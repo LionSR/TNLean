@@ -190,7 +190,7 @@ theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} 
     have hR0 : (0 : ℝ) ≤ R := Nat.cast_nonneg R
     rw [rangeResetWidth]
     nlinarith
-  have hent := mutualInformation_cores_le_of_sites_reset_unitary hq hΩ hAC hA₀ hC₀ _
+  have hent := mutualInformation_cores_le_of_sites_reset_unitary hΩ hAC hA₀ hC₀ _
     (notMem_rangeResetSupport hAC hA₀ hC₀ hℓ hAw hCw) hUu hUs hUerr
   refine hent.trans ?_
   have hA₀card : (A₀.card : ℝ) ≤ (L : ℝ) ^ 2 := by
@@ -199,10 +199,8 @@ theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} 
     exact_mod_cast h₁.trans hΛ
   have hq1 : (1 : ℝ) ≤ q := by exact_mod_cast hq
   have hlogq : 0 ≤ Real.log q := Real.log_nonneg hq1
-  have hcard1 : (1 : ℝ) ≤ (q : ℝ) ^ A₀.card := one_le_pow₀ hq1
-  refine reset_entropy_scalar (lq := Real.log q) hCu.le hL1 (le_trans (le_max_right _ _) hL)
-    (le_refl _) ?_ ?_
-  · exact Real.log_nonneg (one_le_mul_of_one_le_of_one_le (Real.one_le_exp zero_le_one) hcard1)
+  refine Real.eight_mul_sqrt_mul_le_rpow_neg (l := Real.log q) hL1
+    (le_trans (le_max_right _ _) hL) (le_refl _) ?_
   · rw [Real.log_mul (Real.exp_pos 1).ne' (by positivity), Real.log_exp, Real.log_pow]
     have := mul_le_mul_of_nonneg_right hA₀card hlogq
     linarith

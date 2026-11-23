@@ -33,9 +33,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open ManyBody (IntRect IsSafe)
 
-namespace TNLean.PEPS.AreaLaw
-
-namespace IntRect
+namespace ManyBody.IntRect
 
 variable (Q : IntRect) (r : ℕ)
 
@@ -243,10 +241,12 @@ theorem size_le_of_subset {Q Q' : IntRect} (h : Q'.toFinset ⊆ Q.toFinset) :
   simp only [size]
   omega
 
-end IntRect
+end ManyBody.IntRect
+
+namespace TNLean.PEPS.AreaLaw
 
 /-- Subrectangles of no larger size of a safe rectangle are safe. -/
-theorem IsSafe.mono {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {D₀ : ℕ} {Q Q' : IntRect}
+theorem _root_.ManyBody.IsSafe.mono {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {D₀ : ℕ} {Q Q' : IntRect}
     (h : IsSafe Λ A D₀ Q) (hsub : Q'.toFinset ⊆ Q.toFinset) (hsize : Q'.size ≤ Q.size) :
     IsSafe Λ A D₀ Q' := fun e he z hz p hp ↦
   lt_of_le_of_lt (Nat.mul_le_mul_left D₀ hsize) (h e he z hz p (hsub hp))

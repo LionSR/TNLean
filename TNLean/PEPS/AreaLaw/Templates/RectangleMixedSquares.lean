@@ -30,7 +30,7 @@ namespace TNLean.PEPS.AreaLaw
 its four boundary lines. No aspect-ratio assumption is needed.
 Source: the rectangle boundary-line count in `08-scanner.tex`, lines 717–729,
 in the proof of Proposition 9.5 (`prop:small-box`). -/
-theorem IntRect.card_mixedDyadicIndices_toFinset_le (Q : IntRect) (k : ℕ) :
+theorem _root_.ManyBody.IntRect.card_mixedDyadicIndices_toFinset_le (Q : IntRect) (k : ℕ) :
     2 ^ k * (Geometry.mixedDyadicIndices Q.toFinset k).card ≤
       4 * Q.size + 8 * 2 ^ k := by
   let u : ℤ := 2 ^ k

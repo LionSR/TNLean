@@ -516,7 +516,8 @@ set_option synthInstance.maxSize 512 in
 /-- In the coordinates `threeSplit T E` of both sheets, swapping the sheets at `A ⊆ U` exchanges
 the `A`-parts of the two copies of `U`. -/
 theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)ᶜ) :
-    sheetSwapOp q A =
+    reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp A) =
       (((1 : Matrix (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q)))
           (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q))) ℂ) ⊗ₖ
         ((partSwap q (T ∪ E) A).toPEquiv.toMatrix : Matrix _ _ ℂ)).submatrix
@@ -526,7 +527,9 @@ theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)
     Finset.mem_compl.mp (hA hv) (Finset.mem_union_left E v.2)
   have hAE : ∀ v : E, (v : ι) ∉ A := fun v hv =>
     Finset.mem_compl.mp (hA hv) (Finset.mem_union_right T v.2)
-  have he : (threeSplit₂ (q := q) h).symm.trans ((sheetSwap q A).trans (threeSplit₂ h)) =
+  have he : (threeSplit₂ (q := q) h).symm.trans
+      (((Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q).permCongr
+        (ManyBody.pairSwap A)).trans (threeSplit₂ h)) =
       (Equiv.prodProdProdComm _ _ _ _).trans
         (((Equiv.refl _).prodCongr (partSwap q (T ∪ E) A)).trans
           (Equiv.prodProdProdComm _ _ _ _).symm) := by
@@ -535,7 +538,8 @@ theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)
     refine Prod.ext (Prod.ext (Prod.ext ?_ ?_) ?_) (Prod.ext (Prod.ext ?_ ?_) ?_) <;>
       funext v <;> simp only [Equiv.trans_apply, Equiv.prodCongr_apply, Equiv.prodCongr_symm,
         Prod.map_fst, Prod.map_snd, threeSplit_apply_fst_fst, threeSplit_apply_fst_snd,
-        threeSplit_apply_snd, sheetSwap, Equiv.coe_fn_mk, partSwap, Equiv.prodProdProdComm,
+        threeSplit_apply_snd, ManyBody.permCongr_pairSwap_apply, Equiv.coe_fn_mk, partSwap,
+        Equiv.prodProdProdComm,
         Equiv.coe_fn_symm_mk, Equiv.refl_apply]
     · rw [ite_eq_right (hAT v)]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
     · rw [ite_eq_right (hAE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
@@ -545,7 +549,8 @@ theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)
     · rw [ite_eq_right (hAE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
     · by_cases hv : (v : ι) ∈ A <;> simp only [hv, ↓reduceIte] <;>
         exact threeSplit_symm_apply_of_notMem h _ _ _ v.2
-  have key : ((sheetSwap q A).toPEquiv.toMatrix : Matrix _ _ ℂ).submatrix (threeSplit₂ h).symm
+  have key : ((((Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q).permCongr
+      (ManyBody.pairSwap A)).toPEquiv.toMatrix : Matrix _ _ ℂ)).submatrix (threeSplit₂ h).symm
       (threeSplit₂ h).symm =
       ((1 : Matrix (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q)))
           (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q))) ℂ) ⊗ₖ
@@ -554,7 +559,7 @@ theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)
     rw [toMatrix_toPEquiv_submatrix, Equiv.symm_symm, he, ← PEquiv.toMatrix_refl,
       ← Equiv.toPEquiv_refl, ← toMatrix_toPEquiv_prodCongr, toMatrix_toPEquiv_submatrix]
   rw [← key, submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id]
-  rfl
+  exact ManyBody.reindex_pairSwapOp A
 
 -- Same fourfold product of function types as in `correctionMatrix`.
 set_option synthInstance.maxSize 512 in
@@ -565,7 +570,9 @@ set_option synthInstance.maxSize 512 in
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 503–515. -/
 theorem sheetBufferCorrection_mul_sheetSwapOp_eq (σ : SplittingData q T E) {A : Finset ι}
     (hA : A ⊆ (T ∪ E)ᶜ) :
-    sheetBufferCorrection h σ * sheetSwapOp q A =
+    sheetBufferCorrection h σ *
+        reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp A) =
       (((1 : Matrix (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q)))
           (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q))) ℂ) ⊗ₖ
         correctionMatrix σ A).submatrix

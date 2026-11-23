@@ -182,7 +182,10 @@ its party.  On the registers of the frames, one per site and per tag, the exchan
 Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 474–479; proof
 lines 485–515 and 556–561. -/
 theorem exchange_correction_monomial (σ : SplittingData q (X.tSet P) (X.eSet P)) :
-    sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.aSet P) =
+    sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * Matrix.reindex
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (ManyBody.pairSwapOp (X.aSet P)) =
       (((1 : Matrix (((X.tSet P → Fin q) × (X.eSet P → Fin q)) ×
             ((X.tSet P → Fin q) × (X.eSet P → Fin q)))
           (((X.tSet P → Fin q) × (X.eSet P → Fin q)) ×

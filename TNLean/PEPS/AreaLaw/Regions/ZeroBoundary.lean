@@ -154,8 +154,9 @@ theorem regionEntropy_eq_zero_of_q_eq_one {Ω : EuclideanSpace ℂ (↥Λ → Fi
 
 /-- **Empty domain** (area-law preprint, `01-preliminaries.tex`, line 116): on
 the empty domain every regional entropy of every unit vector vanishes. -/
-theorem regionEntropy_eq_zero_of_domain_eq_empty {Ω : EuclideanSpace ℂ (↥∅ → Fin q)} (hΩ : ‖Ω‖ = 1)
-    (A : Finset ↥∅) : ManyBody.regionEntropy Ω A = 0 :=
+theorem regionEntropy_eq_zero_of_domain_eq_empty
+    {Ω : EuclideanSpace ℂ (↥(∅ : Finset (ℤ × ℤ)) → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥(∅ : Finset (ℤ × ℤ))) : ManyBody.regionEntropy Ω A = 0 :=
   regionEntropy_eq_zero_of_card_le_one Ω hΩ A (by
     rw [Fintype.card_fun]
     simp)

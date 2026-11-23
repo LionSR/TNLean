@@ -86,23 +86,23 @@ theorem operatorSchmidtRank_le_placeAlong
     funext i
     by_cases hi : i ∈ A
     · have hei : e i ∈ B := (hAB i).mpr hi
-      simp only [Function.comp_apply, sheetSplit,
+      simp only [Function.comp_apply,
         ManyBody.cutEquiv_symm_apply_mem _ _ hei,
         ManyBody.cutEquiv_symm_apply_mem _ _ hi]
       exact heA.extend_apply x (fun j ↦ τ j) ⟨i, hi⟩
     · have hei : e i ∉ B := fun h ↦ hi ((hAB i).mp h)
-      simp only [Function.comp_apply, sheetSplit,
+      simp only [Function.comp_apply,
         ManyBody.cutEquiv_symm_apply_not_mem _ _ hei,
         ManyBody.cutEquiv_symm_apply_not_mem _ _ hi]
       exact heC.extend_apply y (fun j ↦ τ j) ⟨i, hi⟩
   have hout (x : A → Fin q) (y : {v // v ∉ A} → Fin q) (j : W)
       (hj : ∀ i, e i ≠ j) : (ManyBody.cutEquiv (fun _ ↦ Fin q) B).symm (f x, g y) j = τ j := by
     by_cases hB : j ∈ B
-    · rw [sheetSplit, ManyBody.cutEquiv_symm_apply_mem _ _ hB]
+    · rw [ManyBody.cutEquiv_symm_apply_mem _ _ hB]
       exact Function.extend_apply' (f := eA) x (fun j ↦ τ j) ⟨j, hB⟩ (by
         rintro ⟨i, hi⟩
         exact hj i (congrArg Subtype.val hi))
-    · rw [sheetSplit, ManyBody.cutEquiv_symm_apply_not_mem _ _ hB]
+    · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hB]
       exact Function.extend_apply' (f := eC) y (fun j ↦ τ j) ⟨j, hB⟩ (by
         rintro ⟨i, hi⟩
         exact hj i (congrArg Subtype.val hi))

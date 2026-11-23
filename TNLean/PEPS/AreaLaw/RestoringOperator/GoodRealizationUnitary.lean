@@ -268,8 +268,14 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
       Uᴴ * U = 1 ∧ ‖WithLp.toLp 2 (U *ᵥ φ) - WithLp.toLp 2 η‖ ≤
         a + √(2 * a + 6 * ε + 9 * ε ^ 2) := by
   set e := ManyBody.cutEquiv (fun _ : ι => Fin q) S with he
-  obtain ⟨R', hR'⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hR₀
-  obtain ⟨L'', hL''⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hL
+  obtain ⟨R', hR'⟩ : ∃ R' : Matrix (S → Fin q) (S → Fin q) ℂ, R₀.submatrix e.symm e.symm =
+      R' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ) := by
+    obtain ⟨K, rfl⟩ := ManyBody.exists_eq_place_of_mem_supportedOperators hR₀
+    exact ⟨K, ManyBody.cutOperator_place K⟩
+  obtain ⟨L'', hL''⟩ : ∃ L'' : Matrix (S → Fin q) (S → Fin q) ℂ, L'.submatrix e.symm e.symm =
+      L'' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ) := by
+    obtain ⟨K, rfl⟩ := ManyBody.exists_eq_place_of_mem_supportedOperators hL
+    exact ⟨K, ManyBody.cutOperator_place K⟩
   -- Transport of vectors and matrices to the coordinates `S × Sᶜ`.
   have hvec (A : Matrix (ι → Fin q) (ι → Fin q) ℂ) (v : (ι → Fin q) → ℂ) :
       A.submatrix e.symm e.symm *ᵥ (v ∘ e.symm) = (A *ᵥ v) ∘ e.symm := by
@@ -333,7 +339,10 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
     exact Unitary.coe_star_mul_self U
   refine ⟨((U : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ
     (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ)).submatrix e e,
-    kronecker_one_submatrix_mem_supportedOperators S _, ?_, ?_⟩
+    by
+      have h := ManyBody.place_mem_supportedOperators (X := fun _ : ι ↦ Fin q) (D := S)
+        (U : Matrix (S → Fin q) (S → Fin q) ℂ)
+      rwa [ManyBody.place, Matrix.reindex_apply, Equiv.symm_symm, ← he] at h, ?_, ?_⟩
   · rw [conjTranspose_submatrix, submatrix_mul_equiv _ _ _ e, conjTranspose_kronecker,
       ← mul_kronecker_mul, hu, conjTranspose_one, Matrix.one_mul, one_kronecker_one,
       submatrix_one_equiv]

@@ -22,7 +22,7 @@ depends on a geometry of the sites.
 
 * `Sheet.threeSplit T E` identifies the raw configurations of the sheet with triples
   `((t, e), u)` of configurations on `T`, `E` and `(T ∪ E)ᶜ`. It refines the two-region
-  coordinates `TNLean.Lattice.sheetSplit`, in which an operator on `S` is `A' ⊗ 1` and an
+  coordinates `ManyBody.cutEquiv`, in which an operator on `S` is `A' ⊗ 1` and an
   operator on a set disjoint from `S` is `1 ⊗ A'`.
 * An operator acting on `T ∪ E` is `A' ⊗ 1_U` in these coordinates, and an operator on a subset
   of `E` is `(1_T ⊗ A') ⊗ 1_U`. An operator supported disjointly from `T` is
@@ -253,9 +253,12 @@ theorem exists_threeSplit_eq_reindex_one_kronecker
             ({v // v ∉ T ∪ E} → Fin q)).symm
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
             ({v // v ∉ T ∪ E} → Fin q)).symm := by
-  obtain ⟨B, hB⟩ :=
-    TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators
-      (q := q) (S := T) hD hA
+  obtain ⟨B, hB⟩ : ∃ B : Matrix ({v // v ∉ T} → Fin q) ({v // v ∉ T} → Fin q) ℂ,
+      A.submatrix (ManyBody.cutEquiv (fun _ ↦ Fin q) T).symm
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) T).symm =
+        (1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ B := by
+    obtain ⟨B, rfl⟩ := ManyBody.exists_eq_one_kronecker_of_mem_supportedOperators hD hA
+    exact ⟨B, by rw [Matrix.submatrix_submatrix, Equiv.self_comp_symm, Matrix.submatrix_id_id]⟩
   let c := ManyBody.complementUnionEquiv (fun _ : ι ↦ Fin q) T E h
   refine ⟨B.submatrix c.symm c.symm, ?_⟩
   ext ⟨⟨t, e⟩, u⟩ ⟨⟨t', e'⟩, u'⟩

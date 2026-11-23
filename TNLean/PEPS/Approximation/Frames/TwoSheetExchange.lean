@@ -207,26 +207,30 @@ def renameEquiv : X.frame₁.Layout × X.frame₂.Layout ≃ X.newFrame₁.Layou
   toFun y :=
     let a₁ := tagAppendEquiv X.out₁ X.in₁ y.1.1
     let a₂ := tagAppendEquiv X.out₂ X.in₂ y.2.1
-    let r := sheetSwap q X.region (y.1.2, y.2.2)
+    let r := (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q).permCongr
+        (ManyBody.pairSwap X.region) (y.1.2, y.2.2)
     (((tagAppendEquiv X.out₁ X.in₂).symm (a₁.1, a₂.2), r.1),
       ((tagAppendEquiv X.out₂ X.in₁).symm (a₂.1, a₁.2), r.2))
   invFun y :=
     let a₁ := tagAppendEquiv X.out₁ X.in₂ y.1.1
     let a₂ := tagAppendEquiv X.out₂ X.in₁ y.2.1
-    let r := sheetSwap q X.region (y.1.2, y.2.2)
+    let r := (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q).permCongr
+        (ManyBody.pairSwap X.region) (y.1.2, y.2.2)
     (((tagAppendEquiv X.out₁ X.in₁).symm (a₁.1, a₂.2), r.1),
       ((tagAppendEquiv X.out₂ X.in₂).symm (a₂.1, a₁.2), r.2))
   left_inv y := by
     obtain ⟨⟨τ₁, x₁⟩, ⟨τ₂, x₂⟩⟩ := y
-    have h := (sheetSwap q X.region).symm_apply_apply (x₁, x₂)
+    have h := ((Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q).permCongr
+        (ManyBody.pairSwap X.region)).symm_apply_apply (x₁, x₂)
     simp only [Equiv.apply_symm_apply, Prod.mk.eta, Equiv.symm_apply_apply]
-    rw [sheetSwap_symm] at h
+    rw [ManyBody.permCongr_pairSwap_symm] at h
     simp only [h]
   right_inv y := by
     obtain ⟨⟨τ₁, x₁⟩, ⟨τ₂, x₂⟩⟩ := y
-    have h := (sheetSwap q X.region).symm_apply_apply (x₁, x₂)
+    have h := ((Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q).permCongr
+        (ManyBody.pairSwap X.region)).symm_apply_apply (x₁, x₂)
     simp only [Equiv.apply_symm_apply, Prod.mk.eta, Equiv.symm_apply_apply]
-    rw [sheetSwap_symm] at h
+    rw [ManyBody.permCongr_pairSwap_symm] at h
     simp only [h]
 
 /-- **The renaming `ℛ`** between the two-sheet layouts before and after the exchange. -/
@@ -243,12 +247,13 @@ theorem exists_out_form [NeZero q] {o : List (Hole pos q Party)}
     ∃ O' : Matrix ({v // v ∉ X.region} → Fin q) ({v // v ∉ X.region} → Fin q) ℂ,
       (rawProd o a).submatrix (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm
           (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm =
-        1 ⊗ₖ O' :=
-  exists_one_kronecker_of_mem_supportedOperators
+        1 ⊗ₖ O' := by
+  obtain ⟨O', hO'⟩ := ManyBody.exists_eq_one_kronecker_of_mem_supportedOperators
     (disjoint_footprint_of_forall fun p hp => by
       obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
       exact X.outside h (ho h hh))
     (rawProd_mem_supportedOperators o a)
+  exact ⟨O', by rw [hO', submatrix_submatrix, Equiv.self_comp_symm, submatrix_id_id]⟩
 
 /-- The raw part of the encoding of the holes inside `Y` acts on `Y`. -/
 theorem exists_in_form [NeZero q] {i : List (Hole pos q Party)}
@@ -256,13 +261,14 @@ theorem exists_in_form [NeZero q] {i : List (Hole pos q Party)}
     ∃ I' : Matrix (X.region → Fin q) (X.region → Fin q) ℂ,
       (rawProd i a).submatrix (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm
           (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm =
-        I' ⊗ₖ 1 :=
-  exists_kronecker_one_of_mem_supportedOperators
+        I' ⊗ₖ 1 := by
+  obtain ⟨I', hI'⟩ := ManyBody.exists_eq_place_of_mem_supportedOperators
     (ManyBody.supportedOperators_mono (fun x hx => by
       obtain ⟨p, hp, hx⟩ := mem_footprint.mp hx
       obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
       exact X.inside h (hi h hh) hx)
     (rawProd_mem_supportedOperators i a))
+  exact ⟨I', by rw [hI']; exact ManyBody.cutOperator_place I'⟩
 
 /-- **Exact intertwining identity (`eq:exchange-intertwining`).** `ℛ K_in = K_out F_{Y ∩ Λ}`,
 where `K_in` and `K_out` are the products of the two frames' encoders before and after the
@@ -272,9 +278,12 @@ its tag change sheet together.
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 482–498. -/
 theorem rename_mul_encoder [NeZero q] :
     X.rename * (X.frame₁.encoder ⊗ₖ X.frame₂.encoder) =
-      (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) * sheetSwapOp q X.region := by
-  rw [rename, PEquiv.toMatrix_toPEquiv_mul, sheetSwapOp, PEquiv.mul_toMatrix_toPEquiv,
-    sheetSwap_symm]
+      (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) * Matrix.reindex
+          (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (ManyBody.pairSwapOp X.region) := by
+  rw [rename, PEquiv.toMatrix_toPEquiv_mul, ManyBody.reindex_pairSwapOp, Equiv.Perm.permMatrix,
+    PEquiv.mul_toMatrix_toPEquiv, ManyBody.permCongr_pairSwap_symm]
   ext ⟨⟨τ₁, x₁⟩, ⟨τ₂, x₂⟩⟩ ⟨r₁, r₂⟩
   obtain ⟨O₁, hO₁⟩ := X.exists_out_form (fun h hh => List.mem_append_left _ hh)
     (tagAppendEquiv X.out₁ X.in₂ τ₁).1
@@ -288,18 +297,18 @@ theorem rename_mul_encoder [NeZero q] :
     renameEquiv, Equiv.coe_fn_symm_mk]
   rw [rawProd_append, rawProd_append, rawProd_append, rawProd_append]
   simp only [Equiv.apply_symm_apply]
-  rw [apply_eq_submatrix_apply (_ * _) (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region),
-    mul_submatrix_sheetSplit hO₁ hI₁,
-    apply_eq_submatrix_apply (rawProd X.out₂ _ * rawProd X.in₂ _)
-        (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region),
-    mul_submatrix_sheetSplit hO₂ hI₂,
-    apply_eq_submatrix_apply (rawProd X.out₁ _ * rawProd X.in₂ _)
-        (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region),
-    mul_submatrix_sheetSplit hO₁ hI₂,
-    apply_eq_submatrix_apply (rawProd X.out₂ _ * rawProd X.in₁ _)
-        (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region),
-    mul_submatrix_sheetSplit hO₂ hI₁]
-  simp only [kroneckerMap_apply, sheetSplit_sheetSwap_fst, sheetSplit_sheetSwap_snd]
+  -- each product of an operator off `Y` and one on `Y` is `I' ⊗ O'` in the cut along `Y`
+  rw [ManyBody.apply_eq_submatrix_cutEquiv_apply X.region (_ * _),
+    ← submatrix_mul_equiv _ _ _ (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm, hO₁, hI₁,
+    ManyBody.apply_eq_submatrix_cutEquiv_apply X.region (rawProd X.out₂ _ * rawProd X.in₂ _),
+    ← submatrix_mul_equiv _ _ _ (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm, hO₂, hI₂,
+    ManyBody.apply_eq_submatrix_cutEquiv_apply X.region (rawProd X.out₁ _ * rawProd X.in₂ _),
+    ← submatrix_mul_equiv _ _ _ (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm, hO₁, hI₂,
+    ManyBody.apply_eq_submatrix_cutEquiv_apply X.region (rawProd X.out₂ _ * rawProd X.in₁ _),
+    ← submatrix_mul_equiv _ _ _ (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm, hO₂, hI₁]
+  simp only [← mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one]
+  simp only [kroneckerMap_apply, ManyBody.cutEquiv_permCongr_pairSwap_fst,
+    ManyBody.cutEquiv_permCongr_pairSwap_snd]
   ring
 
 /-! ### The partition and the exchange map -/
@@ -404,28 +413,49 @@ Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 485–489
 def exchangeOp (σ : SplittingData q (X.tSet P) (X.eSet P)) :
     Matrix (X.newFrame₁.Layout × X.newFrame₂.Layout) (X.frame₁.Layout × X.frame₂.Layout) ℂ :=
   liftTags (l₁ := X.out₁ ++ X.in₂) (l₂ := X.out₂ ++ X.in₁)
-    (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.aSet P)) * X.rename
+    (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * Matrix.reindex
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (ManyBody.pairSwapOp (X.aSet P))) * X.rename
 
 theorem norm_exchangeOp_le_one (σ : SplittingData q (X.tSet P) (X.eSet P)) :
     ‖X.exchangeOp P σ‖ ≤ 1 :=
   l2_opNorm_mul_le_one _ _ ((norm_liftTags_le _).trans (l2_opNorm_mul_le_one _ _
-    (norm_sheetBufferCorrection_le_one _ σ) (norm_sheetSwapOp_le_one _))) X.norm_rename_le_one
+    (norm_sheetBufferCorrection_le_one _ σ) ((l2_opNorm_reindex_equiv _ _).trans_le
+      (ManyBody.norm_pairSwapOp_le_one _)))) X.norm_rename_le_one
 
 /-- The corrections `D_U` and `F_A` commute with the raw parts of the encoders after the
 exchange: they act on `U`, away from every hole of both sheets (`05-frames.tex`, lines
 514–515). -/
 theorem commute_correction [NeZero q] (σ : SplittingData q (X.tSet P) (X.eSet P))
     (a : TagSpace (X.out₁ ++ X.in₂)) (b : TagSpace (X.out₂ ++ X.in₁)) :
-    Commute (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.aSet P))
+    Commute (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * Matrix.reindex
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (ManyBody.pairSwapOp (X.aSet P)))
       (rawProd (X.out₁ ++ X.in₂) a ⊗ₖ rawProd (X.out₂ ++ X.in₁) b) := by
   have h₁ := ManyBody.supportedOperators_mono (X.footprint_new₁_subset P)
     (rawProd_mem_supportedOperators _ a)
   have h₂ := ManyBody.supportedOperators_mono (X.footprint_new₂_subset P)
     (rawProd_mem_supportedOperators _ b)
-  refine Commute.mul_left (commute_sheetBufferCorrection _ σ h₁ h₂)
-    (commute_sheetSwapOp_kronecker ?_ h₁ h₂)
-  exact (Finset.disjoint_of_subset_right (X.aSet_subset_compl P)
-    disjoint_compl_right)
+  refine Commute.mul_left (commute_sheetBufferCorrection _ σ h₁ h₂) ?_
+  -- on paired sites the exchange on `A` fixes the paired product, supported away from `A`
+  have hD : Disjoint (X.tSet P ∪ X.eSet P ∪ (X.tSet P ∪ X.eSet P)) (X.aSet P) := by
+    rw [Finset.union_self]
+    exact Finset.disjoint_of_subset_right (X.aSet_subset_compl P) disjoint_compl_right
+  have hfix := ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint hD
+    (ManyBody.reindex_kronecker_mem_supportedOperators h₁ h₂)
+  set E := (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+  have hcomm : ManyBody.pairSwapOp (X.aSet P) * reindex E.symm E.symm
+        (rawProd (X.out₁ ++ X.in₂) a ⊗ₖ rawProd (X.out₂ ++ X.in₁) b) =
+      reindex E.symm E.symm (rawProd (X.out₁ ++ X.in₂) a ⊗ₖ rawProd (X.out₂ ++ X.in₁) b) *
+        ManyBody.pairSwapOp (X.aSet P) := by
+    conv_rhs => rw [← hfix, Matrix.mul_assoc, ManyBody.conjTranspose_pairSwapOp,
+      ManyBody.pairSwapOp_mul_self, Matrix.mul_one]
+  rw [Commute, SemiconjBy, ← (reindex E E).apply_symm_apply
+    (rawProd (X.out₁ ++ X.in₂) a ⊗ₖ rawProd (X.out₂ ++ X.in₁) b)]
+  simp only [reindex_symm, reindex_apply, submatrix_mul_equiv]
+  rw [← reindex_apply, ← reindex_apply, ← reindex_apply, hcomm]
 
 -- Two copies of the configurations `((t, e), u)` of three regions form a fourfold product of
 -- function types; synthesizing their decidable equality exceeds the default instance size.
@@ -435,7 +465,10 @@ set_option synthInstance.maxSize 512 in
 
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 516–526. -/
 theorem sheetBufferCorrection_mul_sheetSwapOp (σ : SplittingData q (X.tSet P) (X.eSet P)) :
-    sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P) =
+    sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * Matrix.reindex
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (ManyBody.pairSwapOp (X.tSet P)) =
       Matrix.submatrix ((((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ⊗ₖ ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V))ᴴ *
           ((tbSwap (X.tSet P → Fin q) (X.eSet P → Fin q) (X.tSet P → Fin q)
             ((X.eSet P → Fin q) ⊕ ({v // v ∉ X.tSet P ∪ X.eSet P} → Fin q))).toPEquiv.toMatrix :
@@ -452,12 +485,18 @@ Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 512–532
 theorem exchangeOp_mul_encoder [NeZero q] (σ : SplittingData q (X.tSet P) (X.eSet P)) :
     X.exchangeOp P σ * (X.frame₁.encoder ⊗ₖ X.frame₂.encoder) =
       (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) *
-        (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P)) := by
+        (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * Matrix.reindex
+            (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+            (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+            (ManyBody.pairSwapOp (X.tSet P))) := by
   rw [exchangeOp, Matrix.mul_assoc, rename_mul_encoder, ← Matrix.mul_assoc]
   rw [show X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder =
     frameEncoder (X.out₁ ++ X.in₂) ⊗ₖ frameEncoder (X.out₂ ++ X.in₁) from rfl,
-    liftTags_mul_kronecker (X.commute_correction P σ), Matrix.mul_assoc, Matrix.mul_assoc,
-    sheetSwapOp_mul_sheetSwapOp (X.mem_tSet_iff P) (X.aSet_subset_region P)]
+    liftTags_mul_kronecker (X.commute_correction P σ), Matrix.mul_assoc, Matrix.mul_assoc]
+  have hT : X.tSet P = X.region \ X.aSet P :=
+    Finset.ext fun x ↦ (X.mem_tSet_iff P x).trans Finset.mem_sdiff.symm
+  rw [reindex_apply, reindex_apply, submatrix_mul_equiv,
+    ManyBody.pairSwapOp_mul_of_subset (X.aSet_subset_region P), ← hT, reindex_apply]
 
 /-- **Lemma 6.6 (two-sheet exchange).** Consider two encoded frames and a region `Y` such that
 every hole's entire outer square lies on one side of `∂Y`. Inside `Y`, exchange the two raw
@@ -481,7 +520,10 @@ theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖�
       ‖X.exchangeOp P σ‖ ≤ 1 ∧
       X.exchangeOp P σ * (X.frame₁.encoder ⊗ₖ X.frame₂.encoder) =
         (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) *
-          (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P)) ∧
+          (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * Matrix.reindex
+              (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+              (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+              (ManyBody.pairSwapOp (X.tSet P))) ∧
       ‖act (X.exchangeOp P σ) (vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω)) -
         vecKron (X.newFrame₁.refVec Ω) (X.newFrame₂.refVec Ω)‖ ≤ 4 * L ^ (-30 : ℤ) := by
   set h := X.disjoint_tSet_eSet P
@@ -623,7 +665,9 @@ theorem exchange_ofFrames [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset
           ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.encoder ⊗ₖ
               (ofFrames F₁ F₂ Y out hout hin).newFrame₂.encoder) *
             (sheetBufferCorrection ((ofFrames F₁ F₂ Y out hout hin).disjoint_tSet_eSet P) σ *
-              sheetSwapOp q ((ofFrames F₁ F₂ Y out hout hin).tSet P)) ∧
+              Matrix.reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+                  (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+                  (ManyBody.pairSwapOp ((ofFrames F₁ F₂ Y out hout hin).tSet P))) ∧
         ‖act ((ofFrames F₁ F₂ Y out hout hin).exchangeOp P σ * tagReorder e₁ e₂)
             (vecKron (F₁.refVec Ω) (F₂.refVec Ω)) -
           vecKron ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.refVec Ω)

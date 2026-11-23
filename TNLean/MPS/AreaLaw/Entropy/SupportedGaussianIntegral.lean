@@ -170,8 +170,9 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
           (_ : ∀ X, ‖h.term X‖ ≤ J) (D : Finset (Fin L))
         (ℓ : ℝ), 0 ≤ ℓ →
         let K := h.doubledFin.hamiltonian
-        let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
-        let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+        let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+        let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
+        let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
         let K' := F * K * Fᴴ
         let crossing := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
@@ -206,14 +207,15 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
     (sub_pos.mpr (Real.exp_lt_one_iff.mpr (by norm_num)))
   have hd : 0 ≤ d := by positivity
   refine ⟨a + d, 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1, by positivity, by positivity, ?_⟩
-  intro q hq L h hh hhJ D ℓ hℓ K e F K' crossing Z N
+  intro q hq L h hh hhJ D ℓ hℓ K pr e F K' crossing Z N
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
     (h.doubled.conj (ManyBody.pairSwapOp (X := fun _ ↦ Fin q) D) fun X ↦
         ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators D
           (h.doubled.mem X)).relabel (X' := fun _ ↦ Fin (q * q)) (Equiv.refl _)
       (fun _ ↦ finProdFinEquiv) (fun X : ChainSupport L R ↦ X.1) fun _ _ ↦ Iff.rfl
   have hΦ : Φ.hamiltonian = K' :=
-    (TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled h D _).trans
+    (ManyBody.Interaction.hamiltonian_relabel_conj_pairSwapOp_doubled (X' := fun _ ↦ Fin (q * q))
+      h D _ (Equiv.refl _) (fun _ ↦ finProdFinEquiv) _ fun _ _ ↦ Iff.rfl).trans
       (congrArg (fun M ↦ F * M * Fᴴ) h.hamiltonian_doubledFin.symm)
   have hΦh : ∀ X, (Φ.term X).IsHermitian := fun X ↦
     ManyBody.Interaction.isHermitian_relabel_term _ _ _ _
@@ -249,8 +251,9 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
           (_ : ∀ X, ‖h.term X‖ ≤ J)
         (D : Finset (Fin Λ.card)) (m : ℕ),
         let K := h.doubledFin.hamiltonian
-        let e := QuantumCircuit.sitePairConfigurationEquiv (Fin Λ.card) q q
-        let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+        let pr := Equiv.arrowProdEquivProdArrow (Fin Λ.card) (fun _ ↦ Fin q) fun _ ↦ Fin q
+        let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin Λ.card)) finProdFinEquiv)
+        let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
         let K' := F * K * Fᴴ
         let crossing := ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
@@ -286,7 +289,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
     (sub_pos.mpr (Real.exp_lt_one_iff.mpr (by norm_num)))
   have hd : 0 ≤ d := by positivity
   refine ⟨a + d, 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1, by positivity, by positivity, ?_⟩
-  intro q hq Λ h hh hhJ D m K e F K' crossing Z N
+  intro q hq Λ h hh hhJ D m K pr e F K' crossing Z N
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
       (fun X : DomainSupport Λ R ↦ X.1) :=
     (h.doubled.conj (ManyBody.pairSwapOp (X := fun _ ↦ Fin q) D) fun X ↦
@@ -294,7 +297,8 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
           (h.doubled.mem X)).relabel (X' := fun _ ↦ Fin (q * q)) (Equiv.refl _)
       (fun _ ↦ finProdFinEquiv) (fun X : DomainSupport Λ R ↦ X.1) fun _ _ ↦ Iff.rfl
   have hΦ : Φ.hamiltonian = K' :=
-    (TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled h D _).trans
+    (ManyBody.Interaction.hamiltonian_relabel_conj_pairSwapOp_doubled (X' := fun _ ↦ Fin (q * q))
+      h D _ (Equiv.refl _) (fun _ ↦ finProdFinEquiv) _ fun _ _ ↦ Iff.rfl).trans
       (congrArg (fun M ↦ F * M * Fᴴ) h.hamiltonian_doubledFin.symm)
   have hΦh : ∀ X, (Φ.term X).IsHermitian := fun X ↦
     ManyBody.Interaction.isHermitian_relabel_term _ _ _ _

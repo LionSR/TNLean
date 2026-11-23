@@ -83,7 +83,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- Safety passes from a parent to a rectangle in its dilation when the two
 radii fit inside the parent's safety radius. Source: `08-scanner.tex`,
 lines 723–729, in the proof of Proposition 9.5 (`prop:small-box`). -/
-theorem IsSafe.of_subset_dilate {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
+theorem _root_.ManyBody.IsSafe.of_subset_dilate {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
     {D₀ j : ℕ} {Q Q' : IntRect} (hsafe : IsSafe Λ A D₀ Q)
     (hsub : Q'.toFinset ⊆ (Q.dilate j).toFinset)
     (hbudget : D₀ * Q'.size + j ≤ D₀ * Q.size) : IsSafe Λ A D₀ Q' := by
@@ -110,7 +110,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- Every selected square is safe when the cap and dilation radii fit in the
 parent clearance. Source: proof of Proposition 9.5, 08-scanner.tex,
 lines 723–729. -/
-theorem IsSafe.isSafe_cappedDyadicPartition_shell
+theorem _root_.ManyBody.IsSafe.isSafe_cappedDyadicPartition_shell
     {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {D₀ : ℕ} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) (j L K k : ℕ) (z : ℤ × ℤ)
     (hj : j ≤ L) (hcap : 2 ^ K ≤ L)
@@ -139,7 +139,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- The actual shell entropy under a pointwise estimate on safe rectangles.
 Source: proof of Proposition 9.5, 08-scanner.tex, lines 717–729.
 The explicit scalar budget supplies the selected squares' clearance. -/
-theorem IntRect.regionEntropy_shell_le_of_safe_box
+theorem _root_.ManyBody.IntRect.regionEntropy_shell_le_of_safe_box
     (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
     (A : Finset ↥Λ) (Q : IntRect) (hsafe : IsSafe Λ A D₀ Q)
     (j L K : ℕ) (hj : j ≤ L) (hL : L ≤ Q.size)

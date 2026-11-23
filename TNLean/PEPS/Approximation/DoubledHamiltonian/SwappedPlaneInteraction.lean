@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Replica.RegionalReset
 import QICLean.ManyBody.Sites.ReplicaSwap
+import QICLean.ManyBody.Dynamics.SwappedDoubledInteraction
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedSquareHamiltonian
 import TNLean.PEPS.AreaLaw.Interactions.SupportedGaussianIntegral
@@ -24,7 +25,7 @@ site, and conjugate by the swap `F_A` of the replicas on `A`. This file shows:
   bound `2J`, with the same supports: the doubled interaction `ManyBody.Interaction.doubled`
   conjugated by the exchange `ManyBody.pairSwapOp A` (`ManyBody.Interaction.conj`), relabelled
   to `Fin (q * q)`, whose Hamiltonian is `F_A K F_Aᴴ`
-  (`TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled`);
+  (`ManyBody.Interaction.hamiltonian_relabel_conj_pairSwapOp_doubled`);
 * it differs from the doubled Hamiltonian only through the terms whose support crosses `A`
   (`ManyBody.PlaneInteraction.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing`), the
   crossing
@@ -132,12 +133,13 @@ corresponding differences for the terms whose support crosses `A`.
 Source: polynomial-PEPS `02-information.tex`, lines 416–424 and 513–524, at range `R`. -/
 theorem sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing (h : PlaneInteraction Λ q R)
     (A : Finset ↥Λ) :
-    let F := sheetSwapOp q A
+    let pr := Equiv.arrowProdEquivProdArrow ↥Λ (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let F := reindex pr pr (ManyBody.pairSwapOp A)
     F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
       ∑ X ∈ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A,
         (F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X)) := by
   classical
-  intro F
+  intro pr F
   have hcancel (X : AdmissibleSupport Λ R)
       (hX : X ∉ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A) :
       F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X) = 0 := by
@@ -148,11 +150,18 @@ theorem sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing (h : PlaneInter
       · exact Or.inl fun v hv ↦ hX hXA v hv
       · push Not at hXA
         exact Or.inr (Finset.disjoint_left.mpr hXA)
-    refine sub_eq_zero.mpr
-      (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators (h.mem X) ?_)
-    rcases hX with hX | hX
-    · exact Or.inl (Finset.coe_subset.mpr hX)
-    · exact Or.inr hX
+    -- on paired sites the exchange on `A` fixes a doubled term supported inside or outside `A`
+    have hfix : ManyBody.pairSwapOp A * reindex pr.symm pr.symm (doubledHamiltonian (h.term X)) *
+        (ManyBody.pairSwapOp A)ᴴ = reindex pr.symm pr.symm (doubledHamiltonian (h.term X)) :=
+      hX.elim (fun hs ↦ ManyBody.pairSwapOp_conj_doubled_of_subset hs (h.mem X))
+        (fun hs ↦ ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint hs
+          (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators (h.mem X)))
+    have hY : doubledHamiltonian (h.term X) =
+        reindex pr pr (reindex pr.symm pr.symm (doubledHamiltonian (h.term X))) := by
+      rw [← reindex_symm, Equiv.apply_symm_apply]
+    rw [sub_eq_zero, hY]
+    conv_rhs => rw [← hfix]
+    simp only [F, reindex_apply, conjTranspose_submatrix, submatrix_mul_equiv]
   have hsum : F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
       ∑ X, (F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X)) := by
     rw [ManyBody.Interaction.hamiltonian, doubledHamiltonian_sum, Finset.mul_sum, Finset.sum_mul,
@@ -169,14 +178,17 @@ count of supports through a site of area-law `01-preliminaries.tex`, lines 95–
 theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
     (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
     (A : Finset ↥Λ) :
-    let p := sitePairConfigurationEquiv ↥Λ q q
+    let pr := Equiv.arrowProdEquivProdArrow ↥Λ (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl ↥Λ) finProdFinEquiv)
     let K := Matrix.reindex p p (doubledHamiltonian h.hamiltonian)
-    let F := Matrix.reindex p p (sheetSwapOp q A)
+    let F := Matrix.reindex p p (Matrix.reindex pr pr (ManyBody.pairSwapOp A))
     F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
         (ManyBody.crossingSites Λ R A : Finset ↥Λ) ∧
       ‖F * K * Fᴴ - K‖ ≤ swapBoundaryCoefficient R * J * (Λ.card : ℝ) := by
   classical
-  intro p K F
+  intro pr p K F
+  let g := ManyBody.siteConfigurationEquiv (X' := fun _ : ↥Λ ↦ Fin (q * q)) (Equiv.refl ↥Λ)
+    fun _ ↦ finProdFinEquiv
   set T := ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A
   have hsum := congrArg (Matrix.reindex p p)
     (h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing A)
@@ -190,19 +202,40 @@ theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
     simpa only [Matrix.reindex_apply, Matrix.submatrix_sub, Pi.sub_apply,
       ← Matrix.submatrix_mul_equiv (e₂ := p.symm), ← Matrix.conjTranspose_submatrix] using!
       (Matrix.l2_opNorm_reindex_equiv p
-        (sheetSwapOp q A * doubledHamiltonian M * (sheetSwapOp q A)ᴴ -
-          doubledHamiltonian M)).trans_le
+        (Matrix.reindex pr pr (ManyBody.pairSwapOp A) * doubledHamiltonian M *
+          (Matrix.reindex pr pr (ManyBody.pairSwapOp A))ᴴ - doubledHamiltonian M)).trans_le
         (TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le A M)
   have hplain (S : Finset ↥Λ)
       {M : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
       (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
       Matrix.reindex p p (doubledHamiltonian M) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
-    simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
-      Matrix.submatrix_mul_equiv,
-      sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-        (R := ∅) hM (Or.inr (by simp))] using!
-      reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hM
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators (Equiv.refl _)
+      (X' := fun _ ↦ Fin (q * q)) (fun _ ↦ finProdFinEquiv) (fun _ ↦ Iff.rfl)
+      (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators hM)
+    convert hs using 1
+    ext x y
+    rfl
+  -- in the paired coordinates `F` is the exchange on `A`, which keeps supports
+  have hswap (S : Finset ↥Λ)
+      {M : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
+      (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
+      F * Matrix.reindex p p (doubledHamiltonian M) * Fᴴ ∈
+        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators (Equiv.refl _)
+      (X' := fun _ ↦ Fin (q * q)) (fun _ ↦ finProdFinEquiv) (fun _ ↦ Iff.rfl)
+      (ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators A
+        (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators hM))
+    convert hs using 1
+    have hF : F = Matrix.reindex g g (ManyBody.pairSwapOp A) := rfl
+    have hY : Matrix.reindex p p (doubledHamiltonian M) =
+        Matrix.reindex g g (Matrix.reindex pr.symm pr.symm (doubledHamiltonian M)) := by
+      ext x y
+      rfl
+    rw [hF, hY]
+    simp only [Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv]
+    ext x y
+    rfl
   have hsupport : F * K * Fᴴ - K ∈
       ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
         (ManyBody.crossingSites Λ R A : Finset ↥Λ) :=
@@ -210,10 +243,7 @@ theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
       fun X hX ↦ ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem
           (fun X : AdmissibleSupport Λ R ↦ X.1) hX))
-        (sub_mem
-          (reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators A X.1
-            (h.mem X))
-          (hplain X.1 (h.mem X)))
+        (sub_mem (hswap X.1 (h.mem X)) (hplain X.1 (h.mem X)))
   have hbound : ‖F * K * Fᴴ - K‖ ≤ (T.card : ℝ) * (4 * J) := by
     simpa only [hsum, nsmul_eq_mul] using
       (norm_sum_le T fun X ↦
@@ -256,9 +286,10 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
     let P := Fin (Fintype.card (A → Fin q)) × Fin (Fintype.card (C → Fin q))
     let s := ManyBody.splitTwoRegionsEquiv (fun _ : ↥Λ ↦ Fin q) A C hAC
     let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ A ∪ C} → Fin q))
-    let p := sitePairConfigurationEquiv ↥Λ q q
+    let pr := Equiv.arrowProdEquivProdArrow ↥Λ (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl ↥Λ) finProdFinEquiv)
     let K := reindex p p (doubledHamiltonian h.hamiltonian)
-    let F := reindex p p (sheetSwapOp q A)
+    let F := reindex p p (reindex pr pr (ManyBody.pairSwapOp A))
     let K' := F * K * Fᴴ
     let Z := ManyBody.crossingSites Λ R A
     ∀ W : Matrix (({v // v ∉ A ∪ C} → Fin q) × ({v // v ∉ A ∪ C} → Fin q))
@@ -287,7 +318,7 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
                   (TNLean.PEPS.AreaLaw.graphBallLocalizationVelocity R (2 * J) * T -
                       1 / 2 * l) := by
   classical
-  intro Q P s g p K F K' Z W V l B
+  intro Q P s g pr p K F K' Z W V l B
   have hC : 0 < 2 * TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor R :=
     mul_pos two_pos (TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor_pos R)
   let gH : PlaneInteraction Λ (q * q) R :=
@@ -295,7 +326,9 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
         ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators A
           (h.doubled.mem X)).relabel (X' := fun _ ↦ Fin (q * q)) (Equiv.refl _)
       (fun _ ↦ finProdFinEquiv) (fun X : AdmissibleSupport Λ R ↦ X.1) fun _ _ ↦ Iff.rfl
-  have hK' : gH.hamiltonian = K' := hamiltonian_relabel_conj_pairSwapOp_doubled h A _
+  have hK' : gH.hamiltonian = K' :=
+    ManyBody.Interaction.hamiltonian_relabel_conj_pairSwapOp_doubled (X' := fun _ ↦ Fin (q * q))
+      h A _ (Equiv.refl _) (fun _ ↦ finProdFinEquiv) _ fun _ _ ↦ Iff.rfl
   have hgHh : ∀ X, (gH.term X).IsHermitian := fun X ↦
     ManyBody.Interaction.isHermitian_relabel_term _ _ _ _
       (ManyBody.Interaction.isHermitian_conj_term _ _
@@ -359,28 +392,31 @@ theorem swapped_doubled_boundary_bound_edgeBoundary
     {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
     (h : PlaneInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
     (A : Finset ↥Λ) :
-    let p := sitePairConfigurationEquiv ↥Λ q q
+    let pr := Equiv.arrowProdEquivProdArrow ↥Λ (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl ↥Λ) finProdFinEquiv)
     let K := Matrix.reindex p p (doubledHamiltonian h.hamiltonian)
-    let F := Matrix.reindex p p (sheetSwapOp q A)
+    let F := Matrix.reindex p p (Matrix.reindex pr pr (ManyBody.pairSwapOp A))
     ‖F * K * Fᴴ - K‖ ≤
       swapBoundaryCoefficient R * ((1 + 2 * R * (R + 1) : ℕ) : ℝ) *
         J * ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) := by
-  intro p K F
+  intro pr p K F
   classical
   have hsum := h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing A
   have hpaired : ‖F * K * Fᴴ - K‖ =
-      ‖sheetSwapOp q A * doubledHamiltonian h.hamiltonian * (sheetSwapOp q A)ᴴ -
+      ‖Matrix.reindex pr pr (ManyBody.pairSwapOp A) * doubledHamiltonian h.hamiltonian *
+          (Matrix.reindex pr pr (ManyBody.pairSwapOp A))ᴴ -
         doubledHamiltonian h.hamiltonian‖ := by
     simpa only [Matrix.reindex_apply, Matrix.submatrix_sub, Pi.sub_apply,
       ← Matrix.submatrix_mul_equiv (e₂ := p.symm), ← Matrix.conjTranspose_submatrix] using!
       Matrix.l2_opNorm_reindex_equiv p
-        (sheetSwapOp q A * doubledHamiltonian h.hamiltonian * (sheetSwapOp q A)ᴴ -
-          doubledHamiltonian h.hamiltonian)
+        (Matrix.reindex pr pr (ManyBody.pairSwapOp A) * doubledHamiltonian h.hamiltonian *
+          (Matrix.reindex pr pr (ManyBody.pairSwapOp A))ᴴ - doubledHamiltonian h.hamiltonian)
   rw [hpaired, hsum]
   refine (norm_sum_le _ _).trans ?_
   have hterm (X : AdmissibleSupport Λ R) :
-      ‖sheetSwapOp q A * doubledHamiltonian (h.term X) * (sheetSwapOp q A)ᴴ -
-        doubledHamiltonian (h.term X)‖ ≤ 4 * J :=
+      ‖Matrix.reindex pr pr (ManyBody.pairSwapOp A) * doubledHamiltonian (h.term X) *
+          (Matrix.reindex pr pr (ManyBody.pairSwapOp A))ᴴ - doubledHamiltonian (h.term X)‖ ≤
+        4 * J :=
     (TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le A (h.term X)).trans
       (mul_le_mul_of_nonneg_left (hhJ X) (by norm_num))
   refine (Finset.sum_le_card_nsmul _ _ (4 * J) (fun X _ ↦ hterm X)).trans ?_

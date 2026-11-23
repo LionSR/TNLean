@@ -31,7 +31,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- An arbitrary part of a rectangle dilation layer has entropy cost at most
 `12 * size Q * log q`. Source: `08-scanner.tex`, lines 666–667 and 717–729.
 The estimate uses only normalization, the local dimension and the layer count. -/
-theorem IntRect.partial_row_entropy_le
+theorem _root_.ManyBody.IntRect.partial_row_entropy_le
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
     (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     (Q : IntRect) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ Q.size)

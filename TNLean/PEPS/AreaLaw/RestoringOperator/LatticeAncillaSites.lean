@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RestoringOperator.LatticeAncillaTransport
-import QICLean.ManyBody.Sites.Relabel
+import QICLean.ManyBody.Entropy.RelabelMutualInformation
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.ManyBody.Entropy.SumSitesProduct
@@ -293,11 +293,15 @@ theorem mutualInformation_ancillaCopy_eq {X Y : Finset ↥Λ} (hXY : Disjoint X 
       RegionalConfiguration q X) => a c.2.1 * b (restoringSplit q X Y hXY c.1).1.1 *
         Ω ((restoringSplit q X Y hXY).symm ((c.2.2, (restoringSplit q X Y hXY c.1).1.2),
           (restoringSplit q X Y hXY c.1).2))) ∘ ancillaSplit q X) =
-      ManyBody.relabelSites (ancillaSwap X) (ManyBody.sumSitesProduct
-        (X := fun _ : AncillaSites Λ X => Fin q) Ω g) := by
+      ManyBody.relabelVector (ancillaSwap X).symm (fun _ ↦ Equiv.refl (Fin q))
+        (ManyBody.sumSitesProduct (X := fun _ : AncillaSites Λ X => Fin q) Ω g) := by
+    rw [ManyBody.relabelVector]
     congr 1
     funext c
-    simp only [Function.comp_apply, ancillaSplit_apply, restoringSplit_symm_replace,
+    have h0 : (ManyBody.siteConfigurationEquiv (ancillaSwap X).symm
+        fun _ ↦ Equiv.refl (Fin q)).symm c = c ∘ (ancillaSwap X).symm :=
+      funext fun v ↦ ManyBody.siteConfigurationEquiv_symm_apply _ _ c v
+    simp only [h0, Function.comp_apply, ancillaSplit_apply, restoringSplit_symm_replace,
       ManyBody.sumSitesProduct, g, PiLp.toLp_apply]
     have h1 : (fun v => c ((ancillaSwap X).symm (Sum.inl v))) =
         fun v => if hv : v ∈ X then c (Sum.inr (Sum.inr ⟨v, hv⟩)) else c (Sum.inl v) := by
@@ -343,7 +347,10 @@ theorem mutualInformation_ancillaCopy_eq {X Y : Finset ↥Λ} (hXY : Disjoint X 
     · simp [ancillaSwapFun, ancillaPhysicalRegion]
     · have hyJ : (y : ↥Λ) ∉ J := fun h => Finset.disjoint_left.mp hJ h y.2
       simp [ancillaSwapFun, ancillaPhysicalRegion, hyJ]
-  rw [hvec, ManyBody.regionMutualInformation_relabelSites, hcopy, hphys]
+  rw [hvec, ManyBody.regionMutualInformation_relabel
+    ((ancillaCopyRegion X').map (ancillaSwap X).toEmbedding)
+    ((ancillaPhysicalRegion X J).map (ancillaSwap X).toEmbedding) _ _ (ancillaSwap X).symm
+    (fun _ ↦ Finset.mem_map_equiv) (fun _ ↦ Finset.mem_map_equiv), hcopy, hphys]
   exact ManyBody.regionMutualInformation_sumSitesProduct_inl
     (X := fun _ : AncillaSites Λ X => Fin q) (f := Ω) (g := g) hΩ hg _ _
 

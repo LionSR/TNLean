@@ -7,6 +7,7 @@ import Mathlib.Data.Nat.Dist
 import TNLean.MPS.AreaLaw.Chain.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.Chain.EntropyInequalities
 import QICLean.ManyBody.Sites.ReplicaSwap
+import QICLean.ManyBody.Sites.PairSwapPermutation
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.Analysis.Norm.MatrixKroneckerContraction
 import QICLean.ManyBody.Sites.ConfigurationMap
@@ -51,20 +52,23 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_term_difference_spec
     {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (D : Finset (Fin L)) (X : ChainSupport L R) (b : Bool) :
-    let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
-    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+    let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
+    let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
     let T := Matrix.reindex e e
       (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
     let K := F * T * Fᴴ - T
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin (q * q)) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
   classical
-  let e := sitePairConfigurationEquiv (Fin L) q q
-  let F := Matrix.reindex e e (sheetSwapOp q D)
+  let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+  let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
+  let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
   have hterm := h.mem X
   have hone := one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) X.1)
   have hF : ‖F‖ ≤ 1 := by
-    simpa only [F, Matrix.l2_opNorm_reindex_equiv] using norm_sheetSwapOp_le_one (q := q) D
+    simpa only [F, Matrix.l2_opNorm_reindex_equiv] using
+      ManyBody.norm_pairSwapOp_le_one (X := fun _ : Fin L ↦ Fin q) D
   have hgeneral (U V : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1)
       (hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1)
@@ -80,10 +84,28 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_term_difference_spec
       rw [Finset.union_self] at h
       convert h using 1
       ext x y
-      simp [e, sitePairConfigurationEquiv, ManyBody.siteConfigurationEquiv]
+      simp [e, pr, ManyBody.siteConfigurationEquiv]
+    -- in the coordinates pairing the two copies of every site, `F` is the exchange of the
+    -- copies on `D`, which keeps the support of the paired product `U ⊗ V`
+    have hFT : F * Matrix.reindex e e (U ⊗ₖ V) * Fᴴ ∈
+        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) X.1 := by
+      have h := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
+        (Equiv.refl (Fin L)) (X' := fun _ ↦ Fin (q * q)) (fun _ ↦ finProdFinEquiv)
+        (fun _ ↦ Iff.rfl) (ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators D
+          (ManyBody.reindex_kronecker_mem_supportedOperators hU hV))
+      rw [Finset.union_self] at h
+      convert h using 1
+      let g := ManyBody.siteConfigurationEquiv (X' := fun _ : Fin L ↦ Fin (q * q))
+        (Equiv.refl (Fin L)) fun _ ↦ finProdFinEquiv
+      change Matrix.reindex g g (ManyBody.pairSwapOp D) *
+          Matrix.reindex g g (Matrix.reindex pr.symm pr.symm (U ⊗ₖ V)) *
+          (Matrix.reindex g g (ManyBody.pairSwapOp D))ᴴ = _
+      simp only [Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
+        Matrix.submatrix_mul_equiv]
+      rfl
     refine ⟨(Subalgebra.toSubmodule
-        (ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) X.1).toSubalgebra).sub_mem
-        (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators D X.1 hU hV) hT, ?_, ?_⟩
+        (ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) X.1).toSubalgebra).sub_mem hFT hT,
+      ?_, ?_⟩
     · have hTherm := hUVherm.reindex e
       exact (Matrix.isHermitian_mul_mul_conjTranspose F hTherm).sub hTherm
     · have hTnorm : ‖Matrix.reindex e e (U ⊗ₖ V)‖ ≤ J := by
@@ -108,8 +130,9 @@ differences, with the printed boundary count. Source: TNLean note,
 `part2a_mps_information.tex`, lines 355–363. -/
 theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
     {L q R : ℕ} (h : ChainInteraction L q R) (D : Finset (Fin L)) :
-    let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
-    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+    let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
+    let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
     let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
       (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
@@ -118,8 +141,9 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
       ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b)) ∧
       C.card * 2 ≤ chainCrossConst R * (boundaryEdges L D).card := by
   classical
-  let e := sitePairConfigurationEquiv (Fin L) q q
-  let F := Matrix.reindex e e (sheetSwapOp q D)
+  let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+  let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
+  let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
   let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
     (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
@@ -154,11 +178,21 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
     change F * Matrix.reindex e e (doubledHamiltonian (h.term X)) * Fᴴ -
       Matrix.reindex e e (doubledHamiltonian (h.term X)) = 0
     apply sub_eq_zero.mpr
-    simpa only [F, Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
-      Matrix.submatrix_mul_equiv] using
-      congrArg (Matrix.reindex e e)
-        (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-          (h.mem X) hside)
+    -- the exchange on `D` fixes a doubled term supported inside or outside `D`
+    have hfix : ManyBody.pairSwapOp D *
+        Matrix.reindex pr.symm pr.symm (doubledHamiltonian (h.term X)) *
+        (ManyBody.pairSwapOp D)ᴴ = Matrix.reindex pr.symm pr.symm (doubledHamiltonian (h.term X)) :=
+      hside.elim (fun hs ↦ ManyBody.pairSwapOp_conj_doubled_of_subset hs (h.mem X))
+        (fun hs ↦ ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint hs
+          (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators (h.mem X)))
+    let g := ManyBody.siteConfigurationEquiv (X' := fun _ : Fin L ↦ Fin (q * q))
+      (Equiv.refl (Fin L)) fun _ ↦ finProdFinEquiv
+    change Matrix.reindex g g (ManyBody.pairSwapOp D) *
+        Matrix.reindex g g (Matrix.reindex pr.symm pr.symm (doubledHamiltonian (h.term X))) *
+        (Matrix.reindex g g (ManyBody.pairSwapOp D))ᴴ =
+      Matrix.reindex g g (Matrix.reindex pr.symm pr.symm (doubledHamiltonian (h.term X)))
+    simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
+      Matrix.submatrix_mul_equiv] using congrArg (Matrix.reindex g g) hfix
   refine ⟨?_, ?_⟩
   · change δ h.doubledFin.hamiltonian = ∑ X ∈ C, ∑ b : Bool, δ (T X b)
     rw [hsum, map_sum]
@@ -182,8 +216,9 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
     {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (D : Finset (Fin L)) :
-    let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
-    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+    let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
+    let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
     let C := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
     let K := F * h.doubledFin.hamiltonian * Fᴴ - h.doubledFin.hamiltonian
@@ -191,8 +226,9 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
       (∀ x ∈ Z, ∃ p ∈ boundaryEdges L D, Nat.dist x.val p ≤ R) ∧
       ‖K‖ ≤ 2 * J * (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ) := by
   classical
-  let e := sitePairConfigurationEquiv (Fin L) q q
-  let F := Matrix.reindex e e (sheetSwapOp q D)
+  let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+  let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
+  let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
   let C := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
   let Z := C.biUnion (fun X ↦ X.1)
   let K := F * h.doubledFin.hamiltonian * Fᴴ - h.doubledFin.hamiltonian

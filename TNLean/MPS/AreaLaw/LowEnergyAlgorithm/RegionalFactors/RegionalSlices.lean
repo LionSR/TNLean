@@ -154,8 +154,8 @@ theorem operatorSchmidtRank_le_card_sq {m n : Type*} [Fintype m] [Finite n]
     (fun ij : m × m ↦ operatorBlock ρ ij.1 ij.2)
     (fun i j ↦ Submodule.subset_span ⟨(i, j), rfl⟩)
 
-/-- The cut coordinates of `ManyBody.cutOperator` and of `sheetSplit` give the same operator
-Schmidt rank. -/
+/-- The cut coordinates of `ManyBody.cutOperator` and the reindexing along `ManyBody.cutEquiv`
+give the same operator Schmidt rank. -/
 theorem operatorSchmidtRank_cutOperator_eq [Finite V] (B : Finset V)
     (X : Matrix (V → Fin q) (V → Fin q) ℂ) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) B X) =

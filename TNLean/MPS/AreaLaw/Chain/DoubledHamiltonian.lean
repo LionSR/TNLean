@@ -23,8 +23,9 @@ The doubled interaction `(hᵢ ⊗ 1 + 1 ⊗ hᵢ)ᵢ` (`ManyBody.Interaction.do
 system with basis `Fin q × Fin q` at every site. Encoding each pair in `Fin (q * q)` by
 `finProdFinEquiv`, a relabelling of the basis at every site, gives an interaction with local
 dimension `q * q`, the alphabet of the chain and domain models. Each term keeps its original
-support, and the sum of the terms is `H ⊗ 1 + 1 ⊗ H` in the paired coordinates
-`QuantumCircuit.sitePairConfigurationEquiv`. The norms and Hermiticity of the terms are those
+support, and the sum of the terms is `H ⊗ 1 + 1 ⊗ H` in the coordinates that pair the two
+configuration values at every site (`Equiv.arrowProdEquivProdArrow`) and encode each pair by
+`finProdFinEquiv`. The norms and Hermiticity of the terms are those
 of `ManyBody.Interaction.doubled`, since relabelling preserves both. No positivity of the local
 dimension or nonemptiness of the sites is required.
 
@@ -47,7 +48,7 @@ The swapped doubled interaction is the doubled interaction `ManyBody.Interaction
 conjugated by the exchange `ManyBody.pairSwapOp D` of the two copies on `D`
 (`ManyBody.Interaction.conj`), in paired coordinates; its Hamiltonian is the conjugate
 `F K Fᴴ` of the doubled Hamiltonian `K` by the regional sheet swap `F`
-(`TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled`). The normalized tensor square
+(`ManyBody.Interaction.hamiltonian_relabel_conj_pairSwapOp_doubled`). The normalized tensor square
 of the original ground vector and its swap image have energy `2 * E₀` and lower gap `Δ` for
 `K` and `F K Fᴴ`.
 
@@ -87,8 +88,11 @@ noncomputable def _root_.ManyBody.Interaction.doubledFin
 Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 355–360. -/
 theorem _root_.ManyBody.Interaction.doubledFin_term
     (Φ : ManyBody.Interaction (fun _ : V ↦ Fin q) S) (i : ι) :
-    Φ.doubledFin.term i = Matrix.reindex (QuantumCircuit.sitePairConfigurationEquiv V q q)
-      (QuantumCircuit.sitePairConfigurationEquiv V q q) (Φ.term i ⊗ₖ 1 + 1 ⊗ₖ Φ.term i) :=
+    Φ.doubledFin.term i = Matrix.reindex
+      ((Equiv.arrowProdEquivProdArrow V (fun _ ↦ Fin q) fun _ ↦ Fin q).symm.trans
+        (Equiv.arrowCongr (Equiv.refl V) finProdFinEquiv))
+      ((Equiv.arrowProdEquivProdArrow V (fun _ ↦ Fin q) fun _ ↦ Fin q).symm.trans
+        (Equiv.arrowCongr (Equiv.refl V) finProdFinEquiv)) (Φ.term i ⊗ₖ 1 + 1 ⊗ₖ Φ.term i) :=
   rfl
 
 /-- Summing the paired doubled terms gives exactly the sum of the two copies of `H`, after
@@ -96,14 +100,16 @@ grouping their local coordinates at each site.
 Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 355–360. -/
 theorem _root_.ManyBody.Interaction.hamiltonian_doubledFin [Fintype ι]
     (Φ : ManyBody.Interaction (fun _ : V ↦ Fin q) S) :
-    Φ.doubledFin.hamiltonian = Matrix.reindex (QuantumCircuit.sitePairConfigurationEquiv V q q)
-      (QuantumCircuit.sitePairConfigurationEquiv V q q)
+    Φ.doubledFin.hamiltonian = Matrix.reindex
+      ((Equiv.arrowProdEquivProdArrow V (fun _ ↦ Fin q) fun _ ↦ Fin q).symm.trans
+        (Equiv.arrowCongr (Equiv.refl V) finProdFinEquiv))
+      ((Equiv.arrowProdEquivProdArrow V (fun _ ↦ Fin q) fun _ ↦ Fin q).symm.trans
+        (Equiv.arrowCongr (Equiv.refl V) finProdFinEquiv))
         (Φ.hamiltonian ⊗ₖ 1 + 1 ⊗ₖ Φ.hamiltonian) := by
   refine (ManyBody.Interaction.hamiltonian_relabel _ _ _ _ _).trans ?_
   rw [ManyBody.Interaction.hamiltonian_doubled]
   ext x y
-  simp [QuantumCircuit.sitePairConfigurationEquiv, ManyBody.siteConfigurationEquiv,
-    Matrix.doubledHamiltonian]
+  simp [ManyBody.siteConfigurationEquiv, Matrix.doubledHamiltonian]
 
 end TNLean.MPS.AreaLaw
 
@@ -126,8 +132,9 @@ theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
     (D : Finset (Fin L)) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < Δ) :
-    let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
-    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+    let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
+    let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
     let ψ₀ := Matrix.doubledVector (WithLp.ofLp Ω)
     let Ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
       WithLp.toLp 2 (ψ₀ ∘ e.symm)
@@ -138,8 +145,9 @@ theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
       (‖Φ‖ = 1 ∧ IsGapped (F * h.doubledFin.hamiltonian * Fᴴ) (2 * E₀) Δ ∧
         groundSpace (F * h.doubledFin.hamiltonian * Fᴴ) (2 * E₀) = Submodule.span ℂ {Φ}) := by
   classical
-  let e := sitePairConfigurationEquiv (Fin L) q q
-  let F := Matrix.reindex e e (sheetSwapOp q D)
+  let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+  let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
+  let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
   let ψ₀ := Matrix.doubledVector (WithLp.ofLp Ω)
   let Ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2 (ψ₀ ∘ e.symm)
   let Φ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
@@ -167,8 +175,8 @@ theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
     change ‖Ψ‖ = ‖WithLp.toLp 2 ψ₀‖ at hi
     exact hi.trans (Matrix.norm_doubledVector hΩsum)
   have hF : F ∈ Matrix.unitaryGroup _ ℂ :=
-    Matrix.reindex_mem_unitaryGroup e (sheetSwapOp q D)
-      (sheetSwap q D).permMatrix_mem_unitaryGroup
+    Matrix.reindex_mem_unitaryGroup e _
+      (Matrix.reindex_mem_unitaryGroup _ _ (ManyBody.pairSwapOp_mem_unitaryGroup D))
   refine ⟨⟨hΨ, hgapD, hspanD⟩, ?_⟩
   have hΦ : Matrix.toEuclideanLin F Ψ = Φ := rfl
   have hΦn : ‖Φ‖ = 1 := by

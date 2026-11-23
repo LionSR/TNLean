@@ -782,10 +782,16 @@ theorem operatorSchmidtRank_aeval_sum_le_pow_of_bulk
     refine sum_mem fun β hβ ↦ ?_
     obtain ⟨hβ, hnot⟩ := Finset.mem_filter.mp hβ
     exact (hside β (Finset.ne_of_mem_erase hβ)).resolve_left hnot
-  obtain ⟨X, hX⟩ := exists_kronecker_one_of_mem_supportedOperators hleft
-  obtain ⟨Y, hY⟩ := exists_one_kronecker_of_mem_supportedOperators
-    (disjoint_compl_left : Disjoint Sᶜ S)
-    hright
+  obtain ⟨X, hX⟩ : ∃ X : Matrix (S → Fin q) (S → Fin q) ℂ,
+      (∑ β ∈ s, F β).submatrix g.symm g.symm = X ⊗ₖ 1 := by
+    obtain ⟨K, hK⟩ := ManyBody.exists_eq_place_of_mem_supportedOperators hleft
+    exact ⟨K, by rw [hK]; exact ManyBody.cutOperator_place K⟩
+  obtain ⟨Y, hY⟩ : ∃ Y : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ,
+      (∑ β ∈ t, F β).submatrix g.symm g.symm = 1 ⊗ₖ Y := by
+    obtain ⟨K, hK⟩ := ManyBody.exists_eq_one_kronecker_of_mem_supportedOperators
+      (disjoint_compl_left : Disjoint Sᶜ S) hright
+    exact ⟨K, by
+      rw [hK, Matrix.submatrix_submatrix, Equiv.self_comp_symm, Matrix.submatrix_id_id]⟩
   have hrankM : operatorSchmidtRank (M.reindex g g) ≤ B + 2 := by
     rw [hM, Matrix.reindex_apply, Matrix.submatrix_add, Matrix.submatrix_add]
     refine (operatorSchmidtRank_add_le _ _).trans ?_

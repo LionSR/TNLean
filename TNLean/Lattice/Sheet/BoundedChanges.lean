@@ -175,12 +175,15 @@ theorem eval_renameWord (c₁ c₂ : ι → Fin q) :
 /-- **The renaming in canonical coordinates** is the swap `F_Y` of the two sheets on `Y`. -/
 theorem twoRegIso_renameWord (z : Mem (S₁.regs q ++ S₂.regs q)) :
     twoRegIso q (swapIn S₁ S₂ Y) (swapIn S₂ S₁ Y) ((renameWord S₁ S₂ Y).eval z) =
-      act (sheetSwapOp q Y) (twoRegIso q S₁ S₂ z) :=
+      act (Matrix.reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp Y))
+          (twoRegIso q S₁ S₂ z) :=
   twoRegIso_eq_act_of_basis q S₁ S₂ _ _ _ _ (fun c₁ c₂ => by
-    rw [eval_renameWord, twoRegIso_appendIso_symm, regIso_siteVec, regIso_siteVec, sheetSwapOp,
-      ← sheetSwap_symm, act_toMatrix_symm_single]
+    rw [eval_renameWord, twoRegIso_appendIso_symm, regIso_siteVec, regIso_siteVec,
+      ManyBody.reindex_pairSwapOp, Equiv.Perm.permMatrix, ← ManyBody.permCongr_pairSwap_symm,
+      act_toMatrix_symm_single]
     ext ⟨a, b⟩
-    simp only [vecKron, sheetSwap, Equiv.coe_fn_mk, PiLp.single_apply, Prod.mk.injEq]
+    simp only [vecKron, ManyBody.permCongr_pairSwap_apply, PiLp.single_apply, Prod.mk.injEq]
     split_ifs <;> simp_all) z
 
 @[simp] theorem isReordering_renameWord : (renameWord (q := q) S₁ S₂ Y).IsReordering :=
@@ -212,7 +215,10 @@ theorem exchange_bounded {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω�
     ∃ σ : SplittingData q (tSet S₁ S₂ Y P) (eSet S₁ S₂ Y P),
       σ.error (disjoint_tSet_eSet S₁ S₂ Y P) Ω ≤ L ^ (-p) ∧
       exchangeOp S₁ S₂ Y P σ =
-        sheetBufferCorrection (disjoint_tSet_eSet S₁ S₂ Y P) σ * sheetSwapOp q (tSet S₁ S₂ Y P) ∧
+        sheetBufferCorrection (disjoint_tSet_eSet S₁ S₂ Y P) σ * Matrix.reindex
+            (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+            (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+            (ManyBody.pairSwapOp (tSet S₁ S₂ Y P)) ∧
       ∃ w : Word (S₁.regs q ++ S₂.regs q) ((swapIn S₁ S₂ Y).regs q ++ (swapIn S₂ S₁ Y).regs q),
         w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧
         (∀ z, twoRegIso q (swapIn S₁ S₂ Y) (swapIn S₂ S₁ Y) (w.eval z) =
@@ -228,7 +234,10 @@ theorem exchange_bounded {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω�
   let c := frontCorrectionWord (q := q) [] [] (swapIn S₁ S₂ Y).owner (swapIn S₂ S₁ Y).owner
     (fun x hx => (hU x hx).1) (fun x hx => (hU x hx).2) (correctionMatrix σ (aSet S₁ S₂ Y P))
   have hc : ∀ z, twoRegIso q (swapIn S₁ S₂ Y) (swapIn S₂ S₁ Y) (c.eval z) =
-      act (sheetBufferCorrection h σ * sheetSwapOp q (aSet S₁ S₂ Y P))
+      act (sheetBufferCorrection h σ * Matrix.reindex
+          (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (ManyBody.pairSwapOp (aSet S₁ S₂ Y P)))
         (twoRegIso q (swapIn S₁ S₂ Y) (swapIn S₂ S₁ Y) z) := fun z => by
     rw [twoRegIso_eq_twoFrontLayoutIso, twoRegIso_eq_twoFrontLayoutIso,
       twoFrontLayoutIso_frontCorrectionWord h, liftFront, unitProdIso₂_act_liftFront,

@@ -50,7 +50,7 @@ namespace TNLean.PEPS.AreaLaw
 
 /-- Integer dilation adds twice the radius to the maximal side length.
 Source: `02-initial.tex`, lines 222–231; `08-scanner.tex`, lines 717–729. -/
-theorem IntRect.size_dilate (Q : IntRect) (j : ℕ) :
+theorem _root_.ManyBody.IntRect.size_dilate (Q : IntRect) (j : ℕ) :
     (Q.dilate j).size = Q.size + 2 * j := by
   have hx := Q.hx
   have hy := Q.hy
@@ -60,7 +60,7 @@ theorem IntRect.size_dilate (Q : IntRect) (j : ℕ) :
 /-- The cap-scale side budget for the actual partition of a rectangle shell.
 Source: auxiliary covering estimate in the proof of Proposition 9.5,
 `08-scanner.tex`, lines 717–729. -/
-theorem IntRect.card_cappedDyadicPartition_shell_at_cap_le
+theorem _root_.ManyBody.IntRect.card_cappedDyadicPartition_shell_at_cap_le
     (Q : IntRect) (j L K : ℕ) (hj : j ≤ L) (hL : L ≤ Q.size)
     (hhi : L < 2 ^ (K + 1)) :
     2 ^ K * ((Geometry.cappedDyadicPartition
@@ -84,7 +84,7 @@ theorem IntRect.card_cappedDyadicPartition_shell_at_cap_le
 /-- The side budget below the cap for the actual partition of a rectangle shell.
 Source: auxiliary covering estimate in the proof of Proposition 9.5,
 `08-scanner.tex`, lines 717–729. -/
-theorem IntRect.card_cappedDyadicPartition_shell_below_cap_le
+theorem _root_.ManyBody.IntRect.card_cappedDyadicPartition_shell_below_cap_le
     (Q : IntRect) (j K k : ℕ) (hj : j ≤ Q.size) (hk : k < K)
     (hscale : 2 ^ (k + 1) ≤ Q.size) :
     2 ^ k * ((Geometry.cappedDyadicPartition
@@ -118,7 +118,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- The sum of side lengths to the power `1 + e` in the actual capped
 partition of a weak-rectangle shell. Source: `08-scanner.tex`, lines 717--729.
 -/
-theorem IntRect.sum_rpow_cappedDyadicPartition_shell_le
+theorem _root_.ManyBody.IntRect.sum_rpow_cappedDyadicPartition_shell_le
     (Q : IntRect) (j L K : ℕ) (hj : j ≤ L) (hL : L ≤ Q.size)
     (hlo : 2 ^ K ≤ L) (hhi : L < 2 ^ (K + 1)) (e : ℝ) (he : 0 < e) :
     (∑ c ∈ Geometry.cappedDyadicPartition
