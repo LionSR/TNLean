@@ -425,7 +425,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   corollaries now live in `MPS/Transfer/Spectrum/TransferOperatorGapInjective.lean`.
 - **Why it's excess**: `IsInjective` strictly implies irreducibility via
   an existing one-composition bridge
-  (`injective_implies_irreducibleCP` + `isIrreducibleTensor_of_isIrreducibleMap`),
+  (`injective_implies_irreducibleCP` + `isIrreducibleFamily_of_isIrreducibleMap_mapLM`),
   and both Wolf Thm 6.3 and the Wolf 6.6 rigidity argument need only
   irreducibility — every injective-hypothesis theorem is a direct
   instance of the already-proven irreducible one.

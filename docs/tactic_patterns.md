@@ -6047,15 +6047,14 @@ no additional helper is proposed.
   nonnegativity suffices for the far threshold. Neither consumer needs a new
   scanner structure or additional dimension hypotheses.
 
-### Sheet swaps in regional coordinates — candidate (2026-10-09)
+### Pair swaps in regional coordinates — candidate (2026-10-09)
 
 - **Pattern:** derive regional tensor factors from membership in the supported-operator
-  space, rewrite multiplication by the sheet-swap permutation matrix, and compare
+  space, rewrite multiplication by the pair-swap permutation matrix, and compare
   entries using the region/complement split.
-- **Seen:** `commute_sheetSwapOp_kronecker` and
-  `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in the regional swap module,
-  now QICLean's `ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint` and
-  `ManyBody.pairSwapOp_mul_kronecker`.
+- **Seen:** QICLean's `ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint` and
+  `ManyBody.pairSwapOp_mul_kronecker`, which replaced the two lemmas of TNLean's former
+  regional swap module.
 - **Abstraction:** the support decompositions, permutation-matrix products, and split
   coordinates are already public lemmas. These are the two distinct cases, for
   operators supported outside and inside the swapped region.
