@@ -39,17 +39,6 @@ namespace TNLean.MPS.AreaLaw.AKLV
 private local instance configurationDecidableEq {V : Type*} (q : ℕ) :
     DecidableEq (V → Fin q) := Classical.decEq _
 
-/-- The regional split with the finite-set complement and the entropy
-cut coordinates have the same operator Schmidt rank. -/
-theorem operatorSchmidtRank_reindex_cutEquiv_eq_cutOperator
-    {V : Type*} [Finite V] [DecidableEq V] {q : ℕ} (A : Finset V)
-    (K : Matrix (V → Fin q) (V → Fin q) ℂ) :
-    operatorSchmidtRank (K.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) A)
-        (ManyBody.cutEquiv (fun _ ↦ Fin q) A)) =
-      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A K) := by
-  have := Fintype.ofFinite V
-  rfl
-
 private theorem one_eq_classical {n : Type*} (d : DecidableEq n) :
     @OfNat.ofNat (Matrix n n ℂ) 1 (@One.toOfNat1 _ (@Matrix.one n ℂ d _ _)) =
       @OfNat.ofNat (Matrix n n ℂ) 1

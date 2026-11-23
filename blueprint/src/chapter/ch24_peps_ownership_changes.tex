@@ -784,7 +784,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Crossing-edge expansion of the doubled perturbation]
     \label{thm:peps_sheet_swap_boundary_expansion}
-    \lean{ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
+    \lean{ManyBody.SquareInteraction.pairSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
     \leanok
     \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
     For an open-square Hamiltonian $H=\sum_v h_v+\sum_e h_e$
@@ -806,7 +806,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Norm of a swapped doubled interaction]
     \label{thm:peps_sheet_swap_doubled_term_norm}
-    \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le}
+    \lean{TNLean.PEPS.EncodedFrame.norm_pairSwapOp_conj_doubledHamiltonian_sub_le}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     For $R\subseteq\Lambda$, any operator $A$ on $\mathcal H_\Lambda$, and
@@ -963,7 +963,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{Matrix.kronecker_kronecker_eq_submatrix,
         Matrix.toMatrix_toPEquiv_prodCongr,
         Matrix.toMatrix_toPEquiv_submatrix,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.sheetBufferCorrection_mul_sheetSwapOp}
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.sheetBufferCorrection_mul_pairSwapOp}
     \leanok
     \uses{def:peps_frame_buffer_correction,def:peps_frame_sheet_swap,lem:lattice_exchange_net_map}
     With $\mathcal V=\id_{TE}\otimes V$,
@@ -990,7 +990,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.Lattice.Sheet.norm_toLp_tensorPurification,
         TNLean.Lattice.Sheet.norm_bufferCorrection_le_one,
         TNLean.Lattice.Sheet.norm_act_bufferCorrection_mul_tSwap_sub_le,
-        TNLean.Lattice.Sheet.norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le}
+        TNLean.Lattice.Sheet.norm_act_sheetBufferCorrection_mul_pairSwapOp_sub_le}
     \leanok
     \uses{lem:lattice_exchange_net_map}
     For a unit vector $\omega$ and $\delta=\lVert\mathcal V\omega-s\otimes s'\rVert$,
@@ -1126,7 +1126,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.Lattice.Sheet.correctionMatrix,
         TNLean.Lattice.Sheet.norm_correctionMatrix_le_one,
         TNLean.Lattice.Sheet.reindex_pairSwapOp_eq_submatrix_of_subset,
-        TNLean.Lattice.Sheet.sheetBufferCorrection_mul_sheetSwapOp_eq,
+        TNLean.Lattice.Sheet.sheetBufferCorrection_mul_pairSwapOp_eq,
         TNLean.Lattice.Sheet.correctionWord}
     \leanok
     \uses{lem:lattice_site_register_coordinates}

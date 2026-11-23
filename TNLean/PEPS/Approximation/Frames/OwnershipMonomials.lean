@@ -203,7 +203,7 @@ theorem exchange_correction_monomial (σ : SplittingData q (X.tSet P) (X.eSet P)
           w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧
           ∀ z, pairHeadIso ℓ (w.eval z) =
             (act (correctionMatrix σ (X.aSet P))).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by
-  refine ⟨sheetBufferCorrection_mul_sheetSwapOp_eq _ σ (X.aSet_subset_compl P), fun x hx => ?_,
+  refine ⟨sheetBufferCorrection_mul_pairSwapOp_eq _ σ (X.aSet_subset_compl P), fun x hx => ?_,
     fun ℓ => ⟨correctionWord P (correctionMatrix σ (X.aSet P)) ℓ,
       (norm_matLocal₂₂_le _ _).trans (norm_correctionMatrix_le_one σ _), Set.mem_singleton P, rfl,
       pairHeadIso_eval_localMap₂₂ P _ ℓ _ _⟩⟩
