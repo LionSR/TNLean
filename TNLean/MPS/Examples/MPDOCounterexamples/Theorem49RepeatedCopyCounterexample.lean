@@ -96,7 +96,7 @@ theorem repeatedCopyDecomposition_isBNTCanonicalForm :
   refine {
     basis_dim_pos := by simp [repeatedCopyDecomposition]
     basis_irreducible := fun _ ↦
-      MPSTensor.isIrreducibleTensor_of_bondDim_one scalarBNT.toMPSTensor
+      MPSTensor.isIrreducibleFamily_of_bondDim_one scalarBNT.toMPSTensor
     basis_left_canonical := by
       intro j
       simp [MPSTensor.IsLeftCanonical, Kraus.IsTP, repeatedCopyDecomposition,

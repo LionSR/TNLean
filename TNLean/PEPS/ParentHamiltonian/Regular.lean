@@ -8,13 +8,13 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.ParentHamiltonian.Regular
 
-import TNLean.PEPS.ParentHamiltonian.Regular.GIsometricRegionParentHamiltonian
 import TNLean.PEPS.ParentHamiltonian.Regular.RegionEntanglementBound
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularCanonicalRegionProjector
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularConstraintFixedSpaces
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularConstraintProjectors
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularGlobalParentCoordinates
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularInvariantStateSpan
+import TNLean.PEPS.ParentHamiltonian.Regular.RegularIsometricParentCommutation
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularIsometricRegionProjector
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularIsometricSiteImages
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularLiftedRegionRange

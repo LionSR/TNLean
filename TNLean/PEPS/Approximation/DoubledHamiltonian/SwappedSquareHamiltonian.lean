@@ -15,7 +15,7 @@ import TNLean.Lattice.Sheet.SwapCorrection
 import QICLean.Spectral.Gap.DoubledSystemGap
 import TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount
 import QICLean.Analysis.Norm.L2OpNormReindex
-import TNLean.PEPS.AreaLaw.Interactions.RectangularHamiltonian
+import TNLean.PEPS.AreaLaw.Interactions.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.ManyBody.Sites.ConfigurationMap

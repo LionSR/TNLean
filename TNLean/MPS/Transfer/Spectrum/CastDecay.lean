@@ -41,7 +41,7 @@ theorem mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_
       ¬ GaugePhaseEquiv (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B) :
     Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds 0) := by
   have hAcst_irr : Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) hdim) A) :=
-    (isIrreducibleTensor_cast_dim hdim A).mpr hA_irr
+    (isIrreducibleFamily_cast_dim hdim A).mpr hA_irr
   have hAcst_norm :
       ∑ i : Fin d,
         (cast (congr_arg (MPSTensor d) hdim) A i)ᴴ *

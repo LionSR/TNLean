@@ -308,7 +308,7 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
     rw [hmap, LinearMap.smul_apply, hEig, smul_smul, inv_mul_cancel₀ hr_ne, one_smul]
   have hIrrScaled : Kraus.IsIrreducibleFamily
       (fun i => (((Real.sqrt r : ℝ) : ℂ))⁻¹ • B i) :=
-    isIrreducibleTensor_smul hc_ne B hIrr
+    isIrreducibleFamily_smul hc_ne B hIrr
   refine ⟨hIrrScaled, ?_, ?_⟩
   · simpa using
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp

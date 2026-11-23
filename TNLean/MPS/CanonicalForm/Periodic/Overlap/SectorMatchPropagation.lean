@@ -247,7 +247,7 @@ private lemma sectorGaugePhaseEquiv_succ_of_cyclicTransport
   -- With matched dimensions, the unit-modulus overlap yields a gauge-phase equivalence.
   have hAcast_irr : Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim')
       (blocksA (u + 1))) :=
-    (isIrreducibleTensor_cast_dim hdim' (blocksA (u + 1))).mpr hIrrA_su
+    (isIrreducibleFamily_cast_dim hdim' (blocksA (u + 1))).mpr hIrrA_su
   have hAcast_norm : ∑ i : Fin (blockPhysDim d m),
       (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim') (blocksA (u + 1)) i)ᴴ *
         (cast (congr_arg (MPSTensor (blockPhysDim d m)) hdim') (blocksA (u + 1)) i) = 1 :=

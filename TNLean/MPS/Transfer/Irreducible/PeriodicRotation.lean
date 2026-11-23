@@ -133,7 +133,7 @@ If `P` were a nontrivial invariant projection for `rotatePhysical u A`, then
 multiplying the invariance condition by `conj(u_{ik})` and summing over `i`
 yields `(1-P) A_k P = 0` via the orthogonality `uᴴ u = 1`, so `P` would also
 be invariant for `A`, contradicting irreducibility. -/
-theorem isIrreducibleTensor_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
+theorem isIrreducibleFamily_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1) (hA : Kraus.IsIrreducibleFamily A) :
     Kraus.IsIrreducibleFamily (rotatePhysical u A) := by
   intro ⟨P, hProj, hNe0, hNe1, hInv⟩
@@ -174,7 +174,7 @@ irreducibility is preserved. -/
 theorem isPeriodic_rotatePhysical (m : ℕ) (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
     (hu : u * uᴴ = 1) (hA : IsPeriodic m A) :
     IsPeriodic m (rotatePhysical u A) where
-  irreducible := isIrreducibleTensor_rotatePhysical A u hu hA.irreducible
+  irreducible := isIrreducibleFamily_rotatePhysical A u hu hA.irreducible
   leftCanonical := isLeftCanonical_rotatePhysical A u hu hA.leftCanonical
   period_pos := hA.period_pos
   peripheral_eq := by rw [transferMap_rotatePhysical A u hu]; exact hA.peripheral_eq

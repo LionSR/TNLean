@@ -270,7 +270,7 @@ theorem norm_sheetBufferCorrection_le_one (σ : SplittingData q T E) :
 set_option synthInstance.maxSize 512 in
 /-- In the coordinates `threeSplit T E` of both sheets, swapping the sheets at `T` exchanges the
 `T`-components. -/
-theorem sheetSwapOp_eq_submatrix :
+theorem reindex_pairSwapOp_eq_submatrix :
     reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
         (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp T) =
       ((tSwapW (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).toPEquiv.toMatrix :

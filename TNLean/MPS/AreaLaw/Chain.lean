@@ -11,7 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Chain.BoundaryGap
 import TNLean.MPS.AreaLaw.Chain.ChainNeighborhood
 import TNLean.MPS.AreaLaw.Chain.Counting
-import TNLean.MPS.AreaLaw.Chain.DomainGraphGeometry
 import TNLean.MPS.AreaLaw.Chain.DomainInteractionBudget
 import TNLean.MPS.AreaLaw.Chain.DomainIntervalNeighborhood
 import TNLean.MPS.AreaLaw.Chain.DomainPartialSwap
@@ -23,6 +22,7 @@ import TNLean.MPS.AreaLaw.Chain.Hamiltonian
 import TNLean.MPS.AreaLaw.Chain.IntervalSymmDiff
 import TNLean.MPS.AreaLaw.Chain.IntervalUnion
 import TNLean.MPS.AreaLaw.Chain.LiebRobinson
+import TNLean.MPS.AreaLaw.Chain.LineDomainGraphGeometry
 import TNLean.MPS.AreaLaw.Chain.NearestNeighbourImaginaryTime
 import TNLean.MPS.AreaLaw.Chain.PartCommutators
 import TNLean.MPS.AreaLaw.Chain.PartialSwap

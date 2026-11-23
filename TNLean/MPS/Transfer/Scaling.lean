@@ -143,7 +143,7 @@ theorem isPeriodic_smul_of_norm_one
   have hc_ne : c ≠ 0 := Complex.ne_zero_of_norm_eq_one hc
   have hTransfer : Kraus.transferMap (fun i => c • A i) = Kraus.transferMap A :=
     transferMap_smul_eq_of_norm_eq_one A c hc
-  refine ⟨isIrreducibleTensor_smul hc_ne A hA.irreducible,
+  refine ⟨isIrreducibleFamily_smul hc_ne A hA.irreducible,
     leftCanonical_smul_of_norm_one c hc A hA.leftCanonical,
     hA.period_pos, ?_⟩
   simpa [hTransfer] using hA.peripheral_eq

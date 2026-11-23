@@ -256,7 +256,7 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_gauge_of_mpo_eq
     hV.isLeftCanonical_normalizedFlattening
   have hIrrU : Kraus.IsIrreducibleFamily
       (cast (congrArg (MPSTensor (d * d)) hdim) U.normalizedFlattening) :=
-    (MPSTensor.isIrreducibleTensor_cast_dim hdim U.normalizedFlattening).2
+    (MPSTensor.isIrreducibleFamily_cast_dim hdim U.normalizedFlattening).2
       hU.isNormalTensor_normalizedFlattening.no_invariant_proj
   have hIrrV : Kraus.IsIrreducibleFamily V.normalizedFlattening :=
     hV.isNormalTensor_normalizedFlattening.no_invariant_proj
@@ -360,7 +360,7 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
         hU.isLeftCanonical_normalizedFlattening
     have hIrrU : Kraus.IsIrreducibleFamily
         (cast (congrArg (MPSTensor (d * d)) hdim) U.normalizedFlattening) :=
-      (MPSTensor.isIrreducibleTensor_cast_dim hdim U.normalizedFlattening).2
+      (MPSTensor.isIrreducibleFamily_cast_dim hdim U.normalizedFlattening).2
         hA.no_invariant_proj
     obtain ⟨z, _, hRel⟩ :=
       MPSTensor.exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible

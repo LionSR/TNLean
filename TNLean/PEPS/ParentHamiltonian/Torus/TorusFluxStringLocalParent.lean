@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Injectivity.TorusSector.TorusGroupGaugeContraction
 import TNLean.PEPS.ParentHamiltonian.Torus.TorusNativeFluxHolonomy
 import TNLean.PEPS.Injectivity.Multiplicity.GraphInsertedRegionSupport
-import TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian
+import TNLean.PEPS.ParentHamiltonian.Region.RegionParentInteraction
 
 /-!
 # Local parent constraints away from flux-string endpoints

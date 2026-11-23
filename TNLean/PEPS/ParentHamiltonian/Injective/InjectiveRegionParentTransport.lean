@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.Injective.InjectiveVertexCoordinates
-import TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian
+import TNLean.PEPS.ParentHamiltonian.Region.RegionParentInteraction
 import QICLean.Algebra.Matrix.MatrixAux
 import Mathlib.LinearAlgebra.Matrix.Rank
 

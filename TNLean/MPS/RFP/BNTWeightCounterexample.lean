@@ -104,7 +104,7 @@ theorem halvedWeightTensor_isBNTCanonicalForm :
       simp
     basis_irreducible := by
       intro j
-      exact isIrreducibleTensor_of_bondDim_one scalarUnitTensor
+      exact isIrreducibleFamily_of_bondDim_one scalarUnitTensor
     basis_left_canonical := by
       intro j
       simp [IsLeftCanonical, Kraus.IsTP, scalarUnitTensor]

@@ -32,7 +32,7 @@ to channel / QPF normalization, following:
 
 ### Main result: CFII-style diagonal fixed point
 
-* `MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor`:
+* `MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily`:
   for a trace-preserving / left-canonical irreducible MPS tensor, there exists a
   unitary conjugation such that the conjugated tensor is still left-canonical and has a
   diagonal positive-definite fixed point.
@@ -140,7 +140,7 @@ unitary `U` and a diagonal positive-definite matrix `Λ` such that:
 
 This is the key step in reducing to "Canonical Form II" from
 Cirac et al. arXiv:1606.00608 Appendix A. -/
-theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
     [DecidableEq (Fin D)]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -238,7 +238,7 @@ and the finite-ring matrix product vectors. -/
 /- Note (for maintainers): the proof reuses the trace-preserving diagonalization
 theorem for the conjugate-transposed Kraus family. This keeps the PGVWC07
 orientation explicit without repeating the spectral argument. -/
-theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor
+theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleFamily
     (A : MPSTensor d D)
     (hUnital : ∑ i : Fin d, A i * (A i)ᴴ = 1)
     (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
@@ -265,7 +265,7 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleT
   have hIrrAdj : Kraus.IsIrreducibleFamily (d := d) (D := D) Aadj :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM Aadj hIrrAdjMap
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
-    exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+    exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
       (d := d) (D := D) Aadj hTPadj hIrrAdj hD
   refine ⟨U, Λ, ?_⟩
   let B : MPSTensor d D :=

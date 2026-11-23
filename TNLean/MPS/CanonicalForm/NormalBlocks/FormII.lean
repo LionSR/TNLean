@@ -47,7 +47,7 @@ private theorem IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ}
     hA.exists_tpGauge
   let T : MPSTensor d m := Kraus.tpGauge A σ
   obtain ⟨V, Λ, _hSame, hΛPos, hΛDiag, hLeft, hΛFix⟩ :=
-    exists_CFII_data_of_TP_of_isIrreducibleTensor T hTP hIrreducible (NeZero.pos m)
+    exists_CFII_data_of_TP_of_isIrreducibleFamily T hTP hIrreducible (NeZero.pos m)
   let B : MPSTensor d m := fun i =>
     (V : Matrix (Fin m) (Fin m) ℂ)ᴴ * T i * (V : Matrix (Fin m) (Fin m) ℂ)
   have hGaugeUnitary : GaugeEquiv T B := by

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Network.DependentBond.DependentDiagonalContraction
-import TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian
+import TNLean.PEPS.Tensor.Region.RegionGroundSpace
 
 /-!
 # Actual graph tensors in dependent endpoint coordinates

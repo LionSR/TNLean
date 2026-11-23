@@ -455,7 +455,7 @@ abstracted — record why, so it is not re-proposed).
   `MPS/ParentHamiltonian/QuasiLocalState/PrimitiveQuasiLocalUniqueness.lean`,
   `MPS/FundamentalTheorem/Compression/StationarySplitting.lean`,
   `PEPS/ParentHamiltonian/Placement/CoordinateRangeProjector.lean`, and
-  `PEPS/ParentHamiltonian/Region/RegionParentHamiltonian.lean`.
+  `PEPS/ParentHamiltonian/Region/RegionParentInteraction.lean`.
 - **Notes:** The helper keeps the linear-map definition used by rank and range
   calculations. Public wrappers retain their existing linear- or continuous-map
   definitions for downstream explicit rewrites; their star-projection proofs use

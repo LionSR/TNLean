@@ -75,7 +75,7 @@ private noncomputable def rotateMPUCanonicalFormData
       coisometric := data.coisometric
       total_dim_eq := data.total_dim_eq
       blocks_canonical := fun k =>
-        { irreducible := isIrreducibleTensor_rotatePhysical _ _
+        { irreducible := isIrreducibleFamily_rotatePhysical _ _
             (Matrix.mem_unitaryGroup_iff.mp hP) (data.blocks_canonical k).irreducible
           spectral_radius_one := by
             rw [transferMap_rotatePhysical _ _ (Matrix.mem_unitaryGroup_iff.mp hP)]

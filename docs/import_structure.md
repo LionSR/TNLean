@@ -51,7 +51,7 @@ The chain and finite-domain commutator and localization estimates in
 `MPS.AreaLaw.LiebRobinson` are specializations, to the path graph and to
 the induced path graph, of one graph statement proved from the shared
 propagation theory in QICLean's `ManyBody.Dynamics`. Their initial support may meet several connected
-components; infinite distance gives exact commutation. `DomainGraphGeometry`
+components; infinite distance gives exact commutation. `LineDomainGraphGeometry`
 uses the component paths of QICLean's `Algebra.IntegerHasseGraph` and the extended-distance
 comparisons in QICLean's `Algebra.GraphDistanceTransport` to bound each finite-radius
 sphere by two sites. This supplies the growth bound for domain localization.

@@ -66,7 +66,7 @@ closure theorem, then take a common power and transport primitivity back
 across the adjoint.
 -/
 
-theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
+theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)

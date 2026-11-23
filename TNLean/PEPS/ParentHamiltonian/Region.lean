@@ -17,7 +17,7 @@ import TNLean.PEPS.ParentHamiltonian.Region.RegionParentBondCoefficients
 import TNLean.PEPS.ParentHamiltonian.Region.RegionParentComparison
 import TNLean.PEPS.ParentHamiltonian.Region.RegionParentDependentCut
 import TNLean.PEPS.ParentHamiltonian.Region.RegionParentGapCriterion
-import TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian
+import TNLean.PEPS.ParentHamiltonian.Region.RegionParentInteraction
 import TNLean.PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation
 import TNLean.PEPS.ParentHamiltonian.Region.RegionPhysicalGroundSpaceTransport
 import TNLean.PEPS.ParentHamiltonian.Region.RegionPhysicalHamiltonianTransport

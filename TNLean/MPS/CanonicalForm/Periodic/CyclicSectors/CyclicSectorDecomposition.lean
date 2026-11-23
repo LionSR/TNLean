@@ -65,7 +65,7 @@ hypotheses (corner-irreducible → proj-step → fixed-algebra-rigidity
 → scalar-blocked-fixed-points) until the unconditional form
 `primitive_and_irreducible_sectorBlocks_of_cyclic_decomp_after_blocking`
 is reached.  Only the unconditional form and the top-level existence theorem
-`exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor`
+`exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleFamily`
 are consumed by the downstream canonical-form proof chain.
 -/
 
@@ -295,7 +295,7 @@ irreducibility are consequences of quantum Perron--Frobenius theory.
 
 The statement records the period-removal decomposition for irreducible
 trace-preserving MPS tensors described in arXiv:1606.00608, lines 227--231. -/
-theorem exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleTensor
+theorem exists_cyclic_sector_decomp_after_blocking_of_TP_of_isIrreducibleFamily
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -347,7 +347,7 @@ This encodes the unconditional sector-orbit lift into the single
 result consumed by the downstream common-blocking construction.  It is
 the period-removal step of arXiv:1606.00608, §2.3, strengthened with
 primitivity and irreducibility of the sector blocks. -/
-theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+theorem exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleFamily
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)

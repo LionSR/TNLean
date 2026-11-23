@@ -79,7 +79,7 @@ end CPSVCanonicalFormIIData
 namespace CPSVCanonicalFormData
 
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
-private theorem isIrreducibleTensor_reindexBond
+private theorem isIrreducibleFamily_reindexBond
     {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPSTensor d n)
     (hB : Kraus.IsIrreducibleFamily B) :
     Kraus.IsIrreducibleFamily (fun i => Matrix.reindex e e (B i)) := by
@@ -129,7 +129,7 @@ arXiv:1703.09188, lines 344--354, is used for the intended reduced representativ
 after lines 319--326. This theorem assumes the resulting ambient-dimensional
 block directly. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem isIrreducibleTensor_of_dim_eq
+theorem isIrreducibleFamily_of_dim_eq
     (data : CPSVCanonicalFormData A) (k : Fin data.r) (hDim : data.dim k = D) :
     Kraus.IsIrreducibleFamily A := by
   classical
@@ -168,7 +168,7 @@ theorem isIrreducibleTensor_of_dim_eq
     have hUiso : Uᴴ * U = 1 := mul_eq_one_comm.mpr hUcois
     exact ⟨⟨U, Uᴴ, hUcois, hUiso⟩, rfl⟩
   have hB : Kraus.IsIrreducibleFamily B := by
-    exact isIrreducibleTensor_reindexBond eBlock (data.blocks k)
+    exact isIrreducibleFamily_reindexBond eBlock (data.blocks k)
       (data.blocks_normal k).no_invariant_proj
   have hassembled : ∀ i,
       Matrix.reindex eTotal eTotal
@@ -235,7 +235,7 @@ theorem isIrreducibleTensor_of_dim_eq
       (data.ambient_coisometryᴴ * toTensorFromBlocks data.weights data.blocks i)
       data.ambient_coisometry (Equiv.refl _) (finCongr hsum).symm (Equiv.refl _)]
     simp
-  have hirr := isIrreducibleTensor_smul_conj B hB hUunit (data.weights_ne_zero k)
+  have hirr := isIrreducibleFamily_smul_conj B hB hUunit (data.weights_ne_zero k)
   have hinv : U⁻¹ = Uᴴ := Matrix.inv_eq_left_inv (mul_eq_one_comm.mpr hUcois)
   convert hirr using 1
   funext i
@@ -285,11 +285,11 @@ arXiv:1703.09188, Proposition `prop:normal-tensor`, lines 344--354. The theorem
 reduced representative; this lemma supplies its full-support irreducibility
 step and does not assert irreducibility of the original nonminimal tensor. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-theorem isIrreducibleTensor_of_r_eq_one_of_fullSupport
+theorem isIrreducibleFamily_of_r_eq_one_of_fullSupport
     (data : CPSVCanonicalFormData A) (hr : data.r = 1)
     (hfull : data.HasFullSupport) : Kraus.IsIrreducibleFamily A := by
   let k : Fin data.r := ⟨0, by omega⟩
-  exact data.isIrreducibleTensor_of_dim_eq k
+  exact data.isIrreducibleFamily_of_dim_eq k
     (data.dim_eq_of_r_eq_one_of_fullSupport hr hfull k)
 
 /-- Combine the full-support one-block conclusion with supplied transfer-radius and
@@ -311,7 +311,7 @@ theorem isNormalTensor_of_r_eq_one_of_fullSupport
         (Kraus.transferMap A)) = 1)
     (hprim : IsPrimitive (Kraus.transferMap A)) : IsNormalTensor A where
   no_invariant_proj :=
-    data.isIrreducibleTensor_of_r_eq_one_of_fullSupport hr hfull
+    data.isIrreducibleFamily_of_r_eq_one_of_fullSupport hr hfull
   spectral_radius_one := hrad
   primitive_transfer := hprim
 

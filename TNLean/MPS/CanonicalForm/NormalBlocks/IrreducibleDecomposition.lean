@@ -145,7 +145,7 @@ We use `MPSTensor.exists_tp_data_of_irreducible` from
 /-!
 ## (3) CFII normalization for irreducible trace-preserving blocks
 
-We collect `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor` together with the
+We collect `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily` together with the
 fact that unitary conjugation preserves MPVs.
 
 Important: this is the **second** half of the Appendix-A normalization story. The preceding
@@ -167,7 +167,7 @@ such that the unitary conjugate tensor
 This is the formal analogue of bringing a block into **Canonical Form II** (CFII) *after*
 one has already chosen a TP representative; it does not say that the original pre-TP-gauge tensor
 is related to a CFII representative by a unitary similarity alone. -/
-theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
+theorem exists_CFII_data_of_TP_of_isIrreducibleFamily
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
@@ -183,7 +183,7 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
         Kraus.transferMap (ι := Fin d) (n := Fin D) B Λ = Λ := by
   classical
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
-    exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+    exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
       (d := d) (D := D) A hTP hIrr hD
   refine ⟨U, Λ, ?_⟩
   -- MPV is invariant under unitary conjugation.

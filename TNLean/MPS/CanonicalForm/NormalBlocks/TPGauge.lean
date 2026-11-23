@@ -243,7 +243,7 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
     simp [hroot_ne]
   have hIrr_scaled :
       Kraus.IsIrreducibleFamily (d := d) (D := D) (fun i => c • A i) :=
-    isIrreducibleTensor_smul (d := d) (D := D) hc_ne A hIrr
+    isIrreducibleFamily_smul (d := d) (D := D) hc_ne A hIrr
   have hActionScaled :
       Matrix.IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
     Kraus.isIrreducibleAction_of_isIrreducibleFamily
@@ -260,10 +260,10 @@ theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
         Kraus.transferMap (ι := Fin d) (n := Fin D) B X = X →
           ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
     intro X hX
-    exact fixed_eq_scalar_of_isIrreducibleTensor_unital
+    exact fixed_eq_scalar_of_isIrreducibleFamily_unital
       (d := d) (D := D) B hIrrB hB_unital_map X hX
   obtain ⟨U, Λ, hSame, hΛ_pd, hΛ_diag, hC_unital, hΛ_fix⟩ :=
-    exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor
+    exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleFamily
       (d := d) (D := D) B hB_unital hIrrB (NeZero.pos D)
   let C : MPSTensor d D :=
     fun i =>
@@ -627,7 +627,7 @@ theorem exists_tp_gauge_blockwise
       simp [hroot_ne]
     have hIrr_scaled :
         Kraus.IsIrreducibleFamily (d := d) (D := dim0 k) (fun i => c • blocks0 k i) :=
-      isIrreducibleTensor_smul (d := d) (D := dim0 k) hc_ne (blocks0 k) (hIrr0 k)
+      isIrreducibleFamily_smul (d := d) (D := dim0 k) hc_ne (blocks0 k) (hIrr0 k)
     have hIrr_gauge :
         Kraus.IsIrreducibleFamily (d := d) (D := dim0 k)
           (Kraus.tpGauge (fun i => c • blocks0 k i) (σ1 k)) :=

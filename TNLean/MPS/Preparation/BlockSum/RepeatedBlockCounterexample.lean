@@ -359,7 +359,7 @@ theorem isBNTCanonicalForm_repeatedBlockBasisSector (m : Fin 2 → ℕ) (hm : �
     (hone : ∃ j k, ‖μ j k‖ = 1) :
     IsBNTCanonicalForm (repeatedBlockBasisSector m hm μ hμ) where
   basis_dim_pos := fun _ => Nat.one_pos
-  basis_irreducible := fun j => isIrreducibleTensor_of_bondDim_one (repeatedBlockBasis j)
+  basis_irreducible := fun j => isIrreducibleFamily_of_bondDim_one (repeatedBlockBasis j)
   basis_left_canonical := fun j => isLeftCanonical_of_dim_one _ (repeatedBlockBasis_norm j)
   basis_normalized_self_overlap := fun j =>
     tendsto_mpvOverlap_self_of_dim_one _ (repeatedBlockBasis_norm j)

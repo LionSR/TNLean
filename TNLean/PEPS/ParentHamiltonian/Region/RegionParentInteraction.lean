@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Tensor.Region.RegionConfigSplit
 import TNLean.PEPS.Tensor.Region.RegionGroundSpace
 import QICLean.Analysis.Projection.MatrixStarProjection
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
@@ -13,12 +14,14 @@ import QICLean.ManyBody.Hamiltonian.FrustrationFree
 import QICLean.Algebra.Matrix.MatrixAux
 
 /-!
-# Parent Hamiltonians on finite PEPS graphs
+# Regional parent interactions of finite PEPS
 
 A parent interaction on a region is any positive semidefinite operator whose
-kernel is the span of the open-region tensors. It acts as the identity on the
-complementary physical indices. The kernel of a finite sum of these interactions
-is their common kernel, and the closed PEPS vector belongs to that kernel.
+kernel is the span of the open-region tensors; the canonical one is the
+orthogonal projector onto the complement of that span. Placed on the whole
+graph, it acts as the identity on the complementary physical indices. The
+kernel of the parent Hamiltonian of a finite family of these interactions is
+their common kernel, and the closed PEPS vector belongs to that kernel.
 
 Source: Cirac, Pérez-García, Schuch, and Verstraete, arXiv:2011.12127,
 Section IV.C.1, local source lines 2003–2011.
@@ -36,21 +39,6 @@ namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
-
-/-- Splitting a physical configuration into its region and complement.
-Source: arXiv:2011.12127, local-versus-complement factorization, lines 2003–2011. -/
-def regionConfigEquiv (R : Finset V) :
-    (V → Fin d) ≃ RegionPhysicalConfig (d := d) R ×
-      RegionPhysicalConfig (d := d) (Finset.univ \ R) where
-  toFun σ := (fun v => σ v.1, fun v => σ v.1)
-  invFun p := assembleRegionσ R p.1 p.2
-  left_inv σ := by
-    funext v
-    simp [assembleRegionσ]
-  right_inv p := by
-    apply Prod.ext <;> funext v
-    · exact assembleRegionσ_mem R p.1 p.2 v
-    · exact assembleRegionσ_notMem R p.1 p.2 v
 
 /-- A positive local interaction with exactly the prescribed PEPS kernel.
 The interaction need not be a projector. Source: arXiv:2011.12127,
@@ -106,38 +94,6 @@ theorem isRegionParentInteraction_canonical (A : Tensor Γ d) (R : Finset V) :
     IsRegionParentInteraction A R (canonicalRegionParentInteraction A R) :=
   ⟨canonicalRegionParentInteraction_posSemidef A R, ker_canonicalRegionParentInteraction A R⟩
 
-/-- The placement of a regional operator, extended by the identity on its complement, in the
-coordinates of the region and of `univ \ R`.
-Source: arXiv:2011.12127, parent Hamiltonian construction, lines 2003–2011. -/
-theorem place_eq_regionConfigEquiv (R : Finset V)
-    (h : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ) :
-    ManyBody.place (X := fun _ ↦ Fin d) R h =
-      (h ⊗ₖ (1 : Matrix (RegionPhysicalConfig (d := d) (Finset.univ \ R))
-        (RegionPhysicalConfig (d := d) (Finset.univ \ R)) ℂ)).submatrix
-          (regionConfigEquiv R) (regionConfigEquiv R) := by
-  ext σ τ
-  simp only [ManyBody.place_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, regionConfigEquiv, Equiv.coe_fn_mk, funext_iff, Subtype.forall,
-    Finset.mem_sdiff, Finset.mem_univ, true_and]
-  split_ifs <;> simp_all
-
-/-- On a fixed complementary configuration the global interaction is exactly
-the original regional interaction. Source: arXiv:2011.12127, lines 2003–2011. -/
-theorem place_mulVec_assemble (R : Finset V)
-    (h : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ) (ψ : (V → Fin d) → ℂ)
-    (σ : RegionPhysicalConfig (d := d) R)
-    (τ : RegionPhysicalConfig (d := d) (Finset.univ \ R)) :
-    (ManyBody.place (X := fun _ ↦ Fin _) R h *ᵥ ψ) (assembleRegionσ R σ τ) =
-      (h *ᵥ (fun ν => ψ (assembleRegionσ R ν τ))) σ := by
-  classical
-  simp only [Matrix.mulVec, dotProduct]
-  rw [← Equiv.sum_comp (regionConfigEquiv (d := d) R).symm,
-    Fintype.sum_prod_type]
-  simp [place_eq_regionConfigEquiv, Matrix.submatrix_apply,
-    regionConfigEquiv, Matrix.one_apply]
-
 /-- A global vector is killed by a regional parent interaction precisely when
 every complementary slice belongs to the local PEPS ground space.
 Source: arXiv:2011.12127, local parent kernels, lines 2003–2011. -/
@@ -164,15 +120,6 @@ theorem place_mulVec_eq_zero_iff (A : Tensor Γ d) (R : Finset V)
     exact congrFun (LinearMap.mem_ker.mp hmem) σ
 
 /-! ## Finite families of interactions -/
-
-/-- A physical slice with the complementary configuration fixed.
-Source: arXiv:2011.12127, local ground-space conditions, lines 2003–2011. -/
-def regionSliceMap (R : Finset V)
-    (τ : RegionPhysicalConfig (d := d) (Finset.univ \ R)) :
-    ((V → Fin d) → ℂ) →ₗ[ℂ] (RegionPhysicalConfig (d := d) R → ℂ) where
-  toFun ψ σ := ψ (assembleRegionσ R σ τ)
-  map_add' _ _ := rfl
-  map_smul' _ _ := rfl
 
 variable {ι : Type*} [Fintype ι]
 

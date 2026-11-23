@@ -99,7 +99,7 @@ theorem IsBNTCanonicalForm.reindexPhysical {d' : ℕ}
     IsBNTCanonicalForm (P.reindexPhysical e) where
   basis_dim_pos := hCF.basis_dim_pos
   basis_irreducible := fun j ↦
-    (isIrreducibleTensor_reindexPhysical_equiv e (P.basis j)).2
+    (isIrreducibleFamily_reindexPhysical_equiv e (P.basis j)).2
       (hCF.basis_irreducible j)
   basis_left_canonical := fun j ↦
     (leftCanonical_reindexPhysical_equiv e (P.basis j)).2
@@ -305,7 +305,7 @@ theorem IsBNTCanonicalForm.blockTensor
       weight_unit_exists := ?_ }
   · intro j
     let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
-    exact isIrreducibleTensor_blockTensor_of_tp_primitive_irr
+    exact isIrreducibleFamily_blockTensor_of_tp_primitive_irr
       (P.basis j) (hCF.basis_left_canonical j) (hPrimitive j)
         (hCF.basis_irreducible j) hp
   · intro j

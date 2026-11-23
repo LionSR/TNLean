@@ -68,7 +68,7 @@ variable {d D : ℕ}
 predicates in `Kraus`. -/
 
 /-- Nonzero scalar rescaling preserves tensor irreducibility. -/
-theorem isIrreducibleTensor_smul
+theorem isIrreducibleFamily_smul
     {c : ℂ} (hc : c ≠ 0) (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A) :
     Kraus.IsIrreducibleFamily (fun i => c • A i) := by
   intro hHas
@@ -102,7 +102,7 @@ support projection is a nontrivial invariant orthogonal projection of `B`.
 This is the normalization step of arXiv:1606.00608, lines 224--225, for the
 corner tensors: the rescaled unital gauge of an irreducible corner is again
 irreducible. -/
-theorem isIrreducibleTensor_smul_conj (B : MPSTensor d D)
+theorem isIrreducibleFamily_smul_conj (B : MPSTensor d D)
     (hIrr : Kraus.IsIrreducibleFamily B) {X : Matrix (Fin D) (Fin D) ℂ} (hX : IsUnit X)
     {c : ℂ} (hc : c ≠ 0) :
     Kraus.IsIrreducibleFamily (fun v => c • (X⁻¹ * B v * X)) := by
@@ -281,12 +281,12 @@ theorem exists_irreducible_blockDecomp (A : MPSTensor d D) :
         intro k
         -- After Fin.addCases_left, the block unfolds to the left branch.
         simp only [combinedBlocks, Fin.addCases_left]
-        exact (isIrreducibleTensor_cast_dim (h_left k).symm (blocks₁ k)).mpr (hirr₁ k)
+        exact (isIrreducibleFamily_cast_dim (h_left k).symm (blocks₁ k)).mpr (hirr₁ k)
       · -- Right half: combinedBlocks (Fin.natAdd r₁ k) = cast (h_right k).symm (blocks₂ k).
         intro k
         -- After Fin.addCases_right, the block unfolds to the right branch.
         simp only [combinedBlocks, Fin.addCases_right]
-        exact (isIrreducibleTensor_cast_dim (h_right k).symm (blocks₂ k)).mpr (hirr₂ k)
+        exact (isIrreducibleFamily_cast_dim (h_right k).symm (blocks₂ k)).mpr (hirr₂ k)
     -- ── SameMPV₂ for the combined decomposition ───────────────────────────────────────────────
     · intro N σ
       -- Step 1: A ~ twoBlockTensor A₁ A₂  (from the invariant-projection splitting).
