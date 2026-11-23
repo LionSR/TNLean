@@ -26,13 +26,13 @@ open scoped ComplexOrder
 
 namespace LinearMap.IsPositive
 
-/-- A comparison `κ P ≤ m Q` of a positive operator `P` with an operator `Q` of the same kernel
-transfers a gap `γ` above the kernel of `P`, every eigenvalue of `P` other than `0` being at
-least `γ`, to the gap `κ γ / m` above the kernel of `Q`. The positivity of `Q` follows from the
-comparison. -/
+/-- A comparison \(\kappa P \le m Q\) of a positive operator `P` with an operator `Q` of the
+same kernel transfers a gap `γ` above the kernel of `P`, every eigenvalue of `P` other than `0`
+being at least `γ`, to the gap \(\kappa\gamma/m\) above the kernel of `Q`. The positivity of
+`Q` follows from the comparison. -/
 theorem forall_hasEigenvalue_of_scaled_comparison {E : Type*} [NormedAddCommGroup E]
     [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    {P Q : E →ₗ[ℂ] E} (hP : P.IsPositive) {κ γ m : ℝ} (hκ : 0 < κ) (hγ : 0 < γ) (hm : 0 < m)
+    {P Q : E →ₗ[ℂ] E} (hP : P.IsPositive) {κ γ m : ℝ} (hκ : 0 < κ) (_hγ : 0 < γ) (hm : 0 < m)
     (hOrder : (κ : ℂ) • P ≤ (m : ℂ) • Q) (hKer : LinearMap.ker P = LinearMap.ker Q)
     (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue P μ → μ = 0 ∨ (γ : ℂ) ≤ μ) :
     ∀ μ : ℂ, Module.End.HasEigenvalue Q μ → μ = 0 ∨ ((κ * γ / m : ℝ) : ℂ) ≤ μ := by
@@ -42,8 +42,14 @@ theorem forall_hasEigenvalue_of_scaled_comparison {E : Type*} [NormedAddCommGrou
   have hQ : Q.IsPositive := by
     simpa only [smul_smul, ← Complex.ofReal_mul, inv_mul_cancel₀ hm.ne', Complex.ofReal_one,
       one_smul] using hmQ.smul_of_nonneg (Complex.zero_le_real.mpr (inv_pos.mpr hm).le)
-  exact hQ.forall_hasEigenvalue_iff_norm.mpr (hP.norm_gap_of_scaled_comparison hκ hγ hm hOrder
-    hKer (hP.forall_hasEigenvalue_iff_norm.mp hGap))
+  refine hQ.isSymmetric.forall_hasEigenvalue_of_re_inner fun v hv ↦ ?_
+  have hPv := hP.isSymmetric.mul_norm_sq_le_re_inner_of_forall_hasEigenvalue hGap
+    (by rwa [hKer])
+  have hOv := hOrder.re_inner_nonneg_right v
+  simp only [LinearMap.sub_apply, LinearMap.smul_apply, inner_sub_right, inner_smul_right,
+    map_sub, RCLike.re_to_complex, Complex.re_ofReal_mul, sub_nonneg] at hOv
+  rw [div_mul_eq_mul_div, div_le_iff₀ hm]
+  nlinarith [mul_le_mul_of_nonneg_left hPv hκ.le]
 
 end LinearMap.IsPositive
 

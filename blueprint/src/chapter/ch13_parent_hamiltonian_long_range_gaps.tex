@@ -1045,7 +1045,7 @@ tensors.
 
 \begin{lemma}[Kernels and gaps under positive comparison]
     \label{lem:positive-comparison-kernel-gap}
-    \lean{LinearMap.IsPositive.ker_le_of_le, LinearMap.IsPositive.ker_eq_of_smul_le_of_le_smul, LinearMap.IsPositive.norm_gap_of_smul_le_of_le_smul}
+    \lean{LinearMap.IsPositive.ker_le_of_le, LinearMap.IsPositive.ker_eq_of_smul_le_of_le_smul, LinearMap.IsPositive.forall_hasEigenvalue_of_smul_le_of_le_smul}
     \leanok
     If $0\leq P\leq Q$, then $\ker Q\subseteq\ker P$.
     Consequently, if $P,Q$ are positive operators and $a,b,c>0$ satisfy
@@ -1053,16 +1053,17 @@ tensors.
         aP\leq bQ\leq cP,
         \notag
     \end{align}
-    their kernels agree. In finite dimension, a norm gap $\gamma>0$
-    for $P$ on its kernel complement implies a norm gap
-    $a\gamma/b$ for $Q$ on the same subspace.
+    their kernels agree. In finite dimension, if every eigenvalue of $P$
+    other than $0$ is at least $\gamma>0$, then every eigenvalue of $Q$
+    other than $0$ is at least $a\gamma/b$.
 \end{lemma}
 \begin{proof}\leanok
     A positive quadratic form vanishes only on the kernel of its operator.
     Evaluating the order bounds on kernel vectors proves the inclusions.
-    On the common kernel complement, the norm gap for $P$ is equivalent
-    to $P\geq\gamma I$. Hence $bQ\geq a\gamma I$, which gives the
-    stated norm gap by Cauchy--Schwarz.
+    On the common kernel complement, the eigenvalue bound for $P$ gives
+    $P\geq\gamma I$. Hence $bQ\geq a\gamma I$ there, so every
+    eigenvalue of $Q$ with an eigenvector in the kernel complement is at
+    least $a\gamma/b$; every other eigenvalue is $0$.
 \end{proof}
 
 \begin{lemma}[Transfer to a prescribed interaction range]

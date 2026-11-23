@@ -73,9 +73,9 @@ theorem smul_orthogonal_ker_projection_le_of_norm_gap
     hnorm,
     inner_eq_inner_orthogonal_ker_projection hH v, sub_nonneg] using h
 
-/-- A gap `γ ≥ 0` above the kernel of a positive operator, every eigenvalue other than `0` being
-at least `γ`, gives a lower order bound by the orthogonal projection onto its kernel
-complement. -/
+/-- A gap \(\gamma \ge 0\) above the kernel of a positive operator, every eigenvalue other
+than `0` being at least `γ`, gives a lower order bound by the orthogonal projection onto its
+kernel complement. -/
 theorem smul_orthogonal_ker_projection_le_of_forall_hasEigenvalue
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [FiniteDimensional ℂ E] {H : E →ₗ[ℂ] E} (hH : H.IsPositive)
