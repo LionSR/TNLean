@@ -45,7 +45,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 380–4
 This estimate does not construct a Gaussian filter or an information reset.
 -/
 
-open ManyBody (ChainSupport DomainSupport lineDomainGraph ChainInteraction DomainInteraction)
+open ManyBody (ChainSupport DomainSupport boundaryEdges lineDomainGraph ChainInteraction
+  DomainInteraction)
 
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
@@ -184,7 +185,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
     exact hsum
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
-    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) hΦh b₀
+    (fun X ↦ ManyBody.ChainSupport.edist_le X) (fun X ↦ X.2.card_le) hΦh b₀
     (ManyBody.ChainInteraction.sum_norm_terms_containing_le Φ hΦn) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
@@ -193,11 +194,9 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
       (mul_le_mul_of_nonneg_left (le_abs_self J) (by norm_num))) ℓ t
   dsimp only at hgen
   rw [graphNeighborhood_pathGraph_eq_chainNeighborhood Z hℓ, hΦ, ← hdiff] at hgen
-  have hb : (boundaryEdges L D).card ≤ L := by
-    calc
-      _ ≤ (Finset.range (L - 1)).card := Finset.card_filter_le _ _
-      _ = L - 1 := Finset.card_range _
-      _ ≤ L := Nat.sub_le _ _
+  have hb : (boundaryEdges L D).card ≤ L :=
+    (Finset.card_le_card fun p hp ↦ Finset.mem_range.mpr
+      (by have := (ManyBody.mem_boundaryEdges.mp hp).1; omega)).trans (Finset.card_range _).le
   have hc : ((C ×ˢ (Finset.univ : Finset Bool)).card : ℝ) ≤ (chainCrossConst R : ℝ) * L := by
     rw [Finset.card_product, Finset.card_univ, Fintype.card_bool]
     exact_mod_cast hcount.trans (Nat.mul_le_mul_left _ hb)

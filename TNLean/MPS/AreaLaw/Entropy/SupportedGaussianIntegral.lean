@@ -228,7 +228,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
           (by linarith [hhJ X]))
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
-    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) hΦh b₀
+    (fun X ↦ ManyBody.ChainSupport.edist_le X) (fun X ↦ X.2.card_le) hΦh b₀
     (ManyBody.ChainInteraction.sum_norm_terms_containing_le Φ hΦn)
         (ManyBody.Interaction.isHermitian_hamiltonian (Φ := h.doubledFin) fun X ↦
           (ManyBody.Interaction.isHermitian_doubled_term (hh X)).reindex _) Z ℓ

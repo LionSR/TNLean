@@ -44,8 +44,6 @@ open scoped Matrix.Norms.L2Operator
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.Approximation

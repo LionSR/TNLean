@@ -4,9 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
-import QICLean.ManyBody.Entropy.MovementEtaRegional
-import QICLean.ManyBody.Entropy.RegionEntropyInequalities
-import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Column intervals in a finite strip

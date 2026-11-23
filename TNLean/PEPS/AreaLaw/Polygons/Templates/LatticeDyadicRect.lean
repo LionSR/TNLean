@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CappedDyadicPartition
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateClearance
-import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # Integer rectangles of lattice dyadic squares

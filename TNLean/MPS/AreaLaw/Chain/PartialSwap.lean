@@ -38,7 +38,7 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines
 No spectral or ground-state transport is asserted here.
 -/
 
-open ManyBody (ChainSupport mem_interval ChainInteraction)
+open ManyBody (ChainSupport boundaryEdges mem_interval ChainInteraction)
 
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
@@ -241,7 +241,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
     have hsplit : (∃ v ∈ X.1, v ∈ D) ∧ ∃ v ∈ X.1, v ∉ D := by
       simpa only [C, ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
         using hXC
-    obtain ⟨p, hp, hwin⟩ := IsChainSupport.exists_boundary_window_of_split X.2 hsplit
+    obtain ⟨p, hp, hwin⟩ := X.2.exists_boundary_window_of_split hsplit
     refine ⟨p, hp, ?_⟩
     have hxwin := mem_interval.mp (hwin hxX)
     simp only [Nat.dist]
@@ -274,7 +274,9 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
       _ = _ := by simp
   refine ⟨hsupp, hzone, ?_⟩
   by_cases hL : L = 0
-  · have hb : boundaryEdges L D = ∅ := by simp [boundaryEdges, hL]
+  · have hb : boundaryEdges L D = ∅ := Finset.eq_empty_of_forall_notMem fun p hp ↦ by
+      have := (ManyBody.mem_boundaryEdges.mp hp).1
+      omega
     have hc : C.card = 0 := by
       change C.card * 2 ≤ chainCrossConst R * (boundaryEdges L D).card at hcount
       rw [hb] at hcount

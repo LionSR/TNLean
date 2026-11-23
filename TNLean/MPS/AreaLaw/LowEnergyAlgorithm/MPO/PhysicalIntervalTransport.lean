@@ -8,11 +8,9 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.TraceCoreSlices
 import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Placement
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Entropy.Filter.OutputCovariance
 import Mathlib.Data.List.OfFn
 import Mathlib.Order.Interval.Finset.Nat

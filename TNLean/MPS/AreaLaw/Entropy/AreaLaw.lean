@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.Entropy.BufferDiscount
 import TNLean.MPS.AreaLaw.Chain.EntropyInequalities
 import TNLean.MPS.AreaLaw.Chain.WindowCounting
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 
 /-!
 # The one-dimensional area law from a global gap
@@ -45,7 +46,7 @@ in `TNLean.MPS.AreaLaw.ComponentReduction`.
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (ChainSupport interval ChainInteraction)
+open ManyBody (ChainSupport boundaryEdges interval ChainInteraction)
 
 open ManyBody (IsGapped groundSpace)
 

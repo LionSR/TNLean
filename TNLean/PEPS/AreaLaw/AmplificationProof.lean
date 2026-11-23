@@ -64,7 +64,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix MeasureTheory SpectralFilter QuantumCircuit
 open scoped Kronecker NNReal ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport IsAdmissibleSupport graphBall planeDomainGraph
   PlaneInteraction edgeBoundary graphNeighborhood ambientDilation mem_ambientDilation_iff)

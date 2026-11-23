@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.Entropy.Typical.PureCompression
+import QICLean.ManyBody.Sites.RegionState
 
 /-!
 # Entropy and dimension of a supplied selected Schmidt spectrum

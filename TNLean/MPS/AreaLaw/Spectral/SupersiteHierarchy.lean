@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.ManyBody.Sites.ProductOperatorTrace
-import QICLean.Circuit.Geometry
 import Mathlib.Data.Finset.NoncommProd
 import TNLean.MPS.AreaLaw.Spectral.HierarchyLevels
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct

@@ -11,10 +11,6 @@ import QICLean.ManyBody.Sites.Placement
 import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Hamiltonian.Models
-import QICLean.ManyBody.Entropy.ZeroEntropy
-import QICLean.ManyBody.Entropy.MovementEtaRegional
-import QICLean.ManyBody.Entropy.RegionEntropyInequalities
-import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Finite-range Hamiltonians on the chain of `L` sites
@@ -126,27 +122,6 @@ open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
 
-/-- An interaction of range one meeting both sides of a cut is the adjacent pair at that
-cut. Source: LVV13, `algo53.tex`, the nearest-neighbour assumption at line 283 and the cut
-decomposition at lines 409–410. -/
-theorem IsChainSupport.eq_interval_of_splits_of_range_one {L k : ℕ} {X : Finset (Fin L)}
-    (hX : IsChainSupport L 1 X)
-    (hsplit : (∃ x ∈ X, x.val < k) ∧ ∃ y ∈ X, k ≤ y.val) :
-    X = interval L (k - 1) (k + 1) := by
-  obtain ⟨⟨x, hx, hxk⟩, y, hy, hky⟩ := hsplit
-  have htwo : X.card = 2 := by
-    have hcard := hX.card_le
-    have hlt : 1 < X.card := Finset.one_lt_card.mpr
-      ⟨x, hx, y, hy, by rintro rfl; omega⟩
-    omega
-  obtain ⟨a, -, hXa⟩ := hX.exists_eq_interval_of_card_eq htwo
-  have hak : k = a + 1 := by
-    have hax := mem_interval.mp ((Finset.ext_iff.mp hXa x).mp hx)
-    have hay := mem_interval.mp ((Finset.ext_iff.mp hXa y).mp hy)
-    omega
-  rw [hXa]
-  congr 1 <;> omega
-
 /-- Positive range-one interactions of norm at most one split at every cut as
 `H = H_L + H_R + K`, with the two parts supported on their respective sides and
 `0 ≤ K ≤ 1`. Source: LVV13, `algo53.tex`, line 283 and lines 409–410. -/
@@ -168,7 +143,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cut_decomposition_of_range_one {
       X.1 = interval L (k - 1) (k + 1) := by
     have hnotL := (Finset.mem_filter.mp (Finset.mem_filter.mp hXC).1).2
     have hnotR := (Finset.mem_filter.mp hXC).2
-    apply IsChainSupport.eq_interval_of_splits_of_range_one X.2
+    apply X.2.eq_interval_of_splits_of_range_one
     constructor
     · obtain ⟨x, hx, hxA⟩ := Finset.not_subset.mp hnotR
       exact ⟨x, hx, by simpa [A, mem_interval] using hxA⟩

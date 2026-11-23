@@ -7,7 +7,6 @@ import QICLean.ManyBody.Sites.Config
 import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Dynamics.GraphLocalization
 import QICLean.ManyBody.Hamiltonian.Models
 

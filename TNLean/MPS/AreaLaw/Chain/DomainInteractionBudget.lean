@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Entropy.ComponentReduction
 import TNLean.MPS.AreaLaw.Chain.Counting
 import TNLean.MPS.AreaLaw.Chain.EntropyInequalities
 
@@ -20,7 +19,7 @@ and `part2a_mps_information.tex`, lines 260–265 and 355–363.
 -/
 
 open ManyBody (ChainSupport DomainSupport DomainSupport.toChainSupport
-  DomainSupport.toChainSupport_injective IsDomainSupport DomainInteraction)
+  DomainSupport.toChainSupport_injective IsDomainSupport boundaryEdges DomainInteraction)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -86,8 +85,8 @@ lemma card_domain_crossingTerms_mul_two_le (Λ : Finset ℤ) (R : ℕ)
     (ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card * 2 ≤
       chainCrossConst R * Λ.card := by
   have hb : (boundaryEdges Λ.card D).card ≤ Λ.card :=
-    (Finset.card_filter_le _ _).trans
-      ((Finset.card_range (Λ.card - 1)).le.trans (Nat.sub_le _ _))
+    (Finset.card_le_card fun p hp ↦ Finset.mem_range.mpr
+      (by have := (ManyBody.mem_boundaryEdges.mp hp).1; omega)).trans (Finset.card_range _).le
   simpa only [chainCrossConst, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm] using
     Nat.mul_le_mul_right 2
       ((card_domain_crossingTerms_le_mul_card_boundaryEdges Λ R D).trans

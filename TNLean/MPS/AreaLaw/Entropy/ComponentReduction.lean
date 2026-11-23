@@ -62,8 +62,9 @@ site-generic lemmas `ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_di
 -/
 
 open ManyBody (ChainSupport DomainSupport DomainSupport.toChainSupport
-  DomainSupport.toChainSupport_injective IsChainSupport IsDomainSupport exists_sitePos_eq interval
-  mem_interval sitePos sitePos_mem val_eq_add_one_of_sitePos_eq_add_one DomainInteraction)
+  DomainSupport.toChainSupport_injective IsChainSupport IsDomainSupport boundaryEdges
+  exists_sitePos_eq interval mem_boundaryEdges mem_interval sitePos sitePos_mem
+  val_eq_add_one_of_sitePos_eq_add_one DomainInteraction)
 
 open Matrix
 open scoped ComplexOrder Kronecker symmDiff Matrix.Norms.L2Operator

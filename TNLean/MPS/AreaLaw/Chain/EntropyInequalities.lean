@@ -4,14 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
-import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.Entropy.Conditional.ConditionalEntropy
-import QICLean.ManyBody.Entropy.Filter.Optimizer
 import TNLean.MPS.AreaLaw.Chain.Counting
 import Mathlib.Data.Nat.Order.Lemmas
 import QICLean.ManyBody.Entropy.MovementEtaRegional
-import QICLean.ManyBody.Entropy.RegionEntropyInequalities
-import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Entropy inequalities for regions of a chain
@@ -23,14 +19,14 @@ geometry of the chain.
 
 * A uniform bound `C` on the entropies of all intervals of the chain gives the area law
   `S(A) ≤ C |∂A|` for every region `A`, where `∂A` is the set of edges of the chain with
-  exactly one endpoint in `A`. Every region is a disjoint union of maximal runs of
-  consecutive sites, each run contributes at most `C` by subadditivity, and the gap just
-  after a run (or the gap just before it, when the run reaches the end of the chain)
-  supplies a boundary edge of the region that the remaining runs do not share.
+  exactly one endpoint in `A` (QICLean's `ManyBody.boundaryEdges`). Every region is a
+  disjoint union of maximal runs of consecutive sites, each run contributes at most `C` by
+  subadditivity, and the gap just after a run (or the gap just before it, when the run
+  reaches the end of the chain) supplies a boundary edge of the region that the remaining
+  runs do not share.
 
 ## Main results
 
-* `boundaryEdges`: the edges of the chain leaving a region.
 * `regionEntropy_le_mul_card_boundaryEdges_of_intervals`: interval bounds give the area
   law on a chain.
 
@@ -43,15 +39,14 @@ geometry of the chain.
 ## Interactions crossing an arbitrary chain region
 
 A finite-range support meeting both sides of a region lies in a window of
-`2R` sites about a boundary edge. Counting the possible subsets of
-these windows gives at most `2^(2R)` crossing supports per boundary edge.
+`2R` sites about a boundary edge (QICLean's
+`ManyBody.IsChainSupport.exists_boundary_window_of_split`). Counting the possible
+subsets of these windows gives at most `2^(2R)` crossing supports per boundary edge.
 The region need not be an interval. The estimates include zero range and an
 empty boundary, with no additional assumptions.
 
 ### Main results
 
-* `IsChainSupport.exists_boundary_window_of_split`: a window about a
-  boundary edge contains every site of a split support.
 * `card_crossingTerms_le_mul_card_boundaryEdges`: the crossing count with
   coefficient `2^(2R)` per edge.
 
@@ -66,38 +61,14 @@ geometric and does not assert a partial-swap operator decomposition.
 
 section
 
-open ManyBody (interval mem_interval)
+open ManyBody (boundaryEdges boundaryEdges_empty boundaryEdges_univ interval mem_boundaryEdges
+  mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
 
 section Chain
-
-/-- The boundary edges of a region `A` of the chain of `L` sites: the positions `p` with
-`p + 1 < L` such that exactly one of the sites at positions `p` and `p + 1` lies in `A`, that
-is, the edges `{p, p + 1}` of the chain leaving `A`. -/
-def boundaryEdges (L : ℕ) (A : Finset (Fin L)) : Finset ℕ :=
-  (Finset.range (L - 1)).filter fun p ↦ ¬ ((∃ i ∈ A, i.val = p) ↔ ∃ i ∈ A, i.val = p + 1)
-
-/-- Membership in the boundary edges of a region, in terms of positions. -/
-theorem mem_boundaryEdges {A : Finset (Fin L)} {p : ℕ} :
-    p ∈ boundaryEdges L A ↔
-      p + 1 < L ∧ ¬ ((∃ i ∈ A, i.val = p) ↔ ∃ i ∈ A, i.val = p + 1) := by
-  rw [boundaryEdges, Finset.mem_filter, Finset.mem_range, Nat.lt_sub_iff_add_lt]
-
-/-- The empty region has no boundary edges. -/
-theorem boundaryEdges_empty : boundaryEdges L ∅ = ∅ := by
-  ext p
-  simp [mem_boundaryEdges]
-
-/-- The whole chain has no boundary edges. -/
-theorem boundaryEdges_univ : boundaryEdges L Finset.univ = ∅ := by
-  ext p
-  simp only [mem_boundaryEdges, Finset.mem_univ, true_and, Finset.notMem_empty, iff_false,
-    not_and, not_not]
-  intro hp
-  exact ⟨fun _ ↦ ⟨⟨p + 1, hp⟩, rfl⟩, fun _ ↦ ⟨⟨p, by omega⟩, rfl⟩⟩
 
 /-- A prefix of a finite chain has at most one boundary edge, including the empty
 and whole-chain cases. Source: the one-dimensional note, Section 2, the chain setting. -/
@@ -258,47 +229,9 @@ end
 
 section
 
-open ManyBody (ChainSupport IsChainSupport card_interval_le interval mem_interval)
+open ManyBody (ChainSupport boundaryEdges card_interval_le interval)
 
 namespace TNLean.MPS.AreaLaw
-
-/-- A support split by a region lies in a window about one of its
-boundary edges. Source: TNLean note, `eq:count`, and
-`part2a_mps_information.tex`, lines 359–363. -/
-lemma IsChainSupport.exists_boundary_window_of_split
-    {L R : ℕ} {X D : Finset (Fin L)} (hX : IsChainSupport L R X)
-    (hsplit : (∃ u ∈ X, u ∈ D) ∧ ∃ v ∈ X, v ∉ D) :
-    ∃ p ∈ boundaryEdges L D,
-      X ⊆ interval L (p + 1 - R) (p + 1 + R) := by
-  classical
-  let P (m : ℕ) := ∃ i ∈ D, i.val = m
-  have hordered (u v : Fin L) (hu : u ∈ X) (hv : v ∈ X) (huv : u.val < v.val)
-      (hmem : ¬ (P u.val ↔ P v.val)) :
-      ∃ p ∈ boundaryEdges L D, X ⊆ interval L (p + 1 - R) (p + 1 + R) := by
-    let Q (n : ℕ) := u.val + n ≤ v.val ∧ (P (u.val + n) ↔ P v.val)
-    have hQ0 : ¬ Q 0 := by simpa only [Q, Nat.add_zero, huv.le, true_and] using hmem
-    have hQex : ∃ n, Q n := ⟨v.val - u.val, by
-      simp only [Q, Nat.add_sub_of_le huv.le, le_refl, iff_self, and_self]⟩
-    obtain ⟨n, hn, hn1⟩ := Nat.exists_not_and_succ_of_not_zero_of_exists hQ0 hQex
-    simp only [Q] at hn hn1
-    refine ⟨u.val + n, mem_boundaryEdges.mpr ⟨by have := v.isLt; omega, ?_⟩, ?_⟩
-    · change ¬ (P (u.val + n) ↔ P (u.val + n + 1))
-      intro he
-      exact hn ⟨by omega, he.trans (by simpa only [Nat.add_assoc] using hn1.2)⟩
-    · intro z hz
-      rw [mem_interval]
-      have huz := hX.2 u hu z hz
-      have hzv := hX.2 z hz v hv
-      omega
-  obtain ⟨⟨u, hu, huD⟩, v, hv, hvD⟩ := hsplit
-  have hPu : P u.val := ⟨u, huD, rfl⟩
-  have hPv : ¬ P v.val := by
-    rintro ⟨i, hi, hiv⟩
-    exact hvD (Fin.ext hiv ▸ hi)
-  rcases lt_trichotomy u.val v.val with huv | huv | hvu
-  · exact hordered u v hu hv huv (fun he ↦ hPv (he.mp hPu))
-  · exact (hPv (huv ▸ hPu)).elim
-  · exact hordered v u hv hu hvu (fun he ↦ hPv (he.mpr hPu))
 
 /-- The number of supports crossing a region is at most `2^(2R)` times its
 boundary cardinality. Source: TNLean note, `eq:count`, and
@@ -314,7 +247,7 @@ lemma card_crossingTerms_le_mul_card_boundaryEdges
       (boundaryEdges L D).biUnion F := by
     intro X hX
     simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
-    obtain ⟨p, hp, hsub⟩ := IsChainSupport.exists_boundary_window_of_split X.2 hX
+    obtain ⟨p, hp, hsub⟩ := X.2.exists_boundary_window_of_split hX
     exact Finset.mem_biUnion.mpr ⟨p, hp, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hsub⟩⟩
   have hcard (p : ℕ) : (F p).card ≤ 2 ^ (2 * R) :=
     card_filter_subset_le_pow_of_card_le

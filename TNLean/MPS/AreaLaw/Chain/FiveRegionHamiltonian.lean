@@ -11,8 +11,6 @@ import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import QICLean.ManyBody.Entropy.ZeroEntropy
 import QICLean.ManyBody.Sites.Lattice.Chain
 /-!
 # Five consecutive regions and their original bonds

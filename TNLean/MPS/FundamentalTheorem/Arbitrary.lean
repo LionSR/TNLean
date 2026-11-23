@@ -22,7 +22,6 @@ import TNLean.MPS.FundamentalTheorem.Arbitrary.Examples
 import TNLean.MPS.FundamentalTheorem.Arbitrary.FlagExistence
 import TNLean.MPS.FundamentalTheorem.Arbitrary.GaugeConversions
 import TNLean.MPS.FundamentalTheorem.Arbitrary.GaugeScalars
-import TNLean.MPS.FundamentalTheorem.Arbitrary.OneBlockSharpness
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Proportional
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ReductionPair
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ReductionPairOneBlock

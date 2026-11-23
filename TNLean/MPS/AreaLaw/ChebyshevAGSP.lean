@@ -18,7 +18,6 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.ChebyshevProjector
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ClippedFilter
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ClippedHamiltonian
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.CutApproximationTail
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.DisjointGroundEnergy
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FavorableParameters
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FilteredApproximation
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree

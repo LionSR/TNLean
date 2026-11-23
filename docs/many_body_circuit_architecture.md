@@ -184,7 +184,10 @@ Read the statement, not the proof, and take the first line that applies:
 A module written for one proof is split along these lines; its general lemmas
 go down, and only the statements that carry the proof's own objects stay with
 the proof. A proof-specific module that fits rule 2–4 but has no second use
-stays in TNLean next to its consumer until it has one.
+stays in TNLean next to its consumer until it has one. One exception to these
+rules: the area laws of `MPS/AreaLaw` and `PEPS/AreaLaw` stay in TNLean with
+the modules of their own arguments although their statements mention no tensor
+network (question 3 of "Questions for the maintainer" in `library_layers.md`).
 
 ### Repository boundary
 

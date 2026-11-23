@@ -7,21 +7,18 @@ These results do not assert existence of a favorable approximate projector.
 
 \begin{lemma}[Disjoint regional ground-energy shifts]
     \label{lem:aklv_disjoint_ground_shifts}
-    \lean{TNLean.MPS.AreaLaw.AKLV.exists_common_ground_shifts_of_disjoint_support,
-        TNLean.MPS.AreaLaw.AKLV.exists_three_disjoint_ground_shifts}
+    \lean{ManyBody.exists_common_unit_ground_of_disjoint_family}
     \leanok
-    Two Hermitian operators on disjoint site regions admit scalar shifts making
-    both positive, with a common normalized vector attaining both shifted zero
-    energies. Three pairwise disjoint regions admit positive shifts and a
-    normalized zero-energy test for their sum. Each shift is nonnegative if
-    its original operator is positive.
+    Let $A_i$, for $i$ in a finite index set, be Hermitian operators, each
+    supported on a site region $R_i$, with the regions pairwise disjoint.
+    There are real numbers $e_i$ and a unit vector $x$ with $A_ix=e_ix$ and
+    $A_i-e_i\ge0$ for every $i$.
 \end{lemma}
 \begin{proof}\leanok
-    In cut coordinates the two operators are $M\otimes I$ and $I\otimes N$.
-    Tensor minimum-energy eigenvectors and transport back to the original
-    sites. For three regions, first normalize two and then their sum against
-    the third. Attained lower energies add. Positivity of an original operator
-    makes its attained minimum nonnegative.
+    For a region and its complement, in cut coordinates the two operators are
+    $M\otimes I$ and $I\otimes N$; tensor minimum-energy eigenvectors and
+    transport back to the original sites. For a finite family, induct on the
+    number of regions.
 \end{proof}
 
 \begin{lemma}[Normalization of the original chain]
@@ -39,8 +36,9 @@ These results do not assert existence of a favorable approximate projector.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:aklv_disjoint_ground_shifts}
-    The three bond sums have disjoint supports, and their shifted sum has a
-    normalized zero-energy test. Restoring two positive contractions adds at
+    The three bond sums have disjoint supports. Shifting each by its least
+    energy, the shifted sum annihilates the common unit vector, and each shift
+    is nonnegative, being an eigenvalue of a positive operator. Restoring two positive contractions adds at
     most two to its energy. The variational principle gives the stated ground
     energy bound. A nonnegative middle shift cannot increase its original sum,
     which is bounded by its number of unit-bounded bonds.

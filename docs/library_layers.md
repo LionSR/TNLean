@@ -446,10 +446,9 @@ them:
 | `PEPS/RegionBlock <-> PEPS/TorusWindowPeeling` | `PEPS.RegionBlock.InteriorBondInsertion` → `PEPS.TorusWindowPeeling.WindowIndependence` (deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff) | `InteriorBondInsertion` → PEPS/FundamentalTheorem |
 | `PEPS/RegionBlock <-> PEPS/VertexComplement` | `PEPS.VertexComplement.Injective` → `PEPS.RegionBlock.KernelDescent` (regionBlockedTensorInjective_of_isVertexInjective) | `Injective` → PEPS/Injectivity |
 
-After the map, 9 pairs remain, all from modules mixing two layers (next
+After the map, 8 pairs remain, all from modules mixing two layers (next
 section):
 
-- `PEPS/Approximation <-> PEPS/AreaLaw`: `PEPS.Approximation.Cells.CellChambers` → `PEPS.AreaLaw.Polygons.Templates.TemplateRows`; `PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary` → `PEPS.Approximation.SheetSplitting`
 - `PEPS/Examples <-> PEPS/Graph`: `PEPS.Examples.CZX.CZXOnSiteSymmetry` → `PEPS.Graph.Region.OnSiteOperator`; `PEPS.Graph.Torus.KitaevPeriodicTiling` → `PEPS.Examples.ToricCode.KitaevCheckerboardBlocking`
 - `PEPS/FundamentalTheorem <-> PEPS/Graph`: `PEPS.FundamentalTheorem.Cycle.CycleBlockingData` → `PEPS.Graph.Region.CycleArcRegion`; `PEPS.Graph.Holonomy.RegularBoundaryRoute` → `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion`
 - `PEPS/FundamentalTheorem <-> PEPS/Injectivity`: `PEPS.FundamentalTheorem.Cycle.CycleMPSChainOverlapWindow` → `PEPS.Injectivity.Region.CycleMPSChainArc`; `PEPS.Injectivity.Charge.RegularTwistedStateNonzero` → `PEPS.FundamentalTheorem.Normal.NormalComparisonScalar`
@@ -463,7 +462,7 @@ section):
 
 ### Imports that remain
 
-Each of these 48 imports points outside the allowed layers after the map. The
+Each of these 47 imports points outside the allowed layers after the map. The
 map records them, and `--check` fails on any other violation and on a recorded
 one that no longer occurs. Each is removed in one of two ways:
 
@@ -472,7 +471,6 @@ one that no longer occurs. Each is removed in one of two ways:
 
 | Importer | Imported | Declarations used, or remedy |
 |---|---|---|
-| `PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary` | `PEPS.Approximation.SheetSplitting` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Graph.Cell.TorusPlaquetteRealization` | `PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement` | uses torusPlaquetteWalk, torusPlaquetteRegion |
 | `PEPS.Graph.Cell.TorusSimplyConnectedComplement` | `PEPS.Injectivity.Normal.NormalPairBlocking` | uses nonempty_regionBoundaryEdge_of_connected |
 | `PEPS.Graph.Holonomy.RegularBoundaryRoute` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion` | uses regionBoundaryEdgeComplEquiv |
@@ -566,7 +564,6 @@ Remedies by host module (the declarations to move and where):
 Imports that name no declaration of the target, and should be dropped or
 replaced by the lower module actually used:
 
-- `GoodRealizationUnitary` → `SheetSplitting`
 - `KitaevPeriodicTiling` → `KitaevCheckerboardBlocking`
 - `SquareLatticeEdgeCount` → `NormalBlocking`
 - `SquareGridSource` → `NormalBlocking`
@@ -1067,7 +1064,10 @@ kind:
 | `Algebra/GInjective` | 1 |
 
 The map does not design a TNLean home for them. They move with their
-neighbours, keep a plain object name, and leave with the QICLean work.
+neighbours, keep a plain object name, and leave with the QICLean work. In
+`MPS/AreaLaw` and `PEPS/AreaLaw` these are the lemmas about arbitrary matrices,
+operators, lattices and entropies; the area laws themselves and the modules of
+their arguments stay in TNLean (question 3 below).
 
 Beside them, 974 modules mention no tensor network but are one theorem's
 own argument. They stay beside the theorem:
@@ -1085,7 +1085,7 @@ own argument. They stay beside the theorem:
 | about forty single modules | |
 
 The two-dimensional area law mentions no tensor network in any of its 534
-modules. Whether it belongs in TNLean at all is one of the questions below.
+modules. It stays in TNLean all the same; see question 3 below.
 
 The directories outside the map that are already moving are not counted above:
 `Algebra` (250 of 255 without a tensor), `Circuit` (22), and the non-party part
@@ -1179,14 +1179,13 @@ rewritten by hand in the same change, from this document.
    replaces `MUTUAL_LAYER_DIRECTORIES` wholesale, since the directory names change.
    The comparison with the base revision will report the renamed pairs as
    added, so this one change needs an exemption from that rule.
-3. **The non-tensor theorems.** The two-dimensional area law (534 modules) and
-   most of `MPS/AreaLaw` (the area law, the AGSP, both algorithms) mention no
-   tensor network. Only the MPS approximation statements do.
-   *Recommendation:* keep them in their theorem directories now, as the map
-   does, and move each to QICLean as a whole theorem once its generic
-   neighbours (the 767 flagged modules) are there. The alternative is to move
-   them before the map is applied, which would remove about 1,000 modules from
-   this change.
+3. **The area laws (decided).** The area laws of `MPS/AreaLaw` and
+   `PEPS/AreaLaw` mention no tensor network in their statements; only the MPS
+   approximation statements of `MPS/AreaLaw` do. They are nevertheless kept in
+   TNLean, together with the modules of their own arguments. The lemmas about
+   arbitrary matrices, operators, lattices and entropies used there do move to
+   QICLean. The placement of the area laws is to be reconsidered after the
+   reorganisation.
 4. **Namespaces.** The namespaces of the table above name directories that
    disappear, but renaming them changes declaration names and blueprint
    `\lean{}` tags.
@@ -2064,7 +2063,10 @@ Layer override target: `TNLean/MPS/Tensor/OpenMPS` (9 modules, 14 parts), see §
   the argument of the area law from the Chebyshev approximate ground-state
   projector: `ChebyshevAGSP`, with `SchmidtRank` and `FrustrationFree`. Flagged
   in place: `ApproximateGroundVector`, `ApproximationStep`,
-  `FilteredApproximation`, `NormalizedVector`, `DisjointGroundEnergy`.
+  `FilteredApproximation`, `NormalizedVector`. `DisjointGroundEnergy` was
+  deleted: its two lemmas are cases of QICLean's
+  `ManyBody.exists_common_unit_ground_of_disjoint_family`, which
+  `ChainNormalization` now calls.
 - `ALVV` (78) together with 210 top-level modules (`Physical*`, `Canonical*`,
   `BalancedInterval*`, `Independent*`, `LowDensity*`, `LowEnergy*`, `Dyadic*`,
   `Soft*`, `FiveRegion*`, `Regional*`, `Selected*`, `Common*`, `Interleaved*`,
@@ -2107,13 +2109,14 @@ Layer override target: `TNLean/MPS/Tensor/OpenMPS` (9 modules, 14 parts), see §
 The theorems of `ProjectorFactorization`, `ChebyshevAGSP`, `LocalSolution` and
 the entropy statements of `LowEnergyAlgorithm` are TN-free; their directories
 carry `proof:` (the modules are single-use stages of those arguments), but the
-theorems themselves are QICLean material and would move with their proofs;
-only the `tn` modules (MPS approximation statements) would stay.
+theorems themselves would be QICLean material by the rule of this document.
+They stay in TNLean with their proofs, together with the `tn` modules (MPS
+approximation statements), by the decision recorded in question 3 of Part I.
 
 #### Modules mixing two layers
 | module | layers | declarations | proposed split |
 |---|---|---|---|
-| `EntropyInequalities` | sites / entropy | `boundaryEdges` and its five lemmas; `regionEntropy_le_mul_card_boundaryEdges_of_intervals` | keep the boundary edges in `Chain`, the entropy lemma into `Entropy` |
+| `EntropyInequalities` | sites / entropy | the boundary-edge lemmas `card_boundaryEdges_prefix_le`, `exists_interval_subset_boundaryEdges_sdiff_ssubset`, `card_crossingTerms_le_mul_card_boundaryEdges` (the definition `boundaryEdges` and its basic lemmas are QICLean's); `regionEntropy_le_mul_card_boundaryEdges_of_intervals` | keep the boundary-edge lemmas in `Chain`, the entropy lemma into `Entropy` |
 | `ComponentReduction` | sites / entropy | `domainBoundaryEdges`, `domainRegion`, `IsDomainEdge`, `card_domainBoundaryEdges`, `boundaryEdges_symmDiff_interval`; versus `domainAreaLaw`, `regionEntropy_le_mul_card_domainBoundaryEdges` | domain geometry to `Chain`, domain area law stays in `Entropy` |
 | `MPSApproximation` | entropy / TN | `surprisalTail_region_le_of_family_budget`, `surprisalTail_leftBlock_le*`, `tailPrefactorRoot*`, `spectralProjectionGE_leftBlock_bounds`; versus `chainBondDimension` and the MPS approximation theorems | surprisal-tail lemmas to `Entropy` (QICLean), the MPS statements stay in `Approximation` |
 | `StripApproximation` | geometry / TN | `stripSnakeRows`, `stripSnakeEquiv`, `stripSnakePrefix`, `card_snakePrefix_sdiff_le`, `regionEntropy_stripSnakePrefix_le`; versus the two MPS statements | snake ordering to `Chain` beside `StripGeometry` |

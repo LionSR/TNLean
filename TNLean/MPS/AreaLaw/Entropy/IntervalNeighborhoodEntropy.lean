@@ -11,6 +11,7 @@ import Mathlib.Data.Nat.Dist
 import TNLean.MPS.AreaLaw.Chain.DomainIntervalNeighborhood
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import TNLean.MPS.AreaLaw.Entropy.AreaLaw
 
 /-!
 # Entropy of neighborhoods of finite interval unions

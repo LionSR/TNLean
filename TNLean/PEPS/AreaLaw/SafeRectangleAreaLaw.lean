@@ -32,8 +32,6 @@ Independently formalized; no upstream Lean proof text reused.
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 open ManyBody (planeDomainGraph edgeBoundary ambientDilation)

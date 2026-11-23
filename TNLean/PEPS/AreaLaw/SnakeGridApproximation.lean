@@ -44,7 +44,7 @@ section
 
 open scoped Matrix.Norms.L2Operator
 
-open Matrix TNLean.Lattice
+open Matrix
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
 
@@ -295,8 +295,6 @@ end
 section
 
 open scoped Matrix.Norms.L2Operator
-
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 

@@ -205,7 +205,7 @@ domain, using only its original global gap. Their constants precede the domain
 and instance data. The chain preparation protocol uses only the chain versions.
 
 For an arbitrary region D of the contiguous chain,
-`MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` places every
+`ManyBody.IsChainSupport.exists_boundary_window_of_split` places every
 split support in a window [p+1−R,p+1+R) about an actual boundary edge {p,p+1}.
 `MPS.AreaLaw.card_crossingTerms_le_mul_card_boundaryEdges` therefore bounds
 the number of such supports by 2^(2R)|∂D|, including zero range and empty
@@ -229,7 +229,7 @@ bound 2J (`ManyBody.Interaction.norm_conj_term`,
 `ManyBody.Interaction.norm_doubled_term_le`); its operator identity is
 `TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled`.
 The theorem
-`ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped`
+`ManyBody.ChainInteraction.isGapped_doubledFin_and_conj_pairSwapOp_of_isGapped`
 constructs the two ground-state predicates for the actual paired tensor
 square Ψ and its swap image Φ. Both vectors are normalized, have energy
 2E₀ and inherit the lower gap Δ from the original ground-state predicate

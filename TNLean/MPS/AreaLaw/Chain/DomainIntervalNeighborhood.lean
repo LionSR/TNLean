@@ -3,12 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Entropy.ComponentReduction
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import QICLean.ManyBody.Dynamics.GraphLocalization
 import Mathlib.Order.Interval.Set.OrdConnected
+import QICLean.ManyBody.Sites.Lattice.Line
+import QICLean.ManyBody.Sites.Lattice.Chain
 
 /-!
 # Intrinsic neighborhoods of intervals in finite integer domains

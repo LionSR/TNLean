@@ -46,7 +46,7 @@ comparison of the general proof give `eq:far`.
   continuity steps (lines 330–364, 501–561) are reused.
 -/
 
-open Matrix TNLean.Lattice
+open Matrix
 open ManyBody (PlaneInteraction Config edgeBoundary graphNeighborhood ambientDilation
   mem_ambientDilation_iff planeDomainGraph)
 open scoped InnerProductSpace Kronecker Matrix.Norms.L2Operator

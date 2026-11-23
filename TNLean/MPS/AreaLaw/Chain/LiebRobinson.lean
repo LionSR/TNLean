@@ -3,13 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.Hamiltonian
 import TNLean.MPS.AreaLaw.Chain.ChainNeighborhood
 import TNLean.MPS.AreaLaw.Chain.LineDomainGraphGeometry
 import QICLean.ManyBody.Sites.Lattice.PathGraph
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Dynamics.GraphLocalization
 
 /-!
@@ -55,18 +53,6 @@ namespace TNLean.MPS.AreaLaw
 
 /-! ### The contiguous chain -/
 
-/-- The path distance between two sites of a range-`R` support is at most `R`.
-Hastings, arXiv:0705.2024v4, finite-range condition, lines 90–94. -/
-theorem ChainSupport.edist_le {L R : ℕ} (X : ChainSupport L R)
-    (x : Fin L) (hx : x ∈ X.1) (z : Fin L) (hz : z ∈ X.1) :
-    (SimpleGraph.pathGraph L).edist x z ≤ (R : ℕ∞) := by
-  rw [SimpleGraph.pathGraph_edist]
-  have hxz := X.2.2 x hx z hz
-  have hzx := X.2.2 z hz x hx
-  exact_mod_cast (show Nat.dist x.val z.val ≤ R by
-    simp only [Nat.dist]
-    omega)
-
 /-- The real-radius chain neighborhood of `S` is the path-graph neighbourhood of `S` of
 radius `⌊ℓ⌋`. -/
 theorem graphNeighborhood_pathGraph_eq_chainNeighborhood {L : ℕ} (S : Finset (Fin L))
@@ -99,7 +85,7 @@ theorem norm_heisenberg_commutator_le_chainDistance
         (if δ = ⊤ then 0 else Real.exp (-((δ.toNat : ℝ) / 2))) :=
   ManyBody.norm_heisenberg_commutator_le_graphDistance_inf (SimpleGraph.pathGraph L)
     (⟨h, hSupport⟩ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) fun k ↦ (X k).1)
-    hHerm R (fun k ↦ ChainSupport.edist_le (X k)) (fun k ↦ (X k).2.card_le)
+    hHerm R (fun k ↦ ManyBody.ChainSupport.edist_le (X k)) (fun k ↦ (X k).2.card_le)
     b₀ hBudget S hA y hB t
 
 /-- Contiguous-chain specialization of Lemma lem:LR, real-radius localization.
@@ -128,7 +114,7 @@ theorem norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
   exact ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two
     (SimpleGraph.pathGraph L)
     (⟨h, hSupport⟩ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) fun k ↦ (X k).1)
-    hHerm R (fun k ↦ ChainSupport.edist_le (X k)) (fun k ↦ (X k).2.card_le)
+    hHerm R (fun k ↦ ManyBody.ChainSupport.edist_le (X k)) (fun k ↦ (X k).2.card_le)
     (SimpleGraph.pathGraph_card_sphere_le_two L) b₀ hBudget S hA ℓ t
 
 /-! ### Finite integer domains -/

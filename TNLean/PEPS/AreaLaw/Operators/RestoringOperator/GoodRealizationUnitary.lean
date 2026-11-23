@@ -4,10 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Isometry.PolarUnitaryCorrection
-import TNLean.PEPS.Approximation.SheetSplitting
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.Analysis.Norm.MatrixKroneckerContraction
-import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 
 /-!
 # From a good clock realization to a local unitary

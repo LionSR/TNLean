@@ -62,7 +62,6 @@ Independently formalized from the manuscripts; no upstream Lean proof text is re
 open scoped Matrix.Norms.L2Operator
 
 open TNLean.PEPS.AreaLaw
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction rectangleEmbedding
   rectangleSiteEquiv rectangleSiteEquiv_val graphNeighborhood planeDomainGraph ambientDilation)
