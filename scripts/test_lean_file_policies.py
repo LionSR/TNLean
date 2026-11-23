@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Unit tests for the Lean module naming, file-size, import and pass-through policy checkers."""
+"""Unit tests for the Lean module file-size, import and pass-through policy checkers."""
 
 from __future__ import annotations
 
@@ -12,7 +12,6 @@ from collections.abc import Callable
 from pathlib import Path
 
 import check_import_layers as layers
-import check_numbered_lean_files as numbered
 import check_oversized_lean_files as oversized
 import check_pass_through_declarations as forwarding
 
@@ -23,180 +22,6 @@ class CapturedCheck(unittest.TestCase):
         with contextlib.redirect_stdout(output):
             status = function(*args)
         return status, output.getvalue()
-
-
-class NumberedLeanFilePolicyTests(CapturedCheck):
-    def setUp(self) -> None:
-        self.temporary = tempfile.TemporaryDirectory()
-        self.root = Path(self.temporary.name)
-        subprocess.run(["git", "init", "-q", str(self.root)], check=True)
-
-    def tearDown(self) -> None:
-        self.temporary.cleanup()
-
-    def track(self, relative: str, source: str = "def x := 1\n") -> None:
-        path = self.root / relative
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(source, encoding="utf-8")
-        subprocess.run(["git", "-C", str(self.root), "add", relative], check=True)
-
-    def check(
-        self,
-        debt: frozenset[str] = frozenset(),
-        exceptions: dict[str, str] | None = None,
-        base_debt: frozenset[str] | None = None,
-    ) -> tuple[int, str]:
-        return self.capture(
-            numbered.check_numbered_files,
-            self.root,
-            debt,
-            {} if exceptions is None else exceptions,
-            base_debt,
-        )
-
-    def test_new_numbered_production_file_fails_with_guidance(self) -> None:
-        self.track("TNLean/Proof2.lean")
-        status, output = self.check()
-        self.assertEqual(status, 1)
-        self.assertIn("new numbered-sequel filename", output)
-        self.assertIn("Basic.lean", output)
-
-    def test_existing_debt_is_allowed(self) -> None:
-        path = "TNLean/Proof2.lean"
-        self.track(path)
-        status, output = self.check(frozenset({path}))
-        self.assertEqual(status, 0)
-        self.assertIn("1 numbered debt", output)
-
-    def test_new_debt_allowlist_entry_fails_against_base(self) -> None:
-        path = "TNLean/Proof2.lean"
-        self.track(path)
-        status, output = self.check(frozenset({path}), base_debt=frozenset())
-        self.assertEqual(status, 1)
-        self.assertIn("debt allowlist; this set may only shrink", output)
-
-    def test_base_debt_ratchet_rejects_pr_and_multicommit_push_additions(self) -> None:
-        old_path = "TNLean/Old2.lean"
-        new_path = "TNLean/New3.lean"
-        self.track(old_path)
-        checker = self.root / "scripts" / "check_numbered_lean_files.py"
-        checker.parent.mkdir(parents=True)
-        checker.write_text(
-            "NUMBERED_DEBT_ALLOWLIST: frozenset[str] = "
-            f"frozenset({{{old_path!r}}})\n",
-            encoding="utf-8",
-        )
-        subprocess.run(
-            ["git", "-C", str(self.root), "add", checker.relative_to(self.root)],
-            check=True,
-        )
-        subprocess.run(
-            [
-                "git", "-C", str(self.root),
-                "-c", "user.name=Test",
-                "-c", "user.email=test@example.com",
-                "commit", "-qm", "baseline",
-            ],
-            check=True,
-        )
-        base_ref = subprocess.run(
-            ["git", "-C", str(self.root), "rev-parse", "HEAD"],
-            check=True,
-            stdout=subprocess.PIPE,
-            text=True,
-        ).stdout.strip()
-
-        self.track(new_path)
-        checker.write_text(
-            "NUMBERED_DEBT_ALLOWLIST: frozenset[str] = "
-            f"frozenset({{{old_path!r}, {new_path!r}}})\n",
-            encoding="utf-8",
-        )
-        subprocess.run(
-            ["git", "-C", str(self.root), "add", checker.relative_to(self.root)],
-            check=True,
-        )
-        subprocess.run(
-            [
-                "git", "-C", str(self.root),
-                "-c", "user.name=Test",
-                "-c", "user.email=test@example.com",
-                "commit", "-qm", "proposed addition",
-            ],
-            check=True,
-        )
-
-        baseline = numbered._debt_allowlist_at_merge_base(self.root, base_ref)
-        status, output = self.check(
-            frozenset({old_path, new_path}),
-            base_debt=baseline,
-        )
-        self.assertEqual(status, 1)
-        self.assertIn(f"{new_path}: added to the numbered debt allowlist", output)
-
-        self.track("TNLean/Unrelated.lean")
-        subprocess.run(
-            [
-                "git", "-C", str(self.root),
-                "-c", "user.name=Test",
-                "-c", "user.email=test@example.com",
-                "commit", "-qm", "later commit in the same push",
-            ],
-            check=True,
-        )
-
-        parent_baseline = numbered._debt_allowlist_at_merge_base(self.root, "HEAD^")
-        parent_status, _ = self.check(
-            frozenset({old_path, new_path}),
-            base_debt=parent_baseline,
-        )
-        self.assertEqual(parent_status, 0)
-
-        push_baseline = numbered._debt_allowlist_at_merge_base(self.root, base_ref)
-        push_status, push_output = self.check(
-            frozenset({old_path, new_path}),
-            base_debt=push_baseline,
-        )
-        self.assertEqual(push_status, 1)
-        self.assertIn(f"{new_path}: added to the numbered debt allowlist", push_output)
-
-    def test_removing_debt_allowlist_entry_is_allowed(self) -> None:
-        path = "TNLean/Proof2.lean"
-        self.track(path)
-        status, output = self.check(
-            frozenset({path}),
-            base_debt=frozenset({path, "TNLean/Removed3.lean"}),
-        )
-        self.assertEqual(status, 0)
-
-    def test_stale_debt_entry_fails_so_allowlist_shrinks(self) -> None:
-        status, output = self.check(frozenset({"TNLean/Gone2.lean"}))
-        self.assertEqual(status, 1)
-        self.assertIn("stale debt allowlist entry", output)
-
-    def test_documented_semantic_exception_is_allowed(self) -> None:
-        path = "TNLean/ZMod2.lean"
-        self.track(path)
-        status, output = self.check(
-            exceptions={path: "The numeral is part of the mathematical type name."}
-        )
-        self.assertEqual(status, 0)
-        self.assertIn("1 semantic exceptions", output)
-
-    def test_empty_semantic_explanation_fails(self) -> None:
-        path = "TNLean/ZMod2.lean"
-        self.track(path)
-        status, output = self.check(exceptions={path: "  "})
-        self.assertEqual(status, 1)
-        self.assertIn("has no explanation", output)
-
-    def test_archive_and_untracked_files_are_out_of_scope(self) -> None:
-        self.track("TNLean/Archive/Legacy2.lean")
-        untracked = self.root / "TNLean" / "Scratch2.lean"
-        untracked.write_text("def scratch := 2\n", encoding="utf-8")
-        status, output = self.check()
-        self.assertEqual(status, 0)
-        self.assertIn("0 numbered debt", output)
 
 
 class OversizedLeanFilePolicyTests(CapturedCheck):

@@ -20,7 +20,8 @@ permissions:
 
 jobs:
   build_project:
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
+    runs-on: ubuntu-24.04
     name: Build project and generate docs
     timeout-minutes: 330
     steps:

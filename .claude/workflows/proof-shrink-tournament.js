@@ -38,8 +38,7 @@ verified these facts you can build on without re-deriving:
   (413 ln) is a declared hand-transpose; UnionInjectivityGeneralBlue.lean (415 ln) a declared
   blue mirror. Generic transport exists (PEPS/IsoTransport.lean) but is barely used.
 - 20 numbered-sequel files / ~11.0k lines remain (CoarseThreeSite4..11, Recovery2..4/7..9,
-  TorusWindowChain2/4/5/6, UnionInjectivityOverlap3, UnionInjectivityGeneral2;
-  the authoritative list is NUMBERED_DEBT_ALLOWLIST in scripts/check_numbered_lean_files.py).
+  TorusWindowChain2/4/5/6, UnionInjectivityOverlap3, UnionInjectivityGeneral2).
   The torus window peeling chain, coarse-three-site coherent frame, recovery endpoints/transfer,
   and overlapping-union chain have since been renamed to concept names
   (TorusWindowPeeling.lean and TorusWindowPeeling/, UnionInjectivityOverlapSetup.lean,
