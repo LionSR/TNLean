@@ -8983,7 +8983,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   source circuit, preserving the sum tags under composition and retaining
   the same occurrence under framing.
 - **Seen:** `SourceCircuit.sourcePairEquiv` and its endpoint identity in
-  `TNLean/Lattice/Compression/SourceSampleIndices.lean`.
+  `TNLean/Network/DistributedContraction/SourceSampleIndices.lean`.
 - **Abstraction:** The slot enumeration reuses `SourceInventory.pairIndexEquiv`;
   Mathlib's injective map on unordered pairs supplies the participant image.
   The global source/sample identification reuses this occurrencewise equivalence.

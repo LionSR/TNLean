@@ -94,7 +94,8 @@ spectral results, and channel-generic Kraus/Wielandt APIs. See
 | Layer | Modules | Content |
 |-------|---------|---------|
 | **0** | `Algebra/` | Tensor-network-facing algebra and compatibility results not owned by QICLean |
-| **2** | `Lattice/` | Distributed-circuit calculus on finite sets of parties (`PartyCircuit/`), sheets without holes (`Sheet/`), and compression of distributed operator networks (`Compression/`); the finite lattice domains, local Hamiltonians, regional entropy and circuit model are QICLean's; imports nothing from `MPS/` or `PEPS/` |
+| **2** | `Lattice/` | Distributed-circuit calculus on finite sets of parties (`PartyCircuit/`), sheets without holes (`Sheet/`), and the parts of the compression of distributed operator networks that mention no tensor network (`Compression/`); the finite lattice domains, local Hamiltonians, regional entropy and circuit model are QICLean's; imports nothing from `Network/`, `MPS/` or `PEPS/` |
+| **2b** | `Network/` | Lowest tensor-network layer, imported by both `MPS/` and `PEPS/`: contractions of tensors whose links carry their own virtual alphabets on multigraphs (`DependentBond/`) and on parties (`Party/`), the distributed operator contraction (`DistributedContraction/`), the factor at one party from its incident labels (`IncidentFactor/`), and its sampled approximation (`SampledApproximation/`) |
 | **3** | `MPS/Tensor/Defs`, `MPS/Chain/`, `MPS/Core/`, `MPS/Overlap/` | MPSTensor definition, finite-Kraus compatibility wrappers, word evaluation, blocking, transfer matrices, overlap matrices |
 | **4** | `MPS/FundamentalTheorem/`, `MPS/Symmetry/` | Single-block FT, gauge equivalence, on-site/virtual symmetries, cocycle coboundary |
 | **5** | `MPS/BNT/`, `MPS/CanonicalForm/`, `MPS/Structure/`, `MPS/Irreducible/`, `MPS/Periodic/`, `MPS/FundamentalTheorem/Multi/` | Multi-block assembly, BNT canonical forms, permutation rigidity, periodic tensors |

@@ -3346,7 +3346,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### Equality of selected remaining operations
 
 - **Declaration:** `TNLean.Lattice.PartyCircuit.Word.IsSelectedLocalPartComparison`.
-- **Defined in:** `TNLean/Lattice/Compression/AllPartySingletonComparison.lean`.
+- **Defined in:** `TNLean/Network/IncidentFactor/AllPartySingletonComparison.lean`.
 - **Meaning:** For a Boolean owner selector and two chronological words, the
   predicate is the heterogeneous equality of their remaining evaluations after
   restriction to the selected owners. Each word's local part keeps its actual

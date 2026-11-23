@@ -63,9 +63,11 @@ SITE_MODULES_IN_CIRCUIT: frozenset[str] = frozenset()
 DYNAMICS_MODULES_IN_CIRCUIT: frozenset[str] = frozenset()
 
 # Layer name and the module-name prefixes it owns, from the bottom up.  A module
-# belongs to the first layer that claims it.  The first six are the layers below
-# the tensor networks; the others are named for the object their statements are
-# about (``docs/library_layers.md``).
+# belongs to the first layer that claims it.  These are the layers below the
+# tensor networks; the tensor-network layers that follow are named for the object
+# their statements are about (``docs/library_layers.md``), and the lowest of them,
+# ``Network``, holds contractions of tensors on multigraphs and on parties that
+# both ``MPS`` and ``PEPS`` import.
 LOWER_LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("algebra", ("TNLean.Algebra", "TNLean.Tactic")),
     ("sites", (*sorted(SITE_MODULES_IN_CIRCUIT),)),
@@ -79,6 +81,7 @@ LOWER_LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("cellular", ("TNLean.QCA", "TNLean.QICLeanInterface")),
 )
 TENSOR_NETWORK_LAYERS: tuple[str, ...] = (
+    "Network",
     "MPS/Tensor",
     "MPS/Transfer",
     "MPS/Operator",
@@ -110,7 +113,8 @@ LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
 # relation is closed transitively below, and each of them may import every lower
 # layer.
 DIRECTLY_BELOW: dict[str, tuple[str, ...]] = {
-    "MPS/Tensor": (),
+    "Network": (),
+    "MPS/Tensor": ("Network",),
     "MPS/Transfer": ("MPS/Tensor",),
     "MPS/Operator": ("MPS/Transfer",),
     "MPS/CanonicalForm": ("MPS/Operator",),
@@ -130,7 +134,7 @@ DIRECTLY_BELOW: dict[str, tuple[str, ...]] = {
         "MPS/AreaLaw",
         "MPS/RFP",
     ),
-    "PEPS/Graph": (),
+    "PEPS/Graph": ("Network",),
     "PEPS/Tensor": ("PEPS/Graph", "MPS/ParentHamiltonian"),
     "PEPS/Injectivity": ("PEPS/Tensor",),
     "PEPS/FundamentalTheorem": ("PEPS/Injectivity",),

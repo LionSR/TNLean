@@ -8,7 +8,12 @@ The directories `TNLean/Circuit` and `TNLean/Lattice` are split along the
 layers below, redesigned, and moved to QICLean. `TNLean/Circuit` and the top
 level of `TNLean/Lattice` are gone (pin move to LionSR/QICLean#1185); the party
 calculus `Lattice/PartyCircuit`, `Lattice/Sheet` and `Lattice/Compression`
-remains.
+remains. The 44 modules of `Lattice/Compression` that contract a network of
+tensors whose links carry their own virtual alphabets (edge-dependent bond
+networks, party networks, the distributed operator contraction and everything
+that imports it) are tensor networks; they moved to `TNLean/Network`, the
+lowest tensor-network layer, which both `MPS` and `PEPS` import. What remains
+in `Lattice` imports nothing from `Network`.
 
 ## Architecture
 
@@ -506,8 +511,9 @@ Sites layer has. It holds three unrelated things:
 - A calculus of distributed circuits and operator networks on a set of parties
   (`PartyCircuit`, `Compression`, `Sheet`, 343 modules, 52,901 lines).
   This is not lattice theory, and it is the second circuit library described
-  above. `Compression` has 254 modules, 123 of them with at most two
-  declarations.
+  above. `Compression` had 254 modules, 123 of them with at most two
+  declarations; its 44 network modules have since moved to `TNLean/Network`,
+  and 210 remain.
 - `TreeBasisCounterexample`.
 
 The pin move to LionSR/QICLean#1185 deletes the root directory (14 modules) and

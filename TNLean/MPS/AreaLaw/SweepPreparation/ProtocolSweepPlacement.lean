@@ -4,13 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolSweepMiddle
-import TNLean.Lattice.Compression.DistributedOperatorContraction
+import TNLean.Network.DistributedContraction.DistributedOperatorContraction
 import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
 import Mathlib.Data.Nat.Dist
 import Mathlib.Data.Fintype.Card
 import Mathlib.Tactic.NormNum
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
-import TNLean.Lattice.Compression.SeparateArityCompression
+import TNLean.Network.SampledApproximation.SeparateArityCompression
 
 /-!
 # Placement of the actual compressed middle links on the chain

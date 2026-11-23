@@ -24,7 +24,10 @@ Work already under way is taken as given and not redesigned here:
 - the generic modules of `TNLean/Algebra` and the finite-ring dynamics of
   `MPS/Preparation` are moving there;
 - the party calculus (`Lattice/PartyCircuit`, `Compression`, `Sheet`) is
-  tracked in issue #10958.
+  tracked in issue #10958;
+- the 44 modules of `Lattice/Compression` that contract a network of tensors
+  have moved to the new lowest tensor-network layer `TNLean/Network` (see "The
+  layers").
 
 ## Summary
 
@@ -89,6 +92,7 @@ the only violations left were those listed here as declaration-level work.
 flowchart BT
   Q["QICLean<br/>matrices, channels, sites, dynamics, Hamiltonians, circuits"]
   B["base: Algebra, Circuit, Lattice, QCA, Tactic<br/>no tensor network; moving to QICLean"]
+  N["Network<br/>contractions with link-dependent virtual alphabets, party networks, distributed contraction"]
   T["MPS/Tensor<br/>tensors, words, mpv, gauge, blocking, chains, local ground spaces"]
   R["MPS/Transfer<br/>transfer maps, primitivity, spectra, overlaps, correlations"]
   O["MPS/Operator<br/>MPO tensors, periodic operators, products, boundaries, fusion"]
@@ -110,7 +114,7 @@ flowchart BT
   PA["PEPS/AreaLaw"]
   PP["PEPS/Approximation"]
   PE["PEPS/Examples"]
-  Q --> B --> T --> R --> O --> C --> F --> H
+  Q --> B --> N --> T --> R --> O --> C --> F --> H
   H --> S
   H --> D
   H --> U
@@ -123,7 +127,7 @@ flowchart BT
   P --> E
   A --> E
   X --> E
-  B --> G --> PT --> PI --> PF --> PH --> PA --> PP --> PE
+  N --> G --> PT --> PI --> PF --> PH --> PA --> PP --> PE
   H --> PT
   E --> PE
 ```
@@ -131,7 +135,8 @@ flowchart BT
 | Layer | Objects of its statements | May import |
 |---|---|---|
 | `base` | no tensor network: matrices on finite index types, sites and regions, Hamiltonians, party circuits, quasi-local algebras | QICLean, Mathlib |
-| `MPS/Tensor` | `MPSTensor`, words and their traces, `mpv`, gauges, physical reshapes and blocking, chains of site-dependent tensors, direct sums, reductions, the local ground spaces `G_L(A)` and parent interaction | base |
+| `Network` | contractions of tensors whose links carry their own finite virtual alphabets: edge-dependent networks on directed multigraphs and their cuts (`DependentBond`), party networks (`Party`), the distributed operator contraction with its labels and sample indices (`DistributedContraction`), the factor at one party from its incident labels (`IncidentFactor`), the sampled approximation and its uniform bounds (`SampledApproximation`) | base |
+| `MPS/Tensor` | `MPSTensor`, words and their traces, `mpv`, gauges, physical reshapes and blocking, chains of site-dependent tensors, direct sums, reductions, the local ground spaces `G_L(A)` and parent interaction | `Network`, base |
 | `MPS/Transfer` | the transfer map as a linear map: fixed points, primitivity and normality, quantum Wielandt bounds, spectra and gaps, overlaps, correlations, irreducibility | `MPS/Tensor` |
 | `MPS/Operator` | `MPOTensor` and its periodic operators, products and action on MPS, boundaries, fusion and zippers, simple density-operator tensors, MPUs as operators | `MPS/Transfer` and below |
 | `MPS/CanonicalForm` | canonical forms and their existence, bases of normal tensors, block separation, periodic tensors and their cyclic sectors, trace-quotient algebras, open-boundary canonical forms, canonical forms of simple MPOs and MPUs | `MPS/Operator` and below |
@@ -139,7 +144,7 @@ flowchart BT
 | `MPS/ParentHamiltonian` | parent interactions and Hamiltonians, block ground spaces, boundary maps, gaps, continuity, deformations, uncle Hamiltonians | `MPS/FundamentalTheorem` and below |
 | `MPS/Symmetry`, `MPS/MPDO`, `MPS/MPU`, `MPS/Preparation`, `MPS/AreaLaw`, `MPS/RFP` | each its own objects; none imports another | `MPS/ParentHamiltonian` and below |
 | `MPS/Examples` | named models | everything in `MPS` |
-| `PEPS/Graph` | finite graphs, tori, cycles, cells and plaquettes, regions and their boundaries, walks and holonomy of group labels; no tensor | base |
+| `PEPS/Graph` | finite graphs, tori, cycles, cells and plaquettes, regions and their boundaries, walks and holonomy of group labels; no tensor | `Network`, base |
 | `PEPS/Tensor` | PEPS tensors on a graph, contraction, open regions, blocked regions | `PEPS/Graph`, the MPS chain up to `MPS/ParentHamiltonian` |
 | `PEPS/Injectivity` | injective, G-injective, semi-regular and normal tensors, injectivity of regions, flux and charge sectors | `PEPS/Tensor` and below |
 | `PEPS/FundamentalTheorem/Injective/FundamentalTheorem` | gauge equivalence and uniqueness on connected graphs, cycles, tori; normal tensors | `PEPS/Injectivity` and below |
@@ -251,7 +256,7 @@ declarations that sit in the wrong module (for example `IncidentEdge` in
 |---|---:|---|
 | `Algebra` | 255 (+1) | Kept as it is. Its generic modules are moving to QICLean (step 3A). The map adds `Algebra/GInjective` (G-injective linear maps) for the same move. Of its modules, 5 name a tensor in a statement, by the scan: `BlockTriangularWord`, `CyclicInsertion`, `FiniteGroupCommutant`, `TensorProductContraction`, `TensorProductRegrouping`. Step 3A decides whether they stay. |
 | `Circuit` | 22 | Kept; being emptied into QICLean. |
-| `Lattice` | 360 | Kept. The party calculus (`PartyCircuit` 69, `Compression` 254, `Sheet` 20) is #10958. The ten root modules are QICLean-bound Hamiltonian, entropy and region material (`FiniteDomain`, `MarginalTails`, `RegionEntropyInequalities`, `RegionalReset`, `RegionalResetEntropy`, `RegionalSwapSupport`, `ReplicaSwap`, `PhysicalBufferCoordinates`, `SiteRelabelEntropy`, `StateSpace`). The map adds the four lattice modules of the two-dimensional area law that the chain area law imports: `BufferedRectangles`, `GraphInteractionBudget`, `GraphInteractionDiamondCounting`, and `InitialBuffer` renamed `BufferedRectangleEntropy`. |
+| `Lattice` | 360 | Kept. The party calculus (`PartyCircuit` 69, `Compression` 254, `Sheet` 20) is #10958. The 44 modules of `Compression` that contract a network of tensors have since moved to `Network`, leaving 210 in `Compression`. The ten root modules are QICLean-bound Hamiltonian, entropy and region material (`FiniteDomain`, `MarginalTails`, `RegionEntropyInequalities`, `RegionalReset`, `RegionalResetEntropy`, `RegionalSwapSupport`, `ReplicaSwap`, `PhysicalBufferCoordinates`, `SiteRelabelEntropy`, `StateSpace`). The map adds the four lattice modules of the two-dimensional area law that the chain area law imports: `BufferedRectangles`, `GraphInteractionBudget`, `GraphInteractionDiamondCounting`, and `InitialBuffer` renamed `BufferedRectangleEntropy`. |
 | `QCA` | 58 | Kept, except `MargolusTensorLocalRule` (it mentions an MPU and moves to `MPS/MPU/QuasiLocal`). The other 57 mention no tensor network and are QICLean-bound: 31 about sites and quasi-local algebras, 17 about automorphisms and cellular automata, 5 about matrix algebras, 4 about Margolus gates. |
 | `Tactic` | 2 | Kept. |
 

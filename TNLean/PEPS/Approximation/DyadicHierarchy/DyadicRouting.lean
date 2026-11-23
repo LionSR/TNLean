@@ -8,7 +8,7 @@ import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Data.Nat.Dist
 import Mathlib.Data.Fintype.Sigma
 import Mathlib.Order.Interval.Finset.Nat
-import TNLean.Lattice.Compression.DistributedOperatorContraction
+import TNLean.Network.DistributedContraction.DistributedOperatorContraction
 
 /-!
 # Horizontal-then-vertical routing on dyadic anchors

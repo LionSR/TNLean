@@ -1,4 +1,4 @@
-import TNLean.Lattice.Compression.DistributedOperatorContraction
+import TNLean.Network.DistributedContraction.DistributedOperatorContraction
 import Mathlib.Tactic.NormNum
 
 /-!
