@@ -349,9 +349,8 @@ calls is formalized separately by the Lean theorem
 \nolinkurl{TNLean/MPS/MPU/Circuit/Bounds/ConstantBranchingBounds.lean}. Its hypotheses
 concern a numerical recurrence; it does not assert that the controlled
 unitary decomposition above has been formalized. The exact finite-matrix
-identity for the six-call merging is checked in
-\nolinkurl{scripts/check_mpu_rank_two_controlled_merging.py}, on several
-noncommuting examples and both orientations of the controlling interval.
+identity for the six-call merging was checked by an exact computation on
+several noncommuting examples and both orientations of the controlling interval.
 
 The potentially complicated local unitaries in
 Lemma~\ref{lem:bipartite-diagonal} are never implemented as circuits.

@@ -1,11 +1,10 @@
 # Library layers of TNLean
 
-Status: proposal, not applied. The module map
-`scripts/library_layers_module_map.txt` was computed on commit `e8f8dd3202`
-(branch `batch/many-body-2`). `scripts/apply_library_layers.py` applies it;
-`scripts/apply_library_layers.py --check` validates it against the current tree
-and changes nothing. A map entry whose old module no longer exists (deleted, or
-moved to QICLean, since that commit) is reported and skipped.
+Status: applied by commit `3203f27710`. The module map was computed on commit
+`e8f8dd3202` and applied by a one-off script; the map and the script were
+removed once the map was applied, and both remain in the history of that
+commit. The layers and the allowed imports are now enforced by
+`scripts/check_import_layers.py` (`LAYERS`, `ALLOWED` and `UPWARD_IMPORTS`).
 
 This document carries out follow-ons F1 and F2, and the layering part of F4, of
 `many_body_circuit_architecture.md`, for the whole of TNLean. It applies the
@@ -81,8 +80,8 @@ The assignment then went in three steps.
 3. **Division by object.** Each large directory was read module by module to
    divide it by object, choose the merges, and flag what belongs to QICLean.
 
-The combined map was checked with `apply_library_layers.py --check` until the
-only violations left were those listed here as declaration-level work.
+The combined map was checked by the check mode of the application script until
+the only violations left were those listed here as declaration-level work.
 
 ## The layers
 
@@ -1120,15 +1119,9 @@ The namespaces `TNLean.MPS.AreaLaw` of the snake-grid modules (now in
 `PEPS/Tensor/SquareLattice` and of `SquareAreaLawSpecialization`, no longer
 match their directories.
 
-## Applying the map
+## How the map was applied
 
-```bash
-python3 scripts/apply_library_layers.py --check            # working tree
-python3 scripts/apply_library_layers.py --check --rev e8f8dd3202
-python3 scripts/apply_library_layers.py                    # applies the map
-```
-
-The application performs these steps:
+The application script performed these steps:
 
 1. **Moves.** `git mv` for each moved module; a target still occupied by a
    module that moves later is retried after that module moves.
@@ -1150,10 +1143,10 @@ The application performs these steps:
 6. **Aggregators.** They are regenerated with
    `scripts/generate_import_aggregators.py`.
 
-The application is idempotent: an entry whose old module is gone and whose
-target exists counts as applied.
+The application was idempotent: an entry whose old module was gone and whose
+target existed counted as applied.
 
-`--check` reports:
+Its check mode reported:
 
 - entries skipped because the old module is missing;
 - collisions with modules that stay;
@@ -1165,10 +1158,10 @@ target exists counts as applied.
 - pairs of sibling subdirectories, at any depth, that import each other;
 - directories over 40 modules.
 
-It exits with an error on anything unrecorded.
+It exited with an error on anything unrecorded.
 
 On the map's commit, and on the working tree of the same branch when this
-document was written, `--check` reports:
+document was written, the check mode reported:
 
 - no errors;
 - 52 recorded layer violations and no unrecorded one;
@@ -1188,7 +1181,7 @@ rewritten by hand in the same change, from this document.
    in follow-up changes grouped by host module, in the order of the list
    above. Each one deletes recorded entries.
 2. **Extend `check_import_layers.py`.** Should it take the layers of this
-   document (`LAYERS` and `ALLOWED` of `apply_library_layers.py`), with the
+   document (`LAYERS` and `ALLOWED` of the application script), with the
    52 recorded imports as its `UPWARD_IMPORTS`?
    *Recommendation:* yes, in the change that applies the map. That change also
    replaces `MUTUAL_LAYER_DIRECTORIES` wholesale, since the directory names change.

@@ -9,10 +9,9 @@ The actual replacement has rank seven across the middle cut, exceeding
 `d² + 2 = 6`. The exact minor has determinant `-512/177147`.
 
 The mathematical construction, uniqueness argument, exact matrix entries and
-integer certificate are in `docs/paper-gaps/alvv16_ff_rank.tex`. The standard
-library script `scripts/check_alvv_ff_rank_counterexample.py` independently
-constructs the selected entries with rational arithmetic and checks both
-projector identities and the displayed nonzero determinants. This is not a
+integer certificate are in `docs/paper-gaps/alvv16_ff_rank.tex`. An independent
+computation in exact rational arithmetic constructed the selected entries and
+checked both projector identities and the displayed nonzero determinants. This is not a
 full Lean counterexample theorem. No source-labelled completion of the full
 Theorem 5.14 is asserted. Issue 9849 must remain open.
 

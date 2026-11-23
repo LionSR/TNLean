@@ -862,8 +862,7 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   source does not fix: in a canonical gauge the two-site boundary range of the
   common operator is closed under the adjoint and the canonical path commutes,
   while in a gauge whose action gauge is not proportional to a Hermitian
-  matrix both fail (checked by
-  `scripts/check_glm23_unitary_mixed_adjoint_closure.py`); it formalizes
+  matrix both fail (checked in exact rational arithmetic); it formalizes
   commutation along the closed interval under adjoint closure of the two-site
   boundary range.
 - `glm23_mixed_operator_one_site_injectivity.tex` (false source claim,
@@ -872,8 +871,8 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   `Rep(A₄)`, two injective endpoint states with injective endpoint operators,
   common fusion tensors and equal F- and L-symbols, the crossed corners of the
   three-dimensional object are not spanned, for every gauge of the action
-  tensors preserving the L-symbols (checked by
-  `scripts/check_glm23_mixed_operator_one_site_injectivity.py`); the claim
+  tensors preserving the L-symbols (checked in exact rational arithmetic);
+  the claim
   holds with multiplicity one, and three-site normality is the formalized
   substitute.
 - `glm23_block_injective_mixed_path.tex` (scope restriction, open) records

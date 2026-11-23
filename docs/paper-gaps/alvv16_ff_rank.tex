@@ -90,11 +90,10 @@ corrected all-cut bound proved in
 so equality holds at this cut.
 
 \paragraph{Verification and missing source step.}
-The standard-library-only script
-\path{scripts/check_alvv_ff_rank_counterexample.py} computes the
+An exact computation over $\mathbb Q$ found the
 49 selected entries directly from (\ref{eq:alvv_ff_example_replacement}),
-checks every local symmetry and idempotence equation over $\mathbb Q$,
-and evaluates both displayed determinants by the Leibniz formula over
+checked every local symmetry and idempotence equation over $\mathbb Q$,
+and evaluated both displayed determinants by the Leibniz formula over
 exact fractions. No floating-point rank tolerance is used. This is
 an exact arithmetic certificate accompanying the mathematical argument;
 a full Lean counterexample theorem is not asserted.
