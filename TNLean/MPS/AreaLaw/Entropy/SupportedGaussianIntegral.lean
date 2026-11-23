@@ -310,7 +310,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
         X)).trans_le ((ManyBody.Interaction.norm_doubled_term_le h X).trans
           (by linarith [hhJ X]))
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
-    (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
+    (lineDomainGraph Λ) (lineDomainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) hΦh b₀
     (ManyBody.DomainInteraction.sum_norm_terms_containing_le Φ hΦn)
         (ManyBody.Interaction.isHermitian_hamiltonian (Φ := h.doubledFin) fun X ↦

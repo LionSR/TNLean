@@ -381,7 +381,7 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
             (S.actualEnergyTerms h Ω J Δ (X.L N) aux) (X.a W N) (withZeroCopyUnit pre) r.val)
           W) := by
   classical
-  obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := actualRounds_transport_domainGraph
+  obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := actualRounds_transport_planeDomainGraph
   have hq : 1 ≤ q := NeZero.pos q
   obtain ⟨A, hA⟩ : ∃ A : ℝ, A = 1 + (2 * Ctr + 3) ^ 2 * Real.log q := ⟨_, rfl⟩
   refine ⟨c₀, max (|Cent| * A ^ max eent 0) (|Cen| * A ^ max een 0),

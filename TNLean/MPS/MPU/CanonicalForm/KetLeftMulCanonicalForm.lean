@@ -44,7 +44,7 @@ theorem IsMPU.ketLeftMul {M : MPOTensor d D} (hM : IsMPU M)
   rw [mpo_ketLeftMul]
   apply (Matrix.unitaryGroup (Fin N → Fin d) ℂ).mul_mem
   · rw [Matrix.mem_unitaryGroup_iff']
-    rw [Matrix.star_eq_conjTranspose, tensorPower_isometry P]
+    rw [Matrix.star_eq_conjTranspose, piKronecker_const_isometry P]
     rw [Matrix.mem_unitaryGroup_iff'] at hP
     simpa only [Matrix.star_eq_conjTranspose] using hP
   · exact hM.mpo_mem_unitaryGroup hN

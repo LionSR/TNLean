@@ -51,7 +51,7 @@ recurrence.
 - `MPOTensor.CycleFiber`, `MPOTensor.cycleFiberToSectorFiber`: the horizontal
   bond fiber around a cyclic sector assignment, and its reindexing into the
   vertex-indexed sector fiber of `cyclicEtaTensorProduct`.
-- `MPOTensor.cyclicEtaTensorProduct_submatrix_eq_finKronecker`: the cyclic
+- `MPOTensor.cyclicEtaTensorProduct_submatrix_eq_piKronecker`: the cyclic
   tensor product, reindexed along the horizontal bond fiber, is the finite
   Kronecker product of the consecutive neighboring operators around the
   cycle.
@@ -188,7 +188,7 @@ Kronecker product of the consecutive neighboring operators around the cycle.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1446--1450 (equation defining
 `Ω_k` as the cyclic tensor product). -/
-theorem cyclicEtaTensorProduct_submatrix_eq_finKronecker
+theorem cyclicEtaTensorProduct_submatrix_eq_piKronecker
     [NeZero N] (hη : EtaStructure ρ) (eta : etaOperators hη) (k : Fin N → Fin hη.m) :
     (cyclicEtaTensorProduct hη eta k).submatrix
         (cycleFiberToSectorFiber hη k) (cycleFiberToSectorFiber hη k) =
@@ -228,7 +228,7 @@ theorem exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef
       ∀ n, (c n • eta (k n) (k (n + 1))).PosSemidef := by
   have hN : 1 ≤ N := Nat.one_le_iff_ne_zero.mpr (NeZero.ne N)
   apply Matrix.exists_pi_smul_posSemidef_of_piKronecker_posSemidef hN
-  · rw [← cyclicEtaTensorProduct_submatrix_eq_finKronecker hη eta k]
+  · rw [← cyclicEtaTensorProduct_submatrix_eq_piKronecker hη eta k]
     exact hpos.submatrix _
   · exact hne
 

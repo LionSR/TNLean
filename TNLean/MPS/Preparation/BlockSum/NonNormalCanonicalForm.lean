@@ -331,14 +331,14 @@ noncomputable def canonicalFixedPointState (P : SectorDecomposition d)
 /-- The GHZ form of the fixed-point state of a canonical form, arXiv:2307.01696, the
 paragraph after eq. (19): `|Ω'⟩ = W^{⊗M} |χ_M⟩` in the bond coordinates `R_k L_{k+1}`, with
 `W : |j⟩ ↦ |ω_j⟩` an isometry (`isIsometry_pairIsometry_embeddedFixedPointPair`). -/
-theorem canonicalFixedPointState_eq_tensorPower_mulVec_ghzState (P : SectorDecomposition d)
+theorem canonicalFixedPointState_eq_piKronecker_mulVec_ghzState (P : SectorDecomposition d)
     (σ : (j : Fin P.basisCount) → Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (N M : ℕ)
     (p : Fin M → Fin P.totalDim × Fin P.totalDim) :
     P.canonicalFixedPointState σ κ N M ((bondRegrouping M P.totalDim).symm p) =
       ((Matrix.piKronecker fun _ : Fin M ↦ (pairIsometry (P.embeddedFixedPointPair σ κ))) *ᵥ
         ghzState (ghzAmplitude (P.coeff N))) p :=
-  nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState _ _ p
+  nonNormalFixedPointState_eq_piKronecker_mulVec_ghzState _ _ p
 
 /-- The fixed-point state of a canonical form is normalized, `⟨Ω'|Ω'⟩ = 1`, on every ring
 of `M ≥ 1` blocked sites at a length `N` where some weight `βₗ` is nonzero

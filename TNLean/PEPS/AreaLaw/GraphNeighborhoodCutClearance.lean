@@ -57,7 +57,7 @@ theorem graphNeighborhood_subset_of_cut_clearance
     have hz : u.val ∈ Geometry.boundaryEndpoints Λ A :=
       Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary hcut (by simp)
     have hvariation := (Scan.abs_ambientDepth_sub_le_walk_length T hT Subtype.val
-      (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_domainGraph_adj) p').trans
+      (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_planeDomainGraph_adj) p').trans
         (Int.ofNat_le.mpr (hp'.trans hp))
     obtain ⟨t, ht, hmin⟩ := T.exists_mem_eq_inf' hT (Scan.ambientSupDistance u.val)
     have hdeep : ((L + R : ℕ) : ℤ) < Scan.ambientDepth T hT u.val := by
@@ -67,7 +67,7 @@ theorem graphNeighborhood_subset_of_cut_clearance
     omega
   · apply (Scan.ambientDepth_le_iff_mem_dilation T hT x.val (L + R)).mp
     have hvariation := (Scan.abs_ambientDepth_sub_le_walk_length T hT Subtype.val
-      (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_domainGraph_adj) p).trans
+      (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_planeDomainGraph_adj) p).trans
         (Int.ofNat_le.mpr hp)
     rw [abs_le] at hvariation
     omega

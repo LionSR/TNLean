@@ -10,7 +10,7 @@ import TNLean.MPS.ParentHamiltonian.Continuity.BlockPeriodicGroundSpaceContinuit
 import TNLean.MPS.ParentHamiltonian.Gap.BlockOpenGroundSpaceAtSimultaneousInjectivity
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.FiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.Gap.BlockOpenGapAtSimultaneousInjectivity
-import QICLean.Spectral.Perturbation.KernelGapPerturbation
+import QICLean.ManyBody.Hamiltonian.KernelGap
 
 /-!
 # Compact uniform gaps for several simultaneously injective blocks
@@ -73,29 +73,24 @@ theorem eventually_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_s
   have hthreshold : ((R : ℝ) - 1) ^ 2 / (m : ℝ) < γ :=
     (div_lt_iff₀ hmpos).2 (by simpa only [mul_comm] using hnum)
   obtain ⟨γ', hγ'lower, hγ'upper⟩ := exists_between hthreshold
-  have hγpos : 0 < γ := by nlinarith [sq_nonneg ((R : ℝ) - 1)]
   let B := fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x)
   have hProjR := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     μ A hμ hA R (fun x => wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
   have hProjW := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     μ A hμ hA (m + R - 1)
     (fun x => wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
-  let e := (Matrix.toEuclideanCLM :
-    Matrix (Cfg d (m + R - 1)) (Cfg d (m + R - 1)) ℂ ≃⋆ₐ[ℂ] _)
-  have hH : Continuous fun x ↦ e (parentChainInteraction (B x) R (m + R - 1)).hamiltonian :=
-    e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
-      (continuous_hamiltonian_parentChainInteraction_family_of_groundProjection B hProjR)
-  have hker := ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
-    (μ x₀) (A x₀) (hμ x₀) hS (hSpan x₀) hR (by omega : R ≤ m + R - 1)
-  have hnear := ContinuousLinearMap.eventually_norm_gap_on_orthogonal
-    (fun x ↦ e (parentChainInteraction (B x) R (m + R - 1)).hamiltonian)
-    (fun x => groundSpaceES (B x) (m + R - 1)) hH.continuousAt hProjW.continuousAt
-    (by rw [Matrix.coe_toEuclideanCLM_eq_toEuclideanLin]
-        exact groundSpaceES_le_ker_hamiltonian_parentChainInteraction (B x₀) R (m + R - 1))
-    hγpos hγ'upper (by
-      rw [← hker]
-      exact (ManyBody.forall_hasEigenvalue_iff_norm
-        (posSemidef_hamiltonian_parentChainInteraction (B x₀) R _)).mp hgap)
+  have hnear := ManyBody.eventually_forall_hasEigenvalue
+    (continuous_hamiltonian_parentChainInteraction_family_of_groundProjection B
+      (N := m + R - 1) hProjR).continuousAt
+    (Filter.Eventually.of_forall fun x ↦
+      posSemidef_hamiltonian_parentChainInteraction (B x) R (m + R - 1))
+    (by
+      refine hProjW.continuousAt.congr (Filter.Eventually.of_forall fun x ↦ ?_)
+      dsimp only
+      rw [ManyBody.groundSpace_zero,
+        ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
+          (μ x) (A x) (hμ x) hS (hSpan x) hR (by omega)])
+    hgap hγ'upper
   have hnum' : ((R : ℝ) - 1) ^ 2 < (m : ℝ) * γ' := by
     simpa only [mul_comm] using (div_lt_iff₀ hmpos).1 hγ'lower
   let δ : ℝ := ((m : ℝ) * γ' - ((R : ℝ) - 1) ^ 2) / ((m : ℝ) - R + 1)
@@ -104,13 +99,8 @@ theorem eventually_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_s
     linarith
   refine ⟨δ, div_pos (sub_pos.mpr hnum') hden, ?_⟩
   filter_upwards [hnear] with x hx N hN
-  refine (hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap
-    (B x) (R := R) (m := m) (by omega) hm hnum' ?_).2 N hN
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction (B x) R _)).mpr ?_
-  rw [ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
-    (μ x) (A x) (hμ x) hS (hSpan x) hR (by omega)]
-  exact hx
+  exact (hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap
+    (B x) (R := R) (m := m) (by omega) hm hnum' hx).2 N hN
 
 /-- A compact continuous family of simultaneously injective block tensors has
 one positive periodic parent-Hamiltonian gap at every sufficiently large

@@ -71,7 +71,7 @@ namespace CollarScan
 
 /-- Every actual completed status satisfies the physical terminal-support
 classification of the transport estimate, derived from scanner geometry. -/
-theorem state_designatedSupport_classification_domainGraph
+theorem state_designatedSupport_classification_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -88,16 +88,16 @@ theorem state_designatedSupport_classification_domainGraph
       ∃ side, IsTerminalSplit (S.state h)
         (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) g side := by
   rcases contained_or_middle_side (S.state h g) _
-    (state_designatedSupport_not_near_far_domainGraph hT S hgraph hdepth h
+    (state_designatedSupport_not_near_far_planeDomainGraph hT S hgraph hdepth h
       hn hk hr hDpos hD hL hclear g i) with hc | ⟨side, hs⟩
   · exact Or.inl hc
   · exact Or.inr ⟨side,
-      state_designatedSplitIncidence_isTerminalSplit_domainGraph hT S hgraph hdepth h
+      state_designatedSplitIncidence_isTerminalSplit_planeDomainGraph hT S hgraph hdepth h
         hn hk hr hDpos hD hL hrows hclear g side i hs⟩
 
 /-- Every actual pre-charge status satisfies the physical terminal-support
 classification, without a good-history or a support-classification assumption. -/
-theorem old_designatedSupport_classification_domainGraph
+theorem old_designatedSupport_classification_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -115,11 +115,11 @@ theorem old_designatedSupport_classification_domainGraph
       ∃ side, IsTerminalSplit (S.oldChargeState h)
         (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) g side := by
   rcases contained_or_middle_side (S.oldChargeState h g) _
-    (old_designatedSupport_not_near_far_domainGraph hT S hgraph hdepth h
+    (old_designatedSupport_not_near_far_planeDomainGraph hT S hgraph hdepth h
       hn hk hr hDpos hD hL hclear g i) with hc | ⟨side, hs⟩
   · exact Or.inl hc
   · exact Or.inr ⟨side,
-      old_designatedSplitIncidence_isTerminalSplit_domainGraph hT S hgraph hdepth h
+      old_designatedSplitIncidence_isTerminalSplit_planeDomainGraph hT S hgraph hdepth h
         hn hk hr hDpos hD hL hrows hclear g side i hs⟩
 
 end CollarScan

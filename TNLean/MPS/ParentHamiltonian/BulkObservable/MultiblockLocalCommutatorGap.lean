@@ -96,8 +96,8 @@ theorem multiblock_commutator_gap_of_bulkObservable_energy_limit
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
     {γ e : ℝ} (hγ : 0 ≤ γ)
     (hPos : ∀ᶠ n in atTop, (H n).IsPositive)
-    (hGap : ∀ᶠ n in atTop, ∀ v ∈ (LinearMap.ker (H n))ᗮ,
-      γ * ‖v‖ ≤ ‖H n v‖)
+    (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue (H n) μ →
+      μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hKernel : ∀ᶠ n in atTop,
       LinearMap.ker (H n) = ⨆ i, groundSpaceES (A i) ((ℓ n + k) + r n))
     (hGround : ∀ᶠ n in atTop, ψ n ∈ groundSpaceES (A α) ((ℓ n + k) + r n))
@@ -170,8 +170,7 @@ theorem multiblock_localCommutator_gap_of_openInteraction_gap
     (tendsto_atTop_mono (fun n => Nat.le_add_left n (R - 1)) tendsto_id)
     H ψ hγ (Eventually.of_forall fun n => Matrix.isPositive_toEuclideanLin_iff.mpr
       (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh (N n)))
-    (hGap.mono fun n hn => (ManyBody.forall_hasEigenvalue_iff_norm
-      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh (N n))).mp hn)
+    hGap
     hKernel hGround hUnit hEnergy
 
 end FiniteFamily

@@ -153,7 +153,7 @@ variable {ι : Type*} [Fintype ι]
 /-- Every commuting regular closure is killed by a finite family of parents
 on connected, simply connected regions. Source: SCP10, the inclusion
 component of Theorem 5.5, lines 1440–1514; no spanning assertion is made. -/
-theorem IsGInjective.regionParentHamiltonian_annihilates_torusGClosure
+theorem IsGInjective.hamiltonian_ofPlace_mulVec_torusGClosure_eq_zero
     {a : G → G → G → G → Fin d → ℂ}
     (ha : IsGInjective (torusLegRep (leftRegularMatrix G)) (siteMap a))
     (R : ι → Finset X) (hR : ∀ i, ((Γₜ).induce (R i : Set X)).Connected)
@@ -187,7 +187,7 @@ theorem IsGInjective.span_torusGClosure_commuting_le_parentKernel
         (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) R Q).hamiltonian).ker := by
   apply Submodule.span_le.mpr
   rintro ψ ⟨p, rfl⟩
-  exact ha.regionParentHamiltonian_annihilates_torusGClosure R hR hSC Q hQ p.1.1 p.1.2 p.2
+  exact ha.hamiltonian_ofPlace_mulVec_torusGClosure_eq_zero R hR hSC Q hQ p.1.1 p.1.2 p.2
 
 /-- The number of commuting pair-conjugacy classes is a lower bound for
 the parent-kernel dimension. Source: SCP10, Theorems 5.5 and 5.9,

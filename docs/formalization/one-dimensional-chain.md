@@ -187,7 +187,7 @@ component of a finite domain is a path on its own number of vertices
 The increasing-coordinate graph isomorphism
 `MPS.AreaLaw.domainGraphIsoHasse`, together with extended-distance
 preservation under isomorphism and component inclusion, gives
-`MPS.AreaLaw.domainGraph_card_sphere_le_two`. Thus every finite-distance
+`MPS.AreaLaw.lineDomainGraph_card_sphere_le_two`. Thus every finite-distance
 sphere has at most two sites; no distance is measured across a missing integer.
 
 With q ≥ 1, the extension

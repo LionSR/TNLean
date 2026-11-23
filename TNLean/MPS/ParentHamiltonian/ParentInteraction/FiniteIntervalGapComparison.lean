@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Spectral.Gap.PositiveGapTransfer
+import QICLean.Spectral.Gap.EigenvalueGap
 import QICLean.Spectral.Gap.OrthogonalKernelGap
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import Mathlib.Analysis.Normed.Module.FiniteDimension
@@ -72,6 +72,17 @@ theorem smul_orthogonal_ker_projection_le_of_norm_gap
     Complex.ofReal_im, zero_mul, sub_zero,
     hnorm,
     inner_eq_inner_orthogonal_ker_projection hH v, sub_nonneg] using h
+
+/-- A gap \(\gamma \ge 0\) above the kernel of a positive operator, every eigenvalue other
+than `0` being at least `γ`, gives a lower order bound by the orthogonal projection onto its
+kernel complement. -/
+theorem smul_orthogonal_ker_projection_le_of_forall_hasEigenvalue
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [FiniteDimensional ℂ E] {H : E →ₗ[ℂ] E} (hH : H.IsPositive)
+    {γ : ℝ} (hγ : 0 ≤ γ)
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue H μ → μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    (γ : ℂ) • (LinearMap.ker H)ᗮ.starProjection.toLinearMap ≤ H :=
+  hH.smul_orthogonal_ker_projection_le_of_norm_gap hγ (hH.forall_hasEigenvalue_iff_norm.mp hGap)
 
 /-- A positive operator on a finite-dimensional Hilbert space dominates a
 positive multiple of the orthogonal projection onto its kernel complement. -/

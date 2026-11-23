@@ -193,7 +193,7 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
       (positiveNearMiddle S.depth (σ j g) ∆ Dfar).card ≤ 3 * S.n * S.D := fun
     | Sum.inl ⟨r, h⟩, g => by
       obtain ⟨hnear, hfar, _, _, hnearCard, hfarCard⟩ :=
-        S.state_prefix_approximation_domainGraph hT hgraph hdepth h g hn
+        S.state_prefix_approximation_planeDomainGraph hT hgraph hdepth h g hn
           (Nat.le_of_lt_succ r.isLt) hr hDpos hD hL hrows
       have hmem := S.front_positiveDepthPrefix_mem_fixed_family hn hL g (h.1 g) r.val
         (Nat.le_of_lt_succ r.isLt)
@@ -201,7 +201,7 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
         hnear, hfar, hnearCard, hfarCard⟩
     | Sum.inr ⟨r, h⟩, g => by
       obtain ⟨hnear, hfar, _, _, hnearCard, hfarCard⟩ :=
-        S.oldChargeState_prefix_approximation_domainGraph hT hgraph hdepth h g hn
+        S.oldChargeState_prefix_approximation_planeDomainGraph hT hgraph hdepth h g hn
           (Nat.succ_le_of_lt r.isLt) hr hDpos hD hL hrows
       have hmem := S.front_positiveDepthPrefix_mem_fixed_family hn hL g (h.1 g) (r.val + 1)
         (Nat.succ_le_of_lt r.isLt)

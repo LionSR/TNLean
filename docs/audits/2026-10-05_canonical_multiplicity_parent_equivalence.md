@@ -2,7 +2,7 @@
 
 ## Result and hypotheses
 
-`map_ker_regionParentHamiltonian_multiplicity_eq` proves exact transport of
+`map_ker_hamiltonian_ofPlace_multiplicity_eq` proves exact transport of
 **the entire canonical parent-Hamiltonian kernel**, not merely one closed
 state or its inserted-state span.
 

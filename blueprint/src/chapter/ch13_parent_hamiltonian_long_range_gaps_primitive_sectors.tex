@@ -204,8 +204,9 @@
     matrix $\rho$, and let $X$ be a fixed observable with $\eta_A(X)=0$.
     Consider a sequence $N_n=\ell_n+k+r_n$ with both $\ell_n,r_n\to\infty$.
     Suppose the operators $H_n$ are eventually positive, have kernel equal
-    to the open-boundary MPS space, and have a common norm gap
-    $\gamma\geq0$ on its orthogonal complement.
+    to the open-boundary MPS space, and have a common gap $\gamma\geq0$
+    above the kernel: every eigenvalue of $H_n$ other than $0$ is at least
+    $\gamma$.
     Let $\psi_n$ be unit vectors eventually in that ground space.
     If
     \begin{align}
@@ -933,7 +934,7 @@
     with $\ell_n,r_n\longrightarrow\infty$, and eventually
     \begin{align}
         \ker H_n=G(N_n),\qquad
-        \gamma\|v\|\leq\|H_nv\|\quad(v\perp\ker H_n),
+        \lambda\in\operatorname{spec}H_n\setminus\{0\}\implies\lambda\geq\gamma,
         \qquad \gamma\geq0.
         \notag
     \end{align}

@@ -157,12 +157,12 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.ambientDepth_eq_iff_mem_dilation_sdiff,
         TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_walk_length,
         TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_of_edist_le,
-        TNLean.PEPS.AreaLaw.Scan.ambientSupDistance_le_one_of_domainGraph_adj,
-        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball,
+        TNLean.PEPS.AreaLaw.Scan.ambientSupDistance_le_one_of_planeDomainGraph_adj,
+        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball,
         TNLean.PEPS.AreaLaw.Scan.depthRow_ambientDepth_length_le,
         TNLean.PEPS.AreaLaw.Scan.depthRow_ambientDepth_length_le_of_row_bound,
-        TNLean.PEPS.AreaLaw.Scan.domainGraph_ball_subset_of_clearance}
+        TNLean.PEPS.AreaLaw.Scan.planeDomainGraph_ball_subset_of_clearance}
     \leanok
     For $d\ge1$, $\{x\in\mathbb Z^2:d(x)=d\}=T_d\setminus T_{d-1}$, so
     $|\{x\in A:d(x)=d\}|\le|T_d\setminus T_{d-1}|$, and
@@ -222,7 +222,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.CollarScan.existsUnique_selected_of_bounds,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.selected_split_sampling,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_depth_bounds,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_sampling_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_sampling_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_history_weights,thm:al_scan_ambient_rows,thm:al_scan_charge_capacity}
     Under the hypotheses of Lemmas~\ref{thm:al_scan_ambient_rows}
@@ -246,7 +246,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.truncationSet,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.middle_subset_truncationSet,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSupport_eq_ball_of_split,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designated_split_sampling_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designated_split_sampling_planeDomainGraph}
     \leanok
     \uses{thm:al_crossing_budget,thm:al_scan_good_ball_sampling}
     Set $S_0=A\cap T_L$ and retain the hypotheses of
@@ -269,7 +269,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.CollarScan.splitIncidenceCost,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.splitIncidenceCost_band_le_expected_chargeMoveCost,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.splitIncidenceCost_le_expected_chargeMoveCost,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_splitIncidenceCost_le_expected_chargeMoveCost_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_splitIncidenceCost_le_expected_chargeMoveCost_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_good_ball_sampling}
     Under the hypotheses of Lemma~\ref{thm:al_scan_good_ball_sampling}, for
@@ -296,7 +296,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSplitIncidences_subset_splitIncidences,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSplitIncidenceCost,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSplitIncidenceCost_le_splitIncidenceCost,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_designated_sampling,thm:al_scan_expected_move_cost}
     Inequality~(\ref{eq:al_scan_expected_move_cost}) (and its
@@ -320,8 +320,8 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.CollarScan.old_split_anchor_bounds,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.state_split_anchor_bounds,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.state_depth_bounds,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_split_anchor_bounds_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_split_anchor_bounds_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_split_anchor_bounds_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_split_anchor_bounds_planeDomainGraph}
     \leanok
     \uses{def:al_scan_actual_histories,thm:al_scan_consumed_slots,thm:al_scan_ambient_rows}
     At every completed or pre-charge history, every assigned site in $A$ has
@@ -379,10 +379,10 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 \begin{lemma}[Designated-support dilution]
     \label{thm:al_scan_designated_dilution}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSupport_eq_ball_of_state_split,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designated_split_dilution_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designated_split_dilution_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.designated_split_mixture_dilution_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.fill_split_mixture_dilution_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designated_split_dilution_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designated_split_dilution_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.designated_split_mixture_dilution_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.fill_split_mixture_dilution_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_unconditional_split_interval,thm:al_scan_offset_count,
         def:al_scan_designated_incidence,thm:al_scan_designated_sampling}
@@ -448,12 +448,12 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Incidence is a unique terminal split]
     \label{thm:al_scan_terminal_split}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSplitIncidence_unique_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSplitIncidence_unique_domainGraph,
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSplitIncidence_unique_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSplitIncidence_unique_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.state_ball_other_band_initial_part,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_ball_other_band_initial_part,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSplitIncidence_isTerminalSplit_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSplitIncidence_isTerminalSplit_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSplitIncidence_isTerminalSplit_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSplitIncidence_isTerminalSplit_planeDomainGraph}
     \leanok
     \uses{def:al_scan_terminal_split,def:al_scan_designated_incidence,
         thm:al_scan_front_separation,thm:al_scan_band_nesting,
@@ -474,8 +474,8 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Number of labelled terminal split occurrences]
     \label{thm:al_scan_split_count}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_state_designatedSplitIncidence_le_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_old_designatedSplitIncidence_le_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_state_designatedSplitIncidence_le_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_old_designatedSplitIncidence_le_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_unconditional_split_interval,thm:al_scan_terminal_split,
         def:al_scan_designated_incidence}
@@ -871,8 +871,8 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Physical deterministic-prefix approximation]
     \label{thm:al_scan_physical_prefix_approximation}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_approximation_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_approximation_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_approximation_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_approximation_planeDomainGraph}
     \leanok
     \uses{lem:al_scan_prefix_counting}
     Under the hypotheses of Lemma~\ref{lem:al_scan_prefix_family} with
@@ -909,8 +909,8 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[All five physical status cuts]
     \label{thm:al_scan_status_cuts}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_cut_bounds_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_cut_bounds_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_cut_bounds_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_cut_bounds_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_physical_prefix_approximation,
         thm:al_scan_prefix_boundary,thm:al_physical_cut_calculus,
@@ -1000,7 +1000,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Charge sampling of regional entropy]
     \label{thm:al_scan_charge_entropy_sampling}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designatedEntropyCost_le_expected_chargeEta_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designatedEntropyCost_le_expected_chargeEta_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_designated_move_cost,thm:al_scan_actual_charge_entropy}
     Under the hypotheses of Lemma~\ref{thm:al_scan_designated_move_cost}, with
@@ -1047,8 +1047,8 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \label{thm:al_scan_receiving_separation}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_near_subset_truncationSet,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_near_subset_truncationSet,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSupport_not_near_far_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSupport_not_near_far_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSupport_not_near_far_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSupport_not_near_far_planeDomainGraph}
     \leanok
     \uses{def:al_scan_actual_histories}
     At any completed or pre-charge status with $8Km\le L$, $P_0\subseteq A\cap T_L$.
@@ -1068,8 +1068,8 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 \begin{lemma}[Classification of designated supports]
     \label{thm:al_scan_support_classification}
     \lean{TNLean.PEPS.AreaLaw.Scan.contained_or_middle_side,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSupport_classification_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSupport_classification_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSupport_classification_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSupport_classification_planeDomainGraph}
     \leanok
     \uses{def:al_scan_actual_histories}
     Under the hypotheses of Lemma~\ref{thm:al_scan_receiving_separation} and
@@ -1089,7 +1089,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \label{thm:al_scan_augmented_supports}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentedPartition_contains_of_constant,
         TNLean.PEPS.AreaLaw.Scan.IsTerminalSplit.augmented,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_supportCompatible_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_supportCompatible_planeDomainGraph}
     \leanok
     \uses{def:al_scan_augmented_partitions}
     Under the hypotheses of Lemma~\ref{thm:al_scan_support_classification},
@@ -1225,8 +1225,8 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Old-state entropy sampling]
     \label{thm:al_scan_actual_old_entropy_sampling}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_sum_splitEta_le_choiceEntropySymbol_domainGraph,
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.good_sum_splitEta_le_choiceEntropySymbol_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect}
     \leanok
     \uses{def:al_scan_old_entropy_integral,def:al_scan_actual_charge_data}
@@ -1338,7 +1338,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Designated supports at fill leaves]
     \label{thm:al_scan_actual_fill_supports}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData_supportCompatible_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData_supportCompatible_planeDomainGraph}
     \leanok
     \uses{def:al_scan_actual_fill_transport,thm:al_scan_augmented_supports}
     Under the hypotheses of Lemma~\ref{thm:al_scan_support_classification}
@@ -1353,13 +1353,13 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Physical sizes of transferred regions]
     \label{thm:al_scan_physical_subsystem_size}
-    \lean{TNLean.PEPS.AreaLaw.Scan.mem_ambientDilation_singleton_of_domainGraph_edist_le,
-        TNLean.PEPS.AreaLaw.Scan.card_domainGraph_ball_le,
+    \lean{TNLean.PEPS.AreaLaw.Scan.mem_ambientDilation_singleton_of_planeDomainGraph_edist_le,
+        TNLean.PEPS.AreaLaw.Scan.card_planeDomainGraph_ball_le,
         TNLean.PEPS.AreaLaw.Scan.card_fill_moved_le_one,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.card_ball_le_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.card_chargeStep_moved_le_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.card_designatedSupport_le_of_state_split_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.card_designatedSupport_le_of_old_split_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.card_ball_le_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.card_chargeStep_moved_le_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.card_designatedSupport_le_of_state_split_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.card_designatedSupport_le_of_old_split_planeDomainGraph}
     \leanok
     \uses{def:al_scan_actual_histories}
     Every $d_\Lambda$-ball of radius $r_0$ has cardinality at most $(2r_0+1)^2$.
@@ -1403,11 +1403,11 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.log_physicalDimension_le_of_card_le,
         TNLean.PEPS.AreaLaw.Scan.prod_physical_subsystem_dimension,
         TNLean.PEPS.AreaLaw.Scan.log_fill_moved_dimension_le,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_chargeStep_moved_dimension_le_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_state_split_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_old_split_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_state_not_constant_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_old_not_constant_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_chargeStep_moved_dimension_le_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_state_split_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_old_split_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_state_not_constant_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_old_not_constant_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_physical_subsystem_size,thm:al_scan_noncontained_support_radius,
         def:al_scan_physical_dimension_cap}
@@ -1487,11 +1487,11 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove_subsystem,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumFillMove_subsystem,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.logDim_quantumFillMove_le,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.logDim_quantumChargeMove_le_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.logDim_quantumChargeMove_le_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData_logDim_move_le,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_logDim_move_le_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_logDim_support_le_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData_logDim_support_le_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_logDim_move_le_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_logDim_support_le_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.fillTransportData_logDim_support_le_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_physical_subsystem_dimension}
     With physical factor dimension $q\ge1$ and any auxiliary dimensions for
@@ -1781,8 +1781,8 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 % Revision 7224037.
 \begin{lemma}[Entropy and energy estimates in a scan round]
     \label{thm:al_scan_actual_transport_estimates}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_planeDomainGraph}
     \leanok
     \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data,
         def:al_scan_actual_energy_terms,def:al_scan_physical_dimension_cap}
@@ -1874,7 +1874,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Integrated charge defect in one round]
     \label{thm:al_scan_actual_charge_integral_bound}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_actual_old_entropy_sampling,thm:al_scan_actual_transport_estimates}
     Under the joint hypotheses of
@@ -2049,7 +2049,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{lemma}[Charge energy and bad-history weight]
     \label{thm:al_scan_actual_charge_energy}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_planeDomainGraph}
     \leanok
     \uses{def:al_scan_actual_charge_data,def:al_scan_literal_measures,
         def:al_scan_physical_dimension_cap}
@@ -2150,7 +2150,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{lemma}[One cut bound for every physical status]
     \label{thm:al_scan_common_status_budget}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_statusMarginal_cutBudget_le_log}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_statusMarginal_cutLogBudget_le_log}
     \uses{thm:al_scan_nonfar_compact,def:al_scan_status_marginals,
         thm:al_scan_status_cuts,thm:al_lattice_crossing_budget,thm:al_exact_cut_budget}
     Fix $q\ge1$, interaction range $R$, and $C_r\ge0$. There exists $C_B>0$
@@ -2433,8 +2433,8 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{lemma}[Common step errors for all scan rounds]
     \label{thm:al_scan_actual_round_transport}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph_of_finiteFamilyTransportBound,
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_planeDomainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_planeDomainGraph_of_finiteFamilyTransportBound,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory_length_add_one_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_isAdmissible,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_logDim_move_le,
@@ -2529,7 +2529,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{lemma}[Integrated entropy over all scan rounds]
     \label{thm:al_scan_actual_round_entropy}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_domainGraph,
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_crossBandCommute}
     \leanok
     \uses{def:al_scan_actual_round_family,def:al_scan_physical_dimension_cap,
@@ -2843,7 +2843,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{lemma}[Charge sampling summed over complete rounds]
     \label{thm:al_scan_actual_charge_sum_sampling}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_actualCharge_integral_le_sum_actualRounds_entropyGain_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_actual_old_entropy_sampling,def:al_scan_actual_round_family}
     Under the hypotheses of Lemma~\ref{thm:al_scan_actual_old_entropy_sampling}
@@ -2874,7 +2874,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{lemma}[Integrated charge defect over the scan]
     \label{thm:al_scan_actual_charge_sum_bound}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_actual_charge_sum_sampling,thm:al_scan_actual_round_transport}
     Under the joint hypotheses of
@@ -2949,7 +2949,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{lemma}[Selection from the integrated charge bound]
     \label{thm:al_scan_actual_charge_sum_selection}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_selection_domainGraph}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_selection_planeDomainGraph}
     \leanok
     \uses{thm:al_scan_actual_charge_sum_bound}
     Under the hypotheses of Lemma~\ref{thm:al_scan_actual_charge_sum_bound},

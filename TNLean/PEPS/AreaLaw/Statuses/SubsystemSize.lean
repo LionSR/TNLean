@@ -28,11 +28,11 @@ namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- A finite graph-distance bound in an induced lattice domain implies membership
 in the ambient square, including for domains with holes or disconnected components. -/
-theorem mem_ambientDilation_singleton_of_domainGraph_edist_le
+theorem mem_ambientDilation_singleton_of_planeDomainGraph_edist_le
     {Λ : Finset (ℤ × ℤ)} {x a : ↥Λ} {r : ℕ}
     (h : (planeDomainGraph Λ).edist x a ≤ (r : ℕ∞)) :
     x.val ∈ ambientDilation {a.val} r := by
-  have hd := abs_ambientDepth_sub_le_domainGraph {a.val} (Finset.singleton_nonempty _) h
+  have hd := abs_ambientDepth_sub_le_planeDomainGraph {a.val} (Finset.singleton_nonempty _) h
   have hz : ambientDepth {a.val} (Finset.singleton_nonempty _) a.val = 0 := by
     simp [ambientDepth, ambientSupDistance]
   rw [hz, sub_zero, abs_of_nonneg (ambientDepth_nonneg _ _ _)] at hd
@@ -40,14 +40,14 @@ theorem mem_ambientDilation_singleton_of_domainGraph_edist_le
 
 /-- A graph ball has at most `(2r+1)²` physical sites. No geometric regularity
 of the finite domain is required. -/
-theorem card_domainGraph_ball_le (Λ : Finset (ℤ × ℤ)) (a : ↥Λ) (r : ℕ) :
+theorem card_planeDomainGraph_ball_le (Λ : Finset (ℤ × ℤ)) (a : ↥Λ) (r : ℕ) :
     (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).edist a x ≤ (r : ℕ∞)).card ≤
       (2 * r + 1) ^ 2 := by
   classical
   calc
     _ ≤ (ambientDilation {a.val} r).card :=
       Finset.card_le_card_of_injOn Subtype.val
-        (fun x hx ↦ mem_ambientDilation_singleton_of_domainGraph_edist_le
+        (fun x hx ↦ mem_ambientDilation_singleton_of_planeDomainGraph_edist_le
           (by simpa only [SimpleGraph.edist_comm] using (Finset.mem_filter.mp hx).2))
         Subtype.val_injective.injOn
     _ ≤ (2 * r + 1) ^ 2 := by
@@ -72,14 +72,14 @@ variable [Fintype I] [LinearOrder I]
 
 omit [Fintype I] [LinearOrder I] in
 /-- Every actual charge ball has the induced-lattice square bound. -/
-theorem card_ball_le_domainGraph {Λ : Finset (ℤ × ℤ)}
+theorem card_ball_le_planeDomainGraph {Λ : Finset (ℤ × ℤ)}
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ) (i : I) :
     (S.ball i).card ≤ (2 * S.r₀ + 1) ^ 2 := by
-  simpa only [ball, hgraph] using card_domainGraph_ball_le Λ (S.anchor i) S.r₀
+  simpa only [ball, hgraph] using card_planeDomainGraph_ball_le Λ (S.anchor i) S.r₀
 
 /-- The actual charge moves no more than its ball's middle intersection. Blank
 slots and disabled charges move no sites. Both receiving sides are included. -/
-theorem card_chargeStep_moved_le_domainGraph {Λ : Finset (ℤ × ℤ)}
+theorem card_chargeStep_moved_le_planeDomainGraph {Λ : Finset (ℤ × ℤ)}
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (g r k : ℕ) (c : Bool × Fin S.M) (σ : PhysicalPartition ↥Λ) :
     (middle σ \ middle (S.chargeStep g r k c σ)).card ≤ (2 * S.r₀ + 1) ^ 2 := by
@@ -91,12 +91,12 @@ theorem card_chargeStep_moved_le_domainGraph {Λ : Finset (ℤ × ℤ)}
     split_ifs
     · rw [middle_sdiff_middle_assign]
       exact (Finset.card_le_card Finset.inter_subset_left).trans
-        (S.card_ball_le_domainGraph hgraph i)
+        (S.card_ball_le_planeDomainGraph hgraph i)
     · simp
 
 /-- A designated support splitting a completed status has base-radius size.
 This makes no assertion about an arbitrary unsplit designated support. -/
-theorem card_designatedSupport_le_of_state_split_domainGraph
+theorem card_designatedSupport_le_of_state_split_planeDomainGraph
     {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
@@ -104,11 +104,11 @@ theorem card_designatedSupport_le_of_state_split_domainGraph
     (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).card ≤
       (2 * S.r₀ + 1) ^ 2 := by
   rw [S.designatedSupport_eq_ball_of_state_split h g side i hL hs]
-  exact S.card_ball_le_domainGraph hgraph i
+  exact S.card_ball_le_planeDomainGraph hgraph i
 
 /-- A designated support splitting a pre-charge status has base-radius size.
 The only scale assumption places the actual middle in the truncation set. -/
-theorem card_designatedSupport_le_of_old_split_domainGraph
+theorem card_designatedSupport_le_of_old_split_planeDomainGraph
     {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
@@ -117,7 +117,7 @@ theorem card_designatedSupport_le_of_old_split_domainGraph
     (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).card ≤
       (2 * S.r₀ + 1) ^ 2 := by
   rw [S.designatedSupport_eq_ball_of_split h g side i hL hs]
-  exact S.card_ball_le_domainGraph hgraph i
+  exact S.card_ball_le_planeDomainGraph hgraph i
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

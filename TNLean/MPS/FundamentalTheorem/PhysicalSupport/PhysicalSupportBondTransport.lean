@@ -51,7 +51,7 @@ theorem bondDim_pos_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M) :
 
 /-- On two sites, the sitewise matrix of a one-site operator is its Kronecker
 square in configuration coordinates. -/
-theorem tensorPower_two_eq_twoSiteSectorProjection
+theorem piKronecker_two_eq_twoSiteSectorProjection
     (P : Matrix (Fin d) (Fin d) ℂ) :
     (Matrix.piKronecker fun _ : Fin 2 ↦ P) = twoSiteSectorProjection P := by
   ext s t
@@ -60,12 +60,12 @@ theorem tensorPower_two_eq_twoSiteSectorProjection
 
 /-- The sitewise tensor square of an isometry has the corresponding tensor
 square of its range projection as its range projection. -/
-theorem tensorPower_two_mul_conjTranspose
+theorem piKronecker_two_mul_conjTranspose
     (V : Matrix (Fin d) (Fin e) ℂ) :
     (Matrix.piKronecker fun _ : Fin 2 ↦ V) * (Matrix.piKronecker fun _ : Fin 2 ↦ V)ᴴ =
       twoSiteSectorProjection (V * Vᴴ) := by
-  rw [tensorPower_mul_conjTranspose,
-    tensorPower_two_eq_twoSiteSectorProjection]
+  rw [piKronecker_const_mul_conjTranspose,
+    piKronecker_two_eq_twoSiteSectorProjection]
 
 /-- A product identity between one-site matrices is preserved on the
 corresponding two-site spaces.
@@ -156,7 +156,7 @@ theorem twoSiteSectorProjection_eq_lifted_range
     twoSiteSectorProjection P =
       (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion) *
         (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion)ᴴ := by
-  rw [tensorPower_two_mul_conjTranspose, F.inclusion_range]
+  rw [piKronecker_two_mul_conjTranspose, F.inclusion_range]
 
 /-- A lifted bond acts entirely within the tensor square of the prescribed
 one-site support.
@@ -173,12 +173,12 @@ theorem liftedBond_supported (F : PhysicalSupportRestrictionData P K)
   rw [← Matrix.mul_assoc
       (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion)ᴴ
       (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion),
-    tensorPower_isometry F.inclusion F.inclusion_isometry 2,
+    piKronecker_const_isometry F.inclusion F.inclusion_isometry 2,
     Matrix.one_mul]
   rw [← Matrix.mul_assoc
       (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion)ᴴ
       (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion),
-    tensorPower_isometry F.inclusion F.inclusion_isometry 2,
+    piKronecker_const_isometry F.inclusion F.inclusion_isometry 2,
     Matrix.one_mul]
 
 end PhysicalSupportRestrictionData

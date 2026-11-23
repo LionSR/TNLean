@@ -54,7 +54,7 @@ def actualChargeEntropyDefect (S : CollarScan V I) (hm : 0 < S.m) (hM : 0 < S.M)
 
 /-- Actual physical geometry supplies compatibility; good-history sampling
 then dominates the actual old-leaf split entropy, pointwise in one vector. -/
-theorem good_sum_splitEta_le_choiceEntropySymbol_domainGraph
+theorem good_sum_splitEta_le_choiceEntropySymbol_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {k L μ : ℕ}
@@ -80,11 +80,11 @@ theorem good_sum_splitEta_le_choiceEntropySymbol_domainGraph
   classical
   let histTree := historyMeanTree S.K S.m S.M hm0 hM k
   let choiceTree := fun _ : History S.K S.m S.M k => chargeChoiceTree S.K S.M hM
-  have hcompat := chargeTransportData_supportCompatible_domainGraph hT S hgraph hdepth
+  have hcompat := chargeTransportData_supportCompatible_planeDomainGraph hT S hgraph hdepth
     histTree choiceTree (by omega) hk (by omega) hDpos hD hL hrows hclear n E hsupport
   have heta := S.designatedSplitIncidenceCost_eq_sum_splitEta n histTree choiceTree E
     hsupport hcompat h ((EuclideanSpace.equiv _ ℂ).symm θ)
-  have hbound := (good_designatedEntropyCost_le_expected_chargeEta_domainGraph hT S
+  have hbound := (good_designatedEntropyCost_le_expected_chargeEta_planeDomainGraph hT S
     hgraph hdepth h n ((EuclideanSpace.equiv _ ℂ).symm θ)
     hn hm hk hr hD hDpos hL hC hrows hmult hclear hgood).2
   have hchoice : (S.actualChargeData hm0 hM k).choiceEntropySymbol n h θ =
@@ -103,7 +103,7 @@ theorem good_sum_splitEta_le_choiceEntropySymbol_domainGraph
 the physical sampling coefficient. The same old state is used on both sides
 for each history and Fourier parameter; no sampling or compatibility field
 is assumed. -/
-theorem actualChargeEntropyDefect_le_entropyGain_domainGraph
+theorem actualChargeEntropyDefect_le_entropyGain_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {k L μ : ℕ}
@@ -152,7 +152,7 @@ theorem actualChargeEntropyDefect_le_entropyGain_domainGraph
     apply D.oldFourierCoherentIntegral_mono n hAdm ht hcomm pre p h
       (continuous_const.mul (hF h)) (D.continuous_choiceEntropySymbol n h)
     intro θ
-    exact good_sum_splitEta_le_choiceEntropySymbol_domainGraph hT S hgraph hdepth hm0 hM h
+    exact good_sum_splitEta_le_choiceEntropySymbol_planeDomainGraph hT S hgraph hdepth hm0 hM h
       n E hsupport hn hm hk hr hD hDpos hL hC hrows hmult hclear hg θ
   · simp only [hg, ↓reduceIte, mul_zero]
     exact mul_nonneg (historyWeight_nonneg h)

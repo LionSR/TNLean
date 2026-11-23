@@ -214,7 +214,7 @@ theorem wBlockEncoding_conjTranspose_mul_self {k : ℕ} (hk : 0 < k) :
     exact inv_mul_cancel₀ hkℂ
 
 /-- Every tensor power of the W-block encoding is an isometry. -/
-theorem rectKronecker_wBlockEncoding_isometry {k : ℕ} (hk : 0 < k) (m : ℕ) :
+theorem piKronecker_wBlockEncoding_isometry {k : ℕ} (hk : 0 < k) (m : ℕ) :
     (Matrix.piKronecker fun _ : Fin m => wBlockEncoding k)ᴴ *
       Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) = 1 :=
   Matrix.IsIsometry.piKronecker (fun _ ↦ wBlockEncoding_conjTranspose_mul_self hk)
@@ -248,7 +248,7 @@ private theorem encoding_vacuum {k : ℕ} (m : ℕ)
 /-- Blocking identity: the tensor power of the local W isometry sends
 the unnormalized W vector to the flattened W vector divided by the square root
 of the block length. No blocked-vector equation is supplied as a hypothesis. -/
-theorem rectKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
+theorem piKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
     Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ wIndicator m =
       (Real.sqrt k : ℂ)⁻¹ •
         fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
@@ -290,12 +290,12 @@ theorem rectKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
 encoding. This retains all (mk) physical sites under the existing flattening
 equivalence. Source: the blocking device of PGVWC07, lines 2090–2097,
 applied to the review's W vector, lines 2348–2362. -/
-theorem rectKronecker_wBlockEncoding_mulVec_normalized (k m : ℕ) :
+theorem piKronecker_wBlockEncoding_mulVec_normalized (k m : ℕ) :
     Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ
       ((Real.sqrt m : ℂ)⁻¹ • wIndicator m) =
       (Real.sqrt (m * k : ℕ) : ℂ)⁻¹ •
         fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
-  rw [Matrix.mulVec_smul, rectKronecker_wBlockEncoding_mulVec_wIndicator, smul_smul]
+  rw [Matrix.mulVec_smul, piKronecker_wBlockEncoding_mulVec_wIndicator, smul_smul]
   congr 1
   rw [Nat.cast_mul, Real.sqrt_mul (Nat.cast_nonneg m), Complex.ofReal_mul, mul_inv]
 
@@ -316,14 +316,14 @@ theorem mpv_wBlockCompression_of_eq_wIndicator {D k m : ℕ} (hk : 0 < k)
     fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ)
   have hflat : W = (Real.sqrt k : ℂ) • (E *ᵥ wIndicator m) := by
     dsimp only [E]
-    rw [rectKronecker_wBlockEncoding_mulVec_wIndicator, smul_smul,
+    rw [piKronecker_wBlockEncoding_mulVec_wIndicator, smul_smul,
       mul_inv_cancel₀ hroot, one_smul]
   have hpull : Matrix.piKronecker (fun _ : Fin m => (wBlockEncoding k)ᴴ) *ᵥ W =
       (Real.sqrt k : ℂ) • wIndicator m := by
     rw [hflat, Matrix.mulVec_smul, Matrix.mulVec_mulVec]
     dsimp only [E]
     rw [← Matrix.conjTranspose_piKronecker,
-      rectKronecker_wBlockEncoding_isometry hk m, Matrix.one_mulVec]
+      piKronecker_wBlockEncoding_isometry hk m, Matrix.one_mulVec]
   have hblock : ∀ σ : Fin m → Fin (blockPhysDim 2 k),
       mpv (blockTensor A k) σ = c * W σ := by
     intro σ

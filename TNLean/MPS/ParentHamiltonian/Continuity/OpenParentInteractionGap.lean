@@ -9,7 +9,6 @@ import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
 import QICLean.ManyBody.Hamiltonian.KernelGap
 import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
-import QICLean.Spectral.Gap.PositiveComparisonGap
 
 /-!
 # Uniform open-chain gaps for positive parent interactions
@@ -66,41 +65,6 @@ theorem IsParentInteraction.exists_pos_hamiltonian_chainTranslates_comparison
   · simpa only [hamiltonian_chainTranslates_smul] using hamiltonian_chainTranslates_mono hLower N
   · simpa only [hamiltonian_chainTranslates_smul] using hamiltonian_chainTranslates_mono hUpper N
 
-/-- A two-sided comparison of the Hamiltonian of the open-chain translates of a positive
-semidefinite matrix with the Hamiltonian of the canonical parent interaction on the open chain
-transfers a gap above the kernel of the latter to the former: every eigenvalue is `0` or at least
-the gap. -/
-private theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_comparison
-    {R N : ℕ} (A : MPSTensor d D) {h : Matrix (Cfg d R) (Cfg d R) ℂ} (hh : h.PosSemidef)
-    {κ C γ : ℝ} (hκ : 0 < κ) (hC : 0 < C) (hγ : 0 < γ)
-    (hLower : (κ : ℂ) • (parentChainInteraction A R N).hamiltonian ≤
-      (chainTranslates R N h).hamiltonian)
-    (hUpper : (chainTranslates R N h).hamiltonian ≤
-      (C : ℂ) • (parentChainInteraction A R N).hamiltonian)
-    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
-      (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
-        μ = 0 ∨ (γ : ℂ) ≤ μ) :
-    ∀ μ : ℂ, Module.End.HasEigenvalue
-      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
-        μ = 0 ∨ ((κ * γ : ℝ) : ℂ) ≤ μ := by
-  have hLower' : (κ : ℂ) • Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian ≤
-      ((1 : ℝ) : ℂ) • Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian := by
-    rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
-    exact hLower
-  have hUpper' : ((1 : ℝ) : ℂ) • Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian ≤
-      (C : ℂ) • Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
-    rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
-    exact hUpper
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_chainTranslates hh N)).mpr ?_
-  simpa only [div_one] using
-    (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (posSemidef_hamiltonian_parentChainInteraction A R N)).norm_gap_of_smul_le_of_le_smul
-      (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_chainTranslates hh N))
-      hκ zero_lt_one hC hγ hLower' hUpper'
-      ((ManyBody.forall_hasEigenvalue_iff_norm
-        (posSemidef_hamiltonian_parentChainInteraction A R N)).mp hGap)
-
 /-- A uniform gap of the Hamiltonian of the canonical parent interaction on the open chain
 transfers to the open-chain translates of a fixed positive parent interaction. Each gap is stated
 above the kernel: every eigenvalue is `0` or at least the gap.
@@ -116,9 +80,11 @@ theorem IsParentInteraction.exists_hamiltonian_chainTranslates_uniform_gap_of_ca
         μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨κ, C, hκ, hC, hComp⟩ := hh.exists_pos_hamiltonian_chainTranslates_comparison
   exact ⟨κ * γ, mul_pos hκ hγ, fun N hN ↦
-    toEuclideanLin_hamiltonian_chainTranslates_gap_of_comparison A
-      (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) hκ hC hγ
-      (hComp N).1 (hComp N).2 (hGap N hN)⟩
+    ManyBody.forall_hasEigenvalue_of_smul_le_of_le_smul
+      (posSemidef_hamiltonian_parentChainInteraction A R N)
+      (posSemidef_hamiltonian_chainTranslates
+        (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) N)
+      hκ hC hγ (hComp N).1 (hComp N).2 (hGap N hN)⟩
 
 /-- A supplied uniform gap of the Hamiltonians of the canonical parent interactions on the open
 chain transfers to the open-chain translates of a compact continuous family of positive parent
@@ -154,8 +120,10 @@ theorem exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
       (hUniform x hx)
   obtain ⟨_, C, _, hC, hComparison⟩ :=
     (hParent x).exists_pos_hamiltonian_chainTranslates_comparison
-  exact toEuclideanLin_hamiltonian_chainTranslates_gap_of_comparison (A x)
-    (Matrix.isPositive_toEuclideanLin_iff.mp (hParent x).isPositive) hκ hC hγ
+  exact ManyBody.forall_hasEigenvalue_of_smul_le_of_le_smul
+    (posSemidef_hamiltonian_parentChainInteraction (A x) R N)
+    (posSemidef_hamiltonian_chainTranslates
+      (Matrix.isPositive_toEuclideanLin_iff.mp (hParent x).isPositive) N) hκ hC hγ
     (by simpa only [hamiltonian_chainTranslates_smul] using
       hamiltonian_chainTranslates_mono hLocal N)
     (hComparison N).2 (hGap x hx N hN)

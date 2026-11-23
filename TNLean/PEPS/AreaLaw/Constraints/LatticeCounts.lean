@@ -23,7 +23,7 @@ disconnected components included, from the ambient diamond count `eq:ball-count`
 
 ## Main results
 
-* `TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le`: `|N_d(x)| ≤ 2 (d + 1)²`.
+* `TNLean.PEPS.AreaLaw.card_graphBall_planeDomainGraph_le`: `|N_d(x)| ≤ 2 (d + 1)²`.
 * `TNLean.PEPS.AreaLaw.card_anchor_fiber_le`: at most `μ_R` labels per anchor.
 * `TNLean.PEPS.AreaLaw.card_interedges_compl_le_card_edgeBoundary`: ordered cut edges are
   counted by the unordered edge boundary `∂_Λ X`.
@@ -52,7 +52,7 @@ variable {Λ : Finset (ℤ × ℤ)}
 
 /-- **Ball count** (`eq:ball-count`, `01-preliminaries.tex`, lines 82–87): a graph ball of
 radius `d` in an induced domain has at most `1 + 2 d (d + 1) ≤ 2 (d + 1)²` sites. -/
-theorem card_graphBall_domainGraph_le (x : ↥Λ) (d : ℕ) :
+theorem card_graphBall_planeDomainGraph_le (x : ↥Λ) (d : ℕ) :
     ((ManyBody.graphBall (planeDomainGraph Λ) x d).card : ℝ) ≤ 2 * ((d : ℝ) + 1) ^ 2 := by
   have h := card_le_diamond_of_edist_le (G := planeDomainGraph Λ) Subtype.val
     (ManyBody.graphBall (planeDomainGraph Λ) x d) Subtype.val_injective

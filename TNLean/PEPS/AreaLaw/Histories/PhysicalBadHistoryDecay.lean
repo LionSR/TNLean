@@ -81,7 +81,7 @@ theorem bad_history_probability_le_of_threshold_le
     rw [hK]
     simpa only [mul_comm, mul_left_comm, mul_assoc] using
       Nat.div_mul_le_self ⌊(n : ℝ) ^ (1 - ell)⌋₊ (8 * S.m)
-  exact (S.sum_historyWeight_bad_through_geometric_domainGraph_le hT hgraph hdepth
+  exact (S.sum_historyWeight_bad_through_geometric_planeDomainGraph_le hT hgraph hdepth
     hnNat hmNat (by omega : 0 < S.r₀) hMpos hL hclear hrows hmult).trans
       (hscalar ↥Λ I S T.card hSn hm hK hD hR hM ht)
 

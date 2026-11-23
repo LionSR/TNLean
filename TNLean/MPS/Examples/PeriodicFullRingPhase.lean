@@ -38,7 +38,7 @@ theorem stringPhaseTensor_fullRing_I_eq_pow (L : ℕ)
     mpvExpectation stringPhaseTensor L
       (Matrix.piKronecker fun _ : Fin L =>
         Complex.I • (1 : Matrix (Fin 4) (Fin 4) ℂ)) = Complex.I ^ L := by
-  apply mpvExpectation_finKronecker_const_eq_phase_pow stringPhaseTensor
+  apply mpvExpectation_piKronecker_const_eq_phase_pow stringPhaseTensor
     (Complex.I • 1) 1 Complex.I (by simp) ?_ L hL
   intro i
   simp [Matrix.smul_apply, Matrix.one_apply, smul_eq_mul, mul_ite, ite_smul]

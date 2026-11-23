@@ -114,7 +114,7 @@ theorem exists_physicalStringBlockEndpoints
   obtain ⟨y, hy⟩ := exists_physicalObservableTransfer_one_eq A hA hNorm Y
   exact ⟨x, y, fun u N => by rw [hy, hx]; rfl⟩
 
-private theorem exists_isHermitian_finKronecker_ne_zero
+private theorem exists_isHermitian_piKronecker_ne_zero
     {n : ℕ} (f : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ →ₗ[ℂ] ℂ)
     {X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} (hX : f X ≠ 0) :
     ∃ p : Fin n → Matrix (Fin d) (Fin d) ℂ,
@@ -219,8 +219,8 @@ theorem exists_isHermitian_physicalStringProductEndpoints
     change Matrix.trace (Λ * Vᴴ * physicalObservableTransfer A (D ^ 2) y 1) ≠ 0
     rw [hy, Matrix.mul_assoc, hV', Matrix.mul_one, hΛtr]
     exact one_ne_zero
-  obtain ⟨H, hH, hfH⟩ := exists_isHermitian_finKronecker_ne_zero f hxne
-  obtain ⟨K, hK, hgK⟩ := exists_isHermitian_finKronecker_ne_zero g hyne
+  obtain ⟨H, hH, hfH⟩ := exists_isHermitian_piKronecker_ne_zero f hxne
+  obtain ⟨K, hK, hgK⟩ := exists_isHermitian_piKronecker_ne_zero g hyne
   exact ⟨H, K, hH, hK, hfH, hgK⟩
 
 end MPSTensor

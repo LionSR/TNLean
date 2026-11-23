@@ -201,7 +201,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   have hlq : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   obtain ⟨Clat, hClat, hlat⟩ := exists_latticeCutBudget_le_log hq R hCtr.le
     (show (0 : ℝ) ≤ 4 by norm_num)
-  obtain ⟨CB, hCB, hstat⟩ := exists_statusMarginal_cutBudget_le_log hq R hCtr.le
+  obtain ⟨CB, hCB, hstat⟩ := exists_statusMarginal_cutLogBudget_le_log hq R hCtr.le
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   refine ⟨max (max 4 (CT + 1))

@@ -141,7 +141,7 @@ This subsection extends \cite[Proposition~3.4]{OpenAI2026PolynomialPEPS} from $R
 \begin{lemma}[Information of a state of the square on the integer square]
     \label{thm:peps_square_state_relabel_information}
     \lean{TNLean.PEPS.Approximation.cell_conditionalMutualInformation_le_square_of_rectangle,
-        TNLean.PEPS.Approximation.mutualInformation_squareAreaLawState}
+        TNLean.PEPS.Approximation.mutualInformation_rectangleAreaLawState}
     \leanok
     \uses{def:square_area_law_state,def:peps_angular_grid}
     For a state $\Omega$ on $\{0,\ldots,L-1\}^2$ and its placement $\tilde\Omega$ on $\Lambda_L=\{1,\ldots,L\}^2$ (Definition~\ref{def:square_area_law_state}), mutual and conditional mutual informations match under the shift $x\mapsto x+(1,1)$, so a cell bound for $\tilde\Omega$ at origin $o-(1,1)$ transfers to $\Omega$ at origin $o$.

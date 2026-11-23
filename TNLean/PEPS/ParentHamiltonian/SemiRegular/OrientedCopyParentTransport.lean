@@ -320,7 +320,7 @@ theorem finrank_regionParentGroundSpace_oriented_copy_eq
 /-- Arbitrary positive canonical parent interactions, with the actual regional
 kernels on both sides, have their full Hamiltonian kernels identified by the
 physical bond map. The conclusion concerns every ground vector. -/
-theorem map_ker_regionParentHamiltonian_oriented_copy_eq
+theorem map_ker_hamiltonian_ofPlace_oriented_copy_eq
     (o : Edge Γ → Bool) (d m : I → ℕ) (D : ∀ i, G →* Matrix (Fin (d i)) (Fin (d i)) ℂ)
     (hm : ∀ i, 0 < m i)
     (eX : (v : V) → (IncidentEdge Γ v → Σ i, Fin (d i)) ≃ Fin p)

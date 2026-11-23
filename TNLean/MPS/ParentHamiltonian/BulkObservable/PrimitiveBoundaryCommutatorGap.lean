@@ -80,8 +80,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.commutator_gap_of_bulkObserva
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)))
     {γ e : ℝ} (hγ : 0 ≤ γ)
     (hPos : ∀ᶠ n in atTop, (H n).IsPositive)
-    (hGap : ∀ᶠ n in atTop, ∀ v ∈ (LinearMap.ker (H n))ᗮ,
-      γ * ‖v‖ ≤ ‖H n v‖)
+    (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue (H n) μ →
+      μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hKernel : ∀ᶠ n in atTop,
       LinearMap.ker (H n) = groundSpaceES A ((ℓ n + k) + r n))
     (hGround : ∀ᶠ n in atTop, ψ n ∈ groundSpaceES A ((ℓ n + k) + r n))

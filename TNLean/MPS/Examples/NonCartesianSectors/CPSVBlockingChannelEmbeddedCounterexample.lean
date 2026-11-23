@@ -49,7 +49,7 @@ private theorem exists_sourceMap_of_exists_embeddedMap (N : ℕ)
   have hForward : IsKrausCPTP
       (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ physicalInclusion)) :=
     singleKrausMap_isKrausCPTP (Matrix.piKronecker fun _ : Fin 2 ↦ physicalInclusion)
-      (tensorPower_isometry physicalInclusion
+      (piKronecker_const_isometry physicalInclusion
         physicalInclusion_isometry 2)
   have hRecover : IsKrausCPTP
       (sitewisePhysicalRecovery physicalInclusion N) :=
@@ -59,7 +59,7 @@ private theorem exists_sourceMap_of_exists_embeddedMap (N : ℕ)
     isKrausCPTP_comp (isKrausCPTP_comp hForward hT) hRecover
   refine ⟨Tsource, hTsource, fun X ↦ ?_⟩
   simp only [Tsource, LinearMap.comp_apply]
-  rw [singleKrausMap_tensorPower_physCloseN]
+  rw [singleKrausMap_piKronecker_physCloseN]
   change sitewisePhysicalRecovery physicalInclusion N
       (T (physCloseN embeddedObstruction 2 X)) = _
   rw [hclose X]

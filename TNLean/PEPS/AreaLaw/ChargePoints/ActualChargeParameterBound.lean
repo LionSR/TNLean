@@ -62,7 +62,7 @@ the integrated entropy estimate with coefficient
 `r * a / (2 * (C₁ + 1) * n * D)`. The error is multiplied by the interval length.
 The constants precede all geometric and Hamiltonian choices, and the logarithmic
 error sequence precedes the replica count and nonzero symmetric vector. -/
-theorem actualCharge_integral_bound_domainGraph :
+theorem actualCharge_integral_bound_planeDomainGraph :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
@@ -99,7 +99,7 @@ theorem actualCharge_integral_bound_domainGraph :
                   (p₁ - p₀) *
                     (Cent * r * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β r) := by
   classical
-  obtain ⟨c₀, Cent, eent, _, _, hc₀, htransport⟩ := actualCharge_transport_domainGraph
+  obtain ⟨c₀, Cent, eent, _, _, hc₀, htransport⟩ := actualCharge_transport_planeDomainGraph
   refine ⟨c₀, Cent, eent, hc₀, ?_⟩
   intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     s L μ hn hs hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ
@@ -123,7 +123,7 @@ theorem actualCharge_integral_bound_domainGraph :
     ht (S.chargeTransportData_crossBandCommute _ _ n ht r) hne).mono_set hsub
   apply mul_integral_le_of_integral_sub_le (mul_nonneg (Nat.cast_nonneg r) ha.le) h01 hQ hG
   · intro p _
-    exact S.actualChargeEntropyDefect_le_entropyGain_domainGraph hT hgraph hdepth hm hM
+    exact S.actualChargeEntropyDefect_le_entropyGain_planeDomainGraph hT hgraph hdepth hm hM
       n E (fun _ => rfl) hn (by omega) hs hr hD hDpos hL hC hrows hmult hclear ht r pre p
   · exact (hresult r pre hpre hne).2 p₀ p₁ h0 h01 h1
 

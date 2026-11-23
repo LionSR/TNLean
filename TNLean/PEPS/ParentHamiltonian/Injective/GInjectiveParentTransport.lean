@@ -134,7 +134,7 @@ theorem exists_regionParentGroundSpace_transport_of_isGInjective
 positive parents with the genuine regional ranges. This applies to all fixed
 semi-regular virtual representations, without ambient dimension equality.
 Source: consequence of SCP10, Definition 5.1 and Theorem 5.7. -/
-theorem exists_ker_regionParentHamiltonian_transport_of_isGInjective
+theorem exists_ker_hamiltonian_ofPlace_transport_of_isGInjective
     (A : Tensor Γ d) (b : (v : V) → LocalVirtualConfig A v → Fin e → ℂ)
     (ρ : (v : V) → Representation ℂ G (LocalVirtualConfig A v → ℂ))
     (hA : ∀ v, IsGInjective (ρ v) (localTensorMap A v))

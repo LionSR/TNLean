@@ -49,7 +49,7 @@ theorem exists_threeSplit_eq_kronecker_one_kronecker_one
   have hU : ∀ v : {v // v ∉ T ∪ E}, m v = 1 := fun v =>
     hm v fun hv => v.2 (Finset.mem_union_left E (hD hv))
   refine ⟨Matrix.piKronecker (fun v : T => m v), ?_⟩
-  rw [rectKronecker_submatrix_threeSplit h]
+  rw [piKronecker_submatrix_threeSplit h]
   simp only [hE, hU, Matrix.piKronecker_one]
   rfl
 
@@ -75,7 +75,7 @@ theorem exists_threeSplit_eq_one_kronecker
   have hE : ∀ v : E, m v = 1 := fun v =>
     hm v fun hv => (Finset.mem_compl.mp (hD hv)) (Finset.mem_union_right T v.2)
   refine ⟨Matrix.piKronecker (fun v : {v // v ∉ T ∪ E} => m v), ?_⟩
-  rw [rectKronecker_submatrix_threeSplit h]
+  rw [piKronecker_submatrix_threeSplit h]
   change _ = (1 : Matrix ((T → Fin q) × (E → Fin q))
     ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ _
   simp only [hT, hE, Matrix.piKronecker_one, one_kronecker_one]

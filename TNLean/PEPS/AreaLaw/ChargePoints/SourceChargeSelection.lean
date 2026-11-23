@@ -188,7 +188,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
                         Brough + Real.bellOverlapRemainder d cU S.K k := by
   classical
   obtain ⟨ct, Cent, eent, Cen, een, hct, hselector⟩ :=
-    actualCharges_selection_energy_domainGraph
+    actualCharges_selection_energy_planeDomainGraph
   obtain ⟨Ctr, hCtr, htarget⟩ :=
     exists_truncated_target_typical_window_uniform_in_q R hJ hΔ hC_T
   refine ⟨Ctr, hCtr, fun q _ hq C₁ hC₁ multiplicity hmultiplicity P ↦ ?_⟩

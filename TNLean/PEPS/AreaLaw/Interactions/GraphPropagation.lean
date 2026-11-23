@@ -70,7 +70,7 @@ open QuantumCircuit
 /-- The sites at induced-graph distance exactly `d` from a site number at most
 `2 (d + 1)²`. Source: area law, `03-quasilocal.tex`, lines 124–126, using the diamond
 count `eq:ball-count`. -/
-theorem card_domainGraph_sphere_le (Λ : Finset (ℤ × ℤ)) (x : ↥Λ) (d : ℕ) :
+theorem card_planeDomainGraph_sphere_le (Λ : Finset (ℤ × ℤ)) (x : ↥Λ) (d : ℕ) :
     ((Finset.univ.filter fun y => (planeDomainGraph Λ).edist x y = d).card : ℝ) ≤
       2 * ((d : ℝ) + 1) ^ 2 := by
   have hcard := card_le_diamond_of_edist_le Subtype.val
@@ -229,7 +229,7 @@ theorem norm_sub_regionExpectation_graphBall_le (h : PlaneInteraction Λ q R)
     (planeDomainGraph Λ) h.interaction (anchors X a) (anchors_mem ha) hh
     R (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le hhJ (h.normBound_nonneg hhJ X)) 2 2
-    (fun x d => card_domainGraph_sphere_le Λ x d) X
+    (fun x d => card_planeDomainGraph_sphere_le Λ x d) X
     hA l t
   rwa [anchors_self] at hBound
 

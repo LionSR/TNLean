@@ -115,7 +115,7 @@ theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ
     (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hΔ htail
     (q := q) (ι := ↥Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ) (fun X => X.1) a ha
     h.term hh h.mem (fun X => X.2.edist_le) (fun X => X.2.card_le)
-    (h.sum_norm_term_containing_le hhJ hJ) (card_domainGraph_sphere_le Λ) hhJ E₀ Ω hΩ hHΩ hgap
+    (h.sum_norm_term_containing_le hhJ hJ) (card_planeDomainGraph_sphere_le Λ) hhJ E₀ Ω hΩ hHΩ hgap
   exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
 
 /-- The prefactor `C₃` of the tail of the positive constraints on a lattice domain: the
@@ -397,8 +397,8 @@ theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : 
     hc₃ htail (q := q) (ι := ↥Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ)
     (fun X => X.1) a ha
     h.term hh h.mem (fun X => X.2.edist_le) (fun X => X.2.card_le)
-    (h.sum_norm_term_containing_le hhJ hJ) (card_domainGraph_sphere_le Λ)
-        card_graphBall_domainGraph_le
+    (h.sum_norm_term_containing_le hhJ hJ) (card_planeDomainGraph_sphere_le Λ)
+        card_graphBall_planeDomainGraph_le
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) hhJ E₀ Ω hΩ hHΩ hgap n hn S₀
     hS₀
 
@@ -598,16 +598,16 @@ theorem exists_latticeCrossingBudget {q : ℕ} (hq : 1 ≤ q) (R : ℕ) :
   refine ⟨fun i hi => (truncationRadius_eq_of_mem_crossingTerms hX hi).2.2, ?_, fun i hi => ?_,
     ?_⟩
   · refine (card_crossingTerms_designatedSupport_le (planeDomainGraph Λ) S₀ r₀ a hX hμ
-      card_graphBall_domainGraph_le hMult).trans ?_
+      card_graphBall_planeDomainGraph_le hMult).trans ?_
     calc 2 * μ * 2 * ((r₀ : ℝ) + 1) ^ 2 * ((planeDomainGraph Λ).interedges X Xᶜ).card
         ≤ 2 * μ * 2 * ((r₀ : ℝ) + 1) ^ 2 * (edgeBoundary G X).card := by gcongr
       _ ≤ _ := by
         rw [mul_right_comm]
         gcongr
-  · refine (log_dim_le_of_mem_crossingTerms hq hX card_graphBall_domainGraph_le hi).trans ?_
+  · refine (log_dim_le_of_mem_crossingTerms hq hX card_graphBall_planeDomainGraph_le hi).trans ?_
     gcongr
   · refine (cutLogBudget_designatedSupport_le hq (planeDomainGraph Λ) S₀ r₀ a hX zero_le_two hμ
-      card_graphBall_domainGraph_le hMult).trans ?_
+      card_graphBall_planeDomainGraph_le hMult).trans ?_
     gcongr
 
 /-- The explicit cut-budget coefficient `max 1 (4 μ_R (1 + 2 log q)²)` on a lattice domain,
@@ -627,7 +627,7 @@ theorem cutLogBudget_le_latticeCutCoefficient {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
       latticeCutCoefficient q R * (1 + (edgeBoundary (planeDomainGraph Λ) X).card) *
         ((r₀ : ℝ) + 1) ^ 6 := by
   refine (cutLogBudget_designatedSupport_le hq (planeDomainGraph Λ) S₀ r₀ a hX zero_le_two
-    (Nat.cast_nonneg _) card_graphBall_domainGraph_le
+    (Nat.cast_nonneg _) card_graphBall_planeDomainGraph_le
     fun x => by exact_mod_cast card_anchor_fiber_le a ha x).trans ?_
   have hb : (((planeDomainGraph Λ).interedges X Xᶜ).card : ℝ) ≤
       (edgeBoundary (planeDomainGraph Λ) X).card := by

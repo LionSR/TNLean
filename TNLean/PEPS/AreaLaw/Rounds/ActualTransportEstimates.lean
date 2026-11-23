@@ -47,7 +47,7 @@ open TensorPower TensorPower.ReplicaTransport
 /-- The actual fill round satisfies all four conclusions of Proposition 7.4.
 The energy equation is for the actual truncated Hamiltonian, while the derivative,
 entropy and endpoint-inclusive integral require only a supplied nonzero symmetric vector. -/
-theorem actualFill_transport_domainGraph :
+theorem actualFill_transport_planeDomainGraph :
     ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
@@ -109,7 +109,7 @@ theorem actualFill_transport_domainGraph :
   have hq : 1 ≤ q := NeZero.pos q
   have hE := S.actualEnergyTerms_spec h hh hhJ Ω hgraph hanchor hΔ hΩ L aux
   have hcompat : D.SupportCompatible E :=
-    S.fillTransportData_supportCompatible_domainGraph hT hgraph hdepth
+    S.fillTransportData_supportCompatible_planeDomainGraph hT hgraph hdepth
       (historyMeanTree S.K S.m S.M hm hM s)
       hn hs hr hDpos hD hL hrows hclear n E (fun _ => rfl)
   have ht : 0 ≤ a / 2 := (half_pos ha).le
@@ -122,7 +122,7 @@ theorem actualFill_transport_domainGraph :
       (historyMeanTree S.K S.m S.M hm hM s) n hq (fun _ => rfl)
   have hsplit : ∀ i, (D.splitLeaves E i).Nonempty →
       logDim n (E.support i) ≤ transportLogDimBound q S.r₀ :=
-    S.fillTransportData_logDim_support_le_domainGraph hgraph
+    S.fillTransportData_logDim_support_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s)
       n hq (fun _ => rfl) hL E (fun _ => rfl)
   obtain ⟨β, ε, hβ, hε, hresult⟩ := htransport n D E
@@ -139,7 +139,7 @@ theorem actualFill_transport_domainGraph :
 /-- The actual charge round satisfies all four conclusions of Proposition 7.4.
 The energy equation is for the actual truncated Hamiltonian, while the derivative,
 entropy and endpoint-inclusive integral require only a supplied nonzero symmetric vector. -/
-theorem actualCharge_transport_domainGraph :
+theorem actualCharge_transport_planeDomainGraph :
     ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
@@ -201,7 +201,7 @@ theorem actualCharge_transport_domainGraph :
   have hq : 1 ≤ q := NeZero.pos q
   have hE := S.actualEnergyTerms_spec h hh hhJ Ω hgraph hanchor hΔ hΩ L aux
   have hcompat : D.SupportCompatible E :=
-    S.chargeTransportData_supportCompatible_domainGraph hT hgraph hdepth
+    S.chargeTransportData_supportCompatible_planeDomainGraph hT hgraph hdepth
       (historyMeanTree S.K S.m S.M hm hM s)
       (fun _ => chargeChoiceTree S.K S.M hM)
       hn hs hr hDpos hD hL hrows hclear n E (fun _ => rfl)
@@ -212,12 +212,12 @@ theorem actualCharge_transport_domainGraph :
       (fun _ => chargeChoiceTree S.K S.M hM) n ht r
   have hmove : ∀ hist c g, logDim n (D.move hist c g).subsystem ≤
       transportLogDimBound q S.r₀ :=
-    S.chargeTransportData_logDim_move_le_domainGraph hgraph
+    S.chargeTransportData_logDim_move_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s)
       (fun _ => chargeChoiceTree S.K S.M hM) n hq (fun _ => rfl)
   have hsplit : ∀ i, (D.splitLeaves E i).Nonempty →
       logDim n (E.support i) ≤ transportLogDimBound q S.r₀ :=
-    S.chargeTransportData_logDim_support_le_domainGraph hgraph
+    S.chargeTransportData_logDim_support_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s)
       (fun _ => chargeChoiceTree S.K S.M hM)
       n hq (fun _ => rfl) hL E (fun _ => rfl)

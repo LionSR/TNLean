@@ -46,7 +46,7 @@ theorem sitewisePhysicalRecovery_isKrausCPTP
     IsKrausCPTP (sitewisePhysicalRecovery V N) := by
   let W := (Matrix.piKronecker fun _ : Fin N ↦ V)
   let P := W * Wᴴ
-  have hW : Wᴴ * W = 1 := tensorPower_isometry V hV N
+  have hW : Wᴴ * W = 1 := piKronecker_const_isometry V hV N
   have hPherm : P.IsHermitian := Matrix.isHermitian_mul_conjTranspose_self W
   have hPidem : P * P = P := by
     change (W * Wᴴ) * (W * Wᴴ) = W * Wᴴ
@@ -77,7 +77,7 @@ theorem sitewisePhysicalRecovery_apply_singleKrausMap
         (singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V) X) = X := by
   let W := (Matrix.piKronecker fun _ : Fin N ↦ V)
   let P := W * Wᴴ
-  have hW : Wᴴ * W = 1 := tensorPower_isometry V hV N
+  have hW : Wᴴ * W = 1 := piKronecker_const_isometry V hV N
   have hPherm : P.IsHermitian := Matrix.isHermitian_mul_conjTranspose_self W
   have hPidem : P * P = P := by
     change (W * Wᴴ) * (W * Wᴴ) = W * Wᴴ
@@ -112,7 +112,7 @@ theorem sitewisePhysicalRecovery_physCloseN
     (X : Matrix (Fin D) (Fin D) ℂ) :
     sitewisePhysicalRecovery V N
         (physCloseN (changePhysicalBasis V M) N X) = physCloseN M N X := by
-  rw [← singleKrausMap_tensorPower_physCloseN]
+  rw [← singleKrausMap_piKronecker_physCloseN]
   exact sitewisePhysicalRecovery_apply_singleKrausMap V hV N (physCloseN M N X)
 
 end MPOTensor

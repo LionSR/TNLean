@@ -24,7 +24,7 @@ open-region support results:
    arbitrary physical G-injective parent kernels.
 
 The main declaration is
-`TNLean.PEPS.nonempty_ker_regionParentHamiltonian_semiRegularGInjective_equiv`,
+`TNLean.PEPS.nonempty_ker_hamiltonian_ofPlace_semiRegularGInjective_equiv`,
 owned by `thm:peps_semiregular_g_injective_parent_kernel`.
 
 ## Mathematical boundaries

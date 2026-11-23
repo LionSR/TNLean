@@ -44,7 +44,7 @@ e_ent, C_en, e_en` satisfying the finite-family transport bound. The smallness t
 transport constant `c₀` itself: the selection and the round transport use the same constants,
 such as QICLean's universal ones, which depend on none of `q, R, J, Δ`. Source: `08-scanner.tex`,
 lines 480--533. -/
-theorem actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound
+theorem actualCharges_selection_energy_planeDomainGraph_of_finiteFamilyTransportBound
     {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     ∀ {Λ T : Finset (ℤ × ℤ)} {q d R : ℕ} {J Δ : ℝ}
       [NeZero q] [NeZero d] [LinearOrder (AdmissibleSupport Λ R)]
@@ -102,11 +102,11 @@ theorem actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound
     L multiplicity hn hr hDpos hD hL hCpos hC hrows hmult hclear a ha hasmall
     hm hM dims E ℓ g Hbar
   obtain ⟨β, Cβ, hCβ, hβ0, hβ, hselected⟩ :=
-    actualCharges_selection_domainGraph_of_finiteFamilyTransportBound htransport
+    actualCharges_selection_planeDomainGraph_of_finiteFamilyTransportBound htransport
         (fun _ ↦ d) h hh hhJ
       Ω S hT hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hCpos hC hrows hmult hclear ha hasmall
   obtain ⟨_, rem, _, _, _, hrem0, _, hrem, hround⟩ :=
-    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport
+    actualRounds_transport_planeDomainGraph_of_finiteFamilyTransportBound htransport
         (fun _ ↦ d) h hh hhJ Ω
       S hT hgraph hdepth hanchor hΔ hΩ (show 0 < S.n by omega) (show S.r₀ ≤ S.D by omega) hDpos
       hD hL hCpos hrows hclear ha hasmall
@@ -163,7 +163,7 @@ Schmidt--Bell prevector of the same target-window ground vector.
 The source gap normalization is explicit. This theorem does not construct
 the physical gap or replace the endpoint log norms by comparator budgets.
 Source: `08-scanner.tex`, lines 480--533. -/
-theorem actualCharges_selection_energy_domainGraph :
+theorem actualCharges_selection_energy_planeDomainGraph :
     ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q d R : ℕ} {J Δ : ℝ}
         [NeZero q] [NeZero d] [LinearOrder (AdmissibleSupport Λ R)]
@@ -218,6 +218,6 @@ theorem actualCharges_selection_energy_domainGraph :
                     rem k) / (g / 2) := by
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
   exact ⟨c₀, Cent, eent, Cen, een, hc₀,
-    actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound htransport⟩
+    actualCharges_selection_energy_planeDomainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

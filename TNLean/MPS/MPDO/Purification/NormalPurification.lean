@@ -147,7 +147,7 @@ theorem mpv_purificationTensor_spinTwist_of_mpo_mul_eq_smul
     (h : mpo (onSite u) L * mpo M L = c • mpo M L) (w : Fin L → Fin (d * dK)) :
     mpv (purificationTensor (spinTwist u A)) w = c * mpv (purificationTensor A) w := by
   rw [mpo_onSite, mpo_eq_purificationDensity A e hM, purificationDensity_eq_mul_conjTranspose,
-    Matrix.mul_mul_conjTranspose_eq_smul_iff, finKronecker_mul_purificationAmplitude] at h
+    Matrix.mul_mul_conjTranspose_eq_smul_iff, piKronecker_mul_purificationAmplitude] at h
   have h1 := congrFun (congrFun h fun n => (finProdFinEquiv.symm (w n)).1)
     fun n => (finProdFinEquiv.symm (w n)).2
   simp only [purificationAmplitude, Matrix.of_apply, Prod.mk.eta, Equiv.apply_symm_apply,

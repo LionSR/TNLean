@@ -285,8 +285,8 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
       Ωt htrgs.1 E ell Bsh hsh hz (fun k hk ↦ (hpre k hk).2) hmass
   simp only [hzEq, hWa] at hend
   obtain ⟨b, rem, Cb, hCb, hb0, hb, hrem0, hrem, hselect⟩ :=
-    actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound htransport (d := d)
-      h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ hn2 hrD hDpos hDm
+    actualCharges_selection_energy_planeDomainGraph_of_finiteFamilyTransportBound htransport
+      (d := d) h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ hn2 hrD hDpos hDm
       hKL hCp hCm hrows hmult hclear ha hasmall
   obtain ⟨cL, Cf, hcL, hCf, hlower⟩ :=
     exists_actualScan_suppliedPrevector_rough_lower

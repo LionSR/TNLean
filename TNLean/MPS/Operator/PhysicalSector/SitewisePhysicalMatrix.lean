@@ -89,7 +89,7 @@ theorem mpo_ketLeftMul (M : MPOTensor d D)
     trace_mul_evalWord_ketLeftMul_ofFn M P (1 : Matrix (Fin D) (Fin D) ℂ) σ τ
 
 /-- The sitewise tensor power of a one-site isometry is an isometry. -/
-theorem tensorPower_isometry
+theorem piKronecker_const_isometry
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ) :
     (Matrix.piKronecker fun _ : Fin N ↦ V)ᴴ * (Matrix.piKronecker fun _ : Fin N ↦ V) = 1 := by
   rw [Matrix.conjTranspose_piKronecker, Matrix.piKronecker_mul, hV]
@@ -97,7 +97,7 @@ theorem tensorPower_isometry
 
 /-- The product of a sitewise tensor power with its conjugate transpose is the
 sitewise tensor power of the corresponding one-site product. -/
-theorem tensorPower_mul_conjTranspose
+theorem piKronecker_const_mul_conjTranspose
     (V : Matrix (Fin d) (Fin e) ℂ) (N : ℕ) :
     (Matrix.piKronecker fun _ : Fin N ↦ V) * (Matrix.piKronecker fun _ : Fin N ↦ V)ᴴ =
       (Matrix.piKronecker fun _ : Fin N ↦ (V * Vᴴ)) := by
@@ -105,7 +105,7 @@ theorem tensorPower_mul_conjTranspose
   exact Matrix.piKronecker_mul (fun _ : Fin N ↦ V) (fun _ : Fin N ↦ Vᴴ)
 
 /-- On two sites, the configuration-indexed tensor power is the Kronecker square. -/
-theorem reindex_tensorPower_two
+theorem reindex_piKronecker_two
     (V : Matrix (Fin e) (Fin d) ℂ) :
     Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
         (_root_.finTwoArrowEquiv (Fin d))
@@ -144,7 +144,7 @@ of `M` to the corresponding closure after changing the physical basis.
 This is the configuration-index form of
 \((V^{\otimes N})\rho_X^{(N)}(M)(V^{\otimes N})^\dagger\), with the same
 virtual boundary matrix \(X\) on both sides. -/
-theorem singleKrausMap_tensorPower_physCloseN
+theorem singleKrausMap_piKronecker_physCloseN
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V) (physCloseN M N X) =
@@ -216,12 +216,12 @@ changing every local physical matrix by `V`.
 This is the configuration-index form of
 \((V^{\otimes N})\rho^{(N)}(M)(V^{\otimes N})^\dagger\).
 -/
-theorem singleKrausMap_tensorPower_mpo
+theorem singleKrausMap_piKronecker_mpo
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ) :
     singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V) (mpo M N) =
       mpo (changePhysicalBasis V M) N := by
   simpa only [physCloseN_identity_eq_mpo] using
-    singleKrausMap_tensorPower_physCloseN V M N
+    singleKrausMap_piKronecker_physCloseN V M N
       (1 : Matrix (Fin D) (Fin D) ℂ)
 
 /-- If an MPO is positive after an isometric physical inclusion, then it was
@@ -232,12 +232,12 @@ theorem isMPDO_of_changePhysicalBasis_isMPDO_of_isometry
     IsMPDO M := by
   intro N hN
   apply Matrix.posSemidef_of_singleKraus_isometry
-    (Matrix.piKronecker fun _ : Fin N ↦ V) (tensorPower_isometry V hV N)
-  rw [singleKrausMap_tensorPower_mpo]
+    (Matrix.piKronecker fun _ : Fin N ↦ V) (piKronecker_const_isometry V hV N)
+  rw [singleKrausMap_piKronecker_mpo]
   exact hM N hN
 
 /-- The sitewise tensor power of a Hermitian one-site matrix is Hermitian. -/
-theorem tensorPower_isHermitian
+theorem isHermitian_piKronecker_const
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian) (N : ℕ) :
     (Matrix.piKronecker fun _ : Fin N ↦ P).IsHermitian := by
   ext s t

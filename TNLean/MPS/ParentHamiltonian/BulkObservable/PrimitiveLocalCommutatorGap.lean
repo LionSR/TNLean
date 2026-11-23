@@ -204,8 +204,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
     (Eventually.of_forall fun n =>
         (Matrix.isPositive_toEuclideanLin_iff.mpr
             (posSemidef_hamiltonian_parentChainInteraction A R (N n))))
-    (hGap.mono fun n hn => (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction A R (N n))).mp hn)
+    hGap
     hKernel hGround hUnit hEnergy
 
 /-- At every range at least \(D^4+1\), a normalized primitive sector obeys

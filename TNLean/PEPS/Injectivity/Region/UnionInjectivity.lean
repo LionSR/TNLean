@@ -25,7 +25,7 @@ family `c` annihilates the blocked-region weight family of `univ \ red`. Reading
 physical leg of `univ \ red` as a fused blue/complement pair
 (`ThreeBlockGeometry.complPhysical`, a bijection onto `univ \ red` legs) and applying,
 for each host boundary configuration, the pointwise blue smul-factorization
-`ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`
+`ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue`
 rewrites the annihilation, as a function of the blue physical leg, as a blue-block combination
 whose coefficients are the `c`-weighted complement coupling coefficients. Injectivity
 of the blue block removes the blue part, leaving `c`-weighted complement coupling

@@ -265,7 +265,7 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
     rw [Finset.sum_product]
     exact hsum
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
-    (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
+    (lineDomainGraph Λ) (lineDomainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) hΦh b₀
     (ManyBody.DomainInteraction.sum_norm_terms_containing_le Φ hΦn) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z

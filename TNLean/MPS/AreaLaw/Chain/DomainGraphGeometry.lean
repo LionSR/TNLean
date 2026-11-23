@@ -39,7 +39,7 @@ noncomputable def domainGraphIsoHasse (Λ : Finset ℤ) :
 /-- Every sphere of finite radius in an induced integer domain contains at most two
 sites. The component intervals are those of the TNLean note,
 `part1_arealaw.tex`, lines 71–80. -/
-theorem domainGraph_card_sphere_le_two (Λ : Finset ℤ) (x : Fin Λ.card) (d : ℕ) :
+theorem lineDomainGraph_card_sphere_le_two (Λ : Finset ℤ) (x : Fin Λ.card) (d : ℕ) :
     (Finset.univ.filter (fun y ↦ (lineDomainGraph Λ).edist x y = (d : ℕ∞))).card ≤ 2 := by
   classical
   let e := domainGraphIsoHasse Λ

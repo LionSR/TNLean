@@ -92,7 +92,7 @@ have exactly the closed PEPS span as their common zero-energy space.
 Source: covering-region consequence of CPGSV21,
 Section IV.C.1, regional parents and the injective uniqueness argument,
 lines 2003–2044. -/
-theorem ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover
+theorem ker_hamiltonian_ofPlace_eq_span_of_isVertexInjective_of_cover
     (A : Tensor Γ d) (hA : IsVertexInjective A) {ι : Type*} [Fintype ι]
     (R : ι → Finset V) (hvertices : ∀ v, ∃ i, v ∈ R i)
     (hedges : ∀ e : Edge Γ, ∃ i, e.1.1 ∈ R i ∧ e.1.2 ∈ R i)

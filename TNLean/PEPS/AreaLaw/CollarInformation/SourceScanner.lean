@@ -326,7 +326,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   obtain ⟨CBnorm, hCBnorm, hnorm⟩ :=
     exists_suppliedTarget_actualCharge_norm_bounds (q := q) (by omega) R hCtr
   obtain ⟨CBcut, hCBcut, hbudget⟩ :=
-    exists_statusMarginal_cutBudget_le_log (q := q) (by omega) R hCtr.le
+    exists_statusMarginal_cutLogBudget_le_log (q := q) (by omega) R hCtr.le
   let Cb := max (max CBcut CBnorm) (max (max Ce 1 + 1) (1 + 3 * Real.log q))
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)

@@ -48,7 +48,7 @@ namespace MPOTensor
 
 /-- Splitting a sitewise product over a two-site window and its cyclic
 complement writes the reindexed sitewise matrix as a Kronecker product. -/
-theorem reindex_tensorPower_windowComplement
+theorem reindex_piKronecker_windowComplement
     {d e : ℕ} (V : Matrix (Fin d) (Fin e) ℂ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     Matrix.reindex (windowComplementEquiv (d := d) 2 N hN i)
         (windowComplementEquiv (d := e) 2 N hN i)
@@ -101,13 +101,13 @@ private noncomputable abbrev physicalCoordinateMatrixN
 private theorem physicalCoordinateMatrixN_isometry
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     (F.physicalCoordinateMatrixN N)ᴴ * F.physicalCoordinateMatrixN N = 1 :=
-  tensorPower_isometry _ F.physicalCoordinateMatrix_isometry N
+  piKronecker_const_isometry _ F.physicalCoordinateMatrix_isometry N
 
 /-- The sitewise physical coordinate matrix is a coisometry. -/
 private theorem physicalCoordinateMatrixN_coisometry
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     F.physicalCoordinateMatrixN N * (F.physicalCoordinateMatrixN N)ᴴ = 1 := by
-  rw [physicalCoordinateMatrixN, tensorPower_mul_conjTranspose,
+  rw [physicalCoordinateMatrixN, piKronecker_const_mul_conjTranspose,
     F.physicalCoordinateMatrix_coisometry, Matrix.piKronecker_one]
 
 /-- The length-`N` MPO transforms by the sitewise physical coordinate
@@ -119,7 +119,7 @@ private theorem physicalCoordinateMatrixN_mpo
     singleKrausMap (F.physicalCoordinateMatrixN N) (mpo K N) =
       mpo F.sectorCoordinateTensor N := by
   rw [F.sectorCoordinateTensor_eq_changePhysicalBasis]
-  exact singleKrausMap_tensorPower_mpo _ _ _
+  exact singleKrausMap_piKronecker_mpo _ _ _
 
 private theorem physicalCoordinateMatrixN_two
     (F : PhysicalSectorFactorization K) :
@@ -207,7 +207,7 @@ private theorem physicalCoordinateMatrixN_placeAlong_ringWindow_physicalBond
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ es ep es,
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ es ep ep]
   simp only [Matrix.coe_reindexLinearEquiv]
-  rw [reindex_tensorPower_windowComplement
+  rw [reindex_piKronecker_windowComplement
       F.physicalCoordinateMatrix hN i,
     reindex_placeAlong_ringWindow_windowComplement]
   have hVH : Matrix.reindex ep es (F.physicalCoordinateMatrixN N)ᴴ =
@@ -215,7 +215,7 @@ private theorem physicalCoordinateMatrixN_placeAlong_ringWindow_physicalBond
         (F.physicalCoordinateMatrixN (N - 2))ᴴ := by
     simpa only [Matrix.conjTranspose_reindex,
       Matrix.conjTranspose_kronecker] using congrArg Matrix.conjTranspose
-        (reindex_tensorPower_windowComplement
+        (reindex_piKronecker_windowComplement
           F.physicalCoordinateMatrix hN i)
   rw [hVH, reindex_placeAlong_ringWindow_windowComplement]
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
@@ -269,11 +269,12 @@ factorization and the complete positive commuting product form from injectivity
 and SAL; the present theorem records only the conditional product identity.
 Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 private theorem mpo_eq_product_physicalBond_of_three_le
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N] (hN : 3 ≤ N) :
+    (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 3 ≤ N) :
     mpo K N =
       (List.ofFn fun i : Fin N ↦
         placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) i)
           F.physicalBond).prod := by
+  have : NeZero N := ⟨by omega⟩
   let V := F.physicalCoordinateMatrixN N
   have htransport : singleKrausMap V (mpo K N) =
       singleKrausMap V

@@ -30,7 +30,7 @@ parent kernels. The virtual bond spaces and representations are kept fixed.
 `ParentHamiltonian/GInjectiveParentTransport.lean` derives the physical
 comparison from the G-injective left-inverse identities themselves. Its
 main result is
-`exists_ker_regionParentHamiltonian_transport_of_isGInjective`.
+`exists_ker_hamiltonian_ofPlace_transport_of_isGInjective`.
 The result includes injectivity on the complete source kernel and equality
 of the kernel dimensions. It does not assume the kernel transport being
 proved. Local positivity and exact local parent kernels are the ordinary

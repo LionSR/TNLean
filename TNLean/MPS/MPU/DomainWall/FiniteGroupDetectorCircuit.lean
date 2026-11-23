@@ -95,7 +95,7 @@ def pairedFactor (σ : Bool → Bool → Equiv.Perm κ) (A : Bool → Matrix (Fi
   if σ p.2 s.2 p.1 = s.1 then A s.2 else 1
 
 /-- The product of the one-site factors of a cell, placed on the cell, is the pair gate. -/
-private theorem place_prodOp_pairedFactor (σ : Bool → Bool → Equiv.Perm κ)
+private theorem place_piKronecker_pairedFactor (σ : Bool → Bool → Equiv.Perm κ)
     (A : Bool → Matrix (Fin d) (Fin d) ℂ) (p : κ × Bool) :
     ManyBody.place ((pairCircuitGeometry σ).cell p)
         (Matrix.piKronecker (ι := fun _ : {s // s ∈ (pairCircuitGeometry σ).cell p} ↦ Fin d)
@@ -179,7 +179,7 @@ theorem pairCircuitLayer_kraus (σ : Bool → Bool → Equiv.Perm κ) (color : B
     (fun c ↦ Finset.mem_toList.mpr (Finset.mem_univ c)) i).trans ?_
   refine (congrArg List.prod (List.map_congr_left
     (g := fun c : (S.image fun k ↦ (k, color)) ↦ pairedGate (σ c.1.2) A c.1.1)
-    fun c _ ↦ place_prodOp_pairedFactor σ A c.1)).trans ?_
+    fun c _ ↦ place_piKronecker_pairedFactor σ A c.1)).trans ?_
   rw [hcolor, pairedGate_list_prod (σ color) A _ ((Finset.nodup_toList _).map hinj)]
   simp only [hmem]
 

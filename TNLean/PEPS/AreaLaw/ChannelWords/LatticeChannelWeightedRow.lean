@@ -87,7 +87,7 @@ theorem exists_latticeChannelEventKernel_bounds {p : ℕ} (hp : 1 ≤ p)
   obtain ⟨-, hk, -, -, -, htail, hcomp⟩ := hpos Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
   exact hbounds ↥Λ {i // P i} Aux q (planeDomainGraph Λ) aP k
     (fun i => (hk i).1) (fun i => (hk i).2.1) (fun i => hcomp i)
-    card_graphBall_domainGraph_le
+    card_graphBall_planeDomainGraph_le
     (fun x => by
       exact_mod_cast (card_anchor_fiber_subtype_le a P x).trans (card_anchor_fiber_le a ha x))
     N hN (fun i l _ => (htail i l).2.2)

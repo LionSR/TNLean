@@ -289,12 +289,12 @@ private theorem canonicalCrossingBudget_eq_original {L q m : ℕ}
     exact mul_comm _ _
   rw [hs]
 
-private theorem squareAreaLawState_inner {L q : ℕ} (φ ψ : StateSpace L q) :
+private theorem rectangleAreaLawState_inner {L q : ℕ} (φ ψ : StateSpace L q) :
     ⟪AreaLaw.rectangleAreaLawState φ, AreaLaw.rectangleAreaLawState ψ⟫_ℂ = ⟪φ, ψ⟫_ℂ :=
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (AreaLaw.rectangleConfigurationEquiv L L q)).inner_map_map φ ψ
 
-private theorem squareAreaLawState_operator {L q : ℕ}
+private theorem rectangleAreaLawState_operator {L q : ℕ}
     (H : Matrix (Configuration L q) (Configuration L q) ℂ) (ψ : StateSpace L q) :
     AreaLaw.rectangleAreaLawState (toEuclideanLin H ψ) =
       toEuclideanLin (reindex (AreaLaw.rectangleConfigurationEquiv L L q)
@@ -332,13 +332,13 @@ private theorem fromCanonical_physical_estimates
       |(⟪normalizedOutput (fromCanonical K hK) Ω,
           toEuclideanLin h.hamiltonian (normalizedOutput (fromCanonical K hK) Ω)⟫_ℂ).re - E₀| ≤ B ∧
       Δ * (1 - ‖⟪Ω, normalizedOutput (fromCanonical K hK) Ω⟫_ℂ‖ ^ 2) ≤ B := by
-  have hout := squareAreaLawState_output (fromCanonical K hK) Ω
-  have hnorm := squareAreaLawState_normalizedOutput (fromCanonical K hK) Ω
+  have hout := rectangleAreaLawState_output (fromCanonical K hK) Ω
+  have hnorm := rectangleAreaLawState_normalizedOutput (fromCanonical K hK) Ω
   rw [canonicalMatrices_fromCanonical] at hout hnorm
   dsimp only at hnorm hresult
   rw [← hnorm, ← hout, h.hamiltonian_toPlaneInteraction_hermitianPart hh,
-    ← squareAreaLawState_operator] at hresult
-  simp only [AreaLaw.norm_rectangleAreaLawState, squareAreaLawState_inner] at hresult
+    ← rectangleAreaLawState_operator] at hresult
+  simp only [AreaLaw.norm_rectangleAreaLawState, rectangleAreaLawState_inner] at hresult
   refine ⟨?_, hresult⟩
   apply (isMaximizer_iff Ω a ha (fromCanonical K hK)).mpr
   simpa only [canonicalMatrices_fromCanonical] using And.intro hK hmax

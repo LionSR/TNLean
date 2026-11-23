@@ -49,11 +49,11 @@ theorem exists_positive_scalar_mpo_changePhysicalBasis_eq_smul_selected
   change mpo (PhysicalSectorFactorization.changePhysicalBasis
     F.physicalCoordinateMatrix K) N = (c : ℂ) • mpo F.sectorCoordinateTensor N
   rw [F.sectorCoordinateTensor_eq_changePhysicalBasis]
-  rw [← singleKrausMap_tensorPower_mpo]
+  rw [← singleKrausMap_piKronecker_mpo]
   rw [hreal]
   rw [(singleKrausMap _).map_smul]
   rw [← data.bondData.fixedProductTensorData.mpo_eq_product N hN]
-  rw [singleKrausMap_tensorPower_mpo]
+  rw [singleKrausMap_piKronecker_mpo]
 
 end MPOTensor.EtaLocalStructureData
 

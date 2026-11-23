@@ -117,7 +117,7 @@ theorem finrank_regionParentGroundSpace_edgePairs_eq_one
 /-- Every positive exact-kernel nearest-neighbor parent has the closed
 injective PEPS span as its kernel, provided no vertex is isolated.
 Source: CPGSV21, Section IV.C.1, lines 2032–2044. -/
-theorem ker_regionParentHamiltonian_edgePairs_eq_span
+theorem ker_hamiltonian_ofPlace_edgePairs_eq_span
     (A : Tensor Γ d) (hA : IsVertexInjective A)
     (hneighbors : ∀ v, ∃ w, Γ.Adj v w)
     (H : (e : Edge Γ) → Matrix (RegionPhysicalConfig (d := d) (edgePairRegion e))
@@ -126,7 +126,7 @@ theorem ker_regionParentHamiltonian_edgePairs_eq_span
     (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) edgePairRegion H).hamiltonian).ker =
       Submodule.span ℂ {stateCoeff A} :=
-  ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover A hA edgePairRegion
+  ker_hamiltonian_ofPlace_eq_span_of_isVertexInjective_of_cover A hA edgePairRegion
     (edgePairRegion_covers_vertices hneighbors) edgePairRegion_covers_edges H hH
 
 /-- On an arbitrary graph, edge-pair conditions and isolated-site conditions
@@ -152,7 +152,7 @@ theorem finrank_regionParentGroundSpace_edgeAndIsolated_eq_one
 regions have precisely the closed injective PEPS span as their kernel.
 Source: finite-graph covering-region consequence of CPGSV21,
 Section IV.C.1, lines 2003–2044. -/
-theorem ker_regionParentHamiltonian_edgeAndIsolated_eq_span
+theorem ker_hamiltonian_ofPlace_edgeAndIsolated_eq_span
     (A : Tensor Γ d) (hA : IsVertexInjective A)
     (H : (i : Edge Γ ⊕ {v : V // ¬ ∃ w, Γ.Adj v w}) →
       Matrix (RegionPhysicalConfig (d := d) (edgeAndIsolatedRegion i))
@@ -162,14 +162,14 @@ theorem ker_regionParentHamiltonian_edgeAndIsolated_eq_span
         edgeAndIsolatedRegion H).hamiltonian).ker =
       Submodule.span ℂ {stateCoeff A} := by
   classical
-  exact ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover A hA
+  exact ker_hamiltonian_ofPlace_eq_span_of_isVertexInjective_of_cover A hA
     edgeAndIsolatedRegion edgeAndIsolatedRegion_covers_vertices
     edgeAndIsolatedRegion_covers_edges H hH
 
 /-- For an injective PEPS, every exact-kernel nearest-neighbor Hamiltonian
 has a one-dimensional kernel on a graph without isolated vertices.
 Source: CPGSV21, Section IV.C.1, lines 2032–2044. -/
-theorem finrank_ker_regionParentHamiltonian_edgePairs_eq_one
+theorem finrank_ker_hamiltonian_ofPlace_edgePairs_eq_one
     (A : Tensor Γ d) (hA : A.IsInjective) (hneighbors : ∀ v, ∃ w, Γ.Adj v w)
     (H : (e : Edge Γ) → Matrix (RegionPhysicalConfig (d := d) (edgePairRegion e))
       (RegionPhysicalConfig (d := d) (edgePairRegion e)) ℂ)
@@ -183,7 +183,7 @@ theorem finrank_ker_regionParentHamiltonian_edgePairs_eq_one
 /-- For an injective PEPS, every exact-kernel augmented nearest-neighbor
 Hamiltonian has a one-dimensional kernel on an arbitrary finite graph.
 Source: covering-region consequence of CPGSV21, Section IV.C.1, lines 2017–2044. -/
-theorem finrank_ker_regionParentHamiltonian_edgeAndIsolated_eq_one
+theorem finrank_ker_hamiltonian_ofPlace_edgeAndIsolated_eq_one
     (A : Tensor Γ d) (hA : A.IsInjective)
     (H : (i : Edge Γ ⊕ {v : V // ¬ ∃ w, Γ.Adj v w}) →
       Matrix (RegionPhysicalConfig (d := d) (edgeAndIsolatedRegion i))

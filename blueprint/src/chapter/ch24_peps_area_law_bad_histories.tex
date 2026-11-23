@@ -17,9 +17,9 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         TNLean.PEPS.AreaLaw.Scan.CollarScan.ChargeAncestry.selected,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.ChargeAncestry.endpoint_mem_last_ball,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.ChargeAncestry.anchor_chain,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.bandState_has_chargeAncestry_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.bandState_has_chargeAncestry_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.bad_bandState_mem_collar,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.bad_bandState_has_long_chargeAncestry_domainGraph}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.bad_bandState_has_long_chargeAncestry_planeDomainGraph}
     \leanok
     \uses{def:al_scan_actual_histories}
     Assume $T\ne\varnothing$, $8Km\le L$, and $\operatorname{dist}_\infty(T,Z)>2L+10r$.
@@ -76,8 +76,8 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         TNLean.PEPS.AreaLaw.Scan.mem_chargeAnchorPaths_iff,
         TNLean.PEPS.AreaLaw.Scan.card_chargeAnchorPaths_le,
         TNLean.PEPS.AreaLaw.Scan.card_nearbyChargeLabels_le_of_vertex_count,
-        TNLean.PEPS.AreaLaw.Scan.card_nearbyChargeLabels_domainGraph_le,
-        TNLean.PEPS.AreaLaw.Scan.card_chargeAnchorPaths_domainGraph_le}
+        TNLean.PEPS.AreaLaw.Scan.card_nearbyChargeLabels_planeDomainGraph_le,
+        TNLean.PEPS.AreaLaw.Scan.card_chargeAnchorPaths_planeDomainGraph_le}
     \leanok
     \uses{thm:al_scan_actual_ancestry}
     If at most $B$ labels have anchors within graph distance $2r$ of any site, there are at most $B^s$ reversed label paths of length $s$ from a fixed endpoint; for anchor multiplicity $\le\mu$, one may take
@@ -184,7 +184,7 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     \label{thm:al_scan_bad_endpoint_probability}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.IsBadBandEndpoint,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.badEndpointTail,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_bad_endpoint_domainGraph_le}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_bad_endpoint_planeDomainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_path_cover,thm:al_scan_selected_chain_probability,thm:al_scan_anchor_path_count}
     For fixed offsets, band, side, and endpoint in $A$, under the hypotheses of Lemma~\ref{thm:al_scan_actual_ancestry} and $n,M>0$, the probability of assignment with lead $>D/2$ at time $k$ is at most
@@ -202,9 +202,9 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     \label{thm:al_scan_bad_history_probability}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.IsGoodCompletedHistory,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.isGoodOldHistory_of_isGoodCompletedHistory,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_bad_completed_domainGraph_le,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_completed_domainGraph_le,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_old_domainGraph_le}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_chargePathWeight_bad_completed_planeDomainGraph_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_completed_planeDomainGraph_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_old_planeDomainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_endpoint_probability,thm:al_scan_actual_ancestry}
     For $m>0$, both the bad completed-history probability at time $k$ and the bad old-history probability after the preceding fill are at most $2K|A\cap T_L|R_k$.
@@ -217,7 +217,7 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
     \label{thm:al_scan_bad_all_times}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.IsGoodThrough,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.IsGoodThrough.old,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_domainGraph_le}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_planeDomainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_history_probability,thm:al_scan_prefix_marginal,thm:al_scan_compact_collar_card}
     Under the layer bound of Lemma~\ref{thm:al_scan_compact_collar_card}, the probability that some prefix ($k\le N$) of a length-$N$ history is bad (either completed or after a fill) is at most
@@ -233,7 +233,7 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
         TNLean.PEPS.AreaLaw.Scan.CollarScan.geometricBadTail,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.badEndpointTail_le_geometricBadTail,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.geometricBadTail_mono,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_domainGraph_le}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_planeDomainGraph_le}
     \leanok
     \uses{thm:al_scan_bad_all_times,thm:al_scan_binomial_cancellation,thm:al_scan_timed_path_count}
     For $r>0$ and $\rho=9e\,nrB/(2M)$, the bad-prefix probability of Lemma~\ref{thm:al_scan_bad_all_times} is at most

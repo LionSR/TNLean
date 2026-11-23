@@ -34,7 +34,7 @@ namespace TNLean.PEPS.AreaLaw.Scan
 /-- A radius-`r₀` graph ball meeting `A ∩ T_L` cannot leave the fixed cut.
 The clearance is stated on the actual ambient endpoints of physical cut edges,
 exactly as in `scanner:test-geometry`. Source: `08-scanner.tex`, lines 225–233. -/
-theorem domainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
+theorem planeDomainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
     (hT : T.Nonempty) (A : Finset ↥Λ) (L r₀ : ℕ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
@@ -64,7 +64,7 @@ theorem domainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
       _ ≤ p.length := by exact_mod_cast hp'
       _ = (planeDomainGraph Λ).edist y x := hp
       _ ≤ ((2 * r₀ : ℕ) : ℕ∞) := hyx
-  have hvariation := abs_ambientDepth_sub_le_domainGraph T hT hyd
+  have hvariation := abs_ambientDepth_sub_le_planeDomainGraph T hT hyd
   have hz : u.val ∈ Geometry.boundaryEndpoints Λ A := by
     refine Finset.mem_image.mpr ⟨u, ?_, rfl⟩
     exact Finset.mem_biUnion.mpr ⟨s(u, w), hcut, by simp⟩

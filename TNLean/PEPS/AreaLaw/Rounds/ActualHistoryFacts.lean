@@ -220,25 +220,25 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
   have hadmF (s : ℕ) := S.actualFillData_isAdmissible hm hM s
   have hcompatC (s : ℕ) (hs : s + 1 ≤ S.n * S.m) :
       (S.actualChargeData hm hM s).SupportCompatible E :=
-    S.chargeTransportData_supportCompatible_domainGraph hT hgraph hdepth
+    S.chargeTransportData_supportCompatible_planeDomainGraph hT hgraph hdepth
       (historyMeanTree S.K S.m S.M hm hM s) (fun _ ↦ chargeChoiceTree S.K S.M hM)
       hn0 hs hr1 hDpos hD hL hrows hclear dims E hsupport
   have hcompatF (s : ℕ) (hs : s + 1 ≤ S.n * S.m) :
       (S.actualFillData hm hM s).SupportCompatible E :=
-    S.fillTransportData_supportCompatible_domainGraph hT hgraph hdepth
+    S.fillTransportData_supportCompatible_planeDomainGraph hT hgraph hdepth
       (historyMeanTree S.K S.m S.M hm hM s) hn0 hs hr1 hDpos hD hL hrows hclear dims E hsupport
   have hsuppC (s : ℕ) (i : I) (hi : ((S.actualChargeData hm hM s).splitLeaves E i).Nonempty) :
       logDim dims (E.support i) ≤ transportLogDimBound q S.r₀ :=
-    S.chargeTransportData_logDim_support_le_domainGraph hgraph
+    S.chargeTransportData_logDim_support_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s) (fun _ ↦ chargeChoiceTree S.K S.M hM)
       dims hq hphysical hL E hsupport i hi
   have hsuppF (s : ℕ) (i : I) (hi : ((S.actualFillData hm hM s).splitLeaves E i).Nonempty) :
       logDim dims (E.support i) ≤ transportLogDimBound q S.r₀ :=
-    S.fillTransportData_logDim_support_le_domainGraph hgraph
+    S.fillTransportData_logDim_support_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s) dims hq hphysical hL E hsupport i hi
   have hmoveC (s : ℕ) : ∀ h c g, logDim dims ((S.actualChargeData hm hM s).move h c g).subsystem ≤
       transportLogDimBound q S.r₀ :=
-    S.chargeTransportData_logDim_move_le_domainGraph hgraph
+    S.chargeTransportData_logDim_move_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s) (fun _ ↦ chargeChoiceTree S.K S.M hM) dims hq
       hphysical
   have hmoveF (s : ℕ) : ∀ h c g, logDim dims ((S.actualFillData hm hM s).move h c g).subsystem ≤
@@ -337,7 +337,7 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
           Finset.sum_nonneg fun i _ ↦
             (S.actualChargeData hm hM (r.val / 2)).splitEta_nonneg dims E (hadmC _) i _ _
         rw [hsum]
-        refine le_trans ?_ (S.good_sum_splitEta_le_choiceEntropySymbol_domainGraph hT hgraph
+        refine le_trans ?_ (S.good_sum_splitEta_le_choiceEntropySymbol_planeDomainGraph hT hgraph
           hdepth hm hM h dims E hsupport (by omega) hm2 (hstage r) hr hD hDpos hL hC₁ hrows
           hmult hclear hgood (fun x => θ.1 x))
         refine mul_le_mul_of_nonneg_right ?_ hnonneg

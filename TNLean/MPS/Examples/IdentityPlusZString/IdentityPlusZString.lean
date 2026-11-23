@@ -59,12 +59,12 @@ private lemma sigmaZ_eq_diagonal : sigmaZ = Matrix.diagonal siteSign := by
   ext i j
   fin_cases i <;> fin_cases j <;> simp [sigmaZ, siteSign, SpinCover.pauli]
 
-private lemma finKronecker_sigmaX_mul {N : ℕ}
+private lemma piKronecker_sigmaX_mul {N : ℕ}
     (B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ) (σ τ : Fin N → Fin 2) :
     ((Matrix.piKronecker fun _ : Fin N => sigmaX) * B) σ τ = B (fun n => (σ n).rev) τ :=
   Matrix.piKronecker_mul_apply_of_eq_ite sigmaX_apply B σ τ
 
-private lemma mul_finKronecker_sigmaX {N : ℕ}
+private lemma mul_piKronecker_sigmaX {N : ℕ}
     (B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ) (σ τ : Fin N → Fin 2) :
     (B * Matrix.piKronecker fun _ : Fin N => sigmaX) σ τ = B σ (fun n => (τ n).rev) :=
   Matrix.mul_piKronecker_apply_of_eq_ite sigmaX_apply' B σ τ
@@ -109,7 +109,7 @@ theorem isWeakSymmetry_sigmaX_iff_even (N : ℕ) :
   constructor
   · intro h
     have h1 := congrFun (congrFun h (fun _ => 0)) (fun _ => 1)
-    rw [finKronecker_sigmaX_mul, mul_finKronecker_sigmaX, rho_eq_diagonal] at h1
+    rw [piKronecker_sigmaX_mul, mul_piKronecker_sigmaX, rho_eq_diagonal] at h1
     have hrev1 : (fun n : Fin N => ((fun _ => (1 : Fin 2)) n).rev) = fun _ => 0 := by
       funext _; rfl
     have hrev0 : (fun n : Fin N => ((fun _ => (0 : Fin 2)) n).rev) = fun _ => 1 := by
@@ -124,7 +124,7 @@ theorem isWeakSymmetry_sigmaX_iff_even (N : ℕ) :
   · intro hN
     change _ * _ = _ * _
     ext σ τ
-    rw [finKronecker_sigmaX_mul, mul_finKronecker_sigmaX, rho_eq_diagonal]
+    rw [piKronecker_sigmaX_mul, mul_piKronecker_sigmaX, rho_eq_diagonal]
     by_cases h : τ = fun n => (σ n).rev
     · subst h
       have hσ : (fun n => ((σ n).rev).rev) = σ := by funext n; exact Fin.rev_rev _
@@ -144,7 +144,7 @@ theorem not_isStrongSymmetry_sigmaX {N : ℕ} (hN : 0 < N) :
     ¬ Matrix.IsStrongSymmetry (Matrix.piKronecker fun _ : Fin N => sigmaX) (mpo M N) := by
   rintro ⟨c, hc⟩
   have h1 := congrFun (congrFun hc (fun _ => 1)) (fun _ => 0)
-  rw [finKronecker_sigmaX_mul, rho_eq_diagonal] at h1
+  rw [piKronecker_sigmaX_mul, rho_eq_diagonal] at h1
   have hrev1 : (fun n : Fin N => ((fun _ => (1 : Fin 2)) n).rev) = fun _ => 0 := by
     funext _; rfl
   have hne : (fun _ : Fin N => (1 : Fin 2)) ≠ fun _ => 0 := by

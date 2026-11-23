@@ -23,7 +23,7 @@ factors, and the literal charge defect. No positive band count or split capacity
 is imposed, and no capacity is divided out. This is a supplied-vector one-round
 estimate; it does not identify the physical prevector or construct the scanner.
 
-`actualCharge_energyError_le_domainGraph` assumes the numerical margin
+`actualCharge_energyError_le_planeDomainGraph` assumes the numerical margin
 `4 * (D + 2 * r₀) ≤ m`, an explicit form of the source's requirement `r₀ ≪ D ≪ m`
 (`08-scanner.tex`, lines 51–52); it is used only for the labelled split count. At the final
 rounded scanner scales the margin is derived in `exists_badOldHistory_threshold`.
@@ -46,7 +46,7 @@ namespace CollarScan
 open Classical in
 /-- The literal charge energy is controlled by its actual entropy defect and
 classical bad-old mass. The split capacity and replica count may be zero. -/
-theorem actualCharge_energyError_le_domainGraph
+theorem actualCharge_energyError_le_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ} [NeZero q]
     [LinearOrder (AdmissibleSupport Λ R)]
     (hT : T.Nonempty) (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
@@ -97,11 +97,11 @@ theorem actualCharge_energyError_le_domainGraph
   have hA : 0 ≤ A := by positivity
   have hp' : p ∈ Icc (0 : ℝ) 1 := ⟨hp.1.le, hp.2.le⟩
   have hcompat : D.SupportCompatible E :=
-    S.chargeTransportData_supportCompatible_domainGraph hT hgraph hdepth
+    S.chargeTransportData_supportCompatible_planeDomainGraph hT hgraph hdepth
       (historyMeanTree S.K S.m S.M hm hM s) (fun _ ↦ chargeChoiceTree S.K S.M hM)
       (by omega) hs hr hDpos hD hL hrows hclear n E (fun _ ↦ rfl)
   have hsupp : ∀ i, (D.splitLeaves E i).Nonempty → logDim n (E.support i) ≤ ℓ :=
-    S.chargeTransportData_logDim_support_le_domainGraph hgraph
+    S.chargeTransportData_logDim_support_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s) (fun _ ↦ chargeChoiceTree S.K S.M hM)
       n hq (fun _ ↦ rfl) hL E (fun _ ↦ rfl)
   have hadm : D.IsAdmissible := S.actualChargeData_isAdmissible hm hM s

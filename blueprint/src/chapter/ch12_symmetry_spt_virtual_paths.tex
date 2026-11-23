@@ -315,7 +315,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         MPSTensor.commonPhysicalNormalizedBondInteraction_translate_commute,
         MPSTensor.isGapped_commonPhysicalNormalizedBondInteraction,
         MPSTensor.commonPhysicalNormalizedBondInteraction_groundSpace,
-        MPSTensor.toEuclideanLin_tensorPower_mpv_rotatePhysical,
+        MPSTensor.toEuclideanLin_piKronecker_mpv_rotatePhysical,
         MPSTensor.commonPhysicalNormalizedBondInteraction_groundSpace_eq_span_mpv,
         MPSTensor.commonPhysicalNormalizedBondInteraction_ker_le_parent,
         MPSTensor.commonPhysicalParentInteraction_commute_onSite,
@@ -819,7 +819,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \begin{lemma}[A common physical character with varying minimal dimension]
     \label{thm:spt_varying_bond_physical_character}
     \lean{LinearMap.map_eq_smul_of_span_singleton_eq,
-        MPSTensor.mpv_twistedTensor_eq_finKronecker_mulVec,
+        MPSTensor.mpv_twistedTensor_eq_piKronecker_mulVec,
         MPSTensor.SamePositiveMpvRay.symmetry_eigenvalue,
         MPSTensor.ExactMPSGroundPath.exists_single_character,
         MPSTensor.ExactMPSGroundPath.exists_exact_symmetry}

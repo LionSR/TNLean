@@ -27,7 +27,7 @@ variable {d : ℕ}
 /-- Regrouping a sitewise physical matrix along the canonical blocking
 equivalence gives the sitewise power of its local blocked matrix.
 Source: arXiv:1703.09188, blocking at lines 297--305. -/
-theorem tensorPower_blockKron_reindex
+theorem reindex_piKronecker_blockKron
     (Q : Matrix (Fin d) (Fin d) ℂ) (N k : ℕ) :
     Matrix.reindex (MPSTensor.blockedConfigEquiv d N k).symm
         (MPSTensor.blockedConfigEquiv d N k).symm (Matrix.piKronecker fun _ : Fin (N * k) ↦ Q) =
@@ -99,7 +99,7 @@ theorem blockedDaggerWithPhysicalMatrix_eq
   · rfl
   · intro N X
     simp only [blockedDaggerWithPhysicalMatrix, block, daggerWithPhysicalMatrix,
-      reindex_mul, tensorPower_blockKron_reindex,
+      reindex_mul, reindex_piKronecker_blockKron,
       Matrix.conjTranspose_reindex]
     congr 2
     ext σ τ
@@ -115,7 +115,7 @@ theorem blockedTransposeWithPhysicalMatrix_eq
   · rfl
   · intro N X
     simp only [blockedTransposeWithPhysicalMatrix, block, transposeWithPhysicalMatrix,
-      reindex_mul, tensorPower_blockKron_reindex]
+      reindex_mul, reindex_piKronecker_blockKron]
     congr 2
     ext σ τ
     simp [Matrix.reindex_apply, Matrix.transpose_apply]

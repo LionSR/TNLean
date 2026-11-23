@@ -80,7 +80,7 @@ theorem IsRangeSquareGroundState.squareCellInformationBound {q R : ℕ} (hq : 1 
 
 /-- The mutual information of a state of the square equals that of its placement on the integer
 square, for the corresponding sets of sites. -/
-theorem mutualInformation_squareAreaLawState {q L : ℕ} (Ω : StateSpace L q)
+theorem mutualInformation_rectangleAreaLawState {q L : ℕ} (Ω : StateSpace L q)
     (X Y : Finset (SquareLatticeVertex L L)) :
     ManyBody.regionMutualInformation
         (AreaLaw.rectangleAreaLawState Ω) (X.map (rectangleSiteEquiv L L).toEmbedding)
@@ -120,8 +120,8 @@ theorem IsRangeSquareGroundState.squareResetBound {q R : ℕ} (hq : 1 ≤ q) {J 
     (R₀.map σ.toEmbedding) (C₀.map σ.toEmbedding)
     ((Finset.disjoint_map σ.toEmbedding).mpr hRC) (Finset.map_subset_map.mpr hR₀)
     (Finset.map_subset_map.mpr hC₀) b hb
-    ((mutualInformation_squareAreaLawState Ω Rg C).trans_le hI) (hfar hRw) (hfar hCw)
-  rwa [mutualInformation_squareAreaLawState] at h
+    ((mutualInformation_rectangleAreaLawState Ω Rg C).trans_le hI) (hfar hRw) (hfar hCw)
+  rwa [mutualInformation_rectangleAreaLawState] at h
 
 /-! ### Proposition 3.4 at range `R` -/
 

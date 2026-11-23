@@ -124,7 +124,7 @@ theorem pairProductState_embedPair_eq_mulVec {D' M : ℕ} {ι : Fin D' → Fin D
 
 /-- `V^{⊗M}` applied to the product of the pairs of `σ` is the periodic state of the tensor
 `V P_∞` of the normal case (arXiv:2307.01696, eqs. (9) and (10)). -/
-theorem tensorPower_polarIso_mulVec_pairProductState {n D' : ℕ} (B : MPSTensor n D')
+theorem piKronecker_polarIso_mulVec_pairProductState {n D' : ℕ} (B : MPSTensor n D')
     (σ : Matrix (Fin D') (Fin D') ℂ) (M : ℕ) [NeZero M] (τ : Fin M → Fin n) :
     ((Matrix.piKronecker fun _ : Fin M ↦ (polarIso (physicalMatrix B))) *ᵥ pairProductState
         (fixedPointPair σ)) τ =
@@ -186,7 +186,7 @@ theorem nonNormalApproxVector_blockSum (hι : ∀ j, Function.Injective (ι j))
   rw [nonNormalApproxVector, hstate, mulVec_sum, Finset.sum_apply]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [mulVec_smul, Pi.smul_apply, smul_eq_mul, mulVec_mulVec, Matrix.piKronecker_mul, hVK,
-    tensorPower_polarIso_mulVec_pairProductState]
+    piKronecker_polarIso_mulVec_pairProductState]
 
 /-! ### Orthogonality of states -/
 

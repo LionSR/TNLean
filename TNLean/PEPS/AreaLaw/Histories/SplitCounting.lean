@@ -77,7 +77,7 @@ private theorem sum_card_incidence_le
 open Classical in
 /-- The number of actual designated split incidences at all bands and both sides
 is at most `10 K n D μ`. Multiplicity counts interaction labels, not anchor sites. -/
-theorem sum_card_state_designatedSplitIncidence_le_domainGraph
+theorem sum_card_state_designatedSplitIncidence_le_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
@@ -96,14 +96,14 @@ theorem sum_card_state_designatedSplitIncidence_le_domainGraph
     hrows hmult
   intro g side i hs
   have heq := S.designatedSupport_eq_ball_of_state_split h g side i hL hs
-  exact state_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i
+  exact state_split_anchor_bounds_planeDomainGraph hT S hgraph hdepth h g side i
     (by omega) hL hrows hclear
     (by simpa only [designatedSplitIncidence, heq] using hs)
 
 open Classical in
 /-- The number of actual designated split incidences at all bands and both sides
 is at most `10 K n D μ`. Multiplicity counts interaction labels, not anchor sites. -/
-theorem sum_card_old_designatedSplitIncidence_le_domainGraph
+theorem sum_card_old_designatedSplitIncidence_le_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
@@ -124,7 +124,7 @@ theorem sum_card_old_designatedSplitIncidence_le_domainGraph
     hrows hmult
   intro g side i hs
   have heq := S.designatedSupport_eq_ball_of_split h g side i hL hs
-  exact old_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i
+  exact old_split_anchor_bounds_planeDomainGraph hT S hgraph hdepth h g side i
     (by omega) hL hrows hclear
     (by simpa only [designatedSplitIncidence, heq] using hs)
 

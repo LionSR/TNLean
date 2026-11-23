@@ -109,7 +109,7 @@ theorem card_nearbyChargeLabels_le_of_vertex_count [Fintype V] [DecidableEq V]
 factor, including repeated-anchor multiplicity. Holes and disconnected components
 require no extra hypothesis. `08-scanner.tex`, lines 310–316, and the lattice
 ball count `01-preliminaries.tex`, lines 81–87. -/
-theorem card_nearbyChargeLabels_domainGraph_le (Λ : Finset (ℤ × ℤ))
+theorem card_nearbyChargeLabels_planeDomainGraph_le (Λ : Finset (ℤ × ℤ))
     (anchor : I → ↥Λ) (r μ : ℕ)
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ anchor i = y).card ≤ μ)
     (x : ↥Λ) :
@@ -128,13 +128,13 @@ theorem card_nearbyChargeLabels_domainGraph_le (Λ : Finset (ℤ × ℤ))
 /-- The actual square-lattice bound for length-`j` labelled anchor paths, with
 bounded label multiplicity and no supplied path-count hypothesis.
 `08-scanner.tex`, lines 310–316. -/
-theorem card_chargeAnchorPaths_domainGraph_le (Λ : Finset (ℤ × ℤ))
+theorem card_chargeAnchorPaths_planeDomainGraph_le (Λ : Finset (ℤ × ℤ))
     (anchor : I → ↥Λ) (r μ : ℕ)
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ anchor i = y).card ≤ μ)
     (x : ↥Λ) (j : ℕ) :
     (chargeAnchorPaths (planeDomainGraph Λ) anchor r x j).card ≤
       ((1 + 2 * (2 * r) * (2 * r + 1)) * μ) ^ j :=
   card_chargeAnchorPaths_le _ _ _ _
-    (card_nearbyChargeLabels_domainGraph_le Λ anchor r μ hmult) x j
+    (card_nearbyChargeLabels_planeDomainGraph_le Λ anchor r μ hmult) x j
 
 end TNLean.PEPS.AreaLaw.Scan

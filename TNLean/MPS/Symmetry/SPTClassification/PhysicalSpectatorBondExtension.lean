@@ -79,7 +79,7 @@ theorem physicalSpectatorBondInteraction_isStarProjection (K d₀ d₁ : ℕ)
 /-- All periodic translates of the extended independent-bond interaction
 commute. Source context: arXiv:1010.3732, Sections II.D.2 and II.F.2,
 equation eq:1d-sym:jointsym. -/
-theorem physicalSpectatorBondInteraction_translate_commute {N : ℕ} [NeZero N]
+theorem physicalSpectatorBondInteraction_translate_commute {N : ℕ}
     (K d₀ d₁ : ℕ) (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ)
     (hN : 2 ≤ N) (i j : Fin N) :
     Commute (placeAlong (X := fun _ ↦ Fin ((K * K + d₀) + d₁)) (ringWindow hN i)

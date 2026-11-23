@@ -128,7 +128,7 @@ theorem chargeMoveCost_chargeEntropyCost {k : ℕ} (h : History S.K S.m S.M k)
 designated splitting incidence with coefficient `c / (nD)`, where
 `c = 1 / (2(C₁ + 1))`. Equal anchors retain their distinct interaction labels.
 This is a pointwise entropy inequality, before coherent or Fourier integration. -/
-theorem good_designatedEntropyCost_le_expected_chargeEta_domainGraph
+theorem good_designatedEntropyCost_le_expected_chargeEta_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {k L μ : ℕ}
@@ -149,7 +149,7 @@ theorem good_designatedEntropyCost_le_expected_chargeEta_domainGraph
         ∑ c : ChargeChoices S.K S.M, chargeWeight c *
           ∑ g, moveEta n (augmentedPartition (S.oldChargeState h g))
             (S.quantumChargeMove g (h.1 g) (k + 1) (c g) (S.oldChargeState h g)) θ := by
-  have hbound := good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_domainGraph
+  have hbound := good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_planeDomainGraph
     hT S hgraph hdepth h (S.chargeEntropyCost n h θ) (S.chargeEntropyCost_nonneg n h θ)
     hn hm hk hr hD hDpos hL hC hrows hmult hclear hgood
   simpa only [S.chargeMoveCost_chargeEntropyCost n h θ] using hbound
