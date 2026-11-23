@@ -102,25 +102,6 @@ end Matrix.MeanTree
 
 namespace TNLean.PEPS.AreaLaw.Scan.Comparators
 
-/-- Compressing a product of operators that each intertwine an isometry with a compressed
-operator gives the product of the compressed operators. -/
-theorem conjTranspose_mul_listProd_ofFn_mul {m n : Type*} [Fintype m] [Fintype n]
-    [DecidableEq m] [DecidableEq n]
-    {K : ℕ} (A : Fin K → Matrix m m ℂ) (B : Fin K → Matrix n n ℂ) (Z : Matrix m n ℂ)
-    (hZ : Zᴴ * Z = 1) (h : ∀ g, A g * Z = Z * B g) :
-    Zᴴ * (List.ofFn A).prod * Z = (List.ofFn B).prod := by
-  have hprod : ∀ {K : ℕ} (A : Fin K → Matrix m m ℂ) (B : Fin K → Matrix n n ℂ),
-      (∀ g, A g * Z = Z * B g) → (List.ofFn A).prod * Z = Z * (List.ofFn B).prod := by
-    intro K
-    induction K with
-    | zero => intro A B _; simp
-    | succ K ih =>
-      intro A B h
-      simp only [List.ofFn_succ, List.prod_cons]
-      rw [Matrix.mul_assoc, ih _ _ fun g ↦ h g.succ, ← Matrix.mul_assoc, h 0,
-        Matrix.mul_assoc]
-  rw [Matrix.mul_assoc, hprod A B h, ← Matrix.mul_assoc, hZ, Matrix.one_mul]
-
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable (β : ι → Type) [∀ v, Fintype (β v)] [∀ v, DecidableEq (β v)]
 
@@ -201,7 +182,8 @@ theorem meanRoot_eq_listProd [∀ v, Nonempty (β v)] {St : Type} {K : ℕ}
       (V j l)).prod * Z = (List.ofFn fun l ↦ Zᴴ * ((W (P j l))⁻¹ *
         (W (P j l ∪ Ymid j l)ᶜ)⁻¹ * W (Ymid j l)) ^ 2 * Z).prod := fun j ↦ by
     simp only [hband]
-    exact conjTranspose_mul_listProd_ofFn_mul _ _ Z hZ fun l ↦ (hleaf j l).2.1
+    rw [Matrix.mul_assoc, Matrix.listProd_ofFn_intertwine Z fun l ↦ (hleaf j l).2.1,
+      ← Matrix.mul_assoc, hZ, Matrix.one_mul]
   simp only [meanRoot, hcompress, hFeq]
   exact MeanTree.eval_listProd_ofFn (fun j l ↦ (hleaf j l).1) hcomm T
 
