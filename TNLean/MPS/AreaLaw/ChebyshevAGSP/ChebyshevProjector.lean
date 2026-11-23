@@ -479,7 +479,7 @@ theorem normalized_chain_real_polynomial_rank {L q w : ℕ}
     Polynomial.aeval_eq_aeval_map (by
       ext z
       simp only [RingHom.comp_apply, Algebra.algebraMap_eq_smul_one, smul_assoc, one_smul]) p Ht
-  rw [hmap, ← operatorSchmidtRank_sheetSplit_eq_cutOperator]
+  rw [hmap]
   exact normalized_chain_polynomial_rank Φ a b hab hw hwindow x m y t τ k hk
     (p.map (algebraMap ℝ ℂ)) (Polynomial.natDegree_map_le.trans hdeg)
 

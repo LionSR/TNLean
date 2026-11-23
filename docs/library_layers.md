@@ -24,7 +24,10 @@ Work already under way is taken as given and not redesigned here:
 - the generic modules of `TNLean/Algebra` and the finite-ring dynamics of
   `MPS/Preparation` are moving there;
 - the party calculus (`Lattice/PartyCircuit`, `Compression`, `Sheet`) is
-  tracked in issue #10958.
+  tracked in issue #10958;
+- the 44 modules of `Lattice/Compression` that contract a network of tensors
+  have moved to the new lowest tensor-network layer `TNLean/Network` (see "The
+  layers").
 
 ## Summary
 
@@ -89,6 +92,7 @@ the only violations left were those listed here as declaration-level work.
 flowchart BT
   Q["QICLean<br/>matrices, channels, sites, dynamics, Hamiltonians, circuits"]
   B["base: Algebra, Circuit, Lattice, QCA, Tactic<br/>no tensor network; moving to QICLean"]
+  N["Network<br/>contractions with link-dependent virtual alphabets, party networks, distributed contraction"]
   T["MPS/Tensor<br/>tensors, words, mpv, gauge, blocking, chains, local ground spaces"]
   R["MPS/Transfer<br/>transfer maps, primitivity, spectra, overlaps, correlations"]
   O["MPS/Operator<br/>MPO tensors, periodic operators, products, boundaries, fusion"]
@@ -110,7 +114,7 @@ flowchart BT
   PA["PEPS/AreaLaw"]
   PP["PEPS/Approximation"]
   PE["PEPS/Examples"]
-  Q --> B --> T --> R --> O --> C --> F --> H
+  Q --> B --> N --> T --> R --> O --> C --> F --> H
   H --> S
   H --> D
   H --> U
@@ -123,7 +127,7 @@ flowchart BT
   P --> E
   A --> E
   X --> E
-  B --> G --> PT --> PI --> PF --> PH --> PA --> PP --> PE
+  N --> G --> PT --> PI --> PF --> PH --> PA --> PP --> PE
   H --> PT
   E --> PE
 ```
@@ -131,7 +135,8 @@ flowchart BT
 | Layer | Objects of its statements | May import |
 |---|---|---|
 | `base` | no tensor network: matrices on finite index types, sites and regions, Hamiltonians, party circuits, quasi-local algebras | QICLean, Mathlib |
-| `MPS/Tensor` | `MPSTensor`, words and their traces, `mpv`, gauges, physical reshapes and blocking, chains of site-dependent tensors, direct sums, reductions, the local ground spaces `G_L(A)` and parent interaction | base |
+| `Network` | contractions of tensors whose links carry their own finite virtual alphabets: edge-dependent networks on directed multigraphs and their cuts (`DependentBond`), party networks (`Party`), the distributed operator contraction with its labels and sample indices (`DistributedContraction`), the factor at one party from its incident labels (`IncidentFactor`), the sampled approximation and its uniform bounds (`SampledApproximation`) | base |
+| `MPS/Tensor` | `MPSTensor`, words and their traces, `mpv`, gauges, physical reshapes and blocking, chains of site-dependent tensors, direct sums, reductions, the local ground spaces `G_L(A)` and parent interaction | `Network`, base |
 | `MPS/Transfer` | the transfer map as a linear map: fixed points, primitivity and normality, quantum Wielandt bounds, spectra and gaps, overlaps, correlations, irreducibility | `MPS/Tensor` |
 | `MPS/Operator` | `MPOTensor` and its periodic operators, products and action on MPS, boundaries, fusion and zippers, simple density-operator tensors, MPUs as operators | `MPS/Transfer` and below |
 | `MPS/CanonicalForm` | canonical forms and their existence, bases of normal tensors, block separation, periodic tensors and their cyclic sectors, trace-quotient algebras, open-boundary canonical forms, canonical forms of simple MPOs and MPUs | `MPS/Operator` and below |
@@ -139,7 +144,7 @@ flowchart BT
 | `MPS/ParentHamiltonian` | parent interactions and Hamiltonians, block ground spaces, boundary maps, gaps, continuity, deformations, uncle Hamiltonians | `MPS/FundamentalTheorem` and below |
 | `MPS/Symmetry`, `MPS/MPDO`, `MPS/MPU`, `MPS/Preparation`, `MPS/AreaLaw`, `MPS/RFP` | each its own objects; none imports another | `MPS/ParentHamiltonian` and below |
 | `MPS/Examples` | named models | everything in `MPS` |
-| `PEPS/Graph` | finite graphs, tori, cycles, cells and plaquettes, regions and their boundaries, walks and holonomy of group labels; no tensor | base |
+| `PEPS/Graph` | finite graphs, tori, cycles, cells and plaquettes, regions and their boundaries, walks and holonomy of group labels; no tensor | `Network`, base |
 | `PEPS/Tensor` | PEPS tensors on a graph, contraction, open regions, blocked regions | `PEPS/Graph`, the MPS chain up to `MPS/ParentHamiltonian` |
 | `PEPS/Injectivity` | injective, G-injective, semi-regular and normal tensors, injectivity of regions, flux and charge sectors | `PEPS/Tensor` and below |
 | `PEPS/FundamentalTheorem/Injective/FundamentalTheorem` | gauge equivalence and uniqueness on connected graphs, cycles, tori; normal tensors | `PEPS/Injectivity` and below |
@@ -251,7 +256,7 @@ declarations that sit in the wrong module (for example `IncidentEdge` in
 |---|---:|---|
 | `Algebra` | 255 (+1) | Kept as it is. Its generic modules are moving to QICLean (step 3A). The map adds `Algebra/GInjective` (G-injective linear maps) for the same move. Of its modules, 5 name a tensor in a statement, by the scan: `BlockTriangularWord`, `CyclicInsertion`, `FiniteGroupCommutant`, `TensorProductContraction`, `TensorProductRegrouping`. Step 3A decides whether they stay. |
 | `Circuit` | 22 | Kept; being emptied into QICLean. |
-| `Lattice` | 360 | Kept. The party calculus (`PartyCircuit` 69, `Compression` 254, `Sheet` 20) is #10958. The ten root modules are QICLean-bound Hamiltonian, entropy and region material (`FiniteDomain`, `MarginalTails`, `RegionEntropyInequalities`, `RegionalReset`, `RegionalResetEntropy`, `RegionalSwapSupport`, `ReplicaSwap`, `PhysicalBufferCoordinates`, `SiteRelabelEntropy`, `StateSpace`). The map adds the four lattice modules of the two-dimensional area law that the chain area law imports: `BufferedRectangles`, `GraphInteractionBudget`, `GraphInteractionDiamondCounting`, and `InitialBuffer` renamed `BufferedRectangleEntropy`. |
+| `Lattice` | 360 | Kept. The party calculus (`PartyCircuit` 69, `Compression` 254, `Sheet` 20) is #10958. The 44 modules of `Compression` that contract a network of tensors have since moved to `Network`, leaving 210 in `Compression`. The ten root modules are QICLean-bound Hamiltonian, entropy and region material (`FiniteDomain`, `MarginalTails`, `RegionEntropyInequalities`, `RegionalReset`, `RegionalResetEntropy`, `RegionalSwapSupport`, `ReplicaSwap`, `PhysicalBufferCoordinates`, `SiteRelabelEntropy`, `StateSpace`). The map adds the four lattice modules of the two-dimensional area law that the chain area law imports: `BufferedRectangles`, `GraphInteractionBudget`, `GraphInteractionDiamondCounting`, and `InitialBuffer` renamed `BufferedRectangleEntropy`. |
 | `QCA` | 58 | Kept, except `MargolusTensorLocalRule` (it mentions an MPU and moves to `MPS/MPU/QuasiLocal`). The other 57 mention no tensor network and are QICLean-bound: 31 about sites and quasi-local algebras, 17 about automorphisms and cellular automata, 5 about matrix algebras, 4 about Margolus gates. |
 | `Tactic` | 2 | Kept. |
 
@@ -390,14 +395,14 @@ them:
 | `MPS/BNT <-> MPS/CanonicalForm` | `MPS.BNT.Bridge` → `MPS.CanonicalForm.NormalTensorGauge` (isNormal) | `Bridge` → MPS/CanonicalForm |
 | `MPS/BNT <-> MPS/FundamentalTheorem` | `MPS.BNT.Construction` → `MPS.FundamentalTheorem.Proportional` (exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP); `MPS.BNT.PermutationRigidityPrimitive` → `MPS.FundamentalTheorem.Proportional` (no constant named) | `Proportional` → MPS/Transfer |
 | `MPS/BNT <-> MPS/MPDO` | `MPS.BNT.DirectSumSelectors` → `MPS.MPDO.BiCFDerivation.DirectSumUniqueness` (groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge, groundSpace_inf_eq_bot_of_exists_not_forall_mpv_eq_mul_of_dim_ge_succ); `MPS.BNT.DirectSumSelectors` → `MPS.MPDO.BiCFDerivation.Selectors` (hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt, wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt, wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords) | `DirectSumSelectors` → MPS/CanonicalForm |
-| `MPS/CanonicalForm <-> MPS/Core` | `MPS.Core.BlockingInfrastructure` → `MPS.CanonicalForm.BlockingViaAdjoint` (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor); `MPS.Core.CommonNormalBlocking` → `MPS.CanonicalForm.NormalTensorGauge` (exists_tpGauge, isNormal); `MPS.Core.CommonNormalBlocking` → `MPS.CanonicalForm.SectorComparison.NormalityChain` (isNBlkInjective_pow_four_of_isNormal_leftCanonical) | `BlockingInfrastructure` → MPS/Transfer; `CommonNormalBlocking` → MPS/CanonicalForm |
+| `MPS/CanonicalForm <-> MPS/Core` | `MPS.Core.BlockingInfrastructure` → `MPS.CanonicalForm.BlockingViaAdjoint` (exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily); `MPS.Core.CommonNormalBlocking` → `MPS.CanonicalForm.NormalTensorGauge` (exists_tpGauge, isNormal); `MPS.Core.CommonNormalBlocking` → `MPS.CanonicalForm.SectorComparison.NormalityChain` (isNBlkInjective_pow_four_of_isNormal_leftCanonical) | `BlockingInfrastructure` → MPS/Transfer; `CommonNormalBlocking` → MPS/CanonicalForm |
 | `MPS/CanonicalForm <-> MPS/FundamentalTheorem` | `MPS.CanonicalForm.TranslationInvariantUniqueness` → `MPS.FundamentalTheorem.UnitaryGauge` (exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible) | `UnitaryGauge` → MPS/Transfer |
 | `MPS/CanonicalForm <-> MPS/Irreducible` | `MPS.Irreducible.FormII` → `MPS.CanonicalForm.Reduction` (no constant named) | `Reduction` → MPS/Tensor |
 | `MPS/CanonicalForm <-> MPS/MPU` | `MPS.CanonicalForm.QuadraticCanonicalOBCWindow` → `MPS.MPU.PeriodicOperatorCutRank` (cutCoefficientRank_mpv_le) | `PeriodicOperatorCutRank` → MPS/Operator |
 | `MPS/CanonicalForm <-> MPS/Overlap` | `MPS.Overlap.NormalTensorDichotomy` → `MPS.CanonicalForm.NormalTensorGauge` (exists_tpGauge, selfOverlap_tendsto_one, norm_eq_one_of_gaugePhase_cast_of_isNormalTensor) | `NormalTensorDichotomy` → MPS/CanonicalForm |
 | `MPS/CanonicalForm <-> MPS/Periodic` | `MPS.CanonicalForm.PrimeLengthNormalBlocks` → `MPS.Periodic.PeriodBound` (period_le_bondDim); `MPS.CanonicalForm.PrimeLengthNormalBlocks` → `MPS.Periodic.ScaledNormalization` (exists_leftCanonical_periodic_scale_of_irreducible); `MPS.CanonicalForm.PrimeLengthNormalBlocks` → `MPS.Periodic.StateVectorDecomposition` (pgvwc07_stateVector_eq_zero_of_not_dvd); `MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition` → `MPS.Periodic.SectorIrreducibility.HLift` (isIrreducibleOnCorner_of_cyclic_decomp_mps, cyclic_projection_mul_left, cyclic_projection_mul_right) | `CyclicSectorDecomposition` → MPS/CanonicalForm; `PrimeLengthNormalBlocks` → MPS/CanonicalForm |
 | `MPS/CanonicalForm <-> MPS/Preparation` | `MPS.CanonicalForm.InjectivePeriodicCuts` → `MPS.Preparation.CutCoefficientRank` (cutCoefficientRank_eq_cutRank); `MPS.CanonicalForm.PeriodicCutBasisCoordinates` → `MPS.Preparation.MinimalCutRepresentation` (no constant named); `MPS.CanonicalForm.QuadraticCanonicalOBCWindow` → `MPS.Preparation.OBCCanonicalPhysicalRanks` (bondDim_eq_cutCoefficientRank_of_canonical, coeff_ne_zero_of_faithful_density, withBondBound); `MPS.CanonicalForm.QuadraticPrescribedOBCWindow` → `MPS.Preparation.OBCMinimalPrefixBasis` (physicalPrefixBasis, toMatrix_cutSlice_physicalPrefixBasis) | `CutCoefficientRank` → MPS/Tensor; `MinimalCutRepresentation` → MPS/Tensor; `OBCCanonicalPhysicalRanks` → MPS/CanonicalForm; `OBCMinimalPrefixBasis` → MPS/CanonicalForm |
-| `MPS/CanonicalForm <-> MPS/SharedInfra` | `MPS.SharedInfra.Scaling` → `MPS.CanonicalForm.Reduction` (isIrreducibleTensor_smul) | `Reduction` → MPS/Tensor |
+| `MPS/CanonicalForm <-> MPS/SharedInfra` | `MPS.SharedInfra.Scaling` → `MPS.CanonicalForm.Reduction` (isIrreducibleFamily_smul) | `Reduction` → MPS/Tensor |
 | `MPS/CanonicalForm <-> PiAlgebra` | `PiAlgebra.CanonicalFormSepAux` → `MPS.CanonicalForm.Reduction` (no constant named) | `Reduction` → MPS/Tensor |
 | `MPS/Chain <-> MPS/Core` | `MPS.Chain.BlockTensor` → `MPS.Core.Blocking` (blockTensor); `MPS.Chain.BlockedChainFT` → `MPS.Core.Blocking` (blockTensor); `MPS.Chain.VaryingBondOBC` → `MPS.Core.CyclicTrace` (evalWord_ofFn_eq_prod, trace_evalWord_eq_sum_cyclic) | `BlockTensor` → MPS/Tensor; `BlockedChainFT` → MPS/Tensor; `VaryingBondOBC` → MPS/Tensor |
 | `MPS/Chain <-> MPS/FundamentalTheorem` | `MPS.Chain.FundamentalTheorem` → `MPS.FundamentalTheorem.Basic` (fundamentalTheorem_singleBlock) | `FundamentalTheorem` → MPS/Tensor |
@@ -441,7 +446,7 @@ them:
 | `PEPS/RegionBlock <-> PEPS/TorusWindowPeeling` | `PEPS.RegionBlock.InteriorBondInsertion` → `PEPS.TorusWindowPeeling.WindowIndependence` (deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff) | `InteriorBondInsertion` → PEPS/FundamentalTheorem |
 | `PEPS/RegionBlock <-> PEPS/VertexComplement` | `PEPS.VertexComplement.Injective` → `PEPS.RegionBlock.KernelDescent` (regionBlockedTensorInjective_of_isVertexInjective) | `Injective` → PEPS/Injectivity |
 
-After the map, 11 pairs remain, all from modules mixing two layers (next
+After the map, 10 pairs remain, all from modules mixing two layers (next
 section):
 
 - `MPS/FundamentalTheorem <-> MPS/ParentHamiltonian`: `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients` → `MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence`; `MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalNormalization` → `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients`
@@ -452,15 +457,14 @@ section):
 - `PEPS/FundamentalTheorem <-> PEPS/Tensor`: `PEPS.FundamentalTheorem.Cycle.CycleMPSChainOverlapInsertion` → `PEPS.Tensor.Cycle.CycleMPSWordTransport`; `PEPS.Tensor.GraphState.GraphBondContraction` → `PEPS.FundamentalTheorem.Injective.GaugeAction`
 - `PEPS/Graph <-> PEPS/Injectivity`: `PEPS.Graph.Cell.TorusPlaquetteRealization` → `PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement`; `PEPS.Injectivity.CutSpace.DependentTorusCutSpaces` → `PEPS.Graph.Torus.TorusLabelledBondGeometry`
 - `PEPS/Graph <-> PEPS/Tensor`: `PEPS.Graph.Holonomy.RegularRegionConnectivity` → `PEPS.Tensor.GraphState.RegularOpenRegion`; `PEPS.Tensor.Cycle.CycleMPSTensor` → `PEPS.Graph.Region.CycleArcRegion`
-- `PEPS/Injectivity <-> PEPS/ParentHamiltonian`: `PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove` → `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian`; `PEPS.ParentHamiltonian.Cycle.CycleGroundSpace` → `PEPS.Injectivity.Region.CycleMPSInjectivity`
+- `PEPS/Injectivity <-> PEPS/ParentHamiltonian`: `PEPS.Injectivity.Regular.GInjectivePhysicalMap` → `PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation`; `PEPS.ParentHamiltonian.Cycle.CycleGroundSpace` → `PEPS.Injectivity.Region.CycleMPSInjectivity`
 - `PEPS/Injectivity <-> PEPS/Tensor`: `PEPS.Injectivity.Boundary.BoundaryIsometry` → `PEPS.Tensor.GraphState.RegularBoundaryState`; `PEPS.Tensor.GraphState.RegularClosedGauge` → `PEPS.Injectivity.Regular.RegularRegionGaugeContraction`
-- `PEPS/ParentHamiltonian <-> PEPS/Tensor`: `PEPS.ParentHamiltonian.Cycle.CycleGroundSpace` → `PEPS.Tensor.Region.RegionGroundSpace`; `PEPS.Tensor.GraphState.GraphDependentCutCoordinates` → `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian`
 
 ## Declaration-level work
 
 ### Imports that remain
 
-Each of these 52 imports points outside the allowed layers after the map. The
+Each of these 49 imports points outside the allowed layers after the map. The
 map records them, and `--check` fails on any other violation and on a recorded
 one that no longer occurs. Each is removed in one of two ways:
 
@@ -506,14 +510,11 @@ one that no longer occurs. Each is removed in one of two ways:
 | `PEPS.Graph.Torus.TorusSingletonRegion` | `PEPS.Injectivity.Entropy.RegularTorusEntropy` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Graph.Walk.TorusWalkWinding` | `PEPS.Injectivity.TorusSector.RegularTorusCut` | uses torusClosureEdgeAssignment, torusRightEdge_head_of_wrap, torusUpEdge_head_of_wrap |
 | `PEPS.Injectivity.Charge.RegularTwistedStateNonzero` | `PEPS.FundamentalTheorem.Normal.NormalComparisonScalar` | uses regionBlockedWeight_univ |
-| `PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove` | `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian` | uses regionConfigEquiv, place_eq_regionConfigEquiv |
 | `PEPS.Injectivity.Multiplicity.GraphOpenAveragingBondState` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.GaugeInjectivity` | uses prod_region_incident_eq_prod_edge |
 | `PEPS.Injectivity.Region.DisjointUnionSetup` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.CoefficientTransfer` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Injectivity.Region.ReindexInjectivity` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion` | uses regionBlockedWeight_reindexTensor |
 | `PEPS.Injectivity.Regular.GInjectivePhysicalMap` | `PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation` | uses physicalDeform |
-| `PEPS.Injectivity.Regular.RegularCoherentGlobalTransport` | `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian` | uses regionConfigEquiv, place_mulVec_assemble |
 | `PEPS.Tensor.GraphState.GraphBondContraction` | `PEPS.FundamentalTheorem.Injective.GaugeAction` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Tensor.GraphState.GraphDependentCutCoordinates` | `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Tensor.GraphState.RegularClosedGauge` | `PEPS.Injectivity.Regular.RegularRegionGaugeContraction` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Tensor.GraphState.RegularRegionGram` | `PEPS.Injectivity.Regular.RegularSiteGram` | uses regularLegProjector_fin, regularLegProjector_apply |
 | `PEPS.Tensor.Region.OpenRegionContraction` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence` | uses sum_regionBlockedWeight_mul_complement |
@@ -556,8 +557,6 @@ Remedies by host module (the declarations to move and where):
 - **`RegionFibers`, `BlockRangeCoincidence`, `NormalComparisonScalar`,
   `Insertion`:** the blocked-weight identities go to `Tensor/Region`.
 - **`RegularSiteGram`:** `regularLegProjector` goes to `Tensor/GraphState`.
-- **`RegionParentHamiltonian`:** `regionConfigEquiv` and the placement lemmas
-  go to `Tensor/Region`, or are replaced by QICLean's placement.
 - **`RegionPhysicalDeformation`:** `physicalDeform` and its two lemmas go to
   `Tensor/Region`.
 - **`MPS/ParentHamiltonian/Gap/Comparison/PrimitiveGaugeExistence`:**
@@ -578,8 +577,6 @@ replaced by the lower module actually used:
 - `SquareGridSource` → `NormalBlocking`
 - `Basic` → `NormalBlocking`
 - `GraphBondContraction` → `GaugeAction` (import `Blocking`)
-- `GraphDependentCutCoordinates` → `RegionParentHamiltonian` (import
-  `RegionGroundSpace`)
 - `RegularClosedGauge` → `RegularRegionGaugeContraction` (import
   `RegularRegionTreeGauge`)
 - `TorusLatticeGraph` → `Defs`
@@ -1384,9 +1381,9 @@ consequences).
 #### Modules that mix two layers, or whose imports force them higher
 | module | layers | declarations | proposed split |
 |---|---|---|---|
-| `Core.BlockingInfrastructure` | Tensor / Transfer | Tensor: `blockedFlatWord`, `blockedFlatConfig`, `sameMPV₂_blockTensor_*`, `sameMPV₂Pos_blockTensor*`, `iteratedBlockIndex`, `directIteratedBlockEquiv`, `blockTensor_blockTensor_*`, `flattenedIteratedBlockTensor*`, `*_cast_physDim` (except two); Transfer: `isPrimitive_transferMap_cast_physDim`, `isIrreducibleTensor_cast_physDim`, `isPrimitive_pow_of_isPrimitive`, `isPrimitive_transferMap_blockTensor_of_dvd`, `lcmPeriod*`, `exists_common_blocking_all_primitive*` | Tensor part to `Tensor/Physical` (e.g. `IteratedBlocking`, taking the `FundamentalTheorem.Multi` import), primitivity part stays in `Transfer/Irreducible`. Then `ReductionExistence`, which uses only `sameMPV₂Pos_blockTensor`, returns to `Tensor/Reduction`. |
+| `Core.BlockingInfrastructure` | Tensor / Transfer | Tensor: `blockedFlatWord`, `blockedFlatConfig`, `sameMPV₂_blockTensor_*`, `sameMPV₂Pos_blockTensor*`, `iteratedBlockIndex`, `directIteratedBlockEquiv`, `blockTensor_blockTensor_*`, `flattenedIteratedBlockTensor*`, `*_cast_physDim` (except two); Transfer: `isPrimitive_transferMap_cast_physDim`, `isIrreducibleFamily_cast_physDim`, `isPrimitive_pow_of_isPrimitive`, `isPrimitive_transferMap_blockTensor_of_dvd`, `lcmPeriod*`, `exists_common_blocking_all_primitive*` | Tensor part to `Tensor/Physical` (e.g. `IteratedBlocking`, taking the `FundamentalTheorem.Multi` import), primitivity part stays in `Transfer/Irreducible`. Then `ReductionExistence`, which uses only `sameMPV₂Pos_blockTensor`, returns to `Tensor/Reduction`. |
 | `Core.ReductionExistence` | Tensor statements, Transfer by import | all six (`exists_isReduction_*`) | follows from the previous split |
-| `Core.PhysicalReindexTransport` | Tensor / Transfer | Tensor: `reindexPhysical_cast_dim`, `leftCanonical_`, `isInjective_`, `isNormal_`, `gaugePhaseEquiv_`, `mpvOverlap_reindexPhysical_equiv`, `linearIndependent_mpvState_*`; Transfer: `transferMap_`, `isPrimitive_transferMap_`, `hasInvariantProj_`, `isIrreducibleTensor_reindexPhysical_equiv` | Tensor part to `Tensor/Physical`; `Operator/Product/PhysicalBlocking` uses only `isInjective_reindexPhysical_equiv` and then no longer imports Transfer |
+| `Core.PhysicalReindexTransport` | Tensor / Transfer | Tensor: `reindexPhysical_cast_dim`, `leftCanonical_`, `isInjective_`, `isNormal_`, `gaugePhaseEquiv_`, `mpvOverlap_reindexPhysical_equiv`, `linearIndependent_mpvState_*`; Transfer: `transferMap_`, `isPrimitive_transferMap_`, `hasInvariantProj_`, `isIrreducibleFamily_reindexPhysical_equiv` | Tensor part to `Tensor/Physical`; `Operator/Product/PhysicalBlocking` uses only `isInjective_reindexPhysical_equiv` and then no longer imports Transfer |
 | `ParentHamiltonian.Defs` | sites / Tensor | sites: `extractWindow`, `replaceWindow`, `ringWindow` lemmas, `offset_mod_eq`; Tensor: `groundSpaceES`, `parentInteraction`, `parentHamiltonian` | window functions to the QICLean Sites layer; `Simple/CommutingForm` and `EmbedLocalOperatorMonomial` use only them |
 | `ParentHamiltonian.Basic` | sites / Tensor | `rotate_ofFn_replaceWindow` (sites; the only declaration `Boundary/BoundaryCut` uses) | that lemma to Sites |
 | `ParentHamiltonian.CyclicWindow`, `CyclicTranslation`, `RestrictTransport` | sites / Tensor | sites: `contiguousCfg`, `cyclicCfg`, `cyclicForwardSite`, `cyclicWindowSupport`, `cyclicWindowsOverlap`, `cyclicRestrictₗ`, `cyclicTranslateCfg/State`, `reindexSites` and their lemmas (36 of 38, 8 of 9, 4 of 6); Tensor: `contiguous_mem_groundSpace`, `contiguousRestrictₗ_groundSpaceMap_mem_groundSpace`, `cyclicTranslateState_mem_chainGroundSpace`, `reindexSites_groundSpaceMap`, `reindexSites_mem_groundSpace` | generic part to Sites; `Simple/CommutingForm`, `PhysicalSector/PhysicalSectorBondTransport`, `CommutingBondEtaCyclicCore` use only `cyclicWindowsOverlap`, `cyclicForwardSite`, `cyclicWindowSupport` |
@@ -2116,7 +2113,7 @@ only the `tn` modules (MPS approximation statements) would stay.
 | `PhysicalIntervalTransport` | sites / TN | `identityExtendInterval`, `intervalShiftOrderIso`, `nestedInterval_*`, `placeAlong_*`; versus the MPO statements | interval coordinate transport to `Chain` |
 | `CopyProduct` | entropy / TN | `copyConfigurationEquiv`, `copyProduct`, `norm_copyProduct`, `inner_copyProduct`; versus the bond statements | block products to QICLean |
 | `Hastings.CutProductState` | entropy, forced into a TN-importing module | imports `MPS.AreaLaw.OpenMPS` only for the cut vector and cut matrix | move the cut vector/matrix definitions below `OpenMPS` (QICLean) |
-| `LiebRobinson`, `DomainGraphGeometry`, `DomainInteractionBudget`, `DomainIntervalNeighborhood` | sites, forced above the area law | they import `ComponentReduction` | remove the import, §5 |
+| `LiebRobinson`, `LineDomainGraphGeometry`, `DomainInteractionBudget`, `DomainIntervalNeighborhood` | sites, forced above the area law | they import `ComponentReduction` | remove the import, §5 |
 
 The `Algorithm.*` programs (`Query`, `SweepProgram`, `SampledProgram`,
 `ValidOracle`) mix query costs with MPS outputs by nature; no split proposed.
@@ -2282,7 +2279,6 @@ this part points upward.
 | `NormalComparisonScalar` (`FundamentalTheorem/Normal`) | Tensor, FundamentalTheorem | `regionBlockedWeight_univ` | to `Tensor/Region/RegionBlock` |
 | `WindowComplement` (formerly `TorusWindowComplement`) | Graph, FundamentalTheorem | `torusArcRectangle`, `mem_torusArcRectangle` | to `Graph/Torus` |
 | `TorusCoordinateSwap` (`FundamentalTheorem/Torus`) | Graph, FundamentalTheorem | `torusCoordinateSwap` | to `Graph/Torus` |
-| `RegionParentHamiltonian` (`ParentHamiltonian/Region`) | Tensor, ParentHamiltonian | `regionConfigEquiv`, `place_eq_regionConfigEquiv`, `place_mulVec_assemble` (placement of a regional operator) | to `Tensor/Region`, or replaced by QICLean's placement of a local operator |
 | `RegionPhysicalDeformation` (`ParentHamiltonian/Region`) | Tensor, ParentHamiltonian | `physicalDeform`, `openRegionWeight_physicalDeform`, `openRegionMap_physicalDeform` | to `Tensor/Region/RegionPhysicalMap` |
 
 `Algebra/GInjective` lies outside this part and the import graph assigned it to

@@ -75,7 +75,7 @@ theorem exists_leftCanonical_periodic_scale_of_irreducible
   have hnormζ : ‖ζ‖ = (Real.sqrt r)⁻¹ := by
     rw [hζ_def, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (inv_pos.2 hsqrt_pos)]
   have hIrrScaled : Kraus.IsIrreducibleFamily (fun i => ζ • A i) :=
-    isIrreducibleTensor_smul hζ A hIrr
+    isIrreducibleFamily_smul hζ A hIrr
   have hRadScaled :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))

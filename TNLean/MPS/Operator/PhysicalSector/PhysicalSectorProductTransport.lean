@@ -101,13 +101,13 @@ private noncomputable abbrev physicalCoordinateMatrixN
 private theorem physicalCoordinateMatrixN_isometry
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     (F.physicalCoordinateMatrixN N)ᴴ * F.physicalCoordinateMatrixN N = 1 :=
-  piKronecker_const_isometry _ F.physicalCoordinateMatrix_isometry N
+  Matrix.piKronecker_const_isometry _ F.physicalCoordinateMatrix_isometry N
 
 /-- The sitewise physical coordinate matrix is a coisometry. -/
 private theorem physicalCoordinateMatrixN_coisometry
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     F.physicalCoordinateMatrixN N * (F.physicalCoordinateMatrixN N)ᴴ = 1 := by
-  rw [physicalCoordinateMatrixN, piKronecker_const_mul_conjTranspose,
+  rw [physicalCoordinateMatrixN, Matrix.piKronecker_const_mul_conjTranspose,
     F.physicalCoordinateMatrix_coisometry, Matrix.piKronecker_one]
 
 /-- The length-`N` MPO transforms by the sitewise physical coordinate

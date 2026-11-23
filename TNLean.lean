@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.Algebra
 import TNLean.Lattice
 import TNLean.MPS
+import TNLean.Network
 import TNLean.PEPS
 import TNLean.QCA
 import TNLean.QICLeanInterface

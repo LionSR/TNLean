@@ -28,7 +28,7 @@ the sheets without holes, whose front block is empty.
   (the registers outside and inside the region `Y`) followed by the raw registers: inside `Y`,
   the raw registers and the inside front blocks of the two sheets exchange their sheet names, by
   exchanges of tensor factors only (`eval_blockRenameWord`, `isReordering_blockRenameWord`).
-* `norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le`: the net map `D_U F_T` of the
+* `norm_act_sheetBufferCorrection_mul_pairSwapOp_sub_le`: the net map `D_U F_T` of the
   exchange moves the product `Ω ⊗ Ω` of two copies of a unit vector by at most four times the
   splitting error.
 
@@ -38,7 +38,7 @@ These are original proofs; no OpenAI Lean code is copied or adapted.
 
 * `Sheet.exists_frontBirthWord`, `Sheet.exists_frontDeathChain`.
 * `Sheet.blockRenameWord`, `Sheet.eval_blockRenameWord`.
-* `Sheet.norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le`.
+* `Sheet.norm_act_sheetBufferCorrection_mul_pairSwapOp_sub_le`.
 
 ## References
 
@@ -70,14 +70,14 @@ set_option synthInstance.maxSize 512 in
 moves `Ω ⊗ Ω` by at most `4 ‖𝒱 Ω - s ⊗ s'‖`.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 516–561. -/
-theorem norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le (h : Disjoint T E)
+theorem norm_act_sheetBufferCorrection_mul_pairSwapOp_sub_le (h : Disjoint T E)
     (σ : SplittingData q T E) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) :
     ‖act (sheetBufferCorrection h σ * Matrix.reindex
         (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
         (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp T))
         (vecKron Ω Ω) -
       vecKron Ω Ω‖ ≤ 4 * σ.error h Ω := by
-  rw [sheetSwapOp_eq_submatrix h, sheetBufferCorrection, submatrix_mul_equiv,
+  rw [reindex_pairSwapOp_eq_submatrix h, sheetBufferCorrection, submatrix_mul_equiv,
     norm_act_submatrix_sub]
   set ω : EuclideanSpace ℂ _ := WithLp.toLp 2 (splitVec h Ω)
   have hω : (WithLp.toLp 2 (⇑(vecKron Ω Ω) ∘ (threeSplit₂ h).symm) : EuclideanSpace ℂ _) =

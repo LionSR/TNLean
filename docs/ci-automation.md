@@ -249,21 +249,22 @@ only after all required build-job checks succeed.
 
 The `build` job derives its focused Lean checks from the change set, using
 `scripts/ci_lean_checks.py`; pull requests do not add workflow steps for new
-modules or tests.
+modules.
 
 For a pull-request checkout, both selectors verify that the synthetic merge's
 second parent is the event's PR head, then compare against its first (base)
 parent. This excludes changes already present on the base branch, even if the
 event's recorded base SHA is stale. Taking a merge-base with that stale ancestor
-would not fix the selection. An unverifiable merge checkout falls back to all
-tests. Pushes and local invocations without a PR-head SHA retain their explicit
-base revision (the previous head for pushes).
+would not fix the selection. An unverifiable merge checkout selects no changed
+source and leaves the library to the root build. Pushes and local invocations
+without a PR-head SHA retain their explicit base revision (the previous head for
+pushes).
 
 The changed-module timing gate uses the same verified two-parent checkout
 contract, comparing the tested merge tree to its first parent. It deliberately
 ignores the event base SHA, including when that history has been rewritten.
-Unlike test selection's full-suite fallback, an unverifiable timing checkout
-fails closed: it cannot reliably attribute build times to PR changes. Missing
+Unlike the strict selection, which then selects nothing, an unverifiable timing
+checkout fails closed: it cannot reliably attribute build times to PR changes. Missing
 PR-head objects are fetched by immutable SHA; missing base-parent objects or Git
 failures are errors. Added/modified Lean paths (including rename destinations)
 are selected; deletions are excluded. The full integration build and the
@@ -273,7 +274,7 @@ Use `lake_build_hotspots.py select-pr --head SHA` for selection and
 invocations remain supported. Top-level `--help` lists both commands.
 
 - **Focused checks** (pull requests, before the early build): the directly
-  changed production files and regression scripts are prepared by one
+  changed production files are prepared by one
   `lake build` and elaborated with the strict flags, so that an error in the
   pull request's own edits surfaces before the root build. It is a shortcut
   with a 50-minute budget inside a 60-minute step: a failure it finds fails
@@ -287,21 +288,19 @@ invocations remain supported. Top-level `--help` lists both commands.
   compile error fails the step, but a build that runs past the budget (for
   example behind a cold dependency cache after a pin change) stops with a
   warning and leaves the remaining modules to the root build.
-- **Strict checks** (after the root build): every changed production file and
-  every affected standalone regression `scripts/*_regression.lean` is
+- **Strict checks** (after the root build): every changed production file is
   elaborated with the package options and `-DwarningAsError=true`, three files
-  at a time, each with a time limit. A regression is affected when it changed
-  or when its repository import closure contains a changed, deleted or renamed
-  module. Every regression runs on manual dispatch, and when the base revision
-  is unknown or `lake-manifest.json`, `lakefile.toml`, `lean-toolchain`, the
-  workflow, or the selection script changes.
+  at a time, each with a time limit. When the base revision is unknown (manual
+  dispatch, an unfetchable base), no file is selected and the root build is
+  the check.
 
 `python3 scripts/ci_lean_checks.py list --base origin/main` prints the
 selection locally. Do not add per-module "build early" or "test strictly" steps
-to `pr-ci.yml`: a new module, or a new `scripts/*_regression.lean`, is picked
-up automatically. The repository keeps no test-fixture directory: the module
-policy job rejects any file under `TNLeanTest/`, and per-theorem `#print
-axioms` fixtures are not written (see `docs/project_conventions.md`).
+to `pr-ci.yml`: a new module is picked up automatically. The repository keeps
+no Lean test fixtures: the module policy job rejects any file under
+`TNLeanTest/`, and neither per-theorem `#print axioms` files nor standalone
+Lean check files under `scripts/` are written (see
+`docs/project_conventions.md`).
 
 ---
 

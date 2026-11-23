@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Tensor.Network.Defs
-import TNLean.Lattice.Compression.PartyNetwork
+import TNLean.Network.Party.PartyNetwork
 import Mathlib.Algebra.BigOperators.GroupWithZero.Finset
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
@@ -33,7 +33,7 @@ dimension at most `D ^ m`.
 
 No injectivity, isometry, translation-invariance, or uniform-dimension assumption is made.
 
-Party networks and their coefficients are defined in `TNLean.Lattice.Compression.PartyNetwork`.
+Party networks and their coefficients are defined in `TNLean.Network.Party.PartyNetwork`.
 
 ## Main results
 

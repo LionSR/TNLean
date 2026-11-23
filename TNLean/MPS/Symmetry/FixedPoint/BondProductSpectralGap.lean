@@ -21,21 +21,6 @@ open scoped Matrix MatrixOrder InnerProductSpace ComplexOrder
 
 namespace MPSTensor
 
-/-- A positive semidefinite matrix satisfying the quadratic gap `A² ≥ A` has every
-eigenvalue equal to `0` or at least `1`. Source: arXiv:1010.3732, Section II.F.2, applied to
-the commuting bond parent Hamiltonian. -/
-theorem forall_hasEigenvalue_of_quadratic_gap {n : Type*} [Fintype n]
-    [DecidableEq n] (A : Matrix n n ℂ) (hPos : A.PosSemidef)
-    (hGap : ∀ v : EuclideanSpace ℂ n,
-      (⟪Matrix.toEuclideanLin A v, v⟫_ℂ).re ≤
-        (⟪Matrix.toEuclideanLin A v,
-          Matrix.toEuclideanLin A v⟫_ℂ).re) :
-    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin A) μ →
-      μ = 0 ∨ (1 : ℂ) ≤ μ := by
-  simpa only [Complex.ofReal_one] using
-    FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional one_pos
-      (Matrix.isPositive_toEuclideanLin_iff.mpr hPos) (by simpa only [one_mul] using hGap)
-
 /-- The physical parent Hamiltonian of unit bonds is positive
 semidefinite. Source: arXiv:1010.3732, Section II.F.2. -/
 theorem physicalBondProductParentHamiltonian_posSemidef
@@ -76,9 +61,9 @@ theorem isGapped_physicalBondProductParentHamiltonian
   · rw [ManyBody.groundSpace_zero, ← hlin, physicalBondProductParentHamiltonian_groundSpace η hη hN,
       Ne, Submodule.span_singleton_eq_bot]
     exact hUψ
-  · rw [Complex.ofReal_one]
-    refine forall_hasEigenvalue_of_quadratic_gap _ hpos fun v ↦ ?_
-    rw [← hlin]
+  · refine FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional one_pos
+      (Matrix.isPositive_toEuclideanLin_iff.mpr hpos) fun v ↦ ?_
+    rw [one_mul, ← hlin]
     exact physicalBondProductParentHamiltonian_gap_one η hη hN v
 
 /-- Uniform gap along the normalized interpolation, above the zero ground energy.

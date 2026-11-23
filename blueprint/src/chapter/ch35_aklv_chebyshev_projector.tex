@@ -36,23 +36,20 @@ configurations. The spectral argument takes place on the original chain.
 
 \begin{lemma}[Restriction of spectator configurations]
     \label{lem:aklv_spectator_cut_rank}
-    \lean{TNLean.MPS.AreaLaw.AKLV.operatorSchmidtRank_le_placeAlong,
-        TNLean.MPS.AreaLaw.AKLV.operatorSchmidtRank_sheetSplit_eq_cutOperator}
+    \lean{TNLean.MPS.AreaLaw.AKLV.operatorSchmidtRank_le_placeAlong}
     \leanok
     Let $e:V\hookrightarrow W$ be an injection of finite sets of
     $q$-dimensional sites. Suppose $e^{-1}(B)=A$.
     Extend an operator $K$ on $V$ by the identity on the remaining sites
     of $W$. If a configuration of those sites exists, then its operator
     Schmidt rank across $B$ is at least the operator Schmidt rank of
-    $K$ across $A$. Replacing the complement of a region by its equivalent
-    set of sites outside the region leaves this rank unchanged.
+    $K$ across $A$.
 \end{lemma}
 \begin{proof}\leanok
     Fix the same spectator configuration in every row and column.
     The two local restrictions at the cut recover $K$.
     Restricting each factor of a product decomposition cannot increase
-    its number of summands. The two conventions for a complement differ
-    by a change of coordinates on the exterior factor.
+    its number of summands.
 \end{proof}
 
 \begin{lemma}[A single-window polynomial rank bound]

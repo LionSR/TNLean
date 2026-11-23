@@ -464,7 +464,7 @@ set_option synthInstance.maxSize 512 in
 𝒱^{⊗2}`, in the coordinates `((t, e), u)` of both sheets.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 516–526. -/
-theorem sheetBufferCorrection_mul_sheetSwapOp (σ : SplittingData q (X.tSet P) (X.eSet P)) :
+theorem sheetBufferCorrection_mul_pairSwapOp (σ : SplittingData q (X.tSet P) (X.eSet P)) :
     sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * Matrix.reindex
         (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
         (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
@@ -475,11 +475,11 @@ theorem sheetBufferCorrection_mul_sheetSwapOp (σ : SplittingData q (X.tSet P) (
               Matrix _ _ ℂ) *
           (((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ⊗ₖ ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V)))
         (threeSplit₂ (X.disjoint_tSet_eSet P)) (threeSplit₂ (X.disjoint_tSet_eSet P)) := by
-  rw [sheetSwapOp_eq_submatrix (X.disjoint_tSet_eSet P), sheetBufferCorrection,
+  rw [reindex_pairSwapOp_eq_submatrix (X.disjoint_tSet_eSet P), sheetBufferCorrection,
     submatrix_mul_equiv, bufferCorrection_mul_tSwap]
 
 /-- **The exact map (`eq:exchange-exact-map`).** `C K_in = K_out D_U F_T`, and
-`D_U F_T = (𝒱^{⊗2})ᴴ F_{T B_T} 𝒱^{⊗2}` (`sheetBufferCorrection_mul_sheetSwapOp`).
+`D_U F_T = (𝒱^{⊗2})ᴴ F_{T B_T} 𝒱^{⊗2}` (`sheetBufferCorrection_mul_pairSwapOp`).
 
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 512–532. -/
 theorem exchangeOp_mul_encoder [NeZero q] (σ : SplittingData q (X.tSet P) (X.eSet P)) :
@@ -539,7 +539,7 @@ theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖�
     (act_kronecker_vecKron _ _ _ _).symm
   rw [hin, hout, ← act_mul, X.exchangeOp_mul_encoder P σ, act_mul, ← act_sub_right]
   refine (norm_act_le_of_norm_le_one hKout _).trans
-    ((norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le h σ hΩ).trans ?_)
+    ((norm_act_sheetBufferCorrection_mul_pairSwapOp_sub_le h σ hΩ).trans ?_)
   linarith
 
 /-! ### Frames with holes in any order -/

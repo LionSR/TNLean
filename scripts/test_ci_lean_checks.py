@@ -24,17 +24,6 @@ def git(root: Path, *args: str) -> str:
                           capture_output=True, text=True).stdout.strip()
 
 
-class ParseImportsTest(unittest.TestCase):
-    def test_header_only(self) -> None:
-        text = ("/-\nCopyright\n-/\nimport A.B -- see D\nimport C\n\n/-! doc -/\n"
-                "import NotHeader\n")
-        self.assertEqual(ci.parse_imports(text), ["A.B", "C"])
-
-    def test_module_system_keywords(self) -> None:
-        text = "module\n\npublic import A\nmeta import B\nimport C D\n"
-        self.assertEqual(ci.parse_imports(text), ["A", "B", "C", "D"])
-
-
 class EarlyModulesTest(unittest.TestCase):
     modules = staticmethod(ci.early_modules)
 
@@ -169,9 +158,6 @@ class SelectTest(unittest.TestCase):
             "TNLean/Uses.lean": "import TNLean.Core\n",
             "TNLean/Other.lean": "import Mathlib\n",
             "TNLean/Archive/Old.lean": "import TNLean.Core\n",
-            "scripts/core_regression.lean": "import TNLean.Uses\n",
-            "scripts/other_regression.lean": "import TNLean.Other\n",
-            "scripts/unrelated_regression.lean": "import Mathlib\n",
             "scripts/LintStyle.lean": "import TNLean.Core\n",
         }
         for path, text in files.items():
@@ -204,12 +190,11 @@ class SelectTest(unittest.TestCase):
         finally:
             os.chdir(cwd)
 
-    def test_transitive_dependents_are_selected(self) -> None:
+    def test_changed_source_is_selected(self) -> None:
         self.change("TNLean/Core.lean", "import Mathlib\n-- edit\n")
-        early, sources, tests = self.select(self.base)
+        early, sources = self.select(self.base)
         self.assertEqual(early, ["TNLean.Core"])
         self.assertEqual(sources, ["TNLean/Core.lean"])
-        self.assertEqual(tests, ["scripts/core_regression.lean"])
 
     def resolve_base(self, base, pr_head):
         cwd = Path.cwd()
@@ -220,51 +205,41 @@ class SelectTest(unittest.TestCase):
         finally:
             os.chdir(cwd)
 
-    def synthetic_merge(self, pr_changes_manifest=False):
+    def synthetic_merge(self):
         git(self.root, "branch", "topic")
-        self.change("lake-manifest.json", '{"base": true}\n')
+        self.change("TNLean/Other.lean", "import Mathlib\n-- base edit\n")
         base_parent = git(self.root, "rev-parse", "HEAD")
         git(self.root, "checkout", "-q", "topic")
         self.change("TNLean/Core.lean", "import Mathlib\n-- PR edit\n")
-        if pr_changes_manifest:
-            self.change("lean-toolchain", "leanprover/lean4:test\n")
         pr_head = git(self.root, "rev-parse", "HEAD")
         git(self.root, "checkout", "-q", "--detach", base_parent)
         git(self.root, "-c", "user.email=t@t", "-c", "user.name=t",
             "merge", "--no-ff", "-qm", "synthetic PR merge", pr_head)
         return base_parent, pr_head
 
-    def test_stale_event_base_excludes_base_only_manifest_change(self):
+    def test_stale_event_base_excludes_base_only_source_change(self):
         base_parent, pr_head = self.synthetic_merge()
         # A merge-base with the stale event base still returns the stale base.
         self.assertEqual(git(self.root, "merge-base", self.base, "HEAD"), self.base)
-        old_tests = self.select(self.base)[2]
-        self.assertIn("scripts/unrelated_regression.lean", old_tests)
+        self.assertIn("TNLean/Other.lean", self.select(self.base)[1])
         resolved = self.resolve_base(self.base, pr_head)
         self.assertEqual(resolved, base_parent)
-        early, sources, tests = self.select(resolved)
+        early, sources = self.select(resolved)
         self.assertEqual(early, ["TNLean.Core"])
         self.assertEqual(sources, ["TNLean/Core.lean"])
-        self.assertEqual(tests, ["scripts/core_regression.lean"])
-
-    def test_pr_owned_full_run_change_still_selects_every_test(self):
-        _, pr_head = self.synthetic_merge(pr_changes_manifest=True)
-        tests = self.select(self.resolve_base(self.base, pr_head))[2]
-        self.assertIn("scripts/unrelated_regression.lean", tests)
-        self.assertIn("scripts/other_regression.lean", tests)
 
     def test_push_merge_keeps_previous_head_base(self):
         self.synthetic_merge()
         self.assertEqual(self.resolve_base(self.base, None), self.base)
-        self.assertIn("scripts/unrelated_regression.lean", self.select(self.base)[2])
+        self.assertIn("TNLean/Other.lean", self.select(self.base)[1])
 
-    def test_wrong_pr_head_falls_back_to_all_tests(self):
+    def test_wrong_pr_head_selects_no_source(self):
         self.synthetic_merge()
         resolved = self.resolve_base(self.base, self.base)
         self.assertIsNone(resolved)
-        self.assertIn("scripts/unrelated_regression.lean", self.select(resolved)[2])
+        self.assertEqual(self.select(resolved), ([], []))
 
-    def test_nonmerge_pr_checkout_falls_back_to_all_tests(self):
+    def test_nonmerge_pr_checkout_has_no_verified_base(self):
         self.assertIsNone(self.resolve_base(self.base, self.base))
 
     def test_unknown_event_base_uses_verified_merge_parent(self):
@@ -279,10 +254,9 @@ class SelectTest(unittest.TestCase):
              "list", "--root", str(self.root), "--base", self.base,
              "--pr-head", pr_head], check=True, capture_output=True, text=True)
         self.assertIn("source TNLean/Core.lean", result.stdout)
-        self.assertIn("test scripts/core_regression.lean", result.stdout)
-        self.assertNotIn("scripts/unrelated_regression.lean", result.stdout)
+        self.assertNotIn("TNLean/Other.lean", result.stdout)
 
-    def test_shallow_merge_checkout_falls_back_to_all_tests(self):
+    def test_shallow_merge_checkout_has_no_verified_base(self):
         _, pr_head = self.synthetic_merge()
         git(self.root, "branch", "shallow-tip")
         with tempfile.TemporaryDirectory() as tmp:
@@ -296,28 +270,26 @@ class SelectTest(unittest.TestCase):
             finally:
                 self.root = root
 
-    def test_mixed_leaf_and_aggregator_preserve_strict_tests(self) -> None:
+    def test_mixed_leaf_and_aggregator_preserve_strict_sources(self) -> None:
         self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
         self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
-        early, sources, tests = self.select(self.base)
+        early, sources = self.select(self.base)
         self.assertEqual(early, ["TNLean.Core"])
         self.assertNotIn("TNLean.Uses", early)
         self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
-        self.assertEqual(tests, ["scripts/core_regression.lean"])
 
-    def test_aggregator_only_keeps_early_strict_and_tests(self) -> None:
+    def test_aggregator_only_keeps_early_and_strict(self) -> None:
         self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
-        early, sources, tests = self.select(self.base)
+        early, sources = self.select(self.base)
         self.assertEqual(early, ["TNLean.Uses"])
         self.assertEqual(sources, ["TNLean/Uses.lean"])
-        self.assertEqual(tests, ["scripts/core_regression.lean"])
 
     def test_multiple_substantive_sources_keep_sorted_order(self) -> None:
         self.change("TNLean/ZProof.lean", "import Mathlib\ndef z := 0\n")
         self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
         self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.ZProof\n")
         self.change("TNLean/All.lean", "import TNLean.Uses\n")
-        early, sources, _ = self.select(self.base)
+        early, sources = self.select(self.base)
         self.assertEqual(early, ["TNLean.Core", "TNLean.ZProof"])
         self.assertEqual(sources, ["TNLean/All.lean", "TNLean/Core.lean",
                                   "TNLean/Uses.lean", "TNLean/ZProof.lean"])
@@ -325,84 +297,48 @@ class SelectTest(unittest.TestCase):
     def test_new_proof_and_aggregator_keep_proof_early(self) -> None:
         self.change("TNLean/New.lean", "import TNLean.Core\ntheorem ok : True := by trivial\n")
         self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.New\n")
-        early, sources, tests = self.select(self.base)
+        early, sources = self.select(self.base)
         self.assertEqual(early, ["TNLean.New"])
         self.assertEqual(sources, ["TNLean/New.lean", "TNLean/Uses.lean"])
-        self.assertEqual(tests, ["scripts/core_regression.lean"])
-
-    def test_pin_change_with_mixed_sources_keeps_every_test(self) -> None:
-        self.change("lake-manifest.json", "{}\n")
-        self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
-        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
-        early, sources, tests = self.select(self.base)
-        self.assertEqual(early, ["TNLean.Core"])
-        self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
-        self.assertEqual(tests, ["scripts/core_regression.lean",
-                                "scripts/other_regression.lean",
-                                "scripts/unrelated_regression.lean"])
 
     def test_invalid_utf8_source_is_strict_and_early(self) -> None:
         (self.root / "TNLean/Core.lean").write_bytes(b"import Mathlib\n-- invalid \xff\n")
         self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
-        early, sources, tests = self.select(self.base)
+        early, sources = self.select(self.base)
         self.assertEqual(early, ["TNLean.Core"])
         self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
-        self.assertEqual(tests, ["scripts/core_regression.lean"])
 
     def test_archive_is_not_built_early(self) -> None:
         self.change("TNLean/Archive/Old.lean", "import TNLean.Core\n-- edit\n")
-        early, sources, tests = self.select(self.base)
-        self.assertEqual((early, sources, tests), ([], [], []))
+        self.assertEqual(self.select(self.base), ([], []))
 
-    def test_new_module_and_regression(self) -> None:
-        (self.root / "TNLean/New.lean").write_text("import TNLean.Core\n")
-        self.change("scripts/new_regression.lean", "import TNLean.New\n")
-        early, sources, tests = self.select(self.base)
-        self.assertEqual(early, ["TNLean.New"])
-        self.assertEqual(tests, ["scripts/new_regression.lean"])
+    def test_new_module_is_selected(self) -> None:
+        self.change("TNLean/New.lean", "import TNLean.Core\n")
+        self.assertEqual(self.select(self.base), (["TNLean.New"], ["TNLean/New.lean"]))
 
-    def test_changed_regression_script_is_selected(self) -> None:
-        self.change("scripts/core_regression.lean", "import TNLean.Uses\n-- edit\n")
-        early, sources, tests = self.select(self.base)
-        self.assertEqual((early, sources, tests), ([], [], ["scripts/core_regression.lean"]))
+    def test_lean_file_outside_the_library_is_not_selected(self) -> None:
+        self.change("scripts/LintStyle.lean", "import TNLean.Core\n-- edit\n")
+        self.assertEqual(self.select(self.base), ([], []))
 
-    def test_deleted_module_marks_its_importers(self) -> None:
+    def test_deleted_module_has_no_target(self) -> None:
         (self.root / "TNLean/Uses.lean").unlink()
         git(self.root, "add", "-A")
         git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "delete")
-        early, sources, tests = self.select(self.base)
-        self.assertEqual((early, sources), ([], []))
-        self.assertEqual(tests, ["scripts/core_regression.lean"])
+        self.assertEqual(self.select(self.base), ([], []))
 
-    def test_renamed_module_marks_importers_of_the_old_name(self) -> None:
+    def test_renamed_module_selects_its_destination(self) -> None:
         git(self.root, "mv", "TNLean/Uses.lean", "TNLean/Renamed.lean")
         git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "rename")
-        early, sources, tests = self.select(self.base)
+        early, sources = self.select(self.base)
         self.assertEqual(early, ["TNLean.Renamed"])
-        self.assertEqual(tests, ["scripts/core_regression.lean"])
+        self.assertEqual(sources, ["TNLean/Renamed.lean"])
 
-    def test_dependency_pin_runs_every_test(self) -> None:
+    def test_dependency_pin_alone_selects_no_source(self) -> None:
         self.change("lake-manifest.json", "{}\n")
-        early, sources, tests = self.select(self.base)
-        self.assertEqual((early, sources), ([], []))
-        self.assertEqual(len(tests), 3)
-        self.assertNotIn("scripts/LintStyle.lean", tests)
+        self.assertEqual(self.select(self.base), ([], []))
 
-    def test_pin_change_keeps_changed_sources_strict(self) -> None:
-        (self.root / "lake-manifest.json").write_text("{}\n")
-        self.change("TNLean/Core.lean", "import Mathlib\n-- edit\n")
-        early, sources, tests = self.select(self.base)
-        self.assertEqual((early, sources), (["TNLean.Core"], ["TNLean/Core.lean"]))
-        self.assertEqual(len(tests), 3)
-
-    def test_lakefile_lean_runs_every_test(self) -> None:
-        self.change("lakefile.lean", "import Lake\n")
-        _, _, tests = self.select(self.base)
-        self.assertEqual(len(tests), 3)
-
-    def test_no_base_runs_every_test(self) -> None:
-        _, _, tests = self.select(None)
-        self.assertEqual(len(tests), 3)
+    def test_no_base_selects_no_source(self) -> None:
+        self.assertEqual(self.select(None), ([], []))
 
 
 class FocusedSelectTest(unittest.TestCase):
@@ -482,11 +418,9 @@ class FocusedSelectTest(unittest.TestCase):
         finally:
             os.chdir(cwd)
 
-    def test_direct_source_does_not_replace_full_affected_test_selector(self):
+    def test_direct_source_is_selected(self):
         self.change("TNLean/Core.lean", "import Mathlib\n-- feature\n")
-        sources, tests, _ = self.focused()
-        self.assertEqual(sources, ["TNLean/Core.lean"])
-        self.assertEqual(tests, [])
+        self.assertEqual(self.focused(), ["TNLean/Core.lean"])
 
     def test_feature_selection_uses_actual_merged_dependency_contents(self):
         self.change("TNLean/Core.lean", "import Mathlib\n-- feature\n")
@@ -500,17 +434,11 @@ class FocusedSelectTest(unittest.TestCase):
         (self.root / "TNLean/Core.lean").write_text("import TNLean.Other\n-- merged\n")
         git(self.root, "add", "-A")
         git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qm", "merge")
-        sources, tests, graph = self.focused(main, feature)
-        self.assertEqual(sources, ["TNLean/Core.lean"])
-        self.assertEqual(tests, [])
-        self.assertEqual(graph["TNLean.Core"], {"TNLean.Other"})
+        self.assertEqual(self.focused(main, feature), ["TNLean/Core.lean"])
 
-    def test_direct_regression_script_is_selected_alone(self):
-        self.change("scripts/core_regression.lean", "import TNLean.Uses\n-- feature\n")
-        sources, tests, graph = self.focused()
-        self.assertEqual(sources, [])
-        self.assertEqual(tests, ["scripts/core_regression.lean"])
-        self.assertEqual(graph[ci.module_of(tests[0])], {"TNLean.Uses"})
+    def test_lean_file_outside_the_library_is_not_a_target(self):
+        self.change("scripts/LintStyle.lean", "import TNLean.Core\n-- feature\n")
+        self.assertEqual(self.focused(), [])
 
     def test_invalid_and_uncontained_heads_fail_closed(self):
         for base, head in [("not-a-commit", self.base), (self.base, "not-a-commit")]:
@@ -535,24 +463,24 @@ class FocusedSelectTest(unittest.TestCase):
     def test_deletion_has_no_target_and_rename_checks_destination(self):
         (self.root / "TNLean/Uses.lean").unlink()
         self.change("README.md", "delete source\n")
-        self.assertEqual(self.focused()[:2], ([], []))
+        self.assertEqual(self.focused(), [])
         git(self.root, "mv", "TNLean/Other.lean", "TNLean/Renamed.lean")
         self.change("README.md", "rename source\n")
-        self.assertEqual(self.focused()[:2], (["TNLean/Renamed.lean"], []))
+        self.assertEqual(self.focused(), ["TNLean/Renamed.lean"])
 
     def test_feature_deletion_restored_in_checkout_is_conservatively_checked(self):
         (self.root / "TNLean/Uses.lean").unlink()
         self.change("README.md", "delete source\n")
         (self.root / "TNLean/Uses.lean").write_text("import TNLean.Core\n")
-        self.assertEqual(self.focused()[:2], (["TNLean/Uses.lean"], []))
+        self.assertEqual(self.focused(), ["TNLean/Uses.lean"])
 
-    def test_pin_trigger_still_runs_all_tests_in_full_selector(self):
+    def test_pin_change_alone_has_no_focused_or_strict_target(self):
         self.change("lake-manifest.json", "{}\n")
-        self.assertEqual(self.focused()[:2], ([], []))
+        self.assertEqual(self.focused(), [])
         cwd = Path.cwd()
         try:
             os.chdir(self.root)
-            self.assertEqual(len(ci.select(Path("."), self.base)[2]), 3)
+            self.assertEqual(ci.select(Path("."), self.base), ([], []))
         finally:
             os.chdir(cwd)
 
@@ -571,7 +499,6 @@ class FocusedSelectTest(unittest.TestCase):
     def test_cli_deferral_preserves_post_build_coverage_and_failures(self):
         self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
         self.change("TNLean/Uses.lean", "import TNLean.Core\n-- aggregator edit\n")
-        self.change("scripts/core_regression.lean", "import TNLean.Uses\n-- test edit\n")
         head = git(self.root, "rev-parse", "HEAD")
         self.merge_checkout(head)
         cwd = Path.cwd()
@@ -580,18 +507,15 @@ class FocusedSelectTest(unittest.TestCase):
                 with mock.patch.object(ci, "focused_checks", return_value=outcome) as run:
                     self.assertEqual(ci.main(["focused", "--root", str(self.root),
                                               "--base", self.base, "--head", head]), outcome)
-                self.assertEqual(run.call_args.args[:2],
-                                 (["TNLean/Core.lean"], ["scripts/core_regression.lean"]))
-                self.assertIn("TNLean.Uses", run.call_args.args[2])
-            early, sources, tests = ci.select(Path("."), self.base)
+                self.assertEqual(run.call_args.args[0], ["TNLean/Core.lean"])
+            early, sources = ci.select(Path("."), self.base)
             self.assertEqual(early, ["TNLean.Core"])
             self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
-            self.assertEqual(tests, ["scripts/core_regression.lean"])
             with mock.patch.object(ci, "selection_base", return_value=self.base), \
                     mock.patch.object(ci, "run_batch", return_value=["TNLean/Uses.lean"]) as run:
                 self.assertEqual(ci.main(["strict", "--root", str(self.root),
                                           "--base", self.base]), 1)
-            self.assertEqual(run.call_args.args, (sources + tests, 3, 240))
+            self.assertEqual(run.call_args.args, (sources, 3, 240))
         finally:
             os.chdir(cwd)
 
@@ -611,27 +535,14 @@ class FocusedSelectTest(unittest.TestCase):
                 build.assert_not_called()
                 self.assertTrue(all(not call.args[0] for call in run.call_args_list))
                 # Existing early's all-import-only fallback remains unchanged.
-                self.assertEqual(ci.select(Path("."), self.base)[:2],
+                self.assertEqual(ci.select(Path("."), self.base),
                                  (["TNLean.Uses"], ["TNLean/Uses.lean"]) if changed else ([], []))
             finally:
                 os.chdir(cwd)
 
-    def test_unreadable_checkout_fails_focused_before_any_build(self):
-        self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
-        head = git(self.root, "rev-parse", "HEAD")
-        cwd = Path.cwd()
-        try:
-            with patch.object(Path, "read_text", side_effect=PermissionError("unreadable")), \
-                    patch.object(ci, "focused_checks") as run:
-                self.assertEqual(ci.main(["focused", "--root", str(self.root),
-                                          "--base", self.base, "--head", head]), 1)
-            run.assert_not_called()
-        finally:
-            os.chdir(cwd)
-
 
 class FocusedRunnerTest(unittest.TestCase):
-    def run_checks(self, sources, tests, graph, build_codes=None, strict_failures=None):
+    def run_checks(self, sources, build_codes=None, strict_failures=None):
         build_codes = build_codes or {}
         strict_failures = strict_failures or set()
 
@@ -642,17 +553,17 @@ class FocusedRunnerTest(unittest.TestCase):
         with mock.patch.object(ci, "early_build", side_effect=lambda ms, log, budget:
                                build_codes.get(ms[0], 0)) as build, \
                 mock.patch.object(ci, "run_batch", side_effect=strict) as runner:
-            code = ci.focused_checks(sources, tests, graph, 3, 240, None)
+            code = ci.focused_checks(sources, 3, 240, None)
         self.assertTrue(all(call.args[2] == 0 for call in build.call_args_list))
         return code, build, runner
 
-    def run_budgeted(self, sources, tests, graph, budget, build, strict):
+    def run_budgeted(self, sources, budget, build, strict):
         """Run with a fake clock that `build` and `strict` advance."""
         self.clock = 0.0
         with mock.patch.object(ci.time, "monotonic", side_effect=lambda: self.clock), \
                 mock.patch.object(ci, "build_until", side_effect=build) as builder, \
                 mock.patch.object(ci, "run_batch", side_effect=strict) as runner:
-            code = ci.focused_checks(sources, tests, graph, 3, 240, None, budget)
+            code = ci.focused_checks(sources, 3, 240, None, budget)
         return code, builder, runner
 
     def test_budget_spent_in_preparation_defers_every_target(self):
@@ -661,9 +572,7 @@ class FocusedRunnerTest(unittest.TestCase):
             return None  # stopped at its budget, even if the clock lags behind
 
         code, builder, runner = self.run_budgeted(
-            ["TNLean/A.lean", "TNLean/B.lean"], ["scripts/a_regression.lean"],
-            {"scripts.a_regression": {"TNLean.A"}, "TNLean.A": set()}, 100,
-            build, lambda paths, jobs, timeout: [])
+            ["TNLean/A.lean", "TNLean/B.lean"], 100, build, lambda paths, jobs, timeout: [])
         self.assertEqual(code, 0)
         self.assertEqual(builder.call_count, 1)
         runner.assert_not_called()
@@ -678,7 +587,7 @@ class FocusedRunnerTest(unittest.TestCase):
             return []
 
         sources = [f"TNLean/M{i}.lean" for i in range(7)]
-        code, _, runner = self.run_budgeted(sources, [], {}, 60, build, strict)
+        code, _, runner = self.run_budgeted(sources, 60, build, strict)
         self.assertEqual(code, 0)
         self.assertEqual([c.args[0] for c in runner.call_args_list], [sources[:3]])
 
@@ -688,7 +597,7 @@ class FocusedRunnerTest(unittest.TestCase):
             return 3 if "TNLean.Bad" in modules else 0
 
         code, builder, runner = self.run_budgeted(
-            ["TNLean/Bad.lean", "TNLean/Good.lean"], [], {}, 60, build,
+            ["TNLean/Bad.lean", "TNLean/Good.lean"], 60, build,
             lambda paths, jobs, timeout: [])
         self.assertEqual(code, 1)
         # Joint build, then `Bad` alone; the budget ends before `Good`.
@@ -705,7 +614,7 @@ class FocusedRunnerTest(unittest.TestCase):
             return 3 if modules == ["TNLean.Zbad"] else 0
 
         code, builder, runner = self.run_budgeted(
-            ["TNLean/Agood.lean", "TNLean/Zbad.lean"], [], {}, 60, build,
+            ["TNLean/Agood.lean", "TNLean/Zbad.lean"], 60, build,
             lambda paths, jobs, timeout: [])
         self.assertEqual(code, 1)
         # The fallback prepares `Agood` and the budget ends before `Zbad`.
@@ -714,14 +623,14 @@ class FocusedRunnerTest(unittest.TestCase):
 
     def test_strict_failure_within_the_budget_remains_nonzero(self):
         code, _, _ = self.run_budgeted(
-            ["TNLean/A.lean", "TNLean/B.lean"], [], {}, 600,
+            ["TNLean/A.lean", "TNLean/B.lean"], 600,
             lambda modules, log, budget: 0,
             lambda paths, jobs, timeout: ["TNLean/B.lean"])
         self.assertEqual(code, 1)
 
     def test_build_failure_skips_only_failed_source_and_remains_nonzero(self):
         code, build, runner = self.run_checks(
-            ["TNLean/Bad.lean", "TNLean/Good.lean"], [], {}, {"TNLean.Bad": 3})
+            ["TNLean/Bad.lean", "TNLean/Good.lean"], {"TNLean.Bad": 3})
         self.assertEqual(code, 1)
         self.assertEqual([c.args[0] for c in build.call_args_list],
                          [["TNLean.Bad", "TNLean.Good"], ["TNLean.Bad"], ["TNLean.Good"]])
@@ -730,80 +639,23 @@ class FocusedRunnerTest(unittest.TestCase):
 
     def test_sources_are_prepared_by_one_build_and_checked_together(self):
         sources = ["TNLean/A.lean", "TNLean/B.lean", "TNLean/C.lean"]
-        code, build, runner = self.run_checks(sources, [], {})
+        code, build, runner = self.run_checks(sources)
         self.assertEqual(code, 0)
         self.assertEqual([c.args[0] for c in build.call_args_list],
                          [["TNLean.A", "TNLean.B", "TNLean.C"]])
-        self.assertEqual([c.args[0] for c in runner.call_args_list], [sources, []])
-
-    def test_prepared_sources_are_not_rebuilt_for_tests(self):
-        sources = ["TNLean/Core.lean", "TNLean/Other.lean"]
-        test = "scripts/core_regression.lean"
-        graph = {"scripts.core_regression": {"TNLean.Core"},
-                 "TNLean.Core": set(), "TNLean.Other": set()}
-        code, build, runner = self.run_checks(sources, [test], graph)
-        self.assertEqual(code, 0)
-        self.assertEqual([c.args[0] for c in build.call_args_list],
-                         [["TNLean.Core", "TNLean.Other"]])
-        self.assertEqual([c.args[0] for c in runner.call_args_list], [sources, [test]])
+        self.assertEqual([c.args[0] for c in runner.call_args_list], [sources])
 
     def test_strict_and_timeout_failures_remain_nonzero(self):
         source = "TNLean/Good.lean"
-        self.assertEqual(self.run_checks([source], [], {}, strict_failures={source})[0], 1)
-        self.assertEqual(self.run_checks([source], [], {}, {"TNLean.Good": 124})[0], 1)
-
-    def test_regression_imports_are_prepared_before_strict_check(self):
-        tests = ["scripts/core_regression.lean", "scripts/other_regression.lean"]
-        graph = {"scripts.core_regression": {"TNLean.Core"},
-                 "scripts.other_regression": {"TNLean.Core", "TNLean.Other"},
-                 "TNLean.Core": set(), "TNLean.Other": set()}
-        code, build, runner = self.run_checks([], tests, graph)
-        self.assertEqual(code, 0)
-        self.assertEqual([c.args[0] for c in build.call_args_list],
-                         [["TNLean.Core"], ["TNLean.Other"]])
-        self.assertEqual([c.args[0] for c in runner.call_args_list], [tests])
-
-    def test_failed_production_dependency_blocks_test_without_stale_imports(self):
-        test = "scripts/uses_regression.lean"
-        graph = {"scripts.uses_regression": {"TNLean.Uses"},
-                 "TNLean.Uses": {"TNLean.Core"}, "TNLean.Core": set()}
-        code, _, runner = self.run_checks(["TNLean/Core.lean"], [test], graph,
-                                         {"TNLean.Core": 1})
-        self.assertEqual(code, 1)
-        self.assertFalse(any(test in c.args[0] for c in runner.call_args_list))
-
-    def test_test_preparation_failure_preserves_independent_diagnostics(self):
-        bad, good = "scripts/bad_regression.lean", "scripts/good_regression.lean"
-        graph = {"scripts.bad_regression": {"TNLean.Bad"},
-                 "scripts.good_regression": {"TNLean.Good"},
-                 "TNLean.Bad": set(), "TNLean.Good": set()}
-        code, build, runner = self.run_checks([], [bad, good], graph, {"TNLean.Bad": 1})
-        self.assertEqual(code, 1)
-        self.assertEqual([c.args[0] for c in build.call_args_list],
-                         [["TNLean.Bad"], ["TNLean.Good"]])
-        self.assertEqual([p for c in runner.call_args_list for p in c.args[0]], [good])
-
-    def test_missing_test_dependency_is_blocked_not_ignored(self):
-        test = "scripts/uses_regression.lean"
-        code, build, runner = self.run_checks([], [test],
-                                             {"scripts.uses_regression": {"TNLean.Deleted"}})
-        self.assertEqual(code, 1)
-        build.assert_not_called()
-        self.assertFalse(any(test in c.args[0] for c in runner.call_args_list))
-
-    def test_required_root_import_is_not_silently_filtered(self):
-        test = "scripts/uses_regression.lean"
-        code, build, _ = self.run_checks([], [test],
-                                         {"scripts.uses_regression": {"TNLean"}, "TNLean": set()})
-        self.assertEqual(code, 0)
-        self.assertEqual(build.call_args.args[0], ["TNLean"])
+        self.assertEqual(self.run_checks([source], strict_failures={source})[0], 1)
+        self.assertEqual(self.run_checks([source], {"TNLean.Good": 124})[0], 1)
 
 
 class FocusedWorkflowTest(unittest.TestCase):
     def setUp(self):
         workflow = Path(__file__).resolve().parents[1] / ".github/workflows/pr-ci.yml"
         block = workflow.read_text().split(
-            "      - name: Check directly changed Lean sources and tests strictly\n", 1)[1]
+            "      - name: Check directly changed Lean sources strictly\n", 1)[1]
         block = block.split("      # Build the changed production modules", 1)[0]
         self.assertIn("if: github.event_name == 'pull_request'", block)
         self.assertIn("BASE_SHA: ${{ github.event.pull_request.base.sha }}", block)
@@ -858,10 +710,10 @@ class FocusedWorkflowTest(unittest.TestCase):
         workflow = Path(__file__).resolve().parents[1] / ".github/workflows/pr-ci.yml"
         steps = yaml.safe_load(workflow.read_text())["jobs"]["build"]["steps"]
         names = [step["name"] for step in steps if "name" in step]
-        ordered = ["Check directly changed Lean sources and tests strictly",
+        ordered = ["Check directly changed Lean sources strictly",
                    "Build changed Lean modules early",
                    "Build Lean project and capture timings",
-                   "Check changed Lean files and affected tests strictly"]
+                   "Check changed Lean files strictly"]
         self.assertEqual(sorted(names.index(n) for n in ordered),
                          [names.index(n) for n in ordered])
         full, strict = [next(s for s in steps if s.get("name") == n) for n in ordered[2:]]
@@ -944,7 +796,7 @@ class EarlyBuildTest(unittest.TestCase):
         out = io.StringIO()
         with redirect_stdout(out), mock.patch.object(ci, "run_batch") as runner:
             code = ci.focused_checks(
-                ["TNLean/A.lean", "TNLean/B.lean"], [], {}, 3, 240, self.log, 2)
+                ["TNLean/A.lean", "TNLean/B.lean"], 3, 240, self.log, 2)
         self.assertEqual(code, 0)
         runner.assert_not_called()
         self.assertIn("::warning::Focused checks stopped at their 2s budget", out.getvalue())

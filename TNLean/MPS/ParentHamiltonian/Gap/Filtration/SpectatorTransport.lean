@@ -418,27 +418,6 @@ theorem ker_hamiltonian_prefix_parentChainInteraction_self_eq_groundSpaceES
   rw [hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction,
     ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀n]
 
-/-- Conjugating an operator by a linear isometry equivalence conjugates its
-kernel projection to the kernel projection of the conjugated operator. -/
-theorem ker_starProjection_conj_linearIsometryEquiv
-    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
-    [FiniteDimensional ℂ E] [FiniteDimensional ℂ F]
-    (U : E ≃ₗᵢ[ℂ] F) (G : E →ₗ[ℂ] E) (H : F →ₗ[ℂ] F)
-    (hconj : U.toLinearEquiv.toLinearMap.comp
-      (G.comp U.symm.toLinearEquiv.toLinearMap) = H) :
-    U.toLinearEquiv.toLinearMap.comp
-        ((LinearMap.ker G).starProjection.toLinearMap.comp
-          U.symm.toLinearEquiv.toLinearMap) =
-      (LinearMap.ker H).starProjection.toLinearMap := by
-  have hker : LinearMap.ker H = (LinearMap.ker G).map (U.toLinearEquiv : E →ₗ[ℂ] F) :=
-    U.ker_eq_map_of_conj G H hconj
-  apply LinearMap.ext
-  intro x
-  change U ((LinearMap.ker G).starProjection (U.symm x)) =
-    (LinearMap.ker H).starProjection x
-  simp only [hker, Submodule.starProjection_map_apply]
-
 /-- If the right-spectator coordinate isometry conjugates an operator to the
 fiberwise extension of an active-volume operator, it conjugates the kernel
 projection of the first to the fiberwise extension of the kernel projection of
@@ -455,7 +434,7 @@ theorem ker_starProjection_conj_of_rightFiberwiseMap {n r : ℕ}
           (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
         (LinearMap.ker H).starProjection).toLinearMap := by
-  have hproj := ker_starProjection_conj_linearIsometryEquiv _ G _ hconj
+  have hproj := LinearIsometryEquiv.conj_starProjection_ker_of_conj _ G _ hconj
   rw [ContinuousLinearMap.ker_starProjection_rightFiberwiseMap] at hproj
   exact hproj
 

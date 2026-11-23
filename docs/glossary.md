@@ -990,7 +990,7 @@ out.
 
 - **Declaration:**
   `TNLean.PEPS.IsRegionParentInteraction (A : Tensor Γ d) (R : Finset V) (h : Matrix _ _ ℂ) : Prop`.
-- **Defined in:** `TNLean/PEPS/ParentHamiltonian/Region/RegionParentHamiltonian.lean`.
+- **Defined in:** `TNLean/PEPS/ParentHamiltonian/Region/RegionParentInteraction.lean`.
 - **Meaning:** the operator `h` on the physical space of the region `R` is
   positive semidefinite and its kernel is exactly the regional PEPS space
   `TNLean.PEPS.regionGroundSpace A R`, spanned by the contractions of `R` with
@@ -3346,7 +3346,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### Equality of selected remaining operations
 
 - **Declaration:** `TNLean.Lattice.PartyCircuit.Word.IsSelectedLocalPartComparison`.
-- **Defined in:** `TNLean/Lattice/Compression/AllPartySingletonComparison.lean`.
+- **Defined in:** `TNLean/Network/IncidentFactor/AllPartySingletonComparison.lean`.
 - **Meaning:** For a Boolean owner selector and two chronological words, the
   predicate is the heterogeneous equality of their remaining evaluations after
   restriction to the selected owners. Each word's local part keeps its actual

@@ -44,7 +44,7 @@ theorem IsMPU.ketLeftMul {M : MPOTensor d D} (hM : IsMPU M)
   rw [mpo_ketLeftMul]
   apply (Matrix.unitaryGroup (Fin N → Fin d) ℂ).mul_mem
   · rw [Matrix.mem_unitaryGroup_iff']
-    rw [Matrix.star_eq_conjTranspose, piKronecker_const_isometry P]
+    rw [Matrix.star_eq_conjTranspose, Matrix.piKronecker_const_isometry P]
     rw [Matrix.mem_unitaryGroup_iff'] at hP
     simpa only [Matrix.star_eq_conjTranspose] using hP
   · exact hM.mpo_mem_unitaryGroup hN
@@ -75,7 +75,7 @@ private noncomputable def rotateMPUCanonicalFormData
       coisometric := data.coisometric
       total_dim_eq := data.total_dim_eq
       blocks_canonical := fun k =>
-        { irreducible := isIrreducibleTensor_rotatePhysical _ _
+        { irreducible := isIrreducibleFamily_rotatePhysical _ _
             (Matrix.mem_unitaryGroup_iff.mp hP) (data.blocks_canonical k).irreducible
           spectral_radius_one := by
             rw [transferMap_rotatePhysical _ _ (Matrix.mem_unitaryGroup_iff.mp hP)]

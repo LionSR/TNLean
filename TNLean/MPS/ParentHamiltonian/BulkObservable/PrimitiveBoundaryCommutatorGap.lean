@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BulkObservableAlgebra
-import TNLean.MPS.ParentHamiltonian.Gap.Spectator.GroundExpectationGap
+import QICLean.ManyBody.Hamiltonian.Martingale.GroundExpectationGap
 
 /-!
 # Commutator gap reduction for a primitive boundary state

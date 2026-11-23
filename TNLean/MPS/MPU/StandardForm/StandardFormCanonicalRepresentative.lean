@@ -62,7 +62,7 @@ theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] (A : MPSTensor d D)
   have hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => c⁻¹ • A i) ρ = ρ := by
     rw [transferMap_smul, hcc, hEig, smul_smul, inv_mul_cancel₀ hr_ne, one_smul]
   have hIrrScaled : Kraus.IsIrreducibleFamily (fun i => c⁻¹ • A i) :=
-    isIrreducibleTensor_smul (inv_ne_zero hc) A hIrr
+    isIrreducibleFamily_smul (inv_ne_zero hc) A hIrr
   have hblock : IsMPUCanonicalBlock (fun i => c⁻¹ • A i) := by
     refine ⟨hIrrScaled, ?_⟩
     simpa using

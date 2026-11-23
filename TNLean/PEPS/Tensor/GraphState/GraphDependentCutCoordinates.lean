@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.DependentDiagonalContraction
-import TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian
+import TNLean.Network.DependentBond.DependentDiagonalContraction
+import TNLean.PEPS.Tensor.Region.RegionGroundSpace
 
 /-!
 # Actual graph tensors in dependent endpoint coordinates

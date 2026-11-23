@@ -102,7 +102,7 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
   have hSunit : IsUnit (CFC.sqrt ρ) :=
     (Matrix.isUnit_iff_isUnit_det _).mpr (Matrix.PosDef.isUnit_det_cfc_sqrt hρ)
   have hIrrK : Kraus.IsIrreducibleFamily (Kraus.spectralUnitalGauge B rad ρ) := by
-    have h := isIrreducibleTensor_smul_conj B hIrr hSunit hcne
+    have h := isIrreducibleFamily_smul_conj B hIrr hSunit hcne
     exact h
   have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D)
       (Kraus.spectralUnitalGauge B rad ρ)) :=

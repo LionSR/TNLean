@@ -341,43 +341,6 @@ theorem mixedEndpointActiveNormalizedHamiltonian_conj_coreSpectators
   intro p _
   rfl
 
-private theorem norm_gap_iff_of_isometric_conj
-    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    [NormedAddCommGroup F] [InnerProductSpace ℂ F] [FiniteDimensional ℂ F]
-    (U : E ≃ₗᵢ[ℂ] F) (P : E →ₗ[ℂ] E) (Q : F →ₗ[ℂ] F)
-    (hPQ : U.toLinearEquiv.conj P = Q) (δ : ℝ) :
-    (∀ x ∈ (LinearMap.ker P)ᗮ, δ * ‖x‖ ≤ ‖P x‖) ↔
-      ∀ y ∈ (LinearMap.ker Q)ᗮ, δ * ‖y‖ ≤ ‖Q y‖ := by
-  have hintertwine (x : E) : U (P x) = Q (U x) := by
-    have h := LinearMap.congr_fun hPQ (U x)
-    change U (P (U.symm (U x))) = Q (U x) at h
-    simpa only [U.symm_apply_apply] using h
-  have hker (x : E) : x ∈ LinearMap.ker P ↔ U x ∈ LinearMap.ker Q := by
-    change P x = 0 ↔ Q (U x) = 0
-    rw [← hintertwine]
-    exact U.map_eq_zero_iff.symm
-  have horth (x : E) : x ∈ (LinearMap.ker P)ᗮ ↔ U x ∈ (LinearMap.ker Q)ᗮ := by
-    constructor
-    · intro hx
-      apply ((LinearMap.ker Q).mem_orthogonal (U x)).mpr
-      intro y hy
-      obtain ⟨z, rfl⟩ := U.surjective y
-      rw [U.inner_map_map]
-      exact ((LinearMap.ker P).mem_orthogonal x).mp hx z ((hker z).mpr hy)
-    · intro hx
-      apply ((LinearMap.ker P).mem_orthogonal x).mpr
-      intro z hz
-      simpa only [U.inner_map_map] using
-        ((LinearMap.ker Q).mem_orthogonal (U x)).mp hx (U z) ((hker z).mp hz)
-  constructor
-  · intro hGap y hy
-    obtain ⟨x, rfl⟩ := U.surjective y
-    rw [← hintertwine, U.norm_map, U.norm_map]
-    exact hGap x ((horth x).mpr hy)
-  · intro hGap x hx
-    have h := hGap (U x) ((horth x).mp hx)
-    simpa only [← hintertwine x, U.norm_map] using h
-
 /-- A normalized mixed chain and its common core have exactly the same
 nonnegative norm-gap bounds when the exterior spectator space is nonempty.
 The hypothesis on dimension only supplies that nonempty spectator.
@@ -388,7 +351,7 @@ theorem mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_core
       δ * ‖v‖ ≤ ‖mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N v‖) ↔
       ∀ v ∈ (LinearMap.ker (endpointCoreHamiltonian A₀ N))ᗮ,
         δ * ‖v‖ ≤ ‖endpointCoreHamiltonian A₀ N v‖ := by
-  have hconj := norm_gap_iff_of_isometric_conj
+  have hconj := LinearIsometryEquiv.norm_gap_iff_of_conj
     (endpointCoreSpectatorIsometry (Fin D₀ ⊕ Fin D₁) D₀ (N + 1))
     (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N)
     (rightFiberwiseMap (S := (Fin D₀ ⊕ Fin D₁) × (Fin D₀ ⊕ Fin D₁))

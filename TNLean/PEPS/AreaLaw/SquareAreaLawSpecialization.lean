@@ -8,7 +8,7 @@ import QICLean.ManyBody.Sites.Relabel
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
-import TNLean.PEPS.AreaLaw.Interactions.RectangularHamiltonian
+import TNLean.PEPS.AreaLaw.Interactions.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
 import TNLean.PEPS.AreaLaw.Templates.AmbientBoundary

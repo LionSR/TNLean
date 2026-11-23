@@ -41,7 +41,7 @@ geometry of the sites; the statements for encoded frames are in
   `B = 1_E ⊗ Kᴴ K` (`sheetPlace`).
 * `Sheet.Frame.exists_birthWord`, `Sheet.Frame.exists_deathChain` : the monomials
   of a birth and of a death on the grouped registers of `T` and `U`.
-* `Sheet.sheetBufferCorrection_mul_sheetSwapOp_eq` : the corrections `D_U F_A` act on the
+* `Sheet.sheetBufferCorrection_mul_pairSwapOp_eq` : the corrections `D_U F_A` act on the
   two copies of `U` alone.
 
 ## References
@@ -515,7 +515,7 @@ theorem norm_correctionMatrix_le_one (σ : SplittingData q T E) (A : Finset ι) 
 set_option synthInstance.maxSize 512 in
 /-- In the coordinates `threeSplit T E` of both sheets, swapping the sheets at `A ⊆ U` exchanges
 the `A`-parts of the two copies of `U`. -/
-theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)ᶜ) :
+theorem reindex_pairSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)ᶜ) :
     reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
         (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp A) =
       (((1 : Matrix (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q)))
@@ -568,7 +568,7 @@ set_option synthInstance.maxSize 512 in
 `T × E` come first.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 503–515. -/
-theorem sheetBufferCorrection_mul_sheetSwapOp_eq (σ : SplittingData q T E) {A : Finset ι}
+theorem sheetBufferCorrection_mul_pairSwapOp_eq (σ : SplittingData q T E) {A : Finset ι}
     (hA : A ⊆ (T ∪ E)ᶜ) :
     sheetBufferCorrection h σ *
         reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
@@ -578,7 +578,7 @@ theorem sheetBufferCorrection_mul_sheetSwapOp_eq (σ : SplittingData q T E) {A :
         correctionMatrix σ A).submatrix
           (Equiv.prodProdProdComm _ _ _ _) (Equiv.prodProdProdComm _ _ _ _)).submatrix
         (threeSplit₂ h) (threeSplit₂ h) := by
-  rw [sheetSwapOp_eq_submatrix_of_subset h hA, sheetBufferCorrection, bufferCorrection,
+  rw [reindex_pairSwapOp_eq_submatrix_of_subset h hA, sheetBufferCorrection, bufferCorrection,
     submatrix_mul_equiv, submatrix_mul_equiv, ← mul_kronecker_mul, Matrix.one_mul]
   rfl
 

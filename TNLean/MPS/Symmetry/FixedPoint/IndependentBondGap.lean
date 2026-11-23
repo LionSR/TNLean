@@ -54,9 +54,9 @@ theorem isGapped_bondProductParentHamiltonian {q N : ℕ} (η : Fin q → ℂ)
   · rw [ManyBody.groundSpace_zero, ← hlin, bondProductParentHamiltonian_groundSpace_eq_span η hη hN,
       Ne, Submodule.span_singleton_eq_bot]
     exact bondProductState_ne_zero η hη N
-  · rw [Complex.ofReal_one]
-    refine forall_hasEigenvalue_of_quadratic_gap _ hpos fun v ↦ ?_
-    rw [← hlin]
+  · refine FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional one_pos
+      (Matrix.isPositive_toEuclideanLin_iff.mpr hpos) fun v ↦ ?_
+    rw [one_mul, ← hlin]
     exact bondProductParentHamiltonian_gap_one η hη hN v
 
 /-- Along the normalized bond interpolation, the local penalty is a continuous

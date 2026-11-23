@@ -164,7 +164,7 @@ theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
   rw [natCast_mul_sqrt_inv_mul_sqrt_inv hx, one_smul]
 
 /-- A nonempty normalized diagonal lift preserves tensor irreducibility. -/
-theorem isIrreducibleTensor_normalizedDiagonalLift
+theorem isIrreducibleFamily_normalizedDiagonalLift
     (A : MPSTensor (d * d) D) (x : ℕ) (hx : 0 < x)
     (hA : Kraus.IsIrreducibleFamily A) :
     Kraus.IsIrreducibleFamily (normalizedDiagonalLift A x) := by
@@ -187,7 +187,7 @@ theorem isNormalTensor_normalizedDiagonalLift
     {A : MPSTensor (d * d) D} (hA : MPSTensor.IsNormalTensor A)
     (x : ℕ) (hx : 0 < x) :
     MPSTensor.IsNormalTensor (normalizedDiagonalLift A x) := by
-  refine ⟨isIrreducibleTensor_normalizedDiagonalLift A x hx hA.no_invariant_proj, ?_, ?_⟩
+  refine ⟨isIrreducibleFamily_normalizedDiagonalLift A x hx hA.no_invariant_proj, ?_, ?_⟩
   · rw [transferMap_normalizedDiagonalLift A x hx]
     exact hA.spectral_radius_one
   · rw [transferMap_normalizedDiagonalLift A x hx]

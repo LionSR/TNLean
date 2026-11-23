@@ -639,7 +639,7 @@ theorem isPrimitive_transferMap_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d�
   rfl
 
 /-- Casting the physical dimension preserves tensor irreducibility. -/
-theorem isIrreducibleTensor_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
+theorem isIrreducibleFamily_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
     (A : MPSTensor d₁ D) :
     Kraus.IsIrreducibleFamily (cast (congr_arg (fun d' => MPSTensor d' D) h) A) ↔
       Kraus.IsIrreducibleFamily A := by
@@ -778,7 +778,7 @@ theorem exists_common_blocking_all_primitive
 
 /-- Common blocking from TP + irreducible hypotheses (the standard reduction entry point).
 
-This combines `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor` (per-block
+This combines `exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily` (per-block
 periodicity removal) with `exists_common_blocking_all_primitive` (LCM common period). -/
 theorem exists_common_blocking_all_primitive_of_TP_irr
     {r : ℕ} {dim : Fin r → ℕ}
@@ -796,7 +796,7 @@ theorem exists_common_blocking_all_primitive_of_TP_irr
           (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
     intro k
     have : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
-    exact exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
+    exact exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily
       (blocks k) (hTP k) (hIrr k) (hDim k)
   exact exists_common_blocking_all_primitive blocks hDim hPer
 

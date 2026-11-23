@@ -105,6 +105,7 @@ TNLean is organized into acyclic layers enforced by `scripts/check_import_layers
 
 | Path | Contents |
 | --- | --- |
+| `TNLean/Network` | Contractions of tensors whose links carry their own virtual alphabets, on directed multigraphs and on finite sets of parties, and the sampled distributed contraction; imported by both MPS and PEPS. |
 | `TNLean/MPS/Tensor`, `.../Transfer`, `.../Operator` | `MPSTensor`, words, `mpv`, gauges, blocking, transfer maps, Wielandt bounds, overlaps, correlations, and `MPOTensor` operators. |
 | `TNLean/MPS/CanonicalForm`, `.../FundamentalTheorem` | Canonical forms, bases of normal tensors (BNT), single/multi-block, periodic, compression, and fixed-length fundamental theorems. |
 | `TNLean/MPS/ParentHamiltonian` | Parent interactions, ground spaces, boundary maps, martingale and long-range spectral gaps, deformations, and uncle Hamiltonians. |

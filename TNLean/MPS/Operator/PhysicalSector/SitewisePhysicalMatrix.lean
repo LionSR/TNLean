@@ -9,6 +9,7 @@ import QICLean.Algebra.Word.OrderedProduct
 import TNLean.MPS.Operator.Periodic.FirstSite
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorCoordinateTransport
 import QICLean.Algebra.Kronecker.PiKronecker
+import QICLean.Algebra.Kronecker.PiKroneckerProducts
 
 /-!
 # Sitewise physical matrices on periodic MPOs
@@ -87,32 +88,6 @@ theorem mpo_ketLeftMul (M : MPOTensor d D)
   simp only [Matrix.mul_apply, mpo_apply, mpoMatrixEntry, Matrix.piKronecker_apply]
   simpa only [Matrix.one_mul] using
     trace_mul_evalWord_ketLeftMul_ofFn M P (1 : Matrix (Fin D) (Fin D) ℂ) σ τ
-
-/-- The sitewise tensor power of a one-site isometry is an isometry. -/
-theorem piKronecker_const_isometry
-    (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ) :
-    (Matrix.piKronecker fun _ : Fin N ↦ V)ᴴ * (Matrix.piKronecker fun _ : Fin N ↦ V) = 1 := by
-  rw [Matrix.conjTranspose_piKronecker, Matrix.piKronecker_mul, hV]
-  exact Matrix.piKronecker_one
-
-/-- The product of a sitewise tensor power with its conjugate transpose is the
-sitewise tensor power of the corresponding one-site product. -/
-theorem piKronecker_const_mul_conjTranspose
-    (V : Matrix (Fin d) (Fin e) ℂ) (N : ℕ) :
-    (Matrix.piKronecker fun _ : Fin N ↦ V) * (Matrix.piKronecker fun _ : Fin N ↦ V)ᴴ =
-      (Matrix.piKronecker fun _ : Fin N ↦ (V * Vᴴ)) := by
-  rw [Matrix.conjTranspose_piKronecker]
-  exact Matrix.piKronecker_mul (fun _ : Fin N ↦ V) (fun _ : Fin N ↦ Vᴴ)
-
-/-- On two sites, the configuration-indexed tensor power is the Kronecker square. -/
-theorem reindex_piKronecker_two
-    (V : Matrix (Fin e) (Fin d) ℂ) :
-    Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
-        (_root_.finTwoArrowEquiv (Fin d))
-        (Matrix.piKronecker fun _ : Fin 2 ↦ V) = V ⊗ₖ V := by
-  ext ⟨i, j⟩ ⟨a, b⟩
-  simp [Matrix.reindex_apply, Matrix.piKronecker_apply,
-    Matrix.kroneckerMap_apply, _root_.finTwoArrowEquiv]
 
 /-- Reindex a pair of bra and ket configurations as a configuration of pairs. -/
 def braKetFunctionsEquiv {i a b : Type*} :
@@ -232,18 +207,8 @@ theorem isMPDO_of_changePhysicalBasis_isMPDO_of_isometry
     IsMPDO M := by
   intro N hN
   apply Matrix.posSemidef_of_singleKraus_isometry
-    (Matrix.piKronecker fun _ : Fin N ↦ V) (piKronecker_const_isometry V hV N)
+    (Matrix.piKronecker fun _ : Fin N ↦ V) (Matrix.piKronecker_const_isometry V hV N)
   rw [singleKrausMap_piKronecker_mpo]
   exact hM N hN
-
-/-- The sitewise tensor power of a Hermitian one-site matrix is Hermitian. -/
-theorem isHermitian_piKronecker_const
-    {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian) (N : ℕ) :
-    (Matrix.piKronecker fun _ : Fin N ↦ P).IsHermitian := by
-  ext s t
-  simp only [Matrix.conjTranspose_apply, Matrix.piKronecker_apply, star_prod]
-  apply Finset.prod_congr rfl
-  intro n _
-  exact hP.apply (s n) (t n)
 
 end MPOTensor

@@ -91,10 +91,12 @@ theorem hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_project
         (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) μ →
       μ = 0 ∨ (1 : ℂ) ≤ μ :=
   haveI : NeZero N := ⟨by omega⟩
-  forall_hasEigenvalue_of_quadratic_gap _
-    (Interaction.posSemidef_hamiltonian fun _ ↦
-      Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _))
-    (hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection A hA hN hcomm)
+  by simpa only [Complex.ofReal_one] using
+    FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional one_pos
+      (Matrix.isPositive_toEuclideanLin_iff.mpr (Interaction.posSemidef_hamiltonian fun _ ↦
+        Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)))
+      (by simpa only [one_mul] using
+        hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection A hA hN hcomm)
 
 private theorem sectorBondBlock_isStarProjection {p q : ℕ} {ι : Type*}
     [Fintype ι] (A : Matrix ι ι ℂ) (hA : IsStarProjection A) :
@@ -214,7 +216,7 @@ theorem placeAlong_ringWindow_isometry_intertwiner {d m N : ℕ}
     (isHermitian_placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i) hLocal).eq] at hAdj
   have hMul := congrArg (fun M => M * (Matrix.piKronecker fun _ : Fin N ↦ E)) hAdj
   simpa only [singleKrausMap_apply, Matrix.mul_assoc,
-    MPOTensor.piKronecker_const_isometry E hE N,
+    Matrix.piKronecker_const_isometry E hE N,
     Matrix.mul_one] using hMul.symm
 
 /-- Extend a two-site interaction through a physical isometry and give
@@ -291,7 +293,7 @@ theorem isometricInteractionExtension_zero_mode {d m N : ℕ}
   refine ⟨?_, h⟩
   exact fun h0 => hψ (by
     simpa only [Matrix.mulVec_mulVec,
-      MPOTensor.piKronecker_const_isometry E hE N, Matrix.one_mulVec,
+      Matrix.piKronecker_const_isometry E hE N, Matrix.one_mulVec,
       Matrix.mulVec_zero] using
       congrArg (fun v => (Matrix.piKronecker fun _ : Fin N ↦ E)ᴴ.mulVec v) h0)
 

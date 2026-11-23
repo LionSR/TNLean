@@ -277,6 +277,10 @@ class ImportLayerPolicyTests(unittest.TestCase):
         self.assertEqual(layers.layer_of("TNLean.Circuit.LocalCircuit"), "circuit")
         self.assertEqual(layers.layer_of("TNLean.Lattice.PartyCircuit.PartyWord"), "party")
         self.assertEqual(layers.layer_of("TNLean.Lattice.StateSpace"), "hamiltonian")
+        self.assertEqual(layers.layer_of("TNLean.Network.Party.PartyNetwork"), "Network")
+        self.assertIn("Network", layers.ALLOWED["PEPS/Graph"])
+        self.assertIn("Network", layers.ALLOWED["MPS/Tensor"])
+        self.assertNotIn("Network", layers.ALLOWED["party"])
         self.assertIsNone(layers.layer_of("TNLean.MPS.Defs"))
 
     def test_upward_and_sideways_imports_are_violations(self) -> None:

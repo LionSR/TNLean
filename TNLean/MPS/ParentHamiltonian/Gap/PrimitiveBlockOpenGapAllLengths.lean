@@ -224,7 +224,7 @@ theorem exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_word
       (posSemidef_hamiltonian_parentChainInteraction T R N))
     (div_pos (mul_pos hκ hγ) (Nat.cast_pos.mpr (Nat.succ_pos (2 * p - R))))
     (fun N hN ↦ toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length T _
-      (posSemidef_toMatrix'_parentInteraction T R) (by omega) hκ hγ hLocal
+      (posSemidef_toMatrix'_parentInteraction T R) (by omega) hκ hLocal
       (hKernel R N hR (by omega)) (hKernel (2 * p) N (by omega) hN) (hLong N))
   have hLocalGS : groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) R = groundSpace T R :=
     groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq μ μ A B hμ hμ (fun j ↦ hGS j R)

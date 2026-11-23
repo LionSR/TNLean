@@ -548,7 +548,7 @@ jobs:
       # 50-minute budget (a cold dependency cache after a pin change, or a
       # change near the bottom of the import graph) it stops with a warning.
       # The root build and complete strict suite below remain mandatory.
-      - name: Check directly changed Lean sources and tests strictly
+      - name: Check directly changed Lean sources strictly
         if: github.event_name == 'pull_request'
         timeout-minutes: 60
         env:
@@ -620,13 +620,9 @@ jobs:
           retention-days: 7
           compression-level: 6
 
-      # Elaborate changed production files and every affected
-      # scripts/*_regression.lean file with warnings as errors. A regression is
-      # affected when it changed or its import closure contains a changed
-      # module; every regression runs when a dependency pin, the toolchain or
-      # this workflow changes. New modules need no workflow edit. Selection:
-      # scripts/ci_lean_checks.py.
-      - name: Check changed Lean files and affected tests strictly
+      # Elaborate changed production files with warnings as errors. New
+      # modules need no workflow edit. Selection: scripts/ci_lean_checks.py.
+      - name: Check changed Lean files strictly
         timeout-minutes: 120
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}

@@ -443,7 +443,7 @@ private theorem exists_perm_unitary_rotatePhysical_of_sum_trace_eq
     have hCleft := reindex_finCongr_transport (hdim k) (fun _ C => IsLeftCanonical C)
       (isLeftCanonical_rotatePhysical (A (σ k)) u hu (hTP (σ k)))
     have hCirr := reindex_finCongr_transport (hdim k) (fun _ C => Kraus.IsIrreducibleFamily C)
-      (isIrreducibleTensor_rotatePhysical (A (σ k)) u hu (hIrr (σ k)))
+      (isIrreducibleFamily_rotatePhysical (A (σ k)) u hu (hIrr (σ k)))
     obtain ⟨V, -, hV⟩ :=
       exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible (X k) 1 one_ne_zero
         (fun i => by simpa only [one_smul] using hX k i) (hTP k) hCleft (hIrr k) hCirr

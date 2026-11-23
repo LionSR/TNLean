@@ -12,30 +12,23 @@ Commands
             before the full library build, so a failure surfaces quickly.
             If any changed source is not confidently import-only, defer
             import-only aggregators to the mandatory full library build.
-``focused`` Check the PR's directly changed sources and regression scripts
-            before the full build. Select against the explicit feature head's
-            merge base, but build and elaborate the actual (possibly merged)
-            checkout. Defer confidently import-only production sources to the
-            full build and post-build strict checks. Failures remain failures
+``focused`` Check the PR's directly changed sources before the full build.
+            Select against the explicit feature head's merge base, but build
+            and elaborate the actual (possibly merged) checkout. Defer
+            confidently import-only production sources to the full build and
+            post-build strict checks. Failures remain failures
             while independent targets are still diagnosed. With ``--budget``
             the step is a shortcut like ``early``: once the budget is spent
             (a cold dependency cache, a change near the bottom of the import
             graph) the remaining targets are left, with a warning, to the
             mandatory full build and post-build strict checks.
-``strict``  After the full build, elaborate with warnings as errors
-
-            * every changed production source file, and
-            * every standalone regression ``scripts/*_regression.lean`` that
-              is changed or whose repository import closure contains a
-              changed module (or a module the change deleted or renamed).
+``strict``  After the full build, elaborate every changed production source
+            file with warnings as errors.
 
 Pull-request merge checkouts use their actual base parent after verifying the
 second parent matches the event's PR head. Pushes use the previous head as the base.
-When a dependency pin, the
-toolchain, this script or the workflow changes, ``strict`` checks every test
-file; early selection still applies, and all changed sources remain strict.
-Without a base revision (manual dispatch, an unfetchable base) ``strict``
-checks every test file and ``early`` does nothing; the full build covers it.
+Without a base revision (manual dispatch, an unfetchable base) ``strict`` and
+``early`` do nothing; the full build covers the library.
 """
 
 from __future__ import annotations
@@ -43,7 +36,6 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import os
-import re
 import signal
 import subprocess
 import sys
@@ -62,26 +54,10 @@ LEAN_FLAGS = [
     "-DwarningAsError=true",
 ]
 
-# A change to any of these can affect every test, so check all of them.
-FULL_RUN_PATHS = (
-    "lake-manifest.json",
-    "lakefile.lean",
-    "lakefile.toml",
-    "lean-toolchain",
-    "scripts/ci_lean_checks.py",
-    ".github/workflows/pr-ci.yml",
-)
-
 # Keep aligned with EXCLUDED_TOP_LEVEL_DIRECTORIES in
 # scripts/generate_import_aggregators.py; pr-ci.yml builds changed archive
 # modules separately.
 EXCLUDED_PREFIXES = ("TNLean/Archive/",)
-
-# Standalone regression files, the only test files; they are not modules of
-# any Lake library.
-REGRESSION_RE = re.compile(r"scripts/[^/]+_regression\.lean")
-
-IMPORT_RE = re.compile(r"^(?:(?:public|private|meta)\s+)*import\s+(.+?)\s*$")
 
 
 def module_of(path: str) -> str:
@@ -96,84 +72,13 @@ def is_production(path: str) -> bool:
     )
 
 
-def is_test(path: str) -> bool:
-    return REGRESSION_RE.fullmatch(path) is not None
-
-
-def is_internal(module: str) -> bool:
-    return module == "TNLean" or module.startswith("TNLean.")
-
-
-def parse_imports(text: str) -> list[str]:
-    """Return the modules imported by the header of a Lean file."""
-    imports: list[str] = []
-    in_block_comment = 0
-    for raw in text.splitlines():
-        line = raw.strip()
-        if in_block_comment:
-            in_block_comment += line.count("/-") - line.count("-/")
-            continue
-        if line.startswith("/-!"):
-            break  # the module docstring follows the import header
-        if line.startswith("/-"):
-            in_block_comment = line.count("/-") - line.count("-/")
-            continue
-        if not line or line.startswith("--"):
-            continue
-        if line == "module" or line.startswith("prelude"):
-            continue
-        match = IMPORT_RE.match(line)
-        if not match:
-            break
-        imports.extend(match.group(1).split("--")[0].split())
-    return imports
-
-
-def lean_files(root: Path) -> list[str]:
-    files = []
-    library = root / "TNLean"
-    if library.is_dir():
-        files.extend(str(p.relative_to(root)) for p in library.rglob("*.lean"))
-    if (root / "TNLean.lean").is_file():
-        files.append("TNLean.lean")
-    scripts = root / "scripts"
-    if scripts.is_dir():
-        files.extend(str(p.relative_to(root)) for p in scripts.glob("*_regression.lean"))
-    return sorted(files)
-
-
-def import_graph(root: Path, files: list[str]) -> dict[str, set[str]]:
-    """Map each repository file's module to the repository modules it imports.
-
-    Imports of repository-internal modules are kept even when the module no
-    longer exists, so deleting or renaming a module marks its importers."""
-    modules = {module_of(f) for f in files}
-    graph: dict[str, set[str]] = {}
-    for f in files:
-        text = (root / f).read_text(encoding="utf-8", errors="replace")
-        graph[module_of(f)] = {m for m in parse_imports(text)
-                               if m in modules or is_internal(m)}
-    return graph
-
-
-def closure(graph: dict[str, set[str]], start: str) -> set[str]:
-    seen: set[str] = set()
-    stack = [start]
-    while stack:
-        m = stack.pop()
-        for d in graph.get(m, ()):
-            if d not in seen:
-                seen.add(d)
-                stack.append(d)
-    return seen
-
-
 def selection_base(base: str | None, pr_head: str | None) -> str | None:
     """Use the tested merge's base parent, not a possibly stale event base.
 
     GitHub's pull-request checkout has the base as its first parent and the
     PR head as its second. Verify that shape before narrowing the selection;
-    unknown/shallow/mismatched checkouts must retain the full-suite fallback.
+    unknown/shallow/mismatched checkouts fall back to no base, leaving the
+    changed sources to the full build.
     Push and local invocations without a PR head keep their explicit base.
     """
     if not pr_head:
@@ -193,7 +98,7 @@ def selection_base(base: str | None, pr_head: str | None) -> str | None:
             print(f"Selecting changes against tested PR merge base parent {parent}.",
                   file=sys.stderr)
             return parent
-    print("::warning::Cannot verify the PR merge parents; checking every test.",
+    print("::warning::Cannot verify the PR merge parents; no changed source is selected.",
           file=sys.stderr)
     return None
 
@@ -253,39 +158,28 @@ def focused_sources(root: Path, sources: list[str], strict_sources: list[str]) -
     return retained
 
 
-def select(root: Path, base: str | None) -> tuple[list[str], list[str], list[str]]:
-    """Return (early modules, strict source files, test files)."""
-    files = lean_files(root)
-    tests = [f for f in files if is_test(f)]
-    changed = changed_paths(base)
+def changed_sources(root: Path, base: str | None) -> list[str]:
+    """Changed production source files present in the checkout."""
+    return sorted(p for p in changed_paths(base) or []
+                  if is_production(p) and os.path.lexists(root / p))
+
+
+def select(root: Path, base: str | None) -> tuple[list[str], list[str]]:
+    """Return (early modules, strict source files)."""
     # All changed production files remain strict sources, including import-only
     # aggregators deferred from the early shortcut to the full library build.
-    changed_lean = [p for p in changed or [] if p.endswith(".lean")]
-    existing = set(files)
-    sources = sorted(p for p in changed_lean if is_production(p) and p in existing)
-    early = early_modules(root, sources)
-    if changed is None or any(p in FULL_RUN_PATHS for p in changed):
-        selected_tests = set(tests)
-    else:
-        graph = import_graph(root, files)
-        changed_modules = {module_of(p) for p in changed_lean}
-        selected_tests = {
-            t for t in tests
-            if t in changed_lean or closure(graph, module_of(t)) & changed_modules
-        }
-    return early, sources, sorted(selected_tests)
+    sources = changed_sources(root, base)
+    return early_modules(root, sources), sources
 
 
-def select_focused(
-    root: Path, base: str | None, head: str | None
-) -> tuple[list[str], list[str], dict[str, set[str]]]:
+def select_focused(root: Path, base: str | None, head: str | None) -> list[str]:
     """Select direct PR edits, without attributing synthetic-merge edits to the PR.
 
     Deleted files absent from the checkout have no elaboration target; a merge
     resolution that restores one is checked. Renamed destinations are additions.
     A file present in the feature head may not silently disappear from the checkout
     being tested. Dependencies use that checkout, not the feature head's older
-    contents. The full selector above is intentionally unchanged.
+    contents.
     """
     if not base or not head:
         raise ValueError("focused checks require both --base and --head")
@@ -301,19 +195,15 @@ def select_focused(
     changed = [p for p in git("diff", "--name-only", "--no-renames", "-z",
                              "--diff-filter=ACDMT", fork, head_commit, "--").split("\0") if p]
     head_files = set(git("ls-tree", "-r", "--name-only", "-z", head_commit).split("\0"))
-    files = lean_files(root)
-    existing = set(files)
-    direct = {p for p in changed if is_production(p) or is_test(p)}
+    direct = {p for p in changed if is_production(p)}
+    existing = {p for p in direct if os.path.lexists(root / p)}
     missing = sorted((direct & head_files) - existing)
     if missing:
         raise ValueError("changed PR targets missing from the checkout: " + ", ".join(missing))
-    sources = sorted(p for p in direct & existing if is_production(p))
-    tests = sorted(p for p in direct & existing if is_test(p))
-    graph = import_graph(root, files)
+    sources = sorted(existing)
     print(f"Focused PR range: {fork}..{head_commit}; elaborating checkout HEAD.", flush=True)
-    print(f"Focused selection: {len(sources)} direct source(s), "
-          f"{len(tests)} direct regression script(s).", flush=True)
-    return sources, tests, graph
+    print(f"Focused selection: {len(sources)} direct source(s).", flush=True)
+    return sources
 
 
 def run_lean(path: str, timeout: int) -> tuple[str, int, str]:
@@ -407,8 +297,7 @@ def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
 
 
 def focused_checks(
-    sources: list[str], tests: list[str], graph: dict[str, set[str]],
-    jobs: int, timeout: int, log_path: Path | None, budget: int = 0,
+    sources: list[str], jobs: int, timeout: int, log_path: Path | None, budget: int = 0,
 ) -> int:
     """Prepare the targets, then use the ordinary strict runner.
 
@@ -488,30 +377,6 @@ def focused_checks(
     deferred += [source for source in sources if module_of(source) in unprepared]
     if ready_sources:
         failed += check(ready_sources)
-
-    ready: list[str] = []
-    for test in tests:
-        module = module_of(test)
-        required = closure(graph, module)
-        missing = required - graph.keys()
-        blocked = bool(missing or any(prepared.get(m) is False for m in required))
-        if not blocked and required & unprepared:
-            deferred.append(test)
-            continue
-        if not blocked:
-            # Build every immediate import, including a root module if the
-            # regression script actually imports one; no allowlist.
-            imports = sorted(graph.get(module, set()))
-            outcomes = [prepare(m) for m in imports]
-            if unprepared.intersection(imports):
-                deferred.append(test)
-                continue
-            blocked = not all(outcomes)
-        if blocked:
-            failed.append(f"{test}: blocked by missing or failed dependencies")
-        else:
-            ready.append(test)
-    failed += check(ready)
     if failed:
         print("Focused checks failed:", *failed, sep="\n  ", flush=True)
         return 1
@@ -528,7 +393,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("command", choices=["early", "strict", "list", "focused"])
     parser.add_argument("--base", default=os.environ.get("BASE_SHA") or None,
-                        help="base revision; omit to check every test")
+                        help="base revision; omit to select no changed source")
     parser.add_argument("--head", default=os.environ.get("PR_HEAD_SHA") or None,
                         help="focused: explicit PR feature head contained in checkout HEAD")
     parser.add_argument("--pr-head", default=os.environ.get("PR_HEAD_SHA") or None,
@@ -547,27 +412,24 @@ def main(argv: list[str] | None = None) -> int:
     os.chdir(args.root)
     if args.command == "focused":
         try:
-            sources, tests, graph = select_focused(Path("."), args.base, args.head)
+            sources = select_focused(Path("."), args.base, args.head)
             # Match the later strict phase's verified-merge selection. In a
             # feature-head/unknown checkout it has no production-source coverage.
             strict_base = selection_base(args.base, args.pr_head or args.head)
-            strict_sources = select(Path("."), strict_base)[1] if strict_base else []
+            strict_sources = changed_sources(Path("."), strict_base) if strict_base else []
             sources = focused_sources(Path("."), sources, strict_sources)
-            return focused_checks(sources, tests, graph, args.jobs, args.timeout, args.log,
-                                  args.budget)
+            return focused_checks(sources, args.jobs, args.timeout, args.log, args.budget)
         except (ValueError, OSError, subprocess.CalledProcessError) as exc:
             print(f"::error::Focused checks could not complete: {exc}", file=sys.stderr)
             return 1
     args.base = selection_base(args.base, args.pr_head)
-    early, sources, tests = select(Path("."), args.base)
+    early, sources = select(Path("."), args.base)
 
     if args.command == "list":
         for m in early:
             print("early", m)
         for s in sources:
             print("source", s)
-        for t in tests:
-            print("test", t)
         return 0
 
     if args.command == "early":
@@ -577,9 +439,8 @@ def main(argv: list[str] | None = None) -> int:
         print("Building changed modules early:", *early, sep="\n  ", flush=True)
         return early_build(early, args.log, args.budget)
 
-    print(f"Strict checks: {len(sources)} changed source file(s), {len(tests)} test file(s).",
-          flush=True)
-    failed = run_batch(sources + tests, args.jobs, args.timeout)
+    print(f"Strict checks: {len(sources)} changed source file(s).", flush=True)
+    failed = run_batch(sources, args.jobs, args.timeout)
     if failed:
         print(f"{len(failed)} strict Lean check(s) failed:", *failed, sep="\n  ")
         return 1

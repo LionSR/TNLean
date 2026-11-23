@@ -82,7 +82,7 @@ theorem exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_
     (div_pos (mul_pos hκ hδ) (Nat.cast_pos.mpr (by omega))) ?_
   intro N hN
   exact toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
-    A h hh hBounds.1 hκ hδ hLocal
+    A h hh hBounds.1 hκ hLocal
     (hN₀ N (hBounds.2.1.trans hN)) (hCanonicalKernel N hN) (hCanonicalGap N)
 
 end Interaction

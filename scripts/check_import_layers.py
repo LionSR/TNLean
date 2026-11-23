@@ -63,9 +63,11 @@ SITE_MODULES_IN_CIRCUIT: frozenset[str] = frozenset()
 DYNAMICS_MODULES_IN_CIRCUIT: frozenset[str] = frozenset()
 
 # Layer name and the module-name prefixes it owns, from the bottom up.  A module
-# belongs to the first layer that claims it.  The first six are the layers below
-# the tensor networks; the others are named for the object their statements are
-# about (``docs/library_layers.md``).
+# belongs to the first layer that claims it.  These are the layers below the
+# tensor networks; the tensor-network layers that follow are named for the object
+# their statements are about (``docs/library_layers.md``), and the lowest of them,
+# ``Network``, holds contractions of tensors on multigraphs and on parties that
+# both ``MPS`` and ``PEPS`` import.
 LOWER_LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("algebra", ("TNLean.Algebra", "TNLean.Tactic")),
     ("sites", (*sorted(SITE_MODULES_IN_CIRCUIT),)),
@@ -79,6 +81,7 @@ LOWER_LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("cellular", ("TNLean.QCA", "TNLean.QICLeanInterface")),
 )
 TENSOR_NETWORK_LAYERS: tuple[str, ...] = (
+    "Network",
     "MPS/Tensor",
     "MPS/Transfer",
     "MPS/Operator",
@@ -110,7 +113,8 @@ LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
 # relation is closed transitively below, and each of them may import every lower
 # layer.
 DIRECTLY_BELOW: dict[str, tuple[str, ...]] = {
-    "MPS/Tensor": (),
+    "Network": (),
+    "MPS/Tensor": ("Network",),
     "MPS/Transfer": ("MPS/Tensor",),
     "MPS/Operator": ("MPS/Transfer",),
     "MPS/CanonicalForm": ("MPS/Operator",),
@@ -130,7 +134,7 @@ DIRECTLY_BELOW: dict[str, tuple[str, ...]] = {
         "MPS/AreaLaw",
         "MPS/RFP",
     ),
-    "PEPS/Graph": (),
+    "PEPS/Graph": ("Network",),
     "PEPS/Tensor": ("PEPS/Graph", "MPS/ParentHamiltonian"),
     "PEPS/Injectivity": ("PEPS/Tensor",),
     "PEPS/FundamentalTheorem": ("PEPS/Injectivity",),
@@ -204,14 +208,11 @@ UPWARD_IMPORTS: frozenset[str] = frozenset(
         "TNLean.PEPS.Graph.Torus.TorusSingletonRegion -> TNLean.PEPS.Injectivity.Entropy.RegularTorusEntropy",
         "TNLean.PEPS.Graph.Walk.TorusWalkWinding -> TNLean.PEPS.Injectivity.TorusSector.RegularTorusCut",
         "TNLean.PEPS.Injectivity.Charge.RegularTwistedStateNonzero -> TNLean.PEPS.FundamentalTheorem.Normal.NormalComparisonScalar",
-        "TNLean.PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove -> TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian",
         "TNLean.PEPS.Injectivity.Multiplicity.GraphOpenAveragingBondState -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.GaugeInjectivity",
         "TNLean.PEPS.Injectivity.Region.DisjointUnionSetup -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.CoefficientTransfer",
         "TNLean.PEPS.Injectivity.Region.ReindexInjectivity -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion",
         "TNLean.PEPS.Injectivity.Regular.GInjectivePhysicalMap -> TNLean.PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation",
-        "TNLean.PEPS.Injectivity.Regular.RegularCoherentGlobalTransport -> TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian",
         "TNLean.PEPS.Tensor.GraphState.GraphBondContraction -> TNLean.PEPS.FundamentalTheorem.Injective.GaugeAction",
-        "TNLean.PEPS.Tensor.GraphState.GraphDependentCutCoordinates -> TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian",
         "TNLean.PEPS.Tensor.GraphState.RegularClosedGauge -> TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeContraction",
         "TNLean.PEPS.Tensor.GraphState.RegularRegionGram -> TNLean.PEPS.Injectivity.Regular.RegularSiteGram",
         "TNLean.PEPS.Tensor.Region.OpenRegionContraction -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence",
@@ -239,7 +240,6 @@ MUTUAL_LAYER_DIRECTORIES: frozenset[str] = frozenset(
         "PEPS/Graph <-> PEPS/Tensor",
         "PEPS/Injectivity <-> PEPS/ParentHamiltonian",
         "PEPS/Injectivity <-> PEPS/Tensor",
-        "PEPS/ParentHamiltonian <-> PEPS/Tensor",
     }
 )
 

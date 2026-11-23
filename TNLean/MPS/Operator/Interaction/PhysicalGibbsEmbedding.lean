@@ -143,13 +143,6 @@ theorem placeAlong_ringWindow_twoSiteFirstOperator
       rw [ite_eq_left hTwo, ite_eq_right hOne, ite_eq_right hne, mul_zero]
     · rw [ite_eq_right hTwo, ite_eq_right hOne]
 
-private def piKroneckerMonoidHom :
-    (Fin N → Matrix (Fin d) (Fin d) ℂ) →*
-      ChainOperator d N where
-  toFun := Matrix.piKronecker
-  map_one' := Matrix.piKronecker_one
-  map_mul' A B := (Matrix.piKronecker_mul A B).symm
-
 /-- A one-site matrix placed at `i` is the tensor product of that matrix
 at `i` and identities at every other site. -/
 theorem piKronecker_mulSingle
@@ -246,16 +239,16 @@ theorem noncommProd_placeAlong_ringWindow_oneSiteOperator
   calc
     _ = Finset.univ.noncommProd (fun i => Matrix.piKronecker (g i))
         (fun i hi j hj hij =>
-          Commute.map (hgcomm i hi j hj hij) piKroneckerMonoidHom) :=
+          Commute.map (hgcomm i hi j hj hij) Matrix.piKroneckerMonoidHom) :=
       Finset.noncommProd_congr rfl
         (fun i _ => (piKronecker_mulSingle hN i A).symm) _
     _ = Matrix.piKronecker x := by
       have hmap := Finset.map_noncommProd Finset.univ g hgcomm
-        piKroneckerMonoidHom
+        Matrix.piKroneckerMonoidHom
       calc
-        _ = piKroneckerMonoidHom
+        _ = Matrix.piKroneckerMonoidHom
             (Finset.univ.noncommProd g hgcomm) := hmap.symm
-        _ = piKroneckerMonoidHom x := by
+        _ = Matrix.piKroneckerMonoidHom x := by
           congr 1
           exact Finset.noncommProd_mulSingle x
         _ = Matrix.piKronecker x := rfl

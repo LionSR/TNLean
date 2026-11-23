@@ -7,6 +7,7 @@ import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalIsometricEmbedding
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorCoordinateTransport
 import TNLean.MPS.Tensor.Gauge.OnSiteSymmetry
 import TNLean.MPS.Operator.Fusion.DensityOperatorSymmetry
+import QICLean.Algebra.Kronecker.PiKroneckerProducts
 
 /-!
 # Strong and weak on-site symmetry of the vectorized density operator
@@ -288,14 +289,6 @@ theorem mpvWithBoundary_toMPSTensor_eq_mul_iff (M N : MPOTensor d D)
 
 /-! ### Strong and weak symmetry on the vectorized state -/
 
-/-- The transpose of the Kronecker power of the entrywise conjugate is the adjoint of the
-Kronecker power. -/
-private theorem transpose_piKronecker_map_star (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :
-    (Matrix.piKronecker fun _ : Fin L => u.map (starRingEnd ℂ))ᵀ =
-      (Matrix.piKronecker fun _ : Fin L => u)ᴴ := by
-  rw [Matrix.transpose_piKronecker, Matrix.conjTranspose_piKronecker]
-  rfl
-
 /-- For a unitary `a`, `[a, ρ] = 0` is `a ρ a^† = ρ`. -/
 private theorem commute_iff_mul_mul_conjTranspose {n : Type*} [Fintype n] [DecidableEq n]
     {a ρ : Matrix n n ℂ} (ha : aᴴ * a = 1) : Commute a ρ ↔ ρ = a * ρ * aᴴ := by
@@ -328,7 +321,7 @@ theorem isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor (M : MPOTensor d 
   refine forall_congr' fun L => forall_congr' fun _ => ?_
   rw [mpo_onSite, mpo_pairTwist, MonoidHom.comp_apply]
   change _ ↔ _ = _ * _ * (Matrix.piKronecker fun _ : Fin L => (U g).map (starRingEnd ℂ))ᵀ
-  rw [transpose_piKronecker_map_star,
+  rw [Matrix.transpose_piKronecker_map_star,
     commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g))]
 
 /-- **Strong on-site symmetry on the vectorized state.**
@@ -374,7 +367,7 @@ theorem isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor
   have hvec := mpvWithBoundary_toMPSTensor_eq_mul_iff
     (pairTwist (U g) ((U g).map (starRingEnd ℂ)) M) M X L 1
   simp only [one_mul, one_smul] at hvec
-  rw [hvec, mpo_onSite, mpoWithBoundary_pairTwist, transpose_piKronecker_map_star,
+  rw [hvec, mpo_onSite, mpoWithBoundary_pairTwist, Matrix.transpose_piKronecker_map_star,
     commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g)),
     eq_comm]
 

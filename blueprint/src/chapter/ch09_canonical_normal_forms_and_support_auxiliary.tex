@@ -2,7 +2,7 @@
 
 \begin{lemma}[Scalar fixed points in an irreducible unital block]%
     \label{thm:irreducible_unital_scalar_fixed_point}
-    \lean{MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital}
+    \lean{MPSTensor.fixed_eq_scalar_of_isIrreducibleFamily_unital}
     \leanok
     \uses{def:transfer_map, def:irreducible_tensor}
     As in the final fixed-point assertion in the proof of
@@ -213,7 +213,7 @@
 
 \begin{lemma}[Diagonal Perron normalization for an irreducible TP tensor]
     \label{thm:form_II}
-    \lean{MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor}
+    \lean{MPSTensor.exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily}
     \leanok
     \uses{def:irreducible_tensor}
     Let $A$ be an irreducible MPS tensor with
@@ -432,7 +432,7 @@ then inferring primitivity of the sector maps.
 
 \begin{lemma}[Blocking yields a peripheral-spectrum primitive transfer map]
     \label{thm:blocking_primitivity}
-    \lean{MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor}
+    \lean{MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily}
     \leanok
     \uses{def:blocked_tensor, def:transfer_map, def:irreducible_tensor}
     Let $A$ be an irreducible MPS tensor with $D>0$ and
@@ -472,7 +472,7 @@ canonical form.
 
 \begin{lemma}[Diagonal Perron data for an irreducible TP block]%
     \label{thm:CFII_data}
-    \lean{MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleTensor}
+    \lean{MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleFamily}
     \leanok
     \uses{def:irreducible_tensor, def:cpsv_cfii}
     Let $A$ be an irreducible MPS tensor in TP gauge,
@@ -497,7 +497,7 @@ canonical form.
 
 \begin{lemma}[Dual diagonalization for irreducible unital blocks]%
     \label{thm:pgvwc07_dual_diag_unital}
-    \lean{MPSTensor.exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor}
+    \lean{MPSTensor.exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleFamily}
     \leanok
     \uses{def:irreducible_tensor}
     Let $A$ be an irreducible MPS tensor in unital gauge
@@ -720,7 +720,7 @@ refines them into primitive irreducible blocks.
 
 \begin{lemma}[Existence of the PGVWC07 canonical decomposition]%
     \label{thm:pgvwc07_positive_length_witness}
-    \lean{MPSTensor.isIrreducibleTensor_smul}
+    \lean{MPSTensor.isIrreducibleFamily_smul}
     \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible}
     \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise}
     \lean{MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary}

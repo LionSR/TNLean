@@ -378,7 +378,7 @@ theorem loopProductState_ne_zero (F : BeigiSectorGraphData A)
   classical
   let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitary)
   have hWstarW : Wᴴ * W = 1 := by
-    apply MPOTensor.piKronecker_const_isometry
+    apply Matrix.piKronecker_const_isometry
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.star_mul_self_of_mem F.unitary_mem
   rw [F.loopProductState_eq_piKronecker_mulVec l]
@@ -412,7 +412,7 @@ theorem loopProductStateES_inner_eq_zero_of_ne
   classical
   let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitary)
   have hWstarW : Wᴴ * W = 1 := by
-    apply MPOTensor.piKronecker_const_isometry
+    apply Matrix.piKronecker_const_isometry
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.star_mul_self_of_mem F.unitary_mem
   rw [loopProductStateES, loopProductStateES]
@@ -469,7 +469,7 @@ private theorem groundBondProduct_mulVec_loopProductState
   have hUUstar := F.unitary_mul_conjTranspose
   have hWWstar : W * Wᴴ = 1 := by
     simp only [W]
-    rw [MPOTensor.piKronecker_const_mul_conjTranspose, hUUstar,
+    rw [Matrix.piKronecker_const_mul_conjTranspose, hUUstar,
       Matrix.piKronecker_one]
   have hconj : singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.unitaryᴴ) Q = T := by
     simpa only [Q, T] using F.singleKrausMap_groundBondProduct hN

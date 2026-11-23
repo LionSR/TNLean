@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Tensor.GraphState.GraphDependentCutCoordinates
 import TNLean.PEPS.Injectivity.CutSpace.DependentLiftedCutIntersection
+import TNLean.PEPS.ParentHamiltonian.Region.RegionParentInteraction
 
 /-!
 # Existing regional parent constraints give genuine dependent cut witnesses

@@ -207,37 +207,6 @@ theorem hamiltonian_parentRingInteraction_quadratic_form_of_finite_overlap_order
     hDisjoint hCrossTerm v
   rwa [sum_toEuclideanLin_parentRingInteraction_term A L N] at hQuad
 
-open Classical in
-/-- Combined martingale criterion for a finite family of symmetric projections.
-
-If the anticommutator forms satisfy row- and column-summable bounds with
-constant \(γ\), then the sum \(H = \sum_i P_i\) of the projections satisfies
-both the quadratic-form inequality
-\(γ \operatorname{Re}\langle Hv, v\rangle \le \operatorname{Re}\langle Hv, Hv\rangle\)
-for every \(v\), and the gap \(γ\) above the kernel: every eigenvalue of \(H\) other than
-\(0\) is at least \(γ\), because \(H\) is positive (a sum of positive maps). -/
-theorem spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional
-    {ι E : Type*} [Fintype ι] [NormedAddCommGroup E]
-    [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    {γ : ℝ} (hγpos : 0 < γ) (hγle : γ ≤ 1)
-    (P : ι → E →ₗ[ℂ] E)
-    (hP : ∀ i, (P i).IsSymmetricProjection)
-    (c : ι → ι → ℝ)
-    (hRow : ∀ i, (∑ j ∈ Finset.univ.erase i, c i j) ≤ 1)
-    (hCol : ∀ j, (∑ i ∈ Finset.univ.erase j, c i j) ≤ 1)
-    (hAnti : ∀ i j, j ∈ Finset.univ.erase i → ∀ v,
-      -(1 - γ) * c i j *
-          ((⟪P i v, v⟫_ℂ).re + (⟪P j v, v⟫_ℂ).re) ≤
-        (⟪P i v, P j v⟫_ℂ).re + (⟪P j v, P i v⟫_ℂ).re) :
-    (∀ v, γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤ (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re) ∧
-    ∀ μ : ℂ, Module.End.HasEigenvalue (∑ i, P i) μ → μ = 0 ∨ (γ : ℂ) ≤ μ := by
-  have hQuad : ∀ v,
-      γ * (⟪(∑ i, P i) v, v⟫_ℂ).re ≤ (⟪(∑ i, P i) v, (∑ i, P i) v⟫_ℂ).re :=
-    ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol
-      hγle P hP c hRow hCol hAnti
-  exact ⟨hQuad, FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional hγpos
-    (LinearMap.isPositive_sum Finset.univ fun i _ => (hP i).isPositive) hQuad⟩
-
 /-! ### The uniform reduction for the parent interaction on the ring
 
 The same reduction chain for the Hamiltonians of the parent interaction on the rings of

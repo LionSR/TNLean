@@ -284,8 +284,6 @@ No sum of edge operators is asserted here.
 
 \begin{lemma}[A norm gap restricts without loss]
     \label{thm:mpo_rectangular_compression_gap}
-    \lean{LinearIsometry.norm_gap_compression_of_commute}
-    \leanok
     \uses{def:mpo_rectangular_compression}
     Suppose that $UU^*H=HUU^*$ and that $\delta\in\R$ satisfies
     $\delta\lVert w\rVert\le\lVert Hw\rVert$ for every
@@ -295,7 +293,6 @@ No sum of edge operators is asserted here.
     domain or codomain.
 \end{lemma}
 \begin{proof}
-    \leanok
     \uses{thm:mpo_rectangular_compression_intertwines}
     For $v\perp\ker K$, applying the given estimate to $Uv$ and using
     $HUv=UKv$ gives, since $U$ preserves norms,

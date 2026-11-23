@@ -34,7 +34,7 @@ sheets without holes, `Lattice.Sheet.birth_bounded` and `Lattice.Sheet.death_bou
 are stated for any exponent: `I_Ω(T:E) ≤ L^{-2p}` gives error `L^{-p}`; the frame bounds here are
 the manuscript's case `p = 30`. The
 reference error of the exchange is bounded on the sheets by
-`norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le`, shared with
+`norm_act_sheetBufferCorrection_mul_pairSwapOp_sub_le`, shared with
 `Lattice.Sheet.exchange_bounded`.
 
 ## Main results
@@ -264,7 +264,7 @@ theorem exchange_bounded [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (h�
     intro z
     rw [Circuit.eval_comp, ContinuousLinearMap.comp_apply, twoLayoutIso_correctionLayoutWord h,
       twoLayoutIso_renameWord, ← act_mul, exchangeOp,
-      sheetBufferCorrection_mul_sheetSwapOp_eq h σ (X.aSet_subset_compl P)]
+      sheetBufferCorrection_mul_pairSwapOp_eq h σ (X.aSet_subset_compl P)]
   have r := X.isReordering_renameWord
   obtain ⟨c₁, c₂, c₃⟩ := correctionLayoutWord_props (q := q) (X.out₁ ++ X.in₂) (X.out₂ ++ X.in₁)
     X.newFrame₁.owner X.newFrame₂.owner (fun x hx => (hU x hx).1) (fun x hx => (hU x hx).2)

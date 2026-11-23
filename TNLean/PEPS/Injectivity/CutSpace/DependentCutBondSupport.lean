@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.CutSpace.DependentBondCoefficients
-import TNLean.Lattice.Compression.DependentBondCut
+import TNLean.Network.DependentBond.DependentBondCut
 import TNLean.PEPS.Injectivity.CutSpace.DependentBondProjectorExpansion
 import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
 

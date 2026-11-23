@@ -73,7 +73,7 @@ theorem trace_mpo_changePhysicalBasis_of_isometry
       Matrix.trace (mpo M N) := by
   rw [← singleKrausMap_piKronecker_mpo]
   exact (singleKrausMap_isKrausCPTP (Matrix.piKronecker fun _ : Fin N ↦ V)
-    (piKronecker_const_isometry V hV N)).trace_map (mpo M N)
+    (Matrix.piKronecker_const_isometry V hV N)).trace_map (mpo M N)
 
 /-- Normalization commutes with an isometric physical inclusion. -/
 theorem normalizedMPO_changePhysicalBasis_of_isometry
@@ -137,7 +137,7 @@ theorem blockReducedState_singleKraus_sitewise
     reindex_piKronecker_blockSplit]
   exact Matrix.partialTraceRight_kronecker_conj_of_right_isometry
     (Matrix.piKronecker fun _ : Fin L ↦ V) (Matrix.piKronecker fun _ : Fin K ↦ V)
-    (piKronecker_const_isometry V hV K)
+    (Matrix.piKronecker_const_isometry V hV K)
     (Matrix.reindex (blockSplitEquiv d L K) (blockSplitEquiv d L K) X)
 
 /-- Every contiguous marginal of a physically included MPO is the isometric
@@ -193,7 +193,7 @@ theorem blockEntropy_changePhysicalBasis_of_isometry
           (reducedBlockState M N L hL)) hρ' :=
       vonNeumannEntropy_congr hred _ _
     _ = _ := vonNeumannEntropy_singleKraus_isometry
-      (Matrix.piKronecker fun _ : Fin L ↦ V) (piKronecker_const_isometry V hV L)
+      (Matrix.piKronecker fun _ : Fin L ↦ V) (Matrix.piKronecker_const_isometry V hV L)
       (reducedBlockState M N L hL) hρ
 
 /-- An isometric physical inclusion does not change the mutual information

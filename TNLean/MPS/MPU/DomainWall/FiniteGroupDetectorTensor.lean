@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.DomainWall.FiniteGroupDetectorClock
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Algebra.Kronecker.PiKroneckerProducts
 
 /-!
 # The complete tensor detector at every even cyclic order
@@ -24,26 +25,11 @@ namespace MPOTensor.FiniteGroupDetector
 
 variable {α ν β : Type*} [Fintype α] [DecidableEq α] [Fintype ν] [DecidableEq ν]
 
-private theorem list_prod_map_piKronecker (l : List β) (A : β → ν → Matrix α α ℂ) :
-    (l.map fun r ↦ Matrix.piKronecker (A r)).prod =
-      Matrix.piKronecker fun s ↦ (l.map fun r ↦ A r s).prod := by
-  induction l with
-  | nil => simp
-  | cons r l ih =>
-    simp only [List.map_cons, List.prod_cons, ih, Matrix.piKronecker_mul]
-
 private theorem unitary_coe_prod_map (l : List β) (A : β → unitary (Matrix α α ℂ)) :
     ((l.map A).prod : Matrix α α ℂ) = (l.map fun r ↦ (A r : Matrix α α ℂ)).prod := by
   induction l with
   | nil => rfl
   | cons r l ih => simp only [List.map_cons, List.prod_cons, Submonoid.coe_mul, ih]
-
-omit [Fintype α] [DecidableEq ν] in
-private theorem piKronecker_smul_one (f : ν → ℂ) :
-    Matrix.piKronecker (fun s ↦ f s • (1 : Matrix α α ℂ)) = (∏ s, f s) • 1 := by
-  conv_rhs => rw [← Matrix.piKronecker_one (ν := ν) (ι := fun _ ↦ α)]
-  ext x y
-  simp only [Matrix.piKronecker_apply, Matrix.smul_apply, smul_eq_mul, Finset.prod_mul_distrib]
 
 private theorem prod_powers (ζ : ℂ) (m : ℕ) :
     (∏ r : Fin m, ζ ^ r.val) = ζ ^ (m.choose 2) := by
@@ -99,7 +85,7 @@ theorem detectorTensorWord_eq_piKronecker (u w : unitary (Matrix α α ℂ)) (m 
       (spatialEndpointWord (Γ := unitary (Matrix α α ℂ))
         u (if s.2 then 1 else w) m s.1.val : Matrix α α ℂ) := by
   simp only [detectorTensorWord, detectorIntervalTensor, Matrix.conjTranspose_piKronecker]
-  rw [list_prod_map_piKronecker, list_prod_map_piKronecker,
+  rw [Matrix.list_prod_map_piKronecker, Matrix.list_prod_map_piKronecker,
     Matrix.piKronecker_mul, Matrix.piKronecker_mul, Matrix.piKronecker_mul]
   congr 1
   funext s
@@ -132,7 +118,7 @@ theorem detectorTensorWord_eq_smul (u w c : unitary (Matrix α α ℂ)) (ζ : �
       simp [h, f]
   rw [detectorTensorWord_eq_piKronecker]
   simp_rw [hsite]
-  rw [piKronecker_smul_one]
+  rw [Matrix.piKronecker_smul_one]
   congr 1
   rw [Fintype.prod_prod_type]
   simpa [f, Fintype.prod_bool] using prod_cut_phase ζ m N (by omega)

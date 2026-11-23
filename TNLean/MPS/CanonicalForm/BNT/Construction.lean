@@ -133,7 +133,7 @@ theorem exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducib
     rw [mpv_cast_dim hdim (A j) N σ]
   exact exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
     (cast (congr_arg (MPSTensor d) hdim) (A j)) (A k)
-    ((isIrreducibleTensor_cast_dim hdim (A j)).mpr (hIrr.block_irreducible j))
+    ((isIrreducibleFamily_cast_dim hdim (A j)).mpr (hIrr.block_irreducible j))
     (hIrr.block_irreducible k)
     ((leftCanonical_cast_dim hdim (A j)).mpr (hLeft.leftCanonical j))
     (hLeft.leftCanonical k)

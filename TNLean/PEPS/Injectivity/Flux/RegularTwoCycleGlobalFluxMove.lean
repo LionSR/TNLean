@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.Flux.RegularTwoCyclePhysicalFluxMove
 import TNLean.PEPS.Injectivity.Regular.RegularCoherentGlobalTransport
-import TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian
+import TNLean.PEPS.Tensor.Region.RegionConfigSplit
 import TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeContraction
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.PEPS.Graph.Holonomy.RegularBoundaryRoute

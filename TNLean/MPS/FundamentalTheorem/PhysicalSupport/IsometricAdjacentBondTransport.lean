@@ -267,20 +267,6 @@ private theorem pair_product_transport
       rw [leftPair_mul_firstProjection B' P hB',
         lastProjection_mul_rightPair P C' hC']
 
-private theorem reindex_piKronecker_three
-    (V : Matrix (Fin d) (Fin e) ℂ) :
-    Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
-        (_root_.finThreeArrowEquiv (Fin e))
-        (Matrix.piKronecker fun _ : Fin 3 ↦ V) = V ⊗ₖ (V ⊗ₖ V) := by
-  ext ⟨i, j, k⟩ ⟨a, b, c⟩
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    finThreeArrowEquiv_symm_apply, Nat.succ_eq_add_one, Nat.reduceAdd,
-    Matrix.kroneckerMap_apply]
-  change (∏ n : Fin 3, V (![i, j, k] n) (![a, b, c] n)) =
-    V i a * (V j b * V k c)
-  rw [Fin.prod_univ_succ, Fin.prod_univ_succ, Fin.prod_univ_succ]
-  simp
-
 private theorem reindex_placeAlong_ringWindow_three_zero
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
     Matrix.reindex (_root_.finThreeArrowEquiv (Fin e))
@@ -381,7 +367,7 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
   rw [Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
-    reindex_piKronecker_two]
+    Matrix.reindex_piKronecker_two]
   have hrestricted := Matrix.reindexLinearEquiv_mul ℂ ℂ
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin e))
@@ -408,7 +394,7 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
     Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
-    reindex_piKronecker_two]
+    Matrix.reindex_piKronecker_two]
   rw [Matrix.singleKrausMap_mul_of_isometry _
     (Matrix.IsIsometry.kronecker V V hV hV)]
   have hswap := swapPairMatrix_singleKraus_kronecker_self Vᴴ
@@ -452,7 +438,7 @@ theorem singleKrausMap_adjacentBondProduct
   rw [Matrix.reindex_singleKrausMap
       (_root_.finThreeArrowEquiv (Fin e))
       (_root_.finThreeArrowEquiv (Fin d)),
-    reindex_piKronecker_three]
+    Matrix.reindex_piKronecker_three]
   have hrestricted := Matrix.reindexLinearEquiv_mul ℂ ℂ
       (_root_.finThreeArrowEquiv (Fin e))
       (_root_.finThreeArrowEquiv (Fin e))
@@ -481,7 +467,7 @@ theorem singleKrausMap_adjacentBondProduct
     Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
-    reindex_piKronecker_two]
+    Matrix.reindex_piKronecker_two]
   exact pair_product_transport V hV _ _
 
 end MPOTensor

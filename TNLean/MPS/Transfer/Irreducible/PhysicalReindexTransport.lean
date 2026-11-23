@@ -19,7 +19,7 @@ basic tensor properties used by blocking and canonical-form arguments.
 * `leftCanonical_reindexPhysical_equiv` and
   `isPrimitive_transferMap_reindexPhysical_equiv` — left-canonical normalization and
   transfer-map primitivity are preserved.
-* `hasInvariantProj_reindexPhysical_equiv`, `isIrreducibleTensor_reindexPhysical_equiv`,
+* `hasInvariantProj_reindexPhysical_equiv`, `isIrreducibleFamily_reindexPhysical_equiv`,
   `isInjective_reindexPhysical_equiv`, and `isNormal_reindexPhysical_equiv` — invariant
   projections, irreducibility, one-site injectivity, and normality are preserved.
 * `gaugePhaseEquiv_reindexPhysical_equiv` — gauge-phase equivalence is preserved
@@ -96,7 +96,7 @@ theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁
     exact ⟨P, hPproj, hP0, hP1, fun i => hLower (e i)⟩
 
 /-- Reindexing by a physical-index equivalence preserves tensor irreducibility. -/
-theorem isIrreducibleTensor_reindexPhysical_equiv {d₁ d₂ D : ℕ}
+theorem isIrreducibleFamily_reindexPhysical_equiv {d₁ d₂ D : ℕ}
     (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
     Kraus.IsIrreducibleFamily (Kraus.reindexPhysical e A) ↔ Kraus.IsIrreducibleFamily A := by
   rw [Kraus.IsIrreducibleFamily, Kraus.IsIrreducibleFamily,

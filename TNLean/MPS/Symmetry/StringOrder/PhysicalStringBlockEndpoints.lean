@@ -10,6 +10,7 @@ import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
 import QICLean.Algebra.Kronecker.KroneckerFactorPositivity
 import Mathlib.LinearAlgebra.Multilinear.Basic
 import QICLean.Algebra.Combinatorics.FinSumPermutation
+import QICLean.ManyBody.Sites.ProductOperatorTrace
 
 /-!
 # Both physical endpoints on dimension-bounded blocks
@@ -114,77 +115,6 @@ theorem exists_physicalStringBlockEndpoints
   obtain ⟨y, hy⟩ := exists_physicalObservableTransfer_one_eq A hA hNorm Y
   exact ⟨x, y, fun u N => by rw [hy, hx]; rfl⟩
 
-private theorem exists_isHermitian_piKronecker_ne_zero
-    {n : ℕ} (f : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ →ₗ[ℂ] ℂ)
-    {X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} (hX : f X ≠ 0) :
-    ∃ p : Fin n → Matrix (Fin d) (Fin d) ℂ,
-      (∀ i, (p i).IsHermitian) ∧ f (Matrix.piKronecker p) ≠ 0 := by
-  classical
-  have hunit : ∃ σ τ : Fin n → Fin d, f (Matrix.single σ τ 1) ≠ 0 := by
-    by_contra! h
-    have hf : f = 0 := by
-      apply Matrix.ext_linearMap
-      intro σ τ
-      apply LinearMap.ext
-      intro c
-      change f (Matrix.single σ τ c) = 0
-      have hs : Matrix.single σ τ c = c • Matrix.single σ τ (1 : ℂ) := by simp
-      rw [hs, map_smul, h σ τ, smul_zero]
-    exact hX (by rw [hf]; rfl)
-  obtain ⟨σ, τ, hστ⟩ := hunit
-  let p₀ : Fin n → Matrix (Fin d) (Fin d) ℂ := fun i => Matrix.single (σ i) (τ i) 1
-  have hp₀ : Matrix.piKronecker p₀ = Matrix.single σ τ 1 := by
-    ext a b
-    simp only [Matrix.piKronecker_apply, p₀, Matrix.single_apply]
-    rw [Finset.prod_boole]
-    congr 1
-    apply propext
-    simp only [Finset.mem_univ, true_implies]
-    constructor
-    · intro h
-      exact ⟨funext fun i => (h i).1, funext fun i => (h i).2⟩
-    · rintro ⟨rfl, rfl⟩
-      simp
-  let k : MultilinearMap ℂ (fun _ : Fin n => Matrix (Fin d) (Fin d) ℂ)
-      (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) :=
-    MultilinearMap.pi fun a => MultilinearMap.pi fun b =>
-      (MultilinearMap.mkPiAlgebra ℂ (Fin n) ℂ).compLinearMap
-        (fun i => (LinearMap.proj (b i) : (Fin d → ℂ) →ₗ[ℂ] ℂ).comp
-          (LinearMap.proj (a i) : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] (Fin d → ℂ)))
-  let F := f.compMultilinearMap k
-  have hF (p : Fin n → Matrix (Fin d) (Fin d) ℂ) :
-      F p = f (Matrix.piKronecker p) := rfl
-  have hpartial : ∀ S : Finset (Fin n),
-      ∃ p : Fin n → Matrix (Fin d) (Fin d) ℂ,
-        (∀ i ∈ S, (p i).IsHermitian) ∧ F p ≠ 0 := by
-    intro S
-    induction S using Finset.induction_on with
-    | empty =>
-        exact ⟨p₀, by simp, by simpa [hF, hp₀] using hστ⟩
-    | @insert i S hi ih =>
-        obtain ⟨p, hp, hpne⟩ := ih
-        obtain ⟨H, K, hH, hK, hpi⟩ := Matrix.exists_isHermitian_eq_add_smul_I (p i)
-        have heq : F p = F (Function.update p i H) +
-            Complex.I * F (Function.update p i K) := by
-          conv_lhs => rw [← Function.update_eq_self i p]
-          rw [hpi, F.map_update_add, F.map_update_smul, smul_eq_mul]
-        have hchoose : ∃ M : Matrix (Fin d) (Fin d) ℂ,
-            M.IsHermitian ∧ F (Function.update p i M) ≠ 0 := by
-          by_cases hz : F (Function.update p i H) = 0
-          · refine ⟨K, hK, ?_⟩
-            intro hzero
-            exact hpne (by rw [heq, hz, hzero, mul_zero, add_zero])
-          · exact ⟨H, hH, hz⟩
-        obtain ⟨M, hM, hMne⟩ := hchoose
-        refine ⟨Function.update p i M, ?_, hMne⟩
-        intro j hj
-        rcases Finset.mem_insert.mp hj with rfl | hj
-        · simpa using hM
-        · have hji : j ≠ i := by intro h; exact hi (h ▸ hj)
-          simpa [Function.update_of_ne hji] using hp j hj
-  obtain ⟨p, hp, hpne⟩ := hpartial Finset.univ
-  exact ⟨p, fun i => hp i (Finset.mem_univ i), hpne⟩
-
 /-- Both dimension-bounded endpoints can be products of one-site Hermitian
 operators when only nonvanishing of the string-order coefficients is required.
 Hermitian real and imaginary parts are chosen one physical site at a time.
@@ -219,8 +149,8 @@ theorem exists_isHermitian_physicalStringProductEndpoints
     change Matrix.trace (Λ * Vᴴ * physicalObservableTransfer A (D ^ 2) y 1) ≠ 0
     rw [hy, Matrix.mul_assoc, hV', Matrix.mul_one, hΛtr]
     exact one_ne_zero
-  obtain ⟨H, hH, hfH⟩ := exists_isHermitian_piKronecker_ne_zero f hxne
-  obtain ⟨K, hK, hgK⟩ := exists_isHermitian_piKronecker_ne_zero g hyne
+  obtain ⟨H, hH, hfH⟩ := ManyBody.exists_isHermitian_piKronecker_ne_zero f hxne
+  obtain ⟨K, hK, hgK⟩ := ManyBody.exists_isHermitian_piKronecker_ne_zero g hyne
   exact ⟨H, K, hH, hK, hfH, hgK⟩
 
 end MPSTensor

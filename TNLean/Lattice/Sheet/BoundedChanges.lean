@@ -241,7 +241,7 @@ theorem exchange_bounded {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω�
         (twoRegIso q (swapIn S₁ S₂ Y) (swapIn S₂ S₁ Y) z) := fun z => by
     rw [twoRegIso_eq_twoFrontLayoutIso, twoRegIso_eq_twoFrontLayoutIso,
       twoFrontLayoutIso_frontCorrectionWord h, liftFront, unitProdIso₂_act_liftFront,
-      sheetBufferCorrection_mul_sheetSwapOp_eq h σ (aSet_subset_compl S₁ S₂ Y P)]
+      sheetBufferCorrection_mul_pairSwapOp_eq h σ (aSet_subset_compl S₁ S₂ Y P)]
   have heval : ∀ z, twoRegIso q (swapIn S₁ S₂ Y) (swapIn S₂ S₁ Y)
       (((renameWord S₁ S₂ Y).comp c).eval z) =
         act (exchangeOp S₁ S₂ Y P σ) (twoRegIso q S₁ S₂ z) := fun z => by
@@ -256,7 +256,7 @@ theorem exchange_bounded {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω�
   rw [← (twoRegIso q (swapIn S₁ S₂ Y) (swapIn S₂ S₁ Y)).norm_map, map_sub,
     LinearIsometryEquiv.apply_symm_apply, heval, LinearIsometryEquiv.apply_symm_apply,
     exchangeOp_eq]
-  exact (norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le h σ hΩ).trans (by linarith)
+  exact (norm_act_sheetBufferCorrection_mul_pairSwapOp_sub_le h σ hΩ).trans (by linarith)
 
 end Exchange
 
