@@ -229,29 +229,6 @@
     finite sums over $i\in I_q$ and $s\in S_q$ gives the identity.
 \end{proof}
 
-\begin{lemma}[Extension of a common norm gap]
-    \label{thm:mpo_dependent_spectator_gap_forward}
-    \uses{def:mpo_dependent_spectator_operator}
-    Let $Q$, $I_q$, and $S_q$ be finite, let each $G_q$ be complex linear, and
-    let $\delta\geq0$.  Suppose
-    $\delta\|u\|\leq\|G_qu\|$ for every $q\in Q$ and
-    $u\in(\ker G_q)^\perp$.  Then
-    $\delta\|v\|\leq\|H_Sv\|$ for every $v\in(\ker H_S)^\perp$.
-    The sets $Q$, $I_q$, and $S_q$ may be empty.
-\end{lemma}
-\begin{proof}
-    \uses{thm:mpo_dependent_spectator_orthogonal, thm:mpo_dependent_spectator_norm}
-    For $v\in(\ker H_S)^\perp$, the hypotheses and
-    (\ref{eq:mpo_dependent_spectator_norm}) give
-    \begin{align}
-        \delta^2\|v\|^2
-         & =\sum_{q\in Q}\sum_{s\in S_q}\delta^2\|v_{q,s}\|^2
-        \leq\sum_{q\in Q}\sum_{s\in S_q}\|G_qv_{q,s}\|^2
-        =\|H_Sv\|^2.
-    \end{align}
-    Taking nonnegative square roots proves the claim.
-\end{proof}
-
 \begin{lemma}[Equivalence of common norm gaps]
     \label{thm:mpo_dependent_spectator_gap_iff}
     \lean{ContinuousLinearMap.norm_gap_dependentRightFiberwiseMap_iff}
@@ -270,9 +247,18 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_dependent_spectator_gap_forward, thm:mpo_dependent_spectator_orthogonal}
-    Lemma~\ref{thm:mpo_dependent_spectator_gap_forward} gives the
-    reverse implication. For the forward implication, fixing $q\in Q$ and
+    \uses{thm:mpo_dependent_spectator_orthogonal, thm:mpo_dependent_spectator_norm}
+    For the reverse implication, let $v\in(\ker H_S)^\perp$.  The hypothesis
+    on the operators $G_q$ and (\ref{eq:mpo_dependent_spectator_norm}) give
+    \begin{align}
+        \delta^2\|v\|^2
+         & =\sum_{q\in Q}\sum_{s\in S_q}\delta^2\|v_{q,s}\|^2
+        \leq\sum_{q\in Q}\sum_{s\in S_q}\|G_qv_{q,s}\|^2
+        =\|H_Sv\|^2,
+    \end{align}
+    and taking nonnegative square roots gives $\delta\|v\|\leq\|H_Sv\|$;
+    this direction does not use that the sets $S_q$ are nonempty.
+    For the forward implication, fixing $q\in Q$ and
     $s\in S_q$ and extending $u\in(\ker G_q)^\perp$ by zero outside
     $(q,s)$ produces $v\in(\ker H_S)^\perp$ with $\|v\|=\|u\|$ and
     $\|H_Sv\|=\|G_qu\|$.
