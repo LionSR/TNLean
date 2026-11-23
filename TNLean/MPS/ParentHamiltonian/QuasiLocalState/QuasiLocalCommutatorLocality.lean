@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.IntervalObservableCoordinates
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BulkObservableAlgebra
-import TNLean.QCA.QuasiLocalInterval
+import TNLean.QCA.QuasiLocal.QuasiLocalInterval
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BulkObservableCommutator
 
 /-!

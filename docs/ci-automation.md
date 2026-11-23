@@ -371,7 +371,8 @@ during review.
 - Imports must respect the layers of
   `docs/many_body_circuit_architecture.md`. `scripts/check_import_layers.py`
   rejects an import that points upward between the layers below the
-  tensor-network directories, a new pair of directories that import each
+  tensor-network directories or to a later subdirectory of a directory with an
+  ordered list of subdirectories, a new pair of directories that import each
   other, and a new import of a module in an `Examples` directory by a module
   outside one. `scripts/check_pass_through_declarations.py` rejects a new
   declaration whose whole body applies the declaration of the same name in

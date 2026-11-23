@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CyclicSectorRelation
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonBlockedCyclicSectorFamily
-import QICLean.Channel.Peripheral.Conjugation
+import QICLean.Channel.Peripheral.Spectrum.Conjugation
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.HLift
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CornerBridge
-import QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity
+import QICLean.Channel.Peripheral.Irreducible.SectorPrimitivity
 
 /-!
 # Period removal (cyclic-sector decomposition) after blocking

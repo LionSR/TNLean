@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockedGroundSpaceTransport
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PrimitiveQuasiLocalUniqueness
-import TNLean.QCA.BlockingIntervalCoordinates
-import TNLean.QCA.BlockingStateTransport
+import TNLean.QCA.QuasiLocal.BlockingIntervalCoordinates
+import TNLean.QCA.State.BlockingStateTransport
 
 /-!
 # Ground-space projection observables under physical blocking

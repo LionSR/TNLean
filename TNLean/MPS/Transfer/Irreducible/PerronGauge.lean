@@ -9,7 +9,7 @@ import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Tensor.Gauge.TPGauge
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
-import QICLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
+import QICLean.Channel.Peripheral.Irreducible.PeripheralUnitary
 
 /-!
 # Perron–Frobenius gauges for irreducible MPS tensors

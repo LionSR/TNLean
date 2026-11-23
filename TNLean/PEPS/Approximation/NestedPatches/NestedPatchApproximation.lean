@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.OriginalNestedPatchEntropy
 import TNLean.PEPS.Approximation.NestedPatches.NestedPatchEnergy
-import TNLean.PEPS.AreaLaw.RegionalFilters.RegularizedPatchMinimumGrowth
-import TNLean.PEPS.AreaLaw.RegionalFilters.RegularizedPatchRadiusChoice
-import TNLean.PEPS.AreaLaw.RegionalFilters.RegularizedPatchInverseCylinder
+import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimumGrowth
+import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchRadiusChoice
+import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchInverseCylinder
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

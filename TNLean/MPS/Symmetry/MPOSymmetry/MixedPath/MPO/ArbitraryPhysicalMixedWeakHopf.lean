@@ -94,7 +94,7 @@ periodic boundary operator, with boundary commuting with the letters, of a
 common operator that is the tensor of a weak-Hopf representation.
 Source: arXiv:2203.12563v3, lines 1279, 1582 and 1687–1692. -/
 theorem
-    interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_weakHopf
+    hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_weakHopf
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (h₀ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₀ A₀)

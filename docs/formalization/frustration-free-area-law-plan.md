@@ -9,7 +9,7 @@ constraints and Poisson clocks of Proposition 10.2 by an exact sweep of local fi
 
 This file lists the Lean statements to prove, in order. Each step is one or two pull
 requests on a branch `claude/ff2d-*`. New modules live in
-`TNLean/PEPS/AreaLaw/FrustrationFree/`. Every new result gets a blueprint entry in a new
+`TNLean/PEPS/AreaLaw/Operators/FrustrationFree/`. Every new result gets a blueprint entry in a new
 section of `blueprint/src/chapter/ch24_peps_area_law_frustration_free.tex`.
 
 ## The model, `eq:model`

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Uncle.UncleBoundaryWords
 import QICLean.Channel.Schwarz.Basic
-import QICLean.Channel.Peripheral.UnitalKraus
+import QICLean.Channel.Peripheral.Spectrum.UnitalKraus
 import QICLean.Kraus.MixedMap.SpectralRadius
 import QICLean.Channel.OperatorMean.BlockDiagonal
 import QICLean.Spectral.Radius.PowerDecay

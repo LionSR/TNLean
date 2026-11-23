@@ -7,7 +7,7 @@ import TNLean.MPS.FundamentalTheorem.Arbitrary.ArbitraryTensor
 import TNLean.MPS.Transfer.Irreducible.Periodic
 import TNLean.MPS.FundamentalTheorem.Arbitrary.EventualEquality
 import TNLean.MPS.Transfer.Scaling
-import QICLean.Channel.Peripheral.Conjugation
+import QICLean.Channel.Peripheral.Spectrum.Conjugation
 import TNLean.MPS.FundamentalTheorem.Arbitrary.WeightedSums
 import TNLean.MPS.FundamentalTheorem.Arbitrary.GaugeConversions
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NonzeroSubfamily

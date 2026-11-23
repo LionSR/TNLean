@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Irreducible.FromSpectral
-import QICLean.Channel.Peripheral.GroupStructure
-import QICLean.Channel.Peripheral.JordanBlocks
-import QICLean.Channel.Peripheral.SpectralRadius
+import QICLean.Channel.Peripheral.Irreducible.GroupStructure
+import QICLean.Channel.Peripheral.Projection.JordanBlocks
+import QICLean.Channel.Peripheral.Spectrum.SpectralRadius
 import TNLean.MPS.Tensor.Defs
 import QICLean.Kraus.Transfer
 

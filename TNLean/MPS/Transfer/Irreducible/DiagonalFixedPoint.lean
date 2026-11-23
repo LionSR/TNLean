@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.DirectSum.IrreducibleDecomposition
 import QICLean.Algebra.Matrix.MatrixAux
-import QICLean.Channel.FixedPoint.SupportInvariance
+import QICLean.Channel.FixedPoint.Stationary.SupportInvariance
 import QICLean.Channel.KrausMap.KrausMap
 import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Kraus.Transfer

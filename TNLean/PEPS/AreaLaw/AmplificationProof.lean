@@ -4,17 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.AmplificationCutClearance
-import TNLean.PEPS.AreaLaw.RestoringOperator.AmplificationProofSteps
-import TNLean.PEPS.AreaLaw.ChannelWords.ConstraintWordLists
-import TNLean.PEPS.AreaLaw.ChannelWords.ConstraintWordTruncation
-import TNLean.PEPS.AreaLaw.ChannelWords.LatticeChannelSpatialOmission
-import TNLean.PEPS.AreaLaw.RestoringOperator.LatticeExcitedDecay
-import TNLean.PEPS.AreaLaw.RestoringOperator.LatticeAncillaSites
-import TNLean.PEPS.AreaLaw.RestoringOperator.GoodRealizationUnitary
-import TNLean.PEPS.AreaLaw.RestoringOperator.RadiusBound
+import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.AmplificationProofSteps
+import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordLists
+import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordTruncation
+import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LatticeChannelSpatialOmission
+import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeExcitedDecay
+import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaSites
+import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary
+import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.RadiusBound
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import QICLean.Analysis.TraceNorm.PureStateTraceDistance
-import TNLean.PEPS.AreaLaw.Templates.TemplateRows
+import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateRows
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

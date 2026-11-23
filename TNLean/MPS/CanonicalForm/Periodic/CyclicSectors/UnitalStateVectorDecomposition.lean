@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.UnitalCanonicalSpectrum
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.StateVectorDecomposition
-import QICLean.Channel.Peripheral.CyclicDecomposition.LetterShift
+import QICLean.Channel.Peripheral.Irreducible.LetterShift
 
 /-!
 # PGVWC07 periodic decomposition from the printed canonical hypotheses

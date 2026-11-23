@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.SquareAreaLawSpecialization
-import TNLean.PEPS.AreaLaw.Squares.NestedPatches
+import TNLean.PEPS.AreaLaw.Polygons.Squares.NestedPatches
 
 /-!
 # Original-state entropy on the selected nested squares

@@ -73,7 +73,7 @@ theorem partialSourceGlobalMatrix_sampled_eq_sum_partyProduct
           C ps hn hc))ᴴ =
       ((k : ℂ)⁻¹ ^ (partialSlots (fun _ ↦ true) w).length) •
         ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
-          dependentPhysicalProductFamilyMatrix (fun q ↦
+          Matrix.piKronecker (fun q ↦
             w.partialSourcePartyMatrix ψ ξ B C q *
               LinearMap.toMatrix (B q).toBasis (B q).toBasis
                 (((sampledEndpointInputWord w k lam E F ξ ζ

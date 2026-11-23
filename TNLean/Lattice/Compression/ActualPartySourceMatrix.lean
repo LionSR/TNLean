@@ -84,7 +84,7 @@ theorem partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange
     w.partialSourceGlobalMatrix ψ ξ
         (partyGroupedBasis (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)
           C ps hn hc) =
-      dependentPhysicalProductFamilyMatrix (w.partialSourcePartyMatrix ψ ξ B C) *
+      Matrix.piKronecker (w.partialSourcePartyMatrix ψ ξ B C) *
         w.actualPartySourceBasisChange B ps hn hc := by
   classical
   let bIn := partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc
@@ -94,17 +94,17 @@ theorem partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange
     (sources_partialSourceWord w ψ ξ) B C ps hn hc
   have hmatrix : Matrix.of (fun row col ↦
       bOut.repr ((w.partialSourceWord ψ ξ).eval (bIn col)) row) =
-      dependentPhysicalProductFamilyMatrix (fun q ↦
+      Matrix.piKronecker (fun q ↦
         w.partialSourcePartyMatrix ψ ξ B C q) := by
     simpa only [bIn, bOut, partialSourcePartyMatrix] using hparty
   have hm : LinearMap.toMatrix bIn.toBasis bOut.toBasis
       (w.partialSourceWord ψ ξ).eval.toLinearMap =
-      dependentPhysicalProductFamilyMatrix (fun q ↦
+      Matrix.piKronecker (fun q ↦
         w.partialSourcePartyMatrix ψ ξ B C q) := by
     simpa only [matrix_repr_eval_eq_toMatrix] using hmatrix
   exact (partialSourceGlobalMatrix_eq_toMatrix w ψ ξ bOut).trans
     (toMatrix_eq_mul_basisChange_of_eq w.actualSourceInputBasis.toBasis
       bIn.toBasis bOut.toBasis (w.partialSourceWord ψ ξ).eval.toLinearMap
-      (dependentPhysicalProductFamilyMatrix (fun q ↦ w.partialSourcePartyMatrix ψ ξ B C q)) hm)
+      (Matrix.piKronecker (fun q ↦ w.partialSourcePartyMatrix ψ ξ B C q)) hm)
 
 end TNLean.Lattice.PartyCircuit.SourceCircuit

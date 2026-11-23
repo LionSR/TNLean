@@ -47,7 +47,7 @@ theorem contractedOperator_densityPair_univ_eq_double_sum
         ∑ η : (g : G) → Ket g, ∑ θ : (g : G) → Bra g,
           (∏ g : G, a g (η g) * conj (b g (θ g))) •
             ∑ j : Sample (Finset.univ : Finset G) participants → Fin k,
-              dependentPhysicalProductFamilyMatrix (fun p ↦
+              Matrix.piKronecker (fun p ↦
                 T p (restrictGates (Finset.univ : Finset G) participants Ket
                     (fun h ↦ η h.1) p)
                   (restrictGates (Finset.univ : Finset G) participants Bra
@@ -61,7 +61,7 @@ theorem contractedOperator_densityPair_univ_eq_double_sum
   let K (η : (g : G) → Ket g) (θ : (g : G) → Bra g) :
       Matrix ((p : Party) → Out p) ((p : Party) → In p) ℂ :=
     ∑ j : Sample (Finset.univ : Finset G) participants → Fin k,
-      dependentPhysicalProductFamilyMatrix (fun p ↦
+      Matrix.piKronecker (fun p ↦
         T p (restrictGates (Finset.univ : Finset G) participants Ket (fun h ↦ η h.1) p)
           (restrictGates (Finset.univ : Finset G) participants Bra (fun h ↦ θ h.1) p)
           (restrictSamples (Finset.univ : Finset G) participants k j p))
@@ -84,7 +84,7 @@ theorem contractedOperator_densityPair_univ_eq_double_sum
         (∏ h : ActiveGate (Finset.univ : Finset G),
           w h.1 * a h.1 (ξζ h).1 * conj (b h.1 (ξζ h).2)) •
           ∑ j : Sample (Finset.univ : Finset G) participants → Fin k,
-            dependentPhysicalProductFamilyMatrix (fun p ↦
+            Matrix.piKronecker (fun p ↦
               pairedT p (restrictGates (Finset.univ : Finset G) participants
                 (fun g ↦ Ket g × Bra g) ξζ p)
                 (restrictSamples (Finset.univ : Finset G) participants k j p)) := by

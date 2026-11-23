@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
-import QICLean.Channel.Peripheral.Primitive
+import QICLean.Channel.Peripheral.Spectrum.Primitive
 import QICLean.Algebra.Matrix.MatrixCyclicPathSum
 import TNLean.MPS.Tensor.Words.CyclicTrace
 import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs

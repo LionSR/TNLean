@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.AreaLawExplicitConstant
-import TNLean.PEPS.AreaLaw.BoxExponent.BootstrapRoundBound
-import TNLean.PEPS.AreaLaw.BoxExponent.PhysicalBoxStepBound
+import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapRoundBound
+import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.PhysicalBoxStepBound
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

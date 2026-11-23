@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
-import TNLean.PEPS.AreaLaw.FinalRegions.TwoFamilyAssembly
+import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.TwoFamilyAssembly
 import TNLean.PEPS.AreaLaw.RectangularSpecialization
-import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective
-import QICLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Peripheral.Spectrum.Spectrum
 import TNLean.MPS.Transfer.Primitivity.EasyDirections
 import TNLean.MPS.Transfer.Primitivity.ImpliesStronglyIrreducible
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral

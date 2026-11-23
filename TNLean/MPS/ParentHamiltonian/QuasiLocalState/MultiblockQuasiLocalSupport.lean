@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.MultiblockQuasiLocalFace
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PrimitiveQuasiLocalUniqueness
-import TNLean.QCA.FinitePureStateDecomposition
+import TNLean.QCA.State.FinitePureStateDecomposition
 
 /-!
 # States supported in a finite sum of primitive MPS spaces

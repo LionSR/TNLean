@@ -59,7 +59,7 @@ theorem physicalProductFamilyMatrix_mul {Mid : Type*} [Fintype Mid]
     (F : Site → Matrix Out Mid ℂ) (L : Site → Matrix Mid In ℂ) :
     physicalProductFamilyMatrix F * physicalProductFamilyMatrix L =
       physicalProductFamilyMatrix (fun v => F v * L v) := by
-  exact dependentPhysicalProductFamilyMatrix_mul F L
+  exact Matrix.piKronecker_mul F L
 
 /-- Products of physical maps compose separately at each site. -/
 theorem physicalProductFamilyMap_comp {Mid : Type*} [Fintype In] [Fintype Mid]
@@ -72,7 +72,7 @@ omit [DecidableEq Site] in
 /-- Identity matrices at every site give the identity product matrix. -/
 @[simp] theorem physicalProductFamilyMatrix_one [DecidableEq Out] :
     physicalProductFamilyMatrix (fun _ : Site => (1 : Matrix Out Out ℂ)) = 1 := by
-  exact dependentPhysicalProductFamilyMatrix_one (Site := Site) (Out := fun _ ↦ Out)
+  exact Matrix.piKronecker_one (ν := Site) (ι := fun _ ↦ Out)
 
 /-- Identity maps at every site give the identity product map. -/
 @[simp] theorem physicalProductFamilyMap_one [Fintype Out] [DecidableEq Out] :

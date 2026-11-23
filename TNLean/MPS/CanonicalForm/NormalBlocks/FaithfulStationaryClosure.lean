@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosure
 import TNLean.MPS.Tensor.Defs
-import QICLean.Channel.FixedPoint.Algebra
+import QICLean.Channel.FixedPoint.Algebra.Algebra
 import QICLean.Channel.KrausMap.KrausMap
 
 /-!

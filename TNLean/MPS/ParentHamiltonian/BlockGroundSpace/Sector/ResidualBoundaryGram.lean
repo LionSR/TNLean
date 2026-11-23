@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryOver
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramConvergence
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicPrimitiveGroundSpace
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.SectorLift
-import QICLean.Channel.FixedPoint.LimitingGramMetric
+import QICLean.Channel.FixedPoint.MeanErgodic.LimitingGramMetric
 
 /-!
 # Gram operators of correlated residual boundaries

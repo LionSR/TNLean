@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteBufferedAction
-import TNLean.QCA.FiniteInverseLocality
+import TNLean.QCA.Automorphism.FiniteInverseLocality
 
 /-!
 # Finite inverse locality from the supplied MPU standard form

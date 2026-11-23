@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoordinates
-import QICLean.Channel.FixedPoint.TraceNonincreasingDirectSum
+import QICLean.Channel.FixedPoint.DirectSum.TraceNonincreasingDirectSum
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorGeneration
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorTraceLoss
 

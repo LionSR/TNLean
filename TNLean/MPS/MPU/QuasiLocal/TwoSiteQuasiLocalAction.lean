@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteLocalAction
-import TNLean.QCA.QuasiLocal
+import TNLean.QCA.QuasiLocal.QuasiLocal
 
 /-!
 # Completed actual forward MPU action

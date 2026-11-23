@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Transfer.Irreducible.TransferPeripheral
-import QICLean.Channel.Peripheral.AdjointSpectrum
-import QICLean.Channel.Peripheral.PeriodicityRemoval
+import QICLean.Channel.Peripheral.Spectrum.AdjointSpectrum
+import QICLean.Channel.Peripheral.Spectrum.PeriodicityRemoval
 
 import Mathlib.Analysis.InnerProductSpace.Adjoint
 

@@ -189,6 +189,44 @@ class ImportLayerPolicyTests(unittest.TestCase):
             {"TNLean.Lattice.PartyCircuit.Example -> TNLean.Lattice.StateSpace"},
         )
 
+    def test_subdirectory_orders_are_enforced(self) -> None:
+        sources = {
+            "TNLean.QCA.QuasiLocal.A": "import TNLean.QCA.Automorphism.B\ndef a := 0\n",
+            "TNLean.QCA.Automorphism.B": "import TNLean.QCA.LocalAlgebra.C\ndef b := 0\n",
+            "TNLean.QCA.LocalAlgebra.C": "def c := 0\n",
+            "TNLean.PEPS.AreaLaw.Collar.Defs": "import TNLean.PEPS.AreaLaw.Collar.Scales.S\ndef d := 0\n",
+            "TNLean.PEPS.AreaLaw.Collar.Scales.S": "def s := 0\n",
+            "TNLean.PEPS.AreaLaw.Collar.Scales.T": "import TNLean.PEPS.AreaLaw.Collar.Defs\ndef t := 0\n",
+            "TNLean.PEPS.AreaLaw.Polygons.Templates.P": (
+                "import TNLean.PEPS.AreaLaw.Collar.Scales.S\nimport TNLean.PEPS.AreaLaw.Theorem\n"
+                "def p := 0\n"
+            ),
+            "TNLean.PEPS.AreaLaw.Theorem": (
+                "import TNLean.PEPS.AreaLaw.Polygons.Templates.P\ndef u := 0\n"
+            ),
+        }
+        self.assertEqual(
+            layers.violations(sources),
+            {
+                "TNLean.QCA.QuasiLocal.A -> TNLean.QCA.Automorphism.B",
+                "TNLean.PEPS.AreaLaw.Collar.Defs -> TNLean.PEPS.AreaLaw.Collar.Scales.S",
+                "TNLean.PEPS.AreaLaw.Polygons.Templates.P -> TNLean.PEPS.AreaLaw.Theorem",
+            },
+        )
+        self.assertEqual(layers.unordered_subdirectories(sources), set())
+        sources["TNLean.QCA.Extra.E"] = "def e := 0\n"
+        self.assertEqual(layers.unordered_subdirectories(sources), {"TNLean.QCA.Extra"})
+
+    def test_base_entries_follow_moved_modules(self) -> None:
+        renamed = layers.rename_entries(
+            frozenset({"TNLean.QCA.Blocking -> TNLean.MPS.Defs", "A <-> B"}),
+            {"TNLean.QCA.Blocking": "TNLean.QCA.LocalAlgebra.Blocking"},
+        )
+        self.assertEqual(
+            renamed, frozenset({"TNLean.QCA.LocalAlgebra.Blocking -> TNLean.MPS.Defs", "A <-> B"})
+        )
+        self.assertIsNone(layers.rename_entries(None, {}))
+
     def test_debt_may_only_shrink_against_the_base(self) -> None:
         entry = "TNLean.Algebra.A -> TNLean.MPS.Defs"
         sources = {"TNLean.Algebra.A": "import TNLean.MPS.Defs\ndef a := 0\n"}

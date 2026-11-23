@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteCyclicInverse
 import TNLean.MPS.MPU.QuasiLocal.TwoSitePropagation
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteTranslationCovariance
-import TNLean.QCA.IsQCA
-import TNLean.QCA.FinitePropagation
+import TNLean.QCA.Automorphism.IsQCA
+import TNLean.QCA.Automorphism.FinitePropagation
 
 /-!
 # Actual local preimages of the supplied standard-form action

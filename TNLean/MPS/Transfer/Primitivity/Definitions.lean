@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Words.WordSpan
 import QICLean.Kraus.Transfer
-import QICLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Peripheral.Spectrum.Spectrum
 import QICLean.Channel.Irreducible.Basic
 import TNLean.MPS.Tensor
 

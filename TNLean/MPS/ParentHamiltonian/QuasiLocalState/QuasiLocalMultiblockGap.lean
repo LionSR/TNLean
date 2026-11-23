@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableQuasiLocalState
 import TNLean.MPS.ParentHamiltonian.BulkObservable.PrimitiveLocalParentInteractionGap
-import TNLean.QCA.QuasiLocalInterval
+import TNLean.QCA.QuasiLocal.QuasiLocalInterval
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanNormalization
 import TNLean.MPS.ParentHamiltonian.BulkObservable.MultiblockLocalCommutatorGap
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalCommutatorLocality

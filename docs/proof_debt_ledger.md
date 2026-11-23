@@ -425,7 +425,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   corollaries now live in `MPS/Transfer/Spectrum/TransferOperatorGapInjective.lean`.
 - **Why it's excess**: `IsInjective` strictly implies irreducibility via
   an existing one-composition bridge
-  (`injective_implies_irreducibleCP` + `isIrreducibleTensor_of_isIrreducibleMap`),
+  (`injective_implies_irreducibleCP` + `isIrreducibleFamily_of_isIrreducibleMap_mapLM`),
   and both Wolf Thm 6.3 and the Wolf 6.6 rigidity argument need only
   irreducibility — every injective-hypothesis theorem is a direct
   instance of the already-proven irreducible one.
@@ -574,7 +574,7 @@ description of current `main`.
   structure (the idiom already used by the PEPS `*Hypotheses` structures,
   e.g. `PEPS/TorusRectangleRegion.lean:120`); replace >= 10-conjunct
   existentials with named witness structures (model:
-  `ProjectionSpectralSplit`, `Channel/Peripheral/CyclicDecomposition/Basic.lean:626`);
+  `ProjectionSpectralSplit`, `Algebra/Hermitian/CornerCompression.lean:584` of QICLean);
   migrate consumers from positional `obtain` to field access.
 - **First PR**: a `VerticalSectorHypotheses` structure bundling the shared
   40-line telescope; restate the 5 byte-identical-signature theorems over

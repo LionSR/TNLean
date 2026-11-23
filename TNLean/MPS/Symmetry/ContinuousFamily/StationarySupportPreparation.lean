@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.ContinuousFamily.StationarySupportedDensityPhaseInvariance
 import TNLean.MPS.CanonicalForm.Definitions
-import QICLean.Channel.Peripheral.SpectralRadius
+import QICLean.Channel.Peripheral.Spectrum.SpectralRadius
 import QICLean.Channel.KrausMap.KrausCornerCompression
 import QICLean.Algebra.Matrix.MatrixAux
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween

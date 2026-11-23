@@ -8,7 +8,7 @@ import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.Tensor.Defs
 import TNLean.MPS.Tensor.Chain.Defs
-import QICLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Peripheral.Spectrum.Spectrum
 import Mathlib.RingTheory.RootsOfUnity.Complex
 
 /-!

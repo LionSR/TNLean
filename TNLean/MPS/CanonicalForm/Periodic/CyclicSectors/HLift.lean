@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.OrbitSum
 import QICLean.Channel.Schwarz.MultiplicativeDomainFull
-import QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity
+import QICLean.Channel.Peripheral.Irreducible.SectorPrimitivity
 
 /-!
 # Sector irreducibility: the `hLift` construction

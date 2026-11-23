@@ -13,7 +13,7 @@ import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
 import TNLean.MPS.FundamentalTheorem.InjectivePhase
 import QICLean.Algebra.Hermitian.OrthogonalProjection
-import QICLean.Channel.FixedPoint.Algebra
+import QICLean.Channel.FixedPoint.Algebra.Algebra
 import Mathlib.Data.Fintype.Pigeonhole
 import Mathlib.Data.Nat.Nth
 import Mathlib.Order.Filter.AtTopBot.CountablyGenerated

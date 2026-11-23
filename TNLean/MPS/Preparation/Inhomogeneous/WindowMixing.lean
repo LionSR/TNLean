@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.Inhomogeneous.InhomogeneousDoeblin
 import TNLean.MPS.Tensor.Chain.Interval
-import QICLean.Channel.FixedPoint.Cesaro
+import QICLean.Channel.FixedPoint.MeanErgodic.Cesaro
 import QICLean.Analysis.Real.GeometricOrderPolynomialBound
 import TNLean.MPS.Preparation.Inhomogeneous.VaryingReferencePreparation
 

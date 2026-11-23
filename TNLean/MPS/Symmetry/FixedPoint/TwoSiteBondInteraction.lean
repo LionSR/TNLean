@@ -8,7 +8,7 @@ import QICLean.Analysis.Projection.MatrixStarProjection
 import TNLean.MPS.Symmetry.FixedPoint.BondProductPhysicalParentHamiltonian
 import TNLean.MPS.Operator.Interaction.GappedInteractionPath
 import TNLean.MPS.Operator.PhysicalSector.CommutingBondEtaCyclicCore
-import TNLean.MPS.Operator.Simple.EmbedLocalOperatorMonomial
+import TNLean.MPS.Operator.Simple.PlaceAlongRingWindowMonomial
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.StringOrder.PureTwistedSpectrum
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.FNWTransferDecay
-import QICLean.Channel.Peripheral.AdjointSpectrum
+import QICLean.Channel.Peripheral.Spectrum.AdjointSpectrum
 
 /-!
 # Phase-retaining asymptotics of the physical string correlator

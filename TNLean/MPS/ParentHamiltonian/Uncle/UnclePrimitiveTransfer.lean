@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Defs
 import QICLean.Spectral.Radius.PowerDecay
-import QICLean.Channel.Peripheral.SpectralRadius
-import QICLean.Channel.Peripheral.AdjointSpectrum
+import QICLean.Channel.Peripheral.Spectrum.SpectralRadius
+import QICLean.Channel.Peripheral.Spectrum.AdjointSpectrum
 import QICLean.Channel.Irreducible.CollatzWielandt
 import QICLean.Kraus.Injectivity
 import QICLean.Kraus.CPPrimitive
