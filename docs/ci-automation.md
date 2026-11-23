@@ -294,6 +294,10 @@ invocations remain supported. Top-level `--help` lists both commands.
   dispatch, an unfetchable base), no file is selected and the root build is
   the check.
 
+The focused checks and the early build skip the aggregators that
+`scripts/generate_import_aggregators.py` writes, since building one builds its
+whole directory; the strict checks elaborate them like any other changed file.
+
 `python3 scripts/ci_lean_checks.py list --base origin/main` prints the
 selection locally. Do not add per-module "build early" or "test strictly" steps
 to `pr-ci.yml`: a new module is picked up automatically. The repository keeps

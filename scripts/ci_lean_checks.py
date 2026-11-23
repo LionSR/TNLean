@@ -10,20 +10,21 @@ Commands
 --------
 ``early``   Build the changed production modules with ``lake --fail-fast build``
             before the full library build, so a failure surfaces quickly.
-            If any changed source is not confidently import-only, defer
-            import-only aggregators to the mandatory full library build.
 ``focused`` Check the PR's directly changed sources before the full build.
             Select against the explicit feature head's merge base, but build
-            and elaborate the actual (possibly merged) checkout. Defer
-            confidently import-only production sources to the full build and
-            post-build strict checks. Failures remain failures
-            while independent targets are still diagnosed. With ``--budget``
+            and elaborate the actual (possibly merged) checkout. Failures
+            remain failures while independent targets are still diagnosed.
+            With ``--budget``
             the step is a shortcut like ``early``: once the budget is spent
             (a cold dependency cache, a change near the bottom of the import
             graph) the remaining targets are left, with a warning, to the
             mandatory full build and post-build strict checks.
 ``strict``  After the full build, elaborate every changed production source
             file with warnings as errors.
+
+``early`` and ``focused`` skip the aggregators written by
+``scripts/generate_import_aggregators.py``: building one builds its whole
+directory, which the full build does anyway. ``strict`` checks them too.
 
 Pull-request merge checkouts use their actual base parent after verifying the
 second parent matches the event's PR head. Pushes use the previous head as the base.
@@ -43,7 +44,7 @@ import threading
 import time
 from pathlib import Path
 
-from lean_import_syntax import pure_import_modules
+from generate_import_aggregators import GENERATED_MARKER
 
 LEAN_FLAGS = [
     "-DautoImplicit=false",
@@ -113,49 +114,17 @@ def changed_paths(base: str | None) -> list[str] | None:
     ).stdout.split("\0") if p]
 
 
-def early_modules(root: Path, sources: list[str]) -> list[str]:
-    """Prefer substantive sources; retain every target if all are import-only."""
-    substantive = []
-    for path in sources:
-        try:
-            text = (root / path).read_text(encoding="utf-8")
-        except (OSError, UnicodeError):
-            # An unreadable source is never safe to defer as import-only.
-            substantive.append(path)
-            continue
-        imports, error = pure_import_modules(text)
-        if error is not None or not imports:
-            substantive.append(path)
-    return [module_of(path) for path in substantive or sources]
+def is_generated_aggregator(root: Path, path: str) -> bool:
+    """Whether `path` carries the import-aggregator generator's marker."""
+    try:
+        with open(root / path, encoding="utf-8", errors="replace") as source:
+            return GENERATED_MARKER in source.read(1024)
+    except OSError:
+        return False
 
 
-def focused_sources(root: Path, sources: list[str], strict_sources: list[str]) -> list[str]:
-    """Defer confidently import-only sources; full strict selection is unchanged."""
-    retained = []
-    for path in sources:
-        if path not in strict_sources:
-            retained.append(path)
-            continue
-        try:
-            text = (root / path).read_bytes().decode("utf-8")
-        except (OSError, UnicodeError):
-            retained.append(path)
-            continue
-        # Python whitespace/comment rules are not Lean's lexer. Keep uncertain
-        # spellings and doc-comment tokens focused, even inside other comments.
-        if any(c.isspace() and c not in " \n" for c in text) or "/--" in text or "/-!" in text:
-            retained.append(path)
-            continue
-        # Comments separate tokens in Lean. Do not let the shared comment
-        # stripper join e.g. im/- comment -/port into an import command.
-        spaced = text.replace("/-", " /-").replace("-/", "-/ ")
-        imports, error = pure_import_modules(spaced)
-        if error is not None or not imports:
-            retained.append(path)
-        else:
-            print(f"Deferring import-only source to full build and post-build strict: {path}",
-                  flush=True)
-    return retained
+def without_aggregators(root: Path, sources: list[str]) -> list[str]:
+    return [path for path in sources if not is_generated_aggregator(root, path)]
 
 
 def changed_sources(root: Path, base: str | None) -> list[str]:
@@ -166,10 +135,8 @@ def changed_sources(root: Path, base: str | None) -> list[str]:
 
 def select(root: Path, base: str | None) -> tuple[list[str], list[str]]:
     """Return (early modules, strict source files)."""
-    # All changed production files remain strict sources, including import-only
-    # aggregators deferred from the early shortcut to the full library build.
     sources = changed_sources(root, base)
-    return early_modules(root, sources), sources
+    return [module_of(path) for path in without_aggregators(root, sources)], sources
 
 
 def select_focused(root: Path, base: str | None, head: str | None) -> list[str]:
@@ -200,7 +167,7 @@ def select_focused(root: Path, base: str | None, head: str | None) -> list[str]:
     missing = sorted((direct & head_files) - existing)
     if missing:
         raise ValueError("changed PR targets missing from the checkout: " + ", ".join(missing))
-    sources = sorted(existing)
+    sources = without_aggregators(root, sorted(existing))
     print(f"Focused PR range: {fork}..{head_commit}; elaborating checkout HEAD.", flush=True)
     print(f"Focused selection: {len(sources)} direct source(s).", flush=True)
     return sources
@@ -413,11 +380,6 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "focused":
         try:
             sources = select_focused(Path("."), args.base, args.head)
-            # Match the later strict phase's verified-merge selection. In a
-            # feature-head/unknown checkout it has no production-source coverage.
-            strict_base = selection_base(args.base, args.pr_head or args.head)
-            strict_sources = changed_sources(Path("."), strict_base) if strict_base else []
-            sources = focused_sources(Path("."), sources, strict_sources)
             return focused_checks(sources, args.jobs, args.timeout, args.log, args.budget)
         except (ValueError, OSError, subprocess.CalledProcessError) as exc:
             print(f"::error::Focused checks could not complete: {exc}", file=sys.stderr)
