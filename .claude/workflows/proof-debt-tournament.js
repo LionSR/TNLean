@@ -29,8 +29,7 @@ Known signals from an initial scout (verify and go deeper, do not just repeat th
 - PEPS/ is a nearly flat directory with numbered-sequel files: TorusWindowChain2/4/5/6,
   UnionInjectivityGeneral2, UnionInjectivityOverlap3, plus
   RegionBlock/CoarseThreeSite4..11 and RegionBlock/Recovery2..4/7..9
-  (20 files, ~11.0k lines; the authoritative list is
-  NUMBERED_DEBT_ALLOWLIST in scripts/check_numbered_lean_files.py). Other stages of the same
+  (20 files, ~11.0k lines at the time of this scout). Other stages of the same
   chains have already been given concept names: TorusUnconditionalFundamentalTheorem.lean,
   NormalSquareUnconditionalFundamentalTheorem.lean, UnionInjectivityOverlapSetup.lean,
   UnionInjectivityOverlapBridge.lean, TorusWindowPeeling.lean with its
@@ -164,8 +163,8 @@ NeighboringTraceFactorization x46, ThreeBlockGeometry x34, sameMPV x18...): open
 files, diff the statements, and determine whether these are genuinely re-stated/re-proved
 per-file (real debt) or distinct namespaced content (not debt). Also hunt for numbered-sequel
 file families (TorusWindowChain2/4/5/6, CoarseThreeSite4..11, Recovery2..4/7..9,
-UnionInjectivityGeneral/2, UnionInjectivityOverlap3; the authoritative list is
-NUMBERED_DEBT_ALLOWLIST in scripts/check_numbered_lean_files.py): read pairs and
+UnionInjectivityGeneral/2, UnionInjectivityOverlap3; list the digit-suffixed files under
+TNLean/ for the current set): read pairs and
 estimate the fraction of duplicated content. Quantify: how many lines exist N times.` },
   { key: 'architecture', prompt: `Lens: FILE & MODULE ORGANIZATION. Assess directory structure and layering. PEPS/ is a
 ~120-file flat directory — is there a coherent grouping (Cycle*, Torus*, Normal*, Region*)

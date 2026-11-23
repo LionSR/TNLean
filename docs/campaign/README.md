@@ -63,7 +63,7 @@ need not be treated as the theorem's label. The third cell contains the work
 issue numbers, rather than pull requests mentioned in coverage descriptions.
 Equations, conjectures and imported-reference rows whose first cell does not
 name a result are not counted. Existing tables retain their earlier parsing
-rules. Run `python3 scripts/test_campaign_results.py` to check both formats.
+rules.
 
 From the TNLean checkout root, with `gh` authenticated and a QICLean clone at
 `../QICLean`:

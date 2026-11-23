@@ -62,10 +62,9 @@ seam is not.
   target unless the user asks.
 - Blueprint-cited declarations under `blueprint/src/`, until the entry is
   redirected to the survivor in the same PR.
-- The `lakefile.toml` lean options and the CI file policies
-  (`scripts/check_numbered_lean_files.py`,
-  `scripts/check_oversized_lean_files.py`). Making a file *pass* them is
-  welcome; loosening them is not. These scripts stay repository-local; the
+- The `lakefile.toml` lean options and the CI file policy
+  `scripts/check_oversized_lean_files.py`. Making a file *pass* it is
+  welcome; loosening it is not. The script stays repository-local; the
   plugin's `assets/` carries a generalized form for other projects, not a copy
   to keep in sync.
 
@@ -101,7 +100,7 @@ deliberately deferred.
   The left/right families in `MPS/MPU` are *not* mirrors: they are the two
   source cuts of a single tensor, both stated by the source paper.
 - Numbered sequels: digit-suffixed files (~50 files / ~23k lines at the last
-  count, policed by `scripts/check_numbered_lean_files.py`), and separately,
+  count), and separately,
   hypothesis-strength suffix ladders on declaration names (e.g.
   `foo_c1_pgvwc07_of_dualFixedPoint`), which are file-invisible and found by
   searching for suffix ladders rather than digits.
@@ -158,11 +157,7 @@ then run `python3 scripts/lake_build_hotspots.py /tmp/build.log`.
 - `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls`
   after a `\lean{}` redirect; without the fetch the check fails for missing
   setup and that reads like a clean "no tag" verdict.
-- `python3 scripts/check_reader_facing_prose.py --root . --diff-base origin/<base> --ci`
-  is the PR gate and judges only added lines, from **committed** content — a
-  fix in the working tree looks ineffective until committed; run bare, it
-  scans the whole tree and fails on others' violations. Its rule that bites a
-  deletion PR: a Lean docstring cites the mathematics, never an issue number.
+- A Lean docstring cites the mathematics, never an issue number.
 - Records: ledger entries in `docs/proof_debt_ledger.md` use the entry format
   of `docs/proof_debt.md` (status, verified evidence, remediation, first PR),
   in rank order, with a `proof-debt` issue as a sub-issue of #4529; issues

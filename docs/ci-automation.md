@@ -419,15 +419,6 @@ during review.
   comments and verifies that every remaining command is an `import`. Missing,
   excluded, empty, malformed, or declaration-bearing exemptions fail even when
   the file is below the limit. CI currently registers only `TNLean.lean`.
-- New Git-tracked production modules below `TNLean/` may not end in a numeral
-  (optionally followed by one letter). `TNLean/Archive/` and untracked scratch
-  files are outside this production policy. Existing continuation files form a
-  shrinking allowlist: pull-request CI compares the proposed set with its
-  merge-base value and rejects additions; a new name fails, and a removed or
-  renamed file leaves a stale entry that must be deleted in the same change.
-  Exact names whose numeral
-  denotes a mathematical object or source label have path-specific documented
-  exceptions in `scripts/check_numbered_lean_files.py`.
 - Imports must respect the layers of
   `docs/many_body_circuit_architecture.md`. `scripts/check_import_layers.py`
   rejects an import that points upward between the layers below the
@@ -437,7 +428,7 @@ during review.
   declaration whose whole body applies the declaration of the same name in
   another namespace to its own explicit arguments. The existing cases are
   recorded in the two scripts in sets that may only shrink, compared with the
-  merge base as the numbered-module allowlist is: recording a new case fails,
+  merge base: recording a new case fails,
   and a case that is repaired must be removed from its set in the same change.
 
 When a proof approaches the cap, split by mathematical responsibility rather

@@ -235,9 +235,6 @@ rg -n "sorry|axiom" TNLean/Path/To/File.lean || true
 # Text-based style linter (whitespace, line endings, module naming).
 lake exe lint_style
 
-# Reader-facing prose patterns (tracker/label shorthand in docstrings, blueprint, etc.).
-python3 scripts/check_reader_facing_prose.py --root . --diff-base origin/main
-
 # If you touched the blueprint, after a successful `lake build`:
 cd blueprint && leanblueprint checkdecls
 ```
@@ -253,7 +250,7 @@ required PR body sections (Motivation / Description / Testing), is in
 triggers a build with the Mathlib cache, the text-based style linter, and a
 check that every `\lean{}` tag in the blueprint resolves
 (`leanblueprint checkdecls`); touching blueprint sources additionally runs
-the reader-facing prose check and a LaTeX lint. A separate automated review
+a LaTeX lint. A separate automated review
 pass then checks the diff against the Mathlib style guide and the proof
 integrity rules above. The full list of workflows and what each one checks
 is in [`docs/CONTRIBUTING.md`](CONTRIBUTING.md#7-ci--automation).
