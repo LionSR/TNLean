@@ -446,10 +446,9 @@ them:
 | `PEPS/RegionBlock <-> PEPS/TorusWindowPeeling` | `PEPS.RegionBlock.InteriorBondInsertion` → `PEPS.TorusWindowPeeling.WindowIndependence` (deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff) | `InteriorBondInsertion` → PEPS/FundamentalTheorem |
 | `PEPS/RegionBlock <-> PEPS/VertexComplement` | `PEPS.VertexComplement.Injective` → `PEPS.RegionBlock.KernelDescent` (regionBlockedTensorInjective_of_isVertexInjective) | `Injective` → PEPS/Injectivity |
 
-After the map, 10 pairs remain, all from modules mixing two layers (next
+After the map, 9 pairs remain, all from modules mixing two layers (next
 section):
 
-- `MPS/FundamentalTheorem <-> MPS/ParentHamiltonian`: `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients` → `MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence`; `MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalNormalization` → `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients`
 - `PEPS/Approximation <-> PEPS/AreaLaw`: `PEPS.Approximation.Cells.CellChambers` → `PEPS.AreaLaw.Templates.TemplateRows`; `PEPS.AreaLaw.RestoringOperator.GoodRealizationUnitary` → `PEPS.Approximation.SheetSplitting`
 - `PEPS/Examples <-> PEPS/Graph`: `PEPS.Examples.CZX.CZXOnSiteSymmetry` → `PEPS.Graph.Region.OnSiteOperator`; `PEPS.Graph.Torus.KitaevPeriodicTiling` → `PEPS.Examples.ToricCode.KitaevCheckerboardBlocking`
 - `PEPS/FundamentalTheorem <-> PEPS/Graph`: `PEPS.FundamentalTheorem.Cycle.CycleBlockingData` → `PEPS.Graph.Region.CycleArcRegion`; `PEPS.Graph.Holonomy.RegularBoundaryRoute` → `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion`
@@ -464,7 +463,7 @@ section):
 
 ### Imports that remain
 
-Each of these 49 imports points outside the allowed layers after the map. The
+Each of these 48 imports points outside the allowed layers after the map. The
 map records them, and `--check` fails on any other violation and on a recorded
 one that no longer occurs. Each is removed in one of two ways:
 
@@ -473,7 +472,6 @@ one that no longer occurs. Each is removed in one of two ways:
 
 | Importer | Imported | Declarations used, or remedy |
 |---|---|---|
-| `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients` | `MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence` | uses exists_hasComplementaryFixedPointGap_gauge_of_isNormal |
 | `PEPS.AreaLaw.RestoringOperator.GoodRealizationUnitary` | `PEPS.Approximation.SheetSplitting` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Graph.Cell.TorusPlaquetteRealization` | `PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement` | uses torusPlaquetteWalk, torusPlaquetteRegion |
 | `PEPS.Graph.Cell.TorusSimplyConnectedComplement` | `PEPS.Injectivity.Normal.NormalPairBlocking` | uses nonempty_regionBoundaryEdge_of_connected |
@@ -559,9 +557,6 @@ Remedies by host module (the declarations to move and where):
 - **`RegularSiteGram`:** `regularLegProjector` goes to `Tensor/GraphState`.
 - **`RegionPhysicalDeformation`:** `physicalDeform` and its two lemmas go to
   `Tensor/Region`.
-- **`MPS/ParentHamiltonian/Gap/Comparison/PrimitiveGaugeExistence`:**
-  `exists_hasComplementaryFixedPointGap_gauge_of_isNormal` goes to
-  `MPS/CanonicalForm`, removing the last MPS pair.
 - **`QCA/Blocking`:** the import of `MPS/Tensor/Physical/Blocking` is replaced by
   `QICLean.Kraus.Blocking`, since only `Kraus.blockPhysDim` and
   `Kraus.decodeBlockEquiv` are used. `MPSTensor.blockedConfigEquiv` and
@@ -1633,7 +1628,7 @@ existing directory of that layer has the same objects (old `MPS/BNT`, `MPS/Perio
 #### Modules that mix two layers or are forced up by their imports
 | module | statements of | declarations responsible | proposed split |
 |---|---|---|---|
-| `PrimitiveGaugeExistence` (`Gap/Comparison`) | CanonicalForm and ParentHamiltonian | `exists_hasComplementaryFixedPointGap_gauge_of_isNormal` (a normal tensor has a trace-preserving primitive gauge with faithful fixed point), `parentHamiltonianES_eq_of_groundSpace_eq` | gauge lemma to the CanonicalForm layer beside `NormalTensorGauge`; the ground-space lemma to `ParentInteraction`; gap theorems stay |
+| `PrimitiveGaugeExistence` (`Gap/Comparison`) | ParentHamiltonian | `hamiltonian_parentRingInteraction_eq_of_groundSpace_eq` | the ground-space lemma to `ParentInteraction`; gap theorems stay |
 | `PhysicalDeformation` (`ParentInteraction`) | ParentInteraction and Deformation | `IsParentInteraction` (used by `ParentInteractionComparison`, `LocalParentExpectation`) | predicate and basic lemmas to `ParentInteraction`; `onSiteTensorPow` and the deformed interaction to `Deformation` |
 | `Martingale.OpenRangeComparison` | ParentInteraction | `openParentHamiltonianES_eq_of_groundSpace_eq` forces `BlockOpenGroundSpaceAtSimultaneousInjectivity` into `Gap` | move the lemma to `ParentInteraction`; the importer returns to `BlockGroundSpace` |
 | `Martingale.PeriodicInteraction` (`Interaction`) | QICLean (generic interaction sums) | order, scalar multiples and positivity of the Hamiltonian of the translates of a local matrix on the ring, and the transfer of an eigenvalue gap along a two-sided comparison | QICLean material (`qiclean:hamiltonian`) |
