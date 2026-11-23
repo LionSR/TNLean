@@ -110,8 +110,8 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
     hProjection hN (isometricInteractionExtension_zero_translate_commute E hN)
   have hvP : v ∈ (LinearMap.ker (Matrix.toEuclideanLin P))ᗮ := by
     rwa [isometricInteractionExtension_zero_ker_eq_range E hE hN]
-  have hGap := (forall_hasEigenvalue_iff_re_inner (Δ := 1) hP).mp
-    (by simpa only [Complex.ofReal_one] using hSpec) v hvP
+  have hGap := mul_norm_sq_le_re_inner_of_hasEigenvalue (Δ := 1) hP.isHermitian
+    (by simpa only [Complex.ofReal_one] using hSpec) hvP
   have hEnergy : ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin P v, v⟫_ℂ).re := by
     rwa [one_mul, ← RCLike.re_eq_complex_re, inner_re_symm, RCLike.re_eq_complex_re] at hGap
   have hOrder : P ≤ H := by
