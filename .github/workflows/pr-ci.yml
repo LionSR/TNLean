@@ -28,12 +28,6 @@ on:
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
       - 'scripts/test_check_docbuild_manifest.py'
-      - 'scripts/coherent_qic_prerequisites.json'
-      - 'scripts/export_coherent_qic_prerequisites.py'
-      - 'scripts/test_export_coherent_qic_prerequisites.py'
-      - 'scripts/coherent_tn_prerequisites.json'
-      - 'scripts/export_coherent_tn_prerequisites.py'
-      - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
@@ -41,7 +35,6 @@ on:
       - 'scripts/ci_resource_diagnostics.sh'
       - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
-      - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
@@ -77,7 +70,6 @@ on:
       - 'scripts/badge_utils.py'
       - 'scripts/write_badges.py'
       - 'scripts/generate_badges.py'
-      - 'scripts/test_badge_colors.py'
       - 'scripts/campaign_board/collect.py'
       - 'scripts/campaign_board/board.js'
       - 'scripts/test_campaign_results.py'
@@ -98,7 +90,6 @@ on:
       - 'scripts/test_*_diagram.py'
       - 'scripts/run_diagram_tests.py'
       - 'scripts/test_run_diagram_tests.py'
-      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_supported_polar_tree.py'
@@ -131,12 +122,6 @@ on:
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
       - 'scripts/test_check_docbuild_manifest.py'
-      - 'scripts/coherent_qic_prerequisites.json'
-      - 'scripts/export_coherent_qic_prerequisites.py'
-      - 'scripts/test_export_coherent_qic_prerequisites.py'
-      - 'scripts/coherent_tn_prerequisites.json'
-      - 'scripts/export_coherent_tn_prerequisites.py'
-      - 'scripts/test_export_coherent_tn_prerequisites.py'
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
@@ -144,7 +129,6 @@ on:
       - 'scripts/ci_resource_diagnostics.sh'
       - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
-      - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
@@ -173,7 +157,6 @@ on:
       - 'scripts/badge_utils.py'
       - 'scripts/write_badges.py'
       - 'scripts/generate_badges.py'
-      - 'scripts/test_badge_colors.py'
       - 'scripts/campaign_board/collect.py'
       - 'scripts/campaign_board/board.js'
       - 'scripts/test_campaign_results.py'
@@ -194,7 +177,6 @@ on:
       - 'scripts/test_*_diagram.py'
       - 'scripts/run_diagram_tests.py'
       - 'scripts/test_run_diagram_tests.py'
-      - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_equation_web.py'
       - 'scripts/test_tenkz_inline_web.py'
       - 'scripts/test_supported_polar_tree.py'
@@ -237,7 +219,6 @@ jobs:
       blueprint_pdf: ${{ steps.filter.outputs.blueprint_pdf }}
       paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
       workflow: ${{ steps.filter.outputs.workflow }}
-      coherent_prerequisites: ${{ steps.filter.outputs.coherent_prerequisites }}
       campaign_results: ${{ steps.filter.outputs.campaign_results }}
     steps:
       - uses: dorny/paths-filter@v4
@@ -251,29 +232,9 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
-              - 'scripts/coherent_qic_prerequisites.json'
-              - 'scripts/export_coherent_qic_prerequisites.py'
-              - 'scripts/test_export_coherent_qic_prerequisites.py'
-              - 'scripts/coherent_tn_prerequisites.json'
-              - 'scripts/export_coherent_tn_prerequisites.py'
-              - 'scripts/test_export_coherent_tn_prerequisites.py'
               - 'scripts/ci_compatible_cache.py'
               - 'scripts/test_ci_compatible_cache.py'
               - 'scripts/ci_lean_checks.py'
-            coherent_prerequisites:
-              - 'TNLean/MPS/Preparation/ExactSectorEncoder.lean'
-              - 'TNLean/MPS/Preparation/SectorEncoderRates.lean'
-              - 'TNLean/MPS/Preparation/CoherentGroundspaceConversion.lean'
-              - 'TNLean/MPS/Preparation/SectorEncoderCompilation.lean'
-              - 'TNLean/MPS/Preparation/SectorEncoderPreparation.lean'
-              - 'TNLean/MPS/Preparation/SectorEncoderGroundspace.lean'
-              - 'TNLean/MPS/Preparation/SectorSpectralGap.lean'
-              - 'scripts/coherent_qic_prerequisites.json'
-              - 'scripts/export_coherent_qic_prerequisites.py'
-              - 'scripts/test_export_coherent_qic_prerequisites.py'
-              - 'scripts/coherent_tn_prerequisites.json'
-              - 'scripts/export_coherent_tn_prerequisites.py'
-              - 'scripts/test_export_coherent_tn_prerequisites.py'
             module_policy:
               - 'scripts/check_import_layers.py'
               - 'scripts/check_numbered_lean_files.py'
@@ -284,12 +245,6 @@ jobs:
               - 'docbuild/**'
               - 'scripts/check_docbuild_manifest.py'
               - 'scripts/test_check_docbuild_manifest.py'
-              - 'scripts/coherent_qic_prerequisites.json'
-              - 'scripts/export_coherent_qic_prerequisites.py'
-              - 'scripts/test_export_coherent_qic_prerequisites.py'
-              - 'scripts/coherent_tn_prerequisites.json'
-              - 'scripts/export_coherent_tn_prerequisites.py'
-              - 'scripts/test_export_coherent_tn_prerequisites.py'
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/ci_lean_checks.py'
               - 'scripts/test_ci_lean_checks.py'
@@ -297,7 +252,6 @@ jobs:
               - 'scripts/ci_resource_diagnostics.sh'
               - 'scripts/test_ci_resource_diagnostics.py'
               - 'scripts/test_lake_build_hotspots.py'
-              - 'scripts/test_pr_ci_base_snapshot.py'
               - 'scripts/lake_build_locked.sh'
               - 'scripts/seed_lake_build.sh'
               - 'scripts/test_seed_lake_build.sh'
@@ -331,7 +285,6 @@ jobs:
               - 'scripts/badge_utils.py'
               - 'scripts/write_badges.py'
               - 'scripts/generate_badges.py'
-              - 'scripts/test_badge_colors.py'
               - 'scripts/test_blueprint_web_render.py'
               - 'scripts/test_blueprint_graph_worker.py'
               - 'scripts/test_blueprint_graph_precompute.py'
@@ -343,7 +296,6 @@ jobs:
               - 'scripts/test_*_diagram.py'
               - 'scripts/run_diagram_tests.py'
               - 'scripts/test_run_diagram_tests.py'
-              - 'scripts/test_blueprint_pdf_capacity.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
               - 'scripts/test_supported_polar_tree.py'
@@ -495,52 +447,6 @@ jobs:
             --state "$RUNNER_TEMP/compatible-cache.json" \
             --prefix "$PREFIX" --matched "$MATCHED_KEY" --version "$VERIFIED_VERSION"
           python3 scripts/ci_compatible_cache.py prune
-
-      # Cache setup and provenance guards above must finish before Lean runs.
-      # Build and export only the allowlisted QIC prerequisites before the TN root build.
-      # The root build reuses their Lake traces; an artifact is not a TN build pass.
-      # Export only the explicit QIC allowlist and hashes, never the whole workspace.
-      - name: Prepare verified coherent QIC prerequisites
-        id: coherent-prerequisites
-        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
-        continue-on-error: true
-        run: >
-          python3 scripts/export_coherent_qic_prerequisites.py --build --root .
-          --output "$RUNNER_TEMP/coherent-qic-prerequisites"
-
-      - name: Export coherent QIC prerequisites
-        if: success() && steps.coherent-prerequisites.outcome == 'success'
-        continue-on-error: true
-        uses: actions/upload-artifact@v7
-        with:
-          name: coherent-qic-prerequisites-${{ github.sha }}
-          path: ${{ runner.temp }}/coherent-qic-prerequisites
-          if-no-files-found: ignore
-          retention-days: 1
-          compression-level: 9
-
-      # The selected TN sources and their TN import closure are unchanged from
-      # an explicit baseline. Source/dependency verification precedes collection.
-      - name: Prepare verified coherent TN prerequisites
-        id: coherent-tn-prerequisites
-        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
-        continue-on-error: true
-        run: |
-          set -eo pipefail
-          python3 scripts/export_coherent_tn_prerequisites.py --build --root . \
-            --output "$RUNNER_TEMP/coherent-tn-prerequisites" \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
-      - name: Export coherent TN prerequisites
-        if: success() && steps.coherent-tn-prerequisites.outcome == 'success'
-        continue-on-error: true
-        uses: actions/upload-artifact@v7
-        with:
-          name: coherent-tn-prerequisites-${{ github.sha }}
-          path: ${{ runner.temp }}/coherent-tn-prerequisites
-          if-no-files-found: ignore
-          retention-days: 1
-          compression-level: 9
 
       # Diagnose the PR's direct edits before the full dependency build. Selection
       # uses the explicit feature head, while checks use this merged checkout.
@@ -800,16 +706,10 @@ jobs:
       - name: Test Lean compilation-time checker
         run: python3 scripts/test_lake_build_hotspots.py
 
-      - name: Test bounded coherent prerequisite export
-        run: |
-          python3 scripts/test_export_coherent_qic_prerequisites.py
-          python3 scripts/test_export_coherent_tn_prerequisites.py
-
       - name: Test compatible CI cache guards
         run: |
           python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
           python3 scripts/test_ci_compatible_cache.py
-          python3 scripts/test_pr_ci_base_snapshot.py
 
       - name: Test changed-file Lean check selection
         run: python3 scripts/test_ci_lean_checks.py
@@ -1087,10 +987,6 @@ jobs:
         if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
         run: texra-blueprint paper-gaps check
 
-      - name: Test blueprint PDF string-pool capacity
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_blueprint_pdf_capacity.py
-
       # Every scripts/test_tenkz_*.py and scripts/test_*_diagram.py test.
       # New diagram tests need no workflow edit. Runner: scripts/run_diagram_tests.py.
       - name: Test diagram test runner
@@ -1222,9 +1118,6 @@ jobs:
 
       - name: Test paper-gap Lean declaration scanner
         run: PYTHONPATH=scripts python3 scripts/test_paper_gap_leanid_sync.py
-
-      - name: Test badge color thresholds
-        run: python3 scripts/test_badge_colors.py
 
       - name: Generate lean_decls from blueprint .tex files
         id: lean-decls

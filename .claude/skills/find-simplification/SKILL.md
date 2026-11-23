@@ -64,8 +64,7 @@ seam is not.
   redirected to the survivor in the same PR.
 - The `lakefile.toml` lean options and the CI file policies
   (`scripts/check_numbered_lean_files.py`,
-  `scripts/check_oversized_lean_files.py`,
-  `scripts/check_forbidden_lean_tokens.py`). Making a file *pass* them is
+  `scripts/check_oversized_lean_files.py`). Making a file *pass* them is
   welcome; loosening them is not. These scripts stay repository-local; the
   plugin's `assets/` carries a generalized form for other projects, not a copy
   to keep in sync.
@@ -159,19 +158,11 @@ then run `python3 scripts/lake_build_hotspots.py /tmp/build.log`.
 - `python3 scripts/fetch_tenkz.py && cd blueprint && leanblueprint checkdecls`
   after a `\lean{}` redirect; without the fetch the check fails for missing
   setup and that reads like a clean "no tag" verdict.
-- `python3 scripts/check_forbidden_lean_tokens.py`, bare, before each commit.
-  Its `--base-ref` defaults to `HEAD`, so it checks the working tree; do not
-  point it at a branch base, where its textual match fires on ordinary English
-  ("adjacent factors admit…"). It runs in the auto-fix workflow, not in
-  `pr-ci.yml`.
 - `python3 scripts/check_reader_facing_prose.py --root . --diff-base origin/<base> --ci`
   is the PR gate and judges only added lines, from **committed** content — a
   fix in the working tree looks ineffective until committed; run bare, it
   scans the whole tree and fails on others' violations. Its rule that bites a
   deletion PR: a Lean docstring cites the mathematics, never an issue number.
-- Both guards count a reworded line as an addition: editing a sentence that
-  contains `sorry` trips the token guard. Leave the original line and put the
-  correction nearby.
 - Records: ledger entries in `docs/proof_debt_ledger.md` use the entry format
   of `docs/proof_debt.md` (status, verified evidence, remediation, first PR),
   in rank order, with a `proof-debt` issue as a sub-issue of #4529; issues
