@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Combinatorics.TupleEquiv
-import TNLean.MPS.Operator.Simple.EmbedLocalOperatorTwoSite
+import TNLean.MPS.Operator.Simple.PlaceAlongRingWindowTwoSite
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorPositiveBond
 import TNLean.MPS.Operator.Simple.CommutingForm
 

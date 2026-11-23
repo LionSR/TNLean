@@ -232,7 +232,7 @@ Source: arXiv:2203.12563, Section 5, lines 1582 and 1687–1692, and
 `docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`, paragraph
 "When closure holds". -/
 theorem
-    interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_isHermitian
+    hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_isHermitian
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (hu₀ : (MPOTensor.physicalSlice T₀ 0 0).IsHermitian)

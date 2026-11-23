@@ -3368,7 +3368,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   (2026-08-12).
 - **Abstraction:** `MPOTensor.reindex_placeAlong_ringWindow_two_zero` and
   `MPOTensor.reindex_placeAlong_ringWindow_two_one` in
-  `TNLean/MPS/Operator/Simple/EmbedLocalOperatorTwoSite.lean`.
+  `TNLean/MPS/Operator/Simple/PlaceAlongRingWindowTwoSite.lean`.
 - **Notes:** the promoted theorems apply to arbitrary two-site matrices. The
   site-one conclusion states the factor exchange directly with
   `Matrix.reindex (Equiv.prodComm ...)`. The two

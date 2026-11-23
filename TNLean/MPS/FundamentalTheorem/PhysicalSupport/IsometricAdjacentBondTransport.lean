@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausMap.SingleKrausPositivity
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
-import TNLean.MPS.Operator.Simple.EmbedLocalOperatorTwoSite
+import TNLean.MPS.Operator.Simple.PlaceAlongRingWindowTwoSite
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportBondTransport
 
 /-!
