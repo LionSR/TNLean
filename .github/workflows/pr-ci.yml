@@ -29,15 +29,10 @@ on:
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
-      - 'scripts/ci_resource_diagnostics.py'
-      - 'scripts/ci_resource_diagnostics.sh'
-      - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
-      - 'scripts/ci_compatible_cache.py'
-      - 'scripts/test_ci_compatible_cache.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -113,15 +108,10 @@ on:
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
-      - 'scripts/ci_resource_diagnostics.py'
-      - 'scripts/ci_resource_diagnostics.sh'
-      - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/lake_build_locked.sh'
       - 'scripts/seed_lake_build.sh'
       - 'scripts/test_seed_lake_build.sh'
-      - 'scripts/ci_compatible_cache.py'
-      - 'scripts/test_ci_compatible_cache.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -211,8 +201,6 @@ jobs:
               - 'lake-manifest.json'
               - 'scripts/LintStyle.lean'
               - 'scripts/nolints-style.txt'
-              - 'scripts/ci_compatible_cache.py'
-              - 'scripts/test_ci_compatible_cache.py'
               - 'scripts/ci_lean_checks.py'
             module_policy:
               - 'scripts/check_import_layers.py'
@@ -225,15 +213,10 @@ jobs:
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/ci_lean_checks.py'
               - 'scripts/test_ci_lean_checks.py'
-              - 'scripts/ci_resource_diagnostics.py'
-              - 'scripts/ci_resource_diagnostics.sh'
-              - 'scripts/test_ci_resource_diagnostics.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/lake_build_locked.sh'
               - 'scripts/seed_lake_build.sh'
               - 'scripts/test_seed_lake_build.sh'
-              - 'scripts/ci_compatible_cache.py'
-              - 'scripts/test_ci_compatible_cache.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
               - 'scripts/generate_import_aggregators.py'
@@ -340,80 +323,10 @@ jobs:
         run: |
           printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
 
-      # cache-hit=false also means a successful restore-prefix hit. Only an
-      # EMPTY matched key is a miss; never overwrite an ordinary restored cache.
-      - name: Select compatible main cache configuration
-        id: compatible-config
-        if: steps.build-cache.outputs.cache-matched-key == ''
-        continue-on-error: true
-        timeout-minutes: 3
-        run: |
-          python3 scripts/ci_compatible_cache.py prepare \
-            --state "$RUNNER_TEMP/compatible-cache.json" \
-            --inputs .ci-cache-baseline \
-            --qic "$RUNNER_TEMP/compatible-cache-qic.git"
-
-      - name: Look up compatible main cache without restoring
-        id: compatible-lookup
-        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-config.outputs.eligible == 'true'
-        continue-on-error: true
-        uses: actions/cache/restore@v6
-        with:
-          path: ${{ env.BUILD_CACHE_PATHS }}
-          # hashFiles computes the baseline's complete original three-file hash.
-          key: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-${{ steps.compatible-config.outputs.baseline }}
-          restore-keys: |
-            tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
-          lookup-only: true
-
-      - name: Select a validated exact compatible cache
-        id: compatible-cache
-        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-lookup.outputs.cache-matched-key != ''
-        continue-on-error: true
-        timeout-minutes: 3
-        env:
-          PREFIX: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
-          MATCHED_KEY: ${{ steps.compatible-lookup.outputs.cache-matched-key }}
-          PRIMARY_KEY: ${{ steps.compatible-lookup.outputs.cache-primary-key }}
-        run: |
-          printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
-          python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
-          python3 scripts/ci_compatible_cache.py select \
-            --state "$RUNNER_TEMP/compatible-cache.json" \
-            --prefix "$PREFIX" --matched "$MATCHED_KEY"
-
       - uses: leanprover/lean-action@v1
         with:
           build: false
           use-github-cache: false
-
-      # Setup/Mathlib prebuilt retrieval happens before this separate seed;
-      # no seeded artifact is available to a Lean command until pruning passes.
-      - name: Restore validated compatible cache by exact key
-        id: compatible-restore
-        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-cache.outputs.key != ''
-        uses: actions/cache/restore@v6
-        with:
-          path: ${{ env.BUILD_CACHE_PATHS }}
-          key: ${{ steps.compatible-cache.outputs.key }}
-          fail-on-cache-miss: true
-
-      - name: Discard unvalidated cross-commit artifacts
-        if: steps.build-cache.outputs.cache-matched-key == '' && steps.compatible-cache.outputs.key != ''
-        env:
-          PRIMARY_KEY: ${{ steps.compatible-restore.outputs.cache-primary-key }}
-          MATCHED_KEY: ${{ steps.compatible-restore.outputs.cache-matched-key }}
-          VERIFIED_KEY: ${{ steps.compatible-cache.outputs.key }}
-          VERIFIED_VERSION: ${{ steps.compatible-cache.outputs.version }}
-          PREFIX: tnlean-build-${{ hashFiles('.ci-cache-baseline/lean-toolchain', '.ci-cache-baseline/lake-manifest.json', '.ci-cache-baseline/lakefile.toml') }}-
-        run: |
-          printf 'cache-primary-key=%s\ncache-matched-key=%s\n' "$PRIMARY_KEY" "$MATCHED_KEY"
-          test "$MATCHED_KEY" = "$VERIFIED_KEY"
-          # Check scope again after restore; refuse a shadow/replacement race.
-          python3 scripts/ci_compatible_cache.py validate \
-            --state "$RUNNER_TEMP/compatible-cache.json" \
-            --prefix "$PREFIX" --matched "$MATCHED_KEY" --version "$VERIFIED_VERSION"
-          python3 scripts/ci_compatible_cache.py prune
 
       # Diagnose the PR's direct edits before the full dependency build. Selection
       # uses the explicit feature head, while checks use this merged checkout.
@@ -463,35 +376,10 @@ jobs:
         id: lean-build
         run: |
           set -eo pipefail
-          source scripts/ci_resource_diagnostics.sh
           {
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
-      - name: Validate closed resource diagnostics for upload
-        id: resource-diagnostics
-        if: always() && steps.lean-build.outputs.resource_directory != ''
-        continue-on-error: true
-        timeout-minutes: 1
-        env:
-          RESOURCE_DIRECTORY: ${{ steps.lean-build.outputs.resource_directory }}
-        run: |
-          python3 scripts/ci_resource_diagnostics.py publish \
-            --directory "$RESOURCE_DIRECTORY" --temp-root "$RUNNER_TEMP" \
-            --github-output "$GITHUB_OUTPUT"
-
-      - name: Upload build resource diagnostics
-        if: always() && steps.resource-diagnostics.outputs.artifact_path != ''
-        continue-on-error: true
-        timeout-minutes: 2
-        uses: actions/upload-artifact@v7
-        with:
-          name: lean-resources-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ steps.resource-diagnostics.outputs.artifact_path }}
-          if-no-files-found: ignore
-          retention-days: 7
-          compression-level: 6
 
       # Elaborate changed production files with warnings as errors. New
       # modules need no workflow edit. Selection: scripts/ci_lean_checks.py.
@@ -648,18 +536,8 @@ jobs:
       - name: Test Lean compilation-time checker
         run: python3 scripts/test_lake_build_hotspots.py
 
-      - name: Test compatible CI cache guards
-        run: |
-          python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
-          python3 scripts/test_ci_compatible_cache.py
-
       - name: Test changed-file Lean check selection
         run: python3 scripts/test_ci_lean_checks.py
-
-      - name: Test build resource diagnostics
-        run: |
-          bash -n scripts/ci_resource_diagnostics.sh
-          python3 scripts/test_ci_resource_diagnostics.py
 
       - name: Check local cache-seeding shell syntax
         run: |
