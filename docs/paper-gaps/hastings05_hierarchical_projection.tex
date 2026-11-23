@@ -400,33 +400,38 @@ rectangular boxes in every dimension; see
 
 \section{Formalization}
 
+The matrix statements named in the first four footnotes below are formalized in QICLean, in
+the modules
+\path{QICLean/Spectral/LowEnergy/HierarchicalProjection} and
+\path{QICLean/Spectral/LowEnergy/HierarchyLevels}; QICLean records them in its note
+\url{https://sirui-lu.com/QICLean/paper-gaps/hastings05_hierarchical_projection.pdf}.
 The spectral residual bound (\ref{eq:hastings05_hierarchical_projection_projection_residual}) and its expectation consequence
 (\ref{eq:hastings05_hierarchical_projection_projection_expectation}) are formalized, as is the normalization bound
-(\ref{eq:hastings05_hierarchical_projection_normalized_projection_distance}) with deficiency measured in norm.\footnote{Declarations:
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_windowProjection_le},
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.one_sub_div_le_re_inner_windowProjection}, and
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_sub_le_two_mul}.}
+(\ref{eq:hastings05_hierarchical_projection_normalized_projection_distance}) with deficiency measured in norm.\footnote{Declarations of QICLean:
+    \leanid{Matrix.norm_sub_windowProjection_le},
+    \leanid{Matrix.one_sub_div_le_re_inner_windowProjection}, and
+    \leanid{Matrix.norm_inv_norm_smul_toEuclideanLin_mul_sub_le_two_mul}.}
 
 The restricted spectral window $P=QP_x(QMQ,c)$ satisfies $PQ=P$.
 Its residual estimate combines with the distance to a reference vector
-to give the second-level bound.\footnote{Declarations:
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection},
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mul}, and
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_le_of_norm_sub_le}.}
+to give the second-level bound.\footnote{Declarations of QICLean:
+    \leanid{Matrix.compressedWindowProjection},
+    \leanid{Matrix.compressedWindowProjection_mul}, and
+    \leanid{Matrix.norm_sub_compressedWindowProjection_le_of_norm_sub_le}.}
 
 The bounds for the scalar recurrence in (\ref{eq:hastings05_hierarchical_projection_scalar_recurrence}) and
 (\ref{eq:hastings05_hierarchical_projection_scalar_recurrence_bound}) are formalized independently of the complete
-hierarchy.\footnote{Declarations:
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_le} and
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.levelDeficiency_self_le}.}
+hierarchy.\footnote{Declarations of QICLean:
+    \leanid{Real.levelDeficiency_le} and
+    \leanid{Real.levelDeficiency_self_le}.}
 
 The bound over all levels,
 (\ref{eq:hastings05_hierarchical_projection_ground_recurrence}) and
 (\ref{eq:hastings05_hierarchical_projection_ground_bound}), is
-formalized.\footnote{Declarations:
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchy_le},
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_le_hierarchyMajorant}, and
-    \leanid{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le}.}
+formalized.\footnote{Declarations of QICLean:
+    \leanid{Matrix.norm_sub_hierarchy_le},
+    \leanid{Real.hierarchyDeficiency_le_hierarchyMajorant}, and
+    \leanid{Real.hierarchyMajorant_le}.}
 The commutation of the two halves of each block, which the bound over all
 levels takes as a hypothesis, is derived from the supersite grouping of lines
 609--628: a spectral window keeps the support of its operator, so every

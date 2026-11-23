@@ -12,9 +12,9 @@ Bessel's inequality \cite{gap:hastings05_final_state_count}.
 
 \begin{lemma}[Bessel's inequality against a projection]
     \label{thm:hastings_final_state_bessel}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.inner_toEuclideanCLM_eq_inner_self,
-        TNLean.MPS.AreaLaw.LocalSolution.re_inner_toEuclideanCLM_eq_norm_sq,
-        TNLean.MPS.AreaLaw.LocalSolution.sum_norm_sq_le_re_trace}
+    \lean{Matrix.inner_toEuclideanCLM_eq_inner_self,
+        Matrix.re_inner_toEuclideanCLM_eq_norm_sq,
+        Matrix.sum_norm_sq_le_re_trace}
     \leanok
     Let $P$ be an orthogonal projection on $\mathbb C^d$ and let $\phi_k$,
     $k\in S$, be orthonormal. Then $\langle\phi_k,P\phi_k\rangle=\|P\phi_k\|^2$
@@ -35,8 +35,8 @@ Bessel's inequality \cite{gap:hastings05_final_state_count}.
 
 \begin{lemma}[Orthonormal states of low energy]
     \label{thm:hastings_final_state_count}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.one_sub_mul_card_le_re_trace,
-        TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace}
+    \lean{Matrix.one_sub_mul_card_le_re_trace,
+        Matrix.card_le_two_mul_re_trace}
     \leanok
     \uses{thm:hastings_final_state_bessel}
     Let $P$ be an orthogonal projection and $H$ an operator with

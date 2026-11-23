@@ -98,7 +98,8 @@
 - **Pattern:** Combine `Matrix.isPositive_toEuclideanLin_iff` and
   `ContinuousLinearMap.isPositive_toLinearMap_iff` to transport a matrix order bound.
 - **Abstraction:** `Matrix.PosSemidef.isPositive_toEuclideanCLM` in
-  `MPS/AreaLaw/Spectral/Truncation.lean`; all four repeated positivity proofs use it.
+  `QICLean/Spectral/Filter/EnergyTruncation.lean` (QICLean dependency); all four repeated
+  positivity proofs use it.
 - **Decision:** A mathematical transport lemma removes the repeated coercion proof.
 
 ### Exponential weights and energy windows — candidate (2026-10-29)
@@ -404,8 +405,8 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** from `P * Q = Q` and `Q φ = φ`, deduce `P φ = φ`, previously
   proved by substituting the second equality into the first matrix action.
-- **Abstraction:** `TNLean.MPS.AreaLaw.LocalSolution.toEuclideanLin_eq_of_mul_eq`
-  in `TNLean/MPS/AreaLaw/Spectral/HierarchicalProjection.lean`.
+- **Abstraction:** `Matrix.toEuclideanLin_eq_of_mul_eq`
+  in `QICLean/Spectral/LowEnergy/HierarchicalProjection.lean` (QICLean dependency).
 - **Call sites:** the compressed-window and child-projection arguments in
   `FinalStateEnergy.lean`, and the child and closing-window arguments in
   `HierarchyNesting.lean`. The matrix identities still state the particular
@@ -10199,8 +10200,8 @@ there is no need for a new tactic.
   unitary, multiply by a basis vector and cancel the unitary factors. The
   result is scalar multiplication by the function at the corresponding energy.
 - **Seen:** Two private helper proofs, in
-  `MPS/AreaLaw/GroundStateAlgorithm/GaussianFilter/ApproximateEnergyFilter.lean` and the companion module
-  `QICLean/Spectral/Filter/Gaussian/SpectralGap.lean`.
+  `QICLean/Spectral/Filter/Gaussian/ApproximateEnergy.lean` and the companion module
+  `QICLean/Spectral/Filter/Gaussian/SpectralGap.lean` (both QICLean).
 - **Abstraction:** A public Mathlib or QICLean theorem for the action of a real
   functional calculus on `IsHermitian.eigenvectorBasis` would replace both helpers.
 - **Notes:** The current spectral proof calls the helper once and then uses

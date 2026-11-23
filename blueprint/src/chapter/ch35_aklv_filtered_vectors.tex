@@ -46,9 +46,9 @@ These results do not assert existence of a favorable approximate projector.
 
 \begin{lemma}[Normalized orthogonal decomposition]
     \label{lem:aklv_phase_normalization}
-    \lean{TNLean.MPS.AreaLaw.AKLV.inner_sub_inner_smul_unit_eq_zero,
-        TNLean.MPS.AreaLaw.AKLV.exists_phase_normalized_of_decomposition,
-        TNLean.MPS.AreaLaw.AKLV.schmidtRank_phase_normalized_eq}
+    \lean{inner_sub_inner_smul_unit_eq_zero,
+        exists_phase_normalized_of_decomposition,
+        Matrix.schmidtRank_phase_normalized_eq}
     \leanok
     If $\chi=a\phi+v$, $\|\phi\|=1$, $a\ne0$ and $v\perp\phi$, then $\chi\ne0$
     and some unit phase makes its normalization have squared distance at most
@@ -65,7 +65,7 @@ These results do not assert existence of a favorable approximate projector.
 
 \begin{lemma}[Normalized filtering near a fixed target]
     \label{lem:aklv_nearby_filtered_vector}
-    \lean{TNLean.MPS.AreaLaw.AKLV.exists_normalized_approximation_step}
+    \lean{LinearMap.exists_normalized_approximation_step}
     \leanok
     Let $K$ fix a unit vector $\phi$, preserve its orthogonal complement, and
     have squared shrinking $\delta\ge0$. If a unit vector $\psi$ satisfies
@@ -80,8 +80,8 @@ These results do not assert existence of a favorable approximate projector.
 
 \begin{lemma}[Filtering a seed with nonzero overlap]
     \label{lem:aklv_filtered_seed}
-    \lean{TNLean.MPS.AreaLaw.AKLV.exists_filtered_approximation_of_overlap,
-        TNLean.MPS.AreaLaw.AKLV.exists_filtered_approximation_of_seven_eighths}
+    \lean{Matrix.exists_filtered_approximation_of_overlap,
+        Matrix.exists_filtered_approximation_of_seven_eighths}
     \leanok
     Suppose $K$ fixes a unit target, preserves its orthogonal complement with
     squared shrinking $\delta\ge0$, and has operator Schmidt rank at most $D$.

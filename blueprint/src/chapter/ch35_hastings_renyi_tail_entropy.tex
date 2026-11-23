@@ -12,7 +12,7 @@ convergent geometric ratio $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$.
 
 \begin{lemma}[Power sums on a finite set]
     \label{thm:hastings_power_sum_card}
-    \lean{TNLean.MPS.AreaLaw.Hastings.sum_rpow_le_card_rpow_mul_sum_rpow}
+    \lean{Entropy.sum_rpow_le_card_rpow_mul_sum_rpow}
     \leanok
     Let $p_1,\dots,p_c\ge0$ and $0\le\alpha\le1$. Then
     \begin{align}
@@ -29,9 +29,9 @@ convergent geometric ratio $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$.
 \begin{lemma}[Rényi entropy under geometric tail constraints]
     \label{thm:hastings_renyi_tail_entropy}
     \lean{
-        TNLean.MPS.AreaLaw.Hastings.sum_rpow_le_of_geometric_tails,
-        TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_geometric_tails,
-        TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_scale_tails
+        Entropy.sum_rpow_le_of_geometric_tails,
+        Entropy.renyiEntropy_le_of_geometric_tails,
+        Entropy.renyiEntropy_le_of_scale_tails
     }
     \leanok
     Let $(p_0,\dots,p_{N-1})$ be a probability vector and let $K\ge1$, $D\ge2$,
@@ -72,8 +72,8 @@ convergent geometric ratio $r=(D^2)^{1-\alpha}e^{-2\alpha/\xi'}<1$.
 
 \begin{lemma}[Rényi entropy from mixtures of bounded Schmidt rank]
     \label{thm:hastings_renyi_schmidt_rank_stage}
-    \lean{TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_schmidtRank_mixtures,
-        TNLean.MPS.AreaLaw.Hastings.renyiEntropy_eq_log_sum_eigenvalues₀_rpow}
+    \lean{Matrix.renyiEntropy_le_of_schmidtRank_mixtures,
+        Matrix.renyiEntropy_eq_log_sum_eigenvalues₀_rpow}
     \leanok
     Let $\Psi$ be a bipartite unit vector with first-factor marginal $\rho$,
     and let $k\ge1$, $D\ge2$, $\xi'>0$, and $c\ge1$. Suppose that for every

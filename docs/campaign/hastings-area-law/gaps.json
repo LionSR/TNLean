@@ -166,6 +166,7 @@
   },
   {
    "id": "docs/paper-gaps/hastings07_spectral_cutoff_threshold.tex",
+   "repo": "QICLean",
    "kind": "local-correction",
    "status": "resolved",
    "paper": "hastings",

@@ -12,7 +12,7 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
 
 \begin{definition}[Spectral cut-off]
     \label{def:hastings_spectral_cutoff}
-    \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff}
+    \lean{Matrix.spectralCutoff}
     \leanok
     For $M=M^\dagger$ and $\theta\in\R$, the spectral cut-off is
     $O_\theta(M)=\mathbf 1_{[-\theta,\theta]}(M)$.
@@ -20,7 +20,7 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
 
 \begin{lemma}[The cut-off is an orthogonal projection]
     \label{thm:hastings_spectral_cutoff_projection}
-    \lean{TNLean.MPS.AreaLaw.Hastings.isStarProjection_spectralCutoff}
+    \lean{Matrix.isStarProjection_spectralCutoff}
     \leanok
     \uses{def:hastings_spectral_cutoff}
     For $M=M^\dagger$ and $\theta\in\R$, $O_\theta(M)^2=O_\theta(M)=O_\theta(M)^\dagger$.
@@ -31,7 +31,7 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
 
 \begin{lemma}[A cut-off moves a nearly annihilated vector little]
     \label{thm:hastings_spectral_cutoff_obd}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_spectralCutoff_le}
+    \lean{Matrix.norm_sub_spectralCutoff_le}
     \leanok
     \uses{def:hastings_spectral_cutoff}
     For $M=M^\dagger$, $\theta>0$, and any vector $\Psi$,
@@ -54,7 +54,7 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
 
 \begin{lemma}[The cut-off reduces the operator]
     \label{thm:hastings_spectral_cutoff_norm}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_mul_spectralCutoff_le}
+    \lean{Matrix.norm_mul_spectralCutoff_le}
     \leanok
     \uses{def:hastings_spectral_cutoff}
     For $M=M^\dagger$ and $\theta\ge0$, $\lVert M\,O_\theta(M)\rVert\le\theta$.
@@ -66,8 +66,8 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
 
 \begin{lemma}[The cut-off estimate]
     \label{thm:hastings_spectral_cutoff_pair_norm}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_le_of_isStarProjection,
-        TNLean.MPS.AreaLaw.Hastings.norm_add_mul_mul_spectralCutoff_le}
+    \lean{Matrix.norm_add_mul_mul_le_of_isStarProjection,
+        Matrix.norm_add_mul_mul_spectralCutoff_le}
     \leanok
     \uses{thm:hastings_spectral_cutoff_projection,thm:hastings_spectral_cutoff_norm}
     If $O,O'$ are commuting orthogonal projections with $\lVert AO\rVert\le a$
@@ -83,7 +83,7 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
 
 \begin{lemma}[Two cut-offs move a vector by at most the sum]
     \label{thm:hastings_spectral_cutoff_two}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_sub_mul_le_of_isStarProjection}
+    \lean{Matrix.norm_sub_mul_le_of_isStarProjection}
     \leanok
     For an orthogonal projection $O$, any operator $O'$, and any vector $\Psi$,
     $\lVert\Psi-OO'\Psi\rVert\le\lVert\Psi-O\Psi\rVert+\lVert\Psi-O'\Psi\rVert$.

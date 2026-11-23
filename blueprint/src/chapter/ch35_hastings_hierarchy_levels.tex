@@ -12,7 +12,7 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
 
 \begin{lemma}[One level against the ground state]
     \label{thm:hastings05_level_against_ground_state}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_compressedWindowProjection_mul_sq_le}
+    \lean{Matrix.norm_sub_compressedWindowProjection_mul_sq_le}
     \leanok
     \uses{thm:hastings05_projection_deficiency,
         thm:hastings05_nested_projections,thm:hastings05_normalization,
@@ -43,9 +43,9 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
 
 \begin{definition}[The deficiency bound of a level]
     \label{def:hastings05_hierarchy_deficiency}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency,
-        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_zero,
-        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_succ}
+    \lean{Real.hierarchyDeficiency,
+        Real.hierarchyDeficiency_zero,
+        Real.hierarchyDeficiency_succ}
     \leanok
     For $\epsilon,K\in\R$ and radii $x_0,x_1,\dots$, set $D_0=0$ and
     \begin{align}
@@ -57,8 +57,8 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
 
 \begin{theorem}[All levels]
     \label{thm:hastings05_hierarchy_levels}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.isStarProjection_hierarchy,
-        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchy_le}
+    \lean{Matrix.isStarProjection_hierarchy,
+        Matrix.norm_sub_hierarchy_le}
     \leanok
     \uses{thm:hastings05_level_against_ground_state,
         def:hastings05_hierarchy_deficiency}
@@ -80,9 +80,9 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
 
 \begin{definition}[The majorant for the source's radii]
     \label{def:hastings05_hierarchy_majorant}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant,
-        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_zero,
-        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_succ}
+    \lean{Real.hierarchyMajorant,
+        Real.hierarchyMajorant_zero,
+        Real.hierarchyMajorant_succ}
     \leanok
     For $e,s\in\R$, set $\beta_0=0$ and
     $\beta_{m+1}=\bigl(2\beta_m^2+(e+2\beta_m)^{2s}\bigr)^{1/2}$.
@@ -90,8 +90,8 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
 
 \begin{lemma}[The source's radii]
     \label{thm:hastings05_hierarchy_source_radii}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_nonneg,
-        TNLean.MPS.AreaLaw.LocalSolution.hierarchyDeficiency_le_hierarchyMajorant}
+    \lean{Real.hierarchyMajorant_nonneg,
+        Real.hierarchyDeficiency_le_hierarchyMajorant}
     \leanok
     \uses{def:hastings05_hierarchy_deficiency,def:hastings05_hierarchy_majorant}
     For $K,e>0$, $\epsilon=Ke$, and $x_m=K(e+2\beta_m)^{1-s}$
@@ -104,8 +104,8 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
 
 \begin{lemma}[The closed form]
     \label{thm:hastings05_hierarchy_closed_form}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le,
-        TNLean.MPS.AreaLaw.LocalSolution.hierarchyMajorant_le_rpow_quarter}
+    \lean{Real.hierarchyMajorant_le,
+        Real.hierarchyMajorant_le_rpow_quarter}
     \leanok
     \uses{def:hastings05_hierarchy_majorant,thm:hastings05_exponent}
     For $0<e\le1$ and $0\le s\le1$, $\beta_m\le(3^m-1)e^{s^m}$. In particular,

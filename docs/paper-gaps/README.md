@@ -1575,7 +1575,7 @@ valid auxiliary statements.
 
 ### One-dimensional area law after Hastings: the threshold of the spectral cut-offs
 
-[hastings07_spectral_cutoff_threshold.tex](hastings07_spectral_cutoff_threshold.tex)
+[hastings07_spectral_cutoff_threshold.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings07_spectral_cutoff_threshold.pdf)
 (local correction, resolved) records that the spectral cut-offs `O_L`, `O_R` in
 the appendix of Hastings (arXiv:0705.2024v4, lines 829–841) are taken onto the
 eigenvalues of absolute value at most the threshold, rather than the printed
@@ -1708,7 +1708,7 @@ retained-space dimension and no conventional matrix product bond dimension.
 
 ### Local solution of gapped Hamiltonians: the number of final states
 
-[hastings05_final_state_count.tex](hastings05_final_state_count.tex)
+[hastings05_final_state_count.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_final_state_count.pdf)
 (clarification, resolved) supplies the argument for the count asserted at the end of
 the hierarchical construction in Hastings, *Solving gapped Hamiltonians locally*
 (arXiv:cond-mat/0508554v3, source lines 722–730). If `H − E₀ ≥ ΔE (1 − P)` for the ground

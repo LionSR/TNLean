@@ -103,7 +103,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 
 \begin{definition}[Separate truncation of the exterior blocks]
     \label{def:aklv_two_sided_truncation}
-    \lean{TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation}
+    \lean{Matrix.twoSidedEnergyTruncation}
     \leanok
     For exterior operators $L,R$ and a middle operator $M$, put
     \begin{align}
@@ -117,8 +117,8 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \label{lem:aklv_truncation_low_agreement}
     \lean{Matrix.IsHermitian.energyTruncation_mul_lowProjection_eq,
         Matrix.PosSemidef.isPositive_toEuclideanCLM,
-        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_bounds,
-        TNLean.MPS.AreaLaw.AKLV.twoSidedEnergyTruncation_mul_lowProjection_eq}
+        Matrix.twoSidedEnergyTruncation_bounds,
+        Matrix.twoSidedEnergyTruncation_mul_lowProjection_eq}
     \leanok
     \uses{def:aklv_two_sided_truncation}
     If $L,M,R\ge0$, $t\ge0$ and $M\le mI$, then
@@ -219,7 +219,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 
 \begin{lemma}[A ground gap from one orthogonal complement]
     \label{lem:aklv_codimension_one_gap}
-    \lean{re_inner_lower_of_unit_orthogonal_lower,exists_ground_gap_of_orthogonal_lower}
+    \lean{ContinuousLinearMap.re_inner_lower_of_unit_orthogonal_lower,ContinuousLinearMap.exists_ground_gap_of_orthogonal_lower}
     \leanok
     Let $K\ge0$ act on a finite-dimensional complex Hilbert space.
     Suppose $\|\Omega\|=1$, $e<a$, $\langle\Omega,K\Omega\rangle\le e$,
@@ -313,7 +313,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 
 \begin{lemma}[Phase distance from a residual below the excited spectrum]
     \label{lem:aklv_residual_phase}
-    \lean{norm_orthogonal_component_le_residual,exists_phase_sq_distance_le_residual}
+    \lean{ContinuousLinearMap.norm_orthogonal_component_le_residual,ContinuousLinearMap.exists_phase_sq_distance_le_residual}
     \leanok
     Let $K$ be self-adjoint, $K\phi=e'\phi$, $\|\phi\|=1$, and suppose
     $\langle w,Kw\rangle\ge a\|w\|^2$ for $w\perp\phi$.
