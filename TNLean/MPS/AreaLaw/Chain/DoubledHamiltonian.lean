@@ -53,7 +53,7 @@ of the original ground vector and its swap image have energy `2 * E₀` and lowe
 
 ### Main results
 
-* `ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped`: the normalized
+* `ManyBody.ChainInteraction.isGapped_doubledFin_and_conj_pairSwapOp_of_isGapped`: the normalized
   explicit ground vectors, their doubled energy and their inherited lower gap.
 
 **Scope restriction (contiguous chains):** The physical sites are `Fin L`.
@@ -126,7 +126,7 @@ namespace TNLean.MPS.AreaLaw
 /-- The paired tensor-square ground vector and its regional swap image
 have doubled energy and the original positive lower-gap bound.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
-theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
+theorem _root_.ManyBody.ChainInteraction.isGapped_doubledFin_and_conj_pairSwapOp_of_isGapped
     {L q R : ℕ} {E₀ Δ : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     (D : Finset (Fin L)) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)

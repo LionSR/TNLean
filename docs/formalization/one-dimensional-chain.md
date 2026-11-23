@@ -229,7 +229,7 @@ bound 2J (`ManyBody.Interaction.norm_conj_term`,
 `ManyBody.Interaction.norm_doubled_term_le`); its operator identity is
 `TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled`.
 The theorem
-`ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped`
+`ManyBody.ChainInteraction.isGapped_doubledFin_and_conj_pairSwapOp_of_isGapped`
 constructs the two ground-state predicates for the actual paired tensor
 square Ψ and its swap image Φ. Both vectors are normalized, have energy
 2E₀ and inherit the lower gap Δ from the original ground-state predicate
