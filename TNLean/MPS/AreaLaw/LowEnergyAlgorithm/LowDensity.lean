@@ -28,7 +28,6 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityLogDimension
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityMinimumDimension
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityOutputParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityTreeAlgorithm
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityTreeExtraction
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowEnergyMPSBasis
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDSampledTree
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTree

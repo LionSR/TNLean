@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Spectral.FinalStateCount
-import TNLean.MPS.AreaLaw.Spectral.HierarchyLevels
+import QICLean.Spectral.LowEnergy.StateCount
+import QICLean.Spectral.LowEnergy.HierarchyLevels
 
 /-!
 # The energy of every final state of Hastings' hierarchical construction
@@ -60,8 +60,6 @@ open scoped Matrix.Norms.L2Operator ComplexOrder InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw.LocalSolution
 
-open TNLean.MPS.AreaLaw.Hastings
-
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- The sum over the binary tree below the block `k` of level `m`: the value at a block of
@@ -102,21 +100,21 @@ window projection of `A` at `c` and `x`. Then `|re⟨φ, A φ⟩ - c ‖φ‖²|
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 640–642. -/
 theorem abs_re_inner_sub_le_of_windowProjection {A : Matrix ι ι ℂ} (hA : A.IsHermitian)
     (c : ℝ) {x : ℝ} (hx : 0 ≤ x) {φ : EuclideanSpace ℂ ι}
-    (hφ : toEuclideanLin (windowProjection A c x) φ = φ) :
+    (hφ : toEuclideanLin (Matrix.windowProjection A c x) φ = φ) :
     |(⟪φ, toEuclideanLin A φ⟫_ℂ).re - c * ‖φ‖ ^ 2| ≤ x * ‖φ‖ ^ 2 := by
-  have hAc := isHermitian_sub_ofReal_smul_one hA c
+  have hAc := Matrix.isHermitian_sub_ofReal_smul_one hA c
   have e : (⟪φ, toEuclideanLin A φ⟫_ℂ).re - c * ‖φ‖ ^ 2 =
-      (⟪φ, toEuclideanLin ((A - (c : ℂ) • 1) * windowProjection A c x) φ⟫_ℂ).re := by
+      (⟪φ, toEuclideanLin ((A - (c : ℂ) • 1) * Matrix.windowProjection A c x) φ⟫_ℂ).re := by
     rw [toEuclideanLin_mul_apply, hφ, map_sub, LinearMap.sub_apply, inner_sub_right,
       Complex.sub_re, map_smul, LinearMap.smul_apply, toEuclideanLin_one_apply,
       inner_smul_right, inner_self_eq_norm_sq_to_K]
     simp [← Complex.ofReal_pow]
   rw [e]
   refine (Complex.abs_re_le_norm _).trans ((norm_inner_le_norm (𝕜 := ℂ) _ _).trans ?_)
-  have hn := Entropy.norm_toEuclideanLin_le ((A - (c : ℂ) • 1) * windowProjection A c x) φ
-  have hW : ‖(A - (c : ℂ) • 1) * windowProjection A c x‖ ≤ x :=
-    norm_mul_spectralCutoff_le hAc hx
-  calc ‖φ‖ * ‖toEuclideanLin ((A - (c : ℂ) • 1) * windowProjection A c x) φ‖
+  have hn := Entropy.norm_toEuclideanLin_le ((A - (c : ℂ) • 1) * Matrix.windowProjection A c x) φ
+  have hW : ‖(A - (c : ℂ) • 1) * Matrix.windowProjection A c x‖ ≤ x :=
+    Matrix.norm_mul_spectralCutoff_le hAc hx
+  calc ‖φ‖ * ‖toEuclideanLin ((A - (c : ℂ) • 1) * Matrix.windowProjection A c x) φ‖
       ≤ ‖φ‖ * (x * ‖φ‖) := by
         gcongr
         exact hn.trans (mul_le_mul_of_nonneg_right hW (norm_nonneg _))
@@ -129,16 +127,16 @@ arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 671–685, where `c = ⟨Ψ_a, M
 theorem abs_re_inner_sub_le_of_compressedWindowProjection {Q M : Matrix ι ι ℂ}
     (hQ : IsStarProjection Q) (hM : M.IsHermitian) (c : ℝ) {x : ℝ} (hx : 0 ≤ x)
     {φ : EuclideanSpace ℂ ι}
-    (hφ : toEuclideanLin (compressedWindowProjection Q M c x) φ = φ) :
+    (hφ : toEuclideanLin (Matrix.compressedWindowProjection Q M c x) φ = φ) :
     toEuclideanLin Q φ = φ ∧ |(⟪φ, toEuclideanLin M φ⟫_ℂ).re - c * ‖φ‖ ^ 2| ≤ x * ‖φ‖ ^ 2 := by
   have hQφ : toEuclideanLin Q φ = φ := by
-    exact toEuclideanLin_eq_of_mul_eq
-      (by rw [compressedWindowProjection, ← mul_assoc, hQ.isIdempotentElem.eq]) hφ
+    exact Matrix.toEuclideanLin_eq_of_mul_eq
+      (by rw [Matrix.compressedWindowProjection, ← mul_assoc, hQ.isIdempotentElem.eq]) hφ
   refine ⟨hQφ, ?_⟩
   have hQM : (Q * M * Q).IsHermitian := by
     simpa only [hQ.isSelfAdjoint.isHermitian.eq] using isHermitian_mul_mul_conjTranspose Q hM
-  have hW : toEuclideanLin (windowProjection (Q * M * Q) c x) φ = φ := by
-    rw [← toEuclideanLin_compressedWindowProjection_of_mem hQ M c x hQφ, hφ]
+  have hW : toEuclideanLin (Matrix.windowProjection (Q * M * Q) c x) φ = φ := by
+    rw [← Matrix.toEuclideanLin_compressedWindowProjection_of_mem hQ M c x hQφ, hφ]
   have hsym := isSymmetric_toEuclideanLin_iff.2 hQ.isSelfAdjoint.isHermitian
   have e : ⟪φ, toEuclideanLin (Q * M * Q) φ⟫_ℂ = ⟪φ, toEuclideanLin M φ⟫_ℂ := by
     rw [toEuclideanLin_mul_apply, toEuclideanLin_mul_apply, hQφ, ← hsym, hQφ]
@@ -147,20 +145,20 @@ theorem abs_re_inner_sub_le_of_compressedWindowProjection {Q M : Matrix ι ι �
 
 variable (P M : ℕ → ℕ → Matrix ι ι ℂ) (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
 
-/-- **eq. `hchy` below one block.** In the hierarchy of `norm_sub_hierarchy_le`, with radii
+/-- **eq. `hchy` below one block.** In the hierarchy of `Matrix.norm_sub_hierarchy_le`, with radii
 `x m ≥ 0`, every vector `φ` kept by the projection of block `k` of level `m` satisfies
 `|re⟨φ, M_T φ⟩ - c_T ‖φ‖²| ≤ x_T ‖φ‖²`, where `M_T`, `c_T` and `x_T` sum the joining
 operators, centres and radii of the tree below the block. Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 668–720. -/
 theorem abs_re_inner_hierarchySum_sub_le (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
-      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
+      Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
     (hcomm : ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) :
     ∀ m k {φ : EuclideanSpace ℂ ι}, toEuclideanLin (P m k) φ = φ →
       |(⟪φ, toEuclideanLin (hierarchySum M m k) φ⟫_ℂ).re - hierarchySum c m k * ‖φ‖ ^ 2| ≤
         hierarchySum (fun m _ ↦ x m) m k * ‖φ‖ ^ 2 := by
-  have hproj := isStarProjection_hierarchy P M c x hP0 hstep hcomm hM
+  have hproj := Matrix.isStarProjection_hierarchy P M c x hP0 hstep hcomm hM
   intro m
   induction m with
   | zero => intro k φ _; simp
@@ -172,10 +170,10 @@ theorem abs_re_inner_hierarchySum_sub_le (hP0 : ∀ k, P 0 k = 1)
       abs_re_inner_sub_le_of_compressedWindowProjection hQ (hM m k) (c m k) (hx m) hφ
     -- The vector is kept by both halves.
     have hφ1 : toEuclideanLin (P m (2 * k)) φ = φ := by
-      exact toEuclideanLin_eq_of_mul_eq
+      exact Matrix.toEuclideanLin_eq_of_mul_eq
         (by rw [← mul_assoc, (hproj m (2 * k)).isIdempotentElem.eq]) hQφ
     have hφ2 : toEuclideanLin (P m (2 * k + 1)) φ = φ := by
-      exact toEuclideanLin_eq_of_mul_eq
+      exact Matrix.toEuclideanLin_eq_of_mul_eq
         (by rw [← mul_assoc, ← (hcomm m k).eq, mul_assoc,
           (hproj m (2 * k + 1)).isIdempotentElem.eq]) hQφ
     have h1 := ih (2 * k) hφ1
@@ -189,9 +187,9 @@ theorem abs_re_inner_hierarchySum_sub_le (hP0 : ∀ k, P 0 k = 1)
             hierarchySum c m (2 * k + 1) * ‖φ‖ ^ 2)| := by ring_nf
       _ ≤ _ := (abs_add_three _ _ _).trans (by linarith)
 
-/-- **eq. `hchy` for every final state.** In the hierarchy of `norm_sub_hierarchy_le`, take the
-centres `c m k = re⟨Ψ, M m k Ψ⟩` of a unit vector `Ψ` and radii `x m ≥ 0`. Then every unit vector
-`φ` kept by the projection of block `k` of level `m` has
+/-- **eq. `hchy` for every final state.** In the hierarchy of `Matrix.norm_sub_hierarchy_le`, take
+the centres `c m k = re⟨Ψ, M m k Ψ⟩` of a unit vector `Ψ` and radii `x m ≥ 0`. Then every unit
+vector `φ` kept by the projection of block `k` of level `m` has
 `re⟨φ, M_T φ⟩ ≤ re⟨Ψ, M_T Ψ⟩ + x_T`, where `M_T` is the sum of the joining operators below the
 block and `x_T` the sum of their radii. With `Ψ = Ψ_a` and the final projection, this is eq.
 `hchy` of Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 709–720, for each final
@@ -199,7 +197,7 @@ state `α^h`, with the explicit error `∑_m 2^{h-1-m} x_m`, under the open-chai
 module docstring. -/
 theorem re_inner_hierarchySum_le_add (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ ι}
-    (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
+    (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
     (hcomm : ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (m k : ℕ)
@@ -221,13 +219,13 @@ theorem re_inner_hierarchySum_le_add (hP0 : ∀ k, P 0 k = 1)
 
 /-- **At most `2n` final states.** In the hierarchy of `re_inner_hierarchySum_le_add`, let
 `H = hierarchySum M h 0` have gap `ΔE` above `E₀` with ground projection `P₀` in the sense of
-`card_le_two_mul_re_trace`. If `re⟨Ψ, H Ψ⟩ + ∑ x ≤ E₀ + ΔE/2`, then every orthonormal family
+`Matrix.card_le_two_mul_re_trace`. If `re⟨Ψ, H Ψ⟩ + ∑ x ≤ E₀ + ΔE/2`, then every orthonormal family
 of vectors kept by the final projection `P h 0` has at most `2 re tr P₀` members. Hastings,
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 722–730, under the open-chain restriction of
 the module docstring. -/
 theorem card_le_two_mul_re_trace_of_hierarchy (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ ι}
-    (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
+    (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
     (hcomm : ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
@@ -240,7 +238,7 @@ theorem card_le_two_mul_re_trace_of_hierarchy (hP0 : ∀ k, P 0 k = 1)
     {κ : Type*} {φ : κ → EuclideanSpace ℂ ι} (hφ : Orthonormal ℂ φ) (s : Finset κ)
     (hφP : ∀ j ∈ s, toEuclideanLin (P h 0) (φ j) = φ j) :
     (s.card : ℝ) ≤ 2 * (trace P₀).re :=
-  card_le_two_mul_re_trace hP₀ hΔ hgap hφ s fun j hj ↦
+  Matrix.card_le_two_mul_re_trace hP₀ hΔ hgap hφ s fun j hj ↦
     (re_inner_hierarchySum_le_add P M x hP0 hstep hcomm hM hx h 0 (hφ.1 j) (hφP j hj)).trans hE
 
 end TNLean.MPS.AreaLaw.LocalSolution

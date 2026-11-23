@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.SupersiteFinalState
-import TNLean.MPS.AreaLaw.Spectral.HierarchicalEnergy
+import QICLean.Spectral.LowEnergy.HierarchyLevels
 
 /-!
 # Constructing the spectral projections of the hierarchy
@@ -41,7 +41,7 @@ Hastings, arXiv:cond-mat/0508554v3, lines 640–642 and 671–685. -/
 noncomputable def hierarchyProjection (M : ℕ → ℕ → Matrix n n ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ) : ℕ → ℕ → Matrix n n ℂ
   | 0, _ => 1
-  | m + 1, k => compressedWindowProjection
+  | m + 1, k => Matrix.compressedWindowProjection
       (hierarchyProjection M c x m (2 * k) * hierarchyProjection M c x m (2 * k + 1))
       (M m k) (c m k) (x m)
 
@@ -55,7 +55,7 @@ theorem hierarchyProjection_zero (M : ℕ → ℕ → Matrix n n ℂ)
 Hastings, arXiv:cond-mat/0508554v3, lines 671–685. -/
 theorem hierarchyProjection_succ (M : ℕ → ℕ → Matrix n n ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ) (m k : ℕ) :
-    hierarchyProjection M c x (m + 1) k = compressedWindowProjection
+    hierarchyProjection M c x (m + 1) k = Matrix.compressedWindowProjection
       (hierarchyProjection M c x m (2 * k) * hierarchyProjection M c x m (2 * k + 1))
       (M m k) (c m k) (x m) := rfl
 
@@ -66,7 +66,7 @@ lines 626–628 and 709–730, documented in
 noncomputable def hierarchyClosingProjection (M : ℕ → ℕ → Matrix n n ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ) (h : ℕ) (W : Matrix n n ℂ) (cW : ℝ) :
     Matrix n n ℂ :=
-  compressedWindowProjection (hierarchyProjection M c x h 0) W cW (x h)
+  Matrix.compressedWindowProjection (hierarchyProjection M c x h 0) W cW (x h)
 
 end Matrices
 
@@ -74,7 +74,7 @@ end Matrices
 The deficiency is measured against the original state, as in the corrected recurrence
 of `HierarchyLevels.lean`. Hastings, arXiv:cond-mat/0508554v3, lines 676–704. -/
 noncomputable def hierarchyWindowRadius (K r : ℝ) (h m : ℕ) : ℝ :=
-  K * (Real.exp (-r) + 2 * hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m) ^
+  K * (Real.exp (-r) + 2 * Real.hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m) ^
     (1 / (h : ℝ))
 
 /-- For `h ≥ 2`, the adaptive windows give deficiency at most
@@ -83,15 +83,15 @@ lines 696–709, with the corrected recurrence documented in
 `docs/paper-gaps/hastings05_hierarchical_projection.tex`. -/
 theorem hierarchyDeficiency_window_le {K r : ℝ} (hK : 0 < K) (hr : 0 ≤ r) {h : ℕ}
     (hh : 2 ≤ h) :
-    hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) h ≤
+    Real.hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) h ≤
       ((3 : ℝ) ^ h - 1) * Real.exp (-r / 4) := by
-  have hbound := (hierarchyDeficiency_le_hierarchyMajorant hK (Real.exp_pos (-r))
+  have hbound := (Real.hierarchyDeficiency_le_hierarchyMajorant hK (Real.exp_pos (-r))
     (1 - 1 / (h : ℝ)) h).trans
-      (hierarchyMajorant_le_rpow_quarter (Real.exp_pos (-r))
+      (Real.hierarchyMajorant_le_rpow_quarter (Real.exp_pos (-r))
         (Real.exp_le_one_iff.mpr (neg_nonpos.mpr hr)) hh)
-  change hierarchyDeficiency (K * Real.exp (-r)) K
+  change Real.hierarchyDeficiency (K * Real.exp (-r)) K
     (fun m => K * (Real.exp (-r) +
-      2 * hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m) ^ (1 / (h : ℝ))) h ≤ _
+      2 * Real.hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m) ^ (1 / (h : ℝ))) h ≤ _
   simpa only [sub_sub_cancel, ← Real.exp_mul, mul_one_div] using hbound
 
 section Supersites
@@ -111,7 +111,7 @@ theorem norm_sub_hierarchyProjection_le (blk : ι → ℕ)
     (hK : ∀ m k, ‖M m k - (c m k : ℂ) • 1‖ ≤ K) :
     ∀ m k, IsStarProjection (hierarchyProjection M c x m k) ∧
       ‖ψ - toEuclideanLin (hierarchyProjection M c x m k) ψ‖ ≤
-        hierarchyDeficiency ε K x m := by
+        Real.hierarchyDeficiency ε K x m := by
   exact norm_sub_supersiteHierarchy_le blk (hierarchyProjection M c x) M c x
     (hierarchyProjection_zero M c x) (hierarchyProjection_succ M c x) hMsupp hM hx hψ hres hK
 
@@ -126,12 +126,12 @@ theorem exists_unit_mem_hierarchyProjection (blk : ι → ℕ)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)
     (hK : ∀ m k, ‖M m k - (c m k : ℂ) • 1‖ ≤ K) (h k : ℕ)
-    (hsmall : hierarchyDeficiency ε K x h < 1) :
+    (hsmall : Real.hierarchyDeficiency ε K x h < 1) :
     ∃ φ : EuclideanSpace ℂ (ι → Fin d), ‖φ‖ = 1 ∧
       toEuclideanLin (hierarchyProjection M c x h k) φ = φ ∧
-      ‖φ - ψ‖ ≤ 2 * hierarchyDeficiency ε K x h := by
+      ‖φ - ψ‖ ≤ 2 * Real.hierarchyDeficiency ε K x h := by
   obtain ⟨hP, hD⟩ := norm_sub_hierarchyProjection_le blk M c x hMsupp hM hx hψ hres hK h k
-  obtain ⟨φ, hφ, hPφ, hnear, -⟩ := exists_mem_range_re_inner_le_add hP hψ hD hsmall
+  obtain ⟨φ, hφ, hPφ, hnear, -⟩ := Matrix.exists_mem_range_re_inner_le_add hP hψ hD hsmall
   exact ⟨φ, hφ, hPφ, hnear⟩
 
 /-- The constructed periodic projection has the deficiency of one further level.
@@ -150,7 +150,7 @@ theorem norm_sub_hierarchyClosingProjection_le (blk : ι → ℕ)
     (hKW : ‖W - (cW : ℂ) • 1‖ ≤ K) :
     IsStarProjection (hierarchyClosingProjection M c x h W cW) ∧
       ‖ψ - toEuclideanLin (hierarchyClosingProjection M c x h W cW) ψ‖ ≤
-        hierarchyDeficiency ε K x (h + 1) := by
+        Real.hierarchyDeficiency ε K x (h + 1) := by
   exact norm_sub_supersiteClosingLinkWindow_le blk (hierarchyProjection M c x) M c x
     (hierarchyProjection_zero M c x) (hierarchyProjection_succ M c x) hMsupp hM hx
     hψ hres hK h hW cW hresW hKW
@@ -169,13 +169,13 @@ theorem exists_unit_mem_hierarchyClosingProjection (blk : ι → ℕ)
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W.IsHermitian) (cW : ℝ)
     (hresW : ‖toEuclideanLin (W - (cW : ℂ) • 1) ψ‖ ≤ ε)
     (hKW : ‖W - (cW : ℂ) • 1‖ ≤ K)
-    (hsmall : hierarchyDeficiency ε K x (h + 1) < 1) :
+    (hsmall : Real.hierarchyDeficiency ε K x (h + 1) < 1) :
     ∃ φ : EuclideanSpace ℂ (ι → Fin d), ‖φ‖ = 1 ∧
       toEuclideanLin (hierarchyClosingProjection M c x h W cW) φ = φ ∧
-      ‖φ - ψ‖ ≤ 2 * hierarchyDeficiency ε K x (h + 1) := by
+      ‖φ - ψ‖ ≤ 2 * Real.hierarchyDeficiency ε K x (h + 1) := by
   obtain ⟨hP, hD⟩ := norm_sub_hierarchyClosingProjection_le blk M c x hMsupp hM hx
     hψ hres hK h hW cW hresW hKW
-  obtain ⟨φ, hφ, hPφ, hnear, -⟩ := exists_mem_range_re_inner_le_add hP hψ hD hsmall
+  obtain ⟨φ, hφ, hPφ, hnear, -⟩ := Matrix.exists_mem_range_re_inner_le_add hP hψ hD hsmall
   exact ⟨φ, hφ, hPφ, hnear⟩
 
 end Supersites

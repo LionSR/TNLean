@@ -11,11 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ChainBootstrap
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.MPSFromEntropy
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.MPSGroundState
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ProjectorOverlap
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.RenyiBootstrapLemma
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtRankBootstrap
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtTail
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtTailConstraint
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtTailMPS
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.TailEntropy
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.TailRenyiEntropy

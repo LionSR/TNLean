@@ -8,7 +8,7 @@ import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import TNLean.MPS.AreaLaw.ProjectorFactorization.CutProductExpectation
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtDiagonalCorrelation
+import QICLean.Analysis.Norm.ApproximateProjector
 
 /-!
 # Expectations from the approximate factorization of the ground-state projector
@@ -58,7 +58,8 @@ theorem norm_toEuclideanCLM_mul_sub_le {Ψ : EuclideanSpace ℂ n} (hΨ : ‖Ψ�
   have e : toEuclideanCLM (n := n) (𝕜 := ℂ) X Ψ =
       toEuclideanCLM (n := n) (𝕜 := ℂ) OB (toEuclideanCLM (n := n) (𝕜 := ℂ) Z Ψ) - Ψ := by
     rw [map_sub, map_mul, _root_.sub_apply, mul_apply_eq_comp,
-      toEuclideanCLM_vecMulVec_star_self_apply, inner_self_eq_norm_sq_to_K, hΨ]
+      show toEuclideanCLM (n := n) (𝕜 := ℂ) (vecMulVec Ψ.ofLp (star Ψ.ofLp)) Ψ = _ from
+        toEuclideanLin_vecMulVec_star_self_apply Ψ Ψ, inner_self_eq_norm_sq_to_K, hΨ]
     simp
   rw [← e]
   calc ‖toEuclideanCLM (n := n) (𝕜 := ℂ) X Ψ‖ ≤ ‖toEuclideanCLM (n := n) (𝕜 := ℂ) X‖ * ‖Ψ‖ :=

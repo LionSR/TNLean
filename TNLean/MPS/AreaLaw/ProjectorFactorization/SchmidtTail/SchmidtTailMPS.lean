@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtTail
+import QICLean.Analysis.Real.PowerExponential
 import TNLean.MPS.Tensor.VaryingBond.SequentialTruncation
 
 /-!
@@ -66,7 +66,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric
           ψ).kyFanNorm k')
       ≤ ∑ _k ∈ Finset.Ico 1 L, c * exp (2 / ξ) * ((k' : ℝ) / k₀) ^ (-1 / (ξ * log d)) :=
         Finset.sum_le_sum fun k hk ↦
-          schmidtTail_le_rpow_of_geometric hd hξ hc hk₀ _ (hτ k hk) hk'
+          Real.schmidtTail_le_rpow_of_geometric hd hξ hc hk₀ _ (hτ k hk) hk'
     _ = ((L - 1 : ℕ) : ℝ) * (c * exp (2 / ξ) * ((k' : ℝ) / k₀) ^ (-1 / (ξ * log d))) := by
         rw [Finset.sum_const, Nat.card_Ico, nsmul_eq_mul]
 

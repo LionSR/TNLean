@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.IndependentLowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpApproximationParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolynomialFamily
-import TNLean.MPS.AreaLaw.Spectral.PolynomialFilterParameters
+import QICLean.Analysis.Parameter.PolynomialFilterParameters
 import QICLean.Spectral.LowEnergy.ChebyshevViability
 import QICLean.Spectral.LowEnergy.ShiftedLowEnergyCoordinates
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpRegionalScalarBudgets

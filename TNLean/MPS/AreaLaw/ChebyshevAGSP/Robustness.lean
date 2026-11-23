@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.LowSpectrumGap
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ApproximateGroundVector
-import TNLean.MPS.AreaLaw.Spectral.CodimensionOneGap
+import QICLean.Spectral.Gap.CodimensionOneGap
 
 /-!
 # Robustness of the ground vector and gap under two-sided truncation
@@ -89,17 +89,18 @@ theorem robust_ground_of_clipped_ground_gap {L q : ℕ}
       (X + N + Y + (Φ.term a + Φ.term b)) Ω = (e : ℂ) • Ω)
     (e' : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)) (hφ : ‖φ‖ = 1)
     (hφeig : Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t) φ = (e' : ℂ) • φ)
+      (Matrix.twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t) φ = (e' : ℂ) • φ)
     (he'e : e' ≤ e)
     (hstrong : ∀ v : EuclideanSpace ℂ (Fin L → Fin q),
       (e + g / 2 - e') * (‖v‖ ^ 2 - ‖⟪φ, v⟫_ℂ‖ ^ 2) ≤
         (⟪v, Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-          (twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t) v⟫_ℂ).re - e' * ‖v‖ ^ 2)
+          (Matrix.twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t) v⟫_ℂ).re -
+        e' * ‖v‖ ^ 2)
     (horth : ∀ v : EuclideanSpace ℂ (Fin L → Fin q), ⟪φ, v⟫_ℂ = 0 →
       (e + g / 2) * ‖v‖ ^ 2 ≤ (⟪v, Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-        (twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t) v⟫_ℂ).re) :
+        (Matrix.twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t) v⟫_ℂ).re) :
     let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
+    let K := Matrix.twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
     (∀ v : EuclideanSpace ℂ (Fin L → Fin q),
       (g / 2) * (‖v‖ ^ 2 - ‖⟪φ, v⟫_ℂ‖ ^ 2) ≤ (⟪v, ι K v⟫_ℂ).re - e' * ‖v‖ ^ 2) ∧
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
@@ -134,8 +135,8 @@ theorem robust_ground_of_clipped_ground_gap {L q : ℕ}
       mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr (by linarith)) (by norm_num)
     apply le_trans ?_ hdecay
     simpa only [← hB, hΩ, mul_one] using htail'
-  obtain ⟨θ, hθ⟩ := exists_phase_sq_distance_le_residual (ι K) hpositive.isSymmetric
-    φ Ω hφ hΩ e' e (e + g / 2) hφeig (by linarith) horth (ι P Ω)
+  obtain ⟨θ, hθ⟩ := ContinuousLinearMap.exists_phase_sq_distance_le_residual (ι K)
+    hpositive.isSymmetric φ Ω hφ hΩ e' e (e + g / 2) hφeig (by linarith) horth (ι P Ω)
   have hden : e + g / 2 - e = g / 2 := by ring
   rw [hden] at hθ
   have hsmall : ‖ι K (ι P Ω) - (e : ℂ) • ι P Ω‖ / (g / 2) + ‖Ω - ι P Ω‖ ≤
@@ -172,7 +173,7 @@ theorem exists_robust_ground_twoSidedEnergyTruncation {L q : ℕ}
         (⟪v, Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
           (X + N + Y + (Φ.term a + Φ.term b)) v⟫_ℂ).re - e * ‖v‖ ^ 2) :
     let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
+    let K := Matrix.twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
     ∃ (e' : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖φ‖ = 1 ∧ ι K φ = (e' : ℂ) • φ ∧ 0 ≤ e' ∧ e' ≤ e ∧
       (∀ v : EuclideanSpace ℂ (Fin L → Fin q),

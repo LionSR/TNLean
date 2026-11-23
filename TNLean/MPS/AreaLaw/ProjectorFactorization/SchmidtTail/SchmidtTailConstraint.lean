@@ -128,7 +128,7 @@ theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
     norm_cast
   have hΨ : star (cv Ω) ⬝ᵥ cv Ω = 1 := by
     rw [hdot, inner_self_eq_norm_sq_to_K, hΩ]; norm_num
-  have htail := one_sub_kyFanNorm_le_of_schmidtRank_mixture (cv Ω) hΨ
+  have htail := Matrix.one_sub_kyFanNorm_le_of_schmidtRank_mixture (cv Ω) hΨ
     (η := 2 * C₁ ^ 2 / P * Real.exp (-(2 * m / ξ'))) (by positivity) w'
     (fun i ↦ cv (ψ' i)) hw' hrank' (by simp only [hnormsq]; exact hpos')
     (by simp only [hnormsq]; simp only [hdot]; exact hov')

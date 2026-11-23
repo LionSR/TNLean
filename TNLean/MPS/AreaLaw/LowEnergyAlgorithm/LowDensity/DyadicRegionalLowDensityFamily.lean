@@ -244,7 +244,7 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
   have hN : N ≤ D ^ 2 := by
     apply hNraw.trans
     simpa only [Nat.mul_add] using
-      collar_card_le_square_of_larger_count_base q mi ell
+      Nat.collar_card_le_square_of_larger_count_base q mi ell
         ((interval L (a + ell) (b + ell + 1) \ Jtarget).card +
           (Jtarget \ interval L (a + ell) (b + ell + 1)).card)
         (((q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))) ^ 2)

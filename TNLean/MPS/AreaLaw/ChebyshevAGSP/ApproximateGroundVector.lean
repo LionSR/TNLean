@@ -118,7 +118,7 @@ theorem norm_clipped_lowProjection_residual_le_exp {L q : ℕ}
       (X + N + Y + (Φ.term a + Φ.term b)) Ω = (e : ℂ) • Ω) :
     let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
     let P := 1 - Matrix.spectralProjectionGE (X + N + Y) t
-    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
+    let K := Matrix.twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
     ‖ι K (ι P Ω) - (e : ℂ) • ι P Ω‖ ≤ 10 * Real.exp (-(t - 40) / 16) := by
   intro ι P K
   let B := X + N + Y

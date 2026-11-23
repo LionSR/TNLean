@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.ManyBody.Sites.ProductOperatorTrace
 import Mathlib.Data.Finset.NoncommProd
-import TNLean.MPS.AreaLaw.Spectral.HierarchyLevels
+import QICLean.Spectral.LowEnergy.HierarchyLevels
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.ManyBody.Sites.ProductVector
 
@@ -18,7 +18,7 @@ lines 609–628, groups the sites of the chain into supersites of `2 l_proj` sit
 operator `M_i` acts on at most two neighbouring supersites, and lets `M_{k,k+1}` be the sum of
 the `M_i` acting on supersites `k` and `k + 1`. The hierarchy of lines 668–707 then pairs
 blocks of `2^m` consecutive supersites. This file supplies the two facts about this grouping
-that the bound over all levels (`norm_sub_hierarchy_le`) takes as hypotheses.
+that the bound over all levels (`Matrix.norm_sub_hierarchy_le`) takes as hypotheses.
 
 * **Commutation.** Spectral windows keep the support of the operator they are taken of, so
   every projection of level `m` acts on its block of `2^m` supersites. The two halves of a block
@@ -57,7 +57,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 theorem windowProjection_mem_supportedOperators {S : Finset ι}
     {M : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (c x : ℝ) :
-    windowProjection M c x ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
+    Matrix.windowProjection M c x ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
   ManyBody.cfc_mem_supportedOperators _ (sub_mem hM
     (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ S))))
 
@@ -66,7 +66,7 @@ theorem compressedWindowProjection_mem_supportedOperators {S : Finset ι}
     {Q M : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hQ : Q ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (c x : ℝ) :
-    compressedWindowProjection Q M c x ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
+    Matrix.compressedWindowProjection Q M c x ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
   mul_mem hQ (windowProjection_mem_supportedOperators
     (mul_mem (mul_mem hQ hM) hQ) c x)
 
@@ -112,7 +112,7 @@ theorem mem_supportedOperators_hierarchy (blk : ι → ℕ)
     (P M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
     (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
-      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
+      Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
     (hMsupp : ∀ m k,
         M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k)) :
     ∀ m k, P m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk m k) := by
@@ -140,7 +140,7 @@ theorem commute_supersiteHierarchy (blk : ι → ℕ)
     (P M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
     (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
-      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
+      Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
     (hMsupp : ∀ m k,
         M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k)) :
     ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)) := by
@@ -148,23 +148,23 @@ theorem commute_supersiteHierarchy (blk : ι → ℕ)
   exact fun m k ↦ ManyBody.commute_of_mem_supportedOperators_of_disjoint (hsupp m (2 * k))
       (hsupp m (2 * k + 1)) (disjoint_levelBlock_two_mul blk m k)
 
-/-- **All levels on supersites.** The bound of `norm_sub_hierarchy_le`, with the commutation of
-the two halves of each block derived from the supports: each pair operator `M m k` acts on the
+/-- **All levels on supersites.** The bound of `Matrix.norm_sub_hierarchy_le`, with the commutation
+of the two halves of each block derived from the supports: each pair operator `M m k` acts on the
 block `k` of level `m + 1`, as the operators `M_{k,k+1}` joining two neighbouring supersites
 do. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 609–707. -/
 theorem norm_sub_supersiteHierarchy_le (blk : ι → ℕ)
     (P M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
     (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
-      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
+      Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
     (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 < x m)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)
     (hK : ∀ m k, ‖M m k - (c m k : ℂ) • 1‖ ≤ K) :
     ∀ m k, IsStarProjection (P m k) ∧
-      ‖ψ - toEuclideanLin (P m k) ψ‖ ≤ hierarchyDeficiency ε K x m :=
-  norm_sub_hierarchy_le P M c x hP0 hstep
+      ‖ψ - toEuclideanLin (P m k) ψ‖ ≤ Real.hierarchyDeficiency ε K x m :=
+  Matrix.norm_sub_hierarchy_le P M c x hP0 hstep
     (commute_supersiteHierarchy blk P M c x hP0 hstep hMsupp) hM hx hψ hres hK
 
 end Supersites

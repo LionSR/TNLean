@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ProjectorOverlap
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtRankBootstrap
+import QICLean.Analysis.Norm.ApproximateProjector
+import QICLean.Entropy.Renyi.SchmidtRankMixture
 import TNLean.MPS.AreaLaw.Approximation.MPSApproximation
 import TNLean.MPS.Tensor.OpenMPS.SupportedCutRank
 import TNLean.MPS.AreaLaw.ProjectorFactorization.LiebRobinson
@@ -33,7 +33,7 @@ Lemma 2 for a gapped chain once the factorization is supplied.
 ## Hastings' bootstrap lemma from the approximate factorization
 
 Hastings' Lemma 2 (arXiv:0705.2024v4, lines 280–311) bounds the entropy
-at a cut by `log k + ξ' log(2 C₁²/P) log q + bootstrapRemainder ξ' q`,
+at a cut by `log k + ξ' log(2 C₁²/P) log q + Entropy.tailEntropyRemainder ξ' q`,
 for a unit-trace mixture of vectors of Schmidt rank at most `k` whose
 overlap with the ground state is `P > 0`. The first theorem below derives
 this estimate from the approximate factorization at that cut. The second
@@ -141,7 +141,7 @@ theorem exists_mixture_rank_cutMatrix_le_overlap_of_factorization (hq : 1 ≤ q)
       have h2 : ε ^ 2 < P := by
         rw [div_lt_one hP] at h1; nlinarith [sq_nonneg ε]
       exact (Real.lt_sqrt hnn).mpr h2
-    obtain ⟨hpos, hineq⟩ := overlap_ge_of_norm_sub_vecMulVec_le hΩ w ψ hw hnorm hPdef' hP hO
+    obtain ⟨hpos, hineq⟩ := Matrix.overlap_ge_of_norm_sub_vecMulVec_le hΩ w ψ hw hnorm hPdef' hP hO
     refine ⟨r, w, fun i ↦ toEuclideanLin (OB * OL * OR) (ψ i), hw, fun i ↦ ?_, hpos hεP, ?_⟩
     · change (cutMatrix (leftBlock L j) (toEuclideanLin (OB * OL * OR) (ψ i))).rank ≤
         k * q ^ (2 * s)
@@ -180,8 +180,8 @@ Hastings, arXiv:0705.2024v4, Lemma 2 (`ble`), lines 280–390 of
 `References/0705.2024/law16.tex`. This is a stage theorem: it takes the approximate
 factorization of Lemma 1 as a hypothesis. At each scale the mixture `O ρ Oᴴ` has cut rank at
 most `k q^{2m}` (`rank_cutMatrix_toEuclideanLin_le_pow`) and normalized overlap at least
-`1 - 2 C₁² e^{-2m/ξ'} / P` (eq. `hg`, `overlap_ge_of_norm_sub_vecMulVec_le`); past the end of
-the chain `Ω` itself serves. `vonNeumannEntropy_le_of_schmidtRank_mixtures` then gives the
+`1 - 2 C₁² e^{-2m/ξ'} / P` (eq. `hg`, `Matrix.overlap_ge_of_norm_sub_vecMulVec_le`); past the end of
+the chain `Ω` itself serves. `Matrix.vonNeumannEntropy_le_of_schmidtRank_mixtures` then gives the
 bound with `c = 2 C₁² / P`. The hypothesis `C₁ ≥ 1` costs no generality: enlarging `C₁`
 keeps the factorization bound true, so a factorization with any constant `C₀` also holds with
 `max C₀ 1`. -/
@@ -200,7 +200,8 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_factorization (hq : 2 ≤ q
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
-      Real.log k + ξ' * Real.log (2 * C₁ ^ 2 / P) * Real.log q + bootstrapRemainder ξ' q := by
+      Real.log k + ξ' * Real.log (2 * C₁ ^ 2 / P) * Real.log q +
+        Entropy.tailEntropyRemainder ξ' q := by
   classical
   have hq1 : 1 ≤ q := by omega
   set cv : EuclideanSpace ℂ (Fin L → Fin q) → _ := fun x ↦
@@ -222,7 +223,7 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_factorization (hq : 2 ≤ q
       _ = ‖ψ i‖ ^ 2 := by rw [hΩ, mul_one]
   have hc : 1 ≤ 2 * C₁ ^ 2 / P := by
     rw [le_div_iff₀ hP]; nlinarith
-  have hmain := vonNeumannEntropy_le_of_schmidtRank_mixtures Ψ hΨ hk hq hξ hc (fun s hs ↦ by
+  have hmain := Matrix.vonNeumannEntropy_le_of_schmidtRank_mixtures Ψ hΨ hk hq hξ hc (fun s hs ↦ by
     obtain ⟨r', w', ψ', hw', hrank', hpos', hov'⟩ :=
       exists_mixture_rank_cutMatrix_le_overlap_of_factorization hq1 hΩ j hfact hk w ψ hw hrank
         hnorm hP hPdef hs
@@ -271,7 +272,8 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq : 2 �
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
-      Real.log k + ξ' * Real.log (2 * C₁ ^ 2 / P) * Real.log q + bootstrapRemainder ξ' q :=
+      Real.log k + ξ' * Real.log (2 * C₁ ^ 2 / P) * Real.log q +
+        Entropy.tailEntropyRemainder ξ' q :=
   entropy_le_of_overlap_schmidtRank_mixture_of_factorization hq hΩ j hξ hC₁
     (fun m _ ↦ by
       obtain ⟨OB, OL, OR, hF⟩ := hfact m
@@ -311,7 +313,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
         ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
           Real.log k + 6 * lemmaOneEndpointLength R J ΔE *
             Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
-            bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
+            Entropy.tailEntropyRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
   obtain ⟨K, -, hF⟩ := exists_projectorFactorization_endpoint R
   refine ⟨max K 1, le_max_right _ _, ?_⟩
   intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan j k r hk w ψ hw hrank hnorm P hP hPdef
@@ -329,8 +331,8 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
     have hk0 : 0 ≤ Real.log k := Real.log_nonneg (by exact_mod_cast hk)
     have hξ0 : 0 ≤ Real.log (6 * lemmaOneEndpointLength R J ΔE / 2 + 1) :=
       Real.log_nonneg (by linarith)
-    simp only [Nat.cast_one, Real.log_one, mul_zero, add_zero, bootstrapRemainder, one_pow,
-      sub_self, Real.log_zero, zero_add]
+    simp only [Nat.cast_one, Real.log_one, mul_zero, add_zero, Entropy.tailEntropyRemainder,
+      one_pow, sub_self, Real.log_zero, zero_add]
     linarith
   · refine entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt hq hΩ j hξ hC₁
       (fun m ↦ ?_) hk w ψ hw hrank hnorm hP hPdef

@@ -11,7 +11,7 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolyno
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
-import TNLean.MPS.AreaLaw.Spectral.PolynomialFilterParameters
+import QICLean.Analysis.Parameter.PolynomialFilterParameters
 
 /-!
 # Actual operator-word powers at independent physical scales
@@ -188,7 +188,7 @@ theorem exists_independent_long_middle_actual_dg_filter_family :
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
       simpa only [hdiff, Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
-    exact hN'.trans (collar_card_le_square_of_larger_count_base
+    exact hN'.trans (Nat.collar_card_le_square_of_larger_count_base
       q m ell (Jtarget \ J0).card (D0 ^ 2) hq hqm hell hcollar le_rfl)
   obtain ⟨Kphys, Rop, hdecK, hKT, hKTo, hlow, hhigh, hcheb⟩ :=
     Matrix.exists_chebyshev_tensor_family_of_actual_cluster

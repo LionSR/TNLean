@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ProjectionEnergy
-import TNLean.MPS.AreaLaw.Spectral.CodimensionOneGap
+import QICLean.Spectral.Gap.CodimensionOneGap
 
 /-!
 # The low-spectrum gap under two-sided energy truncation
@@ -52,11 +52,11 @@ theorem orthogonal_clipped_energy_ge
         (⟪y, Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (L + (N + A) + R) y⟫_ℂ).re -
           e * ‖y‖ ^ 2) :
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     ∀ x : EuclideanSpace ℂ n, ⟪Ω, x⟫_ℂ = 0 →
       (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re := by
   intro ι K
-  apply re_inner_lower_of_unit_orthogonal_lower (ι K) Ω (e + g / 2)
+  apply ContinuousLinearMap.re_inner_lower_of_unit_orthogonal_lower (ι K) Ω (e + g / 2)
   intro x hx horth
   let Q := Matrix.spectralProjectionGE (L + N + R) t
   let P := 1 - Q
@@ -112,9 +112,9 @@ theorem exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal
     (heig : Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (L + (N + A) + R) Ω = (e : ℂ) • Ω)
     (horth : ∀ x : EuclideanSpace ℂ n, ⟪Ω, x⟫_ℂ = 0 →
       (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
-        (twoSidedEnergyTruncation L (N + A) R t) x⟫_ℂ).re) :
+        (Matrix.twoSidedEnergyTruncation L (N + A) R t) x⟫_ℂ).re) :
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     ∃ (e' : ℝ) (φ : EuclideanSpace ℂ n), ‖φ‖ = 1 ∧ ι K φ = (e' : ℂ) • φ ∧
       0 ≤ e' ∧ e' ≤ e ∧
       (∀ x : EuclideanSpace ℂ n,
@@ -136,7 +136,7 @@ theorem exists_ground_gap_twoSidedEnergyTruncation_of_orthogonal
       Complex.re_ofReal_mul, inner_self_eq_norm_sq_to_K, hΩ] at h
     norm_num at h
     exact h
-  exact exists_ground_gap_of_orthogonal_lower (ι K) hpositive Ω hΩ e (e + g / 2)
+  exact ContinuousLinearMap.exists_ground_gap_of_orthogonal_lower (ι K) hpositive Ω hΩ e (e + g / 2)
     (by linarith) htest horth
 
 /-- The actual clipped Hamiltonian has a unit ground vector, and all
@@ -157,7 +157,7 @@ theorem exists_ground_gap_twoSidedEnergyTruncation
         (⟪y, Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (L + (N + A) + R) y⟫_ℂ).re -
           e * ‖y‖ ^ 2) :
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     ∃ (e' : ℝ) (φ : EuclideanSpace ℂ n), ‖φ‖ = 1 ∧ ι K φ = (e' : ℂ) • φ ∧
       0 ≤ e' ∧ e' ≤ e ∧
       (∀ x : EuclideanSpace ℂ n,

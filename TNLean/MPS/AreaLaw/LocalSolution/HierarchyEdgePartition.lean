@@ -95,8 +95,8 @@ theorem centeredNorm_edgePartition_le_two_mul (f : α → β) (a : α → Matrix
     ‖edgePartition f a j -
       ((⟪ψ, toEuclideanLin (edgePartition f a j) ψ⟫_ℂ).re : ℂ) • 1‖ ≤
       2 * Fintype.card α * J := by
-  refine (norm_sub_smul_one_le_two_mul
-    (abs_re_inner_toEuclideanLin_le (edgePartition f a j) hψ)).trans ?_
+  refine (Matrix.norm_sub_smul_one_le_two_mul
+    (Matrix.abs_re_inner_toEuclideanLin_le (edgePartition f a j) hψ)).trans ?_
   nlinarith [norm_edgePartition_le f a hJ ha j]
 
 end Matrices

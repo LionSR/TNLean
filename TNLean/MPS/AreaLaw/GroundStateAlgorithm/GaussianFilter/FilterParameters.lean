@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridParameters
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GaussianQuadrature
+import QICLean.Spectral.Filter.Gaussian.Quadrature
 
 /-!
 # Explicit scalar parameters for approximate-energy Gaussian filtering
@@ -44,7 +44,7 @@ noncomputable def huangEnergyMesh (c Delta : ℝ) (L : ℕ) : ℝ :=
 
 /-- The constructed energy-grid cardinality; Huang, Section 5.4, Lemma 18. -/
 noncomputable def huangEnergyCount (c Delta : ℝ) (L : ℕ) : ℕ :=
-  timeMeshCount L (huangEnergyMesh c Delta L)
+  GaussianFilter.timeMeshCount L (huangEnergyMesh c Delta L)
 
 /-- A uniform upper sample count for all energy estimates of modulus at most `L`.
 Huang, Section 5.4, equations (20)--(22). -/

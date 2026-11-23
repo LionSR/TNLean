@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProjectorFactorization.ChainLocalizedParts
-import TNLean.MPS.AreaLaw.Spectral.SpectralCutoff
+import TNLean.MPS.AreaLaw.Spectral.SupportedSpectralCutoff
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Hamiltonian.GaussianFilter
@@ -293,7 +293,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hsR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) MR (leftBlock L c)ᶜ :=
     h.isSupportedOn_localizedPart_rightPart Ω s ΔE hmk
   let σ₀ : ((_ : Fin L) → Fin q) := fun _ ↦ ⟨0, NeZero.pos q⟩
-  have hcomm : Commute (spectralCutoff ML θ) (spectralCutoff MR θ) :=
+  have hcomm : Commute (Matrix.spectralCutoff ML θ) (Matrix.spectralCutoff MR θ) :=
     commute_spectralCutoff_of_isSupportedOn disjoint_compl_right hML hMR hsL hsR σ₀ θ θ
   -- the bounds `‖M Ω‖ ≤ μ`
   have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
@@ -323,14 +323,15 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
     rw [← hsum]
     simp only [ML, MR, ManyBody.ChainInteraction.localizedPart, DL, DR, PL, PR]
     abel
-  refine ⟨ML + MR, spectralCutoff ML θ, spectralCutoff MR θ, hML.add hMR,
-    isStarProjection_spectralCutoff hML θ, isStarProjection_spectralCutoff hMR θ, hcomm,
+  refine ⟨ML + MR, Matrix.spectralCutoff ML θ, Matrix.spectralCutoff MR θ, hML.add hMR,
+    Matrix.isStarProjection_spectralCutoff hML θ, Matrix.isStarProjection_spectralCutoff hMR θ,
+    hcomm,
     isSupportedOn_spectralCutoff hML hsL σ₀ θ, isSupportedOn_spectralCutoff hMR hsR σ₀ θ,
-    norm_add_mul_mul_spectralCutoff_le hML hMR hθ.le hcomm, ?_, ?_, ?_⟩
-  · refine (norm_sub_mul_le_of_isStarProjection (isStarProjection_spectralCutoff hML θ) _
-      Ω).trans ?_
-    refine (add_le_add (norm_sub_spectralCutoff_le hML hθ Ω)
-      (norm_sub_spectralCutoff_le hMR hθ Ω)).trans ?_
+    Matrix.norm_add_mul_mul_spectralCutoff_le hML hMR hθ.le hcomm, ?_, ?_, ?_⟩
+  · refine (Matrix.norm_sub_mul_le_of_isStarProjection
+      (Matrix.isStarProjection_spectralCutoff hML θ) _ Ω).trans ?_
+    refine (add_le_add (Matrix.norm_sub_spectralCutoff_le hML hθ Ω)
+      (Matrix.norm_sub_spectralCutoff_le hMR hθ Ω)).trans ?_
     rw [two_mul, add_div]
     gcongr
   · rw [hrem]

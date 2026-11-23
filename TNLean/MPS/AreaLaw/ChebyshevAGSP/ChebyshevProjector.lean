@@ -131,7 +131,7 @@ theorem normalized_chain_truncation_bounds {L q : ℕ}
     (hX : (leftCutBlock Φ a x).PosSemidef)
     (hN : (middleCutBlock Φ a b m).PosSemidef)
     (hY : (rightCutBlock Φ b y).PosSemidef) (ht : 0 ≤ t) :
-    let Ht := twoSidedEnergyTruncation (leftCutBlock Φ a x)
+    let Ht := Matrix.twoSidedEnergyTruncation (leftCutBlock Φ a x)
       (middleCutBlock Φ a b m + (Φ.term a + Φ.term b)) (rightCutBlock Φ b y) t
     Ht.PosSemidef ∧ Ht ≤ ((2 * t + middleCutBudget a b m : ℝ) : ℂ) • 1 ∧
       ‖Ht‖ ≤ 2 * t + middleCutBudget a b m := by
@@ -161,7 +161,7 @@ theorem normalized_chain_truncation_bounds {L q : ℕ}
       abel
   have hM : (middleCutBlock Φ a b m + (Φ.term a + Φ.term b)).PosSemidef :=
     hN.add (Matrix.nonneg_iff_posSemidef.mp (add_nonneg (h0 a) (h0 b)))
-  obtain ⟨hpos, _hle, hbudget⟩ := twoSidedEnergyTruncation_bounds
+  obtain ⟨hpos, _hle, hbudget⟩ := Matrix.twoSidedEnergyTruncation_bounds
     (leftCutBlock Φ a x) _ (rightCutBlock Φ b y) hX hM hY t
     (middleCutBudget a b m) ht hcap
   refine ⟨hpos, hbudget, ?_⟩
@@ -187,7 +187,7 @@ theorem exists_normalized_chain_chebyshev_filter {L q : ℕ}
     (he0 : 0 ≤ e) (he6 : e ≤ 6) (hg : 0 < g) (hg1 : g ≤ 1)
     (ht : 32768 * (e + g) / g ^ 2 ≤ t) (k : ℕ) :
     let H := Φ.hamiltonian - ((x + m + y : ℝ) : ℂ) • 1
-    let Ht := twoSidedEnergyTruncation (leftCutBlock Φ a x)
+    let Ht := Matrix.twoSidedEnergyTruncation (leftCutBlock Φ a x)
       (middleCutBlock Φ a b m + (Φ.term a + Φ.term b)) (rightCutBlock Φ b y) t
     let u := 2 * t + middleCutBudget a b m
     Matrix.toEuclideanLin H Ω = (e : ℂ) • Ω →
@@ -246,7 +246,7 @@ theorem exists_frustrationFree_chain_chebyshev_filter {L q : ℕ}
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (g t : ℝ) (hg : 0 < g) (hg1 : g ≤ 1) (ht : 32768 / g ≤ t) (k : ℕ) :
     let H := Φ.hamiltonian
-    let Ht := twoSidedEnergyTruncation (leftCutBlock Φ a 0)
+    let Ht := Matrix.twoSidedEnergyTruncation (leftCutBlock Φ a 0)
       (middleCutBlock Φ a b 0 + (Φ.term a + Φ.term b)) (rightCutBlock Φ b 0) t
     let u := 2 * t + middleCutBudget a b 0
     Ω ∈ Φ.zeroSpace →
@@ -408,7 +408,7 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
     (hwindow : b.val + 1 = a.val + 2 * w)
     (x m y t : ℝ) (τ : Fin q) (k : ℕ) (hk : 1 ≤ k)
     (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
-    let Ht := twoSidedEnergyTruncation (leftCutBlock Φ a x)
+    let Ht := Matrix.twoSidedEnergyTruncation (leftCutBlock Φ a x)
       (middleCutBlock Φ a b m + (Φ.term a + Φ.term b)) (rightCutBlock Φ b y) t
     let A := interval L 0 (a.val + w + 1)
     Matrix.operatorSchmidtRank ((Polynomial.aeval Ht P).reindex
@@ -452,7 +452,7 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
       (interval L (a.val + 2 * w) L : Finset (Fin L)) :=
     ManyBody.cfc_mem_supportedOperators _ hY
   have hHt : Ht = (∑ r, W r) + PL + PR := by
-    dsimp [Ht, twoSidedEnergyTruncation, PL, PR]
+    dsimp [Ht, Matrix.twoSidedEnergyTruncation, PL, PR]
     rw [middleCutBlock_window Φ a b hab hwindow m]
     dsimp [W]
     abel
@@ -468,7 +468,7 @@ theorem normalized_chain_real_polynomial_rank {L q w : ℕ}
     (hwindow : b.val + 1 = a.val + 2 * w)
     (x m y t : ℝ) (τ : Fin q) (k : ℕ) (hk : 1 ≤ k)
     (p : Polynomial ℝ) (hdeg : p.natDegree ≤ k) :
-    let Ht := twoSidedEnergyTruncation (leftCutBlock Φ a x)
+    let Ht := Matrix.twoSidedEnergyTruncation (leftCutBlock Φ a x)
       (middleCutBlock Φ a b m + (Φ.term a + Φ.term b)) (rightCutBlock Φ b y) t
     let A := interval L 0 (a.val + w + 1)
     Matrix.operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A
@@ -504,7 +504,7 @@ theorem exists_normalized_chain_chebyshev_agsp {L q w : ℕ}
     (he0 : 0 ≤ e) (he6 : e ≤ 6) (hg : 0 < g) (hg1 : g ≤ 1)
     (ht : 32768 * (e + g) / g ^ 2 ≤ t) (k : ℕ) (hk : 1 ≤ k) :
     let H := Φ.hamiltonian - ((x + m + y : ℝ) : ℂ) • 1
-    let Ht := twoSidedEnergyTruncation (leftCutBlock Φ a x)
+    let Ht := Matrix.twoSidedEnergyTruncation (leftCutBlock Φ a x)
       (middleCutBlock Φ a b m + (Φ.term a + Φ.term b)) (rightCutBlock Φ b y) t
     let u := 2 * t + middleCutBudget a b m
     let A := interval L 0 (a.val + w + 1)
@@ -556,7 +556,7 @@ theorem exists_normalized_chain_chebyshev_agsp_of_inverse_gap_cutoff {L q w : �
     (he0 : 0 ≤ e) (he6 : e ≤ 6) (hg : 0 < g) (hg1 : g ≤ 1)
     (ht : 32768 / g ≤ t) (k : ℕ) (hk : 1 ≤ k) :
     let H := Φ.hamiltonian - ((x + m + y : ℝ) : ℂ) • 1
-    let Ht := twoSidedEnergyTruncation (leftCutBlock Φ a x)
+    let Ht := Matrix.twoSidedEnergyTruncation (leftCutBlock Φ a x)
       (middleCutBlock Φ a b m + (Φ.term a + Φ.term b)) (rightCutBlock Φ b y) t
     let u := 2 * t + middleCutBudget a b m
     let A := interval L 0 (a.val + w + 1)
@@ -619,7 +619,7 @@ theorem exists_frustrationFree_chain_chebyshev_agsp {L q w : ℕ}
     (g t : ℝ) (hg : 0 < g) (hg1 : g ≤ 1) (ht : 32768 / g ≤ t)
     (k : ℕ) (hk : 1 ≤ k) :
     let H := Φ.hamiltonian
-    let Ht := twoSidedEnergyTruncation (leftCutBlock Φ a 0)
+    let Ht := Matrix.twoSidedEnergyTruncation (leftCutBlock Φ a 0)
       (middleCutBlock Φ a b 0 + (Φ.term a + Φ.term b)) (rightCutBlock Φ b 0) t
     let u := 2 * t + middleCutBudget a b 0
     let A := interval L 0 (a.val + w + 1)

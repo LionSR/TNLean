@@ -173,15 +173,15 @@ theorem posSemidef_gap_twoSidedEnergyTruncation_of_quadratic {n : Type*} [Fintyp
     (hquad : ∀ v : EuclideanSpace ℂ n,
       g' * (‖v‖ ^ 2 - ‖⟪φ, v⟫_ℂ‖ ^ 2) ≤
         (⟪v, Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
-          (twoSidedEnergyTruncation X (N + A) Y t) v⟫_ℂ).re - e' * ‖v‖ ^ 2) :
-    (twoSidedEnergyTruncation X (N + A) Y t - (e' : ℂ) • 1 - (g' : ℂ) •
+          (Matrix.twoSidedEnergyTruncation X (N + A) Y t) v⟫_ℂ).re - e' * ‖v‖ ^ 2) :
+    (Matrix.twoSidedEnergyTruncation X (N + A) Y t - (e' : ℂ) • 1 - (g' : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ)))).PosSemidef := by
-  have hKHerm : (twoSidedEnergyTruncation X (N + A) Y t).IsHermitian :=
+  have hKHerm : (Matrix.twoSidedEnergyTruncation X (N + A) Y t).IsHermitian :=
     ((Matrix.isHermitian_energyTruncation X t).add (hN.add hA)).add
       (Matrix.isHermitian_energyTruncation Y t)
   apply (hKHerm.posSemidef_gap_iff e' g' φ).mpr
   intro v
-  rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin (twoSidedEnergyTruncation X (N + A) Y t)]
+  rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin (Matrix.twoSidedEnergyTruncation X (N + A) Y t)]
   exact hquad v
 
 /-- **AKLV Theorem 6.1 on the normalized nearest-neighbour chain.**
@@ -206,7 +206,7 @@ theorem normalized_chain_robustness {L q : ℕ}
     let N := middleCutBlock Φ a b m
     let Y := rightCutBlock Φ b y
     let H := Φ.hamiltonian - ((x + m + y : ℝ) : ℂ) • 1
-    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
+    let K := Matrix.twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
     ι H Ω = (e : ℂ) • Ω →
     (H - (e : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.IndependentLowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpApproximationParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolynomialFamily
-import TNLean.MPS.AreaLaw.Spectral.PolynomialFilterParameters
+import QICLean.Analysis.Parameter.PolynomialFilterParameters
 import QICLean.Spectral.LowEnergy.ChebyshevViability
 import QICLean.Spectral.LowEnergy.ShiftedLowEnergyCoordinates
 
@@ -184,7 +184,7 @@ theorem exists_sharp_regional_family_of_scalar_budgets
   have hN : N ≤ D ^ 2 := by
     apply hNraw.trans
     simpa only [Nat.mul_add] using
-      collar_card_le_square_of_larger_count_base q m ell
+      Nat.collar_card_le_square_of_larger_count_base q m ell
         ((interval L (a + ell) (b + ell + 1) \ Jtarget).card +
           (Jtarget \ interval L (a + ell) (b + ell + 1)).card)
         (((q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))) ^ 2)

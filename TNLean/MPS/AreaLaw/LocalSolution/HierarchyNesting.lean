@@ -61,13 +61,13 @@ theorem hierarchyProjection_children (blk : ι → ℕ)
     (hierarchyProjection_zero M c x) (hierarchyProjection_succ M c x) hsupp
   have hQ := (hproj m (2 * k)).mul (hproj m (2 * k + 1)) (hcomm m k)
   have hQφ : toEuclideanLin (P m (2 * k) * P m (2 * k + 1)) φ = φ :=
-    toEuclideanLin_eq_of_mul_eq (by
-      rw [hierarchyProjection_succ, compressedWindowProjection, ← mul_assoc,
+    Matrix.toEuclideanLin_eq_of_mul_eq (by
+      rw [hierarchyProjection_succ, Matrix.compressedWindowProjection, ← mul_assoc,
         hQ.isIdempotentElem.eq]) hφ
   constructor
-  · exact toEuclideanLin_eq_of_mul_eq
+  · exact Matrix.toEuclideanLin_eq_of_mul_eq
       (by rw [← mul_assoc, (hproj m (2 * k)).isIdempotentElem.eq]) hQφ
-  · exact toEuclideanLin_eq_of_mul_eq
+  · exact Matrix.toEuclideanLin_eq_of_mul_eq
       (by rw [← mul_assoc, ← (hcomm m k).eq, mul_assoc,
         (hproj m (2 * k + 1)).isIdempotentElem.eq]) hQφ
 
@@ -104,8 +104,8 @@ theorem isRetainedHierarchy_of_hierarchyClosingProjection (blk : ι → ℕ)
   have hP := isStarProjection_supersiteHierarchy blk (hierarchyProjection M c x) M c x
     (hierarchyProjection_zero M c x) (hierarchyProjection_succ M c x) hsupp hM h 0
   apply isRetainedHierarchy_of_hierarchyProjection blk M c x hsupp hM h 0
-  exact toEuclideanLin_eq_of_mul_eq (by
-    rw [hierarchyClosingProjection, compressedWindowProjection, ← mul_assoc,
+  exact Matrix.toEuclideanLin_eq_of_mul_eq (by
+    rw [hierarchyClosingProjection, Matrix.compressedWindowProjection, ← mul_assoc,
       hP.isIdempotentElem.eq]) hφ
 
 end Supersites

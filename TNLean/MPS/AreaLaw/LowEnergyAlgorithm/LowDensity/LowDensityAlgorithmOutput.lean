@@ -69,7 +69,8 @@ theorem exists_orthonormal_ritz_energy_le {σ : Type*} [Fintype σ] [DecidableEq
       ∀ i, (inner ℂ (ψ i) (Matrix.toEuclideanLin H (ψ i))).re ≤ minEigenvalue hH + c + δ := by
   intro Gc A ρ d hR
   obtain ⟨hρ, hd0, hd1, hbound⟩ := low_density_output_accuracy hc (norm_nonneg _ : 0 ≤ A) hδ
-  obtain ⟨-, -, -, -, -, hRzdim, henergy⟩ := window_extraction_of_isCloseTo hH hc hd0.le hd1 R hR
+  obtain ⟨-, -, -, -, -, hRzdim, henergy⟩ :=
+    Matrix.window_extraction_of_isCloseTo hH hc hd0.le hd1 R hR
   set Rz := R.ritzSubspace (Matrix.isSymmetric_toEuclideanLin_iff.mpr hH) (Module.finrank ℂ Gc)
   let b := stdOrthonormalBasis ℂ Rz
   let ψ : Fin (Module.finrank ℂ Gc) → EuclideanSpace ℂ σ :=

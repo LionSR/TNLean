@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import QICLean.Analysis.Norm.MatrixL2Contraction
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtDiagonalCorrelation
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtDiagonalOperators
+import QICLean.Analysis.Norm.ApproximateProjector
+import QICLean.Channel.Schmidt.Decomposition
 import QICLean.Analysis.Norm.RootChannel
 import QICLean.Analysis.TraceInequality.TraceMulBound
 import QICLean.ManyBody.Entropy.Filter.Stationarity
@@ -24,7 +24,7 @@ from the buffer `[j - l, j + l)`. Then `|⟨Ω, A B_L Ω⟩ − ⟨Ω, A Ω⟩�
 eq. `fwdback`.
 
 The operator estimate is
-`TNLean.MPS.AreaLaw.Hastings.norm_inner_sub_le_of_projector_factorization`. This file supplies
+`Matrix.norm_inner_sub_le_of_projector_factorization`. This file supplies
 its structural hypotheses on the chain: the commutations follow from the supports, the operator
 `B_R = 1 ⊗ ∑ α, O α |ψ_R(α)⟩⟨ψ_R(α)|` agrees with `B_L` on `Ω`, and both are contractions.
 
@@ -192,9 +192,9 @@ theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
     rw [ManyBody.place, Entropy.toEuclideanCLM_reindex_cutEquiv_symm,
       Entropy.toEuclideanCLM_reindex_cutEquiv_symm, hdec]
     exact congrArg (fun f ↦ WithLp.toLp 2 (f ∘ ManyBody.cutEquiv _ _))
-      (kronecker_one_mulVec_schmidt_eq_one_kronecker_mulVec a O
+      (Matrix.kronecker_one_mulVec_schmidt_eq_one_kronecker_mulVec a O
         (fun α ↦ WithLp.ofLp (ψL α)) (fun α ↦ WithLp.ofLp (ψR α)) hL hR)
-  exact norm_inner_sub_le_of_projector_factorization hΩ hOB hOL hOR hOB1 hOL1 hOR1 hprod hA1
+  exact Matrix.norm_inner_sub_le_of_projector_factorization hΩ hOB hOL hOR hOB1 hOL1 hOR1 hprod hA1
     hBL1 hBR1 hBA hRB hBRL hLR hB
 
 end Chain

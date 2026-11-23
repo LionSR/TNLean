@@ -8,13 +8,11 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter
 
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.ApproximateEnergyFilter
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.BlockProductBonds
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.ChainGrid
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.FilterGrowth
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.FilterParameters
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.FilterPolynomial
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GaussianQuadrature
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridEvolution
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridHamiltonian
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridLocalization
@@ -23,5 +21,4 @@ import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridPropagation
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.PhysicalFilterFamily
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.PhysicalGaussian
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.PhysicalPropagation
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.UnitaryQuadrature
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.ViableFilter

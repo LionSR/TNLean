@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Spectral.LowEnergy.OrderedSpectralSpan
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.Spectral.TwoBlockTruncation
-import TNLean.MPS.AreaLaw.Spectral.Truncation
+import QICLean.Spectral.Filter.EnergyTruncation
 import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import QICLean.Analysis.Order.LowEnergyPerturbation
 import QICLean.Analysis.Projection.ProjectedPositiveEnergy

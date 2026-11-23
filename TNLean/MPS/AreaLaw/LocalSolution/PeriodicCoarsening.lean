@@ -318,8 +318,8 @@ theorem centeredNorm_periodicCoarseOperator_le {N ℓ d : ℕ}
     ‖periodicCoarseOperator a j -
       ((⟪ψ, toEuclideanLin (periodicCoarseOperator a j) ψ⟫_ℂ).re : ℂ) • 1‖ ≤
       4 * (ℓ : ℝ) * J := by
-  refine (norm_sub_smul_one_le_two_mul
-    (abs_re_inner_toEuclideanLin_le (periodicCoarseOperator a j) hψ)).trans ?_
+  refine (Matrix.norm_sub_smul_one_le_two_mul
+    (Matrix.abs_re_inner_toEuclideanLin_le (periodicCoarseOperator a j) hψ)).trans ?_
   have hn := norm_edgePartition_le_of_fibre_card periodicCoarseEdge a hJ ha j
     (card_periodicCoarseEdge_fibre j).le
   change ‖periodicCoarseOperator a j‖ ≤ _ at hn

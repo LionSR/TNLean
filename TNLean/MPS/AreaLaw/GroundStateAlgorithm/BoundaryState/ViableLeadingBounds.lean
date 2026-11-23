@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ViableLeadingVector
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.Gluing
-import TNLean.MPS.AreaLaw.Spectral.HierarchicalEnergy
+import QICLean.Spectral.LowEnergy.HierarchyLevels
 import QICLean.Spectral.Eigenvalue.DensityMaxEigenvector
 import QICLean.Spectral.Eigenvalue.DominantEigenvectorUniqueness
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -401,7 +401,7 @@ theorem nearby_unit_vector_energy_and_overlap_bounds
     (⟪v', toEuclideanLin H v'⟫_ℂ).re ≤ E + 2 * ‖H‖ * ζ ∧
       a - ζ ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   constructor
-  · have henergy := LocalSolution.abs_re_inner_sub_re_inner_le H hv' hv
+  · have henergy := Matrix.abs_re_inner_sub_re_inner_le H hv' hv
     rw [abs_le] at henergy
     have hscaled : 2 * ‖H‖ * ‖v' - v‖ ≤ 2 * ‖H‖ * ζ :=
       mul_le_mul_of_nonneg_left hdist (mul_nonneg (by norm_num) (norm_nonneg H))
