@@ -76,38 +76,13 @@ theorem regionReplaceConfig_comm_of_disjoint {R S : Finset V} (hRS : Disjoint R 
   · by_cases hvS : v ∈ S <;>
       simp [regionReplaceConfig, assembleRegionσ, hvR, hvS]
 
-/-- A regional operator in the full physical Hilbert space with its standard
-inner product. Source: CPGSV21, arXiv:2011.12127, regional extensions, lines 2003–2011. -/
-noncomputable def placeES (R : Finset V)
-    (h : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ) :
-    EuclideanSpace ℂ (V → Fin d) →ₗ[ℂ] EuclideanSpace ℂ (V → Fin d) :=
-  Matrix.toEuclideanLin (ManyBody.place (X := fun _ ↦ Fin _) R h)
-
-/-- Disjoint regional operators commute in Euclidean coordinates.
-Source: CPGSV21, arXiv:2011.12127, non-overlapping terms, lines 2171–2175. -/
-theorem placeES_commute_of_disjoint {R S : Finset V} (hRS : Disjoint R S)
-    (h : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ)
-    (k : Matrix (RegionPhysicalConfig (d := d) S)
-      (RegionPhysicalConfig (d := d) S) ℂ) :
-    Commute (placeES R h) (placeES S k) := by
-  classical
-  have hc := congrArg Matrix.toEuclideanLin
-      (ManyBody.commute_of_mem_supportedOperators_of_disjoint
-      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) h)
-      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) k) hRS).eq
-  change placeES R h * placeES S k =
-    placeES S k * placeES R h
-  rw [Matrix.toLpLin_mul 2 2 2, Matrix.toLpLin_mul 2 2 2] at hc
-  exact hc
-
 variable {ι : Type*} [Fintype ι]
 
-/-- A positive quadratic-form bound gives the same norm gap for a finite PEPS
-parent sum. Source: CPGSV21, arXiv:2011.12127, equivalence of the gap and
-`H² ≥ γ H`, line 2170. -/
-theorem hamiltonian_ofPlace_norm_gap_of_quadraticForm (R : ι → Finset V)
+/-- A positive quadratic-form bound \(γ \operatorname{Re}⟨Hψ, ψ⟩ ≤ \operatorname{Re}⟨Hψ, Hψ⟩\)
+with \(γ > 0\) for a finite PEPS parent sum \(H\) implies that every eigenvalue of \(H\)
+other than \(0\) is at least \(γ\). Source: CPGSV21, arXiv:2011.12127, equivalence of the
+gap and \(H^2 ≥ γ H\), line 2170. -/
+theorem forall_hasEigenvalue_hamiltonian_ofPlace_of_quadraticForm (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, (h i).PosSemidef) {γ : ℝ} (hγ : 0 < γ)
@@ -118,12 +93,11 @@ theorem hamiltonian_ofPlace_norm_gap_of_quadraticForm (R : ι → Finset V)
             (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ψ,
           Matrix.toEuclideanLin
             (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ψ⟫_ℂ).re) :
-    ∀ ψ ∈ (Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).kerᗮ,
-      γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ψ‖ := by
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian) μ →
+      μ = 0 ∨ (γ : ℂ) ≤ μ := by
   classical
-  exact FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hγ
+  exact FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional hγ
     (Matrix.isPositive_toEuclideanLin_iff.mpr
       (ManyBody.Interaction.posSemidef_hamiltonian
         (Φ := ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h)
@@ -140,7 +114,9 @@ theorem hamiltonian_ofPlace_quadraticForm_of_overlap_anticommutator
     (hε : 0 ≤ ε) (hm : 0 < m)
     (hCard : ∀ i, ((Finset.univ.erase i).filter
       (fun j => ¬ Disjoint (R i) (R j))).card ≤ m)
-    (hAnti : let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
+    (hAnti :
+      let P := fun i => Matrix.toEuclideanLin
+        (ManyBody.place (X := fun _ ↦ Fin d) (R i) (canonicalRegionParentInteraction A (R i)))
       ∀ i j, j ∈ Finset.univ.erase i → ¬ Disjoint (R i) (R j) →
         ∀ ψ : EuclideanSpace ℂ (V → Fin d),
           -ε * ((⟪P i ψ, ψ⟫_ℂ).re + (⟪P j ψ, ψ⟫_ℂ).re) ≤
@@ -150,7 +126,8 @@ theorem hamiltonian_ofPlace_quadraticForm_of_overlap_anticommutator
     ∀ ψ : EuclideanSpace ℂ (V → Fin d),
       (1 - (m : ℝ) * ε) * (⟪H ψ, ψ⟫_ℂ).re ≤ (⟪H ψ, H ψ⟫_ℂ).re := by
   classical
-  let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
+  let P := fun i => Matrix.toEuclideanLin
+    (ManyBody.place (X := fun _ ↦ Fin d) (R i) (canonicalRegionParentInteraction A (R i)))
   have hP : ∀ i, (P i).IsSymmetricProjection :=
     fun i => place_canonical_isSymmetricProjection A (R i)
   have hmR : 0 < (m : ℝ) := by exact_mod_cast hm
@@ -162,8 +139,11 @@ theorem hamiltonian_ofPlace_quadraticForm_of_overlap_anticommutator
     (fun i j => ¬ Disjoint (R i) (R j)) hm hCard
     (fun j => by simpa only [disjoint_comm] using hCard j)
     (fun i j hij hdis ψ => by
-      have hcomm := placeES_commute_of_disjoint (not_not.mp hdis)
-        (canonicalRegionParentInteraction A (R i)) (canonicalRegionParentInteraction A (R j))
+      have hcomm : Commute (P i) (P j) :=
+        (ManyBody.commute_of_mem_supportedOperators_of_disjoint
+          (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin d) _)
+          (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin d) _)
+          (not_not.mp hdis)).map (Matrix.toLpLinAlgEquiv 2)
       have h₁ := (hP i).re_inner_apply_apply_nonneg_of_commute (hP j)
         (fun v => LinearMap.congr_fun hcomm.eq v) ψ
       have h₂ := (hP j).re_inner_apply_apply_nonneg_of_commute (hP i)
@@ -172,83 +152,94 @@ theorem hamiltonian_ofPlace_quadraticForm_of_overlap_anticommutator
     (fun i j hij hover ψ => by
       rw [hcoef]
       exact hAnti i j hij hover ψ)
-  simpa only [ManyBody.Interaction.hamiltonian_ofPlace, map_sum, P, placeES] using hquad
+  simpa only [ManyBody.Interaction.hamiltonian_ofPlace, map_sum, P] using hquad
 
 open Classical in
-/-- The finite-overlap anticommutator estimate gives a gap of at least
-`1 - m * ε` whenever this number is positive. Source: CPGSV21,
-arXiv:2011.12127, projector-sum gap criterion, lines 2170–2179. The pairwise
-estimate and overlap bound remain explicit hypotheses. -/
-theorem hamiltonian_ofPlace_norm_gap_of_overlap_anticommutator
+/-- The finite-overlap anticommutator estimate implies that every eigenvalue of
+the canonical PEPS parent other than \(0\) is at least \(1 - mε\), whenever this
+number is positive. Source: CPGSV21, arXiv:2011.12127, projector-sum gap criterion,
+lines 2170–2179. The pairwise estimate and overlap bound remain explicit hypotheses. -/
+theorem forall_hasEigenvalue_hamiltonian_ofPlace_of_overlap_anticommutator
     (A : Tensor Γ d) (R : ι → Finset V) {ε : ℝ} {m : ℕ}
     (hε : 0 ≤ ε) (hm : 0 < m) (hmε : (m : ℝ) * ε < 1)
     (hCard : ∀ i, ((Finset.univ.erase i).filter
       (fun j => ¬ Disjoint (R i) (R j))).card ≤ m)
-    (hAnti : let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
+    (hAnti :
+      let P := fun i => Matrix.toEuclideanLin
+        (ManyBody.place (X := fun _ ↦ Fin d) (R i) (canonicalRegionParentInteraction A (R i)))
       ∀ i j, j ∈ Finset.univ.erase i → ¬ Disjoint (R i) (R j) →
         ∀ ψ : EuclideanSpace ℂ (V → Fin d),
           -ε * ((⟪P i ψ, ψ⟫_ℂ).re + (⟪P j ψ, ψ⟫_ℂ).re) ≤
             (⟪P i ψ, P j ψ⟫_ℂ).re + (⟪P j ψ, P i ψ⟫_ℂ).re) :
     let H := Matrix.toEuclideanLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
       (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian
-    ∀ ψ ∈ H.kerᗮ, (1 - (m : ℝ) * ε) * ‖ψ‖ ≤ ‖H ψ‖ := by
+    ∀ μ : ℂ, Module.End.HasEigenvalue H μ → μ = 0 ∨ ((1 - (m : ℝ) * ε : ℝ) : ℂ) ≤ μ := by
   classical
-  exact hamiltonian_ofPlace_norm_gap_of_quadraticForm R
+  exact forall_hasEigenvalue_hamiltonian_ofPlace_of_quadraticForm R
     (fun i => canonicalRegionParentInteraction A (R i))
     (fun i => canonicalRegionParentInteraction_posSemidef A (R i)) (sub_pos.mpr hmε)
     (hamiltonian_ofPlace_quadraticForm_of_overlap_anticommutator A R hε hm hCard hAnti)
 
-/-- Pairwise commuting canonical PEPS parent terms have norm gap at least one.
-Source: CPGSV21, arXiv:2011.12127, commuting nonnegative cross terms in the
-projector-sum expansion, lines 2170–2175. Commutation is explicit here. -/
-theorem hamiltonian_ofPlace_unit_norm_gap_of_commute (A : Tensor Γ d)
+/-- Pairwise commuting canonical PEPS parent terms give a parent whose eigenvalues
+other than \(0\) are at least one. Source: CPGSV21, arXiv:2011.12127, commuting
+nonnegative cross terms in the projector-sum expansion, lines 2170–2175.
+Commutation is explicit here. -/
+theorem forall_hasEigenvalue_one_hamiltonian_ofPlace_of_commute (A : Tensor Γ d)
     (R : ι → Finset V)
-    (hComm : let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
-      ∀ i j, Commute (P i) (P j)) :
-    let H := Matrix.toEuclideanLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
-      (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian
-    ∀ ψ ∈ H.kerᗮ, (1 : ℝ) * ‖ψ‖ ≤ ‖H ψ‖ := by
+    (hComm : ∀ i j, Commute
+      (ManyBody.place (X := fun _ ↦ Fin d) (R i) (canonicalRegionParentInteraction A (R i)))
+      (ManyBody.place (X := fun _ ↦ Fin d) (R j) (canonicalRegionParentInteraction A (R j)))) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+          (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian) μ →
+      μ = 0 ∨ (1 : ℂ) ≤ μ := by
   classical
-  let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
+  let P := fun i => Matrix.toEuclideanLin
+    (ManyBody.place (X := fun _ ↦ Fin d) (R i) (canonicalRegionParentInteraction A (R i)))
   have hP : ∀ i, (P i).IsSymmetricProjection :=
     fun i => place_canonical_isSymmetricProjection A (R i)
+  have hCommP : ∀ i j, Commute (P i) (P j) :=
+    fun i j => (hComm i j).map (Matrix.toLpLinAlgEquiv 2)
   have hQuad := ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol
     (γ := 1) (le_refl 1) P hP (fun _ _ => 0)
     (fun _ => by simp) (fun _ => by simp)
     (fun i j hij ψ => by
       have h₁ := (hP i).re_inner_apply_apply_nonneg_of_commute (hP j)
-        (fun v => LinearMap.congr_fun (hComm i j).eq v) ψ
+        (fun v => LinearMap.congr_fun (hCommP i j).eq v) ψ
       have h₂ := (hP j).re_inner_apply_apply_nonneg_of_commute (hP i)
-        (fun v => LinearMap.congr_fun (hComm i j).symm.eq v) ψ
+        (fun v => LinearMap.congr_fun (hCommP i j).symm.eq v) ψ
       simp only [sub_self, neg_zero, zero_mul]
       exact add_nonneg h₁ h₂)
-  apply hamiltonian_ofPlace_norm_gap_of_quadraticForm R
-    (fun i => canonicalRegionParentInteraction A (R i))
-    (fun i => canonicalRegionParentInteraction_posSemidef A (R i)) zero_lt_one
-  simpa only [ManyBody.Interaction.hamiltonian_ofPlace, map_sum, P, placeES] using hQuad
+  simpa only [Complex.ofReal_one] using
+    forall_hasEigenvalue_hamiltonian_ofPlace_of_quadraticForm R
+      (fun i => canonicalRegionParentInteraction A (R i))
+      (fun i => canonicalRegionParentInteraction_posSemidef A (R i)) zero_lt_one
+      (by simpa only [ManyBody.Interaction.hamiltonian_ofPlace, map_sum, P] using hQuad)
 
-/-- A finite canonical PEPS parent on pairwise disjoint regions has norm gap
-at least one. Source: CPGSV21, arXiv:2011.12127, the non-overlapping
-projector terms of the expansion, lines 2170–2175. -/
-theorem hamiltonian_ofPlace_unit_norm_gap_of_pairwise_disjoint (A : Tensor Γ d)
+/-- A finite canonical PEPS parent on pairwise disjoint regions has every
+eigenvalue other than \(0\) at least one. Source: CPGSV21, arXiv:2011.12127, the
+non-overlapping projector terms of the expansion, lines 2170–2175. -/
+theorem forall_hasEigenvalue_one_hamiltonian_ofPlace_of_pairwise_disjoint (A : Tensor Γ d)
     (R : ι → Finset V) (hDisjoint : Pairwise (fun i j => Disjoint (R i) (R j))) :
-    let H := Matrix.toEuclideanLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
-      (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian
-    ∀ ψ ∈ H.kerᗮ, (1 : ℝ) * ‖ψ‖ ≤ ‖H ψ‖ := by
-  apply hamiltonian_ofPlace_unit_norm_gap_of_commute A R
-  dsimp only
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+          (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian) μ →
+      μ = 0 ∨ (1 : ℂ) ≤ μ := by
+  apply forall_hasEigenvalue_one_hamiltonian_ofPlace_of_commute A R
   intro i j
   rcases eq_or_ne i j with rfl | hij
   · exact Commute.refl _
-  · exact placeES_commute_of_disjoint (hDisjoint hij)
-      (canonicalRegionParentInteraction A (R i)) (canonicalRegionParentInteraction A (R j))
+  · exact ManyBody.commute_of_mem_supportedOperators_of_disjoint
+      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin d) _)
+      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin d) _) (hDisjoint hij)
 
 open Classical in
 /-- A uniform comparison with the canonical interaction transfers the
-finite-overlap gap to arbitrary positive regional parent interactions.
+finite-overlap gap to arbitrary positive regional parent interactions: every
+eigenvalue other than \(0\) is at least \(κ(1 - mε)\).
 Source: CPGSV21, arXiv:2011.12127, comparison with projections and the
 projector-sum expansion, lines 2170–2179. Both bounds are explicit hypotheses. -/
-theorem hamiltonian_ofPlace_norm_gap_of_overlap_of_comparison
+theorem forall_hasEigenvalue_hamiltonian_ofPlace_of_overlap_of_comparison
     (A : Tensor Γ d) (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -261,20 +252,20 @@ theorem hamiltonian_ofPlace_norm_gap_of_overlap_of_comparison
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian)
     (hCard : ∀ i, ((Finset.univ.erase i).filter
       (fun j => ¬ Disjoint (R i) (R j))).card ≤ m)
-    (hAnti : let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
+    (hAnti :
+      let P := fun i => Matrix.toEuclideanLin
+        (ManyBody.place (X := fun _ ↦ Fin d) (R i) (canonicalRegionParentInteraction A (R i)))
       ∀ i j, j ∈ Finset.univ.erase i → ¬ Disjoint (R i) (R j) →
         ∀ ψ : EuclideanSpace ℂ (V → Fin d),
           -ε * ((⟪P i ψ, ψ⟫_ℂ).re + (⟪P j ψ, ψ⟫_ℂ).re) ≤
             (⟪P i ψ, P j ψ⟫_ℂ).re + (⟪P j ψ, P i ψ⟫_ℂ).re) :
-    ∀ ψ ∈ (Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).kerᗮ,
-      (κ * (1 - (m : ℝ) * ε)) * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ψ‖ := by
-  exact hamiltonian_ofPlace_norm_gap_of_comparison A R h
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian) μ →
+      μ = 0 ∨ ((κ * (1 - (m : ℝ) * ε) : ℝ) : ℂ) ≤ μ := by
+  exact forall_hasEigenvalue_hamiltonian_ofPlace_of_comparison A R h
     (fun i => canonicalRegionParentInteraction A (R i)) hh
-    (fun i => isRegionParentInteraction_canonical A (R i))
-    hκ (sub_pos.mpr hmε).le hLower
-    (hamiltonian_ofPlace_norm_gap_of_overlap_anticommutator A R hε hm hmε hCard hAnti)
+    (fun i => isRegionParentInteraction_canonical A (R i)) hκ hLower
+    (forall_hasEigenvalue_hamiltonian_ofPlace_of_overlap_anticommutator A R hε hm hmε hCard hAnti)
 
 section UniformFamily
 
@@ -286,18 +277,21 @@ variable [∀ L, DecidableRel (graph L).Adj] {physicalDim : Λ → ℕ}
 
 open Classical in
 /-- The finite-overlap estimate is uniform over a family of finite graphs
-when its overlap degree and pairwise constant are independent of the graph.
+when its overlap degree and pairwise constant are independent of the graph:
+for every parent in the family, every eigenvalue other than \(0\) is at least
+the same positive number \(1 - mε\).
 Source: CPGSV21, arXiv:2011.12127, the system-size-independent gap criterion
 in Section IV.C.3, lines 2167–2179. The pairwise estimate remains explicit. -/
-theorem hamiltonian_ofPlace_uniform_norm_gap_of_overlap_anticommutator
+theorem uniform_forall_hasEigenvalue_hamiltonian_ofPlace_of_overlap_anticommutator
     (A : (L : Λ) → Tensor (graph L) (physicalDim L))
     (R : (L : Λ) → terms L → Finset (vertices L)) {ε : ℝ} {m : ℕ}
     (hε : 0 ≤ ε) (hm : 0 < m) (hmε : (m : ℝ) * ε < 1)
     (hCard : ∀ L i, ((Finset.univ.erase i).filter
       (fun j => ¬ Disjoint (R L i) (R L j))).card ≤ m)
     (hAnti : ∀ L,
-      let P := fun i => placeES (R L i)
-        (canonicalRegionParentInteraction (A L) (R L i))
+      let P := fun i => Matrix.toEuclideanLin
+        (ManyBody.place (X := fun _ ↦ Fin (physicalDim L)) (R L i)
+          (canonicalRegionParentInteraction (A L) (R L i)))
       ∀ i j, j ∈ Finset.univ.erase i → ¬ Disjoint (R L i) (R L j) →
         ∀ ψ : EuclideanSpace ℂ (vertices L → Fin (physicalDim L)),
           -ε * ((⟪P i ψ, ψ⟫_ℂ).re + (⟪P j ψ, ψ⟫_ℂ).re) ≤
@@ -306,9 +300,10 @@ theorem hamiltonian_ofPlace_uniform_norm_gap_of_overlap_anticommutator
       (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin (physicalDim L)) (R L)
         (fun i => canonicalRegionParentInteraction (A L) (R L i))).hamiltonian
     0 < 1 - (m : ℝ) * ε ∧
-      ∀ L, ∀ ψ ∈ (H L).kerᗮ, (1 - (m : ℝ) * ε) * ‖ψ‖ ≤ ‖H L ψ‖ := by
+      ∀ L, ∀ μ : ℂ, Module.End.HasEigenvalue (H L) μ →
+        μ = 0 ∨ ((1 - (m : ℝ) * ε : ℝ) : ℂ) ≤ μ := by
   refine ⟨sub_pos.mpr hmε, fun L => ?_⟩
-  exact hamiltonian_ofPlace_norm_gap_of_overlap_anticommutator
+  exact forall_hasEigenvalue_hamiltonian_ofPlace_of_overlap_anticommutator
     (A L) (R L) hε hm hmε (hCard L) (hAnti L)
 
 end UniformFamily
