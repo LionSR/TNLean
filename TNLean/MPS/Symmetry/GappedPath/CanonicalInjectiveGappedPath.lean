@@ -38,23 +38,21 @@ open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 
 namespace MPSTensor
 
-/-- For an injective tensor, a canonical parent norm gap is a gap above the zero ground energy.
-Source: arXiv:1010.3732, Section II.C and Appendix A, spectral interpretation of the parent
-gap. -/
+/-- For an injective tensor, a lower bound on the nonzero eigenvalues of the canonical parent
+Hamiltonian is a gap above the zero ground energy. Source: arXiv:1010.3732, Section II.C and
+Appendix A, spectral interpretation of the parent gap. -/
 theorem isGapped_hamiltonian_translationInvariant_parent
     {d D N : ℕ} [NeZero D] (A : MPSTensor d D) (hInj : Kraus.IsInjective A)
     (hN : 2 ≤ N) {δ : ℝ}
-    (hGap : haveI : NeZero N := ⟨by omega⟩; ∀ v ∈ (LinearMap.ker
-        (Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian))ᗮ,
-      haveI : NeZero N := ⟨by omega⟩;
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian v‖) :
+    (hGap : haveI : NeZero N := ⟨by omega⟩; ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian) μ →
+      μ = 0 ∨ (δ : ℂ) ≤ μ) :
     haveI : NeZero N := ⟨by omega⟩;
     ManyBody.IsGapped (ManyBody.Interaction.translationInvariant N
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian 0 δ := by
   have : NeZero N := ⟨by omega⟩
-  exact (ManyBody.isGapped_zero_iff_norm
-    (posSemidef_hamiltonian_parentRingInteraction A _ _)).mpr
-      ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot A hInj hN, hGap⟩
+  exact ManyBody.isGapped_zero_iff.mpr
+    ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot A hInj hN, hGap⟩
 
 /-- A continuous one-site injective tensor path with fixed unitary on-site
 symmetry determines a symmetric uniformly gapped path of its canonical
@@ -151,8 +149,10 @@ noncomputable def exactMPSGroundPath_of_canonicalInjective
   ground_line γ hγ N hN := by
     have : NeZero N := ⟨by omega⟩
     rw [hP γ hγ]
+    obtain ⟨Δ, hΔ, hpos⟩ := ManyBody.exists_pos_forall_hasEigenvalue
+      (posSemidef_hamiltonian_parentRingInteraction (A γ) 2 N)
     have hGap := isGapped_hamiltonian_translationInvariant_parent (A γ) (hInj γ hγ) hN
-      (δ := 0) (fun v _ => by rw [zero_mul]; exact norm_nonneg _)
+      (δ := 0) (ManyBody.forall_hasEigenvalue_mono hΔ.le hpos)
     have hmem (μ : ℂ) : μ ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant N
         (LinearMap.toMatrix' (parentInteraction (A γ) 2))).hamiltonian ↔
         Module.End.HasEigenvalue (Matrix.toEuclideanLin
