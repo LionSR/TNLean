@@ -8324,9 +8324,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   intertwining companions in `IsometricConjugationGap.lean`, without
   finite-dimensionality or sign assumptions.
 - **Consumers:** The joint normalized core comparison now uses the public
-  theorem. The endpoint-swap development uses the same API. The older
-  single-block `MixedEndpointCoreHamiltonianSpectators` still has its private
-  proof; migrating that independent consumer awaits its own focused validation.
+  theorem. The endpoint-swap development uses the same API. The single-block
+  `MixedEndpointCoreHamiltonianSpectators` compares eigenvalues instead,
+  through `LinearIsometryEquiv.hasEigenvalue_iff_of_conj`.
 - **Notes:** The dependent projection identification is separately shared as
   `conj_eq_dependentRightFiberwiseMap_of_ker_iff`; both joint edge consumers
   use that theorem instead of repeating the orthogonal-projection proof.

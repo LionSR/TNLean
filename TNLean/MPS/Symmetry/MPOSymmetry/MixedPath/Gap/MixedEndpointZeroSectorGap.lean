@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointActiveHamiltonian
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenRangeComparison
+import QICLean.Spectral.Gap.IsometricConjugationGap
 
 /-!
 # The zero second-sector comparator and its intrinsic open gap
@@ -26,7 +27,7 @@ input is the one-site-injective two-site parent theorem developed from
 Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1.
 -/
 
-open scoped Matrix InnerProductSpace BigOperators
+open scoped Matrix InnerProductSpace BigOperators ComplexOrder
 
 namespace MPSTensor
 namespace MPOSymmetry
@@ -178,54 +179,40 @@ theorem mixedEndpointActiveHamiltonian_zeroSector_eq_conjugate_openParent
 
 /-- The actual zero-second-sector active Hamiltonians have an intrinsic
 positive gap uniformly in sufficiently long chains, derived solely from
-one-site injectivity of `A₀`. No gap or kernel identification is supplied.
-The zero-dimensional first sector is covered directly by the zero space.
+one-site injectivity of `A₀`: every eigenvalue is `0` or at least the gap.
+No gap or kernel identification is supplied. The isometric equivalence with
+the ordinary open parent carries its eigenvalues over unchanged. The
+zero-dimensional first sector is covered directly by the zero space.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692, using the ordinary
 open-parent gap of Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1. -/
 theorem exists_mixedEndpointActiveHamiltonian_zeroSector_uniform_gap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (hA₀ : Kraus.IsInjective A₀) :
     ∃ W : ℕ, 2 ≤ W ∧ ∃ δ : ℝ, 0 < δ ∧
-      ∀ N : ℕ, W ≤ N + 1 + 1 →
-        ∀ v ∈ (LinearMap.ker (mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N))ᗮ,
-          δ * ‖v‖ ≤ ‖mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N v‖ := by
+      ∀ N : ℕ, W ≤ N + 1 + 1 → ∀ μ : ℂ, Module.End.HasEigenvalue
+          (mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   by_cases hD₀ : D₀ = 0
   · subst D₀
-    refine ⟨2, by norm_num, 1, by norm_num, ?_⟩
-    intro N _ v _
-    have hv : v = 0 := by
-      apply PiLp.ext
-      rintro ⟨a, κ, e⟩
-      exact isEmptyElim a
-    simp [hv]
+    refine ⟨2, by norm_num, 1, by norm_num, fun N _ μ hμ ↦ ?_⟩
+    obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
+    refine absurd ?_ hv.2
+    apply PiLp.ext
+    rintro ⟨a, κ, e⟩
+    exact isEmptyElim a
   · let : NeZero D₀ := ⟨hD₀⟩
     obtain ⟨W, hW, δ, hδ, hGap⟩ :=
       exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective A₀ hA₀
-    refine ⟨W, hW, δ, hδ, ?_⟩
-    intro N hWN v hv
-    let U : mixedEndpointActiveSpace D₀ 0 N →ₗᵢ[ℂ]
-        EuclideanSpace ℂ (Cfg (D₀ * D₀) (N + 1 + 1)) :=
-      mixedEndpointActiveLinearIsometry D₀ 0 N
-    have hker : LinearMap.ker
-        (Matrix.toEuclideanLin (parentChainInteraction A₀ 2 (N + 1 + 1)).hamiltonian) =
-        groundSpaceES A₀ (N + 1 + 1) :=
-      ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
-        (Kraus.isNBlkInjective_one_of_isInjective hA₀) (by norm_num) (by omega)
-    have hUv : U v ∈ (groundSpaceES A₀ (N + 1 + 1))ᗮ := by
-      rw [← hker]
-      apply (Submodule.mem_orthogonal _ _).mpr
-      intro w hw
-      obtain ⟨u, rfl⟩ := mixedEndpointActiveLinearIsometry_zeroSector_surjective D₀ N w
-      have hu : u ∈ LinearMap.ker (mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N) := by
-        rw [ker_mixedEndpointActiveHamiltonian,
-          hamiltonian_chainTranslates_zeroSector_eq_hamiltonian_parentChainInteraction]
-        exact hw
-      simpa only [U, LinearIsometry.inner_map_map] using
-        (Submodule.mem_orthogonal _ _).mp hv u hu
-    have h := (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction A₀ 2 (N + 1 + 1))).mp
-        (hGap (N + 1 + 1) hWN) (U v) (by rw [hker]; exact hUv)
-    rw [← mixedEndpointActiveHamiltonian_zeroSector_intertwines A₀ N v] at h
-    simpa only [U, LinearIsometry.norm_map] using h
+    refine ⟨W, hW, δ, hδ, fun N hWN μ hμ ↦ hGap (N + 1 + 1) hWN μ ?_⟩
+    let U := mixedEndpointZeroSectorActiveEquiv D₀ N
+    have hconj : U.toLinearEquiv.conj
+        (mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N) =
+        Matrix.toEuclideanLin (parentChainInteraction A₀ 2 (N + 1 + 1)).hamiltonian := by
+      refine LinearMap.ext fun w ↦ ?_
+      obtain ⟨v, rfl⟩ := U.surjective w
+      change U (mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N (U.symm (U v))) = _
+      rw [LinearIsometryEquiv.symm_apply_apply]
+      exact mixedEndpointActiveHamiltonian_zeroSector_intertwines A₀ N v
+    exact (U.hasEigenvalue_iff_of_conj _ _ hconj μ).mp hμ
 
 end
 
