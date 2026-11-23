@@ -2064,7 +2064,10 @@ Layer override target: `TNLean/MPS/Tensor/OpenMPS` (9 modules, 14 parts), see §
   the argument of the area law from the Chebyshev approximate ground-state
   projector: `ChebyshevAGSP`, with `SchmidtRank` and `FrustrationFree`. Flagged
   in place: `ApproximateGroundVector`, `ApproximationStep`,
-  `FilteredApproximation`, `NormalizedVector`, `DisjointGroundEnergy`.
+  `FilteredApproximation`, `NormalizedVector`. `DisjointGroundEnergy` was
+  deleted: its two lemmas are cases of QICLean's
+  `ManyBody.exists_common_unit_ground_of_disjoint_family`, which
+  `ChainNormalization` now calls.
 - `ALVV` (78) together with 210 top-level modules (`Physical*`, `Canonical*`,
   `BalancedInterval*`, `Independent*`, `LowDensity*`, `LowEnergy*`, `Dyadic*`,
   `Soft*`, `FiveRegion*`, `Regional*`, `Selected*`, `Common*`, `Interleaved*`,
@@ -2113,7 +2116,7 @@ only the `tn` modules (MPS approximation statements) would stay.
 #### Modules mixing two layers
 | module | layers | declarations | proposed split |
 |---|---|---|---|
-| `EntropyInequalities` | sites / entropy | `boundaryEdges` and its five lemmas; `regionEntropy_le_mul_card_boundaryEdges_of_intervals` | keep the boundary edges in `Chain`, the entropy lemma into `Entropy` |
+| `EntropyInequalities` | sites / entropy | the boundary-edge lemmas `card_boundaryEdges_prefix_le`, `exists_interval_subset_boundaryEdges_sdiff_ssubset`, `card_crossingTerms_le_mul_card_boundaryEdges` (the definition `boundaryEdges` and its basic lemmas are QICLean's); `regionEntropy_le_mul_card_boundaryEdges_of_intervals` | keep the boundary-edge lemmas in `Chain`, the entropy lemma into `Entropy` |
 | `ComponentReduction` | sites / entropy | `domainBoundaryEdges`, `domainRegion`, `IsDomainEdge`, `card_domainBoundaryEdges`, `boundaryEdges_symmDiff_interval`; versus `domainAreaLaw`, `regionEntropy_le_mul_card_domainBoundaryEdges` | domain geometry to `Chain`, domain area law stays in `Entropy` |
 | `MPSApproximation` | entropy / TN | `surprisalTail_region_le_of_family_budget`, `surprisalTail_leftBlock_le*`, `tailPrefactorRoot*`, `spectralProjectionGE_leftBlock_bounds`; versus `chainBondDimension` and the MPS approximation theorems | surprisal-tail lemmas to `Entropy` (QICLean), the MPS statements stay in `Approximation` |
 | `StripApproximation` | geometry / TN | `stripSnakeRows`, `stripSnakeEquiv`, `stripSnakePrefix`, `card_snakePrefix_sdiff_le`, `regionEntropy_stripSnakePrefix_le`; versus the two MPS statements | snake ordering to `Chain` beside `StripGeometry` |

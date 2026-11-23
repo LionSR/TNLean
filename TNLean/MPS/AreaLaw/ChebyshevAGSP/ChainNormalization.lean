@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.DisjointGroundEnergy
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.NormalizedChain
 import QICLean.Algebra.Hermitian.HermitianPartSum
+import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 
 /-!
 # Regional scalar normalization of an original nearest-neighbour chain
@@ -98,8 +98,28 @@ theorem exists_chain_normalization {L q : ℕ}
   have hΩne : Ω ≠ 0 := by intro hz; simp [hz] at hΩ
   have hrawne : WithLp.ofLp Ω ≠ 0 := fun hz ↦ hΩne ((WithLp.ofLp_eq_zero (p := 2)).mp hz)
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp hrawne
-  obtain ⟨x, m, y, w, hXlow, hNlow, hYlow, hwunit, hxn, hmn, hyn, hwzero⟩ :=
-    exists_three_disjoint_ground_shifts S T U hST hSU hTU X N Y hSX hTN hUY hX hN hY σ₀
+  obtain ⟨ε, w, hwunit, hweig, hlow⟩ := @ManyBody.exists_common_unit_ground_of_disjoint_family
+    (Fin L) _ _ (fun _ ↦ Fin q) _ _ (fun v ↦ ⟨σ₀ v⟩) (Fin 3) Finset.univ ![S, T, U] ![X, N, Y]
+    (fun i _ ↦ by fin_cases i <;> [exact hX; exact hN; exact hY])
+    (fun i _ j _ hij ↦ by
+      fin_cases i <;> fin_cases j <;>
+        simp [hST, hSU, hTU, hST.symm, hSU.symm, hTU.symm] at hij ⊢)
+    (fun i _ ↦ by fin_cases i <;> [exact hSX; exact hTN; exact hUY])
+  let x := ε 0
+  let m := ε 1
+  let y := ε 2
+  have hXlow : (X - (x : ℂ) • 1).PosSemidef := hlow 0 (Finset.mem_univ _)
+  have hNlow : (N - (m : ℂ) • 1).PosSemidef := hlow 1 (Finset.mem_univ _)
+  have hYlow : (Y - (y : ℂ) • 1).PosSemidef := hlow 2 (Finset.mem_univ _)
+  have hwX : X *ᵥ w = (x : ℂ) • w := hweig 0 (Finset.mem_univ _)
+  have hwN : N *ᵥ w = (m : ℂ) • w := hweig 1 (Finset.mem_univ _)
+  have hwY : Y *ᵥ w = (y : ℂ) • w := hweig 2 (Finset.mem_univ _)
+  have hxn (h : X.PosSemidef) : 0 ≤ x := h.nonneg_of_normalized_eigenvector x w hwX hwunit
+  have hmn (h : N.PosSemidef) : 0 ≤ m := h.nonneg_of_normalized_eigenvector m w hwN hwunit
+  have hyn (h : Y.PosSemidef) : 0 ≤ y := h.nonneg_of_normalized_eigenvector y w hwY hwunit
+  have hwzero : ((X - (x : ℂ) • 1) + (N - (m : ℂ) • 1) + (Y - (y : ℂ) • 1)) *ᵥ w = 0 := by
+    simp only [Matrix.add_mulVec, Matrix.sub_mulVec, Matrix.smul_mulVec, Matrix.one_mulVec,
+      hwX, hwN, hwY, sub_self, add_zero]
   have hXpos : X.PosSemidef := Matrix.nonneg_iff_posSemidef.mp
     (Finset.sum_nonneg fun i _ ↦ h0 i)
   have hNpos : N.PosSemidef := Matrix.nonneg_iff_posSemidef.mp

@@ -415,11 +415,12 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Convert the range condition of `ChainSupport L R` to an upper
   bound on the path-graph distance between two sites of the support.
-- **Defined in:** `TNLean/MPS/AreaLaw/Chain/LiebRobinson.lean`,
-  `ChainSupport.edist_le`.
-- **Refactored occurrences:** the existing propagation and localization proofs
-  in that file and the finite-support numerical propagation proof in
-  `MPS/AreaLaw/ProjectorFactorization/LiebRobinson.lean`.
+- **Defined in:** `QICLean/ManyBody/Sites/Lattice/Chain.lean` (QICLean dependency),
+  `ManyBody.ChainSupport.edist_le`.
+- **Refactored occurrences:** the propagation and localization proofs in
+  `MPS/AreaLaw/Chain/LiebRobinson.lean` and the finite-support numerical
+  propagation proof in `MPS/AreaLaw/ProjectorFactorization/LiebRobinson.lean`;
+  the TNLean copy of the lemma was deleted in favour of the QICLean one.
 - **Notes:** The existing private proof is now a public theorem; the new
   propagation estimate uses it instead of repeating the conversion to natural
   distance. The mathematical range condition is unchanged.

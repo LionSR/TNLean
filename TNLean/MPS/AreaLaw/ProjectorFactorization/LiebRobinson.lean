@@ -55,7 +55,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_numeric
     ⟨h.term, h.mem⟩
   have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric
     (SimpleGraph.pathGraph L) Φ
-    hh R (fun Z x hx y hy ↦ ChainSupport.edist_le Z x hx y hy)
+    hh R (fun Z x hx y hy ↦ ManyBody.ChainSupport.edist_le Z x hx y hy)
     (R + 1) (fun Z ↦ Z.2.card_le)
     (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) (h.sum_norm_terms_containing_le hhJ) X hA Y hB 1
         (by norm_num) d

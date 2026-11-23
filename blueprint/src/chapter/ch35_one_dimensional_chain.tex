@@ -517,7 +517,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Supports split by an arbitrary region of a chain]
     \label{lem:chain_boundary_crossing_count}
-    \lean{TNLean.MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split,
+    \lean{ManyBody.IsChainSupport.exists_boundary_window_of_split,
         TNLean.MPS.AreaLaw.card_crossingTerms_le_mul_card_boundaryEdges}
     \leanok
     \uses{def:chain_model,lem:chain_entropy_inequalities}
@@ -1321,10 +1321,10 @@ Theorem~B a second way, by a sequential preparation protocol.
     \lean{
         ManyBody.regionEntropy_union_le,
         ManyBody.regionEntropy_le_union_add,
-        TNLean.MPS.AreaLaw.boundaryEdges,
-        TNLean.MPS.AreaLaw.mem_boundaryEdges,
-        TNLean.MPS.AreaLaw.boundaryEdges_empty,
-        TNLean.MPS.AreaLaw.boundaryEdges_univ,
+        ManyBody.boundaryEdges,
+        ManyBody.mem_boundaryEdges,
+        ManyBody.boundaryEdges_empty,
+        ManyBody.boundaryEdges_univ,
         TNLean.MPS.AreaLaw.exists_interval_subset_boundaryEdges_sdiff_ssubset,
         TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals,
         TNLean.MPS.AreaLaw.card_boundaryEdges_prefix_le

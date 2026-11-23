@@ -45,7 +45,7 @@ in `TNLean.MPS.AreaLaw.ComponentReduction`.
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (ChainSupport interval ChainInteraction)
+open ManyBody (ChainSupport boundaryEdges interval ChainInteraction)
 
 open ManyBody (IsGapped groundSpace)
 

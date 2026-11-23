@@ -36,7 +36,7 @@ produces the matrix product state.
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (ChainSupport interval ChainInteraction)
+open ManyBody (ChainSupport boundaryEdges interval ChainInteraction)
 
 open Matrix
 
