@@ -19,8 +19,6 @@ through `scripts/fetch_tenkz.py`, which clones into gitignored
 `.deps/tenkz`. Remaining in-tree consumers:
 
 - `blueprint/src/Packages/tenkz_pic.py`
-- `scripts/audit_cpsv16_labels.py`
-- `scripts/test_audit_cpsv16_labels.py`
 - `scripts/tenkz_blueprint_sweep.py`
 - `scripts/test_tenkz_blueprint_sweep.py`
 - `scripts/test_tenkz_pic.py`

@@ -86,8 +86,8 @@ commented-out label `biCF` is the only inactive name, leaving 186 active
 occurrences and 182 active names.  Activity is derived from the source after
 stripping unescaped TeX comments and is checked occurrence by occurrence.
 Every lexical label has an explicit activity, classification, and disposition in
-`docs/audits/data/cpsv16-label-dispositions.tsv`, validated by
-`python3 scripts/audit_cpsv16_labels.py`.  The validator also requires exactly
+`docs/audits/data/cpsv16-label-dispositions.tsv`, which a validator checked
+in CI until 2026-11-23.  The validator also required exactly
 58 unique equation or figure labels, comprising 60 occurrences inside theorem
 statements and proofs, to inherit the enclosing result's status and semantic
 boundary explicitly.  The four duplicate
@@ -405,7 +405,7 @@ axiom-free.
 ## 8. Audit methodology
 
 - Source paper lines counted in `Papers/1606.00608/MPDO-22-12-17-2.tex` and `Papers/quant-ph_0608197/MPSarchive.tex`.
-- The CPSV16 every-label inventory is validated by `scripts/audit_cpsv16_labels.py` against `docs/audits/data/cpsv16-label-dispositions.tsv`; it counts 187 lexical occurrences and 183 lexical names, derives the 186 active occurrences and 182 active names by stripping unescaped TeX comments, compares source activity with the ledger occurrence by occurrence, checks the four duplicate names listed in §2, and verifies explicit status inheritance for exactly 58 unique theorem/proof-contained equation and figure labels comprising 60 occurrences.
+- The CPSV16 every-label inventory was validated by a script against `docs/audits/data/cpsv16-label-dispositions.tsv`; it counts 187 lexical occurrences and 183 lexical names, derives the 186 active occurrences and 182 active names by stripping unescaped TeX comments, compares source activity with the ledger occurrence by occurrence, checks the four duplicate names listed in §2, and verifies explicit status inheritance for exactly 58 unique theorem/proof-contained equation and figure labels comprising 60 occurrences.
 - Lean locations determined by grep for paper citations, theorem names, and type signatures in `TNLean/MPS/`.
 - `leanok` status: verified via `rg "\bsorry\b|axiom"` in the referenced Lean files — no sorry/axiom in those specific files means the theorem body compiles. Does **not** guarantee full correctness relative to the paper; formal proof review is separate.
 - A source theorem is marked **not formalized** when no Lean theorem has the same hypothesis set and conclusion, even if proved constituent reductions are available.

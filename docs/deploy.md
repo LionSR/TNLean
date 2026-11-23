@@ -28,22 +28,21 @@ cd .lake/build/doc && python3 -m http.server 8080   # opens http://localhost:808
 
 ## Deploy Blueprint (fast)
 
-Builds the full PDF and web blueprint, builds the separate FT-MPS volume, and
-pushes the blueprint and homepage to `gh-pages`. Does not touch
-`/docs/` — existing API docs are preserved.
+Builds the full PDF and web blueprint and the separate FT-MPS volume in
+GitHub Actions and deploys them with the homepage. Existing API docs are
+preserved. Local builds cannot publish; trigger the workflow instead:
 
 ```bash
-./scripts/deploy-blueprint.sh
+gh workflow run blueprint.yml --repo LionSR/TNLean --ref main
 ```
-
-Takes seconds if blueprint is already built, a couple of minutes otherwise.
 
 ## Deploy Blueprint + API Docs (full)
 
-Builds everything and pushes to `gh-pages`, including `/docs/` API documentation.
+Builds everything in GitHub Actions, including the `/docs/` API documentation,
+and deploys it:
 
 ```bash
-./scripts/deploy-docs.sh
+gh workflow run docgen.yml --repo LionSR/TNLean --ref main
 ```
 
 The first run is slow (hours) because `lake build TNLean:docs` in `docbuild/`
