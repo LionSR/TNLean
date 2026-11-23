@@ -12,10 +12,10 @@ ground state $\Psi_0$.
 \begin{definition}[Three-way splitting at a cut]
     \label{def:hastings_three_way_splitting}
     \lean{
-        TNLean.MPS.AreaLaw.Hastings.leftSupports,
-        TNLean.MPS.AreaLaw.Hastings.bufferSupports,
-        TNLean.MPS.AreaLaw.Hastings.rightSupports,
-        TNLean.MPS.AreaLaw.Hastings.sum_supports_eq_left_add_buffer_add_right,
+        ManyBody.cutLeftSupports,
+        ManyBody.cutBufferSupports,
+        ManyBody.cutRightSupports,
+        ManyBody.sum_eq_cutLeftSupports_add_cutBufferSupports_add_cutRightSupports,
         ManyBody.Interaction.partialHamiltonian,
         ManyBody.Interaction.isHermitian_partialHamiltonian,
         ManyBody.centeredObservable,
@@ -76,7 +76,7 @@ ground state $\Psi_0$.
         ManyBody.ChainInteraction.isSupportedOn_leftPart,
         ManyBody.ChainInteraction.isSupportedOn_rightPart,
         ManyBody.ChainInteraction.isSupportedOn_bufferPart,
-        TNLean.MPS.AreaLaw.Hastings.subset_window_of_mem_bufferSupports,
+        ManyBody.subset_window_of_mem_cutBufferSupports,
         ManyBody.centeredObservable_mem
     }
     \leanok
@@ -96,8 +96,8 @@ ground state $\Psi_0$.
     \label{thm:hastings_three_way_splitting_norm}
     \lean{
         ManyBody.Interaction.norm_partialHamiltonian_le,
-        TNLean.MPS.AreaLaw.card_supports_containing_le,
-        TNLean.MPS.AreaLaw.Hastings.card_bufferSupports_le,
+        ManyBody.ChainSupport.card_filter_mem_le,
+        ManyBody.card_cutBufferSupports_le,
         ManyBody.ChainInteraction.norm_bufferPart_le,
         ManyBody.norm_centeredObservable_le,
         ManyBody.ChainInteraction.norm_centeredObservable_bufferPart_le

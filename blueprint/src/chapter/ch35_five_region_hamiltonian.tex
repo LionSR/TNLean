@@ -17,8 +17,8 @@
 
 \begin{lemma}[Support of an internal bond]
     \label{thm:internal_bond_region_subset}
-    \lean{TNLean.MPS.AreaLaw.internal_bond_support_subset,
-        TNLean.MPS.AreaLaw.isSupportedOn_sum_internal_bonds}
+    \lean{ManyBody.internal_bond_support_subset,
+        ManyBody.BondInteraction.isSupportedOn_sum_internal_bonds}
     \leanok
     \uses{def:five_region_bond_partition}
     If $i\in I(l,h)$, then $\{i,i+1\}\subseteq R(l,h)$. Consequently,
@@ -33,7 +33,7 @@
 
 \begin{lemma}[The number of internal bonds]
     \label{thm:internal_bond_card_bound}
-    \lean{TNLean.MPS.AreaLaw.card_internal_bonds_le}
+    \lean{ManyBody.card_internal_bonds_le}
     \leanok
     \uses{def:five_region_bond_partition}
     For arbitrary $L,l,h\in\N$, one has
@@ -48,7 +48,7 @@
 
 \begin{lemma}[Commutation of consecutive internal sums]
     \label{thm:consecutive_internal_sums_commute}
-    \lean{TNLean.MPS.AreaLaw.pairwise_commute_sum_internal_consecutive_regions}
+    \lean{ManyBody.BondInteraction.pairwise_commute_sum_internal_consecutive_regions}
     \leanok
     \uses{def:five_region_bond_partition}
     Let $k_0\le\cdots\le k_m$ be natural numbers. If every $h_i$ is
@@ -65,7 +65,7 @@
 
 \begin{lemma}[The additive five-region decomposition]
     \label{thm:five_region_additive_partition}
-    \lean{Finset.sum_five_internal_regions_add_crossings}
+    \lean{Fin.sum_eq_five_internal_add_crossings}
     \leanok
     \uses{def:five_region_bond_partition}
     For $k_1\le k_2\le k_3\le k_4$ and arbitrary values $h_i$ in an
@@ -85,7 +85,7 @@
 
 \begin{lemma}[Original regional support and order budgets]
     \label{thm:five_region_original_bond_bounds}
-    \lean{TNLean.MPS.AreaLaw.five_region_original_bond_data}
+    \lean{ManyBody.BondInteraction.five_region_original_bond_data}
     \leanok
     \uses{def:five_region_bond_partition}
     Suppose $k_4\le L$, $0\le h_i\le\Id$, and $h_i$ is supported on

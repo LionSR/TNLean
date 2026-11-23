@@ -62,10 +62,10 @@ corrected deficiency and the additional closing window of
 
 \begin{definition}[Grouping an arbitrary periodic chain]
     \label{def:hastings_rounded_periodic_grouping}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlock,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicDistance,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount,
+    \lean{ManyBody.roundedPeriodicBlock,
+        ManyBody.roundedPeriodicEdge,
+        ManyBody.roundedPeriodicDistance,
+        ManyBody.roundedPeriodicBlockCount,
         TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicOperator,
         TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicProjection}
     \leanok
@@ -81,15 +81,15 @@ corrected deficiency and the additional closing window of
 
 \begin{lemma}[Rounded cyclic supports and the number of terms]
     \label{thm:hastings_rounded_periodic_grouping}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlock_lt,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_internal_centre,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_support,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount_pos,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount_cover,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount_upper,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicBlockCount_le,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_support_of_cover,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicEdge_zero_support,
+    \lean{ManyBody.roundedPeriodicBlock_lt,
+        ManyBody.roundedPeriodicEdge_internal_centre,
+        ManyBody.roundedPeriodicEdge_support,
+        ManyBody.roundedPeriodicBlockCount_pos,
+        ManyBody.roundedPeriodicBlockCount_cover,
+        ManyBody.roundedPeriodicBlockCount_upper,
+        ManyBody.roundedPeriodicBlockCount_le,
+        ManyBody.roundedPeriodicEdge_support_of_cover,
+        ManyBody.roundedPeriodicEdge_zero_support,
         TNLean.MPS.AreaLaw.LocalSolution.card_roundedPeriodicEdge_fibre_le,
         TNLean.MPS.AreaLaw.LocalSolution.sum_roundedPeriodicOperator,
         TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicOperator_mem_supportedOperators,
@@ -268,10 +268,10 @@ corrected deficiency and the additional closing window of
 
 \begin{lemma}[The metric of the original physical cycle]
     \label{thm:hastings_periodic_physical_metric}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicDistance_eq_valMinAbs,
-        TNLean.MPS.AreaLaw.LocalSolution.roundedPeriodicDistance_triangle,
-        TNLean.MPS.AreaLaw.LocalSolution.periodicPhysicalMetricSpace,
-        TNLean.MPS.AreaLaw.LocalSolution.card_periodicPhysical_metricRangeBall_le}
+    \lean{ManyBody.roundedPeriodicDistance_eq_valMinAbs,
+        ManyBody.roundedPeriodicDistance_triangle,
+        ManyBody.cyclicMetricSpace,
+        ManyBody.card_metricRangeBall_cyclicMetricSpace_le}
     \leanok
     On a cycle of $M\ge1$ sites, the distance
     $d(i,j)=\min\{|i-j|,M-|i-j|\}$ is the least absolute residue of

@@ -179,8 +179,9 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
     \leanok
     \uses{thm:hastings_part_commutators, thm:chain_lieb_robinson, thm:hastings_three_way_splitting_sum}
     In the setting of Lemma~\ref{thm:hastings_part_commutators}, let $q>0$,
-    $h=q/\Delta E^2$, $S_B=S_L\cup S_R$, and for $\ell\ge0$ let $K_\bullet$ be
-    the $\ell$-neighbourhood of $S_\bullet$ ($\bullet\in\{L,B,R\}$). Define
+    $h=q/\Delta E^2$, $S_B=S_L\cup S_R$, and for real $\ell$ let $K_\bullet$ be
+    the neighbourhood $N_\ell(S_\bullet)$ of Lemma~\ref{thm:chain_lieb_robinson}
+    ($\bullet\in\{L,B,R\}$). Define
     \begin{align}
         M_\bullet & =H_\bullet+\mathbb E_{K_\bullet}(\widetilde H_\bullet-H_\bullet).
         \label{eq:hastings_localized_part_def}
@@ -252,7 +253,7 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
         ManyBody.ChainInteraction.norm_localizedPart_apply_le,
         TNLean.MPS.AreaLaw.partLocalizationError,
         TNLean.MPS.AreaLaw.leftWindow, TNLean.MPS.AreaLaw.rightWindow,
-        TNLean.MPS.AreaLaw.chainNeighborhood_interval_subset,
+        TNLean.MPS.AreaLaw.graphNeighborhood_pathGraph_interval_subset,
         ManyBody.norm_gaussianFilteredTerm_sub_self_le}
     \leanok
     \uses{thm:hastings_localized_parts, thm:hastings_cutoffs, thm:hastings_part_commutators}
@@ -323,14 +324,15 @@ $\|P_BX-P_0\|$ \cite[lines 877--905]{Hastings2007AreaLaw}.
     $P_B$ be the interaction average of
     Definition~\ref{def:hastings_interaction_average} for $(A,B,h)$ with $h>0$.
     With $(C',v)$ from Lemma~\ref{thm:chain_lieb_robinson} at
-    $b_0=2^{2R+1}J$, for every $\ell,T\ge0$ there exists $O_B$ supported within
-    distance $\ell$ of $Z$ such that $\|O_B\|\le1$ and
+    $b_0=2^{2R+1}J$, for every real $\ell$ and every $T\ge0$ there exists $O_B$
+    supported on the neighbourhood $N_\ell(Z)$ of Lemma~\ref{thm:chain_lieb_robinson}
+    such that $\|O_B\|\le1$ and
     \begin{align}
         \|P_B-O_B\| & \le\sqrt h\,\bigl(\|A+B-H\|+\|A-H_0\|
         +C'|Z|^2\|H-H_0\|e^{vT-\ell/2}\bigr)+4e^{-T^2/(2h)}.
         \label{eq:hastings_boundary_localization}
     \end{align}
-    At $T=\ell/(4v)$, the last two terms become
+    For $\ell\ge0$ and $T=\ell/(4v)$, the last two terms become
     $\sqrt h\,C'|Z|^2\|H-H_0\|e^{-\ell/4}+4e^{-\ell^2/(32v^2h)}$.
     No positivity of $O_B$ is claimed \cite[note added]{Hastings2007AreaLaw}.
 \end{lemma}
