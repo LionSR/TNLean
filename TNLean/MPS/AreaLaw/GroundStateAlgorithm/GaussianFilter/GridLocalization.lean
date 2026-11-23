@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridHamiltonian
-import TNLean.MPS.AreaLaw.Chain.LiebRobinson
+import QICLean.ManyBody.Dynamics.GraphLocalization
 
 /-!
 # Localization of the omitted boundary terms
@@ -180,13 +180,13 @@ theorem norm_chainGridBoundaryTerm_sub_regionExpectation_le
     calc
       _ ≤ C * 4 * 1 := by gcongr
       _ = chainGridLRPrefactor := by unfold C chainGridLRPrefactor; ring
-  have hLR := norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
+  have hLR := ManyBody.norm_heisenberg_sub_regionExpectation_pathGraph_le
     bondSupport (chainGridRetainedTerm hw Φ) (retained_hermitian hw Φ hHerm)
     (retained_support hw Φ) 2 (chainGridRetained_site_budget hw Φ hnorm) S
-    (chainGridBoundaryTerm_supported hw Φ k) (r : ℝ) (Nat.cast_nonneg r) t
-  rw [sum_chainGridRetainedTerm,
-    chainNeighborhood_chainCutPair_eq (chainGridCut_bounds hw k).1 (chainGridCut_bounds hw k).2 r]
-    at hLR
+    (chainGridBoundaryTerm_supported hw Φ k) (r : ℝ) t
+  rw [sum_chainGridRetainedTerm, Nat.floor_natCast,
+    graphNeighborhood_pathGraph_chainCutPair_eq (chainGridCut_bounds hw k).1
+      (chainGridCut_bounds hw k).2 r] at hLR
   have hLR' : ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw Φ) t
         (chainGridBoundaryTerm hw Φ k) -
       ManyBody.regionExpectation (chainCutBuffer L (chainGridCut w k.val) r)

@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.LocalSolution.PeriodicPhysicalMetric
 import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicApproximation
 import QICLean.ManyBody.Hamiltonian.GaussianFilterMetric
 import QICLean.ManyBody.Hamiltonian.GaussianFilterLocality
@@ -58,7 +57,7 @@ Hastings, arXiv:cond-mat/0508554v3, lines 169–190 and 609–743. -/
 theorem hierarchyProjectionLength_le_physicalPeriodicProjectionRadius {M : ℕ} (hM : 0 < M)
     (R J Δ : ℝ) {η : ℝ} (hη : 0 < η) :
     let ℓ := physicalPeriodicProjectionRadius R M J η Δ
-    hierarchyProjectionLength (finiteHierarchyDepth (roundedPeriodicBlockCount M ℓ))
+    hierarchyProjectionLength (finiteHierarchyDepth (ManyBody.roundedPeriodicBlockCount M ℓ))
       (8 * J / η) Δ ≤ η * (ℓ : ℝ) := by
   let ℓ := physicalPeriodicProjectionRadius R M J η Δ
   have hbase := hierarchyProjectionLength_roundedPeriodic_le hM ℓ J η Δ
@@ -96,7 +95,7 @@ noncomputable def periodicPhysicalTruncatedTerm {M d : ℕ} (c₁ R Δ : ℝ) (�
     (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ) (i : Fin M) :
     Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ :=
   ManyBody.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ
-    (∑ j with (roundedPeriodicDistance i j : ℝ) ≤ (ℓ : ℝ) - R, g j) (g i)
+    (∑ j with (ManyBody.roundedPeriodicDistance i j : ℝ) ≤ (ℓ : ℝ) - R, g j) (g i)
 
 /-- Uniform physical localization constants for the actual periodic truncated terms.
 Hastings, arXiv:cond-mat/0508554v3, eqs. `mid`, `apb`, `facld`, lines 285–349. -/
@@ -107,11 +106,11 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
           (∀ i, g i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
-              (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
+              (Finset.univ.filter fun v ↦ (ManyBody.roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) → ∀ (ℓ : ℕ), R ≤ (ℓ : ℝ) → ∀ i,
           let a := periodicPhysicalTruncatedTerm c₁ R Δ ℓ g i
           a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
-              (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
+              (Finset.univ.filter fun v ↦ ManyBody.roundedPeriodicDistance i v ≤ ℓ) ∧
             a.IsHermitian ∧ ‖a‖ ≤ J ∧
             ‖ManyBody.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a‖ ≤
               J * C * Real.exp (-(η * (ℓ : ℝ))) := by
@@ -120,7 +119,7 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
     refine ⟨1, 1, 0, by norm_num, by norm_num, by norm_num, ?_⟩
     intro M d hM g hg hsupp hnorm ℓ hℓ i a
     let _ : NeZero M := ⟨by omega⟩
-    let _ := periodicPhysicalMetricSpace M
+    let _ := ManyBody.cyclicMetricSpace M
     have hsupp' : ∀ j,
         g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ManyBody.metricRangeBall 0 j) := by
       intro j
@@ -138,9 +137,9 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
       exact hfilters.2
     rw [ha]
     refine ⟨ManyBody.supportedOperators_mono (fun v hv ↦ ?_) (hsupp i), hg i, hnorm i, ?_⟩
-    · have hv : (roundedPeriodicDistance i v : ℝ) ≤ 0 := (Finset.mem_filter.mp hv).2
+    · have hv : (ManyBody.roundedPeriodicDistance i v : ℝ) ≤ 0 := (Finset.mem_filter.mp hv).2
       refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
-      have hd : roundedPeriodicDistance i v = 0 := by
+      have hd : ManyBody.roundedPeriodicDistance i v = 0 := by
         exact_mod_cast (le_antisymm hv (by positivity))
       rw [hd]
       omega
@@ -153,7 +152,7 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
     refine ⟨c₁, η, C, hc₁, hη, hC, ?_⟩
     intro M d hM g hg hsupp hnorm ℓ hℓ i a
     let _ : NeZero M := ⟨by omega⟩
-    let _ := periodicPhysicalMetricSpace M
+    let _ := ManyBody.cyclicMetricSpace M
     have hsupp' : ∀ j,
         g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ManyBody.metricRangeBall R j) := by
       intro j
@@ -163,7 +162,7 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
       exact (Finset.mem_filter.mp hv).2
     have ha := hloc
       (⟨g, hsupp'⟩ : ManyBody.Interaction (fun _ ↦ Fin d) (ManyBody.metricRangeBall R))
-      hg hnorm (card_periodicPhysical_metricRangeBall_le R) (ℓ : ℝ) hℓ i
+      hg hnorm (ManyBody.card_metricRangeBall_cyclicMetricSpace_le R) (ℓ : ℝ) hℓ i
     have heq : ManyBody.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ
         (∑ j ∈ ManyBody.metricRangeBall ((ℓ : ℝ) - R) i, g j) (g i) = a := by
       rfl
@@ -172,7 +171,7 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
     refine ⟨ManyBody.supportedOperators_mono (fun v hv ↦ ?_) ha.1, ha.2.1, ha.2.2.1, ha.2.2.2.1⟩
     · rw [ManyBody.mem_metricRangeBall] at hv
       refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
-      have hd : (roundedPeriodicDistance i v : ℝ) ≤ (ℓ : ℝ) := hv
+      have hd : (ManyBody.roundedPeriodicDistance i v : ℝ) ≤ (ℓ : ℝ) := hv
       exact_mod_cast hd
 
 /-- Physical local interactions determine a corrected periodic hierarchy at explicit
@@ -184,7 +183,7 @@ theorem exists_periodicPhysicalHierarchy {R J Δ : ℝ} (hR : 0 ≤ R) (hJ : 0 <
         ∀ (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ),
           (∀ i, (g i).IsHermitian) →
           (∀ i, g i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
-              (Finset.univ.filter fun v ↦ (roundedPeriodicDistance i v : ℝ) ≤ R)) →
+              (Finset.univ.filter fun v ↦ (ManyBody.roundedPeriodicDistance i v : ℝ) ≤ R)) →
           (∀ i, ‖g i‖ ≤ J) →
           ∀ (ψ : EuclideanSpace ℂ (Fin M → Fin d)), ‖ψ‖ = 1 →
           ∀ (P₀ : Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ), IsStarProjection P₀ →
@@ -199,7 +198,7 @@ theorem exists_periodicPhysicalHierarchy {R J Δ : ℝ} (hR : 0 ≤ R) (hJ : 0 <
           let a := periodicPhysicalTruncatedTerm c₁ R Δ ℓ g
           let P := roundedPeriodicProjection ℓ a ψ Jb r
           let b := roundedPeriodicOperator ℓ a
-          let h := finiteHierarchyDepth (roundedPeriodicBlockCount M ℓ)
+          let h := finiteHierarchyDepth (ManyBody.roundedPeriodicBlockCount M ℓ)
           let K := 8 * (ℓ : ℝ) * Jb
           (∀ i, ‖toEuclideanLin
             (a i - ((⟪ψ, toEuclideanLin (a i) ψ⟫_ℂ).re : ℂ) • 1) ψ‖ ≤
@@ -223,7 +222,7 @@ theorem exists_periodicPhysicalHierarchy {R J Δ : ℝ} (hR : 0 ≤ R) (hJ : 0 <
   have hr := hierarchyProjectionLength_le_physicalPeriodicProjectionRadius hM R Jb Δ hη
   have haloc (i : Fin M) := hloc hM g hg hsupp hnorm ℓ hℓR i
   have haSupp (i : Fin M) : a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
-      (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) :=
+      (Finset.univ.filter fun v ↦ ManyBody.roundedPeriodicDistance i v ≤ ℓ) :=
     (haloc i).1
   have haHerm (i : Fin M) : (a i).IsHermitian := (haloc i).2.1
   have haNorm (i : Fin M) : ‖a i‖ ≤ Jb := ((haloc i).2.2.1).trans (le_max_left _ _)

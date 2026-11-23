@@ -3,15 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.EntropyInequalities
-import TNLean.MPS.AreaLaw.Chain.ChainNeighborhood
 import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 import Mathlib.Algebra.Order.Floor.Semiring
 import Mathlib.Data.Nat.Dist
-import TNLean.MPS.AreaLaw.Chain.DomainIntervalNeighborhood
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.MPS.AreaLaw.Entropy.AreaLaw
+import QICLean.ManyBody.Sites.ProductVector
 
 /-!
 # Entropy of neighborhoods of finite interval unions
@@ -46,19 +44,19 @@ open ManyBody (interval interval_eq_empty mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 
-/-- The exact closed real-radius neighborhood of a clipped interval.
+/-- The exact closed neighborhood of radius `⌊ρ⌋` of a clipped interval in the path graph.
+For `ρ ≥ 0` it is the closed real-radius neighborhood of the note.
 Source: TNLean note, Lemma `lem:logsep`, `part2a_mps_information.tex:482–483`. -/
-theorem chainNeighborhood_interval_eq {L : ℕ} (a z : ℕ)
-    (ρ : ℝ) (hρ : 0 ≤ ρ) :
-    chainNeighborhood (interval L a z) ρ =
+theorem graphNeighborhood_pathGraph_interval_eq {L : ℕ} (a z : ℕ) (ρ : ℝ) :
+    ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) (interval L a z) ⌊ρ⌋₊ =
       if (interval L a z).Nonempty then
         interval L (a - Nat.floor ρ) (z + Nat.floor ρ)
       else ∅ := by
   classical
   split_ifs with hI
   · ext y
-    simp only [mem_chainNeighborhood, mem_interval,
-      ← Nat.le_floor_iff hρ]
+    simp only [ManyBody.mem_graphNeighborhood, SimpleGraph.pathGraph_edist,
+      ENat.natCast_le_natCast, mem_interval]
     constructor
     · rintro ⟨x, hx, hdist⟩
       simp only [Nat.dist] at hdist
@@ -121,26 +119,28 @@ theorem regionEntropy_biUnion_neighborhood_intervals_le
 /-- A uniform interval entropy bound controls the neighborhood of a finite
 interval union, including overlapping and empty components.
 Source: TNLean note, Lemma `lem:logsep`, `part2a_mps_information.tex:458–461, 482–487`. -/
-theorem regionEntropy_chainNeighborhood_biUnion_intervals_le
+theorem regionEntropy_graphNeighborhood_pathGraph_biUnion_intervals_le
     {L q : ℕ} {κ : Type*}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {c : ℝ}
     (hI : ∀ a z : ℕ,
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a z) ≤ c)
-    (s : Finset κ) (a z : κ → ℕ) (ρ : ℝ) (hρ : 0 ≤ ρ) :
+    (s : Finset κ) (a z : κ → ℕ) (ρ : ℝ) :
     let T := s.biUnion (fun i ↦ interval L (a i) (z i))
-    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (chainNeighborhood T ρ) ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω
+        (ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) T ⌊ρ⌋₊) ≤
       (s.card : ℝ) * c := by
   classical
   have hN (S : Finset (Fin L)) :
-      chainNeighborhood S ρ = S.biUnion fun x ↦ chainNeighborhood {x} ρ := by
+      ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) S ⌊ρ⌋₊ =
+        S.biUnion fun x ↦ ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) {x} ⌊ρ⌋₊ := by
     ext y
-    simp only [mem_chainNeighborhood, Finset.mem_biUnion, Finset.mem_singleton,
+    simp only [ManyBody.mem_graphNeighborhood, Finset.mem_biUnion, Finset.mem_singleton,
       exists_eq_left]
   intro T
   rw [hN]
   refine regionEntropy_biUnion_neighborhood_intervals_le hΩ hI _ (fun a z ↦ ?_) s a z
-  rw [← hN, chainNeighborhood_interval_eq a z ρ hρ]
+  rw [← hN, graphNeighborhood_pathGraph_interval_eq a z ρ]
   split_ifs
   · exact ⟨_, _, rfl⟩
   · exact ⟨0, 0, (interval_eq_empty le_rfl).symm⟩
@@ -174,7 +174,7 @@ theorem regionEntropy_domainNeighborhood_biUnion_intervals_le
       Ω ((s.biUnion (fun i ↦ interval Λ.card (a i) (b i))).biUnion
         (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) ≤ (s.card : ℝ) * c := by
   exact regionEntropy_biUnion_neighborhood_intervals_le hΩ hI _
-    (domainNeighborhood_interval_eq Λ · · m) s a b
+    (ManyBody.domainNeighborhood_interval_eq Λ · · m) s a b
 
 /-- The original gapped domain Hamiltonian bounds entropy on an intrinsic neighborhood
 of a finite interval union.

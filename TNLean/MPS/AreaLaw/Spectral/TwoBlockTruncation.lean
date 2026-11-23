@@ -89,7 +89,7 @@ theorem sum_three_regions_add_crossings {L q l r : ℕ} (hlr : l ≤ r)
     intro i hi
     have := (Finset.mem_filter.mp hi).2
     omega
-  have hsum := Finset.sum_five_internal_regions_add_crossings
+  have hsum := Fin.sum_eq_five_internal_add_crossings
     (L := L) (k1 := l) (k2 := l) (k3 := r) (k4 := r) le_rfl hlr le_rfl Φ.term
   rw [ManyBody.Interaction.hamiltonian, hsum]
   simp [aklvRegionalHamiltonians, Fin.sum_univ_three, hempty]

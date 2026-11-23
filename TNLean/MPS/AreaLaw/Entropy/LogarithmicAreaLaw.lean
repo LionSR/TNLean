@@ -48,9 +48,9 @@ with the energy entry of `C₁(2, R)` replaced by its logarithmic entry, divided
 `log³ 2`. Source: the note, Remark `rem:sharper`, `part1_arealaw.tex`, lines 711–745. -/
 noncomputable def chainLogCubeConst (R : ℕ) : ℝ :=
   ((8 * R * Real.log 2 + Real.log 2) *
-      (5 + 64 * Real.exp 1 * chainCrossConst R *
-          Real.log (Real.exp 1 * (2 : ℝ) ^ (R + 1)) ^ 2 + 128 * chainBudgetConst 2 R) +
-      1024 * Real.exp 1 * chainBudgetConst 2 R) / Real.log 2 ^ 3
+      (5 + 64 * Real.exp 1 * ManyBody.chainCrossConst R *
+          Real.log (Real.exp 1 * (2 : ℝ) ^ (R + 1)) ^ 2 + 128 * ManyBody.chainBudgetConst 2 R) +
+      1024 * Real.exp 1 * ManyBody.chainBudgetConst 2 R) / Real.log 2 ^ 3
 
 /-- The area-law coefficient grows at most cubically in the logarithm of the local
 dimension, with the range fixed. The energy entry of `C₁(q, R)` is bounded by its logarithmic
@@ -91,25 +91,25 @@ theorem chainAreaLawConst_le_mul_log_cube (hq : 2 ≤ q) :
   have hℓsq : Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 ≤ ℓ₂ ^ 2 * t ^ 2 := by
     rw [← mul_pow]
     exact pow_le_pow_left₀ hℓq0 hℓq 2
-  have hN : (0 : ℝ) ≤ chainCrossConst R := Nat.cast_nonneg _
-  have hB : chainBudgetConst q R ≤ chainBudgetConst 2 R * t ^ 2 := by
-    calc chainBudgetConst q R
-        ≤ (chainBudgetConst 2 R / Real.log 2 ^ 2) * Real.log (q : ℝ) ^ 2 :=
-          chainBudgetConst_le_mul_log_sq hq
-      _ = chainBudgetConst 2 R * t ^ 2 := by simp only [t, div_pow]; ring
-  have hB2 : 1 ≤ chainBudgetConst 2 R := one_le_chainBudgetConst 2 R
-  have hE : min (32 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)))
-      (64 * Real.exp 1 * chainCrossConst R *
+  have hN : (0 : ℝ) ≤ ManyBody.chainCrossConst R := Nat.cast_nonneg _
+  have hB : ManyBody.chainBudgetConst q R ≤ ManyBody.chainBudgetConst 2 R * t ^ 2 := by
+    calc ManyBody.chainBudgetConst q R
+        ≤ (ManyBody.chainBudgetConst 2 R / Real.log 2 ^ 2) * Real.log (q : ℝ) ^ 2 :=
+          ManyBody.chainBudgetConst_le_mul_log_sq hq
+      _ = ManyBody.chainBudgetConst 2 R * t ^ 2 := by simp only [t, div_pow]; ring
+  have hB2 : 1 ≤ ManyBody.chainBudgetConst 2 R := ManyBody.one_le_chainBudgetConst 2 R
+  have hE : min (32 * ManyBody.chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)))
+      (64 * Real.exp 1 * ManyBody.chainCrossConst R *
         Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) ≤
-      64 * Real.exp 1 * chainCrossConst R * ℓ₂ ^ 2 * t ^ 2 :=
+      64 * Real.exp 1 * ManyBody.chainCrossConst R * ℓ₂ ^ 2 * t ^ 2 :=
     (min_le_right _ _).trans (by
-      rw [show 64 * Real.exp 1 * chainCrossConst R * ℓ₂ ^ 2 * t ^ 2 =
-        64 * Real.exp 1 * chainCrossConst R * (ℓ₂ ^ 2 * t ^ 2) by ring]
+      rw [show 64 * Real.exp 1 * ManyBody.chainCrossConst R * ℓ₂ ^ 2 * t ^ 2 =
+        64 * Real.exp 1 * ManyBody.chainCrossConst R * (ℓ₂ ^ 2 * t ^ 2) by ring]
       exact mul_le_mul_of_nonneg_left hℓsq (by positivity))
-  set C₁' : ℝ := 5 + 64 * Real.exp 1 * chainCrossConst R * ℓ₂ ^ 2 +
-    128 * chainBudgetConst 2 R
+  set C₁' : ℝ := 5 + 64 * Real.exp 1 * ManyBody.chainCrossConst R * ℓ₂ ^ 2 +
+    128 * ManyBody.chainBudgetConst 2 R
   have hC : chainShellConst q R ≤ C₁' * t ^ 2 := by
-    rw [chainShellConst, cutShellConst, ← chainBudgetConst]
+    rw [chainShellConst, cutShellConst, cutBudgetConst_chainCrossConst]
     nlinarith only [hE, hB, ht2]
   have hC0 : 0 ≤ chainShellConst q R := cutShellConst_nonneg _ q R
   have hpre : 8 * R * Real.log (q : ℝ) + Real.log 2 ≤ (8 * R * Real.log 2 + Real.log 2) * t := by
@@ -123,18 +123,18 @@ theorem chainAreaLawConst_le_mul_log_cube (hq : 2 ≤ q) :
         ≤ ((8 * R * Real.log 2 + Real.log 2) * t) * (C₁' * t ^ 2) :=
           mul_le_mul hpre hC hC0 (by positivity)
       _ = ((8 * R * Real.log 2 + Real.log 2) * C₁') * t ^ 3 := by ring
-  have hlast : 1024 * Real.exp 1 * chainBudgetConst q R ≤
-      (1024 * Real.exp 1 * chainBudgetConst 2 R) * t ^ 3 := by
+  have hlast : 1024 * Real.exp 1 * ManyBody.chainBudgetConst q R ≤
+      (1024 * Real.exp 1 * ManyBody.chainBudgetConst 2 R) * t ^ 3 := by
     have hB3 := hB.trans (mul_le_mul_of_nonneg_left ht23 (zero_le_one.trans hB2))
-    calc 1024 * Real.exp 1 * chainBudgetConst q R
-        ≤ 1024 * Real.exp 1 * (chainBudgetConst 2 R * t ^ 3) :=
+    calc 1024 * Real.exp 1 * ManyBody.chainBudgetConst q R
+        ≤ 1024 * Real.exp 1 * (ManyBody.chainBudgetConst 2 R * t ^ 3) :=
           mul_le_mul_of_nonneg_left hB3 (by positivity)
-      _ = (1024 * Real.exp 1 * chainBudgetConst 2 R) * t ^ 3 := by ring
+      _ = (1024 * Real.exp 1 * ManyBody.chainBudgetConst 2 R) * t ^ 3 := by ring
   calc chainAreaLawConst q R
       = (8 * R * Real.log (q : ℝ) + Real.log 2) * chainShellConst q R +
-          1024 * Real.exp 1 * chainBudgetConst q R := rfl
+          1024 * Real.exp 1 * ManyBody.chainBudgetConst q R := rfl
     _ ≤ ((8 * R * Real.log 2 + Real.log 2) * C₁') * t ^ 3 +
-          (1024 * Real.exp 1 * chainBudgetConst 2 R) * t ^ 3 := add_le_add hfirst hlast
+          (1024 * Real.exp 1 * ManyBody.chainBudgetConst 2 R) * t ^ 3 := add_le_add hfirst hlast
     _ = _ := by
       simp only [C₁', ℓ₂, t, div_pow]
       field_simp

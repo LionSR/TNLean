@@ -101,6 +101,7 @@ open GaussianFilter Matrix QuantumCircuit Real
 
 open ManyBody (IsGapped groundSpace)
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal ComplexOrder
+open ManyBody (cutCommutatorConst)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -119,12 +120,12 @@ theorem lemmaOneLength_pos (R : ℕ) (J ΔE : ℝ) : 0 < lemmaOneLength R J ΔE 
 /-- The constant term of the square-root error of Lemma 1: the constant of the error budget,
 enlarged to cover the trivial factorization at short lengths. -/
 noncomputable def lemmaOneSqrtA (R : ℕ) (J ΔE : ℝ) : ℝ :=
-  max (Hastings.lemmaOneBudgetA R ΔE (chainLRPrefactor R J) (partCommutatorConst R * J ^ 2) J)
+  max (Hastings.lemmaOneBudgetA R ΔE (chainLRPrefactor R J) (cutCommutatorConst R * J ^ 2) J)
     (exp ((12 * R + 8 : ℝ) / (6 * lemmaOneLength R J ΔE)))
 
 /-- The coefficient of `√l` in the square-root error of Lemma 1. -/
 noncomputable def lemmaOneSqrtB (R : ℕ) (J ΔE : ℝ) : ℝ :=
-  Hastings.lemmaOneBudgetB ΔE (partCommutatorConst R * J ^ 2)
+  Hastings.lemmaOneBudgetB ΔE (cutCommutatorConst R * J ^ 2)
 
 /-- **The constant `C₁` of Lemma 1** at the rate `ξ' > 6ξ`, `ξ = lemmaOneLength R J ΔE`:
 `C₁ = a + b / √(2e(1/(6ξ) − 1/ξ'))` with `a = lemmaOneSqrtA R J ΔE` and
@@ -175,7 +176,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
         positivity
       linarith)
     (chainLRPrefactor_nonneg R J) (by positivity) hJ
-    (v := chainLRVelocity R J) (a := chainLRPrefactor R J) (cR := partCommutatorConst R * J ^ 2)
+    (v := chainLRVelocity R J) (a := chainLRPrefactor R J) (cR := cutCommutatorConst R * J ^ 2)
   set a := lemmaOneSqrtA R J ΔE with ha
   set B := lemmaOneSqrtB R J ΔE with hBdef
   have hB : 0 ≤ B := lemmaOneBudgetB_nonneg hΔ (by positivity)
@@ -215,9 +216,10 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
   obtain ⟨OB, hOBs, hOB1, hOB⟩ :=
     ManyBody.ChainInteraction.exists_boundaryOperator_factorization hq1 h hh hhJ hH₀ E₀ _ hZ hOL hOR
       (timeAverageVariance s ΔE) (ℓ' := (ℓn : ℝ)) (Nat.cast_nonneg _) hθ' hmoved
+  rw [Nat.floor_natCast] at hOBs
   refine ⟨OB, OL, OR, hOL, hOR, hcomm, hOB1, ?_, hsL, hsR, ?_⟩
   · refine ManyBody.IsSupportedOn.mono hOBs
-      ((chainNeighborhood_interval_subset _ _ ℓn).trans fun x hx ↦ ?_)
+      ((graphNeighborhood_pathGraph_interval_subset _ _ ℓn).trans fun x hx ↦ ?_)
     simp only [mem_interval] at hx ⊢
     omega
   · have hη' : ((timeAverageVariance s ΔE : ℝ≥0) : ℝ) = s / ΔE ^ 2 :=

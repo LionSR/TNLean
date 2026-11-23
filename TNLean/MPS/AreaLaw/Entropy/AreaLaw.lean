@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Entropy.BufferDiscount
-import TNLean.MPS.AreaLaw.Chain.EntropyInequalities
+import QICLean.ManyBody.Entropy.ChainInterval
 import TNLean.MPS.AreaLaw.Chain.WindowCounting
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Entropy.RegionEntropyInequalities
@@ -49,6 +49,8 @@ open scoped Matrix.Norms.L2Operator
 open ManyBody (ChainSupport boundaryEdges interval ChainInteraction)
 
 open ManyBody (IsGapped groundSpace)
+open ManyBody (chainBudgetConst chainCrossConst one_le_chainBudgetConst
+  regionEntropy_le_mul_card_boundaryEdges_of_intervals)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -162,7 +164,7 @@ theorem chainShellCount_le (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
       positivity
     have hT0 : 0 ≤ Tt := by simp only [Tt, chainTailThreshold]; positivity
     exact max_le (max_le (by linarith) (by linarith)) (by linarith)
-  rw [chainShellConst, cutShellConst, ← chainBudgetConst]
+  rw [chainShellConst, cutShellConst, cutBudgetConst_chainCrossConst]
   nlinarith
 
 /-- The constant `C₀(q, R) = (8 R log q + log 2) C₁(q, R) + 1024 e B_R` of the
@@ -188,7 +190,7 @@ theorem chainIntervalEntropyBound_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ
     nlinarith [mul_nonneg h0 hϑ]
   have hC1 : 0 ≤ chainShellConst q R := cutShellConst_nonneg _ q R
   unfold chainIntervalEntropyBound chainDiscountConst
-  rw [chainAreaLawConst, cutAreaLawConst, ← chainShellConst, ← chainBudgetConst]
+  rw [chainAreaLawConst, cutAreaLawConst, ← chainShellConst, cutBudgetConst_chainCrossConst]
   have hR : (0 : ℝ) ≤ R := Nat.cast_nonneg _
   have h1 : 8 * (chainShellCount q R J Δ : ℝ) * R * Real.log q ≤
       8 * R * Real.log q * (chainShellConst q R * (1 + J / Δ)) := by

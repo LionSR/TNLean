@@ -77,37 +77,41 @@ theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_sep
     nlinarith only [mul_nonneg (show 0 ≤ 3 * Cp * (1 + b) + 3 by positivity)
       (sub_nonneg.mpr hlog)]
   let N := fun (ρ : ℝ) (S : Finset (Fin L)) ↦
-    chainNeighborhood S ρ
+    ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) S ⌊ρ⌋₊
+  have hmem {ρ : ℝ} (hρ : 0 ≤ ρ) (S : Finset (Fin L)) (y : Fin L) :
+      y ∈ N ρ S ↔ ∃ x ∈ S, (Nat.dist x.val y.val : ℝ) ≤ ρ := by
+    simp only [N, ManyBody.mem_graphNeighborhood, SimpleGraph.pathGraph_edist,
+      ENat.natCast_le_natCast, Nat.le_floor_iff hρ]
+  have hw1 : 0 ≤ w + 1 := by linarith only [hw]
+  have hw2 : 0 ≤ 2 * w + 2 := by linarith only [hw]
   let D := N (w + 1) T
   let C := (N (2 * w + 2) T)ᶜ
   have hDC : Disjoint D C := by
     apply Finset.disjoint_left.mpr
     intro y hyD hyC
-    obtain ⟨x, hx, hxy⟩ := (Finset.mem_filter.mp hyD).2
+    obtain ⟨x, hx, hxy⟩ := (hmem hw1 T y).mp hyD
     exact (Finset.mem_compl.mp hyC)
-      (Finset.mem_filter.mpr ⟨Finset.mem_univ y, x, hx, by linarith only [hxy, hw]⟩)
+      ((hmem hw2 T y).mpr ⟨x, hx, by linarith only [hxy, hw]⟩)
   have hTD : T ⊆ D := by
     intro x hx
-    exact Finset.mem_filter.mpr
-      ⟨Finset.mem_univ x, x, hx, by simpa using (show 0 ≤ w + 1 by linarith only [hw])⟩
+    exact (hmem hw1 T x).mpr ⟨x, hx, by simpa using hw1⟩
   have hEC : E ⊆ C := by
     intro y hy
     apply Finset.mem_compl.mpr
     intro hyN
-    obtain ⟨x, hx, hxy⟩ := (Finset.mem_filter.mp hyN).2
+    obtain ⟨x, hx, hxy⟩ := (hmem hw2 T y).mp hyN
     linarith only [hdist x hx y hy, hsep, hxy, hw]
   have hmarginT : ∀ x ∈ T, ∀ y : Fin L, y ∉ D →
       w < (Nat.dist x.val y.val : ℝ) := by
     intro x hx y hy
     by_contra hnot
-    exact hy (Finset.mem_filter.mpr
-      ⟨Finset.mem_univ y, x, hx, by linarith only [not_lt.mp hnot]⟩)
+    exact hy ((hmem hw1 T y).mpr ⟨x, hx, by linarith only [not_lt.mp hnot]⟩)
   have hmarginE : ∀ e ∈ E, ∀ y : Fin L, y ∉ C →
       w < (Nat.dist e.val y.val : ℝ) := by
     intro e he y hy
     have hyN : y ∈ N (2 * w + 2) T := by
       simpa only [C, Finset.mem_compl, not_not] using hy
-    obtain ⟨x, hx, hxy⟩ := (Finset.mem_filter.mp hyN).2
+    obtain ⟨x, hx, hxy⟩ := (hmem hw2 T y).mp hyN
     have htri : (Nat.dist x.val e.val : ℝ) ≤
         (Nat.dist x.val y.val : ℝ) + (Nat.dist e.val y.val : ℝ) := by
       exact_mod_cast (Nat.dist.triangle_inequality x.val y.val e.val).trans_eq
@@ -120,8 +124,8 @@ theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_sep
         (le_max_right _ _)
   have hD : ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω D ≤ (k₀ : ℝ) * c := by
     obtain ⟨n, a, z, hn, hT⟩ := hT
-    have hbound := regionEntropy_chainNeighborhood_biUnion_intervals_le hΩ hI
-      (Finset.univ : Finset (Fin n)) a z (w + 1) (by linarith only [hw])
+    have hbound := regionEntropy_graphNeighborhood_pathGraph_biUnion_intervals_le hΩ hI
+      (Finset.univ : Finset (Fin n)) a z (w + 1)
     dsimp only at hbound
     change ManyBody.regionEntropy (X := fun _ ↦ Fin q)
       Ω (N (w + 1) (Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)))) ≤

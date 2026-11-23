@@ -364,7 +364,7 @@ theorem exists_aklv_physical_favorable_filter :
   obtain ⟨-, -, hgapI, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
     ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
       WithLp.ofLp_smul]; exact hground, hgap⟩
-  have hg1 := gap_le_one_of_positive_nearest_neighbor_terms (by omega : 0 < L)
+  have hg1 := ManyBody.BondInteraction.gap_le_one_of_nonneg_of_le_one (by omega : 0 < L)
     hq2 Φ h0 h1 hΩ hgapI hspan
   obtain ⟨_hsLower, _hsUpper, hs21, _hsb, hdiv, hsqrt, _hR, _hRup, _hDaux,
       hdelta, htrade, _htradeSmall, hlogD⟩ := hscalar q g hq2 hg hg1

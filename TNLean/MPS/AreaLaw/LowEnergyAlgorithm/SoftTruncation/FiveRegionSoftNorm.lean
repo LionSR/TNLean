@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Tactic.Module
 import QICLean.Spectral.Filter.SoftTruncationCommutingFamily
 import QICLean.Spectral.Filter.SoftHardTruncation
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
+import QICLean.ManyBody.Hamiltonian.Chain.ConsecutiveRegions
 
 /-!
 # Bounds for the complete five-region soft Hamiltonian
@@ -107,11 +107,11 @@ theorem norm_five_region_soft_three_bulk_le {L q k1 k2 k3 k4 ell : ℕ}
   classical
   intro k I A J Y e x hx hxe he p t m hpl hpu ht hm B G
   obtain ⟨hk, _hR, _hAs, hA, hY, hYcap, hJ, _hsum⟩ :=
-    five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L Φ h0 h1
+    ManyBody.BondInteraction.five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L Φ h0 h1
   have he0 (j : Fin 5) : 0 ≤ e j :=
     (hA j).1.nonneg_of_normalized_eigenvector (e j) x (hxe j) hx
   have hcomm : Pairwise fun i j : Fin 5 ↦ Commute (A i) (A j) :=
-    pairwise_commute_sum_internal_consecutive_regions k hk Φ
+    ManyBody.BondInteraction.pairwise_commute_sum_internal_consecutive_regions k hk Φ
   let S : Finset (Fin 5) := {0, 2, 4}
   obtain ⟨hBpos, _hBle, _hBA, _hproj⟩ := softTruncation_commuting_family_bounds
     A e p S (fun j ↦ (hA j).1.isHermitian) (fun j ↦ le_iff.mpr (he j))
@@ -140,9 +140,9 @@ theorem norm_five_region_soft_three_bulk_le {L q k1 k2 k3 k4 ell : ℕ}
         (zero_le_one : (0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ 1)
     exact le_iff.mp (hpe.trans (le_iff.mpr (he j)))
   have hc1 : (I 1).card ≤ 2 * ell :=
-    (card_internal_bonds_le L k1 k2).trans ((Nat.sub_le _ _).trans hwindow1)
+    (ManyBody.card_internal_bonds_le L k1 k2).trans ((Nat.sub_le _ _).trans hwindow1)
   have hc3 : (I 3).card ≤ 2 * ell :=
-    (card_internal_bonds_le L k3 k4).trans ((Nat.sub_le _ _).trans hwindow3)
+    (ManyBody.card_internal_bonds_le L k3 k4).trans ((Nat.sub_le _ _).trans hwindow3)
   have hcap1 : A 1 ≤ (2 * (ell : ℝ)) • 1 :=
     (hA 1).2.trans (smul_le_smul_of_nonneg_right (by exact_mod_cast hc1) zero_le_one)
   have hcap3 : A 3 ≤ (2 * (ell : ℝ)) • 1 :=

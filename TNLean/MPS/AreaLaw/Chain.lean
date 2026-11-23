@@ -8,26 +8,5 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Chain
 
-import TNLean.MPS.AreaLaw.Chain.BoundaryGap
-import TNLean.MPS.AreaLaw.Chain.ChainNeighborhood
-import TNLean.MPS.AreaLaw.Chain.Counting
-import TNLean.MPS.AreaLaw.Chain.DomainInteractionBudget
-import TNLean.MPS.AreaLaw.Chain.DomainIntervalNeighborhood
-import TNLean.MPS.AreaLaw.Chain.DomainPartialSwap
-import TNLean.MPS.AreaLaw.Chain.DoubledHamiltonian
-import TNLean.MPS.AreaLaw.Chain.EntropyInequalities
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
-import TNLean.MPS.AreaLaw.Chain.GluingHamiltonian
-import TNLean.MPS.AreaLaw.Chain.Hamiltonian
-import TNLean.MPS.AreaLaw.Chain.IntervalSymmDiff
-import TNLean.MPS.AreaLaw.Chain.IntervalUnion
-import TNLean.MPS.AreaLaw.Chain.LiebRobinson
-import TNLean.MPS.AreaLaw.Chain.LineDomainGraphGeometry
-import TNLean.MPS.AreaLaw.Chain.NearestNeighbourImaginaryTime
-import TNLean.MPS.AreaLaw.Chain.PartCommutators
-import TNLean.MPS.AreaLaw.Chain.PartialSwap
-import TNLean.MPS.AreaLaw.Chain.RangeOneSupport
-import TNLean.MPS.AreaLaw.Chain.StripGeometry
-import TNLean.MPS.AreaLaw.Chain.ThreeWaySplitting
 import TNLean.MPS.AreaLaw.Chain.TwoCutEdgeSupports
 import TNLean.MPS.AreaLaw.Chain.WindowCounting

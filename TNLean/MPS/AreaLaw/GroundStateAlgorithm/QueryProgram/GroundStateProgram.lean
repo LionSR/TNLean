@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.QueryProgram.SweepProgram
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.SuccessiveConstruction
-import TNLean.MPS.AreaLaw.Chain.RangeOneSupport
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.OneMarkerRank
-import TNLean.MPS.AreaLaw.Chain.IntervalSymmDiff
 import QICLean.ManyBody.Sites.OperatorSchmidtPartition
 import QICLean.Algebra.Word.OneMarkerFullCounts
 import QICLean.Algebra.Word.OneWindowWordPartition
@@ -228,7 +227,7 @@ theorem operatorSchmidtRank_cutOperator_le_pow_dist_mul {L q : ℕ} (hq : 1 ≤ 
     simp only [mem_leftBlock, mem_interval, Nat.zero_le, true_and]
   have hcard : ((leftBlock L i) ∆ (leftBlock L j)).card ≤ Nat.dist i j := by
     simpa only [hleft, Nat.dist_self, Nat.zero_add] using
-      (card_interval_symmDiff_le_dist (L := L) 0 i 0 j)
+      (ManyBody.card_interval_symmDiff_le_dist (L := L) 0 i 0 j)
   exact (Matrix.operatorSchmidtRank_reindex_piEquivPiSubtypeProd_finset_le
     q (leftBlock L i) (leftBlock L j) K).trans
       (Nat.mul_le_mul_right _ (Nat.pow_le_pow_right hq (Nat.mul_le_mul_left 2 hcard)))

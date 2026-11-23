@@ -26,10 +26,8 @@ import TNLean.MPS.AreaLaw.LocalSolution.HierarchyRadius
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicChainApproximation
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicCoarsening
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicPhysicalHierarchy
-import TNLean.MPS.AreaLaw.LocalSolution.PeriodicPhysicalMetric
 import TNLean.MPS.AreaLaw.LocalSolution.PhysicalEnergy
 import TNLean.MPS.AreaLaw.LocalSolution.PhysicalPeriodicPairs
 import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicApproximation
 import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicCoarsening
-import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicGeometry
 import TNLean.MPS.AreaLaw.LocalSolution.SupersiteFinalState

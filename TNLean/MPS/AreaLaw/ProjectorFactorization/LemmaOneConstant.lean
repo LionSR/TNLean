@@ -66,6 +66,7 @@ open Matrix Real
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
 open scoped ComplexOrder
+open ManyBody (cutCommutatorConst)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -112,7 +113,7 @@ theorem lemmaOneConst_le_pow (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
   set d : ℝ := 1 - exp (-(1 / 2)) with hd
   have hd0 : 0 < d := sub_pos.mpr (exp_lt_one_iff.mpr (by norm_num))
   set α : ℝ := 2 * (2 + 4 * b * exp (2 * R)) * exp 1 / d with hα
-  set p : ℝ := (partCommutatorConst R : ℝ) with hp
+  set p : ℝ := (cutCommutatorConst R : ℝ) with hp
   set C : ℝ := (48 : ℝ) ^ 4 * 24 with hC
   set β : ℝ := 2 * exp 1 * ((κ - 6) / (6 * κ)) with hβ
   have hκ0 : 0 < κ := by linarith
@@ -193,7 +194,7 @@ theorem lemmaOneConst_le_pow (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
   have hS0 : 0 ≤ 1 / √(2 * exp 1 * (1 / (6 * ξ) - 1 / (κ * ξ))) := by positivity
   -- assembly
   unfold lemmaOneConst lemmaOneSqrtA
-  have hmax : max (lemmaOneBudgetA R 1 (chainLRPrefactor R x) (↑(partCommutatorConst R) * x ^ 2) x)
+  have hmax : max (lemmaOneBudgetA R 1 (chainLRPrefactor R x) (↑(cutCommutatorConst R) * x ^ 2) x)
       (exp ((12 * R + 8 : ℝ) / (6 * ξ))) ≤ K₁ * ξ ^ 3 + exp ((12 * R + 8 : ℝ) / 6) * ξ ^ 3 := by
     refine max_le ?_ ?_
     · have := (exp_pos ((12 * R + 8 : ℝ) / 6)).le

@@ -34,6 +34,8 @@ Source: Hastings, arXiv:cond-mat/0508554v3, Section II, lines 609–730.
 
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
+open ManyBody (roundedPeriodicBlock roundedPeriodicBlockCount roundedPeriodicBlockCount_le
+  roundedPeriodicBlockCount_pos roundedPeriodicBlockCount_upper roundedPeriodicDistance)
 
 namespace TNLean.MPS.AreaLaw.LocalSolution
 

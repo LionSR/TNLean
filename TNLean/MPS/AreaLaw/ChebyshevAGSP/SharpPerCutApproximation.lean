@@ -34,6 +34,7 @@ open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 
 open ManyBody (IsGapped groundSpace)
 open ManyBody (cutMatrix)
+open ManyBody.BondInteraction (gap_le_one_of_nonneg_of_le_one)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -69,7 +70,7 @@ theorem aklv_chain_dimension_and_gap_bounds {L q : ℕ}
   obtain ⟨-, -, hgap, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
     ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
       WithLp.ofLp_smul]; exact hground, hgap⟩
-  exact ⟨hL, hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq Φ h0 h1 hΩ hgap hspan⟩
+  exact ⟨hL, hq, gap_le_one_of_nonneg_of_le_one hL hq Φ h0 h1 hΩ hgap hspan⟩
 
 /-- The actual same-cut physical approximants obey the sharp fourth-root
 logarithmic rank bound, uniformly over cuts and chain lengths. Their overlap

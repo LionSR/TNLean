@@ -116,12 +116,12 @@ private theorem surprisalTail_leftBlock_le
       (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w ≤
       2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w /
-          (32 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))) := by
+          (32 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)))) := by
   refine surprisalTail_region_le_of_family_budget h.term
     (fun X : ChainSupport L R ↦ X.1) h.mem hh hJ hhJ hΔ hΩ hgap hspan
     (leftBlock L k) ?_ w hw
   rw [leftBlock_eq_interval]
-  exact cutLogBudget_interval_le hq 0 k
+  exact ManyBody.cutLogBudget_interval_le hq 0 k
 
 open scoped ComplexOrder Matrix.Norms.L2Operator in
 /-- The actual prefix marginal of a gapped chain whose nonzero terms occupy full
@@ -181,7 +181,7 @@ theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
       ((1 - P) * ρ).trace.re ≤
         2 * Real.exp (Real.exp 1 / 2) *
           Real.exp (-(w /
-            (32 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))) := by
+            (32 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)))) := by
   classical
   dsimp only
   have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) Ω
@@ -221,7 +221,7 @@ theorem tailPrefactorRoot_sq : tailPrefactorRoot ^ 2 = 2 * Real.exp (Real.exp 1 
 
 /-- The truncation width `w(L) = 64 √((1 + J/Δ) B_R) log (2 L² √(2 e^{e/2}))`. -/
 noncomputable def chainTruncationWidth (q R : ℕ) (J Δ : ℝ) (L : ℕ) : ℝ :=
-  64 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) *
+  64 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R) *
     Real.log (2 * (L : ℝ) ^ 2 * tailPrefactorRoot)
 
 /-- The bond dimension `⌊exp (C_int + w(L))⌋`. -/
@@ -351,12 +351,12 @@ theorem exists_isOpenMPS_norm_sub_le_of_error
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
       IsOpenMPS L q
         ⌊Real.exp (chainIntervalEntropyBound q R J Δ +
-          64 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) *
+          64 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R) *
             Real.log (2 * (L : ℝ) * tailPrefactorRoot / ε))⌋₊
         (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ ε := by
   have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
-  have hK := one_le_chainBudgetConst q R
-  have hs : 0 < Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) :=
+  have hK := ManyBody.one_le_chainBudgetConst q R
+  have hs : 0 < Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R) :=
     Real.sqrt_pos.mpr (by nlinarith)
   refine exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     (chainIntervalEntropyBound_nonneg hq hJ hΔ) hs hL hΩ hε hε1 ?_ ?_
@@ -409,7 +409,7 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
   · intro k
     have hprefix : (boundaryEdges L (leftBlock L k)).card ≤ 1 := by
       rw [leftBlock_eq_interval]
-      exact card_boundaryEdges_prefix_le L k
+      exact ManyBody.card_boundaryEdges_prefix_le L k
     have hprefix' : ((boundaryEdges L (leftBlock L k)).card : ℝ) ≤ 1 := by
       exact_mod_cast hprefix
     calc ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)
@@ -435,21 +435,21 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_polynomial
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1) :
-    let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
+    let C_E : ℝ := 8 * ManyBody.chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
     let m : ℕ :=
       ⌈max (max (max 4 (4 * C_E / Δ))
-        (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
-        (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
+        (128 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)))
+        (4096 * Real.exp 1 * (1 + J / Δ) * ManyBody.chainBudgetConst q R)⌉₊
     let C_int := 8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
       IsOpenMPS L q
-        ⌊Real.exp (C_int + 64 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) *
+        ⌊Real.exp (C_int + 64 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R) *
           Real.log (2 * (L : ℝ) * tailPrefactorRoot / ε))⌋₊
         (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ ε := by
   intro C_E m C_int
   have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
-  have hK := one_le_chainBudgetConst q R
-  have hs : 0 < Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) :=
+  have hK := ManyBody.one_le_chainBudgetConst q R
+  have hs : 0 < Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R) :=
     Real.sqrt_pos.mpr (by nlinarith)
   have hC : 0 ≤ C_int := by
     have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
@@ -493,19 +493,19 @@ theorem exists_isOpenMPS_norm_sub_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ
 theorem chainBondDimension_le_mul_rpow {L : ℕ} (hL : 1 ≤ L) :
     (chainBondDimension q R J Δ L : ℝ) ≤
       Real.exp (chainIntervalEntropyBound q R J Δ) *
-        (2 * tailPrefactorRoot) ^ (64 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)) *
-        (L : ℝ) ^ (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)) := by
+        (2 * tailPrefactorRoot) ^ (64 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)) *
+        (L : ℝ) ^ (128 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)) := by
   have hL' : (0 : ℝ) < L := by exact_mod_cast hL
   have hroot := tailPrefactorRoot_pos
   have hy : 0 < 2 * (L : ℝ) ^ 2 * tailPrefactorRoot := by positivity
   have hexpw : Real.exp (chainTruncationWidth q R J Δ L) =
-      (2 * tailPrefactorRoot) ^ (64 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)) *
-        (L : ℝ) ^ (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)) := by
+      (2 * tailPrefactorRoot) ^ (64 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)) *
+        (L : ℝ) ^ (128 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)) := by
     unfold chainTruncationWidth
-    rw [show 64 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) *
+    rw [show 64 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R) *
         Real.log (2 * (L : ℝ) ^ 2 * tailPrefactorRoot) =
         Real.log (2 * (L : ℝ) ^ 2 * tailPrefactorRoot) *
-          (64 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)) by ring,
+          (64 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)) by ring,
       ← Real.rpow_def_of_pos hy,
       show 2 * (L : ℝ) ^ 2 * tailPrefactorRoot = (2 * tailPrefactorRoot) * (L : ℝ) ^ 2 by ring,
       Real.mul_rpow (by positivity) (by positivity), ← Real.rpow_natCast,
@@ -544,13 +544,13 @@ theorem exists_isOpenMPS_norm_sub_le_polynomial
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) :
-    let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
+    let C_E : ℝ := 8 * ManyBody.chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
     let m : ℕ :=
       ⌈max (max (max 4 (4 * C_E / Δ))
-        (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
-        (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
+        (128 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)))
+        (4096 * Real.exp 1 * (1 + J / Δ) * ManyBody.chainBudgetConst q R)⌉₊
     let C_int := 8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ
-    let s := Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)
+    let s := Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)
     let u₀ := 1 / (32 * s)
     let D := ⌊Real.exp (C_int + 64 * s *
       Real.log (2 * (L : ℝ) ^ 2 * tailPrefactorRoot))⌋₊
@@ -605,13 +605,13 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_rpow
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1) :
-    let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
+    let C_E : ℝ := 8 * ManyBody.chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
     let m : ℕ :=
       ⌈max (max (max 4 (4 * C_E / Δ))
-        (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
-        (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
+        (128 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)))
+        (4096 * Real.exp 1 * (1 + J / Δ) * ManyBody.chainBudgetConst q R)⌉₊
     let C_int := 8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ
-    let s := Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)
+    let s := Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧ ∃ D : ℕ,
       IsOpenMPS L q D (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ ε ∧
       (D : ℝ) ≤ Real.exp C_int * (2 * tailPrefactorRoot) ^ (64 * s) *

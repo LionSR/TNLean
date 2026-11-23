@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Entropy.SupportedGaussianIntegral
-import TNLean.MPS.AreaLaw.Entropy.ResetSupportSeparation
 import QICLean.ManyBody.Sites.GraphBall
 import QICLean.ManyBody.Replica.RegionalReset
 import QICLean.ManyBody.Replica.RegionalResetEntropy
@@ -324,13 +323,27 @@ theorem _root_.ManyBody.ChainInteraction.information_reset (q : ℕ) (hq : 1 ≤
   simp only [Fintype.card_fin] at hreset'
   refine hreset' h.hamiltonian Ω E₀ (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan
       D C R₀ C₀ hDC hR₀ hC₀ b hI
-    (fun ℓ A ↦ chainNeighborhood A (ℓ : ℝ)) Z (fun ℓ ↦ ?_)
-    (fun ℓ hℓ ↦ (chain_reset_support_separation D C R₀ C₀ hDC w hRw hCw).2 (ℓ : ℝ) hℓ)
-  obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h hh hhJ D (ℓ : ℝ) (Nat.cast_nonneg _)
-  refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
-  obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
-  rw [hK]
-  exact ⟨hs, herr⟩
+    (fun ℓ A ↦ ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) A ℓ) Z
+    (fun ℓ ↦ ?_) (fun ℓ hℓ ↦ ?_)
+  · obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h hh hhJ D (ℓ : ℝ)
+    refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
+    obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
+    simp only [Nat.floor_natCast] at hs herr
+    rw [hK]
+    exact ⟨hs, herr⟩
+  · have hrad : ((ℓ + R : ℕ) : ℝ) ≤ w := by simpa only [Nat.cast_add] using hℓ
+    have hmargin {E E' : Finset (Fin L)}
+        (hE : ∀ x ∈ E', ∀ y : Fin L, y ∉ E → w < (Nat.dist x.val y.val : ℝ))
+        (x : Fin L) (hx : x ∈ E') :
+        ManyBody.graphBall (SimpleGraph.pathGraph L) x (ℓ + R) ⊆ E := by
+      refine ManyBody.graphBall_subset_of_finite_distance_margin _ E x w (ℓ + R) hrad
+        fun y hy d hd ↦ ?_
+      rw [SimpleGraph.pathGraph_edist, Nat.cast_inj] at hd
+      rw [← hd]
+      exact hE x hx y hy
+    exact ManyBody.reset_graphNeighborhood_disjoint_cores (SimpleGraph.pathGraph L)
+      (fun X : ChainSupport L R ↦ X.1) R ℓ (fun X ↦ ManyBody.ChainSupport.edist_le X)
+      D C R₀ C₀ hDC (hmargin hRw) (hmargin hCw)
 
 /-- Information reset on an actual finite induced integer domain, using its
 intrinsic extended graph distance. This extends the chain lemma in the TNLean

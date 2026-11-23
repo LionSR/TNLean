@@ -127,7 +127,7 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
   have hC (j : Fin 3) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (C j)
       (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) :=
-    isSupportedOn_sum_internal_bonds L q _ _ Φ
+    ManyBody.BondInteraction.isSupportedOn_sum_internal_bonds L q _ _ Φ
   have hF (j : Fin 3) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (F j)
       (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by

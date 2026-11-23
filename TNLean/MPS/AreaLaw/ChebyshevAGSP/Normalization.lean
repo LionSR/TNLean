@@ -76,7 +76,7 @@ private theorem aklv_normalization_bond_data {L q a s : ℕ}
     fin_cases i <;> fin_cases j <;> simp_all [p, aklvNormalizationEndpoints] <;> omega
   have hA (j : Fin 3) :
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j) := by
-    exact isSupportedOn_sum_internal_bonds L q (p j).1 (p j).2 Φ
+    exact ManyBody.BondInteraction.isSupportedOn_sum_internal_bonds L q (p j).1 (p j).2 Φ
   have hJ : J.card ≤ 6 := by
     have hc := Finset.card_le_card_of_injOn Fin.val
       (s := J) (t := {a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1})
@@ -211,7 +211,7 @@ theorem aklv_two_block_exterior_data {L q a s : ℕ}
   have hsupport (j : Fin 3) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (C j) (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
-    exact isSupportedOn_sum_internal_bonds L q _ _ Φ
+    exact ManyBody.BondInteraction.isSupportedOn_sum_internal_bonds L q _ _ Φ
   have hcenter (j : Fin 3) (e : ℝ) :
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (C j - (e : ℂ) • 1)
         (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)

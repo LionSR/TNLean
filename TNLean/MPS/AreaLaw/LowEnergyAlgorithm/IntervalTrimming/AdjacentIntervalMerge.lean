@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.IntervalUnion
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Subspace.RegionalTensorMerge
 import QICLean.ManyBody.Subspace.RegionalTensorMergeMeasurable
 
@@ -43,7 +43,7 @@ noncomputable def adjacentIntervalMerge (L q p k r : ℕ) (hpk : p ≤ k) (hkr :
     (disjoint_interval_interval p k r) S1 S2).map
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
         (ManyBody.configurationCongr (fun _ : Fin L ↦ Fin q)
-          (interval_union_interval hpk hkr))).toLinearEquiv.toLinearMap
+          (ManyBody.interval_union_interval hpk hkr))).toLinearEquiv.toLinearMap
 
 /-- Viable spaces on actual adjacent intervals merge with the sum of their
 errors for the same original global target. This is ALVV,
@@ -59,7 +59,7 @@ theorem isViable_adjacentIntervalMerge {L q p k r : ℕ} (hpk : p ≤ k) (hkr : 
       (G.map (Entropy.regionTensorCoordinates q (interval L k r)).toLinearEquiv.toLinearMap)) :
     Submodule.IsViable (delta1 + delta2) (adjacentIntervalMerge L q p k r hpk hkr S1 S2)
       (G.map (Entropy.regionTensorCoordinates q (interval L p r)).toLinearEquiv.toLinearMap) :=
-  Entropy.isViable_region_congr (interval_union_interval hpk hkr) G _
+  Entropy.isViable_region_congr (ManyBody.interval_union_interval hpk hkr) G _
     (Entropy.isViable_regionTensorMerge (interval L p k) (interval L k r)
       (disjoint_interval_interval p k r) G S1 S2 h1 h2)
 
@@ -100,7 +100,7 @@ theorem measurable_projectionMatrix_adjacentIntervalMerge
       (adjacentIntervalMerge L q p k r hpk hkr (S1 x) (S2 x)).starProjection) := by
   exact Submodule.measurable_projectionMatrix_map_piLpCongrLeft
     (ManyBody.configurationCongr (fun _ : Fin L ↦ Fin q)
-      (interval_union_interval hpk hkr))
+      (ManyBody.interval_union_interval hpk hkr))
     (fun x ↦ Entropy.regionTensorMerge q (interval L p k) (interval L k r)
       (disjoint_interval_interval p k r) (S1 x) (S2 x))
     (Entropy.measurable_projectionMatrix_regionTensorMerge q _ _ _ S1 S2 h1 h2)

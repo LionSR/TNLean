@@ -30,6 +30,7 @@ open ManyBody (interval)
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker TensorProduct Matrix.Norms.L2Operator MatrixOrder ComplexOrder
+open ManyBody.BondInteraction (isSupportedOn_sum_internal_bonds)
 
 namespace TNLean.MPS.AreaLaw.ALVV
 

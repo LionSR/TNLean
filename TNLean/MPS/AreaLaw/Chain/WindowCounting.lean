@@ -3,9 +3,10 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.AreaLaw.Chain.Counting
+import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.Algebra.Combinatorics.FinSum
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 
 /-!
 # Consecutive-window interactions on a chain
@@ -28,6 +29,9 @@ crossing count `N_R` and budget `B_R` replaced by `2R` and `B_win`. Recorded in
 
 ## Main results
 
+* `cutBudgetConst`, `cutShellConst`, `cutAreaLawConst`: the constants `B`, `C₁` and `C₀` of
+  Theorem A for at most `N` split supports; at `N = N_R` the budget is `B_R`
+  (`cutBudgetConst_chainCrossConst`).
 * `windowBudgetConst`, `windowAreaLawConst`: the constants `B_win` and `C₀,win`, which are
   `cutBudgetConst` and `cutAreaLawConst` at the crossing count `2R`, so `B_R` and
   `C₀(q, R)` with `N_R` replaced by `2R`.
@@ -55,6 +59,47 @@ open scoped ComplexOrder Matrix.Norms.L2Operator
 namespace TNLean.MPS.AreaLaw
 
 variable {L q R : ℕ} {J : ℝ}
+
+/-- The cut budget `1 + N log² (e q^{R + 1})` of an interval split by at most `N` supports
+of range `R`. TNLean note, `eq:BR`, with `N_R` replaced by `N`. -/
+noncomputable def cutBudgetConst (N q R : ℕ) : ℝ :=
+  1 + N * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
+
+/-- The cut budget is at least one. -/
+theorem one_le_cutBudgetConst (N q R : ℕ) : 1 ≤ cutBudgetConst N q R :=
+  le_add_of_nonneg_right (by positivity)
+
+/-- At the crossing count `N_R` the cut budget is the interval budget `B_R`.
+TNLean note, `eq:BR`. -/
+theorem cutBudgetConst_chainCrossConst (q R : ℕ) :
+    cutBudgetConst (ManyBody.chainCrossConst R) q R = ManyBody.chainBudgetConst q R :=
+  rfl
+
+/-- The shell constant `5 + min {32 N q^{2(R + 1)}, 64 e N log² (e q^{R + 1})} + 128 B` for
+at most `N` split supports, where `B = cutBudgetConst N q R`. TNLean note, Theorem A, with
+`N_R` replaced by `N`. -/
+noncomputable def cutShellConst (N q R : ℕ) : ℝ :=
+  5 + min (32 * N * (q : ℝ) ^ (2 * (R + 1)))
+      (64 * Real.exp 1 * N * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
+    128 * cutBudgetConst N q R
+
+/-- The shell constant is nonnegative. -/
+theorem cutShellConst_nonneg (N q R : ℕ) : 0 ≤ cutShellConst N q R := by
+  unfold cutShellConst cutBudgetConst
+  positivity
+
+/-- The area-law constant `(8 R log q + log 2) C₁ + 1024 e B` for at most `N` split
+supports, where `C₁ = cutShellConst N q R` and `B = cutBudgetConst N q R`. TNLean note,
+Theorem A, with `N_R` replaced by `N`. -/
+noncomputable def cutAreaLawConst (N q R : ℕ) : ℝ :=
+  (8 * R * Real.log q + Real.log 2) * cutShellConst N q R +
+    1024 * Real.exp 1 * cutBudgetConst N q R
+
+/-- The area-law constant is nonnegative. -/
+theorem cutAreaLawConst_nonneg (N q R : ℕ) : 0 ≤ cutAreaLawConst N q R := by
+  have := cutShellConst_nonneg N q R
+  unfold cutAreaLawConst cutBudgetConst
+  positivity
 
 /-- The cut budget `B_win = 1 + 2R log² (e q^{R + 1})` of full consecutive windows.
 Source: the one-dimensional note, `rem:sharper`, lines 706–709. -/
@@ -166,7 +211,7 @@ theorem _root_.ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive
   have hdim (X : A) :
       Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (D X) : ℝ)) ^ 2 ≤
         Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 := by
-    exact log_sq_supportDim_le hq X.val
+    exact ManyBody.ChainSupport.log_sq_supportDim_le hq X.val
   have hbudget : budget ≤ B := by
     have hs := Finset.sum_le_card_nsmul C
       (fun X ↦ Real.log (Real.exp 1 *

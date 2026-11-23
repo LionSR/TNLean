@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.RegionalBarrierResidual
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
 import QICLean.Spectral.Filter.SoftTruncationCommutingFamily
 import QICLean.Spectral.LowEnergy.ShiftedLowEnergyCoordinates
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.FiveRegionSoftStructure
@@ -76,6 +75,8 @@ open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open ManyBody.BondInteraction (five_region_original_bond_data
+  pairwise_commute_sum_internal_consecutive_regions)
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
@@ -766,7 +767,8 @@ theorem exists_five_region_soft_representation {N q k1 k2 k3 k4 : ℕ}
       cfc (Real.softTruncation t m) (A j - (p j : ℂ) • 1)
     let Braw := ∑ j, (A j - (e j : ℂ) • 1)
     obtain ⟨_hk, _hR, _hsA, _hA, _hY, _hYC, _hJ, hsumraw⟩ :=
-      five_region_original_bond_data (N + 1) q k1 k2 k3 k4 h12 h23 h34 h4L Φ h0 h1
+      ManyBody.BondInteraction.five_region_original_bond_data (N + 1) q k1 k2 k3 k4
+        h12 h23 h34 h4L Φ h0 h1
     change Φ.hamiltonian = (∑ j, A j) + Y at hsumraw
     have hcenter : H = Braw + Y := by
       dsimp only [H, Braw]

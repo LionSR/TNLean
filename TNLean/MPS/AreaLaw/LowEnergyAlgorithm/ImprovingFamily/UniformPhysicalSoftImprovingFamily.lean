@@ -37,6 +37,7 @@ open ManyBody (interval)
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker TensorProduct Matrix.Norms.L2Operator MatrixOrder ComplexOrder
+open ManyBody.BondInteraction (isSupportedOn_sum_internal_bonds)
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
@@ -63,7 +64,7 @@ theorem actual_three_bulk_replacement_sum {M : Type*} [AddCommGroup M]
   classical
   intro k A Y WL WR PL G
   have htotal : (∑ i, h i) = (∑ j, A j) + Y := by
-    have hh := Finset.sum_five_internal_regions_add_crossings
+    have hh := Fin.sum_eq_five_internal_add_crossings
       (A := M) (L := L) (k1 := a + 1) (k2 := a + 2 * ell)
       (k3 := b + 1) (k4 := b + 2 * ell)
       (by omega) (by omega) (by omega) h

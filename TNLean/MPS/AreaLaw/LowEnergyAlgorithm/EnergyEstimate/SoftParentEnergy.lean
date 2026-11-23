@@ -136,9 +136,9 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
     rw [Complex.ofReal_add, add_smul]
     abel
   have hPs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P J :=
-    isSupportedOn_sum_internal_bonds L q l r Φ
+    ManyBody.BondInteraction.isSupportedOn_sum_internal_bonds L q l r Φ
   have hMs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) M J := by
-    apply (isSupportedOn_sum_internal_bonds L q u v Φ).mono
+    apply (ManyBody.BondInteraction.isSupportedOn_sum_internal_bonds L q u v Φ).mono
     intro i hi
     simp only [J, mem_interval] at hi ⊢
     omega

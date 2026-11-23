@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SpectralCluster
-import TNLean.MPS.AreaLaw.Chain.BoundaryGap
+import QICLean.ManyBody.Hamiltonian.Chain.GapUpperBound
 import QICLean.Spectral.LowEnergy.Coordinates
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -154,7 +154,7 @@ private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
     (by intro hz; simp only [hz, norm_zero, zero_ne_one] at hΩ) hground
   have hq2 : 2 ≤ q := hH.two_le_local_dimension_of_two_spectral_values
     hmu hexcited (by linarith)
-  have hg1 := gap_le_one_of_positive_nearest_neighbor_terms
+  have hg1 := ManyBody.BondInteraction.gap_le_one_of_nonneg_of_le_one
     (by omega : 0 < L) hq2 Φ h0 h1 hΩ hgapI hspan
   obtain ⟨e, E0, hregional, hEeq, hE0, hE6, hcluster⟩ :=
     exists_aklv_cut_scaled_low_cluster (by omega) hs ha hlr hrL Φ h0 h1

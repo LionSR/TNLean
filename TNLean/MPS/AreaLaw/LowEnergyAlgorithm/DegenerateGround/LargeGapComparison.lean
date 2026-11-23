@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.GroundGapUpperBound
+import QICLean.ManyBody.Hamiltonian.Chain.GapUpperBound
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGGlobalApproximation
 
 /-!
@@ -30,6 +30,7 @@ Documented in `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 open ManyBody (interval)
 
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace
+open ManyBody.BondInteraction (gap_le_one_add_log_div_log)
 
 namespace TNLean.MPS.AreaLaw.ALVV
 

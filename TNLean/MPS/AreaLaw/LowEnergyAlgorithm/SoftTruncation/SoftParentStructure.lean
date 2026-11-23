@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftFamilyResiduals
 import QICLean.Spectral.Filter.SoftHardTruncation
 import QICLean.Spectral.Perturbation.GroundEnergyResidual
@@ -128,7 +127,7 @@ theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
       _hH, _bH, _aH, _hEigH, hfamily⟩ :=
     exists_five_region_soft_residuals hq hlu huv hvr hrL Ψ hp0 hp1
   obtain ⟨_hk, _hR, _hsA, hA, hYpos, hYcap, _hCross', hsum0⟩ :=
-    five_region_original_bond_data L q l u v r hlu huv hvr hrL Ψ hp0 hp1
+    ManyBody.BondInteraction.five_region_original_bond_data L q l u v r hlu huv hvr hrL Ψ hp0 hp1
   have he0 (j : Fin 5) : 0 ≤ e j :=
     (hA j).1.nonneg_of_normalized_eigenvector (e j) x (hxe j) hx
   have hP : Ψ.hamiltonian = P := ManyBody.Interaction.hamiltonian_restrict Φ _
@@ -204,9 +203,9 @@ theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
       (s := Finset.univ.filter fun i : Fin (L - 1) ↦ r ≤ i.val ∧ i.val + 1 < L)
       fun i hi ↦ by have := (Finset.mem_filter.mp hi).2; omega
     have hcard1 : (I 1).card ≤ 2 * ell :=
-      (card_internal_bonds_le L l u).trans (by omega)
+      (ManyBody.card_internal_bonds_le L l u).trans (by omega)
     have hcard3 : (I 3).card ≤ 2 * ell :=
-      (card_internal_bonds_le L v r).trans (by omega)
+      (ManyBody.card_internal_bonds_le L v r).trans (by omega)
     have hcap1 : A 1 ≤ (2 * (ell : ℝ)) • 1 :=
       (hA 1).2.trans (smul_le_smul_of_nonneg_right (by exact_mod_cast hcard1) zero_le_one)
     have hcap3 : A 3 ≤ (2 * (ell : ℝ)) • 1 :=

@@ -58,7 +58,7 @@ private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r
     intro i
     fin_cases i <;> simp [k] <;> omega
   have hcomm : Pairwise fun i j : Fin 3 ↦ Commute (A i) (A j) :=
-    pairwise_commute_sum_internal_consecutive_regions k hk Φ
+    ManyBody.BondInteraction.pairwise_commute_sum_internal_consecutive_regions k hk Φ
   have hX : X.PosSemidef := he 1
   have hA1 : (A 1).IsHermitian := by
     dsimp only [A, aklvRegionalHamiltonians]

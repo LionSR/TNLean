@@ -11,14 +11,12 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.GoodProjectorHardTruncation
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.GoodProjectorHardTruncationCorollary
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.GroundGapUpperBound
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.HardTruncation
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.HardTruncationResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentTruncationParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.PhysicalLowEnergyCloseness
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.RegionalBarrierResidual
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.RegionalEnergyMerge
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.RegionalEnergyMergePhysical
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.RegionalExponentialMoment
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.SpectralProjector
