@@ -14,7 +14,7 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
 
 \begin{lemma}[Energies of nearby unit vectors]
     \label{thm:hastings05_energy_nearby}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_sub_re_inner_le}
+    \lean{Matrix.abs_re_inner_sub_re_inner_le}
     \leanok
     For $\|\phi\|=\|\psi\|=1$ and any operator $M$,
     $|\operatorname{Re}\langle\phi,M\phi\rangle-\operatorname{Re}\langle\psi,M\psi\rangle|
@@ -29,7 +29,7 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
 
 \begin{lemma}[Normalizing the image under one projection]
     \label{thm:hastings05_normalization_one}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_inv_norm_smul_toEuclideanLin_sub_le_two_mul}
+    \lean{Matrix.norm_inv_norm_smul_toEuclideanLin_sub_le_two_mul}
     \leanok
     For an orthogonal projection $Q$ and $\|\psi\|=1$, if
     $\|Q\psi-\psi\|\le b$, then $\|Q\psi/\|Q\psi\|-\psi\|\le2b$.
@@ -41,8 +41,8 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
 
 \begin{lemma}[A final state of nearly the ground-state energy]
     \label{thm:hastings05_hchy}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_mem_range_re_inner_le_add,
-        TNLean.MPS.AreaLaw.LocalSolution.exists_mem_range_re_inner_sum_le_add}
+    \lean{Matrix.exists_mem_range_re_inner_le_add,
+        Matrix.exists_mem_range_re_inner_sum_le_add}
     \leanok
     \uses{thm:hastings05_energy_nearby, thm:hastings05_normalization_one}
     If an orthogonal projection $Q$ and $\|\Psi\|=1$ satisfy
@@ -299,7 +299,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
 
 \begin{lemma}[The closing window preserves the hierarchy]
     \label{thm:hastings05_retained_tree}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.toEuclideanLin_eq_of_mul_eq,
+    \lean{Matrix.toEuclideanLin_eq_of_mul_eq,
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjection_children,
         TNLean.MPS.AreaLaw.LocalSolution.isRetainedHierarchy_of_hierarchyProjection,
         TNLean.MPS.AreaLaw.LocalSolution.isRetainedHierarchy_of_hierarchyClosingProjection}

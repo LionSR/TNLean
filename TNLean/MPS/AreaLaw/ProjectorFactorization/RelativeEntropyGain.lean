@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Complex.ExponentialBounds
 import TNLean.MPS.AreaLaw.ProjectorFactorization.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.ProductStateExpectation
-import TNLean.MPS.AreaLaw.ProjectorFactorization.EffectExpectation
-import TNLean.MPS.AreaLaw.ProjectorFactorization.EffectFromFactorization
+import QICLean.Analysis.TraceInequality.TraceMulBound
+import QICLean.Analysis.Norm.ApproximateProjector
 import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ChainBootstrap
 import TNLean.MPS.AreaLaw.ProjectorFactorization.PositiveFactorization
@@ -33,8 +33,9 @@ met through route 1 of Hastings' note added (lines 916–925). With the effect `
 ground-state expectation is at least `(1 − 2ε)² ≥ 1 − 4ε` and the product-state expectation
 satisfies `x ≤ 20 ε ≤ 36 · (2ε)` for Lemma 1's `ε ≤ 1/136`, given the overlap bound
 `tr(σ P₀) ≤ 2ε` of lines 482–489
-(`sq_one_sub_two_mul_le_re_inner_conjTranspose_mul`, `re_trace_mul_le_of_projection_sandwich`),
-so the lemma applies with `C₁` replaced by `2 C₁`. Only the values of the constants move; the
+(`sq_one_sub_two_mul_le_re_inner_conjTranspose_mul`,
+`Matrix.re_trace_mul_le_of_projection_sandwich`), so the lemma applies with `C₁` replaced by
+`2 C₁`. Only the values of the constants move; the
 rate `e^{-l/ξ'}` and the coefficient `l/ξ'` of eq. `claim` do not.
 Documented in `docs/paper-gaps/hastings07_relent_constants.tex`.
 
@@ -342,7 +343,7 @@ theorem relent_of_projectorFactorization
       vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤ 2 * ε + ε ^ 2 := by
     have h := Matrix.norm_mul_conjTranspose_mul_self_mul_sub_le hP₀ hZ hprodZ
     rwa [Matrix.mul_assoc (OL * OR) OBᴴ OB] at h
-  have hx := re_trace_mul_le_of_projection_sandwich hσ hσ1 hE hEn hZ hZEZ
+  have hx := Matrix.re_trace_mul_le_of_projection_sandwich hσ hσ1 hE hEn hZ hZEZ
   have hy := one_sub_two_mul_sq_le_re_trace_cutProductState_mul hΩ hOL hOR
     (hSL.mono hSLc)
     (hSR.mono fun v hv ↦ Finset.mem_compl.mpr (Finset.disjoint_left.mp hSRc hv)) hprod
@@ -408,7 +409,7 @@ theorem relent_of_projectorFactorization_of_le_entropy (hq : 2 ≤ q)
     {ξ' C₁ : ℝ} (hξ : 0 < ξ') (hC₁ : 1 ≤ C₁)
     (hfact : ∀ m : ℕ, c + m ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c m (C₁ * Real.exp (-(m / ξ'))) OB OL OR)
-    (hS : (l + ξ' * Real.log C₁) * Real.log q + bootstrapRemainder ξ' q ≤
+    (hS : (l + ξ' * Real.log C₁) * Real.log q + Entropy.tailEntropyRemainder ξ' q ≤
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 c)) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) (c + l)) ≤
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) c) +
@@ -519,7 +520,7 @@ theorem exists_relent_of_isGapped (R : ℕ) :
       ∀ c l : ℕ, c + l ≤ L →
       (l + 6 * lemmaOneEndpointLength R J ΔE *
           Real.log (K * lemmaOneEndpointLength R J ΔE ^ 3)) * Real.log q +
-          bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q ≤
+          Entropy.tailEntropyRemainder (6 * lemmaOneEndpointLength R J ΔE) q ≤
         ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 c) →
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) (c + l)) ≤
         ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) c) +
@@ -545,8 +546,8 @@ theorem exists_relent_of_isGapped (R : ℕ) :
     have hS0 := ManyBody.regionEntropy_le_card_mul_log hΩ (interval L 0 c)
     have hξ0 : 0 ≤ Real.log (6 * lemmaOneEndpointLength R J ΔE / 2 + 1) :=
       Real.log_nonneg (by linarith)
-    simp only [Nat.cast_one, Real.log_one, mul_zero, zero_add, bootstrapRemainder, one_pow,
-      sub_self, Real.log_zero, add_zero] at hS hS0
+    simp only [Nat.cast_one, Real.log_one, mul_zero, zero_add, Entropy.tailEntropyRemainder,
+      one_pow, sub_self, Real.log_zero, add_zero] at hS hS0
     exfalso
     linarith
   refine relent_of_projectorFactorization_of_le_entropy hq hΩ hcl hξ hC₁ (fun m _ ↦ ?_) hS

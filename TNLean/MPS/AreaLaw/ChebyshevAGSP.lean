@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ChebyshevAGSP
 
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ApproximateGroundVector
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.ApproximationStep
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.CenteredWindow
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.CertificateRateLowerBound
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ChainNormalization
@@ -19,7 +18,6 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.ClippedFilter
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ClippedHamiltonian
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.CutApproximationTail
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FavorableParameters
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.FilteredApproximation
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.HighEnergyMass
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.Initialization
@@ -27,7 +25,6 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.InverseGapRobustness
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.LowSpectrumGap
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.Normalization
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.NormalizedChain
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.NormalizedVector
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedInitialScale
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedRankBound
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedRankLog

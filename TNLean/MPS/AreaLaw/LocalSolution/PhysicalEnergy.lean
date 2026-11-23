@@ -61,7 +61,7 @@ theorem card_le_two_mul_re_trace_of_approximation {H T P : Matrix ι ι ℂ}
     (henergy : ∀ j ∈ s, (⟪φ j, toEuclideanLin T (φ j)⟫_ℂ).re ≤
       (⟪Ψ, toEuclideanLin T Ψ⟫_ℂ).re + η) :
     (s.card : ℝ) ≤ 2 * (trace P).re := by
-  refine card_le_two_mul_re_trace hP hΔ hgap hφ s ?_
+  refine Matrix.card_le_two_mul_re_trace hP hΔ hgap hφ s ?_
   intro j hj
   change (⟪φ j, toEuclideanLin H (φ j)⟫_ℂ).re ≤ E₀ + Δ / 2
   linarith [(abs_le.mp (abs_re_inner_sub_le_of_norm_sub_le hHT hΨ)).1,

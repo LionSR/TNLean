@@ -14,7 +14,7 @@ the chain bootstrap bound.
 
 \begin{lemma}[Gibbs' inequality]
     \label{thm:hastings_gibbs_inequality}
-    \lean{TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_sum_mul_neg_log}
+    \lean{Entropy.probabilityEntropy_le_sum_mul_neg_log}
     \leanok
     For a probability vector $p$ and weights $w_z>0$ with $\sum_zw_z\le1$,
     \begin{align}
@@ -31,8 +31,8 @@ the chain bootstrap bound.
 \begin{lemma}[Entropy under geometric tail constraints]
     \label{thm:hastings_geometric_tail_entropy}
     \lean{
-        TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_of_geometric_tails,
-        TNLean.MPS.AreaLaw.Hastings.probabilityEntropy_le_of_scale_tails
+        Entropy.probabilityEntropy_le_of_geometric_tails,
+        Entropy.probabilityEntropy_le_of_scale_tails
     }
     \leanok
     Let $p_0,\dots,p_{N-1}$ be a probability vector, $K\ge1$, $D\ge2$, and
@@ -63,7 +63,7 @@ the chain bootstrap bound.
 
 \begin{lemma}[The component orthogonal to a unit vector]
     \label{thm:hastings_orthogonal_component}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_sq_sub_normSq_inner_eq}
+    \lean{EuclideanSpace.norm_sq_sub_normSq_inner_eq}
     \leanok
     For $\|\Psi\|=1$ and any vector $v$,
     \begin{align}
@@ -78,7 +78,7 @@ the chain bootstrap bound.
 
 \begin{lemma}[Overlap with the ground state after an approximate projector]
     \label{thm:hastings_bootstrap_overlap}
-    \lean{TNLean.MPS.AreaLaw.Hastings.overlap_ge_of_norm_sub_vecMulVec_le}
+    \lean{Matrix.overlap_ge_of_norm_sub_vecMulVec_le}
     \leanok
     Let $\|\Psi_0\|=1$, $\rho=\sum_iw_i|\psi_i\rangle\langle\psi_i|$ with
     $\operatorname{tr}\rho=1$ and $\langle\Psi_0,\rho\Psi_0\rangle=P>0$, and
@@ -104,22 +104,26 @@ the chain bootstrap bound.
 
 \begin{lemma}[Overlap with a vector of bounded Schmidt rank]
     \label{thm:hastings_schmidt_overlap_tail}
-    \lean{TNLean.MPS.AreaLaw.Hastings.normSq_dotProduct_le_kyFanNorm}
+    \lean{Matrix.normSq_trace_conjTranspose_mul_le_kyFanNorm_mul_trace}
     \leanok
-    For a bipartite vector $\varphi$ with coefficient matrix $C_\varphi$ and
-    reduced operator $\rho_\varphi=C_\varphi C_\varphi^\dagger$, any $\psi$ of
-    Schmidt rank at most $K$ (below the first-factor dimension) satisfies
-    $|\langle\varphi,\psi\rangle|^2\le\|\psi\|^2\,\|\rho_\varphi\|_{(K)}$, where
-    $\|\cdot\|_{(K)}$ is the Ky Fan $K$-norm.
+    Let $C$ and $B$ be complex $m\times n$ matrices, and let $K<m$ with
+    $\operatorname{rank}B\le K$. Then
+    $|\operatorname{tr}(C^\dagger B)|^2\le\|CC^\dagger\|_{(K)}\operatorname{tr}(B^\dagger B)$,
+    where $\|\cdot\|_{(K)}$ is the Ky Fan $K$-norm. Applied to the coefficient
+    matrices $C=C_\varphi$ and $B=C_\psi$ of bipartite vectors, with reduced operator
+    $\rho_\varphi=C_\varphi C_\varphi^\dagger$: any $\psi$ of Schmidt rank at most $K$
+    (below the first-factor dimension) satisfies
+    $|\langle\varphi,\psi\rangle|^2\le\|\psi\|^2\,\|\rho_\varphi\|_{(K)}$.
 \end{lemma}
 \begin{proof}\leanok
-    For $\psi\ne0$, normalize $\psi$ and apply the Ky Fan variational bound for
-    rank-$K$ overlaps.
+    Project onto the support of $B$, which has dimension at most $K$, and apply the
+    Cauchy--Schwarz inequality together with the Ky Fan variational bound for rank-$K$
+    projections; the case $B=0$ is trivial.
 \end{proof}
 
 \begin{lemma}[The Schmidt tail from one mixture]
     \label{thm:hastings_mixture_tail}
-    \lean{TNLean.MPS.AreaLaw.Hastings.one_sub_kyFanNorm_le_of_schmidtRank_mixture}
+    \lean{Matrix.one_sub_kyFanNorm_le_of_schmidtRank_mixture}
     \leanok
     Let $\|\Psi\|=1$ have reduced state $\rho_\Psi$, let $K\in\mathbb N$,
     $\eta\ge0$, and let $\psi_1,\dots,\psi_r$ have Schmidt rank at most $K$ with
@@ -174,7 +178,7 @@ the chain bootstrap bound.
 
 \begin{definition}[The remainder of the bootstrap bound]
     \label{def:hastings_bootstrap_remainder}
-    \lean{TNLean.MPS.AreaLaw.Hastings.bootstrapRemainder}
+    \lean{Entropy.tailEntropyRemainder}
     \leanok
     For $\xi'>0$ and $D\in\mathbb N$ with $D\ge2$, set
     \begin{align}
@@ -186,8 +190,8 @@ the chain bootstrap bound.
 
 \begin{lemma}[The Schmidt tail from overlaps with mixtures of bounded Schmidt rank]
     \label{thm:hastings_bootstrap_schmidt_tail}
-    \lean{TNLean.MPS.AreaLaw.Hastings.exists_eigenvalues₀_tail_le_of_schmidtRank_mixtures,
-        TNLean.MPS.AreaLaw.Hastings.eigenvalues₀_nonneg_and_sum_eq_one}
+    \lean{Matrix.exists_eigenvalues₀_tail_le_of_schmidtRank_mixtures,
+        Matrix.eigenvalues₀_nonneg_and_sum_eq_one}
     \leanok
     Let $\|\Psi\|=1$ have reduced state $\rho_\Psi$ with eigenvalues
     $p_1\ge p_2\ge\dots$, and let $k,D\in\mathbb N$, $\xi'>0$, and $c\ge1$. If
@@ -213,7 +217,7 @@ the chain bootstrap bound.
 
 \begin{lemma}[Entropy from overlaps with mixtures of bounded Schmidt rank]
     \label{thm:hastings_bootstrap_stage}
-    \lean{TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_le_of_schmidtRank_mixtures}
+    \lean{Matrix.vonNeumannEntropy_le_of_schmidtRank_mixtures}
     \leanok
     \uses{def:hastings_bootstrap_remainder}
     Under the hypotheses of Lemma~\ref{thm:hastings_bootstrap_schmidt_tail}

@@ -47,7 +47,7 @@ theorem original_chain_robustness {L q : ℕ} [NeZero q]
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef) :
     ∃ z : Fin 3 → ℝ,
       let e := E - ∑ j, z j
-      let K := twoSidedEnergyTruncation (leftCutBlock Φ a (z 0))
+      let K := Matrix.twoSidedEnergyTruncation (leftCutBlock Φ a (z 0))
         (middleCutBlock Φ a b (z 1) + (Φ.term a + Φ.term b)) (rightCutBlock Φ b (z 2)) t
       0 ≤ e ∧ e ≤ 6 ∧
       ∃ (e' : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)),

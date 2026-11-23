@@ -24,13 +24,13 @@ namespace TNLean.MPS.AreaLaw.LocalSolution
 
 /-- The scalar deficiency majorant increases with the level.
 Hastings, arXiv:cond-mat/0508554v3, lines 696–707, with the corrected recurrence. -/
-theorem monotone_hierarchyMajorant (e s : ℝ) : Monotone (hierarchyMajorant e s) := by
+theorem monotone_hierarchyMajorant (e s : ℝ) : Monotone (Real.hierarchyMajorant e s) := by
   apply monotone_nat_of_le_succ
   intro m
-  rw [hierarchyMajorant_succ]
+  rw [Real.hierarchyMajorant_succ]
   apply Real.le_sqrt_of_sq_le
-  nlinarith [sq_nonneg (hierarchyMajorant e s m),
-    sq_nonneg ((e + 2 * hierarchyMajorant e s m) ^ s)]
+  nlinarith [sq_nonneg (Real.hierarchyMajorant e s m),
+    sq_nonneg ((e + 2 * Real.hierarchyMajorant e s m) ^ s)]
 
 /-- Every adaptive window has strictly positive radius when the coupling bound is positive.
 Hastings, arXiv:cond-mat/0508554v3, lines 676–685. -/
@@ -40,16 +40,16 @@ theorem hierarchyWindowRadius_pos {K : ℝ} (hK : 0 < K) (r : ℝ) (h m : ℕ) :
   apply mul_pos hK
   apply Real.rpow_pos_of_pos
   exact add_pos_of_pos_of_nonneg (Real.exp_pos _)
-    (mul_nonneg (by norm_num) (hierarchyMajorant_nonneg _ _ _))
+    (mul_nonneg (by norm_num) (Real.hierarchyMajorant_nonneg _ _ _))
 
 /-- All levels up to the last obey the same exponentially decaying majorant.
 Hastings, arXiv:cond-mat/0508554v3, lines 705–707, with the corrected coefficient. -/
 theorem hierarchyMajorant_exp_le {r : ℝ} (hr : 0 ≤ r) {h m : ℕ} (hh : 2 ≤ h)
     (hm : m ≤ h) :
-    hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m ≤
+    Real.hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m ≤
       ((3 : ℝ) ^ h - 1) * Real.exp (-r / 4) := by
   have hbound := (monotone_hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) hm).trans
-    (hierarchyMajorant_le_rpow_quarter (Real.exp_pos (-r))
+    (Real.hierarchyMajorant_le_rpow_quarter (Real.exp_pos (-r))
       (Real.exp_le_one_iff.mpr (neg_nonpos.mpr hr)) hh)
   simpa only [← Real.exp_mul, mul_one_div] using hbound
 
@@ -57,7 +57,7 @@ theorem hierarchyMajorant_exp_le {r : ℝ} (hr : 0 ≤ r) {h m : ℕ} (hh : 2 �
 Hastings, arXiv:cond-mat/0508554v3, lines 705–711. -/
 theorem hierarchyDeficiency_window_lt_one {K r : ℝ} (hK : 0 < K) {h : ℕ}
     (hh : 2 ≤ h) (hr : 4 * (h : ℝ) * Real.log 3 < r) :
-    hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) h < 1 := by
+    Real.hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) h < 1 := by
   have hlog : 0 < Real.log 3 := Real.log_pos (by norm_num)
   have hh0 : 0 ≤ (h : ℝ) := Nat.cast_nonneg h
   have hr0 : 0 ≤ r := by nlinarith [mul_nonneg hh0 hlog.le]
@@ -82,7 +82,7 @@ theorem hierarchyWindowRadius_le {K r : ℝ} (hK : 0 ≤ K) (hr : 0 ≤ r) {h m 
   have hE : Real.exp (-r) ≤ Real.exp (-r / 4) := Real.exp_le_exp.mpr (by linarith)
   have h3 : 1 ≤ (3 : ℝ) ^ h := one_le_pow₀ (by norm_num)
   have hbase : Real.exp (-r) +
-      2 * hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m ≤
+      2 * Real.hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m ≤
       (9 : ℝ) ^ h * Real.exp (-r / 4) := by
     have h9 : (9 : ℝ) ^ h = ((3 : ℝ) ^ h) ^ 2 := by
       rw [← pow_mul, Nat.mul_comm h 2, pow_mul]
@@ -96,7 +96,7 @@ theorem hierarchyWindowRadius_le {K r : ℝ} (hK : 0 ≤ K) (hr : 0 ≤ r) {h m 
       apply mul_le_mul_of_nonneg_left _ hK
       exact Real.rpow_le_rpow
         (add_nonneg (Real.exp_pos _).le
-          (mul_nonneg (by norm_num) (hierarchyMajorant_nonneg _ _ _))) hbase
+          (mul_nonneg (by norm_num) (Real.hierarchyMajorant_nonneg _ _ _))) hbase
         (one_div_nonneg.mpr hhpos.le)
     _ = 9 * K * Real.exp (-r / (4 * (h : ℝ))) := by
       rw [Real.mul_rpow (by positivity) (Real.exp_pos _).le,
@@ -116,35 +116,36 @@ theorem eighth_le_one_sub_inv_pow_succ {h : ℕ} (hh : 2 ≤ h) :
     have := one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 2) hhreal
     linarith
   rw [pow_succ]
-  have hquarter := quarter_le_one_sub_inv_pow hh
+  have hquarter := Real.quarter_le_one_sub_inv_pow hh
   nlinarith [mul_nonneg (sub_nonneg.mpr hquarter) (sub_nonneg.mpr hs)]
 
 /-- The deficiency bound after the closing-link window is exponentially small in `r`.
 Hastings, arXiv:cond-mat/0508554v3, lines 705–720, with the periodic correction above. -/
 theorem hierarchyDeficiency_window_succ_le {K r : ℝ} (hK : 0 < K) (hr : 0 ≤ r)
     {h : ℕ} (hh : 2 ≤ h) :
-    hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) (h + 1) ≤
+    Real.hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) (h + 1) ≤
       ((3 : ℝ) ^ (h + 1) - 1) * Real.exp (-r / 8) := by
   have he0 := Real.exp_pos (-r)
   have he1 : Real.exp (-r) ≤ 1 := Real.exp_le_one_iff.mpr (neg_nonpos.mpr hr)
-  obtain ⟨hs0, hs1⟩ := one_sub_inv_natCast_mem_Icc h
-  have hbound := (hierarchyDeficiency_le_hierarchyMajorant hK he0
-    (1 - 1 / (h : ℝ)) (h + 1)).trans (hierarchyMajorant_le he0 he1 hs0 hs1 (h + 1))
+  obtain ⟨hs0, hs1⟩ : 0 ≤ 1 - 1 / (h : ℝ) ∧ 1 - 1 / (h : ℝ) ≤ 1 :=
+    ⟨Nat.one_sub_one_div_cast_nonneg h, Nat.one_sub_one_div_cast_le_one h⟩
+  have hbound := (Real.hierarchyDeficiency_le_hierarchyMajorant hK he0
+    (1 - 1 / (h : ℝ)) (h + 1)).trans (Real.hierarchyMajorant_le he0 he1 hs0 hs1 (h + 1))
   have hcoeff : 0 ≤ (3 : ℝ) ^ (h + 1) - 1 := by
     have : 1 ≤ (3 : ℝ) ^ (h + 1) := one_le_pow₀ (by norm_num)
     linarith
   have hexp := mul_le_mul_of_nonneg_left
     (Real.rpow_le_rpow_of_exponent_ge he0 he1 (eighth_le_one_sub_inv_pow_succ hh)) hcoeff
-  change hierarchyDeficiency (K * Real.exp (-r)) K
+  change Real.hierarchyDeficiency (K * Real.exp (-r)) K
     (fun m ↦ K * (Real.exp (-r) +
-      2 * hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m) ^ (1 / (h : ℝ))) (h + 1) ≤ _
+      2 * Real.hierarchyMajorant (Real.exp (-r)) (1 - 1 / (h : ℝ)) m) ^ (1 / (h : ℝ))) (h + 1) ≤ _
   simpa only [sub_sub_cancel, ← Real.exp_mul, mul_one_div] using hbound.trans hexp
 
 /-- The final closing window has nonzero retained space for the explicit linear threshold.
 Hastings, arXiv:cond-mat/0508554v3, lines 705–711, with the periodic correction above. -/
 theorem hierarchyDeficiency_window_succ_lt_one {K r : ℝ} (hK : 0 < K) {h : ℕ}
     (hh : 2 ≤ h) (hr : 8 * ((h : ℝ) + 1) * Real.log 3 < r) :
-    hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) (h + 1) < 1 := by
+    Real.hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) (h + 1) < 1 := by
   have hlog : 0 < Real.log 3 := Real.log_pos (by norm_num)
   have hh0 : 0 ≤ (h : ℝ) := Nat.cast_nonneg h
   have hr0 : 0 ≤ r := by nlinarith [mul_nonneg (by linarith : 0 ≤ (h : ℝ) + 1) hlog.le]
@@ -271,7 +272,7 @@ theorem closing_threshold_lt_hierarchyProjectionLength {h : ℕ} (hh : 2 ≤ h) 
 Hastings, arXiv:cond-mat/0508554v3, lines 705–711, with the periodic correction. -/
 theorem hierarchyDeficiency_window_succ_lt_one_of_length {h : ℕ} (hh : 2 ≤ h)
     {K r J Δ : ℝ} (hK : 0 < K) (hr : hierarchyProjectionLength h J Δ ≤ r) :
-    hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) (h + 1) < 1 :=
+    Real.hierarchyDeficiency (K * Real.exp (-r)) K (hierarchyWindowRadius K r h) (h + 1) < 1 :=
   hierarchyDeficiency_window_succ_lt_one hK hh
     ((closing_threshold_lt_hierarchyProjectionLength hh J Δ).trans_le hr)
 

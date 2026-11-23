@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.FilterPolynomial
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.ApproximateEnergyFilter
+import QICLean.Spectral.Filter.Gaussian.ApproximateEnergy
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.PhysicalGaussian
 import QICLean.Spectral.Filter.PhysicalPowerFilterLowerGap
 
@@ -40,7 +40,7 @@ noncomputable def huangFilterApproximant {L q : ℕ}
     (c Delta : ℝ) (j : Fin (huangEnergyCount c Delta L)) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   positiveChainGaussianApproximant Φ h0 (huangFilterVariance c Delta L)
-    (timeMeshNode L (huangEnergyMesh c Delta L) j) (huangFilterTime c Delta L)
+    (GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j) (huangFilterTime c Delta L)
     (huangFilterEta c L) (huangFilterEta c L)
 
 /-- Each Huang approximant has cut rank at most the uniform filter rank bound at every
@@ -54,7 +54,7 @@ theorem huangFilterApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
       (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
         (huangFilterApproximant Φ h0 c Delta j)) ≤ huangFilterRankBound q c Delta L) ∧
     ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
-      (Φ.hamiltonian - (timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 -
+      (Φ.hamiltonian - (GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 -
         huangFilterApproximant Φ h0 c Delta j‖ ≤ 3 * huangFilterEta c L := by
   classical
   have hL : 0 ≤ (L : ℝ) := Nat.cast_nonneg L
@@ -63,10 +63,11 @@ theorem huangFilterApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
   have hδ := (huangEnergyMesh_bounds hc hDelta L).1
   obtain ⟨-, hN, herror, hrank⟩ := positiveChainGaussianApproximant_spec
     hq Φ h0 h1 (huangFilterVariance c Delta L)
-    (timeMeshNode L (huangEnergyMesh c Delta L) j) hT hη hη
-  have hE : |timeMeshNode L (huangEnergyMesh c Delta L) j| ≤ (L : ℝ) :=
-    abs_le.mpr (timeMeshNode_mem hL hδ j)
-  have hNbound : positiveChainGaussianSampleCount Φ (timeMeshNode L (huangEnergyMesh c Delta L) j)
+    (GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j) hT hη hη
+  have hE : |GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j| ≤ (L : ℝ) :=
+    abs_le.mpr (GaussianFilter.timeMeshNode_mem hL hδ j)
+  have hNbound : positiveChainGaussianSampleCount Φ
+      (GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j)
       (huangFilterTime c Delta L) (huangFilterEta c L) ≤ huangFilterSampleCount c Delta L := by
     apply (Nat.cast_le (α := ℝ)).mp
     exact (hN.trans (by gcongr; linarith)).trans (Nat.le_ceil _)
@@ -87,7 +88,8 @@ theorem exists_positive_chain_filter_family {L q : ℕ} (hq : 1 ≤ q)
         (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (Q j)) ≤
           huangFilterRankBound q c Delta L) ∧
       ∀ j, ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
-        (Φ.hamiltonian - (timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 - Q j‖ ≤
+        (Φ.hamiltonian - (GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1)
+          0 1 - Q j‖ ≤
           3 * huangFilterEta c L :=
   ⟨huangFilterApproximant Φ h0 c Delta,
     fun j ↦ (huangFilterApproximant_spec hq Φ h0 h1 hc hDelta j).1,
@@ -126,13 +128,14 @@ theorem exists_huangFilterApproximant_near_ground {L q : ℕ} (hq : 1 ≤ q)
   have hQerror (j : Fin (huangEnergyCount c Delta L)) :=
     (huangFilterApproximant_spec hq Φ h0 h1 hc hDelta j).2
   have hE₀ := abs_eigenvalue_positive_chain_le_length Φ h0 h1 hΓ hHΓ
-  obtain ⟨j, hj⟩ := exists_timeMeshNode_abs_sub_le (Nat.cast_nonneg L)
+  obtain ⟨j, hj⟩ := GaussianFilter.exists_timeMeshNode_abs_sub_le
     (huangEnergyMesh_bounds hc hDelta L).1 (abs_le.mp hE₀)
-  have haccuracy := huangEnergyMesh_accuracy (E := timeMeshNode L (huangEnergyMesh c Delta L) j)
-    (E₀ := E₀) hc hDelta L (by simpa [abs_sub_comm] using hj)
-  let E := timeMeshNode L (huangEnergyMesh c Delta L) j
+  have haccuracy := huangEnergyMesh_accuracy
+    (E := GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j) (E₀ := E₀) hc hDelta L
+    (by simpa [abs_sub_comm] using hj)
+  let E := GaussianFilter.timeMeshNode L (huangEnergyMesh c Delta L) j
   let a := Real.exp (-(huangFilterVariance c Delta L : ℝ) * (E₀ - E) ^ 2 / 2)
-  have hamp := gaussian_ground_amplitude_bounds (E₀ := E₀) (E := E)
+  have hamp := GaussianFilter.gaussian_ground_amplitude_bounds (E₀ := E₀) (E := E)
     (huangFilterVariance c Delta L) haccuracy.2
   have ha : 1 / 2 ≤ a := by
     exact (by linarith [Real.one_sub_le_exp_neg (1 / 2 : ℝ)] :
@@ -140,7 +143,7 @@ theorem exists_huangFilterApproximant_near_ground {L q : ℕ} (hq : 1 ≤ q)
   refine ⟨j, a, ha, hamp.2, ?_⟩
   have hHerm : Φ.hamiltonian.IsHermitian :=
     Matrix.isHermitian_sum _ fun i _ ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian
-  have hspec := norm_gaussianIntertwiner_shift_sub_rankOne_le
+  have hspec := GaussianFilter.norm_gaussianIntertwiner_shift_sub_rankOne_le
     (huangFilterVariance c Delta L) hHerm hΓ hHΓ hgap hDelta haccuracy.1
   have hsuppression := huangFilterVariance_suppression_le hc hDelta L
   have hfirst := hQerror j

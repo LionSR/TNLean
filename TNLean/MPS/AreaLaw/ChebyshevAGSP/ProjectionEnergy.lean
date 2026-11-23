@@ -51,12 +51,12 @@ theorem twoSidedEnergyTruncation_posSemidef_le
     {n : Type*} [Fintype n] [DecidableEq n]
     (L M R : Matrix n n ℂ) (hL : L.PosSemidef) (hM : M.PosSemidef)
     (hR : R.PosSemidef) (t : ℝ) (ht : 0 ≤ t) :
-    (twoSidedEnergyTruncation L M R t).PosSemidef ∧
-      twoSidedEnergyTruncation L M R t ≤ L + M + R := by
+    (Matrix.twoSidedEnergyTruncation L M R t).PosSemidef ∧
+      Matrix.twoSidedEnergyTruncation L M R t ≤ L + M + R := by
   have hcap : M ≤ (‖M‖ : ℂ) • 1 := by
     simpa only [Algebra.algebraMap_eq_smul_one, Complex.coe_smul] using
       IsSelfAdjoint.le_algebraMap_norm_self M hM.isHermitian.isSelfAdjoint
-  obtain ⟨hpos, hle, _⟩ := twoSidedEnergyTruncation_bounds L M R hL hM hR t ‖M‖ ht hcap
+  obtain ⟨hpos, hle, _⟩ := Matrix.twoSidedEnergyTruncation_bounds L M R hL hM hR t ‖M‖ ht hcap
   exact ⟨hpos, hle⟩
 
 /-- The original regional commutations imply commutation of the clipped
@@ -66,7 +66,7 @@ theorem commute_twoSidedEnergyTruncation_disconnected
     {n : Type*} [Fintype n] [DecidableEq n]
     (L N R : Matrix n n ℂ) (hLN : Commute L N) (hLR : Commute L R)
     (hNR : Commute N R) (t : ℝ) :
-    Commute (twoSidedEnergyTruncation L N R t) (L + N + R) := by
+    Commute (Matrix.twoSidedEnergyTruncation L N R t) (L + N + R) := by
   have hLB := ((Commute.refl L).add_right hLN).add_right hLR
   have hNB := (hLN.symm.add_right (Commute.refl N)).add_right hNR
   have hRB := (hLR.symm.add_right hNR.symm).add_right (Commute.refl R)
@@ -82,12 +82,12 @@ theorem twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting
     (L N R A : Matrix n n ℂ) (hL : L.PosSemidef) (hN : N.PosSemidef)
     (hR : R.PosSemidef) (hLN : Commute L N) (hLR : Commute L R)
     (hNR : Commute N R) (t : ℝ) :
-    twoSidedEnergyTruncation L (N + A) R t *
+    Matrix.twoSidedEnergyTruncation L (N + A) R t *
         (1 - Matrix.spectralProjectionGE (L + N + R) t) =
       (L + (N + A) + R) * (1 - Matrix.spectralProjectionGE (L + N + R) t) := by
   have hLB := ((Commute.refl L).add_right hLN).add_right hLR
   have hRB := (hLR.symm.add_right hNR.symm).add_right (Commute.refl R)
-  apply twoSidedEnergyTruncation_mul_lowProjection_eq L (N + A) R (L + N + R)
+  apply Matrix.twoSidedEnergyTruncation_mul_lowProjection_eq L (N + A) R (L + N + R)
     hL.isHermitian hR.isHermitian ((hL.isHermitian.add hN.isHermitian).add hR.isHermitian)
     hLB hRB
   · exact (le_add_of_nonneg_right hN.nonneg).trans (le_add_of_nonneg_right hR.nonneg)
@@ -101,11 +101,11 @@ theorem lowProjection_mul_clipped_mul_highProjection_eq
     (hR : R.IsHermitian) (hLN : Commute L N) (hLR : Commute L R)
     (hNR : Commute N R) (t : ℝ) :
     let Q := Matrix.spectralProjectionGE (L + N + R) t
-    (1 - Q) * twoSidedEnergyTruncation L (N + A) R t * Q = (1 - Q) * A * Q := by
+    (1 - Q) * Matrix.twoSidedEnergyTruncation L (N + A) R t * Q = (1 - Q) * A * Q := by
   intro Q
-  let K₀ := twoSidedEnergyTruncation L N R t
-  have hK : twoSidedEnergyTruncation L (N + A) R t = K₀ + A := by
-    dsimp [K₀, twoSidedEnergyTruncation]
+  let K₀ := Matrix.twoSidedEnergyTruncation L N R t
+  have hK : Matrix.twoSidedEnergyTruncation L (N + A) R t = K₀ + A := by
+    dsimp [K₀, Matrix.twoSidedEnergyTruncation]
     abel
   have hcomm : Commute K₀ Q :=
     ((commute_twoSidedEnergyTruncation_disconnected L N R hLN hLR hNR t).symm.cfc_real
@@ -129,7 +129,7 @@ theorem projected_energy_le_clipped_energy_add_tail
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
     let P := 1 - Matrix.spectralProjectionGE (L + N + R) t
     let H := L + (N + A) + R
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     (⟪ι P x, ι H (ι P x)⟫_ℂ).re ≤ (⟪x, ι K x⟫_ℂ).re +
       4 * ‖ι (Matrix.spectralProjectionGE (L + N + R) t) x‖ := by
   intro ι P H K
@@ -183,7 +183,7 @@ theorem projected_energy_le_clipped_energy_add_sqrt
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
     let P := 1 - Matrix.spectralProjectionGE (L + N + R) t
     let H := L + (N + A) + R
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     (⟪ι P x, ι H (ι P x)⟫_ℂ).re ≤ (⟪x, ι K x⟫_ℂ).re +
       4 * Real.sqrt ((⟪x, ι K x⟫_ℂ).re / t) := by
   intro ι P H K

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeRefinement
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTree
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityTreeExtraction
+import QICLean.Spectral.LowEnergy.WindowExtraction
 
 /-!
 # The merge-tree algorithm for a low-density spectrum
@@ -262,7 +262,7 @@ theorem exists_low_density_tree_algorithm (etaLD : ℝ) (hLD : 0 < etaLD) :
       refine ⟨B, hB, hlogB, R, hdesc, ?_⟩
       intro Rn Gw V Rz A0
       obtain ⟨hVR, hVdim, hVG, hGV, hRzR, hRzdim, henergy⟩ :=
-        window_extraction_of_isCloseTo hRaw (c := eta - 3 * w) (by linarith only [heta6, hw])
+        Matrix.window_extraction_of_isCloseTo hRaw (c := eta - 3 * w) (by linarith only [heta6, hw])
           hdelta.le hdelta1 Rn hclose
       refine ⟨hclose, ?_, hVR, hVdim, hVG, hGV, hRzR, hRzdim, henergy⟩
       rintro _ ⟨x, hx, rfl⟩

@@ -17,7 +17,7 @@ import QICLean.Analysis.Real.ExplicitThresholds
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual
-import TNLean.MPS.AreaLaw.Spectral.PolynomialFilterParameters
+import QICLean.Analysis.Parameter.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.Spectral.RegionalTruncationResidual
 
 /-!

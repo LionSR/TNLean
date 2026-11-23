@@ -17,7 +17,7 @@ import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.Norm.MatrixToEuclidean
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeThreeRegion
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
-import TNLean.MPS.AreaLaw.Spectral.PolynomialFilterParameters
+import QICLean.Analysis.Parameter.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ShortRegionViableFamily
 import TNLean.MPS.AreaLaw.Spectral.TwoWindowPolynomialRank
 

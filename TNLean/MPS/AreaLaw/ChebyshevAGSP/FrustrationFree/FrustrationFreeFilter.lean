@@ -42,7 +42,7 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
     let α : Fin (L - 1) := ⟨a + 1, by omega⟩
     let β : Fin (L - 1) := ⟨a + s - 2, by omega⟩
     aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ =
-      AKLV.twoSidedEnergyTruncation (AKLV.leftCutBlock Φ α 0)
+      Matrix.twoSidedEnergyTruncation (AKLV.leftCutBlock Φ α 0)
         (AKLV.middleCutBlock Φ α β 0 + (Φ.term α + Φ.term β)) (AKLV.rightCutBlock Φ β 0) t := by
   intro α β
   let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
@@ -94,7 +94,7 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
   simp only [Finset.mem_insert, Finset.mem_singleton, Fin.reduceEq, or_self,
     or_false, or_true, ite_true, ite_false, zero_add, Complex.ofReal_zero, zero_smul,
     sub_zero]
-  rw [AKLV.twoSidedEnergyTruncation, hleft, hmiddle, hright]
+  rw [Matrix.twoSidedEnergyTruncation, hleft, hmiddle, hright]
   change cfc (fun x : ℝ ↦ min x t) (C 0) + C 1 +
       cfc (fun x : ℝ ↦ min x t) (C 2) + (Φ.term α + Φ.term β) =
     energyTruncation (C 0) t + (C 1 + (Φ.term α + Φ.term β)) + energyTruncation (C 2) t

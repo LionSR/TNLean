@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ViableLeadingBounds
-import TNLean.MPS.AreaLaw.Spectral.CodimensionOneGap
+import QICLean.Spectral.Gap.CodimensionOneGap
 
 /-!
 # Residual certification for the LVV leading vector

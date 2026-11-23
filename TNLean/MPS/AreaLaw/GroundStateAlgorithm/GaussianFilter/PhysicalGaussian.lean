@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.PhysicalPropagation
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.UnitaryQuadrature
+import QICLean.Spectral.Filter.Gaussian.Quadrature
 import Mathlib.Analysis.Complex.Trigonometric
 
 /-!
@@ -50,7 +50,7 @@ private theorem norm_weighted_sum_sub_le
 equation (22). -/
 noncomputable def positiveChainGaussianSampleCount {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q) (energy T eta : ℝ) : ℕ :=
-  timeMeshCount T (eta / (‖Φ.hamiltonian - (energy : ℂ) • 1‖ + 1))
+  GaussianFilter.timeMeshCount T (eta / (‖Φ.hamiltonian - (energy : ℂ) • 1‖ + 1))
 
 /-- **The Gaussian approximant of a positive chain.** The Gaussian quadrature, over the
 time mesh, of the phase-shifted positive-chain propagators at the mesh nodes: an
@@ -60,9 +60,10 @@ noncomputable def positiveChainGaussianApproximant {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i)
     (variance : ℝ≥0) (energy T eta rho : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   let delta := eta / (‖Φ.hamiltonian - (energy : ℂ) • 1‖ + 1)
-  ∑ j : Fin (timeMeshCount T delta), timeMeshWeight variance T delta j •
-    (Complex.exp (((-energy * timeMeshNode T delta j : ℝ) : ℂ) * Complex.I) •
-      positiveChainPropagator Φ h0 T rho (-timeMeshNode T delta j))
+  ∑ j : Fin (GaussianFilter.timeMeshCount T delta),
+    GaussianFilter.timeMeshWeight variance T delta j •
+    (Complex.exp (((-energy * GaussianFilter.timeMeshNode T delta j : ℝ) : ℂ) * Complex.I) •
+      positiveChainPropagator Φ h0 T rho (-GaussianFilter.timeMeshNode T delta j))
 
 /-- The Gaussian approximant has at least one and at most polynomially many nodes,
 approximates the Gaussian filter to accuracy `2 exp(-T²/(2 variance)) + eta + rho`, and
@@ -109,9 +110,9 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
       _ ≤ (L : ℝ) + |energy| := by linarith
   let delta := eta / (‖Hcenter‖ + 1)
   have hdelta : 0 < delta := div_pos heta (by positivity)
-  have hNdef : N = timeMeshCount T delta := rfl
-  let times := timeMeshNode T delta
-  let weights := timeMeshWeight variance T delta
+  have hNdef : N = GaussianFilter.timeMeshCount T delta := rfl
+  let times := GaussianFilter.timeMeshNode T delta
+  let weights := GaussianFilter.timeMeshWeight variance T delta
   let phase := fun t : ℝ ↦ Complex.exp (((-energy * t : ℝ) : ℂ) * Complex.I)
   have hphase (t : ℝ) : ‖phase t‖ = 1 := Complex.norm_exp_ofReal_mul_I _
   have hshift (t : ℝ) : hermitianUnitaryPath Hcenter t = phase t • hermitianUnitaryPath H t := by
@@ -132,16 +133,18 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
     rw [hshift, ← smul_sub, norm_smul, hphase, one_mul]
     have htime : |-times j| ≤ T := by
       rw [abs_neg]
-      exact abs_le.mpr (timeMeshNode_mem hT hdelta j)
+      exact abs_le.mpr (GaussianFilter.timeMeshNode_mem hT hdelta j)
     simpa only [neg_neg] using hKerror (-times j) htime
-  have hreplace := norm_weighted_sum_sub_le weights (timeMeshWeight_nonneg variance T delta)
-    (sum_timeMeshWeight_le_one variance hT hdelta)
+  have hreplace := norm_weighted_sum_sub_le weights
+    (GaussianFilter.timeMeshWeight_nonneg variance T delta)
+    (GaussianFilter.sum_timeMeshWeight_le_one variance hdelta)
     (fun j ↦ hermitianUnitaryPath Hcenter (times j))
     (fun j ↦ phase (times j) • K (-times j)) hrho.le hsamples
-  have hquad := norm_gaussianIntertwiner_sub_unitary_timeMesh_sum_le variance hcenter hT heta
+  have hquad :=
+    GaussianFilter.norm_gaussianIntertwiner_sub_unitary_timeMesh_sum_le variance hcenter hT heta
   have hN : (N : ℝ) ≤ 2 * T * ((L : ℝ) + |energy| + 1) / eta + 2 :=
-    (timeMeshCount_accuracy_le hT (norm_nonneg Hcenter) heta).trans (by gcongr)
-  refine ⟨by rw [hNdef, timeMeshCount]; omega, hN, ?_, ?_⟩
+    (GaussianFilter.timeMeshCount_accuracy_le hT (norm_nonneg Hcenter) heta).trans (by gcongr)
+  refine ⟨by rw [hNdef, GaussianFilter.timeMeshCount]; omega, hN, ?_, ?_⟩
   · rw [hQdef]
     exact (norm_sub_le_norm_sub_add_norm_sub _
       (∑ j : Fin N, weights j • hermitianUnitaryPath Hcenter (times j)) _).trans

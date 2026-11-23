@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Spectral.Truncation
+import QICLean.Spectral.Filter.EnergyTruncation
 import QICLean.Analysis.FunctionalCalculus.OrthogonalResolutionCfc
 import QICLean.Analysis.Projection.DetectabilityLemma
 
@@ -33,7 +33,7 @@ theorem cutoff_smul_highProjection_le_twoSidedEnergyTruncation
     (hR : R.PosSemidef) (hLN : Commute L N) (hLR : Commute L R)
     (hNR : Commute N R) (t : ℝ) (ht : 0 ≤ t) :
     (t : ℂ) • Matrix.spectralProjectionGE (L + N + R) t ≤
-      twoSidedEnergyTruncation L N R t := by
+      Matrix.twoSidedEnergyTruncation L N R t := by
   classical
   let l := hL.isHermitian
   let m := hN.isHermitian
@@ -73,7 +73,7 @@ theorem cutoff_smul_highProjection_le_twoSidedEnergyTruncation
       ext p
       simp only [b, Pi.add_apply, Complex.ofReal_add]
     rw [hfun, map_add, map_add, hLhom, hNhom, hRhom]
-  have hKhom : P.hom (fun p ↦ (k p : ℂ)) = twoSidedEnergyTruncation L N R t := by
+  have hKhom : P.hom (fun p ↦ (k p : ℂ)) = Matrix.twoSidedEnergyTruncation L N R t := by
     have hLt : P.hom (fun p ↦ ((min (p.1.1 : ℝ) t : ℝ) : ℂ)) =
         Matrix.energyTruncation L t :=
       (P.cfc_hom hherm (fun x ↦ min x t) (fun p ↦ (p.1.1 : ℝ))).symm.trans
@@ -88,7 +88,7 @@ theorem cutoff_smul_highProjection_le_twoSidedEnergyTruncation
           (fun p ↦ ((min (p.2 : ℝ) t : ℝ) : ℂ))) := by
       ext p
       simp only [k, Pi.add_apply, Complex.ofReal_add]
-    rw [hfun, map_add, map_add, hLt, hNhom, hRt, twoSidedEnergyTruncation]
+    rw [hfun, map_add, map_add, hLt, hNhom, hRt, Matrix.twoSidedEnergyTruncation]
   have hQhom : Matrix.spectralProjectionGE (L + N + R) t =
       P.hom (fun p ↦ ((if t ≤ b p then 1 else 0 : ℝ) : ℂ)) := by
     rw [Matrix.spectralProjectionGE, ← hBhom, P.cfc_hom hherm]
@@ -145,13 +145,13 @@ theorem cutoff_mul_sq_norm_highProjection_le_energy
     (t : ℝ) (ht : 0 ≤ t) (x : EuclideanSpace ℂ n) :
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
     let Q := Matrix.spectralProjectionGE (L + N + R) t
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     t * ‖ι Q x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re := by
   intro ι Q K
   have hbase := cutoff_smul_highProjection_le_twoSidedEnergyTruncation
     L N R hL hN hR hLN hLR hNR t ht
-  have hK : K = twoSidedEnergyTruncation L N R t + A := by
-    dsimp [K, twoSidedEnergyTruncation]
+  have hK : K = Matrix.twoSidedEnergyTruncation L N R t + A := by
+    dsimp [K, Matrix.twoSidedEnergyTruncation]
     abel
   have hle : (t : ℂ) • Q ≤ K :=
     hbase.trans (by rw [hK]; exact le_add_of_nonneg_right hA.nonneg)
@@ -179,7 +179,7 @@ theorem norm_highProjection_le_sqrt_clipped_energy
     (t : ℝ) (ht : 0 < t) (x : EuclideanSpace ℂ n) :
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
     let Q := Matrix.spectralProjectionGE (L + N + R) t
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     ‖ι Q x‖ ≤ Real.sqrt ((⟪x, ι K x⟫_ℂ).re / t) := by
   intro ι Q K
   have h := cutoff_mul_sq_norm_highProjection_le_energy
@@ -211,7 +211,7 @@ theorem norm_low_high_boundary_inner_le_sqrt_clipped_energy
     (x : EuclideanSpace ℂ n) (hx : ‖x‖ = 1) :
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
     let Q := Matrix.spectralProjectionGE (L + N + R) t
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     ‖⟪ι (1 - Q) x, ι A (ι Q x)⟫_ℂ‖ ≤
       2 * Real.sqrt ((⟪x, ι K x⟫_ℂ).re / t) := by
   intro ι Q K

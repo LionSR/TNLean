@@ -61,7 +61,8 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
             Real.log
               (2 * (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3) ^ 2 / P) *
               Real.log q +
-            bootstrapRemainder (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q := by
+            Entropy.tailEntropyRemainder
+              (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q := by
   obtain ⟨K, -, hF⟩ := exists_projectorFactorization_source R
   refine ⟨max K 1, le_max_right _ _, ?_⟩
   intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan j k r hk w ψ hw hrank hnorm P hP hPdef
@@ -78,8 +79,8 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
     have hξ0 : 0 ≤ Real.log
         (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) / 2 + 1) :=
       Real.log_nonneg (by linarith)
-    simp only [Nat.cast_one, Real.log_one, mul_zero, add_zero, bootstrapRemainder, one_pow,
-      sub_self, Real.log_zero, zero_add]
+    simp only [Nat.cast_one, Real.log_one, mul_zero, add_zero, Entropy.tailEntropyRemainder,
+      one_pow, sub_self, Real.log_zero, zero_add]
     linarith
   · refine entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt hq hΩ j hξ hC₁
       (fun m ↦ ?_) hk w ψ hw hrank hnorm hP hPdef
@@ -167,7 +168,8 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt_source (
             Real.log
               (2 * (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3) ^ 2 / P) *
               Real.log q +
-            bootstrapRemainder (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q := by
+            Entropy.tailEntropyRemainder
+              (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q := by
   obtain ⟨K, hK, hL2⟩ := exists_entropy_le_of_overlap_schmidtRank_mixture_source R
   refine ⟨K, hK, ?_⟩
   intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank hnorm P hP hPdef
@@ -188,7 +190,8 @@ theorem exists_relent_of_isGapped_source (R : ℕ) :
       ∀ c l : ℕ, c + l ≤ L →
       (l + 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) *
           Real.log (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3)) * Real.log q +
-          bootstrapRemainder (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q ≤
+          Entropy.tailEntropyRemainder
+            (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q ≤
         ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 c) →
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) (c + l)) ≤
         ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) c) +
@@ -216,8 +219,8 @@ theorem exists_relent_of_isGapped_source (R : ℕ) :
     have hξ0 : 0 ≤ Real.log
         (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) / 2 + 1) :=
       Real.log_nonneg (by linarith)
-    simp only [Nat.cast_one, Real.log_one, mul_zero, zero_add, bootstrapRemainder, one_pow,
-      sub_self, Real.log_zero, add_zero] at hS hS0
+    simp only [Nat.cast_one, Real.log_one, mul_zero, zero_add, Entropy.tailEntropyRemainder,
+      one_pow, sub_self, Real.log_zero, add_zero] at hS hS0
     exfalso
     linarith
   refine relent_of_projectorFactorization_of_le_entropy hq hΩ hcl hξ hC₁ (fun m _ ↦ ?_) hS

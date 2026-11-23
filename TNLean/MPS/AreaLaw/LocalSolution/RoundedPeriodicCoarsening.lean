@@ -161,8 +161,8 @@ theorem centeredNorm_roundedPeriodicOperator_le {M ℓ d : ℕ} (hℓ : 0 < ℓ)
     ‖roundedPeriodicOperator ℓ a j -
       ((⟪ψ, toEuclideanLin (roundedPeriodicOperator ℓ a j) ψ⟫_ℂ).re : ℂ) • 1‖ ≤
       8 * (ℓ : ℝ) * J := by
-  refine (norm_sub_smul_one_le_two_mul
-    (abs_re_inner_toEuclideanLin_le (roundedPeriodicOperator ℓ a j) hψ)).trans ?_
+  refine (Matrix.norm_sub_smul_one_le_two_mul
+    (Matrix.abs_re_inner_toEuclideanLin_le (roundedPeriodicOperator ℓ a j) hψ)).trans ?_
   have hn := norm_edgePartition_le_of_fibre_card _ a hJ ha j
     (card_roundedPeriodicEdge_fibre_le hℓ (roundedPeriodicBlockCount_pos M ℓ)
       (roundedPeriodicBlockCount_upper hℓ) j)

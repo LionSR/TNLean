@@ -685,8 +685,8 @@ usually defines the object):
 - `MPS.AreaLaw.ProjectorFactorization.ProjectorFactorization` ← `MPS.AreaLaw.Hastings.ProjectorFactorization`, `MPS.AreaLaw.Hastings.ProjectorFactorizationScaling`
 - `MPS.AreaLaw.ProjectorFactorization.RelativeEntropyGain` ← `MPS.AreaLaw.Hastings.RelativeEntropyGain`, `MPS.AreaLaw.Hastings.RelentAssembly`, `MPS.AreaLaw.Hastings.RelentFromBootstrap`, `MPS.AreaLaw.Hastings.RelentGapped`
 - `MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ChainBootstrap` ← `MPS.AreaLaw.Hastings.ChainBootstrap`, `MPS.AreaLaw.Hastings.BootstrapLemma`
-- `MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtRankBootstrap` ← `MPS.AreaLaw.Hastings.SchmidtRankBootstrap`, `MPS.AreaLaw.Hastings.SchmidtRankRenyiBootstrap`
-- `MPS.AreaLaw.Spectral.CodimensionOneGap` ← `MPS.AreaLaw.AKLV.CodimensionOneGap`, `MPS.AreaLaw.AKLV.ResidualPhase`
+- `MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtRankBootstrap` ← `MPS.AreaLaw.Hastings.SchmidtRankBootstrap`, `MPS.AreaLaw.Hastings.SchmidtRankRenyiBootstrap`; since moved to QICLean as `QICLean.Entropy.Renyi.SchmidtRankMixture`
+- `MPS.AreaLaw.Spectral.CodimensionOneGap` ← `MPS.AreaLaw.AKLV.CodimensionOneGap`, `MPS.AreaLaw.AKLV.ResidualPhase`; since moved to QICLean as `QICLean.Spectral.Gap.CodimensionOneGap`
 - `MPS.AreaLaw.SweepPreparation.ChainStageIncidence` ← `MPS.AreaLaw.ChainStageIncidence`, `MPS.AreaLaw.ProtocolStageArity`
 - `MPS.AreaLaw.SweepPreparation.ProtocolCutCoordinates` ← `MPS.AreaLaw.ProtocolCutCoordinates`, `MPS.AreaLaw.ProtocolPolynomialMPS`
 - `MPS.AreaLaw.SweepPreparation.ProtocolSweepFrames` ← `MPS.AreaLaw.ProtocolSweepFrames`, `MPS.AreaLaw.ProtocolStageInformation`

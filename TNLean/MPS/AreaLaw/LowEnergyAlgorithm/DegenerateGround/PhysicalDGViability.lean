@@ -12,7 +12,7 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolyno
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
-import TNLean.MPS.AreaLaw.Spectral.PolynomialFilterParameters
+import QICLean.Analysis.Parameter.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ShortRegionViableFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGLongMiddleFamily
 

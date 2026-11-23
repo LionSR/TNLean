@@ -17,8 +17,6 @@ import TNLean.MPS.AreaLaw.ProjectorFactorization.CutProductState
 import TNLean.MPS.AreaLaw.ProjectorFactorization.CutoffPair
 import TNLean.MPS.AreaLaw.ProjectorFactorization.DecaySlack
 import TNLean.MPS.AreaLaw.ProjectorFactorization.Doubling
-import TNLean.MPS.AreaLaw.ProjectorFactorization.EffectExpectation
-import TNLean.MPS.AreaLaw.ProjectorFactorization.EffectFromFactorization
 import TNLean.MPS.AreaLaw.ProjectorFactorization.FactorizationBudget
 import TNLean.MPS.AreaLaw.ProjectorFactorization.GappedAreaLaw
 import TNLean.MPS.AreaLaw.ProjectorFactorization.GaussianTimeAverage
@@ -35,8 +33,6 @@ import TNLean.MPS.AreaLaw.ProjectorFactorization.ProductStateExpectation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.ProjectorFactorization
 import TNLean.MPS.AreaLaw.ProjectorFactorization.RelativeEntropyGain
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtDiagonalChain
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtDiagonalCorrelation
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtDiagonalOperators
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SourceConsequences
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SourceLength

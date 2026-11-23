@@ -52,7 +52,7 @@ theorem exists_huangFilter_count_polynomials {c Delta : ℝ}
   have hscale0 : 0 ≤ huangFilterScale c L + 1 := by
     linarith [huangFilterScale_ge_eight hc L]
   constructor
-  · have hcount := timeMeshCount_le hL (huangEnergyMesh_bounds hc hDelta L).1
+  · have hcount := GaussianFilter.timeMeshCount_le hL (huangEnergyMesh_bounds hc hDelta L).1
     change (huangEnergyCount c Delta L : ℝ) ≤ _ at hcount
     calc
       _ ≤ 2 * (L : ℝ) / huangEnergyMesh c Delta L + 2 := hcount
@@ -110,7 +110,7 @@ theorem exists_huangFilter_uniform_polynomial {q : ℕ} (hq : 1 ≤ q) {c Delta 
   have hηpos := hη.1
   have hT := huangFilterTime_pos hc hDelta L
   have henergy : 1 ≤ huangEnergyCount c Delta L := by
-    dsimp only [huangEnergyCount, timeMeshCount]
+    dsimp only [huangEnergyCount, GaussianFilter.timeMeshCount]
     omega
   have hsample : 1 ≤ huangFilterSampleCount c Delta L := by
     dsimp only [huangFilterSampleCount]

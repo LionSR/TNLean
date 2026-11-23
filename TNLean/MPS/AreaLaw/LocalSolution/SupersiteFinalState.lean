@@ -59,10 +59,10 @@ Hermitian pair operators, every projection is an orthogonal projection. Hastings
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 609–628 and 668–685. -/
 theorem isStarProjection_supersiteHierarchy (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
-      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
+      Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
     (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) : ∀ m k, IsStarProjection (P m k) :=
-  isStarProjection_hierarchy P M c x hP0 hstep
+  Matrix.isStarProjection_hierarchy P M c x hP0 hstep
     (commute_supersiteHierarchy blk P M c x hP0 hstep hMsupp) hM
 
 /-- **eq. `hchy` below one block, on supersites.** The bound of
@@ -71,7 +71,7 @@ supports of the pair operators. Hastings, arXiv:cond-mat/0508554v3, `proj3new.te
 lines 609–628 and 668–720. -/
 theorem abs_re_inner_supersiteHierarchySum_sub_le (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
-      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
+      Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
     (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) :
     ∀ m k {φ : EuclideanSpace ℂ (ι → Fin d)}, toEuclideanLin (P m k) φ = φ →
@@ -86,7 +86,7 @@ the pair operators. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 60
 709–720, for the links of the open chain as in `re_inner_hierarchySum_le_add`. -/
 theorem re_inner_supersiteHierarchySum_le_add (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
-    (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
+    (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
     (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (m k : ℕ)
@@ -103,7 +103,7 @@ lines 609–628 and 722–730, for the links of the open chain as in
 `card_le_two_mul_re_trace_of_hierarchy`. -/
 theorem card_le_two_mul_re_trace_of_supersiteHierarchy (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
-    (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
+    (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
     (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
@@ -125,7 +125,7 @@ with the commutation of the halves derived from the supports of the pair operato
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 609–628 and 668–707. -/
 theorem norm_sub_supersiteClosingLinkWindow_le (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
-      compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
+      Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
     (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 < x m)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
@@ -133,9 +133,9 @@ theorem norm_sub_supersiteClosingLinkWindow_le (hP0 : ∀ k, P 0 k = 1)
     (hK : ∀ m k, ‖M m k - (c m k : ℂ) • 1‖ ≤ K) (h : ℕ)
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W.IsHermitian) (cW : ℝ)
     (hresW : ‖toEuclideanLin (W - (cW : ℂ) • 1) ψ‖ ≤ ε) (hKW : ‖W - (cW : ℂ) • 1‖ ≤ K) :
-    IsStarProjection (compressedWindowProjection (P h 0) W cW (x h)) ∧
-      ‖ψ - toEuclideanLin (compressedWindowProjection (P h 0) W cW (x h)) ψ‖ ≤
-        hierarchyDeficiency ε K x (h + 1) :=
+    IsStarProjection (Matrix.compressedWindowProjection (P h 0) W cW (x h)) ∧
+      ‖ψ - toEuclideanLin (Matrix.compressedWindowProjection (P h 0) W cW (x h)) ψ‖ ≤
+        Real.hierarchyDeficiency ε K x (h + 1) :=
   norm_sub_closingLinkWindow_le P M c x hP0 hstep
     (commute_supersiteHierarchy blk P M c x hP0 hstep hMsupp) hM hx hψ hres hK h hW cW hresW hKW
 
@@ -145,14 +145,14 @@ of the pair operators. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines
 709–720. -/
 theorem re_inner_supersiteHierarchySum_add_le_add (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
-    (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
+    (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
     (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W.IsHermitian) {xW : ℝ} (hxW : 0 ≤ xW)
     {φ : EuclideanSpace ℂ (ι → Fin d)} (hφ1 : ‖φ‖ = 1)
     (hφ : toEuclideanLin
-      (compressedWindowProjection (P h 0) W (⟪Ψ, toEuclideanLin W Ψ⟫_ℂ).re xW) φ = φ) :
+      (Matrix.compressedWindowProjection (P h 0) W (⟪Ψ, toEuclideanLin W Ψ⟫_ℂ).re xW) φ = φ) :
     (⟪φ, toEuclideanLin (hierarchySum M h 0 + W) φ⟫_ℂ).re ≤
       (⟪Ψ, toEuclideanLin (hierarchySum M h 0 + W) Ψ⟫_ℂ).re +
         (hierarchySum (fun m _ ↦ x m) h 0 + xW) :=
@@ -165,7 +165,7 @@ supports of the pair operators. Hastings, arXiv:cond-mat/0508554v3, `proj3new.te
 lines 609–628 and 722–730. -/
 theorem card_le_two_mul_re_trace_of_supersiteClosingLink (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
-    (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
+    (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
     (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
@@ -179,7 +179,7 @@ theorem card_le_two_mul_re_trace_of_supersiteClosingLink (hP0 : ∀ k, P 0 k = 1
       (hierarchySum (fun m _ ↦ x m) h 0 + xW) ≤ E₀ + ΔE / 2)
     {κ : Type*} {φ : κ → EuclideanSpace ℂ (ι → Fin d)} (hφ : Orthonormal ℂ φ) (s : Finset κ)
     (hφP : ∀ j ∈ s, toEuclideanLin
-      (compressedWindowProjection (P h 0) W (⟪Ψ, toEuclideanLin W Ψ⟫_ℂ).re xW) (φ j) = φ j) :
+      (Matrix.compressedWindowProjection (P h 0) W (⟪Ψ, toEuclideanLin W Ψ⟫_ℂ).re xW) (φ j) = φ j) :
     (s.card : ℝ) ≤ 2 * (trace P₀).re :=
   card_le_two_mul_re_trace_of_closingLink P M x hP0 hstep
     (commute_supersiteHierarchy blk P M _ x hP0 hstep hMsupp) hM hx h hW hxW hP₀ hΔ hgap hE hφ

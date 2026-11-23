@@ -36,7 +36,7 @@ open ManyBody (IsGapped groundSpace)
 local dimension. Hastings, arXiv:0705.2024v4, Lemma 2, lines 280–390. -/
 private theorem bootstrapRemainder_le_log_product {ξ : ℝ} {q : ℕ}
     (hξ : 4 ≤ ξ) (hq : 2 ≤ q) :
-    bootstrapRemainder ξ q ≤ 8 * ξ * log ξ * log q := by
+    Entropy.tailEntropyRemainder ξ q ≤ 8 * ξ * log ξ * log q := by
   have hq' : (2 : ℝ) ≤ q := by exact_mod_cast hq
   have hlogq : (1 / 2 : ℝ) ≤ log q :=
     (by linarith [log_two_gt_d9] : (1 / 2 : ℝ) ≤ log 2).trans
@@ -62,7 +62,7 @@ private theorem bootstrapRemainder_le_log_product {ξ : ℝ} {q : ℕ}
   have h6 : 6 * log q ≤ 3 / 2 * ξ * log q := by
     have := mul_le_mul_of_nonneg_right hξ (by linarith only [hlogq] : 0 ≤ log q)
     linarith only [this]
-  unfold bootstrapRemainder
+  unfold Entropy.tailEntropyRemainder
   linarith only [hsq, hshort, hprod, hlogprod, h6, hξ]
 
 /-- A polynomial factorization constant gives the printed entropy-bound shape
@@ -109,7 +109,7 @@ private theorem areaLawBound_le_log_product {ξ C a : ℝ} {q : ℕ}
     calc
       _ ≤ ξ * (a * log ξ) * log q := by gcongr
       _ = _ := by ring
-  have hsmall : 2 * (ξ * log C * log q + bootstrapRemainder ξ q) + 3 * log q ≤
+  have hsmall : 2 * (ξ * log C * log q + Entropy.tailEntropyRemainder ξ q) + 3 * log q ≤
       (2 * a + 20) * ξ * log ξ * log q := by
     have h3 := mul_le_mul_of_nonneg_right hξlog hlogq
     have hF := bootstrapRemainder_le_log_product hξ hq
@@ -117,7 +117,7 @@ private theorem areaLawBound_le_log_product {ξ C a : ℝ} {q : ℕ}
   have hpow : 1 ≤ (2 : ℝ) ^ (2 * (ξ * log q)) :=
     one_le_rpow (by norm_num) (mul_nonneg (by norm_num)
       (mul_nonneg (by linarith only [hξ]) hlogq))
-  have hsmall' : 2 * (ξ * log C * log q + bootstrapRemainder ξ q) + 3 * log q ≤
+  have hsmall' : 2 * (ξ * log C * log q + Entropy.tailEntropyRemainder ξ q) + 3 * log q ≤
       (2 * a + 20) * ξ * log ξ * log q * (2 : ℝ) ^ (2 * (ξ * log q)) :=
     hsmall.trans (by
       simpa only [mul_one] using mul_le_mul_of_nonneg_left hpow

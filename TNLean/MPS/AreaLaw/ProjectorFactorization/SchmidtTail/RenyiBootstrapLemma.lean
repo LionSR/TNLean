@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ChainBootstrap
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtRankBootstrap
+import QICLean.Entropy.Renyi.SchmidtRankMixture
 import QICLean.Entropy.Renyi.VonNeumannBound
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -92,7 +92,7 @@ theorem renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq 
       _ = ‖ψ i‖ ^ 2 := by rw [hΩ, mul_one]
   have hc : 1 ≤ 2 * C₁ ^ 2 / P := by
     rw [le_div_iff₀ hP]; nlinarith
-  exact renyiEntropy_le_of_schmidtRank_mixtures Ψ hΨ hk hq hξ hc hα0 hα1 hconv (fun s hs ↦ by
+  exact Matrix.renyiEntropy_le_of_schmidtRank_mixtures Ψ hΨ hk hq hξ hc hα0 hα1 hconv (fun s hs ↦ by
     obtain ⟨r', w', ψ', hw', hrank', hpos', hov'⟩ :=
       exists_mixture_rank_cutMatrix_le_overlap_of_factorization hq1 hΩ j hfact' hk w ψ hw
         hrank hnorm hP hPdef hs
@@ -110,11 +110,12 @@ theorem renyiEntropy_cutMatrix_nonpos_of_one {Ω : EuclideanSpace ℂ (Fin L →
   set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin 1) (leftBlock L j) Ω)
   have hΨ : star Ψ ⬝ᵥ Ψ = 1 := by
     rw [star_cutVector_dotProduct, inner_self_eq_norm_sq_to_K, hΩ]; norm_num
-  obtain ⟨hp0, hpsum⟩ := eigenvalues₀_nonneg_and_sum_eq_one Ψ hΨ
+  obtain ⟨hp0, hpsum⟩ := Matrix.eigenvalues₀_nonneg_and_sum_eq_one Ψ hΨ
   change renyiEntropy (schmidtCoeffMatrix Ψ * (schmidtCoeffMatrix Ψ)ᴴ)
     (posSemidef_self_mul_conjTranspose (schmidtCoeffMatrix Ψ)).isHermitian α ≤ 0
-  rw [renyiEntropy_eq_log_sum_eigenvalues₀_rpow _ hα0.ne' hα1.ne]
-  have hsum := sum_rpow_le_card_rpow_mul_sum_rpow Finset.univ _ (fun a _ ↦ hp0 a) hα0.le hα1.le
+  rw [Matrix.renyiEntropy_eq_log_sum_eigenvalues₀_rpow _ hα0.ne' hα1.ne]
+  have hsum :=
+    Entropy.sum_rpow_le_card_rpow_mul_sum_rpow Finset.univ _ (fun a _ ↦ hp0 a) hα0.le hα1.le
   rw [hpsum, Real.one_rpow, mul_one, Finset.card_univ, Fintype.card_fin] at hsum
   have hc : ((Fintype.card ((leftBlock L j) → Fin 1) : ℕ) : ℝ) ^ (1 - α) = 1 := by simp
   have hsum' := hsum.trans hc.le
@@ -133,13 +134,13 @@ theorem renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt {Ω : EuclideanSpace �
   set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) Ω)
   have hΨ : star Ψ ⬝ᵥ Ψ = 1 := by
     rw [star_cutVector_dotProduct, inner_self_eq_norm_sq_to_K, hΩ]; norm_num
-  obtain ⟨hp0, hpsum⟩ := eigenvalues₀_nonneg_and_sum_eq_one Ψ hΨ
+  obtain ⟨hp0, hpsum⟩ := Matrix.eigenvalues₀_nonneg_and_sum_eq_one Ψ hΨ
   rw [regionEntropy_interval_eq]
   change renyiEntropy (schmidtCoeffMatrix Ψ * (schmidtCoeffMatrix Ψ)ᴴ)
       (posSemidef_self_mul_conjTranspose (schmidtCoeffMatrix Ψ)).isHermitian α ≤
     vonNeumannEntropy (schmidtCoeffMatrix Ψ * (schmidtCoeffMatrix Ψ)ᴴ)
       (posSemidef_self_mul_conjTranspose (schmidtCoeffMatrix Ψ)).isHermitian
-  rw [renyiEntropy_eq_log_sum_eigenvalues₀_rpow _ (by linarith) hα.ne',
+  rw [Matrix.renyiEntropy_eq_log_sum_eigenvalues₀_rpow _ (by linarith) hα.ne',
     vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀]
   exact Entropy.inv_one_sub_mul_log_sum_rpow_le_probabilityEntropy _ hp0 hpsum hα
 
@@ -236,7 +237,7 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt (R : ℕ
             (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
           Real.log k + 6 * lemmaOneEndpointLength R J ΔE *
             Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
-            bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
+            Entropy.tailEntropyRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
   obtain ⟨K, hK, hL2⟩ := exists_entropy_le_of_overlap_schmidtRank_mixture R
   refine ⟨K, hK, fun hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank
       hnorm P hP hPdef ↦

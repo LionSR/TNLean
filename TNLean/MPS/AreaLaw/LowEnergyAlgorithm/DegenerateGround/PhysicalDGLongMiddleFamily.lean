@@ -12,7 +12,7 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolyno
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
-import TNLean.MPS.AreaLaw.Spectral.PolynomialFilterParameters
+import QICLean.Analysis.Parameter.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ShortRegionViableFamily
 
 /-!
@@ -158,7 +158,7 @@ theorem exists_long_middle_actual_dg_family :
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
       simpa only [hdiff, Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
-    exact hN'.trans (collar_card_le_square_at_square_degree
+    exact hN'.trans (Nat.collar_card_le_square_at_square_degree
       q ell (Jtarget \ J0).card (D0 ^ 2) hq hell1 hcollar le_rfl)
   have hcheb := Matrix.chebyshev_viability_of_actual_cluster_polynomial_family
     B hB v lam heigen W Tm (by
@@ -348,7 +348,7 @@ theorem exists_accuracy_long_middle_actual_dg_family :
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (Jtarget \ J0).card) := by
       simpa only [hdiff, Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
-    exact hN'.trans (collar_card_le_square_of_larger_count_base
+    exact hN'.trans (Nat.collar_card_le_square_of_larger_count_base
       q m ell (Jtarget \ J0).card (D0 ^ 2) hq hqm hell1 hcollar le_rfl)
   have hcheb := Matrix.chebyshev_viability_of_actual_cluster_polynomial_family
     B hB v lam heigen W Tm (by

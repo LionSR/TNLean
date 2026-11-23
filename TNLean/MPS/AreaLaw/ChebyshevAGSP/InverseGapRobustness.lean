@@ -51,7 +51,7 @@ theorem orthogonal_clipped_energy_ge_of_inverse_gap_cutoff
         (⟪y, Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (L + (N + A) + R) y⟫_ℂ).re -
           e * ‖y‖ ^ 2) :
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     ∀ x : EuclideanSpace ℂ n, ⟪Ω, x⟫_ℂ = 0 →
       (e + g / 2) * ‖x‖ ^ 2 ≤ (⟪x, ι K x⟫_ℂ).re := by
   intro ι K x horth
@@ -161,7 +161,7 @@ theorem exists_ground_gap_twoSidedEnergyTruncation_of_inverse_gap_cutoff
         (⟪y, Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ) (L + (N + A) + R) y⟫_ℂ).re -
           e * ‖y‖ ^ 2) :
     let ι := Matrix.toEuclideanCLM (n := n) (𝕜 := ℂ)
-    let K := twoSidedEnergyTruncation L (N + A) R t
+    let K := Matrix.twoSidedEnergyTruncation L (N + A) R t
     ∃ (e' : ℝ) (φ : EuclideanSpace ℂ n), ‖φ‖ = 1 ∧ ι K φ = (e' : ℂ) • φ ∧
       0 ≤ e' ∧ e' ≤ e ∧
       (∀ x : EuclideanSpace ℂ n,
@@ -210,7 +210,7 @@ theorem exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff {L q
         (⟪v, Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
           (X + N + Y + (Φ.term a + Φ.term b)) v⟫_ℂ).re - e * ‖v‖ ^ 2) :
     let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
+    let K := Matrix.twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
     ∃ (e' : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖φ‖ = 1 ∧ ι K φ = (e' : ℂ) • φ ∧ 0 ≤ e' ∧ e' ≤ e ∧
       (∀ v : EuclideanSpace ℂ (Fin L → Fin q),
@@ -259,7 +259,7 @@ theorem normalized_chain_robustness_of_inverse_gap_cutoff {L q : ℕ}
     let N := middleCutBlock Φ a b m
     let Y := rightCutBlock Φ b y
     let H := Φ.hamiltonian - ((x + m + y : ℝ) : ℂ) • 1
-    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
+    let K := Matrix.twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
     ι H Ω = (e : ℂ) • Ω →
     (H - (e : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →

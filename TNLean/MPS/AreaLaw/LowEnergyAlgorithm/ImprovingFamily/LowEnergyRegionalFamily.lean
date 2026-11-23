@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.PhysicalLowEnergyFamily
-import TNLean.MPS.AreaLaw.Spectral.PolynomialFilterParameters
+import QICLean.Analysis.Parameter.PolynomialFilterParameters
 
 /-!
 # Low-energy improving families on a region containing the five-region core
@@ -131,7 +131,7 @@ theorem exists_five_region_low_energy_family_on_larger_region
   have hN : N ≤ D ^ 2 := by
     have hN' : N ≤ D0 ^ 2 * q ^ (2 * (J \ J0).card) := by
       simpa only [hdiff, Finset.card_empty, Nat.mul_zero, Nat.zero_add] using hNraw
-    exact hN'.trans (collar_card_le_square_at_square_degree
+    exact hN'.trans (Nat.collar_card_le_square_at_square_degree
       q ell (J \ J0).card (D0 ^ 2) hq hell hcollar le_rfl)
   obtain ⟨_p, _hpdegree, _hp0, _M, _hM, himprove⟩ :=
     exists_chebyshev_nested_viability_of_polynomial_family
