@@ -9,10 +9,10 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Operator.Simple
 
 import TNLean.MPS.Operator.Simple.CommutingForm
-import TNLean.MPS.Operator.Simple.EmbedLocalOperatorMonomial
-import TNLean.MPS.Operator.Simple.EmbedLocalOperatorTwoSite
 import TNLean.MPS.Operator.Simple.HayashiSectorComparison
 import TNLean.MPS.Operator.Simple.HayashiSectorProjector
+import TNLean.MPS.Operator.Simple.PlaceAlongRingWindowMonomial
+import TNLean.MPS.Operator.Simple.PlaceAlongRingWindowTwoSite
 import TNLean.MPS.Operator.Simple.SectorEtaContraction
 import TNLean.MPS.Operator.Simple.SectorEtaOperator
 import TNLean.MPS.Operator.Simple.SectorEtaPositivity

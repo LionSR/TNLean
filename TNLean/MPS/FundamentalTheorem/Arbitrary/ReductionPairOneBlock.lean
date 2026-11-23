@@ -15,8 +15,10 @@ a reduction onto the single block and a nilpotent remainder are equivalent. Then
 vanishes on words of length `D - c + 1`, and any two pairs agree up to a scalar on words of length
 at least `D - c`. The threshold is sharp for the projections
 (`MultiBlockExamples.SharpnessOneBlock.exists_length_eq_sub_one_not_exists_smul`) and for the
-embeddings by its transpose (`TNLean.MPS.FundamentalTheorem.Arbitrary.OneBlockSharpness`). The file
-also records how reduction pairs and states behave under transposition.
+embeddings by its transpose
+(`MultiBlockExamples.SharpnessOneBlock.exists_length_eq_and_not_exists_evalWord_mul_eq_smul`, in
+`TNLean.MPS.Examples.MultiBlock.EmbeddingSharpness`). The file also records how reduction pairs
+and states behave under transposition.
 
 ## Main results
 

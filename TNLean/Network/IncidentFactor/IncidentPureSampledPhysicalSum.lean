@@ -74,7 +74,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysic
         ∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
           conj (coefficient (fun _ : P ↦ true) w ζ)) •
           ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
-            dependentPhysicalProductFamilyMatrix (M ξ ζ j) := by
+            Matrix.piKronecker (M ξ ζ j) := by
   classical
   intro M
   have h := physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum

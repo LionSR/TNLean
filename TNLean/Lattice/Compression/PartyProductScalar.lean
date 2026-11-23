@@ -25,11 +25,10 @@ variable {P : Type} [Fintype P] [DecidableEq P] {I O : P → Type}
 /-- Scaling one specified party matrix scales the product matrix once.
 The scalar may vanish. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 565–588. -/
-theorem partyProductMatrix_smul_at_party
+theorem piKronecker_ite_smul
     (M : (p : P) → Matrix (O p) (I p) ℂ) (p₀ : P) (μ : ℂ) :
-    dependentPhysicalProductFamilyMatrix
-      (fun p ↦ (if p = p₀ then μ else 1) • M p) =
-      μ • dependentPhysicalProductFamilyMatrix M := by
+    Matrix.piKronecker (fun p ↦ (if p = p₀ then μ else 1) • M p) =
+      μ • Matrix.piKronecker M := by
   exact funext fun x ↦ funext fun y ↦
     (Finset.prod_mul_distrib
       (s := Finset.univ) (f := fun p ↦ if p = p₀ then μ else 1)

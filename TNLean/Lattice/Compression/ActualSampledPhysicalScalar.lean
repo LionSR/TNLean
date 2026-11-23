@@ -75,7 +75,7 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSu
       (((k : ℂ)⁻¹ ^ (partialSlots (fun _ ↦ true) w).length) *
         (w.emptyGateScalar * conj w.emptyGateScalar)) •
         ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
-          dependentPhysicalProductFamilyMatrix (fun p : P ↦ M j (some ⟨p, rfl⟩)) := by
+          Matrix.piKronecker (fun p : P ↦ M j (some ⟨p, rfl⟩)) := by
   classical
   intro C bOut e M
   have hNone (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k) :
@@ -96,7 +96,7 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSu
     _ = ((k : ℂ)⁻¹ ^ (partialSlots (fun _ ↦ true) w).length) •
         ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
           M j none PUnit.unit PUnit.unit •
-            dependentPhysicalProductFamilyMatrix (fun p : P ↦ M j (some ⟨p, rfl⟩)) := h
+            Matrix.piKronecker (fun p : P ↦ M j (some ⟨p, rfl⟩)) := h
     _ = _ := by
       simp_rw [hEntry]
       rw [← Finset.smul_sum, smul_smul]

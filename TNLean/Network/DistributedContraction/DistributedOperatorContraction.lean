@@ -456,14 +456,13 @@ theorem contractedOperator_eq_sum_productMatrix (c : (g : Gate) → Label g → 
     contractedOperator gates participants root hroot Label k c T =
       ∑ ξ : GateLabels gates Label, (∏ g : ActiveGate gates, c g.1 (ξ g)) •
         ∑ j : Sample gates participants → Fin k,
-          dependentPhysicalProductFamilyMatrix (fun p =>
+          Matrix.piKronecker (fun p =>
             T p (restrictGates gates participants Label ξ p)
               (restrictSamples gates participants k j p)) := by
   apply Matrix.ext
   intro x y
   rw [contractedOperator_eq_branchSampleSum]
-  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
-    dependentPhysicalProductFamilyMatrix]
+  simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Matrix.piKronecker_apply]
 
 end Contraction
 
@@ -524,7 +523,7 @@ theorem contractedOperator_densityPair_eq (a : (g : Gate) → Ket g → ℂ)
       ∑ ξζ : GateLabels gates (fun g => Ket g × Bra g),
         (∏ g : ActiveGate gates, w g.1 * a g.1 (ξζ g).1 * star (b g.1 (ξζ g).2)) •
           ∑ j : Sample gates participants → Fin k,
-            dependentPhysicalProductFamilyMatrix (fun p =>
+            Matrix.piKronecker (fun p =>
               T p (restrictGates gates participants (fun g => Ket g × Bra g) ξζ p)
                 (restrictSamples gates participants k j p)) :=
   contractedOperator_eq_sum_productMatrix gates participants root hroot

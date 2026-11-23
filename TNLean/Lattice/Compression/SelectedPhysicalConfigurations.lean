@@ -43,14 +43,14 @@ def selectedFamilyPhysicalConfigEquiv (d : P → ℕ) :
 /-- In the original physical configurations, the exterior scalar is retained
 as one factor multiplying the original party product. No scalar is cancelled.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588. -/
-theorem partyProductMatrix_selectedFamilyPhysicalConfig [Fintype P]
+theorem submatrix_piKronecker_selectedFamilyPhysicalConfigEquiv_symm [Fintype P]
     (d : P → ℕ)
     (M : (q : Option {_p : P // true = true}) →
       Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ) :
-    (dependentPhysicalProductFamilyMatrix M).submatrix
+    (Matrix.piKronecker M).submatrix
         (selectedFamilyPhysicalConfigEquiv d).symm
         (selectedFamilyPhysicalConfigEquiv d).symm =
-      M none PUnit.unit PUnit.unit • dependentPhysicalProductFamilyMatrix
+      M none PUnit.unit PUnit.unit • Matrix.piKronecker
         (fun p : P ↦ M (some ⟨p, rfl⟩)) := by
   classical
   ext x y

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockSumGroundSpace
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence
 
 /-!
 # Primitive representatives of inequivalent normal blocks

@@ -100,7 +100,7 @@ private theorem rank_bond_le {h : Fin m → Matrix (Fin L → Fin q) (Fin L → 
     operatorSchmidtRank ((bondTermExtension h i).reindex
         (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
       (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤ q ^ 2 := by
-  rw [← operatorSchmidtRank_cutOperator_eq]
+  change operatorSchmidtRank (ManyBody.cutOperator (interval L 0 c) (bondTermExtension h i)) ≤ q ^ 2
   exact ((bondTermExtension_supported hsupp i).operatorSchmidtRank_cutOperator_le_pow_card
     hq).trans (Nat.pow_le_pow_right hq ((card_interval_le _ _).trans (by omega)))
 

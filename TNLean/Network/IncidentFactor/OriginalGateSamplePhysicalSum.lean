@@ -87,7 +87,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSa
               ∑ j : DistributedOperatorContraction.Sample
                   (Finset.univ : Finset w.nonemptyGateLocations)
                   (fun g ↦ w.participants g.1) → Fin k,
-                dependentPhysicalProductFamilyMatrix (M η θ j) := by
+                Matrix.piKronecker (M η θ j) := by
   classical
   intro M
   have h := physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Matrix.MonomialFixedSubspace
 import TNLean.MPS.MPDO.CZX.CZXGaussCircuitTuple
-import TNLean.MPS.Operator.Simple.EmbedLocalOperatorMonomial
+import TNLean.MPS.Operator.Simple.PlaceAlongRingWindowMonomial
 import TNLean.MPS.MPDO.CZX.GaugeInvariantSubspace
 import TNLean.MPS.MPDO.CZX.GaussProjectorPlacement
 
