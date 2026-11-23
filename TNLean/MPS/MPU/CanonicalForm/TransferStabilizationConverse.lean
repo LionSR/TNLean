@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Matrix.RankOneSandwich
-import QICLean.Channel.FixedPoint.MeanErgodicAdjoint
+import QICLean.Channel.FixedPoint.MeanErgodic.MeanErgodicAdjoint
 import QICLean.Channel.Irreducible.AdjointFamily
 import QICLean.Channel.Irreducible.FromSpectral
 import TNLean.MPS.CanonicalForm.SimpleMPU.TransferStabilization

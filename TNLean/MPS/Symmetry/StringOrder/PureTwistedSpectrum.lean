@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Correlation.StringOrderAux
 import TNLean.MPS.Tensor.Physical.PhysicalRotation
-import QICLean.Channel.Peripheral.CyclicDecomposition.PeripheralUnitary
-import QICLean.Channel.Peripheral.SpectralRadius
+import QICLean.Channel.Peripheral.Irreducible.PeripheralUnitary
+import QICLean.Channel.Peripheral.Spectrum.SpectralRadius
 import QICLean.Channel.Irreducible.FromSpectral
 import Mathlib.Analysis.SpecialFunctions.Complex.Arg
 

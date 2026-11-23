@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.Uncle.UncleWallGram
 import QICLean.Algebra.Matrix.MatrixTracePairing
 import QICLean.Channel.KrausMap.KrausCPTP
 import QICLean.Kraus.Wielandt.KrausRectangularComposition
-import QICLean.Channel.Peripheral.UnitalKraus
+import QICLean.Channel.Peripheral.Spectrum.UnitalKraus
 import Mathlib.Logic.Equiv.Fin.Basic
 
 /-!

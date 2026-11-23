@@ -14,8 +14,8 @@ import Mathlib.Analysis.Normed.Group.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.LinearAlgebra.Quotient.Basic
-import QICLean.Channel.Peripheral.JordanBlocks
-import QICLean.Channel.Peripheral.SpectralRadius
+import QICLean.Channel.Peripheral.Projection.JordanBlocks
+import QICLean.Channel.Peripheral.Spectrum.SpectralRadius
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.SecondOrderOverlap
 import QICLean.Channel.KrausMap.KrausMap
 import Mathlib.Analysis.SpecificLimits.Basic

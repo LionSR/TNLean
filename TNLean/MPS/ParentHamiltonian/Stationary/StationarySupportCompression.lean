@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableInsertion
 import TNLean.MPS.ParentHamiltonian.Stationary.FaithfulPeriodicGroundSpace
-import QICLean.Channel.FixedPoint.SupportInvariance
+import QICLean.Channel.FixedPoint.Stationary.SupportInvariance
 import QICLean.Channel.KrausMap.KrausCornerCompression
 import QICLean.Analysis.Support.Compression
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalDensitySupport

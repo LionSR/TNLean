@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Kraus.Transfer
 import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
 import QICLean.Analysis.Projection.PosSemidefSupport
-import QICLean.Channel.FixedPoint.SupportInvariance
+import QICLean.Channel.FixedPoint.Stationary.SupportInvariance
 
 import Mathlib.Analysis.Matrix.Spectrum
 

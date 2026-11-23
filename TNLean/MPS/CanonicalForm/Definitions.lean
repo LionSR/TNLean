@@ -8,7 +8,7 @@ import TNLean.MPS.Tensor.Defs
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Tensor.Overlap
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
-import QICLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Peripheral.Spectrum.Spectrum
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 

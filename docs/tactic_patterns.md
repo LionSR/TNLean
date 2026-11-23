@@ -3496,7 +3496,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 ### CFC square-root Hermiticity — promoted
 - **Pattern:** derive `(CFC.sqrt ρ)ᴴ = CFC.sqrt ρ` from `CFC.sqrt_nonneg`,
   `Matrix.nonneg_iff_posSemidef`, and positive-semidefinite Hermiticity.
-- **Seen:** six occurrences across `Channel/FixedPoint/Corollaries.lean`,
+- **Seen:** six occurrences across `Channel/FixedPoint/Weighted/WeightedFixedPoints.lean`,
   `MaximalRank.lean`, and `WeightedCornerFixedPoints.lean` before promotion
   (2026-08-09).
 - **Abstraction:** `Matrix.conjTranspose_cfc_sqrt` in
@@ -3508,7 +3508,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 ### positive-definite CFC square-root determinant unit — promoted
 - **Pattern:** combine `CFC.isUnit_sqrt_iff`, `Matrix.PosDef.isUnit`, and
   `Matrix.isUnit_iff_isUnit_det` to prove `IsUnit (CFC.sqrt ρ).det`.
-- **Seen:** four occurrences across `Channel/FixedPoint/Corollaries.lean` and
+- **Seen:** four occurrences across `Channel/FixedPoint/Weighted/WeightedFixedPoints.lean` and
   `WeightedCornerFixedPoints.lean` before promotion (2026-08-09).
 - **Abstraction:** `Matrix.PosDef.isUnit_det_cfc_sqrt` in
   `QICLean/Analysis/FunctionalCalculus/MatrixSqrt.lean` (QICLean dependency).
@@ -3565,7 +3565,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `CanonicalForm/NormalTensorGauge.lean`, and `Periodic/Defs.lean` before
   promotion.
 - **Abstraction:** `matrix_dim_ne_zero_of_spectralRadius_eq_one` in
-  `QICLean/Channel/Peripheral/Spectrum.lean` (QICLean dependency).
+  `QICLean/Channel/Peripheral/Spectrum/Spectrum.lean` (QICLean dependency).
 - **Notes:** the shared lemma is independent of positivity and transfer-map
   structure; callers supply only the spectral-radius-one identity. Net source
   delta: 0 lines relative to the unabstracted draft (14 removed, 14 added).
@@ -4502,7 +4502,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Result:** the four surviving consumers use the shared theorem directly.
 
 ### Finite Kraus setup for channels
-- **Seen:** 2 occurrences in `Channel/Peripheral/IrreducibleChannel.lean` and
+- **Seen:** 2 occurrences in `Channel/Peripheral/Irreducible/IrreducibleChannel.lean` and
   `Channel/Semigroup/Primitivity/Helpers.lean` before promotion (issue #6576).
 - **Abstraction:** `IsChannel.exists_kraus_map_eq_and_normalized` in
   `QICLean/Channel/KrausMap/KrausMap.lean` (QICLean dependency) packages a finite Kraus family, the equality with

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.HalfChain.HalfChainSpectrum
 import TNLean.MPS.CanonicalForm.Definitions
-import QICLean.Channel.Peripheral.IrreducibleChannel
+import QICLean.Channel.Peripheral.Irreducible.IrreducibleChannel
 import QICLean.Channel.Schwarz.Closure
 import QICLean.Channel.Irreducible.InvariantProjection
 import TNLean.MPS.CanonicalForm.TranslationInvariant

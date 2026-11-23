@@ -12,7 +12,7 @@ import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
 import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Transfer.Scaling
-import QICLean.Channel.FixedPoint.CanonicalGauge
+import QICLean.Channel.FixedPoint.Weighted.CanonicalGauge
 import QICLean.Channel.Irreducible.Ergodicity
 import QICLean.Channel.Irreducible.PerronFrobenius
 import QICLean.Channel.Irreducible.KrausGauge

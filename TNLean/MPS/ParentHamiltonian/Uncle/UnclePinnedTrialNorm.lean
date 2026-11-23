@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Uncle.UncleTrialTransferNorm
 import TNLean.MPS.ParentHamiltonian.Uncle.UncleWallGramBounds
-import QICLean.Channel.Peripheral.UnitalKraus
+import QICLean.Channel.Peripheral.Spectrum.UnitalKraus
 import QICLean.Channel.TraceNormNet
 
 /-!

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.StringOrder.PhysicalStringBlockEndpoints
 import TNLean.MPS.Symmetry.StringOrder.PhysicalStringAsymptotics
-import QICLean.Channel.Peripheral.AdjointSpectrum
+import QICLean.Channel.Peripheral.Spectrum.AdjointSpectrum
 import QICLean.Kraus.Wielandt.Primitivity.StronglyIrreducibleToFullWordSpan
 
 /-!

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausMap.KrausCornerCompression
-import QICLean.Channel.Peripheral.CyclicDecomposition
+import QICLean.Channel.Peripheral.Irreducible
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Tensor.Defs
 

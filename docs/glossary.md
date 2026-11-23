@@ -285,7 +285,7 @@ out.
 
 - **Declaration:**
   `_root_.IsPrimitive (E : V →ₗ[ℂ] V) : Prop`.
-- **Defined in:** `QICLean/Channel/Peripheral/Spectrum.lean`.
+- **Defined in:** `QICLean/Channel/Peripheral/Spectrum/Spectrum.lean`.
 - **Meaning:** the unit-circle eigenvalue set of `E` is exactly `{1}`. For an
   MPS tensor it is applied to the transfer map, as
   `IsPrimitive (Kraus.transferMap A)`.

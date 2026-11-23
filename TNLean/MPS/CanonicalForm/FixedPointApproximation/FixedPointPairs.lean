@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import QICLean.Spectral.Radius.PowerDecay
-import QICLean.Channel.Peripheral.IrreducibleChannel
-import QICLean.Channel.Peripheral.Primitive
+import QICLean.Channel.Peripheral.Irreducible.IrreducibleChannel
+import QICLean.Channel.Peripheral.Spectrum.Primitive
 import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Algebra.Matrix.MatrixCyclicPathSum
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge

@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Channel.FixedPoint.TraceNonincreasingDirectSum
+import QICLean.Channel.FixedPoint.DirectSum.TraceNonincreasingDirectSum
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorDensityBlocks
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorGeneration
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCompletePositivity
-import QICLean.Channel.FixedPoint.DirectSumBlockPermutation
+import QICLean.Channel.FixedPoint.DirectSum.DirectSumBlockPermutation
 
 /-!
 # Identity criterion for vertical-sector maps

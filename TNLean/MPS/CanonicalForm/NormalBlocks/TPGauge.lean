@@ -15,7 +15,7 @@ import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
 import TNLean.MPS.Tensor.Physical.BlockingTransfer
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
-import QICLean.Channel.Peripheral.GroupStructure
+import QICLean.Channel.Peripheral.Irreducible.GroupStructure
 import TNLean.MPS.Tensor.Words.WordSpan
 import TNLean.MPS.Transfer.Primitivity.RectangularSpan
 import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank

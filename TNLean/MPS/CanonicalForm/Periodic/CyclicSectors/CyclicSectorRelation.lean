@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.FixedAdjoint
-import QICLean.Channel.Peripheral.CyclicDecomposition.Decomposition
+import QICLean.Channel.Peripheral.Irreducible.CyclicDecomposition
 
 /-!
 # Cyclic-sector relations for blocked tensors

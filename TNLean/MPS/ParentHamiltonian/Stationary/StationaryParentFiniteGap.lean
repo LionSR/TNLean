@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.Stationary.QuasiLocalExpectationEquality
 import TNLean.MPS.ParentHamiltonian.Stationary.FaithfulParentFiniteGap
 import TNLean.MPS.ParentHamiltonian.Stationary.FaithfulParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.SuppliedIsometryInsertion
-import QICLean.Channel.FixedPoint.Cesaro
+import QICLean.Channel.FixedPoint.MeanErgodic.Cesaro
 
 /-!
 # Finite and infinite parent gaps for stationary MPS states

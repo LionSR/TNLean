@@ -10,7 +10,7 @@ import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 import QICLean.Kraus.PrimitiveFixedPoint.Assembly
 import TNLean.MPS.Tensor.DirectSum.IrreducibleDecomposition
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
-import QICLean.Channel.Peripheral.Spectrum
+import QICLean.Channel.Peripheral.Spectrum.Spectrum
 import Mathlib.Analysis.Complex.Basic
 
 /-!

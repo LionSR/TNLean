@@ -7,8 +7,8 @@ import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import QICLean.Channel.Irreducible.AdjointFamily
 import QICLean.Channel.Irreducible.KrausGauge
 import QICLean.Channel.Irreducible.SpectralRadius
-import QICLean.Channel.Peripheral.AdjointSpectrum
-import QICLean.Channel.Peripheral.GroupStructure
+import QICLean.Channel.Peripheral.Spectrum.AdjointSpectrum
+import QICLean.Channel.Peripheral.Irreducible.GroupStructure
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureSpectral
 import TNLean.MPS.Transfer.Irreducible.Periodic

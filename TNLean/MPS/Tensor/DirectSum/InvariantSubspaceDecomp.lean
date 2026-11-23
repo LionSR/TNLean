@@ -16,7 +16,7 @@ import Mathlib.Data.Matrix.Mul
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.Logic.Equiv.Sum
 import Mathlib.Tactic.NoncommRing
-import QICLean.Channel.Peripheral.CyclicDecomposition.Basic
+import QICLean.Channel.Peripheral.Irreducible.CornerRestriction
 
 /-!
 # Projection-triangular trace bridge
