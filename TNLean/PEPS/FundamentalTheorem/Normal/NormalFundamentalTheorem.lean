@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion
 import TNLean.PEPS.FundamentalTheorem.Injective.FundamentalTheorem
+import TNLean.PEPS.Tensor.Region.RegionConfigSplit
 
 /-!
 # Fundamental Theorem for normal PEPS
@@ -22,12 +23,10 @@ with injective complements. The region-level insertion machinery
 `sameTwoBlockInsertions_of_regionInsertedCoeff_eq`) plays the role that the
 edge-centred insertion chain plays in the injective case.
 
-This file supplies the following region-level ingredients:
-
-* `assembleRegionσ`: the map which glues a physical configuration on a region
-  to one on its complement.
-* `regionInsertedCoeff_identity`: the identity-insertion formula at a boundary
-  edge of a region, the region analogue of `edgeInsertedCoeff_identity`.
+This file supplies `regionInsertedCoeff_identity`, the identity-insertion formula
+at a boundary edge of a region, the region analogue of `edgeInsertedCoeff_identity`.
+The map `assembleRegionσ`, which glues a physical configuration on a region to one
+on its complement, lives in `TNLean.PEPS.Tensor.Region.RegionConfigSplit`.
 
 The closed-state comparison lemmas `stateCoeff_eq_regionComplement` and
 `regionInsertedCoeff_one_eq_stateCoeff` belong to
@@ -59,34 +58,6 @@ complement `univ \ R`, summed over the boundary configuration on the edges
 crossing the boundary of `R`. This is the region analogue of
 `stateCoeff_eq_vertexComplement`, where the single vertex `v` is replaced by the
 region `R` and its complement `V \ {v}` by `univ \ R`. -/
-
-/-- Glue a physical configuration on the region `R` and a physical configuration
-on the set complement `univ \ R` into a global physical configuration on all
-vertices. -/
-def assembleRegionσ (R : Finset V)
-    (σ : RegionPhysicalConfig (V := V) (d := d) R)
-    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) : V → Fin d :=
-  fun w => if h : w ∈ R then σ ⟨w, h⟩ else τ ⟨w, by simp [h]⟩
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem assembleRegionσ_mem (R : Finset V)
-    (σ : RegionPhysicalConfig (V := V) (d := d) R)
-    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
-    (w : {w : V // w ∈ R}) :
-    assembleRegionσ (V := V) (d := d) R σ τ w.1 = σ w := by
-  simp [assembleRegionσ, w.2]
-
-omit [DecidableRel G.Adj] in
-@[simp] theorem assembleRegionσ_notMem (R : Finset V)
-    (σ : RegionPhysicalConfig (V := V) (d := d) R)
-    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R))
-    (w : {w : V // w ∈ Finset.univ \ R}) :
-    assembleRegionσ (V := V) (d := d) R σ τ w.1 = τ w := by
-  have hw : w.1 ∉ R := by
-    have := w.2
-    rw [Finset.mem_sdiff] at this
-    exact this.2
-  rw [assembleRegionσ, dite_eq_right hw]
 
 omit [Fintype V] in
 /-- The vertex product over `R` reads a global virtual configuration only through

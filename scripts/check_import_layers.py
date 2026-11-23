@@ -204,14 +204,11 @@ UPWARD_IMPORTS: frozenset[str] = frozenset(
         "TNLean.PEPS.Graph.Torus.TorusSingletonRegion -> TNLean.PEPS.Injectivity.Entropy.RegularTorusEntropy",
         "TNLean.PEPS.Graph.Walk.TorusWalkWinding -> TNLean.PEPS.Injectivity.TorusSector.RegularTorusCut",
         "TNLean.PEPS.Injectivity.Charge.RegularTwistedStateNonzero -> TNLean.PEPS.FundamentalTheorem.Normal.NormalComparisonScalar",
-        "TNLean.PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove -> TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian",
         "TNLean.PEPS.Injectivity.Multiplicity.GraphOpenAveragingBondState -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.GaugeInjectivity",
         "TNLean.PEPS.Injectivity.Region.DisjointUnionSetup -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.CoefficientTransfer",
         "TNLean.PEPS.Injectivity.Region.ReindexInjectivity -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion",
         "TNLean.PEPS.Injectivity.Regular.GInjectivePhysicalMap -> TNLean.PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation",
-        "TNLean.PEPS.Injectivity.Regular.RegularCoherentGlobalTransport -> TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian",
         "TNLean.PEPS.Tensor.GraphState.GraphBondContraction -> TNLean.PEPS.FundamentalTheorem.Injective.GaugeAction",
-        "TNLean.PEPS.Tensor.GraphState.GraphDependentCutCoordinates -> TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian",
         "TNLean.PEPS.Tensor.GraphState.RegularClosedGauge -> TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeContraction",
         "TNLean.PEPS.Tensor.GraphState.RegularRegionGram -> TNLean.PEPS.Injectivity.Regular.RegularSiteGram",
         "TNLean.PEPS.Tensor.Region.OpenRegionContraction -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence",
@@ -239,7 +236,6 @@ MUTUAL_LAYER_DIRECTORIES: frozenset[str] = frozenset(
         "PEPS/Graph <-> PEPS/Tensor",
         "PEPS/Injectivity <-> PEPS/ParentHamiltonian",
         "PEPS/Injectivity <-> PEPS/Tensor",
-        "PEPS/ParentHamiltonian <-> PEPS/Tensor",
     }
 )
 

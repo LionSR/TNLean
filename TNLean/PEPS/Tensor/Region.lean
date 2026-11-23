@@ -12,6 +12,7 @@ import TNLean.PEPS.Tensor.Region.ConfigurationCalculus
 import TNLean.PEPS.Tensor.Region.InsertSplit
 import TNLean.PEPS.Tensor.Region.OpenRegionContraction
 import TNLean.PEPS.Tensor.Region.RegionBlock
+import TNLean.PEPS.Tensor.Region.RegionConfigSplit
 import TNLean.PEPS.Tensor.Region.RegionGroundSpace
 import TNLean.PEPS.Tensor.Region.RegionPhysicalMap
 import TNLean.PEPS.Tensor.Region.RegionTransport

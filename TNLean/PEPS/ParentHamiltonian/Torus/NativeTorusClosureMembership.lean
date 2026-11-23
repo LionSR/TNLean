@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.CutSpace.NativeTorusClosures
 import TNLean.PEPS.ParentHamiltonian.Region.GraphDependentRegionSupport
+import TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian
 import TNLean.PEPS.Injectivity.TorusSector.TorusGraphSeamGauge
 import TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement
 

@@ -441,7 +441,7 @@ them:
 | `PEPS/RegionBlock <-> PEPS/TorusWindowPeeling` | `PEPS.RegionBlock.InteriorBondInsertion` → `PEPS.TorusWindowPeeling.WindowIndependence` (deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff) | `InteriorBondInsertion` → PEPS/FundamentalTheorem |
 | `PEPS/RegionBlock <-> PEPS/VertexComplement` | `PEPS.VertexComplement.Injective` → `PEPS.RegionBlock.KernelDescent` (regionBlockedTensorInjective_of_isVertexInjective) | `Injective` → PEPS/Injectivity |
 
-After the map, 11 pairs remain, all from modules mixing two layers (next
+After the map, 10 pairs remain, all from modules mixing two layers (next
 section):
 
 - `MPS/FundamentalTheorem <-> MPS/ParentHamiltonian`: `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients` → `MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence`; `MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalNormalization` → `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients`
@@ -452,15 +452,14 @@ section):
 - `PEPS/FundamentalTheorem <-> PEPS/Tensor`: `PEPS.FundamentalTheorem.Cycle.CycleMPSChainOverlapInsertion` → `PEPS.Tensor.Cycle.CycleMPSWordTransport`; `PEPS.Tensor.GraphState.GraphBondContraction` → `PEPS.FundamentalTheorem.Injective.GaugeAction`
 - `PEPS/Graph <-> PEPS/Injectivity`: `PEPS.Graph.Cell.TorusPlaquetteRealization` → `PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement`; `PEPS.Injectivity.CutSpace.DependentTorusCutSpaces` → `PEPS.Graph.Torus.TorusLabelledBondGeometry`
 - `PEPS/Graph <-> PEPS/Tensor`: `PEPS.Graph.Holonomy.RegularRegionConnectivity` → `PEPS.Tensor.GraphState.RegularOpenRegion`; `PEPS.Tensor.Cycle.CycleMPSTensor` → `PEPS.Graph.Region.CycleArcRegion`
-- `PEPS/Injectivity <-> PEPS/ParentHamiltonian`: `PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove` → `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian`; `PEPS.ParentHamiltonian.Cycle.CycleGroundSpace` → `PEPS.Injectivity.Region.CycleMPSInjectivity`
+- `PEPS/Injectivity <-> PEPS/ParentHamiltonian`: `PEPS.Injectivity.Regular.GInjectivePhysicalMap` → `PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation`; `PEPS.ParentHamiltonian.Cycle.CycleGroundSpace` → `PEPS.Injectivity.Region.CycleMPSInjectivity`
 - `PEPS/Injectivity <-> PEPS/Tensor`: `PEPS.Injectivity.Boundary.BoundaryIsometry` → `PEPS.Tensor.GraphState.RegularBoundaryState`; `PEPS.Tensor.GraphState.RegularClosedGauge` → `PEPS.Injectivity.Regular.RegularRegionGaugeContraction`
-- `PEPS/ParentHamiltonian <-> PEPS/Tensor`: `PEPS.ParentHamiltonian.Cycle.CycleGroundSpace` → `PEPS.Tensor.Region.RegionGroundSpace`; `PEPS.Tensor.GraphState.GraphDependentCutCoordinates` → `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian`
 
 ## Declaration-level work
 
 ### Imports that remain
 
-Each of these 52 imports points outside the allowed layers after the map. The
+Each of these 49 imports points outside the allowed layers after the map. The
 map records them, and `--check` fails on any other violation and on a recorded
 one that no longer occurs. Each is removed in one of two ways:
 
@@ -506,14 +505,11 @@ one that no longer occurs. Each is removed in one of two ways:
 | `PEPS.Graph.Torus.TorusSingletonRegion` | `PEPS.Injectivity.Entropy.RegularTorusEntropy` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Graph.Walk.TorusWalkWinding` | `PEPS.Injectivity.TorusSector.RegularTorusCut` | uses torusClosureEdgeAssignment, torusRightEdge_head_of_wrap, torusUpEdge_head_of_wrap |
 | `PEPS.Injectivity.Charge.RegularTwistedStateNonzero` | `PEPS.FundamentalTheorem.Normal.NormalComparisonScalar` | uses regionBlockedWeight_univ |
-| `PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove` | `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian` | uses regionConfigEquiv, place_eq_regionConfigEquiv |
 | `PEPS.Injectivity.Multiplicity.GraphOpenAveragingBondState` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.GaugeInjectivity` | uses prod_region_incident_eq_prod_edge |
 | `PEPS.Injectivity.Region.DisjointUnionSetup` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.CoefficientTransfer` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Injectivity.Region.ReindexInjectivity` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion` | uses regionBlockedWeight_reindexTensor |
 | `PEPS.Injectivity.Regular.GInjectivePhysicalMap` | `PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation` | uses physicalDeform |
-| `PEPS.Injectivity.Regular.RegularCoherentGlobalTransport` | `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian` | uses regionConfigEquiv, place_mulVec_assemble |
 | `PEPS.Tensor.GraphState.GraphBondContraction` | `PEPS.FundamentalTheorem.Injective.GaugeAction` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `PEPS.Tensor.GraphState.GraphDependentCutCoordinates` | `PEPS.ParentHamiltonian.Region.RegionParentHamiltonian` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Tensor.GraphState.RegularClosedGauge` | `PEPS.Injectivity.Regular.RegularRegionGaugeContraction` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Tensor.GraphState.RegularRegionGram` | `PEPS.Injectivity.Regular.RegularSiteGram` | uses regularLegProjector_fin, regularLegProjector_apply |
 | `PEPS.Tensor.Region.OpenRegionContraction` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence` | uses sum_regionBlockedWeight_mul_complement |
@@ -556,8 +552,6 @@ Remedies by host module (the declarations to move and where):
 - **`RegionFibers`, `BlockRangeCoincidence`, `NormalComparisonScalar`,
   `Insertion`:** the blocked-weight identities go to `Tensor/Region`.
 - **`RegularSiteGram`:** `regularLegProjector` goes to `Tensor/GraphState`.
-- **`RegionParentHamiltonian`:** `regionConfigEquiv` and the placement lemmas
-  go to `Tensor/Region`, or are replaced by QICLean's placement.
 - **`RegionPhysicalDeformation`:** `physicalDeform` and its two lemmas go to
   `Tensor/Region`.
 - **`MPS/ParentHamiltonian/Gap/Comparison/PrimitiveGaugeExistence`:**
@@ -578,8 +572,6 @@ replaced by the lower module actually used:
 - `SquareGridSource` → `NormalBlocking`
 - `Basic` → `NormalBlocking`
 - `GraphBondContraction` → `GaugeAction` (import `Blocking`)
-- `GraphDependentCutCoordinates` → `RegionParentHamiltonian` (import
-  `RegionGroundSpace`)
 - `RegularClosedGauge` → `RegularRegionGaugeContraction` (import
   `RegularRegionTreeGauge`)
 - `TorusLatticeGraph` → `Defs`
@@ -2282,7 +2274,6 @@ this part points upward.
 | `NormalComparisonScalar` (`FundamentalTheorem/Normal`) | Tensor, FundamentalTheorem | `regionBlockedWeight_univ` | to `Tensor/Region/RegionBlock` |
 | `WindowComplement` (formerly `TorusWindowComplement`) | Graph, FundamentalTheorem | `torusArcRectangle`, `mem_torusArcRectangle` | to `Graph/Torus` |
 | `TorusCoordinateSwap` (`FundamentalTheorem/Torus`) | Graph, FundamentalTheorem | `torusCoordinateSwap` | to `Graph/Torus` |
-| `RegionParentHamiltonian` (`ParentHamiltonian/Region`) | Tensor, ParentHamiltonian | `regionConfigEquiv`, `place_eq_regionConfigEquiv`, `place_mulVec_assemble` (placement of a regional operator) | to `Tensor/Region`, or replaced by QICLean's placement of a local operator |
 | `RegionPhysicalDeformation` (`ParentHamiltonian/Region`) | Tensor, ParentHamiltonian | `physicalDeform`, `openRegionWeight_physicalDeform`, `openRegionMap_physicalDeform` | to `Tensor/Region/RegionPhysicalMap` |
 
 `Algebra/GInjective` lies outside this part and the import graph assigned it to
