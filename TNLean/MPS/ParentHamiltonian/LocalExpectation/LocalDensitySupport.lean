@@ -10,7 +10,7 @@ import QICLean.Channel.Positive.PositiveFunctional
 import QICLean.Analysis.Optimization.SemidefiniteProgram
 import QICLean.Channel.Schwarz.Closure
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableQuasiLocalState
-import TNLean.QCA.QuasiLocalInterval
+import TNLean.QCA.QuasiLocal.QuasiLocalInterval
 
 /-!
 # Finite local densities and their MPS support

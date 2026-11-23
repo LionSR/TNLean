@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableRegionExpectation
-import TNLean.QCA.CompatibleLocalState
-import TNLean.QCA.QuasiLocalInterval
+import TNLean.QCA.State.CompatibleLocalState
+import TNLean.QCA.QuasiLocal.QuasiLocalInterval
 
 /-!
 # The quasi-local MPS expectation

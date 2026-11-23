@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.StarSubalgebra.Equiv
-import TNLean.QCA.ConsecutivePairCoordinates
+import TNLean.QCA.LocalAlgebra.ConsecutivePairCoordinates
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteBlockedLocalAction
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteOutputSupport
-import TNLean.QCA.GNVWIndex
-import TNLean.QCA.SupportAlgebraReindex
+import TNLean.QCA.SupportAlgebra.GNVWIndex
+import TNLean.QCA.StarSubalgebra.SupportAlgebraReindex
 
 /-!
 # The actual canonical QCA pair image of supplied MPU gates

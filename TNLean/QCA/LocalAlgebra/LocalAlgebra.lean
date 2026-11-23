@@ -1,0 +1,272 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import QICLean.Analysis.Norm.CStarMatrixKronecker
+import QICLean.ManyBody.Sites.Subregion
+import Mathlib.Analysis.CStarAlgebra.Hom
+import Mathlib.Data.Fintype.BigOperators
+
+/-!
+# Finite-region observable algebras for one-dimensional spin chains
+
+For a finite region \(\Lambda \subset \mathbb Z\) and on-site dimension \(d\), this file
+defines the local observable C⋆-algebra on \(\Lambda\) and its canonical inclusion into the
+algebra on a larger finite region.  The inclusion tensors an observable with the identity on
+complementary sites. It is the extension `ManyBody.subregionPlaceHom` of the chain with on-site
+basis `Fin d`, transported to the operator-norm C⋆-matrices along
+`CStarMatrix.ofMatrixStarAlgEquiv`; its entries, faithfulness, unit and composition laws are
+those of `ManyBody.subregionPlace`.
+
+This is only the finite directed system.  No quasi-local completion or quantum cellular
+automaton is defined here.
+
+## Main definitions
+
+* `SpinChain.Config` — spin configurations on a finite region.
+* `SpinChain.LocalAlgebra` — the operator-norm C⋆-matrix algebra of local observables.
+* `SpinChain.localInclusion` — the identity-tensor inclusion for nested finite regions.
+
+## Main results
+
+* `SpinChain.localInclusion_apply` — the entries of the inclusion.
+* `SpinChain.localInclusion_injective` — faithfulness of the inclusion.
+* `SpinChain.localInclusion_norm` — preservation of the operator norm.
+* `SpinChain.localInclusion_isometry` — operator-norm isometry.
+* `SpinChain.localInclusion_refl` — the identity inclusion.
+* `SpinChain.localInclusion_trans` — composition of inclusions.
+
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2285--2300.
+* Schumacher--Werner, quant-ph/0405174, Definition 1.
+-/
+
+open scoped ComplexOrder
+
+namespace SpinChain
+
+/-- Configurations of \(d\)-level spins on the finite region \(\Lambda\).
+
+Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
+def Config (d : ℕ) (Λ : Finset ℤ) := Λ → Fin d
+
+/-- The local observable C⋆-algebra on a finite region \(\Lambda\).
+
+Its norm is the `CStarMatrix` operator norm, rather than a norm inherited from plain matrices.
+Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
+abbrev LocalAlgebra (d : ℕ) (Λ : Finset ℤ) :=
+  CStarMatrix (Config d Λ) (Config d Λ) ℂ
+
+/-- Configurations on a finite region form a finite type. -/
+instance instFintypeConfig (d : ℕ) (Λ : Finset ℤ) : Fintype (Config d Λ) := by
+  change Fintype (Λ → Fin d)
+  infer_instance
+
+/-- A finite region has one independent physical coordinate per site,
+so its configuration cardinality is the corresponding power of the
+on-site size. Source: GNVW, arXiv:0910.3675v2, finite cell products
+in lines 1251--1258. This also holds for zero on-site size. -/
+theorem card_config (d : ℕ) (Λ : Finset ℤ) :
+    Fintype.card (Config d Λ) = d ^ Λ.card := by
+  change Fintype.card (Λ → Fin d) = _
+  rw [Fintype.card_fun]
+  simp
+
+/-- Equality of finite-region configurations is decidable. -/
+instance instDecidableEqConfig (d : ℕ) (Λ : Finset ℤ) :
+    DecidableEq (Config d Λ) := by
+  change DecidableEq (Λ → Fin d)
+  infer_instance
+
+/-- A positive on-site dimension supplies configurations on every finite region. -/
+instance instNonemptyConfig (d : ℕ) [NeZero d] (Λ : Finset ℤ) : Nonempty (Config d Λ) := by
+  change Nonempty (Λ → Fin d)
+  exact ⟨fun _ ↦ ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩⟩
+
+namespace Config
+
+/-- Restrict a configuration to a smaller region. -/
+def restrict {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) (x : Config d Γ) : Config d Λ :=
+  fun i ↦ x ⟨i, h i.2⟩
+
+@[simp]
+lemma restrict_refl {d : ℕ} {Λ : Finset ℤ} (x : Config d Λ) : restrict (by rfl) x = x := by
+  rfl
+
+lemma restrict_trans {d : ℕ} {Λ Γ Δ : Finset ℤ} (hΛΓ : Λ ⊆ Γ) (hΓΔ : Γ ⊆ Δ)
+    (x : Config d Δ) : restrict hΛΓ (restrict hΓΔ x) = restrict (hΛΓ.trans hΓΔ) x := by
+  rfl
+
+/-- Split a configuration on \(\Gamma\) into its restrictions to \(\Lambda\) and
+\(\Gamma \setminus \Lambda\).
+
+This is the canonical reindexing used after tensoring with the identity on the complement.
+Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
+def splitEquiv {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
+    Config d Γ ≃ Config d Λ × Config d (Γ \ Λ) where
+  toFun x :=
+    (restrict h x, fun i ↦ x ⟨i, (Finset.mem_sdiff.mp i.2).1⟩)
+  invFun x i :=
+    if hi : (i : ℤ) ∈ Λ then x.1 ⟨i, hi⟩
+    else x.2 ⟨i, Finset.mem_sdiff.mpr ⟨i.2, hi⟩⟩
+  left_inv x := by
+    funext i
+    simp only [restrict]
+    split <;> rfl
+  right_inv x := by
+    apply Prod.ext
+    · funext i
+      simp [restrict]
+    · funext i
+      simp [Finset.mem_sdiff.mp i.2]
+
+/-- Restricting a configuration reconstructed by `splitEquiv` to the retained region recovers
+the first component.
+
+This is the coordinate identity underlying the canonical inclusions in arXiv:1703.09188,
+Appendix, lines 2292--2298. It is not stated separately there. -/
+@[simp]
+lemma restrict_splitEquiv_symm {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
+    (p : Config d Λ × Config d (Γ \ Λ)) :
+    restrict h ((splitEquiv h).symm p) = p.1 :=
+  congrArg Prod.fst ((splitEquiv h).apply_symm_apply p)
+
+/-- Restricting a configuration reconstructed by `splitEquiv` to the complementary region
+recovers the second component.
+
+This is the coordinate identity underlying the canonical inclusions in arXiv:1703.09188,
+Appendix, lines 2292--2298. It is not stated separately there. -/
+@[simp]
+lemma restrict_sdiff_splitEquiv_symm {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
+    (p : Config d Λ × Config d (Γ \ Λ)) :
+    restrict (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) ((splitEquiv h).symm p) = p.2 :=
+  congrArg Prod.snd ((splitEquiv h).apply_symm_apply p)
+
+/-- Two configurations have the same complementary coordinate under `splitEquiv` exactly when
+their restrictions to the complementary region agree.
+
+This is the coordinate identity underlying the canonical inclusions in arXiv:1703.09188,
+Appendix, lines 2292--2298. It is not stated separately there. -/
+lemma splitEquiv_snd_eq_iff_restrict_sdiff {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
+    (x y : Config d Γ) :
+    (splitEquiv h x).2 = (splitEquiv h y).2 ↔
+      restrict (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) x =
+        restrict (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) y := by
+  rfl
+
+/-- Equality of the complementary coordinates for the split retaining `Γ \ Λ` is equality after
+restriction to `Λ`.
+
+This is the coordinate identity underlying the canonical inclusions in arXiv:1703.09188,
+Appendix, lines 2292--2298. It is not stated separately there. -/
+lemma splitEquiv_sdiff_snd_eq_iff_restrict {d : ℕ} {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
+    (x y : Config d Γ) :
+    (splitEquiv (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) x).2 =
+        (splitEquiv (Finset.sdiff_subset : Γ \ Λ ⊆ Γ) y).2 ↔
+      restrict h x = restrict h y := by
+  constructor
+  · intro hxy
+    funext i
+    exact congrFun hxy ⟨i, Finset.mem_sdiff.mpr ⟨h i.2, by simp [i.2]⟩⟩
+  · intro hxy
+    funext i
+    have hiΛ : (i : ℤ) ∈ Λ := by
+      by_contra hi
+      exact (Finset.mem_sdiff.mp i.2).2
+        (Finset.mem_sdiff.mpr ⟨(Finset.mem_sdiff.mp i.2).1, hi⟩)
+    exact congrFun hxy ⟨i, hiΛ⟩
+
+end Config
+
+section Inclusion
+
+variable {d : ℕ}
+
+/-- The canonical inclusion of local observables for \(\Lambda \subseteq \Gamma\).
+
+It sends \(A\) to \(A \otimes 1\), acting as \(A\) on the sites of \(\Lambda\) and as the
+identity on the sites of \(\Gamma \setminus \Lambda\). It is the extension
+`ManyBody.subregionPlaceHom` of matrices on the region \(\Lambda\) to the region \(\Gamma\) of
+the chain, read on the operator-norm C⋆-matrices on both sides.
+
+Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
+noncomputable def localInclusion {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
+    LocalAlgebra d Λ →⋆ₐ[ℂ] LocalAlgebra d Γ :=
+  (CStarMatrix.ofMatrixStarAlgEquiv :
+      Matrix (Config d Γ) (Config d Γ) ℂ ≃⋆ₐ[ℂ] LocalAlgebra d Γ).toStarAlgHom.comp
+    ((ManyBody.subregionPlaceHom (X := fun _ : ℤ ↦ Fin d) Λ Γ h :
+        Matrix (Config d Λ) (Config d Λ) ℂ →⋆ₐ[ℂ] Matrix (Config d Γ) (Config d Γ) ℂ).comp
+      (CStarMatrix.ofMatrixStarAlgEquiv :
+        Matrix (Config d Λ) (Config d Λ) ℂ ≃⋆ₐ[ℂ] LocalAlgebra d Λ).symm.toStarAlgHom)
+
+@[simp]
+lemma localInclusion_apply {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) (A : LocalAlgebra d Λ)
+    (x y : Config d Γ) :
+    localInclusion h A x y =
+      A (Config.restrict h x) (Config.restrict h y) *
+        if (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2 then 1 else 0 := by
+  change ManyBody.subregionPlace (X := fun _ : ℤ ↦ Fin d) h A x y = _
+  rw [ManyBody.subregionPlace_apply (X := fun _ : ℤ ↦ Fin d) h A x y]
+  rw [mul_ite, mul_one, mul_zero]
+  have hiff : (∀ w : {v // v ∈ Γ}, w.1 ∉ Λ → x w = y w) ↔
+      (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2 := by
+    constructor
+    · intro hxy
+      funext i
+      exact hxy ⟨i, (Finset.mem_sdiff.mp i.2).1⟩ (Finset.mem_sdiff.mp i.2).2
+    · intro hxy w hw
+      exact congrFun hxy ⟨w.1, Finset.mem_sdiff.mpr ⟨w.2, hw⟩⟩
+  by_cases hc : (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2
+  · rw [ite_eq_left (hiff.mpr hc), ite_eq_left hc]
+    rfl
+  · rw [ite_eq_right (mt hiff.mp hc), ite_eq_right hc]
+
+/-- The local identity-tensor inclusion is injective.
+
+Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
+lemma localInclusion_injective [NeZero d] {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
+    Function.Injective (localInclusion (d := d) h) := by
+  intro A B hAB
+  have hAB' : ManyBody.subregionPlace (X := fun _ : ℤ ↦ Fin d) h A =
+      ManyBody.subregionPlace (X := fun _ : ℤ ↦ Fin d) h B := hAB
+  exact ManyBody.subregionPlace_injective (X := fun _ : ℤ ↦ Fin d) h hAB'
+
+/-- The local identity-tensor inclusion preserves the C⋆ operator norm.
+
+Source: arXiv:1703.09188, Appendix, lines 2285--2300. -/
+lemma localInclusion_norm [NeZero d] {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
+    (A : LocalAlgebra d Λ) :
+    ‖localInclusion h A‖ = ‖A‖ :=
+  NonUnitalStarAlgHom.norm_map (localInclusion h) (localInclusion_injective h) A
+
+/-- The local identity-tensor inclusion is an operator-norm isometry.
+
+Source: arXiv:1703.09188, Appendix, lines 2285--2300. -/
+lemma localInclusion_isometry [NeZero d] {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
+    Isometry (localInclusion (d := d) h) :=
+  NonUnitalStarAlgHom.isometry (localInclusion h) (localInclusion_injective h)
+
+/-- Inclusion of a finite region into itself is the identity map.
+
+Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
+@[simp]
+lemma localInclusion_refl (Λ : Finset ℤ) :
+    localInclusion (d := d) (show Λ ⊆ Λ from by rfl) =
+      StarAlgHom.id ℂ (LocalAlgebra d Λ) := by
+  ext A : 1
+  exact ManyBody.subregionPlace_self (X := fun _ : ℤ ↦ Fin d) (R := Λ) A
+
+/-- Canonical local inclusions compose for nested finite regions.
+
+Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
+lemma localInclusion_trans {Λ Γ Δ : Finset ℤ} (hΛΓ : Λ ⊆ Γ) (hΓΔ : Γ ⊆ Δ) :
+    (localInclusion (d := d) hΓΔ).comp (localInclusion hΛΓ) =
+      localInclusion (hΛΓ.trans hΓΔ) := by
+  ext A : 1
+  exact ManyBody.subregionPlace_subregionPlace (X := fun _ : ℤ ↦ Fin d) hΛΓ hΓΔ A
+
+end Inclusion
+
+end SpinChain

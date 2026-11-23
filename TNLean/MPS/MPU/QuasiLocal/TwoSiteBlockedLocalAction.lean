@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.QuasiLocal.FiniteWindowSupport
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteSurjectivity
-import TNLean.QCA.BlockingIntervalCoordinates
-import TNLean.QCA.BlockingQCA
-import TNLean.QCA.SupportIntersection
+import TNLean.QCA.QuasiLocal.BlockingIntervalCoordinates
+import TNLean.QCA.Automorphism.BlockingQCA
+import TNLean.QCA.QuasiLocal.SupportIntersection
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalCommutatorLocality
 
 /-!

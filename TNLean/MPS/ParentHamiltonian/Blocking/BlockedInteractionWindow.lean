@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalCommutatorLocality
-import TNLean.QCA.BlockingIntervalCoordinates
+import TNLean.QCA.QuasiLocal.BlockingIntervalCoordinates
 import Mathlib.Analysis.Matrix.Order
 
 /-!

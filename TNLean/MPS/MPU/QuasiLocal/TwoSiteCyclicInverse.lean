@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.QuasiLocal.CyclicConjugation
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteFiniteInverse
-import TNLean.QCA.IntervalSupport
+import TNLean.QCA.LocalAlgebra.IntervalSupport
+import TNLean.QCA.LocalAlgebra.RegionSumset
 
 /-!
 # Boundary-free inverse support on the actual finite periodic chain

@@ -345,12 +345,12 @@ abstracted — record why, so it is not re-proposed).
   bipartite finite-region coordinates and then into the quasi-local algebra.
   Previously the local-inclusion identity and inverse-equivalence cancellation
   were written separately for both factors at each use.
-- **Defined in:** `QCA/BipartiteQuasiLocalEmbedding.lean`, the canonical
+- **Defined in:** `QCA/QuasiLocal/BipartiteQuasiLocalEmbedding.lean`, the canonical
   `bipartiteMatrixToQuasiLocalObservable`, its injectivity and left/right
   evaluation and full-factor range theorems.
-- **Refactored occurrences:** `QCA/SupportAlgebraGeneration.lean`,
-  `QCA/CanonicalAdjacentSupportGeneration.lean`, and the direct shift-image
-  calculations in `QCA/GNVWShift.lean`. The actual finite-image range identity
+- **Refactored occurrences:** `QCA/SupportAlgebra/SupportAlgebraGeneration.lean`,
+  `QCA/SupportAlgebra/CanonicalAdjacentSupportGeneration.lean`, and the direct shift-image
+  calculations in `QCA/SupportAlgebra/GNVWShift.lean`. The actual finite-image range identity
   is exposed once as
   `evenPairLocalImage_map_bipartiteMatrixToQuasiLocalObservable`.
 - **Status:** Source-written helper promotion, with hosted elaboration pending;
@@ -6959,11 +6959,11 @@ current counts and full location lists).
   `StarAlgEquiv.trans`, `StarAlgEquiv.symm`, and `StarAlgEquiv.refl` into group
   multiplication, inverse, and one before applying `Commute` closure lemmas.
 - **Seen:** six short `StarAlgEquiv.aut_mul` / `aut_inv` / `aut_one` conversions
-  at five call sites, all in `TNLean/QCA/TranslationCovariance.lean`, before the
+  at five call sites, all in `TNLean/QCA/Automorphism/TranslationCovariance.lean`, before the
   call-site simplification (2026-08-16).
 - **Abstraction:** the reusable public laws `SpinChain.quasiLocalTranslation_mul`,
   `SpinChain.quasiLocalTranslation_inv`, and `SpinChain.quasiLocalTranslation_one`
-  are available in `TNLean/QCA/QuasiLocalTranslation.lean`.
+  are available in `TNLean/QCA/QuasiLocal/QuasiLocalTranslation.lean`.
 - **Notes:** automorphism multiplication reverses `StarAlgEquiv.trans`, so
   `quasiLocalTranslation d a * quasiLocalTranslation d b` translates by `b + a`.
   The five motivating call sites now use the public laws, but the pattern remains
@@ -10172,7 +10172,7 @@ there is no need for a new tactic.
 
 ### Dense local image inside a closed commutant — candidate (2026-10-29)
 
-- **Seen:** `QCA/SupportAlgebraGeneration.lean`, the support-family generation
+- **Seen:** `QCA/SupportAlgebra/SupportAlgebraGeneration.lean`, the support-family generation
   theorem and the even-pair-image commutant theorem.
 - **Pattern:** Pull back a closed ambient subset under an automorphism;
   include the dense algebraic local image; use closure minimality and
@@ -10270,7 +10270,7 @@ there is no need for a new tactic.
 
 ### Pairwise matrix-unit expansion of an actual local rule — candidate (2026-10-29)
 
-- **Seen:** `QCA/MargolusAlternatingLocalRule.lean`.
+- **Seen:** `QCA/Margolus/MargolusAlternatingLocalRule.lean`.
 - **Pattern:** Rewrite a full intermediate matrix using the pinned
   `Matrix.matrix_eq_sum_single`, express each product-index matrix unit as
   a scalar multiple of a Kronecker product, and map the two finite sums
@@ -10348,7 +10348,7 @@ there is no need for a new tactic.
 ### Finite local generation by single-site algebras — promoted helper (2026-10-29)
 
 - **Seen:** `MPS/MPU/QuasiLocal/TwoSiteBufferedAction.lean` and
-  `QCA/SingletonGeneration.lean`, used by `QCA/FiniteInverseLocality.lean`.
+  `QCA/QuasiLocal/SingletonGeneration.lean`, used by `QCA/Automorphism/FiniteInverseLocality.lean`.
 - **Pattern:** Empty-region scalars form the base case; adjoining a disjoint singleton
   and using `range_localObservable_union` propagates a subalgebra containment.
 - **Abstraction:** `range_localObservable_empty_le` and
@@ -10372,7 +10372,7 @@ there is no need for a new tactic.
 
 ### Commutation after a finite-local star homomorphism — promoted helper (2026-10-29)
 
-- **Seen:** `QCA/SingletonGeneration.lean` and `QCA/SupportIntersection.lean`.
+- **Seen:** `QCA/QuasiLocal/SingletonGeneration.lean` and `QCA/QuasiLocal/SupportIntersection.lean`.
 - **Pattern:** Pull back the target's star centralizer through a star
   homomorphism, include every finite single-site image, and use the existing
   finite local generation theorem to obtain whole-region commutation.
@@ -10404,7 +10404,7 @@ there is no need for a new tactic.
   one was a specialization, and the other reversed the two integer parameters.
 - **Repair:** Move the established general window statements unchanged to
   `ParentHamiltonian/QuasiLocalWindowCoordinates`; move the established translation
-  statement unchanged to `QCA/IntervalTranslation`. Reuse those owners and retain
+  statement unchanged to `QCA/QuasiLocal/IntervalTranslation`. Reuse those owners and retain
   their existing signatures, rather than renaming the duplicates or adding aliases.
 
 ### Equality of actual induced actions through a common buffer (2026-10-29)

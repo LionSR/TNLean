@@ -7,7 +7,7 @@ import TNLean.MPS.MPU.Simple.AdjointSimpleContraction
 import TNLean.MPS.MPU.QuasiLocal.FiniteChainAdjoint
 import TNLean.MPS.MPU.QuasiLocal.TwoSitePropagation
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteTranslationCovariance
-import TNLean.QCA.IsQCA
+import TNLean.QCA.Automorphism.IsQCA
 
 /-!
 # Actual quasi-local automorphism of a canonical-form-II MPU

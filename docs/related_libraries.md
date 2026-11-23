@@ -38,7 +38,7 @@ written together with lecture notes that set the order and choice of results.
   isomorphism of the quasi-local algebras below.
 - **The quasi-local algebra.** TNLean defines `SpinChain.QuasiLocalAlgebra d`
   as the completion of the algebraic local algebra
-  (`TNLean/QCA/QuasiLocal.lean`). LocalAlgebrasLean defines
+  (`TNLean/QCA/QuasiLocal/QuasiLocal.lean`). LocalAlgebrasLean defines
   `quasiLocalAlgebra s₀` as the norm closure of the local matrix algebras among
   bounded operators on a configuration Hilbert space, with a universal property
   for compatible families of unital star homomorphisms. That property gives a

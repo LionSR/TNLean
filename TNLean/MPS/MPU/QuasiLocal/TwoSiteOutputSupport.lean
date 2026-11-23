@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixAlgebra.MatrixStarEquivSpatial
 import TNLean.MPS.MPU.StandardForm.TwoSiteStandardFormOpenWord
-import TNLean.QCA.BipartiteSupportAlgebra
+import TNLean.QCA.StarSubalgebra.BipartiteSupportAlgebra
 import QICLean.Algebra.MatrixAlgebra.SkolemNoetherUnitary
 import Mathlib.Data.Matrix.Basis
 

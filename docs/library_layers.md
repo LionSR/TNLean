@@ -257,7 +257,7 @@ declarations that sit in the wrong module (for example `IncidentEdge` in
 | `Algebra` | 255 (+1) | Kept as it is. Its generic modules are moving to QICLean (step 3A). The map adds `Algebra/GInjective` (G-injective linear maps) for the same move. Of its modules, 5 name a tensor in a statement, by the scan: `BlockTriangularWord`, `CyclicInsertion`, `FiniteGroupCommutant`, `TensorProductContraction`, `TensorProductRegrouping`. Step 3A decides whether they stay. |
 | `Circuit` | 22 | Kept; being emptied into QICLean. |
 | `Lattice` | 360 | Kept. The party calculus (`PartyCircuit` 69, `Compression` 254, `Sheet` 20) is #10958. The 44 modules of `Compression` that contract a network of tensors have since moved to `Network`, leaving 210 in `Compression`. The ten root modules are QICLean-bound Hamiltonian, entropy and region material (`FiniteDomain`, `MarginalTails`, `RegionEntropyInequalities`, `RegionalReset`, `RegionalResetEntropy`, `RegionalSwapSupport`, `ReplicaSwap`, `PhysicalBufferCoordinates`, `SiteRelabelEntropy`, `StateSpace`). The map adds the four lattice modules of the two-dimensional area law that the chain area law imports: `BufferedRectangles`, `GraphInteractionBudget`, `GraphInteractionDiamondCounting`, and `InitialBuffer` renamed `BufferedRectangleEntropy`. |
-| `QCA` | 58 | Kept, except `MargolusTensorLocalRule` (it mentions an MPU and moves to `MPS/MPU/QuasiLocal`). The other 57 mention no tensor network and are QICLean-bound: 31 about sites and quasi-local algebras, 17 about automorphisms and cellular automata, 5 about matrix algebras, 4 about Margolus gates. |
+| `QCA` | 58 | Kept, except `MargolusTensorLocalRule` (it mentions an MPU and moves to `MPS/MPU/QuasiLocal`). The other 57 mention no tensor network and are QICLean-bound: 31 about sites and quasi-local algebras, 17 about automorphisms and cellular automata, 5 about matrix algebras, 4 about Margolus gates. The 57 are divided into seven subdirectories by object (Part II, "`MPS/MPU` and `QCA`"). |
 | `Tactic` | 2 | Kept. |
 
 ## Small directories
@@ -521,7 +521,7 @@ one that no longer occurs. Each is removed in one of two ways:
 | `PEPS.Tensor.Region.OpenRegionContraction` | `PEPS.Injectivity.Normal.NormalBlocking` | uses squareLatticeContiguousRectangle |
 | `PEPS.Tensor.SquareLattice.Basic` | `PEPS.Injectivity.Normal.NormalBlocking` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Tensor.SquareLattice.SquareGridSource` | `PEPS.Injectivity.Normal.NormalBlocking` | no declaration of the target is named: drop the import or import the lower module it relies on |
-| `QCA.Blocking` | `MPS.Tensor.Physical.Blocking` | no declaration of the target is named: drop the import or import the lower module it relies on |
+| `QCA.LocalAlgebra.Blocking` | `MPS.Tensor.Physical.Blocking` | no declaration of the target is named: drop the import or import the lower module it relies on |
 
 Remedies by host module (the declarations to move and where):
 
@@ -562,7 +562,7 @@ Remedies by host module (the declarations to move and where):
 - **`MPS/ParentHamiltonian/Gap/Comparison/PrimitiveGaugeExistence`:**
   `exists_hasComplementaryFixedPointGap_gauge_of_isNormal` goes to
   `MPS/CanonicalForm`, removing the last MPS pair.
-- **`QCA/Blocking`:** the import of `MPS/Tensor/Physical/Blocking` is replaced by
+- **`QCA/LocalAlgebra/Blocking`:** the import of `MPS/Tensor/Physical/Blocking` is replaced by
   `QICLean.Kraus.Blocking`, since only `Kraus.blockPhysDim` and
   `Kraus.decodeBlockEquiv` are used. `MPSTensor.blockedConfigEquiv` and
   `ofFn_blockedConfigEquiv` mention no tensor and go to QICLean's
@@ -1803,16 +1803,31 @@ QuasiLocal < Symmetry`. `Circuit` and `DomainWall` import no sibling, and no sib
 | `MPS/MPU/Circuit/Interval` | Minimal interval implementations: leaf, root and parent columns, joining packets, recursion, the merging circuit | 18 (23) | CutMetrics, Registers, Merging, Bounds |
 | `MPS/MPU/Circuit/Gates` | Unitary gates and operator Schmidt decompositions: the controlled-Pauli and spin-one obstructions, unit-circle rank two, finite-alphabet cut rows, the projection phase gate, the parity rotation, polar factors of two Kraus operators | 8 (9) | none |
 
-`QCA` keeps its current paths: 57 base modules, all of them flagged for QICLean. The 57 modules exceed 40; the
-justification is that the directory leaves for QICLean whole and is divided there. A division by object fits
-QICLean's layers. The Sites layer (quasi-local algebra) takes local algebras, limits and norms, translations,
-blocking, intervals, states, commutants and generation, 31 modules. The Dynamics layer (quasi-local automorphisms)
-takes translation covariance, propagation, `IsQCA`, site-indexed support algebras and the GNVW index, 17 modules.
-The Circuits layer takes the 4 Margolus gate modules. The 5 modules on star-subalgebras of bipartite matrix algebras
-go to QICLean's `Algebra`.
+`QCA` (57 base modules, all of them flagged for QICLean) is divided into seven subdirectories, in sibling
+order: `StarSubalgebra < LocalAlgebra < QuasiLocal < State < Automorphism < SupportAlgebra < Margolus`.
+No module sits at the top level. `scripts/check_import_layers.py` enforces the order (`SUBDIRECTORY_ORDERS`).
+
+| path | objects | modules | imports (siblings) |
+|---|---|---|---|
+| `QCA/StarSubalgebra` | Star-subalgebras of bipartite matrix algebras: left and right support algebras, Kronecker products of commuting star-subalgebras, overlapping supports, reindexing | 5 | none |
+| `QCA/LocalAlgebra` | The observable algebra of a finite region: configurations, local inclusions, region sumsets, translation, blocking, bipartite, interval and consecutive-pair coordinates | 8 | none |
+| `QCA/QuasiLocal` | The algebraic local algebra and its norm completion, the quasi-local algebra: support in a finite region, the canonical matrix embedding, translation and blocking, intervals, disjoint supports, relative commutants and generation by single sites | 18 | StarSubalgebra, LocalAlgebra |
+| `QCA/State` | States of the quasi-local algebra: the state space, compatible local states, finite pure-state decompositions, transport under blocking | 4 | QuasiLocal |
+| `QCA/Automorphism` | Quasi-local automorphisms: finite propagation, translation covariance, inverse propagation, `IsQCA`, finite local restrictions, compatible local automorphisms, blocking and nearest-neighbour blocking | 9 | LocalAlgebra, QuasiLocal |
+| `QCA/SupportAlgebra` | Site-indexed support algebras of a nearest-neighbour automorphism: generation, commutation, covariance, matrix factors, adjacent generation, the GNVW index and the shift | 9 | StarSubalgebra, QuasiLocal, Automorphism |
+| `QCA/Margolus` | Margolus gates: unitary gates, the alternating local rule, coherent coordinates, constant gates | 4 | LocalAlgebra, Automorphism, SupportAlgebra |
+
+The division follows QICLean's layers: `StarSubalgebra` goes to QICLean's `Algebra`; `LocalAlgebra`, `QuasiLocal`
+and `State` to the Sites layer (quasi-local algebra); `Automorphism` and `SupportAlgebra` to the Dynamics layer
+(quasi-local automorphisms and the GNVW index); `Margolus` to the Circuits layer. Three declarations were moved
+down so that every import points to the left: `SpinChain.QuasiLocalSupportedIn` (with `quasiLocalObservable`,
+`iff_exists`, `mono`) and `SpinChain.matrixToQuasiLocalObservable` (with `_supportedIn`) to
+`QuasiLocal/QuasiLocal`, out of `Automorphism/FinitePropagation` and `SupportAlgebra/SiteIndexedSupportAlgebra`;
+`SpinChain.range_localObservable_union` (with `range_localObservable_mono`) to `QuasiLocal/SingletonGeneration`,
+out of `SupportAlgebra/SupportAlgebraGeneration`.
 
 #### Directories named for a source or a proof stage
-None of the present directories (`MPS/MPU`, `MPS/MPU/Representation/GroupCocycleMPO`, `QCA`) is named for a source or a stage.
+None of the present directories (`MPS/MPU`, `MPS/MPU/Representation/GroupCocycleMPO`, `QCA` and its seven subdirectories) is named for a source or a stage.
 Several module names keep the paper's wording: the prefixes `Source…`, `Printed…`, `Supplied…` and the suffix
 `…PleasantProperties`. Rule 8 keeps these names, but they are candidates for later renaming.
 
@@ -1857,7 +1872,7 @@ Tensor}`) go to QICLean, and `FiniteGroupDetectorTransport` stays as an auxiliar
 | `StandardForm/ConjugationSourceFactors` | standard form / conjugation symmetry | `IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_eq` and `remove_source_rank_reindex_{left,right}` are generic gauge lemmas (used by `SourceFactorsStandardForm`); the rest is conjugation transport | generic lemmas to `SourceFactorChoiceGates`; then `ConjugationSourceFactors` and `ConjugationSymmetry` go to `Symmetry/Conjugation` |
 | `Symmetry/Phases/StandardFormSymmetryCriteria` (with `StandardFormTimeReversalSign`) | time reversal / transposition | `index_eq_zero_of_standardForm_even_mpo_eq_adjoint`, `standardForm_even_timeReversal_iff` versus the transposition criteria; the module forces time-reversal sign invariance above `Transposition` | time-reversal half to `Symmetry/TimeReversal`, transposition half to `Symmetry/Transposition` |
 | `Symmetry/Phases/TimeReversalSignInvariance` | standard form / time reversal | `MPOTensor.continuous_blockTwo`, `MPOTensor.mpo_blockTwo_eq_of_mpo_eq` are generic statements about two-site blocking of MPOs; they force `ContinuousStandardFormPath`, `StandardFormPathContinuity`, `LevelTriangularReduction` and `SymmetryPathCriterion` above `TimeReversal` | move the two lemmas to `StandardForm/TwoSiteStandardForm` (or the chain); the three path modules then go to `StandardForm` |
-| `QCA/Blocking`, `QCA/BlockingIntervalCoordinates` | base / `MPS/Tensor` (by import) | see §5 | — |
+| `QCA/LocalAlgebra/Blocking`, `QCA/QuasiLocal/BlockingIntervalCoordinates` | base / `MPS/Tensor` (by import) | see §5 | — |
 
 ### `MPS/Symmetry` and `MPS/Preparation`
 

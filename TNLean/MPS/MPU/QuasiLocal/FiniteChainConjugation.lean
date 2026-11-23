@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Unitary.Basic
-import TNLean.QCA.IntervalCoordinates
-import TNLean.QCA.LocalLimit
+import TNLean.QCA.LocalAlgebra.IntervalCoordinates
+import TNLean.QCA.QuasiLocal.LocalLimit
 
 /-!
 # Finite-chain conjugation by a matrix product unitary

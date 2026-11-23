@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteFiniteHeisenberg
 import TNLean.MPS.MPU.QuasiLocal.FiniteChainConjugation
-import TNLean.QCA.SingletonGeneration
+import TNLean.QCA.QuasiLocal.SingletonGeneration
 
 /-!
 # Canonical buffered local action of supplied MPU standard form

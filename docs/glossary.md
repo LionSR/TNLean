@@ -1457,7 +1457,7 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declaration:** `SpinChain.IsPureQuasiLocalState d ω : Prop`, for a continuous
   complex-linear functional `ω` on `SpinChain.QuasiLocalAlgebra d` with `d > 0`.
-- **Defined in:** `TNLean/QCA/StateSpace.lean`.
+- **Defined in:** `TNLean/QCA/State/StateSpace.lean`.
 - **Meaning:** `ω` is an extreme point, over the real numbers, of
   `SpinChain.quasiLocalStateSpace d`: the functionals of norm one with
   $\omega(I)=1$ and $\omega(X^*X)\geq0$ for every quasi-local observable $X$.

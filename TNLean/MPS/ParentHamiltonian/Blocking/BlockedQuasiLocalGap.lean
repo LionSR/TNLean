@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.Blocking.BlockedInteractionWindow
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PositiveFunctionalCommutator
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PrimitiveQuasiLocalUniqueness
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalOpenInteractionExpectation
-import TNLean.QCA.BlockingStateTransport
+import TNLean.QCA.State.BlockingStateTransport
 import TNLean.MPS.ParentHamiltonian.Blocking.BlockedQuasiLocalFace
 import TNLean.MPS.ParentHamiltonian.Blocking.EventualKernelGroundStateSupport
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalEventualKernelGap

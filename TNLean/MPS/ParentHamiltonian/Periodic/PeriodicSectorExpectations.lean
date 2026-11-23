@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyGroundStates
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableTranslationInvariance
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalCommutatorLocality
-import TNLean.QCA.BlockingIntervalCoordinates
-import TNLean.QCA.BlockingStateTransport
-import TNLean.QCA.BlockingTranslation
+import TNLean.QCA.QuasiLocal.BlockingIntervalCoordinates
+import TNLean.QCA.State.BlockingStateTransport
+import TNLean.QCA.QuasiLocal.BlockingTranslation
 
 /-!
 # Local expectations of periodic ground-state components

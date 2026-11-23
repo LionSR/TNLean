@@ -219,7 +219,7 @@ UPWARD_IMPORTS: frozenset[str] = frozenset(
         "TNLean.PEPS.Tensor.Region.OpenRegionContraction -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
         "TNLean.PEPS.Tensor.SquareLattice.Basic -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
         "TNLean.PEPS.Tensor.SquareLattice.SquareGridSource -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
-        "TNLean.QCA.Blocking -> TNLean.MPS.Tensor.Physical.Blocking",
+        "TNLean.QCA.LocalAlgebra.Blocking -> TNLean.MPS.Tensor.Physical.Blocking",
     }
 )
 

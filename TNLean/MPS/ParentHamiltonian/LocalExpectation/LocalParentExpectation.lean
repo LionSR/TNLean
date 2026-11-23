@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableQuasiLocalState
-import TNLean.QCA.QuasiLocalInterval
+import TNLean.QCA.QuasiLocal.QuasiLocalInterval
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.PhysicalDeformation
 
 /-!

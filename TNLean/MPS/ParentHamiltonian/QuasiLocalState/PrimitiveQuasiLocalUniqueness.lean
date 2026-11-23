@@ -7,8 +7,8 @@ import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableQuasiLocalState
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalCommutatorLocality
 import QICLean.Analysis.Projection.MatrixStarProjection
-import TNLean.QCA.StateSpace
-import TNLean.QCA.QuasiLocalInterval
+import TNLean.QCA.State.StateSpace
+import TNLean.QCA.QuasiLocal.QuasiLocalInterval
 import Mathlib.Analysis.CStarAlgebra.GelfandNaimarkSegal
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalParentExpectation
 
