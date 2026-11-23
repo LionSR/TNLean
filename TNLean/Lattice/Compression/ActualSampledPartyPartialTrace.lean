@@ -74,7 +74,7 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct
           (Equiv.arrowProdEquivProdArrow (Option {_p : P // true = true}) X E).symm) =
       ((k : ℂ)⁻¹ ^ (partialSlots (fun _ ↦ true) w).length) •
         ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
-          dependentPhysicalProductFamilyMatrix (fun q ↦
+          Matrix.piKronecker (fun q ↦
             Matrix.partialTraceRight
               (w.partialSourcePartyMatrix ψ ξ B C q *
                 LinearMap.toMatrix (B q).toBasis (B q).toBasis
@@ -89,13 +89,13 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct
     (Matrix.reindexLinearEquiv ℂ ℂ e e).toLinearMap
   have ht (M : (q : Option {_p : P // true = true}) →
       Matrix (X q × E q) (X q × E q) ℂ) :
-      T (dependentPhysicalProductFamilyMatrix M) =
-        dependentPhysicalProductFamilyMatrix (fun q ↦ Matrix.partialTraceRight (M q)) := by
+      T (Matrix.piKronecker M) =
+        Matrix.piKronecker (fun q ↦ Matrix.partialTraceRight (M q)) := by
     change Matrix.partialTraceRight (fun
       (xi yj : ((q : Option {_p : P // true = true}) → X q) ×
         ((q : Option {_p : P // true = true}) → E q)) ↦
       ∏ q, M q (xi.1 q, xi.2 q) (yj.1 q, yj.2 q)) = _
-    exact (partialTraceRight_fintype_eq _ _ _).trans (partialTraceRight_partyProductMatrix M)
+    exact (partialTraceRight_fintype_eq _ _ _).trans (partialTraceRight_prod_eq_piKronecker M)
   have h := congrArg T
     (partialSourceGlobalMatrix_sampled_eq_sum_partyProduct w ψ k lam L R ξ ζ ω B C ps hn hc)
   simp only [map_smul, map_sum, ht] at h

@@ -103,7 +103,7 @@ theorem partialSourceGlobalMatrix_mixed_word
       (w.partialSourceGlobalMatrix ψ ζ
         (partyGroupedBasis (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)
           C ps hn hc))ᴴ =
-      dependentPhysicalProductFamilyMatrix (fun q ↦
+      Matrix.piKronecker (fun q ↦
         w.partialSourcePartyMatrix ψ ξ B C q *
           LinearMap.toMatrix (B q).toBasis (B q).toBasis
             (u.restrict (partySelector q) hu).eval.toLinearMap *

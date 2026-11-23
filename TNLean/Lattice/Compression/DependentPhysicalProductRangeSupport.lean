@@ -8,6 +8,7 @@ import Mathlib.Basic.Complex.Basic
 import Mathlib.LinearAlgebra.Basis.VectorSpace
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.Tactic.Ring
+import QICLean.Algebra.Kronecker.PiKronecker
 
 /-!
 # Product ranges with site-dependent alphabets
@@ -32,16 +33,12 @@ namespace TNLean.Lattice
 variable {Site : Type*} [Fintype Site] [DecidableEq Site]
 variable {In Out : Site → Type*}
 
-/-- The product matrix of a family of physical maps, one at each site. -/
-def dependentPhysicalProductFamilyMatrix (F : (v : Site) → Matrix (Out v) (In v) ℂ) :
-    Matrix ((v : Site) → Out v) ((v : Site) → In v) ℂ :=
-  fun τ σ => ∏ v, F v (τ v) (σ v)
-
-/-- Apply a possibly different physical map at every site. -/
+/-- Apply a possibly different physical map at every site: the action of the Kronecker product
+`Matrix.piKronecker F` on coefficient vectors. -/
 def dependentPhysicalProductFamilyMap [∀ v, Fintype (In v)]
     (F : (v : Site) → Matrix (Out v) (In v) ℂ) :
     (((v : Site) → In v) → ℂ) →ₗ[ℂ] (((v : Site) → Out v) → ℂ) :=
-  Matrix.mulVecLin (dependentPhysicalProductFamilyMatrix F)
+  Matrix.mulVecLin (Matrix.piKronecker F)
 
 /-- The coefficient formula for a site-dependent physical product. -/
 theorem dependentPhysicalProductFamilyMap_apply [∀ v, Fintype (In v)]
@@ -50,39 +47,20 @@ theorem dependentPhysicalProductFamilyMap_apply [∀ v, Fintype (In v)]
     dependentPhysicalProductFamilyMap F ψ τ =
       ∑ σ : (v : Site) → In v, (∏ v, F v (τ v) (σ v)) * ψ σ := rfl
 
-/-- Products of physical matrices compose separately at each site. -/
-theorem dependentPhysicalProductFamilyMatrix_mul {Mid : Site → Type*} [∀ v, Fintype (Mid v)]
-    (F : (v : Site) → Matrix (Out v) (Mid v) ℂ) (L : (v : Site) → Matrix (Mid v) (In v) ℂ) :
-    dependentPhysicalProductFamilyMatrix F * dependentPhysicalProductFamilyMatrix L =
-      dependentPhysicalProductFamilyMatrix (fun v => F v * L v) := by
-  ext τ σ
-  simp only [dependentPhysicalProductFamilyMatrix, Matrix.mul_apply, ← Finset.prod_mul_distrib]
-  exact (Fintype.prod_sum (fun (v : Site) (j : Mid v) => F v (τ v) j * L v j (σ v))).symm
-
 /-- Products of physical maps compose separately at each site. -/
 theorem dependentPhysicalProductFamilyMap_comp {Mid : Site → Type*}
     [∀ v, Fintype (In v)] [∀ v, Fintype (Mid v)]
     (F : (v : Site) → Matrix (Out v) (Mid v) ℂ) (L : (v : Site) → Matrix (Mid v) (In v) ℂ) :
     dependentPhysicalProductFamilyMap F ∘ₗ dependentPhysicalProductFamilyMap L =
       dependentPhysicalProductFamilyMap (fun v => F v * L v) := by
-  simp only [dependentPhysicalProductFamilyMap, ← Matrix.mulVecLin_mul,
-    dependentPhysicalProductFamilyMatrix_mul]
-
-omit [DecidableEq Site] in
-/-- Identity matrices at every site give the identity product matrix. -/
-@[simp] theorem dependentPhysicalProductFamilyMatrix_one [∀ v, DecidableEq (Out v)] :
-    dependentPhysicalProductFamilyMatrix (fun v : Site => (1 : Matrix (Out v) (Out v) ℂ)) = 1 := by
-  ext τ σ
-  simp only [dependentPhysicalProductFamilyMatrix, Matrix.one_apply, Fintype.prod_boole,
-    ← funext_iff]
+  simp only [dependentPhysicalProductFamilyMap, ← Matrix.mulVecLin_mul, Matrix.piKronecker_mul]
 
 /-- Identity maps at every site give the identity product map. -/
 @[simp] theorem dependentPhysicalProductFamilyMap_one
     [∀ v, Fintype (Out v)] [∀ v, DecidableEq (Out v)] :
     dependentPhysicalProductFamilyMap (fun v : Site => (1 : Matrix (Out v) (Out v) ℂ)) =
       LinearMap.id := by
-  simp only [dependentPhysicalProductFamilyMap, dependentPhysicalProductFamilyMatrix_one,
-    Matrix.mulVecLin_one]
+  simp only [dependentPhysicalProductFamilyMap, Matrix.piKronecker_one, Matrix.mulVecLin_one]
 
 /-- A product with only one nonidentity coordinate acts on that coordinate's slice. -/
 theorem dependentPhysicalProductFamilyMap_oneCoordinate_apply

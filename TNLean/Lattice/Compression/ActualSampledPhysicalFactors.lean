@@ -82,7 +82,7 @@ private def sampledPhysicalFactorsEquality {J : Type} [Fintype J]
   F.submatrix (selectedFamilyPhysicalConfigEquiv d).symm
       (selectedFamilyPhysicalConfigEquiv d).symm =
     α • ∑ j, M j none PUnit.unit PUnit.unit •
-      dependentPhysicalProductFamilyMatrix (fun p : P ↦ M j (some ⟨p, rfl⟩))
+      Matrix.piKronecker (fun p : P ↦ M j (some ⟨p, rfl⟩))
 
 omit [DecidableEq P] in
 /-- Reindex an arbitrary sum of party products in the original physical
@@ -94,17 +94,17 @@ private theorem sampledPhysicalFactorsEquality_of_partyProduct {J : Type} [Finty
       ((q : Option {_p : P // true = true}) → selectedFamilyPhysicalIndex d q) ℂ}
     {M : J → (q : Option {_p : P // true = true}) →
       Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ}
-    (h : F = α • ∑ j, dependentPhysicalProductFamilyMatrix (M j)) :
+    (h : F = α • ∑ j, Matrix.piKronecker (M j)) :
     sampledPhysicalFactorsEquality d α F M := by
   classical
   let T := (Matrix.reindexLinearEquiv ℂ ℂ
     (selectedFamilyPhysicalConfigEquiv d) (selectedFamilyPhysicalConfigEquiv d)).toLinearMap
   have ht (N : (q : Option {_p : P // true = true}) →
       Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ) :
-      T (dependentPhysicalProductFamilyMatrix N) =
+      T (Matrix.piKronecker N) =
         N none PUnit.unit PUnit.unit •
-          dependentPhysicalProductFamilyMatrix (fun p : P ↦ N (some ⟨p, rfl⟩)) :=
-    partyProductMatrix_selectedFamilyPhysicalConfig d N
+          Matrix.piKronecker (fun p : P ↦ N (some ⟨p, rfl⟩)) :=
+    submatrix_piKronecker_selectedFamilyPhysicalConfigEquiv_symm d N
   have hphysical := congrArg T h
   simp only [map_smul, map_sum, ht] at hphysical
   exact hphysical

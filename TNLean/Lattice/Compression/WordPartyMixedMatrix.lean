@@ -40,7 +40,7 @@ theorem partyGroupedBasis_matrix_eval {a z : Layout P} (w : Word a z)
     (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps) :
     Matrix.of (fun x y ↦ (partyGroupedBasis z c ps hn hc).repr
       (w.eval (partyGroupedBasis a b ps hn hc y)) x) =
-      dependentPhysicalProductFamilyMatrix (fun p ↦ Matrix.of (fun x y ↦
+      Matrix.piKronecker (fun p ↦ Matrix.of (fun x y ↦
         (c p).repr ((w.restrict (partySelector p) hs).eval
           (b p y)) x)) := by
   classical
@@ -63,7 +63,7 @@ theorem partyGroupedBasis_mixed_matrix {a z : Layout P}
         (u.eval (partyGroupedBasis a b ps hn hc y)) x) *
       (Matrix.of (fun x y ↦ (partyGroupedBasis z c ps hn hc).repr
         (v.eval (partyGroupedBasis a b ps hn hc y)) x))ᴴ =
-      dependentPhysicalProductFamilyMatrix (fun p ↦
+      Matrix.piKronecker (fun p ↦
         Matrix.of (fun x y ↦ (c p).repr
             ((w.restrict (partySelector p) hw).eval (b p y)) x) *
           Matrix.of (fun x y ↦ (b p).repr
@@ -73,6 +73,6 @@ theorem partyGroupedBasis_mixed_matrix {a z : Layout P}
   classical
   rw [partyGroupedBasis_matrix_eval w hw b c ps hn hc,
     partyGroupedBasis_matrix_eval u hu b b ps hn hc,
-    partyGroupedBasis_matrix_eval v hv b c ps hn hc, partyProductMatrix_conjugate]
+    partyGroupedBasis_matrix_eval v hv b c ps hn hc, piKronecker_mul_mul_conjTranspose]
 
 end TNLean.Lattice.PartyCircuit.Word

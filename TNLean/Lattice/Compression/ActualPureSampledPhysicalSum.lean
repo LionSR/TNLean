@@ -88,7 +88,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum
         ∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
           conj (coefficient (fun _ : P ↦ true) w ζ)) •
           ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
-            dependentPhysicalProductFamilyMatrix (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩)) := by
+            Matrix.piKronecker (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩)) := by
   classical
   intro _C M
   let physical := familyPhysicalLayout d ps
@@ -115,7 +115,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum
           (w.partialSourceGlobalMatrix ψ ξ H * X ξ ζ *
             (w.partialSourceGlobalMatrix ψ ζ H)ᴴ) =
         α • ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
-          dependentPhysicalProductFamilyMatrix (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩)) := by
+          Matrix.piKronecker (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩)) := by
     have hBridge := selectedPhysicalPrivateBasis_partialTrace_actualColumns
       d ps hn hc garbage BG bRef w ψ ξ ζ (X ξ ζ)
     have hFactors := partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSum
@@ -138,14 +138,14 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum
       ∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
         conj (coefficient (fun _ : P ↦ true) w ζ)) •
         (α • ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
-          dependentPhysicalProductFamilyMatrix (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩))) := by
+          Matrix.piKronecker (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩))) := by
     simp_rw [hTrace]
     rfl
   refine hBase.trans (hSum.trans ?_)
   let N (ξ ζ : Choices (fun _ : P ↦ true) w) :
       Matrix ((p : P) → Fin (d p)) ((p : P) → Fin (d p)) ℂ :=
     ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
-      dependentPhysicalProductFamilyMatrix (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩))
+      Matrix.piKronecker (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩))
   change (∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
       conj (coefficient (fun _ : P ↦ true) w ζ)) • (α • N ξ ζ)) =
     α • ∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *

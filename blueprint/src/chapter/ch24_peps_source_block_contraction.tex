@@ -199,8 +199,7 @@ source and physical input coordinates, following
 
 \begin{lemma}[Mixed products of party matrices]
     \label{thm:peps_party_product_conjugation}
-    \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_conjTranspose,
-        TNLean.Lattice.PartyCircuit.partyProductMatrix_conjugate}
+    \lean{TNLean.Lattice.PartyCircuit.piKronecker_mul_mul_conjTranspose}
     \leanok
     \uses{def:peps_dependent_physical_product}
     For finite $P$, finite input alphabets $I_p$, output alphabets $O_p$, and
@@ -230,8 +229,8 @@ source and physical input coordinates, following
 
 \begin{lemma}[Tracing the private coordinates at each party]
     \label{thm:peps_party_product_partial_trace}
-    \lean{TNLean.Lattice.PartyCircuit.partialTraceRight_partyProductMatrix,
-        TNLean.Lattice.PartyCircuit.partialTraceRight_partyProduct_conjugate}
+    \lean{TNLean.Lattice.PartyCircuit.partialTraceRight_prod_eq_piKronecker,
+        TNLean.Lattice.PartyCircuit.partialTraceRight_piKronecker_mul_mul_conjTranspose}
     \leanok
     \uses{def:peps_dependent_physical_product,
         thm:peps_party_product_conjugation}
@@ -263,7 +262,7 @@ source and physical input coordinates, following
 
 \begin{lemma}[Absorbing a common scalar at one party]
     \label{thm:peps_party_product_scalar}
-    \lean{TNLean.Lattice.PartyCircuit.partyProductMatrix_smul_at_party}
+    \lean{TNLean.Lattice.PartyCircuit.piKronecker_ite_smul}
     \leanok
     \uses{def:peps_dependent_physical_product}
     For finite $P$, $p_0\in P$, rectangular matrices $M_p$, and $\mu\in\C$,

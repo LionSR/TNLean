@@ -40,7 +40,7 @@ theorem contractedOperator_smul_at_party
   classical
   rw [DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix,
     DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix]
-  simp_rw [TNLean.Lattice.PartyCircuit.partyProductMatrix_smul_at_party]
+  simp_rw [TNLean.Lattice.PartyCircuit.piKronecker_ite_smul]
   simp only [Finset.smul_sum, smul_smul]
   refine Finset.sum_congr₂ fun ξ _ j _ ↦ ?_
   rw [mul_comm]
