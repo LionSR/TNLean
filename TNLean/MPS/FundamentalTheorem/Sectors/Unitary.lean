@@ -71,7 +71,7 @@ theorem ft_sector_bnt_proportional_unitary_sector_match_witnesses
     · exact (leftCanonical_cast_dim (hDim k) (P.basis (β k))).2
         (hP.basis_left_canonical (β k))
     · exact hQ.basis_left_canonical k
-    · exact (isIrreducibleTensor_cast_dim (hDim k) (P.basis (β k))).2
+    · exact (isIrreducibleFamily_cast_dim (hDim k) (P.basis (β k))).2
         (hP.basis_irreducible (β k))
     · exact hQ.basis_irreducible k
   let U : (k : Fin Q.basisCount) →
@@ -145,7 +145,7 @@ theorem ft_sector_bnt_equal_unitary_global_gauge_witnesses
         ((leftCanonical_cast_dim (hDim k) (P.basis (β k))).2
           (hP.basis_left_canonical (β k)))
         (hQ.basis_left_canonical k)
-        ((isIrreducibleTensor_cast_dim (hDim k) (P.basis (β k))).2
+        ((isIrreducibleFamily_cast_dim (hDim k) (P.basis (β k))).2
           (hP.basis_irreducible (β k)))
         (hQ.basis_irreducible k)
     exact ⟨U, hU⟩

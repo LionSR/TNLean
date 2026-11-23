@@ -136,7 +136,7 @@ private theorem positive_gauge_exists_diagonal_fixedPoint
   have hNormalTP : MPSTensor.IsNormalTensor (Kraus.tpGauge U.normalizedFlattening L) :=
     hNormal.of_gaugeEquiv (MPSTensor.gaugeEquiv_tpGauge U.normalizedFlattening L hL).symm
   obtain ⟨V, Λ, hSame, hΛ, hdiag, hTP, hΛfix⟩ :=
-    MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleTensor _
+    MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleFamily _
       (Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint _ L hL hfix)
       hNormalTP.no_invariant_proj (Nat.pos_of_ne_zero hNormal.bondDim_ne_zero)
   let : NeZero D := ⟨hNormal.bondDim_ne_zero⟩

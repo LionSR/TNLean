@@ -515,7 +515,7 @@ theorem norm_correctionMatrix_le_one (σ : SplittingData q T E) (A : Finset ι) 
 set_option synthInstance.maxSize 512 in
 /-- In the coordinates `threeSplit T E` of both sheets, swapping the sheets at `A ⊆ U` exchanges
 the `A`-parts of the two copies of `U`. -/
-theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)ᶜ) :
+theorem reindex_pairSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)ᶜ) :
     reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
         (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp A) =
       (((1 : Matrix (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q)))
@@ -578,7 +578,7 @@ theorem sheetBufferCorrection_mul_sheetSwapOp_eq (σ : SplittingData q T E) {A :
         correctionMatrix σ A).submatrix
           (Equiv.prodProdProdComm _ _ _ _) (Equiv.prodProdProdComm _ _ _ _)).submatrix
         (threeSplit₂ h) (threeSplit₂ h) := by
-  rw [sheetSwapOp_eq_submatrix_of_subset h hA, sheetBufferCorrection, bufferCorrection,
+  rw [reindex_pairSwapOp_eq_submatrix_of_subset h hA, sheetBufferCorrection, bufferCorrection,
     submatrix_mul_equiv, submatrix_mul_equiv, ← mul_kronecker_mul, Matrix.one_mul]
   rfl
 

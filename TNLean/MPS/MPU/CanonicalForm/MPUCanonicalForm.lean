@@ -140,7 +140,7 @@ private theorem weightedBlock_normal (data : MPUCanonicalFormData A)
     obtain ⟨i, hi⟩ := hBlockNonzero
     exact ⟨i, smul_ne_zero (data.weights_ne_zero k) hi⟩
   have hIrr : Kraus.IsIrreducibleFamily B := by
-    exact isIrreducibleTensor_smul (data.weights_ne_zero k)
+    exact isIrreducibleFamily_smul (data.weights_ne_zero k)
       (data.blocks k) (data.blocks_canonical k).irreducible
   obtain ⟨ρ, radius, hρ, hRadius, hEigenvector⟩ :=
     exists_posDef_transferMap_eigenvector_of_irreducible B hIrr hBnonzero

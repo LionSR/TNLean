@@ -41,7 +41,7 @@ private local instance configurationDecidableEq {V : Type*} (q : ℕ) :
 
 /-- The regional split with the finite-set complement and the entropy
 cut coordinates have the same operator Schmidt rank. -/
-theorem operatorSchmidtRank_sheetSplit_eq_cutOperator
+theorem operatorSchmidtRank_reindex_cutEquiv_eq_cutOperator
     {V : Type*} [Finite V] [DecidableEq V] {q : ℕ} (A : Finset V)
     (K : Matrix (V → Fin q) (V → Fin q) ℂ) :
     operatorSchmidtRank (K.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) A)

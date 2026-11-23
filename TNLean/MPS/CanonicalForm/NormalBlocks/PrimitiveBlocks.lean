@@ -14,7 +14,7 @@ in the normal-canonical-form setting.
 
 ## Main statements
 
-* `isIrreducibleTensor_blockTensor_of_tp_primitive_irr` — blocking a
+* `isIrreducibleFamily_blockTensor_of_tp_primitive_irr` — blocking a
   TP-primitive irreducible tensor preserves irreducibility.
 
 ## References
@@ -72,7 +72,7 @@ points for `E^P` follows from the complementary transfer-map gap of
 `Kraus.HasComplementaryFixedPointGap A ρ`: if
 `E^P σ = σ` then `N^{Pk} σ' = σ'` (where `σ' = σ - c•ρ`, `N = E - Pρ`), but
 `N^n → 0` from the complementary gap, so `σ' = 0`. -/
-theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
+theorem isIrreducibleFamily_blockTensor_of_tp_primitive_irr [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
@@ -232,7 +232,7 @@ theorem tp_primitive_irreducible_extra_blocking [NeZero D]
   · rw [transferMap_blockTensor]
     exact isPrimitive_pow_of_isPrimitive (D := D)
       (Kraus.transferMap (ι := Fin d) (n := Fin D) A) k hk hPrim
-  · exact isIrreducibleTensor_blockTensor_of_tp_primitive_irr
+  · exact isIrreducibleFamily_blockTensor_of_tp_primitive_irr
       (d := d) (D := D) A hTP hPrim hIrr hk
 
 /-! ## Common injective reblocking for TP / primitive / irreducible families

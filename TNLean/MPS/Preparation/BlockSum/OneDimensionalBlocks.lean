@@ -96,7 +96,7 @@ theorem tendsto_mpvOverlap_self_of_dim_one (A : MPSTensor d 1)
     (hA : ∑ i, star (A i 0 0) * A i 0 0 = 1) :
     Tendsto (fun N : ℕ => mpvOverlap (d := d) A A N) atTop (𝓝 1) :=
   overlap_tendsto_one_of_peripheralPrimitive_of_irreducible A
-    (isIrreducibleTensor_of_bondDim_one A) (isLeftCanonical_of_dim_one A hA)
+    (isIrreducibleFamily_of_bondDim_one A) (isLeftCanonical_of_dim_one A hA)
     (isNormalTensor_of_dim_one A hA).primitive_transfer
 
 /-- The coefficients of a one-dimensional tensor are the products of its entries along the

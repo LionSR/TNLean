@@ -482,7 +482,7 @@ self-overlap, their states are linearly independent, they are not related by a g
 transformation and a phase, and every weight is `μ_{j,1} = 1`. -/
 theorem isBNTCanonicalForm_overlappingBlockSector : IsBNTCanonicalForm overlappingBlockSector where
   basis_dim_pos := fun _ => Nat.one_pos
-  basis_irreducible := fun j => isIrreducibleTensor_of_bondDim_one (overlappingBlockBasis j)
+  basis_irreducible := fun j => isIrreducibleFamily_of_bondDim_one (overlappingBlockBasis j)
   basis_left_canonical := fun j => isLeftCanonical_of_dim_one _ (overlappingBlockBasis_norm j)
   basis_normalized_self_overlap := fun j =>
     tendsto_mpvOverlap_self_of_dim_one _ (overlappingBlockBasis_norm j)

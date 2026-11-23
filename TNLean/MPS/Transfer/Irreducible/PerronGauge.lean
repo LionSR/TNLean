@@ -43,7 +43,7 @@ translation-invariant canonical-form proof.
 
 ### Main result
 
-* `MPSTensor.fixed_eq_scalar_of_isIrreducibleTensor_unital`: if an MPS tensor is
+* `MPSTensor.fixed_eq_scalar_of_isIrreducibleFamily_unital`: if an MPS tensor is
   irreducible and its transfer map is unital, then every fixed point of the
   transfer map is a scalar multiple of the identity.
 
@@ -196,7 +196,7 @@ subspace splittings have been exhausted, a further non-scalar fixed point
 would give another split, so the fixed-point space of the unital block is the
 scalar line.  The channel-theoretic input is Wolf Theorem 6.6, formalized as
 `Kraus.fixed_eq_scalar_of_irreducible_unital`. -/
-theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
+theorem fixed_eq_scalar_of_isIrreducibleFamily_unital
     {d D : ℕ}
     (A : MPSTensor d D)
     (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)

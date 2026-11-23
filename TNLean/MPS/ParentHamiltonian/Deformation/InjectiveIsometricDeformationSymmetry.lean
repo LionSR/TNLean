@@ -188,7 +188,7 @@ theorem exists_unitary_virtual_of_isOnSiteSymmetric_of_isTP [NeZero D]
     exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible X 1 one_ne_zero
       (fun i => by simpa only [one_smul, rotatePhysical, twistedTensor] using hX i) hTP
       (isLeftCanonical_rotatePhysical A (U g) hu hTP) hIrr
-      (isIrreducibleTensor_rotatePhysical A (U g) hu hIrr)
+      (isIrreducibleFamily_rotatePhysical A (U g) hu hIrr)
   exact ⟨V, V.property, by
     simpa only [one_smul, rotatePhysical, twistedTensor] using hV⟩
 

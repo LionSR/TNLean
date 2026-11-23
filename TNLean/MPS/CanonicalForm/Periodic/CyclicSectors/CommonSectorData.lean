@@ -104,12 +104,12 @@ theorem afterBlocking_perBlockCyclicData_of_sameMPV₂Pos
   · intro k
     let : NeZero (dimA k) := ⟨Nat.ne_of_gt (hDimA k)⟩
     simpa [HasPrimitiveIrreducibleCyclicSectors] using
-      exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+      exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleFamily
         (d := d) (D := dimA k) (blocksA k) (hTPA k) (hIrrA k)
   · intro k
     let : NeZero (dimB k) := ⟨Nat.ne_of_gt (hDimB k)⟩
     simpa [HasPrimitiveIrreducibleCyclicSectors] using
-      exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor
+      exists_primitive_irreducible_cyclic_sector_decomp_of_TP_of_isIrreducibleFamily
         (d := d) (D := dimB k) (blocksB k) (hTPB k) (hIrrB k)
 
 /-- **Two-sided common-length relabeled cyclic-sector theorem.**

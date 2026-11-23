@@ -45,7 +45,7 @@ Source: arXiv:1606.00608, normal-tensor definition at lines 233--235. -/
 theorem reindexPhysical {A : MPSTensor d₂ D} (hA : IsNormalTensor A)
     (e : Fin d₁ ≃ Fin d₂) :
     IsNormalTensor (Kraus.reindexPhysical e A) := by
-  refine ⟨(isIrreducibleTensor_reindexPhysical_equiv e A).2 hA.no_invariant_proj, ?_, ?_⟩
+  refine ⟨(isIrreducibleFamily_reindexPhysical_equiv e A).2 hA.no_invariant_proj, ?_, ?_⟩
   · rw [transferMap_reindexPhysical_equiv e A]
     exact hA.spectral_radius_one
   · exact (isPrimitive_transferMap_reindexPhysical_equiv e A).2 hA.primitive_transfer

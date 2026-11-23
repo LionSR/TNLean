@@ -29,7 +29,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-private theorem isIrreducibleTensor_blockTensor_one
+private theorem isIrreducibleFamily_blockTensor_one
     (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A) :
     Kraus.IsIrreducibleFamily (d := blockPhysDim d 1) (D := D)
       (blockTensor (d := d) (n := Fin D) A 1) := by
@@ -108,7 +108,7 @@ private theorem common_blocking_primitive
                 (A := fun k => blockTensor (d := d) (n := Fin (dim1 k)) (blocks1 k) 1)
                 (σ := σ))
   · intro k
-    exact isIrreducibleTensor_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (hIrr1 k)
+    exact isIrreducibleFamily_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (hIrr1 k)
   · intro k
     exact leftCanonical_blockTensor_one (d := d) (D := dim1 k) (A := blocks1 k) (hLeft1 k)
   · intro k

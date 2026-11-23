@@ -169,7 +169,7 @@ private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamil
       (A := blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (F.sectorDim k s))
         (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.1
     simpa [commonSectorBlock] using hcast
-  · have hcast := (isIrreducibleTensor_cast_physDim (F.blockPhysDim_nested_eq k)
+  · have hcast := (isIrreducibleFamily_cast_physDim (F.blockPhysDim_nested_eq k)
       (A := blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (F.sectorDim k s))
         (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.2
     simpa [commonSectorBlock] using hcast

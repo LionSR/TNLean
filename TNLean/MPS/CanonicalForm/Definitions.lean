@@ -139,7 +139,7 @@ theorem IsNormalTensor.bondDim_ne_zero {A : MPSTensor d D} (h : IsNormalTensor A
 
 /-- Every tensor of bond dimension one is irreducible: the only orthogonal
 projections on its one-dimensional bond space are zero and the identity. -/
-theorem isIrreducibleTensor_of_bondDim_one (A : MPSTensor d 1) :
+theorem isIrreducibleFamily_of_bondDim_one (A : MPSTensor d 1) :
     Kraus.IsIrreducibleFamily A := by
   rintro ⟨P, ⟨_, hIdem⟩, hP0, hP1, _⟩
   have h00 := congrFun (congrFun hIdem (0 : Fin 1)) (0 : Fin 1)
@@ -164,7 +164,7 @@ tensor. -/
 theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     (A : MPSTensor d 1) (hA : Kraus.transferMap A = LinearMap.id) :
     IsNormalTensor A := by
-  refine ⟨isIrreducibleTensor_of_bondDim_one A, ?_, ?_⟩
+  refine ⟨isIrreducibleFamily_of_bondDim_one A, ?_, ?_⟩
   · rw [hA]
     change spectralRadius ℂ
       (1 : Matrix (Fin 1) (Fin 1) ℂ →L[ℂ] Matrix (Fin 1) (Fin 1) ℂ) = 1

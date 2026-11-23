@@ -77,7 +77,7 @@ theorem norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le (h : Disjoint T E)
         (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp T))
         (vecKron Ω Ω) -
       vecKron Ω Ω‖ ≤ 4 * σ.error h Ω := by
-  rw [sheetSwapOp_eq_submatrix h, sheetBufferCorrection, submatrix_mul_equiv,
+  rw [reindex_pairSwapOp_eq_submatrix h, sheetBufferCorrection, submatrix_mul_equiv,
     norm_act_submatrix_sub]
   set ω : EuclideanSpace ℂ _ := WithLp.toLp 2 (splitVec h Ω)
   have hω : (WithLp.toLp 2 (⇑(vecKron Ω Ω) ∘ (threeSplit₂ h).symm) : EuclideanSpace ℂ _) =

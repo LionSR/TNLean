@@ -475,7 +475,7 @@ theorem sheetBufferCorrection_mul_sheetSwapOp (σ : SplittingData q (X.tSet P) (
               Matrix _ _ ℂ) *
           (((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ⊗ₖ ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V)))
         (threeSplit₂ (X.disjoint_tSet_eSet P)) (threeSplit₂ (X.disjoint_tSet_eSet P)) := by
-  rw [sheetSwapOp_eq_submatrix (X.disjoint_tSet_eSet P), sheetBufferCorrection,
+  rw [reindex_pairSwapOp_eq_submatrix (X.disjoint_tSet_eSet P), sheetBufferCorrection,
     submatrix_mul_equiv, bufferCorrection_mul_tSwap]
 
 /-- **The exact map (`eq:exchange-exact-map`).** `C K_in = K_out D_U F_T`, and

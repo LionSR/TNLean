@@ -117,7 +117,7 @@ private theorem IsNormalTensor.exists_pgvwc07_unital_dualFixedPoint_gauge
   have hCNormal : IsNormalTensor C :=
     hA.of_gaugeEquiv hGaugeAC.symm
   obtain ⟨U, Λ, _hSame, hΛ, _hΛdiag, hBUnital, hDualFixed⟩ :=
-    exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor
+    exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleFamily
       C hCUnital hCNormal.no_invariant_proj (NeZero.pos D)
   let B : MPSTensor d D := fun i =>
     (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * C i *

@@ -318,7 +318,7 @@ theorem exists_residualIsometryFamily_of_isTransferIdempotent
   have hPRFP : IsTransferIdempotent (directSumTensor P) :=
     hGaugeDirect.isTransferIdempotent_iff.mp hCRFP
   have hPIrr : ∀ j, Kraus.IsIrreducibleFamily (P j) := fun j =>
-    isIrreducibleTensor_smul (hμne j) _ (hIrr j)
+    isIrreducibleFamily_smul (hμne j) _ (hIrr j)
   have hPLeft : ∀ j, IsLeftCanonical (P j) := fun j =>
     leftCanonical_smul_of_norm_one (μ j) (hμ j) _ (hTP j)
   have hPDistinct : BlocksNotGaugePhaseEquiv (d := d) P := by
