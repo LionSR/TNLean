@@ -65,7 +65,7 @@ isometry, so the vector error is the error on the original open square.
 Source: the tensor-factor relabelling in the square-grid MPS comparison of
 the polynomial-PEPS manuscript, Section 1. -/
 noncomputable def snakeGridStateEquiv (L q : ℕ) :
-    StateSpace (ManyBody.rectangularDomain L L) q ≃ₗᵢ[ℂ]
+    EuclideanSpace ℂ (↥(ManyBody.rectangularDomain L L) → Fin q) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (Fin (L * L) → Fin q) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (ManyBody.siteConfigurationEquiv (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q)
@@ -74,7 +74,7 @@ noncomputable def snakeGridStateEquiv (L q : ℕ) :
 /-- A one-site square vector already has a bond-one open MPS representation.
 There are no internal cuts. -/
 theorem isOpenMPS_snakeGridStateEquiv_one (q : ℕ)
-    (Ω : StateSpace (ManyBody.rectangularDomain 1 1) q) :
+    (Ω : EuclideanSpace ℂ (↥(ManyBody.rectangularDomain 1 1) → Fin q)) :
     IsOpenMPS (1 * 1) q 1 (fun x ↦ snakeGridStateEquiv 1 q Ω x) := by
   apply isOpenMPS_of_internal_cutMatrix_rank_le
   intro k hk hkL
@@ -107,10 +107,10 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     ∃ C : ℝ, 0 ≤ C ∧ ∀ L : ℕ, 2 ≤ L →
       ∀ H : PlaneInteraction (ManyBody.rectangularDomain L L) q R,
           (∀ X, (H.term X).IsHermitian) → (∀ X, ‖H.term X‖ ≤ J) →
-      ∀ E₀ : ℝ, ∀ Ω : StateSpace (ManyBody.rectangularDomain L L) q,
+      ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥(ManyBody.rectangularDomain L L) → Fin q),
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∃ (D : ℕ) (Φ : StateSpace (ManyBody.rectangularDomain L L) q),
+        ∃ (D : ℕ) (Φ : EuclideanSpace ℂ (↥(ManyBody.rectangularDomain L L) → Fin q)),
           ‖Φ‖ = 1 ∧ IsOpenMPS (L * L) q D (fun x ↦ snakeGridStateEquiv L q Φ x) ∧
           ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧ (D : ℝ) ≤ Real.exp (C * L) := by
   classical
@@ -156,7 +156,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   let S : ℕ → ℝ := fun k ↦ ManyBody.regionEntropy Ω (A k)
   let ρ := fun k ↦ ManyBody.regionState Ω (A k)
   let e := (snakeGridEquiv L).symm
-  have hA (k : ℕ) (v : Site (ManyBody.rectangularDomain L L)) :
+  have hA (k : ℕ) (v : ↥(ManyBody.rectangularDomain L L)) :
       v ∈ A k ↔ e v ∈ leftBlock (L * L) k := by simp [A, e]
   let f := fun k ↦ ManyBody.regionConfigurationEquiv (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q)
     (A k) (leftBlock (L * L) k) e (hA k) (fun _ ↦ Equiv.refl _)
@@ -314,10 +314,10 @@ theorem exists_snakeGridMPS (q : ℕ) (hq : 1 ≤ q) (R : ℕ)
     ∃ C : ℝ, 0 ≤ C ∧ ∀ L : ℕ, 2 ≤ L →
       ∀ H : PlaneInteraction (ManyBody.rectangularDomain L L) q R,
           (∀ X, (H.term X).IsHermitian) → (∀ X, ‖H.term X‖ ≤ J) →
-      ∀ E₀ : ℝ, ∀ Ω : StateSpace (ManyBody.rectangularDomain L L) q,
+      ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥(ManyBody.rectangularDomain L L) → Fin q),
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∃ (D : ℕ) (Φ : StateSpace (ManyBody.rectangularDomain L L) q),
+        ∃ (D : ℕ) (Φ : EuclideanSpace ℂ (↥(ManyBody.rectangularDomain L L) → Fin q)),
           ‖Φ‖ = 1 ∧ IsOpenMPS (L * L) q D (fun x ↦ snakeGridStateEquiv L q Φ x) ∧
           ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧ (D : ℝ) ≤ Real.exp (C * L) :=
   exists_snakeGridMPS_of_uniformAreaLaw PEPS.AreaLaw.uniformAreaLaw q hq R J Δ hJ hΔ

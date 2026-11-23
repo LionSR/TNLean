@@ -190,7 +190,7 @@ theorem sitewiseVerticalCoisometry_mul_conjTranspose
     (Matrix.piKronecker fun _ : Fin L ↦ H.verticalCoisometry) *
         (Matrix.piKronecker fun _ : Fin L ↦ H.verticalCoisometry)ᴴ =
       1 := by
-  rw [MPOTensor.tensorPower_mul_conjTranspose,
+  rw [MPOTensor.piKronecker_const_mul_conjTranspose,
     H.coisometry, Matrix.piKronecker_one]
 
 /-- The fixed physical two-site Gibbs term: the ambient one-site energy on

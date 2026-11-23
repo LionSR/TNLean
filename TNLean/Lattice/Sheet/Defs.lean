@@ -372,17 +372,26 @@ swap `F_A` and the private buffer correction `D_U` on the two copies of `U`.
 One-dimensional note, proof of Lemma `lem:exchange`, `part2b_mps_protocol.tex`, lines 125–138. -/
 def exchangeOp (σ : SplittingData q (tSet S₁ S₂ Y P) (eSet S₁ S₂ Y P)) :
     Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ :=
-  sheetBufferCorrection (disjoint_tSet_eSet S₁ S₂ Y P) σ * sheetSwapOp q (aSet S₁ S₂ Y P) *
-    sheetSwapOp q Y
+  sheetBufferCorrection (disjoint_tSet_eSet S₁ S₂ Y P) σ *
+      reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (ManyBody.pairSwapOp (aSet S₁ S₂ Y P)) *
+    reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+      (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp Y)
 
 /-- **The net map of an exchange (`D_U F_A F_Y = D_U F_T`).**
 
 One-dimensional note, proof of Lemma `lem:exchange`, `part2b_mps_protocol.tex`, lines 134–138. -/
 theorem exchangeOp_eq (σ : SplittingData q (tSet S₁ S₂ Y P) (eSet S₁ S₂ Y P)) :
     exchangeOp S₁ S₂ Y P σ =
-      sheetBufferCorrection (disjoint_tSet_eSet S₁ S₂ Y P) σ * sheetSwapOp q (tSet S₁ S₂ Y P) := by
-  rw [exchangeOp, Matrix.mul_assoc,
-    sheetSwapOp_mul_sheetSwapOp (mem_tSet_iff S₁ S₂ Y P) (aSet_subset_region S₁ S₂ Y P)]
+      sheetBufferCorrection (disjoint_tSet_eSet S₁ S₂ Y P) σ *
+        reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (ManyBody.pairSwapOp (tSet S₁ S₂ Y P)) := by
+  have hT : tSet S₁ S₂ Y P = Y \ aSet S₁ S₂ Y P :=
+    Finset.ext fun x ↦ (mem_tSet_iff S₁ S₂ Y P x).trans Finset.mem_sdiff.symm
+  rw [exchangeOp, Matrix.mul_assoc, reindex_apply, reindex_apply, submatrix_mul_equiv,
+    ManyBody.pairSwapOp_mul_of_subset (aSet_subset_region S₁ S₂ Y P), ← hT, reindex_apply]
 
 end Sheet
 

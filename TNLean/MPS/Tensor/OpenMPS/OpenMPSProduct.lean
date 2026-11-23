@@ -56,7 +56,7 @@ theorem isOpenMPS_operator_entries_prod {L q : ℕ}
 /-- A tensor product of one-site matrices has bond dimension bound one.
 This is the product-operator case of ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
-theorem isOpenMPS_operator_entries_rectKronecker {L q : ℕ}
+theorem isOpenMPS_operator_entries_piKronecker {L q : ℕ}
     (M : Fin L → Matrix (Fin q) (Fin q) ℂ) :
     IsOpenMPS L (q * q) 1 (fun w ↦
       Matrix.piKronecker M

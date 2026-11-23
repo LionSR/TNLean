@@ -218,7 +218,7 @@ theorem norm_state [NeZero D] (M : ℕ) : ‖𝓜.state M‖ = 1 := by
   simp only [RCLike.inner_apply, state_apply, Equiv.symm_apply_apply, amplitude] at h
   set ψ : (Fin M → Fin (D * D)) → ℂ :=
     fun τ => pairProductState 𝓜.topPair (fun j => finProdFinEquiv.symm (τ j))
-  have key := 𝓜.isIsometry_treeMatrix.sum_star_mul_tensorPower ψ ψ
+  have key := 𝓜.isIsometry_treeMatrix.sum_star_mul_prod_const ψ ψ
   have hsum : ∑ τ, star (ψ τ) * ψ τ = 1 := by
     calc ∑ τ, star (ψ τ) * ψ τ
         = ∑ c : Fin M → Fin D × Fin D,

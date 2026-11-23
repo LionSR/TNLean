@@ -27,7 +27,6 @@ isolated-star properties are not part of these definitions or estimates.
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -92,7 +91,7 @@ theorem card_beltMarks_le (o : ℝ × ℝ) (ℓ : ℕ) (F : Finset (ℤ × ℤ))
 Source: area-law Section 11, `geometry:belt-count`, lines 220–228, and
 `geometry:initial-stars`, lines 325–330. -/
 theorem exists_sparse_dyadic_belt_marks_shift (o : ℝ × ℝ) (k : ℕ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C : ℕ) :
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C : ℕ) :
     ∃ a b : Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)),
       ((beltMarks o (fineScaleIndex k)
         (beltCellIndices (fineLayerIndices o k (fineScaleIndex k)

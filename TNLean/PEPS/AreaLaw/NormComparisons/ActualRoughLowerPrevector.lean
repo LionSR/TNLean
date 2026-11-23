@@ -30,7 +30,6 @@ noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder Topology
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport PlaneInteraction)
 
@@ -48,18 +47,18 @@ theorem exists_actualScan_suppliedPrevector_rough_lower_of_weight
     [LinearOrder (AdmissibleSupport Λ R)] (Kband : ℕ)
     (a : ℝ) (ha : 0 < a) (haSmall : a ≤ 1 / 2) :
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
-      ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
+      ∀ (S : CollarScan ↥Λ (AdmissibleSupport Λ R)), S.K = Kband →
       ∀ (hm : 0 < S.m) (hM : 0 < S.M)
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
-        (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ) (L : ℕ)
+        (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (e₀ gap : ℝ),
       ‖Ωt‖ = 1 →
       ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
       ∀ (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ),
       (∀ k : ℕ, 0 < k →
-        let β := fun _ : Site Λ => Fin q
+        let β := fun _ : ↥Λ => Fin q
         let ξ := WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
           globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
         ξ ≠ 0 ∧ ‖ξ‖ ≤ 1) →
@@ -67,7 +66,7 @@ theorem exists_actualScan_suppliedPrevector_rough_lower_of_weight
         (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) * Sent)
         (fun k : ℕ => (k : ℝ)) →
       let W := a * (Kband : ℝ)
-      let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+      let n := augmentedDimensions (V := ↥Λ) q (fun _ => d)
       let pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ := fun k =>
         replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
       Tendsto (roughLowerRemainderAtWeight Kband a c Cf ell Sent) atTop (𝓝 0) ∧
@@ -99,10 +98,10 @@ theorem exists_actualScan_suppliedPrevector_rough_lower_of_weight
   refine ⟨c, Cf, hc, hCf, ?_⟩
   intro S hSK hm hM h hh hhJ Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos ell Sent hpre hdim
     W n pre
-  let β := fun _ : Site Λ => Fin q
+  let β := fun _ : ↥Λ => Fin q
   refine ⟨tendsto_roughLowerRemainderAtWeight_of_label_dimension ell Sent hdim Kband a c Cf, ?_⟩
   intro k hk s p lower Dfill Dcharge
-  let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+  let e := augmentedReplicaConfigurationEquiv (V := ↥Λ) q d k
   have hpreEq : pre k ∘ e = replicaPrevector Ωt d k (ell k) ∘
       globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
     simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
@@ -111,7 +110,7 @@ theorem exists_actualScan_suppliedPrevector_rough_lower_of_weight
     (augmentedReplicaPrevector_ne_zero_iff_global q d k Ωt (ell k)).mpr (hpre k hk).1
   have hprenorm : ‖WithLp.toLp 2 (pre k)‖ ≤ 1 :=
     (norm_augmentedReplicaPrevector_eq_global q d k Ωt (ell k)).trans_le (hpre k hk).2
-  have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k :=
+  have hsym : symProj (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k :=
     symProj_mulVec_augmentedReplicaPrevector q d k Ωt (ell k)
   let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
   have haux := labelProj_globalReplicaCopiesEquiv_auxiliary β (Fin d) (Fin d)
@@ -146,18 +145,18 @@ theorem exists_actualScan_suppliedPrevector_rough_lower
     {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]
     [LinearOrder (AdmissibleSupport Λ R)] (Kband : ℕ) (hKband : 8 ≤ Kband) :
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
-      ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
+      ∀ (S : CollarScan ↥Λ (AdmissibleSupport Λ R)), S.K = Kband →
       ∀ (hm : 0 < S.m) (hM : 0 < S.M)
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
-        (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ) (L : ℕ)
+        (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (e₀ gap : ℝ),
       ‖Ωt‖ = 1 →
       ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
       ∀ (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ),
       (∀ k : ℕ, 0 < k →
-        let β := fun _ : Site Λ => Fin q
+        let β := fun _ : ↥Λ => Fin q
         let ξ := WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
           globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
         ξ ≠ 0 ∧ ‖ξ‖ ≤ 1) →
@@ -165,8 +164,8 @@ theorem exists_actualScan_suppliedPrevector_rough_lower
         (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) * Sent)
         (fun k : ℕ => (k : ℝ)) →
       let a := 4 / (Kband : ℝ)
-      let _β := fun _ : Site Λ => Fin q
-      let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+      let _β := fun _ : ↥Λ => Fin q
+      let n := augmentedDimensions (V := ↥Λ) q (fun _ => d)
       let pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ := fun k =>
         replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
       Tendsto (roughLowerRemainder Kband c Cf ell Sent) atTop (𝓝 0) ∧

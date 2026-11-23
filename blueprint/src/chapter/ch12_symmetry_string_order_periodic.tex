@@ -9,9 +9,9 @@ on the virtual matrix space, whereas $\tr$ is the trace of a virtual matrix.
 
 \begin{lemma}[Finite periodic trace ratio]
     \label{thm:periodic_string_trace_ratio}
-    \lean{MPSTensor.mpvExpectation_finKronecker_const_eq_trace_div,
+    \lean{MPSTensor.mpvExpectation_piKronecker_const_eq_trace_div,
         MPSTensor.physicalObservableTransfer_singleton,
-        MPSTensor.physicalObservableTransfer_finKronecker_const}
+        MPSTensor.physicalObservableTransfer_piKronecker_const}
     \leanok
     \uses{def:source_periodic_string_overlap, def:twisted_transfer_map}
     For every tensor $A$, physical matrix $u$, and length $L$, the normalized
@@ -100,7 +100,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
 \begin{lemma}[Exact periodic symmetry phase]
     \label{thm:periodic_string_exact_phase}
     \lean{MPSTensor.trace_twistedTransferIter_eq_phase_mul_trace_transfer_pow,
-        MPSTensor.mpvExpectation_finKronecker_const_eq_phase_pow}
+        MPSTensor.mpvExpectation_piKronecker_const_eq_phase_pow}
     \leanok
     \uses{def:twisted_transfer_map, def:source_periodic_string_overlap}
     Let $A,u$ be arbitrary and suppose a unitary $V$ and $\mu\in\C$ satisfy

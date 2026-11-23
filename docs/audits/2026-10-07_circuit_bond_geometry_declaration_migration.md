@@ -23,7 +23,7 @@ uses were migrated, and no blueprint `\lean{...}` tag cites a removed name.
 | `QuantumCircuit.IsCircuitOn.isLocalCircuitOfDepth` | `QuantumCircuit.IsBondCircuitOn.isBondCircuitOfDepth` |
 | `QuantumCircuit.ChannelLayer.{gateMap, gateMap_commute, gateMap_isKrausCPTP, map, map_isKrausCPTP, gateDual, gateDual_commute, partialDual, partialDual_eq_filter_mul, partialDual_isHeisenbergLocal, partialDual_mem_supportedOperators, dual, trace_map_mul}` | `QuantumCircuit.BondChannelLayer.*` of the same name |
 | `Matrix.trace_finKronecker` | `Matrix.trace_rectKronecker` |
-| `QuantumCircuit.trace_finKronecker_mul_mul` | `QuantumCircuit.trace_rectKronecker_mul_mul` |
+| `QuantumCircuit.trace_finKronecker_mul_mul` | `QuantumCircuit.trace_piKronecker_mul_mul_mul_trace` |
 
 The ring-distance statements (`conj_circuitOp_mem_supportedOperators`,
 `expect_mul_eq_of_isPreparedInDepth`, `ChannelLayer.dual_mem_supportedOperators`,

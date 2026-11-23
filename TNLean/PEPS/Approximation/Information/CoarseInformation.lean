@@ -72,7 +72,7 @@ namespace TNLean.PEPS.Approximation
 /-- The whole domain has no crossing edges, so its endpoint set `Z_Λ` is empty.
 Source: polynomial-PEPS proof of Proposition 3.1, `02-information.tex` lines 115–117. -/
 private theorem boundaryEndpoints_univ (Λ : Finset (ℤ × ℤ)) :
-    Geometry.boundaryEndpoints Λ (Finset.univ : Finset (Site Λ)) = ∅ := by
+    Geometry.boundaryEndpoints Λ (Finset.univ : Finset ↥Λ) = ∅ := by
   classical
   unfold Geometry.boundaryEndpoints
   rw [ManyBody.edgeBoundary_univ]
@@ -135,13 +135,13 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
     ∀ u : ℝ, coarseInformationThreshold Ctpl N₀ A₀ N Ca Na ≤ u →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
-        (Ω : Lattice.StateSpace Λ q),
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
-          ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
-          ∀ E : Finset (Site Λ),
+          ∀ X ⊆ Finset.univ.filter (fun x : ↥Λ ↦ x.val ∈ T),
+          ∀ E : Finset ↥Λ,
             (∀ t ∈ T, ∀ y ∈ E,
               u ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t y.val : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤ max Ca 0 := by
@@ -266,7 +266,7 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
             inv_mul_cancel₀ (Real.rpow_pos_of_pos hK0 _).ne', one_mul]
   -- Every remote set avoids the graph neighborhood of the collar.
   have hdisj : Disjoint E (graphNeighborhood (planeDomainGraph Λ)
-      (Finset.univ.filter fun x : Site Λ ↦ x.val ∈ ambientDilation Tt.points
+      (Finset.univ.filter fun x : ↥Λ ↦ x.val ∈ ambientDilation Tt.points
         ⌊(n : ℝ) ^ (1 - ε)⌋₊) (2 * r)) := by
     rw [Finset.disjoint_left]
     intro y hyE hyN
@@ -352,13 +352,13 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
-        (Ω : Lattice.StateSpace Λ q),
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
-          ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
-          ∀ E : Finset (Site Λ),
+          ∀ X ⊆ Finset.univ.filter (fun x : ↥Λ ↦ x.val ∈ T),
+          ∀ E : Finset ↥Λ,
             (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤ C := by
   obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=

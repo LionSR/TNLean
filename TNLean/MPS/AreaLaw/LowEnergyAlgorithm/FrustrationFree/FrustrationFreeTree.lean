@@ -136,9 +136,11 @@ theorem exists_unique_ground_state_tree_ritz_approximation :
         Matrix (interval L J.val.1 J.val.2 → Fin q) (interval L J.val.1 J.val.2 → Fin q) ℂ),
       (∀ J, Nfam J ≤ D ^ 2) ∧
       (∀ J j c, operatorSchmidtRank ((W J j).reindex
-        (sheetSplit q (Finset.univ.filter fun v : ↥(interval L J.val.1 J.val.2) ↦
+        (ManyBody.cutEquiv (fun _ ↦ Fin q)
+            (Finset.univ.filter fun v : ↥(interval L J.val.1 J.val.2) ↦
           (v : Fin L) ∈ interval L 0 c))
-        (sheetSplit q (Finset.univ.filter fun v : ↥(interval L J.val.1 J.val.2) ↦
+        (ManyBody.cutEquiv (fun _ ↦ Fin q)
+            (Finset.univ.filter fun v : ↥(interval L J.val.1 J.val.2) ↦
           (v : Fin L) ∈ interval L 0 c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
       let F := fun (J : LongIntervalIndex L width) (j : Fin (Nfam J)) ↦
         Matrix.toEuclideanCLM (𝕜 := ℂ) (n := interval L J.val.1 J.val.2 → Fin q) (W J j)
@@ -219,9 +221,11 @@ theorem exists_unique_ground_state_tree_ritz_approximation :
         (interval L J.val.1 J.val.2 → Fin q) ℂ) (Δ : ℝ),
       N ≤ D ^ 2 ∧ 0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
       (∀ j c, operatorSchmidtRank ((W j).reindex
-        (sheetSplit q (Finset.univ.filter fun v : ↥(interval L J.val.1 J.val.2) ↦
+        (ManyBody.cutEquiv (fun _ ↦ Fin q)
+            (Finset.univ.filter fun v : ↥(interval L J.val.1 J.val.2) ↦
           (v : Fin L) ∈ interval L 0 c))
-        (sheetSplit q (Finset.univ.filter fun v : ↥(interval L J.val.1 J.val.2) ↦
+        (ManyBody.cutEquiv (fun _ ↦ Fin q)
+            (Finset.univ.filter fun v : ↥(interval L J.val.1 J.val.2) ↦
           (v : Fin L) ∈ interval L 0 c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
       ∀ (k : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q)))
         (δ : ℝ),

@@ -176,12 +176,17 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Layers acting on configurations]
     \label{lem:qc_configuration_layers}
-    \lean{QuantumCircuit.apply_eq_ite_of_mulVec_eq_comp, QuantumCircuit.sigmaSite,
-        QuantumCircuit.sigmaSite_injective, QuantumCircuit.layerCfg,
-        QuantumCircuit.layerCfg_apply, QuantumCircuit.layerCfg_comp,
-        QuantumCircuit.layerCfg_apply_of_forall_ne, QuantumCircuit.eq_layerCfg_iff,
+    \lean{QuantumCircuit.apply_eq_ite_of_mulVec_eq_comp,
+        QuantumCircuit.sigmaSite,
+        QuantumCircuit.sigmaSite_injective,
+        QuantumCircuit.layerCfg,
+        QuantumCircuit.layerCfg_apply,
+        QuantumCircuit.layerCfg_comp,
+        QuantumCircuit.layerCfg_apply_of_forall_ne,
+        QuantumCircuit.eq_layerCfg_iff,
         QuantumCircuit.noncommProd_placeAlong_mulVec_eq_comp,
-        QuantumCircuit.placeAlong_mulVec_eq_comp, QuantumCircuit.permOp_mulVec,
+        QuantumCircuit.placeAlong_mulVec_eq_comp,
+        ManyBody.sitePermOp_mulVec,
         QuantumCircuit.placeAlong_mulVec_productVector}
     \leanok
     \uses{def:qc_local_circuit, lem:qc_permutation_layers}

@@ -28,13 +28,13 @@ In `TNLean/PEPS/ParentHamiltonian/Injective/InjectiveNearestNeighborParent.lean`
 
 - `finrank_regionParentGroundSpace_edgePairs_eq_one`;
 - `finrank_regionParentGroundSpace_edgeAndIsolated_eq_one`;
-- `finrank_ker_regionParentHamiltonian_edgePairs_eq_one`;
-- `finrank_ker_regionParentHamiltonian_edgeAndIsolated_eq_one`.
+- `finrank_ker_hamiltonian_ofPlace_edgePairs_eq_one`;
+- `finrank_ker_hamiltonian_ofPlace_edgeAndIsolated_eq_one`.
 
 The four nearest-neighbor names do not name the hypothesis and are unchanged.
 The span and kernel theorems
 `regionParentGroundSpace_eq_span_of_isVertexInjective_of_cover`,
-`ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover` and their
+`ker_hamiltonian_ofPlace_eq_span_of_isVertexInjective_of_cover` and their
 nearest-neighbor specializations keep `IsVertexInjective` alone: they hold with
 zero-dimensional bonds, where the span is zero, and take no positivity.
 

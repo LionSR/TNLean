@@ -24,7 +24,8 @@ The comparison is a derived auxiliary result.
 -/
 
 open scoped BigOperators
-open TNLean.Lattice
+
+open ManyBody (IntRect IsSafe mem_rectRegion rectRegion)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -64,7 +65,7 @@ theorem boxEntropy_power_le_of_succ_clearance
       Nat.mul_le_mul (Q.numChunksX_le r hr hQtwo) (Q.numChunksY_le r hr hQtwo)
     let ι := Fin (Q.numChunksX r) × Fin (Q.numChunksY r)
     let ch : ι → IntRect := fun i ↦ Q.child r i.1 i.2
-    let Xs : ι → Finset (Site Λ) := fun i ↦ rectRegion A (ch i)
+    let Xs : ι → Finset ↥Λ := fun i ↦ rectRegion A (ch i)
     have hsub : ∀ i : ι, (ch i).toFinset ⊆ Q.toFinset := fun i ↦
       IntRect.child_subset hr i.1.isLt i.2.isLt
     have hclear : (D + 1) * r ≤ D * Q.size := half_size_clearance hD hQ

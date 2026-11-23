@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import QICLean.ManyBody.Sites.Lattice.Rectangle
 import TNLean.PEPS.Injectivity.Normal.NormalBlocking
 import Mathlib.Logic.Equiv.Fin.Basic
@@ -29,7 +29,7 @@ The result includes empty grids, one-site grids, and prefixes beyond the last si
 
 open ManyBody (squareLatticeGraph)
 
-open TNLean.Lattice TNLean.PEPS
+open TNLean.PEPS
 
 open ManyBody (planeDomainGraph rectangularDomain rectangleSiteEquiv rectangleGraphIso
   edgeBoundary)
@@ -180,16 +180,16 @@ private theorem card_snakeBoundaryPairs_le (L k : ℕ) :
 
 /-- The snake ordering of the sites of the actual open integer square domain. -/
 noncomputable def snakeGridEquiv (L : ℕ) :
-    Fin (L * L) ≃ Site (rectangularDomain L L) :=
+    Fin (L * L) ≃ ↥(rectangularDomain L L) :=
   (snakeNativeEquiv L).trans (rectangleSiteEquiv L L)
 
 /-- The first `k` sites in the snake ordering. -/
-noncomputable def snakeGridPrefix (L k : ℕ) : Finset (Site (rectangularDomain L L)) := by
+noncomputable def snakeGridPrefix (L k : ℕ) : Finset ↥(rectangularDomain L L) := by
   classical
   exact Finset.univ.filter fun v ↦ ((snakeGridEquiv L).symm v).val < k
 
 /-- Membership in a snake prefix is the inequality on its actual ordering position. -/
-@[simp] theorem mem_snakeGridPrefix {L k : ℕ} {v : Site (rectangularDomain L L)} :
+@[simp] theorem mem_snakeGridPrefix {L k : ℕ} {v : ↥(rectangularDomain L L)} :
     v ∈ snakeGridPrefix L k ↔ ((snakeGridEquiv L).symm v).val < k := by
   classical
   simp [snakeGridPrefix]
@@ -213,7 +213,7 @@ theorem card_edgeBoundary_snakeGridPrefix_le (L k : ℕ) :
       L + 1 := by
   classical
   let f : ((Fin L × Fin L) × (Fin L × Fin L)) →
-      Sym2 (Site (rectangularDomain L L)) := fun p ↦
+      Sym2 ↥(rectangularDomain L L) := fun p ↦
     s(rectangleSiteEquiv L L p.1, rectangleSiteEquiv L L p.2)
   have hcover : edgeBoundary (planeDomainGraph (rectangularDomain L L)) (snakeGridPrefix L k) ⊆
       (snakeBoundaryPairs L k).image f := by

@@ -95,8 +95,8 @@ theorem exists_frustrationFree_improving_family_words_regionTensorCoordinates :
       Real.log (((d ^ 2 + 4) ^ (ℓ ^ 2 + 1) : ℕ) : ℝ) ≤ 4 * (A + 1) ^ 2 / g ^ 2 * u ^ 5 ∧
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
         N ≤ D ^ 2 ∧ 0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
-        (∀ j c, operatorSchmidtRank ((W j).reindex (sheetSplit q (cut c))
-          (sheetSplit q (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
+        (∀ j c, operatorSchmidtRank ((W j).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
         ∀ (k : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (δ : ℝ),
           Submodule.IsViable δ S G → δ < 1 →
           Submodule.IsViable (Δ ^ k / (1 - δ) ^ 2)

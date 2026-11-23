@@ -25,8 +25,6 @@ Source: *A two-dimensional area law from a global spectral gap*, September 24,
 The Lean proof follows the argument of Lemma 2.1 rather than transcribing its text.
 -/
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- Regional entropy continuity with the dimension of the actual region.
@@ -34,16 +32,16 @@ Source: Lemma 2.1, `01-preliminaries.tex`, lines 33–46, and its application
 in `08-scanner.tex`, lines 399–404. -/
 theorem abs_regionEntropy_sub_le_sqrt_traceDistance_card
     (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω Φ : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hΦ : ‖Φ‖ = 1)
-    (A : Finset (Site Λ)) :
+    (Ω Φ : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (hΦ : ‖Φ‖ = 1)
+    (A : Finset ↥Λ) :
     |ManyBody.regionEntropy Ω A - ManyBody.regionEntropy Φ A| ≤
       4 * Real.sqrt (Matrix.traceDistance
         (Matrix.vecMulVec Ω (star Ω)) (Matrix.vecMulVec Φ (star Φ))) *
         (1 + (A.card : ℝ) * Real.log q) := by
   have h := ManyBody.abs_regionEntropy_sub_le_sqrt_traceDistance
-    (fun _ : Site Λ ↦ Fin q) Ω Φ hΩ hΦ A
+    (fun _ : ↥Λ ↦ Fin q) Ω Φ hΩ hΦ A
   have hdim :
-      (Fintype.card (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q) A) : ℝ) ≠ 0 :=
+      (Fintype.card (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q) A) : ℝ) ≠ 0 :=
     (Nat.cast_pos.mpr (Fintype.card_pos_iff.mpr
       (Entropy.Matrix.PosSemidef.nonempty_of_trace_eq_one
         (ManyBody.trace_regionState_eq_one hΩ (D := A))))).ne'

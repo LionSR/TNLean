@@ -569,7 +569,7 @@ complement` (`ThreeBlockGeometry.regionBlockedWeight_complPhysical_eq`).
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
 `Papers/1804.04964/paper_normal.tex`. -/
-theorem ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
+theorem ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical
     (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
     (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement) :

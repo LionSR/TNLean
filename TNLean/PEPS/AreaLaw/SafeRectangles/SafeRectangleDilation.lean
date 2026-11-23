@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangles
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Templates.LatticeDyadicRect
 import TNLean.PEPS.AreaLaw.Templates.CappedDyadicEntropyCover
 import TNLean.PEPS.AreaLaw.Templates.RectangleShellCounts
@@ -74,16 +74,16 @@ and the rectangle-shell entropy input in the proof of Proposition 9.5
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
-section
+open ManyBody (IntRect IsSafe rectRegion supDist)
 
-open TNLean.Lattice
+section
 
 namespace TNLean.PEPS.AreaLaw
 
 /-- Safety passes from a parent to a rectangle in its dilation when the two
 radii fit inside the parent's safety radius. Source: `08-scanner.tex`,
 lines 723–729, in the proof of Proposition 9.5 (`prop:small-box`). -/
-theorem IsSafe.of_subset_dilate {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+theorem _root_.ManyBody.IsSafe.of_subset_dilate {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
     {D₀ j : ℕ} {Q Q' : IntRect} (hsafe : IsSafe Λ A D₀ Q)
     (hsub : Q'.toFinset ⊆ (Q.dilate j).toFinset)
     (hbudget : D₀ * Q'.size + j ≤ D₀ * Q.size) : IsSafe Λ A D₀ Q' := by
@@ -105,15 +105,13 @@ end
 
 section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- Every selected square is safe when the cap and dilation radii fit in the
 parent clearance. Source: proof of Proposition 9.5, 08-scanner.tex,
 lines 723–729. -/
-theorem IsSafe.isSafe_cappedDyadicPartition_shell
-    {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)} {D₀ : ℕ} {Q : IntRect}
+theorem _root_.ManyBody.IsSafe.isSafe_cappedDyadicPartition_shell
+    {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {D₀ : ℕ} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) (j L K k : ℕ) (z : ℤ × ℤ)
     (hj : j ≤ L) (hcap : 2 ^ K ≤ L)
     (hbudget : D₀ * L + L ≤ D₀ * Q.size)
@@ -136,16 +134,14 @@ end
 
 section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- The actual shell entropy under a pointwise estimate on safe rectangles.
 Source: proof of Proposition 9.5, 08-scanner.tex, lines 717–729.
 The explicit scalar budget supplies the selected squares' clearance. -/
-theorem IntRect.regionEntropy_shell_le_of_safe_box
-    (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) (Q : IntRect) (hsafe : IsSafe Λ A D₀ Q)
+theorem _root_.ManyBody.IntRect.regionEntropy_shell_le_of_safe_box
+    (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥Λ) (Q : IntRect) (hsafe : IsSafe Λ A D₀ Q)
     (j L K : ℕ) (hj : j ≤ L) (hL : L ≤ Q.size)
     (hlo : 2 ^ K ≤ L) (hhi : L < 2 ^ (K + 1))
     (hbudget : D₀ * L + L ≤ D₀ * Q.size)
@@ -174,8 +170,6 @@ section
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
@@ -192,10 +186,10 @@ theorem exists_regionEntropy_weak_rectangle_shell_le_rpow
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
             (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (E₀ : ℝ) (Ω : StateSpace Λ q),
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
+          ∀ (A : Finset ↥Λ) (Q : IntRect), IsSafe Λ A D₀ Q →
             ∀ j L : ℕ, j ≤ L → L ≤ Q.size →
               D₀ * L + L ≤ D₀ * Q.size →
               ManyBody.regionEntropy Ω

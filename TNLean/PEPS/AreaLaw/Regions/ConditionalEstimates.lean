@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Entropy.ConditionalMovementRegional
@@ -44,7 +44,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped ComplexOrder MatrixOrder
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -55,8 +54,8 @@ variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 /-- `S(x|P) + S(x|Y) = I(x:F|P)` for four regions partitioning the domain and a unit
 vector. Area-law manuscript, `04-conditional.tex`, lines 122–124 and 138–139;
 `05-replicas.tex`, lines 491–492. -/
-theorem movementEta_eq_condMutualInfo_left {P x Y F : Finset (Site Λ)}
-    (h : Entropy.FourPartition P x Y F) (Ω : StateSpace Λ q) :
+theorem movementEta_eq_condMutualInfo_left {P x Y F : Finset ↥Λ}
+    (h : Entropy.FourPartition P x Y F) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) :
     ManyBody.regionEntropy Ω (P ∪ x) - ManyBody.regionEntropy Ω P +
         (ManyBody.regionEntropy Ω (x ∪ Y) - ManyBody.regionEntropy Ω Y) =
       ManyBody.regionEntropy Ω (x ∪ P) + ManyBody.regionEntropy Ω (F ∪ P) -
@@ -71,8 +70,8 @@ theorem movementEta_eq_condMutualInfo_left {P x Y F : Finset (Site Λ)}
 /-- `S(x|P) + S(x|Y) = I(x:F|Y)` for four regions partitioning the domain and a unit
 vector. Area-law manuscript, `04-conditional.tex`, lines 122–124 and 138–139;
 `05-replicas.tex`, lines 491–492. -/
-theorem movementEta_eq_condMutualInfo_right {P x Y F : Finset (Site Λ)}
-    (h : Entropy.FourPartition P x Y F) (Ω : StateSpace Λ q) :
+theorem movementEta_eq_condMutualInfo_right {P x Y F : Finset ↥Λ}
+    (h : Entropy.FourPartition P x Y F) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) :
     ManyBody.regionEntropy Ω (P ∪ x) - ManyBody.regionEntropy Ω P +
         (ManyBody.regionEntropy Ω (x ∪ Y) - ManyBody.regionEntropy Ω Y) =
       ManyBody.regionEntropy Ω (x ∪ Y) + ManyBody.regionEntropy Ω (F ∪ Y) -
@@ -87,8 +86,8 @@ theorem movementEta_eq_condMutualInfo_right {P x Y F : Finset (Site Λ)}
 
 /-- `η = S(x|P) + S(x|Y) ≥ 0`, by strong subadditivity. Area-law manuscript,
 `04-conditional.tex`, lines 138–139. -/
-theorem movementEta_nonneg {P x Y F : Finset (Site Λ)} (h : Entropy.FourPartition P x Y F)
-    (Ω : StateSpace Λ q) :
+theorem movementEta_nonneg {P x Y F : Finset ↥Λ} (h : Entropy.FourPartition P x Y F)
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) :
     0 ≤ ManyBody.regionEntropy Ω (P ∪ x) - ManyBody.regionEntropy Ω P +
         (ManyBody.regionEntropy Ω (x ∪ Y) - ManyBody.regionEntropy Ω Y) := by
   simpa only [Entropy.regionalMovementEta] using
@@ -107,8 +106,8 @@ Each factor acts on its region, `ρ̂ = ρ + Π_{ker ρ}` is the kernel completi
 regional state, and `η = S(x|P) + S(x|Y)`. No faithfulness of the marginals is assumed. -/
 theorem exists_norm_movement_le :
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (q : ℕ) {P x Y F : Finset (Site Λ)},
-        Entropy.FourPartition P x Y F → ∀ θ : StateSpace Λ q, ‖θ‖ = 1 →
+      ∀ (Λ : Finset (ℤ × ℤ)) (q : ℕ) {P x Y F : Finset ↥Λ},
+        Entropy.FourPartition P x Y F → ∀ θ : EuclideanSpace ℂ (↥Λ → Fin q), ‖θ‖ = 1 →
         ∀ (σ : Matrix (↥(P ∪ x) → Fin q) (↥(P ∪ x) → Fin q) ℂ)
           (τ : Matrix (↥(x ∪ Y) → Fin q) (↥(x ∪ Y) → Fin q) ℂ),
           σ.PosSemidef → σ.trace.re ≤ 1 → τ.PosSemidef → τ.trace.re ≤ 1 →
@@ -120,7 +119,7 @@ theorem exists_norm_movement_le :
                   ManyBody.place (x ∪ Y) (cfc (fun t : ℝ ↦ t ^ (a / 2)) τ) *
                   ManyBody.place Y (cfc (fun t : ℝ ↦ t ^ (-a / 2))
                     (kernelCompletion (ManyBody.regionState θ Y)))) *ᵥ θ.ofLp) :
-                StateSpace Λ q)‖ ≤
+                EuclideanSpace ℂ (↥Λ → Fin q))‖ ≤
               Real.exp (-(a / 2) * (ManyBody.regionEntropy θ (P ∪ x) - ManyBody.regionEntropy θ P +
                   (ManyBody.regionEntropy θ (x ∪ Y) - ManyBody.regionEntropy θ Y)) +
                 C * a ^ (5 / 4 : ℝ) * Real.log (Real.exp 1 * (q : ℝ) ^ x.card) ^ 2) := by
@@ -130,7 +129,7 @@ theorem exists_norm_movement_le :
   have hcard : (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) x) : ℝ) =
       (q : ℝ) ^ x.card := by
     simp [ManyBody.RegionConfig]
-  have key := H (n := fun _ : Site Λ ↦ q) h θ hθ σ τ hσ hσtr hτ hτtr a ha (by rwa [hcard])
+  have key := H (n := fun _ : ↥Λ ↦ q) h θ hθ σ τ hσ hσtr hτ hτtr a ha (by rwa [hcard])
   rw [hcard, Entropy.FourPartition.movementEta_frameVector] at key
   simp only [Entropy.regionalMoveOperator, Entropy.FourPartition.frameMarginalP_eq,
     Entropy.FourPartition.frameMarginalY_eq] at key
@@ -142,8 +141,8 @@ theorem exists_norm_movement_le :
 Lemma 5.3 on lattice regions, where `ρ^{[s]}` is the zero-on-kernel real power of a regional
 state and `h` acts on the whole domain. Area-law manuscript, `04-conditional.tex`,
 lines 495–500. -/
-noncomputable def skewSymbol (Λ : Finset (ℤ × ℤ)) (q : ℕ) (t : ℝ) (P Y : Finset (Site Λ))
-    (h : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (θ : StateSpace Λ q) : ℂ :=
+noncomputable def skewSymbol (Λ : Finset (ℤ × ℤ)) (q : ℕ) (t : ℝ) (P Y : Finset ↥Λ)
+    (h : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) (θ : EuclideanSpace ℂ (↥Λ → Fin q)) : ℂ :=
   star θ.ofLp ⬝ᵥ
     ((ManyBody.place P (cfc (TensorPower.suppRpow t) (ManyBody.regionState θ P)) *
       ManyBody.place Y (cfc (TensorPower.suppRpow (-t)) (ManyBody.regionState θ Y)) * h *
@@ -151,8 +150,8 @@ noncomputable def skewSymbol (Λ : Finset (ℤ × ℤ)) (q : ℕ) (t : ℝ) (P Y
       ManyBody.place Y (cfc (TensorPower.suppRpow t) (ManyBody.regionState θ Y))) *ᵥ θ.ofLp)
 
 /-- The lattice skew symbol equals the marked scalar symbol on the physical tensor product. -/
-theorem skewSymbol_eq_markedScalarSymbol (t : ℝ) (P Y : Finset (Site Λ))
-    (h : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (θ : StateSpace Λ q) :
+theorem skewSymbol_eq_markedScalarSymbol (t : ℝ) (P Y : Finset ↥Λ)
+    (h : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) (θ : EuclideanSpace ℂ (↥Λ → Fin q)) :
     skewSymbol Λ q t P Y h θ =
       TensorPower.markedScalarSymbol (n := fun _ ↦ q) t P Y h θ.ofLp := by
   simp only [skewSymbol, TensorPower.markedScalarSymbol, TensorPower.regionPow, WithLp.toLp_ofLp]
@@ -165,12 +164,12 @@ let `θ` be a unit vector, and let `0 ≤ K ≤ 1` act on `P₀ ∪ x`. With
 `t = a/2` satisfies `|f(t)| - Re f(t) ≤ C a² ℓ_h⁴ η^{1/8}`, with the universal constant
 `C = 18π² + 6144 e^{π²+1}` and `η = S(x|P) + S(x|U) = I(x:F|U)`. No dimension of
 `P₁`, `U` or `F` enters. -/
-theorem skewSymbol_skew_le {P₀ P₁ x U F : Finset (Site Λ)}
+theorem skewSymbol_skew_le {P₀ P₁ x U F : Finset ↥Λ}
     (hp : TensorPower.SkewPartition P₀ P₁ x U F)
     {K : Matrix (↥(P₀ ∪ x) → Fin q) (↥(P₀ ∪ x) → Fin q) ℂ} (hK0 : 0 ≤ K) (hK1 : K ≤ 1)
     {a : ℝ} (ha : 0 < a)
     (hac : a * Real.log (Real.exp 1 * (q : ℝ) ^ (P₀.card + x.card)) ≤ 1 / 8)
-    {θ : StateSpace Λ q} (hθ : ‖θ‖ = 1) :
+    {θ : EuclideanSpace ℂ (↥Λ → Fin q)} (hθ : ‖θ‖ = 1) :
     ‖skewSymbol Λ q (a / 2) (P₀ ∪ P₁) (x ∪ U) (ManyBody.place (P₀ ∪ x) K) θ‖ -
         (skewSymbol Λ q (a / 2) (P₀ ∪ P₁) (x ∪ U) (ManyBody.place (P₀ ∪ x) K) θ).re ≤
       Entropy.ConditionalSkew.skewConst * a ^ 2 *

@@ -159,7 +159,7 @@ variable {ι : Type*} [Fintype ι]
 
 /-- Intertwining identities for every regional interaction intertwine the full
 Hamiltonian sums. -/
-theorem globalPhysicalMap_regionParentHamiltonian (R : ι → Finset V)
+theorem globalPhysicalMap_hamiltonian_ofPlace_mulVec (R : ι → Finset V)
     (F : V → Matrix (Fin e) (Fin d) ℂ)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -176,7 +176,7 @@ theorem globalPhysicalMap_regionParentHamiltonian (R : ι → Finset V)
     globalPhysicalMap_place (R i) F (h i) (k i) (hF i) ψ
 
 /-- Regional matrix intertwining identities extend to the full Hamiltonian matrices. -/
-theorem globalPhysicalMatrix_regionParentHamiltonian (R : ι → Finset V)
+theorem hamiltonian_ofPlace_mul_globalPhysicalMatrix (R : ι → Finset V)
     (F : V → Matrix (Fin e) (Fin d) ℂ)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -194,13 +194,13 @@ theorem globalPhysicalMatrix_regionParentHamiltonian (R : ι → Finset V)
           globalPhysicalMap F =
       globalPhysicalMap F ∘ₗ Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian :=
-    LinearMap.ext fun ψ => (globalPhysicalMap_regionParentHamiltonian R F h k hF ψ).symm
+    LinearMap.ext fun ψ => (globalPhysicalMap_hamiltonian_ofPlace_mulVec R F h k hF ψ).symm
   simpa only [globalPhysicalMatrix, LinearMap.toMatrix'_comp, ← Matrix.toLin'_apply',
     LinearMap.toMatrix'_toLin'] using
     congrArg LinearMap.toMatrix' hLin
 
 /-- Unitary physical changes of coordinates conjugate the full regional Hamiltonian. -/
-theorem regionParentHamiltonian_physicalDeform_unitary (R : ι → Finset V)
+theorem hamiltonian_ofPlace_deformedRegionInteraction_of_isUnitaryBetween (R : ι → Finset V)
     (F : V → (Fin d → ℂ) ≃ₗ[ℂ] (Fin e → ℂ))
     (hF : ∀ v, (LinearMap.toMatrix' (F v).toLinearMap).IsUnitaryBetween)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
@@ -218,7 +218,7 @@ theorem regionParentHamiltonian_physicalDeform_unitary (R : ι → Finset V)
   have hMM : M * M.conjTranspose = 1 := (globalPhysicalMatrix_isUnitaryBetween _ hF).2
   have hInter :
       K * M = M * (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian := by
-    apply globalPhysicalMatrix_regionParentHamiltonian
+    apply hamiltonian_ofPlace_mul_globalPhysicalMatrix
     intro i
     rw [deformedRegionInteraction_eq_unitary_conj (R i) F hF,
       Matrix.mul_assoc, Matrix.mul_assoc,
@@ -233,7 +233,8 @@ theorem regionParentHamiltonian_physicalDeform_unitary (R : ι → Finset V)
 
 /-- Unitary physical deformation preserves the characteristic polynomial of the
 full parent Hamiltonian, including every eigenvalue multiplicity. -/
-theorem charpoly_regionParentHamiltonian_physicalDeform_unitary (R : ι → Finset V)
+theorem charpoly_hamiltonian_ofPlace_deformedRegionInteraction_of_isUnitaryBetween
+    (R : ι → Finset V)
     (F : V → (Fin d → ℂ) ≃ₗ[ℂ] (Fin e → ℂ))
     (hF : ∀ v, (LinearMap.toMatrix' (F v).toLinearMap).IsUnitaryBetween)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
@@ -247,7 +248,7 @@ theorem charpoly_regionParentHamiltonian_physicalDeform_unitary (R : ι → Fins
     (fun v => LinearMap.toMatrix' (F v).toLinearMap) hF
   have hCard : Fintype.card (V → Fin e) = Fintype.card (V → Fin d) :=
     Nat.le_antisymm (hM.2.card_le _) (hM.1.card_le _)
-  rw [regionParentHamiltonian_physicalDeform_unitary R F hF h]
+  rw [hamiltonian_ofPlace_deformedRegionInteraction_of_isUnitaryBetween R F hF h]
   have hchar := Matrix.charpoly_mul_comm_of_le
     (M * (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian)
     M.conjTranspose (hM.1.card_le _)
@@ -256,7 +257,8 @@ theorem charpoly_regionParentHamiltonian_physicalDeform_unitary (R : ι → Fins
   exact hchar
 
 /-- Unitary physical deformation preserves the full Hamiltonian spectrum. -/
-theorem spectrum_regionParentHamiltonian_physicalDeform_unitary (R : ι → Finset V)
+theorem spectrum_hamiltonian_ofPlace_deformedRegionInteraction_of_isUnitaryBetween
+    (R : ι → Finset V)
     (F : V → (Fin d → ℂ) ≃ₗ[ℂ] (Fin e → ℂ))
     (hF : ∀ v, (LinearMap.toMatrix' (F v).toLinearMap).IsUnitaryBetween)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
@@ -267,7 +269,7 @@ theorem spectrum_regionParentHamiltonian_physicalDeform_unitary (R : ι → Fins
   classical
   ext μ
   rw [Matrix.mem_spectrum_iff_isRoot_charpoly,
-    charpoly_regionParentHamiltonian_physicalDeform_unitary R F hF h,
+    charpoly_hamiltonian_ofPlace_deformedRegionInteraction_of_isUnitaryBetween R F hF h,
     Matrix.mem_spectrum_iff_isRoot_charpoly]
 
 end TNLean.PEPS

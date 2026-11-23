@@ -299,11 +299,11 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
     simp only [W, Matrix.conjTranspose_piKronecker,
       Matrix.conjTranspose_conjTranspose]
     rw [← Matrix.conjTranspose_piKronecker,
-      MPOTensor.tensorPower_mul_conjTranspose, hUUstar',
+      MPOTensor.piKronecker_const_mul_conjTranspose, hUUstar',
       Matrix.piKronecker_one]
   have hWWstar : W * Wᴴ = 1 := by
     simp only [W]
-    rw [MPOTensor.tensorPower_mul_conjTranspose]
+    rw [MPOTensor.piKronecker_const_mul_conjTranspose]
     simp only [Matrix.conjTranspose_conjTranspose]
     rw [hUstarU', Matrix.piKronecker_one]
   have hWone : singleKrausMap W 1 = 1 := by
@@ -460,7 +460,7 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
     simp only [W, Matrix.conjTranspose_piKronecker,
       Matrix.conjTranspose_conjTranspose]
     rw [← Matrix.conjTranspose_piKronecker,
-      MPOTensor.tensorPower_mul_conjTranspose, hUUstar,
+      MPOTensor.piKronecker_const_mul_conjTranspose, hUUstar,
       Matrix.piKronecker_one]
   have hprod := F.singleKrausMap_groundBondProduct hN
   have htrace := F.transformedGroundBondProduct_trace hN

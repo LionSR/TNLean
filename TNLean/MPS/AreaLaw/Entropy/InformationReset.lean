@@ -6,12 +6,17 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Entropy.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.Entropy.ResetSupportSeparation
 import QICLean.ManyBody.Sites.GraphBall
-import TNLean.Lattice.PhysicalBufferCoordinates
-import TNLean.Lattice.RegionalReset
-import TNLean.Lattice.RegionalResetEntropy
-import TNLean.Lattice.ReplicaSwap
+import QICLean.ManyBody.Replica.RegionalReset
+import QICLean.ManyBody.Replica.RegionalResetEntropy
+import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Analysis.Norm.MatrixKroneckerContraction
+import QICLean.Analysis.Parameter.LocalizationParameters
+import QICLean.ManyBody.Sites.SupportedUnitary
+import QICLean.Analysis.Real.InformationResetScalar
+import QICLean.Spectral.Perturbation.ResidualComparison
 
 /-!
 # Information reset
@@ -51,8 +56,6 @@ open ManyBody (ChainSupport DomainSupport lineDomainGraph ChainInteraction Domai
 
 open Matrix QuantumCircuit MeasureTheory ProbabilityTheory
 open scoped Kronecker Matrix.Norms.L2Operator NNReal
-open TNLean.Lattice (exists_regional_physicalBuffer_filter exists_supported_unitary_of_two_sided
-  norm_two_sided_le_of_norm_sub_le reindex_physicalBuffer_eq_place reset_entropy_scalar sheetSwapOp)
 
 open ManyBody (IsGapped groundSpace)
 
@@ -79,8 +82,9 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
         ∀ b : ℝ,
           ManyBody.regionMutualInformation Ω D C ≤ b →
           let w := Cp * (1 + b + Real.log (Fintype.card ι : ℝ))
-          let e := sitePairConfigurationEquiv (ι) q q
-          let F := Matrix.reindex e e (sheetSwapOp q D)
+          let pr := Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q
+          let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl ι) finProdFinEquiv)
+          let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
           let K := Matrix.reindex e e (doubledHamiltonian H)
           let K' := F * K * Fᴴ
           ∀ (N : ℕ → Finset (ι) → Finset (ι)) (Z : Finset (ι)),
@@ -101,7 +105,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
   classical
   let r := 2 * p + 10
   have hr : 0 ≤ r := by dsimp [r]; linarith
-  obtain ⟨A, T₀, hA, hT₀, hfilter⟩ := exists_regional_physicalBuffer_filter hΔ hr
+  obtain ⟨A, T₀, hA, hT₀, hfilter⟩ := GaussianFilter.exists_regional_physicalBuffer_filter hΔ hr
   let P := Cint * (1 + T₀)
   have hP : 0 < P := by positivity
   let Kloc := 4 * (v * T₀ + 15 + r + P)
@@ -110,7 +114,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
   have hCp : 0 < Cp := by positivity
   let L₀ := max 1 ⌈8 * Real.sqrt 8 * (1 + Real.log (q : ℝ))⌉₊
   refine ⟨Cp, L₀, hCp, le_max_left _ _, ?_⟩
-  intro ι _ _ hL H Ω E₀ hH hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w e F K K' N Z hlocal hsep
+  intro ι _ _ hL H Ω E₀ hH hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w pr e F K K' N Z hlocal hsep
   set L := Fintype.card ι with hLdef
   have hLn : 1 ≤ L := (le_max_left _ _).trans hL
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hLn
@@ -178,37 +182,41 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
       _ ≤ 1 * ε := mul_le_mul_of_nonneg_right hsmall hε
       _ = ε := one_mul _
   let Q := (D ∪ C)ᶜ
-  let Pconf := Fin (Fintype.card (D → Fin q)) × Fin (Fintype.card (C → Fin q))
-  let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) D C hDC
-  let g := (s.prodCongr s).trans (Equiv.doubledRegroup Pconf ({v // v ∉ D ∪ C} → Fin q))
-  let ψ := fun c ↦ Ω (e.symm c).1 * Ω (e.symm c).2
-  obtain ⟨hψn, hφn, W, z, hW, hz, hgauss⟩ :=
-    hfilter q D C hDC e H E₀ Ω b hH hΩ hgap hspan hb hI
-  let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
-    ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
+  -- The filter is constructed on the sites `ι ⊕ ι` of two replicas; `φ` pairs the two copies of
+  -- every site and encodes each pair along `finProdFinEquiv`, giving the coordinates of `F`, `K`.
+  let φ := (ManyBody.replicaPairEquiv ι (Fin q)).trans
+    (ManyBody.siteConfigurationEquiv (X' := fun _ : ι ↦ Fin (q * q)) (Equiv.refl ι)
+      fun _ ↦ finProdFinEquiv)
+  let KV := Matrix.reindex (Equiv.sumArrowEquivProdArrow ι ι (Fin q)).symm
+    (Equiv.sumArrowEquivProdArrow ι ι (Fin q)).symm (doubledHamiltonian H)
+  let FV := ManyBody.replicaSwapOp (Fin q) D
+  let Ψ := ManyBody.sumSitesProduct (X := fun _ : ι ⊕ ι ↦ Fin q) Ω Ω
+  have hK : Matrix.reindex φ φ KV = K := rfl
+  have hF : Matrix.reindex φ φ FV = F := rfl
+  have hK' : Matrix.reindex φ φ (FV * KV * FVᴴ) = K' := by
+    change _ = F * K * Fᴴ
+    rw [← hK, ← hF]
+    simp only [Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv]
+  obtain ⟨W, z, -, hW, hz, hgauss⟩ := hfilter hH hΩ hgap hspan hDC hI
+  let V := Matrix.reindex φ φ (ManyBody.place (Q.disjSum Q) W)
   have hVsupp : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
-    obtain ⟨A, hA⟩ : ∃ A, V = ManyBody.place (X := fun _ ↦ Fin (q * q)) Q A :=
-      ⟨_, reindex_physicalBuffer_eq_place q D C hDC W⟩
-    rw [hA]
-    exact ManyBody.place_mem_supportedOperators A
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators (Equiv.refl ι)
+      (X' := fun _ ↦ Fin (q * q)) (fun _ ↦ finProdFinEquiv) (fun _ ↦ Iff.rfl)
+      ((ManyBody.reindex_replicaPairEquiv_mem_supportedOperators_iff (S := Q)).mpr
+        (ManyBody.place_mem_supportedOperators W))
+    convert hs using 1
+    ext x y
+    rfl
   have hV : ‖V‖ ≤ 1 :=
-    ((Matrix.l2_opNorm_reindex_equiv (g.symm.trans e) _).trans_le
-      (Matrix.l2_opNorm_one_kronecker_le W)).trans hW
+    (Matrix.l2_opNorm_reindex_equiv φ _).trans_le ((ManyBody.norm_place_le W).trans hW)
   let η := Real.toNNReal (A * B)
+  let M₀V := GaussianFilter.gaussianIntertwinerTruncated η (T₀ * B) (FV * KV * FVᴴ) KV
+    (ManyBody.place (Q.disjSum Q) W)
   let M₀ := GaussianFilter.gaussianIntertwinerTruncated η (T₀ * B) K' K V
-  obtain ⟨hT, hfwd, hrev⟩ := hgauss (L : ℝ) hL1
-  change ‖WithLp.toLp 2
-    (GaussianFilter.gaussianIntertwinerTruncated η (T₀ * B)
-      (F * Matrix.reindex e e (doubledHamiltonian H) * Fᴴ)
-      (Matrix.reindex e e (doubledHamiltonian H)) V *ᵥ ψ) -
-        (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
-          3 * Real.exp (-10 * b) * (L : ℝ) ^ (-r) at hfwd
-  change ‖WithLp.toLp 2
-    ((GaussianFilter.gaussianIntertwinerTruncated η (T₀ * B)
-      (F * Matrix.reindex e e (doubledHamiltonian H) * Fᴴ)
-      (Matrix.reindex e e (doubledHamiltonian H)) V)ᴴ *ᵥ (F *ᵥ ψ)) -
-        (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
-          3 * Real.exp (-10 * b) * (L : ℝ) ^ (-r) at hrev
+  have hM₀ : M₀ = Matrix.reindex φ φ M₀V := by
+    rw [GaussianFilter.reindex_gaussianIntertwinerTruncated, hK', hK]
+  have hT : 0 ≤ T₀ * B := mul_nonneg hT₀.le (zero_le_one.trans hB)
+  obtain ⟨-, hfwd, hrev⟩ := hgauss (L : ℝ) hL1
   let S := N ℓ (Q ∪ Z)
   obtain ⟨path, hpathIntegral⟩ := hlocal ℓ
   let M := ∫ t : ℝ in Set.Icc (-(T₀ * B)) (T₀ * B),
@@ -224,26 +232,49 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
           Real.exp (v * (T₀ * B) - (ℓ : ℝ) / 2)) :=
         mul_le_mul_of_nonneg_right hV (by positivity)
       _ ≤ ε := by simpa only [one_mul] using hlocalError
-  obtain ⟨hMfwd, hMrev⟩ :=
-    TNLean.Lattice.norm_two_sided_le_of_norm_sub_le hψn hφn hMclose hfwd hrev
+  -- the localized average, read on the two replicas
+  let MV := Matrix.reindex φ.symm φ.symm M
+  have hMVs : MV ∈ ManyBody.supportedOperators (fun _ : ι ⊕ ι ↦ Fin q) (S.disjSum S) := by
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators (Equiv.refl ι)
+      (X' := fun _ ↦ Fin q × Fin q) (fun _ ↦ finProdFinEquiv.symm) (fun _ ↦ Iff.rfl) hMs
+    refine (ManyBody.reindex_replicaPairEquiv_mem_supportedOperators_iff (A := MV)).mp ?_
+    convert hs using 1
+    ext x y
+    rfl
+  have hMVclose : ‖MV - M₀V‖ ≤ ε := by
+    have h : MV - M₀V = Matrix.reindex φ.symm φ.symm (M - M₀) := by
+      ext i j
+      simp [MV, hM₀]
+    rw [h, Matrix.l2_opNorm_reindex_equiv]
+    exact hMclose
+  have hΨ : ‖Ψ‖ = 1 := by
+    rw [ManyBody.norm_sumSitesProduct, hΩ, mul_one]
+  have hFΨ : ‖Matrix.toEuclideanLin FV Ψ‖ = 1 := by
+    have h := ManyBody.sitePermOp_mulVec_eq_relabelVector (α := Fin q) (ManyBody.replicaSwap D) Ψ
+    rw [ManyBody.sitePermOp_replicaSwap] at h
+    change ‖WithLp.toLp 2 (FV *ᵥ WithLp.ofLp Ψ)‖ = 1
+    rw [h, ManyBody.norm_relabelVector, hΨ]
+  obtain ⟨hMfwd, hMrev⟩ := Matrix.norm_two_sided_le_of_norm_sub_le hΨ hFΨ hMVclose hfwd hrev
   have hresidual : ε + 3 * Real.exp (-10 * b) * (L : ℝ) ^ (-r) =
       4 * Real.exp (-10 * b) * (L : ℝ) ^ (-r) := by dsimp only [ε]; ring
   rw [hresidual] at hMfwd hMrev
-  obtain ⟨U, hUu, hUs, hUerr⟩ := exists_supported_unitary_of_two_sided
-    (C := 4) (ε := (L : ℝ) ^ (-r)) S hMs hb hz hMfwd hMrev
-    (by norm_num) (by positivity)
-  have hUerr' : ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
+  obtain ⟨U, hUu, hUs, hUerr⟩ := ManyBody.exists_supported_unitary_of_two_sided
+    (C := 4) (ε := (L : ℝ) ^ (-r)) hMVs hb hz hMfwd hMrev
+  have hUerr' : ‖Matrix.toEuclideanLin U Ψ - Matrix.toEuclideanLin FV Ψ‖ ≤
       8 * (L : ℝ) ^ (-r) := by
     simpa only [show (2 : ℝ) * 4 = 8 by norm_num] using hUerr
   have hS : Disjoint S (R₀ ∪ C₀) := hsep ℓ hsepRadius.le
-  have hent := TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary q hq hΩ
-    D R₀ C₀ hR₀ (Finset.disjoint_of_subset_left hC₀ hDC.symm) S hS U hUu hUs
-    (8 * (L : ℝ) ^ (-r)) hUerr'
-  refine hent.trans (reset_entropy_scalar (C := 8) (p := p)
-    (lq := Real.log (q : ℝ)) (by norm_num) hL1 hLthreshold (le_refl _) ?_ ?_)
-  · have hq1 : (1 : ℝ) ≤ q := by exact_mod_cast hq
-    exact Real.log_nonneg (one_le_mul_of_one_le_of_one_le (Real.one_le_exp zero_le_one)
-      (one_le_pow₀ hq1))
+  have hS' : Disjoint (S.disjSum S) ((R₀ ∪ C₀).disjSum (∅ : Finset ι)) := by
+    refine Finset.disjoint_left.mpr ?_
+    rintro (x | x) hx hx'
+    · simp only [Finset.inl_mem_disjSum] at hx hx'
+      exact Finset.disjoint_left.mp hS hx hx'
+    · simp at hx'
+  have hent := ManyBody.regionMutualInformation_cores_le_of_reset_unitary hΩ hR₀
+    (Finset.disjoint_of_subset_left hC₀ hDC.symm) hS' hUu hUs hUerr'
+  rw [Fintype.card_fin] at hent
+  refine hent.trans (Real.eight_mul_sqrt_mul_le_rpow_neg (C := 8) (p := p)
+    (l := Real.log (q : ℝ)) hL1 hLthreshold (le_refl _) ?_)
   · have hq1 : (1 : ℝ) ≤ q := by exact_mod_cast hq
     have hlogq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg hq1
     have hcardNat : R₀.card ≤ L := Finset.card_le_univ R₀
@@ -281,8 +312,12 @@ theorem _root_.ManyBody.ChainInteraction.information_reset (q : ℕ) (hq : 1 ≤
     information_reset_of_supported_localization q hq R Δ hΔ p hp Cint v hCint hv
   refine ⟨Cp, L₀, hCp, hL₀, ?_⟩
   intro L hL h hh hhJ Ω E₀ hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
-  have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin L) q q)
-      (sitePairConfigurationEquiv (Fin L) q q) (doubledHamiltonian h.hamiltonian) =
+  have hK : Matrix.reindex
+      ((Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q).symm.trans
+      (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv))
+      ((Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q).symm.trans
+          (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv))
+          (doubledHamiltonian h.hamiltonian) =
         h.doubledFin.hamiltonian := h.hamiltonian_doubledFin.symm
   let Z := (ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D).biUnion (fun X ↦ X.1)
   have hreset' := hreset (Fin L) (by simpa only [Fintype.card_fin] using hL)
@@ -327,8 +362,12 @@ theorem _root_.ManyBody.DomainInteraction.information_reset (q : ℕ) (hq : 1 �
     information_reset_of_supported_localization q hq R Δ hΔ p hp Cint v hCint hv
   refine ⟨Cp, L₀, hCp, hL₀, ?_⟩
   intro Λ hL h hh hhJ Ω E₀ hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
-  have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin Λ.card) q q)
-      (sitePairConfigurationEquiv (Fin Λ.card) q q) (doubledHamiltonian h.hamiltonian) =
+  have hK : Matrix.reindex
+      ((Equiv.arrowProdEquivProdArrow (Fin Λ.card) (fun _ ↦ Fin q) fun _ ↦ Fin q).symm.trans
+      (Equiv.arrowCongr (Equiv.refl (Fin Λ.card)) finProdFinEquiv))
+      ((Equiv.arrowProdEquivProdArrow (Fin Λ.card) (fun _ ↦ Fin q) fun _ ↦ Fin q).symm.trans
+          (Equiv.arrowCongr (Equiv.refl (Fin Λ.card)) finProdFinEquiv))
+          (doubledHamiltonian h.hamiltonian) =
         h.doubledFin.hamiltonian := h.hamiltonian_doubledFin.symm
   let Z := (ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).biUnion (fun X ↦ X.1)
   have hreset' := hreset (Fin Λ.card) (by simpa only [Fintype.card_fin] using hL)

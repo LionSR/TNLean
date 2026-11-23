@@ -31,8 +31,6 @@ or Proposition 4.1: no Hamiltonian, unitary, or state is involved.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -48,7 +46,7 @@ def nestedPatchRadius (u : ℝ) (j : ℕ) : ℝ := u + 2 * j
 /-- The sampled patch at the selected radius.
 Source: polynomial-PEPS `03-patches.tex`, lines 60–66. -/
 noncomputable def nestedPatch (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (u : ℝ) (j : ℕ) :
-    Finset (Site Λ) := closedSquareSample Λ c (nestedPatchRadius u j)
+    Finset ↥Λ := closedSquareSample Λ c (nestedPatchRadius u j)
 
 /-- There is at least one selected radius. -/
 theorem nestedPatchCount_pos (u : ℝ) : 0 < nestedPatchCount u := by
@@ -89,7 +87,7 @@ theorem nestedPatch_mono (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (u : ℝ)
 
 /-- A crossing edge's support misses a square whose radius is smaller by at least one. -/
 theorem edgeBoundary_support_disjoint_of_add_one_le {Λ : Finset (ℤ × ℤ)}
-    {c : ℝ × ℝ} {r s : ℝ} {e : Sym2 (Site Λ)}
+    {c : ℝ × ℝ} {r s : ℝ} {e : Sym2 ↥Λ}
     (he : e ∈ edgeBoundary (planeDomainGraph Λ) (closedSquareSample Λ c r)) (hsr : s + 1 ≤ r) :
     Disjoint e.toFinset (closedSquareSample Λ c s) := by
   classical
@@ -104,7 +102,7 @@ theorem edgeBoundary_support_disjoint_of_add_one_le {Λ : Finset (ℤ × ℤ)}
 
 /-- A crossing edge's support lies in every square enlarged by at least one. -/
 theorem edgeBoundary_support_subset_of_add_one_le {Λ : Finset (ℤ × ℤ)}
-    {c : ℝ × ℝ} {r s : ℝ} {e : Sym2 (Site Λ)}
+    {c : ℝ × ℝ} {r s : ℝ} {e : Sym2 ↥Λ}
     (he : e ∈ edgeBoundary (planeDomainGraph Λ) (closedSquareSample Λ c r)) (hrs : r + 1 ≤ s) :
     e.toFinset ⊆ closedSquareSample Λ c s := by
   classical
@@ -118,7 +116,7 @@ theorem edgeBoundary_support_subset_of_add_one_le {Λ : Finset (ℤ × ℤ)}
 /-- A crossing support misses every earlier selected patch.
 Source: polynomial-PEPS `03-patches.tex`, lines 222–228. -/
 theorem nestedPatch_crossing_disjoint_earlier {Λ : Finset (ℤ × ℤ)}
-    {c : ℝ × ℝ} {u : ℝ} {i j : ℕ} {e : Sym2 (Site Λ)}
+    {c : ℝ × ℝ} {u : ℝ} {i j : ℕ} {e : Sym2 ↥Λ}
     (he : e ∈ edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u j)) (hij : i < j) :
     Disjoint e.toFinset (nestedPatch Λ c u i) := by
   apply edgeBoundary_support_disjoint_of_add_one_le he
@@ -127,7 +125,7 @@ theorem nestedPatch_crossing_disjoint_earlier {Λ : Finset (ℤ × ℤ)}
 /-- A crossing support is contained in every later selected patch.
 Source: polynomial-PEPS `03-patches.tex`, lines 222–228. -/
 theorem nestedPatch_crossing_subset_later {Λ : Finset (ℤ × ℤ)}
-    {c : ℝ × ℝ} {u : ℝ} {i j : ℕ} {e : Sym2 (Site Λ)}
+    {c : ℝ × ℝ} {u : ℝ} {i j : ℕ} {e : Sym2 ↥Λ}
     (he : e ∈ edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u i)) (hij : i < j) :
     e.toFinset ⊆ nestedPatch Λ c u j := by
   apply edgeBoundary_support_subset_of_add_one_le he
@@ -136,7 +134,7 @@ theorem nestedPatch_crossing_subset_later {Λ : Finset (ℤ × ℤ)}
 /-- No unordered edge crosses two distinct selected patches.
 Source: polynomial-PEPS `03-patches.tex`, lines 218–228. -/
 theorem nestedPatch_crossing_unique {Λ : Finset (ℤ × ℤ)} {c : ℝ × ℝ}
-    {u : ℝ} {i j : ℕ} {e : Sym2 (Site Λ)}
+    {u : ℝ} {i j : ℕ} {e : Sym2 ↥Λ}
     (hi : e ∈ edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u i))
     (hj : e ∈ edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u j)) : i = j := by
   classical

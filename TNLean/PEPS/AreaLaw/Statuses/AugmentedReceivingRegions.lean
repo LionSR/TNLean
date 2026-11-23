@@ -31,8 +31,6 @@ OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 variable {I : Type*} [Fintype I] [LinearOrder I]
@@ -44,20 +42,20 @@ spectral gap, 08-scanner.tex, lines 21–24 and 83–98, at
 openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 theorem state_augmentedPartition_eq_target_near_middle
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) :
-    let X : Finset (Site Λ) := S.A.filter fun x ↦ x.val ∈ T
-    let σ : PhysicalPartition (Site Λ) := S.state h g
-    let U : Finset (Site Λ) := positiveNear S.depth σ
-    let Y : Finset (Site Λ) := middle σ
+    let X : Finset ↥Λ := S.A.filter fun x ↦ x.val ∈ T
+    let σ : PhysicalPartition ↥Λ := S.state h g
+    let U : Finset ↥Λ := positiveNear S.depth σ
+    let Y : Finset ↥Λ := middle σ
     augmentedPartition σ =
       ({ P := insert (Sum.inr false)
-           ((X ∪ U).image (Sum.inl : Site Λ → Site Λ ⊕ Bool))
-         Y := Y.image (Sum.inl : Site Λ → Site Λ ⊕ Bool)
+           ((X ∪ U).image (Sum.inl : ↥Λ → ↥Λ ⊕ Bool))
+         Y := Y.image (Sum.inl : ↥Λ → ↥Λ ⊕ Bool)
          F := insert (Sum.inr true)
-           (((X ∪ (U ∪ Y))ᶜ).image (Sum.inl : Site Λ → Site Λ ⊕ Bool)) } :
-        TensorPower.ReplicaTransport.PYF (Site Λ ⊕ Bool)) := by
+           (((X ∪ (U ∪ Y))ᶜ).image (Sum.inl : ↥Λ → ↥Λ ⊕ Bool)) } :
+        TensorPower.ReplicaTransport.PYF (↥Λ ⊕ Bool)) := by
   simpa only [←(state_receiving_regions hT S hdepth h g).1,
     ←Finset.union_assoc, (state_receiving_regions hT S hdepth h g).2.1,
     ←(state_receiving_regions hT S hdepth h g).2.2] using
@@ -70,20 +68,20 @@ spectral gap, 08-scanner.tex, lines 21–24 and 83–98, at
 openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 theorem oldChargeState_augmentedPartition_eq_target_near_middle
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) :
-    let X : Finset (Site Λ) := S.A.filter fun x ↦ x.val ∈ T
-    let σ : PhysicalPartition (Site Λ) := S.oldChargeState h g
-    let U : Finset (Site Λ) := positiveNear S.depth σ
-    let Y : Finset (Site Λ) := middle σ
+    let X : Finset ↥Λ := S.A.filter fun x ↦ x.val ∈ T
+    let σ : PhysicalPartition ↥Λ := S.oldChargeState h g
+    let U : Finset ↥Λ := positiveNear S.depth σ
+    let Y : Finset ↥Λ := middle σ
     augmentedPartition σ =
       ({ P := insert (Sum.inr false)
-           ((X ∪ U).image (Sum.inl : Site Λ → Site Λ ⊕ Bool))
-         Y := Y.image (Sum.inl : Site Λ → Site Λ ⊕ Bool)
+           ((X ∪ U).image (Sum.inl : ↥Λ → ↥Λ ⊕ Bool))
+         Y := Y.image (Sum.inl : ↥Λ → ↥Λ ⊕ Bool)
          F := insert (Sum.inr true)
-           (((X ∪ (U ∪ Y))ᶜ).image (Sum.inl : Site Λ → Site Λ ⊕ Bool)) } :
-        TensorPower.ReplicaTransport.PYF (Site Λ ⊕ Bool)) := by
+           (((X ∪ (U ∪ Y))ᶜ).image (Sum.inl : ↥Λ → ↥Λ ⊕ Bool)) } :
+        TensorPower.ReplicaTransport.PYF (↥Λ ⊕ Bool)) := by
   simpa only [←(oldChargeState_receiving_regions hT S hdepth h g).1,
     ←Finset.union_assoc, (oldChargeState_receiving_regions hT S hdepth h g).2.1,
     ←(oldChargeState_receiving_regions hT S hdepth h g).2.2] using

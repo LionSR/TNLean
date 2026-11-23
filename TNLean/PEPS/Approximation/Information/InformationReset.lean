@@ -4,12 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DoubledHamiltonian.ResetUnitary
-import TNLean.Lattice.ReplicaSwap
+import QICLean.ManyBody.Sites.ReplicaSwap
+import QICLean.ManyBody.Replica.RegionalResetEntropy
+import QICLean.Analysis.Real.InformationResetScalar
+import QICLean.ManyBody.Sites.SitewiseProduct
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
-import TNLean.Circuit.SitewiseTensorSupport
-import TNLean.Lattice.BufferedRectangles
 import TNLean.Lattice.Sheet.SwapCorrection
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!
 # The information reset
@@ -60,6 +63,8 @@ open ManyBody (IsGapped groundSpace rectangleEmbedding rectangularDomain rectang
   rectangleSiteEquiv_val graphNeighborhood planeDomainGraph)
 open scoped Kronecker
 open TNLean.Lattice
+
+open ManyBody (supDist supDist_le_of_walk)
 
 namespace TNLean.PEPS.Approximation
 
@@ -172,105 +177,91 @@ the paired sites of a finite set `V`, supported on a set `B` containing no site 
 `mutualInformation_cores_le_of_reset_unitary`, follows by relabelling the sites.
 Source: `02-information.tex`, lines 612–630. -/
 theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V]
-    [DecidableEq V] {q : ℕ} (hq : 1 ≤ q) {Ω : EuclideanSpace ℂ (V → Fin q)} (hΩ : ‖Ω‖ = 1)
+    [DecidableEq V] {q : ℕ} {Ω : EuclideanSpace ℂ (V → Fin q)} (hΩ : ‖Ω‖ = 1)
     {A C A₀ C₀ : Finset V} (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
     (B : Finset V) (hnot : ∀ v ∈ A₀ ∪ C₀, v ∉ B)
     {U : Matrix (V → Fin (q * q)) (V → Fin (q * q)) ℂ}
     (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B)
     {δ : ℝ} :
-    let p := sitePairConfigurationEquiv V q q
-    let F := reindex p p (sheetSwapOp q A)
+    let pr := Equiv.arrowProdEquivProdArrow V (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl V) finProdFinEquiv)
+    let F := reindex p p (reindex pr pr (ManyBody.pairSwapOp A))
     let ψ : (V → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
     ManyBody.regionMutualInformation Ω A₀ C₀ ≤
       8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ A₀.card)) := by
-  intro p F ψ hUerr
-  have hΩsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 = 1 := by
-    rw [← EuclideanSpace.norm_sq_eq, hΩ]
-    norm_num
-  have hψn : ‖WithLp.toLp 2 ψ‖ = 1 :=
-    (EuclideanSpace.norm_toLp_comp_equiv p.symm (doubledVector (WithLp.ofLp Ω))).trans
-      (Matrix.norm_doubledVector hΩsum)
-  have hφn : ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 :=
-    (Matrix.norm_toLp_mulVec_of_unitary (Matrix.reindex_mem_unitaryGroup p (sheetSwapOp q A)
-      (sheetSwap q A).permMatrix_mem_unitaryGroup) ψ).trans hψn
-  set Pe := (Equiv.sumArrowEquivProdArrow V V (Fin q)).trans p with hPe
-  set U' := reindex Pe.symm Pe.symm U with hU'
-  have hU's : U' ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (B.disjSum B : Finset (V ⊕ V)) :=
-    reindex_sumArrow_sitePair_mem_supportedOperators q hUs
-  have hU'u : U'ᴴ * U' = 1 :=
-    (Matrix.mem_unitaryGroup_iff').mp (reindex_mem_unitaryGroup Pe.symm U hUu)
-  set Ψ := ManyBody.sumSitesProduct (X := fun _ : V ⊕ V ↦ Fin q) Ω Ω with hΨdef
-  set Φ := ManyBody.relabelSites (replicaSwap A) Ψ with hΦdef
-  have hΨ : Ψ = WithLp.toLp 2 (ψ ∘ Pe) := by
-    apply WithLp.ofLp_injective 2
-    exact (doubledVector_comp_sumArrow p Ω).symm
-  have hΦ : Φ = WithLp.toLp 2 ((F *ᵥ ψ) ∘ Pe) := by
-    apply WithLp.ofLp_injective 2
-    exact (sheetSwapOp_mulVec_comp_sumArrow p A Ω).symm
-  have hΨn : ‖Ψ‖ = 1 := by rw [hΨ, EuclideanSpace.norm_toLp_comp_equiv]; exact hψn
-  have hΦn : ‖Φ‖ = 1 := by rw [hΦ, EuclideanSpace.norm_toLp_comp_equiv]; exact hφn
-  have hδ : ‖WithLp.toLp 2 (U' *ᵥ WithLp.ofLp Ψ) - Φ‖ ≤ δ := by
-    have h₁ := norm_reindex_mulVec_sub Pe.symm U ψ (F *ᵥ ψ)
-    rw [Equiv.symm_symm] at h₁
-    rw [hΨ, hΦ, hU', WithLp.ofLp_toLp, h₁]
+  intro pr p F ψ hUerr
+  -- the two replicas `V ⊕ V`, paired at every site and encoded along `finProdFinEquiv`
+  let φ := (ManyBody.replicaPairEquiv V (Fin q)).trans
+    (ManyBody.siteConfigurationEquiv (X' := fun _ : V ↦ Fin (q * q)) (Equiv.refl V)
+      fun _ ↦ finProdFinEquiv)
+  let FV := ManyBody.replicaSwapOp (Fin q) A
+  let Ψ := ManyBody.sumSitesProduct (X := fun _ : V ⊕ V ↦ Fin q) Ω Ω
+  let U' := reindex φ.symm φ.symm U
+  have hF : reindex φ φ FV = F := by
+    ext x y
+    rfl
+  have hU : reindex φ φ U' = U := (reindex φ φ).apply_symm_apply U
+  have hψ : ψ = WithLp.ofLp Ψ ∘ φ.symm := rfl
+  have hvec (M : Matrix (ManyBody.Config fun _ : V ⊕ V ↦ Fin q)
+      (ManyBody.Config fun _ : V ⊕ V ↦ Fin q) ℂ)
+      (u : EuclideanSpace ℂ (ManyBody.Config fun _ : V ⊕ V ↦ Fin q)) :
+      reindex φ φ M *ᵥ (WithLp.ofLp u ∘ φ.symm) =
+        WithLp.ofLp (toEuclideanLin M u) ∘ φ.symm := by
+    rw [reindex_apply, submatrix_mulVec_equiv, Equiv.symm_symm, Function.comp_assoc,
+      Equiv.symm_comp_self, Function.comp_id]
+    rfl
+  have hU's : U' ∈ ManyBody.supportedOperators (fun _ : V ⊕ V ↦ Fin q) (B.disjSum B) := by
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators (Equiv.refl V)
+      (X' := fun _ ↦ Fin q × Fin q) (fun _ ↦ finProdFinEquiv.symm) (fun _ ↦ Iff.rfl) hUs
+    refine (ManyBody.reindex_replicaPairEquiv_mem_supportedOperators_iff (A := U')).mp ?_
+    convert hs using 1
+    ext x y
+    rfl
+  have hU'u : U' ∈ unitaryGroup _ ℂ := reindex_mem_unitaryGroup φ.symm U hUu
+  have hδ : ‖toEuclideanLin U' Ψ - toEuclideanLin FV Ψ‖ ≤ δ := by
+    rw [← hU, ← hF, hψ, hvec, hvec, ← WithLp.toLp_sub, ← Pi.sub_comp,
+      EuclideanSpace.norm_toLp_comp_equiv, WithLp.toLp_sub, WithLp.toLp_ofLp,
+      WithLp.toLp_ofLp] at hUerr
     exact hUerr
-  have hXJ : Disjoint (A₀.disjSum (∅ : Finset V)) (C₀.disjSum ∅) := by
+  have hS : Disjoint (B.disjSum B) ((A₀ ∪ C₀).disjSum (∅ : Finset V)) := by
     rw [Finset.disjoint_left]
     rintro (v | v) hv hv'
     · simp only [Finset.inl_mem_disjSum] at hv hv'
-      exact Finset.disjoint_left.mp hAC (hA₀ hv) (hC₀ hv')
-    · simp at hv
-  have hS : Disjoint (B.disjSum B : Finset (V ⊕ V)) (A₀.disjSum ∅ ∪ C₀.disjSum ∅) := by
-    rw [Finset.disjoint_left]
-    rintro (v | v) hv hv'
-    · simp only [Finset.inl_mem_disjSum] at hv
-      have hmem : v ∈ A₀ ∪ C₀ := by
-        simpa [Finset.mem_union, Finset.inl_mem_disjSum] using hv'
-      exact hnot v hmem hv
+      exact hnot v hv' hv
     · simp at hv'
-  have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero (q := q) hΩ hA₀
-    (Finset.disjoint_of_subset_left hC₀ hAC.symm)
-  have hent :=
-    ManyBody.regionMutualInformation_le_of_supported_unitary (fun _ : V ⊕ V ↦ Fin q)
-      (φ := Ψ) (η := Φ) hΨn hΦn hXJ hS hU's hU'u hprod
-  rw [hΨdef, ManyBody.regionMutualInformation_sumSitesProduct_inl (X := fun _ : V ⊕ V ↦ Fin q)
-    (f := Ω) (g := Ω) hΩ hΩ] at hent
-  refine hent.trans ?_
-  have hcard : Fintype.card (ManyBody.RegionConfig (fun _ : V ⊕ V ↦ Fin q)
-      (A₀.disjSum ∅)) = q ^ A₀.card := by
-    simp only [ManyBody.RegionConfig, Fintype.card_fun, Fintype.card_fin,
-      Fintype.card_coe, Finset.card_disjSum, Finset.card_empty, add_zero]
-  rw [hcard]
-  push_cast
-  have hcard1 : (1 : ℝ) ≤ (q : ℝ) ^ A₀.card := one_le_pow₀ (by exact_mod_cast hq)
-  gcongr
-  · exact Real.log_nonneg (one_le_mul_of_one_le_of_one_le (Real.one_le_exp zero_le_one) hcard1)
-  · exact hδ
+  have hent := ManyBody.regionMutualInformation_cores_le_of_reset_unitary hΩ hA₀
+    (Finset.disjoint_of_subset_left hC₀ hAC.symm) hS hU'u hU's hδ
+  rwa [Fintype.card_fin] at hent
 
 /-- **The entropy comparison of the reset.** Let `U` be a unitary on the paired sites of the
 open square, supported on a set `B` containing no site of the cores `R₀ ⊆ R`, `C₀ ⊆ C`, with
 `‖U Ψ - Φ‖ ≤ δ` for `Ψ = Ω ⊗ Ω` and `Φ = F_R Ψ`. Then
 `I_Ω(R₀ : C₀) ≤ 8 √δ log (e q^|R₀|)`.
 Source: `02-information.tex`, lines 612–630. -/
-theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
+theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ}
     {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1) {R C R₀ C₀ : Finset (SquareLatticeVertex L L)}
     (hRC : Disjoint R C)
-    (hR₀ : R₀ ⊆ R) (hC₀ : C₀ ⊆ C) (B : Finset (Site (rectangularDomain L L)))
+    (hR₀ : R₀ ⊆ R) (hC₀ : C₀ ⊆ C) (B : Finset ↥(rectangularDomain L L))
     (hnot : ∀ v ∈ R₀ ∪ C₀, rectangleSiteEquiv L L v ∉ B)
-    {U : Matrix (Lattice.Configuration (rectangularDomain L L) (q * q))
-      (Lattice.Configuration (rectangularDomain L L) (q * q)) ℂ}
+    {U : Matrix (↥(rectangularDomain L L) → Fin (q * q))
+      (↥(rectangularDomain L L) → Fin (q * q)) ℂ}
     (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B)
     {δ : ℝ} :
-    let pe := (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
+    let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q)
+      fun _ ↦ Fin q
+    let pe := (pr.symm.trans
+        (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)).trans
       (rectangleConfigurationEquiv L L (q * q))
-    let F := reindex pe pe (TNLean.Lattice.sheetSwapOp q R)
-    let ψ : Lattice.Configuration (rectangularDomain L L) (q * q) → ℂ := fun c ↦
+    let F := reindex pe pe (reindex pr pr (ManyBody.pairSwapOp R))
+    let ψ : (↥(rectangularDomain L L) → Fin (q * q)) → ℂ := fun c ↦
       Ω (pe.symm c).1 * Ω (pe.symm c).2
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
     ManyBody.regionMutualInformation Ω R₀ C₀ ≤
       8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ R₀.card)) := by
-  intro pe F ψ hUerr
+  intro pr pe F ψ hUerr
+  set p₀ := pr.symm.trans
+    (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
   set a := rectangleSiteEquiv L L
   set e := rectangleConfigurationEquiv L L (q * q)
   set S := B.image a.symm
@@ -289,21 +280,24 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     intro v hv hvS
     obtain ⟨u, hu, huv⟩ := Finset.mem_image.mp hvS
     exact hnot v hv (by rw [← huv]; simpa using hu)
-  have hψ : (fun c ↦ Ω ((sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).symm c).1 *
-      Ω ((sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).symm c).2) = ψ ∘ e := by
+  have hψ : (fun c ↦ Ω (p₀.symm c).1 * Ω (p₀.symm c).2) = ψ ∘ e := by
     funext c
     simp [ψ, pe, e]
-  have hF : reindex (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q)
-      (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q)
-      (TNLean.Lattice.sheetSwapOp q R) = F.submatrix e e := by
+    rfl
+  have hF : reindex p₀ p₀ (reindex pr pr (ManyBody.pairSwapOp R)) = F.submatrix e e := by
     ext x y
     simp [F, pe, e]
+    rfl
   have hU₀ : reindex e.symm e.symm U = U.submatrix e e := by
     ext x y
     simp
-  refine mutualInformation_cores_le_of_sites_reset_unitary hq hΩ hRC hR₀ hC₀ S hnot'
+  refine mutualInformation_cores_le_of_sites_reset_unitary hΩ hRC hR₀ hC₀ S hnot'
     (reindex_mem_unitaryGroup e.symm U hUu) hU₀s ?_
-  simp only [hψ, hF, hU₀, Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
+  change ‖WithLp.toLp 2 (reindex e.symm e.symm U *ᵥ fun c ↦ Ω (p₀.symm c).1 * Ω (p₀.symm c).2) -
+    WithLp.toLp 2 (reindex p₀ p₀ (reindex pr pr (ManyBody.pairSwapOp R)) *ᵥ
+      fun c ↦ Ω (p₀.symm c).1 * Ω (p₀.symm c).2)‖ ≤ δ
+  rw [hψ, hF, hU₀]
+  simp only [Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
     Equiv.self_comp_symm, Function.comp_id, ← WithLp.toLp_sub]
   rw [show (U *ᵥ ψ) ∘ e - (F *ᵥ ψ) ∘ e = (U *ᵥ ψ - F *ᵥ ψ) ∘ e from rfl,
     EuclideanSpace.norm_toLp_comp_equiv, WithLp.toLp_sub]
@@ -374,7 +368,7 @@ theorem _root_.ManyBody.SquareInteraction.information_reset_of_resetThreshold_le
     have := Nat.ceil_lt_add_one (mul_nonneg hK.le (by linarith : (0 : ℝ) ≤ 1 + b + Real.log L))
     rw [resetWidth]
     nlinarith
-  have hent := mutualInformation_cores_le_of_reset_unitary hq hΩ hRC hR₀ hC₀ _
+  have hent := mutualInformation_cores_le_of_reset_unitary hΩ hRC hR₀ hC₀ _
     (notMem_resetSupport hRC hR₀ hC₀ hℓ hRw hCw) hUu hUs hUerr
   refine hent.trans ?_
   have hR₀card : (R₀.card : ℝ) ≤ (L : ℝ) ^ 2 := by
@@ -384,10 +378,8 @@ theorem _root_.ManyBody.SquareInteraction.information_reset_of_resetThreshold_le
     simpa [sq] using h'
   have hq1 : (1 : ℝ) ≤ q := by exact_mod_cast hq
   have hlogq : 0 ≤ Real.log q := Real.log_nonneg hq1
-  have hcard1 : (1 : ℝ) ≤ (q : ℝ) ^ R₀.card := one_le_pow₀ hq1
-  refine reset_entropy_scalar (lq := Real.log q) hCu.le hL1 (le_trans (le_max_right _ _) hL)
-    (le_refl _) ?_ ?_
-  · exact Real.log_nonneg (one_le_mul_of_one_le_of_one_le (Real.one_le_exp zero_le_one) hcard1)
+  refine Real.eight_mul_sqrt_mul_le_rpow_neg (l := Real.log q) hL1
+    (le_trans (le_max_right _ _) hL) (le_refl _) ?_
   · rw [Real.log_mul (Real.exp_pos 1).ne' (by positivity), Real.log_exp, Real.log_pow]
     have := mul_le_mul_of_nonneg_right hR₀card hlogq
     linarith

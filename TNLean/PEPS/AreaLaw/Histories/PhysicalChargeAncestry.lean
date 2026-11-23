@@ -18,8 +18,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 286–311, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -32,21 +30,21 @@ namespace CollarScan
 charge ancestry rooted at an initial or actual deterministic fill site.
 Containment of all predecessor sites, including far-side predecessors, follows
 from the domain graph and the source clearance condition. -/
-theorem bandState_has_chargeAncestry_domainGraph
+theorem bandState_has_chargeAncestry_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (k : ℕ) (side : Bool) (x : Site Λ) (hxA : x ∈ S.A)
+    (k : ℕ) (side : Bool) (x : ↥Λ) (hxA : x ∈ S.A)
     (hx : S.bandState g r k (fun j ↦ choices j) x = some side) :
     ∃ events, S.ChargeAncestry g r choices side k x events := by
   apply S.bandState_has_chargeAncestry g r choices _ k side x hxA hx
   intro t i _ hmeet
   let h : History S.K S.m S.M t := (fun _ ↦ r, fun j _ ↦ choices j)
-  exact ball_subset_of_oldChargeState_middle_domainGraph hT S hgraph hdepth hclear h g hL i
+  exact ball_subset_of_oldChargeState_middle_planeDomainGraph hT S hgraph hdepth hclear h g hL i
     hmeet
 
 /-- Possible bad endpoints lie in the actual initial collar of the chosen color.
@@ -75,25 +73,25 @@ theorem bad_bandState_mem_collar {V : Type*} [Fintype V] [DecidableEq V]
 /-- A physically bad completed-pair endpoint forces a long selected-charge
 ancestry inside a short pair-time window. Ambient depth variation and all
 ancestry existence hypotheses are discharged from the physical domain graph. -/
-theorem bad_bandState_has_long_chargeAncestry_domainGraph
+theorem bad_bandState_has_long_chargeAncestry_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L) (hn : 0 < S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (k : ℕ) (side : Bool) (x : Site Λ) (hxA : x ∈ S.A)
+    (k : ℕ) (side : Bool) (x : ↥Λ) (hxA : x ∈ S.A)
     (hx : S.bandState g r k (fun j ↦ choices j) x = some side)
     (hbad : 2 * S.front g r k side + S.D < 2 * orientedDepth S.depth side x) :
     ∃ events, S.ChargeAncestry g r choices side k x events ∧ events ≠ [] ∧
       (S.D : ℤ) < 4 * S.r₀ * events.length ∧
       ∀ e ∈ events, (k : ℤ) - (e.1 + 1) ≤
         4 * S.n * ((S.r₀ : ℤ) * events.length + 1) := by
-  obtain ⟨events, he⟩ := S.bandState_has_chargeAncestry_domainGraph hT hgraph hdepth
+  obtain ⟨events, he⟩ := S.bandState_has_chargeAncestry_planeDomainGraph hT hgraph hdepth
     g r choices hL hclear k side x hxA hx
   refine ⟨events, he, he.bad_length_and_time S hn ?_ hbad⟩
-  exact S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth
+  exact S.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT hgraph hdepth
 
 end CollarScan
 

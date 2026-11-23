@@ -3,9 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.Norm.MatrixKroneckerContraction
-import TNLean.Circuit.RegionalSwap
+import QICLean.ManyBody.Sites.PairSwapPermutation
 import TNLean.Lattice.Sheet.Birth
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 
 /-!
 # Swapping two sheets and the buffer correction
@@ -23,10 +25,11 @@ unit vector it moves by at most `4 ‖𝒱 ω - s ⊗ s'‖`, since `F_{T B_T}` 
 * `Sheet.bufferCorrection`: `D_U` for abstract finite systems.
 * `Sheet.sheetBufferCorrection`: `D_U` on the raw registers of two sheets.
 
-The unitary `F_S` swapping the two raw sheets at the sites of `S`, `TNLean.Lattice.sheetSwapOp`,
-and its algebra (`TNLean.Lattice.sheetSwapOp_mul_sheetSwapOp`: `F_A F_Y = F_T` for
-`Y = T ⊔ A`; `TNLean.Lattice.commute_sheetSwapOp_kronecker`) do not depend on the geometry of
-the sites and are stated in `TNLean.Circuit.RegionalSwap`.
+The unitary `F_S` swapping the two raw sheets at the sites of `S` is QICLean's exchange
+`ManyBody.pairSwapOp S` of the two copies paired at every site, read on pairs of configurations
+along `Equiv.arrowProdEquivProdArrow`; its algebra (`ManyBody.pairSwapOp_mul_of_subset`:
+`F_A F_Y = F_{Y \ A}` for `A ⊆ Y`; `ManyBody.reindex_pairSwapOp`: the exchange is the
+permutation matrix of `ManyBody.pairSwap`) does not depend on the geometry of the sites.
 
 ## Main results
 
@@ -50,7 +53,6 @@ the manuscript; no upstream Lean proof text was reused.
 open Matrix QuantumCircuit
 open EuclideanSpace (vecKron)
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
-open TNLean.Lattice (sheetSwap sheetSwapOp)
 
 noncomputable section
 
@@ -269,10 +271,13 @@ set_option synthInstance.maxSize 512 in
 /-- In the coordinates `threeSplit T E` of both sheets, swapping the sheets at `T` exchanges the
 `T`-components. -/
 theorem sheetSwapOp_eq_submatrix :
-    sheetSwapOp q T =
+    reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp T) =
       ((tSwapW (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).toPEquiv.toMatrix :
         Matrix _ _ ℂ).submatrix (threeSplit₂ h) (threeSplit₂ h) := by
-  have he : (threeSplit₂ h).symm.trans ((sheetSwap q T).trans (threeSplit₂ h)) =
+  have he : (threeSplit₂ h).symm.trans
+      (((Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q).permCongr
+        (ManyBody.pairSwap T)).trans (threeSplit₂ h)) =
       tSwapW (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q) := by
     refine Equiv.ext fun w => ?_
     obtain ⟨⟨⟨t₁, e₁⟩, u₁⟩, ⟨⟨t₂, e₂⟩, u₂⟩⟩ := w
@@ -282,7 +287,7 @@ theorem sheetSwapOp_eq_submatrix :
     refine Prod.ext (Prod.ext (Prod.ext ?_ ?_) ?_) (Prod.ext (Prod.ext ?_ ?_) ?_) <;>
       funext v <;> simp only [Equiv.trans_apply, Equiv.prodCongr_apply, Equiv.prodCongr_symm,
         Prod.map_fst, Prod.map_snd, threeSplit_apply_fst_fst, threeSplit_apply_fst_snd,
-        threeSplit_apply_snd, sheetSwap, Equiv.coe_fn_mk, tSwapW]
+        threeSplit_apply_snd, ManyBody.permCongr_pairSwap_apply, tSwapW]
     · rw [ite_eq_left v.2]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
     · rw [ite_eq_right (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
     · rw [ite_eq_right (hU v)]
@@ -291,11 +296,12 @@ theorem sheetSwapOp_eq_submatrix :
     · rw [ite_eq_right (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
     · rw [ite_eq_right (hU v)]
       exact threeSplit_symm_apply_of_notMem h _ _ _ v.2
-  have hsub := toMatrix_toPEquiv_submatrix (sheetSwap q T) (threeSplit₂ h).symm
-    (threeSplit₂ h).symm
+  have hsub := toMatrix_toPEquiv_submatrix
+    ((Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q).permCongr
+      (ManyBody.pairSwap T)) (threeSplit₂ h).symm (threeSplit₂ h).symm
   rw [Equiv.symm_symm, he] at hsub
   rw [← hsub, submatrix_submatrix, Equiv.symm_comp_self, submatrix_id_id]
-  rfl
+  exact ManyBody.reindex_pairSwapOp T
 
 /-- The buffer correction commutes with every product `R₁ ⊗ R₂` of operators acting on `T ∪ E`,
 in particular with the encoders of both sheets when all holes lie in `T ∪ E`

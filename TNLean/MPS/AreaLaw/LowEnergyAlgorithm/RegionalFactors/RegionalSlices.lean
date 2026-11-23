@@ -8,7 +8,10 @@ import QICLean.Algebra.OperatorSchmidt.PrescribedFactors
 import QICLean.Algebra.OperatorSchmidt.Realignment
 import QICLean.Algebra.OperatorSchmidt.Reindex
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
-import TNLean.Circuit.RegionSplit
+import QICLean.ManyBody.Sites.Placement
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 
 /-!
 # Matrix-entry slices over the complement of a region
@@ -31,15 +34,14 @@ open scoped Kronecker
 
 namespace TNLean.MPS.AreaLaw
 
-open TNLean.Lattice
-
 variable {V : Type*} [DecidableEq V] {q : ℕ}
 
 /-- The matrix entries of `X` between two fixed configurations of the complement of `J`,
 viewed as an operator on `J`. -/
 def regionalSlice (J : Finset V) (X : Matrix (V → Fin q) (V → Fin q) ℂ)
     (x y : {v // v ∉ J} → Fin q) : Matrix (J → Fin q) (J → Fin q) ℂ :=
-  Matrix.of fun σ τ ↦ X ((sheetSplit q J).symm (σ, x)) ((sheetSplit q J).symm (τ, y))
+  Matrix.of fun σ τ ↦ X ((ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm (σ, x))
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm (τ, y))
 
 /-- **Slice decomposition.** An operator of operator Schmidt rank `N` across `(J, Jᶜ)` is a sum
 of `N` products whose factors on `J` are slices of the operator. This is the decomposition
@@ -49,13 +51,15 @@ theorem exists_regionalSlice_decomposition [Finite V] (J : Finset V)
     (X : Matrix (V → Fin q) (V → Fin q) ℂ) :
     ∃ (N : ℕ) (e : Fin N → ({v // v ∉ J} → Fin q) × ({v // v ∉ J} → Fin q))
       (M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ),
-      N = operatorSchmidtRank (X.reindex (sheetSplit q J) (sheetSplit q J)) ∧
+      N = operatorSchmidtRank
+          (X.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ∧
       X = (∑ r, M r ⊗ₖ regionalSlice J X (e r).1 (e r).2).submatrix
-        ((sheetSplit q J).trans (Equiv.prodComm _ _))
-        ((sheetSplit q J).trans (Equiv.prodComm _ _)) := by
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) J).trans (Equiv.prodComm _ _))
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) J).trans (Equiv.prodComm _ _)) := by
   classical
   have := Fintype.ofFinite V
-  let τ := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
+  let τ := (ManyBody.cutEquiv (fun _ ↦ Fin q) J).trans
+      (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
   let ρ : Matrix (({v // v ∉ J} → Fin q) × (J → Fin q))
       (({v // v ∉ J} → Fin q) × (J → Fin q)) ℂ :=
     X.reindex τ τ
@@ -63,8 +67,10 @@ theorem exists_regionalSlice_decomposition [Finite V] (J : Finset V)
       Matrix (J → Fin q) (J → Fin q) ℂ :=
     fun ij ↦ operatorBlock ρ ij.1 ij.2
   have hrank : operatorSchmidtRank ρ =
-      operatorSchmidtRank (X.reindex (sheetSplit q J) (sheetSplit q J)) :=
-    operatorSchmidtRank_reindex_prodComm (X.reindex (sheetSplit q J) (sheetSplit q J))
+      operatorSchmidtRank (X.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) J)
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) :=
+    operatorSchmidtRank_reindex_prodComm
+        (X.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J))
   obtain ⟨κ, a, -, hspan, hli⟩ := exists_linearIndependent' ℂ v
   have : Finite κ := hli.finite
   let : Fintype κ := Fintype.ofFinite κ
@@ -87,14 +93,15 @@ open-boundary matrix product operator bond dimension at a cut is the operator Sc
 theorem operatorSchmidtRank_regionalSlice_le [Finite V] (J C : Finset V)
     (X : Matrix (V → Fin q) (V → Fin q) ℂ) (x y : {v // v ∉ J} → Fin q) :
     operatorSchmidtRank ((regionalSlice J X x y).reindex
-        (sheetSplit q (Finset.univ.filter fun v : J ↦ (v : V) ∈ C))
-        (sheetSplit q (Finset.univ.filter fun v : J ↦ (v : V) ∈ C))) ≤
-      operatorSchmidtRank (X.reindex (sheetSplit q C) (sheetSplit q C)) := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (Finset.univ.filter fun v : J ↦ (v : V) ∈ C))
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (Finset.univ.filter fun v : J ↦ (v : V) ∈ C))) ≤
+      operatorSchmidtRank (X.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) C)
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) C)) := by
   classical
   have := Fintype.ofFinite V
   set C' : Finset ↥J := Finset.univ.filter fun v : J ↦ (v : V) ∈ C with hC'
   obtain ⟨A, B, hX⟩ := hasOperatorSchmidtDecomposition_operatorSchmidtRank
-    (X.reindex (sheetSplit q C) (sheetSplit q C))
+    (X.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) C) (ManyBody.cutEquiv (fun _ ↦ Fin q) C))
   have hL (c : ↥C) (hc : (c : V) ∈ J) : (⟨c, hc⟩ : ↥J) ∈ C' := by
     simp [hC', c.2]
   have hR (c : {v // v ∉ C}) (hc : (c : V) ∈ J) : (⟨c, hc⟩ : ↥J) ∉ C' := by
@@ -104,7 +111,9 @@ theorem operatorSchmidtRank_regionalSlice_le [Finite V] (J C : Finset V)
   let fR : ({v // v ∉ J} → Fin q) → ({v // v ∉ C'} → Fin q) → ({v // v ∉ C} → Fin q) :=
     fun z β c ↦ if hc : (c : V) ∈ J then β ⟨⟨c, hc⟩, hR c hc⟩ else z ⟨c, hc⟩
   have hsplit (z : {v // v ∉ J} → Fin q) (α : ↥C' → Fin q) (β : {v // v ∉ C'} → Fin q) :
-      sheetSplit q C ((sheetSplit q J).symm ((sheetSplit q C').symm (α, β), z)) =
+      ManyBody.cutEquiv (fun _ ↦ Fin q) C
+          ((ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm
+          ((ManyBody.cutEquiv (fun _ ↦ Fin q) C').symm (α, β), z)) =
         (fL z α, fR z β) := by
     refine Prod.ext (funext fun c ↦ ?_) (funext fun c ↦ ?_)
     · simp only [Equiv.piEquivPiSubtypeProd_apply]
@@ -125,9 +134,12 @@ theorem operatorSchmidtRank_regionalSlice_le [Finite V] (J C : Finset V)
   refine ⟨fun t ↦ Matrix.of fun α α' ↦ A t (fL x α) (fL y α'),
     fun t ↦ Matrix.of fun β β' ↦ B t (fR x β) (fR y β'), ?_⟩
   ext ⟨α, β⟩ ⟨α', β'⟩
-  have hentry : X ((sheetSplit q J).symm ((sheetSplit q C').symm (α, β), x))
-      ((sheetSplit q J).symm ((sheetSplit q C').symm (α', β'), y)) =
-      (X.reindex (sheetSplit q C) (sheetSplit q C)) (fL x α, fR x β) (fL y α', fR y β') := by
+  have hentry : X ((ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) C').symm (α, β), x))
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm
+          ((ManyBody.cutEquiv (fun _ ↦ Fin q) C').symm (α', β'), y)) =
+      (X.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) C) (ManyBody.cutEquiv (fun _ ↦ Fin q) C))
+          (fL x α, fR x β) (fL y α', fR y β') := by
     rw [← hsplit x α β, ← hsplit y α' β']
     simp only [reindex_apply, submatrix_apply, Equiv.symm_apply_apply]
   rw [hX] at hentry
@@ -142,12 +154,13 @@ theorem operatorSchmidtRank_le_card_sq {m n : Type*} [Fintype m] [Finite n]
     (fun ij : m × m ↦ operatorBlock ρ ij.1 ij.2)
     (fun i j ↦ Submodule.subset_span ⟨(i, j), rfl⟩)
 
-/-- The cut coordinates of `ManyBody.cutOperator` and of `sheetSplit` give the same operator
-Schmidt rank. -/
+/-- The cut coordinates of `ManyBody.cutOperator` and the reindexing along `ManyBody.cutEquiv`
+give the same operator Schmidt rank. -/
 theorem operatorSchmidtRank_cutOperator_eq [Finite V] (B : Finset V)
     (X : Matrix (V → Fin q) (V → Fin q) ℂ) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) B X) =
-      operatorSchmidtRank (X.reindex (sheetSplit q B) (sheetSplit q B)) := by
+      operatorSchmidtRank (X.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) B)
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) B)) := by
   have := Fintype.ofFinite V
   rfl
 

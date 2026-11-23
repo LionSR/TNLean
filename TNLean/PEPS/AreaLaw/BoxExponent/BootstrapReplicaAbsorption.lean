@@ -163,7 +163,6 @@ section
 noncomputable section
 open Filter Matrix
 open scoped Topology Matrix ComplexOrder
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -179,9 +178,9 @@ and `comparator:rough-upper` and `comparator:rough-lower`, lines 154–166, and
 `08-scanner.tex`, `scanner:bootstrap-comparison`, lines 755–769. -/
 theorem regionEntropy_le_of_rough_typical_comparisons
     {Λ : Finset (ℤ × ℤ)} {q : ℕ}
-    (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1)
-    (X : Finset (Site Λ))
-    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ => Fin q) X))
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
+    (X : Finset ↥Λ)
+    (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ => Fin q) X))
     (w : ℝ)
     (hz : 0 < (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E)
     (hE : ∀ i ∈ E,
@@ -198,7 +197,7 @@ theorem regionEntropy_le_of_rough_typical_comparisons
     (hrₗ : Tendsto rₗ atTop (𝓝 0))
     (hrₑ : Tendsto rₑ atTop (𝓝 0))
     (hdefect : ∀ᶠ k in atTop, d k ≤ Edef + rₑ k) :
-    let β := fun _ : Site Λ => Fin q
+    let β := fun _ : ↥Λ => Fin q
     let split := ManyBody.cutEquiv β X
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ωt
     let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E

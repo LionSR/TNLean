@@ -12,7 +12,7 @@ import TNLean.PEPS.Tensor.Region.ConfigurationCalculus
 This file continues `TNLean.PEPS.RegionBlock.UnionInjectivityGeneral` with the
 blue-side fiber-collapse factorization over a bare `ThreeBlockGeometry`: the pointwise
 capstone
-`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`, which the
+`regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue`, which the
 two-step inverse application of Lemma `injective_union` (arXiv:1804.04964, Section 3,
 lines 1324--1400 of `Papers/1804.04964/paper_normal.tex`) applies for each host boundary
 configuration, and its function-level form
@@ -140,14 +140,14 @@ namespace ThreeBlockGeometry
 
 open scoped Classical in
 /-- **The core blue smul-factorization (pointwise).** The blue mirror of
-`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical`: the blue
+`regionInteriorBondProd_smul_regionBlockedWeight_complPhysical`: the blue
 interior bond multiple of the fused host weight, at a fixed blue physical leg, is the
 sum over blue boundary configurations of the complement coupling coefficient times
 the blue blocked-region weight.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 355--486 of
 `Papers/1804.04964/paper_normal.tex`. -/
-theorem regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue
+theorem regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue
     (bdry : RegionBoundaryConfig (G := G) A (Finset.univ \ g.red))
     (σblue : RegionPhysicalConfig (V := V) (d := d) g.blue)
     (σcompl : RegionPhysicalConfig (V := V) (d := d) g.complement) :
@@ -159,7 +159,7 @@ theorem regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_
           regionBlockedWeight (G := G) A g.blue bβ σblue := by
   rw [← g.swapBlueComplement_complPhysical σblue σcompl]
   exact
-    ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
+    ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical
       g.swapBlueComplement bdry σcompl σblue
 
 end ThreeBlockGeometry
@@ -184,7 +184,7 @@ theorem regionInteriorBondProd_smul_geometryBlueWeight_eq
           regionBlockedWeight (G := G) A g.blue bβ := by
   funext σblue
   rw [Pi.smul_apply, Finset.sum_apply,
-    g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue
+    g.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue
       bdry σblue σcompl]
   refine Finset.sum_congr rfl (fun bβ _ => ?_)
   rw [Pi.smul_apply]

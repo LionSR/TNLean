@@ -33,7 +33,7 @@ regions below are finite.
     \label{thm:peps_region_extension_order}
     \lean{ManyBody.place_smul,
         ManyBody.place_le_place,
-        TNLean.PEPS.regionParentHamiltonian_comparison}
+        TNLean.PEPS.hamiltonian_ofPlace_comparison}
     \leanok
     \uses{def:peps_region_parent_hamiltonian, thm:peps_regional_extension_algebra}
     Extension by the identity on the complementary physical space
@@ -51,8 +51,8 @@ regions below are finite.
 
 \begin{lemma}[Comparison of finite PEPS parents]%
     \label{thm:peps_finite_parent_comparison}
-    \lean{TNLean.PEPS.exists_pos_regionParentHamiltonian_comparison,
-        TNLean.PEPS.exists_pos_regionParentHamiltonian_comparison_between}
+    \lean{TNLean.PEPS.exists_pos_hamiltonian_ofPlace_comparison,
+        TNLean.PEPS.exists_pos_hamiltonian_ofPlace_comparison_between}
     \leanok
     \uses{def:peps_region_parent_hamiltonian}
     For a finite family of regional parent interactions $h_i$, let
@@ -77,32 +77,27 @@ regions below are finite.
 
 \begin{lemma}[Transfer of the finite-volume gap]%
     \label{thm:peps_finite_parent_gap_transfer}
-    \lean{TNLean.PEPS.ker_toEuclideanLin_regionParentHamiltonian_eq,
-        TNLean.PEPS.regionParentHamiltonian_norm_gap_of_comparison,
-        TNLean.PEPS.regionParentHamiltonian_has_pos_norm_gap_iff}
+    \lean{TNLean.PEPS.ker_toEuclideanLin_hamiltonian_ofPlace_eq,
+        TNLean.PEPS.forall_hasEigenvalue_hamiltonian_ofPlace_of_comparison}
     \leanok
     \uses{def:peps_region_parent_hamiltonian}
     Let $H_h,H_k$ be positive PEPS parents on the same finite family
     of regions. They have the same kernel $\mathcal K$. Suppose
-    $H_h\ge\kappa H_k$, where $\kappa>0$, and suppose that for
-    every $\phi\in\mathcal K^\perp$,
-    $\gamma\|\phi\|\le\|H_k\phi\|$, where $\gamma\ge0$.
-    Then every $\phi\in\mathcal K^\perp$ satisfies
-    $\kappa\gamma\|\phi\|\le\|H_h\phi\|$.
-    Existence of a strictly positive bound of this form is therefore
-    independent of the choice of positive regional interactions.
-    The comparison constants may depend on the finite collection.
+    $H_h\ge\kappa H_k$, where $\kappa>0$, and that every eigenvalue
+    of $H_k$ other than $0$ is at least $\gamma$.
+    Then every eigenvalue of $H_h$ other than $0$ is at least
+    $\kappa\gamma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_region_parent_common_kernel,
-        thm:peps_finite_parent_comparison}
+    \uses{thm:peps_region_parent_common_kernel}
     The common regional kernels determine $\mathcal K$.
-    Positivity and the spectral theorem convert the norm bound
-    for $H_k$ into
+    For a positive operator, the spectral theorem shows that its
+    eigenvalues other than $0$ are at least a given number $c$
+    exactly when $\langle\phi,H\phi\rangle\ge c\|\phi\|^2$ for every
+    $\phi$ orthogonal to its kernel. Applied to $H_k$, this gives
     $\langle\phi,H_k\phi\rangle\ge\gamma\|\phi\|^2$ on
     $\mathcal K^\perp$. Loewner comparison gives
-    $\langle\phi,H_h\phi\rangle\ge\kappa\gamma\|\phi\|^2$.
-    The Cauchy--Schwarz inequality yields the asserted norm bound, and
-    applying the two-sided comparison gives the final equivalence.
+    $\langle\phi,H_h\phi\rangle\ge\kappa\gamma\|\phi\|^2$ there,
+    and the same equivalence for $H_h$ gives the eigenvalue bound.
 \end{proof}

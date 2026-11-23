@@ -26,8 +26,9 @@ in `02-initial.tex`, lines 223–228. Revision:
 Independently formalized from the manuscript; no upstream Lean proof text reused.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation)
+
+open ManyBody (IntRect cast_supDist rectRegion supDist)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -40,7 +41,7 @@ and its standing clearance `D₀ > 2R+10`.
 Source: `scanner:templates`, `08-scanner.tex`, lines 574–590 and 641–667. -/
 theorem template_entropy_bounds_of_real_safe_box
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     (D₀ e C : ℝ) (hD : 1 ≤ D₀) (he : 0 < e)
     (hbox : ∀ Q : IntRect,
       (∀ x ∈ Q.toFinset, ∀ z ∈ boundaryEndpoints Λ A,

@@ -68,8 +68,6 @@ open ManyBody (ChainSupport DomainSupport DomainSupport.toChainSupport
 open Matrix
 open scoped ComplexOrder Kronecker symmDiff Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw

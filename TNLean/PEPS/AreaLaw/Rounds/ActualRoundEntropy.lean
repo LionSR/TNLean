@@ -28,8 +28,6 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -174,18 +172,18 @@ which depend on none of `q, R, J, Δ`. The bound involves no Hamiltonian and no 
 clause of the transport bound does not involve its energy terms, so the proof takes the empty
 family of energy terms, and only the domain graph and the scan sizes enter. Source:
 `08-scanner.tex`, lines 442–457. -/
-theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound
+theorem actualRounds_entropy_integral_le_planeDomainGraph_of_finiteFamilyTransportBound
     {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     ∀ {Λ : Finset (ℤ × ℤ)} {q R : ℕ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+      (S : CollarScan ↥Λ (AdmissibleSupport Λ R)),
       S.graph = planeDomainGraph Λ →
       ∀ (hn : 0 < S.n) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hC : 0 < S.C₁),
       ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
       let hm : 0 < S.m := by omega
       let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-      let n := augmentedDimensions (V := Site Λ) q aux
+      let n := augmentedDimensions (V := ↥Λ) q aux
       let D := S.actualRoundData hm hM
       let ℓ := transportLogDimBound q S.r₀
       ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
@@ -204,14 +202,14 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
   intro Λ q R _ _ aux _ S hgraph hn hDpos hD hC a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
+  let n := augmentedDimensions (V := ↥Λ) q aux
   let D := S.actualRoundData hm hM
   let ℓ := transportLogDimBound q S.r₀
   have hq : 1 ≤ q := NeZero.pos q
   have ht : 0 ≤ a / 2 := (half_pos ha).le
   -- The entropy estimate of the transport bound does not involve the energy terms: take the
   -- empty family, for which every energy hypothesis holds vacuously.
-  let E₀ : EnergyTerms (Site Λ ⊕ Bool) n Empty := ⟨Empty.elim, Empty.elim⟩
+  let E₀ : EnergyTerms (↥Λ ⊕ Bool) n Empty := ⟨Empty.elim, Empty.elim⟩
   have hmove := actualRoundData_logDim_move_le (q := q) aux S hgraph hm hM
   obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hround⟩ := htransport n D E₀
     (S.actualRoundData_isAdmissible hm hM) (fun i ↦ i.elim) (fun i ↦ i.elim) (fun i ↦ i.elim)
@@ -259,18 +257,18 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
 norm difference plus exactly `2 * S.n * S.m` copies of the common error
 (`08-scanner.tex`, lines 442–457). The supplied vector is nonzero and symmetric;
 no physical prevector, energy identification or norm comparison is required. -/
-theorem actualRounds_entropy_integral_le_domainGraph :
+theorem actualRounds_entropy_integral_le_planeDomainGraph :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ : Finset (ℤ × ℤ)} {q R : ℕ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)),
         S.graph = planeDomainGraph Λ →
         ∀ (hn : 0 < S.n) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hC : 0 < S.C₁),
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-        let n := augmentedDimensions (V := Site Λ) q aux
+        let n := augmentedDimensions (V := ↥Λ) q aux
         let D := S.actualRoundData hm hM
         let ℓ := transportLogDimBound q S.r₀
         ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
@@ -287,6 +285,6 @@ theorem actualRounds_entropy_integral_le_domainGraph :
                   (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
   exact ⟨c₀, Cent, eent, hc₀,
-    actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound htransport⟩
+    actualRounds_entropy_integral_le_planeDomainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

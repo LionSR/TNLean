@@ -23,8 +23,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -33,8 +31,8 @@ open ActualTerminals
 open scoped symmDiff
 
 private theorem abs_entropy_sub_le_of_nested
-    {Λ : Finset (ℤ × ℤ)} {q : ℕ} (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    {R T : Finset (Site Λ)} (hRT : R ⊆ T) {b : ℕ}
+    {Λ : Finset (ℤ × ℤ)} {q : ℕ} (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    {R T : Finset ↥Λ} (hRT : R ⊆ T) {b : ℕ}
     (hcard : (T ∆ R).card ≤ b) :
     |ManyBody.regionEntropy Ω T - ManyBody.regionEntropy Ω R| ≤
       (b : ℝ) * Real.log q := by
@@ -60,14 +58,14 @@ positive terminal regions, uniformly in history and band. Source:
 `08-scanner.tex`, lines 868--877. -/
 theorem terminalPartition_positiveEntropy_le
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
-    (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+    (hT : T.Nonempty) (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hn : 0 < S.n) (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1) (Bsh : ℝ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1) (Bsh : ℝ)
     (hsh : ∀ i : Fin (L + 1),
       ManyBody.regionEntropy Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh)
     (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K) :
@@ -89,7 +87,7 @@ theorem terminalPartition_positiveEntropy_le
     cases j with
     | inl j =>
       obtain ⟨hnear, hfar, _, _, hnearCard, hfarCard⟩ :=
-        S.state_prefix_approximation_domainGraph hT hgraph hdepth j.2 g hn
+        S.state_prefix_approximation_planeDomainGraph hT hgraph hdepth j.2 g hn
           (Nat.le_of_lt_succ j.1.isLt) hr hDpos hD hL hrows
       obtain ⟨⟨iN, hiN⟩, ⟨iF, hiF⟩⟩ :=
         S.front_positiveDepthPrefix_mem_fixed_family hn hL g (j.2.1 g) j.1.val
@@ -98,7 +96,7 @@ theorem terminalPartition_positiveEntropy_le
         by simpa only [hiN] using hnearCard, by simpa only [hiF] using hfarCard⟩
     | inr j =>
       obtain ⟨hnear, hfar, _, _, hnearCard, hfarCard⟩ :=
-        S.oldChargeState_prefix_approximation_domainGraph hT hgraph hdepth j.2 g hn
+        S.oldChargeState_prefix_approximation_planeDomainGraph hT hgraph hdepth j.2 g hn
           (Nat.succ_le_of_lt j.1.isLt) hr hDpos hD hL hrows
       obtain ⟨⟨iN, hiN⟩, ⟨iF, hiF⟩⟩ :=
         S.front_positiveDepthPrefix_mem_fixed_family hn hL g (j.2.1 g) (j.1.val + 1)

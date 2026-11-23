@@ -53,8 +53,6 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The data at one stage of simultaneous repair. The identifier types may
@@ -94,7 +92,7 @@ No second choice of residues is made for the region family. Its dummy is the
 existing unit summand, and its mark carrier is the selected finite set itself.
 Source: area-law Section 11, lines 212–233 and 325–363. -/
 def initialRepairStage (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
     RepairStage :=
   let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
     o Λ A C k₀ hC h₀
@@ -139,7 +137,7 @@ It is defined for every natural-number generation; no termination assertion
 or external sequence of sector assignments is supplied.
 Source: area-law Section 11, lines 393–417 and 471–514. -/
 def repairStage (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
     (Sstar : ℝ) : ℕ → RepairStage :=
   Nat.rec (initialRepairStage o Λ A C k₀ hC h₀)
     (fun j D ↦ repairNextStage j Sstar D)
@@ -150,7 +148,7 @@ unassigned interface points and is not identified with the full exceptional
 remainder or a lattice partition.
 Source: area-law Section 11, lines 398–409 and 558–561. -/
 def repairTerminalInteriors (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
     (Sstar : ℝ) : Set (ℝ × ℝ) :=
   ⋃ j : ℕ,
     let D := repairStage o Λ A C k₀ hC h₀ Sstar j
@@ -165,7 +163,6 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -175,7 +172,7 @@ repair stage, with the exact residue choices used in its definition.
 Source: area-law Section 11, `geometry:belt-count` and
 `geometry:initial-stars`, lines 212–233 and 325–363. -/
 theorem initialRepairStage_mark_spec (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
     let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
       o Λ A C k₀ hC h₀
     let a := Classical.choose h

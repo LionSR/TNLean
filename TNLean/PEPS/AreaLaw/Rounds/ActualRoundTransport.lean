@@ -36,8 +36,6 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -222,16 +220,16 @@ at most `transportLogDimBound q r₀`, when interaction supports use the graph m
 domain. Source: `08-scanner.tex`, lines 83–154. -/
 theorem actualRoundData_logDim_move_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} [NeZero q]
     [LinearOrder (AdmissibleSupport Λ R)] (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-    (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hgraph : S.graph = planeDomainGraph Λ)
     (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m)) :
-    ∀ hist c g, logDim (augmentedDimensions (V := Site Λ) q aux)
+    ∀ hist c g, logDim (augmentedDimensions (V := ↥Λ) q aux)
       ((S.actualRoundData hm hM j).move hist c g).subsystem ≤ transportLogDimBound q S.r₀ := by
   have hq : 1 ≤ q := NeZero.pos q
   refine S.actualRoundData_induction hm hM j
-    (fun _ _ _ D => ∀ hist c g, logDim (augmentedDimensions (V := Site Λ) q aux)
+    (fun _ _ _ D => ∀ hist c g, logDim (augmentedDimensions (V := ↥Λ) q aux)
       (D.move hist c g).subsystem ≤ transportLogDimBound q S.r₀) ?_ ?_
   · intro _
-    exact S.chargeTransportData_logDim_move_le_domainGraph hgraph
+    exact S.chargeTransportData_logDim_move_le_planeDomainGraph hgraph
         (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
         (fun _ => chargeChoiceTree S.K S.M hM) _ hq (fun _ => rfl)
   · intro _
@@ -242,14 +240,14 @@ theorem actualRoundData_logDim_move_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} [N
 constants `c₀, C_ent, e_ent, C_en, e_en` satisfying the finite-family transport bound, such as
 QICLean's universal transport constants, which depend on none of `q, R, J, Δ`. Source:
 `08-scanner.tex`, lines 83–154. -/
-theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
+theorem actualRounds_transport_planeDomainGraph_of_finiteFamilyTransportBound
     {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
       (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (Ω : StateSpace Λ q)
-      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+          (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+      (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
       S.graph = planeDomainGraph Λ →
       S.depth = (fun x => ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -263,7 +261,7 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
       ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
       let hm : 0 < S.m := by omega
       let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-      let n := augmentedDimensions (V := Site Λ) q aux
+      let n := augmentedDimensions (V := ↥Λ) q aux
       let D := S.actualRoundData hm hM
       let E := S.actualEnergyTerms h Ω J Δ L aux
       let ℓ := transportLogDimBound q S.r₀
@@ -296,7 +294,7 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
     L hn hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
+  let n := augmentedDimensions (V := ↥Λ) q aux
   let D := S.actualRoundData hm hM
   let E := S.actualEnergyTerms h Ω J Δ L aux
   let Hbar := fun k => copyMean n k
@@ -309,12 +307,12 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
     refine S.actualRoundData_induction hm hM j
       (fun _ _ _ D => D.SupportCompatible E) ?_ ?_
     · intro _
-      exact S.chargeTransportData_supportCompatible_domainGraph hT hgraph hdepth
+      exact S.chargeTransportData_supportCompatible_planeDomainGraph hT hgraph hdepth
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           (fun _ => chargeChoiceTree S.K S.M hM)
           hn hs hr hDpos hD hL hrows hclear n E (fun _ => rfl)
     · intro _
-      exact S.fillTransportData_supportCompatible_domainGraph hT hgraph hdepth
+      exact S.fillTransportData_supportCompatible_planeDomainGraph hT hgraph hdepth
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           hn hs hr hDpos hD hL hrows hclear n E (fun _ => rfl)
   have ht : 0 ≤ a / 2 := (half_pos ha).le
@@ -337,12 +335,12 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
       (fun _ _ _ D => ∀ i, (D.splitLeaves E i).Nonempty →
         logDim n (E.support i) ≤ transportLogDimBound q S.r₀) ?_ ?_
     · intro _
-      exact S.chargeTransportData_logDim_support_le_domainGraph hgraph
+      exact S.chargeTransportData_logDim_support_le_planeDomainGraph hgraph
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           (fun _ => chargeChoiceTree S.K S.M hM)
           n hq (fun _ => rfl) hL E (fun _ => rfl)
     · intro _
-      exact S.fillTransportData_logDim_support_le_domainGraph hgraph
+      exact S.fillTransportData_logDim_support_le_planeDomainGraph hgraph
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
           n hq (fun _ => rfl) hL E (fun _ => rfl)
   obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hresult⟩ := htransport n D E
@@ -357,14 +355,14 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
 The logarithmic bound holds at every replica count, including zero. The energy
 hypothesis occurs only within its own clause; the integrated entropy estimate includes
 both endpoints. All physical support, commutation and dimension premises are derived. -/
-theorem actualRounds_transport_domainGraph :
+theorem actualRounds_transport_planeDomainGraph :
     ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -378,7 +376,7 @@ theorem actualRounds_transport_domainGraph :
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-        let n := augmentedDimensions (V := Site Λ) q aux
+        let n := augmentedDimensions (V := ↥Λ) q aux
         let D := S.actualRoundData hm hM
         let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
@@ -408,6 +406,6 @@ theorem actualRounds_transport_domainGraph :
                   Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₁) pre) := by
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
   exact ⟨c₀, Cent, eent, Cen, een, hc₀,
-    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport⟩
+    actualRounds_transport_planeDomainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

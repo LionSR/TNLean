@@ -55,7 +55,7 @@ open ManyBody (interval mem_interval ChainInteraction)
 open ManyBody (gaussianFilteredTerm regionExpectation isHermitian_regionExpectation
   isHermitian_gaussianFilteredTerm)
 
-open GaussianFilter Matrix QuantumCircuit TNLean.Lattice
+open GaussianFilter Matrix QuantumCircuit
 
 open ManyBody (IsGapped groundSpace)
 open scoped Matrix.Norms.L2Operator InnerProductSpace

@@ -67,8 +67,6 @@ open Filter
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Transport of the normalized fan -/
@@ -211,7 +209,7 @@ theorem repairReplacementBirthRegion_exists_template (Ctpl CB : ℝ) (hCtpl : 1 
 
 section Stages
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
   (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -292,7 +290,7 @@ theorem exists_belt_replacement_templates (Ctpl : ℝ) (hCtpl : 1 ≤ Ctpl) :
             T.pieceCount ≤ 8 ∧
               ∀ y : ℤ × ℤ, y ∈ T.points ↔
                 integerPoint y ∈ initialBirthRegion o k₀ Z C a b hC h₀ x) ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ), 1 ≤ Sstar →
         ∀ (j : ℕ) (x : (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).regionIndex)
           (m : (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex),

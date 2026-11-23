@@ -99,7 +99,7 @@ open ManyBody (ChainSupport card_interval_le interval mem_interval ChainInteract
 open ManyBody (gaussianFilteredTerm regionExpectation isHermitian_regionExpectation
   isHermitian_gaussianFilteredTerm)
 
-open GaussianFilter Matrix QuantumCircuit TNLean.Lattice
+open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

@@ -27,8 +27,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -73,9 +71,9 @@ private theorem dilution_constant {m D r₀ : ℕ} (hr : r₀ ≤ D) (hD : 1 ≤
 open Classical in
 /-- Unconditional dilution for the old physical leaf distribution. The bounded
 event is a superset of the actual terminal split condition. -/
-theorem old_designated_split_dilution_domainGraph
+theorem old_designated_split_dilution_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ} (i : I)
     (hn : 0 < S.n) (hm : 0 < S.m) (hr : S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
@@ -93,7 +91,7 @@ theorem old_designated_split_dilution_domainGraph
     (dilution_constant hr hDpos)
   · intro h g side hs
     have heq := S.designatedSupport_eq_ball_of_split h g side i hL hs
-    have hi := old_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i hn hL hrows
+    have hi := old_split_anchor_bounds_planeDomainGraph hT S hgraph hdepth h g side i hn hL hrows
       hclear (by simpa only [designatedSplitIncidence, heq] using hs)
     simpa only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat, add_assoc] using hi
   · exact fun side g g' r r' hi hi' ↦
@@ -102,9 +100,9 @@ theorem old_designated_split_dilution_domainGraph
 open Classical in
 /-- Unconditional dilution for completed actual histories, hence for the new
 leaves after a charge. No goodness or independence of splitting is assumed. -/
-theorem state_designated_split_dilution_domainGraph
+theorem state_designated_split_dilution_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ} (i : I)
     (hn : 0 < S.n) (hm : 0 < S.m) (hr : S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
@@ -122,7 +120,7 @@ theorem state_designated_split_dilution_domainGraph
     (dilution_constant hr hDpos)
   · intro h g side hs
     have heq := S.designatedSupport_eq_ball_of_state_split h g side i hL hs
-    have hi := state_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i hn hL hrows
+    have hi := state_split_anchor_bounds_planeDomainGraph hT S hgraph hdepth h g side i hn hL hrows
       hclear (by simpa only [designatedSplitIncidence, heq] using hs)
     simpa only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat, add_assoc] using hi
   · exact fun side g g' r r' hi hi' ↦
@@ -131,9 +129,9 @@ theorem state_designated_split_dilution_domainGraph
 open Classical in
 /-- Old and new leaves with the same mixture parameter retain the same dilution
 constant. This is the classical common-`p` mixture, before quantum transport. -/
-theorem designated_split_mixture_dilution_domainGraph
+theorem designated_split_mixture_dilution_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ} (i : I)
     (hn : 0 < S.n) (hm : 0 < S.m) (hr : S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
@@ -148,9 +146,9 @@ theorem designated_split_mixture_dilution_domainGraph
     p * (∑ h : History S.K S.m S.M (k + 1),
       if ∃ g side, S.designatedSplitIncidence (S.state h g) L i side
       then historyWeight h else 0) ≤ 10 * (S.D : ℝ) / S.m := by
-  have ho := old_designated_split_dilution_domainGraph hT S hgraph hdepth (k := k)
+  have ho := old_designated_split_dilution_planeDomainGraph hT S hgraph hdepth (k := k)
     i hn hm hr hD hDpos hC hL hrows hclear
-  have hn' := state_designated_split_dilution_domainGraph hT S hgraph hdepth (k := k + 1)
+  have hn' := state_designated_split_dilution_planeDomainGraph hT S hgraph hdepth (k := k + 1)
     i hn hm hr hD hDpos hC hL hrows hclear
   have hpo := mul_le_mul_of_nonneg_left ho (sub_nonneg.mpr hp1)
   have hpn := mul_le_mul_of_nonneg_left hn' hp0
@@ -159,9 +157,9 @@ theorem designated_split_mixture_dilution_domainGraph
 open Classical in
 /-- A deterministic fill round also preserves dilution under its common mixture
 parameter: its old state is completed, and its new state is the next pre-charge state. -/
-theorem fill_split_mixture_dilution_domainGraph
+theorem fill_split_mixture_dilution_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ} (i : I)
     (hn : 0 < S.n) (hm : 0 < S.m) (hr : S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
@@ -176,9 +174,9 @@ theorem fill_split_mixture_dilution_domainGraph
     p * (∑ h : History S.K S.m S.M k,
       if ∃ g side, S.designatedSplitIncidence (S.oldChargeState h g) L i side
       then historyWeight h else 0) ≤ 10 * (S.D : ℝ) / S.m := by
-  have ho := state_designated_split_dilution_domainGraph hT S hgraph hdepth (k := k)
+  have ho := state_designated_split_dilution_planeDomainGraph hT S hgraph hdepth (k := k)
     i hn hm hr hD hDpos hC hL hrows hclear
-  have hn' := old_designated_split_dilution_domainGraph hT S hgraph hdepth (k := k)
+  have hn' := old_designated_split_dilution_planeDomainGraph hT S hgraph hdepth (k := k)
     i hn hm hr hD hDpos hC hL hrows hclear
   have hpo := mul_le_mul_of_nonneg_left ho (sub_nonneg.mpr hp1)
   have hpn := mul_le_mul_of_nonneg_left hn' hp0

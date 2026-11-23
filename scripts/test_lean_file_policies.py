@@ -274,8 +274,6 @@ class OversizedLeanFilePolicyTests(CapturedCheck):
 class ImportLayerPolicyTests(unittest.TestCase):
     def test_layers_are_assigned_from_the_bottom_up(self) -> None:
         self.assertEqual(layers.layer_of("TNLean.Algebra.FinKronecker"), "algebra")
-        self.assertEqual(layers.layer_of("TNLean.Circuit.RegionSplit"), "sites")
-        self.assertEqual(layers.layer_of("TNLean.Circuit.SitePermutation"), "sites")
         self.assertEqual(layers.layer_of("TNLean.Circuit.LocalCircuit"), "circuit")
         self.assertEqual(layers.layer_of("TNLean.Lattice.PartyCircuit.PartyWord"), "party")
         self.assertEqual(layers.layer_of("TNLean.Lattice.StateSpace"), "hamiltonian")

@@ -18,14 +18,11 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Operators on parts of a sheet]
     \label{lem:peps_frame_split_forms}
-    \lean{TNLean.Lattice.sheetSplit,
-        TNLean.Lattice.Sheet.threeSplit,
+    \lean{TNLean.Lattice.Sheet.threeSplit,
         TNLean.Lattice.Sheet.threeSplit_fst,
         TNLean.Lattice.Sheet.threeSplit_snd,
-        TNLean.Lattice.rectKronecker_submatrix_sheetSplit,
-        TNLean.Lattice.Sheet.rectKronecker_submatrix_threeSplit,
-        TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators,
-        TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators,
+        TNLean.Lattice.Sheet.piKronecker_submatrix_threeSplit,
+        ManyBody.exists_eq_one_kronecker_of_mem_supportedOperators,
         TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one,
         TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker_kronecker_one,
         TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker,
@@ -62,8 +59,8 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{definition}[Swapping two sheets]
     \label{def:peps_frame_sheet_swap}
-    \lean{TNLean.Lattice.sheetSwap,
-        TNLean.Lattice.sheetSwapOp}
+    \lean{ManyBody.pairSwap,
+        ManyBody.pairSwapOp}
     \leanok
     For $S\subseteq\Lambda$, let $F_S$ be the unitary swapping the two sheets
     at the sites in $S$ (\texttt{05-frames.tex}, lines 476--477).
@@ -84,7 +81,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Sheet swaps are contractions]
     \label{thm:peps_frame_sheet_swap_norm}
-    \lean{TNLean.Lattice.norm_sheetSwapOp_le_one}
+    \lean{ManyBody.norm_pairSwapOp_le_one}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     $\|F_S\|\leq1$.
@@ -98,8 +95,8 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Composing and commuting sheet swaps]
     \label{lem:peps_frame_sheet_swap_compose}
-    \lean{TNLean.Lattice.sheetSwapOp_mul_sheetSwapOp,
-        TNLean.Lattice.commute_sheetSwapOp_kronecker}
+    \lean{ManyBody.pairSwapOp_mul_of_subset,
+        ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     If $Y=T\sqcup A$, then $F_AF_Y=F_T$. Moreover, $[F_S,R_1\otimes R_2]=0$
@@ -115,9 +112,9 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Swapping two sheets on a set in split coordinates]
     \label{lem:lattice_sheet_split_swap}
-    \lean{TNLean.Lattice.sheetSplit_sheetSwap_fst,
-        TNLean.Lattice.sheetSplit_sheetSwap_snd,
-        TNLean.Lattice.mul_submatrix_sheetSplit}
+    \lean{ManyBody.cutEquiv_permCongr_pairSwap_fst,
+        ManyBody.cutEquiv_permCongr_pairSwap_snd,
+        ManyBody.submatrix_cutEquiv_symm_mul}
     \leanok
     For a set $S$ of sites, in the coordinates $\mathcal H_S\otimes\mathcal
         H_{S^c}$ of both sheets, swapping the two sheets at $S$ exchanges the
@@ -132,7 +129,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Exchanging supported operators]
     \label{thm:peps_sheet_swap_supported_exchange}
-    \lean{TNLean.Lattice.sheetSwapOp_mul_kronecker_of_mem_supportedOperators}
+    \lean{ManyBody.pairSwapOp_mul_kronecker}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     For $R\subseteq\Lambda$ and operators $A,B$ on $\mathcal H_\Lambda$
@@ -154,7 +151,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Cancellation of a noncrossing doubled interaction]
     \label{thm:peps_sheet_swap_doubled_cancellation}
-    \lean{TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
+    \lean{ManyBody.pairSwapOp_conj_doubled_of_subset}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     For $R,S\subseteq\Lambda$ and an operator $A$ supported on $S$, if
@@ -180,8 +177,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Restricting a swap to an interaction support]
     \label{thm:peps_sheet_swap_interaction_restriction}
-    \lean{TNLean.Lattice.sheetSwapOp_conj_kronecker_eq_inter,
-        TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
+    \lean{ManyBody.pairSwapOp_conj_doubled}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $q$ be a natural local dimension, let $\Lambda$ be a finite set of
@@ -219,7 +215,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Support of the swap in paired coordinates]
     \label{thm:peps_sheet_swap_paired_site_support}
-    \lean{TNLean.Lattice.reindex_sheetSwapOp_mem_supportedOperators}
+    \lean{ManyBody.pairSwapOp_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     In the paired-site coordinates of Definition~\ref{def:qc_site_pair_coordinates}
@@ -236,8 +232,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Support of a swapped tensor product]
     \label{thm:peps_sheet_swap_conjugate_support}
-    \lean{TNLean.Lattice.reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators,
-        TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
+    \lean{ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $\Lambda$ be a finite site set, let $q$ be a natural local dimension,
@@ -285,25 +280,18 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Regional coordinates of the replica exchange]
     \label{thm:peps_reset_regional_coordinates}
-    \lean{TNLean.Lattice.splitTwoRegions_sheetSwap,
-        TNLean.Lattice.submatrix_partialSwap_kronecker_one_eq_sheetSwapOp,
-        TNLean.Lattice.quantumRelativeEntropy_splitTwoRegionsState_eq_mutualInformation}
-    \leanok
     For disjoint regions $R,C$ and $Q=(R\cup C)^c$, in replica coordinates $\mathcal X_R\times\mathcal X_C\times\mathcal X_Q$, the operator $F_R$ swaps the two $\mathcal X_R$ registers and fixes the other four registers, and any unit vector $\Omega$ satisfies $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=I_\Omega(R:C)$.
 \end{lemma}
 \begin{proof}
-    \leanok
     The action of $F_R$ follows from $R\cap C=R\cap Q=\varnothing$, and $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=S(\rho_R)+S(\rho_C)-S(\rho_{RC})=I_\Omega(R:C)$.
 \end{proof}
 
 \begin{definition}[The variance and cutoff of the information reset]
     \label{def:lattice_reset_constants}
-    \lean{TNLean.Lattice.resetVariance,
-        TNLean.Lattice.resetCutoff,
-        TNLean.Lattice.resetVariance_pos,
-        TNLean.Lattice.resetCutoff_pos,
-        TNLean.Lattice.resetVariance_mul_sq_div_two,
-        TNLean.Lattice.resetCutoff_sq_div}
+    \lean{GaussianFilter.resetVariance,
+        GaussianFilter.resetCutoff,
+        GaussianFilter.resetVariance_pos,
+        GaussianFilter.resetCutoff_pos}
     \leanok
     For $\Delta,r\in\mathbb R$, define
     \begin{align}
@@ -319,7 +307,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{theorem}[The two-sided Gaussian filter, with explicit constants]
     \label{thm:peps_reset_regional_filter_explicit}
-    \lean{TNLean.Lattice.regional_physicalBuffer_filter}
+    \lean{GaussianFilter.regional_physicalBuffer_filter}
     \leanok
     \uses{def:lattice_reset_constants}
     Fix $\Delta>0$ and $r\geq0$, with $A,T_0$ from (\ref{eq:lattice_reset_constants}). Let $H$ have unit ground vector $\Omega$ ($H\Omega=E_0\Omega$, $H-E_0\geq\Delta(\id-|\Omega\rangle\langle\Omega|)$), let $R,C$ be disjoint with $I_\Omega(R:C)\leq b$ ($b\geq0$), and put $Q=(R\cup C)^c$, $\Psi=\Omega\otimes\Omega$, $\Phi=F_R\Psi$, $\mathbb H=H\otimes\id+\id\otimes H$, and $\mathbb H'=F_R\mathbb HF_R^*$. Then $\|\Psi\|=\|\Phi\|=1$, and there exist a contraction $W$ on the two copies of $\mathcal X_Q$ and $z\geq e^{-2b}$ such that for every $L\geq1$, with $B_*=1+b+\log L$, $h=AB_*$, $T=T_0B_*$, and Gaussian density $g_h$,
@@ -336,7 +324,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{corollary}[The two-sided Gaussian filter of the physical buffer]
     \label{thm:peps_reset_regional_filter}
-    \lean{TNLean.Lattice.exists_regional_physicalBuffer_filter}
+    \lean{GaussianFilter.exists_regional_physicalBuffer_filter}
     \leanok
     For every $\Delta>0$ and $r\ge0$, there exist $A,T_0>0$ such that under the hypotheses of Theorem~\ref{thm:peps_reset_regional_filter_explicit}, some buffer contraction $W$ and $z\ge e^{-2b}$ make $M$ in (\ref{eq:peps_reset_regional_filter}) satisfy (\ref{eq:peps_reset_regional_filter_err}) for all $L\ge1$.
 \end{corollary}
@@ -348,7 +336,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[The polar step of the information reset]
     \label{thm:peps_reset_polar_step}
-    \lean{TNLean.Lattice.exists_supported_unitary_of_two_sided}
+    \lean{ManyBody.exists_supported_unitary_of_two_sided}
     \leanok
     If $M$ is supported on $S$, $b,C,\varepsilon\ge0$, and $z\ge e^{-2b}$ satisfies $\|M\psi-z\varphi\|,\|M^*\varphi-z\psi\|\le Ce^{-10b}\varepsilon$, then there exists a unitary $U$ supported on $S$ with $\|U\psi-\varphi\|\le2C\varepsilon$.
 \end{lemma}
@@ -376,8 +364,8 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Operators on paired sites act on both replicas]
     \label{thm:peps_reset_paired_support}
-    \lean{QuantumCircuit.reindex_sumArrow_sitePair_placeAlong,
-        QuantumCircuit.reindex_sumArrow_sitePair_mem_supportedOperators}
+    \lean{ManyBody.reindex_replicaPairEquiv_place,
+        ManyBody.reindex_replicaPairEquiv_mem_supportedOperators_iff}
     \leanok
     \uses{def:qc_site_pair_coordinates}
     Under the identification of two $q$-dimensional replicas on a finite site set $V$ with a single $q^2$-dimensional system on $V$, any operator supported on $S\subseteq V$ is supported on both replicas of $S$.
@@ -389,9 +377,9 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[The exchanged cores are uncorrelated]
     \label{thm:peps_reset_exchanged_cores}
-    \lean{TNLean.Lattice.doubledVector_comp_sumArrow,
-        TNLean.Lattice.sheetSwapOp_mulVec_comp_sumArrow,
-        TNLean.Lattice.mutualInformation_relabelSites_replicaSwap_eq_zero}
+    \lean{ManyBody.doubledVector_comp_sumArrowEquivProdArrow,
+        ManyBody.sitePermOp_replicaSwap,
+        ManyBody.regionMutualInformation_replicaSwap_eq_zero}
     \leanok
     For any unit vector $\Omega$, $R_0\subseteq R$, and $C_0\subseteq R^c$, the first-replica cores $R_0$ and $C_0$ in $\Phi=F_R(\Omega\otimes\Omega)$ satisfy $I_\Phi(R_0:C_0)=0$.
 \end{lemma}
@@ -402,7 +390,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[The entropy cost of the reset]
     \label{thm:peps_reset_entropy_scalar}
-    \lean{TNLean.Lattice.reset_entropy_scalar}
+    \lean{Real.eight_mul_sqrt_mul_le_rpow_neg}
     \leanok
     If $C\ge0$, $p\in\mathbb R$, $L\ge\max(1,8\sqrt C(1+\lambda))$, $\delta\le CL^{-(2p+10)}$, and $0\le N\le1+L^2\lambda$, then $8\sqrt\delta\,N\le L^{-p}$.
 \end{lemma}

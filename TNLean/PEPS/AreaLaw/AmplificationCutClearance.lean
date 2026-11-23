@@ -42,8 +42,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 open ManyBody (planeDomainGraph edgeBoundary graphNeighborhood ambientDilation)
@@ -58,7 +56,7 @@ radius `r ≤ C n^((1-ε)/α)`, the clearance `dist_∞(T, Z) > L + n^β` of
 theorem graphNeighborhood_collar_subset_of_threshold_le (C : ℝ) {n : ℕ}
     (hn : Exponents.collarRadiusThreshold C 1 ≤ n) (r : ℕ)
     (hr : (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ))
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ))
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (T : Finset (ℤ × ℤ))
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
           (n : ℝ) ^ (Exponents.beta : ℝ) <
@@ -87,7 +85,7 @@ target. Source: `09-amplification.tex`, lines 289–295 and 563–575. -/
 theorem exists_threshold_graphNeighborhood_collar_subset (C : ℝ) :
     ∃ N : ℕ, ∀ n : ℕ, N ≤ n → ∀ r : ℕ,
       (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) →
-      ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+      ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (T : Finset (ℤ × ℤ)),
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
           (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
               (n : ℝ) ^ (Exponents.beta : ℝ) <
@@ -108,9 +106,9 @@ theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
       ∃ C : ℝ, ∃ N : ℕ, ∀ n : ℕ, 2 ≤ n → N ≤ n →
         ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
             (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+            ∀ (A : Finset ↥Λ) (T : Finset (ℤ × ℤ)),
               ((A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
                 C₀ * (n : ℝ) ^ 2 →
@@ -127,7 +125,7 @@ theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
                 C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
               ∃ r : ℕ, (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
-                ∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+                ∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset ↥Λ,
                   Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →

@@ -48,17 +48,19 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 \begin{lemma}[Single-site operators, permutations of sites and sites in the state zero]
     \label{lem:qc_site_permutations}
     \lean{QuantumCircuit.piKronecker_update_one_mulVec_apply,
-        QuantumCircuit.IsZeroOn, QuantumCircuit.IsZeroOn.mono,
+        QuantumCircuit.IsZeroOn,
+        QuantumCircuit.IsZeroOn.mono,
         QuantumCircuit.IsZeroOn.smul,
         QuantumCircuit.IsZeroOn.piKronecker_update_one_mulVec,
-        QuantumCircuit.cfgPerm,
+        ManyBody.siteConfigurationEquiv,
         ManyBody.sitePermOp_mul_mul_conjTranspose,
-        QuantumCircuit.permMatrix_cfgPerm_mul_permMatrix_cfgPerm,
-        QuantumCircuit.permMatrix_cfgPerm_one,
+        ManyBody.sitePermOp_mul,
+        ManyBody.sitePermOp_one,
         ManyBody.sitePermOp_mul_placeAlong_mul_conjTranspose,
         QuantumCircuit.IsZeroOn.sitePermOp_mulVec_image,
         QuantumCircuit.IsZeroOn.mulVec_of_mem_supportedOperators,
-        QuantumCircuit.Layer.ofList, QuantumCircuit.Layer.kraus_ofList,
+        QuantumCircuit.Layer.ofList,
+        QuantumCircuit.Layer.kraus_ofList,
         QuantumCircuit.Layer.forall_isUnitary_ofList}
     \leanok
     \uses{def:qc_local_circuit}

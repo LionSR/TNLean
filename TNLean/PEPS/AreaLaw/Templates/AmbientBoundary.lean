@@ -17,8 +17,6 @@ Original formalization of the geometric argument in manuscript Lemma 9.4;
 no upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation ambientDilation_zero edgeBoundary mem_ambientDilation_iff
   planeDomainGraph)
 
@@ -56,7 +54,7 @@ theorem neighbor_mem_ambientDilation_succ {S : Finset (ℤ × ℤ)} {r : ℕ}
 
 /-- The finite-domain representative of an ambient region in its one-step dilation. -/
 def ambientBoundaryRegion (S : Finset (ℤ × ℤ)) :
-    Finset (Site (ambientDilation S 1)) :=
+    Finset ↥(ambientDilation S 1) :=
   Finset.univ.filter fun p ↦ p.1 ∈ S
 
 /-- The actual unordered nearest-neighbor boundary in the infinite lattice,
@@ -93,8 +91,8 @@ theorem mem_ambientBoundary_iff {S : Finset (ℤ × ℤ)} {e : Sym2 (ℤ × ℤ)
     have hqD : q ∈ ambientDilation S 1 := by
       exact neighbor_mem_ambientDilation_succ (r := 0)
         (by simpa only [ambientDilation_zero] using hp) hpq
-    let a : Site (ambientDilation S 1) := ⟨p, hpD⟩
-    let b : Site (ambientDilation S 1) := ⟨q, hqD⟩
+    let a : ↥(ambientDilation S 1) := ⟨p, hpD⟩
+    let b : ↥(ambientDilation S 1) := ⟨q, hqD⟩
     refine Finset.mem_image.mpr ⟨s(a, b), ?_, rfl⟩
     refine ManyBody.mk_mem_edgeBoundary_iff.mpr ⟨?_, Or.inl ⟨?_, ?_⟩⟩
     · exact mem_latticeNeighbors_iff.mp hpq

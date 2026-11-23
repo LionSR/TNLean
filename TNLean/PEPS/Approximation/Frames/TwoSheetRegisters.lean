@@ -260,7 +260,7 @@ theorem twoLayoutIso_renameWord
       act X.rename (twoLayoutIso (X.out₁ ++ X.in₁) (X.out₂ ++ X.in₂) X.owner₁ X.owner₂ z) :=
   twoLayoutIso_eq_act_of_basis _ _ _ _ _ _ _ _ _ _ (fun τ₁ c₁ τ₂ c₂ => by
     rw [eval_renameWord, twoLayoutIso_basis, rename, act_toMatrix_symm_single]
-    rfl) z
+    simp only [renameEquiv, Equiv.coe_fn_mk, ManyBody.permCongr_pairSwap_apply]) z
 
 /-- The renaming is a reordering: an allowed word using no party and no pair source. -/
 @[simp] theorem isReordering_renameWord : X.renameWord.IsReordering := by

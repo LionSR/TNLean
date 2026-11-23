@@ -37,7 +37,7 @@ theorem onSiteTensorPow_conjTranspose_mul_self {d : ℕ}
     {U : Matrix (Fin d) (Fin d) ℂ}
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ) (L : ℕ) :
     (onSiteTensorPow L U)ᴴ * onSiteTensorPow L U = 1 := by
-  rw [onSiteTensorPow_eq_finKronecker]
+  rw [onSiteTensorPow_eq_piKronecker]
   exact Matrix.IsIsometry.piKronecker
     (fun _ ↦ (Matrix.mem_unitaryGroup_iff').mp hU)
 

@@ -153,16 +153,20 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap_of_is
   have hthreshold : (p : ℝ) ^ 2 / (m : ℝ) < γ :=
     (div_lt_iff₀ hmpos).2 (by simpa only [mul_comm] using hnum)
   obtain ⟨γ', hγ'lower, hγ'upper⟩ := exists_between hthreshold
-  have hγpos : 0 < γ :=
-    (div_pos (sq_pos_of_pos (Nat.cast_pos.mpr hp)) hmpos).trans hthreshold
-  have hnear := eventually_hamiltonian_parentChainInteraction_gap A hA
-    (fun x => isNBlkInjective_of_le hp (hInj x) (by omega : p ≤ p + 1))
-    (fun x => isNBlkInjective_of_le hp (hInj x) (by omega : p ≤ m + p))
-    hγpos hγ'upper (by
-      rw [← ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
-        (hInj x₀) hp (by omega)]
-      exact (ManyBody.forall_hasEigenvalue_iff_norm
-        (posSemidef_hamiltonian_parentChainInteraction (A x₀) (p + 1) _)).mp hgap)
+  have hnear := ManyBody.eventually_forall_hasEigenvalue
+    (continuous_hamiltonian_parentChainInteraction_family A hA (N := m + p) fun x ↦
+      isNBlkInjective_of_le hp (hInj x) (by omega : p ≤ p + 1)).continuousAt
+    (Filter.Eventually.of_forall fun x ↦
+      posSemidef_hamiltonian_parentChainInteraction (A x) (p + 1) (m + p))
+    (by
+      refine (continuous_groundSpaceES_starProjection_family A hA (m + p) fun x ↦
+        isNBlkInjective_of_le hp (hInj x) (by omega : p ≤ m + p)).continuousAt.congr
+        (Filter.Eventually.of_forall fun x ↦ ?_)
+      dsimp only
+      rw [ManyBody.groundSpace_zero,
+        ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+          (hInj x) hp (by omega)])
+    hgap hγ'upper
   have hnum' : (((p + 1 : ℕ) : ℝ) - 1) ^ 2 < (m : ℝ) * γ' := by
     simpa [mul_comm] using (div_lt_iff₀ hmpos).1 hγ'lower
   let δ : ℝ := ((m : ℝ) * γ' - (((p + 1 : ℕ) : ℝ) - 1) ^ 2) /
@@ -174,11 +178,7 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap_of_is
   · filter_upwards [hnear] with x hx N hN
     refine (hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap (A x)
       (R := p + 1) (m := m) (by omega) hm hnum' ?_).2 N hN
-    refine (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction (A x) (p + 1) _)).mpr ?_
-    rw [show m + (p + 1) - 1 = m + p by omega,
-      ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
-        (hInj x) hp (by omega)]
+    rw [show m + (p + 1) - 1 = m + p by omega]
     exact hx
 
 /-- A continuous compact family injective at one common positive length

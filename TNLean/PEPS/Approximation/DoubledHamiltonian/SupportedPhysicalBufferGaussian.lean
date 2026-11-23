@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.PhysicalBufferCoordinates
+import QICLean.ManyBody.Replica.RegionalReset
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedSquareHamiltonian
 import TNLean.PEPS.AreaLaw.Interactions.SupportedGaussianIntegral
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!
 # A supported Gaussian buffer operator for the square Hamiltonian
@@ -80,12 +81,15 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       let s := ManyBody.splitTwoRegionsEquiv
         (fun _ : SquareLatticeVertex L L ↦ Fin q) R C₀ hRC
       let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C₀} → Fin q))
-      let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
+      let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q)
+        fun _ ↦ Fin q
+      let p := pr.symm.trans
+        (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
       let Λ := ManyBody.rectangularDomain L L
       let a := ManyBody.rectangleSiteEquiv L L
       let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
       let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
-      let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
+      let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
       let K' := F * K * Fᴴ
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
         Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -98,13 +102,13 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
         ∀ l : ℕ,
           let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
             (Q.image a ∪ Z.image a) l
-          ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
-              (Lattice.Configuration Λ (q * q)) ℂ,
+          ∃ U : ℝ → Matrix (↥Λ → Fin (q * q))
+              (↥Λ → Fin (q * q)) ℂ,
             U 0 = 1 ∧
             (∀ t, HasDerivAt U
               ((Complex.I • ManyBody.regionExpectation B
                 (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-            (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
+            (∀ t, U t ∈ unitaryGroup (↥Λ → Fin (q * q)) ℂ) ∧
             (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let M := ∫ t : ℝ in Set.Icc (-T) T,
@@ -117,12 +121,32 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
                   (1 + 8 * J * (L : ℝ) ^ 2 * T) *
                   Real.exp (squareLocalizationVelocity J * T - 1 / 2 * l) := by
   classical
-  intro L h hh hhJ R C₀ hRC Q P s g p Λ a e K F K' boundary Z W V l B
+  intro L h hh hhJ R C₀ hRC Q P s g pr p Λ a e K F K' boundary Z W V l B
   have hC : 0 < squareLocalizationPrefactor := squareLocalizationPrefactor_pos
   obtain ⟨gH, hgH, hgHJ, _, hgOperator⟩ := h.exists_swapped_doubled_planeInteraction hh hhJ hJ R
+  have hconj (A B : Matrix (SquareLatticeVertex L L → Fin (q * q))
+      (SquareLatticeVertex L L → Fin (q * q)) ℂ) :
+      reindex e e (A * B * Aᴴ) = reindex e e A * reindex e e B * (reindex e e A)ᴴ := by
+    simp only [reindex_apply, conjTranspose_submatrix, submatrix_mul_equiv]
+  have hFe : F = reindex e e (reindex p p (reindex pr pr (ManyBody.pairSwapOp R))) := by
+    ext x y
+    rfl
+  have hKe : K = reindex e e (reindex p p (doubledHamiltonian h.hamiltonian)) := by
+    ext x y
+    rfl
   have hK' : gH.hamiltonian = K' := by
-    simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
-      Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using! hgOperator
+    rw [hgOperator, hconj]
+    change _ = F * K * Fᴴ
+    rw [hFe, hKe]
+  have hKK : K' - K = reindex e e (reindex p p (reindex pr pr (ManyBody.pairSwapOp R)) *
+      reindex p p (doubledHamiltonian h.hamiltonian) *
+        (reindex p p (reindex pr pr (ManyBody.pairSwapOp R)))ᴴ -
+        reindex p p (doubledHamiltonian h.hamiltonian)) := by
+    rw [show ∀ A B : Matrix (SquareLatticeVertex L L → Fin (q * q))
+        (SquareLatticeVertex L L → Fin (q * q)) ℂ,
+        reindex e e (A - B) = reindex e e A - reindex e e B from fun _ _ ↦ rfl, hconj]
+    change F * K * Fᴴ - K = _
+    rw [hFe, hKe]
   have hDK : (doubledHamiltonian h.hamiltonian).IsHermitian := by
     simp only [Matrix.IsHermitian, doubledHamiltonian, Matrix.conjTranspose_add,
       Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
@@ -132,11 +156,11 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
         ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
     obtain ⟨A, hA⟩ : ∃ A, reindex (g.symm.trans p) (g.symm.trans p)
         ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) = ManyBody.place (X := fun _ ↦ Fin (q * q)) Q A :=
-      ⟨_, TNLean.Lattice.reindex_physicalBuffer_eq_place q R C₀ hRC W⟩
+      ⟨_, ManyBody.reindex_physicalBuffer_eq_place q R C₀ hRC W⟩
     rw [hA]
     exact ManyBody.place_mem_supportedOperators A
   have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
-      (Q.image a : Finset (Lattice.Site Λ)) := by
+      (Q.image a : Finset ↥Λ) := by
     have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
       (X := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
       (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin (q * q))
@@ -146,7 +170,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
     simpa only [a, V, Matrix.reindex_apply, Matrix.submatrix_submatrix] using! hs
   have hD : gH.hamiltonian - K ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset (Lattice.Site Λ)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset ↥Λ) := by
     have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
       (X := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
       (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin (q * q))
@@ -154,19 +178,16 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       (fun _ ↦ (ManyBody.rectangleSiteEquiv L L).injective.mem_finset_image.symm)
       (h.swapped_doubled_boundary_bound hhJ R).1
     rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
-    simpa only [hK', a, K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
-      Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
-      Matrix.submatrix_submatrix] using! hs
+    rw [hK', hKK]
+    exact hs
   have hDn : ‖K' - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
-    simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
-      Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
-      Matrix.submatrix_submatrix] using!
-      (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound hhJ R).2
+    rw [hKK, Matrix.l2_opNorm_reindex_equiv]
+    exact (h.swapped_doubled_boundary_bound hhJ R).2
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
       (Matrix.l2_opNorm_one_kronecker_le W)
   have hcard : (Λ.card : ℝ) = (L : ℝ) ^ 2 := by
-    simpa only [Λ, Lattice.Site, SquareLatticeVertex, Fintype.card_coe,
+    simpa only [Λ,SquareLatticeVertex, Fintype.card_coe,
       Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using
       congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
@@ -203,12 +224,15 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
         let s := ManyBody.splitTwoRegionsEquiv
           (fun _ : SquareLatticeVertex L L ↦ Fin q) R C₀ hRC
         let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C₀} → Fin q))
-        let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
+        let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q)
+          fun _ ↦ Fin q
+        let p := pr.symm.trans
+          (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
         let Λ := ManyBody.rectangularDomain L L
         let a := ManyBody.rectangleSiteEquiv L L
         let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
         let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
-        let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
+        let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
         let K' := F * K * Fᴴ
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
           Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -221,13 +245,13 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
           ∀ l : ℕ,
             let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
               (Q.image a ∪ Z.image a) l
-            ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
-                (Lattice.Configuration Λ (q * q)) ℂ,
+            ∃ U : ℝ → Matrix (↥Λ → Fin (q * q))
+                (↥Λ → Fin (q * q)) ℂ,
               U 0 = 1 ∧
               (∀ t, HasDerivAt U
                 ((Complex.I • ManyBody.regionExpectation B
                   (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-              (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
+              (∀ t, U t ∈ unitaryGroup (↥Λ → Fin (q * q)) ℂ) ∧
               (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
@@ -241,7 +265,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
   refine ⟨squareLocalizationPrefactor, squareLocalizationVelocity J + 1, 1 / 2,
     squareLocalizationPrefactor_pos,
     by linarith [squareLocalizationVelocity_nonneg hJ], one_half_pos, fun L h hh hhJ R C₀ hRC ↦ ?_⟩
-  intro Q P s g p Λ a e K F K' boundary Z W V l B
+  intro Q P s g pr p Λ a e K F K' boundary Z W V l B
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
     ManyBody.SquareInteraction.supported_buffer_gaussian_integral q hq J hJ L h hh hhJ R C₀ hRC W l
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩

@@ -57,14 +57,14 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
 
 \begin{lemma}[Children of a rectangle]
     \label{thm:area_law_box_children}
-    \lean{TNLean.PEPS.AreaLaw.IntRect.child,
-        TNLean.PEPS.AreaLaw.IntRect.exists_mem_child,
-        TNLean.PEPS.AreaLaw.IntRect.dist_le_of_mem_child_dilate,
-        TNLean.PEPS.AreaLaw.IntRect.child_dilate_subset,
-        TNLean.PEPS.AreaLaw.IntRect.width,
-        TNLean.PEPS.AreaLaw.IntRect.height,
-        TNLean.PEPS.AreaLaw.IntRect.numChunksX,
-        TNLean.PEPS.AreaLaw.IntRect.numChunksY}
+    \lean{ManyBody.IntRect.child,
+        ManyBody.IntRect.exists_mem_child,
+        ManyBody.IntRect.dist_le_of_mem_child_dilate,
+        ManyBody.IntRect.child_dilate_subset,
+        ManyBody.IntRect.width,
+        ManyBody.IntRect.height,
+        ManyBody.IntRect.numChunksX,
+        ManyBody.IntRect.numChunksY}
     \leanok
     \uses{def:area_law_safe_rectangle}
     Partitioning each axis of a rectangle $Q$ with $\operatorname{size}(Q)\le Mr$
@@ -76,17 +76,17 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
     its $Cr$-padding contained in $Q$.
 \end{lemma}
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.AreaLaw.IntRect.width_eq,
-        TNLean.PEPS.AreaLaw.IntRect.height_eq,
-        TNLean.PEPS.AreaLaw.IntRect.width_le_size',
-        TNLean.PEPS.AreaLaw.IntRect.height_le_size',
-        TNLean.PEPS.AreaLaw.IntRect.numChunksX_le,
-        TNLean.PEPS.AreaLaw.IntRect.numChunksY_le,
-        TNLean.PEPS.AreaLaw.IntRect.div_lt_numChunks,
-        TNLean.PEPS.AreaLaw.IntRect.mem_child,
-        TNLean.PEPS.AreaLaw.IntRect.child_subset,
-        TNLean.PEPS.AreaLaw.IntRect.size_child_le,
-        TNLean.PEPS.AreaLaw.IntRect.eq_of_mem_child}
+    \lean{ManyBody.IntRect.width_eq,
+        ManyBody.IntRect.height_eq,
+        ManyBody.IntRect.width_le_size',
+        ManyBody.IntRect.height_le_size',
+        ManyBody.IntRect.numChunksX_le,
+        ManyBody.IntRect.numChunksY_le,
+        ManyBody.IntRect.div_lt_numChunks,
+        ManyBody.IntRect.mem_child,
+        ManyBody.IntRect.child_subset,
+        ManyBody.IntRect.size_child_le,
+        ManyBody.IntRect.eq_of_mem_child}
     Coordinates in chunk $a$ lie in $[ar,ar+r-1]$ relative to the corner of
     $Q$, and the $Cr$-padding extends each side by $Cr$.
 \end{proof}
@@ -136,8 +136,8 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
         thm:area_law_rotated_chain_rule}
     \lean{TNLean.PEPS.AreaLaw.eq_of_color_eq,
         TNLean.PEPS.AreaLaw.card_filter_not_interior_le,
-        TNLean.PEPS.AreaLaw.IntRect.size_le_of_subset,
-        TNLean.PEPS.AreaLaw.IsSafe.mono}
+        ManyBody.IntRect.size_le_of_subset,
+        ManyBody.IsSafe.mono}
     Coloring the children of a safe parent (Lemma~\ref{thm:area_law_box_children})
     modulo $P$ along both axes gives $N=P^2$ colors such that the
     $C_{\mathrm{pad}}r$-padding of any child meets only other colors. At most
@@ -173,7 +173,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
 
 \begin{lemma}[Safety inside a dilated rectangle]
     \label{thm:area_law_safe_rectangle_dilation}
-    \lean{TNLean.PEPS.AreaLaw.IsSafe.of_subset_dilate}
+    \lean{ManyBody.IsSafe.of_subset_dilate}
     \leanok
     \uses{def:area_law_safe_rectangle}
     Let $\Lambda\subset\Z^2$ be finite, $A\subseteq\Lambda$, $Z$ be the

@@ -26,13 +26,11 @@ Written from the manuscript; no upstream Lean text is reused.
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 section Stages
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
   (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 /-- The conclusion of the uniform repair induction for the actual repair stages
@@ -100,7 +98,7 @@ Source: area-law Section 11, `geometry:repair-induction`, lines 471–485, with
 the choice of `S_*` and `k₀` in lines 380–394. -/
 def UniformRepairInductionStatement : Prop :=
   ∃ a₀ : ℝ, 0 < a₀ ∧ ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-    ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+    ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
       (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
         IsUniformRepairInduction o Λ A C k₀ hC h₀ Sstar a₀
 

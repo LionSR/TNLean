@@ -53,7 +53,7 @@ public-API policy. All general replacements below are declared in
 | `TNLean.PEPS.threeBlockDoubleSum_eq_smul_single` | `TNLean.PEPS.ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single` |
 | `TNLean.PEPS.threeBlockBlueCoeff` | `TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueCoeff` |
 | `TNLean.PEPS.threeBlockDoubleSum_eq_blueCoeff_sum` | `TNLean.PEPS.ThreeBlockGeometry.threeBlockDoubleSum_eq_blueCoeff_sum` |
-| `TNLean.PEPS.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical` | `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical` |
+| `TNLean.PEPS.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical` | `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical` |
 | `TNLean.PEPS.regionInteriorBondProd_smul_threeBlockComplWeight_eq` | `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockComplWeight_eq` |
 | `TNLean.PEPS.regionBlockedWeight_threeBlockComplPhysical_mem_range` | No replacement needed: unused step of the removed edge-centred argument. |
 

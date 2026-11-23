@@ -91,7 +91,7 @@ noncomputable def canonicalInjectiveGappedPath
         (fun γ => hInj γ γ.property) isCompact_univ
     exact ⟨δ, hδ, fun γ hγ N hN => ⟨0, hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN⟩⟩
   symmetric γ hγ g N hN := by
-    rw [← onSiteTensorPow_eq_finKronecker]
+    rw [← onSiteTensorPow_eq_piKronecker]
     have : NeZero N := ⟨by omega⟩
     have hSym := hamiltonian_translationInvariant_commute_onSiteTensorPow (N := N) (U g)
       (LinearMap.toMatrix' (parentInteraction (A γ) 2))

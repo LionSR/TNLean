@@ -147,7 +147,7 @@ theorem normalizedBondInteraction_commute_onSite
   have haction : P * Matrix.piKronecker (fun _ : Fin 2 => S) * Pᴴ =
       onSiteTensorPow 2 (sptFixedPointAction ρ 1 g) := by
     change P * Matrix.piKronecker (fun _ : Fin 2 => S) * Pᴴ = _
-    simpa only [P, S, X, onSiteTensorPow_eq_finKronecker,
+    simpa only [P, S, X, onSiteTensorPow_eq_piKronecker,
       Matrix.piKronecker_apply, Matrix.piKronecker_apply, sptGauge,
       Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup (ρ.X g⁻¹) hX] using
         incomingBondPerm_conj_sptFixedPointAction ρ g 2

@@ -32,8 +32,6 @@ open Filter
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The explicit threshold `truncationEntropyThreshold q g Cvol` transfers the original
@@ -46,9 +44,9 @@ revision stated in the module documentation. -/
 theorem regionEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
     (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) {n : ℕ}
     (hthr : truncationEntropyThreshold q g Cvol ≤ n) :
-    ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
+    ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
     ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
-    ∀ (A : Finset (Site Λ)) (depth : Site Λ → ℤ) (L : ℕ),
+    ∀ (A : Finset ↥Λ) (depth : ↥Λ → ℤ) (L : ℕ),
     ((depthPrefix A depth (L : ℤ)).card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
     Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
         (Matrix.vecMulVec Ω (star Ω)) ≤
@@ -141,9 +139,9 @@ revision stated in the module documentation. -/
 theorem eventually_regionEntropy_positiveDepthPrefix_le
     (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) :
     ∀ᶠ n : ℕ in atTop,
-      ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
+      ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
       ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
-      ∀ (A : Finset (Site Λ)) (depth : Site Λ → ℤ) (L : ℕ),
+      ∀ (A : Finset ↥Λ) (depth : ↥Λ → ℤ) (L : ℕ),
       ((depthPrefix A depth (L : ℤ)).card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
       Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
           (Matrix.vecMulVec Ω (star Ω)) ≤

@@ -25,7 +25,6 @@ noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport PlaneInteraction)
 
@@ -43,24 +42,24 @@ theorem exists_actualScan_rough_lower_norm_of_weight
     [LinearOrder (AdmissibleSupport Λ R)] (Kband : ℕ)
     (a : ℝ) (ha : 0 < a) (haSmall : a ≤ 1 / 2) :
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
-      ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
+      ∀ (S : CollarScan ↥Λ (AdmissibleSupport Λ R)), S.K = Kband →
       ∀ (hm : 0 < S.m) (hM : 0 < S.M) (Horizon : ℕ)
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
-        (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ) (L : ℕ)
+        (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (e₀ gap : ℝ),
       ‖Ωt‖ = 1 →
       ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
       let W := a * (Kband : ℝ)
-      let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+      let n := augmentedDimensions (V := ↥Λ) q (fun _ => d)
       ∀ (pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ)
         (k : ℕ), 0 < k → pre k ≠ 0 → ‖WithLp.toLp 2 (pre k)‖ ≤ 1 →
-      symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k →
+      symProj (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k →
       ∀ (ell : IrrepLabel (Equiv.Perm (Fin k))) (Sent ε : ℝ),
-      let β := fun _ : Site Λ => Fin q
+      let β := fun _ : ↥Λ => Fin q
       let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
-      let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+      let e := augmentedReplicaConfigurationEquiv (V := ↥Λ) q d k
       labelProj (subsystemPerm k ι₀ {some none}) ell *ᵥ (pre k ∘ e) = pre k ∘ e →
       labelProj (subsystemPerm k ι₀ {none}) ell *ᵥ (pre k ∘ e) = pre k ∘ e →
       2 * (k : ℝ) * Sent - ε ≤ Real.log ell.dim + Real.log ell.dim →
@@ -90,7 +89,7 @@ theorem exists_actualScan_rough_lower_norm_of_weight
   classical
   obtain ⟨c, Cf, hc, hCf, hlower⟩ :=
     exists_replicaMetric_symProj_bandProduct_rough_lower_norm
-      (fun _ : Site Λ => Fin q) (Fin d) (Fin d)
+      (fun _ : ↥Λ => Fin q) (Fin d) (Fin d)
       (div_pos ha zero_lt_two) (by linarith only [haSmall])
   refine ⟨c, Cf, hc, hCf, ?_⟩
   intro S hSK hm hM Horizon h hh hhJ Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos W n
@@ -123,19 +122,19 @@ theorem exists_actualScan_rough_lower_norm_of_weight
     | some side => cases side <;> simp [Q, Y, receiving, middle, hx]
   obtain ⟨N, ZS, hZS, hZSZS⟩ :=
     (isStarProjection_symProj
-      (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry
+      (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry
   let ZO := ZS.submatrix e (id : Fin N → Fin N)
   have hZO : ZOᴴ * ZO = 1 :=
     Matrix.IsIsometry.reindex ZS hZS e.symm (Equiv.refl (Fin N))
-  have hSymm : symProj (copyPerm ((o : Option (Option (Site Λ))) → ι₀ o) k) =
-      (symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)).submatrix e e := by
+  have hSymm : symProj (copyPerm ((o : Option (Option ↥Λ)) → ι₀ o) k) =
+      (symProj (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k)).submatrix e e := by
     simpa only [Matrix.reindex_apply, Equiv.symm_symm] using
       (symProj_of_intertwine e.symm
-        (φ := copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)
-        (ψ := copyPerm ((o : Option (Option (Site Λ))) → ι₀ o) k)
+        (φ := copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k)
+        (ψ := copyPerm ((o : Option (Option ↥Λ)) → ι₀ o) k)
         (fun perm x => funext fun j => rfl))
   have hZOZO : ZO * ZOᴴ =
-      symProj (copyPerm ((o : Option (Option (Site Λ))) → ι₀ o) k) := by
+      symProj (copyPerm ((o : Option (Option ↥Λ)) → ι₀ o) k) := by
     simpa only [ZO, Matrix.conjTranspose_submatrix, Equiv.coe_refl] using
       ((Matrix.submatrix_mul_equiv ZS ZSᴴ e (Equiv.refl (Fin N)) e).trans
         (congrArg (fun P : Matrix (Config k (fun v => Fin (n v)))
@@ -152,8 +151,8 @@ theorem exists_actualScan_rough_lower_norm_of_weight
   have hξnorm : ‖ξ‖ ≤ 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).norm_map
       (WithLp.toLp 2 (pre k))).trans_le hprenorm
-  have hsymO : symProj (copyPerm ((o : Option (Option (Site Λ))) → ι₀ o) k) *ᵥ ξ = ξ := by
-    change symProj (copyPerm ((o : Option (Option (Site Λ))) → ι₀ o) k) *ᵥ
+  have hsymO : symProj (copyPerm ((o : Option (Option ↥Λ)) → ι₀ o) k) *ᵥ ξ = ξ := by
+    change symProj (copyPerm ((o : Option (Option ↥Λ)) → ι₀ o) k) *ᵥ
       (pre k ∘ e) = pre k ∘ e
     simpa only [hSymm, Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
       Equiv.self_comp_symm, Function.comp_id] using
@@ -230,7 +229,7 @@ theorem exists_actualScan_rough_lower_norm_of_weight
       (sub_le_sub_right hcoefficient remainder).trans hdiv
   have hbound {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ hist, DecidableEq (Choice hist)]
-      (D : TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
+      (D : TransportData (↥Λ ⊕ Bool) S.K Hist Choice)
       (hD : D.IsAdmissible) (hcomm : D.CrossBandCommute n (a / 2) k)
       (f : (Σ hist, Option (Choice hist)) → terminalFamily S.K S.m S.M Horizon)
       (hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g))
@@ -341,24 +340,24 @@ theorem exists_actualScan_rough_lower_norm
     {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]
     [LinearOrder (AdmissibleSupport Λ R)] (Kband : ℕ) (hKband : 8 ≤ Kband) :
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
-      ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
+      ∀ (S : CollarScan ↥Λ (AdmissibleSupport Λ R)), S.K = Kband →
       ∀ (hm : 0 < S.m) (hM : 0 < S.M) (Horizon : ℕ)
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
-        (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ) (L : ℕ)
+        (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (e₀ gap : ℝ),
       ‖Ωt‖ = 1 →
       ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
       let a := 4 / (Kband : ℝ)
-      let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+      let n := augmentedDimensions (V := ↥Λ) q (fun _ => d)
       ∀ (pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ)
         (k : ℕ), 0 < k → pre k ≠ 0 → ‖WithLp.toLp 2 (pre k)‖ ≤ 1 →
-      symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k →
+      symProj (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k →
       ∀ (ell : IrrepLabel (Equiv.Perm (Fin k))) (Sent ε : ℝ),
-      let β := fun _ : Site Λ => Fin q
+      let β := fun _ : ↥Λ => Fin q
       let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
-      let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+      let e := augmentedReplicaConfigurationEquiv (V := ↥Λ) q d k
       labelProj (subsystemPerm k ι₀ {some none}) ell *ᵥ (pre k ∘ e) = pre k ∘ e →
       labelProj (subsystemPerm k ι₀ {none}) ell *ᵥ (pre k ∘ e) = pre k ∘ e →
       2 * (k : ℝ) * Sent - ε ≤ Real.log ell.dim + Real.log ell.dim →

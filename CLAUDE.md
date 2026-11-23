@@ -94,8 +94,7 @@ spectral results, and channel-generic Kraus/Wielandt APIs. See
 | Layer | Modules | Content |
 |-------|---------|---------|
 | **0** | `Algebra/` | Tensor-network-facing algebra and compatibility results not owned by QICLean |
-| **1** | `Circuit/` | Site-level remainder of the circuit layer on qudit chains (the circuit model itself is QICLean's): product operators on sets of sites, site permutations, region coordinates and regional swaps, simultaneous regional ground vectors, weighted GHZ normalization; imports nothing from `MPS/` |
-| **2** | `Lattice/` | Finite lattice domains, local Hamiltonians, and regional entropy, shared by the one- and two-dimensional area laws; imports nothing from `MPS/` or `PEPS/` |
+| **2** | `Lattice/` | Distributed-circuit calculus on finite sets of parties (`PartyCircuit/`), sheets without holes (`Sheet/`), and compression of distributed operator networks (`Compression/`); the finite lattice domains, local Hamiltonians, regional entropy and circuit model are QICLean's; imports nothing from `MPS/` or `PEPS/` |
 | **3** | `MPS/Tensor/Defs`, `MPS/Chain/`, `MPS/Core/`, `MPS/Overlap/` | MPSTensor definition, finite-Kraus compatibility wrappers, word evaluation, blocking, transfer matrices, overlap matrices |
 | **4** | `MPS/FundamentalTheorem/`, `MPS/Symmetry/` | Single-block FT, gauge equivalence, on-site/virtual symmetries, cocycle coboundary |
 | **5** | `MPS/BNT/`, `MPS/CanonicalForm/`, `MPS/Structure/`, `MPS/Irreducible/`, `MPS/Periodic/`, `MPS/FundamentalTheorem/Multi/` | Multi-block assembly, BNT canonical forms, permutation rigidity, periodic tensors |
@@ -103,7 +102,7 @@ spectral results, and channel-generic Kraus/Wielandt APIs. See
 | **5c** | `MPS/AreaLaw/` | One-dimensional area law and polynomial matrix product state approximation for gapped finite-range chains, stated natively on the chain of `L` sites and proved from the QICLean tail bound and buffered discount |
 | **6** | `Wielandt/` | Tensor-typed span-growth, primitivity, and Wielandt consequences built on QICLean |
 
-**Other modules**: `Circuit/` (local quantum circuits on qudit chains, namespace `QuantumCircuit`, used by the log-depth preparation of `MPS/Preparation/`; it imports nothing from `MPS/`), `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), `QCA/` (quasi-local and cellular-automaton layer), `Spectral/` (MPS-specific transfer-operator gap and overlap-decay results), and `Archive/` (legacy, excluded from root imports).
+**Other modules**: `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), `QCA/` (quasi-local and cellular-automaton layer), `Spectral/` (MPS-specific transfer-operator gap and overlap-decay results), and `Archive/` (legacy, excluded from root imports).
 
 ### Key Types and Definitions
 

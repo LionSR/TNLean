@@ -60,7 +60,7 @@ which is made in `TNLean.MPS.Preparation.NonNormalCanonicalForm`.
   `R_k L_{k+1}`, `Ω'` is `∑ⱼ αⱼ ∏ₖ ω_j`.
 * `MPSTensor.pairIsometry`, `MPSTensor.isIsometry_pairIsometry` — `W : |j⟩ ↦ |ω_j⟩` is an
   isometry for orthonormal pairs.
-* `MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState` — the GHZ form
+* `MPSTensor.nonNormalFixedPointState_eq_piKronecker_mulVec_ghzState` — the GHZ form
   `|Ω'⟩ = W^{⊗M} |χ_M⟩`, with `|χ_M⟩` the state `QuantumCircuit.ghzState` of
   `QICLean.Circuit.Protocol.GHZ`; `W^{⊗M}` is `Matrix.piKronecker`, an isometry by
   `Matrix.IsIsometry.piKronecker`.
@@ -168,7 +168,7 @@ theorem isIsometry_pairIsometry {ω : Fin b → Fin D × Fin D → ℂ}
 eq. (19): `|Ω'⟩ = W^{⊗M} |χ_M⟩` with `W : |j⟩ ↦ |ω_j⟩`, in the bond coordinates
 `R_k L_{k+1}` of `bondRegrouping`. This identity holds for every family `ω_j`; local
 orthogonality is what makes `W` an isometry (`isIsometry_pairIsometry`). -/
-theorem nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState {M : ℕ} (α : Fin b → ℂ)
+theorem nonNormalFixedPointState_eq_piKronecker_mulVec_ghzState {M : ℕ} (α : Fin b → ℂ)
     (ω : Fin b → Fin D × Fin D → ℂ) (p : Fin M → Fin D × Fin D) :
     nonNormalFixedPointState α ω ((bondRegrouping M D).symm p) =
       ((Matrix.piKronecker fun _ : Fin M ↦ (pairIsometry ω)) *ᵥ ghzState α) p := by

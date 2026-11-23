@@ -53,7 +53,6 @@ open Matrix
 
 open ManyBody (IsGapped groundSpace)
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -80,21 +79,21 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     (center : ℝ × ℝ) (u κ b : ℝ)
     (hu : 4 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     let Λ := ManyBody.rectangularDomain L L
-    letI : LinearOrder (Lattice.Site Λ) :=
-      (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+    letI : LinearOrder ↥Λ :=
+      (Fintype.equivFin ↥Λ).linearOrder
     let m := AreaLaw.Geometry.nestedPatchCount u
-    let regions : Fin m → Finset (Lattice.Site Λ) :=
+    let regions : Fin m → Finset ↥Λ :=
       fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
     let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
     let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
     ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
-      x ∈ regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
+      x ∈ regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions →
       IsMinOn
-        (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+        (regularizedPatchObjective (Out := fun _ : ↥Λ ↦ Fin q)
           regions a b Ωᵤ)
-        (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
-      let φ : Lattice.StateSpace Λ q :=
-        (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+        (regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions) x →
+      let φ : EuclideanSpace ℂ (↥Λ → Fin q) :=
+        (normalizedRegularizedPatchOutput (Out := fun _ : ↥Λ ↦ Fin q)
           regions a b Ωᵤ x)
       (inner ℂ φ (Matrix.toEuclideanLin
           (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart).hamiltonian
@@ -105,16 +104,16 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΩᵤ : ‖Ωᵤ‖ = 1 :=
     ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ)
-  let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+  let : LinearOrder ↥Λ := (Fintype.equivFin ↥Λ).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
-    (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
+    (Out := fun _ : ↥Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
   have hφ : ‖φ‖ = 1 := hnorm
   have hregions : Monotone regions := fun i j hij ↦
     AreaLaw.Geometry.nestedPatch_mono Λ center u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
-    (n := fun _ : Lattice.Site Λ ↦ q) regions hregions a ha hb Ωᵤ hΩᵤ x hx hmin
+    (n := fun _ : ↥Λ ↦ q) regions hregions a ha hb Ωᵤ hΩᵤ x hx hmin
   obtain ⟨T, hsupp, hherm, hTnorm, hTsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
-  let D : ℕ → Finset (Lattice.Site Λ) := AreaLaw.Geometry.nestedPatch Λ center u
+  let D : ℕ → Finset ↥Λ := AreaLaw.Geometry.nestedPatch Λ center u
   let K : (j : Fin m) → Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
       (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ :=
     fun j ↦ (x j + b • 1) ^ (-(a j) / 2)
@@ -124,7 +123,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     (div_nat_le_self_of_nonneg hκ.le m).trans hκ₁
   have hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j := fun _ _ hij ↦ hregions hij
   have hφpatch := normalizedRegularizedPatchOutput_eq_patchState
-    (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ωᵤ x
+    (n := fun _ : ↥Λ ↦ q) (fun j : Fin m ↦ D j) a b Ωᵤ x
   change φ = Entropy.patchState b (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x)
     (AreaLaw.rectangleAreaLawState Ω) at hφpatch
   simp only [Entropy.patchState, Entropy.patchOutput,
@@ -143,7 +142,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
   have hφne : φ ≠ 0 := norm_ne_zero_iff.mp (hφ.trans_ne one_ne_zero)
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp (show (φ : _ → ℂ) ≠ 0 from by
     intro hzero; apply hφne; simpa using congrArg (WithLp.toLp 2) hzero)
-  have hsingle : ∀ (i : Lattice.Site Λ ⊕ Edge (ManyBody.planeDomainGraph Λ)),
+  have hsingle : ∀ (i : ↥Λ ⊕ Edge (ManyBody.planeDomainGraph Λ)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
         j = k := by
@@ -163,8 +162,8 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
           ((AreaLaw.inr_mem_crossingTerms_iff (D k) e).mp (hc k hk)))
   have henergy := Entropy.re_inner_sub_le_of_chain_sharp D hD K hunit hφ a ha₁ hcl
     T (AreaLaw.nearestNeighborSupport (Λ := Λ)) hsupp hherm σ₀ hTnorm hsingle heig
-  have hcard (A S : Finset (Lattice.Site Λ)) :
-      Fintype.card (ManyBody.InnerConfig (fun _ : Lattice.Site Λ ↦ q) A S) =
+  have hcard (A S : Finset ↥Λ) :
+      Fintype.card (ManyBody.InnerConfig (fun _ : ↥Λ ↦ q) A S) =
         Fintype.card (↥(S ∩ A) → Fin q) := by
     rw [ManyBody.card_innerConfig]
     simp only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
@@ -190,7 +189,6 @@ open Matrix
 
 open ManyBody (IsGapped groundSpace SquareInteraction)
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -214,47 +212,47 @@ theorem nestedPatch_minimizer_marginal_closeness
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (center : ℝ × ℝ) (u b : ℝ), 4 ≤ u → 0 < b →
         let Λ := ManyBody.rectangularDomain L L
-        letI : LinearOrder (Lattice.Site Λ) :=
-          (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+        letI : LinearOrder ↥Λ :=
+          (Fintype.equivFin ↥Λ).linearOrder
         let m := AreaLaw.Geometry.nestedPatchCount u
-        let regions : Fin m → Finset (Lattice.Site Λ) :=
+        let regions : Fin m → Finset ↥Λ :=
           fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
         let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
         let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
         ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
           x ∈ regularizedPatchDomain
-            (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
+            (Out := fun _ : ↥Λ ↦ Fin q) regions →
           IsMinOn
-            (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+            (regularizedPatchObjective (Out := fun _ : ↥Λ ↦ Fin q)
               regions a b Ωᵤ)
-            (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
-          ∀ R : Finset (Lattice.Site Λ),
+            (regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions) x →
+          ∀ R : Finset ↥Λ,
             (CFC.abs
               (normalizedRegularizedPatchMarginal
-                (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
+                (Out := fun _ : ↥Λ ↦ Fin q) regions a b Ωᵤ x R -
                 ManyBody.regionState (X := fun _ ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
                   R)).trace.re ≤ (1 / 16 : ℝ) := by
   intro L h hh hhJ E₀ Ω hΩ hgap hspan center u b hu hb Λ m regions a Ωᵤ x hx hmin R
-  let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+  let : LinearOrder ↥Λ := (Fintype.equivFin ↥Λ).linearOrder
   have henergy := (h.nestedPatch_minimizer_energy_le hh hhJ hJ hΔ Ω hΩ hgap hspan center u κ b
     hu hκ (hκhalf.trans (by norm_num)) hb x hx hmin).trans hsmall
   have hnorm := norm_normalizedRegularizedPatchOutput
-    (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a
+    (Out := fun _ : ↥Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ωᵤ
     ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ) hx
   obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan
   have hgap := ManyBody.re_trace_abs_regionState_sub_le_one_sixteenth_of_energy
-    (fun _ : Lattice.Site Λ ↦ Fin q)
+    (fun _ : ↥Λ ↦ Fin q)
         (ManyBody.Interaction.isHermitian_hamiltonian
           h.isHermitian_toPlaneInteraction_hermitianPart_term) hΩ'
         hgap' hspan' hΔ
     (hnorm) henergy R
   have hρ := reindex_reducedPure_eq_regionState
-    (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) R Ωᵤ
+    (fun _ : ↥Λ ↦ Equiv.refl (Fin q)) R Ωᵤ
   simp only [dependentRegionFinEquiv, Equiv.piCongrRight_refl,
     Matrix.reindex_refl_refl] at hρ
   have hU : dependentGlobalFinIsometry
-      (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) Ωᵤ = Ωᵤ := rfl
+      (fun _ : ↥Λ ↦ Equiv.refl (Fin q)) Ωᵤ = Ωᵤ := rfl
   have hΩeq : Ωᵤ = AreaLaw.rectangleAreaLawState Ω := rfl
   rw [hU, hΩeq] at hρ
   simpa only [normalizedRegularizedPatchMarginal, hρ] using hgap
@@ -277,24 +275,24 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (center : ℝ × ℝ) (u b : ℝ), 4 ≤ u → 0 < b →
           let Λ := ManyBody.rectangularDomain L L
-          letI : LinearOrder (Lattice.Site Λ) :=
-            (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+          letI : LinearOrder ↥Λ :=
+            (Fintype.equivFin ↥Λ).linearOrder
           let m := AreaLaw.Geometry.nestedPatchCount u
-          let regions : Fin m → Finset (Lattice.Site Λ) :=
+          let regions : Fin m → Finset ↥Λ :=
             fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
           let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
           let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
           ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
             x ∈ regularizedPatchDomain
-              (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
+              (Out := fun _ : ↥Λ ↦ Fin q) regions →
             IsMinOn
-              (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+              (regularizedPatchObjective (Out := fun _ : ↥Λ ↦ Fin q)
                 regions a b Ωᵤ)
-              (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
-            ∀ R : Finset (Lattice.Site Λ),
+              (regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions) x →
+            ∀ R : Finset ↥Λ,
               (CFC.abs
                 (normalizedRegularizedPatchMarginal
-                  (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
+                  (Out := fun _ : ↥Λ ↦ Fin q) regions a b Ωᵤ x R -
                   ManyBody.regionState (X := fun _ ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
                     R)).trace.re ≤ (1 / 16 : ℝ) := by
   rcases (show (0 : ℝ) ≤ 36 * (q : ℝ) ^ 2 * J by positivity).eq_or_lt with hC | hC

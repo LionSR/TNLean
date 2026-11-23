@@ -32,7 +32,7 @@ namespace MPOTensor
 
 variable {d D Da Db : ℕ}
 
-private theorem reindex_tensorPower_blockKron
+private theorem reindex_piKronecker_blockKron
     (Q : Matrix (Fin d) (Fin d) ℂ) (N k : ℕ) :
     Matrix.reindex (MPSTensor.blockedConfigEquiv d N k).symm
         (MPSTensor.blockedConfigEquiv d N k).symm (Matrix.piKronecker fun _ : Fin (N * k) ↦ Q) =
@@ -84,7 +84,7 @@ private theorem block_swap_dagger_action (d k N : ℕ)
       (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) * Xᴴ *
         (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
   simp only [FiniteChainOperatorSymmetry.block, shiftSwapDaggerSymmetry,
-    reindex_mul, reindex_tensorPower_blockKron, Matrix.conjTranspose_reindex]
+    reindex_mul, reindex_piKronecker_blockKron, Matrix.conjTranspose_reindex]
   congr 2
   ext σ τ
   simp [Matrix.reindex_apply]
@@ -96,7 +96,7 @@ private theorem block_swap_transpose_action (d k N : ℕ)
       (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) * Xᵀ *
         (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
   simp only [FiniteChainOperatorSymmetry.block, shiftSwapTransposeSymmetry,
-    reindex_mul, reindex_tensorPower_blockKron]
+    reindex_mul, reindex_piKronecker_blockKron]
   congr 2
   ext σ τ
   simp [Matrix.reindex_apply, Matrix.transpose_apply]

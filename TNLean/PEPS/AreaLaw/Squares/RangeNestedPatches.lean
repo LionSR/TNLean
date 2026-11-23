@@ -40,8 +40,6 @@ involved.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (IsAdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -78,7 +76,7 @@ def rangeNestedPatchRadius (R : ℕ) (u : ℝ) (j : ℕ) : ℝ := u + rangePatch
 
 /-- The sampled patch at the selected radius at range `R`. -/
 noncomputable def rangeNestedPatch (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (R : ℕ) (u : ℝ)
-    (j : ℕ) : Finset (Site Λ) :=
+    (j : ℕ) : Finset ↥Λ :=
   closedSquareSample Λ c (rangeNestedPatchRadius R u j)
 
 /-- At range one the patch count is the source count. -/
@@ -153,7 +151,7 @@ theorem rangeNestedPatch_mono (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (R : �
 
 /-- Radial distances of the endpoints of a walk differ by at most its length.
 Source: polynomial-PEPS `03-patches.tex`, lines 215–217, iterated along a walk. -/
-theorem abs_squareRadius_sub_le_length {Λ : Finset (ℤ × ℤ)} (c : ℝ × ℝ) {x y : Site Λ}
+theorem abs_squareRadius_sub_le_length {Λ : Finset (ℤ × ℤ)} (c : ℝ × ℝ) {x y : ↥Λ}
     (p : (planeDomainGraph Λ).Walk x y) :
     |squareRadius c x.1 - squareRadius c y.1| ≤ p.length := by
   induction p with
@@ -168,7 +166,7 @@ theorem abs_squareRadius_sub_le_length {Λ : Finset (ℤ × ℤ)} (c : ℝ × �
 
 /-- Radial distances within a support of graph range `R` differ by at most `R`. -/
 theorem abs_squareRadius_sub_le_of_isAdmissibleSupport {Λ : Finset (ℤ × ℤ)} (c : ℝ × ℝ)
-    {R : ℕ} {X : Finset (Site Λ)} (hX : IsAdmissibleSupport Λ R X) {x y : Site Λ}
+    {R : ℕ} {X : Finset ↥Λ} (hX : IsAdmissibleSupport Λ R X) {x y : ↥Λ}
     (hx : x ∈ X) (hy : y ∈ X) : |squareRadius c x.1 - squareRadius c y.1| ≤ R := by
   obtain ⟨p, hp⟩ := hX.2 x hx y hy
   exact (abs_squareRadius_sub_le_length c p).trans (by exact_mod_cast hp)
@@ -176,7 +174,7 @@ theorem abs_squareRadius_sub_le_of_isAdmissibleSupport {Λ : Finset (ℤ × ℤ)
 /-- A support whose radial distances differ by at most `R` is split by at most one
 selected square: it cannot both meet a smaller square and leave a larger one. -/
 theorem rangeNestedPatch_split_unique {Λ : Finset (ℤ × ℤ)} {c : ℝ × ℝ} {R : ℕ} {u : ℝ}
-    {X : Finset (Site Λ)}
+    {X : Finset ↥Λ}
     (hX : ∀ x ∈ X, ∀ y ∈ X, |squareRadius c x.1 - squareRadius c y.1| ≤ R) {i j : ℕ}
     (hi : (∃ v ∈ X, v ∈ rangeNestedPatch Λ c R u i) ∧
       ∃ v ∈ X, v ∉ rangeNestedPatch Λ c R u i)
@@ -198,12 +196,12 @@ theorem rangeNestedPatch_split_unique {Λ : Finset (ℤ × ℤ)} {c : ℝ × ℝ
 /-- The sites with `r - R < ‖x - c‖∞ ≤ r`, the inner layer of width `R` of a closed
 square. -/
 noncomputable def squareLayer (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (r : ℝ) (R : ℕ) :
-    Finset (Site Λ) := by
+    Finset ↥Λ := by
   classical
   exact Finset.univ.filter fun x ↦ r - R < squareRadius c x.1 ∧ squareRadius c x.1 ≤ r
 
 @[simp] theorem mem_squareLayer {Λ : Finset (ℤ × ℤ)} {c : ℝ × ℝ} {r : ℝ} {R : ℕ}
-    {x : Site Λ} :
+    {x : ↥Λ} :
     x ∈ squareLayer Λ c r R ↔ r - R < squareRadius c x.1 ∧ squareRadius c x.1 ≤ r := by
   classical
   simp [squareLayer]
@@ -211,9 +209,9 @@ noncomputable def squareLayer (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (r : �
 /-- A support with radial spread at most `R` that meets a closed square and leaves it has
 each of its sites inside the square in the inner layer of width `R`. -/
 theorem mem_squareLayer_of_split {Λ : Finset (ℤ × ℤ)} {c : ℝ × ℝ} {r : ℝ} {R : ℕ}
-    {X : Finset (Site Λ)}
+    {X : Finset ↥Λ}
     (hX : ∀ x ∈ X, ∀ y ∈ X, |squareRadius c x.1 - squareRadius c y.1| ≤ R)
-    {x y : Site Λ} (hxX : x ∈ X) (hx : x ∈ closedSquareSample Λ c r) (hyX : y ∈ X)
+    {x y : ↥Λ} (hxX : x ∈ X) (hx : x ∈ closedSquareSample Λ c r) (hyX : y ∈ X)
     (hy : y ∉ closedSquareSample Λ c r) : x ∈ squareLayer Λ c r R := by
   rw [mem_closedSquareSample_iff_radius] at hx hy
   have hxy := (abs_le.mp (hX y hyX x hxX)).2

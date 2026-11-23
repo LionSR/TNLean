@@ -36,7 +36,6 @@ open Matrix Filter
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
 
@@ -69,8 +68,8 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
           ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
             (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
                 (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-            (E₀ : ℝ) (Ω : StateSpace Λ q),
+            (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+            (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
@@ -100,7 +99,7 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
             1 ≤ B ∧ 0 < C₀ ∧ 0 < c₀ ∧
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
             X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
-            ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+            ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
               (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
                 groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
               0 ≤ e ∧ e ≤ ε ∧
@@ -110,7 +109,7 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
                   (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
                   (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
                 Real.sqrt (2 * ε / g) ∧
-              (∀ (Y : Finset (Site Λ)) (u : ℝ),
+              (∀ (Y : Finset ↥Λ) (u : ℝ),
                 |u| ≤ Entropy.tailRadius (2 / g)
                   (ManyBody.cutLogBudget
                     (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
@@ -121,7 +120,7 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
                       C₀ * ManyBody.cutLogBudget
                         (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
                         (fun _ ↦ q) Y * u ^ 2) ∧
-              (∀ (Y : Finset (Site Λ)) (v : ℝ),
+              (∀ (Y : Finset ↥Λ) (v : ℝ),
                 Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
                   (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
@@ -164,7 +163,7 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
   have hCtr : 0 < Ctr := by
     rw [hCtrEq]; exact latticeTruncationRadiusConstant_pos R hΔ (by positivity)
   have htarget := hwindow q hq
-  have hbudget := statusMarginal_cutBudget_le_log hq R hCtr.le
+  have hbudget := statusMarginal_cutLogBudget_le_log hq R hCtr.le
   set CB := statusMarginalBudgetConstant q R Ctr
   have hCB : 0 < CB := statusMarginalBudgetConstant_pos q R hCtr.le
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
@@ -258,8 +257,8 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
           ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
             (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
                 (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-            (E₀ : ℝ) (Ω : StateSpace Λ q),
+            (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+            (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
@@ -289,7 +288,7 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
             1 ≤ B ∧ 0 < C₀ ∧ 0 < c₀ ∧
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
             X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
-            ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+            ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
               (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
                 groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
               0 ≤ e ∧ e ≤ ε ∧
@@ -299,7 +298,7 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
                   (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
                   (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
                 Real.sqrt (2 * ε / g) ∧
-              (∀ (Y : Finset (Site Λ)) (u : ℝ),
+              (∀ (Y : Finset ↥Λ) (u : ℝ),
                 |u| ≤ Entropy.tailRadius (2 / g)
                   (ManyBody.cutLogBudget
                     (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
@@ -310,7 +309,7 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
                       C₀ * ManyBody.cutLogBudget
                         (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
                         (fun _ ↦ q) Y * u ^ 2) ∧
-              (∀ (Y : Finset (Site Λ)) (v : ℝ),
+              (∀ (Y : Finset ↥Λ) (v : ℝ),
                 Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
                   (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
@@ -370,8 +369,8 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
           ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
             (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
                 (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-            (E₀ : ℝ) (Ω : StateSpace Λ q),
+            (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+            (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
@@ -398,7 +397,7 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
             1 ≤ B ∧ 0 < C₀ ∧ 0 < c₀ ∧
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
             X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
-            ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+            ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
               (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
                 groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
               0 ≤ e ∧ e ≤ ε ∧
@@ -408,7 +407,7 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
                   (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
                   (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
                 Real.sqrt (2 * ε / g) ∧
-              (∀ (Y : Finset (Site Λ)) (u : ℝ),
+              (∀ (Y : Finset ↥Λ) (u : ℝ),
                 |u| ≤ Entropy.tailRadius (2 / g)
                   (ManyBody.cutLogBudget
                     (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
@@ -419,7 +418,7 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
                       C₀ * ManyBody.cutLogBudget
                         (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
                         (fun _ ↦ q) Y * u ^ 2) ∧
-              (∀ (Y : Finset (Site Λ)) (v : ℝ),
+              (∀ (Y : Finset ↥Λ) (v : ℝ),
                 Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
                   (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *

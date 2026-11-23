@@ -18,8 +18,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 21–29 and 323–329, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -44,7 +42,7 @@ theorem card_ambientDilation_le_of_layers (T : Finset (ℤ × ℤ)) (n L : ℕ)
 /-- Actual chosen-color sites of ambient depth at most `L` inject into the
 ambient dilation, even when the physical domain has holes or extra components. -/
 theorem card_compact_collar_le {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (A : Finset (Site Λ)) (n L : ℕ)
+    (A : Finset ↥Λ) (n L : ℕ)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n) :
     (A.filter fun x ↦ ambientDepth T hT x.val ≤ L).card ≤ T.card + n * L := by
@@ -57,7 +55,7 @@ theorem card_compact_collar_le {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
 /-- A collar no wider than the row scale has quadratic volume, using only the
 actual target size and ambient layer counts. The coefficient may be zero. -/
 theorem card_compact_collar_le_quadratic {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (A : Finset (Site Λ)) {n L : ℕ} {C : ℝ} (hLn : L ≤ n)
+    (A : Finset ↥Λ) {n L : ℕ} {C : ℝ} (hLn : L ≤ n)
     (hsize : (T.card : ℝ) ≤ C * (n : ℝ) ^ 2)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n) :

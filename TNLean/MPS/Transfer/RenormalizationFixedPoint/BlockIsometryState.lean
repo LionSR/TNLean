@@ -160,7 +160,7 @@ theorem IsIsometry.sum_star_mul_prod {M : ℕ} {n : Fin M → Type*} [∀ k, Fin
 
 arXiv:2307.01696, eq. (10), and Supplemental Material, proof of Lemma 1'(i): the isometries
 `V^{⊗N/q}` do not change norms or overlaps. -/
-theorem IsIsometry.sum_star_mul_tensorPower {n κ : Type*} [Fintype n] [Fintype κ]
+theorem IsIsometry.sum_star_mul_prod_const {n κ : Type*} [Fintype n] [Fintype κ]
     [DecidableEq κ] {W : Matrix n κ ℂ} (hW : W.IsIsometry) {M : ℕ}
     (ψ φ : (Fin M → κ) → ℂ) :
     ∑ s : Fin M → n, star (∑ τ, (∏ j, W (s j) (τ j)) * ψ τ) * ∑ τ, (∏ j, W (s j) (τ j)) * φ τ =

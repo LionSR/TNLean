@@ -29,8 +29,6 @@ Written from the manuscript; no upstream Lean text is reused.
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The assignment chosen from the current regions in the working square of
@@ -125,7 +123,7 @@ theorem eq_add_smul_of_sameRay {v z : ℝ × ℝ} {d : ℝ} {s : RepairFanSlot}
 
 section Stages
 
-variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)} {C k₀ : ℕ}
+variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {C k₀ : ℕ}
   {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar : ℝ}
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar

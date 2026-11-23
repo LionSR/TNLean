@@ -3,12 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.Templates.TwoFamilies
 import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 
 /-!
 # The numerical entropy estimate for an ordered decomposition
@@ -69,7 +71,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 section
 
 open scoped BigOperators
-open TNLean.Lattice
 open ManyBody (planeDomainGraph edgeBoundary)
 
 namespace TNLean.PEPS.AreaLaw
@@ -80,7 +81,7 @@ site bound, and the total information-error bound are inputs; this theorem does
 not assert their existence or prove the uniform ground-state area law. -/
 theorem regionEntropy_le_boundary_of_partition_estimates
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     (P : Geometry.OrderedTwoFamilyPartition A) (ε : Fin P.pieceCount → ℝ)
     (hε : ∀ i, ManyBody.regionMutualInformation Ω (P.piece i)
       (Aᶜ ∪ P.earlierSameFamily i) ≤ ε i)
@@ -103,7 +104,6 @@ end
 section
 
 open scoped BigOperators
-open TNLean.Lattice
 open ManyBody (planeDomainGraph edgeBoundary)
 
 namespace TNLean.PEPS.AreaLaw
@@ -121,9 +121,9 @@ sum are explicit premises. This statement does not construct them, prove their
 uniformity, or establish the full ground-state area law. -/
 theorem regionEntropy_le_boundary_of_birth_information_estimates
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     (P : Geometry.OrderedTwoFamilyPartition A)
-    (Y : Fin P.pieceCount → Finset (Site Λ))
+    (Y : Fin P.pieceCount → Finset ↥Λ)
     (hYA : ∀ i, Y i ⊆ A)
     (hXY : ∀ i, P.piece i ⊆ Y i)
     (hYpast : ∀ i, Disjoint (Y i) (P.earlierSameFamily i))
@@ -139,7 +139,7 @@ theorem regionEntropy_le_boundary_of_birth_information_estimates
   exact regionEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ A P
     (fun i ↦ cI * (n i : ℝ) ^ (-100 : ℝ))
     (fun i ↦
-      (ManyBody.regionMutualInformation_mono_left (fun _ : Site Λ ↦ Fin q) Ω
+      (ManyBody.regionMutualInformation_mono_left (fun _ : ↥Λ ↦ Fin q) Ω
         (P.piece i) (Y i) (Aᶜ ∪ P.earlierSameFamily i) (hXY i)
         (Finset.disjoint_union_right.mpr
           ⟨disjoint_compl_right_iff.mpr (hYA i), hYpast i⟩)).trans (hMI i))
@@ -155,7 +155,6 @@ end
 section
 
 open scoped BigOperators
-open TNLean.Lattice
 open ManyBody (planeDomainGraph edgeBoundary)
 
 namespace TNLean.PEPS.AreaLaw
@@ -174,9 +173,9 @@ residual bound and scale sum are explicit premises. This auxiliary implication
 does not construct the final partition or prove those estimates. -/
 theorem regionEntropy_le_boundary_of_neighborhood_information_estimates
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     (P : Geometry.OrderedTwoFamilyPartition A)
-    (Y N : Fin P.pieceCount → Finset (Site Λ))
+    (Y N : Fin P.pieceCount → Finset ↥Λ)
     (hYA : ∀ i, Y i ⊆ A)
     (hXY : ∀ i, P.piece i ⊆ Y i)
     (hYN : ∀ i, Y i ⊆ N i)
@@ -196,7 +195,7 @@ theorem regionEntropy_le_boundary_of_neighborhood_information_estimates
         (Aᶜ ∪ P.earlierSameFamily i) ≤
       ManyBody.regionMutualInformation Ω (Y i) (N i)ᶜ := by
     simpa only [ManyBody.regionMutualInformation, Finset.union_comm, add_comm] using
-      ManyBody.regionMutualInformation_mono_left (fun _ : Site Λ ↦ Fin q) Ω
+      ManyBody.regionMutualInformation_mono_left (fun _ : ↥Λ ↦ Fin q) Ω
         (Aᶜ ∪ P.earlierSameFamily i) (N i)ᶜ (Y i) (hJ i)
         (disjoint_compl_right_iff.mpr (hYN i)).symm
   exact regionEntropy_le_boundary_of_birth_information_estimates Λ q hq Ω hΩ A P

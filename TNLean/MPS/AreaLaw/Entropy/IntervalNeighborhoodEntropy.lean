@@ -43,8 +43,6 @@ section
 
 open ManyBody (interval interval_eq_empty mem_interval)
 
-open TNLean.Lattice
-
 namespace TNLean.MPS.AreaLaw
 
 /-- The exact closed real-radius neighborhood of a clipped interval.

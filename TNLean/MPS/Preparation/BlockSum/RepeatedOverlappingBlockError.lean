@@ -109,7 +109,7 @@ theorem sum_star_copyApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZer
       left
       rfl
     · simp [e, virtualPairEquiv]
-  rw [copyApproxVector, sum_star_tensorPower_polarIso_mulVec_mul_mpv]
+  rw [copyApproxVector, sum_star_piKronecker_polarIso_mulVec_mul_mpv]
   change ∑ c, star (copyFixedPointState α L σ c) * m c = _
   simp only [copyFixedPointState, Finset.sum_apply, Pi.smul_apply, smul_eq_mul, star_sum,
     star_mul', Finset.sum_mul]

@@ -43,13 +43,13 @@ noncomputable def oneCopyFixedPointState (h : IsBNTCanonicalForm P)
 /-- In bond coordinates the actual canonical one-copy state is obtained by applying the
 pair isometry to a GHZ state, as in arXiv:2307.01696, the paragraph after eq. (19), with
 the corrected coefficients of `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`. -/
-theorem oneCopyFixedPointState_eq_tensorPower_mulVec_ghzState (h : IsBNTCanonicalForm P)
+theorem oneCopyFixedPointState_eq_piKronecker_mulVec_ghzState (h : IsBNTCanonicalForm P)
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (q M : ℕ)
     (p : Fin M → Fin P.totalDim × Fin P.totalDim) :
     h.oneCopyFixedPointState κ q M ((bondRegrouping M P.totalDim).symm p) =
       ((Matrix.piKronecker fun _ : Fin M ↦ (pairIsometry (h.basisFixedPointPair κ))) *ᵥ
         ghzState (ghzAmplitude (oneCopyWeight P.copyWeights κ q M))) p :=
-  nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState _ _ p
+  nonNormalFixedPointState_eq_piKronecker_mulVec_ghzState _ _ p
 
 /-- The corrected canonical one-copy state is normalized at every positive blocked length
 with a nonzero coefficient vector. The pairs and their unit norms are derived from the

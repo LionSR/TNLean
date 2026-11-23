@@ -126,26 +126,15 @@ theorem isGapped_hamiltonian_parentRingInteraction_pvbs (μ : ℝ) (hμ : 0 ≤ 
     ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian 0
       ((μ - 1) ^ 2 / (1 + μ ^ 2)) := by
   have : NeZero N := ⟨by omega⟩
-  rw [ManyBody.isGapped_zero_iff_norm
+  rw [ManyBody.isGapped_zero_iff_inner
     (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N),
     ManyBody.groundSpace_zero]
-  set H := Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian
   refine ⟨fun hbot ↦ ?_, fun v hv ↦ ?_⟩
   · have h := pvbs_zero_of_mem_orthogonal_parent_kernel (μ : ℂ) hN
       (v := WithLp.toLp 2 (pvbsVacuum N))
       (by rw [hbot, Submodule.bot_orthogonal_eq_top]; exact Submodule.mem_top)
     exact one_ne_zero ((pvbsVacuum_zero N).symm.trans h)
-  have henergy := hamiltonian_parentRingInteraction_pvbs_energy_lower_bound μ hμ hN v
+  exact hamiltonian_parentRingInteraction_pvbs_energy_lower_bound μ hμ hN v
     (pvbs_zero_of_mem_orthogonal_parent_kernel (μ : ℂ) hN hv)
-  have hCS := @re_inner_le_norm ℂ _ _ _ _ v (H v)
-  by_cases hv0 : v = 0
-  · simp [hv0]
-  · have hmul : ((μ - 1) ^ 2 / (1 + μ ^ 2)) * ‖v‖ * ‖v‖ ≤ ‖H v‖ * ‖v‖ := by
-      calc
-        _ = ((μ - 1) ^ 2 / (1 + μ ^ 2)) * ‖v‖ ^ 2 := by ring
-        _ ≤ (⟪v, H v⟫_ℂ).re := henergy
-        _ ≤ ‖v‖ * ‖H v‖ := hCS
-        _ = _ := mul_comm _ _
-    exact le_of_mul_le_mul_right hmul (norm_pos_iff.mpr hv0)
 
 end MPSTensor

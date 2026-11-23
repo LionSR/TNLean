@@ -22,8 +22,6 @@ The sufficient condition `1 ≤ D₀` follows from `D₀ > 2R + 10` in
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation ambientDilation_zero edgeBoundary mem_ambientDilation_iff
   planeDomainGraph)
 
@@ -32,7 +30,7 @@ namespace TNLean.PEPS.AreaLaw.Geometry
 /-- Restricting a cut to a set avoiding its cut endpoints creates only ambient
 crossing edges. Source: Lemma 9.4, final proof paragraph. -/
 theorem edgeBoundary_filter_image_subset_ambientBoundary
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (U : Finset (ℤ × ℤ))
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (U : Finset (ℤ × ℤ))
     (hU : Disjoint U (boundaryEndpoints Λ A)) :
     (edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.1 ∈ U)).image
         (Sym2.map Subtype.val) ⊆ ambientBoundary U := by
@@ -56,7 +54,7 @@ theorem edgeBoundary_filter_image_subset_ambientBoundary
 /-- The ambient comparison counts unordered physical edges once, even for
 empty or disconnected domains. Source: Lemma 9.4, physical boundary estimate. -/
 theorem card_edgeBoundary_filter_le_ambientBoundary
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (U : Finset (ℤ × ℤ))
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (U : Finset (ℤ × ℤ))
     (hU : Disjoint U (boundaryEndpoints Λ A)) :
     (edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.1 ∈ U)).card ≤
       (ambientBoundary U).card := by
@@ -89,7 +87,7 @@ theorem Template.IsSeparated.disjoint_ambientDilation {Ctpl D₀ : ℝ} {n s₀ 
 most `4 * n` edges. Source: Lemma 9.4. Clearance is derived from separation. -/
 theorem template_cut_boundary_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (j : ℕ) (hj : j ≤ s₀) :
     (edgeBoundary (planeDomainGraph Λ)
@@ -101,7 +99,7 @@ theorem template_cut_boundary_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
 Source: Lemma 9.4, `X = A ∩ T`. -/
 theorem template_core_boundary_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀) :
     (edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.1 ∈ T.points)).card ≤ 4 * n := by
   simpa only [ambientDilation_zero] using
@@ -111,7 +109,7 @@ theorem template_core_boundary_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
 Source: Lemma 9.4, `Q_j = A ∩ (T_j ∖ T)`. -/
 theorem template_shell_cut_boundary_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (j : ℕ) (hj : j ≤ s₀) :
     (edgeBoundary (planeDomainGraph Λ)

@@ -33,7 +33,6 @@ set_option linter.mathlibStandardSet true
 
 open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport planeDomainGraph PlaneInteraction)
 
@@ -51,15 +50,15 @@ theorem exists_latticeChannelWord_spatial_growth {p : ℕ} (hp : 1 ≤ p)
     ∃ c v : ℝ, 0 < c ∧ 0 ≤ v ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (P : AdmissibleSupport Λ R → Prop) [DecidablePred P]
-          (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
-          (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+          (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset ↥Λ)
+          (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
         (∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
-        ∀ (t : ℝ≥0) (y : Site Λ),
+        ∀ (t : ℝ≥0) (y : ↥Λ),
         letI := ManyBody.graphPseudoEMetricSpace (planeDomainGraph Λ)
         let α := kernelExponent p
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -70,8 +69,8 @@ theorem exists_latticeChannelWord_spatial_growth {p : ℕ} (hp : 1 ≤ p)
           (∫ u, siteOscillation q y (spectatorRootChannelWord k (List.ofFn u.2) B)
             ∂PoissonWord.measure {i // P i} t) ≤
             Real.exp (v * t) * (2 * ‖B‖) * Metric.exponentialDistanceProfile
-              (S : Set (Site Λ)) (c / (4 * (2 : ℝ) ^ α)) α y ∧
-          (∀ u : PoissonWord.Word {i // P i}, Metric.infEDist y (S : Set (Site Λ)) = ⊤ →
+              (S : Set ↥Λ) (c / (4 * (2 : ℝ) ^ α)) α y ∧
+          (∀ u : PoissonWord.Word {i // P i}, Metric.infEDist y (S : Set ↥Λ) = ⊤ →
             siteOscillation q y (spectatorRootChannelWord k (List.ofFn u.2) B) = 0) := by
   obtain ⟨C, c, v, hC, hc, hv, hbounds⟩ := exists_latticeChannelEventKernel_bounds hp R hJ hΔ
   refine ⟨c, v, hc, hv, ?_⟩

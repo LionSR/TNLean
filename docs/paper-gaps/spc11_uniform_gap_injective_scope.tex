@@ -59,9 +59,11 @@ $R\geq3\max(\sum_jD_j,1)^5$ suffices. For a single normal tensor, without a
 normalization hypothesis, quantum Wielandt gives the sharper sufficient
 range $D^4+1$. These bounds are sufficient, not asserted to be optimal.
 \footnote{Formal declarations:
-    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths},
-    \leanid{MPSTensor.exists_uniform_block_parentHamiltonianES_gap_of_compact_isNormalTensor}, and
-    \leanid{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_all_lengths}.}
+    \leanid{MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths},
+    \leanid{MPSTensor.exists_uniform_block_hamiltonian_parentRingInteraction_gap_of_compact_isNormalTensor}, and
+    \leanid{MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_all_lengths}.
+    They state the gap in the equivalent form that every eigenvalue of the
+    positive operator $H_{N,R}(A_x)$ is $0$ or at least $\delta$.}
 
 \section{Positive interactions and the source path}
 For a continuous family of positive local interactions $h_x$ with the same
@@ -163,8 +165,8 @@ Nonzero block weights need not vary continuously.
     \leanid{MPSTensor.wordTupleSpanTop_of_ge_of_pos},
     \leanid{MPSTensor.exists_uniform_blockGroundSpaceMapES_injective_of_compact_hasComplementaryFixedPointGap},
     \leanid{MPSTensor.continuous_iSup_groundSpaceES_starProjection_of_injective_family},
-    \leanid{MPSTensor.continuous_openParentHamiltonianES_toTensorFromBlocks_family}, and
-    \leanid{MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_family}.}
+    \leanid{MPSTensor.continuous_hamiltonian_parentChainInteraction_toTensorFromBlocks_family}, and
+    \leanid{MPSTensor.continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_family}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

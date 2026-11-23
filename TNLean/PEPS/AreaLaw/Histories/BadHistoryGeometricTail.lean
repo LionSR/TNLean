@@ -19,8 +19,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 309–329, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -79,9 +77,9 @@ open Classical in
 /-- One explicit finite geometric bound controls every actual scan time, both
 sides and all bands, averaged over offsets. Its endpoint factor is compact and
 its ratio is derived, not supplied as a probability hypothesis. -/
-theorem sum_historyWeight_bad_through_geometric_domainGraph_le
+theorem sum_historyWeight_bad_through_geometric_planeDomainGraph_le
     [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {N L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hr : 0 < S.r₀) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
@@ -92,7 +90,7 @@ theorem sum_historyWeight_bad_through_geometric_domainGraph_le
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ μ) :
     (∑ h : History S.K S.m S.M N, if ¬ S.IsGoodThrough h then historyWeight h else 0) ≤
       (S.K * 2 * (T.card + S.n * L) * (N + 1) : ℕ) * S.geometricBadTail N μ := by
-  apply le_trans (S.sum_historyWeight_bad_through_domainGraph_le hT hgraph hdepth
+  apply le_trans (S.sum_historyWeight_bad_through_planeDomainGraph_le hT hgraph hdepth
     hn hm hM hL hclear hrows hmult)
   calc
     _ ≤ (S.K * 2 * (T.card + S.n * L) : ℕ) *

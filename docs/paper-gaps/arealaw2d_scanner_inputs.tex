@@ -169,20 +169,20 @@ clearance, every splitting radius-$r_0$ ball on a good history has a unique
 charge slot, chosen with conditional probability
 $1/(2\lceil C_1nD\rceil)\ge[2(C_1+1)nD]^{-1}$, and moves the unassigned part of
 its support.\footnote{Splitting-ball sampling:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_sampling_domainGraph}.}
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_sampling_planeDomainGraph}.}
 Because the old middle lies inside the truncation set, every splitting
 designated support coincides with its radius-$r_0$ ball, so the same expected
 lower bound holds for designated-support incidences.\footnote{Designated-support
     sampling:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designated_split_sampling_domainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designated_split_sampling_planeDomainGraph},
     using \leanid{TNLean.PEPS.AreaLaw.truncationRadius_eq_of_mem_crossingTerms}.}
 Moreover, the assigned-site lead and consumed-row coverage confine each
 receiving--middle incidence (which contains the terminal metric split event of
 \path{06-transport.tex}, lines~336--352) to an anchor interval of width
 $D+3r_0+1$, bounding the total incidence weight across bands by $10D/m$ for
 both fill and charge mixtures.\footnote{Mixture dilution bounds:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.designated_split_mixture_dilution_domainGraph}
-    and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.fill_split_mixture_dilution_domainGraph}.}
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.designated_split_mixture_dilution_planeDomainGraph}
+    and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.fill_split_mixture_dilution_planeDomainGraph}.}
 
 For the bad-history probability, every bad endpoint traces back along a strictly
 time-ordered path of $s$ selected charges with $D<4r_0s$ inside the last
@@ -199,7 +199,7 @@ Under the paper's rounded scale exponents, the geometric series in
 (\ref{eq:arealaw2d_scanner_inputs_bad_tail}) decays faster than any inverse
 power of $n$, and in particular is at most $n^{-200}$ for all sufficiently
 large $n$.\footnote{Bad-history tail bounds:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_domainGraph_le}
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_planeDomainGraph_le}
     and \leanid{TNLean.PEPS.AreaLaw.Scan.eventually_bad_history_probability_le}.}
 
 \paragraph{Band nesting, cut bounds, and replica transport trees (Proposition~7.4).}
@@ -208,10 +208,10 @@ $D\ge1$, $r_0\le D$, $4D\le m$, and $8Km\le L$, the regions $U$ and $UY$ differ
 from deterministic whole-row prefixes by at most $3nD$ sites, and the number of
 crossing lattice edges is at most $20nD$ for $U$ and $UY$, $40nD$ for $Y$, and
 $16nD$ for $P_0$ and $V$.\footnote{Prefix approximations and cut-edge bounds:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_approximation_domainGraph},
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_approximation_domainGraph},
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_cut_bounds_domainGraph}, and
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_cut_bounds_domainGraph}.}
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_approximation_planeDomainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_approximation_planeDomainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_cut_bounds_planeDomainGraph}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_cut_bounds_planeDomainGraph}.}
 Disjoint bands have nested physical regions, which implies that their band
 metrics commute on the symmetric replica subspace across all independent
 histories and completed/pre-charge leaf pairs.\footnote{Cross-band commutation:
@@ -231,7 +231,7 @@ Integrating the pointwise conditional-entropy sampling inequality against the
 old transported state shows that the expected entropy gain dominates the
 good-history split defect with coefficient
 $[2(C_1+1)nD]^{-1}$.\footnote{Integrated sampling bound:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph}.}
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_planeDomainGraph}.}
 With the log-dimension cap $\ell=1+(2r_0+1)^2\log q$ on moved subsystems,
 Proposition~7.4 applies to every fill round, every charge round, and the
 combined family of $2nm$ rounds for any nonzero symmetric replica vector
@@ -240,11 +240,11 @@ $0\le\beta_k\le C_\beta\log(k+2)$ and an energy remainder tending to zero as
 $k\to\infty$ when $\overline H_k\mathrm{pre}=E_0\mathrm{pre}$, and telescopes
 over the $2nm$ rounds.\footnote{Single-round, all-round, and telescoped
     transport bounds:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_domainGraph},
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_domainGraph},
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_planeDomainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_planeDomainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_planeDomainGraph},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_actualRoundData_logNormSq_sub}, and
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_domainGraph}.}
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_planeDomainGraph}.}
 
 \paragraph{Transported leaf measures and integrated charge defect.}
 The leaf measures on the one-copy unit sphere (from QICLean revision
@@ -300,8 +300,8 @@ $N^{\mathrm{fill}}_{s,k,\mathrm{pre}}$ for the filtered norm after $s$ charges,
 Both (\ref{eq:arealaw2d_scanner_inputs_charge_sum}) and the single-round bound
 require only interval integrability of the scalar defect.\footnote{One-round
     and all-round charge integral bounds:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}
-    and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph}.}
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_planeDomainGraph}
+    and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_planeDomainGraph}.}
 
 \section{Step 3: Leaf masses and parameter regularity}
 
@@ -453,7 +453,7 @@ At the scanner exponents $\ell_{\mathrm{sc}}=10^{-5}$, $\kappa=10^{-6}$, and
 $\mu_{\mathrm{sc}}=1/4$, the bad-history tail bound replaces $b$ in
 (\ref{eq:arealaw2d_scanner_inputs_charge_energy}) by $n^{-P}$ for any fixed
 $P$ and all sufficiently large $n$.\footnote{Charge-round energy bounds:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_domainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_planeDomainGraph},
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_badOldHistory_threshold}, and
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_threshold}.}
 Absorbing the transport prefactors $|C_{\mathrm{en}}|a^2\ell^{e_{\mathrm{en}}}$

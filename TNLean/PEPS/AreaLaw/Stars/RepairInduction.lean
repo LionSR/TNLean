@@ -29,8 +29,6 @@ Written from the manuscript; no upstream Lean text is reused.
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- **Uniform repair induction at given data.** If the initial stage has isolated
@@ -39,7 +37,7 @@ an isolation constant `a₀ ≤ min a₁ (1/4)`, then the actual repair stages s
 the uniform repair induction with constant `a₀`.
 Source: area-law Section 11, `geometry:repair-induction`, lines 471–543. -/
 theorem isUniformRepairInduction_of_repairMetricHypotheses {o : ℝ × ℝ}
-    {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)} {C k₀ : ℕ} {hC : 2 ≤ C}
+    {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {C k₀ : ℕ} {hC : 2 ≤ C}
     {h₀ : 50000000 ≤ k₀} {Sstar a₀ a₁ : ℝ}
     (hI : (initialRepairStage o Λ A C k₀ hC h₀).HasIsolatedStars a₁)
     (hM : RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
@@ -73,7 +71,7 @@ Source: area-law Section 11, `geometry:initial-stars`, lines 332–349, and
 `geometry:repair-induction`, lines 471–543. -/
 theorem isUniformRepairInduction_of_le {Sstar : ℝ}
     (hS : repairMarginThreshold (1 / 128) ≤ Sstar) (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
     (hK : fineScaleIndexThreshold Sstar ≤ k₀) :
     IsUniformRepairInduction o Λ A C k₀ hC h₀ Sstar (1 / 128) :=
   isUniformRepairInduction_of_repairMetricHypotheses

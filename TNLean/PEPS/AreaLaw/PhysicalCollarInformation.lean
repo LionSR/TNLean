@@ -33,8 +33,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 open ManyBody (planeDomainGraph edgeBoundary ambientDilation)
@@ -79,9 +77,9 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
           c₀ Cent eent Cen een ≤ n →
         ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
             (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+            ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
               ManyBody.regionMutualInformation Ω
@@ -152,9 +150,9 @@ theorem sublinearCollarBound_real_of_boxEntropy
       ∀ n s₀ : ℕ, sublinearCollarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een ≤ n →
         ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
             (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+            ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
               ManyBody.regionMutualInformation Ω
@@ -206,9 +204,9 @@ theorem sublinearCollarBound_real_of_initial
           Ctr' ct' Cent' eent' Cen' een' ≤ n →
         ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
             (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+            ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
               ManyBody.regionMutualInformation Ω
@@ -288,9 +286,9 @@ theorem sublinearCollarBound_real_explicit
         (latticeTruncationRadiusConstant R J Δ 10) c₀ Cent eent Cen een ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω

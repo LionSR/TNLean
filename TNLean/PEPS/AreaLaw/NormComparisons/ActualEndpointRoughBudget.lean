@@ -27,8 +27,6 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation F
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -66,7 +64,7 @@ Source: `08-scanner.tex`, lines 457–490. -/
 theorem eventually_actualScan_suppliedPrevector_endpoint_budget
     {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hm : 0 < S.m) (hM : 0 < S.M)
@@ -76,22 +74,22 @@ theorem eventually_actualScan_suppliedPrevector_endpoint_budget
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ j : ℕ, 1 ≤ j → j ≤ L →
       (ambientDilation T j \ ambientDilation T (j - 1)).card ≤ S.n)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
+    (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T)))
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Bsh : ℝ)
     (hsh : ∀ j : Fin (L + 1),
       ManyBody.regionEntropy Ωt
         (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh) :
     let X := S.A.filter fun x ↦ x.val ∈ T
-    let β := fun _ : Site Λ ↦ Fin q
+    let β := fun _ : ↥Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (ManyBody.cutEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
     let d := E.card
-    let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
     let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦

@@ -19,8 +19,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -77,20 +75,20 @@ variable {I : Type*} [Fintype I] [LinearOrder I]
 
 /-- Every actual charge satisfies the explicit logarithmic dimension cap. No
 history regularity, positive radius, or positive charge capacity is assumed. -/
-theorem log_chargeStep_moved_dimension_le_domainGraph {Λ : Finset (ℤ × ℤ)}
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
-    (g r k : ℕ) (c : Bool × Fin S.M) (σ : PhysicalPartition (Site Λ))
+theorem log_chargeStep_moved_dimension_le_planeDomainGraph {Λ : Finset (ℤ × ℤ)}
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
+    (g r k : ℕ) (c : Bool × Fin S.M) (σ : PhysicalPartition ↥Λ)
     {q : ℕ} (hq : 1 ≤ q) :
     Real.log (Real.exp 1 * (q : ℝ) ^
       (middle σ \ middle (S.chargeStep g r k c σ)).card) ≤
         transportLogDimBound q S.r₀ :=
   log_physicalDimension_le_of_card_le _ hq
-    (S.card_chargeStep_moved_le_domainGraph hgraph g r k c σ)
+    (S.card_chargeStep_moved_le_planeDomainGraph hgraph g r k c σ)
 
 /-- A designated support has the explicit physical logarithmic dimension cap
 when it splits some completed status. Large supports that never split incur no cap. -/
-theorem log_designatedSupport_dimension_le_of_state_split_domainGraph
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
+theorem log_designatedSupport_dimension_le_of_state_split_planeDomainGraph
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ) {k L q : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
     (hq : 1 ≤ q) (hL : 8 * S.K * S.m ≤ L)
@@ -99,11 +97,11 @@ theorem log_designatedSupport_dimension_le_of_state_split_domainGraph
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).card) ≤
         transportLogDimBound q S.r₀ :=
   log_physicalDimension_le_of_card_le _ hq
-    (S.card_designatedSupport_le_of_state_split_domainGraph hgraph h g side i hL hs)
+    (S.card_designatedSupport_le_of_state_split_planeDomainGraph hgraph h g side i hL hs)
 
 /-- The same physical cap applies when the support splits a pre-charge status. -/
-theorem log_designatedSupport_dimension_le_of_old_split_domainGraph
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
+theorem log_designatedSupport_dimension_le_of_old_split_planeDomainGraph
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ) {k L q : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
     (hq : 1 ≤ q) (hL : 8 * S.K * S.m ≤ L)
@@ -112,12 +110,12 @@ theorem log_designatedSupport_dimension_le_of_old_split_domainGraph
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).card) ≤
         transportLogDimBound q S.r₀ :=
   log_physicalDimension_le_of_card_le _ hq
-    (S.card_designatedSupport_le_of_old_split_domainGraph hgraph h g side i hL hs)
+    (S.card_designatedSupport_le_of_old_split_planeDomainGraph hgraph h g side i hL hs)
 
 /-- Every non-contained designated support in a completed status has the cap,
 without any separate support-compatibility or terminal-classification assumption. -/
-theorem log_designatedSupport_dimension_le_of_state_not_constant_domainGraph
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
+theorem log_designatedSupport_dimension_le_of_state_not_constant_planeDomainGraph
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ) {k L q : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (i : I)
     (hq : 1 ≤ q) (hL : 8 * S.K * S.m ≤ L)
@@ -127,11 +125,11 @@ theorem log_designatedSupport_dimension_le_of_state_not_constant_domainGraph
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).card) ≤
         transportLogDimBound q S.r₀ := by
   rw [S.designatedSupport_eq_ball_of_state_not_constant h g i hL hnc]
-  exact log_physicalDimension_le_of_card_le _ hq (S.card_ball_le_domainGraph hgraph i)
+  exact log_physicalDimension_le_of_card_le _ hq (S.card_ball_le_planeDomainGraph hgraph i)
 
 /-- Every non-contained designated support in a pre-charge status has the same cap. -/
-theorem log_designatedSupport_dimension_le_of_old_not_constant_domainGraph
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
+theorem log_designatedSupport_dimension_le_of_old_not_constant_planeDomainGraph
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ) {k L q : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (i : I)
     (hq : 1 ≤ q) (hL : 8 * S.K * S.m ≤ L)
@@ -142,7 +140,7 @@ theorem log_designatedSupport_dimension_le_of_old_not_constant_domainGraph
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).card) ≤
         transportLogDimBound q S.r₀ := by
   rw [S.designatedSupport_eq_ball_of_old_not_constant h g i hL hnc]
-  exact log_physicalDimension_le_of_card_le _ hq (S.card_ball_le_domainGraph hgraph i)
+  exact log_physicalDimension_le_of_card_le _ hq (S.card_ball_le_planeDomainGraph hgraph i)
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

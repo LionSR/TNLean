@@ -59,7 +59,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -73,7 +72,7 @@ private theorem dist_integerPoint_eq_ambientSupDistance (t z : ℤ × ℤ) :
 
 section Primary
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
   (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -139,7 +138,7 @@ identifiers have boundary-weighted sum at most
 `primaryErrorSumConstant C_P (2 C₀ + 1) ^ 2 |∂A|`. Auxiliary to area-law
 Section 11, `10-geometry.tex`, lines 709–715 and 796–800. -/
 theorem repairStage_primary_error_sum_le {CP : ℝ} (hCP : 0 < CP) (o : ℝ × ℝ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C)
     (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (n : ℕ)
     (S : Finset (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).regionIndex) :
     (∀ x ∈ S, repairStageBirthRank o Λ A C k₀ hC h₀ Sstar (0 + n) x = 0 ∧
@@ -210,7 +209,7 @@ Auxiliary to area-law Section 11, `10-geometry.tex`, lines 709–715 and
 796–800. -/
 theorem exists_uniform_repairStage_primary_error_sum_bound {CP : ℝ} (hCP : 0 < CP) :
     ∃ M : ℝ, 0 < M ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
         (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (n : ℕ)
         (S : Finset (repairStage o Λ A C k₀ hC h₀ Sstar (0 + n)).regionIndex),
         (∀ x ∈ S, repairStageBirthRank o Λ A C k₀ hC h₀ Sstar (0 + n) x = 0 ∧
@@ -225,7 +224,7 @@ end Primary
 
 section Exceptional
 
-variable {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+variable {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
   {C k₀ : ℕ} {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar : ℝ}
 
 local notation "𝔇" => repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar
@@ -289,7 +288,7 @@ structure IsBirthSeparationConstant (c₁ : ℝ) : Prop where
   /-- The constant is positive. -/
   pos : 0 < c₁
   /-- The initial belt tiles are separated by `c₁`. Source: lines 573–582. -/
-  initial : ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+  initial : ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
     (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ),
     IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁
   /-- The local separation of a replacement birth from its comparison regions.
@@ -335,7 +334,7 @@ Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
 `geometry:repair-induction`, lines 471–485. -/
 theorem IsBirthSeparationConstant.birthSeparated {c₁ : ℝ} (hc : IsBirthSeparationConstant c₁)
     {Sstar : ℝ} (hS : repairMarginThreshold (1 / 128) ≤ Sstar) (o : ℝ × ℝ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C)
     (h₀ : 50000000 ≤ k₀) (hK : fineScaleIndexThreshold Sstar ≤ k₀) :
     IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
       IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ := by
@@ -360,7 +359,7 @@ partition with separated birth templates, `|D| ≤ C b` and `∑ nᵢ^(-100) ≤
 Source: area-law Section 11, `prop:two-families`, `10-geometry.tex`,
 lines 98–141. -/
 def IsTwoFamilyDecompositionConstant (D₀ Ctpl : ℝ) (nstar : ℕ) (C : ℝ) : Prop :=
-  ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ), 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
+  ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset ↥Λ, 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
     ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
       ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
         (P.residual.card : ℝ) ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card ∧
@@ -438,7 +437,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
     (hCP : 1 ≤ CP) (hCB : 0 < CB) (hc₁ : 0 < c₁) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
     (hS2 : 2 ≤ Sstar) (hSU : twoFamilyLengthBound c₁ CB nstar ≤ Sstar)
     (hk : twoFamilyLayerThreshold CP CB c₁ nstar ≤ k₀)
-    (htpl : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (N : ℕ),
+    (htpl : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (N : ℕ),
       let D := repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N
       ∀ x : D.regionIndex, x ≠ D.dummy →
         ∀ w : ℤ × ℤ, integerPoint w ∈ D.birth x →
@@ -452,17 +451,17 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
               T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
               ∀ y ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
                 2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance y z : ℝ))
-    (hmetric : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)),
+    (hmetric : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ),
       RepairMetricHypotheses (o := dyadicOrigin) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
         (hC := hC) (h₀ := h₀) (Sstar := Sstar) (1 / 4))
-    (hsep : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)),
+    (hsep : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ),
       IsInitialBirthSeparated dyadicOrigin Λ A C k₀ hC h₀ Sstar c₁ ∧
         IsRepairBirthSeparated dyadicOrigin Λ A C k₀ hC h₀ Sstar c₁)
-    (hmark : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (N : ℕ),
+    (hmark : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (N : ℕ),
       ∑ j ∈ Finset.range N,
           (Nat.card (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) ≤
         Mt * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card)
-    (hprim : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (n : ℕ)
+    (hprim : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (n : ℕ)
       (S : Finset (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar (0 + n)).regionIndex),
       (∀ x ∈ S, repairStageBirthRank dyadicOrigin Λ A C k₀ hC h₀ Sstar (0 + n) x = 0 ∧
         x ≠ (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar (0 + n)).dummy) →
@@ -470,7 +469,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
           repairStageCharacteristicLength dyadicOrigin Λ A C k₀ hC h₀ Sstar (0 + n) x ^
           (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ ≤
         Mp * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card)
-    (hnonprim : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (N : ℕ),
+    (hnonprim : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (N : ℕ),
       let I : Type :=
         {i : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A //
           0 < repairStageBirthRank dyadicOrigin Λ A C k₀ hC h₀ Sstar N i.val}
@@ -796,7 +795,7 @@ theorem isTwoFamilyDecompositionConstant_of_one_le {D₀ Ctpl c₁ : ℝ} (hCtpl
   have hK₀ : twoFamilyLayerThreshold CP CB c₁ nstar ≤ k₀ :=
     (le_max_right _ _).trans (le_max_right _ _)
   have hKF : fineScaleIndexThreshold Sstar ≤ k₀ := (le_max_left _ _).trans hKT
-  have hmetric (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) :=
+  have hmetric (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) :=
     repairMetricHypotheses_of_le (a₀ := 1 / 4) (by norm_num) le_rfl hS4 dyadicOrigin Λ A C k₀
       hC h₀ hKF
   exact isTwoFamilyDecompositionConstant_twoFamilyConstant hCP hCB hc.pos hC h₀ hS2 hSU hK₀

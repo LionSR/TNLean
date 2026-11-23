@@ -52,8 +52,6 @@ reference error of the exchange is bounded on the sheets by
   allowed monomials, `04-compression.tex`, lines 32–35.
 -/
 
-open TNLean.Lattice (sheetSwapOp)
-
 noncomputable section
 
 open Matrix ContinuousLinearMap EuclideanSpace
@@ -239,7 +237,10 @@ theorem exchange_bounded [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (h�
       σ.error (X.disjoint_tSet_eSet P) Ω ≤ L ^ (-30 : ℤ) ∧
       X.exchangeOp P σ * (X.frame₁.encoder ⊗ₖ X.frame₂.encoder) =
         (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) *
-          (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P)) ∧
+          (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * Matrix.reindex
+              (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+              (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+              (ManyBody.pairSwapOp (X.tSet P))) ∧
       ∃ w : Word (X.frame₁.regs ++ X.frame₂.regs) (X.newFrame₁.regs ++ X.newFrame₂.regs),
         w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧
         (∀ z, twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner (w.eval z) =
@@ -317,7 +318,9 @@ theorem exchange_ofFrames_bounded [NeZero q] (F₁ F₂ : Frame pos q Party) (Y 
           ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.encoder ⊗ₖ
               (ofFrames F₁ F₂ Y out hout hin).newFrame₂.encoder) *
             (sheetBufferCorrection ((ofFrames F₁ F₂ Y out hout hin).disjoint_tSet_eSet P) σ *
-              sheetSwapOp q ((ofFrames F₁ F₂ Y out hout hin).tSet P)) ∧
+              Matrix.reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+                  (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+                  (ManyBody.pairSwapOp ((ofFrames F₁ F₂ Y out hout hin).tSet P))) ∧
         ∃ w : Word (F₁.regs ++ F₂.regs) ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.regs ++
             (ofFrames F₁ F₂ Y out hout hin).newFrame₂.regs),
           w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧

@@ -37,8 +37,6 @@ open scoped Matrix.Norms.L2Operator
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace rectangularDomain rectangleSiteEquiv)
 
 open ManyBody (innerBoundary endpointBoundary)

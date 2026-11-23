@@ -203,9 +203,9 @@ Section "Amplification with the original frustration-free terms". -/
 theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ : ℝ} (hJ : 0 < J)
     (hΔ : 0 < Δ) (hC₀ : 0 < C₀) (M : ℕ) :
     ∀ n : ℕ, 2 ≤ n → frustrationFreeAmplificationThreshold q R J Δ C₀ M ≤ n →
-      ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, ∀ Ω : StateSpace Λ q,
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
         IsFrustrationFreeGapped h J Δ Ω →
-          ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+          ∀ (A : Finset ↥Λ) (T : Finset (ℤ × ℤ)),
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               C₀ * (n : ℝ) ^ 2 →
@@ -223,7 +223,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
               C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
             ∃ r : ℕ, (r : ℝ) ≤ frustrationFreeAmplificationConstant q R J Δ C₀ M *
                 (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
-              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset ↥Λ,
                 Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
@@ -314,7 +314,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
     restoringTransport_restoringColumnGlobal_eq_sum Ω X Y hXY E p blank blank Q Tq
   have hBsum : Bp = ∑ i ∈ E ×ˢ Finset.univ, PB i ⊗ₖ AB i := hBsum
   have hBblocks : ∀ a b, Bp.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) ∈
-      ManyBody.supportedOperators (fun _ : Site Λ ↦ Fin q) S₀ := by
+      ManyBody.supportedOperators (fun _ : ↥Λ ↦ Fin q) S₀ := by
     intro x y
     have h := block_mem_supportedOperators_of_eq_sum (E ×ˢ Finset.univ) hPB AB x y
     rw [← hBsum, hXYS] at h
@@ -332,12 +332,12 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
     ManyBody.supportedOperators_mono (ManyBody.graphNeighborhood_mono _ _ (by omega)) hLsupp
   have hS₀N : S₀ ⊆ N := ManyBody.subset_graphNeighborhood
   -- The vector `ζ = R₀ φ` and its excited component.
-  let ζ : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ :=
+  let ζ : (↥Λ → Fin q) × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ :=
     Rp *ᵥ φ
   let Pg := vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))
   let I₂ := (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
     (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)
-  have hsubk (A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+  have hsubk (A B : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) :
       (A - B) ⊗ₖ I₂ = A ⊗ₖ I₂ - B ⊗ₖ I₂ := by
     ext i j
     simp only [kroneckerMap_apply, Matrix.sub_apply, sub_mul]

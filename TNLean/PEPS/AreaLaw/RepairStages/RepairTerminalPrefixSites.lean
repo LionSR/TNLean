@@ -21,11 +21,9 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
   (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -46,7 +44,7 @@ theorem card_repairTerminalInteriorSites_prefix_le (N : ℕ) :
     @Fintype.ofFinite _ (finite_repairStage_markIndex o Λ A C k₀ hC h₀ Sstar j)
   let T (j : ℕ) : Finset (𝔇 j).markIndex :=
     Finset.univ.filter (fun p ↦ repairHalfSide ((𝔇 j).scale p) < Sstar)
-  let Q (j : ℕ) : Finset (Site Λ) :=
+  let Q (j : ℕ) : Finset ↥Λ :=
     (T j).biUnion (fun p ↦
       closedSquareSample Λ ((𝔇 j).location p) (repairHalfSide ((𝔇 j).scale p)))
   have hsub : A.filter (fun x ↦ integerPoint x.val ∈

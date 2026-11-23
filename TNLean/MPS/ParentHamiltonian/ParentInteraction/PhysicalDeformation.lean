@@ -74,7 +74,7 @@ noncomputable def onSiteTensorPow (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
 /-- The tensor power is the constant-family finite Kronecker product
 \(\bigotimes_{n<L}\Lambda\); the algebra of the latter is in
 `QICLean/Algebra/Kronecker/FiniteKroneckerProduct.lean`. -/
-lemma onSiteTensorPow_eq_finKronecker (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
+lemma onSiteTensorPow_eq_piKronecker (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
     onSiteTensorPow L Λ = Matrix.piKronecker fun _ : Fin L => Λ := by
   ext σ τ
   simp [onSiteTensorPow, Matrix.piKronecker_apply]
@@ -139,7 +139,7 @@ theorem groundSpaceMap_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPS
     (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
     groundSpaceMap (rotatePhysical Λ A) L X =
       Matrix.toLin' (onSiteTensorPow L Λ) (groundSpaceMap A L X) := by
-  simpa only [onSiteTensorPow_eq_finKronecker,
+  simpa only [onSiteTensorPow_eq_piKronecker,
       Matrix.toLin'_apply] using groundSpaceMap_rotatePhysical_rectangular Λ A L X
 
 /-- The local ground space of the deformed tensor is the image of the local ground space of
@@ -151,7 +151,7 @@ theorem groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTen
     (L : ℕ) :
     groundSpace (rotatePhysical Λ A) L =
       (groundSpace A L).map (Matrix.toLin' (onSiteTensorPow L Λ)) := by
-  simpa only [onSiteTensorPow_eq_finKronecker] using
+  simpa only [onSiteTensorPow_eq_piKronecker] using
     groundSpace_rotatePhysical_rectangular Λ A L
 
 /-- The Hilbert-space realization of the local ground space of the deformed tensor is the
@@ -160,7 +160,7 @@ theorem groundSpaceES_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPST
     (L : ℕ) :
     groundSpaceES (rotatePhysical Λ A) L =
       (groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L Λ)) := by
-  simpa only [onSiteTensorPow_eq_finKronecker] using
+  simpa only [onSiteTensorPow_eq_piKronecker] using
     groundSpaceES_rotatePhysical_rectangular Λ A L
 
 /-! ### The deformed parent interaction -/

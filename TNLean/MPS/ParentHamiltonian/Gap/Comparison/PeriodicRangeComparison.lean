@@ -145,15 +145,11 @@ theorem exists_hamiltonian_parentRingInteraction_gap_of_larger_range
   have h1 := Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr hComparison.1
   have h2 := Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr hComparison.2
   rw [map_smul, map_smul] at h1 h2
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentRingInteraction A _ _)).mpr ?_
   exact (Matrix.isPositive_toEuclideanLin_iff.mpr
-    (posSemidef_hamiltonian_parentRingInteraction A _ _)).norm_gap_of_smul_le_of_le_smul
+    (posSemidef_hamiltonian_parentRingInteraction A _ _)).forall_hasEigenvalue_of_smul_le_of_le_smul
     (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentRingInteraction A _ _))
     hκ (Nat.cast_pos.mpr hm) hC hγ (by simpa only [Complex.ofReal_natCast] using h1)
-    (by simpa only [Complex.ofReal_natCast] using h2)
-    ((ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentRingInteraction A _ _)).mp hGapN)
+    (by simpa only [Complex.ofReal_natCast] using h2) hGapN
 
 end MPSTensor
 

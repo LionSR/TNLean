@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Hermitian.HermitianPartSum
 import TNLean.PEPS.AreaLaw.Constraints.FiniteSetTruncationGap
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import TNLean.PEPS.AreaLaw.Histories.DesignatedSampling
 import QICLean.ManyBody.Replica.BandMetric.Setup
 import QICLean.ManyBody.Hamiltonian.PositiveTerm
@@ -31,8 +31,6 @@ at `openai/math@adc7f124`.
 open scoped BigOperators Matrix Matrix.Norms.L2Operator MatrixOrder ComplexOrder Kronecker
 
 noncomputable section
-
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport exists_walk_length_le_iff_edist_le planeDomainGraph
   PlaneInteraction)
@@ -170,21 +168,21 @@ variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
 
 namespace CollarScan
 
-variable (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+variable (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (Ω : StateSpace Λ q)
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
 
 /-- The actual constraint truncated near the scanner's compact set at its base radius.
 Source: `03-quasilocal.tex`, lines 417–426. -/
 def truncatedEnergyTerm (J Δ : ℝ) (L : ℕ) (i : AdmissibleSupport Λ R) :
-    Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
+    Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ :=
   truncatedConstraint q S.graph (S.truncationSet L) S.r₀ (S.anchor i) (h.positiveTerm J Δ Ω i)
 
 /-- Actual energy terms, with the original support labels retained and with both
 auxiliary identities. Only the term and designated-support fields are bundled.
 Source: `06-transport.tex`, lines 335–358. -/
 def actualEnergyTerms (J Δ : ℝ) (L : ℕ) (aux : Bool → ℕ) :
-    EnergyTerms (Site Λ ⊕ Bool) (augmentedDimensions q aux) (AdmissibleSupport Λ R) where
+    EnergyTerms (↥Λ ⊕ Bool) (augmentedDimensions q aux) (AdmissibleSupport Λ R) where
   term i := augmentOperator q aux (S.truncatedEnergyTerm h Ω J Δ L i)
   support i := physicalRegion (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
 

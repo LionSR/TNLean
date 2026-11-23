@@ -4,10 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Norm.MatrixKroneckerContraction
-import TNLean.Circuit.RegionSplit
+import QICLean.ManyBody.Sites.Placement
 import TNLean.Lattice.Sheet.Operators
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.Entropy.MutualInformation.PurificationSplitting
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 
 /-!
 # Splitting a sheet along three regions
@@ -19,7 +22,7 @@ depends on a geometry of the sites.
 
 * `Sheet.threeSplit T E` identifies the raw configurations of the sheet with triples
   `((t, e), u)` of configurations on `T`, `E` and `(T ∪ E)ᶜ`. It refines the two-region
-  coordinates `TNLean.Lattice.sheetSplit`, in which an operator on `S` is `A' ⊗ 1` and an
+  coordinates `ManyBody.cutEquiv`, in which an operator on `S` is `A' ⊗ 1` and an
   operator on a set disjoint from `S` is `1 ⊗ A'`.
 * An operator acting on `T ∪ E` is `A' ⊗ 1_U` in these coordinates, and an operator on a subset
   of `E` is `(1_T ⊗ A') ⊗ 1_U`. An operator supported disjointly from `T` is
@@ -47,7 +50,6 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator ComplexOrder
-open TNLean.Lattice (sheetSplit)
 
 noncomputable section
 
@@ -95,7 +97,7 @@ theorem one_kronecker_mul_stack {τ n : Type*} [Fintype τ] [DecidableEq τ] [Fi
 and on `U = (T ∪ E)ᶜ`, for disjoint `T` and `E`. -/
 def threeSplit (q : ℕ) (T E : Finset ι) (h : Disjoint T E) :
     (ι → Fin q) ≃ ((T → Fin q) × (E → Fin q)) × ({v // v ∉ T ∪ E} → Fin q) :=
-  (sheetSplit q (T ∪ E)).trans
+  (ManyBody.cutEquiv (fun _ ↦ Fin q) (T ∪ E)).trans
     ((ManyBody.regionUnionEquiv (β := fun _ : ι => Fin q) h).prodCongr (Equiv.refl _))
 
 section ThreeSplit
@@ -137,13 +139,13 @@ omit [Fintype ι] in
 theorem threeSplit_symm_apply_of_notMem (t : T → Fin q) (e : E → Fin q)
     (u : {v // v ∉ T ∪ E} → Fin q) {v : ι} (hv : v ∉ T ∪ E) :
     (threeSplit q T E h).symm ((t, e), u) v = u ⟨v, hv⟩ := by
-  change (sheetSplit q (T ∪ E)).symm
+  change (ManyBody.cutEquiv (fun _ ↦ Fin q) (T ∪ E)).symm
     ((ManyBody.regionUnionEquiv (β := fun _ : ι => Fin q) h).symm (t, e), u) v = _
   exact ManyBody.cutEquiv_symm_apply_not_mem _ _ hv
 
 /-- A product operator in the coordinates of `threeSplit T E` is the Kronecker product of its
 restrictions to `T`, to `E` and to `(T ∪ E)ᶜ`. -/
-theorem rectKronecker_submatrix_threeSplit (m : ι → Matrix (Fin q) (Fin q) ℂ) :
+theorem piKronecker_submatrix_threeSplit (m : ι → Matrix (Fin q) (Fin q) ℂ) :
     (Matrix.piKronecker m).submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
       (Matrix.piKronecker (fun v : T => m v) ⊗ₖ Matrix.piKronecker (fun v : E => m v)) ⊗ₖ
         Matrix.piKronecker (fun v : {v // v ∉ T ∪ E} => m v) := by
@@ -200,7 +202,7 @@ theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
       (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ))
     (fun m hm => ?_) hA
   refine ⟨Matrix.piKronecker (fun v : T => m v) ⊗ₖ Matrix.piKronecker (fun v : E => m v), ?_⟩
-  rw [rectKronecker_submatrix_threeSplit h]
+  rw [piKronecker_submatrix_threeSplit h]
   change _ = _ ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
   congr 1
   rw [← Matrix.piKronecker_one (ν := {v // v ∉ T ∪ E}) (ι := fun _ ↦ Fin q)]
@@ -227,7 +229,7 @@ theorem exists_threeSplit_eq_one_kronecker_kronecker_one {T E : Finset ι} (h : 
   have hU : ∀ v : {v // v ∉ T ∪ E}, m v = 1 := fun v =>
     hm v fun hv => v.2 (Finset.mem_union_right T (hD hv))
   refine ⟨Matrix.piKronecker (fun v : E => m v), ?_⟩
-  rw [rectKronecker_submatrix_threeSplit h]
+  rw [piKronecker_submatrix_threeSplit h]
   change _ = ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ _) ⊗ₖ
     (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
   simp only [hT, hU, Matrix.piKronecker_one]
@@ -251,9 +253,12 @@ theorem exists_threeSplit_eq_reindex_one_kronecker
             ({v // v ∉ T ∪ E} → Fin q)).symm
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
             ({v // v ∉ T ∪ E} → Fin q)).symm := by
-  obtain ⟨B, hB⟩ :=
-    TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators
-      (q := q) (S := T) hD hA
+  obtain ⟨B, hB⟩ : ∃ B : Matrix ({v // v ∉ T} → Fin q) ({v // v ∉ T} → Fin q) ℂ,
+      A.submatrix (ManyBody.cutEquiv (fun _ ↦ Fin q) T).symm
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) T).symm =
+        (1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ B := by
+    obtain ⟨B, rfl⟩ := ManyBody.exists_eq_one_kronecker_of_mem_supportedOperators hD hA
+    exact ⟨B, by rw [Matrix.submatrix_submatrix, Equiv.self_comp_symm, Matrix.submatrix_id_id]⟩
   let c := ManyBody.complementUnionEquiv (fun _ : ι ↦ Fin q) T E h
   refine ⟨B.submatrix c.symm c.symm, ?_⟩
   ext ⟨⟨t, e⟩, u⟩ ⟨⟨t', e'⟩, u'⟩

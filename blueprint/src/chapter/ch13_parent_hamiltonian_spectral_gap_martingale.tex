@@ -1822,12 +1822,8 @@ linear maps on the same ambient space to compare their orthogonal projectors.
          & \le \re\langle Hv,Hv\rangle
         \notag
     \end{align}
-    for every $v$.  Consequently, for every
-    $v\in(\ker H)^\perp$,
-    \begin{align}
-        \gamma\lVert v\rVert & \le\lVert Hv\rVert.
-        \notag
-    \end{align}
+    for every $v$.  Consequently, every eigenvalue of $H$ other than $0$ is
+    at least $\gamma$.
 \end{lemma}
 
 \begin{proof}
@@ -1835,7 +1831,8 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \uses{lem:anticommutator_projection_rowsum_reduction, lem:quadratic_form_to_norm_bound}
     The row-and-column reduction gives the quadratic-form inequality.  The sum
     of symmetric projections is positive, so the abstract martingale criterion
-    converts that inequality into the norm lower bound on $(\ker H)^\perp$.
+    converts that inequality into the lower bound $\gamma$ on the nonzero
+    eigenvalues of $H$.
 \end{proof}
 
 \begin{lemma}[Reduced ground-space overlap bounds the excitation anticommutator]%

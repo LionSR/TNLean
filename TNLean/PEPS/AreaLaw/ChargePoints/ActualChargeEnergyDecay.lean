@@ -32,8 +32,6 @@ open MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -49,7 +47,7 @@ theorem actualCharge_energy_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
     (hthr : badOldHistoryThreshold Cr C1 Ct multiplicity P ≤ n) :
     ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
       (R : ℕ) [LinearOrder (AdmissibleSupport Λ R)]
-      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+      (S : CollarScan ↥Λ (AdmissibleSupport Λ R)),
       S.n = n → S.m = ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
       S.K = ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
@@ -65,15 +63,15 @@ theorem actualCharge_energy_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
       ∃ (hm : 0 < S.m) (hM : 0 < S.M),
         ∀ (q : ℕ) [NeZero q] (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
           (J : ℝ) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
-              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q) (Δ : ℝ)
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ)
           (s : ℕ), s + 1 ≤ S.n * S.m →
           ∀ (a : ℝ), 0 ≤ a → ∀ (k : ℕ)
           (pre : (r : ℕ) → Config r
-            (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) → ℂ),
+            (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q aux v)) → ℂ),
           pre k ∈ symmetricSubspace k
-            (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) →
+            (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q aux v)) →
           pre k ≠ 0 → ∀ p ∈ Ioo (0 : ℝ) 1,
-          let dims := augmentedDimensions (V := Site Λ) q aux
+          let dims := augmentedDimensions (V := ↥Λ) q aux
           let E := S.actualEnergyTerms h Ω J Δ
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ aux
           let A : ℝ := 10 * S.K * S.n * S.D * multiplicity
@@ -94,7 +92,7 @@ theorem actualCharge_energy_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
   have hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
   refine ⟨hm, hM, ?_⟩
   intro q _ aux _ J h hh hhJ Ω Δ s hs a ha k pre hsym hpre p hp
-  let dims := augmentedDimensions (V := Site Λ) q aux
+  let dims := augmentedDimensions (V := ↥Λ) q aux
   let E := S.actualEnergyTerms h Ω J Δ
     ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ aux
   let A : ℝ := 10 * S.K * S.n * S.D * multiplicity
@@ -111,7 +109,7 @@ theorem actualCharge_energy_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
           (S.actualChargeEntropyDefect hm hM s dims E
             (a / 2) k (pre k) p) ^ (1 / 8 : ℝ) +
           A * (2 * ℓ) ^ (1 / 8 : ℝ) / 2 * ((1 - p) * b + p)) :=
-      S.actualCharge_energyError_le_domainGraph hT hgraph hdepth aux h Ω Δ
+      S.actualCharge_energyError_le_planeDomainGraph hT hgraph hdepth aux h Ω Δ
         hnS hs hrS hDpos hmargin hL hCpos hrows hmult hclear ha k pre hsym hpre hp
     _ ≤ _ :=
       mul_le_mul_of_nonneg_left
@@ -128,7 +126,7 @@ theorem exists_actualCharge_energy_threshold {Cr C1 Ct : ℝ}
     (multiplicity : ℕ) (P : ℝ) :
     ∃ N : ℕ, ∀ n ≥ N, ∀ (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
       (R : ℕ) [LinearOrder (AdmissibleSupport Λ R)]
-      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+      (S : CollarScan ↥Λ (AdmissibleSupport Λ R)),
       S.n = n → S.m = ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
       S.K = ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
@@ -144,15 +142,15 @@ theorem exists_actualCharge_energy_threshold {Cr C1 Ct : ℝ}
       ∃ (hm : 0 < S.m) (hM : 0 < S.M),
         ∀ (q : ℕ) [NeZero q] (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
           (J : ℝ) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
-              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q) (Δ : ℝ)
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ)
           (s : ℕ), s + 1 ≤ S.n * S.m →
           ∀ (a : ℝ), 0 ≤ a → ∀ (k : ℕ)
           (pre : (r : ℕ) → Config r
-            (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) → ℂ),
+            (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q aux v)) → ℂ),
           pre k ∈ symmetricSubspace k
-            (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) →
+            (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q aux v)) →
           pre k ≠ 0 → ∀ p ∈ Ioo (0 : ℝ) 1,
-          let dims := augmentedDimensions (V := Site Λ) q aux
+          let dims := augmentedDimensions (V := ↥Λ) q aux
           let E := S.actualEnergyTerms h Ω J Δ
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ aux
           let A : ℝ := 10 * S.K * S.n * S.D * multiplicity

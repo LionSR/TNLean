@@ -37,8 +37,6 @@ open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators Kronecker ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder
   ComplexOrder
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace AdmissibleSupport graphBall graphNeighborhood planeDomainGraph
   PlaneInteraction)
 
@@ -63,15 +61,15 @@ private theorem norm_toLp_prod_vector {n m : Type*} [Fintype n] [Fintype m]
 theorem domain_integrable_and_integral_channelWordOmissionDefect_le
     {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 0 ≤ μ) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (κ : Type*) [Fintype κ]
-      (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+      (a : κ → ↥Λ) (k : κ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
           i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (P : κ → Prop) [DecidablePred P]
-        (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
-        (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+        (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset ↥Λ)
+        (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (r : ℝ), 0 ≤ r →
@@ -93,9 +91,9 @@ theorem domain_integrable_and_integral_channelWordOmissionDefect_le
   have hN (i : κ) : Finset.univ.sup ((planeDomainGraph Λ).dist (a i)) ≤ N :=
     Finset.le_sup (f := fun j => Finset.univ.sup ((planeDomainGraph Λ).dist (a j)))
       (Finset.mem_univ i)
-  exact hbound (Site Λ) κ Aux q (planeDomainGraph Λ) a k hk₀ hk₁
+  exact hbound ↥Λ κ Aux q (planeDomainGraph Λ) a k hk₀ hk₁
     (fun i => mem_supportedOperators_reachable_of_forall_tail _ _ hc hα (htail i))
-    card_graphBall_domainGraph_le hfiber N hN (fun i l _ => htail i l) P S B hB r hr hfar t
+    card_graphBall_planeDomainGraph_le hfiber N hN (fun i l _ => htail i l) P S B hB r hr hfar t
 
 /-- **Expected channel omission on a lattice domain**
 (`eq:amplification-channel-omission`, `09-amplification.tex`, lines 203–215).
@@ -111,15 +109,15 @@ theorem exists_domain_integrable_and_integral_channelWordOmissionDefect_le
     {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 0 ≤ μ) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1) :
     ∃ A v γ : ℝ, 0 ≤ A ∧ 0 < v ∧ 0 < γ ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (κ : Type*) [Fintype κ]
-        (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+        (a : κ → ↥Λ) (k : κ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
             i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (P : κ → Prop) [DecidablePred P]
-          (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
-          (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+          (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset ↥Λ)
+          (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
             ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (r : ℝ), 0 ≤ r →
@@ -143,15 +141,15 @@ holds with `A = channelOmissionPrefactor C 2 μ c α`, `v = channelOmissionRate 
 theorem domainConstraintWord_omission
     {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 0 ≤ μ) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (κ : Type*) [Fintype κ]
-      (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+      (a : κ → ↥Λ) (k : κ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
           i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
-      ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
-      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
-        (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+      ∀ (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
+      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset ↥Λ)
+        (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
@@ -175,7 +173,7 @@ theorem domainConstraintWord_omission
       rw [ENNReal.ofReal_natCast, SimpleGraph.edist_comm]
       exact_mod_cast ManyBody.lt_edist_of_notMem_graphNeighborhood
         (G := planeDomainGraph Λ) (S := S) (l := r) hi hs) t
-  have hunit : ‖WithLp.toLp 2 (fun x : Configuration Λ q × Aux =>
+  have hunit : ‖WithLp.toLp 2 (fun x : (↥Λ → Fin q) × Aux =>
       WithLp.ofLp Ω x.1 * ξ x.2)‖ = 1 := by
     rw [norm_toLp_prod_vector, hξ, mul_one]
     exact hΩ
@@ -210,15 +208,15 @@ theorem exists_domainConstraintWord_omission
     {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 0 ≤ μ) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1) :
     ∃ A v γ : ℝ, 0 ≤ A ∧ 0 < v ∧ 0 < γ ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (κ : Type*) [Fintype κ]
-        (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+        (a : κ → ↥Λ) (k : κ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
             i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
-        ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
-        ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
-          (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+        ∀ (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
+        ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset ↥Λ)
+          (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
             ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
@@ -264,8 +262,8 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
     {J Δ C c : ℝ} (hC : 0 ≤ C) (hc : 0 < c)
     (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let cs := positiveNormalization p (Δ / 2) J
         let k := fun i => positiveConstraint cs
@@ -286,11 +284,11 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
             (planeDomainGraph Λ).Reachable (a i) x))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
-        (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset ↥Λ)
+        (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
@@ -345,11 +343,11 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
         C₃ * Real.exp (-(c₃ * l ^ kernelExponent p))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
-        (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset ↥Λ)
+        (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
@@ -380,11 +378,11 @@ theorem latticeConstraintWord_omission_explicit {p : ℕ} (hp : 1 ≤ p) (R : �
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
-        (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+      ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset ↥Λ)
+        (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
@@ -424,11 +422,11 @@ theorem exists_latticeConstraintWord_omission {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
     ∃ A v γ : ℝ, 0 ≤ A ∧ 0 < v ∧ 0 < γ ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
-          (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+        ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset ↥Λ)
+          (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
             ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),

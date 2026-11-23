@@ -21,8 +21,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -61,13 +59,13 @@ private theorem statusMarginalRegions_containment (depth : V → ℤ)
   · exact Or.inl ((Finset.filter_subset _ _).trans (Finset.union_subset hnear hmiddle))
 
 private theorem statusMarginalRegions_boundary {Λ : Finset (ℤ × ℤ)}
-    (depth : Site Λ → ℤ) (σ : PhysicalPartition (Site Λ)) {n D : ℕ}
+    (depth : ↥Λ → ℤ) (σ : PhysicalPartition ↥Λ) {n D : ℕ}
     (hcuts : (edgeBoundary (planeDomainGraph Λ) (positiveNear depth σ)).card ≤ 20 * n * D ∧
       (edgeBoundary (planeDomainGraph Λ) (positiveNearMiddle depth σ)).card ≤ 20 * n * D ∧
       (edgeBoundary (planeDomainGraph Λ) (middle σ)).card ≤ 40 * n * D ∧
       (edgeBoundary (planeDomainGraph Λ) (receiving σ false)).card ≤ 16 * n * D ∧
       (edgeBoundary (planeDomainGraph Λ) (receiving σ true)).card ≤ 16 * n * D)
-    {Q : Finset (Site Λ)} (hQ : Q ∈ statusMarginalRegions depth σ) :
+    {Q : Finset ↥Λ} (hQ : Q ∈ statusMarginalRegions depth σ) :
     (edgeBoundary (planeDomainGraph Λ) Q).card ≤ 40 * n * D := by
   classical
   simp only [statusMarginalRegions, Finset.mem_insert, Finset.mem_singleton] at hQ
@@ -90,10 +88,10 @@ theorem statusMarginalBudgetConstant_pos (q R : ℕ) {Cr : ℝ} (hCr : 0 ≤ Cr)
 /-- The explicit coefficient `statusMarginalBudgetConstant q R Cr` bounds all five actual cut
 budgets, at every completed and pre-charge status (`08-scanner.tex`, lines 32–58 and
 400–414; `07-comparators.tex`, lines 70–85). -/
-theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
+theorem statusMarginal_cutLogBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     {Cr : ℝ} (hCr : 0 ≤ Cr) :
     ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
-      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+      (S : CollarScan ↥Λ (AdmissibleSupport Λ R)),
       S.graph = planeDomainGraph Λ →
       S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) →
@@ -124,7 +122,7 @@ theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
   dsimp only
   have hnR : (2 : ℝ) ≤ S.n := by exact_mod_cast hn
   have hDR : (1 : ℝ) ≤ S.D := by exact_mod_cast hDpos
-  have hbound (Q : Finset (Site Λ)) (hQ : Q ⊆ S.truncationSet L)
+  have hbound (Q : Finset ↥Λ) (hQ : Q ⊆ S.truncationSet L)
       (hcut : (edgeBoundary (planeDomainGraph Λ) Q).card ≤ 40 * S.n * S.D) :
       ManyBody.cutLogBudget
           (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Q ≤
@@ -133,7 +131,7 @@ theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     refine (hbudget Λ S.anchor hanchor (S.truncationSet L) Q hQ
       hnR hDR (by exact_mod_cast hcut)).trans ?_
     exact mul_le_mul_of_nonneg_right (by linarith) (by positivity)
-  have hboundEither (Q : Finset (Site Λ))
+  have hboundEither (Q : Finset ↥Λ)
       (hQ : Q ⊆ S.truncationSet L ∨ Qᶜ ⊆ S.truncationSet L)
       (hcut : (edgeBoundary (planeDomainGraph Λ) Q).card ≤ 40 * S.n * S.D) :
       ManyBody.cutLogBudget
@@ -152,25 +150,25 @@ theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
       (statusMarginalRegions_containment S.depth (S.state h g)
         (S.state_far_compl_subset_truncationSet h g hL) hQ)
       (statusMarginalRegions_boundary S.depth (S.state h g)
-        (state_cut_bounds_domainGraph hT S hgraph hdepth h g (by omega) hk
+        (state_cut_bounds_planeDomainGraph hT S hgraph hdepth h g (by omega) hk
           hr hDpos hD hL hrows hclear) hQ)
   · intro hk Q hQ
     exact hboundEither Q
       (statusMarginalRegions_containment S.depth (S.oldChargeState h g)
         (S.oldChargeState_far_compl_subset_truncationSet h g hL) hQ)
       (statusMarginalRegions_boundary S.depth (S.oldChargeState h g)
-        (oldChargeState_cut_bounds_domainGraph hT S hgraph hdepth h g (by omega) hk
+        (oldChargeState_cut_bounds_planeDomainGraph hT S hgraph hdepth h g (by omega) hk
           hr hDpos hD hL hrows hclear) hQ)
 
 /-- A single coefficient bounds all five actual cut budgets, at every completed
 and pre-charge status. The lower bound by one also holds when there are no bands.
 The literal scale inequalities are geometric premises; no asymptotic premise,
 cut-containment certificate or cut-edge estimate is supplied. -/
-theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
+theorem exists_statusMarginal_cutLogBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     {Cr : ℝ} (hCr : 0 ≤ Cr) :
     ∃ CB : ℝ, 0 < CB ∧
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
@@ -192,7 +190,7 @@ theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ
               ManyBody.cutLogBudget
                 (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
                 (fun _ ↦ q) Q ≤ B) :=
-  ⟨_, statusMarginalBudgetConstant_pos q R hCr, statusMarginal_cutBudget_le_log hq R hCr⟩
+  ⟨_, statusMarginalBudgetConstant_pos q R hCr, statusMarginal_cutLogBudget_le_log hq R hCr⟩
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

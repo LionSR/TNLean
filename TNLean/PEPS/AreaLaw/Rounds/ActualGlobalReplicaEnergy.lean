@@ -26,7 +26,6 @@ noncomputable section
 
 open TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport PlaneInteraction)
 
@@ -34,12 +33,12 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 variable {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]
   [LinearOrder (AdmissibleSupport Λ R)]
-  (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+  (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
   (hm : 0 < S.m) (hM : 0 < S.M) (s : ℕ)
   (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-      (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
+      (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ) (L : ℕ)
   (a : ℝ) (pre : (k : ℕ) → Config k
-    (fun v => Fin (augmentedDimensions (V := Site Λ) q (fun _ => d) v)) → ℂ)
+    (fun v => Fin (augmentedDimensions (V := ↥Λ) q (fun _ => d) v)) → ℂ)
 
 /-- The actual fill mean energy is the global replica expectation in the same
 filtered vector after the coordinate bijection, including zero copies.
@@ -50,12 +49,12 @@ theorem actualFillScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian
     (k : ℕ) (p : ℝ) :
     (S.actualFillScanRound hm hM s (augmentedDimensions q (fun _ => d))
       (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p =
-      let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+      let n := augmentedDimensions (V := ↥Λ) q (fun _ => d)
       let D := S.actualFillData hm hM s
       let v := Matrix.Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k)
       let vO := v ∘ augmentedReplicaConfigurationEquiv q d k
       (star vO ⬝ᵥ
-        (Matrix.globalReplicaMeanHamiltonian (fun _ : Site Λ => Fin q) (Fin d) (Fin d)
+        (Matrix.globalReplicaMeanHamiltonian (fun _ : ↥Λ => Fin q) (Fin d) (Fin d)
           (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) k *ᵥ vO)).re := by
   simpa only [actualFillScanRound_meanEnergy] using
     congrArg Complex.re (star_dotProduct_copyMean_augmentOperator q d k
@@ -73,12 +72,12 @@ theorem actualChargeScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian
     (k : ℕ) (p : ℝ) :
     (S.actualChargeScanRound hm hM s (augmentedDimensions q (fun _ => d))
       (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p =
-      let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+      let n := augmentedDimensions (V := ↥Λ) q (fun _ => d)
       let D := S.actualChargeData hm hM s
       let v := Matrix.Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k)
       let vO := v ∘ augmentedReplicaConfigurationEquiv q d k
       (star vO ⬝ᵥ
-        (Matrix.globalReplicaMeanHamiltonian (fun _ : Site Λ => Fin q) (Fin d) (Fin d)
+        (Matrix.globalReplicaMeanHamiltonian (fun _ : ↥Λ => Fin q) (Fin d) (Fin d)
           (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) k *ᵥ vO)).re := by
   simpa only [actualChargeScanRound_meanEnergy] using
     congrArg Complex.re (star_dotProduct_copyMean_augmentOperator q d k

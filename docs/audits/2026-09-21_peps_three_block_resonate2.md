@@ -26,11 +26,11 @@ second time in the tree as `ThreeBlockGeometry`-namespaced members of
 `complProd_eq_regionMerge_blue`, `hostLabel_p2_eq_hostLabel_regionMerge_blue`,
 `threeBlockBlueFiber_card`, `threeBlockDoubleSum_eq_smul_single_blue`,
 `threeBlockComplCoeff`, `threeBlockDoubleSum_eq_complCoeff_sum_blue` and
-`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`.
+`regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue`.
 The forty-odd consumers behind those short-name matches resolve to the
 namespaced member through dot notation on a geometry, but only for two of the
 seven, `threeBlockComplCoeff` and the capstone
-`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`;
+`regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue`;
 the other five namespaced twins had no consumer either and are deleted by the
 follow-up recorded in
 `docs/audits/2026-10-07_peps_union_injectivity_blue_dead_blocks.md`.
@@ -62,7 +62,7 @@ deleted them; the affected rows are marked.
 | `TNLean.PEPS.threeBlockDoubleSum_eq_smul_single_blue` | none needed: the namespaced twin had no consumer either and is deleted with it (same note) |
 | `TNLean.PEPS.threeBlockComplCoeff` | `TNLean.PEPS.ThreeBlockGeometry.threeBlockComplCoeff` (same file) |
 | `TNLean.PEPS.threeBlockDoubleSum_eq_complCoeff_sum_blue` | none needed: the namespaced twin had no consumer either and is deleted with it (same note) |
-| `TNLean.PEPS.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue` | `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue` (same file) |
+| `TNLean.PEPS.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue` | `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue` (same file) |
 | `TNLean.PEPS.regionInteriorBondProd_smul_threeBlockBlueWeight_eq` | `TNLean.PEPS.regionInteriorBondProd_smul_geometryBlueWeight_eq` (same file), the geometry-native form of the same blue smul-factorization and the form the overlapping-descent bridge actually calls |
 | `TNLean.PEPS.threeBlockComplRow` | none needed: the explicit preimage witness of the complement row, a proof step of the stripped middle |
 | `TNLean.PEPS.regionInteriorBondProd_smul_threeBlockInsertedCoeff_eq` | none needed: the complement-row read-off feeding the middle strip |

@@ -25,8 +25,6 @@ open Matrix TensorPower PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
@@ -40,15 +38,15 @@ Source: `07-comparators.tex`, lines 130–153, 240–281 and 383–418;
 theorem exists_actualScan_schmidtBellPrevector_sharp_upper
     {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hm : 0 < S.m) (hM : 0 < S.M)
     (a Kmom r : ℝ) (ha : 0 < a) (har : 6 * a ≤ r) (ha1 : 6 * a ≤ 1)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
-    (H : Matrix (Site Λ → Fin q) (Site Λ → Fin q) ℂ) (E₀ : ℝ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
+    (H : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) (E₀ : ℝ)
     (hE : H *ᵥ Ωt.ofLp = (E₀ : ℂ) • Ωt.ofLp)
-    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
+    (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T)))
     (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
       (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
@@ -63,7 +61,7 @@ theorem exists_actualScan_schmidtBellPrevector_sharp_upper
               (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
               u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2)) :
     let X := S.A.filter fun x ↦ x.val ∈ T
-    let β := fun _ : Site Λ ↦ Fin q
+    let β := fun _ : ↥Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (ManyBody.cutEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
@@ -73,7 +71,7 @@ theorem exists_actualScan_schmidtBellPrevector_sharp_upper
     let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
-      let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+      let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
       let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
         replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
       (∀ k : ℕ, 0 < k →
@@ -83,10 +81,10 @@ theorem exists_actualScan_schmidtBellPrevector_sharp_upper
           (TensorPower.replicaPrevector Ωt d k (ell k) ∘ eₖ)
         let L := PermutationRepresentation.labelProj
           (TensorPower.copyPerm (Fin d) k) (ell k)
-        let I := (1 : Matrix (Fin k → (Site Λ) → Fin q) (Fin k → (Site Λ) → Fin q) ℂ)
+        let I := (1 : Matrix (Fin k → ↥Λ → Fin q) (Fin k → ↥Λ → Fin q) ℂ)
         let Pe := PermutationRepresentation.symProj
           (TensorPower.copyPerm
-            ((v : Option (Option (Site Λ))) →
+            ((v : Option (Option ↥Λ)) →
               TensorPower.addedSiteSpace (TensorPower.addedSiteSpace β (Fin d))
                 (Fin d) v) k)
         ξ ≠ 0 ∧ ‖ξ‖ ≤ 1 ∧

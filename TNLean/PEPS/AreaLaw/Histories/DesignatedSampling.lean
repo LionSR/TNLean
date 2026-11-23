@@ -20,8 +20,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 225–233 and 331–337, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -89,9 +87,9 @@ theorem designatedSupport_eq_ball_of_split {k L : ℕ} (h : History S.K S.m S.M 
 /-- Each splitting truncated designated support is sampled by the actual finite
 history with probability `1/(2M) ≥ c/(nD)`, and the extended history removes its
 exact old unassigned part. The probability is classical, before state transport. -/
-theorem good_designated_split_sampling_domainGraph
+theorem good_designated_split_sampling_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
     (hn : 2 ≤ S.n) (hm : 2 ≤ S.m) (hk : k + 1 ≤ S.n * S.m)
@@ -120,7 +118,7 @@ theorem good_designated_split_sampling_domainGraph
       (1 / (2 * (S.C₁ + 1))) / ((S.n : ℝ) * S.D) ≤
         ∑ c : ChargeChoices S.K S.M, if c g = (side, slot) then chargeWeight c else 0 := by
   have heq := S.designatedSupport_eq_ball_of_split h g side i hL hsplit
-  simpa only [heq] using good_split_sampling_domainGraph hT S hgraph hdepth h g side i
+  simpa only [heq] using good_split_sampling_planeDomainGraph hT S hgraph hdepth h g side i
     hn hm hk hr hD hDpos hL hC hrows hmult hclear hgood (by simpa only [heq] using hsplit)
 
 end CollarScan

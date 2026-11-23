@@ -24,7 +24,6 @@ Written from the manuscript; no upstream Lean text is reused.
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -54,7 +53,7 @@ theorem exists_mem_repairNextCurrentRegion_or_terminalInterior
     · exact Or.inl ⟨.inr (⟨j + 1, rfl⟩, ⟨⟨p, le_of_not_gt hterm⟩, H⟩), hH⟩
   · exact hz.elim fun i hi ↦ Or.inl ⟨.inl i, hi, hrem⟩
 
-variable {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)} {C k₀ : ℕ}
+variable {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {C k₀ : ℕ}
   {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar : ℝ}
 
 local notation "𝔇" => repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar

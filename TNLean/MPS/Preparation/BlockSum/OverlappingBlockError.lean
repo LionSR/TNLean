@@ -22,7 +22,7 @@ of the blocks with the norm of the target. The error bounds themselves are
 
 ## Main declarations
 
-* `MPSTensor.sum_star_tensorPower_polarIso_mulVec_mul_mpv`,
+* `MPSTensor.sum_star_piKronecker_polarIso_mulVec_mul_mpv`,
   `MPSTensor.sum_star_nonNormalApproxVector_mul_mpv` — the unnormalized overlap after `V^{⊗M}`.
 * `MPSTensor.inv_mul_norm_le_norm_of_sum_norm_sq_le_one` — normalizing a vector of norm at most
   one does not decrease an overlap.
@@ -53,7 +53,7 @@ sites, where `V P` is the polar decomposition of the `q`-site blocked tensor and
 periodic state of the positive part read as a tensor. The source uses `V†V = Π` and `Π P = P`
 (arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
 tensors"); no injectivity is needed. -/
-theorem sum_star_tensorPower_polarIso_mulVec_mul_mpv (A : MPSTensor d D) (q M : ℕ)
+theorem sum_star_piKronecker_polarIso_mulVec_mul_mpv (A : MPSTensor d D) (q M : ℕ)
     (F : (Fin M → Fin D × Fin D) → ℂ) :
     ∑ τ, star (((Matrix.piKronecker fun _ : Fin M ↦ (Matrix.polarIso (physicalMatrix (blockTensor A
         q)))) *ᵥ F) τ) *
@@ -90,7 +90,7 @@ theorem sum_star_tensorPower_polarIso_mulVec_mul_mpv (A : MPSTensor d D) (q M : 
 unnormalized approximating state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of arXiv:2307.01696, Supplemental
 Material, eq. (S7), has overlap `∑ⱼ conj(αⱼ) ⟨φ_M(P_{σ'_j})|φ_M(P)⟩` with the periodic state of `A`
 on `N = qM` sites, where `P` is the positive part of the `q`-site blocked tensor and `P_{σ'_j}`
-the fixed-point tensor of `σ'_j` (`sum_star_tensorPower_polarIso_mulVec_mul_mpv`). -/
+the fixed-point tensor of `σ'_j` (`sum_star_piKronecker_polarIso_mulVec_mul_mpv`). -/
 theorem sum_star_nonNormalApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZero M]
     (α : Fin b → ℂ) (σ' : Fin b → Matrix (Fin D) (Fin D) ℂ) :
     ∑ τ, star (nonNormalApproxVector A q M α (fun j => fixedPointPair (σ' j)) τ) *
@@ -107,7 +107,7 @@ theorem sum_star_nonNormalApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [
     refine (Fintype.sum_equiv e.symm _ _ fun c => ?_)
     rw [mpv_fixedPointTensor, mul_comm]
     simp [e, m, virtualPairEquiv]
-  rw [nonNormalApproxVector, sum_star_tensorPower_polarIso_mulVec_mul_mpv]
+  rw [nonNormalApproxVector, sum_star_piKronecker_polarIso_mulVec_mul_mpv]
   change ∑ c, star (nonNormalFixedPointState α (fun j => fixedPointPair (σ' j)) c) * m c = _
   calc ∑ c, star (nonNormalFixedPointState α (fun j => fixedPointPair (σ' j)) c) * m c
       = ∑ j, star (α j) * ∑ c, star (pairProductState (fixedPointPair (σ' j)) c) * m c := by

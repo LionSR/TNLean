@@ -18,8 +18,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Lemma 9.1(2), lines 243–260, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation edgeBoundary planeDomainGraph planeDomainGraph_degree_le_four)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -47,9 +45,9 @@ theorem receiving_far_eq_compl (σ : PhysicalPartition V) :
   | some b => cases b <;> simp [receiving, middle, he]
 
 private theorem physical_status_cut_bounds {Λ T : Finset (ℤ × ℤ)}
-    (hT : T.Nonempty) (A : Finset (Site Λ)) (depth : Site Λ → ℤ)
+    (hT : T.Nonempty) (A : Finset ↥Λ) (depth : ↥Λ → ℤ)
     (hdepth : depth = fun x ↦ ambientDepth T hT x.val)
-    (σ : PhysicalPartition (Site Λ)) {n D L r₀ : ℕ} (hL : 1 ≤ L) (hD : 1 ≤ D)
+    (σ : PhysicalPartition ↥Λ) {n D L r₀ : ℕ} (hL : 1 ≤ L) (hD : 1 ≤ D)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
@@ -111,9 +109,9 @@ variable {I : Type*} [Fintype I] [LinearOrder I]
 /-- Every completed physical status has at most `40nD` cut edges in
 each of U, UY, Y, P₀, V, with sharper constants for all but Y. No prefix,
 edge-count, or good-history certificate is assumed. -/
-theorem state_cut_bounds_domainGraph
+theorem state_cut_bounds_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K)
     (hn : 0 < S.n) (hk : k ≤ S.n * S.m)
@@ -133,7 +131,7 @@ theorem state_cut_bounds_domainGraph
     (edgeBoundary (planeDomainGraph Λ) (receiving (S.state h g) true)).card ≤
       16 * S.n * S.D := by
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
-  have ha := state_prefix_approximation_domainGraph hT S hgraph hdepth
+  have ha := state_prefix_approximation_planeDomainGraph hT S hgraph hdepth
     h g hn hk hr hDpos hD hL hrows
   have hLpos : 1 ≤ L := (Nat.mul_pos (Nat.mul_pos (by decide) g.pos) (by omega)).trans_le hL
   exact physical_status_cut_bounds hT S.A S.depth hdepth (S.state h g) hLpos hDpos
@@ -148,9 +146,9 @@ theorem state_cut_bounds_domainGraph
 /-- Every pre-charge physical status has at most `40nD` cut edges in
 each of U, UY, Y, P₀, V, with sharper constants for all but Y. No prefix,
 edge-count, or good-history certificate is assumed. -/
-theorem oldChargeState_cut_bounds_domainGraph
+theorem oldChargeState_cut_bounds_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K)
     (hn : 0 < S.n) (hk : (k + 1) ≤ S.n * S.m)
@@ -171,7 +169,7 @@ theorem oldChargeState_cut_bounds_domainGraph
     (edgeBoundary (planeDomainGraph Λ) (receiving (S.oldChargeState h g) true)).card ≤
       16 * S.n * S.D := by
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
-  have ha := oldChargeState_prefix_approximation_domainGraph hT S hgraph hdepth
+  have ha := oldChargeState_prefix_approximation_planeDomainGraph hT S hgraph hdepth
     h g hn hk hr hDpos hD hL hrows
   have hLpos : 1 ≤ L := (Nat.mul_pos (Nat.mul_pos (by decide) g.pos) (by omega)).trans_le hL
   exact physical_status_cut_bounds hT S.A S.depth hdepth (S.oldChargeState h g) hLpos hDpos

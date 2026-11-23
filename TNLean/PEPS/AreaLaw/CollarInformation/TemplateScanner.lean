@@ -23,8 +23,6 @@ Independently written from the manuscript; no upstream Lean proof reused.
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -33,8 +31,8 @@ namespace TNLean.PEPS.AreaLaw.Scan
 no geometric or entropy certificate stored as a field. Source:
 `08-scanner.tex`, lines 32--58, 83--154 and 839--845. -/
 def finalTemplateScanner {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (A : Finset (Site Λ)) (R n : ℕ) (Cr C₁ : ℝ) :
-    CollarScan (Site Λ) (AdmissibleSupport Λ R) where
+    (A : Finset ↥Λ) (R n : ℕ) (Cr C₁ : ℝ) :
+    CollarScan ↥Λ (AdmissibleSupport Λ R) where
   graph := planeDomainGraph Λ
   A := A
   depth := fun x ↦ ambientDepth T hT x.val
@@ -52,7 +50,7 @@ collar inside the chosen cut. This identity is independent of all scale,
 clearance and entropy estimates. Source: `08-scanner.tex`, lines 21--29
 and 50--53. -/
 theorem finalTemplateScanner_truncationSet {Λ T : Finset (ℤ × ℤ)}
-    (hT : T.Nonempty) (A : Finset (Site Λ)) (R n : ℕ) (Cr C₁ : ℝ) (L : ℕ) :
+    (hT : T.Nonempty) (A : Finset ↥Λ) (R n : ℕ) (Cr C₁ : ℝ) (L : ℕ) :
     (finalTemplateScanner hT A R n Cr C₁).truncationSet L =
       A.filter fun x ↦ x.val ∈ ambientDilation T L := by
   classical

@@ -30,8 +30,6 @@ OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation_zero)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -61,9 +59,9 @@ with the target. Source: OpenAI area-law manuscript, `08-scanner.tex`, lines
 21–24 and 83–98, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 private theorem target_positiveNear_regions_of_ambientDepth
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (A : Finset (Site Λ)) (depth : Site Λ → ℤ)
+    (A : Finset ↥Λ) (depth : ↥Λ → ℤ)
     (hdepth : depth = fun x ↦ ambientDepth T hT x.val)
-    (σ : PhysicalPartition (Site Λ))
+    (σ : PhysicalPartition ↥Λ)
     (hX : (A.filter fun x ↦ x.val ∈ T) ⊆ receiving σ false)
     (hfar : ∀ x, x ∉ A → σ x = some true) :
     let X := A.filter fun x ↦ x.val ∈ T
@@ -89,10 +87,10 @@ Source: OpenAI, A two-dimensional area law from a global spectral gap,
 openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 theorem state_target_subset_receiving_near
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) :
-    let X : Finset (Site Λ) := S.A.filter fun x ↦ x.val ∈ T
+    let X : Finset ↥Λ := S.A.filter fun x ↦ x.val ∈ T
     X ⊆ receiving (S.state h g) false := by
   intro X x hx
   obtain ⟨hxA, hxT⟩ := Finset.mem_filter.mp hx
@@ -110,10 +108,10 @@ Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 21–24 and 83–98,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem oldChargeState_target_subset_receiving_near
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) :
-    let X : Finset (Site Λ) := S.A.filter fun x ↦ x.val ∈ T
+    let X : Finset ↥Λ := S.A.filter fun x ↦ x.val ∈ T
     X ⊆ receiving (S.oldChargeState h g) false := by
   intro X x hx
   obtain ⟨hxA, hxT⟩ := Finset.mem_filter.mp hx
@@ -133,7 +131,7 @@ Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 21–24 and 83–98,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem state_receiving_regions
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) :
     let X := S.A.filter fun x ↦ x.val ∈ T
@@ -153,7 +151,7 @@ Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 21–24 and 83–98,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem oldChargeState_receiving_regions
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) :
     let X := S.A.filter fun x ↦ x.val ∈ T

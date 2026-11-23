@@ -283,7 +283,7 @@ end TNLean.MPS.AreaLaw.Hastings
 
 namespace TNLean.MPS.AreaLaw
 
-open Hastings Matrix TNLean.Lattice
+open Hastings Matrix
 open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace
 

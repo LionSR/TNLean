@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangles
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Squares.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Squares.QuotientIntervals
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # Mixed dyadic cells of an integer rectangle
@@ -21,13 +22,15 @@ September 24, 2026, the boundary-line count in the proof of Proposition 9.5,
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open ManyBody (IntRect)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Total side length of mixed cells of a native rectangle is bounded by
 its four boundary lines. No aspect-ratio assumption is needed.
 Source: the rectangle boundary-line count in `08-scanner.tex`, lines 717–729,
 in the proof of Proposition 9.5 (`prop:small-box`). -/
-theorem IntRect.card_mixedDyadicIndices_toFinset_le (Q : IntRect) (k : ℕ) :
+theorem _root_.ManyBody.IntRect.card_mixedDyadicIndices_toFinset_le (Q : IntRect) (k : ℕ) :
     2 ^ k * (Geometry.mixedDyadicIndices Q.toFinset k).card ≤
       4 * Q.size + 8 * 2 ^ k := by
   let u : ℤ := 2 ^ k

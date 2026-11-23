@@ -20,7 +20,6 @@ spectral gap*, September 24, 2026, at
 No upstream Lean proof text is reused. Safe clearance and entropy are separate.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation ambientDilation_zero mem_ambientDilation_iff)
 
 namespace TNLean.PEPS.AreaLaw.Geometry

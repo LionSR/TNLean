@@ -5,7 +5,10 @@ between single-system channel theory (QICLean) and tensor networks (TNLean):
 finite tensor products indexed by sites, local Hamiltonians, and circuits. It
 supersedes the "Migration policy" section of `circuit_channel_architecture.md`.
 The directories `TNLean/Circuit` and `TNLean/Lattice` are split along the
-layers below, redesigned, and moved to QICLean.
+layers below, redesigned, and moved to QICLean. `TNLean/Circuit` and the top
+level of `TNLean/Lattice` are gone (pin move to LionSR/QICLean#1185); the party
+calculus `Lattice/PartyCircuit`, `Lattice/Sheet` and `Lattice/Compression`
+remains.
 
 ## Architecture
 
@@ -507,6 +510,11 @@ Sites layer has. It holds three unrelated things:
   declarations.
 - `TreeBasisCounterexample`.
 
+The pin move to LionSR/QICLean#1185 deletes the root directory (14 modules) and
+`TreeBasisCounterexample` (3 modules); their statements are QICLean's
+`QICLean/ManyBody` (the hard-core sector certificate in the namespace
+`ManyBody.HardCore`). Only the party calculus remains in `TNLean/Lattice`.
+
 The structure `Lattice.LocalHamiltonian`, described as shared by the one- and
 two-dimensional area laws, is defined on `Λ : Finset (ℤ × ℤ)`. The chain uses
 `ChainHamiltonian` and `DomainHamiltonian` in `MPS/AreaLaw`, and the squares
@@ -683,6 +691,12 @@ Wave 3, two tracks that share no file:
   keeps eight modules: `SupportedOperators`, `SitePermutation`, `RegionSplit`,
   `RegionalSwap`, `SitewiseTensorSupport`, `SupportedGroundSpace`,
   `SupportedNormalizedGroundSpace` and `WeightedGHZ`.
+
+  The pin move to LionSR/QICLean#1185 deletes these eight modules, so
+  `TNLean/Circuit` no longer exists. The swap of two copies on a region is
+  QICLean's `ManyBody.pairSwap` and `ManyBody.pairSwapOp` on the paired system
+  `fun v ↦ X v × X v`; TNLean's two-sheet coordinates
+  `(ι → Fin q) × (ι → Fin q)` are reached by `Equiv.arrowProdEquivProdArrow`.
 
   The directory was not smaller after pin move 5 for two reasons. The ring
   geometry (`ringBall`, ring separation, the ring as a circuit geometry) was

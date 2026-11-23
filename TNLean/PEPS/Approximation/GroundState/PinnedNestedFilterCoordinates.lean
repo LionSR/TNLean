@@ -56,7 +56,7 @@ private theorem extendRegions_fin (X : Fin m → Finset (Vertex L)) (j : Fin m) 
 /-- The supplied finite regions in integer-square coordinates, extended by empty
 regions only to meet the existing natural-indexed ordered-chain API. -/
 def canonicalRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
-    Finset (Lattice.Site (ManyBody.rectangularDomain L L)) :=
+    Finset ↥(ManyBody.rectangularDomain L L) :=
   (extendRegions X k).map (ManyBody.rectangleSiteEquiv L L).toEmbedding
 
 /-- The extension has exactly the supplied regions at every family index. -/
@@ -68,7 +68,7 @@ def canonicalRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
 def regionEquiv (X : Fin m → Finset (Vertex L)) (j : Fin m) :
     RegionConfiguration q (X j) ≃ (ManyBody.RegionConfig (fun _ ↦ Fin q) (canonicalRegions X j)) :=
   ManyBody.regionConfigurationEquiv (X := fun _ : Vertex L ↦ Fin q)
-    (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
+    (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
     (X j) (canonicalRegions X j) (ManyBody.rectangleSiteEquiv L L)
     (by intro v; simp) (fun _ ↦ Equiv.refl (Fin q))
 
@@ -120,10 +120,10 @@ theorem admissible_fromCanonical (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
   exact hK
 
 /-- The existing physical isometry is the generic site relabelling with identity basis maps. -/
-theorem squareAreaLawState_eq_relabelVector (Ω : State L q) :
+theorem rectangleAreaLawState_eq_relabelVector (Ω : State L q) :
     AreaLaw.rectangleAreaLawState Ω = ManyBody.relabelVector
       (X := fun _ : Vertex L ↦ Fin q)
-      (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
+      (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
       (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin q)) Ω := by
   ext σ
   rfl
@@ -135,7 +135,7 @@ private def extendedMatrices (F : FilterFamily q m X) :
     (fun v ↦ x ⟨v.1, (extendRegions_fin X j).symm ▸ v.2⟩)
     (fun v ↦ y ⟨v.1, (extendRegions_fin X j).symm ▸ v.2⟩)
 
-private theorem localLift_extendedMatrices (F : FilterFamily q m X) (j : Fin m) :
+private theorem place_extendedMatrices (F : FilterFamily q m X) (j : Fin m) :
     ManyBody.place (extendRegions X j) (extendedMatrices F j) =
       ManyBody.place (X j) (F j).matrix := by
   ext x y
@@ -147,12 +147,12 @@ private theorem reindex_extendedMatrices (F : FilterFamily q m X) (j : Fin m)
     reindex
         (ManyBody.regionConfigurationEquiv
           (X := fun _ : Vertex L ↦ Fin q)
-          (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
+          (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
           (extendRegions X j) (canonicalRegions X j)
           (ManyBody.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
         (ManyBody.regionConfigurationEquiv
           (X := fun _ : Vertex L ↦ Fin q)
-          (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
+          (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
           (extendRegions X j) (canonicalRegions X j)
           (ManyBody.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
         (extendedMatrices F j) = canonicalMatrices F j := by
@@ -163,18 +163,18 @@ private theorem output_eq_extended_chain (F : FilterFamily q m X) (Ω : State L 
     output F Ω = toEuclideanLin
       (Entropy.liftProd (Entropy.chainList (extendRegions X) (extendedMatrices F)
         fun _ ↦ True)) Ω := by
-  simpa only [output, asMap, localLift_extendedMatrices] using
+  simpa only [output, asMap, place_extendedMatrices] using
     Entropy.foldl_localLift_eq_liftProd_chainList (extendRegions X) (extendedMatrices F) Ω
 
 /-- The actual adapted ascending output equals the canonical reverse-product action.
 Every matrix occurrence is retained; no commutation or nesting is assumed. -/
-theorem squareAreaLawState_output (F : FilterFamily q m X) (Ω : State L q) :
+theorem rectangleAreaLawState_output (F : FilterFamily q m X) (Ω : State L q) :
     AreaLaw.rectangleAreaLawState (output F Ω) =
       toEuclideanLin (Entropy.liftProd
         (Entropy.chainList (canonicalRegions X) (canonicalMatrices F) fun _ ↦ True))
         (AreaLaw.rectangleAreaLawState Ω) := by
-  rw [output_eq_extended_chain, squareAreaLawState_eq_relabelVector,
-    squareAreaLawState_eq_relabelVector]
+  rw [output_eq_extended_chain, rectangleAreaLawState_eq_relabelVector,
+    rectangleAreaLawState_eq_relabelVector]
   have hD (k : ℕ) (v : Vertex L) :
       v ∈ extendRegions X k ↔
         ManyBody.rectangleSiteEquiv L L v ∈ canonicalRegions X k := by
@@ -182,19 +182,19 @@ theorem squareAreaLawState_output (F : FilterFamily q m X) (Ω : State L q) :
   simpa only [reindex_extendedMatrices] using
     Entropy.relabelVector_liftProd_chainList
       (n := fun _ : Vertex L ↦ q)
-      (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+      (n' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ q)
       (extendRegions X) (canonicalRegions X) (ManyBody.rectangleSiteEquiv L L)
       hD (fun _ ↦ Equiv.refl (Fin q)) (extendedMatrices F) (fun _ ↦ True) Ω
 
 /-- Inverse-norm normalization commutes with the same exact output identification,
 including zero output. -/
-theorem squareAreaLawState_normalizedOutput (F : FilterFamily q m X) (Ω : State L q) :
+theorem rectangleAreaLawState_normalizedOutput (F : FilterFamily q m X) (Ω : State L q) :
     let ψ := toEuclideanLin (Entropy.liftProd
       (Entropy.chainList (canonicalRegions X) (canonicalMatrices F) fun _ ↦ True))
       (AreaLaw.rectangleAreaLawState Ω)
     AreaLaw.rectangleAreaLawState (normalizedOutput F Ω) = ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ := by
   dsimp only
-  rw [← squareAreaLawState_output, AreaLaw.norm_rectangleAreaLawState]
+  rw [← rectangleAreaLawState_output, AreaLaw.norm_rectangleAreaLawState]
   exact (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (AreaLaw.rectangleConfigurationEquiv L L q)).map_smul _ _
 
@@ -202,7 +202,7 @@ private theorem norm_canonical_output (F : FilterFamily q m X) (Ω : State L q) 
     ‖toEuclideanLin (Entropy.liftProd
       (Entropy.chainList (canonicalRegions X) (canonicalMatrices F) fun _ ↦ True))
       (AreaLaw.rectangleAreaLawState Ω)‖ = ‖output F Ω‖ := by
-  rw [← squareAreaLawState_output, AreaLaw.norm_rectangleAreaLawState]
+  rw [← rectangleAreaLawState_output, AreaLaw.norm_rectangleAreaLawState]
 
 /-- Source maximality is equivalent to canonical feasibility and comparison with
 every feasible matrix family. The inverse conversion supplies all competitors. -/

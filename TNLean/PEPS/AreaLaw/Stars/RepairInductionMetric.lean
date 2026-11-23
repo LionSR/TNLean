@@ -52,8 +52,6 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Each centered child offset has sup norm at most one.
@@ -107,7 +105,7 @@ theorem repairReplacementBirthRegion_subset_repairSquare {ι : Type*} (v : ℝ �
 
 section Stages
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
   (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -452,7 +450,7 @@ separated by a quarter of the larger scale.
 Source: area-law Section 11, lines 325–330, and `geometry:initial-stars`,
 lines 336–339 and 352–363. -/
 theorem initialRepairStage_scale_separated (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
     (∀ p, ∃ k, k₀ ≤ k ∧
       (initialRepairStage o Λ A C k₀ hC h₀).scale p = (2 : ℝ) ^ fineScaleIndex k) ∧
     ∀ p q, p ≠ q →
@@ -474,7 +472,7 @@ Source: area-law Section 11, `geometry:trim-margins`, lines 380–394, and
 `geometry:initial-stars`, lines 336–339. -/
 theorem repairMetricHypotheses_of_le {a₀ : ℝ} (ha₀ : 0 < a₀) (ha₀' : a₀ ≤ 1 / 4)
     {Sstar : ℝ} (hSstar : repairMarginThreshold a₀ ≤ Sstar) (o : ℝ × ℝ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C)
     (h₀ : 50000000 ≤ k₀) (hK : fineScaleIndexThreshold Sstar ≤ k₀) :
     RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
       (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ := by
@@ -509,7 +507,7 @@ Source: area-law Section 11, `geometry:trim-margins`, lines 380–394, and
 `geometry:initial-stars`, lines 336–339. -/
 theorem exists_repairMetricHypotheses {a₀ : ℝ} (ha₀ : 0 < a₀) (ha₀' : a₀ ≤ 1 / 4) :
     ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
             (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ :=
@@ -525,11 +523,9 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
   (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar

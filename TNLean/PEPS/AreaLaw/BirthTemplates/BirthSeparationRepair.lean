@@ -48,13 +48,11 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 section Stages
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
   (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -112,7 +110,7 @@ end Stages
 
 section Core
 
-variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)} {C k₀ : ℕ}
+variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {C k₀ : ℕ}
   {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar : ℝ}
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -234,7 +232,7 @@ conclusion of `isRepairBirthSeparated_of_isUniformRepairInduction` holds for
 all repair data satisfying its hypotheses.
 Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
 theorem exists_isRepairBirthSeparated_of_isUniformRepairInduction :
-    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
       (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar a₀ : ℝ), 0 < a₀ → 1 ≤ Sstar →
       (∀ j p, Sstar ≤ (repairStage o Λ A C k₀ hC h₀ Sstar j).scale p) →
       (∀ S, Sstar ≤ S → repairHalfSide S ≤ a₀ / 1000 * S) →
@@ -257,7 +255,7 @@ Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
 theorem exists_threshold_isRepairBirthSeparated_of_uniformRepairInductionStatement
     (h : UniformRepairInductionStatement) :
     ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar birthSeparationConstant := by
   obtain ⟨a₀, ha₀, T₁, hT₁⟩ := h
@@ -290,7 +288,7 @@ Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
 theorem exists_isRepairBirthSeparated_of_uniformRepairInductionStatement
     (h : UniformRepairInductionStatement) :
     ∃ c₁ > 0, ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
   ⟨birthSeparationConstant, birthSeparationConstant_pos,

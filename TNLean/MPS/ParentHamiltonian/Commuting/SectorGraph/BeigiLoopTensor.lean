@@ -361,7 +361,7 @@ private theorem transformedGroundBondProduct_mulVec_loopCyclicProduct
   have hs := congrFun hfix (e s)
   simpa only [Function.comp_apply, Equiv.symm_apply_apply] using hs
 
-private theorem loopProductState_eq_tensorPower_mulVec
+private theorem loopProductState_eq_piKronecker_mulVec
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} [NeZero N] :
     F.loopProductState l =
@@ -378,10 +378,10 @@ theorem loopProductState_ne_zero (F : BeigiSectorGraphData A)
   classical
   let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitary)
   have hWstarW : Wᴴ * W = 1 := by
-    apply MPOTensor.tensorPower_isometry
+    apply MPOTensor.piKronecker_const_isometry
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.star_mul_self_of_mem F.unitary_mem
-  rw [F.loopProductState_eq_tensorPower_mulVec l]
+  rw [F.loopProductState_eq_piKronecker_mulVec l]
   intro hzero
   apply F.loopCyclicProduct_ne_zero (N := N) l
   have hzero' := congrArg (fun v ↦ Wᴴ *ᵥ v) hzero
@@ -412,14 +412,14 @@ theorem loopProductStateES_inner_eq_zero_of_ne
   classical
   let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitary)
   have hWstarW : Wᴴ * W = 1 := by
-    apply MPOTensor.tensorPower_isometry
+    apply MPOTensor.piKronecker_const_isometry
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.star_mul_self_of_mem F.unitary_mem
   rw [loopProductStateES, loopProductStateES]
   change inner ℂ (WithLp.toLp 2 (F.loopProductState l))
     (WithLp.toLp 2 (F.loopProductState m)) = 0
-  rw [F.loopProductState_eq_tensorPower_mulVec l,
-    F.loopProductState_eq_tensorPower_mulVec m]
+  rw [F.loopProductState_eq_piKronecker_mulVec l,
+    F.loopProductState_eq_piKronecker_mulVec m]
   change inner ℂ (WithLp.toLp 2 (W *ᵥ F.loopCyclicProduct l))
     (WithLp.toLp 2 (W *ᵥ F.loopCyclicProduct m)) = 0
   rw [EuclideanSpace.inner_toLp_toLp, dotProduct_comm, Matrix.star_mulVec,
@@ -469,7 +469,7 @@ private theorem groundBondProduct_mulVec_loopProductState
   have hUUstar := F.unitary_mul_conjTranspose
   have hWWstar : W * Wᴴ = 1 := by
     simp only [W]
-    rw [MPOTensor.tensorPower_mul_conjTranspose, hUUstar,
+    rw [MPOTensor.piKronecker_const_mul_conjTranspose, hUUstar,
       Matrix.piKronecker_one]
   have hconj : singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.unitaryᴴ) Q = T := by
     simpa only [Q, T] using F.singleKrausMap_groundBondProduct hN
@@ -483,7 +483,7 @@ private theorem groundBondProduct_mulVec_loopProductState
       _ = (W * Wᴴ) * (Q * W) := by rw [hWWstar]
       _ = W * (Wᴴ * Q * W) := by simp only [Matrix.mul_assoc]
       _ = W * T := by rw [hconj']
-  rw [F.loopProductState_eq_tensorPower_mulVec l]
+  rw [F.loopProductState_eq_piKronecker_mulVec l]
   change Q.mulVec (W.mulVec (F.loopCyclicProduct l)) =
     W.mulVec (F.loopCyclicProduct l)
   rw [Matrix.mulVec_mulVec, hmatrix, ← Matrix.mulVec_mulVec,

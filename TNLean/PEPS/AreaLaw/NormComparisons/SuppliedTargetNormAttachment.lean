@@ -35,8 +35,6 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -53,7 +51,7 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ) {Cr : ℝ} (hCr : 0 < Cr) :
     ∃ CB : ℝ, 0 < CB ∧
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-        (hT : T.Nonempty) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+        (hT : T.Nonempty) (S : CollarScan ↥Λ (AdmissibleSupport Λ R)),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
@@ -68,16 +66,16 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
         let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
         1 ≤ B ∧
           ∀ {J Δ : ℝ} (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
-              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q),
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
             0 < Δ → ‖Ω‖ = 1 →
             let g := Δ / positiveNormalization 1 (Δ / 2) J
             let C₀ := 512 * Real.exp 1 * (2 / g)
             let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))
-            ∀ (e : ℝ) (Ωt : StateSpace Λ q),
+            ∀ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
               ‖Ωt‖ = 1 → IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) →
               groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt} →
               let X := S.A.filter fun x ↦ x.val ∈ T
-              let β := fun _ : Site Λ ↦ Fin q
+              let β := fun _ : ↥Λ ↦ Fin q
               ∀ (E : Finset (ManyBody.RegionConfig β X)) (hd : 0 < E.card),
               letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
               let d := E.card
@@ -106,7 +104,7 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
               Asymptotics.IsLittleO atTop
                 (fun k : ℕ ↦ Real.log (ell k).dim - (k : ℝ) * Sent)
                 (fun k : ℕ ↦ (k : ℝ)) →
-              let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+              let dims := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
               let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
               let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
                 replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k

@@ -41,8 +41,6 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The removal set of a finite family of marks is closed.
@@ -51,7 +49,7 @@ theorem isClosed_repairRemovalSet {K : Type*} [Finite K]
     (v : K → ℝ × ℝ) (S : K → ℝ) : IsClosed (repairRemovalSet v S) := by
   exact isClosed_iUnion_of_finite (fun _ ↦ Metric.isClosed_closedBall)
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
   (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -92,12 +90,11 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (ambientDilation edgeBoundary mem_ambientDilation_iff planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
   (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import QICLean.ManyBody.Sites.Lattice.Rectangle
 import TNLean.PEPS.Injectivity.Normal.NormalBlocking
 import TNLean.PEPS.Tensor.Region.RegionBlock
@@ -26,8 +26,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
 
 noncomputable section
-
-open TNLean.Lattice
 
 open ManyBody (planeDomainGraph rectangularDomain rectangleSiteEquiv rectangleGraphIso)
 

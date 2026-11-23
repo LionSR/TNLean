@@ -77,6 +77,8 @@ shell estimate in the proof of `prop:small-box`, lines 705–729, at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (IntRect IsSafe rectRegion)
+
 section
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -168,8 +170,6 @@ section
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
@@ -185,10 +185,10 @@ theorem exists_regionEntropy_initial_rounded_collar_le_rpow
         ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
           ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
               (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (E₀ : ℝ) (Ω : StateSpace Λ q),
+            (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
+            ∀ (A : Finset ↥Λ) (Q : IntRect), IsSafe Λ A D₀ Q →
               N ≤ Q.size →
               let η := 1 - Scan.BootstrapParameters.ell e₀
               let L := Nat.floor ((Nat.ceil (C₂ * (Q.size : ℝ)) : ℝ) ^ η)
@@ -238,8 +238,6 @@ end
 
 section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- A fixed lower exponent gives a uniform rounded-shell coefficient for every
@@ -252,8 +250,8 @@ theorem exists_regionEntropy_rounded_shell_le_uniform_rpow
     ∃ N : ℕ, 1 ≤ N ∧
       ∀ b : ℝ, 0 < b →
       ∀ (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ), 1 ≤ D₀ →
-        ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 →
-          ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
+        ∀ (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 →
+          ∀ (A : Finset ↥Λ) (Q : IntRect), IsSafe Λ A D₀ Q →
             N ≤ Q.size →
             ∀ e : ℝ, b ≤ e → e ≤ e₀ →
               ∀ C : ℝ,

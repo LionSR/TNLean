@@ -26,8 +26,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 and 442–451, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -130,11 +128,11 @@ theorem chargeMoveCost_chargeEntropyCost {k : ℕ} (h : History S.K S.m S.M k)
 designated splitting incidence with coefficient `c / (nD)`, where
 `c = 1 / (2(C₁ + 1))`. Equal anchors retain their distinct interaction labels.
 This is a pointwise entropy inequality, before coherent or Fourier integration. -/
-theorem good_designatedEntropyCost_le_expected_chargeEta_domainGraph
+theorem good_designatedEntropyCost_le_expected_chargeEta_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {k L μ : ℕ}
-    (h : History S.K S.m S.M k) (n : Site Λ ⊕ Bool → ℕ)
+    (h : History S.K S.m S.M k) (n : ↥Λ ⊕ Bool → ℕ)
     (θ : EuclideanSpace ℂ (∀ v, Fin (n v)))
     (hn : 2 ≤ S.n) (hm : 2 ≤ S.m) (hk : k + 1 ≤ S.n * S.m)
     (hr : 2 * S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m) (hDpos : 1 ≤ S.D)
@@ -151,7 +149,7 @@ theorem good_designatedEntropyCost_le_expected_chargeEta_domainGraph
         ∑ c : ChargeChoices S.K S.M, chargeWeight c *
           ∑ g, moveEta n (augmentedPartition (S.oldChargeState h g))
             (S.quantumChargeMove g (h.1 g) (k + 1) (c g) (S.oldChargeState h g)) θ := by
-  have hbound := good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_domainGraph
+  have hbound := good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_planeDomainGraph
     hT S hgraph hdepth h (S.chargeEntropyCost n h θ) (S.chargeEntropyCost_nonneg n h θ)
     hn hm hk hr hD hDpos hL hC hrows hmult hclear hgood
   simpa only [S.chargeMoveCost_chargeEntropyCost n h θ] using hbound

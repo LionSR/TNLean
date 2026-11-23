@@ -32,7 +32,6 @@ noncomputable section
 
 open Matrix MeasureTheory SpectralFilter
 open scoped Kronecker NNReal MatrixOrder ComplexOrder Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
 
@@ -47,10 +46,10 @@ theorem latticeConstraintWord_excitedProjection_decay
     {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ} (_hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
-    (ζ : EuclideanSpace ℂ (Configuration Λ q × Aux)) (t : ℝ≥0) :
+    (ζ : EuclideanSpace ℂ ((↥Λ → Fin q) × Aux)) (t : ℝ≥0) :
     let cs := positiveNormalization p (Δ / 2) J
     let k := fun i : AdmissibleSupport Λ R =>
       positiveConstraint cs (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))

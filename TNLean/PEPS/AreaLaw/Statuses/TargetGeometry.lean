@@ -24,8 +24,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation ambientDilation_zero edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -42,7 +40,7 @@ theorem ScannerExponents.one_le_L_le (E : ScannerExponents) {n : ℕ} (hn : 1 �
 
 namespace CollarScan
 
-variable {Λ : Finset (ℤ × ℤ)} {I : Type*} (S : CollarScan (Site Λ) I)
+variable {Λ : Finset (ℤ × ℤ)} {I : Type*} (S : CollarScan ↥Λ I)
 
 /-- The source target supplies the volume, containment and boundary inputs for
 truncation and the target cut budget. Neither conclusion is a premise.

@@ -42,17 +42,18 @@
   coordinates" (2026-10-06) recorded the first two MPU copies, `siteProduct` in
   `MPU/FundamentalTheoremGates.lean` and `chainPower` in
   `MPU/Examples/ShiftStrictEquivalence.lean`; this entry supersedes it.
-- **Abstraction:** `Matrix.piKronecker` (`QICLean/Algebra/Kronecker/MatrixTensorPower.lean`, QICLean dependency) for one
-  factor at every site and `Matrix.piKronecker` (`QICLean/Algebra/Kronecker/FiniteKroneckerProduct.lean`, QICLean dependency) for
-  site-dependent factors, with `Matrix.piKronecker_apply`,
-  `Matrix.IsUnitaryBetween.piKronecker` and `Matrix.piKronecker_mem_unitaryGroup`
-  added. The local definitions and their duplicated lemmas are deleted; the lemmas
-  that remain are renamed onto `tensorPower`.
+- **Abstraction:** `Matrix.piKronecker` (`QICLean/Algebra/Kronecker/PiKronecker.lean`,
+  QICLean dependency), the Kronecker product of a finite family of matrices: a constant
+  family `fun _ : Fin N ↦ V` for one factor at every site, a general family for
+  site-dependent factors, with `Matrix.piKronecker_apply`, `Matrix.piKronecker_mul`,
+  `Matrix.IsIsometry.piKronecker`, `Matrix.IsUnitaryBetween.piKronecker` and
+  `Matrix.piKronecker_mem_unitaryGroup`. The local definitions and their duplicated
+  lemmas are deleted; the lemmas that remain are named after `piKronecker`.
 - **Notes:** The products of identity entries in the deleted proofs close with
   `simp [Finset.prod_boole, funext_iff]`, the idiom of the PEPS and circuit files.
-  The shared layer still has three parallel definitions, `tensorPower`,
-  `Matrix.piKronecker` and `Matrix.piKronecker`, which agree definitionally; merging them is a
-  separate candidate.
+  The earlier parallel definitions of the shared layer (a tensor power, a Kronecker
+  product over `Fin N`, a rectangular one and a product operator) are merged into
+  `Matrix.piKronecker`.
 - **Remaining case:** `MPOTensor.sitewise_prod_conjTranspose_mul_self`
   (`MPS/MPDO/CyclicActiveSector/LemmaC5CaseI.lean`) still restates the isometry of a sitewise product in
   entrywise form; it is a candidate for `Matrix.IsIsometry.piKronecker`.
@@ -504,7 +505,7 @@ abstracted — record why, so it is not re-proposed).
 ### Replica-swap entropy comparison — promoted (2026-10-21)
 
 - **Pattern:** Two identical normalized replicas, a regional swap, and a unitary supported away from two cores imply a mutual-information bound from the vector approximation error.
-- **Defined in:** `Lattice/RegionalResetEntropy.lean`, `TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary`.
+- **Defined in:** QICLean (dependency), `ManyBody.regionMutualInformation_cores_le_of_reset_unitary`.
 - **Refactored occurrences:** Both the contiguous-chain and arbitrary finite-domain information-reset proofs use the shared finite-site theorem. The former loses its repeated 80-line local entropy argument.
 - **Notes:** Replica normalization and the product marginal after the swap are proved internally. No product-marginal hypothesis is supplied by either caller. The theorem is independent of a Hamiltonian, gap, dimension of the underlying lattice, and connectedness.
 
@@ -1109,7 +1110,7 @@ abstracted — record why, so it is not re-proposed).
   apply the ambient-depth variation bound, and reverse the absolute difference.
 - **Seen:** Four copies in `Scan/GoodSampling.lean`, `Scan/SplitIntervals.lean`,
   `Scan/PhysicalChargeAncestry.lean`, and `Scan/BadHistoryProbability.lean`.
-- **Abstraction:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+- **Abstraction:** `CollarScan.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball`
   in `TNLean/PEPS/AreaLaw/Histories/GoodSampling.lean`.
 - **Refactor:** All five callers use the shared lemma; the private copy in
   `SplitIntervals.lean` is removed. No import edge or theorem hypothesis changes.
@@ -1620,7 +1621,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** a walk in the induced domain starts in a region and ends outside it; take
   its boundary dart, cut the walk at the first endpoint of the dart, and show that the
   dart is an edge of the edge boundary no farther from the start than the walk is long.
-- **Seen:** `subset_of_isSafe` in `TNLean/Lattice/BufferedRectangles.lean`,
+- **Seen:** `subset_of_isSafe` (now QICLean's `ManyBody.subset_of_isSafe`),
   `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/SafeRectangles/TailParameter.lean`, and
   `TNLean/PEPS/AreaLaw/Histories/SupportLocalization.lean`.
 - **Abstraction:** the lemma `ManyBody.exists_edgeBoundary_of_walk` in
@@ -2699,8 +2700,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   `Matrix.piKronecker m`, `Matrix.piKronecker m'` settled site by site, and eight zero, addition and
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
-  `expect_productVector_mul` and `trace_rectKronecker_mul_mul` in
-  `TNLean/Circuit/SupportedOperators.lean`, and `OnsiteChannel.dual_mul` in
+  `expect_productVector_mul` and `trace_piKronecker_mul_mul_mul_trace` in
+  the supported-operator module (now in QICLean), and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean` (deleted; onsite channels are now QICLean
   layers without cells).
 - **Abstraction:** `ManyBody.eq_of_mem_supportedOperators₂` in QICLean
@@ -4708,10 +4709,10 @@ three-plaquette output measurement, and the routed reunion measurement.
   product theorem holds for every commutative monoid. Isolating these declarations from
   `ParentHamiltonian/Defs.lean` avoids invalidating its broad downstream import cone.
 - **Result:** the exact call sites are the shared public lemma
-  `MPOTensor.reindex_tensorPower_windowComplement` in
+  `MPOTensor.reindex_piKronecker_windowComplement` in
   `PhysicalSectorProductTransport.lean`, used from both that file and
   `PhysicalSupportProductTransport.lean`, and
-  `embed_twoSiteSectorProjection_eq_finKronecker` in
+  `placeAlong_twoSiteSectorProjection_eq_piKronecker` in
   `PhysicalSupportProductTransport.lean`. Across the four changed Lean files, including
   the generated ParentHamiltonian aggregator, the final diff is 90 insertions and 87
   deletions, a net increase of 3 lines.
@@ -6050,8 +6051,9 @@ no additional helper is proposed.
   space, rewrite multiplication by the sheet-swap permutation matrix, and compare
   entries using the region/complement split.
 - **Seen:** `commute_sheetSwapOp_kronecker` and
-  `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in
-  `Circuit/RegionalSwap.lean`.
+  `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in the regional swap module,
+  now QICLean's `ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint` and
+  `ManyBody.pairSwapOp_mul_kronecker`.
 - **Abstraction:** the support decompositions, permutation-matrix products, and split
   coordinates are already public lemmas. These are the two distinct cases, for
   operators supported outside and inside the swapped region.
@@ -8949,13 +8951,13 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Ambient depth variation on a scan ball — refactored (2026-10-11)
 
 - **Pattern:** convert filtered-ball membership to an induced-graph distance bound,
-  then apply `abs_ambientDepth_sub_le_domainGraph` and reverse the absolute difference.
+  then apply `abs_ambientDepth_sub_le_planeDomainGraph` and reverse the absolute difference.
 - **Seen:** `Scan/TerminalSplits.lean` has two occurrences; the private helper in
   `Scan/SideSeparation.lean` uses the same conversion.
 - **Abstraction:** the new side-separation proofs share one private helper, so their
   three applications do not repeat this conversion. The mathematical estimate is
-  already supplied by `abs_ambientDepth_sub_le_domainGraph`.
-- **Disposition:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+  already supplied by `abs_ambientDepth_sub_le_planeDomainGraph`.
+- **Disposition:** `CollarScan.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball`
   is now available in `Scan/GoodSampling.lean`, and the sampling, ancestry,
   probability, `SplitIntervals`, `PrefixApproximation`, `SideSeparation`, and
   `TerminalSplits` callers use it; the private copies are removed. No new tactic
@@ -9706,8 +9708,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   calculation in `Geometry/TemplateInstances.lean`, the dyadic-cell
   clearance proof in `Geometry/TemplateClearance.lean`, and the real
   clearance argument in `Geometry/TemplateBoxEntropyReal.lean`.
-- **Promotion:** `TNLean.PEPS.AreaLaw.cast_supDist`, beside
-  `supDist` in `BufferedRectangles.lean`, replaces the three occurrences
+- **Promotion:** `ManyBody.cast_supDist` (QICLean), beside
+  `supDist` in `QICLean/ManyBody/Sites/Lattice/IntegerRectangle.lean`, replaces the three occurrences
   whose modules already import its defining module.
   Its proof is the existing cast calculation. The private helper and the
   repeated local calculation are removed. `TemplateClearance` instead
@@ -9729,7 +9731,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   constant from the same choices before introducing the clearance parameter
   and the physical data.
 - **Occurrences:** `exists_condEntropy_le_initialBuffer` in
-  `TNLean/Lattice/BufferedRectangleEntropy.lean` and
+  the buffered-rectangle entropy module (now in QICLean) and
   `exists_condEntropy_le_initialBuffer_real` in
   `TNLean/PEPS/AreaLaw/SafeRectangles/InitialBufferReal.lean`.
 - **Possible next abstraction:** If a third proof needs the same choices,
@@ -11583,7 +11585,7 @@ removed after the dependency audit exposed it.
 
 ### A common ground vector from disjoint supported spectra (2026-10-29)
 
-- **Seen:** `Circuit/SupportedGroundSpace.lean` and AKLV regional normalization.
+- **Seen:** the supported ground-space module (now in QICLean) and AKLV regional normalization.
 - **Pattern:** Produce regional ground cutoffs by real functional calculus, factor
   their product trace on disjoint supports, and extract a nonzero common ground column.
 - **Reuse:** Promoted the existing Hastings functional-calculus support theorem to

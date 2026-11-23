@@ -127,7 +127,7 @@ theorem physicalObservableTransfer_singleton (A : MPSTensor d D)
 /-- The physical tensor power of the on-site twist inserts exactly the
 corresponding transfer power. Source: arXiv:0802.0447, `EU` and `SOPMP`,
 lines 168–181. This identity is finite and includes zero middle length. -/
-theorem physicalObservableTransfer_finKronecker_const (A : MPSTensor d D)
+theorem physicalObservableTransfer_piKronecker_const (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     physicalObservableTransfer A N (Matrix.piKronecker fun _ : Fin N => u) =
       twistedTransferIter A u N := by
@@ -258,7 +258,7 @@ theorem pureCanonical_mpvExpectation_block_string_tendsto
     (appendObservable
       (appendObservable x (Matrix.piKronecker fun _ : Fin N => u)) y)
   simpa only [physicalObservableTransfer_appendObservable,
-    physicalObservableTransfer_finKronecker_const, Module.End.mul_apply] using h
+    physicalObservableTransfer_piKronecker_const, Module.End.mul_apply] using h
 
 /-- The one-site physical string parameter is the thermodynamic limit of the
 literal normalized finite periodic expectations, at each fixed middle length.

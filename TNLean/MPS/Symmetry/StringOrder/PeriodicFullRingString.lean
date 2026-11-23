@@ -59,13 +59,13 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 and ordinary transfer-power operator traces. At a zero periodic vector both
 sides use the existing zero-normalization convention.
 Source: arXiv:0802.0447, `MPS`, `EU`, and `RL`. -/
-theorem mpvExpectation_finKronecker_const_eq_trace_div
+theorem mpvExpectation_piKronecker_const_eq_trace_div
     (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :
     mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u) =
       LinearMap.trace ℂ Mat (twistedTransferIter A u L) /
         LinearMap.trace ℂ Mat (Kraus.transferMap A ^ L) := by
   rw [mpvExpectation_eq_div, inner_mpvState_toEuclideanLin,
-    physicalObservableTransfer_finKronecker_const, inner_mpvState_self_eq_trace]
+    physicalObservableTransfer_piKronecker_const, inner_mpvState_self_eq_trace]
 
 /-- Closing the virtual boundary takes the trace of the exact phased transfer
 similarity. This identity is finite and needs neither purity nor normalization.
@@ -94,7 +94,7 @@ theorem trace_twistedTransferIter_eq_phase_mul_trace_transfer_pow
 /-- At each nonzero periodic length, the full-ring normalized expectation is
 exactly the intertwiner phase to that length. No thermodynamic limit is used.
 Source: arXiv:0802.0447, Lemma 1 and `RL`. -/
-theorem mpvExpectation_finKronecker_const_eq_phase_pow
+theorem mpvExpectation_piKronecker_const_eq_phase_pow
     (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
     (V : Mat) (μ : ℂ) (hV : V * Vᴴ = 1)
     (hInter : ∀ i, ∑ j, u i j • A j = μ • (V * A i * Vᴴ))
@@ -103,7 +103,7 @@ theorem mpvExpectation_finKronecker_const_eq_phase_pow
   have hden : LinearMap.trace ℂ Mat (Kraus.transferMap A ^ L) ≠ 0 := by
     rw [← inner_mpvState_self_eq_trace A L]
     exact inner_self_ne_zero.mpr hL
-  rw [mpvExpectation_finKronecker_const_eq_trace_div,
+  rw [mpvExpectation_piKronecker_const_eq_trace_div,
     trace_twistedTransferIter_eq_phase_mul_trace_transfer_pow A u V μ hV hInter,
     mul_div_cancel_right₀ _ hden]
 
@@ -146,7 +146,7 @@ theorem pureCanonical_mpvExpectation_fullRing_tendsto_zero
   apply hlim.congr'
   filter_upwards [] with L
   rw [mpvExpectation_eq_div, inner_mpvState_toEuclideanLin,
-    physicalObservableTransfer_finKronecker_const]
+    physicalObservableTransfer_piKronecker_const]
   rfl
 
 /-- Canonical purity makes the exact finite-length phase formula hold on an
@@ -159,7 +159,7 @@ theorem pureCanonical_mpvExpectation_fullRing_eventually_eq_phase_pow
       mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u) = μ ^ L := by
   filter_upwards [pureCanonical_eventually_mpvState_ne_zero
     A Λ hΛpos hΛtr hΛfix hNorm hPure] with L hL
-  exact mpvExpectation_finKronecker_const_eq_phase_pow A u V μ hV hInter L hL
+  exact mpvExpectation_piKronecker_const_eq_phase_pow A u V μ hV hInter L hL
 
 /-- In the symmetry branch the full-ring modulus tends to one, independently
 of the peripheral phase. Source: arXiv:0802.0447, Lemma 1 and `RL`. -/
@@ -382,7 +382,7 @@ theorem pureCanonical_mpvExpectation_fullRing_le_geometric
     change ‖LinearMap.trace ℂ Mat (twistedTransferIter A u L)‖ ≤ _ at h
     exact h.trans (by simpa only [← map_pow, mul_assoc] using
       mul_le_mul_of_nonneg_left (hpow L) hM.le)
-  rw [mpvExpectation_finKronecker_const_eq_trace_div, norm_div]
+  rw [mpvExpectation_piKronecker_const_eq_trace_div, norm_div]
   have hden : (1 / 2 : ℝ) < ‖LinearMap.trace ℂ Mat (Kraus.transferMap A ^ L)‖ := by
     simpa only [inner_mpvState_self_eq_trace] using hN₀ L hL
   have hdenpos : 0 < ‖LinearMap.trace ℂ Mat (Kraus.transferMap A ^ L)‖ := by linarith

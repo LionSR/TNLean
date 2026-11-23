@@ -32,8 +32,6 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -64,14 +62,14 @@ the integrated entropy estimate with coefficient
 `r * a / (2 * (C₁ + 1) * n * D)`. The error is multiplied by the interval length.
 The constants precede all geometric and Hamiltonian choices, and the logarithmic
 error sequence precedes the replica count and nonzero symmetric vector. -/
-theorem actualCharge_integral_bound_domainGraph :
+theorem actualCharge_integral_bound_planeDomainGraph :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -86,7 +84,7 @@ theorem actualCharge_integral_bound_domainGraph :
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
-        let n := augmentedDimensions (V := Site Λ) q aux
+        let n := augmentedDimensions (V := ↥Λ) q aux
         let D := S.actualChargeData hm hM s
         let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
@@ -101,13 +99,13 @@ theorem actualCharge_integral_bound_domainGraph :
                   (p₁ - p₀) *
                     (Cent * r * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β r) := by
   classical
-  obtain ⟨c₀, Cent, eent, _, _, hc₀, htransport⟩ := actualCharge_transport_domainGraph
+  obtain ⟨c₀, Cent, eent, _, _, hc₀, htransport⟩ := actualCharge_transport_planeDomainGraph
   refine ⟨c₀, Cent, eent, hc₀, ?_⟩
   intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     s L μ hn hs hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
+  let n := augmentedDimensions (V := ↥Λ) q aux
   let D := S.actualChargeData hm hM s
   let E := S.actualEnergyTerms h Ω J Δ L aux
   have hn0 : 0 < S.n := by omega
@@ -125,7 +123,7 @@ theorem actualCharge_integral_bound_domainGraph :
     ht (S.chargeTransportData_crossBandCommute _ _ n ht r) hne).mono_set hsub
   apply mul_integral_le_of_integral_sub_le (mul_nonneg (Nat.cast_nonneg r) ha.le) h01 hQ hG
   · intro p _
-    exact S.actualChargeEntropyDefect_le_entropyGain_domainGraph hT hgraph hdepth hm hM
+    exact S.actualChargeEntropyDefect_le_entropyGain_planeDomainGraph hT hgraph hdepth hm hM
       n E (fun _ => rfl) hn (by omega) hs hr hD hDpos hL hC hrows hmult hclear ht r pre p
   · exact (hresult r pre hpre hne).2 p₀ p₁ h0 h01 h1
 

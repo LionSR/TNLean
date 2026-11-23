@@ -43,8 +43,6 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -70,8 +68,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
           (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
               (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
-          (Ω : StateSpace Λ q),
+          (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
@@ -99,7 +97,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
           ∃ (hm : 0 < S.m) (hM : 0 < S.M),
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
-          let β := fun _ : Site Λ ↦ Fin q
+          let β := fun _ : ↥Λ ↦ Fin q
           let g := Δ / positiveNormalization 1 (Δ / 2) J
           let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
           let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
@@ -111,7 +109,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
           1 ≤ S.K ∧ 8 * S.K * S.m ≤ L ∧ 1 ≤ B ∧
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
-          ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+          ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
             (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
               groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
@@ -142,7 +140,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
-            let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+            let dims := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
             let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             let σ := terminalPartition S (S.n * S.m)
             let near := fun j band ↦ receiving (σ j band) false

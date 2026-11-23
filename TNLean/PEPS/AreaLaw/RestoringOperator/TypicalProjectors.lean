@@ -55,7 +55,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open scoped Matrix.Norms.L2Operator
 
 open Matrix Filter Topology
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction edgeBoundary
   planeDomainGraph)
@@ -68,9 +67,9 @@ variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
 eigenvalues whose surprisal lies within `w` of the regional entropy, such as
 `P_X, T_Y, Q_{S_0}` in the proof of the amplification proposition.
 Source: `09-amplification.tex`, lines 304–313. -/
-noncomputable def typicalProjection (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q)
-    (Y : Finset (Site Λ)) (w : ℝ) :
-    Matrix ({x : Site Λ // x ∈ Y} → Fin q) ({x : Site Λ // x ∈ Y} → Fin q) ℂ :=
+noncomputable def typicalProjection (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+    (Y : Finset ↥Λ) (w : ℝ) :
+    Matrix ({x : ↥Λ // x ∈ Y} → Fin q) ({x : ↥Λ // x ∈ Y} → Fin q) ℂ :=
   (ManyBody.regionState_isHermitian Y Ω).spectralSelection
     (Entropy.typicalSet (ManyBody.regionState_isHermitian Y Ω).eigenvalues
       (ManyBody.regionEntropy Ω Y) w)
@@ -93,8 +92,9 @@ theorem trace_mul_spectralSelection {n : Type*} [Fintype n]
 state. Its selected eigenvalues are positive and lie in `[e^{-S-w}, e^{-S+w}]`, and its
 failure probability `1 - tr(ρ_Y P)` is at most the surprisal tail at `w`.
 Source: `09-amplification.tex`, lines 304–313 and 319–321. -/
-theorem typicalProjection_failure_le_surprisalTail (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (Y : Finset (Site Λ)) (w : ℝ) :
+theorem typicalProjection_failure_le_surprisalTail (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+    (hΩ : ‖Ω‖ = 1)
+    (Y : Finset ↥Λ) (w : ℝ) :
     IsStarProjection (typicalProjection Λ q Ω Y w) ∧
       Commute (typicalProjection Λ q Ω Y w) (ManyBody.regionState Ω Y) ∧
       (∀ i ∈ Entropy.typicalSet (ManyBody.regionState_isHermitian Y Ω).eigenvalues
@@ -143,9 +143,9 @@ theorem typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
     (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) :
     ∀ (n : ℕ), 1 ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ Y : Finset (Site Λ), ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
+      ∀ Y : Finset ↥Λ, ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
         1 - (ManyBody.regionState Ω Y *
             typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
           2 * Real.exp (Real.exp 1 / 2) *
@@ -197,9 +197,9 @@ theorem exists_typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ
     ∃ C c : ℝ, 0 < C ∧ 0 < c ∧
       ∀ (n : ℕ), 1 ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ Y : Finset (Site Λ), ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
+        ∀ Y : Finset ↥Λ, ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
           1 - (ManyBody.regionState Ω Y *
               typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
             C * Real.exp (-(c * (n : ℝ) ^ ((1 : ℝ) / 10))) :=
@@ -227,9 +227,9 @@ theorem typicalProjection_failure_le_inv_pow_of_threshold_le (hq : 1 ≤ q) (R :
     (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ) {C₀ : ℝ} (hC₀ : 0 ≤ C₀) {K n : ℕ}
     (hn : typicalProjectionThreshold q R J Δ C₀ K ≤ n) (Λ : Finset (ℤ × ℤ))
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q)
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (Y : Finset (Site Λ))
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (Y : Finset ↥Λ)
     (hY : ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n) :
     1 - (ManyBody.regionState Ω Y *
         typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
@@ -250,9 +250,9 @@ theorem exists_typicalProjection_failure_le_inv_pow (hq : 1 ≤ q) (R : ℕ)
     ∃ N : ℕ, 1 ≤ N ∧
       ∀ (n : ℕ), N ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ Y : Finset (Site Λ), ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
+        ∀ Y : Finset ↥Λ, ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
           1 - (ManyBody.regionState Ω Y *
               typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
             (n : ℝ) ^ (-(2 * K : ℝ)) :=
@@ -272,13 +272,13 @@ theorem typicalProjectors_three_cuts_of_threshold_le (hq : 1 ≤ q) (R : ℕ)
     ∀ (n : ℕ), typicalProjectionThreshold q R J Δ C₀ K ≤ n →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ X Y S₀ : Finset (Site Λ),
+        ∀ X Y S₀ : Finset ↥Λ,
           ((edgeBoundary (planeDomainGraph Λ) X).card : ℝ) ≤ C₀ * n →
           ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
           ((edgeBoundary (planeDomainGraph Λ) S₀).card : ℝ) ≤ C₀ * n →
-          ∀ Z ∈ ({X, Y, S₀} : Finset (Finset (Site Λ))),
+          ∀ Z ∈ ({X, Y, S₀} : Finset (Finset ↥Λ)),
             let w := (n : ℝ) ^ ((3 : ℝ) / 5)
             let p := (ManyBody.regionState_isHermitian Z Ω).eigenvalues
             let S := ManyBody.regionEntropy Ω Z
@@ -314,13 +314,13 @@ theorem exists_typicalProjectors_three_cuts (hq : 1 ≤ q) (R : ℕ)
     ∃ N : ℕ, 1 ≤ N ∧
       ∀ (n : ℕ), N ≤ n → ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ X Y S₀ : Finset (Site Λ),
+        ∀ X Y S₀ : Finset ↥Λ,
           ((edgeBoundary (planeDomainGraph Λ) X).card : ℝ) ≤ C₀ * n →
           ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
           ((edgeBoundary (planeDomainGraph Λ) S₀).card : ℝ) ≤ C₀ * n →
-          ∀ Z ∈ ({X, Y, S₀} : Finset (Finset (Site Λ))),
+          ∀ Z ∈ ({X, Y, S₀} : Finset (Finset ↥Λ)),
             let w := (n : ℝ) ^ ((3 : ℝ) / 5)
             let p := (ManyBody.regionState_isHermitian Z Ω).eigenvalues
             let S := ManyBody.regionEntropy Ω Z

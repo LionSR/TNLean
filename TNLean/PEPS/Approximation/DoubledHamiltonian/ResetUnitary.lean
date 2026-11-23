@@ -9,8 +9,12 @@ import QICLean.Spectral.Filter.Gaussian.Reindex
 import QICLean.ManyBody.Entropy.RegionPurificationSplitting
 import QICLean.Entropy.MutualInformation.ProductMarginals
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SupportedPhysicalBufferGaussian
-import TNLean.Lattice.RegionalReset
+import TNLean.PEPS.Approximation.DoubledHamiltonian.TwoSheetBufferFilter
+import QICLean.Spectral.Perturbation.ResidualComparison
+import QICLean.ManyBody.Replica.RegionalReset
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.SupportedUnitary
 
 /-!
 # The supported unitary of the information reset
@@ -48,13 +52,12 @@ regional sheet swap with the partial swap of the retained regional registers.
 * `ManyBody.SquareInteraction.exists_reset_unitary`: the unitary of
   `eq:info-reset-unitary`.
 
-The steps that do not depend on the geometry of the sites are stated in
-`TNLean.Lattice.RegionalReset`: the regional swap in the coordinates of the two regions and the
-buffer, the Gaussian coefficients `TNLean.Lattice.resetVariance` and
-`TNLean.Lattice.resetCutoff`, the two-sided Gaussian filter
-`TNLean.Lattice.exists_regional_physicalBuffer_filter` of `eq:info-gaussian-two-sided` in
-arbitrary coordinates of the two replicas, and the polar step
-`TNLean.Lattice.exists_supported_unitary_of_two_sided` of `eq:info-reset-polar-errors` and
+The steps that do not depend on the geometry of the sites are QICLean's: the Gaussian
+coefficients `GaussianFilter.resetVariance` and `GaussianFilter.resetCutoff`, the two-sided
+Gaussian filter `GaussianFilter.regional_physicalBuffer_filter` of `eq:info-gaussian-two-sided`
+on two replicas, read on the two sheets by
+`TNLean.PEPS.Approximation.regional_physicalBuffer_filter_twoSheet`, and the polar step
+`ManyBody.exists_supported_unitary_of_two_sided` of `eq:info-reset-polar-errors` and
 `eq:info-reset-unitary`.
 
 ## References
@@ -75,6 +78,8 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal ComplexOrder
 open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace)
+
+open GaussianFilter (resetCutoff resetCutoff_pos resetVariance)
 
 namespace TNLean.PEPS.Approximation
 
@@ -147,12 +152,15 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
       ManyBody.regionMutualInformation Ω R C₀ ≤ b →
       let Q := (R ∪ C₀)ᶜ
-      let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
+      let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q)
+        fun _ ↦ Fin q
+      let p := pr.symm.trans
+        (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
       let Λ := ManyBody.rectangularDomain L L
       let a := ManyBody.rectangleSiteEquiv L L
       let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
-      let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
-      let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
+      let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
+      let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
         Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -161,15 +169,15 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
       let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ) (Q.image a ∪ Z.image a)
         ⌈resetRadius J Δ r * (1 + b + Real.log L)⌉₊
       ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-      ∃ (z : ℝ) (M : Matrix (Lattice.Configuration Λ (q * q))
-          (Lattice.Configuration Λ (q * q)) ℂ),
+      ∃ (z : ℝ) (M : Matrix (↥Λ → Fin (q * q))
+          (↥Λ → Fin (q * q)) ℂ),
         Real.exp (-2 * b) ≤ z ∧
         M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧ ‖M‖ ≤ 1 ∧
         ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
           resetFilterPrefactor J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
         ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
           resetFilterPrefactor J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) := by
-  intro L hL h hh hhJ E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
+  intro L hL h hh hhJ E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI Q pr p Λ a e F ψ boundary Z B
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
   have hcoef : squareLocalizationVelocity J * resetCutoff Δ r + 15 + r ≤
       1 / 2 * resetRadius J Δ r := by
@@ -181,7 +189,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
   have hCg : 0 < Cg := squareLocalizationPrefactor_pos
   have hT₀ : 0 < T₀ := resetCutoff_pos hΔ hr
   obtain ⟨hψn, hφn, W, z, hW, hz, hfil⟩ :=
-    regional_physicalBuffer_filter.{0, 0} hΔ hr q R C₀ hRC (p.trans e) h.hamiltonian E₀ Ω b
+    regional_physicalBuffer_filter_twoSheet.{0, 0} hΔ hr q R C₀ hRC (p.trans e) h.hamiltonian E₀ Ω b
       hh hΩ hgap hspan hb hI
   obtain ⟨hT, hfwd, hrev⟩ := hfil L hL1
   obtain ⟨U, -, -, -, -, hM⟩ :=
@@ -226,7 +234,9 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
       _ = Cg * (1 + 8 * J) * (L : ℝ) ^ 4 * (1 + T₀ * (1 + b + Real.log L)) *
           Real.exp (v * T₀ * (1 + b + Real.log L) - 1 / 2 * ⌈K * (1 + b + Real.log L)⌉₊) := by
           ring
-  obtain ⟨h₁, h₂⟩ := norm_two_sided_le_of_norm_sub_le hψn hφn (hMerr.trans hδ) hfwd hrev
+  obtain ⟨h₁, h₂⟩ := Matrix.norm_two_sided_le_of_norm_sub_le (ψ := WithLp.toLp 2 ψ)
+    (φ := WithLp.toLp 2 (F *ᵥ ψ)) hψn hφn (hMerr.trans hδ) hfwd hrev
+  simp only [Matrix.toEuclideanLin, Matrix.toLpLin_apply] at h₁ h₂
   refine ⟨hψn, hφn, z, _, hz, hMsupp, hMnorm.trans hW, h₁.trans_eq ?_, h₂.trans_eq ?_⟩ <;>
     rw [resetFilterPrefactor, ← hCgdef, ← hT₀def] <;> ring
 
@@ -249,12 +259,15 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
         ManyBody.regionMutualInformation Ω R C₀ ≤ b →
         let Q := (R ∪ C₀)ᶜ
-        let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
+        let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q)
+          fun _ ↦ Fin q
+        let p := pr.symm.trans
+          (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
         let Λ := ManyBody.rectangularDomain L L
         let a := ManyBody.rectangleSiteEquiv L L
         let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
-        let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
-        let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
+        let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
+        let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
           Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -263,8 +276,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
         let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
           (Q.image a ∪ Z.image a) ⌈K * (1 + b + Real.log L)⌉₊
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-        ∃ (z : ℝ) (M : Matrix (Lattice.Configuration Λ (q * q))
-            (Lattice.Configuration Λ (q * q)) ℂ),
+        ∃ (z : ℝ) (M : Matrix (↥Λ → Fin (q * q))
+            (↥Λ → Fin (q * q)) ℂ),
           Real.exp (-2 * b) ≤ z ∧
           M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧ ‖M‖ ≤ 1 ∧
           ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
@@ -289,12 +302,15 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
       ManyBody.regionMutualInformation Ω R C₀ ≤ b →
       let Q := (R ∪ C₀)ᶜ
-      let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
+      let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q)
+        fun _ ↦ Fin q
+      let p := pr.symm.trans
+        (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
       let Λ := ManyBody.rectangularDomain L L
       let a := ManyBody.rectangleSiteEquiv L L
       let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
-      let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
-      let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
+      let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
+      let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
         Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -303,18 +319,18 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
       let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ) (Q.image a ∪ Z.image a)
         ⌈resetRadius J Δ r * (1 + b + Real.log L)⌉₊
       ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-      ∃ U : Matrix (Lattice.Configuration Λ (q * q)) (Lattice.Configuration Λ (q * q)) ℂ,
-        U ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ ∧
+      ∃ U : Matrix (↥Λ → Fin (q * q)) (↥Λ → Fin (q * q)) ℂ,
+        U ∈ unitaryGroup (↥Λ → Fin (q * q)) ℂ ∧
         U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
         ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
             resetUnitaryPrefactor J Δ r * (L : ℝ) ^ (-r) := by
-  intro L hL h hh hhJ E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
+  intro L hL h hh hhJ E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI Q pr p Λ a e F ψ boundary Z B
   obtain ⟨hψn, hφn, z, M, hz, hMsupp, -, hfwd, hrev⟩ :=
     ManyBody.SquareInteraction.reset_localized_filter q hq J hJ hΔ hr L hL h hh hhJ E₀ Ω hΩ hgap
         hspan R C₀ hRC b
       hb hI
-  obtain ⟨U, hU, hUsupp, hUerr⟩ := exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
-    (resetFilterPrefactor_pos hJ hΔ hr).le (by positivity)
+  obtain ⟨U, hU, hUsupp, hUerr⟩ := ManyBody.exists_supported_unitary_of_two_sided
+    (ψ := WithLp.toLp 2 ψ) (φ := WithLp.toLp 2 (F *ᵥ ψ)) hMsupp hb hz hfwd hrev
   exact ⟨hψn, hφn, U, hU, hUsupp, hUerr⟩
 
 /-- **The unitary of the information reset.** For a gap `Δ > 0` and an exponent `r ≥ 0` there
@@ -337,12 +353,15 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
         ManyBody.regionMutualInformation Ω R C₀ ≤ b →
         let Q := (R ∪ C₀)ᶜ
-        let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
+        let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q)
+          fun _ ↦ Fin q
+        let p := pr.symm.trans
+          (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
         let Λ := ManyBody.rectangularDomain L L
         let a := ManyBody.rectangleSiteEquiv L L
         let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
-        let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
-        let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
+        let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
+        let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
           Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -351,8 +370,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
         let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
           (Q.image a ∪ Z.image a) ⌈K * (1 + b + Real.log L)⌉₊
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-        ∃ U : Matrix (Lattice.Configuration Λ (q * q)) (Lattice.Configuration Λ (q * q)) ℂ,
-          U ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ ∧
+        ∃ U : Matrix (↥Λ → Fin (q * q)) (↥Λ → Fin (q * q)) ℂ,
+          U ∈ unitaryGroup (↥Λ → Fin (q * q)) ℂ ∧
           U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
           ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ C * (L : ℝ) ^ (-r) :=
   ⟨resetUnitaryPrefactor J Δ r, resetRadius J Δ r, resetUnitaryPrefactor_pos hJ hΔ hr,

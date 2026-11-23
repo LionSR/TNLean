@@ -29,7 +29,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Filter
 open scoped BigOperators
-open TNLean.Lattice
 
 open ManyBody (ambientDilation planeDomainGraph)
 
@@ -132,7 +131,7 @@ theorem badOldHistory_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
     (multiplicity : ℕ) (P : ℝ) {n : ℕ}
     (hthr : badOldHistoryThreshold Cr C1 Ct multiplicity P ≤ n) :
     ∀ (I : Type u) [Fintype I] [LinearOrder I]
-      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan ↥Λ I),
       S.n = n → S.m = ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
       S.K = ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
@@ -188,7 +187,7 @@ theorem exists_badOldHistory_threshold {Cr C1 Ct : ℝ}
     (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
     (multiplicity : ℕ) (P : ℝ) :
     ∃ N : ℕ, ∀ n ≥ N, ∀ (I : Type u) [Fintype I] [LinearOrder I]
-      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan ↥Λ I),
       S.n = n → S.m = ⌊(n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
       S.K = ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →

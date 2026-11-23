@@ -67,8 +67,6 @@ open scoped BigOperators ComplexOrder
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
@@ -191,9 +189,9 @@ area-law Theorem 1.1 and Corollary 1.2. -/
 theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
     (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q 1, (∀ X, (h.term X).IsHermitian) →
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-      ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ A : Finset (Lattice.Site Λ),
+        ∀ A : Finset ↥Λ,
           ManyBody.regionEntropy Ω A ≤
             C * (ManyBody.edgeBoundary (ManyBody.planeDomainGraph Λ) A).card)
     {L : ℕ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)

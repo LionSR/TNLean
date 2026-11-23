@@ -18,8 +18,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Lemma 9.1(2), lines 243–260, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -32,9 +30,9 @@ variable {I : Type*} [Fintype I] [LinearOrder I]
 /-- Actual completed lattice histories have deterministic nested-prefix
 comparisons with at most `3nD` changed sites. Full near sets and the entropy
 regions with the fixed target removed obey the same bound. -/
-theorem state_prefix_approximation_domainGraph
+theorem state_prefix_approximation_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K)
     (hn : 0 < S.n) (hk : k ≤ S.n * S.m)
@@ -60,7 +58,7 @@ theorem state_prefix_approximation_domainGraph
   have hs := S.state_prefix_sandwich h g hn hk hr hDpos hD
     (fun x hx ↦ depthRow_length_le_of_ambientRows hT hdepth hrows
       (S.state_depth_bounds h g hL x hx))
-    (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth)
+    (abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT S hgraph hdepth)
   apply prefix_sandwich_card_bounds S.A S.depth (S.state h g)
     (S.front g (h.1 g) k false) (S.front g (h.1 g) k true) S.n S.D S.r₀ hr hDpos hs
   · intro d hd
@@ -73,9 +71,9 @@ theorem state_prefix_approximation_domainGraph
 /-- Actual pre-charge lattice histories have deterministic nested-prefix
 comparisons with at most `3nD` changed sites. Full near sets and the entropy
 regions with the fixed target removed obey the same bound. -/
-theorem oldChargeState_prefix_approximation_domainGraph
+theorem oldChargeState_prefix_approximation_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K)
     (hn : 0 < S.n) (hk : (k + 1) ≤ S.n * S.m)
@@ -101,7 +99,7 @@ theorem oldChargeState_prefix_approximation_domainGraph
   have hs := S.oldChargeState_prefix_sandwich h g hn hk hr hDpos hD
     (fun x hx ↦ depthRow_length_le_of_ambientRows hT hdepth hrows
       (S.oldChargeState_depth_bounds h g hL x hx))
-    (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth)
+    (abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT S hgraph hdepth)
   apply prefix_sandwich_card_bounds S.A S.depth (S.oldChargeState h g)
     (S.front g (h.1 g) (k + 1) false) (S.front g (h.1 g) (k + 1) true) S.n S.D S.r₀ hr hDpos hs
   · intro d hd

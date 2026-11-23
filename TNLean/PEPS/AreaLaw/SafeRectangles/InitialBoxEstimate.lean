@@ -3,16 +3,19 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangleEntropy
+import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import TNLean.PEPS.AreaLaw.Regions.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeRectangles.SafeBoxChildren
-import TNLean.Lattice.MarginalTails
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.Templates.TwoFamilies
 import QICLean.Analysis.Real.ScaleRecurrence
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # The initial safe-box estimate
@@ -80,11 +83,13 @@ real-clearance physical conclusion is proved in `PhysicalSafeBox.lean`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open ManyBody (IntRect IsSafe condEntropy_le_initialBufferConst initialBufferConst
+    initialBufferConst_nonneg initialPaddingConst mem_rectRegion one_le_initialPaddingConst
+    rectRegion)
+
 section
 
 open scoped Matrix.Norms.L2Operator
-
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
@@ -93,8 +98,8 @@ namespace TNLean.PEPS.AreaLaw
 /-- The values `S_Ω(A ∩ Q)` entering `F_box(r)`. -/
 def boxEntropyValues (q R : ℕ) (J Δ : ℝ) (D₀ r : ℕ) : Set ℝ :=
   {s | ∃ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
-      (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace Λ q)
-    (A : Finset (Site Λ)) (Q : IntRect), ‖Ω‖ = 1 ∧ IsGapped h.hamiltonian E₀ Δ ∧
+      (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+    (A : Finset ↥Λ) (Q : IntRect), ‖Ω‖ = 1 ∧ IsGapped h.hamiltonian E₀ Δ ∧
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} ∧
       IsSafe Λ A D₀ Q ∧ Q.size ≤ r ∧ s = ManyBody.regionEntropy Ω (rectRegion A Q)}
 
@@ -107,7 +112,7 @@ noncomputable def boxEntropy (q R : ℕ) (J Δ : ℝ) (D₀ r : ℕ) : ℝ :=
 variable {q R : ℕ} {J Δ : ℝ} {D₀ : ℕ}
 
 /-- The number of sites of `A ∩ Q` is at most `size(Q)²`. -/
-theorem card_rectRegion_le {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ)) (Q : IntRect) :
+theorem card_rectRegion_le {Λ : Finset (ℤ × ℤ)} (A : Finset ↥Λ) (Q : IntRect) :
     (rectRegion A Q).card ≤ Q.size ^ 2 := by
   have h1 : (rectRegion A Q).card ≤ Q.toFinset.card :=
     Finset.card_le_card_of_injOn Subtype.val (fun x hx ↦ (mem_rectRegion.mp hx).2)
@@ -149,10 +154,10 @@ theorem boxEntropy_le_sq_mul_log (hq : 1 ≤ q) (r : ℕ) :
 /-- Every safe-box entropy is at most `F_box(r)`. -/
 theorem regionEntropy_le_boxEntropy (hq : 1 ≤ q) {Λ : Finset (ℤ × ℤ)}
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        {E₀ : ℝ} {Ω : StateSpace Λ q}
+        {E₀ : ℝ} {Ω : EuclideanSpace ℂ (↥Λ → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-        {A : Finset (Site Λ)} {Q : IntRect}
+        {A : Finset ↥Λ} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) {r : ℕ} (hQ : Q.size ≤ r) :
     ManyBody.regionEntropy Ω (rectRegion A Q) ≤ boxEntropy q R J Δ D₀ r :=
   le_csSup (bddAbove_boxEntropyValues hq r)
@@ -229,9 +234,9 @@ theorem regionEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {Cbu
     (hCbuf : 0 ≤ Cbuf)
     (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
         (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
-      (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
+      ∀ (A : Finset ↥Λ) (Q : IntRect), IsSafe Λ A D₀ Q →
       ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
         (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
         ManyBody.regionEntropy Ω (rectRegion A Q₀ ∪
@@ -239,10 +244,10 @@ theorem regionEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {Cbu
           ManyBody.regionEntropy Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
         ManyBody.regionEntropy Ω (rectRegion A Q₀) / 2 + Cbuf * r)
     {Λ : Finset (ℤ × ℤ)} (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ} {Ω : StateSpace Λ q}
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (↥Λ → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-        {A : Finset (Site Λ)} {Q : IntRect}
+        {A : Finset ↥Λ} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) {M r : ℕ} (hr : 1 ≤ r) (hQ : Q.size ≤ M * r) :
     ManyBody.regionEntropy Ω (rectRegion A Q) ≤
       ((1 - 1 / (2 * ((2 * Cpad + 1) ^ 2 : ℕ))) * M ^ 2 +
@@ -259,11 +264,11 @@ theorem regionEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {Cbu
   have hny : ny ≤ M := Q.numChunksY_le r hr hQ
   set ι := Fin nx × Fin ny
   set ch : ι → IntRect := fun i ↦ Q.child r i.1 i.2
-  set Xs : ι → Finset (Site Λ) := fun i ↦ rectRegion A (ch i)
+  set Xs : ι → Finset ↥Λ := fun i ↦ rectRegion A (ch i)
   set col : ι → ℕ := fun i ↦ ((i.1 : ℕ) % P) * P + (i.2 : ℕ) % P
   set good : Finset ι := Finset.univ.filter fun i ↦
     (Cpad ≤ (i.1 : ℕ) ∧ (i.1 : ℕ) + Cpad + 2 ≤ nx) ∧ (Cpad ≤ (i.2 : ℕ) ∧ (i.2 : ℕ) + Cpad + 2 ≤ ny)
-  set T : ι → Finset (Site Λ) := fun i ↦
+  set T : ι → Finset ↥Λ := fun i ↦
     rectRegion A ((ch i).dilate (Cpad * r)) \ Xs i
   have hP : 0 < P := by omega
   have hcol : ∀ i, col i < N := fun i ↦ by
@@ -400,9 +405,9 @@ theorem regionEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {Cbu
 theorem boxEntropy_le_of_scale (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ} (hCbuf : 0 ≤ Cbuf)
     (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
         (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
-      (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
+      ∀ (A : Finset ↥Λ) (Q : IntRect), IsSafe Λ A D₀ Q →
       ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
         (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
         ManyBody.regionEntropy Ω (rectRegion A Q₀ ∪
@@ -623,8 +628,6 @@ section
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
@@ -640,10 +643,10 @@ theorem exists_regionEntropy_safe_rect_le_rpow
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
             (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (E₀ : ℝ) (Ω : StateSpace Λ q),
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
+          ∀ (A : Finset ↥Λ) (Q : IntRect), IsSafe Λ A D₀ Q →
             ManyBody.regionEntropy Ω (rectRegion A Q) ≤
               C * (Q.size : ℝ) ^ (1 + e₀) := by
   obtain ⟨C₀, e₀, he₀, he₀', hbox⟩ := exists_boxEntropy_le_rpow q R hq hJ hΔ

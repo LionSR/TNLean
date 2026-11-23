@@ -50,8 +50,6 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -127,8 +125,8 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
       ∃ Cb Clb C Cl Cδ : ℝ, ∀ᶠ n : ℕ in atTop,
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-        (E₀ : ℝ) (Ω : StateSpace Λ q),
+            (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -143,14 +141,14 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
         ManyBody.regionEntropy Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
         (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤
           κ.Ce * (n * (X.L n : ℝ) ^ X.e + n)) →
-        let B : Finset (Site Λ) → ℝ :=
+        let B : Finset ↥Λ → ℝ :=
           fun Y ↦ ManyBody.cutLogBudget
             (fun i ↦ designatedSupport S.graph (S.truncationSet (X.L n)) S.r₀ (S.anchor i))
             (fun _ ↦ q) Y
-        ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+        ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e (κ.g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧
-          (∀ (Y : Finset (Site Λ)) (u : ℝ),
+          (∀ (Y : Finset ↥Λ) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / κ.g) (B Y) →
             Real.log (Entropy.surprisalMoment
               (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
@@ -179,10 +177,10 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
             ∀ (hm : 0 < S.m) (hM : 0 < S.M) (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
               (W : ℝ), 1 ≤ W → ∀
               (pre : (k : ℕ) →
-                Config k (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) → ℂ),
+                Config k (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q aux v)) → ℂ),
               let round : Fin (X.rounds n) → ScanRound (AdmissibleSupport Λ R)
-                  (CoherentSphere (∀ v, Fin ((augmentedDimensions (V := Site Λ) q aux) v))) :=
-                fun r ↦ S.actualScanRound hm hM (augmentedDimensions (V := Site Λ) q aux)
+                  (CoherentSphere (∀ v, Fin ((augmentedDimensions (V := ↥Λ) q aux) v))) :=
+                fun r ↦ S.actualScanRound hm hM (augmentedDimensions (V := ↥Λ) q aux)
                   (S.actualEnergyTerms h Ω J Δ (X.L n) aux) (X.a W n) pre r.val
               ∀ I : ScanInputs X κ n Tr round W,
                 (I.Bsh ≤ Cb * (n * (X.L n : ℝ) ^ X.e + n) ∧ I.Bexc ≤ Cb * n * X.D n ∧
@@ -222,13 +220,13 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
       hinX hinQ
   refine ⟨e, Ωt, htrgs, hmom, Tr, hE0, hgap, hSX, hSXt, hSQ, hSQt, htd, hz, hdstar, hstat, ?_⟩
   intro hm hM aux _ W hW pre round I
-  have hHist := hH Λ T hT S hm hM (augmentedDimensions (V := Site Λ) q aux)
+  have hHist := hH Λ T hT S hm hM (augmentedDimensions (V := ↥Λ) q aux)
     (S.actualEnergyTerms h Ω J Δ (X.L n) aux) (X.a W n) pre (fun _ ↦ rfl) (fun _ ↦ rfl)
     hSn hSm hSK hSD hSr hSC hsize hgraph hdepth hanchor hrows hclear
   let SD : ScanData X κ n :=
     { toScanTruncation := Tr
       ι := AdmissibleSupport Λ R
-      Θ := CoherentSphere (∀ v, Fin ((augmentedDimensions (V := Site Λ) q aux) v))
+      Θ := CoherentSphere (∀ v, Fin ((augmentedDimensions (V := ↥Λ) q aux) v))
       round := round
       W := W
       one_le_W := hW

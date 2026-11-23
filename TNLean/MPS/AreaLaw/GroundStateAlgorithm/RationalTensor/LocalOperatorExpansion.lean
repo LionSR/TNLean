@@ -28,7 +28,7 @@ def twoSiteMatrixUnitFactors {ι : Type*} [DecidableEq ι] {q : ℕ}
 
 /-- The product of two placed matrix units enforces their four local labels
 and equality of the remaining physical coordinates. -/
-theorem rectKronecker_twoSiteMatrixUnitFactors
+theorem piKronecker_twoSiteMatrixUnitFactors_apply
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     {p r : ι} (hpr : p ≠ r) (a b c d : Fin q) (σ τ : ι → Fin q) :
     Matrix.piKronecker (twoSiteMatrixUnitFactors p r a b c d) σ τ =
@@ -102,7 +102,7 @@ theorem supported_eq_sum_twoSiteMatrixUnitFactors
   classical
   ext σ τ
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
-    rectKronecker_twoSiteMatrixUnitFactors hpr]
+    piKronecker_twoSiteMatrixUnitFactors_apply hpr]
   by_cases hout : ∀ j, j ≠ p → j ≠ r → σ j = τ j
   · rw [supported_apply_eq_twoSiteConfig hpr σ₀ hX σ τ hout]
     have hcontr : ∀ j, j ≠ p → j ≠ r → σ j ≠ τ j →

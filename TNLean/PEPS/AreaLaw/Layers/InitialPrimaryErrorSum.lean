@@ -30,7 +30,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -57,7 +56,7 @@ powers of the prescribed primary scales have boundary-weighted sum at most
 Source: area-law Section 11, `geometry:primary-scale`, line 714, and the
 primary error contribution, lines 791–795. -/
 theorem primaryPitchIndices_error_sum_le {C_P : ℝ} (hC_P : 0 < C_P)
-    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (C : ℕ) (a b : ℕ → ℤ) (F : Finset ℕ) :
     let n : ℕ → ℕ := fun k ↦
       ⌈C_P * ((2 : ℝ) ^ k) ^ (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊
@@ -122,7 +121,7 @@ primary error contribution, lines 791–795. -/
 theorem exists_uniform_primaryPitchIndices_error_sum_bound {C_P : ℝ}
     (hC_P : 0 < C_P) :
     ∃ M : ℝ, 0 < M ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
         (C : ℕ) (a b : ℕ → ℤ) (F : Finset ℕ),
         let n : ℕ → ℕ := fun k ↦
           ⌈C_P * ((2 : ℝ) ^ k) ^ (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊

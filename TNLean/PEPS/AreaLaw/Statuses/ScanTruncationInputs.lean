@@ -50,8 +50,6 @@ open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -79,14 +77,14 @@ theorem abs_log_card_sub_le_of_window {ι : Type*} (p : ι → ℝ) (E : Finset 
 
 namespace CollarScan
 
-variable {Λ : Finset (ℤ × ℤ)} {I : Type*} (S : CollarScan (Site Λ) I)
+variable {Λ : Finset (ℤ × ℤ)} {I : Type*} (S : CollarScan ↥Λ I)
 
 /-- The target `X = A ∩ T` (`08-scanner.tex`, line 23). -/
-def target (T : Finset (ℤ × ℤ)) : Finset (Site Λ) := S.A.filter fun x ↦ x.val ∈ T
+def target (T : Finset (ℤ × ℤ)) : Finset ↥Λ := S.A.filter fun x ↦ x.val ∈ T
 
 /-- The shell `Q_j = A ∩ (T_j \ T)` with `T_j = T + [-j, j]²` (`08-scanner.tex`,
 line 22). -/
-def shell (T : Finset (ℤ × ℤ)) (j : ℕ) : Finset (Site Λ) :=
+def shell (T : Finset (ℤ × ℤ)) (j : ℕ) : Finset ↥Λ :=
   S.A.filter fun x ↦ x.val ∈ ambientDilation T j ∧ x.val ∉ T
 
 /-- A shell of depth at most `L` lies in the compact truncation set `A ∩ T_L`. -/
@@ -145,8 +143,8 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       ∀ᶠ n : ℕ in atTop,
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-        (E₀ : ℝ) (Ω : StateSpace Λ q),
+            (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -161,14 +159,14 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
         ManyBody.regionEntropy Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
         (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤
           κ.Ce * (n * (X.L n : ℝ) ^ X.e + n)) →
-        let B : Finset (Site Λ) → ℝ :=
+        let B : Finset ↥Λ → ℝ :=
           fun Y ↦ ManyBody.cutLogBudget
             (fun i ↦ designatedSupport S.graph (S.truncationSet (X.L n)) S.r₀ (S.anchor i))
             (fun _ ↦ q) Y
-        ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+        ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e (κ.g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧
-          (∀ (Y : Finset (Site Λ)) (u : ℝ),
+          (∀ (Y : Finset ↥Λ) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / κ.g) (B Y) →
             Real.log (Entropy.surprisalMoment
               (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
@@ -203,7 +201,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   have hlq : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   obtain ⟨Clat, hClat, hlat⟩ := exists_latticeCutBudget_le_log hq R hCtr.le
     (show (0 : ℝ) ≤ 4 by norm_num)
-  obtain ⟨CB, hCB, hstat⟩ := exists_statusMarginal_cutBudget_le_log hq R hCtr.le
+  obtain ⟨CB, hCB, hstat⟩ := exists_statusMarginal_cutLogBudget_le_log hq R hCtr.le
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   refine ⟨max (max 4 (CT + 1))
@@ -264,7 +262,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
     refine htrace.trans ((sqrt_truncationError_le hg S.n).trans ?_)
     rw [← hκg]
     exact mul_le_mul_of_nonneg_right hCg (Real.rpow_nonneg (Nat.cast_nonneg _) _)
-  have hcont (Y : Finset (Site Λ)) (hY : Y ⊆ S.truncationSet (X.L S.n)) :
+  have hcont (Y : Finset ↥Λ) (hY : Y ⊆ S.truncationSet (X.L S.n)) :
       |ManyBody.regionEntropy Ωt Y - ManyBody.regionEntropy Ω Y| ≤
         κ.C * √t * (1 + κ.C * S.n ^ 2 * Real.log κ.q) := by
     have hYc : (Y.card : ℝ) ≤ κ.C * S.n ^ 2 :=

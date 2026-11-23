@@ -122,7 +122,7 @@ theorem regionParentGroundSpace_eq_span_of_full_region (A : Tensor Γ d)
 /-- The corresponding positive parent Hamiltonian has exactly the PEPS span
 as its kernel. Source: CPGSV21, arXiv:2011.12127, consequence of regional
 parent kernels, lines 2003–2011; the collection here contains the full region. -/
-theorem ker_regionParentHamiltonian_eq_span_of_full_region (A : Tensor Γ d)
+theorem ker_hamiltonian_ofPlace_eq_span_of_full_region (A : Tensor Γ d)
     {ι : Type*} [Fintype ι] (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -195,7 +195,7 @@ theorem ker_place_univ_canonical (A : Tensor Γ d) :
       Submodule.span ℂ {stateCoeff A} := by
   classical
   simpa only [ManyBody.Interaction.hamiltonian_ofPlace, Fintype.sum_unique] using
-    ker_regionParentHamiltonian_eq_span_of_full_region A (fun _ : Unit => Finset.univ)
+    ker_hamiltonian_ofPlace_eq_span_of_full_region A (fun _ : Unit => Finset.univ)
       (fun _ => canonicalRegionParentInteraction A Finset.univ)
       (fun _ => isRegionParentInteraction_canonical A Finset.univ) ⟨(), rfl⟩
 

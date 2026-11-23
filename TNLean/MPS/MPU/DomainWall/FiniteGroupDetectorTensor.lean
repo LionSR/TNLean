@@ -24,7 +24,7 @@ namespace MPOTensor.FiniteGroupDetector
 
 variable {α ν β : Type*} [Fintype α] [DecidableEq α] [Fintype ν] [DecidableEq ν]
 
-private theorem rectKronecker_prod_map (l : List β) (A : β → ν → Matrix α α ℂ) :
+private theorem list_prod_map_piKronecker (l : List β) (A : β → ν → Matrix α α ℂ) :
     (l.map fun r ↦ Matrix.piKronecker (A r)).prod =
       Matrix.piKronecker fun s ↦ (l.map fun r ↦ A r s).prod := by
   induction l with
@@ -39,7 +39,7 @@ private theorem unitary_coe_prod_map (l : List β) (A : β → unitary (Matrix �
   | cons r l ih => simp only [List.map_cons, List.prod_cons, Submonoid.coe_mul, ih]
 
 omit [Fintype α] [DecidableEq ν] in
-private theorem rectKronecker_scalar (f : ν → ℂ) :
+private theorem piKronecker_smul_one (f : ν → ℂ) :
     Matrix.piKronecker (fun s ↦ f s • (1 : Matrix α α ℂ)) = (∏ s, f s) • 1 := by
   conv_rhs => rw [← Matrix.piKronecker_one (ν := ν) (ι := fun _ ↦ α)]
   ext x y
@@ -94,12 +94,12 @@ noncomputable def detectorTensorWord (u w : unitary (Matrix α α ℂ)) (m N : �
 /-- Multiplying the actual interval matrices gives the tensor product of the
 complete spatial words. No endpoint identification is an input hypothesis.
 Source context: arXiv:2405.00439, `detectG`, lines 2108–2117. -/
-theorem detectorTensorWord_eq_rectKronecker (u w : unitary (Matrix α α ℂ)) (m N : ℕ) :
+theorem detectorTensorWord_eq_piKronecker (u w : unitary (Matrix α α ℂ)) (m N : ℕ) :
     detectorTensorWord u w m N = Matrix.piKronecker fun s : Fin N × Bool ↦
       (spatialEndpointWord (Γ := unitary (Matrix α α ℂ))
         u (if s.2 then 1 else w) m s.1.val : Matrix α α ℂ) := by
   simp only [detectorTensorWord, detectorIntervalTensor, Matrix.conjTranspose_piKronecker]
-  rw [rectKronecker_prod_map, rectKronecker_prod_map,
+  rw [list_prod_map_piKronecker, list_prod_map_piKronecker,
     Matrix.piKronecker_mul, Matrix.piKronecker_mul, Matrix.piKronecker_mul]
   congr 1
   funext s
@@ -130,9 +130,9 @@ theorem detectorTensorWord_eq_smul (u w c : unitary (Matrix α α ℂ)) (ζ : �
       · simp [hk]
     · have h := spatialEndpointWord_eq u 1 1 (Commute.one_left u) (by simp) m k.val
       simp [h, f]
-  rw [detectorTensorWord_eq_rectKronecker]
+  rw [detectorTensorWord_eq_piKronecker]
   simp_rw [hsite]
-  rw [rectKronecker_scalar]
+  rw [piKronecker_smul_one]
   congr 1
   rw [Fintype.prod_prod_type]
   simpa [f, Fintype.prod_bool] using prod_cut_phase ζ m N (by omega)

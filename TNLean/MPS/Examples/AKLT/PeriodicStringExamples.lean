@@ -151,7 +151,7 @@ private theorem akltPGWSVC08_fullRing_eq_one {L : ℕ} (hL : L ≠ 1) :
     rw [hstar]
     ext i j
     fin_cases i <;> fin_cases j <;> norm_num [Matrix.mul_apply, Fin.sum_univ_two]
-  simpa only [one_pow] using mpvExpectation_finKronecker_const_eq_phase_pow
+  simpa only [one_pow] using mpvExpectation_piKronecker_const_eq_phase_pow
     akltPGWSVC08Tensor akltSpinRotationZ !![1, 0; 0, -1] 1 hunit
     (fun i => by simpa only [one_smul, hstar] using akltPGWSVC08_sigmaZ_intertwine i)
     L ((akltPGWSVC08_mpvState_ne_zero_iff L).mpr hL)
@@ -218,7 +218,7 @@ theorem clusterTensorRMP_fullRing (L : ℕ) :
     have hi := congrArg (fun M : Mat₂ => M * (SpinCover.pauli 1)ᴴ)
       (clusterTensorRMP_pauliY_intertwine i)
     simpa only [Matrix.mul_assoc, hunit, Matrix.mul_one, one_smul] using hi
-  simpa only [one_pow] using mpvExpectation_finKronecker_const_eq_phase_pow
+  simpa only [one_pow] using mpvExpectation_piKronecker_const_eq_phase_pow
     clusterTensorRMP (-pauliX) (SpinCover.pauli 1) 1 hunit hInter L
     (clusterTensorRMP_mpvState_ne_zero L)
 

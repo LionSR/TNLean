@@ -21,7 +21,7 @@ extends the note. The gap is the unique-ground-vector projector gap of the note'
 preamble, lines 193–206; a degenerate ground-space gap is not sufficient here.
 -/
 
-open Matrix TNLean.Lattice
+open Matrix
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
@@ -55,7 +55,7 @@ noncomputable def stripShellCount (q R w : ℕ) (J Δ : ℝ) : ℕ :=
     128 * Real.sqrt ((1 + J / Δ) * (stripBudgetConst q R * w))⌉₊
 
 /-- Uniform shells are the actual column enlargements, without repeated terminal shells. -/
-def stripShell (L w R a b j : ℕ) : Finset (Site (stripDomain L w)) :=
+def stripShell (L w R a b j : ℕ) : Finset ↥(stripDomain L w) :=
   stripInterval L w (a - (j + 1) * R) (b + (j + 1) * R) \ stripInterval L w a b
 
 /-- Adding a shell gives the enlarged column interval. -/
@@ -71,7 +71,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hw : 1 ≤ w) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : PlaneInteraction (stripDomain L w) q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
-    {Ω : StateSpace (stripDomain L w) q}
+    {Ω : EuclideanSpace ℂ (↥(stripDomain L w) → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
     let m := stripShellCount q R w J Δ
@@ -112,7 +112,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     simp only [weights, Finset.sum_const, Finset.card_range, nsmul_eq_mul]
     field_simp
   have hbudget : ∀ j, Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
-      (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ S) ≤ B := by
+      (Entropy.supportDim (fun _ : ↥(stripDomain L w) ↦ q) ∘ S) ≤ B := by
     intro j
     rw [show X ∪ T j = _ from union_stripShell L w R a b j]
     exact cutLogBudget_stripInterval_le_mul hq hw L R _ _
@@ -125,10 +125,10 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
   have henergy : ∑ j ∈ Finset.range m, 8 * Real.exp 1 * weights j ^ 2 *
       ∑ Y ∈ ManyBody.crossingTerms S (X ∪ T j),
         Real.log (Real.exp 1 * Entropy.supportDim
-          (fun _ : Site (stripDomain L w) ↦ q) (S Y)) ^ 2 * J ≤ Δ / 2 := by
+          (fun _ : ↥(stripDomain L w) ↦ q) (S Y)) ^ 2 * J ≤ Δ / 2 := by
     have hsum (j : ℕ) : ∑ Y ∈ ManyBody.crossingTerms S (X ∪ T j),
         Real.log (Real.exp 1 * Entropy.supportDim
-          (fun _ : Site (stripDomain L w) ↦ q) (S Y)) ^ 2 * J ≤ B * J := by
+          (fun _ : ↥(stripDomain L w) ↦ q) (S Y)) ^ 2 * J ≤ B * J := by
       rw [← Finset.sum_mul]
       have hb := hbudget j
       unfold Entropy.cutLogBudget at hb
@@ -137,7 +137,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     have hterm : ∀ j ∈ Finset.range m, 8 * Real.exp 1 * weights j ^ 2 *
         ∑ Y ∈ ManyBody.crossingTerms S (X ∪ T j),
           Real.log (Real.exp 1 * Entropy.supportDim
-            (fun _ : Site (stripDomain L w) ↦ q) (S Y)) ^ 2 * J ≤
+            (fun _ : ↥(stripDomain L w) ↦ q) (S Y)) ^ 2 * J ≤
         32 * Real.exp 1 * (B * J) / (m : ℝ) ^ 2 := by
       intro j _
       calc _ ≤ 8 * Real.exp 1 * weights j ^ 2 * (B * J) :=
@@ -155,7 +155,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     nlinarith only [hE']
   have hu : ∀ j < m, weights j / (1 - weights j) ≤
       Entropy.tailRadius (J / Δ) (Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
-        (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ S)) := by
+        (Entropy.supportDim (fun _ : ↥(stripDomain L w) ↦ q) ∘ S)) := by
     intro j _
     have h₁ := Entropy.harmonic_weight_ratio_le hm4 (le_refl (1 : ℝ))
     have h₂ := Entropy.le_tailRadius_of_le (c := 1) hmT hmpos le_rfl hθ
@@ -175,14 +175,14 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
   have hgap := hgap.posSemidef_sub_smul_one
       (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
   have key := Entropy.two_mul_condEntropy_le_logarithmic
-    (n := fun _ : Site (stripDomain L w) ↦ q) X T hmono
+    (n := fun _ : ↥(stripDomain L w) ↦ q) X T hmono
     (fun _ ↦ Finset.disjoint_sdiff) weights hweights hhalf hΩ h.term S
     (fun Y ↦ (h.mem Y))
     hh hJ hhJ hsingle hΔ heig hgap (E := Δ / 2)
     (by linarith) henergy hu hmass Finset.disjoint_sdiff hbuf
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
       Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
-        (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ S) * weights j ^ 2 ≤
+        (Entropy.supportDim (fun _ : ↥(stripDomain L w) ↦ q) ∘ S) * weights j ^ 2 ≤
       4096 * Real.exp 1 * (J / Δ) * B / m := by
     calc _ ≤ ∑ j ∈ Finset.range m,
         1024 * Real.exp 1 * (J / Δ) * B * weights j ^ 2 := by
@@ -294,7 +294,7 @@ theorem regionEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hw : 1 ≤ w) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : PlaneInteraction (stripDomain L w) q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
-    {Ω : StateSpace (stripDomain L w) q}
+    {Ω : EuclideanSpace ℂ (↥(stripDomain L w) → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q)
@@ -328,7 +328,7 @@ theorem stripAreaLaw (q R : ℕ) :
       ∀ J Δ : ℝ, 0 ≤ J → 0 < Δ →
       ∀ h : PlaneInteraction (stripDomain L w) q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-      ∀ Ω : StateSpace (stripDomain L w) q,
+      ∀ Ω : EuclideanSpace ℂ (↥(stripDomain L w) → Fin q),
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ a b : ℕ,
       ManyBody.regionEntropy (X := fun _ ↦ Fin q)

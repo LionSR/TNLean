@@ -20,7 +20,7 @@ Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 705--729,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open TNLean.Lattice
+open ManyBody (IntRect IsSafe rectRegion)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -42,8 +42,8 @@ coefficient `weakRectangleSourceEntropyCoefficient b Cbox`, for every current ex
 and every physical rectangle. Source: `08-scanner.tex`, lines 705--729. -/
 theorem weakRectangle_source_entropy_bounds
     (b Cbox : ℝ) (hb : 0 < b) (hCbox : 0 ≤ Cbox) :
-    ∀ (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 →
-    ∀ (A : Finset (Site Λ)) (Q : IntRect) (hQ : Q.toFinset.Nonempty),
+    ∀ (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 →
+    ∀ (A : Finset ↥Λ) (Q : IntRect) (hQ : Q.toFinset.Nonempty),
       IsSafe Λ A D₀ Q → ∀ n L : ℕ, Q.size ≤ n → 1 ≤ L → L ≤ Q.size →
       D₀ * L + L ≤ D₀ * Q.size →
       ∀ e : ℝ, b ≤ e →
@@ -102,8 +102,8 @@ Source: `08-scanner.tex`, lines 705--729. -/
 theorem exists_weakRectangle_source_entropy_bounds
     (b Cbox : ℝ) (hb : 0 < b) (hCbox : 0 ≤ Cbox) :
     ∃ Ce : ℝ, 0 ≤ Ce ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 →
-      ∀ (A : Finset (Site Λ)) (Q : IntRect) (hQ : Q.toFinset.Nonempty),
+      ∀ (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 →
+      ∀ (A : Finset ↥Λ) (Q : IntRect) (hQ : Q.toFinset.Nonempty),
         IsSafe Λ A D₀ Q → ∀ n L : ℕ, Q.size ≤ n → 1 ≤ L → L ≤ Q.size →
         D₀ * L + L ≤ D₀ * Q.size →
         ∀ e : ℝ, b ≤ e →

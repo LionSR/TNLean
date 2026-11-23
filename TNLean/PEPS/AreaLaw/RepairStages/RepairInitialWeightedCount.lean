@@ -30,7 +30,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open scoped BigOperators
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -41,7 +40,7 @@ admissible upper layer; the budget is `polynomialDyadicBudget P`.
 Source: area-law Section 11, lines 212–233 and 325–363;
 `geometry:total-repairs`, lines 668–692, especially 683–692. -/
 theorem initialRepairStage_weighted_sum_le (P : ℝ) {c : ℝ} (hc : 0 ≤ c)
-    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
     let D := initialRepairStage o Λ A C k₀ hC h₀
     ∀ (w : D.markIndex → ℝ),
@@ -135,7 +134,7 @@ Source: area-law Section 11, lines 212–233 and 325–363;
 `geometry:total-repairs`, lines 668–692, especially 683–692. -/
 theorem exists_uniform_initialRepairStage_weighted_sum_bound (P : ℝ) :
     ∃ B : ℝ, 0 < B ∧ ∀ (c : ℝ), 0 ≤ c →
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
         (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀),
         let D := initialRepairStage o Λ A C k₀ hC h₀
         ∀ (w : D.markIndex → ℝ),

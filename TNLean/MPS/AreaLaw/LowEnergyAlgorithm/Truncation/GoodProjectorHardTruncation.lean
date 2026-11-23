@@ -405,9 +405,11 @@ theorem exists_two_window_chebyshev_projector_degree_sq
         1 - ((ℓ * ℓ : ℕ) : ℝ) * |eig j - η₀| / √((η₁ - η₀) * (u - η₀)) ≤ p.eval (eig j)) ∧
       (∀ δ : Fin 2,
         let J := interval L (a + ℓ + δ.val) (b + ℓ + 1)
-        operatorSchmidtRank (K.reindex (sheetSplit q J) (sheetSplit q J)) ≤
+        operatorSchmidtRank (K.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) J)
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤
             (q * (ℓ * ℓ)) ^ (17 * (ℓ + ℓ * ℓ / (2 * ℓ))) ∧
-          operatorSchmidtRank (K.reindex (sheetSplit q J) (sheetSplit q J)) ≤
+          operatorSchmidtRank (K.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) J)
+              (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤
             (q * ℓ) ^ (68 * ℓ)) := by
   intro H hS eig Δ
   have hupper : ∀ j, (Matrix.isSymmetric_toEuclideanLin_iff.mpr hH).eigenvalues

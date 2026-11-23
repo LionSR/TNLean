@@ -492,7 +492,7 @@ theorem inner_approximatingMPVState_mpvState (A : MPSTensor d D) {q : ℕ}
   refine ⟨heq, ?_⟩
   rw [heq, hinner]
   simp only [mpvState_apply, mpv_blockedConfigEquiv_eq_sum_polar, mpv_approximatingTensor]
-  rw [(isIsometry_polarIsoMatrix_of_isInjective hB).sum_star_mul_tensorPower]
+  rw [(isIsometry_polarIsoMatrix_of_isInjective hB).sum_star_mul_prod_const]
   simp only [mpvOverlap, mpv_fixedPointTensor]
   exact Finset.sum_congr rfl fun τ _ => mul_comm _ _
 

@@ -22,8 +22,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Lemma 9.1(2), lines 243–257, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation ambientDilation_zero edgeBoundary mem_ambientDilation_iff
   planeDomainGraph)
 
@@ -32,7 +30,7 @@ namespace TNLean.PEPS.AreaLaw.Scan
 /-- The scanner clearance excludes actual cut endpoints from every permitted dilation.
 Source: `08-scanner.tex`, lines 43–48 and 254–255. -/
 theorem disjoint_ambientDilation_boundaryEndpoints_of_clearance
-    (Λ T : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (L r₀ : ℕ)
+    (Λ T : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (L r₀ : ℕ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
     {j : ℕ} (hj : j ≤ L) :
@@ -66,7 +64,7 @@ are ambient row counts and clearance at actual cut endpoints; no boundary
 estimate is an input. Negative fronts give the empty prefix, and the zero front
 uses the first positive row. Source: Lemma 9.1(2), lines 251–255. -/
 theorem card_edgeBoundary_depthPrefix_le (Λ T : Finset (ℤ × ℤ))
-    (hT : T.Nonempty) (A : Finset (Site Λ)) {n L r₀ : ℕ} (hL : 1 ≤ L)
+    (hT : T.Nonempty) (A : Finset ↥Λ) {n L r₀ : ℕ} (hL : 1 ≤ L)
     (hrow : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
@@ -107,7 +105,7 @@ collar. Source: OpenAI, A two-dimensional area law from a global spectral gap,
 openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 theorem positiveDepthPrefix_eq_filter_ambientDilation
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (A : Finset (Site Λ)) (j : ℤ) :
+    (A : Finset ↥Λ) (j : ℤ) :
     positiveDepthPrefix A (fun x ↦ ambientDepth T hT x.val) j =
       A.filter fun x ↦ x.val ∈ (ambientDilation T j.toNat \ T) := by
   simp only [Finset.ext_iff, positiveDepthPrefix, Finset.mem_filter, Finset.mem_sdiff]
@@ -125,7 +123,7 @@ theorem positiveDepthPrefix_eq_filter_ambientDilation
 zero and negative fronts. The two contributions are the last included row
 and the first positive row. Source: Lemma 9.1(2), lines 251–255. -/
 theorem card_edgeBoundary_positiveDepthPrefix_le (Λ T : Finset (ℤ × ℤ))
-    (hT : T.Nonempty) (A : Finset (Site Λ)) {n L r₀ : ℕ} (hL : 1 ≤ L)
+    (hT : T.Nonempty) (A : Finset ↥Λ) {n L r₀ : ℕ} (hL : 1 ≤ L)
     (hrow : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,

@@ -25,7 +25,6 @@ noncomputable section
 
 open Matrix
 open scoped BigOperators
-open TNLean.Lattice
 
 open ManyBody (ambientDilation planeDomainGraph)
 
@@ -39,14 +38,14 @@ The lower bound uses subadditivity on the near and far regions, whose union
 is the complement of the middle region. Source: `08-scanner.tex`, 868--877. -/
 theorem terminalPartition_preEntropy_bounds
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
-    (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+    (hT : T.Nonempty) (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hn : 0 < S.n) (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1) (Bsh : ℝ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1) (Bsh : ℝ)
     (hsh : ∀ i : Fin (L + 1),
       ManyBody.regionEntropy Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh)
     (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K) :
@@ -60,7 +59,7 @@ theorem terminalPartition_preEntropy_bounds
       2 * Bsh + 6 * (S.n : ℝ) * (S.D : ℝ) * Real.log q := by
   classical
   intro X σ Q Y gpre
-  let β := fun _ : Site Λ ↦ Fin q
+  let β := fun _ : ↥Λ ↦ Fin q
   let U := positiveNear S.depth σ
   let V := receiving σ true
   obtain ⟨hnear, hUYeq, hfar, hXU, hXY, hXV, _, hUV, _, _, _⟩ :=
@@ -109,7 +108,7 @@ the same uniform bound. In particular, no independent leaf distribution is
 introduced. Source: `08-scanner.tex`, lines 868--890. -/
 theorem terminalPartition_preEntropy_max_average_bounds
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
-    (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+    (hT : T.Nonempty) (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hn : 0 < S.n) (hK : 0 < S.K)
@@ -117,7 +116,7 @@ theorem terminalPartition_preEntropy_max_average_bounds
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1) (Bsh : ℝ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1) (Bsh : ℝ)
     (hsh : ∀ i : Fin (L + 1),
       ManyBody.regionEntropy Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh) :
     let X := S.A.filter fun x ↦ x.val ∈ T

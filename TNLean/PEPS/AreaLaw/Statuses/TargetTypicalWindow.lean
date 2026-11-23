@@ -40,8 +40,6 @@ open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -52,7 +50,7 @@ open SpectralFilter
 positive mass and the exponential window, including singular marginals.
 Source: `07-comparators.tex`, lines 37–53. -/
 theorem target_typicalSet_bounds {Λ : Finset (ℤ × ℤ)} {q : ℕ}
-    (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1) (X : Finset (Site Λ)) {w δ : ℝ}
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1) (X : Finset ↥Λ) {w δ : ℝ}
     (htail : Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
       (ManyBody.regionEntropy Ωt X) w ≤ δ) (hδ : δ < 1) :
     let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
@@ -136,8 +134,8 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
     ∀ (q : ℕ) [NeZero q], 1 ≤ q →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-        (E₀ : ℝ) (Ω : StateSpace Λ q) (F : ScannerExponents)
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (F : ScannerExponents)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
@@ -156,12 +154,12 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
         let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
         let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
         let δ := (S.n : ℝ) ^ (-100 : ℝ)
-        let B : Finset (Site Λ) → ℝ :=
+        let B : Finset ↥Λ → ℝ :=
           fun Y => ManyBody.cutLogBudget
             (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Y
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
         X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
-        ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+        ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
           0 ≤ e ∧ e ≤ ε ∧
@@ -169,13 +167,13 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
             Real.sqrt (2 * ε / g) ∧
-          (∀ (Y : Finset (Site Λ)) (u : ℝ),
+          (∀ (Y : Finset ↥Λ) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
             Real.log (Entropy.surprisalMoment
               (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
               u * ManyBody.regionEntropy Ωt Y +
                 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
-          (∀ (Y : Finset (Site Λ)) (v : ℝ),
+          (∀ (Y : Finset ↥Λ) (v : ℝ),
             Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
               (ManyBody.regionEntropy Ωt Y) v ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
@@ -248,8 +246,8 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
     ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ (q : ℕ) [NeZero q], 1 ≤ q →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-        (E₀ : ℝ) (Ω : StateSpace Λ q) (F : ScannerExponents)
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (F : ScannerExponents)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
@@ -268,12 +266,12 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
         let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
         let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
         let δ := (S.n : ℝ) ^ (-100 : ℝ)
-        let B : Finset (Site Λ) → ℝ :=
+        let B : Finset ↥Λ → ℝ :=
           fun Y => ManyBody.cutLogBudget
             (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Y
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
         X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
-        ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+        ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
           0 ≤ e ∧ e ≤ ε ∧
@@ -281,13 +279,13 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
             Real.sqrt (2 * ε / g) ∧
-          (∀ (Y : Finset (Site Λ)) (u : ℝ),
+          (∀ (Y : Finset ↥Λ) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
             Real.log (Entropy.surprisalMoment
               (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
               u * ManyBody.regionEntropy Ωt Y +
                 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
-          (∀ (Y : Finset (Site Λ)) (v : ℝ),
+          (∀ (Y : Finset ↥Λ) (v : ℝ),
             Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
               (ManyBody.regionEntropy Ωt Y) v ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
@@ -328,8 +326,8 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
       ∃ C_B : ℝ, 0 < C_B ∧ ∃ N : ℕ, 2 ≤ N ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-        (E₀ : ℝ) (Ω : StateSpace Λ q) (F : ScannerExponents)
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (F : ScannerExponents)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
@@ -347,12 +345,12 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
         let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
         let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
         let δ := (S.n : ℝ) ^ (-100 : ℝ)
-        let B : Finset (Site Λ) → ℝ :=
+        let B : Finset ↥Λ → ℝ :=
           fun Y => ManyBody.cutLogBudget
             (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Y
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
         X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
-        ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+        ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
           0 ≤ e ∧ e ≤ ε ∧
@@ -360,13 +358,13 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
             Real.sqrt (2 * ε / g) ∧
-          (∀ (Y : Finset (Site Λ)) (u : ℝ),
+          (∀ (Y : Finset ↥Λ) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
             Real.log (Entropy.surprisalMoment
               (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
               u * ManyBody.regionEntropy Ωt Y +
                 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
-          (∀ (Y : Finset (Site Λ)) (v : ℝ),
+          (∀ (Y : Finset ↥Λ) (v : ℝ),
             Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
               (ManyBody.regionEntropy Ωt Y) v ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
@@ -395,8 +393,8 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
     ∃ Ctr C_B : ℝ, 0 < Ctr ∧ 0 < C_B ∧ ∃ N : ℕ, 2 ≤ N ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-        (E₀ : ℝ) (Ω : StateSpace Λ q) (F : ScannerExponents)
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (F : ScannerExponents)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
@@ -414,12 +412,12 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
         let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
         let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
         let δ := (S.n : ℝ) ^ (-100 : ℝ)
-        let B : Finset (Site Λ) → ℝ :=
+        let B : Finset ↥Λ → ℝ :=
           fun Y => ManyBody.cutLogBudget
             (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Y
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
         X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
-        ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+        ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
           0 ≤ e ∧ e ≤ ε ∧
@@ -427,13 +425,13 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
             Real.sqrt (2 * ε / g) ∧
-          (∀ (Y : Finset (Site Λ)) (u : ℝ),
+          (∀ (Y : Finset ↥Λ) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
             Real.log (Entropy.surprisalMoment
               (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
               u * ManyBody.regionEntropy Ωt Y +
                 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
-          (∀ (Y : Finset (Site Λ)) (v : ℝ),
+          (∀ (Y : Finset ↥Λ) (v : ℝ),
             Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
               (ManyBody.regionEntropy Ωt Y) v ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *

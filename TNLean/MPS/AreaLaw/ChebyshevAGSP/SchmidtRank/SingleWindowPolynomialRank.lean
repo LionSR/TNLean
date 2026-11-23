@@ -44,7 +44,8 @@ cut coordinates have the same operator Schmidt rank. -/
 theorem operatorSchmidtRank_sheetSplit_eq_cutOperator
     {V : Type*} [Finite V] [DecidableEq V] {q : ℕ} (A : Finset V)
     (K : Matrix (V → Fin q) (V → Fin q) ℂ) :
-    operatorSchmidtRank (K.reindex (sheetSplit q A) (sheetSplit q A)) =
+    operatorSchmidtRank (K.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) A)
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) A)) =
       operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A K) := by
   have := Fintype.ofFinite V
   rfl
@@ -64,9 +65,10 @@ theorem operatorSchmidtRank_le_placeAlong
     {q : ℕ} (e : V ↪ W) (A : Finset V) (B : Finset W)
     (hAB : ∀ v, e v ∈ B ↔ v ∈ A) (τ : W → Fin q)
     (K : Matrix (V → Fin q) (V → Fin q) ℂ) :
-    operatorSchmidtRank (K.reindex (sheetSplit q A) (sheetSplit q A)) ≤
+    operatorSchmidtRank (K.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) A)
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) A)) ≤
       operatorSchmidtRank ((ManyBody.placeAlong (X := fun _ ↦ Fin q) e K).reindex
-        (sheetSplit q B) (sheetSplit q B)) := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) B) (ManyBody.cutEquiv (fun _ ↦ Fin q) B)) := by
   classical
   let eA : A → B := fun i ↦ ⟨e i, (hAB i).mpr i.property⟩
   let eC : {v // v ∉ A} → {v // v ∉ B} := fun i ↦ ⟨e i, fun h ↦ i.property ((hAB i).mp h)⟩
@@ -79,37 +81,41 @@ theorem operatorSchmidtRank_le_placeAlong
   let g : ({v // v ∉ A} → Fin q) → ({v // v ∉ B} → Fin q) := fun x ↦
     Function.extend eC x (fun j ↦ τ j)
   have hread (x : A → Fin q) (y : {v // v ∉ A} → Fin q) :
-      (sheetSplit q B).symm (f x, g y) ∘ e = (sheetSplit q A).symm (x, y) := by
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) B).symm (f x, g y) ∘ e =
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) A).symm (x, y) := by
     funext i
     by_cases hi : i ∈ A
     · have hei : e i ∈ B := (hAB i).mpr hi
-      simp only [Function.comp_apply, sheetSplit,
+      simp only [Function.comp_apply,
         ManyBody.cutEquiv_symm_apply_mem _ _ hei,
         ManyBody.cutEquiv_symm_apply_mem _ _ hi]
       exact heA.extend_apply x (fun j ↦ τ j) ⟨i, hi⟩
     · have hei : e i ∉ B := fun h ↦ hi ((hAB i).mp h)
-      simp only [Function.comp_apply, sheetSplit,
+      simp only [Function.comp_apply,
         ManyBody.cutEquiv_symm_apply_not_mem _ _ hei,
         ManyBody.cutEquiv_symm_apply_not_mem _ _ hi]
       exact heC.extend_apply y (fun j ↦ τ j) ⟨i, hi⟩
   have hout (x : A → Fin q) (y : {v // v ∉ A} → Fin q) (j : W)
-      (hj : ∀ i, e i ≠ j) : (sheetSplit q B).symm (f x, g y) j = τ j := by
+      (hj : ∀ i, e i ≠ j) : (ManyBody.cutEquiv (fun _ ↦ Fin q) B).symm (f x, g y) j = τ j := by
     by_cases hB : j ∈ B
-    · rw [sheetSplit, ManyBody.cutEquiv_symm_apply_mem _ _ hB]
+    · rw [ManyBody.cutEquiv_symm_apply_mem _ _ hB]
       exact Function.extend_apply' (f := eA) x (fun j ↦ τ j) ⟨j, hB⟩ (by
         rintro ⟨i, hi⟩
         exact hj i (congrArg Subtype.val hi))
-    · rw [sheetSplit, ManyBody.cutEquiv_symm_apply_not_mem _ _ hB]
+    · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hB]
       exact Function.extend_apply' (f := eC) y (fun j ↦ τ j) ⟨j, hB⟩ (by
         rintro ⟨i, hi⟩
         exact hj i (congrArg Subtype.val hi))
-  have hmatrix : K.reindex (sheetSplit q A) (sheetSplit q A) =
+  have hmatrix : K.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) A)
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) A) =
       ((ManyBody.placeAlong (X := fun _ ↦ Fin q) e K).reindex
-        (sheetSplit q B) (sheetSplit q B)).submatrix (Prod.map f g) (Prod.map f g) := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) B) (ManyBody.cutEquiv (fun _ ↦ Fin q) B)).submatrix
+            (Prod.map f g) (Prod.map f g) := by
     ext ⟨x₁, x₂⟩ ⟨y₁, y₂⟩
     simp only [reindex_apply, submatrix_apply, ManyBody.placeAlong_apply, Prod.map]
-    rw [ite_eq_left (show ∀ j, (∀ i, e i ≠ j) → (sheetSplit q B).symm (f x₁, g x₂) j =
-        (sheetSplit q B).symm (f y₁, g y₂) j from
+    rw [ite_eq_left (show ∀ j, (∀ i, e i ≠ j) → (ManyBody.cutEquiv (fun _ ↦ Fin q) B).symm
+        (f x₁, g x₂) j =
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) B).symm (f y₁, g y₂) j from
         fun j hj ↦ (hout x₁ x₂ j hj).trans (hout y₁ y₂ j hj).symm)]
     exact congrArg₂ K (hread x₁ x₂).symm (hread y₁ y₂).symm
   rw [hmatrix]
@@ -149,7 +155,8 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
     (k : ℕ) (hk : 1 ≤ k) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
     let A := interval L 0 (c + w + 1)
     operatorSchmidtRank ((Polynomial.aeval ((∑ r, W r) + PL + PR) P).reindex
-      (sheetSplit q A) (sheetSplit q A)) ≤ (q * k) ^ (17 * (w + k / (2 * w))) := by
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) A) (ManyBody.cutEquiv (fun _ ↦ Fin q) A)) ≤ (q * k) ^
+          (17 * (w + k / (2 * w))) := by
   have hd : instConfig = Classical.decEq (Fin L → Fin q) := Subsingleton.elim _ _
   cases hd
   intro A

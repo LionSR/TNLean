@@ -229,7 +229,7 @@ Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 14–22. -/
 theorem squareSample_integerCoordinates (Λ : Finset (ℤ × ℤ))
     (center : ℝ × ℝ) (r : ℝ) :
     EncodedFrame.squareSample
-      (fun x : Lattice.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) center r =
+      (fun x : ↥Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) center r =
       AreaLaw.Geometry.closedSquareSample Λ center r := by
   ext x
   simp [EncodedFrame.squareSample, AreaLaw.Geometry.mem_closedSquareSample,
@@ -268,21 +268,21 @@ theorem exists_squarePatch_integerCoordinates_of_radius_le_four
     (Λ : Finset (ℤ × ℤ)) {q : ℕ} (hq : 1 ≤ q)
     (z : ℝ × ℝ) {u : ℝ} (hu : 0 < u) (hu4 : u ≤ 4)
     (Ω : EuclideanSpace ℂ
-      ((v : Lattice.Site Λ) → Fin q)) :
-    letI : LinearOrder (Lattice.Site Λ) :=
-      (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+      ((v : ↥Λ) → Fin q)) :
+    letI : LinearOrder ↥Λ :=
+      (Fintype.equivFin ↥Λ).linearOrder
     ∃ P : EncodedFrame.SquarePatch
-        (fun x : Lattice.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) q,
+        (fun x : ↥Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) q,
       P.center = z ∧ P.scale = u ∧
       (∑ j, P.dim j) ≤ q ^ 81 ∧
       ‖Lattice.Sheet.act (1 - P.cylSum)
         (Ω)‖ = 0 := by
   classical
-  let : LinearOrder (Lattice.Site Λ) :=
-    (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+  let : LinearOrder ↥Λ :=
+    (Fintype.equivFin ↥Λ).linearOrder
   obtain ⟨P, _, hz, hs, _, hd, he⟩ :=
     EncodedFrame.exists_squarePatch_of_mem_iSup_dependentRegionCylinder
-      (fun x : Lattice.Site Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) z hu
+      (fun x : ↥Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) z hu
       (fun _ : Fin 1 ↦ u) monotone_const (fun _ ↦ le_rfl) (fun _ ↦ by linarith)
       (fun _ ↦ ⊤) Ω Ω (Submodule.mem_iSup_of_mem (0 : Fin 1)
         ((mem_dependentRegionCylinder _ _ _).mpr (fun _ ↦ Submodule.mem_top)))

@@ -43,8 +43,6 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -73,8 +71,8 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
           ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
             (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
                 (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-            (hM : 0 < S.M) (E₀ : ℝ) (Ω : StateSpace Λ q),
+            (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+            (hM : 0 < S.M) (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
@@ -100,7 +98,7 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
             1 ≤ S.K ∧ 1 ≤ B ∧ 0 < C₀ ∧ 0 < c₀ ∧
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
             X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
-            ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+            ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
               (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
                 groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
               0 ≤ e ∧ e ≤ ε ∧
@@ -110,7 +108,7 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
                   (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
                   (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
                 Real.sqrt (2 * ε / g) ∧
-              (∀ (Y : Finset (Site Λ)) (u : ℝ),
+              (∀ (Y : Finset ↥Λ) (u : ℝ),
                 |u| ≤ Entropy.tailRadius (2 / g)
                   (ManyBody.cutLogBudget
                     (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
@@ -121,7 +119,7 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
                       C₀ * ManyBody.cutLogBudget
                         (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
                         (fun _ ↦ q) Y * u ^ 2) ∧
-              (∀ (Y : Finset (Site Λ)) (v : ℝ),
+              (∀ (Y : Finset ↥Λ) (v : ℝ),
                 Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
                   (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
@@ -144,11 +142,11 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
                   p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w)) ∧
               ∃ hmpos : 0 < S.m, ∀ W : ℝ, 0 < W → W ≤ (S.n : ℝ) ^ ω →
                 let a := W / (S.K : ℝ)
-                let β := fun _ : Site Λ ↦ Fin q
+                let β := fun _ : ↥Λ ↦ Fin q
                 let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
                   (ManyBody.cutEquiv β X) Ωt
                 let d := E.card
-                let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+                let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
                 ∀ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
                   let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
                     replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -190,7 +188,7 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
   classical
   obtain ⟨Ctr, Ctarget, hCtr, hCtarget, Nt, hNt, htarget⟩ :=
     exists_truncated_target_typical_window hq R hJ hΔ hC_T
-  obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutBudget_le_log hq R hCtr.le
+  obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutLogBudget_le_log hq R hCtr.le
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   have hc₀ : 0 < 1 / (32 * Real.sqrt

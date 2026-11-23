@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Sites.Relabel
@@ -33,23 +33,21 @@ Independently proved from the manuscript and existing QICLean partial-trace
 and entropy results; no upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw
 
 /-- Configuration transport of a region preserved by a site bijection.
 Source: area-law `sec:prelim`, lines 10–25, finite tensor factors. -/
 def regionConfigurationEquiv {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
-    (A : Finset (Site Λ)) (A' : Finset (Site Λ'))
-    (e : Site Λ ≃ Site Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A') :
-    ({x : Site Λ // x ∈ A} → Fin q) ≃ ({x : Site Λ' // x ∈ A'} → Fin q) :=
+    (A : Finset ↥Λ) (A' : Finset ↥Λ')
+    (e : ↥Λ ≃ ↥Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A') :
+    ({x : ↥Λ // x ∈ A} → Fin q) ≃ ({x : ↥Λ' // x ∈ A'} → Fin q) :=
   ManyBody.regionConfigurationEquiv (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q) A A' e hA
     fun _ ↦ Equiv.refl _
 
 /-- The same physical vector written after relabelling its sites.
 Source: area-law `sec:prelim`, lines 10–25, finite tensor factors. -/
 noncomputable def relabelState {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
-    (e : Site Λ ≃ Site Λ') (Ω : StateSpace Λ q) : StateSpace Λ' q :=
+    (e : ↥Λ ≃ ↥Λ') (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) : EuclideanSpace ℂ (↥Λ' → Fin q) :=
   ManyBody.relabelVector (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q) e (fun _ ↦ Equiv.refl _) Ω
 
 /-- A reduced pure-state matrix is covariant under a site relabelling that
@@ -57,9 +55,9 @@ preserves the chosen region. No normalization or lattice-adjacency assumption
 is required. Source: area-law `sec:prelim`, lines 10–25, finite tensor-factor
 conventions. -/
 theorem regionState_relabelState {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
-    (A : Finset (Site Λ)) (A' : Finset (Site Λ'))
-    (e : Site Λ ≃ Site Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A')
-    (Ω : StateSpace Λ q) :
+    (A : Finset ↥Λ) (A' : Finset ↥Λ')
+    (e : ↥Λ ≃ ↥Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A')
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) :
     ManyBody.regionState (relabelState q e Ω) A' =
       (ManyBody.regionState Ω A).submatrix
         (regionConfigurationEquiv q A A' e hA).symm
@@ -70,9 +68,9 @@ theorem regionState_relabelState {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
 /-- Regional entropy is unchanged by relabelling the physical sites and region.
 Source: area-law `sec:prelim`, lines 10–25, finite tensor-factor conventions. -/
 theorem regionEntropy_relabelState {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
-    (A : Finset (Site Λ)) (A' : Finset (Site Λ'))
-    (e : Site Λ ≃ Site Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A')
-    (Ω : StateSpace Λ q) :
+    (A : Finset ↥Λ) (A' : Finset ↥Λ')
+    (e : ↥Λ ≃ ↥Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A')
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) :
     ManyBody.regionEntropy (relabelState q e Ω) A' = ManyBody.regionEntropy Ω A := by
   exact ManyBody.regionEntropy_relabel (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q) A A' e hA
     (fun _ ↦ Equiv.refl _) Ω
@@ -80,7 +78,7 @@ theorem regionEntropy_relabelState {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
 /-- Relabelling sites preserves the Euclidean norm of a physical vector.
 Source: area-law `sec:prelim`, lines 10–25, finite tensor factors. -/
 @[simp] theorem norm_relabelState {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
-    (e : Site Λ ≃ Site Λ') (Ω : StateSpace Λ q) :
+    (e : ↥Λ ≃ ↥Λ') (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) :
     ‖relabelState q e Ω‖ = ‖Ω‖ :=
   ManyBody.norm_relabelVector (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q) e _ Ω
 

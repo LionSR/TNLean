@@ -142,7 +142,7 @@ theorem vertexVirtualParentGroundSpace_map_globalVertexTensorMap_of_cover
 has the image of the actual common virtual regional space as its kernel.
 Source: finite-graph consequence of the regional construction and site
 inverse argument in CPGSV21, Section IV.C.1, lines 2003–2044. -/
-theorem ker_regionParentHamiltonian_eq_virtual_image_of_cover
+theorem ker_hamiltonian_ofPlace_eq_virtual_image_of_cover
     (A : Tensor Γ d) (hA : IsVertexInjective A) {ι : Type*} [Fintype ι]
     (R : ι → Finset V) (hcover : ∀ v, ∃ i, v ∈ R i)
     (H : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))

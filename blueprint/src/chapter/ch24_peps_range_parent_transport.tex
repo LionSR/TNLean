@@ -72,7 +72,7 @@ Write $\mathcal G_S(A)=\operatorname{im}\mathcal C_S(A)$ for the open-region ran
 
 \begin{lemma}[Kernels of positive regional parents]%
     \label{thm:peps_range_parent_kernel}
-    \lean{TNLean.PEPS.map_ker_regionParentHamiltonian_physicalDeform_of_injOn}
+    \lean{TNLean.PEPS.map_ker_hamiltonian_ofPlace_physicalDeform_of_injOn}
     \leanok
     \uses{def:peps_region_parent_interaction}
     Under the hypotheses of Lemma~\ref{thm:peps_range_parent_equivalence} with finite $\mathcal I$, if $H=\sum_{i\in\mathcal I}H_i$ and $K=\sum_{i\in\mathcal I}K_i$ for $H_i,K_i\ge0$ with $\ker H_i=\mathcal G_{R_i}(A)$ and $\ker K_i=\mathcal G_{R_i}(B)$, then $F_{\mathrm{all}}(\ker H)=\ker K$.
@@ -99,7 +99,7 @@ Write $\mathcal G_S(A)=\operatorname{im}\mathcal C_S(A)$ for the open-region ran
     \label{thm:peps_range_parent_g_transport}
     \lean{TNLean.PEPS.map_regionParentGroundSpace_physicalDeform_of_isGInjective,
         TNLean.PEPS.exists_regionParentGroundSpace_transport_of_isGInjective,
-        TNLean.PEPS.exists_ker_regionParentHamiltonian_transport_of_isGInjective}
+        TNLean.PEPS.exists_ker_hamiltonian_ofPlace_transport_of_isGInjective}
     \leanok
     If $A,B$ share virtual bond spaces with site maps $G$-injective for the same $\rho_v$ ($G$ finite) and $V=\bigcup_{i\in\mathcal I}R_i$, there exist linear maps $F_v$ (or any prescribed $F_v$ satisfying $B_v=F_vA_v$) such that $F_{\mathrm{all}}|_{\mathcal P_{\mathcal R}(A)}$ is injective, $\dim\mathcal P_{\mathcal R}(A)=\dim\mathcal P_{\mathcal R}(B)$, and for every region $S$,
     \begin{align}

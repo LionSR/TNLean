@@ -36,8 +36,6 @@ Independently formalized from the manuscripts; no upstream Lean proof text is re
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.Approximation
@@ -94,10 +92,10 @@ interactions of range `R`, derived from area-law Theorem 1.1 and Corollary 1.2. 
 theorem squareEntropyAreaLawAt_range_of_areaLawBound {q R : ℕ} {J Δ C : ℝ} (hC : 0 ≤ C)
     (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
         (∀ X, ‖H.term X‖ ≤ J) →
-      ∀ E₀ : ℝ, ∀ Ω : Lattice.StateSpace Λ q,
+      ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ A : Finset (Lattice.Site Λ),
+        ∀ A : Finset ↥Λ,
           ManyBody.regionEntropy Ω A ≤
             C * (ManyBody.edgeBoundary (ManyBody.planeDomainGraph Λ) A).card) :
     SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ) C := by

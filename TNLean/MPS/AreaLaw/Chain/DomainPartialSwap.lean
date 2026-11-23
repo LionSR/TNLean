@@ -41,8 +41,9 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_term_difference_spec
     (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (D : Finset (Fin Λ.card))
     (X : DomainSupport Λ R) (b : Bool) :
-    let e := sitePairConfigurationEquiv (Fin Λ.card) q q
-    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+    let pr := Equiv.arrowProdEquivProdArrow (Fin Λ.card) (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin Λ.card)) finProdFinEquiv)
+    let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
     let T := Matrix.reindex e e
       (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
@@ -67,8 +68,9 @@ supports and both replica labels. Source: TNLean note, part2a_mps_information.te
 355–363; the count uses the original domain-support injection. -/
 theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
     (h : DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
-    let e := sitePairConfigurationEquiv (Fin Λ.card) q q
-    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+    let pr := Equiv.arrowProdEquivProdArrow (Fin Λ.card) (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin Λ.card)) finProdFinEquiv)
+    let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
     let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
       (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
@@ -77,8 +79,9 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
       ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b)) ∧
       C.card * 2 ≤ chainCrossConst R * Λ.card := by
   classical
-  let e := sitePairConfigurationEquiv (Fin Λ.card) q q
-  let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+  let pr := Equiv.arrowProdEquivProdArrow (Fin Λ.card) (fun _ ↦ Fin q) fun _ ↦ Fin q
+  let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin Λ.card)) finProdFinEquiv)
+  let F := Matrix.reindex e e (Matrix.reindex pr pr (ManyBody.pairSwapOp D))
   let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
     (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
@@ -94,11 +97,21 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
     change F * Matrix.reindex e e (doubledHamiltonian (h.term X)) * Fᴴ -
       Matrix.reindex e e (doubledHamiltonian (h.term X)) = 0
     apply sub_eq_zero.mpr
-    simpa only [F, Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
-      Matrix.submatrix_mul_equiv] using
-      congrArg (Matrix.reindex e e)
-        (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-          ((h.mem X)) hside)
+    -- the exchange on `D` fixes a doubled term supported inside or outside `D`
+    have hfix : ManyBody.pairSwapOp D *
+        Matrix.reindex pr.symm pr.symm (doubledHamiltonian (h.term X)) *
+        (ManyBody.pairSwapOp D)ᴴ = Matrix.reindex pr.symm pr.symm (doubledHamiltonian (h.term X)) :=
+      hside.elim (fun hs ↦ ManyBody.pairSwapOp_conj_doubled_of_subset hs (h.mem X))
+        (fun hs ↦ ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint hs
+          (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators (h.mem X)))
+    let g := ManyBody.siteConfigurationEquiv (X' := fun _ : Fin Λ.card ↦ Fin (q * q))
+      (Equiv.refl (Fin Λ.card)) fun _ ↦ finProdFinEquiv
+    change Matrix.reindex g g (ManyBody.pairSwapOp D) *
+        Matrix.reindex g g (Matrix.reindex pr.symm pr.symm (doubledHamiltonian (h.term X))) *
+        (Matrix.reindex g g (ManyBody.pairSwapOp D))ᴴ =
+      Matrix.reindex g g (Matrix.reindex pr.symm pr.symm (doubledHamiltonian (h.term X)))
+    simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
+      Matrix.submatrix_mul_equiv] using congrArg (Matrix.reindex g g) hfix
   refine ⟨?_, card_domain_crossingTerms_mul_two_le Λ R D⟩
   change δ h.doubledFin.hamiltonian = ∑ X ∈ C, ∑ b : Bool, δ (T X b)
   change δ (∑ X, h.doubledFin.term X) = _

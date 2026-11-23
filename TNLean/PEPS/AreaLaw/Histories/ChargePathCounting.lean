@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import QICLean.ManyBody.Sites.Lattice.Diamond
 import Mathlib.Data.List.Chain
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
@@ -21,8 +21,6 @@ Repeated labels at a common anchor remain distinct choices.
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 291–321, at `openai/math@adc7f124`.
 -/
-
-open TNLean.Lattice
 
 open ManyBody (card_le_diamond_of_edist_le latticeL1Distance planeDomainGraph)
 
@@ -111,10 +109,10 @@ theorem card_nearbyChargeLabels_le_of_vertex_count [Fintype V] [DecidableEq V]
 factor, including repeated-anchor multiplicity. Holes and disconnected components
 require no extra hypothesis. `08-scanner.tex`, lines 310–316, and the lattice
 ball count `01-preliminaries.tex`, lines 81–87. -/
-theorem card_nearbyChargeLabels_domainGraph_le (Λ : Finset (ℤ × ℤ))
-    (anchor : I → Site Λ) (r μ : ℕ)
+theorem card_nearbyChargeLabels_planeDomainGraph_le (Λ : Finset (ℤ × ℤ))
+    (anchor : I → ↥Λ) (r μ : ℕ)
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ anchor i = y).card ≤ μ)
-    (x : Site Λ) :
+    (x : ↥Λ) :
     (nearbyChargeLabels (planeDomainGraph Λ) anchor r x).card ≤
       (1 + 2 * (2 * r) * (2 * r + 1)) * μ := by
   apply card_nearbyChargeLabels_le_of_vertex_count _ _ _ _ _ _ hmult
@@ -130,13 +128,13 @@ theorem card_nearbyChargeLabels_domainGraph_le (Λ : Finset (ℤ × ℤ))
 /-- The actual square-lattice bound for length-`j` labelled anchor paths, with
 bounded label multiplicity and no supplied path-count hypothesis.
 `08-scanner.tex`, lines 310–316. -/
-theorem card_chargeAnchorPaths_domainGraph_le (Λ : Finset (ℤ × ℤ))
-    (anchor : I → Site Λ) (r μ : ℕ)
+theorem card_chargeAnchorPaths_planeDomainGraph_le (Λ : Finset (ℤ × ℤ))
+    (anchor : I → ↥Λ) (r μ : ℕ)
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ anchor i = y).card ≤ μ)
-    (x : Site Λ) (j : ℕ) :
+    (x : ↥Λ) (j : ℕ) :
     (chargeAnchorPaths (planeDomainGraph Λ) anchor r x j).card ≤
       ((1 + 2 * (2 * r) * (2 * r + 1)) * μ) ^ j :=
   card_chargeAnchorPaths_le _ _ _ _
-    (card_nearbyChargeLabels_domainGraph_le Λ anchor r μ hmult) x j
+    (card_nearbyChargeLabels_planeDomainGraph_le Λ anchor r μ hmult) x j
 
 end TNLean.PEPS.AreaLaw.Scan

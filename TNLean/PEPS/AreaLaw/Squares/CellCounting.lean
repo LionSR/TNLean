@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 
 /-!
@@ -20,7 +20,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
 open scoped BigOperators
-open TNLean.Lattice
 open ManyBody (ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -38,7 +37,7 @@ theorem card_ambientDilation_le (T : Finset (ℤ × ℤ)) (r : ℕ) :
 /-- The ambient integer endpoints of the unordered crossing edges.
 Source: Section 11, Proposition `prop:two-families`, lines 103–109, and
 lines 163–185. These are the source set `Z`, not an ambient boundary. -/
-noncomputable def boundaryEndpoints (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) :
+noncomputable def boundaryEndpoints (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) :
     Finset (ℤ × ℤ) := by
   classical
   exact ((edgeBoundary (planeDomainGraph Λ) A).biUnion Sym2.toFinset).image Subtype.val
@@ -46,8 +45,8 @@ noncomputable def boundaryEndpoints (Λ : Finset (ℤ × ℤ)) (A : Finset (Site
 /-- A physical crossing edge contributes both endpoints to the source set `Z`.
 Source: Lemma 9.4, final proof paragraph, and the definition of `Z`. -/
 theorem mem_boundaryEndpoints_of_mem_edgeBoundary {Λ : Finset (ℤ × ℤ)}
-    {A : Finset (Site Λ)} {e : Sym2 (Site Λ)} (he : e ∈ edgeBoundary (planeDomainGraph Λ) A)
-    {x : Site Λ} (hx : x ∈ e) : x.1 ∈ boundaryEndpoints Λ A := by
+    {A : Finset ↥Λ} {e : Sym2 ↥Λ} (he : e ∈ edgeBoundary (planeDomainGraph Λ) A)
+    {x : ↥Λ} (hx : x ∈ e) : x.1 ∈ boundaryEndpoints Λ A := by
   classical
   exact Finset.mem_image.mpr
     ⟨x, Finset.mem_biUnion.mpr ⟨e, he, by simpa using hx⟩, rfl⟩
@@ -55,7 +54,7 @@ theorem mem_boundaryEndpoints_of_mem_edgeBoundary {Λ : Finset (ℤ × ℤ)}
 /-- There are at most two endpoints per crossing edge, even when the boundary
 is empty. Source: Section 11, lines 179–185, `|Z| ≤ 2b`, absorbed into the
 numerical constant there. This does not assert the layer-cell bound. -/
-theorem card_boundaryEndpoints_le (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) :
+theorem card_boundaryEndpoints_le (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) :
     (boundaryEndpoints Λ A).card ≤ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   unfold boundaryEndpoints

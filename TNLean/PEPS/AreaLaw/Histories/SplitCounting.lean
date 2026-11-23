@@ -18,8 +18,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Lemma 9.1(2), at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -31,9 +29,9 @@ open Classical in
 omit [LinearOrder I] in
 private theorem sum_card_incidence_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {t L μ : ℕ}
-    (offset : Fin S.K → Fin S.m) (σ : Fin S.K → PhysicalPartition (Site Λ))
+    (offset : Fin S.K → Fin S.m) (σ : Fin S.K → PhysicalPartition ↥Λ)
     (hn : 2 ≤ S.n) (hm : 2 ≤ S.m) (ht : t ≤ S.n * S.m)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
     (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
@@ -79,9 +77,9 @@ private theorem sum_card_incidence_le
 open Classical in
 /-- The number of actual designated split incidences at all bands and both sides
 is at most `10 K n D μ`. Multiplicity counts interaction labels, not anchor sites. -/
-theorem sum_card_state_designatedSplitIncidence_le_domainGraph
+theorem sum_card_state_designatedSplitIncidence_le_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (hn : 2 ≤ S.n) (hm : 2 ≤ S.m)
     (hk : k ≤ S.n * S.m) (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
@@ -98,16 +96,16 @@ theorem sum_card_state_designatedSplitIncidence_le_domainGraph
     hrows hmult
   intro g side i hs
   have heq := S.designatedSupport_eq_ball_of_state_split h g side i hL hs
-  exact state_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i
+  exact state_split_anchor_bounds_planeDomainGraph hT S hgraph hdepth h g side i
     (by omega) hL hrows hclear
     (by simpa only [designatedSplitIncidence, heq] using hs)
 
 open Classical in
 /-- The number of actual designated split incidences at all bands and both sides
 is at most `10 K n D μ`. Multiplicity counts interaction labels, not anchor sites. -/
-theorem sum_card_old_designatedSplitIncidence_le_domainGraph
+theorem sum_card_old_designatedSplitIncidence_le_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (hn : 2 ≤ S.n) (hm : 2 ≤ S.m)
     (hk : k + 1 ≤ S.n * S.m) (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
@@ -126,7 +124,7 @@ theorem sum_card_old_designatedSplitIncidence_le_domainGraph
     hrows hmult
   intro g side i hs
   have heq := S.designatedSupport_eq_ball_of_split h g side i hL hs
-  exact old_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i
+  exact old_split_anchor_bounds_planeDomainGraph hT S hgraph hdepth h g side i
     (by omega) hL hrows hclear
     (by simpa only [designatedSplitIncidence, heq] using hs)
 

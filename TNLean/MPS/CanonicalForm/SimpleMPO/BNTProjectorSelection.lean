@@ -503,7 +503,7 @@ theorem singleKrausMap_sitewise_bntSectorProjection_mpo_basis
         (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
         (mpo (K i) N) =
       if s = i then mpo (K i) N else 0 := by
-  rw [singleKrausMap_tensorPower_mpo,
+  rw [singleKrausMap_piKronecker_mpo,
     changePhysicalBasis_bntSectorProjection_basis hC hρ hη hR]
   by_cases hsi : s = i
   · simp [hsi]
@@ -694,7 +694,7 @@ theorem sitewise_bntSectorProjection_mul_mpo_mul_self
         mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N := by
   dsimp only
   let P := (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
-  have hP : P.IsHermitian := tensorPower_isHermitian
+  have hP : P.IsHermitian := isHermitian_piKronecker_const
     (bntSectorProjection_isOrthogonal hC hρ hη hR s).1 N
   calc
     P * mpo M N * P = singleKrausMap P (mpo M N) := by

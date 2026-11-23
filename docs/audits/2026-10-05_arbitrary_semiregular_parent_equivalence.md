@@ -41,7 +41,7 @@ kernels are the actual regional PEPS ranges.
 7. The existing fixed-representation physical transport compares arbitrary
    physical G-injective tensors to this canonical tensor. Composing gives
    `nonempty_semiRegularGInjectiveParentEquiv`, the dimension identity, and
-   `nonempty_ker_regionParentHamiltonian_semiRegularGInjective_equiv`.
+   `nonempty_ker_hamiltonian_ofPlace_semiRegularGInjective_equiv`.
 
 ## Exact hypotheses and source boundary
 

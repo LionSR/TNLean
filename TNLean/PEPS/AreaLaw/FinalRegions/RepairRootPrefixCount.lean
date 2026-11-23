@@ -24,8 +24,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- **Descendant prefix count of one initial mark, with an explicit constant.**
@@ -34,7 +32,7 @@ generations, whenever its scale is at most `2 ^ k`, number at most
 `K (k + 1) ^ K` with `K = repairDescendantLayerConstant S_* 1`.
 Source: area-law Section 11, `geometry:descendant-count`, lines 670–686. -/
 theorem repairMarkAncestor_prefix_layer_le {Sstar : ℝ} (hSstar : 1 < Sstar) :
-    ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
       (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ),
       RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
         (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ →
@@ -75,7 +73,7 @@ This is the per-mark estimate preceding the sum over the chosen initial family.
 Source: area-law Section 11, `geometry:descendant-count`, lines 670–686. -/
 theorem exists_repairMarkAncestor_prefix_layer_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
     ∃ K : ℝ, 0 < K ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
         (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ),
         RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
           (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ →

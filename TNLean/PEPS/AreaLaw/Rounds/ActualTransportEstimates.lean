@@ -38,8 +38,6 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -49,14 +47,14 @@ open TensorPower TensorPower.ReplicaTransport
 /-- The actual fill round satisfies all four conclusions of Proposition 7.4.
 The energy equation is for the actual truncated Hamiltonian, while the derivative,
 entropy and endpoint-inclusive integral require only a supplied nonzero symmetric vector. -/
-theorem actualFill_transport_domainGraph :
+theorem actualFill_transport_planeDomainGraph :
     ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -70,7 +68,7 @@ theorem actualFill_transport_domainGraph :
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-        let n := augmentedDimensions (V := Site Λ) q aux
+        let n := augmentedDimensions (V := ↥Λ) q aux
         let D := S.actualFillData hm hM s
         let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
@@ -103,7 +101,7 @@ theorem actualFill_transport_domainGraph :
     s L hn hs hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
+  let n := augmentedDimensions (V := ↥Λ) q aux
   let D := S.actualFillData hm hM s
   let E := S.actualEnergyTerms h Ω J Δ L aux
   let Hbar := fun r => copyMean n r
@@ -111,7 +109,7 @@ theorem actualFill_transport_domainGraph :
   have hq : 1 ≤ q := NeZero.pos q
   have hE := S.actualEnergyTerms_spec h hh hhJ Ω hgraph hanchor hΔ hΩ L aux
   have hcompat : D.SupportCompatible E :=
-    S.fillTransportData_supportCompatible_domainGraph hT hgraph hdepth
+    S.fillTransportData_supportCompatible_planeDomainGraph hT hgraph hdepth
       (historyMeanTree S.K S.m S.M hm hM s)
       hn hs hr hDpos hD hL hrows hclear n E (fun _ => rfl)
   have ht : 0 ≤ a / 2 := (half_pos ha).le
@@ -124,7 +122,7 @@ theorem actualFill_transport_domainGraph :
       (historyMeanTree S.K S.m S.M hm hM s) n hq (fun _ => rfl)
   have hsplit : ∀ i, (D.splitLeaves E i).Nonempty →
       logDim n (E.support i) ≤ transportLogDimBound q S.r₀ :=
-    S.fillTransportData_logDim_support_le_domainGraph hgraph
+    S.fillTransportData_logDim_support_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s)
       n hq (fun _ => rfl) hL E (fun _ => rfl)
   obtain ⟨β, ε, hβ, hε, hresult⟩ := htransport n D E
@@ -141,14 +139,14 @@ theorem actualFill_transport_domainGraph :
 /-- The actual charge round satisfies all four conclusions of Proposition 7.4.
 The energy equation is for the actual truncated Hamiltonian, while the derivative,
 entropy and endpoint-inclusive integral require only a supplied nonzero symmetric vector. -/
-theorem actualCharge_transport_domainGraph :
+theorem actualCharge_transport_planeDomainGraph :
     ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -162,7 +160,7 @@ theorem actualCharge_transport_domainGraph :
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-        let n := augmentedDimensions (V := Site Λ) q aux
+        let n := augmentedDimensions (V := ↥Λ) q aux
         let D := S.actualChargeData hm hM s
         let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
@@ -195,7 +193,7 @@ theorem actualCharge_transport_domainGraph :
     s L hn hs hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
+  let n := augmentedDimensions (V := ↥Λ) q aux
   let D := S.actualChargeData hm hM s
   let E := S.actualEnergyTerms h Ω J Δ L aux
   let Hbar := fun r => copyMean n r
@@ -203,7 +201,7 @@ theorem actualCharge_transport_domainGraph :
   have hq : 1 ≤ q := NeZero.pos q
   have hE := S.actualEnergyTerms_spec h hh hhJ Ω hgraph hanchor hΔ hΩ L aux
   have hcompat : D.SupportCompatible E :=
-    S.chargeTransportData_supportCompatible_domainGraph hT hgraph hdepth
+    S.chargeTransportData_supportCompatible_planeDomainGraph hT hgraph hdepth
       (historyMeanTree S.K S.m S.M hm hM s)
       (fun _ => chargeChoiceTree S.K S.M hM)
       hn hs hr hDpos hD hL hrows hclear n E (fun _ => rfl)
@@ -214,12 +212,12 @@ theorem actualCharge_transport_domainGraph :
       (fun _ => chargeChoiceTree S.K S.M hM) n ht r
   have hmove : ∀ hist c g, logDim n (D.move hist c g).subsystem ≤
       transportLogDimBound q S.r₀ :=
-    S.chargeTransportData_logDim_move_le_domainGraph hgraph
+    S.chargeTransportData_logDim_move_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s)
       (fun _ => chargeChoiceTree S.K S.M hM) n hq (fun _ => rfl)
   have hsplit : ∀ i, (D.splitLeaves E i).Nonempty →
       logDim n (E.support i) ≤ transportLogDimBound q S.r₀ :=
-    S.chargeTransportData_logDim_support_le_domainGraph hgraph
+    S.chargeTransportData_logDim_support_le_planeDomainGraph hgraph
       (historyMeanTree S.K S.m S.M hm hM s)
       (fun _ => chargeChoiceTree S.K S.M hM)
       n hq (fun _ => rfl) hL E (fun _ => rfl)

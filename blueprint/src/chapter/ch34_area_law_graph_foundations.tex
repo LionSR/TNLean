@@ -103,8 +103,8 @@ Lemma~\ref{thm:area_diamond_count}.
 
 \begin{lemma}[Supports containing a specified site]
     \label{thm:area_support_count}
-    \lean{TNLean.PEPS.AreaLaw.card_supportFamily_le_pow_card_erase,
-        TNLean.PEPS.AreaLaw.card_supportFamily_le_pow}
+    \lean{ManyBody.card_supportFamily_le_pow_card_erase,
+        ManyBody.card_supportFamily_le_pow}
     \leanok
     Let $B$ be a finite neighborhood and let $\mathcal F$ be a finite family of
     distinct subsets of $B$, each containing $a$. Then
@@ -120,7 +120,7 @@ Lemma~\ref{thm:area_diamond_count}.
 \begin{lemma}[Per-site interaction weight]
     \label{thm:area_site_weight}
     \uses{thm:area_support_count}
-    \lean{TNLean.PEPS.AreaLaw.sum_supportWeights_containing_le}
+    \lean{ManyBody.sum_supportWeights_containing_le}
     \leanok
     Let $\mathcal F$ be a finite family of distinct supports, with weights
     $w_X\le J$ and $J\ge0$. Suppose each support containing $a$ is contained
@@ -136,8 +136,8 @@ Lemma~\ref{thm:area_diamond_count}.
 
 \begin{lemma}[Weights meeting a region]
     \label{thm:area_region_weight}
-    \lean{TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le_sum_siteWeights,
-        TNLean.PEPS.AreaLaw.sum_supportWeights_meeting_le}
+    \lean{ManyBody.sum_supportWeights_meeting_le_sum_siteWeights,
+        ManyBody.sum_supportWeights_meeting_le}
     \leanok
     For nonnegative weights on a finite family of distinct supports and
     any finite region $S$,
@@ -159,7 +159,7 @@ Lemma~\ref{thm:area_diamond_count}.
 
 \begin{definition}[Interaction-chain weight]
     \label{def:area_chain_weight}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainWeightSum}
+    \lean{ManyBody.interactionChainWeightSum}
     \leanok
     For a finite family $\mathcal F$ and weights $w_X$, define recursively
     \begin{align}
@@ -175,7 +175,7 @@ Lemma~\ref{thm:area_diamond_count}.
 \begin{lemma}[Uniform chain-weight growth]
     \label{thm:area_chain_growth}
     \uses{thm:area_region_weight,def:area_chain_weight}
-    \lean{TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_pow}
+    \lean{ManyBody.interactionChainWeightSum_le_pow}
     \leanok
     Suppose the original weights are nonnegative, every original support
     has cardinality at most $v$, and every site weight sum is at most $b\ge0$.

@@ -67,10 +67,10 @@ theorem uniformAreaLaw_vertex_boundary_bounds :
       ∃ C : ℝ, 0 ≤ C ∧
         ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
             (∀ X, ‖H.term X‖ ≤ J) →
-          ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+          ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
             ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
             groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-              ∀ A : Finset (Site Λ),
+              ∀ A : Finset ↥Λ,
                 ManyBody.regionEntropy Ω A ≤
                     4 * C * (innerBoundary (planeDomainGraph Λ) A).card ∧
                 ManyBody.regionEntropy Ω A ≤

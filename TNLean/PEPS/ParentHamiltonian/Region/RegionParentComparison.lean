@@ -75,7 +75,7 @@ variable {ι : Type*} [Fintype ι]
 /-- Common regional comparison constants also compare the full Hamiltonians.
 Source: CPGSV21, arXiv:2011.12127, comparison with projections, line 2170,
 and the PEPS parent sum, lines 2003–2011. -/
-theorem regionParentHamiltonian_comparison (R : ι → Finset V)
+theorem hamiltonian_ofPlace_comparison (R : ι → Finset V)
     (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ) (κ C : ℝ)
     (hLower : ∀ i, (κ : ℂ) • k i ≤ h i)
@@ -107,7 +107,7 @@ private theorem smul_le_smul_of_nonneg {n : Type*} {H K : Matrix n n ℂ}
 /-- A finite collection of positive regional parent interactions has common
 strictly positive comparison constants with the sum of canonical projectors.
 Source: CPGSV21, arXiv:2011.12127, line 2170 and lines 2003–2011. -/
-theorem exists_pos_regionParentHamiltonian_comparison (A : Tensor Γ d)
+theorem exists_pos_hamiltonian_ofPlace_comparison (A : Tensor Γ d)
     (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -126,7 +126,7 @@ theorem exists_pos_regionParentHamiltonian_comparison (A : Tensor Γ d)
     obtain ⟨iMin, _, hMin⟩ := Finset.exists_min_image Finset.univ κ Finset.univ_nonempty
     obtain ⟨iMax, _, hMax⟩ := Finset.exists_max_image Finset.univ C Finset.univ_nonempty
     refine ⟨κ iMin, C iMax, hκ iMin, hC iMax, ?_⟩
-    apply regionParentHamiltonian_comparison
+    apply hamiltonian_ofPlace_comparison
     · intro i
       exact (smul_mono_of_posSemidef (canonicalRegionParentInteraction_posSemidef A (R i))
         (hMin i (Finset.mem_univ i))).trans (hLower i)
@@ -138,7 +138,7 @@ theorem exists_pos_regionParentHamiltonian_comparison (A : Tensor Γ d)
 /-- Any two positive PEPS parents on the same finite family of regions bound
 one another by strictly positive constants. Source: CPGSV21,
 arXiv:2011.12127, comparison with projections, line 2170. -/
-theorem exists_pos_regionParentHamiltonian_comparison_between (A : Tensor Γ d)
+theorem exists_pos_hamiltonian_ofPlace_comparison_between (A : Tensor Γ d)
     (R : ι → Finset V)
     (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -150,9 +150,9 @@ theorem exists_pos_regionParentHamiltonian_comparison_between (A : Tensor Γ d)
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ≤
           (C : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian := by
   obtain ⟨κh, Ch, hκh, hCh, hLowerH, hUpperH⟩ :=
-    exists_pos_regionParentHamiltonian_comparison A R h hh
+    exists_pos_hamiltonian_ofPlace_comparison A R h hh
   obtain ⟨κk, Ck, hκk, hCk, hLowerK, hUpperK⟩ :=
-    exists_pos_regionParentHamiltonian_comparison A R k hk
+    exists_pos_hamiltonian_ofPlace_comparison A R k hk
   refine ⟨κh / Ck, Ch / κk, div_pos hκh hCk, div_pos hCh hκk, ?_, ?_⟩
   · calc
       ((κh / Ck : ℝ) : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ≤
@@ -177,7 +177,7 @@ theorem exists_pos_regionParentHamiltonian_comparison_between (A : Tensor Γ d)
 /-- Changing the positive regional interactions leaves the full Euclidean
 ground space unchanged. Source: CPGSV21, arXiv:2011.12127, prescribed parent
 kernels and frustration freeness, lines 2003–2011. -/
-theorem ker_toEuclideanLin_regionParentHamiltonian_eq (A : Tensor Γ d)
+theorem ker_toEuclideanLin_hamiltonian_ofPlace_eq (A : Tensor Γ d)
     (R : ι → Finset V)
     (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -194,80 +194,43 @@ theorem ker_toEuclideanLin_regionParentHamiltonian_eq (A : Tensor Γ d)
   have hmem := congrArg (fun S => WithLp.ofLp ψ ∈ S) heq
   simpa [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin] using hmem
 
-/-- A Loewner lower comparison transfers a spectral norm gap between two PEPS
-parents with the same regional kernels. The transferred gap is multiplied by
-the lower comparison constant. This is the finite-dimensional consequence of
+/-- A Loewner lower comparison transfers a spectral gap between two PEPS parents
+with the same regional kernels: if every eigenvalue of \(H_k\) other than \(0\) is
+at least \(γ\) and \(κ H_k ≤ H_h\) with \(κ > 0\), then every eigenvalue of \(H_h\)
+other than \(0\) is at least \(κ γ\). This is the finite-dimensional consequence of
 CPGSV21, arXiv:2011.12127, comparison with projections, line 2170. -/
-theorem regionParentHamiltonian_norm_gap_of_comparison (A : Tensor Γ d)
+theorem forall_hasEigenvalue_hamiltonian_ofPlace_of_comparison (A : Tensor Γ d)
     (R : ι → Finset V)
     (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i))
     (hk : ∀ i, IsRegionParentInteraction A (R i) (k i))
-    {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 ≤ γ)
+    {κ γ : ℝ} (hκ : 0 < κ)
     (hLower : (κ : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ≤
       (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian)
-    (hGap : ∀ ψ ∈ (Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian).kerᗮ,
-      γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ψ‖) :
-    ∀ ψ ∈ (Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).kerᗮ,
-      (κ * γ) * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ψ‖ := by
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian) μ →
+      μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian) μ →
+      μ = 0 ∨ ((κ * γ : ℝ) : ℂ) ≤ μ := by
   classical
-  have hp := Matrix.isPositive_toEuclideanLin_iff.mpr
-    (ManyBody.Interaction.posSemidef_hamiltonian
-      (Φ := ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k)
-      fun i ↦ ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hk i).1)
-  have hκ0 : (κ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hκ.ne'
-  have hpos := hp.smul_of_nonneg (c := (κ : ℂ)) (by exact_mod_cast hκ.le)
-  have hle : (κ : ℂ) • Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ≤
-      Matrix.toEuclideanLin
-        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian := by
-    rw [LinearMap.le_def]
-    simpa only [map_sub, map_smul] using
-      Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.le_iff.mp hLower)
-  have hker := (LinearMap.ker_smul _ (κ : ℂ) hκ0).trans
-    (ker_toEuclideanLin_regionParentHamiltonian_eq A R k h hk hh)
-  apply hpos.norm_gap_of_le_of_ker_eq (mul_nonneg hκ.le hγ) hle hker
-  intro ψ hψ
-  rw [LinearMap.ker_smul _ (κ : ℂ) hκ0] at hψ
-  simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_real, Real.norm_eq_abs,
-    abs_of_pos hκ, mul_assoc] using mul_le_mul_of_nonneg_left (hGap ψ hψ) hκ.le
-
-/-- On a fixed finite region collection, existence of a positive norm gap on
-the orthogonal complement of the ground space is independent of the choice
-of positive parent interactions. The comparison constants may depend on the
-interactions and the collection. Source: CPGSV21, arXiv:2011.12127,
-comparison with projections, line 2170. -/
-theorem regionParentHamiltonian_has_pos_norm_gap_iff (A : Tensor Γ d)
-    (R : ι → Finset V)
-    (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
-      (RegionPhysicalConfig (d := d) (R i)) ℂ)
-    (hh : ∀ i, IsRegionParentInteraction A (R i) (h i))
-    (hk : ∀ i, IsRegionParentInteraction A (R i) (k i)) :
-    (∃ γ : ℝ, 0 < γ ∧
-      ∀ ψ ∈ (Matrix.toEuclideanLin
-          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).kerᗮ,
-        γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
-          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ψ‖) ↔
-    (∃ γ : ℝ, 0 < γ ∧
-      ∀ ψ ∈ (Matrix.toEuclideanLin
-          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian).kerᗮ,
-        γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
-          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ψ‖) := by
-  constructor
-  · rintro ⟨γ, hγ, hGap⟩
-    obtain ⟨κ, C, hκ, hC, hLower, hUpper⟩ :=
-      exists_pos_regionParentHamiltonian_comparison_between A R k h hk hh
-    exact ⟨κ * γ, mul_pos hκ hγ,
-      regionParentHamiltonian_norm_gap_of_comparison A R k h hk hh hκ hγ.le hLower hGap⟩
-  · rintro ⟨γ, hγ, hGap⟩
-    obtain ⟨κ, C, hκ, hC, hLower, hUpper⟩ :=
-      exists_pos_regionParentHamiltonian_comparison_between A R h k hh hk
-    exact ⟨κ * γ, mul_pos hκ hγ,
-      regionParentHamiltonian_norm_gap_of_comparison A R h k hh hk hκ hγ.le hLower hGap⟩
+  have hHk := ManyBody.Interaction.posSemidef_hamiltonian
+    (Φ := ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k)
+    fun i ↦ ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hk i).1
+  have hHh := ManyBody.Interaction.posSemidef_hamiltonian
+    (Φ := ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h)
+    fun i ↦ ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hh i).1
+  rw [ManyBody.forall_hasEigenvalue_iff_re_inner hHk] at hGap
+  rw [ManyBody.forall_hasEigenvalue_iff_re_inner hHh]
+  intro v hv
+  rw [ker_toEuclideanLin_hamiltonian_ofPlace_eq A R h k hh hk] at hv
+  have hD := (Matrix.isPositive_toEuclideanLin_iff.mpr
+    (Matrix.le_iff.mp hLower)).re_inner_nonneg_right v
+  rw [map_sub, LinearMap.sub_apply, inner_sub_right, map_smul, LinearMap.smul_apply,
+    inner_smul_right, map_sub, RCLike.re_to_complex, RCLike.re_to_complex,
+    Complex.re_ofReal_mul, sub_nonneg] at hD
+  rw [mul_assoc]
+  exact (mul_le_mul_of_nonneg_left (hGap v hv) hκ.le).trans hD
 
 end TNLean.PEPS

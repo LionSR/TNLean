@@ -72,7 +72,10 @@ moves `Ω ⊗ Ω` by at most `4 ‖𝒱 Ω - s ⊗ s'‖`.
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 516–561. -/
 theorem norm_act_sheetBufferCorrection_mul_sheetSwapOp_sub_le (h : Disjoint T E)
     (σ : SplittingData q T E) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) :
-    ‖act (sheetBufferCorrection h σ * TNLean.Lattice.sheetSwapOp q T) (vecKron Ω Ω) -
+    ‖act (sheetBufferCorrection h σ * Matrix.reindex
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+        (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp T))
+        (vecKron Ω Ω) -
       vecKron Ω Ω‖ ≤ 4 * σ.error h Ω := by
   rw [sheetSwapOp_eq_submatrix h, sheetBufferCorrection, submatrix_mul_equiv,
     norm_act_submatrix_sub]

@@ -50,7 +50,7 @@ theorem exists_adjointBoundary_changePhysicalBasis
       mpoWithBoundary (changePhysicalBasis J W.tensor) Z n =
         singleKrausMap (Matrix.piKronecker fun _ : Fin n ↦ J) (mpoWithBoundary W.tensor Z n) := by
     simp only [mpoWithBoundary_eq_physCloseN,
-      singleKrausMap_tensorPower_physCloseN]
+      singleKrausMap_piKronecker_physCloseN]
   rw [htransport, htransport]
   simp only [singleKrausMap_apply, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, hY n, Matrix.mul_assoc]

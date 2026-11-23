@@ -5,8 +5,12 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Parameter.LocalizationParameters
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedPlaneInteraction
-import TNLean.Lattice.RegionalReset
+import TNLean.PEPS.Approximation.DoubledHamiltonian.TwoSheetBufferFilter
+import QICLean.Spectral.Perturbation.ResidualComparison
+import QICLean.ManyBody.Replica.RegionalReset
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.SupportedUnitary
 
 /-!
 # The supported unitary of the information reset at interaction range `R`
@@ -53,6 +57,8 @@ open Matrix QuantumCircuit
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped Kronecker Matrix.Norms.L2Operator
+
+open GaussianFilter (resetCutoff resetCutoff_pos resetVariance)
 
 noncomputable section
 
@@ -124,24 +130,25 @@ Source: `02-information.tex`, lines 355–562, with `K_loc` at lines 551–554. 
 theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ)
     (hr : 0 ≤ r) {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : PlaneInteraction Λ q R)
         (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-    (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
+    (A C : Finset ↥Λ) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
     (hI : ManyBody.regionMutualInformation Ω A C ≤ b) :
-    let p := sitePairConfigurationEquiv (Site Λ) q q
-    let F := reindex p p (sheetSwapOp q A)
-    let ψ : Configuration Λ (q * q) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
+    let pr := Equiv.arrowProdEquivProdArrow ↥Λ (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl ↥Λ) finProdFinEquiv)
+    let F := reindex p p (reindex pr pr (ManyBody.pairSwapOp A))
+    let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
     let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
       ((A ∪ C)ᶜ ∪ crossingSites Λ R A) ⌈rangeResetRadius R J Δ r * (1 + b + Real.log L)⌉₊
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-    ∃ (z : ℝ) (M : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ),
+    ∃ (z : ℝ) (M : Matrix (↥Λ → Fin (q * q)) (↥Λ → Fin (q * q)) ℂ),
       Real.exp (-2 * b) ≤ z ∧
       M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧ ‖M‖ ≤ 1 ∧
       ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
         rangeResetFilterPrefactor R J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
       ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
         rangeResetFilterPrefactor R J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) := by
-  intro p F ψ B
+  intro pr p F ψ B
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
   set Cg := 2 * TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor R with hCgdef
   set v := TNLean.PEPS.AreaLaw.graphBallLocalizationVelocity R (2 * J) with hvdef
@@ -155,7 +162,7 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
   have hc : 0 ≤ c := swapBoundaryCoefficient_nonneg R
   have hcJ : 0 ≤ c * J := mul_nonneg hc hJ
   obtain ⟨hψn, hφn, W, z, hW, hz, hfil⟩ :=
-    regional_physicalBuffer_filter.{0, 0} hΔ hr q A C hAC p h.hamiltonian E₀ Ω b
+    regional_physicalBuffer_filter_twoSheet.{0, 0} hΔ hr q A C hAC p h.hamiltonian E₀ Ω b
       (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan hb hI
   obtain ⟨hT, hfwd, hrev⟩ := hfil L hL1
   obtain ⟨U, -, -, -, -, hM⟩ :=
@@ -207,7 +214,8 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
           Real.exp (v * T₀ * (1 + b + Real.log L) - 1 / 2 * ⌈K * (1 + b + Real.log L)⌉₊) := by
           ring
   obtain ⟨h₁, h₂⟩ :=
-    TNLean.Lattice.norm_two_sided_le_of_norm_sub_le hψn hφn (hMerr.trans hδ) hfwd hrev
+    Matrix.norm_two_sided_le_of_norm_sub_le (ψ := WithLp.toLp 2 ψ) (φ := WithLp.toLp 2 (F *ᵥ ψ))
+      hψn hφn (hMerr.trans hδ) hfwd hrev
   refine ⟨hψn, hφn, z, _, hz, hMsupp, hMnorm.trans hW, h₁.trans_eq ?_, h₂.trans_eq ?_⟩ <;>
     rw [rangeResetFilterPrefactor, ← hCgdef, ← hT₀def, ← hcdef] <;> ring
 
@@ -223,27 +231,28 @@ Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-er
 theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r)
     {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : PlaneInteraction Λ q R)
         (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-    (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
+    (A C : Finset ↥Λ) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
     (hI : ManyBody.regionMutualInformation Ω A C ≤ b) :
-    let p := sitePairConfigurationEquiv (Site Λ) q q
-    let F := reindex p p (sheetSwapOp q A)
-    let ψ : Configuration Λ (q * q) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
+    let pr := Equiv.arrowProdEquivProdArrow ↥Λ (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl ↥Λ) finProdFinEquiv)
+    let F := reindex p p (reindex pr pr (ManyBody.pairSwapOp A))
+    let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
     let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
       ((A ∪ C)ᶜ ∪ crossingSites Λ R A) ⌈rangeResetRadius R J Δ r * (1 + b + Real.log L)⌉₊
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-    ∃ U : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ,
-      U ∈ unitaryGroup (Configuration Λ (q * q)) ℂ ∧
+    ∃ U : Matrix (↥Λ → Fin (q * q)) (↥Λ → Fin (q * q)) ℂ,
+      U ∈ unitaryGroup (↥Λ → Fin (q * q)) ℂ ∧
       U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
         rangeResetUnitaryPrefactor R J Δ r * (L : ℝ) ^ (-r) := by
-  intro p F ψ B
+  intro pr p F ψ B
   obtain ⟨hψn, hφn, z, M, hz, hMsupp, -, hfwd, hrev⟩ :=
     h.reset_localized_filter hq hJ hΔ hr hL hΛ hh hhJ E₀ Ω hΩ hgap hspan A C hAC b hb hI
   obtain ⟨U, hU, hUsupp, hUerr⟩ :=
-    TNLean.Lattice.exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
-    (rangeResetFilterPrefactor_pos R hJ hΔ hr).le (by positivity)
+    ManyBody.exists_supported_unitary_of_two_sided (ψ := WithLp.toLp 2 ψ)
+      (φ := WithLp.toLp 2 (F *ᵥ ψ)) hMsupp hb hz hfwd hrev
   exact ⟨hψn, hφn, U, hU, hUsupp, hUerr.trans_eq (by rw [rangeResetUnitaryPrefactor])⟩
 
 end ManyBody.PlaneInteraction

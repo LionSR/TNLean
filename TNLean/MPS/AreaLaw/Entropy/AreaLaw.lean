@@ -47,8 +47,6 @@ open scoped Matrix.Norms.L2Operator
 
 open ManyBody (ChainSupport interval ChainInteraction)
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw

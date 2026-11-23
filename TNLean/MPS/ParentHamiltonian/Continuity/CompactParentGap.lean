@@ -113,19 +113,21 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap
   have hmpos : 0 < (m : ℝ) := by exact_mod_cast (by omega : 0 < m)
   have hthreshold : 1 / (m : ℝ) < γ := (div_lt_iff₀ hmpos).2 (by simpa [mul_comm] using hnum)
   obtain ⟨γ', hγ'lower, hγ'upper⟩ := exists_between hthreshold
-  have hγpos : 0 < γ := (div_pos zero_lt_one hmpos).trans hthreshold
-  have hgap' : ∀ v ∈ (groundSpaceES (A x₀) (m + 1))ᗮ,
-      γ * ‖v‖ ≤
-        ‖Matrix.toEuclideanLin (parentChainInteraction (A x₀) 2 (m + 1)).hamiltonian v‖ := by
-    rw [← ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
-      (Kraus.isNBlkInjective_one_of_isInjective (hInj x₀)) (by omega) (by omega)]
-    exact (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction (A x₀) 2 (m + 1))).mp hgap
-  have hnear := eventually_hamiltonian_parentChainInteraction_gap A hA
-    (fun x => isNBlkInjective_of_le one_pos
-      (Kraus.isNBlkInjective_one_of_isInjective (hInj x)) (by omega))
-    (fun x => isNBlkInjective_of_le one_pos
-      (Kraus.isNBlkInjective_one_of_isInjective (hInj x)) (by omega)) hγpos hγ'upper hgap'
+  have hnear := ManyBody.eventually_forall_hasEigenvalue
+    (continuous_hamiltonian_parentChainInteraction_family A hA (N := m + 1) fun x ↦
+      isNBlkInjective_of_le one_pos
+        (Kraus.isNBlkInjective_one_of_isInjective (hInj x)) (by omega)).continuousAt
+    (Filter.Eventually.of_forall fun x ↦
+      posSemidef_hamiltonian_parentChainInteraction (A x) 2 (m + 1))
+    (by
+      refine (continuous_groundSpaceES_starProjection_family A hA (m + 1) fun x ↦
+        isNBlkInjective_of_le one_pos (Kraus.isNBlkInjective_one_of_isInjective (hInj x))
+          (by omega)).continuousAt.congr (Filter.Eventually.of_forall fun x ↦ ?_)
+      dsimp only
+      rw [ManyBody.groundSpace_zero,
+        ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+          (Kraus.isNBlkInjective_one_of_isInjective (hInj x)) (by omega) (by omega)])
+    hgap hγ'upper
   have hnum' : ((2 : ℝ) - 1) ^ 2 < (m : ℝ) * γ' := by
     have h := (div_lt_iff₀ hmpos).1 hγ'lower
     norm_num at *
@@ -138,11 +140,7 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap
   · filter_upwards [hnear] with x hx N hN
     refine (hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap (A x)
       (R := 2) (m := m) (by omega) hm hnum' ?_).2 N hN
-    refine (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction (A x) 2 _)).mpr ?_
-    rw [show m + 2 - 1 = m + 1 by omega,
-      ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
-        (Kraus.isNBlkInjective_one_of_isInjective (hInj x)) (by omega) (by omega)]
+    rw [show m + 2 - 1 = m + 1 by omega]
     exact hx
 
 end MPSTensor

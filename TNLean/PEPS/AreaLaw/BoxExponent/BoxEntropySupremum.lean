@@ -21,9 +21,9 @@ revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
+
+open ManyBody (IntRect IsSafe rectRegion)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -34,9 +34,9 @@ theorem regionEntropy_le_of_boxEntropy_power
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e))
     {Λ : Finset (ℤ × ℤ)} (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
-    {Ω : StateSpace Λ q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    {Ω : EuclideanSpace ℂ (↥Λ → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-    (A : Finset (Site Λ)) (Q : IntRect) (hsafe : IsSafe Λ A D₀ Q) :
+    (A : Finset ↥Λ) (Q : IntRect) (hsafe : IsSafe Λ A D₀ Q) :
     ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e) := by
   by_cases hs : 1 ≤ Q.size
   · exact (regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
@@ -56,9 +56,9 @@ theorem boxEntropy_power_le_of_large_rectangles
     {q R D₀ : ℕ} (hq : 1 ≤ q) {J Δ C p : ℝ} (hC : 0 ≤ C) (hp : 0 ≤ p) (N : ℕ)
     (hrect : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
         (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q → N ≤ Q.size →
+      ∀ (A : Finset ↥Λ) (Q : IntRect), IsSafe Λ A D₀ Q → N ≤ Q.size →
         ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ p) :
     ∀ r : ℕ, 1 ≤ r →
       boxEntropy q R J Δ D₀ r ≤

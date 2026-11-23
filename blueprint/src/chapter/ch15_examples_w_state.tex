@@ -555,7 +555,7 @@ trace illustrates this failure.
         MPSTensor.norm_normalized_wIndicator,
         MPSTensor.wBlockEncoding,
         MPSTensor.wBlockEncoding_conjTranspose_mul_self,
-        MPSTensor.rectKronecker_wBlockEncoding_isometry}
+        MPSTensor.piKronecker_wBlockEncoding_isometry}
     \leanok
     \uses{def:w_indicator, thm:spt_physical_embedding_boundary}
     The unnormalized W vector has squared norm $N$, so $\|W_N\|=\sqrt N$, and
@@ -580,8 +580,8 @@ trace illustrates this failure.
 
 \begin{lemma}[W vectors under isometric blocking]
     \label{lem:w_state_isometric_blocking}
-    \lean{MPSTensor.rectKronecker_wBlockEncoding_mulVec_wIndicator,
-        MPSTensor.rectKronecker_wBlockEncoding_mulVec_normalized}
+    \lean{MPSTensor.piKronecker_wBlockEncoding_mulVec_wIndicator,
+        MPSTensor.piKronecker_wBlockEncoding_mulVec_normalized}
     \leanok
     \uses{lem:w_state_block_encoding, lem:eval_word_block}
     With the usual flattening of $m$ consecutive blocks of $k$ sites,

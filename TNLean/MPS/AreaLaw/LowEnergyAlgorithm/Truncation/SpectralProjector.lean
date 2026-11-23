@@ -107,17 +107,22 @@ theorem exists_two_window_chebyshev_spectral_projector
         1 - k * |eig j - η₀| / √((η₁ - η₀) * (u - η₀)) ≤ p.eval (eig j)) ∧
       (∀ δ : Fin 2,
         let J := interval L (a + ℓ + δ.val) (b + ℓ + 1)
-        operatorSchmidtRank (K.reindex (sheetSplit q J) (sheetSplit q J)) ≤
+        operatorSchmidtRank (K.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) J)
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤
           (q * k) ^ (17 * (ℓ + k / (2 * ℓ)))) ∧
       (∀ c B : ℕ,
         let S := interval L 0 c
         ((c ≤ a ∧ operatorSchmidtRank
-            ((F (Sum.inr 0)).reindex (sheetSplit q S) (sheetSplit q S)) ≤ B) ∨
+            ((F (Sum.inr 0)).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) S)
+                (ManyBody.cutEquiv (fun _ ↦ Fin q) S)) ≤ B) ∨
           (a + 2 * ℓ + 1 ≤ c ∧ c ≤ b ∧ operatorSchmidtRank
-            ((F (Sum.inr 1)).reindex (sheetSplit q S) (sheetSplit q S)) ≤ B) ∨
+            ((F (Sum.inr 1)).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) S)
+                (ManyBody.cutEquiv (fun _ ↦ Fin q) S)) ≤ B) ∨
           (b + 2 * ℓ + 1 ≤ c ∧ operatorSchmidtRank
-            ((F (Sum.inr 2)).reindex (sheetSplit q S) (sheetSplit q S)) ≤ B)) →
-        operatorSchmidtRank (K.reindex (sheetSplit q S) (sheetSplit q S)) ≤
+            ((F (Sum.inr 2)).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) S)
+                (ManyBody.cutEquiv (fun _ ↦ Fin q) S)) ≤ B)) →
+        operatorSchmidtRank (K.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) S)
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) S)) ≤
           (B + 2) ^ (k + 1)) := by
   intro H hS eig Δ
   have hupper' : ∀ j, hS.eigenvalues finrank_euclideanSpace j ≤ u := hupper

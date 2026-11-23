@@ -34,8 +34,6 @@ open TensorPower TensorPower.ReplicaTransport
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -63,9 +61,9 @@ theorem card_filter_le_sum_card {ι G B : Type*}
 namespace CollarScan
 
 variable {I : Type} [Fintype I] [LinearOrder I]
-variable {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+variable {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) (S : CollarScan ↥Λ I)
   (hm : 0 < S.m) (hM : 0 < S.M) {L : ℕ}
-  (n : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)] (E : EnergyTerms (Site Λ ⊕ Bool) n I)
+  (n : ↥Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)] (E : EnergyTerms (↥Λ ⊕ Bool) n I)
   (a : ℝ) (pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ)
 
 open Classical in
@@ -90,7 +88,7 @@ theorem actualChargeScanRound_splitOld_incidence
   obtain ⟨g, hg⟩ := (Finset.mem_filter.mp hi).2
   change ¬ (augmentedPartition (S.oldChargeState hist g)).Contains (E.support i) at hg
   rw [hsupport] at hg
-  rcases S.old_designatedSupport_classification_domainGraph hT hgraph hdepth hist
+  rcases S.old_designatedSupport_classification_planeDomainGraph hT hgraph hdepth hist
       hn hs hr hDpos hD hL hrows hclear g i with hc | ⟨side, ht⟩
   · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
   · exact ⟨g, side, ht.2.1, ht.1⟩
@@ -119,7 +117,7 @@ theorem actualChargeScanRound_splitNew_incidence
   change ¬ ((S.chargeTransportData (historyMeanTree S.K S.m S.M hm hM s)
     (fun _ ↦ chargeChoiceTree S.K S.M hM)).new hist c g).Contains (E.support i) at hg
   rw [S.chargeTransportData_new, hsupport] at hg
-  rcases S.state_designatedSupport_classification_domainGraph hT hgraph hdepth
+  rcases S.state_designatedSupport_classification_planeDomainGraph hT hgraph hdepth
       (extendHistory hist c) hn hs hr hDpos hD hL hrows hclear g i with hc | ⟨side, ht⟩
   · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
   · exact ⟨g, side, ht.2.1, ht.1⟩
@@ -146,7 +144,7 @@ theorem actualFillScanRound_splitOld_incidence
   obtain ⟨g, hg⟩ := (Finset.mem_filter.mp hi).2
   change ¬ (augmentedPartition (S.state hist g)).Contains (E.support i) at hg
   rw [hsupport] at hg
-  rcases S.state_designatedSupport_classification_domainGraph hT hgraph hdepth hist
+  rcases S.state_designatedSupport_classification_planeDomainGraph hT hgraph hdepth hist
       hn hs hr hDpos hD hL hrows hclear g i with hc | ⟨side, ht⟩
   · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
   · exact ⟨g, side, ht.2.1, ht.1⟩
@@ -174,7 +172,7 @@ theorem actualFillScanRound_splitNew_incidence
   change ¬ ((S.fillTransportData (historyMeanTree S.K S.m S.M hm hM s)).new hist c g).Contains
     (E.support i) at hg
   rw [S.fillTransportData_new, hsupport] at hg
-  rcases S.old_designatedSupport_classification_domainGraph hT hgraph hdepth hist
+  rcases S.old_designatedSupport_classification_planeDomainGraph hT hgraph hdepth hist
       hn hs hr hDpos hD hL hrows hclear g i with hc | ⟨side, ht⟩
   · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
   · exact ⟨g, side, ht.2.1, ht.1⟩
@@ -202,7 +200,7 @@ theorem actualChargeScanRound_card_splitOld_le
     (fun g side i ↦ S.designatedSplitIncidence (S.oldChargeState hist g) L i side)
     (fun i hi ↦ S.actualChargeScanRound_splitOld_incidence hT hm hM n E a pre hgraph hdepth
       hsupport (by omega) hs hr hDpos (by omega) hL hrows hclear hi)).trans
-    (S.sum_card_old_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
+    (S.sum_card_old_designatedSplitIncidence_le_planeDomainGraph hT hgraph hdepth
       hist hn hm2 hs hr hDpos hmargin hL hrows hmult hclear)
 
 open Classical in
@@ -228,7 +226,7 @@ theorem actualChargeScanRound_card_splitNew_le
     (fun g side i ↦ S.designatedSplitIncidence (S.state (extendHistory hist c) g) L i side)
     (fun i hi ↦ S.actualChargeScanRound_splitNew_incidence hT hm hM n E a pre hgraph hdepth
       hsupport (by omega) hs hr hDpos (by omega) hL hrows hclear hi)).trans
-    (S.sum_card_state_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
+    (S.sum_card_state_designatedSplitIncidence_le_planeDomainGraph hT hgraph hdepth
       (extendHistory hist c) hn hm2 hs hr hDpos hmargin hL hrows hmult hclear)
 
 open Classical in
@@ -254,7 +252,7 @@ theorem actualFillScanRound_card_splitOld_le
     (fun g side i ↦ S.designatedSplitIncidence (S.state hist g) L i side)
     (fun i hi ↦ S.actualFillScanRound_splitOld_incidence hT hm hM n E a pre hgraph hdepth
       hsupport (by omega) (by omega) hr hDpos (by omega) hL hrows hclear hi)).trans
-    (S.sum_card_state_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
+    (S.sum_card_state_designatedSplitIncidence_le_planeDomainGraph hT hgraph hdepth
       hist hn hm2 (by omega) hr hDpos hmargin hL hrows hmult hclear)
 
 open Classical in
@@ -280,7 +278,7 @@ theorem actualFillScanRound_card_splitNew_le
     (fun g side i ↦ S.designatedSplitIncidence (S.oldChargeState hist g) L i side)
     (fun i hi ↦ S.actualFillScanRound_splitNew_incidence hT hm hM n E a pre hgraph hdepth
       hsupport (by omega) hs hr hDpos (by omega) hL hrows hclear hi)).trans
-    (S.sum_card_old_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
+    (S.sum_card_old_designatedSplitIncidence_le_planeDomainGraph hT hgraph hdepth
       hist hn hm2 hs hr hDpos hmargin hL hrows hmult hclear)
 
 open Classical in
@@ -348,7 +346,7 @@ theorem actualChargeScanRound_splitWeight_le
         · exact mul_nonneg (historyWeight_nonneg hist) (chargeWeight_nonneg c)
         · exact le_rfl)
   exact (add_le_add hold hnew).trans
-    (S.designated_split_mixture_dilution_domainGraph hT hgraph hdepth i
+    (S.designated_split_mixture_dilution_planeDomainGraph hT hgraph hdepth i
       hn hm hr hD hDpos hC hL hrows hclear hp.1 hp.2)
 
 open Classical in
@@ -408,7 +406,7 @@ theorem actualFillScanRound_splitWeight_le
         · exact historyWeight_nonneg hist
         · exact le_rfl)
   exact (add_le_add hold hnew).trans
-    (S.fill_split_mixture_dilution_domainGraph hT hgraph hdepth i
+    (S.fill_split_mixture_dilution_planeDomainGraph hT hgraph hdepth i
       hn hm hr hD hDpos hC hL hrows hclear hp.1 hp.2)
 
 end CollarScan

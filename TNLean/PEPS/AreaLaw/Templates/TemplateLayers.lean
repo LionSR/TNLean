@@ -17,7 +17,6 @@ Original formalization of manuscript Lemma 9.4; no upstream Lean proof text
 is reused. The template model has no additional regularity fields.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation mem_ambientDilation_iff)
 
 namespace TNLean.PEPS.AreaLaw.Geometry

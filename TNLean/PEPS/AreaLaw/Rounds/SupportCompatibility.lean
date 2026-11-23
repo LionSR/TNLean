@@ -32,8 +32,6 @@ at `openai/math@adc7f124`.
 
 section
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -105,9 +103,9 @@ namespace CollarScan
 /-- Every terminal support of an actual charge round satisfies the transport
 compatibility condition. The only support identification is its physical
 embedding; compatibility is derived from the source geometric margins. -/
-theorem chargeTransportData_supportCompatible_domainGraph
+theorem chargeTransportData_supportCompatible_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (choiceTree : History S.K S.m S.M k → Matrix.MeanTree (ChargeChoices S.K S.M))
@@ -118,7 +116,7 @@ theorem chargeTransportData_supportCompatible_domainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (n : Site Λ ⊕ Bool → ℕ) (E : EnergyTerms (Site Λ ⊕ Bool) n I)
+    (n : ↥Λ ⊕ Bool → ℕ) (E : EnergyTerms (↥Λ ⊕ Bool) n I)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩) :
@@ -128,13 +126,13 @@ theorem chargeTransportData_supportCompatible_domainGraph
   cases c with
   | none =>
     change (augmentedPartition (S.oldChargeState h g)).Contains _ ∨ _
-    rcases old_designatedSupport_classification_domainGraph hT S hgraph hdepth h
+    rcases old_designatedSupport_classification_planeDomainGraph hT S hgraph hdepth h
       hn hk hr hDpos hD hL hrows hclear g i with hc | ⟨side, hs⟩
     · exact Or.inl (augmentedPartition_contains_of_constant _ _ hc)
     · exact Or.inr hs.augmented
   | some c =>
     simp only [TransportData.leafPart, chargeTransportData_new]
-    rcases state_designatedSupport_classification_domainGraph hT S hgraph hdepth
+    rcases state_designatedSupport_classification_planeDomainGraph hT S hgraph hdepth
       (extendHistory h c) hn hk hr hDpos hD hL hrows hclear g i with hc | ⟨side, hs⟩
     · exact Or.inl (augmentedPartition_contains_of_constant _ _ hc)
     · exact Or.inr hs.augmented
@@ -145,8 +143,6 @@ end TNLean.PEPS.AreaLaw.Scan
 end
 
 section
-
-open TNLean.Lattice
 
 open ManyBody (ambientDilation planeDomainGraph)
 
@@ -160,9 +156,9 @@ namespace CollarScan
 
 /-- Both endpoints of an actual fill satisfy designated-support compatibility,
 derived from the geometric scanner hypotheses rather than supplied as a premise. -/
-theorem fillTransportData_supportCompatible_domainGraph
+theorem fillTransportData_supportCompatible_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (hn : 0 < S.n) (hk : k + 1 ≤ S.n * S.m)
@@ -172,7 +168,7 @@ theorem fillTransportData_supportCompatible_domainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (n : Site Λ ⊕ Bool → ℕ) (E : EnergyTerms (Site Λ ⊕ Bool) n I)
+    (n : ↥Λ ⊕ Bool → ℕ) (E : EnergyTerms (↥Λ ⊕ Bool) n I)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩) :
@@ -182,13 +178,13 @@ theorem fillTransportData_supportCompatible_domainGraph
   cases c with
   | none =>
     change (augmentedPartition (S.state h g)).Contains _ ∨ _
-    rcases state_designatedSupport_classification_domainGraph hT S hgraph hdepth h
+    rcases state_designatedSupport_classification_planeDomainGraph hT S hgraph hdepth h
       hn (Nat.le_of_succ_le hk) hr hDpos hD hL hrows hclear g i with hc | ⟨side, hs⟩
     · exact Or.inl (augmentedPartition_contains_of_constant _ _ hc)
     · exact Or.inr hs.augmented
   | some c =>
     simp only [TransportData.leafPart, fillTransportData_new]
-    rcases old_designatedSupport_classification_domainGraph hT S hgraph hdepth h
+    rcases old_designatedSupport_classification_planeDomainGraph hT S hgraph hdepth h
       hn hk hr hDpos hD hL hrows hclear g i with hc | ⟨side, hs⟩
     · exact Or.inl (augmentedPartition_contains_of_constant _ _ hc)
     · exact Or.inr hs.augmented

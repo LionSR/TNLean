@@ -362,7 +362,7 @@ theorem copyApproxVector_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι
   rw [copyApproxVector, copyFixedPointState, mulVec_sum, Finset.sum_apply]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [mulVec_smul, Pi.smul_apply, smul_eq_mul, mulVec_mulVec, Matrix.piKronecker_mul, hVL,
-    tensorPower_polarIso_mulVec_pairProductState]
+    piKronecker_polarIso_mulVec_pairProductState]
 
 end MPSTensor
 

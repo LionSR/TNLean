@@ -1535,21 +1535,9 @@ Finite binary trees have uniformly bounded degree and exponentially growing sphe
 they refute the missing implication about geometry, not the source conclusions.
 The general metric exponential truncated-term estimate follows from a weighted
 Lieb–Robinson tail, with constants uniform in the site set and Hamiltonian. The unrestricted
-summed basis assertion is false, as shown by the physical counterexample below; the
+summed basis assertion is false, as shown by the tree counterexample of
+<https://sirui-lu.com/QICLean/paper-gaps/hastings05_tree_basis_counterexample.pdf>; the
 polynomial-growth theorem is a corrected statement.
-
-[hastings05_tree_basis_counterexample.tex](hastings05_tree_basis_counterexample.tex)
-(false source, resolved) gives a self-contained mathematical counterexample to (oibu)
-on arbitrary metric lattices. A qubit Hamiltonian on a finite `256`-ary tree has ground
-dimension two, gap at least `735/2048`, and interaction terms with fixed radius and norm
-bounds. At `l_proj = R = 1` the actual truncated terms equal these terms, but their summed
-off-diagonal norms are at least `2^(L-2)` in every ground-space basis, with maximal
-compressed spread between three and four. This is a fixed-radius counterexample; no
-failure along a size-dependent radius is asserted. Lean verifies the positive lift,
-the number-sector decomposition, and the lower bound on sectors with at least two
-particles. The concrete tree incidence operators and the full ground-space
-classification remain mathematical proofs in the note. The separately verified
-polynomial-growth basis theorem remains valid.
 
 ### One-dimensional area law after Hastings: the entropy gain constants
 

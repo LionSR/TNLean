@@ -40,9 +40,9 @@ def SquareResetBound (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (p Cp 
     ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
     ∀ b : ℝ, 0 ≤ b → ManyBody.regionMutualInformation Ω R C ≤ b →
     (∀ x ∈ R₀, ∀ y, y ∉ R → Cp * (1 + b + Real.log L) <
-      (AreaLaw.supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
+      (ManyBody.supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
     (∀ x ∈ C₀, ∀ y, y ∉ C → Cp * (1 + b + Real.log L) <
-      (AreaLaw.supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
+      (ManyBody.supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
     ManyBody.regionMutualInformation Ω R₀ C₀ ≤ (L : ℝ) ^ (-p)
 
 section

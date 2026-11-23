@@ -4,10 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Twirl
-import TNLean.Circuit.SupportedOperators
+import QICLean.ManyBody.Sites.ProductOperatorTrace
 import QICLean.Circuit.Geometry
 import Mathlib.Data.Finset.NoncommProd
 import TNLean.MPS.AreaLaw.Spectral.HierarchyLevels
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.ProductVector
 
 /-!
 # The hierarchy on supersites

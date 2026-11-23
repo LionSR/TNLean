@@ -7,7 +7,9 @@ import TNLean.PEPS.Tensor.SquareLattice.Basic
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import TNLean.Lattice.RegionalSwapSupport
+import QICLean.ManyBody.Sites.ReplicaSwap
+import QICLean.ManyBody.Sites.PairSwapPermutation
+import QICLean.ManyBody.Sites.SitewiseProduct
 import TNLean.PEPS.Tensor.Region.RegionBlock
 import TNLean.Lattice.Sheet.SwapCorrection
 import QICLean.Spectral.Gap.DoubledSystemGap
@@ -15,7 +17,8 @@ import TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount
 import QICLean.Analysis.Norm.L2OpNormReindex
 import TNLean.PEPS.AreaLaw.Interactions.RectangularHamiltonian
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
-import TNLean.Circuit.SitewiseTensorSupport
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.ConfigurationMap
 
 /-!
 # The crossing-edge expansion of a swapped Hamiltonian
@@ -94,18 +97,18 @@ dimension and empty square grids are included.
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 513–524. -/
 theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
     {L q : ℕ} (h : SquareInteraction L q) (R : Finset (SquareLatticeVertex L L)) :
-    let F := TNLean.Lattice.sheetSwapOp q R
+    let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let F := reindex pr pr (ManyBody.pairSwapOp R)
     F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
       ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R),
         (F * doubledHamiltonian (h.term (.inr e)) * Fᴴ -
           doubledHamiltonian (h.term (.inr e))) := by
   classical
+  intro pr F
   let δ : Matrix (Configuration L q) (Configuration L q) ℂ →ₗ[ℂ]
       Matrix (Configuration L q × Configuration L q)
         (Configuration L q × Configuration L q) ℂ :=
-    (LinearMap.mulLeftRight ℂ
-      (TNLean.Lattice.sheetSwapOp q R, (TNLean.Lattice.sheetSwapOp q R)ᴴ) -
-      LinearMap.id).comp
+    (LinearMap.mulLeftRight ℂ (F, Fᴴ) - LinearMap.id).comp
       ((Matrix.kroneckerBilinear (R := ℂ)).flip
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ) +
         Matrix.kroneckerBilinear (R := ℂ)
@@ -116,10 +119,21 @@ theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
       (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
       (hS : S ⊆ R ∨ Disjoint S R) :
-      δ A = 0 :=
-    sub_eq_zero.mpr
-      (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-        hA hS)
+      δ A = 0 := by
+    -- on paired sites the exchange on `R` fixes a doubled operator supported inside or
+    -- outside `R`
+    have hfix : ManyBody.pairSwapOp R * reindex pr.symm pr.symm (doubledHamiltonian A) *
+        (ManyBody.pairSwapOp R)ᴴ = reindex pr.symm pr.symm (doubledHamiltonian A) :=
+      hS.elim (fun hs ↦ ManyBody.pairSwapOp_conj_doubled_of_subset hs hA)
+        (fun hs ↦ ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint hs
+          (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators hA))
+    have hY : doubledHamiltonian A =
+        reindex pr pr (reindex pr.symm pr.symm (doubledHamiltonian A)) := by
+      rw [← reindex_symm, Equiv.apply_symm_apply]
+    change F * doubledHamiltonian A * Fᴴ - doubledHamiltonian A = 0
+    rw [sub_eq_zero, hY]
+    conv_rhs => rw [← hfix]
+    simp only [F, reindex_apply, conjTranspose_submatrix, submatrix_mul_equiv]
   have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ IsRegionBoundaryEdge R e) :
       δ (h.term (.inr e)) = 0 := by
     apply hcancel (h.mem (.inr e))
@@ -145,7 +159,6 @@ section
 
 open Matrix
 open scoped Matrix.Norms.L2Operator
-open TNLean.Lattice (norm_sheetSwapOp_le_one sheetSwapOp)
 
 namespace TNLean.PEPS.EncodedFrame
 
@@ -155,23 +168,27 @@ in `02-information.tex`, lines 416–424 and 513–524. -/
 theorem norm_sheetSwapOp_conj_doubledHamiltonian_sub_le
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     (R : Finset ι) (A : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
-    ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ -
-      doubledHamiltonian A‖ ≤ 4 * ‖A‖ := by
+    ‖reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q) (ManyBody.pairSwapOp R) *
+        doubledHamiltonian A *
+        (reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+          (ManyBody.pairSwapOp R))ᴴ - doubledHamiltonian A‖ ≤ 4 * ‖A‖ := by
+  set F := reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+    (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+    (ManyBody.pairSwapOp (X := fun _ : ι ↦ Fin q) R)
+  have hF : ‖F‖ ≤ 1 :=
+    (Matrix.l2_opNorm_reindex_equiv _ _).trans_le (ManyBody.norm_pairSwapOp_le_one R)
   have hdouble : ‖doubledHamiltonian A‖ ≤ ‖A‖ + ‖A‖ := by
     unfold doubledHamiltonian
     refine (norm_add_le _ _).trans (add_le_add ?_ ?_)
     · exact l2_opNorm_kronecker_one_le A
     · exact l2_opNorm_one_kronecker_le A
-  have hconj : ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ‖
-      ≤ ‖A‖ + ‖A‖ :=
-    (norm_mul_le_of_le
-      (norm_mul_le_of_le (norm_sheetSwapOp_le_one (q := q) R) hdouble)
-      ((l2_opNorm_conjTranspose (sheetSwapOp q R)).trans_le
-        (norm_sheetSwapOp_le_one (q := q) R))).trans (le_of_eq (by ring))
-  calc ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ
-          - doubledHamiltonian A‖
-      ≤ ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ‖
-        + ‖doubledHamiltonian A‖ := norm_sub_le _ _
+  have hconj : ‖F * doubledHamiltonian A * Fᴴ‖ ≤ ‖A‖ + ‖A‖ :=
+    (norm_mul_le_of_le (norm_mul_le_of_le hF hdouble)
+      ((l2_opNorm_conjTranspose F).trans_le hF)).trans (le_of_eq (by ring))
+  calc ‖F * doubledHamiltonian A * Fᴴ - doubledHamiltonian A‖
+      ≤ ‖F * doubledHamiltonian A * Fᴴ‖ + ‖doubledHamiltonian A‖ := norm_sub_le _ _
     _ ≤ (‖A‖ + ‖A‖) + (‖A‖ + ‖A‖) := add_le_add hconj hdouble
     _ = 4 * ‖A‖ := by ring
 
@@ -183,7 +200,7 @@ section
 
 open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
 
-open Matrix QuantumCircuit
+open Matrix
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.Approximation
@@ -197,16 +214,19 @@ Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 51
 theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
     {L q : ℕ} {J : ℝ} (h : SquareInteraction L q) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     (R : Finset (SquareLatticeVertex L L)) :
-    let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
+    let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
-    let F := Matrix.reindex p p (TNLean.Lattice.sheetSwapOp q R)
+    let F := Matrix.reindex p p (Matrix.reindex pr pr (ManyBody.pairSwapOp R))
     let boundary : Finset (Edge (squareLatticeGraph L L)) :=
       Finset.univ.filter (IsRegionBoundaryEdge R)
     let Z := boundary.biUnion fun e ↦ ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))
     F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z ∧
       ‖F * K * Fᴴ - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
   classical
-  intro p K F boundary Z
+  intro pr p K F boundary Z
+  let g := ManyBody.siteConfigurationEquiv (X' := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
+    (Equiv.refl (SquareLatticeVertex L L)) fun _ ↦ finProdFinEquiv
   have hsum := congrArg (Matrix.reindex p p)
     (h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing R)
   simp only [← Matrix.coe_reindexRingEquiv, map_sum, map_sub, map_mul] at hsum
@@ -219,28 +239,42 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
     simpa only [Matrix.reindex_apply, Matrix.submatrix_sub, Pi.sub_apply,
       ← Matrix.submatrix_mul_equiv (e₂ := p.symm), ← Matrix.conjTranspose_submatrix] using!
       (Matrix.l2_opNorm_reindex_equiv p
-        (TNLean.Lattice.sheetSwapOp q R * doubledHamiltonian A *
-          (TNLean.Lattice.sheetSwapOp q R)ᴴ - doubledHamiltonian A)).trans_le
+        (Matrix.reindex pr pr (ManyBody.pairSwapOp R) * doubledHamiltonian A *
+          (Matrix.reindex pr pr (ManyBody.pairSwapOp R))ᴴ - doubledHamiltonian A)).trans_le
         (EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le R A)
   have hplain (S : Finset (SquareLatticeVertex L L))
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
       (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
       Matrix.reindex p p (doubledHamiltonian A) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
-    simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
-      Matrix.submatrix_mul_equiv,
-      TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-        (R := ∅) hA (Or.inr (by simp))] using!
-      TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hA
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators (Equiv.refl _)
+      (X' := fun _ ↦ Fin (q * q)) (fun _ ↦ finProdFinEquiv) (fun _ ↦ Iff.rfl)
+      (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators hA)
+    convert hs using 1
+    ext x y
+    rfl
   have hlocal (S : Finset (SquareLatticeVertex L L))
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
       (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
       F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ -
           Matrix.reindex p p (doubledHamiltonian A) ∈
-        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S :=
-    sub_mem
-      (TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R S hA)
-      (hplain S hA)
+        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
+    refine sub_mem ?_ (hplain S hA)
+    -- in the paired coordinates `F` is the exchange on `R`, which keeps supports
+    have h := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators (Equiv.refl _)
+      (X' := fun _ ↦ Fin (q * q)) (fun _ ↦ finProdFinEquiv) (fun _ ↦ Iff.rfl)
+      (ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators R
+        (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators hA))
+    convert h using 1
+    have hF : F = Matrix.reindex g g (ManyBody.pairSwapOp R) := rfl
+    have hY : Matrix.reindex p p (doubledHamiltonian A) =
+        Matrix.reindex g g (Matrix.reindex pr.symm pr.symm (doubledHamiltonian A)) := by
+      ext x y
+      rfl
+    rw [hF, hY]
+    simp only [Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv]
+    ext x y
+    rfl
   have hsupport : F * K * Fᴴ - K ∈
       ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z :=
     hsum.symm ▸ sum_mem
@@ -302,9 +336,10 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
     {L q : ℕ} {J : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J) (hJ : 0 ≤ J)
     (R : Finset (SquareLatticeVertex L L)) :
-    let p := QuantumCircuit.sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
+    let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q) fun _ ↦ Fin q
+    let p := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
     let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
-    let F := Matrix.reindex p p (TNLean.Lattice.sheetSwapOp q R)
+    let F := Matrix.reindex p p (Matrix.reindex pr pr (ManyBody.pairSwapOp R))
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
     ∃ g : ManyBody.PlaneInteraction (ManyBody.rectangularDomain L L) (q * q) 1,
       (∀ X, (g.term X).IsHermitian) ∧ (∀ X, ‖g.term X‖ ≤ 2 * J) ∧ g.term =
@@ -314,18 +349,34 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
             (F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianPart.term i)) * Fᴴ)) 0 ∧
       g.hamiltonian = Matrix.reindex e e (F * K * Fᴴ) := by
   classical
-  intro p e F K
+  intro pr p e F K
+  let g := ManyBody.siteConfigurationEquiv (X' := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
+    (Equiv.refl (SquareLatticeVertex L L)) fun _ ↦ finProdFinEquiv
   let B (i : SquareLatticeSiteOrEdge L L) :=
     F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianPart.term i)) * Fᴴ
   have hBsupport (i : SquareLatticeSiteOrEdge L L) : B i ∈
       ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
-          (squareLatticeSiteOrEdgeSupport i : Finset (Vertex L)) :=
-    TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
-      (squareLatticeSiteOrEdgeSupport i)
-          (h.hermitianPart.mem i)
+          (squareLatticeSiteOrEdgeSupport i : Finset (Vertex L)) := by
+    -- in the paired coordinates `F` is the exchange on `R`, which keeps supports
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators (Equiv.refl _)
+      (X' := fun _ ↦ Fin (q * q)) (fun _ ↦ finProdFinEquiv) (fun _ ↦ Iff.rfl)
+      (ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators R
+        (ManyBody.reindex_doubledHamiltonian_mem_supportedOperators (h.hermitianPart.mem i)))
+    convert hs using 1
+    have hF : F = Matrix.reindex g g (ManyBody.pairSwapOp R) := rfl
+    have hY : Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianPart.term i)) =
+        Matrix.reindex g g (Matrix.reindex pr.symm pr.symm
+          (Matrix.doubledHamiltonian (h.hermitianPart.term i))) := by
+      ext x y
+      rfl
+    simp only [B]
+    rw [hF, hY]
+    simp only [Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv]
+    ext x y
+    rfl
   have hFn : ‖F‖ ≤ 1 :=
-    (Matrix.l2_opNorm_reindex_equiv p (TNLean.Lattice.sheetSwapOp q R)).le.trans
-      (TNLean.Lattice.norm_sheetSwapOp_le_one R)
+    (Matrix.l2_opNorm_reindex_equiv p _).le.trans ((Matrix.l2_opNorm_reindex_equiv pr _).le.trans
+      (ManyBody.norm_pairSwapOp_le_one R))
   have hDn (i : SquareLatticeSiteOrEdge L L) : ‖Matrix.doubledHamiltonian
       (h.hermitianPart.term i)‖ ≤
       J + J :=

@@ -80,17 +80,17 @@ theorem cell_conditionalMutualInformation_le_closed
       m₀ ∉ A →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        let G : Finset (Site Λ) :=
+        let G : Finset ↥Λ :=
           Finset.univ.filter (fun x ↦ x.val ∈ CellPartition.cellSample o s m₀)
-        let B : Finset (Site Λ) := Finset.univ.filter
+        let B : Finset ↥Λ := Finset.univ.filter
           (fun x ↦ CellPartition.cellIndex o s (AreaLaw.Geometry.integerPoint x.val) ∈ A)
-        ∀ E : Finset (Site Λ), E ⊆ (G ∪ B)ᶜ →
+        ∀ E : Finset ↥Λ, E ⊆ (G ∪ B)ᶜ →
           (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner o s m₀) s),
             ∀ y ∈ E, c * s ≤ dist x (AreaLaw.Geometry.integerPoint y.val)) →
-          ManyBody.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
+          ManyBody.conditionalMutualInformation (fun _ : ↥Λ ↦ Fin q)
             Ω G E B ≤ cellInformationConstantClosed q R J Δ c *
               (1 + Real.log s) ^ cellInformationExponentClosed q R J Δ c :=
   cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt

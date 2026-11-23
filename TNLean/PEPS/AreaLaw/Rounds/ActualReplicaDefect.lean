@@ -28,7 +28,6 @@ adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 noncomputable section
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport PlaneInteraction)
 
@@ -77,27 +76,27 @@ Source: 07-comparators.tex, comparator:defect-mass, lines 421--443;
 theorem actualChargeScanRound_globalLowDefectProjection_mass_ge
     {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]
     [LinearOrder (AdmissibleSupport Λ R)]
-    (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+    (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (s : ℕ)
     (h : PlaneInteraction Λ q R)
-    (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
-    (Ωt : StateSpace Λ q) (e₀ g : ℝ)
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ) (L : ℕ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (e₀ g : ℝ)
     (hΩt : ‖Ωt‖ = 1)
     (hgap : ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
       (g : ℂ) • (1 - Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef)
     (hg : 0 < g) (a : ℝ) (ha : 0 ≤ a)
     (pre : (k : ℕ) → Config k
-      (fun v => Fin (augmentedDimensions (V := Site Λ) q (fun _ => d) v)) → ℂ)
+      (fun v => Fin (augmentedDimensions (V := ↥Λ) q (fun _ => d) v)) → ℂ)
     {k : ℕ} (hk : 0 < k) (hpre : pre k ≠ 0) (p : ℝ)
     (ellC ellR : IrrepLabel (Equiv.Perm (Fin k))) {τ : ℝ} (hτ : 0 < τ) :
-    let β := fun _ : Site Λ => Fin q
+    let β := fun _ : ↥Λ => Fin q
     let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
-    let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+    let n := augmentedDimensions (V := ↥Λ) q (fun _ => d)
     let D := S.actualChargeData hm hM s
     let v := Matrix.Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k)
     let vO : EuclideanSpace ℂ (Config k ι₀) :=
       WithLp.toLp 2 (v ∘ augmentedReplicaConfigurationEquiv q d k)
-    symProj (copyPerm ((x : Option (Option (Site Λ))) → ι₀ x) k) *ᵥ vO = vO.ofLp →
+    symProj (copyPerm ((x : Option (Option ↥Λ)) → ι₀ x) k) *ᵥ vO = vO.ofLp →
     labelProj (subsystemPerm k ι₀ {some none}) ellC *ᵥ vO = vO.ofLp →
     labelProj (subsystemPerm k ι₀ {none}) ellR *ᵥ vO = vO.ofLp →
     1 - ((S.actualChargeScanRound hm hM s n

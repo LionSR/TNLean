@@ -23,7 +23,6 @@ initial fan runs, lines 299–318; and the initial-belt contribution to
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -45,7 +44,7 @@ actual initial belt regions is finite, and its cardinality is at most
 `initialBeltCountConstant (2 C₀ + 1) ^ 2 |∂A|`.
 Source: area-law Section 11, `geometry:belt-count`, lines 220–233;
 initial fan runs, lines 299–318; and `geometry:total-repairs`, lines 685–692. -/
-theorem initial_belt_card_le (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+theorem initial_belt_card_le (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
     let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
       o Λ A C k₀ hC h₀
@@ -143,7 +142,7 @@ initial fan runs, lines 299–318; and `geometry:total-repairs`, lines 685–692
 at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem exists_uniform_initial_belt_card_bound :
     ∃ B : ℝ, 0 < B ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
         (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀),
         let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
           o Λ A C k₀ hC h₀

@@ -22,7 +22,6 @@ OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
 No upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation mem_ambientDilation_iff)
 
 namespace TNLean.PEPS.AreaLaw.Geometry

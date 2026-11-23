@@ -10,13 +10,13 @@ classification are discussed in \cite{gap:hastings05_tree_basis_counterexample}.
 
 \begin{lemma}[Positive quadratic lifting]
     \label{thm:hastings05_positive_quadratic_lift}
-    \lean{TNLean.Lattice.TreeBasisCounterexample.quadraticLift,
-        TNLean.Lattice.TreeBasisCounterexample.modeOperator,
-        TNLean.Lattice.TreeBasisCounterexample.quadraticLift_outer,
-        TNLean.Lattice.TreeBasisCounterexample.quadraticLift_gram,
-        TNLean.Lattice.TreeBasisCounterexample.posSemidef_quadraticLift,
-        TNLean.Lattice.TreeBasisCounterexample.quadraticLift_one,
-        TNLean.Lattice.TreeBasisCounterexample.quadraticLift_gap}
+    \lean{ManyBody.HardCore.quadraticLift,
+        ManyBody.HardCore.modeOperator,
+        ManyBody.HardCore.quadraticLift_outer,
+        ManyBody.HardCore.quadraticLift_gram,
+        ManyBody.HardCore.posSemidef_quadraticLift,
+        ManyBody.HardCore.quadraticLift_one,
+        ManyBody.HardCore.quadraticLift_gap}
     \leanok
     For a finite family of operators $s_v$, define
     $\mathcal L(A)=\sum_{u,v}A_{uv}s_u^*s_v$ and
@@ -42,19 +42,19 @@ classification are discussed in \cite{gap:hastings05_tree_basis_counterexample}.
 
 \begin{lemma}[Actual hard-core particle number]
     \label{thm:hastings05_hard_core_number}
-    \lean{TNLean.Lattice.TreeBasisCounterexample.qubitLowering,
-        TNLean.Lattice.TreeBasisCounterexample.qubitLowering_number,
-        TNLean.Lattice.TreeBasisCounterexample.lowering,
-        TNLean.Lattice.TreeBasisCounterexample.numberOperator,
-        TNLean.Lattice.TreeBasisCounterexample.occupation,
-        TNLean.Lattice.TreeBasisCounterexample.lowering_number,
-        TNLean.Lattice.TreeBasisCounterexample.numberOperator_eq_diagonal,
-        TNLean.Lattice.TreeBasisCounterexample.isStarProjection_lowering_number,
-        TNLean.Lattice.TreeBasisCounterexample.norm_lowering_le_one,
-        TNLean.Lattice.TreeBasisCounterexample.norm_lowering_apply_le,
-        TNLean.Lattice.TreeBasisCounterexample.IsParticleSector,
-        TNLean.Lattice.TreeBasisCounterexample.re_inner_numberOperator,
-        TNLean.Lattice.TreeBasisCounterexample.sum_norm_lowering_sq_of_sector}
+    \lean{ManyBody.HardCore.qubitLowering,
+        ManyBody.HardCore.qubitLowering_number,
+        ManyBody.HardCore.lowering,
+        ManyBody.HardCore.numberOperator,
+        ManyBody.HardCore.occupation,
+        ManyBody.HardCore.lowering_number,
+        ManyBody.HardCore.numberOperator_eq_diagonal,
+        ManyBody.HardCore.isStarProjection_lowering_number,
+        ManyBody.HardCore.norm_lowering_le_one,
+        ManyBody.HardCore.norm_lowering_apply_le,
+        ManyBody.HardCore.IsParticleSector,
+        ManyBody.HardCore.re_inner_numberOperator,
+        ManyBody.HardCore.sum_norm_lowering_sq_of_sector}
     \leanok
     Let $s_v$ be the qubit lowering matrix $|0\rangle\langle1|$ at site
     $v$ on the physical configuration space $\{0,1\}^V$.
@@ -75,10 +75,10 @@ classification are discussed in \cite{gap:hastings05_tree_basis_counterexample}.
 
 \begin{lemma}[The multi-particle sector energy bound]
     \label{thm:hastings05_hard_core_sector_gap}
-    \lean{TNLean.Lattice.TreeBasisCounterexample.norm_mode_apply_le,
-        TNLean.Lattice.TreeBasisCounterexample.norm_mode_apply_sq_le,
-        TNLean.Lattice.TreeBasisCounterexample.norm_hardCoreMode_apply_sq_le,
-        TNLean.Lattice.TreeBasisCounterexample.hardCore_sector_energy_ge}
+    \lean{ManyBody.HardCore.norm_mode_apply_le,
+        ManyBody.HardCore.norm_mode_apply_sq_le,
+        ManyBody.HardCore.norm_hardCoreMode_apply_sq_le,
+        ManyBody.HardCore.hardCore_sector_energy_ge}
     \leanok
     \uses{thm:hastings05_positive_quadratic_lift,
         thm:hastings05_hard_core_number}

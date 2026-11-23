@@ -31,8 +31,6 @@ revision
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.Approximation

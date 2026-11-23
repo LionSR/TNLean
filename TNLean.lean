@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean
 
 import TNLean.Algebra
-import TNLean.Circuit
 import TNLean.Lattice
 import TNLean.MPS
 import TNLean.PEPS

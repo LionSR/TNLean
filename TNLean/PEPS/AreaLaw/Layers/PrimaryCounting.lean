@@ -23,7 +23,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -137,7 +136,7 @@ theorem card_primaryPitchIndices_le (o : ℝ × ℝ) (k ℓ p : ℕ)
 /-- The actual number of primary indices is uniformly bounded by the physical cut boundary.
 Source: area-law Section 11, lines 237–238. -/
 theorem card_primaryPitchIndices_boundary_le (o : ℝ × ℝ) (k ℓ p : ℕ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C : ℕ) (a b : ℤ) (hkp : k ≤ p) :
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C : ℕ) (a b : ℤ) (hkp : k ≤ p) :
     (primaryPitchIndices o k ℓ p (boundaryEndpoints Λ A) C a b).card ≤
       32 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
   calc

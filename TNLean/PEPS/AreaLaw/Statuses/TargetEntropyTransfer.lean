@@ -23,8 +23,6 @@ open Filter
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The same actual trace-distance estimate controls the target entropy, uniformly over all
@@ -33,8 +31,8 @@ regions of the supplied quadratic volume bound, at every `n` from the explicit t
 theorem abs_regionEntropy_sub_le_of_truncationEntropyThreshold_le
     (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) {n : ℕ}
     (hthr : truncationEntropyThreshold q g Cvol ≤ n) :
-    ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
-    ‖Ω‖ = 1 → ‖Ωt‖ = 1 → ∀ X : Finset (Site Λ),
+    ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
+    ‖Ω‖ = 1 → ‖Ωt‖ = 1 → ∀ X : Finset ↥Λ,
     (X.card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
     Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
         (Matrix.vecMulVec Ω (star Ω)) ≤
@@ -86,8 +84,8 @@ Source: `08-scanner.tex`, lines 399–404. -/
 theorem eventually_abs_regionEntropy_sub_le_of_truncation
     (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) :
     ∀ᶠ n : ℕ in atTop,
-      ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
-      ‖Ω‖ = 1 → ‖Ωt‖ = 1 → ∀ X : Finset (Site Λ),
+      ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
+      ‖Ω‖ = 1 → ‖Ωt‖ = 1 → ∀ X : Finset ↥Λ,
       (X.card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
       Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
           (Matrix.vecMulVec Ω (star Ω)) ≤

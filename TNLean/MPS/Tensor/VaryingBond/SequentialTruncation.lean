@@ -7,11 +7,14 @@ import TNLean.MPS.Tensor.VaryingBond.OpenMPSRank
 import QICLean.Analysis.Norm.MatrixToEuclidean
 import QICLean.Analysis.Projection.MatrixStarProjection
 import QICLean.ManyBody.Entropy.Filter.Optimizer
-import TNLean.Lattice.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.Entropy.VonNeumann.SpectralTail
 import QICLean.Spectral.Eigenvalue.KyFanNorm
 import QICLean.ManyBody.Replica.RelativePin
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Sequential truncation of a chain vector

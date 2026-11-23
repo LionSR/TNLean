@@ -3,12 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.StateSpace
-import TNLean.Lattice.GraphInteractionDiamondCounting
+import QICLean.ManyBody.Sites.Config
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Dynamics.GraphLocalization
+import QICLean.ManyBody.Hamiltonian.Models
 
 /-!
 # Graph-distance propagation for finite-domain Hamiltonians
@@ -53,11 +54,12 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped Matrix.Norms.L2Operator Nat
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport IsAdmissibleSupport card_le_diamond_of_edist_le
   exists_walk_length_le_iff_edist_le latticeL1Distance_le_one_of_planeDomainGraph_adj
   planeDomainGraph PlaneInteraction)
+
+open ManyBody (card_supports_containing_le_diamond)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -68,7 +70,7 @@ open QuantumCircuit
 /-- The sites at induced-graph distance exactly `d` from a site number at most
 `2 (d + 1)²`. Source: area law, `03-quasilocal.tex`, lines 124–126, using the diamond
 count `eq:ball-count`. -/
-theorem card_domainGraph_sphere_le (Λ : Finset (ℤ × ℤ)) (x : Site Λ) (d : ℕ) :
+theorem card_planeDomainGraph_sphere_le (Λ : Finset (ℤ × ℤ)) (x : ↥Λ) (d : ℕ) :
     ((Finset.univ.filter fun y => (planeDomainGraph Λ).edist x y = d).card : ℝ) ≤
       2 * ((d : ℝ) + 1) ^ 2 := by
   have hcard := card_le_diamond_of_edist_le Subtype.val
@@ -85,8 +87,6 @@ end TNLean.PEPS.AreaLaw
 /-! ### The interaction budget -/
 
 namespace ManyBody.PlaneInteraction
-
-open TNLean.Lattice
 
 open TNLean.PEPS.AreaLaw QuantumCircuit
 
@@ -105,7 +105,7 @@ theorem normBound_nonneg (h : PlaneInteraction Λ q R) (hhJ : ∀ X, ‖h.term X
 (`03-quasilocal.tex`, lines 31–39) and `01-preliminaries.tex`, lines 95–102. -/
 theorem sum_norm_term_containing_le (h : PlaneInteraction Λ q R)
     (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
-    (x : Site Λ) :
+    (x : ↥Λ) :
     ∑ X ∈ Finset.univ.filter (fun X : AdmissibleSupport Λ R => x ∈ X.1), ‖h.term X‖ ≤
       (2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * J := by
   classical
@@ -124,17 +124,17 @@ theorem sum_norm_term_containing_le (h : PlaneInteraction Λ q R)
 
 /-- The terms of `h` as an interaction on the sites of `Λ`, with Hamiltonian `h.hamiltonian`. -/
 private noncomputable def interaction (h : PlaneInteraction Λ q R) :
-    ManyBody.Interaction (fun _ : Site Λ ↦ Fin q) (fun X : AdmissibleSupport Λ R ↦ X.1) :=
+    ManyBody.Interaction (fun _ : ↥Λ ↦ Fin q) (fun X : AdmissibleSupport Λ R ↦ X.1) :=
   ⟨h.term, fun X ↦ (h.mem X)⟩
 
 /-- An anchor family that takes the prescribed value `a` at `X` and an arbitrary site of
 every other support. -/
-private noncomputable def anchors (X : AdmissibleSupport Λ R) (a : Site Λ) :
-    AdmissibleSupport Λ R → Site Λ := by
+private noncomputable def anchors (X : AdmissibleSupport Λ R) (a : ↥Λ) :
+    AdmissibleSupport Λ R → ↥Λ := by
   classical
   exact Function.update (fun Y => Y.2.1.choose) X a
 
-private theorem anchors_mem {X : AdmissibleSupport Λ R} {a : Site Λ} (ha : a ∈ X.1)
+private theorem anchors_mem {X : AdmissibleSupport Λ R} {a : ↥Λ} (ha : a ∈ X.1)
     (Y : AdmissibleSupport Λ R) : anchors X a Y ∈ Y.1 := by
   classical
   unfold anchors
@@ -145,7 +145,7 @@ private theorem anchors_mem {X : AdmissibleSupport Λ R} {a : Site Λ} (ha : a �
   · convert Y.2.1.choose_spec
     exact Function.update_of_ne hY ..
 
-private theorem anchors_self (X : AdmissibleSupport Λ R) (a : Site Λ) :
+private theorem anchors_self (X : AdmissibleSupport Λ R) (a : ↥Λ) :
     anchors X a X = a := by
   classical
   unfold anchors
@@ -164,10 +164,10 @@ Source: OpenAI area law, Lemma 4.1, `eq:quasilocal-lr` (`03-quasilocal.tex`,
 lines 52–64 and 70–112), with the budget `eq:quasilocal-budget` (lines 31–39). -/
 theorem norm_commutator_le_graphDistance (h : PlaneInteraction Λ q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
-    {A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1) (y : Site Λ)
-    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
+    (X : AdmissibleSupport Λ R) {a : ↥Λ} (ha : a ∈ X.1)
+    {A B : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1) (y : ↥Λ)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ↥Λ))
     (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ) (hn : (n : ℕ∞) ≤ (planeDomainGraph Λ).edist a y) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B - B *
         ManyBody.heisenbergEvolution h.hamiltonian
@@ -190,10 +190,10 @@ every on-site operator at `y`.
 Source: OpenAI area law, Lemma 4.1: "The commutator is zero when `d_Λ(a_i, y) = ∞`"
 (`03-quasilocal.tex`, lines 63 and 113–114). -/
 theorem commutator_eq_zero_of_edist_eq_top (h : PlaneInteraction Λ q R)
-    (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
-    {A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1) (y : Site Λ)
-    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
+    (X : AdmissibleSupport Λ R) {a : ↥Λ} (ha : a ∈ X.1)
+    {A B : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1) (y : ↥Λ)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ↥Λ))
     (hy : (planeDomainGraph Λ).edist a y = ⊤) (t : ℝ) :
     ManyBody.heisenbergEvolution h.hamiltonian t A * B - B * ManyBody.heisenbergEvolution
         h.hamiltonian t
@@ -214,8 +214,8 @@ Source: OpenAI area law, Lemma 4.1, `eq:quasilocal-lr-ce` (`03-quasilocal.tex`,
 lines 65–68 and 117–128), with `E_{i,l}` from `eq:quasilocal-ce` (lines 17–29). -/
 theorem norm_sub_regionExpectation_graphBall_le (h : PlaneInteraction Λ q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
-    {A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
+    (X : AdmissibleSupport Λ R) {a : ↥Λ} (ha : a ∈ X.1)
+    {A : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1) (l : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.hamiltonian t A -
         ManyBody.regionExpectation (ManyBody.graphBall (planeDomainGraph Λ) a l)
@@ -229,7 +229,7 @@ theorem norm_sub_regionExpectation_graphBall_le (h : PlaneInteraction Λ q R)
     (planeDomainGraph Λ) h.interaction (anchors X a) (anchors_mem ha) hh
     R (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le hhJ (h.normBound_nonneg hhJ X)) 2 2
-    (fun x d => card_domainGraph_sphere_le Λ x d) X
+    (fun x d => card_planeDomainGraph_sphere_le Λ x d) X
     hA l t
   rwa [anchors_self] at hBound
 
@@ -258,11 +258,11 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
     ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J) (X : AdmissibleSupport Λ R)
-        (a : Site Λ), a ∈ X.1 →
-        ∀ A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+        (a : ↥Λ), a ∈ X.1 →
+        ∀ A : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ,
         A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1 → ∀ t : ℝ,
-        (∀ (y : Site Λ) (B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
-          B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)) →
+        (∀ (y : ↥Λ) (B : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ),
+          B ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ↥Λ) →
           (∀ d : ℕ, (planeDomainGraph Λ).edist a y = d →
             ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B -
                 B * ManyBody.heisenbergEvolution h.hamiltonian t A‖ ≤

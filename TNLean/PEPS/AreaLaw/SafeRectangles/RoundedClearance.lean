@@ -24,7 +24,7 @@ and `scanner:scales` / `scanner:test-geometry`, lines 32–49, at
 Original proof from the manuscript; no upstream Lean proof text reused.
 -/
 
-open TNLean.Lattice
+open ManyBody (IntRect IsSafe supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -142,7 +142,7 @@ cells uniformly in the domain, cut, safety parameter and parent rectangle.
 Source: Proposition 9.5, `08-scanner.tex`, lines 707–729. -/
 theorem exists_safe_shell_cells_of_rounded_scales (X : ScannerExponents)
     {C₂ Cr : ℝ} (hC₂ : 0 < C₂) (hCr : 0 ≤ Cr) :
-    ∃ S : ℕ, 1 ≤ S ∧ ∀ {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ))
+    ∃ S : ℕ, 1 ≤ S ∧ ∀ {Λ : Finset (ℤ × ℤ)} (A : Finset ↥Λ)
       (D₀ : ℕ), 1 ≤ D₀ → ∀ Q : IntRect, S ≤ Q.size → IsSafe Λ A D₀ Q →
       let n := ⌈C₂ * Q.size⌉₊
       let L := X.L n
