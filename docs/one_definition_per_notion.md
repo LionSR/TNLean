@@ -1007,8 +1007,7 @@ Blueprint (`grep \lean{…}` in `blueprint/src/chapter/*.tex`):
   (bipartite mutual information of `σ^{(N)}(M)` between the first `L` and the remaining `N-L` spins,
   `\lean{MPOTensor.mutualInfoChain}`) and a lemma with the formula `I_L = S_L + S_{N-L} - S_N`
   (`\lean{MPOTensor.mutualInfoChain_eq}`, `\uses{def:mutual_info_chain, def:block_entropy}`, proof by
-  translation invariance, `\leanok`); register the new lemma in `blueprint/roles.json` if lemmas are
-  listed there.
+  translation invariance, `\leanok`).
 * Unchanged labels (same Lean names): `lem:sal_const`, `prop:mutual_info_monotone`,
   `lem:mutual_info_chain_nonneg`, `lem:mutual_info_chain_symm`, `lem:mutual_info_chain_zero`,
   `thm:local_channel_image_mutual_info_bound`, `thm:mpdo_finite_chain_mutual_information_two_log`,
@@ -1289,7 +1288,6 @@ Downstream uses of the 10 restated or deleted theorems: 8 occurrences in 6 modul
   lists; the surviving line-equation names are already listed at 302, 371, 611);
   `ch15_examples_aklt.tex:574` (drop the deleted name). Also
   `ch13_parent_hamiltonian_spectral_gap_hilbert_space_rowsum.tex:322,333` for `chainGroundSpaceES`.
-  `blueprint/roles.json:175–183`: labels unchanged, no edit.
 * Glossary: no entry for `HasUniqueGroundState`. The survivor is already described in the row
   `ManyBody.IsGapped`, `ManyBody.groundSpace` (`docs/glossary.md:3277`). For family 5: the section
   "Parent Hamiltonians on the ring" (`docs/glossary.md:1478`) cites
@@ -1328,7 +1326,7 @@ Downstream uses of the 10 restated or deleted theorems: 8 occurrences in 6 modul
    `_injective`, `_normal`, `groundSpace_unique_periodic`, `aklt_parentHamiltonian_two_unique_gs`
    with their new conclusions, or rename to `groundSpace_parentHamiltonian_eq_span_mpv…`.
    Recommendation: keep the names. They name the source theorem (`uniqueGS`), the restated
-   conclusion is still "unique ground state", and keeping them leaves `roles.json`, two paper-gap
+   conclusion is still "unique ground state", and keeping them leaves two paper-gap
    notes and four blueprint tags unchanged.
 2. **Conjunction `groundSpace … = ℂ ∙ ψ ∧ ψ ≠ 0` versus the line equation alone.**
    Recommendation: the conjunction, as in New.lean. The sources state that `ψ` is a (nonzero)

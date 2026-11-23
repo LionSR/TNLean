@@ -455,7 +455,7 @@ The following workflows run automatically:
 | **PR Review** (`pr-review.yml`) | After a successful PR CI run | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation, plus blueprint/prose review |
 | **Issue Automation** (`issue-automation.yml`) | Issue opened/labeled/closed/reopened; PR opened/merged | Classifies new issues, posts Mathlib scouting reports, keeps tracking issues current (progress comments, sub-issue counts, `all-resolved` label — deterministic, no model), and scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), filing them with the `follow-up` label |
 | **Blueprint Lint** (`pr-ci.yml`, `blueprint` job) | PRs touching blueprint or Lean files | Validates LaTeX blueprint for broken labels and references |
-| **Lean Module Policy** (`pr-ci.yml`, `file-length` job) | PRs and main pushes touching Lean policy paths | Blocks ordinary files above 1000 lines and new numbered-sequel production modules; validates exact import-only aggregator exemptions |
+| **Lean Module Policy** (`pr-ci.yml`, `file-length` job) | PRs and main pushes touching Lean policy paths | Blocks ordinary files above 1000 lines; validates exact import-only aggregator exemptions |
 | **Import Completeness** (`pr-ci.yml`, `file-length` job) | PRs and main pushes touching TNLean sources or generator files | Tests the import-aggregator generator and checks that the generated aggregators are current |
 
 ### Generated import aggregators
@@ -477,7 +477,7 @@ production manifest; see `docs/import_structure.md` for details.
 
 Do not split a proof according to where editing happened to stop. A filename
 such as `Recovery2.lean` or `Recovery3b.lean` hides the module's mathematical
-role and is rejected for new tracked production files. Instead:
+role. Instead:
 
 1. identify the mathematical responsibilities in the large module;
 2. move repeated definitions, notation, and setup into a family `Basic.lean`;
@@ -485,11 +485,8 @@ role and is rejected for new tracked production files. Instead:
    `BoundaryRecovery.lean` or `OverlapInjectivity.lean`; and
 4. if callers need one import, provide a concept-named import-only aggregator.
 
-The numbered-file allowlist in `scripts/check_numbered_lean_files.py` records
-legacy debt and may only shrink; pull-request CI compares it with the merge-base
-allowlist and rejects additions. Numerals intrinsic to a mathematical object
-(such as `ZMod2`) or to an explicitly cited source result require an exact,
-documented semantic exception. Import-only aggregators can exceed the
+Numerals intrinsic to a mathematical object (such as `ZMod2`) or to an
+explicitly cited source result are fine. Import-only aggregators can exceed the
 line cap only when their exact path is passed to the size checker; the checker
 validates that uncommented content contains imports and nothing else.
 

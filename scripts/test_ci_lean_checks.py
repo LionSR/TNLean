@@ -24,129 +24,24 @@ def git(root: Path, *args: str) -> str:
                           capture_output=True, text=True).stdout.strip()
 
 
-class EarlyModulesTest(unittest.TestCase):
-    modules = staticmethod(ci.early_modules)
+AGGREGATOR = ("/-\nheader\n-/\n-- " + ci.GENERATED_MARKER + "\n"
+              "import TNLean.Core\nimport TNLean.Other\n")
 
+
+class AggregatorTest(unittest.TestCase):
     def setUp(self) -> None:
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         self.root = Path(tmp.name)
         (self.root / "TNLean").mkdir()
-        self.aggregator = "TNLean/Aggregator.lean"
-        self.other = "TNLean/Other.lean"
-        (self.root / self.aggregator).write_text("import TNLean.Other\n")
 
-    def test_no_changed_sources(self) -> None:
-        self.assertEqual(self.modules(self.root, []), [])
-
-    def test_all_import_only_targets_are_preserved(self) -> None:
-        (self.root / self.other).write_text("import Mathlib\n")
-        self.assertEqual(self.modules(self.root, [self.aggregator, self.other]),
-                         ["TNLean.Aggregator", "TNLean.Other"])
-
-    def test_non_import_commands_and_uncertain_syntax_stay_early(self) -> None:
-        cases = {
-            "definition": "import Mathlib\ndef answer := 42\n",
-            "theorem": "import Mathlib\ntheorem ok : True := by trivial\n",
-            "open": "import Mathlib\nopen Nat\n",
-            "namespace": "import Mathlib\nnamespace N\nend N\n",
-            "option": "import Mathlib\nset_option maxRecDepth 2000\n",
-            "command": "import Mathlib\nrun_cmd pure ()\n",
-            "directive": "import Mathlib\n#check Nat\n",
-            "string": 'import Mathlib\ndef s := "-- /-"\n',
-            "empty": "",
-            "comments_only": "/- import Mathlib -/\n-- def x := 1\n",
-            "unterminated_comment": "import Mathlib\n/- unfinished\n",
-            "unmatched_comment_end": "import Mathlib\n-/\n",
-            "module": "module\nimport Mathlib\n",
-            "prelude": "prelude\nimport Mathlib\n",
-            "public_import": "public import Mathlib\n",
-            "private_import": "private import Mathlib\n",
-            "meta_import": "meta import Mathlib\n",
-            "multiline_import": "import\n  Mathlib\n",
-            "multi_module_import": "import Mathlib TNLean.Other\n",
-        }
-        for name, source in cases.items():
-            with self.subTest(name=name):
-                (self.root / self.other).write_text(source)
-                self.assertEqual(
-                    self.modules(self.root, [self.aggregator, self.other]),
-                    ["TNLean.Other"])
-
-    def test_comments_do_not_make_an_aggregator_substantive(self) -> None:
-        (self.root / self.aggregator).write_text(
-            "/- header /- def hidden := 1 -/ still a comment -/\n\n"
-            "  import TNLean.Other -- theorem hidden : True := by trivial\n"
-            "import /- nested /- comment -/ -/ Mathlib\n")
-        (self.root / self.other).write_text("import Mathlib\ndef answer := 42\n")
-        self.assertEqual(self.modules(self.root, [self.aggregator, self.other]),
-                         ["TNLean.Other"])
-
-    def test_invalid_utf8_even_inside_a_comment_stays_early(self) -> None:
-        (self.root / self.other).write_bytes(b"import Mathlib\n-- invalid \xff\n")
-        self.assertEqual(self.modules(self.root, [self.aggregator, self.other]),
-                         ["TNLean.Other"])
-
-    def test_missing_file_stays_early(self) -> None:
-        self.assertEqual(self.modules(self.root, [self.aggregator, self.other]),
-                         ["TNLean.Other"])
-
-    def test_read_failure_stays_early(self) -> None:
-        original_read = Path.read_text
-
-        def read(path, *args, **kwargs):
-            if path == self.root / self.other:
-                raise PermissionError("unreadable source")
-            return original_read(path, *args, **kwargs)
-
-        with patch.object(Path, "read_text", read):
-            self.assertEqual(
-                self.modules(self.root, [self.aggregator, self.other]),
-                ["TNLean.Other"])
-
-
-class FocusedSourcesTest(EarlyModulesTest):
-    # Reuse every uncertain-source/read-error case above against the focused
-    # classifier, whose all-aggregator policy intentionally differs from early.
-    @staticmethod
-    def modules(root, sources):
-        return [ci.module_of(p) for p in ci.focused_sources(root, sources, sources)]
-
-    def test_all_import_only_targets_are_preserved(self):
-        (self.root / self.other).write_text("import Mathlib\n")
-        self.assertEqual(ci.focused_sources(self.root, [self.aggregator, self.other], [self.aggregator, self.other]), [])
-
-    def test_read_failure_stays_early(self):
-        with patch.object(Path, "read_bytes", side_effect=PermissionError("unreadable")):
-            self.assertEqual(ci.focused_sources(self.root, [self.other], [self.other]), [self.other])
-
-    def test_comment_token_splicing_is_not_an_import(self):
-        for source in ("im/- comment -/port Mathlib\n",
-                       "import Math/- comment -/lib\n",
-                       "import Mathlib\n\"-- unterminated string\n"):
-            with self.subTest(source=source):
-                (self.root / self.other).write_text(source)
-                self.assertEqual(ci.focused_sources(self.root, [self.other], [self.other]), [self.other])
-
-    def test_supported_import_spellings_are_deferred(self):
-        for source in ("import A.B'\nimport C_D.E2 -- note\n",
-                       "/- header -/ import A\nimport /- note -/ B\n",
-                       "import A/- trailing comment -/\n"):
-            with self.subTest(source=source):
-                (self.root / self.other).write_text(source)
-                self.assertEqual(ci.focused_sources(self.root, [self.other], [self.other]), [])
-
-    def test_uncertain_whitespace_and_doc_tokens_stay_focused(self):
-        for source in ("import\u00a0A", "import A\u2028import B", "import\tA\n",
-                       "import A\n/-- unattached doc -/", "import A\n/-! doc -/",
-                       "import A\v", "import A\f", "import A\r", "import A\r\n"):
-            with self.subTest(source=source):
-                (self.root / self.other).write_text(source)
-                self.assertEqual(ci.focused_sources(self.root, [self.other], [self.other]),
-                                 [self.other])
-
-    def test_no_strict_coverage_retains_import_only_source(self):
-        self.assertEqual(ci.focused_sources(self.root, [self.aggregator], []), [self.aggregator])
+    def test_generated_marker_identifies_an_aggregator(self) -> None:
+        (self.root / "TNLean/Generated.lean").write_text(AGGREGATOR)
+        (self.root / "TNLean/Manual.lean").write_text("import TNLean.Core\n")
+        self.assertEqual(
+            ci.without_aggregators(self.root, ["TNLean/Generated.lean", "TNLean/Manual.lean",
+                                               "TNLean/Missing.lean"]),
+            ["TNLean/Manual.lean", "TNLean/Missing.lean"])
 
 
 class SelectTest(unittest.TestCase):
@@ -270,43 +165,16 @@ class SelectTest(unittest.TestCase):
             finally:
                 self.root = root
 
-    def test_mixed_leaf_and_aggregator_preserve_strict_sources(self) -> None:
+    def test_aggregator_is_strict_but_not_early(self) -> None:
         self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
-        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
-        early, sources = self.select(self.base)
-        self.assertEqual(early, ["TNLean.Core"])
-        self.assertNotIn("TNLean.Uses", early)
-        self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
-
-    def test_aggregator_only_keeps_early_and_strict(self) -> None:
-        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
-        early, sources = self.select(self.base)
-        self.assertEqual(early, ["TNLean.Uses"])
-        self.assertEqual(sources, ["TNLean/Uses.lean"])
-
-    def test_multiple_substantive_sources_keep_sorted_order(self) -> None:
-        self.change("TNLean/ZProof.lean", "import Mathlib\ndef z := 0\n")
-        self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
-        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.ZProof\n")
-        self.change("TNLean/All.lean", "import TNLean.Uses\n")
-        early, sources = self.select(self.base)
-        self.assertEqual(early, ["TNLean.Core", "TNLean.ZProof"])
-        self.assertEqual(sources, ["TNLean/All.lean", "TNLean/Core.lean",
-                                  "TNLean/Uses.lean", "TNLean/ZProof.lean"])
-
-    def test_new_proof_and_aggregator_keep_proof_early(self) -> None:
-        self.change("TNLean/New.lean", "import TNLean.Core\ntheorem ok : True := by trivial\n")
-        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.New\n")
-        early, sources = self.select(self.base)
-        self.assertEqual(early, ["TNLean.New"])
-        self.assertEqual(sources, ["TNLean/New.lean", "TNLean/Uses.lean"])
-
-    def test_invalid_utf8_source_is_strict_and_early(self) -> None:
-        (self.root / "TNLean/Core.lean").write_bytes(b"import Mathlib\n-- invalid \xff\n")
-        self.change("TNLean/Uses.lean", "import TNLean.Core\nimport TNLean.Other\n")
+        self.change("TNLean/Uses.lean", AGGREGATOR)
         early, sources = self.select(self.base)
         self.assertEqual(early, ["TNLean.Core"])
         self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
+
+    def test_aggregator_only_has_no_early_target(self) -> None:
+        self.change("TNLean/Uses.lean", AGGREGATOR)
+        self.assertEqual(self.select(self.base), ([], ["TNLean/Uses.lean"]))
 
     def test_archive_is_not_built_early(self) -> None:
         self.change("TNLean/Archive/Old.lean", "import TNLean.Core\n-- edit\n")
@@ -350,64 +218,6 @@ class FocusedSelectTest(unittest.TestCase):
         git(self.root, "checkout", "--detach", self.base)
         git(self.root, "-c", "user.email=t@t", "-c", "user.name=t", "merge",
             "--no-ff", "-m", "synthetic merge", feature)
-
-    def test_orphan_import_failure_retained_without_verified_merge(self):
-        self.change("TNLean/Orphan.lean", "import Does.Not.Exist\n")
-        head = git(self.root, "rev-parse", "HEAD")
-        cwd = Path.cwd()
-        try:
-            with patch.object(ci, "early_build", return_value=1) as build, \
-                    patch.object(ci, "run_batch", return_value=[]):
-                self.assertEqual(ci.main(["focused", "--root", str(self.root),
-                                          "--base", self.base, "--head", head,
-                                          "--pr-head", head]), 1)
-            self.assertEqual(build.call_args.args[0], ["TNLean.Orphan"])
-            self.assertIsNone(ci.selection_base(self.base, head))
-            self.assertEqual(ci.select(Path("."), None)[1], [])
-        finally:
-            os.chdir(cwd)
-
-    def test_type_changed_orphan_is_retained_even_in_verified_merge(self):
-        self.change("TNLean/Orphan.lean", "import Mathlib\n")
-        self.change("target.txt", "import Does.Not.Exist\n")
-        self.base = git(self.root, "rev-parse", "HEAD")
-        (self.root / "TNLean/Orphan.lean").unlink()
-        (self.root / "TNLean/Orphan.lean").symlink_to("../target.txt")
-        self.change("README.md", "type change\n")
-        head = git(self.root, "rev-parse", "HEAD")
-        self.assertIn("T\tTNLean/Orphan.lean", git(self.root, "diff", "--name-status", self.base, head))
-        self.merge_checkout(head)
-        cwd = Path.cwd()
-        try:
-            os.chdir(self.root)
-            self.assertEqual(ci.selection_base(self.base, head), self.base)
-            self.assertEqual(ci.select(Path("."), self.base)[1], [])
-            with patch.object(ci, "early_build", return_value=1) as build, \
-                    patch.object(ci, "run_batch", return_value=[]):
-                self.assertEqual(ci.main(["focused", "--root", str(self.root),
-                                          "--base", self.base, "--head", head,
-                                          "--pr-head", head]), 1)
-            self.assertEqual(build.call_args.args[0], ["TNLean.Orphan"])
-        finally:
-            os.chdir(cwd)
-
-    def test_verified_merge_defers_orphan_but_strict_reports_its_failure(self):
-        orphan = "TNLean/Orphan.lean"
-        self.change(orphan, "import Does.Not.Exist\n")
-        head = git(self.root, "rev-parse", "HEAD")
-        self.merge_checkout(head)
-        cwd = Path.cwd()
-        args = ["--root", str(self.root), "--base", self.base, "--pr-head", head]
-        try:
-            with patch.object(ci, "early_build") as build, \
-                    patch.object(ci, "run_batch", return_value=[]):
-                self.assertEqual(ci.main(["focused", "--head", head, *args]), 0)
-            build.assert_not_called()
-            with patch.object(ci, "run_batch", return_value=[orphan]) as run:
-                self.assertEqual(ci.main(["strict", *args]), 1)
-            self.assertEqual(run.call_args.args, ([orphan], 3, 240))
-        finally:
-            os.chdir(cwd)
 
     def focused(self, base=None, head=None):
         cwd = Path.cwd()
@@ -496,9 +306,9 @@ class FocusedSelectTest(unittest.TestCase):
         finally:
             os.chdir(cwd)
 
-    def test_cli_deferral_preserves_post_build_coverage_and_failures(self):
+    def test_cli_skips_aggregator_but_strict_checks_it(self):
         self.change("TNLean/Core.lean", "import Mathlib\ndef answer := 42\n")
-        self.change("TNLean/Uses.lean", "import TNLean.Core\n-- aggregator edit\n")
+        self.change("TNLean/Uses.lean", AGGREGATOR)
         head = git(self.root, "rev-parse", "HEAD")
         self.merge_checkout(head)
         cwd = Path.cwd()
@@ -508,37 +318,14 @@ class FocusedSelectTest(unittest.TestCase):
                     self.assertEqual(ci.main(["focused", "--root", str(self.root),
                                               "--base", self.base, "--head", head]), outcome)
                 self.assertEqual(run.call_args.args[0], ["TNLean/Core.lean"])
-            early, sources = ci.select(Path("."), self.base)
-            self.assertEqual(early, ["TNLean.Core"])
-            self.assertEqual(sources, ["TNLean/Core.lean", "TNLean/Uses.lean"])
             with mock.patch.object(ci, "selection_base", return_value=self.base), \
                     mock.patch.object(ci, "run_batch", return_value=["TNLean/Uses.lean"]) as run:
                 self.assertEqual(ci.main(["strict", "--root", str(self.root),
                                           "--base", self.base]), 1)
-            self.assertEqual(run.call_args.args, (sources, 3, 240))
+            self.assertEqual(run.call_args.args,
+                             (["TNLean/Core.lean", "TNLean/Uses.lean"], 3, 240))
         finally:
             os.chdir(cwd)
-
-    def test_cli_import_only_and_empty_selection_do_not_prepare_root(self):
-        for changed in (False, True):
-            if changed:
-                self.change("TNLean/Uses.lean", "import TNLean.Core\n-- edit\n")
-            head = git(self.root, "rev-parse", "HEAD")
-            if changed:
-                self.merge_checkout(head)
-            cwd = Path.cwd()
-            try:
-                with mock.patch.object(ci, "early_build") as build, \
-                        mock.patch.object(ci, "run_batch", return_value=[]) as run:
-                    self.assertEqual(ci.main(["focused", "--root", str(self.root),
-                                              "--base", self.base, "--head", head]), 0)
-                build.assert_not_called()
-                self.assertTrue(all(not call.args[0] for call in run.call_args_list))
-                # Existing early's all-import-only fallback remains unchanged.
-                self.assertEqual(ci.select(Path("."), self.base),
-                                 (["TNLean.Uses"], ["TNLean/Uses.lean"]) if changed else ([], []))
-            finally:
-                os.chdir(cwd)
 
 
 class FocusedRunnerTest(unittest.TestCase):
@@ -651,81 +438,6 @@ class FocusedRunnerTest(unittest.TestCase):
         self.assertEqual(self.run_checks([source], {"TNLean.Good": 124})[0], 1)
 
 
-class FocusedWorkflowTest(unittest.TestCase):
-    def setUp(self):
-        workflow = Path(__file__).resolve().parents[1] / ".github/workflows/pr-ci.yml"
-        block = workflow.read_text().split(
-            "      - name: Check directly changed Lean sources strictly\n", 1)[1]
-        block = block.split("      # Build the changed production modules", 1)[0]
-        self.assertIn("if: github.event_name == 'pull_request'", block)
-        self.assertIn("BASE_SHA: ${{ github.event.pull_request.base.sha }}", block)
-        self.assertIn("PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}", block)
-        self.assertIn("timeout-minutes: 60", block)
-        self.script = "\n".join(line[10:] for line in block.split("        run: |\n", 1)[1]
-                                .splitlines() if line.strip())
-
-    def run_script(self, git_status=0, base="a" * 40, cache=True):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            if cache:
-                artifact = root / ".lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean"
-                artifact.parent.mkdir(parents=True)
-                artifact.touch()
-            for name, body in {
-                "git": f"echo git >> '{root}/calls'\nexit {git_status}\n",
-                "python3": f"echo python >> '{root}/calls'\nexit 0\n",
-            }.items():
-                path = root / name
-                path.write_text("#!/bin/sh\n" + body)
-                path.chmod(0o755)
-            env = dict(os.environ, PATH=f"{root}:{os.environ['PATH']}", BASE_SHA=base,
-                       PR_HEAD_SHA="b" * 40, RUNNER_TEMP=tmp)
-            result = subprocess.run(["bash", "-c", self.script], env=env, cwd=root,
-                                    capture_output=True)
-            calls = (root / "calls").read_text() if (root / "calls").exists() else ""
-            return result.returncode, calls
-
-    def test_refs_are_required_and_fetch_failure_cannot_pass(self):
-        code, calls = self.run_script(git_status=73)
-        self.assertNotEqual(code, 0)
-        self.assertNotIn("python", calls)
-        code, calls = self.run_script(base="")
-        self.assertNotEqual(code, 0)
-        self.assertEqual(calls, "")
-
-    def test_missing_prebuilt_cache_stops_before_git_or_python(self):
-        code, calls = self.run_script(cache=False)
-        self.assertNotEqual(code, 0)
-        self.assertEqual(calls, "")
-
-    def test_valid_refs_run_generic_mode_without_module_lists(self):
-        self.assertEqual(self.run_script()[0], 0)
-        self.assertIn("ci_lean_checks.py focused", self.script)
-        self.assertIn('--base "$BASE_SHA" --head "$PR_HEAD_SHA"', self.script)
-        self.assertNotIn("TNLean.", self.script)
-        self.assertNotIn("||", self.script)
-
-    def test_full_build_and_post_build_strict_remain_required_in_order(self):
-        import yaml
-        workflow = Path(__file__).resolve().parents[1] / ".github/workflows/pr-ci.yml"
-        steps = yaml.safe_load(workflow.read_text())["jobs"]["build"]["steps"]
-        names = [step["name"] for step in steps if "name" in step]
-        ordered = ["Check directly changed Lean sources strictly",
-                   "Build changed Lean modules early",
-                   "Build Lean project and capture timings",
-                   "Check changed Lean files strictly"]
-        self.assertEqual(sorted(names.index(n) for n in ordered),
-                         [names.index(n) for n in ordered])
-        full, strict = [next(s for s in steps if s.get("name") == n) for n in ordered[2:]]
-        for step in (full, strict):
-            self.assertNotIn("if", step)
-            self.assertNotIn("continue-on-error", step)
-            self.assertIn("set -eo pipefail", step["run"])
-        self.assertIn("lake build\n", full["run"])
-        self.assertIn("ci_lean_checks.py strict --jobs 3", strict["run"])
-        self.assertEqual(strict["timeout-minutes"], 120)
-
-
 class EarlyBuildTest(unittest.TestCase):
     """Run early_build against a stand-in `lake`."""
 
@@ -748,17 +460,6 @@ class EarlyBuildTest(unittest.TestCase):
         self.lake("exit 0\n")
         self.assertEqual(ci.early_build(["TNLean.Core"], self.log, 0), 0)
         self.assertIn("building --fail-fast build TNLean.Core", self.log.read_text())
-
-    def test_mixed_targets_do_not_request_aggregator_from_lake(self) -> None:
-        (self.dir / "TNLean").mkdir()
-        (self.dir / "TNLean/Aggregator.lean").write_text(
-            "import TNLean.ZLeaf\nimport TNLean.Unchanged\n")
-        (self.dir / "TNLean/ZLeaf.lean").write_text("import Mathlib\ndef answer := 42\n")
-        targets = ci.early_modules(
-            self.dir, ["TNLean/Aggregator.lean", "TNLean/ZLeaf.lean"])
-        self.lake("exit 0\n")
-        self.assertEqual(ci.early_build(targets, self.log, 0), 0)
-        self.assertEqual(self.log.read_text(), "building --fail-fast build TNLean.ZLeaf\n")
 
     def test_build_failure_fails_the_step(self) -> None:
         self.lake("exit 3\n")

@@ -183,13 +183,6 @@ imports `QICLean`, ensuring its aggregator closure is rebuilt normally. This is
 an optimization candidate, not evidence of a cache hit or measured speedup. It
 does not relax `seed_lake_build.sh` or the stricter local seeding policy.
 
-Run the no-Lean tests with:
-
-```bash
-python3 -m pip install PyYAML==6.0.3
-python3 scripts/test_ci_compatible_cache.py
-```
-
 The Lake behaviour these guards rely on (unchanged reuse, upstream and dependent
 invalidation, independent reuse, missing traces, broken-source rejection, and
 refusal of removed modules with surviving artifacts) was checked once on

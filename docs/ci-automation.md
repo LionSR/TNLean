@@ -194,57 +194,6 @@ separate `compile-time` job.
 
 ---
 
-### Full-build resource diagnostics
-
-The full-build shell starts `scripts/ci_resource_diagnostics.py` alongside the
-unchanged `lake build` and `lake build lint_style` pipeline. Every 30 seconds it
-writes a UTC-stamped JSON line and a short console heartbeat, with a final
-snapshot when it observes the build shell exit to capture counters after a failed build. The
-`lean-resources-<run-id>-<attempt>` artifact is uploaded after that step, including
-on failure or cancellation when the runner can still execute the upload. A
-forcibly terminated runner may not upload an artifact or finish its final line.
-
-Samples contain host CPU counters, load averages, available memory and swap,
-workspace filesystem capacity/inodes, and available cgroup-v2 memory/OOM and CPU
-throttling counters. Compare consecutive counters for activity or OOM events;
-an absolute event count alone does not attribute an OOM to this build. Unavailable
-metrics are `null`. Process details include only numeric PID/start time, elapsed
-and CPU seconds, RSS, and a fixed allowlist of build-tool names. No command
-arguments, environment variables, cgroup paths, or user-file contents are saved.
-The process scan is capped at 4096 entries; the artifact includes observed
-allowlisted totals and at most 16 cumulative CPU leaders. Summed RSS may count
-shared memory more than once and is not the cgroup's memory usage.
-
-Collection stops at 720 samples or 4 MiB, whichever comes first, and artifacts
-expire after seven days. A two-second sampler-only watchdog covers initialization,
-temporary-directory creation, Actions output publication, parent polling, metric
-collection, output writes and closing. All optional initialization runs in the
-background sampler; the build shell only launches it. The build shell
-never signals or waits for a saved numeric sampler PID: Bash may already have
-reaped it and the PID may have been reused. Parent PID/start-time polling stops
-sampling after shell exit; INT/TERM remain nonzero for the build shell.
-
-Each invocation creates a private, exclusive directory under runner temporary
-storage. Only a successfully closed sample receives an exclusive receipt with
-its device/inode, size and digest. A separate optional publication step validates
-owned regular files without following symlinks and copies matching bytes into a
-second exclusive directory. Only that validated copy is eligible for upload;
-pre-existing fixed paths and incomplete samples are never uploaded by this flow.
-The receipt checks consistency, not authenticity or a content allowlist: an
-active same-UID process can forge both bytes and a matching receipt, just as it
-can modify the scripts or Actions outputs. This is not a same-UID security boundary.
-Publication allows three seconds for the receipt and has a five-second watchdog. Temporary
-sample/copy storage is at most 8 MiB plus small metadata.
-
-Watchdogs terminate interruptible blocking I/O, including the tested FIFO faults.
-Uninterruptible kernel I/O or runner termination can delay physical process exit
-or prevent collection/upload; these mechanisms do not guarantee cleanup under
-those conditions. The shell has no diagnostic cleanup wait that could extend its
-exit. Collection and upload failures do not bypass build checks. These samples
-add observability only: they neither change Lake arguments/timeouts/cache
-provenance nor establish that a build is faster. The current cache is still saved
-only after all required build-job checks succeed.
-
 ### Changed-File Lean Checks (`pr-ci.yml`, `build` job)
 
 The `build` job derives its focused Lean checks from the change set, using
@@ -293,6 +242,10 @@ invocations remain supported. Top-level `--help` lists both commands.
   at a time, each with a time limit. When the base revision is unknown (manual
   dispatch, an unfetchable base), no file is selected and the root build is
   the check.
+
+The focused checks and the early build skip the aggregators that
+`scripts/generate_import_aggregators.py` writes, since building one builds its
+whole directory; the strict checks elaborate them like any other changed file.
 
 `python3 scripts/ci_lean_checks.py list --base origin/main` prints the
 selection locally. Do not add per-module "build early" or "test strictly" steps
@@ -415,15 +368,6 @@ during review.
   comments and verifies that every remaining command is an `import`. Missing,
   excluded, empty, malformed, or declaration-bearing exemptions fail even when
   the file is below the limit. CI currently registers only `TNLean.lean`.
-- New Git-tracked production modules below `TNLean/` may not end in a numeral
-  (optionally followed by one letter). `TNLean/Archive/` and untracked scratch
-  files are outside this production policy. Existing continuation files form a
-  shrinking allowlist: pull-request CI compares the proposed set with its
-  merge-base value and rejects additions; a new name fails, and a removed or
-  renamed file leaves a stale entry that must be deleted in the same change.
-  Exact names whose numeral
-  denotes a mathematical object or source label have path-specific documented
-  exceptions in `scripts/check_numbered_lean_files.py`.
 - Imports must respect the layers of
   `docs/many_body_circuit_architecture.md`. `scripts/check_import_layers.py`
   rejects an import that points upward between the layers below the
@@ -433,7 +377,7 @@ during review.
   declaration whose whole body applies the declaration of the same name in
   another namespace to its own explicit arguments. The existing cases are
   recorded in the two scripts in sets that may only shrink, compared with the
-  merge base as the numbered-module allowlist is: recording a new case fails,
+  merge base: recording a new case fails,
   and a case that is repaired must be removed from its set in the same change.
 
 When a proof approaches the cap, split by mathematical responsibility rather
