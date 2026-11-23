@@ -49,22 +49,23 @@ theorem mixedEndpointBoundaryCondition_pos
     (sq_pos_of_pos (mixedEndpointBoundaryInverseBound_pos A₀ hA₀ D₁))
 
 /-- A gap of the actual compressed endpoint gives a gap of the actual
-normalized sum, with the derived fixed-boundary loss. -/
-theorem mixedEndpointActiveNormalizedHamiltonian_norm_gap_of_actual
+normalized sum, with the derived fixed-boundary loss: if every eigenvalue of
+the compressed endpoint is `0` or at least `δ`, then every eigenvalue of the
+normalized sum is `0` or at least `δ` divided by the boundary condition factor. -/
+theorem mixedEndpointActiveNormalizedHamiltonian_gap_of_actual
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hA₀ : Kraus.IsInjective A₀) {δ : ℝ} (hδ : 0 < δ)
-    (hGap : ∀ v ∈ (LinearMap.ker (mixedEndpointActiveHamiltonian A₀ A₁ (N + 1)))ᗮ,
-      δ * ‖v‖ ≤ ‖mixedEndpointActiveHamiltonian A₀ A₁ (N + 1) v‖) :
-    ∀ v ∈ (LinearMap.ker (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N))ᗮ,
-      (δ / mixedEndpointBoundaryCondition A₀ hA₀ D₁) * ‖v‖ ≤
-        ‖mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N v‖ := by
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
+      (mixedEndpointActiveHamiltonian A₀ A₁ (N + 1)) μ → μ = 0 ∨ (δ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+      (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N) μ →
+        μ = 0 ∨ ((δ / mixedEndpointBoundaryCondition A₀ hA₀ D₁ : ℝ) : ℂ) ≤ μ := by
   let F := activeBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀ (N + 1)
-  have hGap' : ∀ v ∈ (LinearMap.ker (∑ p : MixedEndpointActiveEdgeSite N,
-      mixedEndpointActiveLocalInteraction A₀ A₁ (mixedEndpointActiveEdgeStart p)))ᗮ,
-      δ * ‖v‖ ≤ ‖(∑ p : MixedEndpointActiveEdgeSite N,
-        mixedEndpointActiveLocalInteraction A₀ A₁ (mixedEndpointActiveEdgeStart p)) v‖ := by
+  have hGap' : ∀ μ : ℂ, Module.End.HasEigenvalue (∑ p : MixedEndpointActiveEdgeSite N,
+      mixedEndpointActiveLocalInteraction A₀ A₁ (mixedEndpointActiveEdgeStart p)) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
     simpa only [← mixedEndpointActiveHamiltonian_eq_sum_edges] using hGap
-  have h := F.symm.norm_gap_sum_deformedConstraintProjection
+  have h := F.symm.forall_hasEigenvalue_sum_deformedConstraintProjection
     (fun p : MixedEndpointActiveEdgeSite N =>
       mixedEndpointActiveLocalInteraction A₀ A₁ (mixedEndpointActiveEdgeStart p))
     (fun p => mixedEndpointActiveLocalInteraction_isSymmetricProjection A₀ A₁ _)
@@ -80,22 +81,20 @@ theorem mixedEndpointActiveNormalizedHamiltonian_norm_gap_of_actual
     mixedEndpointActiveNormalizedHamiltonian] using h
 
 /-- Conversely the normalized sum's gap gives a gap of the actual active
-Hamiltonian, through its proved canonical local constraints. -/
-theorem mixedEndpointActiveHamiltonian_norm_gap_of_normalized
+Hamiltonian, through its proved canonical local constraints: the lower bound on
+the nonzero eigenvalues loses the same boundary condition factor. -/
+theorem mixedEndpointActiveHamiltonian_gap_of_normalized
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hA₀ : Kraus.IsInjective A₀) {δ : ℝ} (hδ : 0 < δ)
-    (hGap : ∀ v ∈ (LinearMap.ker
-      (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N))ᗮ,
-      δ * ‖v‖ ≤ ‖mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N v‖) :
-    ∀ v ∈ (LinearMap.ker (mixedEndpointActiveHamiltonian A₀ A₁ (N + 1)))ᗮ,
-      (δ / mixedEndpointBoundaryCondition A₀ hA₀ D₁) * ‖v‖ ≤
-        ‖mixedEndpointActiveHamiltonian A₀ A₁ (N + 1) v‖ := by
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
+      (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N) μ → μ = 0 ∨ (δ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue (mixedEndpointActiveHamiltonian A₀ A₁ (N + 1)) μ →
+      μ = 0 ∨ ((δ / mixedEndpointBoundaryCondition A₀ hA₀ D₁ : ℝ) : ℂ) ≤ μ := by
   let F := activeBoundaryNormalizationEquivES (D₁ := D₁) A₀ hA₀ (N + 1)
-  have hGap' : ∀ v ∈ (LinearMap.ker (∑ p : MixedEndpointActiveEdgeSite N,
-      mixedEndpointActiveNormalizedLocalInteraction (D₁ := D₁) A₀ p))ᗮ,
-      δ * ‖v‖ ≤ ‖(∑ p : MixedEndpointActiveEdgeSite N,
-        mixedEndpointActiveNormalizedLocalInteraction (D₁ := D₁) A₀ p) v‖ := hGap
-  have h := F.norm_gap_sum_deformedConstraintProjection
+  have hGap' : ∀ μ : ℂ, Module.End.HasEigenvalue (∑ p : MixedEndpointActiveEdgeSite N,
+      mixedEndpointActiveNormalizedLocalInteraction (D₁ := D₁) A₀ p) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := hGap
+  have h := F.forall_hasEigenvalue_sum_deformedConstraintProjection
     (fun p : MixedEndpointActiveEdgeSite N =>
       mixedEndpointActiveNormalizedLocalInteraction (D₁ := D₁) A₀ p)
     (mixedEndpointActiveNormalizedLocalInteraction_isSymmetricProjection A₀)
@@ -107,7 +106,8 @@ theorem mixedEndpointActiveHamiltonian_norm_gap_of_normalized
     ← mixedEndpointActiveHamiltonian_eq_sum_edges, mixedEndpointBoundaryCondition] using h
 
 /-- The actual compressed zero-endpoint Hamiltonian has a positive gap
-uniform in all sufficiently large active-chain lengths. The proof derives
+uniform in all sufficiently large active-chain lengths: every eigenvalue is `0`
+or at least the gap. The proof derives
 its reference gap from the ordinary injective tensor, then uses the actual
 termwise boundary normalizations and the proved free-exterior factorization.
 No endpoint gap, local-kernel identity, or reduction is assumed. -/
@@ -115,17 +115,16 @@ theorem exists_mixedEndpointActiveHamiltonian_uniform_gap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hA₀ : Kraus.IsInjective A₀) :
     ∃ W : ℕ, 1 ≤ W ∧ ∃ δ : ℝ, 0 < δ ∧
-      ∀ N : ℕ, W ≤ N → ∀ v ∈ (LinearMap.ker (mixedEndpointActiveHamiltonian A₀ A₁ N))ᗮ,
-        δ * ‖v‖ ≤ ‖mixedEndpointActiveHamiltonian A₀ A₁ N v‖ := by
+      ∀ N : ℕ, W ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+        (mixedEndpointActiveHamiltonian A₀ A₁ N) μ → μ = 0 ∨ (δ : ℂ) ≤ μ := by
   by_cases hD₀ : D₀ = 0
   · subst D₀
-    refine ⟨1, le_rfl, 1, zero_lt_one, ?_⟩
-    intro N _ v _
-    have hv : v = 0 := by
-      apply PiLp.ext
-      rintro ⟨a, ⟨b, σ, c⟩, e⟩
-      exact Fin.elim0 b
-    simp [hv]
+    refine ⟨1, le_rfl, 1, zero_lt_one, fun N _ μ hμ ↦ ?_⟩
+    obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
+    refine absurd ?_ hv.2
+    apply PiLp.ext
+    rintro ⟨a, ⟨b, σ, c⟩, e⟩
+    exact Fin.elim0 b
   · let : NeZero D₀ := ⟨hD₀⟩
     obtain ⟨W, hW, δ, hδ, hGap₀⟩ :=
       exists_mixedEndpointActiveHamiltonian_zeroSector_uniform_gap A₀ hA₀
@@ -139,11 +138,12 @@ theorem exists_mixedEndpointActiveHamiltonian_uniform_gap
     cases N with
     | zero => have := le_max_left 1 W; omega
     | succ n =>
-      have hNorm₀ := mixedEndpointActiveNormalizedHamiltonian_norm_gap_of_actual
+      have hGapZero := mixedEndpointActiveNormalizedHamiltonian_gap_of_actual
         A₀ emptyEndpointTensor hA₀ hδ (hGap₀ (n + 1) (by omega))
-      have hNorm := (mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_zeroSector
-        (D₁ := D₁) A₀ n hδ'.le).mpr hNorm₀
-      exact mixedEndpointActiveHamiltonian_norm_gap_of_normalized A₀ A₁ hA₀ hδ' hNorm
+      exact mixedEndpointActiveHamiltonian_gap_of_normalized A₀ A₁ hA₀ hδ' fun μ hμ ↦
+        hGapZero μ
+          ((mixedEndpointActiveNormalizedHamiltonian_hasEigenvalue_iff_zeroSector
+            (D₁ := D₁) A₀ n μ).mp hμ)
 
 /-- The nonzero eigenvalues of the actual extended first-endpoint open Hamiltonian have a
 positive volume-independent lower bound for all sufficiently large windows. The inactive
@@ -163,8 +163,7 @@ theorem exists_uniform_mixedEndpoint_open_zero_gap
   intro N hWN
   have hlen : N - 2 + 1 + 1 = N := by omega
   rw [← hlen]
-  exact mixedEndpoint_open_gap_of_active_norm_gap A₀ A₁ hδ.le
-    (hGap (N - 2) (by omega))
+  exact mixedEndpoint_open_gap_of_active_gap A₀ A₁ (hGap (N - 2) (by omega))
 
 end
 end MPOSymmetry

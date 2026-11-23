@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Spectral.Gap.BoundedCongruenceGap
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison
 import QICLean.Spectral.Gap.WeightedPositiveKernel
+import QICLean.Spectral.Gap.PositiveComparisonGap
 
 /-!
 # Deforming a finite family of projection constraints
@@ -112,6 +113,59 @@ private theorem symmetricProjection_eq_orthogonal_ker_projection
   obtain ⟨_, h⟩ := P.isSymmetricProjection_iff_eq_coe_starProjection_range.mp hP
   simpa only [hrange] using h
 
+namespace LinearMap.IsPositive
+
+/-- A bounded inverse loses at most a factor \(C^2\) in the gap above the kernel of a positive
+operator under congruence: if every eigenvalue of `P` other than `0` is at least
+\(\delta\ge0\), then every eigenvalue of \(e^*Pe\) other than `0` is at least
+\(\delta/C^2\). -/
+theorem forall_hasEigenvalue_adjoint_congruence_of_inverse_bound
+    {P : F →ₗ[ℂ] F} (hP : P.IsPositive) (e : E ≃ₗ[ℂ] F)
+    {δ C : ℝ} (hδ : 0 ≤ δ) (hC : 0 < C)
+    (hInverse : ∀ w : F, ‖e.symm w‖ ≤ C * ‖w‖)
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue P μ → μ = 0 ∨ (δ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue (e.toLinearMap.adjoint ∘ₗ P ∘ₗ e.toLinearMap) μ →
+      μ = 0 ∨ ((δ / C ^ 2 : ℝ) : ℂ) ≤ μ := by
+  let Q := e.toLinearMap.adjoint ∘ₗ P ∘ₗ e.toLinearMap
+  refine (hP.adjoint_conj e.toLinearMap).isSymmetric.forall_hasEigenvalue_of_re_inner
+    fun v hv ↦ ?_
+  let w := (LinearMap.ker P)ᗮ.starProjection (e v)
+  let u := e.symm ((LinearMap.ker P).starProjection (e v))
+  have hproj : P ((LinearMap.ker P).starProjection (e v)) = 0 :=
+    LinearMap.mem_ker.mp (Submodule.starProjection_apply_mem _ _)
+  have hu : u ∈ LinearMap.ker Q := by
+    rw [show LinearMap.ker Q = (LinearMap.ker P).comap e.toLinearMap from
+      e.ker_adjoint_congruence P]
+    change P (e u) = 0
+    simpa only [u, e.apply_symm_apply] using hproj
+  have horth : ⟪v, u⟫_ℂ = 0 := Submodule.inner_left_of_mem_orthogonal hu hv
+  have hdecomp : e.symm w = v - u := by
+    simp only [w, u, Submodule.starProjection_orthogonal_val, map_sub, e.symm_apply_apply]
+  have hnorm : ‖v‖ ≤ C * ‖w‖ := calc
+    ‖v‖ ≤ ‖v - u‖ := by
+      have hsq : ‖v - u‖ ^ 2 = ‖v‖ ^ 2 + ‖u‖ ^ 2 := by
+        simpa only [horth, RCLike.zero_re, mul_zero, sub_zero] using norm_sub_sq (𝕜 := ℂ) v u
+      nlinarith [norm_nonneg (v - u), norm_nonneg v, sq_nonneg ‖u‖]
+    _ = ‖e.symm w‖ := congrArg norm hdecomp.symm
+    _ ≤ C * ‖w‖ := hInverse w
+  have hnormSq : ‖v‖ ^ 2 ≤ C ^ 2 * ‖w‖ ^ 2 := by
+    simpa only [mul_pow] using pow_le_pow_left₀ (norm_nonneg v) hnorm 2
+  have henergy : (⟪v, Q v⟫_ℂ).re = (⟪w, P w⟫_ℂ).re := by
+    change (⟪v, e.toLinearMap.adjoint (P (e v))⟫_ℂ).re = _
+    rw [LinearMap.adjoint_inner_right]
+    change (⟪e v, P (e v)⟫_ℂ).re = (⟪w, P w⟫_ℂ).re
+    simp only [w, Submodule.starProjection_orthogonal_val, map_sub, hproj, sub_zero,
+      ← hP.isSymmetric _ (e v)]
+  calc
+    δ / C ^ 2 * ‖v‖ ^ 2 ≤ δ / C ^ 2 * (C ^ 2 * ‖w‖ ^ 2) :=
+      mul_le_mul_of_nonneg_left hnormSq (by positivity)
+    _ = δ * ‖w‖ ^ 2 := by field_simp [ne_of_gt hC]
+    _ ≤ (⟪w, P w⟫_ℂ).re := hP.isSymmetric.mul_norm_sq_le_re_inner_of_forall_hasEigenvalue hGap
+      (Submodule.starProjection_apply_mem _ _)
+    _ = (⟪v, Q v⟫_ℂ).re := henergy.symm
+
+end LinearMap.IsPositive
+
 namespace LinearMap.IsSymmetricProjection
 
 /-- A single deformed constraint and the congruence of its original
@@ -204,43 +258,34 @@ theorem sum_deformedConstraintProjection_comparison {ι : Type*} [Fintype ι]
 
 /-- A uniform forward bound and inverse bound transfer a gap of the
 original projection sum to the canonical deformed constraint sum, with
-explicit ratio \(\delta/(B^2C^2)\). -/
-theorem norm_gap_sum_deformedConstraintProjection {ι : Type*} [Fintype ι]
+explicit ratio \(\delta/(B^2C^2)\): if every eigenvalue of \(\sum_iP_i\) other than
+`0` is at least `δ`, then every eigenvalue of \(\sum_iQ_i\) other than `0` is at least
+\(\delta/(B^2C^2)\). -/
+theorem forall_hasEigenvalue_sum_deformedConstraintProjection {ι : Type*} [Fintype ι]
     (e : E ≃ₗ[ℂ] F) (P : ι → F →ₗ[ℂ] F)
     (hP : ∀ i, (P i).IsSymmetricProjection)
     {B C δ : ℝ} (hB : 0 < B) (hC : 0 < C) (hδ : 0 < δ)
     (hForward : ∀ v : E, ‖e v‖ ≤ B * ‖v‖)
     (hInverse : ∀ w : F, ‖e.symm w‖ ≤ C * ‖w‖)
-    (hGap : ∀ w ∈ (LinearMap.ker (∑ i, P i))ᗮ,
-      δ * ‖w‖ ≤ ‖(∑ i, P i) w‖) :
-    ∀ v ∈ (LinearMap.ker (∑ i, e.deformedConstraintProjection (P i)))ᗮ,
-      (δ / (B ^ 2 * C ^ 2)) * ‖v‖ ≤
-        ‖(∑ i, e.deformedConstraintProjection (P i)) v‖ := by
-  let G := e.toLinearMap.adjoint ∘ₗ (∑ i, P i) ∘ₗ e.toLinearMap
-  let S := ∑ i, e.deformedConstraintProjection (P i)
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue (∑ i, P i) μ → μ = 0 ∨ (δ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue (∑ i, e.deformedConstraintProjection (P i)) μ →
+      μ = 0 ∨ ((δ / (B ^ 2 * C ^ 2) : ℝ) : ℂ) ≤ μ := by
   have hsum : (∑ i, P i).IsPositive :=
     LinearMap.isPositive_sum Finset.univ fun i _ => (hP i).isPositive
-  have hG : G.IsPositive := hsum.adjoint_conj e.toLinearMap
-  have hGGap := hsum.norm_gap_adjoint_congruence_of_inverse_bound
+  have hGGap := hsum.forall_hasEigenvalue_adjoint_congruence_of_inverse_bound
     e hδ.le hC hInverse hGap
-  have hBS : ((B ^ 2 : ℝ) : ℂ) ≠ 0 := by exact_mod_cast pow_ne_zero 2 hB.ne'
-  have hker : LinearMap.ker G = LinearMap.ker (((B ^ 2 : ℝ) : ℂ) • S) := by
-    rw [LinearMap.ker_smul _ _ hBS]
-    exact (e.ker_adjoint_congruence (∑ i, P i)).trans
+  have hker : LinearMap.ker (e.toLinearMap.adjoint ∘ₗ (∑ i, P i) ∘ₗ e.toLinearMap) =
+      LinearMap.ker (∑ i, e.deformedConstraintProjection (P i)) :=
+    (e.ker_adjoint_congruence (∑ i, P i)).trans
       (e.ker_sum_deformedConstraintProjection P (fun i => (hP i).isPositive)).symm
-  have hUpper : G ≤ ((B ^ 2 : ℝ) : ℂ) • S :=
-    (e.sum_deformedConstraintProjection_comparison P hP hB hC hForward hInverse).2
-  have hTransfer := hG.norm_gap_of_le_of_ker_eq
-    (by positivity : 0 ≤ δ / C ^ 2) hUpper hker hGGap
-  intro v hv
-  have hv' : v ∈ (LinearMap.ker (((B ^ 2 : ℝ) : ℂ) • S))ᗮ := by
-    simpa only [LinearMap.ker_smul _ _ hBS] using hv
-  have h := hTransfer v hv'
-  have hratio : δ / (B ^ 2 * C ^ 2) = (δ / C ^ 2) / B ^ 2 := by
-    rw [div_div, mul_comm (C ^ 2)]
-  rw [hratio, div_mul_eq_mul_div]
-  apply (div_le_iff₀ (sq_pos_of_pos hB)).mpr
-  simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_real,
-    Real.norm_eq_abs, abs_of_nonneg (sq_nonneg B), mul_comm (B ^ 2)] using h
+  have hUpper : ((1 : ℝ) : ℂ) • (e.toLinearMap.adjoint ∘ₗ (∑ i, P i) ∘ₗ e.toLinearMap) ≤
+      ((B ^ 2 : ℝ) : ℂ) • (∑ i, e.deformedConstraintProjection (P i)) := by
+    rw [Complex.ofReal_one, one_smul]
+    exact (e.sum_deformedConstraintProjection_comparison P hP hB hC hForward hInverse).2
+  have h := (hsum.adjoint_conj e.toLinearMap).forall_hasEigenvalue_of_scaled_comparison one_pos
+    (sq_pos_of_pos hB) hUpper hker hGGap
+  have hratio : 1 * (δ / C ^ 2) / B ^ 2 = δ / (B ^ 2 * C ^ 2) := by
+    rw [one_mul, div_div, mul_comm (C ^ 2)]
+  rwa [hratio] at h
 
 end LinearEquiv

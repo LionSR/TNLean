@@ -20,14 +20,50 @@ Each actually normalized mixed-chain term is the corresponding common-core
 term independently on every pair of exterior registers. Hence the entire
 normalized Hamiltonian is unitarily the right-fiberwise extension of one
 common core operator. Replacing the nonempty exterior spectator space by
-the zero-second-sector spectator space therefore preserves every nonnegative
-norm-gap bound exactly.
+the zero-second-sector spectator space therefore preserves the eigenvalues
+exactly.
 
 No operator equality, kernel identification, or spectral gap is assumed.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692.
 -/
 
 open scoped Matrix InnerProductSpace BigOperators
+
+namespace ContinuousLinearMap
+
+variable {I S : Type*} [Fintype I] [Fintype S]
+
+/-- An operator and its independent extension over a nonempty finite spectator space have the
+same eigenvalues. -/
+theorem hasEigenvalue_rightFiberwiseMap_iff [Nonempty S]
+    (G : EuclideanSpace ℂ I →L[ℂ] EuclideanSpace ℂ I) (μ : ℂ) :
+    Module.End.HasEigenvalue (rightFiberwiseMap (S := S) G).toLinearMap μ ↔
+      Module.End.HasEigenvalue G.toLinearMap μ := by
+  classical
+  constructor
+  · intro h
+    obtain ⟨x, hx⟩ := h.exists_hasEigenvector
+    obtain ⟨s, hs⟩ : ∃ s, rightFiber x s ≠ 0 := by
+      by_contra! hzero
+      refine hx.2 (PiLp.ext fun ⟨i, t⟩ ↦ ?_)
+      simpa only [rightFiber_apply, PiLp.zero_apply] using congrArg (fun y ↦ y i) (hzero t)
+    refine Module.End.hasEigenvalue_of_hasEigenvector (x := rightFiber x s) ⟨?_, hs⟩
+    rw [Module.End.mem_eigenspace_iff]
+    refine PiLp.ext fun i ↦ ?_
+    simpa [rightFiber_apply] using congrArg (fun y ↦ y (i, s)) hx.apply_eq_smul
+  · intro h
+    obtain ⟨x, hx⟩ := h.exists_hasEigenvector
+    let s : S := Classical.choice ‹Nonempty S›
+    refine Module.End.hasEigenvalue_of_hasEigenvector (x := singleRightFiber s x) ⟨?_, ?_⟩
+    · rw [Module.End.mem_eigenspace_iff, ContinuousLinearMap.coe_coe,
+        rightFiberwiseMap_singleRightFiber]
+      have hGx : G x = μ • x := hx.apply_eq_smul
+      refine PiLp.ext fun p ↦ ?_
+      by_cases hp : p.2 = s <;> simp [singleRightFiber, hp, hGx]
+    · intro h0
+      exact hx.2 (by rw [← norm_eq_zero, ← norm_singleRightFiber s x, h0, norm_zero])
+
+end ContinuousLinearMap
 
 namespace MPSTensor
 namespace MPOSymmetry
@@ -341,39 +377,33 @@ theorem mixedEndpointActiveNormalizedHamiltonian_conj_coreSpectators
   intro p _
   rfl
 
-/-- A normalized mixed chain and its common core have exactly the same
-nonnegative norm-gap bounds when the exterior spectator space is nonempty.
-The hypothesis on dimension only supplies that nonempty spectator.
-Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_core
-    [NeZero D₀] (A₀ : MPSTensor (D₀ * D₀) D₀) (N : ℕ) {δ : ℝ} (hδ : 0 ≤ δ) :
-    (∀ v ∈ (LinearMap.ker (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N))ᗮ,
-      δ * ‖v‖ ≤ ‖mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N v‖) ↔
-      ∀ v ∈ (LinearMap.ker (endpointCoreHamiltonian A₀ N))ᗮ,
-        δ * ‖v‖ ≤ ‖endpointCoreHamiltonian A₀ N v‖ := by
-  have hconj := LinearIsometryEquiv.norm_gap_iff_of_conj
+/-- A normalized mixed chain and its common core have exactly the same eigenvalues when the
+exterior spectator space is nonempty. The hypothesis on dimension only supplies that nonempty
+spectator. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
+theorem mixedEndpointActiveNormalizedHamiltonian_hasEigenvalue_iff_core
+    [NeZero D₀] (A₀ : MPSTensor (D₀ * D₀) D₀) (N : ℕ) (μ : ℂ) :
+    Module.End.HasEigenvalue (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N) μ ↔
+      Module.End.HasEigenvalue (endpointCoreHamiltonian A₀ N) μ :=
+  (LinearIsometryEquiv.hasEigenvalue_iff_of_conj
     (endpointCoreSpectatorIsometry (Fin D₀ ⊕ Fin D₁) D₀ (N + 1))
     (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N)
     (rightFiberwiseMap (S := (Fin D₀ ⊕ Fin D₁) × (Fin D₀ ⊕ Fin D₁))
       (endpointCoreHamiltonian A₀ N).toContinuousLinearMap).toLinearMap
-    (mixedEndpointActiveNormalizedHamiltonian_conj_coreSpectators A₀ N) δ
-  exact hconj.trans (norm_gap_rightFiberwiseMap_iff
-    (S := (Fin D₀ ⊕ Fin D₁) × (Fin D₀ ⊕ Fin D₁))
-    (endpointCoreHamiltonian A₀ N).toContinuousLinearMap hδ)
+    (mixedEndpointActiveNormalizedHamiltonian_conj_coreSpectators A₀ N) μ).trans
+    (hasEigenvalue_rightFiberwiseMap_iff (S := (Fin D₀ ⊕ Fin D₁) × (Fin D₀ ⊕ Fin D₁))
+      (endpointCoreHamiltonian A₀ N).toContinuousLinearMap μ)
 
 /-- Replacing the two exterior spectator registers by their zero-second-
-sector versions preserves the actual normalized Hamiltonian's norm gap
-exactly. In particular `.mpr` transfers an intrinsic zero-sector estimate
-to an arbitrary second-sector dimension with the same constant.
+sector versions preserves the eigenvalues of the actual normalized Hamiltonian
+exactly. In particular `.mpr` transfers an intrinsic zero-sector lower bound on the
+nonzero eigenvalues to an arbitrary second-sector dimension with the same constant.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_zeroSector
-    [NeZero D₀] (A₀ : MPSTensor (D₀ * D₀) D₀) (N : ℕ) {δ : ℝ} (hδ : 0 ≤ δ) :
-    (∀ v ∈ (LinearMap.ker (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N))ᗮ,
-      δ * ‖v‖ ≤ ‖mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N v‖) ↔
-      ∀ v ∈ (LinearMap.ker (mixedEndpointActiveNormalizedHamiltonian (D₁ := 0) A₀ N))ᗮ,
-        δ * ‖v‖ ≤ ‖mixedEndpointActiveNormalizedHamiltonian (D₁ := 0) A₀ N v‖ :=
-  (mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_core (D₁ := D₁) A₀ N hδ).trans
-    (mixedEndpointActiveNormalizedHamiltonian_norm_gap_iff_core (D₁ := 0) A₀ N hδ).symm
+theorem mixedEndpointActiveNormalizedHamiltonian_hasEigenvalue_iff_zeroSector
+    [NeZero D₀] (A₀ : MPSTensor (D₀ * D₀) D₀) (N : ℕ) (μ : ℂ) :
+    Module.End.HasEigenvalue (mixedEndpointActiveNormalizedHamiltonian (D₁ := D₁) A₀ N) μ ↔
+      Module.End.HasEigenvalue (mixedEndpointActiveNormalizedHamiltonian (D₁ := 0) A₀ N) μ :=
+  (mixedEndpointActiveNormalizedHamiltonian_hasEigenvalue_iff_core (D₁ := D₁) A₀ N μ).trans
+    (mixedEndpointActiveNormalizedHamiltonian_hasEigenvalue_iff_core (D₁ := 0) A₀ N μ).symm
 
 end
 
