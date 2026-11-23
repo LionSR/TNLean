@@ -260,7 +260,7 @@ C3, $E_n^{(N)}=0$ when $n<l$, and at $n=l$ the endpoint identity
 \end{align}
 supplies the remaining initial index. The physical estimate controls all
 $n>l$. Hence
-\leanid{Kraus.HasComplementaryFixedPointGap.exists_openParentHamiltonianES_gap}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentChainInteraction_gap}
 applies the full-range theorem with $d_{l+1}=\gamma_{l+1}=1$ and preserves the
 coefficient in
 Equation~\eqref{eq:cpgsv21_martingale_overlap_nachtergaele_full_range_coefficient}.
@@ -308,7 +308,7 @@ At $N=L$, this Hamiltonian contains one orthogonal
 projection.\footnote{This is the Blueprint theorem ``Full-window compatible
     interaction,'' labelled
     \path{thm:open_parent_hamiltonian_full_window}; its formal declaration is
-    \leanid{MPSTensor.openParentHamiltonianES_self_eq_parentInteractionES}.}
+    \leanid{MPSTensor.hamiltonian_parentChainInteraction_self}.}
 Consequently,
 \begin{align}
     H^{\mathrm{open}}_{L,L}(A)
@@ -412,17 +412,17 @@ nonwrapping interaction, the theorem
 \leanid{MPSTensor.toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLinearIsometryEquiv}
 proves that the larger-volume local term is the direct sum of the $n$-site
 local term over right-spectator configurations.  The theorems
-\leanid{MPSTensor.openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
+\leanid{MPSTensor.hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv}
 and
-\leanid{MPSTensor.openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
+\leanid{MPSTensor.hamiltonian_restrict_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv}
 sum this identity over the exact prefix and local-interval start sets.
 
 The smaller-volume kernels are now explicit.  Under block injectivity,
-\leanid{MPSTensor.ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES}
+\leanid{MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpaceES}
 identifies the prefix kernel with
 \leanid{MPSTensor.openChainLeftGroundSpaceES}.  The full suffix window contains
 one local interaction, and
-\leanid{MPSTensor.ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES}
+\leanid{MPSTensor.ker_hamiltonian_restrict_parentChainInteraction_eq_openChainTailGroundSpaceES}
 identifies its kernel with
 \leanid{MPSTensor.openChainTailGroundSpaceES}.  Combining these statements with
 \leanid{ContinuousLinearMap.ker_starProjection_rightFiberwiseMap} gives the
@@ -755,7 +755,7 @@ backward transport results replace this conditional route. The theorem
 \leanid{Submodule.re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
 uses the intersection identity
 (\ref{eq:cpgsv21_martingale_overlap_common_ground_space}), equivalently
-\leanid{MPSTensor.adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}; it does not
+\leanid{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ}; it does not
 require a small bound on $\lVert p_ip_j\rVert$.
 
 \section{Relation to the blueprint}
@@ -1839,7 +1839,7 @@ $D^{3/2}$ reshuffle factor, a finite Gram inverse, or periodic coercivity.
 The compatible open-chain estimate now gives a periodic gap without a
 restriction to block-divisible lengths.  Let $A$ be primitive with nonzero
 bond dimension and positive-definite fixed point.  The theorem
-\leanid{Kraus.HasComplementaryFixedPointGap.exists_openParentHamiltonianES_gap}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentChainInteraction_gap}
 provides $l>1$, $\epsilon_l\geq0$, and the exact open coefficient
 \begin{align}
     \gamma_{\mathrm{open}}
@@ -1863,9 +1863,9 @@ Set
     \label{eq:cpgsv21_martingale_overlap_open_knabe_volume}
 \end{align}
 The cyclic local interactions are indexed by $\mathbb Z/N\mathbb Z$, and
-\leanid{MPSTensor.sum_zmodLocalTermES_eq_parentHamiltonianES} identifies their
+\leanid{ManyBody.Interaction.sum_toEuclideanLin_translationInvariant_term_finEquiv_symm} identifies their
 sum with the periodic parent Hamiltonian.  If $R\leq e$ and $e+R\leq N$, then
-\leanid{MPSTensor.zmodLocalTermES_commute_of_oriented_separation} gives
+\leanid{ManyBody.Interaction.commute_translationInvariant_term_finEquiv_symm_add_of_le} gives
 commutation of the interactions whose initial sites have oriented separation
 $e$.
 
@@ -1877,9 +1877,14 @@ active block gives
      & =\left(H^{\mathrm{open}}_{W,R}(A)\right)^{\oplus[d]^{N-W}}.
     \label{eq:cpgsv21_martingale_overlap_cyclic_open_block}
 \end{align}
-This is
-\leanid{MPSTensor.cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock}.
-The norm gap in
+This identity follows from
+\leanid{ManyBody.Interaction.cyclicWindowSum_toEuclideanLin_translationInvariant_term},
+which writes the sum of the $m$ interactions as the open-chain Hamiltonian
+$H^{\mathrm{open}}_{W,R}(A)$ placed on the $W$ sites beginning at $s$, and
+\leanid{MPSTensor.cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply},
+which shows that an operator placed on these $W$ sites acts independently on
+every spectator configuration in the coordinates of the cyclic active block.
+The eigenvalue gap in
 (\ref{eq:cpgsv21_martingale_overlap_open_knabe_coefficient}) implies the
 quadratic-form inequality
 \begin{align}
@@ -1912,10 +1917,14 @@ The finite-range cyclic inequality then gives
     \label{eq:cpgsv21_martingale_overlap_open_knabe_periodic_gap}
 \end{align}
 for every $N\geq2m$ and every
-$v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$.  The first general statement is
-\leanid{MPSTensor.parentHamiltonianES_gap_of_openParentHamiltonianES_gap}; the
+$v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$.  Since $H_{N,l+1}^{\mathrm{ES}}(A)$
+is positive, this bound is equivalent to the statement that every eigenvalue
+of $H_{N,l+1}^{\mathrm{ES}}(A)$ is $0$ or at least $\delta$, and the
+declarations below state it in this eigenvalue form.  The first general
+statement is
+\leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap}; the
 primitive-MPS conclusion is
-\leanid{Kraus.HasComplementaryFixedPointGap.exists_parentHamiltonianES_gap_of_finiteRangeKnabe}.
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentRingInteraction_gap_of_finiteRangeKnabe}.
 
 The gap definition and the MPS gap assertion occur at lines~1460--1500 of the
 local source for Ref.~\cite{PerezGarcia2007Matrix} and at lines~2184--2188 of
@@ -2083,7 +2092,7 @@ sparse aligned-sum domination; the pair of exact conjugation identities
 blocked parent interaction and the blocked range-two local terms to their
 original range-$2p$ counterparts at block-aligned starts; and the private
 helpers serving them.  The replacement for the first is
-\leanid{Kraus.HasComplementaryFixedPointGap.exists_parentHamiltonianES_gap_of_finiteRangeKnabe},
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentRingInteraction_gap_of_finiteRangeKnabe},
 whose compatible open-chain estimate, cyclic active-block identity, and
 finite-range inequality give
 (\ref{eq:cpgsv21_martingale_overlap_open_knabe_periodic_gap}) for every
@@ -2100,14 +2109,17 @@ different cyclic tensor is used.
 The finite threshold $N\geq2m$ can also be removed without comparing
 Hamiltonians with different kernels. For each fixed $N$, the restriction of
 $H_{N,L}(A)$ to $(\ker H_{N,L}(A))^\perp$ is injective on a finite-dimensional
-space, hence has a positive lower norm bound $\delta_N$. Taking the minimum
+space, hence has a positive lower norm bound $\delta_N$; equivalently, every
+nonzero eigenvalue of the positive operator $H_{N,L}(A)$ is at least
+$\delta_N$. Taking the minimum
 of the large-length bound and the finitely many $\delta_N$ for $N<2m$
-gives a uniform positive constant at every length. This is proved by
-\leanid{MPSTensor.parentHamiltonianES_exists_gap} and
-\leanid{MPSTensor.parentHamiltonianES_gap_of_eventual_gap}.
+gives a uniform positive constant at every length. The fixed-length bound,
+in eigenvalue form, holds for every positive semidefinite matrix by
+\leanid{ManyBody.exists_pos_forall_hasEigenvalue}; the minimum is taken in
+\leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_of_eventual_gap}.
 The normalized primitive gauge of an arbitrary normal tensor preserves its
 parent Hamiltonian. Consequently
-\leanid{MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal}
+\leanid{MPSTensor.exists_hamiltonian_parentRingInteraction_uniform_gap_of_isNormal}
 gives the uniform gap at a suitable range $L=l+1$ for every $N$,
 without a normalization hypothesis on the tensor. The resulting constant
 need not equal the explicit Knabe coefficient.
@@ -2124,8 +2136,10 @@ algebra. Then, for every $R\geq S+1$, there is $\gamma_R>0$ such that
 \end{align}
 for every $N\in\mathbb N$ and every
 $v\perp\ker H_{N,R}^{\mathrm{ES}}(B)$. No normalization or separate
-inequivalence hypothesis is imposed on the original blocks. The declaration is
-\leanid{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}.
+inequivalence hypothesis is imposed on the original blocks. The declaration
+states the bound in the equivalent form that every eigenvalue of
+$H_{N,R}^{\mathrm{ES}}(B)$ is $0$ or at least $\gamma_R$; it is
+\leanid{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}.
 Independent primitive normalization preserves $S$ and all local spaces;
 the grouped open-chain estimate and positive comparison between periodic
 interaction ranges give the gap at the original range $R$. The local
@@ -2137,7 +2151,7 @@ physical dimension, the representatives admit $S>0$ with $S+1\leq3D^5$.
 Consequently every $R\geq3D^5$ satisfies
 (\ref{eq:cpgsv21_martingale_overlap_block_prescribed_gap}) for the original
 canonical tensor, with no supplied simultaneous span. This is
-\leanid{MPSTensor.IsCPSVCanonicalForm.exists_parentHamiltonianES_uniform_gap_of_three_bondDim_pow_five_le}.
+\leanid{MPSTensor.IsCPSVCanonicalForm.exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le}.
 For every fixed positive interaction $h$ on $R$ sites with $\ker h=G_R(A)$,
 there is likewise $\gamma_h>0$ such that
 \begin{align}
