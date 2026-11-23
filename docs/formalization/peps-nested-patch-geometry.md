@@ -51,9 +51,7 @@ and when the domain clips the squares.
 The blueprint gives an exact finite example: `Λ = {0,…,10} × {0,1,2}`,
 `c = (5/4,3/2)`, and `u = 4`. The three samples end at columns `5`, `7`, and
 `9`. The edge from `(7,1)` to `(8,1)` crosses only the middle sample.
-`scripts/test_nested_patch_geometry_diagram.py` checks the illustrated samples
-using exact rational arithmetic, verifies its 33 sites and 52 distinct edges,
-and checks the disjoint/contained alternatives. The diagram depicts adjacency
+The diagram has 33 sites and 52 distinct edges and depicts adjacency
 only; it asserts no tensor contraction or operator identity.
 
 ## Uniform scalar coefficient
