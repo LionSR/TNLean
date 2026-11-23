@@ -167,7 +167,7 @@ theorem ambient_charpoly_eq_X_pow_mul_effective {L : ℕ} (hL4 : L ≤ 4) :
       CPSVExample411Ambient.inclusion_isometry,
     Matrix.singleKrausMap_charpoly_eq_X_pow_mul_of_isometry
       (Matrix.piKronecker fun _ : Fin L ↦ CPSVExample411Ambient.inclusion)
-      (piKronecker_const_isometry CPSVExample411Ambient.inclusion
+      (Matrix.piKronecker_const_isometry CPSVExample411Ambient.inclusion
         CPSVExample411Ambient.inclusion_isometry L)]
   simp only [Fintype.card_fun, Fintype.card_fin]
 
@@ -181,7 +181,7 @@ theorem ambient_charpoly_roots_eq_zero_add_effective {L : ℕ} (hL4 : L ≤ 4) :
       CPSVExample411Ambient.inclusion_isometry,
     Matrix.singleKrausMap_charpoly_roots_eq_zero_add_of_isometry
       (Matrix.piKronecker fun _ : Fin L ↦ CPSVExample411Ambient.inclusion)
-      (piKronecker_const_isometry CPSVExample411Ambient.inclusion
+      (Matrix.piKronecker_const_isometry CPSVExample411Ambient.inclusion
         CPSVExample411Ambient.inclusion_isometry L)]
   simp only [Fintype.card_fun, Fintype.card_fin]
 

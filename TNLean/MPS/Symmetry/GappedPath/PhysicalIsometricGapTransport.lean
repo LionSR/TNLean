@@ -133,7 +133,7 @@ private noncomputable def physicalChainLinearIsometry {d m : ℕ}
   have hT : T.adjoint ∘ₗ T = LinearMap.id := by
     simpa only [T, ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
       Matrix.toEuclideanLin, Matrix.toLpLin_mul_same, Matrix.toLpLin_one] using
-      congrArg Matrix.toEuclideanLin (MPOTensor.piKronecker_const_isometry E hE N)
+      congrArg Matrix.toEuclideanLin (Matrix.piKronecker_const_isometry E hE N)
   exact T.isometryOfInner fun x y => by
     rw [← LinearMap.adjoint_inner_right, ← LinearMap.comp_apply, hT, LinearMap.id_apply]
 

@@ -221,8 +221,8 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
       (S.copies s : ℂ) • mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N :=
     sitewise_bntSectorProjection_mul_mpo_mul_self
       M S hM hWeight hC hρ hη hR hN s
-  have hP : P.IsHermitian := isHermitian_piKronecker_const
-    (bntSectorProjection_isOrthogonal hC hρ hη hR s).1 N
+  have hP : P.IsHermitian := Matrix.IsHermitian.piKronecker fun _ : Fin N ↦
+    (bntSectorProjection_isOrthogonal hC hρ hη hR s).1
   have hcompressed : (P * mpo M N * P).PosSemidef := by
     simpa only [hP.eq] using (hMpdo N hN).mul_mul_conjTranspose_same P
   rw [heq] at hcompressed

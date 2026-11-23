@@ -73,7 +73,7 @@ theorem exists_parentChainInteraction_toTensorFromBlocks_gap_subsequence_of_word
     simpa only [Nat.mul_comm] using Nat.mul_le_mul_left p hM
   rw [parentChainInteraction_eq_of_groundSpace_eq hLocalGS (p * M)]
   exact toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length T _
-    (posSemidef_toMatrix'_parentInteraction T R) (by omega) hκ hγ hLocal
+    (posSemidef_toMatrix'_parentInteraction T R) (by omega) hκ hLocal
     (hKernel R (p * M) hR (by omega)) (hKernel (2 * p) (p * M) (by omega) hN) (hLong M hM)
 
 /-- Simultaneous injectivity supplies an open parent interval whose gap

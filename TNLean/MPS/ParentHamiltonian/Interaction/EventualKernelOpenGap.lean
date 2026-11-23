@@ -87,7 +87,7 @@ theorem exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
     (div_pos (mul_pos hκ hδ) (Nat.cast_pos.mpr (by omega))) ?_
   intro N hN
   exact toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
-    (toTensorFromBlocks (d := d) (μ := μ) A) h hh (by omega) hκ hδ
+    (toTensorFromBlocks (d := d) (μ := μ) A) h hh (by omega) hκ
     hLocal' (hN₀ N (by omega)) (hCanonicalKernel (2 * p) N (by omega) hN)
     (hCanonicalGap N)
 

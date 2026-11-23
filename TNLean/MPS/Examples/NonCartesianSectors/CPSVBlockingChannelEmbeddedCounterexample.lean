@@ -49,7 +49,7 @@ private theorem exists_sourceMap_of_exists_embeddedMap (N : ℕ)
   have hForward : IsKrausCPTP
       (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ physicalInclusion)) :=
     singleKrausMap_isKrausCPTP (Matrix.piKronecker fun _ : Fin 2 ↦ physicalInclusion)
-      (piKronecker_const_isometry physicalInclusion
+      (Matrix.piKronecker_const_isometry physicalInclusion
         physicalInclusion_isometry 2)
   have hRecover : IsKrausCPTP
       (sitewisePhysicalRecovery physicalInclusion N) :=

@@ -9,4 +9,3 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.ParentHamiltonian.Gap.Spectator
 
 import TNLean.MPS.ParentHamiltonian.Gap.Spectator.BoundedProjectionDeformation
-import TNLean.MPS.ParentHamiltonian.Gap.Spectator.GroundExpectationGap

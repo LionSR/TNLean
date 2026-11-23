@@ -64,7 +64,7 @@ theorem piKronecker_two_mul_conjTranspose
     (V : Matrix (Fin d) (Fin e) ℂ) :
     (Matrix.piKronecker fun _ : Fin 2 ↦ V) * (Matrix.piKronecker fun _ : Fin 2 ↦ V)ᴴ =
       twoSiteSectorProjection (V * Vᴴ) := by
-  rw [piKronecker_const_mul_conjTranspose,
+  rw [Matrix.piKronecker_const_mul_conjTranspose,
     piKronecker_two_eq_twoSiteSectorProjection]
 
 /-- A product identity between one-site matrices is preserved on the
@@ -173,12 +173,12 @@ theorem liftedBond_supported (F : PhysicalSupportRestrictionData P K)
   rw [← Matrix.mul_assoc
       (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion)ᴴ
       (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion),
-    piKronecker_const_isometry F.inclusion F.inclusion_isometry 2,
+    Matrix.piKronecker_const_isometry F.inclusion F.inclusion_isometry 2,
     Matrix.one_mul]
   rw [← Matrix.mul_assoc
       (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion)ᴴ
       (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion),
-    piKronecker_const_isometry F.inclusion F.inclusion_isometry 2,
+    Matrix.piKronecker_const_isometry F.inclusion F.inclusion_isometry 2,
     Matrix.one_mul]
 
 end PhysicalSupportRestrictionData

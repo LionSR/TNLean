@@ -101,7 +101,7 @@ theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective
   refine ⟨l + 1, by omega, κ * γ / (l + 1 - (p + 1) + 1 : ℕ),
     div_pos (mul_pos hκ hγ) (Nat.cast_pos.mpr (by omega)), fun N hN ↦ ?_⟩
   refine toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length A _
-    (posSemidef_toMatrix'_parentInteraction A (p + 1)) (by omega) hκ hγ hLocal
+    (posSemidef_toMatrix'_parentInteraction A (p + 1)) (by omega) hκ hLocal
     (hShortKer N hN) (hLongKer N hN) ?_
   rw [parentChainInteraction_eq_of_groundSpace_eq (hGS (l + 1)) N]
   exact hOpenB N
