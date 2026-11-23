@@ -4,11 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
-import TNLean.Lattice.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.Entropy.Conditional.ConditionalEntropy
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import TNLean.MPS.AreaLaw.Chain.Counting
 import Mathlib.Data.Nat.Order.Lemmas
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Entropy inequalities for regions of a chain
@@ -64,8 +67,6 @@ geometric and does not assert a partial-swap operator decomposition.
 section
 
 open ManyBody (interval mem_interval)
-
-open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw
 

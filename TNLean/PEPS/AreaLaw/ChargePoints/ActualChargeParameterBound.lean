@@ -32,8 +32,6 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -70,8 +68,8 @@ theorem actualCharge_integral_bound_domainGraph :
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -86,7 +84,7 @@ theorem actualCharge_integral_bound_domainGraph :
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
-        let n := augmentedDimensions (V := Site Λ) q aux
+        let n := augmentedDimensions (V := ↥Λ) q aux
         let D := S.actualChargeData hm hM s
         let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
@@ -107,7 +105,7 @@ theorem actualCharge_integral_bound_domainGraph :
     s L μ hn hs hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
+  let n := augmentedDimensions (V := ↥Λ) q aux
   let D := S.actualChargeData hm hM s
   let E := S.actualEnergyTerms h Ω J Δ L aux
   have hn0 : 0 < S.n := by omega

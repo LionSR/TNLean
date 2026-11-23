@@ -8,11 +8,13 @@ import TNLean.MPS.AreaLaw.ProjectorFactorization.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.ProductStateExpectation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.EffectExpectation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.EffectFromFactorization
-import TNLean.Lattice.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ChainBootstrap
 import TNLean.MPS.AreaLaw.ProjectorFactorization.PositiveFactorization
 import TNLean.MPS.AreaLaw.ProjectorFactorization.LiebRobinson
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # The entropy gain across a cut: from eq. `LU` to eq. `relent`

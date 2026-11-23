@@ -5,8 +5,10 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Parameter.LocalizationParameters
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedPlaneInteraction
-import TNLean.Lattice.RegionalReset
+import QICLean.ManyBody.Replica.RegionalReset
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.SupportedUnitary
 
 /-!
 # The supported unitary of the information reset at interaction range `R`
@@ -53,6 +55,8 @@ open Matrix QuantumCircuit
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped Kronecker Matrix.Norms.L2Operator
+
+open GaussianFilter (resetCutoff resetCutoff_pos resetVariance)
 
 noncomputable section
 
@@ -124,17 +128,17 @@ Source: `02-information.tex`, lines 355–562, with `K_loc` at lines 551–554. 
 theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ)
     (hr : 0 ≤ r) {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : PlaneInteraction Λ q R)
         (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-    (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
+    (A C : Finset ↥Λ) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
     (hI : ManyBody.regionMutualInformation Ω A C ≤ b) :
-    let p := sitePairConfigurationEquiv (Site Λ) q q
+    let p := sitePairConfigurationEquiv ↥Λ q q
     let F := reindex p p (sheetSwapOp q A)
-    let ψ : Configuration Λ (q * q) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
+    let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
     let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
       ((A ∪ C)ᶜ ∪ crossingSites Λ R A) ⌈rangeResetRadius R J Δ r * (1 + b + Real.log L)⌉₊
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-    ∃ (z : ℝ) (M : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ),
+    ∃ (z : ℝ) (M : Matrix (↥Λ → Fin (q * q)) (↥Λ → Fin (q * q)) ℂ),
       Real.exp (-2 * b) ≤ z ∧
       M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧ ‖M‖ ≤ 1 ∧
       ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
@@ -223,18 +227,18 @@ Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-er
 theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r)
     {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : PlaneInteraction Λ q R)
         (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-    (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
+    (A C : Finset ↥Λ) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
     (hI : ManyBody.regionMutualInformation Ω A C ≤ b) :
-    let p := sitePairConfigurationEquiv (Site Λ) q q
+    let p := sitePairConfigurationEquiv ↥Λ q q
     let F := reindex p p (sheetSwapOp q A)
-    let ψ : Configuration Λ (q * q) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
+    let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
     let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
       ((A ∪ C)ᶜ ∪ crossingSites Λ R A) ⌈rangeResetRadius R J Δ r * (1 + b + Real.log L)⌉₊
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-    ∃ U : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ,
-      U ∈ unitaryGroup (Configuration Λ (q * q)) ℂ ∧
+    ∃ U : Matrix (↥Λ → Fin (q * q)) (↥Λ → Fin (q * q)) ℂ,
+      U ∈ unitaryGroup (↥Λ → Fin (q * q)) ℂ ∧
       U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
         rangeResetUnitaryPrefactor R J Δ r * (L : ℝ) ^ (-r) := by

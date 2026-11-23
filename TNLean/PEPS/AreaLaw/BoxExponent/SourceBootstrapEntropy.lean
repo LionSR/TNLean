@@ -45,8 +45,6 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -54,9 +52,9 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 open SpectralFilter
 
 private theorem restored_entropy_le_of_selected_rough_comparisons
-    {Λ : Finset (ℤ × ℤ)} {q : ℕ} (Ω Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1)
-    (X : Finset (Site Λ))
-    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q) X))
+    {Λ : Finset (ℤ × ℤ)} {q : ℕ} (Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
+    (X : Finset ↥Λ)
+    (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q) X))
     (w τ a Edef Bsh Bexc cont : ℝ)
     (hz : 0 < (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E)
     (hE : ∀ i ∈ E,
@@ -70,7 +68,7 @@ private theorem restored_entropy_le_of_selected_rough_comparisons
     (hrU : Tendsto rU atTop (𝓝 0)) (hrL : Tendsto rL atTop (𝓝 0))
     (hrE : Tendsto rE atTop (𝓝 0))
     (hcont : |ManyBody.regionEntropy Ωt X - ManyBody.regionEntropy Ω X| ≤ cont) :
-    let β := fun _ : Site Λ ↦ Fin q
+    let β := fun _ : ↥Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv β X) Ωt
     let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
@@ -159,8 +157,8 @@ theorem sourceBootstrap_entropy_improvement_explicit
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
         (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
             (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
-        (Ω : StateSpace Λ q),
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (E₀ : ℝ)
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
@@ -249,7 +247,7 @@ theorem sourceBootstrap_entropy_improvement_explicit
         (8 * Nat.floor ((S.n : ℝ) ^ BootstrapParameters.mu e₀)) := hKScale
   have hLExplicit : L = Nat.floor ((S.n : ℝ) ^ (1 - BootstrapParameters.ell e₀)) := rfl
   let X := S.A.filter fun x ↦ x.val ∈ T
-  let β := fun _ : Site Λ ↦ Fin q
+  let β := fun _ : ↥Λ ↦ Fin q
   let w := (S.n : ℝ) ^ (3 / 5 : ℝ)
   let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ η + S.n) + (S.n : ℝ) ^ (-247 : ℝ)
   obtain ⟨hK, hKL, hcard, hX, eigen, Ωt, htrgs, he0, he, htrace, _, _, hwdata⟩ := hdata
@@ -264,7 +262,7 @@ theorem sourceBootstrap_entropy_improvement_explicit
     compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
   let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
     (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
-  let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+  let dims := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
   let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
   obtain ⟨ell, hpre, hdim, hweights⟩ := hpdata
   let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
@@ -425,8 +423,8 @@ theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
         (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
             (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
-        (Ω : StateSpace Λ q),
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (E₀ : ℝ)
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
@@ -474,8 +472,8 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
         (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
             (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
-        (Ω : StateSpace Λ q),
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (E₀ : ℝ)
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
@@ -521,8 +519,8 @@ theorem exists_sourceBootstrap_entropy_improvement
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
         (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
             (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
-        (Ω : StateSpace Λ q),
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (E₀ : ℝ)
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →

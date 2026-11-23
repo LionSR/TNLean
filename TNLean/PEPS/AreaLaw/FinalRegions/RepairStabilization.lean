@@ -22,8 +22,6 @@ Section 11, replacement instructions, lines 398–409, termination, lines
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- An empty mark family has empty removal union.
@@ -33,7 +31,7 @@ theorem repairRemovalSet_eq_empty {K : Type*} [IsEmpty K]
     (v : K → ℝ × ℝ) (S : K → ℝ) : repairRemovalSet v S = ∅ := by
   exact Set.iUnion_of_empty _
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
   (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar

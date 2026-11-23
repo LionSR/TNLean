@@ -26,8 +26,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The characteristic length of an initial identifier: r = 2^k for a
@@ -54,7 +52,7 @@ Source: area-law Section 11, replacement creation, lines 398–409;
 `geometry:primary-scale`, lines 709–721; and belt and replacement scanner
 scales, lines 732–740. -/
 def repairStageCharacteristicLength (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
     (Sstar : ℝ) :
     (j : ℕ) → (repairStage o Λ A C k₀ hC h₀ Sstar j).regionIndex → ℝ :=
   Nat.rec

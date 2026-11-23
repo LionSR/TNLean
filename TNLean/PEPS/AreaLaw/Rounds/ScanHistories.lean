@@ -47,7 +47,6 @@ at `openai/math@adc7f124`.
 
 open Filter TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators symmDiff
-open TNLean.Lattice
 
 open ManyBody (ambientDilation edgeBoundary planeDomainGraph)
 
@@ -65,7 +64,7 @@ lines 195–221) for one actual collar scan with collar depth `L`, anchor
 multiplicity `μ`, and inverse power `p` in the bad-history estimate. Completed
 statuses after `k ≤ nm` fill–charge pairs and pre-charge statuses with
 `k + 1 ≤ nm` are both covered. -/
-structure HistoryProperties {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
+structure HistoryProperties {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
     (L μ : ℕ) (p : ℝ) : Prop where
   /-- Item 1: a splitting designated support of a completed status is its graph
   `r₀`-ball, and this ball lies in `A`. -/
@@ -106,17 +105,17 @@ structure HistoryProperties {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ)
   statuses. -/
   band_commute : ∀ {k k' : ℕ} (h : History S.K S.m S.M k) (h' : History S.K S.m S.M k')
     (g g' : Fin S.K), g < g' → ∀ (preCharge preCharge' : Bool)
-    (q : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (q v)] {t : ℝ}, 0 ≤ t → ∀ replicas : ℕ,
+    (q : ↥Λ ⊕ Bool → ℕ) [∀ v, NeZero (q v)] {t : ℝ}, 0 ≤ t → ∀ replicas : ℕ,
       Commute (symBandMetric q t replicas (S.quantumHistoryPartition h g preCharge))
         (symBandMetric q t replicas (S.quantumHistoryPartition h' g' preCharge'))
   /-- Item 2: every assigned site of `A` has oriented depth at most `j + D + r₀` on
   its side. -/
   assigned_lead : ∀ {k : ℕ} (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool)
-    (x : Site Λ), x ∈ S.A → S.state h g x = some side →
+    (x : ↥Λ), x ∈ S.A → S.state h g x = some side →
       orientedDepth S.depth side x ≤ S.front g (h.1 g) k side + S.D + S.r₀
   /-- Item 2 for pre-charge statuses. -/
   old_assigned_lead : ∀ {k : ℕ} (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool)
-    (x : Site Λ), x ∈ S.A → S.oldChargeState h g x = some side →
+    (x : ↥Λ), x ∈ S.A → S.oldChargeState h g x = some side →
       orientedDepth S.depth side x ≤ S.front g (h.1 g) (k + 1) side + S.D + S.r₀
   /-- Item 2: `U` contains, and `UY` is contained in, a deterministic positive-depth
   prefix, and each differs from it by at most `3nD` sites. -/
@@ -222,11 +221,11 @@ omit [Fintype I] [LinearOrder I] in
 /-- A splitting graph ball lies in `A`, once its middle witness lies in the
 compact collar. -/
 private theorem ball_subset_of_middle {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (σ : PhysicalPartition (Site Λ)) (hsub : middle σ ⊆ S.truncationSet L) (i : I)
+    (σ : PhysicalPartition ↥Λ) (hsub : middle σ ⊆ S.truncationSet L) (i : I)
     (hsplit : (S.ball i ∩ middle σ).Nonempty) : S.ball i ⊆ S.A := by
   obtain ⟨y, hy⟩ := hsplit
   obtain ⟨hyb, hym⟩ := Finset.mem_inter.mp hy
@@ -251,7 +250,7 @@ open Classical in
 scales satisfy for large `n` and from the bad-history bound `hbad`, which is the
 first assertion of item 4 (`08-scanner.tex`, lines 195–347). -/
 theorem historyProperties_of_scales {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L μ : ℕ} {p : ℝ}
     (hn : 2 ≤ S.n) (hr : 2 * S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
     (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m) (hL : 8 * S.K * S.m ≤ L)
@@ -353,7 +352,7 @@ theorem eventually_historyProperties {ell kappa mu Cr C1 Ct : ℝ} (hell : 0 < e
     (hkappa : 0 < kappa) (hkappamu : kappa < mu) (hmu : mu < 1 - ell) (hCr : 0 < Cr)
     (hC1 : 0 < C1) (hCt : 0 ≤ Ct) (b : ℕ) (hb : 3 * (b : ℝ) ≤ C1) (p : ℝ) :
     ∀ᶠ n : ℕ in atTop, ∀ (I : Type u) [Fintype I] [LinearOrder I]
-      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan ↥Λ I),
       S.n = n → S.m = ⌊(n : ℝ) ^ mu⌋₊ →
       S.K = ⌊(n : ℝ) ^ (1 - ell)⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ kappa⌉₊ → S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →

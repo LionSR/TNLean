@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.NestedPatches.NestedPatchEnergy
-import TNLean.Lattice.BufferedRectangles
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Squares.RangeNestedPatches
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.Regions.GapMarginalCloseness
@@ -67,7 +67,6 @@ open Matrix
 
 open ManyBody (groundSpace PlaneInteraction)
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport planeDomainGraph)
 
@@ -105,7 +104,7 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
     (hj : j < AreaLaw.Geometry.rangeNestedPatchCount R u) :
     ∑ X ∈ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
         (AreaLaw.Geometry.rangeNestedPatch Λ c R u j),
-      (Fintype.card (ManyBody.InnerConfig (fun _ : Site Λ ↦ q)
+      (Fintype.card (ManyBody.InnerConfig (fun _ : ↥Λ ↦ q)
         (AreaLaw.Geometry.rangeNestedPatch Λ c R u j) X.1) : ℝ) ^ 2 * J ≤
       R * (16 * u + 4) * 2 ^ (2 * R * (R + 1)) * (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J := by
   classical
@@ -116,11 +115,11 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
     simp only [C, ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     exact hX
   -- Each split support has an inside dimension at most `q ^ (v_R - 1)`.
-  have hdim : ∀ X ∈ C, (Fintype.card (ManyBody.InnerConfig (fun _ : Site Λ ↦ q) D X.1) : ℝ)
+  have hdim : ∀ X ∈ C, (Fintype.card (ManyBody.InnerConfig (fun _ : ↥Λ ↦ q) D X.1) : ℝ)
       ≤ (q : ℝ) ^ (2 * R * (R + 1)) := by
     intro X hX
     obtain ⟨⟨v, hvX, hvD⟩, ⟨w, hwX, hwD⟩⟩ := hmemC X hX
-    have hcard : Fintype.card (ManyBody.InnerConfig (fun _ : Site Λ ↦ q) D X.1) =
+    have hcard : Fintype.card (ManyBody.InnerConfig (fun _ : ↥Λ ↦ q) D X.1) =
         q ^ (X.1 ∩ D).card := by
       rw [ManyBody.card_innerConfig, Finset.prod_const]
     have hpos : 1 ≤ (X.1 ∩ D).card :=
@@ -128,7 +127,7 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
     have hlt : (X.1 ∩ D).card < X.1.card :=
       Finset.card_lt_card ⟨Finset.inter_subset_left, fun h ↦ hwD
         (Finset.mem_inter.mp (h hwX)).2⟩
-    have hdiam := AreaLaw.card_support_le_diamond (G := planeDomainGraph Λ) Subtype.val
+    have hdiam := ManyBody.card_support_le_diamond (G := planeDomainGraph Λ) Subtype.val
       Subtype.val_injective (fun _ _ ↦ ManyBody.latticeL1Distance_le_one_of_planeDomainGraph_adj)
       X.1 R X.2.2
     have hle : (X.1 ∩ D).card ≤ 2 * R * (R + 1) := by omega
@@ -139,7 +138,7 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
     · exact pow_le_pow_right₀ (by exact_mod_cast hq) hle
   -- Each split support contains a site of the inner layer.
   have hcount : (C.card : ℝ) ≤ R * (16 * u + 4) * 2 ^ (2 * R * (R + 1)) := by
-    have h := AreaLaw.card_le_card_mul_of_forall_exists_mem (N := N) (S := C) fun X hX ↦ by
+    have h := ManyBody.card_le_card_mul_of_forall_exists_mem (N := N) (S := C) fun X hX ↦ by
       obtain ⟨⟨v, hvX, hvD⟩, ⟨w, hwX, hwD⟩⟩ := hmemC X hX
       exact ⟨v, AreaLaw.Geometry.mem_squareLayer_of_split
         (fun x hx y hy ↦ AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport c X.2
@@ -176,24 +175,24 @@ Extension of polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 213–336,
 theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
     {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ : ℝ} (H : PlaneInteraction Λ q R)
         (hH : ∀ X, (H.term X).IsHermitian) (hHJ : ∀ X, ‖H.term X‖ ≤ J)
-    (hR : 1 ≤ R) (hJ : 0 ≤ J) (Ψ : Lattice.StateSpace Λ q)
+    (hR : 1 ≤ R) (hJ : 0 ≤ J) (Ψ : EuclideanSpace ℂ (↥Λ → Fin q))
     (hΩ : ‖Ψ‖ = 1) (hspan : groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ψ})
     (center : ℝ × ℝ) (u κ b : ℝ) (hu : 0 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
-    letI : LinearOrder (Lattice.Site Λ) :=
-      (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+    letI : LinearOrder ↥Λ :=
+      (Fintype.equivFin ↥Λ).linearOrder
     let m := AreaLaw.Geometry.rangeNestedPatchCount R u
-    let regions : Fin m → Finset (Lattice.Site Λ) :=
+    let regions : Fin m → Finset ↥Λ :=
       fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
     let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
     let Ψᵤ := Ψ
     ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
-      x ∈ regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
+      x ∈ regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions →
       IsMinOn
-        (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+        (regularizedPatchObjective (Out := fun _ : ↥Λ ↦ Fin q)
           regions a b Ψᵤ)
-        (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
-      let φ : Lattice.StateSpace Λ q :=
-        (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+        (regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions) x →
+      let φ : EuclideanSpace ℂ (↥Λ → Fin q) :=
+        (normalizedRegularizedPatchOutput (Out := fun _ : ↥Λ ↦ Fin q)
           regions a b Ψᵤ x)
       (inner ℂ φ (Matrix.toEuclideanLin H.hamiltonian φ)).re - E₀ ≤
         rangePatchEnergyConstant q R J * κ ^ 2 := by
@@ -202,20 +201,20 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
     Nat.cast_pos.mpr (AreaLaw.Geometry.rangeNestedPatchCount_pos R u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΨᵤ : ‖Ψᵤ‖ = 1 := hΩ
-  let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+  let : LinearOrder ↥Λ := (Fintype.equivFin ↥Λ).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
-    (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ψᵤ hΨᵤ hx
+    (Out := fun _ : ↥Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ψᵤ hΨᵤ hx
   have hφ : ‖φ‖ = 1 := hnorm
   have hregions : Monotone regions := fun i j hij ↦
     AreaLaw.Geometry.rangeNestedPatch_mono Λ center R u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
-    (n := fun _ : Lattice.Site Λ ↦ q) regions hregions a ha hb Ψᵤ hΨᵤ x hx hmin
+    (n := fun _ : ↥Λ ↦ q) regions hregions a ha hb Ψᵤ hΨᵤ x hx hmin
   let T : AdmissibleSupport Λ R →
-      Matrix (Lattice.Configuration Λ q) (Lattice.Configuration Λ q) ℂ := H.term
-  let S : AdmissibleSupport Λ R → Finset (Lattice.Site Λ) := fun X ↦ X.1
+      Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ := H.term
+  let S : AdmissibleSupport Λ R → Finset ↥Λ := fun X ↦ X.1
   have hsupp : ∀ X, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (T X) (S X) :=
     fun X ↦ (H.mem X)
-  let D : ℕ → Finset (Lattice.Site Λ) := AreaLaw.Geometry.rangeNestedPatch Λ center R u
+  let D : ℕ → Finset ↥Λ := AreaLaw.Geometry.rangeNestedPatch Λ center R u
   let K : (j : Fin m) → Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
       (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ :=
     fun j ↦ (x j + b • 1) ^ (-(a j) / 2)
@@ -225,7 +224,7 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
     (div_nat_le_self_of_nonneg hκ.le m).trans hκ₁
   have hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j := fun _ _ hij ↦ hregions hij
   have hφpatch := normalizedRegularizedPatchOutput_eq_patchState
-    (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ψᵤ x
+    (n := fun _ : ↥Λ ↦ q) (fun j : Fin m ↦ D j) a b Ψᵤ x
   change φ = Entropy.patchState b (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x)
     (Ψ) at hφpatch
   simp only [Entropy.patchState, Entropy.patchOutput,
@@ -256,7 +255,7 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
     T S hsupp hH σ₀ hHJ hsingle heig
   have hbudget : ∀ j : Fin m,
       a j ^ 2 * ∑ X ∈ ManyBody.crossingTerms S (D j),
-        (Fintype.card (ManyBody.InnerConfig (fun _ : Lattice.Site Λ ↦ q) (D j) (S X)) : ℝ) ^ 2 *
+        (Fintype.card (ManyBody.InnerConfig (fun _ : ↥Λ ↦ q) (D j) (S X)) : ℝ) ^ 2 *
           J ≤
       (κ / m) ^ 2 * (R * (16 * u + 4) * 2 ^ (2 * R * (R + 1)) *
         (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J) := fun j ↦
@@ -330,7 +329,6 @@ open Matrix
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -348,48 +346,48 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
     (hsmall : rangePatchEnergyConstant q R J * κ ^ 2 ≤ Δ / 1024) :
     ∀ (Λ : Finset (ℤ × ℤ)) (H : PlaneInteraction Λ q R) (_ : ∀ X, (H.term X).IsHermitian)
         (_ : ∀ X, ‖H.term X‖ ≤ J) (E₀ : ℝ)
-      (Ψ : Lattice.StateSpace Λ q),
+      (Ψ : EuclideanSpace ℂ (↥Λ → Fin q)),
       ‖Ψ‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
       groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ψ} →
       ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
-        letI : LinearOrder (Lattice.Site Λ) :=
-          (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+        letI : LinearOrder ↥Λ :=
+          (Fintype.equivFin ↥Λ).linearOrder
         let m := AreaLaw.Geometry.rangeNestedPatchCount R u
-        let regions : Fin m → Finset (Lattice.Site Λ) :=
+        let regions : Fin m → Finset ↥Λ :=
           fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
         let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
         let Ψᵤ := Ψ
         ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
           x ∈ regularizedPatchDomain
-            (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
+            (Out := fun _ : ↥Λ ↦ Fin q) regions →
           IsMinOn
-            (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+            (regularizedPatchObjective (Out := fun _ : ↥Λ ↦ Fin q)
               regions a b Ψᵤ)
-            (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
-          ∀ X : Finset (Lattice.Site Λ),
+            (regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions) x →
+          ∀ X : Finset ↥Λ,
             (CFC.abs
               (normalizedRegularizedPatchMarginal
-                (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
+                (Out := fun _ : ↥Λ ↦ Fin q) regions a b Ψᵤ x X -
                 ManyBody.regionState (X := fun _ ↦ Fin q) Ψ X)).trace.re ≤
               (1 / 16 : ℝ) := by
   intro Λ H hH hHJ E₀ Ψ hΩ hgap hspan center u b hu hb m regions a Ψᵤ x hx hmin X
-  let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+  let : LinearOrder ↥Λ := (Fintype.equivFin ↥Λ).linearOrder
   have henergy := (H.rangeNestedPatch_minimizer_energy_le hH hHJ hR hJ Ψ hΩ hspan center u κ b
     hu hκ (hκhalf.trans (by norm_num)) hb x hx hmin).trans hsmall
   have hnorm := norm_normalizedRegularizedPatchOutput
-    (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a
+    (Out := fun _ : ↥Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ψᵤ
     (hΩ) hx
   have hgap := ManyBody.re_trace_abs_regionState_sub_le_one_sixteenth_of_energy
-    (fun _ : Lattice.Site Λ ↦ Fin q) (ManyBody.Interaction.isHermitian_hamiltonian hH)
+    (fun _ : ↥Λ ↦ Fin q) (ManyBody.Interaction.isHermitian_hamiltonian hH)
         hΩ hgap hspan hΔ
     (hnorm) henergy X
   have hρ := reindex_reducedPure_eq_regionState
-    (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) X Ψᵤ
+    (fun _ : ↥Λ ↦ Equiv.refl (Fin q)) X Ψᵤ
   simp only [dependentRegionFinEquiv, Equiv.piCongrRight_refl,
     Matrix.reindex_refl_refl] at hρ
   have hU : dependentGlobalFinIsometry
-      (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) Ψᵤ = Ψᵤ := rfl
+      (fun _ : ↥Λ ↦ Equiv.refl (Fin q)) Ψᵤ = Ψᵤ := rfl
   have hΨeq : Ψᵤ = Ψ := rfl
   rw [hU, hΨeq] at hρ
   simpa only [normalizedRegularizedPatchMarginal, hρ] using hgap
@@ -407,28 +405,28 @@ theorem exists_uniform_rangeNestedPatch_minimizer_marginal_closeness
     ∃ κ : ℝ, 0 < κ ∧ κ ≤ 1 / 2 ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (H : PlaneInteraction Λ q R) (_ : ∀ X, (H.term X).IsHermitian)
           (_ : ∀ X, ‖H.term X‖ ≤ J) (E₀ : ℝ)
-        (Ψ : Lattice.StateSpace Λ q),
+        (Ψ : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ψ‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ψ} →
         ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
-          letI : LinearOrder (Lattice.Site Λ) :=
-            (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+          letI : LinearOrder ↥Λ :=
+            (Fintype.equivFin ↥Λ).linearOrder
           let m := AreaLaw.Geometry.rangeNestedPatchCount R u
-          let regions : Fin m → Finset (Lattice.Site Λ) :=
+          let regions : Fin m → Finset ↥Λ :=
             fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
           let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
           let Ψᵤ := Ψ
           ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
             x ∈ regularizedPatchDomain
-              (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
+              (Out := fun _ : ↥Λ ↦ Fin q) regions →
             IsMinOn
-              (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+              (regularizedPatchObjective (Out := fun _ : ↥Λ ↦ Fin q)
                 regions a b Ψᵤ)
-              (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
-            ∀ X : Finset (Lattice.Site Λ),
+              (regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions) x →
+            ∀ X : Finset ↥Λ,
               (CFC.abs
                 (normalizedRegularizedPatchMarginal
-                  (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
+                  (Out := fun _ : ↥Λ ↦ Fin q) regions a b Ψᵤ x X -
                   ManyBody.regionState (X := fun _ ↦ Fin q) Ψ X)).trace.re ≤
                 (1 / 16 : ℝ) := by
   rcases (rangePatchEnergyConstant_nonneg q R hJ).eq_or_lt with hC | hC

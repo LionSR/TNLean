@@ -35,8 +35,6 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -77,8 +75,8 @@ theorem sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
           (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
               (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
-          (Ω : StateSpace Λ q),
+          (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
@@ -144,8 +142,8 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_th
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
           (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
               (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
-          (Ω : StateSpace Λ q),
+          (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
@@ -203,8 +201,8 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
           (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
               (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
-          (Ω : StateSpace Λ q),
+          (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (E₀ : ℝ)
+          (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →

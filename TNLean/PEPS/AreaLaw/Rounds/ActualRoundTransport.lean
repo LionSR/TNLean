@@ -36,8 +36,6 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -222,13 +220,13 @@ at most `transportLogDimBound q r₀`, when interaction supports use the graph m
 domain. Source: `08-scanner.tex`, lines 83–154. -/
 theorem actualRoundData_logDim_move_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} [NeZero q]
     [LinearOrder (AdmissibleSupport Λ R)] (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-    (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hgraph : S.graph = planeDomainGraph Λ)
     (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m)) :
-    ∀ hist c g, logDim (augmentedDimensions (V := Site Λ) q aux)
+    ∀ hist c g, logDim (augmentedDimensions (V := ↥Λ) q aux)
       ((S.actualRoundData hm hM j).move hist c g).subsystem ≤ transportLogDimBound q S.r₀ := by
   have hq : 1 ≤ q := NeZero.pos q
   refine S.actualRoundData_induction hm hM j
-    (fun _ _ _ D => ∀ hist c g, logDim (augmentedDimensions (V := Site Λ) q aux)
+    (fun _ _ _ D => ∀ hist c g, logDim (augmentedDimensions (V := ↥Λ) q aux)
       (D.move hist c g).subsystem ≤ transportLogDimBound q S.r₀) ?_ ?_
   · intro _
     exact S.chargeTransportData_logDim_move_le_domainGraph hgraph
@@ -248,8 +246,8 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
       (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (Ω : StateSpace Λ q)
-      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+          (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+      (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
       S.graph = planeDomainGraph Λ →
       S.depth = (fun x => ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -263,7 +261,7 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
       ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
       let hm : 0 < S.m := by omega
       let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-      let n := augmentedDimensions (V := Site Λ) q aux
+      let n := augmentedDimensions (V := ↥Λ) q aux
       let D := S.actualRoundData hm hM
       let E := S.actualEnergyTerms h Ω J Δ L aux
       let ℓ := transportLogDimBound q S.r₀
@@ -296,7 +294,7 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
     L hn hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
+  let n := augmentedDimensions (V := ↥Λ) q aux
   let D := S.actualRoundData hm hM
   let E := S.actualEnergyTerms h Ω J Δ L aux
   let Hbar := fun k => copyMean n k
@@ -363,8 +361,8 @@ theorem actualRounds_transport_domainGraph :
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -378,7 +376,7 @@ theorem actualRounds_transport_domainGraph :
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
-        let n := augmentedDimensions (V := Site Λ) q aux
+        let n := augmentedDimensions (V := ↥Λ) q aux
         let D := S.actualRoundData hm hM
         let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀

@@ -58,7 +58,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix
 open scoped Kronecker ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -118,24 +117,24 @@ variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 
 /-- A local matrix placed on a region is `K ⊗ 1` in the coordinates of that region and its
 complement. -/
-theorem place_eq_kronecker_one_submatrix (S : Finset (Site Λ))
+theorem place_eq_kronecker_one_submatrix (S : Finset ↥Λ)
     (K : Matrix (RegionalConfiguration q S) (RegionalConfiguration q S) ℂ) :
-    ManyBody.place S K = (K ⊗ₖ (1 : Matrix (ManyBody.ComplConfig (fun _ : Site Λ ↦ Fin q) S)
-      (ManyBody.ComplConfig (fun _ : Site Λ ↦ Fin q) S) ℂ)).submatrix
-        (ManyBody.cutEquiv (fun _ : Site Λ ↦ Fin q) S)
-        (ManyBody.cutEquiv (fun _ : Site Λ ↦ Fin q) S) := by
+    ManyBody.place S K = (K ⊗ₖ (1 : Matrix (ManyBody.ComplConfig (fun _ : ↥Λ ↦ Fin q) S)
+      (ManyBody.ComplConfig (fun _ : ↥Λ ↦ Fin q) S) ℂ)).submatrix
+        (ManyBody.cutEquiv (fun _ : ↥Λ ↦ Fin q) S)
+        (ManyBody.cutEquiv (fun _ : ↥Λ ↦ Fin q) S) := by
   rw [ManyBody.place, reindex_apply]
   rfl
 
 /-- The physical operator obtained from an operator on `X × Y` acts on `X ∪ Y`.
 Source: `09-amplification.tex`, lines 348–364. -/
-theorem ancillaPhysical_mem_supportedOperators (X Y : Finset (Site Λ)) (hXY : Disjoint X Y)
+theorem ancillaPhysical_mem_supportedOperators (X Y : Finset ↥Λ) (hXY : Disjoint X Y)
     (U : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)
     (M : Matrix (RegionalConfiguration q X × RegionalConfiguration q Y)
       (RegionalConfiguration q X × RegionalConfiguration q Y) ℂ) :
     ancillaPhysical U (restoringSplit q X Y hXY) M ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin q) (X ∪ Y : Finset (Site Λ)) := by
-  set uE := ManyBody.regionUnionEquiv (β := fun _ : Site Λ ↦ Fin q) hXY
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (X ∪ Y : Finset ↥Λ) := by
+  set uE := ManyBody.regionUnionEquiv (β := fun _ : ↥Λ ↦ Fin q) hXY
   have h : ancillaPhysical U (restoringSplit q X Y hXY) M =
       ManyBody.place (X ∪ Y) (((U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
         (RegionalConfiguration q Y) ℂ)) * M * (U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
@@ -149,12 +148,12 @@ theorem ancillaPhysical_mem_supportedOperators (X Y : Finset (Site Λ)) (hXY : D
 
 /-- The eigenvector unitary of the reduced state `ρ_X`, whose columns are the full
 eigenbasis `{|x⟩}`. Source: `09-amplification.tex`, lines 324–325. -/
-noncomputable abbrev restoringEigenbasis (Ω : StateSpace Λ q) (X : Finset (Site Λ)) :
+noncomputable abbrev restoringEigenbasis (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (X : Finset ↥Λ) :
     Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ :=
   ((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
     Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)
 
-theorem restoringEigenbasis_unitary (Ω : StateSpace Λ q) (X : Finset (Site Λ)) :
+theorem restoringEigenbasis_unitary (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (X : Finset ↥Λ) :
     restoringEigenbasis Ω X * (restoringEigenbasis Ω X)ᴴ = 1 ∧
       (restoringEigenbasis Ω X)ᴴ * restoringEigenbasis Ω X = 1 := by
   simp only [restoringEigenbasis, ← star_eq_conjTranspose]
@@ -162,15 +161,15 @@ theorem restoringEigenbasis_unitary (Ω : StateSpace Λ q) (X : Finset (Site Λ)
 
 /-- The transport from the restoring coordinates `((s', e'), (X, Y)), Z'` to the
 coordinates `physical × (s', e')`. Source: `09-amplification.tex`, lines 324–347. -/
-noncomputable def restoringTransport (Ω : StateSpace Λ q) (X Y : Finset (Site Λ))
+noncomputable def restoringTransport (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (X Y : Finset ↥Λ)
     (hXY : Disjoint X Y) :
-    Matrix (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X))
+    Matrix ((↥Λ → Fin q) × (RegionalConfiguration q X × RegionalConfiguration q X))
       (((RegionalConfiguration q X × RegionalConfiguration q X) ×
         (RegionalConfiguration q X × RegionalConfiguration q Y)) ×
           ({v // v ∉ X ∪ Y} → Fin q)) ℂ :=
   ancillaTransport (restoringEigenbasis Ω X) (restoringSplit q X Y hXY)
 
-theorem restoringTransport_unitary (Ω : StateSpace Λ q) (X Y : Finset (Site Λ))
+theorem restoringTransport_unitary (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (X Y : Finset ↥Λ)
     (hXY : Disjoint X Y) :
     restoringTransport Ω X Y hXY * (restoringTransport Ω X Y hXY)ᴴ = 1 ∧
       (restoringTransport Ω X Y hXY)ᴴ * restoringTransport Ω X Y hXY = 1 :=
@@ -183,7 +182,7 @@ theorem restoringTransport_unitary (Ω : StateSpace Λ q) (X Y : Finset (Site Λ
 configuration `c` and ancillary pair `(s, e)` is `|0⟩(s) (U |0⟩)(c_X) Ω(c')`, where `c'`
 agrees with `c` off `X` and reads `e` on `X`.
 Source: `eq:amplification-swapped-state`, `09-amplification.tex`, lines 334–347. -/
-theorem restoringTransport_copy (Ω : StateSpace Λ q) (X Y : Finset (Site Λ))
+theorem restoringTransport_copy (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (X Y : Finset ↥Λ)
     (hXY : Disjoint X Y) (sBlank xBlank : RegionalConfiguration q X → ℂ) :
     restoringTransport Ω X Y hXY *ᵥ
         (Entropy.restoringCopy sBlank xBlank (restoringVector Ω X Y hXY)).ofLp =
@@ -196,7 +195,7 @@ theorem restoringTransport_copy (Ω : StateSpace Λ q) (X Y : Finset (Site Λ))
 /-- **The restored vector** `η = Ω ⊗ ∑_x √p_x |x⟩_{s'}|x⟩_{e'}` in the coordinates
 `physical × (s', e')`, with `e'` read in the original basis.
 Source: `eq:amplification-restored-state`, `09-amplification.tex`, lines 338–341. -/
-theorem restoringTransport_restored (Ω : StateSpace Λ q) (X Y : Finset (Site Λ))
+theorem restoringTransport_restored (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (X Y : Finset ↥Λ)
     (hXY : Disjoint X Y) (p : RegionalConfiguration q X → ℝ) :
     restoringTransport Ω X Y hXY *ᵥ (Entropy.restoringRestored p (restoringVector Ω X Y hXY)).ofLp =
       fun c => Ω c.1 * (((1 : Matrix (RegionalConfiguration q X)
@@ -207,15 +206,15 @@ theorem restoringTransport_restored (Ω : StateSpace Λ q) (X Y : Finset (Site �
 /-- **The support of the transported restoring operator**: `R₀` is a sum of operators
 `P ⊗ (b ⊗ 1_{e'})` with `P` acting on `X ∪ Y` and `b` acting on `s'`.
 Source: `eq:amplification-restoring-operator`, `09-amplification.tex`, lines 350–356. -/
-theorem restoringTransport_restoringGlobal_eq_sum (Ω : StateSpace Λ q)
-    (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) (E : Finset (RegionalConfiguration q X))
+theorem restoringTransport_restoringGlobal_eq_sum (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+    (X Y : Finset ↥Λ) (hXY : Disjoint X Y) (E : Finset (RegionalConfiguration q X))
     (p : RegionalConfiguration q X → ℝ) (sBlank xBlank : RegionalConfiguration q X → ℂ)
     (Q : Matrix (RegionalConfiguration q X × RegionalConfiguration q Y)
       (RegionalConfiguration q X × RegionalConfiguration q Y) ℂ)
     (T : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ) :
-    ∃ P : RegionalConfiguration q X → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+    ∃ P : RegionalConfiguration q X → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ,
       (∀ x, P x ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-        (X ∪ Y : Finset (Site Λ))) ∧
+        (X ∪ Y : Finset ↥Λ)) ∧
       restoringTransport Ω X Y hXY * Entropy.restoringGlobal (Z := {v // v ∉ X ∪ Y} → Fin q)
           E p sBlank xBlank Q T * (restoringTransport Ω X Y hXY)ᴴ =
         ∑ x ∈ E, P x ⊗ₖ (Entropy.basisColumn x sBlank ⊗ₖ
@@ -231,19 +230,19 @@ theorem restoringTransport_restoringGlobal_eq_sum (Ω : StateSpace Λ q)
 /-- **The support of the transported column operator**: `B₀` is a sum of operators
 `P ⊗ A` with `P` acting on `X ∪ Y` and `A` acting on the ancillas.
 Source: `eq:amplification-column-operator`, `09-amplification.tex`, lines 359–364. -/
-theorem restoringTransport_restoringColumnGlobal_eq_sum (Ω : StateSpace Λ q)
-    (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) (E : Finset (RegionalConfiguration q X))
+theorem restoringTransport_restoringColumnGlobal_eq_sum (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+    (X Y : Finset ↥Λ) (hXY : Disjoint X Y) (E : Finset (RegionalConfiguration q X))
     (p : RegionalConfiguration q X → ℝ) (sBlank eBlank : RegionalConfiguration q X → ℂ)
     (Q : Matrix (RegionalConfiguration q X × RegionalConfiguration q Y)
       (RegionalConfiguration q X × RegionalConfiguration q Y) ℂ)
     (T : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ) :
     ∃ (P : RegionalConfiguration q X × RegionalConfiguration q X →
-        Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+        Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)
       (A : RegionalConfiguration q X × RegionalConfiguration q X →
         Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
           (RegionalConfiguration q X × RegionalConfiguration q X) ℂ),
       (∀ i, P i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-        (X ∪ Y : Finset (Site Λ))) ∧
+        (X ∪ Y : Finset ↥Λ)) ∧
       restoringTransport Ω X Y hXY * Entropy.restoringColumnGlobal
           (Z := {v // v ∉ X ∪ Y} → Fin q) E p sBlank eBlank Q T *
             (restoringTransport Ω X Y hXY)ᴴ =
@@ -265,8 +264,8 @@ vectors, `‖R₀‖, ‖B₀‖ ≤ M₀ = exp ((𝓘 + 3w)/2)` with `𝓘 = I_
 for the transported blank pair `ξ`, the physical ground component of `R₀ φ` has norm at
 most one, and `‖((L' ⊗ 1) R₀)^† η - φ‖ ≤ 3 √δ + ‖L'^† Ω - Ω‖` for every physical `L'`.
 Source: `09-amplification.tex`, lines 324–447 and 470–473. -/
-theorem restoringTransport_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) (w δ : ℝ)
+theorem restoringTransport_estimates (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (X Y : Finset ↥Λ) (hXY : Disjoint X Y) (w δ : ℝ)
     (hδX : 1 - (ManyBody.regionState Ω X * typicalProjection Λ q Ω X w).trace.re ≤ δ)
     (hδY : 1 - (ManyBody.regionState Ω Y * typicalProjection Λ q Ω Y w).trace.re ≤ δ)
     (hδS : 1 - (ManyBody.regionState Ω (X ∪ Y) * typicalProjection Λ q Ω (X ∪ Y) w).trace.re ≤
@@ -292,7 +291,7 @@ theorem restoringTransport_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
       ‖WithLp.toLp 2 ((vecMulVec Ω.ofLp (star Ω.ofLp) ⊗ₖ
         (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
           (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)) *ᵥ (R *ᵥ φ))‖ ≤ 1 ∧
-      ∀ L : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+      ∀ L : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ,
         ‖WithLp.toLp 2 ((L ⊗ₖ (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
             (RegionalConfiguration q X × RegionalConfiguration q X) ℂ) * R)ᴴ *ᵥ η) -
           WithLp.toLp 2 φ‖ ≤ 3 * √δ + ‖WithLp.toLp 2 (Lᴴ *ᵥ Ω.ofLp) - Ω‖ := by
@@ -316,7 +315,7 @@ theorem restoringTransport_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     simp only [hUhdef, conjTranspose_kronecker, conjTranspose_conjTranspose, conjTranspose_one]
   have hψdef : ψ.ofLp = Uh *ᵥ fun i => Ω (rs.symm i) := rfl
   -- The physical operators in the eigenbasis coordinates.
-  have hphys (L : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+  have hphys (L : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) :
       𝒲 * Entropy.restoringPhysicalLift (Uh * L.submatrix rs.symm rs.symm * Uhᴴ) * 𝒲ᴴ =
         L ⊗ₖ (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
           (RegionalConfiguration q X × RegionalConfiguration q X) ℂ) := by

@@ -52,6 +52,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open ManyBody (SquareLatticeVertex rectangleEmbedding rectangularDomain rectangleSiteEquiv
   rectangleSiteEquiv_val)
 
+open ManyBody (supDist)
+
 noncomputable section
 
 open TNLean.Lattice

@@ -3,9 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangleEntropy
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # The marginal-tail parameter of a general cut
@@ -47,10 +50,11 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open scoped Matrix.Norms.L2Operator
 
 open Matrix
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport card_le_diamond_of_walks edgeBoundary
   latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph PlaneInteraction)
+
+open ManyBody (card_le_card_mul_of_forall_exists_mem cutLogBudget_le_card)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -63,13 +67,13 @@ of range `R` meet both a region `A` and its complement, where `v_R = 1 + 2R(R + 
 `μ_R = 2^{v_R - 1}`. Source: `02-initial.tex`, lines 202–206, with the counts of
 `01-preliminaries.tex`, lines 81–102. -/
 theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
-    (A : Finset (Site Λ)) :
+    (A : Finset ↥Λ) :
     (ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card ≤
       (edgeBoundary (planeDomainGraph Λ) A).card *
         ((1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1)) := by
   classical
   -- the supports with a site within distance `R` of the endpoint of `e` inside `A`
-  set near : Sym2 (Site Λ) → Finset (AdmissibleSupport Λ R) := fun e ↦
+  set near : Sym2 ↥Λ → Finset (AdmissibleSupport Λ R) := fun e ↦
     Finset.univ.filter fun X ↦ ∃ z ∈ e, z ∈ A ∧ ∃ v ∈ X.1,
       ∃ p : (planeDomainGraph Λ).Walk z v, p.length ≤ R
   have hcover : ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A ⊆
@@ -85,7 +89,7 @@ theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
       (near e).card ≤ (1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) := by
     intro e he
     obtain ⟨-, x, hx, y, hy, rfl⟩ := ManyBody.mem_edgeBoundary.mp he
-    set ball : Finset (Site Λ) :=
+    set ball : Finset ↥Λ :=
       Finset.univ.filter fun v ↦ ∃ p : (planeDomainGraph Λ).Walk x v, p.length ≤ R
     have hball : ball.card ≤ 1 + 2 * R * (R + 1) :=
       card_le_diamond_of_walks Subtype.val ball Subtype.val_injective
@@ -125,7 +129,7 @@ theorem one_le_tailParameterConstant (hq : 1 ≤ q) (R : ℕ) : 1 ≤ tailParame
 Lemma 3.1 satisfies `ℬ_A ≤ C (1 + |∂_Λ A|)` for every cut `A` of a finite induced domain,
 with `C = tailParameterConstant q R`.
 Source: `02-initial.tex`, lines 202–206, `eq:initial-local-tail-parameter`. -/
-theorem cutLogBudget_le_edgeBoundary (hq : 1 ≤ q) (R : ℕ) (A : Finset (Site Λ)) :
+theorem cutLogBudget_le_edgeBoundary (hq : 1 ≤ q) (R : ℕ) (A : Finset ↥Λ) :
     ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A ≤
       tailParameterConstant q R * (1 + (edgeBoundary (planeDomainGraph Λ) A).card) := by
   have hC := one_le_tailParameterConstant hq R
@@ -155,7 +159,7 @@ noncomputable def typicalWidthConstant (q R : ℕ) (J Δ M : ℝ) : ℝ :=
 /-- The concentration width of a cut is at most `C_M √(1 + |∂_Λ A|) log (n + 2)`.
 Source: `02-initial.tex`, lines 207–212. -/
 theorem concentrationWidth_le (hq : 1 ≤ q) (R : ℕ) (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ)
-    (A : Finset (Site Λ)) (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :
+    (A : Finset ↥Λ) (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :
     Entropy.concentrationWidth (J / Δ)
         (ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) n M ≤
       typicalWidthConstant q R J Δ M *
@@ -211,9 +215,9 @@ finite-range Hamiltonian with local dimension `q ≥ 1`, every cut `A`, every `n
 Source: `02-initial.tex`, lines 207–212. -/
 theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_edgeBoundary
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (hq : 1 ≤ q) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q}
+        (hq : 1 ≤ q) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (↥Λ → Fin q)}
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset ↥Λ)
     (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (ManyBody.regionState_isHermitian A Ω).eigenvalues

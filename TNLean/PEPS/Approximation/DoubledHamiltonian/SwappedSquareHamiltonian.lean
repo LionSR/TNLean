@@ -7,7 +7,8 @@ import TNLean.PEPS.Tensor.SquareLattice.Basic
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import TNLean.Lattice.RegionalSwapSupport
+import QICLean.ManyBody.Sites.ReplicaSwap
+import QICLean.ManyBody.Sites.SitewiseProduct
 import TNLean.PEPS.Tensor.Region.RegionBlock
 import TNLean.Lattice.Sheet.SwapCorrection
 import QICLean.Spectral.Gap.DoubledSystemGap
@@ -15,7 +16,8 @@ import TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount
 import QICLean.Analysis.Norm.L2OpNormReindex
 import TNLean.PEPS.AreaLaw.Interactions.RectangularHamiltonian
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
-import TNLean.Circuit.SitewiseTensorSupport
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.ConfigurationMap
 
 /-!
 # The crossing-edge expansion of a swapped Hamiltonian
@@ -145,7 +147,6 @@ section
 
 open Matrix
 open scoped Matrix.Norms.L2Operator
-open TNLean.Lattice (norm_sheetSwapOp_le_one sheetSwapOp)
 
 namespace TNLean.PEPS.EncodedFrame
 

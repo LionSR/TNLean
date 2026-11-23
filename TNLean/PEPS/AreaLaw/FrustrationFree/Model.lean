@@ -46,7 +46,6 @@ of the special case, assembled in later modules of this directory.
 
 open Matrix
 open scoped MatrixOrder ComplexOrder Matrix.Norms.L2Operator
-open TNLean.Lattice
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open ManyBody (planeDomainGraph edgeBoundary)
 
@@ -64,12 +63,13 @@ free in the sense of `ManyBody.Interaction.IsFrustrationFree` (`isFrustrationFre
 `Δ > 0` these are
 exactly the conditions `0 ≤ h_X ≤ J`, `h_X Ω = 0`, `‖Ω‖ = 1`, `H ≥ Δ (1 - |Ω⟩⟨Ω|)` of the note
 (`iff_model`). -/
-structure IsFrustrationFreeGapped (h : PlaneInteraction Λ q R) (J Δ : ℝ) (Ω : StateSpace Λ q) :
+structure IsFrustrationFreeGapped (h : PlaneInteraction Λ q R) (J Δ : ℝ)
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) :
     Prop where
   /-- Every term is positive semidefinite. -/
   posSemidef : ∀ X, (h.term X).PosSemidef
   /-- Every term is at most `J`. -/
-  le_bound : ∀ X, h.term X ≤ J • (1 : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+  le_bound : ∀ X, h.term X ≤ J • (1 : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)
   /-- `Ω` is a unit vector. -/
   norm_eq_one : ‖Ω‖ = 1
   /-- The Hamiltonian is gapped at energy zero with gap `Δ`. -/
@@ -84,14 +84,14 @@ and the cut, with `S_Ω(A) ≤ C |∂_Λ A|` for every instance of `eq:model`. -
 def FrustrationFreeAreaLaw : Prop :=
   ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ C : ℝ, 0 ≤ C ∧
-      ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, ∀ Ω : StateSpace Λ q,
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
         IsFrustrationFreeGapped h J Δ Ω →
-          ∀ A : Finset (Site Λ),
+          ∀ A : Finset ↥Λ,
             ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
 
 namespace IsFrustrationFreeGapped
 
-variable {h : PlaneInteraction Λ q R} {J Δ : ℝ} {Ω : StateSpace Λ q}
+variable {h : PlaneInteraction Λ q R} {J Δ : ℝ} {Ω : EuclideanSpace ℂ (↥Λ → Fin q)}
 
 /-- The ground space at energy zero is the line through `Ω`, since for positive terms it is the
 zero space of the interaction (`ManyBody.Interaction.zeroSpace_eq_groundSpace`). -/
@@ -124,7 +124,7 @@ theorem gap (hff : IsFrustrationFreeGapped h J Δ Ω) (hΔ : 0 < Δ) :
 theorem iff_model (hΔ : 0 < Δ) :
     IsFrustrationFreeGapped h J Δ Ω ↔
       (∀ X, (h.term X).PosSemidef) ∧
-        (∀ X, h.term X ≤ J • (1 : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) ∧
+        (∀ X, h.term X ≤ J • (1 : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)) ∧
         (∀ X, h.term X *ᵥ WithLp.ofLp Ω = 0) ∧ ‖Ω‖ = 1 ∧
         (Δ : ℂ) • (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤ h.hamiltonian := by
   refine ⟨fun hff ↦ ⟨hff.posSemidef, hff.le_bound, ManyBody.Interaction.mem_zeroSpace_iff.mp

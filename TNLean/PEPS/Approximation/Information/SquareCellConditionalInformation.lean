@@ -73,18 +73,18 @@ Source: `02-information.tex`, Lemma 3.2, lines 161–178, and its application in
 Proposition 3.4, lines 688–737. -/
 theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
     (Ω : StateSpace L q) {s c C₀ : ℝ} (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ))
-    (hbound : ∀ E : Finset (Site (rectangularDomain L L)),
-      E ⊆ (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+    (hbound : ∀ E : Finset ↥(rectangularDomain L L),
+      E ⊆ (Finset.univ.filter (fun x : ↥(rectangularDomain L L) ↦
           x.val ∈ CellPartition.cellSample (o - (1, 1)) s m₀) ∪
-        Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+        Finset.univ.filter (fun x : ↥(rectangularDomain L L) ↦
           CellPartition.cellIndex (o - (1, 1)) s (integerPoint x.val) ∈ A))ᶜ →
       (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner (o - (1, 1)) s m₀) s),
         ∀ y ∈ E, c * s ≤ dist x (integerPoint y.val)) →
       ManyBody.conditionalMutualInformation
-        (fun _ : Site (rectangularDomain L L) ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
-        (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+        (fun _ : ↥(rectangularDomain L L) ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
+        (Finset.univ.filter (fun x : ↥(rectangularDomain L L) ↦
           x.val ∈ CellPartition.cellSample (o - (1, 1)) s m₀)) E
-        (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+        (Finset.univ.filter (fun x : ↥(rectangularDomain L L) ↦
           CellPartition.cellIndex (o - (1, 1)) s (integerPoint x.val) ∈ A)) ≤ C₀) :
     let G : Finset (Vertex L) :=
       Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
@@ -114,14 +114,14 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
       add_mul, one_mul]
     constructor <;> rintro ⟨h₁, h₂, h₃, h₄⟩ <;> refine ⟨?_, ?_, ?_, ?_⟩ <;>
       linarith only [h₁, h₂, h₃, h₄]
-  have hG : (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+  have hG : (Finset.univ.filter (fun x : ↥(rectangularDomain L L) ↦
       x.val ∈ CellPartition.cellSample o' s m₀)) = G.map σ.toEmbedding := by
     ext y
     obtain ⟨v, rfl⟩ := σ.surjective y
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_map_equiv,
       Equiv.symm_apply_apply, G, CellPartition.cellSample, CellPartition.mem_latticeBox,
       hboxshift, hpos]
-  have hB : (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
+  have hB : (Finset.univ.filter (fun x : ↥(rectangularDomain L L) ↦
       CellPartition.cellIndex o' s (integerPoint x.val) ∈ A)) = B.map σ.toEmbedding := by
     ext y
     obtain ⟨v, rfl⟩ := σ.surjective y

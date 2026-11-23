@@ -41,8 +41,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Scaling the second vector by a positive factor does not change whether two
@@ -218,7 +216,7 @@ theorem initialMarks_isolatedStars
 `1/128`, for every domain, cut, origin, width factor and admissible lower
 scale. Source: area-law Section 11, `geometry:initial-stars`, lines 325–370. -/
 theorem initialRepairStage_hasIsolatedStars (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
     (initialRepairStage o Λ A C k₀ hC h₀).HasIsolatedStars (1 / 128) := by
   let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
     o Λ A C k₀ hC h₀

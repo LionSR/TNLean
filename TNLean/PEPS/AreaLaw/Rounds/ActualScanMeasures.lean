@@ -33,8 +33,6 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -175,13 +173,13 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ} [NeZero q]
   [LinearOrder (AdmissibleSupport Λ R)]
-  (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+  (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
   (hm : 0 < S.m) (hM : 0 < S.M) (s : ℕ)
   (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-      (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
+      (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ) (L : ℕ)
   (aux : Bool → ℕ) [∀ b, NeZero (aux b)] (a : ℝ)
   (pre : (k : ℕ) → Config k
-    (fun v => Fin (augmentedDimensions (V := Site Λ) q aux v)) → ℂ)
+    (fun v => Fin (augmentedDimensions (V := ↥Λ) q aux v)) → ℂ)
 
 /-- With the actual augmented terms, the fill mean-energy field is the expectation
 of the actual augmented truncated replica Hamiltonian in the same filtered vector.
@@ -189,7 +187,7 @@ No eigenvalue equation is asserted, including at zero copies. -/
 theorem actualFillScanRound_meanEnergy (k : ℕ) (p : ℝ) :
     (S.actualFillScanRound hm hM s (augmentedDimensions q aux)
       (S.actualEnergyTerms h Ω J Δ L aux) a pre).meanEnergy k p =
-      let n := augmentedDimensions (V := Site Λ) q aux
+      let n := augmentedDimensions (V := ↥Λ) q aux
       let D := S.actualFillData hm hM s
       let v := Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k)
       (star v ⬝ᵥ (copyMean n k
@@ -203,7 +201,7 @@ No eigenvalue equation is asserted, including at zero copies. -/
 theorem actualChargeScanRound_meanEnergy (k : ℕ) (p : ℝ) :
     (S.actualChargeScanRound hm hM s (augmentedDimensions q aux)
       (S.actualEnergyTerms h Ω J Δ L aux) a pre).meanEnergy k p =
-      let n := augmentedDimensions (V := Site Λ) q aux
+      let n := augmentedDimensions (V := ↥Λ) q aux
       let D := S.actualChargeData hm hM s
       let v := Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k)
       (star v ⬝ᵥ (copyMean n k

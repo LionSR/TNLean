@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangles
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Squares.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Squares.QuotientIntervals
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # Mixed dyadic cells of an integer rectangle
@@ -20,6 +21,8 @@ September 24, 2026, the boundary-line count in the proof of Proposition 9.5,
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
+
+open ManyBody (IntRect)
 
 namespace TNLean.PEPS.AreaLaw
 

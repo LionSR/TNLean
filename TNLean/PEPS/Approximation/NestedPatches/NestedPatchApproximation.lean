@@ -36,7 +36,6 @@ open scoped Matrix.Norms.L2Operator
 open scoped BigOperators ComplexOrder MatrixOrder
 
 open ManyBody (IsGapped groundSpace SquareInteraction)
-open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -78,47 +77,47 @@ especially `eq:patch-explicit-radius` and `eq:patch-distance-to-cylinders`, revi
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem exists_closedSquare_cylinders_of_marginal_closeness
     {Λ : Finset (ℤ × ℤ)} {q L : ℕ} (hL : 2 ≤ L) {B₀ p κ C : ℝ} (hB₀ : 0 < B₀)
-    (hp : 0 < p) (hκ : 0 < κ) (hC : 0 < C) (Ψ : Lattice.StateSpace Λ q) (hΨ : ‖Ψ‖ = 1)
+    (hp : 0 < p) (hκ : 0 < κ) (hC : 0 < C) (Ψ : EuclideanSpace ℂ (↥Λ → Fin q)) (hΨ : ‖Ψ‖ = 1)
     (center : ℝ × ℝ) {u : ℝ} (hu : 0 ≤ u) (huL : u ≤ B₀ * Real.log L)
     {m : ℕ} (hm : 0 < m) (r : Fin m → ℝ) (hr : Monotone r)
     (hS : ∀ j, ManyBody.regionEntropy (X := fun _ ↦ Fin q)
       Ψ (AreaLaw.Geometry.closedSquareSample Λ center (r j)) ≤ C * (1 + u))
     (hclose : ∀ b : ℝ, 0 < b →
-      letI : LinearOrder (Lattice.Site Λ) :=
-        (Fintype.equivFin (Lattice.Site Λ)).linearOrder
-      let regions : Fin m → Finset (Lattice.Site Λ) :=
+      letI : LinearOrder ↥Λ :=
+        (Fintype.equivFin ↥Λ).linearOrder
+      let regions : Fin m → Finset ↥Λ :=
         fun j ↦ AreaLaw.Geometry.closedSquareSample Λ center (r j)
       let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
       let Ψᵤ := Ψ
       ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
         x ∈ regularizedPatchDomain
-          (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
+          (Out := fun _ : ↥Λ ↦ Fin q) regions →
         IsMinOn
-          (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+          (regularizedPatchObjective (Out := fun _ : ↥Λ ↦ Fin q)
             regions a b Ψᵤ)
-          (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
-        ∀ X : Finset (Lattice.Site Λ),
+          (regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions) x →
+        ∀ X : Finset ↥Λ,
           (CFC.abs
             (normalizedRegularizedPatchMarginal
-              (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
+              (Out := fun _ : ↥Λ ↦ Fin q) regions a b Ψᵤ x X -
               ManyBody.regionState (X := fun _ ↦ Fin q) Ψ X)).trace.re ≤
             (1 / 16 : ℝ)) :
-    letI : LinearOrder (Lattice.Site Λ) :=
-      (Fintype.equivFin (Lattice.Site Λ)).linearOrder
-    let regions : Fin m → Finset (Lattice.Site Λ) :=
+    letI : LinearOrder ↥Λ :=
+      (Fintype.equivFin ↥Λ).linearOrder
+    let regions : Fin m → Finset ↥Λ :=
       fun j ↦ AreaLaw.Geometry.closedSquareSample Λ center (r j)
     let Ψᵤ := Ψ
     ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
       (v : EuclideanSpace ℂ
-        ((v : Lattice.Site Λ) → Fin q)),
+        ((v : ↥Λ) → Fin q)),
       (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤
         (L : ℝ) ^ regularizedPatchRadiusExponent (16 * C + Real.log 8) B₀ p κ) ∧
-      (v : (((v : Lattice.Site Λ) → Fin q) → ℂ)) ∈
+      (v : (((v : ↥Λ) → Fin q) → ℂ)) ∈
         (⨆ j, dependentRegionCylinder
-          (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
+          (Out := fun _ : ↥Λ ↦ Fin q) (regions j) (S j)) ∧
       ‖Ψᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
   intro regions Ψᵤ
-  let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+  let : LinearOrder ↥Λ := (Fintype.equivFin ↥Λ).linearOrder
   let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
   let R : ℝ := regularizedPatchRadiusExponent (16 * C + Real.log 8) B₀ p κ * Real.log L
   have hdata : (0 : ℝ) < m ∧ ‖Ψᵤ‖ = 1 ∧ Monotone regions :=
@@ -133,21 +132,21 @@ theorem exists_closedSquare_cylinders_of_marginal_closeness
       (regions j) ≤ C * (1 + u) := by
     simpa only [hΨeq] using hS j
   have hgrowth := log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance
-    (n := fun _ : Lattice.Site Λ ↦ q) regions hdata.2.2 a ha.1 Ψᵤ hdata.2.1
+    (n := fun _ : ↥Λ ↦ q) regions hdata.2.2 a ha.1 Ψᵤ hdata.2.1
     hC hu hbounds.2.1 hS'
     (fun r _hr x hx hmin j ↦ by
       simpa only [hΨeq] using hclose (Real.exp (-r)) (Real.exp_pos (-r)) x hx hmin (regions j))
   obtain ⟨x, hx, hmin⟩ := exists_isMinOn_regularizedPatchObjective
-    (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (Real.exp_pos (-R)) Ψᵤ hdata.2.1
+    (Out := fun _ : ↥Λ ↦ Fin q) regions a (Real.exp_pos (-R)) Ψᵤ hdata.2.1
   obtain ⟨S, v, hdim, hv, herr⟩ := exists_mem_iSup_dependentRegionCylinder_norm_sub_le
-    (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions hdata.2.2 a (fun j ↦ (ha.1 j).le)
+    (Out := fun _ : ↥Λ ↦ Fin q) regions hdata.2.2 a (fun j ↦ (ha.1 j).le)
     (Real.exp_pos (-R)) Ψᵤ hdata.2.1 hx
   simp only [regularizedPatchObjective_eq_minimum
-    (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (Real.exp (-R)) Ψᵤ hx hmin, ha.2]
+    (Out := fun _ : ↥Λ ↦ Fin q) regions a (Real.exp (-R)) Ψᵤ hx hmin, ha.2]
     at herr hgrowth
   have hpos : 0 < regularizedPatchMinimum
-      (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (Real.exp (-R)) Ψᵤ ∧ (0 : ℝ) < L :=
-    ⟨regularizedPatchMinimum_pos (Out := fun _ : Lattice.Site Λ ↦ Fin q)
+      (Out := fun _ : ↥Λ ↦ Fin q) regions a (Real.exp (-R)) Ψᵤ ∧ (0 : ℝ) < L :=
+    ⟨regularizedPatchMinimum_pos (Out := fun _ : ↥Λ ↦ Fin q)
       regions a (fun j ↦ (ha.1 j).le)
       (Real.exp_pos (-R)) Ψᵤ hdata.2.1, Nat.cast_pos.mpr (lt_of_lt_of_le (by decide) hL)⟩
   have hdim' (j : Fin m) : (Module.finrank ℂ (S j) : ℝ) ≤
@@ -184,20 +183,20 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
           let Λ := ManyBody.rectangularDomain L L
-          letI : LinearOrder (Lattice.Site Λ) :=
-            (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+          letI : LinearOrder ↥Λ :=
+            (Fintype.equivFin ↥Λ).linearOrder
           let m := AreaLaw.Geometry.nestedPatchCount u
-          let regions : Fin m → Finset (Lattice.Site Λ) :=
+          let regions : Fin m → Finset ↥Λ :=
             fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
           let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
           ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
             (v : EuclideanSpace ℂ
-              ((v : Lattice.Site Λ) → Fin q)),
+              ((v : ↥Λ) → Fin q)),
             (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤
               (L : ℝ) ^ nestedPatchRadiusExponent q J Δ B₀ p C_A) ∧
-            (v : (((v : Lattice.Site Λ) → Fin q) → ℂ)) ∈
+            (v : (((v : ↥Λ) → Fin q) → ℂ)) ∈
               (⨆ j, dependentRegionCylinder
-                (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
+                (Out := fun _ : ↥Λ ↦ Fin q) (regions j) (S j)) ∧
             ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
   intro L hL h hh hhJ E₀ Ω hΩ hgap hspan center u hu huL
   have hκ : 0 < patchFilterExponent q J Δ := patchFilterExponent_pos_of_pos (by omega) hJ hΔ
@@ -238,19 +237,19 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
             let Λ := ManyBody.rectangularDomain L L
-            letI : LinearOrder (Lattice.Site Λ) :=
-              (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+            letI : LinearOrder ↥Λ :=
+              (Fintype.equivFin ↥Λ).linearOrder
             let m := AreaLaw.Geometry.nestedPatchCount u
-            let regions : Fin m → Finset (Lattice.Site Λ) :=
+            let regions : Fin m → Finset ↥Λ :=
               fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
             let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
             ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
               (v : EuclideanSpace ℂ
-                ((v : Lattice.Site Λ) → Fin q)),
+                ((v : ↥Λ) → Fin q)),
               (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
-              (v : (((v : Lattice.Site Λ) → Fin q) → ℂ)) ∈
+              (v : (((v : ↥Λ) → Fin q) → ℂ)) ∈
                 (⨆ j, dependentRegionCylinder
-                  (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
+                  (Out := fun _ : ↥Λ ↦ Fin q) (regions j) (S j)) ∧
               ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
   obtain ⟨C_A, hA⟩ := harea.exists_squareEntropyAreaLawAt hq hJ hΔ
   exact ⟨nestedPatchRadiusExponent q J Δ B₀ p C_A,

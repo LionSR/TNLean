@@ -6,7 +6,10 @@ Authors: TNLean contributors
 import Mathlib.Data.Nat.Dist
 import TNLean.MPS.AreaLaw.Chain.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.Chain.EntropyInequalities
-import TNLean.Lattice.RegionalSwapSupport
+import QICLean.ManyBody.Sites.ReplicaSwap
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Analysis.Norm.MatrixKroneckerContraction
+import QICLean.ManyBody.Sites.ConfigurationMap
 
 /-!
 # The partial-swap perturbation on a chain
@@ -38,9 +41,6 @@ open ManyBody (ChainSupport mem_interval ChainInteraction)
 
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
-open TNLean.Lattice (norm_sheetSwapOp_le_one
-  reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators sheetSwapOp
-  sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators)
 
 namespace TNLean.MPS.AreaLaw
 

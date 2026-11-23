@@ -4,11 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Templates.LatticeDyadicRect
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.Templates.TwoFamilies
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Entropy subadditivity on the actual capped dyadic partition
@@ -27,14 +30,15 @@ This auxiliary lemma assumes a pointwise safe-box bound and does not derive it.
 -/
 
 open scoped BigOperators
-open TNLean.Lattice
+
+open ManyBody (IntRect IsSafe rectRegion)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The physical rectangle regions of the actual capped partition cover exactly
 the physical intersection, including holes and disconnected domains. -/
 theorem biUnion_rectRegion_cappedDyadicPartition {Λ : Finset (ℤ × ℤ)}
-    (A : Finset (Site Λ)) (S : Finset (ℤ × ℤ)) (K : ℕ) :
+    (A : Finset ↥Λ) (S : Finset (ℤ × ℤ)) (K : ℕ) :
     (cappedDyadicPartition S K).biUnion (fun c ↦ rectRegion A (latticeDyadicRect c.1 c.2)) =
       A.filter (fun x ↦ x.1 ∈ S) := by
   classical
@@ -49,7 +53,7 @@ theorem biUnion_rectRegion_cappedDyadicPartition {Λ : Finset (ℤ × ℤ)}
 
 /-- Filtering the disjoint ambient cells preserves their disjointness. -/
 theorem pairwiseDisjoint_rectRegion_cappedDyadicPartition {Λ : Finset (ℤ × ℤ)}
-    (A : Finset (Site Λ)) (S : Finset (ℤ × ℤ)) (K : ℕ) :
+    (A : Finset ↥Λ) (S : Finset (ℤ × ℤ)) (K : ℕ) :
     (cappedDyadicPartition S K : Set (ℕ × (ℤ × ℤ))).PairwiseDisjoint
       (fun c ↦ rectRegion A (latticeDyadicRect c.1 c.2)) := by
   intro a ha b hb hab
@@ -63,7 +67,7 @@ theorem pairwiseDisjoint_rectRegion_cappedDyadicPartition {Λ : Finset (ℤ × �
 
 /-- Subadditivity on the actual physical dyadic partition. -/
 theorem regionEntropy_filter_le_sum_rectRegion (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     (S : Finset (ℤ × ℤ)) (K : ℕ) :
     ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ S) ≤
       ∑ c ∈ cappedDyadicPartition S K,
@@ -82,8 +86,8 @@ theorem regionEntropy_filter_le_sum_rectRegion (Λ : Finset (ℤ × ℤ)) (q : �
 the actual selected squares, given a bound on each selected square.
 Source: Lemma 9.4, 08-scanner.tex, lines 651–664. -/
 theorem regionEntropy_filter_le_weighted_cover_of_forall
-    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) (S : Finset (ℤ × ℤ)) (K : ℕ) (e C : ℝ)
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥Λ) (S : Finset (ℤ × ℤ)) (K : ℕ) (e C : ℝ)
     (hcell : ∀ c ∈ cappedDyadicPartition S K,
       ManyBody.regionEntropy Ω (rectRegion A (latticeDyadicRect c.1 c.2)) ≤
         C * ((latticeDyadicRect c.1 c.2).size : ℝ) ^ (1 + e)) :
@@ -99,8 +103,8 @@ theorem regionEntropy_filter_le_weighted_cover_of_forall
 the actual selected squares under a pointwise safe-box estimate.
 Source: Lemma 9.4, 08-scanner.tex, lines 651–664. -/
 theorem regionEntropy_filter_le_weighted_cover
-    (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) (S : Finset (ℤ × ℤ)) (K : ℕ) (e C : ℝ)
+    (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥Λ) (S : Finset (ℤ × ℤ)) (K : ℕ) (e C : ℝ)
     (hsafe : ∀ c ∈ cappedDyadicPartition S K, IsSafe Λ A D₀ (latticeDyadicRect c.1 c.2))
     (hbox : ∀ Q : IntRect, IsSafe Λ A D₀ Q →
       ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :

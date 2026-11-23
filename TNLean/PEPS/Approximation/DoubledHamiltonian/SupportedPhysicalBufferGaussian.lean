@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.PhysicalBufferCoordinates
+import QICLean.ManyBody.Replica.RegionalReset
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedSquareHamiltonian
 import TNLean.PEPS.AreaLaw.Interactions.SupportedGaussianIntegral
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!
 # A supported Gaussian buffer operator for the square Hamiltonian
@@ -98,13 +99,13 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
         ∀ l : ℕ,
           let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
             (Q.image a ∪ Z.image a) l
-          ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
-              (Lattice.Configuration Λ (q * q)) ℂ,
+          ∃ U : ℝ → Matrix (↥Λ → Fin (q * q))
+              (↥Λ → Fin (q * q)) ℂ,
             U 0 = 1 ∧
             (∀ t, HasDerivAt U
               ((Complex.I • ManyBody.regionExpectation B
                 (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-            (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
+            (∀ t, U t ∈ unitaryGroup (↥Λ → Fin (q * q)) ℂ) ∧
             (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let M := ∫ t : ℝ in Set.Icc (-T) T,
@@ -132,11 +133,11 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
         ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
     obtain ⟨A, hA⟩ : ∃ A, reindex (g.symm.trans p) (g.symm.trans p)
         ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) = ManyBody.place (X := fun _ ↦ Fin (q * q)) Q A :=
-      ⟨_, TNLean.Lattice.reindex_physicalBuffer_eq_place q R C₀ hRC W⟩
+      ⟨_, ManyBody.reindex_physicalBuffer_eq_place q R C₀ hRC W⟩
     rw [hA]
     exact ManyBody.place_mem_supportedOperators A
   have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
-      (Q.image a : Finset (Lattice.Site Λ)) := by
+      (Q.image a : Finset ↥Λ) := by
     have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
       (X := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
       (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin (q * q))
@@ -146,7 +147,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
     simpa only [a, V, Matrix.reindex_apply, Matrix.submatrix_submatrix] using! hs
   have hD : gH.hamiltonian - K ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset (Lattice.Site Λ)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset ↥Λ) := by
     have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
       (X := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
       (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin (q * q))
@@ -166,7 +167,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
       (Matrix.l2_opNorm_one_kronecker_le W)
   have hcard : (Λ.card : ℝ) = (L : ℝ) ^ 2 := by
-    simpa only [Λ, Lattice.Site, SquareLatticeVertex, Fintype.card_coe,
+    simpa only [Λ,SquareLatticeVertex, Fintype.card_coe,
       Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using
       congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
@@ -221,13 +222,13 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
           ∀ l : ℕ,
             let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
               (Q.image a ∪ Z.image a) l
-            ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
-                (Lattice.Configuration Λ (q * q)) ℂ,
+            ∃ U : ℝ → Matrix (↥Λ → Fin (q * q))
+                (↥Λ → Fin (q * q)) ℂ,
               U 0 = 1 ∧
               (∀ t, HasDerivAt U
                 ((Complex.I • ManyBody.regionExpectation B
                   (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-              (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
+              (∀ t, U t ∈ unitaryGroup (↥Λ → Fin (q * q)) ℂ) ∧
               (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,

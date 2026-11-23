@@ -7,11 +7,14 @@ import TNLean.MPS.AreaLaw.Chain.Hamiltonian
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import TNLean.Circuit.SitewiseTensorSupport
+import QICLean.ManyBody.Sites.SitewiseProduct
+import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.Analysis.TraceInequality.TraceMulBound
 import QICLean.ManyBody.Dynamics.InteractionOperations
-import TNLean.Lattice.RegionalSwapSupport
 import QICLean.ManyBody.Hamiltonian.KroneckerSum
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Analysis.Norm.MatrixKroneckerContraction
+import QICLean.ManyBody.Sites.ConfigurationMap
 
 /-!
 # Two copies of a finite-range Hamiltonian with paired local alphabets
@@ -110,7 +113,6 @@ section
 
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator ComplexOrder
-open TNLean.Lattice (sheetSwap sheetSwapOp)
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
 

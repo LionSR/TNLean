@@ -8,10 +8,13 @@ import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Placement
-import TNLean.Lattice.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Entropy.ZeroEntropy
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Finite-range Hamiltonians on the chain of `L` sites
@@ -74,7 +77,7 @@ theorem supportDim_le (hq : 1 ≤ q) (X : ChainSupport L R) :
 /-- The Hilbert-space dimension of a support is at least one when `q ≥ 1`. -/
 theorem one_le_supportDim (hq : 1 ≤ q) (X : ChainSupport L R) :
     1 ≤ Entropy.supportDim (fun _ : Fin L ↦ q) X.1 :=
-  TNLean.Lattice.one_le_supportDim_const hq X.1
+  ManyBody.one_le_supportDim_const hq X.1
 
 /-- The interaction bound is nonnegative whenever the chain contains a site.
 The singleton interaction supplies the inequality.

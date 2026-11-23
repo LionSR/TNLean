@@ -24,8 +24,6 @@ at lines 393–417 and retention at lines 565–568.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The lower-layer threshold of the birth templates: the largest of
@@ -48,7 +46,7 @@ Source: area-law Section 11, `10-geometry.tex`, lines 709–750, with the
 replacement instructions of lines 393–417 and retention of lines 565–568. -/
 theorem repairStage_birth_templates_of_le (Ctpl : ℝ) (hCtpl : 1 ≤ Ctpl) (D₀ : ℝ)
     {Sstar : ℝ} (hS : repairMarginThreshold (1 / 128) ≤ Sstar) (C : ℕ) (hWidth : 4 * D₀ < C)
-    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ) (hC : 2 ≤ C)
+    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ) (hC : 2 ≤ C)
     (h₀ : 50000000 ≤ k₀)
     (hK : birthTemplateLayerThreshold D₀ (primaryScannerConstant Ctpl)
       (beltScannerConstant Ctpl) Sstar ≤ k₀) (N : ℕ) :
@@ -190,7 +188,7 @@ theorem exists_uniform_repairStage_birth_templates (Ctpl : ℝ) (hCtpl : 1 ≤ C
       ∀ D₀ : ℝ, ∃ T₀ : ℝ, 1 ≤ T₀ ∧
         ∀ Sstar : ℝ, T₀ ≤ Sstar →
           ∀ C : ℕ, 4 * D₀ < (C : ℝ) → ∃ K : ℕ,
-            ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+            ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
               (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
                 ∀ N : ℕ,
                   let D := repairStage o Λ A C k₀ hC h₀ Sstar N

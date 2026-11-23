@@ -45,7 +45,7 @@ The note writes the factors as `(1 - h_X/J)^{1/2}`; the range projections are us
   "Contraction in one sweep" and "Exact localization on the perturbed vector".
 -/
 
-open Matrix ManyBody TNLean.Lattice
+open Matrix ManyBody
 open scoped InnerProductSpace ComplexOrder MatrixOrder Kronecker
 
 namespace ContinuousLinearMap
@@ -110,7 +110,7 @@ end TNLean.PEPS.AreaLaw.FrustrationFree
 namespace TNLean.PEPS.AreaLaw.FrustrationFree
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {h : PlaneInteraction Λ q R} {J Δ : ℝ}
-  {Ω : StateSpace Λ q}
+  {Ω : EuclideanSpace ℂ (↥Λ → Fin q)}
 
 /-- The contraction factor `θ = (1 + (Δ/J)/(d_R + 1)²)^{-1/2}` of one sweep (`eq:sweep`). -/
 noncomputable def sweepContraction (R : ℕ) (J Δ : ℝ) : ℝ :=
@@ -132,7 +132,7 @@ theorem sweepContraction_pos {R : ℕ} {J Δ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ) 
   rw [sweepContraction]
   exact inv_pos.mpr (Real.sqrt_pos.mpr (by positivity))
 
-local notation "clm" => toEuclideanCLM (n := Configuration Λ q) (𝕜 := ℂ)
+local notation "clm" => toEuclideanCLM (n := (Λ → Fin q)) (𝕜 := ℂ)
 
 namespace IsFrustrationFreeGapped
 
@@ -140,16 +140,16 @@ variable (hff : IsFrustrationFreeGapped h J Δ Ω)
 
 /-- The range projection `Π_X` of the term `h_X`. -/
 noncomputable def termProj (X : AdmissibleSupport Λ R) :
-    Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
+    Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ :=
   (hff.posSemidef X).isHermitian.supportProj
 
 /-- The sweep `D = ∏_X (1 - Π_X)`, the supports taken colour by colour. -/
 noncomputable def sweepOp (c : SupportColouring Λ R) :
-    Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
+    Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ :=
   sweepProd (fun X ↦ 1 - hff.termProj X) (sweepWord c)
 
 theorem termProj_mem (X : AdmissibleSupport Λ R) :
-    hff.termProj X ∈ supportedOperators (fun _ : Site Λ ↦ Fin q) X.1 :=
+    hff.termProj X ∈ supportedOperators (fun _ : ↥Λ ↦ Fin q) X.1 :=
   supportProj_mem_supportedOperators (hff.posSemidef X).isHermitian (h.mem X)
 
 theorem termProj_mulVec (X : AdmissibleSupport Λ R) :
@@ -159,7 +159,7 @@ theorem termProj_mulVec (X : AdmissibleSupport Λ R) :
       (hff.zeroSpace_eq ▸ Submodule.mem_span_singleton_self Ω) X)
 
 theorem factor_mem (X : AdmissibleSupport Λ R) :
-    1 - hff.termProj X ∈ supportedOperators (fun _ : Site Λ ↦ Fin q) X.1 :=
+    1 - hff.termProj X ∈ supportedOperators (fun _ : ↥Λ ↦ Fin q) X.1 :=
   sub_mem (one_mem _) (hff.termProj_mem X)
 
 theorem factor_mulVec (X : AdmissibleSupport Λ R) :
@@ -197,7 +197,8 @@ theorem sweepOp_pow_mulVec_self
   | succ t ih => rw [pow_succ, ← mulVec_mulVec, hff.sweepOp_mulVec_self, ih]
 
 /-- The quadratic form of the range projections dominates `(Δ / J) ‖v‖²` on `Ω^⊥`. -/
-theorem mul_norm_sq_le_re_inner_sum_termProj (hJ : 0 < J) (hΔ : 0 < Δ) {v : StateSpace Λ q}
+theorem mul_norm_sq_le_re_inner_sum_termProj (hJ : 0 < J) (hΔ : 0 < Δ)
+    {v : EuclideanSpace ℂ (↥Λ → Fin q)}
     (hv : ⟪Ω, v⟫_ℂ = 0) :
     Δ / J * ‖v‖ ^ 2 ≤
       RCLike.re ⟪v, clm (∑ X, hff.termProj X) v⟫_ℂ := by
@@ -210,7 +211,7 @@ theorem mul_norm_sq_le_re_inner_sum_termProj (hJ : 0 < J) (hΔ : 0 < Δ) {v : St
     simp [toEuclideanLin, vecMulVec_mulVec, this]
   rw [map_sub, LinearMap.sub_apply, map_smul, LinearMap.smul_apply, map_sub,
     LinearMap.sub_apply, hP, sub_zero, inner_sub_right, inner_smul_right] at h0
-  have h1 : toEuclideanLin (1 : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) v = v := by
+  have h1 : toEuclideanLin (1 : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) v = v := by
     simp
   rw [h1, inner_self_eq_norm_sq_to_K, map_sub, sub_nonneg] at h0
   refine le_of_eq_of_le ?_ h0
@@ -226,7 +227,7 @@ open scoped Classical in
 -/
 theorem norm_sweepOp_pow_apply_le (hJ : 0 < J) (hΔ : 0 < Δ)
     (c : SupportColouring Λ R) (t : ℕ)
-    {v : StateSpace Λ q} (hv : ⟪Ω, v⟫_ℂ = 0) :
+    {v : EuclideanSpace ℂ (↥Λ → Fin q)} (hv : ⟪Ω, v⟫_ℂ = 0) :
     ‖clm (hff.sweepOp c ^ t) v‖ ≤ sweepContraction R J Δ ^ t * ‖v‖ := by
   set w := sweepWord c
   set P := wordProjections (fun X : AdmissibleSupport Λ R ↦ hff.termProj X) w
@@ -274,7 +275,7 @@ theorem norm_sweepOp_pow_apply_le (hJ : 0 < J) (hΔ : 0 < Δ)
   have hsum : ∑ i ∈ Finset.range w.length, P i = clm (∑ X, hff.termProj X) := by
     rw [map_sum]
     exact sum_range_option_elim _ (nodup_sweepWord c) (mem_sweepWord c)
-  have hgap : ∀ u : StateSpace Λ q, ⟪Ω, u⟫_ℂ = 0 →
+  have hgap : ∀ u : EuclideanSpace ℂ (↥Λ → Fin q), ⟪Ω, u⟫_ℂ = 0 →
       Δ / J * ‖u‖ ^ 2 ≤ RCLike.re ⟪u, (∑ i ∈ Finset.range w.length, P i) u⟫_ℂ := by
     intro u hu
     rw [hsum]
@@ -292,18 +293,18 @@ acting on `N_{R χ t}(U)`, `χ = d_R + 1`, with `L Ω = Ω`, `Lᴴ Ω = Ω` and
 perturbed vector". -/
 theorem exists_sweepOp_pow_lightCone
     (c : SupportColouring Λ R) (t : ℕ)
-    {α : Type*} [Fintype α] [DecidableEq α] {U : Finset (Site Λ)}
-    {B : Matrix (Configuration Λ q × α) (Configuration Λ q × α) ℂ}
+    {α : Type*} [Fintype α] [DecidableEq α] {U : Finset ↥Λ}
+    {B : Matrix ((↥Λ → Fin q) × α) ((↥Λ → Fin q) × α) ℂ}
     (hB : ∀ a b, B.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) ∈
-      supportedOperators (fun _ : Site Λ ↦ Fin q) U) (ξ : α → ℂ) :
-    ∃ L : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
-      L ∈ supportedOperators (fun _ : Site Λ ↦ Fin q)
+      supportedOperators (fun _ : ↥Λ ↦ Fin q) U) (ξ : α → ℂ) :
+    ∃ L : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ,
+      L ∈ supportedOperators (fun _ : ↥Λ ↦ Fin q)
           (graphNeighborhood (planeDomainGraph Λ) U (R * (overlapDegreeBound R + 1) * t)) ∧
         L *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω ∧ Lᴴ *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω ∧
         ((hff.sweepOp c ^ t) ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ
-            (B *ᵥ (fun p : Configuration Λ q × α ↦ WithLp.ofLp Ω p.1 * ξ p.2)) =
+            (B *ᵥ (fun p : (↥Λ → Fin q) × α ↦ WithLp.ofLp Ω p.1 * ξ p.2)) =
           (L ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ
-            (B *ᵥ (fun p : Configuration Λ q × α ↦ WithLp.ofLp Ω p.1 * ξ p.2)) := by
+            (B *ᵥ (fun p : (↥Λ → Fin q) × α ↦ WithLp.ofLp Ω p.1 * ξ p.2)) := by
   set l := (List.replicate t (sweepWord c)).flatten
   refine ⟨retainedProd (fun X ↦ 1 - hff.termProj X) (fun X : AdmissibleSupport Λ R ↦ X.1) U l,
     supportedOperators_mono (retainedSet_sweepWord_pow_subset c U t)

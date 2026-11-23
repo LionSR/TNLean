@@ -4,9 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RestoringOperator.LatticeAncillaTransport
-import TNLean.Lattice.SiteRelabelEntropy
+import QICLean.ManyBody.Sites.Relabel
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Entropy.SumSitesProduct
 
 /-!
 # The physical sites enlarged by two copies of the target
@@ -49,7 +50,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix QuantumCircuit
 open scoped Kronecker
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -57,48 +57,48 @@ variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 
 /-- The physical sites of `Λ` together with two copies `s'` and `e'` of the target `X`.
 Source: `09-amplification.tex`, lines 330–331. -/
-abbrev AncillaSites (Λ : Finset (ℤ × ℤ)) (X : Finset (Site Λ)) := Site Λ ⊕ (↥X ⊕ ↥X)
+abbrev AncillaSites (Λ : Finset (ℤ × ℤ)) (X : Finset ↥Λ) := ↥Λ ⊕ (↥X ⊕ ↥X)
 
 /-- Shortcut instance, which keeps instance search on regions of the enlarged sites short. -/
-instance (X : Finset (Site Λ)) : DecidableEq (AncillaSites Λ X) := inferInstance
+instance (X : Finset ↥Λ) : DecidableEq (AncillaSites Λ X) := inferInstance
 
 /-- Shortcut instance, which keeps instance search on regions of the enlarged sites short. -/
-instance (X : Finset (Site Λ)) : Fintype (AncillaSites Λ X) := inferInstance
+instance (X : Finset ↥Λ) : Fintype (AncillaSites Λ X) := inferInstance
 
 /-- The configurations of the enlarged sites as a physical configuration together with the
 configurations of `s'` and of `e'`. -/
-def ancillaSplit (q : ℕ) (X : Finset (Site Λ)) :
+def ancillaSplit (q : ℕ) (X : Finset ↥Λ) :
     (AncillaSites Λ X → Fin q) ≃
-      Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) :=
+      (↥Λ → Fin q) × (RegionalConfiguration q X × RegionalConfiguration q X) :=
   (Equiv.sumArrowEquivProdArrow _ _ _).trans
     ((Equiv.refl _).prodCongr (Equiv.sumArrowEquivProdArrow _ _ _))
 
-theorem ancillaSplit_apply (X : Finset (Site Λ)) (c : AncillaSites Λ X → Fin q) :
+theorem ancillaSplit_apply (X : Finset ↥Λ) (c : AncillaSites Λ X → Fin q) :
     ancillaSplit q X c = (c ∘ Sum.inl, (c ∘ Sum.inr ∘ Sum.inl, c ∘ Sum.inr ∘ Sum.inr)) :=
   rfl
 
 /-- The copy `e'` of a part `X'` of the target, as a region of the enlarged sites. -/
-def ancillaCopyRegion {X : Finset (Site Λ)} (X' : Finset ↥X) : Finset (AncillaSites Λ X) :=
-  (∅ : Finset (Site Λ)).disjSum ((∅ : Finset ↥X).disjSum X')
+def ancillaCopyRegion {X : Finset ↥Λ} (X' : Finset ↥X) : Finset (AncillaSites Λ X) :=
+  (∅ : Finset ↥Λ).disjSum ((∅ : Finset ↥X).disjSum X')
 
 /-- A physical region, as a region of the enlarged sites. -/
-def ancillaPhysicalRegion (X J : Finset (Site Λ)) : Finset (AncillaSites Λ X) :=
+def ancillaPhysicalRegion (X J : Finset ↥Λ) : Finset (AncillaSites Λ X) :=
   J.disjSum ∅
 
 /-! ### Operators -/
 
 /-- A physical operator acting trivially on both copies is placed on the physical sites. -/
-theorem kronecker_one_submatrix_ancillaSplit (X : Finset (Site Λ))
-    (L : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+theorem kronecker_one_submatrix_ancillaSplit (X : Finset ↥Λ)
+    (L : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) :
     (L ⊗ₖ (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
       (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)).submatrix
         (ancillaSplit q X) (ancillaSplit q X) =
       ManyBody.placeAlong (X := fun _ ↦ Fin q)
-        (Function.Embedding.inl : Site Λ ↪ AncillaSites Λ X) L := by
+        (Function.Embedding.inl : ↥Λ ↪ AncillaSites Λ X) L := by
   ext c c'
   simp only [submatrix_apply, kroneckerMap_apply, one_apply, ManyBody.placeAlong_apply]
   have hagree : (ancillaSplit q X c).2 = (ancillaSplit q X c').2 ↔
-      ∀ v, (∀ u, (Function.Embedding.inl : Site Λ ↪ AncillaSites Λ X) u ≠ v) →
+      ∀ v, (∀ u, (Function.Embedding.inl : ↥Λ ↪ AncillaSites Λ X) u ≠ v) →
         c v = c' v := by
     rw [ancillaSplit_apply, ancillaSplit_apply]
     constructor
@@ -116,9 +116,9 @@ theorem kronecker_one_submatrix_ancillaSplit (X : Finset (Site Λ))
   · rw [ite_eq_right h, ite_eq_right (mt hagree.mpr h), mul_zero]
 
 /-- An operator on the copy `s'` alone is placed on the sites of `s'`. -/
-theorem one_kronecker_submatrix_ancillaSplit (X : Finset (Site Λ))
+theorem one_kronecker_submatrix_ancillaSplit (X : Finset ↥Λ)
     (b : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) :
-    ((1 : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) ⊗ₖ
+    ((1 : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) ⊗ₖ
       (b ⊗ₖ (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
         (ancillaSplit q X) (ancillaSplit q X) =
       ManyBody.placeAlong (X := fun _ ↦ Fin q)
@@ -152,8 +152,8 @@ theorem one_kronecker_submatrix_ancillaSplit (X : Finset (Site Λ))
 /-- **Supports on the enlarged sites.** An operator `P ⊗ (b ⊗ 1_{e'})`, with `P` acting on a
 physical region `S` and `b` acting on `s'`, acts on `S ⊔ s'`.
 Source: `09-amplification.tex`, lines 345–346 and 524–525. -/
-theorem kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (Site Λ)}
-    {P : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
+theorem kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset ↥Λ}
+    {P : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
     (hP : P ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     (b : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) :
     (P ⊗ₖ (b ⊗ₖ (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
@@ -163,14 +163,14 @@ theorem kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (S
   have hsplit : P ⊗ₖ (b ⊗ₖ (1 : Matrix (RegionalConfiguration q X)
       (RegionalConfiguration q X) ℂ)) = (P ⊗ₖ (1 : Matrix (RegionalConfiguration q X ×
         RegionalConfiguration q X) (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)) *
-      ((1 : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) ⊗ₖ
+      ((1 : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) ⊗ₖ
         (b ⊗ₖ (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))) := by
     rw [← mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
   rw [hsplit, ← submatrix_mul_equiv _ _ _ (ancillaSplit q X),
     kronecker_one_submatrix_ancillaSplit, one_kronecker_submatrix_ancillaSplit]
   refine mul_mem (ManyBody.supportedOperators_mono ?_
     (ManyBody.placeAlong_mem_supportedOperators_map (X := fun _ ↦ Fin q)
-      (Function.Embedding.inl : Site Λ ↪ AncillaSites Λ X) hP))
+      (Function.Embedding.inl : ↥Λ ↪ AncillaSites Λ X) hP))
     (ManyBody.supportedOperators_mono ?_ (ManyBody.placeAlong_mem_supportedOperators
       (X := fun _ ↦ Fin q) (⟨Sum.inr ∘ Sum.inl, Sum.inr_injective.comp Sum.inl_injective⟩ :
         ↥X ↪ AncillaSites Λ X) b))
@@ -183,8 +183,8 @@ theorem kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (S
 
 /-- **Physical operators on the enlarged sites.** A physical operator acting on a region `S`,
 tensored with the identity on both copies, acts on `S ⊔ s'`. -/
-theorem kronecker_one_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (Site Λ)}
-    {L : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
+theorem kronecker_one_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset ↥Λ}
+    {L : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
     (hL : L ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
     (L ⊗ₖ (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
       (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)).submatrix
@@ -194,7 +194,7 @@ theorem kronecker_one_submatrix_ancillaSplit_mem_supportedOperators {X S : Finse
   rw [kronecker_one_submatrix_ancillaSplit]
   refine ManyBody.supportedOperators_mono ?_
       (ManyBody.placeAlong_mem_supportedOperators_map (X := fun _ ↦ Fin q)
-        (Function.Embedding.inl : Site Λ ↪ AncillaSites Λ X) hL)
+        (Function.Embedding.inl : ↥Λ ↪ AncillaSites Λ X) hL)
   intro _ h
   obtain ⟨v, hv, rfl⟩ := Finset.mem_map.mp h
   simpa using hv
@@ -202,14 +202,14 @@ theorem kronecker_one_submatrix_ancillaSplit_mem_supportedOperators {X S : Finse
 /-! ### Vectors and mutual information -/
 
 /-- The value of `restoringSplit` inverted at a configuration whose `X` part is replaced. -/
-theorem restoringSplit_symm_replace (X Y : Finset (Site Λ)) (hXY : Disjoint X Y)
-    (c : Configuration Λ q) (e : RegionalConfiguration q X) :
+theorem restoringSplit_symm_replace (X Y : Finset ↥Λ) (hXY : Disjoint X Y)
+    (c : ↥Λ → Fin q) (e : RegionalConfiguration q X) :
     (restoringSplit q X Y hXY).symm ((e, (restoringSplit q X Y hXY c).1.2),
         (restoringSplit q X Y hXY c).2) =
       fun v => if hv : v ∈ X then e ⟨v, hv⟩ else c v := by
   funext v
-  change (ManyBody.cutEquiv (fun _ : Site Λ ↦ Fin q) (X ∪ Y)).symm
-    ((ManyBody.regionUnionEquiv (β := fun _ : Site Λ ↦ Fin q) hXY).symm
+  change (ManyBody.cutEquiv (fun _ : ↥Λ ↦ Fin q) (X ∪ Y)).symm
+    ((ManyBody.regionUnionEquiv (β := fun _ : ↥Λ ↦ Fin q) hXY).symm
       (e, fun w : ↥Y => c w), fun w => c w) v = _
   by_cases hv : v ∈ X ∪ Y
   · rw [ManyBody.cutEquiv_symm_apply_mem _ _ hv]
@@ -221,12 +221,12 @@ theorem restoringSplit_symm_replace (X Y : Finset (Site Λ)) (hXY : Disjoint X Y
     simp [hvX]
 
 /-- The swap of each site of the target `X` with its copy in `e'`. -/
-def ancillaSwapFun (X : Finset (Site Λ)) : AncillaSites Λ X → AncillaSites Λ X
+def ancillaSwapFun (X : Finset ↥Λ) : AncillaSites Λ X → AncillaSites Λ X
   | .inl v => if hv : v ∈ X then .inr (.inr ⟨v, hv⟩) else .inl v
   | .inr (.inl x) => .inr (.inl x)
   | .inr (.inr x) => .inl x.val
 
-theorem ancillaSwapFun_involutive (X : Finset (Site Λ)) :
+theorem ancillaSwapFun_involutive (X : Finset ↥Λ) :
     Function.Involutive (ancillaSwapFun X) := by
   rintro (v | x | x)
   · by_cases hv : v ∈ X <;> simp [ancillaSwapFun, hv]
@@ -234,17 +234,17 @@ theorem ancillaSwapFun_involutive (X : Finset (Site Λ)) :
   · simp [ancillaSwapFun, x.2]
 
 /-- The swap of the target with its copy `e'`, as a permutation of the enlarged sites. -/
-def ancillaSwap (X : Finset (Site Λ)) : Equiv.Perm (AncillaSites Λ X) :=
+def ancillaSwap (X : Finset ↥Λ) : Equiv.Perm (AncillaSites Λ X) :=
   (ancillaSwapFun_involutive X).toPerm _
 
 /-- **The restored vector has a product reduction on `e'` and a physical region.** For a
 unit physical vector `Ω` and a unit ancillary vector `χ`, the vector `Ω ⊗ χ` on the enlarged
 sites has no mutual information between `e'` and any physical region.
 Source: `09-amplification.tex`, lines 342–347 and 550–551. -/
-theorem mutualInformation_ancillaProduct_copy_eq_zero {X : Finset (Site Λ)}
-    {Ω : StateSpace Λ q} (hΩ : ‖Ω‖ = 1)
+theorem mutualInformation_ancillaProduct_copy_eq_zero {X : Finset ↥Λ}
+    {Ω : EuclideanSpace ℂ (↥Λ → Fin q)} (hΩ : ‖Ω‖ = 1)
     {χ : RegionalConfiguration q X × RegionalConfiguration q X → ℂ}
-    (hχ : ‖WithLp.toLp 2 χ‖ = 1) (X' : Finset ↥X) (J : Finset (Site Λ)) :
+    (hχ : ‖WithLp.toLp 2 χ‖ = 1) (X' : Finset ↥X) (J : Finset ↥Λ) :
     ManyBody.regionMutualInformation
         (WithLp.toLp 2 ((fun c => Ω c.1 * χ c.2) ∘ ancillaSplit q X))
         (ancillaCopyRegion X') (ancillaPhysicalRegion X J) = 0 := by
@@ -265,12 +265,12 @@ the vector whose value at a physical configuration `c` and an ancillary pair `(s
 vectors `a, b`. For a part `X'` of `X` and a physical region `J` disjoint from `X`, the
 mutual information of `φ` between the copy of `X'` in `e'` and `J` equals `I_Ω(X' : J)`.
 Source: `09-amplification.tex`, lines 342–344 and 547–550. -/
-theorem mutualInformation_ancillaCopy_eq {X Y : Finset (Site Λ)} (hXY : Disjoint X Y)
-    {Ω : StateSpace Λ q} (hΩ : ‖Ω‖ = 1) {a b : RegionalConfiguration q X → ℂ}
+theorem mutualInformation_ancillaCopy_eq {X Y : Finset ↥Λ} (hXY : Disjoint X Y)
+    {Ω : EuclideanSpace ℂ (↥Λ → Fin q)} (hΩ : ‖Ω‖ = 1) {a b : RegionalConfiguration q X → ℂ}
     (ha : ‖WithLp.toLp 2 a‖ = 1) (hb : ‖WithLp.toLp 2 b‖ = 1) (X' : Finset ↥X)
-    {J : Finset (Site Λ)} (hJ : Disjoint J X) :
+    {J : Finset ↥Λ} (hJ : Disjoint J X) :
     ManyBody.regionMutualInformation
-        (WithLp.toLp 2 ((fun c : Configuration Λ q × (RegionalConfiguration q X ×
+        (WithLp.toLp 2 ((fun c : (↥Λ → Fin q) × (RegionalConfiguration q X ×
           RegionalConfiguration q X) => a c.2.1 * b (restoringSplit q X Y hXY c.1).1.1 *
             Ω ((restoringSplit q X Y hXY).symm ((c.2.2, (restoringSplit q X Y hXY c.1).1.2),
               (restoringSplit q X Y hXY c.1).2))) ∘ ancillaSplit q X))
@@ -289,7 +289,7 @@ theorem mutualInformation_ancillaCopy_eq {X Y : Finset (Site Λ)} (hXY : Disjoin
     exact EuclideanSpace.norm_toLp_comp_equiv (Equiv.sumArrowEquivProdArrow ↥X ↥X (Fin q))
       (fun p : RegionalConfiguration q X × RegionalConfiguration q X => a p.1 * b p.2)
   have hσ : ∀ x, (ancillaSwap X).symm x = ancillaSwapFun X x := fun x => rfl
-  have hvec : WithLp.toLp 2 ((fun c : Configuration Λ q × (RegionalConfiguration q X ×
+  have hvec : WithLp.toLp 2 ((fun c : (↥Λ → Fin q) × (RegionalConfiguration q X ×
       RegionalConfiguration q X) => a c.2.1 * b (restoringSplit q X Y hXY c.1).1.1 *
         Ω ((restoringSplit q X Y hXY).symm ((c.2.2, (restoringSplit q X Y hXY c.1).1.2),
           (restoringSplit q X Y hXY c.1).2))) ∘ ancillaSplit q X) =
@@ -341,7 +341,7 @@ theorem mutualInformation_ancillaCopy_eq {X Y : Finset (Site Λ)} (hXY : Disjoin
         simp [ancillaSwapFun, ancillaPhysicalRegion, hv, hvJ]
       · simp [ancillaSwapFun, ancillaPhysicalRegion, hv]
     · simp [ancillaSwapFun, ancillaPhysicalRegion]
-    · have hyJ : (y : Site Λ) ∉ J := fun h => Finset.disjoint_left.mp hJ h y.2
+    · have hyJ : (y : ↥Λ) ∉ J := fun h => Finset.disjoint_left.mp hJ h y.2
       simp [ancillaSwapFun, ancillaPhysicalRegion, hyJ]
   rw [hvec, ManyBody.regionMutualInformation_relabelSites, hcopy, hphys]
   exact ManyBody.regionMutualInformation_sumSitesProduct_inl

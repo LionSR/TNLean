@@ -21,8 +21,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 225–233 and 331–337, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -102,9 +100,9 @@ cost, for `c = 1 / (2(C₁ + 1)) > 0`. The physical geometry and multiplicity
 bounds supply the sampling estimate (`08-scanner.tex`, lines 331–337). -/
 theorem good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
-    (h : History S.K S.m S.M k) (cost : Fin S.K → Bool → Finset (Site Λ) → ℝ)
+    (h : History S.K S.m S.M k) (cost : Fin S.K → Bool → Finset ↥Λ → ℝ)
     (hcost : ∀ g side B, 0 ≤ cost g side B)
     (hn : 2 ≤ S.n) (hm : 2 ≤ S.m) (hk : k + 1 ≤ S.n * S.m)
     (hr : 2 * S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m) (hDpos : 1 ≤ S.D)

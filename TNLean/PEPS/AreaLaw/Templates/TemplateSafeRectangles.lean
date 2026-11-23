@@ -24,8 +24,9 @@ The sufficient condition `D₀ ≥ 1` follows from the standing `D₀ > 2R + 10`
 in `02-initial.tex`, line 225. No upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation ambientDilation_zero)
+
+open ManyBody (IntRect IsSafe cast_supDist)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -36,7 +37,7 @@ For separation bounds written as real literals, specify `(T := T) (D₀ := D₀)
 when applying this theorem or its core and shell consequences. -/
 theorem Template.IsSeparated.isSafe_of_subset_ambientDilation
     {Ctpl : ℝ} {n s₀ D₀ : ℕ} {T : Template Ctpl n s₀}
-    {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+    {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (j : ℕ) (hj : j ≤ s₀) (Q : IntRect)
     (hQ : Q.toFinset ⊆ ambientDilation T.points j) (hsize : Q.size ≤ s₀) :
@@ -53,7 +54,7 @@ Containment and size are derived from selection, not assumed of the cover.
 Source: Lemma 9.4, lines 651–664. -/
 theorem Template.IsSeparated.isSafe_cappedDyadicPartition_core
     {Ctpl : ℝ} {n s₀ D₀ : ℕ} {T : Template Ctpl n s₀}
-    {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+    {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (K k : ℕ) (z : ℤ × ℤ) (hcap : 2 ^ K ≤ s₀)
     (hcell : (k, z) ∈ cappedDyadicPartition T.points K) :
@@ -68,7 +69,7 @@ theorem Template.IsSeparated.isSafe_cappedDyadicPartition_core
 including cap zero and disconnected shells. Source: Lemma 9.4, lines 651–655. -/
 theorem Template.IsSeparated.isSafe_cappedDyadicPartition_shell
     {Ctpl : ℝ} {n s₀ D₀ : ℕ} {T : Template Ctpl n s₀}
-    {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+    {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (j K k : ℕ) (z : ℤ × ℤ) (hj : j ≤ s₀) (hcap : 2 ^ K ≤ s₀)
     (hcell : (k, z) ∈ cappedDyadicPartition (ambientDilation T.points j \ T.points) K) :

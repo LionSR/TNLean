@@ -76,8 +76,6 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -94,7 +92,7 @@ depth, anchors in their supports, `r₀ = ⌈C_tr log² n⌉` (line 49) and char
 inputs `scanner:entropy-input` with constant `C_e` (lines 353–357). -/
 structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (Δ CT Ctr C₁ Ce : ℝ) (n : ℕ)
     {q : ℕ} (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (h : PlaneInteraction Λ q R)
-    (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ) (Ω : StateSpace Λ q) :
+    (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) :
     Prop where
   /-- `Ω` is a unit vector: the original ground vector of the standing setting
   (`01-preliminaries.tex`, lines 4–5), to which the entropy inputs refer
@@ -142,17 +140,17 @@ structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (Δ CT Ctr C₁ Ce 
 
 /-- The typical Schmidt set of the target for `Ωt` with width `n^{3/5}`
 (`comparator:typical-set`, `07-comparators.tex`, lines 37–47; `08-scanner.tex`, line 362). -/
-def typicalWindow {Λ : Finset (ℤ × ℤ)} {I : Type*} (S : CollarScan (Site Λ) I) (q : ℕ)
-    (Ωt : StateSpace Λ q) (T : Finset (ℤ × ℤ)) (n : ℕ) :=
+def typicalWindow {Λ : Finset (ℤ × ℤ)} {I : Type*} (S : CollarScan ↥Λ I) (q : ℕ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (T : Finset (ℤ × ℤ)) (n : ℕ) :=
   Entropy.typicalSet (ManyBody.regionState_isHermitian (S.target T) Ωt).eigenvalues
     (ManyBody.regionEntropy Ωt (S.target T)) ((n : ℝ) ^ (3 / 5 : ℝ))
 
 /-- The vectors `pre_k = π_R^{λ_k}(Ωt ⊗ Bell_{CR})^{⊗k}` of `comparator:prevector`
 (`07-comparators.tex`, lines 130–140), with auxiliary systems of dimension `d`, in the
 coordinates of the scan. -/
-def scanPrevector {Λ : Finset (ℤ × ℤ)} (q d : ℕ) (Ωt : StateSpace Λ q)
+def scanPrevector {Λ : Finset (ℤ × ℤ)} (q d : ℕ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q))
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (k : ℕ) :
-    Config k (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q (fun _ ↦ d) v)) → ℂ :=
+    Config k (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q (fun _ ↦ d) v)) → ℂ :=
   replicaPrevector (WithLp.ofLp Ωt) d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
 
 open Classical in
@@ -176,17 +174,17 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
       0 < C₁ ∧ 0 < C ∧ 0 < Cδ ∧ 0 < ca ∧ ∀ᶠ n : ℕ in atTop,
     ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
       (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
-      (_ : ∀ X, ‖h.term X‖ ≤ J) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-      (E₀ : ℝ) (Ω : StateSpace Λ q),
+      (_ : ∀ X, ‖h.term X‖ ≤ J) (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+      (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
       ScannerHypotheses X R Δ CT Ctr C₁ Ce n Λ T hT h S E₀ Ω →
       let g : ℝ := Δ / positiveNormalization 1 (Δ / 2) J
       let C₀ := 512 * Real.exp 1 * (2 / g)
       let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))
-      let B : Finset (Site Λ) → ℝ :=
+      let B : Finset ↥Λ → ℝ :=
         fun Y ↦ ManyBody.cutLogBudget
           (fun i ↦ designatedSupport S.graph (S.truncationSet (X.L n)) S.r₀ (S.anchor i))
           (fun _ ↦ q) Y
-      ∃ (e : ℝ) (Ωt : StateSpace Λ q),
+      ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
         (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e (g / 2) ∧
           groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧
         0 ≤ e ∧ e ≤ (n : ℝ) ^ (-1000 : ℝ) ∧
@@ -201,7 +199,7 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
         ∃ (hm : 0 < S.m) (hM : 0 < S.M) (hd : 0 < E.card),
         haveI : NeZero E.card := ⟨hd.ne'⟩
         let d := E.card
-        let β := fun _ : Site Λ ↦ Fin q
+        let β := fun _ : ↥Λ ↦ Fin q
         let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
           (ManyBody.cutEquiv β (S.target T)) Ωt
         let ψ : ManyBody.ComplConfig β (S.target T) × Fin d → ℂ := fun x ↦
@@ -211,7 +209,7 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
         ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
           (∀ k, 0 < k → scanPrevector q d Ωt ell k ≠ 0 ∧
             ‖WithLp.toLp 2 (scanPrevector q d Ωt ell k)‖ ≤ 1) ∧
-          let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+          let dims := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
           let energy := S.actualEnergyTerms h Ω J Δ (X.L n) (fun _ ↦ d)
           let pre := scanPrevector q d Ωt ell
           let σ := terminalPartition S (S.n * S.m)
@@ -236,7 +234,7 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
             ∃ Bsh Bexc Bmarg : ℝ,
               Bsh ≤ Cb * (n * (X.L n : ℝ) ^ X.e + n) ∧ Bexc ≤ Cb * n * X.D n ∧
               1 ≤ Bmarg ∧ Bmarg ≤ Cb * n * X.D n * Real.log n ^ Clb ∧
-              (∀ (Y : Finset (Site Λ)) (u : ℝ),
+              (∀ (Y : Finset ↥Λ) (u : ℝ),
                 |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
                 Real.log (Entropy.surprisalMoment
                   (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
@@ -452,7 +450,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   have hsh : ∀ j : Fin (X.L S.n + 1),
       ManyBody.regionEntropy Ωt
         (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh := fun j ↦ by
-    simpa only [] using
+    simpa only using
       hprefix S.n ((le_max_right N Ne).trans hn) Λ Ω Ωt hyp.norm_eq_one htrgs.1
         S.A S.depth (X.L S.n) hcard htrace
         (max Ce 1) X.e hsource j.val (Nat.le_of_lt_succ j.isLt)

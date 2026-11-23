@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangles
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Squares.CellCounting
 import TNLean.PEPS.AreaLaw.Templates.Templates
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # Instances of polygonal lattice templates
@@ -36,7 +37,7 @@ Three constructions show that Definition 9.3 admits the templates used later.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
+open ManyBody (IntRect IsSafe cast_supDist supDist)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -182,7 +183,7 @@ cut in the sense of Definition 9.3 whenever `4 D₀ s₀ ≤ D · size Q`. In th
 bootstrap, `D = 4 D₀` and `s₀ = size Q` give the template clearance. -/
 theorem Template.isSeparated_ofIntRect_of_isSafe {Ctpl : ℝ} {n s₀ : ℕ} (Q : IntRect)
     (hsize : Q.size ≤ s₀) (hC : 1 ≤ Ctpl) (hn : Ctpl * (s₀ + 1) ≤ n)
-    {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)} {D D₀ : ℕ} (hsafe : IsSafe Λ A D Q)
+    {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {D D₀ : ℕ} (hsafe : IsSafe Λ A D Q)
     (hD : 4 * D₀ * s₀ ≤ D * Q.size) :
     (Template.ofIntRect Q hsize hC hn).IsSeparated D₀ (boundaryEndpoints Λ A) := by
   classical

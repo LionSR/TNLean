@@ -24,8 +24,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation_zero)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -38,7 +36,7 @@ the outside of the same truncation set on its far side. The horizon does not
 enter the compact-containment argument. Source: `08-scanner.tex`, 900--911. -/
 theorem terminalPartition_collar_geometry
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)}
-    (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+    (hT : T.Nonempty) (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (H L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (j : terminalFamily S.K S.m S.M H) (g : Fin S.K) :
@@ -91,7 +89,7 @@ theorem terminalPartition_collar_geometry
     cases hy'
   have hXnear : X ⊆ receiving σ false := by rw [hnear]; exact Finset.subset_union_left
   have hUnear : U ⊆ receiving σ false := Finset.filter_subset _ _
-  have hdisjoint (Q : Finset (Site Λ)) (hQ : Q ⊆ X ∪ U ∪ Y) : Disjoint Q V := by
+  have hdisjoint (Q : Finset ↥Λ) (hQ : Q ⊆ X ∪ U ∪ Y) : Disjoint Q V := by
     rw [hfar']
     exact Finset.disjoint_left.mpr fun x hx hv ↦ (Finset.mem_compl.mp hv) (hQ hx)
   have hcover : X ∪ U ∪ Y ∪ V = Finset.univ := by

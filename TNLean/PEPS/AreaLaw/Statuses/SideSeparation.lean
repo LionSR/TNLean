@@ -45,8 +45,6 @@ proof is copied or adapted.
 
 section
 
-open TNLean.Lattice
-
 open ManyBody (planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -107,9 +105,9 @@ private theorem front_sum_lt_neg_lead {k : ℕ} (g r : ℕ)
 omit [Fintype I] [LinearOrder I] in
 private theorem designatedSupport_not_near_far_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
-    (g r : ℕ) (σ : PhysicalPartition (Site Λ))
+    (g r : ℕ) (σ : PhysicalPartition ↥Λ)
     (hn : 0 < S.n) (hk : k ≤ S.n * S.m)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hnear : receiving σ false ⊆ S.truncationSet L)
@@ -152,7 +150,7 @@ history within the source horizon. This also excludes a direct near-to-far split
 with no middle incidence. -/
 theorem state_designatedSupport_not_near_far_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (hn : 0 < S.n) (hk : k ≤ S.n * S.m)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
@@ -173,7 +171,7 @@ theorem state_designatedSupport_not_near_far_domainGraph
 before an actual charge, including histories with an unusually long charge lead. -/
 theorem old_designatedSupport_not_near_far_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (hn : 0 < S.n) (hk : k + 1 ≤ S.n * S.m)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)

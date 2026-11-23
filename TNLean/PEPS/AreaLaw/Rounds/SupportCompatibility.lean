@@ -32,8 +32,6 @@ at `openai/math@adc7f124`.
 
 section
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -107,7 +105,7 @@ compatibility condition. The only support identification is its physical
 embedding; compatibility is derived from the source geometric margins. -/
 theorem chargeTransportData_supportCompatible_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (choiceTree : History S.K S.m S.M k → Matrix.MeanTree (ChargeChoices S.K S.M))
@@ -118,7 +116,7 @@ theorem chargeTransportData_supportCompatible_domainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (n : Site Λ ⊕ Bool → ℕ) (E : EnergyTerms (Site Λ ⊕ Bool) n I)
+    (n : ↥Λ ⊕ Bool → ℕ) (E : EnergyTerms (↥Λ ⊕ Bool) n I)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩) :
@@ -146,8 +144,6 @@ end
 
 section
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -162,7 +158,7 @@ namespace CollarScan
 derived from the geometric scanner hypotheses rather than supplied as a premise. -/
 theorem fillTransportData_supportCompatible_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (hn : 0 < S.n) (hk : k + 1 ≤ S.n * S.m)
@@ -172,7 +168,7 @@ theorem fillTransportData_supportCompatible_domainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (n : Site Λ ⊕ Bool → ℕ) (E : EnergyTerms (Site Λ ⊕ Bool) n I)
+    (n : ↥Λ ⊕ Bool → ℕ) (E : EnergyTerms (↥Λ ⊕ Bool) n I)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩) :

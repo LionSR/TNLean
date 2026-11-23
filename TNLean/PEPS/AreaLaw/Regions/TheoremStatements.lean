@@ -3,9 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.StateSpace
+import QICLean.ManyBody.Sites.Config
 import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Hamiltonian.Models
+import QICLean.ManyBody.Sites.Lattice.Plane
+import QICLean.ManyBody.Sites.PlacedConfiguration
 
 /-!
 # The uniform finite-domain area-law statement
@@ -30,8 +33,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 open ManyBody (planeDomainGraph edgeBoundary)
@@ -46,10 +47,10 @@ def UniformAreaLaw : Prop :=
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) →
-        ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset (Site Λ),
+            ∀ A : Finset ↥Λ,
               ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
 
 end TNLean.PEPS.AreaLaw

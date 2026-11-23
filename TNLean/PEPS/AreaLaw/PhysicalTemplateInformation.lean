@@ -33,8 +33,6 @@ open scoped Matrix.Norms.L2Operator
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped ambientDilation groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -55,10 +53,10 @@ theorem exists_template_final_mutualInformation
       ∀ n s₀ : ℕ, N ≤ n →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
             (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (E₀ : ℝ) (Ω : StateSpace Λ q),
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ (A : Finset (Site Λ)) (T : Template Ctpl n s₀),
+          ∀ (A : Finset ↥Λ) (T : Template Ctpl n s₀),
             T.IsSeparated D₀ (boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ ≤ s₀ →
             let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊

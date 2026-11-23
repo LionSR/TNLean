@@ -18,7 +18,6 @@ Original formalization from the mathematical manuscript; no upstream Lean
 proof text is reused. Physical cut clearance and entropy remain separate.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation ambientDilation_zero)
 
 namespace TNLean.PEPS.AreaLaw.Geometry

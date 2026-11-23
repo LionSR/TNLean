@@ -50,8 +50,6 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Initial primaries have rank zero and initial belt regions have rank one.
@@ -79,7 +77,7 @@ by retaining the old identifier at each intervening step.
 Source: area-law Section 11, lines 398–409, and the ordering preceding
 `geometry:birth-separation`, lines 565–571. -/
 def repairStageOldInclusion (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
     (Sstar : ℝ) (j : ℕ) :
     (l : ℕ) → (repairStage o Λ A C k₀ hC h₀ Sstar j).regionIndex →
       (repairStage o Λ A C k₀ hC h₀ Sstar (j + l)).regionIndex :=
@@ -98,7 +96,7 @@ rank, and a replacement born at step j receives rank j + 2.
 Source: area-law Section 11, lines 404–409, and the ordering preceding
 `geometry:birth-separation`, lines 565–568. -/
 def repairStageBirthRank (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
     (Sstar : ℝ) :
     (j : ℕ) → (repairStage o Λ A C k₀ hC h₀ Sstar j).regionIndex → ℕ :=
   Nat.rec
@@ -123,11 +121,9 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
   (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -152,11 +148,9 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
   (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar

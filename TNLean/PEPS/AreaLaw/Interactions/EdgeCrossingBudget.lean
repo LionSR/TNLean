@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Tensor.Network.Defs
-import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
@@ -24,7 +24,6 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 open ManyBody (Edge)
 
 open scoped BigOperators
-open TNLean.Lattice
 
 open ManyBody (planeDomainGraph edgeBoundary)
 
@@ -61,27 +60,27 @@ theorem card_pair_insideConfig_of_crossing (q : ℕ) {x y : V} {A : Finset V}
   obtain ⟨v, hv⟩ := pair_inter_eq_singleton_of_crossing h
   simp [hv]
 
-variable {Λ : Finset (ℤ × ℤ)} [siteOrder : LinearOrder (Site Λ)]
+variable {Λ : Finset (ℤ × ℤ)} [siteOrder : LinearOrder ↥Λ]
 
 /-- The physical on-site and nearest-neighbor supports, with each edge counted once. -/
 noncomputable def nearestNeighborSupport :
-    Site Λ ⊕ Edge (planeDomainGraph Λ) → Finset (Site Λ) := by
+    ↥Λ ⊕ Edge (planeDomainGraph Λ) → Finset ↥Λ := by
   classical
   exact Sum.elim (fun v ↦ {v}) (fun e ↦ {e.1.1, e.1.2})
 
 /-- The combined interaction list has no crossing on-site terms. -/
-theorem inl_not_mem_crossingTerms (A : Finset (Site Λ))
-    (v : Site Λ) : Sum.inl v ∉ ManyBody.crossingTerms nearestNeighborSupport A := by
+theorem inl_not_mem_crossingTerms (A : Finset ↥Λ)
+    (v : ↥Λ) : Sum.inl v ∉ ManyBody.crossingTerms nearestNeighborSupport A := by
   classical
   intro h
   have h' := h
   simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at h'
-  change (∃ w ∈ ({v} : Finset (Site Λ)), w ∈ A) ∧
-    (∃ w ∈ ({v} : Finset (Site Λ)), w ∉ A) at h'
+  change (∃ w ∈ ({v} : Finset ↥Λ), w ∈ A) ∧
+    (∃ w ∈ ({v} : Finset ↥Λ), w ∉ A) at h'
   simp only [Finset.mem_singleton, exists_eq_left, and_not_self] at h'
 
 /-- Crossing of the edge support is precisely membership in the unordered boundary. -/
-theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
+theorem inr_mem_crossingTerms_iff (A : Finset ↥Λ)
     (e : Edge (planeDomainGraph Λ)) :
     Sum.inr e ∈ ManyBody.crossingTerms nearestNeighborSupport A ↔
       s(e.1.1, e.1.2) ∈ edgeBoundary (planeDomainGraph Λ) A := by
@@ -90,8 +89,8 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
   · intro h
     have h' := h
     simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at h'
-    change (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∈ A) ∧
-      (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∉ A) at h'
+    change (∃ v ∈ ({e.1.1, e.1.2} : Finset ↥Λ), v ∈ A) ∧
+      (∃ v ∈ ({e.1.1, e.1.2} : Finset ↥Λ), v ∉ A) at h'
     obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := h'
     rw [ManyBody.mk_mem_edgeBoundary_iff]
     refine ⟨e.2.2, ?_⟩
@@ -101,14 +100,14 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
   · intro h
     obtain ⟨x, hxA, y, hyA, hxy⟩ := (ManyBody.mem_edgeBoundary.mp h).2
     simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
-    change (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∈ A) ∧
-      (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∉ A)
+    change (∃ v ∈ ({e.1.1, e.1.2} : Finset ↥Λ), v ∈ A) ∧
+      (∃ v ∈ ({e.1.1, e.1.2} : Finset ↥Λ), v ∉ A)
     rcases Sym2.eq_iff.mp hxy with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
       exact ⟨⟨_, by simp, hxA⟩, _, by simp, hyA⟩
 
 /-- Every crossing term has one inside site, including in the presence of on-site terms. -/
 theorem card_nearestNeighbor_insideConfig (q : ℕ)
-    (A : Finset (Site Λ)) {i : Site Λ ⊕ Edge (planeDomainGraph Λ)}
+    (A : Finset ↥Λ) {i : ↥Λ ⊕ Edge (planeDomainGraph Λ)}
     (hi : i ∈ ManyBody.crossingTerms nearestNeighborSupport A) :
     Fintype.card (↥(nearestNeighborSupport i ∩ A) → Fin q) = q := by
   classical
@@ -121,11 +120,11 @@ theorem card_nearestNeighbor_insideConfig (q : ℕ)
 
 /-- Forgetting the canonical endpoint order counts each unordered boundary edge once. -/
 theorem card_crossingTerms_nearestNeighbor
-    (A : Finset (Site Λ)) :
+    (A : Finset ↥Λ) :
     (ManyBody.crossingTerms nearestNeighborSupport A).card =
       (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
-  let f : Site Λ ⊕ Edge (planeDomainGraph Λ) → Sym2 (Site Λ) :=
+  let f : ↥Λ ⊕ Edge (planeDomainGraph Λ) → Sym2 ↥Λ :=
     Sum.elim (fun v ↦ s(v, v)) (fun e ↦ s(e.1.1, e.1.2))
   apply Finset.card_bij (fun i _ ↦ f i)
   · intro i hi
@@ -146,7 +145,7 @@ theorem card_crossingTerms_nearestNeighbor
         · exact Prod.ext h₁ h₂
         · have he := e.2.1
           rw [h₁, h₂] at he
-          exact False.elim (@lt_asymm (Site Λ) siteOrder.toPreorder _ _ d.2.1 he)
+          exact False.elim (@lt_asymm ↥Λ siteOrder.toPreorder _ _ d.2.1 he)
   · intro b hb
     obtain ⟨x, y⟩ := b
     have hxy : (planeDomainGraph Λ).Adj x y :=
@@ -160,7 +159,7 @@ theorem card_crossingTerms_nearestNeighbor
 
 /-- The exact generic crossing budget for on-site and nearest-neighbor terms. -/
 theorem nearestNeighbor_crossing_budget (q : ℕ) (J : ℝ)
-    {m : ℕ} (regions : Fin m → Finset (Site Λ)) (a : Fin m → ℝ) :
+    {m : ℕ} (regions : Fin m → Finset ↥Λ) (a : Fin m → ℝ) :
     (∑ j : Fin m, a j ^ 2 * ∑ i ∈ ManyBody.crossingTerms nearestNeighborSupport (regions j),
       (Fintype.card (↥(nearestNeighborSupport i ∩ regions j) → Fin q) : ℝ) ^ 2 * J) =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *

@@ -32,16 +32,17 @@ This conditional entropy component does not assert the full lemma or derive
 an arbitrary exponent from the initial existential safe-box exponent.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation)
+
+open ManyBody (IntRect IsSafe rectRegion)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Core entropy from a uniform estimate on every safe native rectangle.
 The weighted count and safety are derived from the actual template. -/
 theorem Template.regionEntropy_core_le_of_safe_box
-    (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) {Ctpl : ℝ} {n s₀ : ℕ}
+    (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥Λ) {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (K : ℕ) (hlo : 2 ^ K ≤ s₀) (hhi : s₀ < 2 ^ (K + 1))
@@ -58,8 +59,8 @@ theorem Template.regionEntropy_core_le_of_safe_box
 
 /-- Shell entropy from the same safe-box estimate, including the empty shell. -/
 theorem Template.regionEntropy_shell_le_of_safe_box
-    (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) {Ctpl : ℝ} {n s₀ : ℕ}
+    (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥Λ) {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (j L K : ℕ) (hj : j ≤ L) (hL : L ≤ s₀)
@@ -82,7 +83,7 @@ theorem Template.regionEntropy_shell_le_of_safe_box
 This includes arbitrary subsets of that row; no row-order hypothesis is added. -/
 theorem Template.regionEntropy_prefix_le_of_safe_box
     (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (hq : 1 ≤ q)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (j L K : ℕ) (hj : 1 ≤ j) (hjL : j ≤ L) (hL : L ≤ s₀)
@@ -109,7 +110,7 @@ This is conditional on that safe-box input; it does not produce it from the
 existence of a single initial exponent. -/
 theorem exists_template_entropy_bounds_of_arbitrary_safe_box
     (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (hq : 1 ≤ q) (hD : 1 ≤ D₀)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     (hbox : ∀ ε : ℝ, 0 < ε → ε < 1 → ∃ C : ℝ, 0 ≤ C ∧
       ∀ Q : IntRect, IsSafe Λ A D₀ Q →
         ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + ε))

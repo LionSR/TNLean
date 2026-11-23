@@ -97,8 +97,9 @@ private theorem rank_bond_le {h : Fin m → Matrix (Fin L → Fin q) (Fin L → 
     (hq : 1 ≤ q)
     (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (i c : ℕ) :
-    operatorSchmidtRank ((bondTermExtension h i).reindex (sheetSplit q (interval L 0 c))
-      (sheetSplit q (interval L 0 c))) ≤ q ^ 2 := by
+    operatorSchmidtRank ((bondTermExtension h i).reindex
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤ q ^ 2 := by
   rw [← operatorSchmidtRank_cutOperator_eq]
   exact ((bondTermExtension_supported hsupp i).operatorSchmidtRank_cutOperator_le_pow_card
     hq).trans (Nat.pow_le_pow_right hq ((card_interval_le _ _).trans (by omega)))
@@ -112,13 +113,16 @@ private theorem rank_window_cut_le {h : Fin m → Matrix (Fin L → Fin q) (Fin 
     (hwin : (a + 1 ≤ c ∧ c ≤ a + 2 * ℓ) ∨ (b + 1 ≤ c ∧ c ≤ b + 2 * ℓ))
     (k : ℕ) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
     operatorSchmidtRank ((Polynomial.aeval (∑ α, threeRegionFamily h a b ℓ α) P).reindex
-        (sheetSplit q (interval L 0 c)) (sheetSplit q (interval L 0 c))) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤
       (q ^ 2 + 2) ^ (k + 1) := by
   obtain ⟨hWL, hWR, hPL, hPM, hPR⟩ := threeRegionFamily_supported hsupp a b ℓ
   rcases hwin with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · have hB : operatorSchmidtRank ((threeRegionFamily h a b ℓ
-        (Sum.inl (Sum.inl ⟨c - 1 - a, by omega⟩))).reindex (sheetSplit q (interval L 0 c))
-        (sheetSplit q (interval L 0 c))) ≤ q ^ 2 := rank_bond_le hq hsupp (a + (c - 1 - a)) c
+        (Sum.inl (Sum.inl ⟨c - 1 - a, by omega⟩))).reindex
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤ q ^ 2 := rank_bond_le hq hsupp
+            (a + (c - 1 - a)) c
     refine operatorSchmidtRank_aeval_sum_le_pow_of_bulk (interval L 0 c)
       (threeRegionFamily h a b ℓ) (Sum.inl (Sum.inl ⟨c - 1 - a, by omega⟩)) ?_ hB k P hdeg
     rintro ((r | r) | j) hr
@@ -131,8 +135,10 @@ private theorem rank_window_cut_le {h : Fin m → Matrix (Fin L → Fin q) (Fin 
       · exact mem_supportedOperators_side hPM (by omega)
       · exact mem_supportedOperators_side hPR (by omega)
   · have hB : operatorSchmidtRank ((threeRegionFamily h a b ℓ
-        (Sum.inl (Sum.inr ⟨c - 1 - b, by omega⟩))).reindex (sheetSplit q (interval L 0 c))
-        (sheetSplit q (interval L 0 c))) ≤ q ^ 2 := rank_bond_le hq hsupp (b + (c - 1 - b)) c
+        (Sum.inl (Sum.inr ⟨c - 1 - b, by omega⟩))).reindex
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤ q ^ 2 := rank_bond_le hq hsupp
+            (b + (c - 1 - b)) c
     refine operatorSchmidtRank_aeval_sum_le_pow_of_bulk (interval L 0 c)
       (threeRegionFamily h a b ℓ) (Sum.inl (Sum.inr ⟨c - 1 - b, by omega⟩)) ?_ hB k P hdeg
     rintro ((r | r) | j) hr
@@ -156,7 +162,8 @@ theorem operatorSchmidtRank_aeval_threeRegion_cut_le
       (interval L i (i + 2))) {a b ℓ : ℕ} (hab : a + 2 * ℓ ≤ b)
     (k : ℕ) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) (c : ℕ) :
     operatorSchmidtRank ((Polynomial.aeval (∑ α, threeRegionFamily h a b ℓ α) P).reindex
-        (sheetSplit q (interval L 0 c)) (sheetSplit q (interval L 0 c))) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤
       (q ^ 2 + 4) ^ (k + 1) := by
   classical
   obtain ⟨hWL, hWR, hPL, hPM, hPR⟩ := threeRegionFamily_supported hsupp a b ℓ
@@ -191,7 +198,8 @@ theorem operatorSchmidtRank_aeval_threeRegion_region_le
     (J : Finset (Fin L)) (hsub : interval L (a + ℓ) (b + ℓ + 1) ⊆ J)
     (hcollar : (J \ interval L (a + ℓ) (b + ℓ + 1)).card ≤ 2 * ℓ) :
     operatorSchmidtRank ((Polynomial.aeval (∑ α, threeRegionFamily h a b ℓ α) P).reindex
-        (sheetSplit q J) (sheetSplit q J)) ≤ ((q * ℓ ^ 2) ^ (22 * ℓ)) ^ 2 := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤
+            ((q * ℓ ^ 2) ^ (22 * ℓ)) ^ 2 := by
   classical
   obtain ⟨hWL, hWR, hPL, hPM, hPR⟩ := threeRegionFamily_supported hsupp a b ℓ
   set J0 := interval L (a + ℓ) (b + ℓ + 1) with hJ0
@@ -212,16 +220,18 @@ theorem operatorSchmidtRank_aeval_threeRegion_region_le
     simp only [Fin.val_zero, Nat.add_zero, hJ0]
   rw [hJ0'] at htwo
   have htwo0 : operatorSchmidtRank ((Polynomial.aeval (∑ α, threeRegionFamily h a b ℓ α)
-      P).reindex (sheetSplit q J0) (sheetSplit q J0)) ≤ B ^ (17 * (ℓ + ℓ ^ 2 / (2 * ℓ))) := by
+      P).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) J0) (ManyBody.cutEquiv (fun _ ↦ Fin q) J0)) ≤ B
+          ^ (17 * (ℓ + ℓ ^ 2 / (2 * ℓ))) := by
     convert htwo
   have htwo' : operatorSchmidtRank ((Polynomial.aeval (∑ α, threeRegionFamily h a b ℓ α)
-      P).reindex (sheetSplit q J0) (sheetSplit q J0)) ≤ B ^ (34 * ℓ) :=
+      P).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) J0) (ManyBody.cutEquiv (fun _ ↦ Fin q) J0)) ≤ B
+          ^ (34 * ℓ) :=
     htwo0.trans (Nat.pow_le_pow_right hB1 (by omega))
   have hcol : q ^ (2 * (J \ J0).card) ≤ B ^ (4 * ℓ) :=
     (Nat.pow_le_pow_left hqB _).trans (Nat.pow_le_pow_right hB1 (by omega))
   calc _ ≤ q ^ (2 * (J \ J0).card) * operatorSchmidtRank
         ((Polynomial.aeval (∑ α, threeRegionFamily h a b ℓ α) P).reindex
-          (sheetSplit q J0) (sheetSplit q J0)) := hchange
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) J0) (ManyBody.cutEquiv (fun _ ↦ Fin q) J0)) := hchange
     _ ≤ B ^ (4 * ℓ) * B ^ (34 * ℓ) := Nat.mul_le_mul hcol htwo'
     _ ≤ (B ^ (22 * ℓ)) ^ 2 := by
       rw [← pow_add, ← pow_mul]
@@ -329,7 +339,8 @@ private theorem exists_long_frustrationFree_family
         (4 * Real.exp (-(4 * (ℓ : ℝ) ^ 2 * Real.sqrt ((4 * g / 5) / R)))) ≤ 1 / 100000) :
     let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
     let J := interval L p r
-    let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
+    let tau := (ManyBody.cutEquiv (fun _ ↦ Fin q) J).trans
+        (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
     let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
       (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
@@ -343,8 +354,8 @@ private theorem exists_long_frustrationFree_family
       Finset.univ.filter fun v : ↥J ↦ (v : Fin L) ∈ interval L 0 c
     ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
       N ≤ D ^ 2 ∧ 0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
-      (∀ j c, operatorSchmidtRank ((W j).reindex (sheetSplit q (cut c))
-        (sheetSplit q (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
+      (∀ j c, operatorSchmidtRank ((W j).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
       ∀ (k : ℕ) (S : Submodule ℂ EM) (δ : ℝ), Submodule.IsViable (F := EE) δ S G → δ < 1 →
         Submodule.IsViable (F := EE) (Δ ^ k / (1 - δ) ^ 2)
           (⨆ w : Fin k → Fin N, S.map ((List.ofFn fun j ↦
@@ -543,7 +554,8 @@ private theorem exists_improving_family_core :
       let ℓ : ℕ := ⌈A * u ^ 2 / g⌉₊
       let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
       let J := interval L p r
-      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
+      let tau := (ManyBody.cutEquiv (fun _ ↦ Fin q) J).trans
+          (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
       let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
         (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
@@ -559,8 +571,8 @@ private theorem exists_improving_family_core :
       Real.log (((d ^ 2 + 4) ^ (ℓ ^ 2 + 1) : ℕ) : ℝ) ≤ 4 * (A + 1) ^ 2 / g ^ 2 * u ^ 5 ∧
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
         N ≤ D ^ 2 ∧ 0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
-        (∀ j c, operatorSchmidtRank ((W j).reindex (sheetSplit q (cut c))
-          (sheetSplit q (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
+        (∀ j c, operatorSchmidtRank ((W j).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
         ∀ (k : ℕ) (S : Submodule ℂ EM) (δ : ℝ), Submodule.IsViable (F := EE) δ S G → δ < 1 →
           Submodule.IsViable (F := EE) (Δ ^ k / (1 - δ) ^ 2)
             (⨆ w : Fin k → Fin N, S.map ((List.ofFn fun j ↦
@@ -579,11 +591,14 @@ private theorem exists_improving_family_core :
   have hcutcard : ∀ c, (cut c).card ≤ J.card := fun c ↦
     (Finset.card_filter_le _ _).trans (by simp)
   have hsmall : ∀ (X : Matrix (J → Fin q) (J → Fin q) ℂ) c,
-      operatorSchmidtRank (X.reindex (sheetSplit q (cut c)) (sheetSplit q (cut c))) ≤
+      operatorSchmidtRank (X.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))) ≤
         (q ^ (cut c).card) ^ 2 := by
     intro X c
     simpa only [Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] using
-      operatorSchmidtRank_le_card_sq (X.reindex (sheetSplit q (cut c)) (sheetSplit q (cut c)))
+      operatorSchmidtRank_le_card_sq
+          (X.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c)))
   have hbond1 : 1 ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1) := Nat.one_le_pow _ _ (by positivity)
   by_cases hq1 : q ≤ 1
   · have hEM : Module.finrank ℂ EM ≤ 1 := by
@@ -702,7 +717,8 @@ theorem exists_frustrationFree_improving_family_words :
       let ℓ : ℕ := ⌈A * u ^ 2 / g⌉₊
       let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
       let J := interval L p r
-      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
+      let tau := (ManyBody.cutEquiv (fun _ ↦ Fin q) J).trans
+          (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
       let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
         (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
@@ -718,8 +734,8 @@ theorem exists_frustrationFree_improving_family_words :
       Real.log (((d ^ 2 + 4) ^ (ℓ ^ 2 + 1) : ℕ) : ℝ) ≤ 4 * (A + 1) ^ 2 / g ^ 2 * u ^ 5 ∧
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
         N ≤ D ^ 2 ∧ 0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
-        (∀ j c, operatorSchmidtRank ((W j).reindex (sheetSplit q (cut c))
-          (sheetSplit q (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
+        (∀ j c, operatorSchmidtRank ((W j).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
         ∀ (k : ℕ) (S : Submodule ℂ EM) (δ : ℝ), Submodule.IsViable (F := EE) δ S G → δ < 1 →
           Submodule.IsViable (F := EE) (Δ ^ k / (1 - δ) ^ 2)
             (⨆ w : Fin k → Fin N, S.map ((List.ofFn fun j ↦
@@ -810,7 +826,8 @@ theorem exists_frustrationFree_improving_family :
       let ℓ : ℕ := ⌈A * u ^ 2 / g⌉₊
       let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
       let J := interval L p r
-      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
+      let tau := (ManyBody.cutEquiv (fun _ ↦ Fin q) J).trans
+          (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
       let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
         (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
@@ -826,8 +843,8 @@ theorem exists_frustrationFree_improving_family :
       Real.log (((d ^ 2 + 4) ^ (ℓ ^ 2 + 1) : ℕ) : ℝ) ≤ 4 * (A + 1) ^ 2 / g ^ 2 * u ^ 5 ∧
       ∃ (W : Fin (D ^ 2) → Matrix (J → Fin q) (J → Fin q) ℂ) (Δ : ℝ),
         0 < Δ ∧ (D : ℝ) ^ 12 * Δ ≤ 1 / 100000 ∧
-        (∀ j c, operatorSchmidtRank ((W j).reindex (sheetSplit q (cut c))
-          (sheetSplit q (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
+        (∀ j c, operatorSchmidtRank ((W j).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (cut c))) ≤ (d ^ 2 + 4) ^ (ℓ ^ 2 + 1)) ∧
         ∀ (S : Submodule ℂ EM) (δ : ℝ), Submodule.IsViable (F := EE) δ S G → δ < 1 →
           Submodule.IsViable (F := EE) (Δ / (1 - δ) ^ 2)
             (⨆ j, S.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j) :

@@ -6,13 +6,15 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Sites.Lattice.Square
 import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.PEPS.Injectivity.Normal.NormalBlocking
-import TNLean.Circuit.SupportedOperators
+import QICLean.ManyBody.Sites.ProductOperatorTrace
 import QICLean.Circuit.Geometry
 import Mathlib.Data.Finset.NoncommProd
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Complex.Log
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.ProductVector
 
 /-!
 # The polynomial-bond PEPS approximation statement

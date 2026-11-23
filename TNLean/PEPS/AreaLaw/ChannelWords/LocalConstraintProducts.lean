@@ -43,7 +43,6 @@ Independently formalized from the manuscript; no upstream Lean text is reused.
 
 open Matrix MeasureTheory QuantumCircuit
 open scoped Kronecker NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
-open TNLean.Lattice
 
 open ManyBody (graphBall graphNeighborhood planeDomainGraph)
 
@@ -74,13 +73,13 @@ theorem exists_domainLocalConstraintProducts {C μ c α : ℝ} (hC : 0 ≤ C) (h
     (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1) :
     ∃ A γ v : ℝ, 0 ≤ A ∧ 0 < γ ∧ 0 < v ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (κ : Type*) [Fintype κ]
-        (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+        (a : κ → ↥Λ) (k : κ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
             i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
-        ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
+        ∀ (S : Finset ↥Λ) (r : ℕ) (t : ℝ≥0),
         let P := fun i : κ => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
         let G := fun i : κ => CFC.sqrt (1 - k i)
         let Gr := fun i : κ =>
@@ -94,10 +93,10 @@ theorem exists_domainLocalConstraintProducts {C μ c α : ℝ} (hC : 0 ≤ C) (h
             A * t * S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(γ * (r : ℝ) ^ α))) ∧
         (∀ w, ‖L w‖ ≤ 1 ∧
           L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-              (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset (Site Λ))) ∧
-        ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
+              (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset ↥Λ)) ∧
+        ∀ (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux]
-          (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+          (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
             ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 →

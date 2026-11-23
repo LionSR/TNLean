@@ -25,7 +25,6 @@ or entropy hypothesis is used in this operator estimate.
 
 open QuantumCircuit
 open scoped Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (isAdmissibleSupport_singleton planeDomainGraph graphNeighborhood PlaneInteraction)
 
@@ -76,8 +75,8 @@ Source: polynomial-PEPS `eq:info-operator-localization` (`02-information.tex`,
 lines 498–508), with the constants of OpenAI area law, Lemma 4.1. -/
 theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : ℝ)
     (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (S : Finset (Site Λ))
-    (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (S : Finset ↥Λ)
+    (A : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) (l : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.hamiltonian t A -
         ManyBody.regionExpectation (graphNeighborhood (planeDomainGraph Λ) S l)
@@ -88,15 +87,15 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   set C := graphBallLocalizationPrefactor R
   set v := graphBallLocalizationVelocity R J
   have hC : 0 < C := graphBallLocalizationPrefactor_pos R
-  have hdisj (y : Site Λ) (hy : y ∉ graphNeighborhood (planeDomainGraph Λ) S l) :
+  have hdisj (y : ↥Λ) (hy : y ∉ graphNeighborhood (planeDomainGraph Λ) S l) :
       Disjoint S (ManyBody.graphBall (planeDomainGraph Λ) y l) :=
     Finset.disjoint_left.mpr fun x hxS hxball =>
       (ManyBody.lt_edist_of_notMem_graphNeighborhood hy hxS).not_ge
         (by simpa only [SimpleGraph.edist_comm] using (ManyBody.mem_graphBall.mp hxball))
   have hK : Complex.I • h.hamiltonian ∈
-      skewAdjoint (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
+      skewAdjoint (Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) :=
     (ManyBody.Interaction.isHermitian_hamiltonian hh).isSelfAdjoint.I_smul_mem_skewAdjoint (K := ℂ)
-  have hreverse (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+  have hreverse (U : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) :
       ‖ManyBody.heisenbergEvolution h.hamiltonian t A * U -
         U * ManyBody.heisenbergEvolution h.hamiltonian t A‖ =
       ‖A * ManyBody.heisenbergEvolution h.hamiltonian (-t) U -
@@ -104,9 +103,9 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
     simpa only [ManyBody.heisenbergEvolution_def, neg_neg] using
       norm_exp_commutator_eq (Complex.I • h.hamiltonian) hK A U t
   have : NeZero q := ⟨by omega⟩
-  have hnear (y : Site Λ) (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-      (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
-      (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
+  have hnear (y : ↥Λ) (U : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)
+      (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ↥Λ))
+      (hUu : U ∈ unitary (Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)) :
       ‖ManyBody.heisenbergEvolution h.hamiltonian (-t) U -
         ManyBody.regionExpectation (ManyBody.graphBall (planeDomainGraph Λ) y l)
           (ManyBody.heisenbergEvolution h.hamiltonian (-t) U)‖ ≤
@@ -117,16 +116,16 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
     rw [CStarRing.norm_of_mem_unitary hUu, one_mul, abs_neg,
       show (l : ℝ) / 2 = 1 / 2 * l by ring] at hestimate
     exact hestimate.trans (min_le_right _ _)
-  have hcommute (y : Site Λ) (hy : y ∉ graphNeighborhood (planeDomainGraph Λ) S l)
-      (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+  have hcommute (y : ↥Λ) (hy : y ∉ graphNeighborhood (planeDomainGraph Λ) S l)
+      (U : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) :
       Commute A (ManyBody.regionExpectation (ManyBody.graphBall (planeDomainGraph Λ) y l)
         (ManyBody.heisenbergEvolution h.hamiltonian (-t) U)) :=
     ManyBody.commute_of_mem_supportedOperators_of_disjoint hA
         (ManyBody.regionExpectation_mem_supportedOperators _ _) (hdisj y hy)
-  have hε (y : Site Λ) (hy : y ∉ graphNeighborhood (planeDomainGraph Λ) S l)
-      (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-      (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
-      (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
+  have hε (y : ↥Λ) (hy : y ∉ graphNeighborhood (planeDomainGraph Λ) S l)
+      (U : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)
+      (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ↥Λ))
+      (hUu : U ∈ unitary (Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)) :
       ‖ManyBody.heisenbergEvolution h.hamiltonian t A * U -
         U * ManyBody.heisenbergEvolution h.hamiltonian t A‖ ≤
         2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖ := by
@@ -151,8 +150,8 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
             hUu).trans
         (Finset.sum_le_univ_sum_of_nonneg (fun _ ↦ by positivity))
   have hτnorm : ‖ManyBody.heisenbergEvolution h.hamiltonian t A‖ = ‖A‖ :=
-    letI : NormedAlgebra ℚ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
-      .restrictScalars ℚ ℝ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+    letI : NormedAlgebra ℚ (Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) :=
+      .restrictScalars ℚ ℝ (Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)
     (CStarRing.norm_mul_mem_unitary
       (NormedSpace.exp (t • (Complex.I • h.hamiltonian)) * A)
       (NormedSpace.exp_mem_unitary_of_mem_skewAdjoint (skewAdjoint.smul_mem (-t) hK))).trans
@@ -181,7 +180,7 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
     ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+        (S : Finset ↥Λ) (A : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ),
         A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S → ∀ (l : ℕ) (t : ℝ),
         ‖ManyBody.heisenbergEvolution h.hamiltonian t A -
             ManyBody.regionExpectation (graphNeighborhood (planeDomainGraph Λ) S l)

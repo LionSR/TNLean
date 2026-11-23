@@ -31,8 +31,6 @@ open Matrix TensorPower PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology symmDiff
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation_zero)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -52,7 +50,7 @@ Source: `08-scanner.tex`, lines 83–154 and 400–474, revision adc7f124. -/
 private theorem actualTerminal_sharpUpper_geometry
     {I : Type} [Fintype I] [LinearOrder I]
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L) :
     let X := S.A.filter fun x ↦ x.val ∈ T
@@ -126,7 +124,7 @@ in finite-product coordinates. Source: `07-comparators.tex`, lines 70–85,
 revision adc7f124. -/
 private theorem sharpUpper_marginalMoment_finiteProduct
     {Λ : Finset (ℤ × ℤ)} {q : ℕ}
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (Q : Finset (Site Λ)) (Kmom u : ℝ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (Q : Finset ↥Λ) (Kmom u : ℝ)
     (h : Real.log (Entropy.surprisalMoment
       (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
         u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2) :
@@ -143,8 +141,8 @@ Source: `07-comparators.tex`, lines 70–85; `08-scanner.tex`, lines 400–414,
 revision adc7f124. -/
 private theorem actualTerminal_sharpUpper_moments
     {q : ℕ} {I : Type} [Fintype I] [LinearOrder I]
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I) (Kmom r : ℝ)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q))
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I) (Kmom r : ℝ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q))
     (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
       (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
         ∀ u : ℝ, |u| ≤ r →
@@ -161,7 +159,7 @@ private theorem actualTerminal_sharpUpper_moments
     let U := fun j g ↦ positiveNear S.depth (σ j g)
     let Y := fun j g ↦ middle (σ j g)
     (∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g)) →
-    ∀ j g (Q : Finset (Site Λ)),
+    ∀ j g (Q : Finset ↥Λ),
       Q = U j g ∨ Q = U j g ∪ Y j g ∨ Q = Y j g →
       ∀ u : ℝ, |u| ≤ r →
         Real.log (Entropy.surprisalMoment
@@ -170,7 +168,7 @@ private theorem actualTerminal_sharpUpper_moments
             (ManyBody.regionState_posSemidef Q Ωt).isHermitian + Kmom * u ^ 2 := by
   classical
   intro σ U Y hUYeq
-  have hmomStatus : ∀ j g (Q : Finset (Site Λ)),
+  have hmomStatus : ∀ j g (Q : Finset ↥Λ),
       Q ∈ statusMarginalRegions S.depth (σ j g) →
       ∀ u : ℝ, |u| ≤ r →
         Real.log (Entropy.surprisalMoment
@@ -240,23 +238,23 @@ Source: `06-transport.tex`, lines 251–286 and 388–392;
 revision adc7f124. -/
 private theorem actualRoot_sharpUpper_normSq
     {q d : ℕ} [NeZero q] [NeZero d] {I : Type} [Fintype I] [LinearOrder I]
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
-    (X : Finset (Site Λ)) (a : ℝ) (ha : 0 < a)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q))
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
+    (X : Finset ↥Λ) (a : ℝ) (ha : 0 < a)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q))
     (k : ℕ) (ell : IrrepLabel (Equiv.Perm (Fin k)))
     (N : ℕ)
-    (ZS : Matrix (Config k (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q
+    (ZS : Matrix (Config k (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q
       (fun _ ↦ d) v))) (Fin N) ℂ)
     (hZS : ZSᴴ * ZS = 1)
-    (hZSZS : ZS * ZSᴴ = symProj (copyPerm ((v : Site Λ ⊕ Bool) →
-      Fin (augmentedDimensions (V := Site Λ) q (fun _ ↦ d) v)) k)) :
-    let β := fun _ : Site Λ ↦ Fin q
-    let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    (hZSZS : ZS * ZSᴴ = symProj (copyPerm ((v : ↥Λ ⊕ Bool) →
+      Fin (augmentedDimensions (V := ↥Λ) q (fun _ ↦ d) v)) k)) :
+    let β := fun _ : ↥Λ ↦ Fin q
+    let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
     let pre := replicaPrevector Ωt d k ell ∘ augmentedSumReplicaCopiesEquiv q d k
     let σ := terminalPartition S (S.n * S.m)
     let U := fun j g ↦ positiveNear S.depth (σ j g)
     let Y := fun j g ↦ middle (σ j g)
-    let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+    let e := augmentedReplicaConfigurationEquiv (V := ↥Λ) q d k
     let ZO := ZS.submatrix e (id : Fin N → Fin N)
     (∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g)) →
     (∀ j g, Disjoint X (U j g ∪ Y j g)) →
@@ -267,7 +265,7 @@ private theorem actualRoot_sharpUpper_normSq
       receiving (σ j g) true = (X ∪ positiveNearMiddle S.depth (σ j g))ᶜ) →
     ∀ {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ h, DecidableEq (Choice h)]
-      (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
+      (D : ReplicaTransport.TransportData (↥Λ ⊕ Bool) S.K Hist Choice)
       (_ : D.IsAdmissible) (_ : D.CrossBandCommute n (a / 2) k)
       (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
       (_ : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
@@ -280,7 +278,7 @@ private theorem actualRoot_sharpUpper_normSq
         ((X ∪ U j g).image fun x ↦ some (some x))
       let F := fun j g ↦ insert none
         (((X ∪ (U j g ∪ Y j g))ᶜ).image fun x ↦ some (some x))
-      let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun x ↦ some (some x)
+      let ext := fun B : Finset ↥Λ ↦ (B \ X).image fun x ↦ some (some x)
       let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
       let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
       Transport.filteredNormSq (D.rootPath n (a / 2) k p) pre =
@@ -288,7 +286,7 @@ private theorem actualRoot_sharpUpper_normSq
   classical
   intro β n pre σ U Y e ZO hUYeq hXY hregions
     Hist instHist Choice instChoice D hD hcomm f hparts p tree v W Q F ext A M
-  have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre :=
+  have hsym : symProj (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre :=
     symProj_mulVec_augmentedReplicaPrevector q d k Ωt ell
   have hpre : pre ∘ e = replicaPrevector Ωt d k ell ∘
       globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
@@ -334,23 +332,23 @@ Source: `06-transport.tex`, lines 251–286 and 388–392;
 revision adc7f124. -/
 private theorem actualRoot_sharpUpper_of_compressed
     {q d : ℕ} [NeZero q] [NeZero d] {I : Type} [Fintype I] [LinearOrder I]
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
-    (X : Finset (Site Λ)) (a Kmom z c : ℝ) (ha : 0 < a)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q))
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
+    (X : Finset ↥Λ) (a Kmom z c : ℝ) (ha : 0 < a)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q))
     (k : ℕ) (ell : IrrepLabel (Equiv.Perm (Fin k)))
     (N : ℕ)
-    (ZS : Matrix (Config k (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q
+    (ZS : Matrix (Config k (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q
       (fun _ ↦ d) v))) (Fin N) ℂ)
     (hZS : ZSᴴ * ZS = 1)
-    (hZSZS : ZS * ZSᴴ = symProj (copyPerm ((v : Site Λ ⊕ Bool) →
-      Fin (augmentedDimensions (V := Site Λ) q (fun _ ↦ d) v)) k)) :
-    let β := fun _ : Site Λ ↦ Fin q
-    let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    (hZSZS : ZS * ZSᴴ = symProj (copyPerm ((v : ↥Λ ⊕ Bool) →
+      Fin (augmentedDimensions (V := ↥Λ) q (fun _ ↦ d) v)) k)) :
+    let β := fun _ : ↥Λ ↦ Fin q
+    let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
     let pre := replicaPrevector Ωt d k ell ∘ augmentedSumReplicaCopiesEquiv q d k
     let σ := terminalPartition S (S.n * S.m)
     let U := fun j g ↦ positiveNear S.depth (σ j g)
     let Y := fun j g ↦ middle (σ j g)
-    let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+    let e := augmentedReplicaConfigurationEquiv (V := ↥Λ) q d k
     let ZO := ZS.submatrix e (id : Fin N → Fin N)
     (∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g)) →
     (∀ j g, Disjoint X (U j g ∪ Y j g)) →
@@ -368,11 +366,11 @@ private theorem actualRoot_sharpUpper_of_compressed
         ((X ∪ U j g).image fun x ↦ some (some x))
       let F := fun j g ↦ insert none
         (((X ∪ (U j g ∪ Y j g))ᶜ).image fun x ↦ some (some x))
-      let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun x ↦ some (some x)
+      let ext := fun B : Finset ↥Λ ↦ (B \ X).image fun x ↦ some (some x)
       let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
       let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
       let Nsq := ‖toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ v)‖ ^ 2
-      let entropy := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy
+      let entropy := fun Q : Finset ↥Λ ↦ vonNeumannEntropy
         (ManyBody.regionState Ωt Q) (ManyBody.regionState_posSemidef Q Ωt).isHermitian
       0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
         2 * Real.log (d : ℝ) - Real.log z +
@@ -382,7 +380,7 @@ private theorem actualRoot_sharpUpper_of_compressed
             Real.bellOverlapRemainder d c S.K k) →
     ∀ {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ h, DecidableEq (Choice h)]
-      (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
+      (D : ReplicaTransport.TransportData (↥Λ ⊕ Bool) S.K Hist Choice)
       (_hD : D.IsAdmissible) (_hcomm : D.CrossBandCommute n (a / 2) k)
       (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
       (_hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
@@ -412,7 +410,7 @@ private theorem actualRoot_sharpUpper_of_compressed
           Real.bellOverlapRemainder d c S.K k) hnorm.symm) ?_
   have hestimate := hupper ((D.tree (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map f)
   refine ⟨hestimate.1, hestimate.2.trans_eq ?_⟩
-  have hentropy (Q : Finset (Site Λ)) :
+  have hentropy (Q : Finset ↥Λ) :
       vonNeumannEntropy (ManyBody.regionState Ωt Q)
         (ManyBody.regionState_posSemidef Q Ωt).isHermitian =
           ManyBody.regionEntropy Ωt Q :=
@@ -432,13 +430,13 @@ Source: `06-transport.tex`, lines 251–286 and 388–392;
 revision adc7f124. -/
 private theorem actualScan_sharpUpper_of_compressed
     {q d : ℕ} [NeZero q] [NeZero d] {I : Type} [Fintype I] [LinearOrder I]
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I)
     (hm : 0 < S.m) (hM : 0 < S.M)
-    (X : Finset (Site Λ)) (a Kmom z c : ℝ) (ha : 0 < a)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q))
+    (X : Finset ↥Λ) (a Kmom z c : ℝ) (ha : 0 < a)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q))
     (k : ℕ) (ell : IrrepLabel (Equiv.Perm (Fin k))) :
-    let β := fun _ : Site Λ ↦ Fin q
-    let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    let β := fun _ : ↥Λ ↦ Fin q
+    let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
     let pre := replicaPrevector Ωt d k ell ∘ augmentedSumReplicaCopiesEquiv q d k
     let σ := terminalPartition S (S.n * S.m)
     let U := fun j g ↦ positiveNear S.depth (σ j g)
@@ -453,7 +451,7 @@ private theorem actualScan_sharpUpper_of_compressed
     (∀ (N : ℕ) (ZO : Matrix (Config k
       (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) (Fin N) ℂ),
       ZOᴴ * ZO = 1 →
-      ZO * ZOᴴ = symProj (copyPerm ((o : Option (Option (Site Λ))) →
+      ZO * ZOᴴ = symProj (copyPerm ((o : Option (Option ↥Λ)) →
         addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k) →
       ∀ tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m)),
       let v : EuclideanSpace ℂ (Config k
@@ -464,11 +462,11 @@ private theorem actualScan_sharpUpper_of_compressed
         ((X ∪ U j g).image fun x ↦ some (some x))
       let F := fun j g ↦ insert none
         (((X ∪ (U j g ∪ Y j g))ᶜ).image fun x ↦ some (some x))
-      let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun x ↦ some (some x)
+      let ext := fun B : Finset ↥Λ ↦ (B \ X).image fun x ↦ some (some x)
       let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
       let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
       let Nsq := ‖toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ v)‖ ^ 2
-      let entropy := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy
+      let entropy := fun Q : Finset ↥Λ ↦ vonNeumannEntropy
         (ManyBody.regionState Ωt Q) (ManyBody.regionState_posSemidef Q Ωt).isHermitian
       0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
         2 * Real.log (d : ℝ) - Real.log z +
@@ -502,8 +500,8 @@ private theorem actualScan_sharpUpper_of_compressed
     step Nfill Ncharge
   obtain ⟨N, ZS, hZS, hZSZS⟩ :=
     (isStarProjection_symProj
-      (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry
-  let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+      (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry
+  let e := augmentedReplicaConfigurationEquiv (V := ↥Λ) q d k
   let ZO := ZS.submatrix e (id : Fin N → Fin N)
   obtain ⟨hZO, hZOZO⟩ :=
     sharpUpper_augmented_symmetricCoordinates q d k N ZS hZS hZSZS
@@ -511,7 +509,7 @@ private theorem actualScan_sharpUpper_of_compressed
     hupper N ZO hZO hZOZO tree
   have hbound {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ h, DecidableEq (Choice h)]
-      (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
+      (D : ReplicaTransport.TransportData (↥Λ ⊕ Bool) S.K Hist Choice)
       (hD : D.IsAdmissible) (hcomm : D.CrossBandCommute n (a / 2) k)
       (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
       (hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) :
@@ -545,13 +543,13 @@ Source: `07-comparators.tex`, `comparator:sharp-upper`, lines 383–418;
 theorem eventually_actualScan_suppliedPrevector_sharp_upper
     {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hm : 0 < S.m) (hM : 0 < S.M)
     (a Kmom r : ℝ) (ha : 0 < a) (har : 6 * a ≤ r) (ha1 : 6 * a ≤ 1)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
+    (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T)))
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
@@ -567,14 +565,14 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
               (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
               u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2)) :
     let X := S.A.filter fun x ↦ x.val ∈ T
-    let β := fun _ : Site Λ ↦ Fin q
+    let β := fun _ : ↥Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (ManyBody.cutEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
     let d := E.card
-    let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
     let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦

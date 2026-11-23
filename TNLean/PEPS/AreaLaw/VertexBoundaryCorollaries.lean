@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import TNLean.PEPS.AreaLaw.Regions.TheoremStatements
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -28,8 +28,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 open ManyBody (planeDomainGraph edgeBoundary innerBoundary endpointBoundary)
@@ -40,7 +38,7 @@ namespace TNLean.PEPS.AreaLaw
 Source: area-law Corollary 1.2, first displayed entropy bound.
 The edge-boundary inequality is an explicit hypothesis. -/
 theorem regionEntropy_le_four_mul_innerBoundary_card
-    {Λ : Finset (ℤ × ℤ)} {q : ℕ} {Ω : StateSpace Λ q} {A : Finset (Site Λ)}
+    {Λ : Finset (ℤ × ℤ)} {q : ℕ} {Ω : EuclideanSpace ℂ (↥Λ → Fin q)} {A : Finset ↥Λ}
     {C : ℝ} (hC : 0 ≤ C)
     (harea : ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ManyBody.regionEntropy Ω A ≤ 4 * C * (innerBoundary (planeDomainGraph Λ) A).card := by
@@ -58,7 +56,7 @@ theorem regionEntropy_le_four_mul_innerBoundary_card
 Source: area-law Corollary 1.2, second displayed entropy bound.
 The edge-boundary inequality is an explicit hypothesis. -/
 theorem regionEntropy_le_two_mul_endpointBoundary_card
-    {Λ : Finset (ℤ × ℤ)} {q : ℕ} {Ω : StateSpace Λ q} {A : Finset (Site Λ)}
+    {Λ : Finset (ℤ × ℤ)} {q : ℕ} {Ω : EuclideanSpace ℂ (↥Λ → Fin q)} {A : Finset ↥Λ}
     {C : ℝ} (hC : 0 ≤ C)
     (harea : ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ManyBody.regionEntropy Ω A ≤ 2 * C * (endpointBoundary (planeDomainGraph Λ) A).card := by
@@ -82,10 +80,10 @@ theorem UniformAreaLaw.vertex_boundary_bounds (h : UniformAreaLaw) :
       ∃ C : ℝ, 0 ≤ C ∧
         ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
             (∀ X, ‖H.term X‖ ≤ J) →
-          ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+          ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
             ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
             groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-              ∀ A : Finset (Site Λ),
+              ∀ A : Finset ↥Λ,
                 ManyBody.regionEntropy Ω A ≤
                     4 * C * (innerBoundary (planeDomainGraph Λ) A).card ∧
                 ManyBody.regionEntropy Ω A ≤

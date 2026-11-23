@@ -168,9 +168,9 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
         (Exponents.collarRadiusThreshold (amplificationConstant q R J Δ C₀ C₃ c₃ M) 1) ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+          ∀ (A : Finset ↥Λ) (T : Finset (ℤ × ℤ)),
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               C₀ * (n : ℝ) ^ 2 →
@@ -188,7 +188,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
               C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
             ∃ r : ℕ, (r : ℝ) ≤ amplificationConstant q R J Δ C₀ C₃ c₃ M *
                 (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
-              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset ↥Λ,
                 Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
@@ -215,13 +215,13 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
       exact mul_nonneg hC₂0 (by positivity)
     refine ⟨0, h0, ?_, hcol 0 h0⟩
     intro X' _ Jset _
-    have hempty : IsEmpty (Site Λ) := by
+    have hempty : IsEmpty ↥Λ := by
       by_contra hne
       rw [not_isEmpty_iff] at hne
       obtain ⟨v⟩ := hne
       rcases hdeg with hq0 | hJneg
       · subst hq0
-        have : IsEmpty (Configuration Λ 0) := ⟨fun c => (c v).elim0⟩
+        have : IsEmpty (↥Λ → Fin 0) := ⟨fun c => (c v).elim0⟩
         have hz : Ω = 0 := by
           ext c
           exact (IsEmpty.false c).elim
@@ -370,7 +370,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hRsum : Rp = ∑ x ∈ E, PR x ⊗ₖ (Entropy.basisColumn x blank ⊗ₖ
       (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)) := hRsum
   -- Anchors and the exact positive constraints.
-  let a : AdmissibleSupport Λ R → Site Λ := fun Z => Z.2.1.choose
+  let a : AdmissibleSupport Λ R → ↥Λ := fun Z => Z.2.1.choose
   have ha : ∀ Z, a Z ∈ Z.1 := fun Z => Z.2.1.choose_spec
   let k := fun i : AdmissibleSupport Λ R =>
     positiveConstraint cs (centeredFilter pw (Δ / 2) h.hamiltonian Ω (h.term i))
@@ -383,10 +383,10 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have htt : (tt : ℝ) = t := rfl
   let μ := PoissonWord.measure (AdmissibleSupport Λ R) tt
   -- The vector `ζ = R₀ φ`, its excited component and the blank pair `ξ`.
-  let ζ : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ :=
+  let ζ : (↥Λ → Fin q) × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ :=
     Rp *ᵥ φ
   let Pg := vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))
-  let ξe : EuclideanSpace ℂ (Configuration Λ q × (RegionalConfiguration q X ×
+  let ξe : EuclideanSpace ℂ ((↥Λ → Fin q) × (RegionalConfiguration q X ×
       RegionalConfiguration q X)) :=
     toEuclideanLin ((1 - Pg) ⊗ₖ (1 : Matrix (RegionalConfiguration q X ×
       RegionalConfiguration q X) (RegionalConfiguration q X × RegionalConfiguration q X) ℂ))
@@ -417,7 +417,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   let Xrv : PoissonWord.Word (AdmissibleSupport Λ R) → ℝ := fun u =>
     ‖toEuclideanLin (contractionWord k u.1 u.2 ⊗ₖ (1 : Matrix (RegionalConfiguration q X ×
       RegionalConfiguration q X) (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)) ξe‖
-  let Dl : List (AdmissibleSupport Λ R) → Configuration Λ q × (RegionalConfiguration q X ×
+  let Dl : List (AdmissibleSupport Λ R) → (↥Λ → Fin q) × (RegionalConfiguration q X ×
       RegionalConfiguration q X) → ℂ := fun l =>
     ((l.reverse.map fun i => CFC.sqrt (1 - k i)).prod ⊗ₖ (1 : Matrix (RegionalConfiguration q X ×
       RegionalConfiguration q X) (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)) *ᵥ
@@ -425,14 +425,14 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   let Yrv : PoissonWord.Word (AdmissibleSupport Λ R) → ℝ := fun u =>
     ‖WithLp.toLp 2 (Dl (List.ofFn u.2) - Dl ((List.ofFn u.2).filter fun i => decide (Pr i)))‖
   let Dret : PoissonWord.Word (AdmissibleSupport Λ R) →
-      Matrix (Configuration Λ q) (Configuration Λ q) ℂ := fun u =>
+      Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ := fun u =>
     contractionWord (fun i : {i // Pr i} => k i) (PoissonWord.partitionWords Pr u).1.1
       (PoissonWord.partitionWords Pr u).1.2
   let kr := fun i : {i // Pr i} => ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i)
       r)
       (k i)
   let Lt : PoissonWord.Word (AdmissibleSupport Λ R) →
-      Matrix (Configuration Λ q) (Configuration Λ q) ℂ := fun u =>
+      Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ := fun u =>
     contractionWord kr (PoissonWord.partitionWords Pr u).1.1
       (PoissonWord.partitionWords Pr u).1.2
   let Zrv : PoissonWord.Word (AdmissibleSupport Λ R) → ℝ := fun u => M₀ * ‖Dret u - Lt u‖
@@ -456,7 +456,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hZle : (∫ u, ‖Dret u - Lt u‖ ∂μ) ≤ Ct * t * S₀.card * (1 + (r : ℝ)) ^ 2 *
       Real.exp (-(ct * (r : ℝ) ^ α)) := hZle
   have hLt : ∀ u, ‖Lt u‖ ≤ 1 ∧ Lt u ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-      (graphNeighborhood (planeDomainGraph Λ) S₀ (2 * r) : Finset (Site Λ)) := hLt
+      (graphNeighborhood (planeDomainGraph Λ) S₀ (2 * r) : Finset ↥Λ) := hLt
   -- Markov's inequality and a union bound: a good realization.
   have hrα : 0 ≤ (r : ℝ) ^ α := Real.rpow_nonneg (Nat.cast_nonneg r) α
   have hS0 : (0 : ℝ) ≤ S₀.card := Nat.cast_nonneg _
@@ -505,7 +505,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hS₀N : S₀ ⊆ N := ManyBody.subset_graphNeighborhood
   let I₂ := (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
     (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)
-  have hsubk (A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+  have hsubk (A B : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) :
       (A - B) ⊗ₖ I₂ = A ⊗ₖ I₂ - B ⊗ₖ I₂ := by
     ext i j
     simp only [kroneckerMap_apply, Matrix.sub_apply, sub_mul]
@@ -596,9 +596,9 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
         (Exponents.collarRadiusThreshold (amplificationConstantExplicit q R J Δ C₀ M) 1) ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+          ∀ (A : Finset ↥Λ) (T : Finset (ℤ × ℤ)),
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               C₀ * (n : ℝ) ^ 2 →
@@ -616,7 +616,7 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
               C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
             ∃ r : ℕ, (r : ℝ) ≤ amplificationConstantExplicit q R J Δ C₀ M *
                 (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
-              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset ↥Λ,
                 Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →

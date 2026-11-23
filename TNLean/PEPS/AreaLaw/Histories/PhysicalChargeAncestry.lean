@@ -18,8 +18,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 286–311, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -34,13 +32,13 @@ Containment of all predecessor sites, including far-side predecessors, follows
 from the domain graph and the source clearance condition. -/
 theorem bandState_has_chargeAncestry_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (k : ℕ) (side : Bool) (x : Site Λ) (hxA : x ∈ S.A)
+    (k : ℕ) (side : Bool) (x : ↥Λ) (hxA : x ∈ S.A)
     (hx : S.bandState g r k (fun j ↦ choices j) x = some side) :
     ∃ events, S.ChargeAncestry g r choices side k x events := by
   apply S.bandState_has_chargeAncestry g r choices _ k side x hxA hx
@@ -77,13 +75,13 @@ ancestry inside a short pair-time window. Ambient depth variation and all
 ancestry existence hypotheses are discharged from the physical domain graph. -/
 theorem bad_bandState_has_long_chargeAncestry_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L) (hn : 0 < S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (k : ℕ) (side : Bool) (x : Site Λ) (hxA : x ∈ S.A)
+    (k : ℕ) (side : Bool) (x : ↥Λ) (hxA : x ∈ S.A)
     (hx : S.bandState g r k (fun j ↦ choices j) x = some side)
     (hbad : 2 * S.front g r k side + S.D < 2 * orientedDepth S.depth side x) :
     ∃ events, S.ChargeAncestry g r choices side k x events ∧ events ≠ [] ∧

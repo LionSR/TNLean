@@ -38,7 +38,7 @@ open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
-open Hastings Matrix TNLean.Lattice Real
+open Hastings Matrix Real
 
 open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder

@@ -22,8 +22,6 @@ proof text is reused. The ordered two-family construction and separation
 from the earlier pieces are further geometric inputs.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (planeDomainGraph graphNeighborhood ambientDilation mem_ambientDilation_iff
   exists_edgeBoundary_of_walk)
 
@@ -40,7 +38,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 This is the cut-exclusion and ambient-distance implication; the ordered
 partition and the earlier-family clearance estimates are separate results. -/
 theorem graphNeighborhood_subset_of_cut_clearance
-    (Λ T : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (L R : ℕ)
+    (Λ T : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (L R : ℕ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       ((L + R : ℕ) : ℤ) < Scan.ambientSupDistance t z) :
     graphNeighborhood (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T L) R ⊆
@@ -86,7 +84,7 @@ it does not construct the ordered partition or prove its clearance estimates.
 The proof is independently written from the manuscript; no upstream Lean
 proof text is reused. -/
 theorem exterior_union_subset_graphNeighborhood_compl_of_clearance
-    (Λ T : Finset (ℤ × ℤ)) (A J : Finset (Site Λ)) (L R : ℕ)
+    (Λ T : Finset (ℤ × ℤ)) (A J : Finset ↥Λ) (L R : ℕ)
     (hcut : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       ((L + R : ℕ) : ℤ) < Scan.ambientSupDistance t z)
     (hremote : ∀ t ∈ T, ∀ x ∈ J,

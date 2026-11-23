@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangles
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Templates.TemplateEntropy
 
 /-!
@@ -24,7 +24,7 @@ This is the partial-layer auxiliary estimate.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
-open TNLean.Lattice
+open ManyBody (IntRect card_dilate_sdiff_le)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -33,7 +33,7 @@ namespace TNLean.PEPS.AreaLaw
 The estimate uses only normalization, the local dimension and the layer count. -/
 theorem IntRect.partial_row_entropy_le
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     (Q : IntRect) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ Q.size)
     (Y : Finset (ℤ × ℤ))
     (hY : Y ⊆ (Q.dilate j).toFinset \ (Q.dilate (j - 1)).toFinset) :

@@ -50,8 +50,6 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TensorPower.ReplicaTransport
@@ -151,7 +149,7 @@ variable {I : Type} [Fintype I] [LinearOrder I]
 open Classical in
 /-- The classical probability, at stage `s`, that the old history is not good
 (Lemma 9.1(4), `08-scanner.tex`, lines 212–215). -/
-def badOldWeight {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I) (s : ℕ) : ℝ :=
+def badOldWeight {Λ : Finset (ℤ × ℤ)} (S : CollarScan ↥Λ I) (s : ℕ) : ℝ :=
   ∑ h : History S.K S.m S.M s, if S.IsGoodOldHistory h then 0 else historyWeight h
 
 /-- **Lemma 9.1 for the actual scan at one scale.** At scale `N`, with the scanner scales
@@ -165,10 +163,10 @@ for all large `N` (`exists_historyFacts_actualScanRound`).
 
 Source: `08-scanner.tex`, Lemma 9.1, lines 195–221, and lines 431–444. -/
 theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
-    {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+    {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) (S : CollarScan ↥Λ I)
     (hm : 0 < S.m) (hM : 0 < S.M) {q : ℕ} (hq : 1 ≤ q)
-    (dims : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (dims v)] (hphysical : ∀ x, dims (Sum.inl x) = q)
-    (E : EnergyTerms (Site Λ ⊕ Bool) dims I)
+    (dims : ↥Λ ⊕ Bool → ℕ) [∀ v, NeZero (dims v)] (hphysical : ∀ x, dims (Sum.inl x) = q)
+    (E : EnergyTerms (↥Λ ⊕ Bool) dims I)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet (X.L N)) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -431,9 +429,9 @@ theorem exists_historyFacts_actualScanRound (X : ScannerExponents) (R : ℕ) {q 
     (hq : 1 ≤ q) {Ctr CT : ℝ} (hCtr : 0 < Ctr) (hCT : 0 ≤ CT) :
     ∃ C c C₁ : ℝ, 0 ≤ C ∧ 0 < c ∧ 0 < C₁ ∧ ∀ᶠ N : ℕ in atTop,
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hm : 0 < S.m) (hM : 0 < S.M)
-        (dims : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (dims v)]
-        (E : EnergyTerms (Site Λ ⊕ Bool) dims (AdmissibleSupport Λ R)) (a : ℝ)
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hm : 0 < S.m) (hM : 0 < S.M)
+        (dims : ↥Λ ⊕ Bool → ℕ) [∀ v, NeZero (dims v)]
+        (E : EnergyTerms (↥Λ ⊕ Bool) dims (AdmissibleSupport Λ R)) (a : ℝ)
         (pre : (k : ℕ) → Config k (fun v => Fin (dims v)) → ℂ),
         (∀ x, dims (Sum.inl x) = q) →
         (∀ i, E.support i =
@@ -465,7 +463,7 @@ theorem exists_historyFacts_actualScanRound (X : ScannerExponents) (R : ℕ) {q 
     hgraph hdepth hanchor hrows hclear
   dsimp only [roundedLogRadius] at hscales htwo
   obtain ⟨hN2, -, hDpos, hmargin, -⟩ := hscales
-  have hmult (x : Site Λ) : (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ :=
+  have hmult (x : ↥Λ) : (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ :=
     card_anchor_fiber_le S.anchor hanchor x
   have hr2 : 2 * S.r₀ ≤ S.D := by
     have hceil : (N : ℝ) ^ X.kappa ≤ (X.D N : ℝ) := Nat.le_ceil _

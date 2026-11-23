@@ -35,7 +35,6 @@ set_option linter.mathlibStandardSet true
 
 open QuantumCircuit SpectralFilter Matrix
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport planeDomainGraph PlaneInteraction)
 
@@ -59,8 +58,8 @@ theorem exists_latticeChannelEventKernel_bounds {p : ℕ} (hp : 1 ≤ p)
     ∃ C c v : ℝ, 0 ≤ C ∧ 0 < c ∧ 0 ≤ v ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (P : AdmissibleSupport Λ R → Prop) [DecidablePred P]
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (N : ℕ),
@@ -72,8 +71,8 @@ theorem exists_latticeChannelEventKernel_bounds {p : ℕ} (hp : 1 ≤ p)
         let D := 2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2))
         (∀ y, (∑ z, graphChannelEventKernel (planeDomainGraph Λ) aP D (c / 2) α N y z *
           Real.exp (c / (4 * (2 : ℝ) ^ α) * ((planeDomainGraph Λ).dist y z : ℝ) ^ α)) ≤ v) ∧
-        (∀ (y : Site Λ)
-            (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
+        (∀ (y : ↥Λ)
+            (B : Matrix ((↥Λ → Fin q) × Aux) ((↥Λ → Fin q) × Aux) ℂ),
           (∑ i, (siteOscillation q y (spectatorRootChannel (k i) B) -
             siteOscillation q y B)) ≤
           ∑ z, graphChannelEventKernel (planeDomainGraph Λ) aP D (c / 2) α N y z *
@@ -86,7 +85,7 @@ theorem exists_latticeChannelEventKernel_bounds {p : ℕ} (hp : 1 ≤ p)
   refine ⟨C, c, v, hC, hc, hv, ?_⟩
   intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan P _ Aux _ _ N hN α aP k D
   obtain ⟨-, hk, -, -, -, htail, hcomp⟩ := hpos Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
-  exact hbounds (Site Λ) {i // P i} Aux q (planeDomainGraph Λ) aP k
+  exact hbounds ↥Λ {i // P i} Aux q (planeDomainGraph Λ) aP k
     (fun i => (hk i).1) (fun i => (hk i).2.1) (fun i => hcomp i)
     card_graphBall_domainGraph_le
     (fun x => by

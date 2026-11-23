@@ -27,7 +27,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
 open scoped ComplexOrder
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -35,14 +34,14 @@ namespace TNLean.PEPS.AreaLaw
 Source: area-law `sec:prelim`, lines 10–25, normalization of density operators
 and the one-dimensional empty tensor product. -/
 theorem trace_regionState_eq_norm_sq (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (A : Finset ↥Λ) :
     (ManyBody.regionState Ω A).trace = (‖Ω‖ : ℂ) ^ 2 := by
   rw [ManyBody.trace_regionState A Ω, Complex.ofReal_pow]
 
 /-- Regional entropy of a unit vector is nonnegative.
 Source: area-law `sec:prelim`, lines 10–25, entropy of normalized density operators. -/
 theorem regionEntropy_nonneg (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ) :
     0 ≤ ManyBody.regionEntropy Ω A :=
   vonNeumannEntropy_nonneg_of_posSemidef_trace_one
     (ManyBody.regionState_posSemidef A Ω) (ManyBody.trace_regionState_eq_one hΩ (D := A))

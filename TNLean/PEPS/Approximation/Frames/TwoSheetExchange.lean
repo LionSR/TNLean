@@ -72,10 +72,6 @@ the manuscript; no upstream Lean proof text was reused.
 open Matrix QuantumCircuit
 open EuclideanSpace (vecKron)
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
-open TNLean.Lattice (apply_eq_submatrix_apply commute_sheetSwapOp_kronecker
-  exists_kronecker_one_of_mem_supportedOperators exists_one_kronecker_of_mem_supportedOperators
-  mul_submatrix_sheetSplit norm_sheetSwapOp_le_one sheetSplit sheetSplit_sheetSwap_fst
-  sheetSplit_sheetSwap_snd sheetSwap sheetSwapOp sheetSwapOp_mul_sheetSwapOp sheetSwap_symm)
 
 noncomputable section
 
@@ -245,7 +241,8 @@ theorem norm_rename_le_one : ‖X.rename‖ ≤ 1 :=
 theorem exists_out_form [NeZero q] {o : List (Hole pos q Party)}
     (ho : ∀ h ∈ o, h ∈ X.out₁ ++ X.out₂) (a : TagSpace o) :
     ∃ O' : Matrix ({v // v ∉ X.region} → Fin q) ({v // v ∉ X.region} → Fin q) ℂ,
-      (rawProd o a).submatrix (sheetSplit q X.region).symm (sheetSplit q X.region).symm =
+      (rawProd o a).submatrix (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm =
         1 ⊗ₖ O' :=
   exists_one_kronecker_of_mem_supportedOperators
     (disjoint_footprint_of_forall fun p hp => by
@@ -257,7 +254,8 @@ theorem exists_out_form [NeZero q] {o : List (Hole pos q Party)}
 theorem exists_in_form [NeZero q] {i : List (Hole pos q Party)}
     (hi : ∀ h ∈ i, h ∈ X.in₁ ++ X.in₂) (a : TagSpace i) :
     ∃ I' : Matrix (X.region → Fin q) (X.region → Fin q) ℂ,
-      (rawProd i a).submatrix (sheetSplit q X.region).symm (sheetSplit q X.region).symm =
+      (rawProd i a).submatrix (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region).symm =
         I' ⊗ₖ 1 :=
   exists_kronecker_one_of_mem_supportedOperators
     (ManyBody.supportedOperators_mono (fun x hx => by
@@ -290,13 +288,16 @@ theorem rename_mul_encoder [NeZero q] :
     renameEquiv, Equiv.coe_fn_symm_mk]
   rw [rawProd_append, rawProd_append, rawProd_append, rawProd_append]
   simp only [Equiv.apply_symm_apply]
-  rw [apply_eq_submatrix_apply (_ * _) (sheetSplit q X.region),
+  rw [apply_eq_submatrix_apply (_ * _) (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region),
     mul_submatrix_sheetSplit hO₁ hI₁,
-    apply_eq_submatrix_apply (rawProd X.out₂ _ * rawProd X.in₂ _) (sheetSplit q X.region),
+    apply_eq_submatrix_apply (rawProd X.out₂ _ * rawProd X.in₂ _)
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region),
     mul_submatrix_sheetSplit hO₂ hI₂,
-    apply_eq_submatrix_apply (rawProd X.out₁ _ * rawProd X.in₂ _) (sheetSplit q X.region),
+    apply_eq_submatrix_apply (rawProd X.out₁ _ * rawProd X.in₂ _)
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region),
     mul_submatrix_sheetSplit hO₁ hI₂,
-    apply_eq_submatrix_apply (rawProd X.out₂ _ * rawProd X.in₁ _) (sheetSplit q X.region),
+    apply_eq_submatrix_apply (rawProd X.out₂ _ * rawProd X.in₁ _)
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) X.region),
     mul_submatrix_sheetSplit hO₂ hI₁]
   simp only [kroneckerMap_apply, sheetSplit_sheetSwap_fst, sheetSplit_sheetSwap_snd]
   ring

@@ -56,7 +56,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open scoped Matrix.Norms.L2Operator
 
 open scoped BigOperators
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
@@ -75,9 +74,9 @@ def SublinearCollarBound (q R : ℕ) (J Δ D₀ Ctpl : ℝ) : Prop :=
   ∃ C : ℝ, ∃ N : ℕ, ∀ n s₀ : ℕ, N ≤ n →
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-      ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+        ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
           T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
           ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
           ManyBody.regionMutualInformation Ω
@@ -115,9 +114,9 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
     ∃ C : ℝ, ∃ N : ℕ, ∀ n : ℕ, 2 ≤ n → N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+          ∀ (A : Finset ↥Λ) (T : Finset (ℤ × ℤ)),
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               C₀ * (n : ℝ) ^ 2 →
@@ -134,7 +133,7 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
               C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
             ∃ r : ℕ, (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
-              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset ↥Λ,
                 Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
@@ -158,9 +157,9 @@ def SublinearCollarBoundAt (q R : ℕ) (J Δ D₀ Ctpl C : ℝ) (N : ℕ) : Prop
   ∀ n s₀ : ℕ, N ≤ n →
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-      ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+        ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
           T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
           ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
           ManyBody.regionMutualInformation Ω
@@ -198,9 +197,9 @@ def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : 
   ∀ n : ℕ, 2 ≤ n → N ≤ n →
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-      ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+        ∀ (A : Finset ↥Λ) (T : Finset (ℤ × ℤ)),
           ((A.filter fun x ↦ x.val ∈ ambientDilation T
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
             C₀ * (n : ℝ) ^ 2 →
@@ -217,7 +216,7 @@ def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : 
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
             C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
           ∃ r : ℕ, (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
-            (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+            (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset ↥Λ,
               Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
@@ -251,7 +250,7 @@ induced domain with `b = |∂_Λ A| > 0` has an ordered partition
 `∑ᵢ nᵢ^(-100) ≤ C b`. The constant is chosen before the domain and the cut. -/
 def TwoFamilyDecomposition (D₀ Ctpl : ℝ) : Prop :=
   ∀ nstar : ℕ, 1 ≤ nstar → ∃ C : ℝ,
-    ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ), 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
+    ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset ↥Λ, 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
       ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
         ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
           (P.residual.card : ℝ) ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card ∧
@@ -270,8 +269,8 @@ def TwoFamilyDecomposition (D₀ Ctpl : ℝ) : Prop :=
 within the enlarged ambient collar: every graph step moves by at most one in
 sup-norm. Source: proof of Theorem 1.1, `10-geometry.tex` lines 830–832. -/
 theorem exists_ambientSupDistance_le_of_mem_graphNeighborhood
-    {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) {S : Finset (Site Λ)} {L k : ℕ}
-    (hS : ∀ x ∈ S, x.val ∈ ambientDilation T L) {y : Site Λ}
+    {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) {S : Finset ↥Λ} {L k : ℕ}
+    (hS : ∀ x ∈ S, x.val ∈ ambientDilation T L) {y : ↥Λ}
     (hy : y ∈ graphNeighborhood (planeDomainGraph Λ) S k) :
     ∃ t ∈ T, Scan.ambientSupDistance t y.val ≤ L + k := by
   classical
@@ -325,8 +324,8 @@ frustration-free ones of `TNLean.PEPS.AreaLaw.FrustrationFree`. Source: proof of
 theorem regionEntropy_le_of_collar_amplification_twoFamilies_at
     {q R : ℕ} (hq : 1 ≤ q) {Δ D₀ Ctpl C₁ C₂ C₃ : ℝ} {N₁ N₂ : ℕ} (hΔ : 0 < Δ)
     {Λ : Finset (ℤ × ℤ)} (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-    {E₀ : ℝ} {Ω : StateSpace Λ q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
+    {E₀ : ℝ} {Ω : EuclideanSpace ℂ (↥Λ → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset ↥Λ)
     (hcol : ∀ n s₀ : ℕ, N₁ ≤ n →
           ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
@@ -366,7 +365,7 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_at
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
               max C₁ 1 * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
             ∃ r : ℕ, (r : ℝ) ≤ C₂ * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
-              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset ↥Λ,
                 Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
@@ -481,9 +480,9 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
     (hcol : ∀ n s₀ : ℕ, N₁ ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω
@@ -505,9 +504,9 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
     (hamp : ∀ n : ℕ, 2 ≤ n → N₂ ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
+          ∀ (A : Finset ↥Λ) (T : Finset (ℤ × ℤ)),
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               max C₁ 1 * (n : ℝ) ^ 2 →
@@ -525,7 +524,7 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
               max C₁ 1 * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
             ∃ r : ℕ, (r : ℝ) ≤ C₂ * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
-              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
+              (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset ↥Λ,
                 Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
@@ -538,7 +537,7 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
                 graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A))
-    (htwo : ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ),
+    (htwo : ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset ↥Λ,
       0 < (edgeBoundary (planeDomainGraph Λ) A).card →
       ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
         ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
@@ -554,9 +553,9 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
           ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C₃ * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
-        (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ↥Λ,
         ManyBody.regionEntropy Ω A ≤ uniformAreaLawConstantOf q C₂ C₃ *
             (edgeBoundary (planeDomainGraph Λ) A).card := by
   intro Λ h hh hhJ E₀ Ω hΩ hgap hspan A

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Templates.Templates
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Entropy.TwoFamilies
@@ -27,7 +27,6 @@ The proofs are independently written; no OpenAI Lean proof code is adapted.
 -/
 
 open scoped BigOperators
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -109,8 +108,8 @@ end Geometry.OrderedTwoFamilyPartition
 /-- The physical finite-domain specialization of OpenAI's Lemma 11.1 using the
 model's existing regional entropy. -/
 theorem regionEntropy_le_residual_add_half_sum
-    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) (P : Geometry.OrderedTwoFamilyPartition A)
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥Λ) (P : Geometry.OrderedTwoFamilyPartition A)
     (ε : Fin P.pieceCount → ℝ)
     (hε : ∀ i, ManyBody.regionMutualInformation Ω (P.piece i)
       (Aᶜ ∪ P.earlierSameFamily i) ≤ ε i) :

@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
+import QICLean.ManyBody.Sites.Config
 import TNLean.PEPS.Injectivity.Normal.NormalBlocking
-import TNLean.Lattice.StateSpace
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
@@ -47,8 +47,6 @@ open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport)
 
 namespace TNLean.PEPS.AreaLaw
@@ -67,7 +65,7 @@ abbrev RectangleStateSpace (width height q : ℕ) :=
 integer domain. Source: area-law Corollary 1.2 and polynomial-PEPS Section 1. -/
 noncomputable def rectangleConfigurationEquiv (width height q : ℕ) :
     (SquareLatticeVertex width height → Fin q) ≃
-      Configuration (rectangularDomain width height) q :=
+      (↥(rectangularDomain width height) → Fin q) :=
   Equiv.arrowCongr (rectangleSiteEquiv width height) (Equiv.refl (Fin q))
 
 /-- The configuration transport of the rectangle is the configuration bijection of the site
@@ -86,7 +84,7 @@ theorem siteConfigurationEquiv_rectangleSiteEquiv (width height q : ℕ) :
 /-- The original vector in the actual integer-domain coordinates.
 Source: area-law Corollary 1.2, finite tensor factors. -/
 def rectangleAreaLawState {width height q : ℕ} (Ω : RectangleStateSpace width height q) :
-    StateSpace (rectangularDomain width height) q :=
+    EuclideanSpace ℂ (↥(rectangularDomain width height) → Fin q) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (rectangleConfigurationEquiv width height q) Ω
 

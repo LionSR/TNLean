@@ -42,6 +42,8 @@ estimate and the one-step entropy improvement.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open ManyBody (IntRect card_dilate_sdiff_le)
+
 section
 
 namespace TNLean.PEPS.AreaLaw

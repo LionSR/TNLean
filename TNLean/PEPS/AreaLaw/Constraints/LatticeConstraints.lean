@@ -49,7 +49,6 @@ allows `q, R, J, Δ` (`03-quasilocal.tex`, lines 41–42).
 open scoped Matrix Kronecker Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport edgeBoundary graphBall planeDomainGraph)
 
@@ -90,8 +89,8 @@ theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ
         C₃ * Real.exp (-(c₃ * l ^ kernelExponent p))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let cs := positiveNormalization p (Δ / 2) J
       let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
@@ -114,7 +113,7 @@ theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ
       (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
   obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := positiveQuasilocalConstraints_of_locality hp R
     (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hΔ htail
-    (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ) (fun X => X.1) a ha
+    (q := q) (ι := ↥Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ) (fun X => X.1) a ha
     h.term hh h.mem (fun X => X.2.edist_le) (fun X => X.2.card_le)
     (h.sum_norm_term_containing_le hhJ hJ) (card_domainGraph_sphere_le Λ) hhJ E₀ Ω hΩ hHΩ hgap
   exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
@@ -188,8 +187,8 @@ theorem latticePositiveConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let cs := positiveNormalization p (Δ / 2) J
       let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
@@ -230,8 +229,8 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
     ∃ C c : ℝ, 0 ≤ C ∧ 0 < c ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let cs := positiveNormalization p (Δ / 2) J
         let k := fun i => positiveConstraint cs
@@ -269,8 +268,8 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
     ∃ C c : ℝ, 0 ≤ C ∧ 0 < c ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (i : AdmissibleSupport Λ R) (l : ℕ),
         let k := positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -286,7 +285,7 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
         ‖G - Gl‖ + ‖Kr - Kl‖ ≤ ε ∧ Gl * Gl + Kl * Kl = 1 ∧
         rootChannel G Kr 1 = 1 ∧ rootChannel Gl Kl 1 = 1 ∧
         (∀ (κ : Type*) [Fintype κ] [DecidableEq κ]
-            (B : Matrix (Configuration Λ q × κ) (Configuration Λ q × κ) ℂ),
+            (B : Matrix ((↥Λ → Fin q) × κ) ((↥Λ → Fin q) × κ) ℂ),
           (0 ≤ B → 0 ≤ rootChannel (G ⊗ₖ (1 : Matrix κ κ ℂ)) (Kr ⊗ₖ 1) B ∧
             0 ≤ rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B) ∧
           ‖rootChannel (G ⊗ₖ (1 : Matrix κ κ ℂ)) (Kr ⊗ₖ 1) B‖ ≤ ‖B‖ ∧
@@ -294,12 +293,12 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
           ‖rootChannel (G ⊗ₖ (1 : Matrix κ κ ℂ)) (Kr ⊗ₖ 1) B -
               rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B‖ ≤ ε * ‖B‖ ∧
           ((∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-              (graphBall (planeDomainGraph Λ) (a i) l : Finset (Site Λ)),
+              (graphBall (planeDomainGraph Λ) (a i) l : Finset ↥Λ),
               Commute (A ⊗ₖ (1 : Matrix κ κ ℂ)) B) →
             rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B = B)) ∧
-        (∀ B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+        (∀ B : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ,
           (∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-              (graphBall (planeDomainGraph Λ) (a i) l : Finset (Site Λ)),
+              (graphBall (planeDomainGraph Λ) (a i) l : Finset ↥Λ),
             Commute A B) → rootChannel Gl Kl B = B) := by
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   refine ⟨4 * Real.sqrt C, c / 2, by positivity, by positivity, ?_⟩
@@ -363,10 +362,10 @@ theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : 
         C₃ * Real.exp (-(c₃ * l ^ kernelExponent 1))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+      ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ↥Λ, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
       let G := planeDomainGraph Λ
       let cs := positiveNormalization 1 (Δ / 2) J
       let g := Δ / cs
@@ -376,11 +375,11 @@ theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : 
       let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
       (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin q)
-            (designatedSupport G S₀ r₀ (a i) : Finset (Site Λ))) ∧
+            (designatedSupport G S₀ r₀ (a i) : Finset ↥Λ)) ∧
       (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
         truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
       ‖Ht - ∑ i, k i‖ ≤ ε ∧
-      ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), ‖Ω₀‖ = 1 ∧
+      ∃ (e : ℝ) (Ω₀ : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω₀‖ = 1 ∧
         Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
         (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
           (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
@@ -395,7 +394,7 @@ theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : 
   exact finiteSetTruncation_of_locality R (1 + 2 * R * (R + 1))
     (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 (Kb := 2)
     (μ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)) hΔ zero_le_two (Nat.cast_nonneg _) hC₀ hC₃
-    hc₃ htail (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ)
+    hc₃ htail (q := q) (ι := ↥Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ)
     (fun X => X.1) a ha
     h.term hh h.mem (fun X => X.2.edist_le) (fun X => X.2.card_le)
     (h.sum_norm_term_containing_le hhJ hJ) (card_domainGraph_sphere_le Λ)
@@ -429,10 +428,10 @@ theorem latticeFiniteSetTruncation_explicit (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 
     (hC₀ : 0 ≤ C₀) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+      ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+      ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ↥Λ, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
       let G := planeDomainGraph Λ
       let cs := positiveNormalization 1 (Δ / 2) J
       let g := Δ / cs
@@ -442,11 +441,11 @@ theorem latticeFiniteSetTruncation_explicit (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 
       let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
       (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin q)
-            (designatedSupport G S₀ r₀ (a i) : Finset (Site Λ))) ∧
+            (designatedSupport G S₀ r₀ (a i) : Finset ↥Λ)) ∧
       (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
         truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
       ‖Ht - ∑ i, k i‖ ≤ ε ∧
-      ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), ‖Ω₀‖ = 1 ∧
+      ∃ (e : ℝ) (Ω₀ : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω₀‖ = 1 ∧
         Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
         (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
           (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
@@ -477,10 +476,10 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
     ∃ C₁ : ℝ, 0 < C₁ ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ↥Λ, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
         let G := planeDomainGraph Λ
         let cs := positiveNormalization 1 (Δ / 2) J
         let g := Δ / cs
@@ -491,11 +490,11 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
         let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
         (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q)
-              (designatedSupport G S₀ r₀ (a i) : Finset (Site Λ))) ∧
+              (designatedSupport G S₀ r₀ (a i) : Finset ↥Λ)) ∧
         (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
           truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
         ‖Ht - ∑ i, k i‖ ≤ ε ∧
-        ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), ‖Ω₀‖ = 1 ∧
+        ∃ (e : ℝ) (Ω₀ : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω₀‖ = 1 ∧
           Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
           (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
             (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
@@ -517,10 +516,10 @@ theorem exists_latticeFiniteSetTruncation_eigenspace_eq_span (R : ℕ) {J Δ C�
     ∃ C₁ : ℝ, 0 < C₁ ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+        ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
+        ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset ↥Λ, (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
         let G := planeDomainGraph Λ
         let cs := positiveNormalization 1 (Δ / 2) J
         let g := Δ / cs
@@ -531,11 +530,11 @@ theorem exists_latticeFiniteSetTruncation_eigenspace_eq_span (R : ℕ) {J Δ C�
         let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
         (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q)
-              (designatedSupport G S₀ r₀ (a i) : Finset (Site Λ))) ∧
+              (designatedSupport G S₀ r₀ (a i) : Finset ↥Λ)) ∧
         (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
           truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
         ‖Ht - ∑ i, k i‖ ≤ ε ∧
-        ∃ (e : ℝ) (Ω₀ : StateSpace Λ q), ‖Ω₀‖ = 1 ∧
+        ∃ (e : ℝ) (Ω₀ : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω₀‖ = 1 ∧
           Ht *ᵥ WithLp.ofLp Ω₀ = (e : ℂ) • WithLp.ofLp Ω₀ ∧ 0 ≤ e ∧ e ≤ ε ∧
           (Ht - (e : ℂ) • 1 - ((g / 2 : ℝ) : ℂ) •
             (1 - Matrix.vecMulVec (WithLp.ofLp Ω₀) (star (WithLp.ofLp Ω₀)))).PosSemidef ∧
@@ -563,8 +562,8 @@ is the ball of radius `r₀` about its anchor, `|𝒞_X| ≤ C b_X (r₀ + 1)²`
 `log dᵢ ≤ C (r₀ + 1)²` for `i ∈ 𝒞_X`, and `ℬ_X ≤ C (1 + b_X) (r₀ + 1)⁶`. -/
 theorem exists_latticeCrossingBudget {q : ℕ} (hq : 1 ≤ q) (R : ℕ) :
     ∃ C : ℝ, 0 ≤ C ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (S₀ : Finset (Site Λ)) (r₀ : ℕ) (X : Finset (Site Λ)), X ⊆ S₀ →
+      ∀ (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+      ∀ (S₀ : Finset ↥Λ) (r₀ : ℕ) (X : Finset ↥Λ), X ⊆ S₀ →
         (∀ i ∈ ManyBody.crossingTerms
             (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i)) X,
           designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i) = graphBall (planeDomainGraph Λ) (a i)
@@ -621,8 +620,8 @@ noncomputable def latticeCutCoefficient (q R : ℕ) : ℝ :=
 (Proposition 4.5, `eq:quasilocal-cut-budget`, `03-quasilocal.tex`, lines 434–451 and
 505–518): `ℬ_X ≤ latticeCutCoefficient q R (1 + b_X) (r₀ + 1)⁶` for every `X ⊆ S₀`. -/
 theorem cutLogBudget_le_latticeCutCoefficient {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
-    (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ) (ha : ∀ X, a X ∈ X.1)
-    (S₀ : Finset (Site Λ)) (r₀ : ℕ) {X : Finset (Site Λ)} (hX : X ⊆ S₀) :
+    (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → ↥Λ) (ha : ∀ X, a X ∈ X.1)
+    (S₀ : Finset ↥Λ) (r₀ : ℕ) {X : Finset ↥Λ} (hX : X ⊆ S₀) :
     ManyBody.cutLogBudget (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i))
         (fun _ ↦ q) X ≤
       latticeCutCoefficient q R * (1 + (edgeBoundary (planeDomainGraph Λ) X).card) *
@@ -654,8 +653,8 @@ sentence, `03-quasilocal.tex`, lines 452–455 and 519–520): with `r₀ = ⌈C
 `X ⊆ S₀` with `b_X ≤ C₂ n D`, `n ≥ 2` and `D ≥ 1` has
 `ℬ_X ≤ latticeCutBudgetConstant q R C₁ C₂ · n D (log n)¹²`. -/
 theorem latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ C₂ : ℝ}
-    (hC₁ : 0 ≤ C₁) (hC₂ : 0 ≤ C₂) (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ)
-    (ha : ∀ X, a X ∈ X.1) (S₀ X : Finset (Site Λ)) (hX : X ⊆ S₀) {n D : ℝ} (hn : 2 ≤ n)
+    (hC₁ : 0 ≤ C₁) (hC₂ : 0 ≤ C₂) (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → ↥Λ)
+    (ha : ∀ X, a X ∈ X.1) (S₀ X : Finset ↥Λ) (hX : X ⊆ S₀) {n D : ℝ} (hn : 2 ≤ n)
     (hD : 1 ≤ D) (hb : ((edgeBoundary (planeDomainGraph Λ) X).card : ℝ) ≤ C₂ * n * D) :
     ManyBody.cutLogBudget
         (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ (a i))
@@ -671,8 +670,8 @@ and `D ≥ 1` has `ℬ_X ≤ C n D (log n)¹²`. -/
 theorem exists_latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ C₂ : ℝ}
     (hC₁ : 0 ≤ C₁) (hC₂ : 0 ≤ C₂) :
     ∃ C : ℝ, 0 ≤ C ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (S₀ X : Finset (Site Λ)), X ⊆ S₀ → ∀ n D : ℝ, 2 ≤ n → 1 ≤ D →
+      ∀ (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → ↥Λ), (∀ X, a X ∈ X.1) →
+      ∀ (S₀ X : Finset ↥Λ), X ⊆ S₀ → ∀ n D : ℝ, 2 ≤ n → 1 ≤ D →
         ((edgeBoundary (planeDomainGraph Λ) X).card : ℝ) ≤ C₂ * n * D →
         ManyBody.cutLogBudget
             (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ (a i))

@@ -52,8 +52,6 @@ reference error of the exchange is bounded on the sheets by
   allowed monomials, `04-compression.tex`, lines 32–35.
 -/
 
-open TNLean.Lattice (sheetSwapOp)
-
 noncomputable section
 
 open Matrix ContinuousLinearMap EuclideanSpace

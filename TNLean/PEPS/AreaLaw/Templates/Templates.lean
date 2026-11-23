@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import Mathlib.Analysis.Convex.Hull
 import Mathlib.Basic.Real.Basic
 import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
@@ -42,7 +42,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 section
 
-open TNLean.Lattice
 open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Geometry

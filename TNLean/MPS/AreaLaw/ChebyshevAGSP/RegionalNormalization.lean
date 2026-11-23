@@ -3,10 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SupportedNormalizedGroundSpace
+import QICLean.ManyBody.Hamiltonian.SupportedGroundCutoff
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.NormalizedChain
 import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import Mathlib.Order.Interval.Finset.Nat
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!
 # The three regional minima in AKLV normalization
@@ -29,6 +30,8 @@ open ManyBody (interval mem_interval)
 
 open Matrix QuantumCircuit
 open scoped BigOperators ComplexOrder MatrixOrder
+
+open ManyBody (exists_normalized_common_ground_of_disjoint)
 
 noncomputable section
 

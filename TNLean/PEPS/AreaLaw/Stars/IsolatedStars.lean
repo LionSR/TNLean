@@ -41,8 +41,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The direction of the radial edge ending an elementary wedge: the final
@@ -252,7 +250,7 @@ arbitrary residues is proved separately for the initial mark family.
 Source: area-law Section 11, `geometry:initial-stars`, lines 332–349. -/
 def InitialIsolatedStarsStatement : Prop :=
   ∃ a₀ : ℝ, 0 < a₀ ∧ ∀ C : ℕ, ∃ K : ℕ, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+    (A : Finset ↥Λ) (k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
       (initialRepairStage o Λ A C k₀ hC h₀).HasIsolatedStars a₀
 
 end TNLean.PEPS.AreaLaw.Geometry

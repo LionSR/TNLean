@@ -34,8 +34,6 @@ open TensorPower TensorPower.ReplicaTransport
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -63,9 +61,9 @@ theorem card_filter_le_sum_card {ι G B : Type*}
 namespace CollarScan
 
 variable {I : Type} [Fintype I] [LinearOrder I]
-variable {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+variable {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) (S : CollarScan ↥Λ I)
   (hm : 0 < S.m) (hM : 0 < S.M) {L : ℕ}
-  (n : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)] (E : EnergyTerms (Site Λ ⊕ Bool) n I)
+  (n : ↥Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)] (E : EnergyTerms (↥Λ ⊕ Bool) n I)
   (a : ℝ) (pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ)
 
 open Classical in

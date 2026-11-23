@@ -4,8 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Norm.MatrixKroneckerContraction
-import TNLean.Circuit.RegionalSwap
+import QICLean.ManyBody.Sites.PairSwap
 import TNLean.Lattice.Sheet.Birth
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 
 /-!
 # Swapping two sheets and the buffer correction
@@ -50,7 +53,6 @@ the manuscript; no upstream Lean proof text was reused.
 open Matrix QuantumCircuit
 open EuclideanSpace (vecKron)
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
-open TNLean.Lattice (sheetSwap sheetSwapOp)
 
 noncomputable section
 

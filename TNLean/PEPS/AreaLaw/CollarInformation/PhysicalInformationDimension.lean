@@ -20,8 +20,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Classical in
@@ -30,14 +28,14 @@ by the original-state continuity term. The finite local dimension is fixed
 before the system size and region. -/
 theorem log_exp_configuration_card_le_of_card
     {Λ : Finset (ℤ × ℤ)} {q n : ℕ} (hq : 1 ≤ q)
-    (X : Finset (Site Λ)) {Cvol : ℝ}
+    (X : Finset ↥Λ) {Cvol : ℝ}
     (hcard : (X.card : ℝ) ≤ Cvol * (n : ℝ) ^ 2) :
     Real.log (Real.exp 1 *
-      Fintype.card (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q) X)) ≤
+      Fintype.card (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q) X)) ≤
         1 + (Cvol * Real.log q) * (n : ℝ) ^ 2 := by
   have hqpos : (0 : ℝ) < q := by exact_mod_cast (show 0 < q by omega)
   have hdimpos : (0 : ℝ) <
-      Fintype.card (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q) X) := by
+      Fintype.card (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q) X) := by
     simp only [ManyBody.RegionConfig, Fintype.card_fun, Fintype.card_fin,
       Fintype.card_coe, Nat.cast_pow]
     positivity

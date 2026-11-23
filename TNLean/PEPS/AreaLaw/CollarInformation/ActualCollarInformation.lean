@@ -46,7 +46,6 @@ noncomputable section
 
 open Matrix
 open scoped BigOperators
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -81,9 +80,9 @@ far-side mutual informations. No selected state or probability law is chosen.
 Source: `08-scanner.tex`, lines 900--905. -/
 theorem terminalPartition_collar_entropy_identity
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
-    (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+    (hT : T.Nonempty) (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
-    (H L : ℕ) (hL : 8 * S.K * S.m ≤ L) (Ωt : StateSpace Λ q)
+    (H L : ℕ) (hL : 8 * S.K * S.m ≤ L) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q))
     (j : terminalFamily S.K S.m S.M H) (g : Fin S.K) :
     let X := S.A.filter fun x ↦ x.val ∈ T
     let σ := terminalPartition S H j g
@@ -99,7 +98,7 @@ theorem terminalPartition_collar_entropy_identity
         ManyBody.regionMutualInformation Ωt X (Y ∪ V) := by
   classical
   intro X σ Q Y V gpre gpost
-  let β := fun _ : Site Λ ↦ Fin q
+  let β := fun _ : ↥Λ ↦ Fin q
   obtain ⟨hnear, hUYeq, hfar, hXU, hXY, hXV, hUY, hUV, hYV, hcover, _⟩ :=
     terminalPartition_collar_geometry hT S hdepth H L hL j g
   change Q = X ∪ positiveNear S.depth σ at hnear
@@ -133,10 +132,10 @@ charge tree at the already selected stage and parameter.
 Source: `08-scanner.tex`, lines 906--911. -/
 theorem two_mutualInformation_le_actualTerminal_average
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
-    (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+    (hT : T.Nonempty) (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hK : 0 < S.K) (H L : ℕ) (hL : 8 * S.K * S.m ≤ L)
-    (Ωt : StateSpace Λ q) (tree : MeanTree (terminalFamily S.K S.m S.M H)) :
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (tree : MeanTree (terminalFamily S.K S.m S.M H)) :
     let X := S.A.filter fun x ↦ x.val ∈ T
     let σ := terminalPartition S H
     let Q := fun j g ↦ receiving (σ j g) false
@@ -152,7 +151,7 @@ theorem two_mutualInformation_le_actualTerminal_average
       2 * ManyBody.regionEntropy Ωt X + Gpre - Gpost := by
   classical
   intro X σ Q Y gpre gpost Gpre Gpost
-  let β := fun _ : Site Λ ↦ Fin q
+  let β := fun _ : ↥Λ ↦ Fin q
   let U := fun j g ↦ positiveNear S.depth (σ j g)
   let V := fun j g ↦ receiving (σ j g) true
   have hgeom (j) (g) :
@@ -207,7 +206,6 @@ noncomputable section
 
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
-open TNLean.Lattice
 
 open ManyBody (ambientDilation_zero)
 
@@ -223,12 +221,12 @@ trace-distance continuity cost remain explicit.
 Source: `08-scanner.tex`, lines 900--911 and 936--941. -/
 theorem actualCharge_two_mutualInformation_le_selectedSharpExpression
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
-    (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
+    (hT : T.Nonempty) (S : CollarScan ↥Λ I)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hm : 0 < S.m) (hM : 0 < S.M) (hK : 0 < S.K)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
-    (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
+    (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T))) (w : ℝ)
     (hz : 0 < (ManyBody.regionState_isHermitian (S.A.filter fun x ↦ x.val ∈ T)
       Ωt).spectralRestrictionMass E)
@@ -238,7 +236,7 @@ theorem actualCharge_two_mutualInformation_le_selectedSharpExpression
         (ManyBody.regionState_isHermitian (S.A.filter fun x ↦ x.val ∈ T) Ωt).eigenvalues i ≤
           Real.exp (-ManyBody.regionEntropy Ωt (S.A.filter fun x ↦ x.val ∈ T) + w))
     (s : Fin (S.n * S.m)) (p : ℝ) :
-    let β := fun _ : Site Λ ↦ Fin q
+    let β := fun _ : ↥Λ ↦ Fin q
     let X := S.A.filter fun x ↦ x.val ∈ T
     let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv β X) Ωt
@@ -261,7 +259,7 @@ theorem actualCharge_two_mutualInformation_le_selectedSharpExpression
     let Gpost := (∑ g, ∑ j, tree.weight j * gpost j g) / (S.K : ℝ)
     2 * ManyBody.regionMutualInformation Ωt X (S.truncationSet L)ᶜ ≤
       2 * Sent + Gpre - Gpost + 2 * (w - Real.log z) ∧
-    ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 →
+    ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 →
       2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
         2 * Sent + Gpre - Gpost + 2 * (w - Real.log z) +
           16 * Real.sqrt (Matrix.traceDistance

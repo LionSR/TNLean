@@ -22,7 +22,6 @@ gap*, September 24, 2026, `08-scanner.tex`, lines 641–664, at
 No upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Geometry

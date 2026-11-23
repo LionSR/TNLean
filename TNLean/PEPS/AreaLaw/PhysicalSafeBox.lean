@@ -33,9 +33,9 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
+
+open ManyBody (IntRect IsSafe rectRegion supDist)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -53,10 +53,10 @@ theorem exists_regionEntropy_safe_rect_le_boxError
     ∃ C : ℝ, 0 < C ∧ ∀ D₀ : ℝ, 2 * (R : ℝ) + 10 < D₀ →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q),
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ (A : Finset (Site Λ)) (Q : IntRect),
+        ∀ (A : Finset ↥Λ) (Q : IntRect),
           (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
             D₀ * (Q.size : ℝ) < (supDist t z : ℝ)) →
           ManyBody.regionEntropy Ω (rectRegion A Q) ≤

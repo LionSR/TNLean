@@ -38,6 +38,8 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 open ManyBody (planeDomainGraph edgeBoundary ambientDilation)
 
+open ManyBody (IntRect card_dilate_sdiff_le rectRegion supDist)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- A rectangle avoiding cut endpoints has a linear physical edge-boundary
@@ -45,7 +47,7 @@ bound. Empty physical intersections and disconnected domains are allowed.
 Source: the safe rectangles of `02-initial.tex`, lines 223–228, together with
 the physical-to-ambient boundary comparison in Lemma 9.4. -/
 theorem card_edgeBoundary_rectRegion_le_of_disjoint
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (Q : IntRect)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (Q : IntRect)
     (hdisj : Disjoint Q.toFinset (Geometry.boundaryEndpoints Λ A)) :
     (edgeBoundary (planeDomainGraph Λ) (rectRegion A Q)).card ≤ 48 * Q.size := by
   classical
@@ -68,10 +70,10 @@ theorem exists_regionEntropy_safe_rect_le_linear
       ∀ d : ℝ, 0 ≤ d →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q),
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ (A : Finset (Site Λ)) (Q : IntRect),
+        ∀ (A : Finset ↥Λ) (Q : IntRect),
           (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
             d * (Q.size : ℝ) < (supDist t z : ℝ)) →
           ManyBody.regionEntropy Ω (rectRegion A Q) ≤ K * (Q.size : ℝ) := by
@@ -108,10 +110,10 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
       (∀ d : ℝ, 2 * (R : ℝ) + 10 < d →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
             (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (E₀ : ℝ) (Ω : StateSpace Λ q),
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ (A : Finset (Site Λ)) (Q : IntRect),
+          ∀ (A : Finset ↥Λ) (Q : IntRect),
             (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
               d * (Q.size : ℝ) < (supDist t z : ℝ)) →
             ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
@@ -124,7 +126,7 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
         let F : ℕ → ℝ := fun r ↦ sSup
           {s : ℝ | ∃ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
               (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (E₀ : ℝ) (Ω : StateSpace Λ q) (A : Finset (Site Λ)) (Q : IntRect),
+            (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (A : Finset ↥Λ) (Q : IntRect),
             ‖Ω‖ = 1 ∧ IsGapped h.hamiltonian E₀ Δ ∧
               groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} ∧
               (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,

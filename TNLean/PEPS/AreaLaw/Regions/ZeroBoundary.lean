@@ -4,12 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Regions.TheoremStatements
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Entropy.ZeroEntropy
-import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # A cut with no crossing edge
@@ -61,7 +64,6 @@ open Matrix
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped ComplexOrder Kronecker
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport IsAdmissibleSupport isAdmissibleSupport_zero_iff planeDomainGraph)
 
@@ -96,9 +98,9 @@ ground-state hypothesis of Theorem 1.1, if every admissible support lies inside
 `A` or is disjoint from it, then `S_Ω(A) = 0`. -/
 theorem regionEntropy_eq_zero_of_forall_subset_or_disjoint (h : PlaneInteraction Λ q R)
     (hh : ∀ X, (h.term X).IsHermitian)
-    {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
+    {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : EuclideanSpace ℂ (↥Λ → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset ↥Λ)
     (hsplit : ∀ X : AdmissibleSupport Λ R, X.1 ⊆ A ∨ Disjoint X.1 A) :
     ManyBody.regionEntropy Ω A = 0 := by
   exact ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
@@ -112,9 +114,9 @@ Only the gapped ground-state hypothesis with `Δ > 0` is used; the bound `J`,
 the range `R` and the local dimension `q` are arbitrary. -/
 theorem regionEntropy_eq_zero_of_edgeBoundary_eq_empty (h : PlaneInteraction Λ q R)
     (hh : ∀ X, (h.term X).IsHermitian)
-    {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
+    {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : EuclideanSpace ℂ (↥Λ → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) {A : Finset (Site Λ)}
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) {A : Finset ↥Λ}
     (hA : edgeBoundary (planeDomainGraph Λ) A = ∅) : ManyBody.regionEntropy Ω A = 0 :=
   regionEntropy_eq_zero_of_forall_subset_or_disjoint h hh hΔ hΩ hgap hspan A fun X ↦
     ManyBody.subset_or_disjoint_of_edgeBoundary_eq_empty hA fun _ hx _ hy ↦ X.2.reachable hx hy
@@ -124,9 +126,9 @@ theorem regionEntropy_eq_zero_of_edgeBoundary_eq_empty (h : PlaneInteraction Λ 
 the gapped ground vector vanishes. -/
 theorem regionEntropy_eq_zero_of_range_eq_zero (h : PlaneInteraction Λ q 0)
     (hh : ∀ X, (h.term X).IsHermitian)
-    {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
+    {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : EuclideanSpace ℂ (↥Λ → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) :
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset ↥Λ) :
     ManyBody.regionEntropy Ω A = 0 := by
   refine regionEntropy_eq_zero_of_forall_subset_or_disjoint h hh hΔ hΩ hgap hspan A fun X ↦ ?_
   obtain ⟨x, hx⟩ := Finset.card_eq_one.mp ((isAdmissibleSupport_zero_iff Λ X.1).mp X.2)
@@ -137,8 +139,8 @@ theorem regionEntropy_eq_zero_of_range_eq_zero (h : PlaneInteraction Λ q 0)
 
 /-- A regional entropy vanishes when the regional configuration space has at
 most one element. -/
-theorem regionEntropy_eq_zero_of_card_le_one (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) (hcard : Fintype.card ({x : Site Λ // x ∈ A} → Fin q) ≤ 1) :
+theorem regionEntropy_eq_zero_of_card_le_one (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥Λ) (hcard : Fintype.card ({x : ↥Λ // x ∈ A} → Fin q) ≤ 1) :
     ManyBody.regionEntropy Ω A = 0 := by
   classical
   exact vonNeumannEntropy_eq_zero_of_rank_le_one (ManyBody.regionState_posSemidef A Ω)
@@ -146,14 +148,14 @@ theorem regionEntropy_eq_zero_of_card_le_one (Ω : StateSpace Λ q) (hΩ : ‖Ω
 
 /-- **Local dimension one** (area-law preprint, `01-preliminaries.tex`,
 line 116): for `q = 1` every regional entropy of every unit vector vanishes. -/
-theorem regionEntropy_eq_zero_of_q_eq_one {Ω : StateSpace Λ 1} (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) : ManyBody.regionEntropy Ω A = 0 := by
-  exact TNLean.Lattice.regionEntropy_eq_zero_of_localDimension_one hΩ A
+theorem regionEntropy_eq_zero_of_q_eq_one {Ω : EuclideanSpace ℂ (↥Λ → Fin 1)} (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥Λ) : ManyBody.regionEntropy Ω A = 0 := by
+  exact ManyBody.regionEntropy_eq_zero_of_localDimension_one hΩ A
 
 /-- **Empty domain** (area-law preprint, `01-preliminaries.tex`, line 116): on
 the empty domain every regional entropy of every unit vector vanishes. -/
-theorem regionEntropy_eq_zero_of_domain_eq_empty {Ω : StateSpace ∅ q} (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site ∅)) : ManyBody.regionEntropy Ω A = 0 :=
+theorem regionEntropy_eq_zero_of_domain_eq_empty {Ω : EuclideanSpace ℂ (↥∅ → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (A : Finset ↥∅) : ManyBody.regionEntropy Ω A = 0 :=
   regionEntropy_eq_zero_of_card_le_one Ω hΩ A (by
     rw [Fintype.card_fun]
     simp)
@@ -165,7 +167,7 @@ connected components of the induced domain graph, in particular on each
 component of a disconnected domain. -/
 theorem regionEntropy_connectedComponents_eq_zero (h : PlaneInteraction Λ q R)
     (hh : ∀ X, (h.term X).IsHermitian)
-    {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
+    {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : EuclideanSpace ℂ (↥Λ → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (s : Set (planeDomainGraph Λ).ConnectedComponent) :

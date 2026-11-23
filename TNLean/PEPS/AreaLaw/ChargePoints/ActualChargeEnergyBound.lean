@@ -37,8 +37,6 @@ open MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -51,11 +49,11 @@ classical bad-old mass. The split capacity and replica count may be zero. -/
 theorem actualCharge_energyError_le_domainGraph
     {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ} [NeZero q]
     [LinearOrder (AdmissibleSupport Λ R)]
-    (hT : T.Nonempty) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+    (hT : T.Nonempty) (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
     (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-    (h : PlaneInteraction Λ q R) (Ω : StateSpace Λ q) (Δ : ℝ)
+    (h : PlaneInteraction Λ q R) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ)
     {s L μ : ℕ} (hn : 2 ≤ S.n) (hs : s + 1 ≤ S.n * S.m)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
     (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m)
@@ -67,13 +65,13 @@ theorem actualCharge_energyError_le_domainGraph
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
     {a : ℝ} (ha : 0 ≤ a) (k : ℕ)
     (pre : (r : ℕ) → Config r
-      (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) → ℂ)
+      (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q aux v)) → ℂ)
     (hsym : pre k ∈ symmetricSubspace k
-      (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)))
+      (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q aux v)))
     (hpre : pre k ≠ 0) {p : ℝ} (hp : p ∈ Ioo (0 : ℝ) 1) :
     let hm : 0 < S.m := by omega
     let hM : 0 < S.M := chargeSlotCount_pos hC (by omega) hDpos
-    let n := augmentedDimensions (V := Site Λ) q aux
+    let n := augmentedDimensions (V := ↥Λ) q aux
     let E := S.actualEnergyTerms h Ω J Δ L aux
     let A : ℝ := 10 * S.K * S.n * S.D * μ
     let ℓ := transportLogDimBound q S.r₀
@@ -86,7 +84,7 @@ theorem actualCharge_energyError_le_domainGraph
           A * (2 * ℓ) ^ (1 / 8 : ℝ) / 2 * ((1 - p) * b + p)) := by
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (by omega) hDpos
-  let n := augmentedDimensions (V := Site Λ) q aux
+  let n := augmentedDimensions (V := ↥Λ) q aux
   let E := S.actualEnergyTerms h Ω J Δ L aux
   let D := S.actualChargeData hm hM s
   let Rd := S.actualChargeScanRound hm hM s n E a pre

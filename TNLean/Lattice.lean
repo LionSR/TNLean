@@ -8,21 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Lattice
 
-import TNLean.Lattice.BufferedRectangleEntropy
-import TNLean.Lattice.BufferedRectangles
 import TNLean.Lattice.Compression
-import TNLean.Lattice.FiniteDomain
-import TNLean.Lattice.GraphInteractionBudget
-import TNLean.Lattice.GraphInteractionDiamondCounting
-import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit
-import TNLean.Lattice.PhysicalBufferCoordinates
-import TNLean.Lattice.RegionEntropyInequalities
-import TNLean.Lattice.RegionalReset
-import TNLean.Lattice.RegionalResetEntropy
-import TNLean.Lattice.RegionalSwapSupport
-import TNLean.Lattice.ReplicaSwap
 import TNLean.Lattice.Sheet
-import TNLean.Lattice.SiteRelabelEntropy
-import TNLean.Lattice.StateSpace
-import TNLean.Lattice.TreeBasisCounterexample

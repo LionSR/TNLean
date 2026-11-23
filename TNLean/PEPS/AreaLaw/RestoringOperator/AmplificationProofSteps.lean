@@ -52,8 +52,8 @@ variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 `P_i ⊗ (b_i ⊗ 1_{e'})`, with every `P_i` acting on a physical region `S`, acts on `S ⊔ s'`.
 Source: `eq:amplification-restoring-operator`, `09-amplification.tex`, lines 350–356 and
 524–525. -/
-theorem sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (Site Λ)}
-    {κ : Type*} (s : Finset κ) {P : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
+theorem sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset ↥Λ}
+    {κ : Type*} (s : Finset κ) {P : κ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
     (hP : ∀ i, P i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     (b : κ → Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) :
     (∑ i ∈ s, P i ⊗ₖ (b i ⊗ₖ
@@ -76,8 +76,8 @@ theorem sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finse
 every `P_i` acting on a physical region `S`, then for all ancillary labels `x, y` the block
 `σ, τ ↦ B (σ, x) (τ, y)` acts on `S`.
 Source: `eq:amplification-column-operator`, `09-amplification.tex`, lines 359–364. -/
-theorem block_mem_supportedOperators_of_eq_sum {S : Finset (Site Λ)} {α κ : Type*}
-    (s : Finset κ) {P : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
+theorem block_mem_supportedOperators_of_eq_sum {S : Finset ↥Λ} {α κ : Type*}
+    (s : Finset κ) {P : κ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
     (hP : ∀ i, P i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) (A : κ → Matrix α α ℂ)
     (x y : α) :
     (Matrix.of fun σ τ => (∑ i ∈ s, P i ⊗ₖ A i) (σ, x) (τ, y)) ∈
@@ -99,15 +99,15 @@ physical operators. For unit vectors `φ, η`, suppose that the ground component
 and that the adjoint error of `L' R₀` is at most `a`. Then some unitary acting on `N ⊔ s'`
 moves `φ` to within `a + √(2a + 6ε + 9ε²)` of `η`.
 Source: `09-amplification.tex`, lines 501–545. -/
-theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
-    {R₀ : Matrix (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X))
-      (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X)) ℂ}
+theorem exists_ancilla_unitary_of_good_realization {X N : Finset ↥Λ}
+    {R₀ : Matrix ((↥Λ → Fin q) × (RegionalConfiguration q X × RegionalConfiguration q X))
+      ((↥Λ → Fin q) × (RegionalConfiguration q X × RegionalConfiguration q X)) ℂ}
     (hR₀ : R₀.submatrix (ancillaSplit q X) (ancillaSplit q X) ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q)
           (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)))
-    {L' D Dret : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
+    {L' D Dret : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ}
     (hL : L' ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) N)
-    {φ η g : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ}
+    {φ η g : (↥Λ → Fin q) × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ}
     (hφ : ‖WithLp.toLp 2 φ‖ = 1) (hη : ‖WithLp.toLp 2 η‖ = 1) {M₀ ε a : ℝ}
     (hζ : ‖WithLp.toLp 2 (R₀ *ᵥ φ)‖ ≤ M₀)
     (hg : (D ⊗ₖ (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
@@ -132,16 +132,16 @@ theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
   set sp := ancillaSplit q X with hspdef
   set I₂ := (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
     (RegionalConfiguration q X × RegionalConfiguration q X) ℂ) with hI₂def
-  have hT (A : Matrix (Configuration Λ q × (RegionalConfiguration q X ×
-      RegionalConfiguration q X)) (Configuration Λ q × (RegionalConfiguration q X ×
+  have hT (A : Matrix ((↥Λ → Fin q) × (RegionalConfiguration q X ×
+      RegionalConfiguration q X)) ((↥Λ → Fin q) × (RegionalConfiguration q X ×
         RegionalConfiguration q X)) ℂ)
-      (v : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ) :
+      (v : (↥Λ → Fin q) × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ) :
       A.submatrix sp sp *ᵥ (v ∘ sp) = (A *ᵥ v) ∘ sp := by
     rw [submatrix_mulVec_equiv, Function.comp_assoc, Equiv.self_comp_symm, Function.comp_id]
-  have hTn (v : Configuration Λ q × (RegionalConfiguration q X ×
+  have hTn (v : (↥Λ → Fin q) × (RegionalConfiguration q X ×
       RegionalConfiguration q X) → ℂ) : ‖WithLp.toLp 2 (v ∘ sp)‖ = ‖WithLp.toLp 2 v‖ :=
     EuclideanSpace.norm_toLp_comp_equiv sp v
-  have hsubk (A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+  have hsubk (A B : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) :
       (A - B) ⊗ₖ I₂ = A ⊗ₖ I₂ - B ⊗ₖ I₂ := by
     ext i j
     simp only [kroneckerMap_apply, Matrix.sub_apply, sub_mul]
@@ -179,8 +179,8 @@ theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
     exact hadj
 
 /-- The copy `e'` of a part of the target is disjoint from every physical region. -/
-theorem disjoint_ancillaCopyRegion_ancillaPhysicalRegion {X : Finset (Site Λ)}
-    (X' : Finset ↥X) (J : Finset (Site Λ)) :
+theorem disjoint_ancillaCopyRegion_ancillaPhysicalRegion {X : Finset ↥Λ}
+    (X' : Finset ↥X) (J : Finset ↥Λ) :
     Disjoint (ancillaCopyRegion X') (ancillaPhysicalRegion X J) := by
   rw [Finset.disjoint_left]
   rintro (v | x | x) h1 h2
@@ -190,7 +190,7 @@ theorem disjoint_ancillaCopyRegion_ancillaPhysicalRegion {X : Finset (Site Λ)}
 
 /-- The region `N ⊔ s'` of the enlarged sites is disjoint from the copy `e'` of the target
 together with any physical region avoiding `N`. -/
-theorem disjoint_disjSum_ancillaCopyRegion_union {X N J : Finset (Site Λ)}
+theorem disjoint_disjSum_ancillaCopyRegion_union {X N J : Finset ↥Λ}
     (hJ : Disjoint J N) (X' : Finset ↥X) :
     Disjoint (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X))
       (ancillaCopyRegion X' ∪ ancillaPhysicalRegion X J) := by
@@ -211,8 +211,8 @@ moves `φ` to within `C₁ n^(-K/2)` of `η` with `K ≥ 4(M + 2)`, and `|X| log
 then every part of `X` has mutual information at most `8 √C₁ (1 + C₂) n^(-M)` in `Ω` with
 every physical set avoiding `N`.
 Source: `09-amplification.tex`, lines 547–561. -/
-theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : ‖Ω‖ = 1)
-    {X Y N J : Finset (Site Λ)} (hXY : Disjoint X Y) (hXN : X ⊆ N) (hJ : Disjoint J N)
+theorem mutualInformation_le_of_ancilla_unitary {Ω : EuclideanSpace ℂ (↥Λ → Fin q)} (hΩ : ‖Ω‖ = 1)
+    {X Y N J : Finset ↥Λ} (hXY : Disjoint X Y) (hXN : X ⊆ N) (hJ : Disjoint J N)
     {sBlank xBlank : RegionalConfiguration q X → ℂ} (hs : ‖WithLp.toLp 2 sBlank‖ = 1)
     (hx : ‖WithLp.toLp 2 xBlank‖ = 1) {p : RegionalConfiguration q X → ℝ}
     (hφ : ‖WithLp.toLp 2 (restoringTransport Ω X Y hXY *ᵥ
@@ -242,7 +242,7 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
   set copyAll := ancillaCopyRegion (Finset.univ : Finset ↥X) with hcopyAll
   set physJ := ancillaPhysicalRegion X J with hphysJ
   have hJX : Disjoint J X := Finset.disjoint_of_subset_right hXN hJ
-  have hTn (v : Configuration Λ q × (RegionalConfiguration q X ×
+  have hTn (v : (↥Λ → Fin q) × (RegionalConfiguration q X ×
       RegionalConfiguration q X) → ℂ) : ‖WithLp.toLp 2 (v ∘ sp)‖ = ‖WithLp.toLp 2 v‖ :=
     EuclideanSpace.norm_toLp_comp_equiv sp v
   have hφform : φ = fun c => sBlank c.2.1 *

@@ -46,8 +46,6 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 open scoped Classical in
@@ -55,7 +53,7 @@ open scoped Classical in
 Source: area-law Section 11, final restriction to actual regions,
 lines 777–789. -/
 def RepairStage.regionSites (D : RepairStage) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (i : D.regionIndex) : Finset (Site Λ) :=
+    (A : Finset ↥Λ) (i : D.regionIndex) : Finset ↥Λ :=
   A.filter (fun x ↦ integerPoint x.val ∈ D.current i)
 
 /-- The non-dummy identifiers whose current regions meet the cut.
@@ -63,7 +61,7 @@ Source: area-law Section 11, dummy exclusion in the ordering preceding
 `geometry:birth-separation`, lines 565–568, and retained identifiers,
 lines 777–780. -/
 def RepairStage.RetainedRegionIndex (D : RepairStage) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) : Type :=
+    (A : Finset ↥Λ) : Type :=
   {i : D.regionIndex // i ≠ D.dummy ∧ (D.regionSites Λ A i).Nonempty}
 
 open scoped Classical in
@@ -73,8 +71,8 @@ as the final exceptional set requires all terminal removals to be processed.
 Source: area-law Section 11, final lattice partition, lines 558–561, and
 `geometry:bad-sites`, lines 694–707. -/
 def repairStageExceptionalSites (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
-    (Sstar : ℝ) (N : ℕ) : Finset (Site Λ) :=
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (Sstar : ℝ) (N : ℕ) : Finset ↥Λ :=
   let D := repairStage o Λ A C k₀ hC h₀ Sstar N
   A.filter (fun x ↦ integerPoint x.val ∈
     D.current D.dummy ∪ repairTerminalInteriors o Λ A C k₀ hC h₀ Sstar)
@@ -86,12 +84,12 @@ family is required.
 Source: area-law Section 11, final restriction to actual regions,
 lines 777–780. -/
 theorem RepairStage.finite_retainedRegionIndex (D : RepairStage)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (hdisj : Pairwise fun i j ↦ Disjoint (D.current i) (D.current j)) :
     Finite (D.RetainedRegionIndex Λ A) := by
   exact Set.finite_coe_iff.mpr
     (((show {i : D.regionIndex | i ≠ D.dummy}.PairwiseDisjoint
-        (fun i ↦ (D.regionSites Λ A i : Set (Site Λ))) from
+        (fun i ↦ (D.regionSites Λ A i : Set ↥Λ)) from
       fun i _ j _ hij ↦ Set.disjoint_left.mpr
         (fun _ hx hy ↦ Set.disjoint_left.mp (hdisj hij)
           (Finset.mem_filter.mp hx).2 (Finset.mem_filter.mp hy).2)).finite_biUnion_iff.mp
@@ -109,11 +107,9 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
   (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar

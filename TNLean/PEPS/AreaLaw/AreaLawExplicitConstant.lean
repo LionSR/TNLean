@@ -112,9 +112,9 @@ theorem uniformAreaLaw_explicit_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (h
     (hB : Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een ≤ B) :
     0 ≤ uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
-          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
-        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ↥Λ,
           ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een *
               (edgeBoundary (planeDomainGraph Λ) A).card := by
@@ -153,9 +153,9 @@ theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 
     (htr : Scan.CollarScan.FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     0 ≤ uniformAreaLawConstantExplicit q R J Δ c₀ Cent eent Cen een ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
-          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
-        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ↥Λ,
           ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantExplicit q R J Δ c₀ Cent eent Cen een *
               (edgeBoundary (planeDomainGraph Λ) A).card :=
@@ -185,9 +185,9 @@ Section `sec:top`. -/
 theorem uniformAreaLaw_closed (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     0 ≤ uniformAreaLawConstantClosed q R J Δ ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
-          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
-        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ↥Λ,
           ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantClosed q R J Δ * (edgeBoundary (planeDomainGraph Λ) A).card :=
   uniformAreaLaw_explicit q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
@@ -234,9 +234,9 @@ theorem uniformAreaLaw_closed_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ 
     (hΔ : 0 < Δ) {B : ℝ} (hB : physicalBoxConstantClosed q R J Δ ≤ B) :
     0 ≤ uniformAreaLawConstantClosedAt q R J Δ B ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
-          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
-        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ↥Λ,
           ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantClosedAt q R J Δ B *
               (edgeBoundary (planeDomainGraph Λ) A).card :=

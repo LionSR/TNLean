@@ -25,7 +25,6 @@ The estimate does not require an entropy inequality or an assumed partition.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -67,7 +66,7 @@ def beltCellIndices (F : Finset (ℤ × ℤ)) (m : ℕ) (a b : Fin m) : Finset (
 The combinatorial bound holds at all indices; the physical fine-cell union uses
 `ℓ ≤ k`. Source: area-law Section 11, `geometry:belt-count`, lines 220–228. -/
 theorem exists_fine_belt_shift (o : ℝ × ℝ) (k ℓ p : ℕ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C : ℕ) :
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C : ℕ) :
     ∃ a b : Fin (2 ^ (p - ℓ)),
       2 ^ (p - ℓ) *
           (beltCellIndices (fineLayerIndices o k ℓ (boundaryEndpoints Λ A) C)
@@ -87,7 +86,7 @@ theorem exists_fine_belt_shift (o : ℝ × ℝ) (k ℓ p : ℕ)
 both floor losses accounted for. Source: area-law Section 11,
 `geometry:belt-count`, lines 220–228. -/
 theorem exists_sparse_dyadic_belt_shift (o : ℝ × ℝ) (k : ℕ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C : ℕ) :
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C : ℕ) :
     ∃ a b : Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)),
       ((beltCellIndices (fineLayerIndices o k (fineScaleIndex k)
           (boundaryEndpoints Λ A) C) (2 ^ (pitchScaleIndex k - fineScaleIndex k))

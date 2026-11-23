@@ -3,12 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.Templates.TwoFamilies
 import QICLean.ManyBody.Entropy.ConditionalTwoFamilies
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Labelled conditional two-family entropy estimates
@@ -32,7 +35,6 @@ proof of Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 197–222 and
 -/
 
 open scoped BigOperators
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition
 
@@ -98,8 +100,8 @@ namespace TNLean.PEPS.AreaLaw
 regional entropy terms. Canonical tripartite CMI identification is separate;
 this theorem uses only the existing model entropy and its proved QICLean equality. -/
 theorem regionEntropy_conditional_le_residual_add_sum
-    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (G B C : Finset (Site Λ)) (P : Geometry.OrderedTwoFamilyPartition G)
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (G B C : Finset ↥Λ) (P : Geometry.OrderedTwoFamilyPartition G)
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C)
     (ε : Fin P.pieceCount → ℝ)
     (h₀ : ∀ i, P.family i = 0 →
@@ -121,8 +123,8 @@ remainder. Each remainder site costs at most `2 log q`.
 Source: Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 197–222,
 `eq:info-tile-cost`. -/
 theorem regionEntropy_conditional_le_card_residual_add_pieceCount
-    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (G B C : Finset (Site Λ)) (P : Geometry.OrderedTwoFamilyPartition G)
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (G B C : Finset ↥Λ) (P : Geometry.OrderedTwoFamilyPartition G)
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C) (C₂ : ℝ)
     (h₀ : ∀ i, P.family i = 0 →
       ManyBody.regionMutualInformation Ω (P.piece i)
@@ -144,8 +146,8 @@ theorem regionEntropy_conditional_le_card_residual_add_pieceCount
 partition of `G` with no pieces and remainder `G`.
 Source: Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 310–311. -/
 theorem regionEntropy_conditional_le_two_mul_card_mul_log
-    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
-    (G B C : Finset (Site Λ))
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (G B C : Finset ↥Λ)
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C) :
     ManyBody.regionEntropy Ω (G ∪ B) + ManyBody.regionEntropy Ω (C ∪ B) -
         ManyBody.regionEntropy Ω B - ManyBody.regionEntropy Ω (G ∪ C ∪ B) ≤

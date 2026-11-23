@@ -117,17 +117,17 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
       m₀ ∉ A →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        let G : Finset (Site Λ) :=
+        let G : Finset ↥Λ :=
           Finset.univ.filter (fun x ↦ x.val ∈ CellPartition.cellSample o s m₀)
-        let B : Finset (Site Λ) := Finset.univ.filter
+        let B : Finset ↥Λ := Finset.univ.filter
           (fun x ↦ CellPartition.cellIndex o s (integerPoint x.val) ∈ A)
-        ∀ E : Finset (Site Λ), E ⊆ (G ∪ B)ᶜ →
+        ∀ E : Finset ↥Λ, E ⊆ (G ∪ B)ᶜ →
           (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner o s m₀) s),
             ∀ y ∈ E, c * s ≤ dist x (integerPoint y.val)) →
-          ManyBody.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
+          ManyBody.conditionalMutualInformation (fun _ : ↥Λ ↦ Fin q)
             Ω G E B ≤ cellInformationConstant q c Ctpl N Ca Na *
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
   have hβ : (Exponents.beta : ℝ) < 1 := beta_lt_one
@@ -148,7 +148,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
   intro s hs o m₀ A hm₀ Λ h hh hhJ E₀ Ω hΩ hgap hspan G B E hE hclear
   obtain ⟨P, scale, hscale, hrect, hdiam, houtside, hearlier, hcount⟩ :=
     hpart s hs o m₀ (fun i ↦ if i ∈ A then 0 else 1)
-  let Q : OrderedTwoFamilyPartition G := P.comap (fun x : Site Λ ↦ x.val)
+  let Q : OrderedTwoFamilyPartition G := P.comap (fun x : ↥Λ ↦ x.val)
   have hbox (i : Fin P.pieceCount) : IsBoxUnion (66 * 66) (P.piece i) := by
     rcases hrect i with ⟨n, hn, R, hR, hT⟩
     choose a₁ b₁ a₂ b₂ hR using hR
@@ -167,7 +167,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
       Finset.mem_compl.mp (hE hxE) (Finset.mem_union_left _ hxG),
      Finset.disjoint_left.mpr fun x hxB hxE ↦
       Finset.mem_compl.mp (hE hxE) (Finset.mem_union_right _ hxB)⟩
-  have htile (i : Fin P.pieceCount) (F : Finset (Site Λ))
+  have htile (i : Fin P.pieceCount) (F : Finset ↥Λ)
       (hF : ∀ x ∈ P.piece i, ∀ y ∈ F,
         scale i ^ β < dist (integerPoint x) (integerPoint y.val)) :
       ManyBody.regionMutualInformation Ω (Q.piece i) F ≤ C₂ :=
@@ -216,13 +216,13 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
     · exact hearlier i x hx y.val (by
         simpa only [Q, OrderedTwoFamilyPartition.earlierSameFamily_comap,
           Finset.mem_filter, Finset.mem_univ, true_and] using hy)
-  have hinfo : ManyBody.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
+  have hinfo : ManyBody.conditionalMutualInformation (fun _ : ↥Λ ↦ Fin q)
       Ω G E B ≤ 2 * (Q.residual.card : ℝ) * Real.log q + Q.pieceCount * C₂ := by
     simpa only [ManyBody.conditionalMutualInformation] using
       regionEntropy_conditional_le_card_residual_add_pieceCount
         Λ q Ω hΩ G B E Q hGB hdisj.1 hdisj.2 C₂ h₀ h₁
   have hres : (Q.residual.card : ℝ) ≤ P.residual.card :=
-    Nat.cast_le.mpr (P.card_residual_comap_le (fun x : Site Λ ↦ x.val)
+    Nat.cast_le.mpr (P.card_residual_comap_le (fun x : ↥Λ ↦ x.val)
       Subtype.val_injective)
   let M := max 1 (max (2 * Real.log q) C₂)
   have hMlog : 2 * Real.log q ≤ M := (le_max_left _ _).trans (le_max_right _ _)
@@ -259,17 +259,17 @@ theorem exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound
         m₀ ∉ A →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
             (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          let G : Finset (Site Λ) :=
+          let G : Finset ↥Λ :=
             Finset.univ.filter (fun x ↦ x.val ∈ CellPartition.cellSample o s m₀)
-          let B : Finset (Site Λ) := Finset.univ.filter
+          let B : Finset ↥Λ := Finset.univ.filter
             (fun x ↦ CellPartition.cellIndex o s (integerPoint x.val) ∈ A)
-          ∀ E : Finset (Site Λ), E ⊆ (G ∪ B)ᶜ →
+          ∀ E : Finset ↥Λ, E ⊆ (G ∪ B)ᶜ →
             (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner o s m₀) s),
               ∀ y ∈ E, c * s ≤ dist x (integerPoint y.val)) →
-            ManyBody.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
+            ManyBody.conditionalMutualInformation (fun _ : ↥Λ ↦ Fin q)
               Ω G E B ≤ C₁ * (1 + Real.log s) ^ K := by
   obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol

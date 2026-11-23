@@ -96,9 +96,9 @@ theorem uniformAreaLaw_elementary (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 
     (hΔ : 0 < Δ) :
     0 ≤ uniformAreaLawConstantElementary q R J Δ ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
-          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
-        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ↥Λ,
           ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantElementary q R J Δ *
               (edgeBoundary (planeDomainGraph Λ) A).card :=

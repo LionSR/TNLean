@@ -69,7 +69,6 @@ open Matrix
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped ComplexOrder
-open TNLean.Lattice
 open ManyBody (planeDomainGraph edgeBoundary ambientDilation)
 
 namespace ManyBody
@@ -306,7 +305,7 @@ template constant of Lemma 9.4, and `1 ≤ D₀` follows from the standing choic
 Source: `08-scanner.tex`, lines 824–826 and 942–943, from Lemma 9.4, lines 571–590. -/
 theorem Template.collar_cut_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     {L : ℕ} (hL : L ≤ s₀) :
     (edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card ≤ 4 * n ∧
@@ -362,9 +361,9 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
     (hI : ∀ n s₀ : ℕ, N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω
@@ -375,9 +374,9 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
     ∀ n s₀ : ℕ, N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω
@@ -435,9 +434,9 @@ theorem sublinearCollarBound_of_mutualInformation_le {q R : ℕ} {J Δ D₀ Ctpl
     (hinfo : ∃ C : ℝ, ∃ N : ℕ, ∀ n s₀ : ℕ, N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
+          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω

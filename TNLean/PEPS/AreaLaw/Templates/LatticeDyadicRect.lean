@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangles
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Squares.CappedDyadicPartition
 import TNLean.PEPS.AreaLaw.Templates.TemplateClearance
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # Integer rectangles of lattice dyadic squares
@@ -21,7 +22,7 @@ These independently written manuscript proofs are extracted unchanged from
 TemplateSafeRectangles.lean.
 -/
 
-open TNLean.Lattice
+open ManyBody (IntRect rectRegion)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -56,7 +57,7 @@ exactly `2^k`, rather than its coordinate diameter `2^k - 1`. -/
 /-- Physical intersections use the same native rectangle region as the safe-box
 entropy interface; no ambient sites outside the domain are added. -/
 theorem rectRegion_latticeDyadicRect {Λ : Finset (ℤ × ℤ)}
-    (A : Finset (Site Λ)) (k : ℕ) (z : ℤ × ℤ) :
+    (A : Finset ↥Λ) (k : ℕ) (z : ℤ × ℤ) :
     rectRegion A (latticeDyadicRect k z) = A.filter (fun x ↦ x.1 ∈ latticeDyadicCell k z) := by
   simp only [rectRegion, toFinset_latticeDyadicRect]
 

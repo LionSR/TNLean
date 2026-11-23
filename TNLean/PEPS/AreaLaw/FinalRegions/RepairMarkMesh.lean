@@ -20,11 +20,9 @@ marks, lines 404–409 and 506–514; integral coordinates, lines 545–558.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)} {C k₀ : ℕ}
+variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {C k₀ : ℕ}
   {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar : ℝ}
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar

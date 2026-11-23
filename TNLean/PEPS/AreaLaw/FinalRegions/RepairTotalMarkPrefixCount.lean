@@ -29,7 +29,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -56,7 +55,7 @@ before any finite cutoff number at most `M_t (2 C₀ + 1) ^ 2 |∂A|` with
 Source: area-law Section 11, `geometry:descendant-count` and
 `geometry:total-repairs`, lines 668–692. -/
 theorem repairStage_markIndex_prefix_le {Sstar : ℝ} (hSstar : 1 < Sstar)
-    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ)
     (h : RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
       (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀) (N : ℕ) :
@@ -100,7 +99,7 @@ Source: area-law Section 11, `geometry:descendant-count` and
 theorem exists_uniform_repairStage_markIndex_prefix_bound {Sstar : ℝ}
     (hSstar : 1 < Sstar) :
     ∃ M : ℝ, 0 < M ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
         (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ),
         RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
           (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ →

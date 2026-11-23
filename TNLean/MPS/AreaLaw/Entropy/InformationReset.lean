@@ -6,12 +6,15 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Entropy.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.Entropy.ResetSupportSeparation
 import QICLean.ManyBody.Sites.GraphBall
-import TNLean.Lattice.PhysicalBufferCoordinates
-import TNLean.Lattice.RegionalReset
-import TNLean.Lattice.RegionalResetEntropy
-import TNLean.Lattice.ReplicaSwap
+import QICLean.ManyBody.Replica.RegionalReset
+import QICLean.ManyBody.Replica.RegionalResetEntropy
+import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Analysis.Norm.MatrixKroneckerContraction
+import QICLean.Analysis.Parameter.LocalizationParameters
+import QICLean.ManyBody.Sites.SupportedUnitary
 
 /-!
 # Information reset
@@ -51,10 +54,10 @@ open ManyBody (ChainSupport DomainSupport lineDomainGraph ChainInteraction Domai
 
 open Matrix QuantumCircuit MeasureTheory ProbabilityTheory
 open scoped Kronecker Matrix.Norms.L2Operator NNReal
-open TNLean.Lattice (exists_regional_physicalBuffer_filter exists_supported_unitary_of_two_sided
-  norm_two_sided_le_of_norm_sub_le reindex_physicalBuffer_eq_place reset_entropy_scalar sheetSwapOp)
 
 open ManyBody (IsGapped groundSpace)
+
+open ManyBody (reindex_physicalBuffer_eq_place)
 
 namespace TNLean.MPS.AreaLaw
 

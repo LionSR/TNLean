@@ -22,7 +22,6 @@ Revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text reused.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation edgeBoundary mem_ambientDilation_iff planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -93,7 +92,7 @@ required at every endpoint of a physical crossing edge.
 Source: Lemma 9.4, lines 650–655. -/
 theorem Template.IsSeparated.dyadicCell_clearance
     {Ctpl : ℝ} {n s₀ D₀ j k : ℕ} {T : Template Ctpl n s₀}
-    {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+    {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
     (hsep : T.IsSeparated (D₀ : ℝ) (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (hj : j ≤ s₀) (hk : 2 ^ k ≤ s₀) {c : ℤ × ℤ}
     (hcell : latticeDyadicCell k c ⊆ ambientDilation T.points j) :

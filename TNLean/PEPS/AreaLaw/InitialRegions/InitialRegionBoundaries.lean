@@ -54,7 +54,6 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Geometry

@@ -20,8 +20,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 225–233 and 331–337, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -91,7 +89,7 @@ history with probability `1/(2M) ≥ c/(nD)`, and the extended history removes i
 exact old unassigned part. The probability is classical, before state transport. -/
 theorem good_designated_split_sampling_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
     (hn : 2 ≤ S.n) (hm : 2 ≤ S.m) (hk : k + 1 ≤ S.n * S.m)

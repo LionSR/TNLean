@@ -41,7 +41,7 @@ namespace TNLean.PEPS.Approximation
 nearest-neighbor supports in the integer rectangle.
 Source: polynomial-PEPS `eq:model` and `03-patches.tex`, lines 213–336. -/
 theorem rectangleSupport_val_eq_nearestNeighborSupport (L : ℕ)
-    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))]
+    [LinearOrder ↥(ManyBody.rectangularDomain L L)]
     (i : SquareLatticeSiteOrEdge L L) :
     let e := Equiv.sumCongr (ManyBody.rectangleSiteEquiv L L)
       (ManyBody.Edge.equiv (ManyBody.rectangleGraphIso L L))
@@ -74,11 +74,11 @@ singleton and nearest-neighbor supports in the integer rectangle.
 Source: polynomial-PEPS `eq:model` and `03-patches.tex`, lines 213–336. -/
 theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : ℕ} {J : ℝ}
     (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
-    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))] :
-    ∃ T : (Lattice.Site (ManyBody.rectangularDomain L L) ⊕
+    [LinearOrder ↥(ManyBody.rectangularDomain L L)] :
+    ∃ T : (↥(ManyBody.rectangularDomain L L) ⊕
         Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L))) →
-        Matrix (Lattice.Configuration (ManyBody.rectangularDomain L L) q)
-          (Lattice.Configuration (ManyBody.rectangularDomain L L) q) ℂ,
+        Matrix (↥(ManyBody.rectangularDomain L L) → Fin q)
+          (↥(ManyBody.rectangularDomain L L) → Fin q) ℂ,
       (∀ i, ManyBody.IsSupportedOn
         (X := fun _ ↦ Fin q)
         (T i) (AreaLaw.nearestNeighborSupport i)) ∧

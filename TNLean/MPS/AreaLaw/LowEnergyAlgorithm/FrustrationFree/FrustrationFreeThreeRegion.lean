@@ -571,8 +571,8 @@ theorem rank_regionTermMatrix_le {h : ℕ → Matrix (Fin L → Fin q) (Fin L �
     (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (x y m c : ℕ) :
     operatorSchmidtRank ((regionTermMatrix h x y m).reindex
-      (TNLean.Lattice.sheetSplit q (interval L 0 c))
-      (TNLean.Lattice.sheetSplit q (interval L 0 c))) ≤ q ^ 2 + 2 := by
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤ q ^ 2 + 2 := by
   rw [← TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_eq]
   have hdecomp : regionTermMatrix h x y m = (1 + 1) - regionalProjectionMatrix h (evenBonds x y) m -
       regionalProjectionMatrix h (oddBonds x y) m := by

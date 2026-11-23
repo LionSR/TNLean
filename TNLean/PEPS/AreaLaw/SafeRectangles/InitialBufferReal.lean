@@ -3,9 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangleEntropy
+import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
 import TNLean.PEPS.AreaLaw.Squares.CellCounting
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Conditional entropy in a rectangle with real clearance
@@ -30,9 +33,10 @@ Independently formalized; no upstream Lean proof text reused.
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
+
+open ManyBody (IntRect IsSafe bufferBudgetConst bufferCrossConst
+    condEntropy_le_initialBuffer_of_constants one_le_bufferBudgetConst rectRegion supDist)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -46,10 +50,10 @@ theorem exists_condEntropy_le_initialBuffer_real
       ∀ D₀ : ℝ, 2 * (R : ℝ) + 10 < D₀ →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q),
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ (A : Finset (Site Λ)) (Q : IntRect),
+        ∀ (A : Finset ↥Λ) (Q : IntRect),
           (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
             D₀ * (Q.size : ℝ) < (supDist t z : ℝ)) →
           ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →

@@ -37,7 +37,6 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 noncomputable section
 
 open Filter Topology
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -57,7 +56,7 @@ private theorem finite_support_of_summable_nat_counts (c : ℕ → ℕ)
 cell families have finite support.
 Source: area-law Section 11, `geometry:belt-count`, lines 220–233. -/
 theorem exists_finitely_supported_sparse_belt_shifts (o : ℝ × ℝ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C : ℕ) :
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C : ℕ) :
     ∃ a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)),
       let F := fun k => beltCellIndices
         (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)
@@ -88,7 +87,7 @@ Source: area-law Section 11, `geometry:belt-count`, lines 220–233, and
 `geometry:initial-stars`, lines 325–330. -/
 theorem exists_uniform_initial_mark_bound :
     ∃ B : ℝ, 0 < B ∧ ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-      (A : Finset (Site Λ)) (C k₀ : ℕ),
+      (A : Finset ↥Λ) (C k₀ : ℕ),
       ∃ a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)),
         let F := fun k => beltCellIndices
           (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)
@@ -188,7 +187,7 @@ Source: area-law Section 11, `geometry:belt-count`, lines 220–233, and
 `geometry:initial-stars`, lines 325–339 and 352–363. -/
 theorem exists_uniform_separated_initial_marks :
     ∃ B : ℝ, 0 < B ∧ ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-      (A : Finset (Site Λ)) (C k₀ : ℕ), 2 ≤ C → 50000000 ≤ k₀ →
+      (A : Finset ↥Λ) (C k₀ : ℕ), 2 ≤ C → 50000000 ≤ k₀ →
       ∃ a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)),
         let F := fun k => beltCellIndices
           (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)

@@ -61,8 +61,6 @@ open Filter
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Scalar estimates -/
@@ -268,7 +266,7 @@ theorem Template.cutClearance_of_endpoint_dist_ge {Ctpl D₀ CB u : ℝ} {n s₀
 
 section Stages
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
   (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -412,7 +410,7 @@ Source: area-law Section 11, lines 742–750, with the replacement scanner scale
 of lines 735–737 and Lemma 11.4 (`geometry:repair-induction`, lines 471–485). -/
 theorem descendant_birthTemplate_cutClearance_of_le {Sstar : ℝ}
     (hS : repairMarginThreshold (1 / 128) ≤ Sstar) (C : ℕ) (D₀ CB : ℝ) (o : ℝ × ℝ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
     (hK : max (fineScaleIndexThreshold Sstar) (descendantCutClearanceThreshold D₀ CB) ≤ k₀) :
     ∀ (j : ℕ) (x : (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).regionIndex)
       (m : (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex),
@@ -465,7 +463,7 @@ thresholds are `repairMarginThreshold (1/128)` and the larger of
 (`descendant_birthTemplate_cutClearance_of_le`). -/
 theorem descendant_birthTemplate_cutClearance :
     ∃ T₀ : ℝ, ∀ Sstar : ℝ, T₀ ≤ Sstar → ∀ (C : ℕ) (D₀ CB : ℝ), ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
         ∀ (j : ℕ) (x : (repairStage o Λ A C k₀ hC h₀ Sstar (j + 1)).regionIndex)
           (m : (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex),

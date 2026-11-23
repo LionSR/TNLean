@@ -61,8 +61,6 @@ open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -87,21 +85,21 @@ namespace CollarScan
 open SpectralFilter
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ} [NeZero q]
-    (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+    (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (Ω : StateSpace Λ q)
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
 
 include hh hhJ in
 /-- A common upper bound for the geometric budget gives the comparator's exact
 real-u interval, without changing the truncated physical ground vector. -/
 theorem log_surprisalMoment_truncated_regionState_le_common
     (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
-    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e B : ℝ} {Ωt : StateSpace Λ q}
+    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e B : ℝ} {Ωt : EuclideanSpace ℂ (↥Λ → Fin q)}
     (hΩt : ‖Ωt‖ = 1)
     (hgapt : IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e
       ((Δ / positiveNormalization 1 (Δ / 2) J) / 2))
     (hspant : groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt})
-    (Q : Finset (Site Λ))
+    (Q : Finset ↥Λ)
     (hB : ManyBody.cutLogBudget
       (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Q ≤ B)
     {u : ℝ}
@@ -138,8 +136,8 @@ theorem exists_truncated_statusMarginal_moment_bounds
       ∃ CB : ℝ, 0 < CB ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
           (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-          (E₀ : ℝ) (Ω : StateSpace Λ q),
+          (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ →
@@ -158,7 +156,7 @@ theorem exists_truncated_statusMarginal_moment_bounds
           let C₀ := 512 * Real.exp 1 * (2 / g)
           let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))
           0 < C₀ ∧ 0 < c₀ ∧
-          ∃ (e : ℝ) (Ωt : StateSpace Λ q) (B : ℝ),
+          ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (B : ℝ),
             1 ≤ B ∧ B ≤ CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12) ∧
             (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
               groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -224,8 +222,6 @@ open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -247,8 +243,8 @@ theorem exists_source_statusMarginal_moment_bounds
       ∃ CB : ℝ, 0 < CB ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
           (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-          (E₀ : ℝ) (Ω : StateSpace Λ q),
+          (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
+          (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ →
@@ -271,7 +267,7 @@ theorem exists_source_statusMarginal_moment_bounds
           let C₀ := 512 * Real.exp 1 * (2 / g)
           let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))
           0 < C₀ ∧ 0 < c₀ ∧
-          ∃ (e : ℝ) (Ωt : StateSpace Λ q) (B : ℝ),
+          ∃ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (B : ℝ),
             1 ≤ B ∧ B ≤ CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12) ∧
             (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
               groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -333,7 +329,6 @@ open Matrix Filter
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
@@ -349,7 +344,7 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ) {Cr : ℝ} (hCr : 0 ≤ Cr) :
     ∃ CB : ℝ, 0 < CB ∧
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-        (hT : T.Nonempty) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+        (hT : T.Nonempty) (S : CollarScan ↥Λ (AdmissibleSupport Λ R)),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
@@ -363,9 +358,9 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
         let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
         1 ≤ B ∧
           ∀ {J Δ : ℝ} (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
-              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q),
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
             0 < Δ → ‖Ω‖ = 1 →
-            ∀ (e : ℝ) (Ωt : StateSpace Λ q),
+            ∀ (e : ℝ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)),
               ‖Ωt‖ = 1 →
               IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e
                 ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) →

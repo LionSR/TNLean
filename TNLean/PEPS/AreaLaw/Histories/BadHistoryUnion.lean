@@ -17,8 +17,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 286–329, at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -51,7 +49,7 @@ open Classical in
 with only compact collar volume, two sides, and the number of bands. -/
 theorem sum_chargePathWeight_bad_completed_domainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {k L μ : ℕ} (offsets : Fin S.K → Fin S.m) (hn : 0 < S.n) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
@@ -64,9 +62,9 @@ theorem sum_chargePathWeight_bad_completed_domainGraph_le
       (S.K * 2 * (S.A.filter fun x ↦ S.depth x ≤ L).card : ℕ) * S.badEndpointTail k μ := by
   classical
   let points := S.A.filter fun x ↦ S.depth x ≤ L
-  let tests : Finset (Fin S.K × Bool × Site Λ) := Finset.univ ×ˢ (Finset.univ ×ˢ points)
+  let tests : Finset (Fin S.K × Bool × ↥Λ) := Finset.univ ×ˢ (Finset.univ ×ˢ points)
   let w : ℝ := ((1 / (2 * (S.M : ℝ))) ^ S.K) ^ k
-  let E (a : Fin S.K × Bool × Site Λ) (c : Fin k → ChargeChoices S.K S.M) :=
+  let E (a : Fin S.K × Bool × ↥Λ) (c : Fin k → ChargeChoices S.K S.M) :=
     S.IsBadBandEndpoint offsets a.1 a.2.1 a.2.2 c
   have hw : 0 ≤ w := by dsimp [w]; positivity
   have hcover (c : Fin k → ChargeChoices S.K S.M)
@@ -113,7 +111,7 @@ open Classical in
 The weights are the scanner's classical history weights, not transported quantum measures. -/
 theorem sum_historyWeight_bad_completed_domainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {k L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
@@ -145,7 +143,7 @@ open Classical in
 create bad lead. This covers the source's sampling-time goodness convention. -/
 theorem sum_historyWeight_bad_old_domainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {k L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)

@@ -5,9 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.TwoMarkerMiddleFactors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.RegionalFactors.ThreeRegionSupport
-import TNLean.Circuit.RegionSplit
+import QICLean.ManyBody.Sites.Placement
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Logic.Equiv.Fin.Basic
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!
 # Fixed middle data for two selected windows

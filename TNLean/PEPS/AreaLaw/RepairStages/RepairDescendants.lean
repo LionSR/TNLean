@@ -24,13 +24,11 @@ Written from the manuscript; no upstream Lean text is reused.
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 section Stages
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
   (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 /-- The parent occurrence of a mark of generation `j + 1`.

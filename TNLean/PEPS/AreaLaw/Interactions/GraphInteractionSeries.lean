@@ -24,6 +24,8 @@ September 24, 2026, Lemma 4.1, `03-quasilocal.tex`, lines 96–113, at source co
 
 open scoped BigOperators
 
+open ManyBody (interactionChainWeightSum_le_pow)
+
 namespace TNLean.PEPS.AreaLaw
 
 variable {V : Type*} [DecidableEq V]

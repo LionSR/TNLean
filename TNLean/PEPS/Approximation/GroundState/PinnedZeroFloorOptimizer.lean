@@ -72,7 +72,6 @@ open ManyBody (Edge SquareInteraction)
 
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace edgeBoundary planeDomainGraph)
 
@@ -89,10 +88,10 @@ regional matrices below are in the canonical integer square coordinates. -/
 theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fidelity
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J)
-    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))]
+    [LinearOrder ↥(ManyBody.rectangularDomain L L)]
     {Ω : StateSpace L q} (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped h.hamiltonian E₀ Δ)
     (hΩs : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-    (D : ℕ → Finset (Lattice.Site (ManyBody.rectangularDomain L L)))
+    (D : ℕ → Finset ↥(ManyBody.rectangularDomain L L))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
     (hsingle : ∀ e : Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
       ∀ i j : Fin m,
@@ -132,7 +131,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
   have hΩ0 : AreaLaw.rectangleAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hΩ
     simp [h0] at hnorm
-  have hsplit : ∀ i : Lattice.Site (ManyBody.rectangularDomain L L) ⊕
+  have hsplit : ∀ i : ↥(ManyBody.rectangularDomain L L) ⊕
       Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m, j = k := by
@@ -160,7 +159,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
       (∑ j : Fin m, a j ^ 2 *
         ∑ i ∈ ManyBody.crossingTerms AreaLaw.nearestNeighborSupport (D j),
           (Fintype.card (ManyBody.InnerConfig
-            (fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+            (fun _ : ↥(ManyBody.rectangularDomain L L) ↦ q)
             (D j) (AreaLaw.nearestNeighborSupport i)) : ℝ) ^ 2 * J) =
         (q : ℝ) ^ 2 * J * ∑ j : Fin m,
           a j ^ 2 *
@@ -195,7 +194,6 @@ open Matrix
 
 open ManyBody (IsGapped groundSpace edgeBoundary planeDomainGraph)
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -218,7 +216,7 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 
 /-- The existing source/native bijection followed by graph-isomorphism transport. -/
 private def rectangleForwardEdgeEquiv (L : ℕ)
-    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))] :
+    [LinearOrder ↥(ManyBody.rectangularDomain L L)] :
     Edge (squareLatticeGraph L L) ≃
       Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)) :=
   (ManyBody.Edge.equiv (ManyBody.rectangleGraphIso L L))
@@ -226,7 +224,7 @@ private def rectangleForwardEdgeEquiv (L : ℕ)
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
 chosen target order. No order compatibility of rectangleSiteEquiv is assumed. -/
 private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
-    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))]
+    [LinearOrder ↥(ManyBody.rectangularDomain L L)]
     (A : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) :
     s((rectangleForwardEdgeEquiv L e).1.1,
       (rectangleForwardEdgeEquiv L e).1.2) ∈
@@ -256,7 +254,7 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
 
 /-- Every canonical edge inherits the original one-crossing condition. -/
 private theorem rectangle_singleCrossing {L m : ℕ}
-    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))]
+    [LinearOrder ↥(ManyBody.rectangularDomain L L)]
     (X : Fin m → Finset (Vertex L))
     (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j) :
@@ -368,7 +366,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
       Δ * (1 - ‖⟪Ω, normalizedOutput F Ω⟫_ℂ‖ ^ 2) ≤
         (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
   classical
-  let : LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L)) :=
+  let : LinearOrder ↥(ManyBody.rectangularDomain L L) :=
     LinearOrder.lift' (ManyBody.rectangleSiteEquiv L L).symm
       (ManyBody.rectangleSiteEquiv L L).symm.injective
   have hD : ∀ i j : Fin m, i ≤ j → canonicalRegions X i ⊆ canonicalRegions X j := by

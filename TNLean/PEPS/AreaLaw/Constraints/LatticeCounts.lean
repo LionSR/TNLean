@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangles
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Constraints.CrossingBudget
 import TNLean.PEPS.AreaLaw.Interactions.GraphPropagation
 
@@ -17,7 +17,7 @@ counts of Section 2: graph balls and spheres of radius `d` have at most a consta
 anchor and the norms of the terms meeting a site sum to at most `μ_R J`. The sphere,
 support-diameter, support-size and site-budget counts are proved in
 `TNLean.PEPS.AreaLaw.GraphPropagation`, and the count of supports containing a site is
-`TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le`; this file adds the remaining
+`ManyBody.card_admissibleSupport_containing_le`; this file adds the remaining
 counts on the induced nearest-neighbour graph of an arbitrary finite domain, holes and
 disconnected components included, from the ambient diamond count `eq:ball-count`.
 
@@ -38,10 +38,11 @@ disconnected components included, from the ambient diamond count `eq:ball-count`
 -/
 
 open scoped Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport card_le_diamond_of_edist_le
   latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph)
+
+open ManyBody (card_admissibleSupport_containing_le)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -51,7 +52,7 @@ variable {Λ : Finset (ℤ × ℤ)}
 
 /-- **Ball count** (`eq:ball-count`, `01-preliminaries.tex`, lines 82–87): a graph ball of
 radius `d` in an induced domain has at most `1 + 2 d (d + 1) ≤ 2 (d + 1)²` sites. -/
-theorem card_graphBall_domainGraph_le (x : Site Λ) (d : ℕ) :
+theorem card_graphBall_domainGraph_le (x : ↥Λ) (d : ℕ) :
     ((ManyBody.graphBall (planeDomainGraph Λ) x d).card : ℝ) ≤ 2 * ((d : ℝ) + 1) ^ 2 := by
   have h := card_le_diamond_of_edist_le (G := planeDomainGraph Λ) Subtype.val
     (ManyBody.graphBall (planeDomainGraph Λ) x d) Subtype.val_injective
@@ -63,8 +64,8 @@ theorem card_graphBall_domainGraph_le (x : Site Λ) (d : ℕ) :
 
 /-- **Anchor multiplicity**: if every label is anchored inside its support, at most `μ_R`
 labels share an anchor (`03-quasilocal.tex`, lines 30–33). -/
-theorem card_anchor_fiber_le {R : ℕ} (a : AdmissibleSupport Λ R → Site Λ)
-    (ha : ∀ X, a X ∈ X.1) (x : Site Λ) :
+theorem card_anchor_fiber_le {R : ℕ} (a : AdmissibleSupport Λ R → ↥Λ)
+    (ha : ∀ X, a X ∈ X.1) (x : ↥Λ) :
     (Finset.univ.filter fun X => a X = x).card ≤ 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
   (Finset.card_le_card fun X hX => by
     simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hX ⊢
@@ -72,7 +73,7 @@ theorem card_anchor_fiber_le {R : ℕ} (a : AdmissibleSupport Λ R → Site Λ)
 
 /-- Ordered cut edges `(u, v)`, `u ∈ X`, `v ∉ X`, are no more numerous than the unordered
 edges of `∂_Λ X` (`03-quasilocal.tex`, line 436). -/
-theorem card_interedges_compl_le_card_edgeBoundary (X : Finset (Site Λ)) :
+theorem card_interedges_compl_le_card_edgeBoundary (X : Finset ↥Λ) :
     ((planeDomainGraph Λ).interedges X Xᶜ).card ≤
       (ManyBody.edgeBoundary (planeDomainGraph Λ) X).card := by
   classical

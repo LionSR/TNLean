@@ -33,8 +33,6 @@ open scoped BigOperators
 open TensorPower TensorPower.ReplicaTransport
 noncomputable section
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -58,11 +56,11 @@ def actualChargeEntropyDefect (S : CollarScan V I) (hm : 0 < S.m) (hM : 0 < S.M)
 then dominates the actual old-leaf split entropy, pointwise in one vector. -/
 theorem good_sum_splitEta_le_choiceEntropySymbol_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {k L μ : ℕ}
     (hm0 : 0 < S.m) (hM : 0 < S.M) (h : History S.K S.m S.M k)
-    (n : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)]
-    (E : EnergyTerms (Site Λ ⊕ Bool) n I)
+    (n : ↥Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)]
+    (E : EnergyTerms (↥Λ ⊕ Bool) n I)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -107,11 +105,11 @@ for each history and Fourier parameter; no sampling or compatibility field
 is assumed. -/
 theorem actualChargeEntropyDefect_le_entropyGain_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {k L μ : ℕ}
     (hm0 : 0 < S.m) (hM : 0 < S.M)
-    (n : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)]
-    (E : EnergyTerms (Site Λ ⊕ Bool) n I)
+    (n : ↥Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)]
+    (E : EnergyTerms (↥Λ ⊕ Bool) n I)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)

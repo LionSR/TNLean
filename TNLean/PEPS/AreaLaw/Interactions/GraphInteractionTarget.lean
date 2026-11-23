@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.GraphInteractionBudget
+import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import Mathlib.Combinatorics.SimpleGraph.Metric
 
 /-!
@@ -21,6 +21,8 @@ September 24, 2026, Lemma 4.1, lines 96–113 in `03-quasilocal.tex`, at immutab
 -/
 
 open scoped BigOperators
+
+open ManyBody (interactionChainWeightSum interactionChainWeightSum_le_pow)
 
 namespace TNLean.PEPS.AreaLaw
 

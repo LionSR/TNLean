@@ -24,8 +24,6 @@ OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -44,8 +42,8 @@ theorem actualCharges_selection_domainGraph_of_finiteFamilyTransportBound
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
       (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (Ω : StateSpace Λ q)
-      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+          (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+      (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
       S.graph = planeDomainGraph Λ →
       S.depth = (fun x => ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -60,7 +58,7 @@ theorem actualCharges_selection_domainGraph_of_finiteFamilyTransportBound
       ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
       let hm : 0 < S.m := by omega
       let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
-      let n := augmentedDimensions (V := Site Λ) q aux
+      let n := augmentedDimensions (V := ↥Λ) q aux
       let E := S.actualEnergyTerms h Ω J Δ L aux
       let ℓ := transportLogDimBound q S.r₀
       ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
@@ -108,8 +106,8 @@ theorem actualCharges_selection_domainGraph :
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -124,7 +122,7 @@ theorem actualCharges_selection_domainGraph :
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
-        let n := augmentedDimensions (V := Site Λ) q aux
+        let n := augmentedDimensions (V := ↥Λ) q aux
         let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
         ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧

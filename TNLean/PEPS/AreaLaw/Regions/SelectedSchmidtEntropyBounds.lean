@@ -22,7 +22,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 noncomputable section
 open Matrix
 open scoped Matrix ComplexOrder
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -35,9 +34,9 @@ Source: `07-comparators.tex`, `comparator:typical-entropies`, lines 37–55,
 and `comparator:high-label`, lines 240–270. -/
 theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
     {Λ : Finset (ℤ × ℤ)} {q : ℕ}
-    (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1)
-    (X : Finset (Site Λ))
-    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ => Fin q) X))
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
+    (X : Finset ↥Λ)
+    (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ => Fin q) X))
     (w : ℝ)
     (hz : 0 < (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E)
     (hE : ∀ i ∈ E,
@@ -45,7 +44,7 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
           (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
         (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ≤
           Real.exp (-ManyBody.regionEntropy Ωt X + w)) :
-    let β := fun _ : Site Λ => Fin q
+    let β := fun _ : ↥Λ => Fin q
     let split := ManyBody.cutEquiv β X
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ωt
     let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
@@ -65,7 +64,7 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
   have hselected := Matrix.entropy_compressedTypicalPureState_equivFin_swap ΩX E
     (by simpa only [← hρ] using hz)
   have hz1 : z ≤ 1 := (ManyBody.regionState_posSemidef X Ωt).spectralRestrictionMass_le_one
-    (by simpa only [] using
+    (by simpa only using
       (ManyBody.trace_regionState_eq_one hΩt (D := X))) E
   rw [(ManyBody.regionState_isHermitian X Ωt).rank_normalizedSpectralRestriction E hz.ne'
     (fun i hi => (Real.exp_pos _).trans_le (hE i hi).1)] at hbounds

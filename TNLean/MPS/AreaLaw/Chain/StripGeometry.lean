@@ -3,7 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.BufferedRectangleEntropy
+import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Column intervals in a finite strip
@@ -24,8 +27,6 @@ contain a specified site. These bounds are supplied by the existing lattice coun
 results. They change the constants depending on `q,R`, without changing width scaling.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport)
 
 namespace TNLean.MPS.AreaLaw
@@ -35,12 +36,12 @@ def stripDomain (L w : ℕ) : Finset (ℤ × ℤ) :=
   Finset.Ico 0 (L : ℤ) ×ˢ Finset.Ico 0 (w : ℤ)
 
 /-- A strip site has nonnegative coordinates below the two side lengths. -/
-theorem stripSite_bounds {L w : ℕ} (x : Site (stripDomain L w)) :
+theorem stripSite_bounds {L w : ℕ} (x : ↥(stripDomain L w)) :
     0 ≤ x.1.1 ∧ x.1.1 < L ∧ 0 ≤ x.1.2 ∧ x.1.2 < w := by
   simpa only [stripDomain, Finset.mem_product, Finset.mem_Ico, and_assoc] using x.2
 
 /-- The finite rectangular domain has exactly the requested physical sites. -/
-def stripSiteEquiv (L w : ℕ) : (Fin L × Fin w) ≃ Site (stripDomain L w) where
+def stripSiteEquiv (L w : ℕ) : (Fin L × Fin w) ≃ ↥(stripDomain L w) where
   toFun x := ⟨((x.1 : ℕ), (x.2 : ℕ)), by
     simp only [stripDomain, Finset.mem_product, Finset.mem_Ico]
     exact ⟨⟨by positivity, by exact_mod_cast x.1.isLt⟩,
@@ -54,17 +55,17 @@ def stripSiteEquiv (L w : ℕ) : (Fin L × Fin w) ≃ Site (stripDomain L w) whe
     ext <;> simp only <;> omega
 
 /-- The column coordinate of an actual lattice site. -/
-def stripColumn {L w : ℕ} (x : Site (stripDomain L w)) : ℕ := x.1.1.toNat
+def stripColumn {L w : ℕ} (x : ↥(stripDomain L w)) : ℕ := x.1.1.toNat
 
 /-- The row coordinate of an actual lattice site. -/
-def stripRow {L w : ℕ} (x : Site (stripDomain L w)) : ℕ := x.1.2.toNat
+def stripRow {L w : ℕ} (x : ↥(stripDomain L w)) : ℕ := x.1.2.toNat
 
 /-- A column interval, clipped by the finite strip domain. -/
-def stripInterval (L w a b : ℕ) : Finset (Site (stripDomain L w)) :=
+def stripInterval (L w a b : ℕ) : Finset ↥(stripDomain L w) :=
   Finset.univ.filter fun x ↦ a ≤ stripColumn x ∧ stripColumn x < b
 
 /-- Membership in a column interval is determined solely by its column. -/
-@[simp] theorem mem_stripInterval {L w a b : ℕ} {x : Site (stripDomain L w)} :
+@[simp] theorem mem_stripInterval {L w a b : ℕ} {x : ↥(stripDomain L w)} :
     x ∈ stripInterval L w a b ↔ a ≤ stripColumn x ∧ stripColumn x < b := by
   simp [stripInterval]
 
@@ -72,7 +73,7 @@ def stripInterval (L w a b : ℕ) : Finset (Site (stripDomain L w)) :=
 theorem card_stripInterval_le (L w a b : ℕ) :
     (stripInterval L w a b).card ≤ (b - a) * w := by
   classical
-  have hinj : Function.Injective (fun x : Site (stripDomain L w) ↦
+  have hinj : Function.Injective (fun x : ↥(stripDomain L w) ↦
       (stripColumn x, stripRow x)) := by
     intro x y h
     have hx := stripSite_bounds x
@@ -117,13 +118,13 @@ theorem card_stripInterval_enlargement_sdiff_le (L w a b d : ℕ) :
 
 /-- Bounded lattice diameter bounds the difference of column coordinates. -/
 theorem stripColumn_le_add_range {L w R : ℕ} (X : AdmissibleSupport (stripDomain L w) R)
-    {x y : Site (stripDomain L w)} (hx : x ∈ X.1) (hy : y ∈ X.1) :
+    {x y : ↥(stripDomain L w)} (hx : x ∈ X.1) (hy : y ∈ X.1) :
     stripColumn y ≤ stripColumn x + R := by
   obtain ⟨p, hp⟩ := X.2.2 x hx y hy
-  have hd := TNLean.PEPS.AreaLaw.supDist_le_of_walk p hp
+  have hd := ManyBody.supDist_le_of_walk p hp
   have hx' := stripSite_bounds x
   have hy' := stripSite_bounds y
-  simp only [TNLean.PEPS.AreaLaw.supDist] at hd
+  simp only [ManyBody.supDist] at hd
   simp only [stripColumn]
   omega
 
@@ -160,7 +161,7 @@ theorem card_crossingTerms_stripInterval_le (L w R a b : ℕ) :
         simp only [Nat.add_sub_cancel_left]
         nlinarith [Nat.mul_le_mul_right w this]
   calc _ ≤ band.card * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
-      TNLean.PEPS.AreaLaw.card_le_card_mul_of_forall_exists_mem fun X hX ↦
+      ManyBody.card_le_card_mul_of_forall_exists_mem fun X hX ↦
         crossingSupport_meets_stripBand X hX
     _ ≤ (2 * R * w) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
       Nat.mul_le_mul_right _ hband
@@ -174,7 +175,7 @@ theorem cutLogBudget_stripInterval_le {q : ℕ} (hq : 1 ≤ q) (L w R a b : ℕ)
         (stripInterval L w a b) ≤
       1 + (stripCrossConst R * w : ℕ) *
         Real.log (Real.exp 1 * (q : ℝ) ^ (1 + 2 * R * (R + 1))) ^ 2 := by
-  refine (TNLean.PEPS.AreaLaw.cutLogBudget_le_card hq _).trans ?_
+  refine (ManyBody.cutLogBudget_le_card hq _).trans ?_
   have hc : ((ManyBody.crossingTerms
       (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
       (stripInterval L w a b)).card : ℝ) ≤ (stripCrossConst R * w : ℕ) := by
@@ -218,7 +219,7 @@ theorem strip_single_splitting {L w R a b : ℕ}
 /-- A region between two consecutive whole-column prefixes has only linearly many
 crossing supports, regardless of the order chosen inside the last column. -/
 theorem card_crossingTerms_stripPrefix_le {L w R c : ℕ}
-    (A : Finset (Site (stripDomain L w)))
+    (A : Finset ↥(stripDomain L w))
     (hleft : stripInterval L w 0 c ⊆ A)
     (hright : A ⊆ stripInterval L w 0 (c + 1)) :
     (ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) A).card ≤
@@ -240,7 +241,7 @@ theorem card_crossingTerms_stripPrefix_le {L w R c : ℕ}
     refine (card_stripInterval_le L w (c - R) (c + 1)).trans ?_
     exact Nat.mul_le_mul_right w (by omega)
   calc _ ≤ band.card * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
-      TNLean.PEPS.AreaLaw.card_le_card_mul_of_forall_exists_mem hmeet
+      ManyBody.card_le_card_mul_of_forall_exists_mem hmeet
     _ ≤ ((R + 1) * w) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
       Nat.mul_le_mul_right _ hband
     _ = _ := by simp only [Nat.add_sub_cancel_left]; ring

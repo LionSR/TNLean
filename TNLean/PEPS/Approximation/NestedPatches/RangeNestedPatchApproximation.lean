@@ -103,20 +103,20 @@ theorem SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders
     ∀ (L : ℕ), 2 ≤ L → ∀ Ω : StateSpace L q, IsRangeSquareGroundState q R J Δ L Ω →
       ∀ (center : ℝ × ℝ) (u : ℝ), 0 ≤ u → u ≤ B₀ * Real.log L →
         let Λ := ManyBody.rectangularDomain L L
-        letI : LinearOrder (Lattice.Site Λ) :=
-          (Fintype.equivFin (Lattice.Site Λ)).linearOrder
+        letI : LinearOrder ↥Λ :=
+          (Fintype.equivFin ↥Λ).linearOrder
         let m := AreaLaw.Geometry.rangeNestedPatchCount R u
-        let regions : Fin m → Finset (Lattice.Site Λ) :=
+        let regions : Fin m → Finset ↥Λ :=
           fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j.val
         let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
         ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
           (v : EuclideanSpace ℂ
-            ((v : Lattice.Site Λ) → Fin q)),
+            ((v : ↥Λ) → Fin q)),
           (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤
             (L : ℝ) ^ rangeNestedPatchRadiusExponent q R J Δ B₀ p C_A) ∧
-          (v : (((v : Lattice.Site Λ) → Fin q) → ℂ)) ∈
+          (v : (((v : ↥Λ) → Fin q) → ℂ)) ∈
             (⨆ j, dependentRegionCylinder
-              (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
+              (Out := fun _ : ↥Λ ↦ Fin q) (regions j) (S j)) ∧
           ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
   intro L hL Ω hΩ center u hu huL
   obtain ⟨H, hH, hHJ, E₀, hgs⟩ := hΩ

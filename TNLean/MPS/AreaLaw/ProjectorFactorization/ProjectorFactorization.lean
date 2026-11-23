@@ -97,7 +97,7 @@ section
 
 open ManyBody (card_interval_le interval mem_interval ChainInteraction)
 
-open GaussianFilter Matrix QuantumCircuit TNLean.Lattice Real
+open GaussianFilter Matrix QuantumCircuit Real
 
 open ManyBody (IsGapped groundSpace)
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal ComplexOrder

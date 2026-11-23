@@ -3,9 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import TNLean.MPS.AreaLaw.Chain.Hamiltonian
 import TNLean.MPS.AreaLaw.ProjectorFactorization.Doubling
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Hastings' area law on the chain: the contradiction argument
@@ -85,8 +88,6 @@ No other constant differs from the source.
 -/
 
 open ManyBody (card_interval_le interval mem_interval)
-
-open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw.Hastings
 

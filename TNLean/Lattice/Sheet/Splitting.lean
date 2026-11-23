@@ -4,10 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Norm.MatrixKroneckerContraction
-import TNLean.Circuit.RegionSplit
+import QICLean.ManyBody.Sites.Placement
 import TNLean.Lattice.Sheet.Operators
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.Entropy.MutualInformation.PurificationSplitting
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 
 /-!
 # Splitting a sheet along three regions
@@ -47,7 +50,6 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator ComplexOrder
-open TNLean.Lattice (sheetSplit)
 
 noncomputable section
 
@@ -95,7 +97,7 @@ theorem one_kronecker_mul_stack {τ n : Type*} [Fintype τ] [DecidableEq τ] [Fi
 and on `U = (T ∪ E)ᶜ`, for disjoint `T` and `E`. -/
 def threeSplit (q : ℕ) (T E : Finset ι) (h : Disjoint T E) :
     (ι → Fin q) ≃ ((T → Fin q) × (E → Fin q)) × ({v // v ∉ T ∪ E} → Fin q) :=
-  (sheetSplit q (T ∪ E)).trans
+  (ManyBody.cutEquiv (fun _ ↦ Fin q) (T ∪ E)).trans
     ((ManyBody.regionUnionEquiv (β := fun _ : ι => Fin q) h).prodCongr (Equiv.refl _))
 
 section ThreeSplit
@@ -137,7 +139,7 @@ omit [Fintype ι] in
 theorem threeSplit_symm_apply_of_notMem (t : T → Fin q) (e : E → Fin q)
     (u : {v // v ∉ T ∪ E} → Fin q) {v : ι} (hv : v ∉ T ∪ E) :
     (threeSplit q T E h).symm ((t, e), u) v = u ⟨v, hv⟩ := by
-  change (sheetSplit q (T ∪ E)).symm
+  change (ManyBody.cutEquiv (fun _ ↦ Fin q) (T ∪ E)).symm
     ((ManyBody.regionUnionEquiv (β := fun _ : ι => Fin q) h).symm (t, e), u) v = _
   exact ManyBody.cutEquiv_symm_apply_not_mem _ _ hv
 

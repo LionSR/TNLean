@@ -80,8 +80,9 @@ private theorem exists_degree_sq_projector_of_eq_two_window
         (4 * Real.exp (-4 * ((ℓ * ℓ : ℕ) : ℝ) * Real.sqrt ((η₁ - η₀) / (u - η₀)))) ∧
       ∀ δ : Fin 2,
         operatorSchmidtRank ((aeval M (p.map (algebraMap ℝ ℂ))).reindex
-          (sheetSplit q (interval L (a + ℓ + δ.val) (b + ℓ + 1)))
-          (sheetSplit q (interval L (a + ℓ + δ.val) (b + ℓ + 1)))) ≤ (q * ℓ) ^ (68 * ℓ) := by
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L (a + ℓ + δ.val) (b + ℓ + 1)))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L (a + ℓ + δ.val) (b + ℓ + 1)))) ≤ (q * ℓ) ^
+              (68 * ℓ) := by
   subst hMF
   by_cases h1u : η₁ ≤ u
   · obtain ⟨p, hdeg, hp0, hK, -, hrank⟩ := exists_two_window_chebyshev_projector_degree_sq F
@@ -209,8 +210,8 @@ theorem exists_three_bulk_hard_truncation_good_projector
               Δ ∧
             ∀ δ : Fin 2,
               operatorSchmidtRank ((aeval Ht (p.map (algebraMap ℝ ℂ))).reindex
-                (sheetSplit q (interval L (a + ell + δ.val) (b + ell + 1)))
-                (sheetSplit q (interval L (a + ell + δ.val) (b + ell + 1)))) ≤
+                (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L (a + ell + δ.val) (b + ell + 1)))
+                (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L (a + ell + δ.val) (b + ell + 1)))) ≤
                 (q * ell) ^ (68 * ell)   := by
   intro k I A J Y K jmin
   obtain ⟨e, E0, x, hrest⟩ := exists_three_bulk_hard_truncation_spectral_comparison

@@ -58,7 +58,6 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -67,7 +66,7 @@ namespace RepairMetricHypotheses
 
 section ArbitraryOrigin
 
-variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
   {C k₀ : ℕ} {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar : ℝ}
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -94,7 +93,7 @@ end ArbitraryOrigin
 
 section PrescribedOrigin
 
-variable {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+variable {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
   {C k₀ : ℕ} {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar : ℝ}
 
 local notation "𝔇" => repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar
@@ -146,14 +145,13 @@ section
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 namespace RepairMetricHypotheses
 
-variable {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+variable {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
   {C k₀ : ℕ} {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar a₀ : ℝ}
 
 local notation "𝔇" => repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar

@@ -27,8 +27,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 at `openai/math@adc7f124`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -75,7 +73,7 @@ open Classical in
 event is a superset of the actual terminal split condition. -/
 theorem old_designated_split_dilution_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ} (i : I)
     (hn : 0 < S.n) (hm : 0 < S.m) (hr : S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
@@ -104,7 +102,7 @@ open Classical in
 leaves after a charge. No goodness or independence of splitting is assumed. -/
 theorem state_designated_split_dilution_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ} (i : I)
     (hn : 0 < S.n) (hm : 0 < S.m) (hr : S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
@@ -133,7 +131,7 @@ open Classical in
 constant. This is the classical common-`p` mixture, before quantum transport. -/
 theorem designated_split_mixture_dilution_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ} (i : I)
     (hn : 0 < S.n) (hm : 0 < S.m) (hr : S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
@@ -161,7 +159,7 @@ open Classical in
 parameter: its old state is completed, and its new state is the next pre-charge state. -/
 theorem fill_split_mixture_dilution_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
+    (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ} (i : I)
     (hn : 0 < S.n) (hm : 0 < S.m) (hr : S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)

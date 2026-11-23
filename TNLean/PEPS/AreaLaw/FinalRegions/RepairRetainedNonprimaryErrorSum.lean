@@ -30,7 +30,6 @@ lines 732–740, and their error contribution, lines 796–798 of
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -41,7 +40,7 @@ and a replacement has its positive removal half-side. Retention preserves
 these lengths. Source: area-law Section 11, lines 398–409, 709–721, and
 732–740. -/
 theorem repairStageCharacteristicLength_pos_of_ne_dummy
-    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
     (N : ℕ) (i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex)
     (hi : i ≠ (repairStage o Λ A C k₀ hC h₀ Sstar N).dummy) :
@@ -66,7 +65,7 @@ Source: area-law Section 11, scanner scales, lines 732–740;
 `geometry:total-repairs`, lines 685–692; and the nonprimary error
 contribution, lines 796–798. -/
 theorem repairStage_retained_positive_rank_error_sum_le {Sstar : ℝ} (hSstar : 1 < Sstar)
-    {C_B : ℝ} (hC_B : 0 < C_B) (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    {C_B : ℝ} (hC_B : 0 < C_B) (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ)
     (h : RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
       (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀) (N : ℕ) :
@@ -108,7 +107,7 @@ theorem exists_uniform_repairStage_retained_positive_rank_error_sum_bound
     {Sstar : ℝ} (hSstar : 1 < Sstar) :
     ∃ L : ℝ, 0 < L ∧
       ∀ (C_B : ℝ), 0 < C_B →
-        ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+        ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
           (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ),
           RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
             (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ →

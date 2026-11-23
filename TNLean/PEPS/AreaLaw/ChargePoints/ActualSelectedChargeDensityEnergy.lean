@@ -49,7 +49,6 @@ noncomputable section
 
 open Matrix Set TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport PlaneInteraction)
 
@@ -95,15 +94,15 @@ Source: `08-scanner.tex`, lines 492--533 and 839--865. -/
 theorem actualCharge_defect_le_of_density_energy_bound
     {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J Δ : ℝ} [NeZero q] [NeZero d]
     [LinearOrder (AdmissibleSupport Λ R)]
-    (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+    (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (s : ℕ)
-    (h : PlaneInteraction Λ q R) (Ω : StateSpace Λ q) (L : ℕ)
+    (h : PlaneInteraction Λ q R) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (L : ℕ)
     (hΔ : 0 < Δ) (W Cen een C Cl P rem e₀ : ℝ) (hW : 0 ≤ W)
     (pre : (k : ℕ) → Config k
-      (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q (fun _ ↦ d) v)) → ℂ)
+      (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q (fun _ ↦ d) v)) → ℂ)
     (k : ℕ) (p : ℝ) :
     let a := W / (S.K : ℝ)
-    let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    let dims := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
     let E := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
     let ℓ := transportLogDimBound q S.r₀
     let g := Δ / positiveNormalization 1 (Δ / 2) J
@@ -146,8 +145,6 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation F
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open TNLean.Lattice
-
 open ManyBody (AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -165,14 +162,14 @@ Source: `08-scanner.tex`, lines 480--533 and 881--911. -/
 theorem eventually_exists_selected_actualCharge_sharp_comparison
     {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J Δ : ℝ} [NeZero q] [NeZero d]
     [LinearOrder (AdmissibleSupport Λ R)]
-    (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+    (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (hKpos : 0 < S.K)
-    (h : PlaneInteraction Λ q R) (Ω Ωt : StateSpace Λ q) (L : ℕ)
+    (h : PlaneInteraction Λ q R) (Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (L : ℕ)
     (hΔ : 0 < Δ) (a : ℝ) (ha : 0 < a)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (Sent e₀ Kmom z Cen een C Cl P cU cL Cf p₀ p₁ : ℝ)
     (rem selectionBound : ℕ → ℝ) :
-    let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    let dims := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
     let E := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)

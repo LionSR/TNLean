@@ -35,9 +35,9 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 
 open scoped Matrix.Norms.L2Operator
 
-noncomputable section
+open ManyBody (IntRect IsSafe rectRegion)
 
-open TNLean.Lattice
+noncomputable section
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport ambientDilation PlaneInteraction)
 
@@ -75,8 +75,8 @@ prefix is assumed. Source: Lemma 9.4 and the scanner input, `08-scanner.tex`, li
 574--590 and 641--667. -/
 theorem template_source_entropy_bounds
     (q : ℕ) (hq : 1 ≤ q) (e Cbox : ℝ) (he : 0 < e) (hCbox : 0 ≤ Cbox) :
-    ∀ (Λ : Finset (ℤ × ℤ)) (Ω : StateSpace Λ q), ‖Ω‖ = 1 →
-      ∀ (A : Finset (Site Λ)) (D₀ : ℕ), 1 ≤ D₀ →
+    ∀ (Λ : Finset (ℤ × ℤ)) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 →
+      ∀ (A : Finset ↥Λ) (D₀ : ℕ), 1 ≤ D₀ →
         ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
           24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ A) →
           (∀ Q : IntRect, IsSafe Λ A D₀ Q →
@@ -160,8 +160,8 @@ Source: Lemma 9.4 and the scanner input, `08-scanner.tex`, lines 353--357,
 theorem exists_template_source_entropy_bounds
     (q : ℕ) (hq : 1 ≤ q) (e Cbox : ℝ) (he : 0 < e) (hCbox : 0 ≤ Cbox) :
     ∃ Ce : ℝ, 0 ≤ Ce ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (Ω : StateSpace Λ q), ‖Ω‖ = 1 →
-        ∀ (A : Finset (Site Λ)) (D₀ : ℕ), 1 ≤ D₀ →
+      ∀ (Λ : Finset (ℤ × ℤ)) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 →
+        ∀ (A : Finset ↥Λ) (D₀ : ℕ), 1 ≤ D₀ →
           ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
             24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ A) →
             (∀ Q : IntRect, IsSafe Λ A D₀ Q →
@@ -195,10 +195,10 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
     ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
         (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (E₀ : ℝ) (Ω : StateSpace Λ q),
+      (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+      ∀ (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
         {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
         24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
         S.depth = (fun x ↦ ambientDepth T.points T.nonempty x.val) →
@@ -237,10 +237,10 @@ theorem exists_template_final_source_entropy_bounds_of_boxEntropy
     ∃ Ce : ℝ, 0 ≤ Ce ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q),
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+        ∀ (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
           {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
           24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
           S.depth = (fun x ↦ ambientDepth T.points T.nonempty x.val) →

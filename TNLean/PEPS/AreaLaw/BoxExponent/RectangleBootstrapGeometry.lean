@@ -30,9 +30,9 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-noncomputable section
+open ManyBody (IntRect IsSafe card_dilate_sdiff_le rectRegion supDist)
 
-open TNLean.Lattice
+noncomputable section
 
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
@@ -59,14 +59,14 @@ private theorem rectangleBootstrap_row_card_le (Q : IntRect) {r L : ℕ}
   omega
 
 private theorem rectangleBootstrap_prefix_eq {Λ : Finset (ℤ × ℤ)}
-    (Q : IntRect) (A : Finset (Site Λ)) (hT : Q.toFinset.Nonempty) (j : ℕ) :
+    (Q : IntRect) (A : Finset ↥Λ) (hT : Q.toFinset.Nonempty) (j : ℕ) :
     positiveDepthPrefix A (fun x ↦ ambientDepth Q.toFinset hT x.val) (j : ℤ) =
       A.filter fun x ↦ x.val ∈ (Q.dilate j).toFinset \ Q.toFinset := by
   simpa only [Int.toNat_natCast, ← Q.toFinset_dilate j] using
     positiveDepthPrefix_eq_filter_ambientDilation hT A (j : ℤ)
 
 private theorem rectangleBootstrap_clearance {Λ : Finset (ℤ × ℤ)}
-    {A : Finset (Site Λ)} {D₀ L r₀ : ℕ} {Q : IntRect}
+    {A : Finset ↥Λ} {D₀ L r₀ : ℕ} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) (hbudget : 2 * L + 10 * r₀ ≤ D₀ * Q.size) :
     ∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z := by
@@ -86,8 +86,8 @@ All scale fields are literal rounded values with row scale ceil(24 size Q).
 The interaction anchor is a chosen member of its original nonempty support.
 Source: `08-scanner.tex`, lines 32--58, 83--154 and 705--729, adc7f124. -/
 def rectangleBootstrapScanner {Λ : Finset (ℤ × ℤ)}
-    (Q : IntRect) (A : Finset (Site Λ)) (R : ℕ) (F : ScannerExponents)
-    (Cr C₁ : ℝ) : CollarScan (Site Λ) (AdmissibleSupport Λ R) where
+    (Q : IntRect) (A : Finset ↥Λ) (R : ℕ) (F : ScannerExponents)
+    (Cr C₁ : ℝ) : CollarScan ↥Λ (AdmissibleSupport Λ R) where
   graph := planeDomainGraph Λ
   A := A
   depth := fun x ↦ ambientDepth Q.toFinset (rectangleBootstrap_nonempty Q) x.val
@@ -106,7 +106,7 @@ threshold depends only on `Cr` and `F.ell`, not on the finite domain, cut, recta
 charge constant or safety parameter.
 Source: `08-scanner.tex`, lines 43--58 and 705--729, adc7f124. -/
 theorem rectangleBootstrapScanner_geometry_of_threshold_le (F : ScannerExponents)
-    {Cr : ℝ} (hCr : 0 ≤ Cr) {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ)) (Q : IntRect)
+    {Cr : ℝ} (hCr : 0 ≤ Cr) {Λ : Finset (ℤ × ℤ)} (A : Finset ↥Λ) (Q : IntRect)
     (R : ℕ) (C₁ : ℝ) {D₀ : ℕ} (hD₀ : 1 ≤ D₀)
     (hQN : roundedClearanceThreshold 24 Cr F.ell ≤ Q.size) (hsafe : IsSafe Λ A D₀ Q) :
     let S := rectangleBootstrapScanner Q A R F Cr C₁
@@ -166,7 +166,7 @@ Source: `08-scanner.tex`, lines 43--58 and 705--729, adc7f124. -/
 theorem exists_rectangleBootstrapScanner_geometry (F : ScannerExponents)
     {Cr : ℝ} (hCr : 0 ≤ Cr) :
     ∃ N : ℕ, 1 ≤ N ∧
-      ∀ {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ)) (Q : IntRect)
+      ∀ {Λ : Finset (ℤ × ℤ)} (A : Finset ↥Λ) (Q : IntRect)
         (R : ℕ) (C₁ : ℝ) (D₀ : ℕ),
       1 ≤ D₀ → N ≤ Q.size → IsSafe Λ A D₀ Q →
       let S := rectangleBootstrapScanner Q A R F Cr C₁

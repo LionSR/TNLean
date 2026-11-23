@@ -29,7 +29,6 @@ noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder Topology
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport PlaneInteraction)
 
@@ -57,7 +56,7 @@ open Classical in
 /-- A regional moment bound uses the same reduced matrix in finite-product coordinates. -/
 private theorem sharpLower_marginalMoment_finiteProduct
     {Λ : Finset (ℤ × ℤ)} {q : ℕ}
-    (Ωt : StateSpace Λ q) (U : Finset (Site Λ)) (Kmom u : ℝ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (U : Finset ↥Λ) (Kmom u : ℝ)
     (h : Real.log (Entropy.surprisalMoment
       (ManyBody.regionState_isHermitian U Ωt).eigenvalues u) ≤
         u * ManyBody.regionEntropy Ωt U + Kmom * u ^ 2) :
@@ -70,7 +69,7 @@ open Classical in
 /-- Completed and pre-charge status moments supply all three original physical marginals. -/
 private theorem actualTerminal_sharpLower_moments
     {Λ : Finset (ℤ × ℤ)} {q : ℕ} {I : Type} [Fintype I] [LinearOrder I]
-    (S : CollarScan (Site Λ) I) (Ωt : StateSpace Λ q) (Kmom rMom : ℝ)
+    (S : CollarScan ↥Λ I) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (Kmom rMom : ℝ)
     (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
       (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
         ∀ u : ℝ, |u| ≤ rMom →
@@ -99,7 +98,7 @@ private theorem actualTerminal_sharpLower_moments
     cases hx : σ j g x with
     | none => simp [Q, Y, receiving, middle, hx]
     | some side => cases side <;> simp [Q, Y, receiving, middle, hx]
-  have hmomStatus : ∀ j g (U : Finset (Site Λ)),
+  have hmomStatus : ∀ j g (U : Finset ↥Λ),
       U ∈ statusMarginalRegions S.depth (σ j g) →
       ∀ u : ℝ, |u| ≤ rMom →
         Real.log (Entropy.surprisalMoment
@@ -123,21 +122,21 @@ private theorem actualTerminal_sharpLower_moments
 open Classical in
 /-- The fixed supplied prevector keeps its norm, symmetry and both auxiliary labels. -/
 private theorem sharpLower_suppliedPrevector_properties
-    {Λ : Finset (ℤ × ℤ)} (q d k : ℕ) (Ωt : StateSpace Λ q)
+    {Λ : Finset (ℤ × ℤ)} (q d k : ℕ) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q))
     (ell : IrrepLabel (Equiv.Perm (Fin k)))
     (hpre :
-      let β := fun _ : Site Λ => Fin q
+      let β := fun _ : ↥Λ => Fin q
       let ξ := WithLp.toLp 2 (replicaPrevector Ωt d k ell ∘
         globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
       ξ ≠ 0 ∧ ‖ξ‖ ≤ 1) :
-    let β := fun _ : Site Λ => Fin q
-    let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+    let β := fun _ : ↥Λ => Fin q
+    let n := augmentedDimensions (V := ↥Λ) q (fun _ => d)
     let pre : Config k (fun v => Fin (n v)) → ℂ :=
       replicaPrevector Ωt d k ell ∘ augmentedSumReplicaCopiesEquiv q d k
-    let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+    let e := augmentedReplicaConfigurationEquiv (V := ↥Λ) q d k
     let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
     pre ≠ 0 ∧ ‖WithLp.toLp 2 pre‖ ≤ 1 ∧
-      symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre ∧
+      symProj (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre ∧
       labelProj (subsystemPerm k ι₀ {some none}) ell *ᵥ (pre ∘ e) = pre ∘ e ∧
       labelProj (subsystemPerm k ι₀ {none}) ell *ᵥ (pre ∘ e) = pre ∘ e := by
   classical
@@ -150,7 +149,7 @@ private theorem sharpLower_suppliedPrevector_properties
     (augmentedReplicaPrevector_ne_zero_iff_global q d k Ωt ell).mpr hpre.1
   have hprenorm : ‖WithLp.toLp 2 pre‖ ≤ 1 :=
     (norm_augmentedReplicaPrevector_eq_global q d k Ωt ell).trans_le hpre.2
-  have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre :=
+  have hsym : symProj (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre :=
     symProj_mulVec_augmentedReplicaPrevector q d k Ωt ell
   have haux := labelProj_globalReplicaCopiesEquiv_auxiliary β (Fin d) (Fin d)
     k ell ell
@@ -181,11 +180,11 @@ Source: `07-comparators.tex`, lines 130--153, 255--281 and 550--651;
 theorem exists_actualScan_suppliedPrevector_sharp_lower
     {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]
     [LinearOrder (AdmissibleSupport Λ R)]
-    (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+    (S : CollarScan ↥Λ (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M)
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
-    (Ωt : StateSpace Λ q) (e₀ gap : ℝ) (hΩt : ‖Ωt‖ = 1)
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (Δ : ℝ) (L : ℕ)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (e₀ gap : ℝ) (hΩt : ‖Ωt‖ = 1)
     (hgap : ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
       (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef)
     (hgap_pos : 0 < gap)
@@ -193,7 +192,7 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
     (haone : 10 * a ≤ 1) (hK : 0 ≤ Kmom)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ)
     (hpre : ∀ k : ℕ, 0 < k →
-      let β := fun _ : Site Λ => Fin q
+      let β := fun _ : ↥Λ => Fin q
       let ξ := WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
         globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
       ξ ≠ 0 ∧ ‖ξ‖ ≤ 1)
@@ -212,7 +211,7 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
             Real.log (Entropy.surprisalMoment
               (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
               u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2)) :
-    let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+    let n := augmentedDimensions (V := ↥Λ) q (fun _ => d)
     let pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ := fun k =>
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
     let σ := terminalPartition S (S.n * S.m)

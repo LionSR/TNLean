@@ -36,8 +36,6 @@ open Matrix TensorPower PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology symmDiff
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation ambientDilation_zero planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -56,7 +54,7 @@ revision adc7f124. -/
 theorem eventually_actualScan_suppliedPrevector_rough_upper
     {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I)
+    (S : CollarScan ↥Λ I)
     (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hm : 0 < S.m) (hM : 0 < S.M)
@@ -66,22 +64,22 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ j : ℕ, 1 ≤ j → j ≤ L →
       (ambientDilation T j \ ambientDilation T (j - 1)).card ≤ S.n)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
+    (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
+    (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T)))
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Bsh : ℝ)
     (hsh : ∀ j : Fin (L + 1),
       ManyBody.regionEntropy Ωt
         (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh) :
     let X := S.A.filter fun x ↦ x.val ∈ T
-    let β := fun _ : Site Λ ↦ Fin q
+    let β := fun _ : ↥Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (ManyBody.cutEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
     let d := E.card
-    let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
     let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
@@ -134,7 +132,7 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
   refine ⟨c, hc, Real.tendsto_bellOverlapRemainder d c S.K,
     hu.mono fun k hk s hs p ↦ ?_⟩
   let σ : terminalFamily S.K S.m S.M (S.n * S.m) → Fin S.K →
-      PhysicalPartition (Site Λ) := terminalPartition S (S.n * S.m)
+      PhysicalPartition ↥Λ := terminalPartition S (S.n * S.m)
   have hmiddle : ∀ j g x, σ j g x = none → 0 < S.depth x := fun
     | Sum.inl ⟨r, h⟩, g, x, hx =>
       lt_of_lt_of_le (by decide : (0 : ℤ) < 1)
@@ -178,7 +176,7 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
     (Finset.nonempty_iff_ne_empty.mpr fun hE ↦ by
       simp [hE, Matrix.IsHermitian.spectralRestrictionMass] at hzQ)
   let : NeZero d := ⟨Nat.ne_of_gt hd⟩
-  have hlogCard (B : Finset (Site Λ)) (hB : B.card ≤ 3 * S.n * S.D) :
+  have hlogCard (B : Finset ↥Λ) (hB : B.card ≤ 3 * S.n * S.D) :
       1 + Real.log (Fintype.card (ManyBody.RegionConfig β B)) ≤
         1 + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log (q : ℝ) := by
     simpa only [β, ManyBody.RegionConfig, Fintype.card_fun,
@@ -209,7 +207,7 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
         (Nat.succ_le_of_lt r.isLt)
       exact ⟨_, (List.mem_ofFn' _ _).mpr hmem.1, _, (List.mem_ofFn' _ _).mpr hmem.2,
         hnear, hfar, hnearCard, hfarCard⟩
-  have hmatch : ∀ j g (Q : Finset (Site Λ)),
+  have hmatch : ∀ j g (Q : Finset ↥Λ),
       Q = U j g ∨ Q = U j g ∪ Y j g →
       ∃ D ∈ regions, (D ⊆ Q ∨ Q ⊆ D) ∧
         1 + Real.log (Fintype.card (ManyBody.RegionConfig β (D ∆ Q))) ≤
@@ -224,29 +222,29 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
     List.forall_mem_ofFn_iff.mpr hsh
   obtain ⟨N, ZS, hZS, hZSZS⟩ :=
     (isStarProjection_symProj
-      (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry
-  let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+      (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry
+  let e := augmentedReplicaConfigurationEquiv (V := ↥Λ) q d k
   let ZO := ZS.submatrix e (id : Fin N → Fin N)
   have hZO : ZOᴴ * ZO = 1 :=
     Matrix.IsIsometry.reindex ZS hZS e.symm (Equiv.refl (Fin N))
   have hSymm :
-      symProj (copyPerm ((o : Option (Option (Site Λ))) →
+      symProj (copyPerm ((o : Option (Option ↥Λ)) →
         addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k) =
-      (symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)).submatrix e e := by
+      (symProj (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k)).submatrix e e := by
     simpa only [Matrix.reindex_apply, Equiv.symm_symm] using
       (symProj_of_intertwine e.symm
-        (φ := copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)
-        (ψ := copyPerm ((o : Option (Option (Site Λ))) →
+        (φ := copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k)
+        (ψ := copyPerm ((o : Option (Option ↥Λ)) →
           addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k)
         (fun σ x ↦ funext fun j ↦ rfl))
   have hZOZO : ZO * ZOᴴ =
-      symProj (copyPerm ((o : Option (Option (Site Λ))) →
+      symProj (copyPerm ((o : Option (Option ↥Λ)) →
         addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k) := by
     simpa only [ZO, Matrix.conjTranspose_submatrix, Equiv.coe_refl] using
       ((Matrix.submatrix_mul_equiv ZS ZSᴴ e (Equiv.refl (Fin N)) e).trans
         (congrArg (fun P : Matrix (Config k (fun v ↦ Fin (n v)))
           (Config k (fun v ↦ Fin (n v))) ℂ ↦ P.submatrix e e) hZSZS)).trans hSymm.symm
-  have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k :=
+  have hsym : symProj (copyPerm ((v : ↥Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k :=
     symProj_mulVec_augmentedReplicaPrevector q d k Ωt (ell k)
   have hpre : pre k ∘ e = replicaPrevector Ωt d k (ell k) ∘
       globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
@@ -265,7 +263,7 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
     | Sum.inr ⟨_, h⟩, g => oldChargeState_receiving_regions hT S hdepth h g
   have hbound {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ h, DecidableEq (Choice h)]
-      (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
+      (D : ReplicaTransport.TransportData (↥Λ ⊕ Bool) S.K Hist Choice)
       (hD : D.IsAdmissible) (hcomm : D.CrossBandCommute n (a / 2) k)
       (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
       (hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) :

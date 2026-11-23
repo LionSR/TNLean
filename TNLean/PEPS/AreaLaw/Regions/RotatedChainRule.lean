@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import TNLean.PEPS.AreaLaw.Regions.RegionalStates
@@ -37,8 +37,6 @@ least `1/N`.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
-
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -79,10 +77,11 @@ contained in the union of the regions of the other colors, with
 `S(X_i | T_i) ≤ S(X_i)/2 + β`. Then
 `S(⋃ X_i) ≤ ∑_i S(X_i) - (1/(2N)) ∑_{i ∈ good} S(X_i) + |good| β / N`.
 Source: `02-initial.tex`, lines 625–646, the expected entropy chain rule. -/
-theorem regionEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) {ι : Type*}
-    [Fintype ι] (Xs : ι → Finset (Site Λ))
+theorem regionEntropy_biUnion_le_rotations (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    {ι : Type*}
+    [Fintype ι] (Xs : ι → Finset ↥Λ)
     (hdisj : Pairwise fun i j ↦ Disjoint (Xs i) (Xs j)) {N : ℕ} (col : ι → ℕ)
-    (hcol : ∀ i, col i < N) (good : Finset ι) (T : ι → Finset (Site Λ)) (β : ℝ)
+    (hcol : ∀ i, col i < N) (good : Finset ι) (T : ι → Finset ↥Λ) (β : ℝ)
     (hT : ∀ i ∈ good, T i ⊆ (Finset.univ.filter fun j ↦ col j ≠ col i).biUnion Xs)
     (hbuf : ∀ i ∈ good, ManyBody.regionEntropy Ω (Xs i ∪ T i) - ManyBody.regionEntropy Ω (T i) ≤
       ManyBody.regionEntropy Ω (Xs i) / 2 + β) :
@@ -95,7 +94,7 @@ theorem regionEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω�
   · obtain rfl : good = ∅ := Finset.eq_empty_of_isEmpty good
     simp [Finset.univ_eq_empty, ManyBody.regionEntropy_empty _ Ω hΩ]
   have hN : 0 < N := lt_of_le_of_lt (Nat.zero_le _) (hcol (Classical.arbitrary ι))
-  set S : Finset (Site Λ) → ℝ := ManyBody.regionEntropy Ω
+  set S : Finset ↥Λ → ℝ := ManyBody.regionEntropy Ω
   -- the key of the `k`-th rotation
   set e := Fintype.equivFin ι
   set κ : ℕ → ι → Lex (ℕ × ℕ) := fun k i ↦ toLex ((col i + k) % N, (e i : ℕ))
@@ -103,7 +102,7 @@ theorem regionEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω�
     have := congrArg (fun p : Lex (ℕ × ℕ) ↦ (ofLex p).2) h
     simp only [κ, ofLex_toLex] at this
     exact e.injective (Fin.ext this)
-  set pre : ℕ → ι → Finset (Site Λ) := fun k i ↦
+  set pre : ℕ → ι → Finset ↥Λ := fun k i ↦
     (Finset.univ.filter fun j ↦ κ k j < κ k i).biUnion Xs
   set term : ℕ → ι → ℝ := fun k i ↦ S (Xs i ∪ pre k i) - S (pre k i)
   -- the chain rule for each rotation

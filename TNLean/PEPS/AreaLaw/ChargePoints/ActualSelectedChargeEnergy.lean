@@ -31,7 +31,6 @@ noncomputable section
 open Matrix Set Filter Topology MeasureTheory PermutationRepresentation
 open TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
@@ -50,8 +49,8 @@ theorem actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound
     ∀ {Λ T : Finset (ℤ × ℤ)} {q d R : ℕ} {J Δ : ℝ}
       [NeZero q] [NeZero d] [LinearOrder (AdmissibleSupport Λ R)]
       (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-          (Ω : StateSpace Λ q)
-      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+          (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+      (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
       S.graph = planeDomainGraph Λ →
       S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -67,7 +66,7 @@ theorem actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound
       ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
       let hm : 0 < S.m := by omega
       let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
-      let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+      let dims := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
       let E := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
       let ℓ := transportLogDimBound q S.r₀
       let g := Δ / positiveNormalization 1 (Δ / 2) J
@@ -169,8 +168,8 @@ theorem actualCharges_selection_energy_domainGraph :
       ∀ {Λ T : Finset (ℤ × ℤ)} {q d R : ℕ} {J Δ : ℝ}
         [NeZero q] [NeZero d] [LinearOrder (AdmissibleSupport Λ R)]
         (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
+            (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
+        (S : CollarScan ↥Λ (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
@@ -186,7 +185,7 @@ theorem actualCharges_selection_energy_domainGraph :
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
-        let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+        let dims := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
         let E := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
         let ℓ := transportLogDimBound q S.r₀
         let g := Δ / positiveNormalization 1 (Δ / 2) J

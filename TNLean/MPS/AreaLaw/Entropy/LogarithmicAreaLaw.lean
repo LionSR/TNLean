@@ -35,9 +35,9 @@ open ManyBody (ChainSupport DomainSupport DomainSupport.toChainSupport
   DomainSupport.toChainSupport_injective IsDomainSupport interval sitePos ChainInteraction
   DomainInteraction)
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace)
+
+open ManyBody (regionEntropy_eq_zero_of_localDimension_one)
 
 namespace TNLean.MPS.AreaLaw
 

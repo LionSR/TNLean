@@ -114,13 +114,13 @@ theorem coarse_mutualInformation_le_closed {q R : ℕ} (hq : 1 ≤ q) {J Δ : �
     ∀ u : ℝ, coarseInformationThresholdClosed q R J Δ N₀ A₀ ≤ u →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
-        (Ω : Lattice.StateSpace Λ q),
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
-          ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
-          ∀ E : Finset (Site Λ),
+          ∀ X ⊆ Finset.univ.filter (fun x : ↥Λ ↦ x.val ∈ T),
+          ∀ E : Finset ↥Λ,
             (∀ t ∈ T, ∀ y ∈ E,
               u ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t y.val : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤
@@ -141,13 +141,13 @@ theorem coarse_mutualInformation_le {q R : ℕ} (hq : 1 ≤ q) {J Δ : ℝ}
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
-        (Ω : Lattice.StateSpace Λ q),
+        (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
-          ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
-          ∀ E : Finset (Site Λ),
+          ∀ X ⊆ Finset.univ.filter (fun x : ↥Λ ↦ x.val ∈ T),
+          ∀ E : Finset ↥Λ,
             (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤ C := by
   have hcol : SublinearCollarBound q R J Δ (2 * (R : ℝ) + 11) 24 :=

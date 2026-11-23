@@ -21,7 +21,6 @@ defined by the endpoint neighborhoods, including empty layers.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -151,7 +150,7 @@ theorem card_fineLayerIndices_le (o : ℝ × ℝ) (k ℓ : ℕ)
 squared neighborhood width, the crossing-edge count, and the squared ratio
 of cell sides. Source: area-law Section 11, `geometry:belt-count`, lines 200–228. -/
 theorem card_fineLayerIndices_boundary_le (o : ℝ × ℝ) (k ℓ : ℕ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C : ℕ) :
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C : ℕ) :
     (fineLayerIndices o k ℓ (boundaryEndpoints Λ A) C).card ≤
       8 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card * 4 ^ (k - ℓ) := by
   rw [card_fineLayerIndices]

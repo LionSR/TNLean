@@ -56,7 +56,7 @@ private theorem extendRegions_fin (X : Fin m → Finset (Vertex L)) (j : Fin m) 
 /-- The supplied finite regions in integer-square coordinates, extended by empty
 regions only to meet the existing natural-indexed ordered-chain API. -/
 def canonicalRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
-    Finset (Lattice.Site (ManyBody.rectangularDomain L L)) :=
+    Finset ↥(ManyBody.rectangularDomain L L) :=
   (extendRegions X k).map (ManyBody.rectangleSiteEquiv L L).toEmbedding
 
 /-- The extension has exactly the supplied regions at every family index. -/
@@ -68,7 +68,7 @@ def canonicalRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
 def regionEquiv (X : Fin m → Finset (Vertex L)) (j : Fin m) :
     RegionConfiguration q (X j) ≃ (ManyBody.RegionConfig (fun _ ↦ Fin q) (canonicalRegions X j)) :=
   ManyBody.regionConfigurationEquiv (X := fun _ : Vertex L ↦ Fin q)
-    (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
+    (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
     (X j) (canonicalRegions X j) (ManyBody.rectangleSiteEquiv L L)
     (by intro v; simp) (fun _ ↦ Equiv.refl (Fin q))
 
@@ -123,7 +123,7 @@ theorem admissible_fromCanonical (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
 theorem squareAreaLawState_eq_relabelVector (Ω : State L q) :
     AreaLaw.rectangleAreaLawState Ω = ManyBody.relabelVector
       (X := fun _ : Vertex L ↦ Fin q)
-      (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
+      (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
       (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin q)) Ω := by
   ext σ
   rfl
@@ -147,12 +147,12 @@ private theorem reindex_extendedMatrices (F : FilterFamily q m X) (j : Fin m)
     reindex
         (ManyBody.regionConfigurationEquiv
           (X := fun _ : Vertex L ↦ Fin q)
-          (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
+          (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
           (extendRegions X j) (canonicalRegions X j)
           (ManyBody.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
         (ManyBody.regionConfigurationEquiv
           (X := fun _ : Vertex L ↦ Fin q)
-          (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
+          (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
           (extendRegions X j) (canonicalRegions X j)
           (ManyBody.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
         (extendedMatrices F j) = canonicalMatrices F j := by
@@ -182,7 +182,7 @@ theorem squareAreaLawState_output (F : FilterFamily q m X) (Ω : State L q) :
   simpa only [reindex_extendedMatrices] using
     Entropy.relabelVector_liftProd_chainList
       (n := fun _ : Vertex L ↦ q)
-      (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+      (n' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ q)
       (extendRegions X) (canonicalRegions X) (ManyBody.rectangleSiteEquiv L L)
       hD (fun _ ↦ Equiv.refl (Fin q)) (extendedMatrices F) (fun _ ↦ True) Ω
 

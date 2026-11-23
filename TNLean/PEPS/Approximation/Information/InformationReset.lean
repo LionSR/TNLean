@@ -4,12 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DoubledHamiltonian.ResetUnitary
-import TNLean.Lattice.ReplicaSwap
+import QICLean.ManyBody.Sites.ReplicaSwap
+import QICLean.ManyBody.Sites.SitewiseProduct
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
-import TNLean.Circuit.SitewiseTensorSupport
-import TNLean.Lattice.BufferedRectangles
 import TNLean.Lattice.Sheet.SwapCorrection
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!
 # The information reset
@@ -60,6 +61,8 @@ open ManyBody (IsGapped groundSpace rectangleEmbedding rectangularDomain rectang
   rectangleSiteEquiv_val graphNeighborhood planeDomainGraph)
 open scoped Kronecker
 open TNLean.Lattice
+
+open ManyBody (replicaSwap supDist supDist_le_of_walk)
 
 namespace TNLean.PEPS.Approximation
 
@@ -256,16 +259,16 @@ Source: `02-information.tex`, lines 612–630. -/
 theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1) {R C R₀ C₀ : Finset (SquareLatticeVertex L L)}
     (hRC : Disjoint R C)
-    (hR₀ : R₀ ⊆ R) (hC₀ : C₀ ⊆ C) (B : Finset (Site (rectangularDomain L L)))
+    (hR₀ : R₀ ⊆ R) (hC₀ : C₀ ⊆ C) (B : Finset ↥(rectangularDomain L L))
     (hnot : ∀ v ∈ R₀ ∪ C₀, rectangleSiteEquiv L L v ∉ B)
-    {U : Matrix (Lattice.Configuration (rectangularDomain L L) (q * q))
-      (Lattice.Configuration (rectangularDomain L L) (q * q)) ℂ}
+    {U : Matrix (↥(rectangularDomain L L) → Fin (q * q))
+      (↥(rectangularDomain L L) → Fin (q * q)) ℂ}
     (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B)
     {δ : ℝ} :
     let pe := (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
       (rectangleConfigurationEquiv L L (q * q))
     let F := reindex pe pe (TNLean.Lattice.sheetSwapOp q R)
-    let ψ : Lattice.Configuration (rectangularDomain L L) (q * q) → ℂ := fun c ↦
+    let ψ : (↥(rectangularDomain L L) → Fin (q * q)) → ℂ := fun c ↦
       Ω (pe.symm c).1 * Ω (pe.symm c).2
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
     ManyBody.regionMutualInformation Ω R₀ C₀ ≤

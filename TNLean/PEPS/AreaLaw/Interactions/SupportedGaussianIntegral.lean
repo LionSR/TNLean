@@ -35,7 +35,6 @@ open ManyBody (PlaneInteraction graphNeighborhood planeDomainGraph)
 
 open MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped Matrix Matrix.Norms.L2Operator NNReal
-open TNLean.Lattice
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -45,7 +44,7 @@ localization bound pass unchanged to the approximation error. -/
 private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 ≤ q) {R : ℕ}
     {C v c : ℝ} (hC : 0 ≤ C) (hv : 0 ≤ v) {Λ : Finset (ℤ × ℤ)} (g : PlaneInteraction Λ q R)
         (hg : ∀ X, (g.term X).IsHermitian)
-    (hlocal : ∀ (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+    (hlocal : ∀ (S : Finset ↥Λ) (A : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ),
       A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S → ∀ (l : ℕ) (t : ℝ),
       ‖ManyBody.heisenbergEvolution g.hamiltonian t A -
           ManyBody.regionExpectation (graphNeighborhood (planeDomainGraph Λ) S l)
@@ -53,16 +52,16 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
               g.hamiltonian t
               A)‖ ≤
         ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)))
-    (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hH : H.IsHermitian)
-    (Q Z : Finset (Site Λ)) (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q)
+    (H W : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) (hH : H.IsHermitian)
+    (Q Z : Finset ↥Λ) (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q)
     (hD : g.hamiltonian - H ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Z) (l : ℕ) :
     let B := graphNeighborhood (planeDomainGraph Λ) (Q ∪ Z) l
-    ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+    ∃ U : ℝ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ,
       U 0 = 1 ∧
       (∀ t, HasDerivAt U
         ((Complex.I • ManyBody.regionExpectation B
           (ManyBody.heisenbergEvolution g.hamiltonian t (g.hamiltonian - H))) * U t) t) ∧
-      (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
+      (∀ t, U t ∈ Matrix.unitaryGroup (↥Λ → Fin q) ℂ) ∧
       (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) B) ∧
       ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
         let M := ∫ t : ℝ in Set.Icc (-T) T,
@@ -81,8 +80,8 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
         (ManyBody.Interaction.isHermitian_hamiltonian hg) hH B
   refine ⟨U, hU0, hU, hunit, fun t ↦ (hsupport t),
     fun η T hT ↦ ?_⟩
-  have hnear (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-      (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Q ∪ Z : Finset (Site Λ)))
+  have hnear (A : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ)
+      (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Q ∪ Z : Finset ↥Λ))
       (t : ℝ) (ht : |t| ≤ T) :
       ‖ManyBody.heisenbergEvolution g.hamiltonian t A -
         ManyBody.regionExpectation B (ManyBody.heisenbergEvolution g.hamiltonian t A)‖ ≤
@@ -116,16 +115,16 @@ Source: polynomial-PEPS, Section 2, eq:info-local-two-sided, lines 513–562. -/
 theorem supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q) (R : ℕ) {J : ℝ} (hJ : 0 ≤ J)
     (Λ : Finset (ℤ × ℤ)) (g : PlaneInteraction Λ q R) (hg : ∀ X, (g.term X).IsHermitian)
         (hgJ : ∀ X, ‖g.term X‖ ≤ J)
-    (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hH : H.IsHermitian)
-    (Q Z : Finset (Site Λ)) (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q)
+    (H W : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ) (hH : H.IsHermitian)
+    (Q Z : Finset ↥Λ) (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q)
     (hD : g.hamiltonian - H ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Z) (l : ℕ) :
     let B := graphNeighborhood (planeDomainGraph Λ) (Q ∪ Z) l
-    ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+    ∃ U : ℝ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ,
       U 0 = 1 ∧
       (∀ t, HasDerivAt U
         ((Complex.I • ManyBody.regionExpectation B
           (ManyBody.heisenbergEvolution g.hamiltonian t (g.hamiltonian - H))) * U t) t) ∧
-      (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
+      (∀ t, U t ∈ Matrix.unitaryGroup (↥Λ → Fin q) ℂ) ∧
       (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) B) ∧
       ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
         let M := ∫ t : ℝ in Set.Icc (-T) T,
@@ -152,19 +151,19 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
     ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (g : PlaneInteraction Λ q R) (_ : ∀ X, (g.term X).IsHermitian)
           (_ : ∀ X, ‖g.term X‖ ≤ J)
-        (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+        (H W : Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ),
         H.IsHermitian →
-        ∀ Q Z : Finset (Site Λ),
+        ∀ Q Z : Finset ↥Λ,
           W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q →
           g.hamiltonian - H ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Z →
           ∀ l : ℕ,
             let B := graphNeighborhood (planeDomainGraph Λ) (Q ∪ Z) l
-            ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
+            ∃ U : ℝ → Matrix (↥Λ → Fin q) (↥Λ → Fin q) ℂ,
               U 0 = 1 ∧
               (∀ t, HasDerivAt U
                 ((Complex.I • ManyBody.regionExpectation B
                   (ManyBody.heisenbergEvolution g.hamiltonian t (g.hamiltonian - H))) * U t) t) ∧
-              (∀ t, U t ∈ Matrix.unitaryGroup (Configuration Λ q) ℂ) ∧
+              (∀ t, U t ∈ Matrix.unitaryGroup (↥Λ → Fin q) ℂ) ∧
               (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) B) ∧
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,

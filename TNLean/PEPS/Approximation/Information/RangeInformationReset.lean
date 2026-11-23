@@ -59,6 +59,8 @@ open Matrix QuantumCircuit
 open ManyBody (IsGapped groundSpace)
 open scoped Kronecker
 
+open ManyBody (supDist supDist_le_of_walk)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
@@ -102,7 +104,7 @@ complement of `C`, and `ℓ + R ≤ w`, then the graph neighbourhood of radius `
 `(A ∪ C)ᶜ` and of the sites of the supports of range `R` crossing `A` contains no site of
 `A₀ ∪ C₀`.
 Source: `02-information.tex`, lines 600–611, at range `R`. -/
-theorem notMem_rangeResetSupport {Λ : Finset (ℤ × ℤ)} {R : ℕ} {A C A₀ C₀ : Finset (Site Λ)}
+theorem notMem_rangeResetSupport {Λ : Finset (ℤ × ℤ)} {R : ℕ} {A C A₀ C₀ : Finset ↥Λ}
     (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C) {w : ℝ} {ℓ : ℕ}
     (hℓ : (ℓ : ℝ) + R ≤ w)
     (hAw : ∀ x ∈ A₀, ∀ y, y ∉ A → w < (supDist x.1 y.1 : ℝ))
@@ -117,11 +119,11 @@ theorem notMem_rangeResetSupport {Λ : Finset (ℤ × ℤ)} {R : ℕ} {A C A₀ 
     exact_mod_cast supDist_le_of_walk p hp
   have hR0 : (0 : ℝ) ≤ R := Nat.cast_nonneg R
   -- A site within sup-distance `R` of `x` is within `ℓ + R ≤ w` of `v`.
-  have hnear (y : Site Λ) (hy : (supDist x.1 y.1 : ℝ) ≤ R) : (supDist v.1 y.1 : ℝ) ≤ w := by
+  have hnear (y : ↥Λ) (hy : (supDist x.1 y.1 : ℝ) ≤ R) : (supDist v.1 y.1 : ℝ) ≤ w := by
     have h₁ : (supDist v.1 y.1 : ℝ) ≤ supDist v.1 x.1 + supDist x.1 y.1 := by
       exact_mod_cast supDist_triangle v.1 x.1 y.1
     linarith
-  have hfar (y : Site Λ) (hy : (supDist x.1 y.1 : ℝ) ≤ R) (hA : v ∈ A₀ → y ∉ A)
+  have hfar (y : ↥Λ) (hy : (supDist x.1 y.1 : ℝ) ≤ R) (hA : v ∈ A₀ → y ∉ A)
       (hC : v ∈ C₀ → y ∉ C) : False := by
     have hle := hnear y hy
     rcases Finset.mem_union.mp hv with hv | hv
@@ -159,10 +161,10 @@ Source: `02-information.tex`, Lemma 3.3, lines 334–353, proof lines 355–630,
 theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ)
     (hp : 0 < p) {L : ℕ} (hL : rangeResetThreshold q R J Δ p ≤ L) (hΛ : Λ.card ≤ L ^ 2)
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (E₀ : ℝ) (Ω : StateSpace Λ q)
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q))
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-    (A C A₀ C₀ : Finset (Site Λ)) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
+    (A C A₀ C₀ : Finset ↥Λ) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
     (b : ℝ) (hb : 0 ≤ b) (hI : ManyBody.regionMutualInformation Ω A C ≤ b)
     (hAw : ∀ x ∈ A₀, ∀ y, y ∉ A →
       rangeResetWidth R J Δ p * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ))
@@ -219,10 +221,10 @@ theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J
     (hΔ : 0 < Δ) (hp : 0 < p) {L : ℕ} (hL : rangeResetThreshold q R J Δ p ≤ L)
     (h : PlaneInteraction (rectangularDomain L L) q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
-    (Ω : StateSpace (rectangularDomain L L) q)
+    (Ω : EuclideanSpace ℂ (↥(rectangularDomain L L) → Fin q))
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-    (A C A₀ C₀ : Finset (Site (rectangularDomain L L))) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A)
+    (A C A₀ C₀ : Finset ↥(rectangularDomain L L)) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A)
     (hC₀ : C₀ ⊆ C) (b : ℝ) (hb : 0 ≤ b)
     (hI : ManyBody.regionMutualInformation Ω A C ≤ b)
     (hAw : ∀ x ∈ A₀, ∀ y, y ∉ A →
@@ -246,10 +248,10 @@ theorem information_reset (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < 
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
       ∀ L : ℕ, L₀ ≤ L → ∀ (h : PlaneInteraction (rectangularDomain L L) q R)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
-        (Ω : StateSpace (rectangularDomain L L) q),
+        (Ω : EuclideanSpace ℂ (↥(rectangularDomain L L) → Fin q)),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ (A C A₀ C₀ : Finset (Site (rectangularDomain L L))), Disjoint A C → A₀ ⊆ A →
+        ∀ (A C A₀ C₀ : Finset ↥(rectangularDomain L L)), Disjoint A C → A₀ ⊆ A →
         C₀ ⊆ C → ∀ b : ℝ, 0 ≤ b → ManyBody.regionMutualInformation Ω A C ≤ b →
         (∀ x ∈ A₀, ∀ y, y ∉ A → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →
         (∀ x ∈ C₀, ∀ y, y ∉ C → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →

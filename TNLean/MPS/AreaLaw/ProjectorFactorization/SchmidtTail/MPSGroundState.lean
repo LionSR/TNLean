@@ -46,7 +46,6 @@ because the constraint is available only at even exponents. See
 open scoped Matrix.Norms.L2Operator
 
 open Matrix Real
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
 

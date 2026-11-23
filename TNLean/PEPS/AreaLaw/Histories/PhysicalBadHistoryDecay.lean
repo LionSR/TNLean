@@ -23,7 +23,6 @@ Lemma 9.1, `08-scanner.tex`, lines 309–329, at `openai/math@adc7f124`.
 
 open Filter
 open scoped BigOperators
-open TNLean.Lattice
 
 open ManyBody (ambientDilation planeDomainGraph)
 
@@ -43,7 +42,7 @@ theorem bad_history_probability_le_of_threshold_le
     (multiplicity : ℕ) (p : ℝ) {n : ℕ}
     (hthr : badHistoryThreshold kappa Cr C1 Ct multiplicity p ≤ n) :
     ∀ (I : Type u) [Fintype I] [LinearOrder I]
-      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan ↥Λ I),
       S.n = n → S.m = ⌊(n : ℝ) ^ mu⌋₊ →
       S.K = ⌊(n : ℝ) ^ (1 - ell)⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ kappa⌉₊ → S.r₀ = roundedLogRadius Cr n →
@@ -84,7 +83,7 @@ theorem bad_history_probability_le_of_threshold_le
       Nat.div_mul_le_self ⌊(n : ℝ) ^ (1 - ell)⌋₊ (8 * S.m)
   exact (S.sum_historyWeight_bad_through_geometric_domainGraph_le hT hgraph hdepth
     hnNat hmNat (by omega : 0 < S.r₀) hMpos hL hclear hrows hmult).trans
-      (hscalar (Site Λ) I S T.card hSn hm hK hD hR hM ht)
+      (hscalar ↥Λ I S T.card hSn hm hK hD hR hM ht)
 
 open Classical in
 /-- Lemma 9.1's bad-history estimate for actual finite physical histories, with
@@ -97,7 +96,7 @@ theorem eventually_bad_history_probability_le
     (hCr : 0 < Cr) (hC1 : 0 < C1) (hCt : 0 ≤ Ct)
     (multiplicity : ℕ) (p : ℝ) :
     ∀ᶠ n : ℕ in atTop, ∀ (I : Type u) [Fintype I] [LinearOrder I]
-      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (S : CollarScan ↥Λ I),
       S.n = n → S.m = ⌊(n : ℝ) ^ mu⌋₊ →
       S.K = ⌊(n : ℝ) ^ (1 - ell)⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ kappa⌉₊ → S.r₀ = roundedLogRadius Cr n →

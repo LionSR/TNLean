@@ -30,8 +30,6 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation F
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -46,7 +44,7 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) :
     ∀ {I : Type} [Fintype I] [LinearOrder I]
         {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-        (S : CollarScan (Site Λ) I), max (truncationEntropyThreshold q g Cvol) 2 ≤ S.n →
+        (S : CollarScan ↥Λ I), max (truncationEntropyThreshold q g Cvol) 2 ≤ S.n →
         ∀ (_hgraph : S.graph = planeDomainGraph Λ)
           (_hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
           (hm : 0 < S.m) (hM : 0 < S.M)
@@ -55,7 +53,7 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
           (L : ℕ) (_hL : 8 * S.K * S.m ≤ L)
           (_hrows : ∀ j : ℕ, 1 ≤ j → j ≤ L →
             (ambientDilation T j \ ambientDilation T (j - 1)).card ≤ S.n)
-          (Ω Ωt : StateSpace Λ q), ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
+          (Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
           ((S.truncationSet L).card : ℝ) ≤ Cvol * (S.n : ℝ) ^ 2 →
           Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
               (Matrix.vecMulVec Ω (star Ω)) ≤
@@ -64,20 +62,20 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
             (∀ j : ℕ, j ≤ L →
               ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
                 Ce * ((S.n : ℝ) * (L : ℝ) ^ e + S.n)) →
-          ∀ (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
+          ∀ (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q)
             (S.A.filter fun x ↦ x.val ∈ T)))
             (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))),
           let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ e + S.n) +
             (S.n : ℝ) ^ (-247 : ℝ)
           let X := S.A.filter fun x ↦ x.val ∈ T
-          let β := fun _ : Site Λ ↦ Fin q
+          let β := fun _ : ↥Λ ↦ Fin q
           let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
             (ManyBody.cutEquiv β X) Ωt
           let z := Matrix.IsHermitian.spectralRestrictionMass
             (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
           0 < z →
           let d := E.card
-          let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+          let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
           let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
             replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
           let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
@@ -117,7 +115,7 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
       ManyBody.regionEntropy Ωt
         (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh := by
     intro j
-    simpa only [] using
+    simpa only using
       htransfer Λ Ω Ωt hΩ hΩt S.A S.depth L hcard' hdist Ce e hsource
         j.val (Nat.le_of_lt_succ j.isLt)
   exact eventually_actualScan_suppliedPrevector_endpoint_budget hT S hgraph hdepth
@@ -133,7 +131,7 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
     ∃ N : ℕ, 2 ≤ N ∧
       ∀ {I : Type} [Fintype I] [LinearOrder I]
         {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-        (S : CollarScan (Site Λ) I), N ≤ S.n →
+        (S : CollarScan ↥Λ I), N ≤ S.n →
         ∀ (_hgraph : S.graph = planeDomainGraph Λ)
           (_hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
           (hm : 0 < S.m) (hM : 0 < S.M)
@@ -142,7 +140,7 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
           (L : ℕ) (_hL : 8 * S.K * S.m ≤ L)
           (_hrows : ∀ j : ℕ, 1 ≤ j → j ≤ L →
             (ambientDilation T j \ ambientDilation T (j - 1)).card ≤ S.n)
-          (Ω Ωt : StateSpace Λ q), ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
+          (Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q)), ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
           ((S.truncationSet L).card : ℝ) ≤ Cvol * (S.n : ℝ) ^ 2 →
           Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
               (Matrix.vecMulVec Ω (star Ω)) ≤
@@ -151,20 +149,20 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
             (∀ j : ℕ, j ≤ L →
               ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
                 Ce * ((S.n : ℝ) * (L : ℝ) ^ e + S.n)) →
-          ∀ (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
+          ∀ (E : Finset (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q)
             (S.A.filter fun x ↦ x.val ∈ T)))
             (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))),
           let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ e + S.n) +
             (S.n : ℝ) ^ (-247 : ℝ)
           let X := S.A.filter fun x ↦ x.val ∈ T
-          let β := fun _ : Site Λ ↦ Fin q
+          let β := fun _ : ↥Λ ↦ Fin q
           let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
             (ManyBody.cutEquiv β X) Ωt
           let z := Matrix.IsHermitian.spectralRestrictionMass
             (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
           0 < z →
           let d := E.card
-          let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+          let n := augmentedDimensions (V := ↥Λ) q (fun _ ↦ d)
           let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
             replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
           let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦

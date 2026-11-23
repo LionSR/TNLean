@@ -29,8 +29,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized; no upstream Lean proof text reused.
 -/
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 
@@ -42,7 +40,7 @@ actual repair family are retained.
 Source: area-law Section 11, `10-geometry.tex`, lines 398–409, 732–740
 and 761–771. -/
 theorem repairStage_positive_rank_length_lower_bound (U : ℝ) (o : ℝ × ℝ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C)
     (h₀ : 50000000 ≤ k₀) (hk : fineScaleIndexThreshold U ≤ k₀) (Sstar : ℝ)
     (hSstar : U ≤ Sstar) (N : ℕ) (i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex)
     (hi : 0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i) :
@@ -67,7 +65,7 @@ data, the stopping scale and the generation; it is `fineScaleIndexThreshold U`
 Source: area-law Section 11, `10-geometry.tex`, lines 398–409, 732–740
 and 761–771. -/
 theorem exists_uniform_repairStage_positive_rank_length_lower_bound (U : ℝ) :
-    ∃ K : ℕ, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    ∃ K : ℕ, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
       (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
       ∀ Sstar : ℝ, U ≤ Sstar → ∀ (N : ℕ)
         (i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex),

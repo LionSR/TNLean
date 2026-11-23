@@ -25,7 +25,6 @@ noncomputable section
 open Filter
 open Matrix
 open scoped BigOperators
-open TNLean.Lattice
 
 open ManyBody (ambientDilation planeDomainGraph)
 
@@ -43,14 +42,14 @@ theorem source_actualTerminal_preEntropy_bounds_of_truncationEntropyThreshold_le
     (q : ℕ) (hq : 1 ≤ q) (gap Cvol : ℝ) (hgap : 0 < gap) {n : ℕ}
     (hthr : truncationEntropyThreshold q gap Cvol ≤ n) :
     ∀ (I : Type) [Fintype I] [LinearOrder I] (Λ T : Finset (ℤ × ℤ))
-      (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+      (hT : T.Nonempty) (S : CollarScan ↥Λ I),
     S.n = n → S.graph = planeDomainGraph Λ →
     S.depth = (fun x ↦ ambientDepth T hT x.val) →
     0 < S.n → 0 < S.K → S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m →
     ∀ L : ℕ, 8 * S.K * S.m ≤ L →
     (∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-    ∀ Ω Ωt : StateSpace Λ q, ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
+    ∀ Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
     ((depthPrefix S.A S.depth (L : ℤ)).card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
     Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
         (Matrix.vecMulVec Ω (star Ω)) ≤
@@ -97,14 +96,14 @@ theorem eventually_source_actualTerminal_preEntropy_bounds
     (q : ℕ) (hq : 1 ≤ q) (gap Cvol : ℝ) (hgap : 0 < gap) :
     ∀ᶠ n : ℕ in atTop,
       ∀ (I : Type) [Fintype I] [LinearOrder I] (Λ T : Finset (ℤ × ℤ))
-        (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
+        (hT : T.Nonempty) (S : CollarScan ↥Λ I),
       S.n = n → S.graph = planeDomainGraph Λ →
       S.depth = (fun x ↦ ambientDepth T hT x.val) →
       0 < S.n → 0 < S.K → S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m →
       ∀ L : ℕ, 8 * S.K * S.m ≤ L →
       (∀ d : ℕ, 1 ≤ d → d ≤ L →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-      ∀ Ω Ωt : StateSpace Λ q, ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
+      ∀ Ω Ωt : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
       ((depthPrefix S.A S.depth (L : ℤ)).card : ℝ) ≤ Cvol * (n : ℝ) ^ 2 →
       Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
           (Matrix.vecMulVec Ω (star Ω)) ≤

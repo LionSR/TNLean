@@ -25,9 +25,9 @@ lines 681--805, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
-noncomputable section
+open ManyBody (IntRect IsSafe rectRegion)
 
-open TNLean.Lattice
+noncomputable section
 
 open ManyBody (AdmissibleSupport)
 

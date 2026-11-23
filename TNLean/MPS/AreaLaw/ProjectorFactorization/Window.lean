@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Chain.IntervalUnion
-import TNLean.Lattice.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # The entropy window of Hastings' area-law proof
@@ -64,8 +67,6 @@ past the end of the chain: the chain end needs no separate hypothesis, because e
 -/
 
 open ManyBody (card_interval_le interval)
-
-open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw.Hastings
 

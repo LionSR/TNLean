@@ -73,7 +73,7 @@ private theorem threeSplit_middle_rotation_eq
           (Equiv.prodCongr (Equiv.refl (E → Fin q))
             (Equiv.prodComm ({x // x ∉ T ∪ E} → Fin q) (T → Fin q)))))
     (TNLean.Lattice.Sheet.threeSplit q T E hTE).trans e =
-      (TNLean.Lattice.sheetSplit q E).trans ((Equiv.refl (E → Fin q)).prodCongr c) := by
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) E).trans ((Equiv.refl (E → Fin q)).prodCongr c) := by
   intro c a e
   apply Equiv.ext
   intro x
@@ -101,8 +101,8 @@ private theorem middle_threeSplit_rank_eq
           (Equiv.prodCongr (Equiv.refl (E → Fin q))
             (Equiv.prodComm ({x // x ∉ T ∪ E} → Fin q) (T → Fin q)))))
     operatorSchmidtRank ((M.reindex g g).reindex e e) =
-      operatorSchmidtRank (M.reindex (TNLean.Lattice.sheetSplit q E)
-        (TNLean.Lattice.sheetSplit q E)) := by
+      operatorSchmidtRank (M.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) E)
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) E)) := by
   intro g a e
   have := Fintype.ofFinite ι
   let c :=
@@ -110,11 +110,12 @@ private theorem middle_threeSplit_rank_eq
       ((Equiv.refl (T → Fin q)).prodCongr
         (Equiv.arrowCongr (Equiv.subtypeEquivRight (q := fun x ↦ x ∉ T ∪ E)
           fun _ ↦ by rw [Finset.union_comm E T]) (Equiv.refl (Fin q))))
-  have he : g.trans e = (TNLean.Lattice.sheetSplit q E).trans
+  have he : g.trans e = (ManyBody.cutEquiv (fun _ ↦ Fin q) E).trans
       ((Equiv.refl (E → Fin q)).prodCongr c) :=
     threeSplit_middle_rotation_eq q T E hTE
   have hm : (M.reindex g g).reindex e e =
-      (M.reindex (TNLean.Lattice.sheetSplit q E) (TNLean.Lattice.sheetSplit q E)).reindex
+      (M.reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) E)
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) E)).reindex
         ((Equiv.refl (E → Fin q)).prodCongr c)
         ((Equiv.refl (E → Fin q)).prodCongr c) := by
     change M.reindex (g.trans e) (g.trans e) = _
@@ -283,7 +284,7 @@ private theorem operatorSchmidtRank_two_window_regional_full_counts_le
           (fun w ↦ (WordMultiplicity.countsFinsupp w : _ → ℕ) = α),
         (List.ofFn (fun t ↦ F (w t))).prod
     operatorSchmidtRank ((∑ α ∈ S, weight α • coefficient α).reindex
-        (TNLean.Lattice.sheetSplit q E) (TNLean.Lattice.sheetSplit q E)) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) E) (ManyBody.cutEquiv (fun _ ↦ Fin q) E)) ≤
       (r + 1) ^ (4 * ℓ) * ((r + i + 1).choose (2 * i + 1) *
         (r + j + 1).choose (2 * j + 1) * (q ^ 2) ^ i * (q ^ 2) ^ j) := by
   classical
@@ -361,7 +362,7 @@ private theorem operatorSchmidtRank_two_window_target_full_counts_le
           (fun w ↦ (WordMultiplicity.countsFinsupp w : _ → ℕ) = α),
         (List.ofFn (fun t ↦ F (w t))).prod
     operatorSchmidtRank ((∑ α ∈ S, weight α • coefficient α).reindex
-        (TNLean.Lattice.sheetSplit q J) (TNLean.Lattice.sheetSplit q J)) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤
       q ^ (2 * (E ∆ J).card) * ((r + 1) ^ (4 * ℓ) *
         ((r + i + 1).choose (2 * i + 1) * (r + j + 1).choose (2 * j + 1) *
           (q ^ 2) ^ i * (q ^ 2) ^ j)) := by
@@ -409,7 +410,7 @@ private theorem operatorSchmidtRank_two_window_source_full_counts_le
           (fun w ↦ (WordMultiplicity.countsFinsupp w : _ → ℕ) = α),
         (List.ofFn (fun t ↦ F (w t))).prod
     operatorSchmidtRank ((∑ α ∈ S, weight α • coefficient α).reindex
-        (TNLean.Lattice.sheetSplit q J) (TNLean.Lattice.sheetSplit q J)) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤
       (r + 1) ^ (4 * ℓ) * ((r + i + 1).choose (2 * i + 1) *
         (r + j + 1).choose (2 * j + 1) * q ^ (2 * (i + j) + 4 * ℓ)) := by
   classical
@@ -422,7 +423,7 @@ private theorem operatorSchmidtRank_two_window_source_full_counts_le
     let : IsEmpty (Fin L → Fin 0) := ⟨fun f ↦ Fin.elim0 (f ⟨0, hLpos⟩)⟩
     have hM : (∑ α ∈ S, weight α • coefficient α) = 0 := Subsingleton.elim _ _
     have hzrank : operatorSchmidtRank ((∑ α ∈ S, weight α • coefficient α).reindex
-        (TNLean.Lattice.sheetSplit 0 J) (TNLean.Lattice.sheetSplit 0 J)) ≤ 0 := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin 0) J) (ManyBody.cutEquiv (fun _ ↦ Fin 0) J)) ≤ 0 := by
       apply operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition
       refine ⟨Fin.elim0, Fin.elim0, ?_⟩
       rw [hM]
@@ -474,7 +475,7 @@ private theorem operatorSchmidtRank_two_window_pow_le_sum
     let J := interval L (a + ℓ + δ.val) (b + ℓ + 1)
     let bnd := k / (2 * ℓ)
     operatorSchmidtRank (((∑ α, F α) ^ r).reindex
-        (TNLean.Lattice.sheetSplit q J) (TNLean.Lattice.sheetSplit q J)) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤
       (2 * ℓ) ^ 2 * (∑ i ∈ Finset.range (bnd + 1), ∑ j ∈ Finset.range (bnd + 1),
         (r + 1) ^ (4 * ℓ) * ((r + i + 1).choose (2 * i + 1) *
           (r + j + 1).choose (2 * j + 1) * q ^ (2 * (i + j) + 4 * ℓ))) := by
@@ -521,7 +522,8 @@ private theorem operatorSchmidtRank_two_window_pow_le_sum
     simpa only [hLcard, hRcard] using hpart F k r hr
   have hbin : ∀ t ∈ B, operatorSchmidtRank
       ((∑ α ∈ A with label α = t, coefficient α).reindex
-        (TNLean.Lattice.sheetSplit q J) (TNLean.Lattice.sheetSplit q J)) ≤ C t.1.2 t.2.2 := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤ C t.1.2
+            t.2.2 := by
     rintro ⟨⟨u, i⟩, ⟨v, j⟩⟩ ht
     have hu := (Finset.mem_product.mp (Finset.mem_product.mp ht).1).1
     have hv := (Finset.mem_product.mp (Finset.mem_product.mp ht).2).1
@@ -546,9 +548,9 @@ private theorem operatorSchmidtRank_two_window_pow_le_sum
     simp only [B, Finset.product_eq_sprod, Finset.sum_product, Finset.sum_const, Nat.nsmul_eq_mul,
       ← Finset.mul_sum, hLcard, hRcard, pow_two, mul_assoc]
   have hcut : ((∑ α, F α) ^ r).reindex
-      (TNLean.Lattice.sheetSplit q J) (TNLean.Lattice.sheetSplit q J) =
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J) =
       ∑ t ∈ B, (∑ α ∈ A with label α = t, coefficient α).reindex
-        (TNLean.Lattice.sheetSplit q J) (TNLean.Lattice.sheetSplit q J) := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J) := by
     rw [hpartition]
     ext x y
     simp only [Matrix.reindex_apply, Matrix.sum_apply, Matrix.submatrix_apply]
@@ -623,14 +625,14 @@ private theorem operatorSchmidtRank_two_window_aeval_le_sum
     let J := interval L (a + ℓ + δ.val) (b + ℓ + 1)
     let bnd := k / (2 * ℓ)
     operatorSchmidtRank ((Polynomial.aeval (∑ α, F α) P).reindex
-        (TNLean.Lattice.sheetSplit q J) (TNLean.Lattice.sheetSplit q J)) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤
       (2 * ℓ) ^ 2 * (∑ r ∈ Finset.range (k + 1),
         ∑ i ∈ Finset.range (bnd + 1), ∑ j ∈ Finset.range (bnd + 1),
           (r + 1) ^ (4 * ℓ) * ((r + i + 1).choose (2 * i + 1) *
             (r + j + 1).choose (2 * j + 1) * q ^ (2 * (i + j) + 4 * ℓ))) := by
   classical
   intro J bnd
-  let g := TNLean.Lattice.sheetSplit q J
+  let g := ManyBody.cutEquiv (fun _ ↦ Fin q) J
   let M := ∑ α, F α
   have htransport : (Polynomial.aeval M P).reindex g g =
       Polynomial.aeval (M.reindex g g) P := by
@@ -682,7 +684,7 @@ theorem operatorSchmidtRank_aeval_two_window_le_pow
     let J := interval L (a + ℓ + δ.val) (b + ℓ + 1)
     let bnd := k / (2 * ℓ)
     operatorSchmidtRank ((Polynomial.aeval (∑ α, F α) P).reindex
-        (TNLean.Lattice.sheetSplit q J) (TNLean.Lattice.sheetSplit q J)) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) J) (ManyBody.cutEquiv (fun _ ↦ Fin q) J)) ≤
       (q * k) ^ (17 * (ℓ + bnd)) := by
   classical
   intro J bnd
@@ -692,7 +694,7 @@ theorem operatorSchmidtRank_aeval_two_window_le_pow
     let : IsEmpty (Fin L → Fin 0) := ⟨fun f ↦ Fin.elim0 (f ⟨0, hLpos⟩)⟩
     have hM : Polynomial.aeval (∑ α, F α) P = 0 := Subsingleton.elim _ _
     have hzrank : operatorSchmidtRank ((Polynomial.aeval (∑ α, F α) P).reindex
-        (TNLean.Lattice.sheetSplit 0 J) (TNLean.Lattice.sheetSplit 0 J)) ≤ 0 := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin 0) J) (ManyBody.cutEquiv (fun _ ↦ Fin 0) J)) ≤ 0 := by
       apply operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition
       refine ⟨Fin.elim0, Fin.elim0, ?_⟩
       rw [hM]
@@ -702,7 +704,7 @@ theorem operatorSchmidtRank_aeval_two_window_le_pow
   · by_cases hq1 : q = 1
     · subst q
       have hrank : operatorSchmidtRank ((Polynomial.aeval (∑ α, F α) P).reindex
-          (TNLean.Lattice.sheetSplit 1 J) (TNLean.Lattice.sheetSplit 1 J)) ≤ 1 :=
+          (ManyBody.cutEquiv (fun _ ↦ Fin 1) J) (ManyBody.cutEquiv (fun _ ↦ Fin 1) J)) ≤ 1 :=
         operatorSchmidtRank_le_one_of_unique_left _
       exact hrank.trans (by
         simpa only [one_mul] using (one_le_pow₀ hk : 1 ≤ k ^ (17 * (ℓ + bnd))))
@@ -755,12 +757,15 @@ theorem operatorSchmidtRank_aeval_sum_le_pow_of_bulk
     (F : α → Matrix (ι → Fin q) (ι → Fin q) ℂ) (β₀ : α)
     (hside : ∀ β, β ≠ β₀ → F β ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∨
       F β ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Sᶜ : Finset ι))
-    {B : ℕ} (hB : operatorSchmidtRank ((F β₀).reindex (sheetSplit q S) (sheetSplit q S)) ≤ B)
+    {B : ℕ} (hB : operatorSchmidtRank
+        ((F β₀).reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) S) (ManyBody.cutEquiv (fun _ ↦ Fin q) S))
+        ≤ B)
     (k : ℕ) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
     operatorSchmidtRank ((Polynomial.aeval (∑ β, F β) P).reindex
-        (sheetSplit q S) (sheetSplit q S)) ≤ (B + 2) ^ (k + 1) := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) S) (ManyBody.cutEquiv (fun _ ↦ Fin q) S)) ≤ (B + 2) ^
+            (k + 1) := by
   classical
-  let g := sheetSplit q S
+  let g := ManyBody.cutEquiv (fun _ ↦ Fin q) S
   let M := ∑ β, F β
   have htransport : (Polynomial.aeval M P).reindex g g =
       Polynomial.aeval (M.reindex g g) P := by
@@ -840,10 +845,12 @@ theorem operatorSchmidtRank_aeval_two_window_middle_cut_le
       (interval L (b + 2 * ℓ) L : Finset (Fin L)))
     (hac : a + 2 * ℓ + 1 ≤ c) (hcb : c ≤ b) {B : ℕ}
     (hB : operatorSchmidtRank ((F (Sum.inr 1)).reindex
-      (sheetSplit q (interval L 0 c)) (sheetSplit q (interval L 0 c))) ≤ B)
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤ B)
     (k : ℕ) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
     operatorSchmidtRank ((Polynomial.aeval (∑ α, F α) P).reindex
-        (sheetSplit q (interval L 0 c)) (sheetSplit q (interval L 0 c))) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤
       (B + 2) ^ (k + 1) := by
   refine operatorSchmidtRank_aeval_sum_le_pow_of_bulk _ F (Sum.inr 1) ?_ hB k P hdeg
   rintro ((r | r) | i) hi
@@ -876,10 +883,12 @@ theorem operatorSchmidtRank_aeval_two_window_left_cut_le
       (interval L (b + 2 * ℓ) L : Finset (Fin L)))
     (hab : a ≤ b) (hca : c ≤ a) {B : ℕ}
     (hB : operatorSchmidtRank ((F (Sum.inr 0)).reindex
-      (sheetSplit q (interval L 0 c)) (sheetSplit q (interval L 0 c))) ≤ B)
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤ B)
     (k : ℕ) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
     operatorSchmidtRank ((Polynomial.aeval (∑ α, F α) P).reindex
-        (sheetSplit q (interval L 0 c)) (sheetSplit q (interval L 0 c))) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤
       (B + 2) ^ (k + 1) := by
   refine operatorSchmidtRank_aeval_sum_le_pow_of_bulk _ F (Sum.inr 0) ?_ hB k P hdeg
   rintro ((r | r) | i) hi
@@ -912,10 +921,12 @@ theorem operatorSchmidtRank_aeval_two_window_right_cut_le
       (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)))
     (hab : a ≤ b) (hbc : b + 2 * ℓ + 1 ≤ c) {B : ℕ}
     (hB : operatorSchmidtRank ((F (Sum.inr 2)).reindex
-      (sheetSplit q (interval L 0 c)) (sheetSplit q (interval L 0 c))) ≤ B)
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤ B)
     (k : ℕ) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
     operatorSchmidtRank ((Polynomial.aeval (∑ α, F α) P).reindex
-        (sheetSplit q (interval L 0 c)) (sheetSplit q (interval L 0 c))) ≤
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))
+            (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 c))) ≤
       (B + 2) ^ (k + 1) := by
   refine operatorSchmidtRank_aeval_sum_le_pow_of_bulk _ F (Sum.inr 2) ?_ hB k P hdeg
   rintro ((r | r) | i) hi

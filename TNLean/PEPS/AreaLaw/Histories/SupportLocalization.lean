@@ -27,8 +27,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open TNLean.Lattice
-
 open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -37,10 +35,10 @@ namespace TNLean.PEPS.AreaLaw.Scan
 The clearance is stated on the actual ambient endpoints of physical cut edges,
 exactly as in `scanner:test-geometry`. Source: `08-scanner.tex`, lines 225–233. -/
 theorem domainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
-    (hT : T.Nonempty) (A : Finset (Site Λ)) (L r₀ : ℕ)
+    (hT : T.Nonempty) (A : Finset ↥Λ) (L r₀ : ℕ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    {anchor : Site Λ}
+    {anchor : ↥Λ}
     (hmeet : ∃ y ∈ A, ambientDepth T hT y.val ≤ L ∧
       (planeDomainGraph Λ).edist anchor y ≤ (r₀ : ℕ∞)) :
     (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).edist anchor x ≤ (r₀ : ℕ∞)) ⊆ A := by
@@ -81,14 +79,14 @@ theorem domainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
 /-- Under the ambient row assumption, every physical depth row of index in `[1, L]` has at
 most `n` sites. Source: `08-scanner.tex`, lines 43–48 and 83–87. -/
 theorem depthRow_length_le_of_ambientRows {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    {depth : Site Λ → ℤ} (hdepth : depth = fun x ↦ ambientDepth T hT x.val) {n L : ℕ}
+    {depth : ↥Λ → ℤ} (hdepth : depth = fun x ↦ ambientDepth T hT x.val) {n L : ℕ}
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
     {d : ℤ} (hd : d ∈ Finset.Icc (1 : ℤ) L) :
     (depthRow depth d).length ≤ n := by
   obtain ⟨h1, hL⟩ := Finset.mem_Icc.mp hd
   have hb := depthRow_ambientDepth_length_le_of_row_bound T hT
-    (Subtype.val : Site Λ → ℤ × ℤ) Subtype.val_injective hrows
+    (Subtype.val : ↥Λ → ℤ × ℤ) Subtype.val_injective hrows
     (show 1 ≤ d.toNat by omega) (show d.toNat ≤ L by omega)
   simpa only [← hdepth, Int.toNat_of_nonneg (show 0 ≤ d by omega)] using hb
 

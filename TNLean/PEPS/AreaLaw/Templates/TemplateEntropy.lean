@@ -4,11 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Templates.TemplateLayers
-import TNLean.Lattice.MarginalTails
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
-import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.Templates.TwoFamilies
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Entropy cost of a partial template depth row
@@ -26,7 +29,6 @@ at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text reused.
 -/
 
-open TNLean.Lattice
 open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw
@@ -35,7 +37,7 @@ namespace TNLean.PEPS.AreaLaw
 Source: Lemma 9.4, partial-row step; both signs follow from subadditivity and
 pure-state complementarity of the actual regional reductions. -/
 theorem abs_regionEntropy_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (R B : Finset (Site Λ))
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (R B : Finset ↥Λ)
     (hRB : Disjoint R B) :
     |ManyBody.regionEntropy Ω (R ∪ B) - ManyBody.regionEntropy Ω R| ≤
       ManyBody.regionEntropy Ω B := by
@@ -47,7 +49,7 @@ theorem abs_regionEntropy_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
 `A` in `X` changes the regional entropy by at most `|Y| log q`.
 Source: Lemma 9.4, partial-row step, `08-scanner.tex`, lines 666–667. -/
 theorem abs_regionEntropy_filter_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (hq : 1 ≤ q) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (hq : 1 ≤ q) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
     (X Y : Finset (ℤ × ℤ)) (hXY : Disjoint X Y) :
     |ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ X ∪ Y) -
       ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ X)| ≤ Y.card * Real.log q := by
@@ -79,9 +81,9 @@ that set. Thus the two regions are `A ∩ ((T_{j-1} \ T) ∪ Y)` and
 `A ∩ (T_{j-1} \ T)`, with arbitrary `Y ⊆ T_j \ T_{j-1}`.
 This is the partial-row step only, not the safe-box shell estimate. -/
 theorem template_partial_row_entropy_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (hq : 1 ≤ q) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
+    (hq : 1 ≤ q) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
     {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
-    (A : Finset (Site Λ)) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ s₀)
+    (A : Finset ↥Λ) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ s₀)
     (Y : Finset (ℤ × ℤ))
     (hY : Y ⊆ ambientDilation T.points j \ ambientDilation T.points (j - 1)) :
     |ManyBody.regionEntropy Ω

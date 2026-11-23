@@ -32,7 +32,6 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 noncomputable section
 
-open TNLean.Lattice
 open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
@@ -44,7 +43,7 @@ actual mark count.
 Source: area-law Section 11, birth classes, lines 565–568, and
 `geometry:total-repairs`, lines 685–692. -/
 theorem repairStage_positive_rank_prefix_le (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
-    (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (N : ℕ) :
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (N : ℕ) :
     let I : Type := {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex //
       0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i}
     Finite I ∧ (Nat.card I : ℝ) ≤
@@ -133,7 +132,7 @@ Source: area-law Section 11, birth classes, lines 565–568, and
 `geometry:total-repairs`, lines 685–692. -/
 theorem exists_uniform_repairStage_positive_rank_prefix_bound :
     ∃ B : ℝ, 0 < B ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
         (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ) (N : ℕ),
         let I : Type := {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex //
           0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i}
@@ -164,7 +163,7 @@ every generation form a finite set of size at most
 Source: area-law Section 11, `geometry:total-repairs`, lines 685–692, and
 the nonprimary error contribution, lines 796–798. -/
 theorem repairStage_retained_positive_rank_le {Sstar : ℝ} (hSstar : 1 < Sstar)
-    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+    (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
     (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ)
     (h : RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
       (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀) (N : ℕ) :
@@ -211,7 +210,7 @@ the nonprimary error contribution, lines 796–798. -/
 theorem exists_uniform_repairStage_retained_positive_rank_bound {Sstar : ℝ}
     (hSstar : 1 < Sstar) :
     ∃ L : ℝ, 0 < L ∧
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
         (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (a₀ : ℝ),
         RepairMetricHypotheses (o := o) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
           (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀ →

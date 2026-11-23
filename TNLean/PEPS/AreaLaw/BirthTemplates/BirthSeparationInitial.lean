@@ -60,8 +60,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 noncomputable section
 
-open TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 
@@ -520,7 +518,7 @@ def InitialRegionIndex.beltScaleIndex {o : ℝ × ℝ} {k₀ : ℕ} {Z : Finset 
 
 section Stages
 
-variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
   (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
 
 local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
@@ -569,7 +567,7 @@ the same label.
 Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, for
 the births of initial belt tiles. -/
 theorem isInitialBirthSeparated_birthTemplateSeparationConstant (o : ℝ × ℝ)
-    (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
     (Sstar : ℝ) :
     IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant := by
   have hcore := initialBeltRun_birth_separation
@@ -627,13 +625,13 @@ every primary and every other initial belt tile with the same label.
 Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, for
 the births of initial belt tiles. One may take `c₁ = 1/112`. -/
 theorem exists_isInitialBirthSeparated :
-    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ)
       (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ),
       IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
   ⟨_, birthTemplateSeparationConstant_pos,
     isInitialBirthSeparated_birthTemplateSeparationConstant⟩
 
-theorem IsInitialBirthSeparated.mono {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+theorem IsInitialBirthSeparated.mono {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
     {C k₀ : ℕ} {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar c c' : ℝ}
     (h : IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c) (hc : c' ≤ c) :
     IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c' :=
@@ -641,7 +639,7 @@ theorem IsInitialBirthSeparated.mono {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)}
     (mul_le_mul_of_nonneg_right hc (Real.rpow_nonneg (by positivity) _)).trans
       (h x y ℓ hx hyx hyd hcol p hp w hw)
 
-theorem IsRepairBirthSeparated.mono {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+theorem IsRepairBirthSeparated.mono {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ}
     {C k₀ : ℕ} {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar c c' : ℝ}
     (h : IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c) (hc : c' ≤ c) :
     IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c' :=
@@ -659,7 +657,7 @@ Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
 theorem exists_threshold_birthSeparation_of_uniformRepairInductionStatement
     (h : UniformRepairInductionStatement) :
     ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant ∧
             IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant := by
@@ -679,7 +677,7 @@ Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
 theorem exists_birthSeparation_of_uniformRepairInductionStatement
     (h : UniformRepairInductionStatement) :
     ∃ c₁ > 0, ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
             IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
@@ -696,7 +694,7 @@ lines 471–543. -/
 theorem exists_birthSeparation_of_initialIsolatedStars
     (h : InitialIsolatedStarsStatement) :
     ∃ c₁ > 0, ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
             IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
@@ -714,7 +712,7 @@ Source: area-law Section 11, `geometry:birth-separation`, lines 573–582, with
 the proof in lines 584–659. -/
 theorem exists_birthSeparation :
     ∃ c₁ > 0, ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
             IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
@@ -731,7 +729,7 @@ lines 471–543. -/
 theorem exists_threshold_birthSeparation_of_initialIsolatedStars
     (h : InitialIsolatedStarsStatement) :
     ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant ∧
             IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant :=
@@ -748,7 +746,7 @@ Source: area-law Section 11, `geometry:birth-separation`, lines 573–582, with
 the proof in lines 584–659. -/
 theorem exists_threshold_birthSeparation :
     ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
-      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (k₀ : ℕ)
         (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
           IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant ∧
             IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar birthTemplateSeparationConstant :=

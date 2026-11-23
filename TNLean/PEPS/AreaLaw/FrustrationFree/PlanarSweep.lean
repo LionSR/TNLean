@@ -4,9 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FrustrationFree.LightCone
-import TNLean.Lattice.BufferedRectangles
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import QICLean.Algebra.Combinatorics.GreedyColoring
 import QICLean.Algebra.Combinatorics.OverlapGraph
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # The colour-ordered sweep on a planar domain and the radius of its light cone
@@ -38,7 +39,7 @@ frustration-free area-law note.
   vector".
 -/
 
-open ManyBody SimpleGraph TNLean.Lattice
+open ManyBody SimpleGraph
 
 namespace TNLean.PEPS.AreaLaw.FrustrationFree
 
@@ -117,7 +118,7 @@ theorem pairwise_disjoint_colorLayer
 /-- One layer of a colour moves the light cone by at most `R`. -/
 theorem retainedSet_colorLayer_subset
     (c : SupportColouring Λ R)
-    (i : Fin (overlapDegreeBound R + 1)) (U : Finset (Site Λ)) :
+    (i : Fin (overlapDegreeBound R + 1)) (U : Finset ↥Λ) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (colorLayer c i) ⊆
       graphNeighborhood (planeDomainGraph Λ) U R :=
   retainedSet_subset_of_pairwise_disjoint subset_graphNeighborhood
@@ -127,7 +128,7 @@ theorem retainedSet_colorLayer_subset
 /-- A word of `m` layers moves the light cone by at most `R m`. -/
 theorem retainedSet_flatten_subset
     (c : SupportColouring Λ R)
-    (Ls : List (Fin (overlapDegreeBound R + 1))) (U : Finset (Site Λ)) :
+    (Ls : List (Fin (overlapDegreeBound R + 1))) (U : Finset ↥Λ) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (Ls.map (colorLayer c)).flatten ⊆
       graphNeighborhood (planeDomainGraph Λ) U (R * Ls.length) := by
   induction Ls generalizing U with
@@ -141,7 +142,7 @@ theorem retainedSet_flatten_subset
 /-- **The light cone of one sweep** lies in `N_{R χ}(U)`, `χ = d_R + 1`. -/
 theorem retainedSet_sweepWord_subset
     (c : SupportColouring Λ R)
-    (U : Finset (Site Λ)) :
+    (U : Finset ↥Λ) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (sweepWord c) ⊆
       graphNeighborhood (planeDomainGraph Λ) U (R * (overlapDegreeBound R + 1)) := by
   have h := retainedSet_flatten_subset c (List.ofFn id) U
@@ -153,7 +154,7 @@ frustration-free area-law note). Source:
 perturbed vector": "a physical product `L_t` supported on `N_{χ R t}(S₀)`". -/
 theorem retainedSet_sweepWord_pow_subset
     (c : SupportColouring Λ R)
-    (U : Finset (Site Λ)) (t : ℕ) :
+    (U : Finset ↥Λ) (t : ℕ) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (List.replicate t (sweepWord c)).flatten ⊆
       graphNeighborhood (planeDomainGraph Λ) U (R * (overlapDegreeBound R + 1) * t) := by
   induction t generalizing U with

@@ -412,7 +412,7 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
       (middleCutBlock Φ a b m + (Φ.term a + Φ.term b)) (rightCutBlock Φ b y) t
     let A := interval L 0 (a.val + w + 1)
     Matrix.operatorSchmidtRank ((Polynomial.aeval Ht P).reindex
-      (TNLean.Lattice.sheetSplit q A) (TNLean.Lattice.sheetSplit q A)) ≤
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) A) (ManyBody.cutEquiv (fun _ ↦ Fin q) A)) ≤
       (q * k) ^ (17 * (w + k / (2 * w))) := by
   intro Ht A
   classical
