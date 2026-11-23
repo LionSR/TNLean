@@ -6,9 +6,6 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
 import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.ManyBody.Entropy.MovementEtaRegional
-import QICLean.ManyBody.Entropy.RegionEntropyInequalities
-import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # The marginal-tail parameter of a general cut

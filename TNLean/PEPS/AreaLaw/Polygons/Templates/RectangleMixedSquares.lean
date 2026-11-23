@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Polygons.Squares.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Polygons.Squares.QuotientIntervals
-import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # Mixed dyadic cells of an integer rectangle

@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ProjectionEnergy
+import TNLean.MPS.AreaLaw.Spectral.GroundStateTail
+import TNLean.MPS.AreaLaw.Spectral.SpectralTail
 
 /-!
 # Projected approximate ground vectors

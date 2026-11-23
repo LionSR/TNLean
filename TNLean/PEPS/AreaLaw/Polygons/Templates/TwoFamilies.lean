@@ -7,9 +7,7 @@ import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
 import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
-import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import QICLean.ManyBody.Entropy.RegionEntropy
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Entropy.TwoFamilies
 
 /-!

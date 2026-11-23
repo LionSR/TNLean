@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Chain.StripGeometry
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 
 /-!
 # Buffered discount and entropy bound for a strip

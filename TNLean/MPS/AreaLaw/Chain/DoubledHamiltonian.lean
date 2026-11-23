@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Chain.Hamiltonian
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Sites.SitewiseProduct
 import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.Analysis.TraceInequality.TraceMulBound

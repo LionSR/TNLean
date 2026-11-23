@@ -446,10 +446,9 @@ them:
 | `PEPS/RegionBlock <-> PEPS/TorusWindowPeeling` | `PEPS.RegionBlock.InteriorBondInsertion` → `PEPS.TorusWindowPeeling.WindowIndependence` (deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff) | `InteriorBondInsertion` → PEPS/FundamentalTheorem |
 | `PEPS/RegionBlock <-> PEPS/VertexComplement` | `PEPS.VertexComplement.Injective` → `PEPS.RegionBlock.KernelDescent` (regionBlockedTensorInjective_of_isVertexInjective) | `Injective` → PEPS/Injectivity |
 
-After the map, 9 pairs remain, all from modules mixing two layers (next
+After the map, 8 pairs remain, all from modules mixing two layers (next
 section):
 
-- `PEPS/Approximation <-> PEPS/AreaLaw`: `PEPS.Approximation.Cells.CellChambers` → `PEPS.AreaLaw.Polygons.Templates.TemplateRows`; `PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary` → `PEPS.Approximation.SheetSplitting`
 - `PEPS/Examples <-> PEPS/Graph`: `PEPS.Examples.CZX.CZXOnSiteSymmetry` → `PEPS.Graph.Region.OnSiteOperator`; `PEPS.Graph.Torus.KitaevPeriodicTiling` → `PEPS.Examples.ToricCode.KitaevCheckerboardBlocking`
 - `PEPS/FundamentalTheorem <-> PEPS/Graph`: `PEPS.FundamentalTheorem.Cycle.CycleBlockingData` → `PEPS.Graph.Region.CycleArcRegion`; `PEPS.Graph.Holonomy.RegularBoundaryRoute` → `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion`
 - `PEPS/FundamentalTheorem <-> PEPS/Injectivity`: `PEPS.FundamentalTheorem.Cycle.CycleMPSChainOverlapWindow` → `PEPS.Injectivity.Region.CycleMPSChainArc`; `PEPS.Injectivity.Charge.RegularTwistedStateNonzero` → `PEPS.FundamentalTheorem.Normal.NormalComparisonScalar`
@@ -463,7 +462,7 @@ section):
 
 ### Imports that remain
 
-Each of these 48 imports points outside the allowed layers after the map. The
+Each of these 47 imports points outside the allowed layers after the map. The
 map records them, and `--check` fails on any other violation and on a recorded
 one that no longer occurs. Each is removed in one of two ways:
 
@@ -472,7 +471,6 @@ one that no longer occurs. Each is removed in one of two ways:
 
 | Importer | Imported | Declarations used, or remedy |
 |---|---|---|
-| `PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary` | `PEPS.Approximation.SheetSplitting` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Graph.Cell.TorusPlaquetteRealization` | `PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement` | uses torusPlaquetteWalk, torusPlaquetteRegion |
 | `PEPS.Graph.Cell.TorusSimplyConnectedComplement` | `PEPS.Injectivity.Normal.NormalPairBlocking` | uses nonempty_regionBoundaryEdge_of_connected |
 | `PEPS.Graph.Holonomy.RegularBoundaryRoute` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion` | uses regionBoundaryEdgeComplEquiv |
@@ -566,7 +564,6 @@ Remedies by host module (the declarations to move and where):
 Imports that name no declaration of the target, and should be dropped or
 replaced by the lower module actually used:
 
-- `GoodRealizationUnitary` → `SheetSplitting`
 - `KitaevPeriodicTiling` → `KitaevCheckerboardBlocking`
 - `SquareLatticeEdgeCount` → `NormalBlocking`
 - `SquareGridSource` → `NormalBlocking`

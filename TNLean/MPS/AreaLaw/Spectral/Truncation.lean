@@ -3,9 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Spectral.GroundStateTail
 import QICLean.Spectral.Eigenvalue.CommutingHermitian
 import QICLean.Analysis.FunctionalCalculus.CfcConjugation
+import QICLean.Spectral.Projection.ShiftedDensityTruncation
+import QICLean.Spectral.Filter.EnergyTruncation
+import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
 # Two-sided energy truncation

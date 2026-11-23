@@ -14,7 +14,6 @@ import Mathlib.Logic.Function.Iterate
 import Mathlib.Tactic.Positivity
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order

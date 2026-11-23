@@ -4,14 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateLayers
-import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
-import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Entropy.RegionEntropy
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
-import QICLean.ManyBody.Entropy.MovementEtaRegional
 import QICLean.ManyBody.Entropy.RegionEntropyInequalities
-import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Entropy cost of a partial template depth row

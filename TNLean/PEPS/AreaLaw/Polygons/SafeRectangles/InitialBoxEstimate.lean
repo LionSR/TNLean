@@ -4,18 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
-import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
-import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RotatedChainRule
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.SafeBoxChildren
-import QICLean.ManyBody.Entropy.RegionEntropy
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
 import QICLean.Analysis.Real.ScaleRecurrence
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.ManyBody.Entropy.MovementEtaRegional
 import QICLean.ManyBody.Entropy.RegionEntropyInequalities
-import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # The initial safe-box estimate

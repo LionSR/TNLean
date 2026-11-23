@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.Norm.RootChannel
 

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
-import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import Mathlib.Analysis.Convex.Combination
 
 /-!
 # Instances of polygonal lattice templates

@@ -6,9 +6,6 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.ManyBody.Entropy.MovementEtaRegional
-import QICLean.ManyBody.Entropy.RegionEntropyInequalities
-import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Conditional entropy in a rectangle with real clearance

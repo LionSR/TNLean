@@ -11,10 +11,6 @@ import QICLean.ManyBody.Sites.Placement
 import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Hamiltonian.Models
-import QICLean.ManyBody.Entropy.ZeroEntropy
-import QICLean.ManyBody.Entropy.MovementEtaRegional
-import QICLean.ManyBody.Entropy.RegionEntropyInequalities
-import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # Finite-range Hamiltonians on the chain of `L` sites

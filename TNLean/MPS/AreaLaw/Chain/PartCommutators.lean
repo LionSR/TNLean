@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Chain.ThreeWaySplitting
 import TNLean.MPS.AreaLaw.Chain.Counting
-import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
 

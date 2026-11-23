@@ -7,7 +7,6 @@ import TNLean.PEPS.AreaLaw.Operators.FrustrationFree.LightCone
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import QICLean.Algebra.Combinatorics.GreedyColoring
 import QICLean.Algebra.Combinatorics.OverlapGraph
-import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # The colour-ordered sweep on a planar domain and the radius of its light cone

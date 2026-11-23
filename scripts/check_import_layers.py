@@ -232,7 +232,6 @@ SUBDIRECTORY_ORDERS: dict[str, tuple[str, ...]] = {
 # an entry: move the shared declaration down to the layer both sides may import.
 UPWARD_IMPORTS: frozenset[str] = frozenset(
     {
-        "TNLean.PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary -> TNLean.PEPS.Approximation.SheetSplitting",
         "TNLean.PEPS.Graph.Cell.TorusPlaquetteRealization -> TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement",
         "TNLean.PEPS.Graph.Cell.TorusSimplyConnectedComplement -> TNLean.PEPS.Injectivity.Normal.NormalPairBlocking",
         "TNLean.PEPS.Graph.Holonomy.RegularBoundaryRoute -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion",
@@ -290,7 +289,6 @@ DEEP_ROOTS: frozenset[str] = frozenset({"MPS", "PEPS"})
 # directory both sides already import.
 MUTUAL_LAYER_DIRECTORIES: frozenset[str] = frozenset(
     {
-        "PEPS/Approximation <-> PEPS/AreaLaw",
         "PEPS/FundamentalTheorem <-> PEPS/Graph",
         "PEPS/FundamentalTheorem <-> PEPS/Injectivity",
         "PEPS/FundamentalTheorem <-> PEPS/Tensor",

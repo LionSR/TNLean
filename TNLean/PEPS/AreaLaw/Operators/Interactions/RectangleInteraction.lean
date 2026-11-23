@@ -5,10 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.SupportCounting
 import QICLean.ManyBody.Sites.Config
-import TNLean.PEPS.Injectivity.Normal.NormalBlocking
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Sites.Lattice.Rectangle
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Hamiltonian.HermitianPart

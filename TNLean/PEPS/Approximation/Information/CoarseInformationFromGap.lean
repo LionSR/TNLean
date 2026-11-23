@@ -30,8 +30,6 @@ Source: polynomial-PEPS manuscript, Proposition 3.1 (`prop:coarse`),
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
-
 open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction rectangleEmbedding)
 
 namespace TNLean.PEPS.Approximation
