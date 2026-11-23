@@ -493,9 +493,9 @@ class WorkflowTest(unittest.TestCase):
             'source scripts/ci_resource_diagnostics.sh\n', ''),
             'set -eo pipefail\n{\n  lake build\n  lake build lint_style\n} 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"\n')
         names = [s.get("name") for s in STEPS]
-        ordered = ["Check directly changed Lean sources and tests strictly",
+        ordered = ["Check directly changed Lean sources strictly",
                    "Build changed Lean modules early", "Build Lean project and capture timings",
-                   "Upload build resource diagnostics", "Check changed Lean files and affected tests strictly",
+                   "Upload build resource diagnostics", "Check changed Lean files strictly",
                    "Run text-based style linter", "Check Blueprint Lean declarations",
                    "Check paper-gap Lean declarations", "Save Lean build cache (main only)"]
         self.assertEqual([names.index(n) for n in ordered], sorted(names.index(n) for n in ordered))

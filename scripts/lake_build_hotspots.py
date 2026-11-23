@@ -99,7 +99,7 @@ def pr_changed_paths(head: str) -> list[str]:
     """Compare a verified synthetic merge with its actual tested base parent.
 
     Mirror ci_lean_checks.selection_base's two-parent contract, but fail closed
-    instead of falling back to all files. The event base is deliberately unused.
+    instead of falling back to selecting nothing. The event base is deliberately unused.
     """
     if not re.fullmatch(r"[0-9a-f]{40}", head) or head == "0" * 40:
         raise ValueError("PR head must be a nonzero full commit SHA")

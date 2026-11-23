@@ -65,14 +65,17 @@ history in its own addendum.
 ### No test fixtures
 
 Do not write Lean test fixtures: no `TNLeanTest/` directory, no per-theorem
-`#print axioms` files pinned with `#guard_msgs`, and no example files whose
-only purpose is to show that a theorem's hypotheses can hold together. The
+`#print axioms` files pinned with `#guard_msgs`, no standalone Lean check files
+under `scripts/`, and no example files whose only purpose is to show that a
+theorem's hypotheses can hold together. The
 module-policy job in `pr-ci.yml` rejects any file under `TNLeanTest/`. Check a
 new theorem's axioms locally with `#print axioms` while writing it, and delete
 the command before committing. A worked example that is itself mathematics
 belongs in the library (for instance under `TNLean/MPS/Examples/`) with a
 blueprint entry. A 2026-10-28 cleanup deleted 877 fixture files (about 51,000
-lines) that had accumulated in six weeks, 593 of them axiom printouts only.
+lines) that had accumulated in six weeks, 593 of them axiom printouts only; a
+later cleanup deleted the last six standalone Lean check files in `scripts/` and
+their selection in CI.
 
 ## Prose (prose_style)
 
