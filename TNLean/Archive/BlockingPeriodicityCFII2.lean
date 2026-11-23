@@ -20,7 +20,7 @@ import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 This file implements the Appendix-A periodicity-removal argument in the *CFII* situation:
 starting from a trace-preserving (TP) irreducible tensor `A`, we:
 
-1. use `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily` to obtain
+1. use `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor` to obtain
    a unitary conjugate `B` with a diagonal positive-definite fixed point `Λ` of its transfer map;
 2. unitalize via the diagonal similarity transform `C i = Λ^{-1/2} B i Λ^{1/2}`;
 3. apply the channel-level root-of-unity lemma for irreducible unital maps with an adjoint
@@ -29,7 +29,7 @@ starting from a trace-preserving (TP) irreducible tensor `A`, we:
    physical blocking.
 
 The main theorem is
-`MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily_CFII`.
+`MPSTensor.exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII`.
 
 ## Status
 
@@ -375,7 +375,7 @@ end SupportProj
 section Irreducibility
 
 /-- Unitary conjugation preserves tensor irreducibility. -/
-lemma isIrreducibleFamily_unitaryConj
+lemma isIrreducibleTensor_unitaryConj
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A) :
     Kraus.IsIrreducibleFamily (d := d) (D := D)
@@ -641,7 +641,7 @@ lemma hasInvariantProj_of_hasInvariantProj_unitalize
   exact ⟨Q, hQproj, hQ0, hQ1, hLowerB⟩
 
 /-- Similarity unitalization preserves tensor irreducibility. -/
-lemma isIrreducibleFamily_unitalize
+lemma isIrreducibleTensor_unitalize
     (B : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛ : Λ.PosDef) (hDiag : Λ.IsDiag)
     (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) B) :
@@ -660,7 +660,7 @@ section PeriodicityRemoval
 
 If `A` is trace-preserving and irreducible (tensor sense), then some physical blocking makes the
 blocked transfer map primitive (peripheral eigenvalues = `{1}`). -/
-theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily_CFII
+theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
     {d D : ℕ} [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
@@ -673,7 +673,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily_CFII
   have hDpos : 0 < D := Nat.pos_of_ne_zero (NeZero.ne D)
   -- CFII data: a unitary conjugate with a diagonal positive-definite fixed point.
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTPB, hfixB⟩ :=
-    exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
+    exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
       (d := d) (D := D) A (by simpa using hTP) hIrrT hDpos
   let V : Matrix (Fin D) (Fin D) ℂ := (↑U : Matrix (Fin D) (Fin D) ℂ)
   let B : MPSTensor d D := fun i => Vᴴ * A i * V
@@ -687,9 +687,9 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleFamily_CFII
       (B := B) (Λ := Λ) hΛ_pd hΛ_diag (by simpa [B] using hTPB)
   -- Irreducibility: preserved by unitary conjugation and by similarity unitalization.
   have hIrrB : Kraus.IsIrreducibleFamily (d := d) (D := D) B :=
-    isIrreducibleFamily_unitaryConj (d := d) (D := D) (A := A) U hIrrT
+    isIrreducibleTensor_unitaryConj (d := d) (D := D) (A := A) U hIrrT
   have hIrrC_tensor : Kraus.IsIrreducibleFamily (d := d) (D := D) C :=
-    isIrreducibleFamily_unitalize (d := d) (D := D) (B := B) (Λ := Λ) hΛ_pd hΛ_diag hIrrB
+    isIrreducibleTensor_unitalize (d := d) (D := D) (B := B) (Λ := Λ) hΛ_pd hΛ_diag hIrrB
   have hIrrC : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) C) :=
     isIrreducibleCP_transferMap_of_isIrreducibleTensor (d := d) (D := D) C hIrrC_tensor
   -- Root-of-unity peripheral eigenvalues for the unitalized map.
