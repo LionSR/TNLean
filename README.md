@@ -115,7 +115,7 @@ TNLean is organized into acyclic layers enforced by `scripts/check_import_layers
 | `TNLean/PEPS/Graph`, `.../Tensor`, `.../Injectivity` | Graphs, tori, holonomy, PEPS contractions, injective, `G`-injective, semi-regular, and normal tensors, and anyon/flux sectors. |
 | `TNLean/PEPS/FundamentalTheorem`, `.../ParentHamiltonian` | PEPS gauge uniqueness on connected graphs, cycles, and tori; PEPS parent Hamiltonians and reblocking. |
 | `TNLean/PEPS/AreaLaw`, `.../Approximation`, `.../Examples` | Two-dimensional area law on `ℤ × ℤ`, polynomial-bond-dimension PEPS approximation, and 2D models. |
-| `TNLean/Lattice`, `TNLean/Algebra`, `TNLean/Circuit` | Distributed party-circuit compression, lattice sheets, and shared base utilities (generic non-tensor modules migrate to QICLean). |
+| `TNLean/Lattice`, `TNLean/Algebra` | Distributed party-circuit compression, lattice sheets, and shared base utilities (generic non-tensor modules migrate to QICLean). |
 | `blueprint/`, `docs/` | Mathematical companion text, layer architecture, conventions, and paper-gap notes (`docs/paper-gaps/`). |
 
 After adding, moving, or removing a production `.lean` file, regenerate and verify import aggregators:
