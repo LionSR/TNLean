@@ -11,8 +11,8 @@ import QICLean.ManyBody.Sites.Lattice.PathGraph
 /-!
 # Spheres in a finite integer domain
 
-The increasing enumeration of a finite integer domain identifies its domain
-graph with the induced integer Hasse graph. Each connected component is a finite
+The increasing enumeration of a finite integer domain identifies its line
+domain graph with the induced integer Hasse graph. Each connected component is a finite
 path. Consequently every sphere of finite radius contains at most two sites,
 even when the domain is disconnected.
 
@@ -26,7 +26,7 @@ open ManyBody (lineDomainGraph sitePos)
 
 namespace TNLean.MPS.AreaLaw
 
-/-- Increasing enumeration identifies the domain graph with the induced integer
+/-- Increasing enumeration identifies the line domain graph with the induced integer
 Hasse graph. TNLean note, `part0_preamble.tex`, lines 191–199. -/
 noncomputable def domainGraphIsoHasse (Λ : Finset ℤ) :
     lineDomainGraph Λ ≃g (SimpleGraph.hasse ℤ).induce (Λ : Set ℤ) where

@@ -990,7 +990,7 @@ out.
 
 - **Declaration:**
   `TNLean.PEPS.IsRegionParentInteraction (A : Tensor Γ d) (R : Finset V) (h : Matrix _ _ ℂ) : Prop`.
-- **Defined in:** `TNLean/PEPS/ParentHamiltonian/Region/RegionParentHamiltonian.lean`.
+- **Defined in:** `TNLean/PEPS/ParentHamiltonian/Region/RegionParentInteraction.lean`.
 - **Meaning:** the operator `h` on the physical space of the region `R` is
   positive semidefinite and its kernel is exactly the regional PEPS space
   `TNLean.PEPS.regionGroundSpace A R`, spanned by the contractions of `R` with

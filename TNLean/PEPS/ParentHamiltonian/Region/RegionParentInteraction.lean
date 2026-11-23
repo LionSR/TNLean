@@ -14,12 +14,14 @@ import QICLean.ManyBody.Hamiltonian.FrustrationFree
 import QICLean.Algebra.Matrix.MatrixAux
 
 /-!
-# Parent Hamiltonians on finite PEPS graphs
+# Regional parent interactions of finite PEPS
 
 A parent interaction on a region is any positive semidefinite operator whose
-kernel is the span of the open-region tensors. It acts as the identity on the
-complementary physical indices. The kernel of a finite sum of these interactions
-is their common kernel, and the closed PEPS vector belongs to that kernel.
+kernel is the span of the open-region tensors; the canonical one is the
+orthogonal projector onto the complement of that span. Placed on the whole
+graph, it acts as the identity on the complementary physical indices. The
+kernel of the parent Hamiltonian of a finite family of these interactions is
+their common kernel, and the closed PEPS vector belongs to that kernel.
 
 Source: Cirac, Pérez-García, Schuch, and Verstraete, arXiv:2011.12127,
 Section IV.C.1, local source lines 2003–2011.

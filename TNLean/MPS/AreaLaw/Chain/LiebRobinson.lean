@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Chain.Hamiltonian
 import TNLean.MPS.AreaLaw.Chain.ChainNeighborhood
-import TNLean.MPS.AreaLaw.Chain.DomainGraphGeometry
+import TNLean.MPS.AreaLaw.Chain.LineDomainGraphGeometry
 import QICLean.ManyBody.Sites.Lattice.PathGraph
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector

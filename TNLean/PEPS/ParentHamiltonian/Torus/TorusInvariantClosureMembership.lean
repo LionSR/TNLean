@@ -7,7 +7,7 @@ import TNLean.PEPS.ParentHamiltonian.Reblocking.TorusInsertedGraphNetwork
 import TNLean.PEPS.Injectivity.Multiplicity.GraphInsertedRegionSupport
 import TNLean.PEPS.Injectivity.Closure.TorusClosureSeams
 import TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement
-import TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian
+import TNLean.PEPS.ParentHamiltonian.Region.RegionParentInteraction
 
 /-!
 # Commuting closures satisfy the actual torus plaquette parents

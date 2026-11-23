@@ -2108,7 +2108,7 @@ only the `tn` modules (MPS approximation statements) would stay.
 | `PhysicalIntervalTransport` | sites / TN | `identityExtendInterval`, `intervalShiftOrderIso`, `nestedInterval_*`, `placeAlong_*`; versus the MPO statements | interval coordinate transport to `Chain` |
 | `CopyProduct` | entropy / TN | `copyConfigurationEquiv`, `copyProduct`, `norm_copyProduct`, `inner_copyProduct`; versus the bond statements | block products to QICLean |
 | `Hastings.CutProductState` | entropy, forced into a TN-importing module | imports `MPS.AreaLaw.OpenMPS` only for the cut vector and cut matrix | move the cut vector/matrix definitions below `OpenMPS` (QICLean) |
-| `LiebRobinson`, `DomainGraphGeometry`, `DomainInteractionBudget`, `DomainIntervalNeighborhood` | sites, forced above the area law | they import `ComponentReduction` | remove the import, §5 |
+| `LiebRobinson`, `LineDomainGraphGeometry`, `DomainInteractionBudget`, `DomainIntervalNeighborhood` | sites, forced above the area law | they import `ComponentReduction` | remove the import, §5 |
 
 The `Algorithm.*` programs (`Query`, `SweepProgram`, `SampledProgram`,
 `ValidOracle`) mix query costs with MPS outputs by nature; no split proposed.
