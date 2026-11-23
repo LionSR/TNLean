@@ -74,12 +74,7 @@ theorem eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_
     hn.trans_le (by simpa only [nsmul_eq_mul] using
       mul_le_mul_of_nonneg_right hnm (half_pos hγ).le)
   have hnear := eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_bounded_volumes
-    μ A hμ hA hS hSpan hR (m + R - 1) hγ (half_lt_self hγ)
-    (fun N hN _ ↦ by
-      have h := (ManyBody.forall_hasEigenvalue_iff_norm
-        (posSemidef_hamiltonian_parentChainInteraction _ R N)).mp (hgap N hN)
-      rwa [ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
-        (μ x₀) (A x₀) (hμ x₀) hS (hSpan x₀) hR hN] at h)
+    μ A hμ hA hS hSpan hR (m + R - 1) (half_lt_self hγ) (fun N hN _ ↦ hgap N hN)
   have hmR : R ≤ m := Nat.le_add_left R n
   have hden : 0 < (m : ℝ) - (R : ℝ) + 1 := by
     have hmR' : (R : ℝ) ≤ m := by exact_mod_cast hmR
@@ -87,13 +82,9 @@ theorem eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_
   refine ⟨((m : ℝ) * (γ / 2) - ((R : ℝ) - 1) ^ 2) /
     ((m : ℝ) - R + 1), div_pos (sub_pos.mpr hnum) hden, ?_⟩
   filter_upwards [hnear] with x hx N hN
-  refine (hamiltonian_parentChainInteraction_gap_of_finite_open_gaps
-    (toTensorFromBlocks (d := d) (μ := μ x) (A x)) (by omega) hmR hnum ?_).2 N hN
-  intro W hRW hWM
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction _ R W)).mpr ?_
-  simpa only [ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
-    (μ x) (A x) (hμ x) hS (hSpan x) hR hRW] using hx W hRW hWM
+  exact (hamiltonian_parentChainInteraction_gap_of_finite_open_gaps
+    (toTensorFromBlocks (d := d) (μ := μ x) (A x)) (by omega) hmR hnum hx).2 N hN
+
 /-- A compact continuous family of simultaneously injective blocks has one
 positive canonical open-chain gap uniform in the parameter and every chain
 length containing the interaction. Nonzero block weights need not be

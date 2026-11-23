@@ -2117,21 +2117,23 @@ tensors.
     Fix $R\geq S+1$ and a finite upper volume $M$.
     As in the finite-volume continuity step of
     \cite[Appendix~A, lines~2575--2578]{Schuch2011Phases}, with no continuity
-    of the weights required, if at $x_0$ the open Hamiltonians on every
-    $R\leq N\leq M$ have norm gap at least $\gamma>0$ on $G_N(B_{x_0})^\perp$,
-    then every $\delta<\gamma$ is a common lower bound on $G_N(B_x)^\perp$ for
-    those volumes and all $x$ in some neighborhood of $x_0$ (and the same
-    assertion holds for one fixed $N\geq R$).
+    of the weights required, if at $x_0$ every nonzero eigenvalue of the
+    open Hamiltonian on every $R\leq N\leq M$ is at least $\gamma$, then
+    for every $\delta<\gamma$ every nonzero eigenvalue of these open
+    Hamiltonians is at least $\delta$ for all $x$ in some neighborhood of
+    $x_0$ (and the same assertion holds for one fixed $N\geq R$).
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:block_ground_space_continuity,thm:block_word_span_propagation,
+        thm:block_open_kernel_simultaneous_injectivity,
         thm:kernel_gap_perturbation}
     The ground projections at $R$ and $N$ are continuous. The open
     Hamiltonian is a finite sum of translates of $I-P_{G_R}$, hence
-    continuous. Its ground space contains $G_N$.
-    The operator and projection perturbation estimate preserves each strict
-    lower bound at fixed $N$, and intersecting the finitely many resulting
-    neighborhoods completes the proof.
+    continuous, and its kernel is $G_N$, so the projection onto its kernel
+    is continuous as well. The operator and projection perturbation estimate
+    preserves each strict lower bound on the nonzero eigenvalues at fixed
+    $N$, and intersecting the finitely many resulting neighborhoods
+    completes the proof.
 \end{proof}
 
 \begin{lemma}[Local persistence of an all-length open gap]
