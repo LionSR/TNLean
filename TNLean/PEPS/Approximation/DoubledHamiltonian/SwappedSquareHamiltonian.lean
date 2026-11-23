@@ -95,7 +95,7 @@ perturbation. The individual interactions need not be Hermitian, and zero local
 dimension and empty square grids are included.
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424 and 513–524. -/
-theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
+theorem _root_.ManyBody.SquareInteraction.pairSwapOp_conj_doubled_operator_sub_eq_sum_crossing
     {L q : ℕ} (h : SquareInteraction L q) (R : Finset (SquareLatticeVertex L L)) :
     let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q) fun _ ↦ Fin q
     let F := reindex pr pr (ManyBody.pairSwapOp R)
@@ -165,7 +165,7 @@ namespace TNLean.PEPS.EncodedFrame
 /-- Swapping a doubled interaction changes it by at most four times its original
 norm. This is the single-interaction estimate used for the boundary perturbation
 in `02-information.tex`, lines 416–424 and 513–524. -/
-theorem norm_sheetSwapOp_conj_doubledHamiltonian_sub_le
+theorem norm_pairSwapOp_conj_doubledHamiltonian_sub_le
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     (R : Finset ι) (A : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     ‖reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
@@ -228,7 +228,7 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
   let g := ManyBody.siteConfigurationEquiv (X' := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
     (Equiv.refl (SquareLatticeVertex L L)) fun _ ↦ finProdFinEquiv
   have hsum := congrArg (Matrix.reindex p p)
-    (h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing R)
+    (h.pairSwapOp_conj_doubled_operator_sub_eq_sum_crossing R)
   simp only [← Matrix.coe_reindexRingEquiv, map_sum, map_sub, map_mul] at hsum
   change F * K * Fᴴ - K = ∑ e ∈ boundary,
     (F * Matrix.reindex p p (doubledHamiltonian (h.term (.inr e))) * Fᴴ -
@@ -241,7 +241,7 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
       (Matrix.l2_opNorm_reindex_equiv p
         (Matrix.reindex pr pr (ManyBody.pairSwapOp R) * doubledHamiltonian A *
           (Matrix.reindex pr pr (ManyBody.pairSwapOp R))ᴴ - doubledHamiltonian A)).trans_le
-        (EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le R A)
+        (EncodedFrame.norm_pairSwapOp_conj_doubledHamiltonian_sub_le R A)
   have hplain (S : Finset (SquareLatticeVertex L L))
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
       (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :

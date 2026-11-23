@@ -41,7 +41,7 @@ geometry of the sites; the statements for encoded frames are in
   `B = 1_E ⊗ Kᴴ K` (`sheetPlace`).
 * `Sheet.Frame.exists_birthWord`, `Sheet.Frame.exists_deathChain` : the monomials
   of a birth and of a death on the grouped registers of `T` and `U`.
-* `Sheet.sheetBufferCorrection_mul_sheetSwapOp_eq` : the corrections `D_U F_A` act on the
+* `Sheet.sheetBufferCorrection_mul_pairSwapOp_eq` : the corrections `D_U F_A` act on the
   two copies of `U` alone.
 
 ## References
@@ -568,7 +568,7 @@ set_option synthInstance.maxSize 512 in
 `T × E` come first.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 503–515. -/
-theorem sheetBufferCorrection_mul_sheetSwapOp_eq (σ : SplittingData q T E) {A : Finset ι}
+theorem sheetBufferCorrection_mul_pairSwapOp_eq (σ : SplittingData q T E) {A : Finset ι}
     (hA : A ⊆ (T ∪ E)ᶜ) :
     sheetBufferCorrection h σ *
         reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
