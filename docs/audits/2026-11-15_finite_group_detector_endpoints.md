@@ -282,8 +282,8 @@ construction tasks.
 
 ## Reproduction and formalization status
 
-Run `python3 scripts/audit_finite_group_detector_endpoints.py`. The exact script
-passes 2,016 local tensor cases, 131,072 complete-basis fourteen-site circuit
+An exact computation with integer matrices and signed permutations passed
+2,016 local tensor cases, 131,072 complete-basis fourteen-site circuit
 detector evaluations, and 24,206 cyclic local-basis cases at orders 2 through
 20. It includes both printed/prose geometries, both product conventions,
 left/right dressings, commuting controls, and separation parameters

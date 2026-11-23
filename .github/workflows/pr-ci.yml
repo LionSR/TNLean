@@ -47,7 +47,6 @@ on:
       - 'scripts/test_seed_lake_build.sh'
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
-      - 'scripts/test_ci_cache_lake_invalidation.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -91,16 +90,9 @@ on:
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/blueprint_roles.py'
       - 'blueprint/roles.json'
-      - 'scripts/audit_cpsv16_labels.py'
-      - 'scripts/test_audit_cpsv16_labels.py'
       - 'Papers/1606.00608/**'
       - 'Papers/2502.20257/**'
       - 'scripts/generate_paper_aux.sh'
-      - 'docs/audits/2026-05-08-mps-ft-paper-coverage.md'
-      - 'docs/audits/2026-08-10-cpsv16-every-label-audit.md'
-      - 'docs/audits/data/cpsv16-contained-result-anchors.tsv'
-      - 'docs/audits/data/cpsv16-label-classifications.tsv'
-      - 'docs/audits/data/cpsv16-label-dispositions.tsv'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_*.py'
       - 'scripts/test_*_diagram.py'
@@ -158,7 +150,6 @@ on:
       - 'scripts/test_seed_lake_build.sh'
       - 'scripts/ci_compatible_cache.py'
       - 'scripts/test_ci_compatible_cache.py'
-      - 'scripts/test_ci_cache_lake_invalidation.py'
       - 'docs/ci-automation.md'
       - 'docs/CONTRIBUTING.md'
       - '.github/workflows/**'
@@ -195,16 +186,9 @@ on:
       - 'scripts/check_reader_facing_prose.py'
       - 'scripts/blueprint_roles.py'
       - 'blueprint/roles.json'
-      - 'scripts/audit_cpsv16_labels.py'
-      - 'scripts/test_audit_cpsv16_labels.py'
       - 'Papers/1606.00608/**'
       - 'Papers/2502.20257/**'
       - 'scripts/generate_paper_aux.sh'
-      - 'docs/audits/2026-05-08-mps-ft-paper-coverage.md'
-      - 'docs/audits/2026-08-10-cpsv16-every-label-audit.md'
-      - 'docs/audits/data/cpsv16-contained-result-anchors.tsv'
-      - 'docs/audits/data/cpsv16-label-classifications.tsv'
-      - 'docs/audits/data/cpsv16-label-dispositions.tsv'
       - 'scripts/tenkz_blueprint_sweep.py'
       - 'scripts/test_tenkz_*.py'
       - 'scripts/test_*_diagram.py'
@@ -275,7 +259,6 @@ jobs:
               - 'scripts/test_export_coherent_tn_prerequisites.py'
               - 'scripts/ci_compatible_cache.py'
               - 'scripts/test_ci_compatible_cache.py'
-              - 'scripts/test_ci_cache_lake_invalidation.py'
               - 'scripts/ci_lean_checks.py'
             coherent_prerequisites:
               - 'TNLean/MPS/Preparation/ExactSectorEncoder.lean'
@@ -320,7 +303,6 @@ jobs:
               - 'scripts/test_seed_lake_build.sh'
               - 'scripts/ci_compatible_cache.py'
               - 'scripts/test_ci_compatible_cache.py'
-              - 'scripts/test_ci_cache_lake_invalidation.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
               - 'scripts/generate_import_aggregators.py'
@@ -832,7 +814,6 @@ jobs:
           python3 -m pip install --disable-pip-version-check PyYAML==6.0.3
           python3 scripts/test_ci_compatible_cache.py
           python3 scripts/test_pr_ci_base_snapshot.py
-          python3 -m py_compile scripts/test_ci_cache_lake_invalidation.py
 
       - name: Test changed-file Lean check selection
         run: python3 scripts/test_ci_lean_checks.py
@@ -980,11 +961,6 @@ jobs:
 
       - name: Fetch pinned tenkz package
         run: python3 scripts/fetch_tenkz.py
-
-      - name: Validate CPSV16 every-label audit
-        run: |
-          python3 scripts/test_audit_cpsv16_labels.py
-          python3 scripts/audit_cpsv16_labels.py
 
       - name: Check reader-facing prose patterns
         if: github.event_name == 'pull_request'

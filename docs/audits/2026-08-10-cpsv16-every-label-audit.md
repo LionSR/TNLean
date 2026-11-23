@@ -19,19 +19,13 @@ contains one row for every lexical label, with these fields:
   `equation`, `figure`, `example`, or `theorem-like`;
 - an explicit cross-reference disposition.
 
-Run
-
-```text
-python3 scripts/audit_cpsv16_labels.py --list-duplicates
-```
-
-from the repository root.  The command parses the source independently,
-strips unescaped TeX comments to derive the active occurrence inventory,
-checks each occurrence against the ledger activity, verifies the exact duplicate
-map, compares every label's classification with the maintained snapshot
-`docs/audits/data/cpsv16-label-classifications.tsv`, and checks every
+A validator, run in CI until 2026-11-23, parsed the source independently,
+stripped unescaped TeX comments to derive the active occurrence inventory,
+checked each occurrence against the ledger activity, verified the exact duplicate
+map, compared every label's classification with the maintained snapshot
+`docs/audits/data/cpsv16-label-classifications.tsv`, and checked every
 theorem- or proof-contained equation and figure occurrence against
-`docs/audits/data/cpsv16-contained-result-anchors.tsv`.  It also requires the
+`docs/audits/data/cpsv16-contained-result-anchors.tsv`.  It also required the
 ledger to contain exactly the 183 lexical labels with one activity,
 classification, and nonempty disposition each.  The only inactive name is
 `biCF`.
@@ -61,7 +55,7 @@ Definitions, equations, and figures outside theorem statements and proofs may
 be classified as notation or standalone internal material when that is their
 actual role.  Every equation or figure label inside a theorem statement or
 proof instead explicitly inherits the enclosing result's status and semantic
-boundary.  The validator requires exactly 58 unique labels and 60 occurrences
+boundary.  The validator required exactly 58 unique labels and 60 occurrences
 of this kind.  Each occurrence is matched by an explicit regular expression
 to its exact enclosing-result anchor, including theorem-number boundaries,
 statement-versus-proof distinctions, and separate line-specific anchors for

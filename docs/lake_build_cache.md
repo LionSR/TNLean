@@ -190,18 +190,10 @@ python3 -m pip install PyYAML==6.0.3
 python3 scripts/test_ci_compatible_cache.py
 ```
 
-The optional dependency-free invalidation experiment is separate from those
-parallel-safe tests. With the pinned Lake executable and an explicitly granted
-exclusive Lean slot, run:
-
-```bash
-python3 scripts/test_ci_cache_lake_invalidation.py --lake /absolute/path/to/lake --sole-lean-slot
-```
-
-It creates disposable tiny projects and serializes targets to check unchanged
-reuse, upstream/dependent invalidation, independent reuse, missing traces, broken
-source rejection, and refusal of removed modules with surviving artifacts. It
-never builds or edits TNLean, QICLean, Gametheory, or Mathlib caches.
+The Lake behaviour these guards rely on (unchanged reuse, upstream and dependent
+invalidation, independent reuse, missing traces, broken-source rejection, and
+refusal of removed modules with surviving artifacts) was checked once on
+disposable tiny projects with the pinned Lake executable.
 
 ### Early builds and strict checks of changed files
 
