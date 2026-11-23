@@ -1,239 +1,153 @@
-<p align="center">
-  <img src="docs/logo.svg" alt="TNLean" width="440">
-</p>
+<div align="center">
+  <a href="https://sirui-lu.com/TNLean/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="docs/logo-dark.svg" />
+      <source media="(prefers-color-scheme: light)" srcset="docs/logo.svg" />
+      <img alt="TNLean — Tensor networks formalized in Lean 4" src="docs/logo.svg" width="440" />
+    </picture>
+  </a>
+
+  <p><b>Tensor-network theory and many-body area laws, formalized in Lean 4.</b></p>
+
+  <p>
+    <a href="https://github.com/LionSR/TNLean/actions/workflows/pr-ci.yml"><img alt="PR CI" src="https://github.com/LionSR/TNLean/actions/workflows/pr-ci.yml/badge.svg" /></a>
+    <a href="https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml"><img alt="Compile blueprint" src="https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml/badge.svg" /></a>
+    <img alt="sorries" src="https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/sorries.json" />
+    <img alt="axioms" src="https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/axioms.json" />
+    <img alt="Lean" src="https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/lean.json" />
+    <img alt="Mathlib" src="https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/mathlib.json" />
+    <img alt="blueprint: no \leanok" src="https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/blueprint_no_leanok.json" />
+    <img alt="blueprint: not ready" src="https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/blueprint_not_ready.json" />
+    <a href="LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/github/license/LionSR/TNLean" /></a>
+  </p>
+
+  <p>
+    <a href="https://sirui-lu.com/TNLean/blueprint/">Blueprint (web)</a> ·
+    <a href="https://sirui-lu.com/TNLean/blueprint.pdf">Full PDF</a> ·
+    <a href="https://sirui-lu.com/TNLean/blueprint-ch01-12.pdf">FT-MPS PDF</a> ·
+    <a href="https://sirui-lu.com/TNLean/docs/">API docs</a> ·
+    <a href="https://sirui-lu.com/TNLean/paper-gaps/">Paper-gap notes</a> ·
+    <a href="docs/getting_started.md">Getting started</a> ·
+    <a href="https://github.com/LionSR/QICLean">QICLean</a>
+  </p>
+</div>
 
 <p align="center">
-  <b>Tensor-network theory, formalized in Lean 4.</b>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/overview-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/overview-light.svg" />
+    <img alt="TNLean architecture: built on Mathlib 4 and QICLean, organized into one-dimensional MPS theory (Fundamental Theorem, Parent Hamiltonians, Symmetries, MPDO, MPU/QCA, Preparation, 1D Area Laws) and two-dimensional PEPS theory (Graphs, Injectivity, Fundamental Theorem, Parent Hamiltonians, 2D Area Law, Polynomial PEPS Approximation)." src="docs/assets/overview-light.svg" width="880" />
+  </picture>
 </p>
 
-[![PR CI](https://github.com/LionSR/TNLean/actions/workflows/pr-ci.yml/badge.svg)](https://github.com/LionSR/TNLean/actions/workflows/pr-ci.yml)
-[![Compile blueprint](https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml/badge.svg)](https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml)
-![sorries](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/sorries.json)
-![axioms](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/axioms.json)
-![Lean](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/lean.json)
-![Mathlib](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/mathlib.json)
-![blueprint: no \leanok](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/blueprint_no_leanok.json)
-![blueprint: not ready](https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/blueprint_not_ready.json)
+**TNLean** is a [Lean 4](https://lean-lang.org/) library built on [Mathlib](https://github.com/leanprover-community/mathlib4) (Lean `v4.36.0-rc1`) and the companion quantum-information library [QICLean](https://github.com/LionSR/QICLean). It formalizes the mathematical theory of one- and two-dimensional tensor networks: matrix product states (MPS) and their canonical forms and gauge structure, parent Hamiltonians and spectral gaps, symmetries and topological phases, matrix-product density operators (MPDO) and unitaries (MPU/QCA), quantum circuit state preparation, projected entangled pair states (PEPS), and entanglement area laws with tensor-network approximations in 1D and 2D. Blueprint tensor diagrams are rendered by [tenkz](https://github.com/LionSR/tenkz), pinned in [`tenkz.toml`](tenkz.toml).
 
-<p align="center">
-  <a href="https://sirui-lu.com/TNLean/blueprint/">Blueprint</a> ·
-  <a href="https://sirui-lu.com/TNLean/docs/">Documentation</a> ·
-  <a href="https://sirui-lu.com/TNLean/paper-gaps/">Paper-gap notes</a>
-</p>
+The mathematics is written up in the [blueprint](https://sirui-lu.com/TNLean/blueprint/) ([full PDF](https://sirui-lu.com/TNLean/blueprint.pdf), [FT-MPS release PDF](https://sirui-lu.com/TNLean/blueprint-ch01-12.pdf)), which states each definition and theorem in mathematical prose and links it to its Lean proof. The generated [API documentation](https://sirui-lu.com/TNLean/docs/) covers every declaration in the source, and discrepancies against cited papers are documented under [`docs/paper-gaps/`](https://sirui-lu.com/TNLean/paper-gaps/). Every result is verified by Lean down to its axioms; the `sorries` and `axioms` badges above track the live counts.
 
-TNLean is a [Lean 4](https://lean-lang.org/) library, built on
-[Mathlib](https://github.com/leanprover-community/mathlib4), that formalizes
-the mathematics of tensor networks: matrix product states (MPS), their
-canonical forms and gauge structure, and the theorems that classify them. The
-quantum-information theory this rests on lives in the companion library
-[QICLean](https://github.com/LionSR/QICLean), which TNLean builds on. Blueprint
-diagrams are drawn by the companion package
-[tenkz](https://github.com/LionSR/tenkz), pinned from `tenkz.toml`. Every
-result is checked by Lean down to the axioms it assumes.
-
-The first released part of the library is the **fundamental theorem of matrix
-product states** (Pérez-García, Verstraete, Wolf, Cirac 2007; Cirac,
-Pérez-García, Schuch, Verstraete 2017): two tensors generate the same quantum
-states at every system size exactly when an invertible change of basis on the
-bond indices, a gauge transformation, relates them. Proving this required
-formalizing the quantum-information theory the proof rests on — channel
-representations, Schwarz inequalities, quantum Perron-Frobenius theory, and
-the quantum Wielandt inequality — now developed in
-[QICLean](https://github.com/LionSR/QICLean) following Wolf's *Quantum
-Channels & Operations*. The library also contains material beyond the fundamental
-theorem, at varying levels of completeness; the sections below say what is
-proved and what is not.
-
-The mathematics is written up in the
-[blueprint](https://sirui-lu.com/TNLean/blueprint/), which states each
-definition and theorem in ordinary mathematical language and links it to the
-Lean proof. It is available as a
-[web version](https://sirui-lu.com/TNLean/blueprint/), a
-[full PDF](https://sirui-lu.com/TNLean/blueprint.pdf), and a
-[separate FT-MPS PDF](https://sirui-lu.com/TNLean/blueprint-ch01-12.pdf),
-the fundamental-theorem part that is being released first. The generated
-[API documentation](https://sirui-lu.com/TNLean/docs/) covers every
-declaration in the Lean source.
-
-New to the repository? [`docs/getting_started.md`](docs/getting_started.md)
-walks through building the library, finding your way around the source, and
-making a first contribution.
-
-The agent-driven workflow used to build this library is described in the
-companion paper: S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization
-of Tensor Network Theory*,
-[arXiv:2607.07857](https://arxiv.org/abs/2607.07857). Most of the
-formalization was carried out by agents running on
-[TeXRA](https://texra.ai), whose `lean-env-action` also sets up the Lean and
-blueprint toolchain used in the workflows under `.github/workflows/`.
-
-The library loads as a single import (Lean 4 / Mathlib `v4.36.0-rc1`):
+The agent-driven formalization workflow is described in S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization of Tensor Network Theory* ([arXiv:2607.07857](https://arxiv.org/abs/2607.07857)). Most of the formalization was carried out by agents running on [TeXRA](https://texra.ai), whose `lean-env-action` also sets up the Lean and blueprint toolchain in `.github/workflows/`. The entire library loads as a single import:
 
 ```lean
 import TNLean
 ```
 
-This is a research formalization in progress, not a finished textbook. Some
-files contain unfinished proofs (`sorry`) or results assumed as axioms; the
-badges above track the current counts.
+## What is formalized
 
-## What is proved
+### Fundamental theorem of MPS and quantum Wielandt bounds
 
-### The fundamental theorem of matrix product states
+An MPS assigns a matrix `A i` to each local basis state, with matrix products giving the state's coefficients on a chain (`MPSTensor d D`). TNLean proves the fundamental theorem of MPS across its single-block, canonical-form, periodic, and fixed-length algebraic forms:
 
-An MPS describes a quantum state on a chain by assigning a matrix `A^i` to
-each local basis state; products of these matrices give the state's
-coefficients. The library defines these tensors (`MPSTensor d D`) and proves
-the fundamental theorem in both of its forms.
-
-The single-block case: if a tensor is injective (its matrices span the full
-matrix algebra) and two tensors generate the same states, then they are
-related by a gauge transformation.
+- **Single-block injective case** (`TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean`, plus finite-length and up-to-phase variants):
 
 ```lean
 theorem MPSTensor.fundamentalTheorem_singleBlock {A B : MPSTensor d D}
-    (hA : IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B
+    (hA : Kraus.IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B
 ```
 
-The general case: an arbitrary tensor decomposes into normal blocks, and the
-library constructs this canonical form, the basis of normal tensors that
-makes it unique, and the multi-block theorem
-(`MPSTensor.fundamentalTheorem_equal_canonicalForm`): two canonical forms
-generating the same states at every length are related by a single invertible
-gauge. The exact hypotheses of each theorem are stated in its Lean signature
-and in the blueprint.
-
-As a first physics application, the library proves that an on-site symmetry
-of an injective MPS induces a projective representation on the bond space,
-whose cohomology class is a well-defined invariant of the symmetric tensor.
-This is the MPS ingredient in the classification of one-dimensional
-symmetry-protected topological phases.
-
-### The quantum-information layer
-
-The quantum channels, Kadison-Schwarz inequalities, quantum Perron-Frobenius
-theory, and spectral results that MPS theory runs on are developed in
-[QICLean](https://github.com/LionSR/QICLean), which TNLean imports as an
-ordinary Lake dependency. TNLean keeps the tensor-side statements: transfer
-operators of MPS tensors, their spectral gaps, and the overlap and
-correlation-decay estimates phrased in terms of states.
-
-### Quantum Wielandt theory
-
-The quantum Wielandt inequality controls how quickly products of a tensor's
-matrices span the whole matrix algebra, which determines the blocking length
-after which a normal tensor becomes injective. For a normal tensor the
-library proves a spanning length of at most `D^2`, where `D` is the bond
-dimension:
+- **General multi-block and canonical-form case:** decomposition of arbitrary MPS tensors into normal blocks, bases of normal tensors (BNT), uniqueness of canonical form, and the multi-block equal and proportional theorems (`fundamentalTheorem_equal_canonicalForm`, `fundamentalTheorem_proportional_canonicalForm`), together with periodic-sector and fixed-length algebraic theorems.
+- **Sharp quantum Wielandt spanning bounds** (`TNLean/MPS/Tensor/Words/WordSpan.lean`, consuming QICLean's channel-generic Wielandt theory):
 
 ```lean
-theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeSpan A (D ^ 2) = ⊤
+theorem MPSTensor.cumulativeSpan_eq_top_of_isNormal_sharp [NeZero D]
+    (A : MPSTensor d D) (hN : Kraus.IsNormal A) :
+    Kraus.cumulativeSpan A (D ^ 2 - Module.finrank ℂ (Kraus.wordSpan A 1) + 1) = ⊤
 ```
 
-The channel-generic form of this theory lives in QICLean; TNLean keeps the
-tensor-typed statements the canonical-form machinery consumes. Sharpening
-the bound to match the constants in the literature is ongoing.
+### Parent Hamiltonians, spectral gaps, and correlations
 
-## What is in progress
+- **Ground spaces and uniqueness:** parent interactions and Hamiltonians, the intersection property, frustration-freeness, unique ground states for injective and normal tensors, block ground spaces, and half-chain / uncle Hamiltonians.
+- **Spectral gaps and stability:** martingale spectral-gap bounds, commuting and long-range gaps (including periodic chains and primitive sectors), smooth isometric and physical deformations, and exponential correlation decay.
 
-Beyond the released core, the library develops several neighboring topics,
-each at an earlier stage.
+### Symmetries, SPT phases, MPDO, MPU, and QCA
 
-- **Parent Hamiltonians.** Local Hamiltonians whose ground space is the MPS,
-  with frustration-freeness and ground-state uniqueness proved for injective
-  and normal tensors. The estimates that would give a spectral gap are not
-  yet done.
-- **Matrix-product density operators.** Mixed-state analogues of MPS, their
-  canonical and zero-correlation-length forms, and renormalization fixed
-  points. This is a foundation, not yet a complete classification.
-- **Projected entangled pair states (PEPS).** The two-dimensional
-  generalization of MPS, with fundamental-theorem results for normal PEPS on
-  finite graphs.
-- **Matrix-product unitaries and quantum cellular automata.** Standard forms
-  of MPU tensors and finite-propagation automorphisms of spin chains.
-- **Examples.** Concrete states such as AKLT, GHZ, even parity, and the
-  $\mathbb{Z}/2\mathbb{Z}$ models, alongside algebraic variants of the
-  fundamental theorem.
+- **Group symmetries and SPT phases:** on-site and virtual symmetries of MPS, induced projective representations and `H²` cocycle invariants, continuous gapped paths, and string order parameters.
+- **MPO symmetries and non-invertible fusion:** MPO algebras, boundary theories, fusion of non-invertible symmetry operators, anomalies, and condensation defects.
+- **MPDO and renormalization fixed points:** mixed-state MPS canonical forms, Gibbs and zero-correlation-length structure, and renormalization fixed points.
+- **MPU and 1D QCA:** canonical forms and fundamental theorem of matrix-product unitaries, circuit realizations, CZX gauging and `H³` / L-symbol classification, and finite-propagation 1D quantum cellular automata.
 
-Where a formal statement does not exactly match its cited source, the
-discrepancy is recorded as a mathematical note under `docs/paper-gaps/`,
-published at [sirui-lu.com/TNLean/paper-gaps](https://sirui-lu.com/TNLean/paper-gaps/).
+### Projected entangled pair states (PEPS)
+
+- **Graphs, injectivity, and topological sectors:** finite graphs, cycles, tori, walks and holonomy, injective, `G`-injective, semi-regular, and normal PEPS, together with anyon and flux sectors.
+- **PEPS fundamental theorem and parent Hamiltonians:** gauge uniqueness for injective and normal PEPS on connected graphs, cycles, and tori, and parent Hamiltonians with regional reblocking.
+
+### 1D and 2D area laws, tensor-network approximation, and preparation
+
+- **Two-dimensional area law and polynomial PEPS approximation:** a uniform entanglement area law for gapped local Hamiltonians on finite domains of `ℤ × ℤ` (`TNLean.PEPS.AreaLaw.uniformAreaLaw`, via collar scanning, information amplification, and dyadic cell partitions) and polynomial-bond-dimension PEPS approximation of gapped ground states on the `L × L` square grid (`TNLean.PEPS.Approximation.polynomialPEPSApproximation`, via dyadic frames and distributed circuit compression). See [`docs/openai-math-provenance.md`](docs/openai-math-provenance.md) for manuscript provenance and Apache-2.0 attribution.
+- **One-dimensional area laws and gapped-chain algorithms:** global-gap 1D area laws (`chainAreaLaw`, `domainAreaLaw`), Hastings' approximate ground-state projector factorization, Hastings' 1D area law and thermal-state cluster expansion, entropy scaling for MPS approximation, and ALVV / AKLV polynomial-filter constructions and frustration-free improving families.
+- **Quantum state preparation:** sequential ancilla generation and log-depth circuit preparation of normal, inhomogeneous, and non-normal MPS (`TNLean/MPS/Preparation`).
+
+### Worked examples
+
+Concrete verified models under `TNLean/MPS/Examples` and `TNLean/PEPS/Examples`, including AKLT, GHZ, cluster, Ising, Kramers–Wannier, Fibonacci, Majumdar–Ghosh, PVBS, CZX, WeakHopf, `Z2 × Z2`, `Z3`, and two-dimensional torus and PEPS models.
 
 ## Organization of the source
 
-The generated file `TNLean.lean` collects everything imported as one library;
-legacy material in `TNLean/Archive/` is kept out of it. Directory aggregators
-are generated too. Never edit these aggregators by hand. After adding, moving,
-or removing a production `.lean` file, regenerate and check them with:
+TNLean is organized into acyclic layers enforced by `scripts/check_import_layers.py` (see [`docs/library_layers.md`](docs/library_layers.md) and [`docs/import_structure.md`](docs/import_structure.md)). `TNLean.lean` and directory aggregators are generated; legacy code in `TNLean/Archive/` is excluded.
+
+| Path | Contents |
+| --- | --- |
+| `TNLean/MPS/Tensor`, `.../Transfer`, `.../Operator` | `MPSTensor`, words, `mpv`, gauges, blocking, transfer maps, Wielandt bounds, overlaps, correlations, and `MPOTensor` operators. |
+| `TNLean/MPS/CanonicalForm`, `.../FundamentalTheorem` | Canonical forms, bases of normal tensors (BNT), single/multi-block, periodic, compression, and fixed-length fundamental theorems. |
+| `TNLean/MPS/ParentHamiltonian` | Parent interactions, ground spaces, boundary maps, martingale and long-range spectral gaps, deformations, and uncle Hamiltonians. |
+| `TNLean/MPS/Symmetry` | On-site and virtual symmetries, `H²` cocycles, continuous gapped paths, string order, and MPO symmetry algebras. |
+| `TNLean/MPS/MPDO`, `.../RFP`, `.../MPU`, `TNLean/QCA` | Matrix-product density operators, renormalization fixed points, matrix-product unitaries, CZX gauging (`H³`), and 1D QCA. |
+| `TNLean/MPS/Preparation`, `.../AreaLaw` | Sequential and log-depth MPS preparation; 1D area laws (Hastings, ALVV, AKLV), thermal cluster expansions, and gapped-chain algorithms. |
+| `TNLean/MPS/Examples` | Worked 1D models (AKLT, GHZ, cluster, Ising, CZX, Fibonacci, Kramers–Wannier, Majumdar–Ghosh, PVBS, WeakHopf, `Z2 × Z2`, `Z3`). |
+| `TNLean/PEPS/Graph`, `.../Tensor`, `.../Injectivity` | Graphs, tori, holonomy, PEPS contractions, injective, `G`-injective, semi-regular, and normal tensors, and anyon/flux sectors. |
+| `TNLean/PEPS/FundamentalTheorem`, `.../ParentHamiltonian` | PEPS gauge uniqueness on connected graphs, cycles, and tori; PEPS parent Hamiltonians and reblocking. |
+| `TNLean/PEPS/AreaLaw`, `.../Approximation`, `.../Examples` | Two-dimensional area law on `ℤ × ℤ`, polynomial-bond-dimension PEPS approximation, and 2D models. |
+| `TNLean/Lattice`, `TNLean/Algebra`, `TNLean/Circuit` | Distributed party-circuit compression, lattice sheets, and shared base utilities (generic non-tensor modules migrate to QICLean). |
+| `blueprint/`, `docs/` | Mathematical companion text, layer architecture, conventions, and paper-gap notes (`docs/paper-gaps/`). |
+
+After adding, moving, or removing a production `.lean` file, regenerate and verify import aggregators:
 
 ```bash
 python3 scripts/generate_import_aggregators.py
 python3 scripts/generate_import_aggregators.py --check
 ```
 
-See [`docs/import_structure.md`](docs/import_structure.md) for the hierarchy and
-Archive policy. The source is grouped as follows.
+## Building, blueprint, and documentation
 
-| Path | Contents |
-|---|---|
-| `TNLean/Algebra` | Matrix algebra specific to the fundamental theorem: trace pairings, Gram matrices, Skolem-Noether, Burnside's theorem, and cocycle cohomology. |
-| `TNLean/Spectral` | Transfer-operator spectral gaps, overlap matrices, and correlation-decay estimates for MPS. |
-| `TNLean/MPS/Core`, `TNLean/MPS/Chain`, `TNLean/MPS/Overlap` | Matrix product states: tensors, words, blocking, transfer maps, and overlap matrices. |
-| `TNLean/MPS/FundamentalTheorem`, `.../BNT`, `.../CanonicalForm`, `.../Periodic`, `.../Structure`, `.../Irreducible` | The fundamental theorem in its single-block, multi-block, canonical-form, and periodic versions. |
-| `TNLean/MPS/Symmetry` | On-site and virtual symmetry, cohomology of cocycles, and string order. |
-| `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, their ground spaces, and uniqueness of the ground state. |
-| `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | Matrix-product density operators and renormalization fixed points. |
-| `TNLean/MPS/Examples` | Worked examples (AKLT, GHZ, even parity, $\mathbb{Z}/2\mathbb{Z}$). |
-| `TNLean/MPS/MPU`, `TNLean/QCA` | Matrix-product unitaries and quantum cellular automata. |
-| `TNLean/Wielandt` | The quantum Wielandt inequality and primitivity for MPS tensors. |
-| `TNLean/PEPS` | Projected entangled pair states on finite graphs. |
-| `TNLean/PiAlgebra` | Algebraic variants of the fundamental theorem. |
-| `blueprint/`, `docs/` | The mathematical companion text, conventions, and notes on gaps from the sources. |
+### Building the library
 
-## Status
-
-The README does not track which individual results are complete; the
-authoritative, always-current picture is:
-
-- the `sorries` and `axioms` badges at the top of this page, counting
-  unfinished proofs and assumed results;
-- the [blueprint](https://sirui-lu.com/TNLean/blueprint/), which marks
-  each theorem as formalized or not; and
-- the [paper-gap notes](https://sirui-lu.com/TNLean/paper-gaps/) (`docs/paper-gaps/`), which record where a formal statement diverges from
-  its cited source.
-
-## Building
-
-The Lean version is pinned by `lean-toolchain`; Mathlib is pinned in
-`lakefile.toml` and `lake-manifest.json`.
+The Lean version is pinned in [`lean-toolchain`](lean-toolchain); Mathlib, QICLean, and other dependencies are pinned in [`lakefile.toml`](lakefile.toml) and [`lake-manifest.json`](lake-manifest.json).
 
 ```bash
-# Optional but recommended: download pre-built Mathlib artifacts.
+# Download prebuilt Mathlib artifacts before building.
 lake exe cache get
 
-# Build the default target, which is TNLean.
+# Build the default library target (TNLean).
 lake build
 
-# Equivalently, build the public Lean library target.
-lake build TNLean
+# Verify a single module with package Lean options and Mathlib standard linters.
+lake build TNLean.MPS.Tensor.Gauge.FundamentalTheorem
 
-# Verify one module with the package Lean options and Mathlib standard linters.
-lake build TNLean.MPS.FundamentalTheorem.Basic
-
-# Optional fast elaboration only; this does not apply the package Lean options.
-lake env lean TNLean/MPS/FundamentalTheorem/Basic.lean
+# Fast elaboration only (does not apply package Lean options).
+lake env lean TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean
 ```
 
-Repository-specific notes from past Lean/Mathlib upgrades are collected in
-[`docs/upgrade_4_29.md`](docs/upgrade_4_29.md).
+### Building the blueprint locally
 
-## Blueprint and documentation
-
-The blueprint in `blueprint/` states the definitions and theorems in ordinary
-mathematical language and links each one to its Lean proof. It is built with
-`leanblueprint` on top of a successful `lake build`:
+The blueprint builds with `leanblueprint` on top of a compiled `TNLean` library:
 
 ```bash
 lake build TNLean
@@ -243,66 +157,40 @@ leanblueprint checkdecls
 leanblueprint web   # or: leanblueprint pdf / leanblueprint all
 ```
 
-The FT-MPS release volume is built by
-`scripts/build_blueprint_ch01_12.sh` and published automatically with the
-rest of the site.
+The standalone FT-MPS volume is built by `scripts/build_blueprint_ch01_12.sh` and published automatically alongside the full blueprint.
 
-Conventions for contributors are collected in `AGENTS.md`, `CLAUDE.md`, and
-`docs/`.
+### Guides and conventions
 
-## License
-
-The Lean source, the blueprint, and the other original content of this
-repository are released under the Apache License 2.0 (see
-[`LICENSE`](LICENSE)). The `Papers/` directory contains the arXiv sources of
-the papers being formalized; these are third-party works that remain under
-their authors' copyright and are **not** covered by the repository license.
-See [`Papers/NOTICE.md`](Papers/NOTICE.md).
+| Document | Covers |
+| --- | --- |
+| [`docs/getting_started.md`](docs/getting_started.md) | Setup, source tour, and making a first contribution |
+| [`docs/library_layers.md`](docs/library_layers.md) · [`docs/import_structure.md`](docs/import_structure.md) | Acyclic layer map, import rules, and Archive policy |
+| [`docs/CONTRIBUTING.md`](docs/CONTRIBUTING.md) · [`docs/project_conventions.md`](docs/project_conventions.md) | Contributor workflow, proof standards, and local addenda |
+| [`docs/openai-math-provenance.md`](docs/openai-math-provenance.md) | Provenance and Apache-2.0 attribution for 2D area-law / PEPS modules |
+| [`AGENTS.md`](AGENTS.md) · [`CLAUDE.md`](CLAUDE.md) | Agent conventions, cache rules, and CI workflows |
 
 ## References
 
-The formalization draws principally on the following sources.
-
-- D. Pérez-García, F. Verstraete, M. M. Wolf, J. I. Cirac,
-  *Matrix Product State Representations*,
-  [arXiv:quant-ph/0608197](https://arxiv.org/abs/quant-ph/0608197),
-  Quantum Inf. Comput. **7** (2007).
-- M. Sanz, D. Pérez-García, M. M. Wolf, J. I. Cirac,
-  *A quantum version of Wielandt's inequality*,
-  [arXiv:0909.5347](https://arxiv.org/abs/0909.5347),
-  IEEE Trans. Inf. Theory **56**(9), 4668--4673 (2010).
-- J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete,
-  *Matrix Product Density Operators: Renormalization Fixed Points and Boundary Theories*,
-  [arXiv:1606.00608](https://arxiv.org/abs/1606.00608),
-  Ann. Phys. **378**, 100--149 (2017).
-- G. De las Cuevas, J. I. Cirac, N. Schuch, D. Pérez-García,
-  *Irreducible forms of Matrix Product States: Theory and Applications*,
-  [arXiv:1708.00029](https://arxiv.org/abs/1708.00029),
-  J. Math. Phys. **58**, 121901 (2017).
-- J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete,
-  *Matrix Product States and Projected Entangled Pair States*,
-  [arXiv:2011.12127](https://arxiv.org/abs/2011.12127),
-  Rev. Mod. Phys. **93**, 045003 (2021).
-- A. Molnár, J. Garre-Rubio, D. Pérez-García, N. Schuch, J. I. Cirac,
-  *Normal projected entangled pair states generating the same state*,
-  [arXiv:1804.04964](https://arxiv.org/abs/1804.04964),
-  New J. Phys. **20**, 113017 (2018).
-- D. Pérez-García, M. M. Wolf, M. Sanz, F. Verstraete, J. I. Cirac,
-  *String Order and Symmetries in Quantum Spin Lattices*,
-  [arXiv:0802.0447](https://arxiv.org/abs/0802.0447),
-  Phys. Rev. Lett. **100**, 167202 (2008).
-- C. Fernández-González, N. Schuch, M. M. Wolf, J. I. Cirac, D. Pérez-García,
-  *Frustration free gapless Hamiltonians for Matrix Product States*,
-  [arXiv:1210.6613](https://arxiv.org/abs/1210.6613),
-  Commun. Math. Phys. **333**, 299--333 (2015).
-- N. Schuch, I. Cirac, D. Pérez-García,
-  *PEPS as ground states: Degeneracy and topology*,
-  [arXiv:1001.3807](https://arxiv.org/abs/1001.3807),
-  Ann. Phys. **325**, 2153--2192 (2010).
-- J. I. Cirac, J. Garre-Rubio, D. Pérez-García,
-  *Mathematical open problems in projected entangled pair states*,
-  [arXiv:1903.09439](https://arxiv.org/abs/1903.09439),
-  Rev. Mat. Complut. **32**, 579--599 (2019).
+- D. Pérez-García, F. Verstraete, M. M. Wolf, J. I. Cirac, *Matrix Product State Representations*, [arXiv:quant-ph/0608197](https://arxiv.org/abs/quant-ph/0608197), Quantum Inf. Comput. **7** (2007).
+- M. B. Hastings, *An area law for one-dimensional quantum systems*, [arXiv:0705.2024](https://arxiv.org/abs/0705.2024), J. Stat. Mech. P08024 (2007).
+- D. Pérez-García, M. M. Wolf, M. Sanz, F. Verstraete, J. I. Cirac, *String Order and Symmetries in Quantum Spin Lattices*, [arXiv:0802.0447](https://arxiv.org/abs/0802.0447), Phys. Rev. Lett. **100**, 167202 (2008).
+- M. Sanz, D. Pérez-García, M. M. Wolf, J. I. Cirac, *A quantum version of Wielandt's inequality*, [arXiv:0909.5347](https://arxiv.org/abs/0909.5347), IEEE Trans. Inf. Theory **56**(9), 4668–4673 (2010).
+- N. Schuch, I. Cirac, D. Pérez-García, *PEPS as ground states: Degeneracy and topology*, [arXiv:1001.3807](https://arxiv.org/abs/1001.3807), Ann. Phys. **325**, 2153–2192 (2010).
 - M. M. Wolf, *Quantum Channels & Operations: Guided Tour* (2012).
-- [Mathlib4](https://github.com/leanprover-community/mathlib4), the Lean 4
-  mathematics library.
+- I. Arad, A. Kitaev, Z. Landau, U. Vazirani, *An area law and sub-exponential algorithm for 1D systems*, [arXiv:1301.1162](https://arxiv.org/abs/1301.1162) (2013).
+- C. Fernández-González, N. Schuch, M. M. Wolf, J. I. Cirac, D. Pérez-García, *Frustration free gapless Hamiltonians for Matrix Product States*, [arXiv:1210.6613](https://arxiv.org/abs/1210.6613), Commun. Math. Phys. **333**, 299–333 (2015).
+- J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, *Matrix Product Density Operators: Renormalization Fixed Points and Boundary Theories*, [arXiv:1606.00608](https://arxiv.org/abs/1606.00608), Ann. Phys. **378**, 100–149 (2017).
+- J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, *Matrix Product Unitaries: Structure, Symmetries, and Topological Invariants*, [arXiv:1703.09188](https://arxiv.org/abs/1703.09188), J. Stat. Mech. 083105 (2017).
+- G. De las Cuevas, J. I. Cirac, N. Schuch, D. Pérez-García, *Irreducible forms of Matrix Product States: Theory and Applications*, [arXiv:1708.00029](https://arxiv.org/abs/1708.00029), J. Math. Phys. **58**, 121901 (2017).
+- I. Arad, Z. Landau, U. Vazirani, T. Vidick, *Rigorous RG algorithms and area laws for low energy eigenstates in 1D*, [arXiv:1602.08828](https://arxiv.org/abs/1602.08828), Commun. Math. Phys. **356**, 65–105 (2017).
+- A. Molnár, J. Garre-Rubio, D. Pérez-García, N. Schuch, J. I. Cirac, *Normal projected entangled pair states generating the same state*, [arXiv:1804.04964](https://arxiv.org/abs/1804.04964), New J. Phys. **20**, 113017 (2018).
+- J. I. Cirac, J. Garre-Rubio, D. Pérez-García, *Mathematical open problems in projected entangled pair states*, [arXiv:1903.09439](https://arxiv.org/abs/1903.09439), Rev. Mat. Complut. **32**, 579–599 (2019).
+- J. I. Cirac, D. Pérez-García, N. Schuch, F. Verstraete, *Matrix Product States and Projected Entangled Pair States*, [arXiv:2011.12127](https://arxiv.org/abs/2011.12127), Rev. Mod. Phys. **93**, 045003 (2021).
+- D. Malz, G. Styliaris, Z.-Y. Wei, J. I. Cirac, *Preparation of Matrix Product States with Log-Depth Quantum Circuits*, [arXiv:2307.01696](https://arxiv.org/abs/2307.01696), Phys. Rev. Lett. **132**, 040404 (2024).
+- OpenAI Math, *Two-dimensional area law* and *Polynomial PEPS approximation* manuscripts in [`openai/math`](https://github.com/openai/math) (September 2026; see [`docs/openai-math-provenance.md`](docs/openai-math-provenance.md)).
+- S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization of Tensor Network Theory*, [arXiv:2607.07857](https://arxiv.org/abs/2607.07857) (2026).
+- [Mathlib4](https://github.com/leanprover-community/mathlib4), the Lean 4 mathematics library.
+
+## License
+
+The Lean source, the blueprint, and the other original content of this repository are released under the Apache License 2.0 (see [`LICENSE`](LICENSE)). Adapted definitions from `openai/math` carry Apache-2.0 notices per [`docs/openai-math-provenance.md`](docs/openai-math-provenance.md) and [`LICENSES/openai-math-Apache-2.0.txt`](LICENSES/openai-math-Apache-2.0.txt). The `Papers/` directory contains the arXiv sources of third-party papers that remain under their authors' copyright and are **not** covered by the repository license (see [`Papers/NOTICE.md`](Papers/NOTICE.md)).
