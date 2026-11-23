@@ -188,25 +188,28 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     The last equality is (\ref{eq:mpo_isometry_norm_split}).
 \end{proof}
 
-\begin{lemma}[Combining a norm gap with a complementary energy bound]
+\begin{lemma}[Combining an eigenvalue gap with a complementary energy bound]
     \label{thm:mpo_isometry_abstract_norm}
-    \lean{LinearIsometry.norm_gap_of_intertwines}
+    \lean{LinearIsometry.forall_hasEigenvalue_of_intertwines}
     \leanok
-    Suppose $K,L\geq0$, $\delta\geq0$, and
-    $\delta\|x\|\leq\|Kx\|$ for $x\perp\ker K$.
-    If $c\|y\|^2\leq q_L(y)$ whenever $U^\dagger y=0$, then
-    $\min\{\delta,c\}\|v\|\leq\|Lv\|$ for $v\perp\ker L$.
-    No sign assumption on $c$ is required.
+    Suppose $L$ is self-adjoint, $\delta,c\in\R$, and every eigenvalue
+    of $K$ other than $0$ is at least $\delta$.
+    If $c\|y\|^2\leq q_L(y)$ whenever $U^\dagger y=0$, then every
+    eigenvalue of $L$ other than $0$ is at least $\min\{\delta,c\}$.
+    No positivity of $K$ or $L$ and no sign assumption on $\delta$ or $c$
+    is required.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpo_isometry_abstract_quadratic}
-    For a positive operator, the norm-gap hypothesis with
-    $\delta\geq0$ gives $q_K(x)\geq\delta\|x\|^2$ on the kernel
-    complement. Lemma~\ref{thm:mpo_isometry_abstract_quadratic}
-    and the bound $q_L(v)\leq\|Lv\|\|v\|$ then yield
-    $\min\{\delta,c\}\|v\|^2\leq\|Lv\|\|v\|$.
-    When $v\neq0$, division by $\|v\|$ gives the assertion;
-    for $v=0$ it is immediate.
+    Since $U$ is an isometry and $LU=UK$,
+    $\langle Kx,x'\rangle=\langle LUx,Ux'\rangle$ for all $x,x'$, so $K$
+    is self-adjoint because $L$ is. For a self-adjoint operator, the
+    eigenvalue bound gives $q_K(x)\geq\delta\|x\|^2$ on the kernel
+    complement. Lemma~\ref{thm:mpo_isometry_abstract_quadratic} then yields
+    $\min\{\delta,c\}\|v\|^2\leq q_L(v)$ for $v\perp\ker L$.
+    An eigenvector $v$ of $L$ with eigenvalue $\mu\neq0$ is orthogonal to
+    $\ker L$ and satisfies $q_L(v)=\mu\|v\|^2$, hence
+    $\mu\geq\min\{\delta,c\}$.
 \end{proof}
 
 \subsection{Periodic ground spaces and gap bounds}

@@ -372,8 +372,6 @@ tensors.
 
 \begin{lemma}[Gap transfer through a positively weighted sum]
     \label{thm:weighted_sum_gap_transfer}
-    \lean{WeightedPositiveKernel.norm_gap_sum_of_weighted_sum}
-    \leanok
     Let $(P_i)_{i\in I}$ be a finite family of positive operators on a
     finite-dimensional complex inner product space, with real weights
     $0<w_i\leq1$, and let $\gamma\geq0$.  If
@@ -390,7 +388,6 @@ tensors.
 \end{lemma}
 
 \begin{proof}
-    \leanok
     \uses{thm:weighted_sum_kernel, thm:weighted_sum_loewner, lem:positive_gap_transfer_loewner}
     The weighted sum is positive and, by
     Lemma~\ref{thm:weighted_sum_loewner}, dominated by the unweighted

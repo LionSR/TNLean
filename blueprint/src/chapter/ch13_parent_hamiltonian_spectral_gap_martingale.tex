@@ -468,7 +468,7 @@
         ContinuousLinearMap.isSymmetric_rightFiberwiseMap,
         ContinuousLinearMap.isSymmetricProjection_rightFiberwiseMap,
         ContinuousLinearMap.ker_starProjection_rightFiberwiseMap,
-        MPSTensor.ker_starProjection_conj_linearIsometryEquiv}
+        LinearIsometryEquiv.conj_starProjection_ker_of_conj}
     \leanok
     For $n,r\in\N$, restriction to the first $n$ sites and the final $r$ sites
     gives a canonical equivalence
@@ -1799,7 +1799,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 
 \begin{lemma}[Martingale criterion for a finite family of projections]
     \label{thm:martingale_criterion}
-    \lean{MPSTensor.spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional}
+    \lean{FrustrationFree.spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional}
     \leanok
     \uses{lem:anticommutator_projection_rowsum_reduction, lem:quadratic_form_to_norm_bound}
     Let $P_i$ be a finite family of symmetric projections on a

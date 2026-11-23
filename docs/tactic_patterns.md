@@ -2701,7 +2701,9 @@ three-plaquette output measurement, and the routed reunion measurement.
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
   `expect_productVector_mul` and `trace_piKronecker_mul_mul_mul_trace` in
-  the supported-operator module (now in QICLean), and `OnsiteChannel.dual_mul` in
+  the supported-operator module (now in QICLean, the last as
+  `ManyBody.trace_piKronecker_mul_mul_mul_trace` in
+  `QICLean.ManyBody.Sites.ProductOperatorTrace`), and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean` (deleted; onsite channels are now QICLean
   layers without cells).
 - **Abstraction:** `ManyBody.eq_of_mem_supportedOperators₂` in QICLean
@@ -2782,7 +2784,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 ### kernel projection under a right-spectator fiberwise conjugacy — promoted
 - **Pattern:** from a right-spectator conjugacy `U G U⁻¹ = rightFiberwiseMap H`,
   conclude `U P_{ker G} U⁻¹ = rightFiberwiseMap P_{ker H}` by combining
-  `ker_starProjection_conj_linearIsometryEquiv` with
+  `LinearIsometryEquiv.conj_starProjection_ker_of_conj` (QICLean) with
   `ContinuousLinearMap.ker_starProjection_rightFiberwiseMap` and a `change`.
 - **Seen:** five occurrences across two files:
   `openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv`,
@@ -8291,13 +8293,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   two quadratic bounds with their minimum.
 - **Seen:** `MPS/Symmetry/MPOSymmetry/MixedPath/Gap/MixedEndpointActiveHamiltonian.lean`
   and QICLean's `Analysis/IsometricGapTransfer.lean` (moved from TNLean).
-- **Abstraction:** `LinearIsometry.re_inner_ge_of_intertwines` and
-  `LinearIsometry.norm_gap_of_intertwines` now serve the noncommuting physical
+- **Abstraction:** `LinearIsometry.re_inner_ge_of_intertwines` and its eigenvalue form
+  `LinearIsometry.forall_hasEigenvalue_of_intertwines` now serve the noncommuting physical
   isometry transport. The independent kernel theorem only needs intertwining
   and a strictly positive inactive bound.
 - **Notes:** The existing mixed-endpoint consumer is unchanged while its
   separate validation is in progress; its later migration is a direct
-  application of the generic norm-gap theorem.
+  application of the generic eigenvalue-form theorem.
 
 ### Transporting endpoint parent order through polar inclusion — candidate (2026-10-06)
 
