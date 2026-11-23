@@ -19,8 +19,6 @@ from lean_import_syntax import pure_import_modules
 
 THRESHOLD: int = 1000
 EXCLUDE_DIRS: tuple[str, ...] = (".lake", "lake-packages", "tmp")
-# This guidance is intentionally size-specific.  The numbered-name checker
-# gives complementary advice about choosing mathematical module names.
 SPLIT_GUIDANCE = (
     "Split by mathematical responsibility into concept-named modules; move shared "
     "definitions and setup into a family Basic.lean module; and keep only imports "
