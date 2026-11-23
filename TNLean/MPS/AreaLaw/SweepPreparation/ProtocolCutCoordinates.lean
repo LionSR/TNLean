@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolSweepPlacement
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolSweepGeometry
 import TNLean.MPS.Tensor.OpenMPS.CutMatrixGrowth
-import TNLean.Lattice.Compression.WholeGroupContraction
+import TNLean.Network.DependentBond.WholeGroupContraction
 import TNLean.MPS.Tensor.VaryingBond.OpenMPSRank
 import Mathlib.Algebra.Order.Floor.Ring
 import Mathlib.Analysis.SpecialFunctions.Log.Basic

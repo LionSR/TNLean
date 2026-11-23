@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Matrix.MatrixCyclicPathSum
 import TNLean.PEPS.Approximation.EncodedFrame
-import TNLean.Lattice.Compression.WholeGroupContraction
+import TNLean.Network.DependentBond.WholeGroupContraction
 
 /-!
 # Chains of rank-one site operators as tensor networks

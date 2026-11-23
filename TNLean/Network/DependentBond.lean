@@ -12,4 +12,6 @@ import TNLean.Network.DependentBond.DependentBondCut
 import TNLean.Network.DependentBond.DependentBondNetwork
 import TNLean.Network.DependentBond.DependentDiagonalContraction
 import TNLean.Network.DependentBond.DependentNetworkColumn
+import TNLean.Network.DependentBond.GroupTruncation
+import TNLean.Network.DependentBond.WholeGroupContraction
 import TNLean.Network.DependentBond.WholeGroupNetwork

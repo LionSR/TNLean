@@ -82,7 +82,6 @@ import TNLean.Lattice.Compression.GateReexpansion
 import TNLean.Lattice.Compression.GaussianPhysicalSource
 import TNLean.Lattice.Compression.GaussianSeparatedPhysicalDensity
 import TNLean.Lattice.Compression.GaussianSourceIntegrability
-import TNLean.Lattice.Compression.GroupTruncation
 import TNLean.Lattice.Compression.LayoutExcludedOwners
 import TNLean.Lattice.Compression.LocalPartFrameListRestriction
 import TNLean.Lattice.Compression.LocalPartRestrictionCongruence
@@ -205,7 +204,6 @@ import TNLean.Lattice.Compression.TouchedLabels
 import TNLean.Lattice.Compression.TransferGateExpansion
 import TNLean.Lattice.Compression.WeightedGateLabelPairSum
 import TNLean.Lattice.Compression.WeightedPhysicalSource
-import TNLean.Lattice.Compression.WholeGroupContraction
 import TNLean.Lattice.Compression.WordAppendTailRestriction
 import TNLean.Lattice.Compression.WordEvalComparison
 import TNLean.Lattice.Compression.WordOwnerAppendTailTransport
