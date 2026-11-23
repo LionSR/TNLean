@@ -85,9 +85,9 @@ example {d D : ℕ} (A : MPSTensor d D) (hA : Kraus.IsNormal A)
     (V : Matrix (Fin D) (Fin D) ℂ) (hV : V * Vᴴ = 1) :
     ∃ x y : Fin (D ^ 2) → Matrix (Fin d) (Fin d) ℂ,
       (∀ i, (x i).IsHermitian) ∧ (∀ i, (y i).IsHermitian) ∧
-        Matrix.trace (Λ * physicalObservableTransfer A (D ^ 2) (Matrix.finKronecker x) V) ≠ 0 ∧
+        Matrix.trace (Λ * physicalObservableTransfer A (D ^ 2) (Matrix.piKronecker x) V) ≠ 0 ∧
         Matrix.trace
-          (Λ * Vᴴ * physicalObservableTransfer A (D ^ 2) (Matrix.finKronecker y) 1) ≠ 0 :=
+          (Λ * Vᴴ * physicalObservableTransfer A (D ^ 2) (Matrix.piKronecker y) 1) ≠ 0 :=
   exists_isHermitian_physicalStringProductEndpoints A hA Λ hΛunit hΛtr hΛfix hNorm V hV
 
 -- Source purity supplies normality internally; no one-site injectivity input is allowed here.
@@ -105,9 +105,9 @@ example {d D : ℕ} [NeZero D] (A : MPSTensor d D)
     ∃ x y : Fin (D ^ 2) → Matrix (Fin d) (Fin d) ℂ,
       (∀ i, (x i).IsHermitian) ∧ (∀ i, (y i).IsHermitian) ∧ ∃ s : ℝ, 0 < s ∧
         Filter.Tendsto (fun N : ℕ => ‖Matrix.trace
-          (Λ * physicalObservableTransfer A (D ^ 2) (Matrix.finKronecker x)
+          (Λ * physicalObservableTransfer A (D ^ 2) (Matrix.piKronecker x)
             (twistedTransferIter A u N
-              (physicalObservableTransfer A (D ^ 2) (Matrix.finKronecker y) 1)))‖)
+              (physicalObservableTransfer A (D ^ 2) (Matrix.piKronecker y) 1)))‖)
           Filter.atTop (nhds s) :=
   pureCanonical_exists_isHermitian_physicalStringProductOrder
     A Λ hΛpos hΛtr hΛfix hNorm hPure u hu hRad
