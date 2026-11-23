@@ -238,6 +238,15 @@ introduced were repaired by step 0.3, and the set is empty:
   site notions that were kept among the Hamiltonian modules and are now
   modules of `TNLean/Circuit`.
 
+Inside a directory listed in `SUBDIRECTORY_ORDERS`, in the same script, the
+subdirectories are ordered as well: a module imports only modules of its own or of an
+earlier subdirectory, and an import of a later one counts as a violation in
+`UPWARD_IMPORTS`. The orders of `QCA`, of `PEPS/AreaLaw` and of its seven parent
+directories are described in `docs/library_layers.md`; a subdirectory missing from
+its order fails. An entry recorded at the base revision whose modules Git reports as
+moved is compared under their new names, so moving a module does not count as
+adding an entry.
+
 Three further ratchets of the same kind cover every module of TNLean, not only
 the layers above. Each records what the tree has now in a set that may only
 shrink, compared with the base revision in the same way: a new entry fails,

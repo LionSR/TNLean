@@ -11,11 +11,19 @@ is not a dependency and a trailing comment does not hide one.  An import-only
 module (an aggregator) is not checked itself, but a module that imports it is
 checked against everything the aggregator re-exports.
 
+Inside some directories the subdirectories are ordered as well
+(``SUBDIRECTORY_ORDERS``): a module may import a module of its own or of an earlier
+subdirectory of the same directory, never one of a later subdirectory.  Such an
+import counts as a violation like an upward import between layers, and every
+subdirectory of an ordered directory must be listed in its order.
+
 ``UPWARD_IMPORTS`` is a ratchet.  It lists the imports that violated the rules when the
 check was introduced.  A new violation fails, and so does an entry that no
 longer violates a rule: remove it in the change that repairs the import.  With
 ``--base-ref`` the set is also compared with its value at the merge base, and
 an added entry fails, so a new violation cannot be admitted by recording it.
+An entry at the merge base whose modules Git records as moved is read under
+their new names, so moving a module does not count as adding its entries.
 
 Two further ratchets of the same kind cover every module of ``TNLean``, with
 the same reading of imports and the same treatment of aggregators.
@@ -168,6 +176,58 @@ ALLOWED: dict[str, frozenset[str]] = {
     },
 }
 
+# The subdirectories of a directory, from the bottom up, as the module name of the
+# directory and the names of its subdirectories.  A module imports only modules of
+# its own or an earlier subdirectory.  ``"."`` stands for the modules directly in
+# the directory; when it is not listed, they come after every subdirectory.  The
+# orders are described in ``docs/library_layers.md``.
+SUBDIRECTORY_ORDERS: dict[str, tuple[str, ...]] = {
+    "TNLean.QCA": (
+        "StarSubalgebra",
+        "LocalAlgebra",
+        "QuasiLocal",
+        "State",
+        "Automorphism",
+        "SupportAlgebra",
+        "Margolus",
+    ),
+    "TNLean.PEPS.AreaLaw": (
+        "Collar",
+        "RegionalStates",
+        "Polygons",
+        "Operators",
+        "Scanner",
+        "CollarEntropy",
+        "BirthRegions",
+    ),
+    "TNLean.PEPS.AreaLaw.Collar": (".", "Scales"),
+    "TNLean.PEPS.AreaLaw.RegionalStates": ("Regions", "RegionalFilters"),
+    "TNLean.PEPS.AreaLaw.Polygons": ("Squares", "Templates", "SafeRectangles"),
+    "TNLean.PEPS.AreaLaw.Operators": (
+        "Interactions",
+        "Constraints",
+        "ChannelWords",
+        "FrustrationFree",
+        "RestoringOperator",
+    ),
+    "TNLean.PEPS.AreaLaw.Scanner": ("Histories", "Statuses", "Rounds"),
+    "TNLean.PEPS.AreaLaw.CollarEntropy": (
+        "NormComparisons",
+        "ChargePoints",
+        "BoxExponent",
+        "CollarInformation",
+    ),
+    "TNLean.PEPS.AreaLaw.BirthRegions": (
+        "Layers",
+        "Fans",
+        "InitialRegions",
+        "RepairStages",
+        "Stars",
+        "BirthTemplates",
+        "FinalRegions",
+    ),
+}
+
 # Existing violations only, as "importing module -> imported module".  Never add
 # an entry: move the shared declaration down to the layer both sides may import.
 UPWARD_IMPORTS: frozenset[str] = frozenset(
@@ -316,22 +376,59 @@ def resolved_imports(sources: Mapping[str, str]) -> dict[str, set[str]]:
     return resolved
 
 
+def subdirectory_position(directory: str, module: str) -> tuple[str, int | None] | None:
+    """Return the subdirectory of ``directory`` holding ``module`` and its position.
+
+    ``None`` means that ``module`` is not below ``directory``.  The subdirectory is
+    ``"."`` for a module directly in ``directory``; its position is ``None`` when it
+    is missing from the order.
+    """
+    if not module.startswith(directory + "."):
+        return None
+    parts = module[len(directory) + 1 :].split(".")
+    name = parts[0] if len(parts) > 1 else "."
+    order = SUBDIRECTORY_ORDERS[directory]
+    if name in order:
+        return name, order.index(name)
+    return name, (len(order) if name == "." else None)
+
+
 def violations(sources: Mapping[str, str]) -> set[str]:
     """Return every ``"A -> B"`` whose import points outside the allowed layers.
 
-    ``B`` is a module with declarations: an imported aggregator is replaced by
-    the modules it re-exports, through nested aggregators.
+    This includes an import of a later subdirectory of a directory listed in
+    ``SUBDIRECTORY_ORDERS``.  ``B`` is a module with declarations: an imported
+    aggregator is replaced by the modules it re-exports, through nested aggregators.
     """
     found: set[str] = set()
     for module, targets in resolved_imports(sources).items():
         layer = layer_of(module)
-        if layer is None:
-            continue
         for target_module in targets:
-            target = layer_of(target_module)
-            if target is None or (target != layer and target not in ALLOWED[layer]):
-                found.add(f"{module} -> {target_module}")
+            if layer is not None:
+                target = layer_of(target_module)
+                if target is None or (target != layer and target not in ALLOWED[layer]):
+                    found.add(f"{module} -> {target_module}")
+            for directory in SUBDIRECTORY_ORDERS:
+                source_place = subdirectory_position(directory, module)
+                target_place = subdirectory_position(directory, target_module)
+                if source_place is None or target_place is None:
+                    continue
+                if None not in (source_place[1], target_place[1]) and (
+                    target_place[1] > source_place[1]
+                ):
+                    found.add(f"{module} -> {target_module}")
     return found
+
+
+def unordered_subdirectories(sources: Mapping[str, str]) -> set[str]:
+    """Return the subdirectories of an ordered directory that its order omits."""
+    return {
+        f"{directory}.{place[0]}"
+        for module in sources
+        for directory in SUBDIRECTORY_ORDERS
+        if (place := subdirectory_position(directory, module)) is not None
+        and place[1] is None
+    }
 
 
 def directory_of(module: str) -> str | None:
@@ -478,6 +575,46 @@ def records_at_merge_base(
     return {name: record_from_source(result.stdout, name) for name in names}
 
 
+def renamed_modules(root: Path, base_ref: str) -> dict[str, str]:
+    """Return the modules below ``TNLean/`` that Git records as moved since the merge base."""
+    merge_base = subprocess.run(
+        ["git", "-C", str(root), "merge-base", "HEAD", base_ref],
+        check=True,
+        stdout=subprocess.PIPE,
+        text=True,
+    ).stdout.strip()
+    listing = subprocess.run(
+        ["git", "-C", str(root), "diff", "--name-status", "-M", "-l0",
+         "--diff-filter=R", merge_base, "HEAD", "--", "TNLean"],
+        check=True,
+        stdout=subprocess.PIPE,
+        text=True,
+    ).stdout
+    renames: dict[str, str] = {}
+    for line in listing.splitlines():
+        _status, old, new = line.split("\t")
+        if old.endswith(".lean") and new.endswith(".lean"):
+            renames[old.removesuffix(".lean").replace("/", ".")] = (
+                new.removesuffix(".lean").replace("/", ".")
+            )
+    return renames
+
+
+def rename_entries(
+    entries: frozenset[str] | None, renames: Mapping[str, str]
+) -> frozenset[str] | None:
+    """Read each ``"A -> B"`` entry under the new names of its modules."""
+    if entries is None:
+        return None
+    renamed: set[str] = set()
+    for entry in entries:
+        source, arrow, target = entry.partition(" -> ")
+        if arrow:
+            entry = f"{renames.get(source, source)} -> {renames.get(target, target)}"
+        renamed.add(entry)
+    return frozenset(renamed)
+
+
 def ratchet_errors(
     current: frozenset[str],
     recorded: frozenset[str],
@@ -605,18 +742,26 @@ def main() -> int:
     if args.base_ref is not None:
         try:
             base = records_at_merge_base(root, args.base_ref, CHECKER_PATH, RECORDS)
-        except (SyntaxError, ValueError) as error:
+            renames = renamed_modules(root, args.base_ref)
+        except (SyntaxError, ValueError, subprocess.CalledProcessError) as error:
             print(f"::error title=Import layer check failed::{error}")
             return 1
+        for name in ("UPWARD_IMPORTS", "EXAMPLES_IMPORTS"):
+            base[name] = rename_entries(base[name], renames)
 
     errors = check_layers(sources, UPWARD_IMPORTS, base["UPWARD_IMPORTS"])
     errors += check_mutual_directories(sources, MUTUAL_LAYER_DIRECTORIES, base["MUTUAL_LAYER_DIRECTORIES"])
     errors += check_examples_imports(sources, EXAMPLES_IMPORTS, base["EXAMPLES_IMPORTS"])
+    errors += [
+        f"Subdirectory missing from its order in SUBDIRECTORY_ORDERS: {name}"
+        for name in sorted(unordered_subdirectories(sources))
+    ]
     for message in errors:
         print(f"::error title=Import layer policy::{message}")
     if errors:
         print(
-            "A lower layer must not import a higher one, two directories must not "
+            "A lower layer must not import a higher one, a subdirectory must not import "
+            "a later one of the same directory, two directories must not "
             "import each other, a module outside Examples must not import a worked "
             "example, and the recorded sets may only shrink. Move the shared "
             "declaration to a module both sides may import; see "
