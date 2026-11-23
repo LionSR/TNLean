@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.Lattice.Sheet.RegionalOperatorForms
 import TNLean.Lattice.Sheet.SupportedSchmidtRank
 import TNLean.Lattice.Sheet.LeftSupportedSchmidtRank
@@ -132,15 +133,13 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw
 
-/-- Actual two crossing factors and three regional families of an original
-nearest-neighbour bond family, all in one three-region partition.
+/-- Actual two crossing factors and three regional families of the terms of a
+nearest-neighbour bond interaction, all in one three-region partition.
 Supporting locality algebra for ALVV, arXiv:1602.08828v2, eq:H-mid-cut,
 lines 810–821, and prop:Cheby-AGSP-eff, lines 1324–1332. -/
 theorem exists_threeSplit_edge_factors
     {L q : ℕ}
-    (H : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ r, H r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-      (interval L r.val (r.val + 2) : Finset (Fin L)))
+    (H : ManyBody.BondInteraction L q)
     (u v : Fin (L - 1)) (huv : u.val < v.val)
     {T E : Finset (Fin L)} (hT : T = interval L 0 (u.val + 1))
     (hE : E = interval L (u.val + 1) (v.val + 1)) (hTE : Disjoint T E) :
@@ -152,16 +151,16 @@ theorem exists_threeSplit_edge_factors
       (VR : Matrix ((E → Fin q) × ({x // x ∉ T ∪ E} → Fin q))
         ((E → Fin q) × ({x // x ∉ T ∪ E} → Fin q)) ℂ),
       (∀ r, r ≠ u → r ≠ v →
-        (H r).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
+        (H.term r).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
           (HL r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
               (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
               (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
             (1 : Matrix ((T → Fin q) × (E → Fin q))
               ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR r) ∧
-      (H u).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
+      (H.term u).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
         UL ⊗ₖ (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) ∧
-      (H v).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
+      (H.term v).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
             ({x // x ∉ T ∪ E} → Fin q)).symm
@@ -177,9 +176,9 @@ theorem exists_threeSplit_edge_factors
   obtain ⟨huD, huT, hvD, hvE, hord⟩ :=
     interval_edge_classification_of_lt (L := L) huv hv
   obtain ⟨UL, hUL, hrUL⟩ :=
-    exists_threeSplit_eq_kronecker_one_rank_le hTE huD (hsupp u)
+    exists_threeSplit_eq_kronecker_one_rank_le hTE huD (H.mem u)
   obtain ⟨VR, hVR, hrVR⟩ :=
-    exists_threeSplit_eq_reindex_one_kronecker_rank_le hTE hvD (hsupp v)
+    exists_threeSplit_eq_reindex_one_kronecker_rank_le hTE hvD (H.mem v)
   have hULrank : operatorSchmidtRank UL ≤ q ^ 2 := by
     simpa only [T, huT, Finset.card_singleton, Nat.mul_one] using hrUL
   have hVRrank : operatorSchmidtRank VR ≤ q ^ 2 := by
@@ -189,7 +188,7 @@ theorem exists_threeSplit_edge_factors
         (C : Matrix (E → Fin q) (E → Fin q) ℂ)
         (D : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ),
         r ≠ u → r ≠ v →
-          (H r).submatrix g.symm g.symm =
+          (H.term r).submatrix g.symm g.symm =
             (B ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
                 (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
               ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ C) ⊗ₖ
@@ -204,17 +203,17 @@ theorem exists_threeSplit_edge_factors
       · rcases hord r.val (by omega) (fun h => hru (Fin.ext h))
           (fun h => hrv (Fin.ext h)) with hrT | hrE | hrU
         · obtain ⟨B, hB⟩ := exists_threeSplit_eq_kronecker_one_kronecker_one hTE
-            (Finset.coe_subset.mpr hrT) (hsupp r)
+            (Finset.coe_subset.mpr hrT) (H.mem r)
           refine ⟨B, 0, 0, ?_⟩
           intro _ _
           simpa using hB
         · obtain ⟨C, hC⟩ := exists_threeSplit_eq_one_kronecker_kronecker_one hTE
-            (Finset.coe_subset.mpr hrE) (hsupp r)
+            (Finset.coe_subset.mpr hrE) (H.mem r)
           refine ⟨0, C, 0, ?_⟩
           intro _ _
           simpa using hC
         · obtain ⟨D, hD⟩ := exists_threeSplit_eq_one_kronecker hTE
-            (Finset.coe_subset.mpr hrU) (hsupp r)
+            (Finset.coe_subset.mpr hrU) (H.mem r)
           refine ⟨0, 0, D, ?_⟩
           intro _ _
           simpa using hD
