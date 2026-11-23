@@ -28,7 +28,7 @@ namespace TNLean.MPS.AreaLaw
 
 /-- Increasing enumeration identifies the line domain graph with the induced integer
 Hasse graph. TNLean note, `part0_preamble.tex`, lines 191–199. -/
-noncomputable def domainGraphIsoHasse (Λ : Finset ℤ) :
+noncomputable def lineDomainGraphIsoHasse (Λ : Finset ℤ) :
     lineDomainGraph Λ ≃g (SimpleGraph.hasse ℤ).induce (Λ : Set ℤ) where
   toEquiv := (Λ.orderIsoOfFin rfl).toEquiv
   map_rel_iff' := by
@@ -42,7 +42,7 @@ sites. The component intervals are those of the TNLean note,
 theorem lineDomainGraph_card_sphere_le_two (Λ : Finset ℤ) (x : Fin Λ.card) (d : ℕ) :
     (Finset.univ.filter (fun y ↦ (lineDomainGraph Λ).edist x y = (d : ℕ∞))).card ≤ 2 := by
   classical
-  let e := domainGraphIsoHasse Λ
+  let e := lineDomainGraphIsoHasse Λ
   let C := ((SimpleGraph.hasse ℤ).induce (Λ : Set ℤ)).connectedComponentMk (e x)
   let xC : C := ⟨e x, rfl⟩
   obtain ⟨φ⟩ := C.nonempty_pathGraph_iso_hasse_int_induce_finset Λ
