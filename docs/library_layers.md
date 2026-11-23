@@ -1064,7 +1064,10 @@ kind:
 | `Algebra/GInjective` | 1 |
 
 The map does not design a TNLean home for them. They move with their
-neighbours, keep a plain object name, and leave with the QICLean work.
+neighbours, keep a plain object name, and leave with the QICLean work. In
+`MPS/AreaLaw` and `PEPS/AreaLaw` these are the lemmas about arbitrary matrices,
+operators, lattices and entropies; the area laws themselves and the modules of
+their arguments stay in TNLean (question 3 below).
 
 Beside them, 974 modules mention no tensor network but are one theorem's
 own argument. They stay beside the theorem:
@@ -1082,7 +1085,7 @@ own argument. They stay beside the theorem:
 | about forty single modules | |
 
 The two-dimensional area law mentions no tensor network in any of its 534
-modules. Whether it belongs in TNLean at all is one of the questions below.
+modules. It stays in TNLean all the same; see question 3 below.
 
 The directories outside the map that are already moving are not counted above:
 `Algebra` (250 of 255 without a tensor), `Circuit` (22), and the non-party part
@@ -1176,14 +1179,13 @@ rewritten by hand in the same change, from this document.
    replaces `MUTUAL_LAYER_DIRECTORIES` wholesale, since the directory names change.
    The comparison with the base revision will report the renamed pairs as
    added, so this one change needs an exemption from that rule.
-3. **The non-tensor theorems.** The two-dimensional area law (534 modules) and
-   most of `MPS/AreaLaw` (the area law, the AGSP, both algorithms) mention no
-   tensor network. Only the MPS approximation statements do.
-   *Recommendation:* keep them in their theorem directories now, as the map
-   does, and move each to QICLean as a whole theorem once its generic
-   neighbours (the 767 flagged modules) are there. The alternative is to move
-   them before the map is applied, which would remove about 1,000 modules from
-   this change.
+3. **The area laws (decided).** The area laws of `MPS/AreaLaw` and
+   `PEPS/AreaLaw` mention no tensor network in their statements; only the MPS
+   approximation statements of `MPS/AreaLaw` do. They are nevertheless kept in
+   TNLean, together with the modules of their own arguments. The lemmas about
+   arbitrary matrices, operators, lattices and entropies used there do move to
+   QICLean. The placement of the area laws is to be reconsidered after the
+   reorganisation.
 4. **Namespaces.** The namespaces of the table above name directories that
    disappear, but renaming them changes declaration names and blueprint
    `\lean{}` tags.
@@ -2107,8 +2109,9 @@ Layer override target: `TNLean/MPS/Tensor/OpenMPS` (9 modules, 14 parts), see §
 The theorems of `ProjectorFactorization`, `ChebyshevAGSP`, `LocalSolution` and
 the entropy statements of `LowEnergyAlgorithm` are TN-free; their directories
 carry `proof:` (the modules are single-use stages of those arguments), but the
-theorems themselves are QICLean material and would move with their proofs;
-only the `tn` modules (MPS approximation statements) would stay.
+theorems themselves would be QICLean material by the rule of this document.
+They stay in TNLean with their proofs, together with the `tn` modules (MPS
+approximation statements), by the decision recorded in question 3 of Part I.
 
 #### Modules mixing two layers
 | module | layers | declarations | proposed split |
