@@ -35,7 +35,8 @@ included.
 Source: *A two-dimensional area law from a global spectral gap*, Theorem 1.1
 (`thm:area`, `eq:area-law`) and `eq:hamiltonian`, manuscript revision
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`, as recorded in
-`TNLean/PEPS/AreaLaw/TheoremStatements.lean` and `TNLean/Lattice/FiniteDomain.lean`.
+`TNLean/PEPS/AreaLaw/TheoremStatements.lean` and QICLean's
+`QICLean/ManyBody/Sites/Lattice/SupportCounting.lean`.
 -/
 
 open scoped ComplexOrder Matrix.Norms.L2Operator

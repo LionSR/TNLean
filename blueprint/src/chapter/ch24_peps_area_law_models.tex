@@ -8,15 +8,10 @@ state the two models separately following
 
 \begin{definition}[Induced lattice domain]
     \label{def:area_law_domain}
-    \lean{
-        TNLean.Lattice.Site,
-        TNLean.Lattice.Configuration,
-        TNLean.Lattice.StateSpace,
-        ManyBody.planeDomainGraph,
+    \lean{ManyBody.planeDomainGraph,
         ManyBody.graphNeighborhood,
         ManyBody.cutEquiv,
-        TNLean.Lattice.card_configuration
-    }
+        ManyBody.card_configuration}
     \leanok
     Let $\Lambda\subset\mathbb Z^2$ be finite (possibly empty, perforated, or
     disconnected). Join sites at $\ell_1$-distance $1$, and let $d_\Lambda$ be

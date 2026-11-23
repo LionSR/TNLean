@@ -21,7 +21,7 @@ principles of that document:
 
 Work already under way is taken as given and not redesigned here:
 
-- `TNLean/Circuit` is being emptied into QICLean;
+- `TNLean/Circuit` and the top level of `TNLean/Lattice` have moved to QICLean;
 - the generic modules of `TNLean/Algebra` and the finite-ring dynamics of
   `MPS/Preparation` are moving there;
 - the party calculus (`Lattice/PartyCircuit`, `Compression`, `Sheet`) is

@@ -68,8 +68,9 @@ reduced-channel equality alone.
 
 ## Migration policy
 
-`TNLean/Circuit` and `TNLean/Lattice` are being split along the layers of
-[`many_body_circuit_architecture.md`](many_body_circuit_architecture.md),
-redesigned around one circuit definition, and moved to QICLean. That document
-gives the layers, the order of the steps and the rules for new modules in the
-meantime.
+`TNLean/Circuit` and the top level of `TNLean/Lattice` have moved to QICLean,
+split along the layers of
+[`many_body_circuit_architecture.md`](many_body_circuit_architecture.md). The
+subdirectories `Lattice/PartyCircuit`, `Lattice/Sheet` and `Lattice/Compression`
+remain; that document gives the layers, the order of the remaining steps and the
+rules for new modules in the meantime.

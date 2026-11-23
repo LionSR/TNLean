@@ -143,9 +143,9 @@ comparison treats the two copies as additional sites.
 
 \begin{definition}[Relabelled and product vectors on finite site sets]
     \label{def:al_amp_site_relabel}
-    \lean{ManyBody.relabelSites,
-        ManyBody.regionRelabel,
-        ManyBody.complRelabel,
+    \lean{ManyBody.relabelVector,
+        ManyBody.regionConfigurationEquiv,
+        ManyBody.complementConfigurationEquiv,
         ManyBody.sumSitesProduct,
         ManyBody.disjSumEquiv}
     \leanok
@@ -156,10 +156,9 @@ comparison treats the two copies as additional sites.
 
 \begin{lemma}[Regional entropies of relabelled and product vectors]
     \label{thm:al_amp_site_entropy}
-    \lean{ManyBody.cutEquiv_symm_comp_relabel,
-        ManyBody.regionState_relabelSites,
-        ManyBody.regionEntropy_relabelSites,
-        ManyBody.regionMutualInformation_relabelSites,
+    \lean{ManyBody.regionState_relabel,
+        ManyBody.regionEntropy_relabel,
+        ManyBody.regionMutualInformation_relabel,
         ManyBody.regionState_sumSitesProduct,
         ManyBody.regionEntropy_sumSitesProduct,
         ManyBody.regionMutualInformation_sumSitesProduct_inl,
@@ -231,8 +230,7 @@ comparison treats the two copies as additional sites.
 
 \begin{lemma}[The local unitary and the entropy comparison on a region]
     \label{thm:al_amp_supported_polar}
-    \lean{QuantumCircuit.kronecker_one_submatrix_mem_supportedOperators,
-        TNLean.PEPS.AreaLaw.exists_supported_unitary_of_good_realization,
+    \lean{TNLean.PEPS.AreaLaw.exists_supported_unitary_of_good_realization,
         ManyBody.regionMutualInformation_le_inv_pow_of_supported_unitary}
     \leanok
     \uses{thm:area_law_amplification_unitary_error,thm:al_amp_entropy_comparison_scale}

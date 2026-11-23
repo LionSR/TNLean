@@ -504,7 +504,7 @@ abstracted — record why, so it is not re-proposed).
 ### Replica-swap entropy comparison — promoted (2026-10-21)
 
 - **Pattern:** Two identical normalized replicas, a regional swap, and a unitary supported away from two cores imply a mutual-information bound from the vector approximation error.
-- **Defined in:** `Lattice/RegionalResetEntropy.lean`, `TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary`.
+- **Defined in:** QICLean (dependency), `ManyBody.regionMutualInformation_cores_le_of_reset_unitary`.
 - **Refactored occurrences:** Both the contiguous-chain and arbitrary finite-domain information-reset proofs use the shared finite-site theorem. The former loses its repeated 80-line local entropy argument.
 - **Notes:** Replica normalization and the product marginal after the swap are proved internally. No product-marginal hypothesis is supplied by either caller. The theorem is independent of a Hamiltonian, gap, dimension of the underlying lattice, and connectedness.
 
@@ -1620,7 +1620,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** a walk in the induced domain starts in a region and ends outside it; take
   its boundary dart, cut the walk at the first endpoint of the dart, and show that the
   dart is an edge of the edge boundary no farther from the start than the walk is long.
-- **Seen:** `subset_of_isSafe` in `TNLean/Lattice/BufferedRectangles.lean`,
+- **Seen:** `subset_of_isSafe` (now QICLean's `ManyBody.subset_of_isSafe`),
   `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/SafeRectangles/TailParameter.lean`, and
   `TNLean/PEPS/AreaLaw/Histories/SupportLocalization.lean`.
 - **Abstraction:** the lemma `ManyBody.exists_edgeBoundary_of_walk` in
@@ -2700,7 +2700,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
   `expect_productVector_mul` and `trace_rectKronecker_mul_mul` in
-  `TNLean/Circuit/SupportedOperators.lean`, and `OnsiteChannel.dual_mul` in
+  the supported-operator module (now in QICLean), and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean` (deleted; onsite channels are now QICLean
   layers without cells).
 - **Abstraction:** `ManyBody.eq_of_mem_supportedOperators₂` in QICLean
@@ -6050,8 +6050,9 @@ no additional helper is proposed.
   space, rewrite multiplication by the sheet-swap permutation matrix, and compare
   entries using the region/complement split.
 - **Seen:** `commute_sheetSwapOp_kronecker` and
-  `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in
-  `Circuit/RegionalSwap.lean`.
+  `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in the regional swap module,
+  now QICLean's `ManyBody.pairSwapOp_mul_mul_conjTranspose_of_disjoint` and
+  `ManyBody.pairSwapOp_mul_kronecker`.
 - **Abstraction:** the support decompositions, permutation-matrix products, and split
   coordinates are already public lemmas. These are the two distinct cases, for
   operators supported outside and inside the swapped region.
@@ -9706,8 +9707,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   calculation in `Geometry/TemplateInstances.lean`, the dyadic-cell
   clearance proof in `Geometry/TemplateClearance.lean`, and the real
   clearance argument in `Geometry/TemplateBoxEntropyReal.lean`.
-- **Promotion:** `TNLean.PEPS.AreaLaw.cast_supDist`, beside
-  `supDist` in `BufferedRectangles.lean`, replaces the three occurrences
+- **Promotion:** `ManyBody.cast_supDist` (QICLean), beside
+  `supDist` in `QICLean/ManyBody/Sites/Lattice/IntegerRectangle.lean`, replaces the three occurrences
   whose modules already import its defining module.
   Its proof is the existing cast calculation. The private helper and the
   repeated local calculation are removed. `TemplateClearance` instead
@@ -9729,7 +9730,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   constant from the same choices before introducing the clearance parameter
   and the physical data.
 - **Occurrences:** `exists_condEntropy_le_initialBuffer` in
-  `TNLean/Lattice/BufferedRectangleEntropy.lean` and
+  the buffered-rectangle entropy module (now in QICLean) and
   `exists_condEntropy_le_initialBuffer_real` in
   `TNLean/PEPS/AreaLaw/SafeRectangles/InitialBufferReal.lean`.
 - **Possible next abstraction:** If a third proof needs the same choices,
@@ -11583,7 +11584,7 @@ removed after the dependency audit exposed it.
 
 ### A common ground vector from disjoint supported spectra (2026-10-29)
 
-- **Seen:** `Circuit/SupportedGroundSpace.lean` and AKLV regional normalization.
+- **Seen:** the supported ground-space module (now in QICLean) and AKLV regional normalization.
 - **Pattern:** Produce regional ground cutoffs by real functional calculus, factor
   their product trace on disjoint supports, and extract a nonzero common ground column.
 - **Reuse:** Promoted the existing Hastings functional-calculus support theorem to

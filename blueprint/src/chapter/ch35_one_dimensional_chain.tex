@@ -143,11 +143,10 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Regionally swapped doubled Hamiltonian]
     \label{def:chain_swapped_doubled_hamiltonian}
-    \lean{ManyBody.pairSwapOp, ManyBody.Interaction.conj,
+    \lean{ManyBody.Interaction.conj,
         ManyBody.Interaction.isHermitian_conj_term,
         ManyBody.Interaction.norm_conj_term,
-        TNLean.Lattice.reindex_sheetSwapOp_eq_reindex_pairSwapOp,
-        TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled}
+        ManyBody.Interaction.hamiltonian_relabel_conj_pairSwapOp_doubled}
     \leanok
     \uses{def:chain_doubled_hamiltonian,def:peps_frame_sheet_swap}
     Let $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on the contiguous chain
@@ -1362,7 +1361,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Entropy at local dimension one]
     \label{thm:chain_entropy_dim_one}
-    \lean{TNLean.Lattice.regionEntropy_eq_zero_of_localDimension_one}
+    \lean{ManyBody.regionEntropy_eq_zero_of_localDimension_one}
     \leanok
     Let $V$ be a finite set of sites and let $\Omega$ be a unit vector on
     $\bigotimes_{x\in V}\mathbb C$, with one-dimensional local spaces.
@@ -1867,7 +1866,7 @@ allowed. These are the two-replica operators in
 
 \begin{lemma}[Entropy comparison after a regional replica swap]
     \label{thm:regional_reset_cores_entropy}
-    \lean{TNLean.Lattice.mutualInformation_cores_le_of_reset_unitary}\leanok
+    \lean{ManyBody.regionMutualInformation_cores_le_of_reset_unitary}\leanok
     Let $V$ be a finite site set, let $q\ge1$, and let $\Omega$ be a unit
     vector in $(\mathbb C^q)^{\otimes V}$. Suppose $R_0\subseteq D\subseteq V$
     and $C_0\cap D=\varnothing$. On two replicas put

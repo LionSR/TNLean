@@ -1754,8 +1754,8 @@ The following notions use different transfer objects and are not interchangeable
 
 ## Quantum circuits
 
-The circuit layer `TNLean/Circuit/` (namespace `QuantumCircuit`) imports nothing
-from `TNLean/MPS/`. Its local labels are `Fin d`. The notions that involve no
+The circuit layer is QICLean's; TNLean keeps no `Circuit/` directory. Its local
+labels are `Fin d`. The notions that involve no
 geometry (operators acting on a set of sites, expectations, product vectors,
 placed operators, permutations of configurations and of sites, onsite
 channels) are stated for any finite type of sites `ι`. Layers, unitary circuits,
@@ -1996,8 +1996,8 @@ in `MPS/Preparation/` uses it.
 #### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalPerm {ι : Type*} (S : Finset ι) (σ : Equiv.Perm (ι → Fin d)) : Prop`.
-- **Defined in:** `TNLean/Circuit/SitePermutation.lean`.
+  `QuantumCircuit.IsLocalPerm (S : Finset V) (σ : Equiv.Perm (Config X)) : Prop`.
+- **Defined in:** QICLean, `QICLean/ManyBody/Sites/ConfigurationMap.lean`.
 - **Meaning:** the permutation `σ` of the configurations changes only the
   sites of `S`, and its new values on `S` depend only on the old values on
   `S`.
@@ -3296,10 +3296,10 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `Entropy.concentrationWidth` | The width `32 √((1 + ϑ) ℬ) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}`; on the lattice `ϑ = J/Δ` and `ℬ = ℬ_A` | Area-law `02-initial.tex`, lines 207–212; defined in `QICLean/ManyBody/Entropy/Typical/TypicalMarginalMass.lean` (QICLean dependency), used in `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_regionState` at `Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M`. |
 | `TNLean.PEPS.AreaLaw.tailParameterConstant` | The constant `C = v_R μ_R log²(e q^{v_R})`, with `v_R = 1 + 2R(R+1)` and `μ_R = 2^{v_R - 1}`, in `ℬ_A ≤ C(1 + |∂_Λ A|)` | Area-law `eq:initial-local-tail-parameter`, `02-initial.tex`, lines 202–206; depends only on `q` and `R`, at least one for `q ≥ 1`; the bound is `cutLogBudget_le_edgeBoundary`. |
 | `TNLean.PEPS.AreaLaw.typicalWidthConstant` | The constant `C_M = 32 √((1 + J/Δ) C) (M + (e/2 + log 2)/log 2)` with `C = tailParameterConstant q R` | Area-law `02-initial.tex`, lines 207–212; depends only on `q, R, J, Δ, M`; bounds the concentration width by `C_M √(1 + |∂_Λ A|) log(n+2)` in `concentrationWidth_le`. |
-| `TNLean.PEPS.AreaLaw.IntRect` | A product `[x₀,x₁] × [y₀,y₁]` of two nonempty finite integer intervals, with `size` the larger number of sites along an axis and `dilate d` the rectangle `Q^{+d}` | Area-law `02-initial.tex`, lines 222–232; an ambient rectangle, not a set of sites of the domain. |
-| `TNLean.PEPS.AreaLaw.IntRect.card_mixedDyadicIndices_toFinset_le` | At every dyadic scale, the number of cells meeting both an integer rectangle and its complement, multiplied by the cell side, is at most `4 * size Q + 8 * 2^k` | Auxiliary boundary-line count for Area-law Proposition 9.5, `08-scanner.tex`, lines 717–729; holds for every native integer rectangle, including thin rectangles and negative coordinates. |
-| `TNLean.PEPS.AreaLaw.IsSafe` | The sup-norm distance from the rectangle `Q` to every endpoint of an edge crossing `A` exceeds `D₀ · size Q` | Area-law `02-initial.tex`, lines 220–228; vacuous when no edge crosses `A`, matching the source's infinite distance to the empty set. The source's standing condition `D₀ > 2R + 10` is a hypothesis of the theorems, not of the predicate. |
-| `TNLean.PEPS.AreaLaw.rectRegion` | The physical region `A ∩ Q` of an ambient rectangle | Area-law `02-initial.tex`, lines 232–233; sites of `Q` missing from the domain or from `A` are absent. |
+| `ManyBody.IntRect` | A product `[x₀,x₁] × [y₀,y₁]` of two nonempty finite integer intervals, with `size` the larger number of sites along an axis and `dilate d` the rectangle `Q^{+d}` | Area-law `02-initial.tex`, lines 222–232; an ambient rectangle, not a set of sites of the domain. |
+| `ManyBody.IntRect.card_mixedDyadicIndices_toFinset_le` | At every dyadic scale, the number of cells meeting both an integer rectangle and its complement, multiplied by the cell side, is at most `4 * size Q + 8 * 2^k` | Auxiliary boundary-line count for Area-law Proposition 9.5, `08-scanner.tex`, lines 717–729; holds for every native integer rectangle, including thin rectangles and negative coordinates. |
+| `ManyBody.IsSafe` | The sup-norm distance from the rectangle `Q` to every endpoint of an edge crossing `A` exceeds `D₀ · size Q` | Area-law `02-initial.tex`, lines 220–228; vacuous when no edge crosses `A`, matching the source's infinite distance to the empty set. The source's standing condition `D₀ > 2R + 10` is a hypothesis of the theorems, not of the predicate. |
+| `ManyBody.rectRegion` | The physical region `A ∩ Q` of an ambient rectangle | Area-law `02-initial.tex`, lines 232–233; sites of `Q` missing from the domain or from `A` are absent. |
 | `TNLean.PEPS.AreaLaw.boxEntropy` | The supremum `F_box(r)` of `S_Ω(A ∩ Q)` over all domains, admissible Hamiltonians with gapped ground vectors, cuts, and safe rectangles of size at most `r`, at fixed `q, R, J, Δ, D₀` | Area-law Proposition 3.3 (`prop:initial-box`), `02-initial.tex`, lines 590–594; a real supremum, bounded above by `r² log q` for `q ≥ 1` and estimated in `exists_boxEntropy_le_rpow`. |
 | `TNLean.PEPS.AreaLaw.skewSymbol` | The scalar `f(t) = ⟨θ, ρ_P^{[t]} ρ_Y^{[-t]} h ρ_P^{[-t]} ρ_Y^{[t]} θ⟩` for regions `P, Y` of a finite domain, with `ρ^{[s]}` the real power of a regional state taken as zero on its kernel | Area-law Lemma 5.3 (`lem:skew`), `04-conditional.tex`, lines 495–500; equal to QICLean's marked scalar symbol by `skewSymbol_eq_markedScalarSymbol`, with the lemma itself in `skewSymbol_skew_le`. |
 | `TNLean.PEPS.AreaLaw.Scan.ScanData` | The finite data of the collar scan at one scale for all replica counts, with the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for that scan as fields | Area-law Proposition 9.2 (`prop:scanner`), `08-scanner.tex`, lines 399–533; the inputs are hypotheses and are not derived from the scan geometry, so results over `ScanData` are Proposition 9.2 restricted to them, as recorded in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. |
@@ -3633,7 +3633,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ## Partial rectangle layer entropy
 
-- **Declaration:** `TNLean.PEPS.AreaLaw.IntRect.partial_row_entropy_le`.
+- **Declaration:** `ManyBody.IntRect.partial_row_entropy_le`.
 - **Defined in:** `TNLean/PEPS/AreaLaw/SafeRectangles/WeakRectanglePartialRowEntropy.lean`.
 - **Meaning:** let `Q` be a nonempty integer rectangle of size `s`, let
   `1 ≤ j ≤ s`, and let `Y ⊆ Q^{+j} \ Q^{+(j−1)}` be arbitrary. For a
@@ -3886,8 +3886,9 @@ predicate used in the analytic estimates. No planar embedding is assumed.
 
 ## Hard-core sector certificate for the tree example
 
-The reusable ingredients in `TNLean/Lattice/TreeBasisCounterexample/` concern the tree
-example recorded in `docs/paper-gaps/hastings05_tree_basis_counterexample.tex`.
+The reusable ingredients, now QICLean's `QICLean/ManyBody/Hamiltonian/HardCore/` in the
+namespace `ManyBody.HardCore`, concern the tree example recorded in
+<https://sirui-lu.com/QICLean/paper-gaps/hastings05_tree_basis_counterexample.pdf>.
 
 | Declaration | Mathematical meaning | Scope |
 |---|---|---|
