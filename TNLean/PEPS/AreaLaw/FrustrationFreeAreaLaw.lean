@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FrustrationFreeAmplification
-import TNLean.PEPS.AreaLaw.PhysicalCollarInformation
-import TNLean.PEPS.AreaLaw.FinalRegions.TwoFamilyAssembly
+import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalCollarInformation
+import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.TwoFamilyAssembly
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
-import TNLean.PEPS.AreaLaw.FrustrationFree.Model
+import TNLean.PEPS.AreaLaw.Operators.FrustrationFree.Model
 
 /-!
 # The frustration-free area law by the sweep

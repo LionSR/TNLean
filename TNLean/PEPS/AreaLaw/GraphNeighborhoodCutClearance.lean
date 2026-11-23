@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
-import TNLean.PEPS.AreaLaw.Squares.CellCounting
+import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 
 /-!
 # Graph neighborhoods separated from physical cuts

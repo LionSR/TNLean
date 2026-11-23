@@ -28,7 +28,7 @@ so every remote set `E` avoids it.
 
 The auxiliary theorem `coarse_mutualInformation_le_of_sublinearCollarBound` retains the
 sublinear collar bound as an explicit premise. The physical collar estimate is proved in
-`TNLean.PEPS.AreaLaw.PhysicalCollarInformation`. The theorems of
+`TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalCollarInformation`. The theorems of
 `CoarseInformationFromGap` discharge this premise for the original Hamiltonian and gap
 parameters, including arbitrary common real translations of the coordinates. The reductions here
 are used by

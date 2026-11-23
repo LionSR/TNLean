@@ -176,22 +176,22 @@ energy defect bound
 where $\mathrm{rem}_k \to 0$ as $k \to \infty$ (\path{08-scanner.tex},
 lines~457--533 and~839--911).\footnote{The moment-margin declarations are
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_actualSharpUpper}
-    in \doclink{TNLean/PEPS/AreaLaw/NormComparisons/SourceTargetSharpUpper} and
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/NormComparisons/SourceTargetSharpUpper} and
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_sharp_moments}
-    in \doclink{TNLean/PEPS/AreaLaw/NormComparisons/SourceTargetSharpMoments}; the
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/NormComparisons/SourceTargetSharpMoments}; the
     endpoint budget and entropy-transfer declarations carrying
     (\ref{eq:safe_box_collar_entropy_inputs}) are
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_endpoint_budget}
-    in \doclink{TNLean/PEPS/AreaLaw/NormComparisons/ActualEndpointRoughBudget},
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/NormComparisons/ActualEndpointRoughBudget},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_actualScan_suppliedPrevector_endpoint_budget}
-    in \doclink{TNLean/PEPS/AreaLaw/ChargePoints/SourceEndpointRoughBudget},
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/ChargePoints/SourceEndpointRoughBudget},
     \leanid{TNLean.PEPS.AreaLaw.Scan.eventually_abs_regionEntropy_sub_le_of_truncation}
-    in \doclink{TNLean/PEPS/AreaLaw/Statuses/TargetEntropyTransfer},
+    in \doclink{TNLean/PEPS/AreaLaw/Scanner/Statuses/TargetEntropyTransfer},
     \leanid{TNLean.PEPS.AreaLaw.Scan.roughBudget_le_source_power} and
     \leanid{TNLean.PEPS.AreaLaw.Scan.selectedDensity_budget_le_principal}
-    in \doclink{TNLean/PEPS/AreaLaw/ChargePoints/SourceRoughBudgetPower}, and
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/ChargePoints/SourceRoughBudgetPower}, and
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le}
-    in \doclink{TNLean/PEPS/AreaLaw/ChargePoints/SourceRoughBudgetPower}; the density and
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/ChargePoints/SourceRoughBudgetPower}; the density and
     energy exponent-margin declarations are
     \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_principalDensity_le_rpow},
     \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_principalDensity_le_rpow},
@@ -200,7 +200,7 @@ lines~457--533 and~839--911).\footnote{The moment-margin declarations are
     \leanid{TNLean.PEPS.AreaLaw.Scan.final_eightNuDensity_margins},
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_eightNu},
     and \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le_eightNu}
-    in \doclink{TNLean/PEPS/AreaLaw/ChargePoints/StrongSelectedDensityPower}, together
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/ChargePoints/StrongSelectedDensityPower}, together
     with \leanid{TNLean.PEPS.AreaLaw.Scan.finalSelectedEnergyCap_le},
     \leanid{TNLean.PEPS.AreaLaw.Scan.final_selectedEnergy_margins},
     \leanid{TNLean.PEPS.AreaLaw.Scan.eventually_final_selectedEnergy_le_rpow},
@@ -209,9 +209,9 @@ lines~457--533 and~839--911).\footnote{The moment-margin declarations are
     the composed selected-point comparison, density, and energy bounds are
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_comparison},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_density}
-    in \doclink{TNLean/PEPS/AreaLaw/ChargePoints/SourceSelectedSharpDensity}, and
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/ChargePoints/SourceSelectedSharpDensity}, and
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_energy}
-    in \doclink{TNLean/PEPS/AreaLaw/ChargePoints/SourceSelectedSharpEnergy}.}
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/ChargePoints/SourceSelectedSharpEnergy}.}
 
 Subtracting the sharp upper and lower norm rates at $(s_k, p_k)$, substituting
 (\ref{eq:safe_box_collar_energy_defect}), bounding the terminal pre-charge
@@ -236,9 +236,9 @@ lines~868--911 and~936--941).\footnote{The mutual-information comparison and
     \leanid{TNLean.PEPS.AreaLaw.Scan.two_information_le_sharpInformationBound}
     and
     \leanid{TNLean.PEPS.AreaLaw.Scan.information_le_of_eventually_sharpInformationBound}
-    in \doclink{TNLean/PEPS/AreaLaw/Scales/SharpInformationScalar}, and
+    in \doclink{TNLean/PEPS/AreaLaw/Collar/Scales/SharpInformationScalar}, and
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_actual_mutualInformation_bound}
-    in \doclink{TNLean/PEPS/AreaLaw/CollarInformation/SourceActualInformation}.}
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/CollarInformation/SourceActualInformation}.}
 
 \paragraph{2. Final-scale error absorption and transport smallness.}
 Specializing (\ref{eq:safe_box_collar_post_replica}) to $W = n^{1/20000}$ and
@@ -267,10 +267,10 @@ $2r_0 \le D$, $1 \le D$, and $4D \le m$, and the scanner geometry.\footnote{The
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_transport_smallness};
     the target dimension bound is
     \leanid{TNLean.PEPS.AreaLaw.Scan.log_exp_configuration_card_le_of_card}
-    in \doclink{TNLean/PEPS/AreaLaw/CollarInformation/PhysicalInformationDimension}; the
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/CollarInformation/PhysicalInformationDimension}; the
     conditional final-scale mutual-information theorem is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation}
-    in \doclink{TNLean/PEPS/AreaLaw/CollarInformation/SourceFinalInformation}.}
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/CollarInformation/SourceFinalInformation}.}
 
 \paragraph{3. Numerical admissibility of the rounded scales.}
 At the rounded definitions (\ref{eq:safe_box_collar_scales}), the inequalities
@@ -294,7 +294,7 @@ $e_* = 2 \times 10^{-6}$.\footnote{The template entropy reductions are
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_source_entropy_bounds}
     and
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_source_entropy_bounds_of_boxEntropy}
-    in \doclink{TNLean/PEPS/AreaLaw/CollarInformation/TemplateSourceEntropy}.}
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/CollarInformation/TemplateSourceEntropy}.}
 
 \paragraph{5. Template scanner geometry.}
 Constructing the scanner on the separated template $T$ with $C_{\mathrm{tpl}} \ge 24$
@@ -344,22 +344,22 @@ implies $2L + 10r_0 \le D_0 s$ and $(D_0 + 1)L \le D_0 s$ for large $s$
 (\path{08-scanner.tex}, lines~693--755).\footnote{The bootstrap scale numerics,
     weak-rectangle scanner geometry, and rough lower comparison are
     \leanid{TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.scannerExponents}
-    in \doclink{TNLean/PEPS/AreaLaw/BoxExponent/BootstrapParameters},
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/BoxExponent/BootstrapParameters},
     \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_fixedWeightFour_transport_smallness}
-    in \doclink{TNLean/PEPS/AreaLaw/Rounds/FixedWeightTransportSmallness},
+    in \doclink{TNLean/PEPS/AreaLaw/Scanner/Rounds/FixedWeightTransportSmallness},
     \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_admissibility}
-    in \doclink{TNLean/PEPS/AreaLaw/Scales/ScannerRoundedAdmissibility},
+    in \doclink{TNLean/PEPS/AreaLaw/Collar/Scales/ScannerRoundedAdmissibility},
     \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_clearance_threshold}
-    in \doclink{TNLean/PEPS/AreaLaw/SafeRectangles/RoundedClearance},
+    in \doclink{TNLean/PEPS/AreaLaw/Polygons/SafeRectangles/RoundedClearance},
     \leanid{TNLean.PEPS.AreaLaw.Scan.rectangleBootstrapScanner} and
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_rectangleBootstrapScanner_geometry}
-    in \doclink{TNLean/PEPS/AreaLaw/BoxExponent/RectangleBootstrapGeometry},
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/BoxExponent/RectangleBootstrapGeometry},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_rough_lower_norm}
-    in \doclink{TNLean/PEPS/AreaLaw/NormComparisons/ActualRoughLower},
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/NormComparisons/ActualRoughLower},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_rough_lower}
-    in \doclink{TNLean/PEPS/AreaLaw/NormComparisons/ActualRoughLowerPrevector}, and
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/NormComparisons/ActualRoughLowerPrevector}, and
     \leanid{TNLean.PEPS.AreaLaw.Scan.tendsto_roughLowerRemainder_of_label_dimension}
-    in \doclink{TNLean/PEPS/AreaLaw/NormComparisons/ActualRoughLowerRemainder}.} Combining
+    in \doclink{TNLean/PEPS/AreaLaw/CollarEntropy/NormComparisons/ActualRoughLowerRemainder}.} Combining
 (\ref{eq:safe_box_collar_rough_lower}) with the rough upper bound at $W = 4$
 establishes the one-step improvement $e \mapsto (1 - \ell_0)e$ for
 $e_* < e \le e_0$, and finite iteration yields the integer-clearance safe-box estimate.

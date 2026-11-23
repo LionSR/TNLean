@@ -173,7 +173,7 @@ ALLOWED: dict[str, frozenset[str]] = {
 UPWARD_IMPORTS: frozenset[str] = frozenset(
     {
         "TNLean.MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence",
-        "TNLean.PEPS.AreaLaw.RestoringOperator.GoodRealizationUnitary -> TNLean.PEPS.Approximation.SheetSplitting",
+        "TNLean.PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary -> TNLean.PEPS.Approximation.SheetSplitting",
         "TNLean.PEPS.Graph.Cell.TorusPlaquetteRealization -> TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement",
         "TNLean.PEPS.Graph.Cell.TorusSimplyConnectedComplement -> TNLean.PEPS.Injectivity.Normal.NormalPairBlocking",
         "TNLean.PEPS.Graph.Holonomy.RegularBoundaryRoute -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion",

@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.FrustrationFree.Sweep
-import TNLean.PEPS.AreaLaw.RestoringOperator.AmplificationProofSteps
+import TNLean.PEPS.AreaLaw.Operators.FrustrationFree.Sweep
+import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.AmplificationProofSteps
 import TNLean.PEPS.AreaLaw.AmplificationCutClearance
-import TNLean.PEPS.AreaLaw.RestoringOperator.TypicalProjectors
-import TNLean.PEPS.AreaLaw.RestoringOperator.LatticeAncillaTransport
-import TNLean.PEPS.AreaLaw.Scales.RadiusScales
+import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.TypicalProjectors
+import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaTransport
+import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 
 /-!
 # Amplification for frustration-free terms

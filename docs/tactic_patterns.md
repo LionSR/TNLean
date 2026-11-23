@@ -499,7 +499,7 @@ abstracted — record why, so it is not re-proposed).
   `MPS/AreaLaw/ProjectorFactorization/BoundaryLocalization.lean`.
 - **Notes:** The variants without the subtracted constant in
   `QICLean/ManyBody/Dynamics/GraphPropagation.lean` and
-  `PEPS/AreaLaw/ChannelWords/GraphChannelSpatialOmission.lean` bound
+  `PEPS/AreaLaw/Operators/ChannelWords/GraphChannelSpatialOmission.lean` bound
   `exp (v x)` with a further step and are not rewritten.
 
 ### Replica-swap entropy comparison — promoted (2026-10-21)
@@ -514,7 +514,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
 - **Defined in:** `QICLean/ManyBody/Dynamics/SupportedGaussianIntegral.lean`, `ManyBody.exists_supported_gaussian_integral_of_projection_bounds`.
 - **Use when:** Actual observable and generator projection estimates give scalar errors on a symmetric time interval. The theorem constructs one supported path before the observable and averaging data, retains the two projection regions and a common containing output region, and supplies support, norm and error bounds for the average.
-- **Refactored occurrences:** `MPS/AreaLaw/Entropy/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/Interactions/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed. The finite-domain caller in `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` uses the same theorem with intrinsic graph neighborhoods.
+- **Refactored occurrences:** `MPS/AreaLaw/Entropy/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/Operators/Interactions/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed. The finite-domain caller in `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` uses the same theorem with intrinsic graph neighborhoods.
 - **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
 
 ### Hermitian partial sums of terms Hermitian on a set — promoted (2026-10-25)
@@ -606,7 +606,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** cast `i ≤ j` to `ℝ`, note `0 ≤ s_R`, unfold the radius
   `u + s_R j` and close with `nlinarith`.
 - **Seen:** 3 occurrences across 2 files (`rangeNestedPatch_mono` in
-  `TNLean/PEPS/AreaLaw/Squares/RangeNestedPatches.lean`, and
+  `TNLean/PEPS/AreaLaw/Polygons/Squares/RangeNestedPatches.lean`, and
   `uniform_rangeNestedPatch_cylinders` and `rangeAdaptivePatchSupply` in
   `TNLean/PEPS/Approximation/NestedPatches/RangeNestedPatchApproximation.lean`).
 - **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_mono`.
@@ -664,7 +664,7 @@ abstracted — record why, so it is not re-proposed).
   (`initialBoxExponent_pos_and_lt_one`) and `InitialExponentGain.lean`
   (`one_sub_initialBoxExponent_eq`, `initialBoxExponent_gain_bounds`).
 - **Abstraction:** `TNLean.PEPS.AreaLaw.one_lt_initialBoxScale` in
-  `TNLean/PEPS/AreaLaw/SafeRectangles/InitialBoxEstimate.lean`, beside `sixteen_le_initialBoxScale`.
+  `TNLean/PEPS/AreaLaw/Polygons/SafeRectangles/InitialBoxEstimate.lean`, beside `sixteen_le_initialBoxScale`.
 - **Notes:** All three call sites use the shared real-valued bound. The helper
   retains explicit `q, R, J, Δ` parameters and requires no additional hypotheses.
 
@@ -906,9 +906,9 @@ abstracted — record why, so it is not re-proposed).
   its indexed assumptions, and express descending nesting by the original
   increasing index order.
 - **Seen:** `isPatchMinimizer_regularizedPatchFactorList` in
-  `PEPS/AreaLaw/RegionalFilters/RegularizedPatchListCoordinates.lean` and
+  `PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchListCoordinates.lean` and
   `normalizedRegularizedPatchMarginal_stationarity_of_isMinOn` in
-  `PEPS/AreaLaw/RegionalFilters/RegularizedPatchMinimizerStationarity.lean`.
+  `PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchMinimizerStationarity.lean`.
 - **Abstraction:** Existing `List.mem_reverse`, `List.mem_ofFn`,
   `List.pairwise_reverse` and `List.pairwise_ofFn` give the positional
   membership and order statements. The stationarity proof shares its local
@@ -1073,14 +1073,14 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** name the same unique assignment of the eight working sectors
   to actual initial identifiers in a theorem statement and its proof.
 - **Seen:** twenty-one bindings in theorem statements and proofs:
-  - `TNLean/PEPS/AreaLaw/InitialRegions/InitialSectorColors.lean`: two bindings.
-  - `TNLean/PEPS/AreaLaw/InitialRegions/InitialSectorRuns.lean`: four bindings.
-  - `TNLean/PEPS/AreaLaw/InitialRegions/InitialSectorComponents.lean`: six bindings.
-  - `TNLean/PEPS/AreaLaw/InitialRegions/InitialActiveRayCount.lean`: three bindings.
-  - `TNLean/PEPS/AreaLaw/InitialRegions/InitialSectorCycle.lean`: two bindings.
-  - `TNLean/PEPS/AreaLaw/InitialRegions/InitialActiveRays.lean`: four bindings.
+  - `TNLean/PEPS/AreaLaw/BirthRegions/InitialRegions/InitialSectorColors.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/BirthRegions/InitialRegions/InitialSectorRuns.lean`: four bindings.
+  - `TNLean/PEPS/AreaLaw/BirthRegions/InitialRegions/InitialSectorComponents.lean`: six bindings.
+  - `TNLean/PEPS/AreaLaw/BirthRegions/InitialRegions/InitialActiveRayCount.lean`: three bindings.
+  - `TNLean/PEPS/AreaLaw/BirthRegions/InitialRegions/InitialSectorCycle.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/BirthRegions/InitialRegions/InitialActiveRays.lean`: four bindings.
 - **Abstraction:** `initialSectorAssignment` in
-  `TNLean/PEPS/AreaLaw/InitialRegions/InitialSectorAssignment.lean` is exactly the
+  `TNLean/PEPS/AreaLaw/BirthRegions/InitialRegions/InitialSectorAssignment.lean` is exactly the
   choice from `exists_unique_initialRegion_sector_assignment`, with the
   original parameters and cell/mark hypotheses.
 - **Refactor:** the sector-color, run-assignment and no-active-sector
@@ -1099,7 +1099,7 @@ abstracted — record why, so it is not re-proposed).
   the non-contained-support proof in `SplitSupportSize.lean`, and the common
   five-region budget in `StatusMarginalBudget.lean`.
 - **Abstraction:** `CollarScan.mem_truncationSet_of_not_far` in
-  `TNLean/PEPS/AreaLaw/Statuses/StatusContainment.lean`, with completed and
+  `TNLean/PEPS/AreaLaw/Scanner/Statuses/StatusContainment.lean`, with completed and
   pre-charge far-complement inclusions. Both previous proof copies are removed.
 - **Notes:** There is no time-horizon, row, good-history, or positive-band premise.
   The far side itself is not asserted to be compact.
@@ -1111,7 +1111,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** Four copies in `Scan/GoodSampling.lean`, `Scan/SplitIntervals.lean`,
   `Scan/PhysicalChargeAncestry.lean`, and `Scan/BadHistoryProbability.lean`.
 - **Abstraction:** `CollarScan.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball`
-  in `TNLean/PEPS/AreaLaw/Histories/GoodSampling.lean`.
+  in `TNLean/PEPS/AreaLaw/Scanner/Histories/GoodSampling.lean`.
 - **Refactor:** All five callers use the shared lemma; the private copy in
   `SplitIntervals.lean` is removed. No import edge or theorem hypothesis changes.
 
@@ -1291,7 +1291,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** two coordinate estimates in each of
   `Geometry/TemplateDyadicRows.lean` and `Geometry/RectangleMixedSquares.lean`.
 - **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card` in
-  `TNLean/PEPS/AreaLaw/Squares/QuotientIntervals.lean`.
+  `TNLean/PEPS/AreaLaw/Polygons/Squares/QuotientIntervals.lean`.
 - **Notes:** the divisor is positive and the endpoints are ordered; negative
   endpoints are allowed. The existing statement and proof are unchanged,
   and both counting modules use the shared theorem.
@@ -1370,7 +1370,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** re-proved independently in `designatedSupport_eq_ball_of_split` and
   `designatedSupport_eq_ball_of_state_split` (`Scan/DesignatedDilution.lean`).
 - **Abstraction:** `TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSupport_eq_ball_of_incidence`
-  in `TNLean/PEPS/AreaLaw/Histories/DesignatedSampling.lean`.
+  in `TNLean/PEPS/AreaLaw/Scanner/Histories/DesignatedSampling.lean`.
 - **Notes:** the same refactor replaced a residue step by Mathlib's
   `Nat.ModEq.eq_of_abs_lt` and folded chunk-position and slice-gluing copies
   into private helpers of `SafeBoxChildren.lean` and `Cylinder.lean`; about
@@ -1384,7 +1384,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** `Template.latticeRow_eq_Icc` and
   `Template.latticeRow_dilation_eq_Icc` (`Geometry/TemplateLayers.lean`).
 - **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.finset_eq_Icc_min'_max'_of_between`
-  in `TNLean/PEPS/AreaLaw/Templates/TemplateRows.lean`.
+  in `TNLean/PEPS/AreaLaw/Polygons/Templates/TemplateRows.lean`.
 - **Notes:** with two local contraction steps for `‖√a‖ ≤ 1` and Hermitian
   parts, −6 lines over 4 files.
 
@@ -1622,8 +1622,8 @@ abstracted — record why, so it is not re-proposed).
   its boundary dart, cut the walk at the first endpoint of the dart, and show that the
   dart is an edge of the edge boundary no farther from the start than the walk is long.
 - **Seen:** `subset_of_isSafe` (now QICLean's `ManyBody.subset_of_isSafe`),
-  `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/SafeRectangles/TailParameter.lean`, and
-  `TNLean/PEPS/AreaLaw/Histories/SupportLocalization.lean`.
+  `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/Polygons/SafeRectangles/TailParameter.lean`, and
+  `TNLean/PEPS/AreaLaw/Scanner/Histories/SupportLocalization.lean`.
 - **Abstraction:** the lemma `ManyBody.exists_edgeBoundary_of_walk` in
   `QICLean/ManyBody/Sites/GraphBoundary.lean` (QICLean dependency) returns the boundary
   edge, its endpoint in the region and the shortened walk, for any graph; the three call
@@ -1639,7 +1639,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** three descriptions across `FanInactiveSeams.lean` (the statement
   and its local proof expression) and `FanRunConnectedness.lean`.
 - **Abstraction:** `cellFanCutPiece` in
-  `TNLean/PEPS/AreaLaw/Fans/FanInactiveSeams.lean` names this common set.
+  `TNLean/PEPS/AreaLaw/BirthRegions/Fans/FanInactiveSeams.lean` names this common set.
 - **Refactor:** the inactive-radial statement and proof refer directly to the
   definition; the connected-run proof uses it for its family of pieces and
   unfolds it only in the final union identity.
@@ -4295,8 +4295,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   coefficient by `(Nat.ceil x : ℝ) ≤ (A + 1) * s`, before taking any
   nonnegative real powers of the scale.
 - **Seen:** three elementary ceiling estimates in
-  `PEPS/AreaLaw/BoxExponent/BootstrapRoundedClearance.lean`,
-  `PEPS/AreaLaw/Scales/RoundedScalePower.lean`, and
+  `PEPS/AreaLaw/CollarEntropy/BoxExponent/BootstrapRoundedClearance.lean`,
+  `PEPS/AreaLaw/Collar/Scales/RoundedScalePower.lean`, and
   `PEPS/Approximation/PartyCircuit/UniformMessageGateCompression.lean`.
 - **Abstraction:** `Nat.ceil_le_add_one_mul_of_le_mul` in
   `QICLean/Analysis/Real/ExplicitThresholds.lean` (QICLean dependency), proved from Mathlib's
@@ -5847,8 +5847,8 @@ no additional helper is proposed.
   ```
 
 - **Seen:** 2 occurrences
-  (`TNLean/PEPS/AreaLaw/Squares/NestedPatches.lean:141`,
-  `TNLean/PEPS/AreaLaw/Squares/RangeNestedPatches.lean:179`).
+  (`TNLean/PEPS/AreaLaw/Polygons/Squares/NestedPatches.lean:141`,
+  `TNLean/PEPS/AreaLaw/Polygons/Squares/RangeNestedPatches.lean:179`).
 - **Abstraction:** proposed lemma deriving `i = j` for a symmetric property of
   two indices in a linear order from the case `i < j` leading to a
   contradiction.
@@ -5983,7 +5983,7 @@ no additional helper is proposed.
   and the subsequent cancellation.
 - **Seen:** `hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute`
   and `exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform`, both in
-  `PEPS/AreaLaw/RegionalFilters/RegularizedPatchRadiusDerivative.lean`.
+  `PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchRadiusDerivative.lean`.
 - **Abstraction:** Both occurrences reuse `HasDerivAt.norm_sq` and `HasDerivAt.log`.
   A third occurrence in another file would justify a helper for the logarithmic
   norm derivative of a nonzero complex vector-valued function.
@@ -5995,9 +5995,9 @@ no additional helper is proposed.
 - **Pattern:** Compose `Matrix.toEuclideanLin.toLinearMap` with
   `LinearMap.applyₗ Ω` to apply a varying matrix to a fixed Euclidean vector.
   Restrict scalars to ℝ and use finite-dimensional continuity for real derivatives.
-- **Seen:** `regularizedPatchInsertion` in `PEPS/AreaLaw/RegionalFilters/RegularizedPatchCoordinate.lean`
+- **Seen:** `regularizedPatchInsertion` in `PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchCoordinate.lean`
   and `hasDerivAt_regularizedPatchOutput_exp_neg` in
-  `PEPS/AreaLaw/RegionalFilters/RegularizedPatchRadiusDerivative.lean`.
+  `PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchRadiusDerivative.lean`.
 - **Abstraction:** The proofs use the existing linear maps. A third occurrence
   would justify a public continuous linear evaluation map for matrices.
 - **Caveat:** The ordered product remains noncommutative; differentiate the
@@ -6009,9 +6009,9 @@ no additional helper is proposed.
   apply finite ordered-product continuity, and compose with evaluation on the
   fixed vector and the norm.
 - **Seen:** `continuousOn_regularizedPatchObjective` in
-  `PEPS/AreaLaw/RegionalFilters/RegularizedPatchMinimum.lean` and the joint-continuity step in
+  `PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchMinimum.lean` and the joint-continuity step in
   `continuous_regularizedPatchMinimum_exp_neg` in
-  `PEPS/AreaLaw/RegionalFilters/RegularizedPatchMinimumContinuity.lean`.
+  `PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchMinimumContinuity.lean`.
 - **Abstraction:** Both proofs already use Mathlib's `continuousOn_list_prod`
   or `continuous_list_prod`. A third occurrence may justify a shared theorem
   for evaluation of a continuously varying ordered product.
@@ -6079,7 +6079,7 @@ no additional helper is proposed.
 - **Pattern:** use the connected-component paths to join connected retained
   triangles whose intersections survive along each retained edge.
 - **Seen:** the open-radius and closed-half-radius run proofs in
-  `TNLean/PEPS/AreaLaw/Fans/FanRunConnectedness.lean`.
+  `TNLean/PEPS/AreaLaw/BirthRegions/Fans/FanRunConnectedness.lean`.
 - **Abstraction:** both already use Mathlib's
   `IsConnected.iUnion_of_reflTransGen`; a further application would justify
   naming the common passage from component paths to intersection chains.
@@ -6107,7 +6107,7 @@ no additional helper is proposed.
 - **Pattern:** Obtain nonnegativity of every barycentric coordinate from
   membership in the convex hull of an affine basis.
 - **Seen:** Four local coordinate arguments in
-  `PEPS/AreaLaw/Fans/FanRadialConvexity.lean`.
+  `PEPS/AreaLaw/BirthRegions/Fans/FanRadialConvexity.lean`.
 - **Current reuse:** All four use Mathlib's
   `AffineBasis.convexHull_eq_nonneg_coord` directly. They lie in one file,
   so the two-file promotion threshold has not been reached.
@@ -6132,7 +6132,7 @@ no additional helper is proposed.
 
 - **Pattern:** Cast a cardinal comparison to the reals, multiply by the
   nonnegative entropy constant, and compose with the assumed entropy bound.
-- **Seen:** Two occurrences in `PEPS/AreaLaw/VertexBoundaryCorollaries.lean`,
+- **Seen:** Two occurrences in `PEPS/AreaLaw/RegionalStates/Regions/VertexBoundaryCorollaries.lean`,
   for the inner boundary and the set of both endpoints.
 - **Abstraction:** Both proofs already use Mathlib's cast and multiplication
   lemmas. A third occurrence in another module should extract the common
@@ -8592,7 +8592,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   reconstruct the global vector by composing with the regional configuration
   equivalence. Applying a slice reduces to the equivalence's inverse law.
 - **Seen:** `range_place` and the two summands in
-  `dependentRegionCylinder_sup`, all in `PEPS/AreaLaw/Regions/Cylinder`.
+  `dependentRegionCylinder_sup`, all in `PEPS/AreaLaw/RegionalStates/Regions/Cylinder`.
 - **Abstraction:** None yet; these three occurrences are in one file. Reuse the
   existing configuration equivalence before introducing another reconstruction
   map if a second file needs the same argument.
@@ -8624,7 +8624,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   nonnegative factor, and rearrange the scalar factors.
 - **Seen:** `card_fineLayerIndices_le` and
   `card_fineLayerIndices_boundary_le` in
-  `PEPS/AreaLaw/Squares/DyadicRefinement.lean` (two occurrences).
+  `PEPS/AreaLaw/Polygons/Squares/DyadicRefinement.lean` (two occurrences).
 - **Abstraction:** `card_fineLayerIndices` already contains the exact
   subdivision formula. The two inequalities use the existing coarse bounds
   and `Nat.mul_le_mul_left`; no further helper is needed at present.
@@ -8761,7 +8761,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 - **Promoted: actual fan interiors and base distance.**
   `cellFanPolygon_interior_nonempty_and_closure_eq` in
-  `PEPS/AreaLaw/Fans/FanRegularity.lean` shares the existing determinant
+  `PEPS/AreaLaw/BirthRegions/Fans/FanRegularity.lean` shares the existing determinant
   proof of nonempty triangle interior and its closure equality. Both old
   initial-regularity callers use it. The existing base-distance proof in
   CellFans is public as `norm_sub_cellFanCenter_of_mem_base`, so concentric
@@ -8774,7 +8774,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   their contact equality, with an explicit radial-segment type.
 - **Seen:** The two contact orientations in
   `initialRegion_frontier_near_mark_iff_active_radial` in
-  `PEPS/AreaLaw/InitialRegions/InitialActiveRays.lean`, and the unequal-slot branch in
+  `PEPS/AreaLaw/BirthRegions/InitialRegions/InitialActiveRays.lean`, and the unequal-slot branch in
   `Geometry/CellFanRadialIncidence.lean`, followed by both orientations in
   `Geometry/FanRunDisjointness.lean`.
 - **Abstraction:** The public `cellFanPolygons_nontrivial_inter_cases` in
@@ -8804,7 +8804,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   a Kronecker product with the identity, then apply the existing Euclidean bound.
   Obtain the lower bound by cancelling the filter with its positive power.
 - **Seen:** The lifted regional bound and local inverse-cancellation argument in
-  `PEPS/AreaLaw/RegionalFilters/RegularizedPatchMinimum`; scalar shifted-density power bounds are
+  `PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchMinimum`; scalar shifted-density power bounds are
   supplied by `QICLean.Analysis.FunctionalCalculus.ShiftedDensityPowers`.
 - **Abstraction:** The native lift estimate is factored once. Product bounds use
   a private list induction; there is no new optimizer or contraction-chain type.
@@ -8835,7 +8835,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   Fermat's theorem to the squared norm of the actual output. Separately,
   transport the actual regional lift through the existing configuration
   equivalence and pair its pure state by the existing partial trace.
-- **Seen:** `PEPS/AreaLaw/RegionalFilters/RegularizedPatchCoordinate`,
+- **Seen:** `PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchCoordinate`,
   `RegularizedPatchStationarity`, `RegularizedPatchMarginal`,
   `RegularizedPatchDiagonalVariation`, and `RegularizedPatchListCoordinates`.
 - **Abstraction:** the coordinate module factors the insertion linear map once;
@@ -8870,7 +8870,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 - **Pattern:** apply `Real.sSup_le` with the nonnegativity of the target supremum,
   unpack a regional-entropy witness, and include its region in the target collection.
-- **Seen:** two occurrences in `TNLean/PEPS/AreaLaw/SafeRectangles/InitialBoxEstimate.lean`,
+- **Seen:** two occurrences in `TNLean/PEPS/AreaLaw/Polygons/SafeRectangles/InitialBoxEstimate.lean`,
   `boxEntropy_mono` and `boxEntropy_antitone`.
 - **Abstraction:** both proofs already use `Real.sSup_le`. A further helper is deferred
   until the same inclusion argument occurs in another module.
@@ -9018,8 +9018,8 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Extract the base and final radial slopes from the actual
   fan-triangle constructor.
 - **Seen:** Three actual-fan specializations across
-  `PEPS/AreaLaw/InitialRegions/InitialRegionBoundaries.lean` and
-  `PEPS/AreaLaw/InitialRegions/InitialStarFrontiers.lean`. The radial exclusion in
+  `PEPS/AreaLaw/BirthRegions/InitialRegions/InitialRegionBoundaries.lean` and
+  `PEPS/AreaLaw/BirthRegions/InitialRegions/InitialStarFrontiers.lean`. The radial exclusion in
   the nonemptiness argument needs the same constructor field.
 - **Abstraction:** `cellFanPolygon_base_and_radial_isAllowedSlope` in
   `Geometry/CellFanSlopes.lean` gives both directions for arbitrary optional
@@ -9035,7 +9035,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   color-change radial union with the radial union at changes of the canonical
   initial identifier.
 - **Seen:** The open-square and closed-half-square component correspondences
-  in `PEPS/AreaLaw/InitialRegions/InitialSectorComponents.lean`.
+  in `PEPS/AreaLaw/BirthRegions/InitialRegions/InitialSectorComponents.lean`.
 - **Abstraction:** Both use the canonical sector assignment and the existing
   adjacent-color equivalence. The common connected-partition proof is already
   shared by a private arbitrary-subset lemma in `FanRunComponents.lean`.
@@ -9049,7 +9049,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   direct branch of `Sym2.eq_iff`, reducing both pairs with `Prod.ext`, and
   discharging their integer-coordinate equalities with `omega`.
 - **Seen:** Four three-line occurrences in the four nearest-neighbour cases of
-  `mem_rectangleBoundaryEdges` in `PEPS/AreaLaw/Squares/ClosedSquare.lean`
+  `mem_rectangleBoundaryEdges` in `PEPS/AreaLaw/Polygons/Squares/ClosedSquare.lean`
   (scanner run 2026-10-07).
 - **Abstraction:** Keep the local case proofs until the pattern has a consumer
   in a second file; prefer an endpoint-equality lemma if that reuse appears.
@@ -9062,8 +9062,8 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Apply `ManyBody.regionState_eq_partialTrace` after splitting a physical
   state into the selected region and its complement (before step 4.0 this was
   composed with a bridge between two regional states, now deleted).
-- **Seen:** Two occurrences in `PEPS/AreaLaw/Regions/SelectedSchmidtEntropyBounds.lean`
-  and `PEPS/AreaLaw/BoxExponent/BootstrapReplicaAbsorption.lean`.
+- **Seen:** Two occurrences in `PEPS/AreaLaw/RegionalStates/Regions/SelectedSchmidtEntropyBounds.lean`
+  and `PEPS/AreaLaw/CollarEntropy/BoxExponent/BootstrapReplicaAbsorption.lean`.
 - **Abstraction:** A regional-density identity could package the composition
   if a third use appears. The two existing public identities are reused here.
 - **Notes:** The split state and the selected spectral set remain those of the
@@ -9075,7 +9075,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** transport a matrix-vector equation through the configuration
   isometry, then pass between Euclidean vectors and their coordinate functions.
 - **Seen:** the energy equation, simultaneous symmetry and two auxiliary
-  projection equations in `PEPS/AreaLaw/Regions/GlobalSchmidtBellPrevector.lean`.
+  projection equations in `PEPS/AreaLaw/RegionalStates/Regions/GlobalSchmidtBellPrevector.lean`.
 - **Abstraction:** all four equations use one local arbitrary-matrix transport
   lemma, itself an application of
   `Matrix.toEuclideanLin_reindex_piLpCongrLeft` in
@@ -9133,7 +9133,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** two coordinate estimates in each of
   `Geometry/TemplateDyadicRows.lean` and `Geometry/RectangleMixedSquares.lean`.
 - **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card` in
-  `TNLean/PEPS/AreaLaw/Squares/QuotientIntervals.lean`.
+  `TNLean/PEPS/AreaLaw/Polygons/Squares/QuotientIntervals.lean`.
 - **Notes:** the divisor is positive and the endpoints are ordered; negative
   endpoints are allowed. The existing statement and proof are unchanged,
   and both counting modules use the shared theorem.
@@ -9144,7 +9144,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** the rectangle-shell weighted covering and the two template
   covering proofs in [PR #9000](https://github.com/LionSR/TNLean/pull/9000).
 - **Abstraction:** Geometry.sum_cappedDyadicPartition_by_scale in
-  TNLean/PEPS/AreaLaw/Squares/CappedDyadicPartitionByScale.lean.
+  TNLean/PEPS/AreaLaw/Polygons/Squares/CappedDyadicPartitionByScale.lean.
 - **Notes:** the rectangle argument uses the shared identity. The existing
   template arguments still need the corresponding refactoring in their
   owning PR. The identity is valid for signed real weights, empty
@@ -9364,7 +9364,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   equivalence, apply `Matrix.submatrix_mulVec_equiv`, and cancel the equivalence
   with its inverse in a precomposed vector.
 - **Seen:** three occurrences in
-  `TNLean/PEPS/AreaLaw/Rounds/AugmentedReplicaPrevectorProperties.lean`: full copy
+  `TNLean/PEPS/AreaLaw/Scanner/Rounds/AugmentedReplicaPrevectorProperties.lean`: full copy
   symmetry and the two branches for the original auxiliary labels.
 - **Abstraction:** the matrix transport is already Mathlib's
   `Matrix.submatrix_mulVec_equiv`. A separate fixed-vector corollary may be useful
@@ -9377,9 +9377,9 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Apply `SimpleGraph.ConnectedComponent.lift` to the triangle
   colors, using `cellFanRun_color_eq` on the reachability of a walk.
 - **Seen:** The private `runColor` in
-  `PEPS/AreaLaw/InitialRegions/InitialRegions.lean` and
+  `PEPS/AreaLaw/BirthRegions/InitialRegions/InitialRegions.lean` and
   `repairFanRunExteriorColor` in
-  `PEPS/AreaLaw/RepairStages/RepairReplacementRegions.lean`.
+  `PEPS/AreaLaw/BirthRegions/RepairStages/RepairReplacementRegions.lean`.
 - **Abstraction:** Mathlib already supplies the component descent. A common
   color function for `CellFanRun` would remove the two applications if the
   same expression is needed in another module; no additional tactic is needed.
@@ -9408,7 +9408,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Apply `Finset.disjoint_filter.mpr` and derive the impossible equality
   `some false = none` from the two prescribed values of the partition function.
 - **Seen:** `CollarScan.actualTerminal_sharpLower_geometry` in
-  `TNLean/PEPS/AreaLaw/NormComparisons/ActualSharpLower.lean` and the receiving/middle
+  `TNLean/PEPS/AreaLaw/CollarEntropy/NormComparisons/ActualSharpLower.lean` and the receiving/middle
   disjointness step in `ActualRoughLower.lean`.
 - **Abstraction:** Mathlib's `Set.pairwiseDisjoint_filter` states that distinct
   fibres of a function are disjoint. It is a candidate replacement for both
@@ -9423,8 +9423,8 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Identify a rectangle region with the disjoint union of its
   child regions, then apply finite-product entropy subadditivity to the
   original normalized vector.
-- **Seen:** `TNLean/PEPS/AreaLaw/SafeRectangles/InitialBoxEstimate.lean` and
-  `TNLean/PEPS/AreaLaw/BoxExponent/BoxClearanceComparison.lean`.
+- **Seen:** `TNLean/PEPS/AreaLaw/Polygons/SafeRectangles/InitialBoxEstimate.lean` and
+  `TNLean/PEPS/AreaLaw/CollarEntropy/BoxExponent/BoxClearanceComparison.lean`.
 - **Abstraction:** The geometric partition and the entropy inequality already
   have separate lemmas. If a third use appears, a lemma for the entropy of
   the rectangle partition would remove the repeated union and disjointness
@@ -9463,8 +9463,8 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Apply the physical entropy bound at clearance `d + 1`, with
   `d = 2 * R + 10`, and transfer it to `d` using the rectangle-subdivision
   comparison before treating an arbitrary real clearance.
-- **Seen:** `PEPS/AreaLaw/PhysicalSafeBox.lean` and
-  `PEPS/AreaLaw/PhysicalCollarInformation.lean`.
+- **Seen:** `PEPS/AreaLaw/CollarEntropy/BoxExponent/PhysicalSafeBox.lean` and
+  `PEPS/AreaLaw/CollarEntropy/CollarInformation/PhysicalCollarInformation.lean`.
 - **Abstraction:** The comparison itself is already a theorem. A common
   physical estimate at clearance `2 * R + 10` would remove the repeated
   choice of coefficient and its positivity proof if a third use appears.
@@ -9477,10 +9477,10 @@ spectral split → block extraction → MPV calculation → strict bounds
   nonnegative rectangle size, combine it with the strict distance bound, and
   use `exact_mod_cast` to obtain integer safety.
 - **Seen:** `exists_condEntropy_le_initialBuffer_real` in
-  `PEPS/AreaLaw/SafeRectangles/InitialBufferReal.lean` and
+  `PEPS/AreaLaw/Polygons/SafeRectangles/InitialBufferReal.lean` and
   `exists_regionEntropy_safe_rect_le_boxError` in
-  `PEPS/AreaLaw/PhysicalSafeBox.lean`. The separation comparison in
-  `sublinearCollarBound_real` in `PEPS/AreaLaw/PhysicalCollarInformation.lean`
+  `PEPS/AreaLaw/CollarEntropy/BoxExponent/PhysicalSafeBox.lean`. The separation comparison in
+  `sublinearCollarBound_real` in `PEPS/AreaLaw/CollarEntropy/CollarInformation/PhysicalCollarInformation.lean`
   uses the same multiplication and strict-inequality argument over the reals.
 - **Abstraction:** The two integer-safety proofs already use
   `mul_le_mul_of_nonneg_right`. A common clearance comparison lemma could
@@ -9523,8 +9523,8 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Apply `Real.rpow_le_rpow` to a nonnegative density bounded by
   `δ + ρ`, then use `Real.rpow_add_le_add_rpow` at exponent `1 / 8` to separate
   the principal term from the replica remainder.
-- **Seen:** Two occurrences, in `PEPS/AreaLaw/ChargePoints/EnergyBalance.lean` and
-  `PEPS/AreaLaw/Scales/SelectedEnergyDelta.lean`.
+- **Seen:** Two occurrences, in `PEPS/AreaLaw/CollarEntropy/ChargePoints/EnergyBalance.lean` and
+  `PEPS/AreaLaw/Collar/Scales/SelectedEnergyDelta.lean`.
 - **Abstraction:** The existing Mathlib inequalities provide the two-step
   argument. The latter module also supplies the complete scalar energy
   implication, `selectedEnergy_le_of_density_le_add`, for use by physical
@@ -9560,15 +9560,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   the initial repair stage, then project a geometric property from their
   existence theorem.
 - **Seen:** Two proof occurrences:
-  `TNLean/PEPS/AreaLaw/Stars/RepairInductionMetric.lean`,
+  `TNLean/PEPS/AreaLaw/BirthRegions/Stars/RepairInductionMetric.lean`,
   `initialRepairStage_scale_separated`, and
-  `TNLean/PEPS/AreaLaw/FinalRegions/RepairMarkMesh.lean`,
+  `TNLean/PEPS/AreaLaw/BirthRegions/FinalRegions/RepairMarkMesh.lean`,
   `RepairMetricHypotheses.repairStage_location_mem_affineMesh`.
   The definitions in `RepairStage` and `RepairBirthRank` also refer to these
   same choices; they are not additional proofs of a geometric property.
 - **Abstraction:** The lemma
   `TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_mark_spec` in
-  `TNLean/PEPS/AreaLaw/RepairStages/RepairStage.lean` records sparse cell
+  `TNLean/PEPS/AreaLaw/BirthRegions/RepairStages/RepairStage.lean` records sparse cell
   counts, finite layer support, incidence, scale minimality, separation, and
   injectivity for the actual chosen initial family. It retains the residue
   choices used by the actual regions and introduces no new mark family.
@@ -9596,7 +9596,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   introduced.
 
 - **Initial belt count:** `exists_uniform_initial_belt_card_bound` in
-  `TNLean/PEPS/AreaLaw/RepairStages/InitialBeltCount.lean` also uses the sparse
+  `TNLean/PEPS/AreaLaw/BirthRegions/RepairStages/InitialBeltCount.lean` also uses the sparse
   cell counts and finite layer support from the shared specification. The
   original selected cells and their actual run identifiers are retained.
   This is a fourth direct use, with strict, ordinary, and exact-name imported
@@ -9612,9 +9612,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   the coefficient, and apply the numerical budget.
 - **Occurrences:**
   `exists_uniform_initialRepairStage_weighted_sum_bound` in
-  `TNLean/PEPS/AreaLaw/RepairStages/RepairInitialWeightedCount.lean` and
+  `TNLean/PEPS/AreaLaw/BirthRegions/RepairStages/RepairInitialWeightedCount.lean` and
   `exists_uniform_initial_belt_card_bound` in
-  `TNLean/PEPS/AreaLaw/RepairStages/InitialBeltCount.lean`.
+  `TNLean/PEPS/AreaLaw/BirthRegions/RepairStages/InitialBeltCount.lean`.
 - **Existing abstraction:** `exists_uniform_polynomial_dyadic_sum_bound`
   already supplies the numerical estimate. Both applications retain the
   same jointly chosen initial cells; their finite layer sets come from actual
@@ -9656,7 +9656,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Preservation under iterated retention — candidate (2026-10-16)
 
 - **Pattern:** A quantity preserved by one retention step is preserved by every finite iteration. The proofs of color and characteristic-length preservation are each `exact Nat.rec rfl (fun _ ih ↦ ih) n`; remembered-birth preservation (`repairStage_birth_oldInclusion`, `RepairBirthLatticePoint.lean`) is the same induction written with `induction n`.
-- **Seen:** `TNLean/PEPS/AreaLaw/RepairStages/RepairRankZeroAncestry.lean`, in `repairStage_color_oldInclusion` and `repairStageCharacteristicLength_oldInclusion`, and `TNLean/PEPS/AreaLaw/RepairStages/RepairBirthLatticePoint.lean`, in `repairStage_birth_oldInclusion`.
+- **Seen:** `TNLean/PEPS/AreaLaw/BirthRegions/RepairStages/RepairRankZeroAncestry.lean`, in `repairStage_color_oldInclusion` and `repairStageCharacteristicLength_oldInclusion`, and `TNLean/PEPS/AreaLaw/BirthRegions/RepairStages/RepairBirthLatticePoint.lean`, in `repairStage_birth_oldInclusion`.
 - **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
 - **Notes:** Each occurrence is a one-line induction, so a shared lemma would not shorten the proofs.
 
@@ -9706,7 +9706,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Express the natural-valued lattice sup-norm distance, viewed
   as a real number, as the maximum of the absolute coordinate differences.
 - **Occurrences:** The former private helper in
-  `TNLean/PEPS/AreaLaw/Templates/TemplateSafeRectangles.lean`, the local
+  `TNLean/PEPS/AreaLaw/Polygons/Templates/TemplateSafeRectangles.lean`, the local
   calculation in `Geometry/TemplateInstances.lean`, the dyadic-cell
   clearance proof in `Geometry/TemplateClearance.lean`, and the real
   clearance argument in `Geometry/TemplateBoxEntropyReal.lean`.
@@ -9735,7 +9735,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Occurrences:** `exists_condEntropy_le_initialBuffer` in
   the buffered-rectangle entropy module (now in QICLean) and
   `exists_condEntropy_le_initialBuffer_real` in
-  `TNLean/PEPS/AreaLaw/SafeRectangles/InitialBufferReal.lean`.
+  `TNLean/PEPS/AreaLaw/Polygons/SafeRectangles/InitialBufferReal.lean`.
 - **Possible next abstraction:** If a third proof needs the same choices,
   first consider an existence lemma for the numerical padding and entropy
   constants and their inequalities. The constants must remain uniform in

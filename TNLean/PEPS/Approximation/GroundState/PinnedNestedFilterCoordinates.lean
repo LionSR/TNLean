@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.GroundState.PinnedNestedFilters
-import TNLean.PEPS.AreaLaw.Interactions.RectangleInteraction
+import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
 import QICLean.ManyBody.Entropy.Filter.OutputCovariance

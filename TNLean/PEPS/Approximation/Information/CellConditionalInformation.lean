@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.Information.CoarseInformation
 import TNLean.PEPS.Approximation.Cells.CellTwoFamilyPartition
 import TNLean.PEPS.Approximation.Information.ConditionalTwoFamilies
-import TNLean.PEPS.AreaLaw.Templates.OrderedTwoFamilyPartitionComap
+import TNLean.PEPS.AreaLaw.Polygons.Templates.OrderedTwoFamilyPartitionComap
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

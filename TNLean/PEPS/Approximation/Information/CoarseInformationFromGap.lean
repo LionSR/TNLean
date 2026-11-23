@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.Information.CoarseInformation
-import TNLean.PEPS.AreaLaw.PhysicalCollarInformation
+import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalCollarInformation
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

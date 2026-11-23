@@ -12,7 +12,7 @@ No upstream Lean proof text is reused.
 
 ## Independent densities and an ordered product
 
-`TNLean/PEPS/AreaLaw/RegionalFilters/RegularizedPatchMinimum.lean` uses the existing finite
+`TNLean/PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchMinimum.lean` uses the existing finite
 ordered site type, dependent local configuration spaces, and the placement
 `ManyBody.place`. No lattice, Hamiltonian, physical state, or
 alternative regional coordinate model is introduced.

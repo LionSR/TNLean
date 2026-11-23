@@ -17,3 +17,4 @@ import TNLean.PEPS.AreaLaw.Collar.FillCoverage
 import TNLean.PEPS.AreaLaw.Collar.NestedBandMetric
 import TNLean.PEPS.AreaLaw.Collar.PhysicalPartition
 import TNLean.PEPS.AreaLaw.Collar.RegionalMoveEntropy
+import TNLean.PEPS.AreaLaw.Collar.Scales

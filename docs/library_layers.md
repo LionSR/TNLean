@@ -246,7 +246,7 @@ declarations that sit in the wrong module (for example `IncidentEdge` in
 - **`PEPS/Injectivity`** (288): `Boundary` 13, `Charge` 31, `Closure` 10, `CutSpace` 25, `Entropy` 13, `Flux` 32, `FluxString` 15, `GInjective` 16, `Multiplicity` 30, `Normal` 12, `Region` 15, `Regular` 29, `SemiRegular` 12, `TorusCharge` 9, `TorusSector` 26
 - **`PEPS/FundamentalTheorem/Injective/FundamentalTheorem`** (140): `ConnectedGraph` 3, `Cycle` 10, `Injective` 20, `Normal` 17, `Normal.CoarseThreeSite` 10, `Normal.RegionInsertion` 23, `Torus` 23, `Torus.Window` 34
 - **`PEPS/ParentHamiltonian`** (144): `Cycle` 3, `GInjective` 11, `Injective` 16, `Placement` 5, `Reblocking` 10, `Region` 14, `Regular` 24, `SemiRegular` 28, `ThreeBlock` 6, `Torus` 27
-- **`PEPS/AreaLaw`** (478): `(top)` 24, `BirthTemplates` 14, `BoxExponent` 18, `ChannelWords` 20, `ChargePoints` 26, `Collar` 9, `CollarInformation` 11, `Constraints` 10, `Fans` 27, `FinalRegions` 15, `FrustrationFree` 4, `Histories` 34, `InitialRegions` 17, `Interactions` 9, `Layers` 22, `NormComparisons` 21, `RegionalFilters` 16, `Regions` 14, `RepairStages` 19, `RestoringOperator` 10, `Rounds` 35, `SafeRectangles` 8, `Scales` 20, `Squares` 14, `Stars` 11, `Statuses` 25, `Templates` 25
+- **`PEPS/AreaLaw`** (478): `(top)` 19, `BirthRegions.BirthTemplates` 14, `BirthRegions.Fans` 27, `BirthRegions.FinalRegions` 15, `BirthRegions.InitialRegions` 17, `BirthRegions.Layers` 22, `BirthRegions.RepairStages` 19, `BirthRegions.Stars` 11, `Collar` 9, `Collar.Scales` 20, `CollarEntropy.BoxExponent` 19, `CollarEntropy.ChargePoints` 26, `CollarEntropy.CollarInformation` 13, `CollarEntropy.NormComparisons` 21, `Operators.ChannelWords` 20, `Operators.Constraints` 10, `Operators.FrustrationFree` 4, `Operators.Interactions` 9, `Operators.RestoringOperator` 10, `Polygons.SafeRectangles` 8, `Polygons.Squares` 14, `Polygons.Templates` 26, `RegionalStates.RegionalFilters` 16, `RegionalStates.Regions` 15, `Scanner.Histories` 34, `Scanner.Rounds` 35, `Scanner.Statuses` 25
 - **`PEPS/Approximation`** (199): `(top)` 9, `Cells` 12, `DoubledHamiltonian` 5, `DyadicHierarchy` 4, `Exact` 4, `FrameChanges` 22, `Frames` 18, `GroundState` 7, `Guides` 29, `Information` 17, `NestedPatches` 8, `PartyCircuit` 28, `PatchRewrite` 7, `Protocol` 23, `Routing` 6
 - **`PEPS/Examples`** (36): `(top)` 5, `CZX` 12, `Cluster` 3, `QuantumDouble` 7, `ToricCode` 9
 
@@ -450,7 +450,7 @@ After the map, 10 pairs remain, all from modules mixing two layers (next
 section):
 
 - `MPS/FundamentalTheorem <-> MPS/ParentHamiltonian`: `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients` → `MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence`; `MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalNormalization` → `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients`
-- `PEPS/Approximation <-> PEPS/AreaLaw`: `PEPS.Approximation.Cells.CellChambers` → `PEPS.AreaLaw.Templates.TemplateRows`; `PEPS.AreaLaw.RestoringOperator.GoodRealizationUnitary` → `PEPS.Approximation.SheetSplitting`
+- `PEPS/Approximation <-> PEPS/AreaLaw`: `PEPS.Approximation.Cells.CellChambers` → `PEPS.AreaLaw.Polygons.Templates.TemplateRows`; `PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary` → `PEPS.Approximation.SheetSplitting`
 - `PEPS/Examples <-> PEPS/Graph`: `PEPS.Examples.CZX.CZXOnSiteSymmetry` → `PEPS.Graph.Region.OnSiteOperator`; `PEPS.Graph.Torus.KitaevPeriodicTiling` → `PEPS.Examples.ToricCode.KitaevCheckerboardBlocking`
 - `PEPS/FundamentalTheorem <-> PEPS/Graph`: `PEPS.FundamentalTheorem.Cycle.CycleBlockingData` → `PEPS.Graph.Region.CycleArcRegion`; `PEPS.Graph.Holonomy.RegularBoundaryRoute` → `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion`
 - `PEPS/FundamentalTheorem <-> PEPS/Injectivity`: `PEPS.FundamentalTheorem.Cycle.CycleMPSChainOverlapWindow` → `PEPS.Injectivity.Region.CycleMPSChainArc`; `PEPS.Injectivity.Charge.RegularTwistedStateNonzero` → `PEPS.FundamentalTheorem.Normal.NormalComparisonScalar`
@@ -474,7 +474,7 @@ one that no longer occurs. Each is removed in one of two ways:
 | Importer | Imported | Declarations used, or remedy |
 |---|---|---|
 | `MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients` | `MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence` | uses exists_hasComplementaryFixedPointGap_gauge_of_isNormal |
-| `PEPS.AreaLaw.RestoringOperator.GoodRealizationUnitary` | `PEPS.Approximation.SheetSplitting` | no declaration of the target is named: drop the import or import the lower module it relies on |
+| `PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary` | `PEPS.Approximation.SheetSplitting` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Graph.Cell.TorusPlaquetteRealization` | `PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement` | uses torusPlaquetteWalk, torusPlaquetteRegion |
 | `PEPS.Graph.Cell.TorusSimplyConnectedComplement` | `PEPS.Injectivity.Normal.NormalPairBlocking` | uses nonempty_regionBoundaryEdge_of_connected |
 | `PEPS.Graph.Holonomy.RegularBoundaryRoute` | `PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion` | uses regionBoundaryEdgeComplEquiv |
@@ -611,7 +611,7 @@ These modules are placed by their imports in the map, which is mechanical. The
 split is a later change of declarations.
 
 One merge chosen for the map would close an import cycle together with the
-other merges of its directory, so `PEPS/AreaLaw/RepairStages/RepairTerminalPrefixSites`
+other merges of its directory, so `PEPS/AreaLaw/BirthRegions/RepairStages/RepairTerminalPrefixSites`
 stays a module of its own. The four single-identity Ising letter-sector modules
 are also left apart, since each is one large decided computation.
 
@@ -951,52 +951,52 @@ usually defines the object):
 - `PEPS.Approximation.RangePolynomialPEPSClosedConstant` ← `PEPS.Approximation.RangePolynomialPEPS`, `PEPS.Approximation.RangePolynomialPEPSClosedConstant`
 - `PEPS.Approximation.Routing.PartyColumnRouting` ← `PEPS.Approximation.PartyColumnRouting`, `PEPS.Approximation.DistributedPartyNetwork`
 - `PEPS.Approximation.Routing.SquareGridColumn` ← `PEPS.Approximation.SquareGridColumn`, `PEPS.Approximation.ProductReferenceColumn`
-- `PEPS.AreaLaw.BoundaryEntropyAssembly` ← `PEPS.AreaLaw.BoundaryEntropyAssembly`, `PEPS.AreaLaw.BirthTargetEntropy`, `PEPS.AreaLaw.BirthTargetNeighborhoodInformation`
-- `PEPS.AreaLaw.BoxExponent.BootstrapParameters` ← `PEPS.AreaLaw.Scan.BootstrapParameters`, `PEPS.AreaLaw.Scan.BootstrapScannerExponents`
-- `PEPS.AreaLaw.BoxExponent.BootstrapReplicaAbsorption` ← `PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption`, `PEPS.AreaLaw.Scan.TypicalReplicaAbsorption`
-- `PEPS.AreaLaw.BoxExponent.BootstrapRoundBound` ← `PEPS.AreaLaw.Scan.BootstrapRoundBound`, `PEPS.AreaLaw.Scan.PhysicalBoxRoundBound`
-- `PEPS.AreaLaw.BoxExponent.BootstrapRoundedClearance` ← `PEPS.AreaLaw.Scan.BootstrapRoundedClearance`, `PEPS.AreaLaw.InitialRoundedCollarEntropy`, `PEPS.AreaLaw.RoundedShellEntropy`
-- `PEPS.AreaLaw.ChannelWords.ChannelWordThinning` ← `PEPS.AreaLaw.Amplification.ChannelWordThinning`, `PEPS.AreaLaw.Amplification.LatticeChannelPoissonThinning`
-- `PEPS.AreaLaw.ChannelWords.ExponentialChannelShells` ← `PEPS.AreaLaw.Amplification.ExponentialChannelShells`, `PEPS.AreaLaw.Amplification.GraphChannelOscillation`
-- `PEPS.AreaLaw.ChargePoints.ActualSelectedChargeDensityEnergy` ← `PEPS.AreaLaw.Scan.ActualSelectedChargeDensityEnergy`, `PEPS.AreaLaw.Scan.ActualSelectedSharpComparison`
-- `PEPS.AreaLaw.ChargePoints.Selection` ← `PEPS.AreaLaw.Scan.Selection`, `PEPS.AreaLaw.Scan.ActualChargeSelection`
-- `PEPS.AreaLaw.ChargePoints.SourceRoughBudgetPower` ← `PEPS.AreaLaw.Scan.SourceRoughBudgetPower`, `PEPS.AreaLaw.Scan.SelectedDensityDelta`, `PEPS.AreaLaw.Scan.SelectedDensityPower`
-- `PEPS.AreaLaw.CollarInformation.ActualCollarInformation` ← `PEPS.AreaLaw.Scan.ActualCollarInformation`, `PEPS.AreaLaw.Scan.ActualSelectedCollarInformation`
-- `PEPS.AreaLaw.Constraints.FiniteSetTruncationGap` ← `PEPS.AreaLaw.FiniteSetTruncationGap`, `PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector`
-- `PEPS.AreaLaw.Fans.CellContacts` ← `PEPS.AreaLaw.Geometry.CellContacts`, `PEPS.AreaLaw.Geometry.CellSides`
-- `PEPS.AreaLaw.Fans.CellFanCycle` ← `PEPS.AreaLaw.Geometry.CellFanCycle`, `PEPS.AreaLaw.Geometry.FanRunDisjointness`
-- `PEPS.AreaLaw.Fans.FanRuns` ← `PEPS.AreaLaw.Geometry.FanRuns`, `PEPS.AreaLaw.Geometry.CellFanRunCount`, `PEPS.AreaLaw.Geometry.FanRunTemplate`
-- `PEPS.AreaLaw.FinalRegions.RepairFinalLatticePartition` ← `PEPS.AreaLaw.Geometry.RepairFinalLatticePartition`, `PEPS.AreaLaw.Geometry.RepairOrderedPartition`
-- `PEPS.AreaLaw.FinalRegions.RepairFinalRegion` ← `PEPS.AreaLaw.Geometry.RepairFinalRegion`, `PEPS.AreaLaw.Geometry.RepairFinalRegionStabilization`
-- `PEPS.AreaLaw.FinalRegions.RepairFinalRegionTransport` ← `PEPS.AreaLaw.Geometry.RepairFinalRegionTransport`, `PEPS.AreaLaw.Geometry.RepairOrderedBirthSeparation`
-- `PEPS.AreaLaw.FinalRegions.RepairTermination` ← `PEPS.AreaLaw.Geometry.RepairTermination`, `PEPS.AreaLaw.Geometry.RepairTerminalInteriors`, `PEPS.AreaLaw.Geometry.RepairExceptionalSitesCount`
+- `PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly` ← `PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly`, `PEPS.AreaLaw.BirthTargetEntropy`, `PEPS.AreaLaw.BirthTargetNeighborhoodInformation`
+- `PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapParameters` ← `PEPS.AreaLaw.Scan.BootstrapParameters`, `PEPS.AreaLaw.Scan.BootstrapScannerExponents`
+- `PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapReplicaAbsorption` ← `PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption`, `PEPS.AreaLaw.Scan.TypicalReplicaAbsorption`
+- `PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapRoundBound` ← `PEPS.AreaLaw.Scan.BootstrapRoundBound`, `PEPS.AreaLaw.Scan.PhysicalBoxRoundBound`
+- `PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapRoundedClearance` ← `PEPS.AreaLaw.Scan.BootstrapRoundedClearance`, `PEPS.AreaLaw.InitialRoundedCollarEntropy`, `PEPS.AreaLaw.RoundedShellEntropy`
+- `PEPS.AreaLaw.Operators.ChannelWords.ChannelWordThinning` ← `PEPS.AreaLaw.Amplification.ChannelWordThinning`, `PEPS.AreaLaw.Amplification.LatticeChannelPoissonThinning`
+- `PEPS.AreaLaw.Operators.ChannelWords.ExponentialChannelShells` ← `PEPS.AreaLaw.Amplification.ExponentialChannelShells`, `PEPS.AreaLaw.Amplification.GraphChannelOscillation`
+- `PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualSelectedChargeDensityEnergy` ← `PEPS.AreaLaw.Scan.ActualSelectedChargeDensityEnergy`, `PEPS.AreaLaw.Scan.ActualSelectedSharpComparison`
+- `PEPS.AreaLaw.CollarEntropy.ChargePoints.Selection` ← `PEPS.AreaLaw.Scan.Selection`, `PEPS.AreaLaw.Scan.ActualChargeSelection`
+- `PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceRoughBudgetPower` ← `PEPS.AreaLaw.Scan.SourceRoughBudgetPower`, `PEPS.AreaLaw.Scan.SelectedDensityDelta`, `PEPS.AreaLaw.Scan.SelectedDensityPower`
+- `PEPS.AreaLaw.CollarEntropy.CollarInformation.ActualCollarInformation` ← `PEPS.AreaLaw.Scan.ActualCollarInformation`, `PEPS.AreaLaw.Scan.ActualSelectedCollarInformation`
+- `PEPS.AreaLaw.Operators.Constraints.FiniteSetTruncationGap` ← `PEPS.AreaLaw.FiniteSetTruncationGap`, `PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector`
+- `PEPS.AreaLaw.BirthRegions.Fans.CellContacts` ← `PEPS.AreaLaw.Geometry.CellContacts`, `PEPS.AreaLaw.Geometry.CellSides`
+- `PEPS.AreaLaw.BirthRegions.Fans.CellFanCycle` ← `PEPS.AreaLaw.Geometry.CellFanCycle`, `PEPS.AreaLaw.Geometry.FanRunDisjointness`
+- `PEPS.AreaLaw.BirthRegions.Fans.FanRuns` ← `PEPS.AreaLaw.Geometry.FanRuns`, `PEPS.AreaLaw.Geometry.CellFanRunCount`, `PEPS.AreaLaw.Geometry.FanRunTemplate`
+- `PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalLatticePartition` ← `PEPS.AreaLaw.Geometry.RepairFinalLatticePartition`, `PEPS.AreaLaw.Geometry.RepairOrderedPartition`
+- `PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalRegion` ← `PEPS.AreaLaw.Geometry.RepairFinalRegion`, `PEPS.AreaLaw.Geometry.RepairFinalRegionStabilization`
+- `PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalRegionTransport` ← `PEPS.AreaLaw.Geometry.RepairFinalRegionTransport`, `PEPS.AreaLaw.Geometry.RepairOrderedBirthSeparation`
+- `PEPS.AreaLaw.BirthRegions.FinalRegions.RepairTermination` ← `PEPS.AreaLaw.Geometry.RepairTermination`, `PEPS.AreaLaw.Geometry.RepairTerminalInteriors`, `PEPS.AreaLaw.Geometry.RepairExceptionalSitesCount`
 - `PEPS.AreaLaw.FrustrationFreeAreaLaw` ← `PEPS.AreaLaw.FrustrationFree.AreaLaw`, `PEPS.AreaLaw.FrustrationFree.ViaGeneralTheorem`
-- `PEPS.AreaLaw.InitialRegions.InitialRegionBoundaries` ← `PEPS.AreaLaw.Geometry.InitialRegionBoundaries`, `PEPS.AreaLaw.Geometry.InitialLatticePartition`
-- `PEPS.AreaLaw.InitialRegions.InitialSectorComponents` ← `PEPS.AreaLaw.Geometry.InitialSectorComponents`, `PEPS.AreaLaw.Geometry.InitialComponentRegions`
-- `PEPS.AreaLaw.Layers.MeshGeometry` ← `PEPS.AreaLaw.Geometry.MeshGeometry`, `PEPS.AreaLaw.Geometry.MeshSegmentClearance`
-- `PEPS.AreaLaw.RegionalFilters.RegularizedPatchListCoordinates` ← `PEPS.AreaLaw.RegularizedPatchListCoordinates`, `PEPS.AreaLaw.RegularizedPatchMinimizerClipping`, `PEPS.AreaLaw.RegularizedPatchMinimizerFilter`
-- `PEPS.AreaLaw.RegionalFilters.RegularizedPatchMinimizerStationarity` ← `PEPS.AreaLaw.RegularizedPatchMinimizerStationarity`, `PEPS.AreaLaw.RegularizedPatchMinimizerDerivative`
-- `PEPS.AreaLaw.RegionalFilters.RegularizedPatchMinimum` ← `PEPS.AreaLaw.RegularizedPatchMinimum`, `PEPS.AreaLaw.RegularizedPatchLogMinimum`
-- `PEPS.AreaLaw.RepairStages.RepairBirthRank` ← `PEPS.AreaLaw.Geometry.RepairBirthRank`, `PEPS.AreaLaw.Geometry.RepairCurrentRetention`, `PEPS.AreaLaw.Geometry.RepairInclusionComposition`
-- `PEPS.AreaLaw.RepairStages.RepairCurrentRegions` ← `PEPS.AreaLaw.Geometry.RepairCurrentRegions`, `PEPS.AreaLaw.Geometry.RepairDummySites`
-- `PEPS.AreaLaw.RepairStages.RepairDepth` ← `PEPS.AreaLaw.Geometry.RepairDepth`, `PEPS.AreaLaw.Geometry.RepairTerminalSquareCount`
-- `PEPS.AreaLaw.RepairStages.RepairReplacementRegions` ← `PEPS.AreaLaw.Geometry.RepairReplacementRegions`, `PEPS.AreaLaw.Geometry.RepairRegionDisjointness`, `PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness`
-- `PEPS.AreaLaw.RepairStages.RepairStage` ← `PEPS.AreaLaw.Geometry.RepairStage`, `PEPS.AreaLaw.Geometry.RepairInitialMarkFacts`
-- `PEPS.AreaLaw.RepairStages.RepairStageSites` ← `PEPS.AreaLaw.Geometry.RepairStageSites`, `PEPS.AreaLaw.Geometry.RepairRetainedPrefixCount`
-- `PEPS.AreaLaw.RestoringOperator.GoodRealizationUnitary` ← `PEPS.AreaLaw.Amplification.GoodRealizationUnitary`, `PEPS.AreaLaw.Amplification.SupportedPolarCorrection`
-- `PEPS.AreaLaw.Rounds.FillTransport` ← `PEPS.AreaLaw.Scan.FillTransport`, `PEPS.AreaLaw.Scan.ActualInitialRootNorm`
-- `PEPS.AreaLaw.Rounds.SupportCompatibility` ← `PEPS.AreaLaw.Scan.SupportCompatibility`, `PEPS.AreaLaw.Scan.FillSupportCompatibility`
-- `PEPS.AreaLaw.SafeRectangles.InitialBoxEstimate` ← `PEPS.AreaLaw.InitialBoxEstimate`, `PEPS.AreaLaw.InitialSafeRectangleEntropy`
-- `PEPS.AreaLaw.SafeRectangles.SafeRectangleDilation` ← `PEPS.AreaLaw.SafeRectangleDilation`, `PEPS.AreaLaw.WeakRectangleShellSafety`, `PEPS.AreaLaw.WeakRectangleShellEntropy`, `PEPS.AreaLaw.InitialWeakRectangleShellEntropy`
+- `PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionBoundaries` ← `PEPS.AreaLaw.Geometry.InitialRegionBoundaries`, `PEPS.AreaLaw.Geometry.InitialLatticePartition`
+- `PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorComponents` ← `PEPS.AreaLaw.Geometry.InitialSectorComponents`, `PEPS.AreaLaw.Geometry.InitialComponentRegions`
+- `PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry` ← `PEPS.AreaLaw.Geometry.MeshGeometry`, `PEPS.AreaLaw.Geometry.MeshSegmentClearance`
+- `PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchListCoordinates` ← `PEPS.AreaLaw.RegularizedPatchListCoordinates`, `PEPS.AreaLaw.RegularizedPatchMinimizerClipping`, `PEPS.AreaLaw.RegularizedPatchMinimizerFilter`
+- `PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimizerStationarity` ← `PEPS.AreaLaw.RegularizedPatchMinimizerStationarity`, `PEPS.AreaLaw.RegularizedPatchMinimizerDerivative`
+- `PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimum` ← `PEPS.AreaLaw.RegularizedPatchMinimum`, `PEPS.AreaLaw.RegularizedPatchLogMinimum`
+- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairBirthRank` ← `PEPS.AreaLaw.Geometry.RepairBirthRank`, `PEPS.AreaLaw.Geometry.RepairCurrentRetention`, `PEPS.AreaLaw.Geometry.RepairInclusionComposition`
+- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairCurrentRegions` ← `PEPS.AreaLaw.Geometry.RepairCurrentRegions`, `PEPS.AreaLaw.Geometry.RepairDummySites`
+- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairDepth` ← `PEPS.AreaLaw.Geometry.RepairDepth`, `PEPS.AreaLaw.Geometry.RepairTerminalSquareCount`
+- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairReplacementRegions` ← `PEPS.AreaLaw.Geometry.RepairReplacementRegions`, `PEPS.AreaLaw.Geometry.RepairRegionDisjointness`, `PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness`
+- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairStage` ← `PEPS.AreaLaw.Geometry.RepairStage`, `PEPS.AreaLaw.Geometry.RepairInitialMarkFacts`
+- `PEPS.AreaLaw.BirthRegions.RepairStages.RepairStageSites` ← `PEPS.AreaLaw.Geometry.RepairStageSites`, `PEPS.AreaLaw.Geometry.RepairRetainedPrefixCount`
+- `PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary` ← `PEPS.AreaLaw.Amplification.GoodRealizationUnitary`, `PEPS.AreaLaw.Amplification.SupportedPolarCorrection`
+- `PEPS.AreaLaw.Scanner.Rounds.FillTransport` ← `PEPS.AreaLaw.Scan.FillTransport`, `PEPS.AreaLaw.Scan.ActualInitialRootNorm`
+- `PEPS.AreaLaw.Scanner.Rounds.SupportCompatibility` ← `PEPS.AreaLaw.Scan.SupportCompatibility`, `PEPS.AreaLaw.Scan.FillSupportCompatibility`
+- `PEPS.AreaLaw.Polygons.SafeRectangles.InitialBoxEstimate` ← `PEPS.AreaLaw.InitialBoxEstimate`, `PEPS.AreaLaw.InitialSafeRectangleEntropy`
+- `PEPS.AreaLaw.Polygons.SafeRectangles.SafeRectangleDilation` ← `PEPS.AreaLaw.SafeRectangleDilation`, `PEPS.AreaLaw.WeakRectangleShellSafety`, `PEPS.AreaLaw.WeakRectangleShellEntropy`, `PEPS.AreaLaw.InitialWeakRectangleShellEntropy`
 - `PEPS.AreaLaw.SnakeGridApproximation` ← `MPS.AreaLaw.SnakeGridApproximation`, `MPS.AreaLaw.SnakeGridAreaLaw`
-- `PEPS.AreaLaw.Stars.RepairInductionMetric` ← `PEPS.AreaLaw.Geometry.RepairInductionMetric`, `PEPS.AreaLaw.Geometry.RepairDescendantScales`
-- `PEPS.AreaLaw.Statuses.PrefixComparison` ← `PEPS.AreaLaw.Scan.PrefixComparison`, `PEPS.AreaLaw.Scan.OriginalTruncation`
-- `PEPS.AreaLaw.Statuses.SideSeparation` ← `PEPS.AreaLaw.Scan.SideSeparation`, `PEPS.AreaLaw.Scan.FrontThresholds`, `PEPS.AreaLaw.Scan.FrontPrefixFamily`
-- `PEPS.AreaLaw.Statuses.StatusMarginalMoments` ← `PEPS.AreaLaw.Scan.StatusMarginalMoments`, `PEPS.AreaLaw.Scan.SourceStatusMarginalMoments`, `PEPS.AreaLaw.Scan.SuppliedTargetStatusMoments`
-- `PEPS.AreaLaw.Templates.RectangleShellCounts` ← `PEPS.AreaLaw.Geometry.RectangleShellCounts`, `PEPS.AreaLaw.Geometry.RectangleShellWeightedCover`
-- `PEPS.AreaLaw.Templates.TemplateCoreCounts` ← `PEPS.AreaLaw.Geometry.TemplateCoreCounts`, `PEPS.AreaLaw.Geometry.TemplateCoreCover`
-- `PEPS.AreaLaw.Templates.TemplatePolygons` ← `PEPS.AreaLaw.Geometry.TemplatePolygons`, `PEPS.AreaLaw.Geometry.TemplatePolygonFiniteIntegerPoints`
-- `PEPS.AreaLaw.Templates.Templates` ← `PEPS.AreaLaw.Geometry.Templates`, `PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine`
+- `PEPS.AreaLaw.BirthRegions.Stars.RepairInductionMetric` ← `PEPS.AreaLaw.Geometry.RepairInductionMetric`, `PEPS.AreaLaw.Geometry.RepairDescendantScales`
+- `PEPS.AreaLaw.Scanner.Statuses.PrefixComparison` ← `PEPS.AreaLaw.Scan.PrefixComparison`, `PEPS.AreaLaw.Scan.OriginalTruncation`
+- `PEPS.AreaLaw.Scanner.Statuses.SideSeparation` ← `PEPS.AreaLaw.Scan.SideSeparation`, `PEPS.AreaLaw.Scan.FrontThresholds`, `PEPS.AreaLaw.Scan.FrontPrefixFamily`
+- `PEPS.AreaLaw.Scanner.Statuses.StatusMarginalMoments` ← `PEPS.AreaLaw.Scan.StatusMarginalMoments`, `PEPS.AreaLaw.Scan.SourceStatusMarginalMoments`, `PEPS.AreaLaw.Scan.SuppliedTargetStatusMoments`
+- `PEPS.AreaLaw.Polygons.Templates.RectangleShellCounts` ← `PEPS.AreaLaw.Geometry.RectangleShellCounts`, `PEPS.AreaLaw.Geometry.RectangleShellWeightedCover`
+- `PEPS.AreaLaw.Polygons.Templates.TemplateCoreCounts` ← `PEPS.AreaLaw.Geometry.TemplateCoreCounts`, `PEPS.AreaLaw.Geometry.TemplateCoreCover`
+- `PEPS.AreaLaw.Polygons.Templates.TemplatePolygons` ← `PEPS.AreaLaw.Geometry.TemplatePolygons`, `PEPS.AreaLaw.Geometry.TemplatePolygonFiniteIntegerPoints`
+- `PEPS.AreaLaw.Polygons.Templates.Templates` ← `PEPS.AreaLaw.Geometry.Templates`, `PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine`
 - `PEPS.FundamentalTheorem.Injective.EdgeGaugeFamily` ← `PEPS.EdgeGaugeExtraction`, `PEPS.EdgeGaugeFamily`
 - `PEPS.FundamentalTheorem.Normal.RegionInsertion.InsertedCoefficientExpansion` ← `PEPS.RegionBlock.GaugeBridgeExpansion`, `PEPS.RegionBlock.GaugeBridge`
 - `PEPS.FundamentalTheorem.Torus.TorusArcWindowFundamentalTheorem` ← `PEPS.TorusArcWindowGaugeExistence`, `PEPS.TorusArcWindowFundamentalTheorem`
@@ -2458,53 +2458,77 @@ Paths are below `TNLean/PEPS/AreaLaw` unless written in full. Counts: parts of t
 current tree → modules after merges. "Imports" lists the sibling directories imported;
 the order bottom-up is the order of the list below within each column of the argument.
 
+The directories of the two tables below sit in seven parent directories, ordered bottom-up
+`Collar < RegionalStates < Polygons < Operators < Scanner < CollarEntropy < BirthRegions`, with the
+19 theorem modules at the top level above all of them. Inside each parent the order is:
+
+| parent | subdirectories, bottom-up | modules |
+|---|---|---:|
+| `Collar` | the collar modules at its top level < `Scales` | 9 + 20 |
+| `RegionalStates` | `Regions < RegionalFilters` | 15 + 16 |
+| `Polygons` | `Squares < Templates < SafeRectangles` | 14 + 26 + 8 |
+| `Operators` | `Interactions < Constraints < ChannelWords < FrustrationFree < RestoringOperator` | 9 + 10 + 20 + 4 + 10 |
+| `Scanner` | `Histories < Statuses < Rounds` | 34 + 25 + 35 |
+| `CollarEntropy` | `NormComparisons < ChargePoints < BoxExponent < CollarInformation` | 21 + 26 + 19 + 13 |
+| `BirthRegions` | `Layers < Fans < InitialRegions < RepairStages < Stars < BirthTemplates < FinalRegions` | 22 + 27 + 17 + 19 + 11 + 14 + 15 |
+
+A module imports only modules of its own or an earlier subdirectory, at both levels;
+`scripts/check_import_layers.py` enforces both orders (`SUBDIRECTORY_ORDERS`). Five former
+top-level modules went into the parents: `BoundaryEntropyAssembly` to `Polygons/Templates`,
+`VertexBoundaryCorollaries` to `RegionalStates/Regions`, `PhysicalSafeBox` to
+`CollarEntropy/BoxExponent`, `PhysicalCollarInformation` and `PhysicalTemplateInformation` to
+`CollarEntropy/CollarInformation`. The predicates `SublinearCollarBound`,
+`SublinearCollarBoundAt` (with `sublinearCollarBound_iff_exists_sublinearCollarBoundAt`) and
+`TwoFamilyDecomposition` moved from `BoundaryTheorem` to
+`CollarEntropy/CollarInformation/CollarInformation` and `Polygons/Templates/TwoFamilies`, so no
+subdirectory imports the top level.
+
 Generic part (`qiclean`):
 
 | path | objects | parts → modules | imports (siblings) |
 |---|---|---|---|
-| `Squares` | dyadic squares and cells, their layers and refinement as sets, capped maximal-contained dyadic partitions, mixed squares, closed squares, nested square patches, quotient intervals, power-contracting scale recursions, ambient dilation counts | 14 → 14 | none |
-| `Templates` | allowed polygons, polygonal lattice templates and their rows, layers, cores, shells and boundaries; dyadic covers of integer rectangles and rectangle shells; ordered two-family partitions and their entropy cancellation; template entropy from a box estimate | 29 → 25 | `Squares` |
-| `Regions` | regional density matrices of pure vectors, relabelling of sites, regional entropy continuity, chain rule over rotated orders, cylinders of subspaces and their orthogonalization, conditional estimates, marginals at small excess energy, Schmidt–Bell label sequences, the uniform area-law statement and the zero-boundary lemma | 14 → 14 | `Templates` (unused imports of `TwoFamilies`, see §5) |
-| `Interactions` | interaction chains and series on a graph, graph-distance propagation and localization of evolved operators, the extended graph metric, supported Gaussian integrals, crossing budgets of nearest-neighbour edges, rectangular interactions | 9 → 9 | none |
-| `Constraints` | positive quasi-local constraints from a gap, their square roots and local root channels, truncation near a finite set (radius, series, gap), crossing budgets, the lattice instance and its counts | 11 → 10 | `Interactions`, `Regions` |
-| `ChannelWords` | chronological words of local root channels (Poisson words), their observables, thinning, omission, oscillation and shell bounds on graphs and lattices; the local-products lemma (Lemma 10.1) | 22 → 20 | `Interactions`, `Constraints` |
-| `RegionalFilters` | the minimum norm of products of regularized regional filters over independent regional densities: coordinates, marginals, stationarity, radius derivative, regularity and growth of the minimum | 20 → 16 | `Regions` |
-| `FrustrationFree` | frustration-free gapped Hamiltonians on planar domains, colour-ordered sweeps and the light cone of a sweep | 4 → 4 | `Regions` |
+| `Polygons/Squares` | dyadic squares and cells, their layers and refinement as sets, capped maximal-contained dyadic partitions, mixed squares, closed squares, nested square patches, quotient intervals, power-contracting scale recursions, ambient dilation counts | 14 → 14 | none |
+| `Polygons/Templates` | allowed polygons, polygonal lattice templates and their rows, layers, cores, shells and boundaries; dyadic covers of integer rectangles and rectangle shells; ordered two-family partitions and their entropy cancellation; template entropy from a box estimate | 29 → 25 | `Squares` |
+| `RegionalStates/Regions` | regional density matrices of pure vectors, relabelling of sites, regional entropy continuity, chain rule over rotated orders, cylinders of subspaces and their orthogonalization, conditional estimates, marginals at small excess energy, Schmidt–Bell label sequences, the uniform area-law statement and the zero-boundary lemma | 14 → 14 | none (the two unused imports of `TwoFamilies` are removed) |
+| `Operators/Interactions` | interaction chains and series on a graph, graph-distance propagation and localization of evolved operators, the extended graph metric, supported Gaussian integrals, crossing budgets of nearest-neighbour edges, rectangular interactions | 9 → 9 | none |
+| `Operators/Constraints` | positive quasi-local constraints from a gap, their square roots and local root channels, truncation near a finite set (radius, series, gap), crossing budgets, the lattice instance and its counts | 11 → 10 | `Interactions`, `Regions` |
+| `Operators/ChannelWords` | chronological words of local root channels (Poisson words), their observables, thinning, omission, oscillation and shell bounds on graphs and lattices; the local-products lemma (Lemma 10.1) | 22 → 20 | `Interactions`, `Constraints` |
+| `RegionalStates/RegionalFilters` | the minimum norm of products of regularized regional filters over independent regional densities: coordinates, marginals, stationarity, radius derivative, regularity and growth of the minimum | 20 → 16 | `Regions` |
+| `Operators/FrustrationFree` | frustration-free gapped Hamiltonians on planar domains, colour-ordered sweeps and the light cone of a sweep | 4 → 4 | `Regions` |
 
 The argument of the area law (`proof:AreaLaw`), divided by object:
 
 | path | objects | parts → modules | imports (siblings) |
 |---|---|---|---|
 | `Collar` | data of the collar scan, physical partitions (near, middle, far) and the deterministic schedule, ambient depth, padded charge slots, nested band metrics, entropy of a partition move | 9 → 9 | none |
-| `Scales` | the fixed exponents, scale arithmetic and comparator budgets, rounded radii and moment scales, scalar error budgets of the final comparison | 20 → 20 | `Collar` |
-| `SafeRectangles` | safe and weakly safe integer rectangles, their chunks, dilations and shells, the box entropy `F_box` and its initial estimate, the tail parameter of a cut | 12 → 8 | `Collar`, `Squares`, `Templates`, `Regions` |
-| `Histories` | random histories of the scanner: weights, mean trees, leads, charge ancestry and charge paths, bad histories and their tails, sampling, dilution, designated supports and move costs, band margins, nesting and uniqueness, split intervals and counts | 34 → 34 | `Collar`, `Scales`, `Squares`, `Constraints` |
-| `Statuses` | regions attached to a scan status: whole-row depth prefixes, receiving regions and fronts, containment and cut bounds, sides and split supports, subsystem sizes and dimensions, the truncated Hamiltonian of the scan and its marginal tails and moments, the target window | 30 → 25 | `Collar`, `Scales`, `Histories`, `Constraints`, `Regions`, `Templates` |
-| `Rounds` | fill and charge rounds: transport roots and their endpoints, support compatibility, transport dimensions, old-state integrals, measures, split entropy, round transport, augmented and replica coordinates, Lemma 9.1 for the rounds | 37 → 35 | `Collar`, `Scales`, `Histories`, `Statuses`, `Constraints` |
-| `NormComparisons` | the four norm comparisons (rough and sharp, upper and lower) with their prevectors and remainders, comparator data, terminal partitions' entropy | 21 → 21 | `Rounds`, `Statuses`, `Scales`, `Regions`, `Templates` |
-| `ChargePoints` | the selected charge point: entropy and energy balance, selection, charge energy and density at the selected point, rough and sharp selections | 30 → 26 | `NormComparisons`, `Rounds`, `Statuses`, `Histories`, `Scales`, `Collar`, `Regions` |
-| `CollarInformation` | mutual information in the collar: the sharp entropy expression, scanner estimates on a physical system and on a template, final information at the rounded scales | 12 → 11 | `ChargePoints`, `NormComparisons`, `Rounds`, `Statuses`, `Histories`, `Scales`, `Collar`, `SafeRectangles`, `Constraints`, `Templates`, `Regions` (+ root, §5) |
-| `BoxExponent` | the safe-box exponent and its improvement: parameters, rounds, iterate bounds, rectangle geometry and source entropy, rounded collar entropies | 23 → 18 | `ChargePoints`, `Rounds`, `Statuses`, `Histories`, `SafeRectangles`, `Scales`, `Collar`, `Constraints`, `Regions` |
-| `Layers` | the translated dyadic layers of a cut's endpoint set, fine cells, sparse belts and their marks, the quarter mesh, distance layers, primary regions between belts and their counts | 23 → 22 | `Squares`, `Templates`, `Scales` |
-| `Fans` | triangular fans of the actual fine cells: sides and their subdivision, elementary sides and opposing regions, radial rays, sectors, runs of equal colour, contacts | 31 → 27 | `Layers`, `Templates` |
-| `InitialRegions` | initial birth regions (dummy, primary, belt runs): boundaries, interiors, interfaces, regularity, sector assignment and components near a mark | 19 → 17 | `Fans`, `Layers`, `Squares`, `Templates` |
-| `RepairStages` | removal squares, repair stages and their identifiers, replacement regions, birth rank, characteristic lengths, descendants, depth, current regions and sites | 27 → 18 | `InitialRegions`, `Fans`, `Layers`, `Squares`, `Scales` |
-| `Stars` | isolated stars, fan cones, radial models and child stars; the metric invariants of the repair stages | 12 → 11 | `RepairStages`, `InitialRegions`, `Fans` |
-| `BirthTemplates` | birth templates of primary, belt and replacement regions and their separation; cut clearance of descendant templates | 14 → 14 | `Stars`, `RepairStages`, `InitialRegions`, `Fans`, `Layers`, `Templates`, `Collar` |
-| `FinalRegions` | final regions at an empty generation, their lattice partition and coverage, termination, counts of marks and sites, the ordered partition and the two-family decomposition (Proposition 11.2) | 20 → 15 | `BirthTemplates`, `Stars`, `RepairStages`, `InitialRegions`, `Layers`, `Squares`, `Templates` (+ root, §5) |
-| `RestoringOperator` | typical projectors, the restoring operator with two ancillary copies, good clock realizations and the supported unitary, the amplification radius | 11 → 10 | `Constraints`, `Regions`, `SafeRectangles`, `Templates` |
+| `Collar/Scales` | the fixed exponents, scale arithmetic and comparator budgets, rounded radii and moment scales, scalar error budgets of the final comparison | 20 → 20 | `Collar` |
+| `Polygons/SafeRectangles` | safe and weakly safe integer rectangles, their chunks, dilations and shells, the box entropy `F_box` and its initial estimate, the tail parameter of a cut | 12 → 8 | `Collar`, `Squares`, `Templates`, `Regions` |
+| `Scanner/Histories` | random histories of the scanner: weights, mean trees, leads, charge ancestry and charge paths, bad histories and their tails, sampling, dilution, designated supports and move costs, band margins, nesting and uniqueness, split intervals and counts | 34 → 34 | `Collar`, `Scales`, `Squares`, `Constraints` |
+| `Scanner/Statuses` | regions attached to a scan status: whole-row depth prefixes, receiving regions and fronts, containment and cut bounds, sides and split supports, subsystem sizes and dimensions, the truncated Hamiltonian of the scan and its marginal tails and moments, the target window | 30 → 25 | `Collar`, `Scales`, `Histories`, `Constraints`, `Regions`, `Templates` |
+| `Scanner/Rounds` | fill and charge rounds: transport roots and their endpoints, support compatibility, transport dimensions, old-state integrals, measures, split entropy, round transport, augmented and replica coordinates, Lemma 9.1 for the rounds | 37 → 35 | `Collar`, `Scales`, `Histories`, `Statuses`, `Constraints` |
+| `CollarEntropy/NormComparisons` | the four norm comparisons (rough and sharp, upper and lower) with their prevectors and remainders, comparator data, terminal partitions' entropy | 21 → 21 | `Rounds`, `Statuses`, `Scales`, `Regions`, `Templates` |
+| `CollarEntropy/ChargePoints` | the selected charge point: entropy and energy balance, selection, charge energy and density at the selected point, rough and sharp selections | 30 → 26 | `NormComparisons`, `Rounds`, `Statuses`, `Histories`, `Scales`, `Collar`, `Regions` |
+| `CollarEntropy/CollarInformation` | mutual information in the collar: the sharp entropy expression, scanner estimates on a physical system and on a template, final information at the rounded scales | 12 → 11 | `ChargePoints`, `NormComparisons`, `Rounds`, `Statuses`, `Histories`, `Scales`, `Collar`, `SafeRectangles`, `Constraints`, `Templates`, `Regions` |
+| `CollarEntropy/BoxExponent` | the safe-box exponent and its improvement: parameters, rounds, iterate bounds, rectangle geometry and source entropy, rounded collar entropies | 23 → 18 | `ChargePoints`, `Rounds`, `Statuses`, `Histories`, `SafeRectangles`, `Scales`, `Collar`, `Constraints`, `Regions` |
+| `BirthRegions/Layers` | the translated dyadic layers of a cut's endpoint set, fine cells, sparse belts and their marks, the quarter mesh, distance layers, primary regions between belts and their counts | 23 → 22 | `Squares`, `Templates`, `Scales` |
+| `BirthRegions/Fans` | triangular fans of the actual fine cells: sides and their subdivision, elementary sides and opposing regions, radial rays, sectors, runs of equal colour, contacts | 31 → 27 | `Layers`, `Templates` |
+| `BirthRegions/InitialRegions` | initial birth regions (dummy, primary, belt runs): boundaries, interiors, interfaces, regularity, sector assignment and components near a mark | 19 → 17 | `Fans`, `Layers`, `Squares`, `Templates` |
+| `BirthRegions/RepairStages` | removal squares, repair stages and their identifiers, replacement regions, birth rank, characteristic lengths, descendants, depth, current regions and sites | 27 → 18 | `InitialRegions`, `Fans`, `Layers`, `Squares`, `Scales` |
+| `BirthRegions/Stars` | isolated stars, fan cones, radial models and child stars; the metric invariants of the repair stages | 12 → 11 | `RepairStages`, `InitialRegions`, `Fans` |
+| `BirthRegions/BirthTemplates` | birth templates of primary, belt and replacement regions and their separation; cut clearance of descendant templates | 14 → 14 | `Stars`, `RepairStages`, `InitialRegions`, `Fans`, `Layers`, `Templates`, `Collar` |
+| `BirthRegions/FinalRegions` | final regions at an empty generation, their lattice partition and coverage, termination, counts of marks and sites, the ordered partition and the two-family decomposition (Proposition 11.2) | 20 → 15 | `BirthTemplates`, `Stars`, `RepairStages`, `InitialRegions`, `Layers`, `Squares`, `Templates` |
+| `Operators/RestoringOperator` | typical projectors, the restoring operator with two ancillary copies, good clock realizations and the supported unitary, the amplification radius | 11 → 10 | `Constraints`, `Regions`, `SafeRectangles`, `Templates` |
 
-The root `TNLean/PEPS/AreaLaw` (25 parts → 21 modules) holds the theorems: the area law
+The root `TNLean/PEPS/AreaLaw` (19 modules) holds the theorems: the area law
 (`AreaLawTheorem`, `AreaLawExplicitConstant`, `AreaLawElementaryConstant`), the
-combination of the three propositions (`BoundaryTheorem`, `BoundaryTheoremFromTwoFamilies`,
-`BoundaryEntropyAssembly`), the collar and amplification propositions
-(`PhysicalCollarInformation`, `PhysicalTemplateInformation`, `PhysicalSafeBox`,
-`AmplificationProof`, `AmplificationCutClearance`, `GraphNeighborhoodCutClearance`), the
-corollaries (`VertexBoundaryCorollaries`, `RectangularBoundary`,
-`RectangularSpecialization`, `SquareAreaLawSpecialization`, `SafeRectangleAreaLaw`,
-`SnakeGridGeometry`, `SnakeGridApproximation`) and the frustration-free area law
-(`FrustrationFreeAmplification`, `FrustrationFreeAreaLaw`). Root modules import every
-subdirectory they need; subdirectories import the root only through the edges of §5.
+combination of the three propositions (`BoundaryTheorem`, `BoundaryTheoremFromTwoFamilies`),
+the amplification proposition and its clearances (`AmplificationProof`,
+`AmplificationCutClearance`, `GraphNeighborhoodCutClearance`), the corollaries
+(`RectangularBoundary`, `RectangularSpecialization`, `SquareAreaLawSpecialization`,
+`SquareAreaLawExplicitConstant`, `SafeRectangleAreaLaw`, `RangeSquareGroundState`,
+`OriginalNestedPatchEntropy`, `SnakeGridGeometry`, `SnakeGridApproximation`) and the
+frustration-free area law (`FrustrationFreeAmplification`, `FrustrationFreeAreaLaw`). Root
+modules import every subdirectory they need; no subdirectory imports the root.
 
 Outside `PEPS/AreaLaw`: `TNLean/Lattice` receives the four `base` modules
 (`BufferedRectangles`, `GraphInteractionBudget`, `GraphInteractionDiamondCounting`,
@@ -2546,9 +2570,10 @@ The theorem's directory is `PEPS/AreaLaw` itself (named for what it proves).
   (`regionEntropy_le_of_collar_amplification_twoFamilies_*`,
   `uniformAreaLaw_of_collar_amplification_twoFamilies`). The definitions are imported by
   `CollarInformation`, `FinalRegions.TwoFamilyAssembly` and the frustration-free proof.
-  Split: `SublinearCollarBound(At)` to `CollarInformation/CollarInformation`,
-  `TwoFamilyDecomposition` to `Templates` (it is a property of ordered two-family
-  partitions with separated templates), `AmplificationBound(At)` to `RestoringOperator`;
+  Done: `SublinearCollarBound(At)` is in `CollarEntropy/CollarInformation/CollarInformation`
+  and `TwoFamilyDecomposition` in `Polygons/Templates/TwoFamilies` (it is a property of
+  ordered two-family partitions with separated templates). Still open:
+  `AmplificationBound(At)` to `Operators/RestoringOperator`, which no subdirectory needs;
   the combination stays at the root.
 * `SnakeGridApproximation` (tn) is placed at `PEPS/AreaLaw` but imports
   `MPS.AreaLaw.SequentialTruncation` and `MPS.AreaLaw.SnakeGridParameters`, whose

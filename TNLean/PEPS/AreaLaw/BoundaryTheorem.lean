@@ -3,12 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
-import TNLean.PEPS.AreaLaw.Regions.ZeroBoundary
+import TNLean.PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
 import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
-import TNLean.PEPS.AreaLaw.Squares.CellCounting
-import TNLean.PEPS.AreaLaw.Scales.RadiusScales
+import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
+import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.CollarInformation
 
 /-!
 # The area law from the collar, amplification and two-family propositions
@@ -16,8 +17,10 @@ import QICLean.ManyBody.Hamiltonian.GroundSpace
 The final argument for the uniform area law combines three propositions of the
 source: the sublinear collar bound (Proposition 9.6), its amplification
 (Proposition 10.2) and the two-family decomposition with separated birth
-templates (Proposition 11.2). This module states the three propositions as
-predicates and proves that together they imply `UniformAreaLaw`.
+templates (Proposition 11.2). This module states the amplification proposition as a
+predicate and proves that the three predicates together imply `UniformAreaLaw`; the
+predicates of the other two propositions are stated in lower modules,
+`CollarEntropy/CollarInformation/CollarInformation` and `Polygons/Templates/TwoFamilies`.
 
 The implication in this module takes the three propositions as hypotheses. The
 physical sublinear collar bound is proved by `sublinearCollarBound_real`, the
@@ -29,11 +32,8 @@ two-family entropy cancellation and the regional dimension bound.
 
 ## Main definitions
 
-* `SublinearCollarBound`: Proposition 9.6 (`prop:collar`).
 * `AmplificationBound`: Proposition 10.2 (`prop:amplification`).
-* `TwoFamilyDecomposition`: Proposition 11.2 (`prop:two-families`).
-* `SublinearCollarBoundAt`, `AmplificationBoundAt`: Propositions 9.6 and 10.2 at a given
-  constant and threshold.
+* `AmplificationBoundAt`: Proposition 10.2 at a given constant and threshold.
 
 ## Main statements
 
@@ -62,39 +62,6 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 open ManyBody (planeDomainGraph edgeBoundary graphNeighborhood ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw
-
-/-- **Proposition 9.6** (`prop:collar`, `08-scanner.tex` lines 808–827), for the
-Hamiltonian parameters `q, R, J, Δ` and the template constants `D₀, Ctpl` of
-Definition 9.3. For every template `T` with parameters `(n, s₀)` separated from
-the cut, put `L = ⌊n^(1-ε)⌋` with `ε = 10⁻⁵`, `X = A ∩ T` and `S₀ = A ∩ T_L`. If
-`L ≤ s₀` and `n` exceeds a threshold, then `I_Ω(X : Λ ∖ S₀) ≤ C n^(1-ε)`, the cuts
-of `X`, `S₀` and `S₀ ∖ X` have at most `C n` edges, and `|S₀| ≤ C n²`. The constant
-and threshold are chosen before `T, s₀, n, Λ` and `A`. -/
-def SublinearCollarBound (q R : ℕ) (J Δ D₀ Ctpl : ℝ) : Prop :=
-  ∃ C : ℝ, ∃ N : ℕ, ∀ n s₀ : ℕ, N ≤ n →
-    ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
-        (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-      ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-          T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
-          ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-          ManyBody.regionMutualInformation Ω
-              (A.filter fun x ↦ x.val ∈ T.points)
-              (A.filter fun x ↦ x.val ∈ ambientDilation T.points
-                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
-            C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
-            C * n ∧
-          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
-              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
-            C * n ∧
-          ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
-              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
-              A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
-          ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
-              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
-            C * (n : ℝ) ^ 2
 
 /-- **Proposition 10.2** (`prop:amplification`, `09-amplification.tex` lines
 261–296), for the Hamiltonian parameters `q, R, J, Δ` and the exponents of
@@ -146,45 +113,6 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
                 graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A)
-
-/-- **Proposition 9.6 at a given constant and threshold** (`prop:collar`, `08-scanner.tex`
-lines 808–827). The assertion of `SublinearCollarBound` with its constant `C` and threshold
-`N` fixed: for every template `T` with parameters `(n, s₀)`, `n ≥ N`, separated from the cut,
-with `L = ⌊n^(1-ε)⌋ ≤ s₀`, `X = A ∩ T` and `S₀ = A ∩ T_L`, one has
-`I_Ω(X : Λ ∖ S₀) ≤ C n^(1-ε)`, the cuts of `X`, `S₀` and `S₀ ∖ X` have at most `C n` edges,
-and `|S₀| ≤ C n²`. -/
-def SublinearCollarBoundAt (q R : ℕ) (J Δ D₀ Ctpl C : ℝ) (N : ℕ) : Prop :=
-  ∀ n s₀ : ℕ, N ≤ n →
-    ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
-        (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-      ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-          T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
-          ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-          ManyBody.regionMutualInformation Ω
-              (A.filter fun x ↦ x.val ∈ T.points)
-              (A.filter fun x ↦ x.val ∈ ambientDilation T.points
-                ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
-            C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
-            C * n ∧
-          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
-              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
-            C * n ∧
-          ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
-              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
-              A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
-          ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
-              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
-            C * (n : ℝ) ^ 2
-
-/-- The sublinear collar bound is the existence of a constant and a threshold at which it
-holds. Source: `08-scanner.tex`, lines 808–827. -/
-theorem sublinearCollarBound_iff_exists_sublinearCollarBoundAt {q R : ℕ} {J Δ D₀ Ctpl : ℝ} :
-    SublinearCollarBound q R J Δ D₀ Ctpl ↔
-      ∃ C : ℝ, ∃ N : ℕ, SublinearCollarBoundAt q R J Δ D₀ Ctpl C N :=
-  Iff.rfl
 
 /-- **Proposition 10.2 at a given input constant, order, constant and threshold**
 (`prop:amplification`, `09-amplification.tex` lines 261–296). The assertion of
@@ -238,32 +166,6 @@ theorem amplificationBound_iff_forall_exists_amplificationBoundAt {q R : ℕ} {J
       ∀ C₀ : ℝ, 0 < C₀ → ∀ M : ℕ, 1 ≤ M →
         ∃ C : ℝ, ∃ N : ℕ, AmplificationBoundAt q R J Δ C₀ M C N :=
   Iff.rfl
-
-/-- **Proposition 11.2** (`prop:two-families`, `10-geometry.tex` lines 98–140),
-for the template constants `D₀, Ctpl` of Definition 9.3. For every lower scale
-threshold `n_* ≥ 1` there is a constant `C` such that every cut `A` of a finite
-induced domain with `b = |∂_Λ A| > 0` has an ordered partition
-`A = D ∪ ⋃ᵢ Xᵢ` into two labelled families of nonempty pieces, with templates
-`Tᵢ` of parameters `(nᵢ, sᵢ)` separated from the cut endpoints `Z`, such that
-`|D| ≤ C b`, `Xᵢ ⊆ A ∩ Tᵢ`, `⌊nᵢ^(1-ℓ)⌋ ≤ sᵢ`, `nᵢ ≥ n_*`, the clearances
-`dist_∞(Tᵢ, Z) > 2 nᵢ^β` and `dist_∞(Tᵢ, ⋃_{j<i, fⱼ=fᵢ} Xⱼ) > 2 nᵢ^β` hold, and
-`∑ᵢ nᵢ^(-100) ≤ C b`. The constant is chosen before the domain and the cut. -/
-def TwoFamilyDecomposition (D₀ Ctpl : ℝ) : Prop :=
-  ∀ nstar : ℕ, 1 ≤ nstar → ∃ C : ℝ,
-    ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset ↥Λ, 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
-      ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
-        ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
-          (P.residual.card : ℝ) ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card ∧
-          (∀ i, (P.piece i).Nonempty) ∧
-          (∀ i, P.piece i ⊆ A.filter fun x ↦ x.val ∈ (T i).points) ∧
-          (∀ i, (T i).IsSeparated D₀ (Geometry.boundaryEndpoints Λ A)) ∧
-          (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
-          (∀ i, nstar ≤ n i) ∧
-          (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ)) ∧
-          (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
-            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
-          ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
 
 /-- A graph neighborhood of the part of an ambient collar inside a domain stays
 within the enlarged ambient collar: every graph step moves by at most one in

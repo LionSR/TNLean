@@ -7,7 +7,7 @@ import TNLean.PEPS.Approximation.NestedPatches.AdaptivePatchSupply
 import TNLean.PEPS.ParentHamiltonian.Placement.DependentRegionCoordinates
 import QICLean.ManyBody.Sites.Lattice.Rectangle
 import TNLean.PEPS.Injectivity.Normal.NormalBlocking
-import TNLean.PEPS.AreaLaw.Squares.ClosedSquare
+import TNLean.PEPS.AreaLaw.Polygons.Squares.ClosedSquare
 
 /-!
 # Square patches from nested cylinder spaces

@@ -1,0 +1,103 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateLayers
+import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
+import QICLean.ManyBody.Entropy.QuditRegionEntropy
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
+
+/-!
+# Entropy cost of a partial template depth row
+
+Adding an arbitrary part of one template depth row changes the actual regional
+entropy by at most `n * log q`. This uses only purity, normalization and the
+geometric layer bound. Separation, a spectral gap and a safe-box estimate are
+not needed for this step.
+
+## References
+
+OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
+2026, Lemma 9.4 (`scanner:templates`), proof, `08-scanner.tex`, lines 666–667,
+at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Independently proved from the manuscript; no upstream Lean proof text reused.
+-/
+
+open ManyBody (ambientDilation)
+
+namespace TNLean.PEPS.AreaLaw
+
+/-- Adding a disjoint region changes entropy by at most its entropy.
+Source: Lemma 9.4, partial-row step; both signs follow from subadditivity and
+pure-state complementarity of the actual regional reductions. -/
+theorem abs_regionEntropy_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (R B : Finset ↥Λ)
+    (hRB : Disjoint R B) :
+    |ManyBody.regionEntropy Ω (R ∪ B) - ManyBody.regionEntropy Ω R| ≤
+      ManyBody.regionEntropy Ω B := by
+  have hu := ManyBody.regionEntropy_union_le _ Ω hΩ R B hRB
+  have hl := ManyBody.regionEntropy_le_union_add _ hΩ hRB
+  exact abs_le.mpr ⟨by linarith, by linarith⟩
+
+/-- Adding the sites of a region `Y` disjoint from `X` to the actual sites of
+`A` in `X` changes the regional entropy by at most `|Y| log q`.
+Source: Lemma 9.4, partial-row step, `08-scanner.tex`, lines 666–667. -/
+theorem abs_regionEntropy_filter_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+    (hq : 1 ≤ q) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
+    (X Y : Finset (ℤ × ℤ)) (hXY : Disjoint X Y) :
+    |ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ X ∪ Y) -
+      ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ X)| ≤ Y.card * Real.log q := by
+  classical
+  let R := A.filter fun x ↦ x.val ∈ X
+  let B := A.filter fun x ↦ x.val ∈ Y
+  have hd : Disjoint R B := Finset.disjoint_left.mpr fun x hx hb ↦
+    Finset.disjoint_left.mp hXY (Finset.mem_filter.mp hx).2 (Finset.mem_filter.mp hb).2
+  have he : (A.filter fun x ↦ x.val ∈ X ∪ Y) = R ∪ B := by
+    simp only [R, B, Finset.mem_union, Finset.filter_or]
+  have hcard : B.card ≤ Y.card := by
+    rw [← Finset.card_image_of_injective B Subtype.val_injective]
+    exact Finset.card_le_card fun x hx ↦ by
+      obtain ⟨z, hz, rfl⟩ := Finset.mem_image.mp hx
+      exact (Finset.mem_filter.mp hz).2
+  rw [he]
+  calc
+    |ManyBody.regionEntropy Ω (R ∪ B) - ManyBody.regionEntropy Ω R| ≤
+        ManyBody.regionEntropy Ω B := abs_regionEntropy_union_sub_le Λ q Ω hΩ R B hd
+    _ ≤ B.card * Real.log q := ManyBody.regionEntropy_le_card_mul_log hΩ B
+    _ ≤ Y.card * Real.log q := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
+      (Real.log_nonneg (by exact_mod_cast hq))
+
+namespace Geometry
+
+/-- Lemma 9.4's partial-final-row cost, with its explicit `n log q` constant.
+Here filtering `A` by an ambient set is exactly its physical intersection with
+that set. Thus the two regions are `A ∩ ((T_{j-1} \ T) ∪ Y)` and
+`A ∩ (T_{j-1} \ T)`, with arbitrary `Y ⊆ T_j \ T_{j-1}`.
+This is the partial-row step only, not the safe-box shell estimate. -/
+theorem template_partial_row_entropy_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+    (hq : 1 ≤ q) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
+    {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
+    (A : Finset ↥Λ) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ s₀)
+    (Y : Finset (ℤ × ℤ))
+    (hY : Y ⊆ ambientDilation T.points j \ ambientDilation T.points (j - 1)) :
+    |ManyBody.regionEntropy Ω
+        (A.filter fun x ↦ x.val ∈ (ambientDilation T.points (j - 1) \ T.points) ∪ Y) -
+      ManyBody.regionEntropy Ω
+        (A.filter fun x ↦ x.val ∈ ambientDilation T.points (j - 1) \ T.points)| ≤
+      n * Real.log q := by
+  have hXY : Disjoint (ambientDilation T.points (j - 1) \ T.points) Y :=
+    Finset.disjoint_left.mpr fun x hx hy ↦
+      (Finset.mem_sdiff.mp (hY hy)).2 (Finset.mem_sdiff.mp hx).1
+  refine (abs_regionEntropy_filter_union_sub_le Λ q hq Ω hΩ A _ Y hXY).trans ?_
+  have hcard := (Finset.card_le_card hY).trans (template_layer_card_le T hC j hj hjs)
+  exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
+    (Real.log_nonneg (by exact_mod_cast hq))
+
+end Geometry
+end TNLean.PEPS.AreaLaw

@@ -8,9 +8,9 @@ import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.ManyBody.Dynamics.SwappedDoubledInteraction
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedSquareHamiltonian
-import TNLean.PEPS.AreaLaw.Interactions.SupportedGaussianIntegral
+import TNLean.PEPS.AreaLaw.Operators.Interactions.SupportedGaussianIntegral
 import QICLean.ManyBody.Sites.Lattice.Plane
-import TNLean.PEPS.AreaLaw.SafeRectangles.TailParameter
+import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.TailParameter
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.ManyBody.Sites.ConfigurationMap
 

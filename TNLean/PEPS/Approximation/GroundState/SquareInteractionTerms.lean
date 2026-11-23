@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Interactions.RectangleInteraction
+import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
-import TNLean.PEPS.AreaLaw.Interactions.EdgeCrossingBudget
+import TNLean.PEPS.AreaLaw.Operators.Interactions.EdgeCrossingBudget
 import TNLean.PEPS.Tensor.Network.IsoTransport
 
 /-!

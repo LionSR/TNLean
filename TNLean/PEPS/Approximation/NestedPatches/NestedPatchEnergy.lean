@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.FunctionalCalculus.MatrixPowers
 import TNLean.PEPS.Approximation.GroundState.SquareInteractionTerms
-import TNLean.PEPS.AreaLaw.Squares.NestedPatches
-import TNLean.PEPS.AreaLaw.RegionalFilters.RegularizedPatchListCoordinates
+import TNLean.PEPS.AreaLaw.Polygons.Squares.NestedPatches
+import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchListCoordinates
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import TNLean.PEPS.AreaLaw.Regions.GapMarginalCloseness
-import TNLean.PEPS.AreaLaw.RegionalFilters.PatchEnergySmallnessScale
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GapMarginalCloseness
+import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.PatchEnergySmallnessScale
 
 /-!
 # Energy of minimizing nested patch filters

@@ -925,7 +925,7 @@ out.
 
 #### `TNLean.PEPS.regularizedPatchDomain` and `regularizedPatchMinimum`
 
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalFilters/RegularizedPatchMinimum.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchMinimum.lean`.
 - **Meaning:** the domain consists of independent positive semidefinite
   trace-one matrices on the physical spaces of a finite family of regions.
   For shift `b > 0`, the objective is the norm of the reverse index-ordered
@@ -951,7 +951,7 @@ out.
 
 #### `TNLean.PEPS.regularizedPatchCoordinateUpdate` and `regularizedPatchFirstVariation_eq_zero`
 
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalFilters/RegularizedPatchCoordinate.lean` and
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchCoordinate.lean` and
   `RegularizedPatchStationarity.lean`.
 - **Meaning:** unitary conjugation changes exactly one indexed feasible density.
   The actual output derivative along `exp(tB)`, for skew-Hermitian `B`, is the
@@ -970,7 +970,7 @@ out.
 
 #### `TNLean.PEPS.normalizedRegularizedPatchMarginal`
 
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalFilters/RegularizedPatchMarginal.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchMarginal.lean`.
 - **Meaning:** `ManyBody.regionState` of the same normalized final filtered
   vector for every region, after the explicit univ-subtype/global configuration
   isometry. These are canonical reduced states, not freely supplied densities.
@@ -2208,7 +2208,7 @@ operators on the configurations. The scope of the local channel model relative t
   nearest-neighbor ring consumer of the same recursion.
 - **Caveat:** the graph theorems take the per-support size bound and the
   per-site norm budget as hypotheses. On a finite induced square-lattice domain
-  they are discharged in `TNLean/PEPS/AreaLaw/Interactions/GraphPropagation.lean`:
+  they are discharged in `TNLean/PEPS/AreaLaw/Operators/Interactions/GraphPropagation.lean`:
   `ManyBody.IsAdmissibleSupport.card_le` gives the size bound
   `v_R = 1 + 2R(R + 1)`,
   `ManyBody.PlaneInteraction.sum_norm_term_containing_le` gives the
@@ -2238,8 +2238,8 @@ operators on the configurations. The scope of the local channel model relative t
   constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
   from QICLean and their ball expectations
   `ManyBody.regionExpectation (ManyBody.graphBall G aᵢ l) kᵢ`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Constraints/PositiveConstraints.lean`; the root channels of
-  Lemma 4.4 in `TNLean/PEPS/AreaLaw/Constraints/QuasilocalRoots.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Operators/Constraints/PositiveConstraints.lean`; the root channels of
+  Lemma 4.4 in `TNLean/PEPS/AreaLaw/Operators/Constraints/QuasilocalRoots.lean`.
 - **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
   centered at the ground vector; the positive contractions annihilate `Ω`, their sum
   dominates `c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)`, and the ball tails decay like
@@ -2252,7 +2252,7 @@ operators on the configurations. The scope of the local channel model relative t
   `positiveConstraint_mem_supportedOperators_component`, `quasilocalRoots`.
 - **Caveat:** stated for a general finite graph with the support, multiplicity and
   sphere-growth hypotheses of the propagation estimate. On finite induced square-lattice
-  domains these hypotheses are discharged in `TNLean/PEPS/AreaLaw/Constraints/LatticeConstraints.lean`:
+  domains these hypotheses are discharged in `TNLean/PEPS/AreaLaw/Operators/Constraints/LatticeConstraints.lean`:
   `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` and
   `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots` are Proposition 4.3 and Lemma 4.4
   there, with constants depending only on `p`, `R`, `J` and `Δ`.
@@ -3522,7 +3522,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### `TNLean.PEPS.dependentRegionCylinder`
 
 - **Declaration:** `dependentRegionCylinder R S`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Regions/Cylinder.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/Regions/Cylinder.lean`.
 - **Meaning:** the global vectors all of whose complementary coordinate slices
   lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
 - **Source:** the September 24, 2026 polynomial-PEPS manuscript,
@@ -3540,7 +3540,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 - **Declaration:** `nestedCylinderInnovation R hR S j`, where `hR` states
   that the finite family of regions is monotone.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Regions/NestedCylinderOrthogonalization.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/Regions/NestedCylinderOrthogonalization.lean`.
 - **Meaning:** the inside image `(I − P_(Wⱼ)) Sⱼ`, where
   `nestedCylinderEarlierInside` constructs `Wⱼ` by lifting the original earlier
   inside projectors into the current region and taking the sum of their ranges.
@@ -3634,7 +3634,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ## Partial rectangle layer entropy
 
 - **Declaration:** `ManyBody.IntRect.partial_row_entropy_le`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/SafeRectangles/WeakRectanglePartialRowEntropy.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Polygons/SafeRectangles/WeakRectanglePartialRowEntropy.lean`.
 - **Meaning:** let `Q` be a nonempty integer rectangle of size `s`, let
   `1 ≤ j ≤ s`, and let `Y ⊆ Q^{+j} \ Q^{+(j−1)}` be arbitrary. For a
   normalized pure state `Ω` with local dimension `q ≥ 1` and any physical
@@ -3653,7 +3653,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Declarations:** `TNLean.PEPS.AreaLaw.Scan.exists_two_mul_floor_rpow_ceil_mul_le`,
   `TNLean.PEPS.AreaLaw.Scan.mul_collar_add_collar_le_of_two_mul_le`, and
   `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_collar_clearance`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/BoxExponent/BootstrapRoundedClearance.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/CollarEntropy/BoxExponent/BootstrapRoundedClearance.lean`.
 - **Meaning:** for `C₂ > 0` and `0 < η < 1`, one threshold `N(C₂, η)` gives
   `2⌊⌈C₂s⌉^η⌋ ≤ s` for every natural `s ≥ N`. For natural `D₀ ≥ 1`,
   the scalar implication `2L ≤ s → D₀L + L ≤ D₀s` transfers this bound
@@ -3674,7 +3674,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ## Binary-entropy cost of the rounded bootstrap bands
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/BoxExponent/BootstrapBinaryEntropyCost.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/CollarEntropy/BoxExponent/BootstrapBinaryEntropyCost.lean`.
 - **Meaning:** one threshold, chosen for a fixed scanner exponent tuple before
   the auxiliary fraction and all physical data, gives positive rounded band
   count `K = ⌊L/(8m)⌋`, positive metric weight `a = 4/K`, and
@@ -3784,8 +3784,8 @@ source's Proposition 4.1.
 
 - **Declarations:** `TNLean.PEPS.AreaLaw.floor_rpow_ceil_mul_rpow_le` and
   `TNLean.PEPS.AreaLaw.exists_regionEntropy_initial_rounded_collar_le_rpow`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Scales/RoundedScalePower.lean` and
-  `TNLean/PEPS/AreaLaw/BoxExponent/BootstrapRoundedClearance.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Collar/Scales/RoundedScalePower.lean` and
+  `TNLean/PEPS/AreaLaw/CollarEntropy/BoxExponent/BootstrapRoundedClearance.lean`.
 - **Meaning:** for fixed `q,R,J,Δ`, one initial constant `C` and exponent
   `e₀` precede `C₂` and all physical instance data. For each positive `C₂`,
   one threshold precedes every safety parameter and ground vector. The
@@ -3816,7 +3816,7 @@ source's Proposition 4.1.
 
 - **Declarations:** `TNLean.PEPS.AreaLaw.Scan.entropy_le_of_replica_comparisons`
   and `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_loss_threshold`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/BoxExponent/BootstrapReplicaAbsorption.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/CollarEntropy/BoxExponent/BootstrapReplicaAbsorption.lean`.
 - **Meaning:** two eventual rough scalar comparisons share one nonnegative
   entropy independent of the replica count. Three vanishing remainders can be
   removed at the fixed physical scale, then the coefficient margin gives the

@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.NestedPatches.NestedPatchEnergy
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
-import TNLean.PEPS.AreaLaw.Squares.RangeNestedPatches
+import TNLean.PEPS.AreaLaw.Polygons.Squares.RangeNestedPatches
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import TNLean.PEPS.AreaLaw.Regions.GapMarginalCloseness
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GapMarginalCloseness
 
 /-!
 # Energy of minimizing nested patch filters at interaction range `R`
