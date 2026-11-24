@@ -197,7 +197,8 @@ theorem exists_normalization_torusClosureSuperpositionCut_rectangle
     (hxStart : 0 < xStart) (hyStart : 0 < yStart) (hxPos : 0 < xLen) (hyPos : 0 < yLen)
     (hxEnd : xStart + xLen < width) (hyEnd : yStart + yLen < height) :
     let R := torusContiguousRectangle xStart yStart xLen yLen
-    ∃ n : ℕ, Fintype.card {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} =
+    ∃ n : ℕ, Fintype.card {f : Edge (torusGraph width height) //
+      ManyBody.IsRegionBoundaryEdge R f} =
         n + 1 ∧
       ∃ e : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1),
         ∃ cA : ℝ, 0 < cA ∧

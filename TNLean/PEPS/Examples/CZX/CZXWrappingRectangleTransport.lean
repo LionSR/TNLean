@@ -57,7 +57,8 @@ noncomputable def czxWrappingRectangleBoundaryTransport (a : ZMod width) (b : ZM
 
 private theorem incident_translate (a : ZMod width) (b : ZMod height)
     (R : Finset (TorusVertex width height)) (e : Edge (torusGraph width height)) :
-    ManyBody.IsRegionIncidentEdge (Region.map (translate a b) R) (ManyBody.Edge.map (translate a b) e) ↔
+    ManyBody.IsRegionIncidentEdge (Region.map (translate a b) R) (ManyBody.Edge.map
+      (translate a b) e) ↔
       ManyBody.IsRegionIncidentEdge R e := by
   unfold ManyBody.IsRegionIncidentEdge
   rcases ManyBody.Edge.map_endpoints (translate a b) e with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩

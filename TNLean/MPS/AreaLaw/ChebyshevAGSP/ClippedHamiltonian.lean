@@ -118,7 +118,8 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (Φ : ManyBody.BondInteraction L q)
     (e : Fin 3 → ℝ) (t : ℝ) :
-    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+    let B :=
+      ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
     let H := fun j : Fin (s - 2) ↦ Φ.term ⟨a + 1 + j.val, by omega⟩
     ∃ HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       ManyBody.IsSupportedOn HL (interval L 0 (a + 2)) ∧
@@ -161,7 +162,8 @@ theorem aklv_clipped_hamiltonian_posSemidef_norm_le {L q a s : ℕ}
     (e : Fin 3 → ℝ)
     (he : ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef)
     (he1 : 0 ≤ e 1) {t : ℝ} (ht : 0 ≤ t) :
-    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+    let B :=
+      ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
     B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s := by
   intro B
   let C := ManyBody.BondInteraction.threeRegionHamiltonians (a + 2) (a + s - 1) Φ

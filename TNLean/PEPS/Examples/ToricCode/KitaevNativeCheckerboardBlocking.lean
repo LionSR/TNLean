@@ -40,7 +40,8 @@ local notation "TV" => TorusVertex width height
 local notation "Γₜ" => torusGraph width height
 private abbrev RI (v : TV) :=
   {e : Edge Γₜ // e.1.1 ∈ torusPlaquetteRegion v ∧ e.1.2 ∈ torusPlaquetteRegion v}
-private abbrev RB (v : TV) := {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) e}
+private abbrev RB (v : TV) := {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge
+  (torusPlaquetteRegion v) e}
 
 private def point (v : TV) : Fin 4 → TV :=
   ![(v.1 + 1, v.2 + 1), (v.1 + 1, v.2), v, (v.1, v.2 + 1)]

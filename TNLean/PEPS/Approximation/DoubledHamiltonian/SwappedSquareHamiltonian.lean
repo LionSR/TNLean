@@ -113,7 +113,8 @@ theorem _root_.ManyBody.SquareInteraction.pairSwapOp_conj_doubled_operator_sub_e
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ) +
         Matrix.kroneckerBilinear (R := ℂ)
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ))
-  change δ h.hamiltonian = ∑ e ∈ Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R), δ (h.term (.inr e))
+  change δ h.hamiltonian = ∑ e ∈ Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R),
+    δ (h.term (.inr e))
   simp only [ManyBody.Interaction.hamiltonian, Fintype.sum_sum_type, map_add, map_sum]
   have hcancel {S : Finset (SquareLatticeVertex L L)}
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}

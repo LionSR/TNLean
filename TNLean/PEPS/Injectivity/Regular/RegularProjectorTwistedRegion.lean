@@ -59,7 +59,8 @@ noncomputable def regularProjectorTwistedRegionMatrix (R : Finset V) (u : Edge �
 Source: SCP10, diagonal charge insertion, lines 2449–2486 and 2569–2581. -/
 noncomputable def regularProjectorWeightedTwistedRegionMatrix (R : Finset V)
     (u : Edge Γ → G) (F : ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) → ℂ) :
-    Matrix (RegionHalfEdgeConfig (Γ := Γ) G R) ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) ℂ :=
+    Matrix (RegionHalfEdgeConfig (Γ := Γ) G R) ({e : Edge Γ //
+      ManyBody.IsRegionBoundaryEdge R e} → G) ℂ :=
   fun α θ => ∑ η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G,
     if (fun f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
       η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ then
@@ -72,7 +73,8 @@ noncomputable def regularProjectorWeightedTwistedRegionMatrix (R : Finset V)
 Source: SCP10, lines 1765–1920 and 2569–2581. -/
 theorem regularProjectorWeightedTwistedRegionMatrix_apply (R : Finset V) (u : Edge Γ → G)
     (F : ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) → ℂ)
-    (α : RegionHalfEdgeConfig (Γ := Γ) G R) (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
+    (α : RegionHalfEdgeConfig (Γ := Γ) G R) (θ : {e : Edge Γ //
+      ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorWeightedTwistedRegionMatrix R u F α θ =
       (Fintype.card G : ℂ)⁻¹ ^ R.card *
         ∑ p : ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) × ({v : V // v ∈ R} → G),

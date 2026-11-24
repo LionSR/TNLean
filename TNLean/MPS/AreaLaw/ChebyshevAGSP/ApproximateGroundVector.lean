@@ -136,7 +136,8 @@ theorem norm_clipped_lowProjection_residual_le_exp {L q : ℕ}
       (1 - Matrix.spectralProjectionGE B (t / 2))‖ ≤
         2 * Real.exp (-(t - t / 2) / 8) := by
     rw [show B = (Φ.partialHamiltonian I) - (z : ℂ) • 1 from hB]
-    exact ManyBody.BondInteraction.norm_two_boundary_spectral_offDiagonal_le I Φ h0 h1 a b z t (t / 2)
+    exact ManyBody.BondInteraction.norm_two_boundary_spectral_offDiagonal_le I Φ h0
+      h1 a b z t (t / 2)
       (by linarith)
   have htail (s : ℝ) : ‖ι (Matrix.spectralProjectionGE B s) Ω‖ ≤
       2 * Real.exp (-(s - 20) / 8) := by

@@ -292,7 +292,8 @@ assignments of free labels to the non-boundary edges. -/
 noncomputable def regionBoundaryFiberEquiv (B : Tensor G d) (R : Finset V)
     (bdry : RegionBoundaryConfig (G := G) B R) :
     {ζ : VirtualConfig B // regionBoundaryLabel (G := G) B R ζ = bdry} ≃
-      ((e : {e : Edge G // ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e}) → Fin (B.bondDim e.1)) where
+      ((e : {e : Edge G // ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e}) →
+        Fin (B.bondDim e.1)) where
   toFun ζ e := ζ.1 e.1
   invFun h := ⟨fun e =>
       if hb : ManyBody.IsRegionBoundaryEdge (G := G) R e then bdry ⟨e, hb⟩ else h ⟨e, hb⟩, by
@@ -308,7 +309,8 @@ noncomputable def regionBoundaryFiberEquiv (B : Tensor G d) (R : Finset V)
     · rw [dite_eq_right hb]
   right_inv h := by
     funext e
-    change (if hb : ManyBody.IsRegionBoundaryEdge (G := G) R e.1 then bdry ⟨e.1, hb⟩ else h ⟨e.1, hb⟩) =
+    change (if hb : ManyBody.IsRegionBoundaryEdge (G := G) R e.1 then
+      bdry ⟨e.1, hb⟩ else h ⟨e.1, hb⟩) =
       h e
     rw [dite_eq_right e.2]
 
@@ -562,7 +564,8 @@ theorem prod_regionEdgeContraction (B : Tensor G d) (R : Finset V)
         (if ∀ (h1 : e.1.1.1 ∈ R) (h2 : e.1.1.2 ∈ R),
             ξ ⟨e.1.1.1, h1⟩ (edgeLeftIncident (G := G) e.1) =
               ξ ⟨e.1.1.2, h2⟩ (edgeRightIncident (G := G) e.1) then (1 : ℂ) else 0) *
-          if ManyBody.IsRegionIncidentEdge (G := G) R e.1 then (1 : ℂ) else (B.bondDim e.1 : ℂ) := by
+          if ManyBody.IsRegionIncidentEdge (G := G) R e.1 then
+            (1 : ℂ) else (B.bondDim e.1 : ℂ) := by
     intro e
     rw [regionEdgeContraction]
     by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R e.1

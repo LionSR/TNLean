@@ -64,7 +64,8 @@ private abbrev internalUnique (e : Edge Γ) : Unique (Internal e) where
   uniq f := Subtype.ext (internal_eq e f.1 f.2)
 omit [Fintype V] [DecidableRel Γ.Adj] in
 private theorem boundary_of_other (e : Edge Γ) (v : V) (hv : v ∈ regularEdgeRegion e)
-    (f : IncidentEdge Γ v) (hne : f.1 ≠ e) : ManyBody.IsRegionBoundaryEdge (regularEdgeRegion e) f.1 :=
+    (f : IncidentEdge Γ v) (hne : f.1 ≠ e) : ManyBody.IsRegionBoundaryEdge
+      (regularEdgeRegion e) f.1 :=
   ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge
     (isRegionIncidentEdge_of_regionVertex _ ⟨v, hv⟩ f)
     (fun h => hne (internal_eq e f.1 h))

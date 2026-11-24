@@ -203,7 +203,8 @@ bond product is the factor by which the blocked weight overcounts the residual. 
 noncomputable def insertOuterBondProd (A : Tensor G d) (R : Finset V) {v : V} : ℕ :=
   ∏ e ∈ Finset.univ.filter
       (fun e : Edge G =>
-        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e),
+        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+          ¬ ManyBody.IsRegionIncidentEdge (G := G) R e),
     A.bondDim e
 
 omit [Fintype V] [DecidableRel G.Adj] in
@@ -235,7 +236,8 @@ noncomputable def insertOverwrite (A : Tensor G d) (R : Finset V) {v : V}
     (μ : RegionBoundaryConfig (G := G) A (insert v R)) (ζ : VirtualConfig A) :
     VirtualConfig A :=
   fun e =>
-    if he : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e
+    if he : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+      ¬ ManyBody.IsRegionIncidentEdge (G := G) R e
       then μ ⟨e, he.1⟩ else ζ e
 
 open scoped Classical in
@@ -245,7 +247,8 @@ blocked weight leaves free. -/
 noncomputable def insertOuterLegs (A : Tensor G d) (R : Finset V) {v : V}
     (ζ : VirtualConfig A) :
     (e : {e : Edge G //
-        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e}) →
+        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+          ¬ ManyBody.IsRegionIncidentEdge (G := G) R e}) →
       Fin (A.bondDim e.1) :=
   fun e => ζ e.1
 
@@ -332,11 +335,13 @@ theorem insertOverwrite_mem_residualFilter (A : Tensor G d) (R : Finset V) {v : 
 reads `ζ'`. -/
 noncomputable def insertFiberConfig (A : Tensor G d) (R : Finset V) {v : V} (ζ' : VirtualConfig A)
     (h : (e : {e : Edge G //
-        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e}) →
+        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+          ¬ ManyBody.IsRegionIncidentEdge (G := G) R e}) →
       Fin (A.bondDim e.1)) :
     VirtualConfig A :=
   fun e =>
-    if he : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e
+    if he : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+      ¬ ManyBody.IsRegionIncidentEdge (G := G) R e
       then h ⟨e, he⟩ else ζ' e
 
 open scoped Classical in
@@ -411,7 +416,8 @@ theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
     rw [insertOuterBondProd,
       ← Finset.prod_subtype (Finset.univ.filter
           (fun e : Edge G =>
-            ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e))
+            ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+              ¬ ManyBody.IsRegionIncidentEdge (G := G) R e))
         (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
 
 omit [Fintype V] in

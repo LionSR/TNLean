@@ -291,7 +291,8 @@ theorem ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_complement
     have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) g.complement f.1 := by
       have h2 := f.2
       have := @Finset.disjoint_left.mp g.red_disjoint_complement
-      simp only [ManyBody.IsRegionBoundaryEdge, ManyBody.IsRegionIncidentEdge, Finset.mem_sdiff, Finset.mem_univ,
+      simp only [ManyBody.IsRegionBoundaryEdge, ManyBody.IsRegionIncidentEdge,
+        Finset.mem_sdiff, Finset.mem_univ,
         true_and] at h2 hinc ⊢
       grind
     rw [regionMerge_of_incident (G := G) A _ p hinc]

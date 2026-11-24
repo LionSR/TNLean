@@ -224,7 +224,8 @@ theorem horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform
     (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : j < L) (g : Edge (torusGraph width height))
     (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
-    (hg : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
+    (hg : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j +
+      1)) g)
     (M₁ M₂ : Matrix (Fin (B.bondDim g)) (Fin (B.bondDim g)) ℂ)
     (horient : regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K j) ⟨g, hf⟩
         M₁ =
@@ -268,7 +269,8 @@ theorem verticalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform
     (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K)
     (g : Edge (torusGraph width height))
     (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
-    (hg : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
+    (hg : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j +
+      1)) g)
     (M₁ M₂ : Matrix (Fin (B.bondDim g)) (Fin (B.bondDim g)) ℂ)
     (horient : regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K j) ⟨g, hf⟩
         M₁ =

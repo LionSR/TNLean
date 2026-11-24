@@ -41,7 +41,8 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
     (Φ : ManyBody.BondInteraction L q) (t : ℝ) :
     let α : Fin (L - 1) := ⟨a + 1, by omega⟩
     let β : Fin (L - 1) := ⟨a + s - 2, by omega⟩
-    ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ =
+    ManyBody.BondInteraction.twoBlockTruncatedHamiltonian
+      (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ =
       Matrix.twoSidedEnergyTruncation (AKLV.leftCutBlock Φ α 0)
         (AKLV.middleCutBlock Φ α β 0 + (Φ.term α + Φ.term β)) (AKLV.rightCutBlock Φ β 0) t := by
   intro α β
@@ -128,7 +129,8 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
     (hzero : Ω ∈ Φ.zeroSpace)
     (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef) :
-    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
+    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian
+      (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
     B.PosSemidef ∧ B ≤ Φ.hamiltonian ∧ ‖B‖ ≤ 2 * t + s ∧
       B *ᵥ WithLp.ofLp Ω = 0 ∧
       (B - ((g / 2 : ℝ) : ℂ) •

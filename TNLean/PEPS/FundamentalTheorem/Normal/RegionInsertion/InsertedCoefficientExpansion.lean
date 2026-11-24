@@ -497,9 +497,11 @@ noncomputable def pairOuterFiberPair (B : Tensor G d) (R : Finset V)
     (ξ : OpenLocalConfig (G := G) B)
     (h : (e : {e : Edge G // ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e}) → Fin (B.bondDim e.1)) :
     VirtualConfig B × VirtualConfig B :=
-  (fun e => if hinc : ManyBody.IsRegionIncidentEdge (G := G) R e then pairOuterReadFst (G := G) B R ξ e
+  (fun e => if hinc : ManyBody.IsRegionIncidentEdge (G := G) R e then
+    pairOuterReadFst (G := G) B R ξ e
               else h ⟨e, not_boundary_of_not_incident (G := G) R hinc⟩,
-   fun e => if hb : ManyBody.IsRegionBoundaryEdge (G := G) R e then pairOuterReadSnd (G := G) B R ξ e
+   fun e => if hb : ManyBody.IsRegionBoundaryEdge (G := G) R e then
+     pairOuterReadSnd (G := G) B R ξ e
               else if _ : ManyBody.IsRegionIncidentEdge (G := G) R e then h ⟨e, hb⟩
               else pairOuterReadSnd (G := G) B R ξ e)
 

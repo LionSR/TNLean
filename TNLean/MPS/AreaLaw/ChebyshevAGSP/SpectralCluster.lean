@@ -84,7 +84,8 @@ theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
     (hg : 0 < g)
     (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s Φ j -
-      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j) :
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤
+        ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j) :
     ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
         (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧

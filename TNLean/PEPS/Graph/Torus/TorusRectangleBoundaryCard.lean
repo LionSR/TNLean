@@ -129,7 +129,8 @@ private theorem boundary_torusRightEdge_rectangle_iff
     (xStart yStart xLen yLen : ℕ) (hxPos : 0 < xLen)
     (hxBound : xStart + xLen ≤ width) (hxLen : xLen < width)
     (v : TorusVertex width height) :
-    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) (torusRightEdge v) ↔
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+      (torusRightEdge v) ↔
       (v.1.val = (if xStart = 0 then width - 1 else xStart - 1) ∨
         v.1.val = xStart + xLen - 1) ∧
       (yStart ≤ v.2.val ∧ v.2.val < yStart + yLen) := by
@@ -152,7 +153,8 @@ private theorem boundary_torusUpEdge_rectangle_iff
     (xStart yStart xLen yLen : ℕ) (hyPos : 0 < yLen)
     (hyBound : yStart + yLen ≤ height) (hyLen : yLen < height)
     (v : TorusVertex width height) :
-    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) (torusUpEdge v) ↔
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+      (torusUpEdge v) ↔
       (xStart ≤ v.1.val ∧ v.1.val < xStart + xLen) ∧
       (v.2.val = (if yStart = 0 then height - 1 else yStart - 1) ∨
         v.2.val = yStart + yLen - 1) := by
@@ -329,8 +331,10 @@ theorem card_regionBoundaryEdge_torusRectangle_le
   let e := Equiv.subtypeEquivOfSubtype (p := ManyBody.IsRegionBoundaryEdge R)
     (torusEdgeEquiv (width := width) (height := height))
   have hc : Fintype.card {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} =
-      Fintype.card {v : TorusVertex width height // ManyBody.IsRegionBoundaryEdge R (torusRightEdge v)} +
-      Fintype.card {v : TorusVertex width height // ManyBody.IsRegionBoundaryEdge R (torusUpEdge v)} := by
+      Fintype.card {v : TorusVertex width height //
+        ManyBody.IsRegionBoundaryEdge R (torusRightEdge v)} +
+      Fintype.card {v : TorusVertex width height //
+        ManyBody.IsRegionBoundaryEdge R (torusUpEdge v)} := by
     rw [← Fintype.card_congr e, Fintype.card_congr Equiv.subtypeSum, Fintype.card_sum]
     rfl
   rw [hc]

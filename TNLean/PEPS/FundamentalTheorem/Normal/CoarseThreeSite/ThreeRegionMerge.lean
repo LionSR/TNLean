@@ -310,8 +310,10 @@ theorem complIncident_of_not_red_not_blue (F : CoherentCoarseBlockingFrame (G :=
 /-- The free virtual indices of an agreeing triple in a fiber: each configuration's
 values on the edges not incident to its own region. -/
 abbrev FreeLegs (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) : Type _ :=
-  ((e : {e : Edge G // ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e}) → Fin (A.bondDim e.1)) ×
-  ((e : {e : Edge G // ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e}) → Fin (A.bondDim e.1)) ×
+  ((e : {e : Edge G // ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e}) →
+    Fin (A.bondDim e.1)) ×
+  ((e : {e : Edge G // ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e}) →
+    Fin (A.bondDim e.1)) ×
   ((e : {e : Edge G // ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e}) →
     Fin (A.bondDim e.1))
 
@@ -327,8 +329,10 @@ free indices elsewhere. -/
 noncomputable def triFiberTriple (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (η : VirtualConfig A) (legs : FreeLegs F) :
     VirtualConfig A × VirtualConfig A × VirtualConfig A :=
-  (fun e => if hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e then η e else legs.1 ⟨e, hr⟩,
-   fun e => if hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e then η e else legs.2.1 ⟨e, hb⟩,
+  (fun e => if hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e then
+    η e else legs.1 ⟨e, hr⟩,
+   fun e => if hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e then
+     η e else legs.2.1 ⟨e, hb⟩,
    fun e => if hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e then η e
               else legs.2.2 ⟨e, hc⟩)
 

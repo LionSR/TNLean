@@ -659,7 +659,8 @@ theorem mem_leftSupportSubmodule_of_gluingCut_fixed
         (spanProjection S) ⊗ₖ (1 : Matrix (CutRight L q k) (CutRight L q k) ℂ)) *ᵥ y = y) :
     WithLp.toLp 2 (y ∘ gluingCut L q k) ∈ leftSupportSubmodule S := by
   classical
-  let e := ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
+  let e :=
+    ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
   let P := reindex e e (spanProjection S)
   let Y := Matrix.schmidtCoeffMatrix y
   have hleft : leftApply P (WithLp.toLp 2 y) = WithLp.toLp 2 y := by
@@ -729,7 +730,8 @@ theorem exists_trimmed_witness_chain {k : ℕ}
         ((1 : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ
           x ∧
       (reindex (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-          (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1))) PV ⊗ₖ
+          (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono
+            (Nat.sub_le k 1))) PV ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x := by
   classical
   rcases isEmpty_or_nonempty (Fin L → Fin q) with hσ | ⟨⟨σ⟩⟩

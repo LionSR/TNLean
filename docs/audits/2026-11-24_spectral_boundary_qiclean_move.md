@@ -1,6 +1,6 @@
 # Spectral estimates and boundary edges in QICLean
 
-The QICLean dependency advances from `40ad5ebdb7` to `9c891dacf4`. The spectral estimates
+The QICLean dependency advances from `40ad5ebdb7` to `8c016dc18a`. The spectral estimates
 for arbitrary Hermitian matrices, the finite-chain truncation argument, and the graph boundary
 counts now live in the corresponding layers of QICLean.
 

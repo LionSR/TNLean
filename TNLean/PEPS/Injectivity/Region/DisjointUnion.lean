@@ -370,7 +370,8 @@ theorem ThreeBlockGeometry.isComplBoundary_of_hostBoundary_not_crossing
     (hncross : ¬ g.IsBlueRedCrossingEdge A eg) :
     ManyBody.IsRegionBoundaryEdge (G := G) g.complement eg := by
   have := @Finset.disjoint_left.mp g.red_disjoint_blue
-  simp only [ThreeBlockGeometry.IsBlueRedCrossingEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_sdiff,
+  simp only [ThreeBlockGeometry.IsBlueRedCrossingEdge, ManyBody.IsRegionBoundaryEdge,
+    Finset.mem_sdiff,
     Finset.mem_univ, true_and] at *
   grind [g.mem_complement_iff]
 

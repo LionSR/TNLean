@@ -162,7 +162,8 @@ def SquareEntropyAreaLawAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) 
   0 ≤ C_A ∧
     ∀ L : ℕ, ∀ Ω : StateSpace L q, G L Ω → ∀ A : Finset (Vertex L),
         ManyBody.regionEntropy Ω A ≤
-          C_A * Fintype.card {e : Edge (squareLatticeGraph L L) // ManyBody.IsRegionBoundaryEdge A e}
+          C_A * Fintype.card {e : Edge (squareLatticeGraph L L) //
+            ManyBody.IsRegionBoundaryEdge A e}
 
 /-- The square-grid entropy area law of the polynomial-PEPS paper: for fixed
 `q ≥ 2` and `J, Δ > 0`, one constant `C_A ≥ 0` bounds the entropy of every
@@ -199,7 +200,8 @@ theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Vertex L)) :
     ManyBody.regionEntropy Ω A ≤
-      C * Fintype.card {e : Edge (squareLatticeGraph L L) // ManyBody.IsRegionBoundaryEdge A e} := by
+      C * Fintype.card {e : Edge (squareLatticeGraph L L) //
+        ManyBody.IsRegionBoundaryEdge A e} := by
   obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan
   have := hbound (ManyBody.rectangularDomain L L)
     (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart)

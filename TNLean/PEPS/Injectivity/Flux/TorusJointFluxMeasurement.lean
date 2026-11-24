@@ -60,7 +60,8 @@ theorem IsGIsometric.exists_torusJointFlux_physicalMeasurement
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
       (∀ (a b : G) (u : Edge (Γₜ) → G)
-        (θ : {f : Edge (Γₜ) // ManyBody.IsRegionBoundaryEdge (translatedTwoPlaquetteRegion v) f} → G)
+        (θ : {f : Edge (Γₜ) // ManyBody.IsRegionBoundaryEdge (translatedTwoPlaquetteRegion
+          v) f} → G)
         (C : Option (ConjClasses G)),
         Q C *ᵥ openRegionWeight
             (groupBondTensor (regularTwistedSite (torusIncidentSite tensor)

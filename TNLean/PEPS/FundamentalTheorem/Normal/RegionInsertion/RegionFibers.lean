@@ -236,7 +236,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 /-- An edge not incident to `R` does not cross the boundary of `R`: a
 boundary-crossing edge touches `R`. -/
 theorem not_boundary_of_not_incident (R : Finset V) {e : Edge G}
-    (h : ¬ ManyBody.IsRegionIncidentEdge (G := G) R e) : ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e :=
+    (h : ¬ ManyBody.IsRegionIncidentEdge (G := G) R e) : ¬ ManyBody.IsRegionBoundaryEdge
+      (G := G) R e :=
   fun hb => h (ManyBody.isRegionBoundaryEdge_touches (G := G) R hb)
 
 omit [Fintype V] [DecidableRel G.Adj] in

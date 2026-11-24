@@ -36,7 +36,8 @@ Auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L)
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (e : Fin 3 → ℝ)
-    (he : ∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef)
+    (he : ∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j :
+      ℂ) • 1).PosSemidef)
     (t : ℝ) (m : ℕ) (ht : 0 < t) (hm : 1 ≤ m) :
     let A := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ
     let J := Finset.univ.filter
@@ -73,7 +74,8 @@ private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r
       (X.finite_real_spectrum.continuousOn _) (X.finite_real_spectrum.continuousOn _)
   have hB : B.PosSemidef := ((he 0).add hf0.posSemidef).add (he 2)
   have hY : Y.PosSemidef := posSemidef_sum _ (fun i _ ↦ (h0 i).posSemidef)
-  have hsum : Φ.hamiltonian = (∑ j, A j) + Y := ManyBody.BondInteraction.hamiltonian_eq_sum_threeRegionHamiltonians_add_crossings hlr Φ
+  have hsum : Φ.hamiltonian = (∑ j, A j) + Y :=
+    ManyBody.BondInteraction.hamiltonian_eq_sum_threeRegionHamiltonians_add_crossings hlr Φ
   have hGY : G = B + Y := by
     dsimp only [G, H, B, X]
     rw [hsum]
@@ -136,7 +138,8 @@ theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
+      star x ⬝ᵥ x = 1 ∧ (∀ j, ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j *ᵥ x =
+        (e j : ℂ) • x) ∧
       (∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       (∀ j, 0 ≤ e j) ∧
       let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1

@@ -127,7 +127,8 @@ variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 /-- Incident edges that do not cross the boundary are exactly the internal
 edges, with both endpoints in the region. -/
 def regionInternalEdgeEquiv (R : Finset V) :
-    {e : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} // ¬ ManyBody.IsRegionBoundaryEdge R e.1} ≃
+    {e : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} //
+      ¬ ManyBody.IsRegionBoundaryEdge R e.1} ≃
       {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} where
   toFun e := ⟨e.1.1, by
     have hi := e.1.2
@@ -142,7 +143,8 @@ def regionInternalEdgeEquiv (R : Finset V) :
 /-- The number of free incident-edge labels is the number of internal bonds. -/
 theorem card_regionIncident_not_boundary (R : Finset V) :
     Fintype.card
-      {e : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} // ¬ ManyBody.IsRegionBoundaryEdge R e.1} =
+      {e : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} //
+        ¬ ManyBody.IsRegionBoundaryEdge R e.1} =
       Fintype.card {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} :=
   Fintype.card_congr (regionInternalEdgeEquiv R)
 

@@ -139,7 +139,8 @@ private theorem boundary_card (v : TV) : Fintype.card (RB v) = 8 := by
       (by have := Fact.out (p := 2 < height); omega) Fact.out Fact.out
   rw [show Fintype.card (RB v) = Fintype.card (RB ((0,0) : TV)) from ?_]
   · exact hc
-  · change Fintype.card {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) e} = _
+  · change Fintype.card {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge
+    (torusPlaquetteRegion v) e} = _
     rw [← translated_region v]
     exact Fintype.card_congr (regionBoundaryEdgeMapEquiv
       (translate v.1 v.2) (torusPlaquetteRegion ((0,0) : TV)))

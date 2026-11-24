@@ -232,7 +232,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 `R₂ \ R₁`. -/
 theorem isRegionBoundaryEdge_inter_or_sdiff_of_R₂ {R₁ R₂ : Finset V} {e : Edge G}
     (h : ManyBody.IsRegionBoundaryEdge (G := G) R₂ e) :
-    ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e ∨ ManyBody.IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+    ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e ∨
+      ManyBody.IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
   simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
   grind
 
@@ -350,7 +351,8 @@ theorem isOverlapCrossingEdge_of_interBoundary_not_R₁ {R₁ R₂ : Finset V} {
     (hinter : ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e)
     (hnR₁ : ¬ ManyBody.IsRegionBoundaryEdge (G := G) R₁ e) :
     IsOverlapCrossingEdge (G := G) R₁ R₂ e := by
-  simp only [IsOverlapCrossingEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
+  simp only [IsOverlapCrossingEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_inter,
+    Finset.mem_sdiff] at *
   grind
 
 omit [Fintype V] [DecidableRel G.Adj] in
@@ -359,7 +361,8 @@ endpoints lie in `R₁`, hence outside `R₂ \ R₁`. -/
 theorem not_isRegionBoundaryEdge_sdiff_of_overlapCrossing {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsOverlapCrossingEdge (G := G) R₁ R₂ e) :
     ¬ ManyBody.IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
-  simp only [IsOverlapCrossingEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
+  simp only [IsOverlapCrossingEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_inter,
+    Finset.mem_sdiff] at *
   grind
 
 open scoped Classical in
@@ -426,7 +429,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 `R₂ \ R₁`. -/
 theorem isRegionBoundaryEdge_union_or_sdiff_of_R₁ {R₁ R₂ : Finset V} {e : Edge G}
     (h : ManyBody.IsRegionBoundaryEdge (G := G) R₁ e) :
-    ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e ∨ ManyBody.IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+    ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e ∨
+      ManyBody.IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
   simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_sdiff] at *
   grind
 

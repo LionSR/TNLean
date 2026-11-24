@@ -303,13 +303,15 @@ theorem IsGInjective.torusPhysicalCut_rank_zeroEntropy_of_isSimplyConnected
     change ((M * M.conjTranspose).trace⁻¹ • (M * M.conjTranspose)).trace = 1
     rw [Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ ht]
   have hr : ρ.rank = Fintype.card G ^
-      (Fintype.card {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} - 1) := by
+      (Fintype.card {f : Edge (torusGraph width height) //
+        ManyBody.IsRegionBoundaryEdge R f} - 1) := by
     change ((M * M.conjTranspose).trace⁻¹ • (M * M.conjTranspose)).rank = _
     rw [Matrix.rank_smul_of_mem_nonZeroDivisors _
       (mem_nonZeroDivisors_of_ne_zero (inv_ne_zero ht)), Matrix.rank_self_mul_conjTranspose]
     simpa only [Matrix.rank_eq_finrank_span_cols, M, Ψ] using hrank
   have hlog : Real.log (ρ.rank : ℝ) =
-      (Fintype.card {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} - 1 : ℕ) *
+      (Fintype.card {f : Edge (torusGraph width height) //
+        ManyBody.IsRegionBoundaryEdge R f} - 1 : ℕ) *
         Real.log (Fintype.card G : ℝ) := by
     rw [hr, Nat.cast_pow, Real.log_pow]
   exact ⟨hpos, hρ, htr, hr, hlog, hρ.isHermitian,

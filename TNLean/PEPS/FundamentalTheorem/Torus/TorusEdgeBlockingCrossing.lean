@@ -261,7 +261,8 @@ theorem isCrossingEdge_torusHorizontalEdge
   constructor
   · rintro ⟨hRed, hBlue⟩
     -- Both endpoints lie in the window: one in red, one in blue.
-    simp only [ManyBody.IsRegionBoundaryEdge, mem_torusHorizontalEdgeRed, mem_torusHorizontalEdgeBlue]
+    simp only [ManyBody.IsRegionBoundaryEdge, mem_torusHorizontalEdgeRed,
+      mem_torusHorizontalEdgeBlue]
       at hRed hBlue
     -- Both endpoints lie in the bounding window of the hole, so their coordinate values are
     -- below `xStart + 5 ≤ width` and `yStart + 5 ≤ height`.

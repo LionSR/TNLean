@@ -212,9 +212,11 @@ theorem exists_soft_word_node_energy_update
   obtain ⟨e1, y1, hy1, hAy1, hA1min, hp1l, hp1u⟩ := hp1
   obtain ⟨e2, y2, hy2, hBy2, hB2min, hp2l, hp2u⟩ := hp2
   have he1 : e1 = eA := groundEnergy_eq_of_normalized_eigenvectors
-    (ManyBody.BondInteraction.threeRegionHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
+    (ManyBody.BondInteraction.threeRegionHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1
+      hAx hx hA1min hAmin
   have he2 : e2 = eB := groundEnergy_eq_of_normalized_eigenvectors
-    (ManyBody.BondInteraction.threeRegionHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
+    (ManyBody.BondInteraction.threeRegionHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2
+      hBx hx hB2min hBmin
   have hsumLower : eParent - 8 ≤ p1 + p2 := by
     linarith only [hMergeUpper, heMerge, he1, he2, hp1l, hp2l]
   have hsumUpper : p1 + p2 ≤ eParent := by
@@ -497,9 +499,11 @@ theorem exists_regional_middle_center_of_child_estimates {L q l u v r : ℕ}
   obtain ⟨e1, y1, hy1, hAy1, hA1min, hp1l, hp1u⟩ := hp1
   obtain ⟨e2, y2, hy2, hBy2, hB2min, hp2l, hp2u⟩ := hp2
   have he1 : e1 = eA := groundEnergy_eq_of_normalized_eigenvectors
-    (ManyBody.BondInteraction.threeRegionHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
+    (ManyBody.BondInteraction.threeRegionHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1
+      hAx hx hA1min hAmin
   have he2 : e2 = eB := groundEnergy_eq_of_normalized_eigenvectors
-    (ManyBody.BondInteraction.threeRegionHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
+    (ManyBody.BondInteraction.threeRegionHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2
+      hBx hx hB2min hBmin
   have hsumLower : eParent - 57 / 8 ≤ p1 + p2 := by
     linarith only [hMergeUpper, heMerge, he1, he2, hp1l, hp2l]
   have hsumUpper : p1 + p2 ≤ eParent := by

@@ -47,7 +47,8 @@ theorem exists_single_region_original_soft_truncation_residual {L q l r : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
+      star x ⬝ᵥ x = 1 ∧ (∀ j, ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j *ᵥ x =
+        (e j : ℂ) • x) ∧
       (∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       (∀ j, 0 ≤ e j) ∧
       let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1

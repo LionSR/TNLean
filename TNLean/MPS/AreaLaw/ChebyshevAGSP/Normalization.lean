@@ -232,7 +232,8 @@ theorem aklv_normalization_le_two_block_regions {L q a s : ℕ}
     (h0 : ∀ i, 0 ≤ Φ.term i) (e : Fin 3 → ℝ)
     (he : ∀ j, (aklvNormalizationHamiltonians a s Φ j -
       (e j : ℂ) • 1).PosSemidef) :
-    ∀ j, (e j : ℂ) • 1 ≤ ManyBody.BondInteraction.threeRegionHamiltonians (a + 2) (a + s - 1) Φ j := by
+    ∀ j, (e j : ℂ) • 1 ≤ ManyBody.BondInteraction.threeRegionHamiltonians
+      (a + 2) (a + s - 1) Φ j := by
   intro j
   apply (Matrix.le_iff.mpr (he j)).trans
   apply Finset.sum_le_sum_of_subset_of_nonneg
@@ -277,7 +278,8 @@ theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s Φ j -
-      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j) :
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤
+        ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j) :
     let A := aklvNormalizationHamiltonians a s Φ
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E0 : ℝ),
       let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
@@ -301,7 +303,8 @@ theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
     exists_aklv_energy_normalization hq hs ha Φ h0 h1
   refine ⟨e, x, z, E0, hx, hxe, he, he0, hz, hzE, hE, hE0, hE6, ?_⟩
   intro η t hη ht B
-  obtain ⟨hB, hcenter, hres⟩ := ManyBody.BondInteraction.norm_twoBlockTruncatedHamiltonian_low_le hlr hrL
+  obtain ⟨hB, hcenter, hres⟩ :=
+    ManyBody.BondInteraction.norm_twoBlockTruncatedHamiltonian_low_le hlr hrL
     Φ h0 h1 e (E0 + η) t (by linarith) (by linarith) (hcut e he)
   refine ⟨hB, hcenter, ?_⟩
   intro T G

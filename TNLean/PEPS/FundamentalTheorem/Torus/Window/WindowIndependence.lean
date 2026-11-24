@@ -135,7 +135,8 @@ Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex` (a virtual operation on a bond is a physical operation on any
 window containing an endpoint); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem bondInserted_windowIndependent (R₁ R₂ : Finset V) (e : Edge G)
-    (hf : ManyBody.IsRegionBoundaryEdge (G := G) R₁ e) (hg : ManyBody.IsRegionBoundaryEdge (G := G) R₂ e)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := G) R₁ e) (hg : ManyBody.IsRegionBoundaryEdge
+      (G := G) R₂ e)
     (M₁ M₂ : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)
     (horient : (regionEdgeOrient (G := G) B R₁ ⟨e, hf⟩ M₁) =
       regionEdgeOrient (G := G) B R₂ ⟨e, hg⟩ M₂)

@@ -374,7 +374,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 If `g` is a boundary edge of `red` and also a boundary edge of a region `S`
 disjoint from `red`, then the out-of-red endpoint of `g` lies in `S`. -/
 theorem partner_mem_of_crossing {S : Finset V} (hrS : Disjoint red S) {g : Edge G}
-    (hred : ManyBody.IsRegionBoundaryEdge (G := G) red g) (hS : ManyBody.IsRegionBoundaryEdge (G := G) S g) :
+    (hred : ManyBody.IsRegionBoundaryEdge (G := G) red g) (hS : ManyBody.IsRegionBoundaryEdge
+      (G := G) S g) :
     (g.1.1 ∉ red ∧ g.1.1 ∈ S) ∨ (g.1.2 ∉ red ∧ g.1.2 ∈ S) := by
   rcases hred with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩
   · -- g.1.1 ∈ red, g.1.2 ∉ red: the out-of-red endpoint is g.1.2.

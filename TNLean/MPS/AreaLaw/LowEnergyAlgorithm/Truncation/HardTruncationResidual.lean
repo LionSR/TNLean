@@ -168,15 +168,19 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
-      (∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧ (∀ j, 0 ≤ e j) ∧
+      star x ⬝ᵥ x = 1 ∧ (∀ j, ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j *ᵥ x =
+        (e j : ℂ) • x) ∧
+      (∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, 0 ≤ e j) ∧
       let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ 2 ∧
       ∀ η t : ℝ, 0 < η → η + 7 ≤ t →
-        let F := energyTruncation (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1) (e 1 + t) +
-          ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 0 + ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 2 +
-          (∑ i ∈ Finset.univ.filter
+        let F :=
+          energyTruncation (ManyBody.BondInteraction.threeRegionHamiltonians
+            l r Φ 1) (e 1 + t) + ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 0 +
+            ManyBody.BondInteraction.threeRegionHamiltonians
+              l r Φ 2 + (∑ i ∈ Finset.univ.filter
             (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i) -
           (((∑ j, e j) : ℝ) : ℂ) • 1
         ∃ (hH : H.IsHermitian) (hF : F.IsHermitian)
@@ -282,7 +286,8 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
           (hM.eigenvectorBasis v) = (hM.eigenvalues v : ℂ) • hM.eigenvectorBasis v := by
         rw [hBM]
         exact hM.toEuclideanCLM_eigenvectorBasis v
-      have hsingle := ManyBody.BondInteraction.norm_consecutive_regional_truncation_low_le k hk Φ h0 h1
+      have hsingle :=
+        ManyBody.BondInteraction.norm_consecutive_regional_truncation_low_le k hk Φ h0 h1
         e T 1 J (η + 7) (E + η) (1 / 8) t (by norm_num) (by norm_num)
         (by linarith) ht hM.eigenvectorBasis hM.eigenvalues heorder hEigen hgap
       have hsingle' := hsingle.trans (residual_coefficient_le hJreal hE2)
@@ -375,8 +380,10 @@ theorem exists_regional_ground_energy_bound {L q l r : ℕ}
     hH.minEigenvalue_eq_add_of_centered_ground S E z hz hHz hE
   let Y := ∑ i ∈ Finset.univ.filter
     (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i
-  have hrest : ((ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 0 - (e 0 : ℂ) • 1) +
-      (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 2 - (e 2 : ℂ) • 1) + Y).PosSemidef :=
+  have hrest :
+      ((ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 0 - (e 0 : ℂ) • 1) +
+        (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 2 - (e 2 : ℂ) • 1) +
+        Y).PosSemidef :=
     ((he 0).add (he 2)).add (posSemidef_sum _ (fun i _ ↦ (h0 i).posSemidef))
   have hsplit : H - (S : ℂ) • 1 - C =
       (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 0 - (e 0 : ℂ) • 1) +

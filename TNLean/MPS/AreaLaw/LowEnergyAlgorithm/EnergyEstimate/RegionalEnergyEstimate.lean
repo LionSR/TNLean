@@ -62,7 +62,8 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
       (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     ∃ (K : Matrix (J → Fin q) (J → Fin q) ℂ) (hK : K.IsHermitian),
-      ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1 = ManyBody.place (X := fun _ ↦ Fin q) J K ∧
+      ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1 =
+        ManyBody.place (X := fun _ ↦ Fin q) J K ∧
       let _ : Nonempty (J → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
       let e := minEigenvalue hK
       ∀ (δ : ℝ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))),

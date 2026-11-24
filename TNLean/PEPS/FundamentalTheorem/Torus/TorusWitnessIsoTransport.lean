@@ -150,7 +150,8 @@ theorem exists_edgeCoeffIdentityWitness_of_transport
     apply (isRegionBoundaryEdge_map φ R e).mp
     rw [hR]
     exact w.isBoundary
-  let f : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e} := ⟨e, hBoundary⟩
+  let f : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e} :=
+    ⟨e, hBoundary⟩
   have hE : A.bondDim e = B.bondDim e := by
     simpa only [Tensor.transport_bondDim, ManyBody.Edge.map_symm_map] using hE'
   let w₀ := edgeCoeffIdentityWitness_transport_pullback φ R f hE hE' Z Z w hR.symm
