@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridHamiltonian
+import QICLean.ManyBody.Sites.Lattice.ChainBlocks
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
@@ -75,7 +76,7 @@ theorem commute_chainGridBlockHamiltonian (hw : 0 < w)
     Pairwise fun j k : Fin (L / w + 1) ↦
       Commute (chainGridBlockHamiltonian hw Φ j) (chainGridBlockHamiltonian hw Φ k) := by
   intro j k hjk
-  have hdisj := pairwise_disjoint_chainGridBlock L w
+  have hdisj := ManyBody.pairwise_disjoint_chainGridBlock L w
     (show j.val ≠ k.val from fun heq ↦ hjk (Fin.ext heq))
   exact ManyBody.commute_of_mem_supportedOperators_of_disjoint
       (chainGridBlockHamiltonian_mem_supported hw Φ j)
@@ -95,7 +96,8 @@ Osborne, arXiv:quant-ph/0508031v2, Figure 2. -/
 theorem chainGridBlockEvolution_mem_supported [NeZero q] (hw : 0 < w)
     (Φ : ManyBody.BondInteraction L q) (j : Fin (L / w + 1)) (t : ℝ) :
     hermitianUnitaryPath (chainGridBlockHamiltonian hw Φ j) t ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)) :=
+      ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (ManyBody.chainGridBlock L w j.val : Finset (Fin L)) :=
   hermitianUnitaryPath_mem_supported q _ (chainGridBlockHamiltonian_mem_supported hw Φ j) t
 
 end TNLean.MPS.AreaLaw

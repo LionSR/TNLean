@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter
 
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.BlockProductBonds
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.ChainGrid
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.FilterGrowth
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.FilterParameters
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.FilterPolynomial

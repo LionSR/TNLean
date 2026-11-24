@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Entropy.ComponentReduction
+import QICLean.ManyBody.Entropy.ChainInterval
+import QICLean.ManyBody.Sites.Lattice.Line
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -225,8 +227,9 @@ private theorem consecutive_window_coefficient_le_range_log_cube :
   have hc : 0 < Real.log 2 := Real.log_pos (by norm_num)
   refine ⟨by positivity, by positivity, ?_⟩
   intro q R hq hR
-  have hB := one_le_windowBudgetConst q R
-  unfold windowAreaLawConst windowBudgetConst cutAreaLawConst cutShellConst cutBudgetConst at *
+  have hB := ManyBody.one_le_windowBudgetConst q R
+  rw [← cutBudgetConst_two_mul] at hB
+  unfold windowAreaLawConst cutAreaLawConst cutShellConst cutBudgetConst at *
   push_cast at hB ⊢
   have hq0 : 0 < (q : ℝ) := by exact_mod_cast (show 0 < q by omega)
   have hy : Real.log 2 ≤ Real.log (q : ℝ) :=
@@ -371,9 +374,9 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset ℤ,
               ManyBody.regionEntropy (X := fun _ ↦ Fin q)
-                Ω (domainRegion Λ A) ≤
+                Ω (ManyBody.domainRegion Λ A) ≤
                 Cabs * (1 + J / Δ) * (R : ℝ) * Real.log ((q : ℝ) ^ R) ^ 3 *
-                  (domainBoundaryEdges Λ A).card := by
+                  (ManyBody.domainBoundaryEdges Λ A).card := by
   obtain ⟨Cabs, hCabs, hCeq, hchain⟩ :=
     chainAreaLaw_of_consecutive_terms_polynomial_range
   refine ⟨Cabs, hCabs, hCeq, ?_⟩

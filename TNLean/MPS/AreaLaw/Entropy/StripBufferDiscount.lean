@@ -29,31 +29,10 @@ open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction rectangul
 
 namespace TNLean.MPS.AreaLaw
 
-/-- The width coefficient of the strip logarithmic cut budget. -/
-noncomputable def stripBudgetConst (q R : ℕ) : ℝ :=
-  1 + ManyBody.stripCrossConst R *
-    Real.log (Real.exp 1 * (q : ℝ) ^ (1 + 2 * R * (R + 1))) ^ 2
-
-/-- The cut budget coefficient is at least one. -/
-theorem one_le_stripBudgetConst (q R : ℕ) : 1 ≤ stripBudgetConst q R := by
-  unfold stripBudgetConst
-  exact le_add_of_nonneg_right (by positivity)
-
-/-- Uniform linear-width budget for every column interval. -/
-theorem cutLogBudget_stripInterval_le_mul {q w : ℕ} (hq : 1 ≤ q) (hw : 1 ≤ w)
-    (L R a b : ℕ) :
-    ManyBody.cutLogBudget (fun X : AdmissibleSupport (rectangularDomain L w) R ↦ X.1) (fun _ ↦ q)
-        (ManyBody.stripInterval L w a b) ≤
-      stripBudgetConst q R * w := by
-  have hw' : (1 : ℝ) ≤ w := by exact_mod_cast hw
-  refine (ManyBody.cutLogBudget_stripInterval_le hq L w R a b).trans ?_
-  simp only [stripBudgetConst, Nat.cast_mul]
-  nlinarith
-
 /-- The shell count has a linear energy threshold and a square-root tail threshold. -/
 noncomputable def stripShellCount (q R w : ℕ) (J Δ : ℝ) : ℕ :=
-  ⌈4 + 64 * Real.exp 1 * (J / Δ) * (stripBudgetConst q R * w) +
-    128 * Real.sqrt ((1 + J / Δ) * (stripBudgetConst q R * w))⌉₊
+  ⌈4 + 64 * Real.exp 1 * (J / Δ) * (ManyBody.stripBudgetConst q R * w) +
+    128 * Real.sqrt ((1 + J / Δ) * (ManyBody.stripBudgetConst q R * w))⌉₊
 
 /-- Uniform shells are the actual column enlargements, without repeated terminal shells. -/
 def stripShell (L w R a b j : ℕ) : Finset ↥(rectangularDomain L w) :=
@@ -80,13 +59,13 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     2 * (ManyBody.regionEntropy (X := fun _ ↦ Fin q)
           Ω (ManyBody.stripInterval L w a b ∪ T) - ManyBody.regionEntropy Ω T) ≤
       ManyBody.regionEntropy Ω (ManyBody.stripInterval L w a b) +
-        4096 * Real.exp 1 * (J / Δ) * (stripBudgetConst q R * w) / m +
+        4096 * Real.exp 1 * (J / Δ) * (ManyBody.stripBudgetConst q R * w) / m +
         m * Real.log 2 := by
   classical
   intro m Tbuf
-  let B : ℝ := stripBudgetConst q R * w
+  let B : ℝ := ManyBody.stripBudgetConst q R * w
   have hB1 : 1 ≤ B := by
-    have h₁ := one_le_stripBudgetConst q R
+    have h₁ := ManyBody.one_le_stripBudgetConst q R
     have h₂ : (1 : ℝ) ≤ w := by exact_mod_cast hw
     dsimp [B]
     nlinarith
@@ -116,7 +95,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
       (Entropy.supportDim (fun _ : ↥(rectangularDomain L w) ↦ q) ∘ S) ≤ B := by
     intro j
     rw [show X ∪ T j = _ from union_stripShell L w R a b j]
-    exact cutLogBudget_stripInterval_le_mul hq hw L R _ _
+    exact ManyBody.cutLogBudget_stripInterval_le_mul hq hw L R _ _
   have hsingle : ∀ Y j j', ((∃ v ∈ S Y, v ∈ X ∪ T j) ∧ ∃ v ∈ S Y, v ∉ X ∪ T j) →
       ((∃ v ∈ S Y, v ∈ X ∪ T j') ∧ ∃ v ∈ S Y, v ∉ X ∪ T j') → j = j' := by
     intro Y j j' hj hj'
@@ -201,7 +180,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
 
 /-- A coefficient for the shell count, depending only on local dimension and range. -/
 noncomputable def stripShellConst (q R : ℕ) : ℝ :=
-  5 + (64 * Real.exp 1 + 128) * stripBudgetConst q R
+  5 + (64 * Real.exp 1 + 128) * ManyBody.stripBudgetConst q R
 
 /-- The shell count is linear in width and in one plus the inverse relative gap. -/
 theorem stripShellCount_le {q R w : ℕ} {J Δ : ℝ} (hw : 1 ≤ w)
@@ -209,8 +188,8 @@ theorem stripShellCount_le {q R w : ℕ} {J Δ : ℝ} (hw : 1 ≤ w)
     (stripShellCount q R w J Δ : ℝ) ≤ stripShellConst q R * (1 + J / Δ) * w := by
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hw' : (1 : ℝ) ≤ w := by exact_mod_cast hw
-  have hb := one_le_stripBudgetConst q R
-  let B : ℝ := stripBudgetConst q R * w
+  have hb := ManyBody.one_le_stripBudgetConst q R
+  let B : ℝ := ManyBody.stripBudgetConst q R * w
   have hB1 : 1 ≤ B := by dsimp [B]; nlinarith
   have htB : 1 ≤ (1 + J / Δ) * B := by nlinarith
   have hsqrt : Real.sqrt ((1 + J / Δ) * B) ≤ (1 + J / Δ) * B := by
@@ -233,21 +212,21 @@ theorem stripShellCount_le {q R w : ℕ} {J Δ : ℝ} (hw : 1 ≤ w)
 /-- The explicit entropy coefficient in the strip extension. -/
 noncomputable def stripAreaLawConst (q R : ℕ) : ℝ :=
   (8 * R * Real.log q + Real.log 2) * stripShellConst q R +
-    1024 * Real.exp 1 * stripBudgetConst q R
+    1024 * Real.exp 1 * ManyBody.stripBudgetConst q R
 
 /-- Scalar relaxation of the actual shell and discount costs. -/
 private theorem stripEntropyBound_le {q R w : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hw : 1 ≤ w) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     let m := stripShellCount q R w J Δ
     8 * (m : ℝ) * R * w * Real.log q +
-      4096 * Real.exp 1 * (J / Δ) * (stripBudgetConst q R * w) / m + m * Real.log 2 ≤
+      4096 * Real.exp 1 * (J / Δ) * (ManyBody.stripBudgetConst q R * w) / m + m * Real.log 2 ≤
       stripAreaLawConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 := by
   intro m
-  let B : ℝ := stripBudgetConst q R * w
+  let B : ℝ := ManyBody.stripBudgetConst q R * w
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hw' : (1 : ℝ) ≤ w := by exact_mod_cast hw
   have hB1 : 1 ≤ B := by
-    have := one_le_stripBudgetConst q R
+    have := ManyBody.one_le_stripBudgetConst q R
     dsimp [B]
     nlinarith
   have hm4 : (4 : ℝ) ≤ m := by
@@ -258,7 +237,7 @@ private theorem stripEntropyBound_le {q R w : ℕ} {J Δ : ℝ}
   have hmpos : (0 : ℝ) < m := by linarith only [hm4]
   have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have herr : 4096 * Real.exp 1 * (J / Δ) * B / m ≤
-      1024 * Real.exp 1 * stripBudgetConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 := by
+      1024 * Real.exp 1 * ManyBody.stripBudgetConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 := by
     rw [div_le_iff₀ hmpos]
     have hcoef : 0 ≤ 1024 * Real.exp 1 * B := by positivity
     have ht : J / Δ ≤ (1 + J / Δ) * w := by
@@ -277,7 +256,7 @@ private theorem stripEntropyBound_le {q R w : ℕ} {J Δ : ℝ}
   have hlast : stripShellConst q R * (1 + J / Δ) * w * Real.log 2 ≤
       stripShellConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 * Real.log 2 := by
     have hnonneg : 0 ≤ stripShellConst q R := by
-      have := one_le_stripBudgetConst q R
+      have := ManyBody.one_le_stripBudgetConst q R
       unfold stripShellConst
       positivity
     have hww : (w : ℝ) ≤ (w : ℝ) ^ 2 := by nlinarith
@@ -301,7 +280,7 @@ theorem regionEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     ManyBody.regionEntropy (X := fun _ ↦ Fin q)
       Ω (ManyBody.stripInterval L w a b) ≤ stripAreaLawConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 := by
   let m := stripShellCount q R w J Δ
-  let B : ℝ := stripBudgetConst q R * w
+  let B : ℝ := ManyBody.stripBudgetConst q R * w
   let T := ManyBody.stripInterval L w (a - m * R) (b + m * R) \ ManyBody.stripInterval L w a b
   have hdisc := two_mul_condEntropy_stripInterval_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan a b
   change 2 * (ManyBody.regionEntropy Ω (ManyBody.stripInterval L w a b ∪ T) -
@@ -335,7 +314,7 @@ theorem stripAreaLaw (q R : ℕ) :
       ManyBody.regionEntropy (X := fun _ ↦ Fin q)
         Ω (ManyBody.stripInterval L w a b) ≤ C * (1 + J / Δ) * (w : ℝ) ^ 2 := by
   refine ⟨stripAreaLawConst q R, ?_, ?_⟩
-  · unfold stripAreaLawConst stripShellConst stripBudgetConst
+  · unfold stripAreaLawConst stripShellConst ManyBody.stripBudgetConst
     positivity
   · intro L w _ hw hq J Δ hJ hΔ h hh hhJ E₀ Ω hΩ hgap hspan a b
     exact regionEntropy_stripInterval_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan a b

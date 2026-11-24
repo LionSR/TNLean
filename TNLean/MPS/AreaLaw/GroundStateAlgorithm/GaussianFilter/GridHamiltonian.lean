@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.Models
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.ChainGrid
+import QICLean.ManyBody.Sites.Lattice.ChainBlocks
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
@@ -33,14 +33,14 @@ variable {L q w : ℕ}
 
 /-- The edge immediately before an internal grid boundary. Osborne, Figure 2. -/
 def chainGridBoundaryEdge (hw : 0 < w) (k : Fin ((L - 1) / w)) : Fin (L - 1) :=
-  ⟨chainGridCut w k.val - 1, by
-    have hc := chainGridCut_bounds hw k
+  ⟨ManyBody.chainGridCut w k.val - 1, by
+    have hc := ManyBody.chainGridCut_bounds hw k
     omega⟩
 
 /-- The right endpoint of a boundary edge is its grid cut. Osborne, Figure 2. -/
 theorem chainGridBoundaryEdge_val_succ (hw : 0 < w) (k : Fin ((L - 1) / w)) :
-    (chainGridBoundaryEdge hw k).val + 1 = chainGridCut w k.val := by
-  have hc := (chainGridCut_bounds hw k).1
+    (chainGridBoundaryEdge hw k).val + 1 = ManyBody.chainGridCut w k.val := by
+  have hc := (ManyBody.chainGridCut_bounds hw k).1
   dsimp only [chainGridBoundaryEdge]
   omega
 
@@ -53,7 +53,7 @@ theorem chainGridBoundaryEdge_injective (hw : 0 < w) :
   have hj := chainGridBoundaryEdge_val_succ hw j
   have hk := chainGridBoundaryEdge_val_succ hw k
   have hprod : (j.val + 1) * w = (k.val + 1) * w := by
-    change chainGridCut w j.val = chainGridCut w k.val
+    change ManyBody.chainGridCut w j.val = ManyBody.chainGridCut w k.val
     omega
   have hsucc : j.val + 1 = k.val + 1 := mul_right_cancel₀ hw.ne' hprod
   exact Fin.ext (by omega)
@@ -64,30 +64,30 @@ noncomputable def chainGridBoundaryEdges (hw : 0 < w) : Finset (Fin (L - 1)) :=
 
 /-- The block owner of the left endpoint of an edge. Osborne, Figure 2. -/
 def chainGridEdgeOwner (w : ℕ) (i : Fin (L - 1)) : Fin (L / w + 1) :=
-  chainGridOwner w ⟨i.val, lt_of_lt_of_le i.isLt (Nat.sub_le L 1)⟩
+  ManyBody.chainGridOwner w ⟨i.val, lt_of_lt_of_le i.isLt (Nat.sub_le L 1)⟩
 
 /-- An edge not omitted at a grid boundary lies inside its explicitly assigned block.
 Osborne, arXiv:quant-ph/0508031v2, Figure 2. -/
 theorem chainGridEdge_subset_ownerBlock (hw : 0 < w) (i : Fin (L - 1))
     (hi : i ∉ chainGridBoundaryEdges hw) :
-    interval L i.val (i.val + 2) ⊆ chainGridBlock L w (chainGridEdgeOwner w i).val := by
+    interval L i.val (i.val + 2) ⊆ ManyBody.chainGridBlock L w (chainGridEdgeOwner w i).val := by
   classical
-  have hnot : ¬ ∃ k : Fin ((L - 1) / w), chainGridCut w k.val = i.val + 1 := by
+  have hnot : ¬ ∃ k : Fin ((L - 1) / w), ManyBody.chainGridCut w k.val = i.val + 1 := by
     rintro ⟨k, hk⟩
     have heq : chainGridBoundaryEdge hw k = i := by
       apply Fin.ext
       have h := chainGridBoundaryEdge_val_succ hw k
       omega
     exact hi (Finset.mem_image.mpr ⟨k, Finset.mem_univ _, heq⟩)
-  obtain ⟨j, hj⟩ := (chainGrid_edge_in_block_iff hw (by omega : i.val + 1 < L)).mpr hnot
+  obtain ⟨j, hj⟩ := (ManyBody.chainGrid_edge_in_block_iff hw (by omega : i.val + 1 < L)).mpr hnot
   let x : Fin L := ⟨i.val, lt_of_lt_of_le i.isLt (Nat.sub_le L 1)⟩
   have hxedge : x ∈ interval L i.val (i.val + 2) :=
     mem_interval.mpr (show i.val ≤ i.val ∧ i.val < i.val + 2 by omega)
   have hxj := hj hxedge
-  have hxown := mem_chainGridBlock_owner hw x
+  have hxown := ManyBody.mem_chainGridBlock_owner hw x
   have heq : j.val = (chainGridEdgeOwner w i).val := by
     by_contra hne
-    have hdisj := pairwise_disjoint_chainGridBlock L w hne
+    have hdisj := ManyBody.pairwise_disjoint_chainGridBlock L w hne
     exact Finset.disjoint_left.mp hdisj hxj hxown
   simpa only [heq] using hj
 
@@ -148,7 +148,8 @@ Osborne, Figure 2. -/
 theorem chainGridBlockHamiltonian_mem_supported (hw : 0 < w)
     (Φ : ManyBody.BondInteraction L q) (j : Fin (L / w + 1)) :
     chainGridBlockHamiltonian hw Φ j ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (ManyBody.chainGridBlock L w j.val : Finset (Fin L)) := by
   classical
   apply sum_mem
   intro i hi

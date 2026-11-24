@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Entropy.BufferDiscount
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Entropy.ChainInterval
-import TNLean.MPS.AreaLaw.Chain.WindowCounting
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 
@@ -55,6 +55,57 @@ open ManyBody (chainBudgetConst chainCrossConst one_le_chainBudgetConst
 namespace TNLean.MPS.AreaLaw
 
 variable {L q R : ℕ} {J Δ : ℝ}
+
+/-- The cut budget `1 + N log² (e q^{R + 1})` of an interval split by at most `N` supports
+of range `R`. TNLean note, `eq:BR`, with `N_R` replaced by `N`. -/
+noncomputable def cutBudgetConst (N q R : ℕ) : ℝ :=
+  1 + N * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
+
+/-- The cut budget is at least one. -/
+theorem one_le_cutBudgetConst (N q R : ℕ) : 1 ≤ cutBudgetConst N q R :=
+  le_add_of_nonneg_right (by positivity)
+
+/-- At the crossing count `N_R` the cut budget is the interval budget `B_R`.
+TNLean note, `eq:BR`. -/
+theorem cutBudgetConst_chainCrossConst (q R : ℕ) :
+    cutBudgetConst (ManyBody.chainCrossConst R) q R = ManyBody.chainBudgetConst q R :=
+  rfl
+
+/-- The shell constant `5 + min {32 N q^{2(R + 1)}, 64 e N log² (e q^{R + 1})} + 128 B` for
+at most `N` split supports, where `B = cutBudgetConst N q R`. TNLean note, Theorem A, with
+`N_R` replaced by `N`. -/
+noncomputable def cutShellConst (N q R : ℕ) : ℝ :=
+  5 + min (32 * N * (q : ℝ) ^ (2 * (R + 1)))
+      (64 * Real.exp 1 * N * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
+    128 * cutBudgetConst N q R
+
+/-- The shell constant is nonnegative. -/
+theorem cutShellConst_nonneg (N q R : ℕ) : 0 ≤ cutShellConst N q R := by
+  unfold cutShellConst cutBudgetConst
+  positivity
+
+/-- The area-law constant `(8 R log q + log 2) C₁ + 1024 e B` for at most `N` split
+supports, where `C₁ = cutShellConst N q R` and `B = cutBudgetConst N q R`. TNLean note,
+Theorem A, with `N_R` replaced by `N`. -/
+noncomputable def cutAreaLawConst (N q R : ℕ) : ℝ :=
+  (8 * R * Real.log q + Real.log 2) * cutShellConst N q R +
+    1024 * Real.exp 1 * cutBudgetConst N q R
+
+/-- The area-law constant is nonnegative. -/
+theorem cutAreaLawConst_nonneg (N q R : ℕ) : 0 ≤ cutAreaLawConst N q R := by
+  have := cutShellConst_nonneg N q R
+  unfold cutAreaLawConst cutBudgetConst
+  positivity
+
+/-- The cut budget with crossing count `2 * R` is the consecutive-window budget. -/
+theorem cutBudgetConst_two_mul (q R : ℕ) :
+    cutBudgetConst (2 * R) q R = ManyBody.windowBudgetConst q R := rfl
+
+/-- The area-law constant `C₀,win`: `C₀(q, R)` with `N_R` replaced by `2R` and `B_R` by
+`B_win`; its shell constant `C₁,win` is `cutShellConst (2 * R) q R`.
+Source: the one-dimensional note, `rem:sharper`, lines 706–745. -/
+noncomputable def windowAreaLawConst (q R : ℕ) : ℝ :=
+  cutAreaLawConst (2 * R) q R
 
 /-- The interval entropy bound
 `C_int = 8 m R log q + 4096 e (J/Δ) B_R / m + m log 2`. -/
@@ -288,7 +339,7 @@ private theorem regionEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 
     Finset.disjoint_sdiff)
   have hT := ManyBody.regionEntropy_le_card_mul_log hΩ T
   have hcard : ((T.card : ℕ) : ℝ) ≤ 2 * (m * R) := by
-    exact_mod_cast card_interval_enlargement_sdiff_le L l r (m * R)
+    exact_mod_cast ManyBody.card_interval_enlargement_sdiff_le L l r (m * R)
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have hTbound : ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω T ≤
       2 * (m * R) * Real.log q := hT.trans (mul_le_mul_of_nonneg_right hcard hlog)
@@ -375,7 +426,7 @@ theorem chainAreaLaw_of_consecutive_terms
     (fun a b ↦ ?_) A
   exact regionEntropy_interval_le_of_family_budget hq hJ hΔ g (fun X ↦ X.val)
     (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) (fun X ↦ hhJ X.val)
-    (2 * R) (one_le_windowBudgetConst q R)
+    (2 * R) (ManyBody.one_le_windowBudgetConst q R)
     (h.card_crossingTerms_interval_le_of_consecutive_terms hwindow)
     (h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow) hΩ hgap hspan a b
 
@@ -405,7 +456,7 @@ theorem regionEntropy_interval_le_polynomial
     Disjoint (interval L l r) T)
   have hT := ManyBody.regionEntropy_le_card_mul_log hΩ T
   have hcard : (T.card : ℝ) ≤ 2 * ((m : ℝ) * R) := by
-    exact_mod_cast card_interval_enlargement_sdiff_le L l r (m * R)
+    exact_mod_cast ManyBody.card_interval_enlargement_sdiff_le L l r (m * R)
   have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have hTbound := hT.trans (mul_le_mul_of_nonneg_right hcard hlog)
   linarith

@@ -698,7 +698,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Localization of an evolved sum of local perturbations]
     \label{lem:graph_evolved_perturbation_localization}
-    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le}
+    \lean{ManyBody.norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le}
     \leanok
     \uses{thm:graph_lieb_robinson_two_spheres,def:qc_site_expectation}
     Let $\Gamma$ be a finite graph on a vertex set $V$ whose spheres have at
@@ -802,7 +802,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[A supported Gaussian integral on a graph]
     \label{lem:graph_supported_gaussian_integral}
-    \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_graphNeighborhood}
+    \lean{ManyBody.exists_supported_gaussian_integral_graphNeighborhood}
     \leanok
     \uses{thm:graph_lieb_robinson_two_spheres,thm:qc_supported_gaussian_projection_bounds,
         def:qc_site_expectation}
@@ -834,7 +834,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[A supported Gaussian integral on a contiguous chain]
     \label{thm:chain_supported_gaussian_integral}
-    \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral}
+    \lean{ManyBody.exists_supported_gaussian_integral}
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
         def:qc_site_expectation,thm:chain_lieb_robinson}
@@ -905,7 +905,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Information reset from a supported localization]
     \label{lem:information_reset_of_supported_localization}
-    \lean{TNLean.MPS.AreaLaw.information_reset_of_supported_localization}
+    \lean{ManyBody.information_reset_of_supported_localization}
     \leanok
     \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,
         thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
@@ -1044,7 +1044,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[The size of a coordinate enlargement]
     \label{thm:chain_interval_enlargement_size}
-    \lean{TNLean.MPS.AreaLaw.card_interval_enlargement_sdiff_le}
+    \lean{ManyBody.card_interval_enlargement_sdiff_le}
     \leanok
     Let $I=\{0,\ldots,L-1\}$ and let $l,r,v$ be natural numbers.
     With truncated subtraction at the left endpoint,
@@ -1442,7 +1442,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \label{thm:chain_window_area_law}
     \lean{
         TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms,
-        TNLean.MPS.AreaLaw.windowBudgetConst,
+        ManyBody.windowBudgetConst,
         TNLean.MPS.AreaLaw.windowAreaLawConst
     }
     \leanok
@@ -1585,10 +1585,10 @@ Theorem~B a second way, by a sequential preparation protocol.
         ManyBody.Interaction.extend,
         ManyBody.Interaction.isHermitian_extend_term,
         ManyBody.Interaction.norm_extend_term_le,
-        TNLean.MPS.AreaLaw.domainBoundaryEdges,
-        TNLean.MPS.AreaLaw.domainRegion,
-        TNLean.MPS.AreaLaw.IsDomainEdge,
-        TNLean.MPS.AreaLaw.card_domainBoundaryEdges}
+        ManyBody.domainBoundaryEdges,
+        ManyBody.domainRegion,
+        ManyBody.IsDomainEdge,
+        ManyBody.card_domainBoundaryEdges}
     \leanok
     \uses{def:chain_model,def:area_law_hamiltonian}
     A finite set $\Lambda\subset\mathbb Z$ carries the induced path graph, whose
@@ -1761,7 +1761,7 @@ allowed. These are the two-replica operators in
 
 \begin{lemma}[Supported Gaussian averaging on a finite integer domain]
     \label{thm:domain_supported_gaussian_integral}
-    \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_domain}\leanok
+    \lean{ManyBody.exists_supported_gaussian_integral_domain}\leanok
     \uses{def:domain_model,def:chain_swapped_doubled_hamiltonian,def:qc_site_expectation}
     For every range $R$ and real interaction bound $J$ there are constants
     $C,v>0$ with the following property. Let $q\ge1$, let $H$ be an admissible
@@ -1962,7 +1962,7 @@ allowed. These are the two-replica operators in
 
 \begin{lemma}[Entropy of intrinsic neighborhoods of interval unions]
     \label{thm:domain_interval_neighborhood_entropy}
-    \lean{TNLean.MPS.AreaLaw.regionEntropy_domainNeighborhood_biUnion_intervals_le,
+    \lean{ManyBody.regionEntropy_domainNeighborhood_biUnion_intervals_le,
         ManyBody.DomainInteraction.regionEntropy_neighborhood_biUnion_intervals_le}
     \leanok
     \uses{def:domain_model}
@@ -2190,9 +2190,9 @@ allowed. These are the two-replica operators in
         ManyBody.regionEntropy_sdiff_eq_of_eq_zero,
         ManyBody.regionEntropy_union_eq_of_eq_zero,
         ManyBody.regionEntropy_symmDiff_eq_of_eq_zero,
-        TNLean.MPS.AreaLaw.exists_mem_val_eq_iff,
-        TNLean.MPS.AreaLaw.boundaryEdges_symmDiff_interval,
-        TNLean.MPS.AreaLaw.exists_regionEntropy_eq_boundaryEdges_eq_symmDiff
+        ManyBody.exists_mem_val_eq_iff,
+        ManyBody.boundaryEdges_symmDiff_interval,
+        ManyBody.exists_regionEntropy_eq_boundaryEdges_eq_symmDiff
     }
     \leanok
     \uses{lem:chain_entropy_inequalities}
@@ -2370,9 +2370,9 @@ allowed. These are the two-replica operators in
 
 \begin{lemma}[Neighborhoods of intervals and their entropy]
     \label{thm:chain_interval_neighborhood_entropy}
-    \lean{TNLean.MPS.AreaLaw.graphNeighborhood_pathGraph_interval_eq,
-        TNLean.MPS.AreaLaw.regionEntropy_biUnion_neighborhood_intervals_le,
-        TNLean.MPS.AreaLaw.regionEntropy_graphNeighborhood_pathGraph_biUnion_intervals_le}
+    \lean{ManyBody.graphNeighborhood_pathGraph_interval_eq,
+        ManyBody.regionEntropy_biUnion_neighborhood_intervals_le,
+        ManyBody.regionEntropy_graphNeighborhood_pathGraph_biUnion_intervals_le}
     \leanok
     \uses{def:chain_model}
     Let $I=\{0,\ldots,L-1\}$ be a contiguous chain. Write
@@ -2993,9 +2993,9 @@ In particular the ground eigenspace is one-dimensional.
 
 \begin{lemma}[Logarithmic buffered discount on a strip]
     \label{lem:strip_buffer_discount}
-    \lean{TNLean.MPS.AreaLaw.stripBudgetConst,
-        TNLean.MPS.AreaLaw.one_le_stripBudgetConst,
-        TNLean.MPS.AreaLaw.cutLogBudget_stripInterval_le_mul,
+    \lean{ManyBody.stripBudgetConst,
+        ManyBody.one_le_stripBudgetConst,
+        ManyBody.cutLogBudget_stripInterval_le_mul,
         TNLean.MPS.AreaLaw.stripShellCount,
         TNLean.MPS.AreaLaw.stripShell,
         TNLean.MPS.AreaLaw.union_stripShell,
