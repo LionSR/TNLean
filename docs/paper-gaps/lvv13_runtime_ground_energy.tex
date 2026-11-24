@@ -1998,7 +1998,7 @@ is merely larger than one half.  Its explicit LVV-scale corollary
 \leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.twentyThree\_div\_twentyFour\_le\_maxEigenvalue}
 gives $\mu_{\max}\ge23/24$ whenever the energy excess is at most
 $\Delta/24$.  The trace-one spectral estimate
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.re\_inner\_le\_one\_sub\_eigenvalue\_of\_orthogonal}
+\leanid{Matrix.PosSemidef.re\_inner\_le\_one\_sub\_eigenvalue\_of\_orthogonal}
 shows that the density is bounded by $1-\mu_{\max}$ on the orthogonal
 complement of its leading vector.  Hence the resulting separation is at
 least $11/12$, and
@@ -2050,17 +2050,17 @@ produces a physical vector with the LVV normalization, support, energy, and
 overlap bounds.  The isometric expansion preserves the residual and norm
 exactly; its range condition supplies the retained-support hypothesis.
 The first deterministic power-method ingredient is also formalized:
-\leanid{TNLean.MPS.AreaLaw.exists\_basisVector\_sq\_overlap\_ge\_inv}
+\leanid{exists\_basisVector\_sq\_overlap\_ge\_inv}
 shows that among the $n$ standard coordinate vectors, one has squared overlap
 at least $1/n$ with the unit dominant eigenvector.  Thus only $n$ starting
 vectors are required; the remaining spectral ratio is at most $1/23$.
 The contraction estimate
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm\_toEuclideanLin\_apply\_le\_of\_trace\_eq\_one}
+\leanid{Matrix.PosSemidef.norm\_toEuclideanLin\_apply\_le\_of\_trace\_eq\_one}
 shows that every power iterate has nonincreasing norm before normalization, and
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.eigenvalue\_le\_one\_of\_trace\_eq\_one}
+\leanid{Matrix.PosSemidef.eigenvalue\_le\_one\_of\_trace\_eq\_one}
 records the corresponding upper bound on every real eigenvalue.  The sharper
 orthogonal-complement estimate
-\leanid{TNLean.MPS.AreaLaw.Matrix.PosSemidef.norm\_toEuclideanLin\_apply\_le\_one\_sub\_eigenvalue\_of\_orthogonal}
+\leanid{Matrix.PosSemidef.norm\_toEuclideanLin\_apply\_le\_one\_sub\_eigenvalue\_of\_orthogonal}
 bounds the contraction there by $1-\mu$.  Its LVV specialization and iterated
 form show that, when $\mu\ge23/24$, $t$ power steps suppress every orthogonal
 component by $24^{-t}$.  Scaling each step by $\mu^{-1}$ fixes the dominant
