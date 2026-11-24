@@ -45,7 +45,7 @@ open scoped Matrix.Norms.L2Operator
 
 open Filter Topology Set
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth supDist)
 open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
@@ -137,7 +137,7 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
         (∀ d : ℕ, 1 ≤ d → d ≤ X.L n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
         (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤
           κ.Ce * (n * (X.L n : ℝ) ^ X.e + n)) →

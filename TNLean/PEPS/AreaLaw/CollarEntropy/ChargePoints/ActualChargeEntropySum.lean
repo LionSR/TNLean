@@ -33,7 +33,8 @@ open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 
-open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction ambientDepth
+  supDist)
 
 namespace TensorPower.ReplicaTransport.TransportData
 
@@ -85,7 +86,7 @@ theorem sum_actualCharge_integral_le_sum_actualRounds_entropyGain_planeDomainGra
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {t : ℝ} (ht : 0 ≤ t) (k : ℕ)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (hne : pre ≠ 0)
     {p₀ p₁ : ℝ} (h0 : 0 ≤ p₀) (h01 : p₀ ≤ p₁) (h1 : p₁ ≤ 1) :
@@ -177,7 +178,7 @@ theorem actualCharges_integral_bound_planeDomainGraph_of_finiteFamilyTransportBo
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
       let hm : 0 < S.m := by omega
       let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
@@ -241,7 +242,7 @@ theorem actualCharges_integral_bound_planeDomainGraph :
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos

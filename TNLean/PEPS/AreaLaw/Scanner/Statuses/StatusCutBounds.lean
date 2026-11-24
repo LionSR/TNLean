@@ -18,7 +18,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Lemma 9.1(2), lines 243–260, at `openai/math@adc7f124`.
 -/
 
-open ManyBody (ambientDilation edgeBoundary planeDomainGraph planeDomainGraph_degree_le_four)
+open ManyBody (ambientDilation edgeBoundary planeDomainGraph planeDomainGraph_degree_le_four
+  ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -51,7 +52,7 @@ private theorem physical_status_cut_bounds {Λ T : Finset (ℤ × ℤ)}
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-      ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (jN jF : ℤ) (hjN : jN ≤ L) (hjF : jF ≤ L)
     (hpos : ∀ x, σ x = none → 0 < depth x)
     (hP : ((receiving σ false) ∆ depthPrefix A depth jN).card ≤ 3 * n * D)
@@ -120,7 +121,7 @@ theorem state_cut_bounds_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (edgeBoundary (planeDomainGraph Λ) (positiveNear S.depth (S.state h g))).card ≤
       20 * S.n * S.D ∧
     (edgeBoundary (planeDomainGraph Λ) (positiveNearMiddle S.depth (S.state h g))).card ≤
@@ -157,7 +158,7 @@ theorem oldChargeState_cut_bounds_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (edgeBoundary (planeDomainGraph Λ) (positiveNear S.depth (S.oldChargeState h g))).card ≤
       20 * S.n * S.D ∧
     (edgeBoundary (planeDomainGraph Λ)

@@ -35,7 +35,7 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (IntRect IsSafe rectRegion)
+open ManyBody (IntRect IsSafe rectRegion ambientDepth)
 
 noncomputable section
 

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.TwoFamilies
@@ -124,7 +124,7 @@ theorem regionEntropy_le_residual_add_half_sum
 
 section TwoFamilyDecomposition
 
-open ManyBody (planeDomainGraph edgeBoundary)
+open ManyBody (planeDomainGraph edgeBoundary supDist)
 
 /-- **Proposition 11.2** (`prop:two-families`, `10-geometry.tex` lines 98–140),
 for the template constants `D₀, Ctpl` of Definition 9.3. For every lower scale
@@ -147,9 +147,9 @@ def TwoFamilyDecomposition (D₀ Ctpl : ℝ) : Prop :=
           (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
           (∀ i, nstar ≤ n i) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ)) ∧
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t z : ℤ) : ℝ)) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
-            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t x.val : ℤ) : ℝ)) ∧
           ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
 
 end TwoFamilyDecomposition

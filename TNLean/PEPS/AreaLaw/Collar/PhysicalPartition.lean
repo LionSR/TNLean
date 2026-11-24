@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import Mathlib.Data.Finset.Sort
 import Mathlib.Data.Fintype.Basic
 import Mathlib.Tactic.SplitIfs
@@ -25,9 +26,15 @@ is the ambient sup-norm distance to the target, not the graph distance used for
 interaction balls. All statements here are finite combinatorial statements on
 those actual rows and partitions, with no probabilities or transported states.
 
+For the depth relative to a finite nonempty set of lattice points, the row of
+depth `d ≥ 1` injects into the layer `T^{+d} \ T^{+(d-1)}` of the ambient
+dilations, so a bound on the layers bounds every physical row.
+
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
-`08-scanner.tex`, lines 83–137, at `openai/math@adc7f124`.
+`08-scanner.tex`, lines 43–48 and 83–137, at `openai/math@adc7f124`.
 -/
+
+open ManyBody (ambientDilation ambientDepth ambientDepth_eq_iff_mem_ambientDilation_sdiff)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -179,5 +186,32 @@ theorem charge_moves_middle_part (σ : PhysicalPartition V) (side : Bool)
     (hs : (support ∩ receiving σ side).Nonempty ∧ (support ∩ middle σ).Nonempty) :
     middle σ \ middle (charge σ side support) = support ∩ middle σ := by
   simp [charge, hs, middle_sdiff_middle_assign]
+
+omit [DecidableEq V] in
+/-- The actual fixed physical row has at most as many entries as its ambient dilation layer.
+The injective coordinates are the inclusion of the physical domain in the lattice.
+Source: `08-scanner.tex`, lines 43–48 and 83–87. -/
+theorem depthRow_ambientDepth_length_le (T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
+    (coord : V → ℤ × ℤ) (hcoord : Function.Injective coord) {d : ℕ} (hd : 0 < d) :
+    (depthRow (fun x ↦ ambientDepth T hT (coord x)) d).length ≤
+      (ambientDilation T d \ ambientDilation T (d - 1)).card := by
+  classical
+  rw [depthRow, Finset.length_toList]
+  apply Finset.card_le_card_of_injOn coord _ hcoord.injOn
+  intro x hx
+  exact (ambientDepth_eq_iff_mem_ambientDilation_sdiff T hT (coord x) hd).mp
+    (Finset.mem_filter.mp hx).2
+
+omit [DecidableEq V] in
+/-- The ambient row assumption supplies the scanner's fixed padding bound on every physical row.
+Source: `scanner:test-geometry` and fixed row padding, `08-scanner.tex`, lines 43–48 and 83–87. -/
+theorem depthRow_ambientDepth_length_le_of_row_bound (T : Finset (ℤ × ℤ))
+    (hT : T.Nonempty) (coord : V → ℤ × ℤ) (hcoord : Function.Injective coord)
+    {n L : ℕ}
+    (hrow : ∀ d : ℕ, 1 ≤ d → d ≤ L →
+      (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
+    {d : ℕ} (hd : 1 ≤ d) (hdL : d ≤ L) :
+    (depthRow (fun x ↦ ambientDepth T hT (coord x)) d).length ≤ n :=
+  (depthRow_ambientDepth_length_le T hT coord hcoord hd).trans (hrow d hd hdL)
 
 end TNLean.PEPS.AreaLaw.Scan

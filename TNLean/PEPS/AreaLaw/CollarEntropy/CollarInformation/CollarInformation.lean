@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -13,7 +13,6 @@ import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import QICLean.Analysis.TraceNorm.PureStateTraceDistance
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateLayers
-import TNLean.PEPS.AreaLaw.Collar.CompactCollarCounting
 
 /-!
 # The deterministic steps of the sublinear collar bound
@@ -73,7 +72,7 @@ open scoped Matrix.Norms.L2Operator
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction card_ambientDilation_le_of_layers)
 open scoped ComplexOrder
 open ManyBody (planeDomainGraph edgeBoundary ambientDilation)
 
@@ -402,7 +401,7 @@ theorem Template.collar_cut_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     template_cut_boundary_card_le T hC Λ A hsep hD L hL, ?_, ?_⟩
   · rw [hsd]
     exact template_shell_cut_boundary_card_le T hC Λ A hsep hD L hL
-  · have hlayers := Scan.card_ambientDilation_le_of_layers T.points n L
+  · have hlayers := card_ambientDilation_le_of_layers T.points n L
       (fun d hd hdL ↦ template_layer_card_le T hC d hd (hdL.trans hL))
     have hfilter : (A.filter fun x ↦ x.val ∈ ambientDilation T.points L).card ≤
         (ambientDilation T.points L).card :=

@@ -21,7 +21,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 at `openai/math@adc7f124`.
 -/
 
-open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -101,7 +101,7 @@ theorem statusMarginal_cutLogBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
       (∀ d : ℕ, 1 ≤ d → d ≤ L →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       let B := statusMarginalBudgetConstant q R Cr *
         ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
       1 ≤ B ∧ ∀ (k : ℕ) (h : History S.K S.m S.M k) (g : Fin S.K),
@@ -178,7 +178,7 @@ theorem exists_statusMarginal_cutLogBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : 
         (∀ d : ℕ, 1 ≤ d → d ≤ L →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
         1 ≤ B ∧ ∀ (k : ℕ) (h : History S.K S.m S.M k) (g : Fin S.K),
           (k ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state h g),

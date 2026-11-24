@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -64,16 +64,16 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 noncomputable section
 
-open ManyBody (edgeBoundary planeDomainGraph)
+open ManyBody (edgeBoundary planeDomainGraph supDist natCast_supDist)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 open Filter
 open scoped Fin.NatCast
 
-private theorem dist_integerPoint_eq_ambientSupDistance (t z : ℤ × ℤ) :
-    dist (integerPoint t) (integerPoint z) = (Scan.ambientSupDistance t z : ℝ) := by
-  simp [integerPoint, Prod.dist_eq, Real.dist_eq, Scan.ambientSupDistance]
+private theorem dist_integerPoint_eq_supDist (t z : ℤ × ℤ) :
+    dist (integerPoint t) (integerPoint z) = ((supDist t z : ℤ) : ℝ) := by
+  simp [integerPoint, Prod.dist_eq, Real.dist_eq, natCast_supDist]
 
 section Primary
 
@@ -374,9 +374,9 @@ def IsTwoFamilyDecompositionConstant (D₀ Ctpl : ℝ) (nstar : ℕ) (C : ℝ) :
         (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
         (∀ i, nstar ≤ n i) ∧
         (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-          2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ)) ∧
+          2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t z : ℤ) : ℝ)) ∧
         (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
-          2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
+          2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t x.val : ℤ) : ℝ)) ∧
         ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
 
 /-- Proposition 11.2 says that every lower scale threshold `n_* ≥ 1` has a
@@ -455,7 +455,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
               (∀ y : ℤ × ℤ, y ∈ T.points ↔ integerPoint y ∈ D.birth x) ∧
               T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
               ∀ y ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
-                2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance y z : ℝ))
+                2 * (n : ℝ) ^ (Exponents.beta : ℝ) < ((supDist y z : ℤ) : ℝ))
     (hmetric : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ),
       RepairMetricHypotheses (o := dyadicOrigin) (Λ := Λ) (A := A) (C := C) (k₀ := k₀)
         (hC := hC) (h₀ := h₀) (Sstar := Sstar) (1 / 4))
@@ -548,7 +548,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
       (∀ y : ℤ × ℤ, y ∈ T.points ↔ integerPoint y ∈ 𝔇N.birth (e i).val) ∧
       T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
       ∀ y ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
-        2 * (nf (e i) : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance y z : ℝ) := by
+        2 * (nf (e i) : ℝ) ^ (Exponents.beta : ℝ) < ((supDist y z : ℤ) : ℝ) := by
     intro i
     obtain ⟨w, hw⟩ := (e i).property.2
     have hwb : integerPoint w.val ∈ 𝔇N.birth (e i).val :=
@@ -638,7 +638,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
     have hne : (e j).val ≠ (e i).val := fun h ↦
       hji.ne (e.injective (Subtype.ext h))
     have htb : integerPoint t ∈ 𝔇N.birth (e i).val := (hpts i t).mp ht
-    rw [← dist_integerPoint_eq_ambientSupDistance]
+    rw [← dist_integerPoint_eq_supDist]
     by_cases hr : rank (e i) = 0
     · obtain ⟨k, hk, hlen, hsepP⟩ := hprimary (e i) hr
       have hrj : repairStageBirthRank dyadicOrigin Λ A C k₀ hC h₀ Sstar N (e j).val = 0 :=

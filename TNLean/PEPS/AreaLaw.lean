@@ -30,6 +30,5 @@ import TNLean.PEPS.AreaLaw.RegionalStates
 import TNLean.PEPS.AreaLaw.SafeRectangleAreaLaw
 import TNLean.PEPS.AreaLaw.Scanner
 import TNLean.PEPS.AreaLaw.SnakeGridApproximation
-import TNLean.PEPS.AreaLaw.SnakeGridGeometry
 import TNLean.PEPS.AreaLaw.SquareAreaLawExplicitConstant
 import TNLean.PEPS.AreaLaw.SquareAreaLawSpecialization

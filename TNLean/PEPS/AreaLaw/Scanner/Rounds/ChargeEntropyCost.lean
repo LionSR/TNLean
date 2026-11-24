@@ -26,7 +26,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 and 442–451, at `openai/math@adc7f124`.
 -/
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -141,7 +141,7 @@ theorem good_designatedEntropyCost_le_expected_chargeEta_planeDomainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hgood : S.IsGoodOldHistory h) :
     0 < 1 / (2 * (S.C₁ + 1)) ∧
       ((1 / (2 * (S.C₁ + 1))) / ((S.n : ℝ) * S.D)) *

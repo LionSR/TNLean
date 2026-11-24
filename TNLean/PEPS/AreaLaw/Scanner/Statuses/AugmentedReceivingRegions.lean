@@ -43,7 +43,7 @@ openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 theorem state_augmentedPartition_eq_target_near_middle
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I)
-    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k : ℕ}
+    (hdepth : S.depth = fun x ↦ ManyBody.ambientDepth T hT x.val) {k : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) :
     let X : Finset ↥Λ := S.A.filter fun x ↦ x.val ∈ T
     let σ : PhysicalPartition ↥Λ := S.state h g
@@ -69,7 +69,7 @@ openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 theorem oldChargeState_augmentedPartition_eq_target_near_middle
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I)
-    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k : ℕ}
+    (hdepth : S.depth = fun x ↦ ManyBody.ambientDepth T hT x.val) {k : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) :
     let X : Finset ↥Λ := S.A.filter fun x ↦ x.val ∈ T
     let σ : PhysicalPartition ↥Λ := S.oldChargeState h g

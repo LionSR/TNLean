@@ -66,7 +66,8 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction ambientDepth
+  supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -365,7 +366,7 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
         (∀ d : ℕ, 1 ≤ d → d ≤ X.L N →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ∀ (Tr : ScanTruncation X κ N) (W : ℝ), 1 ≤ W →
         X.a W N * transportLogDimBound q S.r₀ ≤ c₀ →
         ∀ pre : (k : ℕ) →

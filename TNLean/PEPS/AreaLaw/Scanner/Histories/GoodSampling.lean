@@ -26,7 +26,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 212–219 and 331–337, at `openai/math@adc7f124`.
 -/
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph abs_ambientDepth_sub_le_planeDomainGraph
+  ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -57,7 +58,7 @@ theorem ball_subset_of_mem_ball_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (h
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {i : I} {y : ↥Λ} (hyb : y ∈ S.ball i) (hyA : y ∈ S.A) (hyL : S.depth y ≤ L) :
     S.ball i ⊆ S.A := by
   have hb := planeDomainGraph_ball_subset_of_clearance Λ T hT S.A L S.r₀ hclear
@@ -72,7 +73,7 @@ theorem ball_subset_of_middle_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (hT 
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (σ : PhysicalPartition ↥Λ) (i : I)
     (hmiddle : ∀ x, σ x = none → x ∈ S.A ∧ S.depth x ≤ L)
     (hsplit : (S.ball i ∩ middle σ).Nonempty) : S.ball i ⊆ S.A := by
@@ -192,7 +193,7 @@ theorem ball_subset_of_oldChargeState_middle_planeDomainGraph {Λ T : Finset (�
     (hT : T.Nonempty) (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (h : History S.K S.m S.M k) (g : Fin S.K) (hL : 8 * S.K * S.m ≤ L) (i : I)
     (hsplit : (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty) : S.ball i ⊆ S.A :=
   ball_subset_of_middle_planeDomainGraph hT S hgraph hdepth hclear _ i
@@ -216,7 +217,7 @@ theorem good_split_sampling_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (hT : 
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hgood : S.IsGoodOldHistory h)
     (hsplit : (S.ball i ∩ receiving (S.oldChargeState h g) side).Nonempty ∧
       (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty) :

@@ -24,7 +24,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 noncomputable section
 
-open ManyBody (ambientDilation_zero)
+open ManyBody (ambientDilation_zero ambientDepth ambientDepth_le_iff_mem_ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -78,7 +78,7 @@ theorem terminalPartition_collar_geometry
   have hXU : Disjoint X U := Finset.disjoint_left.mpr fun x hx hu ↦ by
     have hd : S.depth x ≤ 0 := by
       simpa only [hdepth, Nat.cast_zero] using
-        (ambientDepth_le_iff_mem_dilation T hT x.val 0).mpr
+        (ambientDepth_le_iff_mem_ambientDilation T hT x.val 0).mpr
           ((ambientDilation_zero T).symm ▸ (Finset.mem_filter.mp hx).2)
     exact (not_lt_of_ge hd) (Finset.mem_filter.mp hu).2
   have hnearY : Disjoint (receiving σ false) Y := by

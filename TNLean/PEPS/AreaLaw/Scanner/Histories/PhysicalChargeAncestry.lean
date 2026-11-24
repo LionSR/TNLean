@@ -18,7 +18,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 286–311, at `openai/math@adc7f124`.
 -/
 
-open ManyBody (planeDomainGraph)
+open ManyBody (planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -37,7 +37,7 @@ theorem bandState_has_chargeAncestry_planeDomainGraph
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (k : ℕ) (side : Bool) (x : ↥Λ) (hxA : x ∈ S.A)
     (hx : S.bandState g r k (fun j ↦ choices j) x = some side) :
     ∃ events, S.ChargeAncestry g r choices side k x events := by
@@ -80,7 +80,7 @@ theorem bad_bandState_has_long_chargeAncestry_planeDomainGraph
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L) (hn : 0 < S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (k : ℕ) (side : Bool) (x : ↥Λ) (hxA : x ∈ S.A)
     (hx : S.bandState g r k (fun j ↦ choices j) x = some side)
     (hbad : 2 * S.front g r k side + S.D < 2 * orientedDepth S.depth side x) :

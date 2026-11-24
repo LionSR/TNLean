@@ -31,7 +31,7 @@ open Matrix TensorPower PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology symmDiff
 
-open ManyBody (ambientDilation_zero)
+open ManyBody (ambientDilation_zero ambientDepth ambientDepth_le_iff_mem_ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -70,7 +70,7 @@ private theorem actualTerminal_sharpUpper_geometry
   intro X σ U Y
   have hdepthX : ∀ x ∈ X, S.depth x ≤ 0 := fun x hx ↦ by
     simpa only [hdepth, Nat.cast_zero] using
-      (ambientDepth_le_iff_mem_dilation T hT x.val 0).mpr
+      (ambientDepth_le_iff_mem_ambientDilation T hT x.val 0).mpr
         ((ambientDilation_zero T).symm ▸ (Finset.mem_filter.mp hx).2)
   have hmiddle : ∀ j g x, σ j g x = none → 0 < S.depth x := fun
     | Sum.inl ⟨r, h⟩, g, x, hx =>

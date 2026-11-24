@@ -39,7 +39,7 @@ noncomputable section
 
 open Matrix TensorPower PermutationRepresentation Filter
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth supDist)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -85,7 +85,7 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
             (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
               (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
             (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-              ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+              ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
             let L := F.L S.n
             let X := S.A.filter fun x ↦ x.val ∈ T
             let g := Δ / positiveNormalization 1 (Δ / 2) J
