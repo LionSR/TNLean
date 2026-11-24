@@ -74,10 +74,10 @@ This is an arithmetic inference from the displayed range, independently
 verified by the owner after the reviewer reported it.
 
 The intended scalar-shift map is `x=c`, middle shift `m=d`, and `y=c′`.
-The added section in `docs/paper-gaps/aklv13_robustness_constants.tex`
-records the typo and its correction. The Lean proof does not depend on
-the printed distribution of shifts. It accepts the resulting regional
-positivity and energy bound directly, as appropriate to its normalized scope.
+The Lean proof does not depend on the printed distribution of shifts. It
+accepts the resulting regional positivity and energy bound directly, as
+appropriate to its normalized scope. The paper-gap note records the typo
+and its correction. [Constants in the robustness theorem](https://sirui-lu.com/QICLean/paper-gaps/aklv13_robustness_constants.pdf).
 
 ## Verification and limits
 
