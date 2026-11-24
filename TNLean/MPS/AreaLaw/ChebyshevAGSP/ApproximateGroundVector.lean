@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ProjectionEnergy
-import TNLean.MPS.AreaLaw.Spectral.GroundStateTail
-import TNLean.MPS.AreaLaw.Spectral.SpectralTail
+import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
+import QICLean.Spectral.Projection.ExponentialDrop
 
 /-!
 # Projected approximate ground vectors
@@ -136,14 +136,15 @@ theorem norm_clipped_lowProjection_residual_le_exp {L q : ℕ}
       (1 - Matrix.spectralProjectionGE B (t / 2))‖ ≤
         2 * Real.exp (-(t - t / 2) / 8) := by
     rw [show B = (Φ.partialHamiltonian I) - (z : ℂ) • 1 from hB]
-    exact norm_two_boundary_spectral_offDiagonal_le I Φ h0 h1 a b z t (t / 2)
+    exact ManyBody.BondInteraction.norm_two_boundary_spectral_offDiagonal_le I Φ h0
+      h1 a b z t (t / 2)
       (by linarith)
   have htail (s : ℝ) : ‖ι (Matrix.spectralProjectionGE B s) Ω‖ ≤
       2 * Real.exp (-(s - 20) / 8) := by
     have heig' : ι (((Φ.partialHamiltonian I) - (z : ℂ) • 1) + A) Ω = (e : ℂ) • Ω := by
       rw [← hB]
       exact heig
-    have h := norm_groundState_highProjection_le_exp I Φ h0 h1 a b z e s Ω
+    have h := ManyBody.BondInteraction.norm_groundState_highProjection_le_exp I Φ h0 h1 a b z e s Ω
       he0 he6 heig'
     simpa only [← hB, hΩ, mul_one] using h
   have hres := hherm.norm_lowProjection_residual_le A K hA Ω e t (t / 2)

@@ -52,21 +52,21 @@ variable [DecidableRel G.Adj] [DecidableRel G'.Adj]
 image region whose underlying edge is `Edge.map φ f.1`.  This is the inverse direction of the
 boundary-edge reindexing `regionBoundaryEdgeMapEquiv`. -/
 def boundaryEdgeMap (φ : G ≃g G') (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
-    {f : Edge G' // IsRegionBoundaryEdge (G := G') (Region.map φ R) f} :=
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
+    {f : Edge G' // ManyBody.IsRegionBoundaryEdge (G := G') (Region.map φ R) f} :=
   (regionBoundaryEdgeMapEquiv φ R).symm f
 
 omit [Fintype V] [Fintype W]
   [DecidableRel G.Adj] [DecidableRel G'.Adj] in
 @[simp] theorem boundaryEdgeMap_coe (φ : G ≃g G') (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     (boundaryEdgeMap φ R f).1 = ManyBody.Edge.map φ f.1 := rfl
 
 omit [Fintype V] [Fintype W] in
 /-- The bond dimension of `A.transport φ` at the image boundary edge equals the bond dimension of
 `A` at the original boundary edge. -/
 theorem transport_bondDim_boundaryEdgeMap (A : Tensor G d) (φ : G ≃g G') (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     (A.transport φ).bondDim (boundaryEdgeMap φ R f).1 = A.bondDim f.1 := by
   rw [boundaryEdgeMap_coe, Tensor.transport_bondDim, ManyBody.Edge.map_symm_map]
 
@@ -74,7 +74,7 @@ omit [Fintype V] [Fintype W] in
 /-- The image boundary configuration, read on the image of the distinguished boundary edge,
 recovers the original value through the bond-dimension cast. -/
 theorem regionBoundaryConfigMap_boundaryEdgeMap (A : Tensor G d) (φ : G ≃g G') (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (g : RegionBoundaryConfig (G := G) A R) :
     (regionBoundaryConfigMap A φ R g) (boundaryEdgeMap φ R f) =
       Fin.cast (transport_bondDim_boundaryEdgeMap A φ R f).symm (g f) := by
@@ -151,7 +151,7 @@ iff the original configurations agree away from `f`.  The values are compared at
 type `Fin ((A.transport φ).bondDim c'.1)`, which matches the original bond type definitionally
 through the edge action. -/
 theorem sameAwayFromBond_regionBoundaryConfigMap (A : Tensor G d) (φ : G ≃g G') (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (μ ν : RegionBoundaryConfig (G := G) A R) :
     SameAwayFromBond (boundaryEdgeMap φ R f)
         (regionBoundaryConfigMap A φ R μ) (regionBoundaryConfigMap A φ R ν) ↔
@@ -196,7 +196,7 @@ enters: the matrix is inserted between the two single boundary values on the edg
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1572 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_transport (A : Tensor G d) (φ : G ≃g G') (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin ((A.transport φ).bondDim (boundaryEdgeMap φ R f).1))
       (Fin ((A.transport φ).bondDim (boundaryEdgeMap φ R f).1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)

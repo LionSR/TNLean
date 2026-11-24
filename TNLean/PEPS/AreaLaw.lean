@@ -25,7 +25,6 @@ import TNLean.PEPS.AreaLaw.Operators
 import TNLean.PEPS.AreaLaw.OriginalNestedPatchEntropy
 import TNLean.PEPS.AreaLaw.Polygons
 import TNLean.PEPS.AreaLaw.RangeSquareGroundState
-import TNLean.PEPS.AreaLaw.RectangularBoundary
 import TNLean.PEPS.AreaLaw.RectangularSpecialization
 import TNLean.PEPS.AreaLaw.RegionalStates
 import TNLean.PEPS.AreaLaw.SafeRectangleAreaLaw

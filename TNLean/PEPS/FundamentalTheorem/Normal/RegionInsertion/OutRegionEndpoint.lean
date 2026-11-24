@@ -82,13 +82,13 @@ boundary edge of the set complement `univ \ R`. -/
 /-- The out-of-region endpoint of a boundary edge `f` of `R`: the unique endpoint
 of `f` not lying in `R`. -/
 def regionBoundaryEdgeOutVertex (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) : V :=
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) : V :=
   if f.1.1.1 ∈ R then f.1.1.2 else f.1.1.1
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- The out-of-region endpoint of a boundary edge does not lie in `R`. -/
 theorem regionBoundaryEdgeOutVertex_not_mem (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     regionBoundaryEdgeOutVertex (G := G) R f ∉ R := by
   unfold regionBoundaryEdgeOutVertex
   rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
@@ -99,7 +99,7 @@ omit [DecidableRel G.Adj] in
 /-- The out-of-region endpoint of a boundary edge lies in the set complement
 `univ \ R`. -/
 theorem regionBoundaryEdgeOutVertex_mem_compl (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     regionBoundaryEdgeOutVertex (G := G) R f ∈ Finset.univ \ R := by
   rw [Finset.mem_sdiff]
   exact ⟨Finset.mem_univ _, regionBoundaryEdgeOutVertex_not_mem (G := G) R f⟩
@@ -112,7 +112,7 @@ The complement membership predicate `w ∈ univ \ R` is `w ∉ R`, so the condit
 defining the in-region endpoint of the complement boundary edge selects the
 endpoint of `f` outside `R`, which is the out-of-region endpoint of `f`. -/
 theorem regionBoundaryEdgeInVertex_compl_eq_outVertex (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
         (regionBoundaryEdgeToCompl (G := G) R f) =
       regionBoundaryEdgeOutVertex (G := G) R f := by
@@ -255,15 +255,15 @@ omit [DecidableRel G.Adj] in
 /-- An edge crosses the boundary of `univ \ (univ \ R)` exactly when it crosses
 the boundary of `R`. -/
 theorem isRegionBoundaryEdge_compl_compl_iff (R : Finset V) (e : Edge G) :
-    IsRegionBoundaryEdge (G := G) (Finset.univ \ (Finset.univ \ R)) e ↔
-      IsRegionBoundaryEdge (G := G) R e := by
+    ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ (Finset.univ \ R)) e ↔
+      ManyBody.IsRegionBoundaryEdge (G := G) R e := by
   rw [isRegionBoundaryEdge_compl_iff, isRegionBoundaryEdge_compl_iff]
 
 /-- The edges crossing the boundary of `univ \ (univ \ R)` are the edges crossing
 the boundary of `R`. -/
 def regionBoundaryEdgeDoubleComplEquiv (R : Finset V) :
-    {e : Edge G // IsRegionBoundaryEdge (G := G) (Finset.univ \ (Finset.univ \ R)) e} ≃
-      {e : Edge G // IsRegionBoundaryEdge (G := G) R e} :=
+    {e : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ (Finset.univ \ R)) e} ≃
+      {e : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R e} :=
   Equiv.subtypeEquivRight (fun e => isRegionBoundaryEdge_compl_compl_iff (G := G) R e)
 
 /-- Transport of a boundary configuration on `R` to one on `univ \ (univ \ R)`
@@ -332,7 +332,7 @@ configuration on `R` corresponds to one on `univ \ R` by reading each crossing e
 under the boundary-edge identification. -/
 def regionComplementBoundaryConfigEquiv (A : Tensor G d) (R : Finset V) :
     RegionBoundaryConfig (G := G) A R ≃ RegionBoundaryConfig (G := G) A (Finset.univ \ R) :=
-  Equiv.piCongrLeft' (fun f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} =>
+  Equiv.piCongrLeft' (fun f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} =>
       Fin (A.bondDim f.1)) (regionBoundaryEdgeComplEquiv (G := G) R)
 
 @[simp] theorem regionComplementBoundaryConfigEquiv_apply (A : Tensor G d) (R : Finset V)
@@ -357,7 +357,7 @@ the boundary edge `f`: two boundary configurations on `R` agree away from `f`
 exactly when their complement reindexings agree away from
 `regionBoundaryEdgeToCompl R f`. -/
 theorem sameAwayFromBond_complementBoundaryConfig (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (a b : RegionBoundaryConfig (G := G) A R) :
     SameAwayFromBond (regionBoundaryEdgeToCompl (G := G) R f)
         (regionComplementBoundaryConfig (G := G) A R a)
@@ -399,7 +399,7 @@ double sum, with the complement-of-complement block read back to the region bloc
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_compl (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -487,7 +487,7 @@ equates.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_regionRealizationSum_compl (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
         (regionBoundaryEdgeToCompl (G := G) R f))))
@@ -524,7 +524,7 @@ boundary-edge reading the region resonate step equates.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_smul_op_regionStateVec_compl (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
         (regionBoundaryEdgeToCompl (G := G) R f))))

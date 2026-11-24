@@ -40,7 +40,7 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 private abbrev RV (R : Finset V) := {v : V // v ∈ R}
 private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 /-- The incidence product contains two factors on internal bonds and one on crossing bonds.
 Source: SCP10, lines 1765–1920 and 1935–1957, and Section 7, lines 2977–3019. -/
@@ -66,14 +66,14 @@ theorem prod_region_incident_eq_internal_boundary (R : Finset V)
   rw [he, prod_region_incident_eq_prod_edge R f]
   let i : Edge Γ → ℂ := fun e => if h : e.1.1 ∈ R ∧ e.1.2 ∈ R then
     F ⟨e.1.1, h.1⟩ (edgeLeftIncident e) * F ⟨e.1.2, h.2⟩ (edgeRightIncident e) else 1
-  let b : Edge Γ → ℂ := fun e => if h : IsRegionBoundaryEdge R e then
+  let b : Edge Γ → ℂ := fun e => if h : ManyBody.IsRegionBoundaryEdge R e then
     if ht : e.1.1 ∈ R then F ⟨e.1.1, ht⟩ (edgeLeftIncident e)
     else F ⟨e.1.2, (h.resolve_left (fun h' => ht h'.1)).2⟩ (edgeRightIncident e) else 1
   have hk (e : Edge Γ) :
       (if e.1.1 ∈ R then f e.1.1 (edgeLeftIncident e) else 1) *
       (if e.1.2 ∈ R then f e.1.2 (edgeRightIncident e) else 1) = i e * b e := by
     by_cases ht : e.1.1 ∈ R <;> by_cases hh : e.1.2 ∈ R <;>
-      simp [i, b, f, IsRegionBoundaryEdge, ht, hh]
+      simp [i, b, f, ManyBody.IsRegionBoundaryEdge, ht, hh]
   simp_rw [hk]
   rw [Finset.prod_mul_distrib]
   dsimp only [i, b]
@@ -124,7 +124,7 @@ theorem graphOpenRegionNetwork_dressedAveragingSite_coherent
       ((graphRegionIncidentConfigEquiv R).symm (ξ, θ)) e, Equiv.apply_symm_apply]
   have hb (ξ : RI (Γ := Γ) R → X) (e : RB (Γ := Γ) R) :
       (graphRegionIncidentConfigEquiv R).symm (ξ, θ)
-        ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩ = θ e := by
+        ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩ = θ e := by
     rw [← graphRegionIncidentConfigEquiv_apply_boundary R
       ((graphRegionIncidentConfigEquiv R).symm (ξ, θ)) e, Equiv.apply_symm_apply]
   have hp (ξ : RI (Γ := Γ) R → X) :

@@ -169,7 +169,7 @@ theorem IsGIsometric.exists_unitary_torusTranslatedPhysicalFluxMove
     ∃ W : Matrix (RV v → Fin d)
         (RV v → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV v → Fin d) ℂ ∧
-      ∀ (g : G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R v) e} → G),
+      ∀ (g : G) (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (R v) e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (torusTranslatedFluxAssignment v false g))) (R v)

@@ -214,7 +214,7 @@ theorem IsGIsometric.exists_torusPlaquette_physicalMeasurement
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
       ∀ (u : Edge (Γₜ) → G)
-        (θ : {f : Edge (Γₜ) // IsRegionBoundaryEdge (torusPlaquetteRegion v) f} → G)
+        (θ : {f : Edge (Γₜ) // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) f} → G)
         (C : Option (ConjClasses G)),
         Q C *ᵥ openRegionWeight
             (groupBondTensor (regularTwistedSite (torusIncidentSite a) u))
@@ -246,7 +246,7 @@ theorem IsGIsometric.exists_torusPlaquette_fluxClass_measurement
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
       ∀ (g : G)
-        (θ : {f : Edge (Γₜ) // IsRegionBoundaryEdge (torusPlaquetteRegion v) f} → G)
+        (θ : {f : Edge (Γₜ) // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) f} → G)
         (C : Option (ConjClasses G)),
         Q C *ᵥ openRegionWeight
             (groupBondTensor (regularTwistedSite (torusIncidentSite a)

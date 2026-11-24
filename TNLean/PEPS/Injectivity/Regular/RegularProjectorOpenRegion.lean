@@ -51,10 +51,10 @@ abbrev RegionHalfEdgeConfig (G : Type*) (R : Finset V) :=
 fixed; the summation then runs once over each internal bond assignment. -/
 noncomputable def regularProjectorOpenRegionMatrix (R : Finset V) :
     Matrix (RegionHalfEdgeConfig (Γ := Γ) G R)
-      ({f : Edge Γ // IsRegionBoundaryEdge R f} → G) ℂ :=
-  fun α θ => ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-    if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-        η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ then
+      ({f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) ℂ :=
+  fun α θ => ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+    if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+        η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ then
       ∏ w : {w : V // w ∈ R},
         regularLegProjector (IncidentEdge Γ w.1) (α w)
           (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩)
@@ -147,13 +147,13 @@ theorem IsGInjective.regularSiteMap_projector_coefficients
 per vertex and the original internal-bond summation. -/
 theorem regularProjectorOpenRegionMatrix_apply (R : Finset V)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regularProjectorOpenRegionMatrix R α θ =
       (Fintype.card G : ℂ)⁻¹ ^ R.card *
-        ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
+        ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
           ∑ q : {w : V // w ∈ R} → G,
-            if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                  η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ ∧
+            if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                  η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ ∧
                 (∀ w : {w : V // w ∈ R}, α w = q w •
                   (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩))
             then 1 else 0 := by
@@ -162,8 +162,8 @@ theorem regularProjectorOpenRegionMatrix_apply (R : Finset V)
   rw [Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro η _
-  by_cases hb : (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ
+  by_cases hb : (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+      η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ
   · simp only [hb, ↓reduceIte, true_and]
     simp only [regularLegProjector_apply, Finset.prod_mul_distrib,
       Finset.prod_const, Finset.card_univ, Fintype.card_coe]
@@ -177,14 +177,14 @@ omit [Fintype V] [DecidableEq G] in
 /-- Encoding the group labels does not alter the prescribed boundary condition. -/
 theorem regionIncidentBoundaryLabel_regularGroup_iff
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
-    (R : Finset V) (η : {f : Edge Γ // IsRegionIncidentEdge R f} → G)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (R : Finset V) (η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G)
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regionIncidentBoundaryLabel (groupBondTensor a) R
         (regularRegionIncidentConfigEquiv a R η) =
           (fun f => Fintype.equivFin G (θ f)) ↔
-      (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-        η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ :=
-  (Equiv.piCongrRight (fun _ : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
+      (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+        η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ :=
+  (Equiv.piCongrRight (fun _ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
     Fintype.equivFin G)).injective.eq_iff
 
 /-- Local physical maps recovering the projector coefficients identify the
@@ -196,7 +196,7 @@ theorem regionPhysicalMap_eq_regularProjectorOpenRegionMatrix
     (hF : ∀ v α η, (∑ s : Fin d, F v α s * a v η s) =
       regularLegProjector (IncidentEdge Γ v) α η)
     (R : Finset V) (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regionPhysicalMap R F (openRegionWeight (groupBondTensor a) R
       (fun f => Fintype.equivFin G (θ f))) α =
       regularProjectorOpenRegionMatrix R α θ := by
@@ -223,7 +223,7 @@ theorem regionPhysicalProductMatrix_mul_regularOpenRegionMatrix
     (hF : ∀ v α η, (∑ s : Fin d, F v α s * a v η s) =
       regularLegProjector (IncidentEdge Γ v) α η)
     (R : Finset V) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     regionPhysicalProductMatrix R F * regularOpenRegionMatrix a R e =
       fun α x => regularProjectorOpenRegionMatrix R α (fun f => x (e f)) := by
   ext α x
@@ -237,7 +237,7 @@ theorem regionPhysicalMap_regularProjectorOpenRegionMatrix
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v)))
-    (R : Finset V) (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (R : Finset V) (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regionPhysicalMap R (fun v => Matrix.of (fun s α => a v α s))
       (fun α => regularProjectorOpenRegionMatrix R α θ) =
       openRegionWeight (groupBondTensor a) R (fun f => Fintype.equivFin G (θ f)) := by
@@ -252,8 +252,8 @@ theorem regionPhysicalMap_regularProjectorOpenRegionMatrix
   apply Finset.sum_congr rfl
   intro η _
   simp only [regionIncidentBoundaryLabel_regularGroup_iff]
-  by_cases hb : (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ
+  by_cases hb : (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+      η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ
   · simp only [hb, ↓reduceIte, Matrix.of_apply, regionIncidentWeight,
       groupBondTensor, regularRegionIncidentConfigEquiv, Equiv.piCongrRight_apply,
       Pi.map_apply, Equiv.symm_apply_apply, ← Finset.prod_mul_distrib]
@@ -275,7 +275,7 @@ theorem exists_regularProjectorOpenRegionMatrix
       (regularSiteMap (a v))) :
     ∃ c : V → ℝ, (∀ v, 0 < c v) ∧ ∀ (R : Finset V)
       (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-      (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G),
+      (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G),
       regionPhysicalMap R (fun v α s => (c v : ℂ)⁻¹ * star (a v α s))
         (openRegionWeight (groupBondTensor a) R
           (fun f => Fintype.equivFin G (θ f))) α =

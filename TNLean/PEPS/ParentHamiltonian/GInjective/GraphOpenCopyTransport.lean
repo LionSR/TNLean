@@ -29,7 +29,7 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 private abbrev RV (R : Finset V) := {v : V // v ∈ R}
 private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 variable {G : Type*} [Group G] [Fintype G]
 
 variable {I : Type*} [Fintype I] [DecidableEq I]

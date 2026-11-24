@@ -101,8 +101,8 @@ theorem exists_viable_vector_of_approximate_density_and_eigenresidual
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))
     (x₀ : Fin n) (τ σ : Matrix (Fin n) (Fin n) ℂ) {ε : ℝ}
     (hτtrace : τ.trace = 1) (hσpsd : σ.PosSemidef)
@@ -224,8 +224,8 @@ theorem exists_viable_vector_of_approximate_density_and_eigenresidual
     have hu' : ‖u'‖ = 1 := by
       rw [show ‖u'‖ = ‖z‖ from Matrix.norm_toLp_mulVec_of_isometry Z hZ z, hz]
     have hu'P : (reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u' =
           WithLp.ofLp u' := by
       rw [← hZZ]
@@ -305,8 +305,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approxi
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (x₀ : Fin n) (τ σ : Matrix (Fin n) (Fin n) ℂ) {ε : ℝ}

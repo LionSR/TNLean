@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.TraceNorm.Frobenius
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.SpecialFunctions.Complex.Arg
+import QICLean.Analysis.Norm.MatrixToEuclidean
 
 /-!
 # A nonzero column close to a pure state
@@ -198,11 +199,6 @@ end Normalization
 section Column
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {n : ℕ}
-
-/-- The column of a matrix at a basis vector has the expected coordinates. -/
-theorem _root_.Matrix.toEuclideanLin_single_one_apply (σ : Matrix ι ι ℂ) (z x : ι) :
-    Matrix.toEuclideanLin σ (EuclideanSpace.single z 1) x = σ x z := by
-  simp [Matrix.toLpLin_apply]
 
 /-- **Polynomial-PEPS Lemma 8.1, vector part.**
 

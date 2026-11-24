@@ -55,7 +55,7 @@ noncomputable def czxRectangleCoordinatesEquiv :
     czxRectangleCoordinatesEquiv xStart yStart w h hw hh hx hy hwp hhp μ =
       czxRectangleBoundaryLabels xStart yStart w h hw hh hx hy hwp hhp μ := by
   change ({e : Edge (torusGraph width height) //
-    IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h) e} → Fin 4) at μ
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h) e} → Fin 4) at μ
   funext i
   change (if w + h ≤ i.val then czxBondSwap else Equiv.refl (Fin 4))
       (μ (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i)) = _
@@ -239,7 +239,7 @@ private theorem czxRectangleCoordinatesEquiv_flip
       fun i => czxLegFlip (czxRectangleCoordinatesEquiv
         xStart yStart w h hw hh hx hy hwp hhp μ i) := by
   change ({e : Edge (torusGraph width height) //
-    IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h) e} → Fin 4) at μ
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h) e} → Fin 4) at μ
   funext i
   change (if w + h ≤ i.val then czxBondSwap else Equiv.refl (Fin 4))
       (czxLegFlip (μ (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i))) =

@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Norm.MatrixToEuclidean
-import TNLean.MPS.AreaLaw.ProjectorFactorization.GaussianTimeAverage
+import QICLean.ManyBody.Hamiltonian.GaussianFilter
+import QICLean.Spectral.Filter.Gaussian.MatrixIntegral
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -89,18 +90,20 @@ theorem norm_gaussianTimeAverage_mul_sub_groundProjector_le {M H O : Matrix n n 
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H 0 ΔE)
     (hspan : groundSpace H 0 = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (hO : IsStarProjection O) (q : ℝ)
     {δ η : ℝ} (hδ : ‖M - H‖ ≤ δ) (hη : ‖Ω - toEuclideanLin O Ω‖ ≤ η) :
-    ‖gaussianTimeAverage q ΔE M * O - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
+    ‖GaussianFilter.gaussianTimeAverage q ΔE M * O - vecMulVec (WithLp.ofLp Ω) (star
+      (WithLp.ofLp Ω))‖ ≤
       Real.exp (-q / 2) + Real.sqrt q / ΔE * δ + η := by
   set P₀ := vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))
-  have hsplit : gaussianTimeAverage q ΔE M * O - P₀ =
-      (gaussianTimeAverage q ΔE M - P₀) * O + (P₀ * O - P₀) := by
+  have hsplit : GaussianFilter.gaussianTimeAverage q ΔE M * O - P₀ =
+      (GaussianFilter.gaussianTimeAverage q ΔE M - P₀) * O + (P₀ * O - P₀) := by
     rw [sub_mul]
     abel
-  have hfirst : ‖(gaussianTimeAverage q ΔE M - P₀) * O‖ ≤
+  have hfirst : ‖(GaussianFilter.gaussianTimeAverage q ΔE M - P₀) * O‖ ≤
       Real.exp (-q / 2) + Real.sqrt q / ΔE * δ := by
     refine (norm_mul_le _ _).trans ((mul_le_of_le_one_right (norm_nonneg _)
       (IsStarProjection.norm_le O hO)).trans ?_)
-    refine (norm_gaussianTimeAverage_sub_groundProjector_le_add hM hH hΩ hgap hspan hΔ q).trans ?_
+    refine (ManyBody.norm_gaussianTimeAverage_sub_groundProjector_le_add hM hH hΩ
+      hgap hspan hΔ q).trans ?_
     gcongr
   rw [hsplit]
   exact (norm_add_le _ _).trans (add_le_add hfirst
@@ -113,7 +116,8 @@ energy `0` and gap `ΔE > 0`, and let `M` be Hermitian with `‖M - H‖ ≤ δ`
 (eq. `obd`, lines 836–840). Then for every real `q`,
 `‖P_q(M) O_L O_R - |Ω⟩⟨Ω|‖ ≤ exp(-q/2) + √q / ΔE · δ + η`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 865–876, for `M = M_L + M_B + M_R`.
-By `gaussianTimeAverage_eq_integral` and the interaction-picture factorization of lines
+By `GaussianFilter.gaussianTimeAverage_eq_integral` and the interaction-picture
+  factorization of lines
 853–864, `P_q(M)` is the average written on lines 868–874. -/
 theorem norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le {M H O_L O_R : Matrix n n ℂ}
     (hM : M.IsHermitian) (hH : H.IsHermitian) {ΔE : ℝ} {Ω : EuclideanSpace ℂ n}
@@ -121,7 +125,7 @@ theorem norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le {M H O_L O_R : M
     (hspan : groundSpace H 0 = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (hO_L : IsStarProjection O_L)
     (hO_R : IsStarProjection O_R) (hc : Commute O_L O_R) (q : ℝ) {δ η : ℝ}
     (hδ : ‖M - H‖ ≤ δ) (hη : ‖Ω - toEuclideanLin (O_L * O_R) Ω‖ ≤ η) :
-    ‖gaussianTimeAverage q ΔE M * (O_L * O_R) -
+    ‖GaussianFilter.gaussianTimeAverage q ΔE M * (O_L * O_R) -
         vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
       Real.exp (-q / 2) + Real.sqrt q / ΔE * δ + η :=
   norm_gaussianTimeAverage_mul_sub_groundProjector_le hM hH hΩ hgap hspan hΔ (hO_L.mul hO_R hc) q

@@ -100,7 +100,7 @@ theorem _root_.ManyBody.SquareInteraction.pairSwapOp_conj_doubled_operator_sub_e
     let pr := Equiv.arrowProdEquivProdArrow (SquareLatticeVertex L L) (fun _ ↦ Fin q) fun _ ↦ Fin q
     let F := reindex pr pr (ManyBody.pairSwapOp R)
     F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
-      ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R),
+      ∑ e ∈ Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R),
         (F * doubledHamiltonian (h.term (.inr e)) * Fᴴ -
           doubledHamiltonian (h.term (.inr e))) := by
   classical
@@ -113,7 +113,8 @@ theorem _root_.ManyBody.SquareInteraction.pairSwapOp_conj_doubled_operator_sub_e
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ) +
         Matrix.kroneckerBilinear (R := ℂ)
           (1 : Matrix (Configuration L q) (Configuration L q) ℂ))
-  change δ h.hamiltonian = ∑ e ∈ Finset.univ.filter (IsRegionBoundaryEdge R), δ (h.term (.inr e))
+  change δ h.hamiltonian = ∑ e ∈ Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R),
+    δ (h.term (.inr e))
   simp only [ManyBody.Interaction.hamiltonian, Fintype.sum_sum_type, map_add, map_sum]
   have hcancel {S : Finset (SquareLatticeVertex L L)}
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
@@ -134,10 +135,10 @@ theorem _root_.ManyBody.SquareInteraction.pairSwapOp_conj_doubled_operator_sub_e
     rw [sub_eq_zero, hY]
     conv_rhs => rw [← hfix]
     simp only [F, reindex_apply, conjTranspose_submatrix, submatrix_mul_equiv]
-  have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ IsRegionBoundaryEdge R e) :
+  have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ ManyBody.IsRegionBoundaryEdge R e) :
       δ (h.term (.inr e)) = 0 := by
     apply hcancel (h.mem (.inr e))
-    simp only [ManyBody.squareLatticeSiteOrEdgeSupport, IsRegionBoundaryEdge,
+    simp only [ManyBody.squareLatticeSiteOrEdgeSupport, ManyBody.IsRegionBoundaryEdge,
       Finset.insert_subset_iff, Finset.singleton_subset_iff, Finset.disjoint_insert_left,
       Finset.disjoint_singleton_left] at he ⊢
     tauto
@@ -219,7 +220,7 @@ theorem _root_.ManyBody.SquareInteraction.swapped_doubled_boundary_bound
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
     let F := Matrix.reindex p p (Matrix.reindex pr pr (ManyBody.pairSwapOp R))
     let boundary : Finset (Edge (squareLatticeGraph L L)) :=
-      Finset.univ.filter (IsRegionBoundaryEdge R)
+      Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R)
     let Z := boundary.biUnion fun e ↦ ({e.1.1, e.1.2} : Finset (SquareLatticeVertex L L))
     F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z ∧
       ‖F * K * Fᴴ - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by

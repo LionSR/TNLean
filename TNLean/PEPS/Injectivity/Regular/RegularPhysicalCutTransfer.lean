@@ -68,7 +68,7 @@ Source: SCP10, proof of Theorem 6.9, lines 1935–1990. -/
 noncomputable def regularProjectorTwistedCutMatrix (R : Finset V) (u : Edge Γ → G) :
     Matrix (RegionHalfEdgeConfig (Γ := Γ) G R)
       (RegionHalfEdgeConfig (Γ := Γ) G (Finset.univ \ R)) ℂ :=
-  fun α β => ∑ θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G,
+  fun α β => ∑ θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G,
     regularProjectorTwistedRegionMatrix R u α θ *
       regularProjectorTwistedRegionMatrix (Finset.univ \ R) u β
         (fun f => θ ((regionBoundaryEdgeComplEquiv (G := Γ) R).symm f))
@@ -132,7 +132,7 @@ theorem regularPhysicalCutMatrix_eq_physicalImage_regularProjectorTwistedCutMatr
   classical
   let B := regularProjectorTwistedRegionMatrix (G := G) R u
   let Q : Matrix (RegionHalfEdgeConfig (Γ := Γ) G (Finset.univ \ R))
-      ({f : Edge Γ // IsRegionBoundaryEdge R f} → G) ℂ :=
+      ({f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) ℂ :=
     fun β θ => regularProjectorTwistedRegionMatrix (Finset.univ \ R) u β
       (fun f => θ ((regionBoundaryEdgeComplEquiv (G := Γ) R).symm f))
   let T := regionPhysicalProductMatrix R (fun v => Matrix.of fun s α => a v α s)
@@ -146,7 +146,7 @@ theorem regularPhysicalCutMatrix_eq_physicalImage_regularProjectorTwistedCutMatr
       stateCoeff_eq_openRegionComplement_of_regularBonds (H := G)
         (groupBondTensor (regularTwistedSite a u)) R (fun _ => rfl)]
     rw [← Equiv.sum_comp (Equiv.piCongrRight
-      (fun _ : {f : Edge Γ // IsRegionBoundaryEdge R f} => Fintype.equivFin G))]
+      (fun _ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} => Fintype.equivFin G))]
     apply Finset.sum_congr rfl
     intro θ _
     have hR := congrFun (regionPhysicalMap_regularProjectorTwistedRegionMatrix

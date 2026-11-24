@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Lattice.PartyCircuit.EffectCircuitError
+import QICLean.Channel.Dilation.ChronologicalGarbage
 
 /-! # Physical density error for source-only replacement
 
@@ -30,54 +31,6 @@ Source: polynomial-PEPS, `04-compression.tex:199–229`, immutable revision
 -/
 open scoped Matrix ComplexOrder Kronecker InnerProductSpace
 noncomputable section
-namespace Matrix
-variable {Phys Env Aux : Type*} [Fintype Env] [Fintype Aux]
-
-/-- Literal coordinate vector with the auxiliary factor grouped into the environment.
-Source: polynomial-PEPS, `04-compression.tex:199–229`. -/
-def appendAuxiliaryVector (v : EuclideanSpace ℂ (Phys × Env))
-    (γ : EuclideanSpace ℂ Aux) : EuclideanSpace ℂ (Phys × (Env × Aux)) :=
-  WithLp.toLp 2 (fun p ↦ v (p.1, p.2.1) * γ p.2.2)
-
-/-- The physical density is unchanged on discarding a normalized auxiliary vector.
-Source: polynomial-PEPS, `04-compression.tex:223–227`. -/
-theorem partialTraceRight_appendAuxiliaryVector
-    (v : EuclideanSpace ℂ (Phys × Env)) (γ : EuclideanSpace ℂ Aux)
-    (hγ : ‖γ‖ = 1) :
-    partialTraceRight (euclideanOuterProduct (appendAuxiliaryVector v γ)
-      (appendAuxiliaryVector v γ)) = partialTraceRight (euclideanOuterProduct v v) := by
-  have h := congrArg (@partialTraceRight Phys Env _) (partialTraceRight_tensorVector v γ hγ)
-  rw [partialTraceRight_partialTraceRight] at h
-  exact h
-/-- Actual Euclidean norms multiply under auxiliary tensoring, including zero vectors.
-Source: polynomial-PEPS, `04-compression.tex:199–229`. -/
-theorem norm_appendAuxiliaryVector [Fintype Phys]
-    (v : EuclideanSpace ℂ (Phys × Env)) (γ : EuclideanSpace ℂ Aux) :
-    ‖appendAuxiliaryVector v γ‖ = ‖v‖ * ‖γ‖ := by
-  apply (sq_eq_sq₀ (norm_nonneg _) (mul_nonneg (norm_nonneg _) (norm_nonneg _))).mp
-  simp only [EuclideanSpace.norm_sq_eq, appendAuxiliaryVector,
-    Fintype.sum_prod_type, norm_mul, mul_pow]
-  simp only [← Finset.mul_sum, ← Finset.sum_mul]
-/-- Absolute physical density error for a literal approximate extended vector.
-There is no division by the original vector norm.
-Source: polynomial-PEPS, `eq:compression-effect-circuit-error`,
-`04-compression.tex:218–229`. -/
-theorem rectangularTraceNorm_appendAuxiliaryVector_error_le_two
-    [Fintype Phys] [DecidableEq Phys]
-    (v : EuclideanSpace ℂ (Phys × Env)) (γ : EuclideanSpace ℂ Aux)
-    (w' : EuclideanSpace ℂ (Phys × (Env × Aux)))
-    (hγ : ‖γ‖ = 1) (hv : ‖v‖ ≤ 1) (hw' : ‖w'‖ ≤ 1) :
-    rectangularTraceNorm
-      (partialTraceRight (euclideanOuterProduct w' w') -
-        partialTraceRight (euclideanOuterProduct v v)) ≤
-      2 * ‖w' - appendAuxiliaryVector v γ‖ := by
-  rw [← partialTraceRight_appendAuxiliaryVector v γ hγ]
-  apply rectangularTraceNorm_partialTraceRight_pure_density_sub_le_two _ _ hw'
-  simpa only [norm_appendAuxiliaryVector, hγ, mul_one] using hv
-end Matrix
-
-
-
 open scoped TensorProduct
 namespace TNLean.Lattice.PartyCircuit
 open ContinuousLinearMap

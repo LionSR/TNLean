@@ -56,7 +56,7 @@ and a reference-region ancillary label. -/
 noncomputable def regularRegionReferenceCoordinatesEquiv
     (R : Finset V) (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    {n : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    {n : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     RegionHalfEdgeConfig (Γ := Γ) G R ≃
       (Fin n → G) × G ×
         ({f : Edge Γ // f.1.1 ∈ R ∧ f.1.2 ∈ R} → G) ×
@@ -84,7 +84,7 @@ theorem star_dotProduct_regularReferenceRegionAncilla
 noncomputable def regularReferenceBoundaryDensity
     (R : Finset V) (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    {n : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    {n : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     Matrix (RegionHalfEdgeConfig (Γ := Γ) G R) (RegionHalfEdgeConfig (Γ := Γ) G R) ℂ :=
   (fixedBoundaryFactorDensity (D := Fin n → G)
     (regularReferenceRegionAncilla (Γ := Γ) (G := G) R T o)).submatrix
@@ -96,7 +96,7 @@ cardinality, and a flat nonzero spectrum. -/
 theorem regularReferenceBoundaryDensity_properties
     (R : Finset V) (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    {n : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    {n : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     (regularReferenceBoundaryDensity (G := G) R T hT htree o e).PosSemidef ∧
       (regularReferenceBoundaryDensity (G := G) R T hT htree o e).trace = 1 ∧
       (regularReferenceBoundaryDensity (G := G) R T hT htree o e).rank = Fintype.card G ^ n ∧
@@ -115,7 +115,7 @@ term minus one group logarithm. -/
 theorem vonNeumannEntropy_regularReferenceBoundaryDensity
     (R : Finset V) (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    {n : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    {n : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     vonNeumannEntropy (regularReferenceBoundaryDensity (G := G) R T hT htree o e)
         (regularReferenceBoundaryDensity_properties R T hT htree o e).1.isHermitian =
       n * Real.log (Fintype.card G : ℝ) := by
@@ -130,7 +130,7 @@ boundary entropy. Source: SCP10, lines 2027–2037. -/
 theorem renyiEntropy_regularReferenceBoundaryDensity
     (R : Finset V) (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    {n : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
+    {n : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
     (α : ℝ) (hα : 0 ≤ α) :
     renyiEntropy (regularReferenceBoundaryDensity (G := G) R T hT htree o e)
         (regularReferenceBoundaryDensity_properties R T hT htree o e).1.isHermitian α =

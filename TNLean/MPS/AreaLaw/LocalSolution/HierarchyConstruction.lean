@@ -104,7 +104,8 @@ Hastings, arXiv:cond-mat/0508554v3, lines 609–707. -/
 theorem norm_sub_hierarchyProjection_le (blk : ι → ℕ)
     (M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 < x m)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)
@@ -112,7 +113,8 @@ theorem norm_sub_hierarchyProjection_le (blk : ι → ℕ)
     ∀ m k, IsStarProjection (hierarchyProjection M c x m k) ∧
       ‖ψ - toEuclideanLin (hierarchyProjection M c x m k) ψ‖ ≤
         Real.hierarchyDeficiency ε K x m := by
-  exact norm_sub_supersiteHierarchy_le blk (hierarchyProjection M c x) M c x
+  exact ManyBody.norm_sub_hierarchy_le_of_mem_supportedOperators blk (hierarchyProjection
+    M c x) M c x
     (hierarchyProjection_zero M c x) (hierarchyProjection_succ M c x) hMsupp hM hx hψ hres hK
 
 /-- A level whose deficiency is less than one retains a unit vector. The witness is
@@ -121,7 +123,8 @@ Hastings, arXiv:cond-mat/0508554v3, lines 645–668 and 696–709. -/
 theorem exists_unit_mem_hierarchyProjection (blk : ι → ℕ)
     (M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 < x m)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)
@@ -140,7 +143,8 @@ as in `docs/paper-gaps/hastings05_hierarchical_energy.tex`. -/
 theorem norm_sub_hierarchyClosingProjection_le (blk : ι → ℕ)
     (M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 < x m)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)
@@ -161,7 +165,8 @@ with the closing window of `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 theorem exists_unit_mem_hierarchyClosingProjection (blk : ι → ℕ)
     (M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 < x m)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)

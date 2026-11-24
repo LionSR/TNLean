@@ -141,7 +141,7 @@ private theorem assignment_residual (hT : T ≤ Γ.induce (R : Set V)) (htree : 
 omit [Fintype V] [DecidableRel Γ.Adj] [DecidableEq G] in
 private theorem assignment_boundary (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree)
     (o : RV R) (ω : RC (Γ := Γ) R T → G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularRegionBoundaryTransport R
       (regularRegionTreeGauge R T hT htree o (regularTreeCycleAssignment R T ω)).1
       (regularTreeCycleAssignment R T ω) θ = θ := by
@@ -157,7 +157,7 @@ Source: SCP10, accessible-coordinate argument, lines 1765–1920, and Theorem 6.
 theorem regularProjectorTwistedRegionMatrix_treeCycleAssignment_coordinates
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (ω : RC (Γ := Γ) R T → G) (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorTwistedRegionMatrix R (regularTreeCycleAssignment R T ω)
       ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
       (Fintype.card G : ℂ)⁻¹ ^ R.card * ∑ x : G,
@@ -215,7 +215,7 @@ theorem regularProjectorTwistedRegionMatrix_twoCycleMove
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (e₀ e₁ : RC (Γ := Γ) R T) (hne : e₀ ≠ e₁)
     (ω : RC (Γ := Γ) R T → G) (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorTwistedRegionMatrix R
       (regularTreeCycleAssignment R T (regularTwoCycleMove e₀ e₁ hne ω))
       ((regularRegionCoordinatesEquiv R T hT htree o).symm
@@ -260,7 +260,7 @@ theorem regularProjectorTwistedRegionMatrix_twoCyclePhysicalMove
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (e₀ e₁ : RC (Γ := Γ) R T) (hne : e₀ ≠ e₁)
     (ω : RC (Γ := Γ) R T → G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     Matrix.permMatrixHom (R := ℂ)
         (regularRegionTwoCyclePhysicalMove R T hT htree o e₀ e₁ hne) *ᵥ
       (fun α => regularProjectorTwistedRegionMatrix R
@@ -300,7 +300,7 @@ theorem exists_unitary_regularTwoCycleFluxMove
     (e₀ e₁ : RC (Γ := Γ) R T) (hne : e₀ ≠ e₁) :
     ∃ Q : Matrix (RegionHalfEdgeConfig (Γ := Γ) G R) (RegionHalfEdgeConfig (Γ := Γ) G R) ℂ,
       Q ∈ Matrix.unitaryGroup (RegionHalfEdgeConfig (Γ := Γ) G R) ℂ ∧
-      ∀ (g : G) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
+      ∀ (g : G) (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G),
         Q *ᵥ (fun α => regularProjectorTwistedRegionMatrix R
           (regularTreeCycleAssignment R T (fun e => if e = e₀ then g else 1)) α θ) =
         (fun α => regularProjectorTwistedRegionMatrix R

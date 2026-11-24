@@ -39,9 +39,9 @@ omit [DecidableRel G.Adj] in
 /-- The boundary edges of $V\setminus\{v\}$ are precisely the edges incident to
 $v$. -/
 theorem isRegionBoundaryEdge_vertexComplementVertices_iff (v : V) (f : Edge G) :
-    IsRegionBoundaryEdge (G := G) (vertexComplementVertices (V := V) v) f ↔
+    ManyBody.IsRegionBoundaryEdge (G := G) (vertexComplementVertices (V := V) v) f ↔
       IsIncidentEdge (G := G) v f := by
-  rw [IsRegionBoundaryEdge, IsIncidentEdge]
+  rw [ManyBody.IsRegionBoundaryEdge, IsIncidentEdge]
   simp only [mem_vertexComplementVertices_iff, not_not]
   constructor
   · rintro (⟨_, h⟩ | ⟨h, _⟩)
@@ -58,7 +58,7 @@ theorem isRegionBoundaryEdge_vertexComplementVertices_iff (v : V) (f : Edge G) :
 /-- Boundary edges of the complement of `v`, identified with edges incident to
 `v`. -/
 def vertexComplementBoundaryEdgeEquiv (v : V) :
-    {f : Edge G // IsRegionBoundaryEdge (G := G)
+    {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G)
       (vertexComplementVertices (V := V) v) f} ≃ IncidentEdge G v :=
   Equiv.subtypeEquivRight fun f =>
     isRegionBoundaryEdge_vertexComplementVertices_iff (G := G) v f

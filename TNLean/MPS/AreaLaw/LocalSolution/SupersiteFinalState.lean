@@ -4,7 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.ClosingLink
-import TNLean.MPS.AreaLaw.Spectral.SupersiteHierarchy
+import Mathlib.Data.Finset.NoncommProd
+import QICLean.Algebra.Combinatorics.DyadicBlock
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Analysis.Norm.MatrixToEuclidean
+import QICLean.ManyBody.Sites.Hierarchy.SupportedHierarchy
+import QICLean.ManyBody.Sites.ProductOperatorTrace
+import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Twirl
+import QICLean.Spectral.LowEnergy.HierarchyLevels
 
 /-!
 # The final states of the hierarchy on supersites
@@ -13,7 +21,7 @@ The theorems of `FinalStateEnergy.lean` and `ClosingLink.lean` on the final stat
 Hastings' hierarchical construction (arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 668–730)
 assume that the projections of the two halves of every block commute. On the chain of
 supersites of lines 609–628 each pair operator `M_{k,k+1}` acts on the block it joins, so by
-`commute_supersiteHierarchy` the two halves act on disjoint blocks and commute. This file
+`ManyBody.commute_hierarchy_halves` the two halves act on disjoint blocks and commute. This file
 restates those theorems with the commutation derived from the supports, so that they no
 longer assume it; the deviations below remain.
 
@@ -54,16 +62,18 @@ namespace TNLean.MPS.AreaLaw.LocalSolution
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] (blk : ι → ℕ)
 variable (P M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
 
-/-- **Projections on supersites.** In the hierarchy of `mem_supportedOperators_hierarchy`, with
+/-- **Projections on supersites.** In the hierarchy of
+`ManyBody.mem_supportedOperators_hierarchy`, with
 Hermitian pair operators, every projection is an orthogonal projection. Hastings,
 arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 609–628 and 668–685. -/
 theorem isStarProjection_supersiteHierarchy (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) : ∀ m k, IsStarProjection (P m k) :=
   Matrix.isStarProjection_hierarchy P M c x hP0 hstep
-    (commute_supersiteHierarchy blk P M c x hP0 hstep hMsupp) hM
+    (ManyBody.commute_hierarchy_halves blk P M c x hP0 hstep hMsupp) hM
 
 /-- **eq. `hchy` below one block, on supersites.** The bound of
 `abs_re_inner_hierarchySum_sub_le`, with the commutation of the halves derived from the
@@ -72,13 +82,14 @@ lines 609–628 and 668–720. -/
 theorem abs_re_inner_supersiteHierarchySum_sub_le (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) :
     ∀ m k {φ : EuclideanSpace ℂ (ι → Fin d)}, toEuclideanLin (P m k) φ = φ →
       |(⟪φ, toEuclideanLin (hierarchySum M m k) φ⟫_ℂ).re - hierarchySum c m k * ‖φ‖ ^ 2| ≤
         hierarchySum (fun m _ ↦ x m) m k * ‖φ‖ ^ 2 :=
   abs_re_inner_hierarchySum_sub_le P M c x hP0 hstep
-    (commute_supersiteHierarchy blk P M c x hP0 hstep hMsupp) hM hx
+    (ManyBody.commute_hierarchy_halves blk P M c x hP0 hstep hMsupp) hM hx
 
 /-- **eq. `hchy` for every final state, on supersites.** The bound of
 `re_inner_hierarchySum_le_add`, with the commutation of the halves derived from the supports of
@@ -88,13 +99,14 @@ theorem re_inner_supersiteHierarchySum_le_add (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (m k : ℕ)
     {φ : EuclideanSpace ℂ (ι → Fin d)} (hφ1 : ‖φ‖ = 1) (hφ : toEuclideanLin (P m k) φ = φ) :
     (⟪φ, toEuclideanLin (hierarchySum M m k) φ⟫_ℂ).re ≤
       (⟪Ψ, toEuclideanLin (hierarchySum M m k) Ψ⟫_ℂ).re + hierarchySum (fun m _ ↦ x m) m k :=
   re_inner_hierarchySum_le_add P M x hP0 hstep
-    (commute_supersiteHierarchy blk P M _ x hP0 hstep hMsupp) hM hx m k hφ1 hφ
+    (ManyBody.commute_hierarchy_halves blk P M _ x hP0 hstep hMsupp) hM hx m k hφ1 hφ
 
 /-- **At most `2n` final states, on supersites.** The count of
 `card_le_two_mul_re_trace_of_hierarchy`, with the commutation of the halves derived from the
@@ -105,7 +117,8 @@ theorem card_le_two_mul_re_trace_of_supersiteHierarchy (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
     {P₀ : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hP₀ : IsStarProjection P₀) {E₀ ΔE : ℝ}
     (hΔ : 0 < ΔE)
@@ -118,7 +131,7 @@ theorem card_le_two_mul_re_trace_of_supersiteHierarchy (hP0 : ∀ k, P 0 k = 1)
     (hφP : ∀ j ∈ s, toEuclideanLin (P h 0) (φ j) = φ j) :
     (s.card : ℝ) ≤ 2 * (trace P₀).re :=
   card_le_two_mul_re_trace_of_hierarchy P M x hP0 hstep
-    (commute_supersiteHierarchy blk P M _ x hP0 hstep hMsupp) hM hx h hP₀ hΔ hgap hE hφ s hφP
+    (ManyBody.commute_hierarchy_halves blk P M _ x hP0 hstep hMsupp) hM hx h hP₀ hΔ hgap hE hφ s hφP
 
 /-- **The closing-link window on supersites.** The bound of `norm_sub_closingLinkWindow_le`,
 with the commutation of the halves derived from the supports of the pair operators. Hastings,
@@ -126,7 +139,8 @@ arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 609–628 and 668–707. -/
 theorem norm_sub_supersiteClosingLinkWindow_le (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 < x m)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)
@@ -137,7 +151,8 @@ theorem norm_sub_supersiteClosingLinkWindow_le (hP0 : ∀ k, P 0 k = 1)
       ‖ψ - toEuclideanLin (Matrix.compressedWindowProjection (P h 0) W cW (x h)) ψ‖ ≤
         Real.hierarchyDeficiency ε K x (h + 1) :=
   norm_sub_closingLinkWindow_le P M c x hP0 hstep
-    (commute_supersiteHierarchy blk P M c x hP0 hstep hMsupp) hM hx hψ hres hK h hW cW hresW hKW
+    (ManyBody.commute_hierarchy_halves blk P M c x hP0 hstep hMsupp) hM hx hψ hres
+      hK h hW cW hresW hKW
 
 /-- **eq. `hchy` for the periodic chain of supersites.** The bound of
 `re_inner_hierarchySum_add_le_add`, with the commutation of the halves derived from the supports
@@ -147,7 +162,8 @@ theorem re_inner_supersiteHierarchySum_add_le_add (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W.IsHermitian) {xW : ℝ} (hxW : 0 ≤ xW)
     {φ : EuclideanSpace ℂ (ι → Fin d)} (hφ1 : ‖φ‖ = 1)
@@ -157,7 +173,7 @@ theorem re_inner_supersiteHierarchySum_add_le_add (hP0 : ∀ k, P 0 k = 1)
       (⟪Ψ, toEuclideanLin (hierarchySum M h 0 + W) Ψ⟫_ℂ).re +
         (hierarchySum (fun m _ ↦ x m) h 0 + xW) :=
   re_inner_hierarchySum_add_le_add P M x hP0 hstep
-    (commute_supersiteHierarchy blk P M _ x hP0 hstep hMsupp) hM hx h hW hxW hφ1 hφ
+    (ManyBody.commute_hierarchy_halves blk P M _ x hP0 hstep hMsupp) hM hx h hW hxW hφ1 hφ
 
 /-- **At most `2n` final states of the periodic chain of supersites.** The count of
 `card_le_two_mul_re_trace_of_closingLink`, with the commutation of the halves derived from the
@@ -167,7 +183,8 @@ theorem card_le_two_mul_re_trace_of_supersiteClosingLink (hP0 : ∀ k, P 0 k = 1
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hstep : ∀ m k, P (m + 1) k = Matrix.compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
-    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.dyadicBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W.IsHermitian) {xW : ℝ} (hxW : 0 ≤ xW)
     {P₀ : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hP₀ : IsStarProjection P₀) {E₀ ΔE : ℝ}
@@ -182,7 +199,8 @@ theorem card_le_two_mul_re_trace_of_supersiteClosingLink (hP0 : ∀ k, P 0 k = 1
       (Matrix.compressedWindowProjection (P h 0) W (⟪Ψ, toEuclideanLin W Ψ⟫_ℂ).re xW) (φ j) = φ j) :
     (s.card : ℝ) ≤ 2 * (trace P₀).re :=
   card_le_two_mul_re_trace_of_closingLink P M x hP0 hstep
-    (commute_supersiteHierarchy blk P M _ x hP0 hstep hMsupp) hM hx h hW hxW hP₀ hΔ hgap hE hφ
+    (ManyBody.commute_hierarchy_halves blk P M _ x hP0 hstep hMsupp) hM hx h hW hxW
+      hP₀ hΔ hgap hE hφ
     s hφP
 
 end TNLean.MPS.AreaLaw.LocalSolution

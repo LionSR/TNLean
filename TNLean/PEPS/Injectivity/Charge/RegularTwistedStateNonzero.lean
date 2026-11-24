@@ -46,11 +46,11 @@ theorem regularProjectorTwistedRegionMatrix_one_column_ne_zero (R : Finset V) (u
   classical
   let α : RegionHalfEdgeConfig (Γ := Γ) G R :=
     fun w => regularTwistedLabels u w.1 (fun _ => 1)
-  let θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G := fun _ => 1
-  let P (η : {f : Edge Γ // IsRegionIncidentEdge R f} → G)
+  let θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G := fun _ => 1
+  let P (η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G)
       (q : {w : V // w ∈ R} → G) : Prop :=
-    (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-        η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ ∧
+    (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+        η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ ∧
       ∀ w : {w : V // w ∈ R}, α w = q w • regularTwistedLabels u w.1
         (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩)
   have hpos : 0 < ∑ η, ∑ q, if P η q then (1 : ℂ) else 0 := by
@@ -100,7 +100,7 @@ private theorem openRegionWeight_univ_apply (A : Tensor Γ d)
   classical
   have hm : regionExteriorMultiplicity A Finset.univ = 1 := by
     rw [regionExteriorMultiplicity_eq_prod]
-    simp [IsRegionIncidentEdge]
+    simp [ManyBody.IsRegionIncidentEdge]
   have h := regionBlockedWeight_eq_exterior_mul_openRegionWeight A Finset.univ μ τ
   rw [hm, Nat.cast_one, one_mul, regionBlockedWeight_univ] at h
   exact h.symm

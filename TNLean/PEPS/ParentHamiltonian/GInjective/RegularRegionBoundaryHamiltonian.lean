@@ -50,7 +50,7 @@ of an actual open region. Source: finite-dimensional consequence of SCP10,
 Definition 5.1, Lemma 5.2, and Theorem 6.9, lines 1278–1358 and 2043–2076. -/
 noncomputable def regularRegionBoundaryHamiltonian
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
-    {n : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    {n : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     Matrix (Fin n → G) (Fin n → G) ℂ :=
   regularBoundaryGramHamiltonian n (Matrix.mulVecLin (regularOpenRegionMatrix a R e))
 
@@ -59,7 +59,7 @@ Source: finite-dimensional boundary logarithm following SCP10,
 Definition 5.1 and Theorem 6.9, lines 1278–1296 and 2043–2076. -/
 theorem regularRegionBoundaryHamiltonian_isHermitian
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
-    {n : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    {n : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     (regularRegionBoundaryHamiltonian a R e).IsHermitian :=
   regularBoundaryGramHamiltonian_isHermitian n _
 
@@ -72,7 +72,7 @@ theorem regularOpenRegionMatrix_gram_eq_compressed_exp_of_connected
     (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected)
-    {n : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    {n : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     (regularOpenRegionMatrix a R e).conjTranspose * regularOpenRegionMatrix a R e =
       LinearMap.toMatrix' (regularBoundarySupportEmbedding (G := G) n) *
         NormedSpace.exp (-regularRegionBoundaryHamiltonian a R e) *

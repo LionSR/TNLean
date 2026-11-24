@@ -89,15 +89,16 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 /-- Boundary-trivial right assignments have the same regional action after
 removing their irrelevant exterior values. -/
 theorem regularRegionRight_eq_internalMultiplier (R : Finset V) (r : Edge Γ → G)
-    (hr : ∀ e, IsRegionBoundaryEdge R e → r e = 1)
+    (hr : ∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
     regularRegionHalfEdgeRightMul R (regularRegionInternalMultiplier R r) α =
       regularRegionHalfEdgeRightMul R r α := by
   funext v e
   by_cases he : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R
   · simp [regularRegionHalfEdgeRightMul, regularRegionInternalMultiplier, he]
-  · have hb : IsRegionBoundaryEdge R e.1 :=
-      (isRegionIncidentEdge_of_regionVertex R v e).isRegionBoundaryEdge he
+  · have hb : ManyBody.IsRegionBoundaryEdge R e.1 :=
+      ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge
+        (isRegionIncidentEdge_of_regionVertex R v e) he
     simp [regularRegionHalfEdgeRightMul, regularRegionInternalMultiplier, he, hr e.1 hb]
 
 omit [DecidableRel Γ.Adj] [Group G] [Fintype G] [DecidableEq G] in

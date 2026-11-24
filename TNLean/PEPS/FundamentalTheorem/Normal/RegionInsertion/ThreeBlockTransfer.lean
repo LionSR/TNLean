@@ -177,7 +177,7 @@ Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, the step `V=W`, lines
 def IsBondLocalTransferKernel (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) : Prop :=
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) : Prop :=
   ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
     ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
       transferCoeff (G := G) A B R hRB hCB f M = incidentKernel (G := G) B R f N
@@ -198,7 +198,7 @@ theorem coeffTransfer_of_bondLocal (A B : Tensor G d) (R : Finset V)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hbond : IsBondLocalTransferKernel (G := G) A B R hRB hCB f) :
     ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
       ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
@@ -233,7 +233,7 @@ theorem bondLocal_iff_coeffTransfer (A B : Tensor G d) (R : Finset V)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     IsBondLocalTransferKernel (G := G) A B R hRB hCB f ↔
       ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
         ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
@@ -257,7 +257,7 @@ theorem isBondLocalTransferKernel_self (A : Tensor G d) (R : Finset V)
     (hRA : RegionBlockedTensorInjective (G := G) A R)
     (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hposA : ∀ g : Edge G, 0 < A.bondDim g)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     IsBondLocalTransferKernel (G := G) A A R hRA hCA f := by
   intro M
   refine ⟨M, ?_⟩
@@ -284,7 +284,7 @@ theorem SharedNormalEdgeBlockingData.coeffTransferAB
     (D : SharedNormalEdgeBlockingData A B e)
     (hAB : SameState A B)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) D.red f})
     (hbondAB : IsBondLocalTransferKernel (G := G) A B D.red
       D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) f) :
     ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
@@ -305,7 +305,7 @@ theorem SharedNormalEdgeBlockingData.coeffTransferBA
     (D : SharedNormalEdgeBlockingData A B e)
     (hBA : SameState B A)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) D.red f})
     (hbondBA : IsBondLocalTransferKernel (G := G) B A D.red
       D.regionInjective_red_A (D.regionInjective_compl_red_A hposA) f) :
     ∀ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
@@ -340,7 +340,7 @@ theorem SharedNormalEdgeBlockingData.exists_regionEdgeGauge
     (hAB : SameState A B)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
     (hDim : A.bondDim = B.bondDim)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) D.red f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) D.red f})
     (hbondAB : IsBondLocalTransferKernel (G := G) A B D.red
       D.regionInjective_red_B (D.regionInjective_compl_red_B hposB) f)
     (hbondBA : IsBondLocalTransferKernel (G := G) B A D.red

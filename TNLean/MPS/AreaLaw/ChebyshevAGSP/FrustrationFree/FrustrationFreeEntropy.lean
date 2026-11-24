@@ -100,7 +100,8 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
         (by omega : 1 ≤ q) (by omega : 6 ≤ s) hfit Φ h0 h1 Ω hΩ
         g t hg hg1 le_rfl hzero hgap
     obtain ⟨p, _hdegree, _hp0, hfix, _herror, _hshortRank, hrank, hperp⟩ := hfilter ell
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
+    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian
+      (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
     let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
     have hrankD : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
         (leftBlock L (a + s / 2)) K) ≤ D := by

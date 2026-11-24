@@ -104,7 +104,7 @@ independence makes these coefficients span. -/
 /-- The physical configuration on `V\{v}` read off `assembleRegionσ R σ τ` at the
 in-region endpoint vertex `v`. -/
 noncomputable def regionComplementPhysicalConfig (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     VertexComplementPhysicalConfig (V := V) (d := d)
@@ -118,7 +118,7 @@ coefficient `stateOpenCoeff B σ τ` equals the vertex-complement tensor family 
 configuration. Both are the blocked contraction of all tensors away from `v` with
 `v`'s local virtual configuration left open. -/
 theorem stateOpenCoeff_eq_vertexComplementTensorFamily (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     stateOpenCoeff (G := G) B R f σ τ =
@@ -150,7 +150,7 @@ some region and complement physical configurations. Since the in-region endpoint
 `w ∉ R`), so the assembled configuration can match any prescribed values on
 `V\{v}`. -/
 theorem regionComplementPhysicalConfig_surjective (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     Function.Surjective
       (fun p : RegionPhysicalConfig (V := V) (d := d) R ×
           RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
@@ -199,7 +199,7 @@ realized by some `σ, τ`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem span_stateOpenCoeff_eq_top (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hB : IsVertexInjective B) (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
     Submodule.span ℂ
         (Set.range (fun p : RegionPhysicalConfig (V := V) (d := d) R ×
@@ -250,7 +250,7 @@ the closed state vectors there. The state vectors are local tensor images
 virtual coefficient space (`span_stateOpenCoeff_eq_top`), so their span is the
 whole image. -/
 theorem range_localTensorMap_eq_span_stateVec (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hB : IsVertexInjective B) (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
     LinearMap.range (localTensorMap B (regionBoundaryEdgeInVertex (G := G) R f)) =
       Submodule.span ℂ (Set.range (fun p : RegionPhysicalConfig (V := V) (d := d) R ×
@@ -276,7 +276,7 @@ coincide. Both equal the span of the closed state vectors there
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem range_localTensorMap_eq_of_sameState (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
     LinearMap.range (localTensorMap A (regionBoundaryEdgeInVertex (G := G) R f)) =
@@ -304,7 +304,7 @@ preservation `physical_to_virtual_insertion` extracts at the edge level.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertionOp_localProjectorAt_eq (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
@@ -345,7 +345,7 @@ in-region physical configuration is updated at the endpoint vertex: the state
 vector reassembles with its own update at the endpoint, overriding any incoming
 value there. -/
 theorem regionStateVec_update_vmem (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) (b : Fin d) :
     regionStateVec (G := G) A R f
@@ -375,7 +375,7 @@ vectors.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertionOp_regionStateVec_pin (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B)
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
@@ -404,7 +404,7 @@ resonate identity at the edge level. The `himage` half is unconditional.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionTransferRealizesAt_of_hform (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
@@ -445,7 +445,7 @@ of `regionTransferMatrix … M` for every inserted matrix `M`. This is exactly t
 per-matrix conclusion of `regionTransferMatrix_realizes_of_image`, the region
 analogue of `physical_to_virtual_insertion`. -/
 def RegionTransferRealizes (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hposB : ∀ e : Edge G, 0 < B.bondDim e) : Prop :=
@@ -471,7 +471,7 @@ coefficient, mirroring `edgeTransferMatrix_mul`/`edgeTransferMatrix_one`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionTransferMatrix_mul_of_realizes (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hposB : ∀ e : Edge G, 0 < B.bondDim e)
@@ -523,7 +523,7 @@ theorem regionTransferMatrix_mul_of_realizes (A B : Tensor G d) (R : Finset V)
 
 /-- The forward transfer is unital under a realized matrix transfer. -/
 theorem regionTransferMatrix_one_of_realizes (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B)
@@ -553,7 +553,7 @@ and `edgeTransferMatrix_one`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 noncomputable def regionInsertionTransfer_of_realizes (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B)

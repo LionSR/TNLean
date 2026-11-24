@@ -76,7 +76,7 @@ def regionExteriorCut (R : Finset V) : Finset (Edge Γ) :=
 
 /-- A crossing bond belongs to the actual regional cut. -/
 theorem mem_regionExteriorCut_of_boundary (R : Finset V)
-    (e : {e : Edge Γ // IsRegionBoundaryEdge R e}) : e.1 ∈ regionExteriorCut R := by
+    (e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) : e.1 ∈ regionExteriorCut R := by
   simp only [regionExteriorCut, Finset.mem_filter, Finset.mem_univ, true_and]
   rcases e.2 with h | h <;> tauto
 

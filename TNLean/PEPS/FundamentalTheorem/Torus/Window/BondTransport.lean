@@ -94,7 +94,8 @@ independence cross-proportionality becomes an equality of states. -/
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of `Papers/1804.04964/paper_normal.tex`;
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1. -/
 noncomputable def scaledBondInsert (B : Tensor (torusGraph width height) d) (R : Finset _)
-    (f : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge (G := torusGraph width height)
+    (f : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge
+      (G := torusGraph width height)
       R f})
     (c : ℂ) (M : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
     RegionInsert (G := torusGraph width height) (d := d) B R :=
@@ -103,7 +104,8 @@ noncomputable def scaledBondInsert (B : Tensor (torusGraph width height) d) (R :
 /-- The assembled deformed state of the scaled bond insert is the constant times the assembled
 deformed state of the bond insert. -/
 theorem deformedRegionStateAssembled_scaledBondInsert (R : Finset _)
-    (f : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge (G := torusGraph width height)
+    (f : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge
+      (G := torusGraph width height)
       R f})
     (c : ℂ) (M : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
     (cfg : TorusVertex width height → Fin d) :
@@ -155,8 +157,9 @@ theorem horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : j < L) (g : Edge (torusGraph width height))
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
-    (hg : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
+    (hg : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j +
+      1)) g)
     (M₁ M₂ : Matrix (Fin (B.bondDim g)) (Fin (B.bondDim g)) ℂ)
     (horient : regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K j) ⟨g, hf⟩
         M₁ =
@@ -208,8 +211,9 @@ theorem verticalStaircaseConsecutiveWindow_bondTransport_extend_eq
     (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K)
     (g : Edge (torusGraph width height))
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
-    (hg : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
+    (hg : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j +
+      1)) g)
     (M₁ M₂ : Matrix (Fin (B.bondDim g)) (Fin (B.bondDim g)) ℂ)
     (horient : regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K j) ⟨g, hf⟩
         M₁ =

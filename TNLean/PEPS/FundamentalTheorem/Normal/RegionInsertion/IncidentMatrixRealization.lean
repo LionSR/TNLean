@@ -83,7 +83,7 @@ region resonate reconcile (step (iv) of remaining obligation 4 of
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionTransferRealizes_of_isIncidentMatrixForm (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
@@ -121,7 +121,7 @@ identity by `physical_to_virtual_insertion` (`TNLean.PEPS.InsertionRealization`)
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 def RegionResonateReconcile (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f))) :
     Prop :=
@@ -134,7 +134,7 @@ def RegionResonateReconcile (A B : Tensor G d) (R : Finset V)
 /-- The region resonate reconcile gives the region physical-to-virtual realization
 bundle, by `regionTransferRealizes_of_isIncidentMatrixForm`. -/
 theorem regionTransferRealizes_of_reconcile (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
@@ -163,7 +163,7 @@ datum is `regionInsertionTransfer_of_realizes`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 noncomputable def regionInsertionTransfer_of_reconcile (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
@@ -192,7 +192,7 @@ matrix.
 Source: arXiv:1804.04964, Section 3, lines 560--586 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem exists_regionEdgeGauge_of_reconcile (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)

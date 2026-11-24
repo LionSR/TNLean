@@ -133,14 +133,14 @@ open scoped Classical in
 pairs of global virtual configurations agreeing on every boundary edge of `R`
 other than `f`, weighted by `M` on the two `f`-values. -/
 theorem regionInsertedCoeff_eq_doubleSum (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     regionInsertedCoeff (G := G) A R f M σ τ =
       ∑ p ∈ Finset.univ.filter
           (fun p : VirtualConfig A × VirtualConfig A =>
-            ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+            ∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
               p.1 c.1 = p.2 c.1),
         M (p.1 f.1) (p.2 f.1) *
           (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => p.1 ie.1) (σ w)) *
@@ -203,10 +203,10 @@ theorem regionInsertedCoeff_eq_doubleSum (A : Tensor G d) (R : Finset V)
       by_cases hsame : SameAwayFromBond f (regionBoundaryLabel (G := G) A R ζ)
           (regionBoundaryLabel (G := G) A R ξ)
       · rw [ite_eq_left hsame]
-        exact (ite_eq_left (show ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c},
+        exact (ite_eq_left (show ∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c},
           c ≠ f → ζ c.1 = ξ c.1 from hsame)).symm
       · rw [ite_eq_right hsame, zero_mul, zero_mul]
-        exact (ite_eq_right (show ¬∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c},
+        exact (ite_eq_right (show ¬∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c},
           c ≠ f → ζ c.1 = ξ c.1 from hsame)).symm
     · -- Carry out the (μ, ν) collapse using the boundary-fiber lemma twice. First swap
       -- the `ν`-sum inside the `ζ`-filtered sum so that `(μ, ζ)` are adjacent.
@@ -391,14 +391,14 @@ This combines the general-matrix double-global-configuration form
 `regionInsertedCoeff_eq_doubleSum` with the agreeing-pair vertex product
 `regionComplProd_eq`. -/
 theorem regionInsertedCoeff_eq_doubleSum_vertex (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     regionInsertedCoeff (G := G) B R f N σ τ =
       ∑ p ∈ Finset.univ.filter
           (fun p : VirtualConfig B × VirtualConfig B =>
-            ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+            ∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
               p.1 c.1 = p.2 c.1),
         N (p.1 f.1) (p.2 f.1) *
           ∏ v : V, B.component v (pairOuter (G := G) B R p v)
@@ -430,20 +430,20 @@ omit [Fintype V] in
 than `f` carries equal indices on its two endpoints by the agreeing-pair hypothesis, so only
 `f` may carry two distinct endpoint indices. -/
 theorem pairOuter_isConsistentOff (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (p : VirtualConfig B × VirtualConfig B)
-    (hp : ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+    (hp : ∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
         p.1 c.1 = p.2 c.1) :
     IsConsistentOff (G := G) B f.1 (pairOuter (G := G) B R p) := by
   intro g hg
   rw [pairOuter, pairOuter]
   by_cases h1 : g.1.1 ∈ R <;> by_cases h2 : g.1.2 ∈ R
   · simp only [edgeLeftIncident, edgeRightIncident, h1, h2, ite_true]
-  · have hb : IsRegionBoundaryEdge (G := G) R g := Or.inl ⟨h1, h2⟩
+  · have hb : ManyBody.IsRegionBoundaryEdge (G := G) R g := Or.inl ⟨h1, h2⟩
     have : p.1 g = p.2 g := hp ⟨g, hb⟩ (fun h => hg (congrArg Subtype.val h))
     simp only [edgeLeftIncident, edgeRightIncident, h1, h2, ite_true, ite_false]
     exact this
-  · have hb : IsRegionBoundaryEdge (G := G) R g := Or.inr ⟨h1, h2⟩
+  · have hb : ManyBody.IsRegionBoundaryEdge (G := G) R g := Or.inr ⟨h1, h2⟩
     have : p.1 g = p.2 g := hp ⟨g, hb⟩ (fun h => hg (congrArg Subtype.val h))
     simp only [edgeLeftIncident, edgeRightIncident, h1, h2, ite_true, ite_false]
     exact this.symm
@@ -495,31 +495,33 @@ open scoped Classical in
 /-- Rebuild a pair from an outer config and ghost legs on the non-boundary edges. -/
 noncomputable def pairOuterFiberPair (B : Tensor G d) (R : Finset V)
     (ξ : OpenLocalConfig (G := G) B)
-    (h : (e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e}) → Fin (B.bondDim e.1)) :
+    (h : (e : {e : Edge G // ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e}) → Fin (B.bondDim e.1)) :
     VirtualConfig B × VirtualConfig B :=
-  (fun e => if hinc : IsRegionIncidentEdge (G := G) R e then pairOuterReadFst (G := G) B R ξ e
+  (fun e => if hinc : ManyBody.IsRegionIncidentEdge (G := G) R e then
+    pairOuterReadFst (G := G) B R ξ e
               else h ⟨e, not_boundary_of_not_incident (G := G) R hinc⟩,
-   fun e => if hb : IsRegionBoundaryEdge (G := G) R e then pairOuterReadSnd (G := G) B R ξ e
-              else if _ : IsRegionIncidentEdge (G := G) R e then h ⟨e, hb⟩
+   fun e => if hb : ManyBody.IsRegionBoundaryEdge (G := G) R e then
+     pairOuterReadSnd (G := G) B R ξ e
+              else if _ : ManyBody.IsRegionIncidentEdge (G := G) R e then h ⟨e, hb⟩
               else pairOuterReadSnd (G := G) B R ξ e)
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A boundary edge whose left endpoint lies outside `R` has its right endpoint in `R`. -/
 theorem boundary_right_mem (R : Finset V) {f : Edge G}
-    (hf : IsRegionBoundaryEdge (G := G) R f) (h1 : f.1.1 ∉ R) : f.1.2 ∈ R :=
+    (hf : ManyBody.IsRegionBoundaryEdge (G := G) R f) (h1 : f.1.1 ∉ R) : f.1.2 ∈ R :=
   hf.elim (fun h => absurd h.1 h1) And.right
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A boundary edge whose left endpoint lies in `R` has its right endpoint outside `R`. -/
 theorem boundary_right_not_mem (R : Finset V) {f : Edge G}
-    (hf : IsRegionBoundaryEdge (G := G) R f) (h1 : f.1.1 ∈ R) : f.1.2 ∉ R :=
+    (hf : ManyBody.IsRegionBoundaryEdge (G := G) R f) (h1 : f.1.1 ∈ R) : f.1.2 ∉ R :=
   hf.elim And.right (fun h => absurd h1 h.1)
 
 omit [Fintype V] in
 /-- Reading `ξ` at the in-region endpoint of an edge incident to a vertex `v ∈ R`, when `ξ`
 is consistent off `f` and the edge is not `f`, gives `ξ v ie`. -/
 theorem pairOuterReadFst_eq (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (ξ : OpenLocalConfig (G := G) B) (hξ : IsConsistentOff (G := G) B f.1 ξ)
     {v : V} (hv : v ∈ R) (ie : IncidentEdge G v) :
     pairOuterReadFst (G := G) B R ξ ie.1 = ξ v ie := by
@@ -541,7 +543,7 @@ omit [Fintype V] in
 /-- Reading `ξ` at the complement endpoint of an edge incident to a vertex `v ∉ R`, when `ξ`
 is consistent off `f` and the edge is not `f`, gives `ξ v ie`. -/
 theorem pairOuterReadSnd_eq (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (ξ : OpenLocalConfig (G := G) B) (hξ : IsConsistentOff (G := G) B f.1 ξ)
     {v : V} (hv : v ∉ R) (ie : IncidentEdge G v) :
     pairOuterReadSnd (G := G) B R ξ ie.1 = ξ v ie := by
@@ -560,9 +562,9 @@ theorem pairOuterReadSnd_eq (B : Tensor G d) (R : Finset V)
 omit [Fintype V] in
 /-- The rebuilt pair's `pairOuter` recovers `ξ` (when `ξ` is consistent off `f`). -/
 theorem pairOuter_pairOuterFiberPair (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (ξ : OpenLocalConfig (G := G) B) (hξ : IsConsistentOff (G := G) B f.1 ξ)
-    (h : (e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e}) → Fin (B.bondDim e.1)) :
+    (h : (e : {e : Edge G // ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e}) → Fin (B.bondDim e.1)) :
     pairOuter (G := G) B R (pairOuterFiberPair (G := G) B R ξ h) = ξ := by
   classical
   funext v ie
@@ -570,7 +572,7 @@ theorem pairOuter_pairOuterFiberPair (B : Tensor G d) (R : Finset V)
   by_cases hv : v ∈ R
   · rw [ite_eq_left hv]
     -- first component: edge ie.1 is R-incident (v ∈ R is an endpoint), reads pairOuterReadFst.
-    have hinc : IsRegionIncidentEdge (G := G) R ie.1 := by
+    have hinc : ManyBody.IsRegionIncidentEdge (G := G) R ie.1 := by
       rcases ie.2 with hie | hie
       · exact Or.inl (by rw [hie]; exact hv)
       · exact Or.inr (by rw [hie]; exact hv)
@@ -579,10 +581,10 @@ theorem pairOuter_pairOuterFiberPair (B : Tensor G d) (R : Finset V)
   · rw [ite_eq_right hv]
     -- second component.
     simp only [pairOuterFiberPair]
-    by_cases hb : IsRegionBoundaryEdge (G := G) R ie.1
+    by_cases hb : ManyBody.IsRegionBoundaryEdge (G := G) R ie.1
     · rw [dite_eq_left hb]
       exact pairOuterReadSnd_eq (G := G) B R f ξ hξ hv ie
-    · by_cases hinc : IsRegionIncidentEdge (G := G) R ie.1
+    · by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R ie.1
       · -- ie.1 R-incident but v ∉ R, so the other endpoint ∈ R, hence ie.1 is boundary: contra hb.
         exfalso
         apply hb
@@ -605,16 +607,16 @@ open scoped Classical in
 /-- The `ξ`-fiber of the agreeing-off-`f` pairs under `pairOuter` has cardinality
 `regionInteriorBondProd B R`. -/
 theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (ξ : OpenLocalConfig (G := G) B) (hξ : IsConsistentOff (G := G) B f.1 ξ) :
     (Finset.univ.filter (fun p : VirtualConfig B × VirtualConfig B =>
-        (∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+        (∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
             p.1 c.1 = p.2 c.1)
           ∧ pairOuter (G := G) B R p = ξ)).card =
       regionInteriorBondProd (G := G) B R := by
   classical
   rw [show regionInteriorBondProd (G := G) B R =
-      (Finset.univ : Finset ((e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e})
+      (Finset.univ : Finset ((e : {e : Edge G // ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e})
         → Fin (B.bondDim e.1))).card from ?_]
   · refine Finset.card_nbij'
       (regionFiberLegs (G := G) B R) (pairOuterFiberPair (G := G) B R ξ) ?_ ?_ ?_ ?_
@@ -625,9 +627,9 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
       refine ⟨?_, pairOuter_pairOuterFiberPair (G := G) B R f ξ hξ h⟩
       -- agreement off `f` on boundary edges.
       intro c hc
-      have hcb : IsRegionBoundaryEdge (G := G) R c.1 := c.2
-      have hcinc : IsRegionIncidentEdge (G := G) R c.1 :=
-        isRegionBoundaryEdge_touches (G := G) R hcb
+      have hcb : ManyBody.IsRegionBoundaryEdge (G := G) R c.1 := c.2
+      have hcinc : ManyBody.IsRegionIncidentEdge (G := G) R c.1 :=
+        ManyBody.isRegionBoundaryEdge_touches (G := G) R hcb
       simp only [pairOuterFiberPair, dite_eq_left hcinc, dite_eq_left hcb]
       -- read-fst = read-snd on a boundary edge ≠ f, by consistency.
       have hcf : c.1 ≠ f.1 := fun h => hc (Subtype.ext h)
@@ -647,7 +649,7 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
       refine Prod.ext ?_ ?_
       · funext e
         simp only [pairOuterFiberPair, regionFiberLegs]
-        by_cases hinc : IsRegionIncidentEdge (G := G) R e
+        by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R e
         · rw [dite_eq_left hinc]
           -- pairOuterReadFst ξ e = p.1 e because pairOuter p = ξ and e is R-incident.
           subst hmerge
@@ -664,7 +666,7 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
         · rw [dite_eq_right hinc, ite_eq_right hinc]
       · funext e
         simp only [pairOuterFiberPair, regionFiberLegs]
-        by_cases hb : IsRegionBoundaryEdge (G := G) R e
+        by_cases hb : ManyBody.IsRegionBoundaryEdge (G := G) R e
         · rw [dite_eq_left hb]
           -- boundary edge: pairOuterReadSnd ξ e = p.2 e.
           subst hmerge
@@ -676,7 +678,7 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
           · -- e.1.1 ∉ R; boundary ⇒ e.1.2 ∈ R, so the left endpoint is the complement side.
             exact (dite_eq_right h1).trans (ite_eq_right h1)
         · rw [dite_eq_right hb]
-          by_cases hinc : IsRegionIncidentEdge (G := G) R e
+          by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R e
           · rw [dite_eq_left hinc, ite_eq_left hinc]
           · rw [dite_eq_right hinc]
             -- e not incident: pairOuterReadSnd ξ e = p.2 e.
@@ -688,8 +690,8 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
       intro h _
       funext e
       simp only [regionFiberLegs, pairOuterFiberPair]
-      have hb : ¬ IsRegionBoundaryEdge (G := G) R e.1 := e.2
-      by_cases hinc : IsRegionIncidentEdge (G := G) R e.1
+      have hb : ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e.1 := e.2
+      by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R e.1
       · -- R-incident non-boundary edge: legs read the second component, which is `h e`.
         rw [ite_eq_left hinc, dite_eq_right hb, dite_eq_left hinc]
       · -- non-incident edge: legs read the first component, which is `h e`.
@@ -698,7 +700,7 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
     simp only [Fintype.card_fin]
     rw [regionInteriorBondProd,
       ← Finset.prod_subtype (Finset.univ.filter
-          (fun e : Edge G => ¬ IsRegionBoundaryEdge (G := G) R e))
+          (fun e : Edge G => ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e))
         (fun e => by simp [Finset.mem_filter]) (fun e => B.bondDim e)]
 
 open scoped Classical in
@@ -708,11 +710,11 @@ configurations consistent off `f`. Each fiber of `pairOuter` over a consistent-o
 configuration has `regionInteriorBondProd B R` agreeing pairs (the free non-boundary legs);
 no agreeing pair lies over an inconsistent-off-`f` configuration. -/
 theorem sum_pairOuter_fiber_collapse (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (g : OpenLocalConfig (G := G) B → ℂ) :
     (∑ p ∈ Finset.univ.filter
         (fun p : VirtualConfig B × VirtualConfig B =>
-          ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+          ∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
             p.1 c.1 = p.2 c.1),
       g (pairOuter (G := G) B R p)) =
       regionInteriorBondProd (G := G) B R •
@@ -728,7 +730,7 @@ theorem sum_pairOuter_fiber_collapse (B : Tensor G d) (R : Finset V)
     (f := fun p => g (pairOuter (G := G) B R p))
     (s := Finset.univ.filter
         (fun p : VirtualConfig B × VirtualConfig B =>
-          ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+          ∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
             p.1 c.1 = p.2 c.1)) ?_]
   · rw [Finset.smul_sum]
     refine Finset.sum_congr rfl (fun ξ hξ => ?_)
@@ -740,7 +742,7 @@ theorem sum_pairOuter_fiber_collapse (B : Tensor G d) (R : Finset V)
       Finset.sum_const]
     rw [show (Finset.univ.filter
         (fun p : VirtualConfig B × VirtualConfig B =>
-          (∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+          (∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
               p.1 c.1 = p.2 c.1)
             ∧ pairOuter (G := G) B R p = ξ)).card =
         regionInteriorBondProd (G := G) B R from
@@ -754,7 +756,7 @@ theorem sum_pairOuter_fiber_collapse (B : Tensor G d) (R : Finset V)
 to its left/right reading: the identity when the left endpoint of `f` lies in `R`, the
 transpose otherwise. -/
 noncomputable def regionEdgeOrient (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
     Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ :=
   if f.1.1.1 ∈ R then N else Nᵀ
@@ -770,7 +772,7 @@ legs (`sum_pairOuter_fiber_collapse`); the cut form is `edgeInsertedCoeff` read 
 `edgeInsertedCoeff_eq_sum_local`, whose consistency deltas restrict to the configurations
 consistent off `f`. -/
 theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -783,14 +785,14 @@ theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Fins
   -- Recognise the summand as `g (pairOuter p)` and collapse the fiber.
   rw [show (∑ p ∈ Finset.univ.filter
         (fun p : VirtualConfig B × VirtualConfig B =>
-          ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+          ∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
             p.1 c.1 = p.2 c.1),
       N (p.1 f.1) (p.2 f.1) *
         ∏ v : V, B.component v (pairOuter (G := G) B R p v)
           (assembleRegionσ (V := V) (d := d) R σ τ v)) =
       ∑ p ∈ Finset.univ.filter
         (fun p : VirtualConfig B × VirtualConfig B =>
-          ∀ c : {c : Edge G // IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
+          ∀ c : {c : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R c}, c ≠ f →
             p.1 c.1 = p.2 c.1),
         (fun ξ : OpenLocalConfig (G := G) B =>
           N (pairOuterReadFst (G := G) B R ξ f.1) (pairOuterReadSnd (G := G) B R ξ f.1) *
@@ -886,14 +888,14 @@ theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Fins
 boundary edge. -/
 theorem regionEdgeOrient_applyGauge (B : Tensor G d) (R : Finset V)
     (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
     regionEdgeOrient (G := G) (applyGauge B Z) R f N = regionEdgeOrient (G := G) B R f N := rfl
 
 omit [Fintype V] in
 /-- `regionEdgeOrient` is an involution. -/
 theorem regionEdgeOrient_regionEdgeOrient (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
     regionEdgeOrient (G := G) B R f (regionEdgeOrient (G := G) B R f N) = N := by
   rw [regionEdgeOrient, regionEdgeOrient]
@@ -917,7 +919,7 @@ exactly as at the edge level when `f`'s left endpoint lies in `R`, and by the tr
 of that conjugation otherwise. -/
 theorem regionInsertedCoeff_applyGauge (B : Tensor G d) (R : Finset V)
     (Z : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :

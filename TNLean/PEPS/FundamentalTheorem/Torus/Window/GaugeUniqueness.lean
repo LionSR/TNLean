@@ -43,7 +43,7 @@ variable [Fact (1 < width)] [Fact (1 < height)]
 /-- The rightward edge from the omitted corner crosses the punctured rectangle. -/
 private theorem isRegionBoundaryEdge_windowCornerRegion_right (hL : 0 < L)
     (hw : 2 * L + 1 ≤ width) (hh : 2 * K + 1 ≤ height) :
-    IsRegionBoundaryEdge (G := torusGraph width height) (windowCornerRegion L K)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (windowCornerRegion L K)
       (torusRightEdge (windowCornerVertex L K : TorusVertex width height)) := by
   have h1 : (windowCornerVertex L K : TorusVertex width height).1.val = L :=
     ZMod.val_cast_of_lt (by omega)
@@ -51,7 +51,7 @@ private theorem isRegionBoundaryEdge_windowCornerRegion_right (hL : 0 < L)
     ZMod.val_cast_of_lt (by omega)
   obtain ⟨hf, hs⟩ := torusRightEdge_endpoints_of_lt
     (p := windowCornerVertex L K) (by rw [h1]; omega)
-  rw [IsRegionBoundaryEdge, hf, hs]
+  rw [ManyBody.IsRegionBoundaryEdge, hf, hs]
   refine Or.inr ⟨windowCornerVertex_notMem hw hh, ?_⟩
   rw [mem_windowCornerRegion]
   have h3 : ((windowCornerVertex L K : TorusVertex width height).1 + 1).val =
@@ -77,7 +77,7 @@ private theorem exists_injective_region_boundary_of_normalArcWindows
     (hL : 0 < L) (hK : 0 < K)
     (hw : 2 * L + 1 ≤ width) (hh : 2 * K + 1 ≤ height)
     (e : Edge (torusGraph width height)) :
-    ∃ R : Finset (TorusVertex width height), IsRegionBoundaryEdge R e ∧
+    ∃ R : Finset (TorusVertex width height), ManyBody.IsRegionBoundaryEdge R e ∧
       RegionBlockedTensorInjective B R ∧ RegionBlockedTensorInjective B (Finset.univ \ R) := by
   classical
   let R : Finset (TorusVertex width height) := windowCornerRegion L K
@@ -88,8 +88,8 @@ private theorem exists_injective_region_boundary_of_normalArcWindows
   have hCR : RegionBlockedTensorInjective B (Finset.univ \ R) :=
     hB.compl_windowCornerRegion_injective hU hL hK hw hh
   have htr (a : ZMod width) (b : ZMod height) (e₀ : Edge (torusGraph width height))
-      (hb : IsRegionBoundaryEdge R e₀) (he : ManyBody.Edge.map (translate a b) e₀ = e) :
-      ∃ Q : Finset (TorusVertex width height), IsRegionBoundaryEdge Q e ∧
+      (hb : ManyBody.IsRegionBoundaryEdge R e₀) (he : ManyBody.Edge.map (translate a b) e₀ = e) :
+      ∃ Q : Finset (TorusVertex width height), ManyBody.IsRegionBoundaryEdge Q e ∧
         RegionBlockedTensorInjective B Q ∧
         RegionBlockedTensorInjective B (Finset.univ \ Q) := by
     have hmapinj (Q : Finset (TorusVertex width height))

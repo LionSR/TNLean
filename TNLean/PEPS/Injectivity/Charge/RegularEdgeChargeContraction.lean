@@ -64,9 +64,11 @@ private abbrev internalUnique (e : Edge Γ) : Unique (Internal e) where
   uniq f := Subtype.ext (internal_eq e f.1 f.2)
 omit [Fintype V] [DecidableRel Γ.Adj] in
 private theorem boundary_of_other (e : Edge Γ) (v : V) (hv : v ∈ regularEdgeRegion e)
-    (f : IncidentEdge Γ v) (hne : f.1 ≠ e) : IsRegionBoundaryEdge (regularEdgeRegion e) f.1 :=
-  (isRegionIncidentEdge_of_regionVertex _ ⟨v, hv⟩ f).isRegionBoundaryEdge
-    fun h => hne (internal_eq e f.1 h)
+    (f : IncidentEdge Γ v) (hne : f.1 ≠ e) : ManyBody.IsRegionBoundaryEdge
+      (regularEdgeRegion e) f.1 :=
+  ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge
+    (isRegionIncidentEdge_of_regionVertex _ ⟨v, hv⟩ f)
+    (fun h => hne (internal_eq e f.1 h))
 private def vertices (e : Edge Γ) : Bool ≃ {v : V // v ∈ regularEdgeRegion e} where
   toFun b := if b then ⟨e.1.2,by simp [regularEdgeRegion]⟩ else ⟨e.1.1,by simp [regularEdgeRegion]⟩
   invFun v := decide (v.1 = e.1.2)
@@ -87,7 +89,7 @@ def regularEdgeCharacterSite
 /-- Read the remaining native crossing labels at the two actual endpoint sites.
 Source: SCP10, the two adjacent vertices in charge detection, lines 2464–2486. -/
 def regularEdgeChargeBoundaryLabels (e : Edge Γ)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge (regularEdgeRegion e) f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge (regularEdgeRegion e) f} → G) :
     ({f : IncidentEdge Γ e.1.1 // f ≠ regularEdgeTailLeg e} → G) ×
       ({f : IncidentEdge Γ e.1.2 // f ≠ regularEdgeHeadLeg e} → G) :=
   (fun f => θ ⟨f.1.1, boundary_of_other e e.1.1 (by simp [regularEdgeRegion]) f.1
@@ -108,7 +110,7 @@ def regularEdgePhysicalPairEquiv (e : Edge Γ) :
   right_inv s := by simp [ne_of_gt e.2.1]
 private def remainingBoundary (e : Edge Γ) (v : V) (hv : v ∈ regularEdgeRegion e)
     (i : IncidentEdge Γ v) (hi : i.1 = e)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge (regularEdgeRegion e) f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge (regularEdgeRegion e) f} → G) :
     {f : IncidentEdge Γ v // f ≠ i} → G :=
   fun f => θ ⟨f.1.1,boundary_of_other e v hv f.1
     (fun h => f.2 (Subtype.ext (h.trans hi.symm)))⟩
@@ -116,7 +118,7 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] [DecidableEq G] in
 private theorem labels_at_vertex (e : Edge Γ) (v : V) (hv : v ∈ regularEdgeRegion e)
     (i : IncidentEdge Γ v) (hi : i.1 = e)
     (ξ : Internal e → G)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge (regularEdgeRegion e) f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge (regularEdgeRegion e) f} → G) :
     (fun f : IncidentEdge Γ v => (graphRegionIncidentConfigEquiv (regularEdgeRegion e)).symm (ξ,θ)
       ⟨f.1,isRegionIncidentEdge_of_regionVertex (regularEdgeRegion e) ⟨v,hv⟩ f⟩) =
       (Equiv.funSplitAt i G).symm
@@ -127,7 +129,7 @@ private theorem labels_at_vertex (e : Edge Γ) (v : V) (hv : v ∈ regularEdgeRe
   apply Prod.ext
   · change η ⟨i.1,_⟩ = _
     have htag : (⟨i.1,isRegionIncidentEdge_of_regionVertex (regularEdgeRegion e) ⟨v,hv⟩ i⟩ :
-        {f : Edge Γ // IsRegionIncidentEdge (regularEdgeRegion e) f}) =
+        {f : Edge Γ // ManyBody.IsRegionIncidentEdge (regularEdgeRegion e) f}) =
         ⟨e,Or.inl (by simp [regularEdgeRegion])⟩ :=
       Subtype.ext hi
     rw [htag]
@@ -150,7 +152,7 @@ Source: SCP10, `eq:anyons:measure-chargeon`, lines 2464–2486. -/
 theorem openRegionWeight_regularEdgeCharacterSite
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (e : Edge Γ) (χ : G → ℂ) (p : G)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge (regularEdgeRegion e) f} → G)
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge (regularEdgeRegion e) f} → G)
     (σ : RegionPhysicalConfig (d := d) (regularEdgeRegion e)) :
     openRegionWeight (groupBondTensor (regularEdgeCharacterSite a e χ p))
         (regularEdgeRegion e) (fun f => Fintype.equivFin G (θ f)) σ =
@@ -228,7 +230,7 @@ theorem exists_regularEdgePhysicalAllChargeMeasurement
       ∀ (b : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
         (_ : ∀ v ∈ ({e.1.1,e.1.2} : Finset V), b v = a v)
         (χ : regularChargeLabels (G := G)) r p
-        (θ : {f : Edge Γ // IsRegionBoundaryEdge {e.1.1,e.1.2} f} → G),
+        (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge {e.1.1,e.1.2} f} → G),
         Q r *ᵥ openRegionWeight (groupBondTensor (regularEdgeCharacterSite b e χ.val p))
             {e.1.1,e.1.2} (fun f => Fintype.equivFin G (θ f)) =
           if r = some χ then

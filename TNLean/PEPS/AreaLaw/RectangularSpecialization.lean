@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
-import TNLean.PEPS.AreaLaw.RectangularBoundary
+import QICLean.ManyBody.Sites.Lattice.Rectangle
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
 import TNLean.PEPS.AreaLaw.SquareAreaLawSpecialization
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -57,7 +57,7 @@ def RectangularEntropyAreaLaw : Prop :=
           ∀ A : Finset (SquareLatticeVertex width height),
             ManyBody.regionEntropy Ω A ≤
               C * Fintype.card
-                {e : Edge (squareLatticeGraph width height) // IsRegionBoundaryEdge A e} ∧
+                {e : Edge (squareLatticeGraph width height) // ManyBody.IsRegionBoundaryEdge A e} ∧
             ManyBody.regionEntropy Ω A ≤
               4 * C * (innerBoundary (squareLatticeGraph width height) A).card ∧
             ManyBody.regionEntropy Ω A ≤
@@ -90,9 +90,9 @@ theorem UniformAreaLaw.rectangularEntropyAreaLaw (harea : UniformAreaLaw) :
     (rectangleAreaLawState Ω) hΩ' hgap' hspan' (A.map (rectangleSiteEquiv width height).toEmbedding)
   have hi := regionEntropy_le_four_mul_innerBoundary_card hC h
   have he := regionEntropy_le_two_mul_endpointBoundary_card hC h
-  rw [regionEntropy_rectangleAreaLawState, card_edgeBoundary_rectangular] at h
-  rw [regionEntropy_rectangleAreaLawState, card_innerBoundary_rectangular] at hi
-  rw [regionEntropy_rectangleAreaLawState, card_endpointBoundary_rectangular] at he
+  rw [regionEntropy_rectangleAreaLawState, ManyBody.card_edgeBoundary_rectangular] at h
+  rw [regionEntropy_rectangleAreaLawState, ManyBody.card_innerBoundary_rectangular] at hi
+  rw [regionEntropy_rectangleAreaLawState, ManyBody.card_endpointBoundary_rectangular] at he
   exact ⟨h, hi, he⟩
 
 /-- The rectangular result supplies the accepted square statement, the equal-side case,

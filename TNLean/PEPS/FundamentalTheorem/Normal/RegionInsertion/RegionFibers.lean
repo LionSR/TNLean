@@ -145,7 +145,7 @@ open scoped Classical in
 form: a sum over pairs of global virtual configurations agreeing on the boundary
 of `R`, of the region vertex product against the complement vertex product. -/
 theorem regionInsertedCoeff_identity_eq_doubleSum (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     regionInsertedCoeff (G := G) A R f
@@ -218,7 +218,7 @@ the agreeing pairs form a product of the free interior bonds. -/
 the overcounting multiplicity of the boundary-agreement double sum relative to the
 closed state coefficient. -/
 noncomputable def regionInteriorBondProd (A : Tensor G d) (R : Finset V) : ℕ :=
-  ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ IsRegionBoundaryEdge (G := G) R e),
+  ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e),
     A.bondDim e
 
 /-! ### The cardinality collapse to the closed state coefficient
@@ -236,14 +236,15 @@ omit [Fintype V] [DecidableRel G.Adj] in
 /-- An edge not incident to `R` does not cross the boundary of `R`: a
 boundary-crossing edge touches `R`. -/
 theorem not_boundary_of_not_incident (R : Finset V) {e : Edge G}
-    (h : ¬ IsRegionIncidentEdge (G := G) R e) : ¬ IsRegionBoundaryEdge (G := G) R e :=
-  fun hb => h (isRegionBoundaryEdge_touches (G := G) R hb)
+    (h : ¬ ManyBody.IsRegionIncidentEdge (G := G) R e) : ¬ ManyBody.IsRegionBoundaryEdge
+      (G := G) R e :=
+  fun hb => h (ManyBody.isRegionBoundaryEdge_touches (G := G) R hb)
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- An edge crossing the boundary of `R` is incident to `R`. -/
 theorem incident_of_boundary (R : Finset V) {e : Edge G}
-    (h : IsRegionBoundaryEdge (G := G) R e) : IsRegionIncidentEdge (G := G) R e :=
-  isRegionBoundaryEdge_touches (G := G) R h
+    (h : ManyBody.IsRegionBoundaryEdge (G := G) R e) : ManyBody.IsRegionIncidentEdge (G := G) R e :=
+  ManyBody.isRegionBoundaryEdge_touches (G := G) R h
 
 /-- The free virtual indices of an agreeing pair: on a region-incident interior
 edge the complement value, on an edge away from `R` the region value. These are
@@ -251,20 +252,20 @@ the indices left free once the merged configuration and the boundary agreement
 are fixed. -/
 def regionFiberLegs (A : Tensor G d) (R : Finset V)
     (p : VirtualConfig A × VirtualConfig A) :
-    (e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e}) → Fin (A.bondDim e.1) :=
-  fun e => if IsRegionIncidentEdge (G := G) R e.1 then p.2 e.1 else p.1 e.1
+    (e : {e : Edge G // ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e}) → Fin (A.bondDim e.1) :=
+  fun e => if ManyBody.IsRegionIncidentEdge (G := G) R e.1 then p.2 e.1 else p.1 e.1
 
 /-- Reconstruct an agreeing pair in the `η`-fiber from its free virtual indices:
 the region-incident edges read `η`, the edges away from `R` read the free indices
 in the first configuration, and the region-interior edges read them in the
 second. -/
 noncomputable def regionFiberPair (A : Tensor G d) (R : Finset V) (η : VirtualConfig A)
-    (h : (e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e}) → Fin (A.bondDim e.1)) :
+    (h : (e : {e : Edge G // ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e}) → Fin (A.bondDim e.1)) :
     VirtualConfig A × VirtualConfig A :=
-  (fun e => if hinc : IsRegionIncidentEdge (G := G) R e then η e
+  (fun e => if hinc : ManyBody.IsRegionIncidentEdge (G := G) R e then η e
               else h ⟨e, not_boundary_of_not_incident (G := G) R hinc⟩,
-   fun e => if hb : IsRegionBoundaryEdge (G := G) R e then η e
-              else if _hinc : IsRegionIncidentEdge (G := G) R e then h ⟨e, hb⟩
+   fun e => if hb : ManyBody.IsRegionBoundaryEdge (G := G) R e then η e
+              else if _hinc : ManyBody.IsRegionIncidentEdge (G := G) R e then h ⟨e, hb⟩
               else η e)
 
 open scoped Classical in
@@ -278,7 +279,7 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
       regionInteriorBondProd (G := G) A R := by
   classical
   rw [show regionInteriorBondProd (G := G) A R =
-      (Finset.univ : Finset ((e : {e : Edge G // ¬ IsRegionBoundaryEdge (G := G) R e})
+      (Finset.univ : Finset ((e : {e : Edge G // ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e})
         → Fin (A.bondDim e.1))).card from ?_]
   · refine Finset.card_nbij'
       (regionFiberLegs (G := G) A R) (regionFiberPair (G := G) A R η) ?_ ?_ ?_ ?_
@@ -294,7 +295,7 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
         rw [dite_eq_left (incident_of_boundary (G := G) R f.2), dite_eq_left f.2]
       · -- The reconstructed pair merges back to `η`.
         funext e
-        by_cases hinc : IsRegionIncidentEdge (G := G) R e
+        by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R e
         · rw [regionMerge_of_incident (G := G) A R _ hinc]
           simp [regionFiberPair, hinc]
         · rw [regionMerge_of_not_incident (G := G) A R _ hinc]
@@ -303,7 +304,7 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
       intro p hp
       simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_univ, true_and] at hp
       obtain ⟨hagree, hmerge⟩ := hp
-      have hagree' : ∀ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+      have hagree' : ∀ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
           p.1 f.1 = p.2 f.1 := fun f => congrFun hagree f
       have hmerge' : ∀ e : Edge G, regionMerge (G := G) A R p e = η e :=
         fun e => congrFun hmerge e
@@ -311,7 +312,7 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
       · -- First configuration.
         funext e
         simp only [regionFiberPair, regionFiberLegs]
-        by_cases hinc : IsRegionIncidentEdge (G := G) R e
+        by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R e
         · rw [dite_eq_left hinc]
           have := hmerge' e
           rw [regionMerge_of_incident (G := G) A R p hinc] at this
@@ -320,7 +321,7 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
       · -- Second configuration.
         funext e
         simp only [regionFiberPair, regionFiberLegs]
-        by_cases hb : IsRegionBoundaryEdge (G := G) R e
+        by_cases hb : ManyBody.IsRegionBoundaryEdge (G := G) R e
         · rw [dite_eq_left hb]
           -- On a boundary edge the agreement and the merge identity force `p.2 e = η e`.
           have hinc := incident_of_boundary (G := G) R hb
@@ -329,7 +330,7 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
           have h2 := hagree' ⟨e, hb⟩
           rw [← h1, h2]
         · rw [dite_eq_right hb]
-          by_cases hinc : IsRegionIncidentEdge (G := G) R e
+          by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R e
           · rw [dite_eq_left hinc, ite_eq_left hinc]
           · rw [dite_eq_right hinc]
             have := hmerge' e
@@ -339,7 +340,7 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
       intro h _
       funext e
       simp only [regionFiberLegs, regionFiberPair]
-      by_cases hinc : IsRegionIncidentEdge (G := G) R e.1
+      by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R e.1
       · rw [ite_eq_left hinc, dite_eq_right e.2, dite_eq_left hinc]
       · rw [ite_eq_right hinc, dite_eq_right hinc]
   · -- The free-index configuration set has the bond-dimension product as its size.
@@ -347,7 +348,7 @@ theorem regionFiber_card (A : Tensor G d) (R : Finset V) (η : VirtualConfig A) 
     simp only [Fintype.card_fin]
     rw [regionInteriorBondProd,
       ← Finset.prod_subtype (Finset.univ.filter
-          (fun e : Edge G => ¬ IsRegionBoundaryEdge (G := G) R e))
+          (fun e : Edge G => ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e))
         (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
 
 open scoped Classical in
@@ -429,7 +430,7 @@ double-global-sum form of the identity insertion with the cardinality collapse.
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_one_eq_stateCoeff (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     regionInsertedCoeff (G := G) A R f

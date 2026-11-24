@@ -69,12 +69,12 @@ theorem hierarchyEdge_mem_supportedOperators (blk : ι → ℕ)
         (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j))
     (m k : ℕ) :
         hierarchyEdge a m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
-    (levelBlock blk (m + 1) k) := by
+    (Finset.dyadicBlock blk (m + 1) k) := by
   apply ManyBody.supportedOperators_mono (D := {i | blk i + 1 = (2 * k + 1) * 2 ^ m ∨
     blk i = (2 * k + 1) * 2 ^ m}) _ (ha _ (by positivity))
   intro i hi
   simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi
-  rw [mem_levelBlock]
+  rw [Finset.mem_dyadicBlock]
   apply Nat.div_eq_of_lt_le
   all_goals
     have := Nat.one_le_two_pow (n := m)

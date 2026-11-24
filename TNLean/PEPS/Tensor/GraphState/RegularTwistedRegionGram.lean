@@ -47,7 +47,7 @@ regular boundary operator. Source: SCP10, twisted-region contraction,
 lines 1935–1990. -/
 theorem sum_regularBoundary_filtered_translation_eq_weightedTranslation
     (R : Finset V) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     (p : G → Prop) [DecidablePred p] (x y : Fin b → G) :
     (∑ g : G, if (fun f => x (e f)) = (fun f => g * y (e f)) ∧ p g
       then (1 : ℂ) else 0) =
@@ -65,14 +65,14 @@ boundary translations intertwining all internal bond operators. -/
 theorem regularTwistedOpenRegionMatrix_crossGram_of_connected
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (c : V → ℂ)
     (R : Finset V) (u w : Edge Γ → G) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     (hlocal : ∀ (v : {v : V // v ∈ R}) (η θ : IncidentEdge Γ v.1 → G),
       (∑ s : Fin d, star (a v.1 η s) * a v.1 θ s) =
         (c v.1 / (Fintype.card G : ℂ)) *
           ∑ g : G, if η = (fun f => g * θ f) then (1 : ℂ) else 0)
     (hΔ : Δ ≤ Γ) (hR : (Δ.induce (R : Set V)).Connected)
     (hUntwisted : ∀ f : Edge Γ, Δ.Adj f.1.1 f.1.2 → u f = 1 ∧ w f = 1)
-    (hBoundary : ∀ f : Edge Γ, IsRegionBoundaryEdge R f → u f = 1 ∧ w f = 1) :
+    (hBoundary : ∀ f : Edge Γ, ManyBody.IsRegionBoundaryEdge R f → u f = 1 ∧ w f = 1) :
     (regularTwistedOpenRegionMatrix a u R e).conjTranspose *
         regularTwistedOpenRegionMatrix a w R e =
       (regularRegionGramScalar (Γ := Γ) (G := G) c R / (Fintype.card G : ℂ)) •
@@ -83,43 +83,43 @@ theorem regularTwistedOpenRegionMatrix_crossGram_of_connected
   let p : G → Prop := fun g =>
     ∀ f : Edge Γ, f.1.1 ∈ R → f.1.2 ∈ R → u f * g = g * w f
   let z : ℂ := (∏ v : {v : V // v ∈ R}, c v.1) / (Fintype.card G : ℂ) ^ R.card
-  have hterm (η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G) :
-      (if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-              η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-            (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-              θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
+  have hterm (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) :
+      (if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+              η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+            (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+              θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
           z * ∑ g : G, if η = (fun f => g * θ f) ∧ p g then (1 : ℂ) else 0
         else 0) =
         z * ∑ g : G,
-          if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-              (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) ∧
+          if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+              (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) ∧
               η = (fun f => g * θ f) ∧ p g then (1 : ℂ) else 0 := by
-    by_cases hη : (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) <;>
-      by_cases hθ : (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-        θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) <;>
+    by_cases hη : (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+      η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) <;>
+      by_cases hθ : (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+        θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) <;>
       simp only [hη, hθ, true_and, false_and, ite_true, ite_false,
         Finset.sum_const_zero, mul_zero]
   calc
-    _ = ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-        ∑ θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-          if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-              (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
+    _ = ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+        ∑ θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+          if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+              (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
             z * ∑ g : G, if η = (fun f => g * θ f) ∧ p g then (1 : ℂ) else 0
           else 0 := by
       rw [regularTwistedOpenRegionMatrix_crossGram_eq_sum_compatible a c R u w e hlocal]
       simp only [sum_twistedRegionLabelCompatible_eq_sum_translation
         R u w _ _ hΔ hR hUntwisted hBoundary, z, p]
-    _ = z * ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-        ∑ θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G, ∑ g : G,
-          if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-              (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) ∧
+    _ = z * ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+        ∑ θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G, ∑ g : G,
+          if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+              (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) ∧
               η = (fun f => g * θ f) ∧ p g then (1 : ℂ) else 0 := by
       simp only [hterm, ← Finset.mul_sum]
     _ = z * ((Fintype.card G : ℂ) ^
@@ -141,14 +141,14 @@ Source: SCP10, twisted-region contraction, lines 1935–1990 and 2062–2072. -/
 theorem regularTwistedOpenRegionMatrix_projected_crossGram_of_connected
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (c : V → ℂ)
     (R : Finset V) (u w : Edge Γ → G) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     (hlocal : ∀ (v : {v : V // v ∈ R}) (η θ : IncidentEdge Γ v.1 → G),
       (∑ s : Fin d, star (a v.1 η s) * a v.1 θ s) =
         (c v.1 / (Fintype.card G : ℂ)) *
           ∑ g : G, if η = (fun f => g * θ f) then (1 : ℂ) else 0)
     (hΔ : Δ ≤ Γ) (hR : (Δ.induce (R : Set V)).Connected)
     (hUntwisted : ∀ f : Edge Γ, Δ.Adj f.1.1 f.1.2 → u f = 1 ∧ w f = 1)
-    (hBoundary : ∀ f : Edge Γ, IsRegionBoundaryEdge R f → u f = 1 ∧ w f = 1) :
+    (hBoundary : ∀ f : Edge Γ, ManyBody.IsRegionBoundaryEdge R f → u f = 1 ∧ w f = 1) :
     regularBoundaryProjector b *
         ((regularTwistedOpenRegionMatrix a u R e).conjTranspose *
           regularTwistedOpenRegionMatrix a w R e) * regularBoundaryProjector b =

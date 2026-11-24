@@ -37,7 +37,7 @@ Source: SCP10, the finite cut contraction, lines 1935–1957. -/
 theorem openRegionWeight_groupBondTensor_congr_on (R : Finset V)
     (a b : (v : V) → (IncidentEdge Γ v → X) → Fin d → ℂ)
     (hab : ∀ v ∈ R, a v = b v)
-    (μ : {f : Edge Γ // IsRegionBoundaryEdge R f} → Fin (Fintype.card X)) :
+    (μ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → Fin (Fintype.card X)) :
     openRegionWeight (groupBondTensor a) R μ =
       openRegionWeight (groupBondTensor b) R μ := by
   funext σ

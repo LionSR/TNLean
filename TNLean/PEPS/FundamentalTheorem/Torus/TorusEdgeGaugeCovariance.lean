@@ -84,7 +84,7 @@ identity into the conjugation form the witness transport consumes.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 377--457 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem gaugeConj_eq_of_coeffIdentities (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hposB : ∀ e : Edge G, 0 < B.bondDim e)
@@ -138,7 +138,7 @@ it on `N` over `B.bondDim f.1` (rather than `reindex M`) is the conjugation-cova
 the edge `f.1`. -/
 theorem gaugeConj_eq_of_coeffIdentities_target
     (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hposB : ∀ g : Edge G, 0 < B.bondDim g)
@@ -210,7 +210,7 @@ structure EdgeCoeffIdentityWitness (A B : Tensor (torusGraph width height) d)
   /-- The region whose single boundary edge is `e`. -/
   region : Finset (TorusVertex width height)
   /-- `e` is a boundary edge of the region. -/
-  isBoundary : IsRegionBoundaryEdge (G := torusGraph width height) region e
+  isBoundary : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) region e
   /-- The second tensor's region block is blocked-tensor injective. -/
   hRB : RegionBlockedTensorInjective (G := torusGraph width height) B region
   /-- The second tensor's host block is blocked-tensor injective. -/

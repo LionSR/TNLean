@@ -164,14 +164,14 @@ theorem isRegionBoundaryEdge_staircaseWindow_referenceEdge {L K a b j : ℕ}
     (hL : 0 < L) (hK : 0 < K)
     (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height)
     (hjcase : j = 0 ∨ L ≤ j) :
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j)
       (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) := by
   have hlow := referenceEdge_leftEndpoint_mem_staircaseWindow (width := width) (height := height)
     (b := b) (j := j) hL hK haw hyh
   have hup := referenceEdge_rightEndpoint_mem_staircaseWindow (width := width) (height := height)
     (b := b) (j := j) hL hK haw hyh
-  rw [IsRegionBoundaryEdge]
+  rw [ManyBody.IsRegionBoundaryEdge]
   rcases hjcase with hj0 | hjL
   · -- $j = 0$: only the right endpoint lies in $W_0$.
     subst hj0
@@ -212,12 +212,12 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 theorem not_isRegionBoundaryEdge_staircaseWindow_referenceEdge_of_interior {L K a b j : ℕ}
     (hL : 0 < L) (hK : 0 < K)
     (haw : a + 2 * L ≤ width) (hyh : 2 * K ≤ height) (h1 : 1 ≤ j) (h2 : j < L) :
-    ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+    ¬ ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K j)
         (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) := by
   obtain ⟨hlow, hup⟩ := referenceEdge_endpoints_mem_staircaseWindow_of_interior
     (width := width) (height := height) (b := b) hL hK haw hyh h1 h2
-  rw [IsRegionBoundaryEdge]
+  rw [ManyBody.IsRegionBoundaryEdge]
   rintro (⟨_, hout⟩ | ⟨hout, _⟩)
   · exact hout hup
   · exact hout hlow

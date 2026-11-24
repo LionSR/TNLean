@@ -24,7 +24,7 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 variable {X G : Type*} [Fintype X] [DecidableEq X] [Group G] [Fintype G] {p q : ℕ}
 
 /-- The actual dressed graph tensor with finite numbered physical coordinates. -/

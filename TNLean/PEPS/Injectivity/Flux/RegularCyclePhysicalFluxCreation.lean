@@ -50,7 +50,7 @@ private abbrev RV (R : Finset V) := {v : V // v ∈ R}
 private abbrev RC (R : Finset V) (T : SimpleGraph (RV R)) := RegionCycleEdge (Γ := Γ) R T
 private abbrev Rest (R : Finset V) (T : SimpleGraph (RV R)) (o : RV R)
     (e : RC (Γ := Γ) R T) :=
-  ({f : Edge Γ // IsRegionBoundaryEdge R f} → G) ×
+  ({f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) ×
   ({f : Edge Γ // f.1.1 ∈ R ∧ f.1.2 ∈ R} → G) ×
   RootedGroupLabels (G := G) o × ({f : RC (Γ := Γ) R T // f ≠ e} → G)
 variable (R : Finset V) (T : SimpleGraph (RV R)) [DecidableRel T.Adj]
@@ -223,7 +223,7 @@ private theorem conjugated_single_split (e : RC (Γ := Γ) R T) (x t : G) :
 private theorem column_split
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (e : RC (Γ := Γ) R T) (t s : G) (b : Rest (G := G) R T o e)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regularProjectorTwistedRegionMatrix R
       (regularTreeCycleAssignment R T (fun f => if f = e then t else 1))
       ((regularRegionCoordinatesEquiv R T hT htree o).symm
@@ -296,7 +296,7 @@ private theorem creation_slice
 private theorem column_initial_split
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (e : RC (Γ := Γ) R T) (s : G) (b : Rest (G := G) R T o e)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regularProjectorTwistedRegionMatrix R
       (regularTreeCycleAssignment R T (fun _ => 1))
       (((regularRegionCoordinatesEquiv R T hT htree o).trans
@@ -326,7 +326,7 @@ private theorem conjugated_class_sum (g x s : G) :
 private theorem column_class_sum
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (e : RC (Γ := Γ) R T) (g s : G) (b : Rest (G := G) R T o e)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     (∑ z : G, regularProjectorTwistedRegionMatrix R
       (regularTreeCycleAssignment R T (fun f => if f = e then z*g*z⁻¹ else 1))
       (((regularRegionCoordinatesEquiv R T hT htree o).trans
@@ -353,7 +353,7 @@ Source: SCP10, Theorem 6.17, lines 2304–2340. -/
 theorem regularProjectorTwistedRegionMatrix_fluxCreation
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (e : RC (Γ := Γ) R T) (g : G)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regularRegionFluxCreationMatrix R T hT htree o e g *ᵥ
       (fun α => regularProjectorTwistedRegionMatrix R
         (regularTreeCycleAssignment R T (fun _ => 1)) α θ) =
@@ -392,7 +392,7 @@ theorem exists_unitary_regularCyclePhysicalFluxCreation
     (e : RC (Γ := Γ) R T) (g : G) :
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
-      ∀ (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G),
+      ∀ (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
           (regularTreeCycleAssignment R T (fun _ => 1)))) R
           (fun f => Fintype.equivFin G (θ f)) =

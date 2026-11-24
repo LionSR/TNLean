@@ -75,13 +75,13 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 end pair); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 4. -/
 theorem isRegionBoundaryEdge_window_of_endPair {L K : ℕ} {s : TorusVertex width height}
     {f : Edge (torusGraph width height)}
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseEndPair s L K) f) :
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseLeftWindow s L K) f ∨
-      IsRegionBoundaryEdge (G := torusGraph width height)
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseRightWindow s L K) f := by
-  simp only [IsRegionBoundaryEdge, horizontalStaircaseEndPair, Finset.mem_union] at *
+  simp only [ManyBody.IsRegionBoundaryEdge, horizontalStaircaseEndPair, Finset.mem_union] at *
   grind
 
 /-! ### A boundary edge of the end pair is not the reference edge
@@ -103,7 +103,7 @@ theorem ne_referenceEdge_of_isRegionBoundaryEdge_endPair {L K a b : ℕ}
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     {f : Edge (torusGraph width height)}
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f) :
     f ≠ horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K := by
   rintro rfl
@@ -136,11 +136,11 @@ theorem isRegionBoundaryEdge_endPair_iff {L K a b : ℕ}
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     (f : Edge (torusGraph width height)) :
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f ↔
-      (IsRegionBoundaryEdge (G := torusGraph width height)
+      (ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
             (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f ∨
-          IsRegionBoundaryEdge (G := torusGraph width height)
+          ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
             (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f) ∧
         f ≠ horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K := by
   constructor
@@ -175,9 +175,9 @@ theorem eq_referenceEdge_of_isRegionBoundaryEdge_both_endWindows {L K a b : ℕ}
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     {f : Edge (torusGraph width height)}
-    (hfL : IsRegionBoundaryEdge (G := torusGraph width height)
+    (hfL : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f)
-    (hfR : IsRegionBoundaryEdge (G := torusGraph width height)
+    (hfR : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f) :
     f = horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K :=
   (isCrossingEdge_horizontalStaircaseEndWindows A hL hK ha0 haw hbh f).mp ⟨hfL, hfR⟩
@@ -199,15 +199,15 @@ theorem isRegionBoundaryEdge_endPair_exactlyOne_window {L K a b : ℕ}
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     {f : Edge (torusGraph width height)}
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f) :
-    (IsRegionBoundaryEdge (G := torusGraph width height)
+    (ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f ∧
-        ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+        ¬ ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f) ∨
-      (¬ IsRegionBoundaryEdge (G := torusGraph width height)
+      (¬ ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f ∧
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f) := by
   have hne : f ≠ horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K :=
     ne_referenceEdge_of_isRegionBoundaryEdge_endPair hL hK ha0 haw hbh hf
@@ -236,9 +236,9 @@ sketch at lines 2415--2444 of `Papers/1804.04964/paper_normal.tex`. -/
 abbrev HorizontalStaircaseLeftExternalBoundaryEdge {L K : ℕ}
     (s : TorusVertex width height) :=
   {f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height)
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseEndPair s L K) f} //
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseLeftWindow s L K) f.1}
 
 /-- The external boundary edges of the right end window: boundary edges of the end pair which
@@ -249,9 +249,9 @@ sketch at lines 2415--2444 of `Papers/1804.04964/paper_normal.tex`. -/
 abbrev HorizontalStaircaseRightExternalBoundaryEdge {L K : ℕ}
     (s : TorusVertex width height) :=
   {f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height)
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseEndPair s L K) f} //
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseRightWindow s L K) f.1}
 
 /-- A virtual configuration on the left end window's external legs.
@@ -277,7 +277,7 @@ private noncomputable def horizontalStaircaseLeftExternalBoundaryEdgeEquiv
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
     {f : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f} //
       f ≠ ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
         isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
@@ -299,7 +299,7 @@ private noncomputable def horizontalStaircaseRightExternalBoundaryEdgeEquiv
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
     {f : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f} //
       f ≠ ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
         isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge A
@@ -321,7 +321,7 @@ private noncomputable def horizontalStaircaseLeftAwayConfigEquiv
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
     ((f : {f : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f} //
       f ≠ ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
         isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
@@ -336,7 +336,7 @@ private noncomputable def horizontalStaircaseRightAwayConfigEquiv
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
     ((f : {f : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f} //
       f ≠ ⟨horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K,
         isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge A
@@ -371,10 +371,10 @@ noncomputable def horizontalStaircaseLeftWindowBoundaryConfigEquiv
       isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
         hL hK ha0 haw hbh⟩ :
       {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f})
     (fun f : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f} =>
       Fin (A.bondDim f.1))).trans
   (Equiv.prodCongr (Equiv.refl _)
@@ -403,10 +403,10 @@ noncomputable def horizontalStaircaseRightWindowBoundaryConfigEquiv
       isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge A
         hL hK ha0 haw hbh⟩ :
       {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f})
     (fun f : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f} =>
       Fin (A.bondDim f.1))).trans
   (Equiv.prodCongr (Equiv.refl _)
@@ -417,9 +417,9 @@ private noncomputable def horizontalStaircaseNotLeftExternalBoundaryEdgeEquiv
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
     {f : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f} //
-      ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+      ¬ ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f.1} ≃
       HorizontalStaircaseRightExternalBoundaryEdge (width := width) (height := height)
         (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) where
@@ -435,9 +435,9 @@ private noncomputable def horizontalStaircaseNotLeftExternalBoundaryConfigEquiv
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
     ((f : {f : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f} //
-      ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+      ¬ ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f.1}) →
       Fin (A.bondDim f.1.1)) ≃
       HorizontalStaircaseRightExternalBoundaryConfig A
@@ -467,9 +467,9 @@ noncomputable def horizontalStaircaseEndPairBoundaryConfigEquiv
           (L := L) (K := K) ((a : ZMod width), (b : ZMod height)) :=
   (Equiv.piEquivPiSubtypeProd
     (fun f : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (G := torusGraph width height)
+        ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f} =>
-      IsRegionBoundaryEdge (G := torusGraph width height)
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f.1)
     (fun f => Fin (A.bondDim f.1))).trans
   (Equiv.prodCongr (Equiv.refl _)

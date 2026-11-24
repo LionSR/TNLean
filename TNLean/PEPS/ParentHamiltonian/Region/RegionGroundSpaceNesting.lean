@@ -37,13 +37,13 @@ omit [Fintype V] [DecidableRel Γ.Adj] in
 /-- An edge touching a smaller region also touches a containing region.
 Source: CPGSV21, arXiv:2011.12127, regional contraction, lines 2003–2008. -/
 theorem isRegionIncidentEdge_of_subset {R S : Finset V} (hRS : R ⊆ S)
-    {e : Edge Γ} (he : IsRegionIncidentEdge R e) : IsRegionIncidentEdge S e :=
+    {e : Edge Γ} (he : ManyBody.IsRegionIncidentEdge R e) : ManyBody.IsRegionIncidentEdge S e :=
   he.imp (fun h => hRS h) (fun h => hRS h)
 
 /-- The incident labels of a larger region that do not touch the smaller region.
 Source: CPGSV21, arXiv:2011.12127, regional contraction, lines 2003–2008. -/
 abbrev RegionRemainderConfig (A : Tensor Γ d) (R S : Finset V) :=
-  (e : {e : Edge Γ // IsRegionIncidentEdge S e ∧ ¬ IsRegionIncidentEdge R e}) →
+  (e : {e : Edge Γ // ManyBody.IsRegionIncidentEdge S e ∧ ¬ ManyBody.IsRegionIncidentEdge R e}) →
     Fin (A.bondDim e.1)
 
 /-- Separate the labels incident to a nested subregion from the remaining labels.
@@ -52,7 +52,7 @@ def regionIncidentConfigEquivNested (A : Tensor Γ d) {R S : Finset V} (hRS : R 
     RegionIncidentConfig A S ≃ RegionIncidentConfig A R × RegionRemainderConfig A R S where
   toFun η := (fun e => η ⟨e.1, isRegionIncidentEdge_of_subset hRS e.2⟩,
     fun e => η ⟨e.1, e.2.1⟩)
-  invFun p e := if he : IsRegionIncidentEdge R e.1 then p.1 ⟨e.1, he⟩
+  invFun p e := if he : ManyBody.IsRegionIncidentEdge R e.1 then p.1 ⟨e.1, he⟩
     else p.2 ⟨e.1, e.2, he⟩
   left_inv η := by
     funext e
@@ -80,14 +80,15 @@ theorem sum_mul_openRegionWeight (A : Tensor Γ d) (R : Finset V)
 
 private def nestedExteriorLabel (A : Tensor Γ d) {R S : Finset V}
     (μ : RegionBoundaryConfig A R) (ζ : RegionRemainderConfig A R S)
-    (e : Edge Γ) (he : IsRegionIncidentEdge S e)
+    (e : Edge Γ) (he : ManyBody.IsRegionIncidentEdge S e)
     (hn : ¬ (e.1.1 ∈ R ∧ e.1.2 ∈ R)) : Fin (A.bondDim e) :=
-  if hR : IsRegionIncidentEdge R e then μ ⟨e, hR.isRegionBoundaryEdge hn⟩
-    else ζ ⟨e, he, hR⟩
+  if hR : ManyBody.IsRegionIncidentEdge R e then
+    μ ⟨e, ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge hR hn⟩
+  else ζ ⟨e, he, hR⟩
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
 private theorem not_internal_of_boundary_larger {R S : Finset V} (hRS : R ⊆ S)
-    {e : Edge Γ} (he : IsRegionBoundaryEdge S e) :
+    {e : Edge Γ} (he : ManyBody.IsRegionBoundaryEdge S e) :
     ¬ (e.1.1 ∈ R ∧ e.1.2 ∈ R) := by
   rintro ⟨h₁, h₂⟩
   rcases he with h | h
@@ -107,7 +108,7 @@ private theorem not_internal_of_complement_vertex (R S : Finset V)
 private def nestedRegionBoundaryLabel (A : Tensor Γ d) {R S : Finset V} (hRS : R ⊆ S)
     (μ : RegionBoundaryConfig A R) (ζ : RegionRemainderConfig A R S) :
     RegionBoundaryConfig A S :=
-  fun e => nestedExteriorLabel A μ ζ e.1 (isRegionBoundaryEdge_touches S e.2)
+  fun e => nestedExteriorLabel A μ ζ e.1 (ManyBody.isRegionBoundaryEdge_touches S e.2)
     (not_internal_of_boundary_larger hRS e.2)
 
 private noncomputable def nestedRegionComplementWeight (A : Tensor Γ d)

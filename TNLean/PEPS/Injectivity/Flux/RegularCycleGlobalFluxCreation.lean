@@ -50,7 +50,7 @@ private theorem global_creation_of_columns
     (hinv : ∀ g v η s, a v (fun e => g * η e) s = a v η s)
     (e : RC (Γ := Γ) R T) (g : G) (γ : ℂ)
     (W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ)
-    (hcreate : ∀ θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G,
+    (hcreate : ∀ θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G,
       W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
         (regularTreeCycleAssignment R T (fun _ => 1)))) R
         (fun f => Fintype.equivFin G (θ f)) =

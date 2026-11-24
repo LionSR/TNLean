@@ -52,8 +52,8 @@ private noncomputable def compatibleBoundaryVirtualConfig (R S : Finset V)
     (ν : RegionBoundaryConfig (G := G) A S)
     (hpos : ∀ eg : Edge G, 0 < A.bondDim eg) : VirtualConfig A :=
   fun eg =>
-    if hR : IsRegionBoundaryEdge (G := G) R eg then μ ⟨eg, hR⟩
-    else if hS : IsRegionBoundaryEdge (G := G) S eg then ν ⟨eg, hS⟩
+    if hR : ManyBody.IsRegionBoundaryEdge (G := G) R eg then μ ⟨eg, hR⟩
+    else if hS : ManyBody.IsRegionBoundaryEdge (G := G) S eg then ν ⟨eg, hS⟩
     else ⟨0, hpos eg⟩
 
 omit [Fintype V] in
@@ -61,7 +61,7 @@ private theorem compatibleBoundaryVirtualConfig_apply_left (R S : Finset V)
     (μ : RegionBoundaryConfig (G := G) A R)
     (ν : RegionBoundaryConfig (G := G) A S)
     (hpos : ∀ eg : Edge G, 0 < A.bondDim eg)
-    (eg : Edge G) (hR : IsRegionBoundaryEdge (G := G) R eg) :
+    (eg : Edge G) (hR : ManyBody.IsRegionBoundaryEdge (G := G) R eg) :
     compatibleBoundaryVirtualConfig (G := G) R S μ ν hpos eg = μ ⟨eg, hR⟩ := by
   rw [compatibleBoundaryVirtualConfig, dite_eq_left hR]
 
@@ -70,12 +70,12 @@ private theorem compatibleBoundaryVirtualConfig_apply_right (R S : Finset V)
     (μ : RegionBoundaryConfig (G := G) A R)
     (ν : RegionBoundaryConfig (G := G) A S)
     (hpos : ∀ eg : Edge G, 0 < A.bondDim eg)
-    (hcompat : ∀ (eg : Edge G) (hR : IsRegionBoundaryEdge (G := G) R eg)
-      (hS : IsRegionBoundaryEdge (G := G) S eg), μ ⟨eg, hR⟩ = ν ⟨eg, hS⟩)
-    (eg : Edge G) (hS : IsRegionBoundaryEdge (G := G) S eg) :
+    (hcompat : ∀ (eg : Edge G) (hR : ManyBody.IsRegionBoundaryEdge (G := G) R eg)
+      (hS : ManyBody.IsRegionBoundaryEdge (G := G) S eg), μ ⟨eg, hR⟩ = ν ⟨eg, hS⟩)
+    (eg : Edge G) (hS : ManyBody.IsRegionBoundaryEdge (G := G) S eg) :
     compatibleBoundaryVirtualConfig (G := G) R S μ ν hpos eg = ν ⟨eg, hS⟩ := by
   rw [compatibleBoundaryVirtualConfig]
-  by_cases hR : IsRegionBoundaryEdge (G := G) R eg
+  by_cases hR : ManyBody.IsRegionBoundaryEdge (G := G) R eg
   · rw [dite_eq_left hR]
     exact hcompat eg hR hS
   · rw [dite_eq_right hR, dite_eq_left hS]
@@ -96,8 +96,8 @@ private theorem compatibleBoundaryVirtualConfig_complement_label (R S : Finset V
     (μ : RegionBoundaryConfig (G := G) A R)
     (ν : RegionBoundaryConfig (G := G) A S)
     (hpos : ∀ eg : Edge G, 0 < A.bondDim eg)
-    (hcompat : ∀ (eg : Edge G) (hR : IsRegionBoundaryEdge (G := G) R eg)
-      (hS : IsRegionBoundaryEdge (G := G) S eg), μ ⟨eg, hR⟩ = ν ⟨eg, hS⟩) :
+    (hcompat : ∀ (eg : Edge G) (hR : ManyBody.IsRegionBoundaryEdge (G := G) R eg)
+      (hS : ManyBody.IsRegionBoundaryEdge (G := G) S eg), μ ⟨eg, hR⟩ = ν ⟨eg, hS⟩) :
     regionBoundaryLabel (G := G) A (Finset.univ \ S)
         (compatibleBoundaryVirtualConfig (G := G) R S μ ν hpos) =
       regionComplementBoundaryConfig (G := G) A S ν := by
@@ -114,8 +114,8 @@ private theorem boundary_compatible_of_virtualConfig_labels (R S : Finset V)
       regionComplementBoundaryConfig (G := G) A R μ)
     (hcompl : regionBoundaryLabel (G := G) A (Finset.univ \ S) q =
       regionComplementBoundaryConfig (G := G) A S ν) :
-    ∀ (eg : Edge G) (hR : IsRegionBoundaryEdge (G := G) R eg)
-      (hS : IsRegionBoundaryEdge (G := G) S eg), μ ⟨eg, hR⟩ = ν ⟨eg, hS⟩ := by
+    ∀ (eg : Edge G) (hR : ManyBody.IsRegionBoundaryEdge (G := G) R eg)
+      (hS : ManyBody.IsRegionBoundaryEdge (G := G) S eg), μ ⟨eg, hR⟩ = ν ⟨eg, hS⟩ := by
   intro eg hR hS
   have hqR := congrFun hhost (regionBoundaryEdgeToCompl (G := G) R ⟨eg, hR⟩)
   have hqS := congrFun hcompl (regionBoundaryEdgeToCompl (G := G) S ⟨eg, hS⟩)
@@ -144,9 +144,9 @@ private theorem horizontalStaircaseLeft_endPair_boundary_compatible
       (horizontalStaircaseLeftWindowBoundaryConfigEquiv A hL hK ha0 haw hbh μ).2 =
         (horizontalStaircaseEndPairBoundaryConfigEquiv A hL hK ha0 haw hbh ν).1) :
     ∀ (eg : Edge (torusGraph width height))
-      (hW : IsRegionBoundaryEdge (G := torusGraph width height)
+      (hW : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) eg)
-      (hS : IsRegionBoundaryEdge (G := torusGraph width height)
+      (hS : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) eg),
       μ ⟨eg, hW⟩ = ν ⟨eg, hS⟩ := by
   intro eg hW hS
@@ -167,9 +167,9 @@ private theorem horizontalStaircaseRight_endPair_boundary_compatible
       (horizontalStaircaseRightWindowBoundaryConfigEquiv A hL hK ha0 haw hbh μ).2 =
         (horizontalStaircaseEndPairBoundaryConfigEquiv A hL hK ha0 haw hbh ν).2) :
     ∀ (eg : Edge (torusGraph width height))
-      (hW : IsRegionBoundaryEdge (G := torusGraph width height)
+      (hW : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) eg)
-      (hS : IsRegionBoundaryEdge (G := torusGraph width height)
+      (hS : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) eg),
       μ ⟨eg, hW⟩ = ν ⟨eg, hS⟩ := by
   intro eg hW hS
@@ -271,14 +271,14 @@ theorem horizontalStaircaseLeftWindow_isExternalCrossingEdge_iff
       (horizontalStaircaseLeftWindow_subset_endPair
         ((a : ZMod width), (b : ZMod height)) (L := L) (K := K))
     g.swapBlueComplement.IsBlueRedCrossingEdge A eg ↔
-      IsRegionBoundaryEdge (G := torusGraph width height)
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) eg ∧
         eg ≠ horizontalStaircaseReferenceEdge
           ((a : ZMod width), (b : ZMod height)) L K := by
   dsimp only
-  change (IsRegionBoundaryEdge (G := torusGraph width height)
+  change (ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) eg ∧
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (Finset.univ \ horizontalStaircaseEndPair
         ((a : ZMod width), (b : ZMod height)) L K) eg) ↔ _
   rw [isRegionBoundaryEdge_compl_iff]
@@ -304,14 +304,14 @@ theorem horizontalStaircaseRightWindow_isExternalCrossingEdge_iff
       (horizontalStaircaseRightWindow_subset_endPair
         ((a : ZMod width), (b : ZMod height)) (L := L) (K := K))
     g.swapBlueComplement.IsBlueRedCrossingEdge A eg ↔
-      IsRegionBoundaryEdge (G := torusGraph width height)
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
           (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) eg ∧
         eg ≠ horizontalStaircaseReferenceEdge
           ((a : ZMod width), (b : ZMod height)) L K := by
   dsimp only
-  change (IsRegionBoundaryEdge (G := torusGraph width height)
+  change (ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) eg ∧
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (Finset.univ \ horizontalStaircaseEndPair
         ((a : ZMod width), (b : ZMod height)) L K) eg) ↔ _
   rw [isRegionBoundaryEdge_compl_iff]
@@ -360,7 +360,7 @@ theorem horizontalStaircaseEndWindows_externalCrossingBondProd_eq
     (horizontalStaircaseRightWindow_subset_endPair (L := L) (K := K) s)
   let boundaryProd := fun W : Finset (TorusVertex width height) ↦
     ∏ eg ∈ Finset.univ.filter (fun eg : Edge (torusGraph width height) ↦
-      IsRegionBoundaryEdge (G := torusGraph width height) W eg), A.bondDim eg
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) W eg), A.bondDim eg
   have hinterior : regionInteriorBondProd (G := torusGraph width height) A Wleft =
       regionInteriorBondProd (G := torusGraph width height) A Wright := by
     exact regionInteriorBondProd_torusArcRectangle_eq hTI _ _ L K
@@ -373,19 +373,19 @@ theorem horizontalStaircaseEndWindows_externalCrossingBondProd_eq
           ∏ eg : Edge (torusGraph width height), A.bondDim eg := by
         exact Finset.prod_filter_mul_prod_filter_not Finset.univ
           (fun eg : Edge (torusGraph width height) ↦
-            IsRegionBoundaryEdge (G := torusGraph width height) Wleft eg) A.bondDim
+            ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) Wleft eg) A.bondDim
       _ = boundaryProd Wright *
           regionInteriorBondProd (G := torusGraph width height) A Wright := by
         exact (Finset.prod_filter_mul_prod_filter_not Finset.univ
           (fun eg : Edge (torusGraph width height) ↦
-            IsRegionBoundaryEdge (G := torusGraph width height) Wright eg) A.bondDim).symm
+            ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) Wright eg) A.bondDim).symm
       _ = boundaryProd Wright *
           regionInteriorBondProd (G := torusGraph width height) A Wleft := by rw [hinterior]
   have hleftFilter :
       Finset.univ.filter (fun eg : Edge (torusGraph width height) ↦
           gleft.swapBlueComplement.IsBlueRedCrossingEdge A eg) =
         (Finset.univ.filter (fun eg : Edge (torusGraph width height) ↦
-          IsRegionBoundaryEdge (G := torusGraph width height) Wleft eg)).erase e := by
+          ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) Wleft eg)).erase e := by
     ext eg
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_erase]
     rw [and_comm]
@@ -395,19 +395,19 @@ theorem horizontalStaircaseEndWindows_externalCrossingBondProd_eq
       Finset.univ.filter (fun eg : Edge (torusGraph width height) ↦
           gright.swapBlueComplement.IsBlueRedCrossingEdge A eg) =
         (Finset.univ.filter (fun eg : Edge (torusGraph width height) ↦
-          IsRegionBoundaryEdge (G := torusGraph width height) Wright eg)).erase e := by
+          ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) Wright eg)).erase e := by
     ext eg
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_erase]
     rw [and_comm]
     exact horizontalStaircaseRightWindow_isExternalCrossingEdge_iff
       A hL hK ha0 haw hbh eg
   have heLeft : e ∈ Finset.univ.filter (fun eg : Edge (torusGraph width height) ↦
-      IsRegionBoundaryEdge (G := torusGraph width height) Wleft eg) := by
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) Wleft eg) := by
     simp only [Finset.mem_filter, Finset.mem_univ, true_and]
     exact isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge
       A hL hK ha0 haw hbh
   have heRight : e ∈ Finset.univ.filter (fun eg : Edge (torusGraph width height) ↦
-      IsRegionBoundaryEdge (G := torusGraph width height) Wright eg) := by
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) Wright eg) := by
     simp only [Finset.mem_filter, Finset.mem_univ, true_and]
     exact isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge
       A hL hK ha0 haw hbh

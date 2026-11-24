@@ -74,7 +74,7 @@ theorem regionBlockedWeight_empty (A : Tensor G d)
     (τ : RegionPhysicalConfig (V := V) (d := d) (∅ : Finset V)) :
     regionBlockedWeight (G := G) A ∅ μ τ = (Fintype.card (VirtualConfig A) : ℂ) := by
   classical
-  have hbdry : IsEmpty {f : Edge G // IsRegionBoundaryEdge (G := G) (∅ : Finset V) f} := by
+  have hbdry : IsEmpty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (∅ : Finset V) f} := by
     refine ⟨fun f => ?_⟩
     rcases f.2 with ⟨h1, _⟩ | ⟨_, h2⟩
     · exact absurd h1 (Finset.notMem_empty _)
@@ -102,7 +102,8 @@ theorem regionBlockedWeight_univ (A : Tensor G d)
       stateCoeff A (fun v => τ ⟨v, Finset.mem_univ v⟩) := by
   classical
   have hbdry :
-      IsEmpty {f : Edge G // IsRegionBoundaryEdge (G := G) (Finset.univ : Finset V) f} := by
+      IsEmpty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ :
+        Finset V) f} := by
     refine ⟨fun f => ?_⟩
     rcases f.2 with ⟨_, h2⟩ | ⟨h1, _⟩
     · exact h2 (Finset.mem_univ _)

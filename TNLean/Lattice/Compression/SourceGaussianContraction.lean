@@ -91,7 +91,7 @@ theorem correctedSourceTerm_gaussian_eq_sum {m n : Type} [Fintype m] [Fintype n]
     (k : ℕ)
     (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
       Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (ω : SourceGaussianSamples w k)
     (bIn : OrthonormalBasis n ℂ (Mem a)) (bOut : OrthonormalBasis m ℂ (Mem b))
@@ -103,7 +103,7 @@ theorem correctedSourceTerm_gaussian_eq_sum {m n : Type} [Fintype m] [Fintype n]
       ∑ ξ, ∑ ζ, (coefficient A w ξ * conj (coefficient A w ζ)) •
         ∑ u : PartialSchmidtCoordinates A w S, ∑ v : PartialSchmidtCoordinates A w S,
           (∏ i : selectedPartialSlots A w S,
-            sourceCorrection k
+            ProductSource.sourceCorrection k
               (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ξ i.1))
               (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ζ i.1))
               (ω (partialSlotEquiv A w i.1).1
@@ -139,7 +139,7 @@ theorem correctedSourceTerm_gaussian_eq_sum {m n : Type} [Fintype m] [Fintype n]
   let uV := fun (ν : Choices A w) (i : Fin R.length) (j : K i) ↦
     (WithLp.toLp 2 (fun x ↦ F (partialSlotEquiv A w i).1
       (partialSlotChoice A w ν i) x j) : V i)
-  let M := fun i : Fin R.length ↦ sourceCorrection k
+  let M := fun i : Fin R.length ↦ ProductSource.sourceCorrection k
     (lam (partialSlotEquiv A w i).1 (partialSlotChoice A w ξ i))
     (lam (partialSlotEquiv A w i).1 (partialSlotChoice A w ζ i))
     (ω (partialSlotEquiv A w i).1 (partialSlotChoice A w ξ i, partialSlotChoice A w ζ i))

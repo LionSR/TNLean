@@ -55,7 +55,7 @@ omit [Group G] in
 physical range. Source: SCP10, the regular-basis boundary cut, lines 2043–2076. -/
 theorem range_regularOpenRegionMatrix_eq_regionGroundSpace
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
-    {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     (Matrix.mulVecLin (regularOpenRegionMatrix a R e)).range =
       regionGroundSpace (groupBondTensor a) R := by
   classical
@@ -79,7 +79,7 @@ theorem finrank_regionGroundSpace_of_regular_connected
     (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     Module.finrank ℂ (regionGroundSpace (groupBondTensor a) R) = Fintype.card G ^ n := by
   classical
   rw [← range_regularOpenRegionMatrix_eq_regionGroundSpace a R e]
@@ -96,7 +96,7 @@ theorem range_regionReducedDensity_eq_regionGroundSpace_of_regular_connected_cut
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected)
     (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     (Matrix.mulVecLin (regionReducedDensity (groupBondTensor a) R)).range =
       regionGroundSpace (groupBondTensor a) R := by
   classical
@@ -125,7 +125,7 @@ theorem rank_regionReducedDensity_of_regular_connected_cut
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected)
     (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     (regionReducedDensity (groupBondTensor a) R).rank = Fintype.card G ^ n := by
   change Module.finrank ℂ (Matrix.mulVecLin
     (regionReducedDensity (groupBondTensor a) R)).range = _
@@ -150,7 +150,7 @@ theorem range_regionReducedDensity_eq_regionGroundSpace_of_regular_connected
   have htop : R ≠ Finset.univ := by
     intro h
     simpa [h] using s.2
-  let β := {f : Edge Γ // IsRegionBoundaryEdge R f}
+  let β := {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f}
   let : Nonempty β := nonempty_regionBoundaryEdge_of_connected hΓ ⟨r.1, r.2⟩ htop
   have hcard : 1 ≤ Fintype.card β := Fintype.card_pos
   let e : β ≃ Fin (Fintype.card β - 1 + 1) :=
@@ -188,7 +188,7 @@ theorem stateCoeff_groupBondTensor_ne_zero_of_regular_connected_cut
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected)
     (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     stateCoeff (groupBondTensor a) ≠ 0 := by
   intro hzero
   have hρzero : regionReducedDensity (groupBondTensor a) R = 0 := by
@@ -215,10 +215,10 @@ theorem card_group_eq_of_sameState_regular_connected_cut
     (hAB : SameState (groupBondTensor a) (groupBondTensor b))
     (R : Finset V) (hR : (Γ.induce (R : Set V)).Connected)
     (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (hboundary : 2 ≤ Fintype.card {f : Edge Γ // IsRegionBoundaryEdge R f}) :
+    (hboundary : 2 ≤ Fintype.card {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f}) :
     Fintype.card G = Fintype.card H := by
   classical
-  let β := {f : Edge Γ // IsRegionBoundaryEdge R f}
+  let β := {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f}
   have hcard : 1 ≤ Fintype.card β := le_trans (by decide) hboundary
   let e : β ≃ Fin (Fintype.card β - 1 + 1) :=
     Fintype.equivFinOfCardEq (Nat.sub_add_cancel hcard).symm

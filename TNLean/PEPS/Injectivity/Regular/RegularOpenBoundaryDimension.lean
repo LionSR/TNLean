@@ -44,7 +44,7 @@ theorem rank_regularOpenRegionMatrix_of_isGInjective_of_connected
     (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected) {b : ℕ} (hb : 0 < b)
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     (regularOpenRegionMatrix a R e).rank = Fintype.card G ^ (b - 1) := by
   classical
   rw [Matrix.rank,
@@ -59,7 +59,7 @@ theorem not_range_le_regularOpenRegionMatrix_of_small_boundary
     (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected) {b : ℕ} (hb : 0 < b)
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     {P B : Type*} [Fintype P] [Fintype B]
     (M : Matrix P B ℂ) (L : Matrix (RegionPhysicalConfig (d := d) R) P ℂ)
     (hdim : Fintype.card B < Fintype.card G ^ (b - 1)) :
@@ -91,7 +91,7 @@ theorem exists_boundaryNumbering_twoSite_not_range_le
       (IncidentEdge (torusGraph width height) v)) (regularSiteMap (a v)))
     (hG : Fintype.card G = 6) {P : Type*} [Fintype P] :
     ∃ e : {f : Edge (torusGraph width height) //
-        IsRegionBoundaryEdge (torusContiguousRectangle 0 0 2 1) f} ≃ Fin 6,
+        ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle 0 0 2 1) f} ≃ Fin 6,
       ∀ (M : Matrix P (Fin 6 → Fin 4) ℂ)
         (L : Matrix (RegionPhysicalConfig (d := d)
           (torusContiguousRectangle 0 0 2 1 : Finset (TorusVertex width height))) P ℂ),
@@ -102,7 +102,7 @@ theorem exists_boundaryNumbering_twoSite_not_range_le
   have hw : 2 < width := Fact.out
   have hh : 2 < height := Fact.out
   have hcard : Fintype.card {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (torusContiguousRectangle 0 0 2 1) f} = 6 := by
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle 0 0 2 1) f} = 6 := by
     simpa using card_regionBoundaryEdge_torusRectangle (width := width) (height := height)
       0 0 2 1 (by omega) (by omega) (by omega) (by omega) (by omega) (by omega)
   let e := (Fintype.equivFin _).trans (finCongr hcard)

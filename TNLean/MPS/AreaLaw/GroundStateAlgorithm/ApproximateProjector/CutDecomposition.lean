@@ -31,8 +31,8 @@ theorem operatorSchmidtRank_cutOperator_leftConfigOfFin {L q i k : ℕ}
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)) =
     operatorSchmidtRank (A.reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono hk))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono hk))) := by
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono hk))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono hk))) := by
   classical
   let eL : {v : Fin i // v ∈ leftBlock i k} ≃ {v : Fin L // v ∈ leftBlock L k} :=
     { toFun := fun v ↦ ⟨⟨v.1.val, lt_of_lt_of_le v.1.isLt hi⟩,
@@ -53,7 +53,7 @@ theorem operatorSchmidtRank_cutOperator_leftConfigOfFin {L q i k : ℕ}
       right_inv := fun _ ↦ rfl }
   let fL := eL.arrowCongr (Equiv.refl (Fin q))
   let fR := eR.arrowCongr (Equiv.refl (Fin q))
-  let e := Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (L := L) hk)
+  let e := ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (L := L) hk)
   let c := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock i k)
   have hcoord : (leftConfigOfFinEquiv hi).trans e = c.trans (fL.prodCongr fR) := by
     ext x <;> rfl

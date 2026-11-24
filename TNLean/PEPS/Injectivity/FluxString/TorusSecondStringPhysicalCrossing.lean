@@ -245,7 +245,7 @@ theorem IsGIsometric.exists_unitary_torusSecondStringCrossing
     ∃ W : Matrix ({x : X // x ∈ R} → Fin d) ({x : X // x ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({x : X // x ∈ R} → Fin d) ℂ ∧
       ManyBody.place («X» := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
-      (∀ (g h : G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge R e} → G),
+      (∀ (g h : G) (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (torusSweptStringRightStepOperators v g h))) R

@@ -122,7 +122,7 @@ theorem maxBondDim_real_le_iff (P : Vector.Tensor q L) (B : ℝ) (hB : 0 ≤ B) 
 def forwardSquareBoundaryEquiv (R : Finset (Vertex L)) :
     {e : Edge (squareLatticeGraph L L) //
       (e.val.1 ∈ R ∧ e.val.2 ∉ R) ∨ (e.val.1 ∉ R ∧ e.val.2 ∈ R)} ≃
-      {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge R e} where
+      {e : Edge (squareLatticeGraph L L) // ManyBody.IsRegionBoundaryEdge R e} where
   toFun e := ⟨e.val, e.property⟩
   invFun e := ⟨e.val, e.property⟩
   left_inv _ := rfl
@@ -132,7 +132,7 @@ def forwardSquareBoundaryEquiv (R : Finset (Vertex L)) :
 theorem forwardSquareBoundary_card (R : Finset (Vertex L)) :
     Fintype.card {e : Edge (squareLatticeGraph L L) //
       (e.val.1 ∈ R ∧ e.val.2 ∉ R) ∨ (e.val.1 ∉ R ∧ e.val.2 ∈ R)} =
-      Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge R e} :=
+      Fintype.card {e : Edge (squareLatticeGraph L L) // ManyBody.IsRegionBoundaryEdge R e} :=
   Fintype.card_congr (forwardSquareBoundaryEquiv R)
 
 /-- Complement configurations identify the native finite-set complement with nonmembership. -/

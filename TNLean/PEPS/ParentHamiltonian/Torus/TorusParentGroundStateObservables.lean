@@ -100,7 +100,7 @@ theorem IsGIsometric.exists_torusParentKernel_common_density_of_isSimplyConnecte
       (torusPlaquetteRegion v) (P v))
     (R : Finset X) (hR : ((Γₜ).induce (R : Set X)).Connected)
     (hSC : IsSimplyConnected (torusRegionRealization R)) :
-    let b := Fintype.card {f : Edge Γₜ // IsRegionBoundaryEdge R f}
+    let b := Fintype.card {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f}
     ∃ ρ : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ,
       ∀ ψ : (X → Fin d) → ℂ,
         ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
@@ -220,7 +220,7 @@ theorem IsGInjective.torusParentKernel_rank_zeroEntropy_of_isSimplyConnected
       torusPlaquetteRegion P).hamiltonian).ker)
     (hne : ψ ≠ 0) :
     let _ := Classical.decEq (Fin d)
-    let b := Fintype.card {f : Edge Γₜ // IsRegionBoundaryEdge R f}
+    let b := Fintype.card {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f}
     let M := ManyBody.cutMatrix R ψ
     let ρ := (M * M.conjTranspose).trace⁻¹ • (M * M.conjTranspose)
     0 < (M * M.conjTranspose).trace ∧ ρ.PosSemidef ∧ ρ.trace = 1 ∧

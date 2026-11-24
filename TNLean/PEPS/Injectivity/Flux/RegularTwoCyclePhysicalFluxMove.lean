@@ -95,7 +95,7 @@ theorem exists_unitary_regularTwoCyclePhysicalFluxMove
     (e₀ e₁ : RC (Γ := Γ) R T) (hne : e₀ ≠ e₁) :
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
-      ∀ (g : G) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
+      ∀ (g : G) (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
           (regularTreeCycleAssignment R T (fun e => if e = e₀ then g else 1)))) R
           (fun f => Fintype.equivFin G (θ f)) =

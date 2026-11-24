@@ -128,7 +128,7 @@ the incident-matrix structure of `W`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem hform_of_isIncidentMatrixForm (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hposB : ∀ e : Edge G, 0 < B.bondDim e)
@@ -187,12 +187,12 @@ reading the region resonate identity equates.
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_complementTwoBlock (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     regionInsertedCoeff (G := G) A R f M σ τ =
-      twoBlockInsertedCoeff (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+      twoBlockInsertedCoeff (Bond := {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
         (bondDim := fun f => Fin (A.bondDim f.1))
         (regionComplementTwoBlock (G := G) A R) (regionTwoBlock (G := G) A R)
         f M.transpose PUnit.unit PUnit.unit τ σ := by
@@ -221,7 +221,7 @@ Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp
     (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)

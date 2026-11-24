@@ -51,7 +51,7 @@ theorem exists_sampledSourceMatrix_error_le_of_integral_bound
       Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
     (F : ∀ e : sourceLocations w, branchLabels w e.1 →
       Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (bIn : OrthonormalBasis n ℂ (Mem a))
     (bPhysical : OrthonormalBasis x ℂ (Mem physical))

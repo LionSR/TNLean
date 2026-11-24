@@ -21,7 +21,7 @@ zero vector; neither regional positivity nor a common vector is an input.
 **Local fix:** The middle core is shifted by its total minimum, equivalently
 by that minimum divided by the number of middle-core bonds on each bond.
 The printed denominator has one bond too few; see
-`docs/paper-gaps/aklv13_robustness_constants.tex`.
+`https://sirui-lu.com/QICLean/paper-gaps/aklv13_robustness_constants.pdf`.
 
 Source: AKLV, arXiv:1301.1162v1, Section 6.1, normalization preceding
 Theorem 6.1.

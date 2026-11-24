@@ -36,9 +36,10 @@ Auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L)
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (e : Fin 3 → ℝ)
-    (he : ∀ j, (aklvRegionalHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef)
+    (he : ∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j :
+      ℂ) • 1).PosSemidef)
     (t : ℝ) (m : ℕ) (ht : 0 < t) (hm : 1 ≤ m) :
-    let A := aklvRegionalHamiltonians l r Φ
+    let A := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ
     let J := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
     let Y := ∑ i ∈ J, Φ.term i
@@ -61,7 +62,7 @@ private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r
     ManyBody.BondInteraction.pairwise_commute_sum_internal_consecutive_regions k hk Φ
   have hX : X.PosSemidef := he 1
   have hA1 : (A 1).IsHermitian := by
-    dsimp only [A, aklvRegionalHamiltonians]
+    dsimp only [A, ManyBody.BondInteraction.threeRegionHamiltonians]
     exact (posSemidef_sum _ (fun i _ ↦ (h0 i).posSemidef)).isHermitian
   have hf0 : 0 ≤ cfc (Real.softTruncation t m) X :=
     cfc_nonneg fun u hu ↦ (Real.softTruncation_bounds t m u ht hm
@@ -73,7 +74,8 @@ private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r
       (X.finite_real_spectrum.continuousOn _) (X.finite_real_spectrum.continuousOn _)
   have hB : B.PosSemidef := ((he 0).add hf0.posSemidef).add (he 2)
   have hY : Y.PosSemidef := posSemidef_sum _ (fun i _ ↦ (h0 i).posSemidef)
-  have hsum : Φ.hamiltonian = (∑ j, A j) + Y := sum_three_regions_add_crossings hlr Φ
+  have hsum : Φ.hamiltonian = (∑ j, A j) + Y :=
+    ManyBody.BondInteraction.hamiltonian_eq_sum_threeRegionHamiltonians_add_crossings hlr Φ
   have hGY : G = B + Y := by
     dsimp only [G, H, B, X]
     rw [hsum]
@@ -93,7 +95,7 @@ private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r
     (hcomm (by decide : (0 : Fin 3) ≠ 1)).sub_left ((Commute.one_left (A 1)).smul_left _)
   have h2c : Commute (A 2 - (e 2 : ℂ) • 1) (A 1) :=
     (hcomm (by decide : (2 : Fin 3) ≠ 1)).sub_left ((Commute.one_left (A 1)).smul_left _)
-  refine ⟨card_two_cut_crossing_le L l r, hGY, hB, hGY.symm ▸ hB.add hY,
+  refine ⟨Fin.card_filter_two_cut_crossing_le L l r, hGY, hB, hGY.symm ▸ hB.add hY,
     hGH, hA1, (h0c.add_left hfc).add_left h2c, ?_⟩
   intro R hR
   have hproj := hA1.smul_spectralProjectionGE_le_softTruncation (e 1) t R m
@@ -136,15 +138,16 @@ theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
-      (∀ j, (aklvRegionalHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
+      star x ⬝ᵥ x = 1 ∧ (∀ j, ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j *ᵥ x =
+        (e j : ℂ) • x) ∧
+      (∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       (∀ j, 0 ≤ e j) ∧
       let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ 2 ∧
       ∃ hH : H.IsHermitian,
         ∀ t : ℝ, ∀ m : ℕ, 0 < t → 2 ≤ m →
-          let X := aklvRegionalHamiltonians l r Φ 1 - (e 1 : ℂ) • 1
+          let X := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1 - (e 1 : ℂ) • 1
           let G := H - X + cfc (Real.softTruncation t m) X
           ∃ (mu : ℝ) (w : (Fin L → Fin q) → ℂ) (hG : G.IsHermitian),
             G.PosSemidef ∧ G ≤ H ∧ star w ⬝ᵥ w = 1 ∧ G *ᵥ w = (mu : ℂ) • w ∧
@@ -168,7 +171,7 @@ theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
   refine ⟨e, x, z, E, hx, hxe, he, he0, hz, hHz, hE, hE0, hE2, hH, ?_⟩
   intro t m ht hm X G
   have hm' : 1 ≤ m := by omega
-  let A := aklvRegionalHamiltonians l r Φ
+  let A := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ
   let J := Finset.univ.filter
     (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
   let Y := ∑ i ∈ J, Φ.term i

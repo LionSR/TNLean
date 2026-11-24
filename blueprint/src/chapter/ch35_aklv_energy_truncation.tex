@@ -31,9 +31,9 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 
 \begin{lemma}[Boundary energy off-diagonal decay]
     \label{thm:aklv_boundary_energy_tail}
-    \lean{TNLean.MPS.AreaLaw.AKLV.norm_boundary_spectral_offDiagonal_le,
-        TNLean.MPS.AreaLaw.AKLV.norm_two_boundary_spectral_offDiagonal_le,
-        TNLean.MPS.AreaLaw.AKLV.norm_exp_conjugation_two_boundary_le_four}
+    \lean{ManyBody.BondInteraction.norm_boundary_spectral_offDiagonal_le,
+        ManyBody.BondInteraction.norm_two_boundary_spectral_offDiagonal_le,
+        ManyBody.BondInteraction.norm_exp_conjugation_two_boundary_le_four}
     \leanok
     \uses{def:chain_model}
     Let $0\le h_i\le I$ be nearest-neighbour terms on a chain, let $I_0$
@@ -84,7 +84,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 
 \begin{lemma}[Explicit eigenvector energy tail on a chain]
     \label{thm:aklv_ground_energy_tail}
-    \lean{TNLean.MPS.AreaLaw.AKLV.norm_groundState_highProjection_le_exp}
+    \lean{ManyBody.BondInteraction.norm_groundState_highProjection_le_exp}
     \leanok
     \uses{def:chain_model}
     Under the assumptions of Lemma~\ref{thm:aklv_boundary_energy_tail},

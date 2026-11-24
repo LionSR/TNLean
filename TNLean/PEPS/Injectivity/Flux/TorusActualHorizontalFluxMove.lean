@@ -243,7 +243,8 @@ theorem IsGIsometric.exists_unitary_torusActualHorizontalFluxMove {d : ℕ}
       ManyBody.place («X» := fun _ ↦ Fin _) (translatedTwoPlaquetteRegion p) W ∈
         Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (u : Edge Γₜ → G)
-          (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (translatedTwoPlaquetteRegion p) e} → G),
+          (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (translatedTwoPlaquetteRegion
+            p) e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a u))
           (translatedTwoPlaquetteRegion p) (fun f => Fintype.equivFin G (θ f)) =
         openRegionWeight (groupBondTensor (regularTwistedSite a

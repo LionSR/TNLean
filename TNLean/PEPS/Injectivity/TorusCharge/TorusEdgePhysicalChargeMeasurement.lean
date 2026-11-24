@@ -63,7 +63,7 @@ theorem IsGIsometric.openRegionWeight_torusEdgeCharacterSite_ne_zero
     (ha : IsGIsometric (torusLegRep (leftRegularMatrix G)) (siteMap a))
     (horizontal : Bool) (v : TorusVertex width height)
     (χ : regularChargeLabels (G := G)) (p : G)
-    (θ : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge
+    (θ : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge
       {(torusChargeMeasurementEdge horizontal v).1.1,
         (torusChargeMeasurementEdge horizontal v).1.2} f} → G) :
     openRegionWeight (groupBondTensor (regularEdgeCharacterSite (torusIncidentSite a)
@@ -106,7 +106,7 @@ theorem IsGIsometric.exists_torusEdgePhysicalAllChargeMeasurement
           (IncidentEdge (torusGraph width height) w → G) → Fin d → ℂ)
         (_ : ∀ w ∈ R, b w = torusIncidentSite a w)
         (χ : regularChargeLabels (G := G)) r p,
-        (∀ θ : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} → G,
+        (∀ θ : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} → G,
           Q r *ᵥ openRegionWeight (groupBondTensor (regularEdgeCharacterSite b e χ.val p))
               R (fun f => Fintype.equivFin G (θ f)) =
             if r = some χ then

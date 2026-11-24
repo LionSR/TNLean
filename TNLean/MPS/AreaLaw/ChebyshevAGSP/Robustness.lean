@@ -126,7 +126,8 @@ theorem robust_ground_of_clipped_ground_gap {L q : ℕ}
     norm_clipped_lowProjection_residual_le_exp I Φ h0 h1 a b z e t ht0.le
       X N Y hX hN hY hXN hXY hNY hB Ω hΩ he0 he6 heig
   have htail : ‖Ω - ι P Ω‖ ≤ 2 * η := by
-    have htail' := norm_groundState_highProjection_le_exp I Φ h0 h1 a b z e t Ω
+    have htail' :=
+      ManyBody.BondInteraction.norm_groundState_highProjection_le_exp I Φ h0 h1 a b z e t Ω
       he0 he6 (by simpa only [← hB] using heig)
     have hid : Ω - ι P Ω = ι (Matrix.spectralProjectionGE B t) Ω := by
       simp only [P, map_sub, map_one, _root_.sub_apply, one_apply_eq_self, sub_sub_cancel]

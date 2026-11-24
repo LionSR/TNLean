@@ -275,7 +275,7 @@ non-crossing edges with the bottom index using positive bond dimensions. -/
 noncomputable def regionBoundaryWitness (hpos : ∀ f : Edge G, 0 < A.bondDim f)
     (ρ : RegionBoundaryConfig (G := G) A R) : VirtualConfig A :=
   fun f =>
-    if h : IsRegionBoundaryEdge (G := G) R f then
+    if h : ManyBody.IsRegionBoundaryEdge (G := G) R f then
       ρ ⟨f, h⟩
     else
       ⟨0, hpos f⟩
@@ -287,7 +287,7 @@ theorem regionBoundaryLabel_regionBoundaryWitness (hpos : ∀ f : Edge G, 0 < A.
     regionBoundaryLabel (G := G) A R (regionBoundaryWitness (G := G) A R hpos ρ) = ρ := by
   funext f
   change regionBoundaryWitness (G := G) A R hpos ρ f.1 = ρ f
-  have h : IsRegionBoundaryEdge (G := G) R f.1 := f.2
+  have h : ManyBody.IsRegionBoundaryEdge (G := G) R f.1 := f.2
   rw [regionBoundaryWitness, dite_eq_left h]
 
 /-- An edge touches `R` when at least one of its endpoints lies in `R`. The edges
@@ -329,7 +329,7 @@ theorem regionBoundaryLabel_regionTouchSplit_symm (A : Tensor G d) (R : Finset V
     regionBoundaryLabel (G := G) A R ((regionTouchSplit (G := G) A R).symm (t, x)) =
       regionBoundaryLabel (G := G) A R ((regionTouchSplit (G := G) A R).symm (t, x')) := by
   funext f
-  have ht : IsTouchingEdge (G := G) R f.1 := isRegionBoundaryEdge_touches (G := G) R f.2
+  have ht : IsTouchingEdge (G := G) R f.1 := ManyBody.isRegionBoundaryEdge_touches (G := G) R f.2
   change (regionTouchSplit (G := G) A R).symm (t, x) f.1 =
     (regionTouchSplit (G := G) A R).symm (t, x') f.1
   rw [regionTouchSplit_symm_apply_touch (G := G) A R t x ⟨f.1, ht⟩,
@@ -407,7 +407,7 @@ theorem regionKernelCondition_empty_eq_zero (hA : IsVertexInjective A)
     rw [← hWlabel]
     funext f
     have ht : IsTouchingEdge (G := G) R f.1 :=
-      isRegionBoundaryEdge_touches (G := G) R f.2
+      ManyBody.isRegionBoundaryEdge_touches (G := G) R f.2
     change (regionTouchSplit (G := G) A R).symm (tW, _) f.1 = W f.1
     rw [regionTouchSplit_symm_apply_touch (G := G) A R tW _ ⟨f.1, ht⟩]
   -- Carry out the inner exterior sum to expose the multiplicity.

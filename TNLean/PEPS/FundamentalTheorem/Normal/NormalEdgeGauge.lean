@@ -71,7 +71,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`, where each blocked region is compared as
 an injective block. -/
 noncomputable def regionTwoBlock (A : Tensor G d) (R : Finset V) :
-    TwoBlockTensor (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    TwoBlockTensor (Bond := {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
       (fun f => Fin (A.bondDim f.1)) PUnit
       (RegionPhysicalConfig (V := V) (d := d) R) :=
   fun _ bdry τ => regionBlockedWeight (G := G) A R bdry τ
@@ -93,7 +93,7 @@ Source: arXiv:1804.04964, Section 3, lines 205--250 of
 `Papers/1804.04964/paper_normal.tex`, where a contraction of injective tensors
 over a region is injective. -/
 theorem isTwoBlockInjective_regionTwoBlock_iff (A : Tensor G d) (R : Finset V) :
-    IsTwoBlockInjective (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    IsTwoBlockInjective (Bond := {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
         (bondDim := fun f => Fin (A.bondDim f.1)) (regionTwoBlock (G := G) A R) ↔
       RegionBlockedTensorInjective (G := G) A R := by
   unfold IsTwoBlockInjective RegionBlockedTensorInjective
@@ -122,7 +122,7 @@ Source: arXiv:1804.04964, Section 3, lines 205--250 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem isTwoBlockInjective_regionTwoBlock (A : Tensor G d) (R : Finset V)
     (hR : RegionBlockedTensorInjective (G := G) A R) :
-    IsTwoBlockInjective (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    IsTwoBlockInjective (Bond := {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
       (bondDim := fun f => Fin (A.bondDim f.1)) (regionTwoBlock (G := G) A R) :=
   (isTwoBlockInjective_regionTwoBlock_iff (G := G) A R).mpr hR
 

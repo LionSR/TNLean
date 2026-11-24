@@ -160,7 +160,7 @@ theorem not_crossing_of_crossing_disjoint {R R' R'' : Finset V}
   have := @Finset.disjoint_left.mp hRR'
   have := @Finset.disjoint_left.mp hRR''
   have := @Finset.disjoint_left.mp hR'R''
-  unfold IsCrossingEdge IsRegionBoundaryEdge at *
+  unfold IsCrossingEdge ManyBody.IsRegionBoundaryEdge at *
   grind
 
 variable (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
@@ -176,7 +176,7 @@ theorem bondModel_rb_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
         crossingLabel (G := G) A F.frame.red F.frame.blue ζr := by
   funext g
   have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 := g.2
-  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.red g.1 := hcross.1
+  have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) F.frame.red g.1 := hcross.1
   have hkey := congrFun h ⟨g.1, hbdry⟩
   rw [F.legEquivRed_apply_eq hP η ⟨g.1, hbdry⟩, dite_eq_left hcross] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
@@ -190,7 +190,7 @@ theorem bondModel_rc_eq_of_legEquivRed_eq (hP : F.frame.IsPartition)
         crossingLabel (G := G) A F.frame.red F.frame.complement ζr := by
   funext g
   have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g.1 := g.2
-  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.red g.1 := hcross.1
+  have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) F.frame.red g.1 := hcross.1
   -- This edge crosses to the complement, not to blue, so the dichotomy resolves right.
   have hnb : ¬ IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 :=
     not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_blue
@@ -209,7 +209,7 @@ theorem bondModel_rb_eq_of_legEquivBlue_eq (hP : F.frame.IsPartition)
         (fun g => ζb g.1 : CrossingConfig (G := G) A F.frame.red F.frame.blue) := by
   funext g
   have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 := g.2
-  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.blue g.1 := hcross.2
+  have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) F.frame.blue g.1 := hcross.2
   have hkey := congrFun h ⟨g.1, hbdry⟩
   rw [F.legEquivBlue_apply_eq hP η ⟨g.1, hbdry⟩, dite_eq_left hcross] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
@@ -224,7 +224,7 @@ theorem bondModel_bc_eq_of_legEquivBlue_eq (hP : F.frame.IsPartition)
         crossingLabel (G := G) A F.frame.blue F.frame.complement ζb := by
   funext g
   have hcross : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g.1 := g.2
-  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.blue g.1 := hcross.1
+  have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) F.frame.blue g.1 := hcross.1
   have hnb : ¬ IsCrossingEdge (G := G) A F.frame.red F.frame.blue g.1 := fun hbad =>
     not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_blue.symm
       hP.blue_disjoint_complement hP.red_disjoint_complement hcross hbad.symm
@@ -242,7 +242,7 @@ theorem bondModel_rc_eq_of_legEquivComplement_eq (hP : F.frame.IsPartition)
         (fun g => ζc g.1 : CrossingConfig (G := G) A F.frame.red F.frame.complement) := by
   funext g
   have hcross : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g.1 := g.2
-  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.complement g.1 := hcross.2
+  have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) F.frame.complement g.1 := hcross.2
   have hkey := congrFun h ⟨g.1, hbdry⟩
   rw [F.legEquivComplement_apply_eq hP η ⟨g.1, hbdry⟩, dite_eq_left hcross] at hkey
   simp only [regionBoundaryLabel_apply] at hkey
@@ -257,7 +257,7 @@ theorem bondModel_bc_eq_of_legEquivComplement_eq (hP : F.frame.IsPartition)
         (fun g => ζc g.1 : CrossingConfig (G := G) A F.frame.blue F.frame.complement) := by
   funext g
   have hcross : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g.1 := g.2
-  have hbdry : IsRegionBoundaryEdge (G := G) F.frame.complement g.1 := hcross.2
+  have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) F.frame.complement g.1 := hcross.2
   have hnr : ¬ IsCrossingEdge (G := G) A F.frame.red F.frame.complement g.1 := fun hbad =>
     not_crossing_of_crossing_disjoint (A := A) hP.red_disjoint_complement.symm
       hP.blue_disjoint_complement.symm hP.red_disjoint_blue hcross.symm hbad.symm

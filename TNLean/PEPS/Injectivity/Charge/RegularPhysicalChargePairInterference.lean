@@ -32,7 +32,7 @@ variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 private abbrev RV (R : Finset V) := {v : V // v ∈ R}
 private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 /-- A complete return measurement is chosen before the flux and every actual
 boundary label. Both accepted and rejected actions follow from the original

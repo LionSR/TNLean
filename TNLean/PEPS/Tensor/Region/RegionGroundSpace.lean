@@ -80,7 +80,7 @@ crossing-bond dimensions. Source: arXiv:2011.12127, the boundary-condition
 construction at lines 2003–2008. -/
 theorem finrank_regionGroundSpace_le (A : Tensor Γ d) (R : Finset V) :
     Module.finrank ℂ (regionGroundSpace A R) ≤
-      ∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
+      ∏ e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
   classical
   calc
     Module.finrank ℂ (regionGroundSpace A R) ≤

@@ -67,8 +67,8 @@ theorem exists_unitary_torusControlledBoundaryFactor_of_isSimplyConnected_and_wi
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oR : {v : X // v ∈ R}) (oS : {v : X // v ∈ Finset.univ \ R})
-    {n : ℕ} (e : {f : Edge Γₜ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
-    (p : {f : Edge Γₜ // IsRegionBoundaryEdge R f} →
+    {n : ℕ} (e : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
+    (p : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} →
       ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS)
     (hwind : ∀ f, torusWalkWinding
         ((p f).map (SimpleGraph.Embedding.induce
@@ -83,7 +83,7 @@ theorem exists_unitary_torusControlledBoundaryFactor_of_isSimplyConnected_and_wi
         (cS : RegularRegionCoordinates (Γ := Γₜ) (G := G) (Finset.univ \ R) TS oS),
         let A := fun j => cR.1 (e.symm j)
         let B := fun j => cS.1 (regionBoundaryEdgeComplEquiv (G := Γₜ) R (e.symm j))
-        (∑ i, μ i * ∑ θ : {f : Edge Γₜ // IsRegionBoundaryEdge R f} → G,
+        (∑ i, μ i * ∑ θ : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} → G,
           regularProjectorTwistedRegionMatrix R (torusClosureEdgeAssignment (pairs i).1 (pairs i).2)
               ((regularRegionCoordinatesEquiv R TR hTR htreeR oR).symm cR) θ *
             (U * regularProjectorTwistedRegionMatrix (Finset.univ \ R)

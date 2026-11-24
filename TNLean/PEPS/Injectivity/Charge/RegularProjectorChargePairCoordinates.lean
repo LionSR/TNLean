@@ -31,10 +31,10 @@ open-region contraction. Source: SCP10, charge-pair equation, lines 2505–2558.
 def regularProjectorChargePairOpenRegionMatrix (R : Finset V)
     (e₀ e₁ : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}) (χ : G → ℂ) (p : G) :
     Matrix (RegionHalfEdgeConfig (Γ := Γ) G R)
-      ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) ℂ :=
-  fun α θ => ∑ η : {e : Edge Γ // IsRegionIncidentEdge R e} → G,
-    if (fun f : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-        η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ then
+      ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) ℂ :=
+  fun α θ => ∑ η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G,
+    if (fun f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+        η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ then
       χ (p * (η ⟨e₁.1, Or.inl e₁.2.1⟩)⁻¹ * η ⟨e₀.1, Or.inl e₀.2.1⟩) *
       ∏ w : {w : V // w ∈ R},
         regularLegProjector (IncidentEdge Γ w.1) (α w)
@@ -45,7 +45,7 @@ private theorem reference_weight_of_nonzero_product (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v // v ∈ R})
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G)
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G)
     (hne : (∏ w : {w : V // w ∈ R},
       regularLegProjector (IncidentEdge Γ w.1)
         ((regularRegionCoordinatesEquiv R T hT htree o).symm c w)
@@ -104,7 +104,7 @@ theorem regularProjectorChargePairOpenRegionMatrix_coordinates (R : Finset V)
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v // v ∈ R})
     (e₀ e₁ : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}) (χ : G → ℂ) (p : G)
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorChargePairOpenRegionMatrix R e₀ e₁ χ p
         ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
       χ (p * (c.2.1 e₁)⁻¹ * c.2.1 e₀) *

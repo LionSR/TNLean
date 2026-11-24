@@ -55,7 +55,7 @@ theorem IsGIsometric.regularTwistedOpenRegionMatrix_torusRegionLift
     (R : Finset (TorusVertex width height))
     (L : {v // v ∈ R} → ℤ × ℤ) (hL : IsTorusRegionIntegerLift R L)
     (g h : G) (hgh : Commute g h) {b : ℕ}
-    (e : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     regularTwistedOpenRegionMatrix (torusIncidentSite a) (torusClosureEdgeAssignment g h) R e =
       (regularOpenRegionMatrix (torusIncidentSite a) R e).submatrix (Equiv.refl _)
         (regularRegionBoundaryGaugeEquiv R (torusRegionLiftGauge R L g h)
@@ -75,7 +75,7 @@ theorem IsGIsometric.exists_positive_gram_torusClosureRegionMatrix_of_integerLif
     (hR : ((torusGraph width height).induce (R : Set (TorusVertex width height))).Connected)
     (L : {v // v ∈ R} → ℤ × ℤ) (hL : IsTorusRegionIntegerLift R L)
     (g h : G) (hgh : Commute g h) {b : ℕ}
-    (e : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     ∃ c : ℝ, 0 < c ∧
       (regularTwistedOpenRegionMatrix (torusIncidentSite a)
         (torusClosureEdgeAssignment g h) R e).conjTranspose *
@@ -98,7 +98,7 @@ theorem IsGIsometric.rank_torusClosureRegionMatrix_of_integerLift
     (hR : ((torusGraph width height).induce (R : Set (TorusVertex width height))).Connected)
     (L : {v // v ∈ R} → ℤ × ℤ) (hL : IsTorusRegionIntegerLift R L)
     (g h : G) (hgh : Commute g h) {b : ℕ} (hb : 0 < b)
-    (e : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     (regularTwistedOpenRegionMatrix (torusIncidentSite a)
       (torusClosureEdgeAssignment g h) R e).rank = Fintype.card G ^ (b - 1) := by
   classical

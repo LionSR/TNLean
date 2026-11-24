@@ -129,17 +129,18 @@ private theorem boundary_torusRightEdge_rectangle_iff
     (xStart yStart xLen yLen : ℕ) (hxPos : 0 < xLen)
     (hxBound : xStart + xLen ≤ width) (hxLen : xLen < width)
     (v : TorusVertex width height) :
-    IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) (torusRightEdge v) ↔
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+      (torusRightEdge v) ↔
       (v.1.val = (if xStart = 0 then width - 1 else xStart - 1) ∨
         v.1.val = xStart + xLen - 1) ∧
       (yStart ≤ v.2.val ∧ v.2.val < yStart + yLen) := by
-  have he : IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+  have he : ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
       (torusRightEdge v) ↔
       (v ∈ torusContiguousRectangle xStart yStart xLen yLen ∧
         (v.1 + 1, v.2) ∉ torusContiguousRectangle xStart yStart xLen yLen) ∨
       (v ∉ torusContiguousRectangle xStart yStart xLen yLen ∧
         (v.1 + 1, v.2) ∈ torusContiguousRectangle xStart yStart xLen yLen) := by
-    unfold IsRegionBoundaryEdge torusRightEdge
+    unfold ManyBody.IsRegionBoundaryEdge torusRightEdge
     rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
     · simp only [h1, h2]
     · simp only [h1, h2]
@@ -152,17 +153,18 @@ private theorem boundary_torusUpEdge_rectangle_iff
     (xStart yStart xLen yLen : ℕ) (hyPos : 0 < yLen)
     (hyBound : yStart + yLen ≤ height) (hyLen : yLen < height)
     (v : TorusVertex width height) :
-    IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) (torusUpEdge v) ↔
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+      (torusUpEdge v) ↔
       (xStart ≤ v.1.val ∧ v.1.val < xStart + xLen) ∧
       (v.2.val = (if yStart = 0 then height - 1 else yStart - 1) ∨
         v.2.val = yStart + yLen - 1) := by
-  have he : IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+  have he : ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
       (torusUpEdge v) ↔
       (v ∈ torusContiguousRectangle xStart yStart xLen yLen ∧
         (v.1, v.2 + 1) ∉ torusContiguousRectangle xStart yStart xLen yLen) ∨
       (v ∉ torusContiguousRectangle xStart yStart xLen yLen ∧
         (v.1, v.2 + 1) ∈ torusContiguousRectangle xStart yStart xLen yLen) := by
-    unfold IsRegionBoundaryEdge torusUpEdge
+    unfold ManyBody.IsRegionBoundaryEdge torusUpEdge
     rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
     · simp only [h1, h2]
     · simp only [h1, h2]
@@ -179,7 +181,7 @@ theorem card_horizontal_boundary_torusRectangle
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height)
     (hxLen : xLen < width) :
     Fintype.card {v : TorusVertex width height //
-      IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
         (torusRightEdge v)} = 2 * yLen := by
   classical
   let e := (Equiv.subtypeEquivRight
@@ -200,7 +202,7 @@ theorem card_vertical_boundary_torusRectangle
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height)
     (hyLen : yLen < height) :
     Fintype.card {v : TorusVertex width height //
-      IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
         (torusUpEdge v)} = 2 * xLen := by
   classical
   let e := (Equiv.subtypeEquivRight
@@ -222,20 +224,20 @@ theorem card_regionBoundaryEdge_torusRectangle
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height)
     (hxLen : xLen < width) (hyLen : yLen < height) :
     Fintype.card {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) f} =
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) f} =
       2 * xLen + 2 * yLen := by
   classical
   let R : Finset (TorusVertex width height) :=
     torusContiguousRectangle xStart yStart xLen yLen
-  let e := Equiv.subtypeEquivOfSubtype (p := IsRegionBoundaryEdge R)
+  let e := Equiv.subtypeEquivOfSubtype (p := ManyBody.IsRegionBoundaryEdge R)
     (torusEdgeEquiv (width := width) (height := height))
   calc
     _ = Fintype.card {z : TorusVertex width height ⊕ TorusVertex width height //
-        IsRegionBoundaryEdge R (torusEdgeEquiv z)} := (Fintype.card_congr e).symm
+        ManyBody.IsRegionBoundaryEdge R (torusEdgeEquiv z)} := (Fintype.card_congr e).symm
     _ = Fintype.card {v : TorusVertex width height //
-        IsRegionBoundaryEdge R (torusRightEdge v)} +
+        ManyBody.IsRegionBoundaryEdge R (torusRightEdge v)} +
         Fintype.card {v : TorusVertex width height //
-          IsRegionBoundaryEdge R (torusUpEdge v)} := by
+          ManyBody.IsRegionBoundaryEdge R (torusUpEdge v)} := by
       rw [Fintype.card_congr Equiv.subtypeSum, Fintype.card_sum]
       rfl
     _ = _ := by
@@ -252,7 +254,7 @@ theorem card_regionBoundaryEdge_torusSquare
     (hxBound : xStart + L ≤ width) (hyBound : yStart + L ≤ height)
     (hxLen : L < width) (hyLen : L < height) :
     Fintype.card {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart L L) f} = 4 * L := by
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart L L) f} = 4 * L := by
   rw [card_regionBoundaryEdge_torusRectangle xStart yStart L L hL hL hxBound hyBound hxLen hyLen]
   omega
 
@@ -260,7 +262,7 @@ private theorem card_horizontal_boundary_torusRectangle_le
     (xStart yStart xLen yLen : ℕ)
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height) :
     Fintype.card {v : TorusVertex width height //
-      IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
         (torusRightEdge v)} ≤ 2 * yLen := by
   classical
   by_cases hz : xLen = 0
@@ -269,16 +271,16 @@ private theorem card_horizontal_boundary_torusRectangle_le
       ext v
       simp only [mem_torusContiguousRectangle, Finset.notMem_empty, iff_false]
       omega
-    simp [hR, IsRegionBoundaryEdge]
+    simp [hR, ManyBody.IsRegionBoundaryEdge]
   · by_cases hlt : xLen < width
     · exact (card_horizontal_boundary_torusRectangle
         xStart yStart xLen yLen (by omega) hxBound hyBound hlt).le
     · have hx : xLen = width := by omega
       have hs : xStart = 0 := by omega
       have hn (v : TorusVertex width height) :
-          ¬IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+          ¬ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
             (torusRightEdge v) := by
-        unfold IsRegionBoundaryEdge torusRightEdge
+        unfold ManyBody.IsRegionBoundaryEdge torusRightEdge
         rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with
             ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
           simp [h1, h2, mem_torusContiguousRectangle, hx, hs, ZMod.val_lt]
@@ -289,7 +291,7 @@ private theorem card_vertical_boundary_torusRectangle_le
     (xStart yStart xLen yLen : ℕ)
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height) :
     Fintype.card {v : TorusVertex width height //
-      IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
         (torusUpEdge v)} ≤ 2 * xLen := by
   classical
   by_cases hz : yLen = 0
@@ -298,16 +300,16 @@ private theorem card_vertical_boundary_torusRectangle_le
       ext v
       simp only [mem_torusContiguousRectangle, Finset.notMem_empty, iff_false]
       omega
-    simp [hR, IsRegionBoundaryEdge]
+    simp [hR, ManyBody.IsRegionBoundaryEdge]
   · by_cases hlt : yLen < height
     · exact (card_vertical_boundary_torusRectangle
         xStart yStart xLen yLen (by omega) hxBound hyBound hlt).le
     · have hy : yLen = height := by omega
       have hs : yStart = 0 := by omega
       have hn (v : TorusVertex width height) :
-          ¬IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
+          ¬ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen)
             (torusUpEdge v) := by
-        unfold IsRegionBoundaryEdge torusUpEdge
+        unfold ManyBody.IsRegionBoundaryEdge torusUpEdge
         rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with
             ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
           simp [h1, h2, mem_torusContiguousRectangle, hy, hs, ZMod.val_lt]
@@ -321,16 +323,18 @@ theorem card_regionBoundaryEdge_torusRectangle_le
     (xStart yStart xLen yLen : ℕ)
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height) :
     Fintype.card {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) f} ≤
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) f} ≤
       2 * xLen + 2 * yLen := by
   classical
   let R : Finset (TorusVertex width height) :=
     torusContiguousRectangle xStart yStart xLen yLen
-  let e := Equiv.subtypeEquivOfSubtype (p := IsRegionBoundaryEdge R)
+  let e := Equiv.subtypeEquivOfSubtype (p := ManyBody.IsRegionBoundaryEdge R)
     (torusEdgeEquiv (width := width) (height := height))
-  have hc : Fintype.card {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} =
-      Fintype.card {v : TorusVertex width height // IsRegionBoundaryEdge R (torusRightEdge v)} +
-      Fintype.card {v : TorusVertex width height // IsRegionBoundaryEdge R (torusUpEdge v)} := by
+  have hc : Fintype.card {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} =
+      Fintype.card {v : TorusVertex width height //
+        ManyBody.IsRegionBoundaryEdge R (torusRightEdge v)} +
+      Fintype.card {v : TorusVertex width height //
+        ManyBody.IsRegionBoundaryEdge R (torusUpEdge v)} := by
     rw [← Fintype.card_congr e, Fintype.card_congr Equiv.subtypeSum, Fintype.card_sum]
     rfl
   rw [hc]

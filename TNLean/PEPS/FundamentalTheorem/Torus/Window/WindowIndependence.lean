@@ -89,7 +89,7 @@ interior-bond multiple of the edge-inserted coefficient; the restriction round-t
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of `Papers/1804.04964/paper_normal.tex`;
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem deformedRegionStateAssembled_bondInserted_eq_smul_edgeInsertedCoeff (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) (cfg : V → Fin d) :
     deformedRegionStateAssembled (G := G) B R
         (bondInsertedRegionInsert (G := G) B R f M) cfg =
@@ -135,7 +135,8 @@ Source: arXiv:1804.04964, the proof sketch at lines 2320--2445 of
 `Papers/1804.04964/paper_normal.tex` (a virtual operation on a bond is a physical operation on any
 window containing an endpoint); `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
 theorem bondInserted_windowIndependent (R₁ R₂ : Finset V) (e : Edge G)
-    (hf : IsRegionBoundaryEdge (G := G) R₁ e) (hg : IsRegionBoundaryEdge (G := G) R₂ e)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := G) R₁ e) (hg : ManyBody.IsRegionBoundaryEdge
+      (G := G) R₂ e)
     (M₁ M₂ : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ)
     (horient : (regionEdgeOrient (G := G) B R₁ ⟨e, hf⟩ M₁) =
       regionEdgeOrient (G := G) B R₂ ⟨e, hg⟩ M₂)

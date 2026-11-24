@@ -94,8 +94,8 @@ theorem exists_rational_boundarySupportCoordinates
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     {δ : ℝ} (hδ : 0 < δ) :
@@ -135,8 +135,8 @@ theorem exists_boundarySupportCoordinateRadius
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) :
     ∃ R : ℝ, 0 ≤ R ∧ ∀ {mesh : ℝ}, 0 < mesh →
@@ -177,7 +177,7 @@ noncomputable def boundarySupportMatrixOfCoordinates
     (c : Fin n → Fin m → S → ℂ) :
     Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ :=
   fun p j ↦ ∑ s : S, c j p.2 s * s.1
-    ((Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q)
+    ((ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
       (leftBlock_mono (Nat.sub_le k 1))).symm p.1)
 
 /-- A uniform norm error on every reconstructed bond slice gives the same entrywise
@@ -192,7 +192,7 @@ theorem norm_boundarySupportMatrixOfCoordinates_sub_apply_le
         ∑ s : S, c j a s • s.1‖ ≤ θ) :
     ∀ p j, ‖(Z - boundarySupportMatrixOfCoordinates S m c) p j‖ ≤ θ := by
   intro p j
-  let x := (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q)
+  let x := (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
     (leftBlock_mono (Nat.sub_le k 1))).symm p.1
   let e : LeftBlockVector L q k :=
     WithLp.toLp 2 (fun y ↦

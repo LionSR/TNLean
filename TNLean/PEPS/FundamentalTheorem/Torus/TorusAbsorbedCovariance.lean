@@ -132,7 +132,7 @@ stored endpoints of the original edge. -/
 theorem boundaryEdgeMap_translate_fst_or
     (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (a : ZMod width) (b : ZMod height) :
     (boundaryEdgeMap (translate a b) R f).1.1.1 = translate a b f.1.1.1 ∨
       (boundaryEdgeMap (translate a b) R f).1.1.1 = translate a b f.1.1.2 := by
@@ -147,7 +147,7 @@ exactly when the translation preserved the stored endpoint order. -/
 theorem boundaryEdgeMap_translate_fst_mem_iff
     (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (hmem : f.1.1.1 ∈ R) (a : ZMod width) (b : ZMod height) :
     (boundaryEdgeMap (translate a b) R f).1.1.1 ∈ Region.map (translate a b) R ↔
       (boundaryEdgeMap (translate a b) R f).1.1.1 = translate a b f.1.1.1 := by
@@ -176,7 +176,7 @@ noncomputable def transportedAbsorbedGauge (B : Tensor (torusGraph width height)
     (hB : IsTorusTranslationInvariant B)
     (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (Z : GL (Fin (B.bondDim f.1)) ℂ) (a : ZMod width) (b : ZMod height) :
     GL (Fin (B.bondDim (boundaryEdgeMap (translate a b) R f).1)) ℂ :=
   absorbedBoundaryGauge (G := torusGraph width height) B (Region.map (translate a b) R)
@@ -190,7 +190,7 @@ theorem glReindex_glReindex_bondDim
     {B : Tensor (torusGraph width height) d} (hB : IsTorusTranslationInvariant B)
     (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (Z : GL (Fin (B.bondDim f.1)) ℂ) (a a' : ZMod width) (b b' : ZMod height)
     (h : B.bondDim (boundaryEdgeMap (translate a b) R f).1 =
       B.bondDim (boundaryEdgeMap (translate a' b') R f).1) :
@@ -216,7 +216,7 @@ theorem transportedAbsorbedGauge_translate_pair
     (B : Tensor (torusGraph width height) d) (hB : IsTorusTranslationInvariant B)
     (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (Z : GL (Fin (B.bondDim f.1)) ℂ) (hmem : f.1.1.1 ∈ R)
     (a a' c : ZMod width) (b b' g : ZMod height)
     (hsu : translate c g (translate a b f.1.1.1) = translate a' b' f.1.1.1)

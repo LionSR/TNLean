@@ -92,7 +92,7 @@ physical configuration recovers `vSideRow`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 noncomputable def vSideRow (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) :
@@ -109,7 +109,7 @@ complement physical configuration `τ`, is the second tensor's complement blocke
 tensor map applied to the v-side row. This restates
 `regionInsertedCoeff_eq_complement_blockedMap_B` (`Recovery9`) with the row named. -/
 theorem regionInsertedCoeff_eq_complement_blockedMap_vSideRow (A B : Tensor G d)
-    (R : Finset V) (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (R : Finset V) (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
@@ -133,7 +133,7 @@ second), so equal rows give equal coefficients.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_of_complementRow_eq (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
@@ -221,7 +221,7 @@ complement `univ \ R`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 noncomputable def complSideRow (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
         (regionBoundaryEdgeToCompl (G := G) R f))))
@@ -254,7 +254,7 @@ transports the `univ \ (univ \ R)` block back to `R`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_region_blockedMap_B (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
         (regionBoundaryEdgeToCompl (G := G) R f))))
@@ -299,7 +299,7 @@ applied to the first tensor's coefficient viewed as a function of `σ`. By the
 σ-side factorization it equals `complSideRow A B R f hvAout M τ`. -/
 noncomputable def regionRowB (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     RegionBoundaryConfig (G := G) B R → ℂ :=
@@ -310,7 +310,7 @@ tensor's region blocked left inverse applied to the first tensor's coefficient
 recovers the σ-side row `complSideRow`. -/
 theorem regionRowB_eq_complSideRow (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
         (regionBoundaryEdgeToCompl (G := G) R f))))
@@ -334,7 +334,7 @@ in the complement block image by the v-side factorization
 submodule. -/
 theorem regionRowB_mem_range (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
@@ -384,7 +384,7 @@ complement block. -/
 noncomputable def transferCoeff (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (μ : RegionBoundaryConfig (G := G) B R) :
     RegionBoundaryConfig (G := G) B (Finset.univ \ R) → ℂ :=
@@ -398,7 +398,7 @@ transfer coefficient. This is the complement read-off from the membership
 theorem regionRowB_eq_complement_blockedMap (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
@@ -426,7 +426,7 @@ Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 theorem regionInsertedCoeff_eq_doubleSum_transferCoeff (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
@@ -482,7 +482,7 @@ Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 theorem regionInsertedCoeff_eq_of_transferCoeff_form (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
@@ -550,7 +550,7 @@ Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 theorem vSideRow_eq_region_blockedMap_transferCoeff (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
@@ -616,7 +616,7 @@ theorem transferCoeff_column_eq_regionBlockedLeftInverse_vSideRow
     (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
@@ -661,7 +661,7 @@ read-off, so it is non-circular.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem vSideRow_eq_localTensorMap_virtualPullback (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
@@ -715,7 +715,7 @@ Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem vSideRow_eq_incidentSum_of_virtualPullback_incidentForm (A B : Tensor G d)
     (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hA : IsVertexInjective A) (hB : IsVertexInjective B)
@@ -777,7 +777,7 @@ theorem transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm (A B : Ten
     (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvAout : LinearIndependent ℂ

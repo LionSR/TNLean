@@ -31,7 +31,7 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 /-- Resolving the partner label in the actual regional tensor gives the literal
 correlated column, not two independent character weights.

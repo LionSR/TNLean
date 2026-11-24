@@ -100,7 +100,7 @@ the bond entering its first site and the bond leaving its last site.
 the first site or leaves the last site. -/
 theorem isRegionBoundaryEdge_cycleSuccEdge_iff (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L)
     (hLn : L < n) (s u : Fin n) :
-    IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L)
+    ManyBody.IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L)
         (cycleSuccEdge hn u) ↔
       u = s - 1 ∨ u = arcLastSite hL hLn s := by
   have h1 : ((1 : Fin n) : ℕ) = 1 := val_one_of_two_le (by omega)
@@ -108,18 +108,18 @@ theorem isRegionBoundaryEdge_cycleSuccEdge_iff (hn : 3 ≤ n) {L : ℕ} (hL : 0 
   have hs := s.isLt
   -- The crossing condition sees the two cyclic endpoints `u` and `u + 1`,
   -- in either stored order.
-  have hmem : IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L)
+  have hmem : ManyBody.IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L)
       (cycleSuccEdge hn u) ↔
       ((u ∈ cycleArcFrom s L ∧ u + 1 ∉ cycleArcFrom s L) ∨
         (u ∉ cycleArcFrom s L ∧ u + 1 ∈ cycleArcFrom s L)) := by
     rcases (show u.val + 1 < n ∨ u.val + 1 = n by omega) with hc | hc
     · have h11 : (cycleSuccEdge hn u).1.1 = u := by rw [cycleSuccEdge_val_of_lt hn hc]
       have h12 : (cycleSuccEdge hn u).1.2 = u + 1 := by rw [cycleSuccEdge_val_of_lt hn hc]
-      unfold IsRegionBoundaryEdge
+      unfold ManyBody.IsRegionBoundaryEdge
       rw [h11, h12]
     · have h11 : (cycleSuccEdge hn u).1.1 = u + 1 := by rw [cycleSuccEdge_val_of_eq hn hc]
       have h12 : (cycleSuccEdge hn u).1.2 = u := by rw [cycleSuccEdge_val_of_eq hn hc]
-      unfold IsRegionBoundaryEdge
+      unfold ManyBody.IsRegionBoundaryEdge
       rw [h11, h12]
       tauto
   rw [hmem, arcLastSite]
@@ -130,7 +130,7 @@ theorem isRegionBoundaryEdge_cycleSuccEdge_iff (hn : 3 ≤ n) {L : ℕ} (hL : 0 
 bond entering its first site and the bond leaving its last site. -/
 theorem isRegionBoundaryEdge_cycleArcFrom_iff (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L)
     (hLn : L < n) (s : Fin n) (f : Edge (SimpleGraph.cycleGraph n)) :
-    IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L) f ↔
+    ManyBody.IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L) f ↔
       f = cycleSuccEdge hn (s - 1) ∨ f = cycleSuccEdge hn (arcLastSite hL hLn s) := by
   obtain ⟨u, rfl⟩ := cycleSuccEdge_surjective hn f
   rw [isRegionBoundaryEdge_cycleSuccEdge_iff hn hL hLn s u]
@@ -153,14 +153,14 @@ theorem arcLastSite_ne_pred (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n) 
 /-- The boundary bond entering the first site of the arc, as a boundary edge. -/
 def arcLeftBoundary (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n) (s : Fin n) :
     {f : Edge (SimpleGraph.cycleGraph n) //
-      IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L) f} :=
+      ManyBody.IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L) f} :=
   ⟨cycleSuccEdge hn (s - 1),
     (isRegionBoundaryEdge_cycleArcFrom_iff hn hL hLn s _).mpr (Or.inl rfl)⟩
 
 /-- The boundary bond leaving the last site of the arc, as a boundary edge. -/
 def arcRightBoundary (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n) (s : Fin n) :
     {f : Edge (SimpleGraph.cycleGraph n) //
-      IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L) f} :=
+      ManyBody.IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L) f} :=
   ⟨cycleSuccEdge hn (arcLastSite hL hLn s),
     (isRegionBoundaryEdge_cycleArcFrom_iff hn hL hLn s _).mpr (Or.inr rfl)⟩
 
@@ -168,7 +168,7 @@ def arcRightBoundary (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n) (s : Fi
 theorem arcBoundary_eq_left_or_right (hn : 3 ≤ n) {L : ℕ} (hL : 0 < L) (hLn : L < n)
     (s : Fin n)
     (f : {f : Edge (SimpleGraph.cycleGraph n) //
-      IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L) f}) :
+      ManyBody.IsRegionBoundaryEdge (G := SimpleGraph.cycleGraph n) (cycleArcFrom s L) f}) :
     f = arcLeftBoundary hn hL hLn s ∨ f = arcRightBoundary hn hL hLn s := by
   rcases (isRegionBoundaryEdge_cycleArcFrom_iff hn hL hLn s f.1).mp f.2 with h | h
   · exact Or.inl (Subtype.ext h)

@@ -51,7 +51,7 @@ noncomputable def torusRectangleBoundaryEquiv
     (xStart yStart xLen yLen : ℕ) (hxPos : 0 < xLen) (hyPos : 0 < yLen)
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height)
     (hxLen : xLen < width) (hyLen : yLen < height) :
-    {f : Edge Γₜ // IsRegionBoundaryEdge
+    {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge
       (torusContiguousRectangle xStart yStart xLen yLen) f} ≃
         Fin (2 * xLen + 2 * yLen - 1 + 1) := by
   apply Fintype.equivFinOfCardEq

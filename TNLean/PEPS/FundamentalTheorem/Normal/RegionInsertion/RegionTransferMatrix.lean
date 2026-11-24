@@ -68,7 +68,7 @@ omit [Fintype V] [DecidableRel G.Adj] in
 /-- The unique in-region endpoint of a boundary edge `f` of `R`: any endpoint of
 `f` lying in `R` equals `regionBoundaryEdgeInVertex R f`. -/
 theorem regionBoundaryEdge_endpoint_in_R_eq (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     {w : V} (hw : f.1.1.1 = w ∨ f.1.1.2 = w) (hwR : w ∈ R) :
     w = regionBoundaryEdgeInVertex (G := G) R f := by
   rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
@@ -85,7 +85,7 @@ the boundary edge `f`: changing the configuration on `f` does not affect it. The
 in-region endpoint of `f` is `v`, which is excluded, and the other endpoint lies
 outside `R`. -/
 theorem regionRestProd_congr_off_f (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (ζ ζ' : VirtualConfig A)
     (hagree : ∀ e : Edge G, e ≠ f.1 → ζ e = ζ' e) :
@@ -115,7 +115,7 @@ agrees with the boundary configuration `ν` on the boundary edge `f`. The bounda
 configuration fixes the virtual index on `f`, and so does the local configuration
 at `v` through its `f`-incident leg. -/
 theorem regionOpenCoeff_eq_zero_of_ne (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (ν : RegionBoundaryConfig (G := G) A R)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (η : LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f))
@@ -135,7 +135,7 @@ reading the boundary configuration with its `f`-value updated to the `f`-leg of
 `η`. Both filtered global sums describe the same configurations, since the
 rest-of-region product ignores the value on `f`. -/
 theorem regionOpenCoeff_update_eq (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (ν : RegionBoundaryConfig (G := G) A R)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (η : LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f)) :
@@ -248,7 +248,7 @@ evaluated against the open region coefficient, collapses to the matrix entry on
 the boundary edge `f` times the open region coefficient at the updated boundary
 configuration. -/
 theorem region_lhs_coeff (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (ν : RegionBoundaryConfig (G := G) A R)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
@@ -286,7 +286,7 @@ open scoped Classical in
 coefficient, reads off the matrix entry on the boundary edge `f` times the open
 region coefficient at the updated boundary configuration. -/
 theorem region_rhs_coeff (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (ν : RegionBoundaryConfig (G := G) A R)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
@@ -325,7 +325,7 @@ theorem region_rhs_coeff (A : Tensor G d) (R : Finset V)
 /-- The blocked-region weight as a function of the physical leg at the in-region
 endpoint `v`, used as the realization vector that the physical operator acts on. -/
 noncomputable def regionWeightVec (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (ν : RegionBoundaryConfig (G := G) A R)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) : Fin d → ℂ :=
   localTensorMap A (regionBoundaryEdgeInVertex (G := G) R f) (regionOpenCoeff (G := G) A R f ν σ)
@@ -337,7 +337,7 @@ blocked-region weight equals the physical operator `regionInsertionOp` from
 `M.transpose`, applied to the region weight vector and evaluated at the physical
 leg `σ v`. -/
 theorem region_innerSum_eq_realized (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (ν : RegionBoundaryConfig (G := G) A R)
@@ -393,7 +393,7 @@ block of `R`.
 This is the region analogue of the right realization sum of
 `edgeInsertedCoeff_eq_sum_right_physicalRealization`. -/
 noncomputable def regionRealizationSum (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) : ℂ :=
@@ -416,7 +416,7 @@ endpoint.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_regionRealizationSum (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
@@ -443,7 +443,7 @@ open scoped Classical in
 updated at the in-region endpoint `v`, since the rest-of-region product reads the
 physical legs only away from `v`. -/
 theorem regionOpenCoeff_update_vmem (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (ν : RegionBoundaryConfig (G := G) A R)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) (a : Fin d) :
     regionOpenCoeff (G := G) A R f ν
@@ -467,7 +467,7 @@ open scoped Classical in
 weight with the physical configuration updated to `a` at the in-region endpoint
 `v`. -/
 theorem regionWeightVec_apply_eq (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (ν : RegionBoundaryConfig (G := G) A R)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) (a : Fin d) :
     regionWeightVec (G := G) A R f ν σ a =
@@ -489,7 +489,7 @@ coefficient with the physical leg at `v` ranging over the basis.
 This is the `SameState`-invariant form: it reads the two tensors only through the
 closed state coefficient, which `SameState` equates. -/
 noncomputable def regionStateRealizationSum (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) : ℂ :=
@@ -512,7 +512,7 @@ with the overcounting multiplicity `regionInteriorBondProd`.
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionRealizationSum_eq_smul_stateRealizationSum (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -567,7 +567,7 @@ theorem regionRealizationSum_eq_smul_stateRealizationSum (A : Tensor G d) (R : F
 only through the closed state coefficient, which `SameState` equates. This is what
 carries the region realization from one tensor to the other. -/
 theorem regionStateRealizationSum_sameState {A B : Tensor G d} (hAB : SameState A B)
-    (R : Finset V) (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (R : Finset V) (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -593,7 +593,7 @@ the closed state vector at the in-region endpoint `v`, evaluated at the physical
 leg `σ v`. Both expand `O` over the standard basis at `v`; the closed state vector
 is the standard-basis combination weighted by the closed state coefficient. -/
 theorem regionStateRealizationSum_eq_op_regionStateVec (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (O : (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ))
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -629,7 +629,7 @@ operator.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_smul_op_regionStateVec (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
@@ -692,7 +692,7 @@ region insertion transfer.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 noncomputable def regionTransferMatrix (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hposB : ∀ e : Edge G, 0 < B.bondDim e)
@@ -721,7 +721,7 @@ unconditional region insertion transfer (remaining obligation 4 of
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionTransferMatrix_realizes_of_image (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hposB : ∀ e : Edge G, 0 < B.bondDim e)
@@ -780,7 +780,7 @@ applies the realization hypothesis.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_transfer_of_realizes (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B)

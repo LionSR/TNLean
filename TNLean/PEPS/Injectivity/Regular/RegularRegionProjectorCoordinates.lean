@@ -38,14 +38,14 @@ variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
 
 private abbrev Vertex (R : Finset V) := {v : V // v ∈ R}
 private abbrev BlockInternal (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev Incident (R : Finset V) := {e : Edge Γ // IsRegionIncidentEdge R e}
-private abbrev BlockBoundary (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev Incident (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e}
+private abbrev BlockBoundary (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 private def referenceConfig (R : Finset V)
     (y : BlockBoundary (Γ := Γ) R → G) (a : BlockInternal (Γ := Γ) R → G) :
     Incident (Γ := Γ) R → G := fun e =>
   if hi : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R then a ⟨e.1, hi⟩
-  else y ⟨e.1, e.2.isRegionBoundaryEdge hi⟩
+  else y ⟨e.1, ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge e.2 hi⟩
 
 omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] [DecidableEq G] in
 private theorem referenceConfig_internal (R : Finset V)
@@ -58,7 +58,7 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] [DecidableEq G] in
 private theorem referenceConfig_boundary (R : Finset V)
     (y : BlockBoundary (Γ := Γ) R → G) (a : BlockInternal (Γ := Γ) R → G)
     (e : BlockBoundary (Γ := Γ) R) :
-    referenceConfig R y a ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩ = y e := by
+    referenceConfig R y a ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩ = y e := by
   have hi : ¬ (e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R) := by
     rcases e.2 with h | h
     · exact fun hi => h.2 hi.2
@@ -73,7 +73,7 @@ theorem regularRegionCoordinates_rootLabels_of_tree_compatibility [Finite G] (R 
     (T : SimpleGraph ({v : V // v ∈ R}))
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G) (q : {v : V // v ∈ R} → G)
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) (q : {v : V // v ∈ R} → G)
     (hα : ∀ e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R},
       T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩ →
         c.2.2.1.1 ⟨e.1.1.1, e.2.1⟩ * c.2.1 e =
@@ -202,7 +202,7 @@ private theorem projector_matrix_apply_pointwise (R : Finset V)
     regularProjectorOpenRegionMatrix R α θ = (Fintype.card G : ℂ)⁻¹ ^ R.card *
       ∑ p : (Incident (Γ := Γ) R → G) × (Vertex R → G),
         if (fun e : BlockBoundary (Γ := Γ) R =>
-              p.1 ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
+              p.1 ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
             (∀ w (e : IncidentEdge Γ w.1),
               α w e = p.2 w * p.1 ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩)
         then 1 else 0 := by
@@ -225,16 +225,16 @@ theorem regularProjectorOpenRegionMatrix_coordinates (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v // v ∈ R})
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorOpenRegionMatrix R
         ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
       (Fintype.card G : ℂ) * (Fintype.card G : ℂ)⁻¹ ^ R.card *
-        regularLegProjector {e : Edge Γ // IsRegionBoundaryEdge R e} c.1 θ *
+        regularLegProjector {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} c.1 θ *
         (if c.2.2.2 = 1 then 1 else 0) := by
   classical
   let P (p : (Incident (Γ := Γ) R → G) × (Vertex R → G)) : Prop :=
     (fun e : BlockBoundary (Γ := Γ) R =>
-        p.1 ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
+        p.1 ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
       ∀ w (f : IncidentEdge Γ w.1),
         (regularRegionCoordinatesEquiv R T hT htree o).symm c w f =
           p.2 w * p.1 ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩
@@ -252,14 +252,14 @@ theorem regularProjectorOpenRegionMatrix_coordinates (R : Finset V)
       funext e
       have he := congrFun h.1 e
       change x⁻¹ * referenceConfig R c.1 c.2.1
-        ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩ = θ e at he
+        ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩ = θ e at he
       rw [referenceConfig_boundary R c.1 c.2.1 e] at he
       exact inv_mul_eq_iff_eq_mul.mp he
     · rintro ⟨hz, hy⟩
       constructor
       · funext e
         change x⁻¹ * referenceConfig R c.1 c.2.1
-          ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩ = θ e
+          ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩ = θ e
         rw [referenceConfig_boundary R c.1 c.2.1 e]
         have he := congrFun hy e
         change c.1 e = x * θ e at he
@@ -307,10 +307,10 @@ theorem regularProjectorOpenRegionMatrix_exists_normalized_ancilla (R : Finset V
           ¬ T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩} → G)) → ℂ,
       ∑ a, ∑ r, ∑ z, star (φ (a, r, z)) * φ (a, r, z) = 1 ∧
         ∀ (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-        (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
+        (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G),
         regularProjectorOpenRegionMatrix R
             ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
-          (γ : ℂ) * regularLegProjector {e : Edge Γ // IsRegionBoundaryEdge R e} c.1 θ *
+          (γ : ℂ) * regularLegProjector {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} c.1 θ *
             φ c.2 := by
   classical
   let A := (BlockInternal (Γ := Γ) R → G) × RootedGroupLabels (G := G) o
@@ -351,7 +351,7 @@ theorem regularProjectorOpenRegionMatrix_exists_normalized_ancilla (R : Finset V
   · simp only [hz, ↓reduceIte, mul_one]
     calc
       _ = ((Fintype.card G : ℂ) * (Fintype.card G : ℂ)⁻¹ ^ R.card) *
-          regularLegProjector {e : Edge Γ // IsRegionBoundaryEdge R e} c.1 θ *
+          regularLegProjector {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} c.1 θ *
           ((b : ℂ) * β) := by rw [hbβ, mul_one]
       _ = _ := by ring
   · simp only [hz, ↓reduceIte, mul_zero]

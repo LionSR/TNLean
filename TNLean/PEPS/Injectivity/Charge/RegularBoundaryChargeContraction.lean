@@ -24,7 +24,7 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 private abbrev RV (R : Finset V) := {v : V // v ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 private theorem prod_charge_at_tail
@@ -66,7 +66,7 @@ theorem graphOpenRegionNetwork_regularEdgeCharacterSite_boundary
   · rw [ite_eq_left ht, prod_charge_at_tail a R e.1 ht]
     congr 3
     change (graphRegionIncidentConfigEquiv R).symm (ξ,θ)
-      ⟨e.1,isRegionBoundaryEdge_touches R e.2⟩ = θ e
+      ⟨e.1,ManyBody.isRegionBoundaryEdge_touches R e.2⟩ = θ e
     exact congrArg (fun z => z.2 e)
       ((graphRegionIncidentConfigEquiv R).apply_symm_apply (ξ,θ))
   · rw [ite_eq_right ht, one_mul]

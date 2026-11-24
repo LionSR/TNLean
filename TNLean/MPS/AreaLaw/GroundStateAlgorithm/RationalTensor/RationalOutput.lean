@@ -33,7 +33,7 @@ theorem boundarySupportMatrixOfCoordinates_hasRationalEntries
   apply HasRationalComplexCoordinates.fintype_sum
   intro s
   exact (hc j p.2 s).mul <| (hS s).coordinate_rational hk
-    ((Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q)
+    ((ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
       (leftBlock_mono (Nat.sub_le k 1))).symm p.1)
 
 /-- A structured rational input decodes to an ambient rational support matrix once the
@@ -66,7 +66,7 @@ theorem boundarySupportMatrixOfCoordinates_hasRationalEntriesOfHeight
   simpa using HasRationalComplexCoordinatesOfHeight.finset_sum
     (s := Finset.univ) (fun s _hs ↦
       (hc j p.2 s).mul <| (hS s).coordinate_height_le hHv hk
-        ((Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q)
+        ((ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
           (leftBlock_mono (Nat.sub_le k 1))).symm p.1))
 
 /-- A structured rational encoding over height-bounded rational MPS data therefore
@@ -196,8 +196,8 @@ theorem exists_rationalSpanViableMPSData_of_mulVec
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)
@@ -263,8 +263,8 @@ theorem exists_rationalSpanViableMPSData_of_mulVec_atError
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)
@@ -334,8 +334,8 @@ theorem exists_rationalSpanViableMPSData_of_mulVec_atTarget
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)
@@ -373,8 +373,8 @@ theorem exists_rationalCoordinateViableMPSData_of_mulVec_atError
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)
@@ -443,8 +443,8 @@ theorem exists_rationalCoordinateViableMPSData_of_mulVec_atTarget
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)

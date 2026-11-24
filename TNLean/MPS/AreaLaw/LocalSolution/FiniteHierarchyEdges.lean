@@ -147,7 +147,7 @@ theorem hierarchyEdge_extendFiniteEdges_mem_supportedOperators (blk : ι → ℕ
       a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
           (Finset.univ.filter fun i ↦ blk i + 1 = (j : ℕ) ∨ blk i = (j : ℕ)))
     (m k : ℕ) : hierarchyEdge (extendFiniteEdges a) m k ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k) :=
+      ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.dyadicBlock blk (m + 1) k) :=
   hierarchyEdge_mem_supportedOperators blk (extendFiniteEdges a)
     (extendFiniteEdges_mem_supportedOperators blk a ha) m k
 

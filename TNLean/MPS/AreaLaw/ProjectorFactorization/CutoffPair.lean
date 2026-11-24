@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProjectorFactorization.ChainLocalizedParts
-import TNLean.MPS.AreaLaw.Spectral.SupportedSpectralCutoff
+import QICLean.ManyBody.Entropy.Filter.Power
+import QICLean.ManyBody.Replica.Symbol.RegionPowerSymbol
+import QICLean.ManyBody.Sites.Twirl
+import QICLean.Spectral.Projection.SpectralCutoff
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Hamiltonian.GaussianFilter
@@ -297,9 +300,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
     h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
   have hsR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) MR (leftBlock L c)ᶜ :=
     h.isSupportedOn_localizedPart_rightPart Ω s ΔE hmk
-  let σ₀ : ((_ : Fin L) → Fin q) := fun _ ↦ ⟨0, NeZero.pos q⟩
   have hcomm : Commute (Matrix.spectralCutoff ML θ) (Matrix.spectralCutoff MR θ) :=
-    commute_spectralCutoff_of_isSupportedOn disjoint_compl_right hML hMR hsL hsR σ₀ θ θ
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint
+      (ManyBody.cfc_mem_supportedOperators _ hsL)
+      (ManyBody.cfc_mem_supportedOperators _ hsR) disjoint_compl_right
   -- the bounds `‖M Ω‖ ≤ μ`
   have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (cutCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
@@ -337,7 +341,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   refine ⟨ML + MR, Matrix.spectralCutoff ML θ, Matrix.spectralCutoff MR θ, hML.add hMR,
     Matrix.isStarProjection_spectralCutoff hML θ, Matrix.isStarProjection_spectralCutoff hMR θ,
     hcomm,
-    isSupportedOn_spectralCutoff hML hsL σ₀ θ, isSupportedOn_spectralCutoff hMR hsR σ₀ θ,
+    ManyBody.cfc_mem_supportedOperators _ hsL, ManyBody.cfc_mem_supportedOperators _ hsR,
     Matrix.norm_add_mul_mul_spectralCutoff_le hML hMR hθ.le hcomm, ?_, ?_, ?_⟩
   · refine (Matrix.norm_sub_mul_le_of_isStarProjection
       (Matrix.isStarProjection_spectralCutoff hML θ) _ Ω).trans ?_

@@ -144,8 +144,8 @@ operator is included precisely when that endpoint is the larger endpoint.
 Source: SCP10, accessible virtual systems and disentangling, lines 1765–1920. -/
 def regularRegionBoundaryTransport (R : Finset V) (k : {v : V // v ∈ R} → G)
     (u : Edge Γ → G) :
-    ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) ≃
-      ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) :=
+    ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) ≃
+      ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :=
   Equiv.piCongrRight fun e => Equiv.mulLeft
     (if h : e.1.1.1 ∈ R then (k ⟨e.1.1.1, h⟩)⁻¹ else
       (k ⟨e.1.1.2, by
@@ -157,7 +157,7 @@ omit [Fintype G] in
 /-- A crossing label at the smaller endpoint acquires only the vertex gauge. -/
 theorem regularRegionBoundaryTransport_tail (R : Finset V)
     (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (e : Edge Γ) (ht : e.1.1 ∈ R) (hh : e.1.2 ∉ R) :
     regularRegionBoundaryTransport R k u θ ⟨e, Or.inl ⟨ht, hh⟩⟩ =
       (k ⟨e.1.1, ht⟩)⁻¹ * θ ⟨e, Or.inl ⟨ht, hh⟩⟩ := by
@@ -168,7 +168,7 @@ omit [Fintype G] in
 the inverse vertex gauge. -/
 theorem regularRegionBoundaryTransport_head (R : Finset V)
     (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (e : Edge Γ) (ht : e.1.1 ∉ R) (hh : e.1.2 ∈ R) :
     regularRegionBoundaryTransport R k u θ ⟨e, Or.inr ⟨ht, hh⟩⟩ =
       (k ⟨e.1.2, hh⟩)⁻¹ * (u e * θ ⟨e, Or.inr ⟨ht, hh⟩⟩) := by

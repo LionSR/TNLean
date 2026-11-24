@@ -71,15 +71,15 @@ edge. -/
 theorem isRegionIncidentEdge_complement_of_crossing_rc
     (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     {g : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.red F.frame.complement g) :
-    IsRegionIncidentEdge (G := G) F.frame.complement g :=
-  isRegionBoundaryEdge_touches (G := G) F.frame.complement hg.2
+    ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement g :=
+  ManyBody.isRegionBoundaryEdge_touches (G := G) F.frame.complement hg.2
 
 /-- A red-to-blue crossing edge is not incident to the complement block: its two endpoints
 lie one in the red block and one in the blue block, both disjoint from the complement. -/
 theorem not_isRegionIncidentEdge_complement_of_crossing_rb
     (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
     {g : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g) :
-    ¬ IsRegionIncidentEdge (G := G) F.frame.complement g :=
+    ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement g :=
   hg.not_incident hP.red_disjoint_blue hP.red_disjoint_complement hP.blue_disjoint_complement
 
 /-! ### The host merge of a relaxed triple's blue and complement configurations
@@ -101,14 +101,14 @@ noncomputable def hostMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
 /-- The host merge reads the complement configuration on a complement-incident edge. -/
 theorem hostMerge_complement (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     {ζb ζc : VirtualConfig A} {e : Edge G}
-    (he : IsRegionIncidentEdge (G := G) F.frame.complement e) :
+    (he : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e) :
     hostMerge F ζb ζc e = ζc e := by
   exact regionMerge_of_incident A F.frame.complement (ζc, ζb) he
 
 /-- The host merge reads the blue configuration on an edge not incident to the complement. -/
 theorem hostMerge_not_complement (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     {ζb ζc : VirtualConfig A} {e : Edge G}
-    (he : ¬ IsRegionIncidentEdge (G := G) F.frame.complement e) :
+    (he : ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e) :
     hostMerge F ζb ζc e = ζb e := by
   exact regionMerge_of_not_incident A F.frame.complement (ζc, ζb) he
 
@@ -227,7 +227,7 @@ blue-to-complement crossings: the free blue indices of the host-merge fiber. -/
 noncomputable def hostBlueFreeBondProd (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
     ℕ :=
   ∏ e ∈ Finset.univ.filter (fun e : Edge G =>
-      IsRegionIncidentEdge (G := G) F.frame.complement e ∧
+      ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e ∧
         ¬ IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e),
     A.bondDim e
 
@@ -241,9 +241,9 @@ noncomputable def hostMergeFiberProd (F : CoherentCoarseBlockingFrame (G := G) (
 the edges not incident to the complement, and the blue configuration on the
 complement-incident edges that are not blue-to-complement crossings. -/
 abbrev HostFreeLegs (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) : Type _ :=
-  ((e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) F.frame.complement e}) →
+  ((e : {e : Edge G // ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e}) →
       Fin (A.bondDim e.1)) ×
-  ((e : {e : Edge G // IsRegionIncidentEdge (G := G) F.frame.complement e ∧
+  ((e : {e : Edge G // ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e ∧
         ¬ IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e}) → Fin (A.bondDim e.1))
 
 /-- The free virtual indices read off a relaxed host-merge fiber pair: the complement
@@ -262,11 +262,11 @@ complement. -/
 noncomputable def hostFiberPair (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (η : VirtualConfig A) (legs : HostFreeLegs (G := G) F) :
     VirtualConfig A × VirtualConfig A :=
-  (fun e => if hc : IsRegionIncidentEdge (G := G) F.frame.complement e then
+  (fun e => if hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e then
         (if hbc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e then η e
           else legs.2 ⟨e, hc, hbc⟩)
       else η e,
-   fun e => if hc : IsRegionIncidentEdge (G := G) F.frame.complement e then η e
+   fun e => if hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e then η e
       else legs.1 ⟨e, hc⟩)
 
 /-- The free-index type of the relaxed host-merge fiber has the host-merge fiber product as
@@ -278,10 +278,10 @@ theorem hostFreeLegs_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) 
   simp only [Fintype.card_fin]
   rw [hostMergeFiberProd, regionNonIncidentBondProd, hostBlueFreeBondProd,
     ← Finset.prod_subtype (Finset.univ.filter
-        (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) F.frame.complement e))
+        (fun e : Edge G => ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e))
       (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e),
     ← Finset.prod_subtype (Finset.univ.filter
-        (fun e : Edge G => IsRegionIncidentEdge (G := G) F.frame.complement e ∧
+        (fun e : Edge G => ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e ∧
           ¬ IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e))
       (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
 
@@ -298,8 +298,8 @@ instance (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (ζb ζc : Virtua
 theorem isRegionIncidentEdge_complement_of_crossing_bc
     (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     {g : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement g) :
-    IsRegionIncidentEdge (G := G) F.frame.complement g :=
-  isRegionBoundaryEdge_touches (G := G) F.frame.complement hg.2
+    ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement g :=
+  ManyBody.isRegionBoundaryEdge_touches (G := G) F.frame.complement hg.2
 
 open scoped Classical in
 /-- **The host-merge fiber count.** The relaxed pairs `(ζb, ζc)` agreeing on the
@@ -323,14 +323,14 @@ theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
     refine ⟨?_, ?_⟩
     · -- Agreement on the blue-to-complement crossings: both sides read `η`.
       intro g hg
-      have hc : IsRegionIncidentEdge (G := G) F.frame.complement g :=
+      have hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement g :=
         isRegionIncidentEdge_complement_of_crossing_bc F hg
       simp only [hostFiberPair]
       rw [dite_eq_left hc, dite_eq_left hg, dite_eq_left hc]
     · -- The reconstruction merges back to `η`.
       funext e
       simp only [hostFiberPair]
-      by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
+      by_cases hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e
       · rw [hostMerge_complement F hc, dite_eq_left hc]
       · rw [hostMerge_not_complement F hc, dite_eq_right hc]
   · -- Reconstructing from the free indices of a fiber pair recovers the pair.
@@ -343,7 +343,7 @@ theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
     · -- First component (the blue configuration `p.1`).
       funext e
       simp only [hostFiberPair, hostFiberLegs]
-      by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
+      by_cases hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e
       · rw [dite_eq_left hc]
         by_cases hbc : IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e
         · -- On a blue-to-complement crossing the agreement and merge force `p.1 e = η e`.
@@ -359,7 +359,7 @@ theorem hostMergeFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A
     · -- Second component (the complement configuration `p.2`).
       funext e
       simp only [hostFiberPair, hostFiberLegs]
-      by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
+      by_cases hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e
       · rw [dite_eq_left hc]
         have := hmerge' e
         rw [hostMerge_complement F hc] at this
@@ -476,14 +476,14 @@ theorem crossTripleAgreesAwayRB_iff (F : CoherentCoarseBlockingFrame (G := G) (d
     refine ⟨?_, ?_⟩
     · intro g hg; have := congrFun hbc ⟨g, hg⟩; simpa [crossingLabel] using this
     · intro g hg
-      have hcinc : IsRegionIncidentEdge (G := G) F.frame.complement g :=
+      have hcinc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement g :=
         isRegionIncidentEdge_complement_of_crossing_rc F hg
       rw [hostMerge_complement F hcinc]
       have := congrFun hrc ⟨g, hg⟩; simpa [crossingLabel] using this
   · rintro ⟨hbc, hrh⟩
     refine ⟨?_, ?_⟩
     · funext g
-      have hcinc : IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
+      have hcinc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
         isRegionIncidentEdge_complement_of_crossing_rc F g.2
       have := hrh g.1 g.2; rw [hostMerge_complement F hcinc] at this
       simpa [crossingLabel] using this

@@ -57,7 +57,7 @@ theorem IsGIsometric.exists_unitary_torusPhysicalChargePairCreation
     ∃ W : Matrix ({w : X // w ∈ R v} → Fin d)
         ({w : X // w ∈ R v} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup _ ℂ ∧
-      ∀ θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R v) e} → G,
+      ∀ θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (R v) e} → G,
         W *ᵥ openRegionWeight (groupBondTensor (A a)) (R v) (fun f => Fintype.equivFin G (θ f)) =
         fun s => regularChargePairOpenRegionMatrix (A a) (R v) (e₀ v) (e₁ v) χ p s θ := by
   have hne := verticalTwoPlaquetteCycleBond_zero_ne_one v

@@ -216,7 +216,7 @@ equality. -/
 /-- The single-edge region-inserted coefficient is unchanged, up to relabelling the region,
 the boundary edge, and the physical configurations, along a region equality. -/
 theorem regionInsertedCoeff_congr {R R' : Finset V} (h : R = R')
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :

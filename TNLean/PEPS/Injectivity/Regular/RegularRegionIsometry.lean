@@ -43,7 +43,7 @@ theorem regularOpenRegionMatrix_invariant
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
     (R : Finset V) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) (g : G) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) (g : G) :
     Matrix.mulVecLin (regularOpenRegionMatrix a R e) ∘ₗ
       regularBoundaryRepresentation b g = Matrix.mulVecLin (regularOpenRegionMatrix a R e) := by
   classical
@@ -62,7 +62,7 @@ theorem isGIsometric_regularOpenRegionMatrix_of_connected
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     IsGIsometric (regularBoundaryRepresentation b)
       (Matrix.mulVecLin (regularOpenRegionMatrix a R e)) := by
   classical

@@ -84,7 +84,7 @@ theorem separatedPhysicalDensity_submatrix {a' : Layout P} {c' : Layout Q} {L U 
         (fun i ↦ (x, i)) (fun j ↦ (y, j)) =
       Matrix.partialTraceRight
         (physicalOutputFrameMatrix J' v' G bD' *
-          ProbabilityTheory.weightedSourceError tau tau'
+          Matrix.halfWeightedBlockCombination tau tau'
             (physicalFrameGramMatrix J x y v w F F' bD) z *
           (physicalOutputFrameMatrix J' w' G' bD')ᴴ) := by
   rw [separatedPhysicalDensity, Matrix.submatrix_partialTraceRight]

@@ -11,7 +11,7 @@ import Mathlib.MeasureTheory.Integral.Average
 
 Every corrected term, including its physical partial trace, has an integrable
 trace norm under the original global Gaussian law. This follows from its
-actual Schmidt-coordinate expansion and the second moments of its scalar
+actual Schmidt-EuclideanSpace.complexCoordinate expansion and the second moments of its scalar
 coefficients. No contractivity, normalized input, covariance bound, or bound
 on the private dimensions is required for this integrability statement.
 
@@ -47,7 +47,7 @@ theorem integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian
       Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
     (F : ∀ e : sourceLocations w, branchLabels w e.1 →
       Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (bIn : OrthonormalBasis n ℂ (Mem a)) (bOut : OrthonormalBasis m ℂ (Mem b))
     (ρ : Matrix n n ℂ) (L : Matrix m m ℂ →ₗ[ℂ] Matrix r s ℂ) :
@@ -59,7 +59,7 @@ theorem integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian
   let z (q : J) (ω : SourceGaussianSamples w k) :=
     (coefficient A w q.1.1 * conj (coefficient A w q.1.2)) *
       ∏ i : selectedPartialSlots A w S,
-        sourceCorrection k
+        ProductSource.sourceCorrection k
           (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w q.1.1 i.1))
           (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w q.1.2 i.1))
           (ω (partialSlotEquiv A w i.1).1
@@ -103,7 +103,7 @@ theorem integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian
       Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
     (F : ∀ e : sourceLocations w, branchLabels w e.1 →
       Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (bIn : OrthonormalBasis n ℂ (Mem a))
     (bPhysical : OrthonormalBasis x ℂ (Mem physical))
@@ -132,7 +132,7 @@ theorem exists_sampledSourceMatrix_error_le_sum_integral
       Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
     (F : ∀ e : sourceLocations w, branchLabels w e.1 →
       Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (bIn : OrthonormalBasis n ℂ (Mem a))
     (bPhysical : OrthonormalBasis x ℂ (Mem physical))

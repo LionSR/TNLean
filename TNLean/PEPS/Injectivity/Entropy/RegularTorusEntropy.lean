@@ -140,7 +140,7 @@ theorem torusClosureEdgeAssignment_eq_one_on_rectangle_incident (g h : G)
     (xStart yStart xLen yLen : ℕ) (hxStart : 0 < xStart) (hyStart : 0 < yStart)
     (hxEnd : xStart + xLen < width) (hyEnd : yStart + yLen < height)
     (f : Edge (torusGraph width height))
-    (hf : IsRegionIncidentEdge (torusContiguousRectangle xStart yStart xLen yLen) f) :
+    (hf : ManyBody.IsRegionIncidentEdge (torusContiguousRectangle xStart yStart xLen yLen) f) :
     torusClosureEdgeAssignment g h f = 1 := by
   obtain ⟨z, rfl⟩ := torusEdgeEquiv.surjective f
   rcases z with v | v
@@ -197,9 +197,10 @@ theorem exists_normalization_torusClosureSuperpositionCut_rectangle
     (hxStart : 0 < xStart) (hyStart : 0 < yStart) (hxPos : 0 < xLen) (hyPos : 0 < yLen)
     (hxEnd : xStart + xLen < width) (hyEnd : yStart + yLen < height) :
     let R := torusContiguousRectangle xStart yStart xLen yLen
-    ∃ n : ℕ, Fintype.card {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} =
+    ∃ n : ℕ, Fintype.card {f : Edge (torusGraph width height) //
+      ManyBody.IsRegionBoundaryEdge R f} =
         n + 1 ∧
-      ∃ e : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} ≃ Fin (n + 1),
+      ∃ e : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1),
         ∃ cA : ℝ, 0 < cA ∧
           (regularOpenRegionMatrix (torusIncidentSite a) R e).conjTranspose *
               regularOpenRegionMatrix (torusIncidentSite a) R e =
@@ -220,7 +221,7 @@ theorem exists_normalization_torusClosureSuperpositionCut_rectangle
   classical
   let R := torusContiguousRectangle (width := width) (height := height)
     xStart yStart xLen yLen
-  let B := {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f}
+  let B := {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f}
   have hB : Nonempty B := nonempty_boundaryEdge_torusRectangle
     xStart yStart xLen yLen hxStart hxPos hyPos hxEnd.le hyEnd.le
   let _ : Nonempty B := hB

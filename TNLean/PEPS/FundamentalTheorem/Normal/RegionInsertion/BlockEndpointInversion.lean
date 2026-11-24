@@ -85,7 +85,7 @@ transfer becomes the agreement of the two operators on the same weight vectors.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionComplementRow_eq_regionInsertionOp (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
@@ -153,7 +153,7 @@ inverts only the second tensor's complement block, never the single vertex `v`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem coeffTransfer_of_endpointOp_eq (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvB : LinearIndependent ℂ (B.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
@@ -208,7 +208,7 @@ the second tensor's region block.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_of_regionRow_eq (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
         (regionBoundaryEdgeToCompl (G := G) R f))))
@@ -245,7 +245,7 @@ inserted matrix `M` on the first tensor, a matrix on the second tensor whose
 region-inserted coefficient matches. The matching is the defining property
 `coeffTransferMap_coeff`. -/
 noncomputable def coeffTransferMap (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (htransfer : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
       ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
         ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
@@ -258,7 +258,7 @@ noncomputable def coeffTransferMap (A B : Tensor G d) (R : Finset V)
 
 /-- The chosen forward transfer matches the region-inserted coefficients. -/
 theorem coeffTransferMap_coeff (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (htransfer : ∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
       ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
         ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
@@ -278,7 +278,7 @@ closed-state coefficient (`regionInsertedCoeff_one_eq_stateCoeff`), matched acro
 two tensors by `SameState` and equal bond dimensions. Block injectivity of the second
 tensor then forces the chosen transfer of `1` to be `1`. -/
 theorem coeffTransferMap_one (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
@@ -326,7 +326,7 @@ route hypotheses are tracked in
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 noncomputable def regionInsertionTransfer_of_coeffTransfer (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
@@ -370,7 +370,7 @@ dimensions on `f` coincide. No single-vertex injectivity is used: the datum is
 Source: arXiv:1804.04964, Section 3, lines 254--586 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem exists_regionEdgeGauge_of_coeffTransfer (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hRA : RegionBlockedTensorInjective (G := G) A R)
     (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hRB : RegionBlockedTensorInjective (G := G) B R)

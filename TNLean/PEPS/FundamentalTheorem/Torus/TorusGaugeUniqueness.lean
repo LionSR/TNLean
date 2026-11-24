@@ -96,7 +96,7 @@ original gauge.  Both branches are involutions — the packaged transpose and th
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem absorbedBoundaryGauge_absorbedBoundaryGauge (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (Z : GL (Fin (B.bondDim f.1)) ℂ) :
     absorbedBoundaryGauge (G := G) B R f (absorbedBoundaryGauge (G := G) B R f Z) = Z := by
   unfold absorbedBoundaryGauge
@@ -122,7 +122,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionConjIdentity_of_edgeAbsorbed (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
     (X : (g : Edge G) → GL (Fin (B.bondDim g)) ℂ)
-    (R : Finset V) (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (R : Finset V) (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hedge : ∀ (σ : V → Fin d) (N : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ),
       edgeInsertedCoeff (G := G) A f.1 σ N =
         edgeInsertedCoeff (G := G) (applyGauge B X) f.1 σ
@@ -175,7 +175,7 @@ theorem torusAbsorbedGauge_unique_scalar_of_region
     {A B : Tensor (torusGraph width height) d} (hbd : A.bondDim = B.bondDim)
     (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R)
     (hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R))
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)

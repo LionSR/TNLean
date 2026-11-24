@@ -37,7 +37,7 @@ def sampledEndpointLeft (e : sourceLocations w)
     (ξζ : branchLabels w e.1 × branchLabels w e.1) (j : Fin k)
     (ω : SourceGaussianSamples w k) :
     Matrix (Fin (sourceDims w e).1) (Fin (sourceDims w e).1) ℂ :=
-  ambientSourceU k (lam e ξζ.1) (lam e ξζ.2) (E e ξζ.1) (E e ξζ.2)
+  ProductSource.ambientSourceU k (lam e ξζ.1) (lam e ξζ.2) (E e ξζ.1) (E e ξζ.2)
     j (ω e ξζ)
 
 /-- The right endpoint uses the conjugate of precisely the same Gaussian array
@@ -47,7 +47,7 @@ def sampledEndpointRight (e : sourceLocations w)
     (ξζ : branchLabels w e.1 × branchLabels w e.1) (j : Fin k)
     (ω : SourceGaussianSamples w k) :
     Matrix (Fin (sourceDims w e).2) (Fin (sourceDims w e).2) ℂ :=
-  ambientSourceV k (lam e ξζ.1) (lam e ξζ.2) (F e ξζ.1) (F e ξζ.2)
+  ProductSource.ambientSourceV k (lam e ξζ.1) (lam e ξζ.2) (F e ξζ.1) (F e ξζ.2)
     j (ω e ξζ)
 
 /-- The actual sampled source is the average of its two endpoint factors;

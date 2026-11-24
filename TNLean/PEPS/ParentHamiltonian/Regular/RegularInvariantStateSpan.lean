@@ -302,13 +302,13 @@ canonical inserted-region contraction, in global half-edge coordinates.
 Source: SCP10, regular closure contraction, lines 1515–1525 and 1765–1920. -/
 theorem regularProjectorClosedState_eq_twistedRegionMatrix
     (u : Edge Γ → G) (α : RegularHalfEdgeConfig Γ G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge (Finset.univ : Finset V) e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge (Finset.univ : Finset V) e} → G) :
     regularProjectorClosedState u α =
       regularProjectorTwistedRegionMatrix Finset.univ u
         (fullRegionHalfEdgeConfigEquiv.symm α) θ := by
   classical
   let E : (Edge Γ → G) ≃
-      ({e : Edge Γ // IsRegionIncidentEdge (Finset.univ : Finset V) e} → G) :=
+      ({e : Edge Γ // ManyBody.IsRegionIncidentEdge (Finset.univ : Finset V) e} → G) :=
     { toFun := fun η e => η e.1
       invFun := fun η e => η ⟨e, Or.inl (Finset.mem_univ _)⟩
       left_inv := fun _ => rfl
@@ -316,10 +316,10 @@ theorem regularProjectorClosedState_eq_twistedRegionMatrix
   unfold regularProjectorClosedState regularProjectorTwistedRegionMatrix
   refine Fintype.sum_equiv E _ _ ?_
   intro η
-  have hb : (fun e : {e : Edge Γ // IsRegionBoundaryEdge (Finset.univ : Finset V) e} =>
-      E η ⟨e.1, isRegionBoundaryEdge_touches _ e.2⟩) = θ := by
+  have hb : (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge (Finset.univ : Finset V) e} =>
+      E η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches _ e.2⟩) = θ := by
     funext e
-    exact False.elim (by simpa [IsRegionBoundaryEdge] using e.2)
+    exact False.elim (by simpa [ManyBody.IsRegionBoundaryEdge] using e.2)
   rw [ite_eq_left hb]
   exact Finset.prod_subtype Finset.univ (fun _ => Iff.rfl)
     (fun v => regularLegProjector (IncidentEdge Γ v) (α v) (regularHalfEdgeOfBonds u η v))

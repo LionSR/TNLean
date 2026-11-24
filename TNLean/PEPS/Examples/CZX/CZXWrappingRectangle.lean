@@ -66,12 +66,14 @@ noncomputable def czxWrappingRectangleBoundaryEquiv :
 enumeration followed by the graph translation, so no bonds are lost at seams. -/
 noncomputable def czxWrappingRectanglePerimeterEquiv :
     Fin (2 * w + 2 * h) ≃
-      {e : Edge (torusGraph width height) // IsRegionBoundaryEdge (torusArcRectangle s w h) e} :=
+      {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge
+        (torusArcRectangle s w h) e} :=
   (torusRectanglePerimeterEquiv 0 0 w h hw hh (by omega) (by omega) hwp hhp).trans
     ((regionBoundaryEdgeMapEquiv (translate s.1 s.2)
       (torusContiguousRectangle 0 0 w h)).symm.trans
         (Equiv.subtypeEquivRight (fun e =>
-          isRegionBoundaryEdge_congr (czxWrappingRectangle_eq_map s w h hw hh hwp hhp).symm e)))
+          ManyBody.isRegionBoundaryEdge_congr (czxWrappingRectangle_eq_map s w h hw
+            hh hwp hhp).symm e)))
 
 /-- The numbered cyclic crossing bond is the translate of the corresponding
 clockwise origin bond, with the native stored endpoints reordered by `Edge.map`. -/

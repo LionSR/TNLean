@@ -88,7 +88,7 @@ theorem regionInsertedCoeff_translate_coeffIdentity_conj
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
     (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (hE : A.bondDim f.1 = B.bondDim f.1)
     (Z : GL (Fin (B.bondDim f.1)) ℂ)
     (hid : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
@@ -213,7 +213,7 @@ noncomputable def edgeCoeffIdentityWitness_translate
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
     (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (hE : A.bondDim f.1 = B.bondDim f.1)
     (Z : GL (Fin (B.bondDim f.1)) ℂ)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)

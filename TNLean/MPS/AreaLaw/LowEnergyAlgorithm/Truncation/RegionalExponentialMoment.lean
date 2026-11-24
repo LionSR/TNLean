@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Spectral.RegionalTruncationResidual
+import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import QICLean.Spectral.LowEnergy.ExponentialWeightRestriction
 import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
@@ -137,7 +137,7 @@ theorem exists_interval_regional_exponential_moment
   have hgap : 2 * (J.card : ℝ) < u - (E0 + eta) := by
     dsimp only [u, C]
     linarith
-  obtain ⟨Z, hZ, hZn⟩ := exists_nearestNeighbour_weighted_low_restriction
+  obtain ⟨Z, hZ, hZn⟩ := ManyBody.BondInteraction.exists_weighted_low_restriction
     (I 1) J Φ (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
     X (e 1) u (E0 + eta) (1 / 8) (by norm_num) (by norm_num)
     (hcomm 1) (horder 1 u hu0 le_rfl)

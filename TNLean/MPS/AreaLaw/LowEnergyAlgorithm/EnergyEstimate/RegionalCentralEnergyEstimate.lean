@@ -43,10 +43,10 @@ theorem exists_regional_central_energy_estimate {L q l u v r : ℕ}
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
-    let A := aklvRegionalHamiltonians l u Φ 1
-    let M := aklvRegionalHamiltonians u v Φ 1
-    let B := aklvRegionalHamiltonians v r Φ 1
-    let P := aklvRegionalHamiltonians l r Φ 1
+    let A := ManyBody.BondInteraction.threeRegionHamiltonians l u Φ 1
+    let M := ManyBody.BondInteraction.threeRegionHamiltonians u v Φ 1
+    let B := ManyBody.BondInteraction.threeRegionHamiltonians v r Φ 1
+    let P := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1
     ∃ (eA eM eB eP : ℝ) (xA xM xB xP : (Fin L → Fin q) → ℂ),
       star xA ⬝ᵥ xA = 1 ∧ A *ᵥ xA = (eA : ℂ) • xA ∧
       (A - (eA : ℂ) • 1).PosSemidef ∧
@@ -68,7 +68,7 @@ theorem exists_regional_central_energy_estimate {L q l u v r : ℕ}
     hw, hRestw, hRest', hlower', hupper', _⟩ :=
     exists_adjacent_interval_energy_merge hq huv hvr hrL Φ h0 h1
   have heRest : eRest' = eRest := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians u r Φ 1) eRest' eRest w x
+    (ManyBody.BondInteraction.threeRegionHamiltonians u r Φ 1) eRest' eRest w x
     hRestw hw hRestx hx hRest' hRest
   refine ⟨eA, eM, eB, eP, x, y, y, z, hx, hAx, hA, hy, hMy, hM,
     hy, hBy, hB, hz, hPz, hP, ?_, ?_, ?_⟩

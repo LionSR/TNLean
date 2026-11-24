@@ -174,7 +174,8 @@ theorem exists_aklv_physical_product_initialization :
           (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
           ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
         E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian
+          (a + 2) (a + s - 1) Φ e t0 Finset.univ
         B.PosSemidef ∧ ‖B‖ ≤ 2 * t0 + (s : ℝ) ∧ 0 ≤ E ∧ ‖φ‖ = 1 ∧
         toEuclideanLin B φ = (E : ℂ) • φ ∧
         (B - (E : ℂ) • 1 - ((9 * g / 10 : ℝ) : ℂ) •
@@ -216,7 +217,8 @@ theorem exists_aklv_physical_product_initialization :
     exists_cut_product_filtered_output _ φ hφ hfix hdelta.le hD hperp hrank
       (by linarith)
   let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-    Polynomial.aeval (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ) p
+    Polynomial.aeval (ManyBody.BondInteraction.twoBlockTruncatedHamiltonian
+      (a + 2) (a + s - 1) Φ e t0 Finset.univ) p
   let ψ := c • (‖toEuclideanLin K χ‖⁻¹ : ℂ) • toEuclideanLin K χ
   have hψφ : ‖ψ - φ‖ ^ 2 ≤ 1 / 64 := by
     calc

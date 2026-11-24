@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Spectral.LowEnergy.OrderedSpectralSpan
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
-import TNLean.MPS.AreaLaw.Spectral.TwoBlockTruncation
+import QICLean.Algebra.Combinatorics.FinSum
+import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
 import QICLean.Spectral.Filter.EnergyTruncation
 import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import QICLean.Analysis.Order.LowEnergyPerturbation
@@ -66,7 +67,7 @@ private theorem three_region_data {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L
     let R := fun j : Fin 3 ↦ interval L (k j.castSucc) (k j.succ)
     let I := fun j : Fin 3 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := aklvRegionalHamiltonians l r Φ
+    let A := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ
     let J := Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
     let Y := ∑ i ∈ J, Φ.term i
     Monotone k ∧ (Pairwise fun i j ↦ Disjoint (R i) (R j)) ∧
@@ -123,7 +124,7 @@ private theorem three_region_data {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L
   · have hcontra (c m : ℕ) : (c ≤ m ∧ m + 1 < c) ↔ False := ⟨fun h ↦ by omega, False.elim⟩
     have hsum := hsum5
     rw [Fin.sum_univ_five] at hsum
-    simp only [A, aklvRegionalHamiltonians, Fin.sum_univ_three, J, Y]
+    simp only [A, ManyBody.BondInteraction.threeRegionHamiltonians, Fin.sum_univ_three, J, Y]
     simp only [Fin.isValue, Fin.castSucc_zero, cons_val_zero, zero_le, Fin.succ_zero_eq_one,
       cons_val_one, true_and, Fin.castSucc_one, Fin.succ_one_eq_two, cons_val, hcontra,
       Finset.filter_false, Finset.sum_empty, add_zero, Fin.reduceCastSucc, Fin.reduceSucc,
@@ -167,15 +168,19 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
-      (∀ j, (aklvRegionalHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧ (∀ j, 0 ≤ e j) ∧
+      star x ⬝ᵥ x = 1 ∧ (∀ j, ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j *ᵥ x =
+        (e j : ℂ) • x) ∧
+      (∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, 0 ≤ e j) ∧
       let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ 2 ∧
       ∀ η t : ℝ, 0 < η → η + 7 ≤ t →
-        let F := energyTruncation (aklvRegionalHamiltonians l r Φ 1) (e 1 + t) +
-          aklvRegionalHamiltonians l r Φ 0 + aklvRegionalHamiltonians l r Φ 2 +
-          (∑ i ∈ Finset.univ.filter
+        let F :=
+          energyTruncation (ManyBody.BondInteraction.threeRegionHamiltonians
+            l r Φ 1) (e 1 + t) + ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 0 +
+            ManyBody.BondInteraction.threeRegionHamiltonians
+              l r Φ 2 + (∑ i ∈ Finset.univ.filter
             (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i) -
           (((∑ j, e j) : ℝ) : ℂ) • 1
         ∃ (hH : H.IsHermitian) (hF : F.IsHermitian)
@@ -194,7 +199,7 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
               ((isSymmetric_toEuclideanLin_iff.mpr hF).eigenvectorBasis
                 finrank_euclideanSpace) hF.eigenvalues₀ (E + η))‖ ≤
               32 * Real.exp (-(t - η) / 8) := by
-  set A := aklvRegionalHamiltonians l r Φ with hAdef
+  set A := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ with hAdef
   set J := Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
     with hJdef
   set Y := ∑ i ∈ J, Φ.term i with hYdef
@@ -281,7 +286,8 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
           (hM.eigenvectorBasis v) = (hM.eigenvalues v : ℂ) • hM.eigenvectorBasis v := by
         rw [hBM]
         exact hM.toEuclideanCLM_eigenvectorBasis v
-      have hsingle := norm_consecutive_regional_truncation_low_le k hk Φ h0 h1
+      have hsingle :=
+        ManyBody.BondInteraction.norm_consecutive_regional_truncation_low_le k hk Φ h0 h1
         e T 1 J (η + 7) (E + η) (1 / 8) t (by norm_num) (by norm_num)
         (by linarith) ht hM.eigenvectorBasis hM.eigenvalues heorder hEigen hgap
       have hsingle' := hsingle.trans (residual_coefficient_le hJreal hE2)
@@ -325,7 +331,7 @@ theorem exists_regional_ground_energy_bound {L q l r : ℕ}
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
-    let A := aklvRegionalHamiltonians l r Φ 1
+    let A := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1
     ∃ (e : ℝ) (x : (Fin L → Fin q) → ℂ),
       star x ⬝ᵥ x = 1 ∧ A *ᵥ x = (e : ℂ) • x ∧
       let C := A - (e : ℂ) • 1
@@ -374,14 +380,16 @@ theorem exists_regional_ground_energy_bound {L q l r : ℕ}
     hH.minEigenvalue_eq_add_of_centered_ground S E z hz hHz hE
   let Y := ∑ i ∈ Finset.univ.filter
     (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i
-  have hrest : ((aklvRegionalHamiltonians l r Φ 0 - (e 0 : ℂ) • 1) +
-      (aklvRegionalHamiltonians l r Φ 2 - (e 2 : ℂ) • 1) + Y).PosSemidef :=
+  have hrest :
+      ((ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 0 - (e 0 : ℂ) • 1) +
+        (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 2 - (e 2 : ℂ) • 1) +
+        Y).PosSemidef :=
     ((he 0).add (he 2)).add (posSemidef_sum _ (fun i _ ↦ (h0 i).posSemidef))
   have hsplit : H - (S : ℂ) • 1 - C =
-      (aklvRegionalHamiltonians l r Φ 0 - (e 0 : ℂ) • 1) +
-        (aklvRegionalHamiltonians l r Φ 2 - (e 2 : ℂ) • 1) + Y := by
+      (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 0 - (e 0 : ℂ) • 1) +
+        (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 2 - (e 2 : ℂ) • 1) + Y := by
     dsimp only [H, S, C, A, Y]
-    rw [sum_three_regions_add_crossings hlr Φ]
+    rw [ManyBody.BondInteraction.hamiltonian_eq_sum_threeRegionHamiltonians_add_crossings hlr Φ]
     simp only [Fin.sum_univ_three, Complex.ofReal_add, add_smul]
     abel
   have hpos : (H - (S : ℂ) • 1 - C).PosSemidef := by rw [hsplit]; exact hrest

@@ -55,7 +55,7 @@ theorem IsGIsometric.exists_unitary_torusTwoPlaquettePhysicalFluxMove
     (ha : IsGIsometric (torusLegRep (leftRegularMatrix G)) (siteMap a)) :
     ∃ W : Matrix ({v : X // v ∈ R} → Fin d) ({v : X // v ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({v : X // v ∈ R} → Fin d) ℂ ∧
-      ∀ (g : G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge R e} → G),
+      ∀ (g : G) (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (torusTwoPlaquetteFluxAssignment (width := width) (height := height) false g))) R

@@ -102,7 +102,8 @@ theorem IsGInjective.range_torusClosureSuperpositionCut_eq_regionGroundSpace_int
   let K := ManyBody.cutMatrix R Ψ
   have ht : (K * K.conjTranspose).trace ≠ 0 := ne_of_gt hpos
   have hKrank : K.rank = Fintype.card G ^
-      (Fintype.card {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} - 1) := by
+      (Fintype.card {f : Edge (torusGraph width height) //
+        ManyBody.IsRegionBoundaryEdge R f} - 1) := by
     rw [Matrix.rank_smul_of_mem_nonZeroDivisors _
       (mem_nonZeroDivisors_of_ne_zero (inv_ne_zero ht)),
       Matrix.rank_self_mul_conjTranspose] at hrank

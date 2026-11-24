@@ -139,7 +139,7 @@ theorem isCrossingEdge_horizontalStaircase {d : ℕ}
         ((b + K - 1 : ℕ) : ZMod height)) := by
   constructor
   · rintro ⟨hRed, hBlue⟩
-    simp only [IsRegionBoundaryEdge, mem_torusContiguousRectangle] at hRed hBlue
+    simp only [ManyBody.IsRegionBoundaryEdge, mem_torusContiguousRectangle] at hRed hBlue
     -- The ordered-endpoint convention `g.1.1 < g.1.2` in coordinate-value form.
     have hlt := torusEdge_val_lt g
     -- Pin the four coordinate values of `g` to the distinguished edge's coordinates.

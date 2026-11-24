@@ -275,8 +275,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 /-- A `P₀`-outer edge is a boundary edge of `R₁`: one endpoint lies in `R₁ \ R₂ ⊆ R₁`, the other
 lies outside `R₁ ∪ R₂`, hence outside `R₁`. -/
 theorem isRegionBoundaryEdge_R₁_of_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
-    (h : IsP0OuterEdge (G := G) R₁ R₂ e) : IsRegionBoundaryEdge (G := G) R₁ e := by
-  simp only [IsP0OuterEdge, IsRegionBoundaryEdge, Finset.mem_union] at *
+    (h : IsP0OuterEdge (G := G) R₁ R₂ e) : ManyBody.IsRegionBoundaryEdge (G := G) R₁ e := by
+  simp only [IsP0OuterEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_union] at *
   grind
 
 omit [Fintype V] in
@@ -302,7 +302,7 @@ theorem regionBoundaryLabel_union_eq_of_R₂_p0Outer {R₁ R₂ : Finset V} {q q
       regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q' := by
   funext f
   rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply]
-  by_cases hR₂edge : IsRegionBoundaryEdge (G := G) R₂ f.1
+  by_cases hR₂edge : ManyBody.IsRegionBoundaryEdge (G := G) R₂ f.1
   · have := congrFun hR₂ ⟨f.1, hR₂edge⟩
     rwa [regionBoundaryLabel_apply, regionBoundaryLabel_apply] at this
   · have hp0 : IsP0OuterEdge (G := G) R₁ R₂ f.1 := ⟨f.2, hR₂edge⟩
@@ -653,7 +653,7 @@ theorem exists_regionBoundaryLabel_union_eq {R₁ R₂ : Finset V}
     (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
     ∃ q : VirtualConfig A, regionBoundaryLabel (G := G) A (R₁ ∪ R₂) q = bdry := by
   classical
-  refine ⟨fun e => if h : IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e then bdry ⟨e, h⟩
+  refine ⟨fun e => if h : ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e then bdry ⟨e, h⟩
     else ⟨0, hpos e⟩, ?_⟩
   funext f
   rw [regionBoundaryLabel_apply, dite_eq_left f.2]

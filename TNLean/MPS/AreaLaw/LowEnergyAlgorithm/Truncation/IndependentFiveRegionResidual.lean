@@ -10,7 +10,7 @@ import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 import QICLean.Spectral.Filter.EnergyTruncation
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
-import TNLean.MPS.AreaLaw.Spectral.RegionalTruncationResidual
+import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
 import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
 import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import QICLean.Spectral.LowEnergy.Cluster
@@ -214,7 +214,7 @@ theorem exists_five_region_independent_truncation_residual
       ‖(ι (A j - cfc (fun r : ℝ ↦ min r (e j + t))
         (A j))).domRestrict G‖ ≤
           96 * Real.exp (11 / 8) * Real.exp (-(t - eta) / 8) := by
-    have htail := norm_consecutive_regional_truncation_low_le k hk Φ h0 h1
+    have htail := ManyBody.BondInteraction.norm_consecutive_regional_truncation_low_le k hk Φ h0 h1
       e T j J (19 + eta) (E0 + eta) (1 / 8) t
       (by norm_num) (by norm_num) hu hcut v lam he hEigen hgap
     exact htail.trans hcoef

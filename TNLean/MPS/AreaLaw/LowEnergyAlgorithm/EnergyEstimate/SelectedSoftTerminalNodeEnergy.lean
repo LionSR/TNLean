@@ -86,11 +86,11 @@ theorem exists_selected_soft_terminal_node_energy_update
       (P - (eP : ℂ) • 1).PosSemidef ∧
       ∃ (eLeft eRight : ℝ) (xLeft xRight : (Fin L → Fin q) → ℂ),
         star xLeft ⬝ᵥ xLeft = 1 ∧
-        aklvRegionalHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
-        (aklvRegionalHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
+        ManyBody.BondInteraction.threeRegionHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
+        (ManyBody.BondInteraction.threeRegionHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
         star xRight ⬝ᵥ xRight = 1 ∧
-        aklvRegionalHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
-        (aklvRegionalHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
+        ManyBody.BondInteraction.threeRegionHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
+        (ManyBody.BondInteraction.threeRegionHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
         ∀ (k : ℕ), l ≤ k → k ≤ r → ∀ p1 p2 : ℝ,
           IsRegionalLowerEnergyEstimate Φ l k (49 / 16) p1 →
           IsRegionalLowerEnergyEstimate Φ k r (49 / 16) p2 →

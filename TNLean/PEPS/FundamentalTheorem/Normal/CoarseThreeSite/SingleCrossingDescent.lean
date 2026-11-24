@@ -64,14 +64,14 @@ omit [Fintype V] in
 /-- The single red-to-blue crossing edge is a boundary edge of the red region. -/
 theorem isRegionBoundaryEdge_singleCrossing (A : Tensor G d) (red blue : Finset V) (e : Edge G)
     (hsingle : ∀ g : Edge G, IsCrossingEdge (G := G) A red blue g ↔ g = e) :
-    IsRegionBoundaryEdge (G := G) red e :=
+    ManyBody.IsRegionBoundaryEdge (G := G) red e :=
   ((hsingle e).mpr rfl).boundary_left
 
 /-- The single boundary edge `f := ⟨e, _⟩` of the red region carrying the sole
 red-to-blue crossing. -/
 def singleBoundaryEdge (A : Tensor G d) (red blue : Finset V) (e : Edge G)
     (hsingle : ∀ g : Edge G, IsCrossingEdge (G := G) A red blue g ↔ g = e) :
-    {f : Edge G // IsRegionBoundaryEdge (G := G) red f} :=
+    {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) red f} :=
   ⟨e, isRegionBoundaryEdge_singleCrossing (G := G) A red blue e hsingle⟩
 
 omit [Fintype V] in
@@ -186,7 +186,7 @@ theorem redBundleInsertedCoeff_singleton (red blue : Finset V) (e : Edge G)
       regionInsertedCoeff (G := G) A red
         (singleBoundaryEdge (G := G) A red blue e hsingle) M σ τ := by
   classical
-  let f : {f : Edge G // IsRegionBoundaryEdge (G := G) red f} :=
+  let f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) red f} :=
     singleBoundaryEdge (G := G) A red blue e hsingle
   let M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ := fun i j => M i j
   let K : Matrix (CrossingConfig (G := G) A red blue)

@@ -19,7 +19,6 @@ import TNLean.MPS.AreaLaw.ProjectorFactorization.DecaySlack
 import TNLean.MPS.AreaLaw.ProjectorFactorization.Doubling
 import TNLean.MPS.AreaLaw.ProjectorFactorization.FactorizationBudget
 import TNLean.MPS.AreaLaw.ProjectorFactorization.GappedAreaLaw
-import TNLean.MPS.AreaLaw.ProjectorFactorization.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.ProjectorFactorization.InteractionPicture
 import TNLean.MPS.AreaLaw.ProjectorFactorization.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.LemmaOneConstant

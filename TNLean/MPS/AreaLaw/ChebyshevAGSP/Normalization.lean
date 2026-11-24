@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
-import TNLean.MPS.AreaLaw.Spectral.TwoBlockTruncation
+import QICLean.Algebra.Combinatorics.FinSum
+import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
 
 /-!
 # The three energy normalizations in the AKLV geometry
@@ -166,7 +167,7 @@ theorem aklv_two_block_exterior_data {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (Φ : ManyBody.BondInteraction L q) :
     let A := aklvNormalizationHamiltonians a s Φ
-    let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
+    let C := ManyBody.BondInteraction.threeRegionHamiltonians (a + 2) (a + s - 1) Φ
     C 0 = A 0 + Φ.term ⟨a, by omega⟩ ∧
       C 2 = Φ.term ⟨a + s - 1, by omega⟩ + A 2 ∧
       ∀ eL eR : ℝ,
@@ -231,7 +232,8 @@ theorem aklv_normalization_le_two_block_regions {L q a s : ℕ}
     (h0 : ∀ i, 0 ≤ Φ.term i) (e : Fin 3 → ℝ)
     (he : ∀ j, (aklvNormalizationHamiltonians a s Φ j -
       (e j : ℂ) • 1).PosSemidef) :
-    ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ j := by
+    ∀ j, (e j : ℂ) • 1 ≤ ManyBody.BondInteraction.threeRegionHamiltonians
+      (a + 2) (a + s - 1) Φ j := by
   intro j
   apply (Matrix.le_iff.mpr (he j)).trans
   apply Finset.sum_le_sum_of_subset_of_nonneg
@@ -253,7 +255,7 @@ theorem aklv_normalization_le_reference_regions {L q a s : ℕ}
     (h0 : ∀ i, 0 ≤ Φ.term i) (e : Fin 3 → ℝ)
     (he : ∀ j, (aklvNormalizationHamiltonians a s Φ j -
       (e j : ℂ) • 1).PosSemidef) :
-    ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians (a + 1) (a + s) Φ j := by
+    ∀ j, (e j : ℂ) • 1 ≤ ManyBody.BondInteraction.threeRegionHamiltonians (a + 1) (a + s) Φ j := by
   intro j
   apply (Matrix.le_iff.mpr (he j)).trans
   apply Finset.sum_le_sum_of_subset_of_nonneg
@@ -276,7 +278,8 @@ theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s Φ j -
-      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r Φ j) :
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤
+        ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j) :
     let A := aklvNormalizationHamiltonians a s Φ
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E0 : ℝ),
       let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
@@ -287,7 +290,7 @@ theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E0 : ℂ) • z ∧
       (H - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ η t : ℝ, 0 ≤ η → η + 11 ≤ t →
-        let B := aklvTwoBlockHamiltonian l r Φ e t
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian l r Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           B ∅ = H ∧ ∀ T : Finset (Fin 2),
             let G := Submodule.spectralSpanLE
@@ -300,7 +303,8 @@ theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
     exists_aklv_energy_normalization hq hs ha Φ h0 h1
   refine ⟨e, x, z, E0, hx, hxe, he, he0, hz, hzE, hE, hE0, hE6, ?_⟩
   intro η t hη ht B
-  obtain ⟨hB, hcenter, hres⟩ := norm_aklv_two_block_truncation_low_le hlr hrL
+  obtain ⟨hB, hcenter, hres⟩ :=
+    ManyBody.BondInteraction.norm_twoBlockTruncatedHamiltonian_low_le hlr hrL
     Φ h0 h1 e (E0 + η) t (by linarith) (by linarith) (hcut e he)
   refine ⟨hB, hcenter, ?_⟩
   intro T G
@@ -337,7 +341,7 @@ theorem exists_aklv_normalized_two_block_residual {L q a s : ℕ} (hq : 0 < q)
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E0 : ℂ) • z ∧
       (H - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ η t : ℝ, 0 ≤ η → η + 11 ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           B ∅ = H ∧ ∀ T : Finset (Fin 2),
             let G := Submodule.spectralSpanLE
@@ -369,7 +373,7 @@ theorem exists_aklv_normalized_reference_residual {L q a s : ℕ} (hq : 0 < q)
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E0 : ℂ) • z ∧
       (H - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ η t : ℝ, 0 ≤ η → η + 11 ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) Φ e t
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 1) (a + s) Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           B ∅ = H ∧ ∀ T : Finset (Fin 2),
             let G := Submodule.spectralSpanLE

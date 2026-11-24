@@ -271,7 +271,7 @@ variable {red blue complement : Finset V}
 theorem crossing_red_blue_or_red_complement
     (hrb : Disjoint red blue) (hrc : Disjoint red complement)
     (hcover : red ∪ blue ∪ complement = Finset.univ)
-    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) red g) :
+    {g : Edge G} (hg : ManyBody.IsRegionBoundaryEdge (G := G) red g) :
     IsCrossingEdge (G := G) A red blue g ∨ IsCrossingEdge (G := G) A red complement g := by
   rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · have h1nb : g.1.1 ∉ blue := Finset.disjoint_left.mp hrb h1
@@ -303,7 +303,7 @@ theorem crossing_red_blue_or_red_complement
 theorem crossing_red_blue_or_blue_complement
     (hrb : Disjoint red blue) (hbc : Disjoint blue complement)
     (hcover : red ∪ blue ∪ complement = Finset.univ)
-    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) blue g) :
+    {g : Edge G} (hg : ManyBody.IsRegionBoundaryEdge (G := G) blue g) :
     IsCrossingEdge (G := G) A red blue g ∨ IsCrossingEdge (G := G) A blue complement g := by
   rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · have h1nr : g.1.1 ∉ red := Finset.disjoint_right.mp hrb h1
@@ -335,7 +335,7 @@ theorem crossing_red_blue_or_blue_complement
 theorem crossing_red_complement_or_blue_complement
     (hrc : Disjoint red complement) (hbc : Disjoint blue complement)
     (hcover : red ∪ blue ∪ complement = Finset.univ)
-    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) complement g) :
+    {g : Edge G} (hg : ManyBody.IsRegionBoundaryEdge (G := G) complement g) :
     IsCrossingEdge (G := G) A red complement g ∨ IsCrossingEdge (G := G) A blue complement g := by
   rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · have h1nr : g.1.1 ∉ red := Finset.disjoint_right.mp hrc h1
@@ -374,7 +374,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 If `g` is a boundary edge of `red` and also a boundary edge of a region `S`
 disjoint from `red`, then the out-of-red endpoint of `g` lies in `S`. -/
 theorem partner_mem_of_crossing {S : Finset V} (hrS : Disjoint red S) {g : Edge G}
-    (hred : IsRegionBoundaryEdge (G := G) red g) (hS : IsRegionBoundaryEdge (G := G) S g) :
+    (hred : ManyBody.IsRegionBoundaryEdge (G := G) red g) (hS : ManyBody.IsRegionBoundaryEdge
+      (G := G) S g) :
     (g.1.1 ∉ red ∧ g.1.1 ∈ S) ∨ (g.1.2 ∉ red ∧ g.1.2 ∈ S) := by
   rcases hred with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩
   · -- g.1.1 ∈ red, g.1.2 ∉ red: the out-of-red endpoint is g.1.2.
@@ -681,7 +682,7 @@ variable
 theorem coarseFrameOfRegions_factor_red
     (legs : (ie : IncidentEdge coarseGraph 0) →
       Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G)
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red b})
     (hf : IsCrossingEdge (G := G) A
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red
@@ -705,7 +706,7 @@ theorem coarseFrameOfRegions_factor_red
 theorem coarseFrameOfRegions_factor_red_rc
     (legs : (ie : IncidentEdge coarseGraph 0) →
       Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G)
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red b})
     (hf : IsCrossingEdge (G := G) A
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red
@@ -730,7 +731,7 @@ theorem coarseFrameOfRegions_factor_red_rc
 theorem coarseFrameOfRegions_factor_blue_rb
     (legs : (ie : IncidentEdge coarseGraph 1) →
       Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G)
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue b})
     (hf : IsCrossingEdge (G := G) A
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red
@@ -754,7 +755,7 @@ theorem coarseFrameOfRegions_factor_blue_rb
 theorem coarseFrameOfRegions_factor_blue_bc
     (legs : (ie : IncidentEdge coarseGraph 1) →
       Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G)
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue b})
     (hf : IsCrossingEdge (G := G) A
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue
@@ -780,7 +781,7 @@ model. -/
 theorem coarseFrameOfRegions_factor_compl_rc
     (legs : (ie : IncidentEdge coarseGraph 2) →
       Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G)
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement b})
     (hf : IsCrossingEdge (G := G) A
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).red
@@ -806,7 +807,7 @@ model. -/
 theorem coarseFrameOfRegions_factor_compl_bc
     (legs : (ie : IncidentEdge coarseGraph 2) →
       Fin ((coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).coarseBondDim ie.1))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G)
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G)
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).complement b})
     (hf : IsCrossingEdge (G := G) A
       (coarseFrameOfRegions hRed hBlue hCompl hd hpos hrb hrc hbc hcover).blue

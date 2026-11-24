@@ -138,7 +138,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1571 of
 through their boundary bonds, which exist because the lattice is connected). -/
 theorem nonempty_regionBoundaryEdge_of_connected (hconn : G.Connected)
     {R : Finset V} (hR : R.Nonempty) (hRtop : R ≠ Finset.univ) :
-    Nonempty {f : Edge G // IsRegionBoundaryEdge (G := G) R f} := by
+    Nonempty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} := by
   classical
   obtain ⟨u, hu⟩ := hR
   obtain ⟨w, hw⟩ : ∃ w : V, w ∉ R := by

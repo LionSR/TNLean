@@ -49,8 +49,8 @@ uses the inverse gauge at the tail; on a crossing edge it is the prescribed
 boundary transport. Source: SCP10, lines 1765–1920. -/
 def regularRegionGaugeIncidentLabels (R : Finset V) (k : {v : V // v ∈ R} → G)
     (u : Edge Γ → G) :
-    ({e : Edge Γ // IsRegionIncidentEdge R e} → G) ≃
-      ({e : Edge Γ // IsRegionIncidentEdge R e} → G) :=
+    ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) ≃
+      ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :=
   Equiv.piCongrRight fun e => Equiv.mulLeft
     (if ht : e.1.1.1 ∈ R then (k ⟨e.1.1.1, ht⟩)⁻¹ else
       (k ⟨e.1.1.2, e.2.resolve_left ht⟩)⁻¹ * u e.1)
@@ -59,12 +59,12 @@ def regularRegionGaugeIncidentLabels (R : Finset V) (k : {v : V // v ∈ R} → 
 boundary transport. -/
 theorem regularRegionGaugeIncidentLabels_boundary (R : Finset V)
     (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G) :
-    (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :
+    (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
       regularRegionGaugeIncidentLabels R k u η
-        ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) =
+        ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) =
       regularRegionBoundaryTransport R k u
-        (fun e => η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) := by
+        (fun e => η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) := by
   funext e
   rfl
 
@@ -72,7 +72,7 @@ theorem regularRegionGaugeIncidentLabels_boundary (R : Finset V)
 ones multiplied by its inverse gauge. Source: SCP10, lines 1765–1920. -/
 theorem regularRegionGaugeIncidentLabels_twisted (R : Finset V)
     (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G) (v : {v : V // v ∈ R}) :
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) (v : {v : V // v ∈ R}) :
     regularTwistedLabels (regularRegionGaugeEdgeOperators R k u) v.1
         (fun e => regularRegionGaugeIncidentLabels R k u η
           ⟨e.1, isRegionIncidentEdge_of_regionVertex R v e⟩) =
@@ -117,7 +117,7 @@ theorem openRegionWeight_regularRegionGauge
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ g v η s, a v (fun e => g * η e) s = a v η s)
     (R : Finset V) (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (σ : RegionPhysicalConfig (d := d) R) :
     openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
         (fun e => Fintype.equivFin G (θ e)) σ =
@@ -153,7 +153,7 @@ theorem openRegionWeight_eq_untwisted_of_regularRegionGaugeResidual_eq_one
     (ha : ∀ g v η s, a v (fun e => g * η e) s = a v η s)
     (R : Finset V) (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
     (hflat : ∀ e, regularRegionGaugeResidual R k u e = 1)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (σ : RegionPhysicalConfig (d := d) R) :
     openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
         (fun e => Fintype.equivFin G (θ e)) σ =

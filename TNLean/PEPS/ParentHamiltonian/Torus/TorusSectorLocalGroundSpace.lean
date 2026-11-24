@@ -48,11 +48,11 @@ ground space. Source: SCP10, closure deformation away from a local region
 in the proof of Theorem 5.5 and lines 1935–1990. -/
 theorem regionGroundSpace_regularTwistedSite_eq_of_trivial_on_incident
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (u : Edge Γ → G)
-    (R : Finset V) (hu : ∀ f : Edge Γ, IsRegionIncidentEdge R f → u f = 1) :
+    (R : Finset V) (hu : ∀ f : Edge Γ, ManyBody.IsRegionIncidentEdge R f → u f = 1) :
     regionGroundSpace (groupBondTensor (regularTwistedSite a u)) R =
       regionGroundSpace (groupBondTensor a) R := by
   classical
-  let e := Fintype.equivFin {f : Edge Γ // IsRegionBoundaryEdge R f}
+  let e := Fintype.equivFin {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f}
   rw [← range_regularOpenRegionMatrix_eq_regionGroundSpace (regularTwistedSite a u) R e,
     ← range_regularOpenRegionMatrix_eq_regionGroundSpace a R e]
   exact congrArg (fun M => (Matrix.mulVecLin M).range)

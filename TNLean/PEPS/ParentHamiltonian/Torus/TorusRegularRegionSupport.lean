@@ -53,7 +53,7 @@ local notation "Γₜ" => torusGraph width height
 /-- Numbering the four actual crossing bonds of a one-site torus region.
 Source: SCP10, the square-lattice construction at lines 1935–1990. -/
 noncomputable def torusSingletonBoundaryEquiv (v : X) :
-    {f : Edge Γₜ // IsRegionBoundaryEdge {v} f} ≃ Fin 4 :=
+    {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge {v} f} ≃ Fin 4 :=
   Fintype.equivFinOfCardEq (card_regionBoundaryEdge_torus_singleton v)
 
 variable {G : Type*} [Group G] [Fintype G] {d : ℕ}

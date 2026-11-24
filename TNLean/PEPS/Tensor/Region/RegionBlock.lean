@@ -43,47 +43,6 @@ namespace PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
-/-! ### Boundary edges of a region
-
-An edge crosses the boundary of `R` when exactly one of its endpoints lies in
-`R`. These crossing edges carry the open virtual legs of the blocked tensor. -/
-
-/-- An edge crosses the boundary of the region `R` when exactly one of its
-endpoints lies in `R`. -/
-def IsRegionBoundaryEdge (R : Finset V) (f : Edge G) : Prop :=
-  (f.1.1 ∈ R ∧ f.1.2 ∉ R) ∨ (f.1.1 ∉ R ∧ f.1.2 ∈ R)
-
-instance (R : Finset V) (f : Edge G) : Decidable (IsRegionBoundaryEdge (G := G) R f) := by
-  unfold IsRegionBoundaryEdge; infer_instance
-
-/-- An edge is incident to the region `R` when at least one endpoint lies in `R`. -/
-def IsRegionIncidentEdge (R : Finset V) (e : Edge G) : Prop :=
-  e.1.1 ∈ R ∨ e.1.2 ∈ R
-
-instance (R : Finset V) (e : Edge G) : Decidable (IsRegionIncidentEdge (G := G) R e) := by
-  unfold IsRegionIncidentEdge; infer_instance
-
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- An edge incident to each of two disjoint regions crosses the boundary of the second. -/
-theorem isRegionBoundaryEdge_of_disjoint_incident (S T : Finset V)
-    (hST : Disjoint S T) {e : Edge G}
-    (hS : IsRegionIncidentEdge (G := G) S e)
-    (hT : IsRegionIncidentEdge (G := G) T e) : IsRegionBoundaryEdge (G := G) T e := by
-  have hdis := Finset.disjoint_left.mp hST
-  rcases hS with hS1 | hS2 <;> rcases hT with hT1 | hT2
-  · exact (hdis hS1 hT1).elim
-  · exact Or.inr ⟨fun h => hdis hS1 h, hT2⟩
-  · exact Or.inl ⟨hT1, fun h => hdis hS2 h⟩
-  · exact (hdis hS2 hT2).elim
-
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- A boundary edge of `R` has at least one endpoint in `R`. -/
-theorem isRegionBoundaryEdge_touches (R : Finset V) {f : Edge G}
-    (hf : IsRegionBoundaryEdge (G := G) R f) : IsRegionIncidentEdge (G := G) R f := by
-  rcases hf with ⟨h1, _⟩ | ⟨_, h2⟩
-  · exact Or.inl h1
-  · exact Or.inr h2
-
 /-! ### Region configurations
 
 The open virtual legs live on the crossing edges; the physical legs live on the
@@ -94,7 +53,7 @@ vertices of `R`. -/
 These are the open legs of the blocked tensor: an edge crosses the boundary of
 `R` precisely when exactly one of its endpoints lies in `R`. -/
 abbrev RegionBoundaryConfig (A : Tensor G d) (R : Finset V) : Type _ :=
-  (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) → Fin (A.bondDim f.1)
+  (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) → Fin (A.bondDim f.1)
 
 instance instFintypeRegionBoundaryConfig (A : Tensor G d) (R : Finset V) :
     Fintype (RegionBoundaryConfig (G := G) A R) :=
@@ -110,7 +69,7 @@ omit [Fintype V] in
 `R`: two configurations agreeing on every `R`-incident edge give the same product. -/
 theorem regionProd_subtype_congr {A : Tensor G d} (R : Finset V)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) {ζ ζ' : VirtualConfig A}
-    (h : ∀ e : Edge G, IsRegionIncidentEdge (G := G) R e → ζ e = ζ' e) :
+    (h : ∀ e : Edge G, ManyBody.IsRegionIncidentEdge (G := G) R e → ζ e = ζ' e) :
     (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w)) =
       ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ' ie.1) (σ w) := by
   refine Finset.prod_congr rfl (fun w _ => ?_)
@@ -129,7 +88,7 @@ def regionBoundaryLabel (A : Tensor G d) (R : Finset V) (ζ : VirtualConfig A) :
 
 omit [Fintype V] in
 @[simp] theorem regionBoundaryLabel_apply (A : Tensor G d) (R : Finset V)
-    (ζ : VirtualConfig A) (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (ζ : VirtualConfig A) (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     regionBoundaryLabel (G := G) A R ζ f = ζ f.1 := rfl
 
 /-- The blocked-region weight: the sum over all global virtual configurations
@@ -165,26 +124,20 @@ When two regions are equal as finite sets, their boundary and physical configura
 coincide. The transport equivalences carry a configuration across the equality, and the blocked
 weight transports with them. -/
 
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- Equal regions have the same boundary-edge predicate. -/
-theorem isRegionBoundaryEdge_congr {S R : Finset V} (h : S = R) (e : Edge G) :
-    IsRegionBoundaryEdge (G := G) S e ↔ IsRegionBoundaryEdge (G := G) R e := by
-  rw [h]
-
 /-- The transport equivalence of boundary configurations along a region-set equality: relabel
 the boundary edges by the predicate equivalence, leaving the assignment unchanged. -/
 def regionBoundaryConfigCongr {S R : Finset V} (h : S = R) :
     RegionBoundaryConfig (G := G) A S ≃ RegionBoundaryConfig (G := G) A R :=
   Equiv.piCongrLeft' _
-    (Equiv.subtypeEquivRight (isRegionBoundaryEdge_congr (G := G) h))
+    (Equiv.subtypeEquivRight (ManyBody.isRegionBoundaryEdge_congr (G := G) h))
 
 omit [Fintype V] in
 /-- The transported configuration reads the same value as the original on a boundary edge. -/
 theorem regionBoundaryConfigCongr_apply {S R : Finset V} (h : S = R)
     (bcfg : RegionBoundaryConfig (G := G) A S)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     regionBoundaryConfigCongr (A := A) h bcfg f =
-      bcfg ⟨f.1, (isRegionBoundaryEdge_congr (G := G) h f.1).mpr f.2⟩ := by
+      bcfg ⟨f.1, (ManyBody.isRegionBoundaryEdge_congr (G := G) h f.1).mpr f.2⟩ := by
   rfl
 
 /-- The transport equivalence of physical configurations along a region-set equality: relabel

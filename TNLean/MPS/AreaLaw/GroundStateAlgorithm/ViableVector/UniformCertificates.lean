@@ -95,8 +95,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_rational_fixed_
     (Z QZ : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))
     (QK : Matrix (Fin n) (Fin n) ℂ)
     {κ ε εb δ θZ θK θX : ℝ} {A : Matrix (Fin n) (Fin n) ℂ}
@@ -182,8 +182,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniformly_appro
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (A : Matrix (Fin n) (Fin n) ℂ) (hA : A.IsHermitian)
@@ -259,8 +259,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniform_approx_
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     {κ ε εb δ : ℝ} {A : Matrix (Fin n) (Fin n) ℂ}
@@ -313,8 +313,8 @@ theorem exists_boundary_coordinates_with_uniform_approx_sdp_soundness
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     (hxnorm : ‖WithLp.toLp 2 x‖ = 1)
     (hxP : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -332,8 +332,8 @@ theorem exists_boundary_coordinates_with_uniform_approx_sdp_soundness
       (P₀ N₀ : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ),
       0 < n ∧ n ≤ S.card * m ∧ Zᴴ * Z = 1 ∧
       Z * Zᴴ = reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
           (1 : Matrix (Fin m) (Fin m) ℂ) ∧
       IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy Z
@@ -400,8 +400,8 @@ theorem exists_boundary_coordinates_with_zero_error_sdp_certificate
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     (hxnorm : ‖WithLp.toLp 2 x‖ = 1)
     (hxP : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x)
     {X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ}
@@ -413,8 +413,8 @@ theorem exists_boundary_coordinates_with_zero_error_sdp_certificate
       (P N : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ),
       0 < n ∧ n ≤ S.card * m ∧ Zᴴ * Z = 1 ∧
       Z * Zᴴ = reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
           (1 : Matrix (Fin m) (Fin m) ℂ) ∧
       IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy Z

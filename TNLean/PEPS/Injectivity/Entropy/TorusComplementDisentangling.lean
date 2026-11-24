@@ -60,8 +60,8 @@ theorem exists_unitary_torusComplementDisentangling_of_winding_eq (R : Finset X)
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oR : {v : X // v ∈ R}) (oS : {v : X // v ∈ Finset.univ \ R})
-    (f₀ : {e : Edge Γₜ // IsRegionBoundaryEdge R e})
-    (p : {e : Edge Γₜ // IsRegionBoundaryEdge R e} →
+    (f₀ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e})
+    (p : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e} →
       ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS)
     (hwind : ∀ f, torusWalkWinding
         ((p f).map (SimpleGraph.Embedding.induce
@@ -72,7 +72,7 @@ theorem exists_unitary_torusComplementDisentangling_of_winding_eq (R : Finset X)
       U ∈ Matrix.unitaryGroup (RegionHalfEdgeConfig (Γ := Γₜ) G (Finset.univ \ R)) ℂ ∧
       ∀ (g h : G) (_hgh : Commute g h)
         (c : RegularRegionCoordinates (Γ := Γₜ) (G := G) (Finset.univ \ R) TS oS)
-        (θ : {e : Edge Γₜ // IsRegionBoundaryEdge R e} → G),
+        (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e} → G),
         (U * regularProjectorTwistedRegionMatrix (Finset.univ \ R)
             (torusClosureEdgeAssignment g h))
           ((regularRegionCoordinatesEquiv (Finset.univ \ R) TS hTS htreeS oS).symm c)

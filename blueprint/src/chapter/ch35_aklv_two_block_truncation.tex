@@ -2,8 +2,8 @@
 
 \begin{definition}[The two exterior truncations]
     \label{def:aklv_two_block_truncation}
-    \lean{TNLean.MPS.AreaLaw.aklvRegionalHamiltonians,
-        TNLean.MPS.AreaLaw.aklvTwoBlockHamiltonian}
+    \lean{ManyBody.BondInteraction.threeRegionHamiltonians,
+        ManyBody.BondInteraction.twoBlockTruncatedHamiltonian}
     \leanok
     Let $0\le l\le r\le L$, let $k=(0,l,r,L)$, and let
     $0\le h_i\le\Id$ be supported on $\{i,i+1\}$.
@@ -33,7 +33,7 @@
 
 \begin{lemma}[At most two crossing bonds]
     \label{lem:two_cut_crossing_card}
-    \lean{TNLean.MPS.AreaLaw.card_two_cut_crossing_le}
+    \lean{Fin.card_filter_two_cut_crossing_le}
     \leanok
     For arbitrary natural numbers $L,l,r$, the set
     \begin{align}
@@ -47,7 +47,7 @@
 
 \begin{lemma}[Three regional sums and the crossing bonds]
     \label{lem:three_region_sum_crossings}
-    \lean{TNLean.MPS.AreaLaw.sum_three_regions_add_crossings}
+    \lean{ManyBody.BondInteraction.hamiltonian_eq_sum_threeRegionHamiltonians_add_crossings}
     \leanok
     Let $l\leq r$ be natural numbers and let $h_i$, $0\leq i<L-1$,
     be arbitrary matrices on the chain. With the regional sums $A_j$
@@ -66,7 +66,7 @@
 
 \begin{lemma}[Exponential residual on each partially truncated low-energy space]
     \label{thm:aklv_two_block_truncation_low}
-    \lean{TNLean.MPS.AreaLaw.norm_aklv_two_block_truncation_low_le}
+    \lean{ManyBody.BondInteraction.norm_twoBlockTruncatedHamiltonian_low_le}
     \leanok
     \uses{def:aklv_two_block_truncation}
     Suppose $\varepsilon\ge0$ and $t\ge\varepsilon+5$.

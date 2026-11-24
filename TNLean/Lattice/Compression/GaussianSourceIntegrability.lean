@@ -51,7 +51,7 @@ theorem integrable_rectangularTraceNorm_sourceCorrectionSum {P m n : Type}
       (∀ e : S, Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2) ×
         Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2))) → Matrix m n ℂ) :
     Integrable (fun ω ↦ Matrix.rectangularTraceNorm
-      (∑ q, (∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      (∑ q, (∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (q.1 e) (q.2 e)) • M q)) (sourceGaussianLaw w k) := by
   apply ProbabilityTheory.integrable_rectangularTraceNorm_sum
   intro q r

@@ -56,7 +56,7 @@ theorem regionBlockedWeight_applyGauge (B : Tensor G d)
     (τ : RegionPhysicalConfig (V := V) (d := d) R) :
     regionBlockedWeight (G := G) (applyGauge B X) R bdry τ =
       ∑ bdry' : RegionBoundaryConfig (G := G) B R,
-        (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+        (∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
           regionBoundaryGauge (G := G) B X R f (bdry f) (bdry' f)) *
           regionBlockedWeight (G := G) B R bdry' τ := by
   classical
@@ -64,14 +64,14 @@ theorem regionBlockedWeight_applyGauge (B : Tensor G d)
   symm
   calc
     (∑ bdry' : RegionBoundaryConfig (G := G) B R,
-      (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+      (∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
         regionBoundaryGauge (G := G) B X R f (bdry f) (bdry' f)) *
         regionBlockedWeight (G := G) B R bdry' τ)
       -- Expand each blocked-region weight as its pinned global sum.
       = ∑ bdry' : RegionBoundaryConfig (G := G) B R,
           ∑ ζ ∈ Finset.univ.filter
               (fun ζ : VirtualConfig B => regionBoundaryLabel (G := G) B R ζ = bdry'),
-            (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+            (∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
               regionBoundaryGauge (G := G) B X R f (bdry f)
                 (regionBoundaryLabel (G := G) B R ζ f)) *
               ∏ w : {w : V // w ∈ R}, B.component w.1 (fun ie => ζ ie.1) (τ w) := by
@@ -82,14 +82,14 @@ theorem regionBlockedWeight_applyGauge (B : Tensor G d)
         rw [hζ.2]
     -- Collapse the boundary fiber.
     _ = ∑ ζ : VirtualConfig B,
-          (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+          (∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
             regionBoundaryGauge (G := G) B X R f (bdry f)
               (regionBoundaryLabel (G := G) B R ζ f)) *
             ∏ w : {w : V // w ∈ R}, B.component w.1 (fun ie => ζ ie.1) (τ w) :=
         sum_regionBoundary_fiber (G := G) B R _
     -- Read the boundary label off each global configuration.
     _ = ∑ ζ : VirtualConfig B,
-          (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+          (∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
             regionBoundaryGauge (G := G) B X R f (bdry f) (ζ f.1)) *
             ∏ w : {w : V // w ∈ R}, B.component w.1 (fun ie => ζ ie.1) (τ w) :=
         Finset.sum_congr rfl fun ζ _ => rfl
@@ -112,36 +112,36 @@ theorem sum_regionBoundaryCoupling_mul_inv (B : Tensor G d)
     (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ) (R : Finset V)
     (b c : RegionBoundaryConfig (G := G) B R) :
     (∑ b' : RegionBoundaryConfig (G := G) B R,
-      (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+      (∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
         regionBoundaryGauge (G := G) B X R f (b f) (b' f)) *
-        ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+        ∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
           regionBoundaryGaugeInv (G := G) B X R f (b' f) (c f)) =
       if b = c then 1 else 0 := by
   classical
   calc
     (∑ b' : RegionBoundaryConfig (G := G) B R,
-      (∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+      (∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
         regionBoundaryGauge (G := G) B X R f (b f) (b' f)) *
-        ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+        ∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
           regionBoundaryGaugeInv (G := G) B X R f (b' f) (c f))
       -- Merge the two products and exchange the sum with the edge product.
-      = ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+      = ∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
           ∑ z : Fin (B.bondDim f.1),
             regionBoundaryGauge (G := G) B X R f (b f) z *
               regionBoundaryGaugeInv (G := G) B X R f z (c f) := by
         rw [Finset.sum_congr rfl
           (fun b' _ => (Finset.prod_mul_distrib (s := Finset.univ)
-            (f := fun f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} =>
+            (f := fun f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} =>
               regionBoundaryGauge (G := G) B X R f (b f) (b' f))
-            (g := fun f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} =>
+            (g := fun f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} =>
               regionBoundaryGaugeInv (G := G) B X R f (b' f) (c f))).symm)]
         simpa only [Fintype.piFinset_univ] using
           (Finset.prod_univ_sum
-            (fun f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} => Finset.univ)
+            (fun f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} => Finset.univ)
             (fun f z => regionBoundaryGauge (G := G) B X R f (b f) z *
               regionBoundaryGaugeInv (G := G) B X R f z (c f))).symm
     -- Each boundary edge contracts to the identity matrix entry.
-    _ = ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+    _ = ∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
           (if b f = c f then (1 : ℂ) else 0) := by
         refine Finset.prod_congr rfl fun f _ => ?_
         rw [← Matrix.mul_apply, regionBoundaryGauge_mul_inv (G := G) B X R f,
@@ -171,10 +171,10 @@ theorem regionBlockedTensorInjective_applyGauge (B : Tensor G d)
   classical
   rw [RegionBlockedTensorInjective] at hB ⊢
   let K : Matrix (RegionBoundaryConfig (G := G) B R) (RegionBoundaryConfig (G := G) B R) ℂ :=
-    fun b b' => ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+    fun b b' => ∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
       regionBoundaryGauge (G := G) B X R f (b f) (b' f)
   let K' : Matrix (RegionBoundaryConfig (G := G) B R) (RegionBoundaryConfig (G := G) B R) ℂ :=
-    fun b b' => ∏ f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f},
+    fun b b' => ∏ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f},
       regionBoundaryGaugeInv (G := G) B X R f (b f) (b' f)
   have hKK' : K * K' = 1 := by
     ext b c

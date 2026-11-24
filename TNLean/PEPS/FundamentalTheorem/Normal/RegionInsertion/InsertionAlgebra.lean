@@ -116,7 +116,7 @@ theorem regionComplementWeight_linearIndependent (A : Tensor G d) (R : Finset V)
 open scoped Classical in
 /-- The region-inserted coefficient is additive in the inserted matrix. -/
 theorem regionInsertedCoeff_add (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -136,7 +136,7 @@ theorem regionInsertedCoeff_add (A : Tensor G d) (R : Finset V)
 open scoped Classical in
 /-- The region-inserted coefficient is homogeneous in the inserted matrix. -/
 theorem regionInsertedCoeff_smul (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (z : ℂ) (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -181,7 +181,7 @@ theorem regionInsertedCoeff_eq_zero_imp (A : Tensor G d) (R : Finset V)
     (hR : RegionBlockedTensorInjective (G := G) A R)
     (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (hM : ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
       (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
@@ -256,7 +256,7 @@ theorem regionInsertedCoeff_injective (A : Tensor G d) (R : Finset V)
     (hR : RegionBlockedTensorInjective (G := G) A R)
     (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (hMM' : ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)
       (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
@@ -303,7 +303,7 @@ edge-specific recovery step.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 structure RegionInsertionTransfer (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) where
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) where
   /-- The forward per-edge matrix transfer `X ↦ Y`. -/
   fwd : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ →
     Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ
@@ -330,7 +330,7 @@ structure RegionInsertionTransfer (A B : Tensor G d) (R : Finset V)
 namespace RegionInsertionTransfer
 
 variable {A B : Tensor G d} {R : Finset V}
-  {f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}}
+  {f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}}
 
 /-- The backward transfer is a left inverse of the forward transfer, by the two
 coefficient identities and injectivity of the region-inserted coefficient on the
@@ -446,7 +446,7 @@ Source: arXiv:1804.04964, Section 3, lines 560--586 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem exists_regionEdgeGauge_of_transfer
     (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (T : RegionInsertionTransfer (G := G) A B R f)
     (hRA : RegionBlockedTensorInjective (G := G) A R)
     (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))

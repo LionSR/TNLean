@@ -84,7 +84,7 @@ theorem IsGIsometric.exists_torusSweptRouteReunion_physicalMeasurement
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
       (∀ (g h : G) (u : Edge Γₜ → G)
-          (θ : {f : Edge Γₜ // IsRegionBoundaryEdge (R v) f} → G)
+          (θ : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (R v) f} → G)
           (C : Option (ConjClasses G)),
         Q C *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension (R v) (torusSweptPhysicalRouteOperators v g h 12) u)))
@@ -117,7 +117,7 @@ theorem IsGIsometric.exists_torusSweptRouteReunion_physicalMeasurement
     rw [regularWalkHolonomy_induced_bondExtension, SimpleGraph.Walk.map_induce]
     exact regularWalkHolonomy_torusSweptPhysicalRoute_BReunionLoop_conjClass v g h
   have hcols (g h : G) (u : Edge Γₜ → G)
-      (θ : {f : Edge Γₜ // IsRegionBoundaryEdge (R v) f} → G)
+      (θ : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (R v) f} → G)
       (C : Option (ConjClasses G)) :=
     hQact (regularRegionBondExtension (R v) (torusSweptPhysicalRouteOperators v g h 12) u) θ C
   simp only [hclass] at hcols

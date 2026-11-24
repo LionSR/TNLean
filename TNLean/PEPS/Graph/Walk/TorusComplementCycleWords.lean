@@ -39,7 +39,7 @@ variable {V : Type*} [Fintype V] [LinearOrder V] {Γ : SimpleGraph V}
 
 /-- The region endpoint of a native crossing edge, selected by membership. -/
 def regularBoundaryInsideVertex (R : Finset V)
-    (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) : {v : V // v ∈ R} :=
+    (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) : {v : V // v ∈ R} :=
   if ht : f.1.1.1 ∈ R then ⟨f.1.1.1, ht⟩ else
     ⟨f.1.1.2, by
       rcases f.2 with h | h
@@ -48,7 +48,7 @@ def regularBoundaryInsideVertex (R : Finset V)
 
 /-- The complementary endpoint of the same native crossing edge. -/
 def regularBoundaryOutsideVertex (R : Finset V)
-    (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) : {v : V // v ∈ Finset.univ \ R} :=
+    (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) : {v : V // v ∈ Finset.univ \ R} :=
   if ht : f.1.1.1 ∈ R then
     ⟨f.1.1.2, Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, by
       rcases f.2 with h | h
@@ -59,7 +59,7 @@ def regularBoundaryOutsideVertex (R : Finset V)
 /-- The actual crossing step directed from the region to its complement.
 Source: SCP10, complementary boundary transports, lines 1935–1990. -/
 theorem regularBoundaryCrossingAdj (R : Finset V)
-    (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) :
+    (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) :
     Γ.Adj (regularBoundaryInsideVertex R f).1 (regularBoundaryOutsideVertex R f).1 := by
   unfold regularBoundaryInsideVertex regularBoundaryOutsideVertex
   split_ifs with ht
@@ -73,8 +73,8 @@ by their genuine region and complementary endpoints. Source: SCP10,
 proof of Theorem 6.9, lines 1935–1990. -/
 theorem regularCombinedBoundaryTransport_insideOutside (R : Finset V)
     (kR : {v : V // v ∈ R} → G) (kS : {v : V // v ∈ Finset.univ \ R} → G)
-    (u : Edge Γ → G) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
-    (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) :
+    (u : Edge Γ → G) (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
+    (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) :
     regularCombinedBoundaryTransport R kR kS u θ f =
       (kS (regularBoundaryOutsideVertex R f))⁻¹ *
         regularDirectedTransport u (regularBoundaryCrossingAdj R f) *
@@ -123,7 +123,7 @@ noncomputable def torusBoundaryTreeRoute (R : Finset X)
     (hTR : TR ≤ (Γₜ).induce (R : Set X))
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree) (oS : {v : X // v ∈ Finset.univ \ R})
-    (f₀ f : {e : Edge Γₜ // IsRegionBoundaryEdge R e}) : (Γₜ).Walk oS.1 oS.1 :=
+    (f₀ f : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e}) : (Γₜ).Walk oS.1 oS.1 :=
   regularBoundaryTreeRoute R (Finset.univ \ R) TR TS hTR hTS htreeR htreeS oS
     (regularBoundaryInsideVertex R f₀) (regularBoundaryInsideVertex R f)
     (regularBoundaryOutsideVertex R f₀) (regularBoundaryOutsideVertex R f)
@@ -142,7 +142,7 @@ theorem torusBoundaryTreeRoute_holonomy (R : Finset X)
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oR : {v : X // v ∈ R}) (oS : {v : X // v ∈ Finset.univ \ R})
-    (u : Edge Γₜ → G) (f₀ f : {e : Edge Γₜ // IsRegionBoundaryEdge R e}) :
+    (u : Edge Γₜ → G) (f₀ f : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e}) :
     regularWalkHolonomy u (torusBoundaryTreeRoute R TR TS hTR hTS htreeR htreeS oS f₀ f) =
       regularCombinedBoundaryTransport R (regularRegionTreeGauge R TR hTR htreeR oR u).1
         (regularRegionTreeGauge (Finset.univ \ R) TS hTS htreeS oS u).1 u 1 f *
@@ -150,7 +150,7 @@ theorem torusBoundaryTreeRoute_holonomy (R : Finset X)
         (regularRegionTreeGauge (Finset.univ \ R) TS hTS htreeS oS u).1 u 1 f₀)⁻¹ := by
   let kR := (regularRegionTreeGauge R TR hTR htreeR oR u).1
   let kS := (regularRegionTreeGauge (Finset.univ \ R) TS hTS htreeS oS u).1
-  have hm (e : {e : Edge Γₜ // IsRegionBoundaryEdge R e}) :
+  have hm (e : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e}) :
       regularCombinedBoundaryTransport R kR kS u 1 e =
         (kS (regularBoundaryOutsideVertex R e))⁻¹ *
           regularDirectedTransport u (regularBoundaryCrossingAdj R e) *
@@ -173,8 +173,8 @@ theorem regularRegionCycleWord_eval_torusClosure_of_winding_eq (R : Finset X)
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oR : {v : X // v ∈ R}) (oS : {v : X // v ∈ Finset.univ \ R})
-    (f₀ : {e : Edge Γₜ // IsRegionBoundaryEdge R e})
-    (p : {e : Edge Γₜ // IsRegionBoundaryEdge R e} →
+    (f₀ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e})
+    (p : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e} →
       ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS)
     (hwind : ∀ f, torusWalkWinding
         ((p f).map (SimpleGraph.Embedding.induce

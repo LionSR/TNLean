@@ -181,7 +181,7 @@ private abbrev Physical (v : TV) :=
   {w : TV // w ∈ torusPlaquetteRegion v} → KitaevBit
 private abbrev Boundary (v : TV) :=
   {e : Edge (torusGraph width height) //
-    IsRegionBoundaryEdge (torusPlaquetteRegion v) e} → KitaevBit
+    ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) e} → KitaevBit
 
 /-- The original four spins of the actual translated block, in clockwise order.
 Source: SCP10, lines 2755–2827, original physical spins of the blocking diagram. -/

@@ -435,7 +435,7 @@ theorem IsGIsometric.exists_unitary_torusActualRouteFluxMove {d : ℕ}
       W ∈ Matrix.unitaryGroup (RV horizontal p → Fin d) ℂ ∧
       ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (reverse : Bool) (u : Edge Γₜ → G)
-          (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R horizontal p) e} → G),
+          (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (R horizontal p) e} → G),
         (if reverse then W.conjTranspose else W) *ᵥ
           openRegionWeight (groupBondTensor (regularTwistedSite a u)) (R horizontal p)
             (fun f => Fintype.equivFin G (θ f)) =
@@ -467,7 +467,7 @@ theorem IsGIsometric.exists_unitary_torusActualRouteFluxUpdate {d : ℕ}
       (∀ (reverse : Bool) (u : Edge Γₜ → G),
         regularWalkHolonomy u (torusPlaquetteWalk
           (if reverse then p else offset horizontal p 1 0)) = 1 →
-        ∀ θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R horizontal p) e} → G,
+        ∀ θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (R horizontal p) e} → G,
           (if reverse then W.conjTranspose else W) *ᵥ
             openRegionWeight (groupBondTensor (regularTwistedSite a u)) (R horizontal p)
               (fun f => Fintype.equivFin G (θ f)) =

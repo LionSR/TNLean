@@ -163,7 +163,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
       let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
-        Finset.univ.filter (IsRegionBoundaryEdge R)
+        Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R)
       let Z := boundary.biUnion fun x ↦
         ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
       let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ) (Q.image a ∪ Z.image a)
@@ -270,7 +270,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
         let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
-          Finset.univ.filter (IsRegionBoundaryEdge R)
+          Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R)
         let Z := boundary.biUnion fun x ↦
           ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
         let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
@@ -313,7 +313,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
       let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
-        Finset.univ.filter (IsRegionBoundaryEdge R)
+        Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R)
       let Z := boundary.biUnion fun x ↦
         ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
       let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ) (Q.image a ∪ Z.image a)
@@ -364,7 +364,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
         let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
-          Finset.univ.filter (IsRegionBoundaryEdge R)
+          Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R)
         let Z := boundary.biUnion fun x ↦
           ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
         let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)

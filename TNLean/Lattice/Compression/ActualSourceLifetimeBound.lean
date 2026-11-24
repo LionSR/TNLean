@@ -60,7 +60,7 @@ theorem integral_actualCorrectedSourceTerm_le_lifetime
       Matrix (Fin (sourceDims w s).2) (Fin (min (sourceDims w s).1 (sourceDims w s).2)) ℂ)
     (hnonneg : ∀ s ξ j, 0 ≤ lam s ξ j) (hmass : ∀ s ξ, ∑ j, lam s ξ j = 1)
     (hE : ∀ s ξ, (E s ξ)ᴴ * E s ξ = 1) (hF : ∀ s ξ, (F s ξ)ᴴ * F s ξ = 1)
-    (hsource : ∀ s ξ, ambientSchmidtVector (lam s ξ) (E s ξ) (F s ξ) =
+    (hsource : ∀ s ξ, Matrix.schmidtFrameVector (lam s ξ) (E s ξ) (F s ξ) =
       (sourceCoordinates w s ξ).ofLp)
     (p₀ : Word [] a) (hp₀ : p₀.IsAllowed) (hp₀s : p₀.sources = [])
     (bIn : OrthonormalBasis n ℂ (Mem a))

@@ -124,7 +124,7 @@ theorem IsGIsometric.exists_unitary_torusTwoColumnChargeMotion
       Wₗ ∈ Matrix.unitaryGroup (RegionPhysicalConfig (d := d) L) ℂ ∧
       Wᵣ ∈ Matrix.unitaryGroup (RegionPhysicalConfig (d := d) S) ℂ ∧
       ∀ (χ : G → ℂ) (p : G)
-        (θ : {b : Edge Γₜ // IsRegionBoundaryEdge (L ∪ S) b} → G),
+        (θ : {b : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (L ∪ S) b} → G),
         (Wₗ ⊗ₖ Wᵣ) *ᵥ (fun s => openRegionWeight (groupBondTensor
           (regularEdgeCharacterSite (torusIncidentSite a)
             (torusColumnChargeMotionBond v true).1 χ p)) (L ∪ S)

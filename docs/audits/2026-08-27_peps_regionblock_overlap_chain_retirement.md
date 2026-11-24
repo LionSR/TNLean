@@ -46,7 +46,7 @@ modules that own their subject matter, with statements and proofs unchanged:
 | `TNLean.PEPS.regionPhysicalConfigCongr` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
 | `TNLean.PEPS.regionPhysicalConfigCongr_apply` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
 | `TNLean.PEPS.regionBlockedWeight_congr` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
-| `TNLean.PEPS.isRegionBoundaryEdge_congr` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
+| `ManyBody.isRegionBoundaryEdge_congr` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
 | `TNLean.PEPS.regionBoundaryConfigCongr` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
 | `TNLean.PEPS.regionBoundaryConfigCongr_apply` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
 | `TNLean.PEPS.ThreeBlockGeometry.complPhysical_surjective` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/Injectivity/Region/DisjointUnionSetup.lean` |

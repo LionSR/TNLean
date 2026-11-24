@@ -136,8 +136,8 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
 \begin{lemma}[Spectral windows keep supports]
     \label{thm:hastings05_window_support}
     \lean{ManyBody.cfc_mem_supportedOperators,
-        TNLean.MPS.AreaLaw.LocalSolution.windowProjection_mem_supportedOperators,
-        TNLean.MPS.AreaLaw.LocalSolution.compressedWindowProjection_mem_supportedOperators}
+        ManyBody.windowProjection_mem_supportedOperators,
+        ManyBody.compressedWindowProjection_mem_supportedOperators}
     \leanok
     \uses{def:hastings05_window_projection,def:hastings05_compressed_window}
     If $A$ is supported on $S$, then $f(A)$ is supported on $S$ for every
@@ -151,7 +151,7 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
 
 \begin{definition}[Blocks of a level]
     \label{def:hastings05_level_block}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelBlock}
+    \lean{Finset.dyadicBlock}
     \leanok
     For a supersite map $\sigma:\{0,\dots,L-1\}\to\N$, block $k$ of level $m$
     is $B_k^m=\{i:\lfloor\sigma(i)/2^m\rfloor=k\}$.
@@ -159,9 +159,9 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
 
 \begin{lemma}[Halves of a block]
     \label{thm:hastings05_level_block_halves}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_subset,
-        TNLean.MPS.AreaLaw.LocalSolution.levelBlock_two_mul_add_one_subset,
-        TNLean.MPS.AreaLaw.LocalSolution.disjoint_levelBlock_two_mul}
+    \lean{Finset.dyadicBlock_two_mul_subset,
+        Finset.dyadicBlock_two_mul_add_one_subset,
+        Finset.disjoint_dyadicBlock_two_mul}
     \leanok
     \uses{def:hastings05_level_block}
     For all $m,k$, $B_{2k}^m\cap B_{2k+1}^m=\emptyset$ and
@@ -173,9 +173,9 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
 
 \begin{lemma}[All levels on supersites]
     \label{thm:hastings05_supersite_hierarchy}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.mem_supportedOperators_hierarchy,
-        TNLean.MPS.AreaLaw.LocalSolution.commute_supersiteHierarchy,
-        TNLean.MPS.AreaLaw.LocalSolution.norm_sub_supersiteHierarchy_le}
+    \lean{ManyBody.mem_supportedOperators_hierarchy,
+        ManyBody.commute_hierarchy_halves,
+        ManyBody.norm_sub_hierarchy_le_of_mem_supportedOperators}
     \leanok
     \uses{thm:hastings05_hierarchy_levels,thm:hastings05_window_support,
         thm:hastings05_level_block_halves}
@@ -192,7 +192,7 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
 
 \begin{lemma}[The residual of a sum]
     \label{thm:hastings05_sum_residual}
-    \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_toEuclideanLin_sum_sub_le}
+    \lean{norm_toEuclideanLin_sum_sub_le}
     \leanok
     For operators $M_i$ and scalars $c_i$,
     $\lVert(\sum_iM_i-\sum_ic_i)\psi\rVert\le\sum_i\lVert(M_i-c_i)\psi\rVert$;

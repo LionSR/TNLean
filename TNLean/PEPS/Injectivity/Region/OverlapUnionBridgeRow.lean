@@ -128,7 +128,7 @@ left geometry's host `R₁ ∪ R₂` label; gluing along them bridges the two ho
 
 /-- A `P₀`-outer edge: a boundary edge of `R₁ ∪ R₂` that is not a boundary edge of `R₂`. -/
 def IsP0OuterEdge (R₁ R₂ : Finset V) (e : Edge G) : Prop :=
-  IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e ∧ ¬ IsRegionBoundaryEdge (G := G) R₂ e
+  ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e ∧ ¬ ManyBody.IsRegionBoundaryEdge (G := G) R₂ e
 
 instance (R₁ R₂ : Finset V) (e : Edge G) :
     Decidable (IsP0OuterEdge (G := G) R₁ R₂ e) := by
@@ -139,8 +139,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 outside `R₂`, hence outside the overlap. -/
 theorem not_isRegionBoundaryEdge_inter_of_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsP0OuterEdge (G := G) R₁ R₂ e) :
-    ¬ IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e := by
-  simp only [IsP0OuterEdge, IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_inter] at *
+    ¬ ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e := by
+  simp only [IsP0OuterEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_inter] at *
   grind
 
 omit [Fintype V] [DecidableRel G.Adj] in
@@ -148,17 +148,17 @@ omit [Fintype V] [DecidableRel G.Adj] in
 hence outside the difference. -/
 theorem not_isRegionBoundaryEdge_sdiff_of_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsP0OuterEdge (G := G) R₁ R₂ e) :
-    ¬ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
-  simp only [IsP0OuterEdge, IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_sdiff] at *
+    ¬ ManyBody.IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+  simp only [IsP0OuterEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_sdiff] at *
   grind
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A boundary edge of the union `R₁ ∪ R₂` that is not `P₀`-outer is a boundary edge of `R₂`,
 by the very definition of `P₀`-outer. -/
 theorem isRegionBoundaryEdge_R₂_of_unionBoundary_not_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
-    (hunion : IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e)
+    (hunion : ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e)
     (hnp0 : ¬ IsP0OuterEdge (G := G) R₁ R₂ e) :
-    IsRegionBoundaryEdge (G := G) R₂ e := by
+    ManyBody.IsRegionBoundaryEdge (G := G) R₂ e := by
   by_contra h
   exact hnp0 ⟨hunion, h⟩
 
@@ -231,9 +231,10 @@ omit [Fintype V] [DecidableRel G.Adj] in
 /-- A boundary edge of `R₂` is a boundary edge of the overlap `R₁ ∩ R₂` or of the difference
 `R₂ \ R₁`. -/
 theorem isRegionBoundaryEdge_inter_or_sdiff_of_R₂ {R₁ R₂ : Finset V} {e : Edge G}
-    (h : IsRegionBoundaryEdge (G := G) R₂ e) :
-    IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e ∨ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
-  simp only [IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
+    (h : ManyBody.IsRegionBoundaryEdge (G := G) R₂ e) :
+    ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e ∨
+      ManyBody.IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+  simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
   grind
 
 omit [Fintype V] in
@@ -347,10 +348,11 @@ omit [Fintype V] [DecidableRel G.Adj] in
 overlap-crossing edge: its overlap endpoint lies in `R₁`, the other endpoint lies in `R₁`
 (else the edge would be an `R₁` boundary edge) but not in the overlap, hence in `R₁ \ R₂`. -/
 theorem isOverlapCrossingEdge_of_interBoundary_not_R₁ {R₁ R₂ : Finset V} {e : Edge G}
-    (hinter : IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e)
-    (hnR₁ : ¬ IsRegionBoundaryEdge (G := G) R₁ e) :
+    (hinter : ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e)
+    (hnR₁ : ¬ ManyBody.IsRegionBoundaryEdge (G := G) R₁ e) :
     IsOverlapCrossingEdge (G := G) R₁ R₂ e := by
-  simp only [IsOverlapCrossingEdge, IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
+  simp only [IsOverlapCrossingEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_inter,
+    Finset.mem_sdiff] at *
   grind
 
 omit [Fintype V] [DecidableRel G.Adj] in
@@ -358,8 +360,9 @@ omit [Fintype V] [DecidableRel G.Adj] in
 endpoints lie in `R₁`, hence outside `R₂ \ R₁`. -/
 theorem not_isRegionBoundaryEdge_sdiff_of_overlapCrossing {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsOverlapCrossingEdge (G := G) R₁ R₂ e) :
-    ¬ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
-  simp only [IsOverlapCrossingEdge, IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
+    ¬ ManyBody.IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+  simp only [IsOverlapCrossingEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_inter,
+    Finset.mem_sdiff] at *
   grind
 
 open scoped Classical in
@@ -406,7 +409,7 @@ theorem regionBoundaryLabel_inter_interCrossGlue {R₁ R₂ : Finset V} (q₁ q�
     have := congrFun h1 f; rwa [regionBoundaryLabel_apply] at this
   · rw [ite_eq_right hc]
     -- `f` is an overlap boundary edge, not crossing, hence an `R₁` boundary edge.
-    have hR₁edge : IsRegionBoundaryEdge (G := G) R₁ f.1 := by
+    have hR₁edge : ManyBody.IsRegionBoundaryEdge (G := G) R₁ f.1 := by
       by_contra hn
       exact hc (isOverlapCrossingEdge_of_interBoundary_not_R₁ (G := G) f.2 hn)
     have hq := congrFun hR₁ ⟨f.1, hR₁edge⟩
@@ -425,9 +428,10 @@ omit [Fintype V] [DecidableRel G.Adj] in
 /-- A boundary edge of `R₁` is a boundary edge of the union `R₁ ∪ R₂` or of the difference
 `R₂ \ R₁`. -/
 theorem isRegionBoundaryEdge_union_or_sdiff_of_R₁ {R₁ R₂ : Finset V} {e : Edge G}
-    (h : IsRegionBoundaryEdge (G := G) R₁ e) :
-    IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e ∨ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
-  simp only [IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_sdiff] at *
+    (h : ManyBody.IsRegionBoundaryEdge (G := G) R₁ e) :
+    ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e ∨
+      ManyBody.IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
+  simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_sdiff] at *
   grind
 
 omit [Fintype V] in
@@ -712,7 +716,7 @@ theorem regionBoundaryLabel_eq_iff_congr {S R : Finset V} (h : S = R) (q : Virtu
     rw [regionBoundaryLabel_apply, regionBoundaryConfigCongr_apply, ← hq, regionBoundaryLabel_apply]
   · intro hq
     funext f
-    have := congrFun hq ⟨f.1, (isRegionBoundaryEdge_congr (G := G) h f.1).mp f.2⟩
+    have := congrFun hq ⟨f.1, (ManyBody.isRegionBoundaryEdge_congr (G := G) h f.1).mp f.2⟩
     rw [regionBoundaryLabel_apply, regionBoundaryConfigCongr_apply] at this
     rw [regionBoundaryLabel_apply, this]
 

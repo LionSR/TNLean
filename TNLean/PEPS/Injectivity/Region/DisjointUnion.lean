@@ -45,34 +45,34 @@ omit [DecidableRel G.Adj] in
 block is a boundary edge of the blue block: the host-side endpoint is in blue, and the
 red-side endpoint lies outside blue (the blocks are disjoint). -/
 theorem ThreeBlockGeometry.isBlueBoundaryEdge_of_hostBoundary_blue
-    {f : Edge G} (hf : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f)
+    {f : Edge G} (hf : ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f)
     (hb : (f.1.1 ∈ Finset.univ \ g.red ∧ f.1.1 ∈ g.blue) ∨
       (f.1.2 ∈ Finset.univ \ g.red ∧ f.1.2 ∈ g.blue)) :
-    IsRegionBoundaryEdge (G := G) g.blue f := by
+    ManyBody.IsRegionBoundaryEdge (G := G) g.blue f := by
   have := @Finset.disjoint_left.mp g.red_disjoint_blue
-  simp only [IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
+  simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
   grind
 
 omit [DecidableRel G.Adj] in
 /-- A boundary edge of the host `univ \ red` whose host-side endpoint lies in the
 complement block is a boundary edge of the complement block. -/
 theorem ThreeBlockGeometry.isComplBoundaryEdge_of_hostBoundary_compl
-    {f : Edge G} (hf : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f)
+    {f : Edge G} (hf : ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f)
     (hc : (f.1.1 ∈ Finset.univ \ g.red ∧ f.1.1 ∈ g.complement) ∨
       (f.1.2 ∈ Finset.univ \ g.red ∧ f.1.2 ∈ g.complement)) :
-    IsRegionBoundaryEdge (G := G) g.complement f := by
+    ManyBody.IsRegionBoundaryEdge (G := G) g.complement f := by
   have := @Finset.disjoint_left.mp g.red_disjoint_complement
-  simp only [IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
+  simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
   grind
 
 omit [DecidableRel G.Adj] in
 /-- The host-side endpoint of a host boundary edge lies in the blue block or in the
 complement block, by the disjoint cover `univ \ red = blue ⊔ complement`. -/
 theorem ThreeBlockGeometry.hostBoundary_hostVertex_mem_blue_or_compl
-    {f : Edge G} (hf : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f) :
+    {f : Edge G} (hf : ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f) :
     (f.1.1 ∈ Finset.univ \ g.red ∧ (f.1.1 ∈ g.blue ∨ f.1.1 ∈ g.complement)) ∨
       (f.1.2 ∈ Finset.univ \ g.red ∧ (f.1.2 ∈ g.blue ∨ f.1.2 ∈ g.complement)) := by
-  simp only [IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
+  simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
   grind [g.mem_complement_iff]
 
 /-- The host boundary configuration reconstructed from a blue boundary configuration
@@ -256,7 +256,7 @@ boundary edges of the blue block. These are the free virtual indices distinguish
 complement blocked-region weight from the constrained complement coupling sum. -/
 def ThreeBlockGeometry.IsBlueRedCrossingEdge (_A : Tensor G d) (eg : Edge G) :
     Prop :=
-  IsRegionBoundaryEdge (G := G) g.red eg ∧ IsRegionBoundaryEdge (G := G) g.blue eg
+  ManyBody.IsRegionBoundaryEdge (G := G) g.red eg ∧ ManyBody.IsRegionBoundaryEdge (G := G) g.blue eg
 
 instance ThreeBlockGeometry.instDecidableIsBlueRedCrossingEdge (eg : Edge G) :
     Decidable (g.IsBlueRedCrossingEdge A eg) := by
@@ -272,10 +272,10 @@ noncomputable def ThreeBlockGeometry.blueRedCrossingBondProd (A : Tensor G d) : 
 endpoints lies in the red or blue block, both disjoint from the complement. -/
 theorem ThreeBlockGeometry.not_isRegionIncidentEdge_complement_of_blueRedCrossing
     {eg : Edge G} (hg : g.IsBlueRedCrossingEdge A eg) :
-    ¬ IsRegionIncidentEdge (G := G) g.complement eg := by
+    ¬ ManyBody.IsRegionIncidentEdge (G := G) g.complement eg := by
   have := @Finset.disjoint_left.mp g.red_disjoint_blue
-  unfold ThreeBlockGeometry.IsBlueRedCrossingEdge IsRegionBoundaryEdge at hg
-  unfold IsRegionIncidentEdge
+  unfold ThreeBlockGeometry.IsBlueRedCrossingEdge ManyBody.IsRegionBoundaryEdge at hg
+  unfold ManyBody.IsRegionIncidentEdge
   grind [g.mem_complement_iff]
 
 /-- The complement vertex product reads a global virtual configuration only through the
@@ -366,11 +366,12 @@ theorem ThreeBlockGeometry.blueRedCrossing_fiber_card
 edge: its host-side endpoint lies in the complement (otherwise it would lie in the blue
 block and the edge would be a crossing edge). -/
 theorem ThreeBlockGeometry.isComplBoundary_of_hostBoundary_not_crossing
-    {eg : Edge G} (hg : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg)
+    {eg : Edge G} (hg : ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg)
     (hncross : ¬ g.IsBlueRedCrossingEdge A eg) :
-    IsRegionBoundaryEdge (G := G) g.complement eg := by
+    ManyBody.IsRegionBoundaryEdge (G := G) g.complement eg := by
   have := @Finset.disjoint_left.mp g.red_disjoint_blue
-  simp only [ThreeBlockGeometry.IsBlueRedCrossingEdge, IsRegionBoundaryEdge, Finset.mem_sdiff,
+  simp only [ThreeBlockGeometry.IsBlueRedCrossingEdge, ManyBody.IsRegionBoundaryEdge,
+    Finset.mem_sdiff,
     Finset.mem_univ, true_and] at *
   grind [g.mem_complement_iff]
 
@@ -405,7 +406,7 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
   -- block: those are complement boundary edges (`isComplBoundary`), pinned by `bc'`.
   have hagree_compl : ∀ ζ : VirtualConfig A,
       regionBoundaryLabel (G := G) A g.complement ζ = bc' →
-      ∀ eg : Edge G, IsRegionBoundaryEdge (G := G) g.complement eg → ζ eg = q₀ eg := by
+      ∀ eg : Edge G, ManyBody.IsRegionBoundaryEdge (G := G) g.complement eg → ζ eg = q₀ eg := by
     intro ζ hζ eg hg
     have h1 := congrFun hζ ⟨eg, hg⟩
     have h2 := congrFun hq0compl ⟨eg, hg⟩
@@ -448,11 +449,11 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
       · rw [ite_eq_right hcross]
         -- A blue boundary edge that is not a crossing edge is a complement boundary edge:
         -- its blue-side endpoint's neighbour lies in the complement, not red.
-        have hred : ¬ IsRegionBoundaryEdge (G := G) g.red f.1 := fun hr => hcross ⟨hr, f.2⟩
-        have hcompl : IsRegionBoundaryEdge (G := G) g.complement f.1 := by
+        have hred : ¬ ManyBody.IsRegionBoundaryEdge (G := G) g.red f.1 := fun hr => hcross ⟨hr, f.2⟩
+        have hcompl : ManyBody.IsRegionBoundaryEdge (G := G) g.complement f.1 := by
           have h2 := f.2
           have := @Finset.disjoint_left.mp g.red_disjoint_blue
-          unfold IsRegionBoundaryEdge at h2 hred ⊢
+          unfold ManyBody.IsRegionBoundaryEdge at h2 hred ⊢
           grind [g.mem_complement_iff]
         rw [hagree_compl ζ hζ.2 f.1 hcompl]
         exact congrFun hq0blue f
@@ -488,7 +489,7 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
   have hqcross : ∀ eg : Edge G, g.IsBlueRedCrossingEdge A eg → q eg = q₀ eg := by
     intro eg hg
     -- A crossing edge is a red boundary edge, hence a host boundary edge.
-    have hhost : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg := by
+    have hhost : ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg := by
       rcases hg.1 with ⟨h1red, h2notred⟩ | ⟨h1notred, h2red⟩
       · exact Or.inr ⟨by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1red,
           by rw [Finset.mem_sdiff]; exact ⟨Finset.mem_univ _, h2notred⟩⟩
@@ -596,7 +597,7 @@ theorem ThreeBlockGeometry.exists_regionBoundaryLabel_host_eq
     (hpos : ∀ eg : Edge G, 0 < A.bondDim eg) :
     ∃ q : VirtualConfig A, regionBoundaryLabel (G := G) A (Finset.univ \ g.red) q = bdry := by
   classical
-  refine ⟨fun eg => if hg : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg then
+  refine ⟨fun eg => if hg : ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg then
       bdry ⟨eg, hg⟩
     else ⟨0, hpos eg⟩, ?_⟩
   funext f

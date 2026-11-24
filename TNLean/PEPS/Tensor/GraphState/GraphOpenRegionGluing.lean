@@ -23,7 +23,7 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 private abbrev RV (R : Finset V) := {v : V // v ∈ R}
 private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 /-- Bonds internal to the union but internal to neither part are its joining bonds.
 Source: SCP10, independent column blocking, lines 2489–2507. -/
@@ -36,7 +36,7 @@ omit [Fintype V] [DecidableRel Γ.Adj] in
 Source: SCP10, independent column contractions, lines 2489–2507. -/
 theorem regionJoiningEdge_boundary (L S : Finset V) (hd : Disjoint L S)
     (e : RegionJoiningEdge (Γ := Γ) L S) :
-    IsRegionBoundaryEdge L e.1 ∧ IsRegionBoundaryEdge S e.1 := by
+    ManyBody.IsRegionBoundaryEdge L e.1 ∧ ManyBody.IsRegionBoundaryEdge S e.1 := by
   rcases Finset.mem_union.mp e.2.1.1 with ht | ht <;>
     rcases Finset.mem_union.mp e.2.1.2 with hh | hh
   · exact (e.2.2.1 ⟨ht,hh⟩).elim
@@ -105,7 +105,7 @@ def regionGluingLabels (L S : Finset V)
     Edge Γ → G := fun e =>
   if h : (e.1.1 ∈ L ∪ S ∧ e.1.2 ∈ L ∪ S) ∧
       ¬ (e.1.1 ∈ L ∧ e.1.2 ∈ L) ∧ ¬ (e.1.1 ∈ S ∧ e.1.2 ∈ S) then μ ⟨e,h⟩
-  else if h : IsRegionBoundaryEdge (L ∪ S) e then θ ⟨e,h⟩ else 1
+  else if h : ManyBody.IsRegionBoundaryEdge (L ∪ S) e then θ ⟨e,h⟩ else 1
 
 /-- The original crossing labels of either part, read from the same label family.
 Source: SCP10, independent column contractions, lines 2489–2507. -/

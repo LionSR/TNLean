@@ -76,7 +76,8 @@ def IsAKLVSequenceStep {L q : ℕ} (a s : ℕ)
     (x y : EuclideanSpace ℂ (Fin L → Fin q)) : Prop :=
   let t := aklvSequenceThreshold g (i + 1)
   let ell := aklvSequenceDegree g s (i + 1)
-  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+  let B :=
+    ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
   ∃ (E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)) (p : Polynomial ℝ) (c : ℂ),
     0 ≤ E ∧ ‖φ‖ = 1 ∧ toEuclideanLin B φ = (E : ℂ) • φ ∧
     (B - (E : ℂ) • 1 - ((9 * g / 10 : ℝ) : ℂ) •
@@ -115,7 +116,8 @@ theorem exists_aklv_dyadic_filtered_output {L q a s : ℕ}
   classical
   let t := aklvSequenceThreshold g (i + 1)
   let ell := aklvSequenceDegree g s (i + 1)
-  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+  let B :=
+    ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
   have hxsmall : ‖x - Ω‖ ^ 2 ≤ 1 / 16 := by
     have hw := (aklvSequenceWeight_pos_le_one i).2
     linarith
@@ -168,7 +170,7 @@ The product overlap is with the clipped target, as in `Initialization`. -/
 def IsAKLVSequenceInitialization {L q : ℕ} (a s : ℕ)
     (Φ : ManyBody.BondInteraction L q)
     (e : Fin 3 → ℝ) (g : ℝ) (Ω x : EuclideanSpace ℂ (Fin L → Fin q)) : Prop :=
-  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e
+  let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e
     (aklvLogarithmicThreshold g) Finset.univ
   ∃ (E : ℝ) (φ χ : EuclideanSpace ℂ (Fin L → Fin q))
       (p : Polynomial ℝ) (c : ℂ)
@@ -222,7 +224,7 @@ theorem exists_aklv_physical_changing_target_sequence :
       heigen, _hprojector, hclose, hdegree, hpE, hfix, _hrankK,
       χ, vL, vR, c, hχ, hproduct, _hoverlap, hKχ, hc, hψunit, hψrank, _hψφ, hψΩ⟩ :=
     hinit L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited ha
-  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e
+  let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e
     (aklvLogarithmicThreshold g) Finset.univ
   let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
   let ψ0 := c • (‖toEuclideanLin K χ‖⁻¹ : ℂ) • toEuclideanLin K χ

@@ -55,7 +55,7 @@ theorem IsGIsometric.exists_torusPhysicalChargePairReturnMeasurement
         ({w : X // w ∈ R v} → Fin d) ℂ,
       (∀ b, (Q b).IsHermitian ∧ (Q b).PosSemidef) ∧
       (∀ b r, Q b * Q r = if b = r then Q b else 0) ∧ (∑ b, Q b) = 1 ∧
-      ∀ (k : G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R v) e} → G),
+      ∀ (k : G) (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (R v) e} → G),
         let ψ := regularWeightedOpenRegionWeight (torusIncidentSite a) (R v)
           (fun _ => 1) (fun η => σ.character
             (p * (η ⟨(e₁ v).1,Or.inl (e₁ v).2.1⟩)⁻¹ * k⁻¹ *

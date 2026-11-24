@@ -37,8 +37,8 @@ variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
 
 private abbrev RV (R : Finset V) := {v : V // v ∈ R}
 private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RE (R : Finset V) := {e : Edge Γ // IsRegionIncidentEdge R e}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RE (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 omit [Fintype V] [DecidableRel Γ.Adj] [DecidableEq G] in
 private theorem root_translations (R : Finset V)
@@ -197,7 +197,7 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 private theorem reference_boundary_iff (R : Finset V) (u : Edge Γ → G) (k : RV R → G)
     (y θ : RB (Γ := Γ) R → G) (a : RI (Γ := Γ) R → G) (x : G) :
     (fun e : RB (Γ := Γ) R => regularRegionTreeReferenceLabels R u k y a x
-      ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ↔
+      ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = θ ↔
         y = x • regularRegionBoundaryTransport R k u θ := by
   constructor
   · intro h
@@ -297,7 +297,7 @@ theorem regularProjectorWeightedTwistedRegionMatrix_coordinates (R : Finset V)
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
     (u : Edge Γ → G) (F : (RE (Γ := Γ) R → G) → ℂ)
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorWeightedTwistedRegionMatrix R u F
         ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
       (Fintype.card G : ℂ)⁻¹ ^ R.card * ∑ x : G,
@@ -309,7 +309,7 @@ theorem regularProjectorWeightedTwistedRegionMatrix_coordinates (R : Finset V)
   classical
   let k := (regularRegionTreeGauge R T hT htree o u).1
   let P (p : (RE (Γ := Γ) R → G) × (RV R → G)) : Prop :=
-    (fun e : RB (Γ := Γ) R => p.1 ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
+    (fun e : RB (Γ := Γ) R => p.1 ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
       ∀ w (f : IncidentEdge Γ w.1),
         (regularRegionCoordinatesEquiv R T hT htree o).symm c w f = p.2 w *
           regularTwistedLabels u w.1
@@ -360,7 +360,7 @@ theorem regularProjectorTwistedRegionMatrix_coordinates (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
     (u : Edge Γ → G) (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorTwistedRegionMatrix R u
         ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
       (Fintype.card G : ℂ)⁻¹ ^ R.card * ∑ x : G,

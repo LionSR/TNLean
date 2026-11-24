@@ -75,7 +75,7 @@ simultaneously conjugated cycle residuals. Source: SCP10, lines 1935–2072. -/
 theorem regularProjectorTwistedRegionMatrix_crossGram_coordinates (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    (u w : Edge Γ → G) (θ ϑ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (u w : Edge Γ → G) (θ ϑ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     ((regularProjectorTwistedRegionMatrix R u).conjTranspose *
       regularProjectorTwistedRegionMatrix R w) θ ϑ =
       (Fintype.card G : ℂ)⁻¹ ^ R.card * (Fintype.card G : ℂ)⁻¹ ^ R.card *
@@ -90,7 +90,7 @@ theorem regularProjectorTwistedRegionMatrix_crossGram_coordinates (R : Finset V)
               (fun e => t * regularRegionTreeCycleResidual R T hT htree o w e * t⁻¹)
           then 1 else 0 := by
   classical
-  let Y := {e : Edge Γ // IsRegionBoundaryEdge R e} → G
+  let Y := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G
   let A := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} → G
   let Q := RootedGroupLabels (G := G) o
   let Z := {e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} //

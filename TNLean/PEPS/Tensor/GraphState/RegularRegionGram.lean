@@ -57,7 +57,7 @@ theorem prod_regularSiteGram_eq_sum_compatible
       (∑ s : Fin d, star (a v.1 η s) * a v.1 θ s) =
         (c v.1 / (Fintype.card G : ℂ)) *
           ∑ g : G, if η = (fun f => g * θ f) then (1 : ℂ) else 0)
-    (η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G) :
+    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) :
     (∏ v : {v : V // v ∈ R}, ∑ s : Fin d,
       star (a v.1 (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) s) *
         a v.1 (fun f => θ ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) s) =
@@ -80,7 +80,7 @@ theorem prod_regularSiteGram_eq_sum_compatible
 /-- An ordered boundary translation sum is the group order times its averaging projector. -/
 theorem sum_regularBoundary_translation_eq_card_mul_projector
     (R : Finset V) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) (x y : Fin b → G) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) (x y : Fin b → G) :
     (∑ g : G, if (fun f => x (e f)) = (fun f => g * y (e f)) then (1 : ℂ) else 0) =
       (Fintype.card G : ℂ) * regularBoundaryProjector b x y := by
   classical
@@ -106,7 +106,7 @@ kernels and the internal bonds. No global Gram identity is assumed. -/
 theorem regularOpenRegionMatrix_gram_of_connected
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (c : V → ℂ)
     (R : Finset V) (hR : (Γ.induce (R : Set V)).Connected) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     (hlocal : ∀ (v : {v : V // v ∈ R}) (η θ : IncidentEdge Γ v.1 → G),
       (∑ s : Fin d, star (a v.1 η s) * a v.1 θ s) =
         (c v.1 / (Fintype.card G : ℂ)) *
@@ -116,43 +116,43 @@ theorem regularOpenRegionMatrix_gram_of_connected
   classical
   ext x y
   let z : ℂ := (∏ v : {v : V // v ∈ R}, c v.1) / (Fintype.card G : ℂ) ^ R.card
-  have hterm (η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G) :
-      (if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-              η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-            (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-              θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
+  have hterm (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) :
+      (if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+              η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+            (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+              θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
           z * ∑ g : G, if η = (fun f => g * θ f) then (1 : ℂ) else 0
         else 0) =
         z * ∑ g : G,
-          if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-              (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) ∧
+          if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+              (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) ∧
               η = (fun f => g * θ f) then (1 : ℂ) else 0 := by
-    by_cases hη : (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) <;>
-      by_cases hθ : (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-        θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) <;>
+    by_cases hη : (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+      η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) <;>
+      by_cases hθ : (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+        θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) <;>
       simp only [hη, hθ, true_and, false_and, ite_true, ite_false,
         Finset.sum_const_zero, mul_zero]
   calc
-    _ = ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-        ∑ θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-          if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-              (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
+    _ = ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+        ∑ θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+          if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+              (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
             z * ∑ g : G, if η = (fun f => g * θ f) then (1 : ℂ) else 0
           else 0 := by
       rw [regularOpenRegionMatrix_gram_apply_group]
       simp only [prod_regularSiteGram_eq_sum_compatible a c R hlocal,
         sum_regionLabelCompatible_eq_sum_translation R hR, z]
-    _ = z * ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-        ∑ θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G, ∑ g : G,
-          if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-              (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) ∧
+    _ = z * ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+        ∑ θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G, ∑ g : G,
+          if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+              (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) ∧
               η = (fun f => g * θ f) then (1 : ℂ) else 0 := by
       simp only [hterm, ← Finset.mul_sum]
     _ = z * ((Fintype.card G : ℂ) ^

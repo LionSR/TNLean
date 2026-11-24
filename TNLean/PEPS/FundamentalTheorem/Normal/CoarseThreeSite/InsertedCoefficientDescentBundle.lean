@@ -323,7 +323,7 @@ the unchanged `b-c` super-bond value. -/
 theorem legEquivBlue_overrideEdge_apply
     (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
     (ηL : VirtualConfig (F.frame.coarseTensor)) (y : Fin (F.frame.coarseBondDim coarseEdgeRB))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G) F.frame.blue b}) :
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) F.frame.blue b}) :
     (F.frame.legEquivBlue
         (fun ie => overrideEdge (G := coarseGraph) (F.frame.coarseTensor) coarseEdgeRB ηL y ie.1)
         b : Fin (A.bondDim b.1)) =

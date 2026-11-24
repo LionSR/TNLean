@@ -73,7 +73,7 @@ transpose of `Z` when `f`'s left endpoint lies in `R` (so the two transposes
 cancel) and the inverse of `Z` otherwise (so the outer transpose flips
 the conjugation back). -/
 noncomputable def absorbedBoundaryGauge (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (Z : GL (Fin (B.bondDim f.1)) ℂ) : GL (Fin (B.bondDim f.1)) ℂ :=
   if f.1.1.1 ∈ R then glTranspose Z else Z⁻¹
 
@@ -82,7 +82,7 @@ omit [Fintype V] in
 by `Xᵀ · orient(·) · (X⁻¹)ᵀ` with `X` the orientation-adapted
 absorbing gauge of `Z` reproduces the engine's `Z · N · Z⁻¹` conjugation. -/
 theorem regionEdgeOrient_absorbedBoundaryGauge (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (Z : GL (Fin (B.bondDim f.1)) ℂ)
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
     regionEdgeOrient (G := G) B R f
@@ -123,7 +123,7 @@ coefficient identity becomes the absorbed plain equality.  The matrix reconcilia
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_applyGauge_of_conjIdentity (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hbd : A.bondDim = B.bondDim)
     (Z : GL (Fin (B.bondDim f.1)) ℂ)
     (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
@@ -189,7 +189,7 @@ identity over the bare edge `f.1`.
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem edgeInsertedCoeff_eq_applyGauge_of_region (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hbd : A.bondDim = B.bondDim)
     (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e)
@@ -277,7 +277,7 @@ theorem regionInsertedCoeff_eq_applyGauge_of_edge (A B : Tensor G d)
       edgeInsertedCoeff (G := G) A e σ N =
         edgeInsertedCoeff (G := G) (applyGauge B X) e σ
           (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd e)) N))
-    (R : Finset V) (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (hfe : f.1 = e)
+    (R : Finset V) (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) (hfe : f.1 = e)
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :

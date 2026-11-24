@@ -74,27 +74,27 @@ open Classical in
 /-- Source: SCP10, proof of Theorem 6.9, lines 1935–1990. A restricted
 translation sum on a region still leaves one free label per internal bond. -/
 theorem sum_regionBoundary_filtered_translations_eq_card (R : Finset V)
-    (μ ν : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (μ ν : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (t : G → Prop) [DecidablePred t] :
-    (∑ η : {e : Edge Γ // IsRegionIncidentEdge R e} → G,
-      ∑ θ : {e : Edge Γ // IsRegionIncidentEdge R e} → G, ∑ g : G,
-      if (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-          η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = μ ∧
-        (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-          θ ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = ν ∧
+    (∑ η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G,
+      ∑ θ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G, ∑ g : G,
+      if (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+          η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = μ ∧
+        (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+          θ ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = ν ∧
         η = (fun e => g * θ e) ∧ t g then (1 : ℂ) else 0) =
       (Fintype.card G : ℂ) ^ Fintype.card {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} *
         ∑ g : G, if μ = (fun e => g * ν e) ∧ t g then 1 else 0 := by
   classical
-  let p : {e : Edge Γ // IsRegionIncidentEdge R e} → Prop :=
-    fun e => IsRegionBoundaryEdge R e.1
-  have hrestrict (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G)
-      (β : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+  let p : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → Prop :=
+    fun e => ManyBody.IsRegionBoundaryEdge R e.1
+  have hrestrict (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G)
+      (β : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
       ((fun e : {e // p e} => η e.1) = (fun e => β ⟨e.1.1, e.2⟩)) ↔
-        (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-          η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = β := by
+        (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+          η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = β := by
     exact regionBoundaryLabel_eq_iff R
-      (fun e => η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) β
+      (fun e => η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) β
   have htranslation (g : G) :
       ((fun e : {e // p e} => μ ⟨e.1.1, e.2⟩) =
         (fun e => g * ν ⟨e.1.1, e.2⟩)) ↔ μ = (fun e => g * ν e) := by

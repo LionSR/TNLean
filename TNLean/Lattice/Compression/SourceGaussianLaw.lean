@@ -105,7 +105,7 @@ def sampledSourceMatrix (e : sourceLocations w) (ξ ζ : branchLabels w e.1)
     (ω : SourceGaussianSamples w k) :
     Matrix (Fin (sourceDims w e).1 × Fin (sourceDims w e).2)
       (Fin (sourceDims w e).1 × Fin (sourceDims w e).2) ℂ :=
-  ambientSampledSource k (lam e ξ) (lam e ζ)
+  ProductSource.ambientSampledSource k (lam e ξ) (lam e ζ)
     (E e ξ) (F e ξ) (E e ζ) (F e ζ) (ω e (ξ, ζ))
 
 /-- Each sampled original-source operator is integrable on the one global law.
@@ -124,7 +124,7 @@ Source: polynomial-PEPS Theorem 5.2, `eq:compression-random-source`,
 `04-compression.tex`, lines 279–309. -/
 theorem integral_sampledSourceMatrix (hk : 0 < k)
     (hnonneg : ∀ e ξ j, 0 ≤ lam e ξ j)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (e : sourceLocations w) (ξ ζ : branchLabels w e.1) :
     (∫ ω, sampledSourceMatrix w k lam E F e ξ ζ ω ∂sourceGaussianLaw w k) =
@@ -136,7 +136,7 @@ theorem integral_sampledSourceMatrix (hk : 0 < k)
   rw [← hmp.map_eq] at hm
   have heq := (integral_map hmp.measurable.aemeasurable hm).symm
   rw [hmp.map_eq, integral_ambientSampledSource k hk _ _
-    (hnonneg e ξ) (hnonneg e ζ), ambientSchmidtSource, hsource, hsource] at heq
+    (hnonneg e ξ) (hnonneg e ζ), Matrix.schmidtFrameOuterProduct, hsource, hsource] at heq
   exact heq
 
 /-- The original normalized sources admit fixed Schmidt frames whose sampled
@@ -154,7 +154,7 @@ theorem exists_unbiased_sampledSourceMatrix (w : SourceCircuit a b) (k : ℕ) (h
           (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ),
       (∀ e ξ, (∀ j, 0 ≤ lam e ξ j) ∧ ∑ j, lam e ξ j = 1 ∧
         (E e ξ)ᴴ * E e ξ = 1 ∧ (F e ξ)ᴴ * F e ξ = 1 ∧
-        ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+        Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
           (sourceCoordinates w e ξ).ofLp) ∧
       ∀ e ξ ζ,
         Integrable (sampledSourceMatrix w k lam E F e ξ ζ) (sourceGaussianLaw w k) ∧

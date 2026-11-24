@@ -86,24 +86,24 @@ by two regions, where the agreement forces the two configurations to coincide. -
 /-- An edge incident to both red and blue is a red-to-blue crossing edge. -/
 theorem isCrossing_rb_of_incident (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (hP : F.frame.IsPartition) {e : Edge G}
-    (hr : IsRegionIncidentEdge (G := G) F.frame.red e)
-    (hb : IsRegionIncidentEdge (G := G) F.frame.blue e) :
+    (hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e)
+    (hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e) :
     IsCrossingEdge (G := G) A F.frame.red F.frame.blue e :=
   .of_incident hP.red_disjoint_blue hr hb
 
 /-- An edge incident to both red and complement is a red-to-complement crossing edge. -/
 theorem isCrossing_rc_of_incident (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (hP : F.frame.IsPartition) {e : Edge G}
-    (hr : IsRegionIncidentEdge (G := G) F.frame.red e)
-    (hc : IsRegionIncidentEdge (G := G) F.frame.complement e) :
+    (hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e)
+    (hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e) :
     IsCrossingEdge (G := G) A F.frame.red F.frame.complement e :=
   .of_incident hP.red_disjoint_complement hr hc
 
 /-- An edge incident to both blue and complement is a blue-to-complement crossing edge. -/
 theorem isCrossing_bc_of_incident (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (hP : F.frame.IsPartition) {e : Edge G}
-    (hb : IsRegionIncidentEdge (G := G) F.frame.blue e)
-    (hc : IsRegionIncidentEdge (G := G) F.frame.complement e) :
+    (hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e)
+    (hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e) :
     IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e :=
   .of_incident hP.blue_disjoint_complement hb hc
 
@@ -114,7 +114,7 @@ with the roles of blue and complement swapped.) -/
 theorem not_isRegionIncidentEdge_blue_of_crossing_rc
     (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
     {e : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.red F.frame.complement e) :
-    ¬ IsRegionIncidentEdge (G := G) F.frame.blue e :=
+    ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e :=
   hg.not_incident hP.red_disjoint_complement hP.red_disjoint_blue
     hP.blue_disjoint_complement.symm
 
@@ -130,8 +130,8 @@ two configurations to coincide. -/
 edges from `ζr`, the remaining blue-incident edges from `ζb`, and the rest from `ζc`. -/
 noncomputable def triMerge (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (ζr ζb ζc : VirtualConfig A) : VirtualConfig A :=
-  mergeVirtualConfig A (IsRegionIncidentEdge (G := G) F.frame.red) ζr
-    (mergeVirtualConfig A (IsRegionIncidentEdge (G := G) F.frame.blue) ζb ζc)
+  mergeVirtualConfig A (ManyBody.IsRegionIncidentEdge (G := G) F.frame.red) ζr
+    (mergeVirtualConfig A (ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue) ζb ζc)
 
 omit [DecidableEq V] in
 /-- The red vertex product reads the merge unchanged: red-incident edges read `ζr`. -/
@@ -293,16 +293,16 @@ product of the three regions' non-incident bond products. -/
 /-- The bond-dimension product over the edges not incident to `R`: the multiplicity of
 free virtual indices a configuration carries away from its own region. -/
 noncomputable def regionNonIncidentBondProd (A : Tensor G d) (R : Finset V) : ℕ :=
-  ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) R e),
+  ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ ManyBody.IsRegionIncidentEdge (G := G) R e),
     A.bondDim e
 
 /-- An edge incident to neither red nor blue is incident to the complement: under the
 partition both its endpoints lie in the complement. -/
 theorem complIncident_of_not_red_not_blue (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (hP : F.frame.IsPartition) {e : Edge G}
-    (hr : ¬ IsRegionIncidentEdge (G := G) F.frame.red e)
-    (hb : ¬ IsRegionIncidentEdge (G := G) F.frame.blue e) :
-    IsRegionIncidentEdge (G := G) F.frame.complement e := by
+    (hr : ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e)
+    (hb : ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e) :
+    ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e := by
   have h1nr : e.1.1 ∉ F.frame.red := fun h => hr (Or.inl h)
   have h1nb : e.1.1 ∉ F.frame.blue := fun h => hb (Or.inl h)
   exact Or.inl (hP.mem_complement_of_notMem h1nr h1nb)
@@ -310,9 +310,11 @@ theorem complIncident_of_not_red_not_blue (F : CoherentCoarseBlockingFrame (G :=
 /-- The free virtual indices of an agreeing triple in a fiber: each configuration's
 values on the edges not incident to its own region. -/
 abbrev FreeLegs (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) : Type _ :=
-  ((e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) F.frame.red e}) → Fin (A.bondDim e.1)) ×
-  ((e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) F.frame.blue e}) → Fin (A.bondDim e.1)) ×
-  ((e : {e : Edge G // ¬ IsRegionIncidentEdge (G := G) F.frame.complement e}) →
+  ((e : {e : Edge G // ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e}) →
+    Fin (A.bondDim e.1)) ×
+  ((e : {e : Edge G // ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e}) →
+    Fin (A.bondDim e.1)) ×
+  ((e : {e : Edge G // ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e}) →
     Fin (A.bondDim e.1))
 
 /-- The free virtual indices read off a triple: each configuration restricted to the
@@ -327,9 +329,11 @@ free indices elsewhere. -/
 noncomputable def triFiberTriple (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (η : VirtualConfig A) (legs : FreeLegs F) :
     VirtualConfig A × VirtualConfig A × VirtualConfig A :=
-  (fun e => if hr : IsRegionIncidentEdge (G := G) F.frame.red e then η e else legs.1 ⟨e, hr⟩,
-   fun e => if hb : IsRegionIncidentEdge (G := G) F.frame.blue e then η e else legs.2.1 ⟨e, hb⟩,
-   fun e => if hc : IsRegionIncidentEdge (G := G) F.frame.complement e then η e
+  (fun e => if hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e then
+    η e else legs.1 ⟨e, hr⟩,
+   fun e => if hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e then
+     η e else legs.2.1 ⟨e, hb⟩,
+   fun e => if hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e then η e
               else legs.2.2 ⟨e, hc⟩)
 
 /-- The free-index type has the product of the three regions' non-incident bond
@@ -343,13 +347,13 @@ theorem freeLegs_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) :
   simp only [Fintype.card_fin]
   rw [regionNonIncidentBondProd, regionNonIncidentBondProd, regionNonIncidentBondProd,
     ← Finset.prod_subtype (Finset.univ.filter
-        (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) F.frame.red e))
+        (fun e : Edge G => ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e))
       (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e),
     ← Finset.prod_subtype (Finset.univ.filter
-        (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) F.frame.blue e))
+        (fun e : Edge G => ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e))
       (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e),
     ← Finset.prod_subtype (Finset.univ.filter
-        (fun e : Edge G => ¬ IsRegionIncidentEdge (G := G) F.frame.complement e))
+        (fun e : Edge G => ¬ ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e))
       (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
   ring
 
@@ -377,31 +381,31 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     refine ⟨⟨?_, ?_, ?_⟩, ?_⟩
     · funext g
       simp only [crossingLabel, triFiberTriple]
-      have hr : IsRegionIncidentEdge (G := G) F.frame.red g.1 :=
-        isRegionBoundaryEdge_touches (G := G) F.frame.red g.2.1
-      have hb : IsRegionIncidentEdge (G := G) F.frame.blue g.1 :=
-        isRegionBoundaryEdge_touches (G := G) F.frame.blue g.2.2
+      have hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red g.1 :=
+        ManyBody.isRegionBoundaryEdge_touches (G := G) F.frame.red g.2.1
+      have hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue g.1 :=
+        ManyBody.isRegionBoundaryEdge_touches (G := G) F.frame.blue g.2.2
       rw [dite_eq_left hr, dite_eq_left hb]
     · funext g
       simp only [crossingLabel, triFiberTriple]
-      have hr : IsRegionIncidentEdge (G := G) F.frame.red g.1 :=
-        isRegionBoundaryEdge_touches (G := G) F.frame.red g.2.1
-      have hc : IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
-        isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
+      have hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red g.1 :=
+        ManyBody.isRegionBoundaryEdge_touches (G := G) F.frame.red g.2.1
+      have hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
+        ManyBody.isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
       rw [dite_eq_left hr, dite_eq_left hc]
     · funext g
       simp only [crossingLabel, triFiberTriple]
-      have hb : IsRegionIncidentEdge (G := G) F.frame.blue g.1 :=
-        isRegionBoundaryEdge_touches (G := G) F.frame.blue g.2.1
-      have hc : IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
-        isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
+      have hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue g.1 :=
+        ManyBody.isRegionBoundaryEdge_touches (G := G) F.frame.blue g.2.1
+      have hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement g.1 :=
+        ManyBody.isRegionBoundaryEdge_touches (G := G) F.frame.complement g.2.2
       rw [dite_eq_left hb, dite_eq_left hc]
     · funext e
       simp only [triMerge, triFiberTriple]
-      by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
+      by_cases hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e
       · rw [mergeVirtualConfig_of_pos A _ _ _ hr, dite_eq_left hr]
       · rw [mergeVirtualConfig_of_neg A _ _ _ hr]
-        by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
+        by_cases hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e
         · rw [mergeVirtualConfig_of_pos A _ _ _ hb, dite_eq_left hb]
         · rw [mergeVirtualConfig_of_neg A _ _ _ hb,
             dite_eq_left (complIncident_of_not_red_not_blue F hP hr hb)]
@@ -413,7 +417,7 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     refine Prod.ext ?_ (Prod.ext ?_ ?_)
     · funext e
       simp only [triFiberTriple, triFiberLegs]
-      by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
+      by_cases hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e
       · rw [dite_eq_left hr]
         have := hmerge' e
         rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr] at this
@@ -421,9 +425,9 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
       · rw [dite_eq_right hr]
     · funext e
       simp only [triFiberTriple, triFiberLegs]
-      by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
+      by_cases hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e
       · rw [dite_eq_left hb]
-        by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
+        by_cases hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e
         · have := hmerge' e
           rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr] at this
           rw [← (hag.rb F (isCrossing_rb_of_incident F hP hr hb)), this]
@@ -434,13 +438,13 @@ theorem triFiber_card (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
       · rw [dite_eq_right hb]
     · funext e
       simp only [triFiberTriple, triFiberLegs]
-      by_cases hc : IsRegionIncidentEdge (G := G) F.frame.complement e
+      by_cases hc : ManyBody.IsRegionIncidentEdge (G := G) F.frame.complement e
       · rw [dite_eq_left hc]
-        by_cases hr : IsRegionIncidentEdge (G := G) F.frame.red e
+        by_cases hr : ManyBody.IsRegionIncidentEdge (G := G) F.frame.red e
         · have := hmerge' e
           rw [triMerge, mergeVirtualConfig_of_pos A _ _ _ hr] at this
           rw [← (hag.rc F (isCrossing_rc_of_incident F hP hr hc)), this]
-        · by_cases hb : IsRegionIncidentEdge (G := G) F.frame.blue e
+        · by_cases hb : ManyBody.IsRegionIncidentEdge (G := G) F.frame.blue e
           · have := hmerge' e
             rw [triMerge, mergeVirtualConfig_of_neg A _ _ _ hr,
               mergeVirtualConfig_of_pos A _ _ _ hb] at this

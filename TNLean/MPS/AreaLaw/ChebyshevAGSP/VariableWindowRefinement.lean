@@ -76,7 +76,8 @@ theorem exists_aklv_variable_window_filtered_output {L q a s : ℕ}
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian
+          (a + 2) (a + s - 1) Φ e t Finset.univ
         B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s ∧
         ∃ (E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
           0 ≤ E ∧ ‖φ‖ = 1 ∧ toEuclideanLin B φ = (E : ℂ) • φ ∧
