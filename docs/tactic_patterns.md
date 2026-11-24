@@ -927,7 +927,8 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Expand the finite union of integer squares, their Cartesian
   products and interval membership to obtain coordinate inequalities.
 - **Seen:** The original membership lemma in `Geometry/TemplateRows.lean`,
-  `Scan.ambientDepth_le_iff_mem_dilation` in `Scan/AmbientDepth.lean`, and
+  `ManyBody.ambientDepth_le_iff_mem_ambientDilation` (now in QICLean's
+  `ManyBody/Sites/Lattice/SupDistance.lean`), and
   `exterior_union_subset_graphNeighborhood_compl_of_clearance` in
   `GraphNeighborhoodCutClearance.lean`, under `TNLean/PEPS/AreaLaw/`.
 - **Abstraction:** QICLean's `ManyBody.mem_ambientDilation_iff` follows
@@ -1522,7 +1523,7 @@ abstracted — record why, so it is not re-proposed).
   `ParentHamiltonian/RegularLiftedRegionRange.lean`,
   `RegularEdgeChargeContraction.lean`).
 - **Abstraction:** `ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge` in
-  `TNLean/PEPS/Tensor/Region/OpenRegionContraction.lean`, combined with
+  `QICLean/ManyBody/Sites/Lattice/Edge.lean` (QICLean dependency), combined with
   `isRegionIncidentEdge_of_regionVertex` for an edge at a region vertex.
 - **Notes:** part of a −101 line refactor over 17 files, which also shared the
   plaquette-seam lemma `torusPlaquetteRegion_ne_add_two`.
