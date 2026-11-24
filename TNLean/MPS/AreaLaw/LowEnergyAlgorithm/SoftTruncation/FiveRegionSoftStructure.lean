@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
+import QICLean.ManyBody.Hamiltonian.Chain.ConsecutiveRegions
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import QICLean.Spectral.Filter.SoftTruncationCommutingFamily
 
@@ -68,7 +68,7 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
   intro k I A J Y
   let R := fun j : Fin 5 ↦ interval L (k j.castSucc) (k j.succ)
   obtain ⟨hk, hR, hsA, hA, hY, hYC, hJ, hsum⟩ :=
-    five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L Φ h0 h1
+    ManyBody.BondInteraction.five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L Φ h0 h1
   have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
     ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
@@ -98,7 +98,7 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
   refine ⟨hJ, e, x, z, E, hx, hxe, he, hHY, hBraw', hz, hHz', hE', hE0, hEC, hH, ?_⟩
   intro S p t m hpl hpu ht hm B D G
   have hcomm : Pairwise fun i j : Fin 5 ↦ Commute (A i) (A j) :=
-    pairwise_commute_sum_internal_consecutive_regions k hk Φ
+    ManyBody.BondInteraction.pairwise_commute_sum_internal_consecutive_regions k hk Φ
   obtain ⟨hBpos, hBle, hBA, hproj⟩ := softTruncation_commuting_family_bounds A e p S
     (fun j ↦ (hA j).1.isHermitian) (fun j ↦ le_iff.mpr (he j)) hpl hpu hcomm t m ht hm
   change (B + (D : ℂ) • 1).PosSemidef at hBpos

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.Counting
+import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.Entropy.Surprisal.TailRadiusWeights
 import QICLean.ManyBody.Entropy.Filter.BufferDiscount
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -69,6 +69,9 @@ open Matrix
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (IsGapped groundSpace)
+open ManyBody.ChainSupport (log_sq_supportDim_le)
+open ManyBody (card_crossingTerms_interval_le chainBudgetConst chainCrossConst
+  cutLogBudget_interval_le one_le_chainBudgetConst single_splitting_shells)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -330,7 +333,8 @@ theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 
           (ManyBody.crossingTerms S (X ∪ T j)).card * ((q : ℝ) ^ (2 * (R + 1)) * J) := by
         rw [← nsmul_eq_mul]
         refine Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ ?_
-        have h2 := supportDim_le_real (R := R) hq (σ i)
+        have h2 : (Entropy.supportDim (fun _ : Fin L ↦ q) (σ i).1 : ℝ) ≤ (q : ℝ) ^ (R + 1) := by
+          exact_mod_cast ManyBody.ChainSupport.supportDim_le (R := R) hq (σ i)
         have h0 : (0 : ℝ) ≤ Entropy.supportDim (fun _ : Fin L ↦ q) (S i) := by positivity
         calc (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
             ((q : ℝ) ^ (R + 1)) ^ 2 * J := mul_le_mul_of_nonneg_right (pow_le_pow_left₀ h0 h2 2) hJ
@@ -660,7 +664,8 @@ theorem two_mul_condEntropy_interval_le_polynomial
             ((q : ℝ) ^ (2 * (R + 1)) * J) := by
         rw [← nsmul_eq_mul]
         refine Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ ?_
-        have h2 := supportDim_le_real (R := R) hq i
+        have h2 : (Entropy.supportDim (fun _ : Fin L ↦ q) i.1 : ℝ) ≤ (q : ℝ) ^ (R + 1) := by
+          exact_mod_cast ManyBody.ChainSupport.supportDim_le (R := R) hq i
         have h0 : (0 : ℝ) ≤ Entropy.supportDim (fun _ : Fin L ↦ q) (S i) := by positivity
         calc (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
             ((q : ℝ) ^ (R + 1)) ^ 2 * J := mul_le_mul_of_nonneg_right (pow_le_pow_left₀ h0 h2 2) hJ

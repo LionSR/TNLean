@@ -168,7 +168,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
       ∀ (q : ℕ), 1 ≤ q →
       ∀ (L : ℕ) (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J) (D : Finset (Fin L))
-        (ℓ : ℝ), 0 ≤ ℓ →
+        (ℓ : ℝ),
         let K := h.doubledFin.hamiltonian
         let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
         let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
@@ -177,7 +177,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
         let crossing := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin L) ↦
-          chainNeighborhood S ℓ
+          ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) S ⌊ℓ⌋₊
         ∃ U : ℝ → Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
@@ -202,12 +202,12 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
   let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
   let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
     (1 - Real.exp (-(1 / 2)))
-  let d : ℝ := 4 * |J| * a * (R + 1 : ℝ) ^ 2 * (chainCrossConst R : ℝ)
+  let d : ℝ := 4 * |J| * a * (R + 1 : ℝ) ^ 2 * (ManyBody.chainCrossConst R : ℝ)
   have ha : 0 < a := div_pos (by positivity)
     (sub_pos.mpr (Real.exp_lt_one_iff.mpr (by norm_num)))
   have hd : 0 ≤ d := by positivity
   refine ⟨a + d, 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1, by positivity, by positivity, ?_⟩
-  intro q hq L h hh hhJ D ℓ hℓ K pr e F K' crossing Z N
+  intro q hq L h hh hhJ D ℓ K pr e F K' crossing Z N
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
     (h.doubled.conj (ManyBody.pairSwapOp (X := fun _ ↦ Fin q) D) fun X ↦
         ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators D
@@ -233,10 +233,9 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
         (ManyBody.Interaction.isHermitian_hamiltonian (Φ := h.doubledFin) fun X ↦
           (ManyBody.Interaction.isHermitian_doubled_term (hh X)).reindex _) Z ℓ
         d hd (fun s ↦ by
-      rw [hΦ, graphNeighborhood_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
-      exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq ℓ hℓ s)
-  simp only [hΦ, graphNeighborhood_pathGraph_eq_chainNeighborhood _ hℓ, Fintype.card_fin]
-    at hgen
+      rw [hΦ, Fintype.card_fin]
+      exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq ℓ s)
+  simp only [hΦ, Fintype.card_fin] at hgen
   exact hgen
 
 /-- One supported unitary path gives the localized truncated Gaussian integrals
@@ -284,7 +283,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
   let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
   let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
     (1 - Real.exp (-(1 / 2)))
-  let d : ℝ := 4 * |J| * a * (R + 1 : ℝ) ^ 2 * (chainCrossConst R : ℝ)
+  let d : ℝ := 4 * |J| * a * (R + 1 : ℝ) ^ 2 * (ManyBody.chainCrossConst R : ℝ)
   have ha : 0 < a := div_pos (by positivity)
     (sub_pos.mpr (Real.exp_lt_one_iff.mpr (by norm_num)))
   have hd : 0 ≤ d := by positivity
@@ -310,7 +309,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
         X)).trans_le ((ManyBody.Interaction.norm_doubled_term_le h X).trans
           (by linarith [hhJ X]))
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
-    (lineDomainGraph Λ) (lineDomainGraph_card_sphere_le_two Λ) Φ
+    (lineDomainGraph Λ) (ManyBody.lineDomainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) hΦh b₀
     (ManyBody.DomainInteraction.sum_norm_terms_containing_le Φ hΦn)
         (ManyBody.Interaction.isHermitian_hamiltonian (Φ := h.doubledFin) fun X ↦

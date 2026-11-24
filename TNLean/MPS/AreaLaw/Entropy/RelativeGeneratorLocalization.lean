@@ -3,11 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.DoubledHamiltonian
-import TNLean.MPS.AreaLaw.Chain.PartialSwap
-import TNLean.MPS.AreaLaw.Chain.DomainPartialSwap
-import TNLean.MPS.AreaLaw.Chain.LiebRobinson
-import TNLean.MPS.AreaLaw.Chain.Counting
+import QICLean.ManyBody.Hamiltonian.Chain.Doubled
+import QICLean.ManyBody.Dynamics.GraphLocalization
 import QICLean.ManyBody.Dynamics.SwappedDoubledInteraction
 
 /-!
@@ -50,6 +47,7 @@ open ManyBody (ChainSupport DomainSupport boundaryEdges lineDomainGraph ChainInt
 
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
+open ManyBody (chainCrossConst lineDomainGraph_card_sphere_le_two)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -137,7 +135,7 @@ in the chain length. Source: TNLean note, `part2a_mps_information.tex`, lines 38
 theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le
     {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (D : Finset (Fin L)) (hq : 1 ≤ q) (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
+    (D : Finset (Fin L)) (hq : 1 ≤ q) (ℓ : ℝ) (t : ℝ) :
     let K := h.doubledFin.hamiltonian
     let pr := Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin q) fun _ ↦ Fin q
     let e := pr.symm.trans (Equiv.arrowCongr (Equiv.refl (Fin L)) finProdFinEquiv)
@@ -145,7 +143,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
     let K' := F * K * Fᴴ
     let C := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
-    let B := chainNeighborhood Z ℓ
+    let B := ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) Z ⌊ℓ⌋₊
     let G := ManyBody.heisenbergEvolution K' t (K' - K)
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
@@ -193,7 +191,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
     (2 * |J|) (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).2.2.trans
       (mul_le_mul_of_nonneg_left (le_abs_self J) (by norm_num))) ℓ t
   dsimp only at hgen
-  rw [graphNeighborhood_pathGraph_eq_chainNeighborhood Z hℓ, hΦ, ← hdiff] at hgen
+  rw [hΦ, ← hdiff] at hgen
   have hb : (boundaryEdges L D).card ≤ L :=
     (Finset.card_le_card fun p hp ↦ Finset.mem_range.mpr
       (by have := (ManyBody.mem_boundaryEdges.mp hp).1; omega)).trans (Finset.card_range _).le

@@ -135,7 +135,8 @@
 - **Pattern:** Two spectral values give `2 ≤ q` and a nonempty chain; the
   gapped-ground-state predicate then gives `g ≤ 1`.
 - **Abstraction:** Derive the frustration-free statement from the general one at
-  `μ = 0`, or move the general one beside `gap_le_one_of_positive_nearest_neighbor_terms`.
+  `μ = 0`, or move the general one beside
+  `ManyBody.BondInteraction.gap_le_one_of_nonneg_of_le_one`.
 - **Notes:** Kept separate while the general file was being edited elsewhere.
 
 Living registry of repeated proof patterns, maintained under the process in
@@ -418,8 +419,9 @@ abstracted — record why, so it is not re-proposed).
   bound on the path-graph distance between two sites of the support.
 - **Defined in:** `QICLean/ManyBody/Sites/Lattice/Chain.lean` (QICLean dependency),
   `ManyBody.ChainSupport.edist_le`.
-- **Refactored occurrences:** the propagation and localization proofs in
-  `MPS/AreaLaw/Chain/LiebRobinson.lean` and the finite-support numerical
+- **Refactored occurrences:** the former chain propagation and localization proofs
+  (the localization one now in QICLean's `ManyBody/Dynamics/GraphLocalization.lean`)
+  and the finite-support numerical
   propagation proof in `MPS/AreaLaw/ProjectorFactorization/LiebRobinson.lean`;
   the TNLean copy of the lemma was deleted in favour of the QICLean one.
 - **Notes:** The existing private proof is now a public theorem; the new
@@ -586,11 +588,12 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Bound the number of supports contained in a window of at most `n`
   sites by `2^n`.
-- **Seen:** `card_crossingTerms_interval_le`,
+- **Seen:** `ManyBody.card_crossingTerms_interval_le`,
   `ManyBody.ChainInteraction.sum_norm_terms_containing_le`, and
-  `card_crossingTerms_le_mul_card_boundaryEdges` in the three chain counting modules.
-- **Abstraction:** `card_filter_subset_le_pow_of_card_le` in
-  `MPS/AreaLaw/Chain/Counting.lean`, combining the powerset count with monotonicity of powers.
+  `ManyBody.card_crossingTerms_le_mul_card_boundaryEdges`, now in QICLean.
+- **Abstraction:** `ManyBody.ChainSupport.card_filter_subset_le_pow_of_card_le` in
+  QICLean's `ManyBody/Sites/Lattice/ChainCut.lean`, combining the powerset count with
+  monotonicity of powers.
 - **Notes:** All three arguments use the shared lemma. Their separate interval-length
   estimates and the finite-union bound remain at their respective uses.
 
@@ -598,9 +601,10 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Compare `log (exp 1 * d_X)^2` with
   `log (exp 1 * q^(R+1))^2` for a support of range `R`.
-- **Seen:** `cutLogBudget_interval_le` and
+- **Seen:** `ManyBody.cutLogBudget_interval_le` and
   `ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive_terms`.
-- **Abstraction:** `log_sq_supportDim_le` in `MPS/AreaLaw/Chain/Counting.lean`.
+- **Abstraction:** `ManyBody.ChainSupport.log_sq_supportDim_le` in QICLean's
+  `ManyBody/Sites/Lattice/ChainCut.lean`.
 - **Notes:** Both the full support family and its nonzero-term subtype use this lemma.
 
 ### Monotone range-R patch radii — promoted (2026-10-21)
@@ -620,14 +624,14 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** At an actual site, use its admissible singleton support and
   `norm_nonneg` followed by the interaction norm bound to derive `0 ≤ J`.
 - **Seen:** `ManyBody.ChainInteraction.sum_norm_terms_containing_le` in
-  `MPS/AreaLaw/Chain/Counting.lean`, the nonempty-chain branch of
+  QICLean's `ManyBody/Hamiltonian/Models.lean`, the nonempty-chain branch of
   `ManyBody.ChainInteraction.partialSwap_boundary_spec` in
-  `MPS/AreaLaw/Chain/PartialSwap.lean`, and the logarithmic-separation proof in
+  QICLean's `ManyBody/Hamiltonian/Chain/Doubled.lean`, and the logarithmic-separation proof in
   `MPS/AreaLaw/Entropy/LogarithmicSeparation.lean`.
 - **Abstraction:** `ManyBody.ChainInteraction.norm_bound_nonneg` in
-  `MPS/AreaLaw/Chain/Hamiltonian.lean`; all three arguments use this lemma.
+  QICLean's `ManyBody/Hamiltonian/Models.lean`; all three arguments use this lemma.
   For finite induced domains, `ManyBody.DomainInteraction.norm_bound_nonneg` in
-  `MPS/AreaLaw/Chain/DomainInteractionBudget.lean` uses the admissible singleton
+  QICLean's `ManyBody/Hamiltonian/Models.lean` uses the admissible singleton
   and is reused by the domain per-site budget. The domain swapped and
   per-replica perturbation proofs also use it at a member of each original
   nonempty support.
@@ -727,12 +731,12 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** At an actual site, use its admissible singleton support and
   `norm_nonneg` followed by the interaction norm bound to derive `0 ≤ J`.
 - **Seen:** `ManyBody.ChainInteraction.sum_norm_terms_containing_le` in
-  `MPS/AreaLaw/Chain/Counting.lean`, the nonempty-chain branch of
+  QICLean's `ManyBody/Hamiltonian/Models.lean`, the nonempty-chain branch of
   `ManyBody.ChainInteraction.partialSwap_boundary_spec` in
-  `MPS/AreaLaw/Chain/PartialSwap.lean`, and the logarithmic-separation proof in
+  QICLean's `ManyBody/Hamiltonian/Chain/Doubled.lean`, and the logarithmic-separation proof in
   `MPS/AreaLaw/Entropy/LogarithmicSeparation.lean`.
 - **Abstraction:** `ManyBody.ChainInteraction.norm_bound_nonneg` in
-  `MPS/AreaLaw/Chain/Hamiltonian.lean`; all three arguments use this lemma.
+  QICLean's `ManyBody/Hamiltonian/Models.lean`; all three arguments use this lemma.
 - **Notes:** An actual site is essential. The empty-chain branch retains
   the original real interaction bound. No positivity hypothesis on the
   interaction bound is added to the logarithmic-separation theorem.
@@ -4349,7 +4353,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `heisenberg_commutator_eq_zero_of_edist_eq_top`, the infinite-distance branch of
   `norm_heisenberg_commutator_le_graph_kernel_sum` in `GraphLocalization.lean`,
   and `norm_heisenberg_commutator_le_graphDistance_inf`, formerly in
-  `MPS/AreaLaw/Chain/LiebRobinson.lean` and now in QICLean's `GraphPropagation.lean`.
+  a TNLean chain module and now in QICLean's `GraphPropagation.lean`.
 - **Notes:** Both existing closed-region arguments and the finite-domain
   specialization use the shared theorem. The existing public statements are
   retained. No tactic or global attribute is introduced.
@@ -4367,11 +4371,13 @@ three-plaquette output measurement, and the routed reunion measurement.
   (four), `LiebRobinson.lean` (two), `InformationReset.lean`,
   `LogarithmicSeparation.lean`, `ResetSupportSeparation.lean` and
   `SupportedGaussianIntegral.lean`.
-- **Abstraction:** `chainNeighborhood S ρ` in
-  `TNLean/MPS/AreaLaw/Chain/ChainNeighborhood.lean`, with the simp lemmas
-  `mem_chainNeighborhood` and `chainNeighborhood_empty`. Statements name it
-  directly; membership proofs use `mem_chainNeighborhood` in place of
-  `Finset.mem_filter, Finset.mem_univ, true_and`.
+- **Abstraction:** `ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) S ⌊ρ⌋₊`, the
+  path-graph neighborhood of QICLean's `ManyBody/Sites/GraphBall.lean` (it agrees with
+  the filter above for `ρ ≥ 0`; for `ρ < 0` it is `S`). The chain copy that first
+  abstracted the pattern was deleted when the chain lemmas moved to QICLean.
+  Membership proofs use `ManyBody.mem_graphNeighborhood`,
+  `SimpleGraph.pathGraph_edist`, `ENat.natCast_le_natCast` and, for `ρ ≥ 0`,
+  `Nat.le_floor_iff`.
 
 ### Common coordinate shells for polynomial and logarithmic discounts — completed cleanup
 
@@ -5581,7 +5587,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   into a `Fin` of the target size by an affine relabelling such as
   `i ↦ i.val + m + 1 - c`, closing the bounds with `omega`, or cover them by
   the region and its translate and count the union.
-- **Seen:** `MPS/AreaLaw/Chain/NearestNeighbourImaginaryTime.lean`
+- **Seen:** QICLean's `ManyBody/Hamiltonian/Chain/ConsecutiveRegions.lean`
   (`card_bonds_meeting_enlarged_interval_le`, clipped linear intervals, by
   injection). The ring occurrence (`card_bonds_meeting_le` in
   `MPS/Preparation/FiniteRingLiebRobinson.lean`) was deleted when that estimate
@@ -5672,7 +5678,8 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** Use the floor inequality to bound
   `exp (a - (⌊ℓ⌋₊ : ℝ) / 2)` by `exp (1 / 2) * exp (a - ℓ / 2)`;
   combine this factor with the coefficient of the natural-radius estimate.
-- **Seen:** The chain localization theorem in `MPS/AreaLaw/Chain/LiebRobinson.lean`
+- **Seen:** The chain localization theorem, now in QICLean's
+  `ManyBody/Dynamics/GraphLocalization.lean`,
   and the domain localization theorem formerly in
   `MPS/AreaLaw/DomainLiebRobinson.lean`.
 - **Existing lemmas:** `Nat.lt_floor_add_one`, `Nat.floor_lt`,
@@ -5860,9 +5867,10 @@ no additional helper is proposed.
 
 - **Pattern:** Use the two ordered support inequalities, unfold `Nat.dist`,
   and apply `omega` to bound the coordinate distance by the interaction range.
-- **Seen:** Two occurrences: `chainSupport_edist_le` in
-  `MPS/AreaLaw/Chain/LiebRobinson.lean` and the common local margin argument in
-  `MPS/AreaLaw/Entropy/ResetSupportSeparation.lean`.
+- **Seen:** Two former occurrences: `chainSupport_edist_le` in the chain
+  Lieb–Robinson module (now `ManyBody.ChainSupport.edist_le` in QICLean) and the common
+  local margin argument of the former chain reset-support lemma (deleted in favour of
+  `ManyBody.reset_graphNeighborhood_disjoint_cores`).
 - **Abstraction:** Consider a minimal `IsChainSupport` distance lemma if a
   third consumer appears; no additional helper is needed at two occurrences.
 - **Notes:** The geometric reset argument uses one local margin proof for both
@@ -5876,7 +5884,7 @@ no additional helper is proposed.
   of `norm_mul_le_of_le`.
 - **Seen:** Two chain occurrences: the common local argument in
   `ManyBody.ChainInteraction.partialSwap_term_difference_spec` in
-  `MPS/AreaLaw/Chain/PartialSwap.lean`, and the norm field of the former chain
+  QICLean's `ManyBody/Hamiltonian/Chain/Doubled.lean`, and the norm field of the former chain
   swapped doubled interaction, now `ManyBody.Interaction.norm_conj_term`.
 - **Abstraction:** The standard norm inequalities suffice for these short
   arguments; no new lemma or tactic is introduced at two occurrences.
@@ -5889,7 +5897,7 @@ no additional helper is proposed.
   bijection and identify the resulting scalar, identity and rank-one terms.
 - **Seen:** The complete gap passages in the companion library's
   `Analysis/GaussianFilter/PhysicalBuffer.lean`, `PEPS/Approximation/DoubledHamiltonian/ResetUnitary.lean`
-  and `MPS/AreaLaw/Chain/DoubledHamiltonian.lean`. A related rank-one-only
+  and QICLean's `ManyBody/Hamiltonian/Chain/Doubled.lean`. A related rank-one-only
   calculation occurs in the companion `Analysis/ReplicaLowDefectCoordinateCovariance.lean`.
 - **Abstraction:** Positivity already uses `Matrix.PosSemidef.submatrix`.
   The new chain proof uses the existing `Matrix.reindexAlgEquiv` with
@@ -9671,7 +9679,9 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Choosing sites in nonempty interaction supports — candidate (2026-10-17)
 
 - **Pattern:** Choose a site in each nonempty interaction support and retain its membership proof.
-- **Seen:** The two proofs in `MPS/AreaLaw/Chain/LiebRobinson.lean`.
+- **Seen:** The two proofs of the former chain Lieb–Robinson module; the localization
+  proof is now in QICLean's `ManyBody/Dynamics/GraphLocalization.lean`, and the
+  commutator estimate is the graph theorem applied to the path graph.
 - **Possible abstraction:** A support-choice lemma if a third substantive use appears. The diameter comparison is already a shared private lemma; two choices in one file do not warrant another abstraction.
 - **Notes:** The choices remain internal to the proofs and add no premise to either theorem.
 
@@ -9749,13 +9759,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   infimum of distances from the initial support to the observed site, separate
   infinite distance from finite distance, and weaken exponential decay from
   exponent one to one half.
-- **Seen:** `norm_heisenberg_commutator_le_chainDistance` and
-  `norm_heisenberg_commutator_le_domainDistance`, formerly proved separately
-  in `MPS/AreaLaw/Chain/LiebRobinson.lean` and `MPS/AreaLaw/DomainLiebRobinson.lean`.
+- **Seen:** the chain and domain commutator estimates, formerly proved separately
+  in two TNLean modules on the chain and on finite integer domains.
 - **Abstraction:** `ManyBody.norm_heisenberg_commutator_le_graphDistance_inf` in
   QICLean's `ManyBody/Dynamics/GraphPropagation.lean`, for an arbitrary finite graph; infinite
   distance uses exact commutation across components, which also covers the
-  connected path. Both estimates are now its specializations.
+  connected path. Both estimates are now its applications to the path graph and to
+  `ManyBody.lineDomainGraph Λ`, written at the call site.
 
 ### Opposite-side witnesses for reset supports — candidate (2026-10-21)
 
@@ -9763,15 +9773,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   one outside. Use the outside witness for the first interior core and the
   inside witness for the disjoint second region. The diameter bound transfers
   the core margin to every vertex of the support.
-- **Seen:** `chain_reset_support_separation` in
-  `MPS/AreaLaw/Entropy/ResetSupportSeparation.lean` and
+- **Seen:** a former chain lemma on the reset support (deleted; information reset
+  on the chain now applies the graph theorem to the path graph) and
   `reset_graphNeighborhood_disjoint_cores` in
   `QICLean/ManyBody/Sites/GraphBall.lean`.
 - **Abstraction:** The graph theorem expresses the common geometric argument
-  with natural ball containments. The chain theorem also gives a real-distance
-  lower bound and retains its present proof.
-- **Notes:** Two occurrences; below the promotion threshold. A conversion
-  through rounded radii would lengthen the existing chain proof.
+  with natural ball containments; with
+  `ManyBody.graphBall_subset_of_finite_distance_margin` it now covers the chain.
+- **Notes:** Resolved (2026-11-23): the chain lemma was deleted in favour of the
+  graph theorem.
 
 ### Entropy of finite unions from submodularity — candidate (2026-10-21)
 
@@ -9848,8 +9858,8 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 - **Pattern:** Convert `i < j` to `i * R + R ≤ j * R` by
   `Nat.succ_le_of_lt`, `Nat.mul_le_mul_right`, and `Nat.succ_mul`.
-- **Seen:** Twice in `MPS/AreaLaw/Chain/Counting.lean`, in the later-containment
-  and earlier-disjointness parts of `single_splitting_shells`.
+- **Seen:** Twice in QICLean's `ManyBody/Sites/Lattice/ChainCut.lean`, in the
+  later-containment and earlier-disjointness parts of `ManyBody.single_splitting_shells`.
 - **Abstraction:** Below the promotion threshold. The common geometric
   argument is already factored into the local two-radius containment lemma.
 
@@ -9910,8 +9920,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   cancel terms whose supports do not cross the exchanged region, and split the
   remaining pair sum over the two replicas.
 - **Seen:** `ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing` in
-  `MPS/AreaLaw/Chain/PartialSwap.lean` and its finite-domain counterpart in
-  `MPS/AreaLaw/Chain/DomainPartialSwap.lean`.
+  QICLean's `ManyBody/Hamiltonian/Chain/Doubled.lean`, beside its finite-domain
+  counterpart.
 - **Decision:** Two occurrences. A third use should share the common finite-sum
   cancellation argument, retaining the distinct support geometries.
 
@@ -11646,11 +11656,12 @@ removed after the dependency audit exposed it.
 - **Pattern:** Apply support under finite sums, then enlarge the two-site support
   of each internal bond to its enclosing interval.
 - **Defined in:** The existing
-  `TNLean.MPS.AreaLaw.isSupportedOn_sum_internal_bonds` in
-  `MPS/AreaLaw/Chain/FiveRegionHamiltonian.lean`, now public without a statement change.
+  `ManyBody.BondInteraction.isSupportedOn_sum_internal_bonds` in
+  QICLean's `ManyBody/Hamiltonian/Chain/ConsecutiveRegions.lean`, now public without a
+  statement change.
 - **Refactored occurrences:** The two new uses in
   `MPS/AreaLaw/ChebyshevAGSP/Normalization.lean` call that same lemma; the original three
-  uses in `FiveRegionHamiltonian.lean` are retained. No parallel support API or
+  uses in that module are retained. No parallel support API or
   new tactic is introduced.
 
 ### Real spectral membership from a nonzero eigenvector — promoted (2026-10-29)
@@ -11689,7 +11700,8 @@ removed after the dependency audit exposed it.
 - **Abstraction:** Both applications already use the shared real-spectrum
   identity and endpoint gap theorem. If a third physical application needs
   this pair of conclusions before choosing its window, expose their combined
-  consequence in `MPS/AreaLaw/Chain/BoundaryGap.lean` rather than repeat the argument.
+  consequence in QICLean's `ManyBody/Hamiltonian/Chain/GapUpperBound.lean` rather than
+  repeat the argument.
 - **Notes:** The favorable scale requires the conclusions before its width is
   selected. This argument is specific to a rank-one ground-space gap; the
   degenerate case does not have the same endpoint bound.
@@ -12024,14 +12036,14 @@ removed after the dependency audit exposed it.
 
 ### Ground data from the empty clipping subset — candidate (2026-11-03)
 
-- **Seen:** `MPS/AreaLaw/LowEnergyAlgorithm/Truncation/HardTruncationResidual.lean` and `MPS/AreaLaw/LowEnergyAlgorithm/Truncation/RegionalEnergyMerge.lean`.
+- **Seen:** `MPS/AreaLaw/LowEnergyAlgorithm/Truncation/HardTruncationResidual.lean` and QICLean's `ManyBody/Hamiltonian/DisjointRegionalGround.lean`.
 - **Pattern:** The common regional minimum and centered minimum for an original positive Hamiltonian are the clipping construction at the empty subset; the residual conclusions are discarded.
 - **Decision:** Reuse the existing construction. If a third independent consumer needs only the original ground data, expose that prefix as a common theorem rather than duplicating disjoint-support or minimum-energy arguments.
 
 
 ### Internal bond sums under subdivision — candidate (2026-11-03)
 
-- **Seen:** `MPS/AreaLaw/Chain/FiveRegionHamiltonian.lean` and `MPS/AreaLaw/LowEnergyAlgorithm/Truncation/RegionalEnergyMergePhysical.lean`.
+- **Seen:** QICLean's `ManyBody/Hamiltonian/Chain/ConsecutiveRegions.lean` and `MPS/AreaLaw/LowEnergyAlgorithm/Truncation/RegionalEnergyMergePhysical.lean`.
 - **Pattern:** Partition an internal bond set into consecutive internal subregions and the intervening crossing bonds; inject the crossing set into the prescribed cuts to bound its cardinality.
 - **Decision:** Reuse Mathlib's finite-sum and cardinality lemmas. The two-child identity currently remains local to the energy estimate; expose it if another consumer needs that exact subdivision.
 

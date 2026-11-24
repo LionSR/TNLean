@@ -141,7 +141,7 @@ on the local dimension, the range, the interaction strength, the gap and `δ`, b
 length of the chain nor on the cut. -/
 noncomputable def constantCutBond (q R : ℕ) (J Δ δ : ℝ) : ℕ :=
   ⌊Real.exp (chainIntervalEntropyBound q R J Δ +
-    32 * √((1 + J / Δ) * chainBudgetConst q R) *
+    32 * √((1 + J / Δ) * ManyBody.chainBudgetConst q R) *
       Real.log (2 * Real.exp (Real.exp 1 / 2) / δ))⌋₊
 
 /-- **Lemma `constantbondapprox`**, chain form (arXiv:1307.5143v1, algo53.tex,
@@ -166,13 +166,13 @@ theorem _root_.ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim {R : ℕ}
     rw [inner_normalized_chainTrim hP, Complex.ofReal_re]
     exact (by linarith : 1 - δ ≤ 0).trans (Real.sqrt_nonneg _)
   set c := 2 * Real.exp (Real.exp 1 / 2) with hc
-  set s := √((1 + J / Δ) * chainBudgetConst q R) with hs
+  set s := √((1 + J / Δ) * ManyBody.chainBudgetConst q R) with hs
   set w := 32 * s * Real.log (c / δ) with hw
   have hc2 : 2 ≤ c := by
     have := Real.one_le_exp (by positivity : (0 : ℝ) ≤ Real.exp 1 / 2)
     rw [hc]; linarith
   have hspos : 0 < s := by
-    have h1 := one_le_chainBudgetConst q R
+    have h1 := ManyBody.one_le_chainBudgetConst q R
     have h2 : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
     exact Real.sqrt_pos.mpr (by nlinarith)
   have hcδ : 1 ≤ c / δ := by rw [le_div_iff₀ hδ0]; linarith

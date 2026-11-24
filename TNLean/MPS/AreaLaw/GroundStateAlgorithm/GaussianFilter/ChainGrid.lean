@@ -112,15 +112,19 @@ theorem card_chainCutBuffer_le (L cut r : ℕ) :
     (chainCutBuffer L cut r).card ≤ 2 * r + 2 :=
   (card_interval_le (cut - 1 - r) (cut + r + 1)).trans (chainCutBuffer_width_le cut r)
 
-/-- The actual closed neighborhood of the adjacent pair is exactly its interval buffer.
+/-- The actual closed neighborhood of radius `r` of the adjacent pair in the path graph is
+exactly its interval buffer.
 Osborne, Figures 1--2; Huang, Section 5.4, the Lieb--Robinson truncation in Lemma 19. -/
-theorem chainNeighborhood_chainCutPair_eq {L cut : ℕ} (_hcut0 : 0 < cut) (hcutL : cut < L)
-    (r : ℕ) : chainNeighborhood (chainCutPair L cut) (r : ℝ) = chainCutBuffer L cut r := by
+theorem graphNeighborhood_pathGraph_chainCutPair_eq {L cut : ℕ} (_hcut0 : 0 < cut)
+    (hcutL : cut < L) (r : ℕ) :
+    ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) (chainCutPair L cut) r =
+      chainCutBuffer L cut r := by
   have hnonempty : (interval L (cut - 1) (cut + 1)).Nonempty :=
     ⟨⟨cut, hcutL⟩, mem_interval.mpr (show cut - 1 ≤ cut ∧ cut < cut + 1 by omega)⟩
-  rw [chainCutPair, chainNeighborhood_interval_eq _ _ _ (Nat.cast_nonneg r),
-    ite_eq_left hnonempty]
-  simp only [Nat.floor_natCast, chainCutBuffer]
+  have hN := graphNeighborhood_pathGraph_interval_eq (L := L) (cut - 1) (cut + 1) (r : ℝ)
+  rw [Nat.floor_natCast] at hN
+  rw [chainCutPair, hN, ite_eq_left hnonempty]
+  simp only [chainCutBuffer]
   congr 1
   omega
 

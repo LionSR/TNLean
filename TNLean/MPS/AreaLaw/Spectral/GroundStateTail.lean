@@ -191,7 +191,7 @@ theorem norm_exp_conjugation_two_boundary_le_four {L q : ℕ}
       NormedSpace.exp (-(((1 / 8 : ℝ) : ℂ) • B))‖ ≤ 4 := by
   intro B
   have hbound (i : Fin (L - 1)) :=
-    norm_exp_conjugation_nearest_neighbour_shift_le_two I Φ
+    ManyBody.BondInteraction.norm_exp_conjugation_shift_le_two I Φ
       (fun j _ ↦ h0 j) (fun j _ ↦ h1 j)
       (Φ.term i) (Φ.mem i) (z : ℂ) (1 / 8) (by norm_num) le_rfl
   have hnorm (i : Fin (L - 1)) : ‖Φ.term i‖ ≤ 1 :=

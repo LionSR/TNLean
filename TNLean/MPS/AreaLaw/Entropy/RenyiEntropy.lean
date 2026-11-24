@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.AreaLaw.Chain.Counting
+import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Entropy.RegionEntropy
 import Mathlib.Analysis.Convex.Jensen
 import Mathlib.Analysis.Convex.SpecificFunctions.Basic
@@ -14,7 +14,7 @@ import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 For an interval in a finite-range gapped chain, the Rényi entropies throughout a fixed
 closed interval of orders below one differ from the von Neumann entropy by at most
-`16 * exp 1 * sqrt ((1 + J / Δ) * chainBudgetConst q R)`.
+`16 * exp 1 * sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)`.
 
 The entropy at order one is the regional von Neumann entropy. At the other orders the
 spectral formula uses the existing surprisal moment, so zero eigenvalues are permitted.
@@ -102,7 +102,7 @@ theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
     let p := (ManyBody.regionState_isHermitian
       (X := fun _ ↦ Fin q) X Ω).eigenvalues
     let S := ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω X
-    let u₀ := Entropy.tailRadius (J / Δ) (chainBudgetConst q R)
+    let u₀ := Entropy.tailRadius (J / Δ) (ManyBody.chainBudgetConst q R)
     let H : ℝ → ℝ := fun α ↦
       if α = 1 then S
       else Real.log (Entropy.surprisalMoment p (1 - α)) / (1 - α)
@@ -110,18 +110,18 @@ theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
       ∀ α : ℝ, 1 - u₀ ≤ α → α ≤ 1 →
         S ≤ H α ∧
         H α ≤ S + 512 * Real.exp 1 * (J / Δ) *
-          chainBudgetConst q R * (1 - α) ∧
+          ManyBody.chainBudgetConst q R * (1 - α) ∧
         |H α - S| ≤ 16 * Real.exp 1 *
-          Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) ∧
+          Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R) ∧
         H α = if α = 1 then S else Real.log (∑ i, p i ^ α) / (1 - α) := by
   dsimp only
   refine ⟨ite_eq_left rfl, ?_⟩
   intro α hαlo hαhi
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
-  have hB := one_le_chainBudgetConst q R
-  have hs : 1 ≤ Real.sqrt ((1 + J / Δ) * chainBudgetConst q R) :=
+  have hB := ManyBody.one_le_chainBudgetConst q R
+  have hs : 1 ≤ Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R) :=
     Real.one_le_sqrt.mpr (by nlinarith [mul_nonneg hθ (zero_le_one.trans hB)])
-  have hrad : Entropy.tailRadius (J / Δ) (chainBudgetConst q R) ≤ 1 / 32 := by
+  have hrad : Entropy.tailRadius (J / Δ) (ManyBody.chainBudgetConst q R) ≤ 1 / 32 := by
     simpa only [Entropy.tailRadius, mul_one] using
       one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 32 * 1)
         (mul_le_mul_of_nonneg_left hs (by norm_num : (0 : ℝ) ≤ 32))
@@ -134,7 +134,7 @@ theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
     set S := ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r)
     set u := 1 - α
     have hu0 : 0 < u := sub_pos.mpr hαlt
-    have hu : u ≤ Entropy.tailRadius (J / Δ) (chainBudgetConst q R) := by
+    have hu : u ≤ Entropy.tailRadius (J / Δ) (ManyBody.chainBudgetConst q R) := by
       linarith only [hαlo]
     have hp : ∀ i, 0 ≤ p i :=
       (ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q)
@@ -150,28 +150,28 @@ theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
         simpa only [S, ManyBody.regionEntropy, ManyBody.regionEntropy, vonNeumannEntropy, p,
           mul_comm] using
           mul_entropy_le_log_surprisalMoment hp hpSum u)
-    have hcut := cutLogBudget_interval_le (L := L) (R := R) hq l r
+    have hcut := ManyBody.cutLogBudget_interval_le (L := L) (R := R) hq l r
     have hmoment := h.log_surprisalMoment_region_le hh hhJ hJ hΔ hΩ hgap hspan (interval L l r)
       ((abs_of_pos hu0).le.trans (hu.trans
         (tailRadius_anti_budget hθ (Entropy.one_le_cutLogBudget _ _) hcut)))
     have hlog : Real.log (Entropy.surprisalMoment p u) ≤ u * S +
-        512 * Real.exp 1 * (J / Δ) * chainBudgetConst q R * u ^ 2 :=
+        512 * Real.exp 1 * (J / Δ) * ManyBody.chainBudgetConst q R * u ^ 2 :=
       hmoment.trans (by gcongr)
     have hupper : Real.log (Entropy.surprisalMoment p u) / u ≤ S +
-        512 * Real.exp 1 * (J / Δ) * chainBudgetConst q R * u :=
+        512 * Real.exp 1 * (J / Δ) * ManyBody.chainBudgetConst q R * u :=
       (div_le_iff₀ hu0).mpr (by nlinarith only [hlog])
-    set s := Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)
+    set s := Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)
     have hu' : u * (32 * s) ≤ 1 :=
       (le_div_iff₀ (by positivity : (0 : ℝ) < 32 * s)).mp hu
-    have hs_sq : s ^ 2 = (1 + J / Δ) * chainBudgetConst q R :=
+    have hs_sq : s ^ 2 = (1 + J / Δ) * ManyBody.chainBudgetConst q R :=
       Real.sq_sqrt (by positivity)
-    have hθB : (J / Δ) * chainBudgetConst q R ≤ s ^ 2 := by
+    have hθB : (J / Δ) * ManyBody.chainBudgetConst q R ≤ s ^ 2 := by
       nlinarith only [hs_sq, hB]
-    have hc1 : 512 * Real.exp 1 * (J / Δ) * chainBudgetConst q R * u * s ≤
-        16 * Real.exp 1 * (J / Δ) * chainBudgetConst q R := by
+    have hc1 : 512 * Real.exp 1 * (J / Δ) * ManyBody.chainBudgetConst q R * u * s ≤
+        16 * Real.exp 1 * (J / Δ) * ManyBody.chainBudgetConst q R := by
       nlinarith only [mul_le_mul_of_nonneg_left hu'
-        (by positivity : 0 ≤ 16 * Real.exp 1 * (J / Δ) * chainBudgetConst q R)]
-    have hc : 512 * Real.exp 1 * (J / Δ) * chainBudgetConst q R * u ≤
+        (by positivity : 0 ≤ 16 * Real.exp 1 * (J / Δ) * ManyBody.chainBudgetConst q R)]
+    have hc : 512 * Real.exp 1 * (J / Δ) * ManyBody.chainBudgetConst q R * u ≤
         16 * Real.exp 1 * s :=
       (mul_le_mul_iff_right₀ (zero_lt_one.trans_le hs)).mp (by
         nlinarith only [hc1, mul_le_mul_of_nonneg_left hθB

@@ -32,9 +32,9 @@ each onto the `k`-neighbourhood `K` of the window supporting `[H, W]`. When `R +
 
 The variance parameter `s` of the filters is the source's `q`.
 
-**Local fix (commutator constant, line 794):** `C(R) = partCommutatorConst R` replaces the
-printed `J²` bound on `[H, H_L]`, which fails for range-one terms. Documented in
-`docs/paper-gaps/hastings07_commutator_constant.tex`.
+**Local fix (commutator constant, line 794):** `C(R) = ManyBody.cutCommutatorConst R` replaces
+the printed `J²` bound on `[H, H_L]`, which fails for range-one terms. Documented in
+https://sirui-lu.com/QICLean/paper-gaps/hastings07_commutator_constant.pdf.
 
 **Local fix (error of the localized parts, lines 816–828):** the localization bound is on
 `‖W_tilde - M‖`, which the next step of the source uses, not on the printed `‖M - H_L‖`.
@@ -52,6 +52,8 @@ Documented in https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_l
 -/
 
 open ManyBody (interval mem_interval ChainInteraction)
+open ManyBody (cutLeftSupports cutRightSupports cutBufferSupports cutCommutatorConst
+  graphNeighborhood)
 open ManyBody (gaussianFilteredTerm regionExpectation isHermitian_regionExpectation
   isHermitian_gaussianFilteredTerm)
 
@@ -70,9 +72,9 @@ variable {L q R : ℕ} {J : ℝ}
 of a left or right part, with `h = s / ΔE²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 noncomputable def partLocalizationError (R : ℕ) (J s ΔE T k : ℝ) : ℝ :=
-  T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (partCommutatorConst R * J ^ 2) *
+  T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (cutCommutatorConst R * J ^ 2) *
       Real.exp (chainLRVelocity R J * T - k / 2)) +
-    2 * (partCommutatorConst R * J ^ 2) *
+    2 * (cutCommutatorConst R * J ^ 2) *
       (Real.sqrt (2 * (s / ΔE ^ 2).toNNReal / Real.pi) *
         Real.exp (-T ^ 2 / (2 * (s / ΔE ^ 2).toNNReal)))
 
@@ -86,12 +88,15 @@ noncomputable def _root_.ManyBody.ChainInteraction.localizedPart (h : ChainInter
     regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian
       (ManyBody.centeredObservable Ω P) - ManyBody.centeredObservable Ω P)
 
-/-- The `k`-neighbourhood of an interval lies in the interval widened by `k` on each side. -/
-theorem chainNeighborhood_interval_subset (a b k : ℕ) :
-    chainNeighborhood (interval L a b) (k : ℝ) ⊆ interval L (a - k) (b + k) := by
+/-- The `k`-neighbourhood of an interval in the path graph lies in the interval widened by `k`
+on each side. -/
+theorem graphNeighborhood_pathGraph_interval_subset (a b k : ℕ) :
+    graphNeighborhood (SimpleGraph.pathGraph L) (interval L a b) k ⊆
+      interval L (a - k) (b + k) := by
   intro y hy
-  obtain ⟨x, hx, hxy⟩ := mem_chainNeighborhood.mp hy
-  have hd : Nat.dist x.val y.val ≤ k := by exact_mod_cast hxy
+  obtain ⟨x, hx, hxy⟩ := ManyBody.mem_graphNeighborhood.mp hy
+  have hd : Nat.dist x.val y.val ≤ k := by
+    rwa [SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast] at hxy
   rw [mem_interval] at hx ⊢
   unfold Nat.dist at hd
   omega
@@ -167,26 +172,26 @@ theorem _root_.ManyBody.ChainInteraction.localizedPart_zero (K : Finset (Fin L))
 /-- The window of the left part: the `k`-neighbourhood of the sites within `2R` and `R` of the
 inner edge `c - m` of the left part, where `[H, H_L]` is supported. -/
 noncomputable def leftWindow (L R c m k : ℕ) : Finset (Fin L) :=
-  chainNeighborhood (interval L (c - m - 2 * R) (c - m + R)) (k : ℝ)
+  graphNeighborhood (SimpleGraph.pathGraph L) (interval L (c - m - 2 * R) (c - m + R)) k
 
 /-- The window of the right part. -/
 noncomputable def rightWindow (L R c m k : ℕ) : Finset (Fin L) :=
-  chainNeighborhood (interval L (c + m - R) (c + m + 2 * R)) (k : ℝ)
+  graphNeighborhood (SimpleGraph.pathGraph L) (interval L (c + m - R) (c + m + 2 * R)) k
 
 /-- **The localized left part acts left of the cut.** If `R + k ≤ m`, then `M_L` is supported on
 the sites `i < c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c m k : ℕ}
     (hmk : R + k ≤ m) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h.localizedPart Ω s ΔE (h.partialHamiltonian (leftSupports L R c m))
+      (h.localizedPart Ω s ΔE (h.partialHamiltonian (cutLeftSupports L R c m))
         (leftWindow L R c m k)) (leftBlock L c) := by
   by_cases hcm : c ≤ m
   · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
     change _ ∈ ManyBody.supportedOperators _ _
     exact zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) _)
   refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart c m) _).mono ?_
-  refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans
-    fun x hx ↦ ?_)
+  refine Finset.union_subset (fun x hx ↦ ?_)
+    ((graphNeighborhood_pathGraph_interval_subset _ _ _).trans fun x hx ↦ ?_)
   · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
   · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
 
@@ -195,11 +200,11 @@ on the sites `i ≥ c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–84
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {c m k : ℕ}
     (hmk : R + k ≤ m) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h.localizedPart Ω s ΔE (h.partialHamiltonian (rightSupports L R c m))
+      (h.localizedPart Ω s ΔE (h.partialHamiltonian (cutRightSupports L R c m))
         (rightWindow L R c m k)) (leftBlock L c)ᶜ := by
   refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_rightPart c m) _).mono ?_
-  refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans
-    fun x hx ↦ ?_)
+  refine Finset.union_subset (fun x hx ↦ ?_)
+    ((graphNeighborhood_pathGraph_interval_subset _ _ _).trans fun x hx ↦ ?_)
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
 
@@ -269,17 +274,17 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (leftBlock L c)ᶜ ∧
       ‖H₀ * (OL * OR)‖ ≤ 2 * θ ∧
       ‖Ω - toEuclideanLin (OL * OR) Ω‖ ≤
-        2 * (ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
+        2 * (ΔE⁻¹ * Real.exp (-s / 2) * (cutCommutatorConst R * J ^ 2) +
           partLocalizationError R J s ΔE T k) / θ ∧
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.hamiltonian - (E₀ : ℂ) • 1 - H₀)
         (interval L (c - m - 2 * R - k) (c + m + 2 * R + k)) ∧
       ‖h.hamiltonian - (E₀ : ℂ) • 1 - H₀‖ ≤
         2 * ((2 * (m + R) * 2 ^ (2 * R + 1) : ℕ) * J) +
           2 * (Real.sqrt (2 * (s / ΔE ^ 2).toNNReal / Real.pi) *
-            (partCommutatorConst R * J ^ 2)) := by
+            (cutCommutatorConst R * J ^ 2)) := by
   have hq1 : 1 ≤ q := NeZero.one_le
-  set PL := h.partialHamiltonian (leftSupports L R c m)
-  set PR := h.partialHamiltonian (rightSupports L R c m)
+  set PL := h.partialHamiltonian (cutLeftSupports L R c m)
+  set PR := h.partialHamiltonian (cutRightSupports L R c m)
   set KL := leftWindow L R c m k
   set KR := rightWindow L R c m k
   set ML := h.localizedPart Ω s ΔE PL KL
@@ -296,18 +301,24 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hcomm : Commute (Matrix.spectralCutoff ML θ) (Matrix.spectralCutoff MR θ) :=
     commute_spectralCutoff_of_isSupportedOn disjoint_compl_right hML hMR hsL hsR σ₀ θ θ
   -- the bounds `‖M Ω‖ ≤ μ`
-  have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
+  have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (cutCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
     h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs KL
       (h.norm_commutator_leftPart_le hhJ c m)
-      (h.norm_gaussianFilteredTerm_leftPart_sub_localized_le hh hhJ hq1 c m s ΔE
-          (Nat.cast_nonneg k) hT)
-  have hμR : ‖toEuclideanLin MR Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
+      (by
+        have hloc := h.norm_gaussianFilteredTerm_leftPart_sub_localized_le hh hhJ hq1 c m s ΔE
+          (ℓ := (k : ℝ)) hT
+        rw [Nat.floor_natCast] at hloc
+        exact hloc)
+  have hμR : ‖toEuclideanLin MR Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (cutCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
     h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs KR
       (h.norm_commutator_rightPart_le hhJ c m)
-      (h.norm_gaussianFilteredTerm_rightPart_sub_localized_le hh hhJ hq1 c m s ΔE
-          (Nat.cast_nonneg k) hT)
+      (by
+        have hloc := h.norm_gaussianFilteredTerm_rightPart_sub_localized_le hh hhJ hq1 c m s ΔE
+          (ℓ := (k : ℝ)) hT
+        rw [Nat.floor_natCast] at hloc
+        exact hloc)
   -- the remainder
   have hE : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω := by
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
@@ -318,7 +329,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   set DR := gaussianFilteredTerm s ΔE h.hamiltonian (ManyBody.centeredObservable Ω PR) -
     ManyBody.centeredObservable Ω PR
   have hrem : h.hamiltonian - (E₀ : ℂ) • 1 - (ML + MR) =
-      ManyBody.centeredObservable Ω (h.partialHamiltonian (bufferSupports L R c m)) -
+      ManyBody.centeredObservable Ω (h.partialHamiltonian (cutBufferSupports L R c m)) -
         regionExpectation KL DL - regionExpectation KR DR := by
     rw [← hsum]
     simp only [ML, MR, ManyBody.ChainInteraction.localizedPart, DL, DR, PL, PR]
@@ -337,7 +348,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   · rw [hrem]
     change _ ∈ ManyBody.supportedOperators _ _
     refine sub_mem (sub_mem ?_ ?_) ?_
-    · have hB : ManyBody.centeredObservable Ω (h.partialHamiltonian (bufferSupports L R c m)) ∈
+    · have hB : ManyBody.centeredObservable Ω (h.partialHamiltonian (cutBufferSupports L R c m)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L (c - m - R) (c + m + R)) :=
         ManyBody.centeredObservable_mem Ω (S := Subalgebra.toSubmodule
             (ManyBody.supportedOperators (fun _ ↦ Fin q)
@@ -351,22 +362,22 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
     · refine ManyBody.supportedOperators_mono ?_
         (ManyBody.regionExpectation_mem_supportedOperators KL DL)
       intro x hx
-      have := chainNeighborhood_interval_subset (L := L) _ _ k hx
+      have := graphNeighborhood_pathGraph_interval_subset (L := L) _ _ k hx
       simp only [mem_interval] at this ⊢
       omega
     · refine ManyBody.supportedOperators_mono ?_
         (ManyBody.regionExpectation_mem_supportedOperators KR DR)
       intro x hx
-      have := chainNeighborhood_interval_subset (L := L) _ _ k hx
+      have := graphNeighborhood_pathGraph_interval_subset (L := L) _ _ k hx
       simp only [mem_interval] at this ⊢
       omega
   · have hD (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hP : P.IsHermitian)
-        (hc : ‖h.hamiltonian * P - P * h.hamiltonian‖ ≤ partCommutatorConst R * J ^ 2)
+        (hc : ‖h.hamiltonian * P - P * h.hamiltonian‖ ≤ cutCommutatorConst R * J ^ 2)
         (K : Finset (Fin L)) :
         ‖regionExpectation K
             (gaussianFilteredTerm s ΔE h.hamiltonian (ManyBody.centeredObservable Ω P) -
           ManyBody.centeredObservable Ω P)‖ ≤
-          Real.sqrt (2 * (s / ΔE ^ 2).toNNReal / Real.pi) * (partCommutatorConst R * J ^ 2) := by
+          Real.sqrt (2 * (s / ΔE ^ 2).toNNReal / Real.pi) * (cutCommutatorConst R * J ^ 2) := by
       refine (ManyBody.norm_regionExpectation_le (D := K) _).trans ?_
       rw [h.gaussianFilteredTerm_centeredObservable_sub hh]
       exact (ManyBody.norm_gaussianFilteredTerm_sub_self_le s ΔE

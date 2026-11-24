@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.NearestNeighbourImaginaryTime
+import QICLean.ManyBody.Hamiltonian.Chain.ConsecutiveRegions
 import QICLean.Spectral.Filter.EnergyTruncation
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 import Mathlib.Analysis.Normed.Algebra.MatrixExponential
@@ -210,7 +210,7 @@ theorem norm_boundary_spectral_offDiagonal_le {L q : ℕ}
       (Φ.mem a)
       (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
   have hnorm : ‖O‖ ≤ (1 / 2 : ℝ) := norm_sub_half_one_le (Φ.term a) (h0 a) (h1 a)
-  have hconj := norm_exp_conjugation_nearest_neighbour_shift_le_two I Φ
+  have hconj := ManyBody.BondInteraction.norm_exp_conjugation_shift_le_two I Φ
     (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) O hO (z : ℂ)
     (1 / 8) (by norm_num) le_rfl
   have hzero := hB.spectralProjectionGE_mul_one_sub_eq_zero hut

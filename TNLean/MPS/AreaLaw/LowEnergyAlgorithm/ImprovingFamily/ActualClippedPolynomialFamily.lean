@@ -9,7 +9,6 @@ import QICLean.Analysis.TensorProduct.MatrixTensorCoordinates
 import QICLean.Algebra.OperatorSchmidt.MatrixFactorExchange
 import QICLean.Algebra.Combinatorics.TwoWindowSum
 import QICLean.ManyBody.Sites.Twirl
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalPolynomialTensorFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.RegionalFactors.RegionalMiddleFactors
@@ -93,7 +92,7 @@ private theorem actual_clipped_two_window_alphabet
     change _ ∈ ManyBody.supportedOperators _ _
     apply sum_mem
     intro i hi
-    exact (Φ.mem i).mono (internal_bond_support_subset hi)
+    exact (Φ.mem i).mono (ManyBody.internal_bond_support_subset hi)
   have hC (j : Fin 5) : C j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (R j : Finset (Fin L)) :=
     ManyBody.cfc_mem_supportedOperators _
       (hA j)
@@ -108,7 +107,7 @@ private theorem actual_clipped_two_window_alphabet
   · intro r
     exact Φ.mem ⟨b + r.val, by omega⟩
   · have htotal : Φ.hamiltonian = (∑ j, A j) + Y := by
-      have hraw := Finset.sum_five_internal_regions_add_crossings
+      have hraw := Fin.sum_eq_five_internal_add_crossings
         (A := Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (L := L)
         (k1 := a + 1) (k2 := a + 2 * ell) (k3 := b + 1) (k4 := b + 2 * ell)
         (by omega : a + 1 ≤ a + 2 * ell)

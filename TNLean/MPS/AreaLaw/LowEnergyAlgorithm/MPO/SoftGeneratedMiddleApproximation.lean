@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.SoftTruncationMPOAccuracy
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.RetainedCoreFamilies
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
+import QICLean.ManyBody.Hamiltonian.Chain.ConsecutiveRegions
 import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.Operator.Periodic.TraceChainHermitian
@@ -108,7 +108,7 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     change _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) l r : Finset (Fin (N + 1)))
-    have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r Φ
+    have hAs : A ∈ V := ManyBody.BondInteraction.isSupportedOn_sum_internal_bonds (N + 1) q l r Φ
     have hp : (p : ℂ) • (1 : Matrix (Fin (N + 1) → Fin q)
         (Fin (N + 1) → Fin q) ℂ) ∈ V :=
       SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))

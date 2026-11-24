@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Hamiltonian.ProductBasisPenalty
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
-import TNLean.MPS.AreaLaw.Chain.Hamiltonian
 import QICLean.Spectral.Gap.DoubledSystemGap
 import QICLean.ManyBody.Sites.PlaceAlong
 

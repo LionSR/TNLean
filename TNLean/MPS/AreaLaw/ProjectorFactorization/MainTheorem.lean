@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Entropy.QuditRegionEntropy
-import TNLean.MPS.AreaLaw.Chain.Hamiltonian
+import QICLean.ManyBody.Sites.Lattice.ChainCut
 import TNLean.MPS.AreaLaw.ProjectorFactorization.Doubling
 import QICLean.ManyBody.Entropy.MovementEtaRegional
 import QICLean.ManyBody.Entropy.RegionEntropyInequalities

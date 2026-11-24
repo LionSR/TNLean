@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFree
-import TNLean.MPS.AreaLaw.Chain.PartCommutators
+import QICLean.ManyBody.Sites.Lattice.ChainCut
 import QICLean.ManyBody.Entropy.Cut.SupportedOperatorSchmidtWords
 
 /-!

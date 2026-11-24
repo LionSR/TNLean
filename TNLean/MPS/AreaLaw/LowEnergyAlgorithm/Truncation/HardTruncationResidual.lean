@@ -52,6 +52,7 @@ open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open ManyBody.BondInteraction (five_region_original_bond_data)
 
 noncomputable section
 

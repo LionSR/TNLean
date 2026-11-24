@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.IntervalUnion
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Entropy.QuditRegionEntropy
 import QICLean.ManyBody.Entropy.MovementEtaRegional
 import QICLean.ManyBody.Entropy.RegionEntropyInequalities
@@ -91,7 +91,7 @@ theorem cutEntropy_sub_le (hΩ : ‖Ω‖ = 1) {i k : ℕ} (hik : i ≤ k) :
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k) := by
   have hAL := ManyBody.regionEntropy_le_union_add _ hΩ
     (ManyBody.disjoint_interval_interval 0 i k)
-  rw [interval_union_interval (Nat.zero_le i) hik] at hAL
+  rw [ManyBody.interval_union_interval (Nat.zero_le i) hik] at hAL
   have hT := ManyBody.regionEntropy_le_card_mul_log (q := q) hΩ (interval L i k)
   have hcard : ((interval L i k).card : ℝ) ≤ (k : ℝ) - i := by
     rw [← Nat.cast_sub hik]
@@ -224,7 +224,7 @@ theorem windowEntropy_two_mul_le (hΩ : ‖Ω‖ = 1) (i l₀ l : ℕ) :
     rw [heq]
     have hsplit : interval L a (a + 2 * l) = interval L a (a + l) ∪
         interval L (a + l) (a + l + l) := by
-      rw [interval_union_interval (by omega) (by omega)]
+      rw [ManyBody.interval_union_interval (by omega) (by omega)]
       congr 1
       ring
     rw [hsplit]

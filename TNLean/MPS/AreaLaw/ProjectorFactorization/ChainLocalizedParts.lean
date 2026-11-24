@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Chain.PartCommutators
-import TNLean.MPS.AreaLaw.Chain.LiebRobinson
+import QICLean.ManyBody.Hamiltonian.Chain.CutCommutators
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
@@ -27,8 +26,8 @@ and a set of sites `K`, put `M = W + E_K(W_tilde - W)`, with `E_K` the normalize
 onto `K`. Then `M - W` acts on `K` and `M` is Hermitian. Take `K` to be the `ℓ`-neighbourhood
 of the window supporting the commutator `[H, W]`. The chain Lieb–Robinson bound localizes
 `τ_s(i[H, W])` onto `K` with error
-`ε = a (3R)² (partCommutatorConst R J²) e^{v T - ℓ/2}` for `|s| ≤ T` (with `6R` for the buffer
-part), and the localization of the Gaussian filter gives
+`ε = a (3R)² (ManyBody.cutCommutatorConst R J²) e^{v T - ℓ/2}` for `|s| ≤ T` (with `6R` for the
+buffer part), and the localization of the Gaussian filter gives
 `‖W_tilde - M‖ ≤ T ε + 2 ‖[H, W]‖ √(2h/π) e^{-T²/(2h)}`, `h = q' / ΔE²`. The constants `a`
 and `v` depend only on `R` and `J`, and no bound depends on the length of the chain.
 
@@ -96,6 +95,8 @@ for the
 section
 
 open ManyBody (ChainSupport card_interval_le interval mem_interval ChainInteraction)
+open ManyBody (cutLeftSupports cutRightSupports cutBufferSupports cutCommutatorConst
+  graphNeighborhood)
 open ManyBody (gaussianFilteredTerm regionExpectation isHermitian_regionExpectation
   isHermitian_gaussianFilteredTerm)
 
@@ -171,9 +172,9 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
     (W : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (S : Finset (Fin L)) (n : ℕ) (c : ℝ)
     (hS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.hamiltonian * W - W * h.hamiltonian) S)
     (hSn : S.card ≤ n) (hc : ‖h.hamiltonian * W - W * h.hamiltonian‖ ≤ c)
-    {ℓ T : ℝ} (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
+    {ℓ T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q' ΔE h.hamiltonian W -
-        (W + regionExpectation (chainNeighborhood S ℓ)
+        (W + regionExpectation (graphNeighborhood (SimpleGraph.pathGraph L) S ⌊ℓ⌋₊)
           (gaussianFilteredTerm q' ΔE h.hamiltonian W - W))‖ ≤
       T * (chainLRPrefactor R J * (n : ℝ) ^ 2 * c *
           Real.exp (chainLRVelocity R J * T - ℓ / 2)) +
@@ -190,15 +191,15 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
   have hloc : ∀ s ∈ Set.Icc (-T) T,
       ‖hermitianUnitaryPath h.hamiltonian s * (Complex.I • C) *
           hermitianUnitaryPath h.hamiltonian (-s) -
-        regionExpectation (chainNeighborhood S ℓ)
+        regionExpectation (graphNeighborhood (SimpleGraph.pathGraph L) S ⌊ℓ⌋₊)
           (hermitianUnitaryPath h.hamiltonian s * (Complex.I • C) *
             hermitianUnitaryPath h.hamiltonian (-s))‖ ≤
         chainLRPrefactor R J * (n : ℝ) ^ 2 * c *
           Real.exp (chainLRVelocity R J * T - ℓ / 2) := by
     intro s hs
-    have hlr := norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
+    have hlr := ManyBody.norm_heisenberg_sub_regionExpectation_pathGraph_le
       (fun X : ChainSupport L R ↦ X) h.term hh h.mem _
-      (h.sum_norm_terms_containing_le hhJ) S hA ℓ hℓ s
+      (h.sum_norm_terms_containing_le hhJ) S hA ℓ s
     have hsT : |s| ≤ T := abs_le.mpr hs
     have hcard : (S.card : ℝ) ^ 2 ≤ (n : ℝ) ^ 2 :=
       pow_le_pow_left₀ (Nat.cast_nonneg _) (by exact_mod_cast hSn) 2
@@ -219,82 +220,83 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
 /-- **The localized left part.** With `K` the `ℓ`-neighbourhood of the window
 `[j - m - 2R, j - m + R)` that supports `[H, H_L]`, the operator
 `M_L = H_L + E_K(H_tilde_L - H_L)` satisfies
-`‖H_tilde_L - M_L‖ ≤ T ε + 2 (partCommutatorConst R J²) √(2h/π) e^{-T²/(2h)}`, with
-`ε = a (3R)² (partCommutatorConst R J²) e^{v T - ℓ/2}` and `h = q' / ΔE²`.
+`‖H_tilde_L - M_L‖ ≤ T ε + 2 (ManyBody.cutCommutatorConst R J²) √(2h/π) e^{-T²/(2h)}`, with
+`ε = a (3R)² (ManyBody.cutCommutatorConst R J²) e^{v T - ℓ/2}` and `h = q' / ΔE²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. The source bounds
 `‖M_L - H_L‖`; the bound here is on `‖H_tilde_L - M_L‖`, see
 https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pdf. -/
 theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_leftPart_sub_localized_le
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
-    (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
-    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (leftSupports L R j m)) -
-        (h.partialHamiltonian (leftSupports L R j m) + regionExpectation
-          (chainNeighborhood (interval L (j - m - 2 * R) (j - m + R)) ℓ)
+    (hT : 0 ≤ T) :
+    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (cutLeftSupports L R j m)) -
+        (h.partialHamiltonian (cutLeftSupports L R j m) + regionExpectation
+          (graphNeighborhood (SimpleGraph.pathGraph L)
+            (interval L (j - m - 2 * R) (j - m + R)) ⌊ℓ⌋₊)
           (gaussianFilteredTerm q' ΔE h.hamiltonian
-              (h.partialHamiltonian (leftSupports L R j m)) -
-            h.partialHamiltonian (leftSupports L R j m)))‖ ≤
-      T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (partCommutatorConst R * J ^ 2) *
+              (h.partialHamiltonian (cutLeftSupports L R j m)) -
+            h.partialHamiltonian (cutLeftSupports L R j m)))‖ ≤
+      T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (cutCommutatorConst R * J ^ 2) *
           Real.exp (chainLRVelocity R J * T - ℓ / 2)) +
-        2 * (partCommutatorConst R * J ^ 2) *
+        2 * (cutCommutatorConst R * J ^ 2) *
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) :=
   h.norm_gaussianFilteredTerm_sub_localized_le_of_commutator hh hhJ hq q' ΔE _ _ _ _
     (h.isSupportedOn_commutator_leftPart j m) ((card_interval_le _ _).trans (by omega))
-    (h.norm_commutator_leftPart_le hhJ j m) hℓ hT
+    (h.norm_commutator_leftPart_le hhJ j m) hT
 
 /-- **The localized right part.** With `K` the `ℓ`-neighbourhood of the window
 `[j + m - R, j + m + 2R)` that supports `[H, H_R]`, the operator
 `M_R = H_R + E_K(H_tilde_R - H_R)` satisfies
-`‖H_tilde_R - M_R‖ ≤ T ε + 2 (partCommutatorConst R J²) √(2h/π) e^{-T²/(2h)}`, with
-`ε = a (3R)² (partCommutatorConst R J²) e^{v T - ℓ/2}` and `h = q' / ΔE²`.
+`‖H_tilde_R - M_R‖ ≤ T ε + 2 (ManyBody.cutCommutatorConst R J²) √(2h/π) e^{-T²/(2h)}`, with
+`ε = a (3R)² (ManyBody.cutCommutatorConst R J²) e^{v T - ℓ/2}` and `h = q' / ΔE²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828; see
 https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pdf. -/
 theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_rightPart_sub_localized_le
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
-    (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
-    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (rightSupports L R j m)) -
-        (h.partialHamiltonian (rightSupports L R j m) + regionExpectation
-          (chainNeighborhood (interval L (j + m - R) (j + m + 2 * R)) ℓ)
+    (hT : 0 ≤ T) :
+    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (cutRightSupports L R j m)) -
+        (h.partialHamiltonian (cutRightSupports L R j m) + regionExpectation
+          (graphNeighborhood (SimpleGraph.pathGraph L)
+            (interval L (j + m - R) (j + m + 2 * R)) ⌊ℓ⌋₊)
           (gaussianFilteredTerm q' ΔE h.hamiltonian
-              (h.partialHamiltonian (rightSupports L R j m)) -
-            h.partialHamiltonian (rightSupports L R j m)))‖ ≤
-      T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (partCommutatorConst R * J ^ 2) *
+              (h.partialHamiltonian (cutRightSupports L R j m)) -
+            h.partialHamiltonian (cutRightSupports L R j m)))‖ ≤
+      T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (cutCommutatorConst R * J ^ 2) *
           Real.exp (chainLRVelocity R J * T - ℓ / 2)) +
-        2 * (partCommutatorConst R * J ^ 2) *
+        2 * (cutCommutatorConst R * J ^ 2) *
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) :=
   h.norm_gaussianFilteredTerm_sub_localized_le_of_commutator hh hhJ hq q' ΔE _ _ _ _
     (h.isSupportedOn_commutator_rightPart j m) ((card_interval_le _ _).trans (by omega))
-    (h.norm_commutator_rightPart_le hhJ j m) hℓ hT
+    (h.norm_commutator_rightPart_le hhJ j m) hT
 
 /-- **The localized buffer part.** With `K` the `ℓ`-neighbourhood of the union of the two
 windows that supports `[H, H_B]`, the operator `M_B = H_B + E_K(H_tilde_B - H_B)` satisfies
-`‖H_tilde_B - M_B‖ ≤ T ε + 4 (partCommutatorConst R J²) √(2h/π) e^{-T²/(2h)}`, with
-`ε = a (6R)² (2 partCommutatorConst R J²) e^{v T - ℓ/2}` and `h = q' / ΔE²`.
+`‖H_tilde_B - M_B‖ ≤ T ε + 4 (ManyBody.cutCommutatorConst R J²) √(2h/π) e^{-T²/(2h)}`, with
+`ε = a (6R)² (2 ManyBody.cutCommutatorConst R J²) e^{v T - ℓ/2}` and `h = q' / ΔE²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828; see
 https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pdf. -/
 theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_bufferPart_sub_localized_le
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
-    (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
-    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (bufferSupports L R j m)) -
-        (h.partialHamiltonian (bufferSupports L R j m) + regionExpectation
-          (chainNeighborhood (interval L (j - m - 2 * R) (j - m + R) ∪
-            interval L (j + m - R) (j + m + 2 * R)) ℓ)
+    (hT : 0 ≤ T) :
+    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (cutBufferSupports L R j m)) -
+        (h.partialHamiltonian (cutBufferSupports L R j m) + regionExpectation
+          (graphNeighborhood (SimpleGraph.pathGraph L) (interval L (j - m - 2 * R) (j - m + R) ∪
+            interval L (j + m - R) (j + m + 2 * R)) ⌊ℓ⌋₊)
           (gaussianFilteredTerm q' ΔE h.hamiltonian
-              (h.partialHamiltonian (bufferSupports L R j m)) -
-            h.partialHamiltonian (bufferSupports L R j m)))‖ ≤
+              (h.partialHamiltonian (cutBufferSupports L R j m)) -
+            h.partialHamiltonian (cutBufferSupports L R j m)))‖ ≤
       T * (chainLRPrefactor R J * ((6 * R : ℕ) : ℝ) ^ 2 *
-          (2 * (partCommutatorConst R * J ^ 2)) *
+          (2 * (cutCommutatorConst R * J ^ 2)) *
           Real.exp (chainLRVelocity R J * T - ℓ / 2)) +
-        2 * (2 * (partCommutatorConst R * J ^ 2)) *
+        2 * (2 * (cutCommutatorConst R * J ^ 2)) *
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) := by
   refine h.norm_gaussianFilteredTerm_sub_localized_le_of_commutator hh hhJ hq q' ΔE _ _ _ _
-    (h.isSupportedOn_commutator_bufferPart j m) ?_ (h.norm_commutator_bufferPart_le hhJ j m) hℓ
-    hT
+    (h.isSupportedOn_commutator_bufferPart j m) ?_ (h.norm_commutator_bufferPart_le hhJ j m) hT
   refine (Finset.card_union_le _ _).trans ?_
   have h1 := card_interval_le (L := L) (j - m - 2 * R) (j - m + R)
   have h2 := card_interval_le (L := L) (j + m - R) (j + m + 2 * R)
@@ -305,9 +307,9 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_leftPart_localized (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
-    (h.partialHamiltonian (leftSupports L R j m) + regionExpectation K
-      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (leftSupports L R j m)) -
-        h.partialHamiltonian (leftSupports L R j m))).IsHermitian :=
+    (h.partialHamiltonian (cutLeftSupports L R j m) + regionExpectation K
+      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (cutLeftSupports L R j m)) -
+        h.partialHamiltonian (cutLeftSupports L R j m))).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
       (ManyBody.Interaction.isHermitian_partialHamiltonian fun X _ ↦ hh X) K
 
@@ -316,9 +318,9 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_rightPart_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
-    (h.partialHamiltonian (rightSupports L R j m) + regionExpectation K
-      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (rightSupports L R j m)) -
-        h.partialHamiltonian (rightSupports L R j m))).IsHermitian :=
+    (h.partialHamiltonian (cutRightSupports L R j m) + regionExpectation K
+      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (cutRightSupports L R j m)) -
+        h.partialHamiltonian (cutRightSupports L R j m))).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
       (ManyBody.Interaction.isHermitian_partialHamiltonian fun X _ ↦ hh X) K
 
@@ -327,9 +329,9 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_bufferPart_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
-    (h.partialHamiltonian (bufferSupports L R j m) + regionExpectation K
-      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (bufferSupports L R j m)) -
-        h.partialHamiltonian (bufferSupports L R j m))).IsHermitian :=
+    (h.partialHamiltonian (cutBufferSupports L R j m) + regionExpectation K
+      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (cutBufferSupports L R j m)) -
+        h.partialHamiltonian (cutBufferSupports L R j m))).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
       (ManyBody.Interaction.isHermitian_partialHamiltonian fun X _ ↦ hh X) K
 
@@ -338,8 +340,8 @@ support, being nonempty, is contained in it.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, line 776 (`H_L`). -/
 theorem _root_.ManyBody.ChainInteraction.leftPart_eq_zero_of_le
     (h : ChainInteraction L q R) {j m : ℕ}
-    (hjm : j ≤ m) : h.partialHamiltonian (leftSupports L R j m) = 0 := by
-  change ∑ X ∈ leftSupports L R j m, h.term X = 0
+    (hjm : j ≤ m) : h.partialHamiltonian (cutLeftSupports L R j m) = 0 := by
+  change ∑ X ∈ cutLeftSupports L R j m, h.term X = 0
   refine Finset.sum_eq_zero fun X hX ↦ ?_
   obtain ⟨x, hx⟩ := X.2.1
   have := mem_interval.mp ((Finset.mem_filter.mp hX).2 hx)
@@ -402,7 +404,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundaryOperator_factorization (
     (hε₀ : ‖GaussianFilter.gaussianIntertwiner η (h.hamiltonian - (E₀ : ℂ) • 1) 0 1 * (OL * OR) -
       P‖ ≤ ε₀) :
     ∃ OB : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      OB ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ' : Finset (Fin L)) ∧
+      OB ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (ManyBody.graphNeighborhood
+          (SimpleGraph.pathGraph L) Z ⌊ℓ'⌋₊) ∧
           ‖OB‖ ≤ 1 ∧
       ‖OB * OL * OR - P‖ ≤ ε₀ + √(η : ℝ) * θ +
         (√(η : ℝ) * (chainLRPrefactor R J * (Z.card : ℝ) ^ 2 *

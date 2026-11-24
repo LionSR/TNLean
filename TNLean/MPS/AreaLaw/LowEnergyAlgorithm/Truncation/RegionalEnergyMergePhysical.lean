@@ -3,9 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.RegionalEnergyMerge
+import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.Spectral.TwoBlockTruncation
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
 
 /-!
 # Joining the actual internal Hamiltonians of adjacent intervals
@@ -48,7 +47,7 @@ theorem exists_adjacent_interval_energy_merge {L q l m r : ℕ}
   intro A B P
   classical
   obtain ⟨_hk, hR, hregion, hbound, _⟩ :=
-    five_region_original_bond_data L q l m m r hlm le_rfl hmr hrL Φ h0 h1
+    ManyBody.BondInteraction.five_region_original_bond_data L q l m m r hlm le_rfl hmr hrL Φ h0 h1
   let J := Finset.univ.filter (fun i : Fin (L - 1) ↦
     l ≤ i.val ∧ i.val + 1 < r ∧ i.val + 1 = m)
   let Y := ∑ i ∈ J, Φ.term i
@@ -78,7 +77,7 @@ theorem exists_adjacent_interval_energy_merge {L q l m r : ℕ}
     intro i _
     split_ifs <;> simp_all <;> omega
   rw [hsplit]
-  exact exists_disjoint_regional_energy_merge hq (interval L l m) (interval L m r)
+  exact ManyBody.exists_disjoint_regional_energy_merge hq (interval L l m) (interval L m r)
     (hR (show (1 : Fin 5) ≠ 3 by decide)) A B Y (hregion 1) (hregion 3)
     (hbound 1).1 (hbound 3).1 hY hY1
 

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicGeometry
+import QICLean.ManyBody.Sites.Lattice.RingBlocks
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicCoarsening
 
 /-!
@@ -23,6 +23,9 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 609–639 and 676–695.
 
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
+open ManyBody (roundedPeriodicBlock roundedPeriodicBlockCount roundedPeriodicBlockCount_cover
+  roundedPeriodicBlockCount_pos roundedPeriodicBlockCount_upper roundedPeriodicDistance
+  roundedPeriodicEdge roundedPeriodicEdge_internal_centre roundedPeriodicEdge_support_of_cover)
 
 namespace TNLean.MPS.AreaLaw.LocalSolution
 

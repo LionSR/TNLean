@@ -34,9 +34,9 @@ site of the chain, with no encoded holes.
 | Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `ManyBody.interval`, `ManyBody.IsChainSupport`, `ManyBody.ChainInteraction`, `ManyBody.IsGapped`, `ManyBody.groundSpace` | Definitions. |
 | Lemma 3.1 (marginal tail bound) at a cut | `ManyBody.ChainInteraction.surprisalTail_regionState_le` with the budget `ManyBody.cutLogBudget` of the chain supports | Proved, from the QICLean core. |
 | Rényi entropies near one (`rem:renyi`) | `ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds` | Proved on the full closed order interval `[1-u₀, 1]`, with the linear coefficient `512e` and uniform bound `16e √((1 + J/Δ) B_R)`. The statement includes order one, zero eigenvalues and the spectral power formula. |
-| `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `MPS.AreaLaw.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `MPS.AreaLaw.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
+| `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `ManyBody.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `ManyBody.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
 | Remark on sharper constants (`rem:sharper`, lines 706–709): full consecutive windows | `ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_consecutive_terms`, `ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_consecutive_terms` | Proved when every nonzero term has a full `(R+1)`-site window as its designated support. Active crossing count `2R`; physical moment budget `1 + 2R log²(e q^(R+1))` for the original gapped vector. The original all-support Hamiltonian is retained; the restriction concerns every nonzero designated support and excludes shorter boundary windows unless their terms vanish. |
-| Single-splitting lemma (Part I, Section 4) | `MPS.AreaLaw.single_splitting_shells`, with `MPS.AreaLaw.not_splits_two_shells` as a corollary | Proved, including the initial index zero, later containment, earlier disjointness, and uniqueness. The coordinate-interval statement also permits arbitrary endpoints and range zero. |
+| Single-splitting lemma (Part I, Section 4) | `ManyBody.single_splitting_shells`, with `ManyBody.not_splits_two_shells` as a corollary | Proved, including the initial index zero, later containment, earlier disjointness, and uniqueness. The coordinate-interval statement also permits arbitrary endpoints and range zero. |
 | Lemma 4.2 (buffered discount) | `MPS.AreaLaw.two_mul_condEntropy_interval_le`, with `MPS.AreaLaw.chainShellCount` (`m`) and `MPS.AreaLaw.chainDiscountConst` | Proved. Shells of width `R` as in the note; the shell count uses the smaller of the note's energy threshold and the logarithmic one of Remark 6.3 (`Entropy.two_mul_condEntropy_le_logarithmic` in QICLean); energy threshold `Δ/2` in place of the note's `Δ/4`, overlap losses `m log 2` in place of the note's `2 C_E/Δ`, and the shell count omits the note's fourth entry `4096 e (1 + ϑ) B_R`, the term `4096 e ϑ B_R / m` staying explicit in the discount: `docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`. |
 | Lemma 4.2 for a finite family of supports | `MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget` | Proved for any finite family of supports of range `R` such that every interval is split by at most `N` supports with cut budget at most `B ≥ 1`, with the same three-entry shell count (`N_R`, `B_R` replaced by `N`, `B`) and discount `4096 e ϑ B/m + m log 2`. The chain lemma is the case of all supports. |
 | Lemma 4.2 with the original polynomial constants (`eq:CE`, `eq:discount`) | `MPS.AreaLaw.two_mul_condEntropy_interval_le_polynomial` | Proved for the printed four-entry shell count and `C_E = 8 N_R J q^(2(R+1))`: `2 S(X∪T) - 2 S(T) ≤ S(X) + 1 + 2 C_E/Δ`. The coefficient-two quadratic comparison gives `E = C_E/m ≤ Δ/4`; the fourth threshold absorbs the tail error. The polynomial constants are local expressions. |
@@ -44,7 +44,7 @@ site of the chain, with no encoded holes.
 | Prescribed accuracy with the original interval constant (extension of the printed `1/L` statement) | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial` | Proved for `L ≥ 1` and `0 < ε ≤ 1`: a unit MPS has error at most `ε` and bond dimension at most `⌊exp(C_int + 64 s log(2 L c₀/ε))⌋`, with `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 exp(e/2))`, using the original printed `C_int`. |
 | Quantitative two-line MPS bound (`thm:Bshort`) with the original constants | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial` | Proved for every `L ≥ 2`: a unit nonzero open MPS has error at most `1/L`, explicit integer bond dimension `⌊exp(C_int + 64 s log(2 L² c₀))⌋`, and the printed upper bound `2 exp(C_int) (32 exp(e/2) L⁴)^(1/u₀)`, where `u₀ = 1/(32 s)`. Normalization and phase adjustment follow with phase zero. |
 | Component factorization with the same gap (`lem:reductions`) | `Lattice.exists_isGapped_factors_of_kronecker_sum`, `Lattice.exists_isGapped_factors_of_sum_factorOperator` | Proved for two Hermitian factors and for every nonempty finite family of them: the ground vector is the product of normalized factor ground vectors, the energies add, and each factor is a gapped ground vector with the original gap `Δ`. The finite-domain Theorem A below does not use it. |
-| Araki–Lieb closure, reductions (Section 2) | `Lattice.regionEntropy_le_union_add`, `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
+| Araki–Lieb closure, reductions (Section 2) | `Lattice.regionEntropy_le_union_add`, `ManyBody.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
 | Theorem A for intervals | `MPS.AreaLaw.regionEntropy_interval_le` with the explicit `MPS.AreaLaw.chainIntervalEntropyBound` | Proved; no existential constant. |
 | Theorem A, constant linear in `1 + J/Δ` | `MPS.AreaLaw.chainIntervalEntropyBound_le`, `MPS.AreaLaw.chainAreaLawConst` | Proved. |
 | Theorem A for subsets of the chain | `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges`, `MPS.AreaLaw.chainAreaLaw` | Proved on the chain of `L` sites (connected domains). |
@@ -160,21 +160,23 @@ values, keeps the same physical supports and has local dimension q² and term
 bound 2J. The equality `ManyBody.Interaction.hamiltonian_doubledFin` identifies
 its sum exactly with H⊗1+1⊗H in paired coordinates.
 
-On a contiguous chain, `MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance`
-and `MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_chainNeighborhood_le`
-prove both estimates with common decay exponent μ = 1/2 and velocity
+On a contiguous chain, `ManyBody.norm_heisenberg_commutator_le_graphDistance_inf`
+and `ManyBody.norm_heisenberg_sub_regionExpectation_pathGraph_le`, applied to
+the path graph, give both estimates with common decay exponent μ = 1/2 and velocity
 v = 2(R + 1)|b₀| exp(2R) + 1. The commutator coefficient is
 C = 2 + 4|b₀| exp(2R); the localization coefficient is
-C′ = 2C exp(1)/(1 − exp(−1/2)). Localization uses the exact closed neighborhood
-at every real radius ℓ ≥ 0. Empty supports are allowed; their distance to a
+C′ = 2C exp(1)/(1 − exp(−1/2)). Localization uses the path-graph neighborhood
+`ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) S ⌊ℓ⌋₊` at every real radius
+ℓ; for ℓ ≥ 0 it is the exact closed neighborhood of radius ℓ, and for ℓ < 0 it is S.
+Empty supports are allowed; their distance to a
 site is infinity, with decay factor zero. Only localization requires q ≥ 1.
 These are the chain estimates used in Part II. After the reduction to
 connected domains, the note explicitly sets `Λ = {1, …, N}`
 (`part1_arealaw.tex`, lines 91–93); Theorem B itself is stated on a chain.
 These chain estimates supply the physical protocol above.
-The additional theorem
-`MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance` gives the same
-commutator estimate on every finite integer domain, using its induced-graph
+The graph estimate `ManyBody.norm_heisenberg_commutator_le_graphDistance_inf`
+for `ManyBody.lineDomainGraph Λ` gives the same commutator estimate on every
+finite integer domain, using its induced-graph
 distance and treating infinite distance by exact commutation. It imposes no
 diameter bound on the initial support and no connectivity or spectral-gap
 hypothesis.
@@ -185,15 +187,16 @@ component of a finite domain is a path on its own number of vertices
 `SimpleGraph.ConnectedComponent.ordConnected_image_hasse_int_induce`, and
 `SimpleGraph.ConnectedComponent.nonempty_pathGraph_iso_hasse_int_induce_finset`).
 The increasing-coordinate graph isomorphism
-`MPS.AreaLaw.lineDomainGraphIsoHasse`, together with extended-distance
+`ManyBody.lineDomainGraphIsoHasse`, together with extended-distance
 preservation under isomorphism and component inclusion, gives
-`MPS.AreaLaw.lineDomainGraph_card_sphere_le_two`. Thus every finite-distance
+`ManyBody.lineDomainGraph_card_sphere_le_two`. Thus every finite-distance
 sphere has at most two sites; no distance is measured across a missing integer.
 
-With q ≥ 1, the extension
-`MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_domainNeighborhood_le`
-gives localization on every finite integer domain with the same C′ and v
-as the contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
+With q ≥ 1, the graph estimate
+`ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two`
+for `ManyBody.lineDomainGraph Λ`, whose spheres have at most two sites, gives
+localization on every finite integer domain with the same C′ and v as the
+contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
 `S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
 The bound retains |S|², allows empty S, and requires neither a ground state
 nor a spectral gap. This completes the two propagation/localization
@@ -207,7 +210,7 @@ and instance data. The chain preparation protocol uses only the chain versions.
 For an arbitrary region D of the contiguous chain,
 `ManyBody.IsChainSupport.exists_boundary_window_of_split` places every
 split support in a window [p+1−R,p+1+R) about an actual boundary edge {p,p+1}.
-`MPS.AreaLaw.card_crossingTerms_le_mul_card_boundaryEdges` therefore bounds
+`ManyBody.card_crossingTerms_le_mul_card_boundaryEdges` therefore bounds
 the number of such supports by 2^(2R)|∂D|, including zero range and empty
 boundaries. The theorem
 `ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing`
@@ -254,13 +257,14 @@ unitary evolution near Z, before the observable and Gaussian data, and then
 the actual supported integral. Its norm is at most the observable norm, and
 its error is bounded by C ‖W‖ L²(1+T) exp(vT−ℓ/2), with C,v chosen before
 q and all system data and depending only on R,J. This operator is supported on
-the exact radius-ℓ neighborhood of Q∪Z. Empty chains, zero variance and
-zero cutoff are included. The geometric lemma
-`MPS.AreaLaw.chain_reset_support_separation` proves the exact margin w−R
-from both cores, using the actual crossing witnesses. The radius-ℓ
-neighborhood of Q∪Z is disjoint from the cores whenever ℓ+R≤w. This
-geometric statement allows empty cores and all real margins and radii,
-without a quantum-state assumption.
+the path-graph neighborhood of Q∪Z of radius ⌊ℓ⌋, the exact radius-ℓ
+neighborhood for ℓ ≥ 0. Empty chains, zero variance and zero cutoff are
+included. For the support separation, the margins place the closed balls of
+radius ℓ+R about the cores inside D and C
+(`ManyBody.graphBall_subset_of_finite_distance_margin` for the path graph), and
+`ManyBody.reset_graphNeighborhood_disjoint_cores` then makes the radius-ℓ
+neighborhood of Q∪Z disjoint from the cores whenever ℓ+R≤w, for every natural ℓ.
+This geometric step allows empty cores and needs no quantum-state assumption.
 
 The theorem `ManyBody.ChainInteraction.information_reset` completes the
 contiguous-chain information-reset argument. For every p > 0, it chooses
@@ -287,7 +291,7 @@ distance at least Dₚ log L from T, then I(T:E) ≤ L^(−p) for L ≥ L₀.
 No disjointness, nonempty-region or sign hypothesis on J is added.
 The exact neighborhood of each nonempty clipped interval expands its
 endpoints by floor(ρ); empty intervals retain empty neighborhoods.
-`MPS.AreaLaw.regionEntropy_chainNeighborhood_biUnion_intervals_le` bounds
+`MPS.AreaLaw.regionEntropy_graphNeighborhood_pathGraph_biUnion_intervals_le` bounds
 the entropy of the actual enlarged union by the number of intervals times
 the uniform interval bound, including overlaps. With c̄ = max(0,C_int),
 b = 4k₀c̄ and w = Cₚ(1+b+log L), the proof uses the actual regions
@@ -311,9 +315,9 @@ them:
 
 | Name | Value |
 |---|---|
-| `chainCrossConst R` | `N_R = 2 · 2^{2R}` |
+| `ManyBody.chainCrossConst R` | `N_R = 2 · 2^{2R}` |
 | `cutBudgetConst N q R` | `1 + N log²(e q^{R+1})`, the cut budget for at most `N` split supports |
-| `chainBudgetConst q R` | `B_R = 1 + N_R log²(e q^{R+1})`, that is `cutBudgetConst N_R q R` |
+| `ManyBody.chainBudgetConst q R` | `B_R = 1 + N_R log²(e q^{R+1})`, that is `cutBudgetConst N_R q R` (`cutBudgetConst_chainCrossConst`) |
 | `chainEnergyThreshold q R J Δ` | `E_R J/Δ` with `E_R = min {32 N_R q^{2(R+1)}, 64 e N_R log²(e q^{R+1})}` |
 | `chainShellCount q R J Δ` | `m = ⌈max {4, E_R J/Δ, 128 √((1 + J/Δ) B_R)}⌉` |
 | `chainDiscountConst q R J Δ` | `4096 e (J/Δ) B_R / m + m log 2` |

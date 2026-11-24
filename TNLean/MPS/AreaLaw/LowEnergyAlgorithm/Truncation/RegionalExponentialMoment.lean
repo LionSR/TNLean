@@ -32,6 +32,7 @@ open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open ManyBody.BondInteraction (five_region_original_bond_data)
 
 namespace TNLean.MPS.AreaLaw
 

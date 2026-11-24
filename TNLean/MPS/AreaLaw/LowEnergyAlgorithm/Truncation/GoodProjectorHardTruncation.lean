@@ -210,7 +210,7 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
     TNLean.MPS.AreaLaw.exists_five_region_independent_truncation_residual
       L q a b ell t hq hell ht0 (by omega) (by omega) Φ h0 h1
   obtain ⟨_, _, hAs, hApos, hYpos, _, _, hHsum⟩ :=
-    TNLean.MPS.AreaLaw.five_region_original_bond_data L q (a + 1) (a + 2 * ell) (b + 1)
+    ManyBody.BondInteraction.five_region_original_bond_data L q (a + 1) (a + 2 * ell) (b + 1)
       (b + 2 * ell) (by omega) (by omega) (by omega) (by omega) Φ h0 h1
   refine ⟨e, E0, x, ?_⟩
   intro S H Ht F

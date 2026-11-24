@@ -226,8 +226,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Supports contained in a prescribed set]
     \label{thm:chain_supports_in_window}
     \lean{
-        TNLean.MPS.AreaLaw.card_filter_subset_le,
-        TNLean.MPS.AreaLaw.card_filter_subset_le_pow_of_card_le
+        ManyBody.ChainSupport.card_filter_subset_le,
+        ManyBody.ChainSupport.card_filter_subset_le_pow_of_card_le
     }
     \leanok
     \uses{def:chain_model}
@@ -243,15 +243,15 @@ Theorem~B a second way, by a sequential preparation protocol.
     \label{lem:chain_crossing_count}
     \lean{
         ManyBody.IsChainSupport.subset_window_of_splits,
-        TNLean.MPS.AreaLaw.chainCrossConst,
-        TNLean.MPS.AreaLaw.card_crossingTerms_interval_le,
+        ManyBody.chainCrossConst,
+        ManyBody.card_crossingTerms_interval_le,
         TNLean.MPS.AreaLaw.cutBudgetConst,
         TNLean.MPS.AreaLaw.one_le_cutBudgetConst,
-        TNLean.MPS.AreaLaw.chainBudgetConst,
-        TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
-        TNLean.MPS.AreaLaw.supportDim_le_real,
-        TNLean.MPS.AreaLaw.log_sq_supportDim_le,
-        TNLean.MPS.AreaLaw.cutLogBudget_interval_le
+        ManyBody.chainBudgetConst,
+        ManyBody.one_le_chainBudgetConst,
+        TNLean.MPS.AreaLaw.cutBudgetConst_chainCrossConst,
+        ManyBody.ChainSupport.log_sq_supportDim_le,
+        ManyBody.cutLogBudget_interval_le
     }
     \leanok
     \uses{def:chain_model,thm:chain_supports_in_window,thm:chain_single_splitting}
@@ -380,8 +380,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Single splitting of nested chain intervals]
     \label{thm:chain_single_splitting}
     \lean{
-        TNLean.MPS.AreaLaw.single_splitting_shells,
-        TNLean.MPS.AreaLaw.not_splits_two_shells
+        ManyBody.single_splitting_shells,
+        ManyBody.not_splits_two_shells
     }
     \leanok
     \uses{def:chain_model}
@@ -425,7 +425,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Logarithmic dependence of the interval cut budget]
     \label{thm:chain_budget_log_sq}
-    \lean{TNLean.MPS.AreaLaw.chainBudgetConst_le_mul_log_sq}
+    \lean{ManyBody.chainBudgetConst_le_mul_log_sq}
     \leanok
     \uses{lem:chain_crossing_count}
     Let $R$ be a nonnegative integer and put $N_R=2\cdot2^{2R}$ and
@@ -518,7 +518,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Supports split by an arbitrary region of a chain]
     \label{lem:chain_boundary_crossing_count}
     \lean{ManyBody.IsChainSupport.exists_boundary_window_of_split,
-        TNLean.MPS.AreaLaw.card_crossingTerms_le_mul_card_boundaryEdges}
+        ManyBody.card_crossingTerms_le_mul_card_boundaryEdges}
     \leanok
     \uses{def:chain_model,lem:chain_entropy_inequalities}
     Let $L,R$ be natural numbers, let $I=\{0,\ldots,L-1\}$ be the
@@ -735,7 +735,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \lean{ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
-        def:qc_site_expectation}
+        def:qc_site_expectation,thm:chain_lieb_robinson}
     Let $H$ be a range-$R$ Hamiltonian on the contiguous chain
     $I=\{0,\ldots,L-1\}$ with local dimension $q\ge1$ and interaction
     bound $J\in\mathbb R$. Let $D\subseteq I$, and let
@@ -743,7 +743,8 @@ Theorem~B a second way, by a sequential preparation protocol.
     swapped doubled operators. Write $\mathcal C_D$ for the original
     supports meeting both $D$ and its complement, and put
     $Z=\bigcup_{X\in\mathcal C_D}X$.
-    For every real $\ell\ge0$ and $t\in\mathbb R$, define
+    For every real $\ell$ and $t$, with $N_\ell$ the neighbourhood of
+    Lemma~\ref{thm:chain_lieb_robinson}, define
     \begin{align}
         B    & =N_\ell(Z),\notag         \\
         G(t) & =e^{itK'}(K'-K)e^{-itK'}.
@@ -836,15 +837,16 @@ Theorem~B a second way, by a sequential preparation protocol.
     \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral}
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
-        def:qc_site_expectation}
+        def:qc_site_expectation,thm:chain_lieb_robinson}
     For every natural number $R$ and real $J$, there are positive constants
     $C,v$, depending only on $R,J$, with the following property.
     Let $q\ge1$ and $L$ be natural numbers, let $H$ be a range-$R$
     Hamiltonian with interaction bound $J$ on the contiguous chain
-    $I=\{0,\ldots,L-1\}$, let $D\subseteq I$, and let $\ell\ge0$ be real.
+    $I=\{0,\ldots,L-1\}$, let $D\subseteq I$, and let $\ell$ be real.
     Put $K=\widehat H$, $K'=\widehat H'$ and
     $Z=\bigcup_{X\in\mathcal C_D}X$, where $\mathcal C_D$ is the set of
-    original supports crossing $D$. Write $N(S)=N_\ell(S)$.
+    original supports crossing $D$. Write $N(S)=N_\ell(S)$, the neighbourhood of
+    Lemma~\ref{thm:chain_lieb_robinson}.
     There is a differentiable unitary path $U$, supported on $N(Z)$ at
     every real time, such that
     \begin{align}
@@ -899,62 +901,6 @@ Theorem~B a second way, by a sequential preparation protocol.
     \end{align}
     Substitution in (\ref{eq:qc_gaussian_projection_error}) gives the stated
     error. The same theorem gives the support and norm bounds.
-\end{proof}
-
-\begin{lemma}[Separation of the reset support from the cores]
-    \label{lem:chain_reset_support_separation}
-    \lean{TNLean.MPS.AreaLaw.chain_reset_support_separation}
-    \leanok
-    \uses{def:chain_model}
-    Let $I=\{0,\ldots,L-1\}$ be a contiguous chain, let $R$ be a
-    natural number, and let $D,C,R_0,C_0\subseteq I$, with $D\cap C=\varnothing$.
-    Suppose that a real number $w$ satisfies
-    \begin{align}
-        w & <|r-y| &  & (r\in R_0,\ y\in I\setminus D),\notag \\
-        w & <|c-x| &  & (c\in C_0,\ x\in I\setminus C).
-    \end{align}
-    Put $Q=I\setminus(D\cup C)$. Let $\mathcal C_D$ consist of all
-    nonempty supports $X\subseteq I$ of diameter at most $R$ that meet
-    both $D$ and its complement, and put $Z=\bigcup_{X\in\mathcal C_D}X$.
-    Then
-    \begin{align}
-        w-R & <|a-z| &  & (z\in Q\cup Z,\ a\in R_0\cup C_0).
-    \end{align}
-    Consequently, for every real $\ell$ with $\ell+R\le w$,
-    \begin{align}
-        \{y\in I:\ \exists z\in Q\cup Z,\ |z-y|\le\ell\}
-        \cap(R_0\cup C_0)=\varnothing.
-    \end{align}
-    Empty chains and empty sets are allowed. No sign assumption on
-    $w$ or $\ell$, or containment of the cores in the outer regions,
-    is needed beyond the displayed hypotheses.
-    This is the support-separation step in Part~II
-    of~\cite{TNLean2026OneDimensional}, on a contiguous
-    chain; see~\cite{gap:tnlean_one_dimensional_connected_domain_scope}.
-    Writing $R$ for the outer region $D$ and $Z_R$ for its crossing support
-    $Z$ as in~\cite{TNLean2026OneDimensional}, the separation between
-    $N_\ell(Q\cup Z_R)$ and the cores $R_0,C_0$ is illustrated by
-    \input{figures/chain_reset}
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{def:chain_model}
-    If $z\in Q$, the two margin inequalities apply directly; weakening
-    the lower bound from $w$ to $w-R$ is permitted since $R\ge0$.
-    If $z\in Z$, choose a crossing support $X$ containing $z$,
-    together with $y\in X\setminus D$ and $x\in X\cap D$.
-    The diameter bound gives $|z-y|,|z-x|\le R$.
-    For $r\in R_0$, the first margin and the triangle inequality give
-    \begin{align}
-        w<|r-y|\le|r-z|+R.
-    \end{align}
-    Since $D$ and $C$ are disjoint, $x\notin C$; the second margin
-    gives the same conclusion for every $c\in C_0$.
-    This proves the first assertion with the exact loss $R$.
-    If a core site $a$ also belonged to the displayed neighborhood,
-    there would be $z\in Q\cup Z$ with $|z-a|\le\ell$.
-    Symmetry of distance would then give
-    $w-R<|a-z|\le\ell\le w-R$, a contradiction.
 \end{proof}
 
 \begin{lemma}[Information reset from a supported localization]
@@ -1026,7 +972,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{proof}
     \leanok
     \uses{lem:information_reset_of_supported_localization,
-        thm:chain_supported_gaussian_integral,lem:chain_reset_support_separation}
+        thm:chain_supported_gaussian_integral,lem:qc_graph_ball_strict_margin,
+        thm:qc_graph_support_separation}
     Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
     Corollary~\ref{thm:peps_reset_regional_filter} once, and choose the locality
     constants $C,v>0$ from Lemma~\ref{thm:chain_supported_gaussian_integral}.
@@ -1075,8 +1022,13 @@ Theorem~B a second way, by a sequential preparation protocol.
 
     The ceiling bound and $B_*\ge1$ give
     $\ell+R<C_pB_*=w$.
-    Lemma~\ref{lem:chain_reset_support_separation} makes $S$ disjoint from
-    both cores, so $V$ acts trivially on their joint marginal in each
+    In the path graph of the chain the graph distance is $|x-y|$, so the
+    margins give $N_{\ell+R}(R_0)\subseteq D$ and $N_{\ell+R}(C_0)\subseteq C$
+    by Lemma~\ref{lem:qc_graph_ball_strict_margin}, and
+    Lemma~\ref{thm:qc_graph_support_separation} makes $S=N_\ell(Q\cup Z)$
+    disjoint from both cores:
+    \input{figures/chain_reset}
+    Hence $V$ acts trivially on their joint marginal in each
     replica. The entropy comparison of
     Lemma~\ref{thm:regional_reset_cores_entropy}, applied to the unitary
     $V$ supported on $S$, yields
@@ -1325,9 +1277,9 @@ Theorem~B a second way, by a sequential preparation protocol.
         ManyBody.mem_boundaryEdges,
         ManyBody.boundaryEdges_empty,
         ManyBody.boundaryEdges_univ,
-        TNLean.MPS.AreaLaw.exists_interval_subset_boundaryEdges_sdiff_ssubset,
-        TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals,
-        TNLean.MPS.AreaLaw.card_boundaryEdges_prefix_le
+        ManyBody.exists_interval_subset_boundaryEdges_sdiff_ssubset,
+        ManyBody.regionEntropy_le_mul_card_boundaryEdges_of_intervals,
+        ManyBody.card_boundaryEdges_prefix_le
     }
     \leanok
     \uses{def:chain_model,thm:area_law_regional_state_identities}
@@ -1660,7 +1612,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Interaction norm budget on a finite integer domain]
     \label{lem:domain_site_norm_budget}
-    \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
+    \lean{ManyBody.IsDomainSupport.singleton,
         ManyBody.DomainSupport.toChainSupport,
         ManyBody.DomainSupport.toChainSupport_injective,
         ManyBody.DomainInteraction.norm_bound_nonneg,
@@ -1688,8 +1640,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Crossing count on a finite integer domain]
     \label{lem:domain_crossing_count}
-    \lean{TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges,
-        TNLean.MPS.AreaLaw.card_domain_crossingTerms_mul_two_le}\leanok
+    \lean{ManyBody.card_domain_crossingTerms_le_mul_card_boundaryEdges,
+        ManyBody.card_domain_crossingTerms_mul_two_le}\leanok
     \uses{def:domain_model}
     In the setting of Definition~\ref{def:domain_model}, let $D$ be any set of
     labelled sites and let $\mathcal C$ be the original admissible supports
@@ -1790,9 +1742,12 @@ allowed. These are the two-replica operators in
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:domain_partial_swap_crossing,lem:domain_site_norm_budget,
-        thm:domain_lieb_robinson_localization,lem:graph_evolved_perturbation_localization}
+        thm:domain_graph_spheres,thm:graph_lieb_robinson_two_spheres,
+        lem:graph_evolved_perturbation_localization}
     The swapped domain family has interaction bound $2J$, so its per-site
-    norm budget is $b_0$. Domain localization gives an error
+    norm budget is $b_0$. Every distance sphere of the induced graph has at most
+    two sites, so the localization estimate of
+    Lemma~\ref{thm:graph_lieb_robinson_two_spheres} gives an error
     $a|X|^2\|A_{X,b}\|e^{v|t|-m/2}$ for each evolved replica perturbation
     at its own neighborhood $N_m(X)$.
     Since $X\subseteq Z$, that approximant is supported on $B$.
@@ -1974,8 +1929,8 @@ allowed. These are the two-replica operators in
 
 \begin{lemma}[Intrinsic neighborhoods of order intervals]
     \label{thm:domain_interval_neighborhood}
-    \lean{TNLean.MPS.AreaLaw.domainNeighborhood_eq_interval_of_ordConnected,
-        TNLean.MPS.AreaLaw.domainNeighborhood_interval_eq}\leanok
+    \lean{ManyBody.domainNeighborhood_eq_interval_of_ordConnected,
+        ManyBody.domainNeighborhood_interval_eq}\leanok
     \uses{def:domain_model,def:chain_model}
     In the setting of Definition~\ref{def:domain_model}, identify the domain
     with its increasing labels $V=\{0,\ldots,|\Lambda|-1\}$.
@@ -2160,8 +2115,8 @@ allowed. These are the two-replica operators in
 
 \begin{lemma}[Distance spheres in a finite integer domain]
     \label{thm:domain_graph_spheres}
-    \lean{TNLean.MPS.AreaLaw.lineDomainGraph_card_sphere_le_two,
-        TNLean.MPS.AreaLaw.lineDomainGraphIsoHasse}
+    \lean{ManyBody.lineDomainGraph_card_sphere_le_two,
+        ManyBody.lineDomainGraphIsoHasse}
     \leanok
     \uses{def:domain_model}
     Let $\Lambda\subset\mathbb Z$ be finite. Its increasing enumeration
@@ -2188,83 +2143,6 @@ allowed. These are the two-replica operators in
     Lemma~\ref{thm:qc_graph_edist_transport}. Its sphere therefore has at
     most two vertices. At distance zero there is just $x$; vertices in
     other components have infinite distance and are not counted.
-\end{proof}
-
-\begin{lemma}[Propagation on a finite integer domain]
-    \label{thm:domain_lieb_robinson_commutator}
-    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance}
-    \leanok
-    \uses{def:domain_model}
-    Let $\Lambda\subset\mathbb Z$ be finite, with its induced path graph,
-    and let $q,R\in\mathbb N$. Let $(h_k)_k$ be a finite labelled family of
-    Hermitian operators, each supported on a nonempty set $X_k$ of graph
-    diameter at most $R$. Suppose $b_0\in\mathbb R$ satisfies
-    $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for every site $x$.
-    Put $H=\sum_k h_k$ and
-    \begin{align}
-        C & =2+4|b_0|e^{2R},\notag      \\
-        v & =2(R+1)|b_0|e^{2R}+1.\notag
-    \end{align}
-    Let $A$ be supported on $S\subseteq\Lambda$ and $B$ at $y\in\Lambda$.
-    Set $\delta=\inf_{x\in S}d_\Lambda(x,y)$, with
-    $\inf\varnothing=\infty$ and $e^{-\infty/2}=0$. For every real $t$,
-    \begin{align}
-        \|[\tau_t(A),B]\|
-        \le C|S|\|A\|\|B\|e^{v|t|}e^{-\delta/2}.\notag
-    \end{align}
-    This extends the commutator estimate of the Lieb--Robinson lemma in
-    \cite[Part~II]{TNLean2026OneDimensional} to arbitrary finite integer
-    domains. No connectivity, positive local dimension, ground-state or
-    spectral-gap hypothesis is required.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:domain_model,thm:graph_lieb_robinson_two_spheres}
-    Every range-$R$ support has at most $R+1$ sites and induced-graph
-    diameter at most $R$, so this is the commutator estimate of
-    Lemma~\ref{thm:graph_lieb_robinson_two_spheres} for the induced graph.
-    All distances are those of the induced graph; sites separated by a hole
-    are not identified with consecutive sites of a longer chain.
-\end{proof}
-
-\begin{lemma}[Localization on a finite integer domain]
-    \label{thm:domain_lieb_robinson_localization}
-    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_domainNeighborhood_le}
-    \leanok
-    \uses{def:domain_model,def:qc_site_expectation}
-    Let $\Lambda\subset\mathbb Z$ be finite, let $q,R\in\mathbb N$,
-    and let $H=\sum_kh_k$ be a finite labelled sum of Hermitian operators.
-    Each $h_k$ is supported on a nonempty set $X_k$ of induced-graph diameter
-    at most $R$. Suppose $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for every site $x$.
-    Put
-    \begin{align}
-        C  & =2+4|b_0|e^{2R},\notag         \\
-        v  & =2(R+1)|b_0|e^{2R}+1,\notag    \\
-        C' & =\frac{2Ce}{1-e^{-1/2}}.\notag
-    \end{align}
-    For $m\in\mathbb N$ write
-    $B_m(x)=\{y\in\Lambda:d_\Lambda(x,y)\le m\}$.
-    For a real $\ell\ge0$ and $S\subseteq\Lambda$, define
-    $N_\ell(S)=\bigcup_{x\in S}B_{\lfloor\ell\rfloor}(x)$.
-    Let $E_{N_\ell(S)}$ be the normalized partial-trace expectation onto
-    operators supported on this set. Every operator $A$ supported on $S$
-    satisfies, for every real $t$,
-    \begin{align}
-        \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
-        \le C'|S|^2\|A\|e^{v|t|-\ell/2}.\notag
-    \end{align}
-    Empty $S$ is allowed. No connectedness, ground-state or spectral-gap
-    hypothesis is imposed. The neighborhood uses the induced graph and
-    never joins sites across a missing integer. This is the finite-domain
-    extension of the localization conclusion in the Lieb--Robinson lemma
-    of \cite[Part~II]{TNLean2026OneDimensional}.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:domain_graph_spheres,thm:graph_lieb_robinson_two_spheres}
-    Each interaction support has at most $R+1$ sites, and every distance
-    sphere of the induced graph has at most two sites. The localization
-    estimate of Lemma~\ref{thm:graph_lieb_robinson_two_spheres} for the
-    induced graph is the displayed bound.
 \end{proof}
 
 \begin{lemma}[A cut that splits no term]
@@ -2492,18 +2370,20 @@ allowed. These are the two-replica operators in
 
 \begin{lemma}[Neighborhoods of intervals and their entropy]
     \label{thm:chain_interval_neighborhood_entropy}
-    \lean{TNLean.MPS.AreaLaw.chainNeighborhood_interval_eq,
+    \lean{TNLean.MPS.AreaLaw.graphNeighborhood_pathGraph_interval_eq,
         TNLean.MPS.AreaLaw.regionEntropy_biUnion_neighborhood_intervals_le,
-        TNLean.MPS.AreaLaw.regionEntropy_chainNeighborhood_biUnion_intervals_le}
+        TNLean.MPS.AreaLaw.regionEntropy_graphNeighborhood_pathGraph_biUnion_intervals_le}
     \leanok
     \uses{def:chain_model}
     Let $I=\{0,\ldots,L-1\}$ be a contiguous chain. Write
     $[a,z)_I=\{x\in I:a\le x<z\}$ for natural endpoints $a,z$, and
-    for a real $\rho\ge0$ put
+    for a real $\rho$ put
     \begin{align}
-        N_\rho(A)=\{y\in I:\ \exists x\in A,\ |x-y|\le\rho\},
-        \qquad d=\lfloor\rho\rfloor.
+        d=\max\{0,\lfloor\rho\rfloor\},
+        \qquad N_\rho(A)=\{y\in I:\ \exists x\in A,\ |x-y|\le d\}.
     \end{align}
+    For $\rho\ge0$ this is $\{y\in I:\ \exists x\in A,\ |x-y|\le\rho\}$, since
+    coordinate distances are integers.
     Then the exact interval neighborhood is
     \begin{align}
         N_\rho([a,z)_I)=
@@ -2534,8 +2414,7 @@ allowed. These are the two-replica operators in
 \begin{proof}
     \leanok
     \uses{def:chain_model,lem:chain_entropy_inequalities}
-    Coordinate distances are integers, so $|x-y|\le\rho$ is equivalent
-    to $|x-y|\le d$. If the interval is nonempty, its first and last
+    If the interval is nonempty, its first and last
     sites are $a$ and $\min\{z,L\}-1$. A site lies within distance $d$
     of it precisely when it belongs to the displayed clipped interval;
     one may choose the nearer endpoint when the site lies outside, or
@@ -3053,16 +2932,16 @@ In particular the ground eigenspace is one-dimensional.
 
 \begin{definition}[Column intervals and strip supports]
     \label{def:strip_column_model}
-    \lean{TNLean.MPS.AreaLaw.stripDomain,
-        TNLean.MPS.AreaLaw.stripSite_bounds,
-        TNLean.MPS.AreaLaw.stripSiteEquiv,
-        TNLean.MPS.AreaLaw.stripColumn,
-        TNLean.MPS.AreaLaw.stripRow,
-        TNLean.MPS.AreaLaw.stripInterval,
-        TNLean.MPS.AreaLaw.mem_stripInterval,
-        TNLean.MPS.AreaLaw.stripInterval_mono}
+    \lean{ManyBody.mem_rectangularDomain,
+        ManyBody.stripColumn,
+        ManyBody.stripRow,
+        ManyBody.stripInterval,
+        ManyBody.mem_stripInterval,
+        ManyBody.stripInterval_mono}
     \leanok
-    The domain is $\Lambda=\{0,\ldots,L-1\}\times\{0,\ldots,w-1\}$,
+    \uses{thm:area_law_domain_identifications}
+    The domain is the integer rectangle
+    $\Lambda=\{0,\ldots,L-1\}\times\{0,\ldots,w-1\}$,
     with column regions $X_{a,b}=\lbrack a,b)\times\lbrack 0,w)\cap\Lambda$.
     Put $v_R=1+2R(R+1)$, $\mu_R=2^{2R(R+1)}$, and
     $\ell_R=\log(e q^{v_R})$.
@@ -3070,15 +2949,15 @@ In particular the ground eigenspace is one-dimensional.
 
 \begin{lemma}[Crossing supports and buffers in a strip]
     \label{lem:strip_column_geometry}
-    \lean{TNLean.MPS.AreaLaw.card_stripInterval_le,
-        TNLean.MPS.AreaLaw.card_stripInterval_enlargement_sdiff_le,
-        TNLean.MPS.AreaLaw.stripColumn_le_add_range,
-        TNLean.MPS.AreaLaw.crossingSupport_meets_stripBand,
-        TNLean.MPS.AreaLaw.stripCrossConst,
-        TNLean.MPS.AreaLaw.card_crossingTerms_stripInterval_le,
-        TNLean.MPS.AreaLaw.cutLogBudget_stripInterval_le,
-        TNLean.MPS.AreaLaw.strip_single_splitting,
-        TNLean.MPS.AreaLaw.card_crossingTerms_stripPrefix_le}
+    \lean{ManyBody.card_stripInterval_le,
+        ManyBody.card_stripInterval_enlargement_sdiff_le,
+        ManyBody.stripColumn_le_add_range,
+        ManyBody.crossingSupport_meets_stripBand,
+        ManyBody.stripCrossConst,
+        ManyBody.card_crossingTerms_stripInterval_le,
+        ManyBody.cutLogBudget_stripInterval_le,
+        ManyBody.strip_single_splitting,
+        ManyBody.card_crossingTerms_stripPrefix_le}
     \leanok
     \uses{def:strip_column_model, thm:area_diamond_count,
         thm:area_law_crossing_supports, thm:area_law_buffer_contours,

@@ -11,7 +11,6 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.RegionalFactors.SelectedCoefficientDecomposition
 import TNLean.Algebra.TwoMarkerMiddleFactors
-import TNLean.MPS.AreaLaw.Chain.IntervalSymmDiff
 import TNLean.MPS.Tensor.OpenMPS.OpenMPSCutRank
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Finset.SymmDiff
@@ -98,7 +97,7 @@ private theorem selected_middle_central_interval_geometry
         (Finset.card_union_of_disjoint hdisjoint).symm
       _ ≤ 2 * ell := by
         simpa only [Fin.val_zero, Nat.add_zero, Finset.symmDiff_def] using
-          card_two_window_middle_symmDiff_le (L := L) (a := a) (b := b) p s (0 : Fin 2)
+          ManyBody.card_two_window_middle_symmDiff_le (L := L) (a := a) (b := b) p s (0 : Fin 2)
   have hKE : K ⊆ E := interval_mono (by omega) (by omega)
   have hKJ : K ⊆ J := interval_mono (by omega) (by omega)
   have hstart : a + 2 * ell < L := by omega

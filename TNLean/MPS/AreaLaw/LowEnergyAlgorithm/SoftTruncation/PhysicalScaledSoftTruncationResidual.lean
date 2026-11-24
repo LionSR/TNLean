@@ -178,6 +178,8 @@ open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open ManyBody.BondInteraction (five_region_original_bond_data
+  pairwise_commute_sum_internal_consecutive_regions)
 
 namespace TNLean.MPS.AreaLaw
 

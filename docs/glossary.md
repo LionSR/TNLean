@@ -3905,8 +3905,8 @@ Lean modules.
 
 The one-dimensional construction in Hastings, *Solving gapped Hamiltonians locally*
 (arXiv:cond-mat/0508554v3, lines 609–743), acts on the original physical cycle
-`Fin M`. `RoundedPeriodicGeometry.lean` places the remainder of the division by
-`2ℓ` in the last block; `RoundedPeriodicCoarsening.lean` derives the pair estimates;
+`Fin M`. QICLean's `ManyBody/Sites/Lattice/RingBlocks.lean` places the remainder of
+the division by `2ℓ` in the last block; `RoundedPeriodicCoarsening.lean` derives the pair estimates;
 `RoundedPeriodicApproximation.lean` chooses the integer radius and constructs the
 retained space. No divisibility condition on `M` is imposed.
 
@@ -3929,8 +3929,8 @@ construction in `PeriodicCoarsening.lean` and `PeriodicChainApproximation.lean`
 has the sharper constants `4ℓJ` and `J_eff=4J/η`.
 
 The source-facing construction in `PeriodicPhysicalHierarchy.lean` starts from
-the original interactions. `periodicPhysicalMetricSpace M` is the actual cyclic
-metric; `card_periodicPhysical_metricRangeBall_le` proves the uniform ball bound
+the original interactions. QICLean's `ManyBody.cyclicMetricSpace M` is the actual cyclic
+metric; `ManyBody.card_metricRangeBall_cyclicMetricSpace_le` proves the uniform ball bound
 `2⌈R⌉+1`. `periodicPhysicalTruncatedTerm c₁ R Δ ℓ g i` is the normalized Gaussian
 filter with `q=c₁ℓΔ` under the terms centred within `ℓ−R` of `i`.
 `exists_periodicPhysicalTruncatedTerm_localization` derives its support,

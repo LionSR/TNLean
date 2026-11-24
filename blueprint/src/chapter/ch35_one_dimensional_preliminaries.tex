@@ -23,8 +23,8 @@ is proved in Chapter~\ref{ch:one_dimensional_chain}.
         ManyBody.IsChainSupport,
         ManyBody.ChainSupport,
         ManyBody.IsChainSupport.card_le,
-        TNLean.MPS.AreaLaw.supportDim_le,
-        TNLean.MPS.AreaLaw.one_le_supportDim,
+        ManyBody.ChainSupport.supportDim_le,
+        ManyBody.one_le_supportDim_const,
         ManyBody.ChainInteraction
     }
     \leanok
@@ -210,7 +210,7 @@ is proved in Chapter~\ref{ch:one_dimensional_chain}.
 \begin{lemma}[The number of range-one supports]
     \label{thm:chain_range_one_support_count}
     \lean{
-        TNLean.MPS.AreaLaw.card_chainSupport_range_one_le,
+        ManyBody.card_chainSupport_range_one_le,
         ManyBody.ChainInteraction.norm_hamiltonian_le_of_range_one
     }
     \leanok
@@ -439,7 +439,7 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 
 \begin{lemma}[Changed sites under interval displacement]
     \label{thm:chain_interval_symmdiff}
-    \lean{TNLean.MPS.AreaLaw.card_interval_symmDiff_le_dist}
+    \lean{ManyBody.card_interval_symmDiff_le_dist}
     \leanok
     \uses{def:chain_model}
     For natural numbers $L,a,b,c,d$, let
@@ -469,7 +469,7 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 
 \begin{lemma}[Middle-region displacement within two windows]
     \label{thm:chain_two_window_middle_displacement}
-    \lean{TNLean.MPS.AreaLaw.card_two_window_middle_symmDiff_le}
+    \lean{ManyBody.card_two_window_middle_symmDiff_le}
     \leanok
     \uses{def:chain_model}
     Let $L,a,b,\ell$ be natural numbers, let $0\le p,s<2\ell$, and let
@@ -902,8 +902,7 @@ windows and the three bulk labels.
 
 \begin{lemma}[Lieb--Robinson estimates on a contiguous chain]
     \label{thm:chain_lieb_robinson}
-    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance,
-        TNLean.MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_chainNeighborhood_le}
+    \lean{ManyBody.norm_heisenberg_sub_regionExpectation_pathGraph_le}
     \leanok
     \uses{def:chain_model,def:qc_site_expectation}
     Let $L,q,R$ be natural numbers. Let $K$ be a finite set of interaction
@@ -931,14 +930,19 @@ windows and the three bulk labels.
         \|[\tau_t(A),B_y]\|
         \le C_0|S|\|A\|\|B_y\|e^{v|t|}e^{-d(S,y)/2}.
     \end{align}
-    For every real $\ell\ge0$, define
-    $N_\ell(S)=\{y\in I:\exists x\in S,\ |x-y|\le\ell\}$.
+    For every real $\ell$, let $N_\ell(S)$ be the set of sites $y\in I$ with
+    $|x-y|\le\lfloor\ell\rfloor$ for some $x\in S$ when $\ell\ge0$, and
+    $N_\ell(S)=S$ when $\ell<0$; for $\ell\ge0$ this is
+    $\{y\in I:\exists x\in S,\ |x-y|\le\ell\}$.
     The normalized partial-trace expectation $E_{N_\ell(S)}$ then satisfies
     \begin{align}
         \|\tau_t(A)-E_{N_\ell(S)}(\tau_t(A))\|
         \le C'|S|^2\|A\|e^{v|t|-\ell/2}.
     \end{align}
-    Both estimates allow every natural local dimension $q$ and $S=\varnothing$. This is the contiguous-chain case
+    Both estimates allow every natural local dimension $q$ and $S=\varnothing$.
+    The first is the commutator estimate of
+    Lemma~\ref{thm:graph_lieb_robinson_two_spheres} for the path graph on $I$.
+    This is the contiguous-chain case
     of the lemma ``Lieb--Robinson bound on a chain'' in Part~II
     of~\cite{TNLean2026OneDimensional}, as used for its Theorem~B;
     the distinction from the broader finite-domain reading is recorded
@@ -950,8 +954,10 @@ windows and the three bulk labels.
     Apply Lemma~\ref{thm:graph_lieb_robinson_two_spheres} to the path graph
     on $I$. Its distance is $|x-y|$, so each $X_k$ has graph diameter at
     most $R$ and at most $R+1$ sites, and every distance sphere has at most
-    two sites. Since path distances are integers, the union of graph balls
-    of radius $\lfloor\ell\rfloor$ about $S$ is exactly $N_\ell(S)$.
+    two sites. The union of graph balls of radius $\lfloor\ell\rfloor$ about
+    $S$ is $N_\ell(S)$: for $\ell<0$ the radius is zero, and for $\ell\ge0$
+    path distances are integers, so $|x-y|\le\lfloor\ell\rfloor$ if and only
+    if $|x-y|\le\ell$.
 \end{proof}
 
 \input{chapter/ch35_nearest_neighbour_imaginary_time}

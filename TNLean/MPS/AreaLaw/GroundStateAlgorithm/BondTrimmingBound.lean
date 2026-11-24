@@ -28,8 +28,8 @@ Source: LVV13, `algo53.tex`, Lemma `l:mpsapprox`, lines 325–328. -/
 theorem lvvReferenceBond_le_mul_rpow (hL : 1 ≤ L) :
     (lvvReferenceBond q Δ L : ℝ) ≤
       Real.exp (chainIntervalEntropyBound q 1 1 Δ) *
-        (2 * tailPrefactorRoot) ^ (64 * Real.sqrt ((1 + 1 / Δ) * chainBudgetConst q 1)) *
-        (48 * (L : ℝ)) ^ (128 * Real.sqrt ((1 + 1 / Δ) * chainBudgetConst q 1)) := by
+        (2 * tailPrefactorRoot) ^ (64 * Real.sqrt ((1 + 1 / Δ) * ManyBody.chainBudgetConst q 1)) *
+        (48 * (L : ℝ)) ^ (128 * Real.sqrt ((1 + 1 / Δ) * ManyBody.chainBudgetConst q 1)) := by
   simpa only [lvvReferenceBond, Nat.cast_mul, Nat.cast_ofNat] using
     (chainBondDimension_le_mul_rpow (q := q) (R := 1) (J := 1) (Δ := Δ)
       (L := 48 * L) (by omega))
@@ -39,9 +39,9 @@ Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559, with the documente
 theorem bondTrimmingRadius_lvvReferenceBond_le_mul_rpow (hL : 1 ≤ L) :
     (bondTrimmingRadius L (lvvReferenceBond q Δ L) : ℝ) ≤
       Real.exp (chainIntervalEntropyBound q 1 1 Δ) *
-        (2 * tailPrefactorRoot) ^ (64 * Real.sqrt ((1 + 1 / Δ) * chainBudgetConst q 1)) *
-        (48 * (L : ℝ)) ^ (128 * Real.sqrt ((1 + 1 / Δ) * chainBudgetConst q 1) + 2) := by
-  let s := Real.sqrt ((1 + 1 / Δ) * chainBudgetConst q 1)
+        (2 * tailPrefactorRoot) ^ (64 * Real.sqrt ((1 + 1 / Δ) * ManyBody.chainBudgetConst q 1)) *
+        (48 * (L : ℝ)) ^ (128 * Real.sqrt ((1 + 1 / Δ) * ManyBody.chainBudgetConst q 1) + 2) := by
+  let s := Real.sqrt ((1 + 1 / Δ) * ManyBody.chainBudgetConst q 1)
   let C := Real.exp (chainIntervalEntropyBound q 1 1 Δ) * (2 * tailPrefactorRoot) ^ (64 * s)
   have hLpos : (0 : ℝ) < L := by exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hL)
   have href : (lvvReferenceBond q Δ L : ℝ) ≤ C * (48 * (L : ℝ)) ^ (128 * s) :=
@@ -61,7 +61,7 @@ Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559, with the documente
 theorem exists_bondTrimmingRadius_lvvReferenceBond_polynomial (q : ℕ) (Δ : ℝ) :
     ∃ (C : ℝ) (p : ℕ), 0 ≤ C ∧ ∀ L : ℕ, 1 ≤ L →
       (bondTrimmingRadius L (lvvReferenceBond q Δ L) : ℝ) ≤ C * (L : ℝ) ^ p := by
-  let s := Real.sqrt ((1 + 1 / Δ) * chainBudgetConst q 1)
+  let s := Real.sqrt ((1 + 1 / Δ) * ManyBody.chainBudgetConst q 1)
   let K := Real.exp (chainIntervalEntropyBound q 1 1 Δ) *
     (2 * tailPrefactorRoot) ^ (64 * s)
   let p : ℕ := ⌈128 * s + 2⌉₊

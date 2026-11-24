@@ -5,11 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProjectorFactorization.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.ProjectorFactorization.InteractionPicture
-import TNLean.MPS.AreaLaw.Chain.LiebRobinson
-import TNLean.MPS.AreaLaw.Chain.Counting
+import QICLean.ManyBody.Dynamics.GraphLocalization
+import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Dynamics.ProjectedRelativeEvolution
 import QICLean.Analysis.TraceNorm.RectangularTraceNorm
 import QICLean.Analysis.Real.ExplicitThresholds
+import QICLean.ManyBody.Sites.PlacedConfiguration
 
 /-!
 # Localizing the boundary operator `P_B` in Hastings' Lemma 1
@@ -109,13 +110,13 @@ end Abstract
 and the norm and support requirements on `O_B` in Lemma 1 (lines 252 and 264).
 
 Let `H` be a chain Hamiltonian of range `R` and term norm `J`, let `H₀` be Hermitian with
-`H - H₀` supported on `Z`, and let `A`, `B` be Hermitian. For every variance `η`, radius
-`ℓ ≥ 0` and cutoff `T ≥ 0` there is an operator `O` supported on the `ℓ`-neighborhood of
-`Z` with `‖O‖ ≤ 1` and
+`H - H₀` supported on `Z`, and let `A`, `B` be Hermitian. For every variance `η`, real
+radius `ℓ` and cutoff `T ≥ 0` there is an operator `O` supported on the path-graph
+neighborhood of radius `⌊ℓ⌋₊` of `Z` (the `ℓ`-neighborhood when `ℓ ≥ 0`) with `‖O‖ ≤ 1` and
 `‖P_B - O‖ ≤ √η (‖(A + B) - H‖ + ‖A - H₀‖ + a |Z|² ‖H - H₀‖ e^{vT - ℓ/2}) + 4 e^{-T²/2η}`,
 where `P_B = interactionAverage η A B`, `b₀ = 2^{2R+1} J`,
 `a = 2 (2 + 4 |b₀| e^{2R}) e / (1 - e^{-1/2})` and `v = 2 (R+1) |b₀| e^{2R} + 1` are the
-Lieb–Robinson constants of `norm_heisenberg_sub_regionExpectation_chainNeighborhood_le`.
+Lieb–Robinson constants of `ManyBody.norm_heisenberg_sub_regionExpectation_pathGraph_le`.
 
 In the application `A = H₀ = M_L + M_R` and `B = M_B`, so `‖A - H₀‖ = 0`; `Z` is
 the window `X_{j-2l/3,j+1+2l/3}` carrying `H - (M_L + M_R)` (line 899), and
@@ -126,13 +127,14 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
         {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hH₀ : H₀.IsHermitian) (hA : A.IsHermitian) (hB : B.IsHermitian) (Z : Finset (Fin L))
     (hZ : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.hamiltonian - H₀) Z)
-    (η : ℝ≥0) {ℓ T : ℝ} (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
+    (η : ℝ≥0) {ℓ T : ℝ} (hT : 0 ≤ T) :
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (ManyBody.graphNeighborhood
+          (SimpleGraph.pathGraph L) Z ⌊ℓ⌋₊) ∧
           ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
@@ -142,7 +144,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   intro b₀ a v
   have : NeZero q := ⟨by omega⟩
   set H := h.hamiltonian with hHdef
-  set N := chainNeighborhood Z ℓ with hNdef
+  set N := ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) Z ⌊ℓ⌋₊ with hNdef
   have hH : H.IsHermitian := (ManyBody.Interaction.isHermitian_hamiltonian hh)
   have hden : 0 < 1 - Real.exp (-(1 / 2 : ℝ)) :=
     sub_pos.mpr (Real.exp_lt_one_iff.mpr (by norm_num))
@@ -156,9 +158,9 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   have hgen (s : ℝ) (hs : |s| ≤ T) :
       ‖ManyBody.heisenbergEvolution H s (H - H₀) -
         ManyBody.regionExpectation N (ManyBody.heisenbergEvolution H s (H - H₀))‖ ≤ E₃ := by
-    have hloc := norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
+    have hloc := ManyBody.norm_heisenberg_sub_regionExpectation_pathGraph_le
       (fun X : ChainSupport L R ↦ X) h.term hh h.mem b₀
-      (h.sum_norm_terms_containing_le hhJ) Z hZ ℓ hℓ s
+      (h.sum_norm_terms_containing_le hhJ) Z hZ ℓ s
     refine hloc.trans (mul_le_mul_of_nonneg_left
       (Real.exp_mul_sub_le_exp_mul_sub hv hs)
       (by positivity))
@@ -249,7 +251,8 @@ theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (ManyBody.graphNeighborhood
+          (SimpleGraph.pathGraph L) Z ⌊ℓ⌋₊) ∧
           ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
@@ -258,7 +261,7 @@ theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (
   intro b₀ a v
   have hv : 0 < v := by positivity
   obtain ⟨O, hO, hOn, hOB⟩ := exists_supported_interactionAverage_approx hq h hh hhJ hH₀ hA hB Z hZ
-    η hℓ (T := ℓ / (4 * v)) (by positivity)
+    η (ℓ := ℓ) (T := ℓ / (4 * v)) (by positivity)
   refine ⟨O, hO, hOn, hOB.trans_eq ?_⟩
   have h1 : v * (ℓ / (4 * v)) - ℓ / 2 = -(ℓ / 4) := by field_simp; ring
   have h2 : -(ℓ / (4 * v)) ^ 2 / (2 * (η : ℝ)) = -ℓ ^ 2 / (32 * v ^ 2 * (η : ℝ)) := by

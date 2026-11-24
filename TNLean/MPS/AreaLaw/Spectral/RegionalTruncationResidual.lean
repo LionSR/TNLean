@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Spectral.LowEnergy.WeightedLowRestriction
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
-import TNLean.MPS.AreaLaw.Chain.NearestNeighbourImaginaryTime
+import QICLean.ManyBody.Hamiltonian.Chain.ConsecutiveRegions
 
 /-!
 # Residual estimates for regional energy truncation
@@ -22,6 +21,8 @@ These results support ALVV, arXiv:1602.08828v2,
 open ManyBody (interval)
 
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open ManyBody.BondInteraction (pairwise_commute_sum_internal_consecutive_regions)
+open ManyBody (card_filter_mem_bond_le_two)
 
 namespace TNLean.MPS.AreaLaw
 

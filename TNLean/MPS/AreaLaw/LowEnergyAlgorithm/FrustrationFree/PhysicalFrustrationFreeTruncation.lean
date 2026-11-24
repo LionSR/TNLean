@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalDetectability
-import TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian
 import QICLean.Algebra.Matrix.MatrixAux
 import QICLean.Analysis.Projection.Residual
 import QICLean.ManyBody.Sites.SupportedComplementProduct

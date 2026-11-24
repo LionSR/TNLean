@@ -16,7 +16,6 @@ import Mathlib.Basic.Complex.Basic
 import TNLean.MPS.AreaLaw.Chain.TwoCutEdgeSupports
 import QICLean.Algebra.OperatorSchmidt.WeightedFrequencySchmidtRank
 import QICLean.Algebra.Combinatorics.TwoWindowCounts
-import TNLean.MPS.AreaLaw.Chain.IntervalSymmDiff
 import QICLean.Algebra.Word.LowFrequencyWordPartition
 import QICLean.Algebra.OperatorSchmidt.Bounds
 import Mathlib.Algebra.Polynomial.AlgebraMap
@@ -434,7 +433,7 @@ private theorem operatorSchmidtRank_two_window_source_full_counts_le
       F hleft hright hL hM hR hab hb p s r i j weight J
     have hgeometry :
         ((interval L (a + p.val + 1) (b + s.val + 1)) ∆ J).card ≤ 2 * ℓ :=
-      card_two_window_middle_symmDiff_le (L := L) (a := a) (b := b) p s δ
+      ManyBody.card_two_window_middle_symmDiff_le (L := L) (a := a) (b := b) p s δ
     have hcost : q ^ (2 * ((interval L (a + p.val + 1) (b + s.val + 1)) ∆ J).card) ≤
         q ^ (4 * ℓ) := Nat.pow_le_pow_right (by omega) (by omega)
     refine (hraw.trans (Nat.mul_le_mul_right _ hcost)).trans_eq ?_
