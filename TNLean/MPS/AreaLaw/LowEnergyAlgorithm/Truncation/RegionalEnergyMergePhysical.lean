@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
-import TNLean.MPS.AreaLaw.Spectral.TwoBlockTruncation
+import QICLean.Algebra.Combinatorics.FinSum
+import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
 
 /-!
 # Joining the actual internal Hamiltonians of adjacent intervals
@@ -33,9 +34,9 @@ theorem exists_adjacent_interval_energy_merge {L q l m r : ℕ}
     (hq : 0 < q) (hlm : l ≤ m) (hmr : m ≤ r) (hrL : r ≤ L)
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
-    let A := aklvRegionalHamiltonians l m Φ 1
-    let B := aklvRegionalHamiltonians m r Φ 1
-    let P := aklvRegionalHamiltonians l r Φ 1
+    let A := ManyBody.BondInteraction.threeRegionHamiltonians l m Φ 1
+    let B := ManyBody.BondInteraction.threeRegionHamiltonians m r Φ 1
+    let P := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1
     ∃ (eA eB eP : ℝ) (x z : (Fin L → Fin q) → ℂ),
       star x ⬝ᵥ x = 1 ∧ A *ᵥ x = (eA : ℂ) • x ∧ B *ᵥ x = (eB : ℂ) • x ∧
       (A - (eA : ℂ) • 1).PosSemidef ∧ (B - (eB : ℂ) • 1).PosSemidef ∧

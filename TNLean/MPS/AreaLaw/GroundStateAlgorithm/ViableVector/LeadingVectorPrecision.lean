@@ -97,8 +97,8 @@ theorem exists_leading_vector_of_approximate_compressed_boundary_solution
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))
     (x₀ : Fin n) (τ σ : Matrix (Fin n) (Fin n) ℂ) {ε : ℝ}
     (hτtrace : τ.trace = 1) (hσpsd : σ.PosSemidef)
@@ -115,8 +115,8 @@ theorem exists_leading_vector_of_approximate_compressed_boundary_solution
       (u : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) (μ : ℝ),
       ρ.PosSemidef ∧ ρ.trace = 1 ∧
       (reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ ∧
       rectangularTraceNorm (partialTraceFirst ρ - X) ≤
         ((Δ / 169) ^ 2) / (2 * L) + 2 * ε ∧
@@ -124,8 +124,8 @@ theorem exists_leading_vector_of_approximate_compressed_boundary_solution
       (∀ (ν : ℝ) (z : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)),
         z ≠ 0 → ρ *ᵥ WithLp.ofLp z = (ν : ℂ) • WithLp.ofLp z → ν ≤ μ) ∧
       let P := reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection S)
       let v : EuclideanSpace ℂ (Fin L → Fin q) := WithLp.toLp 2
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
@@ -152,8 +152,8 @@ theorem exists_leading_vector_of_approximate_compressed_boundary_solution
   have htransport := isometricDensityExpansion_trace_and_energy Z hZ ρ σ₀ rfl Hleft
   have hρtrace : ρ.trace = 1 := htransport.1.symm.trans hσ₀trace
   have hρP : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ := by
     rw [← hZZ]
     change (Z * Zᴴ) * (Z * σ₀ * Zᴴ) = Z * σ₀ * Zᴴ
@@ -260,8 +260,8 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_a
     (u u' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m))
     (hu : ‖u‖ = 1) (hu' : ‖u'‖ = 1)
     (hu'P : (reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u' =
       WithLp.ofLp u')
     (hE : (⟪WithLp.toLp 2
@@ -330,8 +330,8 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_phase_dis
     (u u' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m))
     (hu : ‖u‖ = 1) (hu' : ‖u'‖ = 1)
     (hu'P : (reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u' =
       WithLp.ofLp u')
     (hE : (⟪WithLp.toLp 2
@@ -405,8 +405,8 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_a
     (huρ : ρ *ᵥ WithLp.ofLp u = (μ : ℂ) • WithLp.ofLp u)
     (hμ : 23 / 24 ≤ μ)
     (hu'P : (reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u' =
       WithLp.ofLp u')
     (hE : (⟪WithLp.toLp 2
@@ -495,8 +495,8 @@ theorem exists_rationalSpanViableMPSData_of_leadingCoordinates
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (z : EuclideanSpace ℂ (Fin n)) (hz : ‖z‖ = 1)

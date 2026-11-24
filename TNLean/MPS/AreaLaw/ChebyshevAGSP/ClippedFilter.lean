@@ -152,7 +152,7 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
         B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s ∧
         ∃ (E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
           0 ≤ E ∧ ‖φ‖ = 1 ∧ toEuclideanLin B φ = (E : ℂ) • φ ∧
@@ -265,7 +265,7 @@ theorem exists_aklv_clipped_chebyshev_filter {L q a s : ℕ}
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, (1024 / g) * (E0 / g + 1) ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
         B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s ∧
         ∃ (E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
           0 ≤ E ∧ ‖φ‖ = 1 ∧ toEuclideanLin B φ = (E : ℂ) • φ ∧
@@ -337,7 +337,7 @@ theorem exists_aklv_physical_favorable_filter :
           (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
           ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
         E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ
         B.PosSemidef ∧ ‖B‖ ≤ R ∧ 0 ≤ E ∧ ‖φ‖ = 1 ∧
         toEuclideanLin B φ = (E : ℂ) • φ ∧
         (B - (E : ℂ) • 1 - ((9 * g / 10 : ℝ) : ℂ) •
@@ -380,7 +380,7 @@ theorem exists_aklv_physical_favorable_filter :
   have hrankD : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (a + s / 2))
       (Polynomial.aeval
-        (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ) p)) ≤ D := by
+        (ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ) p)) ≤ D := by
     change _ ≤ (q * (ell + 1)) ^ (32 * (2 * s + 1))
     simpa only [hdiv, hsqrt, two_mul] using hrank
   have hDeltaEq :

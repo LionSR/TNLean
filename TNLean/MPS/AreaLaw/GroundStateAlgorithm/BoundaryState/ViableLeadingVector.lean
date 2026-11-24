@@ -60,8 +60,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
     let P := reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S)
     ∃ (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (w : EuclideanSpace ℂ (Fin L → Fin q)) (m : ℕ)
@@ -105,8 +105,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
   let c : ℝ := (Δ / 169) ^ 2
   let D := constantCutBond q 1 1 Δ c
   let P := reindex
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
     (spanProjection S)
   obtain ⟨w, m, W, x, hw, hwS, hwD, hwE, hW, hmD, hwx, hxP⟩ :=
     h.exists_trimmed_witness_of_isViable hh hhJ hpos hL hq hΔ hΩ hgap hspan hviable

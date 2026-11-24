@@ -60,7 +60,7 @@ theorem Word.sourceContraction_preparedDensityCoefficient_selected_frames {P m n
           (fun i ↦ bU' i) (fun i ↦ bV' i) ℓ v' bIn bOut ρ
           (fun i ↦ (x i).1) (fun i ↦ (x i).2))
         (fun i ↦ if i ∈ S then
-          sourceTransport (fun a j ↦ (bU i).repr (uU i j) a)
+          Matrix.kroneckerSandwich (fun a j ↦ (bU i).repr (uU i j) a)
             (fun a j ↦ (bV i).repr (uV i j) a)
             (fun a j ↦ (bU' i).repr (uU' i j) a)
             (fun a j ↦ (bV' i).repr (uV' i j) a) (M i)
@@ -84,12 +84,12 @@ theorem Word.sourceContraction_preparedDensityCoefficient_selected_frames {P m n
       (fun j ↦ conj (((bU' i).tensorProduct (bV' i)).repr
         (uU' i z.2.1 ⊗ₜ[ℂ] uV' i z.2.2) j))
   have ht (i : Fin R.length) :
-      sourceTransport (fun a j ↦ (bU i).repr (uU i j) a)
+      Matrix.kroneckerSandwich (fun a j ↦ (bU i).repr (uU i j) a)
           (fun a j ↦ (bV i).repr (uV i j) a)
           (fun a j ↦ (bU' i).repr (uU' i j) a)
           (fun a j ↦ (bV' i).repr (uV' i j) a) (M i) =
         ∑ z, M i z.1 z.2 • Z i z := by
-    erw [sourceTransport_eq_sum_rankOne]
+    erw [Matrix.kroneckerSandwich_eq_sum_vecMulVec]
     apply Finset.sum_congr rfl
     intro z _
     apply congrArg (M i z.1 z.2 • ·)

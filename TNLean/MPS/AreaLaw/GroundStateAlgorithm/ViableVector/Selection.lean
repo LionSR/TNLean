@@ -262,8 +262,8 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith {L q
   intro c D
   let : NeZero q := ⟨by omega⟩
   let P := reindex
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
     (spanProjection (S : Set (LeftBlockVector L q k)))
   have hc : 0 < c := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < c / (2 * L) :=

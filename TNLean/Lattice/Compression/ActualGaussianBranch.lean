@@ -90,7 +90,7 @@ theorem integrable_actualGaussianBranch_and_integral_le
     (isTouched_of_source_endpoint A w s.1 (hS s.1 s.2))
   let coeff := fun (u : CorrectedSchmidtCoordinates w S × CorrectedSchmidtCoordinates w S)
       (ω : SourceGaussianSamples w k) ↦
-    ∏ s : S, sourceCorrection k (lam s.1 (ξ₀ s)) (lam s.1 (ζ₀ s))
+    ∏ s : S, ProductSource.sourceCorrection k (lam s.1 (ξ₀ s)) (lam s.1 (ζ₀ s))
       (ω s.1 (ξ₀ s, ζ₀ s)) (u.1 s) (u.2 s)
   let N := fun ω ↦ Word.separatedPhysicalDensity J v z L L' tau tau'
     J' v' z' G G' bD bF (fun u ↦ coeff u ω)

@@ -71,10 +71,10 @@ theorem integral_rectangularTraceNorm_gaussianPhysicalSource_le
     let K' := Word.physicalOutputFrameMatrix J' w' G' bD'
     let z := fun (q : CorrectedSchmidtCoordinates circuit S ×
         CorrectedSchmidtCoordinates circuit S) (ω : SourceGaussianSamples circuit k) ↦
-      ∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      ∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (q.1 e) (q.2 e)
     (∫ ω, Matrix.rectangularTraceNorm (Matrix.partialTraceRight
-      (K * ProbabilityTheory.weightedSourceError tau tau' O (fun q ↦ z q ω) * K'ᴴ))
+      (K * Matrix.halfWeightedBlockCombination tau tau' O (fun q ↦ z q ω) * K'ᴴ))
       ∂sourceGaussianLaw circuit k) ≤ (k : ℝ) ^ (-(S.card : ℝ) / 2) := by
   intro O K K' z
   let : DecidableEq (CorrectedSchmidtCoordinates circuit S) := Classical.decEq _

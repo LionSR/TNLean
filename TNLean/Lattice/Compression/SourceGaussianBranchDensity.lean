@@ -49,7 +49,7 @@ def gaussianSchmidtBranchDensity
     (ψ φ : Mem a) (ξ ζ : Choices A w) : Matrix m m ℂ :=
   ∑ u : PartialSchmidtCoordinates A w S, ∑ v : PartialSchmidtCoordinates A w S,
     (∏ i : selectedPartialSlots A w S,
-      sourceCorrection k
+      ProductSource.sourceCorrection k
         (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ξ i.1))
         (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ζ i.1))
         (ω (partialSlotEquiv A w i.1).1
@@ -79,7 +79,7 @@ theorem integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity
   let z := fun (q : PartialSchmidtCoordinates A w S × PartialSchmidtCoordinates A w S)
       (ω : SourceGaussianSamples w k) ↦
     ∏ i : selectedPartialSlots A w S,
-      sourceCorrection k
+      ProductSource.sourceCorrection k
         (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ξ i.1))
         (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ζ i.1))
         (ω (partialSlotEquiv A w i.1).1
@@ -107,7 +107,7 @@ theorem integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum
       Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
     (hS : ∀ e ∈ S, A (endpoints w e).1 = true ∨ A (endpoints w e).2 = true)
     (hnonneg : ∀ e ξ j, 0 ≤ lam e ξ j)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (bIn : OrthonormalBasis n ℂ (Mem a)) (bOut : OrthonormalBasis m ℂ (Mem b))
     (ψ φ : Mem a) (L : Matrix m m ℂ →ₗ[ℂ] Matrix r s ℂ) :

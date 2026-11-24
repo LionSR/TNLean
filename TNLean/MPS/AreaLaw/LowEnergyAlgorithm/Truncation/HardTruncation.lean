@@ -49,7 +49,7 @@ theorem exists_single_region_hard_truncation_spectral_comparison {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
-    let A := aklvRegionalHamiltonians l r Φ
+    let A := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ
     let J := Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
     let Y := ∑ i ∈ J, Φ.term i
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),

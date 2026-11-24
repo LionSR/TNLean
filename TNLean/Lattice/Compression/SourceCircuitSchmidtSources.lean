@@ -59,7 +59,7 @@ theorem exists_local_schmidt_source_frames {a b : Layout P} (w : SourceCircuit a
               (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ,
           (∀ e ξ, (∀ j, 0 ≤ lam e ξ j) ∧ ∑ j, lam e ξ j = 1 ∧
             (E e ξ)ᴴ * E e ξ = 1 ∧ (F e ξ)ᴴ * F e ξ = 1 ∧
-            ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+            Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
               (sourceCoordinates w e ξ).ofLp) ∧
           ∀ (A : P → Bool) (ξ ζ : Choices A w) (i : Fin (partialSlots A w).length),
             let e := (partialSlotEquiv A w i).1
@@ -67,9 +67,9 @@ theorem exists_local_schmidt_source_frames {a b : Layout P} (w : SourceCircuit a
             let ζ₀ := partialSlotChoice A w ζ i
             let b := (EuclideanSpace.basisFun (Fin (sourceDims w e).1) ℂ).tensorProduct
               (EuclideanSpace.basisFun (Fin (sourceDims w e).2) ℂ)
-            ambientSchmidtVector (lam e ξ₀) (E e ξ₀) (F e ξ₀) =
+            Matrix.schmidtFrameVector (lam e ξ₀) (E e ξ₀) (F e ξ₀) =
                 (b.repr (partialSlotVector A w ξ i)).ofLp ∧
-              ambientSchmidtSource (lam e ξ₀) (lam e ζ₀)
+              Matrix.schmidtFrameOuterProduct (lam e ξ₀) (lam e ζ₀)
                   (E e ξ₀) (F e ξ₀) (E e ζ₀) (F e ζ₀) =
                 Matrix.vecMulVec (b.repr (partialSlotVector A w ξ i)).ofLp
                   (fun p ↦ conj ((b.repr (partialSlotVector A w ζ i)).ofLp p)) := by
@@ -81,8 +81,8 @@ theorem exists_local_schmidt_source_frames {a b : Layout P} (w : SourceCircuit a
         (F : Matrix (Fin (sourceDims w e).2)
           (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ),
         (∀ j, 0 ≤ lam j) ∧ ∑ j, lam j = 1 ∧ Eᴴ * E = 1 ∧ Fᴴ * F = 1 ∧
-          ambientSchmidtVector lam E F = (sourceCoordinates w e ξ).ofLp := by
-    have h := exists_probability_schmidtSourceFrames (sourceCoordinates w e ξ)
+          Matrix.schmidtFrameVector lam E F = (sourceCoordinates w e ξ).ofLp := by
+    have h := Matrix.exists_schmidtFrames_of_norm_eq_one (sourceCoordinates w e ξ)
       (sourceCoordinates_norm w e ξ)
     rw [Fintype.card_fin, Fintype.card_fin] at h
     exact h
@@ -94,7 +94,7 @@ theorem exists_local_schmidt_source_frames {a b : Layout P} (w : SourceCircuit a
     constructor
     · exact hrepr _ _
     · dsimp only
-      rw [ambientSchmidtSource, hrepr, hrepr]
+      rw [Matrix.schmidtFrameOuterProduct, hrepr, hrepr]
       rfl
 
 end TNLean.Lattice.PartyCircuit.SourceCircuit

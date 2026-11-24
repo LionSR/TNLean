@@ -41,11 +41,11 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
     (Φ : ManyBody.BondInteraction L q) (t : ℝ) :
     let α : Fin (L - 1) := ⟨a + 1, by omega⟩
     let β : Fin (L - 1) := ⟨a + s - 2, by omega⟩
-    aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ =
+    ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ =
       Matrix.twoSidedEnergyTruncation (AKLV.leftCutBlock Φ α 0)
         (AKLV.middleCutBlock Φ α β 0 + (Φ.term α + Φ.term β)) (AKLV.rightCutBlock Φ β 0) t := by
   intro α β
-  let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
+  let C := ManyBody.BondInteraction.threeRegionHamiltonians (a + 2) (a + s - 1) Φ
   have hleft : AKLV.leftCutBlock Φ α 0 = C 0 := by
     change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val < a + 1), Φ.term i) -
       (0 : ℂ) • 1 = ∑ i ∈ Finset.univ.filter
@@ -89,7 +89,7 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
       (fun j ↦ (⟨2 * j.val, by omega⟩ : Fin 3)) = {0, 2} := by
     ext x
     fin_cases x <;> simp
-  dsimp only [aklvTwoBlockHamiltonian]
+  dsimp only [ManyBody.BondInteraction.twoBlockTruncatedHamiltonian]
   rw [hselector, Fin.sum_univ_three, hcross, Finset.sum_pair hne]
   simp only [Finset.mem_insert, Finset.mem_singleton, Fin.reduceEq, or_self,
     or_false, or_true, ite_true, ite_false, zero_add, Complex.ofReal_zero, zero_smul,
@@ -128,7 +128,7 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
     (hzero : Ω ∈ Φ.zeroSpace)
     (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef) :
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
+    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
     B.PosSemidef ∧ B ≤ Φ.hamiltonian ∧ ‖B‖ ≤ 2 * t + s ∧
       B *ᵥ WithLp.ofLp Ω = 0 ∧
       (B - ((g / 2 : ℝ) : ℂ) •

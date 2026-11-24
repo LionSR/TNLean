@@ -130,14 +130,14 @@ private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
     (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian)
     (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s Φ j -
-      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r Φ j) :
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j) :
     2 ≤ q ∧ g ≤ 1 ∧ ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
         (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian l r Φ e t Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian l r Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -214,7 +214,7 @@ theorem exists_aklv_logarithmic_robustness {L q a s : ℕ}
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -254,7 +254,7 @@ theorem exists_aklv_reference_logarithmic_robustness {L q a s : ℕ}
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) Φ e t Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 1) (a + s) Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -288,7 +288,7 @@ theorem exists_aklv_physical_robustness {L q a s : ℕ}
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, (1024 / g) * (E0 / g + 1) ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -327,7 +327,7 @@ theorem exists_aklv_reference_physical_robustness {L q a s : ℕ}
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, (1024 / g) * (E0 / g + 1) ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) Φ e t Finset.univ
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 1) (a + s) Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),

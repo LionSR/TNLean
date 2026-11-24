@@ -4,7 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.Normalization
-import TNLean.MPS.AreaLaw.Spectral.SupersiteHierarchy
+import Mathlib.Data.Finset.NoncommProd
+import QICLean.Algebra.Combinatorics.DyadicBlock
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Analysis.Norm.MatrixToEuclidean
+import QICLean.ManyBody.Sites.Hierarchy.SupportedHierarchy
+import QICLean.ManyBody.Sites.ProductOperatorTrace
+import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Twirl
+import QICLean.Spectral.LowEnergy.HierarchyLevels
 
 /-!
 # The norm and spatial decomposition of the actual AKLV truncation
@@ -49,10 +57,10 @@ private theorem aklv_clipped_hamiltonian_formula {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (Φ : ManyBody.BondInteraction L q)
     (e : Fin 3 → ℝ) (t : ℝ) :
-    let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
+    let C := ManyBody.BondInteraction.threeRegionHamiltonians (a + 2) (a + s - 1) Φ
     let F := fun j : Fin 3 ↦ cfc (fun x : ℝ ↦ min x (e j + t)) (C j)
     let H := fun j : Fin (s - 2) ↦ Φ.term ⟨a + 1 + j.val, by omega⟩
-    aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ =
+    ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ =
       (F 0 - (((∑ j, e j) : ℝ) : ℂ) • 1) + (∑ j, H j) + F 2 := by
   intro C F H
   have hmiddle : (∑ j, H j) =
@@ -110,7 +118,7 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (Φ : ManyBody.BondInteraction L q)
     (e : Fin 3 → ℝ) (t : ℝ) :
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
     let H := fun j : Fin (s - 2) ↦ Φ.term ⟨a + 1 + j.val, by omega⟩
     ∃ HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       ManyBody.IsSupportedOn HL (interval L 0 (a + 2)) ∧
@@ -120,7 +128,7 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
       B = HL + (∑ j, H j) + HR ∧
       a + 1 + (s - 2) / 2 = a + s / 2 := by
   intro B H
-  let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
+  let C := ManyBody.BondInteraction.threeRegionHamiltonians (a + 2) (a + s - 1) Φ
   let F (j : Fin 3) := cfc (fun x : ℝ ↦ min x (e j + t)) (C j)
   let HL := F 0 - (((∑ j, e j) : ℝ) : ℂ) • 1
   let HR := F 2
@@ -153,10 +161,10 @@ theorem aklv_clipped_hamiltonian_posSemidef_norm_le {L q a s : ℕ}
     (e : Fin 3 → ℝ)
     (he : ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef)
     (he1 : 0 ≤ e 1) {t : ℝ} (ht : 0 ≤ t) :
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
     B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s := by
   intro B
-  let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
+  let C := ManyBody.BondInteraction.threeRegionHamiltonians (a + 2) (a + s - 1) Φ
   let F (j : Fin 3) := cfc (fun x : ℝ ↦ min x (e j + t)) (C j)
   let H := fun j : Fin (s - 2) ↦ Φ.term ⟨a + 1 + j.val, by omega⟩
   let J := Finset.univ.filter (fun i : Fin (L - 1) ↦

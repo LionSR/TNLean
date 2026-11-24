@@ -8,10 +8,4 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Spectral
 
-import TNLean.MPS.AreaLaw.Spectral.GroundStateTail
-import TNLean.MPS.AreaLaw.Spectral.RegionalTruncationResidual
-import TNLean.MPS.AreaLaw.Spectral.SpectralTail
-import TNLean.MPS.AreaLaw.Spectral.SupersiteHierarchy
-import TNLean.MPS.AreaLaw.Spectral.SupportedSpectralCutoff
-import TNLean.MPS.AreaLaw.Spectral.TwoBlockTruncation
 import TNLean.MPS.AreaLaw.Spectral.TwoWindowPolynomialRank

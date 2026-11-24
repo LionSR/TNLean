@@ -240,7 +240,7 @@ def IsAKLVAccuracyFilteredOutput {L q : ℕ} (k s0 : ℕ)
       (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ z = (e j : ℂ) • z) ∧
       ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
     IsAKLVSequenceInitialization a0 s0 Φ e0 g Ω x ∧ ‖x‖ = 1 ∧ ‖x - Ω‖ ^ 2 ≤ 1 / 16 ∧
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
     B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s ∧ 0 ≤ E ∧ ‖φ‖ = 1 ∧
     toEuclideanLin B φ = (E : ℂ) • φ ∧
     (B - (E : ℂ) • 1 - ((9 * g / 10 : ℝ) : ℂ) •
@@ -301,7 +301,7 @@ theorem exists_aklv_physical_accuracy_window :
         mu g Ω hΩ hground hgap hg hexcited x hx hxΩ
     let t := aklvAccuracyThreshold g rho
     let ell := aklvAccuracyDegree g rho s
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+    let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
     obtain ⟨hBpos, hBnorm, E, φ, hE, hφ, heigen, hprojector, hclose,
         _hxφ, _hoverlap, hpoly⟩ :=
       hfilter t (aklvAccuracyThreshold_bounds hg hg1 hrho hrho1).1

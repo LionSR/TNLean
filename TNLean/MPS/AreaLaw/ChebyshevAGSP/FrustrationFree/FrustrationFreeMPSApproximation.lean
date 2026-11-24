@@ -87,7 +87,7 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
       Φ h0 h1 Ω hΩ g t hg hg1 le_rfl hzero hgap
   obtain ⟨p0, -, -, hfix0, -, -, hrank0, hperp0⟩ := hfilter0 (s0 ^ 2)
   let K0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval
-    (aklvTwoBlockHamiltonian (a + m + 2) (a + m + s0 - 1) Φ (fun _ ↦ 0) t Finset.univ) p0
+    (ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + m + 2) (a + m + s0 - 1) Φ (fun _ ↦ 0) t Finset.univ) p0
   have hrank0' : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) K0) ≤ D0 := by
     rw [← hk0]
@@ -120,7 +120,7 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
       Φ h0 h1 Ω hΩ g t hg hg1 le_rfl hzero hgap
   obtain ⟨p1, -, -, hfix1, -, -, hrank1, hperp1⟩ := hfilter1 (s ^ 2)
   let K1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval
-    (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ) p1
+    (ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ) p1
   have hrank1' : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) K1) ≤ D1 := by
     change _ ≤ (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1))

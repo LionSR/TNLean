@@ -401,8 +401,8 @@ retained left vectors times the actual bond dimension. Thus the density matrix i
 `|S| m`, independently of the exponentially large ambient left Hilbert space. -/
 theorem rank_boundarySupportProjection_le (S : Finset (LeftBlockVector L q k)) (m : ℕ) :
     let P := reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))
     (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)).rank ≤ S.card * m := by
   classical
@@ -417,8 +417,8 @@ This is the coordinate reduction implicit in LVV13, `algo53.tex`, equation `eq:c
 472--476. -/
 theorem exists_boundarySupportCoordinates (S : Finset (LeftBlockVector L q k)) (m : ℕ) :
     let P := reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))
     let Q := P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)
     ∃ (n : ℕ) (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ),
@@ -458,8 +458,8 @@ theorem exists_boundarySupportCoordinateCoefficients
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) :
     ∃ c : Fin n → Fin m → S → ℂ, ∀ j a,
@@ -468,8 +468,8 @@ theorem exists_boundarySupportCoordinateCoefficients
           gluingLeftCoordinates L q k m (WithLp.toLp 2 (Z.col j)) (x, a)) := by
   classical
   let Q := reindex
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
     (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
       (1 : Matrix (Fin m) (Fin m) ℂ)
   have hQZ : Q * Z = Z := by
@@ -524,14 +524,14 @@ theorem rank_boundarySupportedMatrix_le (S : Finset (LeftBlockVector L q k)) (m 
     (ρ : Matrix ((CutLeft L q k × CutSite L q k) × Fin m)
       ((CutLeft L q k × CutSite L q k) × Fin m) ℂ)
     (hρ : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ) :
     ρ.rank ≤ S.card * m := by
   let P := reindex
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
     (spanProjection (S : Set (LeftBlockVector L q k)))
   calc
     ρ.rank = ((P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ).rank := congrArg Matrix.rank hρ.symm
@@ -548,13 +548,13 @@ theorem exists_boundarySupportedDensityCompression
       ((CutLeft L q k × CutSite L q k) × Fin m) ℂ)
     (hρpsd : ρ.PosSemidef)
     (hρ : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ) :
     let P := reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))
     let Q := P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)
     ∃ (n : ℕ) (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
@@ -587,13 +587,13 @@ theorem exists_boundarySupportedDensityCompression_of_trace_eq_one
       ((CutLeft L q k × CutSite L q k) × Fin m) ℂ)
     (hρpsd : ρ.PosSemidef) (hρtrace : ρ.trace = 1)
     (hρ : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ) :
     let P := reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))
     let Q := P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)
     ∃ (n : ℕ) (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
@@ -621,13 +621,13 @@ theorem exists_boundarySupportedVectorDensityCompression
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     (hxnorm : ‖WithLp.toLp 2 x‖ = 1)
     (hx : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x) :
     let P := reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))
     let Q := P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)
     ∃ (n : ℕ) (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
@@ -665,19 +665,19 @@ theorem exists_boundarySupportedDensity_eigenvector_coordinates
     (u : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) (μ : ℂ)
     (hu : ‖u‖ = 1)
     (hρ : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ)
     (husupp : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u = WithLp.ofLp u)
     (heigen : ρ *ᵥ WithLp.ofLp u = μ • WithLp.ofLp u) :
     let P := reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))
     let Q := P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)
     ∃ (n : ℕ) (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
@@ -709,8 +709,8 @@ def feasibleBoundaryDensities (S : Set (LeftBlockVector L q k)) (m : ℕ) (η : 
       ((CutLeft L q k × CutSite L q k) × Fin m) ℂ) :=
   {ρ | ρ.PosSemidef ∧ ρ.trace = 1 ∧
     (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ ∧
     rectangularTraceNorm (partialTraceFirst ρ - X) ≤ η}
 
@@ -774,8 +774,8 @@ theorem boundaryMinimizer_spec (S : Set (LeftBlockVector L q k))
     (m : ℕ) (η : ℝ) {X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ}
     (hX : (feasibleBoundaryDensities S m η X).Nonempty) :
     let P := reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S)
     let σ := boundaryMinimizer S HL m η X
     let u := boundaryLeadingVector S HL m η X
@@ -811,8 +811,8 @@ def IsBoundaryProgramSolution (S : Set (LeftBlockVector L q k))
       ((CutLeft L q k × CutSite L q k) × Fin m) ℂ)
     (u : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) (μ : ℝ) : Prop :=
   let P := reindex
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
     (spanProjection S)
   σ.PosSemidef ∧ σ.trace = 1 ∧ (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * σ = σ ∧
     rectangularTraceNorm (partialTraceFirst σ - X) ≤ η ∧

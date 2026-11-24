@@ -59,7 +59,7 @@ theorem integral_sourceGaussianCorrection (w : SourceCircuit a b) (k : ℕ) (hk 
     (F : ∀ e : sourceLocations w, branchLabels w e.1 →
       Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
     (hnonneg : ∀ e ξ j, 0 ≤ lam e ξ j)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (e : sourceLocations w) (ξ ζ : branchLabels w e.1) :
     (∫ ω, sourceGaussianCorrection w k lam E F ω e ξ ζ ∂sourceGaussianLaw w k) = 0 := by
@@ -79,20 +79,20 @@ theorem sourceGaussianCorrection_eq_transport (w : SourceCircuit a b) (k : ℕ)
       Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
     (F : ∀ e : sourceLocations w, branchLabels w e.1 →
       Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (ω : SourceGaussianSamples w k) (e : sourceLocations w) (ξ ζ : branchLabels w e.1) :
     sourceGaussianCorrection w k lam E F ω e ξ ζ =
-      sourceTransport (E e ξ) (F e ξ) (E e ζ) (F e ζ)
-        (sourceCorrection k (lam e ξ) (lam e ζ) (ω e (ξ, ζ))) := by
+      Matrix.kroneckerSandwich (E e ξ) (F e ξ) (E e ζ) (F e ζ)
+        (ProductSource.sourceCorrection k (lam e ξ) (lam e ζ) (ω e (ξ, ζ))) := by
   have hs : exactSourceMatrix w e ξ ζ =
-      ambientSchmidtSource (lam e ξ) (lam e ζ) (E e ξ) (F e ξ) (E e ζ) (F e ζ) := by
-    rw [ambientSchmidtSource, hsource, hsource]
+      Matrix.schmidtFrameOuterProduct (lam e ξ) (lam e ζ) (E e ξ) (F e ξ) (E e ζ) (F e ζ) := by
+    rw [Matrix.schmidtFrameOuterProduct, hsource, hsource]
     rfl
-  change ambientSampledSource k (lam e ξ) (lam e ζ)
+  change ProductSource.ambientSampledSource k (lam e ξ) (lam e ζ)
     (E e ξ) (F e ξ) (E e ζ) (F e ζ) (ω e (ξ, ζ)) - exactSourceMatrix w e ξ ζ = _
   rw [hs]
-  exact ambientSourceCorrection_eq_transport k (lam e ξ) (lam e ζ)
+  exact ProductSource.ambientSourceCorrection_eq_kroneckerSandwich k (lam e ξ) (lam e ζ)
     (E e ξ) (F e ξ) (E e ζ) (F e ζ) (ω e (ξ, ζ))
 
 variable {n x d : Type} [Fintype n] [Fintype x] [Fintype d]

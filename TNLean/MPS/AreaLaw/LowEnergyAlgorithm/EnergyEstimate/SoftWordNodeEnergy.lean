@@ -68,7 +68,7 @@ arXiv:1602.08828v2, Figure `fig:algo1`, line 1631. -/
 def IsRegionalLowerEnergyEstimate {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (l r : ℕ) (width p : ℝ) : Prop :=
-  let A := aklvRegionalHamiltonians l r Φ 1
+  let A := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1
   ∃ (e : ℝ) (x : (Fin L → Fin q) → ℂ),
     star x ⬝ᵥ x = 1 ∧ A *ᵥ x = (e : ℂ) • x ∧
     (A - (e : ℂ) • 1).PosSemidef ∧ e - width ≤ p ∧ p ≤ e
@@ -87,8 +87,8 @@ def IsSoftWordEnergyUpdate {L q N l k u v r : ℕ} (hq : 0 < q)
     (S2 : Submodule ℂ (EuclideanSpace ℂ (interval L k r → Fin q)))
     (center p : ℝ) : Prop :=
   let J := interval L l r
-  let P := aklvRegionalHamiltonians l r Φ 1
-  let M := aklvRegionalHamiltonians u v Φ 1
+  let P := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1
+  let M := ManyBody.BondInteraction.threeRegionHamiltonians u v Φ 1
   let R := P - M + (center : ℂ) • 1 +
     cfc (Real.softTruncation 768 12) (M - (center : ℂ) • 1)
   let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
@@ -122,11 +122,11 @@ def HasSoftWordNodeEnergyUpdate {L q N l k u v r : ℕ} (hq : 0 < q)
     (S2 : Submodule ℂ (EuclideanSpace ℂ (interval L k r → Fin q))) : Prop :=
 ∃ (eLeft eRight : ℝ) (xLeft xRight : (Fin L → Fin q) → ℂ),
         star xLeft ⬝ᵥ xLeft = 1 ∧
-        aklvRegionalHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
-        (aklvRegionalHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
+        ManyBody.BondInteraction.threeRegionHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
+        (ManyBody.BondInteraction.threeRegionHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
         star xRight ⬝ᵥ xRight = 1 ∧
-        aklvRegionalHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
-        (aklvRegionalHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
+        ManyBody.BondInteraction.threeRegionHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
+        (ManyBody.BondInteraction.threeRegionHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
         ∀ p1 p2 : ℝ,
           IsRegionalLowerEnergyEstimate Φ l k (49 / 16) p1 →
           IsRegionalLowerEnergyEstimate Φ k r (49 / 16) p2 →
@@ -195,16 +195,16 @@ theorem exists_soft_word_node_energy_update
     _hThreeLower, _hThreeUpper, hcenter⟩ :=
     exists_regional_central_energy_estimate hq hlu huv hvr hrL Φ h0 h1
   have heP : eP = eParent := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l r Φ 1) eP eParent xP xParent
+    (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1) eP eParent xP xParent
     hPxP hxP hParent hxParent hPmin hParentMin
   have heM : eM = eMiddle := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians u v Φ 1) eM eMiddle xM xMiddle
+    (ManyBody.BondInteraction.threeRegionHamiltonians u v Φ 1) eM eMiddle xM xMiddle
     hMxM hxM hMiddle hxMiddle hMmin hMiddleMin
   obtain ⟨eA, eB, eMerge, x, z, hx, hAx, hBx, hAmin, hBmin,
     hz, hMerge, hMergeMin, hMergeLower, hMergeUpper, _⟩ :=
     exists_adjacent_interval_energy_merge hq hlk hkr hrL Φ h0 h1
   have heMerge : eMerge = eParent := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l r Φ 1) eMerge eParent z xParent
+    (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1) eMerge eParent z xParent
     hMerge hz hParent hxParent hMergeMin hParentMin
   refine ⟨eLeft, eRight, xLeft, xRight, hxLeft, hLeft, hLeftMin,
     hxRight, hRight, hRightMin, ?_⟩
@@ -212,9 +212,9 @@ theorem exists_soft_word_node_energy_update
   obtain ⟨e1, y1, hy1, hAy1, hA1min, hp1l, hp1u⟩ := hp1
   obtain ⟨e2, y2, hy2, hBy2, hB2min, hp2l, hp2u⟩ := hp2
   have he1 : e1 = eA := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
+    (ManyBody.BondInteraction.threeRegionHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
   have he2 : e2 = eB := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
+    (ManyBody.BondInteraction.threeRegionHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
   have hsumLower : eParent - 8 ≤ p1 + p2 := by
     linarith only [hMergeUpper, heMerge, he1, he2, hp1l, hp2l]
   have hsumUpper : p1 + p2 ≤ eParent := by
@@ -454,18 +454,18 @@ theorem exists_regional_middle_center_of_child_estimates {L q l u v r : ℕ}
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (eP eM : ℝ) (xP xM : (Fin L → Fin q) → ℂ)
     (hxP : star xP ⬝ᵥ xP = 1)
-    (hPxP : aklvRegionalHamiltonians l r Φ 1 *ᵥ xP = (eP : ℂ) • xP)
-    (hPmin : (aklvRegionalHamiltonians l r Φ 1 - (eP : ℂ) • 1).PosSemidef)
+    (hPxP : ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1 *ᵥ xP = (eP : ℂ) • xP)
+    (hPmin : (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1 - (eP : ℂ) • 1).PosSemidef)
     (hxM : star xM ⬝ᵥ xM = 1)
-    (hMxM : aklvRegionalHamiltonians u v Φ 1 *ᵥ xM = (eM : ℂ) • xM)
-    (hMmin : (aklvRegionalHamiltonians u v Φ 1 - (eM : ℂ) • 1).PosSemidef) :
+    (hMxM : ManyBody.BondInteraction.threeRegionHamiltonians u v Φ 1 *ᵥ xM = (eM : ℂ) • xM)
+    (hMmin : (ManyBody.BondInteraction.threeRegionHamiltonians u v Φ 1 - (eM : ℂ) • 1).PosSemidef) :
     ∃ (eLeft eRight : ℝ) (xLeft xRight : (Fin L → Fin q) → ℂ),
       star xLeft ⬝ᵥ xLeft = 1 ∧
-      aklvRegionalHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
-      (aklvRegionalHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
+      ManyBody.BondInteraction.threeRegionHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
+      (ManyBody.BondInteraction.threeRegionHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
       star xRight ⬝ᵥ xRight = 1 ∧
-      aklvRegionalHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
-      (aklvRegionalHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
+      ManyBody.BondInteraction.threeRegionHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
+      (ManyBody.BondInteraction.threeRegionHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
       ∀ (k : ℕ), l ≤ k → k ≤ r → ∀ p1 p2 : ℝ,
         IsRegionalLowerEnergyEstimate Φ l k (49 / 16) p1 →
         IsRegionalLowerEnergyEstimate Φ k r (49 / 16) p2 →
@@ -480,10 +480,10 @@ theorem exists_regional_middle_center_of_child_estimates {L q l u v r : ℕ}
     _hThreeLower, _hThreeUpper, hcenter⟩ :=
     exists_regional_central_energy_estimate hq hlu huv hvr hrL Φ h0 h1
   have heP : eP = eParent := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l r Φ 1) eP eParent xP xParent
+    (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1) eP eParent xP xParent
     hPxP hxP hParent hxParent hPmin hParentMin
   have heM : eM = eMiddle := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians u v Φ 1) eM eMiddle xM xMiddle
+    (ManyBody.BondInteraction.threeRegionHamiltonians u v Φ 1) eM eMiddle xM xMiddle
     hMxM hxM hMiddle hxMiddle hMmin hMiddleMin
   refine ⟨eLeft, eRight, xLeft, xRight, hxLeft, hLeft, hLeftMin,
     hxRight, hRight, hRightMin, ?_⟩
@@ -492,14 +492,14 @@ theorem exists_regional_middle_center_of_child_estimates {L q l u v r : ℕ}
     hz, hMerge, hMergeMin, hMergeLower, hMergeUpper, _⟩ :=
     exists_adjacent_interval_energy_merge hq hlk hkr hrL Φ h0 h1
   have heMerge : eMerge = eParent := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l r Φ 1) eMerge eParent z xParent
+    (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1) eMerge eParent z xParent
     hMerge hz hParent hxParent hMergeMin hParentMin
   obtain ⟨e1, y1, hy1, hAy1, hA1min, hp1l, hp1u⟩ := hp1
   obtain ⟨e2, y2, hy2, hBy2, hB2min, hp2l, hp2u⟩ := hp2
   have he1 : e1 = eA := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
+    (ManyBody.BondInteraction.threeRegionHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
   have he2 : e2 = eB := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
+    (ManyBody.BondInteraction.threeRegionHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
   have hsumLower : eParent - 57 / 8 ≤ p1 + p2 := by
     linarith only [hMergeUpper, heMerge, he1, he2, hp1l, hp2l]
   have hsumUpper : p1 + p2 ≤ eParent := by

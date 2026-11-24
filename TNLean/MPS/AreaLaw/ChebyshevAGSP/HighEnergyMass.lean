@@ -201,7 +201,7 @@ theorem _root_.Matrix.PosSemidef.norm_le_of_le_smul_one {n : Type*} [Fintype n]
 /-- The corrected Cauchy--Schwarz bound in AKLV, arXiv:1301.1162v1,
 the proof of Lemma 6.5(2): the unsquared modulus is at most twice the
 square root of clipped energy divided by the cutoff. The source typo is
-recorded in `docs/paper-gaps/aklv13_robustness_constants.tex`. -/
+recorded in `https://sirui-lu.com/QICLean/paper-gaps/aklv13_robustness_constants.pdf`. -/
 theorem norm_low_high_boundary_inner_le_sqrt_clipped_energy
     {n : Type*} [Fintype n] [DecidableEq n]
     (L N R A : Matrix n n ℂ) (hL : L.PosSemidef) (hN : N.PosSemidef)

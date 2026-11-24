@@ -78,11 +78,11 @@ def IsSoftWordNodeEnergyRealization {L q N l k u v r : ℕ} (hq : 0 < q)
     (p1 p2 p : ℝ) : Prop :=
   ∃ (eLeft eRight : ℝ) (xLeft xRight : (Fin L → Fin q) → ℂ),
     star xLeft ⬝ᵥ xLeft = 1 ∧
-    aklvRegionalHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
-    (aklvRegionalHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
+    ManyBody.BondInteraction.threeRegionHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
+    (ManyBody.BondInteraction.threeRegionHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
     star xRight ⬝ᵥ xRight = 1 ∧
-    aklvRegionalHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
-    (aklvRegionalHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
+    ManyBody.BondInteraction.threeRegionHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
+    (ManyBody.BondInteraction.threeRegionHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
     IsRegionalLowerEnergyEstimate Φ u v 10 (p1 + p2 - eLeft - eRight - 2) ∧
     IsSoftWordEnergyUpdate (u := u) (v := v) hq hlk hkr Φ F S1 S2
       (p1 + p2 - eLeft - eRight - 2) p

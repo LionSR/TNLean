@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Spectral.RegionalTruncationResidual
+import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
 import QICLean.Spectral.Filter.SoftTruncationHardResidual
 import QICLean.Spectral.Filter.ShiftedSoftHardTruncation
 import QICLean.Spectral.LowEnergy.SoftTruncationLowRestriction
@@ -52,7 +52,7 @@ theorem norm_hard_residual_low_of_barrier
   intro A S
   have hproj' : b0 • spectralProjectionGE A ((c - b0) + b0) ≤ B := by
     simpa only [sub_add_cancel] using hproj
-  obtain ⟨Z, hZ, hZn⟩ := exists_nearestNeighbour_weighted_low_restriction
+  obtain ⟨Z, hZ, hZn⟩ := ManyBody.BondInteraction.exists_weighted_low_restriction
     I J Φ h0 h1 B (c - b0) b0 energy s hs0 hs1 hBA hproj' basis a hEigen hgap
   have hA : A.IsHermitian :=
     (isSelfAdjoint_sum I fun i hi ↦
@@ -95,7 +95,7 @@ theorem norm_soft_residual_low_of_barrier
   have hA : A.IsHermitian :=
     (isSelfAdjoint_sum I fun i hi ↦
       IsSelfAdjoint.of_nonneg (h0 i (Finset.mem_union_left J hi))).isHermitian
-  have hconj := norm_exp_conjugation_nearestNeighbour_boundary_sum_le I J Φ h0 h1
+  have hconj := ManyBody.BondInteraction.norm_exp_conjugation_boundary_sum_le I J Φ h0 h1
     ((c : ℝ) : ℂ) s hs0.le hs1
   simp only [Complex.coe_smul] at hconj
   exact norm_soft_truncation_excess_low_le_of_conjugation_le A B _ hA p c b0 energy s t T _ m

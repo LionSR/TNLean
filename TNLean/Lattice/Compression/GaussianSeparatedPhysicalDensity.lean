@@ -64,7 +64,7 @@ theorem integrable_gaussianSeparatedPhysicalDensity_and_integral_le
     (htausum : ∑ t, tau t = 1) (htau'sum : ∑ u, tau' u = 1) :
     let z := fun (q : CorrectedSchmidtCoordinates circuit S ×
         CorrectedSchmidtCoordinates circuit S) (ω : SourceGaussianSamples circuit k) ↦
-      ∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      ∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (q.1 e) (q.2 e)
     let M := fun ω ↦ Word.separatedPhysicalDensity J v w F F' tau tau'
       J' v' w' G G' bD bD' (fun q ↦ z q ω)

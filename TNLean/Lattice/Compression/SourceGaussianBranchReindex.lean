@@ -51,7 +51,7 @@ theorem gaussianSchmidtBranchDensity_eq_sum_original
       (isTouched_of_source_endpoint A w e.1 (hS e.1 e.2))
     let e := partialSchmidtCoordinateEquiv A w S hS
     gaussianSchmidtBranchDensity A w S k lam E F ω bOut ψ φ ξ ζ =
-      ∑ u, ∑ v, (∏ s : S, sourceCorrection k (lam s.1 (ξ₀ s)) (lam s.1 (ζ₀ s))
+      ∑ u, ∑ v, (∏ s : S, ProductSource.sourceCorrection k (lam s.1 (ξ₀ s)) (lam s.1 (ζ₀ s))
         (ω s.1 (ξ₀ s, ζ₀ s)) (u s) (v s)) •
         Matrix.vecMulVec (bOut.repr (partialSchmidtOutput A w S E F ξ (e.symm u) ψ)).ofLp
           (fun j ↦ conj (bOut.repr (partialSchmidtOutput A w S E F ζ (e.symm v) φ) j)) := by

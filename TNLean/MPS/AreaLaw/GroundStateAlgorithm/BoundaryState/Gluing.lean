@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
 import QICLean.Channel.Gluing.LeadingEigenvector
-import QICLean.ManyBody.Entropy.Cut.ThreeWayCut
+import QICLean.ManyBody.Sites.ThreeRegion.Cut
 import QICLean.ManyBody.Entropy.Cut.RegionSplit
 import QICLean.Analysis.TraceNorm.RectangularTraceNormAlgebra
 import QICLean.Analysis.Isometry.EuclideanReindex
@@ -158,7 +158,7 @@ abbrev CutRight (L q k : ℕ) := (v : {v // v ∉ leftBlock L k}) → Fin q
 /-- The three-way cut coordinates `((x, y), z)` at the cut after `k` sites. -/
 abbrev gluingCut (L q k : ℕ) :
     (Fin L → Fin q) ≃ (CutLeft L q k × CutSite L q k) × CutRight L q k :=
-  Entropy.threeCutEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1))
+  ManyBody.threeCutEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1))
 
 /-- The operator on the first `k` sites of a matrix supported there: its slice at the
 configuration `0` of the remaining sites. -/
@@ -654,12 +654,12 @@ theorem mem_leftSupportSubmodule_of_gluingCut_fixed
     (S : Set (LeftBlockVector L q k))
     (y : (CutLeft L q k × CutSite L q k) × CutRight L q k → ℂ)
     (hy : (reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (CutRight L q k) (CutRight L q k) ℂ)) *ᵥ y = y) :
     WithLp.toLp 2 (y ∘ gluingCut L q k) ∈ leftSupportSubmodule S := by
   classical
-  let e := Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
+  let e := ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
   let P := reindex e e (spanProjection S)
   let Y := Matrix.schmidtCoeffMatrix y
   have hleft : leftApply P (WithLp.toLp 2 y) = WithLp.toLp 2 y := by
@@ -675,7 +675,7 @@ theorem mem_leftSupportSubmodule_of_gluingCut_fixed
     rw [ManyBody.cutMatrix_apply]
     change y (gluingCut L q k ((ManyBody.cutEquiv (fun _ ↦ Fin q)
       (leftBlock L k)).symm (p, r))) = y (e p, r)
-    rw [gluingCut, Entropy.threeCutEquiv_eq_trans]
+    rw [gluingCut, ManyBody.threeCutEquiv_eq_trans]
     simp [e]
   apply (spanProjection_mul_cutMatrix_eq_iff (S := S)).mp
   rw [hcm]
@@ -728,8 +728,8 @@ theorem exists_trimmed_witness_chain {k : ℕ}
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
         ((1 : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ
           x ∧
-      (reindex (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-          (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1))) PV ⊗ₖ
+      (reindex (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+          (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1))) PV ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x := by
   classical
   rcases isEmpty_or_nonempty (Fin L → Fin q) with hσ | ⟨⟨σ⟩⟩
@@ -788,7 +788,7 @@ theorem exists_trimmed_witness_chain {k : ℕ}
       (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w)) = _
     rw [hwcw]
   set Ssplit :=
-    Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
+    ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
   refine ⟨w, m, W, fun p ↦ WithLp.ofLp xc (Ssplit.symm p.1, p.2), ?_, ?_, ?_, ?_, hW, hmD, ?_, ?_⟩
   · rw [← Entropy.norm_cutVector (leftBlock L k), hwcw, hwc1]
   · rw [hcm]; exact hwcD
@@ -799,7 +799,7 @@ theorem exists_trimmed_witness_chain {k : ℕ}
   · funext ⟨p, z⟩
     have h := congrFun hwx (Ssplit.symm p, z)
     have hg : (gluingCut L q k).symm (p, z) = e.symm (Ssplit.symm p, z) := by
-      rw [gluingCut, Entropy.threeCutEquiv_eq_trans]
+      rw [gluingCut, ManyBody.threeCutEquiv_eq_trans]
       rfl
     simp only [Function.comp_apply, hg, w, Equiv.apply_symm_apply]
     rw [h]

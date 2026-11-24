@@ -158,15 +158,15 @@ theorem sum_schmidtPhysicalVector_outer_eq_weightedSourceError
       (schmidtPhysicalVector J y w F' tau' l)
     (fun t u ↦ ∑ k : d, (∑ q : I × L, z q •
       Matrix.vecMulVec (ψ q.1) (fun h ↦ conj (φ q.2 h))) (t, k) (u, k)) =
-      ProbabilityTheory.weightedSourceError tau tau'
+      Matrix.halfWeightedBlockCombination tau tau'
         (physicalFrameGramMatrix J x y v w F F' bD) z := by
   classical
   dsimp only
   ext t u
   simp only [Matrix.sum_apply, Matrix.smul_apply, Matrix.vecMulVec_apply, smul_eq_mul,
     schmidtPhysicalVector_repr, map_mul, Complex.conj_ofReal,
-    ProbabilityTheory.weightedSourceError, Matrix.halfWeighted, Matrix.diagonal_mul,
-    Matrix.mul_diagonal, Matrix.transpose_apply, ProbabilityTheory.sourceBlock]
+    Matrix.halfWeightedBlockCombination, Matrix.halfWeighted, Matrix.diagonal_mul,
+    Matrix.mul_diagonal, Matrix.transpose_apply, Matrix.comp_symm_apply]
   simp only [physicalFrameGramMatrix, Matrix.mul_apply, Matrix.conjTranspose_apply]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
@@ -226,10 +226,10 @@ private theorem partialTrace_weightedSourceError
     (K : Matrix (Y × e) T ℂ) (K' : Matrix (Y × e) U ℂ)
     (tau : T → ℝ) (tau' : U → ℝ) (O : Matrix (L × U) (I × T) ℂ)
     (z : I × L → ℂ) :
-    Matrix.partialTraceRight (K * ProbabilityTheory.weightedSourceError tau tau' O z * K'ᴴ) =
+    Matrix.partialTraceRight (K * Matrix.halfWeightedBlockCombination tau tau' O z * K'ᴴ) =
       ∑ q, z q • Matrix.partialTraceRight
-        (K * Matrix.halfWeighted tau tau' (ProbabilityTheory.sourceBlock O q.2 q.1)ᵀ * K'ᴴ) := by
-  simp only [ProbabilityTheory.weightedSourceError, Matrix.mul_sum, Matrix.sum_mul,
+        (K * Matrix.halfWeighted tau tau' ((Matrix.comp _ _ _ _ ℂ).symm O q.2 q.1)ᵀ * K'ᴴ) := by
+  simp only [Matrix.halfWeightedBlockCombination, Matrix.mul_sum, Matrix.sum_mul,
     Matrix.mul_smul, Matrix.smul_mul]
   change Matrix.partialTraceRightLM (∑ q, z q • _) = _
   simp only [map_sum, map_smul]
@@ -271,27 +271,27 @@ theorem integral_rectangularTraceNorm_weightedPhysicalSource_le
     let K := physicalOutputFrameMatrix J' v' G bD'
     let K' := physicalOutputFrameMatrix J' w' G' bD'
     (∫ ω, Matrix.rectangularTraceNorm (Matrix.partialTraceRight
-      (K * ProbabilityTheory.weightedSourceError tau tau' O (fun q ↦ z q ω) * K'ᴴ)) ∂μ) ≤
+      (K * Matrix.halfWeightedBlockCombination tau tau' O (fun q ↦ z q ω) * K'ᴴ)) ∂μ) ≤
       Real.sqrt kappa := by
   intro O K K'
   have hpoint (ω : Ω) : Matrix.rectangularTraceNorm (Matrix.partialTraceRight
-      (K * ProbabilityTheory.weightedSourceError tau tau' O (fun q ↦ z q ω) * K'ᴴ)) ≤
-      Matrix.rectangularTraceNorm (ProbabilityTheory.weightedSourceError tau tau' O
+      (K * Matrix.halfWeightedBlockCombination tau tau' O (fun q ↦ z q ω) * K'ᴴ)) ≤
+      Matrix.rectangularTraceNorm (Matrix.halfWeightedBlockCombination tau tau' O
         (fun q ↦ z q ω)) :=
     rectangularTraceNorm_partialTrace_physicalOutputFrameMatrix_le
       J' v' w' G G' bD' hv' hw' _
-  have hint := ProbabilityTheory.integrable_rectangularTraceNorm_weightedSourceError
+  have hint := ProbabilityTheory.integrable_rectangularTraceNorm_halfWeightedBlockCombination
     tau tau' O z hz htau htau' htausum htau'sum
   have hmeas : AEStronglyMeasurable (fun ω ↦ Matrix.rectangularTraceNorm
       (Matrix.partialTraceRight
-        (K * ProbabilityTheory.weightedSourceError tau tau' O (fun q ↦ z q ω) * K'ᴴ))) μ := by
+        (K * Matrix.halfWeightedBlockCombination tau tau' O (fun q ↦ z q ω) * K'ᴴ))) μ := by
     simp_rw [partialTrace_weightedSourceError]
     exact ProbabilityTheory.aestronglyMeasurable_rectangularTraceNorm_sum z hz _
   have hint' := hint.mono' hmeas (Filter.Eventually.of_forall fun ω ↦ by
     rw [Real.norm_eq_abs, abs_of_nonneg (Matrix.rectangularTraceNorm_nonneg _)]
     exact hpoint ω)
   exact (integral_mono hint' hint hpoint).trans
-    (ProbabilityTheory.integral_rectangularTraceNorm_weightedSourceError_le
+    (ProbabilityTheory.integral_rectangularTraceNorm_halfWeightedBlockCombination_le
       p p' tau tau' O z kappa hp hp' htau htau' hpsum hp'sum htausum htau'sum
       (norm_physicalFrameGramMatrix_le_one J x y v w F F' bD hv hw) hkappa hz hcov)
 

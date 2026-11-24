@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Calculus.ProjectedEvolution
 import QICLean.Spectral.Filter.Gaussian.MatrixIntegral
-import TNLean.MPS.AreaLaw.ProjectorFactorization.GaussianTimeAverage
+import QICLean.ManyBody.Hamiltonian.GaussianFilter
 
 /-!
 # The interaction picture in step five of Hastings' Lemma 1

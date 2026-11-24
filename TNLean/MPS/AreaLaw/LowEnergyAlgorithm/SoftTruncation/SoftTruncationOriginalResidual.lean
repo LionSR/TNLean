@@ -47,15 +47,15 @@ theorem exists_single_region_original_soft_truncation_residual {L q l r : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
-      (∀ j, (aklvRegionalHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
+      star x ⬝ᵥ x = 1 ∧ (∀ j, ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
+      (∀ j, (ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       (∀ j, 0 ≤ e j) ∧
       let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ 2 ∧
       ∃ hH : H.IsHermitian,
         ∀ η T t : ℝ, ∀ m : ℕ, 0 < η → η + 7 ≤ T → 0 < t → 1 ≤ m →
-          let X := aklvRegionalHamiltonians l r Φ 1 - (e 1 : ℂ) • 1
+          let X := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ 1 - (e 1 : ℂ) • 1
           let G := H - X + cfc (Real.softTruncation t m) X
           G.IsHermitian ∧ G ≤ H ∧
             ‖((toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) H -
@@ -73,7 +73,7 @@ theorem exists_single_region_original_soft_truncation_residual {L q l r : ℕ}
     (isHermitian_one.smul (by simp [isSelfAdjoint_iff]))
   refine ⟨e, x, z, E, hx, hxe, he, he0, hz, hHz, hE, hE0, hE2, hH, ?_⟩
   intro η T t m hη hT ht hm X G
-  let A := aklvRegionalHamiltonians l r Φ
+  let A := ManyBody.BondInteraction.threeRegionHamiltonians l r Φ
   let Y := ∑ i ∈ Finset.univ.filter
     (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i
   let F := energyTruncation (A 1) (e 1 + T) + A 0 + A 2 + Y -
@@ -83,7 +83,7 @@ theorem exists_single_region_original_soft_truncation_residual {L q l r : ℕ}
       finrank_euclideanSpace) hH.eigenvalues₀ (E + η)
   have hX : X.PosSemidef := he 1
   have hA1 : (A 1).IsHermitian := by
-    dsimp only [A, aklvRegionalHamiltonians]
+    dsimp only [A, ManyBody.BondInteraction.threeRegionHamiltonians]
     exact (Matrix.posSemidef_sum _ (fun i _ ↦ (h0 i).posSemidef)).isHermitian
   have hG : G.IsHermitian :=
     (hH.sub hX.isHermitian).add (cfc_predicate (Real.softTruncation t m) X)
@@ -104,7 +104,7 @@ theorem exists_single_region_original_soft_truncation_residual {L q l r : ℕ}
       toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) F).domRestrict S‖ ≤
       32 * Real.exp (-(T - η) / 8) at hres
     have hsum : Φ.hamiltonian = (∑ j, A j) + Y :=
-      sum_three_regions_add_crossings hlr Φ
+      ManyBody.BondInteraction.hamiltonian_eq_sum_threeRegionHamiltonians_add_crossings hlr Φ
     have hdiff : H - F = X - energyTruncation X T := by
       rw [hA1.energyTruncation_sub_smul_one (e 1) T]
       dsimp only [H, F, X]

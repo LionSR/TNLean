@@ -17,7 +17,7 @@ import QICLean.Analysis.Real.ExplicitThresholds
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual
 import QICLean.Analysis.Parameter.PolynomialFilterParameters
-import TNLean.MPS.AreaLaw.Spectral.RegionalTruncationResidual
+import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
 
 /-!
 # The low spectral cluster after three-bulk truncation

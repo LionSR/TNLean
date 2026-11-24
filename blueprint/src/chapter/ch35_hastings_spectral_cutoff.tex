@@ -94,8 +94,8 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
 
 \begin{lemma}[Support of the cut-off]
     \label{thm:hastings_spectral_cutoff_support}
-    \lean{TNLean.MPS.AreaLaw.Hastings.spectralCutoff_localLift,
-        TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff}
+    \lean{ManyBody.cfc_place,
+        ManyBody.cfc_mem_supportedOperators}
     \leanok
     \uses{def:hastings_spectral_cutoff}
     For $K=K^\dagger$ on a region $D$, $O_\theta(K\otimes1_{D^c})=O_\theta(K)\otimes1_{D^c}$;
@@ -108,8 +108,7 @@ $\|M_LO_L\|$~\cite{gap:hastings07_spectral_cutoff_threshold}).
 
 \begin{lemma}[Cut-offs on disjoint regions commute]
     \label{thm:hastings_spectral_cutoff_commute}
-    \lean{TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_localLift_of_disjoint,
-        TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn}
+    \lean{ManyBody.commute_of_mem_supportedOperators_of_disjoint, ManyBody.cfc_mem_supportedOperators}
     \leanok
     \uses{thm:hastings_spectral_cutoff_support}
     If $M=M^\dagger$ and $M'=(M')^\dagger$ are supported on disjoint regions

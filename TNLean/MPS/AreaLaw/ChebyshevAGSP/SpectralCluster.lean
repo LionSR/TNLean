@@ -84,14 +84,14 @@ theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
     (hg : 0 < g)
     (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s Φ j -
-      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r Φ j) :
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ ManyBody.BondInteraction.threeRegionHamiltonians l r Φ j) :
     ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
         (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ tau t : ℝ, 0 < tau → tau ≤ 1 → aklvTwoBlockThreshold g tau ≤ t →
-        let B := aklvTwoBlockHamiltonian l r Φ e t
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian l r Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           let v := (hB Finset.univ).eigenvectorBasis
           let lam := (hB Finset.univ).eigenvalues
@@ -286,7 +286,7 @@ theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ tau t : ℝ, 0 < tau → tau ≤ 1 → aklvTwoBlockThreshold g tau ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 2) (a + s - 1) Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           let v := (hB Finset.univ).eigenvectorBasis
           let lam := (hB Finset.univ).eigenvalues
@@ -329,7 +329,7 @@ theorem exists_aklv_reference_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
         ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ tau t : ℝ, 0 < tau → tau ≤ 1 → aklvTwoBlockThreshold g tau ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) Φ e t
+        let B := ManyBody.BondInteraction.twoBlockTruncatedHamiltonian (a + 1) (a + s) Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           let v := (hB Finset.univ).eigenvectorBasis
           let lam := (hB Finset.univ).eigenvalues

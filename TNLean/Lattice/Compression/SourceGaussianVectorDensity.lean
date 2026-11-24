@@ -64,7 +64,7 @@ theorem correctedSourceTerm_gaussian_vecMulVec_eq_sum
       Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
     (F : ∀ e : sourceLocations w, branchLabels w e.1 →
       Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
-    (hsource : ∀ e ξ, ambientSchmidtVector (lam e ξ) (E e ξ) (F e ξ) =
+    (hsource : ∀ e ξ, Matrix.schmidtFrameVector (lam e ξ) (E e ξ) (F e ξ) =
       (sourceCoordinates w e ξ).ofLp)
     (ω : SourceGaussianSamples w k)
     (bIn : OrthonormalBasis n ℂ (Mem a)) (bOut : OrthonormalBasis m ℂ (Mem b))
@@ -74,7 +74,7 @@ theorem correctedSourceTerm_gaussian_vecMulVec_eq_sum
       ∑ ξ, ∑ ζ, (coefficient A w ξ * conj (coefficient A w ζ)) •
         ∑ u : PartialSchmidtCoordinates A w S, ∑ v : PartialSchmidtCoordinates A w S,
           (∏ i : selectedPartialSlots A w S,
-            sourceCorrection k
+            ProductSource.sourceCorrection k
               (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ξ i.1))
               (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ζ i.1))
               (ω (partialSlotEquiv A w i.1).1

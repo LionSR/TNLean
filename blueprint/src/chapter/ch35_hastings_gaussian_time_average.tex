@@ -10,11 +10,10 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
 
 \begin{definition}[Gaussian time average]
     \label{def:hastings_gaussian_time_average}
-    \lean{TNLean.MPS.AreaLaw.Hastings.timeAverageVariance,
-        TNLean.MPS.AreaLaw.Hastings.gaussianTimeAverage,
-        TNLean.MPS.AreaLaw.Hastings.gaussianTimeAverage_eq_integral,
-        TNLean.MPS.AreaLaw.Hastings.le_timeAverageVariance_mul_sq,
-        TNLean.MPS.AreaLaw.Hastings.sqrt_timeAverageVariance}
+    \lean{GaussianFilter.gaussianTimeAverage,
+        GaussianFilter.gaussianTimeAverage_eq_integral,
+        GaussianFilter.le_toNNReal_div_sq_mul_sq,
+        GaussianFilter.sqrt_toNNReal_div_sq}
     \leanok
     For $q,\Delta E\in\R$, set $h=\max(q/\Delta E^2,0)$ when $\Delta E\ne0$ and
     $h=0$ when $\Delta E=0$. Let $\gamma_h$ be the centered Gaussian measure of
@@ -31,7 +30,7 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
 
 \begin{lemma}[Gaussian time average across the gap]
     \label{thm:hastings_gaussian_time_average_gap}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le}
+    \lean{ManyBody.norm_gaussianTimeAverage_sub_groundProjector_le}
     \leanok
     \uses{def:hastings_gaussian_time_average}
     If $H=H^\dagger$, $\|\Omega\|=1$, $H\Omega=0$, $\Delta E>0$, and
@@ -77,8 +76,8 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
 
 \begin{lemma}[Stability of the Gaussian time average]
     \label{thm:hastings_gaussian_time_average_stability}
-    \lean{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_le,
-        TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le_add}
+    \lean{GaussianFilter.norm_gaussianTimeAverage_sub_le,
+        ManyBody.norm_gaussianTimeAverage_sub_groundProjector_le_add}
     \leanok
     \uses{def:hastings_gaussian_time_average,
         thm:hastings_gaussian_time_average_gap}

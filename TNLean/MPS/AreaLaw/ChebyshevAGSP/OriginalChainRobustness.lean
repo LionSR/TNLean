@@ -14,7 +14,7 @@ Only the original ground eigenvector and gap are spectral inputs.
 The cutoff uses the universal upper bound six for the shifted energy.
 
 **Local fix:** Normalization uses the corrected middle-core shift described
-in `docs/paper-gaps/aklv13_robustness_constants.tex`.
+in `https://sirui-lu.com/QICLean/paper-gaps/aklv13_robustness_constants.pdf`.
 
 Source: AKLV, arXiv:1301.1162v1, Section 6.1 and Theorem 6.1.
 -/
@@ -68,7 +68,7 @@ theorem original_chain_robustness {L q : ℕ} [NeZero q]
     simpa only [Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_smul] using
       congrArg WithLp.ofLp heig
   obtain ⟨z, hX, hN, hY, he0, he6⟩ := exists_normalized_chain_data Φ h0 h1 a b hab E
-    (WithLp.ofLp Ω) (SpectralFilter.star_dotProduct_self_of_norm_eq_one hΩ) heigRaw hlow
+    (WithLp.ofLp Ω) (EuclideanSpace.star_dotProduct_self_eq_one_of_norm_eq_one hΩ) heigRaw hlow
   let e := E - ∑ j, z j
   have hshift : Φ.hamiltonian - (((z 0 + z 1 + z 2 : ℝ) : ℂ)) • 1 - (e : ℂ) • 1 =
       Φ.hamiltonian - (E : ℂ) • 1 := by

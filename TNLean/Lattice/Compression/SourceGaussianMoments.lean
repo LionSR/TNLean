@@ -47,10 +47,10 @@ theorem sourceCorrection_product_memLp_two (w : SourceCircuit a b)
     (i l : ∀ e : S, Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2) ×
       Fin (min (sourceDims w e.1).1 (sourceDims w e.1).2)) :
     MemLp (fun ω : SourceGaussianSamples w k ↦
-      ∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      ∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (i e) (l e)) 2 (sourceGaussianLaw w k) := by
   have hm : Integrable (fun ω : SourceGaussianSamples w k ↦
-      ∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      ∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (i e) (l e)) (sourceGaussianLaw w k) := by
     simp_rw [sourceCorrection_product_eq_selected w k hk S ξ ζ lam hnonneg]
     exact integrable_selectedBranchDensityCoefficient
@@ -75,7 +75,7 @@ theorem partialSourceCorrection_product_memLp_two (A : P → Bool)
     (ξ ζ : Choices A w) (u v : PartialSchmidtCoordinates A w S) :
     MemLp (fun ω : SourceGaussianSamples w k ↦
       ∏ i : selectedPartialSlots A w S,
-        sourceCorrection k
+        ProductSource.sourceCorrection k
           (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ξ i.1))
           (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ζ i.1))
           (ω (partialSlotEquiv A w i.1).1
@@ -87,12 +87,12 @@ theorem partialSourceCorrection_product_memLp_two (A : P → Bool)
     (isTouched_of_source_endpoint A w e.1 (hS e.1 e.2))
   have he (ω : SourceGaussianSamples w k) :
       (∏ i : selectedPartialSlots A w S,
-        sourceCorrection k
+        ProductSource.sourceCorrection k
           (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ξ i.1))
           (lam (partialSlotEquiv A w i.1).1 (partialSlotChoice A w ζ i.1))
           (ω (partialSlotEquiv A w i.1).1
             (partialSlotChoice A w ξ i.1, partialSlotChoice A w ζ i.1)) (u i) (v i)) =
-      ∏ e : S, sourceCorrection k (lam e.1 (ξ₀ e)) (lam e.1 (ζ₀ e))
+      ∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ₀ e)) (lam e.1 (ζ₀ e))
         (ω e.1 (ξ₀ e, ζ₀ e))
         (partialSchmidtCoordinateEquiv A w S hS u e)
         (partialSchmidtCoordinateEquiv A w S hS v e) := by

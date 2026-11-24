@@ -340,7 +340,7 @@ theorem exists_interval_physical_scaled_soft_reverse_residual
       v ∈ Submodule.spectralSpanLE hHsc.eigenvectorBasis hHsc.eigenvalues (Es + eta)
     rw [Submodule.mem_spectralSpanLE_iff, Submodule.mem_spectralSpanLE_iff]
     constructor <;> intro hv j hj <;> apply hv j <;> dsimp only [a] at * <;> linarith
-  obtain ⟨Z, hZ, hZn⟩ := exists_nearestNeighbour_weighted_low_restriction
+  obtain ⟨Z, hZ, hZn⟩ := ManyBody.BondInteraction.exists_weighted_low_restriction
     (I 1) J Φ (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
     (Xs + (alpha : ℂ) • 1) (e 1) u (Es + alpha + eta) (1 / 8)
     (by norm_num) (by norm_num) hcomm (hcoerce u hu0 hut).2

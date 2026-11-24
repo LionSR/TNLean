@@ -125,7 +125,7 @@ theorem exists_physicalFirst_sourceSample_original_error_le
         Matrix (Fin (R.sourceDims s).2) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ),
       (∀ s ξ, (∀ j, 0 ≤ lam s ξ j) ∧ ∑ j, lam s ξ j = 1 ∧
         (E s ξ)ᴴ * E s ξ = 1 ∧ (F s ξ)ᴴ * F s ξ = 1 ∧
-        ambientSchmidtVector (lam s ξ) (E s ξ) (F s ξ) =
+        Matrix.schmidtFrameVector (lam s ξ) (E s ξ) (F s ξ) =
           (SourceCircuit.sourceCoordinates R s ξ).ofLp) ∧
       ∃ ω : SourceCircuit.SourceGaussianSamples R k,
         Matrix.rectangularTraceNorm

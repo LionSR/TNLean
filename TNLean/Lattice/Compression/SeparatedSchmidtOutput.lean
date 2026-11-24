@@ -141,7 +141,7 @@ theorem partialTrace_separatedSchmidtOutput_eq_weightedSourceError
       (fun h : Y × (d × e) ↦ conj (Φ q.2 (h.2.1, (h.1, h.2.2))))) =
       Matrix.partialTraceRight
         (physicalOutputFrameMatrix J' v' G bD' *
-          ProbabilityTheory.weightedSourceError tau tau'
+          Matrix.halfWeightedBlockCombination tau tau'
             (physicalFrameGramMatrix J x y v w F F' bD) z *
           (physicalOutputFrameMatrix J' w' G' bD')ᴴ) := by
   dsimp only

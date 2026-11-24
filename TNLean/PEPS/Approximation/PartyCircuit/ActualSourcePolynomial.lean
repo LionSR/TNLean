@@ -68,7 +68,7 @@ theorem exists_sourceSample_polynomial_error_le
         Matrix (Fin (sourceDims w s).2) (Fin (min (sourceDims w s).1 (sourceDims w s).2)) ℂ),
       (∀ s ξ, (∀ j, 0 ≤ lam s ξ j) ∧ ∑ j, lam s ξ j = 1 ∧
         (E s ξ)ᴴ * E s ξ = 1 ∧ (F s ξ)ᴴ * F s ξ = 1 ∧
-        ambientSchmidtVector (lam s ξ) (E s ξ) (F s ξ) =
+        Matrix.schmidtFrameVector (lam s ξ) (E s ξ) (F s ξ) =
           (sourceCoordinates w s ξ).ofLp) ∧
       ∃ ω : SourceGaussianSamples w k,
         let ρ := Matrix.vecMulVec (bIn.repr (p₀.eval 1)).ofLp

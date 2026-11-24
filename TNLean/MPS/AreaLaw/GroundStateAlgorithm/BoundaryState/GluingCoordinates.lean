@@ -48,7 +48,7 @@ noncomputable def gluingLeftCoordinates (L q k m : ℕ) :
       EuclideanSpace ℂ
         ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    ((Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q)
+    ((ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
       (leftBlock_mono (Nat.sub_le k 1))).symm.prodCongr (Equiv.refl _))
 
 /-- Extending the right bond in three-way coordinates agrees with the extension after joining
@@ -70,7 +70,7 @@ theorem gluingLeftCoordinates_rightApply
       (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z).1
       (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z).2
   rw [schmidtCoeffMatrix_ofLp_rightApply]
-  simp [gluingCut, Entropy.threeCutEquiv_eq_trans, gluingLeftCoordinates,
+  simp [gluingCut, ManyBody.threeCutEquiv_eq_trans, gluingLeftCoordinates,
     mulVec, dotProduct, Fintype.sum_prod_type, one_apply, mul_apply, mul_comm]
 
 /-- Being fixed by the projection onto a prescribed left span is unchanged by joining the
@@ -78,9 +78,9 @@ two left regions. This is the support condition in the size-trimming program
 (arXiv:1307.5143v1, `algo53.tex`, lines 472–476). -/
 theorem gluingLeftCoordinates_spanProjection_eq_iff (S : Set (LeftBlockVector L q k))
     (u : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) :
-    (reindex (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q)
+    (reindex (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
           (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q)
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
           (leftBlock_mono (Nat.sub_le k 1))) (spanProjection S) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u = WithLp.ofLp u ↔
       (spanProjection S ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ

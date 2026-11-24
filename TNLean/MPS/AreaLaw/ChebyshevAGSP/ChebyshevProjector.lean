@@ -5,7 +5,15 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.InverseGapRobustness
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.SingleWindowPolynomialRank
-import TNLean.MPS.AreaLaw.Spectral.SupersiteHierarchy
+import Mathlib.Data.Finset.NoncommProd
+import QICLean.Algebra.Combinatorics.DyadicBlock
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Analysis.Norm.MatrixToEuclidean
+import QICLean.ManyBody.Sites.Hierarchy.SupportedHierarchy
+import QICLean.ManyBody.Sites.ProductOperatorTrace
+import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Twirl
+import QICLean.Spectral.LowEnergy.HierarchyLevels
 import QICLean.Spectral.Filter.ChebyshevSpectralFilter
 import QICLean.Spectral.Filter.Gaussian.SpectralGap
 import QICLean.ManyBody.Hamiltonian.FrustrationFree

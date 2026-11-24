@@ -44,7 +44,7 @@ include hk hnonneg in
 for the same original positions and deterministic local labels.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 338–407. -/
 theorem sourceCorrection_product_eq_selected (ω : SourceGaussianSamples w k) :
-    (∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+    (∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
       (ω e.1 (ξ e, ζ e)) (i e) (l e)) =
       selectedBranchDensityCoefficient
         (A := fun (e : sourceLocations w) (_ : branchLabels w e.1 × branchLabels w e.1) ↦
@@ -63,9 +63,9 @@ integrable under the one global law.
 Source: polynomial-PEPS Theorem 5.2, `eq:compression-product-covariance`. -/
 theorem integrable_sourceCorrection_product_mul_conj :
     Integrable (fun ω : SourceGaussianSamples w k ↦
-      (∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      (∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (i e) (l e)) *
-      conj (∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      conj (∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (i' e) (l' e))) (sourceGaussianLaw w k) := by
   simp_rw [sourceCorrection_product_eq_selected w k hk S ξ ζ lam hnonneg]
   exact integrable_selectedBranchDensityCoefficient_mul_conj
@@ -81,9 +81,9 @@ with inverse-sample exponent equal to the number of original corrected positions
 Source: polynomial-PEPS Theorem 5.2, `eq:compression-product-covariance`. -/
 theorem integral_sourceCorrection_product_mul_conj :
     (∫ ω : SourceGaussianSamples w k,
-      (∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      (∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (i e) (l e)) *
-      conj (∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      conj (∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (i' e) (l' e)) ∂sourceGaussianLaw w k) =
       if i = i' ∧ l = l' then
         (((k : ℝ) ^ (-(S.card : ℝ)) * Real.sqrt
@@ -103,7 +103,7 @@ include hk hnonneg in
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 338–407. -/
 theorem integral_sourceCorrection_product_eq_zero [Nonempty S] :
     (∫ ω : SourceGaussianSamples w k,
-      (∏ e : S, sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
+      (∏ e : S, ProductSource.sourceCorrection k (lam e.1 (ξ e)) (lam e.1 (ζ e))
         (ω e.1 (ξ e, ζ e)) (i e) (l e)) ∂sourceGaussianLaw w k) = 0 := by
   simp_rw [sourceCorrection_product_eq_selected w k hk S ξ ζ lam hnonneg]
   exact integral_selectedBranchDensityCoefficient_eq_zero

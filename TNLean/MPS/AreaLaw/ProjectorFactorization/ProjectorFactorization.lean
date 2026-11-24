@@ -215,14 +215,14 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
       hcomm s (δ := 0) (by simp) hη
   obtain ⟨OB, hOBs, hOB1, hOB⟩ :=
     ManyBody.ChainInteraction.exists_boundaryOperator_factorization hq1 h hh hhJ hH₀ E₀ _ hZ hOL hOR
-      (timeAverageVariance s ΔE) (ℓ' := (ℓn : ℝ)) (Nat.cast_nonneg _) hθ' hmoved
+      ((s / ΔE ^ 2).toNNReal) (ℓ' := (ℓn : ℝ)) (Nat.cast_nonneg _) hθ' hmoved
   rw [Nat.floor_natCast] at hOBs
   refine ⟨OB, OL, OR, hOL, hOR, hcomm, hOB1, ?_, hsL, hsR, ?_⟩
   · refine ManyBody.IsSupportedOn.mono hOBs
       ((graphNeighborhood_pathGraph_interval_subset _ _ ℓn).trans fun x hx ↦ ?_)
     simp only [mem_interval] at hx ⊢
     omega
-  · have hη' : ((timeAverageVariance s ΔE : ℝ≥0) : ℝ) = s / ΔE ^ 2 :=
+  · have hη' : ((s / ΔE ^ 2).toNNReal : ℝ) = s / ΔE ^ 2 :=
       Real.coe_toNNReal _ (by positivity)
     have hcard : ((interval L (c - m - 2 * R - k) (c + m + 2 * R + k)).card : ℝ) ≤
         ((6 * R + 4 * k : ℕ) : ℝ) := by

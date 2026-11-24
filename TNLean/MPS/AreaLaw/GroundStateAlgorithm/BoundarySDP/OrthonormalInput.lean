@@ -28,8 +28,8 @@ theorem exists_orthonormalBoundarySupport_isLeftOpenMPS
     (hS : ∀ w ∈ S, IsLeftOpenMPS b w) {n : ℕ}
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) :
     ∃ T : Finset (LeftBlockVector L q k),
@@ -38,8 +38,8 @@ theorem exists_orthonormalBoundarySupport_isLeftOpenMPS
         Submodule.span ℂ (S : Set (LeftBlockVector L q k)) ∧
       (∀ v ∈ T, IsLeftOpenMPS (S.card * max 1 b) v) ∧
       Z * Zᴴ = (reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection (T : Set (LeftBlockVector L q k)))) ⊗ₖ
           (1 : Matrix (Fin m) (Fin m) ℂ) := by
   obtain ⟨T, hcard, horth, hspan, hmps⟩ :=
@@ -56,8 +56,8 @@ theorem boundarySupport_isometry_order_le
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) :
     n ≤ S.card * m := by
@@ -67,8 +67,8 @@ theorem boundarySupport_isometry_order_le
     _ ≤ Z.rank := Matrix.rank_mul_le_right _ _
     _ = (Z * Zᴴ).rank := (Matrix.rank_self_mul_conjTranspose Z).symm
     _ = ((reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
           (1 : Matrix (Fin m) (Fin m) ℂ)).rank := congrArg Matrix.rank hZZ
     _ ≤ S.card * m := rank_boundarySupportProjection_le S m
@@ -123,8 +123,8 @@ theorem exists_boundarySupportOrthonormalCoordinateCoefficients
     (hS : Orthonormal ℂ (fun s : S ↦ s.1))
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) :
     ∃ c : Fin n → Fin m → S → ℂ,
@@ -168,8 +168,8 @@ theorem exists_rational_boundarySupportOrthonormalCoordinates
     (hS : Orthonormal ℂ (fun s : S ↦ s.1))
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     {δ : ℝ} (hδ : 0 < δ) :
@@ -278,8 +278,8 @@ theorem exists_rationalStructuredCompressedSDPInputEncoding_of_orthonormal
     (hS : Orthonormal ℂ (fun s : S ↦ s.1))
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (K : Matrix (Fin n) (Fin n) ℂ) (X : Matrix (Fin r) (Fin r) ℂ)
@@ -319,8 +319,8 @@ theorem exists_dyadicRationalStructuredCompressedSDPInputEncoding_of_orthonormal
     (hS : Orthonormal ℂ (fun s : S ↦ s.1))
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (K : Matrix (Fin n) (Fin n) ℂ) (X : Matrix (Fin r) (Fin r) ℂ)
@@ -357,8 +357,8 @@ theorem exists_dyadicRationalStructuredCompressedSDPInputEncoding_of_bounded_ort
     (hS : Orthonormal ℂ (fun s : S ↦ s.1))
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (K : Matrix (Fin n) (Fin n) ℂ) (X : Matrix (Fin r) (Fin r) ℂ)
@@ -406,8 +406,8 @@ theorem exists_dyadicStructuredInput_of_bounded_orthonormal_withCanonicalShifts
     (hS : Orthonormal ℂ (fun s : S ↦ s.1))
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (K : Matrix (Fin n) (Fin n) ℂ) (X : Matrix (Fin r) (Fin r) ℂ)
@@ -446,8 +446,8 @@ theorem exists_dyadicStructuredInput_of_bounded_isLeftOpenMPS_withCanonicalShift
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (K : Matrix (Fin n) (Fin n) ℂ) (X : Matrix (Fin r) (Fin r) ℂ)
@@ -507,8 +507,8 @@ theorem exists_dyadicStructuredInput_of_physical_isLeftOpenMPS_withCanonicalShif
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (H : Matrix ((CutLeft L q k × CutSite L q k) × Fin m)
@@ -553,8 +553,8 @@ theorem exists_boundarySupportCoordinateCoefficients_with_bitSizeBound
     (hn : n ≤ S.card * m) (hH : H ≤ 2 ^ p)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k)))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) :
     ∃ c : Fin n → Fin m → S → ℂ,

@@ -135,8 +135,8 @@ theorem exists_viable_vector_of_compressed_boundary_solution_with_slack
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))
     (σ : Matrix (Fin n) (Fin n) ℂ) (hσ : σ.PosSemidef) (hσtrace : σ.trace = 1)
     {ξ δ : ℝ}
@@ -158,8 +158,8 @@ theorem exists_viable_vector_of_compressed_boundary_solution_with_slack
   have htransport := isometricDensityExpansion_trace_and_energy Z hZ ρ σ rfl Hleft
   have hρtrace : ρ.trace = 1 := htransport.1.symm.trans hσtrace
   have hρP : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ := by
     rw [← hZZ]
     change (Z * Zᴴ) * (Z * σ * Zᴴ) = Z * σ * Zᴴ
@@ -178,8 +178,8 @@ theorem exists_viable_vector_of_compressed_boundary_solution_with_slack
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρ hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   let P := reindex
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-    (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
     (spanProjection S)
   let v : EuclideanSpace ℂ (Fin L → Fin q) := WithLp.toLp 2
     ((((1 : Matrix (CutLeft L q k × CutSite L q k)
@@ -225,8 +225,8 @@ theorem exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (σ : Matrix (Fin n) (Fin n) ℂ) (hσ : σ.PosSemidef) (hσtrace : σ.trace = 1)
@@ -257,8 +257,8 @@ theorem exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack
   have htransport := isometricDensityExpansion_trace_and_energy Z hZ ρ σ rfl Hleft
   have hρtrace : ρ.trace = 1 := htransport.1.symm.trans hσtrace
   have hρP : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ := by
     rw [← hZZ]
@@ -332,8 +332,8 @@ theorem exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (σ : Matrix (Fin n) (Fin n) ℂ) (hσ : σ.PosSemidef) (hσtrace : σ.trace = 1)
@@ -365,8 +365,8 @@ theorem exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack
   have htransport := isometricDensityExpansion_trace_and_energy Z hZ ρ σ rfl Hleft
   have hρtrace : ρ.trace = 1 := htransport.1.symm.trans hσtrace
   have hρP : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) * ρ = ρ := by
     rw [← hZZ]
@@ -442,8 +442,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_finite_density_search_viable_vec
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))
     (τ₀ : Matrix (Fin n) (Fin n) ℂ) (hτ₀ : τ₀.PosSemidef) (hτ₀trace : τ₀.trace = 1)
     (hτ₀boundary : rectangularTraceNorm (compressedBoundaryLM Z τ₀ - X) ≤
@@ -523,8 +523,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_coordinate_finite_density_search
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     (hxnorm : ‖WithLp.toLp 2 x‖ = 1)
     (hxP : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -541,8 +541,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_coordinate_finite_density_search
       (N : Finset (Matrix (Fin n) (Fin n) ℂ)),
       0 < n ∧ n ≤ S.card * m ∧ Zᴴ * Z = 1 ∧
       Z * Zᴴ = reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
           (1 : Matrix (Fin m) (Fin m) ℂ) ∧
       N.card ≤ (2 * ⌈(n : ℝ) ^ 2 / δ⌉₊ + 1) ^ (2 * n ^ 2) ∧
@@ -608,8 +608,8 @@ theorem exists_canonical_coordinate_finite_density_search_viable_vector
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     (hxnorm : ‖WithLp.toLp 2 x‖ = 1)
     (hxP : (reindex
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-      (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -625,8 +625,8 @@ theorem exists_canonical_coordinate_finite_density_search_viable_vector
       (N : Finset (Matrix (Fin n) (Fin n) ℂ)),
       0 < n ∧ n ≤ S.card * m ∧ Zᴴ * Z = 1 ∧
       Z * Zᴴ = reindex
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
-        (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
         (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
           (1 : Matrix (Fin m) (Fin m) ℂ) ∧
       N.card ≤ (2 * ⌈(n : ℝ) ^ 2 / lvvFiniteDensityMesh L Δ⌉₊ + 1) ^ (2 * n ^ 2) ∧
