@@ -9,4 +9,3 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.Chain
 
 import TNLean.MPS.AreaLaw.Chain.TwoCutEdgeSupports
-import TNLean.MPS.AreaLaw.Chain.WindowCounting

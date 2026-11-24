@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.OpenMPS.CutReducedState
-import TNLean.MPS.AreaLaw.EntropyScaling.VonNeumannSpectralTail
+import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Cut.RegionPureApproximationTail
 import Mathlib.Analysis.SpecialFunctions.Log.PosLog
 
@@ -47,7 +47,7 @@ theorem IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error {L q D : ℕ}
       Real.log D + δ / 2 * ((leftBlock L k).card : ℝ) * Real.log q + Real.log 2 := by
   have ht := Entropy.sum_descEigenvalue_regionState_tail_le_half_pure_trace_error
     ψ φ hψ (leftBlock L k) (hφ.rank_regionState_leftBlock_le_max k) hδ herror
-  have hb := regionEntropy_le_log_rank_add_spectral_tail ψ hψ (leftBlock L k) ht
+  have hb := ManyBody.regionEntropy_le_log_rank_add_spectral_tail ψ hψ (leftBlock L k) ht
   simpa only [log_max_one_nat] using hb
 
 /-- The small-error von Neumann bound for a contiguous block. Two boundaries give
@@ -66,7 +66,7 @@ theorem IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error {L q D
   have ht := Entropy.sum_descEigenvalue_regionState_tail_le_half_pure_trace_error
     ψ φ hψ (leftBlock L b \ leftBlock L a)
     (hφ.rank_regionState_sdiff_leftBlock_le_max_sq hab) hδ herror
-  have hb := regionEntropy_le_log_rank_add_spectral_tail ψ hψ
+  have hb := ManyBody.regionEntropy_le_log_rank_add_spectral_tail ψ hψ
     (leftBlock L b \ leftBlock L a) ht
   simpa only [Nat.cast_pow, Real.log_pow, Nat.cast_ofNat, log_max_one_nat] using hb
 

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Norm.UnitNormalizationDistance
+import QICLean.ManyBody.Entropy.ChainInterval
 import TNLean.MPS.AreaLaw.Entropy.AreaLaw
 import TNLean.MPS.Tensor.VaryingBond.OpenMPSRank
 import TNLean.MPS.Tensor.OpenMPS.NormalizedSequentialApproximation
@@ -143,7 +144,7 @@ private theorem surprisalTail_leftBlock_le_of_consecutive_terms
         (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
       (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w ≤
       2 * Real.exp (Real.exp 1 / 2) *
-        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * windowBudgetConst q R)))) := by
+        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * ManyBody.windowBudgetConst q R)))) := by
   classical
   let A := {X : ChainSupport L R // h.term X ≠ 0}
   let g : A → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
@@ -391,7 +392,7 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
         ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
           ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
             IsOpenMPS L q
-              ⌊Real.exp (C + 64 * Real.sqrt ((1 + J / Δ) * windowBudgetConst q R) *
+              ⌊Real.exp (C + 64 * Real.sqrt ((1 + J / Δ) * ManyBody.windowBudgetConst q R) *
                 Real.log (2 * (L : ℝ) * tailPrefactorRoot / ε))⌋₊
               (fun x ↦ Φ x) ∧ ‖Φ - Ω‖ ≤ ε := by
   dsimp only
@@ -399,8 +400,8 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
     chainAreaLaw_of_consecutive_terms q R J Δ hq hJ hΔ
   rw [← hCeq]
   intro L hL h hh hhJ hwindow E₀ Ω hΩ hgap hspan ε hε hε1
-  let B : ℝ := windowBudgetConst q R
-  have hB : 1 ≤ B := one_le_windowBudgetConst q R
+  let B : ℝ := ManyBody.windowBudgetConst q R
+  have hB : 1 ≤ B := ManyBody.one_le_windowBudgetConst q R
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hs : 0 < Real.sqrt ((1 + J / Δ) * B) :=
     Real.sqrt_pos.mpr (by nlinarith)

@@ -12,11 +12,7 @@ import TNLean.MPS.AreaLaw.Entropy.AreaLaw
 import TNLean.MPS.AreaLaw.Entropy.BufferDiscount
 import TNLean.MPS.AreaLaw.Entropy.ComponentReduction
 import TNLean.MPS.AreaLaw.Entropy.DomainLogarithmicSeparation
-import TNLean.MPS.AreaLaw.Entropy.InformationReset
-import TNLean.MPS.AreaLaw.Entropy.IntervalNeighborhoodEntropy
 import TNLean.MPS.AreaLaw.Entropy.LogarithmicAreaLaw
 import TNLean.MPS.AreaLaw.Entropy.LogarithmicSeparation
-import TNLean.MPS.AreaLaw.Entropy.RelativeGeneratorLocalization
 import TNLean.MPS.AreaLaw.Entropy.RenyiEntropy
 import TNLean.MPS.AreaLaw.Entropy.StripBufferDiscount
-import TNLean.MPS.AreaLaw.Entropy.SupportedGaussianIntegral

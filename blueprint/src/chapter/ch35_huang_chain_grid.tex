@@ -7,9 +7,9 @@ and boundary buffers directly from the chain length and two integer parameters.
 
 \begin{definition}[Grid blocks and boundary buffers]
     \label{def:huang_chain_grid}
-    \lean{TNLean.MPS.AreaLaw.chainGridBlock,TNLean.MPS.AreaLaw.chainGridCut,
-        TNLean.MPS.AreaLaw.chainCutPair,TNLean.MPS.AreaLaw.chainCutBuffer,
-        TNLean.MPS.AreaLaw.chainGridOwner}
+    \lean{ManyBody.chainGridBlock,ManyBody.chainGridCut,
+        ManyBody.chainCutPair,ManyBody.chainCutBuffer,
+        ManyBody.chainGridOwner}
     \leanok
     Let $L,w,r$ be nonnegative integers, with $w>0$. On the chain
     $\{0,\ldots,L-1\}$, set
@@ -27,13 +27,13 @@ and boundary buffers directly from the chain length and two integer parameters.
 
 \begin{lemma}[Disjoint blocks covering the chain]
     \label{thm:huang_chain_grid_blocks}
-    \lean{TNLean.MPS.AreaLaw.card_chainGridBlock_le,
-        TNLean.MPS.AreaLaw.chainGridBlock_width,
-        TNLean.MPS.AreaLaw.pairwise_disjoint_chainGridBlock,
-        TNLean.MPS.AreaLaw.mem_chainGridBlock_owner,
-        TNLean.MPS.AreaLaw.iUnion_chainGridBlock_eq_univ,
-        TNLean.MPS.AreaLaw.chainGrid_label_counts,
-        TNLean.MPS.AreaLaw.chainGridCut_bounds}
+    \lean{ManyBody.card_chainGridBlock_le,
+        ManyBody.chainGridBlock_width,
+        ManyBody.pairwise_disjoint_chainGridBlock,
+        ManyBody.mem_chainGridBlock_owner,
+        ManyBody.iUnion_chainGridBlock_eq_univ,
+        ManyBody.chainGrid_label_counts,
+        ManyBody.chainGridCut_bounds}
     \leanok
     \uses{def:huang_chain_grid}
     The blocks $C_j$ are pairwise disjoint, each has at most $w$ sites, and
@@ -53,11 +53,11 @@ and boundary buffers directly from the chain length and two integer parameters.
 
 \begin{lemma}[Exact neighborhoods and disjoint boundary buffers]
     \label{thm:huang_chain_grid_buffers}
-    \lean{TNLean.MPS.AreaLaw.chainCutBuffer_width_le,
-        TNLean.MPS.AreaLaw.card_chainCutBuffer_le,
-        TNLean.MPS.AreaLaw.graphNeighborhood_pathGraph_chainCutPair_eq,
-        TNLean.MPS.AreaLaw.pairwise_disjoint_chainGridBuffer,
-        TNLean.MPS.AreaLaw.chainCutPair_eq_pair}
+    \lean{ManyBody.chainCutBuffer_width_le,
+        ManyBody.card_chainCutBuffer_le,
+        ManyBody.graphNeighborhood_pathGraph_chainCutPair_eq,
+        ManyBody.pairwise_disjoint_chainGridBuffer,
+        ManyBody.chainCutPair_eq_pair}
     \leanok
     \uses{def:huang_chain_grid, thm:huang_chain_grid_blocks}
     For every internal cut, $S_k=\{c_k-1,c_k\}$ and its closed radius-$r$
@@ -75,10 +75,10 @@ and boundary buffers directly from the chain length and two integer parameters.
 
 \begin{lemma}[Classification of nearest-neighbor edges]
     \label{thm:huang_chain_grid_edges}
-    \lean{TNLean.MPS.AreaLaw.chainGrid_edge_classification,
-        TNLean.MPS.AreaLaw.chainGrid_boundary_edge_eq_pair,
-        TNLean.MPS.AreaLaw.chainGrid_pair_not_subset_block,
-        TNLean.MPS.AreaLaw.chainGrid_edge_in_block_iff}
+    \lean{ManyBody.chainGrid_edge_classification,
+        ManyBody.chainGrid_boundary_edge_eq_pair,
+        ManyBody.chainGrid_pair_not_subset_block,
+        ManyBody.chainGrid_edge_in_block_iff}
     \leanok
     \uses{def:huang_chain_grid, thm:huang_chain_grid_blocks}
     For every edge $\{i,i+1\}$ of the chain, exactly one of the following holds:

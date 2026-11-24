@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridEvolution
+import QICLean.ManyBody.Sites.Lattice.ChainBlocks
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridLocalization
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.BlockProductBonds
 import QICLean.ManyBody.Dynamics.DisjointRelativeEvolution
@@ -37,31 +38,33 @@ private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w
     (P : Fin (L / w + 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (Q : Fin ((L - 1) / w) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hP : ∀ j, P j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-        (chainGridBlock L w j.val : Finset (Fin L)))
+        (ManyBody.chainGridBlock L w j.val : Finset (Fin L)))
     (hQ : ∀ j, Q j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-      (chainCutBuffer L (chainGridCut w j.val) r : Finset (Fin L))) :
+      (ManyBody.chainCutBuffer L (ManyBody.chainGridCut w j.val) r : Finset (Fin L))) :
     ∀ cut : ℕ, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L cut) ((List.ofFn P).prod * (List.ofFn Q).prod)) ≤
         q ^ (2 * (w + (2 * r + 2))) := by
   have hpairP : (List.ofFn (fun j : Fin (L / w + 1) ↦ j)).Pairwise
       (fun j k ↦ Disjoint (interval L (j.val * w) ((j.val + 1) * w))
         (interval L (k.val * w) ((k.val + 1) * w))) :=
-    List.pairwise_ofFn.mpr fun _ _ hjk ↦ pairwise_disjoint_chainGridBlock L w (ne_of_lt hjk)
+    List.pairwise_ofFn.mpr fun _ _ hjk ↦
+      ManyBody.pairwise_disjoint_chainGridBlock L w (ne_of_lt hjk)
   have hpairQ : (List.ofFn (fun j : Fin ((L - 1) / w) ↦ j)).Pairwise
       (fun j k ↦ Disjoint
-        (chainCutBuffer L (chainGridCut w j.val) r)
-        (chainCutBuffer L (chainGridCut w k.val) r)) :=
-    List.pairwise_ofFn.mpr fun _ _ hjk ↦ pairwise_disjoint_chainGridBuffer L hwidth (ne_of_lt hjk)
+        (ManyBody.chainCutBuffer L (ManyBody.chainGridCut w j.val) r)
+        (ManyBody.chainCutBuffer L (ManyBody.chainGridCut w k.val) r)) :=
+    List.pairwise_ofFn.mpr fun _ _ hjk ↦
+      ManyBody.pairwise_disjoint_chainGridBuffer L hwidth (ne_of_lt hjk)
   have h := operatorSchmidtRank_two_interval_layers_le hq
     (fun j : Fin (L / w + 1) ↦ j.val * w) (fun j ↦ (j.val + 1) * w)
-    (fun j : Fin ((L - 1) / w) ↦ chainGridCut w j.val - 1 - r)
-    (fun j ↦ chainGridCut w j.val + r + 1) P Q
+    (fun j : Fin ((L - 1) / w) ↦ ManyBody.chainGridCut w j.val - 1 - r)
+    (fun j ↦ ManyBody.chainGridCut w j.val + r + 1) P Q
     (fun j ↦ (hP j))
     (fun j ↦ (hQ j))
     (List.ofFn (fun j : Fin (L / w + 1) ↦ j))
     (List.ofFn (fun j : Fin ((L - 1) / w) ↦ j)) hpairP hpairQ w (2 * r + 2)
-    (fun j _ ↦ (chainGridBlock_width w j.val).le)
-    (fun j _ ↦ chainCutBuffer_width_le (chainGridCut w j.val) r)
+    (fun j _ ↦ (ManyBody.chainGridBlock_width w j.val).le)
+    (fun j _ ↦ ManyBody.chainCutBuffer_width_le (ManyBody.chainGridCut w j.val) r)
   simpa only [List.map_ofFn, Function.comp_def] using h
 
 /-- **The two-layer grid propagator.** The product of the block evolutions of the retained
@@ -73,7 +76,7 @@ noncomputable def chainGridPropagator (hw : 0 < w) (r : ℕ)
     (hHerm : ∀ i, (Φ.term i).IsHermitian) (t : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw Φ j) (-t)).prod *
     (List.ofFn fun j ↦ ManyBody.disjointProjectedPropagator
-      (fun k : Fin ((L - 1) / w) ↦ chainCutBuffer L (chainGridCut w k.val) r)
+      (fun k : Fin ((L - 1) / w) ↦ ManyBody.chainCutBuffer L (ManyBody.chainGridCut w k.val) r)
       (A := chainGridRetainedHamiltonian hw Φ)
       (Matrix.isHermitian_sum _ fun j _ ↦ isHermitian_chainGridBlockHamiltonian hw Φ hHerm j)
       (chainGridBoundaryTerm hw Φ) (fun k ↦ (hHerm (chainGridBoundaryEdge hw k)).neg) j t).prod
@@ -98,12 +101,13 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
   have hw : 0 < w := by omega
   let A := chainGridRetainedHamiltonian hw Φ
   let B := chainGridBoundaryTerm hw Φ
-  let buffers := fun k : Fin ((L - 1) / w) ↦ chainCutBuffer L (chainGridCut w k.val) r
+  let buffers := fun k : Fin ((L - 1) / w) ↦
+    ManyBody.chainCutBuffer L (ManyBody.chainGridCut w k.val) r
   have hA : A.IsHermitian :=
     Matrix.isHermitian_sum _ fun j _ ↦ isHermitian_chainGridBlockHamiltonian hw Φ hHerm j
   have hB : ∀ k, (B k).IsHermitian := fun k ↦ (hHerm (chainGridBoundaryEdge hw k)).neg
   have hbuffers : Pairwise fun j k ↦ Disjoint (buffers j) (buffers k) :=
-    fun j k hjk ↦ pairwise_disjoint_chainGridBuffer L hwidth
+    fun j k hjk ↦ ManyBody.pairwise_disjoint_chainGridBuffer L hwidth
       (show j.val ≠ k.val from fun heq ↦ hjk (Fin.ext heq))
   obtain ⟨_hU0, _hUd, _hUunit, hUsupport, hcompare⟩ :=
     ManyBody.disjointProjectedPropagator_spec buffers hbuffers hA B hB

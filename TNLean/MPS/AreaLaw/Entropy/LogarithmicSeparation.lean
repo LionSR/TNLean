@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Entropy.AreaLaw
-import TNLean.MPS.AreaLaw.Entropy.InformationReset
-import TNLean.MPS.AreaLaw.Entropy.IntervalNeighborhoodEntropy
+import QICLean.ManyBody.Entropy.InformationReset
+import QICLean.ManyBody.Entropy.ChainInterval
 import QICLean.ManyBody.Entropy.ConditionalTwoFamilies
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -124,7 +124,7 @@ theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_sep
         (le_max_right _ _)
   have hD : ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω D ≤ (k₀ : ℝ) * c := by
     obtain ⟨n, a, z, hn, hT⟩ := hT
-    have hbound := regionEntropy_graphNeighborhood_pathGraph_biUnion_intervals_le hΩ hI
+    have hbound := ManyBody.regionEntropy_graphNeighborhood_pathGraph_biUnion_intervals_le hΩ hI
       (Finset.univ : Finset (Fin n)) a z (w + 1)
     dsimp only at hbound
     change ManyBody.regionEntropy (X := fun _ ↦ Fin q)

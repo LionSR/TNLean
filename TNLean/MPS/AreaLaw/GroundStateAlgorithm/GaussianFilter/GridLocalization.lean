@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridHamiltonian
+import QICLean.ManyBody.Sites.Lattice.ChainBlocks
 import QICLean.ManyBody.Dynamics.GraphLocalization
 
 /-!
@@ -125,11 +126,11 @@ Osborne, Figure 1 and equation (3). -/
 theorem chainGridBoundaryTerm_supported (hw : 0 < w)
     (Φ : ManyBody.BondInteraction L q) (k : Fin ((L - 1) / w)) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (chainGridBoundaryTerm hw Φ k)
-      (chainCutPair L (chainGridCut w k.val)) := by
+      (ManyBody.chainCutPair L (ManyBody.chainGridCut w k.val)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   have hneg := neg_mem (show _ ∈ ManyBody.supportedOperators _ _ from
     Φ.mem (chainGridBoundaryEdge hw k))
-  rw [chainGrid_boundary_edge_eq_pair k (chainGridBoundaryEdge_val_succ hw k).symm] at hneg
+  rw [ManyBody.chainGrid_boundary_edge_eq_pair k (chainGridBoundaryEdge_val_succ hw k).symm] at hneg
   exact hneg
 
 /-- Explicit localization constants for the retained nearest-neighbor interaction.
@@ -159,19 +160,20 @@ theorem norm_chainGridBoundaryTerm_sub_regionExpectation_le
     (hnorm : ∀ i, ‖Φ.term i‖ ≤ 1) (k : Fin ((L - 1) / w)) (r : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw Φ) t (chainGridBoundaryTerm hw Φ
         k) -
-      ManyBody.regionExpectation (chainCutBuffer L (chainGridCut w k.val) r)
+      ManyBody.regionExpectation (ManyBody.chainCutBuffer L (ManyBody.chainGridCut w k.val) r)
         (ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw Φ) t
           (chainGridBoundaryTerm hw Φ k))‖ ≤
       chainGridLRPrefactor * Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) := by
   let C : ℝ := 2 * (2 + 8 * Real.exp 2) * Real.exp 1 / (1 - Real.exp (-(1 / 2)))
-  let S := chainCutPair L (chainGridCut w k.val)
+  let S := ManyBody.chainCutPair L (ManyBody.chainGridCut w k.val)
   have hden : 0 < 1 - Real.exp (-(1 / 2)) := by
     have h := Real.exp_lt_one_iff.mpr (by norm_num : -(1 / 2 : ℝ) < 0)
     linarith
   have hC : 0 ≤ C := by dsimp only [C]; positivity
   have hcard : (S.card : ℝ) ^ 2 ≤ 4 := by
     have hc : S.card ≤ 2 :=
-      (card_interval_le (chainGridCut w k.val - 1) (chainGridCut w k.val + 1)).trans (by omega)
+      (card_interval_le (ManyBody.chainGridCut w k.val - 1)
+        (ManyBody.chainGridCut w k.val + 1)).trans (by omega)
     have hcR : (S.card : ℝ) ≤ 2 := by exact_mod_cast hc
     nlinarith [(Nat.cast_nonneg S.card : (0 : ℝ) ≤ S.card)]
   have hB : ‖chainGridBoundaryTerm hw Φ k‖ ≤ 1 := by
@@ -185,11 +187,11 @@ theorem norm_chainGridBoundaryTerm_sub_regionExpectation_le
     (retained_support hw Φ) 2 (chainGridRetained_site_budget hw Φ hnorm) S
     (chainGridBoundaryTerm_supported hw Φ k) (r : ℝ) t
   rw [sum_chainGridRetainedTerm, Nat.floor_natCast,
-    graphNeighborhood_pathGraph_chainCutPair_eq (chainGridCut_bounds hw k).1
-      (chainGridCut_bounds hw k).2 r] at hLR
+    ManyBody.graphNeighborhood_pathGraph_chainCutPair_eq (ManyBody.chainGridCut_bounds hw k).1
+      (ManyBody.chainGridCut_bounds hw k).2 r] at hLR
   have hLR' : ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw Φ) t
         (chainGridBoundaryTerm hw Φ k) -
-      ManyBody.regionExpectation (chainCutBuffer L (chainGridCut w k.val) r)
+      ManyBody.regionExpectation (ManyBody.chainCutBuffer L (ManyBody.chainGridCut w k.val) r)
         (ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw Φ) t
           (chainGridBoundaryTerm hw Φ k))‖ ≤
       C * (S.card : ℝ) ^ 2 * ‖chainGridBoundaryTerm hw Φ k‖ *

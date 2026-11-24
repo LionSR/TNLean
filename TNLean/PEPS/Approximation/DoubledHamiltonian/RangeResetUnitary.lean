@@ -7,7 +7,7 @@ import QICLean.Analysis.Parameter.LocalizationParameters
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedPlaneInteraction
 import TNLean.PEPS.Approximation.DoubledHamiltonian.TwoSheetBufferFilter
 import QICLean.Spectral.Perturbation.ResidualComparison
-import QICLean.ManyBody.Replica.RegionalReset
+import QICLean.ManyBody.Entropy.RegionalReset
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.ManyBody.Sites.SupportedUnitary
