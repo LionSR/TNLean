@@ -109,7 +109,7 @@ section Region
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 
-private abbrev Boundary (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev Boundary (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 private abbrev Internal (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
 
 private def boundaryVertex (R : Finset V) (e : Boundary (Γ := Γ) R) : {v // v ∈ R} :=
@@ -182,8 +182,9 @@ private theorem halfEdgeIndex_right_inv (R : Finset V)
     exact (Subtype.heq_iff_coe_eq (fun f => by
       simp only [halfEdgeIndex, internalHead]
       rw [hh])).mpr rfl
-  · have hb : IsRegionBoundaryEdge R e.1 :=
-      (isRegionIncidentEdge_of_regionVertex R v e).isRegionBoundaryEdge hi
+  · have hb : ManyBody.IsRegionBoundaryEdge R e.1 :=
+      ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge
+        (isRegionIncidentEdge_of_regionVertex R v e) hi
     change halfEdgeIndex R (.inl ⟨e.1, hb⟩) = ⟨v, e⟩
     have hv : boundaryVertex R ⟨e.1, hb⟩ = v := by
       unfold boundaryVertex
@@ -242,7 +243,7 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] in
 Source: SCP10, regional coordinates, lines 1765–1920, and Section 7, lines 2977–3019. -/
 @[simp] theorem regionHalfEdgeLabelEquiv_apply_boundary_tail (R : Finset V)
     (α : (v : {v : V // v ∈ R}) → IncidentEdge Γ v.1 → G)
-    (e : {e : Edge Γ // IsRegionBoundaryEdge R e}) (ht : e.1.1.1 ∈ R) :
+    (e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) (ht : e.1.1.1 ∈ R) :
     (regionHalfEdgeLabelEquiv R α).1 e =
       α ⟨e.1.1.1, ht⟩ (edgeLeftIncident e.1) := by
   change Sigma.uncurry α (boundaryHalfEdge R e) =
@@ -261,7 +262,7 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] in
 Source: SCP10, regional coordinates, lines 1765–1920, and Section 7, lines 2977–3019. -/
 @[simp] theorem regionHalfEdgeLabelEquiv_apply_boundary_head (R : Finset V)
     (α : (v : {v : V // v ∈ R}) → IncidentEdge Γ v.1 → G)
-    (e : {e : Edge Γ // IsRegionBoundaryEdge R e}) (hh : e.1.1.2 ∈ R) :
+    (e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) (hh : e.1.1.2 ∈ R) :
     (regionHalfEdgeLabelEquiv R α).1 e =
       α ⟨e.1.1.2, hh⟩ (edgeRightIncident e.1) := by
   have ht : e.1.1.1 ∉ R := by
@@ -308,7 +309,7 @@ private theorem regionTreeGradientEquiv_apply (R : Finset V)
 and residual coordinates on the edges outside the chosen spanning tree. -/
 abbrev RegularRegionCoordinates (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) (o : {v // v ∈ R}) :=
-  ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) ×
+  ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) ×
     ({e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} → G) ×
     RootedGroupLabels (G := G) o ×
     ({e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} //

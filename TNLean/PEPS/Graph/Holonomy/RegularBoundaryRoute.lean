@@ -170,8 +170,8 @@ accessible complement coordinates, lines 1935–1990. -/
 noncomputable def regularCombinedBoundaryTransport (R : Finset V)
     (kR : {v : V // v ∈ R} → G) (kS : {v : V // v ∈ Finset.univ \ R} → G)
     (u : Edge Γ → G) :
-    ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) ≃
-      ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) := by
+    ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) ≃
+      ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) := by
   classical
   exact (regularRegionBoundaryTransport R kR u).symm.trans
     (((regionBoundaryEdgeComplEquiv (G := Γ) R).arrowCongr (Equiv.refl G)).trans
@@ -183,8 +183,8 @@ omit [Fintype G] in
 by its value on the identity configuration, separately on each crossing bond. -/
 theorem regularCombinedBoundaryTransport_apply (R : Finset V)
     (kR : {v : V // v ∈ R} → G) (kS : {v : V // v ∈ Finset.univ \ R} → G)
-    (u : Edge Γ → G) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
-    (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) :
+    (u : Edge Γ → G) (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
+    (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) :
     regularCombinedBoundaryTransport R kR kS u θ f =
       regularCombinedBoundaryTransport R kR kS u 1 f * θ f := by
   classical
@@ -196,7 +196,7 @@ omit [Fintype G] in
 complement endpoint, the combined multiplier is the gauged bond operator. -/
 theorem regularCombinedBoundaryTransport_tail (R : Finset V)
     (kR : {v : V // v ∈ R} → G) (kS : {v : V // v ∈ Finset.univ \ R} → G)
-    (u : Edge Γ → G) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (u : Edge Γ → G) (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (f : Edge Γ) (ht : f.1.1 ∈ R) (hh : f.1.2 ∉ R) :
     regularCombinedBoundaryTransport R kR kS u θ ⟨f, Or.inl ⟨ht, hh⟩⟩ =
       (kS ⟨f.1.2, Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hh⟩⟩)⁻¹ * u f *
@@ -210,7 +210,7 @@ omit [Fintype G] in
 complement endpoint, the original bond operator occurs with its inverse. -/
 theorem regularCombinedBoundaryTransport_head (R : Finset V)
     (kR : {v : V // v ∈ R} → G) (kS : {v : V // v ∈ Finset.univ \ R} → G)
-    (u : Edge Γ → G) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (u : Edge Γ → G) (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (f : Edge Γ) (ht : f.1.1 ∉ R) (hh : f.1.2 ∈ R) :
     regularCombinedBoundaryTransport R kR kS u θ ⟨f, Or.inr ⟨ht, hh⟩⟩ =
       (kS ⟨f.1.1, Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, ht⟩⟩)⁻¹ * (u f)⁻¹ *

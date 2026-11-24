@@ -196,7 +196,7 @@ theorem card_group_eq_of_stateCoeff_smul_regular_connected_cut
     (hψ : stateCoeff (groupBondTensor b) = c • stateCoeff (groupBondTensor a))
     (R : Finset V) (hR : (Γ.induce (R : Set V)).Connected)
     (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 2)) :
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 2)) :
     Fintype.card G = Fintype.card H := by
   classical
   apply Nat.pow_left_injective (Nat.succ_ne_zero n)

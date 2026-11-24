@@ -127,22 +127,22 @@ variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 /-- Incident edges that do not cross the boundary are exactly the internal
 edges, with both endpoints in the region. -/
 def regionInternalEdgeEquiv (R : Finset V) :
-    {e : {e : Edge Γ // IsRegionIncidentEdge R e} // ¬ IsRegionBoundaryEdge R e.1} ≃
+    {e : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} // ¬ ManyBody.IsRegionBoundaryEdge R e.1} ≃
       {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} where
   toFun e := ⟨e.1.1, by
     have hi := e.1.2
     have hb := e.2
-    simp only [IsRegionIncidentEdge, IsRegionBoundaryEdge] at hi hb
+    simp only [ManyBody.IsRegionIncidentEdge, ManyBody.IsRegionBoundaryEdge] at hi hb
     tauto⟩
   invFun e := ⟨⟨e.1, Or.inl e.2.1⟩, by
-    simp [IsRegionBoundaryEdge, e.2.1, e.2.2]⟩
+    simp [ManyBody.IsRegionBoundaryEdge, e.2.1, e.2.2]⟩
   left_inv _ := rfl
   right_inv _ := rfl
 
 /-- The number of free incident-edge labels is the number of internal bonds. -/
 theorem card_regionIncident_not_boundary (R : Finset V) :
     Fintype.card
-      {e : {e : Edge Γ // IsRegionIncidentEdge R e} // ¬ IsRegionBoundaryEdge R e.1} =
+      {e : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} // ¬ ManyBody.IsRegionBoundaryEdge R e.1} =
       Fintype.card {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} :=
   Fintype.card_congr (regionInternalEdgeEquiv R)
 
@@ -151,14 +151,14 @@ omit [Fintype V] [DecidableRel Γ.Adj] in
 subtype of incident edges agree. Source: SCP10, finite-region contraction,
 lines 1935–1957. -/
 theorem regionBoundaryLabel_eq_iff (R : Finset V) {H : Type*}
-    (μ ν : {e : Edge Γ // IsRegionBoundaryEdge R e} → H) :
-    ((fun e : {e : {e : Edge Γ // IsRegionIncidentEdge R e} //
-        IsRegionBoundaryEdge R e.1} => μ ⟨e.1.1, e.2⟩) =
+    (μ ν : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → H) :
+    ((fun e : {e : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} //
+        ManyBody.IsRegionBoundaryEdge R e.1} => μ ⟨e.1.1, e.2⟩) =
       (fun e => ν ⟨e.1.1, e.2⟩)) ↔ μ = ν := by
   constructor
   · intro h
     funext e
-    exact congrFun h ⟨⟨e.1, isRegionBoundaryEdge_touches R e.2⟩, e.2⟩
+    exact congrFun h ⟨⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩, e.2⟩
   · intro h
     funext e
     exact congrFun h ⟨e.1.1, e.2⟩
@@ -170,27 +170,27 @@ open Classical in
 translation, the two fixed crossing configurations leave precisely one free
 group label per internal bond. -/
 theorem sum_regionBoundary_translations_eq_card (R : Finset V)
-    (μ ν : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
-    (∑ η : {e : Edge Γ // IsRegionIncidentEdge R e} → G,
-      ∑ θ : {e : Edge Γ // IsRegionIncidentEdge R e} → G, ∑ g : G,
-      if (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-          η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = μ ∧
-        (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-          θ ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = ν ∧
+    (μ ν : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
+    (∑ η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G,
+      ∑ θ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G, ∑ g : G,
+      if (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+          η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = μ ∧
+        (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+          θ ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = ν ∧
         η = (fun e => g * θ e)
       then (1 : ℂ) else 0) =
       (Fintype.card G : ℂ) ^ Fintype.card {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} *
         ∑ g : G, if μ = (fun e => g * ν e) then 1 else 0 := by
   classical
-  let p : {e : Edge Γ // IsRegionIncidentEdge R e} → Prop :=
-    fun e => IsRegionBoundaryEdge R e.1
-  have hrestrict (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G)
-      (β : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+  let p : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → Prop :=
+    fun e => ManyBody.IsRegionBoundaryEdge R e.1
+  have hrestrict (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G)
+      (β : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
       ((fun e : {e // p e} => η e.1) = (fun e => β ⟨e.1.1, e.2⟩)) ↔
-        (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-          η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = β := by
+        (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+          η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = β := by
     exact regionBoundaryLabel_eq_iff R
-      (fun e => η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) β
+      (fun e => η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) β
   have htranslation (g : G) :
       ((fun e : {e // p e} => μ ⟨e.1.1, e.2⟩) =
         (fun e => g * ν ⟨e.1.1, e.2⟩)) ↔ μ = (fun e => g * ν e) := by

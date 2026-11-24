@@ -52,7 +52,7 @@ theorem exists_unitary_regularCycleGlobalPermutation
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
       ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       (∀ (ω : RC (Γ := Γ) R T → G)
-        (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
+        (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
           (regularTreeCycleAssignment R T ω))) R
           (fun f => Fintype.equivFin G (θ f)) =

@@ -53,7 +53,7 @@ theorem IsGIsometric.rank_torusClosureRegionMatrix_of_isSimplyConnected
     (hR : ((torusGraph width height).induce (R : Set (TorusVertex width height))).Connected)
     (hSC : IsSimplyConnected (torusRegionRealization R))
     (g h : G) (hgh : Commute g h) {b : ℕ} (hb : 0 < b)
-    (e : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     (regularTwistedOpenRegionMatrix (torusIncidentSite a)
       (torusClosureEdgeAssignment g h) R e).rank = Fintype.card G ^ (b - 1) := by
   obtain ⟨o⟩ := hR.nonempty

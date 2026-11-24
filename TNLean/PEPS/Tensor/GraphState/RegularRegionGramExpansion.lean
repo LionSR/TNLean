@@ -94,7 +94,7 @@ theorem regularOpenRegionMatrix_gram_apply
     {G : Type*} [Group G] [Fintype G]
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (R : Finset V) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     (x y : Fin b → G) :
     ((regularOpenRegionMatrix a R e).conjTranspose * regularOpenRegionMatrix a R e) x y =
       ∑ η : RegionIncidentConfig (groupBondTensor a) R,
@@ -117,7 +117,7 @@ theorem regularOpenRegionMatrix_gram_apply
 noncomputable def regularRegionIncidentConfigEquiv
     {G : Type*} [Group G] [Fintype G]
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V) :
-    ({f : Edge Γ // IsRegionIncidentEdge R f} → G) ≃
+    ({f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) ≃
       RegionIncidentConfig (groupBondTensor a) R :=
   Equiv.piCongrRight fun _ => Fintype.equivFin G
 
@@ -126,12 +126,12 @@ omit [Fintype V] in
 theorem regionIncidentBoundaryLabel_regular_iff
     {G : Type*} [Group G] [Fintype G]
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
-    {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
-    (η : {f : Edge Γ // IsRegionIncidentEdge R f} → G) (x : Fin b → G) :
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
+    (η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) (x : Fin b → G) :
     regionIncidentBoundaryLabel (groupBondTensor a) R
         (regularRegionIncidentConfigEquiv a R η) = regularRegionBoundaryConfigEquiv a R e x ↔
-      (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-        η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = fun f => x (e f) := by
+      (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+        η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = fun f => x (e f) := by
   constructor
   · intro h
     funext f
@@ -148,14 +148,14 @@ theorem regularOpenRegionMatrix_gram_apply_group
     {G : Type*} [Group G] [Fintype G] [DecidableEq G]
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (R : Finset V) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) (x y : Fin b → G) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) (x y : Fin b → G) :
     ((regularOpenRegionMatrix a R e).conjTranspose * regularOpenRegionMatrix a R e) x y =
-      ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-        ∑ θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-          if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-              (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
+      ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+        ∑ θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+          if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+              (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
             ∏ w : {w : V // w ∈ R}, ∑ s : Fin d,
               star (a w.1
                 (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩) s) *

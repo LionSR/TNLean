@@ -88,7 +88,7 @@ configuration `τ`. By the block-level image coincidence this row reproduces the
 coefficient through the second tensor's region blocked tensor map. -/
 noncomputable def blockTransferRow (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     RegionBoundaryConfig (G := G) B R → ℂ :=
@@ -111,7 +111,7 @@ theorem regionInsertedCoeff_eq_blockTransferRow (A B : Tensor G d) (R : Finset V
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -260,7 +260,7 @@ theorem blockTransferRow_mem_range (A B : Tensor G d) (R : Finset V)
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (μ : RegionBoundaryConfig (G := G) B R) :
     (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
@@ -318,7 +318,7 @@ theorem blockTransferRow_eq_complement_blockedMap (A B : Tensor G d) (R : Finset
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (μ : RegionBoundaryConfig (G := G) B R) :
     (fun τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R) =>
@@ -367,7 +367,7 @@ theorem regionInsertedCoeff_eq_doubleSum_transferCoeff_block (A B : Tensor G d) 
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -421,7 +421,7 @@ theorem regionInsertedCoeff_eq_of_transferCoeff_form_block (A B : Tensor G d) (R
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
     (hform : ∀ (μ : RegionBoundaryConfig (G := G) B R)
@@ -533,7 +533,7 @@ contracts the residual legs by the identity. The complement boundary configurati
 `ν'` is read back to a region boundary configuration by the complement
 boundary-configuration equivalence. -/
 noncomputable def incidentKernel (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
     RegionBoundaryConfig (G := G) B R →
       RegionBoundaryConfig (G := G) B (Finset.univ \ R) → ℂ :=
@@ -554,7 +554,7 @@ as a transfer kernel of `coeff_B N`.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem doubleSum_incidentKernel_eq_regionInsertedCoeff (B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -605,7 +605,7 @@ theorem transferCoeff_eq_incidentKernel_iff_coeff_eq (A B : Tensor G d) (R : Fin
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ) :
     transferCoeff (G := G) A B R hRB hCB f M = incidentKernel (G := G) B R f N ↔
@@ -644,7 +644,7 @@ theorem transferCoeff_one_eq_incidentKernel_one (A B : Tensor G d) (R : Finset V
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
     (hDim : A.bondDim = B.bondDim)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     transferCoeff (G := G) A B R hRB hCB f 1 =
       incidentKernel (G := G) B R f 1 := by
   rw [transferCoeff_eq_incidentKernel_iff_coeff_eq A B R hRA hRB hCA hCB hAB
@@ -680,7 +680,7 @@ theorem coeffTransfer_iff_transferCoeff_incidentForm (A B : Tensor G d) (R : Fin
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hAB : SameState A B)
     (hposA : ∀ e : Edge G, 0 < A.bondDim e) (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     (∀ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
         ∃ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
           ∀ (σ : RegionPhysicalConfig (V := V) (d := d) R)

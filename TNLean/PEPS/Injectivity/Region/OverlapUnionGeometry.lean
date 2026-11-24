@@ -318,8 +318,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 endpoints lie in `R₁ ⊆ R₁ ∪ R₂`. -/
 theorem not_isRegionBoundaryEdge_union_of_overlapCrossing {R₁ R₂ : Finset V} {eg : Edge G}
     (h : IsOverlapCrossingEdge (G := G) R₁ R₂ eg) :
-    ¬ IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) eg := by
-  simp only [IsOverlapCrossingEdge, IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_inter,
+    ¬ ManyBody.IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) eg := by
+  simp only [IsOverlapCrossingEdge, ManyBody.IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_inter,
     Finset.mem_sdiff] at *
   grind
 

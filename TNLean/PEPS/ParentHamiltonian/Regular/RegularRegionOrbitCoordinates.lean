@@ -37,7 +37,7 @@ def regularRegionInternalExtension (R : Finset V)
 on each incident edge. Boundary labels are not identified with one another. -/
 def regularRegionHalfEdgesOfBonds (R : Finset V)
     (u : RegularRegionInternalEdge (Γ := Γ) R → G)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G) :
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :
     RegionHalfEdgeConfig (Γ := Γ) G R :=
   fun v => regularTwistedLabels (regularRegionInternalExtension R u) v.1
     (fun e => η ⟨e.1, isRegionIncidentEdge_of_regionVertex R v e⟩)
@@ -52,7 +52,7 @@ def regularRegionHalfEdgeQuotients (R : Finset V)
 the head. -/
 def regularRegionHalfEdgeReferences (R : Finset V)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
-    {e : Edge Γ // IsRegionIncidentEdge R e} → G :=
+    {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G :=
   fun e => if h : e.1.1.1 ∈ R then α ⟨e.1.1.1, h⟩ ⟨e.1, Or.inl rfl⟩
     else α ⟨e.1.1.2, e.2.resolve_left h⟩ ⟨e.1, Or.inr rfl⟩
 
@@ -60,7 +60,7 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 /-- The internal tail label is the reference label. -/
 theorem regularRegionHalfEdgesOfBonds_tail (R : Finset V)
     (u : RegularRegionInternalEdge (Γ := Γ) R → G)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G)
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G)
     (e : Edge Γ) (h : e.1.1 ∈ R) :
     regularRegionHalfEdgesOfBonds R u η ⟨e.1.1, h⟩ ⟨e, Or.inl rfl⟩ =
       η ⟨e, Or.inl h⟩ := by
@@ -71,7 +71,7 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 /-- The internal head label is the quotient times the reference. -/
 theorem regularRegionHalfEdgesOfBonds_head (R : Finset V)
     (u : RegularRegionInternalEdge (Γ := Γ) R → G)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G)
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G)
     (e : RegularRegionInternalEdge (Γ := Γ) R) :
     regularRegionHalfEdgesOfBonds R u η ⟨e.1.1.2, e.2.2⟩ ⟨e.1, Or.inr rfl⟩ =
       u e * η ⟨e.1, Or.inr e.2.2⟩ := by
@@ -82,7 +82,7 @@ theorem regularRegionHalfEdgesOfBonds_head (R : Finset V)
 regional half-edge configurations bijectively. -/
 def regularRegionHalfEdgeConfigEquiv (R : Finset V) :
     ((RegularRegionInternalEdge (Γ := Γ) R → G) ×
-      ({e : Edge Γ // IsRegionIncidentEdge R e} → G)) ≃
+      ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G)) ≃
         RegionHalfEdgeConfig (Γ := Γ) G R where
   toFun p := regularRegionHalfEdgesOfBonds R p.1 p.2
   invFun α := (regularRegionHalfEdgeQuotients R α, regularRegionHalfEdgeReferences R α)
@@ -118,23 +118,23 @@ def regularRegionHalfEdgeConfigEquiv (R : Finset V) :
 
 /-- Identity reference on internal edges, with the given boundary references. -/
 def regularRegionCanonicalReferences (R : Finset V)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
-    {e : Edge Γ // IsRegionIncidentEdge R e} → G :=
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
+    {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G :=
   fun e => if h : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R then 1
-    else θ ⟨e.1, e.2.isRegionBoundaryEdge h⟩
+    else θ ⟨e.1, ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge e.2 h⟩
 
 /-- The original boundary restriction of an incident reference assignment. -/
 def regularRegionReferenceBoundary (R : Finset V)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G) :
-    {e : Edge Γ // IsRegionBoundaryEdge R e} → G :=
-  fun e => η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :
+    {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G :=
+  fun e => η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩
 
 omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 /-- Right translations on internal edges change the references freely and leave
 all boundary references unchanged. -/
 theorem regularRegionHalfEdgesOfBonds_right_normalize (R : Finset V)
     (u : RegularRegionInternalEdge (Γ := Γ) R → G)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G) :
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :
     regularRegionHalfEdgeRightMul R
         (fun e => if h : e.1.1 ∈ R ∧ e.1.2 ∈ R then η ⟨e, Or.inl h.1⟩ else 1)
         (regularRegionHalfEdgesOfBonds R u
@@ -150,10 +150,10 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 unchanged boundary references. -/
 theorem regularRegionHalfEdgesOfBonds_apply_of_rightInvariant (R : Finset V)
     (f : RegionHalfEdgeConfig (Γ := Γ) G R → ℂ)
-    (hf : ∀ r : Edge Γ → G, (∀ e, IsRegionBoundaryEdge R e → r e = 1) →
+    (hf : ∀ r : Edge Γ → G, (∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1) →
       ∀ α, f (regularRegionHalfEdgeRightMul R r α) = f α)
     (u : RegularRegionInternalEdge (Γ := Γ) R → G)
-    (η : {e : Edge Γ // IsRegionIncidentEdge R e} → G) :
+    (η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :
     f (regularRegionHalfEdgesOfBonds R u η) =
       f (regularRegionHalfEdgesOfBonds R u
         (regularRegionCanonicalReferences R (regularRegionReferenceBoundary R η))) := by

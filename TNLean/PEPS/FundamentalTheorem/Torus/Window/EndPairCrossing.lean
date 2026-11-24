@@ -148,7 +148,7 @@ theorem isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge
     (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
       (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) :=
   ((isCrossingEdge_horizontalStaircaseEndWindows A hL hK ha0 haw hbh _).mpr rfl).1
@@ -162,7 +162,7 @@ theorem isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge
     (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K)
       (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) :=
   ((isCrossingEdge_horizontalStaircaseEndWindows A hL hK ha0 haw hbh _).mpr rfl).2
@@ -190,7 +190,7 @@ Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
 theorem not_isRegionBoundaryEdge_horizontalStaircaseEndPair_referenceEdge
     {L K a b : ℕ} (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
-    ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+    ¬ ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K)
         (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) := by
   set e := horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K with he
@@ -262,10 +262,10 @@ theorem isRegionBoundaryEdge_endPair_of_leftWindow
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     {f : Edge (torusGraph width height)}
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f)
     (hfe : f ≠ horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) :
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f := by
   -- `f` does not cross between the two end windows, since the unique crossing edge is `e`.
   have hnotcross : ¬ IsCrossingEdge (G := torusGraph width height) A
@@ -273,14 +273,14 @@ theorem isRegionBoundaryEdge_endPair_of_leftWindow
       (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f := fun hcross =>
     hfe ((isCrossingEdge_horizontalStaircaseEndWindows A hL hK ha0 haw hbh f).mp hcross)
   -- Hence `f` is not a boundary edge of the right window.
-  have hnotR : ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+  have hnotR : ¬ ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f :=
     fun hR => hnotcross ⟨hf, hR⟩
   -- The two windows are disjoint.
   have hdisj := horizontalStaircaseEndPair_disjoint (width := width) (height := height)
     (L := L) (K := K) (by omega) ((a : ZMod width), (b : ZMod height))
   rw [Finset.disjoint_left] at hdisj
-  rw [IsRegionBoundaryEdge] at hnotR
+  rw [ManyBody.IsRegionBoundaryEdge] at hnotR
   -- The in-endpoint of `f` lies in `S`; the out-endpoint lies outside both windows, so outside `S`.
   rcases hf with ⟨hin, hout⟩ | ⟨hout, hin⟩
   · -- `f.1.1 ∈ left ⊆ S`; `f.1.2 ∉ left`, and ∉ right else `f` crosses the windows.
@@ -308,10 +308,10 @@ theorem isRegionBoundaryEdge_endPair_of_rightWindow
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height)
     {f : Edge (torusGraph width height)}
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f)
     (hfe : f ≠ horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) :
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseEndPair ((a : ZMod width), (b : ZMod height)) L K) f := by
   -- `f` does not cross between the two end windows, since the unique crossing edge is `e`.
   have hnotcross : ¬ IsCrossingEdge (G := torusGraph width height) A
@@ -319,14 +319,14 @@ theorem isRegionBoundaryEdge_endPair_of_rightWindow
       (horizontalStaircaseRightWindow ((a : ZMod width), (b : ZMod height)) L K) f := fun hcross =>
     hfe ((isCrossingEdge_horizontalStaircaseEndWindows A hL hK ha0 haw hbh f).mp hcross)
   -- Hence `f` is not a boundary edge of the left window.
-  have hnotL : ¬ IsRegionBoundaryEdge (G := torusGraph width height)
+  have hnotL : ¬ ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) f :=
     fun hLeft => hnotcross ⟨hLeft, hf⟩
   -- The two windows are disjoint.
   have hdisj := horizontalStaircaseEndPair_disjoint (width := width) (height := height)
     (L := L) (K := K) (by omega) ((a : ZMod width), (b : ZMod height))
   rw [Finset.disjoint_left] at hdisj
-  rw [IsRegionBoundaryEdge] at hnotL
+  rw [ManyBody.IsRegionBoundaryEdge] at hnotL
   rcases hf with ⟨hin, hout⟩ | ⟨hout, hin⟩
   · refine Or.inl ⟨horizontalStaircaseRightWindow_subset_endPair _ hin, ?_⟩
     rw [horizontalStaircaseEndPair, Finset.mem_union, not_or]

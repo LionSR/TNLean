@@ -146,7 +146,7 @@ private theorem rectangle_interval_last_ne_pred {n : ℕ} [NeZero n] [Fact (1 < 
 private theorem rectangle_boundary_up (xStart yStart w h : ℕ)
     (_hw : 0 < w) (hh : 0 < h) (hx : xStart + w ≤ width) (hy : yStart + h ≤ height)
     (hp : h < height) (k : ℕ) (hk : k < w) :
-    IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
       (torusUpEdge (((xStart + k : ℕ) : ZMod width),
         ((yStart + h - 1 : ℕ) : ZMod height))) := by
   have hstep : (((yStart + h - 1 : ℕ) : ZMod height) + 1) =
@@ -166,7 +166,7 @@ private theorem rectangle_boundary_up (xStart yStart w h : ℕ)
       torusContiguousRectangle xStart yStart w h := by
     simp only [mem_torusContiguousRectangle]
     exact fun hm => rectangle_interval_end_out yStart h hh hy hp ⟨hm.2.2.1, hm.2.2.2⟩
-  unfold IsRegionBoundaryEdge torusUpEdge
+  unfold ManyBody.IsRegionBoundaryEdge torusUpEdge
   rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up
     ((xStart + k : ℕ) : ZMod width) ((yStart + h - 1 : ℕ) : ZMod height)) with
     ⟨h1, h2⟩ | ⟨h1, h2⟩
@@ -178,7 +178,7 @@ private theorem rectangle_boundary_up (xStart yStart w h : ℕ)
 private theorem rectangle_boundary_down (xStart yStart w h : ℕ)
     (_hw : 0 < w) (hh : 0 < h) (hx : xStart + w ≤ width) (hy : yStart + h ≤ height)
     (hp : h < height) (k : ℕ) (hk : k < w) :
-    IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
       (torusUpEdge (((xStart + k : ℕ) : ZMod width), (yStart : ZMod height) - 1)) := by
   have hinside : ((((xStart + k : ℕ) : ZMod width), (yStart : ZMod height)) :
       TorusVertex width height) ∈ torusContiguousRectangle xStart yStart w h := by
@@ -190,7 +190,7 @@ private theorem rectangle_boundary_down (xStart yStart w h : ℕ)
       TorusVertex width height) ∉ torusContiguousRectangle xStart yStart w h := by
     simp only [mem_torusContiguousRectangle]
     exact fun hm => rectangle_interval_pred_out yStart h hh hy hp ⟨hm.2.2.1, hm.2.2.2⟩
-  unfold IsRegionBoundaryEdge torusUpEdge
+  unfold ManyBody.IsRegionBoundaryEdge torusUpEdge
   rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up
     ((xStart + k : ℕ) : ZMod width) ((yStart : ZMod height) - 1)) with
     ⟨h1, h2⟩ | ⟨h1, h2⟩
@@ -202,7 +202,7 @@ private theorem rectangle_boundary_down (xStart yStart w h : ℕ)
 private theorem rectangle_boundary_right (xStart yStart w h : ℕ)
     (hw : 0 < w) (_hh : 0 < h) (hx : xStart + w ≤ width) (hy : yStart + h ≤ height)
     (hp : w < width) (k : ℕ) (hk : k < h) :
-    IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
       (torusRightEdge (((xStart + w - 1 : ℕ) : ZMod width),
         ((yStart + k : ℕ) : ZMod height))) := by
   have hstep : (((xStart + w - 1 : ℕ) : ZMod width) + 1) =
@@ -222,7 +222,7 @@ private theorem rectangle_boundary_right (xStart yStart w h : ℕ)
       torusContiguousRectangle xStart yStart w h := by
     simp only [mem_torusContiguousRectangle]
     exact fun hm => rectangle_interval_end_out xStart w hw hx hp ⟨hm.1, hm.2.1⟩
-  unfold IsRegionBoundaryEdge torusRightEdge
+  unfold ManyBody.IsRegionBoundaryEdge torusRightEdge
   rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right
     ((xStart + w - 1 : ℕ) : ZMod width) ((yStart + k : ℕ) : ZMod height)) with
     ⟨h1, h2⟩ | ⟨h1, h2⟩
@@ -234,7 +234,7 @@ private theorem rectangle_boundary_right (xStart yStart w h : ℕ)
 private theorem rectangle_boundary_left (xStart yStart w h : ℕ)
     (hw : 0 < w) (_hh : 0 < h) (hx : xStart + w ≤ width) (hy : yStart + h ≤ height)
     (hp : w < width) (k : ℕ) (hk : k < h) :
-    IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
       (torusRightEdge ((xStart : ZMod width) - 1, ((yStart + k : ℕ) : ZMod height))) := by
   have hinside : (((xStart : ZMod width), ((yStart + k : ℕ) : ZMod height)) :
       TorusVertex width height) ∈ torusContiguousRectangle xStart yStart w h := by
@@ -246,7 +246,7 @@ private theorem rectangle_boundary_left (xStart yStart w h : ℕ)
       TorusVertex width height) ∉ torusContiguousRectangle xStart yStart w h := by
     simp only [mem_torusContiguousRectangle]
     exact fun hm => rectangle_interval_pred_out xStart w hw hx hp ⟨hm.1, hm.2.1⟩
-  unfold IsRegionBoundaryEdge torusRightEdge
+  unfold ManyBody.IsRegionBoundaryEdge torusRightEdge
   rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right
     ((xStart : ZMod width) - 1) ((yStart + k : ℕ) : ZMod height)) with
     ⟨h1, h2⟩ | ⟨h1, h2⟩
@@ -260,7 +260,7 @@ coordinate rectangle, including its possible seam bonds. -/
 theorem torusRectanglePerimeterEdge_boundary (xStart yStart w h : ℕ)
     (hw : 0 < w) (hh : 0 < h) (hx : xStart + w ≤ width) (hy : yStart + h ≤ height)
     (hwp : w < width) (hhp : h < height) (i : Fin (2 * w + 2 * h)) :
-    IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
+    ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h)
       (torusRectanglePerimeterEdge (width := width) (height := height) xStart yStart w h i) := by
   unfold torusRectanglePerimeterEdge torusRectanglePerimeterCode
   split_ifs with ht hr hb
@@ -312,7 +312,7 @@ noncomputable def torusRectanglePerimeterEquiv (xStart yStart w h : ℕ)
     (hw : 0 < w) (hh : 0 < h) (hx : xStart + w ≤ width) (hy : yStart + h ≤ height)
     (hwp : w < width) (hhp : h < height) :
     Fin (2 * w + 2 * h) ≃ {e : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h) e} :=
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart w h) e} :=
   Equiv.ofBijective
     (fun i => ⟨torusRectanglePerimeterEdge xStart yStart w h i,
       torusRectanglePerimeterEdge_boundary xStart yStart w h hw hh hx hy hwp hhp i⟩)

@@ -95,7 +95,7 @@ theorem exists_unitary_regularActualCyclePhysicalPermutation {d : ℕ}
     ∃ W : Matrix ({v : V // v ∈ R} → Fin d) ({v : V // v ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({v : V // v ∈ R} → Fin d) ℂ ∧
       ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
-      (∀ (u : Edge Γ → G) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
+      (∀ (u : Edge Γ → G) (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
           (fun f => Fintype.equivFin G (θ f)) =
         openRegionWeight (groupBondTensor (regularTwistedSite a
@@ -158,7 +158,7 @@ theorem exists_unitary_regularActualCycleBidirectionalPermutation {d : ℕ}
       W ∈ Matrix.unitaryGroup ({v : V // v ∈ R} → Fin d) ℂ ∧
       ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       (∀ (reverse : Bool) (u : Edge Γ → G)
-          (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
+          (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G),
         (if reverse then W.conjTranspose else W) *ᵥ
           openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
             (fun f => Fintype.equivFin G (θ f)) =

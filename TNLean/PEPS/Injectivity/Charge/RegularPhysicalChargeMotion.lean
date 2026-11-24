@@ -90,7 +90,7 @@ private theorem weighted_coordinates
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (e f : RI (Γ := Γ) R) (u : Edge Γ → G) (χ : G → ℂ) (p : G)
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {b : Edge Γ // IsRegionBoundaryEdge R b} → G) :
+    (θ : {b : Edge Γ // ManyBody.IsRegionBoundaryEdge R b} → G) :
     regularProjectorWeightedTwistedRegionMatrix R u
         (fun η => χ (regularChargeMoveParameter R T hT htree o e f u p *
           η ⟨f.1, Or.inl f.2.1⟩))
@@ -113,7 +113,7 @@ private theorem weighted_coordinates
 private theorem weighted_mulVec
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (e f : RI (Γ := Γ) R) (u : Edge Γ → G) (χ : G → ℂ) (p : G)
-    (θ : {b : Edge Γ // IsRegionBoundaryEdge R b} → G) :
+    (θ : {b : Edge Γ // ManyBody.IsRegionBoundaryEdge R b} → G) :
     Matrix.permMatrixHom (R := ℂ)
         (regularRegionCoordinatePhysicalPermutation R T hT htree o
           (regularChargeMoveCoordinatePermutation R T o e f)) *ᵥ
@@ -143,7 +143,7 @@ theorem exists_unitary_regularPhysicalChargeMotion {d : ℕ}
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
       ∀ (u : Edge Γ → G) (χ : G → ℂ) (p : G)
-        (θ : {b : Edge Γ // IsRegionBoundaryEdge R b} → G),
+        (θ : {b : Edge Γ // ManyBody.IsRegionBoundaryEdge R b} → G),
         W *ᵥ regularWeightedOpenRegionWeight a R u
           (fun η => χ (p * η ⟨e.1, Or.inl e.2.1⟩)) θ =
         regularWeightedOpenRegionWeight a R u
@@ -196,7 +196,7 @@ theorem exists_unitary_regularPhysicalChargeMotion_of_connected {d : ℕ}
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
       ∀ (χ : G → ℂ) (p : G)
-        (θ : {b : Edge Γ // IsRegionBoundaryEdge R b} → G),
+        (θ : {b : Edge Γ // ManyBody.IsRegionBoundaryEdge R b} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularEdgeCharacterSite a e.1 χ p)) R
           (fun b => Fintype.equivFin G (θ b)) =
         openRegionWeight (groupBondTensor (regularEdgeCharacterSite a f.1 χ p)) R

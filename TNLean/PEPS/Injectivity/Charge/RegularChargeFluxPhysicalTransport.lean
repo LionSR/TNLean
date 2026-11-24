@@ -48,7 +48,7 @@ theorem exists_unitary_regularChargeFluxPhysicalTransport {d : ℕ}
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
       ∀ (u : Edge Γ → G) (χ : G → ℂ) (p : G)
-        (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G),
+        (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G),
         W *ᵥ regularWeightedOpenRegionWeight a R u
           (fun η => χ (p * η ⟨e.1, Or.inl e.2.1⟩)) θ =
         regularWeightedOpenRegionWeight a R u

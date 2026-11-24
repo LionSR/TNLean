@@ -292,7 +292,7 @@ theorem torusRightEdge_not_incident_rectangle_of_wrap
     (xStart yStart xLen yLen : ℕ) (hxStart : 0 < xStart)
     (hxEnd : xStart + xLen < width) (v : TorusVertex width height)
     (hwrap : v.1 + 1 = 0) :
-    ¬IsRegionIncidentEdge (torusContiguousRectangle xStart yStart xLen yLen)
+    ¬ManyBody.IsRegionIncidentEdge (torusContiguousRectangle xStart yStart xLen yLen)
       (torusRightEdge v) := by
   have hlast := zmod_val_last_of_add_one_eq_zero v.1 hwrap
   have h₁ : v ∉ torusContiguousRectangle xStart yStart xLen yLen := by
@@ -301,7 +301,7 @@ theorem torusRightEdge_not_incident_rectangle_of_wrap
   have h₂ : (v.1 + 1, v.2) ∉ torusContiguousRectangle xStart yStart xLen yLen := by
     simp only [mem_torusContiguousRectangle, hwrap, ZMod.val_zero]
     omega
-  unfold IsRegionIncidentEdge torusRightEdge
+  unfold ManyBody.IsRegionIncidentEdge torusRightEdge
   rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
     simp only [ha, hb, h₁, h₂, or_self, not_false_eq_true]
 
@@ -313,7 +313,7 @@ theorem torusUpEdge_not_incident_rectangle_of_wrap
     (xStart yStart xLen yLen : ℕ) (hyStart : 0 < yStart)
     (hyEnd : yStart + yLen < height) (v : TorusVertex width height)
     (hwrap : v.2 + 1 = 0) :
-    ¬IsRegionIncidentEdge (torusContiguousRectangle xStart yStart xLen yLen)
+    ¬ManyBody.IsRegionIncidentEdge (torusContiguousRectangle xStart yStart xLen yLen)
       (torusUpEdge v) := by
   have hlast := zmod_val_last_of_add_one_eq_zero v.2 hwrap
   have h₁ : v ∉ torusContiguousRectangle xStart yStart xLen yLen := by
@@ -322,7 +322,7 @@ theorem torusUpEdge_not_incident_rectangle_of_wrap
   have h₂ : (v.1, v.2 + 1) ∉ torusContiguousRectangle xStart yStart xLen yLen := by
     simp only [mem_torusContiguousRectangle, hwrap, ZMod.val_zero]
     omega
-  unfold IsRegionIncidentEdge torusUpEdge
+  unfold ManyBody.IsRegionIncidentEdge torusUpEdge
   rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
     simp only [ha, hb, h₁, h₂, or_self, not_false_eq_true]
 
@@ -336,7 +336,7 @@ theorem nonempty_boundaryEdge_torusRectangle
     (hxPos : 0 < xLen) (hyPos : 0 < yLen)
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height) :
     Nonempty {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) f} := by
+      ManyBody.IsRegionBoundaryEdge (torusContiguousRectangle xStart yStart xLen yLen) f} := by
   let v : TorusVertex width height :=
     (((xStart - 1 : ℕ) : ZMod width), (yStart : ZMod height))
   have hs : v.1 + 1 = (xStart : ZMod width) := by
@@ -355,7 +355,7 @@ theorem nonempty_boundaryEdge_torusRectangle
       ZMod.val_natCast_of_lt (show yStart < height by omega)]
     omega
   refine ⟨⟨torusRightEdge v, ?_⟩⟩
-  unfold IsRegionBoundaryEdge torusRightEdge
+  unfold ManyBody.IsRegionBoundaryEdge torusRightEdge
   rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
     simp only [ha, hb, h₁, h₂, not_false_eq_true, not_true_eq_false, and_self,
       false_or, or_false]

@@ -258,7 +258,7 @@ Source: arXiv:1804.04964, the Skolem--Noether argument at lines 582--586 and its
 two-dimensional reduction at lines 2368--2444. -/
 theorem exists_staircaseWindowConjCoeffIdentity_normalized :
     let W := horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K
-    let f : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge W f} :=
+    let f : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge W f} :=
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
         (by omega) (by omega) ha0 haw hbh⟩
     ∃ (hE : A.bondDim f.1 = B.bondDim f.1) (Z : GL (Fin (B.bondDim f.1)) ℂ),

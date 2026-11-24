@@ -67,7 +67,7 @@ theorem isRegionBoundaryEdge_staircaseWindow_zero_referenceEdge
     (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K 0)
       (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) := by
   rw [staircaseWindow_zero]
@@ -82,7 +82,7 @@ theorem isRegionBoundaryEdge_staircaseWindow_last_referenceEdge
     (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
     (hL : 0 < L) (hK : 0 < K) (ha0 : 1 ≤ a)
     (haw : a + 2 * L ≤ width) (hbh : b + 2 * K - 1 ≤ height) :
-    IsRegionBoundaryEdge (G := torusGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height)
       (staircaseWindow ((a : ZMod width), (b : ZMod height)) L K (L + K - 1))
       (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K) := by
   rw [staircaseWindow_last _ hL hK]

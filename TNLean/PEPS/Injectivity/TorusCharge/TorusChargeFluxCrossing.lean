@@ -383,7 +383,7 @@ theorem IsGIsometric.exists_unitary_torusChargeFluxCrossing {d : ℕ}
         ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d) ℂ ∧
       ∀ (k : G) (χ : G → ℂ) (p : G)
-        (θ : {f : Edge Γₜ // IsRegionBoundaryEdge (torusChargeFluxCrossingRegion v) f} → G),
+        (θ : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusChargeFluxCrossingRegion v) f} → G),
         W *ᵥ regularWeightedOpenRegionWeight (torusIncidentSite a)
           (torusChargeFluxCrossingRegion v) (torusSweptStringInitialOperators v k 1)
           (fun η => χ (p * η ⟨(torusChargeFluxCrossingChargeBond v).1,
@@ -428,7 +428,7 @@ theorem IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing {d : ℕ}
         ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d) ℂ ∧
       ∀ (k : G) (χ : G → ℂ) (p q : G)
-        (θ : {f : Edge Γₜ // IsRegionBoundaryEdge (torusChargeFluxCrossingRegion v) f} → G),
+        (θ : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusChargeFluxCrossingRegion v) f} → G),
         W *ᵥ regularWeightedOpenRegionWeight (torusIncidentSite a)
           (torusChargeFluxCrossingRegion v) (torusSweptStringInitialOperators v k 1)
           (fun η => χ (p*q⁻¹ * η ⟨(torusChargeFluxCrossingChargeBond v).1,

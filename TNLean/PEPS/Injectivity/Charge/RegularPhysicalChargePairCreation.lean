@@ -32,10 +32,10 @@ def regularChargePairOpenRegionMatrix
     (a : (v : V) → (IncidentEdge Γ v → G) → κ v → ℂ) (R : Finset V)
     (e₀ e₁ : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}) (χ : G → ℂ) (p : G) :
     Matrix ((v : {v // v ∈ R}) → κ v.1)
-      ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) ℂ :=
-  fun s θ => ∑ η : {e : Edge Γ // IsRegionIncidentEdge R e} → G,
-    if (fun f : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-        η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ then
+      ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) ℂ :=
+  fun s θ => ∑ η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G,
+    if (fun f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+        η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ then
       χ (p * (η ⟨e₁.1, Or.inl e₁.2.1⟩)⁻¹ * η ⟨e₀.1, Or.inl e₀.2.1⟩) *
       ∏ w : {w : V // w ∈ R},
         a w.1 (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩) (s w)
@@ -49,7 +49,7 @@ theorem regularChargePairOpenRegionMatrix_eq_image
     (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R : Finset V)
     (e₀ e₁ : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}) (χ : G → ℂ) (p : G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regionPhysicalProductMatrix R (fun v => Matrix.of fun s α => a v α s) *ᵥ
         (fun α => regularProjectorChargePairOpenRegionMatrix R e₀ e₁ χ p α θ) =
       fun s => regularChargePairOpenRegionMatrix a R e₀ e₁ χ p s θ := by
@@ -58,9 +58,9 @@ theorem regularChargePairOpenRegionMatrix_eq_image
   let P := regionPhysicalProductMatrix R
     (fun v => regularLegProjector (G := G) (IncidentEdge Γ v))
   let z : RegionHalfEdgeConfig (Γ := Γ) G R → ℂ :=
-    ∑ η : {e : Edge Γ // IsRegionIncidentEdge R e} → G,
-      if (fun f : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-          η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ then
+    ∑ η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G,
+      if (fun f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+          η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ then
         χ (p * (η ⟨e₁.1, Or.inl e₁.2.1⟩)⁻¹ * η ⟨e₀.1, Or.inl e₀.2.1⟩) •
           Pi.single (fun w f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩) 1
       else 0
@@ -96,7 +96,7 @@ theorem regularChargePairOpenRegionMatrix_eq_image
 open-region column. -/
 private theorem regularProjectorChargePairOpenRegionMatrix_one (R : Finset V)
     (e₀ e₁ : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R})
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     (fun α => regularProjectorChargePairOpenRegionMatrix
         (G := G) R e₀ e₁ (fun _ => 1) 1 α θ) =
       fun α => regularProjectorOpenRegionMatrix R α θ := by
@@ -111,7 +111,7 @@ theorem regularChargePairOpenRegionMatrix_one_eq_openRegionWeight {d : ℕ}
     (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R : Finset V)
     (e₀ e₁ : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R})
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     (fun s => regularChargePairOpenRegionMatrix a R e₀ e₁ (fun _ => 1) 1 s θ) =
       openRegionWeight (groupBondTensor a) R (fun f => Fintype.equivFin G (θ f)) := by
   rw [← regularChargePairOpenRegionMatrix_eq_image a ha R e₀ e₁ _ 1 θ,
@@ -134,7 +134,7 @@ theorem exists_unitary_regularPhysicalChargePairCreation
     (χ : G → ℂ) (hχ : χ ∈ regularChargeLabels (G := G)) (p : G) :
     ∃ W : Matrix ((v : {v // v ∈ R}) → κ v.1) ((v : {v // v ∈ R}) → κ v.1) ℂ,
       W ∈ Matrix.unitaryGroup _ ℂ ∧
-      ∀ θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G,
+      ∀ θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G,
         W *ᵥ (fun s => regularChargePairOpenRegionMatrix a R e₀ e₁ (fun _ => 1) 1 s θ) =
           fun s => regularChargePairOpenRegionMatrix a R e₀ e₁ χ p s θ := by
   classical

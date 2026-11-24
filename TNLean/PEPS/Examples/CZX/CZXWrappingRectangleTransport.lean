@@ -57,9 +57,9 @@ noncomputable def czxWrappingRectangleBoundaryTransport (a : ZMod width) (b : ZM
 
 private theorem incident_translate (a : ZMod width) (b : ZMod height)
     (R : Finset (TorusVertex width height)) (e : Edge (torusGraph width height)) :
-    IsRegionIncidentEdge (Region.map (translate a b) R) (ManyBody.Edge.map (translate a b) e) ↔
-      IsRegionIncidentEdge R e := by
-  unfold IsRegionIncidentEdge
+    ManyBody.IsRegionIncidentEdge (Region.map (translate a b) R) (ManyBody.Edge.map (translate a b) e) ↔
+      ManyBody.IsRegionIncidentEdge R e := by
+  unfold ManyBody.IsRegionIncidentEdge
   rcases ManyBody.Edge.map_endpoints (translate a b) e with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
   · rw [h₁, h₂, mem_Region_map_apply, mem_Region_map_apply]
   · rw [h₁, h₂, mem_Region_map_apply, mem_Region_map_apply]
@@ -69,9 +69,9 @@ private theorem incident_translate (a : ZMod width) (b : ZMod height)
 the original incident bonds. -/
 noncomputable def czxWrappingRectangleIncidentEdgeEquiv (a : ZMod width) (b : ZMod height)
     (R : Finset (TorusVertex width height)) :
-    {e : Edge (torusGraph width height) // IsRegionIncidentEdge R e} ≃
+    {e : Edge (torusGraph width height) // ManyBody.IsRegionIncidentEdge R e} ≃
       {e : Edge (torusGraph width height) //
-        IsRegionIncidentEdge (Region.map (translate a b) R) e} :=
+        ManyBody.IsRegionIncidentEdge (Region.map (translate a b) R) e} :=
   (ManyBody.Edge.equiv (translate a b)).subtypeEquiv fun e => (incident_translate a b R e).symm
 
 /-- Reindex the incident labels, summing exactly the same internal bonds. -/
@@ -133,12 +133,12 @@ private theorem incidentWeight_translate (a : ZMod width) (b : ZMod height)
         (regionPhysicalConfigMapEquiv (d := 16) (translate a b) R σ) =
       regionIncidentWeight (czxPEPS width height) R η σ := by
   classical
-  change ({e : Edge (torusGraph width height) // IsRegionIncidentEdge R e} → Fin 4) at η
+  change ({e : Edge (torusGraph width height) // ManyBody.IsRegionIncidentEdge R e} → Fin 4) at η
   let θ : {e : Edge (torusGraph width height) //
-      IsRegionIncidentEdge (Region.map (translate a b) R) e} → Fin 4 :=
+      ManyBody.IsRegionIncidentEdge (Region.map (translate a b) R) e} → Fin 4 :=
     fun e => η ((czxWrappingRectangleIncidentEdgeEquiv a b R).symm e)
   let ζ : Edge (torusGraph width height) → Fin 4 :=
-    fun e => if he : IsRegionIncidentEdge R e then η ⟨e, he⟩ else 0
+    fun e => if he : ManyBody.IsRegionIncidentEdge R e then η ⟨e, he⟩ else 0
   unfold regionIncidentWeight
   symm
   refine Fintype.prod_equiv (Finset.equivMap (translate a b).toEquiv.toEmbedding R) _ _ ?_
@@ -153,9 +153,9 @@ private theorem incidentWeight_translate (a : ZMod width) (b : ZMod height)
         ζ (ManyBody.Edge.map (translate a b).symm e.1) := by
     have he := ((czxWrappingRectangleIncidentEdgeEquiv a b R).symm
       ⟨e.1, isRegionIncidentEdge_of_regionVertex _ v' e⟩).2
-    change IsRegionIncidentEdge R (ManyBody.Edge.map (translate a b).symm e.1) at he
+    change ManyBody.IsRegionIncidentEdge R (ManyBody.Edge.map (translate a b).symm e.1) at he
     change η ⟨ManyBody.Edge.map (translate a b).symm e.1, he⟩ =
-      (if he' : IsRegionIncidentEdge R (ManyBody.Edge.map (translate a b).symm e.1) then
+      (if he' : ManyBody.IsRegionIncidentEdge R (ManyBody.Edge.map (translate a b).symm e.1) then
         η ⟨ManyBody.Edge.map (translate a b).symm e.1, he'⟩ else 0)
     rw [dite_eq_left he]
   have hp : regionPhysicalConfigMapEquiv (d := 16) (translate a b) R σ

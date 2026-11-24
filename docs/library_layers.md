@@ -501,7 +501,7 @@ one that no longer occurs. Each is removed in one of two ways:
 | `PEPS.Graph.Torus.TorusLabelledBondGeometry` | `PEPS.Injectivity.TorusSector.TorusBondFlatConnection` | uses torusBondGauge, IsTorusBondFlat, torusBondClosureLabels, exists_torusBondGauge_eq_closure |
 | `PEPS.Graph.Torus.TorusLatticeGraph` | `PEPS.Tensor.Network.Defs` | uses symm |
 | `PEPS.Graph.Torus.TorusRectangleBoundaryCard` | `PEPS.Tensor.Torus.TorusSiteTensor` | uses torusEdgeEquiv |
-| `PEPS.Graph.Torus.TorusRectangleConnectivity` | `PEPS.Tensor.Region.RegionBlock` | uses IsRegionBoundaryEdge, IsRegionIncidentEdge |
+| `PEPS.Graph.Torus.TorusRectangleConnectivity` | `PEPS.Tensor.Region.RegionBlock` | uses ManyBody.IsRegionBoundaryEdge, ManyBody.IsRegionIncidentEdge |
 | `PEPS.Graph.Torus.TorusRectangleConnectivity` | `PEPS.Tensor.Torus.TorusTranslationInvariant` | uses torusRightEdge, torusUpEdge |
 | `PEPS.Graph.Torus.TorusSingletonRegion` | `PEPS.Injectivity.Entropy.RegularTorusEntropy` | no declaration of the target is named: drop the import or import the lower module it relies on |
 | `PEPS.Graph.Walk.TorusWalkWinding` | `PEPS.Injectivity.TorusSector.RegularTorusCut` | uses torusClosureEdgeAssignment, torusRightEdge_head_of_wrap, torusUpEdge_head_of_wrap |
@@ -530,8 +530,8 @@ Remedies by host module (the declarations to move and where):
     `Graph/Region`.
   - The transport of injectivity goes to `Injectivity/Region`.
 - **`PEPS/Tensor/Region/RegionBlock`:**
-  - `IsRegionBoundaryEdge`, `IsRegionIncidentEdge` and
-    `isRegionBoundaryEdge_touches` go to `Graph/Region`.
+  - `ManyBody.IsRegionBoundaryEdge`, `ManyBody.IsRegionIncidentEdge` and
+    `ManyBody.isRegionBoundaryEdge_touches` go to `Graph/Region`.
   - `RegionBlockedTensorInjective` goes to `Injectivity/Region`.
 - **`PEPS/Tensor/Torus/TorusTranslationInvariant`:** `torusRightEdge`,
   `torusUpEdge` and their lemmas go to `Graph/Torus`.
@@ -2265,7 +2265,7 @@ this part points upward.
 | `Defs` (`Tensor/Network`) | Graph, Tensor, Injectivity | `IncidentEdge` and its `Fintype` instance; `IsVertexInjective`, `Tensor.IsInjective` | `IncidentEdge` to `Graph/Region`; the two injectivity predicates to an injectivity module of `Injectivity/Region` |
 | `IsoTransport` (`Tensor/Network`) | Graph, Tensor, Injectivity | `ManyBody.Edge.map`, `ManyBody.Edge.map_endpoints`, `ManyBody.Edge.equiv`, `IncidentEdge.equiv`; two `transport` lemmas for injectivity | the edge maps to QICLean beside `ManyBody.Edge` (or to `Graph/Region/EdgeMapSubgraph`); the transport of injectivity to `Injectivity/Region` |
 | `VirtualInsertion` (`Tensor/Network`) | Tensor, Injectivity | 8 lemmas on injective vertices (`localTensorMap_injective`, `localLeftInverse`, `localProjector`, …) | to `Injectivity/Region` |
-| `RegionBlock` (`Tensor/Region`) | Graph, Tensor, Injectivity | `IsRegionBoundaryEdge`, `IsRegionIncidentEdge`, `isRegionBoundaryEdge_touches`; `RegionBlockedTensorInjective` | the region boundary predicates to `Graph/Region`; the injectivity predicate to `Injectivity/Region` |
+| `RegionBlock` (`Tensor/Region`) | Graph, Tensor, Injectivity | `ManyBody.IsRegionBoundaryEdge`, `ManyBody.IsRegionIncidentEdge`, `ManyBody.isRegionBoundaryEdge_touches`; `RegionBlockedTensorInjective` | the region boundary predicates to `Graph/Region`; the injectivity predicate to `Injectivity/Region` |
 | `OpenRegionContraction` (`Tensor/Region`) | Graph, Tensor | `isRegionIncidentEdge_of_regionVertex` | to `Graph/Region` |
 | `RegionTransport` (`Tensor/Region`) | Graph, Tensor, Injectivity | `Region.map`, `mem_Region_map`; `regionBlockedTensorInjective_transport` | `Region.map` to `Graph/Region`; the transport lemma to `Injectivity/Region` |
 | `TorusTranslationInvariant` (`Tensor/Torus`) | Graph, Tensor, Injectivity | `torusRightEdge`, `torusUpEdge`, and lemmas that they are injective and distinct; `regionBlockedTensorInjective_translate` | the edges to `Graph/Torus/TorusLatticeGraph`; the lemma to `Injectivity/Region` |

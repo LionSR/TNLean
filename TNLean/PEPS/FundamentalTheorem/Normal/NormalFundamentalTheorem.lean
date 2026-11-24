@@ -64,7 +64,7 @@ omit [Fintype V] in
 its `R`-incident edges. -/
 theorem regionProd_congr {A : Tensor G d} (R : Finset V) (σ : V → Fin d)
     {ζ ζ' : VirtualConfig A}
-    (h : ∀ e : Edge G, IsRegionIncidentEdge (G := G) R e → ζ e = ζ' e) :
+    (h : ∀ e : Edge G, ManyBody.IsRegionIncidentEdge (G := G) R e → ζ e = ζ' e) :
     (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w.1)) =
       ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ' ie.1) (σ w.1) := by
   exact regionProd_subtype_congr R (fun w => σ w.1) h
@@ -83,7 +83,7 @@ open scoped Classical in
 edge `f` of `R` collapses `regionInsertedCoeff` to the single-sum region/complement
 contraction over the shared boundary configuration. -/
 theorem regionInsertedCoeff_identity (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     regionInsertedCoeff (G := G) A R f

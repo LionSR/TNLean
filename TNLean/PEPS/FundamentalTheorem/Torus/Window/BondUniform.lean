@@ -71,8 +71,8 @@ its preimage `Edge.map φ.symm e'` crosses the boundary of `R`.  This is `isRegi
 read at the preimage edge, the round trip `Edge.map φ (Edge.map φ.symm e') = e'` collapsing the
 image action. -/
 theorem isRegionBoundaryEdge_map' (φ : G ≃g G') (R : Finset V) (e' : Edge G') :
-    IsRegionBoundaryEdge (G := G') (Region.map φ R) e' ↔
-      IsRegionBoundaryEdge (G := G) R (ManyBody.Edge.map φ.symm e') := by
+    ManyBody.IsRegionBoundaryEdge (G := G') (Region.map φ R) e' ↔
+      ManyBody.IsRegionBoundaryEdge (G := G) R (ManyBody.Edge.map φ.symm e') := by
   have h := isRegionBoundaryEdge_map φ R (ManyBody.Edge.map φ.symm e')
   rwa [ManyBody.Edge.map_map_symm] at h
 
@@ -86,7 +86,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1. -/
 theorem regionInteriorBondProd_map (A' : Tensor G' d) (φ : G ≃g G') (R : Finset V) :
     regionInteriorBondProd (G := G') A' (Region.map φ R) =
-      ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ IsRegionBoundaryEdge (G := G) R e),
+      ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ ManyBody.IsRegionBoundaryEdge (G := G) R e),
         A'.bondDim (ManyBody.Edge.map φ e) := by
   classical
   rw [regionInteriorBondProd]
@@ -223,8 +223,8 @@ theorem horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform
     (hpos : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
     (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : j < L) (g : Edge (torusGraph width height))
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
-    (hg : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
+    (hg : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
     (M₁ M₂ : Matrix (Fin (B.bondDim g)) (Fin (B.bondDim g)) ℂ)
     (horient : regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K j) ⟨g, hf⟩
         M₁ =
@@ -267,8 +267,8 @@ theorem verticalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform
     (hL : 2 ≤ L) (hK : 2 ≤ K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) {j : ℕ} (hj : L ≤ j) (hjK : j + 1 < L + K)
     (g : Edge (torusGraph width height))
-    (hf : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
-    (hg : IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K j) g)
+    (hg : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (staircaseWindow s L K (j + 1)) g)
     (M₁ M₂ : Matrix (Fin (B.bondDim g)) (Fin (B.bondDim g)) ℂ)
     (horient : regionEdgeOrient (G := torusGraph width height) B (staircaseWindow s L K j) ⟨g, hf⟩
         M₁ =

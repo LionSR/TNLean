@@ -56,8 +56,8 @@ private theorem edgeLeftVertices_subset_of_mem (e : Edge G) {R : Finset V}
 
 omit [Fintype V] [DecidableRel G.Adj] in
 private theorem isRegionBoundaryEdge_edgeLeftVertices (e : Edge G) :
-    IsRegionBoundaryEdge (G := G) (edgeLeftVertices e) e := by
-  rw [IsRegionBoundaryEdge]
+    ManyBody.IsRegionBoundaryEdge (G := G) (edgeLeftVertices e) e := by
+  rw [ManyBody.IsRegionBoundaryEdge]
   left
   constructor
   · simp [edgeLeftVertices]
@@ -81,7 +81,7 @@ noncomputable def interiorBondInsertedRegionInsert (A : Tensor G d) (R : Finset 
     (X : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
     RegionInsert (G := G) (d := d) A R :=
   let hsub : edgeLeftVertices e ⊆ R := edgeLeftVertices_subset_of_mem e hends.1
-  let hbd : IsRegionBoundaryEdge (G := G) (edgeLeftVertices e) e :=
+  let hbd : ManyBody.IsRegionBoundaryEdge (G := G) (edgeLeftVertices e) e :=
     isRegionBoundaryEdge_edgeLeftVertices e
   fun ν σ ↦
     (regionInteriorBondProd (G := G) A R : ℂ) *

@@ -54,7 +54,7 @@ theorem czxLegFlip_swap (x : Fin 4) :
 private theorem czx_phase_prod_endpoints (R : Finset (TorusVertex width height))
     (e : Edge (torusGraph width height)) (x : Fin 4) :
     (∏ v : incVertex e, if v.1 ∈ R then czxLegPhase x else 1) =
-      if IsRegionBoundaryEdge R e then czxLegPhase x else 1 := by
+      if ManyBody.IsRegionBoundaryEdge R e then czxLegPhase x else 1 := by
   classical
   let v₁ : incVertex e := ⟨e.1.1, Or.inl rfl⟩
   let v₂ : incVertex e := ⟨e.1.2, Or.inr rfl⟩
@@ -67,14 +67,14 @@ private theorem czx_phase_prod_endpoints (R : Finset (TorusVertex width height))
     · exact Or.inr (Subtype.ext h.symm)
   rw [hu, Finset.prod_pair hv]
   by_cases h₁ : e.1.1 ∈ R <;> by_cases h₂ : e.1.2 ∈ R <;>
-    simp [v₁, v₂, IsRegionBoundaryEdge, h₁, h₂, czxLegPhase_mul_self]
+    simp [v₁, v₂, ManyBody.IsRegionBoundaryEdge, h₁, h₂, czxLegPhase_mul_self]
 
 private theorem czx_phase_prod_incidence (R : Finset (TorusVertex width height))
     (η : Edge (torusGraph width height) → Fin 4) :
     (∏ v : TorusVertex width height, ∏ e : IncidentEdge (torusGraph width height) v,
       if v ∈ R then czxLegPhase (η e.1) else 1) =
       ∏ e : Edge (torusGraph width height),
-        if IsRegionBoundaryEdge R e then czxLegPhase (η e) else 1 := by
+        if ManyBody.IsRegionBoundaryEdge R e then czxLegPhase (η e) else 1 := by
   classical
   rw [← Fintype.prod_sigma (fun p : (Σ v, IncidentEdge (torusGraph width height) v) =>
     if p.1 ∈ R then czxLegPhase (η p.2.1) else 1),
@@ -97,12 +97,12 @@ private theorem czx_region_phase_prod (R : Finset (TorusVertex width height))
     (η : RegionIncidentConfig (czxPEPS width height) R) :
     (∏ w : {w // w ∈ R}, ∏ e : IncidentEdge (torusGraph width height) w.1,
       czxLegPhase (η ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩)) =
-      ∏ e : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge R e},
-        czxLegPhase (η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) := by
+      ∏ e : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e},
+        czxLegPhase (η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) := by
   classical
-  change ({e : Edge (torusGraph width height) // IsRegionIncidentEdge R e} → Fin 4) at η
+  change ({e : Edge (torusGraph width height) // ManyBody.IsRegionIncidentEdge R e} → Fin 4) at η
   let ζ : Edge (torusGraph width height) → Fin 4 :=
-    fun e => if he : IsRegionIncidentEdge R e then η ⟨e,he⟩ else 0
+    fun e => if he : ManyBody.IsRegionIncidentEdge R e then η ⟨e,he⟩ else 0
   have hz (w : {w // w ∈ R}) (e : IncidentEdge (torusGraph width height) w.1) :
       ζ e.1 = η ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩ := by
     dsimp [ζ]
@@ -116,16 +116,16 @@ private theorem czx_region_phase_prod (R : Finset (TorusVertex width height))
       exact Finset.prod_coe_sort R (fun v =>
         ∏ e : IncidentEdge (torusGraph width height) v, czxLegPhase (ζ e.1))
     _ = ∏ e : Edge (torusGraph width height),
-          if IsRegionBoundaryEdge R e then czxLegPhase (ζ e) else 1 :=
+          if ManyBody.IsRegionBoundaryEdge R e then czxLegPhase (ζ e) else 1 :=
       czx_phase_prod_incidence R ζ
-    _ = ∏ e : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge R e},
+    _ = ∏ e : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e},
           czxLegPhase (ζ e.1) := by
       rw [← Finset.prod_filter]
       exact Finset.prod_subtype _ (by simp) _
     _ = _ := by
       apply Finset.prod_congr rfl
       intro e _
-      simp [ζ, isRegionBoundaryEdge_touches R e.2]
+      simp [ζ, ManyBody.isRegionBoundaryEdge_touches R e.2]
 
 /-- Flip both qubits on every actual crossing bond of the region. -/
 def czxRegionBoundaryFlip (R : Finset (TorusVertex width height)) :

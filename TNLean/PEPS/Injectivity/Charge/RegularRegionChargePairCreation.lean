@@ -42,7 +42,7 @@ private def referencePairSplit (e₀ e₁ : Internal (Γ := Γ) R) (hne : e₀ �
     (((Equiv.refl G).prodCongr (Equiv.funSplitAt ⟨e₁, hne.symm⟩ G)).trans
       (Equiv.prodAssoc G G _).symm)
 private abbrev Rest (o : Vertex R) (e₀ e₁ : Internal (Γ := Γ) R) (hne : e₀ ≠ e₁) :=
-  ({f : Edge Γ // IsRegionBoundaryEdge R f} → G) ×
+  ({f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) ×
     OtherReferences (G := G) R e₀ e₁ hne ×
     RootedGroupLabels (G := G) o × (RegionCycleEdge (Γ := Γ) R T → G)
 private def referenceSplit (o : Vertex R)
@@ -204,7 +204,7 @@ theorem regularRegionChargeReferenceMatrix_mulVec
     (e₀ e₁ : Internal (Γ := Γ) R) (hne : e₀ ≠ e₁)
     (Q : Matrix (G × G) (G × G) ℂ) (χ : G → ℂ) (p : G)
     (hact : Q *ᵥ (fun _ : G × G => (1 : ℂ)) = regularChargePairCoefficient χ p)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne Q *ᵥ
         (fun α => regularProjectorOpenRegionMatrix R α θ) =
       fun α => regularProjectorChargePairOpenRegionMatrix R e₀ e₁ χ p α θ := by
@@ -215,7 +215,7 @@ theorem regularRegionChargeReferenceMatrix_mulVec
   let S := referenceSplit (G := G) R T o e₀ e₁ hne
   let F (b : Rest (G := G) R T o e₀ e₁ hne) : ℂ :=
     (Fintype.card G : ℂ) * (Fintype.card G : ℂ)⁻¹ ^ R.card *
-      regularLegProjector {e : Edge Γ // IsRegionBoundaryEdge R e} b.1 θ *
+      regularLegProjector {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} b.1 θ *
       (if b.2.2.2 = 1 then 1 else 0)
   have hcol (s : G × G) (b : Rest (G := G) R T o e₀ e₁ hne) :
       regularProjectorOpenRegionMatrix R (E.symm (S.symm (s,b))) θ = F b := by
@@ -306,7 +306,7 @@ private theorem braided_column_coordinates
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : Vertex R)
     (e₀ e₁ : Internal (Γ := Γ) R) (χ : G → ℂ) (p k : G)
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorWeightedTwistedRegionMatrix R (fun _ => 1)
         (fun η => χ (p * (η ⟨e₁.1,Or.inl e₁.2.1⟩)⁻¹ * k⁻¹ *
           η ⟨e₀.1,Or.inl e₀.2.1⟩))
@@ -334,7 +334,7 @@ private theorem braided_column_coordinates
 
 private theorem initial_weighted_column (e₀ e₁ : Internal (Γ := Γ) R)
     (χ : G → ℂ) (p : G) (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorWeightedTwistedRegionMatrix R (fun _ => 1)
         (fun η => χ (p * (η ⟨e₁.1,Or.inl e₁.2.1⟩)⁻¹ * (1 : G)⁻¹ *
           η ⟨e₀.1,Or.inl e₀.2.1⟩)) α θ =
@@ -364,7 +364,7 @@ theorem regularRegionChargeReferenceMatrix_mulVec_braided
     (hσ : ∀ g, LinearMap.adjoint (σ g) = σ g⁻¹)
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : Vertex R)
     (e₀ e₁ : Internal (Γ := Γ) R) (hne : e₀ ≠ e₁) (p k : G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularRegionChargeReferenceMatrix R T hT htree o e₀ e₁ hne
         (regularChargePairReturnProjection σ.character p) *ᵥ
         (fun α => regularProjectorWeightedTwistedRegionMatrix R (fun _ => 1)

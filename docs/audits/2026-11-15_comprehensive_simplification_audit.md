@@ -72,7 +72,7 @@ Line savings are estimates unless explicitly measured.
 
 2. `TNLean.PEPS.IsCrossingEdge` in
    `PEPS/RegionBlock/CoarseThreeSiteCoherentFrame.lean:91` takes `_A : Tensor G d`
-   but defines only `IsRegionBoundaryEdge R g ∧ IsRegionBoundaryEdge R' g`.
+   but defines only `ManyBody.IsRegionBoundaryEdge R g ∧ ManyBody.IsRegionBoundaryEdge R' g`.
    The defining current-main file is verified. The local migration census is
    202 matching lines across 27 production files, not 202 distinct consumers.
    Remove the unused argument, then remove physical-dimension/tensor binders

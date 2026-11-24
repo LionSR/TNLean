@@ -57,7 +57,7 @@ private theorem regularLegProjector_numbering {ι : Type*} [Fintype ι] [Decidab
 private theorem canonical_boundary_row (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v // v ∈ R})
-    {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     (y x : Fin b → G) :
     regularProjectorOpenRegionMatrix R
         ((regularRegionCoordinatesEquiv R T hT htree o).symm
@@ -78,7 +78,7 @@ theorem isGInjective_regularOpenRegionMatrix_of_connected
     (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     IsGInjective (regularBoundaryRepresentation b)
       (Matrix.mulVecLin (regularOpenRegionMatrix a R e)) := by
   classical

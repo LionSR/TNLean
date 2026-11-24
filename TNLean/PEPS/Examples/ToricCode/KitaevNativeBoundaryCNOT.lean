@@ -35,7 +35,7 @@ local instance kitaevBoundaryHeightOne : Fact (1 < height) :=
 local notation "TV" => TorusVertex width height
 local notation "Γₜ" => torusGraph width height
 private abbrev RB (v : TV) :=
-  {e : Edge Γₜ // IsRegionBoundaryEdge (torusPlaquetteRegion v) e}
+  {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) e}
 private abbrev RV (v : TV) := {w : TV // w ∈ torusPlaquetteRegion v}
 
 private theorem exists_boundary_eval (v : TV) (i : Fin 4) (second : Bool) :
@@ -131,7 +131,7 @@ private theorem translated_region (v : TV) :
 
 private theorem boundary_card (v : TV) : Fintype.card (RB v) = 8 := by
   have hc : Fintype.card (RB ((0,0) : TV)) = 8 := by
-    change Fintype.card {e : Edge Γₜ // IsRegionBoundaryEdge
+    change Fintype.card {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge
       (torusPlaquetteRegion ((0,0) : TV)) e} = 8
     rw [origin_region]
     exact card_regionBoundaryEdge_torusRectangle 0 0 2 2 (by omega) (by omega)
@@ -139,7 +139,7 @@ private theorem boundary_card (v : TV) : Fintype.card (RB v) = 8 := by
       (by have := Fact.out (p := 2 < height); omega) Fact.out Fact.out
   rw [show Fintype.card (RB v) = Fintype.card (RB ((0,0) : TV)) from ?_]
   · exact hc
-  · change Fintype.card {e : Edge Γₜ // IsRegionBoundaryEdge (torusPlaquetteRegion v) e} = _
+  · change Fintype.card {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) e} = _
     rw [← translated_region v]
     exact Fintype.card_congr (regionBoundaryEdgeMapEquiv
       (translate v.1 v.2) (torusPlaquetteRegion ((0,0) : TV)))

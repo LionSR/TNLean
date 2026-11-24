@@ -78,14 +78,14 @@ variable [Group G]
 incident to a region. At vertex `v`, the second configuration is translated
 by `q v`. Source: SCP10, regular-basis contraction, lines 1935–1957. -/
 def IsRegionLabelCompatible (R : Finset V) (q : {v : V // v ∈ R} → G)
-    (η θ : {e : Edge Γ // IsRegionIncidentEdge R e} → G) : Prop :=
+    (η θ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) : Prop :=
   ∀ (v : {v : V // v ∈ R}) (e : IncidentEdge Γ v.1),
     η ⟨e.1, isRegionIncidentEdge_of_regionVertex R v e⟩ =
       q v * θ ⟨e.1, isRegionIncidentEdge_of_regionVertex R v e⟩
 
 instance [Fintype V] [DecidableRel Γ.Adj] [DecidableEq G] (R : Finset V)
     (q : {v : V // v ∈ R} → G)
-    (η θ : {e : Edge Γ // IsRegionIncidentEdge R e} → G) :
+    (η θ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :
     Decidable (IsRegionLabelCompatible R q η θ) :=
   inferInstanceAs (Decidable (∀ (v : {v : V // v ∈ R}) (e : IncidentEdge Γ v.1),
     η ⟨e.1, isRegionIncidentEdge_of_regionVertex R v e⟩ =
@@ -95,7 +95,7 @@ instance [Fintype V] [DecidableRel Γ.Adj] [DecidableEq G] (R : Finset V)
 Source: SCP10, regular-basis contraction, lines 1935–1957. -/
 theorem IsRegionLabelCompatible.internalEdge_eq {R : Finset V}
     {q : {v : V // v ∈ R} → G}
-    {η θ : {e : Edge Γ // IsRegionIncidentEdge R e} → G}
+    {η θ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G}
     (h : IsRegionLabelCompatible R q η θ)
     (e : Edge Γ) (h₁ : e.1.1 ∈ R) (h₂ : e.1.2 ∈ R) :
     q ⟨e.1.1, h₁⟩ = q ⟨e.1.2, h₂⟩ := by
@@ -107,7 +107,7 @@ theorem IsRegionLabelCompatible.internalEdge_eq {R : Finset V}
 local translations in a connected region are one common translation. -/
 theorem IsRegionLabelCompatible.exists_common_label {R : Finset V}
     (hR : (Γ.induce (R : Set V)).Connected) {q : {v : V // v ∈ R} → G}
-    {η θ : {e : Edge Γ // IsRegionIncidentEdge R e} → G}
+    {η θ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G}
     (h : IsRegionLabelCompatible R q η θ) : ∃ g : G, ∀ v, q v = g :=
   (regionLabels_constant_iff_internalEdge_eq R hR q).mpr h.internalEdge_eq
 
@@ -115,7 +115,7 @@ theorem IsRegionLabelCompatible.exists_common_label {R : Finset V}
 Source: SCP10, finite-region contraction, lines 1935–1957. -/
 theorem IsRegionLabelCompatible.exists_translation {R : Finset V}
     (hR : (Γ.induce (R : Set V)).Connected) {q : {v : V // v ∈ R} → G}
-    {η θ : {e : Edge Γ // IsRegionIncidentEdge R e} → G}
+    {η θ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G}
     (h : IsRegionLabelCompatible R q η θ) :
     ∃ g : G, (∀ v, q v = g) ∧ η = fun e => g * θ e := by
   obtain ⟨g, hg⟩ := h.exists_common_label hR
@@ -129,7 +129,7 @@ and the corresponding simultaneous translation of incident labels.
 Source: SCP10, finite-region contraction, lines 1935–1957. -/
 theorem isRegionLabelCompatible_iff_exists_translation (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected) (q : {v : V // v ∈ R} → G)
-    (η θ : {e : Edge Γ // IsRegionIncidentEdge R e} → G) :
+    (η θ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :
     IsRegionLabelCompatible R q η θ ↔
       ∃ g : G, (∀ v, q v = g) ∧ η = fun e => g * θ e := by
   refine ⟨fun h => h.exists_translation hR, ?_⟩
@@ -144,7 +144,7 @@ translations, without requiring uniqueness from an incident edge. -/
 theorem sum_regionLabelCompatible_eq_sum_translation [Fintype V] [DecidableRel Γ.Adj]
     [Fintype G] [DecidableEq G]
     (R : Finset V) (hR : (Γ.induce (R : Set V)).Connected)
-    (η θ : {e : Edge Γ // IsRegionIncidentEdge R e} → G) :
+    (η θ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :
     (∑ q : {v : V // v ∈ R} → G,
       if IsRegionLabelCompatible R q η θ then (1 : ℂ) else 0) =
       ∑ g : G, if η = (fun e => g * θ e) then (1 : ℂ) else 0 := by

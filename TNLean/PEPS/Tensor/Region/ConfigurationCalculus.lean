@@ -162,20 +162,20 @@ theorem virtualConfigCongr_mergeVirtualConfig (A B : Tensor G d)
 first configuration and all remaining edges read the second. -/
 noncomputable def regionMerge (A : Tensor G d) (R : Finset V)
     (p : VirtualConfig A × VirtualConfig A) : VirtualConfig A :=
-  mergeVirtualConfig A (IsRegionIncidentEdge (G := G) R) p.1 p.2
+  mergeVirtualConfig A (ManyBody.IsRegionIncidentEdge (G := G) R) p.1 p.2
 
 omit [Fintype V] in
 @[simp]
 theorem regionMerge_of_incident (A : Tensor G d) (R : Finset V)
     (p : VirtualConfig A × VirtualConfig A) {e : Edge G}
-    (he : IsRegionIncidentEdge (G := G) R e) : regionMerge A R p e = p.1 e := by
+    (he : ManyBody.IsRegionIncidentEdge (G := G) R e) : regionMerge A R p e = p.1 e := by
   exact mergeVirtualConfig_of_pos A _ _ _ he
 
 omit [Fintype V] in
 @[simp]
 theorem regionMerge_of_not_incident (A : Tensor G d) (R : Finset V)
     (p : VirtualConfig A × VirtualConfig A) {e : Edge G}
-    (he : ¬ IsRegionIncidentEdge (G := G) R e) : regionMerge A R p e = p.2 e := by
+    (he : ¬ ManyBody.IsRegionIncidentEdge (G := G) R e) : regionMerge A R p e = p.2 e := by
   exact mergeVirtualConfig_of_neg A _ _ _ he
 
 omit [Fintype V] in
@@ -202,8 +202,8 @@ configurations agree on every edge incident to both the merge region and the pro
 theorem regionProd_p2_eq_merge_of_incident_agree (A : Tensor G d) (T B : Finset V)
     (σ : RegionPhysicalConfig (V := V) (d := d) B)
     (p : VirtualConfig A × VirtualConfig A)
-    (hp : ∀ e : Edge G, IsRegionIncidentEdge (G := G) T e →
-      IsRegionIncidentEdge (G := G) B e → p.1 e = p.2 e) :
+    (hp : ∀ e : Edge G, ManyBody.IsRegionIncidentEdge (G := G) T e →
+      ManyBody.IsRegionIncidentEdge (G := G) B e → p.1 e = p.2 e) :
     (∏ w : {w : V // w ∈ B}, A.component w.1 (fun ie => p.2 ie.1) (σ w)) =
       ∏ w : {w : V // w ∈ B},
         A.component w.1 (fun ie => regionMerge (G := G) A T p ie.1) (σ w) := by
@@ -211,11 +211,11 @@ theorem regionProd_p2_eq_merge_of_incident_agree (A : Tensor G d) (T B : Finset 
   refine Finset.prod_congr rfl (fun w _ => ?_)
   congr 1
   funext ie
-  have hB : IsRegionIncidentEdge (G := G) B ie.1 := by
+  have hB : ManyBody.IsRegionIncidentEdge (G := G) B ie.1 := by
     rcases ie.2 with hie | hie
     · exact Or.inl (by rw [hie]; exact w.2)
     · exact Or.inr (by rw [hie]; exact w.2)
-  by_cases hT : IsRegionIncidentEdge (G := G) T ie.1
+  by_cases hT : ManyBody.IsRegionIncidentEdge (G := G) T ie.1
   · rw [regionMerge_of_incident A T p hT, hp ie.1 hT hB]
   · rw [regionMerge_of_not_incident A T p hT]
 
@@ -231,7 +231,7 @@ theorem complementProd_eq_merge (A : Tensor G d) (R : Finset V)
         A.component w.1 (fun ie => regionMerge (G := G) A R p ie.1) (τ w) := by
   apply regionProd_p2_eq_merge_of_incident_agree
   intro e hR hcompl
-  have hbdry : IsRegionBoundaryEdge (G := G) R e := by
+  have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) R e := by
     rcases hR with hR1 | hR2 <;> rcases hcompl with hc1 | hc2
     · exact absurd hR1 (Finset.mem_sdiff.mp hc1).2
     · exact Or.inl ⟨hR1, (Finset.mem_sdiff.mp hc2).2⟩
@@ -261,8 +261,8 @@ theorem regionBoundaryLabel_regionMerge_of_subset_left {T H : Finset V} (hHT : H
       regionBoundaryLabel (G := G) A H p.1 := by
   funext f
   simp only [regionBoundaryLabel_apply]
-  have hinc : IsRegionIncidentEdge (G := G) T f.1 := by
-    rcases isRegionBoundaryEdge_touches (G := G) H f.2 with h1 | h2
+  have hinc : ManyBody.IsRegionIncidentEdge (G := G) T f.1 := by
+    rcases ManyBody.isRegionBoundaryEdge_touches (G := G) H f.2 with h1 | h2
     · exact Or.inl (hHT h1)
     · exact Or.inr (hHT h2)
   rw [regionMerge_of_incident (G := G) A _ p hinc]
@@ -284,9 +284,9 @@ theorem regionBoundaryLabel_regionMerge_compl_of_subset {T K : Finset V}
   classical
   funext f
   simp only [regionBoundaryLabel_apply]
-  by_cases hinc : IsRegionIncidentEdge (G := G) T f.1
+  by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) T f.1
   · -- `f` is a boundary edge of `univ \ K` and `T`-incident: it is a `T`-boundary edge.
-    have hbdry : IsRegionBoundaryEdge (G := G) T f.1 := by
+    have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) T f.1 := by
       rcases f.2 with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
       · have h2K : f.1.1.2 ∈ K := by
           by_contra hk; exact h2nothost (Finset.mem_sdiff.mpr ⟨Finset.mem_univ _, hk⟩)
@@ -320,7 +320,7 @@ theorem regionProd_p1_eq_merge_of_subset {T B : Finset V} (hBT : B ⊆ T)
         A.component w.1 (fun ie => regionMerge (G := G) A T p ie.1) (σ w) := by
   apply regionProd_subtype_congr
   intro ie hie
-  have hinc : IsRegionIncidentEdge (G := G) T ie :=
+  have hinc : ManyBody.IsRegionIncidentEdge (G := G) T ie :=
     hie.elim (fun h => Or.inl (hBT h)) (fun h => Or.inr (hBT h))
   rw [regionMerge_of_incident (G := G) A _ p hinc]
 
@@ -340,11 +340,11 @@ theorem regionProd_p2_eq_merge_of_compl {T B : Finset V} (hBT : B ⊆ Finset.uni
   classical
   apply regionProd_subtype_congr
   intro ie hie
-  have hcompl : IsRegionIncidentEdge (G := G) (Finset.univ \ T) ie :=
+  have hcompl : ManyBody.IsRegionIncidentEdge (G := G) (Finset.univ \ T) ie :=
     hie.elim (fun h => Or.inl (hBT h)) (fun h => Or.inr (hBT h))
-  by_cases hinc : IsRegionIncidentEdge (G := G) T ie
-  · have hbdry : IsRegionBoundaryEdge (G := G) T ie :=
-      isRegionBoundaryEdge_of_disjoint_incident (G := G) (Finset.univ \ T) T
+  by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) T ie
+  · have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) T ie :=
+      ManyBody.isRegionBoundaryEdge_of_disjoint_incident (G := G) (Finset.univ \ T) T
         Finset.sdiff_disjoint hcompl hinc
     rw [regionMerge_of_incident (G := G) A _ p hinc]
     have := congrFun hp ⟨ie, hbdry⟩

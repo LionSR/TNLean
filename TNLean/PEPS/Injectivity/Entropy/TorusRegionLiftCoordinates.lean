@@ -50,7 +50,7 @@ theorem regularProjectorTwistedRegionMatrix_coordinates_of_torusRegionIntegerLif
     (hT : T ≤ (torusGraph width height).induce (R : Set (TorusVertex width height)))
     (htree : T.IsTree) (o : {v // v ∈ R}) (g h : G) (hgh : Commute g h)
     (c : RegularRegionCoordinates (Γ := torusGraph width height) (G := G) R T o)
-    (θ : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorTwistedRegionMatrix R (torusClosureEdgeAssignment g h)
         ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
       regularProjectorOpenRegionMatrix R
@@ -88,11 +88,11 @@ theorem regularProjectorTwistedRegionMatrix_exists_normalized_ancilla_of_torusRe
       ∑ a, ∑ r, ∑ z, star (φ (a, r, z)) * φ (a, r, z) = 1 ∧
         ∀ (g h : G), Commute g h →
         ∀ (c : RegularRegionCoordinates (Γ := torusGraph width height) (G := G) R T o)
-        (θ : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge R e} → G),
+        (θ : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e} → G),
         regularProjectorTwistedRegionMatrix R (torusClosureEdgeAssignment g h)
             ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
           (γ : ℂ) * regularLegProjector
-            {e : Edge (torusGraph width height) // IsRegionBoundaryEdge R e} c.1
+            {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e} c.1
             (regularRegionBoundaryTransport R (torusRegionLiftRootGauge R L g h o).1
               (torusClosureEdgeAssignment g h) θ) * φ c.2 := by
   obtain ⟨γ, hγ, φ, hnorm, hfactor⟩ :=

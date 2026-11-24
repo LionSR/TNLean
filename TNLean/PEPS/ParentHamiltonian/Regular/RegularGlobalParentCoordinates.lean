@@ -188,7 +188,7 @@ theorem dependentRegionSlice_regularInverse_halfEdgeRightMul
     (hF : ∀ v α η, (∑ s : Fin d, F v α s * a v η s) =
       regularLegProjector (IncidentEdge Γ v) α η)
     (R : Finset V) (r : Edge Γ → G)
-    (hr : ∀ e, IsRegionBoundaryEdge R e → r e = 1)
+    (hr : ∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1)
     (P : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor a) R P)
     (Ψ : (V → Fin d) → ℂ) (hΨ : ManyBody.place (X := fun _ ↦ Fin _) R P *ᵥ Ψ = 0)
@@ -248,7 +248,7 @@ theorem globalDependentPhysicalMap_regularInverse_singleEdgeRightMul
       globalDependentPhysicalMap F Ψ (fun w => α w.1) := by
   classical
   let r := Function.update (1 : Edge Γ → G) e g
-  have hr : ∀ f, IsRegionBoundaryEdge R f → r f = 1 := by
+  have hr : ∀ f, ManyBody.IsRegionBoundaryEdge R f → r f = 1 := by
     intro f hf
     have hne : f ≠ e := by
       rintro rfl

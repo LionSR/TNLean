@@ -54,9 +54,9 @@ theorem stateCoeff_eq_openRegionComplement_unconditional (A : Tensor Γ d) (R : 
       have hS : ¬ Nonempty (RegionIncidentConfig A (Finset.univ \ R)) := by
         rintro ⟨θ⟩
         apply h
-        refine ⟨fun e => if he : IsRegionIncidentEdge R e then η ⟨e, he⟩
+        refine ⟨fun e => if he : ManyBody.IsRegionIncidentEdge R e then η ⟨e, he⟩
           else θ ⟨e, ?_⟩⟩
-        simp only [IsRegionIncidentEdge, not_or] at he
+        simp only [ManyBody.IsRegionIncidentEdge, not_or] at he
         exact Or.inl (by simp [he.1])
       let : IsEmpty (RegionIncidentConfig A (Finset.univ \ R)) :=
         not_nonempty_iff.mp hS

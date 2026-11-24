@@ -84,7 +84,7 @@ private noncomputable def transportedEdgeCoeffIdentityWitness
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
     (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (hE : A.bondDim f.1 = B.bondDim f.1)
     (Z : GL (Fin (B.bondDim f.1)) ℂ)
     (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
@@ -132,9 +132,9 @@ private theorem exists_torusCovariantAbsorbedGaugeFamily_of_referenceWitnesses
   classical
   let Rh := wh.region
   let Rv := wv.region
-  let fh : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge Rh e} :=
+  let fh : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge Rh e} :=
     ⟨torusRightEdge ph, wh.isBoundary⟩
-  let fv : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge Rv e} :=
+  let fv : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge Rv e} :=
     ⟨torusUpEdge pv, wv.isBoundary⟩
   let hEh := congr_fun hbd (torusRightEdge ph)
   let hEv := congr_fun hbd (torusUpEdge pv)

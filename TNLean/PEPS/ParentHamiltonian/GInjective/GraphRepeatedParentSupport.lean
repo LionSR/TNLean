@@ -28,7 +28,7 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 private abbrev RV (R : Finset V) := {v : V // v ∈ R}
 private abbrev RI (R : Finset V) := {f : Edge Γ // f.1.1 ∈ R ∧ f.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {f : Edge Γ // IsRegionBoundaryEdge R f}
+private abbrev RB (R : Finset V) := {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f}
 variable {G I : Type*} [Group G] [Fintype G] [Fintype I] [DecidableEq I]
 
 /-- Dressing by the identity gives the original averaging-site tensor. -/
@@ -139,7 +139,7 @@ private theorem regionHalfEdgeLabelEquiv_global_update {X : Type*}
   · funext g
     have hne : g.1 ≠ f.1 := by
       intro h
-      have hg : IsRegionBoundaryEdge R f.1 := h ▸ g.2
+      have hg : ManyBody.IsRegionBoundaryEdge R f.1 := h ▸ g.2
       rcases hg with ht | hh
       · exact ht.2 f.2.2
       · exact hh.1 f.2.1

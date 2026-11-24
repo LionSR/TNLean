@@ -122,7 +122,7 @@ theorem IsGIsometric.exists_unitary_torusThreePlaquetteDoubleExchange
     ∃ W : Matrix ({x : X // x ∈ R} → Fin d) ({x : X // x ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({x : X // x ∈ R} → Fin d) ℂ ∧
       ManyBody.place («X» := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
-      (∀ (t : Fin 3 → G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge R e} → G),
+      (∀ (t : Fin 3 → G) (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite A
           (torusThreePlaquetteFluxAssignment v t))) R
           (fun f => Fintype.equivFin G (θ f)) =

@@ -60,9 +60,9 @@ private theorem exists_torusRegionBoundaryCoordinates_of_isSimplyConnected
       (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
       (htreeR : TR.IsTree) (htreeS : TS.IsTree)
       (_oR : {v : X // v ∈ R}) (oS : {v : X // v ∈ Finset.univ \ R})
-      (e : {f : Edge Γₜ // IsRegionBoundaryEdge R f} ≃
-        Fin (Fintype.card {f : Edge Γₜ // IsRegionBoundaryEdge R f} - 1 + 1))
-      (p : {f : Edge Γₜ // IsRegionBoundaryEdge R f} →
+      (e : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} ≃
+        Fin (Fintype.card {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} - 1 + 1))
+      (p : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} →
         ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS),
       ∀ f, torusWalkWinding
           ((p f).map (SimpleGraph.Embedding.induce
@@ -75,7 +75,7 @@ private theorem exists_torusRegionBoundaryCoordinates_of_isSimplyConnected
   obtain ⟨TS, hTS, htreeS⟩ := hS.exists_isTree_le
   obtain ⟨oR⟩ := hR.nonempty
   obtain ⟨oS⟩ := hS.nonempty
-  let β := {f : Edge Γₜ // IsRegionBoundaryEdge R f}
+  let β := {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f}
   let : Nonempty β := nonempty_torusRegionBoundaryEdge_of_isSimplyConnected R hSC hR
   have hcard : 1 ≤ Fintype.card β := Fintype.card_pos
   let e : β ≃ Fin (Fintype.card β - 1 + 1) :=
@@ -93,7 +93,7 @@ theorem IsGIsometric.exists_torusPhysicalCut_common_density_of_isSimplyConnected
     (ha : IsGIsometric (torusLegRep (leftRegularMatrix G)) (siteMap a))
     (R : Finset X) (hR : ((Γₜ).induce (R : Set X)).Connected)
     (hSC : IsSimplyConnected (torusRegionRealization R)) :
-    let b := Fintype.card {f : Edge Γₜ // IsRegionBoundaryEdge R f}
+    let b := Fintype.card {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f}
     ∃ ρ : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ,
       ∀ {I : Type*} [Fintype I] (pairs : I → G × G)
         (_hcomm : ∀ i, Commute (pairs i).1 (pairs i).2) (μ : I → ℂ),

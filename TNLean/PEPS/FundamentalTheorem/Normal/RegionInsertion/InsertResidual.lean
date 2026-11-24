@@ -119,7 +119,7 @@ theorem insertResidual_eq_zero_of_inconsistent (A : Tensor G d) (R : Finset V)
     {v : V} (μ : RegionBoundaryConfig (G := G) A (insert v R))
     (σ : RegionPhysicalConfig (V := V) (d := d) (insert v R))
     (η : LocalVirtualConfig A v)
-    (g : {g : Edge G // IsRegionBoundaryEdge (G := G) (insert v R) g})
+    (g : {g : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) g})
     (hgv : g.1.1.1 = v ∨ g.1.1.2 = v)
     (hne : μ g ≠ η ⟨g.1, hgv⟩) :
     insertResidual (G := G) A R μ σ η = 0 := by
@@ -203,7 +203,7 @@ bond product is the factor by which the blocked weight overcounts the residual. 
 noncomputable def insertOuterBondProd (A : Tensor G d) (R : Finset V) {v : V} : ℕ :=
   ∏ e ∈ Finset.univ.filter
       (fun e : Edge G =>
-        IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e),
+        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e),
     A.bondDim e
 
 omit [Fintype V] [DecidableRel G.Adj] in
@@ -211,10 +211,10 @@ omit [Fintype V] [DecidableRel G.Adj] in
 endpoint lies in `insert v R` and its other endpoint lies outside `insert v R`. -/
 theorem isRegionBoundaryEdge_insert_of_vIncident_not_regionIncident (R : Finset V)
     {v : V} {e : Edge G} (hev : e.1.1 = v ∨ e.1.2 = v)
-    (hnr : ¬ IsRegionIncidentEdge (G := G) R e) :
-    IsRegionBoundaryEdge (G := G) (insert v R) e := by
+    (hnr : ¬ ManyBody.IsRegionIncidentEdge (G := G) R e) :
+    ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e := by
   have := G.ne_of_adj e.2.2
-  simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge, Finset.mem_insert] at *
+  simp only [ManyBody.IsRegionBoundaryEdge, ManyBody.IsRegionIncidentEdge, Finset.mem_insert] at *
   grind
 
 /-- The inserted-site consistency predicate: `μ` and `η` agree on every `v`-incident
@@ -224,7 +224,7 @@ labels) constrain; consistency is the condition under which the residual at `η`
 nonempty, given by the complement of `insertResidual_eq_zero_of_inconsistent`. -/
 def InsertConsistent (A : Tensor G d) (R : Finset V) {v : V}
     (μ : RegionBoundaryConfig (G := G) A (insert v R)) (η : LocalVirtualConfig A v) : Prop :=
-  ∀ (g : {g : Edge G // IsRegionBoundaryEdge (G := G) (insert v R) g})
+  ∀ (g : {g : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) g})
       (hgv : g.1.1.1 = v ∨ g.1.1.2 = v), μ g = η ⟨g.1, hgv⟩
 
 open scoped Classical in
@@ -235,7 +235,7 @@ noncomputable def insertOverwrite (A : Tensor G d) (R : Finset V) {v : V}
     (μ : RegionBoundaryConfig (G := G) A (insert v R)) (ζ : VirtualConfig A) :
     VirtualConfig A :=
   fun e =>
-    if he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e
+    if he : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e
       then μ ⟨e, he.1⟩ else ζ e
 
 open scoped Classical in
@@ -245,7 +245,7 @@ blocked weight leaves free. -/
 noncomputable def insertOuterLegs (A : Tensor G d) (R : Finset V) {v : V}
     (ζ : VirtualConfig A) :
     (e : {e : Edge G //
-        IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e}) →
+        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e}) →
       Fin (A.bondDim e.1) :=
   fun e => ζ e.1
 
@@ -254,10 +254,10 @@ omit [Fintype V] [DecidableRel G.Adj] in
 and is not incident to `v`. -/
 theorem isRegionBoundaryEdge_of_insert_regionIncident (R : Finset V)
     {v : V} (hv : v ∉ R) {e : Edge G}
-    (hb : IsRegionBoundaryEdge (G := G) (insert v R) e)
-    (hinc : IsRegionIncidentEdge (G := G) R e) :
-    IsRegionBoundaryEdge (G := G) R e ∧ ¬ (e.1.1 = v ∨ e.1.2 = v) := by
-  simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge, Finset.mem_insert] at *
+    (hb : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e)
+    (hinc : ManyBody.IsRegionIncidentEdge (G := G) R e) :
+    ManyBody.IsRegionBoundaryEdge (G := G) R e ∧ ¬ (e.1.1 = v ∨ e.1.2 = v) := by
+  simp only [ManyBody.IsRegionBoundaryEdge, ManyBody.IsRegionIncidentEdge, Finset.mem_insert] at *
   grind
 
 omit [Fintype V] in
@@ -267,7 +267,7 @@ original configuration elsewhere; on `R`-incident edges it is unchanged, so the 
 product over `R` is unchanged. -/
 theorem insertOverwrite_eq_of_regionIncident (A : Tensor G d) (R : Finset V) {v : V}
     (μ : RegionBoundaryConfig (G := G) A (insert v R)) (ζ : VirtualConfig A)
-    {e : Edge G} (hinc : IsRegionIncidentEdge (G := G) R e) :
+    {e : Edge G} (hinc : ManyBody.IsRegionIncidentEdge (G := G) R e) :
     insertOverwrite (G := G) A R μ ζ e = ζ e := by
   rw [insertOverwrite, dite_eq_right]
   rintro ⟨_, hni⟩
@@ -289,7 +289,7 @@ theorem insertOverwrite_mem_residualFilter (A : Tensor G d) (R : Finset V) {v : 
   · -- `insert v R`-boundary label is `μ`.
     funext g
     rw [regionBoundaryLabel_apply]
-    by_cases hinc : IsRegionIncidentEdge (G := G) R g.1
+    by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R g.1
     · -- `R`-incident boundary edge of `insert v R`: it is `R`-boundary, not `v`-incident,
       -- so the bridge label reads `μ`, and the bridge hypothesis fixes `ζ` to it.
       rw [insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ hinc]
@@ -302,11 +302,11 @@ theorem insertOverwrite_mem_residualFilter (A : Tensor G d) (R : Finset V) {v : 
       rw [insertOverwrite, dite_eq_left ⟨g.2, hinc⟩]
   · -- `v`-incident label is `η`.
     funext ie
-    by_cases hinc : IsRegionIncidentEdge (G := G) R ie.1
+    by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R ie.1
     · -- `v`-incident and `R`-incident: it is an `R`-boundary edge labeled `η` by the bridge.
       rw [insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ hinc]
       -- `ie` is incident to `v ∈ insert v R` and `R`-incident, hence `R`-boundary.
-      have hb : IsRegionBoundaryEdge (G := G) R ie.1 := by
+      have hb : ManyBody.IsRegionBoundaryEdge (G := G) R ie.1 := by
         rcases ie.2 with hev | hev
         · -- `ie.1.1 = v ∉ R`; the other endpoint must be in `R` by incidence.
           have h1 : ie.1.1.1 ∉ R := by rw [hev]; exact hv
@@ -322,7 +322,7 @@ theorem insertOverwrite_mem_residualFilter (A : Tensor G d) (R : Finset V) {v : 
       -- `boundaryLabelOfInsert` reads `η` at the `v`-incident edge.
       rw [hbr]
     · -- `v`-incident, non-`R`-incident: a mult-edge, overwrite reads `μ`; consistency gives `η`.
-      have hb : IsRegionBoundaryEdge (G := G) (insert v R) ie.1 :=
+      have hb : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) ie.1 :=
         isRegionBoundaryEdge_insert_of_vIncident_not_regionIncident (G := G) R ie.2 hinc
       rw [insertOverwrite, dite_eq_left ⟨hb, hinc⟩]
       exact hcons ⟨ie.1, hb⟩ ie.2
@@ -332,11 +332,11 @@ theorem insertOverwrite_mem_residualFilter (A : Tensor G d) (R : Finset V) {v : 
 reads `ζ'`. -/
 noncomputable def insertFiberConfig (A : Tensor G d) (R : Finset V) {v : V} (ζ' : VirtualConfig A)
     (h : (e : {e : Edge G //
-        IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e}) →
+        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e}) →
       Fin (A.bondDim e.1)) :
     VirtualConfig A :=
   fun e =>
-    if he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e
+    if he : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e
       then h ⟨e, he⟩ else ζ' e
 
 open scoped Classical in
@@ -357,8 +357,8 @@ theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
   classical
   rw [show insertOuterBondProd (G := G) A R (v := v) =
       (Finset.univ : Finset ((e : {e : Edge G //
-        IsRegionBoundaryEdge (G := G) (insert v R) e ∧
-          ¬ IsRegionIncidentEdge (G := G) R e}) → Fin (A.bondDim e.1))).card from ?_]
+        ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+          ¬ ManyBody.IsRegionIncidentEdge (G := G) R e}) → Fin (A.bondDim e.1))).card from ?_]
   · refine Finset.card_nbij'
       (insertOuterLegs (G := G) A R) (insertFiberConfig (G := G) A R ζ') ?_ ?_ ?_ ?_
     · intro ζ _; exact Finset.mem_univ _
@@ -370,8 +370,8 @@ theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
         -- where the reconstruction reads `ζ'`, and `ζ'` has `insert v R`-boundary label `μ`.
         funext g
         rw [regionBoundaryLabel_apply, insertFiberConfig]
-        have hginc : IsRegionIncidentEdge (G := G) R g.1 :=
-          isRegionBoundaryEdge_touches (G := G) R g.2
+        have hginc : ManyBody.IsRegionIncidentEdge (G := G) R g.1 :=
+          ManyBody.isRegionBoundaryEdge_touches (G := G) R g.2
         rw [dite_eq_right (fun hc => hc.2 hginc)]
         rw [boundaryLabelOfInsert]
         by_cases hgv : g.1.1.1 = v ∨ g.1.1.2 = v
@@ -380,8 +380,8 @@ theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
       · -- The reconstruction overwrites to `ζ'`.
         funext e
         rw [insertOverwrite, insertFiberConfig]
-        by_cases he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧
-            ¬ IsRegionIncidentEdge (G := G) R e
+        by_cases he : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+            ¬ ManyBody.IsRegionIncidentEdge (G := G) R e
         · rw [dite_eq_left he]
           -- mult-edge: overwrite reads `μ`, which equals `ζ' e` since `ζ'` has boundary label `μ`.
           have := congrFun hζ'.1 ⟨e, he.1⟩
@@ -394,8 +394,8 @@ theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
       obtain ⟨_, hover⟩ := hζ
       funext e
       simp only [insertFiberConfig, insertOuterLegs]
-      by_cases he : IsRegionBoundaryEdge (G := G) (insert v R) e ∧
-          ¬ IsRegionIncidentEdge (G := G) R e
+      by_cases he : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧
+          ¬ ManyBody.IsRegionIncidentEdge (G := G) R e
       · rw [dite_eq_left he]
       · rw [dite_eq_right he]
         -- off the mult-edges the overwrite is the identity, so `ζ' e = ζ e`.
@@ -411,7 +411,7 @@ theorem insertFiber_card (A : Tensor G d) (R : Finset V) {v : V} (hv : v ∉ R)
     rw [insertOuterBondProd,
       ← Finset.prod_subtype (Finset.univ.filter
           (fun e : Edge G =>
-            IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ IsRegionIncidentEdge (G := G) R e))
+            ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) e ∧ ¬ ManyBody.IsRegionIncidentEdge (G := G) R e))
         (fun e => by simp [Finset.mem_filter]) (fun e => A.bondDim e)]
 
 omit [Fintype V] in
@@ -496,7 +496,7 @@ theorem regionBlockedWeight_bridge_eq_smul_insertResidual (A : Tensor G d) (R : 
     funext g
     rw [regionBoundaryLabel_apply,
       insertOverwrite_eq_of_regionIncident (G := G) A R μ ζ
-        (isRegionBoundaryEdge_touches (G := G) R g.2)]
+        (ManyBody.isRegionBoundaryEdge_touches (G := G) R g.2)]
     exact congrFun hζ.2 g
 
 /-! ### The inserted-site factorization of the blocked weight

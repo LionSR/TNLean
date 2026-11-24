@@ -51,17 +51,17 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 /-- Separate one boundary bond coordinate from the remaining boundary coordinates. -/
 noncomputable def regionBoundaryConfigSplitAt
     (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     RegionBoundaryConfig (G := G) A R ≃
       Fin (A.bondDim f.1) ×
-        ((g : {g : {g : Edge G // IsRegionBoundaryEdge (G := G) R g} // g ≠ f}) →
+        ((g : {g : {g : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R g} // g ≠ f}) →
           Fin (A.bondDim g.1.1)) :=
   Equiv.piSplitAt f (fun g ↦ Fin (A.bondDim g.1))
 
 omit [Fintype V] in
 private theorem sameAwayFromBond_iff_splitAt_snd_eq
     (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (mu nu : RegionBoundaryConfig (G := G) A R) :
     SameAwayFromBond f mu nu ↔
       (regionBoundaryConfigSplitAt (G := G) A R f mu).2 =
@@ -78,10 +78,10 @@ private theorem sameAwayFromBond_iff_splitAt_snd_eq
 Source: arXiv:1804.04964, the virtual insertion equations at lines 563--582. -/
 theorem bondInsertedRegionInsert_splitAt
     (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (j : Fin (A.bondDim f.1))
-    (eta : (g : {g : {g : Edge G // IsRegionBoundaryEdge (G := G) R g} // g ≠ f}) →
+    (eta : (g : {g : {g : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R g} // g ≠ f}) →
       Fin (A.bondDim g.1.1)) :
     let E := regionBoundaryConfigSplitAt (G := G) A R f
     bondInsertedRegionInsert (G := G) A R f M (E.symm (j, eta)) =
@@ -138,9 +138,9 @@ private theorem physicalOpOfRegionInsert_mul_of_apply
 private theorem physicalOpOfBondInsertedRegionInsert_isO1
     (A : Tensor G d) (R : Finset V)
     (hR : RegionBlockedTensorInjective (G := G) A R)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
-    (eta : (g : {g : {g : Edge G // IsRegionBoundaryEdge (G := G) R g} // g ≠ f}) →
+    (eta : (g : {g : {g : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R g} // g ≠ f}) →
       Fin (A.bondDim g.1.1)) :
     let E := regionBoundaryConfigSplitAt (G := G) A R f
     IsO1VirtualOperation
@@ -155,7 +155,7 @@ private theorem physicalOpOfBondInsertedRegionInsert_isO1
 private theorem physicalOpOfBondInsertedRegionInsert_mul
     (A : Tensor G d) (R : Finset V)
     (hR : RegionBlockedTensorInjective (G := G) A R)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M N : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
     physicalOpOfRegionInsert (G := G) A R hR
         (bondInsertedRegionInsert (G := G) A R f (M * N)) =

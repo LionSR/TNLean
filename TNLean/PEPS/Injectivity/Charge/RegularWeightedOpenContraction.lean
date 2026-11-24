@@ -31,8 +31,8 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
 variable {d : ℕ}
-private abbrev RE (R : Finset V) := {e : Edge Γ // IsRegionIncidentEdge R e}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RE (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 /-- The literal weighted open contraction of the original site tensors.
 Source: SCP10, lines 2449–2486 and 2569–2581. -/
 def regularWeightedOpenRegionWeight
@@ -41,7 +41,7 @@ def regularWeightedOpenRegionWeight
     (θ : RB (Γ := Γ) R → G) (σ : {v : V // v ∈ R} → Fin d) : ℂ :=
   ∑ η : RE (Γ := Γ) R → G,
     if (fun f : RB (Γ := Γ) R =>
-      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ then
+      η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ then
       F η * ∏ w : {v : V // v ∈ R}, a w.1
         (regularTwistedLabels u w.1
           (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩)) (σ w)
@@ -87,7 +87,7 @@ theorem regionPhysicalMap_regularProjectorWeightedTwistedRegionMatrix
   apply Finset.sum_congr rfl
   intro η _
   by_cases hb : (fun f : RB (Γ := Γ) R =>
-      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ
+      η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ
   · simp only [hb, ↓reduceIte, Matrix.of_apply]
     simp_rw [mul_left_comm _ (F η)]
     rw [← Finset.mul_sum]
@@ -122,7 +122,7 @@ Source: SCP10, `eq:anyons:chargeon-def`, lines 2432–2453. -/
 theorem regularWeightedOpenRegionWeight_eq_openRegionWeight_regularEdgeCharacterSite
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (R : Finset V) (e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R})
-    (χ : G → ℂ) (p : G) (θ : {b : Edge Γ // IsRegionBoundaryEdge R b} → G) :
+    (χ : G → ℂ) (p : G) (θ : {b : Edge Γ // ManyBody.IsRegionBoundaryEdge R b} → G) :
     regularWeightedOpenRegionWeight a R (fun _ => 1)
         (fun η => χ (p * η ⟨e.1, Or.inl e.2.1⟩)) θ =
       openRegionWeight (groupBondTensor (regularEdgeCharacterSite a e.1 χ p)) R

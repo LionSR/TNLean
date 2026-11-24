@@ -32,7 +32,7 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 private abbrev RV (R : Finset V) := {v : V // v ∈ R}
 private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 /-- The native tail is the ordered first endpoint unless the orientation flag
 reverses the edge. Source: SCP10, Section 7, lines 2977–3019. -/
@@ -155,7 +155,7 @@ theorem graphOpenRegionNetwork_orientedAveragingSite_coherent
       ((graphRegionIncidentConfigEquiv R).symm (ξ, θ)) e, Equiv.apply_symm_apply]
   have hb (ξ : RI (Γ := Γ) R → X) (e : RB (Γ := Γ) R) :
       (graphRegionIncidentConfigEquiv R).symm (ξ, θ)
-        ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩ = θ e := by
+        ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩ = θ e := by
     rw [← graphRegionIncidentConfigEquiv_apply_boundary R
       ((graphRegionIncidentConfigEquiv R).symm (ξ, θ)) e, Equiv.apply_symm_apply]
   let F : RI (Γ := Γ) R → X → ℂ := fun e j =>

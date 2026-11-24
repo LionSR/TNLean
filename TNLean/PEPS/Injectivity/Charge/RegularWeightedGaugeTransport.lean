@@ -130,30 +130,30 @@ theorem regularWeightedOpenRegionWeight_vertexGauge {d : ℕ}
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ x v η s, a v (fun e => x * η e) s = a v η s)
     (R : Finset V) (k : V → G) (u : Edge Γ → G)
-    (F : ({e : Edge Γ // IsRegionIncidentEdge R e} → G) → ℂ)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (F : ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) → ℂ)
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (σ : {v : V // v ∈ R} → Fin d) :
     regularWeightedOpenRegionWeight a R u F θ σ =
       regularWeightedOpenRegionWeight a R (regularVertexGaugeOperators k u)
         (fun η => F (fun e => k e.1.1.1 * η e))
         (fun e => (k e.1.1.1)⁻¹ * θ e) σ := by
   classical
-  let E : ({e : Edge Γ // IsRegionIncidentEdge R e} → G) ≃
-      ({e : Edge Γ // IsRegionIncidentEdge R e} → G) :=
+  let E : ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) ≃
+      ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) :=
     Equiv.piCongrRight fun e => Equiv.mulLeft (k e.1.1.1)⁻¹
-  let B : ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) ≃
-      ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) :=
+  let B : ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) ≃
+      ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :=
     Equiv.piCongrRight fun e => Equiv.mulLeft (k e.1.1.1)⁻¹
-  have hθ : (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
+  have hθ : (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
       (k e.1.1.1)⁻¹ * θ e) = B θ := rfl
   rw [hθ]
   unfold regularWeightedOpenRegionWeight
   conv_rhs => rw [← Equiv.sum_comp E]
   apply Finset.sum_congr rfl
   intro η _
-  have hb : (fun f : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-      E η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) =
-      B (fun f => η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) := rfl
+  have hb : (fun f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+      E η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) =
+      B (fun f => η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) := rfl
   have hF : F (fun e => k e.1.1.1 * E η e) = F η := by
     congr 1
     funext e
@@ -181,10 +181,10 @@ theorem regularWeightedOpenRegionWeight_chargePair_swept {d : ℕ}
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ x v η s, a v (fun e => x * η e) s = a v η s)
     (R S : Finset V) (u : Edge Γ → G) (g : G)
-    (e₀ e₁ : {e : Edge Γ // IsRegionIncidentEdge R e})
+    (e₀ e₁ : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e})
     (h₀ : e₀.1.1.1 ∈ S) (h₁ : e₁.1.1.1 ∉ S)
     (χ : G → ℂ) (p : G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (σ : {v : V // v ∈ R} → Fin d) :
     regularWeightedOpenRegionWeight a R u
         (fun η => χ (p * (η e₁)⁻¹ * η e₀)) θ σ =

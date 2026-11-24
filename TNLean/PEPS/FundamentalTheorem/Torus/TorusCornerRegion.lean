@@ -195,7 +195,7 @@ variable [Fact (1 < width)] [Fact (1 < height)]
 /-- The up edge of the corner vertex is a boundary edge of the corner region: the corner
 vertex lies outside, its upper neighbour `(2, 3)` inside. -/
 theorem isRegionBoundaryEdge_cornerRegion (hw : 7 ≤ width) (hh : 7 ≤ height) :
-    IsRegionBoundaryEdge (G := torusGraph width height) cornerRegion
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) cornerRegion
       (torusUpEdge (cornerVertex : TorusVertex width height)) := by
   have hout : (cornerVertex : TorusVertex width height) ∉ cornerRegion :=
     cornerVertex_notMem_cornerRegion hw hh
@@ -239,7 +239,7 @@ def belowCornerVertex : TorusVertex width height :=
 /-- The up edge of `(2, 1)` is a boundary edge of the corner square: `(2, 1)` lies outside,
 its upper neighbour `(2, 2)` inside. -/
 theorem isRegionBoundaryEdge_cornerSquare (hw : 7 ≤ width) (hh : 7 ≤ height) :
-    IsRegionBoundaryEdge (G := torusGraph width height) cornerSquare
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) cornerSquare
       (torusUpEdge (belowCornerVertex : TorusVertex width height)) := by
   have hout : (belowCornerVertex : TorusVertex width height) ∉ cornerSquare := by
     rw [cornerSquare, mem_torusContiguousRectangle]

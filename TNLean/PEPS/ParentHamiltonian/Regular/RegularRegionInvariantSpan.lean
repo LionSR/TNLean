@@ -71,10 +71,10 @@ region columns. No support or flatness assumption enters this expansion. -/
 theorem eq_sum_regularProjectorTwistedRegionMatrix_of_invariant (R : Finset V)
     (f : RegionHalfEdgeConfig (Γ := Γ) G R → ℂ)
     (hleft : ∀ k α, f (regularRegionGaugePhysicalLabels R k α) = f α)
-    (hright : ∀ r : Edge Γ → G, (∀ e, IsRegionBoundaryEdge R e → r e = 1) →
+    (hright : ∀ r : Edge Γ → G, (∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1) →
       ∀ α, f (regularRegionHalfEdgeRightMul R r α) = f α) :
     f = ∑ u : RegularRegionInternalEdge (Γ := Γ) R → G,
-      ∑ θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G,
+      ∑ θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G,
         f (regularRegionHalfEdgesOfBonds R u (regularRegionCanonicalReferences R θ)) •
           (fun α => regularProjectorTwistedRegionMatrix R
             (regularRegionInternalExtension R u) α θ) := by
@@ -103,7 +103,7 @@ The equality follows from the original shared-bond summation. -/
 theorem regularProjectorTwistedRegionMatrix_regionGauge (R : Finset V)
     (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorTwistedRegionMatrix R u α θ =
       regularProjectorTwistedRegionMatrix R (regularRegionGaugeEdgeOperators R k u)
         α (regularRegionBoundaryTransport R k u θ) := by
@@ -128,7 +128,7 @@ theorem regularProjectorTwistedRegionMatrix_eq_open_of_flat (R : Finset V)
     (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
     (hflat : ∀ e, regularRegionGaugeResidual R k u e = 1)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorTwistedRegionMatrix R u α θ =
       regularProjectorOpenRegionMatrix R α (regularRegionBoundaryTransport R k u θ) := by
   rw [regularProjectorTwistedRegionMatrix_regionGauge R k u α θ]
@@ -145,7 +145,7 @@ omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
 internal quotients. -/
 theorem exists_regularRegionGaugeResidual_eq_one_of_flat (R : Finset V)
     (u : RegularRegionInternalEdge (Γ := Γ) R → G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (hflat : IsRegularRegionHalfEdgeFlat R
       (regularRegionHalfEdgesOfBonds R u (regularRegionCanonicalReferences R θ))) :
     ∃ k : {v : V // v ∈ R} → G,
@@ -164,7 +164,7 @@ No spanning tree or connectedness assumption is needed. -/
 theorem mem_regularProjectorOpenRegionRange_of_invariant_flat (R : Finset V)
     (f : RegionHalfEdgeConfig (Γ := Γ) G R → ℂ)
     (hleft : ∀ k α, f (regularRegionGaugePhysicalLabels R k α) = f α)
-    (hright : ∀ r : Edge Γ → G, (∀ e, IsRegionBoundaryEdge R e → r e = 1) →
+    (hright : ∀ r : Edge Γ → G, (∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1) →
       ∀ α, f (regularRegionHalfEdgeRightMul R r α) = f α)
     (hsupport : ∀ α, ¬ IsRegularRegionHalfEdgeFlat R α → f α = 0) :
     f ∈ (Matrix.mulVecLin (regularProjectorOpenRegionMatrix (G := G) R)).range := by
@@ -194,7 +194,7 @@ theorem mem_regularProjectorOpenRegionRange_of_invariant_flat (R : Finset V)
 theorem regularProjectorOpenRegionMatrix_eq_zero_of_not_flat (R : Finset V)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
     (hα : ¬ IsRegularRegionHalfEdgeFlat R α)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorOpenRegionMatrix R α θ = 0 := by
   classical
   rw [regularProjectorOpenRegionMatrix_apply]
@@ -214,7 +214,7 @@ theorem regularProjectorOpenRegionMatrix_eq_zero_of_not_flat (R : Finset V)
 /-- The actual untwisted columns are invariant under independent left vertex gauges. -/
 theorem regularProjectorOpenRegionMatrix_gauge (R : Finset V)
     (k : {v : V // v ∈ R} → G) (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorOpenRegionMatrix R (regularRegionGaugePhysicalLabels R k α) θ =
       regularProjectorOpenRegionMatrix R α θ := by
   classical
@@ -242,7 +242,7 @@ theorem mem_regularProjectorOpenRegionRange_iff (R : Finset V)
     (f : RegionHalfEdgeConfig (Γ := Γ) G R → ℂ) :
     f ∈ (Matrix.mulVecLin (regularProjectorOpenRegionMatrix (G := G) R)).range ↔
       (∀ k α, f (regularRegionGaugePhysicalLabels R k α) = f α) ∧
-      (∀ r : Edge Γ → G, (∀ e, IsRegionBoundaryEdge R e → r e = 1) →
+      (∀ r : Edge Γ → G, (∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1) →
         ∀ α, f (regularRegionHalfEdgeRightMul R r α) = f α) ∧
       (∀ α, ¬ IsRegularRegionHalfEdgeFlat R α → f α = 0) := by
   constructor

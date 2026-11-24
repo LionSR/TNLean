@@ -91,7 +91,7 @@ two regions. -/
 edge of each. For disjoint `R`, `R'` this means exactly one endpoint lies in `R`
 and the other in `R'`. -/
 def IsCrossingEdge (_A : Tensor G d) (R R' : Finset V) (g : Edge G) : Prop :=
-  IsRegionBoundaryEdge (G := G) R g ∧ IsRegionBoundaryEdge (G := G) R' g
+  ManyBody.IsRegionBoundaryEdge (G := G) R g ∧ ManyBody.IsRegionBoundaryEdge (G := G) R' g
 
 instance (A : Tensor G d) (R R' : Finset V) (g : Edge G) :
     Decidable (IsCrossingEdge (G := G) A R R' g) := by
@@ -106,7 +106,7 @@ theorem IsCrossingEdge.symm {A : Tensor G d} {R R' : Finset V} {g : Edge G}
 omit [Fintype V] [DecidableEq V] in
 /-- A crossing edge between `R` and `R'` is a boundary edge of `R`. -/
 theorem IsCrossingEdge.boundary_left {A : Tensor G d} {R R' : Finset V} {g : Edge G}
-    (h : IsCrossingEdge (G := G) A R R' g) : IsRegionBoundaryEdge (G := G) R g :=
+    (h : IsCrossingEdge (G := G) A R R' g) : ManyBody.IsRegionBoundaryEdge (G := G) R g :=
   h.1
 
 omit [Fintype V] [DecidableEq V] in
@@ -116,10 +116,10 @@ in each region.
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem IsCrossingEdge.of_incident {A : Tensor G d} {R R' : Finset V} (hRR' : Disjoint R R')
-    {g : Edge G} (hR : IsRegionIncidentEdge (G := G) R g)
-    (hR' : IsRegionIncidentEdge (G := G) R' g) : IsCrossingEdge (G := G) A R R' g :=
-  ⟨isRegionBoundaryEdge_of_disjoint_incident R' R hRR'.symm hR' hR,
-    isRegionBoundaryEdge_of_disjoint_incident R R' hRR' hR hR'⟩
+    {g : Edge G} (hR : ManyBody.IsRegionIncidentEdge (G := G) R g)
+    (hR' : ManyBody.IsRegionIncidentEdge (G := G) R' g) : IsCrossingEdge (G := G) A R R' g :=
+  ⟨ManyBody.isRegionBoundaryEdge_of_disjoint_incident R' R hRR'.symm hR' hR,
+    ManyBody.isRegionBoundaryEdge_of_disjoint_incident R R' hRR' hR hR'⟩
 
 omit [Fintype V] [DecidableEq V] in
 /-- For three pairwise disjoint regions, an edge crossing between two of them is not
@@ -129,12 +129,12 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem IsCrossingEdge.not_incident {A : Tensor G d} {R R' R'' : Finset V}
     (hRR' : Disjoint R R') (hRR'' : Disjoint R R'') (hR'R'' : Disjoint R' R'') {g : Edge G}
-    (h : IsCrossingEdge (G := G) A R R' g) : ¬ IsRegionIncidentEdge (G := G) R'' g := by
+    (h : IsCrossingEdge (G := G) A R R' g) : ¬ ManyBody.IsRegionIncidentEdge (G := G) R'' g := by
   have := @Finset.disjoint_left.mp hRR'
   have := @Finset.disjoint_left.mp hRR''
   have := @Finset.disjoint_left.mp hR'R''
-  unfold IsCrossingEdge IsRegionBoundaryEdge at h
-  unfold IsRegionIncidentEdge
+  unfold IsCrossingEdge ManyBody.IsRegionBoundaryEdge at h
+  unfold ManyBody.IsRegionIncidentEdge
   grind
 
 /-- The crossing configurations between `R` and `R'`: an assignment of an original
@@ -202,7 +202,7 @@ structure CoherentCoarseBlockingFrame (A : Tensor G d)
   factor_red :
     ∀ (legs : (ie : IncidentEdge coarseGraph 0) →
         Fin (toCoarseBlockingFrame.coarseBondDim ie.1))
-      (b : {b : Edge G // IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.red b})
+      (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.red b})
       (hf : IsCrossingEdge (G := G) A toCoarseBlockingFrame.red toCoarseBlockingFrame.blue b.1)
       (ie : IncidentEdge coarseGraph 0) (hie : ie.1 = coarseEdgeRB),
       toCoarseBlockingFrame.legEquivRed legs b =
@@ -213,7 +213,7 @@ structure CoherentCoarseBlockingFrame (A : Tensor G d)
   factor_red_rc :
     ∀ (legs : (ie : IncidentEdge coarseGraph 0) →
         Fin (toCoarseBlockingFrame.coarseBondDim ie.1))
-      (b : {b : Edge G // IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.red b})
+      (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.red b})
       (hf : IsCrossingEdge (G := G) A toCoarseBlockingFrame.red
         toCoarseBlockingFrame.complement b.1)
       (ie : IncidentEdge coarseGraph 0) (hie : ie.1 = coarseEdgeRC),
@@ -226,7 +226,7 @@ structure CoherentCoarseBlockingFrame (A : Tensor G d)
   factor_blue_rb :
     ∀ (legs : (ie : IncidentEdge coarseGraph 1) →
         Fin (toCoarseBlockingFrame.coarseBondDim ie.1))
-      (b : {b : Edge G // IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.blue b})
+      (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.blue b})
       (hf : IsCrossingEdge (G := G) A toCoarseBlockingFrame.red toCoarseBlockingFrame.blue b.1)
       (ie : IncidentEdge coarseGraph 1) (hie : ie.1 = coarseEdgeRB),
       toCoarseBlockingFrame.legEquivBlue legs b =
@@ -238,7 +238,7 @@ structure CoherentCoarseBlockingFrame (A : Tensor G d)
   factor_blue_bc :
     ∀ (legs : (ie : IncidentEdge coarseGraph 1) →
         Fin (toCoarseBlockingFrame.coarseBondDim ie.1))
-      (b : {b : Edge G // IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.blue b})
+      (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.blue b})
       (hf : IsCrossingEdge (G := G) A toCoarseBlockingFrame.blue
         toCoarseBlockingFrame.complement b.1)
       (ie : IncidentEdge coarseGraph 1) (hie : ie.1 = coarseEdgeBC),
@@ -252,7 +252,7 @@ structure CoherentCoarseBlockingFrame (A : Tensor G d)
     ∀ (legs : (ie : IncidentEdge coarseGraph 2) →
         Fin (toCoarseBlockingFrame.coarseBondDim ie.1))
       (b : {b : Edge G //
-        IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.complement b})
+        ManyBody.IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.complement b})
       (hf : IsCrossingEdge (G := G) A toCoarseBlockingFrame.red
         toCoarseBlockingFrame.complement b.1)
       (ie : IncidentEdge coarseGraph 2) (hie : ie.1 = coarseEdgeRC),
@@ -266,7 +266,7 @@ structure CoherentCoarseBlockingFrame (A : Tensor G d)
     ∀ (legs : (ie : IncidentEdge coarseGraph 2) →
         Fin (toCoarseBlockingFrame.coarseBondDim ie.1))
       (b : {b : Edge G //
-        IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.complement b})
+        ManyBody.IsRegionBoundaryEdge (G := G) toCoarseBlockingFrame.complement b})
       (hf : IsCrossingEdge (G := G) A toCoarseBlockingFrame.blue
         toCoarseBlockingFrame.complement b.1)
       (ie : IncidentEdge coarseGraph 2) (hie : ie.1 = coarseEdgeBC),
@@ -471,31 +471,31 @@ its region's boundary. -/
 is an `r-b` crossing edge or an `r-c` crossing edge: its out-of-`red` endpoint
 lies in `blue` or in `complement`. -/
 theorem isCrossingEdge_red_blue_or_red_complement (hP : F.IsPartition) {g : Edge G}
-    (hg : IsRegionBoundaryEdge (G := G) F.red g) :
+    (hg : ManyBody.IsRegionBoundaryEdge (G := G) F.red g) :
     IsCrossingEdge (G := G) A F.red F.blue g ∨
       IsCrossingEdge (G := G) A F.red F.complement g := by
   have := @Finset.disjoint_left.mp hP.red_disjoint_blue
-  unfold IsCrossingEdge IsRegionBoundaryEdge at *
+  unfold IsCrossingEdge ManyBody.IsRegionBoundaryEdge at *
   grind [hP.mem_complement_iff]
 
 /-- **Crossing classification at the blue super-site.** A boundary edge of `blue`
 is an `r-b` crossing edge or a `b-c` crossing edge. -/
 theorem isCrossingEdge_red_blue_or_blue_complement (hP : F.IsPartition) {g : Edge G}
-    (hg : IsRegionBoundaryEdge (G := G) F.blue g) :
+    (hg : ManyBody.IsRegionBoundaryEdge (G := G) F.blue g) :
     IsCrossingEdge (G := G) A F.red F.blue g ∨
       IsCrossingEdge (G := G) A F.blue F.complement g := by
   have := @Finset.disjoint_left.mp hP.red_disjoint_blue
-  unfold IsCrossingEdge IsRegionBoundaryEdge at *
+  unfold IsCrossingEdge ManyBody.IsRegionBoundaryEdge at *
   grind [hP.mem_complement_iff]
 
 /-- **Crossing classification at the complement super-site.** A boundary edge of
 `complement` is an `r-c` crossing edge or a `b-c` crossing edge. -/
 theorem isCrossingEdge_red_complement_or_blue_complement (hP : F.IsPartition)
-    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) F.complement g) :
+    {g : Edge G} (hg : ManyBody.IsRegionBoundaryEdge (G := G) F.complement g) :
     IsCrossingEdge (G := G) A F.red F.complement g ∨
       IsCrossingEdge (G := G) A F.blue F.complement g := by
   have := @Finset.disjoint_left.mp hP.red_disjoint_blue
-  unfold IsCrossingEdge IsRegionBoundaryEdge at *
+  unfold IsCrossingEdge ManyBody.IsRegionBoundaryEdge at *
   grind [hP.mem_complement_iff]
 
 end CoarseBlockingFrame
@@ -618,7 +618,7 @@ complement it reads the `r-c` model. Under the partition every red boundary edge
 crosses to exactly one of blue or complement. -/
 theorem legEquivRed_apply_eq (hP : F.frame.IsPartition)
     (η : VirtualConfig (F.frame.coarseTensor))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G) F.frame.red b}) :
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) F.frame.red b}) :
     (F.frame.legEquivRed (fun ie => η ie.1) b : Fin (A.bondDim b.1)) =
       if hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1 then
         (F.bondModel coarseEdgeRB (η coarseEdgeRB) ⟨b.1, hb⟩ : Fin (A.bondDim b.1))
@@ -643,7 +643,7 @@ crossing to red it reads the `r-b` bond model, on one crossing to the complement
 it reads the `b-c` bond model. -/
 theorem legEquivBlue_apply_eq (hP : F.frame.IsPartition)
     (η : VirtualConfig (F.frame.coarseTensor))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G) F.frame.blue b}) :
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) F.frame.blue b}) :
     (F.frame.legEquivBlue (fun ie => η ie.1) b : Fin (A.bondDim b.1)) =
       if hb : IsCrossingEdge (G := G) A F.frame.red F.frame.blue b.1 then
         (F.bondModel coarseEdgeRB (η coarseEdgeRB) ⟨b.1, hb⟩ : Fin (A.bondDim b.1))
@@ -667,7 +667,7 @@ boundary edge crossing to red it reads the `r-c` bond model, on one crossing to
 blue it reads the `b-c` bond model. -/
 theorem legEquivComplement_apply_eq (hP : F.frame.IsPartition)
     (η : VirtualConfig (F.frame.coarseTensor))
-    (b : {b : Edge G // IsRegionBoundaryEdge (G := G) F.frame.complement b}) :
+    (b : {b : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) F.frame.complement b}) :
     (F.frame.legEquivComplement (fun ie => η ie.1) b : Fin (A.bondDim b.1)) =
       if hb : IsCrossingEdge (G := G) A F.frame.red F.frame.complement b.1 then
         (F.bondModel coarseEdgeRC (η coarseEdgeRC) ⟨b.1, hb⟩ : Fin (A.bondDim b.1))

@@ -101,7 +101,7 @@ theorem IsGIsometric.exists_unitary_torusVacantPlaquetteMove {d : ℕ}
           Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (u : Edge Γₜ → G), regularWalkHolonomy u
           (torusPlaquetteWalk (torusVacantPlaquetteMoveTarget direction p)).reverse = 1 →
-        ∀ θ : {e : Edge Γₜ // IsRegionBoundaryEdge
+        ∀ θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge
           (torusVacantPlaquetteMoveRegion direction p) e} → G,
         (if reverse direction then W.conjTranspose else W) *ᵥ
           openRegionWeight (groupBondTensor (regularTwistedSite a u))

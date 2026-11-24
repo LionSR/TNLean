@@ -259,9 +259,9 @@ theorem ThreeBlockGeometry.blueProd_eq_regionMerge_complement
   classical
   apply regionProd_subtype_congr
   intro ie hie
-  by_cases hinc : IsRegionIncidentEdge (G := G) g.complement ie
-  · have hbdry : IsRegionBoundaryEdge (G := G) g.complement ie :=
-      isRegionBoundaryEdge_of_disjoint_incident (G := G) g.blue g.complement
+  by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) g.complement ie
+  · have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) g.complement ie :=
+      ManyBody.isRegionBoundaryEdge_of_disjoint_incident (G := G) g.blue g.complement
         g.blue_disjoint_complement hie hinc
     rw [regionMerge_of_incident (G := G) A _ p hinc]
     have := congrFun hp ⟨ie, hbdry⟩
@@ -286,12 +286,12 @@ theorem ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_complement
   classical
   funext f
   simp only [regionBoundaryLabel_apply]
-  by_cases hinc : IsRegionIncidentEdge (G := G) g.complement f.1
+  by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) g.complement f.1
   · -- A complement-incident host boundary edge is a boundary edge of the complement.
-    have hbdry : IsRegionBoundaryEdge (G := G) g.complement f.1 := by
+    have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) g.complement f.1 := by
       have h2 := f.2
       have := @Finset.disjoint_left.mp g.red_disjoint_complement
-      simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge, Finset.mem_sdiff, Finset.mem_univ,
+      simp only [ManyBody.IsRegionBoundaryEdge, ManyBody.IsRegionIncidentEdge, Finset.mem_sdiff, Finset.mem_univ,
         true_and] at h2 hinc ⊢
       grind
     rw [regionMerge_of_incident (G := G) A _ p hinc]

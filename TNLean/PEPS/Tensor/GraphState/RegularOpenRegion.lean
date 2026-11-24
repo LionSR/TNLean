@@ -120,14 +120,14 @@ theorem openRegionWeight_translation
 ordered group configurations. -/
 noncomputable def regularRegionBoundaryConfigEquiv
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
-    {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     (Fin b → G) ≃ RegionBoundaryConfig (groupBondTensor a) R :=
   e.symm.arrowCongr (Fintype.equivFin G)
 
 /-- The actual open-region matrix in ordered regular group coordinates. -/
 noncomputable def regularOpenRegionMatrix
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
-    {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     Matrix (RegionPhysicalConfig (d := d) R) (Fin b → G) ℂ :=
   fun σ x => openRegionWeight (groupBondTensor a) R
     (regularRegionBoundaryConfigEquiv a R e x) σ
@@ -136,7 +136,7 @@ noncomputable def regularOpenRegionMatrix
 theorem regularOpenRegionMatrix_translation
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
-    (R : Finset V) {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    (R : Finset V) {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     (g : G) (σ : RegionPhysicalConfig (d := d) R) (x : Fin b → G) :
     regularOpenRegionMatrix a R e σ (g • x) = regularOpenRegionMatrix a R e σ x := by
   have h : regularRegionBoundaryConfigEquiv a R e (g • x) =
@@ -183,7 +183,7 @@ theorem regularOpenRegionMatrix_mul_projector
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
     (R : Finset V) (n : ℕ)
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     regularOpenRegionMatrix a R e * regularBoundaryProjector (n + 1) =
       regularOpenRegionMatrix a R e := by
   apply matrix_mul_regularBoundaryProjector_of_translation
@@ -193,7 +193,7 @@ theorem regularOpenRegionMatrix_mul_projector
 same enumeration as the first region. -/
 noncomputable def regularOpenComplementMatrix
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
-    {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     Matrix (RegionPhysicalConfig (d := d) (Finset.univ \ R)) (Fin b → G) ℂ :=
   fun τ x => openRegionWeight (groupBondTensor a) (Finset.univ \ R)
     (regionComplementBoundaryConfig (groupBondTensor a) R
@@ -211,7 +211,7 @@ omit [DecidableEq G] in
 This uses unnormalized regular bonds. Source: SCP10, lines 1935–1980. -/
 theorem regularPhysicalCutMatrix_eq_mul_transpose
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
-    {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     regularPhysicalCutMatrix a R =
       regularOpenRegionMatrix a R e * (regularOpenComplementMatrix a R e).transpose := by
   ext σ τ
@@ -228,7 +228,7 @@ theorem regularPhysicalCutMatrix_eq_mul_projector_mul_transpose
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
     (R : Finset V) (n : ℕ)
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     regularPhysicalCutMatrix a R = regularOpenRegionMatrix a R e *
       regularBoundaryProjector (n + 1) * (regularOpenComplementMatrix a R e).transpose := by
   rw [regularOpenRegionMatrix_mul_projector a ha R n e]
@@ -243,7 +243,7 @@ theorem regularOpenRegionMatrix_mul_schmidtMatrix_mul_transpose
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
     (R : Finset V) (n : ℕ)
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     regularOpenRegionMatrix a R e * regularBoundarySchmidtMatrix n *
         (regularOpenComplementMatrix a R e).transpose =
       (Real.sqrt (Fintype.card G ^ n : ℝ) : ℂ)⁻¹ • regularPhysicalCutMatrix a R := by
@@ -274,7 +274,7 @@ theorem mul_regularPhysicalCutMatrix_eq_smul_of_openRegion_eigen
         z • openRegionWeight (groupBondTensor a) R μ) :
     Q * regularPhysicalCutMatrix a R = z • regularPhysicalCutMatrix a R := by
   classical
-  let E := Fintype.equivFin {f : Edge Γ // IsRegionBoundaryEdge R f}
+  let E := Fintype.equivFin {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f}
   have hQB : Q * regularOpenRegionMatrix a R E = z • regularOpenRegionMatrix a R E := by
     ext σ x
     exact congrFun (hQ (regularRegionBoundaryConfigEquiv a R E x)) σ
@@ -289,7 +289,7 @@ theorem mul_regularPhysicalCutMatrix_eq_ite_of_openRegion_eigen
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
     (Q : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (P : Prop) [Decidable P]
-    (hQ : ∀ θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G,
+    (hQ : ∀ θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G,
       Q *ᵥ openRegionWeight (groupBondTensor a) R
           (fun f => Fintype.equivFin G (θ f)) =
         if P then openRegionWeight (groupBondTensor a) R

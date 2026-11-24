@@ -46,7 +46,7 @@ private theorem controlled_cut_sum_apply
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
     (β : RegionHalfEdgeConfig (Γ := Γ) G (Finset.univ \ R)) :
     ((∑ i, μ i • regularProjectorTwistedCutMatrix R (u i)) * U.transpose) α β =
-      ∑ i, μ i * ∑ θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G,
+      ∑ i, μ i * ∑ θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G,
         regularProjectorTwistedRegionMatrix R (u i) α θ *
           (U * regularProjectorTwistedRegionMatrix (Finset.univ \ R) (u i)) β
             (fun f => θ ((regionBoundaryEdgeComplEquiv (G := Γ) R).symm f)) := by
@@ -91,8 +91,8 @@ theorem torusControlledCut_reducedMatrix_eq_trace_smul
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oR : {v : X // v ∈ R}) (oS : {v : X // v ∈ Finset.univ \ R})
-    {n : ℕ} (e : {f : Edge Γₜ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
-    (p : {f : Edge Γₜ // IsRegionBoundaryEdge R f} →
+    {n : ℕ} (e : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
+    (p : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} →
       ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS)
     (hwind : ∀ f, torusWalkWinding
         ((p f).map (SimpleGraph.Embedding.induce
@@ -166,8 +166,8 @@ theorem torusControlledCut_normalized_reducedMatrix
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oR : {v : X // v ∈ R}) (oS : {v : X // v ∈ Finset.univ \ R})
-    {n : ℕ} (e : {f : Edge Γₜ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
-    (p : {f : Edge Γₜ // IsRegionBoundaryEdge R f} →
+    {n : ℕ} (e : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
+    (p : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} →
       ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS)
     (hwind : ∀ f, torusWalkWinding
         ((p f).map (SimpleGraph.Embedding.induce
@@ -211,8 +211,8 @@ theorem torusControlledCut_normalized_renyiEntropy
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oR : {v : X // v ∈ R}) (oS : {v : X // v ∈ Finset.univ \ R})
-    {n : ℕ} (e : {f : Edge Γₜ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
-    (p : {f : Edge Γₜ // IsRegionBoundaryEdge R f} →
+    {n : ℕ} (e : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
+    (p : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} →
       ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS)
     (hwind : ∀ f, torusWalkWinding
         ((p f).map (SimpleGraph.Embedding.induce

@@ -109,7 +109,7 @@ the same value on every red boundary edge that does not cross to the blue region
 carry the same value on every red boundary edge not crossing to the blue region. -/
 def SameAwayFromRBBundle (A : Tensor G d) (red blue : Finset V)
     (μ ν : RegionBoundaryConfig (G := G) A red) : Prop :=
-  ∀ f : {f : Edge G // IsRegionBoundaryEdge (G := G) red f},
+  ∀ f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) red f},
     ¬ IsCrossingEdge (G := G) A red blue f.1 → μ f = ν f
 
 instance (A : Tensor G d) (red blue : Finset V)

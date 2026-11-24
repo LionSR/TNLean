@@ -57,7 +57,7 @@ theorem regionGroundSpace_regularTwisted_eq_of_internalGaugeFlat
     regionGroundSpace (groupBondTensor (regularTwistedSite a u)) R =
       regionGroundSpace (groupBondTensor a) R := by
   classical
-  let E : ({f : Edge Γ // IsRegionBoundaryEdge R f} → G) ≃
+  let E : ({f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) ≃
       RegionBoundaryConfig (groupBondTensor a) R :=
     Equiv.piCongrRight (fun _ => Fintype.equivFin G)
   let B : RegionBoundaryConfig (groupBondTensor a) R ≃
@@ -66,7 +66,7 @@ theorem regionGroundSpace_regularTwisted_eq_of_internalGaugeFlat
   have hf : openRegionWeight (groupBondTensor (regularTwistedSite a u)) R =
       openRegionWeight (groupBondTensor a) R ∘ B := by
     funext μ σ
-    let θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G :=
+    let θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G :=
       fun f => (Fintype.equivFin G).symm (μ f)
     have hμ : (fun f => Fintype.equivFin G (θ f)) = μ := by
       funext f

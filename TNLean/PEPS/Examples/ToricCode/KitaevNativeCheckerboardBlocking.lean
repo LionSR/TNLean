@@ -40,7 +40,7 @@ local notation "TV" => TorusVertex width height
 local notation "Γₜ" => torusGraph width height
 private abbrev RI (v : TV) :=
   {e : Edge Γₜ // e.1.1 ∈ torusPlaquetteRegion v ∧ e.1.2 ∈ torusPlaquetteRegion v}
-private abbrev RB (v : TV) := {e : Edge Γₜ // IsRegionBoundaryEdge (torusPlaquetteRegion v) e}
+private abbrev RB (v : TV) := {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) e}
 
 private def point (v : TV) : Fin 4 → TV :=
   ![(v.1 + 1, v.2 + 1), (v.1 + 1, v.2), v, (v.1, v.2 + 1)]
@@ -170,14 +170,14 @@ private theorem outside_horizontal (v : TV) (y : ZMod height) (right : Bool) :
       Prod.mk.injEq, h₂, hm, add_assoc]
 
 private theorem crossing_boundary (v : TV) (i : Fin 4) (second : Bool) :
-    IsRegionBoundaryEdge (torusPlaquetteRegion v) (crossing v i second) := by
+    ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) (crossing v i second) := by
   have hr (x y : TV) (hadj : (Γₜ).Adj x y)
       (hx : (x ∈ torusPlaquetteRegion v ∧ y ∉ torusPlaquetteRegion v) ∨
         (x ∉ torusPlaquetteRegion v ∧ y ∈ torusPlaquetteRegion v)) :
-      IsRegionBoundaryEdge (torusPlaquetteRegion v) (ManyBody.Edge.ofAdj hadj) := by
+      ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) (ManyBody.Edge.ofAdj hadj) := by
     rcases ManyBody.Edge.ofAdj_endpoints hadj with ⟨h₀,h₁⟩ | ⟨h₀,h₁⟩
-    · simpa only [IsRegionBoundaryEdge,h₀,h₁] using hx
-    · simpa only [IsRegionBoundaryEdge,h₀,h₁,or_comm,and_comm] using hx
+    · simpa only [ManyBody.IsRegionBoundaryEdge,h₀,h₁] using hx
+    · simpa only [ManyBody.IsRegionBoundaryEdge,h₀,h₁,or_comm,and_comm] using hx
   fin_cases i <;> cases second
   · simpa [crossing,torusUpEdge,torusRightEdge] using hr _ _ (torusGraph_adj_up v.1 (v.2 + 1))
       (Or.inl ⟨point_mem v 3, outside_vertical v v.1 true⟩)
@@ -236,7 +236,7 @@ private theorem assembled_internal (v : TV) (ξ : RI v → KitaevBit)
 
 private theorem assembled_boundary (v : TV) (ξ : RI v → KitaevBit)
     (θ : RB v → KitaevBit) (e : RB v) :
-    assembled v ξ θ ⟨e.1,isRegionBoundaryEdge_touches _ e.2⟩ = θ e := by
+    assembled v ξ θ ⟨e.1,ManyBody.isRegionBoundaryEdge_touches _ e.2⟩ = θ e := by
   rw [← graphRegionIncidentConfigEquiv_apply_boundary (torusPlaquetteRegion v)
     (assembled v ξ θ) e]
   exact congrArg (fun t => t.2 e) ((graphRegionIncidentConfigEquiv
@@ -254,7 +254,7 @@ private theorem assembled_leg (v : TV) (ξ : RI v → KitaevBit)
     have hh : (⟨(legs (point v i) j).1,
         isRegionIncidentEdge_of_regionVertex (torusPlaquetteRegion v)
           ⟨point v i,point_mem v i⟩ (legs (point v i) j)⟩ :
-        {e : Edge Γₜ // IsRegionIncidentEdge (torusPlaquetteRegion v) e}) =
+        {e : Edge Γₜ // ManyBody.IsRegionIncidentEdge (torusPlaquetteRegion v) e}) =
         ⟨e.1,Or.inl e.2.1⟩ := Subtype.ext he
     rw [hh]
     exact assembled_internal v ξ θ e
@@ -262,8 +262,8 @@ private theorem assembled_leg (v : TV) (ξ : RI v → KitaevBit)
     have hh : (⟨(legs (point v i) j).1,
         isRegionIncidentEdge_of_regionVertex (torusPlaquetteRegion v)
           ⟨point v i,point_mem v i⟩ (legs (point v i) j)⟩ :
-        {e : Edge Γₜ // IsRegionIncidentEdge (torusPlaquetteRegion v) e}) =
-        ⟨e.1,isRegionBoundaryEdge_touches _ e.2⟩ := Subtype.ext he
+        {e : Edge Γₜ // ManyBody.IsRegionIncidentEdge (torusPlaquetteRegion v) e}) =
+        ⟨e.1,ManyBody.isRegionBoundaryEdge_touches _ e.2⟩ := Subtype.ext he
     rw [hh]
     exact assembled_boundary v ξ θ e
 
@@ -278,7 +278,7 @@ def kitaevNativeCheckerboardSite (v w : TV) (η : IncidentEdge Γₜ w → Kitae
 /-- Read the eight actual crossing labels in clockwise boundary-pair order.
 Source: SCP10, the four-site blocking diagram, lines 2755–2794. -/
 def kitaevNativeBlockBoundary (v : TV)
-    (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (torusPlaquetteRegion v) e} → KitaevBit) :
+    (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) e} → KitaevBit) :
     KitaevBlockBoundary :=
   fun i => (θ (boundary v i false),θ (boundary v i true))
 
@@ -323,7 +323,7 @@ four-site checkerboard block, for every crossing assignment and every original
 physical spin configuration. Source: SCP10, lines 2755–2827. The two periods are
 at least three; orientations are prescribed locally, without a global tiling. -/
 theorem graphOpenRegionNetwork_kitaevNativeCheckerboardSite (v : TV)
-    (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (torusPlaquetteRegion v) e} → KitaevBit)
+    (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) e} → KitaevBit)
     (σ : {w : TV // w ∈ torusPlaquetteRegion v} → KitaevBit) :
     graphOpenRegionNetwork (kitaevNativeCheckerboardSite v) (torusPlaquetteRegion v) θ σ =
       kitaevCheckerboardBlock (kitaevNativeBlockBoundary v θ)
@@ -365,7 +365,7 @@ theorem graphOpenRegionNetwork_kitaevNativeCheckerboardSite (v : TV)
 four adjacent color differences. Source: SCP10, lines 2755–2827. Every actual
 crossing label remains in the statement. -/
 theorem graphOpenRegionNetwork_kitaevNativeCheckerboardSite_apply (v : TV)
-    (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (torusPlaquetteRegion v) e} → KitaevBit)
+    (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) e} → KitaevBit)
     (σ : {w : TV // w ∈ torusPlaquetteRegion v} → KitaevBit) :
     graphOpenRegionNetwork (kitaevNativeCheckerboardSite v) (torusPlaquetteRegion v) θ σ =
       if (∀ i, (kitaevNativeBlockBoundary v θ i).2 =

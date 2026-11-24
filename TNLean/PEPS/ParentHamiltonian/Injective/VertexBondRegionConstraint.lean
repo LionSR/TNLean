@@ -85,7 +85,7 @@ private theorem regionIncidentBoundaryLabel_edgeLabelPerm (A : Tensor Γ d) (R :
   intro h
   have hf := f.2
   rw [h] at hf
-  simp [IsRegionBoundaryEdge, hfirst, hsecond] at hf
+  simp [ManyBody.IsRegionBoundaryEdge, hfirst, hsecond] at hf
 
 /-- The actual virtual coefficient is unchanged by permuting both labels
 of an internal edge together. Source: the independent Bell-bond summation

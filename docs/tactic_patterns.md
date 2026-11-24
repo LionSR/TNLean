@@ -1521,7 +1521,7 @@ abstracted — record why, so it is not re-proposed).
   `GraphInsertedRegionSupport.lean`, `RegularRegionCoordinates.lean`,
   `ParentHamiltonian/RegularLiftedRegionRange.lean`,
   `RegularEdgeChargeContraction.lean`).
-- **Abstraction:** `TNLean.PEPS.IsRegionIncidentEdge.isRegionBoundaryEdge` in
+- **Abstraction:** `ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge` in
   `TNLean/PEPS/Tensor/Region/OpenRegionContraction.lean`, combined with
   `isRegionIncidentEdge_of_regionVertex` for an edge at a region vertex.
 - **Notes:** part of a −101 line refactor over 17 files, which also shared the
@@ -1574,7 +1574,7 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the module elaborates slightly faster (about 7 s against 8 s
   locally). Use `grind` for further endpoint-membership splits of this shape
   rather than a macro. Unfold first with
-  `simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge] at *`, adding the
+  `simp only [ManyBody.IsRegionBoundaryEdge, ManyBody.IsRegionIncidentEdge] at *`, adding the
   membership lemmas of the regions involved (`Finset.mem_union`,
   `Finset.mem_inter`, `Finset.mem_sdiff`, `Finset.mem_insert`);
   supply disjointness as `have := @Finset.disjoint_left.mp h`, and a
@@ -3847,7 +3847,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   in `RegionBlock/Recovery.lean` remain for the #4522 owner (2026-07-22).
 - **Abstraction:** `regionProd_subtype_congr` in
   `TNLean/PEPS/Tensor/Region/RegionBlock.lean`, supported by
-  `isRegionBoundaryEdge_of_disjoint_incident` for the repeated disjoint-region side goal.
+  `ManyBody.isRegionBoundaryEdge_of_disjoint_incident` for the repeated disjoint-region side goal.
 - **Notes:** the abstraction is a lemma rather than a tactic and quantifies over arbitrary
   region physical configurations. The existing `regionProd_congr` statement is preserved
   as a wrapper. The migrated PEPS slice loses 60 source lines (92 additions,
@@ -7317,7 +7317,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   partition — `isCrossingEdge_of_incident` (incident to both of two disjoint regions ⇒
   crossing) and `not_isRegionIncidentEdge_of_isCrossingEdge` (crossing between two
   regions disjoint from a third ⇒ not incident to the third) — with the region-frame
-  API (`IsRegionIncidentEdge`, `IsCrossingEdge`) already shared. Recorded rather than
+  API (`ManyBody.IsRegionIncidentEdge`, `IsCrossingEdge`) already shared. Recorded rather than
   promoted in the triMerge migration PR: the `IsCrossingEdge`-hypothesis restate
   (sharing the `CoarseThreeSite9` derivation shape) was applied there, but unifying the
   six sites needs a partition-with-regions hypothesis bundle common to

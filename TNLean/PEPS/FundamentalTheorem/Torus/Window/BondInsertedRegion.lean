@@ -73,7 +73,7 @@ Source: arXiv:1804.04964, Section 3, lines 1205--1210 of `Papers/1804.04964/pape
 block against its complement, with a matrix inserted on the shared bond);
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 4. -/
 noncomputable def bondInsertedRegionInsert (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
     RegionInsert (G := G) (d := d) A R :=
   fun ν σ =>
@@ -93,7 +93,7 @@ complement) carries the inner `μ`-sum of the bond-inserted insert, reproducing 
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of `Papers/1804.04964/paper_normal.tex`;
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 4. -/
 theorem deformedRegionState_bondInsertedRegionInsert (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -141,7 +141,7 @@ Source: arXiv:1804.04964, Section 3, lines 1205--1210 and the proof sketch at li
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 4. -/
 theorem regionInsertedCoeff_eq_extendInsert_bondInserted {R S : Finset V} (hRS : R ⊆ S)
     (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) (cfg : V → Fin d) :
     regionInsertedCoeff (G := G) A R f M
         (restrictRegionσ (V := V) (d := d) R cfg)

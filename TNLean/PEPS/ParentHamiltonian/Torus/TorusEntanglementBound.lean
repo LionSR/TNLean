@@ -44,7 +44,7 @@ theorem entropy_torusRectangle_le_perimeter
     (A : Tensor (torusGraph width height) d) (hA : stateCoeff A ≠ 0)
     (xStart yStart xLen yLen : ℕ)
     (hxBound : xStart + xLen ≤ width) (hyBound : yStart + yLen ≤ height)
-    (D : ℕ) (hD : ∀ e, IsRegionBoundaryEdge
+    (D : ℕ) (hD : ∀ e, ManyBody.IsRegionBoundaryEdge
       (torusContiguousRectangle xStart yStart xLen yLen) e → A.bondDim e = D) :
     let ρ := normalizedRegionReducedDensity A
       (torusContiguousRectangle xStart yStart xLen yLen)
@@ -66,7 +66,7 @@ theorem entropy_torusSquare_le_four_mul
     (A : Tensor (torusGraph width height) d) (hA : stateCoeff A ≠ 0)
     (xStart yStart L : ℕ)
     (hxBound : xStart + L ≤ width) (hyBound : yStart + L ≤ height)
-    (D : ℕ) (hD : ∀ e, IsRegionBoundaryEdge
+    (D : ℕ) (hD : ∀ e, ManyBody.IsRegionBoundaryEdge
       (torusContiguousRectangle xStart yStart L L) e → A.bondDim e = D) :
     let ρ := normalizedRegionReducedDensity A
       (torusContiguousRectangle xStart yStart L L)

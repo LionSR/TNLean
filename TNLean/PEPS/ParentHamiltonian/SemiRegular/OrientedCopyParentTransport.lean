@@ -27,7 +27,7 @@ open scoped Matrix BigOperators Kronecker
 namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 variable {p q : ℕ}
 variable {G I : Type*} [Group G] [Fintype G] [Fintype I] [DecidableEq I]
 

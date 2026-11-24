@@ -62,7 +62,7 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 
 /-- Inserting the identity on a boundary bond leaves each blocked tensor unchanged. -/
 theorem bondInsertedRegionInsert_one (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (μ : RegionBoundaryConfig (G := G) A R) :
     bondInsertedRegionInsert (G := G) A R f 1 μ =
       regionBlockedWeight (G := G) A R μ := by
@@ -80,7 +80,7 @@ theorem bondInsertedRegionInsert_injective (A : Tensor G d) (R : Finset V)
     (hR : RegionBlockedTensorInjective (G := G) A R)
     (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     Function.Injective (bondInsertedRegionInsert (G := G) A R f) := by
   intro X Y h
   apply regionInsertedCoeff_injective A R hR hC hpos f X Y
@@ -115,7 +115,7 @@ private theorem physicalOpOfRegionInsert_smul (A : Tensor G d) (R : Finset V)
 
 /-- Boundary bond insertion preserves addition of bond matrices. -/
 theorem bondInsertedRegionInsert_add (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (X Y : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
     bondInsertedRegionInsert (G := G) A R f (X + Y) =
       bondInsertedRegionInsert (G := G) A R f X +
@@ -125,7 +125,7 @@ theorem bondInsertedRegionInsert_add (A : Tensor G d) (R : Finset V)
 
 /-- Boundary bond insertion preserves complex scalar multiplication. -/
 theorem bondInsertedRegionInsert_smul (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (c : ℂ) (X : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
     bondInsertedRegionInsert (G := G) A R f (c • X) =
       c • bondInsertedRegionInsert (G := G) A R f X := by
@@ -178,8 +178,8 @@ private theorem regionInsertCongr_bondInserted
     (A : Tensor (torusGraph width height) d)
     {R S : Finset (TorusVertex width height)} (h : R = S)
     (e : Edge (torusGraph width height))
-    (hR : IsRegionBoundaryEdge (G := torusGraph width height) R e)
-    (hS : IsRegionBoundaryEdge (G := torusGraph width height) S e)
+    (hR : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R e)
+    (hS : ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) S e)
     (X : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :
     regionInsertCongr A h (bondInsertedRegionInsert (G := torusGraph width height) A R ⟨e, hR⟩ X) =
       bondInsertedRegionInsert (G := torusGraph width height) A S ⟨e, hS⟩ X := by
@@ -353,7 +353,7 @@ theorem staircaseCrossTensorVirtualOperation_normalized_coeff
     (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d)
       (Finset.univ \ horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)) :
     let W := horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K
-    let f : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge W f} :=
+    let f : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge W f} :=
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
         (by omega) (by omega) ha0 haw hbh⟩
     (regionInteriorBondProd B W : ℂ) * regionInsertedCoeff A W f X σ τ =

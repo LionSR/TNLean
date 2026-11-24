@@ -101,7 +101,7 @@ theorem regularProjectorWeightedTwistedRegionMatrix_internalCharge_coordinates
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (u : Edge Γ → G) (χ : G → ℂ) (p : G) (e : RI (Γ := Γ) R)
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     let k := (regularRegionTreeGauge R T hT htree o u).1
     regularProjectorWeightedTwistedRegionMatrix R u
         (fun η => χ (p * η ⟨e.1, Or.inl e.2.1⟩))
@@ -122,7 +122,7 @@ theorem regularProjectorWeightedTwistedRegionMatrix_chargeFlux_coordinates
     (e : RI (Γ := Γ) R) (b : RC (Γ := Γ) R T)
     (u : Edge Γ → G) (χ : G → ℂ) (p : G)
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorWeightedTwistedRegionMatrix R u
         (fun η => χ (regularChargeFluxParameter R T hT htree o e b u p *
           η ⟨e.1, Or.inl e.2.1⟩))
@@ -150,7 +150,7 @@ theorem regularProjectorWeightedTwistedRegionMatrix_chargeFlux_mulVec
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : RV R)
     (e : RI (Γ := Γ) R) (b : RC (Γ := Γ) R T)
     (u : Edge Γ → G) (χ : G → ℂ) (p : G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     Matrix.permMatrixHom (R := ℂ)
         (regularChargeFluxPhysicalPermutation R T hT htree o e b) *ᵥ
       (fun α => regularProjectorWeightedTwistedRegionMatrix R u

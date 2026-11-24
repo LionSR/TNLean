@@ -215,10 +215,10 @@ theorem ThreeBlockGeometry.regionBoundaryLabel_blue_eq_of_host_eq_of_complement_
     regionBoundaryLabel (G := G) A g.blue q =
       regionBoundaryLabel (G := G) A g.blue q' := by
   funext f
-  have hblue : IsRegionIncidentEdge (G := G) g.blue f.1 :=
-    isRegionBoundaryEdge_touches g.blue f.2
-  have hother : IsRegionIncidentEdge (G := G) g.red f.1 ∨
-      IsRegionIncidentEdge (G := G) g.complement f.1 := by
+  have hblue : ManyBody.IsRegionIncidentEdge (G := G) g.blue f.1 :=
+    ManyBody.isRegionBoundaryEdge_touches g.blue f.2
+  have hother : ManyBody.IsRegionIncidentEdge (G := G) g.red f.1 ∨
+      ManyBody.IsRegionIncidentEdge (G := G) g.complement f.1 := by
     have hmem : ∀ w : V, w ∉ g.blue → w ∈ g.red ∨ w ∈ g.complement := by
       intro w hnblue
       have hw : w ∈ g.red ∪ g.blue ∪ g.complement := by
@@ -238,15 +238,15 @@ theorem ThreeBlockGeometry.regionBoundaryLabel_blue_eq_of_host_eq_of_complement_
       · exact Or.inr (Or.inl hc)
   simp only [regionBoundaryLabel_apply]
   rcases hother with hred | hcomplInc
-  · have hredBoundary : IsRegionBoundaryEdge (G := G) g.red f.1 :=
-      isRegionBoundaryEdge_of_disjoint_incident (G := G) g.blue g.red
+  · have hredBoundary : ManyBody.IsRegionBoundaryEdge (G := G) g.red f.1 :=
+      ManyBody.isRegionBoundaryEdge_of_disjoint_incident (G := G) g.blue g.red
         g.red_disjoint_blue.symm hblue hred
-    have hhostBoundary : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f.1 :=
+    have hhostBoundary : ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f.1 :=
       (isRegionBoundaryEdge_compl_iff (G := G) g.red f.1).mpr hredBoundary
     have h := congrFun hhost ⟨f.1, hhostBoundary⟩
     simpa only [regionBoundaryLabel_apply] using h
-  · have hcomplBoundary : IsRegionBoundaryEdge (G := G) g.complement f.1 :=
-      isRegionBoundaryEdge_of_disjoint_incident (G := G) g.blue g.complement
+  · have hcomplBoundary : ManyBody.IsRegionBoundaryEdge (G := G) g.complement f.1 :=
+      ManyBody.isRegionBoundaryEdge_of_disjoint_incident (G := G) g.blue g.complement
         g.blue_disjoint_complement hblue hcomplInc
     have h := congrFun hcompl ⟨f.1, hcomplBoundary⟩
     simpa only [regionBoundaryLabel_apply] using h

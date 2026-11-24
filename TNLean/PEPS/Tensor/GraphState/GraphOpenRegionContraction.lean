@@ -31,15 +31,15 @@ variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 variable {X : Type*} [Fintype X]
 private abbrev RV (R : Finset V) := {v : V // v ∈ R}
 private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
-private abbrev RE (R : Finset V) := {e : Edge Γ // IsRegionIncidentEdge R e}
+private abbrev RB (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
+private abbrev RE (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e}
 
 private def incidentSplit (R : Finset V) : RE (Γ := Γ) R ≃ RI (Γ := Γ) R ⊕ RB (Γ := Γ) R where
   toFun e := if h : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R then .inl ⟨e.1, h⟩ else
-    .inr ⟨e.1, e.2.isRegionBoundaryEdge h⟩
+    .inr ⟨e.1, ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge e.2 h⟩
   invFun
     | .inl e => ⟨e.1, Or.inl e.2.1⟩
-    | .inr e => ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩
+    | .inr e => ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩
   left_inv e := by
     dsimp only
     split_ifs <;> rfl
@@ -66,7 +66,7 @@ def graphOpenRegionNetwork {P : V → Type*}
     (a : (v : V) → (IncidentEdge Γ v → X) → P v → ℂ) (R : Finset V)
     (θ : RB (Γ := Γ) R → X) (σ : (v : RV R) → P v.1) : ℂ :=
   ∑ η : RE (Γ := Γ) R → X,
-    if (fun e : RB (Γ := Γ) R => η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ then
+    if (fun e : RB (Γ := Γ) R => η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = θ then
       ∏ v : RV R, a v.1 (fun e => η ⟨e.1, isRegionIncidentEdge_of_regionVertex R v e⟩) (σ v)
     else 0
 
@@ -83,7 +83,7 @@ Source: SCP10, lines 1765–1920 and 1935–1957, and Section 7, lines 2977–30
 @[simp] theorem graphRegionIncidentConfigEquiv_apply_boundary (R : Finset V)
     (η : RE (Γ := Γ) R → X) (e : RB (Γ := Γ) R) :
     (graphRegionIncidentConfigEquiv R η).2 e =
-      η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩ := rfl
+      η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩ := rfl
 
 /-- Fixing the crossing labels leaves exactly one sum over internal bond labels.
 Source: SCP10, lines 1765–1920 and 1935–1957, and Section 7, lines 2977–3019. -/
@@ -99,7 +99,7 @@ theorem graphOpenRegionNetwork_eq_sum_internal {P : V → Type*}
   rw [← (graphRegionIncidentConfigEquiv (X := X) R).symm.sum_comp, Fintype.sum_prod_type]
   have hb (ξ : RI (Γ := Γ) R → X) (ζ : RB (Γ := Γ) R → X) :
       (fun e : RB (Γ := Γ) R => (graphRegionIncidentConfigEquiv R).symm (ξ, ζ)
-        ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = ζ := by
+        ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = ζ := by
     funext e
     rw [← graphRegionIncidentConfigEquiv_apply_boundary R
       ((graphRegionIncidentConfigEquiv R).symm (ξ, ζ)) e, Equiv.apply_symm_apply]
@@ -122,7 +122,7 @@ theorem openRegionWeight_groupBondTensor_eq_graphOpenRegionNetwork {d : ℕ}
   intro η _
   have hlabel : regionIncidentBoundaryLabel (groupBondTensor a) R (E η) =
       (fun e => Fintype.equivFin X (θ e)) ↔
-      (fun e : RB (Γ := Γ) R => η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ :=
+      (fun e : RB (Γ := Γ) R => η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = θ :=
     (Equiv.piCongrRight (fun _ : RB (Γ := Γ) R => Fintype.equivFin X)).injective.eq_iff
   simp only [hlabel]
   split_ifs

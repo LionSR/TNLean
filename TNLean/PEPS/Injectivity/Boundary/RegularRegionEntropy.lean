@@ -68,7 +68,7 @@ omit [Group G] in
 /-- The complementary map uses the same crossing labels as the region map. -/
 theorem regularOpenComplementMatrix_eq_regularOpenRegionMatrix
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
-    {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     regularOpenComplementMatrix a R e = regularOpenRegionMatrix a (Finset.univ \ R)
       ((regionBoundaryEdgeComplEquiv (G := Γ) R).symm.trans e) := by
   rfl
@@ -89,7 +89,7 @@ theorem exists_positive_gram_regularOpenRegionMatrix_of_connected
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v)) (regularSiteMap (a v)))
     (R : Finset V) (hR : (Γ.induce (R : Set V)).Connected) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     ∃ κ : ℝ, 0 < κ ∧
       (regularOpenRegionMatrix a R e).conjTranspose * regularOpenRegionMatrix a R e =
         (κ : ℂ) • regularBoundaryProjector b := by
@@ -105,7 +105,7 @@ private theorem exists_normalization_of_cut_grams
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
     (R : Finset V) (n : ℕ)
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
     {cA cB : ℝ} (hcA : 0 < cA) (hcB : 0 < cB)
     (hM : (regularOpenRegionMatrix a R e).conjTranspose * regularOpenRegionMatrix a R e =
       (cA : ℂ) • regularBoundaryProjector (n + 1))
@@ -174,7 +174,7 @@ theorem exists_normalization_regularPhysicalCutState_of_connected
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v)) (regularSiteMap (a v)))
     (R : Finset V) (hR : (Γ.induce (R : Set V)).Connected)
     (hRc : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     ∃ z : ℝ, 0 < z ∧
       let ψ := (z : ℂ) • regularPhysicalCutState a R
       let ρ := partialTraceRight (vecMulVec ψ (star ψ))

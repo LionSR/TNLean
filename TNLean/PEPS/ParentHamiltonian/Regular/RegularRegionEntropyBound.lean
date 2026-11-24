@@ -131,7 +131,7 @@ theorem range_normalizedRegionReducedDensity_of_regular_connected_cut
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected)
     (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     (Matrix.mulVecLin (normalizedRegionReducedDensity (groupBondTensor a) R)).range =
       regionGroundSpace (groupBondTensor a) R := by
   rw [range_normalizedRegionReducedDensity_eq _ _
@@ -148,7 +148,7 @@ theorem mul_normalizedRegionReducedDensity_eq_zero_iff_of_regular_connected_cut
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected)
     (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
     (h : Matrix (RegionPhysicalConfig (d := d) R)
       (RegionPhysicalConfig (d := d) R) ℂ) :
     h * normalizedRegionReducedDensity (groupBondTensor a) R = 0 ↔
@@ -174,7 +174,7 @@ theorem normalizedRegionReducedDensity_properties_of_regular_connected_cut
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected)
     (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     (normalizedRegionReducedDensity (groupBondTensor a) R).PosSemidef ∧
       (normalizedRegionReducedDensity (groupBondTensor a) R).trace = 1 ∧
       (normalizedRegionReducedDensity (groupBondTensor a) R).rank = Fintype.card G ^ n := by
@@ -194,7 +194,7 @@ theorem entropy_normalizedRegionReducedDensity_of_regular_connected_cut
       (regularSiteMap (a v))) (R : Finset V)
     (hR : (Γ.induce (R : Set V)).Connected)
     (hS : (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
-    (n : ℕ) (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (n : ℕ) (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     let ρ := normalizedRegionReducedDensity (groupBondTensor a) R
     ∃ hρ : ρ.IsHermitian,
       0 ≤ vonNeumannEntropy ρ hρ ∧

@@ -184,7 +184,7 @@ variable [Fact (1 < width)] [Fact (1 < height)]
 /-- The upward edge from the omitted vertex crosses the punctured comparison region. -/
 theorem isRegionBoundaryEdge_windowCornerRegion (hK : 0 < K)
     (hw : 2 * L + 1 ≤ width) (hh : 2 * K + 1 ≤ height) :
-    IsRegionBoundaryEdge (G := torusGraph width height) (windowCornerRegion L K)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (windowCornerRegion L K)
       (torusUpEdge (windowCornerVertex L K : TorusVertex width height)) := by
   have h1 : (windowCornerVertex L K : TorusVertex width height).1.val = L :=
     ZMod.val_cast_of_lt (by omega)
@@ -192,7 +192,7 @@ theorem isRegionBoundaryEdge_windowCornerRegion (hK : 0 < K)
     ZMod.val_cast_of_lt (by omega)
   obtain ⟨hf, hs⟩ := torusUpEdge_endpoints_of_lt
     (p := windowCornerVertex L K) (by rw [h2]; omega)
-  rw [IsRegionBoundaryEdge, hf, hs]
+  rw [ManyBody.IsRegionBoundaryEdge, hf, hs]
   refine Or.inr ⟨windowCornerVertex_notMem hw hh, ?_⟩
   rw [mem_windowCornerRegion]
   have h3 : ((windowCornerVertex L K : TorusVertex width height).2 + 1).val =
@@ -206,7 +206,7 @@ theorem isRegionBoundaryEdge_windowCornerRegion (hK : 0 < K)
 /-- The upward edge just below the corner crosses the completed comparison rectangle. -/
 theorem isRegionBoundaryEdge_windowCornerRectangle (hK : 0 < K)
     (hw : 2 * L + 1 ≤ width) (hh : 2 * K + 1 ≤ height) :
-    IsRegionBoundaryEdge (G := torusGraph width height) (windowCornerRectangle L K)
+    ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) (windowCornerRectangle L K)
       (torusUpEdge ((L : ZMod width), ((K - 1 : ℕ) : ZMod height))) := by
   have hx : (L : ZMod width).val = L := ZMod.val_cast_of_lt (by omega)
   have hy : ((K - 1 : ℕ) : ZMod height).val = K - 1 := ZMod.val_cast_of_lt (by omega)
@@ -216,7 +216,7 @@ theorem isRegionBoundaryEdge_windowCornerRectangle (hK : 0 < K)
       congrArg (fun n : ℕ ↦ (n : ZMod height)) hnat
   obtain ⟨hf, hs⟩ := torusUpEdge_endpoints_of_lt
     (p := ((L : ZMod width), ((K - 1 : ℕ) : ZMod height))) (by dsimp; rw [hy]; omega)
-  rw [IsRegionBoundaryEdge, hf, hs]
+  rw [ManyBody.IsRegionBoundaryEdge, hf, hs]
   refine Or.inr ⟨?_, ?_⟩
   · rw [windowCornerRectangle, mem_torusContiguousRectangle]
     dsimp only
@@ -290,9 +290,9 @@ theorem exists_scalar_of_normalArcWindows_absorbedGauge
       RegionBlockedTensorInjective (reindexTensor (applyGauge B X) hbond) Q :=
     regionBlockedTensorInjective_reindexTensor (applyGauge B X) hbond Q
       (regionBlockedTensorInjective_applyGauge B X Q hQ)
-  let _ : Nonempty {e : Edge (torusGraph width height) // IsRegionBoundaryEdge R e} :=
+  let _ : Nonempty {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e} :=
     ⟨⟨torusUpEdge v₀, isRegionBoundaryEdge_windowCornerRegion hK hxw hyh⟩⟩
-  let _ : Nonempty {e : Edge (torusGraph width height) // IsRegionBoundaryEdge S e} :=
+  let _ : Nonempty {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge S e} :=
     ⟨⟨torusUpEdge ((L : ZMod width), ((K - 1 : ℕ) : ZMod height)),
       isRegionBoundaryEdge_windowCornerRectangle hK hxw hyh⟩⟩
   obtain ⟨cR, hcR0, hRp⟩ := twoBlockProportional_of_edgeAbsorbed A B hbond X R

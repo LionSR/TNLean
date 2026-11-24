@@ -106,7 +106,7 @@ theorem notMem_resetSupport {L : ℕ} {R C R₀ C₀ : Finset (SquareLatticeVert
       w < (supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) :
     let a := rectangleSiteEquiv L L
     let boundary : Finset (Edge (squareLatticeGraph L L)) :=
-      Finset.univ.filter (IsRegionBoundaryEdge R)
+      Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R)
     let Z := boundary.biUnion fun x ↦ ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
     ∀ v ∈ R₀ ∪ C₀,
       a v ∉ graphNeighborhood (planeDomainGraph (rectangularDomain L L))
@@ -143,7 +143,7 @@ theorem notMem_resetSupport {L : ℕ} {R C R₀ C₀ : Finset (SquareLatticeVert
     refine hfar y (by simp [a, supDist]) (fun _ ↦ hy'.1) (fun _ ↦ hy'.2)
   · obtain ⟨y, hy, rfl⟩ := Finset.mem_image.mp hx
     obtain ⟨f, hf, hyf⟩ := Finset.mem_biUnion.mp hy
-    have hfR : IsRegionBoundaryEdge R f := (Finset.mem_filter.mp hf).2
+    have hfR : ManyBody.IsRegionBoundaryEdge R f := (Finset.mem_filter.mp hf).2
     have hadj := f.2.2
     have hy₁ : supDist (a y).1 (rectangleEmbedding f.1.1) ≤ 1 := by
       rcases Finset.mem_insert.mp hyf with rfl | hy

@@ -277,7 +277,7 @@ private theorem exists_cycleFunction_physicalMeasurement
       (∀ C, (Q C).IsHermitian ∧ (Q C).PosSemidef) ∧
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
-      ∀ (u : Edge Γ → G) (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G)
+      ∀ (u : Edge Γ → G) (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G)
         (C : Option (ConjClasses G)),
         Q C *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
             (fun f => Fintype.equivFin G (θ f)) =
@@ -353,7 +353,7 @@ theorem exists_regularCycleClass_physicalMeasurement
       (∀ C, (Q C).IsHermitian ∧ (Q C).PosSemidef) ∧
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
-      ∀ (u : Edge Γ → G) (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G)
+      ∀ (u : Edge Γ → G) (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G)
         (C : Option (ConjClasses G)),
         Q C *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
             (fun f => Fintype.equivFin G (θ f)) =
@@ -379,7 +379,7 @@ theorem exists_regularClosedWalkClass_physicalMeasurement
       (∀ C, (Q C).IsHermitian ∧ (Q C).PosSemidef) ∧
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
-      ∀ (u : Edge Γ → G) (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G)
+      ∀ (u : Edge Γ → G) (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G)
         (C : Option (ConjClasses G)),
         Q C *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
             (fun f => Fintype.equivFin G (θ f)) =

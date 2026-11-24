@@ -189,7 +189,7 @@ theorem regionVirtualBondWeight_univ_apply (A : Tensor Γ d)
   have hBoundary (η : RegionIncidentConfig A Finset.univ) :
       regionIncidentBoundaryLabel A Finset.univ η = μ := by
     funext e
-    exact False.elim (by simpa [IsRegionBoundaryEdge] using e.2)
+    exact False.elim (by simpa [ManyBody.IsRegionBoundaryEdge] using e.2)
   simp only [regionVirtualBondWeight, hBoundary, ite_true, Finset.sum_apply, Pi.single_apply]
   rw [virtualBondProduct_eq_sum_diagonal]
   refine Fintype.sum_equiv (fullRegionIncidentConfigEquivBonds A) _ _ ?_

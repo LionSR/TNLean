@@ -48,7 +48,7 @@ theorem regularTwistedOpenRegionMatrix_regularRegionGauge
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
     (R : Finset V) (k : {v : V // v ∈ R} → G) (u : Edge Γ → G) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     regularTwistedOpenRegionMatrix a u R e =
       (regularTwistedOpenRegionMatrix a (regularRegionGaugeEdgeOperators R k u) R e).submatrix
         (Equiv.refl _) (regularRegionBoundaryGaugeEquiv R k u e) := by
@@ -68,7 +68,7 @@ theorem regularTwistedOpenRegionMatrix_eq_submatrix_of_regularRegionGaugeResidua
     (ha : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
     (R : Finset V) (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
     (hflat : ∀ f, regularRegionGaugeResidual R k u f = 1) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     regularTwistedOpenRegionMatrix a u R e =
       (regularOpenRegionMatrix a R e).submatrix
         (Equiv.refl _) (regularRegionBoundaryGaugeEquiv R k u e) := by
@@ -92,7 +92,7 @@ theorem exists_positive_gram_regularTwistedOpenRegionMatrix_of_regularRegionGaug
     (hR : (Γ.induce (R : Set V)).Connected)
     (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
     (hflat : ∀ f, regularRegionGaugeResidual R k u f = 1) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     ∃ c : ℝ, 0 < c ∧
       (regularTwistedOpenRegionMatrix a u R e).conjTranspose *
         regularTwistedOpenRegionMatrix a u R e =
@@ -116,7 +116,7 @@ theorem rank_regularTwistedOpenRegionMatrix_of_regularRegionGaugeResidual_eq_one
     (hR : (Γ.induce (R : Set V)).Connected)
     (k : {v : V // v ∈ R} → G) (u : Edge Γ → G)
     (hflat : ∀ f, regularRegionGaugeResidual R k u f = 1) {b : ℕ} (hb : 0 < b)
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     (regularTwistedOpenRegionMatrix a u R e).rank = Fintype.card G ^ (b - 1) := by
   classical
   obtain ⟨c, hc, hgram⟩ :=

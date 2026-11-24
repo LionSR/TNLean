@@ -107,7 +107,7 @@ private theorem sum_boundary_pair_cycle {C : Type*} [Fintype C] (n : ℕ)
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 
-private abbrev Boundary (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev Boundary (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 variable (R : Finset V)
 variable (T : SimpleGraph {v : V // v ∈ Finset.univ \ R}) [DecidableRel T.Adj]

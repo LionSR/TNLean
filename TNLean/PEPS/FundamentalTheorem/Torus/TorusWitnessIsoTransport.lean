@@ -29,7 +29,7 @@ variable [DecidableRel G.Adj] [DecidableRel G'.Adj] {d : ℕ}
 
 private theorem regionInsertedCoeff_transport_pullback_conj
     {A B : Tensor G d} (φ : G ≃g G') (R : Finset V)
-    (f : {e : Edge G // IsRegionBoundaryEdge R e})
+    (f : {e : Edge G // ManyBody.IsRegionBoundaryEdge R e})
     (hE : A.bondDim f.1 = B.bondDim f.1)
     (hE' : (A.transport φ).bondDim (boundaryEdgeMap φ R f).1 =
       (B.transport φ).bondDim (boundaryEdgeMap φ R f).1)
@@ -81,7 +81,7 @@ private noncomputable def edgeCoeffIdentityWitness_transport_pullback
     {A B : Tensor (torusGraph width height) d}
     (φ : torusGraph width height ≃g torusGraph width' height')
     (R : Finset (TorusVertex width height))
-    (f : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge R e})
+    (f : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e})
     (hE : A.bondDim f.1 = B.bondDim f.1)
     (hE' : (A.transport φ).bondDim (boundaryEdgeMap φ R f).1 =
       (B.transport φ).bondDim (boundaryEdgeMap φ R f).1)
@@ -146,11 +146,11 @@ theorem exists_edgeCoeffIdentityWitness_of_transport
     simp only [R, mem_Region_map]
     change φ (φ.symm v) ∈ w.region ↔ v ∈ w.region
     rw [φ.apply_symm_apply]
-  have hBoundary : IsRegionBoundaryEdge R e := by
+  have hBoundary : ManyBody.IsRegionBoundaryEdge R e := by
     apply (isRegionBoundaryEdge_map φ R e).mp
     rw [hR]
     exact w.isBoundary
-  let f : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge R e} := ⟨e, hBoundary⟩
+  let f : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge R e} := ⟨e, hBoundary⟩
   have hE : A.bondDim e = B.bondDim e := by
     simpa only [Tensor.transport_bondDim, ManyBody.Edge.map_symm_map] using hE'
   let w₀ := edgeCoeffIdentityWitness_transport_pullback φ R f hE hE' Z Z w hR.symm

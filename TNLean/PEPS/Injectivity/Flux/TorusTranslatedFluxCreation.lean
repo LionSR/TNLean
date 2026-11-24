@@ -132,7 +132,7 @@ theorem IsGIsometric.exists_unitary_torusTranslatedPhysicalFluxCreation
     ∃ W : Matrix ({x : TorusVertex width height // x ∈ R v} → Fin d)
         ({x : TorusVertex width height // x ∈ R v} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({x : TorusVertex width height // x ∈ R v} → Fin d) ℂ ∧
-      ∀ θ : {e : Edge (torusGraph width height) // IsRegionBoundaryEdge (R v) e} → G,
+      ∀ θ : {e : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge (R v) e} → G,
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a) (fun _ => 1)))
           (R v) (fun f => Fintype.equivFin G (θ f)) =

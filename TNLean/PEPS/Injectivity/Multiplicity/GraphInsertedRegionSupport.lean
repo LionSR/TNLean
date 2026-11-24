@@ -31,7 +31,7 @@ variable {X : Type*} [Fintype X] [DecidableEq X]
 
 private abbrev Internal (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
 private abbrev Noninternal (R : Finset V) := {e : Edge Γ // ¬ (e.1.1 ∈ R ∧ e.1.2 ∈ R)}
-private abbrev Boundary (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev Boundary (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
 private theorem boundary_not_internal (R : Finset V) (e : Boundary (Γ := Γ) R) :
@@ -86,8 +86,9 @@ private theorem assembled_region_labels (R : Finset V)
     simp only [graphSiteBondEndpointEquiv, Equiv.coe_fn_symm_mk,
       Equiv.piEquivPiSubtypeProd, hi]
     simpa using h
-  · have hb : IsRegionBoundaryEdge R e.1 :=
-      (isRegionIncidentEdge_of_regionVertex R v e).isRegionBoundaryEdge hi
+  · have hb : ManyBody.IsRegionBoundaryEdge R e.1 :=
+      ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge
+        (isRegionIncidentEdge_of_regionVertex R v e) hi
     have h := graphRegionIncidentConfigEquiv_apply_boundary R
       ((graphRegionIncidentConfigEquiv R).symm (ξ, insertedBoundary R ζ)) ⟨e.1, hb⟩
     rw [Equiv.apply_symm_apply] at h

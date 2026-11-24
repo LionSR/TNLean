@@ -106,8 +106,8 @@ complement coordinates, lines 1935–1990. -/
 theorem regularCycleControlledBoundary_coordinateTranslation (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (o : {v : V // v ∈ R})
-    (v w : {e : Edge Γ // IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
-    (p : (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) →
+    (v w : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
+    (p : (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) →
       (Γ.induce (R : Set V)).Walk (v f) (w f))
     (ℓ : {v : V // v ∈ R} → G)
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o) :
@@ -177,8 +177,8 @@ control function. Source: SCP10, lines 1935–1990. -/
 theorem regularCycleControlledBoundaryMatrix_commute_vertexTranslation (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    (v w : {e : Edge Γ // IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
-    (p : (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) →
+    (v w : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
+    (p : (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) →
       (Γ.induce (R : Set V)).Walk (v f) (w f)) (ℓ : {v : V // v ∈ R} → G) :
     Commute (regularCycleControlledBoundaryMatrix R T hT htree o
         (fun z f => FreeGroup.lift z (regularRegionCycleWord R T (p f))))
@@ -257,8 +257,8 @@ No group-valued equivariance or physical surjectivity hypothesis is required. -/
 theorem regularCycleControlledBoundaryMatrix_commute_localProjector (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    (v w : {e : Edge Γ // IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
-    (p : (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) →
+    (v w : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
+    (p : (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) →
       (Γ.induce (R : Set V)).Walk (v f) (w f)) :
     Commute (regularCycleControlledBoundaryMatrix R T hT htree o
         (fun z f => FreeGroup.lift z (regularRegionCycleWord R T (p f))))
@@ -273,8 +273,8 @@ support. Source: SCP10, lines 1765–1820 and 1935–1990. -/
 theorem regularCycleControlledBoundaryMatrix_maps_localProjector_range (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    (v w : {e : Edge Γ // IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
-    (p : (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) →
+    (v w : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
+    (p : (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) →
       (Γ.induce (R : Set V)).Walk (v f) (w f))
     (ψ : RegionHalfEdgeConfig (Γ := Γ) G R → ℂ)
     (hψ : ψ ∈ LinearMap.range (Matrix.mulVecLin (regionPhysicalProductMatrix R
@@ -303,8 +303,8 @@ theorem exists_unitary_regionPhysicalProductMatrix_mul_cycleWords
       (regularSiteMap (a v))) (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
-    (v w : {e : Edge Γ // IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
-    (p : (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) →
+    (v w : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → {v : V // v ∈ R})
+    (p : (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) →
       (Γ.induce (R : Set V)).Walk (v f) (w f)) :
     ∃ W : Matrix ((v : {v // v ∈ R}) → κ v.1) ((v : {v // v ∈ R}) → κ v.1) ℂ,
       W ∈ Matrix.unitaryGroup ((v : {v // v ∈ R}) → κ v.1) ℂ ∧

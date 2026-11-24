@@ -226,7 +226,7 @@ end NormalSquareLatticeRectangleInjectivityHypotheses
 `(a, b)` lies outside, its upper neighbour `(a, b + 1)` inside. -/
 theorem isRegionBoundaryEdge_normalSquareComparisonRegion {a b : ℕ}
     (ha : a < width) (hb : b + 2 < height) :
-    IsRegionBoundaryEdge (G := squareLatticeGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := squareLatticeGraph width height)
       (normalSquareComparisonRegion a b)
       (squareLatticeUpEdge a b ha (by omega)) := by
   refine Or.inr ⟨?_, ?_⟩
@@ -241,7 +241,7 @@ theorem isRegionBoundaryEdge_normalSquareComparisonRegion {a b : ℕ}
 `(a, b - 1)` lies outside, its upper neighbour `(a, b)` inside. -/
 theorem isRegionBoundaryEdge_normalSquareComparisonSquare {a b : ℕ}
     (hb1 : 1 ≤ b) (ha : a < width) (hb : b + 2 < height) :
-    IsRegionBoundaryEdge (G := squareLatticeGraph width height)
+    ManyBody.IsRegionBoundaryEdge (G := squareLatticeGraph width height)
       (normalSquareComparisonSquare a b)
       (squareLatticeUpEdge a (b - 1) ha (by omega)) := by
   refine Or.inr ⟨?_, ?_⟩
@@ -265,7 +265,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1571 of
 theorem normalSquareInteriorEdgeDatum_of_boundary_comparisonSquare {a b : ℕ}
     (hwin : IsNormalSquareComparisonWindow width height a b)
     {f : Edge (squareLatticeGraph width height)}
-    (hf : IsRegionBoundaryEdge (G := squareLatticeGraph width height)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := squareLatticeGraph width height)
       (normalSquareComparisonSquare a b) f) :
     NormalSquareInteriorEdgeDatum f := by
   obtain ⟨ha4, haw, hb4, hbh⟩ := hwin
@@ -294,7 +294,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1449--1571 of
 theorem normalSquareInteriorEdgeDatum_of_boundary_comparisonRegion {a b : ℕ}
     (hwin : IsNormalSquareComparisonWindow width height a b)
     {f : Edge (squareLatticeGraph width height)}
-    (hf : IsRegionBoundaryEdge (G := squareLatticeGraph width height)
+    (hf : ManyBody.IsRegionBoundaryEdge (G := squareLatticeGraph width height)
       (normalSquareComparisonRegion a b) f) :
     NormalSquareInteriorEdgeDatum f := by
   obtain ⟨ha4, haw, hb4, hbh⟩ := hwin

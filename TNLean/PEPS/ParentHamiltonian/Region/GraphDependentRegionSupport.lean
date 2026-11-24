@@ -25,7 +25,7 @@ variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
 
 private abbrev Internal (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
 private abbrev Noninternal (R : Finset V) := {e : Edge Γ // ¬ (e.1.1 ∈ R ∧ e.1.2 ∈ R)}
-private abbrev Boundary (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
+private abbrev Boundary (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
 private theorem boundary_not_internal (R : Finset V) (e : Boundary (Γ := Γ) R) :
@@ -39,7 +39,7 @@ private def regionSplit (A : Tensor Γ d) (R : Finset V) :
       ((e : Internal (Γ := Γ) R) → Fin (A.bondDim e.1)) × RegionBoundaryConfig A R where
   toFun η := (fun e ↦ η ⟨e.1, Or.inl e.2.1⟩, regionIncidentBoundaryLabel A R η)
   invFun p e := if hi : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R then p.1 ⟨e.1, hi⟩ else
-    p.2 ⟨e.1, e.2.isRegionBoundaryEdge hi⟩
+    p.2 ⟨e.1, ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge e.2 hi⟩
   left_inv η := by funext e; dsimp only; split_ifs <;> rfl
   right_inv p := by
     apply Prod.ext

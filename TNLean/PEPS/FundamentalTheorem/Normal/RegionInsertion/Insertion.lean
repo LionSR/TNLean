@@ -67,28 +67,28 @@ omit [DecidableRel G.Adj] in
 /-- An edge crosses the boundary of `R` exactly when it crosses the boundary of
 the set complement `univ \ R`. -/
 theorem isRegionBoundaryEdge_compl_iff (R : Finset V) (f : Edge G) :
-    IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f ↔
-      IsRegionBoundaryEdge (G := G) R f := by
-  simp only [IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and]
+    ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f ↔
+      ManyBody.IsRegionBoundaryEdge (G := G) R f := by
+  simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and]
   tauto
 
 /-- A boundary edge of `R`, reread as a boundary edge of the complement
 `univ \ R`. -/
 def regionBoundaryEdgeToCompl (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
-    {f : Edge G // IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f} :=
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
+    {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f} :=
   ⟨f.1, (isRegionBoundaryEdge_compl_iff (G := G) R f.1).mpr f.2⟩
 
 /-- The boundary edges of `R` and of its complement `univ \ R` are the same
 edges. -/
 def regionBoundaryEdgeComplEquiv (R : Finset V) :
-    {f : Edge G // IsRegionBoundaryEdge (G := G) R f} ≃
-      {f : Edge G // IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f} :=
+    {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} ≃
+      {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f} :=
   Equiv.subtypeEquivRight (fun f => (isRegionBoundaryEdge_compl_iff (G := G) R f).symm)
 
 omit [DecidableRel G.Adj] in
 @[simp] theorem regionBoundaryEdgeComplEquiv_symm_apply_coe (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ \ R) f}) :
     (((regionBoundaryEdgeComplEquiv (G := G) R).symm f) : Edge G) = f.1 := rfl
 
 /-! ### The complement region as a two-block tensor over the boundary of `R`
@@ -110,7 +110,7 @@ def regionComplementBoundaryConfig (A : Tensor G d) (R : Finset V)
 viewed on the complement as `regionBoundaryEdgeToCompl R f`, off the original
 boundary value at `f`. -/
 theorem regionComplementBoundaryConfig_apply_toCompl (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (bdry : RegionBoundaryConfig (G := G) A R) :
     regionComplementBoundaryConfig (G := G) A R bdry (regionBoundaryEdgeToCompl (G := G) R f) =
       bdry f := by
@@ -130,7 +130,7 @@ Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`, where one block is compared against its
 complement. -/
 noncomputable def regionComplementTwoBlock (A : Tensor G d) (R : Finset V) :
-    TwoBlockTensor (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    TwoBlockTensor (Bond := {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
       (fun f => Fin (A.bondDim f.1)) PUnit
       (RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :=
   fun _ bdry τ =>
@@ -156,7 +156,7 @@ Source: arXiv:1804.04964, Section 3, lines 205--250 of
 over a region is injective. -/
 theorem isTwoBlockInjective_regionComplementTwoBlock (A : Tensor G d) (R : Finset V)
     (hR : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R)) :
-    IsTwoBlockInjective (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    IsTwoBlockInjective (Bond := {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
       (bondDim := fun f => Fin (A.bondDim f.1)) (regionComplementTwoBlock (G := G) A R) := by
   classical
   -- Reindex the family through the punit and boundary-edge equivalences.
@@ -204,7 +204,7 @@ endpoint stars are replaced by the region boundary configurations.
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`. -/
 noncomputable def regionInsertedCoeff (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) : ℂ := by
@@ -220,7 +220,7 @@ noncomputable def regionInsertedCoeff (A : Tensor G d) (R : Finset V)
 open scoped Classical in
 /-- Unfolding lemma for `regionInsertedCoeff` (the explicit double-sum form). -/
 theorem regionInsertedCoeff_eq (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -251,11 +251,11 @@ the two boundary-configuration sums of `regionInsertedCoeff`.
 Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem twoBlockInsertedCoeff_eq_regionInsertedCoeff (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
-    twoBlockInsertedCoeff (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    twoBlockInsertedCoeff (Bond := {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
         (bondDim := fun f => Fin (A.bondDim f.1))
         (regionTwoBlock (G := G) A R) (regionComplementTwoBlock (G := G) A R)
         f M PUnit.unit PUnit.unit σ τ =
@@ -334,7 +334,7 @@ the inserted matrix with the corresponding reindexing algebra equivalence.
 This is the region analogue of `edgeInsertedCoeff_reindexTensor`. -/
 theorem regionInsertedCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
     (h : bd = B.bondDim) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (N : Matrix (Fin (bd f.1)) (Fin (bd f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -346,22 +346,22 @@ theorem regionInsertedCoeff_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
   -- Reindex both boundary-configuration sums by casting every bond.
   refine Fintype.sum_equiv
     (Equiv.piCongrRight
-      (fun e : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} =>
+      (fun e : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} =>
         finCongr (congr_fun h e.1))) _ _ (fun μ => ?_)
   refine Fintype.sum_equiv
     (Equiv.piCongrRight
-      (fun e : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} =>
+      (fun e : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} =>
         finCongr (congr_fun h e.1))) _ _ (fun ν => ?_)
   -- Rewrite the bare equiv-applications `(piCongrRight …) μ`, `(piCongrRight …) ν`
   -- (passed as whole functions) to their pointwise-cast forms; the pointwise simp
   -- lemmas below then clear the residual `μ f`/`ν f` applications.
   have hμeq : (Equiv.piCongrRight
-        (fun e : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} =>
+        (fun e : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} =>
           finCongr (congr_fun h e.1))) μ =
       (fun e => Fin.cast (congr_fun h e.1) (μ e)) := by
     funext e; simp only [Equiv.piCongrRight_apply, Pi.map_apply, finCongr_apply]
   have hνeq : (Equiv.piCongrRight
-        (fun e : {f : Edge G // IsRegionBoundaryEdge (G := G) R f} =>
+        (fun e : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f} =>
           finCongr (congr_fun h e.1))) ν =
       (fun e => Fin.cast (congr_fun h e.1) (ν e)) := by
     funext e; simp only [Equiv.piCongrRight_apply, Pi.map_apply, finCongr_apply]
@@ -423,14 +423,14 @@ Source: arXiv:1804.04964, Section 3, lines 1205--1210 and 1475--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem sameTwoBlockInsertions_of_regionInsertedCoeff_eq (A B : Tensor G d)
     (R : Finset V) (hbd : A.bondDim = B.bondDim)
-    (hregion : ∀ (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hregion : ∀ (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
       (N : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
       (σ : RegionPhysicalConfig (V := V) (d := d) R)
       (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
       regionInsertedCoeff (G := G) A R f N σ τ =
         regionInsertedCoeff (G := G) B R f
           (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd f.1)) N) σ τ) :
-    SameTwoBlockInsertions (Bond := {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    SameTwoBlockInsertions (Bond := {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
       (bondDim := fun f => Fin (A.bondDim f.1))
       (regionTwoBlock (G := G) A R)
       (regionTwoBlock (G := G) (reindexTensor (G := G) B hbd) R)

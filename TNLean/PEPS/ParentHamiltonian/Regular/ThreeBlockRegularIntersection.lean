@@ -52,7 +52,7 @@ theorem threeBlockFourLegGraph_core_degree (v : Fin 11) (hv : v ∈ threeBlockRe
 /-- The three-block region has eight distinct boundary edges. -/
 theorem threeBlockFourLegGraph_boundary_card :
     Fintype.card {e : Edge threeBlockFourLegGraph //
-      IsRegionBoundaryEdge threeBlockRegion e} = 8 := by
+      ManyBody.IsRegionBoundaryEdge threeBlockRegion e} = 8 := by
   decide
 
 /-- The literal four-leg geometry satisfies the regular intersection identity.

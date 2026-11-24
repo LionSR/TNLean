@@ -73,12 +73,12 @@ theorem torusGraph_singleton_connected (v : TorusVertex width height) :
 Source: SCP10, the one-site boundary in the square-lattice construction,
 lines 1935–1990. -/
 theorem card_regionBoundaryEdge_torus_singleton (v : TorusVertex width height) :
-    Fintype.card {f : Edge (torusGraph width height) // IsRegionBoundaryEdge {v} f} = 4 := by
+    Fintype.card {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge {v} f} = 4 := by
   classical
-  let e : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge {v} f} ≃
+  let e : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge {v} f} ≃
       IncidentEdge (torusGraph width height) v :=
     Equiv.subtypeEquivRight (fun f => by
-      simp only [IsRegionBoundaryEdge, Finset.mem_singleton]
+      simp only [ManyBody.IsRegionBoundaryEdge, Finset.mem_singleton]
       have hne := ne_of_lt f.2.1
       have hnot : ¬(f.1.1 = v ∧ f.1.2 = v) :=
         fun h => hne (h.1.trans h.2.symm)

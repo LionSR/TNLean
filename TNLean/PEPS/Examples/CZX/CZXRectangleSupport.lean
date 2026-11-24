@@ -322,9 +322,9 @@ theorem czxRectangleBoundaryLabels_mem_range_of_openRegionWeight_ne_zero
   rw [openRegionWeight_czxPEPS] at hσ
   simp only [ne_eq, ite_eq_right_iff, one_ne_zero, imp_false, not_not] at hσ
   obtain ⟨η, hημ, hη⟩ := hσ
-  change ({e : Edge (torusGraph width height) // IsRegionIncidentEdge R e} → Fin 4) at η
+  change ({e : Edge (torusGraph width height) // ManyBody.IsRegionIncidentEdge R e} → Fin 4) at η
   let ζ : Edge (torusGraph width height) → Fin 4 :=
-    fun e => if he : IsRegionIncidentEdge R e then η ⟨e, he⟩ else 0
+    fun e => if he : ManyBody.IsRegionIncidentEdge R e then η ⟨e, he⟩ else 0
   let τ : TorusVertex width height → Fin 16 :=
     fun v => if hv : v ∈ R then σ ⟨v, hv⟩ else 0
   have hn (v : TorusVertex width height) (hv : v ∈ R) :
@@ -341,7 +341,7 @@ theorem czxRectangleBoundaryLabels_mem_range_of_openRegionWeight_ne_zero
         ζ (torusRectanglePerimeterEdge xStart yStart w h i) := by
     have he := congrFun hημ
       (torusRectanglePerimeterEquiv xStart yStart w h hw hh hx hy hwp hhp i)
-    have hi := isRegionBoundaryEdge_touches R
+    have hi := ManyBody.isRegionBoundaryEdge_touches R
       (torusRectanglePerimeterEdge_boundary xStart yStart w h hw hh hx hy hwp hhp i)
     dsimp only [ζ]
     rw [dite_eq_left hi]

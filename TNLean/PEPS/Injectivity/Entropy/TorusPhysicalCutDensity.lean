@@ -99,8 +99,8 @@ theorem IsGIsometric.exists_torusPhysicalCut_common_density_of_isSimplyConnected
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oR : {v : X // v ∈ R}) (oS : {v : X // v ∈ Finset.univ \ R})
-    {n : ℕ} (e : {f : Edge Γₜ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
-    (p : {f : Edge Γₜ // IsRegionBoundaryEdge R f} →
+    {n : ℕ} (e : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1))
+    (p : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} →
       ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS)
     (hwind : ∀ f, torusWalkWinding
         ((p f).map (SimpleGraph.Embedding.induce

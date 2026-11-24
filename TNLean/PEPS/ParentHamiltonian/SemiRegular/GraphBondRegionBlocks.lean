@@ -29,7 +29,7 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 private abbrev RI (R : Finset V) := {f : Edge Γ // f.1.1 ∈ R ∧ f.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {f : Edge Γ // IsRegionBoundaryEdge R f}
+private abbrev RB (R : Finset V) := {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f}
 private abbrev RE (R : Finset V) := {f : Edge Γ // f.1.1 ∉ R ∧ f.1.2 ∉ R}
 variable {X Y : Type*} {p q : ℕ}
 
@@ -97,14 +97,14 @@ theorem prod_edge_eq_exterior_boundary_internal (R : Finset V) (w : Edge Γ → 
   classical
   have h (f : Edge Γ) : w f =
       (if _h : f.1.1 ∉ R ∧ f.1.2 ∉ R then w f else 1) *
-        ((if _h : IsRegionBoundaryEdge R f then w f else 1) *
+        ((if _h : ManyBody.IsRegionBoundaryEdge R f then w f else 1) *
           (if _h : f.1.1 ∈ R ∧ f.1.2 ∈ R then w f else 1)) := by
     by_cases ht : f.1.1 ∈ R <;> by_cases hh : f.1.2 ∈ R <;>
-      simp [IsRegionBoundaryEdge, ht, hh]
+      simp [ManyBody.IsRegionBoundaryEdge, ht, hh]
   calc
     _ = ∏ f : Edge Γ,
         (if _h : f.1.1 ∉ R ∧ f.1.2 ∉ R then w f else 1) *
-          ((if _h : IsRegionBoundaryEdge R f then w f else 1) *
+          ((if _h : ManyBody.IsRegionBoundaryEdge R f then w f else 1) *
             (if _h : f.1.1 ∈ R ∧ f.1.2 ∈ R then w f else 1)) :=
       Finset.prod_congr rfl (fun f _ => h f)
     _ = _ := by

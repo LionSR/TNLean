@@ -51,7 +51,7 @@ variable [Group G]
 operator. Source: SCP10, oriented regular bonds, lines 1935–1957. -/
 theorem IsTwistedRegionLabelCompatible.tail_eq {R : Finset V} {u w : Edge Γ → G}
     {q : {v : V // v ∈ R} → G}
-    {η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G}
+    {η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G}
     (hc : IsTwistedRegionLabelCompatible R u w q η θ) (e : Edge Γ) (h₁ : e.1.1 ∈ R) :
     η ⟨e, Or.inl h₁⟩ = q ⟨e.1.1, h₁⟩ * θ ⟨e, Or.inl h₁⟩ := by
   have h := congrFun (hc ⟨e.1.1, h₁⟩) ⟨e, Or.inl rfl⟩
@@ -61,7 +61,7 @@ theorem IsTwistedRegionLabelCompatible.tail_eq {R : Finset V} {u w : Edge Γ →
 Source: SCP10, oriented regular bonds, lines 1935–1957. -/
 theorem IsTwistedRegionLabelCompatible.head_eq {R : Finset V} {u w : Edge Γ → G}
     {q : {v : V // v ∈ R} → G}
-    {η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G}
+    {η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G}
     (hc : IsTwistedRegionLabelCompatible R u w q η θ) (e : Edge Γ) (h₂ : e.1.2 ∈ R) :
     u e * η ⟨e, Or.inr h₂⟩ = q ⟨e.1.2, h₂⟩ * (w e * θ ⟨e, Or.inr h₂⟩) := by
   have h := congrFun (hc ⟨e.1.2, h₂⟩) ⟨e, Or.inr rfl⟩
@@ -71,7 +71,7 @@ theorem IsTwistedRegionLabelCompatible.head_eq {R : Finset V} {u w : Edge Γ →
 operators. Source: SCP10, twisted regular contraction, lines 1935–1990. -/
 theorem IsTwistedRegionLabelCompatible.internalEdge_intertwining
     {R : Finset V} {u w : Edge Γ → G} {q : {v : V // v ∈ R} → G}
-    {η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G}
+    {η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G}
     (hc : IsTwistedRegionLabelCompatible R u w q η θ)
     (e : Edge Γ) (h₁ : e.1.1 ∈ R) (h₂ : e.1.2 ∈ R) :
     u e * q ⟨e.1.1, h₁⟩ = q ⟨e.1.2, h₂⟩ * w e := by
@@ -82,7 +82,7 @@ theorem IsTwistedRegionLabelCompatible.internalEdge_intertwining
 Source: SCP10, twisted regular contraction, lines 1935–1990. -/
 theorem IsTwistedRegionLabelCompatible.exists_common_label
     {R : Finset V} {u w : Edge Γ → G} {q : {v : V // v ∈ R} → G}
-    {η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G}
+    {η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G}
     (hc : IsTwistedRegionLabelCompatible R u w q η θ)
     (hΔ : Δ ≤ Γ) (hR : (Δ.induce (R : Set V)).Connected)
     (hUntwisted : ∀ e : Edge Γ, Δ.Adj e.1.1 e.1.2 → u e = 1 ∧ w e = 1) :
@@ -98,10 +98,10 @@ common translation and one intertwining equation for each internal bond.
 Source: SCP10, twisted-region contraction, lines 1935–1990. -/
 theorem isTwistedRegionLabelCompatible_iff_exists_translation
     (R : Finset V) (u w : Edge Γ → G) (q : {v : V // v ∈ R} → G)
-    (η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G)
+    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G)
     (hΔ : Δ ≤ Γ) (hR : (Δ.induce (R : Set V)).Connected)
     (hUntwisted : ∀ e : Edge Γ, Δ.Adj e.1.1 e.1.2 → u e = 1 ∧ w e = 1)
-    (hBoundary : ∀ e : Edge Γ, IsRegionBoundaryEdge R e → u e = 1 ∧ w e = 1) :
+    (hBoundary : ∀ e : Edge Γ, ManyBody.IsRegionBoundaryEdge R e → u e = 1 ∧ w e = 1) :
     IsTwistedRegionLabelCompatible R u w q η θ ↔
       ∃ x : G, (∀ v, q v = x) ∧ η = (fun e => x * θ e) ∧
         ∀ (e : Edge Γ), e.1.1 ∈ R → e.1.2 ∈ R → u e * x = x * w e := by
@@ -135,10 +135,10 @@ common internal-bond intertwiners. Source: SCP10, lines 1935–1990. -/
 theorem sum_twistedRegionLabelCompatible_eq_sum_translation
     [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G]
     (R : Finset V) (u w : Edge Γ → G)
-    (η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G)
+    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G)
     (hΔ : Δ ≤ Γ) (hR : (Δ.induce (R : Set V)).Connected)
     (hUntwisted : ∀ e : Edge Γ, Δ.Adj e.1.1 e.1.2 → u e = 1 ∧ w e = 1)
-    (hBoundary : ∀ e : Edge Γ, IsRegionBoundaryEdge R e → u e = 1 ∧ w e = 1) :
+    (hBoundary : ∀ e : Edge Γ, ManyBody.IsRegionBoundaryEdge R e → u e = 1 ∧ w e = 1) :
     (∑ q : {v : V // v ∈ R} → G,
       if IsTwistedRegionLabelCompatible R u w q η θ then (1 : ℂ) else 0) =
       ∑ x : G, if η = (fun e => x * θ e) ∧

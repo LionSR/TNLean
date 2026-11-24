@@ -237,7 +237,7 @@ conjugator determinacy of the isomorphism lemma, lines 560--583 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem absorbedGauge_unique_scalar_of_region
     (A B : Tensor G d) (hbd : A.bondDim = B.bondDim)
-    (R : Finset V) (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (R : Finset V) (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hposB : ∀ g : Edge G, 0 < B.bondDim g)
@@ -388,7 +388,7 @@ theorem fundamentalTheorem_normalPEPS_gauge_unique
     regionBlockedTensorInjective_red D.pairLeft
   have hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ D.pairLeft.red) :=
     regionBlockedTensorInjective_host D.pairLeft hUA
-  have hbdry : IsRegionBoundaryEdge (G := G) D.pairLeft.red e :=
+  have hbdry : ManyBody.IsRegionBoundaryEdge (G := G) D.pairLeft.red e :=
     Or.inl ⟨D.left_mem_red,
       Finset.disjoint_right.mp D.red_disjoint_blue D.right_mem_blue⟩
   exact absorbedGauge_unique_scalar_of_region B A hbond.symm D.pairLeft.red

@@ -64,7 +64,7 @@ theorem isCrossingEdge_normalSquareHorizontalTranslatedEdge
   · rintro ⟨hRed, hBlue⟩
     -- `g` crosses red (one endpoint in, one out) and blue (one endpoint in, one out).
     -- Unfold boundary membership and the nearest-neighbour adjacency of `g`.
-    simp only [IsRegionBoundaryEdge, normalSquareHorizontalTranslatedEdgeRed,
+    simp only [ManyBody.IsRegionBoundaryEdge, normalSquareHorizontalTranslatedEdgeRed,
       normalSquareHorizontalTranslatedEdgeBlue, mem_normalSquareRegionTVerticalBlock,
       mem_normalSquareRegionTHorizontalBlock] at hRed hBlue
     have hadj := g.2.2
@@ -105,7 +105,7 @@ theorem isCrossingEdge_normalSquareHorizontalTranslatedEdge
     · simpa only [normalSquareHorizontalTranslatedEdge] using hc4
   · rintro rfl
     refine ⟨?_, ?_⟩ <;>
-      simp only [IsRegionBoundaryEdge, normalSquareHorizontalTranslatedEdgeRed,
+      simp only [ManyBody.IsRegionBoundaryEdge, normalSquareHorizontalTranslatedEdgeRed,
         normalSquareHorizontalTranslatedEdgeBlue, normalSquareHorizontalTranslatedEdge,
         mem_normalSquareRegionTVerticalBlock, mem_normalSquareRegionTHorizontalBlock]
     · exact Or.inl ⟨⟨by omega, by omega, by omega, by omega⟩, by omega⟩

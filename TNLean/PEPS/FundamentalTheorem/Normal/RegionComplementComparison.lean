@@ -84,13 +84,13 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1544 of
 `Papers/1804.04964/paper_normal.tex`: `A_R ∝ B'_R`. -/
 theorem regionComplement_comparison (A Btilde : Tensor G d)
     (R : Finset V) (hbd : A.bondDim = Btilde.bondDim)
-    [Nonempty {f : Edge G // IsRegionBoundaryEdge (G := G) R f}]
+    [Nonempty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}]
     (hRA : RegionBlockedTensorInjective (G := G) A R)
     (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hRB : RegionBlockedTensorInjective (G := G) (reindexTensor (G := G) Btilde hbd) R)
     (hCB :
       RegionBlockedTensorInjective (G := G) (reindexTensor (G := G) Btilde hbd) (Finset.univ \ R))
-    (hregion : ∀ (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hregion : ∀ (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
       (N : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
       (σ : RegionPhysicalConfig (V := V) (d := d) R)
       (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),
@@ -133,10 +133,10 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1544 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionComplement_comparison_of_vertexInjective (A Btilde : Tensor G d)
     (R : Finset V) (hbd : A.bondDim = Btilde.bondDim)
-    [Nonempty {f : Edge G // IsRegionBoundaryEdge (G := G) R f}]
+    [Nonempty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}]
     (hA : IsVertexInjective A) (hBtilde : IsVertexInjective Btilde)
     (hpos : ∀ e : Edge G, 0 < A.bondDim e)
-    (hregion : ∀ (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (hregion : ∀ (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
       (N : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
       (σ : RegionPhysicalConfig (V := V) (d := d) R)
       (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)),

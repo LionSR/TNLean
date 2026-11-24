@@ -69,7 +69,7 @@ doubled boundary-edge reading the region resonate identity equates.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertionOp_regionStateVec_pin_compl (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
         (regionBoundaryEdgeToCompl (G := G) R f))))
@@ -120,7 +120,7 @@ reading the region resonate step equates.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem region_resonate_identity (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hvA : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (hvAout : LinearIndependent ℂ
       (A.component (regionBoundaryEdgeInVertex (G := G) (Finset.univ \ R)
@@ -167,7 +167,7 @@ the inserted matrix entry on the boundary edge `f` coupling `w` (reindexed back 
 `σ`. This is the coefficient of the complement block in the region-inserted
 coefficient, viewed as a function of the complement physical configuration. -/
 noncomputable def regionComplementRow (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) :
     RegionBoundaryConfig (G := G) A (Finset.univ \ R) → ℂ :=
@@ -193,7 +193,7 @@ left inverse acts on.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_complement_blockedMap (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -234,7 +234,7 @@ configuration, contracted against the complement block at `τ`. This is the
 coefficient of the region block in the region-inserted coefficient, viewed as a
 function of the region physical configuration. -/
 noncomputable def regionRegionRow (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     RegionBoundaryConfig (G := G) A R → ℂ :=
@@ -257,7 +257,7 @@ This is the factoring the region left inverse acts on.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_eq_region_blockedMap (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -285,7 +285,7 @@ map, applied to the region-inserted coefficient viewed as a function of the
 complement physical configuration, recovers the complement row function. -/
 theorem regionBlockedLeftInverse_complement_regionInsertedCoeff (A : Tensor G d)
     (R : Finset V) (hC : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) :
     regionBlockedLeftInverse (G := G) A (Finset.univ \ R) hC
@@ -302,7 +302,7 @@ applied to the region-inserted coefficient viewed as a function of the region
 physical configuration, recovers the region row function. -/
 theorem regionBlockedLeftInverse_region_regionInsertedCoeff (A : Tensor G d)
     (R : Finset V) (hR : RegionBlockedTensorInjective (G := G) A R)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     regionBlockedLeftInverse (G := G) A R hR

@@ -100,7 +100,7 @@ theorem exists_unitary_regularTwoCyclePhysicalConjugation {d : ℕ}
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
       ∀ (ω : RC (Γ := Γ) R T → G)
-        (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
+        (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
           (regularTreeCycleAssignment R T ω))) R
           (fun f => Fintype.equivFin G (θ f)) =

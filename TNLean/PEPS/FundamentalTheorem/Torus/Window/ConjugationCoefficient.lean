@@ -91,7 +91,7 @@ transfer inputs are the genuine content.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--586 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
 theorem exists_regionConjCoeffIdentity_of_coeffTransfer (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hRA : RegionBlockedTensorInjective (G := G) A R)
     (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hRB : RegionBlockedTensorInjective (G := G) B R)
@@ -150,7 +150,7 @@ physical-to-virtual realization in each direction, with no further hypothesis.
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--586 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1. -/
 theorem exists_regionConjCoeffIdentity_of_transfer (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (T : RegionInsertionTransfer (G := G) A B R f)
     (hRA : RegionBlockedTensorInjective (G := G) A R)
     (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))

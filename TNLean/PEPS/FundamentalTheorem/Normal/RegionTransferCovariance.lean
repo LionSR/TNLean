@@ -52,7 +52,7 @@ equal region-inserted coefficients, with the inserted matrix carried across the 
 trivial) bond-dimension equality.  This bridges the literal tensor of a translation-invariant
 PEPS with its transported copy `A.transport φ = A`. -/
 theorem regionInsertedCoeff_congrTensor {A₁ A₂ : Tensor G d} (h : A₁ = A₂) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A₁.bondDim f.1)) (Fin (A₁.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -81,7 +81,7 @@ covariant: any two transfer maps satisfying the defining coefficient identity ar
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 377--457 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem regionInsertedCoeff_transferMap_unique (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hRB : RegionBlockedTensorInjective (G := G) B R)
     (hCB : RegionBlockedTensorInjective (G := G) B (Finset.univ \ R))
     (hposB : ∀ e : Edge G, 0 < B.bondDim e)
@@ -118,7 +118,7 @@ theorem bondDim_boundaryEdgeMap_translate
     (hA : IsTorusTranslationInvariant A)
     (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f}) :
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f}) :
     A.bondDim (boundaryEdgeMap (translate a b) R f).1 = A.bondDim f.1 := by
   rw [← transport_bondDim_boundaryEdgeMap A (translate a b) R f, hA a b]
 
@@ -143,7 +143,7 @@ theorem regionInsertedCoeff_translate_coeffIdentity
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
     (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (g : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ →
       Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ)
     (hg : ∀ (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)

@@ -85,7 +85,7 @@ theorem staircaseCrossTensorVirtualOperation_coeff
     (τ : RegionPhysicalConfig (V := TorusVertex width height) (d := d)
       (Finset.univ \ horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)) :
     let W := horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K
-    let f : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge W f} :=
+    let f : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge W f} :=
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
         (by omega) (by omega) ha0 haw hbh⟩
     regionInsertedCoeff A W f X σ τ = regionInsertedCoeff B W f
@@ -108,7 +108,7 @@ Source: arXiv:1804.04964, the insertion correspondence at lines 563--582 and the
 two-dimensional comparison at lines 2368--2444. -/
 noncomputable def staircaseRegionInsertionTransfer :
     let W := horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K
-    let f : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge W f} :=
+    let f : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge W f} :=
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
         (by omega) (by omega) ha0 haw hbh⟩
     RegionInsertionTransfer A B W f where
@@ -132,7 +132,7 @@ assignment. Injectivity of the second tensor on the window and its complement gi
 Source: arXiv:1804.04964, the uniqueness of the insertion correspondence at lines 563--582. -/
 theorem coeffTransferMap_eq_staircaseCrossTensorVirtualOperation :
     let W := horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K
-    let f : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge W f} :=
+    let f : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge W f} :=
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
         (by omega) (by omega) ha0 haw hbh⟩
     ∀ (htransfer : ∀ X : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
@@ -169,7 +169,7 @@ Source: arXiv:1804.04964, the Skolem--Noether conclusion at lines 582--586 and i
 two-dimensional reduction at lines 2368--2444. -/
 theorem exists_staircaseWindowConjCoeffIdentity :
     let W := horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K
-    let f : {f : Edge (torusGraph width height) // IsRegionBoundaryEdge W f} :=
+    let f : {f : Edge (torusGraph width height) // ManyBody.IsRegionBoundaryEdge W f} :=
       ⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge A
         (by omega) (by omega) ha0 haw hbh⟩
     ∃ (hE : A.bondDim f.1 = B.bondDim f.1) (Z : GL (Fin (B.bondDim f.1)) ℂ),

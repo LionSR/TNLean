@@ -159,9 +159,9 @@ omit [Fintype V] [DecidableRel G.Adj] in
 /-- An `R`-boundary edge not incident to the inserted site `v` is an
 `insert v R`-boundary edge. -/
 theorem isRegionBoundaryEdge_insert_of_not_incident (R : Finset V) {v : V} (hv : v ∉ R)
-    {g : Edge G} (hg : IsRegionBoundaryEdge (G := G) R g)
+    {g : Edge G} (hg : ManyBody.IsRegionBoundaryEdge (G := G) R g)
     (hgv : g.1.1 ≠ v ∧ g.1.2 ≠ v) :
-    IsRegionBoundaryEdge (G := G) (insert v R) g := by
+    ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) g := by
   obtain ⟨hgv1, hgv2⟩ := hgv
   rcases hg with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · refine Or.inl ⟨Finset.mem_insert_of_mem h1, ?_⟩

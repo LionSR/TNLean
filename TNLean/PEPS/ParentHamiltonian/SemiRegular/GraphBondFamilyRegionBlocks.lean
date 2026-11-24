@@ -25,7 +25,7 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 private abbrev RI (R : Finset V) := {f : Edge Γ // f.1.1 ∈ R ∧ f.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {f : Edge Γ // IsRegionBoundaryEdge R f}
+private abbrev RB (R : Finset V) := {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f}
 private abbrev RE (R : Finset V) := {f : Edge Γ // f.1.1 ∉ R ∧ f.1.2 ∉ R}
 variable {X Y : Type*} {p q : ℕ}
 

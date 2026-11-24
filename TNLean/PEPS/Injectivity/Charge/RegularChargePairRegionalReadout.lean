@@ -46,7 +46,7 @@ private theorem prod_split_two (w₀ w₁ : W) (hne : w₀ ≠ w₁) (f : W → 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
-private abbrev RI (R : Finset V) := {e : Edge Γ // IsRegionIncidentEdge R e}
+private abbrev RI (R : Finset V) := {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e}
 private abbrev RE (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
 private def bondIndex (R : Finset V) (e : RE (Γ := Γ) R) : RI (Γ := Γ) R :=
   ⟨e.1,Or.inl e.2.1⟩
@@ -113,28 +113,28 @@ private theorem endpointLabels (R : Finset V) (e : RE (Γ := Γ) R)
 private def weightedColumn
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
     (e f : RE (Γ := Γ) R) (weight : G → G → ℂ)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G)
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G)
     (s : {v // v ∈ R} → Fin d) : ℂ :=
   ∑ η : RI (Γ := Γ) R → G,
-    if (fun b : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-        η ⟨b.1,isRegionBoundaryEdge_touches R b.2⟩) = θ then
+    if (fun b : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+        η ⟨b.1,ManyBody.isRegionBoundaryEdge_touches R b.2⟩) = θ then
       weight (η (bondIndex R e)) (η (bondIndex R f)) *
         ∏ w : {v // v ∈ R}, a w.1 (labelsAt R η w) (s w)
     else 0
 private def restCoefficient
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
     (e : RE (Γ := Γ) R) (ξ : {f : RI (Γ := Γ) R // f ≠ bondIndex R e} → G)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G)
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G)
     (s : {v // v ∈ R} → Fin d) : ℂ :=
-  if (fun b : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      splitLabels R e ξ 1 ⟨b.1,isRegionBoundaryEdge_touches R b.2⟩) = θ then
+  if (fun b : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+      splitLabels R e ξ 1 ⟨b.1,ManyBody.isRegionBoundaryEdge_touches R b.2⟩) = θ then
     ∏ w : PairRest (tailVertex R e) (headVertex R e) (endpoints_ne R e),
       a w.1.1.1 (labelsAt R (splitLabels R e ξ 1) w.1.1) (s w.1.1)
   else 0
 private theorem shared_expansion
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
     (e f : RE (Γ := Γ) R) (hne : e ≠ f) (weight : G → G → ℂ)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G)
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G)
     (s : {v // v ∈ R} → Fin d) (t : Fin d × Fin d) :
     weightedColumn a R e f weight θ (replacePair R e s t) =
       ∑ ξ : {b : RI (Γ := Γ) R // b ≠ bondIndex R e} → G,
@@ -152,10 +152,10 @@ private theorem shared_expansion
   simp only [regularTwoSitePhysicalChargeColumn, one_mul, Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro k _
-  have hb : (fun b : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      splitLabels R e ξ k ⟨b.1,isRegionBoundaryEdge_touches R b.2⟩) =
-      (fun b : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      splitLabels R e ξ 1 ⟨b.1,isRegionBoundaryEdge_touches R b.2⟩) := by
+  have hb : (fun b : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+      splitLabels R e ξ k ⟨b.1,ManyBody.isRegionBoundaryEdge_touches R b.2⟩) =
+      (fun b : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+      splitLabels R e ξ 1 ⟨b.1,ManyBody.isRegionBoundaryEdge_touches R b.2⟩) := by
     funext b
     apply splitLabels_same
     intro h
@@ -216,7 +216,7 @@ private theorem replacePair_current (R : Finset V) (e : RE (Γ := Γ) R)
 private theorem action_of_shared_slices
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (R : Finset V)
     (e f : RE (Γ := Γ) R) (hne : e ≠ f) (weight : G → G → ℂ)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G)
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G)
     (Q : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (selected : Prop) [Decidable selected]
     (hact : ∀ ξ : {b : RI (Γ := Γ) R // b ≠ bondIndex R e} → G,
       Q *ᵥ regularTwoSitePhysicalChargeColumn (tailLeg e) (headLeg e)

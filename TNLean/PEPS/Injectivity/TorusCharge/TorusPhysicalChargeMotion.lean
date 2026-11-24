@@ -84,7 +84,7 @@ theorem IsGIsometric.exists_unitary_torusPhysicalChargeMotion
         (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ,
       W ∈ Matrix.unitaryGroup (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ ∧
       ∀ (χ : G → ℂ) (p : G)
-        (θ : {b : Edge Γₜ // IsRegionBoundaryEdge (torusPlaquetteRegion v) b} → G),
+        (θ : {b : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (torusPlaquetteRegion v) b} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularEdgeCharacterSite
           (torusIncidentSite a) (torusPlaquetteChargeMotionBond v true).1 χ p))
           (torusPlaquetteRegion v) (fun b => Fintype.equivFin G (θ b)) =

@@ -42,7 +42,7 @@ def regularCycleControlledBoundary (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ R}) (o : {v : V // v ∈ R})
     (W : ({e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} //
       ¬ T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩} → G) →
-        {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+        {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     Equiv.Perm (RegularRegionCoordinates (Γ := Γ) (G := G) R T o) where
   toFun c := (fun f => (W c.2.2.2 f)⁻¹ * c.1 f, c.2)
   invFun c := (fun f => W c.2.2.2 f * c.1 f, c.2)
@@ -57,7 +57,7 @@ noncomputable def regularCycleControlledBoundaryMatrix [Fintype V]
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
     (W : ({e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} //
       ¬ T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩} → G) →
-        {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+        {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     Matrix (RegionHalfEdgeConfig (Γ := Γ) G R) (RegionHalfEdgeConfig (Γ := Γ) G R) ℂ :=
   Matrix.permMatrixHom (R := ℂ)
     ((regularRegionCoordinatesEquiv R T hT htree o).trans
@@ -73,7 +73,7 @@ theorem regularCycleControlledBoundaryMatrix_mem_unitaryGroup (R : Finset V)
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
     (W : ({e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} //
       ¬ T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩} → G) →
-        {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+        {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularCycleControlledBoundaryMatrix R T hT htree o W ∈
       Matrix.unitaryGroup (RegionHalfEdgeConfig (Γ := Γ) G R) ℂ := by
   let E := regularRegionCoordinatesEquiv (G := G) R T hT htree o
@@ -90,9 +90,9 @@ theorem regularCycleControlledBoundaryMatrix_mul_coordinates (R : Finset V)
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
     (W : ({e : {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R} //
       ¬ T.Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩} → G) →
-        {e : Edge Γ // IsRegionBoundaryEdge R e} → G)
+        {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G)
     (u : Edge Γ → G) (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     (regularCycleControlledBoundaryMatrix R T hT htree o W *
       regularProjectorTwistedRegionMatrix R u)
         ((regularRegionCoordinatesEquiv R T hT htree o).symm c) θ =
@@ -141,8 +141,8 @@ noncomputable def regularComplementWalkControlMatrix (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ Finset.univ \ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce ((Finset.univ \ R : Finset V) : Set V)) (htree : T.IsTree)
     (o : {v : V // v ∈ Finset.univ \ R})
-    (v w : {e : Edge Γ // IsRegionBoundaryEdge R e} → {v : V // v ∈ Finset.univ \ R})
-    (p : (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) →
+    (v w : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → {v : V // v ∈ Finset.univ \ R})
+    (p : (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) →
       (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Walk (v f) (w f)) :
     Matrix (RegionHalfEdgeConfig (Γ := Γ) G (Finset.univ \ R))
       (RegionHalfEdgeConfig (Γ := Γ) G (Finset.univ \ R)) ℂ :=
@@ -156,8 +156,8 @@ theorem regularComplementWalkControlMatrix_mem_unitaryGroup (R : Finset V)
     (T : SimpleGraph {v : V // v ∈ Finset.univ \ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce ((Finset.univ \ R : Finset V) : Set V)) (htree : T.IsTree)
     (o : {v : V // v ∈ Finset.univ \ R})
-    (v w : {e : Edge Γ // IsRegionBoundaryEdge R e} → {v : V // v ∈ Finset.univ \ R})
-    (p : (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) →
+    (v w : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → {v : V // v ∈ Finset.univ \ R})
+    (p : (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) →
       (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Walk (v f) (w f)) :
     regularComplementWalkControlMatrix (G := G) R T hT htree o v w p ∈
       Matrix.unitaryGroup (RegionHalfEdgeConfig (Γ := Γ) G (Finset.univ \ R)) ℂ :=
@@ -178,10 +178,10 @@ theorem regularCycleControlledBoundaryMatrix_mul_coordinates_of_combined_relativ
     (T : SimpleGraph {v : V // v ∈ Finset.univ \ R}) [DecidableRel T.Adj]
     (hT : T ≤ Γ.induce ((Finset.univ \ R : Finset V) : Set V)) (htree : T.IsTree)
     (o : {v : V // v ∈ Finset.univ \ R})
-    (v w : {e : Edge Γ // IsRegionBoundaryEdge R e} → {v : V // v ∈ Finset.univ \ R})
-    (p : (f : {e : Edge Γ // IsRegionBoundaryEdge R e}) →
+    (v w : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → {v : V // v ∈ Finset.univ \ R})
+    (p : (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}) →
       (Γ.induce ((Finset.univ \ R : Finset V) : Set V)).Walk (v f) (w f))
-    (u : Edge Γ → G) (f₀ : {e : Edge Γ // IsRegionBoundaryEdge R e})
+    (u : Edge Γ → G) (f₀ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e})
     (hrelative : ∀ f, FreeGroup.lift
         (regularRegionTreeCycleResidual (Finset.univ \ R) T hT htree o u)
         (regularRegionCycleWord (Finset.univ \ R) T (p f)) =
@@ -190,7 +190,7 @@ theorem regularCycleControlledBoundaryMatrix_mul_coordinates_of_combined_relativ
         (regularCombinedBoundaryTransport R kR
           (regularRegionTreeGauge (Finset.univ \ R) T hT htree o u).1 u 1 f₀)⁻¹)
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) (Finset.univ \ R) T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     (regularComplementWalkControlMatrix (G := G) R T hT htree o v w p *
       regularProjectorTwistedRegionMatrix (Finset.univ \ R) u)
         ((regularRegionCoordinatesEquiv (Finset.univ \ R) T hT htree o).symm c)
@@ -208,7 +208,7 @@ theorem regularCycleControlledBoundaryMatrix_mul_coordinates_of_combined_relativ
   let kS := (regularRegionTreeGauge S T hT htree o u).1
   let E := regionBoundaryEdgeComplEquiv (G := Γ) R
   let η := fun f => (regularRegionBoundaryTransport R kR u).symm θ (E.symm f)
-  have hcomp (f : {e : Edge Γ // IsRegionBoundaryEdge S e}) :
+  have hcomp (f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge S e}) :
       regularRegionBoundaryTransport S kS u η f =
         regularCombinedBoundaryTransport R kR kS u θ (E.symm f) := by
     change regularRegionBoundaryTransport S kS u η f =

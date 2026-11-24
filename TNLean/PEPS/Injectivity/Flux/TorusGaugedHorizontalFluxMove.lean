@@ -83,7 +83,7 @@ theorem IsGIsometric.exists_unitary_torusGaugedHorizontalFluxMove
       W ∈ Matrix.unitaryGroup (RV v → Fin d) ℂ ∧
       ManyBody.place («X» := fun _ ↦ Fin _) (R v) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (k : RV v → G) (reverse : Bool) (g : G) (u : Edge Γₜ → G)
-        (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R v) e} → G),
+        (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (R v) e} → G),
         (if reverse then W.conjTranspose else W) *ᵥ
           openRegionWeight (groupBondTensor (regularTwistedSite
             (torusIncidentSite (width := width) (height := height) a)

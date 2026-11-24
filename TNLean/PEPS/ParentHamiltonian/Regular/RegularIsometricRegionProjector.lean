@@ -44,7 +44,7 @@ theorem regularProjectorOpenRegionRange_map_physical
     refine ⟨fun e => Fintype.equivFin G (θ e), ?_⟩
     exact (regionPhysicalMap_regularProjectorOpenRegionMatrix a ha R θ).symm
   · rintro ⟨μ, rfl⟩
-    let θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G :=
+    let θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G :=
       fun e => (Fintype.equivFin G).symm (μ e)
     refine ⟨θ, ?_⟩
     have h := regionPhysicalMap_regularProjectorOpenRegionMatrix a ha R θ

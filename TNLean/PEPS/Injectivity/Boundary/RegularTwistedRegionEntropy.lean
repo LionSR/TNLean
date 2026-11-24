@@ -45,12 +45,12 @@ omit [Fintype G] [DecidableEq G] [Fintype V] [DecidableRel Γ.Adj] in
 /-- Twists trivial on edges incident to a region leave every site in the region unchanged. -/
 theorem regularTwistedSite_eq_of_trivial_on_incident
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (u : Edge Γ → G)
-    (R : Finset V) (hu : ∀ f : Edge Γ, IsRegionIncidentEdge R f → u f = 1)
+    (R : Finset V) (hu : ∀ f : Edge Γ, ManyBody.IsRegionIncidentEdge R f → u f = 1)
     (v : V) (hv : v ∈ R) (η : IncidentEdge Γ v → G) (s : Fin d) :
     regularTwistedSite a u v η s = a v η s := by
   have hlabels : regularTwistedLabels u v η = η := by
     funext f
-    have hf : IsRegionIncidentEdge R f.1 := by
+    have hf : ManyBody.IsRegionIncidentEdge R f.1 := by
       rcases f.2 with h | h
       · exact Or.inl (h.symm ▸ hv)
       · exact Or.inr (h.symm ▸ hv)
@@ -61,8 +61,8 @@ omit [DecidableEq G] in
 /-- The actual region contraction is unchanged by complementary twists. -/
 theorem regularTwistedOpenRegionMatrix_eq_of_trivial_on_incident
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (u : Edge Γ → G)
-    (R : Finset V) (hu : ∀ f : Edge Γ, IsRegionIncidentEdge R f → u f = 1)
-    {b : ℕ} (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :
+    (R : Finset V) (hu : ∀ f : Edge Γ, ManyBody.IsRegionIncidentEdge R f → u f = 1)
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
     regularTwistedOpenRegionMatrix a u R e = regularOpenRegionMatrix a R e := by
   classical
   ext σ x
@@ -80,8 +80,8 @@ fixed region map and the complementary superposition. -/
 theorem regularClosureSuperpositionState_eq_twistedCut_sum (n : ℕ)
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (u : S → Edge Γ → G)
     (w : S → ℂ) (R : Finset V)
-    (hu : ∀ s f, IsRegionIncidentEdge R f → u s f = 1)
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) {c : ℂ}
+    (hu : ∀ s f, ManyBody.IsRegionIncidentEdge R f → u s f = 1)
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) {c : ℂ}
     (hM : (regularOpenRegionMatrix a R e).conjTranspose * regularOpenRegionMatrix a R e =
       c • regularBoundaryProjector (n + 1)) :
     regularClosureSuperpositionState (regularOpenRegionMatrix a R e)
@@ -117,11 +117,11 @@ theorem exists_normalization_regularTwistedPhysicalCutSuperposition (n : ℕ)
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v)) (regularSiteMap (a v)))
     (R : Finset V) (hR : (Γ.induce (R : Set V)).Connected)
     (u : S → Edge Γ → G)
-    (hu : ∀ s f, IsRegionIncidentEdge R f → u s f = 1)
+    (hu : ∀ s f, ManyBody.IsRegionIncidentEdge R f → u s f = 1)
     (hΔ : Δ ≤ Γ) (hRc : (Δ.induce ((Finset.univ \ R : Finset V) : Set V)).Connected)
     (huΔ : ∀ s (f : Edge Γ), Δ.Adj f.1.1 f.1.2 →
       f.1.1 ∉ R → f.1.2 ∉ R → u s f = 1)
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin (n + 1)) :
     ∃ cA : ℝ, 0 < cA ∧
       (regularOpenRegionMatrix a R e).conjTranspose * regularOpenRegionMatrix a R e =
         (cA : ℂ) • regularBoundaryProjector (n + 1) ∧
@@ -152,9 +152,9 @@ theorem exists_normalization_regularTwistedPhysicalCutSuperposition (n : ℕ)
     by_cases hh : f.1.2 ∈ R
     · exact hu s f (Or.inr hh)
     exact huΔ s f hf ht hh
-  have hBoundary : ∀ s (f : Edge Γ), IsRegionBoundaryEdge Rc f → u s f = 1 := by
+  have hBoundary : ∀ s (f : Edge Γ), ManyBody.IsRegionBoundaryEdge Rc f → u s f = 1 := by
     intro s f hf
-    exact hu s f (isRegionBoundaryEdge_touches R
+    exact hu s f (ManyBody.isRegionBoundaryEdge_touches R
       ((isRegionBoundaryEdge_compl_iff R f).mp hf))
   have hk : ∀ s t, regularBoundaryProjector (n + 1) * (N s).conjTranspose * N t *
       regularBoundaryProjector (n + 1) = k s t • regularBoundaryProjector (n + 1) := by

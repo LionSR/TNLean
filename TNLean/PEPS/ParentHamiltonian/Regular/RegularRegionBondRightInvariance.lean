@@ -65,23 +65,23 @@ crossing bond, so the original boundary condition is preserved. Source:
 SCP10, accessible regular coordinates, lines 1765–1920. -/
 theorem regularProjectorTwistedRegionMatrix_halfEdgeRightMul
     (R : Finset V) (u r : Edge Γ → G)
-    (hr : ∀ e, IsRegionBoundaryEdge R e → r e = 1)
+    (hr : ∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regularProjectorTwistedRegionMatrix R u (regularRegionHalfEdgeRightMul R r α) θ =
       regularProjectorTwistedRegionMatrix R u α θ := by
   classical
-  let E : ({f : Edge Γ // IsRegionIncidentEdge R f} → G) ≃
-      ({f : Edge Γ // IsRegionIncidentEdge R f} → G) :=
+  let E : ({f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) ≃
+      ({f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) :=
     Equiv.piCongrRight fun e => Equiv.mulRight (r e.1)
   unfold regularProjectorTwistedRegionMatrix
   rw [← Equiv.sum_comp E]
   apply Finset.sum_congr rfl
   intro η _
-  have hb : (fun e : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      E η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) =
-      (fun e : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-        η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) := by
+  have hb : (fun e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+      E η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) =
+      (fun e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+        η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) := by
     funext e
     simp only [E, Equiv.piCongrRight_apply, Pi.map_apply, Equiv.coe_mulRight,
       hr e.1 e.2, mul_one]
@@ -105,9 +105,9 @@ theorem regularProjectorTwistedRegionMatrix_halfEdgeRightMul
 right invariance. Source: SCP10, lines 1765–1920. -/
 theorem regularProjectorOpenRegionMatrix_halfEdgeRightMul
     (R : Finset V) (r : Edge Γ → G)
-    (hr : ∀ e, IsRegionBoundaryEdge R e → r e = 1)
+    (hr : ∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regularProjectorOpenRegionMatrix R (regularRegionHalfEdgeRightMul R r α) θ =
       regularProjectorOpenRegionMatrix R α θ := by
   rw [← regularProjectorTwistedRegionMatrix_one R]
@@ -120,7 +120,7 @@ shared internal regular reference label, lines 1765–1920. -/
 theorem regularProjectorOpenRegionMatrix_internalEdgeRightMul
     (R : Finset V) (e : Edge Γ) (he : e.1.1 ∈ R ∧ e.1.2 ∈ R) (g : G)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regularProjectorOpenRegionMatrix R
       (regularRegionHalfEdgeRightMul R (fun f => if f = e then g else 1) α) θ =
       regularProjectorOpenRegionMatrix R α θ := by
@@ -145,7 +145,7 @@ theorem regionPhysicalMap_halfEdgeRightMul_of_mem_regularGroundSpace
     (hF : ∀ v α η, (∑ s : Fin d, F v α s * a v η s) =
       regularLegProjector (IncidentEdge Γ v) α η)
     (R : Finset V) (r : Edge Γ → G)
-    (hr : ∀ e, IsRegionBoundaryEdge R e → r e = 1)
+    (hr : ∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1)
     {ψ : RegionPhysicalConfig (d := d) R → ℂ}
     (hψ : ψ ∈ regionGroundSpace (groupBondTensor a) R)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
@@ -183,7 +183,7 @@ theorem regionPhysicalMap_slice_halfEdgeRightMul_of_parent_annihilates
     (hF : ∀ v α η, (∑ s : Fin d, F v α s * a v η s) =
       regularLegProjector (IncidentEdge Γ v) α η)
     (R : Finset V) (r : Edge Γ → G)
-    (hr : ∀ e, IsRegionBoundaryEdge R e → r e = 1)
+    (hr : ∀ e, ManyBody.IsRegionBoundaryEdge R e → r e = 1)
     (P : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor a) R P)
     (Ψ : (V → Fin d) → ℂ) (hΨ : ManyBody.place (X := fun _ ↦ Fin _) R P *ᵥ Ψ = 0)

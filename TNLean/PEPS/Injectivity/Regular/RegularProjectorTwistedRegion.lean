@@ -45,10 +45,10 @@ bond operators. Its physical rows are the original incident half-edge labels.
 Source: SCP10, lines 1515–1525 and 1765–1820. -/
 noncomputable def regularProjectorTwistedRegionMatrix (R : Finset V) (u : Edge Γ → G) :
     Matrix (RegionHalfEdgeConfig (Γ := Γ) G R)
-      ({f : Edge Γ // IsRegionBoundaryEdge R f} → G) ℂ :=
-  fun α θ => ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-    if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-        η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ then
+      ({f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) ℂ :=
+  fun α θ => ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+    if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+        η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ then
       ∏ w : {w : V // w ∈ R},
         regularLegProjector (IncidentEdge Γ w.1) (α w)
           (regularTwistedLabels u w.1
@@ -58,11 +58,11 @@ noncomputable def regularProjectorTwistedRegionMatrix (R : Finset V) (u : Edge �
 /-- Literal canonical contraction with a scalar weight on the incident bond labels.
 Source: SCP10, diagonal charge insertion, lines 2449–2486 and 2569–2581. -/
 noncomputable def regularProjectorWeightedTwistedRegionMatrix (R : Finset V)
-    (u : Edge Γ → G) (F : ({e : Edge Γ // IsRegionIncidentEdge R e} → G) → ℂ) :
-    Matrix (RegionHalfEdgeConfig (Γ := Γ) G R) ({e : Edge Γ // IsRegionBoundaryEdge R e} → G) ℂ :=
-  fun α θ => ∑ η : {e : Edge Γ // IsRegionIncidentEdge R e} → G,
-    if (fun f : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ then
+    (u : Edge Γ → G) (F : ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) → ℂ) :
+    Matrix (RegionHalfEdgeConfig (Γ := Γ) G R) ({e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) ℂ :=
+  fun α θ => ∑ η : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G,
+    if (fun f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+      η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ then
       F η * ∏ w : {v : V // v ∈ R}, regularLegProjector (IncidentEdge Γ w.1) (α w)
         (regularTwistedLabels u w.1
           (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩))
@@ -71,13 +71,13 @@ noncomputable def regularProjectorWeightedTwistedRegionMatrix (R : Finset V)
 /-- Expanding the actual weighted projector uses one independent translation per vertex.
 Source: SCP10, lines 1765–1920 and 2569–2581. -/
 theorem regularProjectorWeightedTwistedRegionMatrix_apply (R : Finset V) (u : Edge Γ → G)
-    (F : ({e : Edge Γ // IsRegionIncidentEdge R e} → G) → ℂ)
-    (α : RegionHalfEdgeConfig (Γ := Γ) G R) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (F : ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) → ℂ)
+    (α : RegionHalfEdgeConfig (Γ := Γ) G R) (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorWeightedTwistedRegionMatrix R u F α θ =
       (Fintype.card G : ℂ)⁻¹ ^ R.card *
-        ∑ p : ({e : Edge Γ // IsRegionIncidentEdge R e} → G) × ({v : V // v ∈ R} → G),
-          if (fun e : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-              p.1 ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
+        ∑ p : ({e : Edge Γ // ManyBody.IsRegionIncidentEdge R e} → G) × ({v : V // v ∈ R} → G),
+          if (fun e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+              p.1 ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩) = θ ∧
             (∀ w (f : IncidentEdge Γ w.1), α w f = p.2 w *
               regularTwistedLabels u w.1
                 (fun e => p.1 ⟨e.1, isRegionIncidentEdge_of_regionVertex R w e⟩) f)
@@ -87,8 +87,8 @@ theorem regularProjectorWeightedTwistedRegionMatrix_apply (R : Finset V) (u : Ed
   rw [Finset.mul_sum, Fintype.sum_prod_type]
   apply Finset.sum_congr rfl
   intro η _
-  by_cases hb : (fun f : {e : Edge Γ // IsRegionBoundaryEdge R e} =>
-      η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ
+  by_cases hb : (fun f : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} =>
+      η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ
   · simp only [hb, ↓reduceIte, true_and]
     simp only [regularLegProjector_apply, Finset.prod_mul_distrib,
       Finset.prod_const, Finset.card_univ, Fintype.card_coe]
@@ -114,13 +114,13 @@ normalization and one translation label per vertex. Source: SCP10,
 `obs:iso:accessible-virt`, lines 1765–1820. -/
 theorem regularProjectorTwistedRegionMatrix_apply (R : Finset V) (u : Edge Γ → G)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regularProjectorTwistedRegionMatrix R u α θ =
       (Fintype.card G : ℂ)⁻¹ ^ R.card *
-        ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
+        ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
           ∑ q : {w : V // w ∈ R} → G,
-            if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                  η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = θ ∧
+            if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                  η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = θ ∧
                 (∀ w : {w : V // w ∈ R}, α w = q w •
                   regularTwistedLabels u w.1
                     (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R w f⟩))
@@ -142,7 +142,7 @@ theorem regionPhysicalMap_eq_regularProjectorTwistedRegionMatrix
       regularLegProjector (IncidentEdge Γ v) α η)
     (R : Finset V) (u : Edge Γ → G)
     (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regionPhysicalMap R F (openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
       (fun f => Fintype.equivFin G (θ f))) α =
       regularProjectorTwistedRegionMatrix R u α θ := by
@@ -170,7 +170,7 @@ theorem regionPhysicalMap_regularProjectorTwistedRegionMatrix
     (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v)))
     (R : Finset V) (u : Edge Γ → G)
-    (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G) :
+    (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G) :
     regionPhysicalMap R (fun v => Matrix.of (fun s α => a v α s))
       (fun α => regularProjectorTwistedRegionMatrix R u α θ) =
       openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
@@ -222,7 +222,7 @@ theorem exists_regularProjectorTwistedRegionMatrix_of_isGInjective
     ∃ F : (v : V) → Matrix (IncidentEdge Γ v → G) (Fin d) ℂ,
       ∀ (R : Finset V) (u : Edge Γ → G)
         (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-        (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G),
+        (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G),
       regionPhysicalMap R F
         (openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
           (fun f => Fintype.equivFin G (θ f))) α =
@@ -240,7 +240,7 @@ theorem exists_regularProjectorTwistedRegionMatrix
       (regularSiteMap (a v))) :
     ∃ c : V → ℝ, (∀ v, 0 < c v) ∧ ∀ (R : Finset V) (u : Edge Γ → G)
       (α : RegionHalfEdgeConfig (Γ := Γ) G R)
-      (θ : {f : Edge Γ // IsRegionBoundaryEdge R f} → G),
+      (θ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → G),
       regionPhysicalMap R (fun v α s => (c v : ℂ)⁻¹ * star (a v α s))
         (openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
           (fun f => Fintype.equivFin G (θ f))) α =

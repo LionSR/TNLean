@@ -78,7 +78,7 @@ theorem IsGIsometric.exists_unitary_torusRouteSteps
       ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) (W horizontal p) ∈ Matrix.unitaryGroup
           (X → Fin d) ℂ ∧
       (∀ (k : RV horizontal p → G) (reverse : Bool) (g : G) (u : Edge Γₜ → G)
-        (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R horizontal p) e} → G),
+        (θ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge (R horizontal p) e} → G),
         (if reverse then (W horizontal p).conjTranspose else W horizontal p) *ᵥ
           openRegionWeight (groupBondTensor (regularTwistedSite
             (torusIncidentSite (width := width) (height := height) a)

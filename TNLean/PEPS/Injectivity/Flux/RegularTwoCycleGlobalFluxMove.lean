@@ -79,7 +79,7 @@ omit [Group G] in
 private theorem openWeight_congr (R : Finset V)
     (a b : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (hab : ∀ v ∈ R, a v = b v)
-    (μ : {f : Edge Γ // IsRegionBoundaryEdge R f} → Fin (Fintype.card G)) :
+    (μ : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} → Fin (Fintype.card G)) :
     openRegionWeight (groupBondTensor a) R μ =
       openRegionWeight (groupBondTensor b) R μ := by
   funext σ
@@ -191,7 +191,7 @@ theorem openRegionWeight_regularTreeCycleBondExtension
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (hinv : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
     (ω : RC (Γ := Γ) R T → G) (u : Edge Γ → G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     openRegionWeight (groupBondTensor (regularTwistedSite a
       (regularRegionBondExtension R (regularTreeCycleAssignment R T ω) u))) R
       (fun f => Fintype.equivFin G (θ f)) =

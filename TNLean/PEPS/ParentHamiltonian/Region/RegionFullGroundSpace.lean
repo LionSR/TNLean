@@ -39,8 +39,8 @@ omit [DecidableRel Γ.Adj] in
 /-- The full region has no boundary edges.
 Source: CPGSV21, arXiv:2011.12127, arbitrary boundary conditions, lines 2003–2008. -/
 theorem not_isRegionBoundaryEdge_univ (e : Edge Γ) :
-    ¬ IsRegionBoundaryEdge (Finset.univ : Finset V) e := by
-  simp [IsRegionBoundaryEdge]
+    ¬ ManyBody.IsRegionBoundaryEdge (Finset.univ : Finset V) e := by
+  simp [ManyBody.IsRegionBoundaryEdge]
 
 /-- Every boundary-labelled tensor of the full region equals the closed PEPS
 vector in the regional physical coordinates. Source: CPGSV21,
@@ -49,11 +49,11 @@ theorem openRegionWeight_univ (A : Tensor Γ d)
     (μ : RegionBoundaryConfig A Finset.univ) :
     openRegionWeight A Finset.univ μ = fullRegionPhysicalEquiv d (stateCoeff A) := by
   classical
-  let : IsEmpty {e : Edge Γ // IsRegionBoundaryEdge (Finset.univ : Finset V) e} :=
+  let : IsEmpty {e : Edge Γ // ManyBody.IsRegionBoundaryEdge (Finset.univ : Finset V) e} :=
     ⟨fun e => not_isRegionBoundaryEdge_univ e.1 e.2⟩
   have hmult : regionExteriorMultiplicity A Finset.univ = 1 := by
     rw [regionExteriorMultiplicity_eq_prod]
-    simp [IsRegionIncidentEdge]
+    simp [ManyBody.IsRegionIncidentEdge]
   have h := regionBlockedWeight_eq_exterior_mul_openRegionWeight A Finset.univ μ
   funext σ
   have hs := h σ

@@ -40,26 +40,26 @@ variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
 
 /-- Virtual labels only on edges touching the region. -/
 abbrev RegionIncidentConfig (A : Tensor Γ d) (R : Finset V) :=
-  (e : {e : Edge Γ // IsRegionIncidentEdge R e}) → Fin (A.bondDim e.1)
+  (e : {e : Edge Γ // ManyBody.IsRegionIncidentEdge R e}) → Fin (A.bondDim e.1)
 
 /-- Boundary labels read from an incident-edge configuration. -/
 def regionIncidentBoundaryLabel (A : Tensor Γ d) (R : Finset V)
     (η : RegionIncidentConfig A R) : RegionBoundaryConfig A R :=
-  fun e => η ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩
+  fun e => η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
 /-- An edge attached to a vertex of the region touches that region. -/
 theorem isRegionIncidentEdge_of_regionVertex (R : Finset V) (w : {w : V // w ∈ R})
-    (e : IncidentEdge Γ w.1) : IsRegionIncidentEdge R e.1 := by
+    (e : IncidentEdge Γ w.1) : ManyBody.IsRegionIncidentEdge R e.1 := by
   rcases e.2 with h | h
   · exact Or.inl (by rw [h]; exact w.2)
   · exact Or.inr (by rw [h]; exact w.2)
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
 /-- An edge touching the region without having both endpoints in it crosses the boundary. -/
-theorem IsRegionIncidentEdge.isRegionBoundaryEdge {R : Finset V} {e : Edge Γ}
-    (he : IsRegionIncidentEdge R e) (hn : ¬ (e.1.1 ∈ R ∧ e.1.2 ∈ R)) :
-    IsRegionBoundaryEdge R e := by
+theorem ManyBody.IsRegionIncidentEdge.isRegionBoundaryEdge {R : Finset V} {e : Edge Γ}
+    (he : ManyBody.IsRegionIncidentEdge R e) (hn : ¬ (e.1.1 ∈ R ∧ e.1.2 ∈ R)) :
+    ManyBody.IsRegionBoundaryEdge R e := by
   rcases he with h | h
   · exact Or.inl ⟨h, fun h' => hn ⟨h, h'⟩⟩
   · exact Or.inr ⟨fun h' => hn ⟨h', h⟩, h⟩
@@ -119,7 +119,7 @@ theorem toMatrix_openRegionMap (A : Tensor Γ d) (R : Finset V) :
 
 /-- The number of assignments to edges wholly outside the region. -/
 noncomputable def regionExteriorMultiplicity (A : Tensor Γ d) (R : Finset V) : ℕ :=
-  Fintype.card ((e : {e : Edge Γ // ¬ IsRegionIncidentEdge R e}) → Fin (A.bondDim e.1))
+  Fintype.card ((e : {e : Edge Γ // ¬ ManyBody.IsRegionIncidentEdge R e}) → Fin (A.bondDim e.1))
 
 /-- The globally indexed region weight counts each genuine open-region coefficient
 once for every assignment to the exterior edges. -/
@@ -127,19 +127,19 @@ theorem regionBlockedWeight_eq_exterior_mul_openRegionWeight (A : Tensor Γ d) (
     (μ : RegionBoundaryConfig A R) (σ : RegionPhysicalConfig (d := d) R) :
     regionBlockedWeight A R μ σ =
       (regionExteriorMultiplicity A R : ℂ) * openRegionWeight A R μ σ := by
-  let e := Equiv.piEquivPiSubtypeProd (IsRegionIncidentEdge (G := Γ) R)
+  let e := Equiv.piEquivPiSubtypeProd (ManyBody.IsRegionIncidentEdge (G := Γ) R)
     (fun f : Edge Γ => Fin (A.bondDim f))
   rw [regionBlockedWeight, Finset.sum_filter, ← Equiv.sum_comp e.symm,
     Fintype.sum_prod_type]
   have hlabel (η : RegionIncidentConfig A R)
-      (θ : (f : {f : Edge Γ // ¬ IsRegionIncidentEdge R f}) → Fin (A.bondDim f.1)) :
+      (θ : (f : {f : Edge Γ // ¬ ManyBody.IsRegionIncidentEdge R f}) → Fin (A.bondDim f.1)) :
       regionBoundaryLabel A R (e.symm (η, θ)) = regionIncidentBoundaryLabel A R η := by
     funext f
     simp only [regionBoundaryLabel, regionIncidentBoundaryLabel, e,
       Equiv.piEquivPiSubtypeProd_symm_apply,
-      dite_eq_left (isRegionBoundaryEdge_touches R f.2)]
+      dite_eq_left (ManyBody.isRegionBoundaryEdge_touches R f.2)]
   have hweight (η : RegionIncidentConfig A R)
-      (θ : (f : {f : Edge Γ // ¬ IsRegionIncidentEdge R f}) → Fin (A.bondDim f.1)) :
+      (θ : (f : {f : Edge Γ // ¬ ManyBody.IsRegionIncidentEdge R f}) → Fin (A.bondDim f.1)) :
       (∏ w : {w : V // w ∈ R},
         A.component w.1 (fun ie => e.symm (η, θ) ie.1) (σ w)) =
       regionIncidentWeight A R η σ := by
@@ -155,11 +155,11 @@ theorem regionBlockedWeight_eq_exterior_mul_openRegionWeight (A : Tensor Γ d) (
 /-- Exterior assignments are counted by the product of the exterior bond dimensions. -/
 theorem regionExteriorMultiplicity_eq_prod (A : Tensor Γ d) (R : Finset V) :
     regionExteriorMultiplicity A R =
-      ∏ e : Edge Γ, if IsRegionIncidentEdge R e then 1 else A.bondDim e := by
+      ∏ e : Edge Γ, if ManyBody.IsRegionIncidentEdge R e then 1 else A.bondDim e := by
   rw [regionExteriorMultiplicity, Fintype.card_pi]
   simp only [Fintype.card_fin]
   symm
-  simpa using (Fintype.prod_dite (p := IsRegionIncidentEdge R)
+  simpa using (Fintype.prod_dite (p := ManyBody.IsRegionIncidentEdge R)
     (fun _ _ => (1 : ℕ)) (fun e _ => A.bondDim e))
 
 /-- The spectator multiplicities of a region and its complement give the full
@@ -171,7 +171,7 @@ theorem regionInteriorBondProd_eq_exterior_mul_exterior (A : Tensor Γ d) (R : F
     regionExteriorMultiplicity_eq_prod, ← Finset.prod_mul_distrib]
   refine Finset.prod_congr rfl fun e _ => ?_
   by_cases h₁ : e.1.1 ∈ R <;> by_cases h₂ : e.1.2 ∈ R <;>
-    simp [IsRegionIncidentEdge, IsRegionBoundaryEdge, h₁, h₂]
+    simp [ManyBody.IsRegionIncidentEdge, ManyBody.IsRegionBoundaryEdge, h₁, h₂]
 
 /-- Nonzero bonds have a nonzero number of exterior assignments. -/
 theorem regionExteriorMultiplicity_ne_zero (A : Tensor Γ d) (R : Finset V)

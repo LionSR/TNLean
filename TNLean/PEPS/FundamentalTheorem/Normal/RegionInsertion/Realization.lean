@@ -59,13 +59,13 @@ the insertion. -/
 /-- The in-region endpoint of a boundary edge `f` of `R`: the unique endpoint
 lying in `R`. -/
 def regionBoundaryEdgeInVertex (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) : V :=
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) : V :=
   if f.1.1.1 ∈ R then f.1.1.1 else f.1.1.2
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- The in-region endpoint of a boundary edge lies in `R`. -/
 theorem regionBoundaryEdgeInVertex_mem (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     regionBoundaryEdgeInVertex (G := G) R f ∈ R := by
   unfold regionBoundaryEdgeInVertex
   split_ifs with h
@@ -77,7 +77,7 @@ theorem regionBoundaryEdgeInVertex_mem (R : Finset V)
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- The boundary edge `f` is incident to its in-region endpoint. -/
 theorem regionBoundaryEdgeInVertex_incident (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     f.1.1.1 = regionBoundaryEdgeInVertex (G := G) R f ∨
       f.1.1.2 = regionBoundaryEdgeInVertex (G := G) R f := by
   unfold regionBoundaryEdgeInVertex
@@ -87,13 +87,13 @@ theorem regionBoundaryEdgeInVertex_incident (R : Finset V)
 
 /-- The boundary edge `f` as an incident edge at its in-region endpoint vertex. -/
 noncomputable def regionBoundaryEdgeInIncident (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     IncidentEdge G (regionBoundaryEdgeInVertex (G := G) R f) :=
   ⟨f.1, regionBoundaryEdgeInVertex_incident (G := G) R f⟩
 
 omit [Fintype V] [DecidableRel G.Adj] in
 @[simp] theorem regionBoundaryEdgeInIncident_edge (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) :
     (regionBoundaryEdgeInIncident (G := G) R f).1 = f.1 := rfl
 
 /-! ### Factoring the blocked-region weight through the in-region vertex tensor
@@ -111,13 +111,13 @@ rest of `R` plays the role of the open middle weight. -/
 /-- The local virtual configuration at the in-region vertex `v`, read off a global
 virtual configuration. -/
 noncomputable def regionVertexLocalConfig (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (ζ : VirtualConfig A) :
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) (ζ : VirtualConfig A) :
     LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f) :=
   fun ie => ζ ie.1
 
 omit [Fintype V] in
 @[simp] theorem regionVertexLocalConfig_apply (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (ζ : VirtualConfig A)
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) (ζ : VirtualConfig A)
     (ie : IncidentEdge G (regionBoundaryEdgeInVertex (G := G) R f)) :
     regionVertexLocalConfig (G := G) A R f ζ ie = ζ ie.1 := rfl
 
@@ -125,7 +125,7 @@ open scoped Classical in
 /-- The product of the tensors at the region vertices other than the in-region
 endpoint `v`, at a fixed global virtual configuration. -/
 noncomputable def regionRestProd (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R) (ζ : VirtualConfig A) : ℂ :=
   ∏ w ∈ ({⟨regionBoundaryEdgeInVertex (G := G) R f,
         regionBoundaryEdgeInVertex_mem (G := G) R f⟩} :
@@ -139,7 +139,7 @@ configuration `η` at `v`, the sum over global configurations restricting to `μ
 the boundary and to `η` at `v`, of the product of the tensors at the remaining
 region vertices. -/
 noncomputable def regionOpenCoeff (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (μ : RegionBoundaryConfig (G := G) A R)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) :
     LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f) → ℂ :=
@@ -155,7 +155,7 @@ open scoped Classical in
 The blocked-region weight equals the local tensor map of the in-region endpoint
 `v`, applied to `regionOpenCoeff`, evaluated at the physical leg `σ v`. -/
 theorem regionBlockedWeight_eq_localTensorMap (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (μ : RegionBoundaryConfig (G := G) A R)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) :
     regionBlockedWeight (G := G) A R μ σ =
@@ -210,7 +210,7 @@ other. -/
 coefficient of the assembled physical configuration as a function of the physical
 leg at `v`. -/
 noncomputable def regionStateVec (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) : Fin d → ℂ :=
   fun a =>
@@ -250,7 +250,7 @@ endpoint `v` through which the closed state vector factors: the closed state
 coefficient grouped by the local configuration at `v`, with `v`'s tensor factor
 removed and `v`'s physical leg left open. -/
 noncomputable def stateOpenCoeff (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f) → ℂ :=
@@ -267,7 +267,7 @@ open scoped Classical in
 closed state vector at the in-region endpoint `v` equals the local tensor map of
 `v` applied to `stateOpenCoeff`. -/
 theorem regionStateVec_eq_localTensorMap (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     regionStateVec (G := G) A R f σ τ =
@@ -322,7 +322,7 @@ theorem regionStateVec_eq_localTensorMap (A : Tensor G d) (R : Finset V)
 two tensors represent the same state. This is what carries the region realization
 sum from one tensor to the other. -/
 theorem regionStateVec_sameState {A B : Tensor G d} (hAB : SameState A B) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
     regionStateVec (G := G) A R f σ τ = regionStateVec (G := G) B R f σ τ := by
@@ -342,7 +342,7 @@ matrix `M` on the boundary edge `f` and realizing it through `v`'s tensor.
 
 This is the region analogue of `edgeRightInsertionOp`. -/
 noncomputable def regionInsertionOp (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hv : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
     (Fin d → ℂ) →ₗ[ℂ] (Fin d → ℂ) :=
@@ -352,7 +352,7 @@ noncomputable def regionInsertionOp (A : Tensor G d) (R : Finset V)
 /-- The region insertion operator realizes the inserted matrix on the image of the
 local tensor map at the in-region endpoint vertex. -/
 theorem regionInsertionOp_realizes (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hv : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (c : LocalVirtualConfig A (regionBoundaryEdgeInVertex (G := G) R f) → ℂ) :
@@ -366,7 +366,7 @@ theorem regionInsertionOp_realizes (A : Tensor G d) (R : Finset V)
 /-- The region insertion operator is an algebra anti-homomorphism in the inserted
 matrix: inserting a product realizes the composite in reverse order. -/
 theorem regionInsertionOp_mul (A : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hv : LinearIndependent ℂ (A.component (regionBoundaryEdgeInVertex (G := G) R f)))
     (M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) :
     regionInsertionOp (G := G) A R f hv (M * M') =

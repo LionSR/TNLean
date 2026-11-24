@@ -51,7 +51,7 @@ theorem openRegionWeight_regularGaugedTreeCycleBondExtension {d : ℕ}
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (hinv : ∀ x v η s, a v (fun e => x * η e) s = a v η s)
     (k : RV R → G) (ω : RC (Γ := Γ) R T → G) (u : Edge Γ → G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     openRegionWeight (groupBondTensor (regularTwistedSite a
       (regularRegionBondExtension R (regularGaugedTreeCycleAssignment R T k ω) u))) R
       (fun f => Fintype.equivFin G (θ f)) =
@@ -101,7 +101,7 @@ theorem exists_unitary_regularGaugedCyclePhysicalPermutation {d : ℕ}
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
       ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       (∀ (k : RV R → G) (ω : RC (Γ := Γ) R T → G) (u : Edge Γ → G)
-        (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
+        (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularGaugedTreeCycleAssignment R T k ω) u))) R
           (fun f => Fintype.equivFin G (θ f)) =
@@ -119,7 +119,7 @@ theorem exists_unitary_regularGaugedCyclePhysicalPermutation {d : ℕ}
   have hinv : ∀ x v η s, a v (fun e => x * η e) s = a v η s :=
     fun x v η s => (ha v).toIsGInjective.regularSiteMap_translation x η s
   have hcols (k : RV R → G) (ω : RC (Γ := Γ) R T → G) (u : Edge Γ → G)
-      (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+      (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
       W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
         (regularRegionBondExtension R (regularGaugedTreeCycleAssignment R T k ω) u))) R
         (fun f => Fintype.equivFin G (θ f)) =

@@ -133,7 +133,7 @@ theorem tiBoundaryConfigMap_boundaryEdgeMap (T : Tensor (torusGraph width height
     (R : Finset (TorusVertex width height))
     (bdry : RegionBoundaryConfig (G := torusGraph width height) T R)
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f}) :
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f}) :
     tiBoundaryConfigMap T hT a b R bdry (boundaryEdgeMap (translate a b) R f) =
       Fin.cast (bondDim_boundaryEdgeMap_translate hT a b R f).symm (bdry f) := by
   rw [tiBoundaryConfigMap, regionBoundaryConfigMap_boundaryEdgeMap]
@@ -178,7 +178,7 @@ theorem regionBoundaryGauge_translate {B : Tensor (torusGraph width height) d}
     (hX : IsTranslationCovariantGaugeFamily B X)
     (a : ZMod width) (b : ZMod height) (R : Finset (TorusVertex width height))
     (f : {f : Edge (torusGraph width height) //
-      IsRegionBoundaryEdge (G := torusGraph width height) R f})
+      ManyBody.IsRegionBoundaryEdge (G := torusGraph width height) R f})
     (h : B.bondDim f.1 = B.bondDim (boundaryEdgeMap (translate a b) R f).1) :
     regionBoundaryGauge (G := torusGraph width height) B X (Region.map (translate a b) R)
         (boundaryEdgeMap (translate a b) R f) =

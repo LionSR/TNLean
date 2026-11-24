@@ -60,7 +60,7 @@ theorem regularProjectorTwistedRegionMatrix_cyclePermutation
     (φ : Equiv.Perm (RC (Γ := Γ) R T → G))
     (hφ : ∀ z x, φ (fun e => x * z e * x⁻¹) = fun e => x * φ z e * x⁻¹)
     (ω : RC (Γ := Γ) R T → G) (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     regularProjectorTwistedRegionMatrix R (regularTreeCycleAssignment R T (φ ω))
       ((regularRegionCoordinatesEquiv R T hT htree o).symm
         (regularRegionCyclePermutation R T o φ c)) θ =
@@ -83,7 +83,7 @@ theorem regularProjectorTwistedRegionMatrix_cyclePhysicalPermutation
     (φ : Equiv.Perm (RC (Γ := Γ) R T → G))
     (hφ : ∀ z x, φ (fun e => x * z e * x⁻¹) = fun e => x * φ z e * x⁻¹)
     (ω : RC (Γ := Γ) R T → G)
-    (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
+    (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G) :
     Matrix.permMatrixHom (R := ℂ)
         (regularRegionCyclePhysicalPermutation R T hT htree o φ) *ᵥ
       (fun α => regularProjectorTwistedRegionMatrix R
@@ -157,7 +157,7 @@ theorem exists_unitary_regularCyclePhysicalPermutation {d : ℕ}
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
       ∀ (ω : RC (Γ := Γ) R T → G)
-        (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
+        (θ : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
           (regularTreeCycleAssignment R T ω))) R
           (fun f => Fintype.equivFin G (θ f)) =

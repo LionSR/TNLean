@@ -65,7 +65,7 @@ theorem IsGIsometric.exists_torusThreePlaquetteOutput_physicalMeasurement
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
       (∀ (t : Fin 3 → G) (u : Edge Γₜ → G)
-        (θ : {f : Edge Γₜ // IsRegionBoundaryEdge R f} → G) (C : Option (ConjClasses G)),
+        (θ : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} → G) (C : Option (ConjClasses G)),
         Q C *ᵥ openRegionWeight
             (groupBondTensor (regularTwistedSite A (regularRegionBondExtension R (output t) u)))
             R (fun f => Fintype.equivFin G (θ f)) =
@@ -99,7 +99,7 @@ theorem IsGIsometric.exists_torusThreePlaquetteOutput_physicalMeasurement
     rw [regularWalkHolonomy_induced_bondExtension, SimpleGraph.Walk.map_induce]
     exact (regularWalkHolonomy_torusThreePlaquetteDoubleExchange v t).2.2.2
   have hcols (t : Fin 3 → G) (u : Edge Γₜ → G)
-      (θ : {f : Edge Γₜ // IsRegionBoundaryEdge R f} → G) (C : Option (ConjClasses G)) :=
+      (θ : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} → G) (C : Option (ConjClasses G)) :=
     hQact (regularRegionBondExtension R (output t) u) θ C
   simp only [hhol] at hcols
   refine ⟨Q, hQh, hQm, hQsum, hcols, ?_⟩
@@ -129,7 +129,7 @@ theorem IsGIsometric.exists_torusThreePlaquetteMeasuredDoubleExchange
       (∀ C, (Q C).IsHermitian ∧ (Q C).PosSemidef) ∧
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
-      (∀ (t : Fin 3 → G) (θ : {f : Edge Γₜ // IsRegionBoundaryEdge R f} → G),
+      (∀ (t : Fin 3 → G) (θ : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite A (input t))) R
           (fun f => Fintype.equivFin G (θ f)) =
         openRegionWeight (groupBondTensor (regularTwistedSite A (output t))) R
@@ -139,7 +139,7 @@ theorem IsGIsometric.exists_torusThreePlaquetteMeasuredDoubleExchange
           (groupBondTensor (regularTwistedSite A (regularRegionBondExtension R (input t) u))) =
         stateCoeff
           (groupBondTensor (regularTwistedSite A (regularRegionBondExtension R (output t) u)))) ∧
-      (∀ (t : Fin 3 → G) (θ : {f : Edge Γₜ // IsRegionBoundaryEdge R f} → G)
+      (∀ (t : Fin 3 → G) (θ : {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} → G)
         (C : Option (ConjClasses G)),
         Q C *ᵥ (W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite A (input t))) R
             (fun f => Fintype.equivFin G (θ f))) =

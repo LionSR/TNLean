@@ -86,7 +86,7 @@ CPGSV21, Section IV.C.1, lines 2003–2044. -/
 theorem finrank_regionGroundSpace_of_injective_openRegionMap
     (A : Tensor Γ d) (R : Finset V) (hR : Function.Injective (openRegionMap A R)) :
     Module.finrank ℂ (regionGroundSpace A R) =
-      ∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
+      ∏ e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
   change Module.finrank ℂ (openRegionMap A R).range = _
   rw [LinearMap.finrank_range_of_inj hR, Module.finrank_pi, Fintype.card_pi]
   exact Finset.prod_congr rfl fun e _ => Fintype.card_fin _
@@ -160,7 +160,7 @@ theorem rank_regionReducedDensity_of_injective_open_cut
     (hR : Function.Injective (openRegionMap A R))
     (hC : Function.Injective (openRegionMap A (Finset.univ \ R))) :
     (regionReducedDensity A R).rank =
-      ∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
+      ∏ e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
   change Module.finrank ℂ (Matrix.mulVecLin (regionReducedDensity A R)).range = _
   rw [range_regionReducedDensity_eq_regionGroundSpace_of_injective_complement A R hC]
   exact finrank_regionGroundSpace_of_injective_openRegionMap A R hR
@@ -184,7 +184,7 @@ CPGSV21, Section IV.C.1, lines 2003–2044. -/
 theorem rank_regionReducedDensity_of_isInjective
     (A : Tensor Γ d) (R : Finset V) (hA : A.IsInjective) :
     (regionReducedDensity A R).rank =
-      ∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, A.bondDim e.1 :=
+      ∏ e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}, A.bondDim e.1 :=
   rank_regionReducedDensity_of_injective_open_cut A R
     (openRegionMap_injective_of_isInjective A R hA)
     (openRegionMap_injective_of_isInjective A (Finset.univ \ R) hA)

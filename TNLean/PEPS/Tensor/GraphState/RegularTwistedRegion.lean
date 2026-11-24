@@ -63,14 +63,14 @@ Source: SCP10, twisted-region contraction, lines 1935–1990. -/
 noncomputable abbrev regularTwistedOpenRegionMatrix
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (u : Edge Γ → G)
     (R : Finset V) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) :=
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :=
   regularOpenRegionMatrix (regularTwistedSite a u) R e
 
 /-- The local translation equations after the two bond operators are inserted.
 Source: SCP10, twisted-sector contraction, lines 1935–1990. -/
 def IsTwistedRegionLabelCompatible (R : Finset V) (u w : Edge Γ → G)
     (q : {v : V // v ∈ R} → G)
-    (η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G) : Prop :=
+    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) : Prop :=
   ∀ (v : {v : V // v ∈ R}),
     regularTwistedLabels u v.1
         (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) =
@@ -78,7 +78,7 @@ def IsTwistedRegionLabelCompatible (R : Finset V) (u w : Edge Γ → G)
         (fun f => θ ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) f
 
 instance (R : Finset V) (u w : Edge Γ → G) (q : {v : V // v ∈ R} → G)
-    (η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G) :
+    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) :
     Decidable (IsTwistedRegionLabelCompatible R u w q η θ) :=
   inferInstanceAs (Decidable (∀ (v : {v : V // v ∈ R}),
     regularTwistedLabels u v.1
@@ -92,12 +92,12 @@ Source: SCP10, region contraction in the proof of Theorem 6.9, lines 1935–1957
 theorem regularOpenRegionMatrix_apply_group
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (R : Finset V) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     (σ : RegionPhysicalConfig (d := d) R) (x : Fin b → G) :
     regularOpenRegionMatrix a R e σ x =
-      ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-        if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-            η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) then
+      ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+        if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+            η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) then
           ∏ v : {v : V // v ∈ R},
             a v.1 (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) (σ v)
         else 0 := by
@@ -116,14 +116,14 @@ site pairings. Source: SCP10, proof of Theorem 6.9, lines 1935–1990 and 2062�
 theorem regularOpenRegionMatrix_crossGram_apply_group
     (a a' : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (R : Finset V) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b) (x y : Fin b → G) :
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) (x y : Fin b → G) :
     ((regularOpenRegionMatrix a R e).conjTranspose * regularOpenRegionMatrix a' R e) x y =
-      ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-        ∑ θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-          if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-              (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
+      ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+        ∑ θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+          if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+              (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
             ∏ v : {v : V // v ∈ R}, ∑ s : Fin d,
               star (a v.1
                 (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) s) *
@@ -135,10 +135,10 @@ theorem regularOpenRegionMatrix_crossGram_apply_group
   rw [Fintype.sum_reverse_three]
   apply Finset.sum_congr₂
   intro η _ θ _
-  by_cases hη : (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-    η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) <;>
-    by_cases hθ : (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-      θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) <;>
+  by_cases hη : (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+    η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) <;>
+    by_cases hθ : (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+      θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) <;>
     simp only [hη, hθ, true_and, false_and, and_false, ite_true, ite_false,
       star_zero, mul_zero, zero_mul, Finset.sum_const_zero]
   simp only [star_prod, ← Finset.prod_mul_distrib]
@@ -156,7 +156,7 @@ theorem prod_twistedSiteGram_eq_sum_compatible
       (∑ s : Fin d, star (a v.1 η s) * a v.1 θ s) =
         (c v.1 / (Fintype.card G : ℂ)) *
           ∑ g : G, if η = (fun f => g * θ f) then (1 : ℂ) else 0)
-    (η θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G) :
+    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) :
     (∏ v : {v : V // v ∈ R}, ∑ s : Fin d,
       star (regularTwistedSite a u v.1
         (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) s) *
@@ -183,7 +183,7 @@ Source: SCP10, proof of Theorem 6.9, lines 1935–1990 and 2062–2072. -/
 theorem regularTwistedOpenRegionMatrix_crossGram_eq_sum_compatible
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) (c : V → ℂ)
     (R : Finset V) (u w : Edge Γ → G) {b : ℕ}
-    (e : {f : Edge Γ // IsRegionBoundaryEdge R f} ≃ Fin b)
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
     (hlocal : ∀ (v : {v : V // v ∈ R}) (η θ : IncidentEdge Γ v.1 → G),
       (∑ s : Fin d, star (a v.1 η s) * a v.1 θ s) =
         (c v.1 / (Fintype.card G : ℂ)) *
@@ -191,12 +191,12 @@ theorem regularTwistedOpenRegionMatrix_crossGram_eq_sum_compatible
     (x y : Fin b → G) :
     ((regularTwistedOpenRegionMatrix a u R e).conjTranspose *
         regularTwistedOpenRegionMatrix a w R e) x y =
-      ∑ η : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-        ∑ θ : {f : Edge Γ // IsRegionIncidentEdge R f} → G,
-          if (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                η ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
-              (fun f : {f : Edge Γ // IsRegionBoundaryEdge R f} =>
-                θ ⟨f.1, isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
+      ∑ η : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+        ∑ θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G,
+          if (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                η ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => x (e f)) ∧
+              (fun f : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} =>
+                θ ⟨f.1, ManyBody.isRegionBoundaryEdge_touches R f.2⟩) = (fun f => y (e f)) then
             ((∏ v : {v : V // v ∈ R}, c v.1) / (Fintype.card G : ℂ) ^ R.card) *
               ∑ q : {v : V // v ∈ R} → G,
                 if IsTwistedRegionLabelCompatible R u w q η θ then (1 : ℂ) else 0

@@ -92,7 +92,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
       let K' := F * K * Fᴴ
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
-        Finset.univ.filter (IsRegionBoundaryEdge R)
+        Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R)
       let Z := boundary.biUnion fun b ↦
         ({b.1.1, b.1.2} : Finset (SquareLatticeVertex L L))
       ∀ W : Matrix (({v // v ∉ R ∪ C₀} → Fin q) × ({v // v ∉ R ∪ C₀} → Fin q))
@@ -235,7 +235,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
         let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
         let K' := F * K * Fᴴ
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
-          Finset.univ.filter (IsRegionBoundaryEdge R)
+          Finset.univ.filter (ManyBody.IsRegionBoundaryEdge R)
         let Z := boundary.biUnion fun b ↦
           ({b.1.1, b.1.2} : Finset (SquareLatticeVertex L L))
         ∀ W : Matrix (({v // v ∉ R ∪ C₀} → Fin q) × ({v // v ∉ R ∪ C₀} → Fin q))

@@ -55,7 +55,7 @@ of dimensions crossing the cut. Source: CPGSV21, Section II.A.3,
 the PEPS area-law argument, lines 429–448. -/
 theorem rank_regionReducedDensity_le_boundary (A : Tensor Γ d) (R : Finset V) :
     (regionReducedDensity A R).rank ≤
-      ∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
+      ∏ e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
   change Module.finrank ℂ (Matrix.mulVecLin (regionReducedDensity A R)).range ≤ _
   exact (Submodule.finrank_mono (range_regionReducedDensity_le A R)).trans
     (finrank_regionGroundSpace_le A R)
@@ -82,7 +82,7 @@ lines 429–448. -/
 theorem rank_normalizedRegionReducedDensity_le_boundary (A : Tensor Γ d) (R : Finset V)
     (hA : stateCoeff A ≠ 0) :
     (normalizedRegionReducedDensity A R).rank ≤
-      ∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
+      ∏ e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
   change Module.finrank ℂ (Matrix.mulVecLin (normalizedRegionReducedDensity A R)).range ≤ _
   rw [range_normalizedRegionReducedDensity_eq A R hA]
   exact rank_regionReducedDensity_le_boundary A R
@@ -96,14 +96,14 @@ theorem entropy_normalizedRegionReducedDensity_le_boundary (A : Tensor Γ d) (R 
     ∃ hρ : ρ.IsHermitian,
       0 ≤ vonNeumannEntropy ρ hρ ∧
       vonNeumannEntropy ρ hρ ≤
-        ∑ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, Real.log (A.bondDim e.1 : ℝ) := by
+        ∑ e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}, Real.log (A.bondDim e.1 : ℝ) := by
   classical
   obtain ⟨hpos, htr, _⟩ := normalizedRegionReducedDensity_properties A R hA
   have hrank := rank_normalizedRegionReducedDensity_le_boundary A R hA
   have hrankpos : 0 < ((normalizedRegionReducedDensity A R).rank : ℝ) :=
     Nat.cast_pos.mpr (hpos.rank_pos_of_trace_one htr)
   have hlog : Real.log ((normalizedRegionReducedDensity A R).rank : ℝ) ≤
-      Real.log (∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, (A.bondDim e.1 : ℝ)) := by
+      Real.log (∏ e : {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e}, (A.bondDim e.1 : ℝ)) := by
     apply Real.log_le_log hrankpos
     exact_mod_cast hrank
   rw [Real.log_prod (fun e _ => Nat.cast_ne_zero.mpr
@@ -116,12 +116,12 @@ number of crossing edges times its logarithm. Source: CPGSV21,
 Section II.A.3, PEPS area law at line 445. -/
 theorem entropy_normalizedRegionReducedDensity_le_uniform_boundary
     (A : Tensor Γ d) (R : Finset V) (hA : stateCoeff A ≠ 0)
-    (D : ℕ) (hD : ∀ e, IsRegionBoundaryEdge R e → A.bondDim e = D) :
+    (D : ℕ) (hD : ∀ e, ManyBody.IsRegionBoundaryEdge R e → A.bondDim e = D) :
     let ρ := normalizedRegionReducedDensity A R
     ∃ hρ : ρ.IsHermitian,
       0 ≤ vonNeumannEntropy ρ hρ ∧
       vonNeumannEntropy ρ hρ ≤
-        Fintype.card {e : Edge Γ // IsRegionBoundaryEdge R e} * Real.log (D : ℝ) := by
+        Fintype.card {e : Edge Γ // ManyBody.IsRegionBoundaryEdge R e} * Real.log (D : ℝ) := by
   obtain ⟨hρ, hnonneg, hbound⟩ := entropy_normalizedRegionReducedDensity_le_boundary A R hA
   refine ⟨hρ, hnonneg, hbound.trans_eq ?_⟩
   simp only [hD _ (Subtype.property _), Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
@@ -132,7 +132,7 @@ edges. Source: CPGSV21, Section II.A.3, the boundary-rank argument
 at lines 429–448. -/
 theorem entropy_normalizedRegionReducedDensity_eq_zero_of_boundary_bondOne
     (A : Tensor Γ d) (R : Finset V) (hA : stateCoeff A ≠ 0)
-    (hboundary : ∀ e, IsRegionBoundaryEdge R e → A.bondDim e = 1) :
+    (hboundary : ∀ e, ManyBody.IsRegionBoundaryEdge R e → A.bondDim e = 1) :
     let ρ := normalizedRegionReducedDensity A R
     ∃ hρ : ρ.IsHermitian, vonNeumannEntropy ρ hρ = 0 := by
   obtain ⟨hρ, hnonneg, hbound⟩ :=

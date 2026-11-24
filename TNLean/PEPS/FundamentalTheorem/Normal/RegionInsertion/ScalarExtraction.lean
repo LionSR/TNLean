@@ -64,9 +64,9 @@ omit [Fintype V] [DecidableRel G.Adj] in
 endpoint lies in `R` and its `v` endpoint does not. -/
 theorem isRegionBoundaryEdge_of_vIncident_regionIncident (R : Finset V) {v : V}
     (hv : v ∉ R) {e : Edge G} (hev : e.1.1 = v ∨ e.1.2 = v)
-    (hinc : IsRegionIncidentEdge (G := G) R e) :
-    IsRegionBoundaryEdge (G := G) R e := by
-  simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge] at *
+    (hinc : ManyBody.IsRegionIncidentEdge (G := G) R e) :
+    ManyBody.IsRegionBoundaryEdge (G := G) R e := by
+  simp only [ManyBody.IsRegionBoundaryEdge, ManyBody.IsRegionIncidentEdge] at *
   grind
 
 omit [Fintype V] in
@@ -86,9 +86,9 @@ theorem localConfig_eq_of_insertConsistent (A : Tensor G d) (R : Finset V) {v : 
     η = η' := by
   classical
   funext ie
-  by_cases hinc : IsRegionIncidentEdge (G := G) R ie.1
+  by_cases hinc : ManyBody.IsRegionIncidentEdge (G := G) R ie.1
   · -- `v`-incident and `R`-incident: an `R`-boundary edge; the bridge label reads `η`.
-    have hb : IsRegionBoundaryEdge (G := G) R ie.1 :=
+    have hb : ManyBody.IsRegionBoundaryEdge (G := G) R ie.1 :=
       isRegionBoundaryEdge_of_vIncident_regionIncident (G := G) R hv ie.2 hinc
     have h1 : boundaryLabelOfInsert (G := G) A R hv μ η ⟨ie.1, hb⟩ = η ie := by
       rw [boundaryLabelOfInsert, dite_eq_left ie.2]
@@ -96,7 +96,7 @@ theorem localConfig_eq_of_insertConsistent (A : Tensor G d) (R : Finset V) {v : 
       rw [boundaryLabelOfInsert, dite_eq_left ie.2]
     rw [← h1, ← h2, congrFun hbridge ⟨ie.1, hb⟩]
   · -- `v`-incident, non-`R`-incident: a `v`-incident `insert v R`-boundary edge.
-    have hb : IsRegionBoundaryEdge (G := G) (insert v R) ie.1 :=
+    have hb : ManyBody.IsRegionBoundaryEdge (G := G) (insert v R) ie.1 :=
       isRegionBoundaryEdge_insert_of_vIncident_not_regionIncident (G := G) R ie.2 hinc
     have h1 : η ie = μ ⟨ie.1, hb⟩ := (hcons ⟨ie.1, hb⟩ ie.2).symm
     have h2 : η' ie = μ ⟨ie.1, hb⟩ := (hcons' ⟨ie.1, hb⟩ ie.2).symm

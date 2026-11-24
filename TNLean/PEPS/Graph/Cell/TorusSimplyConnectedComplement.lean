@@ -136,7 +136,7 @@ Theorem 6.9, lines 2027–2072; the boundary counts crossing bonds. -/
 theorem nonempty_torusRegionBoundaryEdge_of_isSimplyConnected
     (R : Finset X) (hSC : IsSimplyConnected (torusRegionRealization R))
     (hR : ((Γₜ).induce (R : Set X)).Connected) :
-    Nonempty {f : Edge Γₜ // IsRegionBoundaryEdge R f} := by
+    Nonempty {f : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R f} := by
   obtain ⟨r⟩ := hR.nonempty
   obtain ⟨s⟩ := (torusGraph_compl_connected_of_isSimplyConnected R hSC hR).nonempty
   apply nonempty_regionBoundaryEdge_of_connected ambient_connected ⟨r.1, r.2⟩

@@ -133,15 +133,15 @@ theorem exists_complementBoundaryLoops_of_integerExteriorCollarGraph_connected
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oS : {v : X // v ∈ Finset.univ \ R})
-    (f₀ : {e : Edge Γₜ // IsRegionBoundaryEdge R e}) :
-    ∃ p : {e : Edge Γₜ // IsRegionBoundaryEdge R e} →
+    (f₀ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e}) :
+    ∃ p : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e} →
         ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS,
       ∀ f, torusWalkWinding
           ((p f).map (SimpleGraph.Embedding.induce
             ((Finset.univ \ R : Finset X) : Set X)).toHom) =
         torusWalkWinding (torusBoundaryTreeRoute R TR TS hTR hTS htreeR htreeS oS f₀ f) := by
   classical
-  have hf (f : {e : Edge Γₜ // IsRegionBoundaryEdge R e}) :
+  have hf (f : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e}) :
       ∃ p : ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS,
         torusWalkWinding (p.map ⟨Subtype.val, fun {_ _} h => h⟩) =
           torusWalkWinding
@@ -178,8 +178,8 @@ theorem exists_complementBoundaryLoops_of_isSimplyConnected
     (hTS : TS ≤ (Γₜ).induce ((Finset.univ \ R : Finset X) : Set X))
     (htreeR : TR.IsTree) (htreeS : TS.IsTree)
     (oS : {v : X // v ∈ Finset.univ \ R})
-    (f₀ : {e : Edge Γₜ // IsRegionBoundaryEdge R e}) :
-    ∃ p : {e : Edge Γₜ // IsRegionBoundaryEdge R e} →
+    (f₀ : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e}) :
+    ∃ p : {e : Edge Γₜ // ManyBody.IsRegionBoundaryEdge R e} →
         ((Γₜ).induce ((Finset.univ \ R : Finset X) : Set X)).Walk oS oS,
       ∀ f, torusWalkWinding
           ((p f).map (SimpleGraph.Embedding.induce

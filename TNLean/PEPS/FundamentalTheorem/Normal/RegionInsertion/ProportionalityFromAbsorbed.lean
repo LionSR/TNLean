@@ -75,7 +75,7 @@ to the bare-edge identity).
 Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1544 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem edgeAbsorbed_of_conjIdentity (A B : Tensor G d) (R : Finset V)
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (hbd : A.bondDim = B.bondDim)
     (Z : GL (Fin (B.bondDim f.1)) ℂ)
     (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
@@ -120,7 +120,7 @@ theorem regionAbsorbed_of_edgeAbsorbed (A B : Tensor G d)
       edgeInsertedCoeff (G := G) A e σ N =
         edgeInsertedCoeff (G := G) (applyGauge B X) e σ
           (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbd e)) N))
-    (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f})
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
     (M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ)
     (σ : RegionPhysicalConfig (V := V) (d := d) R)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
@@ -145,7 +145,7 @@ theorem twoBlockProportional_of_edgeAbsorbed (A B : Tensor G d)
     (hbd : A.bondDim = B.bondDim)
     (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
     (R : Finset V)
-    [Nonempty {f : Edge G // IsRegionBoundaryEdge (G := G) R f}]
+    [Nonempty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}]
     (hRA : RegionBlockedTensorInjective (G := G) A R)
     (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hRB : RegionBlockedTensorInjective (G := G)
@@ -180,14 +180,14 @@ theorem twoBlockProportional_of_boundaryEdgeAbsorbed (A B : Tensor G d)
     (hbd : A.bondDim = B.bondDim)
     (X : (e : Edge G) → GL (Fin (B.bondDim e)) ℂ)
     (R : Finset V)
-    [Nonempty {f : Edge G // IsRegionBoundaryEdge (G := G) R f}]
+    [Nonempty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}]
     (hRA : RegionBlockedTensorInjective (G := G) A R)
     (hCA : RegionBlockedTensorInjective (G := G) A (Finset.univ \ R))
     (hRB : RegionBlockedTensorInjective (G := G)
       (reindexTensor (G := G) (applyGauge B X) hbd) R)
     (hCB : RegionBlockedTensorInjective (G := G)
       (reindexTensor (G := G) (applyGauge B X) hbd) (Finset.univ \ R))
-    (hedge : ∀ (f : {f : Edge G // IsRegionBoundaryEdge (G := G) R f}) (σ : V → Fin d)
+    (hedge : ∀ (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f}) (σ : V → Fin d)
         (N : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ),
       edgeInsertedCoeff (G := G) A f.1 σ N =
         edgeInsertedCoeff (G := G) (applyGauge B X) f.1 σ
