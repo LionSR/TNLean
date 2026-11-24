@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Entropy.InformationReset
-import TNLean.MPS.AreaLaw.Entropy.IntervalNeighborhoodEntropy
+import TNLean.MPS.AreaLaw.Entropy.AreaLaw
+import QICLean.ManyBody.Entropy.InformationReset
+import QICLean.ManyBody.Entropy.ChainInterval
 import QICLean.ManyBody.Entropy.ConditionalTwoFamilies
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -30,6 +31,32 @@ open QuantumCircuit
 open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
+
+/-- The original gapped domain Hamiltonian bounds entropy on an intrinsic neighborhood
+of a finite interval union.
+Source: TNLean note, `part2a_mps_information.tex`, lines 482–487, together with the
+interval area-law bound from Part I. -/
+theorem _root_.ManyBody.DomainInteraction.regionEntropy_neighborhood_biUnion_intervals_le
+    {Λ : Finset ℤ} {q R : ℕ} {J Δ : ℝ} {κ : Type*}
+    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
+    (s : Finset κ) (a b : κ → ℕ) (m : ℕ) :
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      Ω ((s.biUnion (fun i ↦ interval Λ.card (a i) (b i))).biUnion
+        (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) ≤
+          (s.card : ℝ) * chainIntervalEntropyBound q R J Δ := by
+  let hc : ManyBody.ChainInteraction Λ.card q R :=
+    h.extend ManyBody.DomainSupport.toChainSupport
+      ManyBody.DomainSupport.toChainSupport_injective (fun Y ↦ Y.1) fun _ ↦ subset_rfl
+  have hext : hc.hamiltonian = h.hamiltonian := ManyBody.Interaction.hamiltonian_extend
+  exact ManyBody.regionEntropy_domainNeighborhood_biUnion_intervals_le hΩ
+    (fun u v ↦ regionEntropy_interval_le hq hJ hΔ hc
+        (ManyBody.Interaction.isHermitian_extend_term hh)
+        (ManyBody.Interaction.norm_extend_term_le hJ hhJ)
+      hΩ (by simpa only [hext] using hgap) (by simpa only [hext] using hspan) u v) s a b m
 
 /-- A finite intrinsic distance bounds the physical integer separation.
 This auxiliary estimate makes no assertion across disconnected components.

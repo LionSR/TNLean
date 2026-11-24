@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.Models
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.Entropy.Surprisal.TailRadiusWeights
 import QICLean.ManyBody.Entropy.Filter.BufferDiscount
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -50,7 +51,7 @@ constants and propagate to `C_int` and `C₀` in `TNLean.MPS.AreaLaw.AreaLaw`. D
 * `two_mul_condEntropy_interval_le_of_family_budget`: the same discount for any finite family
   of supports of range `R` with crossing count `N` and cut budget `B`.
 * `two_mul_condEntropy_interval_le`: the discount `2 S(X | T) ≤ S(X) + C`.
-* `card_interval_enlargement_sdiff_le`: a clipped coordinate interval enlarged by `v` adds at
+* `ManyBody.card_interval_enlargement_sdiff_le`: enlarging a clipped interval by `v` adds at
   most `2 v` sites.
 * `two_mul_condEntropy_interval_le_polynomial`: the discount with the printed constants of
   `eq:CE` and `eq:discount`, including the fourth entry of `m`.
@@ -134,27 +135,10 @@ theorem disjoint_interval_chainBuffer (L q R : ℕ) (J Δ : ℝ) (l r : ℕ) :
     Disjoint (interval L l r) (chainBuffer L q R J Δ l r) :=
   Finset.disjoint_sdiff
 
-/-- A clipped coordinate interval enlarged by radius `v` adds at most `2 * v` sites.
-The left subtraction is truncated, with no restriction on the endpoint order.
-Source: the one-dimensional note, Section 5, `eq:final`. -/
-theorem card_interval_enlargement_sdiff_le (L l r v : ℕ) :
-    (interval L (l - v) (r + v) \ interval L l r).card ≤ 2 * v := by
-  set w : ℕ := v
-  have hsub : interval L (l - w) (r + w) \ interval L l r ⊆
-      interval L (l - w) l ∪ interval L r (r + w) := by
-    intro v hv
-    simp only [Finset.mem_sdiff, mem_interval, not_and, not_lt] at hv
-    rw [Finset.mem_union, mem_interval, mem_interval]
-    omega
-  refine (Finset.card_le_card hsub).trans ((Finset.card_union_le _ _).trans ?_)
-  have h1 := card_interval_le (L := L) (l - w) l
-  have h2 := card_interval_le (L := L) r (r + w)
-  omega
-
 /-- The buffer has at most `2 m R` sites. -/
 theorem card_chainBuffer_le (L q R : ℕ) (J Δ : ℝ) (l r : ℕ) :
     (chainBuffer L q R J Δ l r).card ≤ 2 * (chainShellCount q R J Δ * R) :=
-  card_interval_enlargement_sdiff_le L l r _
+  ManyBody.card_interval_enlargement_sdiff_le L l r _
 
 /-- The uniform shells of the buffered discount: `X^{+(j+1)R} \ X` for `j < m`, and the
 whole complement of `X` from `m` on. TNLean note, Lemma 4.2. -/

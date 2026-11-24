@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Entropy.StripBufferDiscount
+import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
 import TNLean.MPS.AreaLaw.Approximation.MPSApproximation
 import QICLean.ManyBody.Sites.Relabel
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
@@ -463,7 +464,7 @@ theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
   have hC : 0 ≤ C := by
     dsimp only [C]
     have hA : 0 ≤ stripAreaLawConst q R := by
-      unfold stripAreaLawConst stripShellConst stripBudgetConst
+      unfold stripAreaLawConst stripShellConst ManyBody.stripBudgetConst
       positivity
     positivity
   have hs : 0 < s := by
@@ -515,7 +516,7 @@ theorem stripMPSApproximation (q R : ℕ) :
         (D : ℝ) ≤ Real.exp (C * (1 + J / Δ) * (w : ℝ) ^ 2) *
           (L : ℝ) ^ (c * Real.sqrt (1 + J / Δ) * w) := by
   refine ⟨stripApproximationConst q R, stripApproximationExponent q R, ?_, ?_, ?_⟩
-  · unfold stripApproximationConst stripAreaLawConst stripShellConst stripBudgetConst
+  · unfold stripApproximationConst stripAreaLawConst stripShellConst ManyBody.stripBudgetConst
     have hroot := one_lt_tailPrefactorRoot
     have hlog : 0 ≤ Real.log (2 * tailPrefactorRoot) :=
       Real.log_nonneg (by linarith only [hroot])
