@@ -21,7 +21,7 @@ states are rays and the minimal tensor representative may change.
 
 open scoped InnerProductSpace
 
-namespace TNLean.Lattice
+namespace Matrix
 
 /-- A nonzero scalar does not change the actual normalized expectation
 `⟪ψ, A ψ⟫ / ‖ψ‖²`,
@@ -39,11 +39,9 @@ theorem inner_toEuclideanCLM_div_norm_sq_smul
     inner_smul_right, ← mul_assoc]
   exact mul_div_mul_left _ _ (mul_ne_zero hc ((map_ne_zero _).mpr hc))
 
-end TNLean.Lattice
+end Matrix
 
 namespace MPSTensor
-
-open TNLean.Lattice
 
 /-- The window-correlator normalization is the squared-norm expectation
 of the actual unnormalized periodic vector. Source: arXiv:2307.01696,
@@ -72,7 +70,7 @@ theorem SamePositiveMpvRay.mpvExpectation_eq
     exact congrArg (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm hc.symm
   rw [mpvExpectation_eq_inner_div_norm_sq,
     mpvExpectation_eq_inner_div_norm_sq, hstate,
-    inner_toEuclideanCLM_div_norm_sq_smul _ _ c.ne_zero]
+    Matrix.inner_toEuclideanCLM_div_norm_sq_smul _ _ c.ne_zero]
 
 /-- Connected window correlations are invariant under equality of the
 actual periodic rays. No injectivity, canonical gauge or nonzero-vector

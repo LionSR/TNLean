@@ -33,7 +33,7 @@ open MeasureTheory
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-open TNLean.MPS.AreaLaw TNLean.Lattice
+open TNLean.MPS.AreaLaw
 
 /-- One long physical parent of the degenerate-gap tree: for every number of rounds `k ≥ 1`,
 sampling size `1 ≤ s ≤ D^{2k}` and children of dimension at most `D^{2k} s`, the canonical

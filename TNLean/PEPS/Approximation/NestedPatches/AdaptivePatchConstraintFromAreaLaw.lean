@@ -28,7 +28,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators
-open TNLean.Lattice
 namespace TNLean.PEPS.Approximation
 open EncodedFrame
 

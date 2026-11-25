@@ -38,7 +38,7 @@ site, and conjugate by the swap `F_A` of the replicas on `A`. This file shows:
   (`ManyBody.PlaneInteraction.supported_buffer_gaussian_integral`).
 
 The sites of the crossing supports and their walks to both sides of `A` are in
-`TNLean.Lattice.CrossingSupports`.
+`QICLean.ManyBody.Sites.Lattice.Plane`.
 
 The polynomial-PEPS manuscript treats only site and nearest-neighbour terms on the open square,
 which is range one; this file extends its boundary estimate to range `R`. The range-one
@@ -80,7 +80,7 @@ noncomputable section
 
 open ManyBody (AdmissibleSupport PlaneInteraction)
 
-namespace TNLean.Lattice
+namespace TNLean.PEPS.Approximation
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
 
@@ -104,11 +104,11 @@ theorem swapBoundaryCoefficient_nonneg (R : ℕ) : 0 ≤ swapBoundaryCoefficient
   unfold swapBoundaryCoefficient
   positivity
 
-end TNLean.Lattice
+end TNLean.PEPS.Approximation
 
 namespace ManyBody.PlaneInteraction
 
-open TNLean.Lattice
+open TNLean.PEPS.Approximation
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
 
@@ -381,7 +381,7 @@ open ManyBody (AdmissibleSupport PlaneInteraction)
 
 namespace ManyBody.PlaneInteraction
 
-open TNLean.Lattice
+open TNLean.PEPS.Approximation
 
 /-- The edge-boundary norm estimate for the actual swapped doubled Hamiltonian.
 This finite-range extension combines polynomial-PEPS `02-information.tex`,

@@ -11,7 +11,7 @@ import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.ManyBody.Sites.PairSwapPermutation
 import QICLean.ManyBody.Sites.SitewiseProduct
 import TNLean.PEPS.Tensor.Region.RegionBlock
-import TNLean.Lattice.Sheet.SwapCorrection
+import QICLean.ManyBody.Sites.ThreeRegion.SwapCorrection
 import QICLean.Spectral.Gap.DoubledSystemGap
 import TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount
 import QICLean.Analysis.Norm.L2OpNormReindex
@@ -322,7 +322,6 @@ open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
-open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 

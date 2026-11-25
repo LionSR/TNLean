@@ -21,8 +21,7 @@ open ManyBody (Edge)
 
 noncomputable section
 namespace TNLean.PEPS
-open TNLean.Lattice
-open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
+open DependentBondNetwork TNLean.Network.DependentBondNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
@@ -37,7 +36,7 @@ theorem cutSpace_graphPhysicalPaddingTensor
     cutSpace graphEdgeTail graphEdgeHead (fun e ↦ Fin (N e))
       (graphDependentTensor (graphPhysicalPaddingTensor N A)) C =
       (cutSpace graphEdgeTail graphEdgeHead (fun e ↦ Fin (N e)) A C).map
-        (dependentPhysicalProductFamilyMap physicalPaddingMatrix) := by
+        (Matrix.piKronecker physicalPaddingMatrix).mulVecLin := by
   rw [graphDependentTensor_physicalPadding, map_cutSpace]
 
 /-- The product restriction maps every genuine padded cut back to the original
@@ -45,7 +44,7 @@ cut, retaining exactly the same arbitrary joint virtual boundary. -/
 theorem restriction_cutMap_graphPhysicalPaddingTensor
     (A : (v : V) → LocalConfig graphEdgeTail graphEdgeHead (fun e ↦ Fin (N e)) v → Phys v → ℂ)
     (C : Finset (Edge Γ)) (M : CutConfig C (fun e ↦ Fin (N e)) → ℂ) :
-    dependentPhysicalProductFamilyMap physicalRestrictionMatrix
+    (Matrix.piKronecker physicalRestrictionMatrix).mulVecLin
       (cutMap graphEdgeTail graphEdgeHead (fun e ↦ Fin (N e))
         (graphDependentTensor (graphPhysicalPaddingTensor N A)) C M) =
       cutMap graphEdgeTail graphEdgeHead (fun e ↦ Fin (N e)) A C M := by
@@ -63,8 +62,8 @@ theorem padding_restriction_eq_self_of_mem_regionParentGroundSpace
     (hcover : ∀ v, ∃ i, v ∈ R i)
     {Ψ : (V → Fin (physicalPaddingDimension (Phys := Phys))) → ℂ}
     (hΨ : Ψ ∈ regionParentGroundSpace (graphPhysicalPaddingTensor N A) R) :
-    dependentPhysicalProductFamilyMap physicalPaddingMatrix
-      (dependentPhysicalProductFamilyMap physicalRestrictionMatrix Ψ) = Ψ := by
+    (Matrix.piKronecker physicalPaddingMatrix).mulVecLin
+      ((Matrix.piKronecker physicalRestrictionMatrix).mulVecLin Ψ) = Ψ := by
   have hcuts := regionParentGroundSpace_le_iInf_cutSpace
     (graphPhysicalPaddingTensor N A) hN R hcover hΨ
   have hcut := (Submodule.mem_iInf _).mp hcuts i₀

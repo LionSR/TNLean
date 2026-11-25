@@ -39,7 +39,7 @@ open Matrix
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-open TNLean.MPS.AreaLaw TNLean.Lattice
+open TNLean.MPS.AreaLaw
 
 /-- For a positive chain whose kernel is the line spanned by `Γ`, the kernel of the Euclidean
 operator of `H` is that line. Auxiliary to ALVV, arXiv:1602.08828v2, Theorem `t:unique`,

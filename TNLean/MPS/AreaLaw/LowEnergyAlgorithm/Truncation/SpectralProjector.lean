@@ -44,7 +44,7 @@ The matrix-product-operator bond dimensions and the running time of the construc
 
 open ManyBody (interval)
 
-open Polynomial Matrix TNLean.Lattice TNLean.Lattice.Sheet QuantumCircuit
+open Polynomial Matrix
 
 noncomputable section
 

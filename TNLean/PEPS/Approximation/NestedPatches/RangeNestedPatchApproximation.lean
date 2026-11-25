@@ -33,7 +33,6 @@ Independently formalized from the manuscripts; no upstream Lean text is reused.
 -/
 
 open scoped BigOperators
-open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 open EncodedFrame

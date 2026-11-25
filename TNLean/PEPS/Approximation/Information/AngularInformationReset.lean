@@ -26,7 +26,6 @@ open scoped Matrix.Norms.L2Operator
 
 open ManyBody (SquareLatticeVertex SquareInteraction rectangleEmbedding)
 
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace)
 

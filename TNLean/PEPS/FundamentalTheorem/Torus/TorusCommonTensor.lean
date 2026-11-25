@@ -28,7 +28,6 @@ noncomputable section
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
-open TNLean.Lattice
 
 variable {width height d : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]
@@ -48,10 +47,10 @@ theorem exists_torus_uniform_edge_representation
     ∃ Q : (r : Bool) → GL (Fin (if r then A.bondDim (torusUpEdge 0)
         else A.bondDim (torusRightEdge 0))) ℂ,
       ∃ Γ : ℂ, Γ ≠ 0 ∧ stateCoeff A =
-        Γ • dependentPhysicalProductFamilyMap
+        Γ • (Matrix.piKronecker
           (fun (_ : TorusVertex width height) (σ : Fin d) x =>
-            A.component 0 (E 0 x) σ)
-          (independentPortProduct torusOutgoingNeighbor
+            A.component 0 (E 0 x) σ) *ᵥ
+          independentPortProduct torusOutgoingNeighbor
             (fun r (_ : TorusVertex width height) =>
               (Q r : Matrix
                 (Fin (if r then A.bondDim (torusUpEdge 0) else A.bondDim (torusRightEdge 0)))
@@ -88,15 +87,14 @@ theorem exists_torus_uniform_edge_representation
         refine Finset.sum_congr rfl ?_
         intro ξ hξ
         rw [href]
-  have hC : stateCoeff A = dependentPhysicalProductFamilyMap
-      (fun _ : TorusVertex width height => F) R :=
-    stateCoeff_eq_commonPhysicalProductFamilyMap A E (fun x σ => F σ x) M hlocal
+  have hC : stateCoeff A = Matrix.piKronecker (fun _ : TorusVertex width height => F) *ᵥ R :=
+    stateCoeff_eq_piKronecker_mulVec A E (fun x σ => F σ x) M hlocal
   have hF : Function.Injective (Matrix.mulVecLin F) :=
     Matrix.mulVec_injective_iff.mpr
       ((hInj.isVertexInjective 0).comp (E 0) (E 0).injective)
   have hR (a : ZMod width) (b : ZMod height) (x : TorusVertex width height → Xi) :
       R (fun p => x (translateEquiv a b p)) = R x := by
-    refine invariant_of_commonPhysicalProductFamilyMap_invariant F hF
+    refine Matrix.eq_of_piKronecker_const_mulVec_comp_perm F hF
       (translateEquiv a b) R ?_ x
     intro σ
     rw [← hC]
@@ -146,14 +144,12 @@ theorem exists_torus_uniform_edge_representation
         exact hscale z.1 z.2 _ _
       _ = _ := Finset.prod_mul_distrib
   refine ⟨fun r => B r 0, Γ, hΓ, ?_⟩
-  change stateCoeff A = Γ • dependentPhysicalProductFamilyMap
-    (fun _ : TorusVertex width height => F) R₀
-  rw [hC, hRR, map_smul]
+  change stateCoeff A = Γ • (Matrix.piKronecker (fun _ : TorusVertex width height => F) *ᵥ R₀)
+  rw [hC, hRR, Matrix.mulVec_smul]
 
 end TNLean.PEPS
 
 namespace TNLean.PEPS
-open TNLean.Lattice
 
 variable {width height d : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]
@@ -236,14 +232,14 @@ theorem stateCoeff_torusFourLegTensor_uniformBondAbsorption
         (A.bondDim (torusUpEdge 0))
     stateCoeff (torusFourLegTensor A hU
         (fourLegKernelApply A (torusUniformBondLegKernel A Q) F)) =
-      dependentPhysicalProductFamilyMap
-        (fun (_ : TorusVertex width height) (σ : Fin d) x => F (L.symm x) σ)
-        (independentPortProduct torusOutgoingNeighbor
+      Matrix.piKronecker
+        (fun (_ : TorusVertex width height) (σ : Fin d) x => F (L.symm x) σ) *ᵥ
+        independentPortProduct torusOutgoingNeighbor
           (fun r (_ : TorusVertex width height) => (Q r : Matrix
             (Fin (if r then A.bondDim (torusUpEdge 0)
               else A.bondDim (torusRightEdge 0)))
             (Fin (if r then A.bondDim (torusUpEdge 0)
-              else A.bondDim (torusRightEdge 0))) ℂ))) := by
+              else A.bondDim (torusRightEdge 0))) ℂ)) := by
   classical
   let Xi4 := (i : Fin 4) → Fin (torusFourLegBondDim A i)
   let XiPort := (r : Bool) → Bool → Fin (if r then A.bondDim (torusUpEdge 0)
@@ -272,14 +268,14 @@ theorem stateCoeff_torusFourLegTensor_uniformBondAbsorption
         ∑ ξ : LocalVirtualConfig A p,
           (∏ ie, M p ie (η ie) (ξ ie)) * F ((E p).symm ξ) σ :=
     fourLegKernelApply_eq_sum_incident A hU P F p η σ
-  have hC : stateCoeff B = dependentPhysicalProductFamilyMap
-      (fun (_ : TorusVertex width height) (σ : Fin d) x => F x σ) R4 :=
-    stateCoeff_eq_commonPhysicalProductFamilyMap B E F M hlocal
-  have hReindex : dependentPhysicalProductFamilyMap
-      (fun (_ : TorusVertex width height) (σ : Fin d) x => F (L.symm x) σ) Rp =
-        dependentPhysicalProductFamilyMap
-          (fun (_ : TorusVertex width height) (σ : Fin d) x => F x σ) R4 :=
-    dependentPhysicalProductFamilyMap_reindex_input
+  have hC : stateCoeff B = Matrix.piKronecker
+      (fun (_ : TorusVertex width height) (σ : Fin d) x => F x σ) *ᵥ R4 :=
+    stateCoeff_eq_piKronecker_mulVec B E F M hlocal
+  have hReindex : Matrix.piKronecker
+      (fun (_ : TorusVertex width height) (σ : Fin d) x => F (L.symm x) σ) *ᵥ Rp =
+        Matrix.piKronecker
+          (fun (_ : TorusVertex width height) (σ : Fin d) x => F x σ) *ᵥ R4 :=
+    Matrix.piKronecker_mulVec_reindex_columns
       (fun _ : TorusVertex width height => L.symm)
       (fun (_ : TorusVertex width height) (σ : Fin d) x => F x σ) R4
   have hRp : Rp = R0 := by
@@ -323,8 +319,8 @@ theorem stateCoeff_torusFourLegTensor_uniformBondAbsorption
     stateCoeff B = _ := hC
     _ = _ := hReindex.symm
     _ = _ := congrArg
-      (dependentPhysicalProductFamilyMap
-        (fun (_ : TorusVertex width height) (σ : Fin d) x => F (L.symm x) σ)) hRp
+      (Matrix.piKronecker
+        (fun (_ : TorusVertex width height) (σ : Fin d) x => F (L.symm x) σ) *ᵥ ·) hRp
 
 /-- A translation-invariant injective PEPS vector on a fixed simple torus
 with both periods at least three is represented by a repeated injective tensor
@@ -344,15 +340,15 @@ theorem exists_isTorusTranslationInvariant_sameState
     fun x => A.component 0 (E 0 x)
   let P := torusUniformBondLegKernel A Q
   let G := fourLegKernelApply A P F
-  let Ψ := dependentPhysicalProductFamilyMap
+  let Ψ := Matrix.piKronecker
     (fun (_ : TorusVertex width height) (σ : Fin d) x =>
-      A.component 0 (torusDirectionPortConfigEquiv A hU 0 x) σ)
-    (independentPortProduct torusOutgoingNeighbor
+      A.component 0 (torusDirectionPortConfigEquiv A hU 0 x) σ) *ᵥ
+    independentPortProduct torusOutgoingNeighbor
       (fun r (_ : TorusVertex width height) => (Q r : Matrix
             (Fin (if r then A.bondDim (torusUpEdge 0)
               else A.bondDim (torusRightEdge 0)))
             (Fin (if r then A.bondDim (torusUpEdge 0)
-              else A.bondDim (torusRightEdge 0))) ℂ)))
+              else A.bondDim (torusRightEdge 0))) ℂ))
   have hOriginal : stateCoeff A = Γ • Ψ := hRep
   have hUnscaled : stateCoeff (torusFourLegTensor A hU G) = Ψ :=
     stateCoeff_torusFourLegTensor_uniformBondAbsorption A hU Q F

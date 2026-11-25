@@ -24,7 +24,6 @@ open ManyBody (interval)
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix
-open TNLean.Lattice.Sheet
 
 noncomputable section
 

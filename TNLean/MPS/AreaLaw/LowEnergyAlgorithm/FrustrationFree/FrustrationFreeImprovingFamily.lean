@@ -64,7 +64,7 @@ open Matrix
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-open TNLean.MPS.AreaLaw TNLean.Lattice
+open TNLean.MPS.AreaLaw
 
 section Cuts
 

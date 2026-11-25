@@ -20,7 +20,6 @@ SCP10, Theorem 5.5. The four seam cuts at period two each remove four edges.
 -/
 
 namespace TNLean.PEPS
-open TNLean.Lattice
 
 /-- Actual native bond IDs; false is horizontal and true is vertical. -/
 abbrev TorusLabelledBond (width height : ℕ) := TorusVertex width height × Bool
@@ -73,18 +72,20 @@ theorem torusLabelledBond_not_mem_own_cut (e : TorusLabelledBond 2 2) :
 /-- The unique incidence of each direction and endpoint polarity at a vertex.
 The two flags distinguish all four incidences even on the one-by-one torus. -/
 def torusIncidentEndpoint (v : TorusVertex width height) (z : Bool × Bool) :
-    DependentBondNetwork.IncidentEndpoint torusLabelledBondTail torusLabelledBondHead v :=
+    TNLean.Network.DependentBondNetwork.IncidentEndpoint torusLabelledBondTail
+      torusLabelledBondHead v :=
   match z with
   | (false, false) => ⟨((v, false), false), rfl⟩
   | (false, true) => ⟨(((v.1 - 1, v.2), false), true), by
-      simp [DependentBondNetwork.endpointVertex, torusLabelledBondHead]⟩
+      simp [TNLean.Network.DependentBondNetwork.endpointVertex, torusLabelledBondHead]⟩
   | (true, false) => ⟨(((v.1, v.2 - 1), true), false), by
-      simp [DependentBondNetwork.endpointVertex, torusLabelledBondTail]⟩
+      simp [TNLean.Network.DependentBondNetwork.endpointVertex, torusLabelledBondTail]⟩
   | (true, true) => ⟨((v, true), true), rfl⟩
 
 /-- Actual native incidence fibers have exactly the four direction/polarity choices. -/
 def torusIncidentEndpointEquiv (v : TorusVertex width height) :
-    DependentBondNetwork.IncidentEndpoint torusLabelledBondTail torusLabelledBondHead v ≃
+    TNLean.Network.DependentBondNetwork.IncidentEndpoint torusLabelledBondTail
+        torusLabelledBondHead v ≃
       Bool × Bool where
   toFun p := (p.1.1.2, p.1.2)
   invFun := torusIncidentEndpoint v
@@ -92,25 +93,25 @@ def torusIncidentEndpointEquiv (v : TorusVertex width height) :
     rcases p with ⟨⟨⟨w, d⟩, b⟩, hp⟩
     cases d <;> cases b
     all_goals
-      simp only [DependentBondNetwork.endpointVertex, torusLabelledBondHead,
+      simp only [TNLean.Network.DependentBondNetwork.endpointVertex, torusLabelledBondHead,
         torusLabelledBondTail, Bool.false_eq_true, ↓reduceIte] at hp
       subst v
       apply Subtype.ext
-      simp [torusIncidentEndpoint, DependentBondNetwork.endpointVertex,
+      simp [torusIncidentEndpoint, TNLean.Network.DependentBondNetwork.endpointVertex,
         torusLabelledBondHead, torusLabelledBondTail]
   right_inv z := by rcases z with ⟨d, b⟩; cases d <;> cases b <;> rfl
 
 /-- Every local tensor has four distinct incident endpoint indices. -/
 theorem card_torusIncidentEndpoint (v : TorusVertex width height) :
-    Fintype.card (DependentBondNetwork.IncidentEndpoint
+    Fintype.card (TNLean.Network.DependentBondNetwork.IncidentEndpoint
       torusLabelledBondTail torusLabelledBondHead v) = 4 := by
   rw [Fintype.card_congr (torusIncidentEndpointEquiv v)]
   decide
 
 /-- The actual source cut boundary consists of eight distinct endpoint incidences. -/
 theorem card_torusCutEndpoint_two (c r : ZMod 2) :
-    Fintype.card (DependentBondNetwork.CutEndpoint (torusSeamCutBonds c r)) = 8 := by
-  simp [DependentBondNetwork.CutEndpoint, card_torusSeamCutBonds_two]
+    Fintype.card (TNLean.Network.DependentBondNetwork.CutEndpoint (torusSeamCutBonds c r)) = 8 := by
+  simp [TNLean.Network.DependentBondNetwork.CutEndpoint, card_torusSeamCutBonds_two]
 
 section GroupLabels
 variable {G : Type*} [Group G]

@@ -23,8 +23,7 @@ open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS
-open TNLean.Lattice
-open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
+open DependentBondNetwork TNLean.Network.DependentBondNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
@@ -100,17 +99,14 @@ theorem physicalPaddingMatrix_injective (v : V) :
 /-- The product coordinate restriction is a left inverse of the product zero extension. -/
 theorem physicalRestrictionProduct_padding
     (ψ : ((v : V) → Phys v) → ℂ) :
-    dependentPhysicalProductFamilyMap physicalRestrictionMatrix
-      (dependentPhysicalProductFamilyMap physicalPaddingMatrix ψ) = ψ := by
-  change (dependentPhysicalProductFamilyMap physicalRestrictionMatrix ∘ₗ
-    dependentPhysicalProductFamilyMap physicalPaddingMatrix) ψ = ψ
-  rw [dependentPhysicalProductFamilyMap_comp]
-  simp only [physicalRestrictionMatrix_mul_padding, dependentPhysicalProductFamilyMap_one,
-    LinearMap.id_apply]
+    (Matrix.piKronecker physicalRestrictionMatrix).mulVecLin
+      ((Matrix.piKronecker physicalPaddingMatrix).mulVecLin ψ) = ψ := by
+  simp only [Matrix.mulVecLin_apply, Matrix.mulVec_mulVec, Matrix.piKronecker_mul,
+    physicalRestrictionMatrix_mul_padding, Matrix.piKronecker_one, Matrix.one_mulVec]
 
 /-- Independent physical zero extensions are injective jointly on the full tensor product. -/
 theorem physicalPaddingProduct_injective :
-    Function.Injective (dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys))) :=
+    Function.Injective (Matrix.piKronecker (physicalPaddingMatrix (Phys := Phys))).mulVecLin :=
   Function.LeftInverse.injective physicalRestrictionProduct_padding
 
 /-- The original independently dimensioned sites, zero-padded in the existing
