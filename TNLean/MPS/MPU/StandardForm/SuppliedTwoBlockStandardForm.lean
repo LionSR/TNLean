@@ -116,6 +116,7 @@ noncomputable def TwoSiteStandardFormData.blockTwo
         _ = ∑ l : Fin (d * d), ∑ r : Fin d × Fin d, F (e l) r := by
           exact Finset.sum_congr rfl fun l _ ↦ e.sum_comp (F (e l))
         _ = _ := e.sum_comp (fun l ↦ ∑ r, F l r)
+    rw [blockTwo_apply]
     change (W (a, c) * W (b, f)) α γ =
       ∑ l : Fin (d * d), ∑ r : Fin (d * d), X₂ (α, a) l *
         twoBlockInputGate u v (l, r) (c, f) * X₁ (b, γ) r

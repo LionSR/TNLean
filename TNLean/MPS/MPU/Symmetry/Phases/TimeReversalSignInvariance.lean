@@ -54,6 +54,7 @@ variable {d D : ℕ}
 definition `blocking`, lines 297--305. -/
 theorem continuous_blockTwo : Continuous (blockTwo : MPOTensor d D → MPOTensor (d * d) D) := by
   refine continuous_pi fun ⟨i, j⟩ ↦ ?_
+  simp only [blockTwo_apply]
   exact (continuous_apply _).matrix_mul (continuous_apply _)
 
 /-- Equal periodic operators at every positive length give equal periodic

@@ -292,7 +292,7 @@ theorem doubled_W_apply (S : TwoSiteStandardFormData W u v) (i j : Fin ((d * d) 
   simp_rw [← finProdFinEquiv.sum_comp (fun s ↦ _ * doubledU u v _ _ * S.doubledX₁ _ s)]
   simp only [Fintype.sum_prod_type, doubledU_apply, doubledX₁, doubledX₂, Equiv.symm_apply_apply,
     mul_ite, mul_one, mul_zero, ite_mul, zero_mul]
-  simp only [blockTwo, Matrix.mul_apply, Equiv.symm_apply_apply, S.W_apply, S.v_apply]
+  simp only [blockTwo_apply, Matrix.mul_apply, Equiv.symm_apply_apply, S.W_apply, S.v_apply]
   simp only [Finset.sum_mul, Finset.mul_sum, Finset.sum_ite_irrel, Finset.sum_const_zero,
     Finset.sum_ite_eq, Finset.mem_univ, ite_true, one_mul]
   rw [sum_reorder_five]

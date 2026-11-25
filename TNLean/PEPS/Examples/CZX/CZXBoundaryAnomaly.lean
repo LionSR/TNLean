@@ -100,9 +100,15 @@ theorem pairTwist_czxPhaseGate_blockTwo_reviewCZXTensor :
         (blockTwo CZXCompression.reviewCZXTensor) = -CZX.tensor := by
   funext ⟨i, j⟩
   ext l r
+  have hb : ∀ p q : Fin 4, blockTwo CZXCompression.reviewCZXTensor (p, q) =
+      CZXCompression.reviewCZXTensor (((finProdFinEquiv (m := 2) (n := 2)).symm p).1,
+          ((finProdFinEquiv (m := 2) (n := 2)).symm q).1) *
+        CZXCompression.reviewCZXTensor (((finProdFinEquiv (m := 2) (n := 2)).symm p).2,
+          ((finProdFinEquiv (m := 2) (n := 2)).symm q).2) :=
+    fun p q ↦ blockTwo_apply CZXCompression.reviewCZXTensor p q
   simp only [pairTwist, czxPhaseGate, Matrix.map_apply, Matrix.diagonal_apply, ite_smul,
     zero_smul, Finset.sum_ite_eq, Finset.mem_univ, ite_true, Matrix.smul_apply, Pi.neg_apply,
-    Matrix.neg_apply, CZX.tensor, blockTwo]
+    Matrix.neg_apply, CZX.tensor_apply_pair, hb]
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
     simp [Matrix.sum_apply, Fin.sum_univ_four, Matrix.mul_apply, Fin.sum_univ_two,
       CZXCompression.reviewCZXTensor_apply, CZX.decoratedSiteTensor, Fin.rev, finProdFinEquiv,

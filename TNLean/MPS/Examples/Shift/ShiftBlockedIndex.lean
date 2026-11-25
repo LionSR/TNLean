@@ -125,8 +125,9 @@ theorem blockTensor_rightShiftTensor_apply (k : ℕ)
       if Fin.init (Kraus.decodeBlock d (k + 1) J) = Fin.tail (Kraus.decodeBlock d (k + 1) I)
       then Matrix.single (Kraus.decodeBlock d (k + 1) I 0)
         (Kraus.decodeBlock d (k + 1) J (Fin.last k)) 1
-      else 0 :=
-  evalWord_rightShiftTensor_ofFn k _ _
+      else 0 := by
+  rw [blockTensor_apply]
+  exact evalWord_rightShiftTensor_ofFn k _ _
 
 /-- The bijection of source-cut indices that carries the first source cut of the
 blocked right shift to the identity: a row $(\sigma,\beta)$ goes to the column

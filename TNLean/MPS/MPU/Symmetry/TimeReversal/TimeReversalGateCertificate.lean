@@ -137,7 +137,7 @@ private theorem evalWord_blockTwo_ofFn {D : ℕ} (V : MPOTensor d D) (a b : Fin 
     ext; simp [finProdFinEquiv_apply_val]; ring
   have h1 : (⟨x * 2 + 1, by omega⟩ : Fin (N * 2)) = finProdFinEquiv (x, 1) := by
     ext; simp [finProdFinEquiv_apply_val]; ring
-  simp [List.ofFn_succ, blockTwo, pairConfigFlat, h0, h1]
+  simp [List.ofFn_succ, blockTwo_apply, pairConfigFlat, h0, h1]
 
 private theorem ofFn_pairConfigFlat_shifted [NeZero N] (a : Fin N → Fin d × Fin d) :
     List.ofFn (pairConfigFlat (twoSiteShiftedPairEquiv (ℓ := d) (r := d) a)) =

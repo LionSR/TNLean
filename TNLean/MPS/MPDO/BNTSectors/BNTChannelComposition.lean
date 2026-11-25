@@ -128,7 +128,7 @@ theorem equivReindexMap_physCloseN_two_eq_physClose1_blockTwo
       physClose1 (blockTwo K) X := by
   ext i j
   simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv,
-    blockedOneChainEquiv, blockedIndexEquiv, blockTwo, physCloseN,
+    blockedOneChainEquiv, blockedIndexEquiv, blockTwo_apply, physCloseN,
     List.ofFn_succ, evalWord_cons, Matrix.mul_assoc]
 
 /-- The two-site closure of a two-site blocking is the four-site chain closure
@@ -141,7 +141,7 @@ theorem equivReindexMap_physCloseN_four_eq_physClose2_blockTwo
       physClose2 (blockTwo K) X := by
   ext i j
   simp [Matrix.equivReindexMap, Matrix.coe_reindexLinearEquiv,
-    blockedTwoChainEquiv, blockedPairEquiv, blockedIndexEquiv, blockTwo,
+    blockedTwoChainEquiv, blockedPairEquiv, blockedIndexEquiv, blockTwo_apply,
     physCloseN, List.ofFn_succ, evalWord_cons, Matrix.mul_assoc]
 
 /-- The outer-sector measurement on one blocked site: the original one-site

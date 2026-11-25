@@ -155,8 +155,9 @@ theorem blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁
       ∑ l : Fin ℓ[U], ∑ r : Fin r[U],
         S.X₂ (α, (finProdFinEquiv.symm i).1) l *
           sourceU U S (l, r) (finProdFinEquiv.symm j) *
-            S.X₁ ((finProdFinEquiv.symm i).2, γ) r :=
-  mul_apply_eq_sum_X₂_mul_sourceU_mul_X₁ U S
+            S.X₁ ((finProdFinEquiv.symm i).2, γ) r := by
+  rw [blockTwo_apply]
+  exact mul_apply_eq_sum_X₂_mul_sourceU_mul_X₁ U S
     (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm j).1
     (finProdFinEquiv.symm i).2 (finProdFinEquiv.symm j).2 α γ
 
@@ -170,8 +171,9 @@ theorem blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
         sourceV U S (finProdFinEquiv.symm i) (r, l) *
           S.Y₁ r (α, (finProdFinEquiv.symm j).1) *
-            S.Y₂ l ((finProdFinEquiv.symm j).2, γ) :=
-  mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂ U S
+            S.Y₂ l ((finProdFinEquiv.symm j).2, γ) := by
+  rw [blockTwo_apply]
+  exact mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂ U S
     (finProdFinEquiv.symm i).1 (finProdFinEquiv.symm j).1
     (finProdFinEquiv.symm i).2 (finProdFinEquiv.symm j).2 α γ
 

@@ -47,6 +47,7 @@ theorem blockTensor_actTensor (T : MPOTensor d D₁) (A : MPSTensor d D₂) (L :
   change Kraus.evalWord (actTensor T A) (List.ofFn (Kraus.decodeBlock d L I)) = _
   rw [evalWord_actTensor, actTensor_apply]
   rw [← (Kraus.decodeBlockEquiv d L).sum_comp]
+  simp only [blockTensor_apply]
   rfl
 
 namespace GroupFamily

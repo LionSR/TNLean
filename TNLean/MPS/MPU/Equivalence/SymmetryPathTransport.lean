@@ -188,6 +188,7 @@ theorem blockTensor_ketLeftMul (W : MPOTensor d D)
     (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
     blockTensor (W.ketLeftMul Q) k = (blockTensor W k).ketLeftMul (MPSTensor.blockKron k Q) := by
   funext ⟨i, j⟩
+  simp only [ketLeftMul, blockTensor_apply]
   change evalWord (W.ketLeftMul Q)
     (List.ofFn (Kraus.decodeBlock d k i)) (List.ofFn (Kraus.decodeBlock d k j)) =
       ∑ l : Fin (Kraus.blockPhysDim d k),

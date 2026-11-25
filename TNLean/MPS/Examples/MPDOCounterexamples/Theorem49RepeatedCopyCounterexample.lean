@@ -311,7 +311,7 @@ sole local matrix. -/
 theorem physTraceTransfer_blockTwo_repeatedCopyTensor :
     physTraceTransfer (blockTwo repeatedCopyTensor) =
       (repeatedCopyTensor (0, 0)) ^ 2 := by
-  rw [physTraceTransfer, Fin.sum_univ_one]
+  rw [physTraceTransfer, Fin.sum_univ_one, blockTwo_apply]
   change repeatedCopyTensor (0, 0) * repeatedCopyTensor (0, 0) =
     (repeatedCopyTensor (0, 0)) ^ 2
   rw [pow_two]

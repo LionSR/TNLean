@@ -287,8 +287,8 @@ private theorem blockTwo_reindexPhysical {d' : ℕ} (σ : Fin d' ≃ Fin d)
     (U : MPOTensor d D₁) :
     blockTwo (reindexPhysical σ U) =
       reindexPhysical (pairPhysicalEquiv σ) (blockTwo U) := by
-  ext I J
-  simp [blockTwo, reindexPhysical, pairPhysicalEquiv]
+  funext ⟨I, J⟩
+  simp [blockTwo_apply, reindexPhysical, pairPhysicalEquiv]
 
 private theorem rightRank_blockTwo_mulTensor_reindexPhysical {d' : ℕ}
     (σ : Fin d' ≃ Fin d) (U : MPOTensor d D₁) (V : MPOTensor d D₂) :

@@ -355,6 +355,7 @@ theorem TwoSiteStandardFormData.printedBlocked_input_contraction {d D k : ℕ}
   calc
     _ = evalWord W (List.ofFn fun p ↦ finProdFinEquiv (i p))
         (List.ofFn fun p ↦ finProdFinEquiv (j p)) α γ := by
+      simp only [reindexPhysical, blockTensor_apply]
       exact congrArg₂ (fun f g ↦ evalWord W (List.ofFn f) (List.ofFn g) α γ) (hp I) (hp J)
     _ = _ := by
       have h := S.evalWord_eq_printedInputCircuit i j α γ

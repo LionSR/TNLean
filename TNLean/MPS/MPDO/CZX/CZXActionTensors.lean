@@ -114,7 +114,7 @@ theorem actedSector_apply (x : Fin 2) (i : Fin 4) :
     Matrix.one_apply_eq, Matrix.zero_apply, mul_ite, mul_one, mul_zero,
     Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   fin_cases x <;> fin_cases i <;> fin_cases l <;> fin_cases r <;>
-    norm_num [actionLetter, actionMatrix, tensor, blockTwo, decoratedSiteTensor,
+    norm_num [actionLetter, actionMatrix, tensor_apply_pair, decoratedSiteTensor,
       Matrix.mul_apply, Fin.sum_univ_two, finProdFinEquiv, Fin.divNat, Fin.modNat]
 
 /-- Sparse support of the actual reindexed target sector.
@@ -135,7 +135,7 @@ theorem actionMatrix_coordinates :
     actionMatrix 0 = !![0, 0; -1, 1] ∧
     actionMatrix 1 = !![1, 1; 0, 0] := by
   constructor <;> ext l r <;> fin_cases l <;> fin_cases r <;>
-    norm_num [actionMatrix, actionLetter, tensor, blockTwo, decoratedSiteTensor,
+    norm_num [actionMatrix, actionLetter, tensor_apply_pair, decoratedSiteTensor,
       Matrix.mul_apply, Fin.sum_univ_two, finProdFinEquiv, Fin.divNat, Fin.modNat]
 
 /-- Kernel-checked local identities for the printed pair. In particular its

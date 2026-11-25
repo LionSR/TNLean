@@ -72,6 +72,15 @@ def edgeExponent (i : Fin 4) (r : Fin 2) : ℕ :=
   (siteBits i).1.val + (siteBits i).2.val +
     (siteBits i).1.val * (siteBits i).2.val + (siteBits i).2.val * r.val
 
+/-- A letter of the once-blocked CZX tensor is the product of two decorated site letters. -/
+theorem tensor_apply_pair (i j : Fin 4) :
+    tensor (i, j) =
+      decoratedSiteTensor (((finProdFinEquiv (m := 2) (n := 2)).symm i).1,
+          ((finProdFinEquiv (m := 2) (n := 2)).symm j).1) *
+        decoratedSiteTensor (((finProdFinEquiv (m := 2) (n := 2)).symm i).2,
+          ((finProdFinEquiv (m := 2) (n := 2)).symm j).2) :=
+  blockTwo_apply decoratedSiteTensor i j
+
 /-- The displayed bond-two coordinates of FBC25 `eq:MPU_CZX`. -/
 theorem tensor_apply (i j : Fin 4) (l r : Fin 2) :
     tensor (i, j) l r =
@@ -86,9 +95,9 @@ theorem tensor_apply (i j : Fin 4) (l r : Fin 2) :
       (Fin.divNat (m := 2) (n := 2) i).val *
       (Fin.modNat (m := 2) (n := 2) i).val +
       (Fin.modNat (m := 2) (n := 2) i).val * r.val := by decide
-  rw [hc, hb, he]
+  rw [hc, hb, he, tensor_apply_pair]
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
-    norm_num [tensor, blockTwo, decoratedSiteTensor, Matrix.mul_apply,
+    norm_num [decoratedSiteTensor, Matrix.mul_apply,
       Fin.sum_univ_two, Fin.divNat, Fin.modNat, Fin.rev]
 
 /-- FBC25 `eq:MPU_CZX` written with the six individual binary coordinates.

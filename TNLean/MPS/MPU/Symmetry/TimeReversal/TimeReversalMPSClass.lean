@@ -325,7 +325,7 @@ theorem blockTwo_timeReversal_gauge {W : MPOTensor d D} (G : Matrix (Fin D) (Fin
     (a b : Fin (d * d)) :
     (MPOTensor.blockTwo W (b, a)).map (starRingEnd ℂ) =
       (ζ * ζ) • (Gᴴ * MPOTensor.blockTwo W (a, b) * G) := by
-  simp only [MPOTensor.blockTwo, Matrix.map_mul, hgauge, Matrix.smul_mul, Matrix.mul_smul,
+  simp only [MPOTensor.blockTwo_apply, Matrix.map_mul, hgauge, Matrix.smul_mul, Matrix.mul_smul,
     smul_smul]
   congr 1
   simp only [Matrix.mul_assoc]

@@ -139,7 +139,7 @@ noncomputable def shiftExampleU₁BlockedStandardForm (d : ℕ) [NeZero d] :
     simp only [one_apply, Prod.mk.injEq, Fin.sum_univ_one]
     by_cases h₁ : i₁ = s <;> by_cases h₂ : i₂ = t <;> simp [h₁, h₂]
   W_apply i j α γ := by
-    simp only [blockTwo, shiftExampleU₁_apply, one_apply]
+    simp only [blockTwo_apply, shiftExampleU₁_apply, one_apply]
     rw [Finset.sum_eq_single (finProdFinEquiv.symm i).1, Finset.sum_eq_single
       (finProdFinEquiv.symm i).2]
     · fin_cases α; fin_cases γ

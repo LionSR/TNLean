@@ -205,6 +205,17 @@ theorem evalWord_toMPSTensor_ofFn (M : MPOTensor d D) (N : ℕ)
       rw [ih (w ∘ Fin.succ)]
       rfl
 
+/-- Word evaluation of an operator tensor, read as a tensor with the pair alphabet, on the word
+of paired letters is the evaluation on the ket and bra words. -/
+theorem kraus_evalWord_ofFn_pair (M : MPOTensor d D) {N : ℕ} (σ τ : Fin N → Fin d) :
+    Kraus.evalWord M (List.ofFn fun k ↦ (σ k, τ k)) =
+      evalWord M (List.ofFn σ) (List.ofFn τ) := by
+  induction N with
+  | zero => simp
+  | succ N ih =>
+      simp only [List.ofFn_succ, Kraus.evalWord_cons, evalWord_cons]
+      rw [ih]
+
 /-- Paired physical configurations give the same word evaluation in the MPO
 and doubled-index MPS descriptions. -/
 @[simp]

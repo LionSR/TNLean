@@ -79,10 +79,14 @@ words.
 This is the MPO counterpart of the blocking used to make the basis of normal
 tensors block injective in arXiv:1606.00608, lines 317--345.  The ket and bra
 indices remain separate.  This local tensor should not be confused with the
-closed-chain operator `O_L(M)` defined at lines 962--967. -/
+closed-chain operator `O_L(M)` defined at lines 962--967.
+
+It is the blocking `Kraus.block` of the tensor with the pair alphabet, with the paired word of
+length `L` numbered by its ket and bra blocked indices. -/
 noncomputable def blockTensor (M : MPOTensor d D) (L : ℕ) :
     MPOTensor (Kraus.blockPhysDim d L) D :=
-  fun (i, j) => evalWord M (Kraus.wordOfBlock d L i) (Kraus.wordOfBlock d L j)
+  Kraus.reindexPhysical
+    (fun ij k ↦ (Kraus.decodeBlock d L ij.1 k, Kraus.decodeBlock d L ij.2 k)) (Kraus.block M L)
 
 /-- Evaluating a blocked tensor gives the corresponding pair of blocked words. -/
 @[simp]
@@ -90,15 +94,15 @@ lemma blockTensor_apply (M : MPOTensor d D) (L : ℕ)
     (i j : Fin (Kraus.blockPhysDim d L)) :
     blockTensor M L (i, j) =
       evalWord M (Kraus.wordOfBlock d L i) (Kraus.wordOfBlock d L j) :=
-  rfl
+  kraus_evalWord_ofFn_pair M _ _
 
 /-- Blocking one site is the original tensor in the canonical identification
 of its one-letter physical alphabet. Source: arXiv:1703.09188, definition
 `blocking`, lines 297–305. -/
 theorem blockTensor_one_eq_reindexPhysical (M : MPOTensor d D) :
     blockTensor M 1 = reindexPhysical (Kraus.singleBlockEquiv d) M := by
-  ext i j
-  simp [blockTensor, reindexPhysical]
+  funext ⟨i, j⟩
+  simp [blockTensor_apply, reindexPhysical]
 
 /-- Physical blocking commutes with the physical adjoint. The equality is
 literal: both operations preserve the order of the virtual word.
@@ -109,7 +113,7 @@ theorem physicalAdjointTensor_blockTensor (U : MPOTensor d D) (L : ℕ) :
       blockTensor (physicalAdjointTensor U) L := by
   funext ⟨I, K⟩
   ext β α
-  rw [blockTensor_apply]
+  rw [physicalAdjointTensor_apply, blockTensor_apply, blockTensor_apply]
   have h := evalWord_physicalAdjointTensor U
     (Kraus.wordOfBlock d L I) (Kraus.wordOfBlock d L K) (by simp)
   rw [h]
@@ -138,8 +142,9 @@ Source: arXiv:1703.09188, proof of Proposition `prop:continuity-index`,
 lines 747--752. -/
 theorem continuous_blockTensor (L : ℕ) :
     Continuous (fun M : MPOTensor d D ↦ blockTensor M L) := by
-  refine continuous_pi fun ij ↦ ?_
-  exact continuous_evalWord (Kraus.wordOfBlock d L ij.1) (Kraus.wordOfBlock d L ij.2)
+  refine continuous_pi fun ⟨i, j⟩ ↦ ?_
+  simp only [blockTensor_apply]
+  exact continuous_evalWord (Kraus.wordOfBlock d L i) (Kraus.wordOfBlock d L j)
 
 end MPOTensor
 
@@ -274,15 +279,6 @@ theorem IsMPDO.blockTensor {M : MPOTensor d D} (hM : IsMPDO M) (L : ℕ)
 
 /-! ### Two-site blocking -/
 
-/-- The MPO tensor obtained by blocking two adjacent physical sites. The two
-ket indices, and separately the two bra indices, are encoded through the
-standard equivalence `Fin d × Fin d ≃ Fin (d * d)`. This is the blocking used
-in arXiv:1606.00608, Theorem 4.9, lines 851--856. -/
-noncomputable def blockTwo (M : MPOTensor d D) : MPOTensor (d * d) D :=
-  fun (i, j) =>
-    M ((finProdFinEquiv.symm i).1, (finProdFinEquiv.symm j).1) *
-      M ((finProdFinEquiv.symm i).2, (finProdFinEquiv.symm j).2)
-
 /-- Identify the standard two-site index `Fin (d * d)` with the general
 length-two blocked alphabet.
 
@@ -292,6 +288,22 @@ noncomputable def twoSiteBlockEquiv (d : ℕ) :
   finProdFinEquiv.symm |>.trans
     (finTwoArrowEquiv (Fin d)).symm |>.trans
     (Kraus.decodeBlockEquiv d 2).symm
+
+/-- The MPO tensor obtained by blocking two adjacent physical sites. The two
+ket indices, and separately the two bra indices, are encoded through the
+standard equivalence `Fin d × Fin d ≃ Fin (d * d)`. This is the blocking used
+in arXiv:1606.00608, Theorem 4.9, lines 851--856. It is the length-two blocking
+`blockTensor M 2`, with each blocked index renumbered by `twoSiteBlockEquiv`. -/
+noncomputable def blockTwo (M : MPOTensor d D) : MPOTensor (d * d) D :=
+  reindexPhysical (twoSiteBlockEquiv d) (blockTensor M 2)
+
+/-- A letter of the two-site blocking is the product of the two original letters. -/
+@[simp] lemma blockTwo_apply (M : MPOTensor d D) (i j : Fin (d * d)) :
+    blockTwo M (i, j) =
+      M ((finProdFinEquiv.symm i).1, (finProdFinEquiv.symm j).1) *
+        M ((finProdFinEquiv.symm i).2, (finProdFinEquiv.symm j).2) := by
+  simp [blockTwo, reindexPhysical, blockTensor_apply, Kraus.wordOfBlock, twoSiteBlockEquiv,
+    List.ofFn_succ]
 
 /-- Identify the doubled physical index of `blockTwo` with the general
 length-two block of the doubled MPS alphabet. -/
@@ -312,7 +324,7 @@ theorem toMPSTensor_blockTwo (M : MPOTensor d D) :
       Kraus.reindexPhysical (twoSiteDoubledIndexEquiv d)
         (Kraus.blockTensor M.toMPSTensor 2) := by
   funext ij
-  simp [toMPSTensor, blockTwo, Kraus.reindexPhysical,
+  simp [toMPSTensor, blockTwo_apply, Kraus.reindexPhysical,
     Kraus.blockTensor, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
     blockedDoubledIndexEquiv, Equiv.arrowCongr]
 
@@ -324,7 +336,7 @@ theorem blockTwo_eq_blockTensor_reindex (M : MPOTensor d D) :
     blockTwo M = Function.uncurry fun i j ↦
       blockTensor M 2 (twoSiteBlockEquiv d i, twoSiteBlockEquiv d j) := by
   funext ⟨i, j⟩
-  simp [blockTwo, blockTensor, twoSiteBlockEquiv, Kraus.wordOfBlock]
+  rfl
 
 /-- Closing a chain of concrete two-site blocks is the same as closing a
 chain of general length-two blocks, after relabeling every physical index.
@@ -350,12 +362,6 @@ theorem IsMPDO.blockTwo {M : MPOTensor d D} (hM : IsMPDO M) :
   intro N hN
   rw [mpo_blockTwo_eq_reindex_blockTensor, Matrix.reindex_apply]
   exact (hM.blockTensor 2 (by omega) N hN).submatrix _
-
-@[simp] lemma blockTwo_apply (M : MPOTensor d D) (i j : Fin (d * d)) :
-    blockTwo M (i, j) =
-      M ((finProdFinEquiv.symm i).1, (finProdFinEquiv.symm j).1) *
-        M ((finProdFinEquiv.symm i).2, (finProdFinEquiv.symm j).2) :=
-  rfl
 
 /-! ### The four-site physical closure -/
 
@@ -418,7 +424,7 @@ theorem physClose1_blockTwo_eq_physClose2 (M : MPOTensor d D) :
         (blockedIndexEquiv d)).toLinearMap ∘ₗ physClose1 (blockTwo M) =
       physClose2 M := by
   ext X i j
-  simp [Matrix.coe_reindexLinearEquiv, blockedIndexEquiv, blockTwo]
+  simp [Matrix.coe_reindexLinearEquiv, blockedIndexEquiv, blockTwo_apply]
 
 /-- Evaluating the one-site closure of the two-site blocking at a virtual
 matrix gives the two-site closure after decoding the blocked physical index.
@@ -452,7 +458,7 @@ theorem physClose2_blockTwo_eq_physClose4 (M : MPOTensor d D) :
       physClose4 M := by
   ext X i j
   simp [Matrix.coe_reindexLinearEquiv, blockedPairEquiv, blockedIndexEquiv,
-    blockTwo, Matrix.mul_assoc]
+    blockTwo_apply, Matrix.mul_assoc]
 
 /-- Evaluating the one-site closure of the two-site blocking at a virtual
 matrix gives the two-site closure, in the index-relabelling spelling used

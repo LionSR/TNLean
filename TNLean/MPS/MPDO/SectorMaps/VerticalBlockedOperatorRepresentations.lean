@@ -41,7 +41,7 @@ theorem verticalBNTMPO_verticalTensor_blockTwo (M : MPOTensor d D) :
       mulTensor (verticalBNTMPO (verticalTensor M))
         (verticalBNTMPO (verticalTensor M)) := by
   ext ⟨a, b⟩ x y
-  simp [verticalBNTMPO, verticalTensor, blockTwo, mulTensor,
+  simp [verticalBNTMPO, verticalTensor, blockTwo_apply, mulTensor,
     Matrix.mul_apply, Matrix.sum_apply, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply]
 

@@ -421,7 +421,7 @@ theorem blockTwo_map_star_eq_of_gauge {V : MPOTensor d D} (G : Matrix (Fin D) (F
     (hgauge : ∀ i j, (V (i, j)).map (starRingEnd ℂ) = ζ • (Gᴴ * V (i, j) * G)) (i j : Fin (d * d)) :
     (MPOTensor.blockTwo V (i, j)).map (starRingEnd ℂ) =
       (ζ * ζ) • (Gᴴ * MPOTensor.blockTwo V (i, j) * G) := by
-  simp only [MPOTensor.blockTwo, Matrix.map_mul, hgauge, Matrix.smul_mul, Matrix.mul_smul,
+  simp only [MPOTensor.blockTwo_apply, Matrix.map_mul, hgauge, Matrix.smul_mul, Matrix.mul_smul,
     smul_smul]
   congr 1
   simp only [Matrix.mul_assoc]

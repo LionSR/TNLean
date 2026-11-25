@@ -68,7 +68,7 @@ private theorem blockTwoPrefixCoordinateCompression_eq_markedChainCoefficient
   simp_rw [Finset.sum_mul, Matrix.trace_sum, Matrix.smul_mul,
     Matrix.trace_smul, smul_eq_mul]
   simp only [mpo_apply, mpoMatrixEntry, List.ofFn_succ, Fin.cons_zero,
-    Fin.cons_succ, evalWord_cons, blockTwo]
+    Fin.cons_succ, evalWord_cons, blockTwo_apply]
   apply Finset.sum_congr₂
   intro i _ j _
   rw [Matrix.mul_assoc]
