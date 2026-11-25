@@ -129,8 +129,8 @@ end IsStepChain
 section Lift
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-  {Party : Type} {Ω : EuclideanSpace ℂ (ι → Fin q)} {S : Set Party} {r K rs : ℕ} {ε : ℝ}
-  {X : Type*} [DecidableEq X]
+  {Party : Type} [Fintype Party] [DecidableEq Party] {Ω : EuclideanSpace ℂ (ι → Fin q)}
+  {S : Set Party} {r K rs : ℕ} {ε : ℝ} {X : Type*} [DecidableEq X]
 
 omit [DecidableEq X] in
 /-- **A chain of changes of the main sheet.** Every memory of the chain keeps the main sheet, so
@@ -140,8 +140,9 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 38–40 and 662–664. -/
 theorem isStepChain_main {n : ℕ} {F F' : Frame pos q Party} (l : List X)
     (A : X → Frame pos q Party) (hΩ : ‖Ω‖ ≤ 1)
     (h : IsStepChain (fun F F' => HasFrameChange Ω F F' S r K rs ε) n F F') :
-    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ) S r K rs ε ∧
-      Fs' ≠ []) n (F :: l.map A) (F' :: l.map A) :=
+    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs'
+      (EuclideanSpace.single (fun _ ↦ ()) 1) S r K rs ε ∧ Fs' ≠ []) n (F :: l.map A)
+      (F' :: l.map A) :=
   h.map (fun F => F :: l.map A) fun _ _ ⟨_, hc, hs⟩ =>
     ⟨hasSourceBoundedChange_main _ hc hs hΩ (by simp), List.cons_ne_nil _ _⟩
 
@@ -149,8 +150,8 @@ theorem isStepChain_main {n : ℕ} {F F' : Frame pos q Party} (l : List X)
 theorem hasSourceBoundedChange_aux_of_eq (M : Frame pos q Party) {l : List X} (hl : l.Nodup)
     {x : X} (hx : x ∈ l) {A : X → Frame pos q Party} {F F' : Frame pos q Party} (hA : A x = F)
     (hΩ : ‖Ω‖ ≤ 1) (h : HasFrameChange Ω F F' S r K rs ε) :
-    HasSourceBoundedChange Ω (M :: l.map A) (M :: l.map (Function.update A x F')) (ℓ := [])
-      (1 : ℂ) S r K rs ε := by
+    HasSourceBoundedChange Ω (M :: l.map A) (M :: l.map (Function.update A x F'))
+      (EuclideanSpace.single (fun _ ↦ ()) 1) S r K rs ε := by
   subst hA
   obtain ⟨c, hc, hs⟩ := h
   exact hasSourceBoundedChange_aux M hl hx A hc hs hΩ (by simp)
@@ -160,8 +161,9 @@ theorem hasSourceBoundedChange_aux_of_eq (M : Frame pos q Party) {l : List X} (h
 theorem isStepChain_aux {n : ℕ} (M : Frame pos q Party) {l : List X} (hl : l.Nodup) {x : X}
     (hx : x ∈ l) (A : X → Frame pos q Party) {F F' : Frame pos q Party} (hΩ : ‖Ω‖ ≤ 1)
     (h : IsStepChain (fun F F' => HasFrameChange Ω F F' S r K rs ε) n F F') :
-    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ) S r K rs ε ∧
-      Fs' ≠ []) n (M :: l.map (Function.update A x F)) (M :: l.map (Function.update A x F')) :=
+    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs'
+      (EuclideanSpace.single (fun _ ↦ ()) 1) S r K rs ε ∧ Fs' ≠ []) n
+      (M :: l.map (Function.update A x F)) (M :: l.map (Function.update A x F')) :=
   h.map (fun F => M :: l.map (Function.update A x F)) fun G G' hG => by
     have := hasSourceBoundedChange_aux_of_eq M hl hx (A := Function.update A x G)
       (Function.update_self x G A) hΩ hG
@@ -172,8 +174,8 @@ theorem isStepChain_aux {n : ℕ} (M : Frame pos q Party) {l : List X} (hl : l.N
 theorem hasSourceBoundedChange_of_hasPairChange {M M' : Frame pos q Party} {l : List X}
     (hl : l.Nodup) {x : X} (hx : x ∈ l) {A : X → Frame pos q Party} {F F' : Frame pos q Party}
     (hA : A x = F) (hΩ : ‖Ω‖ ≤ 1) (h : HasPairChange Ω M F M' F' S r K rs ε) :
-    HasSourceBoundedChange Ω (M :: l.map A) (M' :: l.map (Function.update A x F')) (ℓ := [])
-      (1 : ℂ) S r K rs ε := by
+    HasSourceBoundedChange Ω (M :: l.map A) (M' :: l.map (Function.update A x F'))
+      (EuclideanSpace.single (fun _ ↦ ()) 1) S r K rs ε := by
   subst hA
   obtain ⟨c, hc, hs⟩ := h
   exact hasSourceBoundedChange_mainAux hl hx A hc hs hΩ (by simp)

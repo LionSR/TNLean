@@ -15,13 +15,14 @@ In the protocol of Proposition 7.1 of the polynomial-PEPS manuscript every copy 
 initialized privately at its future owner: the main copy at the root party, and each auxiliary
 copy at the party that will use it. At the beginning the main guide carries only the root label
 and the exterior placeholder, so every initial sheet is a raw frame, without holes and held by
-one party (`06-geometry.tex`, lines 21–23 and 658–667). This file instantiates the initial step
-`EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil` on these frames.
+one party (`06-geometry.tex`, lines 21–23 and 658–667). Such a reference vector is a product
+across the parties (`QuantumCircuit.Party.exists_productVector_eq_framesVec`), so the initial
+memory of a protocol can be the memory of the frames itself.
 
-* `DyadicProtocol.exists_originalCircuit_initial`: if the initial memory of every party of a
-  protocol is the memory of the raw frames it holds and its initial vector is their reference
-  vector, then one private map per party followed by a reordering, with no nonprivate gate,
-  carries the initial reference vector exactly to the reference vector of the frames.
+* `DyadicProtocol.exists_originalCircuit_initial`: if the initial memory of a protocol is the
+  memory of a list of frames and its initial reference vector is their reference vector, then an
+  original circuit with no nonprivate gate carries the initial reference vector exactly to the
+  reference vector of the frames: the identification of the two memories.
 * `initialFrames`: the main raw frame at the root party followed by one raw frame for each change
   of the schedule that initializes an auxiliary sheet, held by an arbitrary assigned future owner;
   `length_initialFrames_le` counts them by `countP_isAuxInit_protocolSchedule_le`.
@@ -42,67 +43,58 @@ namespace TNLean.PEPS
 
 namespace Approximation
 
-open EncodedFrame TNLean.Lattice.PartyCircuit
+open EncodedFrame ManyBody QuantumCircuit.Party
 
 /-! ### The initial step of a protocol -/
 
 namespace DyadicProtocol
 
-variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
+variable {L q : ℕ} {P : Type} [Fintype P] [DecidableEq P] (D : DyadicProtocol L q P)
 
-/-- **The initial step of a protocol from raw copies.** Let `‖Ω‖ = 1` and let every frame of the
-list `Fs` have no hole and be held entirely by the party `holder F`. If the whole initial memory
-of each party of a protocol is the memory of the frames it holds and its initial vector is the
-product of their reference vectors, then one private map per party followed by a reordering,
-with no nonprivate gate, carries the initial reference vector exactly to the reference vector of
-`Fs`.
+/-- **The initial step of a protocol from copies.** If the whole initial memory of each party of a
+protocol is its memory on the frames of the list `Fs`, and the initial reference vector is the
+reference vector of `Fs`, then an original circuit with no nonprivate gate, whose participant
+conditions hold vacuously, carries the initial reference vector exactly to the reference vector
+of `Fs`.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 1, `06-geometry.tex`,
 lines 21–23, and its proof, lines 658–667. -/
-theorem exists_originalCircuit_initial [DecidableEq P] [NeZero q] {ι : Type} [Fintype ι]
-    [DecidableEq ι] {pos : ι → ℝ × ℝ} {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
-    (Fs : List (Frame pos q P)) (holder : Frame pos q P → P) (hraw : ∀ F ∈ Fs, F.holes = [])
-    (hown : ∀ F ∈ Fs, ∀ x, F.owner x = holder F)
-    (hspace : D.initialSpace = fun p => framesSpace (Fs.filter fun F => holder F = p))
-    (hvec : HEq D.initialVector fun p => framesVec Ω (Fs.filter fun F => holder F = p)) :
-    ∃ c : OriginalCircuit (D.layout 0) (stackRegs Fs []),
+theorem exists_originalCircuit_initial [NeZero q] {ι : Type} [Fintype ι] [DecidableEq ι]
+    {pos : ι → ℝ × ℝ} (Ω : EuclideanSpace ℂ (ι → Fin q)) (Fs : List (Frame pos q P))
+    (hsys : D.system 0 = framesSystem q pos Fs fun _ ↦ Unit)
+    (href : D.reference 0 = OriginalCircuit.castVector hsys.symm (framesRef Ω Fs)) :
+    ∃ c : OriginalCircuit (D.system 0) (framesSystem q pos Fs fun _ ↦ Unit),
       c.nonprivateCount = 0 ∧ (∀ (S : Set P) g, (↑(c.participants g) : Set P) ⊆ S) ∧
         (∀ r s, c.IsExpansionBounded r s) ∧ (∀ K, c.IsMonomialBounded K) ∧
-          c.eval (D.reference 0) = framesVec Ω Fs := by
-  obtain ⟨hx, c, h0, h1, h2, h3, h4⟩ :=
-    exists_originalCircuit_initial_of_holes_eq_nil hΩ Fs holder hraw hown
-  obtain ⟨placement, initialSpace, finite_initialSpace, initialVector, norm_initialVector,
-    changes, layout, layout_zero, step, reference, reference_zero⟩ := D
-  dsimp only at hspace hvec reference_zero ⊢
-  subst hspace
-  obtain rfl := eq_of_heq hvec
-  refine ⟨c.castLayouts layout_zero.symm rfl, (Circuit.gateCount_castLayouts _ _ _).trans h0,
-    fun S => OriginalCircuit.participants_castLayouts_subset _ _ _ (h1 S),
-    fun r s => OriginalCircuit.isExpansionBounded_castLayouts _ _ _ (h2 r s),
-    fun K => OriginalCircuit.isMonomialBounded_castLayouts _ _ _ (h3 K), ?_⟩
-  rw [Circuit.eval_castLayouts, reference_zero]
-  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.isoL_apply,
-    LinearIsometryEquiv.symm_apply_apply]
-  exact h4
+          Matrix.toEuclideanLin c.op (D.reference 0) = framesRef Ω Fs := by
+  have h0 : ((OriginalCircuit.done _).castSystems hsys.symm rfl :
+      OriginalCircuit (D.system 0) (framesSystem q pos Fs fun _ ↦ Unit)).nonprivateCount = 0 := by
+    simp
+  refine ⟨(OriginalCircuit.done _).castSystems hsys.symm rfl, h0,
+    fun S g ↦ OriginalCircuit.forall_participants_of_nonprivateCount_eq_zero
+      (Q := fun T ↦ (↑T : Set P) ⊆ S) h0 g,
+    fun r s ↦ OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero h0 r s,
+    fun K ↦ OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero h0 K, ?_⟩
+  rw [href, OriginalCircuit.toEuclideanLin_op_castSystems, OriginalCircuit.op_done,
+    OriginalCircuit.castVector_rfl]
+  simp
 
 /-- **The two descriptions of the initial reference vector agree.** For a protocol with the
-bounds of §8 and `‖Ω‖ = 1`, the initial product vector `r_0` across the parties is carried by one
-private map per party followed by a reordering, with no nonprivate gate, exactly to the reference
-vector of the initial encoded frames: the main copy of `Ω` followed by the auxiliary copies.
+bounds of §8 and `‖Ω‖ = 1`, the initial product vector `r_0` across the parties is carried by an
+original circuit with no nonprivate gate exactly to the reference vector of the initial encoded
+frames: the main copy of `Ω` followed by the auxiliary copies.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 1, `06-geometry.tex`,
 lines 21–23, and item 4, lines 38–40. -/
 theorem IsDistributionProtocol.exists_originalCircuit_initialCopies [NeZero q]
     {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
-    (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r)
-    (hΩ : ‖Ω‖ = 1) :
-    ∃ c : OriginalCircuit (D.layout 0) (stackRegs (D.frames 0) []),
-      c.nonprivateCount = 0 ∧ c.eval (D.reference 0) = framesVec Ω (D.frames 0) := by
-  classical
-  obtain ⟨-, holder, hF, hsv⟩ := h.initialCopies
-  obtain ⟨hs, hv⟩ := hsv
-  obtain ⟨c, h0, -, -, -, hc⟩ := D.exists_originalCircuit_initial hΩ (D.frames 0) holder
-    (fun F hF' => (hF F hF').1) (fun F hF' => (hF F hF').2) hs hv
+    (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) :
+    ∃ c : OriginalCircuit (D.system 0)
+        (framesSystem q (cellCenterPos L) (D.frames 0) fun _ ↦ Unit),
+      c.nonprivateCount = 0 ∧
+        Matrix.toEuclideanLin c.op (D.reference 0) = framesRef Ω (D.frames 0) := by
+  obtain ⟨-, -, -, hsys, href⟩ := h.initialCopies
+  obtain ⟨c, h0, -, -, -, hc⟩ := D.exists_originalCircuit_initial Ω (D.frames 0) hsys href
   exact ⟨c, h0, hc⟩
 
 end DyadicProtocol
@@ -153,31 +145,30 @@ theorem mem_initialFrames {large : DyadicSquare k → Bool}
   · obtain ⟨x, -, rfl⟩ := List.mem_map.1 hF
     exact ⟨_, rfl⟩
 
-/-- **The initial step of the dyadic protocol.** Let `‖Ω‖ = 1` on the square of side `L > 0`. If
-the whole initial memory of each party of a protocol on the parties of the hierarchy is the
-memory of the initial sheets it holds, the main copy at the root party and every auxiliary copy
-at its future owner, and its initial vector is the product of their reference vectors, then the
-initial reference vector is carried exactly to the reference vector of the initial sheets, by one
-private map per party and a reordering, with no nonprivate gate.
+/-- **The initial step of the dyadic protocol.** Let the whole initial memory of each party of a
+protocol on the parties of the hierarchy be its memory on the initial sheets, the main copy at the
+root party and every auxiliary copy at its future owner, and let the initial reference vector be
+the reference vector of the initial sheets. Then an original circuit with no nonprivate gate
+carries the initial reference vector exactly to the reference vector of the initial sheets.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 1, `06-geometry.tex`,
 lines 21–23, and its proof, lines 658–667. -/
 theorem DyadicProtocol.exists_originalCircuit_initialFrames [NeZero q]
-    (D : DyadicProtocol L q (ProtocolParty k)) (hL : 0 < L) {Ω : StateSpace L q}
-    (hΩ : ‖Ω‖ = 1) (large : DyadicSquare k → Bool)
+    (D : DyadicProtocol L q (ProtocolParty k)) (Ω : StateSpace L q)
+    (large : DyadicSquare k → Bool)
     (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k)
-    (hspace : D.initialSpace = fun p =>
-      framesSpace ((initialFrames (q := q) k large auxOwner).filter fun F => rawHolder hL F = p))
-    (hvec : HEq D.initialVector fun p =>
-      framesVec Ω ((initialFrames (q := q) k large auxOwner).filter fun F => rawHolder hL F = p)) :
-    ∃ c : OriginalCircuit (D.layout 0) (stackRegs (initialFrames (q := q) k large auxOwner) []),
+    (hsys : D.system 0 =
+      framesSystem q (cellCenterPos L) (initialFrames (q := q) k large auxOwner) fun _ ↦ Unit)
+    (href : D.reference 0 = OriginalCircuit.castVector hsys.symm
+      (framesRef Ω (initialFrames (q := q) k large auxOwner))) :
+    ∃ c : OriginalCircuit (D.system 0)
+        (framesSystem q (cellCenterPos L) (initialFrames (q := q) k large auxOwner) fun _ ↦ Unit),
       c.nonprivateCount = 0 ∧ (∀ (S : Set (ProtocolParty k)) g,
         (↑(c.participants g) : Set (ProtocolParty k)) ⊆ S) ∧
         (∀ r s, c.IsExpansionBounded r s) ∧ (∀ K, c.IsMonomialBounded K) ∧
-          c.eval (D.reference 0) = framesVec Ω (initialFrames (q := q) k large auxOwner) :=
-  D.exists_originalCircuit_initial hΩ _ (rawHolder hL)
-    (fun F hF => by obtain ⟨p, rfl⟩ := mem_initialFrames hF; rfl)
-    (fun F hF x => by obtain ⟨p, rfl⟩ := mem_initialFrames hF; rfl) hspace hvec
+          Matrix.toEuclideanLin c.op (D.reference 0) =
+            framesRef Ω (initialFrames (q := q) k large auxOwner) :=
+  D.exists_originalCircuit_initial Ω _ hsys href
 
 end Approximation
 

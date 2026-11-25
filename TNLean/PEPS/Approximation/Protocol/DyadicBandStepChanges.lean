@@ -36,7 +36,7 @@ open Set Metric Filter Topology
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.PartyCircuit
+open EncodedFrame QuantumCircuit.Party
 
 /-- **Values of readings near a change.** If on the open `δ`-neighborhood of the set where two
 labellings differ the first is `A` and the second takes only `A` and `B`, then at every point where
@@ -392,7 +392,7 @@ theorem bandDeath_hasFrameChange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀'
     guideFrame_eq_changeOwner_of_ne (fun x => by simp [T, ne_comm]) hVV
       (fun x hx => (hkey _ (Ne.symm hx)).2) fun z hz => hinc z ((hV z).2 ((hma z).1 hz))
   rw [hFb, hFa, hbefore]
-  obtain ⟨M, hM, hu, hs, hf, herr⟩ := bandDeath_step_guideFrame (L := L)
+  obtain ⟨M, hM, hu, -, hn, herr⟩ := bandDeath_step_guideFrame (L := L)
     (hole := suppliedPatch P _ hr)
     (V := Va) (hV := hda) (own := labelParty R) (ph := guidePlaceholder) (rank := rank)
     hD hLL hΩ hΩ₁ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ hc.a_le op e g₀ d
@@ -413,9 +413,9 @@ theorem bandDeath_hasFrameChange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀'
       have hy' : fb (cellCenterPos L y) ≠ fa (cellCenterPos L y) := by simpa [T] using hy
       exact (hTdiam _ _ hx' hy').trans (le_mul_of_one_le_left hn.le hA₀))
     (fun x hx => by simpa [T] using hx)
-  refine ⟨M.toOriginalCircuit hM, (PartyChain.isBoundedChange_toOriginalCircuit hM hu hs hf hr1 hK
-    (by exact herr)).mono ?_ le_rfl le_rfl le_rfl,
-    M.isSourceBounded_toOriginalCircuit_of_one_le hM hrs⟩
+  refine ⟨Monomial.toOriginalCircuit M hM, (Monomial.isBoundedChange_toOriginalCircuit hM hu hn hr1
+    hK (by exact herr)).mono ?_ le_rfl le_rfl le_rfl,
+    Monomial.isSourceBounded_toOriginalCircuit_of_one_le M hM hrs⟩
   rintro x (rfl | rfl)
   exacts [hPS, hQS]
 

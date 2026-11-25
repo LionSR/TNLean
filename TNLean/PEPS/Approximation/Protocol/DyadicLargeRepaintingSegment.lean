@@ -154,7 +154,8 @@ theorem exists_largeRepainting_segment (hD : IsAngularScale q G a A₀ m₀ 60 D
         auxOwner i ∧
       seg 189 = protocolState P rank R₀ hc.ε₀_pos ht hB (largeSquare K₀ (D * Real.log L)) frozen
         auxOwner (i + 1) ∧
-      ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+      ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1))
+        (EuclideanSpace.single (fun _ ↦ ()) 1)
         {p | EventUses (.inl S) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
           seg (j + 1) ≠ [] := by
   classical

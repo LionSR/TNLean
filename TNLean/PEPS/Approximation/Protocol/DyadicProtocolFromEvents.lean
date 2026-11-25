@@ -35,7 +35,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet
+open EncodedFrame
 
 variable {k : ℕ}
 
@@ -180,12 +180,13 @@ theorem exists_isDistributionProtocol_of_largeRepaintings_of_le {ε₀ : ℝ} (h
           seg 189 = protocolState P rank R₀ hε (hc.t_pos hL) (hc.hole_le hL)
             (largeSquare K₀ (D * Real.log L)) frozen
             auxOwner (i + 1) ∧
-          ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+          ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1))
+            (EuclideanSpace.single (fun _ ↦ ()) 1)
             {p | EventUses (.inl S) p} (2 * protocolPatchBound ε₀ ν)
             (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
             ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) ∧ seg (j + 1) ≠ []) →
       (∀ x ∈ auxIndices k (largeSquare K₀ (D * Real.log L)), ∀ h ∈ (frozen x).holes,
-        ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
+        ‖Matrix.toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
       (((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
         ((frozen x).holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3) →
       5042 ≤ C_N → (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L : ℝ) ≤ C_K * (L : ℝ) ^ kK →
@@ -218,20 +219,20 @@ theorem exists_isDistributionProtocol_of_largeRepaintings_of_le {ε₀ : ℝ} (h
       ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)), seg 0 = st i ∧
         seg (eventOps large ((eventSchedule k)[i])).length = st (i + 1) ∧
         (∀ j < (eventOps large ((eventSchedule k)[i])).length,
-          HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+          HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (EuclideanSpace.single (fun _ ↦ ()) 1)
             {p | EventUses ((eventSchedule k)[i]) p} (2 * b) (rewriteGateBound C' c' b L)
             (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹)) ∧
         ∀ j ≤ (eventOps large ((eventSchedule k)[i])).length, seg j ≠ [] := by
     intro i hi
     -- one change between the states before and after the event
-    have hone : HasSourceBoundedChange Ω (st i) (st (i + 1)) (ℓ := []) (1 : ℂ)
+    have hone : HasSourceBoundedChange Ω (st i) (st (i + 1)) (EuclideanSpace.single (fun _ ↦ ()) 1)
         {p | EventUses ((eventSchedule k)[i]) p} (2 * b) (rewriteGateBound C' c' b L)
         (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) →
         (eventOps large ((eventSchedule k)[i])).length = 1 →
         ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)), seg 0 = st i ∧
           seg (eventOps large ((eventSchedule k)[i])).length = st (i + 1) ∧
           (∀ j < (eventOps large ((eventSchedule k)[i])).length,
-            HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+            HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (EuclideanSpace.single (fun _ ↦ ()) 1)
               {p | EventUses ((eventSchedule k)[i]) p} (2 * b) (rewriteGateBound C' c' b L)
               (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹)) ∧
           ∀ j ≤ (eventOps large ((eventSchedule k)[i])).length, seg j ≠ [] := fun h h1 =>
@@ -279,8 +280,9 @@ theorem exists_isDistributionProtocol_of_largeRepaintings_of_le {ε₀ : ℝ} (h
       exact Hres ν hν hνν' hc hL hkL hΩ P rank R₀ J hJ0 _ hC hC' hcc _
   -- the trajectory
   choose seg hseg0 hsegm hsegs hsegne using hseg
-  obtain ⟨tr, htr0, htrm, htrs, htrne⟩ := exists_frames_of_segments (Ω := Ω) (ℓ := [])
-    (ξ := (1 : ℂ)) (fun e : ProtocolEvent k => {p | EventUses e p}) (eventOps large)
+  obtain ⟨tr, htr0, htrm, htrs, htrne⟩ := exists_frames_of_segments (Ω := Ω) (W := fun _ ↦ Unit)
+    (ξ := EuclideanSpace.single (fun _ ↦ ()) 1)
+    (fun e : ProtocolEvent k => {p | EventUses e p}) (eventOps large)
     (fun Fs => Fs ≠ []) (eventSchedule k) st
     (fun i => if h : i < (eventSchedule k).length then seg i h else fun _ => st i)
     (fun i => by split_ifs with h; exacts [hseg0 i h, rfl])
@@ -346,12 +348,13 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
           seg 189 = protocolState P rank R₀ hε (hc.t_pos hL) (hc.hole_le hL)
             (largeSquare K₀ (D * Real.log L)) frozen
             auxOwner (i + 1) ∧
-          ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+          ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1))
+            (EuclideanSpace.single (fun _ ↦ ()) 1)
             {p | EventUses (.inl S) p} (2 * protocolPatchBound ε₀ ν)
             (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
             ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) ∧ seg (j + 1) ≠ []) →
       (∀ x ∈ auxIndices k (largeSquare K₀ (D * Real.log L)), ∀ h ∈ (frozen x).holes,
-        ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
+        ‖Matrix.toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
       (((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
         ((frozen x).holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3) →
       5042 ≤ C_N → (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L : ℝ) ≤ C_K * (L : ℝ) ^ kK →

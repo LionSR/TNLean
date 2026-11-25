@@ -98,7 +98,8 @@ theorem directRepainting_hasSourceBoundedChange {K₀ ε₀ ν a D : ℝ}
       (levelFrame P rank R₀ R.1.1 (insert R.1.index done)
         (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L))
         (hc.holeRadius_bounds hL (by positivity)) :: Fs)
-      (ℓ := []) (1 : ℂ) {p | EventUses (.inl R.1) p} (2 * protocolPatchBound ε₀ ν)
+      (EuclideanSpace.single (fun _ ↦ ()) 1) {p | EventUses (.inl R.1) p}
+        (2 * protocolPatchBound ε₀ ν)
       (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
       ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
   have hρ := hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
@@ -119,7 +120,7 @@ theorem directRepainting_hasSourceBoundedChange {K₀ ε₀ ν a D : ℝ}
     obtain ⟨-, hu, -⟩ := hs.direct n hn
     have := hs.patch_le n hK
     exact fun _ => ⟨hu, by linarith⟩
-  obtain ⟨hcH, hεH, htag⟩ := suppliedPatch_data hρ P hΩ hL hC hC' hcc
+  obtain ⟨hcH, hεH, -⟩ := suppliedPatch_data hρ P hΩ hL hC hC' hcc
   obtain ⟨hcP, hεP, -⟩ := suppliedPatch_data hu P hΩ hL hC hC' hcc
   rw [levelFrame_eq P rank R₀ (hdisj done), levelFrame_eq P rank R₀ (hdisj _),
     guideFrame_levelLabels_labelParty_eq hkL R.2 (isDisplacedReading_levelGuide _ done) R₀ R
@@ -136,7 +137,7 @@ theorem directRepainting_hasSourceBoundedChange {K₀ ε₀ ν a D : ℝ}
     (suppliedPatch P _ hρ) (suppliedPatch P _ hu)
     (fun z => ⟨suppliedPatch_center P hρ z, suppliedPatch_scale P hρ z⟩)
     (fun z => ⟨suppliedPatch_center P hu z, suppliedPatch_scale P hu z⟩) (hdisj _) (hdisj _)
-    hcH hcP hΩ.le hεP hεH htag
+    hcH hcP hΩ.le hεP hεH
   exact hasSourceBoundedChange_main Fs hw hws hΩ.le (by simp)
 
 /-! ### Resizes -/
@@ -277,7 +278,8 @@ theorem resize_hasSourceBoundedChange_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε
         (levelFrame P rank R₀ J.1 univ _
           (hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity)
             (insert (blockCorner ((2 : ℝ) ^ (J.1 : ℕ)) J.index) A)) :: Fs)
-        (ℓ := []) (1 : ℂ) {p | EventUses (.inr J) p} (2 * protocolPatchBound ε₀ ν)
+        (EuclideanSpace.single (fun _ ↦ ()) 1) {p | EventUses (.inr J) p}
+        (2 * protocolPatchBound ε₀ ν)
         (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
         ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
   have H := resize_step_supplied_of_le hε hε₀
@@ -406,7 +408,8 @@ theorem exists_resize_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀) (h�
         (levelFrame P rank R₀ J.1 univ _
           (hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity)
             (insert (blockCorner ((2 : ℝ) ^ (J.1 : ℕ)) J.index) A)) :: Fs)
-        (ℓ := []) (1 : ℂ) {p | EventUses (.inr J) p} (2 * protocolPatchBound ε₀ ν)
+        (EuclideanSpace.single (fun _ ↦ ()) 1) {p | EventUses (.inr J) p}
+        (2 * protocolPatchBound ε₀ ν)
         (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
         ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) :=
   ⟨resizeRatio ε₀, resizeRatio_pos hε, resize_hasSourceBoundedChange_of_le hε hε₀⟩
