@@ -3,19 +3,24 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.ApproximateSourceSampling
+import QICLean.Algebra.Matrix.ReindexSandwich
+import QICLean.Circuit.Party.Compression.SourceSampling.Approximation
 import TNLean.Network.SampledApproximation.ActualSampledDistributedContraction
-import TNLean.Lattice.Compression.SourceNetworkCoordinateBases
 
 /-!
 # Sampled distributed approximation from local gate expansions
 
 The original gate operators are approximated by the recorded local monomial
-lists at the prescribed accuracy. The existing sampling estimate for their
-rescaled contraction circuit supplies normalized Schmidt data and a Gaussian
-sample array. The exact distributed contraction represents its sampled
-physical operator with the same total error bound. All local source and
-discarded-memory coordinates are chosen from the actual finite registers.
+lists at the prescribed accuracy. The sampling estimate for their rescaled
+contraction circuit supplies normalized Schmidt data and a Gaussian sample
+array. The exact distributed contraction represents its sampled physical
+operator with the same total error bound.
+
+The local tensors read the output of every party through its own readout: the
+physical index and the discarded and auxiliary outputs of the party, on the
+blocks of all parties, with one configuration at the exterior block. Read
+together, these readouts are the readout of the physical density up to a
+reordering of the configurations.
 
 The statement concerns monomial lists supplied at this prescribed accuracy
 and the physical error of their actual sampled contraction.
@@ -25,152 +30,172 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–19,
 -/
 
 noncomputable section
-open QICLean.ComplexGaussian
-open scoped Matrix ComplexConjugate NNReal
 
-namespace TNLean.Lattice.PartyCircuit.EffectCircuit
-open TNLean.Lattice.PartyCircuit
+open Matrix ManyBody QICLean.ComplexGaussian
+open scoped Kronecker ComplexConjugate NNReal Matrix.Norms.L2Operator
 
-open TNLean.Lattice.Compression
-attribute [local instance] Classical.propDecidable
-variable {P : Type} [Fintype P]
+namespace QuantumCircuit.Party
 
-/-- The incident physical factor in the canonical coordinates of an arbitrary
-source circuit and its original finite discarded registers.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–579. -/
-private def canonicalIncidentSampledPhysicalFactor {a : Layout P}
-    (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps)
-    (garbage : Layout P) (hfinite : ∀ t ∈ garbage, FiniteDimensional ℂ t.space)
-    (R : SourceCircuit a (familyPhysicalLayout d ps ++ garbage))
-    (ψ : ProductInput a) (k : ℕ)
-    (lam : ∀ s : R.sourceLocations, R.branchLabels s.1 →
-      Fin (min (R.sourceDims s).1 (R.sourceDims s).2) → ℝ)
-    (E : ∀ s : R.sourceLocations, R.branchLabels s.1 →
-      Matrix (Fin (R.sourceDims s).1) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
-    (F : ∀ s : R.sourceLocations, R.branchLabels s.1 →
-      Matrix (Fin (R.sourceDims s).2) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
-    (p : P) (η θ : SourceCircuit.OriginalGateLabelsAt R p)
-    (ω : SourceCircuit.SourceGaussianSamples R k)
-    (j : DistributedOperatorContraction.SampleAt
-      (Finset.univ : Finset R.nonemptyGateLocations)
-      (fun g ↦ R.participants g.1) p → Fin k) :
-    Matrix (Fin (d p)) (Fin (d p)) ℂ :=
-  SourceCircuit.incidentSampledPhysicalFactor
-    d ps hn hc garbage R ψ k lam E F p η θ ω
-    R.allResidualSourceBasis (SourceCircuit.allPartyDiscardBasis garbage hfinite)
-    (j ∘ (SourceCircuit.partialSlotSampleEquiv R p).toFun)
+variable {P : Type} [DecidableEq P] [Fintype P]
 
-/-- The exact sampled contraction preserves any trace-norm error bound for
-its sampled physical density. This comparison is proved for an arbitrary
-source circuit before the approximate circuit is substituted.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588. -/
-private theorem contractedOperator_error_le_of_source_error {a : Layout P}
-    (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps)
-    (garbage : Layout P) (hfinite : ∀ t ∈ garbage, FiniteDimensional ℂ t.space)
-    (R : SourceCircuit a (familyPhysicalLayout d ps ++ garbage))
-    (ψ : ProductInput a) (k : ℕ)
-    (lam : ∀ s : R.sourceLocations, R.branchLabels s.1 →
-      Fin (min (R.sourceDims s).1 (R.sourceDims s).2) → ℝ)
-    (E : ∀ s : R.sourceLocations, R.branchLabels s.1 →
-      Matrix (Fin (R.sourceDims s).1) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
-    (F : ∀ s : R.sourceLocations, R.branchLabels s.1 →
-      Matrix (Fin (R.sourceDims s).2) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
-    (ω : SourceCircuit.SourceGaussianSamples R k)
-    {n C : Type} [Fintype n] [Fintype C]
-    (bIn : OrthonormalBasis n ℂ (Mem a)) (bDiscard : OrthonormalBasis C ℂ (Mem garbage))
-    (A : Matrix ((p : P) → Fin (d p)) ((p : P) → Fin (d p)) ℂ) (ε : ℝ)
-    (h : Matrix.rectangularTraceNorm
-      (SourceCircuit.physicalSourceReplacedDensity (familyPhysicalLayout d ps) garbage R
-        (fun s ξ ζ ↦ SourceCircuit.sampledSourceMatrix R k lam E F s ξ ζ ω)
-        bIn (familyLabelledPhysicalBasis d ps hn hc) bDiscard
-        (Matrix.euclideanOuterProduct (bIn.repr ψ.vector) (bIn.repr ψ.vector)) - A) ≤ ε) :
-    let T := fun (p : P) (η θ : SourceCircuit.OriginalGateLabelsAt R p)
-      (j : DistributedOperatorContraction.SampleAt
-        (Finset.univ : Finset R.nonemptyGateLocations)
-        (fun g ↦ R.participants g.1) p → Fin k) ↦
-      canonicalIncidentSampledPhysicalFactor d ps hn hc garbage hfinite
-        R ψ k lam E F p η θ ω j
-    Matrix.rectangularTraceNorm
-      ((R.emptyGateScalar * conj R.emptyGateScalar) •
-          DistributedOperatorContraction.contractedOperator
-            (Finset.univ : Finset R.nonemptyGateLocations) (fun g ↦ R.participants g.1)
-            (SourceCircuit.sourceGateRoot R) (fun g _ ↦ SourceCircuit.sourceGateRoot_mem R g)
-            (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) k
-            (DistributedOperatorContraction.densityPairCoefficient
-              (Gate := R.nonemptyGateLocations)
-              (fun g ↦ R.branchLabels g.1) (fun g ↦ R.branchLabels g.1)
-              (fun g ↦ R.branchCoefficient g.1) (fun g ↦ R.branchCoefficient g.1)
-              (fun g ↦ (k : ℂ)⁻¹ ^ (pairSampleLabels (R.participants g.1)).card))
-            (fun p ξζ j ↦ T p (fun g ↦ (ξζ g).1) (fun g ↦ (ξζ g).2) j) - A) ≤ ε := by
-  classical
-  intro T
-  have hNetwork :=
-    SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator
-      d ps hn hc garbage R ψ k lam E F ω
-      R.allResidualSourceBasis (SourceCircuit.allPartyDiscardBasis garbage hfinite) bIn bDiscard
-  dsimp only at hNetwork
-  change SourceCircuit.physicalSourceReplacedDensity (familyPhysicalLayout d ps)
-    garbage R (fun s ξ ζ ↦ SourceCircuit.sampledSourceMatrix R k lam E F s ξ ζ ω)
-    bIn (familyLabelledPhysicalBasis d ps hn hc) bDiscard
-    (Matrix.euclideanOuterProduct (bIn.repr ψ.vector) (bIn.repr ψ.vector)) = _ at hNetwork
-  rw [hNetwork] at h
-  exact h
+namespace SourceCircuit
 
-/-- Local gate expansions at the prescribed approximation budget give an actual
-sampled distributed contraction within physical trace-norm error `ε` of the
-original gate operators. The original local approximation hypothesis is
-retained; the input and local memory bases are constructed from their original
-finite registers.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–19,
-137–175, 199–229, 342–381, 565–588 and 590–600. -/
+/-- The physical basis at a block of all parties: one configuration at the exterior block and
+`Fin (d p)` at the block of the party `p`. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 409–434 and 565–579. -/
+abbrev blockPhys (d : P → ℕ) (q : Option {_p : P // true = true}) : Type :=
+  Option.rec (motive := fun _ ↦ Type) PUnit (fun p ↦ Fin (d p.1)) q
+
+/-- The traced-out basis at a block of all parties: one configuration at the exterior block and
+`G p` at the block of the party `p`. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 409–434 and 565–579. -/
+abbrev blockEnv (G : P → Type) (q : Option {_p : P // true = true}) : Type :=
+  Option.rec (motive := fun _ ↦ Type) PUnit (fun p ↦ G p.1) q
+
+instance instFintypeBlockPhys (d : P → ℕ) : ∀ q, Fintype (blockPhys d q)
+  | none => inferInstanceAs (Fintype PUnit)
+  | some p => inferInstanceAs (Fintype (Fin (d p.1)))
+
+instance instDecidableEqBlockPhys (d : P → ℕ) : ∀ q, DecidableEq (blockPhys d q)
+  | none => inferInstanceAs (DecidableEq PUnit)
+  | some p => inferInstanceAs (DecidableEq (Fin (d p.1)))
+
+instance instFintypeBlockEnv (G : P → Type) [∀ p, Fintype (G p)] :
+    ∀ q, Fintype (blockEnv G q)
+  | none => inferInstanceAs (Fintype PUnit)
+  | some p => inferInstanceAs (Fintype (G p.1))
+
+instance instDecidableEqBlockEnv (G : P → Type) [∀ p, DecidableEq (G p)] :
+    ∀ q, DecidableEq (blockEnv G q)
+  | none => inferInstanceAs (DecidableEq PUnit)
+  | some p => inferInstanceAs (DecidableEq (G p.1))
+
+omit [DecidableEq P] [Fintype P] in
+/-- Every party is the only party of its own block. -/
+theorem affectedOwner_all_eq_some_iff (p : {_p : P // true = true}) (u : P) :
+    affectedOwner (fun _ ↦ true) u = some p ↔ u = p.1 := by
+  simp only [affectedOwner, dite_true, Option.some.injEq]
+  exact ⟨fun h ↦ congrArg Subtype.val h, fun h ↦ Subtype.ext h⟩
+
+/-- The readout at the blocks of all parties of a system split sitewise by `e p : Y p ≃
+Fin (d p) × G p`: at the block of `p`, the configuration of `p` split by `e p`; at the exterior
+block, which has one configuration, the only matrix entry. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 409–434 and 565–579. -/
+noncomputable def blockReadout {Y : P → Type} [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)]
+    {d : P → ℕ} {G : P → Type} [∀ p, DecidableEq (G p)]
+    (e : ∀ p, Y p ≃ Fin (d p) × G p) :
+    ∀ q, Matrix (blockPhys d q × blockEnv G q)
+      (blockSystem (affectedOwner fun _ ↦ true) Y q) ℂ
+  | none => of fun _ _ ↦ 1
+  | some p => of fun r z ↦
+    if (blockFiberEquiv (affectedOwner fun _ ↦ true) (affectedOwner_all_eq_some_iff p) Y).trans
+      (e p.1) z = r then 1 else 0
+
+/-- The physical configurations at the blocks of all parties are the physical configurations of
+the parties. -/
+def blockPhysEquiv (d : P → ℕ) : (∀ q, blockPhys d q) ≃ ∀ p, Fin (d p) :=
+  (exteriorConfigEquiv (blockPhys d)).trans (Equiv.punitProd _)
+
+/-- The exterior partial trace of the exterior readout is one. -/
+theorem partialTraceRight_blockReadout_none {Y : P → Type} [∀ p, Fintype (Y p)]
+    [∀ p, DecidableEq (Y p)] {d : P → ℕ} {G : P → Type} [∀ p, DecidableEq (G p)]
+    (e : ∀ p, Y p ≃ Fin (d p) × G p) :
+    partialTraceRight (blockReadout e none * (blockReadout e none)ᴴ) = 1 := by
+  let _ := uniqueBlockSystemNone Y
+  ext a b
+  obtain rfl : a = b := Subsingleton.elim (α := PUnit) a b
+  rw [partialTraceRight_apply]
+  change ∑ _k : PUnit, ∑ _z : blockSystem (affectedOwner fun _ ↦ true) Y none,
+    (1 : ℂ) * star (1 : ℂ) = 1
+  simp
+
+end SourceCircuit
+
+namespace EffectCircuit
+
+open TNLean.Network SourceCircuit
+
+variable {X : P → Type} [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
+
+/-- The readout of the replacement at the blocks of all parties is its readout through the
+physical readout, up to a reordering of the rows. -/
+private theorem piKronecker_blockReadout_eq {A : P → Type} [∀ p, Fintype (A p)]
+    [∀ p, DecidableEq (A p)] (d : P → ℕ) (V : P → Type) [∀ p, Fintype (V p)]
+    [∀ p, DecidableEq (V p)] :
+    let e : ∀ p, A p × (Fin (d p) × V p) ≃ Fin (d p) × (A p × V p) :=
+      fun _ ↦ Equiv.prodLeftComm _ _ _
+    let σ₂ : (∀ q, blockEnv (fun p ↦ A p × V p) q) ≃ Config V × Config A :=
+      (exteriorConfigEquiv (blockEnv fun p ↦ A p × V p)).trans ((Equiv.punitProd _).trans
+        ((Equiv.arrowProdEquivProdArrow P A V).trans (Equiv.prodComm _ _)))
+    (piKronecker (blockReadout e)).submatrix
+        (Equiv.arrowProdEquivProdArrow _ (blockPhys d) (blockEnv fun p ↦ A p × V p)).symm
+        (blockConfigEquiv (affectedOwner fun _ ↦ true) (fun p ↦ A p × physicalSystem d V p)).symm =
+      reindex ((blockPhysEquiv d).prodCongr σ₂).symm (Equiv.refl _)
+        (extendedReadout (A := A) (physicalReadout d V)) := by
+  intro e σ₂
+  ext ⟨ph, en⟩ y
+  rw [submatrix_apply, piKronecker_apply, Fintype.prod_option]
+  simp only [blockReadout, Matrix.of_apply, one_mul]
+  rw [Finset.prod_boole]
+  simp only [reindex_apply, submatrix_apply, Equiv.symm_symm, Equiv.refl_symm,
+    Equiv.coe_refl, id_eq, extendedReadout, physicalReadout, kronecker_apply,
+    Equiv.prodCongr_apply, Prod.map_apply, Equiv.prodAssoc_symm_apply, Equiv.trans_apply,
+    Equiv.prodComm_apply, Prod.swap_prod_mk, Equiv.arrowProdEquivProdArrow_apply,
+    PEquiv.toMatrix_apply, Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq, one_apply,
+    ite_zero_mul_ite_zero]
+  simp only [Finset.mem_univ, Equiv.trans_apply, blockFiberEquiv_apply,
+    blockConfigEquiv_symm_apply, Subtype.forall, mul_one, σ₂, e, blockPhysEquiv,
+    exteriorConfigEquiv, Equiv.coe_fn_mk, Equiv.punitProd_apply, Equiv.prodLeftComm_apply,
+    Equiv.arrowProdEquivProdArrow_symm_apply, funext_iff, Prod.ext_iff, Equiv.prodComm_apply,
+    Prod.fst_swap, Prod.snd_swap, Equiv.arrowProdEquivProdArrow_apply, forall_const]
+  by_cases H : ∀ a : P, (y a).2.1 = ph (some ⟨a, rfl⟩) ∧ (y a).1 = (en (some ⟨a, rfl⟩)).1 ∧
+      (y a).2.2 = (en (some ⟨a, rfl⟩)).2
+  · rw [ite_eq_left fun a _ ↦ H a,
+      ite_eq_left ⟨fun x ↦ ⟨(H x).1.symm, (H x).2.2.symm⟩, fun x ↦ (H x).2.1.symm⟩]
+  · rw [ite_eq_right fun h ↦ H fun a ↦ h a trivial, ite_eq_right]
+    rintro ⟨h1, h2⟩
+    exact H fun a ↦ ⟨(h1 a).1.symm, (h2 a).symm, (h1 a).2.symm⟩
+
+open Classical in
+/-- **Local gate expansions at the prescribed approximation budget give an actual sampled
+distributed contraction within physical trace-norm error `ε` of the original gate operators.**
+The original local approximation hypothesis is retained. The local tensors read the output of
+each party through its own readout (`blockReadout`). Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 17–19, 137–175, 199–229, 342–381, 565–588 and 590–600. -/
 theorem exists_sampled_contractedOperator_approximate_error_le
-    (H : P → HSpace) (hH : ∀ p, FiniteDimensional ℂ (H p))
-    (x : ∀ p, H p) (hx : ∀ p, ‖x p‖ = 1)
-    (physicalDim : P → ℕ) (ps : List P) (hps : ps.Nodup) (hcover : ∀ p : P, p ∈ ps)
-    (priv : Layout P)
-    (w : EffectCircuit (ProductInput.wholePartyLayout H)
-      (familyPhysicalLayout physicalDim ps ++ priv)) (G : w.GateMaps)
-    {r M lifetime : ℕ} (B D : ℝ≥0) (hB : 1 ≤ B) (hD : 1 ≤ D)
-    (hb : w.IsExpansionBounded r (B : ℝ)) (hcount : w.expandedGateCount ≤ M)
-    (hlifetime : ∀ p, Nat.card {g : w.gateLocations // p ∈ w.participants g} ≤ lifetime)
-    (hphysical : ∀ p, (physicalDim p : ℝ≥0) ≤ D)
-    (hpriv : ∀ t ∈ priv, FiniteDimensional ℂ t.space.carrier)
+    (φ : ∀ p, EuclideanSpace ℂ (X p)) (hφ : ∀ p, ‖φ p‖ = 1) (d : P → ℕ) (V : P → Type)
+    [∀ p, Fintype (V p)] [∀ p, DecidableEq (V p)] (w : EffectCircuit X (physicalSystem d V))
+    (G : w.GateMaps) {r M lifetime : ℕ} (B D : ℝ≥0) (hB : 1 ≤ B) (hD : 1 ≤ D)
+    (hb : w.IsExpansionBounded r (B : ℝ)) (hcount : w.numGates ≤ M)
+    (hlifetime : ∀ p, w.participationCount p ≤ lifetime) (hphysical : ∀ p, (d p : ℝ≥0) ≤ D)
     (ε : ℝ) (hε : 0 < ε) (hεone : ε ≤ 1)
     (happrox : w.IsGateApproximation (sourceGateBudget (ε / 2) M) G) :
-    let ψ := ProductInput.ofAllParties H x hx
+    let ψ : EuclideanSpace ℂ (Config X) := WithLp.toLp 2 (productVector fun p x ↦ φ p x)
     let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) M).le G happrox
-    letI := ProductInput.finiteDimensional_wholePartyMem H hH
-    let δ := sourceGateBudget ε M
-    let m := stackLength r (B : ℝ) δ
-    letI := Layout.finiteDimensional_mem_of_registers priv hpriv
-    letI := W.produce.finiteDimensional_auxiliary m
-    let R := W.produce.physicalFirstReplacement (sourceGateBudget_pos hε M)
-      (familyPhysicalLayout physicalDim ps) priv W.isAllowed_produce
-      ((W.isExpansionBounded_produce_iff r (B : ℝ)).mpr
-        (w.isExpansionBounded_rescaledOriginal
-          (sourceGateBudget_pos (half_pos hε) M).le G happrox hb))
+    let R := W.replacement (sourceGateBudget_pos hε M)
+      (w.isExpansionBounded_rescaledOriginal (sourceGateBudget_pos (half_pos hε) M).le G
+        happrox hb)
     let Q := (B : ℝ) ^ (4 * lifetime) * (D : ℝ) ^ 4
-    let k := sourceSamplingCount (Fintype.card R.sourceLocations) Q ε
-    let garbage := W.produce.auxiliary m ++ priv
-    let hfinite := W.produce.finiteDimensional_auxiliary_private_registers m priv hpriv
+    let k := binomialSampleCount (max 1 (Fintype.card R.sourceLocations)) Q ε
     ∃ (lam : ∀ s : R.sourceLocations, R.branchLabels s.1 →
         Fin (min (R.sourceDims s).1 (R.sourceDims s).2) → ℝ)
       (E : ∀ s : R.sourceLocations, R.branchLabels s.1 →
-        Matrix (Fin (R.sourceDims s).1) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
+        Matrix (R.leftBasis s) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
       (F : ∀ s : R.sourceLocations, R.branchLabels s.1 →
-        Matrix (Fin (R.sourceDims s).2) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ),
+        Matrix (R.rightBasis s) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ),
       (∀ s ξ, (∀ j, 0 ≤ lam s ξ j) ∧ ∑ j, lam s ξ j = 1 ∧
         (E s ξ)ᴴ * E s ξ = 1 ∧ (F s ξ)ᴴ * F s ξ = 1 ∧
-        Matrix.schmidtFrameVector (lam s ξ) (E s ξ) (F s ξ) =
-          (SourceCircuit.sourceCoordinates R s ξ).ofLp) ∧
+        schmidtFrameVector (lam s ξ) (E s ξ) (F s ξ) = (R.sourceVectorAt s ξ).ofLp) ∧
       ∃ ω : SourceCircuit.SourceGaussianSamples R k,
-        let T := fun (p : P) (η θ : SourceCircuit.OriginalGateLabelsAt R p)
-          (j : DistributedOperatorContraction.SampleAt
-            (Finset.univ : Finset R.nonemptyGateLocations)
-            (fun g ↦ R.participants g.1) p → Fin k) ↦
-          canonicalIncidentSampledPhysicalFactor physicalDim ps hps hcover garbage hfinite
-            R ψ k lam E F p η θ ω j
-        Matrix.rectangularTraceNorm
+        let T : (p : P) → SourceCircuit.OriginalGateLabelsAt R p →
+            SourceCircuit.OriginalGateLabelsAt R p →
+            (DistributedOperatorContraction.SampleAt
+              (Finset.univ : Finset R.nonemptyGateLocations)
+              (fun g ↦ R.participants g.1) p → Fin k) → Matrix (Fin (d p)) (Fin (d p)) ℂ :=
+          fun p η θ j ↦ SourceCircuit.incidentSampledPhysicalFactor
+            (blockReadout fun _ ↦ Equiv.prodLeftComm _ _ _) R φ k lam E F p η θ ω
+            (j ∘ SourceCircuit.partialSlotSampleEquiv R p)
+        rectangularTraceNorm
           ((R.emptyGateScalar * conj R.emptyGateScalar) •
               DistributedOperatorContraction.contractedOperator
                 (Finset.univ : Finset R.nonemptyGateLocations) (fun g ↦ R.participants g.1)
@@ -182,25 +207,34 @@ theorem exists_sampled_contractedOperator_approximate_error_le
                   (fun g ↦ R.branchCoefficient g.1) (fun g ↦ R.branchCoefficient g.1)
                   (fun g ↦ (k : ℂ)⁻¹ ^ (pairSampleLabels (R.participants g.1)).card))
                 (fun p ξζ j ↦ T p (fun g ↦ (ξζ g).1) (fun g ↦ (ξζ g).2) j) -
-            w.physicalDensityWithGateMaps G
-              (familyLabelledPhysicalReadout physicalDim ps hps hcover priv) ψ.vector) ≤ ε := by
+            w.physicalDensityWithGateMaps G (physicalReadout d V) ψ) ≤ ε := by
   classical
-  intro ψ W δ m R Q k garbage hfinite
-  let := ProductInput.finiteDimensional_wholePartyMem H hH
-  let := Layout.finiteDimensional_mem_of_registers priv hpriv
-  let := W.produce.finiteDimensional_auxiliary m
-  let bIn := stdOrthonormalBasis ℂ (Mem (ProductInput.wholePartyLayout H)).carrier
-  let bDiscard := exchangedGarbageBasis (W.produce.auxiliary m) priv
-    (stdOrthonormalBasis ℂ (Mem (W.produce.auxiliary m)).carrier)
-    (stdOrthonormalBasis ℂ (Mem priv).carrier)
-  obtain ⟨lam, E, F, hframes, ω, hω⟩ :=
-    exists_sourceSample_approximate_error_le H hH x hx physicalDim ps hps hcover
-      priv w G B D hB hD hb hcount hlifetime hphysical hpriv ε hε hεone happrox
+  intro ψ W R Q k
+  obtain ⟨lam, E, F, hframes, ω, hω⟩ := w.exists_sourceSample_approximate_error_le φ hφ d V G
+    B D hB hD hb hcount hlifetime hphysical ε hε hεone happrox
   refine ⟨lam, E, F, hframes, ω, ?_⟩
   intro T
-  exact contractedOperator_error_le_of_source_error physicalDim ps hps hcover garbage hfinite
-    R ψ k lam E F ω bIn bDiscard
-    (w.physicalDensityWithGateMaps G
-      (familyLabelledPhysicalReadout physicalDim ps hps hcover priv) ψ.vector) ε hω
+  have hN := physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator
+    (blockReadout fun _ ↦ Equiv.prodLeftComm _ _ _) R φ k lam E F ω
+  dsimp only at hN hω
+  have hσ : ∀ {α α' β β' : Type} (e₁ : α ≃ α') (e₂ : β ≃ β'),
+      e₁.prodCongr e₂ = (e₁.symm.prodCongr e₂.symm).symm := fun _ _ ↦ by
+    rw [Equiv.prodCongr_symm, Equiv.symm_symm, Equiv.symm_symm]
+  have hD := piKronecker_blockReadout_eq (A := EffectCircuit.auxiliary
+    (stackLength r (B : ℝ) (sourceGateBudget ε M)) W.toEffectCircuit) d V
+  dsimp only at hD
+  rw [hD, physicalSourceReplacedDensity, reindex_mul_mul_conjTranspose, Equiv.refl_symm,
+    reindex_refl_refl, reindex_apply, Equiv.symm_symm, hσ, partialTraceRight_submatrix_prod_equiv,
+    Equiv.symm_symm, ← physicalSourceReplacedDensity, partialTraceRight_blockReadout_none] at hN
+  have hext := congrArg (fun A ↦ A.submatrix (blockPhysEquiv d).symm (blockPhysEquiv d).symm) hN
+  simp only [submatrix_submatrix, Equiv.self_comp_symm, submatrix_id_id] at hext
+  rw [hext] at hω
+  convert hω using 3
+  ext x y
+  simp only [blockPhysEquiv, submatrix_apply, Matrix.smul_apply, reindex_apply, Equiv.symm_symm,
+    Equiv.symm_trans_apply, Equiv.apply_symm_apply, Equiv.punitProd_symm_apply,
+    kroneckerMap_apply, one_apply_eq, one_mul, T]
 
-end TNLean.Lattice.PartyCircuit.EffectCircuit
+end EffectCircuit
+
+end QuantumCircuit.Party
