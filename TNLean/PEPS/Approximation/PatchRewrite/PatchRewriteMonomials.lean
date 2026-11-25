@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PatchRewrite.PatchRewriteTruncation
+import TNLean.PEPS.Approximation.Frames.FrameRegisters
 import TNLean.PEPS.Approximation.PatchRewrite.SiteChainMonomials
 
 /-!
@@ -11,24 +12,32 @@ import TNLean.PEPS.Approximation.PatchRewrite.SiteChainMonomials
 
 The last step of the proof of the second assertion of Lemma 6.3 `lem:small-rewrite` of the
 polynomial-PEPS manuscript reads every product term of the truncated branch expansion as a
-monomial allowed by Theorem 5.2, on the registers of the two frames, one register per site and
-per tag, each held by its owner (`TNLean.PEPS.Approximation.FrameRegisters`).
+monomial allowed by Theorem 5.2, on the registers of the two frames: at every party, the tags it
+holds and the raw configurations of the sites it owns
+(`TNLean.PEPS.Approximation.Frames.FrameRegisters`).
 
 For a branch `(a, s, b)` and a choice of one vector on every open-leg group of its network, the
 product term, placed in the tag block `|a⟩⟨b|`, is a scalar of modulus at most one times the
-operator of the following monomial from the registers of `F_old` to those of `F_new`
-(`SmallPatchRewrite.exists_termChain`):
+operator of the following monomial from the registers of `F_old` to the output of the gate
+`SmallPatchRewrite.gateSystem` (`SmallPatchRewrite.exists_termChain`):
 
 1. on the open input legs of each patch bra, the normalized covector of the term, contracted at
    the at most two old owners of these legs (a pair effect or a private map), the legs then being
    reset to `|0⟩`;
 2. on every site touched by the branch, `|0⟩⟨0|`, contracted at the old owner and prepared at the
    new owner; this imposes the zero bras of the old-hole decoders and transfers the reset raw
-   registers;
+   sites;
 3. on the open output legs of each patch ket, the normalized vector of the term, prepared at the
    at most two new owners (a pair source or a private map) after contracting the zeros;
 4. on the tags, `⟨b|` on the affected old tags and `|a⟩` on the affected new tags, each at its
    tag owner.
+
+The first three steps are a monomial on the sheets (`SiteChain.termOp_eq_smul_prod`,
+`EncodedFrame.exists_monomial_listProd`, `EncodedFrame.exists_zeroChain`), run beside the tags;
+the last is one local operation at every party (`SmallPatchRewrite.tagChange`). The output of the
+gate has the registers of `F_new` at the specified parties and those of `F_old` elsewhere, where
+the two frames differ only by one-point tag factors of the affected holes: the gate then uses
+only the specified parties.
 
 Every site in no selected square is untouched and keeps its owner. The monomial uses only the
 specified parties, with at most `2m` normalized pair sources and at most `2m` normalized pair
@@ -60,13 +69,15 @@ the source requires only a bounded number.
 
 ## Main definitions
 
-* `EncodedFrame.tagBraWord`, `EncodedFrame.tagKetWord`, `EncodedFrame.tagChangeWord`: the tag
-  maps of a branch.
+* `EncodedFrame.SmallPatchRewrite.gateSystem`, `EncodedFrame.SmallPatchRewrite.gateConfigEquiv`:
+  the output of the gate and its canonical coordinates.
+* `EncodedFrame.SmallPatchRewrite.tagStep`, `EncodedFrame.SmallPatchRewrite.tagChange`,
+  `EncodedFrame.SmallPatchRewrite.termMonomial`: the tag maps and the product term of a branch.
 
 ## Main results
 
-* `EncodedFrame.SmallPatchRewrite.liftBranch_apply`,
-  `EncodedFrame.SmallPatchRewrite.liftBranch_mul`: the tag block of a branch.
+* `EncodedFrame.SmallPatchRewrite.liftBranch_apply`: the tag block of a branch.
+* `EncodedFrame.SmallPatchRewrite.op_termMonomial`: the operator of the product term of a branch.
 * `EncodedFrame.SmallPatchRewrite.exists_termChain`: a product term as an allowed monomial.
 * `EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx`: the second assertion of
   Lemma 6.3, with the count `N k^{2m}`.
@@ -92,218 +103,16 @@ the manuscript; no upstream Lean proof text was reused.
 
 noncomputable section
 
-open Matrix ContinuousLinearMap EuclideanSpace
-open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
+open Matrix
+open scoped Kronecker Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
-open TNLean.Lattice.PartyCircuit SiteChain
+open ManyBody QuantumCircuit.Party SiteChain
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type}
 
-/-! ### Operators on the registers of a frame from basis vectors -/
-
-/-- An operator between the registers of two frames is determined, in canonical coordinates,
-by its values on the basis vectors `|τ⟩ ⊗ ⊗_x |c x⟩`. -/
-theorem layoutIso_eq_act_of_basis (l l' : List (Hole pos q Party)) (own own' : ι → Party)
-    (f : Mem (layoutRegs q l own) →L[ℂ] Mem (layoutRegs q l' own'))
-    (A : Matrix (TagSpace l' × (ι → Fin q)) (TagSpace l × (ι → Fin q)) ℂ)
-    (hf : ∀ τ c, layoutIso l' own' (f (layoutVec l own τ c)) =
-      act A (EuclideanSpace.single (τ, c) (1 : ℂ)))
-    (z : Mem (layoutRegs q l own)) : layoutIso l' own' (f z) = act A (layoutIso l own z) := by
-  obtain ⟨y, rfl⟩ : ∃ y, z = (layoutIso l own).symm y := ⟨layoutIso l own z, by simp⟩
-  rw [LinearIsometryEquiv.apply_symm_apply]
-  conv_lhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
-  conv_rhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
-  simp only [map_sum, map_smul]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  obtain ⟨τ, c⟩ := i
-  rw [EuclideanSpace.basisFun_apply, layoutIso_symm_single, hf]
-
-/-! ### The tag maps of a branch -/
-
-section Tags
-
-/-- The bra `⟨a|` on one register `ℂ^α`. -/
-def regBra (p : Party) {α : Type} [Fintype α] [DecidableEq α] (a : α) :
-    Mem [⟨p, euc α⟩] →L[ℂ] Mem ([] : Layout Party) :=
-  innerSL ℂ (EuclideanSpace.single a (1 : ℂ)) ∘L isoL (oneIso p α)
-
-/-- The preparation of `|a⟩` on one register `ℂ^α`. -/
-def regKet (p : Party) {α : Type} [Fintype α] [DecidableEq α] (a : α) :
-    Mem ([] : Layout Party) →L[ℂ] Mem [⟨p, euc α⟩] :=
-  isoL (oneIso p α).symm ∘L (ContinuousLinearMap.id ℂ ℂ).smulRight (EuclideanSpace.single a 1)
-
-theorem norm_regBra_le (p : Party) {α : Type} [Fintype α] [DecidableEq α] (a : α) :
-    ‖regBra p a‖ ≤ 1 := by
-  refine (opNorm_comp_le _ _).trans ?_
-  rw [innerSL_apply_norm, PiLp.norm_single, norm_one, one_mul]
-  exact LinearIsometry.norm_toContinuousLinearMap_le _
-
-theorem norm_regKet_le (p : Party) {α : Type} [Fintype α] [DecidableEq α] (a : α) :
-    ‖regKet p a‖ ≤ 1 := by
-  refine (opNorm_comp_le _ _).trans ?_
-  rw [norm_smulRight_apply]
-  refine (mul_le_of_le_one_left (by positivity)
-    (LinearIsometry.norm_toContinuousLinearMap_le _)).trans ?_
-  simp
-
-/-- The tag registers of a list of holes contracted with the basis bra `⟨b|`, each at its tag
-owner. -/
-def tagBraWord : (l : List (Hole pos q Party)) → TagSpace l → (tail : Layout Party) →
-    Word (tagRegs l ++ tail) tail
-  | [], _, tail => .id tail
-  | h :: l, b, tail => .comp
-      (Word.localMap h.tagOwner (ℓ₁ := [⟨h.tagOwner, euc h.patch.Tag⟩]) (ℓ₂ := [])
-        owner_of_mem_one owner_of_mem_nil (regBra h.tagOwner b.1) (tagRegs l ++ tail))
-      (tagBraWord l b.2 tail)
-
-/-- The tag registers of a list of holes prepared in the basis vector `|a⟩`, each at its tag
-owner. -/
-def tagKetWord : (l : List (Hole pos q Party)) → TagSpace l → (tail : Layout Party) →
-    Word tail (tagRegs l ++ tail)
-  | [], _, tail => .id tail
-  | h :: l, a, tail => .comp (tagKetWord l a.2 tail)
-      (Word.localMap h.tagOwner (ℓ₁ := []) (ℓ₂ := [⟨h.tagOwner, euc h.patch.Tag⟩])
-        owner_of_mem_nil owner_of_mem_one (regKet h.tagOwner a.1) (tagRegs l ++ tail))
-
-theorem eval_tagBraWord (tail : Layout Party) (y : Mem tail) :
-    (l : List (Hole pos q Party)) → (b τ : TagSpace l) →
-      (tagBraWord l b tail).eval ((appendIso (tagRegs l) tail).symm (tagVec l τ ⊗ₜ y)) =
-        (if τ = b then (1 : ℂ) else 0) • y
-  | [], b, τ => by
-      change (appendIso ([] : Layout Party) tail).symm ((1 : ℂ) ⊗ₜ y) = _
-      rw [appendIso_nil_symm_tmul, show τ = b from Subsingleton.elim (α := Unit) τ b]
-      simp
-  | h :: l, ⟨b, bs⟩, ⟨t, τ⟩ => by
-      change (tagBraWord l bs tail).eval ((Word.localMap h.tagOwner _ _
-        (regBra h.tagOwner b) (tagRegs l ++ tail)).eval
-          ((EuclideanSpace.single t (1 : ℂ) : EuclideanSpace ℂ h.patch.Tag) ⊗ₜ
-            (appendIso (tagRegs l) tail).symm (tagVec l τ ⊗ₜ y))) = _
-      rw [← appendIso_one_symm h.tagOwner (tagRegs l ++ tail), eval_localMap,
-        appendIso_nil_symm_tmul, map_smul, eval_tagBraWord tail y l bs τ, smul_smul]
-      congr 1
-      simp only [regBra, ContinuousLinearMap.comp_apply, isoL_apply,
-        LinearIsometryEquiv.apply_symm_apply, innerSL_apply_apply, EuclideanSpace.inner_single_left,
-        PiLp.single_apply, map_one]
-      have hpair : ((t, τ) : TagSpace (h :: l)) = (b, bs) ↔ b = t ∧ τ = bs :=
-        ⟨fun h' => ⟨(Prod.mk.inj h').1.symm, (Prod.mk.inj h').2⟩,
-          fun ⟨h₁, h₂⟩ => h₁ ▸ h₂ ▸ rfl⟩
-      refine Eq.trans ?_ (if_congr hpair rfl rfl).symm
-      by_cases h₁ : b = t <;> by_cases h₂ : τ = bs <;> simp [h₁, h₂]
-
-theorem eval_tagKetWord (tail : Layout Party) (y : Mem tail) :
-    (l : List (Hole pos q Party)) → (a : TagSpace l) →
-      (tagKetWord l a tail).eval y = (appendIso (tagRegs l) tail).symm (tagVec l a ⊗ₜ y)
-  | [], a => by
-      change y = (appendIso ([] : Layout Party) tail).symm ((1 : ℂ) ⊗ₜ y)
-      rw [appendIso_nil_symm_tmul, one_smul]
-  | h :: l, ⟨a, as⟩ => by
-      change (Word.localMap h.tagOwner (ℓ₁ := []) (ℓ₂ := [⟨h.tagOwner, euc h.patch.Tag⟩])
-        owner_of_mem_nil owner_of_mem_one (regKet h.tagOwner a) (tagRegs l ++ tail)).eval
-        ((tagKetWord l as tail).eval y) = _
-      rw [eval_tagKetWord tail y l as]
-      have ht : (appendIso (tagRegs l) tail).symm (tagVec l as ⊗ₜ y) =
-          (appendIso ([] : Layout Party) (tagRegs l ++ tail)).symm ((1 : ℂ) ⊗ₜ
-            (appendIso (tagRegs l) tail).symm (tagVec l as ⊗ₜ y)) := by
-        rw [appendIso_nil_symm_tmul, one_smul]
-      rw [ht, eval_localMap]
-      have hk : regKet h.tagOwner a (1 : ℂ) =
-          (oneIso h.tagOwner h.patch.Tag).symm (EuclideanSpace.single a 1) := by
-        simp [regKet]
-      rw [hk, appendIso_one_symm]
-      rfl
-
-theorem tagBraWord_props (tail : Layout Party) {S : Set Party} :
-    (l : List (Hole pos q Party)) → (∀ h ∈ l, h.tagOwner ∈ S) → (b : TagSpace l) →
-      (tagBraWord l b tail).IsAllowed ∧ (tagBraWord l b tail).UsesOnly S ∧
-        (tagBraWord l b tail).sourceCount = 0
-  | [], _, _ => ⟨trivial, trivial, rfl⟩
-  | h :: l, hS, b => by
-      obtain ⟨h₁, h₂, h₃⟩ := tagBraWord_props tail l
-        (fun h' hh' => hS h' (List.mem_cons_of_mem _ hh')) b.2
-      exact ⟨⟨norm_regBra_le _ _, h₁⟩, ⟨hS h List.mem_cons_self, h₂⟩,
-        by simp [tagBraWord, Word.sourceCount, Circuit.gateCount, h₃]⟩
-
-theorem tagKetWord_props (tail : Layout Party) {S : Set Party} :
-    (l : List (Hole pos q Party)) → (∀ h ∈ l, h.tagOwner ∈ S) → (a : TagSpace l) →
-      (tagKetWord l a tail).IsAllowed ∧ (tagKetWord l a tail).UsesOnly S ∧
-        (tagKetWord l a tail).sourceCount = 0
-  | [], _, _ => ⟨trivial, trivial, rfl⟩
-  | h :: l, hS, a => by
-      obtain ⟨h₁, h₂, h₃⟩ := tagKetWord_props tail l
-        (fun h' hh' => hS h' (List.mem_cons_of_mem _ hh')) a.2
-      exact ⟨⟨h₁, norm_regKet_le _ _⟩, ⟨h₂, hS h List.mem_cons_self⟩,
-        by simp [tagKetWord, Word.sourceCount, Circuit.gateCount, h₃]⟩
-
-/-- **The tag maps of a branch.** On the registers of a frame with holes `U ++ A`, contract the
-tags of `A` with `⟨b|` and prepare tags of `A'` in `|a⟩`, each at its tag owner, leaving the tags
-of `U` and the raw registers untouched. -/
-def tagChangeWord (U A A' : List (Hole pos q Party)) (b : TagSpace A) (a : TagSpace A')
-    (own : ι → Party) : Word (layoutRegs q (U ++ A) own) (layoutRegs q (U ++ A') own) :=
-  (tagSplit U A (siteRegs q own (sites ι))).comp <|
-    (Word.frameList (tagRegs U) (tagBraWord A b (siteRegs q own (sites ι)))).comp <|
-      (Word.frameList (tagRegs U) (tagKetWord A' a (siteRegs q own (sites ι)))).comp
-        (tagMerge U A' (siteRegs q own (sites ι)))
-
-theorem eval_tagChangeWord (U A A' : List (Hole pos q Party)) (b : TagSpace A) (a : TagSpace A')
-    (own : ι → Party) (τ : TagSpace (U ++ A)) (c : ι → Fin q) :
-    (tagChangeWord U A A' b a own).eval (layoutVec (U ++ A) own τ c) =
-      (if (tagAppendEquiv U A τ).2 = b then (1 : ℂ) else 0) •
-        layoutVec (U ++ A') own ((tagAppendEquiv U A').symm ((tagAppendEquiv U A τ).1, a)) c := by
-  simp only [tagChangeWord, Circuit.eval_comp, ContinuousLinearMap.comp_apply, layoutVec]
-  rw [eval_tagSplit, Circuit.eval_frameList_appendIso_symm, eval_tagBraWord,
-    TensorProduct.tmul_smul, LinearIsometryEquiv.map_smul, map_smul,
-    Circuit.eval_frameList_appendIso_symm, eval_tagKetWord, map_smul, eval_tagMerge]
-
-theorem tagChangeWord_props (U A A' : List (Hole pos q Party)) (b : TagSpace A) (a : TagSpace A')
-    (own : ι → Party) {S : Set Party} (hA : ∀ h ∈ A, h.tagOwner ∈ S)
-    (hA' : ∀ h ∈ A', h.tagOwner ∈ S) :
-    (tagChangeWord U A A' b a own).IsAllowed ∧ (tagChangeWord U A A' b a own).UsesOnly S ∧
-      (tagChangeWord U A A' b a own).sourceCount = 0 := by
-  obtain ⟨b₁, b₂, b₃⟩ := tagBraWord_props (siteRegs q own (sites ι)) A hA b
-  obtain ⟨k₁, k₂, k₃⟩ := tagKetWord_props (siteRegs q own (sites ι)) A' hA' a
-  have s := isReordering_tagSplit (q := q) (siteRegs q own (sites ι)) U A
-  have m := isReordering_tagMerge (q := q) (siteRegs q own (sites ι)) U A'
-  refine ⟨⟨s.isAllowed, (Word.isAllowed_frameList_iff _ _).2 b₁,
-      (Word.isAllowed_frameList_iff _ _).2 k₁, m.isAllowed⟩,
-    ⟨s.usesOnly S, (Word.usesOnly_frameList_iff _ _ _).2 b₂,
-      (Word.usesOnly_frameList_iff _ _ _).2 k₂, m.usesOnly S⟩, ?_⟩
-  simp only [tagChangeWord, Word.sourceCount, Circuit.gateCount, s.sourceCount_eq, m.sourceCount_eq,
-    Circuit.gateCount_frameList, b₃, k₃]
-
-theorem swapsMeet_tagBraWord (f : Party → Bool) (tail : Layout Party) :
-    (l : List (Hole pos q Party)) → (b : TagSpace l) → (tagBraWord l b tail).SwapsMeet f
-  | [], _ => trivial
-  | _ :: l, b => ⟨trivial, swapsMeet_tagBraWord f tail l b.2⟩
-
-theorem swapsMeet_tagKetWord (f : Party → Bool) (tail : Layout Party) :
-    (l : List (Hole pos q Party)) → (a : TagSpace l) → (tagKetWord l a tail).SwapsMeet f
-  | [], _ => trivial
-  | _ :: l, a => ⟨swapsMeet_tagKetWord f tail l a.2, trivial⟩
-
-theorem swapsMeet_tagSplit (f : Party → Bool) (tail : Layout Party) :
-    (l₁ l₂ : List (Hole pos q Party)) → (tagSplit l₁ l₂ tail).SwapsMeet f
-  | [], _ => trivial
-  | _ :: l₁, l₂ => swapsMeet_tagSplit f tail l₁ l₂
-
-theorem swapsMeet_tagMerge (f : Party → Bool) (tail : Layout Party) :
-    (l₁ l₂ : List (Hole pos q Party)) → (tagMerge l₁ l₂ tail).SwapsMeet f
-  | [], _ => trivial
-  | _ :: l₁, l₂ => swapsMeet_tagMerge f tail l₁ l₂
-
-/-- The tag maps of a branch exchange no tensor factors, so they meet every selection. -/
-theorem swapsMeet_tagChangeWord (f : Party → Bool) (U A A' : List (Hole pos q Party))
-    (b : TagSpace A) (a : TagSpace A') (own : ι → Party) :
-    (tagChangeWord U A A' b a own).SwapsMeet f :=
-  ⟨swapsMeet_tagSplit f _ _ _,
-    Word.swapsMeet_frameList f (swapsMeet_tagBraWord f _ A b) _,
-    Word.swapsMeet_frameList f (swapsMeet_tagKetWord f _ A' a) _, swapsMeet_tagMerge f _ _ _⟩
-
-end Tags
-
-/-! ### Branches of the rewrite on the registers of the frames -/
+/-! ### Branches of the rewrite -/
 
 namespace SmallPatchRewrite
 
@@ -325,53 +134,266 @@ theorem liftBranch_apply (β : R.Branch) (Y : Matrix (ι → Fin q) (ι → Fin 
     by_cases h₃ : (tagAppendEquiv R.untouched R.newAffected τ').1 =
       (tagAppendEquiv R.untouched R.oldAffected τ).1 <;> simp [h₁, h₂, h₃]
 
-/-- A matrix in the tag block of a branch is the tag block of the identity after the matrix on
-the raw registers. -/
-theorem liftBranch_mul (β : R.Branch) (Y : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
-    R.liftBranch β 1 *
-        ((1 : Matrix (TagSpace (R.untouched ++ R.oldAffected))
-          (TagSpace (R.untouched ++ R.oldAffected)) ℂ) ⊗ₖ Y) = R.liftBranch β Y := by
-  ext ⟨τ', c'⟩ ⟨τ, c⟩
-  rw [Matrix.mul_apply, Fintype.sum_prod_type,
-    Finset.sum_eq_single τ (fun τ'' _ h => Finset.sum_eq_zero fun c'' _ => by
-      simp [kroneckerMap_apply, h])
-      (fun h => absurd (Finset.mem_univ _) h),
-    Finset.sum_eq_single c' (fun c'' _ h => by
-      rw [liftBranch_apply]
-      simp [Ne.symm h])
-      (fun h => absurd (Finset.mem_univ _) h)]
-  rw [liftBranch_apply, liftBranch_apply]
-  simp only [kroneckerMap_apply, Matrix.one_apply_eq, one_mul]
-  split_ifs <;> simp
+/-! ### The output of the gate and the tag maps of a branch -/
 
-/-- **The tag maps of a branch as a word.** Contracting the affected old tags with `⟨b|` and
-preparing the affected new tags in `|a⟩` acts, in canonical coordinates, as the tag block
-`|a⟩⟨b| ⊗ 1` of the branch. -/
-theorem layoutIso_tagChangeWord (β : R.Branch) (own : ι → Party)
-    (z : Mem (layoutRegs q (R.untouched ++ R.oldAffected) own)) :
-    layoutIso (R.untouched ++ R.newAffected) own
-        ((tagChangeWord R.untouched R.oldAffected R.newAffected β.2.2 β.1 own).eval z) =
-      act (R.liftBranch β 1) (layoutIso (R.untouched ++ R.oldAffected) own z) := by
-  refine layoutIso_eq_act_of_basis _ _ _ _ _ _ (fun τ c => ?_) z
-  rw [eval_tagChangeWord, LinearIsometryEquiv.map_smul, layoutIso_layoutVec]
-  ext ⟨τ', c'⟩
-  rw [PiLp.smul_apply, smul_eq_mul, PiLp.single_apply]
-  change _ = (R.liftBranch β 1 *ᵥ (EuclideanSpace.single (τ, c) (1 : ℂ)).ofLp) (τ', c')
-  rw [PiLp.ofLp_single, Matrix.mulVec_single_one, Matrix.col_apply, liftBranch_apply,
-    Matrix.one_apply]
-  have h : (τ', c') = ((tagAppendEquiv R.untouched R.newAffected).symm
-      ((tagAppendEquiv R.untouched R.oldAffected τ).1, β.1), c) ↔
-      ((tagAppendEquiv R.untouched R.newAffected τ').2 = β.1 ∧
-        (tagAppendEquiv R.untouched R.newAffected τ').1 =
-          (tagAppendEquiv R.untouched R.oldAffected τ).1) ∧ c' = c := by
-    rw [Prod.mk.injEq, Equiv.eq_symm_apply, Prod.ext_iff]
-    tauto
-  rw [if_congr h rfl rfl]
-  by_cases h₁ : (tagAppendEquiv R.untouched R.newAffected τ').2 = β.1 <;>
-    by_cases h₂ : (tagAppendEquiv R.untouched R.oldAffected τ).2 = β.2.2 <;>
-    by_cases h₃ : (tagAppendEquiv R.untouched R.newAffected τ').1 =
-      (tagAppendEquiv R.untouched R.oldAffected τ).1 <;>
-    by_cases h₄ : c' = c <;> simp [h₁, h₂, h₃, h₄]
+section Gate
+
+variable [Fintype Party] [DecidableEq Party]
+
+omit [Fintype Party] in
+/-- A list of holes none of whose tags is held by `p` has one basis vector at `p`. -/
+def tagSystemEquivUnit {p : Party} : (l : List (Hole pos q Party)) →
+    (∀ h ∈ l, h.tagOwner ≠ p) → tagSystem l p ≃ Unit
+  | [], _ => Equiv.refl Unit
+  | h :: l, hl =>
+    ((Equiv.cast (updateOn_of_notMem (Finset.notMem_singleton.mpr
+        (Ne.symm (hl h List.mem_cons_self))))).prodCongr
+      (tagSystemEquivUnit l fun h' hh' ↦ hl h' (List.mem_cons_of_mem _ hh'))).trans
+      (Equiv.prodPUnit Unit)
+
+omit [Fintype Party] [DecidableEq Party] in
+theorem tagOwner_ne_of_mem_oldAffected (hR : R.Conditions) {p : Party} (hp : p ∉ R.parties) :
+    ∀ h ∈ R.oldAffected, h.tagOwner ≠ p := fun h hh e ↦
+  hp (e ▸ hR.tag_owners_mem h (List.mem_append_left _ hh))
+
+omit [Fintype Party] [DecidableEq Party] in
+theorem tagOwner_ne_of_mem_newAffected (hR : R.Conditions) {p : Party} (hp : p ∉ R.parties) :
+    ∀ h ∈ R.newAffected, h.tagOwner ≠ p := fun h hh e ↦
+  hp (e ▸ hR.tag_owners_mem h (List.mem_append_right _ hh))
+
+omit [Fintype Party] in
+/-- **The tags of the two frames at an unspecified party.** Such a party holds no affected tag
+(condition (iv)), so its tags in both frames are those of the untouched holes. -/
+def tagSwap (hR : R.Conditions) {p : Party} (hp : p ∉ R.parties) :
+    tagSystem (R.untouched ++ R.newAffected) p ≃ tagSystem (R.untouched ++ R.oldAffected) p :=
+  (tagSystemAppendEquiv _ _ p).trans
+    (((Equiv.refl _).prodCongr
+      ((tagSystemEquivUnit _ (R.tagOwner_ne_of_mem_newAffected hR hp)).trans
+        (tagSystemEquivUnit _ (R.tagOwner_ne_of_mem_oldAffected hR hp)).symm)).trans
+      (tagSystemAppendEquiv _ _ p).symm)
+
+omit [Fintype Party] in
+theorem tagSwap_fst (hR : R.Conditions) {p : Party} (hp : p ∉ R.parties)
+    (y : tagSystem (R.untouched ++ R.newAffected) p) :
+    (tagSystemAppendEquiv _ _ p (R.tagSwap hR hp y)).1 = (tagSystemAppendEquiv _ _ p y).1 := by
+  simp [tagSwap]
+
+omit [Fintype Party] in
+/-- The tag basis at a party of the output of the gate: the tags of the new frame at the
+specified parties and those of the old frame elsewhere. -/
+def gateTag (p : Party) : Type :=
+  if p ∈ R.parties then tagSystem (R.untouched ++ R.newAffected) p
+  else tagSystem (R.untouched ++ R.oldAffected) p
+
+omit [Fintype Party] in
+theorem gateTag_of_mem {p : Party} (hp : p ∈ R.parties) :
+    R.gateTag p = tagSystem (R.untouched ++ R.newAffected) p := by
+  simp [gateTag, hp]
+
+omit [Fintype Party] in
+theorem gateTag_of_notMem {p : Party} (hp : p ∉ R.parties) :
+    R.gateTag p = tagSystem (R.untouched ++ R.oldAffected) p := by
+  simp [gateTag, hp]
+
+instance (p : Party) : Fintype (R.gateTag p) := by
+  unfold gateTag
+  split_ifs <;> infer_instance
+
+instance (p : Party) : DecidableEq (R.gateTag p) := by
+  unfold gateTag
+  split_ifs <;> infer_instance
+
+variable (q) in
+/-- **The output of the gate of the rewrite.** At every party, the tags of `gateTag` and the raw
+configurations of the sites it owns in the new frame. It agrees with the registers of the new
+frame at the specified parties and with those of the old frame elsewhere. -/
+abbrev gateSystem (p : Party) : Type := R.gateTag p × Sheet.system q ⟨R.ownerNew⟩ p
+
+omit [Fintype Party] in
+/-- The tags of the new frame read as those of the output of the gate. -/
+def gateTagEquiv (hR : R.Conditions) (p : Party) :
+    tagSystem (R.untouched ++ R.newAffected) p ≃ R.gateTag p :=
+  if hp : p ∈ R.parties then Equiv.cast (R.gateTag_of_mem hp).symm
+  else (R.tagSwap hR hp).trans (Equiv.cast (R.gateTag_of_notMem hp).symm)
+
+/-- The configurations of a system read on the parties of `Finset.univ`. -/
+def univConfigEquiv (X : Party → Type) :
+    Config X ≃ Config (fun s : ↥(Finset.univ : Finset Party) ↦ X s.1) where
+  toFun x s := x s.1
+  invFun z p := z ⟨p, Finset.mem_univ p⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+
+/-- The registers of the old frame, on the parties of `Finset.univ`, in canonical
+coordinates. -/
+def oldConfigEquiv : Config (fun s : ↥(Finset.univ : Finset Party) ↦ R.oldFrame.system s.1) ≃
+    R.oldFrame.Layout :=
+  (univConfigEquiv R.oldFrame.system).symm.trans R.oldFrame.configEquiv
+
+/-- The output of the gate, on the parties of `Finset.univ`, in the canonical coordinates of
+the new frame. -/
+def gateConfigEquiv (hR : R.Conditions) :
+    Config (fun s : ↥(Finset.univ : Finset Party) ↦ R.gateSystem q s.1) ≃ R.newFrame.Layout :=
+  (Equiv.piCongrRight fun s : ↥(Finset.univ : Finset Party) ↦
+      ((R.gateTagEquiv hR s.1).prodCongr (Equiv.refl _)).symm).trans
+    ((univConfigEquiv R.newFrame.system).symm.trans R.newFrame.configEquiv)
+
+/-- The tag map of a branch `(a, s, b)` at one party: `⟨b|` on its old affected tags and `|a⟩`
+on its new affected tags, the identity on its untouched tags. -/
+def tagStep (a : TagSpace R.newAffected) (b : TagSpace R.oldAffected) (p : Party) :
+    Matrix (tagSystem (R.untouched ++ R.newAffected) p)
+      (tagSystem (R.untouched ++ R.oldAffected) p) ℂ :=
+  reindex (tagSystemAppendEquiv _ _ p).symm (tagSystemAppendEquiv _ _ p).symm
+    ((1 : Matrix (tagSystem R.untouched p) (tagSystem R.untouched p) ℂ) ⊗ₖ
+      (prepMatrix (Equiv.prodPUnit.{0, 0} _).symm
+          (EuclideanSpace.single ((tagConfigEquiv R.newAffected).symm a p) (1 : ℂ)) *
+        (prepMatrix (Equiv.prodPUnit.{0, 0} _).symm
+          (EuclideanSpace.single ((tagConfigEquiv R.oldAffected).symm b p) (1 : ℂ)))ᴴ))
+
+omit [Fintype Party] in
+theorem tagStep_apply (a : TagSpace R.newAffected) (b : TagSpace R.oldAffected) (p : Party)
+    (y : tagSystem (R.untouched ++ R.newAffected) p)
+    (x : tagSystem (R.untouched ++ R.oldAffected) p) :
+    R.tagStep a b p y x =
+      if (tagSystemAppendEquiv _ _ p y).1 = (tagSystemAppendEquiv _ _ p x).1 ∧
+          (tagSystemAppendEquiv _ _ p y).2 = (tagConfigEquiv R.newAffected).symm a p ∧
+          (tagSystemAppendEquiv _ _ p x).2 = (tagConfigEquiv R.oldAffected).symm b p
+      then 1 else 0 := by
+  simp only [tagStep, reindex_apply, submatrix_apply, Equiv.symm_symm, kroneckerMap_apply,
+    one_apply, mul_apply, prepMatrix_apply, conjTranspose_apply, Equiv.prodPUnit_symm_apply,
+    PiLp.single_apply, Finset.univ_unique, Finset.sum_singleton, ite_true]
+  split_ifs <;> simp_all
+
+omit [Fintype Party] in
+theorem norm_tagStep_le (a : TagSpace R.newAffected) (b : TagSpace R.oldAffected) (p : Party) :
+    ‖R.tagStep a b p‖ ≤ 1 := by
+  refine (l2_opNorm_reindex_le _ _ _).trans ((l2_opNorm_one_kronecker_le _).trans ?_)
+  refine l2_opNorm_mul_le_one _ _ ((norm_prepMatrix_le _ _).trans (by simp)) ?_
+  rw [l2_opNorm_conjTranspose]
+  exact (norm_prepMatrix_le _ _).trans (by simp)
+
+/-- The tag maps of a branch at every party of `Finset.univ`, beside the raw configurations of
+the new frame. -/
+def tagChange (hR : R.Conditions) (a : TagSpace R.newAffected) (b : TagSpace R.oldAffected)
+    (s : ↥(Finset.univ : Finset Party)) :
+    Matrix (R.gateSystem q s.1) (layoutSystem q (R.untouched ++ R.oldAffected) R.ownerNew s.1) ℂ :=
+  reindex ((R.gateTagEquiv hR s.1).prodCongr (Equiv.refl _)) (Equiv.refl _)
+    (R.tagStep a b s.1 ⊗ₖ (1 : Matrix (Sheet.system q ⟨R.ownerNew⟩ s.1)
+      (Sheet.system q ⟨R.ownerNew⟩ s.1) ℂ))
+
+theorem tagChange_apply (hR : R.Conditions) (a : TagSpace R.newAffected)
+    (b : TagSpace R.oldAffected) (s : ↥(Finset.univ : Finset Party)) (y x) :
+    R.tagChange hR a b s y x =
+      R.tagStep a b s.1 ((R.gateTagEquiv hR s.1).symm y.1) x.1 * if y.2 = x.2 then 1 else 0 := by
+  simp [tagChange, reindex_apply, kroneckerMap_apply, one_apply]
+
+theorem norm_tagChange_le (hR : R.Conditions) (a : TagSpace R.newAffected)
+    (b : TagSpace R.oldAffected) (s : ↥(Finset.univ : Finset Party)) :
+    ‖R.tagChange hR a b s‖ ≤ 1 :=
+  (l2_opNorm_reindex_le _ _ _).trans ((l2_opNorm_kronecker_one_le _).trans
+    (R.norm_tagStep_le a b s.1))
+
+omit [Fintype ι] [DecidableEq ι] [Fintype Party] [DecidableEq Party] in
+private theorem cast_prod_left {A B C : Type} (h : A = B) (y : A × C) :
+    cast (congrArg (· × C) h) y = (cast h y.1, y.2) := by
+  subst h
+  rfl
+
+/-- **The tag maps act at the specified parties only.** At a party outside the specified list
+the tag map of a branch is the identification of equal bases. -/
+theorem tagChange_of_notMem (hR : R.Conditions) (a : TagSpace R.newAffected)
+    (b : TagSpace R.oldAffected) {s : ↥(Finset.univ : Finset Party)} (hs : s.1 ∉ R.parties) :
+    ∃ h : R.gateSystem q s.1 = layoutSystem q (R.untouched ++ R.oldAffected) R.ownerNew s.1,
+      ∀ y x, R.tagChange hR a b s y x = if cast h y = x then 1 else 0 := by
+  refine ⟨congrArg (· × _) (R.gateTag_of_notMem hs), fun y x ↦ ?_⟩
+  have hsym : (R.gateTagEquiv hR s.1).symm y.1 =
+      (R.tagSwap hR hs).symm (cast (R.gateTag_of_notMem hs) y.1) := by
+    simp only [gateTagEquiv, hs, dite_false, Equiv.symm_trans_apply]
+    rfl
+  have hcast : cast (congrArg (· × _) (R.gateTag_of_notMem hs)) y =
+      (cast (R.gateTag_of_notMem hs) y.1, y.2) :=
+    cast_prod_left _ y
+  set w := cast (R.gateTag_of_notMem hs) y.1
+  have hu₁ : ∀ z z' : tagSystem R.oldAffected s.1, z = z' := fun z z' ↦
+    (tagSystemEquivUnit _ (R.tagOwner_ne_of_mem_oldAffected hR hs)).injective rfl
+  have hu₂ : ∀ z z' : tagSystem R.newAffected s.1, z = z' := fun z z' ↦
+    (tagSystemEquivUnit _ (R.tagOwner_ne_of_mem_newAffected hR hs)).injective rfl
+  rw [tagChange_apply, hsym, tagStep_apply, hcast]
+  have hfst : (tagSystemAppendEquiv _ _ s.1 ((R.tagSwap hR hs).symm w)).1 =
+      (tagSystemAppendEquiv _ _ s.1 w).1 := by
+    rw [← R.tagSwap_fst hR hs, Equiv.apply_symm_apply]
+  rw [hfst]
+  have hw : (tagSystemAppendEquiv _ _ s.1 w).1 = (tagSystemAppendEquiv _ _ s.1 x.1).1 ↔
+      w = x.1 := by
+    refine ⟨fun h ↦ (tagSystemAppendEquiv _ _ s.1).injective (Prod.ext h (hu₁ _ _)),
+      fun h ↦ h ▸ rfl⟩
+  by_cases h₁ : w = x.1 <;> by_cases h₂ : y.2 = x.2 <;>
+    simp [hw, h₁, h₂, hu₂ _ ((tagConfigEquiv R.newAffected).symm a s.1),
+      hu₁ _ ((tagConfigEquiv R.oldAffected).symm b s.1), Prod.ext_iff]
+
+/-- The tag maps of a branch at all parties, in canonical coordinates: the tag block `|a⟩⟨b|`
+beside the identity on the untouched tags. -/
+theorem prod_tagStep (a : TagSpace R.newAffected) (b : TagSpace R.oldAffected)
+    (y : Config (tagSystem (R.untouched ++ R.newAffected)))
+    (x : Config (tagSystem (R.untouched ++ R.oldAffected))) :
+    (∏ s : ↥(Finset.univ : Finset Party), R.tagStep a b s.1 (y s.1) (x s.1)) =
+      if (tagAppendEquiv R.untouched R.newAffected (tagConfigEquiv _ y)).2 = a ∧
+          (tagAppendEquiv R.untouched R.oldAffected (tagConfigEquiv _ x)).2 = b ∧
+          (tagAppendEquiv R.untouched R.newAffected (tagConfigEquiv _ y)).1 =
+            (tagAppendEquiv R.untouched R.oldAffected (tagConfigEquiv _ x)).1
+      then 1 else 0 := by
+  simp only [tagStep_apply, Finset.prod_boole, Finset.mem_univ, true_implies]
+  refine if_congr ?_ rfl rfl
+  rw [tagAppendEquiv_tagConfigEquiv, tagAppendEquiv_tagConfigEquiv]
+  simp only [← Equiv.eq_symm_apply, (tagConfigEquiv R.untouched).apply_eq_iff_eq,
+    funext_iff]
+  exact ⟨fun h ↦ ⟨fun p ↦ (h ⟨p, Finset.mem_univ p⟩).2.1, fun p ↦ (h ⟨p, Finset.mem_univ p⟩).2.2,
+    fun p ↦ (h ⟨p, Finset.mem_univ p⟩).1⟩, fun h s ↦ ⟨h.2.2 s.1, h.1 s.1, h.2.1 s.1⟩⟩
+
+/-- The product term of a branch on the registers of the frames: a monomial `M` on the sheets,
+beside the tags of the old frame, followed by the tag maps of the branch. -/
+def termMonomial (hR : R.Conditions) (β : R.Branch)
+    (M : Monomial (Finset.univ : Finset Party) (univSheet q R.ownerOld) (univSheet q R.ownerNew)) :
+    Monomial (Finset.univ : Finset Party) (fun s ↦ R.oldFrame.system s.1)
+      (fun s ↦ R.gateSystem q s.1) :=
+  PartyCircuit.comp (M.frame fun s ↦ tagSystem (R.untouched ++ R.oldAffected) s.1)
+    (PartyCircuit.localOps (R.tagChange hR β.1 β.2.2))
+
+/-- **The operator of the product term of a branch.** If the monomial on the sheets has the
+operator `Y` in canonical site coordinates, the product term has the operator of `Y` placed in
+the tag block of the branch, in the canonical coordinates of the two frames. -/
+theorem op_termMonomial (hR : R.Conditions) (β : R.Branch)
+    (M : Monomial (Finset.univ : Finset Party) (univSheet q R.ownerOld) (univSheet q R.ownerNew))
+    (Y : Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (hM : M.op chainEv = reindex (univSheetEquiv R.ownerNew).symm
+      (univSheetEquiv R.ownerOld).symm Y) :
+    (R.termMonomial hR β M).op chainEv =
+      reindex (R.gateConfigEquiv hR).symm R.oldConfigEquiv.symm (R.liftBranch β Y) := by
+  rw [termMonomial, PartyCircuit.op_comp (P := ↥(Finset.univ : Finset Party)) (G := ChainGate),
+    PartyCircuit.op_localOps,
+    PartyCircuit.op_frame (fun s ↦ tagSystem (R.untouched ++ R.oldAffected) s.1) chainEv
+      chainEv_isCompatible_frame M, hM]
+  ext y x
+  rw [mul_apply, Finset.sum_eq_single (fun s ↦ ((x s).1, (y s).2)) (fun m _ hm ↦ ?_)
+    (fun h ↦ absurd (Finset.mem_univ _) h)]
+  · simp only [piKronecker_apply, R.tagChange_apply, reindex_apply, submatrix_apply,
+      Equiv.symm_symm, kroneckerMap_apply, Equiv.arrowProdEquivProdArrow_apply, one_apply_eq,
+      one_mul, ite_true, mul_one]
+    rw [R.prod_tagStep β.1 β.2.2 (fun p ↦ (R.gateTagEquiv hR p).symm (y ⟨p, Finset.mem_univ p⟩).1)
+      (fun p ↦ (x ⟨p, Finset.mem_univ p⟩).1), liftBranch_apply, boole_mul]
+    rfl
+  · simp only [piKronecker_apply, R.tagChange_apply, reindex_apply, submatrix_apply,
+      Equiv.symm_symm, kroneckerMap_apply, Equiv.arrowProdEquivProdArrow_apply, one_apply]
+    by_cases h₁ : (fun s ↦ (m s).1) = fun s ↦ (x s).1
+    · have h₂ : ∃ s, (y s).2 ≠ (m s).2 := by
+        by_contra h
+        push Not at h
+        exact hm (funext fun s ↦ Prod.ext (congrFun h₁ s) (h s).symm)
+      obtain ⟨s, hs⟩ := h₂
+      rw [Finset.prod_eq_zero (Finset.mem_univ s) (by simp [hs]), zero_mul]
+    · simp [h₁]
+
+end Gate
 
 end SmallPatchRewrite
 
@@ -456,18 +478,20 @@ theorem card_open_vertices_le (hR : R.Conditions) (β : R.Branch) :
   obtain ⟨x, hx⟩ := (Finset.mem_filter.mp hv).2
   exact R.mem_patchVertices_of_isOpen hR β hx
 
+variable [Fintype Party] [DecidableEq Party]
+
 /-- **A product term of a branch as an allowed monomial.** Under the four conditions of
 Lemma 6.3, let `(a, s, b)` be a branch and let a unit vector be chosen on every open-leg group of
 its network (one of the orthonormal families of the whole-group truncation). Then the product
 term placed in the tag block, `|a⟩⟨b| ⊗ T ⊗ 1`, is `σ` times the operator of an allowed monomial
-from the registers of `F_old` to those of `F_new`, one register per site and per tag, with
-`|σ| ≤ 1`. The monomial uses only the specified parties, moves a register of a specified party at
-every exchange of tensor factors, and has at most `2m` normalized pair sources and at most `2m`
-normalized pair effects. It consumes the open inputs of each patch bra
-by its normalized covector at their at most two old owners, contracts every touched raw register
-with `⟨0|` at its old owner and prepares `|0⟩` at its new owner, prepares the open outputs of each
-patch ket by its normalized vector at their at most two new owners, and replaces the affected
-tags by `⟨b|` and `|a⟩` at their tag owners; every other register is untouched.
+from the registers of `F_old` to the output of the gate (the registers of `F_new` at the
+specified parties), in canonical coordinates, with `|σ| ≤ 1`. The monomial uses only the
+specified parties and has at most `2m` normalized pair sources and at most `2m` normalized pair
+effects. It consumes the open inputs of each patch bra by its normalized covector at their at
+most two old owners, contracts every touched raw site with `⟨0|` at its old owner and prepares
+`|0⟩` at its new owner, prepares the open outputs of each patch ket by its normalized vector at
+their at most two new owners, and replaces the affected tags by `⟨b|` and `|a⟩` at their tag
+owners; every other register is untouched.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.3, `05-frames.tex`, lines 262–273 and 306–316:
 after restoring the factored private maps and direct identities, each product term is precisely
@@ -479,125 +503,128 @@ theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
       EuclideanSpace ℂ (Group (R.branchChain β) v))
     (he : ∀ v, Orthonormal ℂ (e v))
     (i : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r v)) :
-    ∃ (σ : ℂ) (M : PartyChain R.oldFrame.regs R.newFrame.regs), ‖σ‖ ≤ 1 ∧ M.IsAllowed ∧
-      M.UsesOnly (R.parties : Set Party) ∧
-      M.SwapsMeetSet (R.parties : Set Party) ∧
-      M.sourceCount ≤ 2 * R.patches.length ∧
-      M.toEffectChain.effectCount ≤ 2 * R.patches.length ∧
-      ∀ z, σ • R.newFrame.regIso (M.toEffectChain.eval z) =
-        act (R.liftBranch β (termOp (R.branchChain β) e i)) (R.oldFrame.regIso z) := by
-  set l := R.untouched ++ R.oldAffected
-  set S : Set Party := (R.parties : Set Party)
+    ∃ (σ : ℂ) (M : Monomial (Finset.univ : Finset Party) (fun s ↦ R.oldFrame.system s.1)
+        (fun s ↦ R.gateSystem q s.1)),
+      ‖σ‖ ≤ 1 ∧ M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly R.parties ∧
+      M.sourceCount ≤ 2 * R.patches.length ∧ M.effectCount ≤ 2 * R.patches.length ∧
+      σ • M.op chainEv = reindex (R.gateConfigEquiv hR).symm R.oldConfigEquiv.symm
+        (R.liftBranch β (termOp (R.branchChain β) e i)) := by
+  set S := R.parties
   have hbra := fun j : Fin (R.branchSteps β).length =>
-    exists_braVertexBlock (q := q) l R.ownerOld S (IsOpen (R.branchChain β) (.inl j))
+    exists_braVertexBlock (q := q) R.ownerOld S (IsOpen (R.branchChain β) (.inl j))
       (fun _ => by
         obtain ⟨P, hP, hPx⟩ := R.exists_owners_of_isOpen_inl hR β j
         exact ⟨P, hP, fun x hx => ⟨(hPx x hx).1, (hPx x hx).2.1⟩⟩)
       (e (.inl j) (i (.inl j))) ((he _).1 _)
-  choose B sB hsB hBE hBK hBB MB hMB₁ hMB₂ hMB₆ hMB₃ hMB₄ hMB₅ using hbra
+  choose B sB hsB hBE hBK hBB MB hMB₁ hMB₂ hMB₃ hMB₄ hMB₅ using hbra
   have hket := fun j : Fin (R.branchSteps β).length =>
-    exists_ketVertexBlock (q := q) l R.ownerNew S (IsOpen (R.branchChain β) (.inr j))
+    exists_ketVertexBlock (q := q) R.ownerNew S (IsOpen (R.branchChain β) (.inr j))
       (fun _ => by
         obtain ⟨P, hP, hPx⟩ := R.exists_owners_of_isOpen_inr hR β j
         exact ⟨P, hP, fun x hx => ⟨(hPx x hx).1, (hPx x hx).2.2⟩⟩)
       (e (.inr j) (i (.inr j))) ((he _).1 _)
-  choose K sK hsK hKE hKB hKK MK hMK₁ hMK₂ hMK₆ hMK₃ hMK₄ hMK₅ using hket
-  set W := (sites ι).filter fun x => decide (¬Untouched (R.branchChain β) x) with hWdef
-  have hWn : W.Nodup := nodup_sites.filter _
-  have hW : ∀ x, x ∈ W ↔ ¬Untouched (R.branchChain β) x := fun x => by simp [hWdef, mem_sites]
-  obtain ⟨M₁, a₁, a₂, a₆, a₃, a₄, a₅⟩ := exists_chain_listProd (layoutIso l R.ownerOld) S
-    (fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ (B j).op)
+  choose K sK hsK hKE hKB hKK MK hMK₁ hMK₂ hMK₃ hMK₄ hMK₅ using hket
+  set W := (Finset.univ : Finset ι).toList.filter fun x => decide (¬Untouched (R.branchChain β) x)
+    with hWdef
+  have hWn : W.Nodup := (Finset.nodup_toList _).filter _
+  have hW : ∀ x, x ∈ W ↔ ¬Untouched (R.branchChain β) x := fun x => by simp [hWdef]
+  obtain ⟨M₁, a₁, a₂, a₃, a₄, a₅⟩ := exists_monomial_listProd (univSheetEquiv R.ownerOld) S
+    (fun j => (B j).op)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inl j) x then 1 else 0)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inl j) x then 1 else 0)
-    (List.finRange _) fun j _ => ⟨MB j, hMB₁ j, hMB₂ j, hMB₆ j, hMB₃ j, hMB₄ j, hMB₅ j⟩
-  obtain ⟨M₂, b₁, b₂, b₆, b₃, b₄, b₅⟩ := exists_zeroChain l S W hWn R.ownerOld R.ownerNew
+    (List.finRange _) fun j _ => ⟨MB j, hMB₁ j, hMB₂ j, hMB₃ j, hMB₄ j, hMB₅ j⟩
+  obtain ⟨M₂, b₁, b₂, b₃, b₄, b₅⟩ := exists_zeroChain (q := q) S W hWn R.ownerOld R.ownerNew
     (fun x hx => R.owners_mem_parties_of_not_untouched hR β ((hW x).mp hx))
     (fun x hx => R.ownerOld_eq_ownerNew_of_untouched hR β (by simpa [hW] using hx))
-  obtain ⟨M₃, c₁, c₂, c₆, c₃, c₄, c₅⟩ := exists_chain_listProd (layoutIso l R.ownerNew) S
-    (fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ (K j).op)
+  obtain ⟨M₃, c₁, c₂, c₃, c₄, c₅⟩ := exists_monomial_listProd (univSheetEquiv R.ownerNew) S
+    (fun j => (K j).op)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inr j) x then 1 else 0)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inr j) x then 1 else 0)
-    (List.finRange _) fun j _ => ⟨MK j, hMK₁ j, hMK₂ j, hMK₆ j, hMK₃ j, hMK₄ j, hMK₅ j⟩
-  set Wt := tagChangeWord R.untouched R.oldAffected R.newAffected β.2.2 β.1 R.ownerNew
-  obtain ⟨t₁, t₂, t₃⟩ := tagChangeWord_props R.untouched R.oldAffected R.newAffected β.2.2 β.1
-    R.ownerNew (S := S) (fun h hh => hR.tag_owners_mem h (List.mem_append_left _ hh))
-    (fun h hh => hR.tag_owners_mem h (List.mem_append_right _ hh))
-  obtain ⟨d₁, d₂, d₃, d₄⟩ := PartyChain.append_props S M₁ M₂ a₁ a₂ b₁ b₂
-  obtain ⟨e₁, e₂, e₃, e₄⟩ := PartyChain.append_props S (M₁.append M₂) M₃ d₁ d₂ c₁ c₂
-  obtain ⟨f₁, f₂, f₃, f₄⟩ := PartyChain.postcomp_props S ((M₁.append M₂).append M₃) Wt t₁ t₂
-    e₁ e₂
+    (List.finRange _) fun j _ => ⟨MK j, hMK₁ j, hMK₂ j, hMK₃ j, hMK₄ j, hMK₅ j⟩
   have hsum : ∀ g : Fin (R.branchSteps β).length → ℕ,
       ((List.finRange _).map g).sum = ∑ j, g j := fun g => by
     rw [← List.ofFn_eq_map, List.sum_ofFn]
   have hcount := R.card_open_vertices_le hR β
   rw [hsum] at a₃ a₄ c₃ c₄
-  refine ⟨(∏ j, sB j) * ∏ j, sK j, ((M₁.append M₂).append M₃).postcomp Wt, ?_, f₁, f₂,
-    fun g hg => PartyChain.swapsMeet_postcomp g (swapsMeet_tagChangeWord g _ _ _ _ _ _)
-      (PartyChain.swapsMeet_append g (PartyChain.swapsMeet_append g (a₆ g hg) (b₆ g hg))
-        (c₆ g hg)), ?_, ?_, fun z => ?_⟩
+  have hprod : ∀ A : Fin (R.branchSteps β).length → RankOneBlock ι q,
+      ((List.finRange _).map fun j => (A j).op) = (List.ofFn A).map RankOneBlock.op := fun A => by
+    rw [List.ofFn_eq_map, List.map_map]
+    rfl
+  set Msh := (M₁.comp M₂).comp M₃
+  have hMsh : Msh.op chainEv = reindex (univSheetEquiv R.ownerNew).symm
+      (univSheetEquiv R.ownerOld).symm (((List.ofFn K).map RankOneBlock.op).prod *
+        ((W.map (zeroBlock (q := q))).map RankOneBlock.op).prod *
+        ((List.ofFn B).map RankOneBlock.op).prod) := by
+    rw [PartyCircuit.op_comp (P := ↥(Finset.univ : Finset Party)) (G := ChainGate),
+      PartyCircuit.op_comp (P := ↥(Finset.univ : Finset Party)) (G := ChainGate), c₅, b₅, a₅,
+      hprod, hprod, reindex_apply, reindex_apply, reindex_apply, reindex_apply,
+      submatrix_mul_equiv, submatrix_mul_equiv, Matrix.mul_assoc]
+  have hframe : ∀ ⦃D : Finset ↥(Finset.univ : Finset Party)⦄
+      ⦃X Y : ↥(Finset.univ : Finset Party) → Type⦄
+      [∀ s, Fintype (X s)] [∀ s, DecidableEq (X s)] [∀ s, Fintype (Y s)]
+      [∀ s, DecidableEq (Y s)] (g : ChainGate D X Y), ChainGate.IsAllowed g →
+        ChainGate.IsAllowed (GateFrame.frame
+          (fun s : ↥(Finset.univ : Finset Party) ↦ tagSystem (R.untouched ++ R.oldAffected) s.1)
+          g) := by
+    intro _ _ _ _ _ _ _ g h
+    cases g <;> exact h
+  refine ⟨(∏ j, sB j) * ∏ j, sK j, R.termMonomial hR β Msh, ?_,
+    ⟨PartyCircuit.isAllowed_frame _ chainEv chainEv_isCompatible_frame hframe (c := Msh)
+      ⟨⟨a₁, b₁⟩, c₁⟩, fun s ↦ R.norm_tagChange_le hR _ _ s⟩,
+    ⟨PartyCircuit.UsesOnly.frame _ (c := Msh) ⟨⟨a₂, b₂⟩, c₂⟩, fun s hs ↦ by
+      obtain ⟨h, h'⟩ := R.tagChange_of_notMem hR β.1 β.2.2 hs
+      exact ⟨h, fun y x ↦ (h' y x).trans (by congr)⟩⟩, ?_, ?_, ?_⟩
   · rw [norm_mul, norm_prod, norm_prod]
     calc _ ≤ (1 : ℝ) * 1 := mul_le_mul
           (Finset.prod_le_one₀ (fun _ _ => norm_nonneg _) fun j _ => hsB j)
           (Finset.prod_le_one₀ (fun _ _ => norm_nonneg _) fun j _ => hsK j)
           (Finset.prod_nonneg fun _ _ => norm_nonneg _) zero_le_one
       _ = 1 := one_mul 1
-  · rw [f₃, e₃, d₃, b₃, t₃]
+  · change Monomial.sourceCount (PartyCircuit.comp _ _) ≤ _
+    rw [Monomial.sourceCount_comp, Monomial.sourceCount_frame, Monomial.sourceCount_comp,
+      Monomial.sourceCount_comp, b₃]
+    change _ + 0 ≤ _
     change _ ≤ _ at hcount
     omega
-  · rw [f₄, e₄, d₄, b₄]
+  · change Monomial.effectCount (PartyCircuit.comp _ _) ≤ _
+    rw [Monomial.effectCount_comp, Monomial.effectCount_frame, Monomial.effectCount_comp,
+      Monomial.effectCount_comp, b₄]
+    change _ + 0 ≤ _
+    change _ ≤ _ at hcount
     omega
-  · have hT := termOp_eq_smul_prod (R.branchChain β) e i B K sB sK hBE hBK hBB hKE hKB hKK hWn hW
-    have hB : ((List.finRange _).map fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ
-        (B j).op).prod = 1 ⊗ₖ ((List.ofFn B).map RankOneBlock.op).prod := by
-      rw [prod_map_one_kronecker, List.ofFn_eq_map, List.map_map]
-      rfl
-    have hK : ((List.finRange _).map fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ
-        (K j).op).prod = 1 ⊗ₖ ((List.ofFn K).map RankOneBlock.op).prod := by
-      rw [prod_map_one_kronecker, List.ofFn_eq_map, List.map_map]
-      rfl
-    rw [hT, liftBranch_smul, act_smul]
-    congr 1
-    rw [PartyChain.eval_postcomp, ContinuousLinearMap.comp_apply, PartyChain.eval_append,
-      ContinuousLinearMap.comp_apply, PartyChain.eval_append, ContinuousLinearMap.comp_apply]
-    change layoutIso (R.untouched ++ R.newAffected) R.ownerNew
-        (Wt.eval (M₃.toEffectChain.eval (M₂.toEffectChain.eval (M₁.toEffectChain.eval z)))) =
-      act _ (layoutIso l R.ownerOld z)
-    rw [layoutIso_tagChangeWord, c₅, b₅, a₅, hB, hK, ← act_mul, ← act_mul, ← act_mul]
-    congr 1
-    simp only [Matrix.mul_assoc]
-    rw [← mul_kronecker_mul, one_mul, ← mul_kronecker_mul, one_mul, liftBranch_mul]
+  · rw [termOp_eq_smul_prod (R.branchChain β) e i B K sB sK hBE hBK hBB hKE hKB hKK hWn hW,
+      liftBranch_smul, R.op_termMonomial hR β Msh _ hMsh]
+    ext y x
+    simp [reindex_apply]
 
 /-- **Lemma 6.3, the rewrite as a sum of allowed monomials.** Under the four conditions of
 Lemma 6.3, for every `δ > 0` (for instance `δ = L^{-a}`) let `N` be the number of branches, `m`
 the number of additional patches and `k = ⌈(4 N m / δ)²⌉ + 1`. There are a contraction `M_δ` with
-`‖M_δ - M‖ ≤ δ` and an expansion `M_δ = ∑_t c_t M_t` into at most `N k^{2m}` monomials `M_t` from
-the registers of `F_old` to those of `F_new` (one register per site and per tag, each held by its
-owner), each allowed in the sense of Theorem 5.2, using only the specified parties and moving a
-register of a specified party at every exchange of tensor factors, with at most `2m` normalized
-pair sources and at most `2m` normalized pair effects, and with coefficients
-`|c_t| ≤ 1`. The expansion is read in canonical coordinates.
+`‖M_δ - M‖ ≤ δ` and a gate `∑_t c_t M_t` of at most `N k^{2m}` monomials `M_t` from the
+registers of `F_old` to the output of the gate, each allowed in the sense of Theorem 5.2, using
+only the specified parties, with at most `2m` normalized pair sources and at most `2m`
+normalized pair effects, and with coefficients `|c_t| ≤ 1`, whose operator is `M_δ` in canonical
+coordinates.
 
-With `norm_act_refVec_sub_le_of_approx` and `rewrite_error_le_inv_pow_twenty`, the choice
-`δ = L^{-30}` gives the reference-vector error `O(L^{-20})` of the final assertion of Lemma 6.3.
-For `δ = L^{-a}`, the count `N k^{2m}` is polynomial in `L` once `N` is and `m` is bounded; see
-`exists_allowed_monomial_approx_polynomial`.
+With `norm_toEuclideanLin_refVec_sub_le_of_approx` and `rewrite_error_le_inv_pow_twenty`, the
+choice `δ = L^{-30}` gives the reference-vector error `O(L^{-20})` of the final assertion of
+Lemma 6.3. For `δ = L^{-a}`, the count `N k^{2m}` is polynomial in `L` once `N` is and `m` is
+bounded; see `exists_allowed_monomial_approx_polynomial`.
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 214–217;
 proof lines 254–341. -/
 theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 < δ) :
-    ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
-      G.length ≤ Fintype.card R.Branch *
+    ∃ g : WeightedGate (Finset.univ : Finset Party) R.oldFrame.system (R.gateSystem q),
+      g.terms.length ≤ Fintype.card R.Branch *
         truncationRank (Fintype.card R.Branch) ((2 * R.patches.length : ℕ) : ℝ) δ ^
           (2 * R.patches.length) ∧
-      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
-        p.2.SwapsMeetSet (R.parties : Set Party) ∧
-        p.2.sourceCount ≤ 2 * R.patches.length ∧
-        p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
+      (∀ t ∈ g.terms, ‖t.1‖ ≤ 1 ∧ t.2.IsAllowed chainEv ChainGate.IsAllowed ∧
+        t.2.UsesOnly R.parties ∧ t.2.sourceCount ≤ 2 * R.patches.length ∧
+        t.2.effectCount ≤ 2 * R.patches.length) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
-        ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
-          act Ma (R.oldFrame.regIso z) := by
+        WeightedGate.ev g () = reindex (R.gateConfigEquiv hR).symm R.oldConfigEquiv.symm Ma := by
   obtain ⟨r, e, c, -, he, hc, hcard, h1, h2⟩ := R.exists_contractive_approx hR hδ
-  choose σ M hσ hM₁ hM₂ hM₆ hM₃ hM₄ hM₅ using fun (β : R.Branch)
+  choose σ M hσ hM₁ hM₂ hM₃ hM₄ hM₅ using fun (β : R.Branch)
     (ii : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r β v)) =>
       R.exists_termChain hR β (e β) (he β) ii
   set a : ℂ := (((1 + δ / 2)⁻¹ : ℝ) : ℂ) with ha
@@ -606,27 +633,36 @@ theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 <
     exact inv_le_one_of_one_le₀ (by linarith)
   let κ := Σ β : R.Branch, ((v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) →
     Fin (r β v))
-  refine ⟨(Finset.univ : Finset κ).toList.map fun t => (a * c t.1 t.2 * σ t.1 t.2, M t.1 t.2),
-    ?_, ?_, _, h1, h2, fun z => ?_⟩
+  refine ⟨⟨(Finset.univ : Finset κ).toList.map fun t => (a * c t.1 t.2 * σ t.1 t.2, M t.1 t.2)⟩,
+    ?_, ?_, _, h1, h2, ?_⟩
   · rw [List.length_map, Finset.length_toList, Finset.card_univ, Fintype.card_sigma]
     calc _ ≤ ∑ _β : R.Branch, truncationRank (Fintype.card R.Branch)
           ((2 * R.patches.length : ℕ) : ℝ) δ ^ (2 * R.patches.length) :=
           Finset.sum_le_sum fun β _ => hcard β
       _ = _ := by rw [Finset.sum_const, Finset.card_univ, smul_eq_mul]
-  · intro p hp
-    obtain ⟨t, -, rfl⟩ := List.mem_map.mp hp
-    refine ⟨?_, hM₁ _ _, hM₂ _ _, hM₆ _ _, hM₃ _ _, hM₄ _ _⟩
+  · intro t ht
+    obtain ⟨t, -, rfl⟩ := List.mem_map.mp ht
+    refine ⟨?_, hM₁ _ _, hM₂ _ _, hM₃ _ _, hM₄ _ _⟩
     rw [norm_mul, norm_mul]
     calc _ ≤ (1 : ℝ) * 1 * 1 := mul_le_mul (mul_le_mul hna (hc _ _) (norm_nonneg _) zero_le_one)
           (hσ _ _) (norm_nonneg _) (by norm_num)
       _ = 1 := by norm_num
-  · rw [List.map_map, Finset.sum_map_toList, act_smul, act_sum, Finset.smul_sum]
-    simp only [Function.comp_apply]
-    rw [Fintype.sum_sigma]
+  · have hterm : ∀ t : κ, (a * c t.1 t.2 * σ t.1 t.2) • (M t.1 t.2).op chainEv =
+        reindexLinearEquiv ℂ ℂ (R.gateConfigEquiv hR).symm R.oldConfigEquiv.symm
+          ((a * c t.1 t.2) • R.liftBranch t.1 (termOp (R.branchChain t.1) (e t.1) t.2)) := by
+      intro t
+      rw [mul_smul, hM₅, map_smul]
+      rfl
+    rw [WeightedGate.ev, List.map_map, Function.comp_def]
+    simp only [hterm]
+    rw [Finset.sum_map_toList, ← map_sum, Fintype.sum_sigma]
+    rw [← coe_reindexLinearEquiv ℂ ℂ]
+    congr 1
+    rw [Finset.smul_sum]
     refine Finset.sum_congr rfl fun β _ => ?_
-    rw [liftBranch_sum_smul, act_sum, Finset.smul_sum]
+    rw [liftBranch_sum_smul, Finset.smul_sum]
     refine Finset.sum_congr rfl fun ii _ => ?_
-    rw [act_smul, ← hM₅, smul_smul, smul_smul, mul_assoc]
+    rw [mul_smul]
 
 /-- **Lemma 6.3, the count with the number of cylinder terms as a parameter.** If every affected
 hole and every additional patch has at most `D` cylinder terms, the expansion of
@@ -641,18 +677,16 @@ theorem exists_allowed_monomial_approx_of_card_le (hR : R.Conditions) {δ : ℝ}
     {D : ℕ} (hnew : ∀ h ∈ R.newAffected, Fintype.card h.patch.Tag ≤ D)
     (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ D)
     (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ D) :
-    ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
-      G.length ≤ D ^ (R.newAffected.length + R.patches.length + R.oldAffected.length) *
+    ∃ g : WeightedGate (Finset.univ : Finset Party) R.oldFrame.system (R.gateSystem q),
+      g.terms.length ≤ D ^ (R.newAffected.length + R.patches.length + R.oldAffected.length) *
         truncationRank ((D ^ (R.newAffected.length + R.patches.length +
           R.oldAffected.length) : ℕ) : ℝ) ((2 * R.patches.length : ℕ) : ℝ) δ ^
           (2 * R.patches.length) ∧
-      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
-        p.2.SwapsMeetSet (R.parties : Set Party) ∧
-        p.2.sourceCount ≤ 2 * R.patches.length ∧
-        p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
+      (∀ t ∈ g.terms, ‖t.1‖ ≤ 1 ∧ t.2.IsAllowed chainEv ChainGate.IsAllowed ∧
+        t.2.UsesOnly R.parties ∧ t.2.sourceCount ≤ 2 * R.patches.length ∧
+        t.2.effectCount ≤ 2 * R.patches.length) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
-        ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
-          act Ma (R.oldFrame.regIso z) := by
+        WeightedGate.ev g () = reindex (R.gateConfigEquiv hR).symm R.oldConfigEquiv.symm Ma := by
   obtain ⟨G, hG, rest⟩ := R.exists_allowed_monomial_approx hR hδ
   have hN := R.card_branch_le hnew hpatch hold
   refine ⟨G, hG.trans (Nat.mul_le_mul hN (Nat.pow_le_pow_left ?_ _)), rest⟩
@@ -686,17 +720,16 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
     (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
     (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
     (hrnew : R.newAffected.length ≤ b) (hparties : R.parties.card ≤ b) (a : ℝ) :
-    R.parties.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
-      G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
+    R.parties.card ≤ b ∧
+      ∃ g : WeightedGate (Finset.univ : Finset Party) R.oldFrame.system (R.gateSystem q),
+      g.terms.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + ⌈a⌉₊)) ∧
-      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
-        p.2.SwapsMeetSet (R.parties : Set Party) ∧
-        p.2.sourceCount ≤ 2 * b ∧
-        p.2.toEffectChain.effectCount ≤ 2 * b) ∧
+      (∀ t ∈ g.terms, ‖t.1‖ ≤ 1 ∧ t.2.IsAllowed chainEv ChainGate.IsAllowed ∧
+        t.2.UsesOnly R.parties ∧ t.2.sourceCount ≤ 2 * b ∧
+        t.2.effectCount ≤ 2 * b) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
         ‖Ma - R.rewrite‖ ≤ (L : ℝ) ^ (-a) ∧
-        ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
-          act Ma (R.oldFrame.regIso z) := by
+        WeightedGate.ev g () = reindex (R.gateConfigEquiv hR).symm R.oldConfigEquiv.symm Ma := by
   set B := (C + 1) * L ^ c with hBdef
   have hL0 : 0 < L := hL
   have hB1 : 1 ≤ B := Nat.one_le_iff_ne_zero.mpr (by positivity)
@@ -732,15 +765,15 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
       ring
     rw [this, add_mul, one_mul]
     exact Nat.add_le_add_left hP _
-  refine ⟨hparties, G, ?_, fun p hp => ?_, rest⟩
+  refine ⟨hparties, G, ?_, fun t ht => ?_, rest⟩
   · refine hG.trans ((Nat.mul_le_mul hN ((Nat.pow_le_pow_left hk _).trans
       (Nat.pow_le_pow_right (Nat.succ_pos _) (Nat.mul_le_mul_left 2 hm)))).trans ?_)
     calc B ^ (3 * b) * (X ^ 2 + 1) ^ (2 * b)
         ≤ B ^ (3 * b) * ((16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) *
             L ^ (2 * (3 * b * c + ⌈a⌉₊))) ^ (2 * b) := by gcongr
       _ = _ := by rw [hBdef, mul_pow (C + 1) (L ^ c), mul_pow _ (L ^ _)]; ring
-  · obtain ⟨h₁, h₂, h₃, h₆, h₄, h₅⟩ := hGp p hp
-    exact ⟨h₁, h₂, h₃, h₆, h₄.trans (by omega), h₅.trans (by omega)⟩
+  · obtain ⟨h₁, h₂, h₃, h₄, h₅⟩ := hGp t ht
+    exact ⟨h₁, h₂, h₃, h₄.trans (by omega), h₅.trans (by omega)⟩
 
 /-- **Lemma 6.3, the bounded change with reference-vector error `O(L^{-20})`.** In the setting of
 `exists_allowed_monomial_approx_polynomial`, let `Ω` be a vector with `‖Ω‖ ≤ 1` on which every
@@ -759,21 +792,20 @@ theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ
     (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
     (hrnew : R.newAffected.length ≤ b) (hparties : R.parties.card ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
-    R.parties.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
-      G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
+    (hεpatch : ∀ P ∈ R.patches, ‖toEuclideanLin P.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεold : ∀ h ∈ R.oldAffected, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
+    R.parties.card ≤ b ∧
+      ∃ g : WeightedGate (Finset.univ : Finset Party) R.oldFrame.system (R.gateSystem q),
+      g.terms.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) ∧
-      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
-        p.2.SwapsMeetSet (R.parties : Set Party) ∧
-        p.2.sourceCount ≤ 2 * b ∧
-        p.2.toEffectChain.effectCount ≤ 2 * b) ∧
+      (∀ t ∈ g.terms, ‖t.1‖ ≤ 1 ∧ t.2.IsAllowed chainEv ChainGate.IsAllowed ∧
+        t.2.UsesOnly R.parties ∧ t.2.sourceCount ≤ 2 * b ∧
+        t.2.effectCount ≤ 2 * b) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
         ‖Ma - R.rewrite‖ ≤ ((L : ℝ) ^ 30)⁻¹ ∧
-        ‖act Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
+        ‖toEuclideanLin Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
-        ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
-          act Ma (R.oldFrame.regIso z) := by
+        WeightedGate.ev g () = reindex (R.gateConfigEquiv hR).symm R.oldConfigEquiv.symm Ma := by
   have h30 : ⌈(30 : ℝ)⌉₊ = 30 := by exact_mod_cast Nat.ceil_natCast 30
   have hrpow : (L : ℝ) ^ (-(30 : ℝ)) = ((L : ℝ) ^ 30)⁻¹ := by
     rw [Real.rpow_neg (Nat.cast_nonneg _)]
@@ -784,7 +816,7 @@ theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ
   rw [hrpow] at hMa
   have hLr : (1 : ℝ) ≤ L := by exact_mod_cast hL
   have hL0 : (0 : ℝ) < L := by linarith
-  have href := R.norm_act_refVec_sub_le_of_approx hR.avoidsUntouched hΩ hεpatch hεold hMa
+  have href := R.norm_toEuclideanLin_refVec_sub_le_of_approx hR.avoidsUntouched hΩ hεpatch hεold hMa
   refine ⟨hparties, G, hG, hGp, Ma, hMa1, hMa, href.trans ?_, hz⟩
   have h60 : ((L : ℝ) ^ 60)⁻¹ ≤ ((L : ℝ) ^ 20)⁻¹ :=
     inv_anti₀ (by positivity) (pow_le_pow_right₀ hLr (by norm_num))
@@ -797,6 +829,7 @@ theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ
       ≤ ((L : ℝ) ^ 20)⁻¹ + 2 * b * ((L : ℝ) ^ 20)⁻¹ := by
         gcongr
     _ = (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by ring
+
 
 end SmallPatchRewrite
 

@@ -25,6 +25,12 @@ blocks impose the fixed input zeros and leave zeros on every touched site, and t
 prepare the open outputs; the fixed output zeros remain (`SiteChain.termOp_eq_smul_prod`). A
 vertex without open legs contributes a scalar of modulus at most one.
 
+On the sheets, each of these blocks is an allowed monomial: a product of monomial operators on
+one sheet is one (`EncodedFrame.exists_monomial_listProd`), the one-site blocks may change the
+owner of their site (`EncodedFrame.exists_zeroChain`), and a block on a group of sites with at
+most two owners uses only these owners (`EncodedFrame.exists_groupBlock`,
+`EncodedFrame.exists_braVertexBlock`, `EncodedFrame.exists_ketVertexBlock`).
+
 ## Main definitions
 
 * `EncodedFrame.zeroBlock`, `EncodedFrame.emptyBlock`: the one-site zero block and the trivial
@@ -33,6 +39,9 @@ vertex without open legs contributes a scalar of modulus at most one.
 ## Main results
 
 * `EncodedFrame.prod_map_one_kronecker`: a product of operators beside an identity factor.
+* `EncodedFrame.exists_monomial_listProd`, `EncodedFrame.exists_zeroChain`,
+  `EncodedFrame.exists_groupBlock`, `EncodedFrame.exists_braVertexBlock`,
+  `EncodedFrame.exists_ketVertexBlock`: the blocks as monomials on the sheets.
 * `SiteChain.termOp_eq_smul_prod`: a product term as a scalar times a product of blocks.
 
 ## References
@@ -142,6 +151,245 @@ theorem zeroGroupVec_apply (O : ι → Prop) [DecidablePred O] (c : ι → Fin q
   exact propext ⟨fun h x hx => congrFun h ⟨x, hx⟩, fun h => funext fun x => h x.1 x.2⟩
 
 end GroupBlock
+
+
+/-! ### Products of monomials on one sheet -/
+
+section Monomials
+
+open ManyBody QuantumCircuit.Party
+
+variable {Party : Type} [Fintype Party] [DecidableEq Party]
+
+/-- **A product of monomial operators on one system.** If each operator `A k` of a list is, in
+the coordinates `e`, the operator of an allowed monomial on the system `X` using only the parties
+of `S`, then so is the product `A k₁ ⋯ A k_r`, with the pair sources and pair effects added up. -/
+theorem exists_monomial_listProd {X : ↥(Finset.univ : Finset Party) → Type}
+    [∀ s, Fintype (X s)] [∀ s, DecidableEq (X s)] {κ : Type} [Fintype κ] [DecidableEq κ]
+    (e : Config X ≃ κ) (S : Finset Party) {γ : Type} (A : γ → Matrix κ κ ℂ)
+    (src eff : γ → ℕ) : (ks : List γ) →
+    (∀ k ∈ ks, ∃ M : Monomial (Finset.univ : Finset Party) X X,
+      M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ src k ∧
+      M.effectCount ≤ eff k ∧ M.op chainEv = reindex e.symm e.symm (A k)) →
+    ∃ M : Monomial (Finset.univ : Finset Party) X X,
+      M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly S ∧
+      M.sourceCount ≤ (ks.map src).sum ∧ M.effectCount ≤ (ks.map eff).sum ∧
+      M.op chainEv = reindex e.symm e.symm (ks.map A).prod
+  | [], _ => ⟨.done X, trivial, trivial, le_rfl, le_rfl, by
+      rw [PartyCircuit.op_done, List.map_nil, List.prod_nil, reindex_apply,
+        submatrix_one_equiv]⟩
+  | k :: ks, h => by
+      obtain ⟨M, h₁, h₂, h₃, h₄, h₅⟩ :=
+        exists_monomial_listProd e S A src eff ks fun k' hk' ↦ h k' (List.mem_cons_of_mem _ hk')
+      obtain ⟨Mk, k₁, k₂, k₃, k₄, k₅⟩ := h k List.mem_cons_self
+      refine ⟨M.comp Mk, ⟨h₁, k₁⟩, ⟨h₂, k₂⟩, ?_, ?_, ?_⟩
+      · rw [Monomial.sourceCount_comp, List.map_cons, List.sum_cons]
+        omega
+      · rw [Monomial.effectCount_comp, List.map_cons, List.sum_cons]
+        omega
+      · rw [PartyCircuit.op_comp (P := ↥(Finset.univ : Finset Party)) (G := ChainGate), k₅, h₅,
+          List.map_cons, List.prod_cons, reindex_apply, reindex_apply, reindex_apply,
+          submatrix_mul_equiv]
+
+variable [NeZero q]
+
+private theorem notMem_compl_union_singleton {x y : ι} :
+    y ∉ (({x} : Finset ι) ∪ ({x} : Finset ι)ᶜ)ᶜ := by
+  simp only [Finset.mem_compl, Finset.mem_union, not_not]
+  by_cases h : y = x
+  · exact Or.inl (Finset.mem_singleton.mpr h)
+  · exact Or.inr (by simpa using h)
+
+/-- **One-site zero blocks with a change of owners.** For a list `W` of distinct sites, outside
+of which the owners `own` and `own'` agree, the product of the one-site zero blocks
+`|0⟩⟨0|_x`, `x ∈ W`, is, in canonical site coordinates, the operator of an allowed monomial from
+the sheet of `own` to that of `own'`, using only the owners of the sites of `W` before and after,
+with no pair source and no pair effect. At each site the configuration is contracted with `⟨0|`
+at its owner before and prepared as `|0⟩` at its owner after. -/
+theorem exists_zeroChain (S : Finset Party) :
+    (W : List ι) → W.Nodup → (own own' : ι → Party) → (∀ x ∈ W, own x ∈ S ∧ own' x ∈ S) →
+    (∀ x ∉ W, own x = own' x) →
+    ∃ M : Monomial (Finset.univ : Finset Party) (univSheet q own) (univSheet q own'),
+      M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly S ∧
+      M.sourceCount = 0 ∧ M.effectCount = 0 ∧
+      M.op chainEv = reindex (univSheetEquiv own').symm (univSheetEquiv own).symm
+        ((W.map (zeroBlock (q := q))).map RankOneBlock.op).prod
+  | [], _, own, own', _, hown => by
+      obtain rfl : own = own' := funext fun x ↦ hown x List.not_mem_nil
+      refine ⟨.done _, trivial, trivial, rfl, rfl, ?_⟩
+      rw [PartyCircuit.op_done, List.map_nil, List.map_nil, List.prod_nil, reindex_apply,
+        submatrix_one_equiv]
+  | x :: W, hW, own, own', hS, hown => by
+      have hxW : x ∉ W := (List.nodup_cons.mp hW).1
+      set mid : ι → Party := fun y ↦ if y ∈ W then own' y else own y with hmid
+      obtain ⟨M, h₁, h₂, h₃, h₄, h₅⟩ := exists_zeroChain S W (List.nodup_cons.mp hW).2 own mid
+        (fun y hy ↦ ⟨(hS y (List.mem_cons_of_mem _ hy)).1, by
+          simpa [hmid, hy] using (hS y (List.mem_cons_of_mem _ hy)).2⟩)
+        (fun y hy ↦ by simp [hmid, hy])
+      obtain ⟨Mx, k₁, k₂, -, k₃, -, k₄, k₅⟩ := exists_rankOneBlock_monomial
+        (zeroBlock x) S mid own' (pA := own x) (pB := own x) (pA' := own' x) (pB' := own' x)
+        (fun y hy ↦ by
+          obtain rfl : y = x := Finset.mem_singleton.mp hy
+          simp [hmid, hxW])
+        (fun y hy ↦ absurd hy notMem_compl_union_singleton)
+        (fun y hy ↦ by rw [Finset.mem_singleton.mp hy])
+        (fun y hy ↦ absurd hy notMem_compl_union_singleton)
+        (fun y hy ↦ by
+          have hyx : y ≠ x := by simpa [zeroBlock] using hy
+          by_cases hyW : y ∈ W
+          · simp [hmid, hyW]
+          · simp only [hmid, hyW, ite_false]
+            exact hown y (by simp [hyx, hyW]))
+        (norm_zeroPair (q := q) _ _) (norm_zeroPair (q := q) _ _) (hS x List.mem_cons_self).1
+        (hS x List.mem_cons_self).1 (hS x List.mem_cons_self).2 (hS x List.mem_cons_self).2
+      refine ⟨M.comp Mx, ⟨h₁, k₁⟩, ⟨h₂, k₂⟩, ?_, ?_, ?_⟩
+      · rw [Monomial.sourceCount_comp, h₃, k₃ rfl]
+      · rw [Monomial.effectCount_comp, h₄, k₄ rfl]
+      · rw [PartyCircuit.op_comp (P := ↥(Finset.univ : Finset Party)) (G := ChainGate), k₅, h₅,
+          List.map_cons, List.map_cons, List.prod_cons, reindex_apply, reindex_apply,
+          reindex_apply, submatrix_mul_equiv]
+
+omit [Fintype Party] [DecidableEq Party] in
+private theorem eq_of_card_le_two {P : Finset Party} (hP : P.card ≤ 2) {a b c : Party}
+    (ha : a ∈ P) (hb : b ∈ P) (hc : c ∈ P) (hba : b ≠ a) (hca : c ≠ a) : b = c := by
+  classical
+  by_contra hbc
+  have := Finset.two_lt_card_iff.mpr ⟨a, b, c, ha, hb, hc, hba.symm, hca.symm, hbc⟩
+  omega
+
+omit [NeZero q] in
+/-- **A block on a group of sites with at most two owners.** Let `O` be a nonempty group of
+sites whose owners lie in a set of at most two parties, all in `S`, and let `v`, `w` be unit
+vectors on the configurations of the group. There is a block with the sites outside the group as
+its complement, reading `v` and `w` on every configuration, whose operator `|v⟩⟨w|_O ⊗ 1` is, in
+canonical site coordinates, an allowed monomial on the sheet, using only the parties of `S`, with
+at most one pair source and at most one pair effect: the sites of the group held by one owner
+form the part `T`, the others the part `U`.
+
+Polynomial-PEPS manuscript, proof of Lemma 6.3, `05-frames.tex`, lines 306–313: a group vector
+is a normalized state or covector on one party, or a normalized bipartite one on its two
+owners. -/
+theorem exists_groupBlock (own : ι → Party) (S : Finset Party)
+    (O : ι → Prop) [DecidablePred O] (hne : ∃ x, O x)
+    (hO : ∃ P : Finset Party, P.card ≤ 2 ∧ ∀ x, O x → own x ∈ P) (hS : ∀ x, O x → own x ∈ S)
+    (v w : EuclideanSpace ℂ ({x // O x} → Fin q)) (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) :
+    ∃ b : RankOneBlock ι q, (∀ x, x ∈ b.E ↔ ¬O x) ∧ (∀ c, b.ketAt c = v fun x ↦ c x.1) ∧
+      (∀ c, b.braAt c = w fun x ↦ c x.1) ∧
+      ∃ M : Monomial (Finset.univ : Finset Party) (univSheet q own) (univSheet q own),
+        M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly S ∧
+        M.sourceCount ≤ 1 ∧ M.effectCount ≤ 1 ∧
+        M.op chainEv = reindex (univSheetEquiv own).symm (univSheetEquiv own).symm b.op := by
+  classical
+  obtain ⟨x₀, hx₀⟩ := hne
+  obtain ⟨P, hP, hPO⟩ := hO
+  set pA := own x₀
+  set T : Finset ι := Finset.univ.filter fun x ↦ O x ∧ own x = pA
+  set E : Finset ι := Finset.univ.filter fun x ↦ ¬O x
+  have hT : ∀ x ∈ T, O x := fun x hx ↦ (Finset.mem_filter.mp hx).2.1
+  have hU : ∀ x ∈ (T ∪ E)ᶜ, O x ∧ own x ≠ pA := fun x hx ↦ by
+    simp only [T, E, Finset.mem_compl, Finset.mem_union, Finset.mem_filter, Finset.mem_univ,
+      true_and, not_or, not_and, not_not] at hx
+    exact ⟨hx.2, hx.1 hx.2⟩
+  set pB : Party := if h : ∃ x, O x ∧ own x ≠ pA then own h.choose else pA
+  have hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB := fun x hx ↦ by
+    have hex : ∃ x, O x ∧ own x ≠ pA := ⟨x, hU x hx⟩
+    simp only [pB, hex, dite_true]
+    exact eq_of_card_le_two hP (hPO x₀ hx₀) (hPO x (hU x hx).1) (hPO _ hex.choose_spec.1)
+      (hU x hx).2 hex.choose_spec.2
+  have hpB : pB ∈ S := by
+    simp only [pB]
+    split_ifs with hex
+    · exact hS _ hex.choose_spec.1
+    · exact hS x₀ hx₀
+  obtain ⟨vk, hvk, hvk'⟩ := exists_pairVec O hT v
+  obtain ⟨vb, hvb, hvb'⟩ := exists_pairVec O hT w
+  have hTE : Disjoint T E := Finset.disjoint_left.mpr fun x hxT hxE ↦
+    (Finset.mem_filter.mp hxE).2 (hT x hxT)
+  let b : RankOneBlock ι q := ⟨T, E, hTE, vk, vb⟩
+  obtain ⟨M, m₁, m₂, m₃, -, m₄, -, m₅⟩ := exists_rankOneBlock_monomial b S own own
+    (pA := pA) (pB := pB) (pA' := pA) (pB' := pB) (fun x hx ↦ (Finset.mem_filter.mp hx).2.2)
+    hB (fun x hx ↦ (Finset.mem_filter.mp hx).2.2) hB (fun _ _ ↦ rfl) (hvk.trans hv)
+    (hvb.trans hw) (hS x₀ hx₀) hpB (hS x₀ hx₀) hpB
+  exact ⟨b, fun x ↦ by simp [b, E], hvk', hvb', M, m₁, m₂, m₃, m₄, m₅⟩
+
+/-- **The block of a bra vertex.** Let `f` be a unit vector on a group `O` of sites, read as the
+covector `⟨f|`. There are a block on the sites of `O` and a scalar `s` of modulus at most one
+with `f(c|_O) = s · \overline{w(c)}` and the zero vector as ket, whose operator `|0⟩⟨w|_O ⊗ 1` is,
+in canonical site coordinates, an allowed monomial on the sheet using only the parties of `S`,
+with at most one pair source and one pair effect when `O` is nonempty and none otherwise. When `O`
+is nonempty its owners must lie in a set of at most two parties of `S`; the block is then that of
+`exists_groupBlock` and `s = 1`. When `O` is empty, the block is trivial and `s = f(·)`. -/
+theorem exists_braVertexBlock (own : ι → Party) (S : Finset Party)
+    (O : ι → Prop) [DecidablePred O]
+    (hO : (∃ x, O x) → ∃ P : Finset Party, P.card ≤ 2 ∧ ∀ x, O x → own x ∈ P ∧ own x ∈ S)
+    (f : EuclideanSpace ℂ ({x // O x} → Fin q)) (hf : ‖f‖ = 1) :
+    ∃ (b : RankOneBlock ι q) (s : ℂ), ‖s‖ ≤ 1 ∧ (∀ x, x ∈ b.E ↔ ¬O x) ∧
+      (∀ c, b.ketAt c = if ∀ x, O x → c x = 0 then 1 else 0) ∧
+      (∀ c, f (fun x ↦ c x.1) = s * star (b.braAt c)) ∧
+      ∃ M : Monomial (Finset.univ : Finset Party) (univSheet q own) (univSheet q own),
+        M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly S ∧
+        M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        M.effectCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        M.op chainEv = reindex (univSheetEquiv own).symm (univSheetEquiv own).symm b.op := by
+  classical
+  by_cases hne : ∃ x, O x
+  · obtain ⟨P, hP, hPO⟩ := hO hne
+    have hfo : Orthonormal ℂ fun _ : Unit ↦ f := by
+      rw [orthonormal_iff_ite]
+      intro _ _
+      simp [inner_self_eq_norm_sq_to_K, hf]
+    obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₃, m₄, m₅⟩ := exists_groupBlock own S O hne
+      ⟨P, hP, fun x hx ↦ (hPO x hx).1⟩ (fun x hx ↦ (hPO x hx).2) (zeroGroupVec O)
+      (Network.WholeGroup.conjFamily (fun _ : Unit ↦ f) ()) (norm_zeroGroupVec O)
+      ((Network.WholeGroup.orthonormal_conjFamily hfo).1 ())
+    refine ⟨b, 1, by simp, hbE, fun c ↦ by rw [hbK, zeroGroupVec_apply], fun c ↦ ?_, M, m₁,
+      m₂, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
+    rw [hbB]
+    simp [Network.WholeGroup.conjFamily]
+  · refine ⟨emptyBlock, f fun x ↦ (0 : ι → Fin q) x.1, ?_, fun x ↦ ?_, fun c ↦ ?_,
+      fun c ↦ ?_, .done _, trivial, trivial, Nat.zero_le _, Nat.zero_le _, ?_⟩
+    · rw [← hf]
+      exact PiLp.norm_apply_le f _
+    · simpa [emptyBlock] using fun h ↦ hne ⟨x, h⟩
+    · rw [emptyBlock_ketAt, ite_eq_left fun x h ↦ absurd ⟨x, h⟩ hne]
+    · rw [emptyBlock_braAt, star_one, mul_one]
+      exact congrArg (fun d ↦ f d) (funext fun (x : {x // O x}) ↦ absurd ⟨x.1, x.2⟩ hne)
+    · rw [PartyCircuit.op_done, emptyBlock_op, reindex_apply, submatrix_one_equiv]
+
+/-- **The block of a ket vertex.** The analogue of `exists_braVertexBlock` for the vector `|f⟩`:
+a block on the sites of `O` with zero bra and ket reading `f` up to a scalar `s` of modulus at
+most one. -/
+theorem exists_ketVertexBlock (own : ι → Party) (S : Finset Party)
+    (O : ι → Prop) [DecidablePred O]
+    (hO : (∃ x, O x) → ∃ P : Finset Party, P.card ≤ 2 ∧ ∀ x, O x → own x ∈ P ∧ own x ∈ S)
+    (f : EuclideanSpace ℂ ({x // O x} → Fin q)) (hf : ‖f‖ = 1) :
+    ∃ (b : RankOneBlock ι q) (s : ℂ), ‖s‖ ≤ 1 ∧ (∀ x, x ∈ b.E ↔ ¬O x) ∧
+      (∀ c, b.braAt c = if ∀ x, O x → c x = 0 then 1 else 0) ∧
+      (∀ c, f (fun x ↦ c x.1) = s * b.ketAt c) ∧
+      ∃ M : Monomial (Finset.univ : Finset Party) (univSheet q own) (univSheet q own),
+        M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly S ∧
+        M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        M.effectCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        M.op chainEv = reindex (univSheetEquiv own).symm (univSheetEquiv own).symm b.op := by
+  classical
+  by_cases hne : ∃ x, O x
+  · obtain ⟨P, hP, hPO⟩ := hO hne
+    obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₃, m₄, m₅⟩ := exists_groupBlock own S O hne
+      ⟨P, hP, fun x hx ↦ (hPO x hx).1⟩ (fun x hx ↦ (hPO x hx).2) f (zeroGroupVec O) hf
+      (norm_zeroGroupVec O)
+    refine ⟨b, 1, by simp, hbE, fun c ↦ by rw [hbB, zeroGroupVec_apply], fun c ↦ by
+      rw [hbK, one_mul], M, m₁, m₂, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
+  · refine ⟨emptyBlock, f fun x ↦ (0 : ι → Fin q) x.1, ?_, fun x ↦ ?_, fun c ↦ ?_,
+      fun c ↦ ?_, .done _, trivial, trivial, Nat.zero_le _, Nat.zero_le _, ?_⟩
+    · rw [← hf]
+      exact PiLp.norm_apply_le f _
+    · simpa [emptyBlock] using fun h ↦ hne ⟨x, h⟩
+    · rw [emptyBlock_braAt, ite_eq_left fun x h ↦ absurd ⟨x, h⟩ hne]
+    · rw [emptyBlock_ketAt, mul_one]
+      exact congrArg (fun d ↦ f d) (funext fun (x : {x // O x}) ↦ absurd ⟨x.1, x.2⟩ hne)
+    · rw [PartyCircuit.op_done, emptyBlock_op, reindex_apply, submatrix_one_equiv]
+
+end Monomials
 
 end TNLean.PEPS.EncodedFrame
 
