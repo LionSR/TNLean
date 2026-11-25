@@ -4481,7 +4481,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `Matrix.toLin_mul` in the standard orthonormal basis.
 - **Reuse:** `Matrix.toEuclideanLin_mul` in `QICLean/Analysis/TraceNorm/TraceNormAbs.lean` (QICLean dependency) is the shared
   layer-0 statement.
-- **Result:** `QICLean/Analysis/Projection/ReducedProjection.lean` uses the shared theorem directly,
+- **Result:** `QICLean/Analysis/Support/ReducedProjection.lean` uses the shared theorem directly,
   and `PositiveOnAbelian.Internal.toEuclideanLin_mul` remains as a compatibility wrapper for
   its three existing QICLean Channel call sites. The two-copy candidate was promoted early as required
   by issue #6525, preventing a third layer-crossing copy.
@@ -6982,7 +6982,7 @@ current counts and full location lists).
   `re_trace_posPart_map_le_of_scaledTrace` (scaled-trace case) before
   factoring (review on 2026-08-09).
 - **Abstraction:** `Matrix.re_trace_posPart_map_le_aux` in
-  `QICLean/Analysis/Norm/TraceNormContractivity.lean` (QICLean dependency) isolates the shared
+  `QICLean/Analysis/TraceNorm/TraceNormContractivity.lean` (QICLean dependency) isolates the shared
   projection-chaining estimate; both source-facing lemmas are now
   one-`calc`-block corollaries.
 - **Notes:** the abstraction removes ~15 duplicated proof lines from each
@@ -7262,7 +7262,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   almost-everywhere vanishing, then use continuity and
   `Measure.eqOn_open_of_ae_eq` to obtain pointwise vanishing.
 - **Seen:** 2 occurrences across 2 files:
-  `QICLean/Entropy/Relative/WeylRelativeEntropyIntegral.lean` in
+  `QICLean/Entropy/Recovery/WeylRelativeEntropyIntegral.lean` in
   `weyl_sourceB_defect_eq_zero_of_gap_eq_zero`, and
   `QICLean/Entropy/Relative/SupportRelativeEntropyGap.lean` in
   `supportSourceBDefect_eq_zero_of_relativeEntropy_sum_eq` (2026-07-27).

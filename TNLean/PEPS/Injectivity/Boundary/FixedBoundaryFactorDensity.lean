@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Entropy.Renyi.FlatDensityEntropy
 import QICLean.Analysis.Real.ComplexSqrt
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
-import QICLean.Channel.Entanglement.MaximallyEntangled
+import QICLean.Algebra.Kronecker.MaximallyEntangled
 import QICLean.Algebra.PartialTrace
 
 /-!

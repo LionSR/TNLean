@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.Regular.RegularCycleControlledBoundary
 import TNLean.PEPS.Tensor.GraphState.RegularBoundaryState
-import QICLean.Channel.Entanglement.MaximallyEntangled
+import QICLean.Algebra.Kronecker.MaximallyEntangled
 
 /-!
 # A common relative-boundary factor of actual controlled blocks

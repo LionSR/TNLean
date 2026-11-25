@@ -2542,13 +2542,17 @@ most 37 parts.
 
 #### Directories named for a technique or proof stage
 * `Scan` (213) disappears. Generic part, flagged and kept beside its consumer:
-  `ChargeBinomialBound`, `TimedChargePaths` (combinatorics), `ChargePathCounting` (graph),
-  `RegionalMoveEntropy` (entropy). The rest is the argument of Propositions 9.2–9.6 and is
+  `TimedChargePaths` (combinatorics), `ChargePathCounting` (graph). Two further generic
+  modules are now in QICLean: `ChargeBinomialBound` (in
+  `Analysis/Real/ExcitationSubsetCounts`) and `RegionalMoveEntropy`
+  (`ManyBody/Replica/BandMetric/MoveEntropy`). The rest is the argument of Propositions
+  9.2–9.6 and is
   divided by object into `Collar`, `Scales`, `Histories`, `Statuses`, `Rounds`,
   `NormComparisons`, `ChargePoints`, `CollarInformation`, `BoxExponent`;
   `PhysicalTemplateInformation` goes to the root.
 * `Geometry` (189) disappears. Generic part: `Squares` (14) and `Templates` (29 with
-  `TwoFamilies`), plus `SparseBelts` (combinatorics, kept in `Layers`). Directory
+  `TwoFamilies`); `SparseBelts` (combinatorics) is now in QICLean
+  (`Algebra/Combinatorics/ZModIntCast`). Directory
   `Fans` was planned as generic but its defining module `CellFans` states the fans of the
   actual belt cells (it mentions `BeltMarks`), so it is the argument's. The argument of
   Proposition 11.2: `Layers`, `Fans`, `InitialRegions`, `RepairStages`, `Stars`,

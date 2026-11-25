@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Representation.Permutation.RegularBlocking
 import TNLean.PEPS.Injectivity.Multiplicity.GraphAveragingBondState
 import TNLean.PEPS.Injectivity.Regular.RegularTorusSite
-import QICLean.Channel.Entanglement.MaximallyEntangled
+import QICLean.Algebra.Kronecker.MaximallyEntangled
 
 /-!
 # Physical separation of regular bond bundles on a finite graph

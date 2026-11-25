@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.VaryingBond.VaryingBondChain
 import QICLean.Algebra.Combinatorics.IndexInduction
 import QICLean.Kraus.RectangularChain
-import QICLean.Channel.Choi.WindowMinorization
+import QICLean.Channel.FixedPoint.Stationary.WindowMinorization
 
 /-!
 # Actual rectangular intervals of a varying-bond ring

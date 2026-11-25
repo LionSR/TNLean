@@ -11,7 +11,7 @@ was removed in the same change, so no `@[deprecated] alias` is retained.
 
 | Removed | Replacement |
 | --- | --- |
-| `MPOTensor.exists_units_for_hat_reducedProjection` (`TNLean/MPS/MPU/Index/ReducedToHatTransport.lean`) | `Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor` (`QICLean/Analysis/Projection/ReducedProjection.lean`) |
+| `MPOTensor.exists_units_for_hat_reducedProjection` (`TNLean/MPS/MPU/Index/ReducedToHatTransport.lean`) | `Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor` (`QICLean/Analysis/Support/ReducedProjection.lean`) |
 
 ## What was checked
 
@@ -32,7 +32,7 @@ The forwarder had no Lean consumer: a name search across `TNLean/` (excluding
 `Archive/`) found only its own definition, and a root `lake build` after the
 deletion named no importer.
 
-The module keeps both of its imports. `QICLean.Analysis.Projection.ReducedProjection`
+The module keeps both of its imports. `QICLean.Analysis.Support.ReducedProjection`
 is still required, because `Matrix.reducedProjection` and
 `Matrix.reducedProjection_mul_second` appear in the three surviving theorems of
 the file. The module docstring's supplied-fixed-pair scope-restriction marker is

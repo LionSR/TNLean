@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadHistoryTimeUnion
-import TNLean.PEPS.AreaLaw.Collar.Scales.ChargeBinomialBound
+import QICLean.Analysis.Real.ExcitationSubsetCounts
 
 /-!
 # A geometric finite tail for actual bad scan histories
@@ -57,7 +57,7 @@ theorem badEndpointTail_le_geometricBadTail (S : CollarScan V I) (k μ : ℕ)
   have hwR : ((recentChargeTimes k (4 * S.n * (S.r₀ * j + 1))).card : ℝ) ≤
       (9 * (S.n : ℝ) * S.r₀) * j := by exact_mod_cast hw
   simpa only [badChargeRatio, div_eq_mul_inv, one_mul] using
-    choose_mul_pow_le_of_window_bound
+    Nat.choose_mul_pow_le_exp_mul_pow
       (recentChargeTimes k (4 * S.n * (S.r₀ * j + 1))).card j hjpos
       ((((1 + 2 * (2 * S.r₀) * (2 * S.r₀ + 1)) * μ : ℕ) : ℝ) *
         (1 / (2 * (S.M : ℝ)))) (9 * (S.n : ℝ) * S.r₀) (by positivity) hwR
