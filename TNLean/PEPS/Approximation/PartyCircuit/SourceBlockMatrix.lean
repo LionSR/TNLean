@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PartyCircuit.PreparedMatrixNorm
-import TNLean.Lattice.Compression.SourceSlotBasis
 
 /-!
 # Joint contraction of free source inputs
@@ -24,145 +23,128 @@ reused.
 
 noncomputable section
 
-open scoped TensorProduct Matrix Matrix.Norms.L2Operator
-open ContinuousLinearMap
+open scoped ComplexConjugate Matrix Matrix.Norms.L2Operator
+open Matrix ManyBody
 
-namespace TNLean.Lattice.PartyCircuit.Word
+namespace QuantumCircuit.Party.Word
 
-variable {P m n : Type} [Fintype m] [Fintype n]
-    (R : SourceInventory P) (U V : Fin R.length → HSpace)
-    {A B : Fin R.length → Type} [∀ i, Fintype (A i)] [∀ i, Fintype (B i)]
-    (bU : ∀ i, OrthonormalBasis (A i) ℂ (U i))
-    (bV : ∀ i, OrthonormalBasis (B i) ℂ (V i))
-    (ℓ : Layout P) {ℓ' : Layout P}
+open SourceInventory
+
+variable {P : Type} [Fintype P] [DecidableEq P] (R : SourceInventory P)
+  (B : SlotBases R.length) (X : P → Type) [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
+  {Y : P → Type} [∀ p, Fintype (Y p)]
+
+omit [Fintype P] [DecidableEq P] [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
+  [∀ p, Fintype (Y p)] in
+/-- The slot vector of basis vectors is a basis vector. -/
+private theorem slotVector_single (a : ∀ i, B.left i × B.right i) :
+    slotVector R B (fun i ↦ EuclideanSpace.vecKron
+      (EuclideanSpace.single (a i).1 (1 : ℂ)) (EuclideanSpace.single (a i).2 1)) =
+      EuclideanSpace.single a 1 := by
+  ext f
+  rw [slotVector_apply, PiLp.single_apply]
+  split_ifs with h
+  · subst h
+    simp [EuclideanSpace.vecKron]
+  · obtain ⟨i, hi⟩ := Function.ne_iff.mp h
+    refine Finset.prod_eq_zero (Finset.mem_univ i) ?_
+    by_cases h₁ : (f i).1 = (a i).1
+    · have h₂ : (f i).2 ≠ (a i).2 := fun h₂ ↦ hi (Prod.ext h₁ h₂)
+      simp [EuclideanSpace.vecKron, h₂]
+    · simp [EuclideanSpace.vecKron, h₁]
 
 /-- The matrix of the remaining word with every source coordinate and every
 physical input coordinate free. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 383–427. -/
-def freeSourceMatrix (v : Word (SourceInventory.slotLayout R U V ++ ℓ) ℓ')
-    (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bOut : OrthonormalBasis m ℂ (Mem ℓ')) :
-    Matrix m ((∀ i, A i × B i) × n) ℂ := by
-  classical
-  exact LinearMap.toMatrix
-    (SourceInventory.preparedInputBasis R U V bU bV ℓ bIn).toBasis
-    bOut.toBasis v.eval.toLinearMap
+def freeSourceMatrix (v : Word (slotSystem R B X) Y) :
+    Matrix (Config Y) ((∀ i, B.left i × B.right i) × Config X) ℂ :=
+  v.op.submatrix id (slotColumnEquiv R B X).symm
 
+omit [∀ p, Fintype (Y p)] in
 /-- A block of the full matrix is the actual branch prepared with the corresponding
 endpoint basis vectors. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 409–427. -/
-theorem freeSourceMatrix_apply
-    (v : Word (SourceInventory.slotLayout R U V ++ ℓ) ℓ')
-    (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bOut : OrthonormalBasis m ℂ (Mem ℓ'))
-    (a : ∀ i, A i × B i) (j : n) (k : m) :
-    v.freeSourceMatrix R U V bU bV ℓ bIn bOut k (a, j) =
-      v.preparedMatrix R U V (fun i ↦ bU i (a i).1 ⊗ₜ bV i (a i).2)
-        ℓ bIn bOut k j := by
-  classical
-  simp only [freeSourceMatrix, preparedMatrix, LinearMap.toMatrix_apply,
-    OrthonormalBasis.coe_toBasis, SourceInventory.preparedInputBasis_apply,
-    ContinuousLinearMap.coe_coe, ContinuousLinearMap.comp_apply]
+theorem freeSourceMatrix_apply (v : Word (slotSystem R B X) Y)
+    (a : ∀ i, B.left i × B.right i) (j : Config X) (k : Config Y) :
+    v.freeSourceMatrix R B X k (a, j) =
+      v.preparedMatrix R B (fun i ↦ EuclideanSpace.vecKron
+        (EuclideanSpace.single (a i).1 1) (EuclideanSpace.single (a i).2 1)) X k j := by
+  rw [preparedMatrix, op_prepareSlots, slotVector_single, mul_apply,
+    ← (slotColumnEquiv R B X).symm.sum_comp, Fintype.sum_prod_type]
+  simp only [prepMatrix_apply, Equiv.apply_symm_apply, PiLp.single_apply, mul_ite, mul_one,
+    mul_zero]
+  rw [Finset.sum_eq_single a (fun b _ hb ↦ by simp [hb]) (by simp),
+    Finset.sum_eq_single j (fun b _ hb ↦ by simp [hb]) (by simp)]
+  simp [freeSourceMatrix]
 
-open Classical in
 /-- The complete matrix is a contraction on arbitrary joint source/input vectors.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 383–427. -/
-theorem norm_freeSourceMatrix_le_one
-    (v : Word (SourceInventory.slotLayout R U V ++ ℓ) ℓ') (hv : v.IsAllowed)
-    (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bOut : OrthonormalBasis m ℂ (Mem ℓ')) :
-    ‖v.freeSourceMatrix R U V bU bV ℓ bIn bOut‖ ≤ 1 := by
-  classical
-  rw [freeSourceMatrix, ContinuousLinearMap.norm_toMatrix_orthonormal]
-  exact v.norm_eval_le_one hv
+theorem norm_freeSourceMatrix_le_one (v : Word (slotSystem R B X) Y) (hv : v.IsAllowed) :
+    ‖v.freeSourceMatrix R B X‖ ≤ 1 :=
+  (l2_opNorm_submatrix_le_of_injective _ Function.injective_id
+    (slotColumnEquiv R B X).symm.injective).trans (PartyCircuit.norm_op_le_one _ hv)
 
 section BraKet
 
-variable {n' : Type} [Fintype n']
-    (R' : SourceInventory P) (U' V' : Fin R'.length → HSpace)
-    {A' B' : Fin R'.length → Type} [∀ i, Fintype (A' i)] [∀ i, Fintype (B' i)]
-    (bU' : ∀ i, OrthonormalBasis (A' i) ℂ (U' i))
-    (bV' : ∀ i, OrthonormalBasis (B' i) ℂ (V' i))
-    (ℓb : Layout P)
+variable (R' : SourceInventory P) (B' : SlotBases R'.length) (X' : P → Type)
+  [∀ p, Fintype (X' p)] [∀ p, DecidableEq (X' p)]
 
 /-- The overlap of the complete bra and ket operators has exactly the overlaps
 of the prepared coefficient operators as its blocks. The bra source assignment
-is the row index. Their source and physical input spaces may differ.
+is the row index. Their source and physical input systems may differ.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–468. -/
-theorem freeSourceMatrix_conjTranspose_mul_apply
-    (v : Word (SourceInventory.slotLayout R U V ++ ℓ) ℓ')
-    (v' : Word (SourceInventory.slotLayout R' U' V' ++ ℓb) ℓ')
-    (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bBra : OrthonormalBasis n' ℂ (Mem ℓb))
-    (bOut : OrthonormalBasis m ℂ (Mem ℓ'))
-    (a : ∀ i, A i × B i) (b : ∀ i, A' i × B' i) (i : n) (j : n') :
-    ((v'.freeSourceMatrix R' U' V' bU' bV' ℓb bBra bOut)ᴴ *
-      v.freeSourceMatrix R U V bU bV ℓ bIn bOut) (b, j) (a, i) =
-    ((v'.preparedMatrix R' U' V' (fun e ↦ bU' e (b e).1 ⊗ₜ bV' e (b e).2)
-        ℓb bBra bOut)ᴴ *
-      v.preparedMatrix R U V (fun e ↦ bU e (a e).1 ⊗ₜ bV e (a e).2)
-        ℓ bIn bOut) j i := by
-  classical
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, freeSourceMatrix_apply]
+theorem freeSourceMatrix_conjTranspose_mul_apply (v : Word (slotSystem R B X) Y)
+    (v' : Word (slotSystem R' B' X') Y)
+    (a : ∀ i, B.left i × B.right i) (b : ∀ i, B'.left i × B'.right i) (i : Config X)
+    (j : Config X') :
+    ((v'.freeSourceMatrix R' B' X')ᴴ * v.freeSourceMatrix R B X) (b, j) (a, i) =
+      ((v'.preparedMatrix R' B' (fun e ↦ EuclideanSpace.vecKron
+          (EuclideanSpace.single (b e).1 1) (EuclideanSpace.single (b e).2 1)) X')ᴴ *
+        v.preparedMatrix R B (fun e ↦ EuclideanSpace.vecKron
+          (EuclideanSpace.single (a e).1 1) (EuclideanSpace.single (a e).2 1)) X) j i := by
+  simp only [mul_apply, conjTranspose_apply, freeSourceMatrix_apply]
 
-open Classical in
 /-- The actual bra-adjoint–ket product is a rectangular contraction, with no
 factor depending on the number of source coordinates. Source: polynomial-PEPS
 Theorem 5.2, `04-compression.tex`, lines 409–427. -/
-theorem norm_freeSourceMatrix_conjTranspose_mul_le_one
-    (v : Word (SourceInventory.slotLayout R U V ++ ℓ) ℓ')
-    (v' : Word (SourceInventory.slotLayout R' U' V' ++ ℓb) ℓ')
-    (hv : v.IsAllowed) (hv' : v'.IsAllowed)
-    (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bBra : OrthonormalBasis n' ℂ (Mem ℓb))
-    (bOut : OrthonormalBasis m ℂ (Mem ℓ')) :
-    ‖(v'.freeSourceMatrix R' U' V' bU' bV' ℓb bBra bOut)ᴴ *
-      v.freeSourceMatrix R U V bU bV ℓ bIn bOut‖ ≤ 1 := by
+theorem norm_freeSourceMatrix_conjTranspose_mul_le_one (v : Word (slotSystem R B X) Y)
+    (v' : Word (slotSystem R' B' X') Y) (hv : v.IsAllowed) (hv' : v'.IsAllowed) :
+    ‖(v'.freeSourceMatrix R' B' X')ᴴ * v.freeSourceMatrix R B X‖ ≤ 1 := by
   classical
-  apply (Matrix.l2_opNorm_mul _ _).trans
-  rw [Matrix.l2_opNorm_conjTranspose]
-  exact (mul_le_mul (norm_freeSourceMatrix_le_one R' U' V' bU' bV' ℓb v' hv' bBra bOut)
-    (norm_freeSourceMatrix_le_one R U V bU bV ℓ v hv bIn bOut)
-    (norm_nonneg _) zero_le_one).trans (by simp)
+  refine l2_opNorm_mul_le_one _ _ ?_ (norm_freeSourceMatrix_le_one R B X v hv)
+  rw [l2_opNorm_conjTranspose]
+  exact norm_freeSourceMatrix_le_one R' B' X' v' hv'
 
 /-- A rectangular input coefficient pairs with the opposite-index block of the
 actual bra-adjoint–ket operator after the common output is traced out.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–468. -/
-theorem trace_preparedMatrix_mul_conjTranspose_eq
-    (v : Word (SourceInventory.slotLayout R U V ++ ℓ) ℓ')
-    (v' : Word (SourceInventory.slotLayout R' U' V' ++ ℓb) ℓ')
-    (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bBra : OrthonormalBasis n' ℂ (Mem ℓb))
-    (bOut : OrthonormalBasis m ℂ (Mem ℓ'))
-    (ρ : Matrix n n' ℂ) (a : ∀ i, A i × B i) (b : ∀ i, A' i × B' i) :
-    Matrix.trace
-      (v.preparedMatrix R U V (fun e ↦ bU e (a e).1 ⊗ₜ bV e (a e).2) ℓ bIn bOut *
-        ρ * (v'.preparedMatrix R' U' V'
-          (fun e ↦ bU' e (b e).1 ⊗ₜ bV' e (b e).2) ℓb bBra bOut)ᴴ) =
-    ∑ i, ∑ j, ρ i j *
-      ((v'.freeSourceMatrix R' U' V' bU' bV' ℓb bBra bOut)ᴴ *
-        v.freeSourceMatrix R U V bU bV ℓ bIn bOut) (b, j) (a, i) := by
-  classical
-  rw [Matrix.trace_mul_cycle, Matrix.trace_mul_comm]
+theorem trace_preparedMatrix_mul_conjTranspose_eq (v : Word (slotSystem R B X) Y)
+    (v' : Word (slotSystem R' B' X') Y) (ρ : Matrix (Config X) (Config X') ℂ)
+    (a : ∀ i, B.left i × B.right i) (b : ∀ i, B'.left i × B'.right i) :
+    trace
+      (v.preparedMatrix R B (fun e ↦ EuclideanSpace.vecKron
+          (EuclideanSpace.single (a e).1 1) (EuclideanSpace.single (a e).2 1)) X * ρ *
+        (v'.preparedMatrix R' B' (fun e ↦ EuclideanSpace.vecKron
+          (EuclideanSpace.single (b e).1 1) (EuclideanSpace.single (b e).2 1)) X')ᴴ) =
+      ∑ i, ∑ j, ρ i j *
+        ((v'.freeSourceMatrix R' B' X')ᴴ * v.freeSourceMatrix R B X) (b, j) (a, i) := by
+  rw [trace_mul_cycle, trace_mul_comm]
   simp only [freeSourceMatrix_conjTranspose_mul_apply]
   rfl
 
 end BraKet
 
-variable {A' B' : Fin R.length → Type} [∀ i, Fintype (A' i)] [∀ i, Fintype (B' i)]
-    (bU' : ∀ i, OrthonormalBasis (A' i) ℂ (U i))
-    (bV' : ∀ i, OrthonormalBasis (B' i) ℂ (V i))
-
 /-- Tracing an actual density coefficient pairs the input matrix with the
 corresponding block of the complete bra-adjoint–ket contraction. The input
 matrix need not be Hermitian or positive. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 409–468. -/
-theorem trace_preparedDensityCoefficient_eq_freeSourceMatrix
-    (v v' : Word (SourceInventory.slotLayout R U V ++ ℓ) ℓ')
-    (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bOut : OrthonormalBasis m ℂ (Mem ℓ'))
-    (ρ : Matrix n n ℂ) (a : ∀ i, A i × B i) (b : ∀ i, A' i × B' i) :
-    Matrix.trace (v.preparedDensityCoefficient R U V
-      (fun e ↦ bU e) (fun e ↦ bV e) (fun e ↦ bU' e) (fun e ↦ bV' e)
-      ℓ v' bIn bOut ρ a b) =
-    ∑ i, ∑ j, ρ i j *
-      ((v'.freeSourceMatrix R U V bU' bV' ℓ bIn bOut)ᴴ *
-        v.freeSourceMatrix R U V bU bV ℓ bIn bOut) (b, j) (a, i) := by
-  classical
-  exact trace_preparedMatrix_mul_conjTranspose_eq R U V bU bV ℓ
-    R U V bU' bV' ℓ v v' bIn bIn bOut ρ a b
+theorem trace_preparedDensityCoefficient_eq_freeSourceMatrix (v v' : Word (slotSystem R B X) Y)
+    (ρ : Matrix (Config X) (Config X) ℂ) (a b : ∀ i, B.left i × B.right i) :
+    trace (v.preparedDensityCoefficient R B X (fun _ a ↦ EuclideanSpace.single a 1)
+        (fun _ a ↦ EuclideanSpace.single a 1) (fun _ a ↦ EuclideanSpace.single a 1)
+        (fun _ a ↦ EuclideanSpace.single a 1) v' ρ a b) =
+      ∑ i, ∑ j, ρ i j *
+        ((v'.freeSourceMatrix R B X)ᴴ * v.freeSourceMatrix R B X) (b, j) (a, i) :=
+  trace_preparedMatrix_mul_conjTranspose_eq R B X R B X v v' ρ a b
 
-end TNLean.Lattice.PartyCircuit.Word
+end QuantumCircuit.Party.Word

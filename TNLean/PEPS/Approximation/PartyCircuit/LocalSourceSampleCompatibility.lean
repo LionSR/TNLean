@@ -16,21 +16,20 @@ and 568–579.
 -/
 
 noncomputable section
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice TNLean.Lattice.PartyCircuit
-open TNLean.Lattice.Compression
-variable {P : Type}
+namespace QuantumCircuit.Party.SourceCircuit
+open TNLean.Network
+variable {P : Type} [DecidableEq P]
 
 open Classical in
 /-- Restriction through the distributed incident-sample indices is exactly
 restriction through the original ordered source-slot indices. No extension
 of a local assignment is used. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 342–417 and 568–579. -/
-theorem restrict_sourceSampleAssignment_eq {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (k : ℕ) (j : w.sourceLocations → Fin k) :
+theorem restrict_sourceSampleAssignment_eq {X Y : P → Type}
+    (w : SourceCircuit X Y) (p : P) (k : ℕ) (j : w.sourceLocations → Fin k) :
     let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
       (affectedOwner (fun _ : P ↦ true) t)
-    (fun s : Lattice.Compression.DistributedOperatorContraction.SampleAt
+    (fun s : DistributedOperatorContraction.SampleAt
         (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) p ↦
       j ((sourceSampleEquiv w).symm s.1)) ∘ partialSlotSampleEquiv w p =
       fun i : Fin (partialSlots A w).length ↦ j (partialSlotEquiv A w i).1 := by
@@ -41,4 +40,4 @@ theorem restrict_sourceSampleAssignment_eq {a b : Layout P}
     (sourceSampleEquiv w (partialSlotEquiv A w i).1)) = _
   rw [Equiv.symm_apply_apply]
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

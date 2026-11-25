@@ -3,13 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.PartyCircuit.CommonPartyMaps
+import QICLean.Circuit.Party.Source.PartyMaps
 
 /-!
 # The source expansion of a gate in common private spaces
 
 A finite linear combination of allowed source-only words has an exact source
-expansion with one common halfspace at each endpoint of every pair of parties.
+expansion with one common slot basis at each endpoint of every pair of parties.
 Each branch source is normalized and each party map is a contraction. The
 coefficients are precisely those of the original expansion; the gate itself
 need not be a contraction for this identity.
@@ -23,42 +23,28 @@ reused.
 
 noncomputable section
 
-open scoped InnerProductSpace TensorProduct
-open ContinuousLinearMap
+open Matrix
+open scoped Matrix.Norms.L2Operator
 
-namespace TNLean
-open TNLean.Lattice.PartyCircuit
+namespace QuantumCircuit.Party.Word
 
-namespace Lattice.PartyCircuit
-/-- The actual weighted gate has a source expansion in fixed private spaces,
+/-- The actual weighted gate has a source expansion in fixed slot bases,
 with its original coefficients and with normalized sources and local contractions.
 Source: polynomial-PEPS manuscript, `eq:compression-source-gate`,
 `04-compression.tex`, lines 233–267. -/
-theorem Word.exists_common_source_gate {P ι : Type} [Fintype P] [Fintype ι]
-    {ℓ ℓ' : Layout P} (c : ι → ℂ) (w : ι → Word ℓ ℓ')
-    (hw : ∀ ξ, (w ξ).IsAllowed) :
-    let ps := (Finset.univ : Finset P).toList
+theorem exists_common_source_gate {P ι : Type} [Fintype P] [DecidableEq P] [Fintype ι]
+    {X Y : P → Type} [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)] [∀ p, Fintype (Y p)]
+    (c : ι → ℂ) (w : ι → Word X Y) (hw : ∀ ξ, (w ξ).IsAllowed) :
     ∃ R : SourceInventory P, (R.map PairSource.partyPair).Nodup ∧
       (∀ k, k ∈ R.map PairSource.partyPair ↔ ¬ k.IsDiag) ∧
-      ∃ U V : Fin R.length → HSpace, ∃ η : ι → ∀ i, U i ⊗[ℂ] V i,
+      ∃ (B : SourceInventory.SlotBases R.length)
+        (η : ι → ∀ i, EuclideanSpace ℂ (B.left i × B.right i)),
         (∀ ξ i, ‖η ξ i‖ = 1) ∧
-        ∃ B : ι → ∀ p,
-          Mem (Layout.atParty p (SourceInventory.slotLayout R U V ++ ℓ)) →L[ℂ]
-            Mem (Layout.atParty p ℓ'),
-          (∀ ξ p, ‖B ξ p‖ ≤ 1) ∧
-          isoL (groupByPartyIso ps ℓ' (Finset.nodup_toList _) (by simp [ps])) ∘L
-              (∑ ξ, c ξ • (w ξ).eval) =
-            ∑ ξ, c ξ • (tensorPartyMaps (SourceInventory.slotLayout R U V ++ ℓ) ℓ'
-              (B ξ) ps ∘L
-                isoL (groupByPartyIso ps (SourceInventory.slotLayout R U V ++ ℓ)
-                  (Finset.nodup_toList _) (by simp [ps])) ∘L
-                (SourceInventory.prepareSlots R U V (η ξ) ℓ).eval) := by
-  classical
-  dsimp only
-  obtain ⟨R, hR, hRK, U, V, η, hη, B, hB, he⟩ :=
-    Word.exists_common_prepared_tensorPartyMaps w hw
-  refine ⟨R, hR, hRK, U, V, η, hη, B, hB, ?_⟩
-  simp only [comp_finsetSum, comp_smul, he]
+        ∃ A : ι → ∀ p, Matrix (Y p) (SourceInventory.slotSystem R B X p) ℂ,
+          (∀ ξ p, ‖A ξ p‖ ≤ 1) ∧
+          ∑ ξ, c ξ • (w ξ).op =
+            ∑ ξ, c ξ • (piKronecker (A ξ) * (SourceInventory.prepareSlots R B (η ξ) X).op) := by
+  obtain ⟨R, hR, hRK, B, η, hη, A, hA, he⟩ := exists_common_prepared_localOps w hw
+  exact ⟨R, hR, hRK, B, η, hη, A, hA, Finset.sum_congr rfl fun ξ _ ↦ by rw [he ξ]⟩
 
-end Lattice.PartyCircuit
-end TNLean
+end QuantumCircuit.Party.Word

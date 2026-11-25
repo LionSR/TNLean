@@ -3,221 +3,184 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
-import TNLean.PEPS.Approximation.PartyCircuit.PartyGateOriginalCircuit
+import QICLean.Analysis.Norm.MatrixKroneckerContraction
+import QICLean.Circuit.Party.Original.Basic
+import QICLean.Circuit.Party.Syntax.RestrictMonomial
 
 /-!
-# Pair sources of a sum of monomials read as one gate
+# A sum of monomials on a set of parties as one gate, with its pair sources
 
-A sum `∑_ξ c_ξ M_ξ` of allowed monomials that use only the parties of a finite set `S` is one
-gate of these parties (`PartyGate.exists_originalCircuit`). Its gate expansion consists of the
-parts of the monomials `M_ξ` on the registers of `S`, relabelled by the parties of `S`. Restricting
-to the selected parties keeps every pair source of a monomial using only these parties, and
-relabelling owners turns a pair source into a local preparation at most; hence each monomial of
-the gate has at most as many pair sources as the corresponding `M_ξ`
-(`PartyGate.exists_originalCircuit_isSourceBounded`).
+A bounded change of the protocol of Proposition 7.1 may be a sum `∑_ξ c_ξ M_ξ` of allowed
+monomials, as in the small-patch rewrite of Lemma 6.3, all of which use only the parties of a
+fixed finite set `S` (`06-geometry.tex`, lines 574–583). Such a sum is a weighted gate on a cell
+`D ⊇ S` whose monomials use only `S`; outside `S` they act as the identification of the equal
+bases. Reading every monomial on the parties of `S` (`WeightedGate.restrict`) gives a weighted gate
+on the cell `S` with the same operator, the same coefficients and the same numbers of pair effects
+and pair sources in each monomial. If `S` has a single party, the gate is a contraction of that
+party instead, as the original circuits require.
 
 ## Main results
 
-* `PartyCircuit.Word.sourceCount_selectedPart`, `PartyCircuit.PartyChain.sourceCount_selectedPart`.
-* `PartyCircuit.Word.sourceCount_mapOwner_le`, `PartyCircuit.PartyChain.sourceCount_mapOwner_le`.
-* `PairEffect.isSourceBounded_gateCircuit`.
-* `PartyCircuit.PartyGate.exists_originalCircuit_isSourceBounded`,
-  `PartyCircuit.PartyGate.exists_originalCircuit`.
+* `TNLean.PEPS.PairEffect.norm_le_norm_placeBetween`: placing a matrix on a region does not
+  decrease its norm when the configurations outside the region exist.
+* `QuantumCircuit.Party.WeightedGate.exists_originalCircuit_isSourceBounded`: such a sum is an
+  original circuit with at most one nonprivate gate, whose participants lie in `S`, with the
+  pair-effect, coefficient, monomial and pair-source bounds of the sum.
+* `QuantumCircuit.Party.WeightedGate.exists_originalCircuit`: the same without the pair-source
+  bound.
 
 ## References
 
-* Polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2, item 3, `04-compression.tex`,
-  lines 143–147; allowed monomials, lines 21–43; the factorization
-  `eq:compression-source-gate`, lines 233–251; the gates of Proposition 7.1, `06-geometry.tex`,
-  lines 574–583.
+* Polynomial-PEPS manuscript (September 24, 2026), original circuits, `04-compression.tex`,
+  lines 21–43 and 199–208; Theorem 5.2, item 3, lines 143–147; the gates of Proposition 7.1,
+  `06-geometry.tex`, lines 574–583; Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`,
+  lines 188–218.
 -/
 
 noncomputable section
 
-open ContinuousLinearMap
+open Matrix ManyBody QuantumCircuit.Party
+open scoped Matrix.Norms.L2Operator
 
-namespace TNLean
-open TNLean.Lattice.PartyCircuit TNLean.PEPS.PairEffect
+namespace TNLean.PEPS.PairEffect
 
-variable {P : Type}
+variable {P : Type} [DecidableEq P]
 
-/-! ### Pair sources under restriction and relabelling -/
+variable [Fintype P] {X Y : P → Type} [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
+  [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)]
 
-namespace Lattice.PartyCircuit.Word
+omit [∀ p, DecidableEq (Y p)] in
+/-- **Placing a matrix on a region does not decrease its norm** when the region has a
+complement configuration: the matrix is a submatrix of its placement. -/
+theorem norm_le_norm_placeBetween (D : Finset P) (hXY : ∀ v ∉ D, Y v = X v)
+    (K : Matrix (RegionConfig Y D) (RegionConfig X D) ℂ) (z : ComplConfig X D) :
+    ‖K‖ ≤ ‖placeBetween D hXY K‖ := by
+  classical
+  have hK : K = (placeBetween D hXY K).submatrix
+      (fun a ↦ (cutEquiv Y D).symm (a, complCast hXY z)) (fun b ↦ (cutEquiv X D).symm (b, z)) := by
+    ext a b
+    exact (placeBetween_apply_cutEquiv_symm hXY K a b z).symm
+  conv_lhs => rw [hK]
+  refine l2_opNorm_submatrix_le_of_injective _ (fun a a' h ↦ ?_) (fun b b' h ↦ ?_)
+  · simpa using congrArg Prod.fst ((cutEquiv Y D).symm.injective h)
+  · simpa using congrArg Prod.fst ((cutEquiv X D).symm.injective h)
 
-/-- The number of pair sources of a word is the length of its source inventory. -/
-theorem sourceCount_eq_length_sources {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
-    w.sourceCount = w.sources.length := by
-  induction w with
-  | id => rfl
-  | comp w w' ih ih' =>
-      simp only [sourceCount, Circuit.gateCount, sources, List.length_append, ih, ih', Nat.add_comm]
-  | localMap => rfl
-  | source => rfl
-  | swap => rfl
-  | frame r w ih => exact ih
+/-- The configurations of a one-party region are those of its party. -/
+def singletonConfigEquiv (T : P → Type) {S : Finset P} {p : P} (hS : S = {p}) :
+    RegionConfig T S ≃ T p where
+  toFun y := y ⟨p, hS ▸ Finset.mem_singleton_self p⟩
+  invFun a v := cast (congrArg T (Finset.mem_singleton.mp (hS ▸ v.2)).symm) a
+  left_inv y := by
+    funext v
+    obtain ⟨v, hv⟩ := v
+    obtain rfl := Finset.mem_singleton.mp (hS ▸ hv)
+    rfl
+  right_inv _ := rfl
 
-/-- The selected part of a word keeps all of its pair sources. -/
-@[simp] theorem sourceCount_selectedPart (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
-    (hS : ∀ s ∈ w.sources, f s.left = true ∧ f s.right = true) :
-    (w.selectedPart f hS).sourceCount = w.sourceCount := by
-  simp only [sourceCount_eq_length_sources, selectedPart, sources, sources_castInput,
-    sources_restrict, sources_prepare, List.nil_append]
+omit [∀ p, Fintype (X p)] [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)] in
+/-- A matrix on a one-party region, read on its party and placed back at that party, is the
+matrix placed on the region. -/
+theorem placeBetween_submatrix_singletonConfigEquiv {S : Finset P} {p : P} (hS : S = {p})
+    (hY : ∀ v ∉ S, Y v = X v) (K : Matrix (RegionConfig Y S) (RegionConfig X S) ℂ) :
+    placeBetween {p} (fun v hv ↦ hY v (hS ▸ hv))
+        ((reindex (singletonConfigEquiv Y hS) (singletonConfigEquiv X hS) K).submatrix
+          (fun y ↦ y ⟨p, Finset.mem_singleton_self p⟩)
+          (fun x ↦ x ⟨p, Finset.mem_singleton_self p⟩)) =
+      placeBetween S hY K := by
+  subst hS
+  congr 1
+  ext y x
+  simp only [submatrix_apply, reindex_apply]
+  congr 1 <;> exact (singletonConfigEquiv _ rfl).left_inv _
 
-/-- Relabelling owners does not create pair sources. -/
-theorem sourceCount_mapOwner_le {Q : Type} (g : P → Q) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
-    (w.mapOwner g).sourceCount ≤ w.sourceCount := by
-  rw [sourceCount_eq_length_sources, sourceCount_eq_length_sources, sources_mapOwner]
-  exact List.length_filterMap_le _ _
+end TNLean.PEPS.PairEffect
 
-end Lattice.PartyCircuit.Word
+namespace QuantumCircuit.Party.WeightedGate
 
-namespace Lattice.PartyCircuit.PartyChain
+open TNLean.PEPS.PairEffect
 
-/-- The selected part of a monomial using only selected parties keeps all of its pair
-sources. -/
-@[simp] theorem sourceCount_selectedPart (f : P → Bool) {ℓX ℓY : Layout P}
-    (M : PartyChain ℓX ℓY) (h : M.UsesOnly {p | f p = true}) :
-    (M.selectedPart f h).sourceCount = M.sourceCount := by
-  induction M with
-  | final w => exact w.sourceCount_selectedPart f _
-  | effect hpq α β ℓS w η rest ih =>
-      simp only [selectedPart, sourceCount, Circuit.gateCount_castLayouts,
-        Word.sourceCount_selectedPart, ih]
+variable {P : Type} [Fintype P] [DecidableEq P] {X Y : P → Type} [∀ p, Fintype (X p)]
+  [∀ p, DecidableEq (X p)] [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)]
 
-/-- Relabelling owners does not create pair sources. -/
-theorem sourceCount_mapOwner_le {Q : Type} (g : P → Q) {ℓX ℓY : Layout P}
-    (M : PartyChain ℓX ℓY) (h : ∀ e ∈ M.effectParties, g e.1 ≠ g e.2) :
-    (M.mapOwner g h).sourceCount ≤ M.sourceCount := by
-  induction M with
-  | final w => exact w.sourceCount_mapOwner_le g
-  | effect hpq α β ℓS w η rest ih =>
-      exact Nat.add_le_add (w.sourceCount_mapOwner_le g) (ih _)
+/-- **A sum of monomials on a set of parties as one gate, with its pair sources.** Let
+`g = ∑_ξ c_ξ M_ξ` be a weighted gate on a cell `D` whose monomials are allowed and use only the
+parties of `S ⊆ D`, the bases outside `S` being equal, and let the gate placed on its cell be a
+contraction. Then the gate is the operator of an original circuit with at most one nonprivate gate,
+whose participants lie in `S`. Its expansion has the coefficients and the monomials of `g`, read on
+the parties of `S`, so the pair-effect and coefficient bounds of `g`, its number of monomials and
+the number of pair sources of every monomial are kept. If `S` has a single party, the circuit is a
+contraction of that party.
 
-end Lattice.PartyCircuit.PartyChain
+The configurations are assumed to exist; this excludes a basis type with no element, on which
+every operator vanishes. Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43, 143–147
+and 199–208, and `06-geometry.tex`, lines 574–583. -/
+theorem exists_originalCircuit_isSourceBounded {D : Finset P} (S : Finset P) (hSD : S ⊆ D)
+    (hY : ∀ v ∉ S, Y v = X v) (g : WeightedGate D X Y) (hA : WeightedGate.IsAllowed g)
+    (hU : ∀ t ∈ g.terms, t.2.UsesOnly S)
+    (hN : ‖placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ())‖ ≤ 1)
+    (hne : Nonempty (Config X)) :
+    ∃ c : OriginalCircuit X Y,
+      c.op = placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ()) ∧
+      c.nonprivateCount ≤ 1 ∧ (∀ i, (↑(c.participants i) : Set P) ⊆ ↑S) ∧
+      (∀ (r : ℕ) (s : ℝ), (∀ t ∈ g.terms, t.2.effectCount ≤ r) →
+        (g.terms.map fun t ↦ ‖t.1‖).sum ≤ s → c.IsExpansionBounded r s) ∧
+      c.IsMonomialBounded g.terms.length ∧
+      ∀ r : ℕ, (∀ t ∈ g.terms, t.2.sourceCount ≤ r) → c.IsSourceBounded r := by
+  obtain ⟨x₀⟩ := hne
+  set g' := g.restrict S hSD hU
+  have hop : placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ()) =
+      placeBetween S hY (WeightedGate.ev g' ()) := by
+    have h := WeightedGate.op_gate_restrict S hSD g hU (fun v hv ↦ hY v fun h ↦ hv (hSD h)) hY
+    rw [PartyCircuit.op_gate, PartyCircuit.op_gate] at h
+    exact h
+  have hN' : ‖WeightedGate.ev g' ()‖ ≤ 1 :=
+    (norm_le_norm_placeBetween S hY _ fun v ↦ x₀ v).trans (hop ▸ hN)
+  by_cases hC : S.card = 1
+  · obtain ⟨p, hp⟩ := Finset.card_eq_one.mp hC
+    have hYp : ∀ v ≠ p, Y v = X v := fun v hv ↦ hY v (by simpa [hp] using hv)
+    let U := reindex (singletonConfigEquiv Y hp) (singletonConfigEquiv X hp) (WeightedGate.ev g' ())
+    have hU1 : ‖U‖ ≤ 1 := (l2_opNorm_reindex_le _ _ _).trans hN'
+    refine ⟨OriginalCircuit.localOp p hYp U hU1, ?_, by simp, fun i ↦ i.elim, fun _ _ _ _ ↦ trivial,
+      trivial, fun _ _ ↦ trivial⟩
+    rw [OriginalCircuit.op_localOp, hop]
+    exact placeBetween_submatrix_singletonConfigEquiv hp hY _
+  · refine ⟨OriginalCircuit.gate S hY
+      (OriginalGate.ofWeightedGate g' hC (WeightedGate.isAllowed_restrict S hSD hU hA) hN'),
+      ?_, by simp, fun _ ↦ subset_rfl, fun r s hr hs ↦ ⟨fun t ht ↦ ?_, ?_⟩, ?_, fun r hr t ht ↦ ?_⟩
+    · rw [OriginalCircuit.op_gate, hop]
+      rfl
+    · obtain ⟨t', ht', h⟩ := WeightedGate.exists_mem_terms_of_mem_restrict S hSD (h := hU) ht
+      rw [h]
+      exact (Monomial.effectCount_restrict S hSD t'.2 (hU t' ht')).trans_le (hr t' ht')
+    · have h := congrArg (List.map fun z : ℂ ↦ ‖z‖) (WeightedGate.map_fst_terms_restrict S hSD g hU)
+      simp only [List.map_map] at h
+      change (g'.terms.map fun t ↦ ‖t.1‖).sum ≤ s
+      exact (congrArg List.sum h).trans_le hs
+    · exact (WeightedGate.length_terms_restrict S hSD g hU).le
+    · obtain ⟨t', ht', h⟩ := WeightedGate.exists_mem_terms_of_mem_restrict S hSD (h := hU) ht
+      rw [h]
+      exact (Monomial.sourceCount_restrict S hSD t'.2 (hU t' ht')).trans_le (hr t' ht')
 
-/-! ### The gate of a sum of monomials -/
+/-- **A sum of monomials using a set of parties is one gate of these parties.** The conclusion of
+`exists_originalCircuit_isSourceBounded` without the pair-source bound: an original circuit with
+the operator of the gate, at most one nonprivate gate, whose participants lie in `S`, and the
+pair-effect, coefficient and monomial bounds of the sum.
 
-variable [DecidableEq P]
-
-namespace PEPS.PairEffect
-theorem sourceCount_retractedGate_le (S : Finset P) (d : S) {ℓ ℓ' : Layout P}
-    (G : PartyGate ℓ ℓ') (hU : ∀ m ∈ G, m.2.UsesOnly {p | decide (p ∈ S) = true}) {r : ℕ}
-    (hr : ∀ m ∈ G, m.2.sourceCount ≤ r) :
-    ∀ m ∈ retractedGate S d G hU, m.2.sourceCount ≤ r := by
-  intro m hm
-  obtain ⟨m₁, hm₁, rfl⟩ := mem_mapOwnerGate hm
-  obtain ⟨m₀, hm₀, rfl⟩ := mem_selectedGate hm₁
-  exact (PartyChain.sourceCount_mapOwner_le _ _ _).trans
-    ((PartyChain.sourceCount_selectedPart _ _ _).trans_le (hr m₀ hm₀))
-
-theorem isSourceBounded_coreGateCircuit (S : Finset P) (hS₀ : S.Nonempty)
-    {ℓ ℓ' : Layout P} (G : PartyGate ℓ ℓ') (hA : ∀ m ∈ G, m.2.IsAllowed)
-    (hU : ∀ m ∈ G, m.2.UsesOnly {p | decide (p ∈ S) = true})
-    (hN : ‖gate (toGate (selectedGate _ G hU))‖ ≤ 1) (T : Layout P) {r : ℕ}
-    (hr : ∀ m ∈ G, m.2.sourceCount ≤ r) :
-    (coreGateCircuit S hS₀ G hA hU hN T).IsSourceBounded r := by
-  unfold coreGateCircuit
-  split
-  · trivial
-  · exact OriginalCircuit.isSourceBounded_castLayouts _ _ _
-      (sourceCount_retractedGate_le S _ G hU hr)
-
-/-- The gate of a sum of monomials using only the parties of `S` has at most as many pair
-sources in each monomial as the monomials of the sum.
-Polynomial-PEPS manuscript, `04-compression.tex`, lines 143–147 and 233–251. -/
-theorem isSourceBounded_gateCircuit (S : Finset P) (hS₀ : S.Nonempty) {ℓ ℓ' : Layout P}
-    (h : Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ = Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ')
-    (G : PartyGate ℓ ℓ') (hA : ∀ m ∈ G, m.2.IsAllowed)
-    (hU : ∀ m ∈ G, m.2.UsesOnly {p | decide (p ∈ S) = true})
-    (hN : ‖gate (toGate (selectedGate _ G hU))‖ ≤ 1) {r : ℕ}
-    (hr : ∀ m ∈ G, m.2.sourceCount ≤ r) : (gateCircuit S hS₀ h G hA hU hN).IsSourceBounded r :=
-  ⟨OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero
-      (Word.nonprivateCount_toOriginalCircuit_of_isReordering
-        (Layout.isReordering_partitionWord _ ℓ)) r,
-    OriginalCircuit.isSourceBounded_castLayouts _ _ _
-      (isSourceBounded_coreGateCircuit S hS₀ G hA hU hN _ hr),
-    OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero
-      (Word.nonprivateCount_toOriginalCircuit_of_isReordering
-        (Layout.isReordering_unpartitionWord _ ℓ')) r⟩
-
-end PEPS.PairEffect
-namespace Lattice.PartyCircuit
-/-- **A sum of monomials on a list of parties as one gate, with its pair sources.** The
-conclusion of `PartyGate.exists_originalCircuit`, together with the pair-source bound: every
-monomial of the gate has at most `r` pair sources when every monomial of the sum does.
-
-Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43 and 143–147, and
+Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43 and 199–208, and
 `06-geometry.tex`, lines 574–583. -/
-theorem PartyGate.exists_originalCircuit_isSourceBounded (S : Finset P) (hS₀ : S.Nonempty)
-    {ℓ ℓ' : Layout P}
-    (h : Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ = Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ')
-    (G : PartyGate ℓ ℓ') (hA : ∀ m ∈ G, m.2.IsAllowed) (hF : ∀ m ∈ G, m.2.FixesOutside S h)
-    (hN : ‖gate (toGate G)‖ ≤ 1) (hne : Nontrivial (Mem ℓ)) :
-    ∃ c : OriginalCircuit ℓ ℓ', c.eval = gate (toGate G) ∧ c.nonprivateCount ≤ 1 ∧
-      (∀ g, (↑(c.participants g) : Set P) ⊆ ↑S) ∧
-      (∀ (r : ℕ) (s : ℝ), (∀ m ∈ G, m.2.toEffectChain.effectCount ≤ r) →
-        (G.map fun m => ‖m.1‖).sum ≤ s → c.IsExpansionBounded r s) ∧
-      c.IsMonomialBounded G.length ∧
-      ∀ r : ℕ, (∀ m ∈ G, m.2.sourceCount ≤ r) → c.IsSourceBounded r := by
-  have hU : ∀ m ∈ G, m.2.UsesOnly {p | decide (p ∈ S) = true} := fun m hm => (hF m hm).1
-  have hFx : ∀ m (hm : m ∈ G),
-      (m.2.complementPart (fun p ↦ decide (p ∈ S)) (hU m hm)).eval =
-        isoL (Layout.memCongr h) := fun m hm => (hF m hm).2
-  have hN' := norm_gate_selectedGate_le S h G hU hFx hN hne
-  have hP := Layout.isReordering_partitionWord (fun p ↦ decide (p ∈ S)) ℓ
-  have hQ := Layout.isReordering_unpartitionWord (fun p ↦ decide (p ∈ S)) ℓ'
-  refine ⟨gateCircuit S hS₀ h G hA hU hN', eval_gateCircuit S hS₀ h G hA hU hFx hN', ?_, ?_,
-    ?_, ?_, fun r hr => isSourceBounded_gateCircuit S hS₀ h G hA hU hN' hr⟩
-  · simp only [gateCircuit, OriginalCircuit.nonprivateCount, Circuit.gateCount,
-      Word.nonprivateCount_toOriginalCircuit_of_isReordering hP,
-      Word.nonprivateCount_toOriginalCircuit_of_isReordering hQ,
-      Circuit.gateCount_castLayouts, zero_add, add_zero]
-    exact nonprivateCount_coreGateCircuit_le S hS₀ G hA hU hN' _
-  · intro g
-    rcases g with g | g | g
-    · exact Word.participants_toOriginalCircuit_subset _ _ (hP.usesOnly _) g
-    · exact OriginalCircuit.participants_castLayouts_subset _ _ _
-        (participants_coreGateCircuit_subset S hS₀ G hA hU hN' _) g
-    · exact Word.participants_toOriginalCircuit_subset _ _ (hQ.usesOnly _) g
-  · intro r s hr hs
-    exact ⟨Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-        hP.sourceCount_eq r s,
-      OriginalCircuit.isExpansionBounded_castLayouts _ _ _
-        (isExpansionBounded_coreGateCircuit S hS₀ G hA hU hN' _ hr hs),
-      Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-        hQ.sourceCount_eq r s⟩
-  · exact ⟨Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-        hP.sourceCount_eq _,
-      OriginalCircuit.isMonomialBounded_castLayouts _ _ _
-        (isMonomialBounded_coreGateCircuit S hS₀ G hA hU hN' _),
-      Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-        hQ.sourceCount_eq _⟩
-
-/-- **A sum of monomials using a list of parties is one gate of these parties.** Let
-`G = ∑_ξ c_ξ M_ξ` be a contraction expanded into allowed monomials, each of which uses only the
-parties of a nonempty finite set `S` and leaves the other registers in place. Then `G` is an
-original circuit with at most one nonprivate gate, whose participants lie in `S`. Its expansion
-has the coefficients and the monomials of `G`, restricted to the registers of `S`, so the
-pair-effect and coefficient bounds of `G` and its number of monomials are kept. If `S` has a
-single party, the circuit is a private map of that party.
-
-The memory is assumed nonzero; this excludes registers of dimension zero, on which every
-operator vanishes. Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43 and 199–208,
-and `06-geometry.tex`, lines 574–583. -/
-theorem PartyGate.exists_originalCircuit (S : Finset P) (hS₀ : S.Nonempty) {ℓ ℓ' : Layout P}
-    (h : Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ = Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ')
-    (G : PartyGate ℓ ℓ') (hA : ∀ m ∈ G, m.2.IsAllowed) (hF : ∀ m ∈ G, m.2.FixesOutside S h)
-    (hN : ‖gate (toGate G)‖ ≤ 1) (hne : Nontrivial (Mem ℓ)) :
-    ∃ c : OriginalCircuit ℓ ℓ', c.eval = gate (toGate G) ∧ c.nonprivateCount ≤ 1 ∧
-      (∀ g, (↑(c.participants g) : Set P) ⊆ ↑S) ∧
-      (∀ (r : ℕ) (s : ℝ), (∀ m ∈ G, m.2.toEffectChain.effectCount ≤ r) →
-        (G.map fun m => ‖m.1‖).sum ≤ s → c.IsExpansionBounded r s) ∧
-      c.IsMonomialBounded G.length := by
+theorem exists_originalCircuit {D : Finset P} (S : Finset P) (hSD : S ⊆ D)
+    (hY : ∀ v ∉ S, Y v = X v) (g : WeightedGate D X Y) (hA : WeightedGate.IsAllowed g)
+    (hU : ∀ t ∈ g.terms, t.2.UsesOnly S)
+    (hN : ‖placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ())‖ ≤ 1)
+    (hne : Nonempty (Config X)) :
+    ∃ c : OriginalCircuit X Y,
+      c.op = placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ()) ∧
+      c.nonprivateCount ≤ 1 ∧ (∀ i, (↑(c.participants i) : Set P) ⊆ ↑S) ∧
+      (∀ (r : ℕ) (s : ℝ), (∀ t ∈ g.terms, t.2.effectCount ≤ r) →
+        (g.terms.map fun t ↦ ‖t.1‖).sum ≤ s → c.IsExpansionBounded r s) ∧
+      c.IsMonomialBounded g.terms.length := by
   obtain ⟨c, h₁, h₂, h₃, h₄, h₅, -⟩ :=
-    PartyGate.exists_originalCircuit_isSourceBounded S hS₀ h G hA hF hN hne
+    exists_originalCircuit_isSourceBounded S hSD hY g hA hU hN hne
   exact ⟨c, h₁, h₂, h₃, h₄, h₅⟩
 
-end Lattice.PartyCircuit
-end TNLean
+end QuantumCircuit.Party.WeightedGate

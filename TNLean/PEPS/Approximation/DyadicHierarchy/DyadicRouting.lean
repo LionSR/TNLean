@@ -378,7 +378,7 @@ end
 section
 
 namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
-open TNLean.Lattice.Compression TNLean.Lattice.Compression.DistributedOperatorContraction
+open TNLean.Network TNLean.Network.DistributedOperatorContraction GateIncidence
 
 /-- The incidence count of the actual tagged link family is its routing degree.
 Source: polynomial-PEPS manuscript, Theorem 5.2, 04-compression.tex,
