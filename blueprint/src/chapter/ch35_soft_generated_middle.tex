@@ -63,8 +63,7 @@ they assert neither a spectral gap nor an improving family.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:soft_hamiltonian_mpo_accuracy,lem:hermitian_trace_chain_approximation,
-        thm:actual_retained_interval_trace,lem:qc_placement_norm}
+    \uses{thm:soft_hamiltonian_mpo_accuracy,lem:hermitian_trace_chain_approximation,thm:actual_retained_interval_trace,lem:qc_placement_norm}
     Mask the original interaction family outside $[l,r)$, and apply the
     corrected heat-expansion construction to its soft replacement. Taking
     the Hermitian part doubles the virtual dimension without increasing
@@ -148,8 +147,7 @@ adaptive measurability or running-time conclusion is asserted.
     The scalar $pI$ is represented separately and exactly.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:shifted_regional_heat_mpo,
-        lem:trace_chain_linear_combination,lem:native_supported_mpo_restriction}
+    \uses{thm:shifted_regional_heat_mpo,lem:trace_chain_linear_combination,lem:native_supported_mpo_restriction}
     Construct all heat atoms $E_a=e^{-a(A-eI)/t}$ at the fixed lower
     energy $e$. Replace each approximation by its Hermitian part and
     restrict it once to the native interval. The common-closing formula

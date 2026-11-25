@@ -23,7 +23,7 @@ Source: SCP10, arXiv:1001.3807, Theorem 5.4.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
-open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
+open TNLean.Network.DependentBondNetwork
 
 variable {Vertex Edge : Type*}
 
@@ -154,11 +154,11 @@ theorem iInf_liftedCutSpace_le_range_product [∀ v, Finite (Phys v)]
     {ι : Type*} (R : ι → Finset Vertex) (C : ι → Finset Edge)
     (hcover : ∀ v, (∃ i, v ∈ R i) ∨ LinearMap.range (localSiteMap tail head D A v) = ⊤) :
     (⨅ i, liftedCutSpace tail head D A (R i) (C i)) ≤
-      LinearMap.range (dependentPhysicalProductFamilyMap
-        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))) := by
+      LinearMap.range (Matrix.piKronecker
+        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))).mulVecLin := by
   classical
   intro ψ hψ
-  apply (mem_range_dependentPhysicalProductFamilyMap_iff _ ψ).mpr
+  apply (Matrix.mem_range_mulVecLin_piKronecker_iff _ ψ).mpr
   intro v σ
   change (fun s ↦ ψ (Function.update σ v s)) ∈
     LinearMap.range (Matrix.toLin' (LinearMap.toMatrix' (localSiteMap tail head D A v)))
@@ -214,14 +214,14 @@ theorem cutSpace_le_liftedCutSpace
 theorem cutSpace_le_range_product
     (A : (v : Vertex) → LocalConfig tail head D v → Phys v → ℂ) (C : Finset Edge) :
     cutSpace tail head D A C ≤
-      LinearMap.range (dependentPhysicalProductFamilyMap
-        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))) := by
+      LinearMap.range (Matrix.piKronecker
+        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))).mulVecLin := by
   classical
   rintro _ ⟨M, rfl⟩
   refine ⟨fun η ↦ M (cutRestriction D C ((endpointSiteEquiv tail head D).symm η)) *
     cutInteriorWeight D C ((endpointSiteEquiv tail head D).symm η), ?_⟩
   funext σ
-  simp only [dependentPhysicalProductFamilyMap_apply, cutMap_apply, cutCoeff]
+  simp only [Matrix.mulVecLin_apply, Matrix.piKronecker_mulVec_apply, cutMap_apply, cutCoeff]
   rw [← (endpointSiteEquiv tail head D).symm.sum_comp]
   apply Finset.sum_congr rfl
   intro η _

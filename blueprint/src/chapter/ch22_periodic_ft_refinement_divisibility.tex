@@ -2,7 +2,7 @@
     \label{thm:periodic_positive_decomposition}
     \lean{MPSTensor.exists_periodic_blockDecomposition}
     \leanok
-    \uses{def:periodic_tensor, def:same_mpv2_pos}
+    \uses{def:periodic_tensor,def:same_mpv2_pos}
     Every tensor $A$ admits $r\in\N$ and, for $k=1,\ldots,r$, left-canonical
     periodic tensors $B_k$ of positive bond dimensions $D_k$ and weights
     $\mu_k>0$, with $\sum_{k=1}^rD_k\le D$, such that $A$ has the same matrix
@@ -12,7 +12,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:tp_gauge_arbitrary, thm:irreducible_left_canonical_periodic}
+    \uses{thm:tp_gauge_arbitrary,thm:irreducible_left_canonical_periodic}
     Lemma~\ref{thm:tp_gauge_arbitrary} gives $A$ the same positive-length
     matrix product vectors as $\bigoplus_{k=1}^r\mu_kB_k$ with $\mu_k>0$,
     $\sum_kD_k\le D$, and each $B_k$ irreducible and left-canonical, so
@@ -36,7 +36,7 @@
     \label{def:p_refinable}
     \lean{MPSTensor.IsPRefinable}
     \leanok
-    \uses{def:mps_tensor, def:blocked_tensor}
+    \uses{def:mps_tensor,def:blocked_tensor}
     Given a tensor $B$, the family $\mc V(B)$ can be \emph{$p$-refined} if
     there exist another tensor $A$ and an isometry
     $W : \C^d \to (\C^d)^{\otimes p}$ such that, for every $N$,
@@ -63,7 +63,7 @@
     \label{lem:periodic_refinement_one_site}
     \lean{MPSTensor.isPRefinable_one, MPSTensor.isPDivisibleChannel_one_iff}
     \leanok
-    \uses{def:p_refinable, def:p_divisible_channel}
+    \uses{def:p_refinable,def:p_divisible_channel}
     Every tensor is $1$-refinable. A linear map is $1$-divisible if and only
     if it is a channel. Thus, at $p=1$, the forward implication of the
     printed Theorem~4.1 requires trace preservation of $\E_B$; see
@@ -166,10 +166,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_exact_spectrum,
-        thm:periodic_compressed_irreducible,
-        thm:cyclic_sector_compression_letter_isometry_periodic,
-        lem:periodic_negreindex_shift}
+    \uses{thm:periodic_step_orbit_compression,thm:periodic_compressed_exact_spectrum,thm:periodic_compressed_irreducible,thm:cyclic_sector_compression_letter_isometry_periodic,lem:periodic_negreindex_shift}
     Take the cyclic spectral projections, with their indices negated to give
     $P_uA^i=A^iP_{u+1}$. No projection vanishes: left canonicality and the
     shift relation give $\E_A^\dagger(P_u)=P_{u+1}$, and $\E_A^\dagger(0)=0$, so
@@ -263,8 +260,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_blocking_peripheral_roots,thm:periodic_compressed_projection_shift,
-        thm:periodic_step_orbit_compression}
+    \uses{thm:periodic_blocking_peripheral_roots,thm:periodic_compressed_projection_shift,thm:periodic_step_orbit_compression}
     The ambient spectral bound gives one inclusion. For the other, put
     $R_k=V^\dagger P_{[\alpha+pk]_m}V$. The compressed adjoint map satisfies
     $\E_C^\dagger(R_k)=R_{k+1}$. If $z^q=1$, the sum
@@ -315,8 +311,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_adjoint_fixed_gcd,thm:periodic_step_coordinates,
-        thm:transfer_map_irreducible_of_tensor}
+    \uses{thm:periodic_adjoint_fixed_gcd,thm:periodic_step_coordinates,thm:transfer_map_irreducible_of_tensor}
     The projections $R_j=F^j(Q_\alpha)$, for $0\le j<r$, are pairwise
     orthogonal and sum to $\Id_D$, since their cyclic-sector indices
     partition $\Z_m$. The letter relation gives
@@ -341,8 +336,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_orbit_fixed_rigidity,thm:adjoint_corner_fixed_of_preserved,
-        thm:transfer_map_irreducible_of_tensor}
+    \uses{thm:periodic_orbit_fixed_rigidity,thm:adjoint_corner_fixed_of_preserved,thm:transfer_map_irreducible_of_tensor}
     Let $R$ be an invariant orthogonal projection for $\E_C^\dagger$.
     The projection $L=VRV^\dagger$ has invariant corner under
     $F^p$, where $F=\E_A^\dagger$. The faithful invariant state of $\E_A$
@@ -453,9 +447,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:periodic_sector_rephasing,thm:periodic_orbit_phase_products,
-        thm:periodic_sector_rephasing_words,
-        thm:periodic_sector_rephasing_left_canonical}
+    \uses{def:periodic_sector_rephasing,thm:periodic_orbit_phase_products,thm:periodic_sector_rephasing_words,thm:periodic_sector_rephasing_left_canonical}
     Since $m/r>0$, each root $c_\alpha$ has modulus one. Apply
     Lemma~\ref{thm:periodic_orbit_phase_products} in $U(1)$ to obtain
     unit phases $b_u$, and set $A'^i=\sum_ub_uP_uA^i$.
@@ -469,7 +461,7 @@
     \label{thm:p_refinement_pullback_irreducible_form}
     \lean{MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm}
     \leanok
-    \uses{def:irreducible_form, def:p_refinable}
+    \uses{def:irreducible_form,def:p_refinable}
     Let $B$ be an MPS tensor in irreducible form~II. If $\mc V(B)$ can be
     $p$-refined, then there exist a tensor $A$, an isometry
     $W : \C^d \to (\C^d)^{\otimes p}$, and a tensor $C$ defined by
@@ -501,7 +493,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{remark}[Trace preservation in the forward direction]
     \label{rem:thm_4_1_forward_trace_preservation}
-    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
+    \uses{def:irreducible_form,def:p_refinable,def:p_divisible_channel}
     In \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}, $p$-divisibility presupposes
     trace preservation of $\E_B$, which is explicit in the hypotheses here.
     Without trace preservation, let $p \ge 1$, let $B_0$ be $p$-refinable via $(A_0, W)$ and in
@@ -555,7 +547,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \lean{MPSTensor.refinementScalarCounterexample,
         MPSTensor.refinement_normalization_counterexample}
     \leanok
-    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
+    \uses{def:irreducible_form,def:p_refinable,def:p_divisible_channel}
     Let the physical and bond dimensions both be one, and take $B=(4)$.
     The tensor $B$ is the period-one normalized block $(1)$
     with positive weight $4$. It is $2$-refinable with root $A=(2)$,
@@ -566,8 +558,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:bond_dimension_one_identity_transfer_normal,
-        thm:periodic_refinement_from_blocked_transfer}
+    \uses{lem:bond_dimension_one_identity_transfer_normal,thm:periodic_refinement_from_blocked_transfer}
     The block $(1)$ has identity transfer map and period one.
     Since $A^{[2]}=B$, equality of the blocked and target transfer maps
     gives a refinement isometry. If $\E_B=\mathcal F^2$ for a channel
@@ -597,7 +588,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \label{thm:thm_4_1_p_refinement_reverse}
     \lean{MPSTensor.thm_4_1_p_refinement_reverse}
     \leanok
-    \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
+    \uses{def:irreducible_form,def:p_refinable,def:p_divisible_channel}
     Let $B$ be an MPS tensor in irreducible form~II and let $p \ge 1$.
     Assume the reverse transfer-map root hypothesis: there is a tensor $A$ with
     $\E_B = \E_{A^{[p]}}$ whenever $\E_B$ is
@@ -628,7 +619,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
         MPSTensor.isIrreducibleFamily_of_transferMap_eq_blockTensor,
         MPSTensor.IsPeriodic.coprime_of_isIrreducibleFamily_blockTensor}
     \leanok
-    \uses{def:blocked_tensor, def:periodic_tensor}
+    \uses{def:blocked_tensor,def:periodic_tensor}
     Let $A$ be a tensor and let $p\geq0$. If its blocked tensor
     $A^{(p)}$ is irreducible, then $A$ is irreducible. In particular,
     this holds if $\mathcal E_A^p=\mathcal E_B$ for an irreducible
@@ -664,7 +655,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
         MPSTensor.CyclicResetCounterexample.root_isIrreducibleFamily,
         MPSTensor.supplied_root_rank_counterexample}
     \leanok
-    \uses{def:irreducible_form, def:periodic_tensor, def:p_divisible_channel}
+    \uses{def:irreducible_form,def:periodic_tensor,def:p_divisible_channel}
     Decompose $\mathbb C^7$ into five sectors of dimensions
     $(1,2,2,1,1)$. Let $\mathcal F$ discard all off-diagonal sector
     blocks and send the diagonal block in sector $i$ to its trace
@@ -678,7 +669,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:irreducible_left_canonical_periodic, thm:periodic_choi_rank_kraus_span}
+    \uses{thm:irreducible_left_canonical_periodic,thm:periodic_choi_rank_kraus_span}
     The Kraus matrices for $\mathcal F$ are the matrix units between
     consecutive sectors, divided by the square root of the output-sector
     dimension. They are linearly independent. The analogous two-step
@@ -709,7 +700,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
         MPSTensor.CyclicResetCounterexample.transferMap_square_eq_alternativeRoot_pow,
         MPSTensor.CyclicResetCounterexample.square_isPRefinable}
     \leanok
-    \uses{thm:periodic_supplied_root_rank_obstruction, def:p_refinable}
+    \uses{thm:periodic_supplied_root_rank_obstruction,def:p_refinable}
     The nine-letter cyclic-reset tensor $B$ of
     Lemma~\ref{thm:periodic_supplied_root_rank_obstruction} is $2$-refinable.
     In coordinates $0,\ldots,6$, write $E_{ab}=|a\rangle\langle b|$ and set
@@ -724,7 +715,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_choi_rank_kraus_span, thm:periodic_refinement_from_bounded_root}
+    \uses{thm:periodic_choi_rank_kraus_span,thm:periodic_refinement_from_bounded_root}
     Summing $K_j^*K_j$ gives $I_7$. The seven Kraus matrices are
     linearly independent, as seen from their entries at
     $(1,0),(2,0),(3,1),(5,3),(5,4),(6,5),(0,6)$.
@@ -815,14 +806,14 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \label{thm:periodic_refinement_injective_transfer}
     \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_injective}
     \leanok
-    \uses{def:p_refinable, def:p_divisible_channel}
+    \uses{def:p_refinable,def:p_divisible_channel}
     Let $B$ have physical dimension $d$ and an invertible transfer map,
     and let $p>0$. If $\mathcal E_B$ is $p$-divisible as a channel,
     then $B$ is $p$-refinable.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_injective_composition_choi_rank, thm:periodic_refinement_from_bounded_root}
+    \uses{thm:periodic_injective_composition_choi_rank,thm:periodic_refinement_from_bounded_root}
     Any channel root $\mathcal F$ with $\mathcal F^p=\mathcal E_B$ is
     invertible, so the preceding theorem gives
     $\operatorname{rank}C_{\mathcal F}\le
@@ -873,7 +864,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_choi_rank_kraus_span, thm:periodic_root_word_span_dimension, thm:periodic_refinement_from_bounded_root}
+    \uses{thm:periodic_choi_rank_kraus_span,thm:periodic_root_word_span_dimension,thm:periodic_refinement_from_bounded_root}
     If $S$ is the Kraus span of $A$, the preceding two theorems give
     \begin{align}
         \operatorname{rank}_{\mathrm{Choi}}\mathcal E_A
@@ -916,8 +907,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:periodic_qubit_singular_span_dimension, thm:periodic_root_word_span_dimension,
-        thm:periodic_choi_rank_kraus_span, thm:periodic_injective_composition_choi_rank}
+    \uses{lem:periodic_qubit_singular_span_dimension,thm:periodic_root_word_span_dimension,thm:periodic_choi_rank_kraus_span,thm:periodic_injective_composition_choi_rank}
     Put $r=\operatorname{rank}_{\mathrm{Choi}}\mathcal F$ and
     $s=\operatorname{rank}_{\mathrm{Choi}}\mathcal F^p$.
     If $s\le1$, the power has one normalized Kraus matrix and is
@@ -931,7 +921,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \label{lem:periodic_qubit_refinement}
     \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_fin_two}
     \leanok
-    \uses{def:p_refinable, def:p_divisible_channel}
+    \uses{def:p_refinable,def:p_divisible_channel}
     Let $B$ have physical dimension $d$ and bond dimension two. For every $p>0$,
     $p$-divisibility of $\mathcal E_B$ implies that $B$ is $p$-refinable.
     This includes singular and reducible transfer maps and assumes no
@@ -939,7 +929,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:periodic_qubit_root_rank, thm:periodic_refinement_from_bounded_root}
+    \uses{lem:periodic_qubit_root_rank,thm:periodic_refinement_from_bounded_root}
     Every channel root $\mathcal F$ with $\mathcal F^p=\E_B$ satisfies
     \begin{align}
         \operatorname{rank}C_{\mathcal F}\le
@@ -1050,8 +1040,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,
-        thm:block_tensor_of_same_mpv_to_tensor_from_blocks}
+    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,thm:block_tensor_of_same_mpv_to_tensor_from_blocks}
     Apply the prescribed-blocking decomposition separately to each $A_k$,
     giving blocks $B_{k,a}$ with $0\le a<\gcd(m_k,p)$. Blocking raises
     $\mu_k$ to the power $p$: if $\sigma'$ is the unblocked configuration of
@@ -1153,9 +1142,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_unitary_resolution,thm:periodic_orthogonal_resolution_multiplication,
-        thm:periodic_absorb_orbit_gauge,
-        thm:periodic_prescribed_blocking_compression}
+    \uses{thm:periodic_unitary_resolution,thm:periodic_orthogonal_resolution_multiplication,thm:periodic_absorb_orbit_gauge,thm:periodic_prescribed_blocking_compression}
     Apply Lemma~\ref{thm:periodic_unitary_resolution} to the orbit
     isometries and set $Z=U\bigl(\bigoplus_ac_a\Id_{D_a}\bigr)U^\dagger$.
     Since $UJ_a$ is the original orbit isometry,
@@ -1185,9 +1172,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,
-        thm:periodic_ungrouped_weight_moduli,thm:periodic_grouped_unitary,
-        thm:periodic_ft_equal_case_trace_preserving,thm:block_tensor_to_tensor_from_blocks}
+    \uses{thm:periodic_prescribed_blocking_compression,thm:periodic_weighted_block_refinement,thm:periodic_ungrouped_weight_moduli,thm:periodic_grouped_unitary,thm:periodic_ft_equal_case_trace_preserving,thm:block_tensor_to_tensor_from_blocks}
     Decompose each blocked $B_k$ into its prescribed orbits. Every resulting
     block inherits weight $\mu_k^p$. Group repeated blocks and apply the
     multiplicity-bearing equal-case theorem. Matching to the unit-modulus
@@ -1219,8 +1204,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_positive_decomposition,thm:periodic_blocked_weight_normalization,
-        thm:same_mpv2_pos_block_tensor}
+    \uses{thm:periodic_positive_decomposition,thm:periodic_blocked_weight_normalization,thm:same_mpv2_pos_block_tensor}
     Take the positive-weight periodic decomposition of $A$ from
     Lemma~\ref{thm:periodic_positive_decomposition} and block it by $p$.
     The preceding theorem gives unit modulus for each original weight and
@@ -1251,8 +1235,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_unitary_orbit_root,thm:periodic_unitary_resolution,
-        thm:block_tensor_to_tensor_from_blocks}
+    \uses{thm:periodic_unitary_orbit_root,thm:periodic_unitary_resolution,thm:block_tensor_to_tensor_from_blocks}
     Blocking commutes with the direct sum. Composing the inclusion $J_k$ of
     the $k$-th summand with the orbit isometries $V_{k,a}$ of $A_k$ gives
     isometries $J_kV_{k,a}$ that resolve the identity and intertwine the
@@ -1279,8 +1262,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_grouped_unitary,thm:periodic_refinement_normalized_presentation,
-        thm:periodic_block_sum_orbit_root,thm:periodic_block_families_unitary_matching}
+    \uses{thm:periodic_grouped_unitary,thm:periodic_refinement_normalized_presentation,thm:periodic_block_sum_orbit_root,thm:periodic_block_families_unitary_matching}
     Group the target by Lemma~\ref{thm:periodic_grouped_unitary}; its
     multiplicities have modulus one. By
     Lemma~\ref{thm:periodic_refinement_normalized_presentation}, $A$ has
@@ -1303,8 +1285,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \lean{MPSTensor.isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks,
         MPSTensor.exists_isLeftCanonical_transferMap_eq_pow_of_isPRefinable}
     \leanok
-    \uses{def:p_refinable,def:p_divisible_channel,def:periodic_tensor,
-        def:block_diagonal_tensor}
+    \uses{def:p_refinable,def:p_divisible_channel,def:periodic_tensor,def:block_diagonal_tensor}
     Let $B=\bigoplus_k\mu_kB_k$, where the $B_k$ are left-canonical periodic
     tensors and $|\mu_k|=1$, and let $p>0$. If $B$ is $p$-refinable, then
     $\E_B$ is $p$-divisible. This is the forward implication of

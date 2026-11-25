@@ -29,7 +29,7 @@ the inverse gap is asserted.
         TNLean.MPS.AreaLaw.huangFilterApproximant_spec,
         TNLean.MPS.AreaLaw.exists_huangFilterApproximant_near_ground}
     \leanok
-    \uses{def:huang_physical_gaussian, def:huang_filter_parameters}
+    \uses{def:huang_physical_gaussian,def:huang_filter_parameters}
     For each point $e$ of the energy mesh, the Gaussian approximant $Q_e$ is
     the finite physical Gaussian approximant of
     Definition~\ref{def:huang_physical_gaussian} with variance $h$, energy
@@ -44,7 +44,7 @@ the inverse gap is asserted.
     \label{thm:huang_positive_chain_filter_family}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_filter_family}
     \leanok
-    \uses{thm:huang_physical_gaussian, def:huang_filter_approximant}
+    \uses{thm:huang_physical_gaussian,def:huang_filter_approximant}
     Let $q\ge1$, let $h_j$ additionally be supported on sites $j,j+1$, and fix
     $c,\Delta>0$. Let $\eta,h,T$ and the energy mesh width be the
     parameters of Section~\ref{sec:huang_filter_parameters}.
@@ -68,8 +68,7 @@ the inverse gap is asserted.
     \label{thm:huang_positive_chain_ground_filter_family}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_ground_filter_family}
     \leanok
-    \uses{lem:huang_positive_chain_energy_window,
-        thm:huang_positive_chain_filter_family, def:huang_filter_approximant}
+    \uses{lem:huang_positive_chain_energy_window,thm:huang_positive_chain_filter_family,def:huang_filter_approximant}
     The family can be chosen before $E_0$ and $\Gamma$ so that the following
     holds for every unit vector $\Gamma$ with $H\Gamma=E_0\Gamma$ and
     \begin{align*}
@@ -108,7 +107,7 @@ the inverse gap is asserted.
     \label{lem:huang_finite_left_filter_factors}
     \lean{TNLean.MPS.AreaLaw.exists_finite_left_filter_factors}
     \leanok
-    \uses{thm:lvv_cut_decomposition, def:huang_left_filter_factors}
+    \uses{thm:lvv_cut_decomposition,def:huang_left_filter_factors}
     Suppose that $M$ chain operators have operator-Schmidt rank at most
     $R$ at every cut. At the cut after $i\le L$ sites, their left factors
     can be drawn from one set $F$ of cardinality at most $MR$. Each member
@@ -127,7 +126,7 @@ the inverse gap is asserted.
         TNLean.MPS.AreaLaw.card_gaussianFilterFactors_le,
         TNLean.MPS.AreaLaw.operatorSchmidtRank_of_mem_gaussianFilterFactors}
     \leanok
-    \uses{def:huang_left_filter_factors, def:huang_filter_approximant}
+    \uses{def:huang_left_filter_factors,def:huang_filter_approximant}
     At the cut after $i$ sites, the Gaussian filter factors are the left
     factors (Definition~\ref{def:huang_left_filter_factors}) of the Gaussian
     approximants $Q_e$ over the energy mesh
@@ -143,9 +142,7 @@ the inverse gap is asserted.
         TNLean.MPS.AreaLaw.exists_positive_chain_error_reduction_factors,
         TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_errorReductionSet}
     \leanok
-    \uses{def:huang_gaussian_filter_factors,
-        thm:huang_positive_chain_ground_filter_family,
-        thm:lvv_scaled_projection_error_reduction, def:lvv_error_reduction_family}
+    \uses{def:huang_gaussian_filter_factors,thm:huang_positive_chain_ground_filter_family,thm:lvv_scaled_projection_error_reduction,def:lvv_error_reduction_family}
     Let $L\ge1$ and $i\le L$. Under the physical assumptions of
     Lemma~\ref{thm:huang_positive_chain_ground_filter_family}, let $F$ be
     the Gaussian filter factors of

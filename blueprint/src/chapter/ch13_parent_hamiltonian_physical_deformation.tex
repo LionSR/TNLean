@@ -142,7 +142,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
         MPSTensor.groundSpace_rotatePhysical_rectangular,
         MPSTensor.groundSpaceES_rotatePhysical_rectangular}
     \leanok
-    \uses{def:physical_rotation, def:ground_space_map, def:ground_space_es}
+    \uses{def:physical_rotation,def:ground_space_map,def:ground_space_es}
     Let $E:\mathbb C^d\to\mathbb C^m$ be a linear map and let
     $(EA)^i=\sum_jE_{ij}A^j$. Write $T_L=E^{\otimes L}$. Then
     $\Gamma_L^{EA}(X)=T_L\Gamma_L^A(X)$ and
@@ -155,7 +155,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:physical_rotation_word, def:ground_space_map}
+    \uses{thm:physical_rotation_word,def:ground_space_map}
     Expand each rotated letter in the ordered product. Taking the trace
     against $X$ gives the boundary-map identity. Taking its range gives
     the boundary-space identity, including its Hilbert-space realization.
@@ -167,7 +167,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
     \lean{MPSTensor.mpv_rotatePhysical_eq_toLin'}
     \lean{MPSTensor.groundSpaceMap_rotatePhysical}
     \leanok
-    \uses{def:physical_rotation, def:on_site_tensor_pow, def:ground_space_map}
+    \uses{def:physical_rotation,def:on_site_tensor_pow,def:ground_space_map}
     For $\Lambda\in\MN{d}$,
     $\ket{V^{(N)}(\Lambda A)}=\Lambda^{\otimes N}\ket{V^{(N)}(A)}$ and
     $\Gamma_L^{\Lambda A}(X)=\Lambda^{\otimes L}\,\Gamma_L^{A}(X)$ for every
@@ -175,7 +175,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpv_rotate_physical, thm:spt_physical_embedding_boundary}
+    \uses{lem:mpv_rotate_physical,thm:spt_physical_embedding_boundary}
     The state identity is Lemma~\ref{lem:mpv_rotate_physical}, written using
     the on-site tensor power.
     The boundary-map identity is the square-map instance of
@@ -186,7 +186,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
     \lean{MPSTensor.groundSpace_rotatePhysical}
     \lean{MPSTensor.groundSpaceES_rotatePhysical}
     \leanok
-    \uses{def:physical_rotation, def:on_site_tensor_pow, def:ground_space_parent, def:ground_space_es}
+    \uses{def:physical_rotation,def:on_site_tensor_pow,def:ground_space_parent,def:ground_space_es}
     For every $\Lambda\in\MN{d}$ and $L\ge0$,
     \begin{align}
         G_L(\Lambda A) & =\Lambda^{\otimes L}\,G_L(A),
@@ -217,14 +217,14 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 \begin{lemma}[The canonical parent interaction is a parent interaction]\label{thm:canonical_parent_interaction_is_parent_interaction}
     \lean{MPSTensor.isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction}
     \leanok
-    \uses{def:is_parent_interaction, rem:euclidean_local_projector_ingredients}
+    \uses{def:is_parent_interaction,rem:euclidean_local_projector_ingredients}
     The canonical parent interaction $P_L^{\mathrm{ES}}(A)$, the orthogonal
     projector onto $G_L(A)^\perp$, is a parent interaction on $L$ sites for $A$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{def:canonical_parent_interaction_matrix, lem:parent_interaction_es_kernel}
+    \uses{def:canonical_parent_interaction_matrix,lem:parent_interaction_es_kernel}
     By Definition~\ref{def:canonical_parent_interaction_matrix}, an orthogonal
     projector is hermitian and positive semidefinite, and by
     Lemma~\ref{lem:parent_interaction_es_kernel} a vector is annihilated by the
@@ -253,7 +253,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
     \lean{MPSTensor.ker_toEuclideanLin_deformedInteraction}
     \lean{MPSTensor.IsParentInteraction.deformedInteraction}
     \leanok
-    \uses{def:physical_rotation, def:is_parent_interaction, def:deformed_interaction}
+    \uses{def:physical_rotation,def:is_parent_interaction,def:deformed_interaction}
     Let $\Lambda\in\MN{d}$ be invertible and let $h$ be a parent interaction on $L$
     sites for $A$. Then the deformed interaction $h'$ of
     (\ref{eq:deformed_interaction}) is a parent interaction on $L$ sites for
@@ -262,7 +262,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{proof}
     \leanok
-    \uses{lem:on_site_tensor_pow_mul, thm:ground_space_physical_rotation}
+    \uses{lem:on_site_tensor_pow_mul,thm:ground_space_physical_rotation}
     With $S=(\Lambda^{-1})^{\otimes L}$, Lemma~\ref{lem:on_site_tensor_pow_mul}
     gives $({\Lambda^{-1}}^\dagger)^{\otimes L}=S^\dagger$, so $h'=S^\dagger hS$
     is positive semidefinite. Since $S$ and $S^\dagger$ are invertible with
@@ -281,7 +281,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 \begin{lemma}[Window factorization of the tensor power]\label{lem:cyclic_restrict_tensor_pow}
     \lean{MPSTensor.cyclicRestrictₗ_toLin'_onSiteTensorPow}
     \leanok
-    \uses{def:on_site_tensor_pow, rem:cyclic_window_operators, def:cyclic_window_support}
+    \uses{def:on_site_tensor_pow,rem:cyclic_window_operators,def:cyclic_window_support}
     Let $0<N$, $L\le N$, let $i\in\Fin{N}$, and let $\tau\in\Fin{d}^{N}$ be an
     outside configuration. For every $\phi\colon\Fin{d}^{N}\to\C$, the restriction of
     $\Lambda^{\otimes N}\phi$ to the cyclic window $[i,i+L-1]$ with outside
@@ -349,7 +349,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
     \lean{MPSTensor.chainGroundSpace_rotatePhysical}
     \lean{MPSTensor.ker_parentHamiltonian_rotatePhysical}
     \leanok
-    \uses{def:physical_rotation, def:on_site_tensor_pow, def:chain_ground_space, def:parent_hamiltonian}
+    \uses{def:physical_rotation,def:on_site_tensor_pow,def:chain_ground_space,def:parent_hamiltonian}
     As the periodic-chain matrix-product-state specialization of the one-to-one
     correspondence, through $R^{\otimes N}$, between the ground states of the
     parent Hamiltonians of $\ket\psi$ and $\ket{\psi'}=R^{\otimes N}\ket\psi$
@@ -368,7 +368,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{proof}
     \leanok
-    \uses{lem:cyclic_restrict_tensor_pow, thm:ground_space_physical_rotation, lem:on_site_tensor_pow_mul, lem:physical_rotation_one, lem:physical_rotation_mul, thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    \uses{lem:cyclic_restrict_tensor_pow,thm:ground_space_physical_rotation,lem:on_site_tensor_pow_mul,lem:physical_rotation_one,lem:physical_rotation_mul,thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     Let $\phi\in\mathcal G_{N,L}(A)$, so that every window restriction of $\phi$
     lies in $G_L(A)$. By (\ref{eq:cyclic_restrict_tensor_pow}), every window
     restriction of $\Lambda^{\otimes N}\phi$ is $\Lambda^{\otimes L}$ applied to a
@@ -387,7 +387,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
     \lean{MPSTensor.onSiteTensorPowEquiv}
     \lean{MPSTensor.chainGroundSpace_rotatePhysical_eq_span}
     \leanok
-    \uses{def:physical_rotation, def:chain_ground_space, def:has_unique_ground_state}
+    \uses{def:physical_rotation,def:chain_ground_space,def:has_unique_ground_state}
     Let $\Lambda\in\MN{d}$ be invertible. If $\mathcal G_{N,L}(A)$ is the
     line through a nonzero vector $\psi$, then $\mathcal G_{N,L}(\Lambda A)$
     is the line through the nonzero vector $\Lambda^{\otimes N}\psi$.
@@ -395,7 +395,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{proof}
     \leanok
-    \uses{thm:chain_ground_space_physical_rotation, lem:on_site_tensor_pow_mul}
+    \uses{thm:chain_ground_space_physical_rotation,lem:on_site_tensor_pow_mul}
     By (\ref{eq:chain_ground_space_physical_rotation}), $\mathcal G_{N,L}(\Lambda A)$
     is the image of $\mathcal G_{N,L}(A)$ under the linear automorphism
     $\Lambda^{\otimes N}$, which maps the line through $\psi$ onto the line

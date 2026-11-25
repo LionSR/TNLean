@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Circuit.Party.Sheet.TaggedBirthDeath
+import QICLean.Spectral.Eigenvalue.MatrixReindexEuclidean
 import TNLean.PEPS.Approximation.Frames.TwoSheetRegisters
 
 /-!
@@ -11,31 +13,25 @@ import TNLean.PEPS.Approximation.Frames.TwoSheetRegisters
 Lemmas 6.5 and 6.6 of the polynomial-PEPS manuscript assert that a homogeneous birth or death,
 and a two-sheet exchange, are bounded changes: monomials allowed by Theorem 5.2 on a fixed list
 of parties, with small reference-vector error. This file proves these assertions on the
-registers of the frames, one register per site and per tag, each held by its owner
-(`TNLean.PEPS.Approximation.FrameRegisters`), in their canonical coordinates.
+registers of the frames, at every party the tags it holds and the raw configurations of the
+sites it owns (`TNLean.PEPS.Approximation.Frames.FrameRegisters`), in their canonical
+coordinates.
 
 * `Frame.birth_bounded`: the birth is an allowed word using only `P∘` and `Q∘`, with at most one
   normalized pair source, whose operator is `1_tags ⊗ B` for the canonical map `B` of
-  `eq:birth-map`; the reference-vector error is at most `L^{-30}`. The word groups the raw
-  registers of `T` and `U` at `P∘` (`groupWord`), applies the birth monomial of
-  `TNLean.PEPS.Approximation.OwnershipMonomials`, and ungroups at `Q∘` and `P∘`.
+  `eq:birth-map`; the reference-vector error is at most `L^{-30}`. The word is the birth of the
+  raw configurations of the sheet beside the untouched tags
+  (`QuantumCircuit.Party.Sheet.exists_taggedBirthWord_of_environment`).
 * `Frame.death_bounded`: the death is the same with one normalized pair effect instead.
-* `TwoSheetExchange.exchange_bounded`: the exchange is the renaming `ℛ`, a word of exchanges of
-  tensor factors, followed by one private contraction at `P∘`; it uses only `P∘`, and its
-  operator is `C = D_U F_A ℛ` with reference-vector error at most `4 L^{-30}`.
+* `TwoSheetExchange.exchange_bounded`: the exchange is the renaming `ℛ`, a relabelling of the
+  bases of the parties, followed by one private contraction at `P∘`; the contraction uses only
+  `P∘`, and the operator is `C = D_U F_A ℛ` with reference-vector error at most `4 L^{-30}`.
 * `TwoSheetExchange.exchange_ofFrames_bounded`: the same for two frames whose holes are listed in
-  any order, after the canonical identification of tag orderings, itself a word of exchanges.
+  any order, after the canonical identification of tag orderings, itself a relabelling.
 
-The words of the birth and the death do not act on the tag registers. They are
-`exists_frontBirthWord` and `exists_frontDeathChain` of `TNLean.Lattice.Sheet.FrontChanges`,
-stated for any block of registers in front of the raw registers and read here with the tag
-registers of the holes in front; read with the empty front block they give the bounds for
-sheets without holes, `Lattice.Sheet.birth_bounded` and `Lattice.Sheet.death_bounded`, which
-are stated for any exponent: `I_Ω(T:E) ≤ L^{-2p}` gives error `L^{-p}`; the frame bounds here are
-the manuscript's case `p = 30`. The
-reference error of the exchange is bounded on the sheets by
-`norm_act_sheetBufferCorrection_mul_pairSwapOp_sub_le`, shared with
-`Lattice.Sheet.exchange_bounded`.
+The frame bounds here are the manuscript's case of the exponent `30`; the bounds for sheets
+without holes, stated for any exponent, are `QuantumCircuit.Party.Sheet.birth_bounded` and its
+companions in `TNLean.Network.Party.SheetBoundedChanges`.
 
 ## Main results
 
@@ -43,7 +39,7 @@ reference error of the exchange is bounded on the sheets by
 * `EncodedFrame.TwoSheetExchange.exchange_bounded`,
   `EncodedFrame.TwoSheetExchange.exchange_ofFrames_bounded`: Lemma 6.6 `lem:exchange`.
 * `EncodedFrame.exists_tagReorderWord`: the canonical identification of tag orderings of two
-  frames as a word.
+  frames as a relabelling.
 
 ## References
 
@@ -54,35 +50,50 @@ reference error of the exchange is bounded on the sheets by
 
 noncomputable section
 
-open Matrix ContinuousLinearMap EuclideanSpace
-open scoped InnerProductSpace TensorProduct Kronecker
+open Matrix ManyBody QuantumCircuit.Party
+open EuclideanSpace (vecKron)
+open scoped Kronecker
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
-
-open TNLean.Lattice.PartyCircuit
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type}
+  [Fintype Party] [DecidableEq Party]
+
+/-- An operator `1_W ⊗ M` of the tags beside the raw configurations of a sheet, read in the
+canonical coordinates of a frame. -/
+private theorem reindex_one_kronecker_tags (l : List (Hole pos q Party)) (own own' : ι → Party)
+    (M : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
+    reindex
+        ((Equiv.arrowProdEquivProdArrow Party (tagSystem l) (Sheet.system q ⟨own'⟩)).trans
+          ((Equiv.refl _).prodCongr (blockConfigEquiv own' fun _ ↦ Fin q))).symm
+        ((Equiv.arrowProdEquivProdArrow Party (tagSystem l) (Sheet.system q ⟨own⟩)).trans
+          ((Equiv.refl _).prodCongr (blockConfigEquiv own fun _ ↦ Fin q))).symm
+        ((1 : Matrix (Config (tagSystem l)) (Config (tagSystem l)) ℂ) ⊗ₖ M) =
+      reindex (layoutConfigEquiv l own').symm (layoutConfigEquiv l own).symm
+        ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ M) := by
+  ext y x
+  simp only [reindex_apply, submatrix_apply, Equiv.symm_symm, kroneckerMap_apply, one_apply,
+    Equiv.trans_apply, Equiv.prodCongr_apply, Prod.map, Equiv.refl_apply,
+    layoutConfigEquiv_apply, Equiv.arrowProdEquivProdArrow_apply,
+    (tagConfigEquiv l).apply_eq_iff_eq]
+  rfl
 
 namespace Frame
 
-variable (F : Frame pos q Party)
-
-variable {T : Finset ι} {P Q : Party}
+variable (F : Frame pos q Party) {T : Finset ι} {P Q : Party}
 
 /-- **Lemma 6.5 (homogeneous birth): the birth is a bounded change involving only `P∘` and
 `Q∘`.** In an encoded frame `F`, let `T` be a set of raw sites owned by `P∘` and disjoint from
 every outer hole footprint, and let `E` and `U = Λ ∖ (T ∪ E)` be as in `eq:birth-partition`. If
 `I_Ω(T:E) ≤ L^{-60}` for a unit vector `Ω`, there are splitting data and an allowed monomial `w`
-from the registers of `F` (one per site and per tag, each held by its owner) to the registers
-of the frame `F'` in which `T` is owned by `Q∘`, such that:
+from the registers of `F` (at every party, the tags it holds and the raw configurations of the
+sites it owns) to the registers of the frame `F'` in which `T` is owned by `Q∘`, such that:
 
 * `w` uses only `P∘` and `Q∘` and at most one normalized pair source; the statement records
   these counts, which are what a bounded change asks for (`05-frames.tex`, lines 99–105). The
-  monomial constructed in the proof groups the registers of `T` and of `U` at `P∘`, applies, for
-  `Q∘ ≠ P∘`, the private contraction `⟨s| (1_T ⊗ V)` at `P∘`, prepares the pair state `s` on `T`
-  held by `Q∘` and `B_T` held by `P∘` and applies `Vᴴ` at `P∘`, and ungroups `T` at `Q∘` and `U`
-  at `P∘`, with exchanges of tensor factors in between;
+  monomial constructed in the proof prepares, for `Q∘ ≠ P∘`, the pair state `s` on a fresh copy
+  of `T` held by `Q∘` and a fresh `B_T` held by `P∘`, and applies at `P∘` the contraction
+  `Vᴴ (1_{B_T} ⊗ K)` with `K = ⟨s| (1_T ⊗ V)`, beside the tags;
 * in canonical coordinates the operator of `w` is `1_tags ⊗ B` for the canonical map `B` of
   `eq:birth-map`, and `(1 ⊗ B) K_F = K_{F'} B`;
 * the reference-vector error is at most `L^{-30}`: `‖w Ω_F - Ω_{F'}‖ ≤ L^{-30}`, with the
@@ -96,43 +107,44 @@ theorem birth_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     {L : ℝ}
     (hI : ManyBody.regionMutualInformation Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
-    ∃ σ : SplittingData q T (F.birthEnv P),
-      σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
+    ∃ σ : SplittingData (fun _ : ι ↦ Fin q) T (T ∪ F.birthEnv P),
+      σ.error Finset.subset_union_left Ω ≤ L ^ (-30 : ℤ) ∧
       ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-          sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) * F.encoder =
-        (F.changeOwner T Q).encoder * sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ ∧
-      ∃ w : Word F.regs (F.changeOwner T Q).regs,
+          configBirthOp Finset.subset_union_left σ) * F.encoder =
+        (F.changeOwner T Q).encoder * configBirthOp Finset.subset_union_left σ ∧
+      ∃ w : Word F.system (F.changeOwner T Q).system,
         w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
-        (∀ z, (F.changeOwner T Q).regIso (w.eval z) =
-          act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-            sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) (F.regIso z)) ∧
-        ‖w.eval (F.regIso.symm (F.refVec Ω)) -
-          (F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)‖ ≤ L ^ (-30 : ℤ) := by
+        w.op = reindex (F.changeOwner T Q).configEquiv.symm F.configEquiv.symm
+          ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
+            configBirthOp Finset.subset_union_left σ) ∧
+        ‖toEuclideanLin w.op (F.regRef Ω) - (F.changeOwner T Q).regRef Ω‖ ≤ L ^ (-30 : ℤ) := by
   obtain ⟨σ, hσ, -, -, hK, herr⟩ := F.birth (Q := Q) hTP hTH hΩ hI
-  obtain ⟨hB, hA', hB', hE'⟩ := F.changeOwner_birth_owners (Q := Q) hTP hTH
-  obtain ⟨w, hwA, hwU, hwS, hw⟩ := exists_frontBirthWord (tagRegs F.holes) (tagIso F.holes)
-    F.owner (F.changeOwner T Q).owner (F.disjoint_birthEnv hTP hTH) hTP hB hA' hB'
-    (fun x hx => (hE' x hx).symm) σ
-  have heval : ∀ z, (F.changeOwner T Q).regIso (w.eval z) =
-      act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-        sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) (F.regIso z) := hw
-  refine ⟨σ, hσ, hK, w, hwA, hwU, hwS, heval, ?_⟩
-  rw [← (F.changeOwner T Q).regIso.norm_map, map_sub, LinearIsometryEquiv.apply_symm_apply,
-    heval, LinearIsometryEquiv.apply_symm_apply]
+  obtain ⟨hB, -, -, -⟩ := F.changeOwner_birth_owners (Q := Q) hTP hTH
+  obtain ⟨w, hA, hR, hn, hop'⟩ : ∃ w : Word F.system (F.changeOwner T Q).system,
+      w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
+      w.op = reindex (F.changeOwner T Q).configEquiv.symm F.configEquiv.symm
+        ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
+          configBirthOp Finset.subset_union_left σ) := by
+    obtain ⟨w, hA, hR, hn, hop⟩ := Sheet.exists_taggedBirthWord_of_environment (Q := Q) F.sheet
+      (tagSystem F.holes) (F.disjoint_birthEnv hTP hTH) hTP
+      (fun x hx ↦ hB x (Finset.mem_compl.mpr hx)) σ
+    exact ⟨w, hA, hR, hn,
+      hop.trans (reindex_one_kronecker_tags F.holes F.owner (F.changeOwner T Q).owner _)⟩
+  refine ⟨σ, hσ, hK, w, hA, hR, hn, hop', ?_⟩
+  rw [hop', Frame.regRef, toEuclideanLin_reindex_piLpCongrLeft₂, Frame.regRef, ← map_sub,
+    LinearIsometryEquiv.norm_map]
   exact herr
 
 /-- **Lemma 6.5 (homogeneous death): the death is a bounded change involving only `P∘` and
 `Q∘`.** Let `F` be the frame *after* the death, in which `T` is owned by `P∘` and avoids every
 outer hole footprint, and let the frame before the death be `F'`, in which `T` is owned by
 `Q∘`. If `I_Ω(T:E) ≤ L^{-60}` for `E` computed in `F`, there are splitting data and an allowed
-monomial from the registers of `F'` to those of `F`, using only `P∘` and `Q∘`, without pair
-sources and with at most one normalized pair effect, whose operator in canonical coordinates is
+monomial from the registers of `F'` to those of `F`, using only `P∘` and `Q∘`, whose gates are
+normalized pair effects, at most one of them, whose operator in canonical coordinates is
 `1_tags ⊗ B` for the canonical map `B` of `eq:birth-map`, with `(1 ⊗ B) K_{F'} = K_F B` and
-reference-vector error `‖M Ω_{F'} - Ω_F‖ ≤ L^{-30}`. The statement records the parties and the
-pair-resource counts; the monomial constructed in the proof groups the registers of `T` at `Q∘`
-and of `U` at `P∘`, then, for `Q∘ ≠ P∘`, applies `V` at `P∘`, contracts `T` and `B_T` with the
-pair effect `⟨s|` held by `Q∘` and `P∘`, reinserts `s` and applies `Vᴴ` at `P∘`, and ungroups at
-`P∘`.
+reference-vector error `‖M Ω_{F'} - Ω_F‖ ≤ L^{-30}`. For `Q∘ ≠ P∘` the monomial constructed in
+the proof applies at `Q∘` and `P∘` the local maps reversing those of the birth and ends with the
+normalized pair effect `⟨s|` held by `Q∘` and `P∘`.
 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–410; proof lines
 439–446. -/
@@ -141,38 +153,81 @@ theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     {L : ℝ}
     (hI : ManyBody.regionMutualInformation Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
-    ∃ σ : SplittingData q T (F.birthEnv P),
-      σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
+    ∃ σ : SplittingData (fun _ : ι ↦ Fin q) T (T ∪ F.birthEnv P),
+      σ.error Finset.subset_union_left Ω ≤ L ^ (-30 : ℤ) ∧
       ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-          sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) * (F.changeOwner T Q).encoder =
-        F.encoder * sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ ∧
-      ∃ M : PartyChain (F.changeOwner T Q).regs F.regs,
-        M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount ≤ 1 ∧
-        (∀ z, F.regIso (M.toEffectChain.eval z) =
-          act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-            sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) ((F.changeOwner T Q).regIso z)) ∧
-        ‖M.toEffectChain.eval ((F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)) -
-          F.regIso.symm (F.refVec Ω)‖ ≤ L ^ (-30 : ℤ) := by
+          configBirthOp Finset.subset_union_left σ) * (F.changeOwner T Q).encoder =
+        F.encoder * configBirthOp Finset.subset_union_left σ ∧
+      ∃ M : PartyCircuit (ChainGate (P := Party)) (F.changeOwner T Q).system F.system,
+        M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly {P, Q} ∧
+        M.ForallGate (fun _ _ _ g ↦ Sum.isRight g) ∧ M.numGates ≤ 1 ∧
+        M.op chainEv = reindex F.configEquiv.symm (F.changeOwner T Q).configEquiv.symm
+          ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
+            configBirthOp Finset.subset_union_left σ) ∧
+        ‖toEuclideanLin (M.op chainEv) ((F.changeOwner T Q).regRef Ω) - F.regRef Ω‖ ≤
+          L ^ (-30 : ℤ) := by
   obtain ⟨σ, hσ, -, -, hK, herr⟩ := F.death (Q := Q) hTP hTH hΩ hI
-  obtain ⟨hB', hA, hB, hE⟩ := F.changeOwner_birth_owners (Q := Q) hTP hTH
-  obtain ⟨M, hMA, hMU, hMS, hMe, hM⟩ := exists_frontDeathChain (tagRegs F.holes)
-    (tagIso F.holes) (F.changeOwner T Q).owner F.owner (F.disjoint_birthEnv hTP hTH) hA hB hTP
-    hB' hE σ
-  have heval : ∀ z, F.regIso (M.toEffectChain.eval z) =
-      act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-        sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) ((F.changeOwner T Q).regIso z) := hM
-  refine ⟨σ, hσ, hK, M, hMA, hMU, hMS, hMe, heval, ?_⟩
-  rw [← F.regIso.norm_map, map_sub, LinearIsometryEquiv.apply_symm_apply, heval,
-    LinearIsometryEquiv.apply_symm_apply]
+  obtain ⟨hB, -, -, -⟩ := F.changeOwner_birth_owners (Q := Q) hTP hTH
+  obtain ⟨M, hA, hR, hG, hn, hop'⟩ :
+      ∃ M : PartyCircuit (ChainGate (P := Party)) (F.changeOwner T Q).system F.system,
+        M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly {P, Q} ∧
+        M.ForallGate (fun _ _ _ g ↦ Sum.isRight g) ∧ M.numGates ≤ 1 ∧
+        M.op chainEv = reindex F.configEquiv.symm (F.changeOwner T Q).configEquiv.symm
+          ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
+            configBirthOp Finset.subset_union_left σ) := by
+    obtain ⟨M, hA, hR, hG, hn, hop⟩ := Sheet.exists_taggedDeathChain_of_environment (Q := Q)
+      F.sheet (tagSystem F.holes) (F.disjoint_birthEnv hTP hTH) hTP
+      (fun x hx ↦ hB x (Finset.mem_compl.mpr hx)) σ
+    exact ⟨M, hA, hR, hG, hn,
+      hop.trans (reindex_one_kronecker_tags F.holes (F.changeOwner T Q).owner F.owner _)⟩
+  refine ⟨σ, hσ, hK, M, hA, hR, hG, hn, hop', ?_⟩
+  rw [hop', Frame.regRef, toEuclideanLin_reindex_piLpCongrLeft₂, Frame.regRef, ← map_sub,
+    LinearIsometryEquiv.norm_map]
   exact herr
 
 end Frame
 
-/-- **The canonical identification of tag orderings on two frames, as a word.** If `l₁'`, `l₂'`
-list the holes of `l₁`, `l₂` in other orders, there are relabellings `e₁`, `e₂` of the tag
-configurations preserving the raw parts of the encodings and a word of exchanges of tensor
-factors, using no party, whose operator in canonical coordinates is the relabelling
-`tagReorder e₁ e₂`.
+/-! ### The canonical identification of tag orderings -/
+
+omit [Fintype Party] in
+/-- **Reordering the tags of the holes at every party.** If `l'` lists the holes of `l`, whose
+outer footprints are pairwise disjoint, in another order, the tag registers of `l'` are those of
+`l` at every party, the tag of every hole moved to the hole's new position, and the raw parts of
+the encodings agree along this identification. -/
+theorem exists_tagSystemEquiv_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
+    (hd : PairwiseDisjointOuter (l.map Hole.patch)) (hp : l.Perm l') :
+    ∃ f : ∀ p, tagSystem l' p ≃ tagSystem l p, ∀ z : Config (tagSystem l'),
+      rawProd l (tagConfigEquiv l (Equiv.piCongrRight f z)) = rawProd l' (tagConfigEquiv l' z) := by
+  induction hp with
+  | nil => exact ⟨fun _ ↦ Equiv.refl _, fun _ ↦ rfl⟩
+  | cons h _ ih =>
+    obtain ⟨f, hf⟩ := ih (PairwiseDisjointOuter.of_cons hd)
+    refine ⟨fun p ↦ (Equiv.refl _).prodCongr (f p), fun z ↦ ?_⟩
+    change h.patch.branch _ * rawProd _ (tagConfigEquiv _ (Equiv.piCongrRight f fun p ↦ (z p).2)) =
+      h.patch.branch _ * rawProd _ (tagConfigEquiv _ fun p ↦ (z p).2)
+    rw [hf]
+    rfl
+  | swap x y l =>
+    refine ⟨fun p ↦ ⟨fun t ↦ (t.2.1, t.1, t.2.2), fun t ↦ (t.2.1, t.1, t.2.2), fun _ ↦ rfl,
+      fun _ ↦ rfl⟩, fun z ↦ ?_⟩
+    change y.patch.branch _ * (x.patch.branch _ * rawProd l _) =
+      x.patch.branch _ * (y.patch.branch _ * rawProd l _)
+    have hyx : Disjoint y.patch.outer x.patch.outer :=
+      List.rel_of_pairwise_cons hd List.mem_cons_self
+    rw [← mul_assoc, ← mul_assoc,
+      (ManyBody.commute_of_mem_supportedOperators_of_disjoint
+        (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _) hyx).eq]
+    rfl
+  | trans h₁ _ ih₁ ih₂ =>
+    obtain ⟨f₁, hf₁⟩ := ih₁ hd
+    obtain ⟨f₂, hf₂⟩ := ih₂ (hd.perm (h₁.map _) fun h ↦ Disjoint.symm h)
+    exact ⟨fun p ↦ (f₂ p).trans (f₁ p), fun z ↦ (hf₁ _).trans (hf₂ z)⟩
+
+/-- **The canonical identification of tag orderings on two frames, as a relabelling.** If `l₁'`,
+`l₂'` list the holes of `l₁`, `l₂` in other orders, there are relabellings `e₁`, `e₂` of the tag
+configurations preserving the raw parts of the encodings and an allowed word without pair
+sources, a relabelling of the bases of the parties, whose operator in canonical coordinates is
+the relabelling `tagReorder e₁ e₂`.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 74–75 and 84–85. -/
 theorem exists_tagReorderWord [NeZero q] {l₁ l₁' l₂ l₂' : List (Hole pos q Party)}
@@ -181,30 +236,45 @@ theorem exists_tagReorderWord [NeZero q] {l₁ l₁' l₂ l₂' : List (Hole pos
     (own₁ own₂ : ι → Party) :
     ∃ (e₁ : TagSpace l₁ ≃ TagSpace l₁') (e₂ : TagSpace l₂ ≃ TagSpace l₂'),
       (∀ t, rawProd l₁' (e₁ t) = rawProd l₁ t) ∧ (∀ t, rawProd l₂' (e₂ t) = rawProd l₂ t) ∧
-      ∃ w : Word (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)
-          (layoutRegs q l₁' own₁ ++ layoutRegs q l₂' own₂),
-        w.IsReordering ∧ ∀ z, twoLayoutIso l₁' l₂' own₁ own₂ (w.eval z) =
-          act (TwoSheetExchange.tagReorder e₁ e₂) (twoLayoutIso l₁ l₂ own₁ own₂ z) := by
-  obtain ⟨e₁, he₁, w₁, a₁, hw₁⟩ := exists_tagWord_of_perm hd₁ hp₁
-    (siteRegs q own₁ (sites ι) ++ layoutRegs q l₂ own₂)
-  obtain ⟨e₂, he₂, w₂, a₂, hw₂⟩ := exists_tagWord_of_perm hd₂ hp₂
-    (siteRegs q own₂ (sites ι))
-  refine ⟨e₁, e₂, he₁, he₂,
-    (Word.assocWord (tagRegs l₁) (siteRegs q own₁ (sites ι)) (layoutRegs q l₂ own₂)).comp
-      (w₁.comp ((Word.unassocWord (tagRegs l₁') (siteRegs q own₁ (sites ι))
-        (layoutRegs q l₂ own₂)).comp (Word.frameList (layoutRegs q l₁' own₁) w₂))),
-    by simp [a₁, a₂], ?_⟩
-  · refine twoLayoutIso_eq_act_of_basis _ _ _ _ _ _ _ _ _ _ fun τ₁ c₁ τ₂ c₂ => ?_
-    simp only [layoutVec, Circuit.eval_comp, ContinuousLinearMap.comp_apply,
-      Word.eval_assocWord_appendIso_symm, hw₁, Word.eval_unassocWord_appendIso_symm,
-      Circuit.eval_frameList_appendIso_symm, hw₂]
-    rw [← layoutVec, ← layoutVec, twoLayoutIso_basis, TwoSheetExchange.tagReorder,
-      act_toMatrix_symm_single]
-    rfl
+      ∃ w : Word (fun p ↦ layoutSystem q l₁ own₁ p × layoutSystem q l₂ own₂ p)
+          (fun p ↦ layoutSystem q l₁' own₁ p × layoutSystem q l₂' own₂ p),
+        w.IsAllowed ∧ w.sourceCount = 0 ∧
+        w.op = reindex (twoLayoutEquiv l₁' own₁ l₂' own₂).symm
+          (twoLayoutEquiv l₁ own₁ l₂ own₂).symm (TwoSheetExchange.tagReorder e₁ e₂) := by
+  obtain ⟨f₁, hf₁⟩ := exists_tagSystemEquiv_of_perm hd₁ hp₁
+  obtain ⟨f₂, hf₂⟩ := exists_tagSystemEquiv_of_perm hd₂ hp₂
+  set e₁ : TagSpace l₁ ≃ TagSpace l₁' := (tagConfigEquiv l₁).symm.trans
+    ((Equiv.piCongrRight f₁).symm.trans (tagConfigEquiv l₁'))
+  set e₂ : TagSpace l₂ ≃ TagSpace l₂' := (tagConfigEquiv l₂).symm.trans
+    ((Equiv.piCongrRight f₂).symm.trans (tagConfigEquiv l₂'))
+  refine ⟨e₁, e₂, fun t ↦ ?_, fun t ↦ ?_,
+    PartyCircuit.relabel fun p ↦ ((f₁ p).prodCongr (Equiv.refl _)).prodCongr
+      ((f₂ p).prodCongr (Equiv.refl _)), Word.isAllowed_relabel _, rfl, ?_⟩
+  · change rawProd l₁' (tagConfigEquiv l₁' ((Equiv.piCongrRight f₁).symm
+      ((tagConfigEquiv l₁).symm t))) = _
+    rw [← hf₁, Equiv.apply_symm_apply, Equiv.apply_symm_apply]
+  · change rawProd l₂' (tagConfigEquiv l₂' ((Equiv.piCongrRight f₂).symm
+      ((tagConfigEquiv l₂).symm t))) = _
+    rw [← hf₂, Equiv.apply_symm_apply, Equiv.apply_symm_apply]
+  · ext y x
+    rw [Word.op, PartyCircuit.op_relabel, reindex_apply, submatrix_apply, Equiv.symm_symm,
+      Equiv.symm_symm, TwoSheetExchange.tagReorder]
+    simp only [PEquiv.toMatrix_apply, Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq]
+    refine if_congr ?_ rfl rfl
+    have key : ((e₁.prodCongr (Equiv.refl _)).prodCongr (e₂.prodCongr (Equiv.refl _))).symm
+        (twoLayoutEquiv l₁' own₁ l₂' own₂ y) =
+        twoLayoutEquiv l₁ own₁ l₂ own₂ (Equiv.piCongrRight (fun p ↦
+          ((f₁ p).prodCongr (Equiv.refl _)).prodCongr ((f₂ p).prodCongr (Equiv.refl _))) y) := by
+      simp only [Equiv.prodCongr_symm, Equiv.symm_trans, Equiv.symm_symm, Equiv.refl_symm,
+        twoLayoutEquiv, Equiv.trans_apply, Equiv.arrowProdEquivProdArrow_apply,
+        Equiv.prodCongr_apply, Prod.map_apply, layoutConfigEquiv_apply, Equiv.coe_trans,
+        Equiv.coe_refl, Function.comp_apply, Equiv.symm_apply_apply, id_eq,
+        Equiv.piCongrRight_apply, Pi.map_apply, Prod.map_fst, Prod.map_snd, Prod.mk.injEq,
+        EmbeddingLike.apply_eq_iff_eq, and_true, e₁, e₂]
+      exact ⟨rfl, rfl⟩
+    rw [key, (twoLayoutEquiv l₁ own₁ l₂ own₂).apply_eq_iff_eq]
 
 namespace TwoSheetExchange
-
-open EuclideanSpace (vecKron)
 
 variable (X : TwoSheetExchange pos q Party) (P : Party)
 
@@ -213,18 +283,16 @@ register renaming.** Consider two encoded frames and a region `Y` such that ever
 square lies on one side of `∂Y`, with the holes of each frame listed as those outside `Y`
 followed by those inside. Let `P∘` be a party and `Z`, `T`, `E`, `U` as in `eq:exchange-Z` and
 `eq:exchange-partition`. If `I_Ω(T:E) ≤ L^{-60}` for a unit vector `Ω`, there are splitting data
-and an allowed monomial `w` from the registers of the two frames (one per site and per tag on
-each sheet, each held by its owner) to the registers of the two frames after the exchange, such
-that:
+and an allowed word `c` on the registers of the two frames after the exchange (at every party,
+its tags and raw configurations on both sheets) such that:
 
-* `w` uses only `P∘` and no pair resource; the monomial constructed in the proof is the renaming
-  `ℛ`, a word of exchanges of tensor factors that keeps every register at its party, followed by
-  one private contraction at `P∘` on the raw registers of `U` of both sheets (the corrections
-  `D_U F_A`);
-* in canonical coordinates its operator is the map `C = D_U F_A ℛ`, with
-  `C (K_{F₁} ⊗ K_{F₂}) = K_out D_U F_T`;
+* `c` uses only `P∘` and no pair resource; it is one private contraction at `P∘` on the raw
+  configurations of `U` of both sheets (the corrections `D_U F_A`), beside the tags;
+* the renaming `ℛ` (`renameWord`, a relabelling of the bases of the parties that keeps every
+  register at its party) followed by `c` has, in canonical coordinates, the operator
+  `C = D_U F_A ℛ`, with `C (K_{F₁} ⊗ K_{F₂}) = K_out D_U F_T`;
 * the reference-vector error is at most `4 L^{-30}`:
-  `‖w (Ω_{F₁} ⊗ Ω_{F₂}) - Ω_{F₁'} ⊗ Ω_{F₂'}‖ ≤ 4 L^{-30}`, read on the registers of the frames.
+  `‖C (Ω_{F₁} ⊗ Ω_{F₂}) - Ω_{F₁'} ⊗ Ω_{F₂'}‖ ≤ 4 L^{-30}`, read on the registers of the frames.
 
 Hence the exchange is a bounded change in the sense of Theorem 5.2.
 
@@ -233,48 +301,30 @@ lines 481–561; bounded changes, lines 99–105. -/
 theorem exchange_bounded [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
     (hI : ManyBody.regionMutualInformation Ω (X.tSet P) (X.eSet P) ≤
       L ^ (-60 : ℤ)) :
-    ∃ σ : SplittingData q (X.tSet P) (X.eSet P),
-      σ.error (X.disjoint_tSet_eSet P) Ω ≤ L ^ (-30 : ℤ) ∧
+    ∃ σ : SplittingData (fun _ : ι ↦ Fin q) (X.tSet P) (X.tSet P ∪ X.eSet P),
+      σ.error Finset.subset_union_left Ω ≤ L ^ (-30 : ℤ) ∧
       X.exchangeOp P σ * (X.frame₁.encoder ⊗ₖ X.frame₂.encoder) =
         (X.newFrame₁.encoder ⊗ₖ X.newFrame₂.encoder) *
-          (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * Matrix.reindex
+          (configBufferCorrection Finset.subset_union_left σ * Matrix.reindex
               (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
               (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
               (ManyBody.pairSwapOp (X.tSet P))) ∧
-      ∃ w : Word (X.frame₁.regs ++ X.frame₂.regs) (X.newFrame₁.regs ++ X.newFrame₂.regs),
-        w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧
-        (∀ z, twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner (w.eval z) =
-          act (X.exchangeOp P σ) (twoLayoutIso _ _ X.owner₁ X.owner₂ z)) ∧
-        ‖w.eval ((twoLayoutIso _ _ X.owner₁ X.owner₂).symm
-            (vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω))) -
-          (twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner).symm
-            (vecKron (X.newFrame₁.refVec Ω) (X.newFrame₂.refVec Ω))‖ ≤ 4 * L ^ (-30 : ℤ) := by
+      ∃ c : Word (fun p ↦ X.newFrame₁.system p × X.newFrame₂.system p)
+          (fun p ↦ X.newFrame₁.system p × X.newFrame₂.system p),
+        c.IsAllowed ∧ c.UsesOnly {P} ∧ c.sourceCount = 0 ∧
+        Word.op (PartyCircuit.comp X.renameWord c) =
+          reindex (twoFrameEquiv X.newFrame₁ X.newFrame₂).symm
+            (twoFrameEquiv X.frame₁ X.frame₂).symm (X.exchangeOp P σ) ∧
+        ‖toEuclideanLin (Word.op (PartyCircuit.comp X.renameWord c))
+            (pairRef X.frame₁ X.frame₂ Ω) - pairRef X.newFrame₁ X.newFrame₂ Ω‖ ≤
+          4 * L ^ (-30 : ℤ) := by
   obtain ⟨σ, hσ, -, hK, herr⟩ := X.exchange P hΩ hI
-  set h := X.disjoint_tSet_eSet P
-  have hU : ∀ x ∈ (X.tSet P ∪ X.eSet P)ᶜ,
-      X.newFrame₁.owner x = P ∧ X.newFrame₂.owner x = P := fun x hx =>
-    X.newOwner_eq_of_notMem_exchangeEnv P (by
-      rw [← X.tSet_union_eSet P]
-      exact Finset.mem_compl.mp hx)
-  have heval : ∀ z, twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner
-      ((X.renameWord.comp (correctionLayoutWord (X.out₁ ++ X.in₂) (X.out₂ ++ X.in₁)
-        X.newFrame₁.owner X.newFrame₂.owner (fun x hx => (hU x hx).1) (fun x hx => (hU x hx).2)
-        (correctionMatrix σ (X.aSet P)))).eval z) =
-      act (X.exchangeOp P σ) (twoLayoutIso _ _ X.owner₁ X.owner₂ z) := by
-    intro z
-    rw [Circuit.eval_comp, ContinuousLinearMap.comp_apply, twoLayoutIso_correctionLayoutWord h,
-      twoLayoutIso_renameWord, ← act_mul, exchangeOp,
-      sheetBufferCorrection_mul_pairSwapOp_eq h σ (X.aSet_subset_compl P)]
-  have r := X.isReordering_renameWord
-  obtain ⟨c₁, c₂, c₃⟩ := correctionLayoutWord_props (q := q) (X.out₁ ++ X.in₂) (X.out₂ ++ X.in₁)
-    X.newFrame₁.owner X.newFrame₂.owner (fun x hx => (hU x hx).1) (fun x hx => (hU x hx).2)
-    (norm_correctionMatrix_le_one σ (X.aSet P))
-  refine ⟨σ, hσ, hK, X.renameWord.comp (correctionLayoutWord (X.out₁ ++ X.in₂)
-    (X.out₂ ++ X.in₁) X.newFrame₁.owner X.newFrame₂.owner (fun x hx => (hU x hx).1)
-    (fun x hx => (hU x hx).2) (correctionMatrix σ (X.aSet P))), ⟨r.isAllowed, c₁⟩,
-    ⟨r.usesOnly _, c₂⟩, congrArg₂ (· + ·) r.sourceCount_eq c₃, heval, ?_⟩
-  rw [← (twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner).norm_map, map_sub,
-    LinearIsometryEquiv.apply_symm_apply, heval, LinearIsometryEquiv.apply_symm_apply]
+  refine ⟨σ, hσ, hK, X.correctionWord P σ, X.isAllowed_correctionWord P σ,
+    X.usesOnly_correctionWord P σ, X.sourceCount_correctionWord P σ,
+    X.op_comp_renameWord_correctionWord P σ, ?_⟩
+  rw [X.op_comp_renameWord_correctionWord P σ, pairRef_eq_twoFrameEquiv_symm,
+    pairRef_eq_twoFrameEquiv_symm, toEuclideanLin_reindex_piLpCongrLeft₂, ← map_sub,
+    LinearIsometryEquiv.norm_map]
   exact herr
 
 /-- **Lemma 6.6 (two-sheet exchange) for frames with holes in any order: the exchange is a bounded
@@ -283,18 +333,12 @@ holes of both frames classified as outside or inside the region as in `ofFrames`
 `E`, `U` computed from the two frames (`mem_ofFrames_exchangeEnv`), if `I_Ω(T:E) ≤ L^{-60}` for a
 unit vector `Ω`, there are relabellings `e₁`, `e₂` of the tag configurations identifying the
 encodings of each frame with those of its holes listed outside first (the canonical
-identification of tag orderings), splitting data with error at most `L^{-30}`, and an allowed
-monomial `w` from the registers of `F₁` and `F₂` to the registers of the two frames after the
-exchange, such that `w` uses only `P∘` and no pair resource (the monomial constructed in the
-proof consists of exchanges of tensor factors and one private contraction at `P∘`), acts in
-canonical coordinates as
-`C G = D_U F_A ℛ G` with `G = tagReorder e₁ e₂`, satisfies `C G (K_{F₁} ⊗ K_{F₂}) = K_out D_U F_T`,
-and has reference-vector error `‖w (Ω_{F₁} ⊗ Ω_{F₂}) - Ω_{F₁'} ⊗ Ω_{F₂'}‖ ≤ 4 L^{-30}`.
-
-The statement constrains `e₁` and `e₂` only by preserving the raw parts of the encodings. The
-relabellings constructed in the proof (`exists_tagWord_of_perm`) are the ones implemented by the
-exchanges of tag registers, which move the tag of each hole to that hole's position in the new
-list; the operator, the intertwining relation and the error bound are stated for these.
+identification of tag orderings), splitting data with error at most `L^{-30}`, a relabelling
+`g` of the bases of the parties implementing `e₁` and `e₂`, and an allowed word `c` using only
+`P∘` and no pair resource (one private contraction at `P∘`), such that `g`, then the renaming
+`ℛ`, then `c` acts in canonical coordinates as `C G = D_U F_A ℛ G` with
+`G = tagReorder e₁ e₂`, satisfies `C G (K_{F₁} ⊗ K_{F₂}) = K_out D_U F_T`, and has
+reference-vector error `‖C G (Ω_{F₁} ⊗ Ω_{F₂}) - Ω_{F₁'} ⊗ Ω_{F₂'}‖ ≤ 4 L^{-30}`.
 
 Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 460–479, with the
 canonical identification of tag orderings of lines 75–76 and 84–85; proof lines 481–561;
@@ -310,74 +354,79 @@ theorem exchange_ofFrames_bounded [NeZero q] (F₁ F₂ : Frame pos q Party) (Y 
     ∃ (e₁ : TagSpace F₁.holes ≃ TagSpace (ofFrames F₁ F₂ Y out hout hin).frame₁.holes)
       (e₂ : TagSpace F₂.holes ≃ TagSpace (ofFrames F₁ F₂ Y out hout hin).frame₂.holes),
       (∀ t, rawProd _ (e₁ t) = rawProd F₁.holes t) ∧ (∀ t, rawProd _ (e₂ t) = rawProd F₂.holes t) ∧
-      ∃ σ : SplittingData q ((ofFrames F₁ F₂ Y out hout hin).tSet P)
-          ((ofFrames F₁ F₂ Y out hout hin).eSet P),
-        σ.error ((ofFrames F₁ F₂ Y out hout hin).disjoint_tSet_eSet P) Ω ≤ L ^ (-30 : ℤ) ∧
+      ∃ σ : SplittingData (fun _ : ι ↦ Fin q) ((ofFrames F₁ F₂ Y out hout hin).tSet P)
+          ((ofFrames F₁ F₂ Y out hout hin).tSet P ∪ (ofFrames F₁ F₂ Y out hout hin).eSet P),
+        σ.error Finset.subset_union_left Ω ≤ L ^ (-30 : ℤ) ∧
         (ofFrames F₁ F₂ Y out hout hin).exchangeOp P σ * tagReorder e₁ e₂ *
             (F₁.encoder ⊗ₖ F₂.encoder) =
           ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.encoder ⊗ₖ
               (ofFrames F₁ F₂ Y out hout hin).newFrame₂.encoder) *
-            (sheetBufferCorrection ((ofFrames F₁ F₂ Y out hout hin).disjoint_tSet_eSet P) σ *
+            (configBufferCorrection Finset.subset_union_left σ *
               Matrix.reindex (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
                   (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
                   (ManyBody.pairSwapOp ((ofFrames F₁ F₂ Y out hout hin).tSet P))) ∧
-        ∃ w : Word (F₁.regs ++ F₂.regs) ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.regs ++
-            (ofFrames F₁ F₂ Y out hout hin).newFrame₂.regs),
-          w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧
-          (∀ z, twoLayoutIso _ _ (ofFrames F₁ F₂ Y out hout hin).newFrame₁.owner
-              (ofFrames F₁ F₂ Y out hout hin).newFrame₂.owner (w.eval z) =
-            act ((ofFrames F₁ F₂ Y out hout hin).exchangeOp P σ * tagReorder e₁ e₂)
-              (twoLayoutIso _ _ F₁.owner F₂.owner z)) ∧
-          ‖w.eval ((twoLayoutIso _ _ F₁.owner F₂.owner).symm
-              (vecKron (F₁.refVec Ω) (F₂.refVec Ω))) -
-            (twoLayoutIso _ _ (ofFrames F₁ F₂ Y out hout hin).newFrame₁.owner
-                (ofFrames F₁ F₂ Y out hout hin).newFrame₂.owner).symm
-              (vecKron ((ofFrames F₁ F₂ Y out hout hin).newFrame₁.refVec Ω)
-                ((ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω))‖ ≤ 4 * L ^ (-30 : ℤ) := by
+        ∃ g : Word (fun p ↦ F₁.system p × F₂.system p)
+            (fun p ↦ (ofFrames F₁ F₂ Y out hout hin).frame₁.system p ×
+              (ofFrames F₁ F₂ Y out hout hin).frame₂.system p),
+          g.IsAllowed ∧ g.sourceCount = 0 ∧
+          ∃ c : Word (fun p ↦ (ofFrames F₁ F₂ Y out hout hin).newFrame₁.system p ×
+                (ofFrames F₁ F₂ Y out hout hin).newFrame₂.system p)
+              (fun p ↦ (ofFrames F₁ F₂ Y out hout hin).newFrame₁.system p ×
+                (ofFrames F₁ F₂ Y out hout hin).newFrame₂.system p),
+            c.IsAllowed ∧ c.UsesOnly {P} ∧ c.sourceCount = 0 ∧
+            Word.op ((g.comp (ofFrames F₁ F₂ Y out hout hin).renameWord).comp c) =
+              reindex (twoFrameEquiv (ofFrames F₁ F₂ Y out hout hin).newFrame₁
+                  (ofFrames F₁ F₂ Y out hout hin).newFrame₂).symm
+                (twoFrameEquiv F₁ F₂).symm
+                ((ofFrames F₁ F₂ Y out hout hin).exchangeOp P σ * tagReorder e₁ e₂) ∧
+            ‖toEuclideanLin (Word.op ((g.comp (ofFrames F₁ F₂ Y out hout hin).renameWord).comp c))
+                (pairRef F₁ F₂ Ω) -
+              pairRef (ofFrames F₁ F₂ Y out hout hin).newFrame₁
+                (ofFrames F₁ F₂ Y out hout hin).newFrame₂ Ω‖ ≤ 4 * L ^ (-30 : ℤ) := by
   set X := ofFrames F₁ F₂ Y out hout hin
-  obtain ⟨e₁, e₂, he₁, he₂, g, hgR, hg⟩ := exists_tagReorderWord (q := q) F₁.disjoint
+  obtain ⟨e₁, e₂, he₁, he₂, g, hgA, hgS, hg⟩ :
+      ∃ (e₁ : TagSpace F₁.holes ≃ TagSpace X.frame₁.holes)
+        (e₂ : TagSpace F₂.holes ≃ TagSpace X.frame₂.holes),
+        (∀ t, rawProd _ (e₁ t) = rawProd F₁.holes t) ∧
+        (∀ t, rawProd _ (e₂ t) = rawProd F₂.holes t) ∧
+        ∃ g : Word (fun p ↦ F₁.system p × F₂.system p)
+            (fun p ↦ X.frame₁.system p × X.frame₂.system p),
+          g.IsAllowed ∧ g.sourceCount = 0 ∧
+          g.op = reindex (twoFrameEquiv X.frame₁ X.frame₂).symm (twoFrameEquiv F₁ F₂).symm
+            (tagReorder e₁ e₂) := exists_tagReorderWord (q := q)
+    (l₁' := X.frame₁.holes) (l₂' := X.frame₂.holes) F₁.disjoint
     F₂.disjoint (List.filter_append_perm out F₁.holes).symm
     (List.filter_append_perm out F₂.holes).symm F₁.owner F₂.owner
-  obtain ⟨σ, hσ, hK, w, w₁, w₂, w₃, hw, herr⟩ := X.exchange_bounded P hΩ hI
+  obtain ⟨σ, hσ, hK, c, hcA, hcU, hcS, hop, herr⟩ := X.exchange_bounded P hΩ hI
   have hG : tagReorder e₁ e₂ * (F₁.encoder ⊗ₖ F₂.encoder) =
       X.frame₁.encoder ⊗ₖ X.frame₂.encoder :=
     tagReorder_mul_kronecker he₁ he₂
-  have heval : ∀ z, twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner ((g.comp w).eval z) =
-      act (X.exchangeOp P σ * (tagReorder e₁ e₂ :
-        Matrix (X.frame₁.Layout × X.frame₂.Layout) (F₁.Layout × F₂.Layout) ℂ))
-        (twoLayoutIso _ _ F₁.owner F₂.owner z) := by
-    intro z
-    calc _ = act (X.exchangeOp P σ)
-          (twoLayoutIso _ _ X.owner₁ X.owner₂ (g.eval z)) := hw (g.eval z)
-      _ = act (X.exchangeOp P σ) (act (tagReorder e₁ e₂ :
-          Matrix (X.frame₁.Layout × X.frame₂.Layout) (F₁.Layout × F₂.Layout) ℂ)
-            (twoLayoutIso _ _ F₁.owner F₂.owner z)) := congrArg (act (X.exchangeOp P σ)) (hg z)
-      _ = _ := (act_mul _ _ _).symm
-  refine ⟨e₁, e₂, he₁, he₂, σ, hσ, ?_, g.comp w, ⟨hgR.isAllowed, w₁⟩, ⟨hgR.usesOnly {P}, w₂⟩,
-    congrArg₂ (· + ·) hgR.sourceCount_eq w₃, heval, ?_⟩
+  have hop' : Word.op ((g.comp X.renameWord).comp c) =
+      reindex (twoFrameEquiv X.newFrame₁ X.newFrame₂).symm (twoFrameEquiv F₁ F₂).symm
+        (X.exchangeOp P σ * tagReorder e₁ e₂) := by
+    simp only [Word.op_comp]
+    rw [← Matrix.mul_assoc, show c.op * X.renameWord.op =
+        Word.op (PartyCircuit.comp X.renameWord c) from (Word.op_comp X.renameWord c).symm, hop,
+      hg, reindex_apply, reindex_apply, reindex_apply, submatrix_mul_equiv]
+  refine ⟨e₁, e₂, he₁, he₂, σ, hσ, ?_, g, hgA, hgS, c, hcA, hcU, hcS, hop', ?_⟩
   · rw [Matrix.mul_assoc]
     exact (congrArg _ hG).trans hK
-  · have hv : act (tagReorder e₁ e₂ :
+  · have hv : toEuclideanLin (tagReorder e₁ e₂ :
           Matrix (X.frame₁.Layout × X.frame₂.Layout) (F₁.Layout × F₂.Layout) ℂ)
           (vecKron (F₁.refVec Ω) (F₂.refVec Ω)) =
         vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω) := by
-      rw [Frame.refVec, Frame.refVec, Frame.refVec, Frame.refVec, ← act_kronecker_vecKron,
-        ← act_kronecker_vecKron, ← act_mul]
-      exact congrArg (fun M => act M (vecKron Ω Ω)) hG
-    have hgv : g.eval ((twoLayoutIso _ _ F₁.owner F₂.owner).symm
-        (vecKron (F₁.refVec Ω) (F₂.refVec Ω))) = (twoLayoutIso _ _ X.owner₁ X.owner₂).symm
-          (vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω)) := by
-      apply (twoLayoutIso _ _ X.owner₁ X.owner₂).injective
-      refine (hg _).trans ?_
-      rw [LinearIsometryEquiv.apply_symm_apply]
-      exact hv.trans ((twoLayoutIso _ _ X.owner₁ X.owner₂).apply_symm_apply _).symm
-    calc _ = ‖w.eval ((twoLayoutIso _ _ X.owner₁ X.owner₂).symm
-          (vecKron (X.frame₁.refVec Ω) (X.frame₂.refVec Ω))) -
-        (twoLayoutIso _ _ X.newFrame₁.owner X.newFrame₂.owner).symm
-          (vecKron (X.newFrame₁.refVec Ω) (X.newFrame₂.refVec Ω))‖ := by
-          rw [← hgv]
-          rfl
-      _ ≤ _ := herr
+      rw [Frame.refVec, Frame.refVec, Frame.refVec, Frame.refVec,
+        ← toEuclideanLin_kronecker_vecKron, ← toEuclideanLin_kronecker_vecKron,
+        ← toEuclideanLin_mul_apply]
+      exact congrArg (fun M ↦ toEuclideanLin M (vecKron Ω Ω)) hG
+    have hgv : toEuclideanLin g.op (pairRef F₁ F₂ Ω) = pairRef X.frame₁ X.frame₂ Ω := by
+      rw [hg, pairRef_eq_twoFrameEquiv_symm, pairRef_eq_twoFrameEquiv_symm,
+        toEuclideanLin_reindex_piLpCongrLeft₂, hv]
+    simp only [Word.op_comp]
+    rw [← Matrix.mul_assoc, show c.op * X.renameWord.op =
+        Word.op (PartyCircuit.comp X.renameWord c) from (Word.op_comp X.renameWord c).symm,
+      toEuclideanLin_mul_apply, hgv]
+    exact herr
 
 end TwoSheetExchange
 

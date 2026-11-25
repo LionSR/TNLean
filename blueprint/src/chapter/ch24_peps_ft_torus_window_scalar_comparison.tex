@@ -11,7 +11,7 @@
     $\mathcal R(s;a,b)\in\mathcal I$ for every $s$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_normal_arc_windows, lem:peps_regionInjectivityUnionClosure_finite}
+    \uses{def:peps_normal_arc_windows,lem:peps_regionInjectivityUnionClosure_finite}
     Since $\mathcal R(s;a,b)=\bigcup_{(i,j)\in\{0,\ldots,a-L\}\times\{0,\ldots,b-K\}}\mathcal R(s+(i,j);L,K)$,
     Lemma~\ref{lem:peps_regionInjectivityUnionClosure_finite} gives
     $\mathcal R(s;a,b)\in\mathcal I$.
@@ -89,8 +89,7 @@
     $2K+1\le h$, then $R,S,R^c,S^c\in\mathcal I$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_arc_rectangle_injective, thm:peps_arc_rectangle_complement,
-        thm:peps_window_corner_geometry}
+    \uses{thm:peps_arc_rectangle_injective,thm:peps_arc_rectangle_complement,thm:peps_window_corner_geometry}
     Lemma~\ref{thm:peps_arc_rectangle_injective} places $S$ (of size
     $(L+1)\times(K+1)$) and the two rectangles of $R$ (of sizes $L\times(K+1)$
     and $(L+1)\times K$) in $\mathcal I$. Since $w-L-1\ge L$ and $h-K-1\ge K$,
@@ -175,10 +174,7 @@
     $A_v=(c_S/c_Q)C_v$ at every vertex $v$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_block_proportional_translate,
-        thm:peps_region_injective_identification,
-        thm:peps_regionBlockedTensorInjective_applyGauge,
-        cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
+    \uses{thm:peps_block_proportional_translate,thm:peps_region_injective_identification,thm:peps_regionBlockedTensorInjective_applyGauge,cor:peps_component_eq_gaugeVertex_of_twoBlockProportional}
     For the translation $t$ with $tv_0=v$,
     Lemma~\ref{thm:peps_block_proportional_translate} gives
     $A_{tQ}=c_Q C_{tQ}$ and $A_{tQ\cup\{v\}}=c_S C_{tQ\cup\{v\}}$, while
@@ -217,12 +213,7 @@
     for all $v$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_regionInjectivityUnionClosure_of_overlap,
-        thm:peps_window_corner_injectivity, thm:peps_window_corner_geometry,
-        thm:peps_window_corner_boundary, thm:peps_region_injective_identification,
-        thm:peps_regionBlockedTensorInjective_applyGauge,
-        thm:peps_block_proportional_absorbed, thm:peps_translated_scalar_comparison,
-        thm:peps_common_scalar_volume}
+    \uses{thm:peps_regionInjectivityUnionClosure_of_overlap,thm:peps_window_corner_injectivity,thm:peps_window_corner_geometry,thm:peps_window_corner_boundary,thm:peps_region_injective_identification,thm:peps_regionBlockedTensorInjective_applyGauge,thm:peps_block_proportional_absorbed,thm:peps_translated_scalar_comparison,thm:peps_common_scalar_volume}
     Lemmas~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap},
     \ref{thm:peps_window_corner_injectivity},
     \ref{thm:peps_region_injective_identification}, and

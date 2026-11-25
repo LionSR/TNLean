@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.PartialTrace.ProductReferenceDensityError
 import TNLean.PEPS.Tensor.SquareLattice.Basic
-import TNLean.Lattice.Compression.ColumnSelection
+import QICLean.Analysis.TraceNorm.ColumnSelection
 import TNLean.Network.Party.PartyColumnInput
 import TNLean.PEPS.Approximation.Routing.DyadicRoutingPEPS
 import TNLean.Network.DistributedContraction.DistributedOperatorContraction
@@ -73,7 +73,7 @@ noncomputable section
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS.Approximation
-open TNLean.Lattice.Compression
+open TNLean.Network
 
 
 /-- A nonzero contraction forces every bond dimension to be positive: a zero dimension makes
@@ -211,7 +211,7 @@ section
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.Approximation.DistributedOperatorContraction
-open TNLean.Lattice.Compression TNLean.Lattice.Compression.DistributedOperatorContraction
+open TNLean.Network TNLean.Network.DistributedOperatorContraction
 
 variable {Party Gate : Type*} [Fintype Party]
   [DecidableEq Party] [DecidableEq Gate]

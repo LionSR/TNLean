@@ -166,9 +166,7 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:aklv_frustration_free_filter,
-        lem:aklv_ff_product_filtered_output,
-        lem:aklv_normalized_cut_schmidt_rank}
+    \uses{lem:aklv_frustration_free_filter,lem:aklv_ff_product_filtered_output,lem:aklv_normalized_cut_schmidt_rank}
     The window of width $s_0$ with left end $a+m$ has the same centre $k$.
     Its filter of degree $s_0^2$ fixes $\Omega$, and
     Lemma~\ref{lem:aklv_ff_product_filtered_output} gives a vector $x$ of rank
@@ -199,10 +197,7 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:aklv_frustration_free_scalar_parameters,
-        lem:aklv_ff_two_filter_approximant,
-        lem:aklv_ff_accuracy_shrink,lem:aklv_ff_rank_log,
-        thm:aklv_exact_boundary_rank}
+    \uses{lem:aklv_frustration_free_scalar_parameters,lem:aklv_ff_two_filter_approximant,lem:aklv_ff_accuracy_shrink,lem:aklv_ff_rank_log,thm:aklv_exact_boundary_rank}
     Take $s_0$, $t=1024/g$ and $D_0$ from the frustration-free scalar
     parameters, so $s_0\ge21$, $s_0\ge1/g$, $s_0\le Wu^2/g$,
     $\log D_0\le Ru^3/g$ and $D_0\delta_0\le10^{-5}$. Let $D=B$.
@@ -245,8 +240,7 @@ estimate, which is retained here \cite{gap:aklv13_frustration_free_mps_rate}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:aklv_ff_per_cut,lem:aklv_ff_dimension_gap,
-        thm:aklv_cut_approximation_tail,thm:aklv_sharp_sequential_mps}
+    \uses{lem:aklv_ff_per_cut,lem:aklv_ff_dimension_gap,thm:aklv_cut_approximation_tail,thm:aklv_sharp_sequential_mps}
     The actual gap gives $q\ge2$ and $g\le1$ by
     Lemma~\ref{lem:aklv_ff_dimension_gap}. Apply
     Lemma~\ref{lem:aklv_ff_per_cut} with $\rho=\epsilon^2/(16(L+1))$, so that

@@ -85,8 +85,7 @@ physical-support coordinates and $0<\gamma<1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:mpo_mixed_endpoint_tensor,def:injective,
-        thm:spt_normalized_bond_interpolation}
+    \uses{def:mpo_mixed_endpoint_tensor,def:injective,thm:spt_normalized_bond_interpolation}
     Endpoint injectivity gives every matrix in each diagonal block, and
     the mixed letters give every off-diagonal matrix unit, so all matrix
     units belong to the span. Right multiplication in
@@ -126,9 +125,7 @@ physical-support coordinates and $0<\gamma<1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:one_block_injective_of_injective,
-        lem:block_injective_two_sided_word_span,def:mpo_mixed_extended_support,
-        def:eval_word}
+    \uses{lem:one_block_injective_of_injective,lem:block_injective_two_sided_word_span,def:mpo_mixed_extended_support,def:eval_word}
     The products $B^iWB^j$ span the full matrix algebra by
     Lemmas~\ref{lem:one_block_injective_of_injective}
     and~\ref{lem:block_injective_two_sided_word_span}:
@@ -152,8 +149,7 @@ physical-support coordinates and $0<\gamma<1$.
         MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction,
         MPSTensor.MPOSymmetry.tendsto_toMatrix'_parentInteraction_mixedEndpointInterpolation}
     \leanok
-    \uses{def:mpo_mixed_extended_support,def:ground_space_es,
-        def:parent_interaction}
+    \uses{def:mpo_mixed_extended_support,def:ground_space_es,def:parent_interaction}
     The spaces $\mathcal S'_\gamma$ have dimension $D^2$ for every real
     $\gamma$, and their orthogonal projectors are continuous.
     For $0<\gamma<1$, the space $\mathcal S'_\gamma$ equals the canonical
@@ -164,11 +160,7 @@ physical-support coordinates and $0<\gamma<1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_mixed_interior,thm:mpo_inserted_boundary_injective,
-        thm:spt_normalized_bond_interpolation,lem:uncle_local_projector_continuity,
-        lem:mem_ground_space_es,lem:ground_space_map_apply,
-        def:mpo_mixed_extended_support,def:eval_word,
-        rem:euclidean_local_projector_ingredients}
+    \uses{thm:mpo_mixed_interior,thm:mpo_inserted_boundary_injective,thm:spt_normalized_bond_interpolation,lem:uncle_local_projector_continuity,lem:mem_ground_space_es,lem:ground_space_map_apply,def:mpo_mixed_extended_support,def:eval_word,rem:euclidean_local_projector_ingredients}
     Since both endpoint bond dimensions are positive,
     $W(\gamma)\neq0$ for every real $\gamma$.
     Lemmas~\ref{thm:mpo_mixed_interior}
@@ -222,8 +214,7 @@ physical-support coordinates and $0<\gamma<1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_mixed_interior,def:mpo_mixed_endpoint_tensor,
-        def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
+    \uses{thm:mpo_mixed_interior,def:mpo_mixed_endpoint_tensor,def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
     Left multiplication by $P_0$ selects the physical row sector of each
     letter, while right multiplication selects its column sector.
     Moving the former insertion around the trace gives
@@ -242,8 +233,7 @@ physical-support coordinates and $0<\gamma<1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_mixed_interior,thm:mpo_mixed_outer_sectors,
-        def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
+    \uses{thm:mpo_mixed_interior,thm:mpo_mixed_outer_sectors,def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
     In $\tr(A^iP_0A^jX)$, a first letter with column in $I_1$ satisfies
     $A^iP_0=0$, and a second letter with row in $I_1$ satisfies
     $P_0A^j=0$. All such physical coefficients vanish.
@@ -290,8 +280,7 @@ physical-support coordinates and $0<\gamma<1$.
         MPSTensor.MPOSymmetry.insertedTwoSiteMap_first_boundary,
         MPSTensor.MPOSymmetry.groundSpaceES_mixedEndpointLeftTensor_le_extendedSupport}
     \leanok
-    \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_extended_support,
-        def:ground_space_es,def:injective}
+    \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_extended_support,def:ground_space_es,def:injective}
     The tensor $B_0$ is injective whenever $A_0$ is injective, and
     $V_0V_0^*=P_0$, $V_0^*A^iV_0=B_0^i$.
     For every endpoint boundary matrix $X$,
@@ -303,9 +292,7 @@ physical-support coordinates and $0<\gamma<1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_endpoint_tensor,
-        def:mpo_mixed_extended_support,def:spt_coordinate_inclusions,def:injective,
-        def:ground_space_es,lem:ground_space_map_apply,def:eval_word}
+    \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_endpoint_tensor,def:mpo_mixed_extended_support,def:spt_coordinate_inclusions,def:injective,def:ground_space_es,lem:ground_space_map_apply,def:eval_word}
     Every letter of $A_0$ occurs in $B_0$, so its span remains full.
     Coordinate compression selects the first diagonal virtual block.
     Substituting $P_0=V_0V_0^*$ and moving the last factor around the
@@ -323,14 +310,12 @@ physical-support coordinates and $0<\gamma<1$.
     \label{thm:mpo_mixed_corner_support}
     \lean{MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES}
     \leanok
-    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support,
-        def:mpo_mixed_first_endpoint,def:ground_space_es}
+    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support,def:mpo_mixed_first_endpoint,def:ground_space_es}
     The image of $\mathcal S'_0$ under $R_0C_1$ is exactly $G_2(B_0)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_mixed_outer_sectors,thm:mpo_mixed_first_support,
-        def:ground_space_es}
+    \uses{thm:mpo_mixed_outer_sectors,thm:mpo_mixed_first_support,def:ground_space_es}
     Applying both outer projections replaces $X$ by $P_0XP_0$.
     Since $P_0=V_0V_0^*$, this boundary equals
     $V_0(V_0^*XV_0)V_0^*$ and (\ref{eq:mpo_mixed_corner_boundary})

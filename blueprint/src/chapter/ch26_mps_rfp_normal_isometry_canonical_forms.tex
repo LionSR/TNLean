@@ -37,7 +37,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{thm:canonical_from_primitive}
     \lean{MPSTensor.IsCanonicalForm.of_peripheral_primitive}
     \leanok
-    \uses{def:is_canonical_form, def:injective}
+    \uses{def:is_canonical_form,def:injective}
     Let $(\mu_k,A_k)_{k=1}^r$ be nonzero weights and injective left-canonical
     blocks with positive bond dimensions, non-increasing moduli
     $|\mu_1|\ge\cdots\ge|\mu_r|>0$, and
@@ -48,7 +48,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
 
 \begin{proof}
     \leanok
-    \uses{def:is_canonical_form, thm:primitive_overlap}
+    \uses{def:is_canonical_form,thm:primitive_overlap}
     The injectivity, left-canonical identity, weight ordering, and
     nonzero-weight clauses are exactly the hypotheses. For each block,
     peripheral primitivity gives the complementary spectral gap
@@ -61,7 +61,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
 \begin{lemma}[RFP normal tensor is injective]\label{thm:rfp_nt_injective}
     \lean{MPSTensor.rfp_nt_structural}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:normal, def:injective}
+    \uses{def:mps_transfer_idempotence,def:normal,def:injective}
     If $A$ is a normal RFP tensor, then $A$ is injective.
 \end{lemma}
 \begin{proof}\leanok
@@ -83,7 +83,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{thm:rfp_nt_structural_of_left_canonical}
     \lean{MPSTensor.rfp_nt_structural_of_leftCanonical}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:normal, def:injective}
+    \uses{def:mps_transfer_idempotence,def:normal,def:injective}
     Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
     $\sum_i (A^i)^\dagger A^i = \Id$.
     As in the left-canonical step of \cite[Appendix~B]{Cirac2016MPDO_arXiv},
@@ -98,7 +98,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{thm:rfp_nt_cfii_diagonal_fixed_point}
     \lean{MPSTensor.rfp_nt_cfii_diagonal_fixedPoint}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:normal, def:transfer_map}
+    \uses{def:mps_transfer_idempotence,def:normal,def:transfer_map}
     Assume $D > 0$. Let $A$ be a normal renormalization fixed point such that
     $\sum_i (A^i)^\dagger A^i = \Id$.
     As in the diagonal fixed-point reduction of
@@ -108,7 +108,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     $\E_B(\Lambda) = \Lambda$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:rfp_nt_structural_of_left_canonical, thm:injective_irreducible, thm:form_II}
+    \uses{thm:rfp_nt_structural_of_left_canonical,thm:injective_irreducible,thm:form_II}
     Lemma~\ref{thm:rfp_nt_structural_of_left_canonical} shows that $A$ is
     injective, and Lemma~\ref{thm:injective_irreducible} implies that its
     transfer map $\E_A$ is irreducible. Canonical form~II
@@ -151,7 +151,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     \lean{MPSTensor.transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:injective, def:left_canonical_tensor}
+    \uses{def:mps_transfer_idempotence,def:injective,def:left_canonical_tensor}
     Let $A$ be an injective left-canonical RFP tensor with positive-definite
     fixed point $\rho$ of the transfer map $\E_A$. Then
     $\E_A = P_\rho$, where $P_\rho(X) = \frac{\tr(X)}{\tr(\rho)} \rho$
@@ -172,7 +172,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{thm:rfp_nt_structural_full}
     \lean{MPSTensor.rfp_nt_structural_full}
     \leanok
-    \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    \uses{thm:rfp_nt_structural_of_left_canonical,thm:rfp_nt_cfii_diagonal_fixed_point,thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     A normal left-canonical renormalization fixed-point tensor $A$ admits a
     decomposition $A^i=X\Lambda U^iX^{-1}$, where
     $\Lambda$ is diagonal positive, $\sum_i (U^i)^\dagger U^i=I$, and
@@ -228,12 +228,12 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{thm:rfp_nt_structural_full_sq_sum}
     \lean{MPSTensor.rfp_nt_structural_full_sqSum}
     \leanok
-    \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    \uses{thm:rfp_nt_structural_of_left_canonical,thm:rfp_nt_cfii_diagonal_fixed_point,thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     In the decomposition of Lemma~\ref{thm:rfp_nt_structural_full}, the
     diagonal weights satisfy $\sum_\alpha \Lambda_\alpha^2 = D$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:rfp_nt_structural_of_left_canonical, thm:rfp_nt_cfii_diagonal_fixed_point, thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
+    \uses{thm:rfp_nt_structural_of_left_canonical,thm:rfp_nt_cfii_diagonal_fixed_point,thm:transferMap_eq_fixedPointProj_of_isTransferIdempotent_injective}
     From $\Lambda_\alpha = \sqrt{D\,\rho_{\alpha,\alpha}/\tr\rho}$, squaring
     and summing over $\alpha$ gives
     $\sum_\alpha \Lambda_\alpha^2 = \frac{D}{\tr\rho}\sum_\alpha \rho_{\alpha,\alpha} = D$.
@@ -306,7 +306,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{lem:isometry_canonical_form_gauge_invariant}
     \lean{MPSTensor.GaugeEquiv.isIsometryCanonicalForm_iff}
     \leanok
-    \uses{def:gauge_equiv, def:is_isometry_canonical_form}
+    \uses{def:gauge_equiv,def:is_isometry_canonical_form}
     If $A \sim_{\mathrm{gauge}} B$ (so $B^i = Y A^i Y^{-1}$ for invertible $Y$), then $A$ has the square-root fixed-point form if and only if $B$ does.
 \end{lemma}
 \begin{proof}\leanok
@@ -324,7 +324,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{thm:isometry_canonical_form_of_rfp_nt}
     \lean{MPSTensor.isIsometryCanonicalForm_of_rfp_nt}
     \leanok
-    \uses{def:is_isometry_canonical_form, thm:rfp_nt_structural_full_sq_sum}
+    \uses{def:is_isometry_canonical_form,thm:rfp_nt_structural_full_sq_sum}
     Every normal left-canonical renormalization fixed-point tensor has the
     square-root fixed-point form (Definition~\ref{def:is_isometry_canonical_form}),
     establishing the normal-tensor characterization of
@@ -421,7 +421,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{thm:is_rfp_of_isometry_canonical_form}
     \lean{MPSTensor.isTransferIdempotent_of_isIsometryCanonicalForm}
     \leanok
-    \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence}
+    \uses{def:is_isometry_canonical_form,def:mps_transfer_idempotence}
     If an MPS tensor $A$ has the square-root fixed-point form, then its transfer map $\E_A$ is idempotent:
     \begin{align}
         \E_A^2 = \E_A.
@@ -451,7 +451,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     \label{thm:normal_rfp_iff_isometry_canonical_form}
     \lean{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
     \leanok
-    \uses{def:nt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, thm:cpsv_normal_bond_dim_pos}
+    \uses{def:nt_cpsv,def:mps_transfer_idempotence,def:is_isometry_canonical_form,thm:cpsv_normal_bond_dim_pos}
     Let $A$ be a normal tensor. As in the corrected form of
     \cite[Lemma~B.1, lines~1274--1301]{Cirac2016MPDO_arXiv}, its transfer map
     satisfies $\E_A^2 = \E_A$ if and only if $A$ has the square-root
@@ -463,7 +463,7 @@ of Definitions~\ref{def:cpsv_canonical_form} and~\ref{def:cpsv_cfii}.
     and in particular the bond dimension of $A$ is positive.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_bond_dim_pos, thm:cpsv_normal_tp_gauge, thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal, lem:rfp_parent_gauge_invariance, lem:isometry_canonical_form_gauge_invariant, thm:isometry_canonical_form_of_rfp_nt, thm:is_rfp_of_isometry_canonical_form}
+    \uses{thm:cpsv_normal_bond_dim_pos,thm:cpsv_normal_tp_gauge,thm:cpsv_normal_eventually_injective,thm:gauge_invariance_normal,lem:rfp_parent_gauge_invariance,lem:isometry_canonical_form_gauge_invariant,thm:isometry_canonical_form_of_rfp_nt,thm:is_rfp_of_isometry_canonical_form}
     Lemma~\ref{thm:cpsv_normal_bond_dim_pos} first gives positive bond
     dimension from normality. For the forward implication,
     Lemma~\ref{thm:cpsv_normal_tp_gauge} places $A$ in trace-preserving

@@ -44,9 +44,7 @@ base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:area_law_cell_fan_successor,
-        thm:area_law_indexed_side_interpolation,
-        thm:area_law_unsplit_side_endpoints}
+    \uses{def:area_law_cell_fan_successor,thm:area_law_indexed_side_interpolation,thm:area_law_unsplit_side_endpoints}
     The ordered whole-side coordinates give $B_s=A_{s+1}$, with the
     side index reduced modulo $4$. The indexed affine parameters give
     \begin{align}
@@ -70,9 +68,7 @@ base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
     is injective.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:area_law_cell_fan,thm:area_law_cell_fan_base_radius,
-        thm:area_law_fan_triangle_contact,
-        thm:area_law_elementary_side_boundary_geometry}
+    \uses{def:area_law_cell_fan,thm:area_law_cell_fan_base_radius,thm:area_law_fan_triangle_contact,thm:area_law_elementary_side_boundary_geometry}
     Suppose that $i\ne j$ and $b_i=b_j=p$. The center and $p$ belong
     to both closed triangles. The base-radius identity gives
     $\|p-c\|_\infty=t/2>0$, so these are two distinct intersection
@@ -93,8 +89,7 @@ base $i$ and triangles $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_cell_fan_successor_endpoints,
-        thm:area_law_cell_fan_final_endpoint_injective}
+    \uses{thm:area_law_cell_fan_successor_endpoints,thm:area_law_cell_fan_final_endpoint_injective}
     Evaluating the successor endpoint identity at $\tau^{-1}(j)$ gives
     $a_j=b_{\tau^{-1}(j)}$. If $b_i=a_j$, injectivity of final
     endpoints gives $i=\tau^{-1}(j)$, and hence $j=\tau(i)$.

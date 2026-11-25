@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Network.DistributedContraction.DistributedOperatorContraction
-import TNLean.Lattice.Compression.PartyProductScalar
 import QICLean.Algebra.Combinatorics.FinSumPermutation
+import QICLean.Algebra.Kronecker.PiKronecker
 
 /-!
 # Absorbing a scalar into a distributed local matrix
@@ -20,7 +20,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 573–579.
 -/
 
 noncomputable section
-namespace TNLean.Lattice.Compression.DistributedOperatorContraction
+namespace TNLean.Network.DistributedOperatorContraction
 
 /-- Placing a scalar in one existing local matrix scales the literal contraction.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 573–579. -/
@@ -40,9 +40,15 @@ theorem contractedOperator_smul_at_party
   classical
   rw [DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix,
     DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix]
-  simp_rw [TNLean.Lattice.PartyCircuit.piKronecker_ite_smul]
+  have hupd (M : (p : P) → Matrix (Out p) (In p) ℂ) :
+      (fun p ↦ (if p = p₀ then μ else 1) • M p) = Function.update M p₀ (μ • M p₀) := by
+    funext p
+    rcases eq_or_ne p p₀ with rfl | hp
+    · simp
+    · simp [hp]
+  simp_rw [hupd, Matrix.piKronecker_update_smul]
   simp only [Finset.smul_sum, smul_smul]
   refine Finset.sum_congr₂ fun ξ _ j _ ↦ ?_
   rw [mul_comm]
 
-end TNLean.Lattice.Compression.DistributedOperatorContraction
+end TNLean.Network.DistributedOperatorContraction

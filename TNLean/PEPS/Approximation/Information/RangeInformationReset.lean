@@ -65,7 +65,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open TNLean.Lattice AreaLaw
+open AreaLaw
 open ManyBody (crossingSites exists_walks_of_mem_crossingSites graphNeighborhood planeDomainGraph)
 
 /-! ### The constants -/
@@ -145,7 +145,6 @@ end TNLean.PEPS.Approximation
 
 namespace ManyBody.PlaneInteraction
 
-open TNLean.Lattice
 
 open TNLean.PEPS.Approximation TNLean.PEPS.AreaLaw
 

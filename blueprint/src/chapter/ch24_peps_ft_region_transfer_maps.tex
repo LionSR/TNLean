@@ -48,7 +48,7 @@
     \lean{TNLean.PEPS.regionTransferMatrix_mul_of_realizes,
         TNLean.PEPS.regionTransferMatrix_one_of_realizes}
     \leanok
-    \uses{def:peps_region_transfer_realizes, def:peps_region_insertion_transfer}
+    \uses{def:peps_region_transfer_realizes,def:peps_region_insertion_transfer}
     If $T_f$ satisfies (\ref{eq:peps_region_transfer_realizes}), then $T_f(XY)=T_f(X)T_f(Y)$. If in addition $A$ and $B$ define the same state with $D_A=D_B>0$ and the blocked maps of $B$ on $R$ and $R^c$ are injective, then $T_f(\Id)=\Id$.
 \end{lemma}
 \begin{proof}\leanok
@@ -59,7 +59,7 @@
     \label{def:peps_region_insertion_transfer_of_realizes}
     \lean{TNLean.PEPS.regionInsertionTransfer_of_realizes}
     \leanok
-    \uses{def:peps_region_transfer_realizes, thm:peps_region_transfer_realized_maps}
+    \uses{def:peps_region_transfer_realizes,thm:peps_region_transfer_realized_maps}
     If $T_f$ and $S_f$ satisfy (\ref{eq:peps_region_transfer_realizes}), $A$ and $B$ define the same state with $D_A=D_B>0$, and the blocked maps of $B$ on $R$ and $R^c$ are injective, then $(T_f,S_f)$ forms a region insertion transfer in the sense of Definition~\ref{def:peps_region_insertion_transfer}.
 \end{definition}
 
@@ -70,7 +70,7 @@
         TNLean.PEPS.regionInsertionTransfer_of_reconcile,
         TNLean.PEPS.exists_regionEdgeGauge_of_reconcile}
     \leanok
-    \uses{def:peps_region_resonate_reconcile, thm:peps_hform_of_region_incident_form, def:peps_same_state, def:IsVertexInjective, def:peps_regionInjectivityData}
+    \uses{def:peps_region_resonate_reconcile,thm:peps_hform_of_region_incident_form,def:peps_same_state,def:IsVertexInjective,def:peps_regionInjectivityData}
     Assume $A$ and $B$ define the same PEPS state, are vertex-injective with positive bond dimensions, and have injective blocked maps on $R$ and $R^c$. If (\ref{eq:peps_region_resonate_reconcile}) holds in both directions, then the induced maps $T_f:\MN{D_A(f)}\to\MN{D_B(f)}$ and $S_f:\MN{D_B(f)}\to\MN{D_A(f)}$ satisfy (\ref{eq:peps_region_insertion_transfer}). If in addition $D_A(e)=D_B(e)$ for every edge $e$, with induced identification $\iota_f:\MN{D_A(f)}\simeq\MN{D_B(f)}$, then there exists $Z_f\in\GL(D_B(f))$ such that $T_f(X)=Z_f\,\iota_f(X)\,Z_f^{-1}$.
 \end{lemma}
 \begin{proof}\leanok
@@ -168,7 +168,7 @@
         TNLean.PEPS.vSideRow_eq_incidentSum_of_virtualPullback_incidentForm,
         TNLean.PEPS.transferCoeff_eq_incidentForm_of_virtualPullback_incidentForm}
     \leanok
-    \uses{thm:peps_region_transfer_coeff_double_factorization, thm:peps_hform_of_region_incident_form, thm:peps_region_insertion_virtual_pullback_realizes}
+    \uses{thm:peps_region_transfer_coeff_double_factorization,thm:peps_hform_of_region_incident_form,thm:peps_region_insertion_virtual_pullback_realizes}
     Under the hypotheses of Lemma~\ref{thm:peps_region_transfer_coeff_double_factorization}, assume further that $A$ and $B$ are vertex-injective with $D_A,D_B>0$ and $B_{v_f}$ is linearly independent. If $W_X=\mc{I}_f(Y^T)$, then $K_X$ satisfies (\ref{eq:peps_transfer_coeff_form}).
 \end{lemma}
 \begin{proof}\leanok
@@ -199,7 +199,7 @@
     \label{def:peps_region_insertion_transfer_of_coeff_transfer}
     \lean{TNLean.PEPS.regionInsertionTransfer_of_coeffTransfer}
     \leanok
-    \uses{def:peps_region_insertion_transfer, def:peps_coeff_transfer_map, thm:peps_coeff_transfer_map_properties}
+    \uses{def:peps_region_insertion_transfer,def:peps_coeff_transfer_map,thm:peps_coeff_transfer_map_properties}
     If coefficient transfers $T_f$ and $S_f$ exist in both directions with $T_f(XY)=T_f(X)T_f(Y)$, $A$ and $B$ define the same state with $D_A=D_B>0$, and $B$'s blocked maps on $R$ and $R^c$ are injective, then $(T_f,S_f)$ forms a region insertion transfer in the sense of Definition~\ref{def:peps_region_insertion_transfer}.
 \end{definition}
 
@@ -218,7 +218,7 @@
     \label{thm:peps_regionInsertedCoeff_transferMap_unique}
     \lean{TNLean.PEPS.regionInsertedCoeff_transferMap_unique}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_region_out_endpoint_block_inverse}
+    \uses{def:peps_regionInsertedCoeff,def:peps_region_out_endpoint_block_inverse}
     Assume $B$'s blocked maps on $R$ and $R^c$ are injective and $D_B>0$. If $T_1,T_2:\MN{D_A(f)}\to\MN{D_B(f)}$ satisfy $C_A(R,f,M;\sigma,\tau)=C_B(R,f,T_i(M);\sigma,\tau)$ for $i=1,2$ and all $M,\sigma,\tau$, then $T_1=T_2$.
 \end{lemma}
 \begin{proof}\leanok

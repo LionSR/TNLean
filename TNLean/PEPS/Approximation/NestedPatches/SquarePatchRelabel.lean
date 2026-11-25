@@ -25,7 +25,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
 variable {V W : Type*} [Fintype V] [DecidableEq V]
   [Fintype W] [DecidableEq W] {q : ℕ}
@@ -108,11 +107,11 @@ theorem HasAdaptivePatch.relabel {pos : V → ℝ × ℝ}
   refine ⟨P', hz'.trans hz, hu'.trans hu, hsum ▸ hd, ?_⟩
   have hnorm := Matrix.norm_reindex_mulVec_sub
     (Equiv.arrowCongr e (Equiv.refl (Fin q))) P.cylSum (⇑Ω) (⇑Ω)
-  rw [act_sub, act_one, norm_sub_rev] at he ⊢
+  rw [map_sub, LinearMap.sub_apply, Matrix.toEuclideanLin_one_apply, norm_sub_rev] at he ⊢
   have hΩ : LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (Equiv.arrowCongr e (Equiv.refl (Fin q))) Ω =
         WithLp.toLp 2 (Ω.ofLp ∘ (Equiv.arrowCongr e (Equiv.refl (Fin q))).symm) := rfl
-  rw [hcyl, hΩ, act_apply]
+  rw [hcyl, hΩ, Matrix.toLpLin_apply]
   exact hnorm.le.trans he
 
 end TNLean.PEPS.EncodedFrame

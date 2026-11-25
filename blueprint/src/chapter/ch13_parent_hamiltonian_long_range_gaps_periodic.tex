@@ -22,9 +22,7 @@
     spaces of \cite[lines~1815--1820 and 1985--1992]{Cirac2021Matrix}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocked_local_ground_space_transport,
-        def:mps_ground_space_projection_matrix,
-        thm:qca_blocking_quasi_local_interval}
+    \uses{thm:blocked_local_ground_space_transport,def:mps_ground_space_projection_matrix,thm:qca_blocking_quasi_local_interval}
     Evaluate the finite projection conjugacy on a configuration basis vector.
     This gives the matrix reindexing identity. Apply the interval observable
     blocking formula to obtain the completed identity.
@@ -52,7 +50,7 @@
     Both identities include $N=0$ and arbitrary integer $a$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocked_ground_projection_observable, def:qca_blocking_functional}
+    \uses{thm:blocked_ground_projection_observable,def:qca_blocking_functional}
     Substitute the projection observable identity into inverse
     precomposition. The inverse evaluation follows by applying the same
     identity to $T_L^{-1}\varphi$.
@@ -180,9 +178,7 @@
     is its supported word contraction.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_prescribed_blocking_compression,
-        thm:isometric_sector_ground_space_resolution,
-        thm:block_sum_local_ground_space}
+    \uses{thm:periodic_prescribed_blocking_compression,thm:isometric_sector_ground_space_resolution,thm:block_sum_local_ground_space}
     The step-orbit projections commute with every blocked letter and resolve
     the virtual identity. The displayed compression therefore intertwines
     letters. Apply the isometric sector resolution to obtain
@@ -203,8 +199,7 @@
     for every $a\in\mathbb Z$ and $N\geq0$. Primitivity is unnecessary.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_sum_local_ground_space,
-        thm:mps_state_local_support}
+    \uses{thm:block_sum_local_ground_space,thm:mps_state_local_support}
     The sector MPS space is contained in the joint space. Thus its vectors
     are annihilated by $1-P_T(N)$, which has zero expectation in the sector
     state. Normalization gives the assertion.
@@ -234,9 +229,7 @@
     of a general periodic GVBS presentation remains separate.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:multiblock_supported_quasi_local_state_convex_combination,
-        thm:sector_state_joint_mps_support,
-        thm:finite_pure_state_decomposition, thm:primitive_quasi_local_purity}
+    \uses{thm:multiblock_supported_quasi_local_state_convex_combination,thm:sector_state_joint_mps_support,thm:finite_pure_state_decomposition,thm:primitive_quasi_local_purity}
     Full interval support implies support on every centered interval, so
     the centered-interval argument gives the convex coefficients.
     Conversely, every sector state has joint support, and linearity
@@ -270,8 +263,7 @@
     \cite{gap:dccsp17_blocking_peripheral_roots}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_blocked_ground_space,
-        lem:periodic_scale_of_irreducible, def:primitive_mps}
+    \uses{thm:periodic_blocked_ground_space,lem:periodic_scale_of_irreducible,def:primitive_mps}
     The compressed sectors have period $m/\gcd(m,p)=1$, hence are
     irreducible, trace preserving, and peripheral primitive.
     Finite-dimensional Perron--Frobenius theory gives their primitive
@@ -375,8 +367,7 @@
     \cite{gap:dccsp17_blocking_peripheral_roots}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_primitive_ground_space,
-        thm:primitive_sector_representatives_exact_support}
+    \uses{thm:periodic_primitive_ground_space,thm:primitive_sector_representatives_exact_support}
     Obtain primitive compressed sectors with their exact joint local space.
     Select one representative of each gauge-phase class. The given
     primitive and faithful fixed points are inherited, and the joint support
@@ -441,11 +432,7 @@
     is assumed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:quasi_local_parent_ground_state_face,
-        thm:quasi_local_zero_energy_support_eventual_kernel,
-        thm:eventual_symmetric_mps_support_all_intervals,
-        thm:positive_functional_support_compression,
-        thm:quasi_local_open_interaction_zero_expectation}
+    \uses{def:quasi_local_parent_ground_state_face,thm:quasi_local_zero_energy_support_eventual_kernel,thm:eventual_symmetric_mps_support_all_intervals,thm:positive_functional_support_compression,thm:quasi_local_open_interaction_zero_expectation}
     Zero local energy first gives full support on sufficiently large
     symmetric intervals, and hence on every nonempty interval.
     Conversely, fix $a$ and choose $N\geq R$ with the exact kernel.
@@ -477,8 +464,7 @@
     explicit at the level of supported states.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocked_aligned_mps_support_iff,
-        thm:blocked_ground_projection_support, def:qca_blocking_functional}
+    \uses{thm:blocked_aligned_mps_support_iff,thm:blocked_ground_projection_support,def:qca_blocking_functional}
     Support on all intervals is equivalent to support on the aligned
     intervals. The blocked projection identity carries the latter
     conditions to all intervals of the blocked chain.
@@ -525,9 +511,7 @@
     with a general GVBS construction are separate assertions.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocked_support_representation_iff,
-        thm:primitive_joint_mps_supported_state_classification,
-        thm:qca_blocking_state_purity}
+    \uses{thm:blocked_support_representation_iff,thm:primitive_joint_mps_supported_state_classification,thm:qca_blocking_state_purity}
     Apply the primitive-family classification to $T_L^{-1}\varphi$.
     State pullback preserves finite real convex combinations and purity,
     so carry the resulting identities back to the original chain.
@@ -550,8 +534,7 @@
     \cite[Appendix, lines~2308 and 2313--2320]{Cirac2017MPU}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:qca_blocking_quasi_local_interval,
-        thm:quasi_local_bulk_inclusion, thm:quasi_local_interval_observable}
+    \uses{thm:qca_blocking_quasi_local_interval,thm:quasi_local_bulk_inclusion,thm:quasi_local_interval_observable}
     Apply the injective interval inclusion to both matrices. Their
     quasi-local images agree by the window inclusion and interval blocking
     identities: the blocked start $b$ becomes $bL$ and the length becomes $KL$.
@@ -572,7 +555,7 @@
     of \cite[equation~(3.12)]{Nachtergaele1996Spectral} pulled back under blocking.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocked_interaction_window, def:finite_open_interaction_matrix}
+    \uses{thm:blocked_interaction_window,def:finite_open_interaction_matrix}
     Matrix reindexing is linear. Apply the window identity to each term of
     the finite open sum.
 \end{proof}
@@ -711,9 +694,7 @@
     \cite[Proposition~2.7]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocking_joint_boundary_space,
-        thm:periodic_primitive_ground_space,
-        thm:primitive_nested_family_presentation}
+    \uses{thm:blocking_joint_boundary_space,thm:periodic_primitive_ground_space,thm:primitive_nested_family_presentation}
     The cyclic-sector decomposition of $A_j^{(L)}$ has compressed period
     $m_j/\gcd(m_j,L)=1$, so each compressed tensor is primitive and has a
     faithful invariant matrix. Flatten these finitely many sector families.
@@ -786,7 +767,7 @@
     interaction expanded into its original terms.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:blocked_interaction_matrix, thm:blocked_open_interaction_sum}
+    \uses{def:blocked_interaction_matrix,thm:blocked_open_interaction_sum}
     Decoding sends each grouped window to the corresponding original
     window. Inclusion is linear, and nested nonwrapping inclusions add
     their starts, so the internal start $j$ becomes $iL+j$.
@@ -811,7 +792,7 @@
     no local MPS-kernel condition is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocked_interaction_expansion, lem:positive-comparison-kernel-gap}
+    \uses{thm:blocked_interaction_expansion,lem:positive-comparison-kernel-gap}
     For an original start $s$, choose
     $i=\min(\lfloor s/L\rfloor,N-K)$ and $j=s-iL$.
     The covering condition gives $0\leq j\leq KL-R$, and the pair
@@ -839,7 +820,7 @@
     \cite[Theorem~1.2]{Nachtergaele1996Spectral} through its regrouping convention.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocked_interaction_comparison, thm:blocked_local_ground_space_transport}
+    \uses{thm:blocked_interaction_comparison,thm:blocked_local_ground_space_transport}
     Since $L>0$, the original volumes $NL$ tend to infinity. Apply the
     original eventual kernel equality and the exact isometric image
     $\mathcal G_N(A^{[L]})\mapsto\mathcal G_{NL}(A)$.
@@ -1088,8 +1069,7 @@
     the period is asserted \cite[Theorem~1.1]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_block_family_ground_states,
-        thm:blocked_stationary_expectation}
+    \uses{thm:periodic_block_family_ground_states,thm:blocked_stationary_expectation}
     Every pure zero-energy state is one of the pulled-back primitive sector
     states of a common blocking by $L$, and each such state is invariant
     under translations by multiples of $L$.
@@ -1110,8 +1090,7 @@
     \cite[lines~825--836 and Section~3]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:qca_blocking_quasi_local_interval,
-        thm:quasi_local_interval_observable}
+    \uses{thm:qca_blocking_quasi_local_interval,thm:quasi_local_interval_observable}
     Put $c=a\bmod L$, $b=\lfloor a/L\rfloor$, and $N=c+k$.
     Since $L\geq1$, the original interval lies inside $[bL,(b+N)L)$.
     Place $X$ at offset $c$ in this enlarged interval, adjoin identities,
@@ -1183,8 +1162,7 @@
     including empty prefixes and tails.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:blocked_residual_boundary_map, lem:eval_word_block,
-        thm:left_boundary_map_factorization}
+    \uses{def:blocked_residual_boundary_map,lem:eval_word_block,thm:left_boundary_map_factorization}
     The letter intertwiner extends to every blocked word, so
     $B^uV^\dagger=V^\dagger A^{\widetilde u}$. Word concatenation and
     cyclicity of the rectangular trace give
@@ -1209,8 +1187,7 @@
     orthogonality or injectivity of the residual ranges is assumed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocked_residual_boundary_identity, def:ground_space_parent,
-        def:ground_space_es}
+    \uses{thm:blocked_residual_boundary_identity,def:ground_space_parent,def:ground_space_es}
     Resolving the right virtual boundary gives
     $\Gamma^A_{NL+r}(X)=\sum_a\mathcal F_{A,B_a,V_a}^{N,r}(XV_a)$.
     Conversely, each residual vector is the original boundary vector
@@ -1242,8 +1219,7 @@
     \cite{gap:dccsp17_blocking_peripheral_roots}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_blocked_ground_space,
-        thm:blocked_residual_ground_space_resolution}
+    \uses{thm:periodic_blocked_ground_space,thm:blocked_residual_ground_space_resolution}
     Step-orbit compression gives the normalized tensors, support isometries,
     resolution, and right intertwining. The orbit projections commute
     with every blocked letter. Using $V_a^\dagger V_a=I$ gives the left
@@ -1272,8 +1248,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_block_family_primitive_presentation,
-        thm:blocked_primitive_aligned_uniform_gap}
+    \uses{thm:periodic_block_family_primitive_presentation,thm:blocked_primitive_aligned_uniform_gap}
     Derive an exact primitive faithful inequivalent presentation after
     blocking by $L$. Take the coarse interaction range $K=R+1$;
     positivity of $L$ gives $R+L\leq KL+1$. The positive window comparison
@@ -1528,11 +1503,7 @@
     as recorded in \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:blocked_interaction_eventual_kernel,
-        thm:eventual_kernel_sector_local_gap,
-        thm:eventual_kernel_ground_state_support_iff,
-        thm:blocked_primitive_supported_state_classification,
-        thm:blocked_quasi_local_gap_transport}
+    \uses{thm:blocked_interaction_eventual_kernel,thm:eventual_kernel_sector_local_gap,thm:eventual_kernel_ground_state_support_iff,thm:blocked_primitive_supported_state_classification,thm:blocked_quasi_local_gap_transport}
     Take $K=R+L$ and group the original Hamiltonian on $KL$ sites.
     Coverage gives $R+L\leq KL+1$, so its eventual kernel is the given
     joint primitive space. Obtain one positive coarse gap for all sectors.
@@ -1753,9 +1724,7 @@
     is a separate step.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:cyclic_boundary_degree,thm:cyclic_boundary_compression,
-        thm:boundary_injectivity_adjoint_span,
-        thm:ground_space_restriction_overlap,thm:ground_space_grow_back}
+    \uses{def:cyclic_boundary_degree,thm:cyclic_boundary_compression,thm:boundary_injectivity_adjoint_span,thm:ground_space_restriction_overlap,thm:ground_space_grow_back}
     Write the two sets of one-site restrictions with boundaries $Y_i,Z_j$
     in $V_{n+1}$. Their overlap gives
     $\Gamma_n(A_jY_i)=\Gamma_n(Z_jA_i)$.
@@ -2273,8 +2242,7 @@
     GVBS presentation, and the all-residue finite-volume gap, remain separate.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_original_parent_interaction,
-        thm:periodic_quasi_local_ground_state_gap}
+    \uses{thm:periodic_original_parent_interaction,thm:periodic_quasi_local_ground_state_gap}
     Choose the positive canonical interaction from the original-chain
     intersection. Its kernel identity for every $N\ge R$ gives the
     eventual kernel hypothesis of the periodic infinite-volume gap theorem.
@@ -2307,8 +2275,7 @@
     $\lVert G^{\oplus S}\rVert\leq\lVert G\rVert$ and
     $\langle y,G^{\oplus S}x\rangle=\sum_s\langle y_s,Gx_s\rangle$.
     These statements include empty coordinate sets.
-    \uses{def:euclidean_fiberwise_operator,lem:right-spectator-extension,
-        thm:ph_spectator_operator_order}
+    \uses{def:euclidean_fiberwise_operator,lem:right-spectator-extension,thm:ph_spectator_operator_order}
 \end{lemma}
 \begin{proof}\leanok
     The squared norm is the sum of the squared fiber norms. Applying
@@ -2338,8 +2305,7 @@
     $\lVert L_1\rVert\leq\lVert\Gamma_B(K+M)\rVert$.
     These identities require no normalization or injectivity and include
     zero lengths and empty configuration sets.
-    \uses{def:residual_window_coordinates,def:euclidean_fiberwise_operator,
-        def:ground_space_gram}
+    \uses{def:residual_window_coordinates,def:euclidean_fiberwise_operator,def:ground_space_gram}
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:residual_boundary_inner_fibers,thm:euclidean_fiberwise_operator}
@@ -2782,8 +2748,7 @@
     \end{align}
     No transfer fixed-point equation, injectivity, or normalization is required
     for these identities.
-    \uses{def:residual_window_coordinates,def:correlated_residual_gram_metric,
-        def:residual_fixed_metric_row_projection}
+    \uses{def:residual_window_coordinates,def:correlated_residual_gram_metric,def:residual_fixed_metric_row_projection}
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:residual_exact_row_support,def:residual_fixed_metric_row_projection,def:correlated_residual_gram_metric,thm:euclidean_fiberwise_operator}
@@ -2842,8 +2807,7 @@
     finite direct sum of $U_{M,r}\Gamma_{B,V}(M,r)$ over the blocked prefix
     configurations $u$ of length $K$.
     No normalization or intertwining hypothesis is required.
-    \uses{def:residual_boundary_config_equiv,def:blocked_residual_boundary_map,
-        def:residual_window_coordinates}
+    \uses{def:residual_boundary_config_equiv,def:blocked_residual_boundary_map,def:residual_window_coordinates}
 \end{lemma}
 \begin{proof}\leanok
     Both maps have coefficient $\tr(B^vV^*A^\tau X_u)$ at $(u,v,\tau)$.
@@ -3017,8 +2981,7 @@
         \notag
     \end{align}
     All lengths may be zero. No normalization or injectivity is assumed.
-    \uses{def:residual_window_coordinates,def:euclidean_fiberwise_operator,
-        def:residual_window_left_config_equiv}
+    \uses{def:residual_window_coordinates,def:euclidean_fiberwise_operator,def:residual_window_left_config_equiv}
 \end{lemma}
 \begin{proof}\leanok
     The coefficient of the left side is $\tr(B^uB^v y_\tau)$.
@@ -3074,8 +3037,7 @@
     $\mathcal A\mathbf x=(V^*A^\tau X_u)_{u,\tau}$ and
     $\mathcal B\mathbf y=(Y_\tau B^u)_{u,\tau}$.
     They are finite direct sums followed by isometric coordinate rearrangements.
-    \uses{def:residual_window_coordinates,def:correlated_residual_gram_metric,
-        def:euclidean_fiberwise_operator}
+    \uses{def:residual_window_coordinates,def:correlated_residual_gram_metric,def:euclidean_fiberwise_operator}
 \end{definition}
 
 \begin{lemma}[Residual overlap factor estimates]
@@ -3204,11 +3166,7 @@
     \uses{def:residual_window_mixed_gram_residual}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:residual_window_overlap_factors,
-        thm:residual_supported_inverse_uniform_tail,
-        thm:residual_window_gram_errors,
-        thm:residual_window_virtual_norm,
-        thm:three_operator_perturbation_limit}
+    \uses{thm:residual_window_overlap_factors,thm:residual_supported_inverse_uniform_tail,thm:residual_window_gram_errors,thm:residual_window_virtual_norm,thm:three_operator_perturbation_limit}
     The centered limiting mixed Gram is bounded by the common-prefix Gram error
     and hence tends to zero. Replace successively the right-window Gram, the
     supported full-boundary inverse, and the left-window Gram by their limits.
@@ -3342,9 +3300,7 @@
     \uses{def:residual_window_coordinates}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:residual_window_left_fiberwise_coordinates,
-        thm:euclidean_fiberwise_projection,
-        thm:isometric_sector_ground_space_resolution}
+    \uses{thm:residual_window_left_fiberwise_coordinates,thm:euclidean_fiberwise_projection,thm:isometric_sector_ground_space_resolution}
     Concatenating the two blocked words and decoding their physical letters
     identifies the blocked left map with the original prefix boundary map.
     Each tail configuration contributes an independent copy of the prefix
@@ -3437,9 +3393,7 @@
     \uses{def:residual_window_coordinates,def:residual_window_mixed_gram_residual}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:residual_full_window_gram,
-        thm:supported_gram_projector_cancellation,
-        thm:residual_window_grams}
+    \uses{thm:residual_full_window_gram,thm:supported_gram_projector_cancellation,thm:residual_window_grams}
     The right Gram and its supported inverse act independently on prefix
     configurations. The left Gram and its inverse act independently on tail
     configurations. Both factorizations of the full boundary map have the exact
@@ -3464,10 +3418,7 @@
 
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:residual_window_supported_projector_cancellation,
-        thm:residual_window_mixed_gram_decay,
-        thm:residual_supported_inverse_uniform_tail,
-        thm:supported_gram_projector_norm}
+    \uses{thm:residual_window_supported_projector_cancellation,thm:residual_window_mixed_gram_decay,thm:residual_supported_inverse_uniform_tail,thm:supported_gram_projector_norm}
     The primitive supported-inverse estimates give the inverse identities
     and uniform bounds at lengths $M$ and $K+M$. The ordinary primitive Gram
     inverse is uniformly bounded at length $K+M$. The window maps are uniformly
@@ -3494,12 +3445,7 @@
 
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:residual_window_primitive_projection_decay,
-        thm:residual_window_cross_sector_decay,
-        thm:residual_window_left_sector_sum,
-        thm:residual_window_right_sector_sum,
-        thm:residual_window_full_sector_sum,
-        thm:sector_projection_defect_limit}
+    \uses{thm:residual_window_primitive_projection_decay,thm:residual_window_cross_sector_decay,thm:residual_window_left_sector_sum,thm:residual_window_right_sector_sum,thm:residual_window_full_sector_sum,thm:sector_projection_defect_limit}
     Replace each joint projection by the sum of its sector projections.
     The three replacement errors vanish. The paired sector defects vanish
     by the supported same-sector cancellation, and the different-sector
@@ -3531,9 +3477,7 @@
     \uses{def:residual_window_coordinates}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:cyclic_primitive_sector_resolution,
-        thm:residual_window_joint_projection_decay,
-        thm:correlated_residual_cyclic_corner}
+    \uses{thm:cyclic_primitive_sector_resolution,thm:residual_window_joint_projection_decay,thm:correlated_residual_cyclic_corner}
     Choose the faithful primitive, inequivalent cyclic sector resolution.
     Its cyclic shift is $P_{j+1}A_i=A_iP_j$. Reversing the labels permits the
     word shift formula to show that the correlated-tail Gram is precisely
@@ -3561,11 +3505,7 @@
     remains separate; see \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_residual_window_joint_projection_decay,
-        thm:isometric_projection_defect_transport,
-        thm:residual_window_right_joint_range,
-        thm:residual_window_left_joint_range_cover,
-        thm:residual_window_full_joint_range_cover}
+    \uses{thm:periodic_residual_window_joint_projection_decay,thm:isometric_projection_defect_transport,thm:residual_window_right_joint_range,thm:residual_window_left_joint_range_cover,thm:residual_window_full_joint_range_cover}
     The cyclic primitive sector resolution gives the joint three-window
     projection limit. The right, left, and full joint ranges are the images
     of the corresponding original interval spaces under one physical isometry.
@@ -3616,8 +3556,7 @@
     \cite[Theorem 1.2, Lemma existenceinteraction, and Section 6]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_open_parent_gap_all_volumes,
-        def:canonical_parent_interaction_matrix}
+    \uses{thm:periodic_open_parent_gap_all_volumes,def:canonical_parent_interaction_matrix}
     Choose the configuration-basis matrix of the canonical local ground-space
     complement projection. It is positive, and its open interaction sum is
     exactly the canonical parent Hamiltonian at every volume.
@@ -3705,8 +3644,7 @@
     and $\mathcal G_A(N)=\mathcal G_B(N)$ for every $N\ge0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto,
-        thm:primitive_representative_support_gauge}
+    \uses{thm:periodic_overlap_dichotomy,thm:periodic_self_overlap_tendsto,thm:primitive_representative_support_gauge}
     Along common multiples of the two periods, the self-overlaps tend to
     the positive periods. Proportionality gives the exact identity
     $|\braket{V^{(N)}(A)}{V^{(N)}(B)}|^2
@@ -3793,12 +3731,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:faithful_stationary_projector_closure,
-        thm:projector_closure_irreducible_corners,
-        thm:trace_preserving_isometric_corner,
-        thm:irreducible_left_canonical_periodic,
-        thm:isometric_sector_ground_space_resolution,
-        thm:block_sum_local_ground_space}
+    \uses{thm:faithful_stationary_projector_closure,thm:projector_closure_irreducible_corners,thm:trace_preserving_isometric_corner,thm:irreducible_left_canonical_periodic,thm:isometric_sector_ground_space_resolution,thm:block_sum_local_ground_space}
     Faithful stationarity makes every invariant projection reducing.
     Decompose into irreducible isometric corners; the identity resolution
     and positive ambient bond dimension imply that the family is nonempty.
@@ -3832,8 +3765,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:left_canonical_physical_dimension,
-        thm:primitive_insertion_local_state, thm:faithful_local_mps_support}
+    \uses{thm:left_canonical_physical_dimension,thm:primitive_insertion_local_state,thm:faithful_local_mps_support}
     The physical alphabet is nonempty by the positive physical dimension of a
     left-canonical tensor on a nonzero bond space. Trace preservation gives
     $\operatorname{tr}E^k(\rho)=\operatorname{tr}\rho$, so
@@ -3893,7 +3825,7 @@
     \label{thm:primitive_ground_space_eventual_independence}
     \lean{MPSTensor.eventually_groundSpaceES_iSupIndep_of_primitive}
     \leanok
-    \uses{def:primitive_mps, def:ground_space_es}
+    \uses{def:primitive_mps,def:ground_space_es}
     A finite family of pairwise gauge and phase inequivalent primitive
     tensors, with faithful invariant matrices, has independent boundary
     spaces $G_{B_i}(N)$ for every sufficiently large $N$.
@@ -3901,8 +3833,7 @@
     \cite[Lemmas disjoint and overlapestimate]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:inequivalent_block_ground_space_overlap_decay,
-        thm:asymptotic_subspace_independence}
+    \uses{thm:inequivalent_block_ground_space_overlap_decay,thm:asymptotic_subspace_independence}
     Inequivalence gives uniformly vanishing pairwise ground-space
     overlaps. Finiteness makes the bounds simultaneous, so the preceding
     theorem proves independence.
@@ -3999,7 +3930,7 @@
     \label{thm:faithful_quasi_local_state_density_support}
     \lean{MPSTensor.exists_quasiLocalExpectation_density_range_eq_groundSpaceES}
     \leanok
-    \uses{def:mps_quasi_local_expectation, def:ground_space_es}
+    \uses{def:mps_quasi_local_expectation,def:ground_space_es}
     Let $A$ have positive bond dimension, assume
     $\sum_iA_i^*A_i=I$, and let $\rho>0$ satisfy $E_A(\rho)=\rho$.
     Write $\omega_{A,\rho}$ for the resulting quasi-local state.
@@ -4066,9 +3997,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:left_canonical_physical_dimension,
-        thm:faithful_periodic_ground_space_presentation,
-        thm:periodic_block_family_quasi_local_gap}
+    \uses{thm:left_canonical_physical_dimension,thm:faithful_periodic_ground_space_presentation,thm:periodic_block_family_quasi_local_gap}
     Normalization implies positive physical dimension. The faithful
     stationary matrix yields a finite periodic family $B_j$ with
     $G_A(N)=G_{\bigoplus_jB_j}(N)$ at every length. Hence the same
@@ -4196,9 +4125,7 @@
     generating tensors, rather than an arbitrary GVBS presentation.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:joint_ground_space_intersection_middle_independence,
-        thm:primitive_ground_space_eventual_independence,
-        thm:periodic_original_intersection}
+    \uses{thm:joint_ground_space_intersection_middle_independence,thm:primitive_ground_space_eventual_independence,thm:periodic_original_intersection}
     Finiteness gives one eventual set on which all individual identities
     hold. Apply the middle-independence criterion on its intersection with
     the eventual independence set. For primitive tensors, overlap decay
@@ -4224,8 +4151,7 @@
     family intersection argument.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_joint_intersection_from_overlap,
-        thm:canonical_open_kernel_from_eventual_intersection}
+    \uses{thm:primitive_joint_intersection_from_overlap,thm:canonical_open_kernel_from_eventual_intersection}
     Nonzero weights preserve the joint open-boundary space. Substitute
     the eventual joint intersection into the canonical kernel criterion.
     The orthogonal projection onto the local ground-space complement is
@@ -4286,8 +4212,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:fp_inv_proj,thm:trace_preserving_isometric_corner,
-        thm:observable_insertion_isometric_intertwiner}
+    \uses{thm:fp_inv_proj,thm:trace_preserving_isometric_corner,thm:observable_insertion_isometric_intertwiner}
     The stationary support projection $P$ obeys $(I-P)A_iP=0$.
     Choose $V$ with $V^*V=I$ and $VV^*=P$. Then $PV=V$ gives
     $A_iV=V(V^*A_iV)$. Compression preserves trace preservation and the
@@ -4331,7 +4256,7 @@
     \lean{MPSTensor.observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff_of_stationary,
         MPSTensor.exists_local_density_range_eq_cornerGroundSpaceES_of_stationary}
     \leanok
-    \uses{def:primitive_insertion_expectation, def:corner_boundary_space}
+    \uses{def:primitive_insertion_expectation,def:corner_boundary_space}
     Let $A$ be an MPS tensor, let $\rho\geq0$ have nonzero trace and satisfy
     $\sum_iA_i\rho A_i^*=\rho$, and let $P$ be its support projection.
     The matrix $\rho$ need not be faithful. For every $k\geq0$ and every
@@ -4353,9 +4278,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:stationary_support_faithful_generators,
-        thm:isometric_compression_corner_boundary,
-        thm:faithful_local_mps_support, thm:local_mps_density_support}
+    \uses{thm:stationary_support_faithful_generators,thm:isometric_compression_corner_boundary,thm:faithful_local_mps_support,thm:local_mps_density_support}
     Compress to the support of $\rho$. The compressed data are faithful
     and have the same finite expectations, so the faithful support
     theorem and the finite-density theorem apply to them. The boundary
@@ -4399,13 +4322,7 @@
     \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:cyclic_primitive_sector_resolution,
-        thm:blocked_residual_ground_space_resolution,
-        thm:residual_supported_inverse_uniform_tail,
-        thm:residual_sector_overlap_decay,
-        thm:subspace_overlap_lower_gram,thm:sector_bounded_preimages,
-        def:residual_boundary_embedding,
-        thm:inverse_cyclic_word_gram,thm:supported_gram_projector_cancellation}
+    \uses{thm:cyclic_primitive_sector_resolution,thm:blocked_residual_ground_space_resolution,thm:residual_supported_inverse_uniform_tail,thm:residual_sector_overlap_decay,thm:subspace_overlap_lower_gram,thm:sector_bounded_preimages,def:residual_boundary_embedding,thm:inverse_cyclic_word_gram,thm:supported_gram_projector_cancellation}
     Write $n=Nm+r$ using the tensor's period $m$. Its primitive cyclic
     sectors give residual maps $S_j$ and supported inverses $H_j$ with
     $S_jH_jS_j^*=P_{\operatorname{ran}S_j}$ and uniformly bounded
@@ -4434,8 +4351,7 @@
     not assert purity of their associated states.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_boundary_uniform_lifts,thm:mixed_boundary_gram_decay,
-        thm:transfer_operator_gap_irr_tp,thm:transfer_operator_gap_rect_irr_tp}
+    \uses{thm:periodic_boundary_uniform_lifts,thm:mixed_boundary_gram_decay,thm:transfer_operator_gap_irr_tp,thm:transfer_operator_gap_rect_irr_tp}
     Irreducibility, normalization and inequivalence give a strict spectral
     radius bound for the original mixed transfer operator. Consequently
     $\|\Gamma^A_n{}^*\Gamma^B_n\|\to0$.
@@ -4508,8 +4424,7 @@
     is retained in this sufficient criterion.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_family_interaction_independence_criterion,
-        thm:periodic_block_family_quasi_local_gap}
+    \uses{thm:periodic_family_interaction_independence_criterion,thm:periodic_block_family_quasi_local_gap}
     Apply the existing original-chain periodic-family gap theorem to the
     constructed interaction. Its eventual kernel hypothesis follows from
     the exact identities for all volumes at least the interaction range.
@@ -4591,11 +4506,7 @@
     compressed corners is not assumed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:isometric_cointertwiner_ground_space_inclusion,
-        thm:periodic_boundary_overlap_decay,
-        thm:blocked_local_ground_space_transport,
-        thm:primitive_representative_support_gauge,
-        thm:primitive_ground_space_map_eventual_inverse_gram_bound}
+    \uses{thm:isometric_cointertwiner_ground_space_inclusion,thm:periodic_boundary_overlap_decay,thm:blocked_local_ground_space_transport,thm:primitive_representative_support_gauge,thm:primitive_ground_space_map_eventual_inverse_gram_bound}
     A hypothetical corner gauge relation gives
     $\mathcal G_N(B)=\mathcal G_N(C)$ at every $N$.
     For large $N$, primitivity and faithfulness make $\Gamma^B_N$ injective,
@@ -4639,10 +4550,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:stationary_support_faithful_generators,
-        thm:left_canonical_physical_dimension,
-        thm:faithful_quasi_local_state_density_support,
-        thm:mps_quasi_local_interval_expectation}
+    \uses{thm:stationary_support_faithful_generators,thm:left_canonical_physical_dimension,thm:faithful_quasi_local_state_density_support,thm:mps_quasi_local_interval_expectation}
     Support compression gives $E>0$, faithful stationary generators
     $B,\sigma$, and $\eta_{A,\rho}(X)=\eta_{B,\sigma}(X)$ at every length.
     Normalization of $B$ implies positive physical dimension. The faithful
@@ -4718,8 +4626,7 @@
     the general GVBS presentation step remains separate.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_family_canonical_interaction,
-        thm:periodic_block_family_quasi_local_gap}
+    \uses{thm:periodic_family_canonical_interaction,thm:periodic_block_family_quasi_local_gap}
     Apply the periodic-family original-chain commutator theorem to the
     constructed interaction. Its eventual kernel identity follows from
     the exact kernels for every volume at least the interaction range.
@@ -4744,9 +4651,7 @@
     from an arbitrary GVBS boundary limit remains separate.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:faithful_periodic_ground_space_presentation,
-        thm:periodic_family_canonical_interaction,
-        lem:canonical_interaction_support_transport}
+    \uses{thm:faithful_periodic_ground_space_presentation,thm:periodic_family_canonical_interaction,lem:canonical_interaction_support_transport}
     The faithful stationary matrix makes every invariant projection reducing.
     Decompose into normalized irreducible periodic corners, preserving every
     boundary space. Construct the periodic-family canonical interaction.
@@ -4773,9 +4678,7 @@
     on the competing pure states.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:faithful_generators_canonical_interaction,
-        thm:canonical_parent_generated_state,
-        thm:faithful_generators_quasi_local_gap}
+    \uses{thm:faithful_generators_canonical_interaction,thm:canonical_parent_generated_state,thm:faithful_generators_quasi_local_gap}
     Choose the canonical interaction given by the preceding theorem.
     Its local projection annihilates the generated state support, so that
     state has zero energy. Its exact kernels give the eventual kernel
@@ -4817,8 +4720,7 @@
     expectations in \cite[Section~3]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mps_finite_region_expectation,def:mps_compatible_local_state,
-        thm:mps_quasi_local_expectation_state,thm:qca_compatible_state_extension}
+    \uses{def:mps_finite_region_expectation,def:mps_compatible_local_state,thm:mps_quasi_local_expectation_state,thm:qca_compatible_state_extension}
     Embed any finite region into its canonical containing interval.
     Its expectation is the insertion value of that interval observable,
     so the two finite-region functionals agree. Uniqueness of continuous
@@ -4849,9 +4751,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:stationary_support_faithful_generators,
-        thm:left_canonical_physical_dimension,
-        thm:quasi_local_mps_expectation_equality}
+    \uses{thm:stationary_support_faithful_generators,thm:left_canonical_physical_dimension,thm:quasi_local_mps_expectation_equality}
     Compress the generators and stationary matrix to their stationary
     support. The compressed bond dimension is positive, and normalization
     of $B$ implies positive physical dimension. All finite insertion
@@ -4890,11 +4790,7 @@
     and tail-Gram hypotheses are given explicitly.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:residual_window_joint_projection_decay,
-        thm:residual_window_right_joint_range,
-        thm:residual_window_left_joint_range_cover,
-        thm:residual_window_full_joint_range_cover,
-        thm:isometric_projection_defect_transport}
+    \uses{thm:residual_window_joint_projection_decay,thm:residual_window_right_joint_range,thm:residual_window_left_joint_range_cover,thm:residual_window_full_joint_range_cover,thm:isometric_projection_defect_transport}
     The three joint sector spaces equal the corresponding original
     interval spaces under one configuration isometry. Their joint
     projection defect converges to zero by primitive-sector decay and
@@ -4917,8 +4813,7 @@
     volumes shorter than the interaction range.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:physical_residual_cover_limit_primitive_resolution,
-        thm:aligned_residue_cover_gap_limit}
+    \uses{thm:physical_residual_cover_limit_primitive_resolution,thm:aligned_residue_cover_gap_limit}
     The first theorem gives the residual-cover limit uniformly along
     all prefix and tail selections. The aligned-cover criterion gives
     an eventual original-length gap. A positive minimum over the
@@ -4984,8 +4879,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:stationary_support_quasi_local_state_equality,
-        thm:faithful_generators_constructed_quasi_local_gap}
+    \uses{thm:stationary_support_quasi_local_state_equality,thm:faithful_generators_constructed_quasi_local_gap}
     Compress the stationary matrix to its support. This gives normalized
     faithful stationary generators for the same quasi-local state.
     Apply the constructed parent-interaction theorem to those generators.
@@ -5280,12 +5174,7 @@
     separate.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_family_canonical_interaction,
-        thm:periodic_sector_representatives_exact_support,
-        thm:periodic_family_literal_primitive_resolution,
-        thm:all_length_gap_primitive_resolution_criterion,
-        thm:periodic_block_family_aligned_gap_of_dvd,
-        lem:canonical_interaction_support_transport}
+    \uses{thm:periodic_family_canonical_interaction,thm:periodic_sector_representatives_exact_support,thm:periodic_family_literal_primitive_resolution,thm:all_length_gap_primitive_resolution_criterion,thm:periodic_block_family_aligned_gap_of_dvd,lem:canonical_interaction_support_transport}
     Select inequivalent representatives without changing any finite
     ground space. If the selected family is nonempty, a common period
     multiple gives a primitive isometric resolution and exact
@@ -5319,9 +5208,7 @@
     The general GVBS presentation step remains separate.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:periodic_family_uniform_original_open_gap,
-        lem:positive_canonical_interaction_exact_open_kernels,
-        thm:periodic_block_family_quasi_local_gap}
+    \uses{thm:periodic_family_uniform_original_open_gap,lem:positive_canonical_interaction_exact_open_kernels,thm:periodic_block_family_quasi_local_gap}
     Choose any range at the canonical threshold and use its canonical
     local projection matrix. The all-length canonical norm gap transfers
     to the matrix interaction sum, including short volumes. The exact
@@ -5379,8 +5266,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:stationary_support_quasi_local_state_equality,
-        thm:faithful_generators_constructed_finite_quasi_local_gap}
+    \uses{thm:stationary_support_quasi_local_state_equality,thm:faithful_generators_constructed_finite_quasi_local_gap}
     Compress the stationary matrix to its support. This gives normalized
     faithful stationary generators for the same quasi-local state.
     Apply the constructed parent-interaction theorem to those generators.
@@ -5498,9 +5384,7 @@
     assertion that arbitrary GVBS boundary data have this representation.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:source_reversed_product_observable,
-        thm:supplied_isometry_insertion_trace_duality,
-        lem:ldp_observable_transfer_products}
+    \uses{def:source_reversed_product_observable,thm:supplied_isometry_insertion_trace_duality,lem:ldp_observable_transfer_products}
     Induct on the list, allowing an arbitrary matrix $\rho$. Trace duality
     moves the first Heisenberg insertion to $E_{X_1}(\rho)$.
     The induction hypothesis then gives
@@ -5531,8 +5415,7 @@
     \cite[Theorem~1.2]{Nachtergaele1996Spectral} in this setting.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_family_uniform_original_open_gap,
-        thm:canonical_gap_to_eventual_kernel_interaction}
+    \uses{thm:periodic_family_uniform_original_open_gap,thm:canonical_gap_to_eventual_kernel_interaction}
     The canonical interactions have exact kernels and uniform gaps at
     every sufficiently large range. Choose one long interval on which
     both the canonical and given interaction kernels equal the MPS
@@ -5562,8 +5445,7 @@
     general GVBS presentation step remains separate.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_family_given_interaction_uniform_open_gap,
-        thm:periodic_block_family_quasi_local_gap}
+    \uses{thm:periodic_family_given_interaction_uniform_open_gap,thm:periodic_block_family_quasi_local_gap}
     Combine the given-interaction finite gap with the original-chain
     periodic-family commutator theorem, applied to exactly the same
     given interaction and eventual kernel identity.

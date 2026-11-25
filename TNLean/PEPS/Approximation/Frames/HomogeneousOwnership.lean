@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Sheet.Birth
 import TNLean.PEPS.Approximation.SheetSplitting
 
 /-!
@@ -16,11 +15,12 @@ gives an isometry `V` on `U` and unit vectors `s`, `s'` with `‖𝒱 Ω - s ⊗
 `I_Ω(T:E) ≤ L^{-60}`, where `𝒱 = 1_{TE} ⊗ V`. The canonical map of the birth is
 `B = 𝒱ᴴ (|s⟩⟨s|_{T B_T} ⊗ 1_{E B_E}) 𝒱`.
 
-The canonical map `B`, its contraction and reference-error bounds, and the fact that on a sheet
-it commutes with every operator acting on a subset of `E` do not depend on the holes and are
-stated in `TNLean.Lattice.Sheet.Birth`. This file reads them in an encoded frame: `B` commutes
-with every hole encoder, all of which are supported in `E`, so the same bound holds for the
-encoded reference vectors.
+The canonical map `B` (`ManyBody.configBirthOp`), its contraction and reference-error bounds,
+and the fact that on a sheet it commutes with every operator acting on a subset of `E` do not
+depend on the holes and are stated in `QICLean.ManyBody.Sites.ThreeRegion.Birth`, for splitting
+data in the three-region coordinates of `T ⊆ T ∪ E`. This file reads them in an encoded frame:
+`B` commutes with every hole encoder, all of which are supported in `E`, so the same bound holds
+for the encoded reference vectors.
 
 ## Main definitions
 
@@ -34,8 +34,8 @@ encoded reference vectors.
 The bounded-change clause of Lemma 6.5, that the birth is a private contraction at `P∘`, one
 normalized pair source between `Q∘` and `P∘` and a private contraction at `P∘`, and the death the
 same with one normalized pair effect, is `Frame.birth_bounded` and `Frame.death_bounded` in
-`TNLean.PEPS.Approximation.FrameBoundedChanges`, on the registers of the frame with one register
-per site and per tag.
+`TNLean.PEPS.Approximation.Frames.FrameBoundedChanges`, on the registers of the frame, the tags and
+raw configurations held by each party.
 
 ## References
 
@@ -54,7 +54,8 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
+
+open ManyBody
 
 /-! ### Birth and death in an encoded frame -/
 
@@ -153,25 +154,28 @@ theorem birth [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     {L : ℝ}
     (hI : ManyBody.regionMutualInformation Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
-    ∃ σ : SplittingData q T (F.birthEnv P),
-      σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
-      (sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ).IsHermitian ∧
-      ‖sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ‖ ≤ 1 ∧
+    ∃ σ : SplittingData (fun _ : ι ↦ Fin q) T (T ∪ F.birthEnv P),
+      σ.error Finset.subset_union_left Ω ≤ L ^ (-30 : ℤ) ∧
+      (configBirthOp Finset.subset_union_left σ).IsHermitian ∧
+      ‖configBirthOp Finset.subset_union_left σ‖ ≤ 1 ∧
       ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-          sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) * F.encoder =
-        (F.changeOwner T Q).encoder * sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ ∧
-      ‖act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-          sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) (F.refVec Ω) -
+          configBirthOp Finset.subset_union_left σ) * F.encoder =
+        (F.changeOwner T Q).encoder * configBirthOp Finset.subset_union_left σ ∧
+      ‖toEuclideanLin ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
+          configBirthOp Finset.subset_union_left σ) (F.refVec Ω) -
         (F.changeOwner T Q).refVec Ω‖ ≤ L ^ (-30 : ℤ) := by
   set hTE := F.disjoint_birthEnv hTP hTH
   obtain ⟨σ, hσ⟩ := exists_sheetSplitting_zpow hTE hΩ hI
-  have hcomm : ∀ t, Commute (sheetBirthOp hTE σ) (rawProd F.holes t) := fun t =>
-    commute_sheetBirthOp hTE σ F.outerHoles_subset_birthEnv
+  have hD : F.outerHoles ⊆ (T ∪ F.birthEnv P) \ T := by
+    rw [Finset.union_sdiff_cancel_left hTE]
+    exact F.outerHoles_subset_birthEnv
+  have hcomm : ∀ t, Commute (configBirthOp Finset.subset_union_left σ) (rawProd F.holes t) :=
+    fun t ↦ commute_configBirthOp Finset.subset_union_left σ hD
       (rawProd_mem_supportedOperators F.holes t)
-  refine ⟨σ, hσ, sheetBirthOp_isHermitian hTE σ, norm_sheetBirthOp_le_one hTE σ,
+  refine ⟨σ, hσ, configBirthOp_isHermitian _ σ, norm_configBirthOp_le_one _ σ,
     one_kronecker_mul_frameEncoder hcomm, ?_⟩
-  exact (norm_act_one_kronecker_refVec_sub_le F hcomm Ω).trans
-    ((norm_act_sheetBirthOp_sub_le hTE σ Ω).trans hσ)
+  exact (norm_toEuclideanLin_one_kronecker_refVec_sub_le F hcomm Ω).trans
+    ((norm_toEuclideanLin_configBirthOp_sub_le _ σ Ω).trans hσ)
 
 /-- **Lemma 6.5 (homogeneous death).** The reversed operation. Let `F` be the frame *after* the
 death, in which `T` is owned by `P∘` and avoids every outer hole footprint, and let the frame
@@ -190,15 +194,15 @@ theorem death [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     {L : ℝ}
     (hI : ManyBody.regionMutualInformation Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
-    ∃ σ : SplittingData q T (F.birthEnv P),
-      σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
-      (sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ).IsHermitian ∧
-      ‖sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ‖ ≤ 1 ∧
+    ∃ σ : SplittingData (fun _ : ι ↦ Fin q) T (T ∪ F.birthEnv P),
+      σ.error Finset.subset_union_left Ω ≤ L ^ (-30 : ℤ) ∧
+      (configBirthOp Finset.subset_union_left σ).IsHermitian ∧
+      ‖configBirthOp Finset.subset_union_left σ‖ ≤ 1 ∧
       ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-          sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) * (F.changeOwner T Q).encoder =
-        F.encoder * sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ ∧
-      ‖act ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
-          sheetBirthOp (F.disjoint_birthEnv hTP hTH) σ) ((F.changeOwner T Q).refVec Ω) -
+          configBirthOp Finset.subset_union_left σ) * (F.changeOwner T Q).encoder =
+        F.encoder * configBirthOp Finset.subset_union_left σ ∧
+      ‖toEuclideanLin ((1 : Matrix (TagSpace F.holes) (TagSpace F.holes) ℂ) ⊗ₖ
+          configBirthOp Finset.subset_union_left σ) ((F.changeOwner T Q).refVec Ω) -
         F.refVec Ω‖ ≤ L ^ (-30 : ℤ) :=
   F.birth (Q := Q) hTP hTH hΩ hI
 

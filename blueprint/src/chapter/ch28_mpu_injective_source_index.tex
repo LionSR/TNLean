@@ -2,7 +2,7 @@
     \label{thm:mpu_injective_cfii_representative}
     \lean{MPOTensor.IsMPU.exists_cfii_representative_of_isInjective}
     \leanok
-    \uses{def:mpu, def:injective, def:mpu_canonical_form_ii}
+    \uses{def:mpu,def:injective,def:mpu_canonical_form_ii}
     Let $d>0$ and let $\mathcal U$ be an injective MPU tensor of bond
     dimension $D$. Combining the canonical replacement of
     \cite[lines~319--356]{Cirac2017MPU} with the equality case of
@@ -16,8 +16,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_cfii_representative,
-        thm:mps_equality_reduction_exists, thm:mps_rectangular_reduction_identities}
+    \uses{thm:mpu_reduced_cfii_representative,thm:mps_equality_reduction_exists,thm:mps_rectangular_reduction_identities}
     A reduced canonical representative $\mathcal V$ has bond dimension
     $E\leq D$, and equality of the positive-length periodic operators
     identifies the doubled-index matrix product vectors of $\mathcal U$ and
@@ -35,8 +34,7 @@
     \lean{MPOTensor.IsMPU.rightRank_mul_leftRank_of_isInjective_of_isMPUSimple,
         MPOTensor.IsMPU.index_eq_logb_of_isInjective_of_isMPUSimple}
     \leanok
-    \uses{def:mpu, def:injective, def:mpu_simple,
-        def:mpu_reduced_representative_index, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu,def:injective,def:mpu_simple,def:mpu_reduced_representative_index,def:mpu_right_rank,def:mpu_left_rank}
     Let $d>0$ and let $\mathcal U$ be a simple injective MPU tensor as in
     \cite[lines~1403--1407]{FrancoRubio2025MPUGauging}. Following
     \cite[lines~562--573 and~681--704]{Cirac2017MPU}, its source-cut ranks
@@ -49,12 +47,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_injective_cfii_representative,
-        thm:mpu_simple_rectangular_inclusion, thm:mpu_virtual_sandwich_source_ranks,
-        thm:mpu_reduced_representative_index_invariance,
-        thm:mpu_bounded_simple_blocking,
-        thm:mpu_source_ranks_physical_reindexing,
-        ThmFund1, prop:mpu_admissible_index_well_defined}
+    \uses{thm:mpu_injective_cfii_representative,thm:mpu_simple_rectangular_inclusion,thm:mpu_virtual_sandwich_source_ranks,thm:mpu_reduced_representative_index_invariance,thm:mpu_bounded_simple_blocking,thm:mpu_source_ranks_physical_reindexing,ThmFund1,prop:mpu_admissible_index_well_defined}
     Passing to the same-dimensional canonical representative
     $\mathcal V^{ij}=X\mathcal U^{ij}X^{-1}$ preserves both simplicity and
     the two source ranks. The simple canonical tensor $\mathcal V$ therefore

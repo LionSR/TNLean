@@ -51,7 +51,6 @@ section
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
 variable {V : Type*} [Fintype V] [LinearOrder V] {q m : ℕ}
 
@@ -79,7 +78,7 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
       P.center = z ∧ P.scale = u ∧
       (∀ j, P.radius (Fin.cast hn.symm j) = r j) ∧
       (∑ j, P.dim j) ≤ ∑ j, Module.finrank ℂ (S j) ∧
-      ‖act (1 - P.cylSum)
+      ‖Matrix.toEuclideanLin (1 - P.cylSum)
         (Ω)‖ ≤ ‖Ω - v‖ := by
   classical
   let R : Fin m → Finset V := fun j ↦ squareSample pos z (r j)
@@ -206,10 +205,10 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
       change Matrix.toEuclideanLin (coordinateRangeProjector W) Ω = _
       rw [coordinateRangeProjector, LinearEquiv.apply_symm_apply]
       rfl
-    have hact : act (coordinateRangeProjector W) Ω = U.starProjection Ω := by
+    have hact : Matrix.toEuclideanLin (coordinateRangeProjector W) Ω = U.starProjection Ω := by
       rw [← hproj]
       rfl
-    rw [hPsum, act_sub, act_one, hact]
+    rw [hPsum, map_sub, LinearMap.sub_apply, Matrix.toEuclideanLin_one_apply, hact]
     exact hres
 
 end TNLean.PEPS.EncodedFrame
@@ -275,8 +274,7 @@ theorem exists_squarePatch_integerCoordinates_of_radius_le_four
         (fun x : ↥Λ ↦ ((x.1.1 : ℝ), (x.1.2 : ℝ))) q,
       P.center = z ∧ P.scale = u ∧
       (∑ j, P.dim j) ≤ q ^ 81 ∧
-      ‖Lattice.Sheet.act (1 - P.cylSum)
-        (Ω)‖ = 0 := by
+      ‖Matrix.toEuclideanLin (1 - P.cylSum) Ω‖ = 0 := by
   classical
   let : LinearOrder ↥Λ :=
     (Fintype.equivFin ↥Λ).linearOrder

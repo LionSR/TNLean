@@ -11,8 +11,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     \lean{IsingTwist.isingBondObjectThree, IsingTwist.thetaThree_eq_directSum,
         IsingTwist.isingThreeBlockDim, IsingTwist.isingThreeTargets}
     \leanok
-    \uses{def:asymex_ising_action, def:asymex_ising_tensors,
-        def:mpdo_operator_product}
+    \uses{def:asymex_ising_action,def:asymex_ising_tensors,def:mpdo_operator_product}
     Put $\widehat A_\sigma=\sqrt2A_\sigma$,
     $\Theta_3=5A_1\oplus3A_\psi\oplus2A_\sigma$, and
     $B_3=\Theta_3\star\widehat A_\sigma$, of auxiliary dimension forty.
@@ -26,8 +25,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
     \lean{IsingTwist.thetaThree_mpo_mul_isingSigma,
         IsingTwist.isingBondObjectThree_trace_evalWord}
     \leanok
-    \uses{def:asymex_ising_three_product, thm:asymex_ising_sigma_fusion,
-        thm:asymex_ising_sigma_square}
+    \uses{def:asymex_ising_three_product,thm:asymex_ising_sigma_fusion,thm:asymex_ising_sigma_square}
     At every positive length $L$,
     \begin{align}
         O_L(\Theta_3)O_L(\widehat A_\sigma)
@@ -47,7 +45,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_ising_sigma_fusion, thm:asymex_ising_sigma_square}
+    \uses{thm:asymex_ising_sigma_fusion,thm:asymex_ising_sigma_square}
     The periodic operator of a direct sum is the sum of the periodic
     operators of its summands. Applying the fusion rules
     $1\otimes\sigma=\sigma$, $\psi\otimes\sigma=\sigma$, and
@@ -63,8 +61,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
         IsingTwist.isingThreeCompression, IsingTwist.isingBondObjectThree_dim_eq,
         IsingTwist.isingBondObjectThree_z_eq}
     \leanok
-    \uses{def:asymex_ising_three_product, thm:asymex_ising_three_trace,
-        thm:asymex_ising_normal, thm:asym_multiblock}
+    \uses{def:asymex_ising_three_product,thm:asymex_ising_three_trace,thm:asymex_ising_normal,thm:asym_multiblock}
     The tensor $B_3$ admits a multi-block asymmetric compression onto the
     four weighted targets in Definition~\ref{def:asymex_ising_three_product}.
     The auxiliary dimensions satisfy $40=4+4+3+3+26$: in an
@@ -74,8 +71,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_ising_normal, thm:asymex_ising_three_trace,
-        thm:asym_multiblock}
+    \uses{thm:asymex_ising_normal,thm:asymex_ising_three_trace,thm:asym_multiblock}
     Each target is a nonzero scalar multiple of a normal tensor of
     positive auxiliary dimension; applying Theorem~\ref{thm:asym_multiblock}
     to (\ref{eq:asymex_ising_three_trace}) and subtracting the sum of the
@@ -104,8 +100,7 @@ contraction described in~\cite{gap:tnlean_ising_three_object_twist_scope}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_ising_compression, thm:asymex_ising_sigma_square,
-        prop:asym_split_intertwiners}
+    \uses{thm:asymex_ising_compression,thm:asymex_ising_sigma_square,prop:asym_split_intertwiners}
     Grouping the first two summands of $\Theta_3$ writes the stacked
     product as the direct sum of the twenty-four-dimensional two-object
     product and $\sqrt2$ times the sixteen-dimensional $\sigma$ square.

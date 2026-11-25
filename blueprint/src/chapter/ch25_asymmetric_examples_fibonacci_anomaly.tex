@@ -174,7 +174,7 @@ matrices.
     \lean{FibonacciCompression.isMPOSymmetricFamily_fibNimTargets,
         FibonacciCompression.mpo_fibOne_mulVec_chain}
     \leanok
-    \uses{def:asymex_fib_anomaly_nim, cor:asym_action_tensors}
+    \uses{def:asymex_fib_anomaly_nim,cor:asym_action_tensors}
     Set $s=\varphi^{-1/2}$, the scalar denoted by $\sigma$ in
     Definition~\ref{def:asymex_golden_ring}. On the physical alphabet
     $\{0,1\}$, with $0$ representing the trivial label and $1$
@@ -314,7 +314,7 @@ no-go below.
     \label{thm:asymex_fib_anomaly_eigenvalue_zero}
     \lean{FibonacciCompression.fibTau_eigenvalue_eq_zero}
     \leanok
-    \uses{def:asymex_fib, def:normal}
+    \uses{def:asymex_fib,def:normal}
     Let $A$ be a word-normal tensor of physical dimension two and
     positive bond dimension, and set
     $\Psi_A(N)=\ket{V^{(N)}(A)}$. If a single scalar $c\in\C$ satisfies
@@ -324,8 +324,7 @@ no-go below.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_fib_anomaly_fusion_algebra, thm:mpo_symmetric_character,
-        ex:mpo_symmetry_fibonacci}
+    \uses{thm:asymex_fib_anomaly_fusion_algebra,thm:mpo_symmetric_character,ex:mpo_symmetry_fibonacci}
     Suppose $c\neq0$ and suppress $N\geq1$ in the notation. The unit law
     $O_1O_\tau=O_\tau$ of
     Lemma~\ref{thm:asymex_fib_anomaly_fusion_algebra} gives
@@ -348,7 +347,7 @@ no-go below.
     \label{thm:asymex_fib_anomaly_no_go}
     \lean{FibonacciCompression.not_exists_normal_fibonacci_symmetric}
     \leanok
-    \uses{def:asymex_fib, def:normal}
+    \uses{def:asymex_fib,def:normal}
     There is no positive bond dimension $D$, word-normal tensor $A$ of
     physical dimension two and bond dimension $D$, and single scalar
     $c\in\C$, such that for every $N\geq1$,
@@ -375,8 +374,7 @@ no-go below.
 
 \begin{proof}
     \leanok
-    \uses{cor:mpo_symmetric_no_go, thm:asymex_fib_anomaly_fusion_algebra,
-        ex:mpo_symmetry_fibonacci}
+    \uses{cor:mpo_symmetric_no_go,thm:asymex_fib_anomaly_fusion_algebra,ex:mpo_symmetry_fibonacci}
     Suppose $A$ and $c$ satisfy
     Eq.~\ref{eq:asymex_fib_anomaly_symmetry}. Then $A$ is symmetric under
     the Fibonacci fusion algebra of

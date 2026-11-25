@@ -43,7 +43,7 @@ tensor by applying one left shift per site.
         MPOTensor.GroupCocycle.shift_apply,
         MPOTensor.GroupCocycle.phase}
     \leanok
-    \uses{def:mpo_tensor, def:mpo_family, def:mpug_scalar_cochains}
+    \uses{def:mpo_tensor,def:mpo_family,def:mpug_scalar_cochains}
     Let $G$ be a finite group and let
     $\omega\colon G^3\to\C^\times$ be a scalar three-cochain. On
     $\C[G]\otimes\C[G]$ define the diagonal gate and the left shift by
@@ -195,7 +195,7 @@ $U_g$ applied after $U_h$.
         MPOTensor.GroupCocycle.phase_mul,
         MPOTensor.GroupCocycle.shift_mul}
     \leanok
-    \uses{thm:asymex_group_cocycle_kernel, def:mpug_three_cocycle}
+    \uses{thm:asymex_group_cocycle_kernel,def:mpug_three_cocycle}
     If $\omega$ is a three-cocycle, then $U_gU_h=U_{gh}$ for all
     $g,h\in G$ and every $N>0$.
 \end{lemma}
@@ -222,7 +222,7 @@ $U_g$ applied after $U_h$.
         MPOTensor.GroupCocycle.wGate_one,
         MPOTensor.GroupCocycle.shift_one}
     \leanok
-    \uses{thm:asymex_group_cocycle_kernel, def:mpug_scalar_cochains}
+    \uses{thm:asymex_group_cocycle_kernel,def:mpug_scalar_cochains}
     If $\omega$ is normalized, then $W_e=1$ and $U_e=1$ for every $N>0$.
 \end{lemma}
 
@@ -240,8 +240,7 @@ $U_g$ applied after $U_h$.
         MPOTensor.GroupCocycle.mpo_tensor_conjTranspose,
         MPOTensor.GroupCocycle.family_operator_laws}
     \leanok
-    \uses{thm:asymex_group_cocycle_kernel, thm:asymex_group_cocycle_mul,
-        thm:asymex_group_cocycle_one, def:mpug_positive_mpu}
+    \uses{thm:asymex_group_cocycle_kernel,thm:asymex_group_cocycle_mul,thm:asymex_group_cocycle_one,def:mpug_positive_mpu}
     If every value of $\omega$ has modulus one, then $U_g$ is unitary for
     every $g\in G$ and every $N>0$, so $\hat T_g$ is a matrix product
     unitary on nonempty chains. When $\omega$ is a normalized
@@ -306,9 +305,7 @@ identified half sites carries $O_g$ to $U_g$.
         MPOTensor.GroupCocycle.mpo_boundaryTensor_conjTranspose,
         MPOTensor.GroupCocycle.mpo_tensor_eq_halfSiteEmbedding}
     \leanok
-    \uses{def:asymex_group_cocycle_boundary_tensor,
-        thm:asymex_group_cocycle_kernel, thm:asymex_group_cocycle_mul,
-        thm:asymex_group_cocycle_one, thm:asymex_group_cocycle_unitary}
+    \uses{def:asymex_group_cocycle_boundary_tensor,thm:asymex_group_cocycle_kernel,thm:asymex_group_cocycle_mul,thm:asymex_group_cocycle_one,thm:asymex_group_cocycle_unitary}
     On every periodic chain of $N>0$ sites, $\Gamma\Gamma^\dagger=\mathbf 1$
     and $O_g=\Gamma^\dagger U_g\Gamma$. Hence:
     \begin{enumerate}
@@ -356,7 +353,7 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
         MPOTensor.GroupCocycle.fusionV, MPOTensor.GroupCocycle.fusionW,
         MPOTensor.GroupCocycle.fusionData}
     \leanok
-    \uses{def:asymex_group_cocycle_tensor, def:mpug_anomaly_three_cochain}
+    \uses{def:asymex_group_cocycle_tensor,def:mpug_anomaly_three_cochain}
     For $g,h\in G$ let $F^<_{g,h}$ send the bond pair $(hl,l)$ of
     $\hat T_g\hat T_h$ to the bond label $l$ of $\hat T_{gh}$ with the
     factor $\omega(g,h,l)^{-1}$, and vanish on every other bond pair, and
@@ -372,8 +369,7 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
         MPOTensor.GroupCocycle.fusionV_mul_fusionW,
         MPOTensor.GroupCocycle.isReduction_fusion}
     \leanok
-    \uses{def:asymex_group_cocycle_fusion_tensors, def:mps_rectangular_reduction,
-        def:mpdo_operator_product, thm:asymex_group_cocycle_mul}
+    \uses{def:asymex_group_cocycle_fusion_tensors,def:mps_rectangular_reduction,def:mpdo_operator_product,thm:asymex_group_cocycle_mul}
     If $\omega$ is a three-cocycle, then $F^<_{g,h}F^>_{g,h}=\mathbf 1$ and
     $F^<_{g,h}\,(\hat T_g\hat T_h)^{ij}=\hat T_{gh}^{ij}\,F^<_{g,h}$ for every
     pair of physical indices. Hence
@@ -403,8 +399,7 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
         MPOTensor.GroupCocycle.exists_evalWord_tensor_ne_zero,
         MPOTensor.GroupCocycle.fusionData_omega}
     \leanok
-    \uses{thm:asymex_group_cocycle_fusion, def:mpug_anomaly_three_cochain,
-        thm:asymex_group_cocycle_kernel}
+    \uses{thm:asymex_group_cocycle_fusion,def:mpug_anomaly_three_cochain,thm:asymex_group_cocycle_kernel}
     Let $\omega$ be a three-cocycle. For the fusion tensors of
     Definition~\ref{def:asymex_group_cocycle_fusion_tensors}, the left
     boundaries of the two fusion trees of $(g,h,k)$ satisfy
@@ -430,8 +425,7 @@ $l$ of $\hat T_{gh}$ is $(hl,l)$.
         MPOTensor.GroupCocycle.not_isNormal_tensor_one,
         MPOTensor.GroupCocycle.not_isNormalRepresentation}
     \leanok
-    \uses{def:asymex_group_cocycle_tensor, def:normal,
-        def:mpug_anomaly_three_cochain}
+    \uses{def:asymex_group_cocycle_tensor,def:normal,def:mpug_anomaly_three_cochain}
     If $G$ is nontrivial and $\omega$ is normalized, then $\hat T_e$ is not
     normal. Hence the tensors $\hat T_g$ do not form a representation with
     normal tensors, and the three-cochain of
@@ -462,7 +456,7 @@ complement of $t\in\{0,1\}^N$ and $q(s)=\sum_is_is_{i+1}$.
         MPOTensor.GroupCocycle.wGate_cyclicTwo,
         MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo}
     \leanok
-    \uses{def:asymex_z2_cocycles, thm:asymex_group_cocycle_kernel}
+    \uses{def:asymex_z2_cocycles,thm:asymex_group_cocycle_kernel}
     For $\omega=\omega_1$ and $g=s$, the gate is
     $W_s\ket{k,l}=(-1)^{kl+l}\ket{k,l}$, which is $CZ(1\otimes Z)$. For
     every $N>0$,
@@ -533,8 +527,7 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
         MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_neg_one,
         MPOTensor.GroupCocycle.czxDecorated_conj_clusterIsingHamiltonian_one}
     \leanok
-    \uses{thm:asymex_group_cocycle_z2, def:asymex_czx_tensors,
-        def:asymex_group_cocycle_z2_hamiltonians}
+    \uses{thm:asymex_group_cocycle_z2,def:asymex_czx_tensors,def:asymex_group_cocycle_z2_hamiltonians}
     On a periodic chain of $N\geq2$ qubits the following hold.
     \begin{enumerate}
         \item $O_ZX_jO_Z^\dagger=K_j$ and $O_ZK_jO_Z^\dagger=X_j$, so
@@ -550,8 +543,7 @@ $H(\lambda)=-\sum_jK_j-\lambda\sum_jX_j$ be the cluster Ising Hamiltonian.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_czx_kernel, thm:asymex_czx_unitarity,
-        thm:mpug_monomial_matrix_laws}
+    \uses{thm:asymex_czx_kernel,thm:asymex_czx_unitarity,thm:mpug_monomial_matrix_laws}
     All operators are monomial in the computational basis. The periodic
     operator of the undecorated CZX tensor is $O_Z$ up to the global sign
     $(-1)^N$ of its gate order~\cite{gap:mpu_czx_tensor_normalization},
@@ -612,9 +604,7 @@ labelling the cohomology classes.
         MPOTensor.GroupCocycle.mpo_tensor_cyclic_apply,
         MPOTensor.GroupCocycle.cyclic_operator_laws}
     \leanok
-    \uses{def:asymex_group_cocycle_cyclic, def:mpug_three_cocycle,
-        thm:asymex_group_cocycle_kernel, thm:asymex_group_cocycle_mul,
-        thm:asymex_group_cocycle_one, thm:asymex_group_cocycle_unitary}
+    \uses{def:asymex_group_cocycle_cyclic,def:mpug_three_cocycle,thm:asymex_group_cocycle_kernel,thm:asymex_group_cocycle_mul,thm:asymex_group_cocycle_one,thm:asymex_group_cocycle_unitary}
     For every $n\geq1$ and $j\in\N$, the value is
     $\omega_j(a,b,c)=\zeta^{ja\lfloor(b+c)/n\rfloor}$, and $\omega_j$ is a
     normalized three-cocycle of $\Z_n$ with values of modulus one. For every
@@ -709,8 +699,7 @@ class of $\omega$.
         ScalarThreeCochain.domainWallPhase_cyclicCocycle_four,
         ScalarThreeCochain.not_cohomologousTo_cyclicCocycle}
     \leanok
-    \uses{def:asymex_group_cocycle_domain_wall_phase,
-        thm:asymex_group_cocycle_cyclic}
+    \uses{def:asymex_group_cocycle_domain_wall_phase,thm:asymex_group_cocycle_cyclic}
     Let $n\geq1$, $j\in\N$ and $a\in\{0,\ldots,n-1\}$, with order
     $o(a)=n/\gcd(n,a)$ in $\Z_n$. For every $m\in\N$,
     $I_{a,m}(\omega_j)=\zeta^{ja\lfloor ma/n\rfloor}$. The domain-wall phase is
@@ -733,7 +722,7 @@ class of $\omega$.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpug_cyclic_invariant_gauge, thm:asymex_group_cocycle_cyclic}
+    \uses{thm:mpug_cyclic_invariant_gauge,thm:asymex_group_cocycle_cyclic}
     This is~\cite[``Domain-wall phases of the cyclic
         cocycles'']{QICLean2026Blueprint}.
     By Lemma~\ref{thm:asymex_group_cocycle_cyclic},
@@ -770,8 +759,7 @@ class of $\omega$.
         ScalarThreeCochain.cohomologousTo_iff_domainWallPhase_eq,
         ScalarThreeCochain.anomalyClass_eq_iff_domainWallPhase_eq}
     \leanok
-    \uses{thm:asymex_group_cocycle_cyclic_domain_wall,
-        thm:mpug_h3_group_cohomology}
+    \uses{thm:asymex_group_cocycle_cyclic_domain_wall,thm:mpug_h3_group_cohomology}
     Let $n>1$. The group $H^3(\Z_n,\C^\times_{\mathrm{triv}})$ has $n$
     elements and consists of the classes $[\omega_0],\ldots,[\omega_{n-1}]$,
     with $[\omega_j]=[\omega_{j'}]$ exactly when $j\equiv j'\pmod n$. In
@@ -784,9 +772,7 @@ class of $\omega$.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_group_cocycle_cyclic_domain_wall,
-        thm:mpug_h3_group_cohomology,
-        thm:asymex_group_cocycle_domain_wall_phase_gauge}
+    \uses{thm:asymex_group_cocycle_cyclic_domain_wall,thm:mpug_h3_group_cohomology,thm:asymex_group_cocycle_domain_wall_phase_gauge}
     This is~\cite[``The classes of the cyclic cocycles'']{QICLean2026Blueprint}.
     The value $\omega_j(a,b,c)=\zeta^{ja\lfloor(b+c)/n\rfloor}$ depends on $j$
     only modulo $n$, and $\omega_0=1$. By
@@ -834,9 +820,7 @@ $b=(0,1)$. That source does not apply the periodic construction to it.
         MPOTensor.GroupCocycle.mpo_tensor_klein_apply,
         MPOTensor.GroupCocycle.klein_operator_laws}
     \leanok
-    \uses{def:asymex_group_cocycle_klein, def:mpug_three_cocycle,
-        thm:asymex_group_cocycle_kernel, thm:asymex_group_cocycle_mul,
-        thm:asymex_group_cocycle_one, thm:asymex_group_cocycle_unitary}
+    \uses{def:asymex_group_cocycle_klein,def:mpug_three_cocycle,thm:asymex_group_cocycle_kernel,thm:asymex_group_cocycle_mul,thm:asymex_group_cocycle_one,thm:asymex_group_cocycle_unitary}
     The function $\omega$ is a normalized three-cocycle with values $\pm1$.
     Write $t_i=(x_{i,1},x_{i,2})$. For every $g\in\Z_2\times\Z_2$, every
     $N>0$ and all $s,t$,

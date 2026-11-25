@@ -29,7 +29,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \label{lem:bnt_eventual_change_basis}
     \lean{MPSTensor.eventually_exists_invertible_changeBasis}
     \leanok
-    \uses{lem:bnt_invertible_change_basis, def:mpv_overlap}
+    \uses{lem:bnt_invertible_change_basis,def:mpv_overlap}
     If two finite families of blocks have asymptotically orthonormal overlaps
     within each family, and if their MPV spans agree for all sufficiently large
     system sizes $N$, then for all sufficiently large $N$ there exists an
@@ -37,7 +37,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     combinations of the MPV states of the other.
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:bnt_finite_index_overlap_orthonormal_li, lem:bnt_invertible_change_basis}
+\begin{proof}\leanok\uses{lem:bnt_finite_index_overlap_orthonormal_li,lem:bnt_invertible_change_basis}
     By Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}, both families are
     linearly independent for all sufficiently large $N$. Hence, for all
     sufficiently large $N$, both families are linearly independent and the
@@ -135,7 +135,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \lean{MPSTensor.SectorDecomposition.coeff_blockTensor}
     \lean{MPSTensor.SectorDecomposition.sameMPV₂_blockTensor_toTensor}
     \leanok
-    \uses{def:sector_decomposition_block_tensor, thm:block_tensor_to_tensor_from_blocks}
+    \uses{def:sector_decomposition_block_tensor,thm:block_tensor_to_tensor_from_blocks}
     The coefficient of the blocked decomposition satisfies
     \begin{align}
         c_{P^{[p]},j}^{(N)}
@@ -221,7 +221,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \lean{MPSTensor.SectorDecomposition.coeff_not_eventually_zero}
     \lean{MPSTensor.SectorDecomposition.coeff_mul_not_eventually_zero}
     \leanok
-    \uses{def:sector_weight_data, lem:finite_geometric_sum_eventual_vanishing}
+    \uses{def:sector_weight_data,lem:finite_geometric_sum_eventual_vanishing}
     For any sector decomposition $P$ and any sector $j$, the coefficient
     $c_{P,j}^{(N)}=\sum_q\mu_{j,q}^N$ is not eventually zero in $N$.  More
     generally, for every positive integer $p$, the subsequence
@@ -247,7 +247,7 @@ between the sector sets.
     \label{thm:sector_bnt_proportional_exact_match}
     \lean{MPSTensor.exists_block_match_exact_of_eventuallyProportional}
     \leanok
-    \uses{def:sector_bnt_cf, lem:sector_bnt_combined_family_eventually_li, lem:sector_decomposition_coeff_not_eventually_zero}
+    \uses{def:sector_bnt_cf,lem:sector_bnt_combined_family_eventually_li,lem:sector_decomposition_coeff_not_eventually_zero}
     Let $P$ and $Q$ be BNT canonical forms whose total MPV families are
     eventually nonzero and proportional. For every sector $j$ of $P$, there is
     a sector $k$ of $Q$ with equal bond dimension, gauge-phase-equivalent basis
@@ -255,7 +255,7 @@ between the sector sets.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_combined_family_eventually_li, lem:sector_decomposition_coeff_not_eventually_zero, cor:sector_bnt_cf_basis_normal, thm:cpsv_normal_overlap_dichotomy, thm:gauge_phase_mpv_scaling}
+    \uses{lem:sector_bnt_combined_family_eventually_li,lem:sector_decomposition_coeff_not_eventually_zero,cor:sector_bnt_cf_basis_normal,thm:cpsv_normal_overlap_dichotomy,thm:gauge_phase_mpv_scaling}
     Suppose the chosen sector decays against every sector of $Q$, and separate
     all such $P$-sectors from the remaining ones. For each remaining sector,
     choose a $Q$-sector with non-decaying overlap. Both blocks are normal by the

@@ -35,7 +35,7 @@ one-species specialization by an explicit operator decomposition.
     \label{lem:pvbs_local_projector}
     \lean{MPSTensor.parentInteraction_pvbs_two_apply}
     \leanok
-    \uses{def:pvbs_tensor, def:parent_interaction}
+    \uses{def:pvbs_tensor,def:parent_interaction}
     At real hopping $\mu$, the canonical two-site parent interaction is
     \begin{align}
         h_\mu & =|11\rangle\langle11|+
@@ -62,7 +62,7 @@ one-species specialization by an explicit operator decomposition.
         MPSTensor.toEuclideanLin_parentRingInteraction_term_pvbs_decomposition,
         MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_decomposition}
     \leanok
-    \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
+    \uses{def:pvbs_tensor,def:parent_hamiltonian_es}
     On every ring of $N\ge2$ sites, the PVBS parent Hamiltonian satisfies
     \begin{align}
         H_\mu & =\frac{2\mu}{1+\mu^2}H_1+
@@ -75,7 +75,7 @@ one-species specialization by an explicit operator decomposition.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:pvbs_local_projector, lem:pvbs_cyclic_geometry}
+    \uses{lem:pvbs_local_projector,lem:pvbs_cyclic_geometry}
     The difference between $h_\mu$ and $2\mu h_1/(1+\mu^2)$ is the
     diagonal field $[(\mu^2-\mu)n_L+(1-\mu)n_R]/(1+\mu^2)$.
     Summing cyclically gives the same total occupation at the left and
@@ -90,7 +90,7 @@ one-species specialization by an explicit operator decomposition.
         MPSTensor.pvbs_zero_of_mem_orthogonal_parent_kernel,
         MPSTensor.isGapped_hamiltonian_parentRingInteraction_pvbs}
     \leanok
-    \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
+    \uses{def:pvbs_tensor,def:parent_hamiltonian_es}
     For $\mu\ge0$, let $c(\mu)=(\mu-1)^2/(1+\mu^2)$.
     If $v$ has zero vacuum amplitude, then
     $\langle v,H_\mu v\rangle\ge c(\mu)\|v\|^2$.
@@ -102,7 +102,7 @@ one-species specialization by an explicit operator decomposition.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:pvbs_periodic_occupation, thm:pvbs_periodic_parent}
+    \uses{thm:pvbs_periodic_occupation,thm:pvbs_periodic_parent}
     Because the critical parent Hamiltonian $H_1$ is positive and every
     nonvacuum configuration contains at least one particle, any vector $v$
     with vanishing vacuum coefficient satisfies
@@ -120,7 +120,7 @@ one-species specialization by an explicit operator decomposition.
         MPSTensor.hamiltonian_parentRingInteraction_pvbs_gap_le,
         MPSTensor.hamiltonian_parentRingInteraction_pvbs_gap_exact}
     \leanok
-    \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
+    \uses{def:pvbs_tensor,def:parent_hamiltonian_es}
     The uniform one-particle vector $W_N=\sum_j|0\cdots1_j\cdots0\rangle$
     satisfies $H_\mu W_N=c(\mu)W_N$ for every real $\mu$ and $N\ge2$.
     For $\mu>0$ and $\mu\ne1$, $c(\mu)>0$ is the largest possible
@@ -132,8 +132,7 @@ one-species specialization by an explicit operator decomposition.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:pvbs_periodic_occupation, thm:pvbs_uniform_lower_gap,
-        thm:pvbs_one_particle_dynamics}
+    \uses{thm:pvbs_periodic_occupation,thm:pvbs_uniform_lower_gap,thm:pvbs_one_particle_dynamics}
     The uniform one-particle vector is invariant under exchange of two
     sites and has no adjacent double occupation. Every critical local
     term therefore annihilates it. It has particle number one, so

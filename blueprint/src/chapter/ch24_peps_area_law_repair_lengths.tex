@@ -45,9 +45,7 @@ places primaries first, initial belt regions second, and replacements by generat
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_length_lower_bound,
         TNLean.PEPS.AreaLaw.Geometry.repairStage_positive_rank_length_lower_bound}
     \leanok
-    \uses{def:area_law_repair_characteristic_length,
-        def:area_law_repair_birth_rank,
-        def:area_law_two_family_scale_thresholds}
+    \uses{def:area_law_repair_characteristic_length,def:area_law_repair_birth_rank,def:area_law_two_family_scale_thresholds}
     For every $U\in\mathbb R$ there is $K\in\mathbb N$ with the
     following property. Fix an origin $o\in\mathbb R^2$, a finite
     domain $\Lambda\subset\mathbb Z^2$, a cut $A\subseteq\Lambda$,
@@ -62,10 +60,7 @@ places primaries first, initial belt regions second, and replacements by generat
 
 \begin{proof}
     \leanok
-    \uses{def:area_law_fine_belt_scales,
-        def:area_law_repair_characteristic_length,
-        def:area_law_repair_birth_rank,def:area_law_repair_successor_regions,
-        thm:area_law_two_family_scale_thresholds}
+    \uses{def:area_law_fine_belt_scales,def:area_law_repair_characteristic_length,def:area_law_repair_birth_rank,def:area_law_repair_successor_regions,thm:area_law_two_family_scale_thresholds}
     Take $K=K_\zeta(U)$. Whenever $k\ge K$, the fine side
     $t_k=2^{\lfloor\zeta k\rfloor}$ satisfies $t_k\ge U$ by
     Lemma~\ref{thm:area_law_two_family_scale_thresholds}.
@@ -85,9 +80,7 @@ places primaries first, initial belt regions second, and replacements by generat
     \label{thm:area_law_repair_birth_templates}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_birth_templates}
     \leanok
-    \uses{def:area_law_repair_characteristic_length,
-        def:area_law_repair_birth_rank,def:area_law_template,
-        def:area_law_hamiltonian}
+    \uses{def:area_law_repair_characteristic_length,def:area_law_repair_birth_rank,def:area_law_template,def:area_law_hamiltonian}
     Fix $C_{\rm tpl}\ge1$. There exist $C_P\ge1$ and $C_B>0$ such that for every $D_0\in\mathbb R$
     there exists $T_0\ge1$ with the following property: for every $S_*\ge T_0$ and integer
     $C_0>\max(1,4D_0)$, there exists $K\ge0$ such that for every $o\in\mathbb R^2$, finite
@@ -121,17 +114,7 @@ places primaries first, initial belt regions second, and replacements by generat
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_primary_scanner_constant,
-        def:area_law_primary_birth_template,
-        thm:area_law_primary_fragment_union,
-        thm:area_law_dyadic_layer_distance,
-        thm:area_law_primary_birth_template_points,
-        thm:area_law_primary_birth_template_clearance,
-        thm:area_law_primary_scale_limits,
-        thm:area_law_belt_replacement_templates,
-        thm:area_law_belt_birth_template_clearance,
-        thm:area_law_descendant_birth_template_clearance,
-        def:area_law_repair_characteristic_length}
+    \uses{thm:area_law_primary_scanner_constant,def:area_law_primary_birth_template,thm:area_law_primary_fragment_union,thm:area_law_dyadic_layer_distance,thm:area_law_primary_birth_template_points,thm:area_law_primary_birth_template_clearance,thm:area_law_primary_scale_limits,thm:area_law_belt_replacement_templates,thm:area_law_belt_birth_template_clearance,thm:area_law_descendant_birth_template_clearance,def:area_law_repair_characteristic_length}
     Fix $C_P$ from Lemma~\ref{thm:area_law_primary_scanner_constant}, $C_B$ from
     Lemma~\ref{thm:area_law_belt_replacement_templates}, $T_0\ge1$ from
     Lemma~\ref{thm:area_law_descendant_birth_template_clearance}, and $K$ dominating the
@@ -175,8 +158,7 @@ places primaries first, initial belt regions second, and replacements by generat
 
 \begin{proof}
     \leanok
-    \uses{def:area_law_repair_characteristic_length,
-        def:area_law_repair_square,def:area_law_repair_stage}
+    \uses{def:area_law_repair_characteristic_length,def:area_law_repair_square,def:area_law_repair_stage}
     By induction on $N$: at $N=0$, $\tau_0(i)\in\{r_k,t_k\}$ is a positive power of $2$ by
     (\ref{eq:area_law_initial_characteristic_length}); at $N+1$, (\ref{eq:area_law_repair_characteristic_length})
     preserves $\tau_N(i)>0$ for old $i\ne *_N$ and assigns $\tau_{N+1}=d(S)>0$ (a power of $2$ by
@@ -194,8 +176,7 @@ places primaries first, initial belt regions second, and replacements by generat
         TNLean.PEPS.AreaLaw.Geometry.repairStage_color_oldInclusion,
         TNLean.PEPS.AreaLaw.Geometry.repairStageCharacteristicLength_oldInclusion}
     \leanok
-    \uses{def:area_law_repair_inclusions,def:area_law_repair_characteristic_length,
-        thm:area_law_retained_birth_lattice_point}
+    \uses{def:area_law_repair_inclusions,def:area_law_repair_characteristic_length,thm:area_law_retained_birth_lattice_point}
     For any $o\in\mathbb R^2$, finite $\Lambda\subset\mathbb Z^2$, cut $A\subseteq\Lambda$,
     $C_0\ge2$, $k_0\ge50{,}000{,}000$, $S_*\in\mathbb R$, and $j,n\in\mathbb N$, the retention map
     $\iota_{j,j+n}:I_j\to I_{j+n}$ (Definition~\ref{def:area_law_repair_inclusions}) of $\mathcal D_j$
@@ -210,10 +191,7 @@ places primaries first, initial belt regions second, and replacements by generat
 
 \begin{proof}
     \leanok
-    \uses{def:area_law_repair_inclusions,def:area_law_repair_stage,
-        def:area_law_repair_successor_regions,
-        def:area_law_repair_characteristic_length,
-        thm:area_law_retained_birth_lattice_point}
+    \uses{def:area_law_repair_inclusions,def:area_law_repair_stage,def:area_law_repair_successor_regions,def:area_law_repair_characteristic_length,thm:area_law_retained_birth_lattice_point}
     Induct on $n$: $\iota_{j,j}=\mathrm{id}$, and each step $I_{j+n}\hookrightarrow I_{j+n+1}$
     is a disjoint-union summand inclusion preserving dummy, birth, label, and $\tau$ by
     Definitions~\ref{def:area_law_repair_successor_regions} and
@@ -241,8 +219,7 @@ places primaries first, initial belt regions second, and replacements by generat
     \label{lem:area_law_repair_rank_zero_primary_ancestor}
     \lean{TNLean.PEPS.AreaLaw.Geometry.existsUnique_initialPrimary_of_repairStageBirthRank_eq_zero}
     \leanok
-    \uses{def:area_law_repair_inclusions,def:area_law_repair_birth_rank,
-        def:area_law_initial_region_indices,def:area_law_primary_pitch_indices}
+    \uses{def:area_law_repair_inclusions,def:area_law_repair_birth_rank,def:area_law_initial_region_indices,def:area_law_primary_pitch_indices}
     Let $G_k$ be the primary pitch index set at layer $k$
     (Definition~\ref{def:area_law_primary_pitch_indices}). For every $n\in\mathbb N$ and
     $x\in I_n\setminus\{*_n\}$ with $\operatorname{rk}_n(x)=0$, there exists a unique
@@ -251,9 +228,7 @@ places primaries first, initial belt regions second, and replacements by generat
 
 \begin{proof}
     \leanok
-    \uses{lem:area_law_repair_rank_zero_ancestry,
-        lem:area_law_repair_retention_identities,
-        def:area_law_initial_region_indices,def:area_law_repair_birth_rank}
+    \uses{lem:area_law_repair_rank_zero_ancestry,lem:area_law_repair_retention_identities,def:area_law_initial_region_indices,def:area_law_repair_birth_rank}
     By Lemma~\ref{lem:area_law_repair_rank_zero_ancestry}, $x=\iota_{0,n}(y)$ for some $y\in I_0$
     with $\operatorname{rk}_0(y)=0$. Since $\iota_{0,n}(*_0)=*_n\ne x$
     (Lemma~\ref{lem:area_law_repair_retention_identities}) and initial belts have rank $1$,

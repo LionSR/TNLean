@@ -36,8 +36,7 @@ Deriving it from properties of a boundary state is a separate question.
         TNLean.PEPS.forall_hasEigenvalue_hamiltonian_ofPlace_of_overlap_anticommutator,
         TNLean.PEPS.forall_hasEigenvalue_hamiltonian_ofPlace_of_overlap_of_comparison}
     \leanok
-    \uses{thm:peps_region_projector_unit_gap,
-        thm:peps_disjoint_region_interactions_commute}
+    \uses{thm:peps_region_projector_unit_gap,thm:peps_disjoint_region_interactions_commute}
     Let $P_i$ be the extended canonical parent projector for
     a region $R_i$, and let $H=\sum_i P_i$.
     Suppose that each region overlaps at most $m$ other regions,
@@ -94,8 +93,7 @@ Deriving it from properties of a boundary state is a separate question.
     \lean{TNLean.PEPS.forall_hasEigenvalue_one_hamiltonian_ofPlace_of_commute,
         TNLean.PEPS.forall_hasEigenvalue_one_hamiltonian_ofPlace_of_pairwise_disjoint}
     \leanok
-    \uses{thm:peps_region_projector_unit_gap,
-        thm:peps_disjoint_region_interactions_commute}
+    \uses{thm:peps_region_projector_unit_gap,thm:peps_disjoint_region_interactions_commute}
     If the extended canonical parent projectors commute pairwise,
     their sum satisfies $H^2\ge H$, so every eigenvalue of $H$ other
     than $0$ is at least one. In particular, this holds for

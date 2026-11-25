@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.RegionalFactors.SelectedCoefficientDecomposition
 import QICLean.Algebra.OperatorSchmidt.MatrixFactorExchange
 import QICLean.ManyBody.Sites.RegionMatrix
-import TNLean.Lattice.Sheet.Splitting
+import QICLean.ManyBody.Sites.ThreeRegion.Cut
 import Mathlib.Data.Fintype.EquivFin
 
 /-!
@@ -33,7 +33,6 @@ Proposition 5.7, lines 1324–1333.
 
 open Matrix
 open scoped BigOperators Kronecker
-open TNLean.Lattice.Sheet
 
 noncomputable section
 
@@ -42,7 +41,7 @@ namespace TNLean.MPS.AreaLaw
 /-- Recombine the two exterior pieces as the actual complement of the middle.
 This is a configuration identity for the regional decomposition used in ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private def threeSplitExteriorConfigEquiv {Ω : Type*} [DecidableEq Ω]
+private def threeCutExteriorConfigEquiv {Ω : Type*} [DecidableEq Ω]
     (q : ℕ) (T E : Finset Ω) (hTE : Disjoint T E) :
     ManyBody.ComplConfig (fun _ : Ω ↦ Fin q) E ≃
       ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) :=
@@ -51,115 +50,142 @@ private def threeSplitExteriorConfigEquiv {Ω : Type*} [DecidableEq Ω]
       (Equiv.arrowCongr (Equiv.subtypeEquivRight fun _ ↦ by rw [Finset.union_comm E T])
         (Equiv.refl (Fin q))))
 
+/-- The configurations of `E` read as those of the middle region `(T ∪ E) \ T` of the
+three-region coordinates, which is `E` for disjoint `T` and `E`. -/
+private def threeCutMiddleConfigEquiv {Ω : Type*} [DecidableEq Ω]
+    (q : ℕ) (T E : Finset Ω) (hTE : Disjoint T E) :
+    (E → Fin q) ≃ (↥((T ∪ E) \ T) → Fin q) :=
+  Equiv.arrowCongr (Equiv.subtypeEquivRight fun _ ↦ by
+    rw [Finset.union_sdiff_cancel_left hTE]) (Equiv.refl (Fin q))
+
 /-- Regrouping the three regional coordinates agrees with splitting off the
 middle and then reading its actual complement. Supporting ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private theorem exteriorMiddle_threeSplit_apply
+private theorem exteriorMiddle_threeCut_apply
     {Ω : Type*} [DecidableEq Ω]
     (q : ℕ) (T E : Finset Ω) (hTE : Disjoint T E) (x : Ω → Fin q) :
-    exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)
-        (threeSplit q T E hTE x) =
-      (threeSplitExteriorConfigEquiv q T E hTE
+    exteriorMiddleEquiv (T → Fin q) (↥((T ∪ E) \ T) → Fin q) ({v // v ∉ T ∪ E} → Fin q)
+        (ManyBody.threeCutEquiv (fun _ ↦ Fin q) (Finset.subset_union_left : T ⊆ T ∪ E) x) =
+      (threeCutExteriorConfigEquiv q T E hTE
         ((ManyBody.cutEquiv (fun _ : Ω ↦ Fin q) E x).2),
-        (ManyBody.cutEquiv (fun _ : Ω ↦ Fin q) E x).1) := by
+        threeCutMiddleConfigEquiv q T E hTE
+          (ManyBody.cutEquiv (fun _ : Ω ↦ Fin q) E x).1) := by
   apply Prod.ext
   · apply Prod.ext
     · funext v
-      simp [exteriorMiddleEquiv, threeSplitExteriorConfigEquiv,
+      simp [exteriorMiddleEquiv, threeCutExteriorConfigEquiv,
         ManyBody.complementUnionEquiv, Equiv.prodCongr]
     · funext v
       rfl
   · funext v
-    simp [exteriorMiddleEquiv]
+    rfl
 
 /-- A three-region middle decomposition is a decomposition over the actual
-middle and its actual complement, with precisely the same middle family.
-Only exterior coefficients are pulled back. This closes the regional
+middle and its actual complement, with precisely the same middle family read on
+`E`. Only exterior coefficients are pulled back. This closes the regional
 coordinate identification in ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
-private theorem exists_regional_exterior_of_threeSplit_decomposition
+private theorem exists_regional_exterior_of_threeCut_decomposition
     {Ω ι R : Type*} [DecidableEq Ω] [Fintype ι] [Semiring R]
     (q : ℕ) (T E : Finset Ω) (hTE : Disjoint T E)
     (X : Matrix (Ω → Fin q) (Ω → Fin q) R)
-    (V : ι → Matrix (E → Fin q) (E → Fin q) R)
+    (V : ι → Matrix (↥((T ∪ E) \ T) → Fin q) (↥((T ∪ E) \ T) → Fin q) R)
     (B : ι → Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
       ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) R)
     (hX : X.reindex
-        ((threeSplit q T E hTE).trans
-          (exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)))
-        ((threeSplit q T E hTE).trans
-          (exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q))) =
+        ((ManyBody.threeCutEquiv (fun _ ↦ Fin q) (Finset.subset_union_left : T ⊆ T ∪ E)).trans
+          (exteriorMiddleEquiv (T → Fin q) (↥((T ∪ E) \ T) → Fin q)
+            ({v // v ∉ T ∪ E} → Fin q)))
+        ((ManyBody.threeCutEquiv (fun _ ↦ Fin q) (Finset.subset_union_left : T ⊆ T ∪ E)).trans
+          (exteriorMiddleEquiv (T → Fin q) (↥((T ∪ E) \ T) → Fin q)
+            ({v // v ∉ T ∪ E} → Fin q))) =
         ∑ t, B t ⊗ₖ V t) :
     ∃ M : ι → Matrix ({v // v ∉ E} → Fin q) ({v // v ∉ E} → Fin q) R,
-      X = (∑ t, M t ⊗ₖ V t).submatrix
+      X = (∑ t, M t ⊗ₖ (V t).submatrix (threeCutMiddleConfigEquiv q T E hTE)
+          (threeCutMiddleConfigEquiv q T E hTE)).submatrix
         ((ManyBody.cutEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _))
         ((ManyBody.cutEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _)) := by
-  let f := (threeSplit q T E hTE).trans
-    (exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q))
-  let M := fun t ↦ (B t).submatrix (threeSplitExteriorConfigEquiv q T E hTE)
-    (threeSplitExteriorConfigEquiv q T E hTE)
+  let f := (ManyBody.threeCutEquiv (fun _ ↦ Fin q) (Finset.subset_union_left : T ⊆ T ∪ E)).trans
+    (exteriorMiddleEquiv (T → Fin q) (↥((T ∪ E) \ T) → Fin q) ({v // v ∉ T ∪ E} → Fin q))
+  let M := fun t ↦ (B t).submatrix (threeCutExteriorConfigEquiv q T E hTE)
+    (threeCutExteriorConfigEquiv q T E hTE)
   refine ⟨M, ?_⟩
   ext x y
   have hentry := congrArg (fun Z ↦ Z (f x) (f y)) hX
   change X (f.symm (f x)) (f.symm (f y)) = (∑ t, B t ⊗ₖ V t) (f x) (f y) at hentry
   rw [Equiv.symm_apply_apply, Equiv.symm_apply_apply] at hentry
-  have hx : f x = _ := exteriorMiddle_threeSplit_apply q T E hTE x
-  have hy : f y = _ := exteriorMiddle_threeSplit_apply q T E hTE y
+  have hx : f x = _ := exteriorMiddle_threeCut_apply q T E hTE x
+  have hy : f y = _ := exteriorMiddle_threeCut_apply q T E hTE y
   rw [hx, hy] at hentry
   simpa [M, Matrix.submatrix_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply] using hentry
 
 /-- Convert increasing middle coordinates and the three-region exterior into
 an operator identity on the actual middle region and its complement. The
-middle family is prescribed before exterior coefficients. Supporting ALVV,
-arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-theorem exists_regional_exterior_of_natural_threeSplit_decomposition
+increasing coordinates `eE` of `E` are read on the middle region `(T ∪ E) \ T`
+of the three-region coordinates, which is `E`. The middle family is prescribed
+before exterior coefficients. Supporting ALVV, arXiv:1602.08828v2,
+Proposition 5.7, lines 1324–1333. -/
+theorem exists_regional_exterior_of_natural_threeCut_decomposition
     {Ω ι R : Type*} [DecidableEq Ω] [Fintype ι] [Semiring R]
     {q N : ℕ} (T E : Finset Ω) (hTE : Disjoint T E) (eE : Fin N ≃ E)
     (X : Matrix (Ω → Fin q) (Ω → Fin q) R)
     (V : ι → Matrix (Fin N → Fin q) (Fin N → Fin q) R)
     (B : ι → Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
       ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) R)
-    (hX : (X.reindex
-        ((threeSplit q T E hTE).trans
-          (exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)))
-        ((threeSplit q T E hTE).trans
-          (exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)))).submatrix
+    (hX :
+      let eM : Fin N ≃ ↥((T ∪ E) \ T) :=
+        eE.trans (Equiv.subtypeEquivRight fun _ ↦ by rw [Finset.union_sdiff_cancel_left hTE])
+      let f := (ManyBody.threeCutEquiv (fun _ ↦ Fin q)
+          (Finset.subset_union_left : T ⊆ T ∪ E)).trans
+        (exteriorMiddleEquiv (T → Fin q) (↥((T ∪ E) \ T) → Fin q)
+          ({v // v ∉ T ∪ E} → Fin q))
+      (X.reindex f f).submatrix
           (fun x : ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) × (Fin N → Fin q) ↦
-            (x.1, x.2 ∘ eE.symm))
+            (x.1, x.2 ∘ eM.symm))
           (fun x : ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) × (Fin N → Fin q) ↦
-            (x.1, x.2 ∘ eE.symm)) = ∑ r, B r ⊗ₖ V r) :
+            (x.1, x.2 ∘ eM.symm)) = ∑ r, B r ⊗ₖ V r) :
     ∃ M : ι → Matrix ({v // v ∉ E} → Fin q) ({v // v ∉ E} → Fin q) R,
       X = (∑ r, M r ⊗ₖ (V r).submatrix (fun σ : E → Fin q ↦ σ ∘ eE)
           (fun σ : E → Fin q ↦ σ ∘ eE)).submatrix
         ((ManyBody.cutEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _))
         ((ManyBody.cutEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _)) := by
-  let f := (threeSplit q T E hTE).trans
-    (exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q))
-  let Vphys := fun r ↦ (V r).submatrix (fun σ : E → Fin q ↦ σ ∘ eE)
-    (fun σ : E → Fin q ↦ σ ∘ eE)
+  let eM : Fin N ≃ ↥((T ∪ E) \ T) :=
+    eE.trans (Equiv.subtypeEquivRight fun _ ↦ by rw [Finset.union_sdiff_cancel_left hTE])
+  let f := (ManyBody.threeCutEquiv (fun _ ↦ Fin q)
+      (Finset.subset_union_left : T ⊆ T ∪ E)).trans
+    (exteriorMiddleEquiv (T → Fin q) (↥((T ∪ E) \ T) → Fin q)
+      ({v // v ∉ T ∪ E} → Fin q))
+  replace hX : (X.reindex f f).submatrix
+      (fun x : ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) × (Fin N → Fin q) ↦
+        (x.1, x.2 ∘ eM.symm))
+      (fun x : ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) × (Fin N → Fin q) ↦
+        (x.1, x.2 ∘ eM.symm)) = ∑ r, B r ⊗ₖ V r := hX
+  let Vphys := fun r ↦ (V r).submatrix (fun σ : ↥((T ∪ E) \ T) → Fin q ↦ σ ∘ eM)
+    (fun σ : ↥((T ∪ E) \ T) → Fin q ↦ σ ∘ eM)
   have hphys : X.reindex f f = ∑ r, B r ⊗ₖ Vphys r := by
     ext x y
-    let xn := (x.1, x.2 ∘ eE)
-    let yn := (y.1, y.2 ∘ eE)
-    have hx : (x.1, (x.2 ∘ eE) ∘ eE.symm) = x := by
+    let xn := (x.1, x.2 ∘ eM)
+    let yn := (y.1, y.2 ∘ eM)
+    have hx : (x.1, (x.2 ∘ eM) ∘ eM.symm) = x := by
       apply Prod.ext
       · rfl
       · funext v
-        simp only [Function.comp_apply, eE.apply_symm_apply]
-    have hy : (y.1, (y.2 ∘ eE) ∘ eE.symm) = y := by
+        simp only [Function.comp_apply, eM.apply_symm_apply]
+    have hy : (y.1, (y.2 ∘ eM) ∘ eM.symm) = y := by
       apply Prod.ext
       · rfl
       · funext v
-        simp only [Function.comp_apply, eE.apply_symm_apply]
+        simp only [Function.comp_apply, eM.apply_symm_apply]
     have hentry := congrArg (fun Z ↦ Z xn yn) hX
     simp only [Matrix.submatrix_apply] at hentry
-    change (X.reindex f f) (x.1, (x.2 ∘ eE) ∘ eE.symm)
-      (y.1, (y.2 ∘ eE) ∘ eE.symm) = (∑ r, B r ⊗ₖ V r) xn yn at hentry
+    change (X.reindex f f) (x.1, (x.2 ∘ eM) ∘ eM.symm)
+      (y.1, (y.2 ∘ eM) ∘ eM.symm) = (∑ r, B r ⊗ₖ V r) xn yn at hentry
     rw [hx, hy] at hentry
     simpa only [Matrix.sum_apply, Matrix.kroneckerMap_apply, Vphys,
       Matrix.submatrix_apply, xn, yn] using hentry
-  exact exists_regional_exterior_of_threeSplit_decomposition
+  obtain ⟨M, hM⟩ := exists_regional_exterior_of_threeCut_decomposition
     q T E hTE X Vphys B hphys
+  exact ⟨M, hM.trans rfl⟩
 
 end TNLean.MPS.AreaLaw
 

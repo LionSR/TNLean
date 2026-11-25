@@ -7,7 +7,7 @@ import QICLean.Analysis.Norm.MatrixL2Contraction
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.Placement
 import TNLean.PEPS.Approximation.HoleEncoder
-import TNLean.Lattice.Sheet.Operators
+import QICLean.Analysis.Norm.MatrixToEuclidean
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.ManyBody.Sites.ProductVector
 
@@ -80,14 +80,79 @@ disjointness of their physical samples, which it implies; `Frame` records the la
 -/
 
 open Matrix QuantumCircuit
-open scoped BigOperators Matrix.Norms.L2Operator
+open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
+
+/-! ### Rank-one projectors, the product zero vector and tagged stacks -/
+
+/-- The rank-one projector `|v⟩⟨v|`. -/
+def rankOne {α : Type*} [Fintype α] (v : EuclideanSpace ℂ α) : Matrix α α ℂ :=
+  vecMulVec (⇑v) (star ⇑v)
+
+/-- The product zero vector `|0⟩^{⊗ D}` on the sites of `D`. -/
+def zeroVec [NeZero q] (D : Finset ι) : (D → Fin q) → ℂ :=
+  Pi.single 0 1
+
+omit [Fintype ι] in
+theorem star_zeroVec_dotProduct_zeroVec [NeZero q] (D : Finset ι) :
+    star (zeroVec (q := q) D) ⬝ᵥ zeroVec D = 1 := by
+  classical
+  simp [zeroVec, dotProduct, Pi.single_apply]
+
+theorem rankOne_conjTranspose {α : Type*} [Fintype α] (v : EuclideanSpace ℂ α) :
+    (rankOne v)ᴴ = rankOne v := by
+  simp [rankOne, conjTranspose_vecMulVec]
+
+theorem rankOne_mul_self {α : Type*} [Fintype α] {v : EuclideanSpace ℂ α} (hv : ‖v‖ = 1) :
+    rankOne v * rankOne v = rankOne v := by
+  rw [rankOne, Matrix.vecMulVec_mul_vecMulVec,
+    EuclideanSpace.star_dotProduct_self_eq_one_of_norm_eq_one hv, one_smul]
+
+section Stack
+
+variable {T m n : Type*} [Fintype T] [Fintype m] [Fintype n]
+
+/-- The tagged stack `∑_t |t⟩ ⊗ R_t` of a family of operators. -/
+def stack (R : T → Matrix m n ℂ) : Matrix (T × m) n ℂ := Matrix.of fun r τ => R r.1 r.2 τ
+
+omit [Fintype T] [Fintype m] [Fintype n] in
+@[simp]
+theorem stack_apply (R : T → Matrix m n ℂ) (t : T) (σ : m) (τ : n) :
+    stack R (t, σ) τ = R t σ τ := rfl
+
+omit [Fintype n] in
+theorem stack_conjTranspose_mul_stack {n' : Type*} (R : T → Matrix m n ℂ)
+    (S : T → Matrix m n' ℂ) : (stack R)ᴴ * stack S = ∑ t, (R t)ᴴ * S t := by
+  ext τ τ'
+  simp only [mul_apply, conjTranspose_apply, stack_apply, Fintype.sum_prod_type,
+    Matrix.sum_apply]
+
+omit [Fintype T] [Fintype m] in
+theorem stack_mul {l : Type*} (R : T → Matrix m n ℂ) (A : Matrix n l ℂ) :
+    stack R * A = stack fun t => R t * A := by
+  ext ⟨t, σ⟩ τ
+  simp [mul_apply]
+
+/-- The operator `1 ⊗ B`, acting as `B` on the second factor and as the identity on the tags,
+passes through a tagged stack `∑_t |t⟩ ⊗ S_t` whenever `B` commutes with every `S_t`. -/
+theorem one_kronecker_mul_stack {τ n : Type*} [Fintype τ] [DecidableEq τ] [Fintype n]
+    {S : τ → Matrix n n ℂ} {B : Matrix n n ℂ} (hB : ∀ t, Commute B (S t)) :
+    ((1 : Matrix τ τ ℂ) ⊗ₖ B) * stack S = stack S * B := by
+  rw [stack_mul]
+  ext ⟨t, x⟩ y
+  simp only [mul_apply, kroneckerMap_apply, one_apply, stack_apply, Fintype.sum_prod_type,
+    ite_mul, one_mul, zero_mul]
+  rw [Finset.sum_eq_single t (fun b _ hb => by simp [Ne.symm hb]) (by simp)]
+  have h := congrFun (congrFun (hB t).eq x) y
+  simp only [mul_apply] at h
+  simpa using h
+
+end Stack
 
 /-! ### Squares and their samples -/
 
@@ -426,10 +491,10 @@ theorem norm_projProd_le_one (l : List (SquarePatch pos q)) : ‖projProd l‖ �
 most `rε` on `ψ`, where `r` is the length of the list. No commutation is assumed.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 93–94 and 237–248. -/
-theorem norm_act_projProd_sub_le {l : List (SquarePatch pos q)} {ε : ℝ}
-    {ψ : EuclideanSpace ℂ (ι → Fin q)} (hε : ∀ p ∈ l, ‖act p.proj ψ - ψ‖ ≤ ε) :
-    ‖act (projProd l) ψ - ψ‖ ≤ l.length * ε := by
-  refine (norm_act_list_prod_sub_le _ (fun A hA => ?_) ψ).trans ?_
+theorem norm_toEuclideanLin_projProd_sub_le {l : List (SquarePatch pos q)} {ε : ℝ}
+    {ψ : EuclideanSpace ℂ (ι → Fin q)} (hε : ∀ p ∈ l, ‖toEuclideanLin p.proj ψ - ψ‖ ≤ ε) :
+    ‖toEuclideanLin (projProd l) ψ - ψ‖ ≤ l.length * ε := by
+  refine (norm_toEuclideanLin_list_prod_sub_le _ (fun A hA => ?_) ψ).trans ?_
   · obtain ⟨p, -, rfl⟩ := List.mem_map.mp hA
     exact p.norm_proj_le_one
   · rw [List.map_map]
@@ -613,10 +678,10 @@ theorem norm_frameEncoder_le_one [NeZero q] {l : List (Hole pos q Party)}
     (by rw [frameEncoder_conjTranspose_mul_self h]; exact norm_projProd_le_one _)
 
 /-- `‖K_F ψ‖ = ‖∏_a P_a ψ‖` for every raw vector `ψ`. -/
-theorem norm_act_frameEncoder [NeZero q] {l : List (Hole pos q Party)}
+theorem norm_toEuclideanLin_frameEncoder [NeZero q] {l : List (Hole pos q Party)}
     (h : PairwiseDisjointOuter (l.map Hole.patch)) (ψ : EuclideanSpace ℂ (ι → Fin q)) :
-    ‖act (frameEncoder l) ψ‖ = ‖act (projProd (l.map Hole.patch)) ψ‖ := by
-  refine norm_act_eq_of_gram_eq ?_ ψ
+    ‖toEuclideanLin (frameEncoder l) ψ‖ = ‖toEuclideanLin (projProd (l.map Hole.patch)) ψ‖ := by
+  refine norm_toEuclideanLin_apply_eq_of_conjTranspose_mul_eq ?_ ψ
   have hP := projProd_isStarProjection _ h
   rw [frameEncoder_conjTranspose_mul_self h, ← Matrix.star_eq_conjTranspose,
     hP.isSelfAdjoint.star_eq, hP.isIdempotentElem.eq]
@@ -657,7 +722,7 @@ def encoder [NeZero q] : Matrix F.Layout (ι → Fin q) ℂ := frameEncoder F.ho
 
 /-- The reference vector `Ω_F = K_F Ω` (`eq:frame-vector`). -/
 def refVec [NeZero q] (Ω : EuclideanSpace ℂ (ι → Fin q)) : EuclideanSpace ℂ F.Layout :=
-  act F.encoder Ω
+  toEuclideanLin F.encoder Ω
 
 /-- A raw sheet: the frame without holes, for an ownership assignment. An ownership guide in
 the plane gives such an assignment by sampling its labels at the site positions. -/
@@ -678,14 +743,14 @@ theorem norm_encoder_le_one [NeZero q] : ‖F.encoder‖ ≤ 1 :=
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 86–90. -/
 theorem norm_refVec_eq [NeZero q] (Ω : EuclideanSpace ℂ (ι → Fin q)) :
-    ‖F.refVec Ω‖ = ‖act (projProd F.patches) Ω‖ :=
-  norm_act_frameEncoder F.disjoint Ω
+    ‖F.refVec Ω‖ = ‖toEuclideanLin (projProd F.patches) Ω‖ :=
+  norm_toEuclideanLin_frameEncoder F.disjoint Ω
 
 /-- **`eq:frame-norm`, upper bound.** `‖Ω_F‖ ≤ ‖Ω‖`.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 86–92. -/
 theorem norm_refVec_le [NeZero q] (Ω : EuclideanSpace ℂ (ι → Fin q)) : ‖F.refVec Ω‖ ≤ ‖Ω‖ :=
-  norm_act_le_of_norm_le_one F.norm_encoder_le_one Ω
+  norm_toEuclideanLin_apply_le_of_norm_le_one F.norm_encoder_le_one Ω
 
 /-- **`eq:frame-norm`.** If `‖Ω‖ = 1` and every hole projector satisfies
 `‖(1 - P_a) Ω‖ ≤ ε`, then the reference vector of a frame with `r` holes satisfies
@@ -693,14 +758,14 @@ theorem norm_refVec_le [NeZero q] (Ω : EuclideanSpace ℂ (ι → Fin q)) : ‖
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 86–94. -/
 theorem one_sub_mul_le_norm_refVec [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)}
-    (hΩ : ‖Ω‖ = 1) {ε : ℝ} (hε : ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ε) :
+    (hΩ : ‖Ω‖ = 1) {ε : ℝ} (hε : ∀ h ∈ F.holes, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ε) :
     1 - F.holes.length * ε ≤ ‖F.refVec Ω‖ ∧ ‖F.refVec Ω‖ ≤ 1 := by
   refine ⟨?_, hΩ ▸ F.norm_refVec_le Ω⟩
-  have h := norm_act_projProd_sub_le (l := F.patches) (ψ := Ω) (ε := ε) fun p hp => by
+  have h := norm_toEuclideanLin_projProd_sub_le (l := F.patches) (ψ := Ω) (ε := ε) fun p hp => by
     obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
     exact hε h hh
   rw [F.norm_refVec_eq]
-  have h2 := norm_sub_norm_le Ω (act (projProd F.patches) Ω)
+  have h2 := norm_sub_norm_le Ω (toEuclideanLin (projProd F.patches) Ω)
   rw [norm_sub_rev] at h2
   have hlen : F.patches.length = F.holes.length := List.length_map _
   rw [hlen] at h

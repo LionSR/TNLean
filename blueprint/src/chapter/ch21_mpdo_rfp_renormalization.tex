@@ -160,7 +160,7 @@ is stated in \cite[``State-preparation map'']{QICLean2026Blueprint}.
     \label{lem:phys_close_identity}
     \lean{MPOTensor.physCloseN_identity_eq_mpo}
     \leanok
-    \uses{def:phys_close, def:mpo_family}
+    \uses{def:phys_close,def:mpo_family}
     Closing the virtual legs with the identity gives the periodic MPO
     operator: $M_N(1)=\rho^{(N)}(M)$.
 \end{lemma}
@@ -205,7 +205,7 @@ is stated in \cite[``State-preparation map'']{QICLean2026Blueprint}.
     \label{lem:phys_close_three}
     \lean{MPOTensor.physClose3_apply, MPOTensor.physCloseN_three_eq_physClose3}
     \leanok
-    \uses{def:phys_close, def:three_coordinate_identification}
+    \uses{def:phys_close,def:three_coordinate_identification}
     For the three-site physical closure (the operator $\mathcal K_3(X)$ in
     \cite[Proposition~C.7, lines~1510--1516]{Cirac2016MPDO_arXiv} when
     $M=\mathcal K$), the coefficients are
@@ -232,7 +232,7 @@ leaving the remaining sites unchanged.
     \label{def:is_rfp_via_ts}
     \lean{MPOTensor.IsRFPViaTS}
     \leanok
-    \uses{def:mpo_tensor, def:phys_close}
+    \uses{def:mpo_tensor,def:phys_close}
     An MPO tensor $M$ is a \emph{renormalization fixed point} (RFP) if there exist
     trace-preserving completely positive maps $\mathcal{S}, \mathcal{T}$ on the
     physical indices such that $\mathcal{S}[M_2(X)]=M_1(X)$ and
@@ -293,7 +293,7 @@ leaving the remaining sites unchanged.
     \lean{MPSTensor.doubledTensor_isRFPViaTS_iff_isTransferIdempotent,
         MPSTensor.doubledTensor_isRFPViaTS_iff_hasPhysicalBlockingIsometry}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mps_transfer_idempotence, def:physical_blocking_isometry}
+    \uses{def:is_rfp_via_ts,def:mps_transfer_idempotence,def:physical_blocking_isometry}
     In the pure-state specialization of
     \cite[lines~668, 675--687]{Cirac2016MPDO_arXiv}, let
     $A=(A^i)_{i=0}^{d-1}$ be an MPS tensor, and let
@@ -328,7 +328,7 @@ leaving the remaining sites unchanged.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence, thm:rfp_via_ts_physical_trace_idempotent, thm:matrix_support_completion_cptp}
+    \uses{thm:physical_blocking_isometry_iff_transfer_idempotence,thm:rfp_via_ts_physical_trace_idempotent,thm:matrix_support_completion_cptp}
     The blocking relation
     $A^{i_1}A^{i_2}=\sum_jV_{(i_1,i_2),j}A^j$ implies
     \begin{align}
@@ -435,7 +435,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_transition_matrix, def:cpsv_fibonacci_boundary_counts}
+    \uses{def:cpsv_fibonacci_transition_matrix,def:cpsv_fibonacci_boundary_counts}
     Multiplying the row indexed by $\alpha$ in $B^n$ by the two columns of $B$
     yields the two recurrence relations.
 \end{proof}
@@ -467,7 +467,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_transition_matrix, def:cpsv_fibonacci_boundary_counts, def:cpsv_fibonacci_periodic_count}
+    \uses{def:cpsv_fibonacci_transition_matrix,def:cpsv_fibonacci_boundary_counts,def:cpsv_fibonacci_periodic_count}
     Expanding $B^{N+2}=B^{N+1}B$ and $B^{N+1}=B^NB$ and substituting
     $B=\left(\begin{smallmatrix}1&1\\1&2\end{smallmatrix}\right)$ into the
     diagonal sums gives $a_{N+2}+a_N=3a_{N+1}$.
@@ -478,7 +478,7 @@ leaving the remaining sites unchanged.
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_one,
         MPSTensor.FibonacciBoundary.periodicTransitionCount_two}
     \leanok
-    \uses{def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_boundary_recurrence}
+    \uses{def:cpsv_fibonacci_periodic_count,thm:cpsv_fibonacci_boundary_recurrence}
     The first two periodic transition counts are $a_1=3$ and $a_2=7$.
 \end{lemma}
 
@@ -506,7 +506,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_transition_matrix, def:cpsv_fibonacci_boundary_counts, def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_periodic_count_recurrence}
+    \uses{def:cpsv_fibonacci_transition_matrix,def:cpsv_fibonacci_boundary_counts,def:cpsv_fibonacci_periodic_count,thm:cpsv_fibonacci_periodic_count_recurrence}
     By two-step induction on $N$, the cases $N=0$ and $N=1$ follow by direct
     calculation. Since $\tau_\pm^2=\tau_\pm+1$, each sequence
     $\tau_\pm^{2N}$ satisfies
@@ -518,7 +518,7 @@ leaving the remaining sites unchanged.
     \label{thm:cpsv_fibonacci_transition_not_geometric}
     \lean{MPSTensor.FibonacciBoundary.periodicTransitionCount_not_geometric}
     \leanok
-    \uses{def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_periodic_count_values}
+    \uses{def:cpsv_fibonacci_periodic_count,thm:cpsv_fibonacci_periodic_count_values}
     As asserted at \cite[Appendix~D, line~2125]{Cirac2016MPDO_arXiv} for the
     transition-count sequence, there are no $r,s\in\N$ such that
     $a_N=rs^{N-1}$ for every $N>0$.
@@ -552,7 +552,7 @@ leaving the remaining sites unchanged.
     \label{thm:cpsv_fibonacci_open_boundary_rank}
     \lean{MPSTensor.FibonacciBoundary.rank_openBoundaryOperator_eq_x}
     \leanok
-    \uses{def:cpsv_fibonacci_open_boundary_operator, def:cpsv_fibonacci_boundary_counts}
+    \uses{def:cpsv_fibonacci_open_boundary_operator,def:cpsv_fibonacci_boundary_counts}
     Following \cite[Appendix~D, lines~2127--2130]{Cirac2016MPDO_arXiv}, for
     $n>0$ and $\alpha,\beta\in\{0,1\}$,
     \begin{align}
@@ -563,7 +563,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_open_boundary_operator, def:cpsv_fibonacci_transition_matrix, def:cpsv_fibonacci_boundary_counts}
+    \uses{def:cpsv_fibonacci_open_boundary_operator,def:cpsv_fibonacci_transition_matrix,def:cpsv_fibonacci_boundary_counts}
     A diagonal entry is nonzero exactly when its physical labels form an allowed
     path from $\alpha$ to $\beta$. Splitting a path at its first physical label
     shows that the numbers of supported words obey the transition rule determined
@@ -578,7 +578,7 @@ leaving the remaining sites unchanged.
     \lean{MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_periodicTransitionCount,
         MPSTensor.FibonacciBoundary.rank_mpo_toMPOTensor_eq_goldenRatio}
     \leanok
-    \uses{def:cpsv_fibonacci_support_tensor, def:cpsv_fibonacci_periodic_count}
+    \uses{def:cpsv_fibonacci_support_tensor,def:cpsv_fibonacci_periodic_count}
     Let $A$ be obtained from any positive choice of fusion weights with the
     support prescribed in Definition~\ref{def:cpsv_fibonacci_support_tensor}.
     Set $\tau_\pm=(1\pm\sqrt5)/2$, as in
@@ -595,7 +595,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:cpsv_fibonacci_open_boundary_operator, def:cpsv_fibonacci_periodic_count, thm:cpsv_fibonacci_periodic_count_golden_ratio, thm:cpsv_fibonacci_open_boundary_rank, thm:to_mpo_diagonal_rank}
+    \uses{def:cpsv_fibonacci_open_boundary_operator,def:cpsv_fibonacci_periodic_count,thm:cpsv_fibonacci_periodic_count_golden_ratio,thm:cpsv_fibonacci_open_boundary_rank,thm:to_mpo_diagonal_rank}
     The diagonal MPO rank counts physical words with nonzero periodic amplitude.
     For $N>0$, the supports obtained by closing the virtual endpoint at $0$ and
     at $1$ are disjoint, since the first physical bit determines the initial
@@ -618,7 +618,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_fibonacci_periodic_rank, thm:cpsv_fibonacci_transition_not_geometric}
+    \uses{thm:cpsv_fibonacci_periodic_rank,thm:cpsv_fibonacci_transition_not_geometric}
     The operator rank equals $a_N$ at every positive length, while
     $a_1=3$ and $a_2=7$. A geometric formula would therefore give $r=3$ and
     $7=3s$, which is impossible in $\N$.
@@ -628,7 +628,7 @@ leaving the remaining sites unchanged.
     \label{thm:cpsv_fibonacci_not_strong_rfp}
     \lean{MPSTensor.FibonacciBoundary.toMPOTensor_not_isStrongRFP}
     \leanok
-    \uses{def:cpsv_fibonacci_support_tensor, def:mpdo_strong_rfp}
+    \uses{def:cpsv_fibonacci_support_tensor,def:mpdo_strong_rfp}
     Let $A$ be obtained from any positive choice of fusion weights with the
     support prescribed in Definition~\ref{def:cpsv_fibonacci_support_tensor}.
     Then its canonical diagonal MPO tensor is not a strong renormalization
@@ -637,7 +637,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_fibonacci_operator_rank_not_geometric, thm:mpdo_strong_rfp_periodic_rank_growth}
+    \uses{thm:cpsv_fibonacci_operator_rank_not_geometric,thm:mpdo_strong_rfp_periodic_rank_growth}
     Suppose otherwise, and let $P$ be the positive matrix in the strong
     fixed-point relation. Then, for every $N>0$, the periodic ranks satisfy
     \begin{align}
@@ -749,7 +749,7 @@ leaving the remaining sites unchanged.
         MPOTensor.coarsenFirstTwoSites_mpo,
         MPOTensor.exists_global_renormalization_maps}
     \leanok
-    \uses{def:phys_close, def:is_rfp_via_ts, def:mpdo_global_renormalization_maps}
+    \uses{def:phys_close,def:is_rfp_via_ts,def:mpdo_global_renormalization_maps}
     Suppose that $\mathcal S[M_2(X)]=M_1(X)$ and
     $\mathcal T[M_1(X)]=M_2(X)$ for every virtual operator $X$. Then, for
     every $N$ and $X$,
@@ -768,7 +768,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{lem:mpdo_global_renormalization_regrouping, lem:phys_close_identity}
+    \uses{lem:mpdo_global_renormalization_regrouping,lem:phys_close_identity}
     For words $u,v$ on the $N$ spectator sites, write $M^{u,v}$ for their
     virtual word evaluation and write $[Y]^{(r)}_{u,v}$ for the block of an
     operator $Y$ on the first $r$ sites. Regrouping the first site gives
@@ -804,7 +804,7 @@ leaving the remaining sites unchanged.
     \lean{MPOTensor.IsRFPViaTS.isMPDO_of_mpo_one_posSemidef}
     \lean{MPOTensor.IsRFPViaTS.isMPDO_iff_mpo_one_posSemidef}
     \leanok
-    \uses{def:mpdo, def:is_rfp_via_ts, thm:mpdo_global_renormalization_maps}
+    \uses{def:mpdo,def:is_rfp_via_ts,thm:mpdo_global_renormalization_maps}
     Suppose that the one-site and two-site closures of $M$ are related
     by the two channels of Definition~\ref{def:is_rfp_via_ts}.
     Then $\rho^{(N)}(M)\succeq0$ at every positive length if and only
@@ -823,7 +823,7 @@ leaving the remaining sites unchanged.
 \begin{definition}[Diagonal pure-state embedding as an MPO]\label{def:to_mpo_tensor}
     \lean{MPSTensor.toMPOTensor}
     \leanok
-    \uses{def:mps_tensor, def:mpo_tensor}
+    \uses{def:mps_tensor,def:mpo_tensor}
     An MPS tensor $A=\{A^i\}_{i=0}^{d-1}$ determines an MPO tensor by
     placing $A^i$ on the diagonal in the bra and ket indices:
     \begin{align}
@@ -839,7 +839,7 @@ leaving the remaining sites unchanged.
         MPSTensor.mpo_toMPOTensor,
         MPSTensor.rank_mpo_toMPOTensor}
     \leanok
-    \uses{def:to_mpo_tensor, def:mpo_family, def:mpv}
+    \uses{def:to_mpo_tensor,def:mpo_family,def:mpv}
     For every $N$, the embedded MPO is diagonal with diagonal
     $V^{(N)}(A)$, and hence
     \begin{align}
@@ -853,7 +853,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:to_mpo_tensor, def:mpo_family, def:mpv}
+    \uses{def:to_mpo_tensor,def:mpo_family,def:mpv}
     A ket--bra word evaluation vanishes at the first unequal pair of physical
     labels.  Equal words recover the original MPS word evaluation.  The rank
     formula follows by counting the nonzero entries of a diagonal matrix.
@@ -863,14 +863,14 @@ leaving the remaining sites unchanged.
     \label{thm:to_mpo_transfer_map}
     \lean{MPSTensor.toMPOTensor_transferMap}
     \leanok
-    \uses{def:to_mpo_tensor, def:mpo_transfer_map, def:transfer_map}
+    \uses{def:to_mpo_tensor,def:mpo_transfer_map,def:transfer_map}
     The transfer map of the diagonal MPO associated to $A$ agrees with the
     original MPS transfer map: $\E_{A^{\mathrm{MPO}}}=\E_A$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{def:to_mpo_tensor, def:mpo_transfer_map, def:transfer_map}
+    \uses{def:to_mpo_tensor,def:mpo_transfer_map,def:transfer_map}
     In the double sum defining $\E_{A^{\mathrm{MPO}}}$, all off-diagonal terms
     vanish because $M^{ij}=0$ for $i\ne j$, while the diagonal terms are
     exactly $A^iX(A^i)^\dagger$. Thus only the sum over $i$ remains, which
@@ -881,7 +881,7 @@ leaving the remaining sites unchanged.
     \label{thm:to_mpo_zcl_iff_transfer_idempotent}
     \lean{MPSTensor.toMPOTensor_isZCL_iff_isTransferIdempotent}
     \leanok
-    \uses{def:mpo_is_zcl, def:mps_transfer_idempotence, thm:to_mpo_transfer_map}
+    \uses{def:mpo_is_zcl,def:mps_transfer_idempotence,thm:to_mpo_transfer_map}
     For an MPS tensor $A$, the diagonal MPO embedding has idempotent transfer
     map if and only if the MPS transfer map is idempotent:
     \begin{align}
@@ -895,7 +895,7 @@ leaving the remaining sites unchanged.
 
 \begin{proof}
     \leanok
-    \uses{def:mpo_is_zcl, def:mps_transfer_idempotence, thm:to_mpo_transfer_map}
+    \uses{def:mpo_is_zcl,def:mps_transfer_idempotence,thm:to_mpo_transfer_map}
     Both conditions assert idempotence of the corresponding transfer map.
     Lemma~\ref{thm:to_mpo_transfer_map} identifies those transfer maps, so
     the two predicates are equivalent.
@@ -905,14 +905,14 @@ leaving the remaining sites unchanged.
     \label{thm:to_mpo_zcl_iff_zcl}
     \lean{MPSTensor.toMPOTensor_isZCL_iff_mps_isZCL}
     \leanok
-    \uses{thm:to_mpo_zcl_iff_transfer_idempotent, thm:zcl_iff_idempotent_transfer}
+    \uses{thm:to_mpo_zcl_iff_transfer_idempotent,thm:zcl_iff_idempotent_transfer}
     For an MPS tensor $A$, the diagonal MPO embedding has idempotent transfer
     map if and only if $A$ has zero correlation length.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:to_mpo_zcl_iff_transfer_idempotent, thm:zcl_iff_idempotent_transfer}
+    \uses{thm:to_mpo_zcl_iff_transfer_idempotent,thm:zcl_iff_idempotent_transfer}
     Lemma~\ref{thm:to_mpo_zcl_iff_transfer_idempotent} reduces idempotence of
     the embedded transfer map to idempotence of $\E_A$, which is equivalent to
     zero correlation length by Theorem~\ref{thm:zcl_iff_idempotent_transfer}.

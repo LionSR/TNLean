@@ -20,7 +20,7 @@ is fixed by the number of bonds that cross the cut.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_regular_boundary_density, thm:peps_flat_density_entropy}
+    \uses{thm:peps_regular_boundary_density,thm:peps_flat_density_entropy}
     The identity $\rho^2=r^{-1}\rho$ applied to each eigenvector gives
     eigenvalue $0$ or $r^{-1}$. With $0\log0=0$, each entropy summand
     is therefore its eigenvalue times $\log r$. Their sum is
@@ -65,7 +65,7 @@ is fixed by the number of bonds that cross the cut.
     \cite[Theorem~6.9]{Schuch2010PEPS}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_regular_boundary_density, thm:peps_flat_density_entropy}
+    \uses{thm:peps_regular_boundary_density,thm:peps_flat_density_entropy}
     The coefficient matrix transforms by $C\mapsto ACB^{\mathsf T}$.
     Since $P$ is real symmetric, $B^\dagger B=P$ gives
     $B^{\mathsf T}\overline B=P$, so the partial trace is
@@ -85,8 +85,7 @@ is fixed by the number of bonds that cross the cut.
         TNLean.PEPS.physicalRegularBoundarySchmidtMatrix_normalizedRegularBoundaryMap,
         TNLean.PEPS.vonNeumannEntropy_normalizedRegularBoundaryState}
     \leanok
-    \uses{thm:peps_regular_boundary_physical_realization,
-        thm:peps_regular_open_region_projector}
+    \uses{thm:peps_regular_boundary_physical_realization,thm:peps_regular_open_region_projector}
     Let $M^\dagger M=c_AP$ and $N^\dagger N=c_BP$, with $c_A,c_B>0$.
     Then $\widehat M=M/\sqrt{c_A}$ and
     $\widehat N=N/\sqrt{c_B}$ are isometric on the invariant boundary
@@ -129,8 +128,7 @@ is fixed by the number of bonds that cross the cut.
         TNLean.PEPS.exists_positive_gram_regularOpenRegionMatrix_of_connected,
         TNLean.PEPS.exists_normalization_regularPhysicalCutState_of_connected}
     \leanok
-    \uses{thm:peps_connected_regular_region_gram,
-        thm:peps_regular_boundary_normalization}
+    \uses{thm:peps_connected_regular_region_gram,thm:peps_regular_boundary_normalization}
     Consider a finite graph PEPS with regular bonds and a $G$-isometric
     tensor at every site. Assume that both $R$ and its complement
     induce nonempty connected graphs, and that $b>0$ bonds cross the cut.

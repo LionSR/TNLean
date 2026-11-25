@@ -33,9 +33,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_torus_physical_cut_density,
-        thm:peps_torus_simply_connected_boundary_loops,
-        thm:peps_torus_simply_connected_complement}
+    \uses{thm:peps_torus_physical_cut_density,thm:peps_torus_simply_connected_boundary_loops,thm:peps_torus_simply_connected_complement}
     The induced complement graph is connected. Choose spanning trees
     and roots in both regions and enumerate the nonempty boundary.
     The simply connected planar lift and its exterior collar provide
@@ -51,8 +49,7 @@
     \label{thm:peps_torus_simply_connected_physical_local_equivalence}
     \lean{TNLean.PEPS.IsGIsometric.torusPhysicalCut_local_equivalence_of_isSimplyConnected}
     \leanok
-    \uses{thm:peps_torus_simply_connected_physical_density,
-        def:peps_normalized_pure_cut_matrix}
+    \uses{thm:peps_torus_simply_connected_physical_density,def:peps_normalized_pure_cut_matrix}
     Under the hypotheses of
     \ref{thm:peps_torus_simply_connected_physical_density}, let $A$ and
     $B$ be the physical coefficient matrices of any two nonzero
@@ -73,9 +70,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_torus_physical_local_equivalence,
-        thm:peps_torus_simply_connected_boundary_loops,
-        thm:peps_torus_simply_connected_complement}
+    \uses{thm:peps_torus_physical_local_equivalence,thm:peps_torus_simply_connected_boundary_loops,thm:peps_torus_simply_connected_complement}
     Derive the complementary winding loops from the simple
     connectedness and apply
     \ref{thm:peps_torus_physical_local_equivalence}.

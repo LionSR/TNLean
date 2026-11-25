@@ -26,7 +26,6 @@ noncomputable section
 
 namespace TNLean.PEPS
 
-open TNLean.Lattice
 open scoped BigOperators Matrix
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
@@ -59,8 +58,9 @@ theorem gaugeVertex_applyGauge (A : Tensor G d)
   let MY := fun ie : IncidentEdge G v => edgeGaugeAt A Y v ie
   let f : ((ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) → ℂ :=
     fun ξ => A.component v ξ σ
-  have h := LinearMap.congr_fun
-    (dependentPhysicalProductFamilyMap_comp (Site := IncidentEdge G v) MY MX) f
+  have h : Matrix.piKronecker MY *ᵥ (Matrix.piKronecker MX *ᵥ f) =
+      Matrix.piKronecker (fun ie => MY ie * MX ie) *ᵥ f := by
+    rw [Matrix.mulVec_mulVec, Matrix.piKronecker_mul]
   have hProd : (fun ie : IncidentEdge G v => MY ie * MX ie) =
       (fun ie : IncidentEdge G v => edgeGaugeAt A (fun e => Y e * X e) v ie) := by
     funext ie
@@ -115,7 +115,6 @@ end TNLean.PEPS
 
 namespace TNLean.PEPS
 
-open TNLean.Lattice
 open scoped BigOperators Matrix
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
@@ -129,7 +128,7 @@ private theorem exists_normalPhysicalSymmetry_gauges
       IsCrossingEdge (G := G) A (hA.edgeBlocking.red e)
         (hA.edgeBlocking.blue e) f ↔ f = e)
     (hconn : G.Connected) (M : Matrix (Fin d) (Fin d) ℂ)
-    (hSym : dependentPhysicalProductFamilyMap (fun _ : V => M) (stateCoeff A) =
+    (hSym : Matrix.piKronecker (fun _ : V => M) *ᵥ stateCoeff A =
       stateCoeff A) :
     ∃ X : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ,
       ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
@@ -203,7 +202,7 @@ private theorem exists_normal_virtual_lifts
         (hA.edgeBlocking.blue e) f ↔ f = e)
     (hconn : G.Connected) (U : H →* Matrix (Fin d) (Fin d) ℂ)
     (hSym : ∀ g : H,
-      dependentPhysicalProductFamilyMap (fun _ : V => U g) (stateCoeff A) =
+      Matrix.piKronecker (fun _ : V => U g) *ᵥ stateCoeff A =
         stateCoeff A) :
     ∃ ω : (e : Edge G) → ScalarCocycle H,
       ∃ ρvirt : (e : Edge G) → ProjectiveRepresentation (D := A.bondDim e) (ω e),
@@ -278,7 +277,7 @@ theorem exists_virtualRepresentation_of_normal_symmetry
         (hA.edgeBlocking.blue e) f ↔ f = e)
     (hconn : G.Connected) (U : H →* Matrix (Fin d) (Fin d) ℂ)
     (hSym : ∀ g : H,
-      dependentPhysicalProductFamilyMap (fun _ : V => U g) (stateCoeff A) =
+      Matrix.piKronecker (fun _ : V => U g) *ᵥ stateCoeff A =
         stateCoeff A) :
     ∃ ω : (e : Edge G) → ScalarCocycle H,
       ∃ X : H → (e : Edge G) → GL (Fin (A.bondDim e)) ℂ,

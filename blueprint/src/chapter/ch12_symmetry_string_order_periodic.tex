@@ -13,7 +13,7 @@ on the virtual matrix space, whereas $\tr$ is the trace of a virtual matrix.
         MPSTensor.physicalObservableTransfer_singleton,
         MPSTensor.physicalObservableTransfer_piKronecker_const}
     \leanok
-    \uses{def:source_periodic_string_overlap, def:twisted_transfer_map}
+    \uses{def:source_periodic_string_overlap,def:twisted_transfer_map}
     For every tensor $A$, physical matrix $u$, and length $L$, the normalized
     full-ring expectation is
     \begin{align}
@@ -52,8 +52,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:canonical_transfer_stationary_trace_limit,
-        lem:ldp_observable_transfer_products}
+    \uses{lem:canonical_transfer_stationary_trace_limit,lem:ldp_observable_transfer_products}
     The transfer powers converge pointwise to $P(X)=\tr(\Lambda X)\Id$.
     Finite dimensionality gives convergence of their traces, and the trace
     of the rank-one map $P$ is $\tr\Lambda=1$. Thus
@@ -66,7 +65,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
         MPSTensor.pureCanonical_mpvExpectation_block_string_tendsto,
         MPSTensor.pureCanonical_mpvExpectation_string_tendsto}
     \leanok
-    \uses{def:physical_string_order_param, def:physical_observable_transfer}
+    \uses{def:physical_string_order_param,def:physical_observable_transfer}
     Under the same canonical purity assumptions, fix a support length $k$
     and a physical operator $O$ on those $k$ sites. Then
     \begin{align}
@@ -84,9 +83,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:periodic_string_normalization,
-        lem:canonical_transfer_stationary_trace_limit,
-        lem:ldp_observable_transfer_products, thm:periodic_string_trace_ratio}
+    \uses{thm:periodic_string_normalization,lem:canonical_transfer_stationary_trace_limit,lem:ldp_observable_transfer_products,thm:periodic_string_trace_ratio}
     With $F=\E_O$ and $P(X)=\tr(\Lambda X)\Id$, the exact numerator is
     $\operatorname{Tr}(F\E_A^n)$. Pointwise convergence and finite
     dimensionality give
@@ -102,7 +99,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
     \lean{MPSTensor.trace_twistedTransferIter_eq_phase_mul_trace_transfer_pow,
         MPSTensor.mpvExpectation_piKronecker_const_eq_phase_pow}
     \leanok
-    \uses{def:twisted_transfer_map, def:source_periodic_string_overlap}
+    \uses{def:twisted_transfer_map,def:source_periodic_string_overlap}
     Let $A,u$ be arbitrary and suppose a unitary $V$ and $\mu\in\C$ satisfy
     $\sum_j u_{ij}A_j=\mu V A_iV^\dagger$ for every physical index $i$.
     At every length with $\Phi_L(A)\ne0$,
@@ -116,8 +113,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:periodic_string_trace_ratio,
-        thm:physical_string_phase_retaining_asymptotics}
+    \uses{thm:periodic_string_trace_ratio,thm:physical_string_phase_retaining_asymptotics}
     The exact iterate identity is
     $\E_u^L=\mu^L L_V\E_A^L L_{V^\dagger}$, where $L_V(X)=VX$.
     Since $L_{V^\dagger}L_V=\Id$, cyclicity of the endomorphism trace
@@ -135,7 +131,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
         MPSTensor.pureCanonical_mpvExpectation_fullRing_phase_adjusted_tendsto_one,
         MPSTensor.pureCanonical_mpvExpectation_fullRing_not_tendsto}
     \leanok
-    \uses{def:source_periodic_string_overlap, def:twisted_transfer_map}
+    \uses{def:source_periodic_string_overlap,def:twisted_transfer_map}
     Assume the canonical purity conditions above and let $u$ be unitary.
     Either $\rho(\E_u)<1$ and the complex full-ring expectation tends to
     zero, or $\rho(\E_u)=1$ and its magnitude tends to one.
@@ -148,9 +144,7 @@ condition retained rather than only uniqueness of the eigenvalue as a set.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:pgwsvc08_twisted_spectral_radius,
-        thm:periodic_string_trace_ratio, thm:periodic_string_normalization,
-        thm:periodic_string_exact_phase}
+    \uses{lem:pgwsvc08_twisted_spectral_radius,thm:periodic_string_trace_ratio,thm:periodic_string_normalization,thm:periodic_string_exact_phase}
     Below unit spectral radius, the twisted transfer-power traces tend to
     zero, while $Z_L\to1$. At unit radius the intertwiner gives
     (\ref{eq:periodic_string_exact_phase}) on the eventual nonzero tail.

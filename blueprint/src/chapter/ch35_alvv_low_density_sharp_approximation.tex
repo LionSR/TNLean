@@ -146,8 +146,7 @@ supporting the approximation conclusion of
     $\|\Phi-\psi\|^2\le\delta/2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:ld_sharp_logarithmic_cut_rank,
-        lem:regional_overlap_to_missing_mass,lem:normalized_sequential_prefix_mass}
+    \uses{lem:ld_sharp_logarithmic_cut_rank,lem:regional_overlap_to_missing_mass,lem:normalized_sequential_prefix_mass}
     Apply the cut-rank bound at accuracy $\delta/[16(L+1)]$ to each
     prefix. Round the same exponential rank factor upward once,
     independently of the vector. Every prefix then has missing mass

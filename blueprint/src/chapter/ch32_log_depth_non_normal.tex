@@ -2,8 +2,7 @@
 
 \begin{definition}[Fixed point of a basis of normal tensors]
     \label{def:ldp_non_normal_fixed_point}
-    \uses{def:bnt, def:sector_weight_data, def:prep_fixed_point_tensor,
-        thm:ldpolar_tensor_decomposition, def:correlation_length}
+    \uses{def:bnt,def:sector_weight_data,def:prep_fixed_point_tensor,thm:ldpolar_tensor_decomposition,def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\operatorname{diag}(\mu_{j,1},\dots,\mu_{j,m_j})
         \otimes A_j^i$ with normal $A_j$, each in the gauge
     (\ref{eq:ldp_normal_gauge}), forming a basis of normal tensors, and put
@@ -60,8 +59,7 @@
         MPSTensor.SectorDecomposition.canonicalFixedPointState,
         MPSTensor.embedPair}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:sector_weight_data,
-        def:prep_pair_product_state}
+    \uses{def:ldp_non_normal_fixed_point,def:sector_weight_data,def:prep_pair_product_state}
     Let $A$ be given by a sector decomposition with blocks $A_1,\dots,A_b$ of
     bond dimensions $D_j$, multiplicities $m_j$ and coefficients $\mu_{j,k}$,
     whose flattened direct sum $\bigoplus_{(j,k)}\mu_{j,k}A_j$ is the tensor of
@@ -86,8 +84,7 @@
         MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState,
         MPSTensor.pairIsometry}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, thm:ldpolar_tensor_decomposition,
-        def:qc_ghz_state, def:mpdo_sitewise_physical_matrix}
+    \uses{def:ldp_non_normal_fixed_point,thm:ldpolar_tensor_decomposition,def:qc_ghz_state,def:mpdo_sitewise_physical_matrix}
     Let $\omega_1,\dots,\omega_b\in\mathbb C^D\otimes\mathbb C^D$ be any vectors,
     $\alpha\in\mathbb C^b$ any coefficients, and $M\ge0$. The state
     $\ket{\Omega'}=\sum_j\alpha_j\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}$ is
@@ -142,8 +139,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:ldp_pair_disjoint_orthogonal, thm:prep_pair_norm,
-        thm:prep_mpv_fixed_point_tensor, thm:mpv_decomposition}
+    \uses{thm:ldp_pair_disjoint_orthogonal,thm:prep_pair_norm,thm:prep_mpv_fixed_point_tensor,thm:mpv_decomposition}
     Copies of distinct blocks occupy distinct bond coordinates, so the right
     legs of $\omega_j$ and $\omega_{j'}$ with $j\neq j'$ are supported on
     disjoint sets and the pairs are orthogonal by
@@ -163,8 +159,7 @@
         MPSTensor.SectorDecomposition.canonicalFixedPointState_eq_piKronecker_mulVec_ghzState,
         MPSTensor.SectorDecomposition.canonicalFixedPointState_norm_sq}
     \leanok
-    \uses{def:ldp_sector_fixed_point_state, def:ldp_pair_family_fixed_point,
-        thm:ldp_local_orthogonality}
+    \uses{def:ldp_sector_fixed_point_state,def:ldp_pair_family_fixed_point,thm:ldp_local_orthogonality}
     With $W$, $X^{\otimes M}$ and $\chi_M$ as in
     Definition~\ref{def:ldp_pair_family_fixed_point}, formed with
     $\alpha=\alpha^{(N)}$ and the pairs of
@@ -181,7 +176,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:prep_pair_product_norm, thm:ldp_local_orthogonality}
+    \uses{thm:prep_pair_product_norm,thm:ldp_local_orthogonality}
     The pairs of Definition~\ref{def:ldp_sector_fixed_point_state} are
     orthonormal by Lemma~\ref{thm:ldp_local_orthogonality}. The $(j,j')$ entry of $W^\dagger W$ is $\braket{\omega_j}{\omega_{j'}}$, and the
     entries of $(W^{\otimes M})^\dagger W^{\otimes M}$ factor over the sites,
@@ -225,7 +220,7 @@
 
 \begin{lemma}[Approximation error, general case]
     \label{thm:ldp_approximation_error_general}
-    \uses{def:ldp_non_normal_fixed_point, def:correlation_length}
+    \uses{def:ldp_non_normal_fixed_point,def:correlation_length}
     \notready
     With the notation of Definition~\ref{def:ldp_non_normal_fixed_point},
     including the approximating state $\widetilde\phi_N$ defined there,
@@ -286,9 +281,7 @@
         MPSTensor.norm_le_of_hasEigenvalue_transferMap_repeatedBlockBasis,
         MPSTensor.not_approximationError_le_repeatedBlockTensor}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
-        def:correlation_length, def:sector_bnt_cf, def:nt_cpsv,
-        def:cpsv_cfii}
+    \uses{def:ldp_non_normal_fixed_point,def:ldp_sector_fixed_point_state,def:correlation_length,def:sector_bnt_cf,def:nt_cpsv,def:cpsv_cfii}
     Let $A^0=\operatorname{diag}(1,1,0)$ and $A^1=\operatorname{diag}(0,0,1)$,
     the canonical form with the normal block $A_1=(1,0)$ of multiplicity two and
     weights $(1,1)$ and the normal block $A_2=(0,1)$ of multiplicity one, so that
@@ -318,7 +311,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    \uses{thm:ldpolar_decomposition,thm:ldp_polar_uniqueness}
     Each block is one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, so its
     transfer map is the identity. It is therefore irreducible and normal, and
     left-canonical with the diagonal positive-definite fixed point $1$, which is
@@ -371,9 +364,7 @@
         MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis,
         MPSTensor.not_approximationError_le_overlappingBlockTensor}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
-        def:correlation_length, def:sector_bnt_cf, def:nt_cpsv,
-        def:cpsv_cfii}
+    \uses{def:ldp_non_normal_fixed_point,def:ldp_sector_fixed_point_state,def:correlation_length,def:sector_bnt_cf,def:nt_cpsv,def:cpsv_cfii}
     Let $A^0=\operatorname{diag}(1,3/5)$ and $A^1=\operatorname{diag}(0,4/5)$,
     the canonical form with the normal blocks $A_1=(1,0)$ and $A_2=(3/5,4/5)$, each
     of multiplicity one and weight one, so that $\beta=(1,1)$. The blocks are
@@ -408,7 +399,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    \uses{thm:ldpolar_decomposition,thm:ldp_polar_uniqueness}
     The hypotheses are checked as in the proof of
     Lemma~\ref{thm:ldp_approximation_error_repeated_block}: both blocks are
     one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, their states
@@ -515,9 +506,7 @@
         MPSTensor.mpvOverlap_eq_zero,
         MPSTensor.eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:ldp_pair_family_fixed_point,
-        lem:ldp_orthogonal_sum_polar, lem:ldp_mixed_transfer_decay,
-        thm:ldp_approximation_error_overlapping_weights, def:correlation_length}
+    \uses{def:ldp_non_normal_fixed_point,def:ldp_pair_family_fixed_point,lem:ldp_orthogonal_sum_polar,lem:ldp_mixed_transfer_decay,thm:ldp_approximation_error_overlapping_weights,def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ with $b\geq1$, weights $\mu_j>0$, and
     normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, each placed on its own bond coordinates. Let $\lambda_2$

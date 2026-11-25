@@ -9,7 +9,7 @@ a unit phase.
     \label{thm:sector_bnt_proportional_bijective_match}
     \lean{MPSTensor.bijective_match_of_eventuallyProportional}
     \leanok
-    \uses{def:sector_bnt_cf, thm:sector_bnt_proportional_full_basis_match, lem:sector_bnt_bijection_from_matches}
+    \uses{def:sector_bnt_cf,thm:sector_bnt_proportional_full_basis_match,lem:sector_bnt_bijection_from_matches}
     Let $P$ and $Q$ be BNT canonical forms whose total MPV families are
     eventually nonzero and proportional. There is a bijection
     $\beta:J(Q)\simeq J(P)$ such that every $Q_k$ has an equal-dimensional,
@@ -77,7 +77,7 @@ coefficient identification from the linear independence of the BNT basis.
     \label{lem:sector_bnt_coeff_identity_via_global_gauge}
     \lean{MPSTensor.coeff_identity_via_global_gauge}
     \leanok
-    \uses{def:sector_bnt_cf, def:gauge_phase_equiv}
+    \uses{def:sector_bnt_cf,def:gauge_phase_equiv}
     Following the equal-MPV coefficient comparison of
     \cite[Appendix MPV proof, lines~1187--1188]{Cirac2016MPDO_arXiv}, let $P$
     and $Q$ be BNT canonical forms with the same MPV family at every positive
@@ -93,7 +93,7 @@ coefficient identification from the linear independence of the BNT basis.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:sector_bnt_norm_phase_of_matched_mpv, lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
+    \uses{lem:sector_bnt_norm_phase_of_matched_mpv,lem:sector_bnt_coeff_identity_via_matched_mpv_phase}
     For each matched sector, the gauge-phase equivalence gives
     $V^{(N)}(Q_k)_\sigma=\zeta_k^NV^{(N)}(P_{\beta(k)})_\sigma$.
     Lemma~\ref{lem:sector_bnt_norm_phase_of_matched_mpv} gives
@@ -118,7 +118,7 @@ such implication is possible.
     \label{lem:sector_bnt_coeff_identity_via_matched_mpv_phase_proportional}
     \lean{MPSTensor.coeff_identity_via_matched_mpv_phase_proportional}
     \leanok
-    \uses{def:sector_bnt_cf, lem:eventual_coeff_eq_of_eventual_li}
+    \uses{def:sector_bnt_cf,lem:eventual_coeff_eq_of_eventual_li}
     Let $P$ be a BNT canonical form and $Q$ a sector decomposition whose total
     tensors generate eventually nonzero proportional MPV families. Suppose a
     bijection $\beta:J(Q)\simeq J(P)$ and scalars $\zeta_k$ satisfy the matched
@@ -172,7 +172,7 @@ transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}
     \label{lem:unitary_global_gauge_of_blocks}
     \lean{MPSTensor.globalGaugeOfBlocks_unitaryGL_mem}
     \leanok
-    \uses{def:unitary_gl, def:global_gauge_of_blocks}
+    \uses{def:unitary_gl,def:global_gauge_of_blocks}
     If every block gauge $U_k$ is unitary, then the flattened block-diagonal
     gauge $U=\bigoplus_k U_k$ is unitary.
 \end{lemma}
@@ -192,7 +192,7 @@ transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}
     \lean{MPSTensor.toTensorFromBlocks_eq_globalGaugeOfBlocks_conj,
         MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockConj}
     \leanok
-    \uses{def:global_gauge_of_blocks, def:block_diagonal_tensor, def:gauge_equiv}
+    \uses{def:global_gauge_of_blocks,def:block_diagonal_tensor,def:gauge_equiv}
     If, for every block $k$ and physical index $i$,
     $B_k^i=X_kA_k^iX_k^{-1}$, then the weighted direct sums satisfy
     \begin{align}
@@ -217,7 +217,7 @@ transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}
     \label{thm:sector_bnt_global_gauge_of_copy_weight_matching}
     \lean{MPSTensor.sector_bnt_global_gauge_of_copy_weight_matching}
     \leanok
-    \uses{def:sector_bnt_copy_weight_matching, thm:sector_bnt_global_gauge_of_matched_weights}
+    \uses{def:sector_bnt_copy_weight_matching,thm:sector_bnt_global_gauge_of_matched_weights}
     Reformulating Lemma~\ref{thm:sector_bnt_global_gauge_of_matched_weights}
     in terms of copy-weight matchings, suppose that the sectors of $P$ and $Q$
     are matched, with bond-dimension equalities, nonzero phases, and block
@@ -248,7 +248,7 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     \label{thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
     \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching}
     \leanok
-    \uses{def:sector_bnt_copy_weight_matching, thm:sector_bnt_proportional_sector_match_witnesses, thm:sector_bnt_global_gauge_of_copy_weight_matching}
+    \uses{def:sector_bnt_copy_weight_matching,thm:sector_bnt_proportional_sector_match_witnesses,thm:sector_bnt_global_gauge_of_copy_weight_matching}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
     eventually nonzero proportional MPV families.
     Then the proportional sector-matching theorem gives $\beta$, the
@@ -275,7 +275,7 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     \label{thm:sector_bnt_proportional_global_gauge_of_coeff_identity}
     \lean{MPSTensor.ft_sector_bnt_proportional_global_gauge_of_coeff_identity}
     \leanok
-    \uses{def:sector_bnt_copy_weight_matching_of_coeff_identity, thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
+    \uses{def:sector_bnt_copy_weight_matching_of_coeff_identity,thm:sector_bnt_proportional_global_gauge_of_copy_weight_matching}
     Let $P$ and $Q$ be BNT canonical forms whose total tensors generate
     eventually nonzero proportional MPV families.
     Then there are a bijection $\beta:J(Q)\simeq J(P)$, bond-dimension

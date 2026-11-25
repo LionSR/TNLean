@@ -20,26 +20,16 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{lemma}[A rank-one map on two registers with a change of owners]
     \label{lem:peps_rank_one_chain}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.append,
-        TNLean.Lattice.PartyCircuit.PartyChain.eval_append,
-        TNLean.Lattice.PartyCircuit.PartyChain.append_props,
-        TNLean.PEPS.PairEffect.braLocal,
-        TNLean.PEPS.PairEffect.ketLocal,
-        TNLean.PEPS.PairEffect.norm_braLocal_le,
-        TNLean.PEPS.PairEffect.norm_ketLocal_le,
-        TNLean.Lattice.PartyCircuit.owner_of_mem_pair,
-        TNLean.Lattice.PartyCircuit.owner_of_mem_nil,
-        TNLean.PEPS.PairEffect.braChain,
-        TNLean.PEPS.PairEffect.ketWord,
-        TNLean.PEPS.PairEffect.rankOneChain,
-        TNLean.PEPS.PairEffect.eval_braChain,
-        TNLean.PEPS.PairEffect.pairHeadIso_ketWord,
-        TNLean.PEPS.PairEffect.act_vecMulVec_star,
-        TNLean.PEPS.PairEffect.pairHeadIso_rankOneChain,
-        TNLean.PEPS.PairEffect.rankOneChain_props}
+    \lean{TNLean.PEPS.EncodedFrame.privateBra,
+        TNLean.PEPS.EncodedFrame.privateKet,
+        TNLean.PEPS.EncodedFrame.isAllowed_privateBra,
+        TNLean.PEPS.EncodedFrame.isAllowed_privateKet,
+        TNLean.PEPS.EncodedFrame.pairBra,
+        TNLean.PEPS.EncodedFrame.pairKet,
+        TNLean.PEPS.EncodedFrame.op_pairBra,
+        TNLean.PEPS.EncodedFrame.op_pairKet}
     \leanok
-    \uses{def:peps_party_monomial,def:peps_monomial_parties,
-        thm:peps_monomial_composition_counts,lem:peps_front_registers}
+    \uses{def:peps_party_monomial,def:peps_monomial_parties,thm:peps_monomial_composition_counts,lem:peps_front_registers,def:peps_compose_actual_monomials,thm:peps_compose_actual_monomials}
     Two allowed monomials on parties in $S$ applied in succession form an allowed
     monomial on $S$ whose pair-source and pair-effect counts add.
     For unit vectors $v,w\in\C^\alpha\otimes\C^\beta$, the map $\ket v\bra w$ from a register
@@ -76,7 +66,6 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
         TNLean.PEPS.EncodedFrame.emptyBlock_braAt,
         TNLean.PEPS.EncodedFrame.emptyBlock_op}
     \leanok
-    \uses{lem:peps_grouped_monomial_placement}
     A rank-one block $b=(T,E,v,w)$ consists of disjoint sets $T,E\subseteq\Lambda$, with
     $U=\Lambda\setminus(T\cup E)$, and vectors $v,w\in\C^{[q]^T\times[q]^U}$. Its operator $\mathrm{op}(b)=(\ket v\bra w)_{T\cup U}\otimes\id_E$ has matrix entries
     \begin{align}
@@ -106,7 +95,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{lemma}[Rank-one blocks as allowed monomials on a frame]
     \label{lem:peps_rank_one_block_monomial}
-    \lean{TNLean.PEPS.EncodedFrame.exists_rankOneBlock_chain,
+    \lean{TNLean.PEPS.EncodedFrame.exists_rankOneBlock_monomial,
         TNLean.PEPS.EncodedFrame.exists_pairVec,
         TNLean.PEPS.EncodedFrame.exists_groupBlock,
         TNLean.PEPS.EncodedFrame.zeroGroupVec,
@@ -115,11 +104,10 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
         TNLean.PEPS.EncodedFrame.exists_braVertexBlock,
         TNLean.PEPS.EncodedFrame.exists_ketVertexBlock,
         TNLean.PEPS.EncodedFrame.prod_map_one_kronecker,
-        TNLean.PEPS.EncodedFrame.exists_chain_listProd,
+        TNLean.PEPS.EncodedFrame.exists_monomial_listProd,
         TNLean.PEPS.EncodedFrame.exists_zeroChain}
     \leanok
-    \uses{lem:peps_rank_one_chain,def:peps_rank_one_block,
-        lem:peps_grouped_monomial_placement}
+    \uses{lem:peps_rank_one_chain,def:peps_rank_one_block}
     Let $b=(T,E,v,w)$ be a rank-one block with unit vectors $v,w$, where the site registers
     of $T$ have owner $p_A$ before and $p_A'$ after, those of $U$ have $p_B$
     and $p_B'$, and those of $E$ keep their owner. Then
@@ -138,9 +126,8 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Grouping the site registers of $T$ and $U$, applying
-    Lemma~\ref{lem:peps_rank_one_chain}, and ungrouping via
-    Lemma~\ref{lem:peps_grouped_monomial_placement} proves the main claim; item~1 follows by partitioning $O=T\cup U$ by owner and setting $E=\Lambda\setminus O$, item~2 by contracting with $\bra0$ at the old owner and preparing $\ket0$ at the new owner at each $x_i$, and item~3 by Lemma~\ref{lem:peps_rank_one_chain}.
+    Applying Lemma~\ref{lem:peps_rank_one_chain} on the sites of $T$ and $U$, read in the
+    configurations of the frame registers, proves the main claim; item~1 follows by partitioning $O=T\cup U$ by owner and setting $E=\Lambda\setminus O$, item~2 by contracting with $\bra0$ at the old owner and preparing $\ket0$ at the new owner at each $x_i$, and item~3 by Lemma~\ref{lem:peps_rank_one_chain}.
 \end{proof}
 
 \begin{lemma}[A product term as a product of blocks]
@@ -157,8 +144,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
         TNLean.PEPS.SiteChain.prod_zeroBlocks_apply,
         TNLean.PEPS.SiteChain.termOp_eq_smul_prod}
     \leanok
-    \uses{lem:peps_frame_chain_network,lem:peps_frame_chain_truncation,
-        lem:peps_rank_one_block_products}
+    \uses{lem:peps_frame_chain_network,lem:peps_frame_chain_truncation,lem:peps_rank_one_block_products}
     In the network of $L_0\cdots L_{n-1}$ from Lemma~\ref{lem:peps_frame_chain_network} with $W=\bigcup_{j=0}^{n-1}S_j$,
     an open input leg at $x\in W$ belongs to the first applied bra containing $x$, an open output
     leg to the last applied ket containing $x$, and a leg at $x\in W$ is fixed if and only if it is not open. For any choice of truncation vectors on the open-leg groups in Lemma~\ref{lem:peps_frame_chain_truncation}, the resulting product term $T$ satisfies
@@ -176,29 +162,11 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{lemma}[The tag maps of a branch]
     \label{lem:peps_frame_tag_change}
-    \lean{TNLean.PEPS.EncodedFrame.layoutIso_eq_act_of_basis,
-        TNLean.PEPS.EncodedFrame.regBra,
-        TNLean.PEPS.EncodedFrame.regKet,
-        TNLean.PEPS.EncodedFrame.norm_regBra_le,
-        TNLean.PEPS.EncodedFrame.norm_regKet_le,
-        TNLean.PEPS.EncodedFrame.tagBraWord,
-        TNLean.PEPS.EncodedFrame.tagKetWord,
-        TNLean.PEPS.EncodedFrame.eval_tagBraWord,
-        TNLean.PEPS.EncodedFrame.eval_tagKetWord,
-        TNLean.PEPS.EncodedFrame.tagBraWord_props,
-        TNLean.PEPS.EncodedFrame.tagKetWord_props,
-        TNLean.PEPS.EncodedFrame.tagChangeWord,
-        TNLean.PEPS.EncodedFrame.eval_tagChangeWord,
-        TNLean.PEPS.EncodedFrame.tagChangeWord_props,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_apply,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_mul,
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_apply,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_sum_smul,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_smul,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.layoutIso_tagChangeWord}
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_smul}
     \leanok
-    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
-        lem:peps_register_reorderings,lem:peps_front_registers,
-        def:peps_monomial_parties,lem:peps_frame_branches}
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,lem:peps_register_reorderings,lem:peps_front_registers,def:peps_monomial_parties,lem:peps_frame_branches}
     For a branch $\beta=(a,s,b)$, contracting the affected old tag registers with $\bra b$ and preparing the affected new tag registers in
     $\ket a$ at their respective tag owners is an allowed monomial using only the
     affected tag owners and no pair resources; in the coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates} it acts
@@ -220,9 +188,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_open_vertices_le,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_termChain}
     \leanok
-    \uses{lem:peps_frame_branch_network,lem:peps_frame_wires,
-        lem:peps_rank_one_block_monomial,lem:peps_product_term_blocks,
-        lem:peps_frame_tag_change}
+    \uses{lem:peps_frame_branch_network,lem:peps_frame_wires,lem:peps_rank_one_block_monomial,lem:peps_product_term_blocks,lem:peps_frame_tag_change}
     Assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data}, fix a branch $\beta=(a,s,b)$, and
     choose a unit vector on every open-leg group of its network. Then the
     placed product term $\ket a\bra b\otimes T\otimes\id_{\rm unt}$
@@ -241,14 +207,11 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{lemma}[Small-patch rewrite: expansion into allowed monomials]
     \label{thm:peps_frame_small_rewrite_monomials}
-    \lean{TNLean.Lattice.Sheet.act_smul,
-        TNLean.Lattice.Sheet.act_sum,
-        TNLean.PEPS.EncodedFrame.truncationRank_mono,
+    \lean{TNLean.PEPS.EncodedFrame.truncationRank_mono,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_of_card_le}
     \leanok
-    \uses{def:peps_party_monomial,thm:peps_frame_small_rewrite_product_terms,
-        thm:peps_frame_small_rewrite_term_monomial,lem:peps_frame_branches}
+    \uses{def:peps_party_monomial,thm:peps_frame_small_rewrite_product_terms,thm:peps_frame_small_rewrite_term_monomial,lem:peps_frame_branches}
     Assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data}, let $\delta>0$, let $N$ be the
     number of branches, and set $k=\lceil(4Nm/\delta)^2\rceil+1$. There exist a
     contraction $M_\delta$ with $\lVert M_\delta-M\rVert\le\delta$ and an

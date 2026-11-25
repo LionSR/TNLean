@@ -69,8 +69,7 @@
         MPSPreparation.sum_cutSiteMatrix_mul_conjTranspose_eq_one,
         MPSPreparation.trace_cutBondDensity_step}
     \leanok
-    \uses{lem:obc_weighted_schmidt_cut_bases,
-        lem:obc_canonical_configurations_endpoints}
+    \uses{lem:obc_weighted_schmidt_cut_bases,lem:obc_canonical_configurations_endpoints}
     Let $A_k^i$ be the coordinate matrices between the chosen adjacent
     cut bases, and put $\Lambda_k=F_k^\dagger F_k$. The actual prefix
     and suffix recursions give
@@ -96,7 +95,7 @@
     \label{thm:obc_schmidt_canonical}
     \lean{OBCChainTensor.exists_canonical_coeff_eq}
     \leanok
-    \uses{lem:obc_canonical_cut_recurrences, thm:seqanc_cut_rank_bounds}
+    \uses{lem:obc_canonical_cut_recurrences,thm:seqanc_cut_rank_bounds}
     Let $N>0$, and let $\psi$ be a normalized state on $N$ sites of
     physical dimension $d$. There is an exact OBC representation
     $c_A=\psi$ with bonds
@@ -163,8 +162,7 @@
     \lean{MPSPreparation.exists_cutPrefixMatrix_leftInverse,
         OBCChainTensor.exists_rectangular_maps_to_cutBasis}
     \leanok
-    \uses{lem:obc_original_boundary_factors,
-        lem:obc_weighted_schmidt_cut_bases}
+    \uses{lem:obc_original_boundary_factors,lem:obc_weighted_schmidt_cut_bases}
     Choose bases of the physical cut column spaces, with prefix matrices
     $F_k$, initial basis vector $1$ and final basis vector $\psi$. For
     every OBC representation $B$ of the same state there are rectangular
@@ -191,7 +189,7 @@
     \label{thm:obc_rectangular_canonical_freedom}
     \lean{OBCChainTensor.exists_canonical_coeff_eq_rectangular_maps}
     \leanok
-    \uses{thm:obc_schmidt_canonical, lem:obc_rectangular_cut_maps}
+    \uses{thm:obc_schmidt_canonical,lem:obc_rectangular_cut_maps}
     Let $N>0$, and let $B$ be any OBC representation of a normalized
     state. There is a simultaneous Schmidt canonical representation $A$
     of the same state, with the minimal physical cut ranks, the bound

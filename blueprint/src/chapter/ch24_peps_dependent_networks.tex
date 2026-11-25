@@ -12,16 +12,16 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{definition}[Independent incidence coordinates]%
     \label{def:peps_dependent_incidence}
-    \lean{TNLean.Lattice.DependentBondNetwork.Endpoint,
-        TNLean.Lattice.DependentBondNetwork.endpointVertex,
-        TNLean.Lattice.DependentBondNetwork.IncidentEndpoint,
-        TNLean.Lattice.DependentBondNetwork.EndpointConfig,
-        TNLean.Lattice.DependentBondNetwork.LocalConfig,
-        TNLean.Lattice.DependentBondNetwork.endpointSiteEquiv,
-        TNLean.Lattice.DependentBondNetwork.endpointSiteEquiv_apply,
-        TNLean.Lattice.DependentBondNetwork.endpointSiteEquiv_symm_apply,
-        TNLean.Lattice.DependentBondNetwork.endpointPairEquiv,
-        TNLean.Lattice.DependentBondNetwork.endpointPairEquiv_apply}
+    \lean{TNLean.Network.DependentBondNetwork.Endpoint,
+        TNLean.Network.DependentBondNetwork.endpointVertex,
+        TNLean.Network.DependentBondNetwork.IncidentEndpoint,
+        TNLean.Network.DependentBondNetwork.EndpointConfig,
+        TNLean.Network.DependentBondNetwork.LocalConfig,
+        TNLean.Network.DependentBondNetwork.endpointSiteEquiv,
+        TNLean.Network.DependentBondNetwork.endpointSiteEquiv_apply,
+        TNLean.Network.DependentBondNetwork.endpointSiteEquiv_symm_apply,
+        TNLean.Network.DependentBondNetwork.endpointPairEquiv,
+        TNLean.Network.DependentBondNetwork.endpointPairEquiv_apply}
     \leanok
     The incidence set is $\mathcal E\times\{-,+\}$, where $-$ is the tail
     and $+$ the head. Put $I_v=\{(e,\epsilon):v(e,\epsilon)=v\}$ and
@@ -36,10 +36,10 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{lemma}[Incidence products and sums]%
     \label{thm:peps_dependent_incidence_sums}
-    \lean{TNLean.Lattice.DependentBondNetwork.prod_incident_eq_prod_endpoint,
-        TNLean.Lattice.DependentBondNetwork.prod_endpoint_eq_prod_edge,
-        TNLean.Lattice.DependentBondNetwork.prod_incident_eq_prod_edge,
-        TNLean.Lattice.DependentBondNetwork.sum_endpoint_prod_eq_prod_sum}
+    \lean{TNLean.Network.DependentBondNetwork.prod_incident_eq_prod_endpoint,
+        TNLean.Network.DependentBondNetwork.prod_endpoint_eq_prod_edge,
+        TNLean.Network.DependentBondNetwork.prod_incident_eq_prod_edge,
+        TNLean.Network.DependentBondNetwork.sum_endpoint_prod_eq_prod_sum}
     \leanok
     \uses{def:peps_dependent_incidence}
     For factors in any commutative monoid,
@@ -60,9 +60,9 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{definition}[Contraction and arbitrary cut boundary]%
     \label{def:peps_dependent_network}
-    \lean{TNLean.Lattice.DependentBondNetwork.bondWeight,
-        TNLean.Lattice.DependentBondNetwork.network,
-        TNLean.Lattice.DependentBondNetwork.network_eq_sum_site}
+    \lean{TNLean.Network.DependentBondNetwork.bondWeight,
+        TNLean.Network.DependentBondNetwork.network,
+        TNLean.Network.DependentBondNetwork.network_eq_sum_site}
     \leanok
     \uses{def:peps_dependent_incidence}
     Let $A_v(\eta,s)$ be the coefficient of a tensor with virtual
@@ -82,15 +82,15 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{definition}[The full cut range]%
     \label{def:peps_dependent_cut}
-    \lean{TNLean.Lattice.DependentBondNetwork.CutEndpoint,
-        TNLean.Lattice.DependentBondNetwork.CutConfig,
-        TNLean.Lattice.DependentBondNetwork.cutRestriction,
-        TNLean.Lattice.DependentBondNetwork.cutInteriorWeight,
-        TNLean.Lattice.DependentBondNetwork.cutCoeff,
-        TNLean.Lattice.DependentBondNetwork.cutMap,
-        TNLean.Lattice.DependentBondNetwork.cutMap_apply,
-        TNLean.Lattice.DependentBondNetwork.cutSpace,
-        TNLean.Lattice.DependentBondNetwork.mem_cutSpace_iff}
+    \lean{TNLean.Network.DependentBondNetwork.CutEndpoint,
+        TNLean.Network.DependentBondNetwork.CutConfig,
+        TNLean.Network.DependentBondNetwork.cutRestriction,
+        TNLean.Network.DependentBondNetwork.cutInteriorWeight,
+        TNLean.Network.DependentBondNetwork.cutCoeff,
+        TNLean.Network.DependentBondNetwork.cutMap,
+        TNLean.Network.DependentBondNetwork.cutMap_apply,
+        TNLean.Network.DependentBondNetwork.cutSpace,
+        TNLean.Network.DependentBondNetwork.mem_cutSpace_iff}
     \leanok
     \uses{def:peps_dependent_network}
     For $C\subseteq\mathcal E$, let $\partial C=C\times\{-,+\}$ and
@@ -113,14 +113,14 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{lemma}[Fixed cut configurations and bond matrices]%
     \label{thm:peps_dependent_cut_basis}
-    \lean{TNLean.Lattice.DependentBondNetwork.cutMap_eq_sum_single,
-        TNLean.Lattice.DependentBondNetwork.cutSpace_eq_span_single,
-        TNLean.Lattice.DependentBondNetwork.cutBondBoundary,
-        TNLean.Lattice.DependentBondNetwork.cutBondBoundary_restriction,
-        TNLean.Lattice.DependentBondNetwork.cutCoeff_bondBoundary,
-        TNLean.Lattice.DependentBondNetwork.cutBondUnits,
-        TNLean.Lattice.DependentBondNetwork.cutBondBoundary_units,
-        TNLean.Lattice.DependentBondNetwork.cutMap_single_eq_network}
+    \lean{TNLean.Network.DependentBondNetwork.cutMap_eq_sum_single,
+        TNLean.Network.DependentBondNetwork.cutSpace_eq_span_single,
+        TNLean.Network.DependentBondNetwork.cutBondBoundary,
+        TNLean.Network.DependentBondNetwork.cutBondBoundary_restriction,
+        TNLean.Network.DependentBondNetwork.cutCoeff_bondBoundary,
+        TNLean.Network.DependentBondNetwork.cutBondUnits,
+        TNLean.Network.DependentBondNetwork.cutBondBoundary_units,
+        TNLean.Network.DependentBondNetwork.cutMap_single_eq_network}
     \leanok
     \uses{def:peps_dependent_cut}
     Let $\delta_\eta$ denote a coordinate vector on $\mathcal X_{\partial C}$.
@@ -141,7 +141,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     $\mathcal C_{A,C}(\delta_\eta)=\mathcal N_A(E^\eta)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_dependent_cut, def:peps_dependent_network}
+    \uses{def:peps_dependent_cut,def:peps_dependent_network}
     Expand $M=\sum_\eta M(\eta)\delta_\eta$ and use linearity.
     In the contraction with $M_B$, the factors on $C$ are the entries of
     $B_e$, and the remaining factors are identity entries. Products of
@@ -151,8 +151,8 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{definition}[Products of independently sized physical maps]%
     \label{def:peps_dependent_physical_product}
-    \lean{TNLean.Lattice.dependentPhysicalProductFamilyMap,
-        TNLean.Lattice.dependentPhysicalProductFamilyMap_apply}
+    \uses{def:finite_kronecker_product}
+    \lean{Matrix.piKronecker_mulVec_apply}
     \leanok
     For finite input alphabets $J_v$, arbitrary output alphabets $K_v$, and
     matrices $F_v: \C^{J_v}\to\C^{K_v}$, put
@@ -166,12 +166,9 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{lemma}[Products, single-coordinate actions, and fixed slices]%
     \label{thm:peps_dependent_product_calculus}
-    \lean{TNLean.Lattice.dependentPhysicalProductFamilyMap_comp,
-        TNLean.Lattice.dependentPhysicalProductFamilyMap_one,
-        TNLean.Lattice.dependentPhysicalProductFamilyMap_oneCoordinate_apply,
-        TNLean.Lattice.dependentPhysicalProductFamilyMap_fixed_of_slices_fixed}
+    \lean{Matrix.piKronecker_mulVec_eq_self_of_slice}
     \leanok
-    \uses{def:peps_dependent_physical_product}
+    \uses{def:peps_dependent_physical_product,lem:mpdo_tensor_power_laws,thm:peps_four_cut_common_product_algebra,thm:peps_party_product_conjugation}
     Products compose coordinatewise: $(\bigotimes_vF_v)(\bigotimes_vL_v)
         =\bigotimes_v(F_vL_v)$, at both the matrix and linear-map levels.
     Products of identities are identities. The product with $P_v$ at one
@@ -190,10 +187,9 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{lemma}[A product range is determined by its slices]%
     \label{thm:peps_dependent_product_range}
-    \lean{TNLean.Lattice.dependentPhysicalProductFamilyMap_slice_mem_range,
-        TNLean.Lattice.mem_range_dependentPhysicalProductFamilyMap_iff}
+    \lean{Matrix.mem_range_mulVecLin_piKronecker_iff}
     \leanok
-    \uses{def:peps_dependent_physical_product}
+    \uses{def:peps_dependent_physical_product,thm:peps_four_cut_common_product_range}
     Every one-coordinate slice of $\mathcal F\chi$ lies in
     $\operatorname{im}F_v$. If all input and output alphabets are finite,
     the converse holds:

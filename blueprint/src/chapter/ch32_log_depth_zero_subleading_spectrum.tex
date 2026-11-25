@@ -10,7 +10,7 @@ correlation-length prescription
     \label{thm:ldp_zero_subleading_transfer_stabilization}
     \lean{MPSTensor.transferMap_pow_eq_fixedPointProj_of_subleading_eigenvalues_eq_zero}
     \leanok
-    \uses{def:normal, def:left_canonical_tensor, def:transfer_map}
+    \uses{def:normal,def:left_canonical_tensor,def:transfer_map}
     Let $A$ be a normal left-canonical tensor of virtual dimension $D$,
     with fixed point $\sigma>0$, $\tr\sigma=1$, and
     $\E_A(\sigma)=\sigma$. Suppose every eigenvalue of $\E_A$ distinct
@@ -36,8 +36,7 @@ correlation-length prescription
     \lean{MPSTensor.polarPosTensor_eq_fixedPointTensor_of_transferMap_eq_trace_smul,
         MPSTensor.isInjective_of_transferMap_eq_trace_smul}
     \leanok
-    \uses{def:ldpolar_physical_matrix, def:ldpolar_tensor,
-        def:prep_fixed_point_tensor}
+    \uses{def:ldpolar_physical_matrix,def:ldpolar_tensor,def:prep_fixed_point_tensor}
     Let $B$ be a tensor with $\E_B(X)=\tr(X)\sigma$ for every $X$.
     In this exact fixed-point case of the transfer/polar identity in
     \cite{Malz2024Preparation}, if $\sigma\geq0$, the positive polar
@@ -46,8 +45,7 @@ correlation-length prescription
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:ldpolar_physical_matrix,
-        thm:prep_fixed_point_tensor_psd}
+    \uses{def:ldpolar_physical_matrix,thm:prep_fixed_point_tensor_psd}
     The physical matrix satisfies
     \begin{align}
         \widehat B^\dagger\widehat B & =\sigma^{\mathsf T}\otimes I,
@@ -67,7 +65,7 @@ correlation-length prescription
     \label{thm:ldp_exact_block_polar_reconstruction}
     \lean{MPSTensor.blockIsometryState_eq_mpvState_of_polarPosTensor_eq_fixedPointTensor}
     \leanok
-    \uses{def:ldp_block_isometry_state, def:prep_fixed_point_tensor}
+    \uses{def:ldp_block_isometry_state,def:prep_fixed_point_tensor}
     Let $A$ be a tensor, let $\sigma\in\MN{D}$, and partition a ring of
     $N$ sites into $M\geq1$ blocks of lengths $\ell_k$ with
     $\sum_k\ell_k=N$. Suppose that the positive polar tensor of every
@@ -77,9 +75,7 @@ correlation-length prescription
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:ldpolar_tensor_decomposition,
-        lem:ldp_block_isometry_state_overlap,
-        thm:prep_mpv_fixed_point_tensor}
+    \uses{thm:ldpolar_tensor_decomposition,lem:ldp_block_isometry_state_overlap,thm:prep_mpv_fixed_point_tensor}
     The local polar decompositions give
     $A^{[\ell_k]}=V_kP_\infty(\sigma)$. In this exact-factor case of
     the construction in \cite{Malz2024Preparation}, contracting these
@@ -92,9 +88,7 @@ correlation-length prescription
     \label{thm:ldp_zero_subleading_exact_reconstruction}
     \lean{MPSTensor.blockIsometryState_eq_mpvState_of_subleading_eigenvalues_eq_zero}
     \leanok
-    \uses{thm:ldp_zero_subleading_transfer_stabilization,
-        thm:ldp_exact_fixed_point_polar,
-        thm:ldp_exact_block_polar_reconstruction}
+    \uses{thm:ldp_zero_subleading_transfer_stabilization,thm:ldp_exact_fixed_point_polar,thm:ldp_exact_block_polar_reconstruction}
     Under the hypotheses of
     Lemma~\ref{thm:ldp_zero_subleading_transfer_stabilization},
     partition $N$ into $M\geq1$ blocks with
@@ -104,9 +98,7 @@ correlation-length prescription
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:ldp_zero_subleading_transfer_stabilization,
-        thm:ldp_exact_fixed_point_polar,
-        thm:ldp_exact_block_polar_reconstruction}
+    \uses{thm:ldp_zero_subleading_transfer_stabilization,thm:ldp_exact_fixed_point_polar,thm:ldp_exact_block_polar_reconstruction}
     Every block has transfer map $X\mapsto\tr(X)\sigma$ by
     (\ref{eq:ldp_zero_subleading_transfer}), so its positive polar tensor
     is $P_\infty(\sigma)$, and
@@ -118,8 +110,7 @@ correlation-length prescription
     \label{thm:ldp_zero_subleading_constant_depth}
     \lean{MPSPreparation.exists_isPreparedInDepth_normalizedMPVState_of_subleading_eigenvalues_eq_zero}
     \leanok
-    \uses{thm:ldp_zero_subleading_exact_reconstruction,
-        thm:ldp_approximating_state_depth}
+    \uses{thm:ldp_zero_subleading_exact_reconstruction,thm:ldp_approximating_state_depth}
     For each physical and virtual dimension $d,D$, there is a depth
     $T=T(d,D)$ with the following property. Let $A$ be a normal
     left-canonical tensor with $\sigma>0$, $\tr\sigma=1$, and
@@ -134,11 +125,7 @@ correlation-length prescription
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:ldp_zero_subleading_transfer_stabilization,
-        thm:ldp_exact_fixed_point_polar,
-        thm:ldp_zero_subleading_exact_reconstruction,
-        thm:prep_pair_norm, lem:ldp_block_isometry_state_overlap,
-        thm:ldp_approximating_state_depth}
+    \uses{thm:ldp_zero_subleading_transfer_stabilization,thm:ldp_exact_fixed_point_polar,thm:ldp_zero_subleading_exact_reconstruction,thm:prep_pair_norm,lem:ldp_block_isometry_state_overlap,thm:ldp_approximating_state_depth}
     Writing $N=Mq_0+r$ with $M\geq1$ and $0\leq r<q_0$, and partitioning
     into $M-1$ blocks of length $q_0$ and one block of length
     $q_0+r$, places every block length in $q_0\leq\ell_k<2q_0$, so all blocks have at least

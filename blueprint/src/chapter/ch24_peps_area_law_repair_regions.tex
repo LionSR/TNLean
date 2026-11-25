@@ -79,8 +79,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \label{thm:area_law_repair_replacement_lattice_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_mem_repairReplacementOpenRegion_of_mem_repairSquare}
     \leanok
-    \uses{def:area_law_dyadic_origin,def:area_law_affine_mesh,
-        def:area_law_repair_birth}
+    \uses{def:area_law_dyadic_origin,def:area_law_affine_mesh,def:area_law_repair_birth}
     For $o=(\sqrt2,\sqrt3)$, $v\in\mathcal M(o,1)=o+\mathbb Z^2$, $S\ge1$, and any $I$,
     $\xi:I\to\{0,1\}$, and $\sigma:J\to I$,
     \begin{align}
@@ -92,9 +91,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 
 \begin{proof}
     \leanok
-    \uses{def:area_law_repair_square,thm:area_law_repair_halfside_integral,
-        thm:area_law_dyadic_origin_lines,lem:area_law_repair_fan_cones,
-        def:area_law_repair_birth}
+    \uses{def:area_law_repair_square,thm:area_law_repair_halfside_integral,thm:area_law_dyadic_origin_lines,lem:area_law_repair_fan_cones,def:area_law_repair_birth}
     Let $v=o+m$ ($m\in\mathbb Z^2$) and $d=d(S)\in\mathbb Z_{>0}$
     (Lemma~\ref{thm:area_law_repair_halfside_integral}). For $z\in Q(v,S)\cap\mathbb Z^2$,
     $\partial Q(v,S)$ and all fan rays lie on integer translates of the four line families of
@@ -175,8 +172,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:area_law_repair_successor_regions,
-        thm:area_law_repair_replacement_disjoint}
+    \uses{def:area_law_repair_successor_regions,thm:area_law_repair_replacement_disjoint}
     By (\ref{eq:area_law_repair_successor}): for distinct $i,k\in I$, $R'_i\cap R'_k\subseteq R_i\cap R_k=\varnothing$
     by (1); for $i\in I$ and $q=(j+1,p,H)\in I_{\mathrm{new}}$, $R'_q\subseteq Q(v_p,S_p)\subseteq Q_K$ by (3)
     while $R'_i=R_i\setminus Q_K$; for fresh identifiers with distinct parents $p\ne p'$,
@@ -214,9 +210,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \label{thm:area_law_repair_next_lattice_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_mem_repairNextCurrentRegion_or_terminalInterior}
     \leanok
-    \uses{def:area_law_repair_successor_regions,
-        def:area_law_repair_terminal_children,def:area_law_affine_mesh,
-        def:area_law_dyadic_origin}
+    \uses{def:area_law_repair_successor_regions,def:area_law_repair_terminal_children,def:area_law_affine_mesh,def:area_law_dyadic_origin}
     In Definitions~\ref{def:area_law_repair_successor_regions} and
     \ref{def:area_law_repair_terminal_children} with $o=(\sqrt2,\sqrt3)$, if $v_p\in\mathcal M(o,1)$
     and $S_p\ge1$ for all $p\in K$, then
@@ -229,9 +223,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 
 \begin{proof}
     \leanok
-    \uses{def:area_law_repair_successor_regions,
-        def:area_law_repair_terminal_children,def:area_law_repair_birth,
-        thm:area_law_repair_replacement_lattice_cover}
+    \uses{def:area_law_repair_successor_regions,def:area_law_repair_terminal_children,def:area_law_repair_birth,thm:area_law_repair_replacement_lattice_cover}
     For $z\in R_i\cap\mathbb Z^2$: if $z\notin Q_K$, then $z\in R_i\setminus Q_K=R'_i$;
     if $z\in Q(v_p,S_p)$ ($p\in K$), then (\ref{eq:area_law_repair_replacement_lattice_cover}) of
     Lemma~\ref{thm:area_law_repair_replacement_lattice_cover} places $z\in U(v_p,S_p,H)$ for some
@@ -249,11 +241,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         TNLean.PEPS.AreaLaw.Geometry.repairNextStage,
         TNLean.PEPS.AreaLaw.Geometry.repairStage}
     \leanok
-    \uses{def:area_law_repair_current_assignment,
-        def:area_law_repair_successor_regions,
-        def:area_law_repair_terminal_children,
-        thm:area_law_uniform_separated_initial_marks,
-        def:area_law_initial_open_regions,def:area_law_initial_region_colors}
+    \uses{def:area_law_repair_current_assignment,def:area_law_repair_successor_regions,def:area_law_repair_terminal_children,thm:area_law_uniform_separated_initial_marks,def:area_law_initial_open_regions,def:area_law_initial_region_colors}
     A stage is a tuple $\mathcal D=(I,*,B,R,\xi,K,v,S)$ with identifiers $I$, dummy $*\in I$,
     sets $B_i,R_i\subseteq\mathbb R^2$, labels $\xi_i\in\{0,1\}$, marks $K$, locations $v:K\to\mathbb R^2$,
     and scales $S:K\to\mathbb R$. Given finite $\Lambda$, $A\subseteq\Lambda$, $o\in\mathbb R^2$,
@@ -289,8 +277,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \label{thm:area_law_initial_repair_mark_facts}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_mark_spec}
     \leanok
-    \uses{def:area_law_repair_stage,def:area_law_belt_cells,
-        def:area_law_belt_cell_marks,def:area_law_fine_belt_scales}
+    \uses{def:area_law_repair_stage,def:area_law_belt_cells,def:area_law_belt_cell_marks,def:area_law_fine_belt_scales}
     In Definition~\ref{def:area_law_repair_stage}, let $F_k$ be the selected belt-cell indices
     (Definition~\ref{def:area_law_belt_cells}) and $t_k=2^{\ell_k}$
     (Definition~\ref{def:area_law_fine_belt_scales}). Then:
@@ -307,8 +294,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_uniform_separated_initial_marks,
-        def:area_law_repair_stage}
+    \uses{thm:area_law_uniform_separated_initial_marks,def:area_law_repair_stage}
     Immediate from Lemma~\ref{thm:area_law_uniform_separated_initial_marks} and
     (\ref{eq:area_law_repair_initial}), where $K_0=M\subseteq\mathbb R^2$ embeds by inclusion.
 \end{proof}
@@ -334,9 +320,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_initial_repair_mark_facts,
-        thm:area_law_belt_mark_count,thm:area_law_fine_belt_scales,
-        thm:area_law_polynomial_finite_sums}
+    \uses{thm:area_law_initial_repair_mark_facts,thm:area_law_belt_mark_count,thm:area_law_fine_belt_scales,thm:area_law_polynomial_finite_sums}
     Fix $B$ from Lemma~\ref{thm:area_law_polynomial_finite_sums} at exponent $P$. By
     Lemma~\ref{thm:area_law_initial_repair_mark_facts}, each $p\in K_0$ has a layer
     $\kappa(p)\ge k_0$ and $z\in F_{\kappa(p)}$ with $v_p^{(0)}\in M_{\ell_{\kappa(p)},z}$ and
@@ -359,9 +343,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \label{thm:area_law_initial_belt_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_initial_belt_card_bound}
     \leanok
-    \uses{def:area_law_repair_stage,def:area_law_initial_region_indices,
-        def:area_law_hamiltonian,def:area_law_belt_cells,
-        def:area_law_fan_runs,def:area_law_belt_fan_color}
+    \uses{def:area_law_repair_stage,def:area_law_initial_region_indices,def:area_law_hamiltonian,def:area_law_belt_cells,def:area_law_fan_runs,def:area_law_belt_fan_color}
     There exists $B>0$ such that for any $o\in\mathbb R^2$, finite $\Lambda\subseteq\mathbb Z^2$,
     cut $A\subseteq\Lambda$, $C_0\ge2$, and $k_0\ge50{,}000{,}000$, the initial belt summand
     $\mathcal I_{\mathrm{belt}}=\coprod_{k\ge k_0}\coprod_{z\in F_k}\mathcal R_{k,z}$
@@ -375,8 +357,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_initial_repair_mark_facts,def:area_law_fan_runs,
-        thm:area_law_cell_fan_run_count,thm:area_law_polynomial_finite_sums}
+    \uses{thm:area_law_initial_repair_mark_facts,def:area_law_fan_runs,thm:area_law_cell_fan_run_count,thm:area_law_polynomial_finite_sums}
     Take $B_0>0$ from Lemma~\ref{thm:area_law_polynomial_finite_sums} at $P=0$ and set $B=512B_0$.
     Since $J=\{k\ge k_0:F_k\ne\varnothing\}$ is finite
     (Lemma~\ref{thm:area_law_initial_repair_mark_facts}) and $|\mathcal R_{k,z}|\le8$

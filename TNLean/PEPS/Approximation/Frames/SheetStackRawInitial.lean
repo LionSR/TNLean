@@ -16,14 +16,15 @@ frame without holes, held entirely by one party.
 
 A frame without holes has reference vector `Ω` on its raw registers, of norm `‖Ω‖`
 (`EncodedFrame.Frame.norm_refVec_of_holes_eq_nil`). Hence, when `‖Ω‖ = 1`, the product of the
-reference vectors of the frames held by any one party has norm one
-(`EncodedFrame.norm_framesVec_of_holes_eq_nil`), which is the normalization hypothesis of the
-initial private maps `EncodedFrame.exists_originalCircuit_initial`. The initial step of the
+reference vectors of any list of such frames has norm one
+(`EncodedFrame.norm_framesRef_of_holes_eq_nil`), and the product of the norms of the reference
+vectors of the frames held by any party is one, which is the normalization hypothesis of the
+initial local operations `EncodedFrame.exists_originalCircuit_initial`. The initial step of the
 protocol follows (`EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil`).
 
 ## Main results
 
-* `EncodedFrame.Frame.norm_refVec_of_holes_eq_nil`, `EncodedFrame.norm_framesVec_of_holes_eq_nil`.
+* `EncodedFrame.Frame.norm_refVec_of_holes_eq_nil`, `EncodedFrame.norm_framesRef_of_holes_eq_nil`.
 * `EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil`.
 
 ## References
@@ -36,9 +37,8 @@ protocol follows (`EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil`)
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
-open TNLean.Lattice.PartyCircuit
+open ManyBody QuantumCircuit.Party Matrix
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type}
   {pos : ι → ℝ × ℝ}
@@ -47,43 +47,47 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party :
 theorem Frame.norm_refVec_of_holes_eq_nil (F : Frame pos q Party) (h : F.holes = [])
     (Ω : EuclideanSpace ℂ (ι → Fin q)) : ‖F.refVec Ω‖ = ‖Ω‖ := by
   rw [F.norm_refVec_eq, Frame.patches, h, List.map_nil]
-  simp [projProd, act_one]
+  simp [projProd]
+
+variable [Fintype Party] [DecidableEq Party]
 
 /-- **Normalized raw copies.** If `‖Ω‖ = 1`, the reference vector of a list of frames without
 holes has norm one. Polynomial-PEPS manuscript, `06-geometry.tex`, lines 658–667. -/
-theorem norm_framesVec_of_holes_eq_nil {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+theorem norm_framesRef_of_holes_eq_nil {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     (Fs : List (Frame pos q Party)) (h : ∀ F ∈ Fs, F.holes = []) :
-    ‖framesVec Ω Fs‖ = 1 := by
-  rw [norm_stackVec, List.map_congr_left fun F hF => by
-    rw [F.norm_refVec_of_holes_eq_nil (h F hF), hΩ]]
+    ‖framesRef Ω Fs‖ = 1 := by
+  rw [framesRef, norm_framesVec, List.map_congr_left fun F hF ↦ by
+    rw [F.norm_regRef, F.norm_refVec_of_holes_eq_nil (h F hF), hΩ]]
   simp
 
 /-- **The initial step from raw copies.** Let `‖Ω‖ = 1`, and let every frame `F` of the list `Fs`
 have no hole and be held entirely by the party `holder F`: the main raw copy at the root and the
-raw auxiliary copies at their future owners. Take as the whole initial memory of each party the
-memory of its frames and as its initial vector the product of their reference vectors. These
-initial vectors have norm one, and one private map per party followed by a reordering carries
-the initial product vector exactly to the reference vector of `Fs`, with no nonprivate gate.
+raw auxiliary copies at their future owners. One local operation at every party prepares, from
+the system with one basis vector at every party, the reference vector of `Fs`, the product across
+the parties of the reference vectors of the frames each party holds, with no nonprivate gate.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 1, `06-geometry.tex`,
 lines 21–23, and its proof, lines 658–667. -/
-theorem exists_originalCircuit_initial_of_holes_eq_nil [Fintype Party] [DecidableEq Party]
-    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) (Fs : List (Frame pos q Party))
-    (holder : Frame pos q Party → Party) (hraw : ∀ F ∈ Fs, F.holes = [])
-    (hown : ∀ F ∈ Fs, ∀ x, F.owner x = holder F) :
-    ∃ hx : ∀ p, ‖framesVec Ω (Fs.filter fun F => holder F = p)‖ = 1,
-      ∃ c : OriginalCircuit
-          (ProductInput.wholePartyLayout fun p => framesSpace (Fs.filter fun F => holder F = p))
-          (stackRegs Fs []),
-        c.nonprivateCount = 0 ∧ (∀ (S : Set Party) g, (↑(c.participants g) : Set Party) ⊆ S) ∧
-        (∀ r s, c.IsExpansionBounded r s) ∧ (∀ K, c.IsMonomialBounded K) ∧
-        c.eval (ProductInput.ofAllParties _ _ hx).vector = framesVec Ω Fs := by
-  have hx : ∀ p, ‖framesVec Ω (Fs.filter fun F => holder F = p)‖ = 1 := fun p =>
-    norm_framesVec_of_holes_eq_nil hΩ _ fun F hF => hraw F (List.mem_of_mem_filter hF)
-  refine ⟨hx, exists_originalCircuit_initial Ω Fs holder (fun F hF r hr => ?_) hx⟩
-  have hmem : r.owner ∈ F.regs.map Reg.owner := List.mem_map_of_mem hr
-  rw [F.map_owner_regs, hraw F hF, List.map_nil, List.nil_append] at hmem
-  obtain ⟨x, -, hxr⟩ := List.mem_map.1 hmem
-  rw [← hxr, hown F hF x]
+theorem exists_originalCircuit_initial_of_holes_eq_nil {Ω : EuclideanSpace ℂ (ι → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (Fs : List (Frame pos q Party)) (holder : Frame pos q Party → Party)
+    (hraw : ∀ F ∈ Fs, F.holes = []) (hown : ∀ F ∈ Fs, ∀ x, F.owner x = holder F) :
+    ∃ c : OriginalCircuit (fun _ : Party ↦ Unit) (framesSystem q pos Fs fun _ ↦ Unit),
+      c.nonprivateCount = 0 ∧
+        toEuclideanLin c.op (EuclideanSpace.single (fun _ ↦ ()) 1) = framesRef Ω Fs := by
+  refine exists_originalCircuit_initial Ω Fs holder (fun F hF p hp ↦ ?_) fun p ↦
+    List.prod_eq_one fun r hr ↦ by
+      obtain ⟨F, hF, rfl⟩ := List.mem_map.mp hr
+      exact (F.norm_refVec_of_holes_eq_nil (hraw F (List.mem_filter.mp hF).1) Ω).trans hΩ
+  have hown' := hown F hF
+  have hraw' := hraw F hF
+  obtain ⟨own, holes, hd⟩ := F
+  simp only at hraw' hown'
+  subst hraw'
+  rw [Fintype.card_prod]
+  simp only [Fintype.card_pi, Finset.prod_const, Fintype.card_fin]
+  rw [Finset.card_univ, Fintype.card_coe,
+    show blockPreimage own {p} = ∅ from Finset.filter_eq_empty_iff.mpr fun x _ ↦ by
+      simpa using fun h ↦ hp (h.symm.trans (hown' x)), Finset.card_empty, pow_zero]
+  rfl
 
 end TNLean.PEPS.EncodedFrame

@@ -14,10 +14,7 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
     \label{thm:hastings05_level_against_ground_state}
     \lean{Matrix.norm_sub_compressedWindowProjection_mul_sq_le}
     \leanok
-    \uses{thm:hastings05_projection_deficiency,
-        thm:hastings05_nested_projections,thm:hastings05_normalization,
-        thm:hastings05_compressed_window_projection,
-        thm:hastings05_compressed_window_bound}
+    \uses{thm:hastings05_projection_deficiency,thm:hastings05_nested_projections,thm:hastings05_normalization,thm:hastings05_compressed_window_projection,thm:hastings05_compressed_window_bound}
     Let $P,P'$ be commuting orthogonal projections, $M=M^\dagger$, $c\in\R$,
     $x>0$, and $\psi$ a unit vector with $\lVert(M-c)\psi\rVert\le\epsilon$,
     $\lVert\psi-P\psi\rVert\le D$, and $\lVert\psi-P'\psi\rVert\le D$. Let $R$
@@ -60,8 +57,7 @@ $2^m-1$~\cite{gap:hastings05_hierarchical_projection}.
     \lean{Matrix.isStarProjection_hierarchy,
         Matrix.norm_sub_hierarchy_le}
     \leanok
-    \uses{thm:hastings05_level_against_ground_state,
-        def:hastings05_hierarchy_deficiency}
+    \uses{thm:hastings05_level_against_ground_state,def:hastings05_hierarchy_deficiency}
     Let $P_k^0=1$, and let $P_k^{m+1}$ be the window of $M_k^m=(M_k^m)^\dagger$
     at $c_k^m$ with radius $x_m>0$ inside $\operatorname{ran}(P_{2k}^mP_{2k+1}^m)$.
     If $[P_{2k}^m,P_{2k+1}^m]=0$, $\lVert(M_k^m-c_k^m)\psi\rVert\le\epsilon$,
@@ -177,8 +173,7 @@ supersites $k,k+1$~\cite[lines 609--628]{Hastings2006Solving}.
         ManyBody.commute_hierarchy_halves,
         ManyBody.norm_sub_hierarchy_le_of_mem_supportedOperators}
     \leanok
-    \uses{thm:hastings05_hierarchy_levels,thm:hastings05_window_support,
-        thm:hastings05_level_block_halves}
+    \uses{thm:hastings05_hierarchy_levels,thm:hastings05_window_support,thm:hastings05_level_block_halves}
     In Theorem~\ref{thm:hastings05_hierarchy_levels}, if each $M_k^m$ is
     supported on $B_k^{m+1}$, then $P_k^m$ is supported on $B_k^m$,
     $[P_{2k}^m,P_{2k+1}^m]=0$, and $\lVert\psi-P_k^m\psi\rVert\le D_m$.

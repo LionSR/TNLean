@@ -17,8 +17,7 @@
     \label{thm:aklv_logarithmic_robustness}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_logarithmic_robustness}
     \leanok
-    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation,
-        def:aklv_logarithmic_threshold}
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation,def:aklv_logarithmic_threshold}
     Let $s\ge3$, $a+s+1\le L$, and let $0\le h_i\le\Id$ act on
     $\{i,i+1\}$. Suppose the unit ground vector $\Omega$ of
     $H'=\sum_i h_i$ has energy $\mu$, actual first excited energy
@@ -38,8 +37,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:aklv_two_block_scaled_low_cluster,
-        thm:chain_positive_nearest_neighbor_gap_upper}
+    \uses{thm:aklv_two_block_scaled_low_cluster,thm:chain_positive_nearest_neighbor_gap_upper}
     The ground eigenvalue belongs to the spectrum because its unit
     eigenvector is nonzero. The two distinct spectral values force $q\ge2$,
     and the endpoint trial vector gives $g\le1$.
@@ -99,8 +97,7 @@
     \lean{TNLean.MPS.AreaLaw.exists_aklv_reference_logarithmic_robustness,
         TNLean.MPS.AreaLaw.exists_aklv_reference_physical_robustness}
     \leanok
-    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation,
-        def:aklv_logarithmic_threshold}
+    \uses{def:aklv_normalization_regions,def:aklv_two_block_truncation,def:aklv_logarithmic_threshold}
     Let $s\ge1$ and keep the remaining hypotheses of
     Lemma~\ref{thm:aklv_logarithmic_robustness}. Form the actual
     truncation $B$ at the cuts $a+1,a+s$, which clips the two reference sums
@@ -117,8 +114,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:aklv_reference_scaled_low_cluster,
-        thm:chain_positive_nearest_neighbor_gap_upper}
+    \uses{thm:aklv_reference_scaled_low_cluster,thm:chain_positive_nearest_neighbor_gap_upper}
     Repeat the proofs of Lemmas~\ref{thm:aklv_logarithmic_robustness}
     and~\ref{thm:aklv_physical_robustness}, replacing the spectral
     comparison by Lemma~\ref{thm:aklv_reference_scaled_low_cluster}.

@@ -43,9 +43,8 @@ Proposition 5.7, lines 1311–1333.
 
 open ManyBody (disjoint_interval_interval interval mem_interval)
 
-open Matrix QuantumCircuit
+open Matrix
 open scoped BigOperators Kronecker Matrix
-open TNLean.Lattice.Sheet
 
 noncomputable section
 
@@ -216,6 +215,27 @@ end MPOTensor
 
 namespace TNLean.MPS.AreaLaw
 
+/-- A placement along `w` followed by a relabelling `ρ` of the sites, read back
+through `ρ`, is the placement along `w`. This compares a middle operator placed
+on the middle region `(T ∪ E) \ T` of the three-region coordinates with the same
+operator placed on `E`. Supporting natural interval coordinates in ALVV,
+arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
+private theorem submatrix_placeAlong_trans_equiv
+    {κ V₁ V₂ : Type*} [Fintype κ] [Fintype V₁] [Fintype V₂] [DecidableEq V₁]
+    [DecidableEq V₂] {q : ℕ}
+    (w : κ ↪ V₁) (ρ : V₁ ≃ V₂) (X : Matrix (κ → Fin q) (κ → Fin q) ℂ) :
+    (ManyBody.placeAlong (X := fun _ ↦ Fin q) (w.trans ρ.toEmbedding) X).submatrix
+        (fun σ : V₁ → Fin q ↦ σ ∘ ρ.symm) (fun σ : V₁ → Fin q ↦ σ ∘ ρ.symm) =
+      ManyBody.placeAlong (X := fun _ ↦ Fin q) w X := by
+  classical
+  ext σ τ
+  rw [Matrix.submatrix_apply, ManyBody.placeAlong_apply, ManyBody.placeAlong_apply]
+  refine if_congr ⟨fun h v hv ↦ ?_, fun h v hv ↦ ?_⟩ ?_ rfl
+  · have hρ := h (ρ v) (fun u hu ↦ hv u (ρ.injective (by simpa using hu)))
+    simpa using hρ
+  · exact h (ρ.symm v) (fun u hu ↦ hv u (by simp [hu]))
+  · congr 1 <;> funext u <;> simp
+
 /-- Every existing ordered middle word built from the actual supplied regional
 MPO and collar-supported factors has a finite MPO decomposition in increasing
 selected-interval coordinates. If its word length is d, the decomposition has
@@ -231,9 +251,14 @@ private noncomputable def actualSelectedMiddleWordStatement
     (C0 : Matrix (Fin B) (Fin B) ℂ) (zmid : ℂ) : Prop :=
     let cE := a + p.val + 1
     let dE := b + s.val + 1
+    let T := interval L 0 cE
     let E := interval L cE dE
+    let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
+    let Mid := (T ∪ E) \ T
+    let ρ : E ≃ ↥((T ∪ E) \ T) := Equiv.subtypeEquivRight fun _ ↦ by
+      rw [Finset.union_sdiff_cancel_left hTE]
     let Z := interval L (a + 2 * ell + 1) b
-    let C : Finset E := Finset.univ.filter (fun x : E ↦ x.val ∉ Z)
+    let C : Finset Mid := Finset.univ.filter (fun x : Mid ↦ x.val ∉ Z)
     let N := dE - cE
     let aNat := (a + 2 * ell + 1) - cE
     let Lnat := b - (a + 2 * ell + 1)
@@ -243,8 +268,9 @@ private noncomputable def actualSelectedMiddleWordStatement
     let eE := intervalShiftOrderIso
       (show cE ≤ dE by have hp := p.isLt; omega)
       (show dE ≤ L by have hs := s.isLt; omega)
-    let inc : ↥(interval L (a + 2 * ell) (b + 1)) ↪ E :=
-      ⟨fun x ↦ (⟨x.val, mem_interval.mpr (by
+    let eM : Fin N ≃ Mid := eE.toEquiv.trans ρ
+    let inc : ↥(interval L (a + 2 * ell) (b + 1)) ↪ Mid :=
+      ⟨fun x ↦ ρ (⟨x.val, mem_interval.mpr (by
         have hx := mem_interval.mp x.property
         have hp := p.isLt
         constructor <;> omega)⟩ : E),
@@ -253,9 +279,9 @@ private noncomputable def actualSelectedMiddleWordStatement
       (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
         Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
     let ME := ManyBody.placeAlong (X := fun _ ↦ Fin q) inc Mphys
-    ∀ (K : Matrix (E → Fin q) (E → Fin q) ℂ)
-      (U : Fin rU → Matrix (E → Fin q) (E → Fin q) ℂ)
-      (W : Fin rV → Matrix (E → Fin q) (E → Fin q) ℂ),
+    ∀ (K : Matrix (Mid → Fin q) (Mid → Fin q) ℂ)
+      (U : Fin rU → Matrix (Mid → Fin q) (Mid → Fin q) ℂ)
+      (W : Fin rV → Matrix (Mid → Fin q) (Mid → Fin q) ℂ),
       ManyBody.IsSupportedOn K C →
       (∀ t, ManyBody.IsSupportedOn (U t) C) →
       (∀ t, ManyBody.IsSupportedOn (W t) C) →
@@ -272,8 +298,8 @@ private noncomputable def actualSelectedMiddleWordStatement
               ∃ Ar : Fin N → MPOTensor q (B ^ (t r).val),
                 V r = MPOTensor.traceChainOperator Ar Cr) ∧
             (twoMarkerMiddleFactor (zmid • ME + K) U W pIndex).submatrix
-              (fun σ : Fin N → Fin q ↦ σ ∘ eE.symm)
-              (fun σ : Fin N → Fin q ↦ σ ∘ eE.symm) = ∑ r, V r
+              (fun σ : Fin N → Fin q ↦ σ ∘ eM.symm)
+              (fun σ : Fin N → Fin q ↦ σ ∘ eM.symm) = ∑ r, V r
 
 /-- Finite MPO families for the supplied selected-middle word.
 Supporting ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
@@ -288,9 +314,14 @@ private theorem exists_actual_selected_middle_word_mpo_family
   classical
   let cE := a + p.val + 1
   let dE := b + s.val + 1
+  let T := interval L 0 cE
   let E := interval L cE dE
+  let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
+  let Mid := (T ∪ E) \ T
+  let ρ : E ≃ ↥((T ∪ E) \ T) := Equiv.subtypeEquivRight fun _ ↦ by
+    rw [Finset.union_sdiff_cancel_left hTE]
   let Z := interval L (a + 2 * ell + 1) b
-  let C : Finset E := Finset.univ.filter (fun x : E ↦ x.val ∉ Z)
+  let C : Finset Mid := Finset.univ.filter (fun x : Mid ↦ x.val ∉ Z)
   let N := dE - cE
   let aNat := (a + 2 * ell + 1) - cE
   let Lnat := b - (a + 2 * ell + 1)
@@ -300,12 +331,14 @@ private theorem exists_actual_selected_middle_word_mpo_family
   let eE := intervalShiftOrderIso
     (show cE ≤ dE by have hp := p.isLt; omega)
     (show dE ≤ L by have hs := s.isLt; omega)
-  let inc : ↥(interval L (a + 2 * ell) (b + 1)) ↪ E :=
+  let eM : Fin N ≃ Mid := eE.toEquiv.trans ρ
+  let incE : ↥(interval L (a + 2 * ell) (b + 1)) ↪ E :=
     ⟨fun x ↦ (⟨x.val, mem_interval.mpr (by
       have hx := mem_interval.mp x.property
       have hp := p.isLt
       constructor <;> omega)⟩ : E),
       fun x y hxy ↦ Subtype.ext (by simpa using congrArg Subtype.val hxy)⟩
+  let inc : ↥(interval L (a + 2 * ell) (b + 1)) ↪ Mid := incE.trans ρ.toEmbedding
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
@@ -322,18 +355,18 @@ private theorem exists_actual_selected_middle_word_mpo_family
     intervalShift_subinterval_length_le hcu hud hvd
   have hC : ∀ r : Fin N,
       r ∈ Finset.univ.filter (fun v : Fin N ↦
-        ¬(aNat ≤ v.val ∧ v.val < aNat + Lnat)) ↔ eE r ∈ C := by
+        ¬(aNat ≤ v.val ∧ v.val < aNat + Lnat)) ↔ eM r ∈ C := by
     intro r
     simp only [C, Finset.mem_filter, Finset.mem_univ, true_and]
     exact (not_congr (intervalShiftOrderIso_mem_subinterval
       (u := a + 2 * ell + 1) (v := b) hcd hd hcu r)).symm
-  let eConf : (E → Fin q) ≃ (Fin N → Fin q) :=
-    Equiv.arrowCongr eE.toEquiv.symm (Equiv.refl (Fin q))
+  let eConf : (Mid → Fin q) ≃ (Fin N → Fin q) :=
+    Equiv.arrowCongr eM.symm (Equiv.refl (Fin q))
   let natPull := Matrix.reindexAlgEquiv ℂ ℂ eConf
-  have hnatPull (X : Matrix (E → Fin q) (E → Fin q) ℂ) :
+  have hnatPull (X : Matrix (Mid → Fin q) (Mid → Fin q) ℂ) :
       natPull X = X.submatrix
-        (fun σ : Fin N → Fin q ↦ σ ∘ eE.symm)
-        (fun σ : Fin N → Fin q ↦ σ ∘ eE.symm) := rfl
+        (fun σ : Fin N → Fin q ↦ σ ∘ eM.symm)
+        (fun σ : Fin N → Fin q ↦ σ ∘ eM.symm) := rfl
   have hca : cE ≤ a + 2 * ell := by dsimp only [cE]; omega
   have hcore : a + 2 * ell ≤ b + 1 := by omega
   have hbd : b + 1 ≤ dE := by dsimp only [dE]; omega
@@ -346,8 +379,15 @@ private theorem exists_actual_selected_middle_word_mpo_family
     Matrix.of fun σ τ ↦ Matrix.trace
       (C0 * (List.ofFn (fun v ↦ Afull v (σ v) (τ v))).prod)
   have hME : natPull ME = Hnat := by
-    exact MPOTensor.trace_identityExtendInterval_nested_natural
-      hca hcore hbd hd Acore C0
+    have hrel := submatrix_placeAlong_trans_equiv (q := q) incE ρ Mphys
+    calc natPull ME =
+          ((ManyBody.placeAlong (X := fun _ ↦ Fin q) (incE.trans ρ.toEmbedding) Mphys).submatrix
+            (fun σ : E → Fin q ↦ σ ∘ ρ.symm) (fun σ : E → Fin q ↦ σ ∘ ρ.symm)).submatrix
+          (fun σ : Fin N → Fin q ↦ σ ∘ eE.symm) (fun σ : Fin N → Fin q ↦ σ ∘ eE.symm) := rfl
+      _ = Hnat := by
+        rw [hrel]
+        exact MPOTensor.trace_identityExtendInterval_nested_natural
+          hca hcore hbd hd Acore C0
   let place := fun X : Matrix (MPOTensor.actualAffineRetainedConfig N Lnat q aNat)
       (MPOTensor.actualAffineRetainedConfig N Lnat q aNat) ℂ ↦
     (X ⊗ₖ (1 : Matrix (Fin Lnat → Fin q) (Fin Lnat → Fin q) ℂ)).submatrix
@@ -358,7 +398,7 @@ private theorem exists_actual_selected_middle_word_mpo_family
           (MPOTensor.actualAffineRetainedConfig N Lnat q aNat) ℂ,
         natPull (ManyBody.place C X) = place Xret := by
     intro X
-    exact exists_retainedMatrix_of_physical_localLift eE.toEquiv aNat ha C hC X
+    exact exists_retainedMatrix_of_physical_localLift eM aNat ha C hC X
   choose g hg using htransport
   obtain ⟨KC, UC, WC, _hKC, _hUC, _hWC, hsteps⟩ :=
     exists_localLift_twoMarkerMiddleSteps C ME K zmid U W hK hU hW
@@ -417,14 +457,18 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   let T := interval L 0 (a + p.val + 1)
   let E := interval L (a + p.val + 1) (b + s.val + 1)
   let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
-  let g := threeSplit q T E hTE
-  let e := exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)
+  let Mid := (T ∪ E) \ T
+  let g := ManyBody.threeCutEquiv (fun _ : Fin L ↦ Fin q)
+    (Finset.subset_union_left : T ⊆ T ∪ E)
+  let e := exteriorMiddleEquiv (T → Fin q) (Mid → Fin q) ({v // v ∉ T ∪ E} → Fin q)
   let Nnat := (b + s.val + 1) - (a + p.val + 1)
   let aNat := (a + 2 * ell + 1) - (a + p.val + 1)
   let Lnat := b - (a + 2 * ell + 1)
   let eE := intervalShiftOrderIso
     (show a + p.val + 1 ≤ b + s.val + 1 by have hp := p.isLt; omega)
     (show b + s.val + 1 ≤ L by have hs := s.isLt; omega)
+  let eM : Fin Nnat ≃ ↥((T ∪ E) \ T) := eE.toEquiv.trans
+    (Equiv.subtypeEquivRight fun _ ↦ by rw [Finset.union_sdiff_cancel_left hTE])
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega)
     (show b + 1 ≤ L by have hs := s.isLt; omega)
@@ -460,23 +504,27 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
               cPoly r • twoMarkerCoefficient Dphys (WL p) (WR s) r.val i j).reindex
               (g.trans e) (g.trans e)).submatrix
                 (fun x : ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ×
-                    (Fin Nnat → Fin q) ↦ (x.1, x.2 ∘ eE.symm))
+                    (Fin Nnat → Fin q) ↦ (x.1, x.2 ∘ eM.symm))
                 (fun x : ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ×
-                    (Fin Nnat → Fin q) ↦ (x.1, x.2 ∘ eE.symm)) =
+                    (Fin Nnat → Fin q) ↦ (x.1, x.2 ∘ eM.symm)) =
             ∑ r, B_out r ⊗ₖ V r := by
   classical
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let T := interval L 0 (a + p.val + 1)
   let E := interval L (a + p.val + 1) (b + s.val + 1)
   let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
-  let g := threeSplit q T E hTE
-  let e := exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)
+  let Mid := (T ∪ E) \ T
+  let g := ManyBody.threeCutEquiv (fun _ : Fin L ↦ Fin q)
+    (Finset.subset_union_left : T ⊆ T ∪ E)
+  let e := exteriorMiddleEquiv (T → Fin q) (Mid → Fin q) ({v // v ∉ T ∪ E} → Fin q)
   let Nnat := (b + s.val + 1) - (a + p.val + 1)
   let aNat := (a + 2 * ell + 1) - (a + p.val + 1)
   let Lnat := b - (a + 2 * ell + 1)
   let eE := intervalShiftOrderIso
     (show a + p.val + 1 ≤ b + s.val + 1 by have hp := p.isLt; omega)
     (show b + s.val + 1 ≤ L by have hs := s.isLt; omega)
+  let eM : Fin Nnat ≃ ↥((T ∪ E) \ T) := eE.toEquiv.trans
+    (Equiv.subtypeEquivRight fun _ ↦ by rw [Finset.union_sdiff_cancel_left hTE])
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega)
     (show b + 1 ≤ L by have hs := s.isLt; omega)
@@ -487,7 +535,7 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
   let RetDim := Fintype.card (MPOTensor.actualAffineRetainedConfig Nnat Lnat q aNat)
-  let Nmid := fun (e₀ : E) (t : Fin (q * q)) ↦
+  let Nmid := fun (e₀ : Mid) (t : Fin (q * q)) ↦
     ManyBody.placeAlong (X := fun _ ↦ Fin q)
       ⟨fun _ : Fin 1 ↦ e₀, fun a b _ ↦ Subsingleton.elim a b⟩
       (Matrix.single
@@ -499,12 +547,12 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   let Widx := TwoMarkerMiddleIndex k i j (q * q) (q * q)
   let d : Widx → ℕ := fun w ↦ (∑ h, (w.1.2 h).val) + i + j
   let nw : Widx → ℕ := fun w ↦ (d w + 1) * RetDim ^ 2
-  let Psi : Widx → Matrix (E → Fin q) (E → Fin q) ℂ :=
+  let Psi : Widx → Matrix (Mid → Fin q) (Mid → Fin q) ℂ :=
     fun w ↦ twoMarkerMiddleFactor A (Nmid eL) (Nmid eR) w
   let natPsi : Widx → Matrix (Fin Nnat → Fin q) (Fin Nnat → Fin q) ℂ :=
     fun w ↦ (Psi w).submatrix
-      (fun σ : Fin Nnat → Fin q ↦ σ ∘ eE.symm)
-      (fun σ : Fin Nnat → Fin q ↦ σ ∘ eE.symm)
+      (fun σ : Fin Nnat → Fin q ↦ σ ∘ eM.symm)
+      (fun σ : Fin Nnat → Fin q ↦ σ ∘ eM.symm)
   have hd (w : Widx) : d w ≤ k := w.2.2.2
   have hword (w : Widx) :
       ∃ (t : Fin (nw w) → Fin (d w + 1))
@@ -525,8 +573,8 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
     subst dw
     refine ⟨t, Vw, hVw, htrace, ?_⟩
     change (twoMarkerMiddleFactor A (Nmid eL) (Nmid eR) w).submatrix
-      (fun σ : Fin Nnat → Fin q ↦ σ ∘ eE.symm)
-      (fun σ : Fin Nnat → Fin q ↦ σ ∘ eE.symm) = ∑ r, Vw r
+      (fun σ : Fin Nnat → Fin q ↦ σ ∘ eM.symm)
+      (fun σ : Fin Nnat → Fin q ↦ σ ∘ eM.symm) = ∑ r, Vw r
     rw [hA]
     exact hsum
   choose tWord VWord hVWord hTraceWord hPsiWord using hword
@@ -576,8 +624,8 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   intro PL PR hPL hPR F Dphys cPoly
   obtain ⟨Bword, hBword⟩ := hphysical PL PR hPL hPR cPoly
   let Ext := (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)
-  let readMiddle : Ext × (Fin Nnat → Fin q) → Ext × (E → Fin q) :=
-    fun x ↦ (x.1, x.2 ∘ eE.symm)
+  let readMiddle : Ext × (Fin Nnat → Fin q) → Ext × (Mid → Fin q) :=
+    fun x ↦ (x.1, x.2 ∘ eM.symm)
   let Xnat : Matrix (Ext × (Fin Nnat → Fin q)) (Ext × (Fin Nnat → Fin q)) ℂ :=
     ((∑ r : Fin (k + 1),
       cPoly r • twoMarkerCoefficient Dphys (WL p) (WR s) r.val i j).reindex

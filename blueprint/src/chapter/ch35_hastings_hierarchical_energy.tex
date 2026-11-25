@@ -44,7 +44,7 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     \lean{Matrix.exists_mem_range_re_inner_le_add,
         Matrix.exists_mem_range_re_inner_sum_le_add}
     \leanok
-    \uses{thm:hastings05_energy_nearby, thm:hastings05_normalization_one}
+    \uses{thm:hastings05_energy_nearby,thm:hastings05_normalization_one}
     If an orthogonal projection $Q$ and $\|\Psi\|=1$ satisfy
     $\|Q\Psi-\Psi\|\le b<1$, then $\phi=Q\Psi/\|Q\Psi\|$ satisfies $\|\phi\|=1$,
     $Q\phi=\phi$, $\|\phi-\Psi\|\le2b$, and for every $M$,
@@ -60,7 +60,7 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:hastings05_energy_nearby, thm:hastings05_normalization_one}
+    \uses{thm:hastings05_energy_nearby,thm:hastings05_normalization_one}
     Since $\|Q\Psi\|\ge1-b>0$, combine
     Lemmas~\ref{thm:hastings05_normalization_one}
     and~\ref{thm:hastings05_energy_nearby}.
@@ -100,8 +100,7 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     \label{thm:hastings05_hierarchy_sum_expectation}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.abs_re_inner_hierarchySum_sub_le}
     \leanok
-    \uses{thm:hastings05_window_expectation, def:hastings05_hierarchy_sum,
-        thm:hastings05_hierarchy_levels}
+    \uses{thm:hastings05_window_expectation,def:hastings05_hierarchy_sum,thm:hastings05_hierarchy_levels}
     In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels} with radii
     $x_m\ge0$, every $P_k^m$ is an orthogonal projection, and any $\phi$ with
     $P_k^m\phi=\phi$ satisfies
@@ -141,7 +140,7 @@ periodic chain \cite{gap:hastings05_hierarchical_energy}.
     \label{thm:hastings05_final_state_count_hierarchy}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_hierarchy}
     \leanok
-    \uses{thm:hastings05_hchy_every_state, thm:hastings_final_state_count}
+    \uses{thm:hastings05_hchy_every_state,thm:hastings_final_state_count}
     In the setting of Theorem~\ref{thm:hastings05_hchy_every_state}, if
     $H=T_0^h(M)$ satisfies $H-E_0\ge\Delta E(1-P)$ for an orthogonal projection
     $P$ and $\Delta E>0$, and
@@ -162,7 +161,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
     \label{thm:hastings05_closing_link_window}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.norm_sub_closingLinkWindow_le}
     \leanok
-    \uses{thm:hastings05_hierarchy_levels, thm:hastings05_level_against_ground_state}
+    \uses{thm:hastings05_hierarchy_levels,thm:hastings05_level_against_ground_state}
     In the setting of Theorem~\ref{thm:hastings05_hierarchy_levels}, if
     $W=W^\dagger$ satisfies $\|(W-c_W)\psi\|\le\epsilon$ and $\|W-c_W\|\le K$,
     then $R=P_0^hP_{x_h}(P_0^hWP_0^h,c_W)$ is an orthogonal projection with
@@ -177,7 +176,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
     \label{thm:hastings05_hchy_periodic}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.re_inner_hierarchySum_add_le_add}
     \leanok
-    \uses{thm:hastings05_hchy_every_state, thm:hastings05_window_expectation}
+    \uses{thm:hastings05_hchy_every_state,thm:hastings05_window_expectation}
     In the setting of Theorem~\ref{thm:hastings05_hchy_every_state}, for
     $W=W^\dagger$, $x_W\ge0$, and
     $R=P_0^hP_{x_W}(P_0^hWP_0^h,\operatorname{Re}\langle\Psi,W\Psi\rangle)$,
@@ -201,7 +200,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
     \label{thm:hastings05_final_state_count_periodic}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_closingLink}
     \leanok
-    \uses{thm:hastings05_hchy_periodic, thm:hastings_final_state_count}
+    \uses{thm:hastings05_hchy_periodic,thm:hastings_final_state_count}
     In the setting of Lemma~\ref{thm:hastings05_hchy_periodic}, if
     $H=T_0^h(M)+W$ satisfies $H-E_0\ge\Delta E(1-P)$ for an orthogonal
     projection $P$ and $\Delta E>0$, and
@@ -225,11 +224,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
         TNLean.MPS.AreaLaw.LocalSolution.re_inner_supersiteHierarchySum_add_le_add,
         TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_supersiteClosingLink}
     \leanok
-    \uses{thm:hastings05_supersite_hierarchy,
-        thm:hastings05_hierarchy_sum_expectation, thm:hastings05_hchy_every_state,
-        thm:hastings05_final_state_count_hierarchy,
-        thm:hastings05_closing_link_window, thm:hastings05_hchy_periodic,
-        thm:hastings05_final_state_count_periodic}
+    \uses{thm:hastings05_supersite_hierarchy,thm:hastings05_hierarchy_sum_expectation,thm:hastings05_hchy_every_state,thm:hastings05_final_state_count_hierarchy,thm:hastings05_closing_link_window,thm:hastings05_hchy_periodic,thm:hastings05_final_state_count_periodic}
     If each $M_k^m=(M_k^m)^\dagger$ is supported on $B_k^{m+1}$, then every
     $P_k^m$ is an orthogonal projection and
     Lemmas~\ref{thm:hastings05_hierarchy_sum_expectation},
@@ -269,8 +264,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
         TNLean.MPS.AreaLaw.LocalSolution.norm_sub_hierarchyClosingProjection_le,
         TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_hierarchyClosingProjection}
     \leanok
-    \uses{def:hastings05_constructed_hierarchy, thm:hastings05_supersite_hierarchy,
-        thm:hastings05_closing_link_window, thm:hastings05_hchy}
+    \uses{def:hastings05_constructed_hierarchy,thm:hastings05_supersite_hierarchy,thm:hastings05_closing_link_window,thm:hastings05_hchy}
     Suppose $M_k^m$ acts on its block of $2^{m+1}$ supersites, all radii are
     positive, and $\psi$ is a unit vector with
     $\|(M_k^m-c_k^m)\psi\|\le\epsilon$ and $\|M_k^m-c_k^m\|\le K$.
@@ -304,8 +298,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
         TNLean.MPS.AreaLaw.LocalSolution.isRetainedHierarchy_of_hierarchyProjection,
         TNLean.MPS.AreaLaw.LocalSolution.isRetainedHierarchy_of_hierarchyClosingProjection}
     \leanok
-    \uses{def:hastings05_retained_tree, def:hastings05_constructed_hierarchy,
-        thm:hastings05_supersite_hierarchy}
+    \uses{def:hastings05_retained_tree,def:hastings05_constructed_hierarchy,thm:hastings05_supersite_hierarchy}
     For the constructed hierarchy, a vector kept by a block projection is
     retained throughout that block. Every vector kept by the additional
     closing window is retained throughout the original tree.
@@ -337,7 +330,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
         TNLean.MPS.AreaLaw.LocalSolution.hierarchySum_hierarchyEdge_add_zero,
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyEdge_mem_supportedOperators}
     \leanok
-    \uses{def:hastings05_hierarchy_edge, def:hastings05_hierarchy_sum}
+    \uses{def:hastings05_hierarchy_edge,def:hastings05_hierarchy_sum}
     The sum below block $k$ of level $m$ is
     $T_k^m(M)=\sum_{k2^m<j<(k+1)2^m}a_j$. In particular,
     $T_0^h(M)+a_0=\sum_{0\le j<2^h}a_j$.
@@ -377,7 +370,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
     \label{def:hastings05_periodic_projection}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.periodicHierarchyProjection}
     \leanok
-    \uses{def:hastings05_constructed_hierarchy, def:hastings05_hierarchy_edge}
+    \uses{def:hastings05_constructed_hierarchy,def:hastings05_hierarchy_edge}
     Use the pair operators $M_k^m=a_{(2k+1)2^m}$, their expectations in
     $\psi$ as centres, and the adaptive radii $x_m$ of
     Section~\ref{sec:hastings05_hierarchical_projection}. Let $R$ be the
@@ -404,7 +397,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
         TNLean.MPS.AreaLaw.LocalSolution.extendFiniteEdges_mem_supportedOperators,
         TNLean.MPS.AreaLaw.LocalSolution.hierarchyEdge_extendFiniteEdges_mem_supportedOperators}
     \leanok
-    \uses{def:hastings05_finite_edges, thm:hastings05_hierarchy_edges}
+    \uses{def:hastings05_finite_edges,thm:hastings05_hierarchy_edges}
     Extending by zero preserves Hermiticity, support, and nonnegative bounds
     on local residuals and centred norms. For $N\le2^h$, the sum of the
     extended family over $0\le j<2^h$ equals $\sum_{j<N}a_j$.
@@ -430,7 +423,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
     \label{thm:hastings05_finite_length}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyProjectionLength_finiteHierarchyDepth_le}
     \leanok
-    \uses{def:hastings05_finite_depth, thm:hastings05_explicit_projection_length}
+    \uses{def:hastings05_finite_depth,thm:hastings05_explicit_projection_length}
     The chosen projection length at depth $h_N$ is at most
     $512(\lceil\log_2N\rceil+2)^2(1+\max\{0,\log(J/\Delta)\})$.
 \end{lemma}
@@ -445,9 +438,7 @@ the closing link $(N,1)$ \cite{gap:hastings05_hierarchical_energy}.
         TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_periodicHierarchyProjection_of_finite,
         TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_periodicHierarchyProjection_of_finite}
     \leanok
-    \uses{def:hastings05_periodic_projection,
-        thm:hastings05_constructed_deficiency, thm:hastings05_physical_gap_count,
-        thm:hastings05_supersite_final_states, thm:hastings05_explicit_projection_length}
+    \uses{def:hastings05_periodic_projection,thm:hastings05_constructed_deficiency,thm:hastings05_physical_gap_count,thm:hastings05_supersite_final_states,thm:hastings05_explicit_projection_length}
     Let $h\ge2$, $J,\Delta,K>0$, and
     $r\ge512h^2(1+\max\{0,\log(J/\Delta)\})$.
     Suppose the positive-index Hermitian edges satisfy the two-supersite support condition,

@@ -19,10 +19,7 @@ common boundary factor, up to a single unitary acting on the complement.
         TNLean.PEPS.regularCombinedBoundaryTransport_tail,
         TNLean.PEPS.regularCombinedBoundaryTransport_head}
     \leanok
-    \uses{thm:peps_regular_walk_holonomy,
-        thm:peps_regular_region_cycle_holonomy,
-        thm:peps_regular_region_tree_gauge,
-        def:peps_regionComplementBoundaryConfig}
+    \uses{thm:peps_regular_walk_holonomy,thm:peps_regular_region_cycle_holonomy,thm:peps_regular_region_tree_gauge,def:peps_regionComplementBoundaryConfig}
     Choose rooted spanning trees in a region $R$ and its complement $S$,
     with normalized gauges $k_R,k_S$. Let $F_R,F_S$ be their
     crossing-label maps. After rereading each crossing bond as the
@@ -70,10 +67,7 @@ common boundary factor, up to a single unitary acting on the complement.
     \lean{TNLean.PEPS.torusWalkWinding_of_isTorusRegionIntegerLift,
         TNLean.PEPS.torusWalkWinding_eq_of_isSimplyConnected}
     \leanok
-    \uses{thm:peps_torus_walk_winding,
-        thm:peps_torus_region_integer_lift_gauge,
-        thm:peps_regular_boundary_route,
-        thm:peps_torus_region_realization}
+    \uses{thm:peps_torus_walk_winding,thm:peps_torus_region_integer_lift_gauge,thm:peps_regular_boundary_route,thm:peps_torus_region_realization}
     Let $L:R\to\mathbb Z^2$ be an integer lift preserving each native
     horizontal and vertical unit step, and write the torus periods as
     $W$ and $H$. For any induced-region walk $p:v\to t$,
@@ -118,9 +112,7 @@ common boundary factor, up to a single unitary acting on the complement.
         TNLean.PEPS.torusBoundaryTreeRoute_holonomy,
         TNLean.PEPS.regularRegionCycleWord_eval_torusClosure_of_winding_eq}
     \leanok
-    \uses{thm:peps_regular_boundary_route,
-        thm:peps_regular_region_cycle_holonomy,
-        thm:peps_torus_walk_winding}
+    \uses{thm:peps_regular_boundary_route,thm:peps_regular_region_cycle_holonomy,thm:peps_torus_walk_winding}
     On a native torus of width and height at least three, choose rooted
     spanning trees in $R$ and $S=R^c$. For each native crossing bond $f$,
     membership determines its inside endpoint $v_f$, its outside endpoint
@@ -216,9 +208,7 @@ common boundary factor, up to a single unitary acting on the complement.
     \label{thm:peps_cycle_controlled_relative_walks}
     \lean{TNLean.PEPS.regularCycleControlledBoundaryMatrix_mul_coordinates_of_combined_relative_walk_words}
     \leanok
-    \uses{thm:peps_cycle_controlled_boundary,
-        thm:peps_regular_region_cycle_holonomy,
-        thm:peps_regular_boundary_route}
+    \uses{thm:peps_cycle_controlled_boundary,thm:peps_regular_region_cycle_holonomy,thm:peps_regular_boundary_route}
     Let $S$ be the complement of $R$, and identify their crossing bonds
     by the same native edges. Choose a region gauge $k_R$ and a rooted
     spanning tree in $S$, with normalized gauge $k_S$ and cycle residuals
@@ -314,7 +304,7 @@ common boundary factor, up to a single unitary acting on the complement.
         TNLean.PEPS.regularReferenceRegionAncilla_dotProduct,
         TNLean.PEPS.regularControlledProjectorCutMatrix_sum_factorization}
     \leanok
-    \uses{thm:peps_controlled_complement_boundary_factor, def:peps_regular_region_coordinates}
+    \uses{thm:peps_controlled_complement_boundary_factor,def:peps_regular_region_coordinates}
     Retain the same complement walk identities, and suppose
     every cycle residual in $R$ is the identity. Contract the
     two canonical region matrices, applying the fixed controlled
@@ -373,10 +363,7 @@ common boundary factor, up to a single unitary acting on the complement.
     \label{thm:peps_torus_controlled_boundary_factor}
     \lean{TNLean.PEPS.exists_unitary_torusControlledBoundaryFactor_of_isSimplyConnected_and_winding}
     \leanok
-    \uses{thm:peps_controlled_projector_cut_boundary_factor,
-        thm:peps_torus_region_realization,
-        thm:peps_torus_region_integer_lift_gauge,
-        thm:peps_torus_complement_cycle_words}
+    \uses{thm:peps_controlled_projector_cut_boundary_factor,thm:peps_torus_region_realization,thm:peps_torus_region_integer_lift_gauge,thm:peps_torus_complement_cycle_words}
     Let both torus dimensions be at least three. Suppose the
     closed-cell realization of $R$ is simply connected. Choose rooted
     spanning trees in $R$ and $S$, number their nonempty crossing bonds

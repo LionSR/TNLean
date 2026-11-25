@@ -81,8 +81,7 @@ it does not require real representation matrices.
         TNLean.PEPS.graphOrientedRegionCoordinateMatrix_maps_openBondSpace,
         TNLean.PEPS.graphOrientedRegionCoordinateMatrix_map_openBondSpace}
     \leanok
-    \uses{def:peps_oriented_coordinate_matrix,
-        def:peps_oriented_open_coefficients}
+    \uses{def:peps_oriented_coordinate_matrix,def:peps_oriented_open_coefficients}
     Suppose $Q^\dagger Q=1$ and $U,L$ are representations satisfying
     $L_g=QU_gQ^\dagger$. For $W=1$, internal factors obey
     $T_e(Q)I_e^U(q)=I_e^L(q)$, while crossing factors obey
@@ -108,8 +107,7 @@ it does not require real representation matrices.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_coordinate_swap,
-        thm:peps_oriented_coordinate_inverse}
+    \uses{thm:peps_oriented_coordinate_swap,thm:peps_oriented_coordinate_inverse}
     At a native head, $L_gQ=QU_g$, and at a native tail,
     $Q^\dagger L_g=U_gQ^\dagger$, with conjugates as specified by
     $B_{e,R}(Q)$, which gives~(\ref{eq:peps_oriented_boundary_coordinate}).
@@ -148,8 +146,7 @@ it does not require real representation matrices.
         TNLean.PEPS.regionOperatorBlock_graphNumberedBondFamilyMatrix_oriented_coordinates_maps,
         TNLean.PEPS.graphNumberedBondFamilyMatrix_oriented_coordinates_maps_regionParentGroundSpace}
     \leanok
-    \uses{def:peps_oriented_coordinate_exterior,
-        def:peps_oriented_bond_family}
+    \uses{def:peps_oriented_coordinate_exterior,def:peps_oriented_bond_family}
     The mixed product of crossing blocks and internal coordinate matrices
     is $b_R(Q;\gamma_Y,\gamma_X)T_R^o(Q)$.
     Under the hypotheses of
@@ -164,9 +161,7 @@ it does not require real representation matrices.
     No coverage condition is needed for this inclusion.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_bond_family_blocks,
-        thm:peps_oriented_coordinate_open,thm:peps_oriented_open_range,
-        thm:peps_parent_support_block_criterion}
+    \uses{thm:peps_oriented_bond_family_blocks,thm:peps_oriented_coordinate_open,thm:peps_oriented_open_range,thm:peps_parent_support_block_criterion}
     A crossing coefficient of $Q_e\otimes\overline{Q_e}$ factors
     into its fixed exterior entry and its retained endpoint entry, and
     taking their product gives~(\ref{eq:peps_oriented_coordinate_exterior}).
@@ -190,8 +185,7 @@ it does not require real representation matrices.
     is injective on the full source physical space.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_coordinate_inverse,
-        thm:peps_oriented_bond_family_algebra}
+    \uses{thm:peps_oriented_coordinate_inverse,thm:peps_oriented_bond_family_algebra}
     Each edge factor and its inverse cancel, as do the conjugated factors
     on reversed edges, so their global product
     cancels by Lemma~\ref{thm:peps_oriented_bond_family_algebra}.
@@ -205,8 +199,7 @@ it does not require real representation matrices.
         TNLean.PEPS.finrank_regionParentGroundSpace_oriented_coordinates_eq,
         TNLean.PEPS.map_ker_hamiltonian_ofPlace_oriented_coordinates_eq}
     \leanok
-    \uses{def:peps_oriented_coordinate_matrix,
-        def:peps_region_parent_interaction}
+    \uses{def:peps_oriented_coordinate_matrix,def:peps_region_parent_interaction}
     If $Q^\dagger Q=1$ and $L_g=QU_gQ^\dagger$ for representations
     $U,L$, then for every $\mathcal R$,
     \begin{align}
@@ -220,9 +213,7 @@ it does not require real representation matrices.
     ranges. Then $M_o(Q)\ker H_U=\ker H_L$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_coordinate_blocks,
-        thm:peps_oriented_global_coordinate_inverse,
-        thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_oriented_coordinate_blocks,thm:peps_oriented_global_coordinate_inverse,thm:peps_region_parent_common_kernel}
     Evaluating the intertwining identity at $1$ gives $QQ^\dagger=1$.
     Applying the block inclusion in both directions and cancelling the global
     coordinate matrices shows that the restriction of $M_o(Q)$ is bijective,

@@ -150,7 +150,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \label{thm:tripartite_observable_decorrelation_iff}
     \lean{TripartiteDecorrelation.isObservableDecorrelated_iff}
     \leanok
-    \uses{def:tripartite_observable_decorrelation, def:tripartite_decorrelation}
+    \uses{def:tripartite_observable_decorrelation,def:tripartite_decorrelation}
     Observable decorrelation holds if and only if its complex-linear extension
     holds.
 \end{lemma}
@@ -211,7 +211,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \lean{TripartiteDecorrelation.lift_marginalAX_eq_sum,
         TripartiteDecorrelation.lift_marginalXB_eq_sum}
     \leanok
-    \uses{def:tripartite_local_lifts, def:tripartite_marginals}
+    \uses{def:tripartite_local_lifts,def:tripartite_marginals}
     For matrix units on $A$ and $B$,
     \begin{align}
         \Id_A\otimes\rho_{XB}
@@ -245,7 +245,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \label{thm:tripartite_marginal_complementary_product_zero}
     \lean{TripartiteDecorrelation.IsDecorrelated.marginals_mul_complement_mul_eq_zero}
     \leanok
-    \uses{def:tripartite_decorrelation, thm:tripartite_marginal_matrix_units}
+    \uses{def:tripartite_decorrelation,thm:tripartite_marginal_matrix_units}
     If $A$ and $B$ are decorrelated, then
     $\widehat\rho_{XB}(\Id-P)\widehat\rho_{AX}=0$.
 \end{lemma}
@@ -267,7 +267,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \label{thm:tripartite_reverse_marginal_complementary_product_zero}
     \lean{TripartiteDecorrelation.IsDecorrelated.reverse_marginals_mul_complement_mul_eq_zero}
     \leanok
-    \uses{thm:tripartite_decorrelation_reverse, thm:tripartite_marginal_matrix_units}
+    \uses{thm:tripartite_decorrelation_reverse,thm:tripartite_marginal_matrix_units}
     If $P=P^\dagger$ and $A$ and $B$ are decorrelated, then
     $\widehat\rho_{AX}(\Id-P)\widehat\rho_{XB}=0$.
 \end{lemma}
@@ -301,7 +301,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \lean{TripartiteDecorrelation.IsDecorrelated.supports_mul_complement_mul_eq_zero,
         TripartiteDecorrelation.IsDecorrelated.reverse_supports_mul_complement_mul_eq_zero}
     \leanok
-    \uses{def:tripartite_marginal_supports, thm:tripartite_marginal_complementary_product_zero, thm:tripartite_reverse_marginal_complementary_product_zero}
+    \uses{def:tripartite_marginal_supports,thm:tripartite_marginal_complementary_product_zero,thm:tripartite_reverse_marginal_complementary_product_zero}
     If $P=P^\dagger$ and $A$ and $B$ are decorrelated, then
     \begin{align}
         \widehat P_{XB}(\Id-P)\widehat P_{AX}
@@ -353,7 +353,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \lean{TripartiteDecorrelation.liftSupportXB_mul_self,
         TripartiteDecorrelation.mul_liftSupportXB_self}
     \leanok
-    \uses{def:tripartite_local_lifts, def:tripartite_marginal_supports}
+    \uses{def:tripartite_local_lifts,def:tripartite_marginal_supports}
     For $P\geq0$,
     $\widehat P_{XB}P=P=P\widehat P_{XB}$.
 \end{lemma}
@@ -373,7 +373,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \lean{TripartiteDecorrelation.liftSupportAX_mul_self,
         TripartiteDecorrelation.mul_liftSupportAX_self}
     \leanok
-    \uses{def:tripartite_local_lifts, def:tripartite_marginal_supports}
+    \uses{def:tripartite_local_lifts,def:tripartite_marginal_supports}
     For $P\geq0$,
     $\widehat P_{AX}P=P=P\widehat P_{AX}$.
 \end{lemma}
@@ -393,7 +393,7 @@ $(H_A\otimes H_X)\otimes H_B$ whenever the $AX$ marginal is taken.
     \label{thm:tripartite_support_products}
     \lean{TripartiteDecorrelation.supportProducts_eq}
     \leanok
-    \uses{def:tripartite_marginal_supports, thm:tripartite_xb_support_absorption, thm:tripartite_ax_support_absorption, thm:tripartite_complementary_product_zero}
+    \uses{def:tripartite_marginal_supports,thm:tripartite_xb_support_absorption,thm:tripartite_ax_support_absorption,thm:tripartite_complementary_product_zero}
     If $P=P^\dagger=P^2$ and $A$ and $B$ are decorrelated relative to $P$, then
     \begin{align}
         \widehat P_{XB}\widehat P_{AX}

@@ -111,7 +111,7 @@ identity endpoints.
     \lean{MPSTensor.exists_hermitian_physical_generator,
         MPSTensor.condC1_hermitianUnitaryPath_of_intertwiner}
     \leanok
-    \uses{def:row_kraus_generator, def:condC1}
+    \uses{def:row_kraus_generator,def:condC1}
     Let $H=H^\dagger$ and $[L_H,E]=0$. There is a Hermitian physical
     matrix $K$ such that, for every physical index $i$ and real $t$,
     \begin{align}
@@ -149,7 +149,7 @@ identity endpoints.
     \end{tenkzequation}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:row_transfer_gram_realignment, thm:row_physical_virtual_actions}
+    \uses{thm:row_transfer_gram_realignment,thm:row_physical_virtual_actions}
     By Lemma~\ref{thm:row_transfer_gram_realignment}, $L_H$ commutes
     with $G=FF^\dagger$. The Hermitian lift criterion of the companion
     quantum-channel volume~\cite[``Hermitian intertwiners of rectangular
@@ -258,8 +258,7 @@ identity endpoints.
     \lean{MPSTensor.pureCanonical_continuous_generator_identity_endpoints,
         MPSTensor.hasPhysicalStringOrder_of_continuous_generator}
     \leanok
-    \uses{def:row_kraus_generator, def:condC1,
-        def:has_physical_string_order}
+    \uses{def:row_kraus_generator,def:condC1,def:has_physical_string_order}
     Let $D>0$, $\E_A(\Id)=\Id$, $\Lambda>0$, $\tr\Lambda=1$, and
     $\E_A^*(\Lambda)=\Lambda$. Assume the simple-peripheral purity
     property: whenever $X\ne0$, $|\lambda|=1$, and
@@ -281,11 +280,7 @@ identity endpoints.
     endpoints in the sense of Definition~\ref{def:has_physical_string_order}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:continuous_physical_generator,
-        thm:scalar_physical_commutator_rigidity,
-        thm:physical_block_order_pure_canonical,
-        thm:virtual_path_trace_nonzero,
-        thm:identity_endpoint_complex_limit}
+    \uses{thm:continuous_physical_generator,thm:scalar_physical_commutator_rigidity,thm:physical_block_order_pure_canonical,thm:virtual_path_trace_nonzero,thm:identity_endpoint_complex_limit}
     Lemma~\ref{thm:continuous_physical_generator} provides the Hermitian
     generator $K$.
     Purity makes every fixed matrix scalar. If $K=c\Id$, the

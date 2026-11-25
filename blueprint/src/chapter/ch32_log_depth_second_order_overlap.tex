@@ -73,9 +73,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
         MPSTensor.norm_eq_of_forall_abs_norm_sub_le_pow,
         MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq}
     \leanok
-    \uses{thm:ldp_unit_vector_deficit, lem:ldp_overlapping_positive_part, lem:ldp_overlapping_overlaps,
-        thm:ldp_idempotent_compressed_second_order,
-        thm:ldp_positive_part_overlap_second_order, def:prep_fixed_point_tensor}
+    \uses{thm:ldp_unit_vector_deficit,lem:ldp_overlapping_positive_part,lem:ldp_overlapping_overlaps,thm:ldp_idempotent_compressed_second_order,thm:ldp_positive_part_overlap_second_order,def:prep_fixed_point_tensor}
     \begin{enumerate}
         \item For a $D^2\times D^2$ matrix $H$, read as a tensor $X$ with physical index the
               output pair, and a $D\times D$ matrix $\sigma$, the mixed transfer map of $X$
@@ -151,8 +149,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
         MPSTensor.norm_sq_sub_norm_inner_sq_div_le,
         MPSTensor.exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le}
     \leanok
-    \uses{lem:ldp_overlapping_overlaps, lem:ldp_overlapping_overlaps_second_order,
-        lem:ldp_mixed_transfer_decay, thm:ldp_approximation_error_normal}
+    \uses{lem:ldp_overlapping_overlaps,lem:ldp_overlapping_overlaps_second_order,lem:ldp_mixed_transfer_decay,thm:ldp_approximation_error_normal}
     In the setting of Lemma~\ref{lem:ldp_overlapping_positive_part} with weights one, let
     $\phi_N$ be the periodic state of $A$.
     \begin{enumerate}
@@ -198,9 +195,7 @@ with $c>2$ \cite{gap:mswc24_block_form_mixed_overlap}.
         MPSTensor.one_sub_norm_nonNormalApproxOverlap_blockSum_le,
         MPSTensor.one_sub_div_le_two_mul_of_sq_sub_sq_le}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, lem:ldp_overlapping_overlaps,
-        lem:ldp_overlapping_overlaps_second_order,
-        lem:ldp_overlapping_one_block_second_order, def:correlation_length}
+    \uses{def:ldp_non_normal_fixed_point,lem:ldp_overlapping_overlaps,lem:ldp_overlapping_overlaps_second_order,lem:ldp_overlapping_one_block_second_order,def:correlation_length}
     In the setting of Lemma~\ref{thm:ldp_approximation_error_overlapping_corrected}, let
     $0<\gamma<1$. There are constants $C,C'>0$ such that for every
     block length $q$ and every $M\ge1$, with $N=qM$ and $y=Me^{-2\gamma q/\xi}$, which is

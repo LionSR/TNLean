@@ -3,7 +3,7 @@
 \begin{lemma}[Ground-space map injectivity]\label{thm:ground_space_map_injective}
     \lean{MPSTensor.groundSpaceMap_injective}
     \leanok
-    \uses{def:ground_space_map, def:injective}
+    \uses{def:ground_space_map,def:injective}
     If $A$ is injective and $L \ge 1$, then $\Gamma_L$ is injective.
 \end{lemma}
 
@@ -18,7 +18,7 @@
     \label{thm:ground_space_map_injective_word_span}
     \lean{MPSTensor.groundSpaceMap_injective_of_wordSpan_eq_top}
     \leanok
-    \uses{def:ground_space_map, def:word_span}
+    \uses{def:ground_space_map,def:word_span}
     If the length-$L$ products $\{A^\sigma : |\sigma| = L\}$ span $\MN{D}$, then
     $\Gamma_L$ is injective.
 \end{lemma}
@@ -34,13 +34,13 @@
     \label{thm:ground_space_map_injective_blk}
     \lean{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective}
     \leanok
-    \uses{def:ground_space_map, def:l_blk_injective}
+    \uses{def:ground_space_map,def:l_blk_injective}
     If $A$ is $L_0$-block injective, then $\Gamma_{L_0}$ is injective.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_map_injective_word_span, lem:wordspan_blk_inj}
+    \uses{thm:ground_space_map_injective_word_span,lem:wordspan_blk_inj}
     Lemma~\ref{lem:wordspan_blk_inj} identifies $L_0$-block injectivity with
     the word-span hypothesis of
     Lemma~\ref{thm:ground_space_map_injective_word_span}.
@@ -49,7 +49,7 @@
 \begin{lemma}[Ground-space dimension]\label{thm:ground_space_finrank_eq}
     \lean{MPSTensor.groundSpace_finrank_eq}
     \leanok
-    \uses{thm:ground_space_map_injective, lem:ground_space_finrank_le}
+    \uses{thm:ground_space_map_injective,lem:ground_space_finrank_le}
     If $A$ is injective and $L \ge 1$, then $\dim G_L(A) = D^2$.
 \end{lemma}
 
@@ -97,7 +97,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \label{thm:ground_space_grow_back}
     \lean{MPSTensor.mem_groundSpace_succ_of_intertwine}
     \leanok
-    \uses{def:ground_space_map, def:ground_space_parent}
+    \uses{def:ground_space_map,def:ground_space_parent}
     Let $\psi$ be a vector on $K+1$ sites and let $Y_i,Z_j\in\MN{D}$ satisfy
     $\psi(i,\tau)=\Gamma_{K}(Y_i)(\tau)$ for all letters $i$ and words $\tau$
     of length $K$, and $A^jY_i=Z_jA^i$ for all letters $i,j$. If matrices
@@ -125,7 +125,7 @@ only through the choice of the matrices $R_j$ in the second one.
 \begin{lemma}[One inclusion of the intersection property]\label{thm:ground_space_intersection}
     \lean{MPSTensor.groundSpace_intersection}
     \leanok
-    \uses{thm:ground_space_map_injective, def:in_left_ground, def:in_right_ground, def:ground_space_parent, def:injective}
+    \uses{thm:ground_space_map_injective,def:in_left_ground,def:in_right_ground,def:ground_space_parent,def:injective}
     If $A$ is injective and $L \ge 2$, then the nontrivial inclusion in the
     intersection property holds:
     \begin{align}
@@ -137,7 +137,7 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_restriction_overlap, thm:ground_space_grow_back}
+    \uses{thm:ground_space_restriction_overlap,thm:ground_space_grow_back}
     Comparing the left and right restrictions on their common $(L-1)$-site
     overlap determines a boundary matrix $X'$ that reconstructs the
     full $(L+1)$-site word:
@@ -190,7 +190,7 @@ only through the choice of the matrices $R_j$ in the second one.
 \begin{theorem}[Intersection property]\label{thm:ground_space_iff}
     \lean{MPSTensor.groundSpace_iff_left_right}
     \leanok
-    \uses{lem:ground_space_in_left_ground, lem:ground_space_in_right_ground, thm:ground_space_intersection}
+    \uses{lem:ground_space_in_left_ground,lem:ground_space_in_right_ground,thm:ground_space_intersection}
     For injective $A$ and $L \ge 2$,
     $G_L^{\mathrm{left}}\cap G_L^{\mathrm{right}} = G_{L+1}(A)$,
     equivalently, $\psi \in G_{L+1}(A)$ if and only if
@@ -310,7 +310,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_product_common_background}
     \lean{MPSTensor.adjacent_cyclicRestrictₗ_witness_product_common_background_named}
     \leanok
-    \uses{rem:cyclic_window_operators, def:ground_space_parent, def:l_blk_injective}
+    \uses{rem:cyclic_window_operators,def:ground_space_parent,def:l_blk_injective}
     If a cyclic $(L+1)$-window is represented by a boundary matrix $Y$, then
     deleting one endpoint gives
     \begin{align}
@@ -368,7 +368,7 @@ only through the choice of the matrices $R_j$ in the second one.
 \begin{definition}[Suffix ground membership]\label{def:in_tail_ground}
     \lean{MPSTensor.InTailGround}
     \leanok
-    \uses{def:tail_restrict_parent, def:ground_space_parent}
+    \uses{def:tail_restrict_parent,def:ground_space_parent}
     A state $\psi$ on $K+L$ sites lies in the suffix ground condition if every
     fixed prefix $u$ gives a suffix state in $G_L(A)$.
 \end{definition}
@@ -379,7 +379,7 @@ only through the choice of the matrices $R_j$ in the second one.
         MPSTensor.tailRestrictₗ_groundSpaceMap,
         MPSTensor.groundSpace_inTailGround}
     \leanok
-    \uses{def:in_tail_ground, def:ground_space_parent}
+    \uses{def:in_tail_ground,def:ground_space_parent}
     If $\psi \in G_{K+L}(A)$, then every fixed-prefix suffix restriction of
     $\psi$ lies in $G_L(A)$. For a vector in $G_{L+1}(A)$, fixing either
     endpoint gives the expected left or right multiplication of its boundary
@@ -398,7 +398,7 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{remark}[Ground-space contiguous-window restriction]
     \label{rem:contiguous_restriction_ground_space_map_intersection}
-    \uses{thm:contiguous_restriction_ground_space_map, def:ground_space_map, def:ground_space_parent, rem:contiguous_window_operators}
+    \uses{thm:contiguous_restriction_ground_space_map,def:ground_space_map,def:ground_space_parent,rem:contiguous_window_operators}
     The two-sided window restriction is recorded in the martingale chapter as
     Lemma~\ref{thm:contiguous_restriction_ground_space_map}: for sites
     $s,L,N$ with $s+L \le N$, a full configuration $\tau$ specifying the
@@ -426,7 +426,7 @@ only through the choice of the matrices $R_j$ in the second one.
 \begin{lemma}[Left-tail compatibility]\label{lem:left_tail_compatibility}
     \lean{MPSTensor.exists_left_tail_compatibility}
     \leanok
-    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    \uses{def:in_left_ground,def:in_tail_ground,def:ground_space_parent}
     Assume $\psi$ on $K+L_0+1$ sites satisfies the left ground condition on the
     first $K+L_0$ sites and the suffix ground condition on every fixed prefix of
     length $K$. Then there exist matrices $(Z_j)_j$ and $(Y_u)_u$ with the two
@@ -481,7 +481,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \label{thm:ground_space_extend_right_block_injective}
     \lean{MPSTensor.groundSpace_extend_right_of_isNBlkInjective}
     \leanok
-    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    \uses{def:in_left_ground,def:in_tail_ground,def:ground_space_parent}
     Assume $A$ is $L_0$-block-injective with $L_0 > 0$. If an element $\psi$
     on $K+L_0+1$ sites satisfies the left ground condition on the first
     $K+L_0$ sites and the suffix ground condition on every prefix of length
@@ -490,7 +490,7 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    \uses{lem:left_tail_compatibility, thm:right_factor_word_compatibility}
+    \uses{lem:left_tail_compatibility,thm:right_factor_word_compatibility}
     Lemma~\ref{lem:left_tail_compatibility} produces matrices $(Z_j)_j$ and
     $(Y_u)_u$ with $Z_jA^u=A^jY_u$ for every prefix word $u$ of length $K$.
     Lemma~\ref{thm:right_factor_word_compatibility} gives a common right
@@ -508,7 +508,7 @@ only through the choice of the matrices $R_j$ in the second one.
         MPSTensor.openChainLeftGroundProjectionES,
         MPSTensor.openChainTailGroundProjectionES}
     \leanok
-    \uses{def:in_left_ground, def:in_tail_ground, def:ground_space_parent}
+    \uses{def:in_left_ground,def:in_tail_ground,def:ground_space_parent}
     For every $L\in\N$, let $\mathcal U_L(A)$ be the subspace of the
     $(L+1)$-site Hilbert space whose corresponding functions satisfy the left
     ground condition: every fixed-final-site restriction belongs to $G_L(A)$.
@@ -524,7 +524,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \label{thm:mem_open_chain_left_ground_space_es}
     \lean{MPSTensor.mem_openChainLeftGroundSpaceES_iff}
     \leanok
-    \uses{def:open_chain_ground_subspaces_es, def:in_left_ground}
+    \uses{def:open_chain_ground_subspaces_es,def:in_left_ground}
     Under the $\ell^2$ coordinate identification, a Hilbert-space vector
     belongs to $\mathcal U_L(A)$ exactly when the corresponding function
     satisfies the left ground condition: every fixed-final-site restriction
@@ -541,7 +541,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \label{thm:mem_open_chain_tail_ground_space_es}
     \lean{MPSTensor.mem_openChainTailGroundSpaceES_iff}
     \leanok
-    \uses{def:open_chain_ground_subspaces_es, def:in_tail_ground}
+    \uses{def:open_chain_ground_subspaces_es,def:in_tail_ground}
     Under the $\ell^2$ coordinate identification, a Hilbert-space vector
     belongs to $\mathcal V_{K,L}(A)$ exactly when the corresponding function
     satisfies the tail ground condition: every fixed-prefix restriction
@@ -558,7 +558,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \label{thm:open_chain_left_tail_ground_intersection}
     \lean{MPSTensor.openChainLeft_inf_tailGroundSpaceES}
     \leanok
-    \uses{def:open_chain_ground_subspaces_es, def:ground_space_es, def:l_blk_injective}
+    \uses{def:open_chain_ground_subspaces_es,def:ground_space_es,def:l_blk_injective}
     If $D\ge1$, $A$ is $L_0$-block-injective, and $L_0>0$, then
     \begin{align}
         \mathcal U_{K+L_0}(A)\cap\mathcal V_{K,L_0+1}(A)
@@ -571,7 +571,7 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    \uses{thm:mem_open_chain_left_ground_space_es, thm:mem_open_chain_tail_ground_space_es, lem:mem_ground_space_es, thm:ground_space_extend_right_block_injective, lem:ground_space_in_left_ground, lem:ground_space_in_tail_ground}
+    \uses{thm:mem_open_chain_left_ground_space_es,thm:mem_open_chain_tail_ground_space_es,lem:mem_ground_space_es,thm:ground_space_extend_right_block_injective,lem:ground_space_in_left_ground,lem:ground_space_in_tail_ground}
     The forward inclusion is the growing-back step at the injectivity length.
     Conversely, a vector in the longer ground space remains in the ground
     space after every left or tail restriction.
@@ -581,7 +581,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \label{thm:normal_open_chain_range_reduction}
     \lean{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}
     \leanok
-    \uses{thm:ground_space_extend_right_block_injective, def:l_blk_injective, rem:contiguous_window_operators}
+    \uses{thm:ground_space_extend_right_block_injective,def:l_blk_injective,rem:contiguous_window_operators}
     Let $A$ be $L_0$-block-injective with $D \ge 1$ and $L_0 > 0$.
     If an $N$-site state satisfies the ground-space constraint on every
     non-wrapping contiguous interval of length $L_0+1$, for every fixed choice
@@ -590,7 +590,7 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_extend_right_block_injective, def:tail_restrict_parent, rem:contiguous_window_operators}
+    \uses{thm:ground_space_extend_right_block_injective,def:tail_restrict_parent,rem:contiguous_window_operators}
     By induction on the number of sites beyond $L_0+1$, the induction
     hypothesis gives the long left-window ground condition after deleting the
     last site, while Definition~\ref{def:tail_restrict_parent} and
@@ -630,7 +630,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \label{lem:periodic_constraints_propagated_subspace_sequence}
     \lean{MPSTensor.chainGroundSpace_le_of_local_le_restriction_intersection_submodules}
     \leanok
-    \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
+    \uses{lem:open_chain_iteration_subspace_sequence,rem:cyclic_window_operators}
     Let $S_m\subseteq(\C^d)^{\otimes m}$ be subspaces, and let $0<L\le N$.
     Suppose that $G_L(A)\subseteq S_L$. Suppose also that, for every $m\ge L$,
     $(\C^d\otimes S_m)\cap (S_m\otimes\C^d) = S_{m+1}$.
@@ -640,7 +640,7 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    \uses{lem:open_chain_iteration_subspace_sequence, rem:cyclic_window_operators}
+    \uses{lem:open_chain_iteration_subspace_sequence,rem:cyclic_window_operators}
     If $\psi\in\mathcal G_{N,L}(A)$, then every length-$L$ cyclic interval of
     $\psi$ lies in $G_L(A)$, and hence in $S_L$. A non-wrapping interval is the
     cyclic interval starting at the same site. Therefore, all non-wrapping
@@ -673,7 +673,7 @@ only through the choice of the matrices $R_j$ in the second one.
     \label{thm:cyclic_normal_open_chain_range_reduction}
     \lean{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}
     \leanok
-    \uses{lem:cyclic_window_range_antitonicity, thm:normal_open_chain_range_reduction}
+    \uses{lem:cyclic_window_range_antitonicity,thm:normal_open_chain_range_reduction}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D \ge 1$.
     If an $N$-site periodic-chain state satisfies all cyclic ground-space
     constraints at some range $L_0+1\le L\le N$, then it lies in the
@@ -682,7 +682,7 @@ only through the choice of the matrices $R_j$ in the second one.
 
 \begin{proof}
     \leanok
-    \uses{lem:cyclic_window_range_antitonicity, thm:normal_open_chain_range_reduction}
+    \uses{lem:cyclic_window_range_antitonicity,thm:normal_open_chain_range_reduction}
     Lemma~\ref{lem:cyclic_window_range_antitonicity} reduces the cyclic
     hypotheses to range $L_0+1$. On every non-wrapping interval, the cyclic and
     contiguous restriction maps agree, so

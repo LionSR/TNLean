@@ -73,9 +73,7 @@ The scanner estimate of \cite[Proposition~9.2]{OpenAI2026AreaLaw} selects a char
 
 \begin{proof}
     \leanok
-    \uses{thm:arealaw-source-selected-energy,thm:arealaw-supplied-target-norm-bounds,
-        thm:al_scan_common_status_budget,thm:al_positive_prefix_entropy_transfer,
-        thm:al_scan_actual_rough_upper,thm:al_augmented_prevector_norm,thm:al_lattice_counts}
+    \uses{thm:arealaw-source-selected-energy,thm:arealaw-supplied-target-norm-bounds,thm:al_scan_common_status_budget,thm:al_positive_prefix_entropy_transfer,thm:al_scan_actual_rough_upper,thm:al_augmented_prevector_norm,thm:al_lattice_counts}
     Choose $C_{\rm tr}$ from Lemma~\ref{thm:arealaw-source-selected-energy} before fixing $q$.
     By Lemma~\ref{thm:al_lattice_counts}, range-$R$ anchor multiplicity is at most $\mu_*=2^{2R(R+1)}$; setting $C_1=3\mu_*+1$ and applying Lemma~\ref{thm:arealaw-source-selected-energy} with entropy coefficient $\max\{C_e,1\}$ yields $\widetilde\Omega$, $E$, $\lambda_k$, and a selected point satisfying (\ref{eq:al_scanner_source_trace_distance}), $1-n^{-100}\le z\le1$, $\|\mathrm{pre}_k\|\le1$ (Lemma~\ref{thm:al_augmented_prevector_norm}), and (\ref{eq:al_scanner_source_energy}).
 

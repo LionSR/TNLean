@@ -96,7 +96,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \lean{MPSTensor.transferMap_fixedPointTensor_apply}
     \lean{MPSTensor.transferMap_fixedPointTensor}
     \leanok
-    \uses{def:prep_fixed_point_tensor, def:transfer_map}
+    \uses{def:prep_fixed_point_tensor,def:transfer_map}
     Let $\sigma$ be positive semidefinite. Then
     $\E_{P_\infty}(X)=\tr(X)\,\sigma$ for every $X\in\MN{D}$. As in
     \cite{Malz2024Preparation}, when $\tr\sigma=1$, $\E_{P_\infty}$ is the
@@ -119,7 +119,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \label{thm:prep_mpv_fixed_point_tensor}
     \lean{MPSTensor.mpv_fixedPointTensor}
     \leanok
-    \uses{def:prep_fixed_point_tensor, def:prep_pair_product_state, def:mpv}
+    \uses{def:prep_fixed_point_tensor,def:prep_pair_product_state,def:mpv}
     Let $\sigma\in\MN{D}$ and $N\ge1$. For every configuration $c$ of the
     physical pairs $c_k=(l_k,r_k)$ on $N$ sites,
     $V^{(N)}(P_\infty)_c=\Omega(c)$, where $\Omega$ is the pair product
@@ -188,16 +188,14 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \lean{MPSTensor.isTransferIdempotent_fixedPointTensor}
     \lean{MPSTensor.hasPhysicalBlockingIsometry_fixedPointTensor}
     \leanok
-    \uses{def:prep_fixed_point_tensor, def:mps_transfer_idempotence,
-        def:physical_blocking_isometry}
+    \uses{def:prep_fixed_point_tensor,def:mps_transfer_idempotence,def:physical_blocking_isometry}
     Let $\sigma$ be positive semidefinite with $\tr\sigma=1$. Then
     $\E_{P_\infty}^2=\E_{P_\infty}$, and $P_\infty$ has a physical blocking
     isometry.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:prep_transfer_fixed_point_tensor,
-        thm:physical_blocking_isometry_iff_transfer_idempotence}
+    \uses{thm:prep_transfer_fixed_point_tensor,thm:physical_blocking_isometry_iff_transfer_idempotence}
     By Lemma~\ref{thm:prep_transfer_fixed_point_tensor},
     $\E_{P_\infty}$ is the projection $X\mapsto\tr(X)\,\sigma$, which is
     idempotent because $\tr\sigma=1$. The physical blocking isometry
@@ -246,7 +244,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:prep_bond_regrouping, thm:prep_pair_norm}
+    \uses{def:prep_bond_regrouping,thm:prep_pair_norm}
     Expanding $\braket{\omega}{\omega'}^N$ as a sum over bond configurations
     $(p_k)_k$ of $\prod_k\overline{\omega_{p_k}}\omega'_{p_k}$ and
     reindexing along the bond regrouping of
@@ -259,8 +257,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \label{thm:prep_blocked_transfer_limit_gap}
     \lean{MPSTensor.tendsto_transferMap_blockTensor_of_spectralRadius_lt_one}
     \leanok
-    \uses{def:prep_fixed_point_tensor, def:blocked_tensor,
-        def:left_canonical_tensor}
+    \uses{def:prep_fixed_point_tensor,def:blocked_tensor,def:left_canonical_tensor}
     Let $A$ be left-canonical, let $\sigma$ be positive semidefinite with
     $\tr\sigma=1$ and $\E_A(\sigma)=\sigma$, and suppose that
     $\E_A-\E_{P_\infty}$ has spectral radius less than one. As in
@@ -270,7 +267,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:prep_transfer_fixed_point_tensor, thm:blocked_transfer_map}
+    \uses{thm:prep_transfer_fixed_point_tensor,thm:blocked_transfer_map}
     With $P=\E_{P_\infty}$, the projection $X\mapsto\tr(X)\,\sigma$ of
     Lemma~\ref{thm:prep_transfer_fixed_point_tensor}, the powers of an
     operator of spectral radius less than one tend to zero, so
@@ -285,8 +282,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
     \lean{MPSTensor.tendsto_transferMap_blockTensor_of_isPrimitive,
         MPSTensor.isNormalTensor_of_isIrreducibleFamily_leftCanonical}
     \leanok
-    \uses{def:prep_fixed_point_tensor, def:blocked_tensor,
-        def:left_canonical_tensor, def:irreducible_tensor, def:nt_cpsv}
+    \uses{def:prep_fixed_point_tensor,def:blocked_tensor,def:left_canonical_tensor,def:irreducible_tensor,def:nt_cpsv}
     Let $A$ be irreducible and left-canonical, with $1$ the only eigenvalue
     of $\E_A$ of modulus one. Then $A$ is a normal tensor in the sense of
     Definition~\ref{def:nt_cpsv}, since $\E_A$ is a channel and so has
@@ -297,8 +293,7 @@ periodic state factors into a product of nearest-neighbor entangled pairs.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:prep_blocked_transfer_limit_gap,
-        thm:prep_transfer_fixed_point_tensor}
+    \uses{thm:prep_blocked_transfer_limit_gap,thm:prep_transfer_fixed_point_tensor}
     The transfer map of a left-canonical tensor is a channel, and it is
     irreducible because $A$ is. By the complementary transfer-map gap for
     primitive maps~\cite[``Complementary transfer-map gap for primitive maps'']{QICLean2026Blueprint},

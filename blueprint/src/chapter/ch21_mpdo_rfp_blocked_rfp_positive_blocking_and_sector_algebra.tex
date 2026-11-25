@@ -60,7 +60,7 @@ physical indices, as in
     \lean{MPOTensor.toMPSTensor_blockTensor}
     \lean{MPOTensor.isInjective_toMPSTensor_blockTensor_iff}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:blocked_tensor}
+    \uses{def:mpdo_physical_blocking,def:blocked_tensor}
     For every integer $L\geq0$, pairing the ket and bra letters site by site
     gives the bijection
     \begin{align}
@@ -86,7 +86,7 @@ physical indices, as in
     \label{thm:mpdo_blocking_product}
     \lean{MPOTensor.blockTensor_mulTensor}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpdo_operator_product}
+    \uses{def:mpdo_physical_blocking,def:mpdo_operator_product}
     For every integer $L\geq0$ and two MPO tensors $M,N$ with the same
     physical dimension, let juxtaposition denote the MPO tensor product
     obtained by contracting the intermediate physical index. Then
@@ -106,7 +106,7 @@ physical indices, as in
     \label{thm:mpo_eval_word_block}
     \lean{MPOTensor.evalWord_blockTensor_ofFn}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpo_eval_word}
+    \uses{def:mpdo_physical_blocking,def:mpo_eval_word}
     Let $L\geq0$, and let $\sigma=(\sigma_0,\ldots,\sigma_{m-1})$ and
     $\tau=(\tau_0,\ldots,\tau_{m-1})$ be words of the same length $m$ in the
     blocked alphabet, so that each $\sigma_k$ and each $\tau_k$ is a word of
@@ -142,7 +142,7 @@ physical indices, as in
     \lean{MPOTensor.mpo_blockTensor_eq_reindex}
     \lean{MPOTensor.IsMPDO.blockTensor}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpo_family, def:mpdo}
+    \uses{def:mpdo_physical_blocking,def:mpo_family,def:mpdo}
     Let $L\in\N$, and let
     \begin{align}
         \Phi_{N,L}\colon
@@ -167,7 +167,7 @@ physical indices, as in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpo_eval_word_block, lem:eval_word_block}
+    \uses{thm:mpo_eval_word_block,lem:eval_word_block}
     The word of $N$ blocked letters $\sigma=(\sigma_0,\ldots,\sigma_{N-1})$
     has concatenation $\Phi_{N,L}(\sigma)$, and similarly for $\tau$; this
     concatenation is the blocked-configuration bijection of
@@ -187,7 +187,7 @@ physical indices, as in
     \label{lem:mpdo_physical_blocking_residuals}
     \lean{MPOTensor.mpo_apply_prefix_blockTensor_suffix}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpo_family, def:mpo_eval_word}
+    \uses{def:mpdo_physical_blocking,def:mpo_family,def:mpo_eval_word}
     Let a chain consist of a prefix of $p$ sites, $m$ complete blocks of
     length $L$, and a suffix of $s$ sites. Write $M^{\alpha,\beta}$ for the
     ordered product of matrices indexed by two equally long physical
@@ -208,7 +208,7 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpo_eval_word_append, thm:mpo_eval_word_block, lem:eval_word_block}
+    \uses{lem:mpo_eval_word_append,thm:mpo_eval_word_block,lem:eval_word_block}
     The concatenations $\widetilde\sigma,\widetilde\tau$ are identified with
     the flattened blocked configurations by Lemma~\ref{lem:eval_word_block}.
     Applying word concatenation at the two boundaries
@@ -247,7 +247,7 @@ physical indices, as in
     \lean{MPOTensor.mpo_blockTwo_eq_reindex_blockTensor}
     \lean{MPOTensor.IsMPDO.blockTwo}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking, def:mpdo}
+    \uses{def:mpdo_physical_blocking,def:mpdo_two_site_blocking,def:mpdo}
     Let $\varphi:\{0,\ldots,d^2-1\}\to
         \{0,\ldots,d-1\}^2$ be the canonical bijection. Then
     $(K^{[2]})^{i,j}
@@ -271,7 +271,7 @@ physical indices, as in
     \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTensor}
     \lean{MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTwo}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking, thm:mpdo_blocking_doubled_index, thm:mpdo_block_two_as_positive_blocking, thm:cpsv_physical_reindexing, thm:cpsv_literal_canonical_form_positive_blocking}
+    \uses{def:mpdo_physical_blocking,def:mpdo_two_site_blocking,thm:mpdo_blocking_doubled_index,thm:mpdo_block_two_as_positive_blocking,thm:cpsv_physical_reindexing,thm:cpsv_literal_canonical_form_positive_blocking}
     Let $A_M$ be the doubled-index MPS tensor associated to an MPO tensor
     $M$. If $A_M$ is in CPSV canonical form and $L\geq1$, then the
     doubled-index MPS tensor associated to $M^{[L]}$ is again in CPSV
@@ -280,7 +280,7 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking, thm:mpdo_blocking_doubled_index, thm:mpdo_block_two_as_positive_blocking, thm:cpsv_physical_reindexing, thm:cpsv_literal_canonical_form_positive_blocking}
+    \uses{def:mpdo_physical_blocking,def:mpdo_two_site_blocking,thm:mpdo_blocking_doubled_index,thm:mpdo_block_two_as_positive_blocking,thm:cpsv_physical_reindexing,thm:cpsv_literal_canonical_form_positive_blocking}
     The doubled-index tensor of $M^{[L]}$ is, under the canonical pairing of
     ket and bra words, a physical relabeling of $A_M^{[L]}$:
     \begin{align}
@@ -301,7 +301,7 @@ physical indices, as in
     \label{thm:mpdo_literal_cpsv_vertical_decomposition}
     \lean{MPOTensor.HasVerticalBNTGroupingInputs.exists_cpsvVerticalDecomposition}
     \leanok
-    \uses{def:vertical_bnt_grouping_with_isometry, def:grouped_corner_gram_dressing, def:vertical_tensor_mpdo, def:bnt_cpsv}
+    \uses{def:vertical_bnt_grouping_with_isometry,def:grouped_corner_gram_dressing,def:vertical_tensor_mpdo,def:bnt_cpsv}
     Suppose that $M$ admits the phase-class grouping with physical isometries
     of Definition~\ref{def:vertical_bnt_grouping_with_isometry} and the
     grouped-corner Gram comparison of
@@ -328,7 +328,7 @@ physical indices, as in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:normalized_grouped_sector_maps_of_dressing, lem:same_mpv_exact_isometric_decomposition}
+    \uses{thm:normalized_grouped_sector_maps_of_dressing,lem:same_mpv_exact_isometric_decomposition}
     Group the normal vertical corners into phase classes and normalize their
     physical sector maps. The exact original-sector reconstruction gives
     positive-length matrix-product-vector equality with the corresponding
@@ -351,7 +351,7 @@ decompositions simultaneously.
     \label{lem:mpdo_horizontal_cf_block_two}
     \lean{MPOTensor.IsHorizontalCF.blockTwo}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:mpdo_two_site_blocking, thm:sector_bnt_cf_block_tensor}
+    \uses{def:horizontal_cf_mpdo,def:mpdo_two_site_blocking,thm:sector_bnt_cf_block_tensor}
     If an MPO tensor $K$ is in normalized BNT-refined horizontal form, then its
     two-site blocking $K^{[2]}$ is again in that form.
 \end{lemma}
@@ -379,7 +379,7 @@ decompositions simultaneously.
     \label{thm:mpdo_vertical_cf_before_after_block_two}
     \lean{MPOTensor.verticalCF_and_blockTwo_of_horizontalCF}
     \leanok
-    \uses{thm:vertical_cf_of_horizontal_cf, thm:mpdo_block_two_as_positive_blocking, lem:mpdo_horizontal_cf_block_two}
+    \uses{thm:vertical_cf_of_horizontal_cf,thm:mpdo_block_two_as_positive_blocking,lem:mpdo_horizontal_cf_block_two}
     Let $K$ be an MPO tensor in normalized BNT-refined horizontal form that
     generates matrix product density operators. Then both $K$ and $K^{[2]}$
     satisfy the
@@ -563,7 +563,7 @@ decompositions simultaneously.
     \lean{MPOTensor.weightedVerticalBondContractionProduct}
     \lean{MPOTensor.WeightedVerticalBondContractionProductSpanTop}
     \leanok
-    \uses{def:mpdo_normalized_vertical_sector_maps, def:mpdo_vertical_bond_matrix_contraction}
+    \uses{def:mpdo_normalized_vertical_sector_maps,def:mpdo_vertical_bond_matrix_contraction}
     For vertical BNT tensors $M_\alpha$ with simple matrix algebras
     $M_{d_\alpha}$ and a family of complex scalars $(c_\alpha)_\alpha$, define
     \begin{align}
@@ -626,7 +626,7 @@ decompositions simultaneously.
     \label{lem:mpdo_weighted_contraction_matrix_unit_words}
     \lean{MPOTensor.weightedVerticalBondContractionProduct_single}
     \leanok
-    \uses{def:mpdo_weighted_vertical_contraction_products, lem:mpdo_vertical_bond_contraction_encoded_matrix_unit}
+    \uses{def:mpdo_weighted_vertical_contraction_products,lem:mpdo_vertical_bond_contraction_encoded_matrix_unit}
     For a word $w=((a_1,b_1),\ldots,(a_L,b_L))$,
     \begin{align}
         V_c(E_{b_1a_1})\cdots V_c(E_{b_La_L})
@@ -640,7 +640,7 @@ decompositions simultaneously.
     \lean{MPOTensor.%
         weightedVerticalBondContractionProductSpanTop_of_wordTupleSpanTop}
     \leanok
-    \uses{def:mpdo_vertical_sector_scaling_equivalence, lem:mpdo_weighted_contraction_matrix_unit_words}
+    \uses{def:mpdo_vertical_sector_scaling_equivalence,lem:mpdo_weighted_contraction_matrix_unit_words}
     Fix $L\geq0$ and suppose that every $c_\alpha$ is nonzero. If the
     simultaneous word tuples $(M_\alpha^w)_\alpha$ of length $L$ span
     $\prod_\alpha M_{d_\alpha}$, then
@@ -652,7 +652,7 @@ decompositions simultaneously.
     \lean{MPOTensor.%
         exists_positive_weightedVerticalBondContractionProductSpanTop_of_bnt}
     \leanok
-    \uses{def:bnt_cpsv, def:mpdo_weighted_vertical_contraction_products}
+    \uses{def:bnt_cpsv,def:mpdo_weighted_vertical_contraction_products}
     Suppose that $(M_\alpha)_\alpha$ is a basis of normal tensors and that
     $(c_\alpha)_\alpha$ is any family of nonzero complex scalars. Then there
     is a positive integer $L$ such that
@@ -660,7 +660,7 @@ decompositions simultaneously.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_weighted_contraction_span_transfer, thm:cpsv_bnt_blocked_simultaneous_span}
+    \uses{lem:mpdo_weighted_contraction_span_transfer,thm:cpsv_bnt_blocked_simultaneous_span}
     For a length $L>0$ at which the simultaneous word tuples
     $(M_\alpha^w)_\alpha$ span $\prod_\alpha M_{d_\alpha}$, nonvanishing of
     every $c_\alpha$ makes each $c_\alpha^L$ nonzero, and
@@ -673,7 +673,7 @@ decompositions simultaneously.
     \lean{MPOTensor.%
         exists_positive_verticalMultiplicityTraceBondContractionProductSpanTop_of_bnt}
     \leanok
-    \uses{def:bnt_cpsv, def:mpdo_weighted_vertical_contraction_products}
+    \uses{def:bnt_cpsv,def:mpdo_weighted_vertical_contraction_products}
     Suppose that $(M_\alpha)_\alpha$ is a basis of normal tensors, every
     multiplicity space is nonzero, and every diagonal entry of $\mu_\alpha$
     is positive. As used in the spanning step of
@@ -683,7 +683,7 @@ decompositions simultaneously.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_vertical_sector_retraction, thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
+    \uses{lem:mpdo_vertical_sector_retraction,thm:mpdo_nonzero_weight_vertical_bond_contractions_generate_sector_algebra}
     Since every multiplicity space is nonzero and every diagonal entry is
     positive,
     $m_\alpha
@@ -803,7 +803,7 @@ decompositions simultaneously.
     \lean{MPOTensor.%
         eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le}
     \leanok
-    \uses{def:mpdo_weighted_vertical_contraction_products, def:mpdo_vertical_fixed_point_products}
+    \uses{def:mpdo_weighted_vertical_contraction_products,def:mpdo_vertical_fixed_point_products}
     Let $F$ be a linear endomorphism of
     $\mathcal A=\prod_\alpha M_{d_\alpha}$. Suppose that the following three
     conditions hold, with the second required for every bond matrix $X$:
@@ -888,7 +888,7 @@ decompositions simultaneously.
     \lean{MPOTensor.%
         eq_id_of_weightedVerticalBondContractions_fixed_of_traceAdjointSchwarz}
     \leanok
-    \uses{thm:mpdo_direct_sum_faithful_fixed_family, thm:mpdo_density_blocks_fixed_point_product_dimension, thm:mpdo_fixed_contractions_product_dimension}
+    \uses{thm:mpdo_direct_sum_faithful_fixed_family,thm:mpdo_density_blocks_fixed_point_product_dimension,thm:mpdo_fixed_contractions_product_dimension}
     Let $F$ be a positive trace-preserving endomorphism of
     $\mathcal A=\prod_\alpha M_{d_\alpha}$ whose trace adjoint satisfies the
     Schwarz inequality. Suppose that, for some $L>0$,

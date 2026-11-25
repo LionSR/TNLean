@@ -2,7 +2,7 @@
     \label{thm:peps_edge_gauge_absorption}
     \lean{TNLean.PEPS.edge_gauge_absorption}
     \leanok
-    \uses{def:peps_absorbEdgeGauges, thm:peps_absorbEdgeGauges_bondDim, thm:peps_absorbEdgeGauges_component}
+    \uses{def:peps_absorbEdgeGauges,thm:peps_absorbEdgeGauges_bondDim,thm:peps_absorbEdgeGauges_component}
     Given edge gauges $X_e$, set $\widetilde B=B^X$. Then
     $D_{\widetilde B}=D_B$ and, for every vertex $v$,
     \begin{align}
@@ -46,7 +46,7 @@
     \label{thm:peps_postAbsorptionEdgeInsertionEquality}
     \lean{TNLean.PEPS.post_absorption_edge_insertion_equality}
     \leanok
-    \uses{thm:peps_edge_gauge_absorption, def:peps_postAbsorptionEdgeInsertionEquality}
+    \uses{thm:peps_edge_gauge_absorption,def:peps_postAbsorptionEdgeInsertionEquality}
     Let $A$ and $B$ be vertex-injective PEPS with $\Coeff_A=\Coeff_B$,
     $D_A(e)>0$ for all $e$, and $h:D_A=D_B$. Then there exist edge gauges $Z_e$
     such that $\widetilde B=B^Z$ satisfies $D_{\widetilde B}=D_A$ and
@@ -106,7 +106,7 @@
     \end{center}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_exists_edgeGaugeFamily, thm:peps_edge_gauge_absorption, def:peps_postAbsorptionEdgeInsertionEquality}
+    \uses{thm:peps_exists_edgeGaugeFamily,thm:peps_edge_gauge_absorption,def:peps_postAbsorptionEdgeInsertionEquality}
     By Lemma~\ref{thm:peps_exists_edgeGaugeFamily}, each edge $e$ carries an
     invertible $X_e$ such that $C_A(e,X;\sigma)=C_B(e,X_e\phi_{h_e}(X)X_e^{-1};\sigma)$.
     Setting $Z_e=X_e^t$ and $\widetilde B=B^Z$ via
@@ -147,7 +147,7 @@
     \label{thm:gaugeConsistency}
     \lean{TNLean.PEPS.gaugeConsistency}
     \leanok
-    \uses{thm:peps_exists_edgeGaugeFamily, thm:peps_postAbsorptionEdgeInsertionEquality, thm:localGauge_exists, def:gaugeVertex}
+    \uses{thm:peps_exists_edgeGaugeFamily,thm:peps_postAbsorptionEdgeInsertionEquality,thm:localGauge_exists,def:gaugeVertex}
     Let $A$ and $B$ be vertex-injective PEPS tensors on a connected graph with
     $\Coeff_A=\Coeff_B$, $D_A=D_B$, and $D_A(e)>0$ for all $e$ (connectivity is
     necessary, as disconnected components can carry reciprocal non-unit scalars).
@@ -219,7 +219,7 @@
     \label{thm:peps_twoInjectiveGaugeScalarReduction}
     \lean{TNLean.PEPS.threeLeg_residual_forms_scalar}
     \leanok
-    \uses{def:peps_threeLegLeftIdentityForm, def:peps_threeLegRightIdentityForm, def:peps_threeLegMiddleIdentityForm}
+    \uses{def:peps_threeLegLeftIdentityForm,def:peps_threeLegRightIdentityForm,def:peps_threeLegMiddleIdentityForm}
     For nonzero virtual leg spaces $\alpha,\beta,\gamma$, let
     $Z\in\End(\beta\otimes\gamma)$, $U\in\End(\alpha\otimes\beta)$, and
     $W\in\End(\alpha\otimes\gamma)$ have equal induced three-leg residual forms
@@ -343,7 +343,7 @@
     \label{thm:peps_twoInjectiveTensorInsertionComparison_singletonBond}
     \lean{TNLean.PEPS.two_injective_tensor_insertion_comparison_singletonBond}
     \leanok
-    \uses{thm:peps_twoBlockInsertedCoeff_singletonBond, thm:peps_twoBlockPointwiseProductCancellation}
+    \uses{thm:peps_twoBlockInsertedCoeff_singletonBond,thm:peps_twoBlockPointwiseProductCancellation}
     If two injective blocks share a single virtual bond $\mathcal B=\{b\}$, have
     nonempty external boundary spaces, and satisfy
     $C_{A_1,A_2}(b,X;\eta_1,\eta_2,\sigma_1,\sigma_2)

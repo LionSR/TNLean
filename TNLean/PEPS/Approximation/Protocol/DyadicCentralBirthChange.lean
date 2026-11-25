@@ -35,7 +35,7 @@ open Set Metric Filter Topology
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.PartyCircuit
+open EncodedFrame QuantumCircuit.Party
 
 /-! ### The central birth -/
 

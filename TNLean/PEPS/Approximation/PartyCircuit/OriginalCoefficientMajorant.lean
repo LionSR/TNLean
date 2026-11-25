@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.GateCoefficientBounds
+import QICLean.Circuit.Party.Compression.GateExpansion.CoefficientBounds
 
 /-!
 # A positive coefficient majorant from the original polynomial bounds
@@ -27,15 +27,17 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 open scoped NNReal
-namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
-variable {P : Type} {a b : Layout P}
+namespace QuantumCircuit.Party.OriginalCircuit
+
+variable {P : Type} [DecidableEq P] {X Y : P → Type} [∀ p, Fintype (X p)]
+  [∀ p, DecidableEq (X p)]
 
 /-- Original polynomial monomial and individual coefficient bounds yield a
 nonnegative-real coefficient-sum bound at least one. Its displayed polynomial
 depends only on the original constants and exponents.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–175. -/
 theorem exists_one_le_isExpansionBounded_of_termwise_power_bounds
-    (w : OriginalCircuit a b) {r K : ℕ} (L C_K C_C : ℝ) (u v : ℕ)
+    (w : OriginalCircuit X Y) {r K : ℕ} (L C_K C_C : ℝ) (u v : ℕ)
     (hL : 1 ≤ L) (hCK : 0 ≤ C_K) (hCC : 0 ≤ C_C)
     (hK : w.IsMonomialBounded K) (ht : w.IsTermwiseBounded r (C_C * L ^ v))
     (hKbound : (K : ℝ) ≤ C_K * L ^ u) :
@@ -55,4 +57,4 @@ theorem exists_one_le_isExpansionBounded_of_termwise_power_bounds
     _ ≤ (1 + C_K * C_C) * L ^ (u + v) :=
       mul_le_mul_of_nonneg_right (le_add_of_nonneg_left zero_le_one) (by positivity)
 
-end TNLean.Lattice.PartyCircuit.OriginalCircuit
+end QuantumCircuit.Party.OriginalCircuit

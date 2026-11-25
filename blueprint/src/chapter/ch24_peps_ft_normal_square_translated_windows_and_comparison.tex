@@ -47,7 +47,7 @@
     \lean{TNLean.PEPS.not_topMarginUpEdge_marginCover_seven}
     \lean{TNLean.PEPS.not_fourSidedBoundaryMarginCover_seven}
     \leanok
-    \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData, lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
+    \uses{lem:peps_normalSquareHorizontalTranslatedEdge_blockingData,lem:peps_normalSquareVerticalTranslatedEdge_blockingData}
     A \emph{translated edge window} (or equivalently an \emph{oriented
         margin-and-cover datum}) at an edge $e=\{u_e,v_e\}$ identifies $e$ with a
     translated horizontal edge $e_{x_0,y_0}$ in a $5\times 7$ frame
@@ -78,7 +78,7 @@
     \lean{TNLean.PEPS.normalSquareEdgeBlockingHypotheses_endpoint_disjoint_cover_of_marginCovers}
     \lean{TNLean.PEPS.not_forall_normalSquareEdgeMarginCover_seven}
     \leanok
-    \uses{def:peps_normalSquareTranslatedEdgeWindow, def:peps_normalEdgeBlockingHypotheses}
+    \uses{def:peps_normalSquareTranslatedEdgeWindow,def:peps_normalEdgeBlockingHypotheses}
     Under rectangular injectivity and finite union closure, a family of
     translated edge windows (or oriented margin-and-cover data,
     Definition~\ref{def:peps_normalSquareTranslatedEdgeWindow}) at every edge
@@ -102,7 +102,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionR_injective_of_union}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.regionS_injective_of_union}
     \leanok
-    \uses{def:peps_regionInjectivityData, def:peps_normalRectangleInjectivityHypotheses, lem:peps_normalSquareRegionRS_rectangular_decomposition}
+    \uses{def:peps_regionInjectivityData,def:peps_normalRectangleInjectivityHypotheses,lem:peps_normalSquareRegionRS_rectangular_decomposition}
     Under rectangular injectivity
     (Definition~\ref{def:peps_normalRectangleInjectivityHypotheses}) and union
     closure (Definition~\ref{def:peps_regionInjectivityData}), the regions $R$
@@ -122,7 +122,7 @@
     \lean{TNLean.PEPS.regionBlockedTensorInjective_normalSquareRegionS}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_normalSquareRegionT}
     \leanok
-    \uses{thm:peps_regionInjectivityUnionClosure_of_overlap, lem:peps_normalSquareRegionRS_injective_of_unionClosure, lem:peps_normalSquareRegionT_injective_of_cover}
+    \uses{thm:peps_regionInjectivityUnionClosure_of_overlap,lem:peps_normalSquareRegionRS_injective_of_unionClosure,lem:peps_normalSquareRegionT_injective_of_cover}
     Let $A$ be a square-lattice PEPS tensor with $D_A>0$ satisfying coordinate
     rectangular injectivity for $\inj_A$. Then $\inj_A(R)$ and $\inj_A(S)$
     hold, and if $T$ admits a rectangular cover then $\inj_A(T)$ holds as well.
@@ -164,7 +164,7 @@
     \lean{TNLean.PEPS.notMem_normalSquareComparisonRegion}
     \lean{TNLean.PEPS.insert_normalSquareComparisonRegion}
     \leanok
-    \uses{def:peps_normalSquareComparisonRegions, lem:peps_squareLatticeCoordinateRegion_identities}
+    \uses{def:peps_normalSquareComparisonRegions,lem:peps_squareLatticeCoordinateRegion_identities}
     For any $(a,b)$, a vertex $(x,y)$ satisfies $(x,y)\in R_{a,b}$ if and only
     if
     \begin{align}
@@ -215,7 +215,7 @@
     \label{lem:peps_normalSquareComparisonRegion_complementBands}
     \lean{TNLean.PEPS.compl_normalSquareComparisonRegion_eq_bands}
     \leanok
-    \uses{def:peps_normalSquareComparisonRegions, lem:peps_normalSquareComparisonRegion_membership}
+    \uses{def:peps_normalSquareComparisonRegions,lem:peps_normalSquareComparisonRegion_membership}
     On the $n\times m$ lattice with $2\le a$, $1\le b$, $a+3\le n$, and
     $b+3\le m$, the complement $V\setminus R_{a,b}$ is the union of the four
     bands of (\ref{eq:peps_comp_square_bands})
@@ -240,7 +240,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.comparisonRegion_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.comparisonSquare_injective}
     \leanok
-    \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityData, lem:peps_squareLatticeRectangleInjectivity_rectangles, lem:peps_normalSquareWideRectangle_injective}
+    \uses{def:peps_normalRectangleInjectivityHypotheses,def:peps_regionInjectivityData,lem:peps_squareLatticeRectangleInjectivity_rectangles,lem:peps_normalSquareWideRectangle_injective}
     Under rectangular injectivity
     (Definition~\ref{def:peps_normalRectangleInjectivityHypotheses}) and union
     closure (Definition~\ref{def:peps_regionInjectivityData}), if
@@ -258,7 +258,7 @@
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.compl_comparisonSquare_injective}
     \lean{TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.compl_comparisonRegion_injective}
     \leanok
-    \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityData, lem:peps_normalSquareWideRectangle_injective, lem:peps_normalSquareComparisonSquare_complementBands, lem:peps_normalSquareComparisonRegion_complementBands}
+    \uses{def:peps_normalRectangleInjectivityHypotheses,def:peps_regionInjectivityData,lem:peps_normalSquareWideRectangle_injective,lem:peps_normalSquareComparisonSquare_complementBands,lem:peps_normalSquareComparisonRegion_complementBands}
     Under rectangular injectivity
     (Definition~\ref{def:peps_normalRectangleInjectivityHypotheses}) and union
     closure (Definition~\ref{def:peps_regionInjectivityData}), if $2\le a,b$,
@@ -281,7 +281,7 @@
     \lean{TNLean.PEPS.NormalEdgeBlockingData}
     \lean{TNLean.PEPS.NormalEdgeBlockingHypotheses}
     \leanok
-    \uses{def:peps_edge, def:peps_regionInjectivityData}
+    \uses{def:peps_edge,def:peps_regionInjectivityData}
     For an edge $e=\{u_e,v_e\}$ ($u_e<v_e$, Definition~\ref{def:peps_edge}) and
     a region-injectivity assignment $\inj$
     (Definition~\ref{def:peps_regionInjectivityData}), a \emph{normal one-edge
@@ -375,8 +375,7 @@
     \lean{TNLean.PEPS.%
         leftBoundaryRightEdgeInjectivityCountermodelSeven_rectangular}
     \leanok
-    \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel,
-        def:peps_normalRectangleInjectivityHypotheses}
+    \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel,def:peps_normalRectangleInjectivityHypotheses}
     Every $R\in\mathcal R_{2\times 3}\cup\mathcal R_{3\times 2}$
     (Definition~\ref{def:peps_normalRectangleInjectivityHypotheses}) on the
     $7\times 7$ lattice satisfies $\inj_{\partial}(R)$.
@@ -390,8 +389,7 @@
     \label{thm:peps_leftBoundaryRightEdge_not_boundaryBlockingData}
     \lean{TNLean.PEPS.not_leftBoundaryRightEdge_blockingData_countermodelSeven}
     \leanok
-    \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel,
-        def:peps_normalEdgeBlockingHypotheses}
+    \uses{def:peps_leftBoundaryRightEdgeInjectivityCountermodel,def:peps_normalEdgeBlockingHypotheses}
     The relation $\inj_{\partial}$ of
     Definition~\ref{def:peps_leftBoundaryRightEdgeInjectivityCountermodel}
     admits no one-edge blocking datum $(R_e,B_e,C_e)$
@@ -407,9 +405,7 @@
     \label{thm:peps_rectangularInjectivity_not_boundaryBlockingData}
     \lean{TNLean.PEPS.exists_rectangularInjectivity_not_boundaryBlockingData}
     \leanok
-    \uses{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_unionClosure,
-        thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_rectangular,
-        thm:peps_leftBoundaryRightEdge_not_boundaryBlockingData}
+    \uses{thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_unionClosure,thm:peps_leftBoundaryRightEdgeInjectivityCountermodel_rectangular,thm:peps_leftBoundaryRightEdge_not_boundaryBlockingData}
     On the open $7\times 7$ rectangle, there exists a union-closed region
     assignment $\inj_{\partial}$ satisfying all $2\times 3$ and $3\times 2$
     rectangular conditions that admits no three-partite injective blocking

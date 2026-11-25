@@ -4,14 +4,9 @@
 
 \begin{definition}[Products of a family of physical maps]%
     \label{def:peps_four_cut_common_physical_product}
-    \lean{TNLean.PEPS.physicalProductFamilyMatrix,
-        TNLean.PEPS.physicalProductFamilyMap,
-        TNLean.PEPS.physicalProductFamilyMatrix_const,
-        TNLean.PEPS.physicalProductFamilyMap_const,
-        TNLean.PEPS.physicalProductFamilyMap_apply,
-        TNLean.PEPS.torusSitewisePhysicalMap}
+    \lean{TNLean.PEPS.torusSitewisePhysicalMap}
     \leanok
-    \uses{def:peps_physical_product_map}
+    \uses{def:peps_physical_product_map,def:finite_kronecker_product,def:peps_dependent_physical_product}
     For a finite site set $I$ and matrices $F_v:\C^P\to\C^Q$, define
     \begin{align}
         (\mathcal T_F)_{\tau,\sigma} & =\prod_{v\in I}F_v(\tau_v,\sigma_v),
@@ -26,14 +21,9 @@
 
 \begin{lemma}[Composition and coordinate action of product maps]%
     \label{thm:peps_four_cut_common_product_algebra}
-    \lean{TNLean.PEPS.physicalProductFamilyMatrix_mul,
-        TNLean.PEPS.physicalProductFamilyMap_comp,
-        TNLean.PEPS.physicalProductFamilyMatrix_one,
-        TNLean.PEPS.physicalProductFamilyMap_one,
-        TNLean.PEPS.physicalProductFamilyMap_oneCoordinate_apply,
-        TNLean.PEPS.physicalProductFamilyMap_fixed_of_slices_fixed}
+    \lean{Matrix.piKronecker_update_one_mulVec_apply}
     \leanok
-    \uses{def:peps_four_cut_common_physical_product}
+    \uses{def:peps_four_cut_common_physical_product,lem:mpdo_tensor_power_laws,thm:peps_dependent_product_calculus,thm:peps_party_product_conjugation}
     For compatible $F_v,L_v$ over finite intermediate (and for maps, input)
     alphabets, $\mathcal T_F\mathcal T_L=\mathcal T_{(F_vL_v)_v}$ and
     $\mathcal T_{(\Id)_v}=\Id$. For finite $P$ and $F_v=B$, $F_w=\Id$ ($w\ne v$),
@@ -55,10 +45,9 @@
 
 \begin{lemma}[Slice characterization of a product range]%
     \label{thm:peps_four_cut_common_product_range}
-    \lean{TNLean.PEPS.physicalProductFamilyMap_slice_mem_range,
-        TNLean.PEPS.mem_range_physicalProductFamilyMap_iff}
+    \lean{Matrix.piKronecker_mulVec_slice_mem_range}
     \leanok
-    \uses{def:peps_four_cut_common_physical_product}
+    \uses{def:peps_four_cut_common_physical_product,thm:peps_dependent_product_range}
     For finite $I,P$, every slice $(\mathcal T_F\chi)(\tau[v\mapsto\cdot])$ lies in
     $\operatorname{ran}F_v$; if $Q$ is also finite,
     \begin{align}
@@ -85,8 +74,7 @@
         TNLean.PEPS.torusSitewisePhysicalMap_matchedTorusGClosure,
         TNLean.PEPS.map_matchedCommutingClosureSpan}
     \leanok
-    \uses{def:peps_four_cut_common_physical_product,
-        def:peps_four_cut_common_boundary,def:peps_four_cut_common_closure}
+    \uses{def:peps_four_cut_common_physical_product,def:peps_four_cut_common_boundary,def:peps_four_cut_common_closure}
     For a finite input physical alphabet, with
     \begin{align}
         (FA)_v(t,r,b,l;q) & =\sum_sF_v(q,s)A_v(t,r,b,l;s),
@@ -120,9 +108,7 @@
         TNLean.PEPS.fourTorusCutSpace_eq_map_representationAveragingSite,
         TNLean.PEPS.map_matchedCommutingClosureSpan_recover}
     \leanok
-    \uses{def:peps_four_cut_common_matched_action,
-        def:peps_four_cut_common_physical_product,def:peps_four_cut_common_boundary,
-        def:peps_four_cut_common_closure,def:peps_g_injective}
+    \uses{def:peps_four_cut_common_matched_action,def:peps_four_cut_common_physical_product,def:peps_four_cut_common_boundary,def:peps_four_cut_common_closure,def:peps_g_injective}
     For finite $G$, representations $\rho_v$ on $\C^{V^4}$, and
     $R_v=\mathcal P(A_v)$, if $R_v\rho_v(k)=R_v$ for all $v,k$, then
     $R_v\Pi_{\rho_v}=R_v$, $R_vA^0_{\rho_v}=A_v$,
@@ -144,9 +130,7 @@
     so $\mathcal S^A=\mathcal T_R(\mathcal S^{A^0})$ on the $2\times2$ torus.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_g_injective_left_inverse,
-        thm:peps_site_coefficients_composition,
-        thm:peps_four_cut_common_physical_contraction}
+    \uses{thm:peps_g_injective_left_inverse,thm:peps_site_coefficients_composition,thm:peps_four_cut_common_physical_contraction}
     Averaging $R_v\rho_v(k)=R_v$ yields $R_v\Pi_{\rho_v}=R_v$, and
     Lemma~\ref{thm:peps_g_injective_left_inverse} supplies $L_v$ with
     $L_vR_v=\Pi_{\rho_v}$; applying (\ref{eq:peps_common_physical_cut}) gives
@@ -260,8 +244,7 @@
         TNLean.PEPS.torusBondRegrouping_insertedAveragingSite_coherent,
         TNLean.PEPS.torusGaugeBondMatrix}
     \leanok
-    \uses{def:peps_four_cut_common_matched_action,
-        def:peps_torus_physical_bond_regrouping}
+    \uses{def:peps_four_cut_common_matched_action,def:peps_torus_physical_bond_regrouping}
     For finite $G$, with $O^{\mathrm h,q}_v,O^{\mathrm v,q}_v$ as in
     (\ref{eq:peps_common_gauged_horizontal})--(\ref{eq:peps_common_gauged_vertical}),
     $O^q_{(v,d)}=O^{d,q}_v$, $\sigma_v=(t_v,r_v,b_v,l_v)$, and physical bond
@@ -279,10 +262,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_four_cut_common_cut_expansion,
-        thm:peps_four_cut_common_leg_gauge,thm:peps_torus_projector_expansion,
-        def:peps_torus_physical_bond_regrouping,
-        lem:peps_torus_physical_bond_regrouping_overlap}
+    \uses{thm:peps_four_cut_common_cut_expansion,thm:peps_four_cut_common_leg_gauge,thm:peps_torus_projector_expansion,def:peps_torus_physical_bond_regrouping,lem:peps_torus_physical_bond_regrouping_overlap}
     Expand $A^0$ into $|G|^{-|X|}\sum_{q:X\to G}$ as in
     (\ref{eq:peps_common_cut_average_expansion}), apply
     (\ref{eq:peps_common_leg_gauge}) to $a_v=\delta_{\sigma_v}$ to obtain

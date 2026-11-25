@@ -21,7 +21,7 @@
     \label{thm:peps_regular_site_orbit_detection}
     \lean{TNLean.PEPS.IsGInjective.regularSite_coeff_eq_iff_common_translation}
     \leanok
-    \uses{def:peps_g_injective, def:peps_regular_site_gram}
+    \uses{def:peps_g_injective,def:peps_regular_site_gram}
     Let $I$ be a nonempty finite set of incident legs. Let
     $a(\eta)\in\mathcal H$ be the physical vector associated with a
     configuration $\eta\in G^I$, and suppose that the corresponding
@@ -33,8 +33,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_g_injective_image_equality,
-        def:peps_regular_site_gram, thm:peps_regular_site_gram}
+    \uses{thm:peps_g_injective_image_equality,def:peps_regular_site_gram,thm:peps_regular_site_gram}
     Write $\delta_\eta$ for the coordinate vector at $\eta$.
     Equality of the physical vectors gives
     $\Pi\delta_\eta=\Pi\delta_\theta$. The matrix entry
@@ -48,7 +47,7 @@
     \label{thm:peps_regular_site_permutation_recovery}
     \lean{TNLean.PEPS.IsGInjective.regularSite_relabelling_invariant_iff}
     \leanok
-    \uses{def:peps_g_injective, def:peps_regular_site_gram}
+    \uses{def:peps_g_injective,def:peps_regular_site_gram}
     In the setting of Lemma~\ref{thm:peps_regular_site_orbit_detection},
     suppose that $I$ has at least two elements. A map $e:G\to G$
     satisfies $a(e\circ\eta)=a(\eta)$ for every configuration $\eta$
@@ -59,7 +58,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_site_orbit_detection, thm:peps_regular_site_gram}
+    \uses{thm:peps_regular_site_orbit_detection,thm:peps_regular_site_gram}
     Choose distinct $i,j\in I$ and fix $h\in G$. Let $\eta_j=h$
     and $\eta_k=1$ for $k\ne j$. By
     Lemma~\ref{thm:peps_regular_site_orbit_detection}, there exists

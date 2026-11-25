@@ -30,8 +30,7 @@
         TNLean.PEPS.regularRegionFluxCreationMatrix_commute_vertexTranslation,
         TNLean.PEPS.regularRegionFluxCreationMatrix_commute_localProjector}
     \leanok
-    \uses{def:peps_regular_region_flux_creation,
-        thm:peps_regular_flux_creation_matrix,lem:peps_regular_projector_commutation}
+    \uses{def:peps_regular_region_flux_creation,thm:peps_regular_flux_creation_matrix,lem:peps_regular_projector_commutation}
     The operator $Q_{g,e}$ is unitary and commutes with every independent vertex
     translation, hence with the product of the local regular invariant projectors.
 \end{lemma}
@@ -47,8 +46,7 @@
     \label{thm:peps_regular_canonical_flux_creation}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_fluxCreation}
     \leanok
-    \uses{def:peps_regular_region_flux_creation,thm:peps_regular_two_cycle_flux_move,
-        thm:peps_regular_flux_creation_norm}
+    \uses{def:peps_regular_region_flux_creation,thm:peps_regular_two_cycle_flux_move,thm:peps_regular_flux_creation_norm}
     Write $u_e(t)$ for the assignment equal to $t$ on $e$ and to the identity
     on every other bond. For every boundary configuration $\theta$,
     \begin{align}
@@ -72,10 +70,7 @@
     \label{thm:peps_regular_physical_flux_creation}
     \lean{TNLean.PEPS.exists_unitary_regularCyclePhysicalFluxCreation}
     \leanok
-    \uses{thm:peps_regular_region_flux_creation_support,
-        thm:peps_regular_canonical_flux_creation,
-        thm:peps_regular_physical_unitary_transport,
-        thm:peps_regular_twisted_region_accessibility}
+    \uses{thm:peps_regular_region_flux_creation_support,thm:peps_regular_canonical_flux_creation,thm:peps_regular_physical_unitary_transport,thm:peps_regular_twisted_region_accessibility}
     Suppose each original tensor is $G$-isometric for the regular incident-edge
     action. For each requested class $g$ there exists a unitary $W_{g,e}$ on
     the original spins of $R$, chosen before every boundary configuration, with

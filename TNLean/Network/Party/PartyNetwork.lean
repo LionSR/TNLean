@@ -20,15 +20,15 @@ parties is involved.
 
 A link joining a party to itself is read once by that party's tensor, so it contributes a
 diagonal trace. The coefficient of a party network is the endpoint contraction
-`TNLean.Lattice.DependentBondNetwork.network` on the party graph with identity bond matrices,
+`TNLean.Network.DependentBondNetwork.network` on the party graph with identity bond matrices,
 which forces the two endpoint labels of every link, including a self-link, to agree
-(`TNLean.Lattice.Compression.PartyNetwork.coeff_eq_network`). The routing of a party network
+(`TNLean.Network.PartyNetwork.coeff_eq_network`). The routing of a party network
 through a graph is in `TNLean.PEPS.Approximation.RoutedContraction`.
 
 ## Main results
 
-* `TNLean.Lattice.Compression.PartyNetwork`: a party network and its coefficient.
-* `TNLean.Lattice.Compression.PartyNetwork.coeff_eq_network`: the party-network coefficient
+* `TNLean.Network.PartyNetwork`: a party network and its coefficient.
+* `TNLean.Network.PartyNetwork.coeff_eq_network`: the party-network coefficient
   is the endpoint contraction of the party graph with identity bond matrices.
 
 ## References
@@ -40,7 +40,7 @@ through a graph is in `TNLean.PEPS.Approximation.RoutedContraction`.
 noncomputable section
 open scoped BigOperators
 
-namespace TNLean.Lattice.Compression
+namespace TNLean.Network
 
 /-- The links incident to a party `p`: those having `p` as first or second endpoint.
 A link joining `p` to itself occurs once. -/
@@ -111,4 +111,4 @@ theorem coeff_eq_network (N : PartyNetwork P Λ d) (site : P → V) (σ : V → 
 
 end PartyNetwork
 
-end TNLean.Lattice.Compression
+end TNLean.Network

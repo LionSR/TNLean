@@ -69,7 +69,7 @@
     \label{def:is_bnt_zcl}
     \lean{MPSTensor.IsBNTZCL}
     \leanok
-    \uses{def:bnt_cpsv, def:is_cid, def:is_bnt_locally_orthogonal}
+    \uses{def:bnt_cpsv,def:is_cid,def:is_bnt_locally_orthogonal}
     Let $(A_j)_j$ be a basis of normal tensors for $A$. The family $(A_j)_j$
     satisfies \emph{virtual-insertion BNT zero correlation length} for $A$ if
     $A$ satisfies virtual-insertion distance independence
@@ -84,7 +84,7 @@
     \label{def:is_positive_gap_bnt_zcl}
     \lean{MPSTensor.IsPositiveGapBNTZCL}
     \leanok
-    \uses{def:bnt_cpsv, def:is_positive_gap_physical_cid, def:is_bnt_locally_orthogonal}
+    \uses{def:bnt_cpsv,def:is_positive_gap_physical_cid,def:is_bnt_locally_orthogonal}
     A family $(A_j)_j$ of MPS tensors has \emph{positive-gap BNT zero correlation
         length} for $A$ if $(A_j)_j$ is a basis of normal tensors for $A$
     (Definition~\ref{def:bnt_cpsv}), its components are locally orthogonal
@@ -98,7 +98,7 @@
     \label{lem:is_positive_gap_bnt_zcl_iff}
     \lean{MPSTensor.isPositiveGapBNTZCL_iff}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl, def:bnt_cpsv, def:is_positive_gap_physical_cid, def:is_bnt_locally_orthogonal}
+    \uses{def:is_positive_gap_bnt_zcl,def:bnt_cpsv,def:is_positive_gap_physical_cid,def:is_bnt_locally_orthogonal}
     A family $(A_j)_j$ has positive-gap BNT zero correlation length for $A$ if
     and only if $(A_j)_j$ is a basis of normal tensors for $A$
     (Definition~\ref{def:bnt_cpsv}), the physical correlations of $A$ are
@@ -115,7 +115,7 @@
     \label{def:source_bnt_zcl}
     \lean{MPSTensor.IsPhysicalBNTZCL}
     \leanok
-    \uses{def:bnt_cpsv, def:source_physical_cid, def:is_bnt_locally_orthogonal}
+    \uses{def:bnt_cpsv,def:source_physical_cid,def:is_bnt_locally_orthogonal}
     Following \cite[Definition~3.6]{Cirac2016MPDO_arXiv}, a basis of normal
     tensors $(A_j)_j$ for $A$ has \emph{physical BNT zero correlation length}
     if the generated matrix product states have physical correlations
@@ -132,7 +132,7 @@
 % data; no duplicate `CPSVCanonicalFormData` package has been added.
 \begin{lemma}[Two source gaps in the zero-correlation-length characterization]
     \label{thm:cpsv_theorem_zcl_pure_status}
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:source_bnt_zcl, def:mps_transfer_idempotence, def:has_nncph_ground_spaces, thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid, thm:is_positive_gap_physical_cid_of_is_rfp}
+    \uses{def:cpsv_canonical_form,def:bnt_cpsv,def:source_bnt_zcl,def:mps_transfer_idempotence,def:has_nncph_ground_spaces,thm:halved_weight_zcl_not_rfp,thm:bell_pair_chain_not_cid,thm:is_positive_gap_physical_cid_of_is_rfp}
     \notready
     Cirac et al.~\cite[Theorems~3.8 and~3.10]{Cirac2016MPDO_arXiv} assert that a
     tensor $A$ in canonical form has physical BNT zero correlation length if and
@@ -184,7 +184,7 @@
     forward implication when both complementary gaps are positive.
 \end{lemma}
 \begin{proof}
-    \uses{thm:halved_weight_zcl_not_rfp, thm:bell_pair_chain_not_cid}
+    \uses{thm:halved_weight_zcl_not_rfp,thm:bell_pair_chain_not_cid}
     Lemma~\ref{thm:halved_weight_zcl_not_rfp} refutes the reverse implication,
     and Lemma~\ref{thm:bell_pair_chain_not_cid} refutes the forward
     implication.
@@ -199,7 +199,7 @@
     \lean{MPSTensor.halvedWeightTensor_sameMPV₂_halvedDecomp}
     \lean{MPSTensor.halvedWeightTensor_not_isTransferIdempotent}
     \leanok
-    \uses{def:source_bnt_zcl, def:mps_transfer_idempotence, def:sector_bnt_cf, def:same_mpv2}
+    \uses{def:source_bnt_zcl,def:mps_transfer_idempotence,def:sector_bnt_cf,def:same_mpv2}
     Let $P$ be the auxiliary BNT sector decomposition with one scalar basis
     tensor $C^0=(1)$, two one-dimensional copies, and weights $1$ and $1/2$.
     Let $A=\mathcal A(P)$, so
@@ -265,7 +265,7 @@
     \lean{MPSTensor.bellPairChain_isTransferIdempotent_and_not_isPhysicalCID}
     \lean{MPSTensor.bellPairChain_isNormalTensor_isTransferIdempotent_and_not_isPhysicalCID}
     \leanok
-    \uses{def:physical_two_point_expectation, def:source_physical_cid, def:mps_transfer_idempotence, def:nt_cpsv}
+    \uses{def:physical_two_point_expectation,def:source_physical_cid,def:mps_transfer_idempotence,def:nt_cpsv}
     Let $A$ be the tensor with physical index pairs
     $(\alpha,\beta)\in\{0,1\}^{2}$ and letters
     \begin{align}
@@ -350,7 +350,7 @@
     \label{lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
     \lean{MPSTensor.isPositiveGapBNTZCL_of_isPhysicalBNTZCL}
     \leanok
-    \uses{def:source_bnt_zcl, def:is_positive_gap_bnt_zcl}
+    \uses{def:source_bnt_zcl,def:is_positive_gap_bnt_zcl}
     If a BNT family $(A_j)_j$ for $A$ has zero correlation length for all
     disjoint physical regions ($\mathrm{ZCL}_{\mathrm{phys}}$), then it satisfies
     the positive-gap zero correlation length condition ($\mathrm{ZCL}_+$):
@@ -370,7 +370,7 @@
     \label{thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
     \lean{MPSTensor.isPositiveGapBNTZCL_of_isTransferIdempotent_directSum}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence}
+    \uses{def:is_positive_gap_bnt_zcl,def:mps_transfer_idempotence}
     Let $(A_j)_j$ be nonzero-dimensional, irreducible, left-canonical,
     pairwise gauge-phase-distinct BNT components. If the direct-sum tensor
     $A=\bigoplus_j A_j$ satisfies $\E_A^2=\E_A$, then $A$ has positive-gap
@@ -381,7 +381,7 @@
     regions.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:is_positive_gap_physical_cid_of_is_rfp, thm:bnt_locally_orthogonal_of_rfp_direct_sum}
+    \uses{thm:is_positive_gap_physical_cid_of_is_rfp,thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     Idempotence implies positive-gap physical CID by
     Lemma~\ref{thm:is_positive_gap_physical_cid_of_is_rfp}. On each
     off-diagonal bond block, idempotence of $\E_A$ gives
@@ -396,7 +396,7 @@
     \label{thm:bnt_cf_basis_direct_sum_is_cpsv_cf}
     \lean{MPSTensor.IsBNTCanonicalForm.isCPSVCanonicalForm_basisDirectSum}
     \leanok
-    \uses{def:cpsv_canonical_form, def:sector_bnt_cf}
+    \uses{def:cpsv_canonical_form,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition with distinct basis
     tensors $(A_j)_j$. The multiplicity-one unit-weight direct sum
     $A=\bigoplus_j A_j$ is in CPSV canonical form
@@ -417,7 +417,7 @@
     \lean{MPSTensor.IsBNTCanonicalForm.isCPSVBasisOfNormalTensors_basisDirectSum}
     \lean{MPSTensor.IsBNTCanonicalForm.isBNT_basisDirectSum}
     \leanok
-    \uses{def:bnt_cpsv, def:sector_bnt_cf}
+    \uses{def:bnt_cpsv,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition with distinct basis
     tensors $(A_j)_j$, and
     let $A=\bigoplus_j A_j$ be their direct sum with one unit-weight copy of
@@ -432,7 +432,7 @@
     all sufficiently large $N$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{cor:sector_bnt_cf_basis_normal, thm:mpv_decomposition}
+    \uses{cor:sector_bnt_cf_basis_normal,thm:mpv_decomposition}
     Every basis block is irreducible and left-canonical with normalized
     self-overlap converging to $1$, hence a normal tensor by
     Lemma~\ref{cor:sector_bnt_cf_basis_normal}. The direct sum is the
@@ -446,7 +446,7 @@
     \label{thm:rfp_implies_positive_gap_bnt_zcl_cf_basis_direct_sum}
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_isPositiveGapBNTZCL}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl, def:sector_bnt_cf, def:mps_transfer_idempotence}
+    \uses{def:is_positive_gap_bnt_zcl,def:sector_bnt_cf,def:mps_transfer_idempotence}
     Let $P$ be an auxiliary BNT sector decomposition with distinct basis
     tensors $(A_j)_j$, and
     let $A=\bigoplus_j A_j$ be their multiplicity-one direct sum. In the
@@ -462,7 +462,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:bnt_cf_basis_is_bnt_for_direct_sum, thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
+    \uses{thm:bnt_cf_basis_is_bnt_for_direct_sum,thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
     By Lemma~\ref{thm:bnt_cf_basis_is_bnt_for_direct_sum}, the distinct basis
     tensors of $P$ are a basis of normal tensors for $A$. The basis blocks are
     irreducible, left-canonical, and pairwise gauge-phase distinct, so
@@ -519,7 +519,7 @@
     \lean{MPSTensor.WordTupleSpanTop.exists_physicalObservableTransfer_directSum_sectorSupported}
     \lean{MPSTensor.WordTupleSpanTop.exists_physicalObservableTransfer_directSum_rankOne}
     \leanok
-    \uses{def:physical_observable_transfer, rem:word_tuple_span_top}
+    \uses{def:physical_observable_transfer,rem:word_tuple_span_top}
     Let $A=\bigoplus_k A_k$, and suppose the simultaneous length-$L$ word
     evaluations span $\bigoplus_k\MN{D_k}$. For every sector $j$ and matrices
     $R,l\in\MN{D_j}$, there is an observable $O$ on $L$ sites whose inserted
@@ -533,7 +533,7 @@
     are realized by physical observables.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:bnt_word_tuple_simultaneous_inverse, thm:physical_observable_word_span_mul}
+    \uses{thm:bnt_word_tuple_simultaneous_inverse,thm:physical_observable_word_span_mul}
     Applying Lemma~\ref{thm:bnt_word_tuple_simultaneous_inverse}
     independently to the left and right word evaluations shows that the
     observable with coefficients
@@ -553,7 +553,7 @@
     \label{thm:bnt_rank_one_observables_sharp_length}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservableTransfer_rankOne_le_three_totalDim_pow_five}
     \leanok
-    \uses{def:sector_bnt_cf, def:physical_observable_transfer, thm:bnt_sector_supported_physical_observable}
+    \uses{def:sector_bnt_cf,def:physical_observable_transfer,thm:bnt_sector_supported_physical_observable}
     Let $P$ be an auxiliary BNT sector decomposition of total bond dimension
     $D$, and let $A=\bigoplus_j A_j$ be the direct sum of its basis tensors.
     Establishing the multiplicity-one case of the block-injective observable
@@ -564,7 +564,7 @@
     sector-supported insertion (\ref{eq:zcl_sector_rank_one}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:sharp_bnt_block_separation, thm:bnt_sector_supported_physical_observable}
+    \uses{thm:sharp_bnt_block_separation,thm:bnt_sector_supported_physical_observable}
     Lemma~\ref{thm:sharp_bnt_block_separation} gives a positive
     $L\leq3D^5$ for which the simultaneous word evaluations span the product
     matrix algebra, so applying
@@ -621,7 +621,7 @@
     \label{thm:zcl_subleading_pair_excludes_cid}
     \lean{MPSTensor.IsBNTCanonicalForm.not_isPositiveGapPhysicalCID_basisDirectSum_of_basis_spectral_pair}
     \leanok
-    \uses{def:is_positive_gap_physical_cid, def:sector_bnt_cf, thm:bnt_rank_one_observables_sharp_length}
+    \uses{def:is_positive_gap_physical_cid,def:sector_bnt_cf,thm:bnt_rank_one_observables_sharp_length}
     Let $P$ be an auxiliary BNT sector decomposition, let
     $A=\bigoplus_k A_k$, and fix a
     sector $j$. Suppose there are matrices $r,l\in\MN{D_j}$ and a scalar
@@ -635,7 +635,7 @@
     distance (Definition~\ref{def:is_positive_gap_physical_cid}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:zcl_direct_sum_sector_calculus, thm:bnt_rank_one_observables_sharp_length}
+    \uses{lem:zcl_direct_sum_sector_calculus,thm:bnt_rank_one_observables_sharp_length}
     Let $\rho_j$ be the trace-one positive fixed point of $\E_j$. At the
     common blocking length, choose physical observables with inserted transfer
     maps
@@ -659,7 +659,7 @@
     \label{lem:positive_gap_bnt_rank_one_probe_expectation}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_physicalObservables_expectation_eq_trace_mul_transferMap_pow}
     \leanok
-    \uses{def:sector_bnt_cf, def:physical_two_point_expectation}
+    \uses{def:sector_bnt_cf,def:physical_two_point_expectation}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form, let
     $A=\bigoplus_j A_j$, and fix a sector $j$. For every
     $u,v\in\MN{D_j}$, there are a positive integer $L$ and observables
@@ -675,7 +675,7 @@
     % See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:bnt_rank_one_observables_sharp_length, lem:zcl_direct_sum_sector_calculus}
+    \uses{thm:bnt_rank_one_observables_sharp_length,lem:zcl_direct_sum_sector_calculus}
     Choose the trace-one stationary state $\rho_j$ of $\E_{A_j}$. Simultaneous
     block injectivity gives observables with inserted maps
     \begin{align}
@@ -700,7 +700,7 @@
     \label{thm:positive_gap_bnt_zcl_unconditional_converse}
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPositiveGapBNTZCL}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence, def:sector_bnt_cf}
+    \uses{def:is_positive_gap_bnt_zcl,def:mps_transfer_idempotence,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
     $A=\bigoplus_j A_j$. If $A$ has
     positive-gap BNT zero correlation length, then $\E_A^2=\E_A$.
@@ -709,7 +709,7 @@
     % See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:positive_gap_bnt_rank_one_probe_expectation, thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
+    \uses{lem:positive_gap_bnt_rank_one_probe_expectation,thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     For any fixed sector $j$ and arbitrary $u,v\in\MN{D_j}$, applying
     positive-gap CID to the observables of
     Lemma~\ref{lem:positive_gap_bnt_rank_one_probe_expectation} at
@@ -731,7 +731,7 @@
     \label{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp}
     \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_isTransferIdempotent}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl, def:mps_transfer_idempotence, def:sector_bnt_cf}
+    \uses{def:is_positive_gap_bnt_zcl,def:mps_transfer_idempotence,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
     $A=\bigoplus_j A_j$. Then
     \begin{align}
@@ -745,7 +745,7 @@
     % See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:positive_gap_bnt_zcl_unconditional_converse, thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
+    \uses{thm:positive_gap_bnt_zcl_unconditional_converse,thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
     The forward implication is
     Lemma~\ref{thm:positive_gap_bnt_zcl_unconditional_converse}.
     Conversely, transfer idempotence implies positive-gap physical
@@ -758,7 +758,7 @@
     \label{thm:physical_bnt_zcl_multiplicity_one_implies_rfp}
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_of_isPhysicalBNTZCL}
     \leanok
-    \uses{def:source_bnt_zcl, def:mps_transfer_idempotence, def:sector_bnt_cf}
+    \uses{def:source_bnt_zcl,def:mps_transfer_idempotence,def:sector_bnt_cf}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
     $A=\bigoplus_j A_j$. If $A$ has physical BNT zero correlation length,
     then $\E_A^2=\E_A$.
@@ -767,7 +767,7 @@
     % See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:positive_gap_bnt_zcl_unconditional_converse, lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
+    \uses{thm:positive_gap_bnt_zcl_unconditional_converse,lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
     Since physical correlation independence includes all positive-gap
     configurations, restricting to those configurations and applying
     Lemma~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} yields
@@ -779,7 +779,7 @@
     \label{thm:positive_gap_bnt_zcl_unconditional_nncph}
     \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_implies_hasNNCPHGroundSpaces_basisDirectSum}
     \leanok
-    \uses{def:is_positive_gap_bnt_zcl, def:sector_bnt_cf, def:has_nncph_ground_spaces}
+    \uses{def:is_positive_gap_bnt_zcl,def:sector_bnt_cf,def:has_nncph_ground_spaces}
     Let $P$ be an auxiliary BNT sector decomposition in BNT canonical form and
     $A=\bigoplus_j A_j$. If $A$ has positive-gap BNT zero correlation length,
     then for every $N>2$ its translated two-site parent interactions satisfy
@@ -797,7 +797,7 @@
     % See docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:positive_gap_bnt_zcl_unconditional_converse, thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
+    \uses{thm:positive_gap_bnt_zcl_unconditional_converse,thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces}
     Lemma~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} gives
     $\E_A^2=\E_A$. The multiplicity-one fixed-point theorem
     \ref{thm:rfp_multiplicity_one_bnt_has_nncph_ground_spaces} gives the
@@ -809,7 +809,7 @@
     \label{thm:positive_gap_bnt_zcl_multiplicity_one_iff_nncph_ground_spaces}
     \lean{MPSTensor.IsBNTCanonicalForm.isPositiveGapBNTZCL_basisDirectSum_iff_hasNNCPHGroundSpaces}
     \leanok
-    \uses{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp, thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces}
+    \uses{thm:positive_gap_bnt_zcl_multiplicity_one_iff_rfp,thm:rfp_multiplicity_one_bnt_iff_nncph_ground_spaces}
     Let $A_1,\ldots,A_g$ be the distinct basis tensors of a BNT canonical
     form, and set $A=\bigoplus_{j=1}^g A_j$. Then
     \begin{align}

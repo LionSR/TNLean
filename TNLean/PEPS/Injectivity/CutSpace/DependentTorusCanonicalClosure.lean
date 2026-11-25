@@ -19,7 +19,6 @@ alphabet and each site's actual incidence coordinates.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.DependentTorus
-open TNLean.Lattice
 
 local notation "tail" => (torusLabelledBondTail (width := 2) (height := 2))
 local notation "head" => (torusLabelledBondHead (width := 2) (height := 2))
@@ -42,12 +41,14 @@ theorem canonicalClosure_mem_cutSpace
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ)
     (g h : G) (hgh : Commute g h) (v : Vertex) :
     closure D U (canonicalSites D U) g h ∈
-      DependentBondNetwork.cutSpace tail head D (canonicalSites D U) (cutBonds v) := by
+      TNLean.Network.DependentBondNetwork.cutSpace tail head D (canonicalSites D U)
+        (cutBonds v) := by
   let B : (e : Bond) → Matrix (D e) (D e) ℂ :=
     fun e ↦ U e (torusLabelledClosureAt g h v.1 v.2 e)
-  refine ⟨DependentBondNetwork.cutBondBoundary D (cutBonds v) B, ?_⟩
+  refine ⟨TNLean.Network.DependentBondNetwork.cutBondBoundary D (cutBonds v) B, ?_⟩
   funext σ
-  rw [DependentBondNetwork.cutMap_apply, DependentBondNetwork.cutCoeff_bondBoundary]
+  rw [TNLean.Network.DependentBondNetwork.cutMap_apply,
+    TNLean.Network.DependentBondNetwork.cutCoeff_bondBoundary]
   have hB : (fun e ↦ if e ∈ cutBonds v then B e else 1) = B := by
     funext e
     by_cases he : e ∈ cutBonds v
@@ -75,10 +76,11 @@ those same independently represented group labels. -/
 theorem canonicalProjector_bondProduct
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ) (p : Bond → G) :
     canonicalProjector D U (DependentBondNetwork.representationBondProduct tail head D U p) =
-      DependentBondNetwork.network tail head D (canonicalSites D U) (fun e ↦ U e (p e)) := by
-  have hbare : DependentBondNetwork.representationBondProduct tail head D U p =
-      DependentBondNetwork.network tail head D (DependentBondNetwork.identitySite tail head D)
+      TNLean.Network.DependentBondNetwork.network tail head D (canonicalSites D U)
         (fun e ↦ U e (p e)) := by
+  have hbare : DependentBondNetwork.representationBondProduct tail head D U p =
+      TNLean.Network.DependentBondNetwork.network tail head D
+        (DependentBondNetwork.identitySite tail head D) (fun e ↦ U e (p e)) := by
     funext σ
     rw [DependentBondNetwork.network_identitySite]
     rfl

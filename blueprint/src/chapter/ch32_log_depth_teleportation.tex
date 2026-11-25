@@ -49,8 +49,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         MPSPreparation.isImplementationOn_treeRounds,
         MPSPreparation.exists_isMeasurementConversion_treeOp}
     \leanok
-    \uses{thm:qc_long_range_layer, lem:qc_round_implementation_compose,
-        lem:ldp_zero_sites_product_vector}
+    \uses{thm:qc_long_range_layer,lem:qc_round_implementation_compose,lem:ldp_zero_sites_product_vector}
     For $i\ge0$, level $i$ of the tree applies, for every block
     $\{p2^{i+1},\dots,(p+1)2^{i+1}-1\}$ with $(p+1)2^{i+1}\le N$, a two-site
     unitary $u_{i,p}$ to the two endpoints $p2^{i+1}$ and
@@ -81,8 +80,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{remark}[The tree circuit of matrix product states]
     \label{rem:ldp_tree_measurements_mps}
-    \uses{thm:ldp_tree_measurements, thm:ldp_loglog_depth,
-        thm:ldp_loglog_depth_every_length}
+    \uses{thm:ldp_tree_measurements,thm:ldp_loglog_depth,thm:ldp_loglog_depth_every_length}
     In the tree circuit (\ref{eq:ldp_tree_factorization}) a register above
     the lowest level carries $\mathbb C^{D^2}$, which is a group of sites once
     $D^2>d$. Lemma~\ref{thm:ldp_loglog_depth} takes registers of $s$

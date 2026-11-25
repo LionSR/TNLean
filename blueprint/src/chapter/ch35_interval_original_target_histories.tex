@@ -50,8 +50,7 @@ spaces in the repeated-sampling construction of
     in the full collection of interval sequences.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:interval_original_target_history,
-        lem:actual_interval_resampling_tree_probability}
+    \uses{def:interval_original_target_history,lem:actual_interval_resampling_tree_probability}
     Reindex the candidate projection into the fixed finite coordinates.
     The stopped projections, their ranks and their full-exterior
     closeness tests are jointly measurable. The history event is a finite
@@ -70,8 +69,7 @@ spaces in the repeated-sampling construction of
     $u\in H_J(W_J(\omega))$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:interval_original_target_history,
-        lem:independent_interval_tree_sections}
+    \uses{def:interval_original_target_history,lem:independent_interval_tree_sections}
     Both children are strictly shorter than $J$. Their projections depend
     only on coordinates of intervals no longer than themselves, so the
     coordinate replacement leaves them unchanged. Substitution into
@@ -94,10 +92,7 @@ spaces in the repeated-sampling construction of
     $\max\{r-p-1,0\}\beta$ under the fixed independent product law.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:interval_original_target_history_measurable,
-        lem:interval_original_target_history_section,
-        lem:balanced_interval_joint_history_probability,
-        thm:actual_adjacent_interval_merge}
+    \uses{lem:interval_original_target_history_measurable,lem:interval_original_target_history_section,lem:balanced_interval_joint_history_probability,thm:actual_adjacent_interval_merge}
     Two $3/200$-viable adjacent child spaces merge to a $3/100$-viable
     candidate, which is $0.04$-viable. Thus a successful history implies
     viability of the same retained parent. The guarded history failure
@@ -146,9 +141,7 @@ spaces in the repeated-sampling construction of
     selection is assumed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:canonical_interval_resampling_good,
-        lem:actual_interval_resampling_tree_probability,
-        lem:interval_original_target_history_measurable}
+    \uses{def:canonical_interval_resampling_good,lem:actual_interval_resampling_tree_probability,lem:interval_original_target_history_measurable}
     The actual root and retained-parent viability events are measurable,
     as are the literal history events. Express the listed-parent condition
     as an intersection over all valid long intervals: its factor is

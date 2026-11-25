@@ -18,7 +18,7 @@
     \lean{TNLean.PEPS.isRegionBoundaryEdge_horizontalStaircaseRightWindow_referenceEdge}
     \lean{TNLean.PEPS.not_isRegionBoundaryEdge_horizontalStaircaseEndPair_referenceEdge}
     \leanok
-    \uses{def:peps_horizontal_staircase_reference_edge, def:peps_horizontal_staircase_patch}
+    \uses{def:peps_horizontal_staircase_reference_edge,def:peps_horizontal_staircase_patch}
     Assume $1<W$, $1<H$, $0<L$, $0<K$, $1\le a$, $a+2L\le W$, and
     $b+2K-1\le H$, and set $S=W_{\mathrm{left}}\cup W_{\mathrm{right}}$. Then
     \begin{align}
@@ -105,7 +105,7 @@
     \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_symm_left}
     \lean{TNLean.PEPS.horizontalStaircaseEndPairBoundaryConfigEquiv_symm_right}
     \leanok
-    \uses{thm:peps_horizontal_staircase_end_pair_boundary, thm:peps_horizontal_staircase_reference_edge_crossing}
+    \uses{thm:peps_horizontal_staircase_end_pair_boundary,thm:peps_horizontal_staircase_reference_edge_crossing}
     Under the bounds of Lemma~\ref{thm:peps_horizontal_staircase_end_pair_boundary},
     set $\partial_{\mathrm{left}}S=\partial S\cap\partial W_{\mathrm{left}}$ and
     $\partial_{\mathrm{right}}S=\partial S\cap\partial W_{\mathrm{right}}$.
@@ -137,7 +137,7 @@
     \lean{TNLean.PEPS.compl_leftWindow_eq_rightWindow_union_complEndPair}
     \lean{TNLean.PEPS.compl_rightWindow_eq_leftWindow_union_complEndPair}
     \leanok
-    \uses{def:peps_horizontal_staircase_patch, lem:peps_horizontal_staircase_end_pair_disjoint}
+    \uses{def:peps_horizontal_staircase_patch,lem:peps_horizontal_staircase_end_pair_disjoint}
     If $2L\le W$, then
     \begin{align}
         V\setminus W_{\mathrm{left}}
@@ -177,7 +177,7 @@
     \label{thm:peps_staircase_pair_insert_eq_open}
     \lean{TNLean.PEPS.staircasePair_insert_eq_open}
     \leanok
-    \uses{thm:peps_staircase_pair_cancel, thm:peps_corner_extension_linear_transitive}
+    \uses{thm:peps_staircase_pair_cancel,thm:peps_corner_extension_linear_transitive}
     Let $S=W_0\cup W_{L+K-1}$. Suppose $B$ satisfies the one-orientation
     $L\times K$ window-injectivity hypotheses, union closure for injective
     regions, and positive bond dimensions, with $0<L$, $0<K$, $2L+1\le W$, and
@@ -259,7 +259,7 @@
     \lean{TNLean.PEPS.IsO3TransposeVirtualOperation.eq_mul_of_mul}
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_O1_O3Transpose}
     \leanok
-    \uses{def:peps_end_operations_realizing_virtual_matrix, thm:peps_existsUnique_virtualOperation_of_endPair}
+    \uses{def:peps_end_operations_realizing_virtual_matrix,thm:peps_existsUnique_virtualOperation_of_endPair}
     If $\{A_{1,\mu}\}$ and $\{A_{3,\mu}\}$ are linearly independent and
     $(O_1(A_1),O_3(A_3))$ satisfies~(\ref{eq:peps_open_contraction_id}), then a
     unique $X$ satisfies~(\ref{eq:peps_end_operations_realize}). Moreover, if
@@ -291,7 +291,7 @@
     \lean{TNLean.PEPS.horizontalStaircaseLeftWindow_normalized_threeBlockBlueCoeff_factorization}
     \lean{TNLean.PEPS.horizontalStaircaseRightWindow_normalized_threeBlockBlueCoeff_factorization}
     \leanok
-    \uses{def:peps_horizontal_staircase_end_window_boundary_config, lem:peps_horizontal_staircase_end_window_complement_split}
+    \uses{def:peps_horizontal_staircase_end_window_boundary_config,lem:peps_horizontal_staircase_end_window_complement_split}
     In the coordinates~(\ref{eq:peps_end_window_conf_equiv}), write
     $\mu_{\mathrm L}=(k,\eta_{\mathrm L})$,
     $\mu_{\mathrm R}=(k,\eta_{\mathrm R})$, and
@@ -366,9 +366,7 @@
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPair}
     \lean{TNLean.PEPS.existsUnique_virtualOperation_of_horizontalStaircaseEndPhysicalOperations}
     \leanok
-    \uses{def:peps_end_operations_realizing_virtual_matrix,
-        thm:peps_existsUnique_virtualOperation_of_endPair,
-        thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
+    \uses{def:peps_end_operations_realizing_virtual_matrix,thm:peps_existsUnique_virtualOperation_of_endPair,thm:peps_horizontal_staircase_end_pair_single_bond_contraction}
     Suppose the tensor is translation invariant with positive bond dimensions
     and $A_{\mathrm L},A_{\mathrm R}$ are injective. If inserts $C_{\mathrm L},C_{\mathrm R}$
     satisfy $\Ext(C_{\mathrm L})=\Ext(C_{\mathrm R})$ on $S$ (with no
@@ -398,7 +396,7 @@
     \label{thm:peps_regionInsertedCoeff_endWindows_eq_of_staircase}
     \lean{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_of_staircase}
     \leanok
-    \uses{def:peps_bond_inserted_region_insert, thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted, thm:peps_staircase_end_reference_edge_boundary, thm:peps_staircase_pair_insert_eq_open}
+    \uses{def:peps_bond_inserted_region_insert,thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted,thm:peps_staircase_end_reference_edge_boundary,thm:peps_staircase_pair_insert_eq_open}
     Suppose $B$ satisfies the one-orientation $L\times K$ window-injectivity
     hypotheses, union closure for injective regions, and positive bond
     dimensions on a $W\times H$ torus with $2\le L$, $2\le K$, $1\le a$,
@@ -435,7 +433,7 @@
     \label{def:peps_window_edge_coeff_identity_witness}
     \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, thm:peps_staircase_end_reference_edge_boundary}
+    \uses{def:peps_regionInsertedCoeff,thm:peps_staircase_end_reference_edge_boundary}
     Let $W=W_{\mathrm{left}}$ and $e$ be the left end window and reference edge
     of an $(L,K)$-staircase at $(a,b)$ with $0<L$, $0<K$, $1\le a$,
     $a+2L\le W_{\mathrm{torus}}$, and $b+2K-1\le H_{\mathrm{torus}}$ (so

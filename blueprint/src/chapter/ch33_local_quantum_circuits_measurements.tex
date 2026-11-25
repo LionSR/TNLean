@@ -52,7 +52,7 @@ outcomes.
         QuantumCircuit.IsPreparedInDepth.exists_isMeasurementConversion,
         QuantumCircuit.smul_productVector}
     \leanok
-    \uses{def:qc_measurement_preparation, lem:qc_measurement_outcomes}
+    \uses{def:qc_measurement_preparation,lem:qc_measurement_outcomes}
     Every nonzero vector prepared in depth $T$ is prepared with measurements in depth $T$ ($S=\varnothing$, $v_{m,i}=\mathbb 1$).
 \end{lemma}
 \begin{proof}
@@ -92,7 +92,7 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.IsMeasurementConversion.smul,
         QuantumCircuit.IsMeasurementConversion.trans}
     \leanok
-    \uses{def:qc_measurement_rounds, lem:qc_measurement_outcomes}
+    \uses{def:qc_measurement_rounds,lem:qc_measurement_outcomes}
     Every $\ket v\neq0$ has a nonzero output $K_p\ket v$ under any measurement circuit, so any vector prepared with measurement rounds is nonzero. The branches of a circuit $\mathcal R_1$ followed by $\mathcal R_2$ are the pairs $(p,q)$ of branches, with $K_{(p,q)}=K^{(2)}_qK^{(1)}_p$; a preparation in depth $T_1$ followed by a conversion in depth $T_2$ is a preparation in depth $T_1+T_2$, a scalar multiple of a prepared vector is prepared in the same depth, and a $1$-round preparation in the sense of Definition~\ref{def:qc_measurement_preparation} is a preparation with measurement rounds in the same depth.
 \end{lemma}
 \begin{proof}
@@ -115,7 +115,7 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.Circuit.IsImplementationOn.comp,
         QuantumCircuit.Circuit.IsImplementationOn.isMeasurementConversion}
     \leanok
-    \uses{def:qc_round_implementation, lem:qc_measurement_rounds_outputs}
+    \uses{def:qc_round_implementation,lem:qc_measurement_rounds_outputs}
     The empty circuit implements $\mathbb 1$, implementation is downward closed in $E$, and if $\mathcal R$ implements $W$ on $E$ with $W(E)\subseteq E'$ and $\mathcal R'$ implements $W'$ on $E'$, then $\mathcal R$ followed by $\mathcal R'$ implements $W'W$ on $E$. In particular, if $\mathcal R$ has depth at most $T$ and $\ket\pi\in E$ is a nonzero product vector, $W\ket\pi$ is prepared with measurement rounds in depth $T$.
 \end{lemma}
 \begin{proof}
@@ -128,7 +128,7 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \lean{QuantumCircuit.IsOneRoundConversion.mulVec,
         QuantumCircuit.IsOneRoundConversion.mono}
     \leanok
-    \uses{def:qc_measurement_preparation, def:qc_local_circuit}
+    \uses{def:qc_measurement_preparation,def:qc_local_circuit}
     A vector $\ket\psi$ is \emph{prepared with measurements and a circuit in depth $T$} if $\ket\psi=U\ket\varphi$ for $\ket\varphi$ prepared with measurements in depth $T_1$ and a local circuit $U$ (independent of measurement outcomes) of depth $T_2$ with $T_1+T_2\leq T$.
 \end{definition}
 
@@ -165,8 +165,7 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \label{lem:qc_asymptotic_preparation_of_overlap}
     \lean{QuantumCircuit.isAsymptoticallyPreparedWithMeasurementsInDepth_of_one_sub_norm_inner_le}
     \leanok
-    \uses{def:qc_asymptotic_measurement_preparation,
-        lem:qc_pure_state_trace_norm}
+    \uses{def:qc_asymptotic_measurement_preparation,lem:qc_pure_state_trace_norm}
     If $\varepsilon_N\to0$ and for all large $N$, $\lVert\varphi_N\rVert=1$ and some unit vector $\ket{\psi_N}$ prepared with measurements and a circuit in depth at most $f(N)$ satisfies $1-\lvert\braket{\psi_N|\varphi_N}\rvert\leq\varepsilon_N$, then $(\ket{\varphi_N})_N$ is asymptotically prepared with measurements in depth $f$.
 \end{lemma}
 \begin{proof}
@@ -189,7 +188,7 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         ManyBody.sitePermOp_mulVec,
         QuantumCircuit.placeAlong_mulVec_productVector}
     \leanok
-    \uses{def:qc_local_circuit, lem:qc_permutation_layers}
+    \uses{def:qc_local_circuit,lem:qc_permutation_layers}
     If operators $X_k$ on pairwise disjoint site sets $S_k$ act by $(X_k v)(u)=v(f_k(u))$ (so $(X_k)_{u,w}=\delta_{w,f_k(u)}$), then $\prod_k\operatorname{embed}_{S_k}(X_k)$ acts by $v\mapsto v\circ\rho$, where $\rho(x)|_{S_k}=f_k(x|_{S_k})$ and $\rho(x)|_{(\bigcup_k S_k)^c}=x|_{(\bigcup_k S_k)^c}$. A site permutation $\tau$ acts by $v\mapsto v\circ(x\mapsto x\circ\tau)$. If $X\in\mathcal A_S$ and $\ket\pi=\bigotimes_i\ket{v_i}$ has $\ket{v_i}=\ket z$ for all $i\in S$, then $(X\ket\pi)(y)=X_{y|_S,(z,\dots,z)}\prod_{i\notin S}v_i(y_i)$.
 \end{lemma}
 \begin{proof}
@@ -212,8 +211,7 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.ghzCorrection, QuantumCircuit.ghzProtocol_output,
         QuantumCircuit.isOneRoundConversion_withZeroAncillas_ghzState}
     \leanok
-    \uses{def:qc_measurement_preparation, lem:qc_permutation_layers,
-        lem:qc_configuration_layers, def:qc_ghz_state}
+    \uses{def:qc_measurement_preparation,lem:qc_permutation_layers,lem:qc_configuration_layers,def:qc_ghz_state}
     Generalizing~\cite[Example~1]{Piroli2021LOCC} and~\cite[paragraph ``Long-range MPS using measurements'']{Malz2024Preparation}, let $M,b\geq1$ and $0\neq\alpha\in\mathbb C^b$. On the ring of $2M$ sites of dimension $b$ with system sites $2n$ and ancilla sites $2n+1$ ($0\le n<M$), $\ket{\chi_M}_{\rm sys}\otimes\ket{0}^{\otimes M}_{\rm anc}$ is prepared with measurements in depth $2$, deterministically across all outcomes.
 \end{theorem}
 \begin{proof}

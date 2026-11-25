@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.CutSpace.TorusCutBondSupport
-import TNLean.PEPS.Injectivity.Multiplicity.PhysicalProductFamilyRangeSupport
+import QICLean.Algebra.Kronecker.PiKroneckerRange
 
 /-!
 # Actual four-cut vectors lie in the bond representation span
@@ -64,11 +64,11 @@ theorem torusBondRegrouping_mem_product_range_of_mem_fourTorusCutSpace
     {ψ : (TorusVertex 2 2 → V × V × V × V) → ℂ}
     (hψ : ψ ∈ fourTorusCutSpace (torusMatchedAveragingSites Uh Uv)) :
     torusBondRegrouping ψ ∈
-      (physicalProductFamilyMap
+      (Matrix.piKronecker
         (fun e : TorusVertex 2 2 × Bool ↦
-          representationBondMatrix (torusBondRepresentation Uh Uv e))).range := by
+          representationBondMatrix (torusBondRepresentation Uh Uv e))).mulVecLin.range := by
   classical
-  apply (mem_range_physicalProductFamilyMap_iff _ _).mpr
+  apply (Matrix.mem_range_mulVecLin_piKronecker_iff _ _).mpr
   intro e τ
   change torusPhysicalBondSlice e τ ψ ∈ _
   have hcut : ψ ∈ torusCutSpace (torusMatchedAveragingSites Uh Uv) e.1.1 e.1.2 :=
@@ -94,7 +94,8 @@ theorem exists_bondCoefficients_of_mem_fourTorusCutSpace
   simp_rw [map_smul]
   rw [← hc]
   funext β
-  simp only [physicalProductFamilyMap_apply, Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+  simp only [Matrix.mulVecLin_apply, Matrix.piKronecker_mulVec_apply, Finset.sum_apply,
+    Pi.smul_apply, smul_eq_mul]
   apply Finset.sum_congr rfl
   intro q _
   rw [torusBondRegrouping_apply]

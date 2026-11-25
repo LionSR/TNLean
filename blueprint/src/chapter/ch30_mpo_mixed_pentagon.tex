@@ -6,8 +6,7 @@
     \leanok
     \label{thm:glm_auxiliary_fusion_comparison}
     \lean{MPOTensor.triangular_inversePrintedFMatrix_eq_fusionFMatrix}
-    \uses{def:glm_boundary_fusion_f_matrix,
-        def:mpdo_complete_zipper_fusion_family}
+    \uses{def:glm_boundary_fusion_f_matrix,def:mpdo_complete_zipper_fusion_family}
     Let an auxiliary tensor family on the disjoint operator/state labels
     have positive bond dimensions, individual injectivity, and a simultaneous
     one-letter block left inverse. Suppose the original fusion and action
@@ -27,8 +26,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_fusion_comparison_traces,
-        def:glm_boundary_fusion_f_matrix}
+    \uses{thm:glm_fusion_comparison_traces,def:glm_boundary_fusion_f_matrix}
     The normalized trace of left analysis followed by right synthesis
     extracts $Q$. On operator labels these are the two original
     fusion contractions defining $F$. The bond dimension and both virtual
@@ -39,8 +37,7 @@
     \leanok
     \label{thm:glm_actual_mixed_pentagon}
     \lean{MPOTensor.triangular_actionLMatrix_mixed_pentagon}
-    \uses{def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix,
-        def:mpdo_complete_zipper_fusion_family,thm:glm_auxiliary_fusion_comparison}
+    \uses{def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix,def:mpdo_complete_zipper_fusion_family,thm:glm_auxiliary_fusion_comparison}
     Assume the auxiliary tensors, inverse, and exact maps satisfy the
     hypotheses of Lemma~\ref{thm:glm_auxiliary_fusion_comparison}.
     Let $a,b,c,e,f$ be operator labels and $x,y,z,t$ state labels.
@@ -74,8 +71,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_mixed_entries,thm:glm_auxiliary_action_comparison,
-        thm:glm_auxiliary_fusion_comparison}
+    \uses{thm:glm_mixed_entries,thm:glm_auxiliary_action_comparison,thm:glm_auxiliary_fusion_comparison}
     Applying Lemma~\ref{thm:glm_mixed_entries}, whose matrix identity is
     $EDQ=CB$, to the auxiliary input
     $(a,b,c,x)$ and final label $y$ restricts the intermediate fusion label
@@ -92,8 +88,7 @@
     \leanok
     \label{thm:glm_unblocked_mixed_pentagon}
     \lean{MPOTensor.actionLMatrix_mixed_pentagon}
-    \uses{def:glm_boundary_decomposition,def:glm_boundary_action_l_matrix,
-        def:glm_boundary_fusion_f_matrix}
+    \uses{def:glm_boundary_decomposition,def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix}
     Let the operator and state blocks be individually injective, have
     positive bond dimensions, and have no scalar-gauge duplicates within
     either family. Any exact biorthogonal fusion and action maps for these
@@ -102,8 +97,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_actual_mixed_pentagon,thm:glm_triangular_boundary_exact,
-        thm:glm_triangular_boundary_blocking,thm:glm_triangular_boundary_inverse}
+    \uses{thm:glm_actual_mixed_pentagon,thm:glm_triangular_boundary_exact,thm:glm_triangular_boundary_blocking,thm:glm_triangular_boundary_inverse}
     Padding the physical letters in the upper-left corner and upper-right
     column gives cross-kind scalar-gauge separation by disjoint support,
     while the retained letters preserve individual injectivity.
@@ -120,8 +114,7 @@
     \leanok
     \label{thm:glm_boundary_source_mixed_pentagon}
     \lean{MPOTensor.IsBoundaryCompatible.exists_exact_mixed_pentagon}
-    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition,
-        def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix}
+    \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition,def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix}
     Let $T=\bigoplus_aO_a$ and $B=\bigoplus_xA_x$ be the unweighted
     direct-sum operator and state tensors. Suppose every pair of operator
     boundaries $X,Y$ admits a single boundary $Z$ such that
@@ -139,8 +132,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_boundary_source_decomposition,
-        thm:glm_unblocked_mixed_pentagon}
+    \uses{thm:glm_boundary_source_decomposition,thm:glm_unblocked_mixed_pentagon}
     Lemma~\ref{thm:glm_boundary_source_decomposition} applies to every
     operator pair and every operator/state pair, deriving the common word
     span from individual injectivity and scalar-gauge separation. Choosing

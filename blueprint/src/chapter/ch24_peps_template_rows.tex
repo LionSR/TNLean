@@ -124,18 +124,13 @@
     \label{thm:area_law_fan_run_template}
     \lean{TNLean.PEPS.AreaLaw.Geometry.CellFanRun.exists_template}
     \leanok
-    \uses{def:area_law_template,def:area_law_dyadic_cells,def:area_law_cell_fan,
-        def:area_law_fan_runs}
+    \uses{def:area_law_template,def:area_law_dyadic_cells,def:area_law_cell_fan,def:area_law_fan_runs}
     Let $C_{\mathrm{tpl}}\ge1$ and $C_B\ge16C_{\mathrm{tpl}}$. Fix $o\in\mathbb R^2$, $\ell\in\mathbb N$, $z\in\mathbb Z^2$, and midpoint subdivisions and a two-coloring of the fan triangles of the closed dyadic square of side $u=2^\ell$. For any run $R$ with $T_R\cap\mathbb Z^2\ne\varnothing$, there exists a template $T$ with $s_0=2^\ell$, $n=\lceil C_Bu\rceil$, and at most $8$ polygonal pieces such that $T=T_R\cap\mathbb Z^2$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{def:area_law_template,def:area_law_fan_runs,
-        thm:area_law_cell_fan_count,thm:area_law_cell_fan_cover,
-        thm:area_law_fan_run_cover,
-        thm:area_law_polygon_integer_points_finite,
-        thm:area_law_dyadic_cell_distance}
+    \uses{def:area_law_template,def:area_law_fan_runs,thm:area_law_cell_fan_count,thm:area_law_cell_fan_cover,thm:area_law_fan_run_cover,thm:area_law_polygon_integer_points_finite,thm:area_law_dyadic_cell_distance}
     By Lemmas~\ref{thm:area_law_cell_fan_count}, \ref{thm:area_law_fan_run_cover}, and~\ref{thm:area_law_polygon_integer_points_finite}, the $m\in\{1,\ldots,8\}$ fan triangles $P_e$ ($e\in R$) have finite samples $P_e\cap\mathbb Z^2$ with union $T_R\cap\mathbb Z^2$. By Lemmas~\ref{thm:area_law_cell_fan_cover} and~\ref{thm:area_law_dyadic_cell_distance}, all pieces lie in a closed square of side $u=s_0$, bounding their $\ell_\infty$-diameters by $s_0$, and since $u\ge1$,
     \begin{align}
         C_{\mathrm{tpl}}m(s_0+1) & \le8C_{\mathrm{tpl}}(u+1)
@@ -180,8 +175,7 @@
         TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain,
         TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le
     }
-    \uses{thm:area_law_affine_row_profiles,thm:area_law_dilation_rows_union,
-        thm:area_law_template_area}
+    \uses{thm:area_law_affine_row_profiles,thm:area_law_dilation_rows_union,thm:area_law_template_area}
     For any sampled piece $S$, each $R_y(S_r)$ is an integer interval of length at most $2s_0+2r+1$ with $|R_y(S_{r+1})\setminus R_y(S_r)|\le4$ whenever $R_y(S_r)\ne\varnothing$. When $S\ne\varnothing$, the occupied rows of $S_r$ form $[a-r,b+r]\cap\mathbb Z$ for some $a\le b$ with $b-a\le2s_0$, and for every $1\le j\le s_0$ (including $S=\varnothing$),
     \begin{align}
         |S_j\setminus S_{j-1}| & \le24(s_0+1).
@@ -196,8 +190,7 @@
     \label{thm:area_law_template_depth_layers}
     \leanok
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le}
-    \uses{def:area_law_template,thm:area_law_piece_depth_layers,
-        thm:area_law_dilation_rows_union}
+    \uses{def:area_law_template,thm:area_law_piece_depth_layers,thm:area_law_dilation_rows_union}
     If $C_{\rm tpl}\ge24$ and $1\le j\le s_0$, the template satisfies
     \begin{align}
         |T_j\setminus T_{j-1}| & \le n.

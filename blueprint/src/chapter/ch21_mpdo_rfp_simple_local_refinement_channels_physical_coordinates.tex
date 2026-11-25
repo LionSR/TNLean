@@ -2,7 +2,7 @@
     \label{def:mpdo_physical_t_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTMap}
     \leanok
-    \uses{def:mpdo_physical_sector_t_map, def:mpdo_physical_sector_closure_coordinates}
+    \uses{def:mpdo_physical_sector_t_map,def:mpdo_physical_sector_closure_coordinates}
     Conjugating $\mathcal T$ by the canonical two-site and three-site
     coordinate identifications gives a channel
     $\widehat{\mathcal T}:\MN{q^2}\longrightarrow\MN{q^3}$, where all
@@ -48,7 +48,7 @@
     \label{def:mpdo_physical_s_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSMap}
     \leanok
-    \uses{def:mpdo_physical_sector_s_map, def:mpdo_physical_sector_closure_coordinates}
+    \uses{def:mpdo_physical_sector_s_map,def:mpdo_physical_sector_closure_coordinates}
     Conjugating $\mathcal S$ by the canonical three-site and two-site
     coordinate identifications gives a channel
     $\widehat{\mathcal S}:\MN{q^3}\longrightarrow\MN{q^2}$.
@@ -191,7 +191,7 @@
     \label{def:mpdo_physical_t_squared_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTSquaredMap}
     \leanok
-    \uses{def:mpdo_neighboring_trace_factorization, def:mpdo_physical_t_map, def:mpdo_localized_physical_t_map}
+    \uses{def:mpdo_neighboring_trace_factorization,def:mpdo_physical_t_map,def:mpdo_localized_physical_t_map}
     Let $F$ be a physical-sector factorization whose neighboring operators
     satisfy Definition~\ref{def:mpdo_neighboring_trace_factorization}, and let
     $\widehat{\mathcal K}$ be its sector-coordinate tensor. Define
@@ -219,7 +219,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_physical_t_map_cptp, thm:mpdo_localized_physical_t_map_cptp}
+    \uses{thm:mpdo_physical_t_map_cptp,thm:mpdo_localized_physical_t_map_cptp}
     It is the composition of the physical refinement channel and its
     localization on the first two sites.
 \end{proof}
@@ -238,7 +238,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_physical_t_closure_identity, thm:mpdo_localized_physical_t_closure_identity}
+    \uses{thm:mpdo_physical_t_closure_identity,thm:mpdo_localized_physical_t_closure_identity}
     The first refinement gives $\widehat{\mathcal K}_3(X)$; applying the
     localized refinement to its first two sites gives
     $\widehat{\mathcal K}_4(X)$.
@@ -248,7 +248,7 @@
     \label{def:mpdo_physical_s_squared_map}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSSquaredMap}
     \leanok
-    \uses{def:mpdo_physical_s_map, def:mpdo_localized_physical_s_map}
+    \uses{def:mpdo_physical_s_map,def:mpdo_localized_physical_s_map}
     Define
     \begin{align}
         \widehat{\mathcal S}^2
@@ -273,7 +273,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_physical_s_map_cptp, thm:mpdo_localized_physical_s_map_cptp}
+    \uses{thm:mpdo_physical_s_map_cptp,thm:mpdo_localized_physical_s_map_cptp}
     It is the composition of the localized coarse-graining channel and the
     physical coarse-graining channel.
 \end{proof}
@@ -289,7 +289,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_localized_physical_s_closure_identity, thm:mpdo_physical_s_closure_identity}
+    \uses{thm:mpdo_localized_physical_s_closure_identity,thm:mpdo_physical_s_closure_identity}
     The localized coarse-graining first gives
     $\widehat{\mathcal K}_3(X)$; the second coarse-graining gives
     $\widehat{\mathcal K}_2(X)$.
@@ -392,7 +392,7 @@
     \label{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_sectorCoordinateTensor_isRFPViaTS}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking, def:mpdo_neighboring_trace_factorization}
+    \uses{def:is_rfp_via_ts,def:mpdo_two_site_blocking,def:mpdo_neighboring_trace_factorization}
     Let $F$ be a physical-sector factorization whose neighboring operators
     satisfy Definition~\ref{def:mpdo_neighboring_trace_factorization}. Let
     $\widehat{\mathcal K}^{[2]}$ be the tensor obtained by blocking two
@@ -405,7 +405,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_physical_t_squared_map_cptp, thm:mpdo_physical_t_squared_closure_identity, thm:mpdo_physical_s_squared_map_cptp, thm:mpdo_physical_s_squared_closure_identity, thm:mpdo_one_site_closure_two_site_blocking, thm:mpdo_two_site_closure_two_site_blocking}
+    \uses{thm:mpdo_physical_t_squared_map_cptp,thm:mpdo_physical_t_squared_closure_identity,thm:mpdo_physical_s_squared_map_cptp,thm:mpdo_physical_s_squared_closure_identity,thm:mpdo_one_site_closure_two_site_blocking,thm:mpdo_two_site_closure_two_site_blocking}
     Decoding one blocked index as a pair of physical indices and two blocked
     indices as four physical indices turns the one-site and two-site closures of
     $\widehat{\mathcal K}^{[2]}$ into
@@ -434,7 +434,7 @@
     \label{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.blockTwo_isRFPViaTS}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking, def:mpdo_neighboring_trace_factorization}
+    \uses{def:is_rfp_via_ts,def:mpdo_two_site_blocking,def:mpdo_neighboring_trace_factorization}
     Let $F$ be a physical-sector factorization of $\mathcal K$ whose
     neighboring operators satisfy
     Definition~\ref{def:mpdo_neighboring_trace_factorization}. Thus they are
@@ -518,7 +518,7 @@
     \lean{MPOTensor.physCloseN_eq_sum_flatBasis_of_gauge_toTensor,
         MPOTensor.physCloseN_eq_sum_commonWeightAbsorbedBasis_of_gauge_toTensor}
     \leanok
-    \uses{thm:mpdo_canonical_block_sum_arbitrary_boundary, def:mpdo_common_sector_weight_absorption, def:phys_close}
+    \uses{thm:mpdo_canonical_block_sum_arbitrary_boundary,def:mpdo_common_sector_weight_absorption,def:phys_close}
     % The basis blocks are an arbitrary family: the linked declarations take
     % a generic sector decomposition carrying no canonical-form or
     % basis-of-normal-tensors witness.
@@ -587,7 +587,7 @@
         MPOTensor.blockTwo_isRFPViaTS_of_chainCoordinateRFP,
         MPOTensor.blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mpdo_two_site_blocking, def:mpdo_common_sector_weight_absorption, thm:mpdo_absorbed_representative_boundary_decomposition}
+    \uses{def:is_rfp_via_ts,def:mpdo_two_site_blocking,def:mpdo_common_sector_weight_absorption,thm:mpdo_absorbed_representative_boundary_decomposition}
     Let $K$ be exactly gauge equivalent, by an invertible virtual matrix $G$,
     to a canonical BNT sum. Suppose that the repeated-copy weights agree
     within each fixed representative and have been absorbed into tensors
@@ -658,7 +658,7 @@
         MPOTensor.exists_chainCoordinateRFP_of_orthogonalSectorDecomposition,
         MPOTensor.blockTwo_isRFPViaTS_of_commonWeightAbsorbedBNTChannels_of_orthogonalSupports}
     \leanok
-    \uses{thm:mpdo_absorbed_representative_boundary_decomposition, thm:mpdo_absorbed_bnt_channel_assembly, def:is_rfp_via_ts}
+    \uses{thm:mpdo_absorbed_representative_boundary_decomposition,thm:mpdo_absorbed_bnt_channel_assembly,def:is_rfp_via_ts}
     Retain the hypotheses of
     Lemma~\ref{thm:mpdo_absorbed_bnt_channel_assembly}, except that the
     pairwise orthogonal outer support projections are not required to sum to
@@ -668,7 +668,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_absorbed_representative_boundary_decomposition, thm:mpdo_absorbed_bnt_channel_assembly, thm:matrix_support_completion_cptp, lem:mpdo_compressed_cp_sum, lem:mpdo_projector_controlled_trace_selection}
+    \uses{thm:mpdo_absorbed_representative_boundary_decomposition,thm:mpdo_absorbed_bnt_channel_assembly,thm:matrix_support_completion_cptp,lem:mpdo_compressed_cp_sum,lem:mpdo_projector_controlled_trace_selection}
     If the one-site physical space has dimension zero, all of its endomorphisms
     are equal. Hence $\sum_sP_s=I$, and
     Lemma~\ref{thm:mpdo_absorbed_bnt_channel_assembly} applies directly.
@@ -736,7 +736,7 @@
     \lean{MPOTensor.%
         blockTwo_isRFPViaTS_of_bntLayerOrthogonal_of_oneSectorFactorization_of_commonWeight}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization, def:mpdo_bnt_layer_orthogonality, def:mpdo_common_sector_weight_absorption, def:is_rfp_via_ts, def:mpdo_two_site_blocking}
+    \uses{def:mpdo_physical_sector_factorization,def:mpdo_neighboring_trace_factorization,def:mpdo_bnt_layer_orthogonality,def:mpdo_common_sector_weight_absorption,def:is_rfp_via_ts,def:mpdo_two_site_blocking}
     Let $M$ be exactly gauge equivalent, by an invertible virtual matrix $G$,
     to a canonical BNT sum whose repeated-copy weights agree within each
     fixed representative and have been absorbed into tensors
@@ -768,7 +768,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{cor:mpdo_common_weight_bnt_layer_supports, thm:mpdo_blocked_original_tensor_is_rfp_via_ts, thm:mpdo_absorbed_bnt_channel_support_completion}
+    \uses{cor:mpdo_common_weight_bnt_layer_supports,thm:mpdo_blocked_original_tensor_is_rfp_via_ts,thm:mpdo_absorbed_bnt_channel_support_completion}
     Positivity of the neighboring operators makes every absorbed
     representative generate positive semidefinite periodic operators, and
     one-site spanning makes it injective. With the unstarred layer
@@ -789,8 +789,7 @@
     \label{def:mpdo_sitewise_physical_recovery}
     \lean{MPOTensor.sitewisePhysicalRecovery}
     \leanok
-    \uses{def:mpdo_sitewise_physical_matrix,
-        thm:matrix_support_completion_cptp}
+    \uses{def:mpdo_sitewise_physical_matrix,thm:matrix_support_completion_cptp}
     Let $d>0$, let $V:\C^d\to\C^e$ be a linear map, put
     $W_N=V^{\otimes N}$ and $P_N=W_NW_N^\dagger$, and let
     $\tau_N=d^{-N}I\in\MN{d^N}$ be the uniform faithful density matrix. The
@@ -852,11 +851,7 @@
         printed_propositionC15_and_theorem49_ii_to_v_are_false}
     \leanok
     \discussion{7479}
-    \uses{def:mpdo_simple_cf_tensor, def:mpdo_simple_tensor,
-        def:sector_bnt_cf, def:is_sal, def:mpo_physical_trace_transfer,
-        def:is_rfp_via_ts,
-        def:mpdo_two_site_blocking,
-        thm:mpdo_neighboring_trace_obstruction_ambient_properties}
+    \uses{def:mpdo_simple_cf_tensor,def:mpdo_simple_tensor,def:sector_bnt_cf,def:is_sal,def:mpo_physical_trace_transfer,def:is_rfp_via_ts,def:mpdo_two_site_blocking,thm:mpdo_neighboring_trace_obstruction_ambient_properties}
     There is a five-letter MPO tensor $K$ of virtual bond dimension three
     which generates matrix product density operators, has normalized simple
     canonical form, is simple in the sense of Definition~4.7, and is in biCF.
@@ -878,8 +873,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_sitewise_physical_recovery,
-        thm:mpdo_neighboring_trace_obstruction_ambient_properties}
+    \uses{lem:mpdo_sitewise_physical_recovery,thm:mpdo_neighboring_trace_obstruction_ambient_properties}
     Let $A$ be the four-letter rank-one tensor underlying the ambient
     construction, and choose the virtual boundary $X$ displayed in the
     paper-gap note \cite{gap:cpsv16_prop_c15_blocking_channel_false}. The

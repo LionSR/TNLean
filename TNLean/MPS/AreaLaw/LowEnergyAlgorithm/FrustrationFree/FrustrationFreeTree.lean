@@ -62,7 +62,7 @@ open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-open TNLean.MPS.AreaLaw TNLean.Lattice
+open TNLean.MPS.AreaLaw
 
 /-- A nonempty chain of local dimension at least two whose kernel is a line has a positive
 spectral value above a gap. Auxiliary to ALVV, arXiv:1602.08828v2, Theorem `t:unique`,

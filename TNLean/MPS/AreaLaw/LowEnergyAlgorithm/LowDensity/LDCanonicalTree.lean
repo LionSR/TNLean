@@ -47,7 +47,7 @@ open MeasureTheory
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-open TNLean.MPS.AreaLaw TNLean.Lattice
+open TNLean.MPS.AreaLaw
 
 /-- The children of a long interval split at the midpoint have level at most
 one less than the parent. Supporting ALVV, arXiv:1602.08828v2, merge

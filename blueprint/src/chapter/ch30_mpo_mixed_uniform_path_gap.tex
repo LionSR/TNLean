@@ -20,8 +20,7 @@ concern these given tensors; the constants may depend on them.
         MPSTensor.MPOSymmetry.eventually_isGapped_mixedEndpoint_hamiltonian_chainTranslates,
         MPSTensor.MPOSymmetry.exists_uniform_isGapped_mixedEndpoint_hamiltonian_chainTranslates_fixed_volume}
     \leanok
-    \uses{def:mpo_mixed_extended_support,def:injective,
-        lem:open_local_interaction_sum_properties}
+    \uses{def:mpo_mixed_extended_support,def:injective,lem:open_local_interaction_sum_properties}
     At every fixed $N\geq2$, the extended open Hamiltonian and its
     kernel projector depend continuously on $\gamma\in\R$, and its
     kernel is nonzero. If its nonzero eigenvalues are at least $\eta$ at
@@ -34,9 +33,7 @@ concern these given tensors; the constants may depend on them.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_mixed_support_continuity,
-        thm:mpo_mixed_extended_open_kernel,
-        thm:kernel_gap_perturbation,thm:compact_kernel_gap}
+    \uses{thm:mpo_mixed_support_continuity,thm:mpo_mixed_extended_open_kernel,thm:kernel_gap_perturbation,thm:compact_kernel_gap}
     Extension by exterior identities and a fixed permutation of the
     physical coordinates preserve operator continuity. Summing the
     finitely many nonwrapping terms gives continuity of the open sum.
@@ -61,8 +58,7 @@ concern these given tensors; the constants may depend on them.
         MPSTensor.MPOSymmetry.groundSpace_mixedEndpoint_hamiltonian_translationInvariant_ne_bot,
         MPSTensor.MPOSymmetry.exists_uniform_isGapped_mixedEndpoint_hamiltonian_translationInvariant_fixed_volume}
     \leanok
-    \uses{def:mpo_mixed_extended_support,def:mpo_mixed_endpoint_swap,
-        def:periodic-fixed-interaction,def:injective,def:mpv}
+    \uses{def:mpo_mixed_extended_support,def:mpo_mixed_endpoint_swap,def:periodic-fixed-interaction,def:injective,def:mpv}
     At each endpoint, the weighted periodic vector equals the
     corresponding embedded endpoint vector for every positive length.
     For $N\geq2$ and $\gamma\in[0,1]$, the vector
@@ -79,11 +75,7 @@ concern these given tensors; the constants may depend on them.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:asymex_absorbing_compression,
-        thm:mpo_mixed_first_support,thm:mpo_mixed_second_endpoint_comparison,
-        thm:mpo_mixed_interior,thm:mpo_mixed_periodic_endpoint_gaps,
-        thm:mpv_ne_zero_blk_injective,thm:chain_ground_space_eq_mpv_blk,
-        thm:continuous_injective_range_projector,thm:compact_kernel_gap}
+    \uses{lem:asymex_absorbing_compression,thm:mpo_mixed_first_support,thm:mpo_mixed_second_endpoint_comparison,thm:mpo_mixed_interior,thm:mpo_mixed_periodic_endpoint_gaps,thm:mpv_ne_zero_blk_injective,thm:chain_ground_space_eq_mpv_blk,thm:continuous_injective_range_projector,thm:compact_kernel_gap}
     At zero, every weighted letter is right-absorbed by the first
     virtual corner. Compressing a nonempty product into that corner
     preserves its trace and gives the embedded endpoint product.
@@ -110,13 +102,7 @@ concern these given tensors; the constants may depend on them.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_mixed_open_endpoint_gaps,thm:mpo_mixed_interior,
-        thm:injective_strict_knabe_window,thm:open_parent_hamiltonian_kernel_ground_space,
-        thm:mpo_mixed_open_gap_continuity,
-        thm:mpo_mixed_periodic_endpoint_gaps,
-        thm:parent_hamiltonian_gap_from_open_knabe_block,
-        lem:compact_uniform_pos_nat_bounds,
-        thm:mpo_mixed_periodic_line_continuity}
+    \uses{thm:mpo_mixed_open_endpoint_gaps,thm:mpo_mixed_interior,thm:injective_strict_knabe_window,thm:open_parent_hamiltonian_kernel_ground_space,thm:mpo_mixed_open_gap_continuity,thm:mpo_mixed_periodic_endpoint_gaps,thm:parent_hamiltonian_gap_from_open_knabe_block,lem:compact_uniform_pos_nat_bounds,thm:mpo_mixed_periodic_line_continuity}
     At either endpoint, its derived eventual open gap gives a window
     with $m\geq2$ local terms and $m+1$ sites whose gap $\eta$ satisfies
     $1<m\eta$. In the interior, injectivity gives such a strict

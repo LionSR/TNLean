@@ -16,8 +16,7 @@ corners at or above a fixed layer index $k_0$; see
     \label{thm:area_law_actual_elementary_side_matching}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_elementary_contact_match}
     \leanok
-    \uses{def:area_law_actual_side_mask,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales}
+    \uses{def:area_law_actual_side_mask,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     Fix a common origin $o\in\mathbb R^2$, finite endpoint set $Z$,
     integer width $C_0\ge2$ and natural indices $k_0,k,h$ with
     $k\ge50\,000\,000$ and $k_0\le k,h$.
@@ -38,9 +37,7 @@ corners at or above a fixed layer index $k_0$; see
     where $s(i)$ and $s(j)$ are their counterclockwise side indices.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_fine_cell_contact,thm:area_law_elementary_side_geometry,
-        def:area_law_actual_side_mask,thm:area_law_elementary_corner_endpoint,
-        thm:area_law_unsplit_side_endpoints,thm:area_law_adjacent_fine_meshes}
+    \uses{thm:area_law_fine_cell_contact,thm:area_law_elementary_side_geometry,def:area_law_actual_side_mask,thm:area_law_elementary_corner_endpoint,thm:area_law_unsplit_side_endpoints,thm:area_law_adjacent_fine_meshes}
     The intersection $\overline{Q_{k,z}}\cap\overline{Q_{h,w}}$ is either
     a full side of each cell or a full side of the smaller cell equal to
     one half of a side of the larger cell. Because the contact contains

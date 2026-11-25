@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.PhysicalProductInvariance
+import QICLean.Algebra.Kronecker.PiKroneckerRange
 import TNLean.PEPS.FundamentalTheorem.Injective.GaugeAction
 import TNLean.PEPS.FundamentalTheorem.Injective.LocalGaugeExtraction
 
@@ -167,7 +167,6 @@ private theorem stateCoeff_eq_sum_independentLegKernel (A : Tensor G d)
 end TNLean.PEPS
 
 namespace TNLean.PEPS
-open TNLean.Lattice
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
@@ -189,7 +188,7 @@ noncomputable def independentLegEdgeCoefficient (A : Tensor Γ d)
 /-- The local orbit formula and actual local coordinate bijections put the
 original PEPS vector in the image of one common local physical map.
 Supporting composition for arXiv:1804.04964, lines 1891–1894. -/
-theorem stateCoeff_eq_commonPhysicalProductFamilyMap
+theorem stateCoeff_eq_piKronecker_mulVec
     {Xi : Type*} [Fintype Xi]
     (A : Tensor Γ d) (E : (v : V) → Xi ≃ LocalVirtualConfig A v)
     (F : Xi → Fin d → ℂ)
@@ -200,13 +199,13 @@ theorem stateCoeff_eq_commonPhysicalProductFamilyMap
         ∑ ξ : LocalVirtualConfig A v,
           (∏ ie : IncidentEdge Γ v, K v ie (η ie) (ξ ie)) * F ((E v).symm ξ) σ) :
     stateCoeff A =
-      dependentPhysicalProductFamilyMap (fun (_ : V) (σ : Fin d) (x : Xi) => F x σ)
+      Matrix.piKronecker (fun (_ : V) (σ : Fin d) (x : Xi) => F x σ) *ᵥ
         (fun x : V → Xi => independentLegEdgeCoefficient A K (fun v => E v (x v))) := by
   classical
   let R := independentLegEdgeCoefficient A K
   have hC : stateCoeff A =
-      dependentPhysicalProductFamilyMap
-        (fun (v : V) (σ : Fin d) (ξ : LocalVirtualConfig A v) => F ((E v).symm ξ) σ) R := by
+      Matrix.piKronecker
+        (fun (v : V) (σ : Fin d) (ξ : LocalVirtualConfig A v) => F ((E v).symm ξ) σ) *ᵥ R := by
     funext σ
     rw [stateCoeff_eq_sum_independentLegKernel A
       (fun v ξ σ => F ((E v).symm ξ) σ) K hlocal σ]
@@ -215,7 +214,7 @@ theorem stateCoeff_eq_commonPhysicalProductFamilyMap
       ∑ ξ : OpenLocalConfig (G := Γ) A,
         (∏ v : V, F ((E v).symm (ξ v)) (σ v)) * R ξ
     exact Finset.sum_congr rfl (fun ξ _ => mul_comm _ _)
-  have hE := dependentPhysicalProductFamilyMap_reindex_input E
+  have hE := Matrix.piKronecker_mulVec_reindex_columns E
     (fun (v : V) (σ : Fin d) (ξ : LocalVirtualConfig A v) => F ((E v).symm ξ) σ) R
   have hFloc :
       (fun (v : V) (σ : Fin d) (x : Xi) => F ((E v).symm (E v x)) σ) =

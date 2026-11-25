@@ -11,8 +11,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
     \label{lem:normal_blocks_no_small_divisor}
     \lean{MPSTensor.exists_normal_blocks_of_no_small_divisor}
     \leanok
-    \uses{def:irreducible_tensor, def:l_blk_injective,
-        def:blocks_not_gauge_phase_equiv}
+    \uses{def:irreducible_tensor,def:l_blk_injective,def:blocks_not_gauge_phase_equiv}
     Let $A$ have physical dimension $d$, bond dimension $D$, and chain length
     $N\ge2$. Suppose no integer $m$ with $2\le m\le D$ divides $N$. There
     exist $b\le D$ blocks $B_j$ of positive bond dimensions $D_j\le D$ and
@@ -27,12 +26,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
     The decomposition and all these properties are derived from $A$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:pgvwc07_positive_length_witness, lem:pgvwc07_block_irreducible,
-        lem:periodic_scale_of_irreducible, thm:periodic_period_le_bondDim,
-        thm:pgvwc07_normalized_periodic_state_vector_decomposition,
-        thm:wielandt_general, lem:gauge_invariance_block_injective,
-        thm:normality_rescaling_invariance, def:mpv_phase_class_data,
-        thm:mpv_decomposition}
+    \uses{thm:pgvwc07_positive_length_witness,lem:pgvwc07_block_irreducible,lem:periodic_scale_of_irreducible,thm:periodic_period_le_bondDim,thm:pgvwc07_normalized_periodic_state_vector_decomposition,thm:wielandt_general,lem:gauge_invariance_block_injective,thm:normality_rescaling_invariance,def:mpv_phase_class_data,thm:mpv_decomposition}
     Lemma~\ref{thm:pgvwc07_positive_length_witness} reduces $A$ to unital
     canonical blocks $A^k$ with positive definite dual fixed points, weights
     $\mu_k$, and $\sum_k\dim A^k\le D$; in particular there are at most $D$
@@ -68,8 +62,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
     \lean{MPSTensor.exists_normal_eventual_ground_data_of_prime_length_bound,
         MPSTensor.exists_eventually_fixed_mps_of_prime_length_bound}
     \leanok
-    \uses{lem:normal_blocks_no_small_divisor,
-        lem:finite_volume_local_kernel_inclusion, lem:local_mps_kernel_all_volumes}
+    \uses{lem:normal_blocks_no_small_divisor,lem:finite_volume_local_kernel_inclusion,lem:local_mps_kernel_all_volumes}
     Let $h\ge0$ act on $L$ sites, and assume $\dim\ker H_M=1$ for every
     $M\ge L$. Suppose $N$ is prime, $V^{(N)}(A)\ne0$ is annihilated by
     $H_N$, and
@@ -87,8 +80,7 @@ recorded in \cite{gap:spwc10_ground_state_dichotomy_quantifiers}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:normal_blocks_no_small_divisor,
-        lem:finite_volume_local_kernel_inclusion, lem:local_mps_kernel_all_volumes}
+    \uses{lem:normal_blocks_no_small_divisor,lem:finite_volume_local_kernel_inclusion,lem:local_mps_kernel_all_volumes}
     The threshold gives $D<N$, so primality permits
     Lemma~\ref{lem:normal_blocks_no_small_divisor}. The original nonzero vector
     ensures a retained block exists. Simultaneous complementary spanning

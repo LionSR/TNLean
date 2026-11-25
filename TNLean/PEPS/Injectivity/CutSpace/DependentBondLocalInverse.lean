@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Network.DependentBond.DependentBondCut
 import TNLean.PEPS.Injectivity.CutSpace.DependentBondProjectorExpansion
-import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
+import QICLean.Algebra.Kronecker.PiKroneckerRange
 
 /-!
 # Local inverses with dependent virtual and physical dimensions
@@ -20,7 +20,7 @@ site alphabets may vary.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
-open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
+open TNLean.Network.DependentBondNetwork
 
 variable {Vertex Edge : Type*} [Fintype Vertex] [Fintype Edge]
 variable [DecidableEq Vertex] [DecidableEq Edge]
@@ -59,10 +59,10 @@ theorem physicalMap_cutMap [∀ v, Fintype (Phys v)]
     (F : (v : Vertex) → Matrix (Out v) (Phys v) ℂ)
     (A : (v : Vertex) → LocalConfig tail head D v → Phys v → ℂ)
     (C : Finset Edge) (M : CutConfig C D → ℂ) :
-    dependentPhysicalProductFamilyMap F (cutMap tail head D A C M) =
+    (Matrix.piKronecker F).mulVecLin (cutMap tail head D A C M) =
       cutMap tail head D (physicalMapSite tail head D F A) C M := by
   funext τ
-  simp only [dependentPhysicalProductFamilyMap_apply, cutMap_apply, cutCoeff,
+  simp only [Matrix.mulVecLin_apply, Matrix.piKronecker_mulVec_apply, cutMap_apply, cutCoeff,
     physicalMapSite, Finset.mul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun β _ ↦ ?_
@@ -77,10 +77,11 @@ theorem physicalMap_network [∀ v, Fintype (Phys v)]
     (F : (v : Vertex) → Matrix (Out v) (Phys v) ℂ)
     (A : (v : Vertex) → LocalConfig tail head D v → Phys v → ℂ)
     (B : (e : Edge) → Matrix (D e) (D e) ℂ) :
-    dependentPhysicalProductFamilyMap F (network tail head D A B) =
+    (Matrix.piKronecker F).mulVecLin (network tail head D A B) =
       network tail head D (physicalMapSite tail head D F A) B := by
   funext τ
-  simp only [dependentPhysicalProductFamilyMap_apply, network, physicalMapSite, Finset.mul_sum]
+  simp only [Matrix.mulVecLin_apply, Matrix.piKronecker_mulVec_apply, network, physicalMapSite,
+    Finset.mul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun β _ ↦ ?_
   rw [Fintype.prod_sum, Finset.mul_sum]
@@ -132,7 +133,7 @@ theorem exists_cutMap_localInverse [∀ v, Fintype (Phys v)]
     (A : (v : Vertex) → LocalConfig tail head D v → Phys v → ℂ)
     (hA : ∀ v, IsGInjective (ρ v) (localSiteMap tail head D A v)) :
     ∃ F : (v : Vertex) → Matrix (LocalConfig tail head D v) (Phys v) ℂ,
-      ∀ C M, dependentPhysicalProductFamilyMap F (cutMap tail head D A C M) =
+      ∀ C M, (Matrix.piKronecker F).mulVecLin (cutMap tail head D A C M) =
         cutMap tail head D (representationAveragingSite tail head D ρ) C M := by
   obtain ⟨F, hF⟩ := exists_physicalMap_to_representationAveragingSite tail head D ρ A hA
   refine ⟨F, fun C M ↦ ?_⟩
@@ -144,8 +145,8 @@ theorem cutMap_recover_representationAveragingSite
     (A : (v : Vertex) → LocalConfig tail head D v → Phys v → ℂ)
     (hA : ∀ v g, localSiteMap tail head D A v ∘ₗ ρ v g = localSiteMap tail head D A v)
     (C : Finset Edge) (M : CutConfig C D → ℂ) :
-    dependentPhysicalProductFamilyMap
-        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))
+    (Matrix.piKronecker
+        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))).mulVecLin
         (cutMap tail head D (representationAveragingSite tail head D ρ) C M) =
       cutMap tail head D A C M := by
   rw [physicalMap_cutMap, physicalMap_recover_representationAveragingSite tail head D ρ A hA]
@@ -160,8 +161,8 @@ theorem iInf_cutSpace_eq_map_representationAveragingSite
     (C : ι → Finset Edge) :
     (⨅ i, cutSpace tail head D A (C i)) =
       (⨅ i, cutSpace tail head D (representationAveragingSite tail head D ρ) (C i)).map
-        (dependentPhysicalProductFamilyMap
-          (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))) := by
+        (Matrix.piKronecker
+          (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))).mulVecLin := by
   classical
   let (v : Vertex) := Fintype.ofFinite (Phys v)
   obtain ⟨F, hF⟩ := exists_cutMap_localInverse tail head D ρ A hA
@@ -170,11 +171,11 @@ theorem iInf_cutSpace_eq_map_representationAveragingSite
   apply le_antisymm
   · intro ψ hψ
     have hcuts i : ψ ∈ cutSpace tail head D A (C i) := ((Submodule.mem_iInf _).mp hψ) i
-    refine ⟨dependentPhysicalProductFamilyMap F ψ, ?_, ?_⟩
+    refine ⟨(Matrix.piKronecker F).mulVecLin ψ, ?_, ?_⟩
     · apply (Submodule.mem_iInf _).mpr
       intro i
       obtain ⟨M, hM⟩ := hcuts i
-      exact ⟨M, (hF (C i) M).symm.trans (congrArg (dependentPhysicalProductFamilyMap F) hM)⟩
+      exact ⟨M, (hF (C i) M).symm.trans (congrArg (Matrix.piKronecker F).mulVecLin hM)⟩
     · obtain ⟨M, hM⟩ := hcuts i₀
       rw [← hM, hF, hR]
   · rintro _ ⟨χ, hχ, rfl⟩
@@ -182,8 +183,8 @@ theorem iInf_cutSpace_eq_map_representationAveragingSite
     intro i
     obtain ⟨M, hM⟩ := ((Submodule.mem_iInf _).mp hχ) i
     exact ⟨M, (hR (C i) M).symm.trans (congrArg
-      (dependentPhysicalProductFamilyMap
-        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))) hM)⟩
+      (Matrix.piKronecker
+        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))).mulVecLin hM)⟩
 
 /-- The identity tensor exposes every local virtual configuration as a physical one. -/
 def identitySite (v : Vertex) (η s : LocalConfig tail head D v) : ℂ :=
@@ -204,8 +205,8 @@ def averagingProjector
     (ρ : (v : Vertex) → Representation ℂ G (LocalConfig tail head D v → ℂ)) :
     (((v : Vertex) → LocalConfig tail head D v) → ℂ) →ₗ[ℂ]
       (((v : Vertex) → LocalConfig tail head D v) → ℂ) :=
-  dependentPhysicalProductFamilyMap (fun v ↦
-    LinearMap.toMatrix' (localSiteMap tail head D (representationAveragingSite tail head D ρ) v))
+  (Matrix.piKronecker fun v ↦ LinearMap.toMatrix'
+    (localSiteMap tail head D (representationAveragingSite tail head D ρ) v)).mulVecLin
 
 /-- Every canonical cut vector is fixed by the product local projection. -/
 theorem averagingProjector_cutMap

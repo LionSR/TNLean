@@ -35,7 +35,7 @@ open Set Metric
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.PartyCircuit
+open EncodedFrame QuantumCircuit.Party
 
 variable {k : ℕ}
 
@@ -65,15 +65,17 @@ of `F'`, with at most `rs` pair sources in each monomial.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 39–41 and 572–583. -/
 def HasFrameChange {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q]
-    {pos : ι → ℝ × ℝ} {Party : Type} (Ω : EuclideanSpace ℂ (ι → Fin q))
-    (F F' : Frame pos q Party) (S : Set Party) (r K rs : ℕ) (ε : ℝ) : Prop :=
-  ∃ w : OriginalCircuit F.regs F'.regs,
+    {pos : ι → ℝ × ℝ} {Party : Type} [Fintype Party] [DecidableEq Party]
+    (Ω : EuclideanSpace ℂ (ι → Fin q)) (F F' : Frame pos q Party) (S : Set Party) (r K rs : ℕ)
+    (ε : ℝ) : Prop :=
+  ∃ w : OriginalCircuit F.system F'.system,
     w.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) ∧ w.IsSourceBounded rs
 
 section Bounds
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-  {Party : Type} {Ω : EuclideanSpace ℂ (ι → Fin q)} {S : Set Party} {r K rs : ℕ} {ε ε' : ℝ}
+  {Party : Type} [Fintype Party] [DecidableEq Party] {Ω : EuclideanSpace ℂ (ι → Fin q)}
+  {S : Set Party} {r K rs : ℕ} {ε ε' : ℝ}
 
 /-- A change of one frame remains bounded when its error bound is enlarged. -/
 lemma HasFrameChange.mono_error {F F' : Frame pos q Party}

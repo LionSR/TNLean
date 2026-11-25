@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Injectivity.CutSpace.DependentBondCoefficients
 import TNLean.Network.DependentBond.DependentBondCut
 import TNLean.PEPS.Injectivity.CutSpace.DependentBondProjectorExpansion
-import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
+import QICLean.Algebra.Kronecker.PiKroneckerRange
 
 /-!
 # Coherent bond expansions forced by complementary cuts
@@ -26,7 +26,7 @@ Source: SCP10, arXiv:1001.3807, Theorem 5.5 and Lemma 4.6.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
-open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
+open TNLean.Network.DependentBondNetwork
 
 section CoordinateSlices
 variable {Site : Type*} [Fintype Site] [DecidableEq Site] {Out : Site → Type*}
@@ -178,8 +178,8 @@ theorem bondRegrouping_mem_product_range_of_mem_cutSpaces
     {ι : Type*} (C : ι → Finset Edge) (hcover : ∀ e, ∃ i, e ∉ C i)
     {ψ : ((v : Vertex) → LocalConfig tail head D v) → ℂ}
     (hψ : ∀ i, ψ ∈ cutSpace tail head D (averagingSite tail head D U) (C i)) :
-    bondRegrouping tail head D ψ ∈ (dependentPhysicalProductFamilyMap (bondMatrix D U)).range := by
-  apply (mem_range_dependentPhysicalProductFamilyMap_iff _ _).mpr
+    bondRegrouping tail head D ψ ∈ (Matrix.piKronecker (bondMatrix D U)).mulVecLin.range := by
+  apply (Matrix.mem_range_mulVecLin_piKronecker_iff _ _).mpr
   intro e τ
   obtain ⟨i, hi⟩ := hcover e
   exact physicalBondSlice_mem_range_of_mem_cutSpace tail head D U (C i) e hi τ (hψ i)
@@ -199,8 +199,9 @@ theorem exists_bondCoefficients_of_mem_cutSpaces
   simp_rw [map_smul]
   rw [← hc]
   funext β
-  simp only [dependentPhysicalProductFamilyMap_apply, Finset.sum_apply, Pi.smul_apply,
-    smul_eq_mul, representationBondProduct, bondRegrouping_matrixBondProduct, bondMatrix]
+  simp only [Matrix.mulVecLin_apply, Matrix.piKronecker_mulVec_apply, Finset.sum_apply,
+    Pi.smul_apply, smul_eq_mul, representationBondProduct, bondRegrouping_matrixBondProduct,
+    bondMatrix]
   exact Finset.sum_congr rfl fun _ _ => mul_comm _ _
 
 /-- Semi-regular edge trace pairings reconstruct every actual simultaneous cut

@@ -14,7 +14,7 @@
     \label{def:mpdo_eta_local_structure_data}
     \lean{MPOTensor.EtaLocalStructureData}
     \leanok
-    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_has_commuting_form}
+    \uses{def:mpdo_translation_invariant_bond_data,def:mpdo_has_commuting_form}
     The one-bond $\eta$-local form constructed in
     \cite[Appendix~C.2]{Cirac2016MPDO_arXiv} consists of
     a two-site bond $B$ as in
@@ -35,7 +35,7 @@
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_hN}
     \lean{MPOTensor.TranslationInvariantBondData.toCommutingFormData_bondAt}
     \leanok
-    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_commuting_form_data}
+    \uses{def:mpdo_translation_invariant_bond_data,def:mpdo_commuting_form_data}
     A translation-invariant positive two-site bond determines finite-chain
     commuting-form data at every length $N\ge2$.
 \end{definition}
@@ -66,7 +66,7 @@
     \lean{MPOTensor.TranslationInvariantBondData.%
         overlappingLifts_pairBond_comm}
     \leanok
-    \uses{def:mpdo_three_site_overlapping_coordinates, def:mpdo_translation_invariant_bond_data}
+    \uses{def:mpdo_three_site_overlapping_coordinates,def:mpdo_translation_invariant_bond_data}
     Let $B$ be a translation-invariant positive two-site bond, written as an
     operator $\widehat B$ on an ordered pair of physical spaces.
     Under the same three-site identification for both translates,
@@ -130,7 +130,7 @@
     \lean{MPOTensor.EtaLocalStructureData.positive_commuting_product_form}
     \lean{MPOTensor.hasCommutingForm_of_etaLocalStructure}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpdo_has_commuting_form}
+    \uses{def:mpdo_eta_local_structure_data,def:mpdo_has_commuting_form}
     As in the one-bond product conclusion of
     \cite[Proposition~C.8]{Cirac2016MPDO_arXiv}, the $\eta$-local structure
     itself determines a single-bond commuting-form presentation for every
@@ -154,7 +154,7 @@
     \lean{MPOTensor.TranslationInvariantBondData.%
         exists_unitary_blockActions_of_pairBond}
     \leanok
-    \uses{def:mpdo_three_site_overlapping_coordinates, thm:mpdo_eta_bond_overlapping_lifts}
+    \uses{def:mpdo_three_site_overlapping_coordinates,thm:mpdo_eta_bond_overlapping_lifts}
     Let $\widehat B$ be a pair-indexed positive two-site bond whose periodic
     translates commute. There are positive dimensions
     $d_{l,q}=\dim H_{q,l}$ and $d_{r,q}=\dim H_{q,r}$, a unitary decomposition
@@ -332,7 +332,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
         exists_positive_cyclic_eta_block_decomposition}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, thm:mpdo_commuting_bond_positive_eta_decomposition, thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    \uses{def:mpdo_eta_local_structure_data,thm:mpdo_commuting_bond_positive_eta_decomposition,thm:mpdo_eta_pair_bond_cyclic_product_transport}
     Let $\sigma^{(N)}(\mathcal K)$ be realized, for every $N\ge2$, by
     translates of one positive commuting bond. There are one unitary $U$,
     positive sector dimensions, and positive semidefinite operators
@@ -357,8 +357,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,
-        thm:mpdo_eta_pair_bond_cyclic_product_transport, lem:mpdo_tensor_power_laws}
+    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,thm:mpdo_eta_pair_bond_cyclic_product_transport,lem:mpdo_tensor_power_laws}
     Choosing the unitary $U$ and the neighboring operators $\eta_{q,h}$ from
     the commuting-bond positive $\eta$-decomposition, the identities of
     Lemma~\ref{lem:mpdo_tensor_power_laws} show that conjugation by
@@ -431,7 +430,7 @@
     \lean{MPOTensor.TranslationInvariantBondData.CyclicEdgeWeightForm.%
         toFixedProductTensorData}
     \leanok
-    \uses{def:mpdo_translation_invariant_bond_data, thm:mpdo_cyclic_edge_weight_tensor}
+    \uses{def:mpdo_translation_invariant_bond_data,thm:mpdo_cyclic_edge_weight_tensor}
     A fixed tensor for a bond-product family consists of a positive virtual
     dimension and one matrix-product tensor $C$, independent of $N$, such
     that, for every $N\ge2$,
@@ -454,7 +453,7 @@
     \lean{MPOTensor.EtaLocalStructureData.nonempty_fixedProductTensorData}
     \lean{MPOTensor.EtaLocalStructureData.fixedProductTensorData}
     \leanok
-    \uses{def:mpdo_translation_invariant_bond_data, def:mpdo_eta_local_structure_data, def:mpdo_fixed_bond_product_tensor, thm:mpdo_commuting_bond_positive_eta_decomposition}
+    \uses{def:mpdo_translation_invariant_bond_data,def:mpdo_eta_local_structure_data,def:mpdo_fixed_bond_product_tensor,thm:mpdo_commuting_bond_positive_eta_decomposition}
     Let $B\ge0$ be a two-site bond whose periodic translates commute. There
     is a positive integer $R$ and a matrix-product tensor $C$ of virtual
     dimension $R$, both independent of the chain length, such that for every
@@ -594,7 +593,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
         eventuallyNonzeroProportionalMPV₂_fixedProductTensor}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpdo_fixed_bond_product_tensor, thm:mpdo_eta_fixed_bond_product_tensor}
+    \uses{def:mpdo_eta_local_structure_data,def:mpdo_fixed_bond_product_tensor,thm:mpdo_eta_fixed_bond_product_tensor}
     Suppose one fixed tensor $C$ generates the products of the bond carried
     by an eta-local structure. Then the doubled-index tensors of $M$ and
     $C$ are eventually nonzero proportional. The proof uses only lengths
@@ -614,7 +613,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
         exists_unit_phase_power_mpo_eq_product_of_normal_smul}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
+    \uses{def:mpdo_eta_local_structure_data,def:mpdo_fixed_bond_product_tensor,def:nt_cpsv}
     Let $A$ be the normal doubled-index source tensor of positive bond
     dimension $D$, and let $C$ be a fixed tensor for its commuting-bond
     product. Suppose that $sC$ is normal for some $s>0$. Then there is a
@@ -628,7 +627,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality, lem:mpv_smul, thm:normal_proportional_mpv_geometric_phase, lem:mpdo_three_first_site_contraction_coefficients}
+    \uses{thm:mpdo_eta_fixed_product_tensor_eventual_proportionality,lem:mpv_smul,thm:normal_proportional_mpv_geometric_phase,lem:mpdo_three_first_site_contraction_coefficients}
     Scaling $C$ by $s$ gives
     $V^{(N)}(sC)_\sigma=s^N V^{(N)}(C)_\sigma$.
     Thus, for all sufficiently large $N$, the proportionality
@@ -656,7 +655,7 @@
     \lean{MPOTensor.EtaLocalStructureData.%
         mpo_eq_positive_power_product_of_normal_smul}
     \leanok
-    \uses{def:mpdo_eta_local_structure_data, def:mpdo_fixed_bond_product_tensor, def:nt_cpsv}
+    \uses{def:mpdo_eta_local_structure_data,def:mpdo_fixed_bond_product_tensor,def:nt_cpsv}
     Let $A$ be the normal doubled-index source tensor of positive bond
     dimension $D$, let $C$ be a fixed tensor for its commuting-bond product,
     and suppose that $sC$ is normal for some $s>0$. Then the unit phase is
@@ -672,7 +671,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_eta_normal_rescaling_geometric_phase, thm:cpsv_normal_mpv_phase_gauge}
+    \uses{thm:mpdo_eta_normal_rescaling_geometric_phase,thm:cpsv_normal_mpv_phase_gauge}
     Normality gives
     $\lim_{N\to\infty}\braket{V^{(N)}(A)}{V^{(N)}(A)}=1$.
     Hence at two sufficiently large consecutive lengths, say $N$ and $N+1$,

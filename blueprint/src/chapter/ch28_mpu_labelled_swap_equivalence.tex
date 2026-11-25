@@ -2,7 +2,7 @@
     \label{lem:mpu_sitewise_matrix_regrouping}
     \lean{MPOTensor.reindex_piKronecker_blockKron}
     \leanok
-    \uses{def:mpdo_sitewise_physical_matrix, lem:eval_word_block}
+    \uses{def:mpdo_sitewise_physical_matrix,lem:eval_word_block}
     For every local matrix $Q$ and $N,k\geq0$, the canonical blocked
     configuration identification gives
     \[
@@ -25,8 +25,7 @@
     \lean{MPOTensor.FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix,
         MPOTensor.FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix}
     \leanok
-    \uses{def:mpu_distinguished_physical_matrix_actions,
-        def:mpu_blocked_finite_chain_symmetry}
+    \uses{def:mpu_distinguished_physical_matrix_actions,def:mpu_blocked_finite_chain_symmetry}
     Fix a local matrix $Q$ and $k\geq0$. Canonically regroup the
     adjunction or transposition sandwich action through $k$ sites,
     and test the resulting action on every positive blocked chain
@@ -38,10 +37,7 @@
     \lean{MPOTensor.FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix_eq,
         MPOTensor.FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix_eq}
     \leanok
-    \uses{def:mpu_blocked_physical_positive_actions,
-        def:mpu_distinguished_physical_matrix_actions,
-        def:mpu_blocked_finite_chain_symmetry,
-        lem:mpu_sitewise_matrix_regrouping}
+    \uses{def:mpu_blocked_physical_positive_actions,def:mpu_distinguished_physical_matrix_actions,def:mpu_blocked_finite_chain_symmetry,lem:mpu_sitewise_matrix_regrouping}
     For every $k\geq0$, these actions are exactly
     \[
         X\longmapsto (Q^{\otimes k})^{\otimes N}
@@ -68,13 +64,7 @@
         MPOTensor.strictlyEquivalentUnderSymmetry_blockedTransposeWithPhysicalMatrix_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_blockedConjugationWithPhysicalMatrix_iff}
     \leanok
-    \uses{lem:mpu_blocked_physical_positive_action_identities,
-        thm:mpu_symmetry_path_transport,
-        thm:mpu_physical_left_action_blocking,
-        thm:mpu_pointwise_symmetry_invariance_comparison,
-        thm:mpu_involution_combined_fixed_equation,
-        lem:on_site_tensor_pow_mul, thm:mpdo_eta_local_sigma_nk2,
-        thm:threeMPU2_chain_formulas}
+    \uses{lem:mpu_blocked_physical_positive_action_identities,thm:mpu_symmetry_path_transport,thm:mpu_physical_left_action_blocking,thm:mpu_pointwise_symmetry_invariance_comparison,thm:mpu_involution_combined_fixed_equation,lem:on_site_tensor_pow_mul,thm:mpdo_eta_local_sigma_nk2,thm:threeMPU2_chain_formulas}
     Let $Q$ be a unitary involution, let $U,V$ have the same physical
     dimension and arbitrary virtual dimensions, and fix $k\geq0$.
     Left multiplication by $Q^{\otimes k}$ identifies the following
@@ -120,12 +110,7 @@
         MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_one,
         MPOTensor.conjugationSymmetry_block}
     \leanok
-    \uses{def:mpu_distinguished_physical_matrix_actions,
-        def:mpu_finite_chain_operator_symmetry,
-        def:mpu_blocked_finite_chain_symmetry,
-        def:mpu_swap_comparison_symmetries,
-        lem:mpu_blocked_physical_positive_action_identities,
-        thm:mpdo_eta_local_sigma_nk2}
+    \uses{def:mpu_distinguished_physical_matrix_actions,def:mpu_finite_chain_operator_symmetry,def:mpu_blocked_finite_chain_symmetry,def:mpu_swap_comparison_symmetries,lem:mpu_blocked_physical_positive_action_identities,thm:mpdo_eta_local_sigma_nk2}
     Let $Q$ be a local physical matrix and $k>0$. Canonical blocking of
     the actions specified by $Q$ gives the actions specified by
     $Q^{\otimes k}$ on every blocked chain. Canonical blocking preserves
@@ -145,8 +130,7 @@
     \lean{MPOTensor.PhysicalSymmetryKind,
         MPOTensor.PhysicalSymmetryKind.withMatrix}
     \leanok
-    \uses{def:mpu_distinguished_physical_matrix_actions,
-        def:mpu_swap_comparison_symmetries}
+    \uses{def:mpu_distinguished_physical_matrix_actions,def:mpu_swap_comparison_symmetries}
     Retain the three operations $\sharp\in\{\dagger,\mathsf T,\mathsf K\}$.
     A local matrix $Q$ specifies the full adjunction and transposition
     actions from Definition~\ref{def:mpu_distinguished_physical_matrix_actions}.
@@ -158,9 +142,7 @@
     \label{def:mpu_labelled_physical_matrix_equivalence}
     \lean{MPOTensor.EquivalentUnderPhysicalMatrixSymmetry}
     \leanok
-    \uses{def:mpu_physical_matrix_symmetry_operations,
-        def:mpu_physical_identity_matrix, def:strictly-equivalent-symmetry,
-        def:mpu_blocked_finite_chain_symmetry, def:blocked_tensor}
+    \uses{def:mpu_physical_matrix_symmetry_operations,def:mpu_physical_identity_matrix,def:strictly-equivalent-symmetry,def:mpu_blocked_finite_chain_symmetry,def:blocked_tensor}
     Let $\mathcal U,\mathcal V$ be MPUs on the same labelled physical
     space, and retain its local symmetry matrix $Q$. Write
     $\mathcal U\sim^{Q}_{\sharp}\mathcal V$ when there are common
@@ -180,13 +162,7 @@
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_transpose_iff,
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_conjugation_iff}
     \leanok
-    \uses{def:mpu_labelled_physical_matrix_equivalence,
-        lem:mpu_blocked_physical_involution_paths,
-        lem:mpu_physical_matrix_canonical_blocking,
-        lem:mpu_blocked_physical_positive_action_identities,
-        lem:mpu_ancilla_output_action, lem:on_site_tensor_pow_mul,
-        thm:mpu_continuous_involutive_left_action,
-        thm:threeMPU2_chain_formulas}
+    \uses{def:mpu_labelled_physical_matrix_equivalence,lem:mpu_blocked_physical_involution_paths,lem:mpu_physical_matrix_canonical_blocking,lem:mpu_blocked_physical_positive_action_identities,lem:mpu_ancilla_output_action,lem:on_site_tensor_pow_mul,thm:mpu_continuous_involutive_left_action,thm:threeMPU2_chain_formulas}
     Let $Q$ be a unitary involution on a fixed labelled physical space.
     For tensors $U,V$ with arbitrary virtual dimensions, output
     multiplication identifies the stabilized comparisons
@@ -224,7 +200,7 @@
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_transpose_iff,
         MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_conjugation_iff}
     \leanok
-    \uses{def:mpu_labelled_physical_matrix_equivalence, threeMPU2}
+    \uses{def:mpu_labelled_physical_matrix_equivalence,threeMPU2}
     Let $\mathcal U,\mathcal V$ have physical space
     $\mathbb C^d\otimes\mathbb C^d$ and arbitrary virtual dimensions.
     Put $\widetilde{\mathcal U}=\mathbb S\mathcal U$ and
@@ -238,12 +214,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_common_ancilla_swap_comparison,
-        lem:mpu_physical_matrix_canonical_blocking,
-        lem:mpu_blocked_physical_positive_action_identities,
-        lem:mpu_ancilla_output_action, lem:on_site_tensor_pow_mul,
-        thm:mpu_continuous_involutive_left_action,
-        thm:mpu_one_sided_swap_invariance, thm:threeMPU2_chain_formulas}
+    \uses{lem:mpu_common_ancilla_swap_comparison,lem:mpu_physical_matrix_canonical_blocking,lem:mpu_blocked_physical_positive_action_identities,lem:mpu_ancilla_output_action,lem:on_site_tensor_pow_mul,thm:mpu_continuous_involutive_left_action,thm:mpu_one_sided_swap_invariance,thm:threeMPU2_chain_formulas}
     Apply Lemma~\ref{lem:mpu_common_ancilla_swap_comparison} to the
     common positive ancilla and blocking witnesses. Since
     $\mathbb S$ is unitary and $\mathbb S^2=I$,
@@ -261,7 +232,7 @@
         MPOTensor.shiftExampleFamily,
         MPOTensor.shiftExampleTildeFamily}
     \leanok
-    \uses{threeMPU, threeMPU2}
+    \uses{threeMPU,threeMPU2}
     Index the source tensors in their printed order by
     $i\in\{0,1,2\}$, writing
     \[
@@ -279,8 +250,7 @@
         MPOTensor.labelledShiftExamples_swap_transpose_iff,
         MPOTensor.labelledShiftExamples_swap_conjugation_iff}
     \leanok
-    \uses{def:mpu_three_labelled_source_families,
-        thm:mpu_labelled_swap_equivalence}
+    \uses{def:mpu_three_labelled_source_families,thm:mpu_labelled_swap_equivalence}
     For every $i,j\in\{0,1,2\}$, the three comparisons of
     Lemma~\ref{thm:mpu_labelled_swap_equivalence} hold for the source
     tensors $\mathcal A_i,\mathcal A_j$ and their transformed tensors

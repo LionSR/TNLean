@@ -6,8 +6,7 @@
     \label{thm:mpug_raw_first_cut_contraction}
     \lean{MPOTensor.sourceCutM₁_adjointSimpleContraction_raw}
     \leanok
-    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
-        def:mpug_adjoint_simple_contraction}
+    \uses{def:mpu_source_matrix_one,def:mpu_source_weight,def:mpug_adjoint_simple_contraction}
     For an arbitrary tensor $A$ of physical dimension $d$ and bond
     dimension $D$, and an arbitrary $D\times D$ matrix $\rho$, put
     $M=M_1(A)$ and $W=I_d\otimes\rho$. Then
@@ -18,8 +17,7 @@
     No positivity, canonical-form, or simplicity hypothesis is needed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpu_source_matrix_one, def:mpu_source_weight,
-        def:mpug_adjoint_simple_contraction}
+    \uses{def:mpu_source_matrix_one,def:mpu_source_weight,def:mpug_adjoint_simple_contraction}
     In the first-cut coordinates, multiplication and the physical
     Kronecker delta in $W^{\mathsf T}$ give
     \begin{align}
@@ -38,8 +36,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
-        def:mpu_source_matrix_one, def:mpug_adjoint_simple_contraction}
+    \uses{def:mpu_canonical_form_ii,def:mpu_weighted_source_factors,def:mpu_source_matrix_one,def:mpug_adjoint_simple_contraction}
     Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
     matrix $\rho$, and let $X_1,Y_1$ be its chosen source factors for this
     same $\rho$. Construct $s$ from $\mathcal U,\rho$ as in
@@ -55,9 +52,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_raw_first_cut_contraction,
-        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
-        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    \uses{thm:mpug_raw_first_cut_contraction,thm:mpu_source_factorizations,thm:mpu_source_factor_normalizations,def:mpu_weighted_source_factors,def:mpu_source_weight}
     With $W=I_d\otimes\rho$, diagonality gives $W^{\mathsf T}=W$.
     The cut factorization and weighted isometry then yield
     \begin{align}
@@ -72,8 +67,7 @@
     \label{thm:mpug_source_y_one_scalar_gram}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose_eq_smul}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPU in canonical form II, and suppose that
     both $\mathcal U$ and $\mathcal U^\dagger$ are simple. Construct the
     source factors from $\mathcal U$ and its recorded fixed matrix
@@ -86,11 +80,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_adjoint_simple_scalar,
-        thm:mpug_first_cut_adjoint_contraction,
-        thm:mpu_source_factor_normalizations,
-        thm:mpu_source_factor_right_inverses,
-        thm:mpu_source_factorizations}
+    \uses{thm:mpug_adjoint_simple_scalar,thm:mpug_first_cut_adjoint_contraction,thm:mpu_source_factor_normalizations,thm:mpu_source_factor_right_inverses,thm:mpu_source_factorizations}
     By Lemma~\ref{thm:mpug_adjoint_simple_scalar}, $s=\delta\mathcal U$.
     Applying the first cut and
     Lemma~\ref{thm:mpug_first_cut_adjoint_contraction} gives
@@ -106,8 +96,7 @@
     \label{thm:mpug_source_y_one_gram_trace}
     \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₁_mul_conjTranspose}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpu_weighted_source_factors}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be a simple MPU in canonical form II, with physical
     dimension $d$, bond dimension $D$, first source-cut rank $d_r$, and
     recorded fixed matrix $\rho$. As in the physical-trace calculation of
@@ -138,8 +127,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₁_mul_conjTranspose}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPU in canonical form II of physical dimension
     $d$, and suppose that both $\mathcal U$ and $\mathcal U^\dagger$ are
     simple. Let $Y_1$ be the first source factor constructed from
@@ -154,8 +142,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_source_y_one_scalar_gram,
-        thm:mpug_source_y_one_gram_trace}
+    \uses{thm:mpug_source_y_one_scalar_gram,thm:mpug_source_y_one_gram_trace}
     Writing $Y_1Y_1^\dagger=\delta I_{d_r}$ by
     Lemma~\ref{thm:mpug_source_y_one_scalar_gram} and taking traces via
     Lemma~\ref{thm:mpug_source_y_one_gram_trace} gives $\delta d_r=d$.
@@ -170,9 +157,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceCutM₁_adjointSimpleContraction_physicalAdjoint}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
-        def:mpu_source_matrix_one, def:mpug_adjoint_simple_contraction,
-        def:mpdo_physical_adjoint, def:mpu_source_weight}
+    \uses{def:mpu_canonical_form_ii,def:mpu_weighted_source_factors,def:mpu_source_matrix_one,def:mpug_adjoint_simple_contraction,def:mpdo_physical_adjoint,def:mpu_source_weight}
     Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
     matrix $\rho$, and let $X_2,Y_2$ be its chosen second source factors.
     Set $W=I_d\otimes\rho$ and let $s_\dagger$ be the contraction of
@@ -187,10 +172,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_raw_first_cut_contraction,
-        thm:mpu_physical_adjoint_source_cuts,
-        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
-        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    \uses{thm:mpug_raw_first_cut_contraction,thm:mpu_physical_adjoint_source_cuts,thm:mpu_source_factorizations,thm:mpu_source_factor_normalizations,def:mpu_weighted_source_factors,def:mpu_source_weight}
     Lemma~\ref{thm:mpug_raw_first_cut_contraction} gives
     \begin{align}
         M_1(s(A,\rho)) & =M_1(A)M_1(A)^\dagger W^{\mathsf T}M_1(A).
@@ -206,9 +188,7 @@
     \label{thm:mpug_source_y_two_scalar_gram}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose_eq_smul}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors,
-        def:mpu_source_weight}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpu_weighted_source_factors,def:mpu_source_weight}
     Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
     matrix $\rho$, and assume that both $\mathcal U$ and
     $\mathcal U^\dagger$ are simple. Let $Y_2$ be its chosen second
@@ -220,12 +200,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_adjoint_canonical_boundaries,
-        thm:mpug_adjoint_simple_scalar, thm:mpu_physical_adjoint_identities,
-        thm:mpug_adjoint_cut_second_gram,
-        thm:mpu_physical_adjoint_source_cuts,
-        thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
-        thm:mpu_source_factor_right_inverses}
+    \uses{def:mpug_adjoint_canonical_boundaries,thm:mpug_adjoint_simple_scalar,thm:mpu_physical_adjoint_identities,thm:mpug_adjoint_cut_second_gram,thm:mpu_physical_adjoint_source_cuts,thm:mpu_source_factorizations,thm:mpu_source_factor_normalizations,thm:mpu_source_factor_right_inverses}
     Passing canonical form II to $\mathcal U^\dagger$ with the same
     $\rho$, Lemma~\ref{thm:mpug_adjoint_simple_scalar} gives
     $s_\dagger=\varepsilon\mathcal U^\dagger$, since physical adjunction
@@ -246,8 +221,7 @@
     \label{thm:mpug_source_y_two_gram_trace}
     \lean{MPOTensor.IsMPUCanonicalFormII.trace_sourceY₂_weighted_mul_conjTranspose}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpu_weighted_source_factors, def:mpu_source_weight}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpu_weighted_source_factors,def:mpu_source_weight}
     Let $\mathcal U$ be a simple MPU in canonical form II of physical
     dimension $d$, with recorded fixed matrix $\rho$ and chosen second
     source factor $Y_2$. Then, as in the physical-trace calculation for
@@ -259,7 +233,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_source_y_physical_contractions, def:mpu_source_weight}
+    \uses{thm:mpug_source_y_physical_contractions,def:mpu_source_weight}
     Cyclic invariance and expanding $I_d\otimes\rho$ give
     \begin{align}
         \operatorname{tr}\bigl(Y_2(I_d\otimes\rho)Y_2^\dagger\bigr)
@@ -275,9 +249,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceY₂_weighted_mul_conjTranspose}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors,
-        def:mpu_source_weight}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpu_weighted_source_factors,def:mpu_source_weight}
     Let $\mathcal U$ be an MPU in canonical form II of physical dimension
     $d$, and suppose that both $\mathcal U$ and $\mathcal U^\dagger$ are
     simple. Let $Y_2$ be the second source factor constructed from
@@ -292,8 +264,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_source_y_two_scalar_gram,
-        thm:mpug_source_y_two_gram_trace}
+    \uses{thm:mpug_source_y_two_scalar_gram,thm:mpug_source_y_two_gram_trace}
     Writing the Gram matrix as $\varepsilon I_{d_l}$ by
     Lemma~\ref{thm:mpug_source_y_two_scalar_gram}, its trace is $d$ by
     Lemma~\ref{thm:mpug_source_y_two_gram_trace}, so $\varepsilon d_l=d$.
@@ -308,8 +279,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.oneLetter_output_contraction}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPU in canonical form II of physical dimension
     $d$ and bond dimension $D$, with recorded fixed matrix $\rho$.
     Suppose that $\mathcal U^\dagger$ is simple. For $0\leq i,j<d$,
@@ -327,8 +297,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_adjoint_canonical_boundaries,
-        thm:mpug_one_letter_physical_contraction, def:mpdo_physical_adjoint}
+    \uses{def:mpug_adjoint_canonical_boundaries,thm:mpug_one_letter_physical_contraction,def:mpdo_physical_adjoint}
     Applying Lemma~\ref{thm:mpug_one_letter_physical_contraction} to
     $\mathcal U^\dagger$ with its canonical presentation carrying the
     same $\rho$, where
@@ -341,8 +310,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceX₁_physical_contraction}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPU in canonical form II of physical dimension
     $d$ and bond dimension $D$. Assume that both $\mathcal U$ and
     $\mathcal U^\dagger$ are simple. Let $X_1$ be the first source factor
@@ -360,9 +328,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_source_y_one_normalization,
-        thm:mpug_source_y_one_gram_trace, thm:mpug_one_letter_output_contraction,
-        thm:mpu_source_factorizations, def:mpu_source_matrix_one}
+    \uses{thm:mpug_source_y_one_normalization,thm:mpug_source_y_one_gram_trace,thm:mpug_one_letter_output_contraction,thm:mpu_source_factorizations,def:mpu_source_matrix_one}
     Factoring $M_1(\mathcal U)=X_1Y_1$ and applying
     Lemma~\ref{thm:mpug_source_y_one_normalization} yields
     \begin{align}
@@ -382,8 +348,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceX₂_physical_contraction}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpu_weighted_source_factors}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPU in canonical form II of physical dimension
     $d$ and bond dimension $D$. Assume that both $\mathcal U$ and
     $\mathcal U^\dagger$ are simple. Let $X_2$ be its chosen second source
@@ -398,10 +363,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_source_y_two_normalization,
-        thm:mpug_source_y_two_gram_trace, thm:mpug_one_letter_output_contraction,
-        thm:mpu_source_factorizations, def:mpu_source_matrix_two,
-        def:mpu_source_weight}
+    \uses{thm:mpug_source_y_two_normalization,thm:mpug_source_y_two_gram_trace,thm:mpug_one_letter_output_contraction,thm:mpu_source_factorizations,def:mpu_source_matrix_two,def:mpu_source_weight}
     With $W=I_d\otimes\rho$, the factorization $M_2(\mathcal U)=X_2Y_2$
     and Lemma~\ref{thm:mpug_source_y_two_normalization} give
     \begin{align}
@@ -510,7 +472,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \lean{MPOTensor.sourceU_contraction_transport}
     \leanok
     \discussion{7315}
-    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Let $U$ have physical dimension $d$ and bond dimension $D$, and write
     $r=\operatorname{rank}M_1(U)$ and $\ell=\operatorname{rank}M_2(U)$.
     Let $Y_1,\widetilde Y_1\in\operatorname{Mat}_{r\times(D\times d)}(\C)$
@@ -543,7 +505,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \lean{MPOTensor.exists_reciprocal_unitary_source_gauges}
     \leanok
     \discussion{7315}
-    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Let $U$ have physical dimension $d$ and bond dimension $D$, with
     $r=\operatorname{rank}M_1(U)$ and $\ell=\operatorname{rank}M_2(U)$.
     Suppose that
@@ -586,8 +548,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_factorization_comparison,
-        thm:mpug_source_contraction_transport, thm:mpug_reciprocal_unitary_gauges}
+    \uses{thm:mpug_factorization_comparison,thm:mpug_source_contraction_transport,thm:mpug_reciprocal_unitary_gauges}
     If $d=0$, every factor equality has an empty physical row or column
     index. Thus $\delta=1$ and identity gauges satisfy all four
     equalities, and $\delta^{-1}\delta=1$.
@@ -764,8 +725,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         GaussLaw.gaussOperator_apply_of_ne}
     \leanok
     \discussion{7503}
-    \uses{def:mpug_unitary_factorization_comparison,
-        def:mpug_gauss_leg_action}
+    \uses{def:mpug_unitary_factorization_comparison,def:mpug_gauss_leg_action}
     Let $G$ be finite, let $R_{a,b}\in\mathrm U(n)$ for $a,b\in G$, and take
     the basis $\ket{i,a,b}$ of $\C^n\otimes\C[G]^{\otimes2}$. As in
     \cite[lines~3380--3387]{FrancoRubio2025MPUGauging}, define the local Gauss
@@ -814,9 +774,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_unitary_factorization_comparison_laws,
-        thm:mpug_gauss_leg_action_mul,
-        def:mpug_gauss_operator}
+    \uses{thm:mpug_unitary_factorization_comparison_laws,thm:mpug_gauss_leg_action_mul,def:mpug_gauss_operator}
     In a column labelled by $(a,b)$, multiplication has only the intermediate
     gauge label $T_h(a,b)$. The surviving matter block is
     \begin{align}
@@ -838,8 +796,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         GaussLaw.gaussProjector_eq_average}
     \leanok
     \discussion{7578}
-    \uses{def:mpug_finite_group_unitary_average,
-        thm:mpug_gauss_representation}
+    \uses{def:mpug_finite_group_unitary_average,thm:mpug_gauss_representation}
     Let $G$ be finite and let $\mathcal G_g$ act on
     $\mathcal H=\C^n\otimes\C[G]^{\otimes2}$. Define the unplaced local
     projector kernel
@@ -867,8 +824,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_finite_group_unitary_average_projection,
-        thm:mpug_gauss_representation}
+    \uses{thm:mpug_finite_group_unitary_average_projection,thm:mpug_gauss_representation}
     Identifying the matrix average with the averaging operator of the unitary
     representation $g\mapsto\mathcal G_g$ makes this operator idempotent by
     the invariant-space averaging theorem. For self-adjointness,
@@ -927,8 +883,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_gauss_projector_projection,
-        thm:mpdo_cyclic_local_embedding_reindex}
+    \uses{thm:mpug_gauss_projector_projection,thm:mpdo_cyclic_local_embedding_reindex}
     Let $U_\kappa$ be the permutation unitary determined by the coordinate
     bijection in Definition~\ref{def:mpug_placed_gauss_projector}, with the
     orientation
@@ -1089,7 +1044,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         GaussLaw.DefectMaps.exists_completion}
     \leanok
     \discussion{7702}
-    \uses{def:mpug_defect_maps, def:mpug_completion_class}
+    \uses{def:mpug_defect_maps,def:mpug_completion_class}
     Let $\mathcal H_{\mathrm m}$ be finite-dimensional. Every family of
     prescribed defect maps satisfying (\ref{eq:mpug_defect_isometry}) admits a
     simultaneous unitary extension:
@@ -1116,7 +1071,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_defect_maps, def:mpug_completion_class}
+    \uses{def:mpug_defect_maps,def:mpug_completion_class}
     For each pair $(a,b)$, the restriction of $D_{a,b}$ to
     $\mathcal K_{a,b}$ is a linear isometry and therefore extends to a unitary
     operator on the whole finite-dimensional matter space. Choosing one such
@@ -1132,9 +1087,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         GaussLaw.DefectMaps.IsCompletion.unitaryFactorizationComparison_gaussLegAction_mulVec}
     \leanok
     \discussion{7569}
-    \uses{def:mpug_completion_class,
-        def:mpug_unitary_factorization_comparison,
-        def:mpug_gauss_leg_action}
+    \uses{def:mpug_completion_class,def:mpug_unitary_factorization_comparison,def:mpug_gauss_leg_action}
     Let $R=(U_{a,b})\in\mathfrak C(D)$, let
     $\ket{\xi}\in\mathcal K_{a,b}$ and $\ket{\eta}\in\mathcal K_{c,d}$, and
     assume the exact covariance
@@ -1155,8 +1108,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_completion_class,
-        thm:mpug_unitary_factorization_comparison_laws}
+    \uses{def:mpug_completion_class,thm:mpug_unitary_factorization_comparison_laws}
     This is~\cite[``Comparison identity for a
         completion'']{QICLean2026Blueprint}.
     Identity~(\ref{eq:mpug_completion_agrees}) is the defining property of a
@@ -1232,9 +1184,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         MPOTensor.placedGaussOperator}
     \leanok
     \discussion{7569}
-    \uses{def:mpug_gauss_operator,
-        def:mpug_placed_gauss_projector,
-        def:mpug_completion_class}
+    \uses{def:mpug_gauss_operator,def:mpug_placed_gauss_projector,def:mpug_completion_class}
     Let $R\in\mathfrak C(D)$ and let a chain site carry one matter index and
     one gauge label. Relabelling the row and column coordinates of
     $\mathcal G_g$ by the bijection $\kappa$ of
@@ -1265,7 +1215,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_gauss_projector, def:mpug_placed_gauss_operator}
+    \uses{def:mpug_gauss_projector,def:mpug_placed_gauss_operator}
     Comparing matrix entries, the relabelling is entrywise and the embedding
     multiplies each entry by the indicator that the two chain configurations
     agree outside the window. Both operations commute with the normalized sum
@@ -1301,8 +1251,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         MPOTensor.HasPrescribedDefectCovariance}
     \leanok
     \discussion{7569}
-    \uses{def:mpug_defect_maps, def:mpug_chain_label_action,
-        def:mpug_gauged_vector}
+    \uses{def:mpug_defect_maps,def:mpug_chain_label_action,def:mpug_gauged_vector}
     The matter defect states have local defect support when, for every
     $\alpha$ and every window $(j,j+1)$ whose adjacent labels are
     $(a_j,a_{j+1})$, the matter support of $\ket{\Psi_\alpha}$ lies in
@@ -1327,11 +1276,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         MPOTensor.placedGaussProjector_mulVec_gaugedVector}
     \leanok
     \discussion{7569}
-    \uses{def:mpug_placed_gauss_operator,
-        def:mpug_placed_gauss_projector,
-        def:mpug_completion_class,
-        def:mpug_gauged_vector,
-        def:mpug_defect_state_hypotheses}
+    \uses{def:mpug_placed_gauss_operator,def:mpug_placed_gauss_projector,def:mpug_completion_class,def:mpug_gauged_vector,def:mpug_defect_state_hypotheses}
     Assume local defect support and exact defect
     covariance~(\ref{eq:mpug_exact_defect_covariance}), which as recorded
     in~\cite{gap:fbc25_state_level_gauging_covariance} enter here as hypotheses
@@ -1376,10 +1321,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{center}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_completion_transport,
-        thm:mpug_chain_label_action_mul,
-        thm:mpug_placed_gauss_projector_average,
-        def:mpug_gauss_operator}
+    \uses{thm:mpug_completion_transport,thm:mpug_chain_label_action_mul,thm:mpug_placed_gauss_projector_average,def:mpug_gauss_operator}
     Fix an output chain configuration and let $\alpha$ be its gauge-label part,
     with $(a,b)=(a_j,a_{j+1})$ the two labels adjacent to the window. Among the
     columns contributing to this fixed output row of
@@ -1410,9 +1352,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \lean{MPOTensor.gaugeInvariantSubspace}
     \leanok
     \discussion{7569}
-    \uses{def:mpug_common_fixed_subspace,
-        def:mpug_completion_class,
-        def:mpug_placed_gauss_projector}
+    \uses{def:mpug_common_fixed_subspace,def:mpug_completion_class,def:mpug_placed_gauss_projector}
     For $R\in\mathfrak C(D)$ and a chain of length $N\geq2$, the
     gauge-invariant subspace is the common fixed subspace
     \begin{align}
@@ -1432,10 +1372,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         MPOTensor.one_le_finrank_gaugeInvariantSubspace}
     \leanok
     \discussion{7569}
-    \uses{def:mpug_gauge_invariant_subspace,
-        def:mpug_completion_class,
-        def:mpug_gauged_vector,
-        def:mpug_defect_state_hypotheses}
+    \uses{def:mpug_gauge_invariant_subspace,def:mpug_completion_class,def:mpug_gauged_vector,def:mpug_defect_state_hypotheses}
     Under local defect support and exact defect
     covariance~(\ref{eq:mpug_exact_defect_covariance}),
     \begin{align}
@@ -1452,9 +1389,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_universal_invariant_vector,
-        thm:mpug_mem_common_fixed_subspace,
-        thm:mpug_common_fixed_subspace_finrank}
+    \uses{thm:mpug_universal_invariant_vector,thm:mpug_mem_common_fixed_subspace,thm:mpug_common_fixed_subspace_finrank}
     Membership is the projector identity in
     Lemma~\ref{thm:mpug_universal_invariant_vector} at every window. A
     nonzero member of a subspace forces its dimension to be at least one.

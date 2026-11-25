@@ -21,8 +21,7 @@ closures, with distances measured in the sup metric.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_dyadic_closures,thm:area_law_dyadic_indices,
-        thm:area_law_dyadic_cell_distance}
+    \uses{thm:area_law_dyadic_closures,thm:area_law_dyadic_indices,thm:area_law_dyadic_cell_distance}
     The point lies in a closed scale-$k$ cell whose index is within
     $C_0$ of an occupied index in each coordinate. Choose an endpoint
     in that occupied cell and apply the closed-cell distance bound.
@@ -41,8 +40,7 @@ closures, with distances measured in the sup metric.
     In particular, this is a positive separation when $C_0\ge2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_neighborhood_endpoint_distance,
-        thm:area_law_dyadic_layer_distance}
+    \uses{thm:area_law_neighborhood_endpoint_distance,thm:area_law_dyadic_layer_distance}
     Choose $z\in Z$ with
     $d_\infty(x,z)\le(C_0+1)2^{k_0}$. The layer bound gives
     $C_0 2^k\le d_\infty(y,z)$, while $2^k\ge2\cdot2^{k_0}$.

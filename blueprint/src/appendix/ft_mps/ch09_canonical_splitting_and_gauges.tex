@@ -43,7 +43,7 @@ Similarity invariance and strict dimension decrease justify the induction used i
     \label{thm:nonzero_irreducible_block_decomposition}
     \lean{MPSTensor.exists_irreducible_blockDecomp_nonzeroBlocks}
     \leanok
-    \uses{def:irreducible_tensor, def:same_mpv2_pos}
+    \uses{def:irreducible_tensor,def:same_mpv2_pos}
     Every MPS tensor $A$ admits a finite family of nonzero irreducible blocks
     $(B_k)_{k=1}^r$, each with at least one nonzero Kraus operator and positive
     bond dimension. For every $N\ge1$ and every $\sigma$,
@@ -97,7 +97,7 @@ Lemmas~\ref{thm:projector_closure_irreducible_corners} and
     \label{thm:exists_reducing_projection_of_invariant_projector}
     \lean{MPSTensor.exists_reducing_projection_of_hasInvariantProj}
     \leanok
-    \uses{def:has_inv_proj, def:invariant_projector_closure}
+    \uses{def:has_inv_proj,def:invariant_projector_closure}
     If $A$ has invariant-projector closure and admits a nontrivial invariant
     projection, then it admits a nontrivial orthogonal projection commuting
     with every $A^i$.
@@ -210,7 +210,7 @@ companion quantum-channel volume~\cite[``Rectangular Gram equality gives a unita
     \label{lem:mpv_partition_isometries}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_of_isometry_family}
     \leanok
-    \uses{def:same_mpv2, def:block_diagonal_tensor}
+    \uses{def:same_mpv2,def:block_diagonal_tensor}
     Let $V_1,\ldots,V_r$ be isometries, $V_k^\dagger V_k=\Id$, with
     $\sum_kV_kV_k^\dagger=\Id$, and suppose $A^iV_k=V_kB_k^i$ for some
     tensors $B_1,\ldots,B_r$. Then
@@ -280,7 +280,7 @@ companion quantum-channel volume~\cite[``Rectangular Gram equality gives a unita
     \label{lem:canonical_hypotheses_dependent_direct_summand}
     \lean{MPSTensor.projectorClosure_and_noPeriodicVectors_block_of_reindex_eq_blockDiagonal}
     \leanok
-    \uses{lem:matrix_sigma_block_inclusion, def:invariant_projector_closure, def:no_periodic_vectors}
+    \uses{lem:matrix_sigma_block_inclusion,def:invariant_projector_closure,def:no_periodic_vectors}
     Suppose that, after a change of coordinates, $A$ is the dependent direct
     sum of tensors $B_k$. If $A$ has invariant-projector closure and no
     nontrivial periodic vectors, then every $B_k$ has both properties. The
@@ -300,7 +300,7 @@ companion quantum-channel volume~\cite[``Rectangular Gram equality gives a unita
     \label{lem:same_mpv_exact_isometric_decomposition}
     \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction}
     \leanok
-    \uses{def:same_mpv2_pos, def:block_diagonal_tensor}
+    \uses{def:same_mpv2_pos,def:block_diagonal_tensor}
     Suppose that isometries $V_k$ satisfy
     \begin{align}
         V_k^\dagger A^i
@@ -334,7 +334,7 @@ gauge transformations of irreducible blocks.
     \label{lem:irreducible_transfer_perron_pair}
     \lean{MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible}
     \leanok
-    \uses{def:irreducible_tensor, def:transfer_map}
+    \uses{def:irreducible_tensor,def:transfer_map}
     Let $B$ be an irreducible MPS tensor of positive bond dimension, not all
     of whose matrices vanish. Then there are $\rho>0$ and $r>0$ with
     $\E_B(\rho)=r\rho$.
@@ -356,7 +356,7 @@ gauge transformations of irreducible blocks.
     \label{lem:irreducible_block_spectral_normalization}
     \lean{MPSTensor.isNormalTensor_invSqrt_smul_of_unique_peripheral}
     \leanok
-    \uses{def:irreducible_tensor, def:transfer_map, def:nt_cpsv}
+    \uses{def:irreducible_tensor,def:transfer_map,def:nt_cpsv}
     Let $B$ be an irreducible MPS tensor of positive bond dimension with
     $\E_B(\rho)=r\rho$ for some $\rho>0$ and $r>0$, and suppose every
     eigenvalue of $\E_B$ of modulus~$r$ equals~$r$. Then $r^{-1/2}B$ is a
@@ -417,7 +417,7 @@ gauge transformations of irreducible blocks.
     \label{thm:irreducible_tensor_smul_conj}
     \lean{MPSTensor.isIrreducibleFamily_smul_conj}
     \leanok
-    \uses{def:irreducible_tensor, lem:support_proj_range_factorization}
+    \uses{def:irreducible_tensor,lem:support_proj_range_factorization}
     Let $B$ be an irreducible tensor, let $X$ be invertible, and let
     $c\ne0$. Then the rescaled conjugated tensor with letters
     $cX^{-1}B^vX$ is irreducible. In particular, the rescaled unital-gauge
@@ -444,7 +444,7 @@ gauge transformations of irreducible blocks.
     \label{thm:spectral_unital_gauge_schwarz_setup}
     \lean{MPSTensor.spectralUnitalGauge_schwarz_setup}
     \leanok
-    \uses{def:irreducible_tensor, def:transfer_map, thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj}
+    \uses{def:irreducible_tensor,def:transfer_map,thm:unital_gauge_of_pd_fixed_point,thm:irreducible_tensor_smul_conj}
     Let $B$ be an irreducible tensor with a positive definite transfer
     eigenvector, $\E_B(\rho)=r\rho$, where $\rho>0$ and $r>0$. Then the
     rescaled unital gauge
@@ -457,7 +457,7 @@ gauge transformations of irreducible blocks.
 
 \begin{proof}
     \leanok
-    \uses{thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj, thm:transfer_psd_fp_pd_irred}
+    \uses{thm:unital_gauge_of_pd_fixed_point,thm:irreducible_tensor_smul_conj,thm:transfer_psd_fp_pd_irred}
     Unitality follows from Lemma~\ref{thm:unital_gauge_of_pd_fixed_point} and
     irreducibility from Lemma~\ref{thm:irreducible_tensor_smul_conj}. The
     adjoint of a unital family is trace-preserving, so its transfer map is

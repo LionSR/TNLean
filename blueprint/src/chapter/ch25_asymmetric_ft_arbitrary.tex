@@ -23,8 +23,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     \label{thm:asym_arbitrary_ft}
     \lean{MPSTensor.sameMPV₂Pos_iff_exists_multiBlockCompression}
     \leanok
-    \uses{def:same_mpv2_pos, def:irreducible_action, thm:asym_multiblock,
-        prop:asym_compression_trace}
+    \uses{def:same_mpv2_pos,def:irreducible_action,thm:asym_multiblock,prop:asym_compression_trace}
     Two tensors $B$ and $B'$ satisfy
     $\ket{V^{(N)}(B)}=\ket{V^{(N)}(B')}$ for every $N\geq1$ if and only if
     there is a finite family of admissible tensors onto which both $B$ and
@@ -33,7 +32,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asym_multiblock, prop:asym_compression_trace}
+    \uses{thm:asym_multiblock,prop:asym_compression_trace}
     If the vectors agree, decompose $B'$ into irreducible blocks with a
     nonzero letter; $B$ and $B'$ then both have the periodic traces of the
     direct sum of these blocks, and each has a reduction onto them.
@@ -45,8 +44,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     \label{thm:asym_arbitrary_family_unique}
     \lean{MPSTensor.MultiBlockCompression.z_sub_z_eq_and_exists_equiv_isGaugeRelated_of_sameMPV₂Pos}
     \leanok
-    \uses{thm:asym_arbitrary_ft, cor:asym_uniq_trace_independence,
-        def:asym_gauge_related}
+    \uses{thm:asym_arbitrary_ft,cor:asym_uniq_trace_independence,def:asym_gauge_related}
     Let $B$ have a reduction onto an admissible family $(C_s)_{s\in S}$ with
     $z$ zero blocks and $B'$ a reduction onto an admissible family
     $(C'_t)_{t\in S'}$ with $z'$ zero blocks. If $B$ and $B'$ have the same
@@ -78,8 +76,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
         MPSTensor.tfae_sameMPV₂Pos_compositionSeries,
         MPSTensor.SameMPV₂Pos.exists_equiv_isGaugeRelated_stepTensor}
     \leanok
-    \uses{def:asym_word_module, thm:asym_arbitrary_ft,
-        def:asym_gauge_related}
+    \uses{def:asym_word_module,thm:asym_arbitrary_ft,def:asym_gauge_related}
     Every tensor has an invariant flag. A step of an invariant flag on which
     every letter vanishes is one-dimensional; the tensor of a step is
     irreducible, it has a nonzero letter when the step is nonzero, the step
@@ -114,7 +111,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     \label{thm:asym_arbitrary_flag_reduction}
     \lean{MPSTensor.exists_multiBlockCompression_mem_iff_and_flag_eq_and_ord_eq}
     \leanok
-    \uses{thm:asym_arbitrary_flags, def:asym_flag_data}
+    \uses{thm:asym_arbitrary_flags,def:asym_flag_data}
     Let $0=M_0\subset\cdots\subset M_r$ be an invariant flag of $B$ and $S$
     the set of its nonzero steps. Then $B$ has a reduction onto the tensors of
     the steps in $S$ with $r-|S|$ zero blocks, whose invariant flag is the
@@ -136,7 +133,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
     \lean{MPSTensor.MultiBlockCompression.exists_isUnit_and_tendsto_mul_zeroPad_mul_inv,
         MPSTensor.sameMPV₂Pos_of_tendsto_mul_zeroPad_mul_inv}
     \leanok
-    \uses{thm:asym_arbitrary_ft, def:varying_bond_obc_zero_pad}
+    \uses{thm:asym_arbitrary_ft,def:varying_bond_obc_zero_pad}
     Let $n=\max(D_B,D_{B'})$ and let $\widehat B$ and $\widehat B'$ be $B$
     and $B'$ padded by zero blocks to bond dimension $n$. If $B$ and $B'$
     have reductions onto one family $(C_s)_{s\in S}$, then for the block
@@ -167,7 +164,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
         MPSTensor.eventually_mpv_eq_pow_mul_iff_exists_equiv_isGaugeRelated_smul,
         MPSTensor.tfae_statesDependent}
     \leanok
-    \uses{thm:asym_arbitrary_ft, thm:asym_arbitrary_family_unique}
+    \uses{thm:asym_arbitrary_ft,thm:asym_arbitrary_family_unique}
     Let $V$ and $U$ be square matrices of any sizes. The identity
     $\tr(V^N)\ket{V^{(N)}(A)}=\tr(U^N)\ket{V^{(N)}(B)}$ holds for all
     large $N$ if and only if it holds for every $N\geq1$, if and only if
@@ -189,7 +186,7 @@ block-diagonal theorem of \cite{DeLasCuevas2017Irreducible}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asym_arbitrary_ft, thm:asym_arbitrary_family_unique}
+    \uses{thm:asym_arbitrary_ft,thm:asym_arbitrary_family_unique}
     The periodic trace of a word on $A\otimes V$ is $\tr(V^{|w|})\tr(A^w)$,
     so the weighted identity is equality of the periodic vectors of
     $A\otimes V$ and $B\otimes U$, and equality for all large lengths

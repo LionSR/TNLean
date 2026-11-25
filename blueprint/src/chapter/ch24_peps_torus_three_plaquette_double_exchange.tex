@@ -2,8 +2,7 @@
     \label{def:peps_torus_three_plaquette_double_exchange_transports}
     \lean{TNLean.PEPS.torusThreePlaquetteDoubleExchangeTransports}
     \leanok
-    \uses{def:peps_torus_three_plaquette_flux_assignment,
-        def:peps_regular_three_plaquette_double_exchange}
+    \uses{def:peps_torus_three_plaquette_flux_assignment,def:peps_regular_three_plaquette_double_exchange}
     For directed bond values $t=(t_0,t_1,t_2)$, define
     \begin{align}
         t'=(t_0,\ t_2t_0^{-1}t_1t_2^{-1}t_0,\ t_2).
@@ -18,8 +17,7 @@
     \label{thm:peps_torus_three_plaquette_double_exchange_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusThreePlaquetteDoubleExchange}
     \leanok
-    \uses{def:peps_torus_three_plaquette_double_exchange_transports,
-        thm:peps_torus_three_plaquette_flux_holonomy}
+    \uses{def:peps_torus_three_plaquette_double_exchange_transports,thm:peps_torus_three_plaquette_flux_holonomy}
     At every translated position, the output assignment has plaquette
     holonomies
     \begin{align}
@@ -41,9 +39,7 @@
     \label{thm:peps_torus_three_plaquette_double_exchange_physical}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusThreePlaquetteDoubleExchange}
     \leanok
-    \uses{thm:peps_three_plaquette_geometry,
-        thm:peps_torus_three_plaquette_double_exchange_holonomy,
-        thm:peps_regular_three_plaquette_double_exchange_physical}
+    \uses{thm:peps_three_plaquette_geometry,thm:peps_torus_three_plaquette_double_exchange_holonomy,thm:peps_regular_three_plaquette_double_exchange_physical}
     Let $G$ be finite, and suppose the native four-leg tensor is
     $G$-isometric for the regular torus-leg representation.
     For every position $v$, there is one unitary $W$ on the eight original

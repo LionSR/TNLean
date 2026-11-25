@@ -29,9 +29,8 @@ Proposition 5.7, lines 1324–1333.
 
 open ManyBody (disjoint_interval_interval interval)
 
-open Matrix QuantumCircuit
+open Matrix
 open scoped BigOperators Kronecker
-open TNLean.Lattice.Sheet
 
 noncomputable section
 
@@ -178,25 +177,27 @@ theorem exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition
     let T := interval L 0 (a + p.val + 1)
     let E := interval L (a + p.val + 1) (b + s.val + 1)
     let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
-    let g := threeSplit q T E hTE
-    let e := exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)
+    let Mid := (T ∪ E) \ T
+    let g := ManyBody.threeCutEquiv (fun _ : Fin L ↦ Fin q)
+      (Finset.subset_union_left : T ⊆ T ∪ E)
+    let e := exteriorMiddleEquiv (T → Fin q) (Mid → Fin q) ({v // v ∉ T ∪ E} → Fin q)
     let Z := interval L (a + 2 * ℓ + 1) b
-    let C : Finset E := Finset.univ.filter (fun x : E ↦ x.val ∉ Z)
-    let hKE : K ⊆ E := (core_and_strict_core_subset_selected_middle
-      (L := L) (a := a) (b := b) p s).1
+    let C : Finset Mid := Finset.univ.filter (fun x : Mid ↦ x.val ∉ Z)
+    let hKE : K ⊆ Mid := (core_and_strict_core_subset_selected_middle
+      (L := L) (a := a) (b := b) p s).1.trans (Finset.union_sdiff_cancel_left hTE).ge
     let ME := ManyBody.placeAlong (X := fun _ ↦ Fin q)
-      ⟨fun x : K ↦ (⟨x.val, hKE x.property⟩ : E),
+      ⟨fun x : K ↦ (⟨x.val, hKE x.property⟩ : Mid),
         fun _ _ h ↦ Subtype.ext (by simpa using congrArg Subtype.val h)⟩ M
     let Pmid := ManyBody.place (X := fun _ ↦ Fin q) K M
     let O : Finset ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) :=
       (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
-    let N := fun (e₀ : E) (t : Fin (q * q)) ↦
+    let N := fun (e₀ : Mid) (t : Fin (q * q)) ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin q)
         ⟨fun _ : Fin 1 ↦ e₀, fun a b _ ↦ Subsingleton.elim a b⟩
         (Matrix.single
           (fun _ : Fin 1 ↦ (finProdFinEquiv.symm t).1)
           (fun _ : Fin 1 ↦ (finProdFinEquiv.symm t).2) (1 : ℂ))
-    ∃ (eL eR : E) (A Kz : Matrix (E → Fin q) (E → Fin q) ℂ),
+    ∃ (eL eR : Mid) (A Kz : Matrix (Mid → Fin q) (Mid → Fin q) ℂ),
       eL.val.val = a + p.val + 1 ∧ eR.val.val = b + s.val ∧
       A = z (Sum.inr 1) • ME + Kz ∧ ManyBody.IsSupportedOn Kz C ∧
       (∀ t, ManyBody.IsSupportedOn (N eL t) C) ∧
@@ -219,12 +220,12 @@ theorem exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition
                 (g.trans e) (g.trans e) =
               ∑ f, B f ⊗ₖ Psi f := by
   classical
-  intro K T E hTE g e Z C hKE ME Pmid O N
+  intro K T E hTE Mid g e Z C hKE ME Pmid O N
   obtain ⟨eL, eR, HM, UL, VR, AL, BR, heL, heR, _hactual, hUL, hVR,
       hAL, hBR, hNL, hNR, hweighted, hlate⟩ :=
     exists_physical_selected_window_fixed_middle_data
       WL WR hleft hright hab hb p s M
-  let A : Matrix (E → Fin q) (E → Fin q) ℂ := ∑ t ∈ O, z t • HM t
+  let A : Matrix (Mid → Fin q) (Mid → Fin q) ℂ := ∑ t ∈ O, z t • HM t
   obtain ⟨Kz, hA, hKz⟩ := hweighted z
   refine ⟨eL, eR, A, Kz, heL, heR, hA, hKz, hNL, hNR, ?_⟩
   intro Psi PL PR hPL hPR F Dphys c
@@ -232,18 +233,18 @@ theorem exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition
   let Lz : Matrix (T → Fin q) (T → Fin q) ℂ := ∑ t ∈ O, z t • HL t
   let Rz : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ :=
     ∑ t ∈ O, z t • HR t
-  let D₀ := (Lz ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
+  let D₀ := (Lz ⊗ₖ (1 : Matrix (Mid → Fin q) (Mid → Fin q) ℂ)) ⊗ₖ
         (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
       ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ A) ⊗ₖ
         (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
-      (1 : Matrix ((T → Fin q) × (E → Fin q))
-        ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ Rz
+      (1 : Matrix ((T → Fin q) × (Mid → Fin q))
+        ((T → Fin q) × (Mid → Fin q)) ℂ) ⊗ₖ Rz
   let U₀ := (∑ t, AL t ⊗ₖ N eL t) ⊗ₖ
     (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
   let V₀ := ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ
       (∑ t, N eR t ⊗ₖ BR t)).reindex
-        (Equiv.prodAssoc (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm
-        (Equiv.prodAssoc (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm
+        (Equiv.prodAssoc (T → Fin q) (Mid → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm
+        (Equiv.prodAssoc (T → Fin q) (Mid → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm
   have hD : Dphys.reindex g g = D₀ := by
     calc
       _ = ∑ t ∈ O, z t • (F t).submatrix g.symm g.symm := by
@@ -251,36 +252,36 @@ theorem exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition
         simp only [Dphys, Matrix.reindex_apply, Matrix.submatrix_apply,
           Matrix.sum_apply, Matrix.smul_apply]
       _ = ∑ t ∈ O, z t •
-          ((HL t ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
+          ((HL t ⊗ₖ (1 : Matrix (Mid → Fin q) (Mid → Fin q) ℂ)) ⊗ₖ
               (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM t) ⊗ₖ
               (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
-            (1 : Matrix ((T → Fin q) × (E → Fin q))
-              ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR t) := by
+            (1 : Matrix ((T → Fin q) × (Mid → Fin q))
+              ((T → Fin q) × (Mid → Fin q)) ℂ) ⊗ₖ HR t) := by
         refine Finset.sum_congr rfl fun t ht ↦ ?_
         have htr : t ≠ Sum.inl (Sum.inr s) := (Finset.mem_erase.mp ht).1
         have htl : t ≠ Sum.inl (Sum.inl p) :=
           (Finset.mem_erase.mp (Finset.mem_erase.mp ht).2).1
         rw [hlocal t htl htr]
       _ = D₀ := by
-        let fullConfig := ((T → Fin q) × (E → Fin q)) × ({v // v ∉ T ∪ E} → Fin q)
-        let outer : Matrix ((T → Fin q) × (E → Fin q))
-            ((T → Fin q) × (E → Fin q)) ℂ →ₗ[ℂ] Matrix fullConfig fullConfig ℂ :=
+        let fullConfig := ((T → Fin q) × (Mid → Fin q)) × ({v // v ∉ T ∪ E} → Fin q)
+        let outer : Matrix ((T → Fin q) × (Mid → Fin q))
+            ((T → Fin q) × (Mid → Fin q)) ℂ →ₗ[ℂ] Matrix fullConfig fullConfig ℂ :=
           (Matrix.kroneckerBilinear (R := ℂ) (α := ℂ)).flip
             (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
         let leftMap : Matrix (T → Fin q) (T → Fin q) ℂ →ₗ[ℂ]
             Matrix fullConfig fullConfig ℂ :=
           outer.comp ((Matrix.kroneckerBilinear (R := ℂ) (α := ℂ)).flip
-            (1 : Matrix (E → Fin q) (E → Fin q) ℂ))
-        let middleMap : Matrix (E → Fin q) (E → Fin q) ℂ →ₗ[ℂ]
+            (1 : Matrix (Mid → Fin q) (Mid → Fin q) ℂ))
+        let middleMap : Matrix (Mid → Fin q) (Mid → Fin q) ℂ →ₗ[ℂ]
             Matrix fullConfig fullConfig ℂ :=
           outer.comp ((Matrix.kroneckerBilinear (R := ℂ) (α := ℂ))
             (1 : Matrix (T → Fin q) (T → Fin q) ℂ))
         let rightMap : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ →ₗ[ℂ]
             Matrix fullConfig fullConfig ℂ :=
           (Matrix.kroneckerBilinear (R := ℂ) (α := ℂ))
-            (1 : Matrix ((T → Fin q) × (E → Fin q))
-              ((T → Fin q) × (E → Fin q)) ℂ)
+            (1 : Matrix ((T → Fin q) × (Mid → Fin q))
+              ((T → Fin q) × (Mid → Fin q)) ℂ)
         change (∑ t ∈ O, z t • (leftMap (HL t) + middleMap (HM t) + rightMap (HR t))) =
           leftMap (∑ t ∈ O, z t • HL t) + middleMap (∑ t ∈ O, z t • HM t) +
             rightMap (∑ t ∈ O, z t • HR t)

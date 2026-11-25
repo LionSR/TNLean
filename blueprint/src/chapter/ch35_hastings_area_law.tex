@@ -84,8 +84,7 @@ prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+
     \label{thm:hastings_area_law_from_factorization}
     \lean{TNLean.MPS.AreaLaw.Hastings.regionEntropy_prefix_le_of_factorization}
     \leanok
-    \uses{def:chain_model,def:hastings_area_law_bound,
-        def:hastings_factorization_at}
+    \uses{def:chain_model,def:hastings_area_law_bound,def:hastings_factorization_at}
     Let $\Omega$ be a gapped ground vector of a finite-range Hamiltonian on a
     chain of $L$ sites with local dimension $q$, and let $\xi'>0$ and
     $C_1\ge1$. Suppose that for every cut $c$ and $l\in\N$ with $c+l\le L$
@@ -103,10 +102,7 @@ prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+
     the entropy gain \cite{gap:hastings07_relent_constants}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_main_stage_long_window,
-        thm:hastings_cut_entropy_slow,thm:hastings_window_entropy_bounds,
-        thm:hastings_relent_window,thm:hastings_window_claim_of_relent,
-        lem:chain_entropy_inequalities}
+    \uses{thm:hastings_main_stage_long_window,thm:hastings_cut_entropy_slow,thm:hastings_window_entropy_bounds,thm:hastings_relent_window,thm:hastings_window_claim_of_relent,lem:chain_entropy_inequalities}
     For $q\le1$, $S(\lbrack0,i))=0\le S_{\max}$. For $q\ge2$, apply
     Lemma~\ref{thm:hastings_main_stage_long_window} with $l_0$ from
     (\ref{eq:hastings_area_law_bound}) and the window entropy $S_l$:
@@ -127,8 +123,7 @@ prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+
     \label{thm:hastings_area_law}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le}
     \leanok
-    \uses{def:chain_model,def:hastings_area_law_bound,
-        thm:hastings_lemma1_endpoint}
+    \uses{def:chain_model,def:hastings_area_law_bound,thm:hastings_lemma1_endpoint}
     For every range $R\in\N$ there is a constant $K\ge0$ depending only on $R$
     with the following property. Let $J\ge0$, $\Delta E>0$, and let $\tilde\xi$
     be the decay length of Lemma~\ref{thm:hastings_lemma1_endpoint}
@@ -160,9 +155,7 @@ prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+
     after enlarging the length.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_lemma1_endpoint,
-        thm:hastings_area_law_from_factorization,
-        thm:hastings_factorization_mono}
+    \uses{thm:hastings_lemma1_endpoint,thm:hastings_area_law_from_factorization,thm:hastings_factorization_mono}
     Lemma~\ref{thm:hastings_lemma1_endpoint} gives $K\ge0$ and factorizations
     at every $(c,l)$ with error $K\tilde\xi^3e^{-l/(6\tilde\xi)}\le C_1e^{-l/\xi'}$
     (Lemma~\ref{thm:hastings_factorization_mono}), so
@@ -194,8 +187,7 @@ prefactor $c_0$ of $S_{\max}$, we lengthen the window $l_0\ge\lceil\xi_0\rceil_+
     in~\cite{gap:hastings07_doubling_constants}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_area_law,thm:hastings_area_law_bound_le,
-        thm:hastings_max_entropy_bound_le}
+    \uses{thm:hastings_area_law,thm:hastings_area_law_bound_le,thm:hastings_max_entropy_bound_le}
     Write $x=6\zeta$ and $C_1=\max\{K\zeta^3,1\}$, where $K$ is the
     constant in Lemma~\ref{thm:hastings_area_law}. Since $\zeta\ge20$,
     $\ln C_1\le a\ln x$ with $a=\ln(K+1)+3$. The starting length of the

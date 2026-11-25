@@ -55,8 +55,7 @@ recorded in Section~\ref{sec:peps_czx_rectangle_boundary}.
         TNLean.PEPS.czxWrappingRectangleBoundaryMatrix,
         TNLean.PEPS.czxWrappingRectangleBoundaryMatrix_apply}
     \leanok
-    \uses{def:czx_rectangle_perimeter,def:czx_rectangle_boundary_labels,
-        lem:czx_wrapping_contraction}
+    \uses{def:czx_rectangle_perimeter,def:czx_rectangle_boundary_labels,lem:czx_wrapping_contraction}
     Translate the clockwise origin enumeration of the $P$ crossing bonds
     to $R_s$, keeping its cyclic index and reversing the native bottom and
     left pairs. For effective spins $c\in\{0,1\}^P$, let $\mu_s(c)$ be
@@ -86,8 +85,7 @@ recorded in Section~\ref{sec:peps_czx_rectangle_boundary}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:czx_wrapping_contraction,thm:czx_rectangle_boundary_faithful,
-        thm:czx_rectangle_physical_image,thm:czx_rectangle_review_mpo}
+    \uses{lem:czx_wrapping_contraction,thm:czx_rectangle_boundary_faithful,thm:czx_rectangle_physical_image,thm:czx_rectangle_review_mpo}
     The physical relabeling is bijective, so it preserves injectivity,
     column spans, and dimensions of the bounded rectangle map. It also
     reindexes the identical on-site factors in $U_{R_s}$. Relabeling the
@@ -107,9 +105,7 @@ recorded in Section~\ref{sec:peps_czx_rectangle_boundary}.
     $\operatorname{rank}\rho_{R_s}=2^P$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:czx_wrapping_contraction,thm:czx_rectangle_boundary_faithful,
-        thm:czx_wrapping_boundary,thm:czx_rectangle_density_support,
-        thm:peps_region_reduced_density_support}
+    \uses{lem:czx_wrapping_contraction,thm:czx_rectangle_boundary_faithful,thm:czx_wrapping_boundary,thm:czx_rectangle_density_support,thm:peps_region_reduced_density_support}
     Translate the bounded plaquette extension of each effective spin
     assignment. Its copied complement configuration selects the corresponding
     actual boundary column as a literal closed-state slice. Hence every

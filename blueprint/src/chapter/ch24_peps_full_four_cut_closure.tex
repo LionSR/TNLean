@@ -23,8 +23,7 @@ finite physical alphabet $Y_v$.
         TNLean.PEPS.DependentTorus.closure,
         TNLean.PEPS.DependentTorus.commutingClosureSpan}
     \leanok
-    \uses{def:peps_labelled_bonds, def:peps_labelled_cut,
-        def:peps_labelled_closure, def:peps_dependent_cut}
+    \uses{def:peps_labelled_bonds,def:peps_labelled_cut,def:peps_labelled_closure,def:peps_dependent_cut}
     Let $C_{c,r}$ be the cut of horizontal bonds with head column $c$ and
     vertical bonds with tail row $r$, with eight-incidence virtual domain
     $\mathcal X_{\partial C_{c,r}}$. For $p^{g,h}$ equal to $h$ on the
@@ -45,8 +44,7 @@ finite physical alphabet $Y_v$.
     \label{thm:peps_four_cut_closure}
     \lean{TNLean.PEPS.DependentTorus.fourCutSpace_eq_commutingClosureSpan}
     \leanok
-    \uses{def:peps_full_four_cut_space, def:peps_g_injective,
-        def:peps_dependent_incident_action, def:peps_semiregular}
+    \uses{def:peps_full_four_cut_space,def:peps_g_injective,def:peps_dependent_incident_action,def:peps_semiregular}
     For finite $G$, semi-regular bond representations $U_e$, and
     $G$-injective site tensors $A_v$,
     \begin{align}
@@ -63,8 +61,7 @@ finite physical alphabet $Y_v$.
     % Proof source labels: eq:2d:closure-inv, eq:2d:close-in-in.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_full_four_cut_transport,
-        thm:peps_full_four_cut_canonical_equality}
+    \uses{thm:peps_full_four_cut_transport,thm:peps_full_four_cut_canonical_equality}
     For the canonical averaging tensors $A^0$ and the product
     $\mathcal T=\bigotimes_vT_v$ of the local coefficient maps,
     Lemma~\ref{thm:peps_full_four_cut_transport} gives
@@ -81,7 +78,7 @@ finite physical alphabet $Y_v$.
         TNLean.PEPS.DependentTorus.fourCutSpace_eq_map_averagingSite,
         TNLean.PEPS.DependentTorus.map_commutingClosureSpan_recover}
     \leanok
-    \uses{def:peps_full_four_cut_space, def:peps_dependent_physical_site}
+    \uses{def:peps_full_four_cut_space,def:peps_dependent_physical_site}
     For local physical maps $F_v$ and $\mathcal F=\bigotimes_vF_v$,
     $\mathcal F\zeta_A(g,h)=\zeta_{FA}(g,h)$ and
     $\mathcal F(\mathcal Z_A)=\mathcal Z_{FA}$.
@@ -91,8 +88,7 @@ finite physical alphabet $Y_v$.
     $\mathcal I_A=\mathcal T(\mathcal I_{A^0})$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_physical_contraction,
-        thm:peps_dependent_common_inverse}
+    \uses{thm:peps_dependent_physical_contraction,thm:peps_dependent_common_inverse}
     Commuting $\mathcal F$ through (\ref{eq:peps_full_four_cut_closure}) and
     taking spans gives the first two identities; $T_vP_v=T_v$ then gives
     $\mathcal T(\mathcal Z_{A^0})=\mathcal Z_A$. Applying
@@ -105,7 +101,7 @@ finite physical alphabet $Y_v$.
     \lean{TNLean.PEPS.DependentTorus.canonicalSites,
         TNLean.PEPS.DependentTorus.canonicalProjector}
     \leanok
-    \uses{def:peps_dependent_averaging_site, def:peps_dependent_average_projection}
+    \uses{def:peps_dependent_averaging_site,def:peps_dependent_average_projection}
     On $\Lambda=(\mathbb Z/2\mathbb Z)^2$, the canonical tensors are
     $A_v^0(\eta,s)=(P_v)_{s,\eta}$ with physical alphabet $\mathcal X_v$,
     and their product projection is $\mathcal P=\bigotimes_{v\in\Lambda}P_v$.
@@ -116,14 +112,13 @@ finite physical alphabet $Y_v$.
     \lean{TNLean.PEPS.DependentTorus.canonicalClosure_mem_cutSpace,
         TNLean.PEPS.DependentTorus.commutingClosureSpan_le_fourCutSpace_canonical}
     \leanok
-    \uses{def:peps_full_four_cut_space, def:peps_full_four_cut_canonical}
+    \uses{def:peps_full_four_cut_space,def:peps_full_four_cut_canonical}
     Without assuming semi-regularity, $gh=hg$ implies
     $\zeta_{A^0}(g,h)\in\mathcal S_{A^0,C_{c,r}}$ for every $(c,r)$, and hence
     $\mathcal Z_{A^0}\subseteq\mathcal I_{A^0}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_labelled_closure_gauge, thm:peps_labelled_closure_support,
-        thm:peps_dependent_vertex_gauge, thm:peps_dependent_cut_basis}
+    \uses{thm:peps_labelled_closure_gauge,thm:peps_labelled_closure_support,thm:peps_dependent_vertex_gauge,thm:peps_dependent_cut_basis}
     By Lemmas~\ref{thm:peps_labelled_closure_gauge}
     and~\ref{thm:peps_labelled_closure_support}, a vertex gauge shifts the
     seams to labels $p^{g,h;c,r}$ equal to $1$ off $C_{c,r}$. By
@@ -140,16 +135,14 @@ finite physical alphabet $Y_v$.
         TNLean.PEPS.DependentTorus.exists_canonicalProjector_bondProduct_eq_closure,
         TNLean.PEPS.DependentTorus.canonicalProjector_bondProduct_mem_closureSpan}
     \leanok
-    \uses{def:peps_full_four_cut_canonical, def:peps_dependent_bond_product,
-        def:peps_bond_flat}
+    \uses{def:peps_full_four_cut_canonical,def:peps_dependent_bond_product,def:peps_bond_flat}
     For every bond assignment $p$,
     $\mathcal P b_p=\mathcal N_{A^0}((U_e(p_e))_e)$.
     If $p$ is flat, then $\mathcal P b_p=\zeta_{A^0}(g,h)\in\mathcal Z_{A^0}$
     for some commuting pair $(g,h)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_average_projection,
-        thm:peps_labelled_flat_classification, thm:peps_dependent_vertex_gauge}
+    \uses{thm:peps_dependent_average_projection,thm:peps_labelled_flat_classification,thm:peps_dependent_vertex_gauge}
     Lemma~\ref{thm:peps_dependent_average_projection} gives
     $\mathcal P b_p=\mathcal N_{A^0}((U_e(p_e))_e)$. For flat $p$,
     Lemma~\ref{thm:peps_labelled_flat_classification} provides a vertex
@@ -162,13 +155,12 @@ finite physical alphabet $Y_v$.
     \label{thm:peps_full_four_cut_nonflat_zero}
     \lean{TNLean.PEPS.DependentTorus.coefficient_eq_zero_of_mem_fourCutSpace_not_flat}
     \leanok
-    \uses{def:peps_full_four_cut_space, def:peps_dependent_bond_coefficient,
-        def:peps_bond_flat}
+    \uses{def:peps_full_four_cut_space,def:peps_dependent_bond_coefficient,def:peps_bond_flat}
     If every $U_e$ is semi-regular, $\psi\in\mathcal I_{A^0}$, and $p$ is
     not flat, then $c_p(\psi)=0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_uncut_coefficients, thm:peps_labelled_uncut_flat}
+    \uses{thm:peps_dependent_uncut_coefficients,thm:peps_labelled_uncut_flat}
     If $c_p(\psi)\ne0$, then on the cut of a plaquette where $p$ is not flat,
     (\ref{eq:peps_dependent_uncut_coefficients}) and
     Lemma~\ref{thm:peps_labelled_uncut_flat} force $p$ to satisfy that
@@ -180,15 +172,13 @@ finite physical alphabet $Y_v$.
     \lean{TNLean.PEPS.DependentTorus.fourCutSpace_canonical_le_commutingClosureSpan,
         TNLean.PEPS.DependentTorus.fourCutSpace_canonical_eq_commutingClosureSpan}
     \leanok
-    \uses{def:peps_full_four_cut_space, def:peps_full_four_cut_canonical}
+    \uses{def:peps_full_four_cut_space,def:peps_full_four_cut_canonical}
     If all eight bond representations are semi-regular, then
     $\mathcal I_{A^0}\subseteq\mathcal Z_{A^0}$ and
     $\mathcal I_{A^0}=\mathcal Z_{A^0}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_average_projection, thm:peps_dependent_cut_expansion,
-        thm:peps_full_four_cut_nonflat_zero, thm:peps_full_four_cut_flat_projection,
-        thm:peps_full_four_cut_forward}
+    \uses{thm:peps_dependent_average_projection,thm:peps_dependent_cut_expansion,thm:peps_full_four_cut_nonflat_zero,thm:peps_full_four_cut_flat_projection,thm:peps_full_four_cut_forward}
     For $\psi\in\mathcal I_{A^0}$, membership in $\mathcal S_{A^0,C_{0,0}}$
     gives $\mathcal P\psi=\psi$ by
     Lemma~\ref{thm:peps_dependent_average_projection}. Since the four cuts

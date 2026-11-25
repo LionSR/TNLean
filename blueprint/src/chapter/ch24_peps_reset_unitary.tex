@@ -42,9 +42,7 @@ and polar correction were proved in Chapter~\ref{ch:finite_site_reset}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_filter_explicit,
-        thm:peps_supported_physical_buffer_gaussian,def:peps_reset_constants,
-        def:peps_square_localization_constants}
+    \uses{thm:peps_reset_regional_filter_explicit,thm:peps_supported_physical_buffer_gaussian,def:peps_reset_constants,def:peps_square_localization_constants}
     Combining Theorem~\ref{thm:peps_reset_regional_filter_explicit} with the localized filter $M$ of Lemma~\ref{thm:peps_supported_physical_buffer_gaussian} at radius $\ell=\lceil KB_*\rceil$ and $\mu=1/2$ ($\mu K=v_\square(J)T_0+15+r$) bounds the localization error by
     \begin{align}
         C_\square L^2(1+8JL^2T_0B_*)e^{v_\square(J)T_0B_*-\mu\ell}
@@ -75,8 +73,7 @@ and polar correction were proved in Chapter~\ref{ch:finite_site_reset}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_localized_filter_explicit,thm:peps_reset_polar_step,
-        def:peps_reset_constants}
+    \uses{thm:peps_reset_localized_filter_explicit,thm:peps_reset_polar_step,def:peps_reset_constants}
     Combine Lemma~\ref{thm:peps_reset_localized_filter_explicit} with Lemma~\ref{thm:peps_reset_polar_step} for $C=C_F(J,\Delta,r)$.
 \end{proof}
 
@@ -106,8 +103,7 @@ The following statements extend Lemmas~\ref{thm:peps_reset_localized_filter_expl
         TNLean.PEPS.Approximation.rangeResetFilterPrefactor_pos,
         TNLean.PEPS.Approximation.rangeResetUnitaryPrefactor_pos}
     \leanok
-    \uses{def:peps_reset_constants,def:area_graph_ball_localization_constants,
-        def:peps_crossing_supports}
+    \uses{def:peps_reset_constants,def:area_graph_ball_localization_constants,def:peps_crossing_supports}
     With $C_0,v$ from Definition~\ref{def:area_graph_ball_localization_constants}, $c_R$ from Definition~\ref{def:peps_crossing_supports}, $T_0=T_0(\Delta,r)$ from (\ref{eq:lattice_reset_constants}), and $\mu=1/2$, define for $R\in\mathbb N$ and $J,\Delta,r\in\mathbb R$:
     \begin{align}
         K_R(J,\Delta,r)     & =\frac{v(R,2J)T_0+15+r}{\mu}, &
@@ -123,8 +119,7 @@ The following statements extend Lemmas~\ref{thm:peps_reset_localized_filter_expl
     \lean{ManyBody.PlaneInteraction.reset_localized_filter,
         ManyBody.PlaneInteraction.reset_unitary}
     \leanok
-    \uses{def:area_law_hamiltonian,def:peps_frame_sheet_swap,
-        def:peps_crossing_supports,def:peps_reset_constants_range}
+    \uses{def:area_law_hamiltonian,def:peps_frame_sheet_swap,def:peps_crossing_supports,def:peps_reset_constants_range}
     Fix integers $q\ge1$, $R\ge0$ and reals $J\ge0$, $\Delta>0$, $r\ge0$. For $L\ge1$, a finite domain $\Lambda$ with $|\Lambda|\le L^2$, a range-$R$, bound-$J$ Hamiltonian $H$ on $\Lambda$ with unit ground vector $\Omega$ and gap $\Delta$, disjoint $A,C\subseteq\Lambda$ with $I_\Omega(A:C)\le b$ ($b\ge0$), and the paired-site graph neighbourhood $B$ of radius $\lceil K_R(J,\Delta,r)(1+b+\log L)\rceil$ around $(A\cup C)^c\cup Z_R(A)$, the unit vectors $\Psi=\Omega\otimes\Omega$ and $\Phi=F_A\Psi$ admit $z\ge e^{-2b}$, a contraction $M$ supported on $B$, and a unitary $U$ supported on $B$ satisfying
     \begin{align}
         \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le C_{F,R}(J,\Delta,r)e^{-10b}L^{-r}, &
@@ -133,8 +128,6 @@ The following statements extend Lemmas~\ref{thm:peps_reset_localized_filter_expl
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_filter_explicit,
-        thm:peps_supported_physical_buffer_gaussian_range,
-        thm:peps_reset_polar_step,def:peps_reset_constants_range}
+    \uses{thm:peps_reset_regional_filter_explicit,thm:peps_supported_physical_buffer_gaussian_range,thm:peps_reset_polar_step,def:peps_reset_constants_range}
     Combine Theorem~\ref{thm:peps_reset_regional_filter_explicit} with Lemma~\ref{thm:peps_supported_physical_buffer_gaussian_range} at $\ell=\lceil K_RB_*\rceil$ (using $|\Lambda|\le L^2$ and $\mu K_R=v(R,2J)T_0+15+r$ to bound the localization error by $2C_0(R)(1+c_RJ)(1+T_0)e^{-10b}L^{-r}$), and apply Lemma~\ref{thm:peps_reset_polar_step}.
 \end{proof}

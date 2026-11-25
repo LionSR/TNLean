@@ -51,7 +51,7 @@
     \lean{MPOTensor.BNTFusionCoisometryFamily.%
         conjugatedProjectorQBlock_isOrthogonalProjection}
     \leanok
-    \uses{def:mpdo_topological_projector_one_fusion, thm:mpdo_bnt_length_independent_zipper}
+    \uses{def:mpdo_topological_projector_one_fusion,thm:mpdo_bnt_length_independent_zipper}
     Let $P_\gamma$ be self-adjoint idempotents on the terminal bond space of
     $M_\gamma$. Suppose that the matrices $\chi_{\alpha,\beta,\gamma}$ are
     diagonal with strictly positive entries, and that the structure
@@ -146,7 +146,7 @@
         physTraceTransfer_fusionChainTensor_eq_conjTranspose_mul_recursiveProjectorQ_mul}
     \lean{MPOTensor.BNTFusionCoisometryFamily.recursiveProjectorQ_isStarProjection}
     \leanok
-    \uses{def:mpdo_topological_projector_recursion, def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_topological_projector_recursion,def:mpo_physical_trace_transfer}
     For every initial label and every finite list of appended labels, let
     $N\geq1$ be one plus the length of that list, and let
     $M_{\alpha,\boldsymbol\beta}$ denote the left-associated product tensor.
@@ -273,7 +273,7 @@ right-hand side is the corresponding block of $Q_3$.
     \lean{MPOTensor.BNTFusionTensorClause.%
         physTraceTransfer_verticalBNTMPO_posSemidef}
     \leanok
-    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpo_physical_trace_transfer, thm:mpdo_algebra_clause_terminal_transfer_positivity}
+    \uses{def:mpdo,def:mpdo_bnt_fusion_tensor_clause,def:mpo_physical_trace_transfer,thm:mpdo_algebra_clause_terminal_transfer_positivity}
     Let $M$ generate MPDOs, and choose a vertical canonical decomposition
     with BNT $\{M_\gamma\}_\gamma$ and positive diagonal multiplicity
     matrices $\mu_\gamma$. Giving the positivity needed for the spectral
@@ -304,7 +304,7 @@ right-hand side is the corresponding block of $Q_3$.
         topologicalMultiplicityWeightFactorSucc}
     \lean{MPOTensor.BNTFusionTensorClause.topologicalRecursiveFactorSucc}
     \leanok
-    \uses{def:mpdo_topological_projector_recursion, def:mpdo_bnt_fusion_tensor_clause, def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_topological_projector_recursion,def:mpdo_bnt_fusion_tensor_clause,def:mpo_physical_trace_transfer}
     For a chain of positive length $N$, choose at every site a BNT label
     $\alpha_j$ and a diagonal coordinate $q_j$ of $\mu_{\alpha_j}$.
     There are $N-1$ appended labels after the initial site. Define
@@ -360,7 +360,7 @@ right-hand side is the corresponding block of $Q_3$.
     \lean{MPOTensor.BNTFusionTensorClause.HasTopologicalDensityDecomposition}
     \lean{MPOTensor.BNTFusionTensorClause.hasTopologicalDensityDecomposition}
     \leanok
-    \uses{def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator, def:mpdo_sitewise_physical_matrix}
+    \uses{def:mpdo_bnt_fusion_tensor_clause,def:mpdo_topological_density_operator,def:mpdo_sitewise_physical_matrix}
     Fix a vertical canonical decomposition of $M$ with fusion coisometries
     onto the nonzero product sectors and exact reconstruction.
     For every $N>0$, its vertical coisometry $V$ and
@@ -392,7 +392,7 @@ right-hand side is the corresponding block of $Q_3$.
     \cite{gap:cpgsv17_vertical_isometry_zero_sector}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_topological_projector_recursion, lem:mpdo_sitewise_physical_coordinate_congruence}
+    \uses{def:mpdo_topological_projector_recursion,lem:mpdo_sitewise_physical_coordinate_congruence}
     In retained coordinates, the one-site entries are block diagonal in the
     label and multiplicity coordinates. Within each configuration, multiplying
     the scalar weights and applying the forward and adjoint recursive fusion
@@ -405,7 +405,7 @@ right-hand side is the corresponding block of $Q_3$.
     \label{thm:mpdo_topological_density_decomposition}
     \lean{MPOTensor.exists_topologicalDensityDecomposition_of_isRFPViaTS}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator, def:mpdo_sitewise_physical_matrix, thm:mpdo_fusion_clause_topological_density_decomposition}
+    \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,def:mpdo_bnt_fusion_tensor_clause,def:mpdo_topological_density_operator,def:mpdo_sitewise_physical_matrix,thm:mpdo_fusion_clause_topological_density_decomposition}
     Let $M$ generate MPDOs and be in normalized BNT-refined horizontal
     form. Suppose that $M$ is an RFP.
     There is one vertical canonical decomposition and one compatible family of
@@ -429,7 +429,7 @@ right-hand side is the corresponding block of $Q_3$.
     \cite{gap:cpgsv17_vertical_isometry_zero_sector}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_topological_projector_recursion, lem:mpdo_sitewise_physical_coordinate_congruence}
+    \uses{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,thm:mpdo_topological_projector_recursion,lem:mpdo_sitewise_physical_coordinate_congruence}
     Under the normalized BNT-refined horizontal hypothesis, the vertical
     canonical-form theorem gives a rectangular coisometry onto the retained
     nonzero vertical sectors, together with exact reconstruction from those
@@ -456,7 +456,7 @@ right-hand side is the corresponding block of $Q_3$.
     \lean{MPOTensor.BNTFusionTensorClause.%
         hasTopologicalDensityFactorCommutator}
     \leanok
-    \uses{def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator}
+    \uses{def:mpdo_bnt_fusion_tensor_clause,def:mpdo_topological_density_operator}
     For any vertical canonical decomposition with fusion coisometries onto
     the nonzero product sectors and exact reconstruction, the recursive
     density operator satisfies, for every $N>0$,
@@ -480,7 +480,7 @@ right-hand side is the corresponding block of $Q_3$.
     \label{cor:mpdo_topological_density_factor_commutator}
     \lean{MPOTensor.exists_topologicalDensityDecomposition_and_factorCommutator_of_isRFPViaTS}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_topological_density_operator, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, cor:mpdo_fusion_clause_topological_density_factor_commutator}
+    \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,def:mpdo_topological_density_operator,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,cor:mpdo_fusion_clause_topological_density_factor_commutator}
     Let $M$ generate MPDOs and be in normalized BNT-refined horizontal
     form. Suppose that $M$ is an RFP.
     One choice of the vertical canonical decomposition and fusion

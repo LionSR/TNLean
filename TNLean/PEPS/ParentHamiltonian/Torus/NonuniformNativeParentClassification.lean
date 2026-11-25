@@ -25,8 +25,7 @@ open ManyBody (Edge)
 
 noncomputable section
 namespace TNLean.PEPS
-open TNLean.Lattice
-open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
+open DependentBondNetwork TNLean.Network.DependentBondNetwork
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]
@@ -59,7 +58,7 @@ theorem ker_nonuniformTorusPlaquetteParent_eq_map_nativeCommutingClosureSpan :
     (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
         torusPlaquetteRegion H).hamiltonian).ker =
       (NativeTorus.commutingClosureSpan (fun e ↦ Fin (N e)) U A).map
-        (dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys))) := by
+        (Matrix.piKronecker (physicalPaddingMatrix (Phys := Phys))).mulVecLin := by
   have hB := isGInjective_graphPhysicalPaddingTensor N
     (incidentRepresentation graphEdgeTail graphEdgeHead (fun e ↦ Fin (N e)) U) A hA
   rw [ker_torusPlaquetteParentHamiltonian_eq_nativeCommutingClosureSpan
@@ -75,7 +74,7 @@ def nonuniformNativeParentEquiv :
       (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
         torusPlaquetteRegion H).hamiltonian).ker :=
   (Submodule.equivMapOfInjective
-    (dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys)))
+    (Matrix.piKronecker (physicalPaddingMatrix (Phys := Phys))).mulVecLin
     physicalPaddingProduct_injective _).trans
       (LinearEquiv.ofEq _ _
         (ker_nonuniformTorusPlaquetteParent_eq_map_nativeCommutingClosureSpan
@@ -86,18 +85,18 @@ def nonuniformNativeParentEquiv :
     (ψ : NativeTorus.commutingClosureSpan (fun e ↦ Fin (N e)) U A) :
     (nonuniformNativeParentEquiv N U hU A hA H hH ψ :
       (X → Fin (physicalPaddingDimension (Phys := Phys))) → ℂ) =
-      dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys)) ψ := rfl
+      (Matrix.piKronecker (physicalPaddingMatrix (Phys := Phys))).mulVecLin ψ := rfl
 
 /-- Product restriction is the explicit inverse on every ambient kernel vector. -/
 @[simp] theorem nonuniformNativeParentEquiv_symm_apply
     (Ψ : (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
       torusPlaquetteRegion H).hamiltonian).ker) :
     ((nonuniformNativeParentEquiv N U hU A hA H hH).symm Ψ : ((v : X) → Phys v) → ℂ) =
-      dependentPhysicalProductFamilyMap (physicalRestrictionMatrix (Phys := Phys)) Ψ := by
+      (Matrix.piKronecker (physicalRestrictionMatrix (Phys := Phys))).mulVecLin Ψ := by
   have heq := congrArg
     (fun z : (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
         torusPlaquetteRegion H).hamiltonian).ker =>
-      dependentPhysicalProductFamilyMap (physicalRestrictionMatrix (Phys := Phys)) z)
+      (Matrix.piKronecker (physicalRestrictionMatrix (Phys := Phys))).mulVecLin z)
     ((nonuniformNativeParentEquiv N U hU A hA H hH).apply_symm_apply Ψ)
   simpa only [nonuniformNativeParentEquiv_apply, physicalRestrictionProduct_padding] using heq
 
@@ -109,7 +108,7 @@ theorem existsUnique_nativeClosureRepresentative_of_mem_nonuniformParentKernel
       torusPlaquetteRegion H).hamiltonian).ker) :
     ∃! ψ : ((v : X) → Phys v) → ℂ,
       ψ ∈ NativeTorus.commutingClosureSpan (fun e ↦ Fin (N e)) U A ∧
-      dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys)) ψ = Ψ := by
+      (Matrix.piKronecker (physicalPaddingMatrix (Phys := Phys))).mulVecLin ψ = Ψ := by
   rw [ker_nonuniformTorusPlaquetteParent_eq_map_nativeCommutingClosureSpan N U hU A hA H hH] at hΨ
   obtain ⟨ψ, hψ, heq⟩ := hΨ
   refine ⟨ψ, ⟨hψ, heq⟩, fun χ hχ ↦ ?_⟩

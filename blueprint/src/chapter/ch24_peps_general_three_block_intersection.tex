@@ -252,8 +252,7 @@
     \lean{TNLean.PEPS.ThreeBlockDependent.sum_endpoint_eq_sum_core_exterior,
         TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_eq_openBoundaryMap,TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_eq_openBoundarySpace}
     \leanok
-    \uses{def:peps_three_core_lifted_cut,def:peps_three_block_open_boundary,
-        def:peps_three_block_boundary_marginal}
+    \uses{def:peps_three_core_lifted_cut,def:peps_three_block_open_boundary,def:peps_three_block_boundary_marginal}
     Endpoint summation splits as
     $\sum_\beta F(\beta)=\sum_\eta\sum_\xi F(a(\eta,\xi))$, giving
     $K_{A,T,C_0}(M)=\zeta_A(m(M))$; if an exterior configuration $\xi_0$
@@ -330,8 +329,7 @@
     \lean{TNLean.PEPS.ThreeBlockDependent.sum_endpoint_eq_sum_region_outside,
         TNLean.PEPS.ThreeBlockDependent.coreLiftedCutMap_eq_regionalBoundaryMap,TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_eq_regionalBoundarySpace}
     \leanok
-    \uses{def:peps_three_core_lifted_cut,def:peps_three_block_regional_boundary,
-        def:peps_three_block_regional_marginal}
+    \uses{def:peps_three_core_lifted_cut,def:peps_three_block_regional_boundary,def:peps_three_block_regional_marginal}
     For $Q\subseteq T$ with all $e\notin C$ internal to $Q$,
     \begin{align}
         \sum_\beta F(\beta) & =\sum_\eta\sum_\xi F(a_Q(\eta,\xi)),\nonumber \\
@@ -352,8 +350,7 @@
     \label{thm:peps_three_block_core_lifted_intersection}
     \lean{TNLean.PEPS.ThreeBlockDependent.coreLiftedCutSpace_inf_eq_openBoundarySpace}
     \leanok
-    \uses{def:peps_three_block_identity_extension,def:peps_three_core_lifted_cut,
-        def:peps_three_block_open_boundary}
+    \uses{def:peps_three_block_identity_extension,def:peps_three_core_lifted_cut,def:peps_three_block_open_boundary}
     Let $G$ be finite, let every $U_e$ be semi-regular, and let the three
     maps $T_v:\C^{\mathcal X_v}\to\C^{Y_v}$ be $G$-injective for their
     incident representations, with finite, independently chosen $Y_v$.
@@ -365,9 +362,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_semiregular_alphabet_nonempty,thm:peps_three_core_localization,
-        thm:peps_lifted_cut_intersection,thm:peps_three_block_cut_intersection,
-        thm:peps_three_block_extended_injectivity,thm:peps_three_block_open_boundary_exact}
+    \uses{thm:peps_semiregular_alphabet_nonempty,thm:peps_three_core_localization,thm:peps_lifted_cut_intersection,thm:peps_three_block_cut_intersection,thm:peps_three_block_extended_injectivity,thm:peps_three_block_open_boundary_exact}
     By Lemmas~\ref{thm:peps_semiregular_alphabet_nonempty}
     and~\ref{thm:peps_three_block_extended_injectivity}, all bond alphabets are
     nonempty, $\widetilde T_v$ is $G$-injective on $V$ and surjective on
@@ -390,8 +385,7 @@
     \label{thm:peps_general_three_block_intersection}
     \lean{TNLean.PEPS.ThreeBlockDependent.regionalBoundarySpace_inf_eq_openBoundarySpace}
     \leanok
-    \uses{def:peps_three_block_regional_boundary,def:peps_three_block_open_boundary,
-        def:peps_three_block_core_action,def:peps_g_injective,def:peps_semiregular}
+    \uses{def:peps_three_block_regional_boundary,def:peps_three_block_open_boundary,def:peps_three_block_core_action,def:peps_g_injective,def:peps_semiregular}
     Let $G$ be finite. Give the ten bonds independently chosen finite
     virtual alphabets and matched semi-regular representations $U_e$.
     Let $A_0,A_1,A_2$ be $G$-injective four-legged tensors for the incident
@@ -470,9 +464,7 @@
     % contragredient representation when an exterior edge is oriented outward.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_semiregular_alphabet_nonempty,
-        thm:peps_three_block_regional_boundary_exact,
-        thm:peps_three_block_core_lifted_intersection}
+    \uses{thm:peps_semiregular_alphabet_nonempty,thm:peps_three_block_regional_boundary_exact,thm:peps_three_block_core_lifted_intersection}
     Semi-regularity yields one complementary virtual configuration for
     each region, so Lemma~\ref{thm:peps_three_block_regional_boundary_exact}
     identifies the two six-leg ranges with

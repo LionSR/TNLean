@@ -77,8 +77,8 @@ theorem le_two_pow_clog_lt {L : ℕ} (hL : 2 ≤ L) :
 
 namespace DyadicProtocol.IsDistributionProtocol
 
-variable {L q : ℕ} {P : Type} [Fintype P] {D : DyadicProtocol L q P} {Ω : StateSpace L q}
-  {C_N C_K C_E : ℝ} {b k r : ℕ}
+variable {L q : ℕ} {P : Type} [Fintype P] [DecidableEq P] {D : DyadicProtocol L q P}
+  {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
 
 /-- **Larger constants are admissible.** The bounds of §8 with constants `C_N`, `C_K`, `C_E`
 hold with any larger constants `C_N' ≥ C_N`, `C_K' ≥ C_K` and `C_E' ≥ C_E`.
@@ -94,9 +94,9 @@ theorem mono (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) {C_N' C_K' C_E'
   exact { h with
     card_le := h.card_le.trans (by gcongr)
     changes_le := h.changes_le.trans (by gcongr)
-    monomialBounded := fun t ht ↦ Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_mono _
+    monomialBounded := fun t ht ↦ QuantumCircuit.Party.OriginalCircuit.isMonomialBounded_mono _
       (h.monomialBounded t ht) (Nat.floor_le_floor hpow)
-    expansionBounded := fun t ht ↦ Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_mono _
+    expansionBounded := fun t ht ↦ QuantumCircuit.Party.OriginalCircuit.isExpansionBounded_mono _
       (h.expansionBounded t ht) le_rfl hpow
     reference_step := fun t ht ↦ (h.reference_step t ht).trans (by gcongr)
     reference_changes := ⟨Ξ, hΞ, le_trans (by gcongr) hlower, href⟩ }
@@ -110,8 +110,8 @@ theorem LargeSizeDyadicProtocolBounds.largeSizeDyadicProtocolConsequences
   intro q hq J Δ hJ hΔ
   obtain ⟨C_N, C_K, C_E, b, k, r, L₀, hall⟩ := h q hq J Δ hJ hΔ
   refine ⟨max C_N (max C_K C_E), b, k, r, L₀, fun L hL hL₀ Ω hΩ => ?_⟩
-  obtain ⟨P, hP, D, hD⟩ := hall L hL hL₀ Ω hΩ
-  exact ⟨P, hP, D, hD.mono (le_max_left _ _) ((le_max_left _ _).trans (le_max_right _ _))
+  obtain ⟨P, hP, hPd, D, hD⟩ := hall L hL hL₀ Ω hΩ
+  exact ⟨P, hP, hPd, D, hD.mono (le_max_left _ _) ((le_max_left _ _).trans (le_max_right _ _))
     ((le_max_right _ _).trans (le_max_right _ _))⟩
 
 /-! ### The named constants of the protocol -/
@@ -361,7 +361,8 @@ theorem largeSizeDyadicProtocol_of_angularScale {q : ℕ} (hq : 2 ≤ q)
           (protocolFrozen P rank hr) protocolAuxOwner i ∧
         seg 189 = protocolState P rank R₀ hε ht hB (largeSquare K₀ (D * Real.log L))
           (protocolFrozen P rank hr) protocolAuxOwner (i + 1) ∧
-        ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+        ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1))
+          (EuclideanSpace.single (fun _ ↦ ()) 1)
           {p | EventUses (.inl S) p} (2 * b) (rewriteGateBound C' c' b L) (2 * b)
           ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧ seg (j + 1) ≠ [] := by
     intro i hi S he hl
@@ -403,7 +404,7 @@ theorem largeSizeDyadicProtocol_of_angularScale {q : ℕ} (hq : 2 ≤ q)
       push_cast
       exact mul_le_mul_of_nonneg_right hGC (by positivity))
     hCEb
-  exact ⟨ProtocolParty k, inferInstance, D', hD'⟩
+  exact ⟨ProtocolParty k, inferInstance, inferInstance, D', hD'⟩
 
 /-- **Proposition 7.1 with explicit constants, from Proposition 4.1.** Assume the adaptive patch
 constraint of Proposition 4.1. For every `q ≥ 2` and `J, Δ > 0` there are an information scale
@@ -437,7 +438,7 @@ theorem largeSizeDyadicProtocol_of_le_of_adaptivePatchConstraint
         protocolExpansionConstant protocolMeshRatio C ≤ C_K →
         protocolErrorConstant protocolMeshRatio ≤ C_E →
         ∀ L : ℕ, 2 ≤ L → L₁ ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
-          ∃ (P : Type) (_ : Fintype P) (D' : DyadicProtocol L q P),
+          ∃ (P : Type) (_ : Fintype P) (_ : DecidableEq P) (D' : DyadicProtocol L q P),
             D'.IsDistributionProtocol Ω C_N C_K C_E protocolLifetimeBound
               (protocolExpansionExponent protocolMeshRatio c)
               (2 * protocolPatchBound protocolHoleRatio protocolMeshRatio) := by

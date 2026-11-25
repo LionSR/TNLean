@@ -41,8 +41,7 @@
         TNLean.PEPS.AreaLaw.Geometry.pairwiseDisjoint_rectRegion_cappedDyadicPartition,
         TNLean.PEPS.AreaLaw.Geometry.regionEntropy_filter_le_sum_rectRegion}
     \leanok
-    \uses{def:area_law_capped_dyadic_partition,
-        def:area_template_dyadic_rectangle,def:area_law_ground_entropy}
+    \uses{def:area_law_capped_dyadic_partition,def:area_template_dyadic_rectangle,def:area_law_ground_entropy}
     Fix a finite lattice domain $\Lambda$, a region $A\subseteq\Lambda$,
     a finite lattice set $S$, and $K\in\N$. The physical regions
     $A\cap R_{k,z}$ for $(k,z)\in\mathcal P_K(S)$ are pairwise disjoint,
@@ -57,8 +56,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_capped_dyadic_partition,
-        thm:area_template_dyadic_rectangle}
+    \uses{thm:area_law_capped_dyadic_partition,thm:area_template_dyadic_rectangle}
     The selected ambient squares partition $S$. Intersecting them with
     $A$ preserves pairwise disjointness and gives union $A\cap S$.
     Apply finite disjoint-union subadditivity, starting with the empty
@@ -69,8 +67,7 @@
     \label{thm:area_law_rectangle_shell_safe_cells}
     \lean{ManyBody.IsSafe.isSafe_cappedDyadicPartition_shell}
     \leanok
-    \uses{def:area_law_safe_rectangle,def:area_template_dyadic_rectangle,
-        def:area_law_capped_dyadic_partition}
+    \uses{def:area_law_safe_rectangle,def:area_template_dyadic_rectangle,def:area_law_capped_dyadic_partition}
     Fix a finite lattice domain $\Lambda$, a physical region $A$, and
     $D_0\in\N$. Let $Q$ be a safe integer rectangle and put
     $s=\operatorname{size}(Q)$. Suppose $j,L,K\in\N$ satisfy
@@ -85,8 +82,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_capped_dyadic_partition,
-        thm:area_template_dyadic_rectangle,thm:area_law_safe_rectangle_dilation}
+    \uses{thm:area_law_capped_dyadic_partition,thm:area_template_dyadic_rectangle,thm:area_law_safe_rectangle_dilation}
     A selected square $R_{k,z}$ is contained in $Q^{+j}$ and has
     $k\le K$ and $\operatorname{size}(R_{k,z})=2^k\le L$. Hence
     \begin{align}
@@ -100,8 +96,7 @@
     \label{thm:area_law_capped_dyadic_entropy_cover_of_forall}
     \lean{TNLean.PEPS.AreaLaw.Geometry.regionEntropy_filter_le_weighted_cover_of_forall}
     \leanok
-    \uses{def:area_law_ground_entropy,def:area_law_safe_rectangle,
-        def:area_template_dyadic_rectangle,def:area_law_capped_dyadic_partition}
+    \uses{def:area_law_ground_entropy,def:area_law_safe_rectangle,def:area_template_dyadic_rectangle,def:area_law_capped_dyadic_partition}
     Fix a finite lattice domain $\Lambda$ with local dimension $q$,
     a unit physical vector $\Omega$, and a region $A$.
     Let $S$ be a finite set of lattice sites, let $K\in\N$, and let
@@ -120,8 +115,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:area_template_physical_dyadic_entropy,
-        thm:area_template_dyadic_rectangle}
+    \uses{thm:area_template_physical_dyadic_entropy,thm:area_template_dyadic_rectangle}
     The physical regions $A\cap R_{k,z}$ are pairwise disjoint and
     have union $A\cap S$. Each $R_{k,z}$ is an integer rectangle
     of size $2^k$. Subadditivity and the assumed estimate give
@@ -137,8 +131,7 @@
     \label{thm:area_law_capped_dyadic_entropy_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.regionEntropy_filter_le_weighted_cover}
     \leanok
-    \uses{def:area_law_ground_entropy,def:area_law_safe_rectangle,
-        def:area_template_dyadic_rectangle,def:area_law_capped_dyadic_partition}
+    \uses{def:area_law_ground_entropy,def:area_law_safe_rectangle,def:area_template_dyadic_rectangle,def:area_law_capped_dyadic_partition}
     Fix a finite lattice domain $\Lambda$ with local dimension $q$,
     a unit physical vector $\Omega$, a region $A$, and $D_0\in\N$.
     Let $S$ be a finite set of lattice sites, let $K\in\N$, and let
@@ -187,9 +180,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_capped_dyadic_entropy_cover,
-        thm:area_law_rectangle_shell_safe_cells,
-        thm:area_law_rectangle_shell_weighted_cover}
+    \uses{thm:area_law_capped_dyadic_entropy_cover,thm:area_law_rectangle_shell_safe_cells,thm:area_law_rectangle_shell_weighted_cover}
     The selected squares give disjoint physical rectangle regions
     whose union is $A\cap(Q^{+j}\setminus Q)$. Each is safe.
     Subadditivity and the assumed safe-box estimate give

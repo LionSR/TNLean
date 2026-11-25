@@ -64,8 +64,6 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open TNLean.Lattice
-
 /-! ### The constants of the information reset at range `R` -/
 
 /-- The localization radius coefficient `K = (v T₀ + 15 + r) / μ` of the information reset at
@@ -109,8 +107,6 @@ theorem rangeResetUnitaryPrefactor_pos (R : ℕ) {J Δ r : ℝ} (hJ : 0 ≤ J) (
 end TNLean.PEPS.Approximation
 
 namespace ManyBody.PlaneInteraction
-
-open TNLean.Lattice
 
 open TNLean.PEPS.Approximation
 

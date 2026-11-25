@@ -2,7 +2,7 @@
     \label{thm:periodic_block_families_unitary_matching}
     \lean{MPSTensor.exists_unitary_matching_of_periodic_block_families}
     \leanok
-    \uses{def:periodic_tensor, def:same_mpv2_pos, def:block_diagonal_tensor}
+    \uses{def:periodic_tensor,def:same_mpv2_pos,def:block_diagonal_tensor}
     Let $A_j$ and $B_k$ be left-canonical periodic tensors with periods
     $m_j$ and $n_k$, and let all weights $\mu_j$ and $\nu_k$ be nonzero.
     Repeated blocks are allowed. If
@@ -17,7 +17,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_grouped_unitary, thm:periodic_ft_equal_case_trace_preserving}
+    \uses{thm:periodic_grouped_unitary,thm:periodic_ft_equal_case_trace_preserving}
     Lemma~\ref{thm:periodic_grouped_unitary} groups both sums into
     multiplicity forms $P$ and $Q$ over bases of periodic tensors without
     repetition, with unitaries $Y_A$ and $Y_B$. The two forms generate the
@@ -39,7 +39,7 @@
         MPSTensor.blockScalarMatrix_mem_unitaryGroup,
         MPSTensor.sameMPV₂_toTensorFromBlocks_of_periodic_phases}
     \leanok
-    \uses{def:block_diagonal_tensor, def:same_mpv2, def:same_mpv2_pos}
+    \uses{def:block_diagonal_tensor,def:same_mpv2,def:same_mpv2_pos}
     Let $A^i=\bigoplus_j\mu_jA_j^i$ with nonzero weights $\mu_j$, where every
     $A_j$ is irreducible with spectral radius one and has a trace-preserving
     transfer map. Let $u$ be a unitary $d\times d$ matrix with
@@ -57,9 +57,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:spectral_periodic_period_existence,
-        thm:periodic_block_families_unitary_matching,
-        thm:pgvwc07_normalized_periodic_state_vector_decomposition}
+    \uses{thm:spectral_periodic_period_existence,thm:periodic_block_families_unitary_matching,thm:pgvwc07_normalized_periodic_state_vector_decomposition}
     Lemma~\ref{thm:spectral_periodic_period_existence} gives the periods
     $m_j$. Mixing the physical index commutes with the direct sum:
     $\sum_iu^{i',i}A^i=\bigoplus_j\mu_jC_j^{i'}$ with
@@ -82,7 +80,7 @@
     \label{def:periodic_projective_rigidity}
     \lean{MPSTensor.PeriodicProjectiveRigidity}
     \leanok
-    \uses{def:twisted_tensor, def:on_site_symmetric}
+    \uses{def:twisted_tensor,def:on_site_symmetric}
     Let $A$ be an MPS tensor with physical dimension $d$ and bond dimension $D$,
     and assume it is on-site symmetric under a group action
     $U : G \to \GL_d(\C)$. The tensor $A$ satisfies the
@@ -183,7 +181,7 @@
     \label{thm:projectiveRep_of_symmetry}
     \lean{MPSTensor.projectiveRep_of_symmetry}
     \leanok
-    \uses{thm:cor_4_1_projective_rep, thm:cor_4_1_projective_rep_cocycle}
+    \uses{thm:cor_4_1_projective_rep,thm:cor_4_1_projective_rep_cocycle}
     Under the periodic projective-rigidity hypothesis
     (Definition~\ref{def:periodic_projective_rigidity}), if $D>0$, then the
     virtual gauge family defines a projective representation of $G$ on the bond

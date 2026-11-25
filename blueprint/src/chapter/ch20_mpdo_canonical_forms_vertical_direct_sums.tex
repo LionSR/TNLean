@@ -23,7 +23,7 @@
     \label{lem:mpv_diagonal_tensor_eq_blocks}
     \lean{MPOTensor.mpv_diagonalTensor_eq_blocks}
     \leanok
-    \uses{lem:mpv_diagonal_tensor, def:horizontal_cf_mpdo}
+    \uses{lem:mpv_diagonal_tensor,def:horizontal_cf_mpdo}
     Suppose the doubled-index tensor $\widehat{M}$ shares its positive-length matrix
     product vector family with a block-diagonal direct sum
     $\bigoplus_k\mu_kA_k$ of blocks $A_k$ on
@@ -106,7 +106,7 @@
     \label{lem:mpv_diagonal_tensor_eq_density}
     \lean{MPOTensor.mpv_diagonalTensor_eq_mpo_diag}
     \leanok
-    \uses{def:mpo_family, lem:eval_word_diagonal_tensor}
+    \uses{def:mpo_family,lem:eval_word_diagonal_tensor}
     For an MPO tensor $M$ and a configuration $\sigma$, the matrix product vector of
     the diagonal tensor equals the diagonal entry of the generated operator:
     \begin{align}
@@ -128,7 +128,7 @@
     \label{lem:mpv_diagonal_tensor_nonneg}
     \lean{MPOTensor.mpv_diagonalTensor_nonneg}
     \leanok
-    \uses{lem:mpv_diagonal_tensor_eq_density, def:mpdo}
+    \uses{lem:mpv_diagonal_tensor_eq_density,def:mpdo}
     If $\rho^{(N)}(M)$ is positive semidefinite, then
     $V^{(N)}(i\mapsto M^{ii})(\sigma)\geq0$ for every configuration
     $\sigma$.
@@ -145,7 +145,7 @@
     \lean{MPOTensor.verticalCopyBlocks}
     \lean{MPOTensor.mpv_verticalAssembledTensor_eq_sum}
     \leanok
-    \uses{thm:mpv_decomposition, def:block_diagonal_tensor}
+    \uses{thm:mpv_decomposition,def:block_diagonal_tensor}
     Let $g$ be a block count,
     $\dim,\mult:\{0,\ldots,g-1\}\to\N$, weights
     $\omega_{\alpha j}\in\C$ for $0\leq j<\mult_\alpha$, and blocks
@@ -191,7 +191,7 @@
     \label{lem:vertical_grouping_equiv}
     \lean{MPOTensor.sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_equiv}
     \leanok
-    \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
+    \uses{lem:mpv_vertical_assembled,thm:mpv_decomposition}
     Let $(B_k)_{k\in I}$ be a finite family of blocks with weights $\nu_k$,
     and let $(A_\alpha)_{\alpha\in J}$ be a finite family of representative
     blocks. Suppose there is a bijection
@@ -215,7 +215,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:mpv_vertical_assembled, thm:mpv_decomposition}
+    \uses{lem:mpv_vertical_assembled,thm:mpv_decomposition}
     For $N>0$ and every configuration $\sigma$, the two sides expand as
     \begin{align}
         \sum_{k\in I}\nu_k^NV^{(N)}(B_k)(\sigma),
@@ -234,7 +234,7 @@
         hasInvariantProjectorClosure_verticalTensor}
     \lean{MPSTensor.IsCPSVCanonicalForm.hasInvariantProjectorClosure_verticalTensor}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:invariant_projector_closure, thm:representative_one_sub_mp_zero, thm:cpsv_original_coordinate_marked_lemma_l}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:vertical_tensor_mpdo,def:invariant_projector_closure,thm:representative_one_sub_mp_zero,thm:cpsv_original_coordinate_marked_lemma_l}
     Let $M$ generate matrix product density operators, and suppose that its
     doubled-index MPS tensor is in CPSV canonical form. If an
     orthogonal projection $P$ satisfies
@@ -248,7 +248,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:representative_one_sub_mp_zero, thm:cpsv_original_coordinate_marked_lemma_l}
+    \uses{thm:representative_one_sub_mp_zero,thm:cpsv_original_coordinate_marked_lemma_l}
     The left-invariance hypothesis gives
     $P_1H^{(N)}=P_1H^{(N)}P_1$ at every positive length. Since $H^{(N)}$ is
     positive and $P=P^\dagger$,
@@ -276,7 +276,7 @@
     \label{thm:mpdo_vertical_projector_closure}
     \lean{MPOTensor.IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_tensor_mpdo, def:invariant_projector_closure, thm:representative_one_sub_mp_zero}
+    \uses{def:mpdo,def:horizontal_cf_mpdo,def:vertical_tensor_mpdo,def:invariant_projector_closure,thm:representative_one_sub_mp_zero}
     Let $M$ be in normalized BNT-refined horizontal form and generate matrix
     product density operators. If an orthogonal projection $P$ satisfies
     $P\widetilde M_v=P\widetilde M_vP$ for every vertical letter $v$, then it
@@ -299,7 +299,7 @@
     \label{thm:mpdo_vertical_irreducible_reducing_sectors}
     \lean{MPOTensor.IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry}
     \leanok
-    \uses{thm:mpdo_vertical_projector_closure, thm:projector_closure_irreducible_corners}
+    \uses{thm:mpdo_vertical_projector_closure,thm:projector_closure_irreducible_corners}
     Under the hypotheses of
     Lemma~\ref{thm:mpdo_vertical_projector_closure}, there are positive
     integers $d_k$, tensors $B_k$ of bond dimension $d_k$, and isometries
@@ -328,7 +328,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_vertical_projector_closure, thm:projector_closure_irreducible_corners}
+    \uses{thm:mpdo_vertical_projector_closure,thm:projector_closure_irreducible_corners}
     Applying the irreducible-corner decomposition under invariant-projector
     closure to $\widetilde M$ using the vertical projector-closure theorem
     yields the sectors $B_k$ and isometries $V_k$.
@@ -380,7 +380,7 @@
     \label{thm:mpdo_vertical_normal_sectors_with_isometries}
     \lean{MPOTensor.IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry}
     \leanok
-    \uses{thm:mpdo_vertical_irreducible_reducing_sectors, thm:mpdo_vertical_no_periodic_vectors_horizontal_cf, lem:irreducible_transfer_perron_pair, lem:irreducible_block_spectral_normalization}
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors,thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,lem:irreducible_transfer_perron_pair,lem:irreducible_block_spectral_normalization}
     Under the same hypotheses, there are positive integers $d_k$, positive
     scalars $\nu_k$, normal tensors $B_k$ of bond dimension $d_k$, and
     isometries $V_k:\C^{d_k}\to\C^d$ with pairwise orthogonal ranges. For
@@ -403,7 +403,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_vertical_irreducible_reducing_sectors, thm:mpdo_vertical_no_periodic_vectors_horizontal_cf, lem:irreducible_transfer_perron_pair, lem:irreducible_block_spectral_normalization}
+    \uses{thm:mpdo_vertical_irreducible_reducing_sectors,thm:mpdo_vertical_no_periodic_vectors_horizontal_cf,lem:irreducible_transfer_perron_pair,lem:irreducible_block_spectral_normalization}
     Retaining the irreducible corners that contain a nonzero letter gives each
     retained corner a positive Perron--Frobenius eigenvalue, and the absence
     of nontrivial periodic vectors makes its inverse-square-root rescaling
@@ -420,7 +420,7 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_normal_verticalBlockDecomp_with_isometry}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:normal}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:vertical_tensor_mpdo,def:normal}
     Let $M$ generate matrix product density operators, and suppose that its
     doubled-index MPS tensor is in CPSV canonical form. Then there are
     positive integers $d_k$, positive scalars $\nu_k$, normal tensors $B_k$ of
@@ -449,7 +449,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_vertical_projector_closure_literal_cpsv, thm:mpdo_vertical_no_periodic_vectors_literal_cpsv, thm:projector_closure_canonical_form}
+    \uses{thm:mpdo_vertical_projector_closure_literal_cpsv,thm:mpdo_vertical_no_periodic_vectors_literal_cpsv,thm:projector_closure_canonical_form}
     Lemma~\ref{thm:mpdo_vertical_projector_closure_literal_cpsv} gives
     invariant-projector closure for $\widetilde M$, and
     Lemma~\ref{thm:mpdo_vertical_no_periodic_vectors_literal_cpsv} excludes
@@ -469,7 +469,7 @@
     \label{def:vertical_bnt_grouping_with_isometry}
     \lean{MPOTensor.HasVerticalBNTGroupingWithIsometry}
     \leanok
-    \uses{def:vertical_tensor_mpdo, def:mpv_phase_class_data, def:bnt_cpsv, def:mpdo_sector_projector, def:mpdo_vertical_loops}
+    \uses{def:vertical_tensor_mpdo,def:mpv_phase_class_data,def:bnt_cpsv,def:mpdo_sector_projector,def:mpdo_vertical_loops}
     An MPO tensor $M$ has a \emph{grouped vertical BNT decomposition with
         physical isometries} if there are positive bond dimensions $d_k$, positive
     weights $\mu_k$, normal tensors $B_k$, and isometries
@@ -522,7 +522,7 @@
     \label{thm:mpdo_vertical_bnt_grouping_with_isometries}
     \lean{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_bnt_grouping_with_isometry}
+    \uses{def:mpdo,def:horizontal_cf_mpdo,def:vertical_bnt_grouping_with_isometry}
     Under the same hypotheses, partition the normalized vertical sectors by
     equality of their matrix product vector families up to a fixed nonzero
     scalar per site. There are normal representatives $M_\alpha$, an enumeration
@@ -560,7 +560,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_vertical_normal_sectors_with_isometries, thm:cpsv_normal_mpv_phase_gauge, thm:cpsv_normal_separated_eventually_li, thm:mpdo_grouped_sector_compression_nonzero, def:mpdo_sector_projector, thm:mpdo_sector_weight_pos}
+    \uses{thm:mpdo_vertical_normal_sectors_with_isometries,thm:cpsv_normal_mpv_phase_gauge,thm:cpsv_normal_separated_eventually_li,thm:mpdo_grouped_sector_compression_nonzero,def:mpdo_sector_projector,thm:mpdo_sector_weight_pos}
     Choosing one representative from each phase class,
     Lemma~\ref{thm:cpsv_normal_mpv_phase_gauge} gives equality of bond
     dimensions and (\ref{eq:mpdo_vertical_gauge_phase}) for every copy.
@@ -584,7 +584,7 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_verticalBNTGrouping_with_isometry}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_bnt_grouping_with_isometry}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:vertical_bnt_grouping_with_isometry}
     Under the same hypotheses, partition the normalized vertical sectors by
     equality of their matrix product vector families up to a fixed nonzero
     scalar per site. There are normal representatives $M_\alpha$, an enumeration
@@ -622,7 +622,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_literal_normal_vertical_corners, thm:cpsv_normal_mpv_phase_gauge, thm:cpsv_normal_separated_eventually_li, thm:mpdo_range_projection_corner_nonzero, thm:cpsv_literal_sector_compression_nonzero, def:mpdo_sector_projector, thm:mpdo_sector_weight_pos}
+    \uses{thm:mpdo_literal_normal_vertical_corners,thm:cpsv_normal_mpv_phase_gauge,thm:cpsv_normal_separated_eventually_li,thm:mpdo_range_projection_corner_nonzero,thm:cpsv_literal_sector_compression_nonzero,def:mpdo_sector_projector,thm:mpdo_sector_weight_pos}
     Choosing one representative from each phase class,
     Lemma~\ref{thm:cpsv_normal_mpv_phase_gauge} gives equality of bond
     dimensions and (\ref{eq:cpsv_literal_vertical_gauge_phase}) for every copy.
@@ -708,7 +708,7 @@
     \label{thm:vertical_cf_of_grouped_orthogonal_sectors}
     \lean{MPOTensor.isVerticalCF_of_grouped_orthogonal_sectors}
     \leanok
-    \uses{def:vertical_tensor_mpdo, def:vertical_cf_mpdo, def:bnt}
+    \uses{def:vertical_tensor_mpdo,def:vertical_cf_mpdo,def:bnt}
     Let $\{A_\alpha\}_{\alpha=0}^{g-1}$ be a BNT for the vertically viewed
     tensor $\widetilde M$. For each $\alpha$, let $r_\alpha>0$, let
     $\omega_{\alpha,q}>0$ for $0\leq q<r_\alpha$, and let
@@ -763,7 +763,7 @@
     \label{lem:mpdo_vertical_retained_class_nonempty}
     \lean{MPOTensor.IsHorizontalCF.exists_nonempty_verticalBNTGrouping}
     \leanok
-    \uses{def:horizontal_cf_mpdo, thm:mpdo_vertical_bnt_grouping_with_isometries, lem:mpv_phase_class_nonempty}
+    \uses{def:horizontal_cf_mpdo,thm:mpdo_vertical_bnt_grouping_with_isometries,lem:mpv_phase_class_nonempty}
     Under the hypotheses of
     Lemma~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries}, the retained
     vertical decomposition has at least one sector and hence at least one
@@ -785,7 +785,7 @@
     \label{thm:mpdo_vertical_tensor_nonzero}
     \lean{MPOTensor.IsHorizontalCF.verticalTensor_ne_zero}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo}
+    \uses{def:horizontal_cf_mpdo,def:vertical_tensor_mpdo}
     As used in \cite[Proposition~4.13, lines~1895--1902]{Cirac2016MPDO_arXiv},
     if an MPO tensor $M$ is in normalized BNT-refined horizontal form, then
     its vertical reshaping is nonzero: $\widetilde M\ne0$.
@@ -793,7 +793,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:vertical_tensor_mpdo, lem:sector_bnt_weight_unit_exists}
+    \uses{def:horizontal_cf_mpdo,def:vertical_tensor_mpdo,lem:sector_bnt_weight_unit_exists}
     In the normalized BNT-refined horizontal form $\widehat M=GSG^{-1}$, where
     $S$ is the weighted direct sum of its basis tensors, any copy whose weight
     has unit modulus has a basis tensor that cannot vanish on every letter,
@@ -808,7 +808,7 @@
     \label{thm:mpdo_vertical_grouped_is_bnt}
     \lean{MPOTensor.isBNT_verticalTensor_of_grouping}
     \leanok
-    \uses{def:vertical_tensor_mpdo, def:bnt, def:bnt_cpsv, def:mpv_phase_class_data}
+    \uses{def:vertical_tensor_mpdo,def:bnt,def:bnt_cpsv,def:mpv_phase_class_data}
     Let $M$ be an MPO tensor and put $T=\widetilde M$. Let $B_k$ have bond
     dimension $d_k$, let $\mu_k\in\C$, and let
     $V_k:\C^{d_k}\to\C^d$ be an isometry for $0\leq k<r$. Assume, for every
@@ -830,7 +830,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_bnt_is_bnt, lem:bnt_of_same_mpv2_pos, thm:mpv_decomposition}
+    \uses{thm:cpsv_bnt_is_bnt,lem:bnt_of_same_mpv2_pos,thm:mpv_decomposition}
     With $C_k^v=\mu_kB_k^v$, induction on a word $w$ gives
     $V_k^\dagger T^w=C_k^wV_k^\dagger$.
     For a nonempty word $w=(v,w')$, reconstruction of its first letter,
@@ -856,7 +856,7 @@
     \label{thm:cpsv_literal_pairwise_vertical_gram_conjugation}
     \lean{MPSTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:vertical_tensor_mpdo}
     Let $M$ be an MPO tensor whose doubled-index MPS tensor is in
     CPSV canonical form, and suppose that $M$ generates positive semidefinite
     operators on every nonempty chain. Let $A$ be a tensor, let $X$ and $Y$ be
@@ -883,7 +883,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_reflected_marked_chain, thm:cpsv_original_coordinate_marked_lemma_l}
+    \uses{thm:mpdo_reflected_marked_chain,thm:cpsv_original_coordinate_marked_lemma_l}
     For $Z=X,Y$, set
     \begin{align}
         f^Z_{(r,s),(i,j)}
@@ -903,7 +903,7 @@
     \label{thm:cpsv_literal_positive_relative_gram_scalar}
     \lean{MPSTensor.IsCPSVCanonicalForm.gram_eq_pos_smul_gram_of_two_grouped_corners}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:normal}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:vertical_tensor_mpdo,def:normal}
     Let $M$ be an MPO tensor whose doubled-index MPS tensor is in
     CPSV canonical form, and suppose that $M$ generates positive semidefinite
     operators on every nonempty chain. Let $A$ be normal, let $X$ and $Y$ be
@@ -928,7 +928,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation, thm:normal_tensor_gram_rigidity}
+    \uses{thm:cpsv_literal_pairwise_vertical_gram_conjugation,thm:normal_tensor_gram_rigidity}
     Equation~(\ref{eq:cpsv_literal_pairwise_gram_conj}) makes the ratio of the
     two Gram matrices commute with every letter of $A$. Normality makes this
     ratio scalar, and positive definiteness makes the scalar a positive real
@@ -945,7 +945,7 @@
     \label{thm:vertical_cf_of_grouping_and_gram_dressing}
     \lean{MPOTensor.verticalCF_of_grouping_and_gramDressing}
     \leanok
-    \uses{def:vertical_bnt_grouping_with_isometry, def:grouped_corner_gram_dressing, def:vertical_cf_mpdo}
+    \uses{def:vertical_bnt_grouping_with_isometry,def:grouped_corner_gram_dressing,def:vertical_cf_mpdo}
     If $M$ has a grouped vertical BNT decomposition with physical isometries
     in the sense of
     Definition~\ref{def:vertical_bnt_grouping_with_isometry}, and $M$ has the
@@ -955,7 +955,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:grouped_sector_gram_scalar_of_dressing, thm:mpdo_vertical_grouped_is_bnt, thm:normalized_grouped_sector_maps_of_gram, thm:vertical_cf_of_grouped_orthogonal_sectors}
+    \uses{thm:grouped_sector_gram_scalar_of_dressing,thm:mpdo_vertical_grouped_is_bnt,thm:normalized_grouped_sector_maps_of_gram,thm:vertical_cf_of_grouped_orthogonal_sectors}
     Lemma~\ref{thm:grouped_sector_gram_scalar_of_dressing} gives
     $X_{\alpha,q}^\dagger X_{\alpha,q}=\omega_{\alpha,q}\Id$ with
     $\omega_{\alpha,q}>0$, and absorbing
@@ -971,7 +971,7 @@
     \label{thm:vertical_cf_of_cpsv_canonical_form}
     \lean{MPOTensor.verticalCF_of_cpsvCanonicalForm}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_cf_mpdo}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:vertical_cf_mpdo}
     Let $M$ be an MPO tensor whose doubled-index MPS tensor is in
     CPSV canonical form. If $M$ generates matrix product density operators,
     then $M$ is in canonical form in the vertical direction. More precisely,
@@ -1003,7 +1003,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:vertical_cf_of_grouping_and_gram_dressing, thm:cpsv_literal_vertical_bnt_grouping_with_isometries, thm:cpsv_literal_pairwise_vertical_gram_conjugation}
+    \uses{thm:vertical_cf_of_grouping_and_gram_dressing,thm:cpsv_literal_vertical_bnt_grouping_with_isometries,thm:cpsv_literal_pairwise_vertical_gram_conjugation}
     Theorem~\ref{thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     gives the grouped vertical BNT decomposition with physical isometries, and
     the pairwise Figure~8 theorem for CPSV canonical form gives the grouped-corner
@@ -1019,7 +1019,7 @@
     \label{thm:vertical_cf_of_horizontal_cf}
     \lean{MPOTensor.verticalCF_of_horizontalCF}
     \leanok
-    \uses{def:mpdo, def:horizontal_cf_mpdo, def:vertical_cf_mpdo}
+    \uses{def:mpdo,def:horizontal_cf_mpdo,def:vertical_cf_mpdo}
     Complementing the CPSV canonical-form formulation of
     Lemma~\ref{thm:vertical_cf_of_cpsv_canonical_form}, a tensor in
     normalized BNT-refined horizontal form (Definition~\ref{def:horizontal_cf_mpdo})
@@ -1042,7 +1042,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:vertical_cf_of_grouping_and_gram_dressing, thm:mpdo_vertical_bnt_grouping_with_isometries, thm:mpdo_pairwise_vertical_gram_conjugation}
+    \uses{thm:vertical_cf_of_grouping_and_gram_dressing,thm:mpdo_vertical_bnt_grouping_with_isometries,thm:mpdo_pairwise_vertical_gram_conjugation}
     Lemma~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries} gives the
     grouped vertical decomposition, and the pairwise Figure~8 theorem gives
     its grouped-corner Gram-dressing property, so

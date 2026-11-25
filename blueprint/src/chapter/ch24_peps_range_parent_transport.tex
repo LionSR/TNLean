@@ -65,8 +65,7 @@ Write $\mathcal G_S(A)=\operatorname{im}\mathcal C_S(A)$ for the open-region ran
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_range_parent_site_inverse,
-        thm:peps_range_parent_slice_reconstruction}
+    \uses{thm:peps_range_parent_site_inverse,thm:peps_range_parent_slice_reconstruction}
     Since $\mathcal G_S(B)=F_S\mathcal G_S(A)$, $F_{\mathrm{all}}\mathcal P_{\mathcal R}(A)\subseteq\mathcal P_{\mathcal R}(B)$ and similarly $L_{\mathrm{all}}\mathcal P_{\mathcal R}(B)\subseteq\mathcal P_{\mathcal R}(A)$ via $L_vB_v=A_v$ (Lemma~\ref{thm:peps_range_parent_site_inverse}); Lemma~\ref{thm:peps_range_parent_slice_reconstruction} gives $L_{\mathrm{all}}F_{\mathrm{all}}|_{\mathcal P_{\mathcal R}(A)}=\operatorname{id}$ and $F_{\mathrm{all}}L_{\mathrm{all}}|_{\mathcal P_{\mathcal R}(B)}=\operatorname{id}$, establishing (\ref{eq:peps_range_parent_equivalence}).
 \end{proof}
 
@@ -109,9 +108,7 @@ Write $\mathcal G_S(A)=\operatorname{im}\mathcal C_S(A)$ for the open-region ran
     for finite $\mathcal I$ and positive regional interactions $H_i,K_i\ge0$ with these local kernels, $F_{\mathrm{all}}(\ker H)=\ker K$ and $\dim\ker K=\dim\ker H$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_range_parent_g_comparison,
-        thm:peps_range_parent_equivalence,
-        thm:peps_g_injective_physical_map}
+    \uses{thm:peps_range_parent_g_comparison,thm:peps_range_parent_equivalence,thm:peps_g_injective_physical_map}
     Lemma~\ref{thm:peps_range_parent_g_comparison} (or Lemma~\ref{thm:peps_g_injective_physical_map} when $B=FA$ is prescribed) provides $F_v$ injective on $\operatorname{im}A_v$ with $B_v=F_vA_v$, and Lemma~\ref{thm:peps_range_parent_equivalence} (with $\ker H=\mathcal P_{\mathcal R}(A)$ and $\ker K=\mathcal P_{\mathcal R}(B)$) yields the remaining claims.
 \end{proof}
 % These fixed-representation consequences do not change virtual bond spaces.

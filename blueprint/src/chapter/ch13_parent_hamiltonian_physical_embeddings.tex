@@ -210,8 +210,7 @@ be the periodic sums of the complementary projections of these spaces.
     \label{lem:physical_sector_parent_projection_transport}
     \lean{MPSTensor.physical_sector_parent_projection_embed}
     \leanok
-    \uses{lem:physical_sector_word_orthogonality,
-        lem:physical_euclidean_extension_zero_isometry}
+    \uses{lem:physical_sector_word_orthogonality,lem:physical_euclidean_extension_zero_isometry}
     For $R\ge1$, the complementary projection of the sum
     $U=E_R S+F_R T$ satisfies
     \begin{align}
@@ -233,9 +232,7 @@ be the periodic sums of the complementary projections of these spaces.
     \lean{MPSTensor.physical_sector_hamiltonian_translationInvariant_embed,
         MPSTensor.physical_sector_hamiltonian_translationInvariant_embed_eq_zero_iff}
     \leanok
-    \uses{lem:physical_sector_parent_projection_transport,
-        lem:physical_spectator_embedding_transport,
-        lem:physical_euclidean_extension_zero_isometry}
+    \uses{lem:physical_sector_parent_projection_transport,lem:physical_spectator_embedding_transport,lem:physical_euclidean_extension_zero_isometry}
     If $1\le R\le M$, then
     \begin{align}
         H_U E_Mv  & =E_MH_Sv,                             &
@@ -258,8 +255,7 @@ be the periodic sums of the complementary projections of these spaces.
     \label{lem:physical_sector_sum_kernel_iff}
     \lean{MPSTensor.physical_sector_hamiltonian_translationInvariant_sum_eq_zero_iff}
     \leanok
-    \uses{lem:physical_sector_periodic_hamiltonian_transport,
-        lem:physical_sector_word_orthogonality}
+    \uses{lem:physical_sector_periodic_hamiltonian_transport,lem:physical_sector_word_orthogonality}
     Under the same assumptions,
     \begin{align}
         H_U(E_Mv+F_Mw)=0
@@ -403,8 +399,7 @@ be the periodic sums of the complementary projections of these spaces.
     \label{lem:varying_physical_local_parent_transport}
     \lean{Matrix.pair_parent_localTerm_extend_physical}
     \leanok
-    \uses{lem:varying_physical_pair_projection_transport,
-        lem:physical_spectator_embedding_transport}
+    \uses{lem:varying_physical_pair_projection_transport,lem:physical_spectator_embedding_transport}
     Let $S$ be the finite configuration space outside a pair, with any
     injection $g:S\hookrightarrow T$. Extend the complementary pair
     projectors by the identity outside the pair. Then
@@ -446,8 +441,7 @@ be the periodic sums of the complementary projections of these spaces.
     \lean{Matrix.pairConfigurationEquiv_embedding_apply,
         Matrix.pairConfigurationReindex_extendByZero}
     \leanok
-    \uses{def:dependent_physical_pair_coordinates,
-        def:physical_euclidean_extension_zero}
+    \uses{def:dependent_physical_pair_coordinates,def:physical_euclidean_extension_zero}
     For sitewise injections $e_k:I_k\hookrightarrow J_k$, the dependent
     pair/outside coordinate bijection commutes with the full configuration
     injection. The corresponding Euclidean coordinate changes $Q_I,Q_J$
@@ -490,9 +484,7 @@ be the periodic sums of the complementary projections of these spaces.
         Matrix.varyingPhysicalParentHamiltonian_extend_physical,
         Matrix.varyingPhysicalParentHamiltonian_extend_eq_zero_iff}
     \leanok
-    \uses{def:varying_physical_parent_hamiltonian,
-        lem:dependent_physical_pair_embedding,
-        lem:varying_physical_local_parent_transport}
+    \uses{def:varying_physical_parent_hamiltonian,lem:dependent_physical_pair_embedding,lem:varying_physical_local_parent_transport}
     Every local term $h_j$ and their sum $H$ are positive. For
     arbitrary sitewise physical injections, extend each site matrix by
     zero to obtain the corresponding parent $\widetilde H$. Then
@@ -542,8 +534,7 @@ be the periodic sums of the complementary projections of these spaces.
         Matrix.varyingPhysicalParentHamiltonian_pair_apply_eq_zero,
         Matrix.varyingPhysicalParentHamiltonian_coeff_eq_zero_of_not_mem_range}
     \leanok
-    \uses{lem:varying_physical_local_boundary_sections,
-        lem:varying_physical_parent_embedding_transport}
+    \uses{lem:varying_physical_local_boundary_sections,lem:varying_physical_parent_embedding_transport}
     Extend site matrices by zero along arbitrary sitewise physical
     injections $e_k:I_k\hookrightarrow J_k$. Suppose $N\ge2$ and the extended
     parent satisfies $\widetilde H\phi=0$. Then $\phi(\sigma)=0$

@@ -4,7 +4,7 @@
         MPOTensor.GroupFamily.IsRawRepresentation.index_one,
         MPOTensor.GroupFamily.IsRawRepresentation.neZero_phys}
     \leanok
-    \uses{def:mpug_group_representation, def:mpu_reduced_representative_index}
+    \uses{def:mpug_group_representation,def:mpu_reduced_representative_index}
     Let $\{\mathcal U_g\}_{g\in G}$ be an injective family of MPUs with positive
     bond dimensions, satisfying~(\ref{eq:mpug_rep_identity}) and
     (\ref{eq:mpug_rep_multiplication}) at every positive chain length, without
@@ -19,9 +19,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_representative_index_invariance,
-        thm:mpu_representative_index_tensor_product,
-        thm:mpu_identity_index, thm:mpu_admissible_index_composition}
+    \uses{thm:mpu_reduced_representative_index_invariance,thm:mpu_representative_index_tensor_product,thm:mpu_identity_index,thm:mpu_admissible_index_composition}
     Injectivity on a positive-dimensional bond space excludes an empty
     physical alphabet, so $d>0$. On the remaining periodic operators, the
     identity law identifies $\mathcal U_e$ with the identity tensor of zero
@@ -57,7 +55,7 @@
     \label{thm:mpug_finite_group_source_ranks}
     \lean{MPOTensor.GroupFamily.IsRepresentation.sourceRanks_eq_physDim}
     \leanok
-    \uses{def:mpug_group_representation, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpug_group_representation,def:mpu_right_rank,def:mpu_left_rank}
     Let $G$ be finite and let $\{\mathcal U_g\}_{g\in G}$ be an exact
     representation by simple injective MPU tensors of physical dimension
     $d$. As in \cite[line~1547]{FrancoRubio2025MPUGauging}, every $g\in G$ has
@@ -69,9 +67,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_finite_group_index_zero,
-        thm:mpu_simple_injective_source_index,
-        thm:mpug_zero_specified_source_index_ranks}
+    \uses{thm:mpug_finite_group_index_zero,thm:mpu_simple_injective_source_index,thm:mpug_zero_specified_source_index_ranks}
     For $r=d_r(g)$ and $\ell=d_l(g)$, simplicity and injectivity imply
     $r\ell=d^2$ and
     $\operatorname{ind}(\mathcal U_g)=\frac12(\log_2 r-\log_2\ell)$, with

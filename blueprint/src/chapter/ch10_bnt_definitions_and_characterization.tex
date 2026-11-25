@@ -3,7 +3,7 @@
 \begin{definition}[Basis of Normal Tensors (BNT)]\label{def:bnt}
     \lean{MPSTensor.IsBNT}
     \leanok
-    \uses{def:normal, def:mpv}
+    \uses{def:normal,def:mpv}
     As in \cite[Definition~IV.2]{Cirac2021Matrix}, a \emph{basis of normal
         tensors} (BNT) for a total tensor $A_{\mathrm{tot}}$ consists of $g$ block
     tensors $(A_1, \ldots, A_g)$ with bond dimensions $(D_1, \ldots, D_g)$
@@ -20,7 +20,7 @@
 \begin{definition}[Basis of normal tensors, coefficient form]\label{def:bnt_cpsv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors}
     \leanok
-    \uses{def:nt_cpsv, def:mpv}
+    \uses{def:nt_cpsv,def:mpv}
     % Source: Cirac2017MPDO_AnnPhys \S~II.C, lines 271--274.
     In the coefficient form of a basis of normal tensors
     \cite[Section~2.3]{Cirac2016MPDO_arXiv}, each block $A_j$ is a
@@ -35,7 +35,7 @@
     \label{thm:cpsv_bnt_blocks_not_gaugePhaseEquiv}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv}
     \leanok
-    \uses{def:bnt_cpsv, def:blocks_not_gauge_phase_equiv}
+    \uses{def:bnt_cpsv,def:blocks_not_gauge_phase_equiv}
     Distinct members of a basis of normal tensors are not gauge-phase
     equivalent after identifying equal bond dimensions.
 \end{lemma}
@@ -60,7 +60,7 @@
     \lean{MPSTensor.SectorDecomposition.%
         exists_phase_match_of_isCPSVBasisOfNormalTensors}
     \leanok
-    \uses{def:bnt_cpsv, def:nt_cpsv, def:block_diagonal_tensor, def:same_mpv2_pos, def:blocks_not_gauge_phase_equiv}
+    \uses{def:bnt_cpsv,def:nt_cpsv,def:block_diagonal_tensor,def:same_mpv2_pos,def:blocks_not_gauge_phase_equiv}
     As in \cite[Proposition~2.7]{Cirac2016MPDO_arXiv} read with the
     nonzero-coefficient convention of Definition~\ref{def:cpsv_canonical_form},
     let $A$ have a canonical-form MPV expansion
@@ -86,7 +86,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_mpv_phase_gauge, thm:cpsv_normal_mpv_phase_alternative, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, lem:bnt_finite_index_overlap_orthonormal_li, lem:finite_geometric_sum_eventual_vanishing, lem:sector_decomposition_coeff_not_eventually_zero, def:mpv_phase_class_data, thm:cpsv_normal_separated_eventually_li, thm:mpv_decomposition}
+    \uses{thm:cpsv_normal_mpv_phase_gauge,thm:cpsv_normal_mpv_phase_alternative,thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,lem:bnt_finite_index_overlap_orthonormal_li,lem:finite_geometric_sum_eventual_vanishing,lem:sector_decomposition_coeff_not_eventually_zero,def:mpv_phase_class_data,thm:cpsv_normal_separated_eventually_li,thm:mpv_decomposition}
     Grouping the summands into the MPV phase classes of
     Definition~\ref{def:mpv_phase_class_data} and selecting one representative
     from each class,

@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.NonemptyGateLabels
+import QICLean.Circuit.Party.Compression.PartialExpansion.Choices
+import QICLean.Circuit.Party.Syntax.OwnerMap
+import QICLean.Circuit.Party.Syntax.PartySelector
 import TNLean.Network.DistributedContraction.DistributedOperatorContraction
-import TNLean.Lattice.Compression.PartySelector
 
 /-! # Gate labels visible at one party
 
@@ -26,23 +27,21 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice.PartyCircuit
-variable {P : Type}
-open TNLean.Lattice.Compression
+namespace QuantumCircuit.Party.SourceCircuit
+open TNLean.Network
+variable {P : Type} [DecidableEq P]
 
 /-- The all-party grouping retains every original party with its actual label.
 Source: polynomial-PEPS 04-compression.tex, lines 409–417. -/
 theorem partySelector_affectedOwner_all_apply (p q : P) :
     partySelector (some (⟨p, rfl⟩ : {p : P // (fun _ : P => true) p = true}))
         (affectedOwner (fun _ => true) q) = partySelector p q := by
-  classical
   apply Bool.eq_iff_iff.mpr
   simp [partySelector, affectedOwner]
 
 /-- Selecting the grouped owner of one original party touches exactly its
 original incident gates. Source: polynomial-PEPS 04-compression.tex, lines 351–381. -/
-theorem isTouched_groupedParty_iff {a b : Layout P} (w : SourceCircuit a b)
+theorem isTouched_groupedParty_iff {X Y : P → Type} (w : SourceCircuit X Y)
     (p : P) (g : w.gateLocations) :
     w.IsTouched (fun q => partySelector (some ⟨p, rfl⟩)
       (affectedOwner (fun _ : P => true) q)) g ↔ p ∈ w.participants g := by
@@ -50,18 +49,17 @@ theorem isTouched_groupedParty_iff {a b : Layout P} (w : SourceCircuit a b)
   · rintro ⟨q, hq, hsel⟩
     have hs : partySelector p q = true :=
       (partySelector_affectedOwner_all_apply p q).symm.trans hsel
-    have hqp : q = p := by simpa only [partySelector, decide_eq_true_eq] using hs
+    rw [partySelector_eq_true_iff] at hs
     subst q
     exact hq
   · intro hp
     refine ⟨p, hp, ?_⟩
-    exact (partySelector_affectedOwner_all_apply p p).trans
-      (by simp only [partySelector, decide_true])
+    exact (partySelector_affectedOwner_all_apply p p).trans (partySelector_eq_true_iff.mpr rfl)
 
 open Classical in
 /-- The actual shared original-gate labels visible at one party.
 Source: polynomial-PEPS 04-compression.tex, lines 565–579. -/
-abbrev OriginalGateLabelsAt {a b : Layout P} (w : SourceCircuit a b) (p : P) :=
+abbrev OriginalGateLabelsAt {X Y : P → Type} (w : SourceCircuit X Y) (p : P) :=
   DistributedOperatorContraction.GateLabelsAt
     (Finset.univ : Finset w.nonemptyGateLocations)
     (fun g => w.participants g.1) (fun g => w.branchLabels g.1) p
@@ -70,7 +68,7 @@ open Classical in
 /-- Construct the actual incident partial choices from the gate labels carried
 by the party's incident gates. Source: polynomial-PEPS 04-compression.tex,
 lines 351–381 and 565–579. -/
-def choicesOfOriginalGateLabelsAt {a b : Layout P} (w : SourceCircuit a b) (p : P)
+def choicesOfOriginalGateLabelsAt {X Y : P → Type} (w : SourceCircuit X Y) (p : P)
     (ξ : OriginalGateLabelsAt w p) :
     Choices (fun q => partySelector (some ⟨p, rfl⟩)
       (affectedOwner (fun _ : P => true) q)) w :=
@@ -81,7 +79,7 @@ def choicesOfOriginalGateLabelsAt {a b : Layout P} (w : SourceCircuit a b) (p : 
 open Classical in
 /-- Restrict the labels of a genuine all-party choice to the gates visible at
 an original party. Source: polynomial-PEPS 04-compression.tex, lines 565–579. -/
-def originalGateLabelsAtOfAllChoices {a b : Layout P} (w : SourceCircuit a b) (p : P)
+def originalGateLabelsAtOfAllChoices {X Y : P → Type} (w : SourceCircuit X Y) (p : P)
     (ξ : Choices (fun _ => true) w) : OriginalGateLabelsAt w p :=
   fun g => allChoicesNonemptyLabelsEquiv w ξ g.1.1
 
@@ -89,8 +87,8 @@ open Classical in
 /-- The incident choices reconstructed from incident gate labels are precisely the
 restriction of the actual all-party choices. No unused gate label is chosen.
 Source: polynomial-PEPS 04-compression.tex, lines 351–381 and 565–579. -/
-theorem choicesOfOriginalGateLabelsAt_eq_projectAllChoices {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (ξ : Choices (fun _ => true) w) :
+theorem choicesOfOriginalGateLabelsAt_eq_projectAllChoices {X Y : P → Type}
+    (w : SourceCircuit X Y) (p : P) (ξ : Choices (fun _ => true) w) :
     choicesOfOriginalGateLabelsAt w p (originalGateLabelsAtOfAllChoices w p ξ) =
       projectAllChoices (fun q => partySelector (some ⟨p, rfl⟩)
         (affectedOwner (fun _ : P => true) q)) w ξ := by
@@ -99,4 +97,4 @@ theorem choicesOfOriginalGateLabelsAt_eq_projectAllChoices {a b : Layout P}
   exact (choiceAt_choicesOfTouchedLabels _ w _ g hg).trans
     (choiceAt_projectAllChoices _ w ξ g hg).symm
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

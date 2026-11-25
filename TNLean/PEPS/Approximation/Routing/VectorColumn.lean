@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Network.DependentBond.DependentNetworkColumn
 import TNLean.PEPS.Tensor.Network.Defs
+import QICLean.Analysis.TraceNorm.ColumnSelection
 
 /-!
 # Extracting one ket column from an operator tensor network
@@ -46,7 +47,7 @@ noncomputable section
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS.Approximation
-open TNLean.Lattice.Compression
+open TNLean.Network
 
 section SimpleGraph
 
@@ -121,7 +122,8 @@ theorem exists_fixInput_stateCoeff_of_traceNorm_sub_pure_le (A : Tensor G (d * d
         ψ ≠ 0 ∧
         ∃ θ : ℝ, ‖((‖ψ‖ : ℂ)⁻¹) • ψ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
   obtain ⟨z, hz, θ, hθ⟩ :=
-    exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
+    Matrix.exists_column_ne_zero_of_rectangularTraceNorm_sub_pure_le _ Ω hΩ
+      (by rwa [← Matrix.rectangularTraceNorm_reindex e e, Matrix.rectangularTraceNorm_square]) hη
   refine ⟨z, rfl, _, fun τ ↦ ?_, rfl, hz, θ, hθ⟩
   rw [Matrix.toEuclideanLin_single_one_apply, stateCoeff_fixInput]
 

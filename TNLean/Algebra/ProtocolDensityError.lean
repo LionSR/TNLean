@@ -22,7 +22,7 @@ last vector is the product `Ω ⊗ Ξ` of the target with a private factor of no
   (`eq:compressed-density`).
 
 The spaces of the trajectory may change from step to step, as parties are born and private
-registers are added. The reference trajectory, the step errors, the number of changes, the
+factors are added. The reference trajectory, the step errors, the number of changes, the
 private factor and the compressed operator are hypotheses: they are the outputs of
 Proposition 7.1, the small-patch rewrite lemma `lem:small-rewrite` and Theorem 5.2, which are
 not constructed here. Every final constant is an explicit expression in the supplied
@@ -30,14 +30,14 @@ constants.
 
 ## Main results
 
-* `TNLean.Lattice.PartyCircuit.norm_trajectory_sub_reference_le`: the accumulated vector error
+* `TNLean.norm_trajectory_sub_reference_le`: the accumulated vector error
   of a chain of contractions is at most the sum of the step errors.
-* `TNLean.Lattice.PartyCircuit.norm_trajectory_le`: a chain of contractions does not increase
+* `TNLean.norm_trajectory_le`: a chain of contractions does not increase
   the norm.
-* `TNLean.Lattice.PartyCircuit.norm_protocol_sub_reference_le`: the `C L⁻¹⁷` vector error.
-* `TNLean.Lattice.PartyCircuit.rectangularTraceNorm_protocol_density_sub_le`:
+* `TNLean.norm_protocol_sub_reference_le`: the `C L⁻¹⁷` vector error.
+* `TNLean.rectangularTraceNorm_protocol_density_sub_le`:
   `eq:protocol-density`.
-* `TNLean.Lattice.PartyCircuit.rectangularTraceNorm_compressed_density_sub_le`:
+* `TNLean.rectangularTraceNorm_compressed_density_sub_le`:
   `eq:compressed-density`.
 
 ## References
@@ -51,7 +51,7 @@ open scoped Matrix
 
 noncomputable section
 
-namespace TNLean.Lattice.PartyCircuit
+namespace TNLean
 
 section Trajectory
 
@@ -261,4 +261,4 @@ theorem rectangularTraceNorm_compressed_density_sub_le
 
 end Density
 
-end TNLean.Lattice.PartyCircuit
+end TNLean

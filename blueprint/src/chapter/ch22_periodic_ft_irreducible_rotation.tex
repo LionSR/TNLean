@@ -26,7 +26,7 @@
     $m$-th roots of unity (\cite[lines~257--258]{DeLasCuevas2017Irreducible}).
 \end{lemma}
 \begin{proof}
-    \uses{thm:pure_perron_tp_gauge, thm:cpsv_spectral_radius_similarity, lem:peripheral_spectrum_similarity, lem:irreducible_transfer_perron_pair, thm:transfer_map_irreducible_of_tensor}
+    \uses{thm:pure_perron_tp_gauge,thm:cpsv_spectral_radius_similarity,lem:peripheral_spectrum_similarity,lem:irreducible_transfer_perron_pair,thm:transfer_map_irreducible_of_tensor}
     \leanok
     Let $\sigma$ be the positive definite fixed point of $\E_A^*$ and pass to
     the similar tensor $B=\sigma^{1/2}A\sigma^{-1/2}$ of
@@ -104,7 +104,7 @@
     \label{thm:irreducible_left_canonical_periodic}
     \lean{MPSTensor.exists_isPeriodic_of_irreducible_of_isLeftCanonical}
     \leanok
-    \uses{def:irreducible_tensor, def:left_canonical_tensor, def:periodic_tensor}
+    \uses{def:irreducible_tensor,def:left_canonical_tensor,def:periodic_tensor}
     Every irreducible left-canonical MPS tensor $A$ of positive bond dimension
     is $m$-periodic for some $m\ge1$
     \cite[lines~248--258 and eq.~\emph{unital}]{DeLasCuevas2017Irreducible}.
@@ -124,7 +124,7 @@
     \label{thm:spectral_periodic_normalization}
     \lean{MPSTensor.IsSpectrallyPeriodic.exists_isPeriodic_tpGauge}
     \leanok
-    \uses{def:spectral_periodic_tensor, def:periodic_tensor}
+    \uses{def:spectral_periodic_tensor,def:periodic_tensor}
     Let $A$ be spectrally $m$-periodic.  There is a positive definite matrix
     $\sigma$ such that
     \begin{align}
@@ -136,7 +136,7 @@
     weight into the normalization.
 \end{lemma}
 \begin{proof}
-    \uses{lem:peripheral_spectrum_similarity, thm:pure_perron_tp_gauge}
+    \uses{lem:peripheral_spectrum_similarity,thm:pure_perron_tp_gauge}
     \leanok
     Lemma~\ref{thm:pure_perron_tp_gauge} provides $\sigma$ and makes $B$
     left-canonical; because the transfer map of $B$ is similar to that of $A$,
@@ -190,7 +190,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}
-    \uses{def:ft_matched_flat_data, lem:tensor_from_blocks_globalGauge_conj}
+    \uses{def:ft_matched_flat_data,lem:tensor_from_blocks_globalGauge_conj}
     \leanok
     Repeating $X_j$ on every copy indexed by a diagonal entry of $R_j$ and
     taking their block-diagonal direct sum produces $X$, and on the $(j,q)$
@@ -201,14 +201,14 @@
     \label{thm:spectral_periodic_sector_normalization}
     \lean{MPSTensor.SectorDecomposition.exists_isPeriodic_replaceBasis}
     \leanok
-    \uses{def:spectral_periodic_tensor, def:periodic_sector_basis_replacement, def:periodic_tensor}
+    \uses{def:spectral_periodic_tensor,def:periodic_sector_basis_replacement,def:periodic_tensor}
     Suppose every representative $A_j$ is spectrally $m_j$-periodic.  There
     are left-canonical $m_j$-periodic representatives $B_j$, each purely
     similar to $A_j$, such that the two full multiplicity-bearing tensors are
     purely similar.  Every multiplicity matrix $R_j$ is unchanged.
 \end{lemma}
 \begin{proof}
-    \uses{thm:spectral_periodic_normalization, thm:periodic_sector_basis_replacement_gauge}
+    \uses{thm:spectral_periodic_normalization,thm:periodic_sector_basis_replacement_gauge}
     \leanok
     Applying the positive Perron gauge to each representative and combining
     them via Lemma~\ref{thm:periodic_sector_basis_replacement_gauge} yields
@@ -304,7 +304,7 @@ follows.
     \label{thm:transfer_map_rotate_physical}
     \lean{MPSTensor.transferMap_rotatePhysical}
     \leanok
-    \uses{def:rotate_physical, def:transfer_map}
+    \uses{def:rotate_physical,def:transfer_map}
     If $uu^\dagger=\Id$, then the transfer map is invariant under
     physical-index rotation: $\E_{A_u}=\E_A$.
 \end{lemma}
@@ -351,13 +351,13 @@ follows.
     \label{thm:periodic_rotate_physical}
     \lean{MPSTensor.isPeriodic_rotatePhysical}
     \leanok
-    \uses{def:rotate_physical, thm:transfer_map_rotate_physical, thm:left_canonical_rotate_physical, thm:irreducible_tensor_rotate_physical}
+    \uses{def:rotate_physical,thm:transfer_map_rotate_physical,thm:left_canonical_rotate_physical,thm:irreducible_tensor_rotate_physical}
     If $uu^\dagger=\Id$ and $A$ is periodic with period~$m$, then
     $A_u$ is periodic with the same period.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_map_rotate_physical, thm:left_canonical_rotate_physical, thm:irreducible_tensor_rotate_physical}
+    \uses{thm:transfer_map_rotate_physical,thm:left_canonical_rotate_physical,thm:irreducible_tensor_rotate_physical}
     Lemma~\ref{thm:transfer_map_rotate_physical} preserves the transfer map
     and its peripheral spectrum, Lemma~\ref{thm:left_canonical_rotate_physical}
     preserves left-canonicity, and
@@ -369,12 +369,12 @@ follows.
     \label{thm:same_mpv_rotate_physical}
     \lean{MPSTensor.sameMPV₂_rotatePhysical}
     \leanok
-    \uses{def:rotate_physical, def:same_mpv}
+    \uses{def:rotate_physical,def:same_mpv}
     If $\mc{V}(A)=\mc{V}(B)$, then $\mc{V}(A_u)=\mc{V}(B_u)$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:rotate_physical, def:same_mpv}
+    \uses{def:rotate_physical,def:same_mpv}
     The claim follows by induction on the word length with a strengthened
     hypothesis carrying an arbitrary prefix matrix, which reduces each step to
     the induction hypothesis via word concatenation.
@@ -403,14 +403,14 @@ follows.
     \label{thm:irreducible_form_rotate_physical}
     \lean{MPSTensor.isIrreducibleForm_rotatePhysical}
     \leanok
-    \uses{def:rotate_physical, def:irreducible_form, thm:periodic_rotate_physical, thm:same_mpv_rotate_physical, thm:rotate_physical_blocks}
+    \uses{def:rotate_physical,def:irreducible_form,thm:periodic_rotate_physical,thm:same_mpv_rotate_physical,thm:rotate_physical_blocks}
     If $uu^\dagger=\Id$ and $A$ is in irreducible form, then
     $A_u$ is in irreducible form with the same block structure and
     rotated blocks.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_rotate_physical, thm:same_mpv_rotate_physical, thm:rotate_physical_blocks}
+    \uses{thm:periodic_rotate_physical,thm:same_mpv_rotate_physical,thm:rotate_physical_blocks}
     By Lemma~\ref{thm:periodic_rotate_physical} each block remains periodic,
     by Lemma~\ref{thm:same_mpv_rotate_physical} equality of the MPV families
     is preserved, and by Lemma~\ref{thm:rotate_physical_blocks} physical

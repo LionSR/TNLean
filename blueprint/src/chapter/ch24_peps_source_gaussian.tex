@@ -4,7 +4,7 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{definition}[Coordinates of an original source]
     \label{def:peps_source_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCoordinates}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceVectorAt}
     \leanok
     Let $z_{e,\alpha}\in\C^{u_ev_e}$ be the coordinate vector of
     $\nu_{e,\alpha}$ in the tensor-product standard orthonormal endpoint basis, and set $r_e=\min(u_e,v_e)$.
@@ -12,8 +12,8 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{lemma}[Local Schmidt frames chosen before partial expansion]
     \label{thm:peps_local_schmidt_sources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCoordinates_norm}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_local_schmidt_source_frames}
+    \lean{QuantumCircuit.Party.SourceCircuit.norm_sourceVectorAt}
+    \lean{QuantumCircuit.Party.SourceCircuit.exists_local_schmidt_source_frames}
     \leanok
     \uses{def:peps_source_coordinates}
     For every $e=(g,j)\in\mathcal E$ and $\alpha\in\Xi_g$, $\|z_{e,\alpha}\|=1$, and there exist weights $\lambda_{e,\alpha,t}\geq0$ with $\sum_{t=1}^{r_e}\lambda_{e,\alpha,t}=1$ and matrices $E_{e,\alpha}:\C^{r_e}\to\C^{u_e}$, $F_{e,\alpha}:\C^{r_e}\to\C^{v_e}$ such that
@@ -34,7 +34,7 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{lemma}[Finite Schmidt support in arbitrary endpoint spaces]
     \label{thm:peps_tensor_schmidt_isometries}
-    \lean{TNLean.Lattice.PartyCircuit.PairSource.exists_probability_schmidt_isometries}
+    \lean{Matrix.exists_schmidtFrames_of_norm_eq_one}
     \leanok
     Let $U,V$ be complex inner-product spaces and let
     $z\in U\otimes V$ satisfy $\|z\|=1$
@@ -50,17 +50,17 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{definition}[A single law indexed by original sources]
     \label{def:peps_source_gaussian_law}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.SourceGaussianSamples}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianLaw}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianLawIsProbabilityMeasure}
+    \lean{QuantumCircuit.Party.SourceCircuit.SourceGaussianSamples}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceGaussianLaw}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceGaussianLawIsProbabilityMeasure}
     \leanok
     Fix $k\geq0$. Let $\mathbb P_k$ be the product probability law of independent standard circular complex Gaussian variables $\omega_{e,\alpha,\beta,s,p,q}$ indexed by $e=(g,j)\in\mathcal E$, $(\alpha,\beta)\in\Xi_g^2$, $0\leq s<k$, and $p,q\in\{1,\ldots,r_e\}$.
 \end{definition}
 
 \begin{lemma}[Fixed selections retain the Gaussian law]
     \label{thm:peps_source_gaussian_selection}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.measurePreserving_sourceGaussian_eval}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.measurePreserving_selected_sourceGaussian}
+    \lean{QuantumCircuit.Party.SourceCircuit.measurePreserving_sourceGaussian_eval}
+    \lean{QuantumCircuit.Party.SourceCircuit.measurePreserving_selected_sourceGaussian}
     \leanok
     \uses{def:peps_source_gaussian_law}
     For any fixed $e=(g,j)\in\mathcal E$ and $(\alpha,\beta)\in\Xi_g^2$, the projection $\omega\mapsto(\omega_{e,\alpha,\beta,s,p,q})_{s,p,q}$ has the standard product Gaussian law under $\mathbb P_k$. More generally, for any $S\subseteq\mathcal E$ and deterministic labels $(\alpha_e,\beta_e)\in\Xi_g^2$ ($e\in S$), the families $(\omega_{e,\alpha_e,\beta_e,s,p,q})_{s,p,q}$ ($e\in S$) are independent with their prescribed Gaussian laws.
@@ -72,8 +72,8 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{definition}[Sampled source operators]
     \label{def:peps_sampled_source_matrix}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledSourceMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianCorrection}
+    \lean{QuantumCircuit.Party.SourceCircuit.sampledSourceMatrix}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceGaussianCorrection}
     \leanok
     \uses{thm:peps_local_schmidt_sources,def:peps_source_gaussian_law}
     For $k>0$, let $U_s$ and $V_s$ be the quarter-power weighted Gaussian and conjugate-Gaussian matrices of \cite[Equation~(5.6)]{OpenAI2026PolynomialPEPS} formed from $(\omega_{e,\alpha,\beta,s,p,q})_{p,q}$ and $(\overline{\omega_{e,\alpha,\beta,s,p,q}})_{p,q}$, and define
@@ -90,11 +90,11 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{lemma}[Unbiasedness of the original-source construction]
     \label{thm:peps_unbiased_original_sources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_sampledSourceMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sampledSourceMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_unbiased_sampledSourceMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sourceGaussianCorrection}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGaussianCorrection_eq_transport}
+    \lean{QuantumCircuit.Party.SourceCircuit.integrable_sampledSourceMatrix}
+    \lean{QuantumCircuit.Party.SourceCircuit.integral_sampledSourceMatrix}
+    \lean{QuantumCircuit.Party.SourceCircuit.exists_unbiased_sampledSourceMatrix}
+    \lean{QuantumCircuit.Party.SourceCircuit.integral_sourceGaussianCorrection}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceGaussianCorrection_eq_kroneckerSandwich}
     \leanok
     \uses{thm:peps_local_schmidt_sources,thm:peps_source_gaussian_selection,def:peps_sampled_source_matrix}
     For every $k>0$ and any weights $\lambda_{e,\alpha,t}\ge 0$ and frames $E_{e,\alpha},F_{e,\alpha}$ satisfying (\ref{eq:peps_local_schmidt_source}) (chosen as in Lemma~\ref{thm:peps_local_schmidt_sources} prior to all $S$ and partial branches), each $\widehat X_{e,\alpha\beta}$ is integrable,
@@ -111,10 +111,10 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{lemma}[Covariance at original corrected positions]
     \label{thm:peps_actual_gaussian_covariance}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCorrection_product_eq_selected}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_sourceCorrection_product_mul_conj}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sourceCorrection_product_mul_conj}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_sourceCorrection_product_eq_zero}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceCorrection_product_eq_selected}
+    \lean{QuantumCircuit.Party.SourceCircuit.integrable_sourceCorrection_product_mul_conj}
+    \lean{QuantumCircuit.Party.SourceCircuit.integral_sourceCorrection_product_mul_conj}
+    \lean{QuantumCircuit.Party.SourceCircuit.integral_sourceCorrection_product_eq_zero}
     \leanok
     \uses{thm:peps_source_gaussian_selection}
     Fix $k>0$, $S\subseteq\mathcal E$, deterministic labels $\alpha_e,\beta_e\in\Xi_g$, and weights $\lambda_{e,\alpha,t}\ge 0$. Let $\delta_e=\delta_{e,\alpha_e\beta_e}$ be the centered Schmidt-coordinate source matrix, and for $u,v\in\prod_{e\in S}\{1,\ldots,r_e\}^2$ set
@@ -158,10 +158,9 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{lemma}[Frame-mapped sources in prepared words]
     \label{thm:peps_prepared_source_frames}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
+    \lean{QuantumCircuit.Party.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
     \leanok
-    \uses{thm:peps_selected_multilinear_expansion,
-        thm:peps_prepared_source_contraction}
+    \uses{thm:peps_selected_multilinear_expansion,thm:peps_prepared_source_contraction}
     Let $V,V'$ be words acting after a common ordered pair-source layout with finite orthonormal bases on the input/output memories and source halfspaces. Fix source vectors $\eta_i,\zeta_i$ and a subset $S$ of slots. For $i\in S$, let $M_i\in\operatorname{Mat}_{K_i^2\times(K'_i)^2}(\C)$ be mapped by endpoint families $u_i,v_i$ on the ket side and $u'_i,v'_i$ on the bra side. Contracting these mapped matrices against the prepared density coefficient of $(V,V')$ on $S$, with $|\eta_i\rangle\langle\zeta_i|$ outside $S$, yields
     \begin{align}
         \sum_{a\in\prod_{i\in S}K_i^2}
@@ -178,10 +177,10 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{definition}[Schmidt assignments at retained original positions]
     \label{def:peps_partial_schmidt_assignments}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.PartialSchmidtCoordinates}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSchmidtCoordinateEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSchmidtCoordinateEquiv_apply}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSchmidtSourceVectors}
+    \lean{QuantumCircuit.Party.SourceCircuit.PartialSchmidtCoordinates}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialSchmidtCoordinateEquiv}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialSchmidtCoordinateEquiv_apply}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialSchmidtSourceVectors}
     \leanok
     \uses{def:peps_selected_retained_positions}
     Let $S\subseteq\mathcal E$ have every position incident to the affected parties $\mathcal A$, so the selected retained partial slots correspond bijectively to $S$ and their Schmidt index tuples identify with $\prod_{e\in S}\{1,\ldots,r_e\}^2$. For a partial branch $\xi$ and $u\in\prod_{e\in S}\{1,\ldots,r_e\}^2$, define the source family that places $E_{e,\xi_g}|(u_e)_1\rangle\otimes F_{e,\xi_g}|(u_e)_2\rangle$ at each selected slot with original position $e=(g,j)\in S$ and retains $\nu_{e,\xi_g}$ at all other slots.
@@ -189,10 +188,9 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{lemma}[Corrected terms in Schmidt coordinates]
     \label{thm:peps_corrected_gaussian_sum}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_gaussian_eq_sum}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceTerm_gaussian_eq_sum}
     \leanok
-    \uses{def:peps_partial_schmidt_assignments,thm:peps_prepared_source_frames,
-        thm:peps_unbiased_original_sources,thm:peps_corrected_source_contraction}
+    \uses{def:peps_partial_schmidt_assignments,thm:peps_prepared_source_frames,thm:peps_unbiased_original_sources,thm:peps_corrected_source_contraction}
     Suppose every position in $S\subseteq\mathcal E$ is incident to $\mathcal A$ and the fixed weights and frames satisfy (\ref{eq:peps_local_schmidt_source}). For every sample $\omega$ and input matrix $\rho$,
     \begin{align}
         F_S(\Delta(\omega))
@@ -211,8 +209,8 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
 
 \begin{lemma}[Pointwise physical error of the sampled operators]
     \label{thm:peps_sampled_physical_error}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physical_sampledSourceMatrix_sub_eq_sum}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.physical_sampledSourceMatrix_sub_eq_sum}
+    \lean{QuantumCircuit.Party.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le}
     \leanok
     \uses{def:peps_sampled_source_matrix,thm:peps_physical_corrected_subsets}
     Suppose the final memory is the ordered tensor product of physical and discarded registers with finite orthonormal bases on the input and both output factors. Let $\widehat\rho_{\rm phys}(\omega)$ be the physical operator obtained by substituting $\widehat X_{e,\alpha\beta}(\omega)$ for $X_{e,\alpha\beta}$ and tracing out the discarded registers. For every sample $\omega$ and input matrix $\rho$,

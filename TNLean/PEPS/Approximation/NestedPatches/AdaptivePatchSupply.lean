@@ -35,8 +35,8 @@ encoded frames of the dyadic protocol consume it. No proof of the proposition is
 
 * `EncodedFrame.SquarePatch.proj_eq_cylSum`: with a nonempty outer sample, the projector of the
   patch is the cylinder sum.
-* `EncodedFrame.SquarePatch.norm_act_proj_sub_le`: the error of the projector of a patch is at
-  most that of its cylinder sum.
+* `EncodedFrame.SquarePatch.norm_toEuclideanLin_proj_sub_le`: the error of the projector of a
+  patch is at most that of its cylinder sum.
 * `EncodedFrame.HasAdaptivePatch.translate`: the conclusion is invariant under translation.
 * `Approximation.AdaptivePatchConstraint.supply_cellCenterPos`: Proposition 4.1 supplies patches
   on the cell-center sites used by the dyadic protocol.
@@ -59,7 +59,6 @@ open Matrix
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
@@ -105,12 +104,13 @@ theorem proj_eq_cylSum (h : p.outer.Nonempty) : p.proj = p.cylSum := by
 
 /-- The error of the projector of a patch on a vector is at most that of its cylinder sum: the
 two agree for a nonempty outer sample, and the projector is the identity otherwise. -/
-theorem norm_act_proj_sub_le (ψ : EuclideanSpace ℂ (ι → Fin q)) :
-    ‖act p.proj ψ - ψ‖ ≤ ‖act (1 - p.cylSum) ψ‖ := by
+theorem norm_toEuclideanLin_proj_sub_le (ψ : EuclideanSpace ℂ (ι → Fin q)) :
+    ‖toEuclideanLin p.proj ψ - ψ‖ ≤ ‖toEuclideanLin (1 - p.cylSum) ψ‖ := by
   rcases p.outer.eq_empty_or_nonempty with h | h
-  · rw [p.proj_of_outer_eq_empty h, act_one, sub_self, norm_zero]
+  · rw [p.proj_of_outer_eq_empty h, toEuclideanLin_one_apply, sub_self, norm_zero]
     exact norm_nonneg _
-  · rw [p.proj_eq_cylSum h, act_sub, act_one, norm_sub_rev]
+  · rw [p.proj_eq_cylSum h, map_sub, LinearMap.sub_apply, toEuclideanLin_one_apply,
+      norm_sub_rev]
 
 /-- The number of tags of a patch is at most `max 1 (∑_j d_j)`. -/
 theorem card_tag_le_max : Fintype.card p.Tag ≤ max 1 (∑ j, p.dim j) := by
@@ -166,7 +166,7 @@ Polynomial-PEPS manuscript, Proposition 4.1 `prop:patch`, `03-patches.tex`, line
 def HasAdaptivePatch (pos : ι → ℝ × ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q)) (C c p : ℝ)
     (L : ℕ) (z : ℝ × ℝ) (u : ℝ) : Prop :=
   ∃ P : SquarePatch pos q, P.center = z ∧ P.scale = u ∧
-    ((∑ j, P.dim j : ℕ) : ℝ) ≤ C * (L : ℝ) ^ c ∧ ‖act (1 - P.cylSum) Ω‖ ≤ (L : ℝ) ^ (-p)
+    ((∑ j, P.dim j : ℕ) : ℝ) ≤ C * (L : ℝ) ^ c ∧ ‖toEuclideanLin (1 - P.cylSum) Ω‖ ≤ (L : ℝ) ^ (-p)
 
 /-- The conclusion of Proposition 4.1 is invariant under translating the site positions and the
 center by one vector. -/
@@ -203,13 +203,15 @@ def patchAt : SquarePatch pos q := (S z u hu.1 hu.2).choose
 theorem sum_dim_patchAt_le : ((∑ j, (patchAt S z hu).dim j : ℕ) : ℝ) ≤ C * (L : ℝ) ^ c :=
   (S z u hu.1 hu.2).choose_spec.2.2.1
 
-theorem norm_act_one_sub_cylSum_patchAt_le :
-    ‖act (1 - (patchAt S z hu).cylSum) Ω‖ ≤ (L : ℝ) ^ (-p) :=
+theorem norm_toEuclideanLin_one_sub_cylSum_patchAt_le :
+    ‖toEuclideanLin (1 - (patchAt S z hu).cylSum) Ω‖ ≤ (L : ℝ) ^ (-p) :=
   (S z u hu.1 hu.2).choose_spec.2.2.2
 
 /-- The projector of a supplied patch has error at most `L^{-p}`. -/
-theorem norm_act_proj_patchAt_sub_le : ‖act (patchAt S z hu).proj Ω - Ω‖ ≤ (L : ℝ) ^ (-p) :=
-  ((patchAt S z hu).norm_act_proj_sub_le Ω).trans (norm_act_one_sub_cylSum_patchAt_le S z hu)
+theorem norm_toEuclideanLin_proj_patchAt_sub_le :
+    ‖toEuclideanLin (patchAt S z hu).proj Ω - Ω‖ ≤ (L : ℝ) ^ (-p) :=
+  ((patchAt S z hu).norm_toEuclideanLin_proj_sub_le Ω).trans
+    (norm_toEuclideanLin_one_sub_cylSum_patchAt_le S z hu)
 
 /-- A supplied patch has at most `max 1 (C L^c)` tags. -/
 theorem card_tag_patchAt_le :
@@ -226,7 +228,7 @@ end TNLean.PEPS.EncodedFrame
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet
+open EncodedFrame
 
 /-- The position of a site of `Λ_L = {1, …, L}²`: the zero-based coordinates `(i, j)` are the
 point `(i + 1, j + 1)`.

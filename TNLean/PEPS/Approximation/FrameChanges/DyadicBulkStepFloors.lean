@@ -56,8 +56,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open Set EncodedFrame TNLean.Lattice.PartyCircuit
-open EuclideanSpace (vecKron)
+open Set EncodedFrame Matrix QuantumCircuit.Party
 
 /-- A point lies in the translate `S + d` exactly when `x - d` lies in `S`. -/
 theorem mem_image_add_right_iff {S : Set (ℝ × ℝ)} {d x : ℝ × ℝ} :
@@ -91,7 +90,8 @@ end VertexZone
 
 variable {q : ℕ} [NeZero q] {a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
   {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q}
-  {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type} {κ : Type*}
+  {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type} [Fintype Party]
+  [DecidableEq Party] {κ : Type*}
 
 /-- The marked points of an edge operation, translated, number at most two. -/
 private theorem card_edgeMarks_le (n : ℝ) (e : SquareEdge) (d : ℝ × ℝ) :
@@ -103,7 +103,7 @@ private theorem card_cornerMarks_le (n : ℝ) (d : ℝ × ℝ) :
     (({(0, 0), (n, 0), (0, n), (n, n)} : Finset (ℝ × ℝ)).image (· + d)).card ≤ 4 :=
   Finset.card_image_le.trans (Finset.card_le_four)
 
-omit [NeZero q] in
+omit [NeZero q] [Fintype Party] [DecidableEq Party] in
 /-- The separation premise of a birth or death from the plane separation of the remaining
 changed region `X` from the other labels and the vertex zone `Z`. -/
 private theorem angularSeparation_birthEnv {F : Frame pos q Party} {T : Finset _} {P : Party}
@@ -152,11 +152,10 @@ theorem bandBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L�
     (hholes : ∀ hl ∈ F.holes, IsTrueVertex (homogenize (edgeTreated n e (D * Real.log L))
       op.label (bandUpdate n e op.surrounding g)) (hl.patch.center - d) ∧
         hl.patch.scale ≤ ε₀ * (D * Real.log L)) :
-    ∃ w : Word F.regs (F.changeOwner T Q).regs,
+    ∃ w : Word F.system (F.changeOwner T Q).system,
       w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
-      ‖w.eval (F.regIso.symm (F.refVec Ω)) -
-        (F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)‖ ≤
-          (L : ℝ) ^ (-30 : ℤ) :=
+      ‖toEuclideanLin w.op (F.regRef Ω) - (F.changeOwner T Q).regRef Ω‖ ≤
+        (L : ℝ) ^ (-30 : ℤ) :=
   bulkBirth_step hD hL hΩ hΩ₁ hpos F hTP hTH ((card_edgeMarks_le n e d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv (op.angularSeparation_bandUpdate ht htn hε e g d) ht ha hT hown
       fun _ hx => mem_image_vertexZone_of_mem_outerHoles F hholes hx)
@@ -164,7 +163,7 @@ theorem bandBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L�
 /-- **An edge death from the plane floors, conditional on Proposition 3.4.** In the setting of
 `bandBirth_step`, with `F` the frame after the death, in which `T` is owned by `P∘`, the death
 from the frame in which `T` is owned by `Q∘` is an allowed monomial using only `P∘` and `Q∘`,
-without pair sources, with at most one pair effect and error `L^{-30}`.
+whose gates are pair effects, at most one of them, with error `L^{-30}`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:102–108`, `357–387` and
 `440–445`. -/
@@ -184,10 +183,11 @@ theorem bandDeath_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L�
     (hholes : ∀ hl ∈ F.holes, IsTrueVertex (homogenize (edgeTreated n e (D * Real.log L))
       op.label (bandUpdate n e op.surrounding g)) (hl.patch.center - d) ∧
         hl.patch.scale ≤ ε₀ * (D * Real.log L)) :
-    ∃ M : PartyChain (F.changeOwner T Q).regs F.regs,
-      M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount ≤ 1 ∧
-      ‖M.toEffectChain.eval ((F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)) -
-        F.regIso.symm (F.refVec Ω)‖ ≤ (L : ℝ) ^ (-30 : ℤ) :=
+    ∃ M : PartyCircuit (ChainGate (P := Party)) (F.changeOwner T Q).system F.system,
+      M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly {P, Q} ∧
+      M.ForallGate (fun _ _ _ g ↦ Sum.isRight g) ∧ M.numGates ≤ 1 ∧
+      ‖toEuclideanLin (M.op chainEv) ((F.changeOwner T Q).regRef Ω) - F.regRef Ω‖ ≤
+        (L : ℝ) ^ (-30 : ℤ) :=
   bulkDeath_step hD hL hΩ hΩ₁ hpos F hTP hTH ((card_edgeMarks_le n e d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv (op.angularSeparation_bandUpdate ht htn hε e g d) ht ha hT hown
       fun _ hx => mem_image_vertexZone_of_mem_outerHoles F hholes hx)
@@ -220,11 +220,10 @@ theorem centralBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : 
     (hholes : ∀ hl ∈ F.holes,
       IsTrueVertex (homogenize (cornerTreated R.n (D * Real.log L)) R.oldLabel R.guide)
         (hl.patch.center - d) ∧ hl.patch.scale ≤ ε₀ * (D * Real.log L)) :
-    ∃ w : Word F.regs (F.changeOwner T Q).regs,
+    ∃ w : Word F.system (F.changeOwner T Q).system,
       w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
-      ‖w.eval (F.regIso.symm (F.refVec Ω)) -
-        (F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)‖ ≤
-          (L : ℝ) ^ (-30 : ℤ) :=
+      ‖toEuclideanLin w.op (F.regRef Ω) - (F.changeOwner T Q).regRef Ω‖ ≤
+        (L : ℝ) ^ (-30 : ℤ) :=
   bulkBirth_step hD hL hΩ hΩ₁ hpos F hTP hTH ((card_cornerMarks_le R.n d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv (R.angularSeparation_central ht htn hε d) ht ha hT hown
       fun _ hx => mem_image_vertexZone_of_mem_outerHoles F hholes hx)
@@ -237,8 +236,8 @@ and `Y` the sites placed in the lens, translated by `d`, with every hole classif
 or inside `Y`. If the sites not held by `C` on the first (second) sheet are placed at labels of
 `G₁` (`G₂`) other than `C_e`, every hole of `F₁` (`F₂`) is centered at a true vertex of `G₁`
 (`G₂`) with inner radius at most `ε₀ t`, and the target `T` of `eq:exchange-partition` has
-diameter at most `A₀ n`, the exchange is an allowed word using only `C`, without pair resources,
-with error at most `4 L^{-30}`.
+diameter at most `A₀ n`, the exchange is, after the relabellings of `lensExchange_step`, an
+allowed word using only `C`, without pair resources, with error at most `4 L^{-30}`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:102–108`, `389–430` and
 `440–445`. -/
@@ -275,17 +274,21 @@ theorem edgeExchange_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : 
       IsTrueVertex (homogenize (edgeTreated R.n e (D * Real.log L)) (R.nbrLabel e)
         (R.auxGuide e (auxWord R.oldLabel R.finalLabel (R.nbrLabel e))))
         (hl.patch.center - d) ∧ hl.patch.scale ≤ ε₀ * (D * Real.log L)) :
-    ∃ w : Word (F₁.regs ++ F₂.regs)
-        ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.regs ++
-          (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.regs),
-      w.IsAllowed ∧ w.UsesOnly {C} ∧ w.sourceCount = 0 ∧
-      ‖w.eval ((twoLayoutIso _ _ F₁.owner F₂.owner).symm
-          (vecKron (F₁.refVec Ω) (F₂.refVec Ω))) -
-        (twoLayoutIso _ _ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.owner
-            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.owner).symm
-          (vecKron ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.refVec Ω)
-            ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω))‖ ≤
-        4 * (L : ℝ) ^ (-30 : ℤ) := by
+    ∃ g : Word (fun p ↦ F₁.system p × F₂.system p)
+        (fun p ↦ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).frame₁.system p ×
+          (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).frame₂.system p),
+      g.IsAllowed ∧ g.sourceCount = 0 ∧
+      ∃ w : Word (fun p ↦ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.system p ×
+            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.system p)
+          (fun p ↦ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.system p ×
+            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.system p),
+        w.IsAllowed ∧ w.UsesOnly {C} ∧ w.sourceCount = 0 ∧
+        ‖toEuclideanLin
+            (Word.op ((g.comp (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).renameWord).comp
+              w)) (pairRef F₁ F₂ Ω) -
+          pairRef (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁
+            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂ Ω‖ ≤
+          4 * (L : ℝ) ^ (-30 : ℤ) := by
   have hfl := R.floor_exchange_frontier ht htn hε E e d
   refine lensExchange_step_of_frontier hD hL hΩ hΩ₁ hpos F₁ F₂ Y out hout hin C
     (K := (· + d) '' edgeLens R.n e) (fun x => (hY x).trans mem_image_add_right_iff.symm)

@@ -179,8 +179,7 @@ Lemma~\ref{thm:al_spectator_support_indicator} give
 
 \begin{lemma}[Summed append increments of the current observable]
     \label{thm:al_channel_word_kernel_increment}
-    \uses{def:al_channel_word,def:qc_site_oscillation,
-        def:al_graph_event_kernel,def:qc_local_circuit}
+    \uses{def:al_channel_word,def:qc_site_oscillation,def:al_graph_event_kernel,def:qc_local_circuit}
     \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannelWord_append_sub_le_graphChannelEventKernel}
     \leanok
     Suppose $q>0$, $F$ is finite, $G$ is a simple graph on $I$, and
@@ -247,8 +246,7 @@ so $H_{\varnothing}=0$.
 
 \begin{lemma}[A physical channel kernel gives expected spatial decay]
     \label{thm:al_channel_poisson_kernel_growth}
-    \uses{def:al_channel_word,def:qc_site_oscillation,
-        def:al_graph_extended_metric}
+    \uses{def:al_channel_word,def:qc_site_oscillation,def:al_graph_extended_metric}
     \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_siteOscillation_le_of_graph_kernel,
         TNLean.PEPS.AreaLaw.spectatorRootChannelWord_ofFn_append_singleton}
     \leanok
@@ -276,8 +274,7 @@ so $H_{\varnothing}=0$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_channel_word_append,thm:al_spectator_support_indicator,
-        thm:al_graph_extended_components,thm:al_graph_extended_real_value}
+    \uses{thm:al_channel_word_append,thm:al_spectator_support_indicator,thm:al_graph_extended_components,thm:al_graph_extended_real_value}
     Following \cite[\texttt{09-amplification.tex}, lines 161--188]{OpenAI2026AreaLaw},
     set $f(w,y)=d_y(B_w)\ge0$. Lemma~\ref{thm:al_spectator_support_indicator}
     gives $f(\varnothing,y)\le2\|B\|\mathbf1_S(y)$, and
@@ -297,8 +294,7 @@ so $H_{\varnothing}=0$.
 
 \begin{lemma}[Localization tails give expected spatial decay]
     \label{thm:al_channel_poisson_graph_growth}
-    \uses{thm:al_channel_word_kernel_increment,
-        thm:al_channel_poisson_kernel_growth}
+    \uses{thm:al_channel_word_kernel_increment,thm:al_channel_poisson_kernel_growth}
     \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_siteOscillation_le_graphChannelEventKernel}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:al_channel_word_kernel_increment},
@@ -309,9 +305,7 @@ so $H_{\varnothing}=0$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_actual_channel_kernel_domination,
-        thm:al_graph_event_kernel_nonneg,thm:al_graph_kernel_disconnected,
-        thm:al_channel_poisson_kernel_growth}
+    \uses{thm:al_actual_channel_kernel_domination,thm:al_graph_event_kernel_nonneg,thm:al_graph_kernel_disconnected,thm:al_channel_poisson_kernel_growth}
     Combine Lemma~\ref{thm:al_actual_channel_kernel_domination},
     Lemma~\ref{thm:al_graph_event_kernel_nonneg}, and
     Lemma~\ref{thm:al_graph_kernel_disconnected} with
@@ -320,8 +314,7 @@ so $H_{\varnothing}=0$.
 
 \begin{lemma}[Uniform expected spatial decay on lattice domains]
     \label{thm:al_channel_poisson_lattice_growth}
-    \uses{thm:al_lattice_channel_uniform_bounds,
-        thm:al_channel_poisson_kernel_growth}
+    \uses{thm:al_lattice_channel_uniform_bounds,thm:al_channel_poisson_kernel_growth}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelWord_spatial_growth}
     \leanok
     For every $p\ge1$, $R\in\N$, $J\ge0$, and $\Delta>0$, there exist $c>0$
@@ -340,9 +333,7 @@ so $H_{\varnothing}=0$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_lattice_channel_uniform_bounds,
-        thm:al_graph_event_kernel_nonneg,thm:al_graph_kernel_disconnected,
-        thm:al_channel_poisson_kernel_growth}
+    \uses{thm:al_lattice_channel_uniform_bounds,thm:al_graph_event_kernel_nonneg,thm:al_graph_kernel_disconnected,thm:al_channel_poisson_kernel_growth}
     Take $C,c,v$ from Lemma~\ref{thm:al_lattice_channel_uniform_bounds} and
     $N=\max_{X\in F_P}R_{a_X}$ (or $0$ if $F_P=\varnothing$), and apply
     Lemma~\ref{thm:al_channel_poisson_kernel_growth} to $\mathsf A^{(N,P)}$
@@ -422,8 +413,7 @@ so $H_{\varnothing}=0$.
 
 \begin{lemma}[Filtered full lattice words satisfy spatial decay]
     \label{thm:al_channel_poisson_lattice_filter_growth}
-    \uses{thm:al_channel_poisson_lattice_growth,
-        thm:al_channel_word_filter}
+    \uses{thm:al_channel_poisson_lattice_growth,thm:al_channel_word_filter}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelWord_filter_spatial_growth}
     \leanok
     Under the hypotheses of
@@ -440,8 +430,7 @@ so $H_{\varnothing}=0$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_channel_poisson_lattice_growth,
-        thm:al_channel_word_filter_oscillation,thm:al_channel_word_filter}
+    \uses{thm:al_channel_poisson_lattice_growth,thm:al_channel_word_filter_oscillation,thm:al_channel_word_filter}
     Combine Lemma~\ref{thm:al_channel_poisson_lattice_growth} with
     Lemma~\ref{thm:al_channel_word_filter_oscillation} and
     (\ref{eq:al_channel_word_filter}).

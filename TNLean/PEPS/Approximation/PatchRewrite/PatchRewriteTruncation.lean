@@ -66,9 +66,8 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
-open SiteChain TNLean.Lattice.WholeGroup
+open SiteChain TNLean.Network.WholeGroup
 
 variable {ι : Type*} {q : ℕ}
 

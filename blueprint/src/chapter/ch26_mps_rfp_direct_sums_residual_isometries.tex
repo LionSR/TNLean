@@ -106,7 +106,7 @@
     \lean{MPSTensor.%
         mixedMapLM_comp_self_eq_smul_of_transferMap_comp_self_eq_smul}
     \leanok
-    \uses{def:mixed_transfer_rect, def:transfer_map}
+    \uses{def:mixed_transfer_rect,def:transfer_map}
     Let $(B_k)_k$ be a family of tensors and let $c\in\C$. If
     \begin{align}
         \E_{\oplus_k B_k}^2 & =c\E_{\oplus_k B_k},
@@ -121,7 +121,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:block_transfer_sum_quasi_idempotent_of_direct_sum, lem:block_diagonal_transfer_sum_to_block}
+    \uses{thm:block_transfer_sum_quasi_idempotent_of_direct_sum,lem:block_diagonal_transfer_sum_to_block}
     Realizing an arbitrary rectangular matrix $Z$ as the $(j,j')$ block of a
     matrix $Y$ on the total bond space gives
     $[\mathcal S_B(Y)]_{j,j'}=\E_{j,j'}(Z)$ by
@@ -141,7 +141,7 @@
     \label{lem:block_transfer_sum_idempotent_of_pairwise_mixed}
     \lean{MPSTensor.blockTransferSum_idempotent_of_pairwise_mixedMapLM}
     \leanok
-    \uses{def:mixed_transfer_rect, lem:block_diagonal_transfer_sum_to_block}
+    \uses{def:mixed_transfer_rect,lem:block_diagonal_transfer_sum_to_block}
     Let $(B_k)_k$ be a family of tensors. If every mixed transfer operator
     $\E_{j,j'}$ is idempotent, then the block transfer sum $\mathcal S_B$ is
     idempotent: $\mathcal S_B(\mathcal S_B(X))=\mathcal S_B(X)$.
@@ -164,7 +164,7 @@
     \label{thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     \lean{MPSTensor.isTransferIdempotent_directSumTensor_iff_pairwise_mixedMapLM_isIdempotentElem}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:mixed_transfer_rect, lem:block_diagonal_transfer_sum_to_block, lem:block_transfer_sum_idempotent_of_pairwise_mixed}
+    \uses{def:mps_transfer_idempotence,def:mixed_transfer_rect,lem:block_diagonal_transfer_sum_to_block,lem:block_transfer_sum_idempotent_of_pairwise_mixed}
     Suppose every bond dimension is positive. The transfer map of
     $\bigoplus_k B_k$ is idempotent if and only if, for every pair $j,j'$,
     the mixed transfer operator is idempotent:
@@ -221,7 +221,7 @@
     \label{thm:literal_repeated_blocks_phase_coherence}
     \lean{MPSTensor.phases_eq_of_isTransferIdempotent_directSum_scaled_self}
     \leanok
-    \uses{def:mps_transfer_idempotence, lem:mixed_transfer_rect_smul, thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
+    \uses{def:mps_transfer_idempotence,lem:mixed_transfer_rect_smul,thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     Let $A$ have positive bond dimension and a nonzero idempotent transfer map.
     Let $\mu_q$ have unit modulus. If the bond direct sum
     $\bigoplus_q \mu_qA$ has an idempotent transfer map, then
@@ -266,7 +266,7 @@
     \label{thm:bnt_locally_orthogonal_of_rfp_direct_sum}
     \lean{MPSTensor.isBNTLocallyOrthogonal_of_isTransferIdempotent_directSum}
     \leanok
-    \uses{def:is_bnt_locally_orthogonal, def:mps_transfer_idempotence, def:mixed_transfer_rect}
+    \uses{def:is_bnt_locally_orthogonal,def:mps_transfer_idempotence,def:mixed_transfer_rect}
     Let $(A_j)_j$ be a family of distinct irreducible left-canonical blocks, no
     two of which are gauge-phase equivalent, and suppose the direct sum
     $\bigoplus_j A_j$ is a renormalization fixed point. Then for every pair of
@@ -281,7 +281,7 @@
     Lemma~\ref{thm:residual_isometry_of_rfp_direct_sum}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:block_diagonal_transfer_sum_to_block, thm:transfer_operator_gap_irr_tp, thm:transfer_operator_gap_rect_irr_tp, lem:idempotent_spectral_radius_zero}
+    \uses{lem:block_diagonal_transfer_sum_to_block,thm:transfer_operator_gap_irr_tp,thm:transfer_operator_gap_rect_irr_tp,lem:idempotent_spectral_radius_zero}
     By Lemma~\ref{lem:block_diagonal_transfer_sum_to_block} the $(j,j')$ bond
     block of the direct-sum transfer map acts as $\E_{j,j'}$. Whole-tensor
     idempotence $\E^2=\E$ therefore restricts to each block as
@@ -421,7 +421,7 @@
     \label{lem:isrfp_block_of_rfp_direct_sum}
     \lean{MPSTensor.isTransferIdempotent_block_of_isTransferIdempotent_directSum}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:mixed_transfer_rect}
+    \uses{def:mps_transfer_idempotence,def:mixed_transfer_rect}
     If the direct sum $\bigoplus_k B_k$ is a renormalization fixed point, with
     $\dim_k\ge1$ for all $k$, then each block $B_j$ is a renormalization fixed
     point.
@@ -437,7 +437,7 @@
     \label{thm:residual_isometry_of_rfp_direct_sum}
     \lean{MPSTensor.exists_residualIsometryFamily_of_isTransferIdempotent_directSum}
     \leanok
-    \uses{def:is_residual_isometry_family, def:mps_transfer_idempotence, def:is_isometry_canonical_form}
+    \uses{def:is_residual_isometry_family,def:mps_transfer_idempotence,def:is_isometry_canonical_form}
     Let $(A_j)_j$ be a family of normal, irreducible, left-canonical blocks with
     bond dimensions $D_j\ge1$, no two of which are gauge-phase equivalent. If
     the direct sum $\bigoplus_j A_j$ is a renormalization fixed point, then
@@ -478,7 +478,7 @@
     % (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:bnt_locally_orthogonal_of_rfp_direct_sum, thm:isometry_canonical_form_of_rfp_nt, lem:mixed_transfer_conj_apply, lem:isrfp_block_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
+    \uses{thm:bnt_locally_orthogonal_of_rfp_direct_sum,thm:isometry_canonical_form_of_rfp_nt,lem:mixed_transfer_conj_apply,lem:isrfp_block_of_rfp_direct_sum,lem:mixed_transfer_eq_zero_of_conj,lem:residual_isometry_entry}
     Whole-tensor idempotence makes the diagonal mixed transfer operator of each
     block its own transfer map, so each block is a renormalization fixed
     point; the square-root fixed-point form
@@ -498,7 +498,7 @@
     \label{thm:is_rfp_of_isometry_canonical_form_direct_sum}
     \lean{MPSTensor.isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm}
     \leanok
-    \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence, def:mixed_transfer_rect}
+    \uses{def:is_isometry_canonical_form,def:mps_transfer_idempotence,def:mixed_transfer_rect}
     Let $(B_k)_k$ be a family of tensors in square-root fixed-point form whose
     cross-block mixed transfer operators vanish ($\E_{j,j'}=0$ for all
     $j\ne j'$). As in the converse direction of
@@ -509,7 +509,7 @@
     % single-copy case (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:is_rfp_of_isometry_canonical_form, lem:block_diagonal_transfer_sum_to_block}
+    \uses{thm:is_rfp_of_isometry_canonical_form,lem:block_diagonal_transfer_sum_to_block}
     The direct-sum transfer map decouples block by block: by
     Lemma~\ref{lem:block_diagonal_transfer_sum_to_block} its $(j,j')$ bond block
     acts as $\E_{j,j'}$ on the $(j,j')$ bond block of the argument. Each diagonal
@@ -533,7 +533,7 @@
     \label{thm:rfp_directSumTensor_iff}
     \lean{MPSTensor.isTransferIdempotent_directSumTensor_iff}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:mixed_transfer_rect, def:normal, def:irreducible_tensor, def:gauge_phase_equiv}
+    \uses{def:mps_transfer_idempotence,def:is_isometry_canonical_form,def:mixed_transfer_rect,def:normal,def:irreducible_tensor,def:gauge_phase_equiv}
     Let $(B_k)_k$ be a family of normal, irreducible, left-canonical blocks with
     $D_k\ge1$ for all $k$, no two of which are gauge-phase equivalent. As in
     the distinct-block characterization of
@@ -556,7 +556,7 @@
     % (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:isometry_canonical_form_of_rfp_nt, lem:isrfp_block_of_rfp_direct_sum, thm:bnt_locally_orthogonal_of_rfp_direct_sum, thm:is_rfp_of_isometry_canonical_form_direct_sum}
+    \uses{thm:isometry_canonical_form_of_rfp_nt,lem:isrfp_block_of_rfp_direct_sum,thm:bnt_locally_orthogonal_of_rfp_direct_sum,thm:is_rfp_of_isometry_canonical_form_direct_sum}
     For the forward direction, whole-tensor idempotence makes each diagonal mixed
     transfer operator the transfer map of its block
     (Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum}), so each block is a
@@ -574,7 +574,7 @@
     \lean{MPSTensor.IsBNTCanonicalForm.isTransferIdempotent_basisDirectSum_iff}
     \lean{MPSTensor.IsBNTCanonicalForm.exists_residualIsometryFamily_of_isTransferIdempotent_basisDirectSum}
     \leanok
-    \uses{def:sector_bnt_cf, def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:mixed_transfer_rect, def:is_residual_isometry_family}
+    \uses{def:sector_bnt_cf,def:mps_transfer_idempotence,def:is_isometry_canonical_form,def:mixed_transfer_rect,def:is_residual_isometry_family}
     Let $P$ satisfy the auxiliary BNT sector hypotheses, with distinct basis tensors $(B_j)_j$.
     Then the multiplicity-one direct sum $\bigoplus_j B_j$ is a
     renormalization fixed point if and only if every $B_j$ has the square-root
@@ -589,7 +589,7 @@
     % docs/paper-gaps/cpsv16_rfp_isometry_scope.tex.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:rfp_directSumTensor_iff, thm:postblocked_representative_grouped_insert_eq, thm:normal_tp_primitive_irred}
+    \uses{thm:rfp_directSumTensor_iff,thm:postblocked_representative_grouped_insert_eq,thm:normal_tp_primitive_irred}
     Since each basis tensor has positive bond dimension, every bond space is
     nonzero. For each basis
     tensor, irreducibility and left-canonical normalization are part of the
@@ -646,7 +646,7 @@
     \label{thm:normal_scaled_rfp}
     \lean{MPSTensor.norm_eq_one_and_isTransferIdempotent_of_isNormalTensor_smul}
     \leanok
-    \uses{def:nt_cpsv, def:mps_transfer_idempotence, thm:spectral_radius_smul, thm:idempotent_spectral_radius_one}
+    \uses{def:nt_cpsv,def:mps_transfer_idempotence,thm:spectral_radius_smul,thm:idempotent_spectral_radius_one}
     Let $B$ be a normal tensor and let $c\in\C\setminus\{0\}$. If $cB$ is a
     renormalization fixed point, then
     \begin{align}
@@ -656,7 +656,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spectral_radius_smul, thm:idempotent_spectral_radius_one}
+    \uses{thm:spectral_radius_smul,thm:idempotent_spectral_radius_one}
     Normality gives $r(\E_B)=1$, while
     $\E_{cB}=|c|^2\E_B$. Since $c\ne0$, this operator is nonzero.
     Lemma~\ref{thm:idempotent_spectral_radius_one} gives
@@ -672,7 +672,7 @@
     \label{thm:cpsv_weight_norm_one_and_block_rfp}
     \lean{MPSTensor.CPSVCanonicalFormData.weight_norm_one_and_block_rfp}
     \leanok
-    \uses{def:cpsv_canonical_form, def:mps_transfer_idempotence, thm:rfp_coisometry_reconstruction_iff, thm:normal_scaled_rfp, lem:isrfp_block_of_rfp_direct_sum}
+    \uses{def:cpsv_canonical_form,def:mps_transfer_idempotence,thm:rfp_coisometry_reconstruction_iff,thm:normal_scaled_rfp,lem:isrfp_block_of_rfp_direct_sum}
     Suppose $A$ has CPSV canonical-form data
     \begin{align}
         A^i
@@ -689,7 +689,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:rfp_coisometry_reconstruction_iff, lem:isrfp_block_of_rfp_direct_sum, thm:normal_scaled_rfp}
+    \uses{thm:rfp_coisometry_reconstruction_iff,lem:isrfp_block_of_rfp_direct_sum,thm:normal_scaled_rfp}
     By Lemma~\ref{thm:rfp_coisometry_reconstruction_iff}, the direct sum
     $\bigoplus_k\mu_kA_k$ is a renormalization fixed point.
     Lemma~\ref{lem:isrfp_block_of_rfp_direct_sum} implies that each block
@@ -708,7 +708,7 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_bntRefinement_residualIsometryFamily_of_isTransferIdempotent}
     \leanok
-    \uses{def:cpsv_canonical_form, def:is_residual_isometry_family}
+    \uses{def:cpsv_canonical_form,def:is_residual_isometry_family}
     Let $A$ be a CPSV canonical-form renormalization fixed point. Choose one
     representative $C_j$ from each matrix-product-vector phase class.
     Then there are invertible matrices $X_j$, positive numbers
@@ -733,7 +733,7 @@
     \cite{gap:cpsv16_rfp_isometry_scope}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:rfp_coisometry_reconstruction_iff, thm:cpsv_weight_norm_one_and_block_rfp, thm:normal_rfp_iff_isometry_canonical_form, thm:bnt_locally_orthogonal_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
+    \uses{thm:cpsv_canonical_form_bnt_refinement,thm:rfp_coisometry_reconstruction_iff,thm:cpsv_weight_norm_one_and_block_rfp,thm:normal_rfp_iff_isometry_canonical_form,thm:bnt_locally_orthogonal_of_rfp_direct_sum,lem:mixed_transfer_eq_zero_of_conj,lem:residual_isometry_entry}
     The retained weighted direct sum is a renormalization fixed point. For each
     representative, Lemma~\ref{thm:cpsv_weight_norm_one_and_block_rfp}
     gives $|\mu_j|=1$ and $\E_{C_j}^2=\E_{C_j}$. By
@@ -767,7 +767,7 @@
 \begin{theorem}[Square-root characterization of fixed points]
     \label{thm:cpsv_charact_mps_status}
     \notready
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:is_residual_isometry_family}
+    \uses{def:cpsv_canonical_form,def:bnt_cpsv,def:mps_transfer_idempotence,def:is_isometry_canonical_form,def:is_residual_isometry_family}
     Cirac et al.~\cite[Theorem~3.11]{Cirac2016MPDO_arXiv} assert that a tensor $A$
     in canonical form is a renormalization fixed point if and only if it can be
     written as

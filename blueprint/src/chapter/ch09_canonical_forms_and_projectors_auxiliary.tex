@@ -35,7 +35,7 @@ coefficients.
     \label{thm:is_normal_tensor_of_is_normal_left_canonical}
     \lean{MPSTensor.isNormalTensor_of_isNormal_leftCanonical}
     \leanok
-    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, thm:normalized_normal_strongly_irreducible}
+    \uses{def:normal,def:left_canonical_tensor,def:nt_cpsv,thm:normalized_normal_strongly_irreducible}
     Let $D>0$. If $A$ is algebraically normal and left-canonical, then
     \begin{align}
         A
@@ -45,7 +45,7 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, thm:normalized_normal_strongly_irreducible}
+    \uses{def:normal,def:left_canonical_tensor,def:nt_cpsv,thm:normalized_normal_strongly_irreducible}
     Algebraic normality together with
     $\sum_i(A^i)^\dagger A^i=\Id$ gives the transfer map a positive-definite
     fixed point, no nontrivial invariant projection, and peripheral spectrum
@@ -62,7 +62,7 @@ coefficients.
     \lean{Kraus.IsNormal.mapStar}
     \lean{MPSTensor.IsNormalTensor.mapStar}
     \leanok
-    \uses{def:left_canonical_tensor, def:nt_cpsv, def:gauge_equiv, def:normal}
+    \uses{def:left_canonical_tensor,def:nt_cpsv,def:gauge_equiv,def:normal}
     For a tensor or matrix, an overline denotes entrywise conjugation. If $A$
     and $B$ are gauge equivalent through $X$, then $\overline A$ and
     $\overline B$ are gauge equivalent through $\overline X$. If $A$ is
@@ -73,7 +73,7 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:left_canonical_tensor, def:gauge_equiv, def:normal, def:nt_cpsv, thm:cpsv_map_star_transfer_fixed_point, thm:cpsv_map_star_irreducible}
+    \uses{def:left_canonical_tensor,def:gauge_equiv,def:normal,def:nt_cpsv,thm:cpsv_map_star_transfer_fixed_point,thm:cpsv_map_star_irreducible}
     Entrywise conjugating $B^i=X A^i X^{-1}$ gives
     $\overline{B^i}=\overline X\,\overline{A^i}\,(\overline X)^{-1}$.
     Conjugating the left-canonical identity gives
@@ -161,7 +161,7 @@ coefficients.
     \lean{MPSTensor.IsCPSVCanonicalForm}
     \lean{MPSTensor.CPSVCanonicalFormData.IsWeightNormalized}
     \leanok
-    \uses{def:nt_cpsv, def:block_diagonal_tensor}
+    \uses{def:nt_cpsv,def:block_diagonal_tensor}
     Let $A$ have bond dimension $D$. It is in the canonical
     form of \cite[Section~2.3]{Cirac2016MPDO_arXiv} if there are positive
     integers $D_1,\ldots,D_r$, normal tensors $A_k$ of bond dimension $D_k$,
@@ -218,7 +218,7 @@ coefficients.
     \lean{MPSTensor.IsCPSVCanonicalForm.reindexPhysical}
     \lean{MPSTensor.isNormal_reindexPhysical_equiv}
     \leanok
-    \uses{def:nt_cpsv, def:cpsv_canonical_form, def:normal}
+    \uses{def:nt_cpsv,def:cpsv_canonical_form,def:normal}
     Let $e:\{0,\ldots,d'-1\}\to\{0,\ldots,d-1\}$ be a bijection and set
     \begin{align}
         (e^*A)^j
@@ -245,7 +245,7 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:nt_cpsv, def:cpsv_canonical_form}
+    \uses{def:nt_cpsv,def:cpsv_canonical_form}
     A bijection of the physical alphabet only permutes the summands in
     $\E_A(X)=\sum_iA^iX(A^i)^\dagger$. Hence the transfer map, its spectral
     radius, its peripheral spectrum, and its invariant orthogonal projections
@@ -258,7 +258,7 @@ coefficients.
     \label{thm:cpsv_gauge_transfer_similarity}
     \lean{MPSTensor.GaugeEquiv.transferMap_eq_similarityMap}
     \leanok
-    \uses{def:gauge_equiv, def:transfer_map}
+    \uses{def:gauge_equiv,def:transfer_map}
     If $B^i=XA^iX^{-1}$ for every physical index $i$, then there is an
     invertible matrix $C$ such that
     \begin{align}
@@ -276,7 +276,7 @@ coefficients.
     \label{thm:cpsv_gauge_transfer_quasi_idempotence}
     \lean{MPSTensor.GaugeEquiv.transferMap_comp_self_eq_smul_iff}
     \leanok
-    \uses{def:gauge_equiv, def:transfer_map}
+    \uses{def:gauge_equiv,def:transfer_map}
     Let $A$ and $B$ be gauge-equivalent MPS tensors and let $c\in\C$. Then
     \begin{align}
         \E_B^2=c\E_B
@@ -346,7 +346,7 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:nt_cpsv, thm:cpsv_gauge_transfer_similarity, thm:cpsv_spectral_radius_similarity, thm:cpsv_primitivity_similarity}
+    \uses{def:nt_cpsv,thm:cpsv_gauge_transfer_similarity,thm:cpsv_spectral_radius_similarity,thm:cpsv_primitivity_similarity}
     With $S_X(Y)=XYX^\dagger$, the transfer maps satisfy
     \begin{align}
         \E_B
@@ -369,13 +369,13 @@ coefficients.
     \lean{MPSTensor.GaugeEquiv.blockTensor}
     \lean{MPSTensor.IsNormalTensor.blockTensor}
     \leanok
-    \uses{def:nt_cpsv, def:blocked_tensor, thm:cpsv_normal_tp_gauge, thm:tp_primitive_irreducible_extra_blocking, thm:cpsv_normal_tensor_gauge_transport, thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{def:nt_cpsv,def:blocked_tensor,thm:cpsv_normal_tp_gauge,thm:tp_primitive_irreducible_extra_blocking,thm:cpsv_normal_tensor_gauge_transport,thm:is_normal_tensor_of_is_normal_left_canonical}
     Let $A$ be a CPSV normal tensor and let $L\geq1$. Then the blocked tensor
     $A^{[L]}$ is a CPSV normal tensor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_normal_tp_gauge, thm:tp_primitive_irreducible_extra_blocking, thm:cpsv_normal_tensor_gauge_transport, thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{thm:cpsv_normal_tp_gauge,thm:tp_primitive_irreducible_extra_blocking,thm:cpsv_normal_tensor_gauge_transport,thm:is_normal_tensor_of_is_normal_left_canonical}
     In a trace-preserving gauge $B^i=XA^iX^{-1}$, positive blocking gives
     \begin{align}
         (B^{[L]})^I
@@ -396,7 +396,7 @@ coefficients.
     \lean{MPSTensor.CPSVCanonicalFormData.blockTensor}
     \lean{MPSTensor.IsCPSVCanonicalForm.blockTensor}
     \leanok
-    \uses{def:cpsv_canonical_form, def:blocked_tensor, thm:cpsv_normal_tensor_positive_blocking}
+    \uses{def:cpsv_canonical_form,def:blocked_tensor,thm:cpsv_normal_tensor_positive_blocking}
     Let $A$ have canonical-form data
     \begin{align}
         A^i
@@ -417,7 +417,7 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, def:blocked_tensor, thm:cpsv_normal_tensor_positive_blocking}
+    \uses{def:cpsv_canonical_form,def:blocked_tensor,thm:cpsv_normal_tensor_positive_blocking}
     Since $L\geq1$, each physical word $I=(i_1,\ldots,i_L)$ is nonempty.
     Repeatedly inserting $UU^\dagger=\Id$ into
     $A^{i_1}\cdots A^{i_L}$ gives
@@ -442,7 +442,7 @@ coefficients.
     \lean{MPSTensor.exists_cpsvCanonicalForm_representative_after_blocking,
         MPSTensor.exists_leftCanonical_cpsvCanonicalFormData_after_blocking}
     \leanok
-    \uses{def:cpsv_canonical_form, def:blocked_tensor, def:same_mpv2_pos, thm:unconditional_common_primitive_irreducible_blocks, thm:normal_tp_primitive_irred, thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{def:cpsv_canonical_form,def:blocked_tensor,def:same_mpv2_pos,thm:unconditional_common_primitive_irreducible_blocks,thm:normal_tp_primitive_irred,thm:is_normal_tensor_of_is_normal_left_canonical}
     % Maintainer source anchor: CPSV16 lines 214--251, especially
     % eq:II_Aiplusk1, eq:II_CF1, and the proposition at lines 249--251.
     For every tensor $A$, there are a positive integer $p$, a bond dimension
@@ -459,7 +459,7 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:unconditional_common_primitive_irreducible_blocks, thm:normal_tp_primitive_irred, thm:is_normal_tensor_of_is_normal_left_canonical, def:cpsv_canonical_form}
+    \uses{thm:unconditional_common_primitive_irreducible_blocks,thm:normal_tp_primitive_irred,thm:is_normal_tensor_of_is_normal_left_canonical,def:cpsv_canonical_form}
     Applied to $A$ and itself,
     Lemma~\ref{thm:unconditional_common_primitive_irreducible_blocks} gives
     $p\ge1$, weights $\mu_k$, and left-canonical, primitive,
@@ -489,7 +489,7 @@ coefficients.
     \label{thm:cpsv_canonical_form_mpv_expansion}
     \lean{MPSTensor.CPSVCanonicalFormData.mpv_eq_sum_weight_pow}
     \leanok
-    \uses{def:cpsv_canonical_form, def:mpv}
+    \uses{def:cpsv_canonical_form,def:mpv}
     % Maintainer source anchor: CPSV16 eq:II_Psi_k, lines 259--263.
     As in the identity immediately following the canonical-form definition
     in~\cite[Section~2.3]{Cirac2016MPDO_arXiv}, for canonical-form data as
@@ -505,7 +505,7 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, thm:mpv_decomposition}
+    \uses{def:cpsv_canonical_form,thm:mpv_decomposition}
     Induction on a nonempty physical word~$w$ of length~$N$, using
     (\ref{eq:cpsv_canonical_form}) at each letter and
     $UU^\dagger=\Id_S$ between adjacent letters, gives
@@ -535,7 +535,7 @@ coefficients.
     \label{thm:cpsv_canonical_form_bnt_characterization}
     \lean{MPSTensor.CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal}
     \leanok
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv}
+    \uses{def:cpsv_canonical_form,def:bnt_cpsv}
     % Maintainer source anchors: CPSV16 prop:char-BNT, lines 278--301 and 1137--1148.
     As in \cite[Proposition~2.7 and Appendix~A]{Cirac2016MPDO_arXiv}
     specialized to canonical-form data, let $A$ have canonical-form data as
@@ -559,7 +559,7 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, thm:cpsv_bnt_characterization}
+    \uses{def:cpsv_canonical_form,thm:cpsv_bnt_characterization}
     The canonical-form data give normality of every $A_k$ and the
     positive-length identity
     $\ket{V^{(N)}(A)}=\sum_k\mu_k^N\ket{V^{(N)}(A_k)}$.
@@ -622,7 +622,7 @@ yields Definition~\ref{def:cpsv_canonical_form}.
     \lean{MPSTensor.commutes_of_leftCanonical_of_posDef_fixedPoint_of_lowerZero}
     \lean{MPSTensor.hasInvariantProjectorClosure_of_leftCanonical_of_posDef_fixedPoint}
     \leanok
-    \uses{def:left_canonical_tensor, def:invariant_projector_closure}
+    \uses{def:left_canonical_tensor,def:invariant_projector_closure}
     By the stationary-weight criterion obtained from
     \cite[Proposition~6.11 and Theorem~6.13]{Wolf2012Quantum}, if $A$ is
     left-canonical and its transfer map has a positive-definite fixed point
@@ -651,7 +651,7 @@ yields Definition~\ref{def:cpsv_canonical_form}.
     \label{thm:projector_closure_irreducible_corners}
     \lean{MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
     \leanok
-    \uses{def:invariant_projector_closure, def:irreducible_tensor, def:same_mpv2, def:block_diagonal_tensor}
+    \uses{def:invariant_projector_closure,def:irreducible_tensor,def:same_mpv2,def:block_diagonal_tensor}
     Suppose $A$ has invariant-projector closure. Then there are isometries
     $V_1,\ldots,V_r$ with $V_k^\dagger V_k=\Id$, pairwise orthogonal ranges,
     and $\sum_kV_kV_k^\dagger=\Id$, such that $A^iV_k=V_kA_k^i$ for the
@@ -661,7 +661,7 @@ yields Definition~\ref{def:cpsv_canonical_form}.
 
 \begin{proof}
     \leanok
-    \uses{def:has_inv_proj, thm:invariant_projector_closure_commutes, lem:projection_support_isometry, lem:projector_closure_corner, lem:mpv_partition_isometries}
+    \uses{def:has_inv_proj,thm:invariant_projector_closure_commutes,lem:projection_support_isometry,lem:projector_closure_corner,lem:mpv_partition_isometries}
     By strong induction on the bond dimension, if $A$ is irreducible then
     the single corner $V=\Id$ suffices. Otherwise, $A$ has a nontrivial
     invariant projection $P$, which by
@@ -687,7 +687,7 @@ yields Definition~\ref{def:cpsv_canonical_form}.
     \label{def:no_periodic_vectors}
     \lean{MPSTensor.HasNoPeriodicVectors}
     \leanok
-    \uses{def:mps_tensor, def:transfer_map, def:irreducible_tensor}
+    \uses{def:mps_tensor,def:transfer_map,def:irreducible_tensor}
     An MPS tensor $A$ has \emph{no nontrivial $p$-periodic vectors} if, for
     every isometry $V$ with $V^\dagger V=\Id$ and $A^iV=VB^i$ for all~$i$,
     with $B$ irreducible (equivalently, for every restriction $B$ of $A$ to a
@@ -708,7 +708,7 @@ yields Definition~\ref{def:cpsv_canonical_form}.
         exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
     \lean{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure}
     \leanok
-    \uses{def:invariant_projector_closure, def:no_periodic_vectors, def:nt_cpsv, def:same_mpv2_pos, def:block_diagonal_tensor}
+    \uses{def:invariant_projector_closure,def:no_periodic_vectors,def:nt_cpsv,def:same_mpv2_pos,def:block_diagonal_tensor}
     As in the sufficient condition for canonical form
     of~\cite[Section~2]{Cirac2016MPDO_arXiv} (with that paper's convention
     $\sum_kD_k\le D$ allowing zero blocks, since a corner of $A$ carrying the
@@ -737,7 +737,7 @@ yields Definition~\ref{def:cpsv_canonical_form}.
 
 \begin{proof}
     \leanok
-    \uses{thm:projector_closure_irreducible_corners, lem:irreducible_transfer_perron_pair, lem:irreducible_block_spectral_normalization}
+    \uses{thm:projector_closure_irreducible_corners,lem:irreducible_transfer_perron_pair,lem:irreducible_block_spectral_normalization}
     Lemma~\ref{thm:projector_closure_irreducible_corners} decomposes $A$
     into irreducible corners $B_k$ along isometries $V_k$ so that every matrix
     product vector coefficient of $A$ is the sum of those of the corners. A
@@ -769,7 +769,7 @@ yields Definition~\ref{def:cpsv_canonical_form}.
     \lean{MPSTensor.exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint}
     \lean{MPSTensor.exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint}
     \leanok
-    \uses{def:transfer_map, def:same_mpv2, thm:two_block_decomp}
+    \uses{def:transfer_map,def:same_mpv2,thm:two_block_decomp}
     As in the fixed-point shift and further decomposition step in
     \cite[Theorem~4]{PerezGarcia2007Matrix}, suppose $A$ is unital,
     $\E_A(\Id)=\Id$. If $X$ is a Hermitian fixed point of $\E_A$ which is not

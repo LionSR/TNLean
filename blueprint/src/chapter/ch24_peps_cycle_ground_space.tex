@@ -24,8 +24,7 @@
     \lean{TNLean.PEPS.exterior_mul_openRegionMap_cycleTensorOfMPS,
         TNLean.PEPS.cycleArcPhysical_openRegionMap_eq_groundSpaceMap}
     \leanok
-    \uses{def:peps_cycle_arc_coordinates,
-        def:peps_open_region_contraction, def:ground_space_map}
+    \uses{def:peps_cycle_arc_coordinates,def:peps_open_region_contraction,def:ground_space_map}
     Let $A$ be a matrix product tensor of bond dimension $D$, and
     let $\Gamma_R$ be its open contraction on $R$. Let $m$ be the
     number of assignments to the cycle bonds wholly outside $R$.
@@ -57,8 +56,7 @@
     \lean{TNLean.PEPS.map_regionGroundSpace_cycleTensorOfMPS,
         TNLean.PEPS.mem_regionGroundSpace_cycleTensorOfMPS_iff}
     \leanok
-    \uses{def:peps_region_ground_space, def:ground_space_parent,
-        def:peps_cycle_arc_coordinates}
+    \uses{def:peps_region_ground_space,def:ground_space_parent,def:peps_cycle_arc_coordinates}
     For a matrix product tensor $A$ on a cycle of $n\geq3$ sites,
     and every arc $R$ of length $0<L<n$,
     \begin{align}
@@ -92,8 +90,7 @@
         TNLean.PEPS.cycleArcPhysical_regionSliceMap,
         TNLean.PEPS.exists_cycleArc_complement_extension}
     \leanok
-    \uses{def:peps_cycle_arc_coordinates, def:chain_ground_space,
-        def:peps_region_parent_hamiltonian}
+    \uses{def:peps_cycle_arc_coordinates,def:chain_ground_space,def:peps_region_parent_hamiltonian}
     Let $R_s=\{s,s+1,\ldots,s+L-1\}$ be the arc of length $0<L<n$
     starting at $s$. For a word $\sigma$ on $R_s$ and a full
     background $\tau$, write $\sigma\sqcup\tau$ for the configuration
@@ -130,8 +127,7 @@
     \label{thm:peps_cycle_parent_ground_space}
     \lean{TNLean.PEPS.regionParentGroundSpace_cycleTensorOfMPS}
     \leanok
-    \uses{def:peps_region_parent_hamiltonian, def:chain_ground_space,
-        def:cycleTensorOfMPS}
+    \uses{def:peps_region_parent_hamiltonian,def:chain_ground_space,def:cycleTensorOfMPS}
     Let $n\ge3$ and $0<L<n$, and let $T_A$ be the cycle tensor of a
     matrix product family $A$. Write $\mathcal G(T_A)$ for the common
     regional parent ground space of $T_A$ over the arcs
@@ -143,8 +139,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_cycle_slice_restriction,
-        thm:peps_cycle_region_ground_space}
+    \uses{thm:peps_cycle_slice_restriction,thm:peps_cycle_region_ground_space}
     By (\ref{eq:peps_parent_common_kernel}),
     Lemma~\ref{thm:peps_cycle_region_ground_space} and
     (\ref{eq:peps_cycle_slice_restriction}),
@@ -168,7 +163,7 @@
     \lean{TNLean.PEPS.physicalDeform_cycleTensorOfMPS,
         TNLean.PEPS.globalPhysicalMap_const_eq_onSiteTensorPow}
     \leanok
-    \uses{def:cycleTensorOfMPS, def:peps_global_physical_map}
+    \uses{def:cycleTensorOfMPS,def:peps_global_physical_map}
     Applying the same physical matrix $\Lambda$ at each vertex of the
     cycle gives the cycle tensor of $\Lambda A$. On the full physical
     space the constant graph product map is exactly $\Lambda^{\otimes n}$.
@@ -185,8 +180,7 @@
     \label{thm:peps_cycle_physical_parent_specialization}
     \lean{TNLean.PEPS.map_chainGroundSpace_physicalEquiv_of_cycle}
     \leanok
-    \uses{thm:peps_cycle_parent_ground_space,
-        thm:peps_cycle_physical_coordinates}
+    \uses{thm:peps_cycle_parent_ground_space,thm:peps_cycle_physical_coordinates}
     Let $n\ge3$, $0<L<n$, and let $\Lambda$ be an invertible
     $d\times d$ matrix. Then the graph parent-space correspondence
     specializes to
@@ -200,9 +194,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_region_parent_ground_space_physical_transport,
-        thm:peps_cycle_parent_ground_space,
-        thm:peps_cycle_physical_coordinates}
+    \uses{thm:peps_region_parent_ground_space_physical_transport,thm:peps_cycle_parent_ground_space,thm:peps_cycle_physical_coordinates}
     Take $F_v=\Lambda$ at every vertex in the graph correspondence
     $\mathcal G(A^F)=F_V\mathcal G(A)$, applied to $T_A$ and the arcs
     $R_s$. Lemma~\ref{thm:peps_cycle_physical_coordinates} gives

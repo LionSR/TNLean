@@ -21,7 +21,7 @@ proved in the companion quantum-channel volume~\cite[``Nondegeneracy of the trac
 \begin{lemma}[Same matrix-product vectors give trace agreement]\label{lem:same_mpv_trace}
     \lean{MPSTensor.SameMPV.trace_evalWord}
     \leanok
-    \uses{def:same_mpv, def:eval_word}
+    \uses{def:same_mpv,def:eval_word}
     If $A$ and $B$ generate the same matrix-product vectors, then
     $\tr(A^w) = \tr(B^w)$ for every word~$w$.
 \end{lemma}
@@ -56,7 +56,7 @@ algebra structure of $\MN{D}$.
     \lean{MPSTensor.traceMulRightPi_ker_eq_bot}
     \lean{MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero}
     \leanok
-    \uses{def:trace_pairing_map, def:injective}
+    \uses{def:trace_pairing_map,def:injective}
     If $A$ is injective, then $\ker \Phi_A = \{0\}$.
 \end{lemma}
 
@@ -91,7 +91,7 @@ algebra structure of $\MN{D}$.
 \begin{lemma}[The linear extension exists and is unique]\label{thm:linear_ext}
     \lean{MPSTensor.linearExtension_exists_unique}
     \leanok
-    \uses{def:injective, def:same_mpv}
+    \uses{def:injective,def:same_mpv}
     If $A$ is injective and $A$, $B$ generate the same matrix-product vectors,
     then there is a unique linear map $T : \MN{D} \to \MN{D}$ with
     $T(A^i) = B^i$ for all~$i$.
@@ -99,7 +99,7 @@ algebra structure of $\MN{D}$.
 
 \begin{proof}
     \leanok
-    \uses{thm:trace_pairing_injective, lem:same_mpv_trace, lem:injectivity_transfer}
+    \uses{thm:trace_pairing_injective,lem:same_mpv_trace,lem:injectivity_transfer}
     Length-two trace agreement gives $\Phi_A(A^i) = \Phi_B(B^i)$ for every~$i$.
     The $\{A^i\}$ span $\MN{D}$, so $\range \Phi_A \subseteq
         \range \Phi_B$. With $\ker \Phi_A = \{0\}$
@@ -116,14 +116,14 @@ algebra structure of $\MN{D}$.
 \begin{lemma}[The linear extension is multiplicative]\label{thm:linear_ext_mul}
     \lean{MPSTensor.linearExtension_mul}
     \leanok
-    \uses{def:injective, def:same_mpv}
+    \uses{def:injective,def:same_mpv}
     Under the hypotheses of Lemma~\ref{thm:linear_ext}, the map~$T$ satisfies
     $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:trace_pairing_injective, lem:same_mpv_trace, lem:injectivity_transfer}
+    \uses{thm:trace_pairing_injective,lem:same_mpv_trace,lem:injectivity_transfer}
     Length-two trace agreement gives
     $\Phi_B(T(A^i)) = \Phi_B(B^i) = \Phi_A(A^i)$; since the $\{A^i\}$ span
     $\MN{D}$, this extends to $\Phi_B \circ T = \Phi_A$, so
@@ -188,7 +188,7 @@ invertible matrix by the Skolem--Noether theorem.
 \begin{lemma}[An injective tensor forces a nonzero partner]\label{lem:trace_ne_zero}
     \lean{MPSTensor.trace_ne_zero_of_injective}
     \leanok
-    \uses{def:injective, def:same_mpv}
+    \uses{def:injective,def:same_mpv}
     Let $D \ge 1$. If $A$ is injective and $A$, $B$ generate the same
     matrix-product vectors, then the $B^i$ are not all zero.
 \end{lemma}
@@ -206,7 +206,7 @@ invertible matrix by the Skolem--Noether theorem.
 \begin{theorem}[Single-block Fundamental Theorem]\label{thm:ft_single}
     \lean{MPSTensor.fundamentalTheorem_singleBlock}
     \leanok
-    \uses{def:injective, def:same_mpv, def:gauge_equiv}
+    \uses{def:injective,def:same_mpv,def:gauge_equiv}
     Let $A$ be an injective MPS tensor and $B$ a tensor of the same bond
     dimension. If $A$ and $B$ generate the same matrix-product vectors, then
     there is $X \in \GL_D(\C)$ with $B^i = X A^i X^{-1}$ for all~$i$. In
@@ -232,7 +232,7 @@ invertible matrix by the Skolem--Noether theorem.
 
 \begin{proof}
     \leanok
-    \uses{thm:linear_ext, thm:linear_ext_mul, thm:simplicity, lem:trace_ne_zero, lem:linear_map_to_alg}
+    \uses{thm:linear_ext,thm:linear_ext_mul,thm:simplicity,lem:trace_ne_zero,lem:linear_map_to_alg}
     Lemma~\ref{thm:linear_ext} gives the unique linear~$T$ with
     $T(A^i) = B^i$, and Lemma~\ref{thm:linear_ext_mul} makes it
     multiplicative. It is nonzero: otherwise $B^i = 0$ for all~$i$, against
@@ -247,7 +247,7 @@ invertible matrix by the Skolem--Noether theorem.
 \begin{theorem}[Single-block Fundamental Theorem up to a phase]\label{thm:ft_single_phase}
     \lean{MPSTensor.exists_eq_pow_of_mpv_eq_smul, MPSTensor.unitGaugePhaseEquiv_of_mpv_eq_smul_of_isInjective}
     \leanok
-    \uses{thm:ft_single, def:gauge_phase_equiv}
+    \uses{thm:ft_single,def:gauge_phase_equiv}
     As the single-block case of the Fundamental Theorem of matrix product
     vectors \cite[Theorem~2.10]{Cirac2016MPDO_arXiv} with unimodular
     proportionality constants, let $A$ be an injective MPS tensor with $D\ge1$
@@ -260,7 +260,7 @@ invertible matrix by the Skolem--Noether theorem.
 
 \begin{proof}
     \leanok
-    \uses{thm:asym_unblocked_coefficients, thm:mpoalg_unimodular_power_sum}
+    \uses{thm:asym_unblocked_coefficients,thm:mpoalg_unimodular_power_sum}
     \ifftmpsvolume
         Expanding the coefficients of $B$ over the single normal target $A$ as a
         power sum gives nonzero $\mu_1,\ldots,\mu_n$ with

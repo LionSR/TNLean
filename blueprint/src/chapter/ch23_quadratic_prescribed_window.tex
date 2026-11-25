@@ -32,8 +32,7 @@
         MPSTensor.quadraticWindow_cutCoefficientRank_eq_of_isNBlkInjective,
         MPSTensor.exists_quadraticSolution_physicalCutWindow_of_isNBlkInjective}
     \leanok
-    \uses{lem:quadratic_virtual_cut_slicing,
-        lem:quadratic_actual_physical_window_solution}
+    \uses{lem:quadratic_virtual_cut_slicing,lem:quadratic_actual_physical_window_solution}
     Let $A$ satisfy C1 at length $L_0$ and have a nonzero letter.
     There are an invertible $X$ and a scalar $\zeta\ne0$ such that
     $B_i=\zeta X A_iX^{-1}$ is row normalized. C1 holds for the
@@ -69,9 +68,7 @@
         MPSTensor.exists_quadraticSolution_prescribedOBCWindow,
         MPSTensor.exists_quadraticSolution_prescribedOBCWindow_of_mpv_ne_zero}
     \leanok
-    \uses{lem:quadratic_prescribed_prefix_basis,
-        lem:quadratic_injective_physical_cut,
-        lem:quadratic_perron_normalization}
+    \uses{lem:quadratic_prescribed_prefix_basis,lem:quadratic_injective_physical_cut,lem:quadratic_perron_normalization}
     Let $A$ be a TI tensor satisfying C1 at length $L_0$, with
     $N>2L_0+D^4$ and a nonzero actual length-$N$ vector. Let $B$ be any
     prescribed OBC representation of its actual length-$N$ state,
@@ -144,8 +141,7 @@
         MPSTensor.quadraticCanonicalOBCWindow_apply,
         MPSTensor.exists_quadraticSolution_canonicalOBCWindow}
     \leanok
-    \uses{lem:quadratic_canonical_obc_physical_ranks,
-        lem:quadratic_prescribed_obc_window_solution}
+    \uses{lem:quadratic_canonical_obc_physical_ranks,lem:quadratic_prescribed_obc_window_solution}
     Let the original canonical OBC tensor represent the actual
     length-$N$ state of a TI tensor $A$ satisfying C1 at $L_0$, with
     $N>2L_0+D^4$. Its original window admits a solution of the
@@ -174,7 +170,7 @@
     \lean{MPSTensor.finrank_wordSpan_le_one_of_krausRank_le_one,
         MPSTensor.exists_isNBlkInjective_le_of_canonical}
     \leanok
-    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective}
+    \uses{def:pgvwc07_ti_canonical_representation,def:l_blk_injective}
     Let $A$ be a canonical tensor of bond dimension $D\ge2$ satisfying
     condition C1. Then the words of some length $\ell$ with
     $1\le\ell\le D^4-2$ in $A$ span $\MN{D}$.
@@ -229,9 +225,7 @@
     \lean{MPSTensor.exists_intertwiner_of_gauged,
         MPSTensor.exists_intertwiner_of_physicalCutWindow}
     \leanok
-    \uses{lem:quadratic_gauged_endpoint, lem:quadratic_window_spanning_length,
-        lem:pgvwc07_complete_chain_intertwiner,
-        lem:quadratic_actual_physical_window_solution}
+    \uses{lem:quadratic_gauged_endpoint,lem:quadratic_window_spanning_length,lem:pgvwc07_complete_chain_intertwiner,lem:quadratic_actual_physical_window_solution}
     In the setting of Lemma~\ref{lem:quadratic_gauged_endpoint} with
     $m=D^4$, let $G_0$ be invertible and let some $B_i$ be nonzero. Then
     there are a nonzero $R\in\MN{D}$ and a scalar $x\ne0$ with

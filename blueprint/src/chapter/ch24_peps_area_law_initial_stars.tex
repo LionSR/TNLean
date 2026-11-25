@@ -21,8 +21,7 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
         TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars,
         TNLean.PEPS.AreaLaw.Geometry.InitialIsolatedStarsStatement}
     \leanok
-    \uses{def:area_law_repair_fan,def:area_law_repair_current_assignment,
-        def:area_law_cell_fan_successor,def:area_law_repair_stage}
+    \uses{def:area_law_repair_fan,def:area_law_repair_current_assignment,def:area_law_cell_fan_successor,def:area_law_repair_stage}
     Let $(R_i)_{i\in I}$ be open regions with colors
     $\xi:I\to\{0,1\}$. The square $Q_\rho(v)$ is an isolated star of
     this family when there is $\sigma:J\to I$ with the following
@@ -85,12 +84,7 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
     \label{thm:area_law_initial_mark_isolated_star}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_isIsolatedStar}
     \leanok
-    \uses{def:area_law_isolated_star,thm:area_law_actual_sector_assignment,
-        thm:area_law_initial_active_ray_closed,
-        thm:area_law_initial_sector_colors,
-        thm:area_law_initial_sector_no_active,
-        thm:area_law_concentric_fan_restriction,
-        thm:area_law_initial_birth_regularity}
+    \uses{def:area_law_isolated_star,thm:area_law_actual_sector_assignment,thm:area_law_initial_active_ray_closed,thm:area_law_initial_sector_colors,thm:area_law_initial_sector_no_active,thm:area_law_concentric_fan_restriction,thm:area_law_initial_birth_regularity}
     Fix an origin, a finite endpoint set $Z$, a width $C_0\ge2$, a lower
     layer $k_0\ge50{,}000{,}000$ and arbitrary valid residues at every
     layer. Let $k\ge k_0$, let $z$ index a fine cell of layer $k$,
@@ -137,9 +131,7 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
     of the recursive family has isolated stars with constant $a_0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_initial_mark_isolated_star,
-        thm:area_law_fine_layer_mark_separation,
-        thm:area_law_uniform_separated_initial_marks}
+    \uses{thm:area_law_initial_mark_isolated_star,thm:area_law_fine_layer_mark_separation,thm:area_law_uniform_separated_initial_marks}
     Let $S_v=t_k$ be realized by a selected belt cell of layer $k$. The
     star is the preceding theorem applied to that cell, since
     $a_0S_v=t_k/128$. For the separation, distinct marks of fine

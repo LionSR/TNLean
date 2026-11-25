@@ -18,16 +18,17 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Operators on parts of a sheet]
     \label{lem:peps_frame_split_forms}
-    \lean{TNLean.Lattice.Sheet.threeSplit,
-        TNLean.Lattice.Sheet.threeSplit_fst,
-        TNLean.Lattice.Sheet.threeSplit_snd,
-        TNLean.Lattice.Sheet.piKronecker_submatrix_threeSplit,
+    \uses{thm:peps_region_configuration}
+    \lean{ManyBody.threeCutEquiv_apply_fst_fst,
+        ManyBody.threeCutEquiv_apply_fst_snd,
+        ManyBody.threeCutEquiv_apply_snd,
+        ManyBody.reindex_threeCutEquiv_piKronecker,
         ManyBody.exists_eq_one_kronecker_of_mem_supportedOperators,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker}
+        ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one,
+        ManyBody.exists_reindex_threeCutEquiv_eq_one_kronecker_kronecker_one,
+        ManyBody.exists_reindex_threeCutEquiv_eq_reindex_one_kronecker,
+        ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one_kronecker_one,
+        ManyBody.exists_reindex_threeCutEquiv_eq_one_kronecker}
     \leanok
     Let $\Lambda$ be a finite site set and $q\in\mathbb N$. For
     $S\subseteq\Lambda$, identify $\mathcal H_\Lambda\cong\mathcal H_S\otimes\mathcal H_{\Lambda\setminus S}$
@@ -165,8 +166,7 @@ sum of Hamiltonians on two factors is a product vector
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,
-        thm:permutation_matrix_unitary}
+    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,thm:permutation_matrix_unitary}
     If $S\subseteq R$, Lemma~\ref{thm:peps_sheet_swap_supported_exchange}
     gives $F_R(A\otimes I)=(I\otimes A)F_R$ and $F_R(I\otimes A)=(A\otimes I)F_R$;
     if $S\cap R=\varnothing$, Lemma~\ref{lem:peps_frame_sheet_swap_compose}
@@ -248,8 +248,7 @@ sum of Hamiltonians on two factors is a product vector
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_sheet_swap_interaction_restriction,
-        thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
+    \uses{thm:peps_sheet_swap_interaction_restriction,thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
     Put $K=R\cap S$. Restricting the swap gives
     $F_R(A\otimes B)F_R^\dagger=F_K^\dagger(A\otimes B)F_K$.
     In paired-site coordinates, $F_K$ is supported on $K\subseteq S$,

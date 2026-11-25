@@ -34,8 +34,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     are conclusions, rather than additional assumptions on $U$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_unitary_character_blocks,
-        thm:peps_semiregular_remove_copies}
+    \uses{thm:peps_unitary_character_blocks,thm:peps_semiregular_remove_copies}
     In the orthonormal irreducible rows of
     Lemma~\ref{thm:peps_unitary_character_blocks}, the matrices of the
     action on one row of each component give $D_i$, while the common action on
@@ -244,10 +243,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     linearly isomorphic.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_semiregular_matrix_blocks,
-        thm:peps_semiregular_block_fourier,
-        thm:peps_copy_positive_parent,
-        thm:peps_fourier_coordinate_parent,thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_semiregular_matrix_blocks,thm:peps_semiregular_block_fourier,thm:peps_copy_positive_parent,thm:peps_fourier_coordinate_parent,thm:peps_region_parent_common_kernel}
     With $D_i,d_i,m_i,Q$ from Lemma~\ref{thm:peps_semiregular_matrix_blocks},
     $Q^\dagger$ induces $\mathcal P_{\mathcal R}(A(U,e))\cong\mathcal P_{\mathcal R}(A(D^{[m]},e^{X^{[m]}}))$,
     Lemma~\ref{thm:peps_copy_positive_parent} gives
@@ -272,9 +268,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     requiring constant incidence or semi-regularity.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_semiregular_averaging_g_injective,
-        thm:peps_range_parent_g_comparison,
-        thm:peps_range_parent_equivalence}
+    \uses{thm:peps_semiregular_averaging_g_injective,thm:peps_range_parent_g_comparison,thm:peps_range_parent_equivalence}
     By Lemma~\ref{thm:peps_semiregular_averaging_g_injective}, $A(U,e)_v$ is
     $G$-injective for $\rho_v^{\mathrm{num}}$. Lemma~\ref{thm:peps_range_parent_g_comparison}
     provides maps $F_v$ injective on $\operatorname{im}A(U,e)_v$ with
@@ -289,8 +283,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
         TNLean.PEPS.finrank_regionParentGroundSpace_semiRegularGInjective_eq,
         TNLean.PEPS.nonempty_ker_hamiltonian_ofPlace_semiRegularGInjective_equiv}
     \leanok
-    \uses{def:peps_semiregular_incident_action,
-        def:peps_semiregular_incident_enumeration,def:peps_region_parent_interaction}
+    \uses{def:peps_semiregular_incident_action,def:peps_semiregular_incident_enumeration,def:peps_region_parent_interaction}
     Let $U:G\to\operatorname{Mat}_X(\C)$ be a unitary semi-regular
     representation used uniformly on $E$, with $|\operatorname{Inc}(v)|=k$ and
     $A_v:\mathcal V_v^{\mathrm{num}}\to\C^p$ $G$-injective for
@@ -310,8 +303,7 @@ $\mathcal P_{\mathcal R}(A)$ for the common regional parent space.
     requirement that $p=|G|^k$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_semiregular_physical_canonical_parent,
-        thm:peps_semiregular_canonical_parent_equivalence,thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_semiregular_physical_canonical_parent,thm:peps_semiregular_canonical_parent_equivalence,thm:peps_region_parent_common_kernel}
     In the enumeration $e^X$ of Definition~\ref{def:peps_semiregular_incident_enumeration},
     Lemmas~\ref{thm:peps_semiregular_physical_canonical_parent}
     and~\ref{thm:peps_semiregular_canonical_parent_equivalence} compose to

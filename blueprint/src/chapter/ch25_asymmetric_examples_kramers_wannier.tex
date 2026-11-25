@@ -26,7 +26,7 @@ and as asymmetric compressions of stacked tensors.
     \lean{KWExample.kwTensor, KWExample.shiftTensor, KWExample.flipShiftTensor,
         KWExample.kwSquare, KWExample.kwSquareTargets}
     \leanok
-    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+    \uses{def:mpo_tensor,def:mpo_to_mps,def:mpdo_operator_product}
     With the outgoing label $s'$ written first, the duality tensor is
     \begin{align}
         W^{00} & =\begin{pmatrix}1&1\\0&0\end{pmatrix},
@@ -296,7 +296,7 @@ inverse of $K_N$ is involved.
         KWExample.kwTensor_mpo_transpose_eq_transpose_translate_mul,
         KWExample.kwTensor_mpo_mul_transpose}
     \leanok
-    \uses{thm:asymex_kw_kernel, def:asymex_kw}
+    \uses{thm:asymex_kw_kernel,def:asymex_kw}
     The unnormalized operator satisfies
     \begin{align}
         TK_N        & =K_NT,
@@ -368,7 +368,7 @@ normalizations of the duality operator are
         KWExample.kwTensor_mpo_normalized_conjTranspose_mul,
         KWExample.kwTensor_mpo_normalized_mul_conjTranspose}
     \leanok
-    \uses{thm:asymex_kw_absorption, lem:asymex_kw_gram}
+    \uses{thm:asymex_kw_absorption,lem:asymex_kw_gram}
     The kernel and image of the unnormalized duality operator are
     \begin{align}
         \ker K_N  & =\mathcal H_N^-,
@@ -471,7 +471,7 @@ $\mathcal D_N^{\mathsf T}=\mathcal D_N^\dagger$.
         KWExample.kwTensor_mpo_transpose_mul,
         KWExample.kwTensor_mpo_mul_transpose_mul}
     \leanok
-    \uses{lem:asymex_kw_gram, thm:asymex_kw_absorption}
+    \uses{lem:asymex_kw_gram,thm:asymex_kw_absorption}
     The normalized duality $\mathcal D_N=2^{-N/2}K_N$ and the spin flip
     satisfy
     \begin{align}
@@ -526,7 +526,7 @@ $U_N^\dagger=2^{-(N+1)/2}K_N^{\mathsf T}$.
         KWExample.transpose_translate_pow_self,
         KWExample.spinFlip_mul_transpose_translate}
     \leanok
-    \uses{lem:asymex_kw_local, lem:asymex_kw_gram, thm:asymex_kw_absorption}
+    \uses{lem:asymex_kw_local,lem:asymex_kw_gram,thm:asymex_kw_absorption}
     For every site $j$,
     \begin{align}
         U_N^\dagger X_j        & =Z_jZ_{j+1}U_N^\dagger,
@@ -650,7 +650,7 @@ comparing this lattice relation with a size-independent fusion algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_kw_kernel, prop:asymex_kw_adjoint_relations}
+    \uses{thm:asymex_kw_kernel,prop:asymex_kw_adjoint_relations}
     The Hadamard gate is its own inverse and exchanges $X_j$ and $Z_j$.
     Conjugation therefore maps $d^z_j$ to $(\Id+iX_j)/\sqrt2$, $d^x_j$ to
     $(\Id+iZ_jZ_{j+1})/\sqrt2$, and $\eta_Z$ to $\eta$. In this frame
@@ -722,7 +722,7 @@ normalization on the spectral radius of a transfer map.
     \label{thm:asymex_kw_normal}
     \lean{KWExample.shiftMPS_isNormal, KWExample.flipShiftMPS_isNormal}
     \leanok
-    \uses{def:asymex_kw, def:normal}
+    \uses{def:asymex_kw,def:normal}
     The translation tensor and the flipped translation tensor are normal:
     the four matrices of each are the four matrix units of $\MN{2}$, which
     already span $\MN{2}$ at word length one.
@@ -741,7 +741,7 @@ normalization on the spectral radius of a transfer map.
     \lean{KWExample.kwSquare_compression, KWExample.kwSquare_dim_eq,
         KWExample.kwSquare_remainder_eq_zero}
     \leanok
-    \uses{def:asymex_kw, thm:asym_multiblock}
+    \uses{def:asymex_kw,thm:asym_multiblock}
     The stacked tensor of Definition~\ref{def:asymex_kw} has the block
     triangular form of Theorem~\ref{thm:asym_multiblock} for the two
     targets $C_1=2T$ and $C_2=2\eta T$, with no zero slots and $4=2+2$.
@@ -799,7 +799,7 @@ normalization on the spectral radius of a transfer map.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_kw_compression, prop:asym_compression_trace}
+    \uses{thm:asymex_kw_compression,prop:asym_compression_trace}
     Lemma~\ref{prop:asym_compression_trace} applied to the
     compression of Lemma~\ref{thm:asymex_kw_compression} gives
     $\tr(B^w)=\tr((2T)^w)+\tr((2\eta T)^w)$. Pulling the weight $2$ out
@@ -815,7 +815,7 @@ normalization on the spectral radius of a transfer map.
         KWExample.left0_mul_kwSquare_eq, KWExample.left1_mul_kwSquare_eq,
         KWExample.kwSquareLeft0_mul_right0, KWExample.kwSquareLeft1_mul_right1}
     \leanok
-    \uses{def:asymex_kw, thm:asymex_kw_compression}
+    \uses{def:asymex_kw,thm:asymex_kw_compression}
     Write
     \begin{align}
         V_1 & =\begin{pmatrix}
@@ -939,7 +939,7 @@ They do not require a thermodynamic limit.
         KWExample.ghzState, KWExample.mpv_kwPlus_eq_smul_mpv_ghz,
         KWExample.mpv_kwGHZ_eq_two_smul_mpv_plusTensor}
     \leanok
-    \uses{thm:asymex_kw_kernel, thm:asymex_kw_absorption}
+    \uses{thm:asymex_kw_kernel,thm:asymex_kw_absorption}
     For every $N\geq1$,
     \begin{align}
         K_Np_N                              & =2^Ng_N,
@@ -991,7 +991,7 @@ sitewise intertwiners to be compared directly.
         KWExample.kwGHZ, KWExample.kwGHZTarget,
         KWExample.mpv_plusTensor_eq_plusState, KWExample.mpv_ghz_eq_ghzState}
     \leanok
-    \uses{def:asymex_kw, def:mps_tensor}
+    \uses{def:asymex_kw,def:mps_tensor}
     The product-state tensor $A_+$ has bond dimension one and
     $A_+^0=A_+^1=(1)$. Its periodic vector is $p_N$.
     The two ferromagnetic-sector tensors have
@@ -1097,7 +1097,7 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
     \lean{KWExample.plusCompression, KWExample.plus_dim_eq, KWExample.plus_remainder_eq_zero,
         KWExample.kwPlus_trace_evalWord_eq_sum}
     \leanok
-    \uses{def:asymex_kw_action, thm:asym_multiblock}
+    \uses{def:asymex_kw_action,thm:asym_multiblock}
     The first action tensor of Definition~\ref{def:asymex_kw_action} has
     the block triangular form of Theorem~\ref{thm:asym_multiblock} for
     the weighted targets $\widehat C_s=2C_s$, $s=0,1$, with no zero
@@ -1112,7 +1112,7 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
+    \uses{thm:asymex_explicit_gauge,prop:asym_compression_trace}
     Let $F=\begin{pmatrix}1&1\\1&-1\end{pmatrix}$, so
     $F^{-1}=F/2$. Direct multiplication gives
     \begin{align}
@@ -1135,7 +1135,7 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
         KWExample.kwGHZ_evalWord_remainder_eq_zero, KWExample.kwGHZRemainder_eq,
         KWExample.kwGHZ_remainder_mul_remainder, KWExample.kwGHZ_trace_evalWord_eq_two}
     \leanok
-    \uses{def:asymex_kw_action, thm:asym_multiblock}
+    \uses{def:asymex_kw_action,thm:asym_multiblock}
     The second action tensor of Definition~\ref{def:asymex_kw_action}
     has the block triangular form of Theorem~\ref{thm:asym_multiblock}
     for two unweighted copies $C_s=A_+$ of the product-state tensor,
@@ -1164,7 +1164,7 @@ rather than the stacked square tensor of Definition~\ref{def:asymex_kw}.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_explicit_gauge, prop:asym_compression_trace}
+    \uses{thm:asymex_explicit_gauge,prop:asym_compression_trace}
     The two copies occupy the first and fourth bond coordinates, and
     the zero slots occupy the second and third. Ordering the coordinates
     as $(0,3,1,2)$ makes both letters upper triangular, with diagonal
@@ -1250,7 +1250,7 @@ gauge.
         KWExample.kwTensor_mpo_mul_kwTransposeTensor_mpo,
         KWExample.kwTransposeTensor_mpo_mul_kwTensor_mpo}
     \leanok
-    \uses{def:asymex_kw, thm:asymex_kw_absorption, lem:asymex_kw_gram}
+    \uses{def:asymex_kw,thm:asymex_kw_absorption,lem:asymex_kw_gram}
     Let $O_0$ and $O_1$ be the periodic operators of the bond-one tensors
     $O_0^{s's}=\delta_{s's}$ and $O_1^{s's}=\delta_{s',1-s}$, and let
     $W^{\mathsf T}$ be the duality tensor with its physical indices
@@ -1284,7 +1284,7 @@ gauge.
         KWExample.exists_gauge_mulTensor_kwTensor_flipTensor,
         KWExample.exists_gauge_mulTensor_flipTensor_kwTensor}
     \leanok
-    \uses{lem:asymex_kw_bimodule, cor:asym_single_block}
+    \uses{lem:asymex_kw_bimodule,cor:asym_single_block}
     The duality tensor $W$ is normal. The stacked tensors
     $\sum_mW^{s'm}\otimes O_1^{ms}$ and $\sum_mO_1^{s'm}\otimes W^{ms}$,
     of bond dimension two, are each conjugate to $W$: there are
@@ -1342,7 +1342,7 @@ matrices.
         KWExample.exists_compression_mulTensor_kwTensor_kwTransposeTensor,
         KWExample.exists_compression_mulTensor_kwTransposeTensor_kwTensor}
     \leanok
-    \uses{lem:asymex_kw_bimodule, thm:asym_mpo_product, thm:asym_multiblock}
+    \uses{lem:asymex_kw_bimodule,thm:asym_mpo_product,thm:asym_multiblock}
     The stacked tensor $\sum_mW^{s'm}\otimes(W^{\mathsf T})^{ms}$, of
     bond dimension four, has the block triangular form of
     Theorem~\ref{thm:asym_multiblock} for the two bond-one targets

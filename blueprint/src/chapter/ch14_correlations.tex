@@ -17,7 +17,7 @@ spectral decomposition, and quantitative decay bounds.
 \begin{definition}[Auxiliary-space one-point functional]\label{def:one_point_expectation}
     \lean{MPSTensor.onePointExpectation}
     \leanok
-    \uses{def:transfer_map, thm:qpf}
+    \uses{def:transfer_map,thm:qpf}
     Let $A$ be an MPS tensor and $\rho^R$ a right fixed point of its transfer map.
     Under the hypotheses of Theorem~\ref{thm:qpf}, this fixed point exists
     and is unique up to scaling, normalized here so that $\tr(\rho^R)=1$.
@@ -30,7 +30,7 @@ spectral decomposition, and quantitative decay bounds.
 \begin{definition}[Auxiliary-space two-point functional at distance $n$]\label{def:two_point_expectation}
     \lean{MPSTensor.twoPointExpectation}
     \leanok
-    \uses{def:transfer_map, def:one_point_expectation}
+    \uses{def:transfer_map,def:one_point_expectation}
     For auxiliary-space insertions $X,Y\in\MN{D}$ and $n\ge0$, the two-point
     functional at distance $n$ is
     \begin{align}
@@ -64,7 +64,7 @@ spectral decomposition, and quantitative decay bounds.
 \begin{definition}[Auxiliary-space connected correlator]\label{def:connected_correlator}
     \lean{MPSTensor.connectedCorrelator}
     \leanok
-    \uses{def:two_point_expectation, def:one_point_expectation}
+    \uses{def:two_point_expectation,def:one_point_expectation}
     The connected two-point function is
     \begin{align}
         C(X,Y;n)
@@ -113,7 +113,7 @@ spectral decomposition, and quantitative decay bounds.
     \label{thm:connected_correlator_traceless_reduction}
     \lean{MPSTensor.connectedCorrelator_eq_trace_transfer_tracelessPart}
     \leanok
-    \uses{def:connected_correlator, def:correlator_traceless_part, def:transfer_map}
+    \uses{def:connected_correlator,def:correlator_traceless_part,def:transfer_map}
     Suppose that $\rho$ is a right fixed point of the transfer map,
     $\E_A(\rho)=\rho$.  Then, for every $n\geq0$,
     \begin{align}
@@ -128,7 +128,7 @@ spectral decomposition, and quantitative decay bounds.
 
 \begin{proof}
     \leanok
-    \uses{def:connected_correlator, def:correlator_traceless_part}
+    \uses{def:connected_correlator,def:correlator_traceless_part}
     Since $\E_A(\rho)=\rho$, one has $\E_A^n(\rho)=\rho$ for every $n$.
     Linearity therefore gives
     \begin{align}
@@ -146,7 +146,7 @@ spectral decomposition, and quantitative decay bounds.
     \label{def:physical_connected_correlator}
     \lean{MPSTensor.physicalConnectedCorrelator}
     \leanok
-    \uses{def:physical_observable_transfer, def:transfer_map}
+    \uses{def:physical_observable_transfer,def:transfer_map}
     Let $\rho\in\MN{D}$ have nonzero trace, and set
     $P(Z)=\tr(Z)\rho/\tr\rho$. For physical operators $X,Y$ on independently
     chosen blocks of lengths $L_1,L_2$, and $n\geq0$ unobserved intermediate
@@ -190,7 +190,7 @@ spectral decomposition, and quantitative decay bounds.
     \label{lem:normal_tensor_complement_gap}
     \lean{MPSTensor.normalTensor_complement_spectralRadius_lt_one}
     \leanok
-    \uses{def:nt_cpsv, def:transfer_map}
+    \uses{def:nt_cpsv,def:transfer_map}
     Let $A$ be normal in trace-preserving gauge, and let $\rho\succeq0$ satisfy
     $\E_A(\rho)=\rho$ and $\tr\rho=1$. Then
     $\rho_{\spec}(\E_A-P)<1$, where $P(Z)=\tr(Z)\rho$.
@@ -208,7 +208,7 @@ spectral decomposition, and quantitative decay bounds.
     \lean{MPSTensor.exists_physicalConnectedCorrelator_le_geometric,
         MPSTensor.exists_rate_physicalConnectedCorrelator_le_geometric}
     \leanok
-    \uses{def:physical_connected_correlator, def:nt_cpsv}
+    \uses{def:physical_connected_correlator,def:nt_cpsv}
     For any tensor $A$ and matrix $\rho$ of nonzero trace, every rate
     $r>\rho_{\spec}(\E_A-P)$ and every pair of physical operators on independent
     finite supports have a constant $C_{XY}>0$ such that, for all $n\geq0$,
@@ -241,7 +241,7 @@ spectral decomposition, and quantitative decay bounds.
 
 \begin{remark}[Transfer-map spectral hypothesis]%
     \label{rem:spectral_hypothesis}
-    \uses{thm:physical_correlator_tp_bound, thm:transfer_operator_gap_irr_tp, thm:transfer_map_gap_wielandt}
+    \uses{thm:physical_correlator_tp_bound,thm:transfer_operator_gap_irr_tp,thm:transfer_map_gap_wielandt}
     The rate $r<1$ in Lemma~\ref{thm:physical_correlator_tp_bound}
     expresses a transfer-map gap condition: unlike the Hamiltonian spectral gap of
     Chapter~\ref{ch:parent_hamiltonian_commuting_and_gap}, it requires all
@@ -334,7 +334,7 @@ for the transfer map $\E_A$.
 \begin{theorem}[Correlation length bound]\label{thm:correlation_length_bound}
     \lean{MPSTensor.correlation_length_bound}
     \leanok
-    \uses{def:correlation_length, thm:exponential_convergence_primitive, def:injective}
+    \uses{def:correlation_length,thm:exponential_convergence_primitive,def:injective}
     For an injective trace-preserving MPS tensor, there exist
     $C>0$ and $\xi>0$ such that, for all $n\ge 0$ and all
     traceless $X\in\MN{D}$, i.e.\ $\tr(X)=0$,
@@ -383,7 +383,7 @@ for the transfer map $\E_A$.
 \section{Relation to parent Hamiltonians}
 
 \begin{remark}\label{rem:correlations_parent_hamiltonian}
-    \uses{def:parent_hamiltonian, lem:parent_hamiltonian_annihilates, def:correlation_length, thm:physical_correlator_tp_bound}
+    \uses{def:parent_hamiltonian,lem:parent_hamiltonian_annihilates,def:correlation_length,thm:physical_correlator_tp_bound}
     When the MPS tensor $A$ generates a parent Hamiltonian $H_N(A,L)$
     (Definition~\ref{def:parent_hamiltonian}) with the matrix product vector as
     ground state (Lemma~\ref{lem:parent_hamiltonian_annihilates}), its
@@ -403,7 +403,7 @@ for the transfer map $\E_A$.
     \label{def:physical_left_right_correlator}
     \lean{MPSTensor.physicalLeftRightConnectedCorrelator}
     \leanok
-    \uses{def:physical_observable_transfer, def:transfer_map}
+    \uses{def:physical_observable_transfer,def:transfer_map}
     Following \cite[Section~II.B.3]{Cirac2021Matrix}, for matrices
     $\rho^L,\rho^R\in\MN{D}$ and physical operators $X,Y$
     on independently chosen blocks of lengths $L_1,L_2$, the physical connected
@@ -435,7 +435,7 @@ for the transfer map $\E_A$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:eval_word_gauge, def:physical_observable_transfer}
+    \uses{lem:eval_word_gauge,def:physical_observable_transfer}
     Every word satisfies $B^w=UA^wU^{-1}$. Substituting this relation into the
     finite word sum defining $\E_O^B(UZU^\dagger)$ and cancelling the inner
     factors $U^{-1}U$ and $U^\dagger U^{-\dagger}$ yields $U\E_O^A(Z)U^\dagger$.
@@ -460,8 +460,7 @@ for the transfer map $\E_A$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:physical_insertion_gauge, lem:ldp_observable_transfer_products,
-        def:physical_left_right_correlator}
+    \uses{thm:physical_insertion_gauge,lem:ldp_observable_transfer_products,def:physical_left_right_correlator}
     Because inserting the identity on $n$ sites gives $\E_A^n$, the gauge
     relation (\ref{eq:correlations_insertion_gauge}) also applies to every
     transfer power. Combining that relation with
@@ -475,7 +474,7 @@ for the transfer map $\E_A$.
     \label{thm:physical_left_right_tp}
     \lean{MPSTensor.physicalLeftRightConnectedCorrelator_one}
     \leanok
-    \uses{def:physical_left_right_correlator, def:physical_connected_correlator}
+    \uses{def:physical_left_right_correlator,def:physical_connected_correlator}
     Suppose $\E_A$ is trace preserving, $\E_A(\rho)=\rho$, and
     $\tr\rho=1$. For every pair of independently supported physical
     operators and every $n\geq0$,
@@ -493,7 +492,7 @@ for the transfer map $\E_A$.
     \label{thm:correlator_exponential_bound}
     \lean{MPSTensor.IsNormalTensor.exists_physicalLeftRightCorrelation_decay}
     \leanok
-    \uses{def:nt_cpsv, def:physical_left_right_correlator}
+    \uses{def:nt_cpsv,def:physical_left_right_correlator}
     Let $A$ be a normal tensor, with leading transfer eigenvalue normalized
     to one. There are positive definite matrices $\rho^L,\rho^R$ satisfying
     \begin{align}
@@ -515,9 +514,7 @@ for the transfer map $\E_A$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:ldp_normal_gauge_reduction, thm:cpsv_normal_tensor_gauge_transport,
-        thm:physical_correlator_tp_bound, thm:physical_correlator_gauge,
-        thm:physical_left_right_tp}
+    \uses{lem:ldp_normal_gauge_reduction,thm:cpsv_normal_tensor_gauge_transport,thm:physical_correlator_tp_bound,thm:physical_correlator_gauge,thm:physical_left_right_tp}
     The tensor $A$ admits a trace-preserving gauge representative
     $B^i=UA^iU^{-1}$ with a positive definite fixed state $\rho$ of trace one,
     and gauge invariance of normality implies that $B$ is normal. For

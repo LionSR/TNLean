@@ -118,39 +118,37 @@ truncation instead.
     Let $\Omega$ be a unit vector on the chain. Initially place the main
     copy at $R_0$ and each auxiliary copy at its specified party $C$.
     There are $1+m+\max\{m-1,0\}$ copies, each held entirely by one
-    party. Take a party's private memory to be the tensor product of
-    the copies it holds, with their product reference vector. These
-    vectors have norm one. Private maps and changes of tensor-factor
-    order prepare the complete copy reference exactly, with no
-    nonprivate operation.
+    party. The memory is the stack of the copies: at every party, the
+    registers of the copies it holds. There are unit vectors $\phi_p$
+    in the memory of each party $p$, the product of the reference
+    vectors of the copies held by $p$, whose product over all parties is
+    the stacked reference vector of the copies. The initial vector is
+    therefore a product vector across parties, and no operation is
+    needed to prepare it.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:chain_terminal_registers, thm:lattice_sheet_initialization}
+    \uses{def:chain_terminal_registers,thm:lattice_sheet_initialization}
     Each right copy at stage $k$ is held by $P_{k+1}$, and each left
     copy at stage $k+1$ is held by $P_{k+1}$. The copies remain
     distinct even when their holders coincide. Grouping the copies
-    by their holders gives a product across parties; each grouped
-    vector has norm equal to the product of the copy norms, hence one.
-    Lemma~\ref{thm:lattice_sheet_initialization} splits each party's
-    private memory into its labelled copies and restores their prescribed
-    order. Every map is private, and its action on the product vector
-    is exact.
+    by their holders gives, by
+    Lemma~\ref{thm:lattice_sheet_initialization}, a product across
+    parties whose factor at $p$ is the product of the reference vectors
+    of the copies held by $p$; its norm is the product of the copy
+    norms, hence one.
 \end{proof}
 
 \begin{definition}[Block coordinates]
     \label{def:chain_terminal_coordinates}
     \uses{def:chain_terminal_registers}
-    \lean{
-        TNLean.MPS.AreaLaw.ChainSweep.blockEncoding,
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.blockEncoding,
         TNLean.MPS.AreaLaw.ChainSweep.mainConfigurationEquiv,
         TNLean.MPS.AreaLaw.ChainSweep.terminalConfigurationEquiv,
         TNLean.MPS.AreaLaw.ChainSweep.localConfigurationEquiv,
-        TNLean.MPS.AreaLaw.ChainSweep.privateLayout,
-        TNLean.MPS.AreaLaw.ChainSweep.physicalOrder,
+        TNLean.MPS.AreaLaw.ChainSweep.privateSystem,
         TNLean.MPS.AreaLaw.ChainSweep.sheetReadout,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRegrouping
-    }
+        TNLean.MPS.AreaLaw.ChainSweep.terminalRegrouping}
     \leanok
     At every party $p$, use increasing main-site order to identify
     configurations on $M_p$ with the basis of $\mathbb C^{d_p}$.
@@ -202,18 +200,16 @@ truncation instead.
 \begin{lemma}[Realization by private operations]
     \label{thm:chain_terminal_private_operations}
     \uses{def:chain_terminal_coordinates}
-    \lean{
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRegroupingWord,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRegroupingWord_props,
-        TNLean.MPS.AreaLaw.ChainSweep.eval_terminalRegroupingWord
-    }
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.terminalRegroupingCircuit,
+        TNLean.MPS.AreaLaw.ChainSweep.nonprivateCount_terminalRegroupingCircuit,
+        TNLean.MPS.AreaLaw.ChainSweep.toEuclideanLin_op_terminalRegroupingCircuit}
     \leanok
     The unitary $T$ is realized by a finite sequence of private
     operations and changes of tensor-factor order. No nonprivate gate
     is introduced, and the equality holds on every input vector.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_terminal_coordinates, lem:lattice_site_register_coordinates}
+    \uses{def:chain_terminal_coordinates,lem:lattice_site_register_coordinates}
     First place the main owner fibres in the prescribed party order,
     followed by the complete auxiliary list. These are precisely the
     original labels, each occurring once. At each party apply the local
@@ -225,20 +221,12 @@ truncation instead.
 
 \begin{definition}[The terminal reference vector]
     \label{def:chain_terminal_reference}
-    \uses{def:chain_terminal_registers, thm:chain_initial_copies,
-        def:chain_terminal_coordinates}
-    \lean{
-        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryReference,
+    \uses{def:chain_terminal_registers,thm:chain_initial_copies,def:chain_terminal_coordinates}
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.auxiliaryReference,
         TNLean.MPS.AreaLaw.ChainSweep.auxiliaryReference_apply,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalAuxiliarySiteOrder,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRawOrder,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRawOrder_nodup,
-        TNLean.MPS.AreaLaw.ChainSweep.mem_terminalRawOrder,
         TNLean.MPS.AreaLaw.ChainSweep.terminalAuxiliaryFrames,
         TNLean.MPS.AreaLaw.ChainSweep.terminalFrames,
-        TNLean.MPS.AreaLaw.ChainSweep.stackRegs_terminalFrames,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalStackReadout
-    }
+        TNLean.MPS.AreaLaw.ChainSweep.terminalStackReadout}
     \leanok
     Retain the chain, parties and labelled copies of
     Definition~\ref{def:chain_terminal_registers}, with $q\ge1$.
@@ -276,7 +264,7 @@ truncation instead.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_terminal_reference, lem:lattice_site_register_coordinates}
+    \uses{def:chain_terminal_reference,lem:lattice_site_register_coordinates}
     In the raw site basis, a copy has coefficient $\Omega(b)$ at the
     configuration $b$. The tensor product over the labelled copies
     therefore has coefficient $\Omega(b)\prod_{c\in\mathcal C}\Omega(a_c)$
@@ -302,8 +290,7 @@ truncation instead.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_terminal_reference,
-        thm:chain_terminal_reference_coordinates}
+    \uses{def:chain_terminal_reference,thm:chain_terminal_reference_coordinates}
     The tensor norm gives $\|\Xi\|=\prod_{c\in\mathcal C}\|\Omega\|=1$.
     Tracing the auxiliary factor of the reference in sheet coordinates
     gives $\|\Xi\|^2|\Omega\rangle\langle\Omega|$.
@@ -326,8 +313,7 @@ truncation instead.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_terminal_reference_coordinates,
-        thm:chain_terminal_reference_density}
+    \uses{thm:chain_terminal_reference_coordinates,thm:chain_terminal_reference_density}
     The readout is an isometry, so
     $\|\mathcal R\Psi-\Omega\otimes\Xi\|
         =\|\Psi-v_{\rm ref}\|\le\varepsilon$ and $\|\mathcal R\Psi\|\le1$.
@@ -530,8 +516,7 @@ truncation instead.
     \lean{TNLean.MPS.AreaLaw.OneBand.circuits_of_primitive_information,
         TNLean.MPS.AreaLaw.OneBand.boundary_change_of_primitive_information}
     \leanok
-    \uses{def:chain_one_band_assignments,def:lattice_bounded_change,
-        def:peps_circuit_source_bound,def:lattice_sheet_stack}
+    \uses{def:chain_one_band_assignments,def:lattice_bounded_change,def:peps_circuit_source_bound,def:lattice_sheet_stack}
     Assume $o(x)=C$ on $\lbrack a-8w,a)_L$ and $o(x)=A$ on $[a,a+w)_L$; the
     parties $A,B,C$ need not be distinct. Let $q\ge1$ and let $\Omega$ be a unit vector on the
     original chain. Put $\delta=L^{-12}$.
@@ -587,9 +572,7 @@ truncation instead.
     and introduces no left auxiliary copy.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_plain_birth_death,thm:chain_plain_exchange,
-        thm:lattice_bounded_change_closure,
-        thm:peps_original_produced_resource_bounds,def:lattice_sheet_stack}
+    \uses{thm:chain_plain_birth_death,thm:chain_plain_exchange,thm:lattice_bounded_change_closure,thm:peps_original_produced_resource_bounds,def:lattice_sheet_stack}
     Apply the birth and death estimates at $p=12$.
     Every modified band is owned by the departing party in its sheet.
     Apply the birth estimate to rows $0,1,2,6$ and its reversed
@@ -700,8 +683,7 @@ The objects below are owner assignments and ordered lists of sheets.
     $\widehat M_k^{(R)}=M_k^{(R)}=M_{k+1}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_sweep_stage_assignments,thm:chain_stage_margins,
-        thm:chain_one_band_geometry}
+    \uses{def:chain_sweep_stage_assignments,thm:chain_stage_margins,thm:chain_one_band_geometry}
     Membership in a completed block fixes the quotient $\lfloor x/t\rfloor$.
     Neither birth changes an earlier completed block. The first target
     lies beyond $b+w$, and the second lies between $a+w$ and $b$;
@@ -741,8 +723,7 @@ The objects below are owner assignments and ordered lists of sheets.
     when their centres coincide.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_sweep_stage_owners,thm:chain_stage_margins,
-        thm:chain_one_band_geometry}
+    \uses{thm:chain_sweep_stage_owners,thm:chain_stage_margins,thm:chain_one_band_geometry}
     Use the derived flanks for the right band and for the positive-stage
     left band. The one-band auxiliary endpoint retains its two right-hand
     strips. The left margins ensure that natural subtraction in these
@@ -763,8 +744,7 @@ The objects below are owner assignments and ordered lists of sheets.
         TNLean.MPS.AreaLaw.ChainSweep.leftCopyLabel
     }
     \leanok
-    \uses{def:chain_sweep_stage_assignments,thm:chain_sweep_retired_copies,
-        thm:chain_initial_copies}
+    \uses{def:chain_sweep_stage_assignments,thm:chain_sweep_retired_copies,thm:chain_initial_copies}
     Retain the initial ordered list $\mathcal C$ of all auxiliary copy
     labels. Its order is fixed throughout. The activation stage is
     $s(\rho_j)=j$ and $s(\lambda_j)=j+1$.
@@ -825,8 +805,7 @@ The objects below are owner assignments and ordered lists of sheets.
     other copies in their original order with $c$ omitted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_sweep_labelled_history,thm:chain_sweep_retired_copies,
-        thm:chain_sweep_stage_owners}
+    \uses{def:chain_sweep_labelled_history,thm:chain_sweep_retired_copies,thm:chain_sweep_stage_owners}
     Initially no activation stage is negative. Before the last boundary
     every copy's activation stage has been passed, so the retired-sheet
     identities give the terminal auxiliary list. Comparing the two
@@ -917,8 +896,7 @@ The objects below are owner assignments and ordered lists of sheets.
     $\mathcal B_{k,j}=\mathcal F_k^R$ for every $j\ge18$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_sweep_frame_path,thm:chain_sweep_labelled_history,
-        thm:chain_sweep_stage_owners}
+    \uses{def:chain_sweep_frame_path,thm:chain_sweep_labelled_history,thm:chain_sweep_stage_owners}
     The interior boundaries are the specified one-band sheets.
     Before its activation the selected label still carries its initial
     constant-owner sheet. Selecting that label therefore gives the
@@ -957,8 +935,7 @@ The objects below are owner assignments and ordered lists of sheets.
     one right auxiliary copy, followed by the stationary terminal tail.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_sweep_frame_path,thm:chain_sweep_local_boundaries,
-        thm:chain_sweep_labelled_history}
+    \uses{def:chain_sweep_frame_path,thm:chain_sweep_local_boundaries,thm:chain_sweep_labelled_history}
     For $j<18$, division of $18k+j$ by $18$ gives quotient $k$ and
     remainder $j$. At $j=18$, the eighteenth local boundary is
     $\mathcal F_{k+1}$; the next quotient and zero remainder give that
@@ -1058,8 +1035,7 @@ with the retained-copy correction of
     \label{thm:chain_conditional_local_circuits}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.local_stage_circuits_of_primitive_information}
     \leanok
-    \uses{def:chain_stage_participants,def:chain_sweep_frame_path,
-        def:lattice_bounded_change,def:peps_circuit_source_bound,def:lattice_sheet_stack}
+    \uses{def:chain_stage_participants,def:chain_sweep_frame_path,def:lattice_bounded_change,def:peps_circuit_source_bound,def:lattice_sheet_stack}
     Suppose $q\ge1$, $w\ge1$ and $0\le k<m$.
     Let $\Omega$ be a unit vector on the original chain and put
     $\delta=L^{-12}$. Assume the two before-birth bounds
@@ -1106,14 +1082,13 @@ with the retained-copy correction of
     absolute coefficient sum at most one, and at most one normalized
     pair source and one normalized pair effect per monomial.
     At stage zero, position $2$ joins the boundaries of the direct
-    death into $P_1$; positions $3,\ldots,9$ are identity circuits, with
-    zero error and no nonprivate gate. Every original auxiliary label and the order
+    death into $P_1$; positions $3,\ldots,9$ are circuits without gates,
+    consisting of private operations only, with zero error and no
+    nonprivate gate. Every original auxiliary label and the order
     of all spectator occurrences are retained.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_sweep_stage_owners,thm:chain_stage_margins,
-        thm:chain_one_band_conditional_changes,thm:chain_sweep_local_boundaries,
-        thm:chain_plain_birth_death,thm:lattice_bounded_change_closure}
+    \uses{thm:chain_sweep_stage_owners,thm:chain_stage_margins,thm:chain_one_band_conditional_changes,thm:chain_sweep_local_boundaries,thm:chain_plain_birth_death,thm:lattice_bounded_change_closure}
     The two birth targets are held by $R_k$ in their before-birth
     sheets. Apply the birth estimate with
     (\ref{eq:chain_stage_remainder_information}) and
@@ -1137,17 +1112,16 @@ with the retained-copy correction of
     \lean{TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep,
         TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit}
     \leanok
-    \uses{def:chain_sweep_frame_path,def:chain_stage_participants,
-        def:lattice_bounded_change,def:peps_circuit_source_bound,
-        def:peps_original_chronology_composite}
+    \uses{def:chain_sweep_frame_path,def:chain_stage_participants,def:lattice_bounded_change,def:peps_circuit_source_bound,def:peps_original_chronology_composite}
     Let $q\ge1$ and let $\Omega$ be any original chain vector.
     Write $\delta_L=L^{-12}$ for $L>0$ and $\delta_0=0$.
     Suppose each given circuit $c_{k,j}$ between the successive
     boundary lists is a bounded change from $\psi(\mathcal B_{k,j})$ to
     $\psi(\mathcal B_{k,j+1})$, with participants in $\mathcal S_{k,j}$,
     bounds $r=K=1$ and error $4\delta_L$, and has pair-source bound one.
-    At $k=0$ and $3\le j<10$, require the identity circuit, zero
-    reference error and zero nonprivate count, as in the local conclusion.
+    At $k=0$ and $3\le j<10$, require a circuit without gates (private
+    operations only), zero reference error and zero nonprivate count, as
+    in the local conclusion.
     Put $N=18m$. On the chronological lists $\mathcal G_n$, define
     \begin{align}
         d_n & =
@@ -1166,8 +1140,8 @@ with the retained-copy correction of
 
 \begin{lemma}[Counts, expansions and error of the middle circuit]
     \label{thm:chain_conditional_middle_bounds}
-    \lean{TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_tail_identity,
-        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_first_padding,
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_tail_isLocal,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_first_padding_isLocal,
         TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_participation_le_forty,
         TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_nonprivateCount_le,
         TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_resource_bounds,
@@ -1190,14 +1164,14 @@ with the retained-copy correction of
         \label{eq:chain_middle_circuit_error}
     \end{align}
     The tail $d_n$ for $n\ge18m$ is the identity. When a first stage
-    exists, its positions $3,\ldots,9$ are identities. If $m=0$, the
+    exists, its positions $3,\ldots,9$ have no gates. If $m=0$, the
     middle is the identity on the common initial and terminal list.
     If $m=1$, it has one eighteen-position stage with the direct
-    left-death boundaries, seven identities and one right auxiliary copy.
+    left-death boundaries, seven positions without gates and one right
+    auxiliary copy.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_stage_incidence,thm:peps_original_chronology_composition,
-        lem:peps_protocol_telescoping,thm:chain_initial_copies}
+    \uses{thm:chain_stage_incidence,thm:peps_original_chronology_composition,lem:peps_protocol_telescoping,thm:chain_initial_copies}
     The count identities for chronological composition sum the
     position counts. There is at most one nonprivate occurrence per position,
     and an occurrence involving $p$ lies in a position counted by
@@ -1222,8 +1196,7 @@ with the retained-copy correction of
     \lean{TNLean.MPS.AreaLaw.ChainSweep.partyLevel,
         TNLean.MPS.AreaLaw.ChainSweep.prefixCrossingLinks}
     \leanok
-    \uses{def:chain_terminal_registers,def:compression_operator_links,
-        def:compression_operator_endpoints}
+    \uses{def:chain_terminal_registers,def:compression_operator_links,def:compression_operator_endpoints}
     Place $R_i$ at level $\ell(R_i)=i$ and $P_{j+1}$ at
     $\ell(P_{j+1})=j$.
     Retain all parties, including $R_m$ and the parties with scalar
@@ -1339,15 +1312,15 @@ Definition~\ref{def:chain_open_mps}.
     \label{thm:chain_conditional_preparation}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_preparation_of_local_circuits}
     \leanok
-    \uses{def:chain_conditional_middle_circuit,def:chain_terminal_reference,
-        def:chain_terminal_coordinates}
+    \uses{def:chain_conditional_middle_circuit,def:chain_terminal_reference,def:chain_terminal_coordinates}
     Let $L,w,q$ be natural numbers with $L>0$ and $q\ge1$, and let
     $\Omega$ be a unit vector on the original chain. Suppose the circuits $c_{k,j}$ satisfy exactly
     the local conditions in Definition~\ref{def:chain_conditional_middle_circuit}:
     they are bounded changes between the prescribed boundary references,
     with participants in $\mathcal S_{k,j}$, bounds $r=K=1$, error
     $4L^{-12}$ and pair-source bound one; the seven first-stage padding
-    positions are identities with zero error and zero nonprivate count.
+    positions have no gates (private operations only), zero error and
+    zero nonprivate count.
     Put $N=18m$ and $\varepsilon=4NL^{-12}$.
 
     Let $\mathcal F_0$ be the original ordered initial sheet list.
@@ -1405,10 +1378,7 @@ Definition~\ref{def:chain_open_mps}.
     \cite{gap:tnlean_one_dimensional_band_sweep_corrections}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_initial_copies,thm:chain_conditional_middle_bounds,
-        thm:chain_middle_gate_support,thm:chain_terminal_private_operations,
-        thm:chain_terminal_reference_density,thm:chain_terminal_reference_error,
-        thm:chain_terminal_coordinates}
+    \uses{thm:chain_initial_copies,thm:chain_conditional_middle_bounds,thm:chain_middle_gate_support,thm:chain_terminal_private_operations,thm:chain_terminal_reference_density,thm:chain_terminal_reference_error,thm:chain_terminal_coordinates}
     Compose the constructed private initialization, the given family's
     chronological middle, and the private terminal regrouping.
     The two ends have no nonprivate occurrence; each such occurrence
@@ -1448,11 +1418,9 @@ Definition~\ref{def:chain_open_mps}.
 
 \begin{lemma}[One useful column and all its cut ranks]
     \label{thm:compression_useful_column_all_cuts}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
+    \lean{TNLean.Network.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
     \leanok
-    \uses{def:compression_operator_operator,def:compression_operator_alphabets,
-        def:compression_operator_endpoint_tensor,def:peps_dependent_network,
-        def:peps_ket_column_dependent_fix_input}
+    \uses{def:compression_operator_operator,def:compression_operator_alphabets,def:compression_operator_endpoint_tensor,def:peps_dependent_network,def:peps_ket_column_dependent_fix_input}
     Let $\sigma$ be the distributed operator contraction with
     input and output alphabet $X_a$ at each party, all finite. Retain its
     tagged link alphabets $D_e$ and endpoint tensors $A_a$.
@@ -1496,8 +1464,7 @@ Definition~\ref{def:chain_open_mps}.
     \label{thm:chain_uniform_compressed_block_column}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_sampled_block_column}
     \leanok
-    \uses{def:peps_distributed_construction,def:peps_distributed_construction_density,
-        def:chain_party_placement,def:compression_operator_operator}
+    \uses{def:peps_distributed_construction,def:peps_distributed_construction_density,def:chain_party_placement,def:compression_operator_operator}
     Let $i$ range over an arbitrary index set $I$, with sizes $s_i\ge2$
     and natural lengths and widths $L_i,w_i$. Let $\mathcal C_i$ be given
     distributed constructions on the parties of these chains,
@@ -1575,8 +1542,7 @@ Definition~\ref{def:chain_open_mps}.
     \input{figures/chain_source_sampling}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_separate_arity_compression,
-        thm:chain_tagged_link_congestion,thm:compression_useful_column_all_cuts}
+    \uses{thm:peps_separate_arity_compression,thm:chain_tagged_link_congestion,thm:compression_useful_column_all_cuts}
     Apply Theorem~\ref{thm:peps_separate_arity_compression} to the
     whole family, retaining its sampled tensors and tagged alphabets.
     Its density estimates and trace bounds give
@@ -1601,8 +1567,7 @@ Definition~\ref{def:chain_open_mps}.
     \lean{TNLean.MPS.AreaLaw.ChainSweep.rank_partyPrefix_eq_cutMatrix,
         TNLean.MPS.AreaLaw.ChainSweep.rank_partyPrefix_last_eq_cutMatrix}
     \leanok
-    \uses{def:chain_terminal_coordinates,def:chain_sweep_stage_assignments,
-        def:chain_party_placement,def:chain_open_mps}
+    \uses{def:chain_terminal_coordinates,def:chain_sweep_stage_assignments,def:chain_party_placement,def:chain_open_mps}
     Let $L,w,q$ be arbitrary natural numbers, with the same owner and
     block-coordinate definitions, including the zero-width convention.
     Let $\psi$ be any vector on the physical party factors
@@ -1630,8 +1595,7 @@ Definition~\ref{def:chain_open_mps}.
     \cite[Part~II, proof of Theorem~B]{TNLean2026OneDimensional}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_terminal_coordinates,def:chain_sweep_stage_assignments,
-        def:chain_party_placement,def:chain_open_mps}
+    \uses{def:chain_terminal_coordinates,def:chain_sweep_stage_assignments,def:chain_party_placement,def:chain_open_mps}
     For $a\le m$, the owner satisfies
     $\ell(\operatorname{owner}(x))<a$ exactly when $x<at$.
     On each side, restricting that owner map and applying the
@@ -1667,8 +1631,7 @@ Definition~\ref{def:chain_open_mps}.
     The vector $\psi$ is arbitrary; no norm or nonzero premise is needed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_party_prefix_site_coordinates,thm:chain_cut_rank_growth,
-        thm:chain_terminal_block_sizes}
+    \uses{thm:chain_party_prefix_site_coordinates,thm:chain_cut_rank_growth,thm:chain_terminal_block_sizes}
     The coordinate equalities give the same bound $R$ at cuts $at$,
     for $1\le a\le m$. The endpoint cuts at $0,L$ have rank at most
     one, hence at most $R$. A cut below $mt$ lies between two adjacent
@@ -1801,8 +1764,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \label{thm:chain_physical_local_circuits}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.local_stage_circuits_of_logarithmic_separation}
     \leanok
-    \uses{def:chain_model,def:chain_stage_participants,def:chain_sweep_frame_path,
-        def:lattice_bounded_change,def:peps_circuit_source_bound}
+    \uses{def:chain_model,def:chain_stage_participants,def:chain_sweep_frame_path,def:lattice_bounded_change,def:peps_circuit_source_bound}
     Fix $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$.
     There are $D_{24}>0$ and $L_0\ge1$ such that, for every
     $L\ge L_0$, every corresponding gapped ground vector $\Omega$
@@ -1812,8 +1774,9 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     For each $0\le j<18$, $c_{k,j}$ is a bounded change on
     $\mathcal S_{k,j}$ with bounds $r=K=1$, pair-source bound one,
     at most one nonprivate occurrence, and reference error at most
-    $4L^{-12}$. At $k=0$ the positions $3,\ldots,9$ are the
-    identity circuits, have zero error and have no nonprivate occurrence.
+    $4L^{-12}$. At $k=0$ the positions $3,\ldots,9$ are circuits
+    without gates, consisting of private operations only; they have zero
+    error and no nonprivate occurrence.
     Thus these circuits satisfy the entire local conclusion of
     Lemma~\ref{thm:chain_conditional_local_circuits}, including the
     original copy labels and spectator order. No information estimate
@@ -1823,9 +1786,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:chain_band_physical_information,thm:chain_stage_physical_information,
-        thm:chain_stage_margins,thm:chain_sweep_stage_owners,
-        thm:chain_conditional_local_circuits}
+    \uses{thm:chain_band_physical_information,thm:chain_stage_physical_information,thm:chain_stage_margins,thm:chain_sweep_stage_owners,thm:chain_conditional_local_circuits}
     Take the maximum of the two information constants and the maximum
     of their length cutoffs. Since $\log L\ge0$, this common width
     meets both original conditions. The existence of $k<m$ forces
@@ -1838,7 +1799,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     death, these supply precisely the nineteen information
     hypotheses of Lemma~\ref{thm:chain_conditional_local_circuits}.
     The ground-state hypothesis supplies $\|\Omega\|=1$.
-    The resulting circuits retain the seven identity positions; no
+    The resulting circuits retain the seven positions without gates; no
     predecessor $P_0$ or left copy is introduced at stage zero.
 \end{proof}
 
@@ -1846,8 +1807,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \label{thm:chain_physical_preparation}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_preparation_of_gappedGroundState}
     \leanok
-    \uses{def:chain_model,def:chain_terminal_reference,def:chain_terminal_coordinates,
-        def:chain_stage_participants,def:chain_party_placement}
+    \uses{def:chain_model,def:chain_terminal_reference,def:chain_terminal_coordinates,def:chain_stage_participants,def:chain_party_placement}
     Fix $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and $\Delta>0$.
     There are $D\ge1$, $K>0$, $s\in\mathbb N$ and $L_0\ge1$,
     before all further physical data, with the following property.
@@ -1900,8 +1860,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:chain_physical_local_circuits,thm:chain_conditional_preparation,
-        thm:chain_stage_arity_three,thm:chain_terminal_block_sizes}
+    \uses{thm:chain_physical_local_circuits,thm:chain_conditional_preparation,thm:chain_stage_arity_three,thm:chain_terminal_block_sizes}
     Enlarge the physical local constant to $D=\max\{D_{24},1\}$.
     Enlarge the length cutoff to at least $120$ and the uniform
     logarithmic threshold at which $60D\log L\le L/2$.
@@ -1928,8 +1887,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \label{def:chain_physical_construction}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.preparationConstruction}
     \leanok
-    \uses{def:peps_distributed_construction,thm:chain_initial_copies,
-        def:chain_terminal_coordinates}
+    \uses{def:peps_distributed_construction,thm:chain_initial_copies,def:chain_terminal_coordinates}
     Let $L>0$, $q\ge1$ and $w\in\mathbb N$.
     Given an original vector $\Omega$, the initial
     party spaces $H_p$ and their unit vectors $x_p$ from the grouped
@@ -1952,8 +1910,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \label{thm:chain_uniform_physical_family}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_preparation_family}
     \leanok
-    \uses{def:chain_physical_construction,def:chain_model,
-        def:chain_terminal_coordinates}
+    \uses{def:chain_physical_construction,def:chain_model,def:chain_terminal_coordinates}
     For fixed $q\ge1$, $R\in\mathbb N$, $J\in\mathbb R$ and
     $\Delta>0$, there are $D\ge1$, $K>0$, $s\in\mathbb N$ and
     $L_0\ge2$ before every physical instance.
@@ -1989,8 +1946,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     No one Hamiltonian or ground vector is selected to represent a length.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_physical_preparation,def:chain_physical_construction,
-        def:peps_distributed_construction_density}
+    \uses{thm:chain_physical_preparation,def:chain_physical_construction,def:peps_distributed_construction_density}
     Enlarge the physical cutoff to $\max\{L_0,2\}$ and choose the
     preparation witnesses over the entire admissible tuple set.
     Retain the derived arity-three bound of these same circuits.
@@ -2040,8 +1996,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \label{thm:chain_protocol_mps_of_prefix_ranks}
     \lean{TNLean.MPS.AreaLaw.ChainSweep.isOpenMPS_of_polynomial_partyPrefix_bounds}
     \leanok
-    \uses{def:chain_open_mps,def:chain_terminal_coordinates,
-        def:chain_party_placement}
+    \uses{def:chain_open_mps,def:chain_terminal_coordinates,def:chain_party_placement}
     Retain $q,D,C_p,\alpha,\chi,L,w,A_L,n$ from
     Lemma~\ref{thm:chain_protocol_polynomial_bond} and assume
     $60w\le L$. Let $\psi$ be a unit vector in the physical
@@ -2065,8 +2020,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     \input{figures/chain_block_to_sites}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_site_ranks_of_party_prefixes,thm:chain_mps_of_cut_rank,
-        thm:chain_protocol_polynomial_bond}
+    \uses{thm:chain_site_ranks_of_party_prefixes,thm:chain_mps_of_cut_rank,thm:chain_protocol_polynomial_bond}
     Positivity of $D\log L$ gives $w\ge1$, and $A_L^{\chi}\ge1$.
     The coordinate equivalence preserves the norm.
     Apply Lemma~\ref{thm:chain_site_ranks_of_party_prefixes} with
@@ -2107,9 +2061,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     of this theorem.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:chain_uniform_physical_family,
-        thm:chain_uniform_compressed_block_column,
-        thm:chain_protocol_mps_of_prefix_ranks,thm:chain_mps_of_cut_rank}
+    \uses{thm:chain_uniform_physical_family,thm:chain_uniform_compressed_block_column,thm:chain_protocol_mps_of_prefix_ranks,thm:chain_mps_of_cut_rank}
     Take the entire admissible physical family from
     Lemma~\ref{thm:chain_uniform_physical_family}, with its derived
     arity-three bound. Apply Lemma~\ref{thm:chain_uniform_compressed_block_column}

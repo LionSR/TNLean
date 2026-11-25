@@ -38,8 +38,7 @@ midpoint halves; see \cite[Section~11]{OpenAI2026AreaLaw}.
     Then $Q_{k,z}\cap Q_{h,w}=\varnothing$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_dyadic_indices,thm:area_law_layer_pairwise_disjoint,
-        thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales}
+    \uses{thm:area_law_dyadic_indices,thm:area_law_layer_pairwise_disjoint,thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales}
     If $k=h$, the unique cell-index criterion implies that any common
     point would give $z=w$. If $k\ne h$, the two fine cells belong to
     the disjoint half-open layers $D_k$ and $D_h$, since
@@ -50,8 +49,7 @@ midpoint halves; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \label{thm:area_law_fine_cell_contact}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_closedCell_contact}
     \leanok
-    \uses{def:area_law_dyadic_cell_side,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales}
+    \uses{def:area_law_dyadic_cell_side,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     Suppose that $C_0\ge2$, $k\ge50\,000\,000$, $z\in F_{k,\ell_k}$,
     $w\in F_{h,\ell_h}$ and $(k,z)\ne(h,w)$. If
     $I=\overline{Q_{k,z}}\cap\overline{Q_{h,w}}$ contains two distinct
@@ -68,9 +66,7 @@ midpoint halves; see \cite[Section~11]{OpenAI2026AreaLaw}.
     The opposing index $h$ is unrestricted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_fine_cells_disjoint,thm:area_law_fine_cell_containment,
-        thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,
-        thm:area_law_dyadic_closures,def:area_law_dyadic_cell_side}
+    \uses{thm:area_law_fine_cells_disjoint,thm:area_law_fine_cell_containment,thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,thm:area_law_dyadic_closures,def:area_law_dyadic_cell_side}
     A common point belongs to both closed layers. The nearby-layer
     estimate gives $h\le k+1$ and $k\le h+1$, so the fine exponents
     differ by at most one. Order the cells by their fine exponents.

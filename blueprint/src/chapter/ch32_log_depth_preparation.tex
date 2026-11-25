@@ -80,7 +80,7 @@ remaining eigenvalues have modulus strictly less than $1$.
         MPSTensor.tendsto_polarPosTensor_of_tendsto_transferMap,
         MPSTensor.tendsto_polarPos_physicalMatrix_of_tendsto_transferMap}
     \leanok
-    \uses{def:ldpolar_tensor, def:prep_fixed_point_tensor}
+    \uses{def:ldpolar_tensor,def:prep_fixed_point_tensor}
     Let $P_q=(\mathcal B_q^\dagger\mathcal B_q)^{1/2}$. Then $P_q\to P_\infty$ as
     $q\to\infty$, where $P_\infty=(\sqrt\rho)^{\mathsf T}\otimes\Id$
     \cite[eq.~(8)]{Malz2024Preparation}.
@@ -92,8 +92,7 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:prep_fixed_point_tensor_psd, thm:prep_transfer_fixed_point_tensor,
-        thm:prep_blocked_transfer_limit_normal}
+    \uses{thm:prep_fixed_point_tensor_psd,thm:prep_transfer_fixed_point_tensor,thm:prep_blocked_transfer_limit_normal}
     The matrix of $\mathcal B_q^\dagger\mathcal B_q$ is a rearrangement of
     $\E_A^{\,q}$:
     $(\mathcal B_q^\dagger\mathcal B_q)_{(\alpha,\beta),(\alpha',\beta')}
@@ -183,7 +182,7 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_sqrt_holder, lem:ldp_sqrt_floor_bounds}
+    \uses{thm:ldp_sqrt_holder,lem:ldp_sqrt_floor_bounds}
     This is~\cite[``Square root near a positive definite
         element'']{QICLean2026Blueprint}.
     Write $\varepsilon=\lVert a-b\rVert$. If $\varepsilon>c$, the bound
@@ -301,9 +300,7 @@ remaining eigenvalues have modulus strictly less than $1$.
     \lean{MPSTensor.approximatingTensor, MPSTensor.mpv_approximatingTensor,
         MPSTensor.mpv_approximatingTensor_norm_sq}
     \leanok
-    \uses{def:ldpolar_tensor, def:prep_fixed_point_tensor,
-        thm:prep_mpv_fixed_point_tensor, lem:mpv_rotate_physical,
-        thm:ldpolar_tensor_injective, thm:prep_pair_product_norm}
+    \uses{def:ldpolar_tensor,def:prep_fixed_point_tensor,thm:prep_mpv_fixed_point_tensor,lem:mpv_rotate_physical,thm:ldpolar_tensor_injective,thm:prep_pair_product_norm}
     With $V$ from Definition~\ref{def:ldpolar_tensor} and $N=qM$, the
     \emph{approximating state} is
     $\ket{\widetilde\phi_N}=\ket{\phi_M(VP_\infty)}/\lVert\phi_M(VP_\infty)\rVert$.
@@ -322,8 +319,7 @@ remaining eigenvalues have modulus strictly less than $1$.
         MPSTensor.mpv_approximatingTensor_eq_sum_embeddedPairState,
         MPSTensor.exists_unitary_mpv_approximatingTensor}
     \leanok
-    \uses{def:ldpolar_tensor, def:ldp_approximating_state,
-        def:prep_pair_product_state}
+    \uses{def:ldpolar_tensor,def:ldp_approximating_state,def:prep_pair_product_state}
     Suppose $\mathcal B_q$ is injective, and let $\iota$ be an injective map
     from the pairs $(\gamma,\delta)$ with $0\le\gamma,\delta<D$ to the
     computational basis of $(\C^d)^{\otimes q}$. Then there is a unitary $U$
@@ -440,7 +436,7 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:seqanc_sweep_matrix_remainder, thm:seqanc_support_propagation}
+    \uses{thm:seqanc_sweep_matrix_remainder,thm:seqanc_support_propagation}
     The matrix elements of $V$ are
     $\bigl(j^{\mathsf T}(\Id_D\otimes A_1^{i_1})\cdots(\Id_D\otimes A_q^{i_q})G\bigr)_x$
     with $j=\sum_\gamma\ket{\gamma}\otimes\ket{\gamma}$. Applying
@@ -518,8 +514,7 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{center}
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_decomposition, thm:ldpolar_tensor_injective,
-        thm:ldp_sequential_factorization_general}
+    \uses{thm:ldpolar_decomposition,thm:ldpolar_tensor_injective,thm:ldp_sequential_factorization_general}
     Since $\mathcal B_q$ is injective, $P$ is positive definite and
     $V=\mathcal B_qP^{-1}$, so
     $\bra{i_1\cdots i_q}V\ket{x}
@@ -573,7 +568,7 @@ remaining eigenvalues have modulus strictly less than $1$.
         Matrix.mul_eq_self_of_conjTranspose_mul_self_eq,
         Matrix.polarPos_eq_of_mul_self_eq, Matrix.polarSupport_eq_of_range_eq}
     \leanok
-    \uses{thm:ldpolar_decomposition, thm:ldpolar_support}
+    \uses{thm:ldpolar_decomposition,thm:ldpolar_support}
     Let $M=WQ$ with $Q\ge0$, and suppose $W^\dagger W=E$ for the orthogonal
     projector $E$ onto the range of $Q$. Then $Q=(M^\dagger M)^{1/2}$, $E$ is the
     support projector of $M$, and $W$ is the partial isometry of the polar
@@ -676,9 +671,7 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{center}
 \begin{proof}
     \leanok
-    \uses{lem:physical_rotation_mul, lem:ldpolar_physical_matrix_rotate,
-        lem:physical_rotation_state, thm:block_tensor_rotate_physical,
-        thm:ldpolar_tensor_rotate}
+    \uses{lem:physical_rotation_mul,lem:ldpolar_physical_matrix_rotate,lem:physical_rotation_state,thm:block_tensor_rotate_physical,thm:ldpolar_tensor_rotate}
     Blocking commutes with maps on the physical leg: blocking $C_W$ over $m$
     sites gives the tensor $C$ blocked over $m$ sites, rotated by
     $W^{\otimes m}$ (Lemma~\ref{thm:block_tensor_rotate_physical}). Blocking
@@ -724,8 +717,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.exists_norm_trace_prod_range_transferMatrix_sub_one_le,
         MPSTensor.exists_norm_mpvState_sq_le}
     \leanok
-    \uses{def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer,
-        def:correlation_length}
+    \uses{def:prep_fixed_point_tensor,thm:ldpolar_blocked_transfer,def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, and let $0<\gamma<1$.
     Then, for $N=qM$,
@@ -857,8 +849,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.transferMatrix_fixedPointTensor_mul_mul,
         MPSTensor.inner_sqrtWeightLM, MPSTensor.exists_norm_map_polarPosTensor_sub_le}
     \leanok
-    \uses{thm:ldp_idempotent_second_order, thm:ldp_positive_part_rate,
-        def:prep_fixed_point_tensor, thm:ldpolar_blocked_transfer}
+    \uses{thm:ldp_idempotent_second_order,thm:ldp_positive_part_rate,def:prep_fixed_point_tensor,thm:ldpolar_blocked_transfer}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, and let $0<\gamma<1$. There is $C>0$ such that for all $q$ and
     all $M\ge2$ with $Cy<1$, where $y=M\,e^{-2\gamma q/\xi}$,
@@ -915,9 +906,7 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
         MPSTensor.exists_norm_transferMatrix_pow_sub_le,
         MPSTensor.one_sub_norm_inner_smul_inv_norm_le_two_mul}
     \leanok
-    \uses{thm:ldp_positive_part_overlap_second_order, def:ldp_approximating_state,
-        thm:ldpolar_blocked_state, thm:ldpolar_tensor_injective,
-        thm:ldp_injectivity_cutoff, def:correlation_length}
+    \uses{thm:ldp_positive_part_overlap_second_order,def:ldp_approximating_state,thm:ldpolar_blocked_state,thm:ldpolar_tensor_injective,thm:ldp_injectivity_cutoff,def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, let $\ket{\phi_N}$ be the
     normalized vector (\ref{eq:ldp_ti_mps}), and let $0<\gamma<1$. For
@@ -984,8 +973,7 @@ and its error extend to blocks of any lengths.
         MPSPreparation.blockOffset, MPSPreparation.blockSite,
         MPSPreparation.blockCfgEquiv, MPSTensor.blockIndexEquiv}
     \leanok
-    \uses{def:ldp_approximating_state, thm:ldpolar_tensor_decomposition,
-        def:prep_pair_product_state}
+    \uses{def:ldp_approximating_state,thm:ldpolar_tensor_decomposition,def:prep_pair_product_state}
     Cut the ring of $N$ sites into $M\ge1$ consecutive blocks of lengths
     $\ell_1,\dots,\ell_M$ with $\sum_k\ell_k=N$, block $k$ consisting of the
     sites $o_k+1,\dots,o_k+\ell_k$ with $o_k=\sum_{i<k}\ell_i$. Let
@@ -1019,9 +1007,7 @@ and its error extend to blocks of any lengths.
         Matrix.IsIsometry.sum_star_mul_prod,
         Matrix.IsIsometry.sum_star_mul_prod_const}
     \leanok
-    \uses{def:ldp_block_isometry_state, thm:ldpolar_tensor_injective,
-        thm:ldpolar_tensor_decomposition, thm:prep_pair_product_norm,
-        thm:prep_mpv_fixed_point_tensor, thm:mpu_transfer_matrix_overlap}
+    \uses{def:ldp_block_isometry_state,thm:ldpolar_tensor_injective,thm:ldpolar_tensor_decomposition,thm:prep_pair_product_norm,thm:prep_mpv_fixed_point_tensor,thm:mpu_transfer_matrix_overlap}
     Suppose every blocked tensor $\mathcal B_{\ell_k}$ is injective. Then
     $\braket{\psi_{\ell,\omega}}{\psi_{\ell,\omega}}=\braket\omega\omega^M$, and
     for the pair $\omega$ of the fixed point
@@ -1063,9 +1049,7 @@ and its error extend to blocks of any lengths.
     \label{thm:ldp_block_approximation_error}
     \lean{MPSTensor.exists_blockApproximationError_le_mul}
     \leanok
-    \uses{thm:ldp_unequal_absolute_trace_second_order,
-        thm:ldp_approximation_error_normal, def:ldp_block_isometry_state,
-        lem:ldp_block_isometry_state_overlap, def:correlation_length}
+    \uses{thm:ldp_unequal_absolute_trace_second_order,thm:ldp_approximation_error_normal,def:ldp_block_isometry_state,lem:ldp_block_isometry_state_overlap,def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}) with correlation
     length $\xi$, and let $0<\gamma<1$. There is $C>0$, depending only on
     the tensor, its normalized fixed state and the chosen spectral bound
@@ -1079,10 +1063,7 @@ and its error extend to blocks of any lengths.
     \cite[Lemma~1$'$(i), eq.~(S11)]{Malz2024Preparation}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ldp_unequal_absolute_trace_second_order,
-        thm:ldp_positive_part_overlap_second_order,
-        thm:ldp_approximation_error_normal,
-        lem:ldp_block_isometry_state_overlap}
+    \uses{thm:ldp_unequal_absolute_trace_second_order,thm:ldp_positive_part_overlap_second_order,thm:ldp_approximation_error_normal,lem:ldp_block_isometry_state_overlap}
     Put $v=\phi_N(A)$, $c_N=\lVert v\rVert$ and
     $a=\langle\psi_{\ell,\omega},v\rangle$.
     The block isometries give $\lVert\psi_{\ell,\omega}\rVert=1$ and
@@ -1131,8 +1112,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
 
 \begin{lemma}[The approximating state in depth $O(q)$]
     \label{thm:ldp_approximating_state_depth}
-    \uses{def:qc_local_circuit, def:ldp_approximating_state,
-        def:ldp_block_isometry_state}
+    \uses{def:qc_local_circuit,def:ldp_approximating_state,def:ldp_block_isometry_state}
     \lean{MPSPreparation.exists_isPreparedInDepth_blockIsometryState,
         MPSPreparation.exists_isPreparedInDepth_approximatingMPVState,
         MPSPreparation.blockIsometryState_eq_mulVec,
@@ -1170,10 +1150,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_unitary_implementing_isometry,
-        thm:ldp_sequential_factorization, lem:seqanc_staircase,
-        thm:qc_bounded_unitary_two_site_gates, lem:qc_parallel_circuits,
-        lem:qc_placed_operators}
+    \uses{thm:ldp_unitary_implementing_isometry,thm:ldp_sequential_factorization,lem:seqanc_staircase,thm:qc_bounded_unitary_two_site_gates,lem:qc_parallel_circuits,lem:qc_placed_operators}
     The case $D=0$ is trivial. If $d\ge2$ then $D<d^D$. If $d\le1$ and
     $D\ge1$, injectivity of the blocked tensor gives $D^2\le d^q$, which
     forces $d=D=1$. In either case $D\le d^D$, so each bond index can be
@@ -1223,9 +1200,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
         MPSPreparation.exists_isPreparedInDepth_of_norm_eq_one,
         MPSTensor.norm_normalizedMPVState}
     \leanok
-    \uses{thm:ldp_approximating_state_depth, def:ldp_block_isometry_state,
-        lem:ldp_block_isometry_state_overlap,
-        thm:qc_bounded_unitary_two_site_gates, def:qc_local_circuit}
+    \uses{thm:ldp_approximating_state_depth,def:ldp_block_isometry_state,lem:ldp_block_isometry_state_overlap,thm:qc_bounded_unitary_two_site_gates,def:qc_local_circuit}
     There is $C$, depending only on $d$ and $D$, such that for every tensor $A$
     and every $N\ge3D$ for which the $N$-site blocked tensor is injective and
     $\ket{\phi_N(A)}\neq0$, the normalized state $\ket{\phi_N}$ is prepared
@@ -1267,14 +1242,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:normalized_primitive_gauge, lem:ldp_normalized_state_rescaling,
-        thm:ldp_block_approximation_error, thm:ldp_approximating_state_depth,
-        thm:ldp_short_chain_preparation, lem:ldp_periodic_state_nonzero,
-        lem:ldp_block_isometry_state_overlap, thm:wordspan_blk_inj_succ,
-        lem:isNBlkInjective_iff_blockTensor_isInjective,
-        thm:gauge_invariance_normal, thm:normality_rescaling_invariance,
-        thm:is_normal_tensor_of_is_normal_left_canonical, thm:eigenvalue_bound,
-        thm:primitive_fixed_point_trace_normalization, thm:transfer_channel}
+    \uses{thm:normalized_primitive_gauge,lem:ldp_normalized_state_rescaling,thm:ldp_block_approximation_error,thm:ldp_approximating_state_depth,thm:ldp_short_chain_preparation,lem:ldp_periodic_state_nonzero,lem:ldp_block_isometry_state_overlap,thm:wordspan_blk_inj_succ,lem:isNBlkInjective_iff_blockTensor_isInjective,thm:gauge_invariance_normal,thm:normality_rescaling_invariance,thm:is_normal_tensor_of_is_normal_left_canonical,thm:eigenvalue_bound,thm:primitive_fixed_point_trace_normalization,thm:transfer_channel}
     Bringing $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) as in the proof of
     Lemma~\ref{thm:ldp_depth_upper_bound_divisible} gives a fixed point $\sigma$,
     a bound $t<1$ on the moduli of the eigenvalues other than $1$, and
@@ -1311,7 +1279,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
     \label{lem:ldp_periodic_state_nonzero}
     \lean{MPSPreparation.exists_mpvState_ne_zero_of_le}
     \leanok
-    \uses{thm:normalized_primitive_gauge, thm:ldp_approximation_error_normal}
+    \uses{thm:normalized_primitive_gauge,thm:ldp_approximation_error_normal}
     Let $A$ be normal with $D\ge1$. There is $N_0$ such that
     $\ket{\phi_N(A)}\neq0$ for every $N\ge N_0$.
 \end{lemma}
@@ -1383,9 +1351,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_depth_upper_bound, lem:ldp_periodic_state_nonzero,
-        lem:qc_circuit_inverse_composition, lem:qc_preparation_from_zero,
-        lem:ldp_error_triangle}
+    \uses{thm:ldp_depth_upper_bound,lem:ldp_periodic_state_nonzero,lem:qc_circuit_inverse_composition,lem:qc_preparation_from_zero,lem:ldp_error_triangle}
     By Theorem~\ref{thm:ldp_depth_upper_bound} with error $\varepsilon/4$ and
     Lemma~\ref{lem:qc_preparation_from_zero}, there are local circuits $U_A$,
     $U_B$ and unit vectors $\psi_A=aU_A\ket{0\cdots0}$,
@@ -1464,9 +1430,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     \label{lem:ldp_approximation_error_slope_threshold}
     \lean{MPSPreparation.exists_approximationError_le_of_slope}
     \leanok
-    \uses{thm:ldp_approximation_error_normal,
-        lem:ldp_normalized_state_rescaling,
-        lem:ldp_block_length_threshold_error}
+    \uses{thm:ldp_approximation_error_normal,lem:ldp_normalized_state_rescaling,lem:ldp_block_length_threshold_error}
     Let $B$ be a normal tensor in the gauge~(\ref{eq:ldp_normal_gauge}), with a
     positive definite fixed point $\sigma$ of trace one, and let $A$ be a tensor
     with $\ket{\phi_N(B)}=\zeta^N\ket{\phi_N(A)}$ for all $N$ and some
@@ -1508,14 +1472,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_approximating_state_depth,
-        thm:ldp_approximation_error_normal,
-        thm:wordspan_blk_inj_succ,
-        lem:ldp_normalized_state_rescaling,
-        lem:isNBlkInjective_iff_blockTensor_isInjective,
-        lem:ldp_approximating_state_unit_norm,
-        lem:ldp_block_length_threshold_error,
-        lem:ldp_approximation_error_slope_threshold}
+    \uses{thm:ldp_approximating_state_depth,thm:ldp_approximation_error_normal,thm:wordspan_blk_inj_succ,lem:ldp_normalized_state_rescaling,lem:isNBlkInjective_iff_blockTensor_isInjective,lem:ldp_approximating_state_unit_norm,lem:ldp_block_length_threshold_error,lem:ldp_approximation_error_slope_threshold}
     Since $a>\xi/2$, the number $\gamma=\xi/(2a)$ satisfies $0<\gamma<1$, and
     Lemma~\ref{thm:ldp_approximation_error_normal} at this $\gamma$ gives $K$
     with $\varepsilon(\widetilde\phi_N,\phi_N(B))\le K\,(N/q)\,e^{-q/a}$, since
@@ -1536,8 +1493,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     \label{lem:ldp_normal_gap}
     \lean{MPSTensor.exists_eigenvalue_norm_le_of_isNormal}
     \leanok
-    \uses{thm:is_normal_tensor_of_is_normal_left_canonical, thm:transfer_channel,
-        thm:eigenvalue_bound}
+    \uses{thm:is_normal_tensor_of_is_normal_left_canonical,thm:transfer_channel,thm:eigenvalue_bound}
     For a normal left-canonical tensor $A$ with $D\geq1$ there is $0<t<1$
     bounding the moduli of the eigenvalues other than $1$ of $\E_A$.
 \end{lemma}
@@ -1582,14 +1538,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:normalized_primitive_gauge, thm:ldp_depth_upper_bound_slope,
-        lem:ldp_depth_log_window, lem:ldp_normal_gap,
-        thm:normality_rescaling_invariance,
-        thm:gauge_invariance_normal,
-        thm:is_normal_tensor_of_is_normal_left_canonical,
-        thm:eigenvalue_bound,
-        thm:primitive_fixed_point_trace_normalization,
-        thm:transfer_channel}
+    \uses{thm:normalized_primitive_gauge,thm:ldp_depth_upper_bound_slope,lem:ldp_depth_log_window,lem:ldp_normal_gap,thm:normality_rescaling_invariance,thm:gauge_invariance_normal,thm:is_normal_tensor_of_is_normal_left_canonical,thm:eigenvalue_bound,thm:primitive_fixed_point_trace_normalization,thm:transfer_channel}
     A gauge transformation and a rescaling bring $A$ into the
     gauge~(\ref{eq:ldp_normal_gauge}) by
     Lemma~\ref{thm:normalized_primitive_gauge}, and the positive definite
@@ -1678,7 +1627,7 @@ $A$ along $w$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:physical_observable_word_span_mul, lem:ldp_observable_transfer_products}
+    \uses{thm:physical_observable_word_span_mul,lem:ldp_observable_transfer_products}
     For coefficients $c^{ab}_w$ with $\sum_wc^{ab}_wA^w=e_{ab}$, the operator
     with matrix elements $\bra{w'}X\ket{w}=c^{ab}_w\overline{c^{ce}_{w'}}$ gives
     $\E_X(Z)=e_{ab}Ze_{ec}=Z_{be}\,e_{ac}$. These maps span all linear maps on
@@ -1800,8 +1749,7 @@ $A$ along $w$.
     \lean{MPSTensor.exists_hermitian_vector_functional_compl_pow,
         MPSTensor.exists_normalized_observables_limitCorrelator}
     \leanok
-    \uses{lem:ldp_limit_correlator_eigenvalue,
-        lem:ldp_observable_transfer_surjective}
+    \uses{lem:ldp_limit_correlator_eigenvalue,lem:ldp_observable_transfer_surjective}
     Suppose the products of $L$ matrices of $A$ span $\MN{D}$ and
     $\sum_i(A^i)^\dagger A^i=\Id$, let $\rho$ be Hermitian with $\Tr\rho=1$,
     put $P(Z)=\Tr(Z)\,\rho$, and let $\lambda\neq0,1$ be an eigenvalue of
@@ -1841,8 +1789,7 @@ $A$ along $w$.
         Matrix.norm_linearMap_trace_le_mul_norm,
         MPSTensor.exp_neg_div_correlationLength_le_norm_pow}
     \leanok
-    \uses{lem:ldp_two_window_trace, thm:wielandt_proposition_three,
-        def:correlation_length}
+    \uses{lem:ldp_two_window_trace,thm:wielandt_proposition_three,def:correlation_length}
     Let $A$ be in the gauge (\ref{eq:ldp_normal_gauge}), with the products of
     $L\ge1$ matrices spanning $\MN{D}$, let $P(Z)=\Tr(Z)\,\rho$, and let
     $\lambda_2$ be an eigenvalue of $\E_A$ of largest modulus among those
@@ -1889,7 +1836,7 @@ $A$ along $w$.
         MPSTensor.mpvConnectedCorrelator, MPSTensor.mpvExpectation,
         ManyBody.chainWindow}
     \leanok
-    \uses{def:normal, def:correlation_length}
+    \uses{def:normal,def:correlation_length}
     Let $A$ be normal and in the gauge (\ref{eq:ldp_normal_gauge}), with
     correlation length $\xi>0$, let $L\ge1$ be a length such that the products
     of $L$ matrices of $A$ span $\MN{D}$ (one may take $L=1$ when $A$ is
@@ -1923,10 +1870,7 @@ $A$ along $w$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:transfer_map, lem:ldp_observable_transfer_products,
-        lem:ldp_observable_transfer_surjective, lem:ldp_two_window_trace,
-        lem:ldp_hermitian_observables, lem:ldp_finite_size_correction,
-        lem:ldp_vandermonde_window, thm:wielandt_proposition_three}
+    \uses{def:transfer_map,lem:ldp_observable_transfer_products,lem:ldp_observable_transfer_surjective,lem:ldp_two_window_trace,lem:ldp_hermitian_observables,lem:ldp_finite_size_correction,lem:ldp_vandermonde_window,thm:wielandt_proposition_three}
     With the inserted transfer maps $\E_X$ defined before
     Lemma~\ref{lem:ldp_observable_transfer_surjective}, and for operators
     $X,Y$ on consecutive blocks,
@@ -2061,7 +2005,7 @@ $A$ along $w$.
     \lean{MPSTensor.eventually_one_half_lt_infidelity_of_isNormal,
         MPSTensor.eventually_one_half_lt_infidelity_of_isNormalTensor}
     \leanok
-    \uses{def:qc_local_circuit, def:correlation_length}
+    \uses{def:qc_local_circuit,def:correlation_length}
     Let $A$ be normal with correlation length $\xi>0$. Here
     $\xi=-1/\log\lvert\lambda_2/\lambda_1\rvert$, where $\lambda_1$ is an
     eigenvalue of $\E_A$ of largest modulus and $\lambda_2$ is an eigenvalue of
@@ -2074,9 +2018,7 @@ $A$ along $w$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_decaying_correlations, lem:ldp_expectation_overlap,
-        thm:wielandt_proposition_three, lem:ldp_window_averages,
-        thm:ldp_depth_lower_bound_gauge, lem:ldp_normal_gauge_reduction}
+    \uses{thm:ldp_decaying_correlations,lem:ldp_expectation_overlap,thm:wielandt_proposition_three,lem:ldp_window_averages,thm:ldp_depth_lower_bound_gauge,lem:ldp_normal_gauge_reduction}
     We may assume that $A$ is in the gauge (\ref{eq:ldp_normal_gauge}). Since
     $A$ is normal, $\E_A$ is strongly irreducible
     (Lemma~\ref{thm:wielandt_proposition_three}), so its spectral radius
@@ -2230,8 +2172,7 @@ $A$ along $w$.
         MPSTensor.exists_norm_sub_inner_smul_add_le_div_sqrt,
         MPSPreparation.isGraphSeparated_window}
     \leanok
-    \uses{lem:ldp_two_window_trace, lem:ldp_finite_size_correction,
-        lem:qc_light_cone_correlations}
+    \uses{lem:ldp_two_window_trace,lem:ldp_finite_size_correction,lem:qc_light_cone_correlations}
     Let $A$ be in the gauge (\ref{eq:ldp_normal_gauge}), with the products of
     $L$ matrices spanning $\MN{D}$, and let $\lvert\lambda_2\rvert<r<1$ and
     $M\ge0$. For an operator $X$ on $(\C^d)^{\otimes w}$ let $X^{(k)}$ act on
@@ -2287,7 +2228,7 @@ $A$ along $w$.
         MPSTensor.mpvExpectation_centred_pair,
         MPSPreparation.sum_norm_inner_div_le_of_overlap}
     \leanok
-    \uses{def:qc_local_circuit, def:correlation_length}
+    \uses{def:qc_local_circuit,def:correlation_length}
     Let $A$ be normal and in the gauge (\ref{eq:ldp_normal_gauge}), let $L\ge1$
     be a length such that the products of $L$ matrices of $A$ span $\MN{D}$,
     and let $\lambda_2\neq1$ be an eigenvalue of $\E_A$ of largest modulus
@@ -2312,8 +2253,7 @@ $A$ along $w$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_decaying_correlations, lem:ldp_expectation_overlap,
-        lem:ldp_window_averages, lem:qc_light_cone_correlations}
+    \uses{thm:ldp_decaying_correlations,lem:ldp_expectation_overlap,lem:ldp_window_averages,lem:qc_light_cone_correlations}
     Part (1) is the argument of the proof of
     Theorem~\ref{thm:ldp_depth_lower_bound} from its second paragraph on, with $s'\le s_0+2T+L+2$,
     $\Delta\le(s_0+2L+4)(T+1)$ and $n\ge N/(2\Delta)$. Squaring
@@ -2338,9 +2278,7 @@ $A$ along $w$.
         MPSTensor.normalizedMPVState_eq_of_gaugeEquiv,
         MPSTensor.norm_inner_normalizedMPVState_smul}
     \leanok
-    \uses{def:normal, thm:cpsv_normal_tp_gauge,
-        thm:normalized_normal_strongly_irreducible,
-        thm:cpsv_normal_eventually_injective, thm:gauge_invariance_normal}
+    \uses{def:normal,thm:cpsv_normal_tp_gauge,thm:normalized_normal_strongly_irreducible,thm:cpsv_normal_eventually_injective,thm:gauge_invariance_normal}
     Let the products of some fixed number of matrices of $A$ span $\MN{D}$, and
     let $\lambda_1$ be an eigenvalue of $\E_A$ of largest modulus. Then
     $\lambda_1\ne0$, and there are $\zeta\ne0$, an invertible $X$ and $L\ge1$
@@ -2391,8 +2329,7 @@ $A$ along $w$.
     \lean{MPSTensor.exists_log_le_of_infidelity_le_one_half_of_isNormal,
         MPSTensor.exists_mul_log_le_of_infidelity_le_one_half_of_isNormal}
     \leanok
-    \uses{def:qc_local_circuit, def:correlation_length,
-        thm:ldp_depth_lower_bound}
+    \uses{def:qc_local_circuit,def:correlation_length,thm:ldp_depth_lower_bound}
     Let $A$ and $\xi=-1/\log\lvert\lambda_2/\lambda_1\rvert>0$ be as in
     Theorem~\ref{thm:ldp_depth_lower_bound}.
     \begin{enumerate}
@@ -2414,7 +2351,7 @@ $A$ along $w$.
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_depth_lower_bound_gauge, lem:ldp_normal_gauge_reduction}
+    \uses{thm:ldp_depth_lower_bound_gauge,lem:ldp_normal_gauge_reduction}
     By Lemma~\ref{lem:ldp_normal_gauge_reduction}, $A$ may be replaced by a
     tensor in the gauge (\ref{eq:ldp_normal_gauge}); this changes
     $\ket{\phi_N}$ by a phase and divides the eigenvalues of $\E_A$ by
@@ -2433,8 +2370,7 @@ $A$ along $w$.
     \label{cor:ldp_depth_theta_log}
     \lean{MPSTensor.exists_depth_isTheta_log}
     \leanok
-    \uses{def:qc_local_circuit, def:correlation_length,
-        thm:ldp_depth_lower_bound}
+    \uses{def:qc_local_circuit,def:correlation_length,thm:ldp_depth_lower_bound}
     Let $A$ and $\xi$ be as in Theorem~\ref{thm:ldp_depth_lower_bound}, and
     fix $0<\varepsilon\le1/2$. There are $a>0$, $c$, $C$ and $N_0$ such that
     for every $N\ge N_0$:
@@ -2450,7 +2386,7 @@ $A$ along $w$.
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_depth_upper_bound, thm:ldp_depth_lower_bound_constant}
+    \uses{thm:ldp_depth_upper_bound,thm:ldp_depth_lower_bound_constant}
     For (1), Theorem~\ref{thm:ldp_depth_upper_bound} gives depth at most
     $c_0\ln(N/\varepsilon)$ for $N\ge N_0$, and for $N\ge2$,
     $\ln(N/\varepsilon)=\ln N+\ln(1/\varepsilon)

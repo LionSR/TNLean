@@ -17,7 +17,7 @@ This is the open-boundary support step for SCP10, Theorem 5.4.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
-open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
+open TNLean.Network.DependentBondNetwork
 
 variable {Vertex Edge G : Type*} [Group G] [Fintype G]
 variable [Fintype Vertex] [Fintype Edge] [DecidableEq Vertex] [DecidableEq Edge]
@@ -76,8 +76,8 @@ theorem exists_openBondCoefficients_of_slices
     ∃ c : ((e : Edge) → OpenBondLabel (G := G) D e) → ℂ,
       ψ = ∑ p, c p • matrixBondProduct tail head D (fun e ↦ openBondGenerator D U C e (p e)) := by
   have hsupport : bondRegrouping tail head D ψ ∈
-      (dependentPhysicalProductFamilyMap (openBondMatrix D U C)).range := by
-    apply (mem_range_dependentPhysicalProductFamilyMap_iff _ _).mpr
+      (Matrix.piKronecker (openBondMatrix D U C)).mulVecLin.range := by
+    apply (Matrix.mem_range_mulVecLin_piKronecker_iff _ _).mpr
     intro e τ
     by_cases he : e ∈ C
     · rw [openBondMatrix_range_eq_top D U C e he]
@@ -90,8 +90,8 @@ theorem exists_openBondCoefficients_of_slices
   simp_rw [map_smul]
   rw [← hc]
   funext β
-  simp only [dependentPhysicalProductFamilyMap_apply, Finset.sum_apply, Pi.smul_apply,
-    smul_eq_mul, bondRegrouping_matrixBondProduct, openBondMatrix]
+  simp only [Matrix.mulVecLin_apply, Matrix.piKronecker_mulVec_apply, Finset.sum_apply,
+    Pi.smul_apply, smul_eq_mul, bondRegrouping_matrixBondProduct, openBondMatrix]
   exact Finset.sum_congr rfl fun _ _ ↦ mul_comm _ _
 
 end TNLean.PEPS.DependentBondNetwork

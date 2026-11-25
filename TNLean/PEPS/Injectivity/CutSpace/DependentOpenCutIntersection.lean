@@ -22,7 +22,7 @@ Source: SCP10, arXiv:1001.3807, Theorem 5.4.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
-open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
+open TNLean.Network.DependentBondNetwork
 
 variable {Vertex Edge G : Type*} [Group G] [Fintype G]
 variable [Fintype Vertex] [Fintype Edge] [DecidableEq Vertex] [DecidableEq Edge]
@@ -65,7 +65,7 @@ theorem cutSpace_mono
 theorem map_cutSpace {Out : Vertex → Type*} [∀ v, Fintype (Phys v)]
     (F : (v : Vertex) → Matrix (Out v) (Phys v) ℂ)
     (A : (v : Vertex) → LocalConfig tail head D v → Phys v → ℂ) (C : Finset Edge) :
-    (cutSpace tail head D A C).map (dependentPhysicalProductFamilyMap F) =
+    (cutSpace tail head D A C).map (Matrix.piKronecker F).mulVecLin =
       cutSpace tail head D (physicalMapSite tail head D F A) C := by
   change (cutMap tail head D A C).range.map _ = _
   rw [← LinearMap.range_comp]

@@ -81,11 +81,6 @@ LOWER_LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("sites", (*sorted(SITE_MODULES_IN_CIRCUIT),)),
     ("dynamics", (*sorted(DYNAMICS_MODULES_IN_CIRCUIT),)),
     ("circuit", ("TNLean.Circuit",)),
-    (
-        "party",
-        ("TNLean.Lattice.PartyCircuit", "TNLean.Lattice.Compression", "TNLean.Lattice.Sheet"),
-    ),
-    ("hamiltonian", ("TNLean.Lattice",)),
     ("cellular", ("TNLean.QCA", "TNLean.QICLeanInterface")),
 )
 TENSOR_NETWORK_LAYERS: tuple[str, ...] = (
@@ -160,16 +155,14 @@ def _below(layer: str) -> frozenset[str]:
     return frozenset(found)
 
 
-# The layers each layer may import, besides itself.  Circuits and Hamiltonians
-# are siblings above the site layer: neither imports the other.
+# The layers each layer may import, besides itself.  Circuits and dynamics are
+# siblings above the site layer: neither imports the other.
 ALLOWED: dict[str, frozenset[str]] = {
     "algebra": frozenset(),
     "sites": frozenset({"algebra"}),
     "dynamics": frozenset({"algebra", "sites"}),
     "circuit": frozenset({"algebra", "sites"}),
-    "hamiltonian": frozenset({"algebra", "sites", "dynamics"}),
-    "party": frozenset({"algebra", "sites", "circuit"}),
-    "cellular": frozenset({"algebra", "sites", "dynamics", "circuit", "hamiltonian", "party"}),
+    "cellular": frozenset({"algebra", "sites", "dynamics", "circuit"}),
     **{
         layer: _below(layer) | frozenset(name for name, _ in LOWER_LAYERS)
         for layer in TENSOR_NETWORK_LAYERS

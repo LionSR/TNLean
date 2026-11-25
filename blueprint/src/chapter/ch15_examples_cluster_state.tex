@@ -142,7 +142,7 @@ representative.
         MPSTensor.clusterTensor_sameMPV_clusterTensorRMP,
         MPSTensor.clusterBlocked_gaugeEquiv_clusterBlockedRMP}
     \leanok
-    \uses{def:cluster_tensor_review, def:cluster_tensor, def:gauge_equiv}
+    \uses{def:cluster_tensor_review,def:cluster_tensor,def:gauge_equiv}
     The tensor of Definition~\ref{def:cluster_tensor_review} is the transpose
     of the tensor of Definition~\ref{def:cluster_tensor}, and the two are
     gauge equivalent: with
@@ -164,9 +164,7 @@ representative.
         MPSTensor.clusterBlockedRMP_hasStringOrder,
         MPSTensor.clusterBlockedRMP_isZCL}
     \leanok
-    \uses{lem:cluster_review_gauge, thm:cluster_not_injective, thm:cluster_normal,
-        thm:cluster_z2z2_symmetric, def:cluster_omega, thm:cluster_nontrivial_spt,
-        thm:cluster_string_order, thm:cluster_zcl}
+    \uses{lem:cluster_review_gauge,thm:cluster_not_injective,thm:cluster_normal,thm:cluster_z2z2_symmetric,def:cluster_omega,thm:cluster_nontrivial_spt,thm:cluster_string_order,thm:cluster_zcl}
     The tensor of Definition~\ref{def:cluster_tensor_review} is not injective,
     its length-$2$ blocking is injective, and so it is normal. The length-$2$
     blocked tensor is on-site symmetric under the $\Z_2 \times \Z_2$ action of
@@ -183,10 +181,7 @@ representative.
 
 \begin{proof}
     \leanok
-    \uses{lem:cluster_review_gauge, thm:cluster_not_injective, thm:cluster_normal,
-        thm:cluster_z2z2_symmetric, thm:cluster_gauge_anticomm,
-        thm:has_string_order_of_symmetric_injective, thm:cluster_string_order,
-        thm:cluster_zcl}
+    \uses{lem:cluster_review_gauge,thm:cluster_not_injective,thm:cluster_normal,thm:cluster_z2z2_symmetric,thm:cluster_gauge_anticomm,thm:has_string_order_of_symmetric_injective,thm:cluster_string_order,thm:cluster_zcl}
     Each property is invariant under the gauge equivalence of
     Lemma~\ref{lem:cluster_review_gauge} and holds for the transposed
     representative by Lemmas~\ref{thm:cluster_not_injective},
@@ -204,7 +199,7 @@ representative.
 \begin{lemma}[Cluster-state tensor is not injective]\label{thm:cluster_not_injective}
     \lean{MPSTensor.cluster_not_isInjective}
     \leanok
-    \uses{def:cluster_tensor, def:injective}
+    \uses{def:cluster_tensor,def:injective}
     The cluster-state tensor is not injective:
     $\spn_{\C}\{A^0, A^1\} = \spn_{\C}\{\ketbra{+}{0}, \ketbra{-}{1}\}$
     has dimension~$2$, not $\dim \MN{2} = 4$.
@@ -223,7 +218,7 @@ representative.
     \lean{MPSTensor.cluster_isNBlkInjective_two,
         MPSTensor.clusterBlocked_isInjective}
     \leanok
-    \uses{def:cluster_tensor, def:injective}
+    \uses{def:cluster_tensor,def:injective}
     Although the cluster-state tensor is not injective at a single site, its
     length-$2$ blocking is injective: the four length-$2$ products span
     $\MN{2}$. In particular, the cluster-state tensor is normal.
@@ -251,7 +246,7 @@ representative.
 \begin{lemma}[$\Z_2 \times \Z_2$ on-site symmetry of the blocked cluster-state tensor]\label{thm:cluster_z2z2_symmetric}
     \lean{MPSTensor.cluster_isOnSiteSymmetric_Z2Z2}
     \leanok
-    \uses{def:cluster_tensor, def:on_site_symmetric}
+    \uses{def:cluster_tensor,def:on_site_symmetric}
     The length-$2$ blocked cluster-state tensor is on-site symmetric
     under $\Z_2 \times \Z_2$. The two generators act on the
     $4$-dimensional blocked physical space $(\C^2)^{\otimes 2}$ by
@@ -282,7 +277,7 @@ representative.
 \begin{lemma}[Cluster-state commutator phase]\label{lem:cluster_comm_phase_neg_one}
     \lean{MPSTensor.cluster_commPhase_eq_neg_one}
     \leanok
-    \uses{def:cluster_omega, def:comm_phase}
+    \uses{def:cluster_omega,def:comm_phase}
     The commutator phase of the cluster-state factor system on the two generators
     is $-1$.
 \end{lemma}
@@ -290,7 +285,7 @@ representative.
 \begin{lemma}[The cluster-state factor system is a $2$-cocycle]\label{thm:cluster_omega_cocycle}
     \lean{MPSTensor.clusterOmega_isCocycle}
     \leanok
-    \uses{def:is_cocycle, def:cluster_omega}
+    \uses{def:is_cocycle,def:cluster_omega}
     The cluster-state factor system is a genuine $2$-cocycle, being the factor
     system of an explicit projective representation, so it represents an element
     of $H^2(\Z_2 \times \Z_2, \mathrm{U}(1))$.
@@ -299,7 +294,7 @@ representative.
 \begin{lemma}[The cluster-state $\Z_2 \times \Z_2$ phase is non-trivial]\label{thm:cluster_nontrivial_spt}
     \lean{MPSTensor.cluster_isNontrivialSPT}
     \leanok
-    \uses{def:nontrivial_class, thm:nontrivial_of_comm_phase, lem:cluster_comm_phase_neg_one}
+    \uses{def:nontrivial_class,thm:nontrivial_of_comm_phase,lem:cluster_comm_phase_neg_one}
     The cluster-state factor system (Lemma~\ref{thm:cluster_omega_cocycle}),
     built from the anticommuting gauges $\sigma_z$ and $\sigma_x$
     (Lemma~\ref{thm:cluster_gauge_anticomm}), is not a coboundary: its
@@ -312,7 +307,7 @@ representative.
     \label{thm:cluster_twist_intertwine}
     \lean{MPSTensor.clusterBlocked_twist_intertwine}
     \leanok
-    \uses{thm:cluster_z2z2_symmetric, def:cluster_omega}
+    \uses{thm:cluster_z2z2_symmetric,def:cluster_omega}
     Let $u$ be the on-site $\Z_2\times\Z_2$ action of
     Lemma~\ref{thm:cluster_z2z2_symmetric} and let $X$ be the projective
     representation with factor system of Definition~\ref{def:cluster_omega} whose
@@ -336,7 +331,7 @@ representative.
     \label{thm:cluster_spt_fixed_point}
     \lean{MPSTensor.clusterSPTUnitary, MPSTensor.clusterBlocked_eq_sum_sptFixedPointTensor, MPSTensor.clusterSPTUnitary_mul_conjTranspose, MPSTensor.clusterZ2Z2Action_mul_clusterSPTUnitary, MPSTensor.isNontrivialClass_of_clusterSPTFixedPoint}
     \leanok
-    \uses{def:spt_fixed_point_tensor, def:cluster_tensor}
+    \uses{def:spt_fixed_point_tensor,def:cluster_tensor}
     Let $B$ be the SPT fixed-point tensor of the projective representation of
     $\Z_2\times\Z_2$ by $\sigma_z$ and $\sigma_x$.  The length-$2$ blocked
     cluster-state tensor satisfies $A^i=\sum_jV_{ij}B^j$ for a unitary $V$ on the
@@ -349,7 +344,7 @@ representative.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:spt_fixed_point_class, thm:cluster_nontrivial_spt, thm:spt_fixed_point_transfer, thm:cluster_twist_intertwine}
+    \uses{thm:spt_fixed_point_class,thm:cluster_nontrivial_spt,thm:spt_fixed_point_transfer,thm:cluster_twist_intertwine}
     The matrix $V_{i,(a,b)}=\sqrt2\,(A^i)_{ab}$ is unitary because the four
     blocked letters are orthogonal with $\tr(A^iA^{j\dagger})=\tfrac12\delta_{ij}$.
     Both tensors realize the symmetry $g$ with the same virtual gauge, so
@@ -371,7 +366,7 @@ representative.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:spt_entanglement_spectrum_even, thm:cluster_normal, thm:cluster_gauge_anticomm, thm:cluster_twist_intertwine}
+    \uses{thm:spt_entanglement_spectrum_even,thm:cluster_normal,thm:cluster_gauge_anticomm,thm:cluster_twist_intertwine}
     Because the blocked tensor is injective with $\E(\Id)=\Id$ and the two
     generators of $\Z_2\times\Z_2$ act by unitary permutation matrices with
     anticommuting virtual gauges $\sigma_z$ and $\sigma_x$,
@@ -382,7 +377,7 @@ representative.
 \begin{lemma}[Virtual-boundary nondecay for the cluster symmetry]\label{thm:cluster_string_order}
     \lean{MPSTensor.cluster_hasStringOrder}
     \leanok
-    \uses{def:has_string_order, def:cluster_tensor}
+    \uses{def:has_string_order,def:cluster_tensor}
     For every element $g$ of $\Z_2 \times \Z_2$, the length-$2$ blocked
     cluster-state tensor has virtual-boundary nondecay in the sense of
     Definition~\ref{def:has_string_order} for the twist by $g$, including the
@@ -392,7 +387,7 @@ representative.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:has_string_order_of_symmetric_injective, thm:cluster_z2z2_symmetric, rem:cluster_injective_blocked}
+    \uses{thm:has_string_order_of_symmetric_injective,thm:cluster_z2z2_symmetric,rem:cluster_injective_blocked}
     The blocked tensor is injective (Remark~\ref{rem:cluster_injective_blocked})
     and on-site symmetric under $\Z_2 \times \Z_2$
     (Lemma~\ref{thm:cluster_z2z2_symmetric}), and each group element acts by a
@@ -411,7 +406,7 @@ representative.
     \lean{MPSTensor.clusterBlocked_transferMap_idempotent,
         MPSTensor.clusterBlocked_transferMap_apply}
     \leanok
-    \uses{def:cluster_tensor, def:transfer_map}
+    \uses{def:cluster_tensor,def:transfer_map}
     The length-$2$ blocked cluster transfer map satisfies $\E_A^2 = \E_A$. In
     closed form, it sends every $X$ to the scalar $(X_{00} + X_{11})/2$ times
     the identity, so its image is one-dimensional.
@@ -428,7 +423,7 @@ representative.
 \begin{lemma}[Cluster zero correlation length]\label{thm:cluster_zcl}
     \lean{MPSTensor.clusterBlocked_isZCL}
     \leanok
-    \uses{def:is_zcl, thm:cluster_blocked_idempotent, thm:zcl_iff_idempotent_transfer}
+    \uses{def:is_zcl,thm:cluster_blocked_idempotent,thm:zcl_iff_idempotent_transfer}
     The length-$2$ blocked cluster tensor has zero correlation length: its
     idempotent transfer map (Lemma~\ref{thm:cluster_blocked_idempotent}) gives
     correlations independent of the separation. Like the GHZ state, and unlike
@@ -438,7 +433,7 @@ representative.
 
 \begin{proof}
     \leanok
-    \uses{thm:zcl_iff_idempotent_transfer, thm:cluster_blocked_idempotent}
+    \uses{thm:zcl_iff_idempotent_transfer,thm:cluster_blocked_idempotent}
     By Theorem~\ref{thm:zcl_iff_idempotent_transfer}, transfer-map idempotence
     is equivalent to zero correlation length, so the idempotence of the blocked
     cluster transfer map yields the claim.

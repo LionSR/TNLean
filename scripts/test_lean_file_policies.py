@@ -100,12 +100,11 @@ class ImportLayerPolicyTests(unittest.TestCase):
     def test_layers_are_assigned_from_the_bottom_up(self) -> None:
         self.assertEqual(layers.layer_of("TNLean.Algebra.FinKronecker"), "algebra")
         self.assertEqual(layers.layer_of("TNLean.Circuit.LocalCircuit"), "circuit")
-        self.assertEqual(layers.layer_of("TNLean.Lattice.PartyCircuit.PartyWord"), "party")
-        self.assertEqual(layers.layer_of("TNLean.Lattice.StateSpace"), "hamiltonian")
+        self.assertEqual(layers.layer_of("TNLean.QCA.LocalAlgebra.Basic"), "cellular")
         self.assertEqual(layers.layer_of("TNLean.Network.Party.PartyNetwork"), "Network")
         self.assertIn("Network", layers.ALLOWED["PEPS/Graph"])
         self.assertIn("Network", layers.ALLOWED["MPS/Tensor"])
-        self.assertNotIn("Network", layers.ALLOWED["party"])
+        self.assertNotIn("Network", layers.ALLOWED["circuit"])
         self.assertIsNone(layers.layer_of("TNLean.MPS.Defs"))
 
     def test_upward_and_sideways_imports_are_violations(self) -> None:
@@ -113,25 +112,25 @@ class ImportLayerPolicyTests(unittest.TestCase):
             "TNLean.Algebra.A": "import TNLean.Circuit.RegionSplit\ntheorem a : True := trivial\n",
             "TNLean.Circuit.RegionSplit": "import TNLean.Algebra.A\ndef e := 0\n",
             "TNLean.Circuit.LocalCircuit": (
-                "import TNLean.Circuit.RegionSplit\nimport TNLean.Lattice.StateSpace\n"
+                "import TNLean.Circuit.RegionSplit\nimport TNLean.QCA.StateSpace\n"
                 "def c := 0\n"
             ),
-            "TNLean.Lattice.StateSpace": "import TNLean.MPS.Defs\ndef h := 0\n",
-            "TNLean.MPS.Defs": "import TNLean.Lattice.StateSpace\ndef t := 0\n",
+            "TNLean.QCA.StateSpace": "import TNLean.MPS.Defs\ndef h := 0\n",
+            "TNLean.MPS.Defs": "import TNLean.QCA.StateSpace\ndef t := 0\n",
         }
         self.assertEqual(
             layers.violations(sources),
             {
                 "TNLean.Algebra.A -> TNLean.Circuit.RegionSplit",
-                "TNLean.Circuit.LocalCircuit -> TNLean.Lattice.StateSpace",
-                "TNLean.Lattice.StateSpace -> TNLean.MPS.Defs",
+                "TNLean.Circuit.LocalCircuit -> TNLean.QCA.StateSpace",
+                "TNLean.QCA.StateSpace -> TNLean.MPS.Defs",
             },
         )
 
     def test_import_only_aggregators_are_exempt(self) -> None:
         sources = {
-            "TNLean.Lattice": "/- generated -/\nimport TNLean.Lattice.PartyCircuit\n",
-            "TNLean.Lattice.PartyCircuit": "import TNLean.Lattice.PartyCircuit.PartyWord\n",
+            "TNLean.QCA": "/- generated -/\nimport TNLean.QCA.LocalAlgebra\n",
+            "TNLean.QCA.LocalAlgebra": "import TNLean.QCA.LocalAlgebra.Basic\n",
         }
         self.assertEqual(layers.violations(sources), set())
 
@@ -177,16 +176,16 @@ class ImportLayerPolicyTests(unittest.TestCase):
             layers.violations(sources), {"TNLean.Circuit.LocalCircuit -> TNLean.MPS.Defs"}
         )
 
-    def test_party_layer_may_import_circuits_but_not_hamiltonians(self) -> None:
+    def test_cellular_layer_may_import_circuits_but_not_networks(self) -> None:
         sources = {
-            "TNLean.Lattice.PartyCircuit.Example": (
-                "import TNLean.Circuit.LocalCircuit\nimport TNLean.Lattice.StateSpace\n"
+            "TNLean.QCA.Example": (
+                "import TNLean.Circuit.LocalCircuit\nimport TNLean.Network.Party.PartyNetwork\n"
                 "def p := 0\n"
             ),
         }
         self.assertEqual(
             layers.violations(sources),
-            {"TNLean.Lattice.PartyCircuit.Example -> TNLean.Lattice.StateSpace"},
+            {"TNLean.QCA.Example -> TNLean.Network.Party.PartyNetwork"},
         )
 
     def test_subdirectory_orders_are_enforced(self) -> None:
@@ -276,7 +275,7 @@ class MutualDirectoryPolicyTests(unittest.TestCase):
         self.assertEqual(layers.directory_of("TNLean.PEPS.AreaLaw.Geometry.CellFans"), "PEPS/AreaLaw")
         self.assertEqual(layers.directory_of("TNLean.MPS.Defs"), "MPS")
         self.assertEqual(layers.directory_of("TNLean.Circuit.Gates.Givens"), "Circuit")
-        self.assertEqual(layers.directory_of("TNLean.Lattice.Sheet.SwapCorrection"), "Lattice")
+        self.assertEqual(layers.directory_of("TNLean.QCA.LocalAlgebra.Basic"), "QCA")
         self.assertIsNone(layers.directory_of("TNLean.MPS"))
 
     def test_only_pairs_with_imports_in_both_directions_are_found(self) -> None:

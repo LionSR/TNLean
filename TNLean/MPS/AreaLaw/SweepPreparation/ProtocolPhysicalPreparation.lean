@@ -16,7 +16,7 @@ import QICLean.ManyBody.Hamiltonian.GroundSpace
 The width constant, polynomial dimension bound and length cutoff are chosen
 before the chain, Hamiltonian and ground state. The actual
 local circuits are obtained from the physical information estimates and are
-then composed with the constructed private initialization and terminal word.
+then composed with the constructed private initialization and terminal regrouping.
 No circuit family, information estimate, output or resource bound is supplied
 by the physical caller. The complete constructed circuit retains its derived
 stage support and the three-party bound of the prescribed participant table.
@@ -42,7 +42,8 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet ContinuousLinearMap
+open Matrix QuantumCircuit QuantumCircuit.Party
+open ManyBody (Config)
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
 
@@ -129,49 +130,39 @@ Source: Part II, `con:sweep`, `prop:sweep` and proof, lines 330–396, with the
 physical density consequence at lines 579–585. -/
 theorem exists_preparation_of_gappedGroundState
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
-    ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 1 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
-      ∀ (L : ℕ) (hsize : L₀ ≤ L),
+    ∃ (D K : ℝ) (s L₀ : ℕ) (_ : 1 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
+      ∀ (L : ℕ), L₀ ≤ L →
         let w := ⌈D * Real.log (L : ℝ)⌉₊
-        let hL : 0 < L := Nat.lt_of_lt_of_le Nat.zero_lt_one (hL₀.trans hsize)
         ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
           (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        let Fs := initialFrames L w
-        let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
-        let H := fun p ↦ framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p)
-        let rs := terminalRawOrder L w
-        let hn := terminalRawOrder_nodup L w
-        let hr := mem_terminalRawOrder (L := L) (w := w)
-        let R := terminalRegrouping (q := q) rs hn hr
-        let hT := stackRegs_terminalFrames (q := q) L w
-        let A : Mem (privateLayout L w q) ≃ₗᵢ[ℂ]
-            EuclideanSpace ℂ (AuxiliarySite L w → Fin q) :=
-          groupIso (auxiliaryOwner L w) Finset.univ.toList
-            (List.Nodup.getEquivOfForallMemList _ (Finset.nodup_toList _) (by simp))
-        letI := A.symm.toLinearEquiv.finiteDimensional
-        ∃ hx : ∀ p, ‖framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)‖ = 1,
-          ∃ C : OriginalCircuit (ProductInput.wholePartyLayout H)
-              (familyPhysicalOutputLayout (physicalDimension L w q)
-                (physicalOrder L w) (privateLayout L w q)),
-            let X := ProductInput.ofAllParties H
-              (fun p ↦ framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)) hx
-            let Ψ := C.eval X.vector
-            let V := familyLabelledPhysicalReadout (physicalDimension L w q)
-              (physicalOrder L w) (Finset.nodup_toList _) (by simp [physicalOrder])
-              (privateLayout L w q) Ψ
-            let Ψraw := (Layout.memCongr hT).symm (R.symm Ψ)
+        ∃ φ : ∀ p, EuclideanSpace ℂ
+            (stackSystem (Sheet.system q) (initialFrames L w) (fun _ ↦ Unit) p),
+          (∀ p, ‖φ p‖ = 1) ∧
+          (WithLp.toLp 2 (productVector fun p x ↦ WithLp.ofLp (φ p) x) :
+            EuclideanSpace ℂ (Config (stackSystem (Sheet.system q) (initialFrames L w)
+              fun _ ↦ Unit))) = framesVec (fun S ↦ S.refVec Ω) (initialFrames L w) ∧
+          ∃ C : OriginalCircuit (stackSystem (Sheet.system q) (initialFrames L w) fun _ ↦ Unit)
+              (physicalSystem (physicalDimension L w q) (privateSystem L w q)),
+            let Ψ := toEuclideanLin C.op
+              (WithLp.toLp 2 (productVector fun p x ↦ WithLp.ofLp (φ p) x))
+            let V := toEuclideanLin
+              (physicalReadout (physicalDimension L w q) (privateSystem L w q)) Ψ
+            let Ψraw := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+              (Equiv.piCongrRight (terminalPartyEquiv L w q))).symm
+                ((terminalRegrouping L w q).symm Ψ)
             let ε := (sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ))
-            (∀ p, C.participationCount p ≤ 40) ∧
+            (∀ p, C.participation p ≤ 40) ∧
               C.nonprivateCount ≤ sweepOperationCount L w ∧
               C.IsSourceBounded 1 ∧ C.IsExpansionBounded 1 1 ∧ C.IsMonomialBounded 1 ∧
               ‖Ψ‖ ≤ 1 ∧ ‖auxiliaryReference L w q Ω‖ = 1 ∧
               ‖terminalStackReadout L w Ψraw -
-                Matrix.euclideanTensorVector Ω (auxiliaryReference L w q Ω)‖ ≤ ε ∧
-              Matrix.rectangularTraceNorm
-                (Matrix.partialTraceRight (Matrix.euclideanOuterProduct V V) -
-                  Matrix.reindex (mainConfigurationEquiv L w q) (mainConfigurationEquiv L w q)
-                    (Matrix.euclideanOuterProduct Ω Ω)) ≤ 2 * ε ∧
+                euclideanTensorVector Ω (auxiliaryReference L w q Ω)‖ ≤ ε ∧
+              rectangularTraceNorm
+                (partialTraceRight (euclideanOuterProduct V V) -
+                  reindex (mainConfigurationEquiv L w q) (mainConfigurationEquiv L w q)
+                    (euclideanOuterProduct Ω Ω)) ≤ 2 * ε ∧
               (∀ g : C.nonprivateLocations,
                 ∃ k : Fin (stageCount L w), ∃ j : Fin 18,
                   (↑(C.participants g) : Set (Party L w)) ⊆ stageParticipants k j) ∧
@@ -186,12 +177,12 @@ theorem exists_preparation_of_gappedGroundState
               (∀ p : Party L w,
                 (physicalDimension L w q p : ℝ) ≤ K * (L : ℝ) ^ s) ∧
               ‖terminalStackReadout L w Ψraw -
-                Matrix.euclideanTensorVector Ω (auxiliaryReference L w q Ω)‖ ≤
+                euclideanTensorVector Ω (auxiliaryReference L w q Ω)‖ ≤
                   26 * (L : ℝ) ^ (-11 : ℤ) ∧
-              Matrix.rectangularTraceNorm
-                (Matrix.partialTraceRight (Matrix.euclideanOuterProduct V V) -
-                  Matrix.reindex (mainConfigurationEquiv L w q) (mainConfigurationEquiv L w q)
-                    (Matrix.euclideanOuterProduct Ω Ω)) ≤ 52 * (L : ℝ) ^ (-11 : ℤ) ∧
+              rectangularTraceNorm
+                (partialTraceRight (euclideanOuterProduct V V) -
+                  reindex (mainConfigurationEquiv L w q) (mainConfigurationEquiv L w q)
+                    (euclideanOuterProduct Ω Ω)) ≤ 52 * (L : ℝ) ^ (-11 : ℤ) ∧
               (∀ g : C.nonprivateLocations, (C.participants g).card ≤ 3) ∧
               1 ≤ w ∧ 3 * (20 * w) ≤ L := by
   classical
@@ -205,10 +196,7 @@ theorem exists_preparation_of_gappedGroundState
   have hK : 0 < (q : ℝ) ^ 80 :=
     pow_pos (by exact_mod_cast (show 0 < q by omega)) 80
   refine ⟨D, (q : ℝ) ^ 80, ⌈80 * D * Real.log (q : ℝ)⌉₊, L₀, hL₀, hD, hK, ?_⟩
-  intro L hsize
-  dsimp only
-  intro h hh hhJ Ω E₀ hΩ hgap hspan
-  let w := ⌈D * Real.log (L : ℝ)⌉₊
+  intro L hsize w h hh hhJ Ω E₀ hΩ hgap hspan
   have hL : 0 < L := Nat.lt_of_lt_of_le Nat.zero_lt_one (hL₀.trans hsize)
   have hwidthCut : max 120 ⌈Real.logPowThreshold (60 * D) (1 / 2) 1 1⌉₊ ≤ L :=
     (le_max_right _ _).trans hsize
@@ -221,29 +209,14 @@ theorem exists_preparation_of_gappedGroundState
   have hfamily := hphysical L ((le_max_left _ _).trans hsize)
     h hh hhJ Ω E₀ hΩ hgap hspan w hw hwidth
   choose c hc using hfamily
-  let Fs := initialFrames L w
-  let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
-  let H := fun p ↦ framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p)
-  let rs := terminalRawOrder L w
-  let hn := terminalRawOrder_nodup L w
-  let hr := mem_terminalRawOrder (L := L) (w := w)
-  let R := terminalRegrouping (q := q) rs hn hr
-  let hT := stackRegs_terminalFrames (q := q) L w
-  let A : Mem (privateLayout L w q) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (AuxiliarySite L w → Fin q) :=
-    groupIso (auxiliaryOwner L w) Finset.univ.toList
-      (List.Nodup.getEquivOfForallMemList _ (Finset.nodup_toList _) (by simp))
-  let := A.symm.toLinearEquiv.finiteDimensional
-  obtain ⟨hx, C, hpart, hcount, hsource, hexp, hmono, hnorm, hXi, hsplit,
+  obtain ⟨φ, hφ, hφv, C, hpart, hcount, hsource, hexp, hmono, hnorm, hXi, hsplit,
       hdensity, hsupport, harity, hlocality⟩ :=
     exists_preparation_of_local_circuits c Ω hc hL hΩ
-  let X := ProductInput.ofAllParties H
-    (fun p ↦ framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)) hx
-  let Ψ := C.eval X.vector
-  let V := familyLabelledPhysicalReadout (physicalDimension L w q)
-    (physicalOrder L w) (Finset.nodup_toList _) (by simp [physicalOrder])
-    (privateLayout L w q) Ψ
-  let Ψraw := (Layout.memCongr hT).symm (R.symm Ψ)
+  let Ψ := toEuclideanLin C.op (WithLp.toLp 2 (productVector fun p x ↦ WithLp.ofLp (φ p) x))
+  let V := toEuclideanLin
+    (physicalReadout (physicalDimension L w q) (privateSystem L w q)) Ψ
+  let Ψraw := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+    (Equiv.piCongrRight (terminalPartyEquiv L w q))).symm ((terminalRegrouping L w q).symm Ψ)
   have hparty := card_party_le L w hw hgeometry
   have htwenty := twenty_mul_stageCount_le L w hw hgeometry
   have hoperation : sweepOperationCount L w ≤ 20 * stageCount L w := by
@@ -264,12 +237,12 @@ theorem exists_preparation_of_gappedGroundState
   have herror := sweep_error_le (by omega : 1 ≤ L) (hoperation.trans htwenty)
   have hsplit' :
       ‖terminalStackReadout L w Ψraw -
-        Matrix.euclideanTensorVector Ω (auxiliaryReference L w q Ω)‖ ≤
+        euclideanTensorVector Ω (auxiliaryReference L w q Ω)‖ ≤
           26 * (L : ℝ) ^ (-11 : ℤ) := hsplit.trans herror
-  have hdensity' : Matrix.rectangularTraceNorm
-      (Matrix.partialTraceRight (Matrix.euclideanOuterProduct V V) -
-        Matrix.reindex (mainConfigurationEquiv L w q) (mainConfigurationEquiv L w q)
-          (Matrix.euclideanOuterProduct Ω Ω)) ≤ 52 * (L : ℝ) ^ (-11 : ℤ) := by
+  have hdensity' : rectangularTraceNorm
+      (partialTraceRight (euclideanOuterProduct V V) -
+        reindex (mainConfigurationEquiv L w q) (mainConfigurationEquiv L w q)
+          (euclideanOuterProduct Ω Ω)) ≤ 52 * (L : ℝ) ^ (-11 : ℤ) := by
     calc
       _ ≤ 2 * ((sweepOperationCount L w : ℝ) * (4 * (L : ℝ) ^ (-12 : ℤ))) := hdensity
       _ ≤ 2 * (26 * (L : ℝ) ^ (-11 : ℤ)) :=
@@ -278,8 +251,14 @@ theorem exists_preparation_of_gappedGroundState
   have harity3 (g : C.nonprivateLocations) : (C.participants g).card ≤ 3 := by
     obtain ⟨k, j, hsub⟩ := hsupport g
     exact card_le_three_of_subset_stageParticipants _ k j hsub
-  exact ⟨hx, C, hpart, hcount, hsource, hexp, hmono, hnorm, hXi, hsplit,
-    hdensity, hsupport, harity, hlocality, hparty, hcount20, hcount2L, hdim,
-    hpoly, hsplit', hdensity', harity3, hw, hgeometry⟩
+  refine ⟨φ, hφ, hφv, C, ?_⟩
+  intro Ψ' V' Ψraw' ε'
+  refine ⟨hpart, hcount, hsource, hexp, hmono, hnorm, hXi, ?_,
+    ?_, hsupport, harity, hlocality, hparty, hcount20, hcount2L, hdim,
+    hpoly, ?_, ?_, harity3, hw, hgeometry⟩
+  · exact hsplit
+  · exact hdensity
+  · exact hsplit'
+  · exact hdensity'
 
 end TNLean.MPS.AreaLaw.ChainSweep

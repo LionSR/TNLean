@@ -57,7 +57,7 @@ noncomputable section
 open scoped BigOperators
 
 namespace TNLean.PEPS.Approximation
-open TNLean.Lattice.Compression
+open TNLean.Network
 
 
 variable {V : Type*} [Fintype V] [LinearOrder V]

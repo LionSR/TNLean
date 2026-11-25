@@ -114,8 +114,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \label{thm:peps_partial_averaging_injective}
     \lean{TNLean.PEPS.DependentBondNetwork.isGInjective_partialAveragingSite}
     \leanok
-    \uses{def:peps_partial_averaging_site,
-        def:peps_g_injective}
+    \uses{def:peps_partial_averaging_site,def:peps_g_injective}
     At every vertex $v$, $P_v^f$ is $G$-injective for $\rho_v^f$.
 \end{lemma}
 \begin{proof}\leanok
@@ -316,8 +315,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \label{thm:peps_open_product_in_cut}
     \lean{TNLean.PEPS.DependentBondNetwork.averagingProjector_openBondProduct_mem_cutSpace}
     \leanok
-    \uses{def:peps_partial_averaging_site,
-        def:peps_open_bond_generators}
+    \uses{def:peps_partial_averaging_site,def:peps_open_bond_generators}
     Suppose that every $p:\mathcal E\to G$ admits $q:\mathcal V\to G$
     such that
     \begin{align}
@@ -330,9 +328,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     $\mathcal P^f b_{(Q_e^C(a_e))_e}\in\mathcal S_{A^f,C}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_average_bond_product,
-        thm:peps_partial_vertex_gauge,
-        thm:peps_network_in_open_cut}
+    \uses{thm:peps_average_bond_product,thm:peps_partial_vertex_gauge,thm:peps_network_in_open_cut}
     Set $p_e=g$ if $a_e=[g]$ and $p_e=1$ if $a_e=[x,y]$, and choose $q$
     satisfying (\ref{eq:peps_open_remove_labels}). By
     Lemmas~\ref{thm:peps_average_bond_product}
@@ -359,10 +355,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_partial_uncut_support,
-        thm:peps_open_bond_expansion,
-        thm:peps_open_product_in_cut,
-        thm:peps_cut_space_mono}
+    \uses{thm:peps_partial_uncut_support,thm:peps_open_bond_expansion,thm:peps_open_product_in_cut,thm:peps_cut_space_mono}
     If $\psi\in\bigcap_{i\in I}\mathcal S_{A^f,C_i}$, then for each $e\notin C_0$
     choosing $i$ with $e\notin C_i$ gives $S_{e,\tau}\psi\in\operatorname{im}F_e$
     by Lemma~\ref{thm:peps_partial_uncut_support}, so
@@ -384,8 +377,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \label{thm:peps_open_cut_intersection}
     \lean{TNLean.PEPS.DependentBondNetwork.iInf_cutSpace_eq_of_remove_labels}
     \leanok
-    \uses{def:peps_partial_incident_representation,
-        def:peps_g_injective}
+    \uses{def:peps_partial_incident_representation,def:peps_g_injective}
     Suppose every $Y_v$ is finite and $T_v$ is $G$-injective for $\rho_v^f$.
     Under the hypotheses of Lemma~\ref{thm:peps_partial_open_cut_intersection}
     on $(C_i)_{i\in I}$ and $C_0$,
@@ -395,9 +387,7 @@ steps of \cite[Theorem~5.4]{Schuch2010PEPS}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_g_injective_left_inverse,
-        thm:peps_partial_open_cut_intersection,
-        thm:peps_cut_space_physical_image}
+    \uses{thm:peps_g_injective_left_inverse,thm:peps_partial_open_cut_intersection,thm:peps_cut_space_physical_image}
     Set $\mathcal T=\bigotimes_vT_v$, choose $L_v$ with $L_vT_v=P_v^f$ by
     Lemma~\ref{thm:peps_g_injective_left_inverse}, and put
     $\mathcal L=\bigotimes_vL_v$. Since $L_vT_v=P_v^f$ and $T_vP_v^f=T_v$,
@@ -465,8 +455,7 @@ outside $\Omega$ as part of one joint boundary.
     $\psi=\widehat\Gamma_{A,\Omega,C}(M)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_lifted_cut,
-        def:peps_outside_physical_config}
+    \uses{def:peps_lifted_cut,def:peps_outside_physical_config}
     Since $(\sigma[v\leftarrow s])_{\Omega^c}=\sigma_{\Omega^c}$ by
     Definition~\ref{def:peps_outside_physical_config}, separating the factor at
     $v\in\Omega$ in (\ref{eq:peps_lifted_cut}) gives
@@ -521,16 +510,14 @@ outside $\Omega$ as part of one joint boundary.
     \lean{TNLean.PEPS.DependentBondNetwork.cutSpace_le_liftedCutSpace,
         TNLean.PEPS.DependentBondNetwork.cutSpace_le_range_product}
     \leanok
-    \uses{def:peps_lifted_cut,
-        def:peps_outside_cut_config}
+    \uses{def:peps_lifted_cut,def:peps_outside_cut_config}
     If $C$ exposes $\Omega^c$, then
     $\mathcal S_{A,C}\subseteq\widehat{\mathcal S}_{A,\Omega,C}$.
     For every cut $C$,
     $\mathcal S_{A,C}\subseteq\operatorname{im}(\bigotimes_vT_v)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_outside_cut_config,
-        def:peps_lifted_cut}
+    \uses{def:peps_outside_cut_config,def:peps_lifted_cut}
     Setting $\widetilde M(\kappa,\tau)=M(\kappa)\prod_{v\notin\Omega}A_v(o_v(\kappa),\tau_v)$
     and using $o_v(r_C\beta)=(R\beta)_v$ in (\ref{eq:peps_lifted_cut}) gives
     $\widehat\Gamma_{A,\Omega,C}(\widetilde M)=\mathcal C_{A,C}(M)$.
@@ -571,9 +558,7 @@ outside $\Omega$ as part of one joint boundary.
     \label{def:peps_reconstructed_cut_boundary}
     \lean{TNLean.PEPS.DependentBondNetwork.reconstructedCutBoundary}
     \leanok
-    \uses{def:peps_cut_replace_outside,
-        def:peps_outside_cut_config,
-        def:peps_lifted_cut}
+    \uses{def:peps_cut_replace_outside,def:peps_outside_cut_config,def:peps_lifted_cut}
     Suppose every $Y_v$ is finite and $C$ exposes $\Omega^c$. For
     $L_v:\C^{Y_v}\to\C^{\mathcal X_v}$ ($v\notin\Omega$) and a lifted boundary
     $M$, define
@@ -591,8 +576,7 @@ outside $\Omega$ as part of one joint boundary.
     \label{thm:peps_reconstructed_boundary_contraction}
     \lean{TNLean.PEPS.DependentBondNetwork.cutMap_reconstructedCutBoundary}
     \leanok
-    \uses{def:peps_reconstructed_cut_boundary,
-        def:peps_replace_outside_physical}
+    \uses{def:peps_reconstructed_cut_boundary,def:peps_replace_outside_physical}
     Under the hypotheses of
     Definition~\ref{def:peps_reconstructed_cut_boundary}, put
     $\psi=\widehat\Gamma_{A,\Omega,C}(M)$ and
@@ -606,9 +590,7 @@ outside $\Omega$ as part of one joint boundary.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_reconstructed_cut_boundary,
-        def:peps_lifted_cut,
-        def:peps_replace_outside_physical}
+    \uses{def:peps_reconstructed_cut_boundary,def:peps_lifted_cut,def:peps_replace_outside_physical}
     Expand $\mathcal C_{A,C}(K_{L,M})(\sigma)$ via
     (\ref{eq:peps_open_cut_notation}) and (\ref{eq:peps_reconstructed_boundary})
     over $(\beta,\xi,\tau)$ and swap $((R\beta)_v)_{v\notin\Omega}\leftrightarrow\xi$.
@@ -629,8 +611,7 @@ outside $\Omega$ as part of one joint boundary.
     \lean{TNLean.PEPS.DependentBondNetwork.cutSpace_eq_liftedCutSpace_inf_range_product,
         TNLean.PEPS.DependentBondNetwork.liftedCutSpace_inf_range_product_le_cutSpace}
     \leanok
-    \uses{def:peps_lifted_cut,
-        def:peps_outside_cut_config}
+    \uses{def:peps_lifted_cut,def:peps_outside_cut_config}
     Suppose every $Y_v$ is finite and $C$ exposes $\Omega^c$. With
     $\mathcal H_A=\operatorname{im}(\bigotimes_vT_v)$,
     \begin{align}
@@ -640,8 +621,7 @@ outside $\Omega$ as part of one joint boundary.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_full_cut_in_lifted_support,
-        thm:peps_reconstructed_boundary_contraction}
+    \uses{thm:peps_full_cut_in_lifted_support,thm:peps_reconstructed_boundary_contraction}
     Lemma~\ref{thm:peps_full_cut_in_lifted_support} gives
     $\mathcal S_{A,C}\subseteq\widehat{\mathcal S}_{A,\Omega,C}\cap\mathcal H_A$.
     Conversely, for $\psi=\widehat\Gamma_{A,\Omega,C}(M)\in\mathcal H_A$,
@@ -662,8 +642,7 @@ outside $\Omega$ as part of one joint boundary.
         TNLean.PEPS.DependentBondNetwork.liftedCutSpace_eq_cutSpace_of_cover_or_surjective,
         TNLean.PEPS.DependentBondNetwork.liftedCutSpace_inf_eq_cutSpace_inf}
     \leanok
-    \uses{def:peps_lifted_cut,
-        def:peps_outside_cut_config}
+    \uses{def:peps_lifted_cut,def:peps_outside_cut_config}
     Suppose every $Y_v$ is finite, each $C_i$ exposes $\Omega_i^c$, and every
     $v\in\mathcal V$ satisfies $v\in\bigcup_{i\in I}\Omega_i$ or
     $\operatorname{im}T_v=\C^{Y_v}$. Then
@@ -683,9 +662,7 @@ outside $\Omega$ as part of one joint boundary.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_lifted_cover_support,
-        thm:peps_lifted_cut_reconstruction,
-        thm:peps_full_cut_in_lifted_support}
+    \uses{thm:peps_lifted_cover_support,thm:peps_lifted_cut_reconstruction,thm:peps_full_cut_in_lifted_support}
     Combine (\ref{eq:peps_lifted_cover_support}) and
     (\ref{eq:peps_lifted_reconstruction}) with
     Lemma~\ref{thm:peps_full_cut_in_lifted_support}; the one- and two-region
@@ -696,8 +673,7 @@ outside $\Omega$ as part of one joint boundary.
     \label{thm:peps_lifted_canonical_intersection}
     \lean{TNLean.PEPS.DependentBondNetwork.iInf_liftedCutSpace_eq_map_representationAveragingSite}
     \leanok
-    \uses{def:peps_lifted_cut,
-        def:peps_g_injective}
+    \uses{def:peps_lifted_cut,def:peps_g_injective}
     Let $G$ be finite, suppose every $Y_v$ is finite, and let $T_v$ be
     $G$-injective for $\rho_v$ with averaging tensors $A^0$. For a nonempty
     family $(\Omega_i,C_i)_{i\in I}$ satisfying the hypotheses of
@@ -710,8 +686,7 @@ outside $\Omega$ as part of one joint boundary.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_g_injective_left_inverse,
-        thm:peps_lifted_cut_intersection}
+    \uses{thm:peps_g_injective_left_inverse,thm:peps_lifted_cut_intersection}
     Choose $L_v$ with $L_vT_v=P_v$ by
     Lemma~\ref{thm:peps_g_injective_left_inverse} and set
     $\mathcal L=\bigotimes_vL_v$. Since $L_vT_v=P_v$ and $T_vP_v=T_v$,
@@ -726,8 +701,7 @@ outside $\Omega$ as part of one joint boundary.
     \label{thm:peps_lifted_common_inverse}
     \lean{TNLean.PEPS.DependentBondNetwork.exists_liftedCutSpace_common_localInverse}
     \leanok
-    \uses{def:peps_lifted_cut,
-        def:peps_g_injective}
+    \uses{def:peps_lifted_cut,def:peps_g_injective}
     Under the hypotheses of
     Lemma~\ref{thm:peps_lifted_canonical_intersection}, there exists
     $L_v:\C^{Y_v}\to\C^{\mathcal X_v}$ with $\mathcal L=\bigotimes_vL_v$ such
@@ -743,8 +717,7 @@ outside $\Omega$ as part of one joint boundary.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_g_injective_left_inverse,
-        thm:peps_lifted_cut_intersection}
+    \uses{thm:peps_g_injective_left_inverse,thm:peps_lifted_cut_intersection}
     Choosing $L_v$ with $L_vT_v=P_v$ by
     Lemma~\ref{thm:peps_g_injective_left_inverse} gives
     (\ref{eq:peps_lifted_inverse_boundary}). For

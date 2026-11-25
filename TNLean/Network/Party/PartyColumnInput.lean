@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.PartialTrace.ProductReferenceDensityError
-import TNLean.Lattice.Compression.ColumnSelection
+import QICLean.Analysis.TraceNorm.ColumnSelection
 import TNLean.Network.Party.PartyNetwork
 
 /-!
@@ -21,10 +21,10 @@ the square is in `TNLean.PEPS.Approximation.PartyColumnRouting`.
 
 ## Main results
 
-* `TNLean.Lattice.Compression.PartyNetwork.operatorCoeff`,
-  `TNLean.Lattice.Compression.PartyNetwork.fixInput`: the operator of an operator party
+* `TNLean.Network.PartyNetwork.operatorCoeff`,
+  `TNLean.Network.PartyNetwork.fixInput`: the operator of an operator party
   network and its input-fixed ket network.
-* `TNLean.Lattice.Compression.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le`:
+* `TNLean.Network.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le`:
   Lemma 8.1 on the party network.
 
 ## References
@@ -38,7 +38,7 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
-namespace TNLean.Lattice.Compression
+namespace TNLean.Network
 
 namespace PartyNetwork
 
@@ -99,17 +99,11 @@ theorem exists_fixInput_of_rectangularTraceNorm_sub_pure_le [Fintype V] [Decidab
     ∃ z : V → Fin q, ∃ ψ : EuclideanSpace ℂ (V → Fin q),
       (∀ τ, ψ τ = (N.fixInput site z).coeff site τ) ∧ ψ ≠ 0 ∧
       ∃ θ : ℝ, ‖((‖ψ‖ : ℂ)⁻¹) • ψ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
-  classical
-  let e := Fintype.equivFin (V → Fin q)
-  have htrace : Matrix.traceNorm (Matrix.reindex e e
-      (N.operatorCoeff site - Matrix.vecMulVec (⇑Ω) (star ⇑Ω))) ≤ η := by
-    rw [← Matrix.rectangularTraceNorm_square, Matrix.rectangularTraceNorm_reindex]
-    exact hσ
   obtain ⟨z, hz, θ, hθ⟩ :=
-    exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ htrace hη
+    Matrix.exists_column_ne_zero_of_rectangularTraceNorm_sub_pure_le _ Ω hΩ hσ hη
   refine ⟨z, _, fun τ ↦ ?_, hz, θ, hθ⟩
   rw [Matrix.toEuclideanLin_single_one_apply, coeff_fixInput]
 
 end PartyNetwork
 
-end TNLean.Lattice.Compression
+end TNLean.Network

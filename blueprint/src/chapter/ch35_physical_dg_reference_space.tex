@@ -84,8 +84,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:physical_dg_normalized_mps_approximation,
-        thm:mps_basis_reference_subspace}
+    \uses{thm:physical_dg_normalized_mps_approximation,thm:mps_basis_reference_subspace}
     Choose an actual orthonormal basis $u_1,\ldots,u_r$ of $G$.
     Apply the global approximation theorem at
     $\delta_{\mathrm{basis}}=\varepsilon/(2r)$.
@@ -515,9 +514,7 @@
     whole exterior of $[p,r)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:canonical_interval_sampling_operation,
-        lem:borel_actual_adjacent_interval_merge,
-        lem:borel_canonical_sampled_interval_interleaved_parent}
+    \uses{def:canonical_interval_sampling_operation,lem:borel_actual_adjacent_interval_merge,lem:borel_canonical_sampled_interval_interleaved_parent}
     Induct on the interval length, simultaneously with the dependence
     assertion below. A short interval is the constant full local space.
     At a long interval, the child projections are jointly Borel by the
@@ -597,8 +594,7 @@ probabilities remains a separate argument.
     asserted here.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:balanced_interval_merge_bounds,lem:balanced_interval_merge_count,
-        lem:balanced_interval_failure_ancestry}
+    \uses{thm:balanced_interval_merge_bounds,lem:balanced_interval_merge_count,lem:balanced_interval_failure_ancestry}
     Each listed interval has valid endpoint coordinates by
     Lemma~\ref{thm:balanced_interval_merge_bounds}.
     Integrate each coordinate-section bound against the remaining
@@ -632,8 +628,7 @@ finite product of samples; the same estimate applies.
     long-node success estimate enters this assertion.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:balanced_interval_failure_ancestry,def:balanced_interval_merge_list,
-        def:guarded_interval_failure}
+    \uses{lem:balanced_interval_failure_ancestry,def:balanced_interval_merge_list,def:guarded_interval_failure}
     Fix $\omega$. Strengthen the property on each interval by setting
     \begin{align}
         Q_{a,b}(S) & =P_{a,b}(S)\ \land
@@ -668,8 +663,7 @@ finite product of samples; the same estimate applies.
     No union over other overlapping intervals is taken.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:balanced_interval_failure_probability,
-        lem:balanced_interval_joint_failure_ancestry}
+    \uses{thm:balanced_interval_failure_probability,lem:balanced_interval_joint_failure_ancestry}
     The preceding deterministic ancestry result contains this joint
     failure in the same union of guarded events. Apply monotonicity
     of outer measure and the guarded-union estimate.
@@ -725,8 +719,7 @@ finite product of samples; the same estimate applies.
     parent of those same two child spaces, with choice $u$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:canonical_interval_sampling_tree_coordinate_dependence,
-        def:canonical_interval_sampling_operation,def:balanced_interval_spaces}
+    \uses{lem:canonical_interval_sampling_tree_coordinate_dependence,def:canonical_interval_sampling_operation,def:balanced_interval_spaces}
     Each child is strictly shorter than the parent, so its retained space
     is unchanged by the coordinate replacement. Unfold the defining
     parent operation and use these two equalities. Its coordinate is now
@@ -772,8 +765,7 @@ finite product of samples; the same estimate applies.
     an explicit analytic hypothesis.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:canonical_interval_sampling_parent_section,
-        lem:canonical_interval_sampling_tree_coordinate_dependence,def:guarded_interval_failure}
+    \uses{lem:canonical_interval_sampling_parent_section,lem:canonical_interval_sampling_tree_coordinate_dependence,def:guarded_interval_failure}
     Replacing the longer parent coordinate leaves each shorter child
     space equal to its baseline value. The updated parent is the same
     canonical sampled merge of $S_1,S_2$, evaluated at $v$.
@@ -810,9 +802,7 @@ finite product of samples; the same estimate applies.
     and short-leaf viability are derived.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:borel_guarded_canonical_interval_failure,thm:canonical_guarded_sampling_section,
-        thm:balanced_interval_failure_probability,
-        lem:balanced_interval_joint_failure_ancestry}
+    \uses{lem:borel_guarded_canonical_interval_failure,thm:canonical_guarded_sampling_section,thm:balanced_interval_failure_probability,lem:balanced_interval_joint_failure_ancestry}
     The actual constructed projections make each listed guarded event
     Borel. The fixed-child estimates and
     Lemma~\ref{thm:canonical_guarded_sampling_section} bound every true
@@ -1342,8 +1332,7 @@ recursive root remains a separate step.
     or running-time claim is added.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:interval_trimming_reference,thm:sampled_interval_witness_tree,
-        thm:dg_accuracy_scalar_parameters}
+    \uses{thm:interval_trimming_reference,thm:sampled_interval_witness_tree,thm:dg_accuracy_scalar_parameters}
     The physical improving families do not use the trimming threshold.
     Choose them first. For fixed child spaces their measurable sampling
     success event gives the same improved image. If the threshold is
@@ -1424,8 +1413,7 @@ recursive root remains a separate step.
     recurrence is recorded in~\cite{gap:alvv16_final_filter_gain}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:physical_dg_mps_reference_subspace,
-        lem:physical_dg_finite_filter_trim,lem:full_interval_trim_native_mps}
+    \uses{thm:physical_dg_mps_reference_subspace,lem:physical_dg_finite_filter_trim,lem:full_interval_trim_native_mps}
     The chosen reference and threshold give
     $\varepsilon_{\rm ref}\le c^2\rho/1024$ and
     $\xi\sqrt{(L-1)b^2}\le c\rho/48$. The actual normalized filter
@@ -1471,8 +1459,7 @@ recursive root remains a separate step.
     the printed final iteration count, or a running-time bound.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_dg_interval_tree_common_radius,
-        lem:physical_dg_automatic_refinement}
+    \uses{lem:physical_dg_interval_tree_common_radius,lem:physical_dg_automatic_refinement}
     Choose the actual improving families before the accuracy and
     threshold. The automatic threshold is positive and at most
     $\xi_{\rm tree}$, so the common-threshold recursive construction
@@ -1600,8 +1587,7 @@ in~\cite{gap:alvv16_approximation_parameters}.
     \label{thm:physical_dg_constant_node_tree}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_constant_node_tree}
     \leanok
-    \uses{lem:physical_dg_sampled_node_power,thm:sampled_interval_witness_tree,
-        thm:dg_accuracy_scalar_parameters,thm:alvv_unique_ground_state_tree}
+    \uses{lem:physical_dg_sampled_node_power,thm:sampled_interval_witness_tree,thm:dg_accuracy_scalar_parameters,thm:alvv_unique_ground_state_tree}
     Retain the physical hypotheses, the universal constants and the automatic
     parameters $g,m,v,\ell,D$ of
     Theorem~\ref{thm:physical_dg_interval_tree_parameters}. The actual parent
@@ -1635,8 +1621,7 @@ in~\cite{gap:alvv16_approximation_parameters}.
     in~\cite{gap:alvv16_approximation_parameters}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_dg_sampled_node_power,thm:sampled_interval_witness_tree,
-        thm:dg_accuracy_scalar_parameters,thm:alvv_unique_ground_state_tree}
+    \uses{lem:physical_dg_sampled_node_power,thm:sampled_interval_witness_tree,thm:dg_accuracy_scalar_parameters,thm:alvv_unique_ground_state_tree}
     The automatic parameters give all scalar conditions of
     Lemma~\ref{lem:physical_dg_sampled_node_power}, as in
     Theorem~\ref{thm:physical_dg_interval_tree_parameters}. Since

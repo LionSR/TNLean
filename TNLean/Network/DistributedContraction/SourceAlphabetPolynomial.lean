@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.PartyCircuit.SourceCircuitLocations
+import QICLean.Circuit.Party.Source.Locations
 import TNLean.Network.DistributedContraction.DistributedOperatorContraction
 
 /-!
@@ -30,16 +30,16 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice.Compression
-variable {P : Type} [DecidableEq P] {a b : Layout P}
+namespace QuantumCircuit.Party.SourceCircuit
+open TNLean.Network
+variable {P : Type} [DecidableEq P] {X Y : P → Type}
 
 open Classical in
 /-- The actual star and sample alphabets have uniformly polynomial cardinality
 when actual gate branch counts and the sample count do. The exact per-link
 cardinality is used, so no integral upper bound on a global branch count is
 introduced. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588. -/
-theorem card_sourceNetworkAlphabet_le_of_power_bounds (w : SourceCircuit a b)
+theorem card_sourceNetworkAlphabet_le_of_power_bounds (w : SourceCircuit X Y)
     (gates : Finset w.gateLocations) (root : w.gateLocations → P) (k : ℕ)
     (L C_M C_k : ℝ) (u v : ℕ) (hL : 1 ≤ L) (hM0 : 0 ≤ C_M) (hk0 : 0 ≤ C_k)
     (hM : ∀ g ∈ gates, (Fintype.card (w.branchLabels g) : ℝ) ≤ C_M * L ^ u)
@@ -73,4 +73,4 @@ theorem card_sourceNetworkAlphabet_le_of_power_bounds (w : SourceCircuit a b)
         _ ≤ (C_M ^ 2 + C_k) * L ^ (max (2 * u) v) :=
           mul_le_mul_of_nonneg_right (le_add_of_nonneg_left (sq_nonneg C_M)) (by positivity)
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

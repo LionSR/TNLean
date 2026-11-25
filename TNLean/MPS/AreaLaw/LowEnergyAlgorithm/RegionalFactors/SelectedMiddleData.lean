@@ -35,9 +35,8 @@ equation H-mid-cut, lines 810–821, and Proposition 5.7, lines 1324–1333.
 
 open ManyBody (card_interval_le disjoint_interval_interval interval interval_mono mem_interval)
 
-open Matrix QuantumCircuit
+open Matrix
 open scoped BigOperators Kronecker
-open TNLean.Lattice.Sheet
 
 noncomputable section
 
@@ -99,32 +98,34 @@ private theorem interval_left_edge_inter_middle {L u v : ℕ}
   simp only [Finset.mem_inter, mem_interval, Finset.mem_singleton, Fin.ext_iff]
   omega
 
-/-- A placement along an embedding whose image lies in E factors through the
-canonical inclusion of E and gives the same actual regional operator in
-threeSplit coordinates. Supporting locality algebra for ALVV,
-arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private theorem placeAlong_into_middle_submatrix_threeSplit
+/-- A placement along an embedding whose image lies in the middle region `B \ A`
+factors through the canonical inclusion of `B \ A` and gives the same actual
+regional operator in the three-region coordinates of `A ⊆ B`. Supporting
+locality algebra for ALVV, arXiv:1602.08828v2, Proposition 5.7,
+lines 1324–1333. -/
+private theorem placeAlong_into_middle_submatrix_threeCut
     {V κ : Type*} [Fintype V] [DecidableEq V] [Fintype κ] {q : ℕ}
-    (T E : Finset V) (hTE : Disjoint T E)
-    (w : κ ↪ V) (hE : ∀ j, w j ∈ E)
+    {A B : Finset V} (hAB : A ⊆ B)
+    (w : κ ↪ V) (hE : ∀ j, w j ∈ B \ A)
     (M : Matrix (κ → Fin q) (κ → Fin q) ℂ) :
     (ManyBody.placeAlong (X := fun _ ↦ Fin q) w M).submatrix
-        (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
-      ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ
+        (ManyBody.threeCutEquiv (fun _ ↦ Fin q) hAB).symm
+        (ManyBody.threeCutEquiv (fun _ ↦ Fin q) hAB).symm =
+      ((1 : Matrix (A → Fin q) (A → Fin q) ℂ) ⊗ₖ
         ManyBody.placeAlong (X := fun _ ↦ Fin q)
-          ⟨fun j ↦ (⟨w j, hE j⟩ : E), fun _ _ h ↦ w.injective (congrArg Subtype.val h)⟩ M) ⊗ₖ
-          (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) := by
-  let wE : κ ↪ E :=
-    ⟨fun j ↦ (⟨w j, hE j⟩ : E), fun _ _ h ↦ w.injective (congrArg Subtype.val h)⟩
-  have hw : wE.trans (Function.Embedding.subtype (· ∈ E)) = w :=
+          ⟨fun j ↦ (⟨w j, hE j⟩ : ↥(B \ A)),
+            fun _ _ h ↦ w.injective (congrArg Subtype.val h)⟩ M) ⊗ₖ
+          (1 : Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ) := by
+  let wE : κ ↪ ↥(B \ A) :=
+    ⟨fun j ↦ (⟨w j, hE j⟩ : ↥(B \ A)), fun _ _ h ↦ w.injective (congrArg Subtype.val h)⟩
+  have hw : wE.trans (Function.Embedding.subtype (· ∈ B \ A)) = w :=
     Function.Embedding.ext fun _ ↦ rfl
-  have hplace : ManyBody.place (X := fun _ ↦ Fin q) E
+  have hplace : ManyBody.place (X := fun _ ↦ Fin q) (B \ A)
       (ManyBody.placeAlong (X := fun _ ↦ Fin q) wE M) =
         ManyBody.placeAlong (X := fun _ ↦ Fin q) w M := by
     rw [← ManyBody.placeAlong_subtype, ManyBody.placeAlong_placeAlong, hw]
   rw [← hplace]
-  exact place_submatrix_threeSplit T E hTE
-    (ManyBody.placeAlong (X := fun _ ↦ Fin q) wE M)
+  exact place_submatrix_threeCut hAB (ManyBody.placeAlong (X := fun _ ↦ Fin q) wE M)
 
 /-- Every operator supported at one designated site belongs to the span of the
 fixed placed one-site matrix units, indexed by `Fin (q * q)`.
@@ -202,148 +203,149 @@ private theorem mem_span_placeAlong_single_of_isSupportedOn_singleton
 
 /-- The actual left crossing retains a prescribed singleton-supported middle
 family. The site and support inclusion are geometric data, not assumptions
-on a new Schmidt decomposition. Supporting locality algebra for ALVV,
+on a new Schmidt decomposition; the middle region is `B \ A` in the three-region
+coordinates of `A ⊆ B`. Supporting locality algebra for ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
 private theorem exists_left_crossing_factors_with_fixed_middle_units
     {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
-    (T E D : Finset V) (hTE : Disjoint T E)
+    {A B : Finset V} (hAB : A ⊆ B) (D : Finset V)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
     (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)
-    (UL : Matrix ((T → Fin q) × (E → Fin q))
-      ((T → Fin q) × (E → Fin q)) ℂ)
-    (hUL : P.submatrix (threeSplit q T E hTE).symm
-        (threeSplit q T E hTE).symm =
-      UL ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ))
-    (e₀ : E)
-    (hDE : Finset.univ.filter (fun e : E ↦ e.val ∈ D) ⊆ {e₀}) :
-    let N : Fin (q * q) → Matrix (E → Fin q) (E → Fin q) ℂ := fun z ↦
+    (UL : Matrix ((A → Fin q) × (↥(B \ A) → Fin q))
+      ((A → Fin q) × (↥(B \ A) → Fin q)) ℂ)
+    (hUL : P.submatrix (ManyBody.threeCutEquiv (fun _ ↦ Fin q) hAB).symm
+        (ManyBody.threeCutEquiv (fun _ ↦ Fin q) hAB).symm =
+      UL ⊗ₖ (1 : Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ))
+    (e₀ : ↥(B \ A))
+    (hDE : Finset.univ.filter (fun e : ↥(B \ A) ↦ e.val ∈ D) ⊆ {e₀}) :
+    let N : Fin (q * q) → Matrix (↥(B \ A) → Fin q) (↥(B \ A) → Fin q) ℂ := fun z ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin q)
         ⟨fun _ : Fin 1 ↦ e₀, fun a b _ ↦ Subsingleton.elim a b⟩
         (Matrix.single
           (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).1)
           (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).2) (1 : ℂ))
-    ∃ A : Fin (q * q) → Matrix (T → Fin q) (T → Fin q) ℂ,
-      UL = ∑ z, A z ⊗ₖ N z := by
+    ∃ AL : Fin (q * q) → Matrix (A → Fin q) (A → Fin q) ℂ,
+      UL = ∑ z, AL z ⊗ₖ N z := by
   classical
   intro N
   apply Matrix.exists_left_factors_of_operatorBlock_mem_span UL N
   intro a b
   have hblock :=
-    (operatorBlock_isSupportedOn_of_threeSplit_left T E D hTE P hP UL hUL a b).mono hDE
+    (operatorBlock_isSupportedOn_of_threeCut_left hAB D P hP UL hUL a b).mono hDE
   exact mem_span_placeAlong_single_of_isSupportedOn_singleton
     e₀ (Matrix.operatorBlock UL a b) hblock
 
 /-- The actual right crossing retains the same literal singleton-unit form
-as its left, middle-region factors. The tensor association is unchanged.
+as its left, middle-region factors; the middle region is `B \ A` in the
+three-region coordinates of `A ⊆ B`. The tensor association is unchanged.
 Supporting locality algebra for ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
 private theorem exists_right_crossing_factors_with_fixed_middle_units
     {V : Type*} [DecidableEq V] {q : ℕ}
-    (T E D : Finset V) (hTE : Disjoint T E)
+    {A B : Finset V} (hAB : A ⊆ B) (D : Finset V)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
     (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)
-    (VR : Matrix ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
-      ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
-    (hVR : P.submatrix (threeSplit q T E hTE).symm
-        (threeSplit q T E hTE).symm =
-      ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
-        (Equiv.prodAssoc (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm
-        (Equiv.prodAssoc (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm)
-    (e₀ : E)
-    (hDE : Finset.univ.filter (fun e : E ↦ e.val ∈ D) ⊆ {e₀}) :
-    let N : Fin (q * q) → Matrix (E → Fin q) (E → Fin q) ℂ := fun z ↦
+    (VR : Matrix ((↥(B \ A) → Fin q) × ({v // v ∉ B} → Fin q))
+      ((↥(B \ A) → Fin q) × ({v // v ∉ B} → Fin q)) ℂ)
+    (hVR : P.submatrix (ManyBody.threeCutEquiv (fun _ ↦ Fin q) hAB).symm
+        (ManyBody.threeCutEquiv (fun _ ↦ Fin q) hAB).symm =
+      ((1 : Matrix (A → Fin q) (A → Fin q) ℂ) ⊗ₖ VR).reindex
+        (Equiv.prodAssoc (A → Fin q) (↥(B \ A) → Fin q) ({v // v ∉ B} → Fin q)).symm
+        (Equiv.prodAssoc (A → Fin q) (↥(B \ A) → Fin q) ({v // v ∉ B} → Fin q)).symm)
+    (e₀ : ↥(B \ A))
+    (hDE : Finset.univ.filter (fun e : ↥(B \ A) ↦ e.val ∈ D) ⊆ {e₀}) :
+    let N : Fin (q * q) → Matrix (↥(B \ A) → Fin q) (↥(B \ A) → Fin q) ℂ := fun z ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin q)
         ⟨fun _ : Fin 1 ↦ e₀, fun a b _ ↦ Subsingleton.elim a b⟩
         (Matrix.single
           (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).1)
           (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).2) (1 : ℂ))
-    ∃ B : Fin (q * q) →
-        Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ,
-      VR = ∑ z, N z ⊗ₖ B z := by
+    ∃ BR : Fin (q * q) →
+        Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ,
+      VR = ∑ z, N z ⊗ₖ BR z := by
   classical
   intro N
   apply Matrix.exists_right_factors_of_left_blocks_mem_span VR N
   intro a b
   have hblock :=
-    (leftBlock_isSupportedOn_of_threeSplit_right T E D hTE P hP VR hVR a b).mono hDE
+    (leftBlock_isSupportedOn_of_threeCut_right hAB D P hP VR hVR a b).mono hDE
   exact mem_span_placeAlong_single_of_isSupportedOn_singleton
-    e₀ (fun x y : E → Fin q ↦ VR (x, a) (y, b)) hblock
+    e₀ (fun x y : ↥(B \ A) → Fin q ↦ VR (x, a) (y, b)) hblock
 
 /-- Regional factors chosen for the two windows and central bulk remain valid
 when arbitrary supported exterior bulk operators are supplied afterwards.
 Every exterior component of every bulk label is overwritten, while the middle
 array and all exterior window components are retained. This is supporting
 locality algebra for ALVV, arXiv:1602.08828v2, equation `H-mid-cut`,
-lines 810–821, and Proposition 5.7, lines 1324–1333. -/
-private theorem exists_threeSplit_two_window_late_exterior
+lines 810–821, and Proposition 5.7, lines 1324–1333. The three regions are
+`A`, the middle region `B \ A` and the complement of `B`, for `A ⊆ B`. -/
+private theorem exists_threeCut_two_window_late_exterior
     {V : Type*} [Fintype V] [DecidableEq V] {q ℓ : ℕ}
-    (T E : Finset V) (hTE : Disjoint T E) (p s : Fin (2 * ℓ))
+    {A B : Finset V} (hAB : A ⊆ B) (p s : Fin (2 * ℓ))
     (WL WR : Fin (2 * ℓ) → Matrix (V → Fin q) (V → Fin q) ℂ)
     (Pmid : Matrix (V → Fin q) (V → Fin q) ℂ)
     (HL₀ : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-      Matrix (T → Fin q) (T → Fin q) ℂ)
+      Matrix (A → Fin q) (A → Fin q) ℂ)
     (HM : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-      Matrix (E → Fin q) (E → Fin q) ℂ)
+      Matrix (↥(B \ A) → Fin q) (↥(B \ A) → Fin q) ℂ)
     (HR₀ : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-      Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) :
-    let g := threeSplit q T E hTE
+      Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ) :
+    let g := ManyBody.threeCutEquiv (fun _ : V ↦ Fin q) hAB
     let F₀ : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
         Matrix (V → Fin q) (V → Fin q) ℂ :=
       Sum.elim (Sum.elim WL WR) (fun j : Fin 3 ↦ if j = 1 then Pmid else 0)
     (∀ r, r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
       (F₀ r).submatrix g.symm g.symm =
-        (HL₀ r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
-            (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
-          ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
-            (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
-          (1 : Matrix ((T → Fin q) × (E → Fin q))
-            ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR₀ r) →
+        (HL₀ r ⊗ₖ (1 : Matrix (↥(B \ A) → Fin q) (↥(B \ A) → Fin q) ℂ)) ⊗ₖ
+            (1 : Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ) +
+          ((1 : Matrix (A → Fin q) (A → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
+            (1 : Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ) +
+          (1 : Matrix ((A → Fin q) × (↥(B \ A) → Fin q))
+            ((A → Fin q) × (↥(B \ A) → Fin q)) ℂ) ⊗ₖ HR₀ r) →
     HM (Sum.inr 0) = 0 → HM (Sum.inr 2) = 0 →
     HL₀ (Sum.inr 1) = 0 → HR₀ (Sum.inr 1) = 0 →
     ∀ (PL PR : Matrix (V → Fin q) (V → Fin q) ℂ),
-      PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) T →
-      PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ((T ∪ E)ᶜ : Finset V) →
+      PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) A →
+      PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Bᶜ : Finset V) →
       let F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
           Matrix (V → Fin q) (V → Fin q) ℂ :=
         Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
       ∃ (HL : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-          Matrix (T → Fin q) (T → Fin q) ℂ)
+          Matrix (A → Fin q) (A → Fin q) ℂ)
         (HR : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-          Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ),
+          Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ),
         (∀ r, r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
           (F r).submatrix g.symm g.symm =
-            (HL r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
-                (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
-              ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
-                (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
-              (1 : Matrix ((T → Fin q) × (E → Fin q))
-                ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR r) ∧
+            (HL r ⊗ₖ (1 : Matrix (↥(B \ A) → Fin q) (↥(B \ A) → Fin q) ℂ)) ⊗ₖ
+                (1 : Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ) +
+              ((1 : Matrix (A → Fin q) (A → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
+                (1 : Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ) +
+              (1 : Matrix ((A → Fin q) × (↥(B \ A) → Fin q))
+                ((A → Fin q) × (↥(B \ A) → Fin q)) ℂ) ⊗ₖ HR r) ∧
         (∀ r : Fin (2 * ℓ) ⊕ Fin (2 * ℓ), HL (Sum.inl r) = HL₀ (Sum.inl r)) ∧
         (∀ r : Fin (2 * ℓ) ⊕ Fin (2 * ℓ), HR (Sum.inl r) = HR₀ (Sum.inl r)) ∧
         HR (Sum.inr 0) = 0 ∧ HL (Sum.inr 2) = 0 ∧
         HL (Sum.inr 1) = 0 ∧ HR (Sum.inr 1) = 0 := by
   classical
   intro g F₀ hlocal hMleft hMright hLmid hRmid PL PR hPL hPR F
-  obtain ⟨BL, hBL⟩ := exists_threeSplit_eq_kronecker_one_kronecker_one
-    (ι := V) (q := q) (T := T) (E := E) (D := T) (A := PL)
-    hTE (Finset.Subset.refl T) hPL
-  obtain ⟨BR, hBR⟩ := exists_threeSplit_eq_one_kronecker
-    (ι := V) (q := q) (T := T) (E := E)
-    (D := (T ∪ E)ᶜ) (A := PR) hTE (Finset.Subset.refl _) hPR
+  obtain ⟨BL, hBL⟩ := ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one_kronecker_one
+    hAB (Finset.Subset.refl A) hPL
+  obtain ⟨BR, hBR⟩ := ManyBody.exists_reindex_threeCutEquiv_eq_one_kronecker
+    hAB (Finset.Subset.refl _) hPR
   have hF₀mid : F₀ (Sum.inr 1) = Pmid := by
     change (if (1 : Fin 3) = 1 then Pmid else 0) = Pmid
     exact ite_eq_left rfl
   have hmid : Pmid.submatrix g.symm g.symm =
-      ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM (Sum.inr 1)) ⊗ₖ
-        (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) := by
+      ((1 : Matrix (A → Fin q) (A → Fin q) ℂ) ⊗ₖ HM (Sum.inr 1)) ⊗ₖ
+        (1 : Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ) := by
     have h := hlocal (Sum.inr 1) (by intro h; cases h) (by intro h; cases h)
     rw [hF₀mid, hLmid, hRmid] at h
     simpa only [Matrix.zero_kronecker, Matrix.kronecker_zero, zero_add, add_zero] using h
   let HL : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-      Matrix (T → Fin q) (T → Fin q) ℂ :=
+      Matrix (A → Fin q) (A → Fin q) ℂ :=
     Sum.elim (fun r ↦ HL₀ (Sum.inl r)) (fun j ↦ if j = 0 then BL else 0)
   let HR : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-      Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ :=
+      Matrix ({v // v ∉ B} → Fin q) ({v // v ∉ B} → Fin q) ℂ :=
     Sum.elim (fun r ↦ HR₀ (Sum.inl r)) (fun j ↦ if j = 2 then BR else 0)
   have hHLleft : HL (Sum.inr 0) = BL := by
     change (if (0 : Fin 3) = 0 then BL else 0) = BL
@@ -373,11 +375,13 @@ private theorem exists_threeSplit_two_window_late_exterior
     · have hj : j = 0 ∨ j = 1 ∨ j = 2 := by omega
       rcases hj with rfl | rfl | rfl
       · rw [hFleft, hHLleft, hHRleft, hMleft]
-        simpa only [Matrix.kronecker_zero, Matrix.zero_kronecker, add_zero] using hBL
+        simpa only [Matrix.reindex_apply, Matrix.kronecker_zero, Matrix.zero_kronecker,
+          add_zero] using hBL
       · rw [hFmid, hHLmid, hHRmid]
         simpa only [Matrix.zero_kronecker, Matrix.kronecker_zero, zero_add, add_zero] using hmid
       · rw [hFright, hHLright, hHRright, hMright]
-        simpa only [Matrix.zero_kronecker, Matrix.kronecker_zero, zero_add] using hBR
+        simpa only [Matrix.reindex_apply, Matrix.zero_kronecker, Matrix.kronecker_zero,
+          zero_add] using hBR
   · intro r
     rfl
   · intro r
@@ -393,16 +397,20 @@ private theorem exists_selected_middle_collar_endpoints {L a b ℓ : ℕ}
     (p s : Fin (2 * ℓ)) :
     let u := a + p.val
     let v := b + s.val
+    let T := interval L 0 (u + 1)
     let E := interval L (u + 1) (v + 1)
+    let Mid := (T ∪ E) \ T
     let Z := interval L (a + 2 * ℓ + 1) b
-    let C : Finset E := Finset.univ.filter (fun x : E ↦ x.val ∉ Z)
-    ∃ eL eR : E,
+    let C : Finset Mid := Finset.univ.filter (fun x : Mid ↦ x.val ∉ Z)
+    ∃ eL eR : Mid,
       eL.val.val = u + 1 ∧ eR.val.val = v ∧
-      Finset.univ.filter (fun x : E ↦ x.val ∈ interval L u (u + 2)) ⊆ {eL} ∧
-      Finset.univ.filter (fun x : E ↦ x.val ∈ interval L v (v + 2)) ⊆ {eR} ∧
+      Finset.univ.filter (fun x : Mid ↦ x.val ∈ interval L u (u + 2)) ⊆ {eL} ∧
+      Finset.univ.filter (fun x : Mid ↦ x.val ∈ interval L v (v + 2)) ⊆ {eR} ∧
       eL ∈ C ∧ eR ∈ C := by
   classical
-  intro u v E Z C
+  intro u v T E Mid Z C
+  have hMid : Mid = E :=
+    Finset.union_sdiff_cancel_left (disjoint_interval_interval (L := L) 0 _ _)
   have hp := p.isLt
   have hs := s.isLt
   have huv : u < v := by
@@ -413,23 +421,25 @@ private theorem exists_selected_middle_collar_endpoints {L a b ℓ : ℕ}
     omega
   let l : Fin L := ⟨u + 1, by omega⟩
   let r : Fin L := ⟨v, by omega⟩
-  have hlE : l ∈ E := by
+  have hlE : l ∈ Mid := by
+    rw [hMid]
     apply mem_interval.mpr
     change u + 1 ≤ u + 1 ∧ u + 1 < v + 1
     omega
-  have hrE : r ∈ E := by
+  have hrE : r ∈ Mid := by
+    rw [hMid]
     apply mem_interval.mpr
     change u + 1 ≤ v ∧ v < v + 1
     omega
-  let eL : E := ⟨l, hlE⟩
-  let eR : E := ⟨r, hrE⟩
-  have hpullback {D : Finset (Fin L)} (e : E) (hDE : D ∩ E = {e.val}) :
-      Finset.univ.filter (fun x : E ↦ x.val ∈ D) ⊆ {e} := by
+  let eL : Mid := ⟨l, hlE⟩
+  let eR : Mid := ⟨r, hrE⟩
+  have hpullback {D : Finset (Fin L)} (e : Mid) (hDE : D ∩ E = {e.val}) :
+      Finset.univ.filter (fun x : Mid ↦ x.val ∈ D) ⊆ {e} := by
     intro x hx
     apply Finset.mem_singleton.mpr
     apply Subtype.ext
     have hxDE : x.val ∈ D ∩ E :=
-      Finset.mem_inter.mpr ⟨(Finset.mem_filter.mp hx).2, x.property⟩
+      Finset.mem_inter.mpr ⟨(Finset.mem_filter.mp hx).2, hMid ▸ x.property⟩
     rw [hDE] at hxDE
     exact Finset.mem_singleton.mp hxDE
   have hleft : interval L u (u + 2) ∩ E = {eL.val} :=
@@ -473,30 +483,32 @@ theorem exists_physical_selected_window_fixed_middle_data
     let T := interval L 0 (a + p.val + 1)
     let E := interval L (a + p.val + 1) (b + s.val + 1)
     let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
-    let g := threeSplit q T E hTE
+    let Mid := (T ∪ E) \ T
+    let g := ManyBody.threeCutEquiv (fun _ : Fin L ↦ Fin q)
+      (Finset.subset_union_left : T ⊆ T ∪ E)
     let Z := interval L (a + 2 * ℓ + 1) b
-    let C : Finset E := Finset.univ.filter (fun x : E ↦ x.val ∉ Z)
-    let hKE : K ⊆ E := (core_and_strict_core_subset_selected_middle
-      (L := L) (a := a) (b := b) p s).1
+    let C : Finset Mid := Finset.univ.filter (fun x : Mid ↦ x.val ∉ Z)
+    let hKE : K ⊆ Mid := (core_and_strict_core_subset_selected_middle
+      (L := L) (a := a) (b := b) p s).1.trans (Finset.union_sdiff_cancel_left hTE).ge
     let ME := ManyBody.placeAlong (X := fun _ ↦ Fin q)
-      ⟨fun x : K ↦ (⟨x.val, hKE x.property⟩ : E),
+      ⟨fun x : K ↦ (⟨x.val, hKE x.property⟩ : Mid),
         fun _ _ h ↦ Subtype.ext (by simpa using congrArg Subtype.val h)⟩ M
     let Pmid := ManyBody.place (X := fun _ ↦ Fin q) K M
     let O : Finset ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) :=
       (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
-    let N := fun (e₀ : E) (z : Fin (q * q)) ↦
+    let N := fun (e₀ : Mid) (z : Fin (q * q)) ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin q)
         ⟨fun _ : Fin 1 ↦ e₀, fun a b _ ↦ Subsingleton.elim a b⟩
         (Matrix.single
           (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).1)
           (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).2) (1 : ℂ))
-    ∃ (eL eR : E)
+    ∃ (eL eR : Mid)
       (HM : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-        Matrix (E → Fin q) (E → Fin q) ℂ)
-      (UL : Matrix ((T → Fin q) × (E → Fin q))
-        ((T → Fin q) × (E → Fin q)) ℂ)
-      (VR : Matrix ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
-        ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
+        Matrix (Mid → Fin q) (Mid → Fin q) ℂ)
+      (UL : Matrix ((T → Fin q) × (Mid → Fin q))
+        ((T → Fin q) × (Mid → Fin q)) ℂ)
+      (VR : Matrix ((Mid → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+        ((Mid → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
       (AL : Fin (q * q) → Matrix (T → Fin q) (T → Fin q) ℂ)
       (BR : Fin (q * q) →
         Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ),
@@ -506,16 +518,16 @@ theorem exists_physical_selected_window_fixed_middle_data
         (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) ∧
       (WR s).submatrix g.symm g.symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
-          (Equiv.prodAssoc (T → Fin q) (E → Fin q)
+          (Equiv.prodAssoc (T → Fin q) (Mid → Fin q)
             ({v // v ∉ T ∪ E} → Fin q)).symm
-          (Equiv.prodAssoc (T → Fin q) (E → Fin q)
+          (Equiv.prodAssoc (T → Fin q) (Mid → Fin q)
             ({v // v ∉ T ∪ E} → Fin q)).symm ∧
       UL = ∑ z, AL z ⊗ₖ N eL z ∧
       VR = ∑ z, N eR z ⊗ₖ BR z ∧
       (∀ z, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (N eL z) C) ∧
       (∀ z, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (N eR z) C) ∧
       (∀ z : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → ℂ,
-        ∃ Kz : Matrix (E → Fin q) (E → Fin q) ℂ,
+        ∃ Kz : Matrix (Mid → Fin q) (Mid → Fin q) ℂ,
           (∑ i ∈ O, z i • HM i) = z (Sum.inr 1) • ME + Kz ∧
             ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Kz C) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
@@ -530,15 +542,16 @@ theorem exists_physical_selected_window_fixed_middle_data
             Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ),
           (∀ r, r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
             (F r).submatrix g.symm g.symm =
-              (HL r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
+              (HL r ⊗ₖ (1 : Matrix (Mid → Fin q) (Mid → Fin q) ℂ)) ⊗ₖ
                   (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
                 ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
                   (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
-                (1 : Matrix ((T → Fin q) × (E → Fin q))
-                  ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR r) ∧
+                (1 : Matrix ((T → Fin q) × (Mid → Fin q))
+                  ((T → Fin q) × (Mid → Fin q)) ℂ) ⊗ₖ HR r) ∧
           HL (Sum.inr 1) = 0 ∧ HR (Sum.inr 1) = 0 := by
   classical
-  intro K T E hTE g Z C hKE ME Pmid O N
+  intro K T E hTE Mid g Z C hKE ME Pmid O N
+  have hAB : T ⊆ T ∪ E := Finset.subset_union_left
   obtain ⟨eL, eR, heL, heR, hDEL, hDER, heLC, heRC⟩ :=
     exists_selected_middle_collar_endpoints hab hb p s
   let F₀ : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
@@ -581,35 +594,35 @@ theorem exists_physical_selected_window_fixed_middle_data
     exact zero_mem _
   obtain ⟨HL₀, HM, HR₀, UL, VR, hlocal₀, hUL₀, hVR₀, _hULrank, _hVRrank,
       hMleftBulk, hMrightBulk, hLmiddleZero, hRmiddleZero, hLzero, hRzero, hLsupp, hRsupp⟩ :=
-    exists_threeSplit_two_window_factors_with_collars F₀ hFleft hFright hFleftBulk hFmiddleBulk
+    exists_threeCut_two_window_factors_with_collars F₀ hFleft hFright hFleftBulk hFmiddleBulk
       hFrightBulk hab hb p s
   have hUL : (WL p).submatrix g.symm g.symm = UL ⊗ₖ
       (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) := by
     exact hUL₀
   have hVR : (WR s).submatrix g.symm g.symm =
       ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
-        (Equiv.prodAssoc (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm
-        (Equiv.prodAssoc (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm := by
+        (Equiv.prodAssoc (T → Fin q) (Mid → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm
+        (Equiv.prodAssoc (T → Fin q) (Mid → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm := by
     exact hVR₀
   have hmiddle : HM (Sum.inr 1) = ME := by
-    apply eq_of_threeSplit_middle_lift_eq T E eL
+    apply eq_of_threeCut_middle_lift_eq T (T ∪ E) eL
     have hchosen : Pmid.submatrix g.symm g.symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM (Sum.inr 1)) ⊗ₖ
           (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) := by
       have h := hlocal₀ (Sum.inr 1) (by intro h; cases h) (by intro h; cases h)
       rw [hF₀middle, hLmiddleZero, hRmiddleZero] at h
       simpa only [Matrix.zero_kronecker, Matrix.kronecker_zero, zero_add, add_zero] using h
-    have hcanonical := placeAlong_into_middle_submatrix_threeSplit T E hTE
+    have hcanonical := placeAlong_into_middle_submatrix_threeCut hAB
       (Function.Embedding.subtype (· ∈ K)) (fun x ↦ hKE x.property) M
     rw [ManyBody.placeAlong_subtype] at hcanonical
     exact hchosen.symm.trans hcanonical
   obtain ⟨AL, hAL⟩ := exists_left_crossing_factors_with_fixed_middle_units
-    T E (interval L (a + p.val) (a + p.val + 2)) hTE (WL p) (hleft p) UL hUL eL hDEL
+    hAB (interval L (a + p.val) (a + p.val + 2)) (WL p) (hleft p) UL hUL eL hDEL
   obtain ⟨BR, hBR⟩ := exists_right_crossing_factors_with_fixed_middle_units
-    T E (interval L (b + s.val) (b + s.val + 2)) hTE (WR s) (hright s) VR hVR eR hDER
-  have hNsupport (e₀ : E) (he₀ : e₀ ∈ C) (z : Fin (q * q)) :
+    hAB (interval L (b + s.val) (b + s.val + 2)) (WR s) (hright s) VR hVR eR hDER
+  have hNsupport (e₀ : Mid) (he₀ : e₀ ∈ C) (z : Fin (q * q)) :
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (N e₀ z) C := by
-    have hmem : N e₀ z ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({e₀} : Finset E) := by
+    have hmem : N e₀ z ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({e₀} : Finset Mid) := by
       refine ManyBody.supportedOperators_mono (fun x hx ↦ ?_)
         (ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin q) _ _)
       obtain ⟨i, -, rfl⟩ := Finset.mem_map.mp hx
@@ -617,7 +630,7 @@ theorem exists_physical_selected_window_fixed_middle_data
     exact ManyBody.IsSupportedOn.mono hmem
       (Finset.singleton_subset_iff.mpr he₀)
   have hweighted : ∀ z : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → ℂ,
-      ∃ Kz : Matrix (E → Fin q) (E → Fin q) ℂ,
+      ∃ Kz : Matrix (Mid → Fin q) (Mid → Fin q) ℂ,
         (∑ i ∈ O, z i • HM i) = z (Sum.inr 1) • ME + Kz ∧
           ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Kz C := by
     intro z
@@ -641,7 +654,7 @@ theorem exists_physical_selected_window_fixed_middle_data
     have hs := s.isLt
     omega
   obtain ⟨HL, HR, hlocal, _hLwindows, _hRwindows, _hRleftBulk, _hLrightBulk, hLmid, hRmid⟩ :=
-    exists_threeSplit_two_window_late_exterior T E hTE p s WL WR Pmid HL₀ HM HR₀
+    exists_threeCut_two_window_late_exterior hAB p s WL WR Pmid HL₀ HM HR₀
       hlocal₀ hMleftBulk hMrightBulk hLmiddleZero hRmiddleZero PL PR hPLT hPRU
   exact ⟨HL, HR, hlocal, hLmid, hRmid⟩
 

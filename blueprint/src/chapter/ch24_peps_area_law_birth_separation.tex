@@ -76,7 +76,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
     \label{thm:area_law_contact_angular_estimate}
     \lean{TNLean.PEPS.AreaLaw.Geometry.half_max_le_norm_sub_of_isQuarterSectorial}
     \leanok
-    \uses{thm:area_law_sup_angular_estimate, thm:area_law_quarter_sections}
+    \uses{thm:area_law_sup_angular_estimate,thm:area_law_quarter_sections}
     If $P,P'\subseteq\mathbb R^2$ are quarter-sectorial at $q$ and
     $P\cap P'\cap\{z:\|z-q\|\le1/4\}\subseteq\{q\}$, then every $x\in P$ and $y\in P'$
     with $\|x-q\|,\|y-q\|\le1/4$ satisfy
@@ -125,7 +125,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.repairNormTriangle_inter_eq_zero,
         TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_region_subset_repairNormTriangle}
     \leanok
-    \uses{def:area_law_normalized_repair_fan, thm:area_law_quarter_sections}
+    \uses{def:area_law_normalized_repair_fan,thm:area_law_quarter_sections}
     The sets $LT_s$ ($L\in\{1,2\}$) and $E_s$ (Definition~\ref{def:area_law_normalized_repair_fan})
     are compact and quarter-sectorial at every $q\in\mathbb Z^2$. For $s\ne t$,
     $T_s\cap E_t\subseteq\mathbb Z^2$, and if $s,t$ are non-consecutive then $T_s\cap T_t=\{0\}$.
@@ -176,8 +176,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.exists_mem_facetPolygon_inter_of_norm_sub_lt,
         TNLean.PEPS.AreaLaw.Geometry.facetPolygon_contact_dichotomy}
     \leanok
-    \uses{thm:area_law_belt_atoms, thm:area_law_quarter_sections,
-        thm:area_law_contact_angular_estimate}
+    \uses{thm:area_law_belt_atoms,thm:area_law_quarter_sections,thm:area_law_contact_angular_estimate}
     Call a closed half-plane $\{a x_1+b x_2\le n\}$ a belt half-plane if
     $n\in\mathbb Z$ and $(a,b)$ is one of $(\pm1,0)$, $(0,\pm1)$, or if
     $(a,b)=(\pm1,\pm1)$ and $n$ is even.
@@ -235,9 +234,7 @@ rescaled local patterns in the source's compactness argument.
         TNLean.PEPS.AreaLaw.Geometry.repairBirth_separation,
         TNLean.PEPS.AreaLaw.Geometry.exists_repairBirth_separation}
     \leanok
-    \uses{thm:area_law_normalized_fan_contacts,
-        thm:area_law_belt_polygon_separation, thm:area_law_repair_margins,
-        def:area_law_repair_children}
+    \uses{thm:area_law_normalized_fan_contacts,thm:area_law_belt_polygon_separation,thm:area_law_repair_margins,def:area_law_repair_children}
     Let $c_1=1/28$. The following holds. Let the exterior labels of
     the eight wedges be given, let $C$ be one of their maximal cyclic runs of
     equal label, and let $B_C=\bigcup_{s\in C}T_s$. Let $W_C$ be the union
@@ -308,10 +305,7 @@ rescaled local patterns in the source's compactness argument.
         TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement,
         TNLean.PEPS.AreaLaw.Geometry.exists_threshold_isRepairBirthSeparated_of_uniformRepairInductionStatement}
     \leanok
-    \uses{thm:area_law_replacement_birth_separation_local,
-        thm:area_law_star_same_label_bound,
-        def:area_law_uniform_repair_conclusion,
-        lem:area_law_repair_metric_choice}
+    \uses{thm:area_law_replacement_birth_separation_local,thm:area_law_star_same_label_bound,def:area_law_uniform_repair_conclusion,lem:area_law_repair_metric_choice}
     Assume the conclusion of the uniform repair induction of
     \cite[Section~11]{OpenAI2026AreaLaw}. There are a fixed $c_1>0$ and a
     threshold $T$ such that the following holds for every stopping scale
@@ -364,7 +358,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
         TNLean.PEPS.AreaLaw.Geometry.exists_segment_subset_beltAtom_inter,
         TNLean.PEPS.AreaLaw.Geometry.beltAtom_axis_segments}
     \leanok
-    \uses{def:area_law_normalized_repair_fan, thm:area_law_quarter_sections}
+    \uses{def:area_law_normalized_repair_fan,thm:area_law_quarter_sections}
     Every atom $A_{c,s}$ is compact, convex, and quarter-sectorial at every $q\in\mathbb Z^2$,
     and $\operatorname{int}A_{c,s}$ misses all lines of (\ref{eq:area_law_belt_arrangement}). Moreover:
     \begin{enumerate}
@@ -396,7 +390,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltAtom_dichotomy,
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy}
     \leanok
-    \uses{thm:area_law_belt_atoms, thm:area_law_belt_polygon_separation}
+    \uses{thm:area_law_belt_atoms,thm:area_law_belt_polygon_separation}
     Let $\eta=1/28$. For any two atoms $A,B$ with
     $A\cap B\subseteq\mathbb Z^2$, and all $x\in A$, $y\in B$, either
     $\|x-y\|\ge\eta$, or there is a common point $q\in A\cap B$ with
@@ -421,7 +415,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset_closure_dyadicCell,
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset_initialBirthRegion}
     \leanok
-    \uses{thm:area_law_belt_atoms, def:area_law_initial_birth_regions}
+    \uses{thm:area_law_belt_atoms,def:area_law_initial_birth_regions}
     Under normalization of a layer-$k$ belt cell to $[0,4]^2$, every fan triangle and closed
     fine cell of any layer $h$ with $\ell_h\ge\ell_k-1$ satisfies Lemma~\ref{thm:area_law_belt_atoms}(1).
     Consequently, for $C_0\ge2$ and $k\ge k_0\ge50{,}000{,}000$, if $p$ lies in the closed belt
@@ -432,10 +426,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_local_layer_indices, thm:area_law_adjacent_fine_meshes,
-        thm:area_law_primary_fine_cell_cover,
-        thm:area_law_fan_frontier_primitives, thm:area_law_cell_fan_cover,
-        thm:area_law_cell_fan_regularity}
+    \uses{thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,thm:area_law_primary_fine_cell_cover,thm:area_law_fan_frontier_primitives,thm:area_law_cell_fan_cover,thm:area_law_cell_fan_regularity}
     By Lemmas~\ref{thm:area_law_adjacent_fine_meshes} and \ref{thm:area_law_fan_frontier_primitives},
     cells and fan triangles at scale index $\ell_h\ge\ell_k-1$ have frontiers on
     (\ref{eq:area_law_belt_arrangement}). By Lemma~\ref{thm:area_law_local_layer_indices}, any $w$
@@ -456,7 +447,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
         TNLean.PEPS.AreaLaw.Geometry.mem_beltCellMarks_of_beltNormalize_eq,
         TNLean.PEPS.AreaLaw.Geometry.beltNormalize_symm_mem_beltCellMarks}
     \leanok
-    \uses{thm:area_law_belt_cell_local_atoms, def:area_law_belt_cell_marks}
+    \uses{thm:area_law_belt_cell_local_atoms,def:area_law_belt_cell_marks}
     For $C_0\ge2$ and $k\ge k_0\ge50{,}000{,}000$, let $x$ be an initial belt tile in a layer-$k$
     belt cell and $y\ne x$ an initial identifier with $\lambda(y)=\lambda(x)$. If $q\in\mathbb Z^2$
     (in cell-normalized coordinates) lies in $\tilde X_x^0$ and in an atom $B\subseteq\tilde X_y^0$,
@@ -466,9 +457,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_initial_interface_colors, thm:area_law_initial_open_disjoint,
-        thm:area_law_initial_birth_regularity, thm:area_law_fan_run_geometric_contact,
-        thm:area_law_square_frontier_side, thm:area_law_fan_own_side_contact}
+    \uses{thm:area_law_initial_interface_colors,thm:area_law_initial_open_disjoint,thm:area_law_initial_birth_regularity,thm:area_law_fan_run_geometric_contact,thm:area_law_square_frontier_side,thm:area_law_fan_own_side_contact}
     By Lemma~\ref{thm:area_law_initial_interface_colors}, $\tilde X_x^0$ and $\tilde X_y^0$ share no
     nondegenerate segment. If $\operatorname{int}X_y^0$ meets the open belt cell,
     Lemmas~\ref{thm:area_law_initial_open_disjoint} and \ref{thm:area_law_fan_run_geometric_contact}
@@ -489,8 +478,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
         TNLean.PEPS.AreaLaw.Geometry.initialBeltRun_birth_separation,
         TNLean.PEPS.AreaLaw.Geometry.exists_initialBeltRun_birth_separation}
     \leanok
-    \uses{def:area_law_initial_birth_regions, def:area_law_initial_open_regions,
-        def:area_law_belt_cell_marks}
+    \uses{def:area_law_initial_birth_regions,def:area_law_initial_open_regions,def:area_law_belt_cell_marks}
     There is $c_1>0$ with the following property. Fix an origin, a finite
     endpoint set, a width $C_0\ge2$, a lower layer $k_0\ge50{,}000{,}000$
     and arbitrary valid residues at every layer. Let $x$ be an initial belt
@@ -504,8 +492,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_belt_atom_dichotomy, thm:area_law_belt_cell_local_atoms,
-        thm:area_law_initial_belt_contacts, thm:area_law_belt_atoms}
+    \uses{thm:area_law_belt_atom_dichotomy,thm:area_law_belt_cell_local_atoms,thm:area_law_initial_belt_contacts,thm:area_law_belt_atoms}
     Put $c_1=\min(\eta/4,1/8)=1/112$ with $\eta=1/28$ from
     Lemma~\ref{thm:area_law_belt_atom_dichotomy}. If $\|p-w\|\ge u$ there is
     nothing to prove, since $u\ge u^{\rho_0}$. Otherwise the normalized points
@@ -540,9 +527,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_initial_belt_birth_separation_local,
-        thm:area_law_uniform_separated_initial_marks, thm:area_law_repair_margins,
-        thm:area_law_local_layer_indices, thm:area_law_adjacent_fine_meshes}
+    \uses{thm:area_law_initial_belt_birth_separation_local,thm:area_law_uniform_separated_initial_marks,thm:area_law_repair_margins,thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes}
     Every $R_y^{(\infty,0)}\subseteq\operatorname{int}X_y^0$ avoids the generation-$0$ removal squares
     around the $9$ marks of the belt cell. Each such mark has initial scale $S\ge u/2$
     (Lemmas~\ref{thm:area_law_uniform_separated_initial_marks}, \ref{thm:area_law_local_layer_indices},
@@ -580,8 +565,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}).
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_replacement_birth_separation_conditional,
-        thm:area_law_initial_belt_birth_separation}
+    \uses{thm:area_law_replacement_birth_separation_conditional,thm:area_law_initial_belt_birth_separation}
     Take the smaller of the two constants, $\min(1/28,1/112)=1/112$; both
     lower bounds remain valid for a smaller constant.
 \end{proof}
@@ -611,8 +595,7 @@ Lemma~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation_s
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_birth_separation_conditional,
-        thm:area_law_initial_stars}
+    \uses{thm:area_law_birth_separation_conditional,thm:area_law_initial_stars}
     Immediate from Lemmas~\ref{thm:area_law_initial_stars} and
     \ref{thm:area_law_birth_separation_conditional}.
 \end{proof}
@@ -624,10 +607,7 @@ Lemma~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation_s
     \label{thm:area_law_birth_separation_common_stage}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_birth_separation_of_rank_le}
     \leanok
-    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions,
-        def:area_law_repair_birth_rank,def:area_law_repair_characteristic_length,
-        thm:area_law_initial_belt_birth_separation,
-        thm:area_law_replacement_birth_separation_conditional}
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions,def:area_law_repair_birth_rank,def:area_law_repair_characteristic_length,thm:area_law_initial_belt_birth_separation,thm:area_law_replacement_birth_separation_conditional}
     In the repair family $\mathcal D_j$ (Definition~\ref{def:area_law_repair_stage}), fix
     $c_1\in\mathbb R$ and assume the separation bounds of
     Lemmas~\ref{thm:area_law_initial_belt_birth_separation} and
@@ -643,9 +623,7 @@ Lemma~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation_s
 
 \begin{proof}
     \leanok
-    \uses{def:area_law_repair_birth_rank,
-        def:area_law_repair_characteristic_length,
-        thm:area_law_repair_final_retention}
+    \uses{def:area_law_repair_birth_rank,def:area_law_repair_characteristic_length,thm:area_law_repair_final_retention}
     By Definition~\ref{def:area_law_repair_birth_rank}, $\operatorname{rk}_j(i)\le j+1$ for all
     $i\in I_j$, and Lemma~\ref{thm:area_law_repair_final_retention} gives
     $R_i^{(\infty,j)}=R_{\iota_{j,j+1}(i)}^{(\infty,j+1)}$. Induct on $N$: at $N=0$,

@@ -10,3 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.Network.Party.PartyColumnInput
 import TNLean.Network.Party.PartyNetwork
+import TNLean.Network.Party.SheetBoundedChanges

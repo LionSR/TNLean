@@ -42,11 +42,7 @@ distinct.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:area_law_fan_closed_half_piece,
-        thm:area_law_cell_fan_successor_iff,
-        thm:area_law_cell_fan_base_radius,
-        thm:area_law_cell_fan_end_same_ray,
-        thm:area_law_fan_noncentral_radial_incidence}
+    \uses{def:area_law_fan_closed_half_piece,thm:area_law_cell_fan_successor_iff,thm:area_law_cell_fan_base_radius,thm:area_law_cell_fan_end_same_ray,thm:area_law_fan_noncentral_radial_incidence}
     Suppose first that $j=\tau(i)$, so $b_i=a_j$, and set
     $m=(c+b_i)/2$. The base-radius identity gives
     $\|m-c\|_\infty=r/2>0$, so $m\ne c$ and
@@ -71,9 +67,7 @@ distinct.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:area_law_fan_closed_half_piece,
-        thm:area_law_fan_cut_piece_connected,
-        thm:area_law_fan_radial_union_deletion_convex}
+    \uses{def:area_law_fan_closed_half_piece,thm:area_law_fan_cut_piece_connected,thm:area_law_fan_radial_union_deletion_convex}
     Evaluating Lemma~\ref{thm:area_law_fan_cut_piece_connected} at
     radius $r/2$ produces a point of
     $(P_i\setminus L)\cap B_\infty(c,r/2)$, which belongs to
@@ -96,9 +90,7 @@ distinct.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs,
-        thm:area_law_fan_closed_half_piece_connected,
-        thm:area_law_fan_closed_half_intersection}
+    \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs,thm:area_law_fan_closed_half_piece_connected,thm:area_law_fan_closed_half_intersection}
     Each $K_i$ is nonempty and connected by
     Lemma~\ref{thm:area_law_fan_closed_half_piece_connected}, and
     Lemma~\ref{thm:area_law_fan_closed_half_intersection} gives
@@ -149,11 +141,7 @@ distinct.
     for the initial-star construction in \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_fan_closed_half_run_connected,
-        thm:area_law_fan_cut_runs_disjoint,
-        thm:area_law_fan_run_cover,
-        thm:area_law_sample_rows,
-        thm:area_law_cell_fan_closed_ball}
+    \uses{thm:area_law_fan_closed_half_run_connected,thm:area_law_fan_cut_runs_disjoint,thm:area_law_fan_run_cover,thm:area_law_sample_rows,thm:area_law_cell_fan_closed_ball}
     For each run $R$, set $V_R=T_R\cap\Omega_{1/2}$.
     Lemma~\ref{thm:area_law_fan_closed_half_run_connected} shows
     that $V_R$ is nonempty and connected. These sets are pairwise

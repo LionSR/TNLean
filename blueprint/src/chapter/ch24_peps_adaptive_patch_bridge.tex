@@ -19,8 +19,7 @@ square cylinder data at the same radii.
 
 \begin{proof}
     \leanok
-    \uses{def:peps_frame_square_patch, def:peps_adaptive_patch_constraint,
-        def:peps_closed_square_sample, thm:area_law_domain_identifications}
+    \uses{def:peps_frame_square_patch,def:peps_adaptive_patch_constraint,def:peps_closed_square_sample,thm:area_law_domain_identifications}
     Immediate from $\|x-c\|_\infty=\max\{|x_1-c_1|,|x_2-c_2|\}$.
 \end{proof}
 
@@ -28,7 +27,7 @@ square cylinder data at the same radii.
     \label{thm:peps_square_patch_of_nested_cylinders}
     \lean{TNLean.PEPS.EncodedFrame.exists_squarePatch_of_mem_iSup_dependentRegionCylinder}
     \leanok
-    \uses{def:peps_frame_square_patch, def:peps_regional_cylinder}
+    \uses{def:peps_frame_square_patch,def:peps_regional_cylinder}
     Let $0<u\le r_0\le\cdots\le r_{m-1}\le2u$, and let $S_j\subseteq\mathcal H_{D_j}$
     be subspaces on the square samples $D_j$ of radii $r_j$ about $z$. If
     $v\in\sum_{j=0}^{m-1}S_j\otimes\mathcal H_{D_j^c}$, then every vector
@@ -44,17 +43,7 @@ square cylinder data at the same radii.
 
 \begin{proof}
     \leanok
-    \uses{def:peps_frame_square_patch,
-        def:peps_adaptive_patch_constraint,
-        def:peps_nested_cylinder_images,
-        thm:peps_nested_cylinder_orthogonalization,
-        thm:peps_nested_cylinder_projector_sum,
-        thm:peps_cylinder_projector,
-        thm:peps_regional_extension_algebra,
-        def:peps_hole_encoder,
-        thm:peps_coordinate_reset_gram,
-        def:peps_coordinate_projector,
-        def:peps_patch_canonical_marginal}
+    \uses{def:peps_frame_square_patch,def:peps_adaptive_patch_constraint,def:peps_nested_cylinder_images,thm:peps_nested_cylinder_orthogonalization,thm:peps_nested_cylinder_projector_sum,thm:peps_cylinder_projector,thm:peps_regional_extension_algebra,def:peps_hole_encoder,thm:peps_coordinate_reset_gram,def:peps_coordinate_projector,def:peps_patch_canonical_marginal}
     Write $P_X$ for the orthogonal projector onto $X$, and let
     $W_j=\sum_{i<j}\operatorname{ran}(P_{S_i}\otimes\id_{D_j\setminus D_i})\subseteq\mathcal H_{D_j}$.
     The innovation $T_j=(\id-P_{W_j})S_j\subseteq\mathcal H_{D_j}$ satisfies
@@ -85,10 +74,7 @@ square cylinder data at the same radii.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_square_patch_of_nested_cylinders,
-        thm:peps_square_sample_integer_coordinates,
-        thm:peps_closed_square_card,
-        def:peps_regional_cylinder}
+    \uses{thm:peps_square_patch_of_nested_cylinders,thm:peps_square_sample_integer_coordinates,thm:peps_closed_square_card,def:peps_regional_cylinder}
     Apply Lemma~\ref{thm:peps_square_patch_of_nested_cylinders} with $m=1$,
     $r_0=u$, $S_0=\mathcal H_{D_0}$, and $v=\Omega$; Lemma~\ref{thm:peps_closed_square_card}
     gives $|D_0|\le81$ for $u\le4$, so $\sum_jd_j\le\dim\mathcal H_{D_0}=q^{|D_0|}\le q^{81}$
@@ -115,8 +101,7 @@ square cylinder data at the same radii.
     \label{lem:peps_adaptive_patch_supply_core}
     \lean{TNLean.PEPS.Approximation.adaptivePatchSupply_of_closedSquare_cylinders}
     \leanok
-    \uses{def:peps_adaptive_patch_constants,def:peps_adaptive_patch_constraint,
-        def:peps_closed_square_sample,def:peps_regional_cylinder}
+    \uses{def:peps_adaptive_patch_constants,def:peps_adaptive_patch_constraint,def:peps_closed_square_sample,def:peps_regional_cylinder}
     Let $q\ge1$, $L\ge2$, $B_0>0$, and $R_0\ge0$. Suppose each $u\in[0,B_0\log L]$
     has $m(u)\le\frac{B_0}{2}\log L+1$ nondecreasing radii in $[u,2u]$ whose
     samples, for every centre and $u\in[4,B_0\log L]$, carry subspaces
@@ -127,13 +112,7 @@ square cylinder data at the same radii.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_square_patch_of_nested_cylinders,
-        thm:peps_bounded_radius_square_patch,
-        thm:peps_square_sample_integer_coordinates,
-        thm:peps_square_patch_relabel,
-        lem:peps_adaptive_patch_supply,
-        thm:peps_patch_count_polynomial,
-        def:square_area_law_state}
+    \uses{thm:peps_square_patch_of_nested_cylinders,thm:peps_bounded_radius_square_patch,thm:peps_square_sample_integer_coordinates,thm:peps_square_patch_relabel,lem:peps_adaptive_patch_supply,thm:peps_patch_count_polynomial,def:square_area_law_state}
     On the integer domain (translated by $(1,1)$ via
     Lemma~\ref{thm:peps_square_sample_integer_coordinates}),
     Lemma~\ref{thm:peps_square_patch_of_nested_cylinders} for $u\ge4$ gives
@@ -148,8 +127,7 @@ square cylinder data at the same radii.
         TNLean.PEPS.Approximation.adaptivePatchExponent_pos,
         TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.adaptivePatchSupply}
     \leanok
-    \uses{def:square_entropy_area_law_at,def:peps_adaptive_patch_constants,
-        def:peps_adaptive_patch_constraint}
+    \uses{def:square_entropy_area_law_at,def:peps_adaptive_patch_constants,def:peps_adaptive_patch_constraint}
     Let $q\ge2$ and $J,\Delta,B_0,p>0$, and assume the square-grid entropy area
     law at $(J,\Delta)$ with constant $C_A$. Then $C=C(q,B_0)>0$ and
     $c=c(q,J,\Delta,B_0,p,C_A)>0$ in (\ref{eq:peps_adaptive_patch_constants}),
@@ -164,9 +142,7 @@ square cylinder data at the same radii.
 
 \begin{proof}
     \leanok
-    \uses{lem:peps_adaptive_patch_supply_core,
-        thm:peps_nested_patch_cylinder_approximation_explicit,
-        def:peps_nested_patches,thm:peps_nested_patch_sizes}
+    \uses{lem:peps_adaptive_patch_supply_core,thm:peps_nested_patch_cylinder_approximation_explicit,def:peps_nested_patches,thm:peps_nested_patch_sizes}
     By Lemma~\ref{thm:peps_nested_patch_sizes}, the $m=\lfloor u/2\rfloor+1\le\frac{B_0}{2}\log L+1$
     nested patches have radii in $[u,2u]$;
     Lemma~\ref{thm:peps_nested_patch_cylinder_approximation_explicit} gives
@@ -179,7 +155,7 @@ square cylinder data at the same radii.
     \label{thm:peps_adaptive_patch_constraint_of_area_law}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.adaptivePatchConstraint}
     \leanok
-    \uses{def:square_entropy_area_law, def:peps_adaptive_patch_constraint}
+    \uses{def:square_entropy_area_law,def:peps_adaptive_patch_constraint}
     The square-grid entropy area law implies the adaptive patch constraint
     (\cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
     lines 26--54 and 534--603).
@@ -205,8 +181,7 @@ square cylinder data at the same radii.
 
 \begin{proof}
     \leanok
-    \uses{thm:openai_square_area_law,
-        thm:peps_adaptive_patch_constraint_of_area_law}
+    \uses{thm:openai_square_area_law,thm:peps_adaptive_patch_constraint_of_area_law}
     Combine Theorem~\ref{thm:openai_square_area_law} and Lemma~\ref{thm:peps_adaptive_patch_constraint_of_area_law}.
 \end{proof}
 
@@ -224,8 +199,7 @@ Definitions~\ref{def:peps_range_nested_patches} and
     \lean{TNLean.PEPS.Approximation.rangeNestedPatchRadiusExponent,
         TNLean.PEPS.Approximation.rangeAdaptivePatchExponent}
     \leanok
-    \uses{def:peps_patch_radius_exponent,
-        def:peps_range_patch_filter_exponent}
+    \uses{def:peps_patch_radius_exponent,def:peps_range_patch_filter_exponent}
     For integers $q,R$ and reals $J,\Delta,B_0,p,C_A$, let $R_0^{(R)}$ be the
     radius exponent of Definition~\ref{def:peps_patch_radius_exponent} at
     $C_0=16\max\{1,16C_A\}+\log8$, $B_0$, $p$, and $\kappa_R(q,J,\Delta)$, and
@@ -240,9 +214,7 @@ Definitions~\ref{def:peps_range_nested_patches} and
         TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders,
         TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.rangeAdaptivePatchSupply}
     \leanok
-    \uses{def:square_entropy_area_law_at,def:area_law_hamiltonian,
-        def:peps_range_nested_patches,def:peps_range_adaptive_patch_constants,
-        def:peps_adaptive_patch_constants,def:peps_adaptive_patch_constraint}
+    \uses{def:square_entropy_area_law_at,def:area_law_hamiltonian,def:peps_range_nested_patches,def:peps_range_adaptive_patch_constants,def:peps_adaptive_patch_constants,def:peps_adaptive_patch_constraint}
     Let $q,R\ge1$ and $J,\Delta,B_0,p>0$, and assume the square-grid entropy
     area law with constant $C_A$ for gapped ground states $\Omega$ of range-$R$
     square Hamiltonians with term bound $J$ and gap $\Delta$. Then
@@ -259,12 +231,7 @@ Definitions~\ref{def:peps_range_nested_patches} and
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:peps_closed_square_entropy_explicit,
-        lem:peps_closed_square_cylinder_core,
-        lem:peps_adaptive_patch_supply_core,
-        thm:peps_range_nested_patch_sizes,
-        thm:peps_range_nested_patch_minimizer_marginal_closeness,
-        lem:peps_range_patch_energy_parameter_choice}
+    \uses{lem:peps_closed_square_entropy_explicit,lem:peps_closed_square_cylinder_core,lem:peps_adaptive_patch_supply_core,thm:peps_range_nested_patch_sizes,thm:peps_range_nested_patch_minimizer_marginal_closeness,lem:peps_range_patch_energy_parameter_choice}
     Since $u+s_Rj\in[u,2u]$ is nondecreasing,
     Lemma~\ref{lem:peps_closed_square_entropy_explicit} gives (1), which with
     Lemma~\ref{thm:peps_range_nested_patch_minimizer_marginal_closeness} at

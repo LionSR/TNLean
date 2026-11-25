@@ -5,9 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Hamiltonian.Models
-import TNLean.Lattice.Sheet.RegionalOperatorForms
-import TNLean.Lattice.Sheet.SupportedSchmidtRank
-import TNLean.Lattice.Sheet.LeftSupportedSchmidtRank
+import QICLean.ManyBody.Sites.ThreeRegion.Cut
 
 /-!
 # Nearest-neighbour edges at two cuts of a finite chain
@@ -125,76 +123,87 @@ section
 
 open ManyBody (interval)
 
-open Matrix QuantumCircuit
+open Matrix
 open scoped Kronecker
-open TNLean.Lattice.Sheet
 
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw
 
 /-- Actual two crossing factors and three regional families of the terms of a
-nearest-neighbour bond interaction, all in one three-region partition.
+nearest-neighbour bond interaction, all in one three-region partition: the
+coordinates of `T`, of the middle region `(T ∪ E) \ T` (which is `E`) and of
+the complement of `T ∪ E`.
 Supporting locality algebra for ALVV, arXiv:1602.08828v2, eq:H-mid-cut,
 lines 810–821, and prop:Cheby-AGSP-eff, lines 1324–1332. -/
-theorem exists_threeSplit_edge_factors
+theorem exists_threeCut_edge_factors
     {L q : ℕ}
     (H : ManyBody.BondInteraction L q)
     (u v : Fin (L - 1)) (huv : u.val < v.val)
     {T E : Finset (Fin L)} (hT : T = interval L 0 (u.val + 1))
     (hE : E = interval L (u.val + 1) (v.val + 1)) (hTE : Disjoint T E) :
+    let M := (T ∪ E) \ T
+    let g := ManyBody.threeCutEquiv (fun _ : Fin L ↦ Fin q)
+      (Finset.subset_union_left : T ⊆ T ∪ E)
     ∃ (HL : Fin (L - 1) → Matrix (T → Fin q) (T → Fin q) ℂ)
-      (HM : Fin (L - 1) → Matrix (E → Fin q) (E → Fin q) ℂ)
-      (HR : Fin (L - 1) → Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ)
-      (UL : Matrix ((T → Fin q) × (E → Fin q))
-        ((T → Fin q) × (E → Fin q)) ℂ)
-      (VR : Matrix ((E → Fin q) × ({x // x ∉ T ∪ E} → Fin q))
-        ((E → Fin q) × ({x // x ∉ T ∪ E} → Fin q)) ℂ),
+      (HM : Fin (L - 1) → Matrix (M → Fin q) (M → Fin q) ℂ)
+      (HR : Fin (L - 1) →
+        Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ)
+      (UL : Matrix ((T → Fin q) × (M → Fin q))
+        ((T → Fin q) × (M → Fin q)) ℂ)
+      (VR : Matrix ((M → Fin q) × ({x // x ∉ T ∪ E} → Fin q))
+        ((M → Fin q) × ({x // x ∉ T ∪ E} → Fin q)) ℂ),
       (∀ r, r ≠ u → r ≠ v →
-        (H.term r).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
-          (HL r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
+        (H.term r).submatrix g.symm g.symm =
+          (HL r ⊗ₖ (1 : Matrix (M → Fin q) (M → Fin q) ℂ)) ⊗ₖ
               (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
               (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
-            (1 : Matrix ((T → Fin q) × (E → Fin q))
-              ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR r) ∧
-      (H.term u).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
+            (1 : Matrix ((T → Fin q) × (M → Fin q))
+              ((T → Fin q) × (M → Fin q)) ℂ) ⊗ₖ HR r) ∧
+      (H.term u).submatrix g.symm g.symm =
         UL ⊗ₖ (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) ∧
-      (H.term v).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
+      (H.term v).submatrix g.symm g.symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
-          (Equiv.prodAssoc (T → Fin q) (E → Fin q)
+          (Equiv.prodAssoc (T → Fin q) (M → Fin q)
             ({x // x ∉ T ∪ E} → Fin q)).symm
-          (Equiv.prodAssoc (T → Fin q) (E → Fin q)
+          (Equiv.prodAssoc (T → Fin q) (M → Fin q)
             ({x // x ∉ T ∪ E} → Fin q)).symm ∧
       operatorSchmidtRank UL ≤ q ^ 2 ∧ operatorSchmidtRank VR ≤ q ^ 2 := by
   classical
   subst hT hE
   set T := interval L 0 (u.val + 1)
   set E := interval L (u.val + 1) (v.val + 1)
-  set g := threeSplit q T E hTE
+  intro M g
+  have hAB : T ⊆ T ∪ E := Finset.subset_union_left
   have hv : v.val + 1 < L := by omega
   obtain ⟨huD, huT, hvD, hvE, hord⟩ :=
     interval_edge_classification_of_lt (L := L) huv hv
   obtain ⟨UL, hUL, hrUL⟩ :=
-    exists_threeSplit_eq_kronecker_one_rank_le hTE huD (H.mem u)
+    ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one_operatorSchmidtRank_le hAB huD
+      (H.mem u)
   obtain ⟨VR, hVR, hrVR⟩ :=
-    exists_threeSplit_eq_reindex_one_kronecker_rank_le hTE hvD (H.mem v)
+    ManyBody.exists_reindex_threeCutEquiv_eq_reindex_one_kronecker_operatorSchmidtRank_le hAB
+      hvD (H.mem v)
   have hULrank : operatorSchmidtRank UL ≤ q ^ 2 := by
     simpa only [T, huT, Finset.card_singleton, Nat.mul_one] using hrUL
+  have hvM : interval L v.val (v.val + 2) ∩ ((T ∪ E) \ T) = {⟨v.val, by omega⟩} := by
+    rw [Finset.union_sdiff_cancel_left hTE]
+    exact hvE
   have hVRrank : operatorSchmidtRank VR ≤ q ^ 2 := by
-    simpa only [E, hvE, Finset.card_singleton, Nat.mul_one] using hrVR
+    simpa only [hvM, Finset.card_singleton, Nat.mul_one] using hrVR
   have hlocal : ∀ r : Fin (L - 1),
       ∃ (B : Matrix (T → Fin q) (T → Fin q) ℂ)
-        (C : Matrix (E → Fin q) (E → Fin q) ℂ)
+        (C : Matrix (M → Fin q) (M → Fin q) ℂ)
         (D : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ),
         r ≠ u → r ≠ v →
           (H.term r).submatrix g.symm g.symm =
-            (B ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
+            (B ⊗ₖ (1 : Matrix (M → Fin q) (M → Fin q) ℂ)) ⊗ₖ
                 (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
               ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ C) ⊗ₖ
                 (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
-              (1 : Matrix ((T → Fin q) × (E → Fin q))
-                ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ D := by
+              (1 : Matrix ((T → Fin q) × (M → Fin q))
+                ((T → Fin q) × (M → Fin q)) ℂ) ⊗ₖ D := by
     intro r
     by_cases hru : r = u
     · exact ⟨0, 0, 0, by simp [hru]⟩
@@ -202,18 +211,20 @@ theorem exists_threeSplit_edge_factors
       · exact ⟨0, 0, 0, by simp [hrv]⟩
       · rcases hord r.val (by omega) (fun h => hru (Fin.ext h))
           (fun h => hrv (Fin.ext h)) with hrT | hrE | hrU
-        · obtain ⟨B, hB⟩ := exists_threeSplit_eq_kronecker_one_kronecker_one hTE
-            (Finset.coe_subset.mpr hrT) (H.mem r)
+        · obtain ⟨B, hB⟩ :=
+            ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one_kronecker_one hAB hrT
+              (H.mem r)
           refine ⟨B, 0, 0, ?_⟩
           intro _ _
           simpa using hB
-        · obtain ⟨C, hC⟩ := exists_threeSplit_eq_one_kronecker_kronecker_one hTE
-            (Finset.coe_subset.mpr hrE) (H.mem r)
+        · obtain ⟨C, hC⟩ :=
+            ManyBody.exists_reindex_threeCutEquiv_eq_one_kronecker_kronecker_one hAB
+              (hrE.trans (Finset.union_sdiff_cancel_left hTE).ge) (H.mem r)
           refine ⟨0, C, 0, ?_⟩
           intro _ _
           simpa using hC
-        · obtain ⟨D, hD⟩ := exists_threeSplit_eq_one_kronecker hTE
-            (Finset.coe_subset.mpr hrU) (H.mem r)
+        · obtain ⟨D, hD⟩ := ManyBody.exists_reindex_threeCutEquiv_eq_one_kronecker hAB hrU
+            (H.mem r)
           refine ⟨0, 0, D, ?_⟩
           intro _ _
           simpa using hD
@@ -227,20 +238,21 @@ end
 
 section
 
-open ManyBody (disjoint_interval_interval interval interval_mono mem_interval)
+open ManyBody (interval interval_mono mem_interval)
 
-open Matrix QuantumCircuit
+open Matrix
 open scoped Kronecker
-open TNLean.Lattice.Sheet
 
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw
 
 /-- Simultaneous regional forms for the two-window family of ALVV,
-arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821. The three bulk operators
-are independently supplied; no equality with complementary bond sums is required. -/
-theorem exists_threeSplit_two_window_factors
+arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–821, in the three-region
+coordinates of `T`, of the middle region `(T ∪ E) \ T` (which is `E`) and of the
+complement of `T ∪ E`. The three bulk operators are independently supplied; no
+equality with complementary bond sums is required. -/
+theorem exists_threeCut_two_window_factors
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -258,35 +270,39 @@ theorem exists_threeSplit_two_window_factors
     (p s : Fin (2 * ℓ)) :
     let T := interval L 0 ((a + p.val) + 1)
     let E := interval L ((a + p.val) + 1) ((b + s.val) + 1)
-    let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
-    let g := threeSplit q T E hTE
+    let M := (T ∪ E) \ T
+    let g := ManyBody.threeCutEquiv (fun _ : Fin L ↦ Fin q)
+      (Finset.subset_union_left : T ⊆ T ∪ E)
     ∃ (HL : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → Matrix (T → Fin q) (T → Fin q) ℂ)
-      (HM : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → Matrix (E → Fin q) (E → Fin q) ℂ)
+      (HM : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → Matrix (M → Fin q) (M → Fin q) ℂ)
       (HR : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
         Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
-      (UL : Matrix ((T → Fin q) × (E → Fin q))
-        ((T → Fin q) × (E → Fin q)) ℂ)
-      (VR : Matrix ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
-        ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ),
+      (UL : Matrix ((T → Fin q) × (M → Fin q))
+        ((T → Fin q) × (M → Fin q)) ℂ)
+      (VR : Matrix ((M → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+        ((M → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ),
       (∀ r, r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
         (F r).submatrix g.symm g.symm =
-          (HL r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
+          (HL r ⊗ₖ (1 : Matrix (M → Fin q) (M → Fin q) ℂ)) ⊗ₖ
               (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
               (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
-            (1 : Matrix ((T → Fin q) × (E → Fin q))
-              ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR r) ∧
+            (1 : Matrix ((T → Fin q) × (M → Fin q))
+              ((T → Fin q) × (M → Fin q)) ℂ) ⊗ₖ HR r) ∧
       (F (Sum.inl (Sum.inl p))).submatrix g.symm g.symm =
         UL ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) ∧
       (F (Sum.inl (Sum.inr s))).submatrix g.symm g.symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
-          (Equiv.prodAssoc (T → Fin q) (E → Fin q)
+          (Equiv.prodAssoc (T → Fin q) (M → Fin q)
             ({v // v ∉ T ∪ E} → Fin q)).symm
-          (Equiv.prodAssoc (T → Fin q) (E → Fin q)
+          (Equiv.prodAssoc (T → Fin q) (M → Fin q)
             ({v // v ∉ T ∪ E} → Fin q)).symm ∧
       operatorSchmidtRank UL ≤ q ^ 2 ∧ operatorSchmidtRank VR ≤ q ^ 2 := by
   classical
-  intro T E hTE g
+  intro T E M g
+  have hTE : Disjoint T E := ManyBody.disjoint_interval_interval (L := L) 0 _ _
+  have hAB : T ⊆ T ∪ E := Finset.subset_union_left
+  have hME : M = E := Finset.union_sdiff_cancel_left hTE
   have huv : a + p.val < b + s.val := by
     have := p.isLt
     omega
@@ -296,13 +312,19 @@ theorem exists_threeSplit_two_window_factors
   obtain ⟨huD, huT, hvD, hvE, hord⟩ :=
     interval_edge_classification_of_lt (L := L) huv hv
   obtain ⟨UL, hUL, hrUL⟩ :=
-    exists_threeSplit_eq_kronecker_one_rank_le hTE huD (hleft p)
+    ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one_operatorSchmidtRank_le hAB huD
+      (hleft p)
   obtain ⟨VR, hVR, hrVR⟩ :=
-    exists_threeSplit_eq_reindex_one_kronecker_rank_le hTE hvD (hright s)
+    ManyBody.exists_reindex_threeCutEquiv_eq_reindex_one_kronecker_operatorSchmidtRank_le hAB
+      hvD (hright s)
   have hULrank : operatorSchmidtRank UL ≤ q ^ 2 := by
     simpa only [T, huT, Finset.card_singleton, Nat.mul_one] using hrUL
+  have hvM : interval L (b + s.val) (b + s.val + 2) ∩ ((T ∪ E) \ T) =
+      {⟨b + s.val, by omega⟩} := by
+    rw [Finset.union_sdiff_cancel_left hTE]
+    exact hvE
   have hVRrank : operatorSchmidtRank VR ≤ q ^ 2 := by
-    simpa only [E, hvE, Finset.card_singleton, Nat.mul_one] using hrVR
+    simpa only [hvM, Finset.card_singleton, Nat.mul_one] using hrVR
   have hregional : ∀ r, r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
       F r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) T ∨
         F r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) E ∨
@@ -319,9 +341,9 @@ theorem exists_threeSplit_two_window_factors
           A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) E ∨
           A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ((T ∪ E)ᶜ : Finset (Fin L)) := by
       rcases hord t ht htu htv with hT | hE | hU
-      · exact Or.inl (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hT) hA)
-      · exact Or.inr (Or.inl (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hE) hA))
-      · exact Or.inr (Or.inr (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hU) hA))
+      · exact Or.inl (ManyBody.supportedOperators_mono hT hA)
+      · exact Or.inr (Or.inl (ManyBody.supportedOperators_mono hE hA))
+      · exact Or.inr (Or.inr (ManyBody.supportedOperators_mono hU hA))
     rcases r with (t | t) | j
     · have ht := t.isLt
       refine hmono (a + t.val) (by omega) ?_ (by omega) (hleft t)
@@ -339,50 +361,49 @@ theorem exists_threeSplit_two_window_factors
         (Fin.ext (Nat.add_left_cancel h))
     · fin_cases j
       · left
-        exact ManyBody.supportedOperators_mono
-          (Finset.coe_subset.mpr (interval_mono (by omega) (by omega))) hL
+        exact ManyBody.supportedOperators_mono (interval_mono (by omega) (by omega)) hL
       · right
         left
-        exact ManyBody.supportedOperators_mono
-          (Finset.coe_subset.mpr (interval_mono (by omega) (by omega))) hM
+        exact ManyBody.supportedOperators_mono (interval_mono (by omega) (by omega)) hM
       · right
         right
         apply ManyBody.supportedOperators_mono ?_ hR
         intro x hx
         have hx' := (mem_interval.mp hx).1
-        change x ∈ (T ∪ E)ᶜ
         simp only [Finset.mem_compl, Finset.mem_union, T, E, mem_interval]
         omega
   have hlocal : ∀ r : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3),
       ∃ (B : Matrix (T → Fin q) (T → Fin q) ℂ)
-        (C : Matrix (E → Fin q) (E → Fin q) ℂ)
+        (C : Matrix (M → Fin q) (M → Fin q) ℂ)
         (D : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ),
         r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
           (F r).submatrix g.symm g.symm =
-            (B ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
+            (B ⊗ₖ (1 : Matrix (M → Fin q) (M → Fin q) ℂ)) ⊗ₖ
                 (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
               ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ C) ⊗ₖ
                 (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
-              (1 : Matrix ((T → Fin q) × (E → Fin q))
-                ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ D := by
+              (1 : Matrix ((T → Fin q) × (M → Fin q))
+                ((T → Fin q) × (M → Fin q)) ℂ) ⊗ₖ D := by
     intro r
     by_cases hru : r = Sum.inl (Sum.inl p)
     · exact ⟨0, 0, 0, by simp [hru]⟩
     · by_cases hrv : r = Sum.inl (Sum.inr s)
       · exact ⟨0, 0, 0, by simp [hrv]⟩
       · rcases hregional r hru hrv with hrT | hrE | hrU
-        · obtain ⟨B, hB⟩ := exists_threeSplit_eq_kronecker_one_kronecker_one hTE
-            (Set.Subset.rfl) hrT
+        · obtain ⟨B, hB⟩ :=
+            ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one_kronecker_one hAB
+              (Finset.Subset.refl T) hrT
           refine ⟨B, 0, 0, ?_⟩
           intro _ _
           simpa using hB
-        · obtain ⟨C, hC⟩ := exists_threeSplit_eq_one_kronecker_kronecker_one hTE
-            (Set.Subset.rfl) hrE
+        · obtain ⟨C, hC⟩ :=
+            ManyBody.exists_reindex_threeCutEquiv_eq_one_kronecker_kronecker_one hAB
+              hME.ge hrE
           refine ⟨0, C, 0, ?_⟩
           intro _ _
           simpa using hC
-        · obtain ⟨D, hD⟩ := exists_threeSplit_eq_one_kronecker hTE
-            (Set.Subset.rfl) hrU
+        · obtain ⟨D, hD⟩ := ManyBody.exists_reindex_threeCutEquiv_eq_one_kronecker hAB
+            (Finset.Subset.refl _) hrU
           refine ⟨0, 0, D, ?_⟩
           intro _ _
           simpa using hD

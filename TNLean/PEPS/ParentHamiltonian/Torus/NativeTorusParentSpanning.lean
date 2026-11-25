@@ -24,8 +24,7 @@ open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS
-open TNLean.Lattice
-open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
+open DependentBondNetwork TNLean.Network.DependentBondNetwork
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]
@@ -108,9 +107,9 @@ theorem torusPlaquetteParentGroundSpace_le_nativeCommutingClosureSpan [Finite G]
     exact Submodule.subset_span ⟨⟨(g, h), hgh⟩, rfl⟩
   have hmap : ψ ∈ (NativeTorus.commutingClosureSpan (graphBondAlphabet A) U
       (DependentBondNetwork.averagingSite graphEdgeTail graphEdgeHead (graphBondAlphabet A) U)).map
-      (dependentPhysicalProductFamilyMap (fun v ↦ LinearMap.toMatrix'
+      (Matrix.piKronecker (fun v ↦ LinearMap.toMatrix'
         (localSiteMap graphEdgeTail graphEdgeHead (graphBondAlphabet A)
-          (graphDependentTensor A) v))) :=
+          (graphDependentTensor A) v))).mulVecLin :=
     ⟨ξ, hspan, hrec⟩
   rwa [NativeTorus.map_commutingClosureSpan_recover (graphBondAlphabet A) U
     (graphDependentTensor A) (fun v ↦ (hA v).invariant)] at hmap

@@ -140,9 +140,7 @@ and the number of sites and identifiers produced in finitely many generations.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:area_law_repair_inclusions,
-        thm:area_law_repair_current_inclusion_subset,
-        thm:area_law_repair_current_inclusion_add}
+    \uses{def:area_law_repair_inclusions,thm:area_law_repair_current_inclusion_subset,thm:area_law_repair_current_inclusion_add}
     Since $A_m=R_{\iota_{j,j+m}(i)}^{(j+m)}$ decreases in $m$
     (Lemma~\ref{thm:area_law_repair_current_inclusion_subset}), Lemma~\ref{thm:area_law_repair_current_inclusion_add}
     gives $R_i^{(\infty,j)}=\bigcap_{m\ge0}A_m=\bigcap_{m\ge0}A_{n+m}=R_{\iota_{j,j+n}(i)}^{(\infty,j+n)}$.
@@ -163,8 +161,7 @@ and the number of sites and identifiers produced in finitely many generations.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_repair_final_retention,
-        thm:area_law_repair_final_current_empty}
+    \uses{thm:area_law_repair_final_retention,thm:area_law_repair_final_current_empty}
     Combine Lemmas~\ref{thm:area_law_repair_final_retention} and
     \ref{thm:area_law_repair_final_current_empty} at generation $j+n$.
 \end{proof}
@@ -247,8 +244,7 @@ and the number of sites and identifiers produced in finitely many generations.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_repair_finite_marks,
-        thm:area_law_repair_terminal_square_sites}
+    \uses{thm:area_law_repair_finite_marks,thm:area_law_repair_terminal_square_sites}
     Each $K_j$ is finite (Lemma~\ref{thm:area_law_repair_finite_marks}) and each terminal square at
     generation $j$ contains $\le(2S_*+1)^2$ lattice sites
     (Lemma~\ref{thm:area_law_repair_terminal_square_sites}); summing over $p\in K_j$ ($d(S_p)<S_*$)
@@ -280,8 +276,7 @@ and the number of sites and identifiers produced in finitely many generations.
     \label{thm:area_law_repair_current_terminal_empty}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_disjoint_terminalInteriors_of_isEmpty}
     \leanok
-    \uses{def:area_law_repair_stage,def:area_law_repair_terminal_interiors,
-        lem:area_law_repair_metric_invariants}
+    \uses{def:area_law_repair_stage,def:area_law_repair_terminal_interiors,lem:area_law_repair_metric_invariants}
     Under the metric hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}, if
     $K_N=\varnothing$ ($N\in\mathbb N$), then $R_i^{(N)}\cap\mathcal E_{\mathrm{term}}=\varnothing$
     for every $i\in I_N$.
@@ -289,9 +284,7 @@ and the number of sites and identifiers produced in finitely many generations.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_repair_terminal_interiors_before_empty,
-        def:area_law_repair_terminal_children,def:area_law_repair_ancestors,
-        thm:area_law_repair_current_terminal_disjoint}
+    \uses{thm:area_law_repair_terminal_interiors_before_empty,def:area_law_repair_terminal_children,def:area_law_repair_ancestors,thm:area_law_repair_current_terminal_disjoint}
     By Lemma~\ref{thm:area_law_repair_terminal_interiors_before_empty},
     $\mathcal E_{\mathrm{term}}=\bigcup_{j<N}E_{\mathrm{term}}(\mathcal D_j)\subseteq\mathcal E_N$,
     and $R_i^{(N)}\cap\mathcal E_N=\varnothing$ by Lemma~\ref{thm:area_law_repair_current_terminal_disjoint}.
@@ -304,9 +297,7 @@ and the number of sites and identifiers produced in finitely many generations.
     \label{thm:area_law_repair_final_lattice_partition_empty}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_terminal_or_unique_final_of_isEmpty}
     \leanok
-    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions,
-        def:area_law_dyadic_origin,def:area_law_repair_terminal_interiors,
-        lem:area_law_repair_metric_invariants}
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions,def:area_law_dyadic_origin,def:area_law_repair_terminal_interiors,lem:area_law_repair_metric_invariants}
     At $o=(\sqrt2,\sqrt3)$, under the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}
     with $S_*\ge1$, $b=|\partial_\Lambda A|>0$, and $K_N=\varnothing$ ($N\in\mathbb N$), every
     $z\in\mathbb Z^2$ satisfies exactly one of:
@@ -319,11 +310,7 @@ and the number of sites and identifiers produced in finitely many generations.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_repair_current_terminal_empty,
-        thm:area_law_repair_final_current_empty,
-        thm:area_law_repair_current_disjoint,
-        thm:area_law_repair_lattice_cover_before,
-        def:area_law_repair_terminal_interiors}
+    \uses{thm:area_law_repair_current_terminal_empty,thm:area_law_repair_final_current_empty,thm:area_law_repair_current_disjoint,thm:area_law_repair_lattice_cover_before,def:area_law_repair_terminal_interiors}
     Since $R_i^{(\infty,N)}=R_i^{(N)}$ (Lemma~\ref{thm:area_law_repair_final_current_empty}),
     Lemma~\ref{thm:area_law_repair_current_terminal_empty} gives (1) when
     $z\in\mathcal E_{\mathrm{term}}$, while for $z\notin\mathcal E_{\mathrm{term}}$
@@ -376,9 +363,7 @@ and the number of sites and identifiers produced in finitely many generations.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:area_law_initial_open_regions,
-        def:area_law_repair_successor_regions,thm:area_law_repair_finite_marks,
-        thm:area_law_repair_removal_closed}
+    \uses{def:area_law_initial_open_regions,def:area_law_repair_successor_regions,thm:area_law_repair_finite_marks,thm:area_law_repair_removal_closed}
     Induct on $j$: $R_i^{(0)}$ is an interior, and at $j+1$ subtracting the closed set $Q_{K_j}$
     (Lemmas~\ref{thm:area_law_repair_finite_marks} and \ref{thm:area_law_repair_removal_closed})
     from open $R_i^{(j)}$ or taking $\operatorname{int}B_q^{(j+1)}$ yields open sets.
@@ -418,9 +403,7 @@ and the number of sites and identifiers produced in finitely many generations.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:area_law_repair_current_birth_containment,
-        thm:area_law_neighborhood_endpoint_distance,
-        thm:area_law_cell_counts}
+    \uses{thm:area_law_repair_current_birth_containment,thm:area_law_neighborhood_endpoint_distance,thm:area_law_cell_counts}
     By (\ref{eq:area_law_repair_current_birth_containment}) and
     Lemma~\ref{thm:area_law_neighborhood_endpoint_distance}, every $x\in X_{*_j}(A)\subseteq\overline{N_{k_0}}$
     lies within $\ell_\infty$-distance $r=(C_0+1)2^{k_0}$ of some $z\in Z$ ($|Z|\le2b$), and each
@@ -433,8 +416,7 @@ and the number of sites and identifiers produced in finitely many generations.
     \label{def:area_law_repair_exceptional_sites}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairStageExceptionalSites}
     \leanok
-    \uses{def:area_law_repair_region_sites,
-        def:area_law_repair_terminal_interiors}
+    \uses{def:area_law_repair_region_sites,def:area_law_repair_terminal_interiors}
     At generation $N$, define the exceptional lattice sites of $A$ by
     \begin{align}
         D_N(A)
@@ -461,9 +443,7 @@ and the number of sites and identifiers produced in finitely many generations.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_repair_terminal_interiors_before_empty,
-        thm:area_law_repair_dummy_sites_count,
-        thm:area_law_repair_terminal_prefix_sites}
+    \uses{thm:area_law_repair_terminal_interiors_before_empty,thm:area_law_repair_dummy_sites_count,thm:area_law_repair_terminal_prefix_sites}
     By Lemma~\ref{thm:area_law_repair_terminal_interiors_before_empty},
     $D_N(A)=X_{*_N}(A)\cup\bigl(A\cap\bigcup_{0\le j<N}E_{\mathrm{term}}(\mathcal D_j)\bigr)$,
     so (\ref{eq:area_law_repair_dummy_sites_count}) and
@@ -491,9 +471,7 @@ and the number of sites and identifiers produced in finitely many generations.
     \label{thm:area_law_repair_ordered_partition_empty}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.exists_orderedTwoFamilyPartition_of_isEmpty}
     \leanok
-    \uses{def:area_law_two_family_partition,def:area_law_repair_region_sites,
-        def:area_law_repair_exceptional_sites,def:area_law_repair_birth_rank,
-        def:area_law_dyadic_origin,lem:area_law_repair_metric_invariants}
+    \uses{def:area_law_two_family_partition,def:area_law_repair_region_sites,def:area_law_repair_exceptional_sites,def:area_law_repair_birth_rank,def:area_law_dyadic_origin,lem:area_law_repair_metric_invariants}
     At $o=(\sqrt2,\sqrt3)$, under the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}
     with $S_*\ge1$, $|\partial_\Lambda A|>0$, and $K_N=\varnothing$ ($N\in\mathbb N$), there exist
     an ordered two-family partition (Definition~\ref{def:area_law_two_family_partition}) of $A$
@@ -509,11 +487,7 @@ and the number of sites and identifiers produced in finitely many generations.
 
 \begin{proof}
     \leanok
-    \uses{lem:area_law_repair_region_sites_finite,
-        thm:area_law_repair_current_disjoint,
-        thm:area_law_repair_final_lattice_partition_empty,
-        thm:area_law_repair_final_current_empty,
-        thm:area_law_repair_current_terminal_empty}
+    \uses{lem:area_law_repair_region_sites_finite,thm:area_law_repair_current_disjoint,thm:area_law_repair_final_lattice_partition_empty,thm:area_law_repair_final_current_empty,thm:area_law_repair_current_terminal_empty}
     By Lemma~\ref{thm:area_law_repair_current_disjoint} and
     Lemma~\ref{lem:area_law_repair_region_sites_finite}, $I_A^{(N)}$ is finite; choose a bijection
     $e:\{0,\ldots,m-1\}\to I_A^{(N)}$ with $\operatorname{rk}_N\circ e$ nondecreasing.
@@ -542,10 +516,7 @@ and the number of sites and identifiers produced in finitely many generations.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_initial_open_disjoint,
-        lem:area_law_repair_region_sites_finite,
-        thm:area_law_repair_finite_marks,thm:area_law_cell_fan_run_count,
-        def:area_law_repair_successor_regions}
+    \uses{thm:area_law_initial_open_disjoint,lem:area_law_repair_region_sites_finite,thm:area_law_repair_finite_marks,thm:area_law_cell_fan_run_count,def:area_law_repair_successor_regions}
     $I_A^{(0)}$ is finite by Lemma~\ref{thm:area_law_initial_open_disjoint} and
     Lemma~\ref{lem:area_law_repair_region_sites_finite}. At step $j$, old regions shrink while at
     most $8|K_j|$ fresh identifiers are born (Lemmas~\ref{thm:area_law_repair_finite_marks} and
@@ -570,10 +541,7 @@ and the number of sites and identifiers produced in finitely many generations.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_initial_belt_count,
-        def:area_law_repair_birth_rank,
-        def:area_law_repair_successor_regions,
-        thm:area_law_repair_finite_marks,thm:area_law_cell_fan_run_count}
+    \uses{thm:area_law_initial_belt_count,def:area_law_repair_birth_rank,def:area_law_repair_successor_regions,thm:area_law_repair_finite_marks,thm:area_law_cell_fan_run_count}
     At $N=0$, $I_0^+=\mathcal I_{\mathrm{belt}}$ has $|I_0^+|\le B(2C_0+1)^2b$ by
     Lemma~\ref{thm:area_law_initial_belt_count}; at step $j$, at most $8|K_j|$ fresh identifiers
     (of rank $j+2>0$) are added by Definition~\ref{def:area_law_repair_successor_regions} and
@@ -584,9 +552,7 @@ and the number of sites and identifiers produced in finitely many generations.
     \label{thm:area_law_repair_retained_positive_rank_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_retained_positive_rank_bound}
     \leanok
-    \uses{def:area_law_hamiltonian,def:area_law_repair_birth_rank,
-        def:area_law_repair_region_sites,
-        lem:area_law_repair_metric_invariants}
+    \uses{def:area_law_hamiltonian,def:area_law_repair_birth_rank,def:area_law_repair_region_sites,lem:area_law_repair_metric_invariants}
     For every $S_*>1$, there exists $L>0$ such that under the hypotheses of
     Lemma~\ref{lem:area_law_repair_metric_invariants}, for every $N\in\mathbb N$, the set
     $I_{A,N}^+=\{i\in I_A^{(N)}:\operatorname{rk}_N(i)>0\}$ is finite and satisfies
@@ -598,8 +564,7 @@ and the number of sites and identifiers produced in finitely many generations.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_repair_positive_rank_prefix_count,
-        thm:area_law_repair_total_mark_prefix_count}
+    \uses{thm:area_law_repair_positive_rank_prefix_count,thm:area_law_repair_total_mark_prefix_count}
     Since $I_{A,N}^+\subseteq I_N^+$, combining (\ref{eq:area_law_repair_positive_rank_prefix_count})
     of Lemma~\ref{thm:area_law_repair_positive_rank_prefix_count} with
     (\ref{eq:area_law_repair_total_mark_prefix_count}) of
@@ -611,9 +576,7 @@ and the number of sites and identifiers produced in finitely many generations.
     \label{thm:area_law_repair_retained_nonprimary_error_sum}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_retained_positive_rank_error_sum_bound}
     \leanok
-    \uses{def:area_law_hamiltonian,def:area_law_repair_characteristic_length,
-        def:area_law_repair_region_sites,def:area_law_repair_birth_rank,
-        lem:area_law_repair_metric_invariants}
+    \uses{def:area_law_hamiltonian,def:area_law_repair_characteristic_length,def:area_law_repair_region_sites,def:area_law_repair_birth_rank,lem:area_law_repair_metric_invariants}
     For every $S_*>1$, with $L>0$ from Lemma~\ref{thm:area_law_repair_retained_positive_rank_count},
     under the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants}, for any $C_B>0$,
     $N\in\mathbb N$, and $n_i=\lceil C_B\tau_N(i)\rceil$ ($i\in I_{A,+}^{(N)}=I_{A,N}^+$),
@@ -626,8 +589,7 @@ and the number of sites and identifiers produced in finitely many generations.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_repair_characteristic_length_positive,
-        thm:area_law_repair_retained_positive_rank_count}
+    \uses{thm:area_law_repair_characteristic_length_positive,thm:area_law_repair_retained_positive_rank_count}
     For every $i\in I_{A,+}^{(N)}$, $i\ne *_N$ gives $\tau_N(i)>0$
     (Lemma~\ref{thm:area_law_repair_characteristic_length_positive}), so $n_i=\lceil C_B\tau_N(i)\rceil\ge1$
     and $(n_i^{100})^{-1}\le1$; summing over $I_{A,+}^{(N)}$ and applying

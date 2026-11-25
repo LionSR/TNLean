@@ -14,7 +14,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
     \label{thm:fundamentalTheorem_injective_chain}
     \lean{MPSChainTensor.fundamentalTheorem_injective_chain}
     \leanok
-    \uses{def:non_ti_chain, def:same_mpv}
+    \uses{def:non_ti_chain,def:same_mpv}
     Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
     $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two chains with $n>0$ sites
     and common positive bond dimension $D$, and assume that $\mathbf{A}$ is
@@ -27,7 +27,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
 
 \begin{proof}
     \leanok
-    \uses{lem:blocking_preserves_injectivity, thm:ft_single}
+    \uses{lem:blocking_preserves_injectivity,thm:ft_single}
     Injectivity at a chosen site of $\mathbf{A}$ implies injectivity of
     the combined tensor by Lemma~\ref{lem:blocking_preserves_injectivity}.
     Applying the single-block Fundamental Theorem
@@ -64,7 +64,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
     \label{thm:fundamentalTheorem_injective_chain_gaugePhase}
     \lean{MPSChainTensor.fundamentalTheorem_injective_chain_gaugePhase}
     \leanok
-    \uses{thm:fundamentalTheorem_injective_chain, def:gauge_phase_equiv, def:non_ti_chain}
+    \uses{thm:fundamentalTheorem_injective_chain,def:gauge_phase_equiv,def:non_ti_chain}
     Let $\mathbf{A} = (A_0, \ldots, A_{n-1})$ and
     $\mathbf{B} = (B_0, \ldots, B_{n-1})$ be two chains with $n>0$ sites and
     common positive bond dimension $D$, and assume that $\mathbf{A}$ is
@@ -84,7 +84,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
 
 \begin{proof}
     \leanok
-    \uses{lem:chainCombinedTensor_smul_chain, thm:gauge_invariance, thm:fundamentalTheorem_injective_chain}
+    \uses{lem:chainCombinedTensor_smul_chain,thm:gauge_invariance,thm:fundamentalTheorem_injective_chain}
     If the combined tensor of $\mathbf{B}$ differs from that of $\mathbf{A}$
     by a gauge and a nonzero scalar $\zeta$, rescaling each site of
     $\mathbf{B}$ by $\zeta^{-1}$ removes this common scalar from the combined tensor by Lemma~\ref{lem:chainCombinedTensor_smul_chain}.
@@ -95,7 +95,7 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
 
 \begin{remark}[Relationship to the translation-invariant all-sizes theorem]
     \label{rem:ft_vs_singleBlock}
-    \uses{thm:fundamentalTheorem_injective_chain, def:injective}
+    \uses{thm:fundamentalTheorem_injective_chain,def:injective}
     Theorem~\ref{thm:fundamentalTheorem_injective_chain} treats a fixed chain
     length and assumes equality of the combined-tensor MPV families.
     The single-block Fundamental Theorem
@@ -129,7 +129,7 @@ agreement from any threshold $N_0$ onward already implies full agreement.
     \label{thm:sameMPV_of_sameMPVFrom}
     \lean{MPSTensor.sameMPV_of_sameMPVFrom_of_injective}
     \leanok
-    \uses{def:same_mpv_from, def:injective, def:same_mpv}
+    \uses{def:same_mpv_from,def:injective,def:same_mpv}
     Let $A$ be an injective tensor of bond dimension $D \ge 1$, and let
     $B$ be a tensor of the same bond dimension. If $A$ and $B$ generate
     the same MPV family for every system size $N \ge N_0$, then they
@@ -138,7 +138,7 @@ agreement from any threshold $N_0$ onward already implies full agreement.
 
 \begin{proof}
     \leanok
-    \uses{def:same_mpv_from, def:injective}
+    \uses{def:same_mpv_from,def:injective}
     By injectivity of $A$, we can write $1 = \sum_i c_i A^i$ and set
     $S = \sum_i c_i B^i$.
     \begin{enumerate}
@@ -159,7 +159,7 @@ agreement from any threshold $N_0$ onward already implies full agreement.
     \label{thm:ft_singleBlock_finiteLength}
     \lean{MPSTensor.fundamentalTheorem_singleBlock_finiteLength}
     \leanok
-    \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single, def:gauge_equiv}
+    \uses{thm:sameMPV_of_sameMPVFrom,thm:ft_single,def:gauge_equiv}
     Let $A$ be an injective tensor of bond dimension $D \ge 1$, and let
     $B$ be a tensor of the same bond dimension. If $A$ and $B$ agree on
     all MPV coefficients for system sizes $N \ge N_0$ (for any threshold
@@ -168,7 +168,7 @@ agreement from any threshold $N_0$ onward already implies full agreement.
 
 \begin{proof}
     \leanok
-    \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single}
+    \uses{thm:sameMPV_of_sameMPVFrom,thm:ft_single}
     Lemma~\ref{thm:sameMPV_of_sameMPVFrom} upgrades the hypothesis to
     equality of the MPV families for all system sizes, and the
     single-block Fundamental Theorem (Theorem~\ref{thm:ft_single}) then yields gauge equivalence.
@@ -189,7 +189,7 @@ translation-invariant, and constant chains of blocked tensors.
     \label{thm:ti_tensors_single_gauge}
     \lean{MPSChainTensor.ti_tensors_single_gauge}
     \leanok
-    \uses{def:injective, def:same_mpv}
+    \uses{def:injective,def:same_mpv}
     Let $A$ and $B$ be MPS tensors of bond dimension $D$, and fix a chain
     length $n \ge 1$.
     Assume that $A$ is injective and that the combined tensors of the two
@@ -201,7 +201,7 @@ translation-invariant, and constant chains of blocked tensors.
 
 \begin{proof}
     \leanok
-    \uses{lem:blocking_preserves_injectivity, thm:ft_single}
+    \uses{lem:blocking_preserves_injectivity,thm:ft_single}
     When the constant chains are bundled into a single combined tensor,
     injectivity of $A$ implies injectivity of the combined tensor by
     Lemma~\ref{lem:blocking_preserves_injectivity}, and the combined-tensor MPV
@@ -214,7 +214,7 @@ translation-invariant, and constant chains of blocked tensors.
 \begin{corollary}[Translation-invariant collapse to one gauge]\label{cor:ft_ti_chain}
     \lean{MPSChainTensor.ti_tensors_collapse_to_single_gauge}
     \leanok
-    \uses{def:injective, def:same_mpv}
+    \uses{def:injective,def:same_mpv}
     Let $A$ and $B$ be MPS tensors of bond dimension $D$, and fix a chain
     length $n \ge 1$.
     Assume that $A$ is injective and that the combined tensors of the two
@@ -259,7 +259,7 @@ Chapter~\ref{ch:symmetry}.
     \label{lem:blocked_chain_isInjective}
     \lean{MPSChainTensor.blockedChain_isInjective}
     \leanok
-    \uses{def:blocked_chain, lem:isNBlkInjective_iff_blockTensor_isInjective}
+    \uses{def:blocked_chain,lem:isNBlkInjective_iff_blockTensor_isInjective}
     If $A$ is $L$-block injective, then the constant blocked chain built from
     $A^{[L]}$ is injective at every site.
 \end{lemma}
@@ -276,7 +276,7 @@ Chapter~\ref{ch:symmetry}.
     \label{thm:fundamentalTheorem_blockedChain}
     \lean{MPSChainTensor.fundamentalTheorem_blockedChain}
     \leanok
-    \uses{def:blocked_chain, def:same_mpv}
+    \uses{def:blocked_chain,def:same_mpv}
     Let $A$ and $B$ be MPS tensors of positive bond dimension $D$, let $L$ be
     a blocking length, and let $n>0$ be a chain length.
     Assume that $A$ is $L$-block injective and that the combined tensors of the
@@ -287,7 +287,7 @@ Chapter~\ref{ch:symmetry}.
 
 \begin{proof}
     \leanok
-    \uses{lem:blocked_chain_isInjective, thm:fundamentalTheorem_injective_chain}
+    \uses{lem:blocked_chain_isInjective,thm:fundamentalTheorem_injective_chain}
     By Lemma~\ref{lem:blocked_chain_isInjective}, the blocked chain built from
     $A^{[L]}$ is injective, so
     Theorem~\ref{thm:fundamentalTheorem_injective_chain} applied to the two
@@ -421,7 +421,7 @@ applies.
     \lean{MPSTensor.perBlockLinearExtension}
     \lean{MPSTensor.perBlockLinearExtension_spec}
     \leanok
-    \uses{def:injective, def:same_mpv}
+    \uses{def:injective,def:same_mpv}
     Let $A_k, B_k$ be MPS tensors of bond dimension $D_k$ with
     $A_k$ injective and $\mc{V}(A_k) = \mc{V}(B_k)$ for each block
     $k \in \{0, \ldots, r{-}1\}$.
@@ -474,7 +474,7 @@ applies.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:perBlockLinearExtension_mul, lem:perBlockLinearExtension_bijective}
+    \uses{lem:perBlockLinearExtension_mul,lem:perBlockLinearExtension_bijective}
     By Lemmas~\ref{lem:perBlockLinearExtension_mul}
     and~\ref{lem:perBlockLinearExtension_bijective}, $T_k$ is a bijective
     multiplicative linear map. Positivity makes this algebra automorphism
@@ -486,7 +486,7 @@ applies.
     \label{def:piAlgEquiv}
     \lean{MPSTensor.piAlgEquiv}
     \leanok
-    \uses{def:perBlockLinearExtension, lem:perBlockLinearExtension_mul, lem:perBlockLinearExtension_bijective}
+    \uses{def:perBlockLinearExtension,lem:perBlockLinearExtension_mul,lem:perBlockLinearExtension_bijective}
     The \emph{product algebra automorphism} is the $\C$-algebra
     equivalence
     \begin{align}
@@ -507,7 +507,7 @@ applies.
     \label{thm:piAlgEquiv_decomposition}
     \lean{MPSTensor.piAlgEquiv_decomposition}
     \leanok
-    \uses{def:piAlgEquiv, thm:pi_auto_decomp}
+    \uses{def:piAlgEquiv,thm:pi_auto_decomp}
     The product algebra automorphism $T$ decomposes as a block
     permutation composed with per-block inner automorphisms: there exist
     a permutation $\sigma \in S_r$ (with $D_{\sigma(k)} = D_k$ for
@@ -524,7 +524,7 @@ applies.
     conjugation.
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:piAlgEquiv, thm:pi_auto_decomp}
+\begin{proof}\leanok\uses{def:piAlgEquiv,thm:pi_auto_decomp}
     Applying Lemma~\ref{thm:pi_auto_decomp} to the product-algebra
     automorphism of Definition~\ref{def:piAlgEquiv} writes the
     nonzero input block as $\pi(k)$ in output component~$k$; setting $\sigma := \pi^{-1}$ ensures that an element supported in block~$k$

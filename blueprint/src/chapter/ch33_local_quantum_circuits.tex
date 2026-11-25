@@ -56,7 +56,7 @@ preparation of matrix product states.
     \lean{ManyBody.mem_supportedOperators_iff,
         ManyBody.supportedOperators_toSubmodule_eq_span}
     \leanok
-    \uses{def:qc_local_circuit, thm:peps_region_site_embedding}
+    \uses{def:qc_local_circuit,thm:peps_region_site_embedding}
     Let $I$ be a finite set, $q\in\mathbb N$, $S\subseteq I$, and $\mathcal C=\{0,\ldots,q-1\}^I$. A matrix $A\in\C^{\mathcal C\times\mathcal C}$ belongs to $\mathcal A_S=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin S\}$ if and only if:
     \begin{enumerate}
         \item $\sigma|_{S^c}\ne\tau|_{S^c}\implies A_{\sigma\tau}=0$;
@@ -143,8 +143,7 @@ preparation of matrix product states.
 
 \begin{lemma}[Light cone of a local circuit]
     \label{lem:qc_light_cone}
-    \uses{def:qc_local_circuit, def:qc_light_cone_geometry,
-        lem:qc_light_cone_geometries}
+    \uses{def:qc_local_circuit,def:qc_light_cone_geometry,lem:qc_light_cone_geometries}
     \lean{QuantumCircuit.IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators_graphNeighborhood_cycleGraph,
         QuantumCircuit.IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators,
         QuantumCircuit.UnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators_lightCone,
@@ -306,8 +305,7 @@ preparation of matrix product states.
         QuantumCircuit.IsUnitaryCircuitOn.list_prod,
         QuantumCircuit.IsGateProduct.isUnitaryCircuitOn_ring}
     \leanok
-    \uses{def:qc_local_circuit, lem:qc_circuit_inverse_composition,
-        lem:qc_placed_operators}
+    \uses{def:qc_local_circuit,lem:qc_circuit_inverse_composition,lem:qc_placed_operators}
     A layer acts \emph{inside} $R\subseteq I$ if all its bonds lie in $R$ and its one-site unitaries outside $R$ are $\mathbb 1$, and $U$ is a \emph{local circuit of depth $T$ inside $R$} if $U=W_k\cdots W_1$ with each $W_t$ acting inside $R$ and total depth at most $T$.
     \begin{enumerate}
         \item Series composition inside $R$ adds depths: $T$ and $T'$ give $T+T'$.
@@ -367,8 +365,7 @@ preparation of matrix product states.
         QuantumCircuit.isGateProduct_pathGraph_of_mem_supportedOperators_interval,
         QuantumCircuit.IsGateProduct.of_window}
     \leanok
-    \uses{def:qc_window_gate, lem:qc_placed_operators,
-        thm:qc_bounded_unitary_two_site_gates}
+    \uses{def:qc_window_gate,lem:qc_placed_operators,thm:qc_bounded_unitary_two_site_gates}
     On the open chain of $n$ sites:
     \begin{enumerate}
         \item Any unitary supported on a window of $m$ consecutive sites is a window-$m$ gate.

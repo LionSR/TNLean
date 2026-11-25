@@ -10,7 +10,7 @@ We follow the cyclic-cut argument of
     \lean{MPSTensor.mpv_cyclicActiveBlockConfigEquiv_symm,
         MPSTensor.cyclicActiveBlock_mpvState_apply}
     \leanok
-    \uses{def:ground_space_map, def:mpv}
+    \uses{def:ground_space_map,def:mpv}
     Let $A$ be a tensor, $L\le N$, and fix a cyclic cut $i$ of an $N$-site
     ring. If $\sigma$ is the active word of length $L$ and $\tau$ is the
     complementary word of length $N-L$, then the periodic coefficient,
@@ -31,7 +31,7 @@ We follow the cyclic-cut argument of
     \label{lem:cyclic_active_local_interaction}
     \lean{MPSTensor.toEuclideanLin_translationInvariant_term_apply_fiber}
     \leanok
-    \uses{def:periodic-fixed-interaction, lem:cyclic_mpv_active_boundary}
+    \uses{def:periodic-fixed-interaction,lem:cyclic_mpv_active_boundary}
     Let $L\le N$, let $h$ be a matrix on $L$ sites with translate $h_i$ to the
     cyclic window starting at $i$, and fix a cyclic cut $i$.
     Let $U_i$ be the coordinate isometry of
@@ -52,8 +52,7 @@ We follow the cyclic-cut argument of
     \label{lem:arbitrary_local_block_separation}
     \lean{MPSTensor.toEuclideanLin_translationInvariant_term_smul_mpvState_eq_zero_of_wordTupleSpanTop}
     \leanok
-    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction,
-        def:periodic-fixed-interaction}
+    \uses{lem:cyclic_mpv_active_boundary,lem:cyclic_active_local_interaction,def:periodic-fixed-interaction}
     Let $A_1,\ldots,A_b$ be tensors with arbitrary finite virtual dimensions,
     let $c_j\in\C$, and let $h$ be any linear operator on $L$ sites of an
     $N$-site ring, with $L\le N$. Assume that the complementary word tuples
@@ -64,8 +63,7 @@ We follow the cyclic-cut argument of
     is not needed for this local assertion.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:cyclic_mpv_active_boundary, lem:cyclic_active_local_interaction,
-        lem:local_weighted_boundary_annihilation}
+    \uses{lem:cyclic_mpv_active_boundary,lem:cyclic_active_local_interaction,lem:local_weighted_boundary_annihilation}
     In the cyclic coordinates at $i$, compose the weighted joint boundary map
     with $h$: for boundaries $X=(X_1,\ldots,X_b)$ in the product algebra put
     \begin{align}
@@ -90,7 +88,7 @@ We follow the cyclic-cut argument of
     \label{lem:arbitrary_positive_block_ground_states}
     \lean{MPSTensor.toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_wordTupleSpanTop}
     \leanok
-    \uses{lem:arbitrary_local_block_separation, def:periodic-fixed-interaction}
+    \uses{lem:arbitrary_local_block_separation,def:periodic-fixed-interaction}
     Under the complementary-span hypothesis of
     Lemma~\ref{lem:arbitrary_local_block_separation}, suppose $h\ge0$ and
     $c_j\ne0$ for every $j$. For $H=\sum_i h_i$,
@@ -102,7 +100,7 @@ We follow the cyclic-cut argument of
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:arbitrary_local_block_separation, thm:weighted_sum_kernel}
+    \uses{lem:arbitrary_local_block_separation,thm:weighted_sum_kernel}
     Each $h_i$ is positive. A finite sum of positive operators has kernel equal
     to the intersection of their kernels. Apply
     Lemma~\ref{lem:arbitrary_local_block_separation} to each $h_i$, cancel
@@ -129,11 +127,7 @@ We follow the cyclic-cut argument of
         MPSTensor.PGVWC07CanonicalFormData.blockCount_le_finrank_ker_hamiltonian_translationInvariant}
     \leanok
     \discussion{7684}
-    \uses{def:pgvwc07_ti_canonical_representation,
-        def:l_blk_injective, def:blocks_not_gauge_phase_equiv,
-        lem:pgvwc07_block_tuple_span,
-        lem:arbitrary_positive_block_ground_states,
-        lem:periodic_block_linear_independence}
+    \uses{def:pgvwc07_ti_canonical_representation,def:l_blk_injective,def:blocks_not_gauge_phase_equiv,lem:pgvwc07_block_tuple_span,lem:arbitrary_positive_block_ground_states,lem:periodic_block_linear_independence}
     This is \cite[Theorem~11]{PerezGarcia2007Matrix}. Let $A$ have $b\ge2$
     canonical blocks $A_j$ in the sense of
     \cite[Theorem~4]{PerezGarcia2007Matrix}, with positive block weights.
@@ -161,9 +155,7 @@ We follow the cyclic-cut argument of
     agree; see \cite{gap:pgvwc07_direct_sum_input}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:pgvwc07_block_tuple_span,
-        lem:arbitrary_positive_block_ground_states,
-        lem:periodic_block_linear_independence}
+    \uses{lem:pgvwc07_block_tuple_span,lem:arbitrary_positive_block_ground_states,lem:periodic_block_linear_independence}
     Canonical normalization, its positive dual fixed points and common
     injectivity derive the simultaneous spans at lengths $N-L$ and $N$.
     The original vector is the sum of the block vectors with nonzero

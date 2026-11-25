@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.MessageGateExpansion
+import QICLean.Circuit.Party.Compression.GateExpansion.Messages
 
 /-!
 # Weighted gates as message-free segments
@@ -24,10 +24,9 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized; no upstream Lean proof text reused.
 -/
 
-namespace TNLean.Lattice.PartyCircuit.MessageGate
-open TNLean.Lattice.PartyCircuit
+namespace QuantumCircuit.Party.MessageGate
 
-variable {P : Type} {a b : Layout P}
+variable {P : Type} [DecidableEq P] {D : Finset P} {X Y : ↥D → Type}
 
 /-- Regarding every party monomial as a message-free segment and then
 expanding gives the original weighted list, including order and multiplicity.
@@ -35,8 +34,8 @@ No allowedness or quantitative bound is required for this algebraic identity.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43
 and 143–149. -/
 @[simp]
-theorem expand_map_segment (A : PartyGate a b) :
+theorem expand_map_segment (A : List (ℂ × Monomial D X Y)) :
     expand (A.map fun q ↦ (q.1, MessageMonomial.segment q.2)) = A := by
-  simp [expand, MessageMonomial.expand, List.flatMap_map]
+  simp [expand, List.flatMap_map]
 
-end TNLean.Lattice.PartyCircuit.MessageGate
+end QuantumCircuit.Party.MessageGate

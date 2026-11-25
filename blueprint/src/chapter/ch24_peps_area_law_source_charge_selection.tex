@@ -23,8 +23,7 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_augmented_prevector_symmetry,thm:al_scan_global_replica_energy,
-        thm:al_augmented_prevector_norm}
+    \uses{thm:al_augmented_prevector_symmetry,thm:al_scan_global_replica_energy,thm:al_augmented_prevector_norm}
     Follows from Lemmas~\ref{thm:al_augmented_prevector_norm}, \ref{thm:al_augmented_prevector_symmetry}, and~\ref{thm:al_scan_global_replica_energy} via $H_{\rm aug}\mathrm{pre}=UH_{\rm glob}v=e\,\mathrm{pre}$.
 \end{proof}
 
@@ -59,8 +58,7 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
     \lean{
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_density_energy}
     \leanok
-    \uses{def:area_law_hamiltonian,def:al_scan_actual_histories,
-        def:al_scan_actual_energy_terms,thm:al_scan_target_typical_window_uniform_dimension}
+    \uses{def:area_law_hamiltonian,def:al_scan_actual_histories,def:al_scan_actual_energy_terms,thm:al_scan_target_typical_window_uniform_dimension}
     Fix $R\in\mathbb N$, $J\geq0$, $\Delta>0$, and
     $C_T\geq0$. By Lemma~\ref{thm:al_scan_target_typical_window_uniform_dimension}, there exists $C_{\rm tr}>0$ (independent of $q,C_1,m_*,P$; cf.\ \cite[Proposition~4.5 and Section~9, lines~49--59]{OpenAI2026AreaLaw}) such that for every
     $q\geq1$, $C_1>0$, $m_*\in\mathbb N$ with $3m_*\leq C_1$, and $P\in\mathbb R$, there
@@ -152,13 +150,7 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_scan_target_typical_window,thm:al_global_schmidt_bell_prevector,
-        thm:al_positive_prefix_entropy_transfer,thm:al_scan_actual_rough_upper,
-        thm:arealaw-physical-endpoint-loss,thm:arealaw-density-from-rough-endpoint,
-        thm:arealaw-augmented-prevector-properties,thm:arealaw-actual-selected-energy,
-        thm:arealaw-generic-charge-energy,thm:arealaw-generic-selected-energy,
-        lem:al_scanner_scale_facts,thm:area_law_band_count_growth,
-        thm:arealaw-rough-endpoint-remainder-limit}
+    \uses{thm:al_scan_target_typical_window,thm:al_global_schmidt_bell_prevector,thm:al_positive_prefix_entropy_transfer,thm:al_scan_actual_rough_upper,thm:arealaw-physical-endpoint-loss,thm:arealaw-density-from-rough-endpoint,thm:arealaw-augmented-prevector-properties,thm:arealaw-actual-selected-energy,thm:arealaw-generic-charge-energy,thm:arealaw-generic-selected-energy,lem:al_scanner_scale_facts,thm:area_law_band_count_growth,thm:arealaw-rough-endpoint-remainder-limit}
     Fix $C_{\rm tr}$ before $q$, then $(C_{\rm target},c_t,C_{\rm ent},e_{\rm ent})$, and then $(C,C_l,N)$. For $n\ge N$, Lemmas~\ref{thm:al_scan_target_typical_window}, \ref{thm:al_global_schmidt_bell_prevector}, and~\ref{thm:al_positive_prefix_entropy_transfer} yield $(\widetilde\Omega,E,z,\lambda_k,\mathrm{pre}_k)$ and transfer prefix entropies within $n^{-247}$. Lemmas~\ref{thm:al_scan_actual_rough_upper} and~\ref{thm:arealaw-physical-endpoint-loss} control the endpoint norms, and Lemma~\ref{thm:arealaw-augmented-prevector-properties} feeds $\mathrm{pre}_k$ into Lemmas~\ref{thm:arealaw-generic-charge-energy}, \ref{thm:arealaw-generic-selected-energy}, and~\ref{thm:arealaw-actual-selected-energy} to select $(s_k,p_k)$, which together with (\ref{eq:arealaw-density-from-rough-endpoint}) gives (\ref{eq:arealaw-charge-selection}).
 \end{proof}
 
@@ -204,10 +196,7 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:arealaw-source-charge-selection,thm:scanner_rounded_admissibility,
-        thm:al_scan_radius_dimension_smallness,thm:al_scan_transport_coefficients_log,
-        thm:arealaw-target-entropy-transfer,thm:arealaw-source-rough-budget-power,
-        thm:arealaw-selected-density-delta}
+    \uses{thm:arealaw-source-charge-selection,thm:scanner_rounded_admissibility,thm:al_scan_radius_dimension_smallness,thm:al_scan_transport_coefficients_log,thm:arealaw-target-entropy-transfer,thm:arealaw-source-rough-budget-power,thm:arealaw-selected-density-delta}
     By Lemmas~\ref{thm:scanner_rounded_admissibility}, \ref{thm:al_scan_radius_dimension_smallness}, \ref{thm:arealaw-target-entropy-transfer}, and~\ref{thm:arealaw-source-rough-budget-power}, $ar_0^2\le c$ implies $a\ell_{\dim}\le c_t$ and the bound on $B_{\rm rough}$ in (\ref{eq:arealaw-source-density}). By Lemma~\ref{thm:al_scan_transport_coefficients_log}, $G=C_{\rm ent}\ell_{\dim}^{e_{\rm ent}}\le C_t(\log n)^{C_{l,\delta}}$. Setting $C_\delta=4(C_1+1)(6C_e+13+6\log q+2C_t)C_s$, $\gamma=4(C_1+1)/(Wnm\varepsilon)$, and $\rho_k=|\gamma R_k^{\rm end}|\to0$, Lemma~\ref{thm:arealaw-selected-density-delta} and (\ref{eq:arealaw-charge-selection}) give $\mathcal Q_k/(KnD)\le\delta_n+\rho_k$.
 \end{proof}
 
@@ -231,8 +220,7 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:arealaw-source-selected-density,thm:arealaw-selected-energy-density,
-        thm:arealaw-selected-energy-vanishing-remainder}
+    \uses{thm:arealaw-source-selected-density,thm:arealaw-selected-energy-density,thm:arealaw-selected-energy-vanishing-remainder}
     With $g_*=g/2$ and density coefficients $(C_{\delta,0},C_{l,\delta,0})$ from Lemma~\ref{thm:arealaw-source-selected-density}, set
     $C_\delta=\max\{C_{\delta,0},(C+1)/g_*\}$, $C_{l,\delta}=\max\{C_{l,\delta,0},C_l\}$,
     $A=CW^2n^\ell D^2(\log n)^{C_l}$, and $\rho_{E,k}=(A|\rho_k|^{1/8}+r_k)/g_*\to0$ (Lemma~\ref{thm:arealaw-selected-energy-vanishing-remainder}). Applying Lemma~\ref{thm:arealaw-selected-energy-density} to (\ref{eq:arealaw-charge-selection}) gives (\ref{eq:arealaw-source-energy}).
@@ -297,8 +285,6 @@ fixed interpolation interval $[p_0,p_1]\subset(0,1)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_scan_supplied_status_moments,thm:actual_supplied_rough_lower_weight,
-        thm:arealaw-sharp-smallness,thm:al_actual_sharp_upper,
-        thm:actual_scan_supplied_prevector_sharp_lower}
+    \uses{thm:al_scan_supplied_status_moments,thm:actual_supplied_rough_lower_weight,thm:arealaw-sharp-smallness,thm:al_actual_sharp_upper,thm:actual_scan_supplied_prevector_sharp_lower}
     Choose $C_B$ from Lemma~\ref{thm:al_scan_supplied_status_moments}. Since $r_0\ge1$ and $ar_0^2\le1/2$ imply $0<a\le1/2$, Lemma~\ref{thm:actual_supplied_rough_lower_weight} yields (\ref{eq:arealaw-supplied-rough-lower}). When $a\sqrt{\mathcal B}\le\min\{c_0,1\}/10$, Lemma~\ref{thm:arealaw-sharp-smallness} gives $10a\le\min\{c_0/\sqrt{\mathcal B},1\}$, so Lemmas~\ref{thm:al_scan_supplied_status_moments}, \ref{thm:al_actual_sharp_upper}, and~\ref{thm:actual_scan_supplied_prevector_sharp_lower} yield (\ref{eq:arealaw-supplied-sharp-bounds}).
 \end{proof}

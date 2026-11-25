@@ -37,7 +37,7 @@ develops an operator-norm refinement motivated by that discussion.
     independent, $F_{A,N}^\dagger F_{A,N}=I_b$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ldpolar_decomposition, thm:ldpolar_injective}
+    \uses{thm:ldpolar_decomposition,thm:ldpolar_injective}
     For $P=(V_{A,N}^\dagger V_{A,N})^{1/2}$, the polar identities
     $F_{A,N}=V_{A,N}G_{A,N}^{-1/2}$ and $V_{A,N}=F_{A,N}P$ give both
     range inclusions, and injectivity makes the initial support projector
@@ -81,7 +81,7 @@ develops an operator-norm refinement motivated by that discussion.
     \lean{MPSPreparation.exists_isUnitaryCircuit_registerEncoder,
         MPSPreparation.mul_registerEncoder_eq_blockIsometryEncoder}
     \leanok
-    \uses{def:ldp_register_block_encoders, def:qc_local_circuit}
+    \uses{def:ldp_register_block_encoders,def:qc_local_circuit}
     Fix $d,D\ge1$, $r\ge2$, and injective encodings of the $D$ bond
     values and $b$ logical labels in $r$ sites. There is $C$ such that
     the following holds. Let $A$ be a tensor, $S$ a set of bond pairs,
@@ -94,7 +94,7 @@ develops an operator-norm refinement motivated by that discussion.
     The constant precedes $A$, the pair vectors, and the partition.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ldp_coherent_sector_circuit, thm:ldp_register_encoder_isometric}
+    \uses{thm:ldp_coherent_sector_circuit,thm:ldp_register_encoder_isometric}
     Lemma~\ref{thm:ldp_coherent_sector_circuit} chooses one circuit
     whose action agrees on every column of $J$. Therefore $UJ=W$ as
     matrices, and $W^\dagger W=J^\dagger U^\dagger UJ=I_b$.
@@ -105,7 +105,7 @@ develops an operator-norm refinement motivated by that discussion.
     \lean{MPSTensor.gram_sectorColumnMatrix_apply,
         MPSTensor.cross_blockIsometryEncoder_sectorColumnMatrix_apply}
     \leanok
-    \uses{def:ldp_sector_encoder, def:ldp_register_block_encoders}
+    \uses{def:ldp_sector_encoder,def:ldp_register_block_encoders}
     The entries used in coherent estimates are exactly
     \begin{align}
         (V_{A,N}^\dagger V_{A,N})_{ij}
@@ -135,7 +135,7 @@ develops an operator-norm refinement motivated by that discussion.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ldp_sqrt_lipschitz, thm:ldpolar_decomposition, thm:ldpolar_injective}
+    \uses{thm:ldp_sqrt_lipschitz,thm:ldpolar_decomposition,thm:ldpolar_injective}
     The square-root Lipschitz bound at $I$ gives the first inequality.
     Since $V=F(V^\dagger V)^{1/2}$ and $\|F\|\le1$, it follows that
     $\|F-V\|\le\eta$. In addition,
@@ -197,7 +197,7 @@ develops an operator-norm refinement motivated by that discussion.
     \label{thm:ldp_canonical_encoder_conversion}
     \lean{MPSPreparation.norm_sectorEncoder_conversion_le}
     \leanok
-    \uses{def:ldp_sector_encoder, def:qc_local_circuit}
+    \uses{def:ldp_sector_encoder,def:qc_local_circuit}
     Let $A_j,B_j$ be equally labelled tensor families at one positive
     length $N$, and suppose the periodic columns of each family are
     independent. Let $J:\C^b\to\mathcal H_N$ be an isometry and
@@ -217,7 +217,7 @@ develops an operator-norm refinement motivated by that discussion.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ldp_polar_frame_bound, thm:ldp_common_encoder_conversion}
+    \uses{thm:ldp_polar_frame_bound,thm:ldp_common_encoder_conversion}
     Both $U_AJ$ and $U_BJ$ are isometries. Applying
     Lemma~\ref{thm:ldp_polar_frame_bound} to each family, using the
     monotonicity of the square root in (\ref{eq:ldp_encoder_defects}),

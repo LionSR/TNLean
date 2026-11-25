@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondProductIsometry
-import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
+import QICLean.Algebra.Kronecker.PiKroneckerRange
 
 /-!
 # Product ranges from one-coordinate support
@@ -33,7 +33,7 @@ theorem physicalProductMap_fixed_of_slices_fixed [Fintype Out]
     (hψ : ∀ v τ, P *ᵥ (fun s => ψ (Function.update τ v s)) =
       fun s => ψ (Function.update τ v s)) :
     physicalProductMap Site P ψ = ψ := by
-  exact TNLean.Lattice.dependentPhysicalProductFamilyMap_fixed_of_slices_fixed
+  exact Matrix.piKronecker_mulVec_eq_self_of_slice
     (fun _ : Site ↦ P) ψ hψ
 
 /-- Every one-coordinate slice of a physical product image lies in the local
@@ -42,7 +42,7 @@ theorem physicalProductMap_slice_mem_range [Fintype In]
     (F : Matrix Out In ℂ) (ψ : (Site → In) → ℂ) (v : Site) (τ : Site → Out) :
     (fun s => physicalProductMap Site F ψ (Function.update τ v s)) ∈
       LinearMap.range (Matrix.mulVecLin F) := by
-  exact TNLean.Lattice.dependentPhysicalProductFamilyMap_slice_mem_range
+  exact Matrix.piKronecker_mulVec_slice_mem_range
     (fun _ : Site ↦ F) ψ v τ
 
 /-- A vector is in the full product range precisely when every one-coordinate
@@ -53,7 +53,7 @@ theorem mem_range_physicalProductMap_iff [Fintype In] [Finite Out]
     ψ ∈ LinearMap.range (physicalProductMap Site F) ↔
       ∀ v τ, (fun s => ψ (Function.update τ v s)) ∈
         LinearMap.range (Matrix.mulVecLin F) := by
-  exact TNLean.Lattice.mem_range_dependentPhysicalProductFamilyMap_iff
+  exact Matrix.mem_range_mulVecLin_piKronecker_iff
     (fun _ : Site ↦ F) ψ
 
 end TNLean.PEPS

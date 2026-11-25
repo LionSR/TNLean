@@ -4,14 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.NestedPatches.AdaptivePatchSupply
-import TNLean.Lattice.PartyCircuit.ApproximateCircuitError
 import TNLean.PEPS.Tensor.SquareLattice.Basic
-import TNLean.Lattice.Compression.DistributedConstruction
 import TNLean.PEPS.Approximation.Guides.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.Routing.DyadicRoutingPEPS
-import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
-import TNLean.Lattice.PartyCircuit.ProtocolDensityError
+import TNLean.Algebra.ProtocolDensityError
 import TNLean.PEPS.Approximation.Frames.SheetStackEndpoints
+import QICLean.Circuit.Party.Original.Density
+import QICLean.Circuit.Party.Original.Sequence
 
 /-!
 # The consequences of Proposition 7.1 used in §8
@@ -30,14 +29,14 @@ changes, together with a dyadic attachment of its parties and a reference vector
 
 * the parties form a finite type `P` with a `DyadicPlacement`: the scale and the block indices
   of the square to which each party is attached;
-* the memory is a register layout at every stage, and the change number `t` is an
-  `OriginalCircuit` from the layout at stage `t` to the layout at stage `t + 1`. Its private
+* the memory at every stage is a finite basis at every party, and the change number `t` is an
+  `OriginalCircuit` from the memory at stage `t` to the memory at stage `t + 1`. Its private
   maps are arbitrary contractions of one party, and its nonprivate gates carry their actual
   monomial expansions and participating parties (`04-compression.tex:21–43`);
-* the initial layout holds one register for the whole private memory of each party, and the
-  initial vector is a product of normalized party vectors;
-* the final layout consists of one physical register for each party followed by the private
-  registers to be discarded. The physical register of the unit-square party of a genuine site
+* the initial memory of each party is its whole private memory, and the initial vector is a
+  product of normalized party vectors;
+* the final memory of each party consists of one physical register followed by the private
+  register to be discarded. The physical register of the unit-square party of a genuine site
   has dimension `q`, and that of every other party has dimension one;
 * the reference vector of the initial stage is the initial vector.
 
@@ -50,8 +49,8 @@ Under the endpoint-coordinate convention above—where strict intermediate refer
 of encoded frames and the terminal reference is expressed in physical and private coordinates as
 `Ω ⊗ Ξ`, with the canonical regrouping of the same auxiliary stack proved for the constructed
 witness (`DyadicProtocol.exists_reference_changes_of_readoutCircuit` in
-`TNLean.PEPS.Approximation.DyadicProtocolFinalReadout`, resting on
-`readout_eval_readoutCircuit_stackVec` in `TNLean.PEPS.Approximation.SheetStackReadout`) rather
+`TNLean.PEPS.Approximation.DyadicProtocolFinalReadout`, resting on the readout of the sheets in
+`TNLean.PEPS.Approximation.SheetStackReadout`) rather
 than retained as a separate field of the public protocol predicate—`IsDistributionProtocol`
 carries every clause of Proposition 7.1 (`06-geometry.tex:12–53`); the former scope restriction
 to the consequences used in §8 is resolved in
@@ -79,6 +78,7 @@ Three consequences are proved for every protocol satisfying the bounds:
 
 ## Main definitions
 
+* `TNLean.PEPS.EncodedFrame.heldRef`: the vector, at one party, of the copies of `Ω` it holds.
 * `TNLean.PEPS.Approximation.DyadicProtocol`: the data of a protocol.
 * `TNLean.PEPS.Approximation.DyadicProtocol.trajectory`: the actual vector at every stage.
 * `TNLean.PEPS.Approximation.DyadicProtocol.readout`: the physical and private coordinates of
@@ -138,6 +138,43 @@ module does not construct it.
   These are original proofs; no OpenAI Lean code is copied or adapted.
 -/
 
+/-! ### The copies held by one party -/
+
+noncomputable section
+
+namespace TNLean.PEPS.EncodedFrame
+
+open ManyBody QuantumCircuit.Party
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type} [Fintype Party]
+  [DecidableEq Party] {pos : ι → ℝ × ℝ}
+
+/-- The factor at the party `p` of the reference vector `K_F Ω` of a frame `F` held by the party
+`holder F`: the reference vector read on the registers of `p` when `p` holds the frame, and the
+vector `1` otherwise.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+`06-geometry.tex:21–23, 658–660`. -/
+def Frame.heldFactor (Ω : EuclideanSpace ℂ (ι → Fin q)) (holder : Frame pos q Party → Party)
+    (p : Party) (F : Frame pos q Party) : EuclideanSpace ℂ (F.system p) :=
+  WithLp.toLp 2 fun a ↦
+    if holder F = p then ∑ z : Config F.system, if z p = a then F.regRef Ω z else 0 else 1
+
+/-- The vector at the party `p` of the copies of `Ω` that it holds in a list of frames, each held
+by the party `holder F`: the product of the factors at `p` of the reference vectors of the frames,
+on the registers of `p` on all the frames.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+`06-geometry.tex:21–23, 658–660`. -/
+def heldRef (Ω : EuclideanSpace ℂ (ι → Fin q)) (holder : Frame pos q Party → Party) (p : Party) :
+    (Fs : List (Frame pos q Party)) → EuclideanSpace ℂ (framesSystem q pos Fs (fun _ ↦ Unit) p)
+  | [] => EuclideanSpace.single () 1
+  | F :: Fs => EuclideanSpace.vecKron (F.heldFactor Ω holder p) (heldRef Ω holder p Fs)
+
+end TNLean.PEPS.EncodedFrame
+
+end
+
 section
 
 open ManyBody (SquareLatticeVertex)
@@ -145,9 +182,8 @@ open ManyBody (SquareLatticeVertex)
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
-open TNLean.Lattice.PartyCircuit
 
-open Finset TNLean.Lattice.PartyCircuit
+open Finset ManyBody QuantumCircuit QuantumCircuit.Party
 
 /-- The aligned squares of the padded dyadic hierarchy of `[0, N] ^ 2`, each given by its scale
 `j` and its block address `(x, y)`: the square
@@ -163,21 +199,20 @@ local dimension `q`, on the finite party type `P`, consists of the following.
 
 * `placement`: the dyadic square to which each party is attached, by scale and block indices
   (`06-geometry.tex:19–21, 36–37, 633–647`).
-* `initialSpace`, `initialVector`: the finite-dimensional private memory of each party and its
-  normalized initial vector; the initial state is their product, a pure product across parties
-  (`06-geometry.tex:21–23, 658–662`).
-* `changes`, `layout`, `step`: the number of changes, the register layout at every stage, and
-  the change number `t` as a chronology from the layout at stage `t` to the layout at stage
-  `t + 1`. Its nonprivate gates carry their monomial expansions; every gate is a contraction
-  (`06-geometry.tex:25–32`, `04-compression.tex:21–43`). The steps with `t ≥ changes` are not
-  used.
+* `changes`, `system`, `step`: the number of changes, the memory at every stage (a finite basis
+  at every party), and the change number `t` as a chronology from the memory at stage `t` to the
+  memory at stage `t + 1`. Its nonprivate gates carry their monomial expansions; every gate is a
+  contraction (`06-geometry.tex:25–32`, `04-compression.tex:21–43`). The steps with
+  `t ≥ changes` are not used.
+* `initialVector`: the normalized initial vector of the whole private memory of each party; the
+  initial state is their product, a pure product across parties (`06-geometry.tex:21–23,
+  658–662`).
 * `reference`: the designated reference vector at every stage, equal to the initial vector at
   the first stage (`06-geometry.tex:39–42, 662–667`).
-* `site`, `physicalDimension`, `physicalOrder`, `privateOutput`: the unit-square party of each
-  genuine site, at the address of that site, and the final layout, which consists of one
-  physical register per party, of dimension `q` at the unit-square party of a genuine site and
-  one elsewhere, followed by the private registers to be discarded
-  (`06-geometry.tex:48–51, 669–679`).
+* `site`, `physicalDimension`, `privateOutput`: the unit-square party of each genuine site, at
+  the address of that site, and the final memory, which consists at every party of one physical
+  register, of dimension `q` at the unit-square party of a genuine site and one elsewhere,
+  followed by the private register to be discarded (`06-geometry.tex:48–51, 669–679`).
 
 The quantitative assertions of Proposition 7.1 are not part of these data; they are
 `DyadicProtocol.IsDistributionProtocol`.
@@ -185,30 +220,27 @@ The quantitative assertions of Proposition 7.1 are not part of these data; they 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, with the distributed constructions of Theorem 5.2,
 `04-compression.tex:21–43, 137–151`. -/
-structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
+structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] [DecidableEq P] where
   /-- The dyadic square of each party: its scale and block indices. -/
   placement : DyadicPlacement P
-  /-- The whole initial private memory of each party. -/
-  initialSpace : P → HSpace
-  /-- All private memories are finite-dimensional, without a size bound. -/
-  finite_initialSpace : ∀ p, FiniteDimensional ℂ (initialSpace p)
-  /-- The initial vector of each party. -/
-  initialVector : ∀ p, initialSpace p
-  /-- The initial party vectors are normalized. -/
-  norm_initialVector : ∀ p, ‖initialVector p‖ = 1
   /-- The number of changes of the schedule. -/
   changes : ℕ
-  /-- The register layout of the memory at each stage. -/
-  layout : ℕ → Layout P
-  /-- The initial layout holds one register for the whole memory of each party. -/
-  layout_zero : layout 0 = ProductInput.wholePartyLayout initialSpace
+  /-- The memory at each stage: a finite basis at every party, without a size bound. -/
+  system : ℕ → P → Type
+  /-- The bases of the memory are finite. -/
+  [fintype_system : ∀ t p, Fintype (system t p)]
+  /-- The bases of the memory have decidable equality. -/
+  [decidableEq_system : ∀ t p, DecidableEq (system t p)]
+  /-- The initial vector of the whole private memory of each party. -/
+  initialVector : ∀ p, EuclideanSpace ℂ (system 0 p)
+  /-- The initial party vectors are normalized. -/
+  norm_initialVector : ∀ p, ‖initialVector p‖ = 1
   /-- The change number `t`, with its private maps and its nonprivate gates. -/
-  step : (t : ℕ) → OriginalCircuit (layout t) (layout (t + 1))
+  step : (t : ℕ) → OriginalCircuit (system t) (system (t + 1))
   /-- The designated reference vector at each stage. -/
-  reference : (t : ℕ) → Mem (layout t)
+  reference : (t : ℕ) → EuclideanSpace ℂ (Config (system t))
   /-- The reference vector of the initial stage is the initial product vector. -/
-  reference_zero : reference 0 = Layout.memCongr layout_zero.symm
-    (ProductInput.ofAllParties initialSpace initialVector norm_initialVector).vector
+  reference_zero : reference 0 = WithLp.toLp 2 (productVector fun p x ↦ initialVector p x)
   /-- The unit-square party holding the physical output of each genuine site. -/
   site : SquareLatticeVertex L L → P
   /-- Distinct sites have distinct unit-square parties. -/
@@ -222,19 +254,16 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   physicalDimension_site : ∀ v, physicalDimension (site v) = q
   /-- No other party has a physical output. -/
   physicalDimension_eq_one : ∀ p, p ∉ Set.range site → physicalDimension p = 1
-  /-- The order of the physical registers in the final memory. -/
-  physicalOrder : List P
-  /-- Each party has one physical register. -/
-  physicalOrder_nodup : physicalOrder.Nodup
-  /-- Every party has a physical register. -/
-  mem_physicalOrder : ∀ p, p ∈ physicalOrder
-  /-- The private registers retained until the final discard. -/
-  privateOutput : Layout P
-  /-- Each discarded register is finite-dimensional, without a size bound. -/
-  finite_privateOutput : ∀ r ∈ privateOutput, FiniteDimensional ℂ r.space
-  /-- The final layout: the physical registers, then the private registers. -/
-  layout_changes :
-    layout changes = familyPhysicalOutputLayout physicalDimension physicalOrder privateOutput
+  /-- The private register of each party retained until the final discard, a finite basis
+  without a size bound. -/
+  privateOutput : P → Type
+  /-- The private registers are finite. -/
+  [fintype_privateOutput : ∀ p, Fintype (privateOutput p)]
+  /-- The private registers have decidable equality. -/
+  [decidableEq_privateOutput : ∀ p, DecidableEq (privateOutput p)]
+  /-- The final memory: at every party the physical register, then the private register, through
+  an identification of the bases. -/
+  finalSystemEquiv : ∀ p, system changes p ≃ physicalSystem physicalDimension privateOutput p
   /-- The party assigned to each square of the padded hierarchy, including the root square.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
@@ -259,36 +288,42 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] where
   `06-geometry.tex:21–23` and `06-geometry.tex:38–40`. -/
   frames : ℕ → List (EncodedFrame.Frame (cellCenterPos L) q P)
 
+attribute [instance] DyadicProtocol.fintype_system DyadicProtocol.decidableEq_system
+  DyadicProtocol.fintype_privateOutput DyadicProtocol.decidableEq_privateOutput
+
 namespace DyadicProtocol
 
-variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
+variable {L q : ℕ} {P : Type} [Fintype P] [DecidableEq P] (D : DyadicProtocol L q P)
 
 /-- The initial product vector of a protocol.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:21–23, 658–662`. -/
-def input : ProductInput (ProductInput.wholePartyLayout D.initialSpace) :=
-  ProductInput.ofAllParties D.initialSpace D.initialVector D.norm_initialVector
+def input : EuclideanSpace ℂ (Config (D.system 0)) :=
+  WithLp.toLp 2 (productVector fun p x ↦ D.initialVector p x)
 
 /-- The actual vector at every stage: the initial product vector, followed by the changes.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:29–36`. -/
-def trajectory : (t : ℕ) → Mem (D.layout t)
-  | 0 => Layout.memCongr D.layout_zero.symm D.input.vector
-  | t + 1 => (D.step t).eval (trajectory t)
+def trajectory : (t : ℕ) → EuclideanSpace ℂ (Config (D.system t))
+  | 0 => D.input
+  | t + 1 => Matrix.toEuclideanLin (D.step t).op (trajectory t)
 
 theorem trajectory_zero : D.trajectory 0 = D.reference 0 := by
   rw [D.reference_zero]; rfl
 
-theorem trajectory_succ (t : ℕ) : D.trajectory (t + 1) = (D.step t).eval (D.trajectory t) :=
+theorem trajectory_succ (t : ℕ) :
+    D.trajectory (t + 1) = Matrix.toEuclideanLin (D.step t).op (D.trajectory t) :=
   rfl
 
 /-- The initial reference vector has norm one. -/
 theorem norm_reference_zero : ‖D.reference 0‖ = 1 := by
-  rw [D.reference_zero, LinearIsometryEquiv.norm_map, ProductInput.norm_vector]
+  rw [D.reference_zero]
+  exact norm_toLp_productVector_eq_one D.initialVector D.norm_initialVector
 
 /-- Every change is a contraction. -/
-theorem norm_step_eval_le (t : ℕ) (v : Mem (D.layout t)) : ‖(D.step t).eval v‖ ≤ ‖v‖ := by
-  simpa only [one_mul] using (D.step t).eval.le_of_opNorm_le (OriginalCircuit.norm_eval_le_one _) v
+theorem norm_step_apply_le (t : ℕ) (v : EuclideanSpace ℂ (Config (D.system t))) :
+    ‖Matrix.toEuclideanLin (D.step t).op v‖ ≤ ‖v‖ :=
+  Matrix.norm_toEuclideanLin_apply_le_of_norm_le_one (D.step t).norm_op_le_one v
 
 /-- The physical configurations of the parties are the configurations of the square: the
 physical output of a site is at its unit-square party, and every other party has a physical
@@ -305,18 +340,22 @@ def physicalConfigEquiv : ((p : P) → Fin (D.physicalDimension p)) ≃ Configur
         fun v ↦ finCongr (D.physicalDimension_site v).symm).symm)
 
 /-- The coordinates of the final memory: the configuration of the physical outputs on the
-square, and an orthonormal coordinate of the private registers.
+square, and the configuration of the private registers.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:43–51`, with the physical
 and private registers of Theorem 5.2, `04-compression.tex:148–153`. -/
-def readout : Mem (D.layout D.changes) ≃ₗᵢ[ℂ]
-    EuclideanSpace ℂ (Configuration L q × Fin (Module.finrank ℂ (Mem D.privateOutput))) := by
-  classical
-  letI := Layout.finiteDimensional_mem_of_registers D.privateOutput D.finite_privateOutput
-  exact (Layout.memCongr D.layout_changes).trans
-    ((familyLabelledPhysicalReadout D.physicalDimension D.physicalOrder D.physicalOrder_nodup
-      D.mem_physicalOrder D.privateOutput).trans
-      (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (D.physicalConfigEquiv.prodCongr (Equiv.refl _))))
+def finalConfigEquiv : Config (D.system D.changes) ≃ Configuration L q × Config D.privateOutput :=
+  (Equiv.piCongrRight D.finalSystemEquiv).trans
+    ((Equiv.arrowProdEquivProdArrow P (fun p ↦ Fin (D.physicalDimension p)) D.privateOutput).trans
+      (D.physicalConfigEquiv.prodCongr (Equiv.refl _)))
+
+/-- The readout of the final memory in the coordinates `finalConfigEquiv`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:43–51`, with the physical
+and private registers of Theorem 5.2, `04-compression.tex:148–153`. -/
+def readout : EuclideanSpace ℂ (Config (D.system D.changes)) ≃ₗᵢ[ℂ]
+    EuclideanSpace ℂ (Configuration L q × Config D.privateOutput) :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ D.finalConfigEquiv
 
 /-- The physical density of the actual final vector: the private registers are traced, and
 the vector is not normalized.
@@ -331,7 +370,7 @@ def physicalDensity : Matrix (Configuration L q) (Configuration L q) ℂ :=
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:31–32`, and Theorem 5.2,
 item 2, `04-compression.tex:140–142`. -/
 def participation (p : P) : ℕ :=
-  ∑ t ∈ range D.changes, (D.step t).participationCount p
+  ∑ t ∈ range D.changes, (D.step t).participation p
 
 /-- **The bounds of Proposition 7.1 consumed by §8.** With a count constant `C_N`, an
 expansion constant `C_K`, an error constant `C_E`, constants `b`, `k`, `r`, and the target
@@ -424,19 +463,21 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
   /-- Item 1: initialization is a pure product across parties of the copies of `Ω`. The initial
   encoded frames are the main frame followed by the auxiliary frames; each is a copy of `Ω` with
   no hole, held entirely by one party, its designated party; and the whole initial memory of each
-  party is the memory of the copies it holds, with initial vector the product of their reference
-  vectors. The party holding the first frame holds the main copy.
+  party is the memory of the copies it holds (its registers on the frames, which are a single
+  point on the frames held by other parties, through an identification `e` of the bases), with
+  initial vector the product of the reference vectors of these copies
+  (`EncodedFrame.heldRef`). The party holding the first frame holds the main copy.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
   `06-geometry.tex:21–23`: “Initialization is a pure product across parties. One party initially
   holds the main copy of `Ω`; all auxiliary copies are initialized privately at their designated
   parties”; and the initialization in the proof, `06-geometry.tex:658–660`. -/
   initialCopies : D.frames 0 ≠ [] ∧ ∃ holder : EncodedFrame.Frame (cellCenterPos L) q P → P,
-    (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧ ∀ [DecidableEq P],
-      (D.initialSpace = fun p =>
-          EncodedFrame.framesSpace ((D.frames 0).filter fun F => holder F = p)) ∧
-        ∀ [NeZero q], HEq D.initialVector
-          fun p => EncodedFrame.framesVec Ω ((D.frames 0).filter fun F => holder F = p)
+    (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧
+      ∃ e : ∀ p, D.system 0 p ≃
+          EncodedFrame.framesSystem q (cellCenterPos L) (D.frames 0) (fun _ ↦ Unit) p,
+        ∀ [NeZero q], ∀ p, D.initialVector p = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+          (e p).symm (EncodedFrame.heldRef Ω holder p (D.frames 0))
   /-- Item 2: at most `C_N L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C_N * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/
@@ -461,7 +502,8 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
           b * 2 ^ D.placement.scale p
   /-- Item 4: the reference vector of every intermediate stage is the product of the reference
   vectors `K_F Ω` of the encoded frames of that stage, of the protocol's own `Ω`, an unlabelled
-  list of the encoded copies. All its factors have norm at most one. Read per stage, being the
+  list of the encoded copies, read through an identification `e` of the memory of each party with
+  its registers on the frames. All its factors have norm at most one. Read per stage, being the
   main copy carries no content beyond the designations at the endpoints, which are stated by
   `initialCopies` at the initial stage and by `mainFrame_owner` before the last change. The
   initial stage is the product initialization of `initialCopies`, and the last stage is described
@@ -475,8 +517,10 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
   one.” -/
   reference_frames : ∀ [NeZero q], ∀ t, 0 < t → t < D.changes →
     (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
-      ∃ h : D.layout t = EncodedFrame.stackRegs (D.frames t) [],
-        D.reference t = Layout.memCongr h.symm (EncodedFrame.framesVec Ω (D.frames t))
+      ∃ e : ∀ p, D.system t p ≃
+          EncodedFrame.framesSystem q (cellCenterPos L) (D.frames t) (fun _ ↦ Unit) p,
+        D.reference t = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight e).symm
+          (EncodedFrame.framesRef Ω (D.frames t))
   /-- Item 4: every intermediate stage has at least one encoded frame.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,
@@ -491,9 +535,10 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
   mainFrame_owner : ∃ M Fs, D.frames (D.changes - 1) = M :: Fs ∧ ∀ v, M.owner v = D.site v
   /-- Item 4: each change keeps the reference vector within `C_E L⁻²⁰`. -/
   reference_step : ∀ t < D.changes,
-    ‖(D.step t).eval (D.reference t) - D.reference (t + 1)‖ ≤ C_E / (L : ℝ) ^ 20
+    ‖Matrix.toEuclideanLin (D.step t).op (D.reference t) - D.reference (t + 1)‖ ≤
+      C_E / (L : ℝ) ^ 20
   /-- Item 4: the final reference vector is `Ω ⊗ Ξ`, with `Ξ` nearly normalized. -/
-  reference_changes : ∃ Ξ : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem D.privateOutput))),
+  reference_changes : ∃ Ξ : EuclideanSpace ℂ (Config D.privateOutput),
     ‖Ξ‖ ≤ 1 ∧ 1 - C_E / (L : ℝ) ^ 57 ≤ ‖Ξ‖ ∧
       D.readout (D.reference D.changes) = Matrix.euclideanTensorVector Ω Ξ
   /-- Theorem 5.2, item 3: at most `r` pair sources in each monomial of every gate expansion,
@@ -517,9 +562,9 @@ theorem rectangularTraceNorm_physicalDensity_sub_le
       (2 * (C_N * C_E) + 2 * C_E) / (L : ℝ) ^ 10 := by
   obtain ⟨Ξ, hΞ, hlower, href⟩ := h.reference_changes
   exact (rectangularTraceNorm_protocol_density_sub_le
-    (fun t ↦ ((D.step t).eval : Mem (D.layout t) →ₗ[ℂ] Mem (D.layout (t + 1))))
+    (fun t ↦ Matrix.toEuclideanLin (D.step t).op)
     D.trajectory D.reference hL hC hC h.changes_le
-    (fun t _ v ↦ D.norm_step_eval_le t v) D.norm_reference_zero.le D.trajectory_zero
+    (fun t _ v ↦ D.norm_step_apply_le t v) D.norm_reference_zero.le D.trajectory_zero
     (fun t _ ↦ D.trajectory_succ t) h.reference_step D.readout.toLinearIsometry Ω Ξ hΩ hΞ
     hlower href).2.2
 
@@ -550,12 +595,12 @@ abbrev Gate : Type := Σ t : Fin D.changes, (D.step t).nonprivateLocations
 
 /-- The participation of a party is the number of nonprivate gates of the whole schedule in
 which it participates. -/
-theorem participation_eq_card [DecidableEq P] (p : P) :
+theorem participation_eq_card (p : P) :
     D.participation p = (univ.filter fun γ : D.Gate ↦ p ∈ (D.step γ.1).participants γ.2).card := by
-  rw [participation, ← Fin.sum_univ_eq_sum_range (fun t ↦ (D.step t).participationCount p),
+  rw [participation, ← Fin.sum_univ_eq_sum_range (fun t ↦ (D.step t).participation p),
     card_filter, Fintype.sum_sigma]
   refine sum_congr rfl fun t _ ↦ ?_
-  rw [OriginalCircuit.participationCount, Nat.card_eq_fintype_card, Fintype.card_subtype,
+  rw [← OriginalCircuit.natCard_participants_mem, Nat.card_eq_fintype_card, Fintype.card_subtype,
     card_filter]
 
 /-- **Lifetime participation of a block party.** Let the nonprivate gates of the schedule
@@ -597,7 +642,7 @@ def LargeSizeDyadicProtocolConsequences : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ (C : ℝ) (b k r L₀ : ℕ),
       ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
-        ∃ (P : Type) (_ : Fintype P) (D : DyadicProtocol L q P),
+        ∃ (P : Type) (_ : Fintype P) (_ : DecidableEq P) (D : DyadicProtocol L q P),
           D.IsDistributionProtocol Ω C C C b k r
 
 /-- **The consequences of Proposition 7.1 for a family of states, at given constants.** Every
@@ -616,7 +661,7 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protoco
 def DyadicProtocolBoundsAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C_N C_K C_E : ℝ)
     (b k r L₀ : ℕ) : Prop :=
   ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
-    ∃ (P : Type) (_ : Fintype P) (D : DyadicProtocol L q P),
+    ∃ (P : Type) (_ : Fintype P) (_ : DecidableEq P) (D : DyadicProtocol L q P),
       D.IsDistributionProtocol Ω C_N C_K C_E b k r
 
 /-- **The consequences of Proposition 7.1, with separate constants.** For every `q ≥ 2` and
@@ -656,12 +701,9 @@ section
 noncomputable section
 
 namespace TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol
-open TNLean.Lattice.PartyCircuit
 
-open TNLean.Lattice.PartyCircuit
-
-variable {L q : ℕ} {P : Type} [Fintype P] {D : DyadicProtocol L q P} {Ω : StateSpace L q}
-  {C_N C_K C_E : ℝ} {b k r : ℕ}
+variable {L q : ℕ} {P : Type} [Fintype P] [DecidableEq P] {D : DyadicProtocol L q P}
+  {Ω : StateSpace L q} {C_N C_K C_E : ℝ} {b k r : ℕ}
 
 /-- **Retained norm and trace of the protocol.** For a protocol with the bounds of §8 on a
 square of side `L ≥ 1`, with count constant `C_N`, error constant `C_E ≥ 0` and `‖Ω‖ = 1`,
@@ -679,9 +721,9 @@ theorem retained_norm_and_trace_le (h : D.IsDistributionProtocol Ω C_N C_K C_E 
   classical
   obtain ⟨Ξ, hΞ, hlower, href⟩ := h.reference_changes
   exact protocol_norm_and_trace_deficit_le
-    (fun t ↦ ((D.step t).eval : Mem (D.layout t) →ₗ[ℂ] Mem (D.layout (t + 1))))
+    (fun t ↦ Matrix.toEuclideanLin (D.step t).op)
     D.trajectory D.reference hL hC hC h.changes_le
-    (fun t _ v ↦ D.norm_step_eval_le t v) D.norm_reference_zero.le D.trajectory_zero
+    (fun t _ v ↦ D.norm_step_apply_le t v) D.norm_reference_zero.le D.trajectory_zero
     (fun t _ ↦ D.trajectory_succ t) h.reference_step D.readout.toLinearIsometry Ω Ξ hΩ hΞ
     hlower href
 

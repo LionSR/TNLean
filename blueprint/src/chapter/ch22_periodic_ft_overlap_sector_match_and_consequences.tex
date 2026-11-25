@@ -2,7 +2,7 @@
     \label{lem:sector_tensor_proportional_blocked_match}
     \lean{MPSTensor.sectorTensor_proportional_of_blockedMatch}
     \leanok
-    \uses{lem:sector_match_propagation, def:cyclic_sector_decomp, def:periodic_corner_letter, def:periodic_corner_product, lem:periodic_corner_product_append, lem:periodic_corner_product_blockmatch_pow, lem:periodic_corner_contraction, thm:periodic_product_one_phase_extraction, thm:left_canonical_sector_scalar_normalization, lem:finite_cycle_coboundary}
+    \uses{lem:sector_match_propagation,def:cyclic_sector_decomp,def:periodic_corner_letter,def:periodic_corner_product,lem:periodic_corner_product_append,lem:periodic_corner_product_blockmatch_pow,lem:periodic_corner_contraction,thm:periodic_product_one_phase_extraction,thm:left_canonical_sector_scalar_normalization,lem:finite_cycle_coboundary}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Let the
@@ -163,7 +163,7 @@
     \label{thm:periodic_overlap_gauge_equiv_sector_match}
     \lean{MPSTensor.periodicOverlap_gaugeEquiv_of_sector_match}
     \leanok
-    \uses{lem:sector_match_propagation, lem:sector_tensor_proportional_blocked_match, def:cyclic_sector_decomp}
+    \uses{lem:sector_match_propagation,lem:sector_tensor_proportional_blocked_match,def:cyclic_sector_decomp}
     Let $A$ and $B$ be periodic tensors with the same period $m$. Let
     $\bar A\sim\bigoplus_u A_u$ and $\bar B\sim\bigoplus_v B_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical, with
@@ -189,7 +189,7 @@
 \begin{lemma}[Periodic overlap dichotomy]\label{thm:periodic_overlap_dichotomy}
     \lean{MPSTensor.periodicOverlapDichotomy}
     \leanok
-    \uses{thm:periodic_overlap_zero_ne_period, thm:periodic_overlap_zero_no_sector_match, thm:periodic_overlap_zero_ne_dim, thm:periodic_overlap_gauge_equiv_sector_match}
+    \uses{thm:periodic_overlap_zero_ne_period,thm:periodic_overlap_zero_no_sector_match,thm:periodic_overlap_zero_ne_dim,thm:periodic_overlap_gauge_equiv_sector_match}
     Let $A$ and $B$ be periodic tensors. Then at least one of the following
     alternatives holds:
     \begin{enumerate}
@@ -199,7 +199,7 @@
     \end{enumerate}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_overlap_zero_ne_period, thm:periodic_overlap_zero_no_sector_match, thm:periodic_overlap_zero_ne_dim, thm:periodic_overlap_gauge_equiv_sector_match}
+    \uses{thm:periodic_overlap_zero_ne_period,thm:periodic_overlap_zero_no_sector_match,thm:periodic_overlap_zero_ne_dim,thm:periodic_overlap_gauge_equiv_sector_match}
     If $m_A\ne m_B$, then
     $\lim_{N\to\infty}O_{AB}(N)=0$ by
     Lemma~\ref{thm:periodic_overlap_zero_ne_period}. Assume $m_A=m_B=m$.
@@ -243,7 +243,7 @@
     independent for every sufficiently large $N$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:periodic_bond_dimension_pos, thm:periodic_self_overlap_tendsto}
+    \uses{thm:periodic_bond_dimension_pos,thm:periodic_self_overlap_tendsto}
     The Gram matrix converges to the diagonal matrix whose $j$-th diagonal
     entry is the positive period of $A_j$. Its determinant therefore has a
     nonzero limit, so the Gram matrix is invertible for every sufficiently
@@ -273,7 +273,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy}
+    \uses{thm:periodic_bond_dimension_pos,thm:periodic_family_li_of_cross_overlap_decay,thm:periodic_overlap_dichotomy}
     Periodicity makes every bond dimension positive. For distinct $i,j$, the
     repeated-block alternative in
     Lemma~\ref{thm:periodic_overlap_dichotomy} contradicts pairwise
@@ -302,7 +302,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy}
+    \uses{thm:periodic_bond_dimension_pos,thm:periodic_family_li_of_cross_overlap_decay,thm:periodic_overlap_dichotomy}
     There are finitely many subfamilies. For each subfamily $S\subseteq J$
     apply Lemma~\ref{thm:periodic_family_li_of_cross_overlap_decay} at the
     least common multiple $p_S$ of the periods occurring in $S$, the
@@ -402,7 +402,7 @@
     \label{thm:peripheral_periodic_ft_proportional_same}
     \lean{MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos}
     \leanok
-    \uses{def:periodic_tensor, def:same_mpv2_pos, thm:periodic_overlap_dichotomy, thm:periodic_self_overlap_tendsto}
+    \uses{def:periodic_tensor,def:same_mpv2_pos,thm:periodic_overlap_dichotomy,thm:periodic_self_overlap_tendsto}
     Let $A$ and $B$ be periodic tensors with the same matrix product vectors
     at every positive length.
     Then their bond dimensions agree, and after identifying the bond spaces,
@@ -487,7 +487,7 @@
     (\cite[lines~286--305, 625--627]{DeLasCuevas2017Irreducible}).
 \end{lemma}
 \begin{proof}
-    \uses{thm:repeated_blocks_phase_power_mpv, thm:gauge_phase_mpv_scaling}
+    \uses{thm:repeated_blocks_phase_power_mpv,thm:gauge_phase_mpv_scaling}
     \leanok
     Take $\xi$ to be the reciprocal of the phase from
     Lemma~\ref{thm:repeated_blocks_phase_power_mpv}, which
@@ -517,7 +517,7 @@
     unit-circle eigenvalues.
 \end{lemma}
 \begin{proof}
-    \uses{thm:transfer_map_smul_unit_norm, thm:cpsv_gauge_transfer_similarity, %
+    \uses{thm:transfer_map_smul_unit_norm,thm:cpsv_gauge_transfer_similarity,%
         lem:peripheral_spectrum_similarity}
     \leanok
     Write $A^i=\xi YB^iY^{-1}$ with $|\xi|=1$.  The transfer map of $\xi C$ is
@@ -564,7 +564,7 @@
     $A$ and $B$ are repeated blocks, then $m=n$.
 \end{lemma}
 \begin{proof}
-    \uses{thm:repeated_blocks_peripheral_spectrum, %
+    \uses{thm:repeated_blocks_peripheral_spectrum,%
         thm:spectral_period_eq_of_peripheral_spectrum}
     \leanok
     Repeated blocks have the same peripheral spectrum by
@@ -585,7 +585,7 @@
     the same three assertions hold for the two original families.
 \end{lemma}
 \begin{proof}
-    \uses{lem:pure_gauge_het_repeated_blocks, thm:gauge_invariance}
+    \uses{lem:pure_gauge_het_repeated_blocks,thm:gauge_invariance}
     \leanok
     Cyclicity of the trace makes every closed-chain coefficient, and hence
     every mixed overlap, invariant under the two similarities.  Thus decay and
@@ -640,7 +640,7 @@
     the result to unnormalized spectrally periodic blocks.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:finite_coefficient_isolation, lem:nonzero_proportional_mpv_basic, thm:gauge_phase_mpv_scaling, thm:mpv_decomposition, thm:periodic_bond_dimension_pos, thm:periodic_family_li_of_cross_overlap_decay, thm:periodic_overlap_dichotomy, lem:sector_decomposition_coeff_not_eventually_zero}
+    \uses{lem:finite_coefficient_isolation,lem:nonzero_proportional_mpv_basic,thm:gauge_phase_mpv_scaling,thm:mpv_decomposition,thm:periodic_bond_dimension_pos,thm:periodic_family_li_of_cross_overlap_decay,thm:periodic_overlap_dichotomy,lem:sector_decomposition_coeff_not_eventually_zero}
     Fix $j_0\in J$ and suppose that its overlap with every $B_k$ tends to
     zero. Let $T\subseteq J$ be the set of all indices with this property.
     For every $j\notin T$, choose $k(j)$ for which the mixed overlap does not
@@ -682,7 +682,7 @@
     \lean{MPSTensor.PeriodicOverlapHypothesis.%
         ofSpectrallyPeriodicSectorDecompositions}
     \leanok
-    \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
+    \uses{def:nonzero_proportional_mpv,def:spectral_periodic_tensor}
     Let
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i), &
@@ -706,7 +706,7 @@
     unit-modulus scalar.
 \end{lemma}
 \begin{proof}
-    \uses{lem:periodic_overlap_hypothesis_gauge_transport, lem:pure_gauge_het_repeated_blocks, thm:gauge_invariance, thm:periodic_multiplicity_nondecaying_overlap, thm:spectral_periodic_sector_normalization}
+    \uses{lem:periodic_overlap_hypothesis_gauge_transport,lem:pure_gauge_het_repeated_blocks,thm:gauge_invariance,thm:periodic_multiplicity_nondecaying_overlap,thm:spectral_periodic_sector_normalization}
     \leanok
     Normalize all representatives by their pure Perron gauges and combine
     the gauges block diagonally.  The multiplicity matrices and their grouped
@@ -721,7 +721,7 @@
     \label{thm:periodic_scalar_weight_nondecaying_overlap}
     \lean{MPSTensor.PeriodicOverlapHypothesis.ofIsIrreducibleForm}
     \leanok
-    \uses{def:irreducible_form, def:nonzero_proportional_mpv}
+    \uses{def:irreducible_form,def:nonzero_proportional_mpv}
     Let $A$ and $B$ each have the same length-$N$ matrix-product vector, for
     every $N\geq0$, as a scalar-weight direct sum formed from a finite,
     pairwise non-repeated family of left-canonical periodic tensors
@@ -773,7 +773,7 @@
     \label{thm:periodic_ft_proportional}
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional_irreducibleForm}
     \leanok
-    \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
+    \uses{def:nonzero_proportional_mpv,def:spectral_periodic_tensor}
     Let $A$ and $B$ have multiplicity-bearing irreducible forms
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
@@ -805,8 +805,7 @@
     (\cite[lines~257--258]{DeLasCuevas2017Irreducible}).
 \end{theorem}
 \begin{proof}
-    \uses{thm:spectral_periodic_period_existence,
-        thm:periodic_ft_proportional_supplied_periods}
+    \uses{thm:spectral_periodic_period_existence,thm:periodic_ft_proportional_supplied_periods}
     \leanok
     Lemma~\ref{thm:spectral_periodic_period_existence} produces a positive
     period for each block of either family, and
@@ -818,7 +817,7 @@
     \label{thm:periodic_ft_proportional_supplied_periods}
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
     \leanok
-    \uses{def:nonzero_proportional_mpv, def:spectral_periodic_tensor}
+    \uses{def:nonzero_proportional_mpv,def:spectral_periodic_tensor}
     Under the hypotheses of Theorem~\ref{thm:periodic_ft_proportional}, suppose
     in addition that positive integers $m_j$ and $n_k$ are given such that each
     $A_j$ is spectrally $m_j$-periodic and each $B_k$ is spectrally $n_k$-periodic
@@ -826,7 +825,7 @@
     Theorem~\ref{thm:periodic_ft_proportional} hold for these specified periods.
 \end{corollary}
 \begin{proof}
-    \uses{thm:repeated_blocks_period_eq, thm:periodic_conditional_block_matching, thm:periodic_spectral_multiplicity_nondecaying_overlap}
+    \uses{thm:repeated_blocks_period_eq,thm:periodic_conditional_block_matching,thm:periodic_spectral_multiplicity_nondecaying_overlap}
     \leanok
     Lemma~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap}
     gives non-decaying partners in both directions and classifies every
@@ -843,8 +842,7 @@
         MPSTensor.MPVBlockPhaseEquiv.hetRepeatedBlocks_of_isSpectrallyPeriodic,
         MPSTensor.IsPeriodic.isSpectrallyPeriodic}
     \leanok
-    \uses{def:spectral_periodic_tensor,def:nonzero_proportional_mpv,
-        def:mpv_block_phase_equiv,def:periodic_tensor}
+    \uses{def:spectral_periodic_tensor,def:nonzero_proportional_mpv,def:mpv_block_phase_equiv,def:periodic_tensor}
     Let $A$ and $B$ be spectrally periodic blocks. If their matrix product
     vectors are proportional by a nonzero scalar at every positive length,
     then $A$ and $B$ are repeated blocks. In particular, this holds when
@@ -891,8 +889,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_proportional_single_block,thm:repeated_blocks_period_eq,
-        lem:left_canonical_irreducible_same_phase_unitary_gauge,lem:gauge_phase_equiv_cast_compose}
+    \uses{thm:periodic_proportional_single_block,thm:repeated_blocks_period_eq,lem:left_canonical_irreducible_same_phase_unitary_gauge,lem:gauge_phase_equiv_cast_compose}
     Lemma~\ref{thm:periodic_proportional_single_block} makes each member
     repeated with its representative, giving equal dimensions and periods.
     Lemma~\ref{lem:left_canonical_irreducible_same_phase_unitary_gauge}
@@ -964,8 +961,7 @@
     \label{thm:periodic_grouped_unitary}
     \lean{MPSTensor.MPVPhaseClassData.exists_unitary_sectorDecomposition}
     \leanok
-    \uses{def:periodic_grouped_multiplicities,def:periodic_tensor,def:same_mpv2_pos,
-        def:block_diagonal_tensor}
+    \uses{def:periodic_grouped_multiplicities,def:periodic_tensor,def:same_mpv2_pos,def:block_diagonal_tensor}
     Let $A_k$ be left-canonical periodic blocks and let every $\mu_k$ be
     nonzero. Set $T^i=\bigoplus_k\mu_k A_k^i$.
     There are phases $\xi_{j,q}$ in
@@ -988,8 +984,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_phase_class_unitary_match,thm:coisometry_reconstruction_same_mpv_pos,
-        thm:periodic_matched_blocks_global_similarity}
+    \uses{thm:periodic_phase_class_unitary_match,thm:coisometry_reconstruction_same_mpv_pos,thm:periodic_matched_blocks_global_similarity}
     Choose the phases and unitaries of
     Lemma~\ref{thm:periodic_phase_class_unitary_match}. Multiplying
     (\ref{eq:periodic_phase_class_unitary}) by $\mu_{e(j,q)}$ and using

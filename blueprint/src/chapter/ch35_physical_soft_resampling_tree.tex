@@ -52,9 +52,7 @@ dependence on the gap, and no running-time estimate is asserted.
     at every internal cut $j$. This bound concerns the recorded generators.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:actual_interval_original_target_joint_probability,
-        lem:canonical_interval_resampling_good_measurable,
-        lem:actual_interval_resampling_tree_profile}
+    \uses{lem:actual_interval_original_target_joint_probability,lem:canonical_interval_resampling_good_measurable,lem:actual_interval_resampling_tree_profile}
     Choose one of the assumed families on each interval, retaining its
     additional data. Apply the existing joint-history estimate and the
     unconditional recorded-rank estimate to those same families.
@@ -141,9 +139,7 @@ dependence on the gap, and no running-time estimate is asserted.
     $[a_J+2\ell,b_J+1)$ of the selected geometry.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:physical_soft_sampling_data,lem:physical_soft_interval_history,
-        lem:canonical_interval_resampling_selection,
-        thm:successful_tree_energy_induction}
+    \uses{lem:physical_soft_sampling_data,lem:physical_soft_interval_history,lem:canonical_interval_resampling_selection,thm:successful_tree_energy_induction}
     Choose the uniform numerical data and the independent original-ground
     reference once. Its common radius supplies every interval's exact
     weighted trimming budget. Apply the physical interval-history
@@ -174,9 +170,7 @@ dependence on the gap, and no running-time estimate is asserted.
     \label{thm:successful_tree_energy_induction}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_successful_tree_energy_induction,
         TNLean.MPS.AreaLaw.ALVV.IsTerminalRitzEnergyAssignment}\leanok
-    \uses{lem:root_energy_node_relation_assignment,
-        lem:selected_soft_terminal_node_energy,
-        def:canonical_interval_resampling_good}
+    \uses{lem:root_energy_node_relation_assignment,lem:selected_soft_terminal_node_energy,def:canonical_interval_resampling_good}
     Retain the interaction, numerical and coordinate assumptions of
     Lemma~\ref{lem:selected_soft_terminal_node_energy}, with $G$ the full
     ground space of $H$ at its least spectral value $\mu$. Fix the families,
@@ -208,9 +202,7 @@ dependence on the gap, and no running-time estimate is asserted.
     \cite{gap:alvv16_soft_regional_energy_centering}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:root_energy_node_relation_assignment,
-        lem:selected_soft_terminal_node_energy,
-        lem:adjacent_interval_energy_merge,thm:actual_adjacent_interval_merge}
+    \uses{lem:root_energy_node_relation_assignment,lem:selected_soft_terminal_node_energy,lem:adjacent_interval_energy_merge,thm:actual_adjacent_interval_merge}
     On the success event every listed interval is $3/200$-viable and
     carries its literal history; short children are the full local space.
     The children of a listed interval are short or listed, so their merge
@@ -241,8 +233,7 @@ dependence on the gap, and no running-time estimate is asserted.
     running time is asserted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:physical_soft_resampling_tree,lem:same_root_polynomial_refinement,
-        lem:full_interval_viability}
+    \uses{thm:physical_soft_resampling_tree,lem:same_root_polynomial_refinement,lem:full_interval_viability}
     On the success event the root is $3/200$-viable on the whole chain, which
     is $3/200$-closeness of the same space in chain coordinates, and its
     dimension is at most $\mathrm{count}$ for every seed. Apply the same-root

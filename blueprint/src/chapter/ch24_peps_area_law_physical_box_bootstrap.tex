@@ -27,8 +27,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:al_scanner_scale_facts,
-        thm:al_scan_transport_coefficients_log}
+    \uses{lem:al_scanner_scale_facts,thm:al_scan_transport_coefficients_log}
     Lemma~\ref{thm:al_scan_transport_coefficients_log} bounds the two round-energy coefficients by
     $C_d(\log n)^{C_l}$, and Lemma~\ref{lem:al_scanner_scale_facts} gives $nD^2/(mK)\leq C_s n^\ell D^2$.
     Substituting $a=W/K$ into the physical history density-plus-tail bound yields
@@ -73,15 +72,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_scan_target_typical_window,
-        thm:al_global_schmidt_bell_prevector,
-        thm:al_positive_prefix_entropy_transfer,
-        thm:al_scan_actual_rough_upper,
-        thm:arealaw-physical-endpoint-loss,
-        thm:arealaw-actual-selected-energy,
-        thm:actual_scan_supplied_prevector_rough_lower,
-        thm:arealaw-generic-charge-energy,
-        thm:arealaw-generic-selected-energy}
+    \uses{thm:al_scan_target_typical_window,thm:al_global_schmidt_bell_prevector,thm:al_positive_prefix_entropy_transfer,thm:al_scan_actual_rough_upper,thm:arealaw-physical-endpoint-loss,thm:arealaw-actual-selected-energy,thm:actual_scan_supplied_prevector_rough_lower,thm:arealaw-generic-charge-energy,thm:arealaw-generic-selected-energy}
     Constructing one truncated ground vector and typical window
     (Lemma~\ref{thm:al_scan_target_typical_window}) and one global Schmidt--Bell prevector
     (Lemma~\ref{thm:al_global_schmidt_bell_prevector}) transfers the prefix entropy bounds via
@@ -112,9 +103,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:arealaw-source-rough-budget-power,
-        thm:arealaw-selected-density-principal,
-        lem:al_scanner_scale_facts}
+    \uses{thm:arealaw-source-rough-budget-power,thm:arealaw-selected-density-principal,lem:al_scanner_scale_facts}
     By Lemma~\ref{thm:arealaw-source-rough-budget-power}, Lemma~\ref{thm:arealaw-selected-density-principal},
     and $D\leq2n^e$, $m\geq n^\mu/2$ (Lemma~\ref{lem:al_scanner_scale_facts}), the non-remainder
     density contribution is at most $\delta/2$ for suitable $C_\delta$, while at fixed physical
@@ -178,15 +167,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:fixed_weight_four_transport_smallness,
-        thm:scanner_rounded_admissibility,
-        thm:arealaw-source-rough-comparison,
-        thm:arealaw-rough-selected-density,
-        thm:arealaw-bootstrap-selected-energy,
-        thm:arealaw-bootstrap-restored-budget,
-        thm:arealaw-target-entropy-transfer,
-        thm:area_law_selected_schmidt_entropy_bounds,
-        thm:area_law_rough_typical_entropy_absorption}
+    \uses{thm:fixed_weight_four_transport_smallness,thm:scanner_rounded_admissibility,thm:arealaw-source-rough-comparison,thm:arealaw-rough-selected-density,thm:arealaw-bootstrap-selected-energy,thm:arealaw-bootstrap-restored-budget,thm:arealaw-target-entropy-transfer,thm:area_law_selected_schmidt_entropy_bounds,thm:area_law_rough_typical_entropy_absorption}
     By Lemmas~\ref{thm:fixed_weight_four_transport_smallness} and \ref{thm:scanner_rounded_admissibility},
     Lemmas~\ref{thm:arealaw-source-rough-comparison}, \ref{thm:arealaw-rough-selected-density},
     and \ref{thm:arealaw-bootstrap-selected-energy} apply at the selected point. Setting
@@ -286,12 +267,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:bootstrap_scanner_exponents,
-        thm:arealaw-source-bootstrap-entropy,
-        thm:arealaw-weak-rectangle-source-entropy,
-        thm:arealaw-box-supremum-powers,
-        thm:arealaw-box-supremum-small-sizes,
-        thm:rectangle_bootstrap_scanner_geometry}
+    \uses{def:bootstrap_scanner_exponents,thm:arealaw-source-bootstrap-entropy,thm:arealaw-weak-rectangle-source-entropy,thm:arealaw-box-supremum-powers,thm:arealaw-box-supremum-small-sizes,thm:rectangle_bootstrap_scanner_geometry}
     Applying Lemmas~\ref{thm:arealaw-box-supremum-powers},
     \ref{thm:arealaw-weak-rectangle-source-entropy} ($b=e_*$), and
     \ref{thm:arealaw-source-bootstrap-entropy} to the rectangle scanner of
@@ -314,10 +290,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_initial_box,
-        thm:area_law_box_entropy_bounds,
-        thm:area_law_finite_exponent_improvement,
-        thm:arealaw-physical-box-step}
+    \uses{thm:area_law_initial_box,thm:area_law_box_entropy_bounds,thm:area_law_finite_exponent_improvement,thm:arealaw-physical-box-step}
     Combine the uniform initial exponent $e_0\in(0,1)$ of Theorem~\ref{thm:area_law_initial_box},
     the quadratic volume bound of Lemma~\ref{thm:area_law_box_entropy_bounds}, and the one-step
     improvement (\ref{eq:arealaw-physical-box-step}) of Lemma~\ref{thm:arealaw-physical-box-step}
@@ -331,8 +304,7 @@ For real $D_0>2R+10$, write $F_{\mathrm{box},D_0}(r)$ for the safe-box supremum
     \label{thm:arealaw-physical-safe-rectangle-real}
     \lean{TNLean.PEPS.AreaLaw.exists_regionEntropy_safe_rect_le_boxError}
     \leanok
-    \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
-        def:area_law_safe_rectangle}
+    \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,def:area_law_safe_rectangle}
     Fix integers $q\geq1$, $R\geq0$ and reals $J\geq0$, $\Delta>0$. There exists $C>0$
     (depending only on $q,R,J,\Delta$) such that for every real $D_0>2R+10$, finite domain
     $\Lambda\subseteq\mathbb Z^2$, $(R,J)$-Hamiltonian $H$ with $\Delta$-gapped ground state
@@ -347,9 +319,7 @@ For real $D_0>2R+10$, write $F_{\mathrm{box},D_0}(r)$ for the safe-box supremum
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:arealaw-physical-box-fixed-exponent,
-        thm:arealaw-box-clearance-comparison,
-        thm:arealaw-box-supremum-powers}
+    \uses{thm:arealaw-physical-box-fixed-exponent,thm:arealaw-box-clearance-comparison,thm:arealaw-box-supremum-powers}
     Put $d=2R+10\ge3$. Theorem~\ref{thm:arealaw-physical-box-fixed-exponent} gives $C_b>0$ with
     $F_{\mathrm{box},d+1}(r)\leq C_b r^{1+e_*}$, and Lemma~\ref{thm:arealaw-box-clearance-comparison}
     gives

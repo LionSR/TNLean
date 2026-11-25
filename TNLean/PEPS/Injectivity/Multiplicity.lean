@@ -18,7 +18,6 @@ import TNLean.PEPS.Injectivity.Multiplicity.GraphInsertedRegionSupport
 import TNLean.PEPS.Injectivity.Multiplicity.GraphOpenAveragingBondState
 import TNLean.PEPS.Injectivity.Multiplicity.GraphRegularStateNonzero
 import TNLean.PEPS.Injectivity.Multiplicity.PhysicalCoherentTransport
-import TNLean.PEPS.Injectivity.Multiplicity.PhysicalProductFamilyRangeSupport
 import TNLean.PEPS.Injectivity.Multiplicity.PhysicalProductRangeSupport
 import TNLean.PEPS.Injectivity.Multiplicity.RegularGraphBondBlocking
 import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondIsometry

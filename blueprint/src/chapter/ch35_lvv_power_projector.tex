@@ -43,7 +43,7 @@ and~\ref{thm:huang_positive_chain_operator}).
         TNLean.MPS.AreaLaw.norm_powerProjector,
         TNLean.MPS.AreaLaw.powerProjector_apply_ground}
     \leanok
-    \uses{def:lvv_power_projector, def:chain_model}
+    \uses{def:lvv_power_projector,def:chain_model}
     Let $L\ge1$, and let $A$ be defined by~(\ref{eq:lvv_power_projector}) with
     $n=L$. Then $A$ is positive semidefinite, $\|A\|=1$ and $A\Gamma=\Gamma$.
     This is the first assertion of~\cite[line 602]{Landau2015Polynomial}.
@@ -67,7 +67,7 @@ and~\ref{thm:huang_positive_chain_operator}).
     \label{thm:lvv_power_cutdown}
     \lean{TNLean.MPS.AreaLaw.norm_inner_powerProjector_le}
     \leanok
-    \uses{def:lvv_power_projector, def:chain_model}
+    \uses{def:lvv_power_projector,def:chain_model}
     Let $L\ge1$, $n=L$ and $\varepsilon_1=\varepsilon_0+\Delta$. For every unit
     vector $\Gamma^\perp$ orthogonal to $\Gamma$,
     \begin{align*}
@@ -97,7 +97,7 @@ and~\ref{thm:huang_positive_chain_operator}).
     \label{thm:lvv_power_threshold}
     \lean{TNLean.MPS.AreaLaw.norm_powerProjector_sub_le}
     \leanok
-    \uses{def:lvv_power_projector, def:chain_model}
+    \uses{def:lvv_power_projector,def:chain_model}
     Let $L\ge1$, $n=L$ and $\eta>0$. If
     $m\ge((n-\varepsilon_0)/\Delta)\log(1/\eta)$, then
     $\|A-|\Gamma\rangle\langle\Gamma|\|\le\eta$. With $\eta=c_\varepsilon/(2q(n))$
@@ -137,7 +137,7 @@ and~\ref{thm:huang_positive_chain_operator}).
     \label{thm:lvv_power_expansion}
     \lean{TNLean.MPS.AreaLaw.powerProjector_eq_sum_bondComplementWord}
     \leanok
-    \uses{def:lvv_power_projector, def:lvv_power_letters}
+    \uses{def:lvv_power_projector,def:lvv_power_letters}
     Let $L\ge1$, $n=L$ and $C=1/(1-\varepsilon_0/n)$. Then
     \begin{align*}
         A=C^m\frac{1}{n^m}\sum_{I\in\{0,\ldots,n-1\}^m}P_I.

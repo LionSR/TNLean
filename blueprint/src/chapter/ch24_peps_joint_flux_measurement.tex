@@ -48,8 +48,7 @@
     \label{thm:peps_torus_joint_flux_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusJointFluxAssignment}
     \leanok
-    \uses{def:peps_torus_joint_flux_geometry,
-        def:peps_torus_plaquette_flux_geometry}
+    \uses{def:peps_torus_joint_flux_geometry,def:peps_torus_plaquette_flux_geometry}
     The counterclockwise left, right, and outer walks have respective
     holonomies $a$, $b$, and $ab$. The formulas hold at every translated
     position, including both periodic seams.
@@ -67,10 +66,7 @@
     \label{thm:peps_torus_joint_flux_physical_measurement}
     \lean{TNLean.PEPS.IsGIsometric.exists_torusJointFlux_physicalMeasurement}
     \leanok
-    \uses{thm:peps_translated_two_plaquette_geometry,
-        thm:peps_torus_joint_flux_holonomy,
-        thm:peps_closed_walk_class_physical_measurement,
-        thm:peps_physical_cut_column_action}
+    \uses{thm:peps_translated_two_plaquette_geometry,thm:peps_torus_joint_flux_holonomy,thm:peps_closed_walk_class_physical_measurement,thm:peps_physical_cut_column_action}
     Let the original four-leg tensor be $G$-isometric for the regular action.
     Under the stated period bounds, for every position $v$ there is a complete
     projective measurement $(Q_C)_C$ on the six original spins of $R_v$.

@@ -158,8 +158,7 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
     \lean{Matrix.obc_trace_reconstruction_of_adjacent_pair_sections,
         Matrix.obc_scalar_reconstruction_of_adjacent_pair_sections}
     \leanok
-    \uses{lem:varying_obc_pair_sections_reconstruct,
-        lem:varying_obc_prefix_product_row_isometry}
+    \uses{lem:varying_obc_pair_sections_reconstruct,lem:varying_obc_prefix_product_row_isometry}
     Consider an open chain of $N\ge2$ sites, canonically normalized as above,
     and assume that the matrices at each site span the corresponding
     rectangular matrix space. Let $\phi$ be a coefficient family on the
@@ -261,8 +260,7 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
         Matrix.pair_sections_of_hamiltonian_obcParentInteraction_apply_eq_zero,
         Matrix.hamiltonian_obcParentInteraction_apply_eq_zero_iff_pair_sections}
     \leanok
-    \uses{def:varying_obc_parent_projectors,
-        lem:varying_obc_pair_projector_kernel}
+    \uses{def:varying_obc_parent_projectors,lem:varying_obc_pair_projector_kernel}
     The Hamiltonian $H_N$ is positive. A vector $\phi$ satisfies $H_N\phi=0$
     if and only if, for every adjacent
     pair and every fixed outside configuration, there is a
@@ -340,8 +338,7 @@ afterwards, for arbitrary physical dimensions.
     \label{lem:varying_obc_scalar_state_normalized}
     \lean{Matrix.norm_obcScalarState_eq_one}
     \leanok
-    \uses{def:varying_obc_scalar_state,
-        lem:varying_obc_prefix_product_row_isometry}
+    \uses{def:varying_obc_scalar_state,lem:varying_obc_prefix_product_row_isometry}
     If $\sum_iB^{[j]}_i B^{[j]\dagger}_i=I_{D_j}$ at every site and
     $D_0=D_N=1$, then $\|\Omega\|=1$.
 \end{lemma}
@@ -355,8 +352,7 @@ afterwards, for arbitrary physical dimensions.
     \lean{Matrix.obcBoundaryState_one_eq_obcScalarState,
         Matrix.hamiltonian_obcParentInteraction_apply_obcScalarState}
     \leanok
-    \uses{def:varying_obc_scalar_state,
-        lem:varying_obc_boundary_states_parent_kernel}
+    \uses{def:varying_obc_scalar_state,lem:varying_obc_boundary_states_parent_kernel}
     For singleton endpoint bonds, the boundary trace state of
     Lemma~\ref{lem:varying_obc_boundary_states_parent_kernel} with unit
     scalar boundary $Z=1\in M_{1,1}(\mathbb C)$ is precisely $\Omega$:
@@ -382,10 +378,7 @@ afterwards, for arbitrary physical dimensions.
         Matrix.ker_hamiltonian_obcParentInteraction_eq_span,
         Matrix.finrank_ker_hamiltonian_obcParentInteraction_eq_one}
     \leanok
-    \uses{lem:varying_obc_parent_kernel_sections,
-        lem:varying_obc_full_chain_reconstruction,
-        lem:varying_obc_scalar_state_normalized,
-        lem:varying_obc_scalar_state_parent_kernel}
+    \uses{lem:varying_obc_parent_kernel_sections,lem:varying_obc_full_chain_reconstruction,lem:varying_obc_scalar_state_normalized,lem:varying_obc_scalar_state_parent_kernel}
     Consider $N\ge2$ sites with a common physical alphabet. Suppose that the
     endpoint bonds are singletons, the site matrices obey the canonical row
     equations, and each site family spans its rectangular matrix space.

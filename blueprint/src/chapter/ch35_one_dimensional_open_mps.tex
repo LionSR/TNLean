@@ -73,8 +73,7 @@ this bound with the area law to prove Theorem~B.
     \cite[Proposition~5.7]{Arad2016RigorousRG}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_open_mps,lem:qc_placed_operators,
-        thm:qc_supported_operator_placement}
+    \uses{def:chain_open_mps,lem:qc_placed_operators,thm:qc_supported_operator_placement}
     For a site product take the scalar multiplying the contraction
     to be one, all virtual dimensions to be one, and
     $A_i(s)_{0,0}=f_i(s)$. The unique virtual path gives $\phi(w)$.
@@ -349,8 +348,7 @@ this bound with the area law to prove Theorem~B.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank,
-        lem:chain_sequential_truncation}
+    \uses{def:chain_open_mps,thm:chain_mps_of_cut_rank,lem:chain_sequential_truncation}
     Each $P_k$ is an orthogonal projection, hence a contraction. Telescoping
     gives
     $\Phi-\psi=\sum_k P_1\cdots P_{k-1}(P_k-1)\psi$,
@@ -388,8 +386,7 @@ this bound with the area law to prove Theorem~B.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:chain_open_mps, thm:chain_mps_of_cut_rank,
-        lem:chain_sequential_truncation}
+    \uses{def:chain_open_mps,thm:chain_mps_of_cut_rank,lem:chain_sequential_truncation}
     Each $\Pi_k$ is an orthogonal projection of rank
     $\min\{D,N_k\}\le D$, and the trace of $(1-\Pi_k)\rho_k$ is
     $\operatorname{tr}\rho_k$ minus the sum of the $\min\{D,N_k\}$ largest
@@ -464,7 +461,7 @@ this bound with the area law to prove Theorem~B.
         TNLean.MPS.AreaLaw.exists_sequentialTruncation
     }
     \leanok
-    \uses{def:chain_open_mps, thm:peps_regional_extension_algebra}
+    \uses{def:chain_open_mps,thm:peps_regional_extension_algebra}
     Let $\psi$ be a unit vector on $L$ sites and let $w$ be a real number. For
     each cut $k$,
     $1\le k\le L-1$, let $S_k$ be the entropy of the first $k$ sites, let

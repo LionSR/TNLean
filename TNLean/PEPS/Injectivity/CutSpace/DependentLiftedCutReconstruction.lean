@@ -20,7 +20,7 @@ Theorem 5.4 and Section 7.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
-open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
+open TNLean.Network.DependentBondNetwork
 
 variable {Vertex Edge : Type*} [Fintype Vertex] [Fintype Edge]
 variable [DecidableEq Vertex] [DecidableEq Edge]
@@ -179,10 +179,10 @@ theorem cutMap_reconstructedCutBoundary [∀ v, Fintype (Phys v)]
     (M : CutConfig C D × OutsidePhysicalConfig R Phys → ℂ)
     (σ : (v : Vertex) → Phys v) :
     cutMap tail head D A C (reconstructedCutBoundary tail head D R C hcut L M) σ =
-      dependentPhysicalProductFamilyMap
+      (Matrix.piKronecker
         (fun v : {v // v ∉ R} ↦
-          LinearMap.toMatrix' (localSiteMap tail head D A v.1) * L v)
-        (fun τ ↦ liftedCutMap tail head D A R C M (replaceOutsidePhysical R σ τ))
+          LinearMap.toMatrix' (localSiteMap tail head D A v.1) * L v) *ᵥ
+        fun τ ↦ liftedCutMap tail head D A R C M (replaceOutsidePhysical R σ τ))
         (outsidePhysicalRestriction R σ) := by
   classical
   let f (β : EndpointConfig D)
@@ -219,7 +219,7 @@ theorem cutMap_reconstructedCutBoundary [∀ v, Fintype (Phys v)]
   have hentry (v : Vertex) (η : LocalConfig tail head D v) (s : Phys v) :
       LinearMap.toMatrix' (localSiteMap tail head D A v) s η = A v η s := by
     simp [LinearMap.toMatrix'_apply, localSiteMap_apply, Pi.single_apply]
-  simp only [dependentPhysicalProductFamilyMap_apply, Matrix.mul_apply, hentry]
+  simp only [Matrix.piKronecker_mulVec_apply, Matrix.mul_apply, hentry]
   simp_rw [Fintype.prod_sum]
   simp only [Finset.sum_mul]
   rw [Finset.sum_comm]
@@ -251,8 +251,8 @@ theorem liftedCutSpace_inf_range_product_le_cutSpace [∀ v, Finite (Phys v)]
     (R : Finset Vertex) (C : Finset Edge)
     (hcut : ∀ p : Endpoint Edge, endpointVertex tail head p ∉ R → p.1 ∈ C) :
     liftedCutSpace tail head D A R C ⊓
-        LinearMap.range (dependentPhysicalProductFamilyMap
-          (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))) ≤
+        LinearMap.range (Matrix.piKronecker
+          (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))).mulVecLin ≤
       cutSpace tail head D A C := by
   classical
   let (v : Vertex) := Fintype.ofFinite (Phys v)
@@ -274,21 +274,21 @@ theorem liftedCutSpace_inf_range_product_le_cutSpace [∀ v, Finite (Phys v)]
   refine ⟨reconstructedCutBoundary tail head D R C hcut L M, ?_⟩
   funext σ
   rw [cutMap_reconstructedCutBoundary]
-  have hfixed : dependentPhysicalProductFamilyMap
-      (fun v : {v // v ∉ R} ↦ LinearMap.toMatrix' (localSiteMap tail head D A v.1) * L v)
+  have hfixed : Matrix.piKronecker
+      (fun v : {v // v ∉ R} ↦ LinearMap.toMatrix' (localSiteMap tail head D A v.1) * L v) *ᵥ
       (fun τ ↦ ψ (replaceOutsidePhysical R σ τ)) =
         (fun τ ↦ ψ (replaceOutsidePhysical R σ τ)) := by
-    apply dependentPhysicalProductFamilyMap_fixed_of_slices_fixed
+    apply Matrix.piKronecker_mulVec_eq_self_of_slice
     intro v τ
     apply hL v
     simp_rw [replaceOutsidePhysical_update]
-    have hs := (mem_range_dependentPhysicalProductFamilyMap_iff _ ψ).mp hψ v.1
+    have hs := (Matrix.mem_range_mulVecLin_piKronecker_iff _ ψ).mp hψ v.1
       (replaceOutsidePhysical R σ τ)
     change (fun s ↦ ψ (Function.update (replaceOutsidePhysical R σ τ) v.1 s)) ∈
       LinearMap.range (Matrix.toLin' (LinearMap.toMatrix' (localSiteMap tail head D A v.1))) at hs
     simpa only [Matrix.toLin'_toMatrix'] using hs
-  change dependentPhysicalProductFamilyMap _
-    (fun τ ↦ (liftedCutMap tail head D A R C M) (replaceOutsidePhysical R σ τ)) _ = _
+  change (Matrix.piKronecker _ *ᵥ
+    fun τ ↦ (liftedCutMap tail head D A R C M) (replaceOutsidePhysical R σ τ)) _ = _
   rw [hM, hfixed]
   simp only [replaceOutsidePhysical_restriction]
 
@@ -300,8 +300,8 @@ theorem cutSpace_eq_liftedCutSpace_inf_range_product [∀ v, Finite (Phys v)]
     (R : Finset Vertex) (C : Finset Edge)
     (hcut : ∀ p : Endpoint Edge, endpointVertex tail head p ∉ R → p.1 ∈ C) :
     cutSpace tail head D A C = liftedCutSpace tail head D A R C ⊓
-      LinearMap.range (dependentPhysicalProductFamilyMap
-        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))) := by
+      LinearMap.range (Matrix.piKronecker
+        (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))).mulVecLin := by
   exact le_antisymm
     (le_inf (cutSpace_le_liftedCutSpace tail head D A R C hcut)
       (cutSpace_le_range_product tail head D A C))

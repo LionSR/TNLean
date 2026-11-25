@@ -56,7 +56,7 @@ about the ungraded contraction rather than graded injectivity.
 \begin{definition}[Twisted periodic amplitude]\label{def:kitaev_twisted_coeff}
     \lean{MPSTensor.kitaevTwistedCoeff}
     \leanok
-    \uses{def:kitaev_tensor, def:eval_word}
+    \uses{def:kitaev_tensor,def:eval_word}
     For a word $w=(i_1,\ldots,i_N)$ the twisted periodic amplitude is
     $\tr(YA^{i_1}\cdots A^{i_N})$, the coefficient of $w$
     in~(\ref{eq:kitaev_chain_state}).
@@ -81,7 +81,7 @@ about the ungraded contraction rather than graded injectivity.
 \begin{lemma}[Products of the Kitaev-chain matrices]\label{lem:kitaev_eval_word}
     \lean{MPSTensor.kitaevTensor_evalWord}
     \leanok
-    \uses{def:kitaev_tensor, def:eval_word, lem:kitaev_twist_sq}
+    \uses{def:kitaev_tensor,def:eval_word,lem:kitaev_twist_sq}
     If the word $w$ contains the letter $1$ exactly $k$ times, then
     $A^{i_1}\cdots A^{i_N}=Y^k$.
 \end{lemma}
@@ -95,7 +95,7 @@ about the ungraded contraction rather than graded injectivity.
 \begin{lemma}[Periodic amplitudes]\label{thm:kitaev_amplitudes}
     \lean{MPSTensor.kitaevTensor_coeff, MPSTensor.kitaevTwistedCoeff_eq}
     \leanok
-    \uses{def:mpv, def:kitaev_twisted_coeff, lem:kitaev_eval_word}
+    \uses{def:mpv,def:kitaev_twisted_coeff,lem:kitaev_eval_word}
     Let the word $w$ contain the letter $1$ exactly $k$ times. Then
     \begin{align}
         \tr(A^{i_1}\cdots A^{i_N})
@@ -167,7 +167,7 @@ about the ungraded contraction rather than graded injectivity.
         MPSTensor.kitaevTensor_not_isIrreducibleFamily,
         MPSTensor.kitaevTensor_not_isInjective, MPSTensor.kitaevTensor_not_isNormal}
     \leanok
-    \uses{def:kitaev_tensor, def:injective, def:normal, lem:kitaev_open_boundary}
+    \uses{def:kitaev_tensor,def:injective,def:normal,lem:kitaev_open_boundary}
     Read as an ordinary matrix product state as in
     \cite[Section~III.A.4]{Cirac2021Matrix}, the Kitaev-chain tensor is
     reducible: the vector $(1,i)$ is a common eigenvector of $A^0$ and $A^1$,
@@ -192,7 +192,7 @@ about the ungraded contraction rather than graded injectivity.
     \lean{MPSTensor.kitaevSectorTensor, MPSTensor.kitaevSectorTensor_evalWord,
         MPSTensor.kitaevSectorTensor_isInjective, MPSTensor.kitaevTwistedCoeff_eq_add}
     \leanok
-    \uses{def:kitaev_twisted_coeff, def:injective, lem:kitaev_eval_word}
+    \uses{def:kitaev_twisted_coeff,def:injective,lem:kitaev_eval_word}
     For $c\in\mathbb C$ let $a_c$ be the tensor of bond dimension one with
     $a_c^0=1$ and $a_c^1=c$; it is injective. Write $a_\pm=a_{\pm i}$. For
     every word $w$,

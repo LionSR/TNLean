@@ -27,8 +27,7 @@ of such a protocol is Lemma~\ref{prop:peps_dyadic_protocol}.
         TNLean.PEPS.Approximation.LargeSizeDyadicProtocolBounds.largeSizeDyadicProtocolConsequences,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.mono}
     \leanok
-    \uses{def:peps_distributed_construction, def:peps_original_circuit,
-        def:peps_dyadic_hv_routing}
+    \uses{def:peps_distributed_construction,def:peps_original_circuit,def:peps_dyadic_hv_routing}
     A dyadic distribution protocol on the square of side $L$ with local
     dimension $q$ consists of a finite set $P$ of parties, each attached to a
     dyadic square by its scale and block indices, a finite-dimensional private
@@ -146,8 +145,7 @@ of such a protocol is Lemma~\ref{prop:peps_dyadic_protocol}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_from_angular_and_patch_bounds,
-        thm:peps_adaptive_patch_constraint}
+    \uses{thm:peps_protocol_from_angular_and_patch_bounds,thm:peps_adaptive_patch_constraint}
     The bounds of Definition~\ref{def:peps_dyadic_protocol} are the four items
     of the proposition. Theorem~\ref{thm:peps_protocol_from_angular_and_patch_bounds}
     gives a protocol with these bounds from the adaptive patch constraint of
@@ -165,9 +163,7 @@ of such a protocol is Lemma~\ref{prop:peps_dyadic_protocol}.
         TNLean.PEPS.Approximation.protocolMeshRatio_le_one_sixth,
         TNLean.PEPS.Approximation.protocolMeshRatio_eq}
     \leanok
-    \uses{thm:peps_dyadic_block_reading_ratio,
-        thm:peps_dyadic_direct_repainting_constants,
-        thm:peps_guide_frame_mark_ratio}
+    \uses{thm:peps_dyadic_block_reading_ratio,thm:peps_dyadic_direct_repainting_constants,thm:peps_guide_frame_mark_ratio}
     Let $\epsilon_0=1/30000$ and $K_0=20$, and let $\nu$ be the smaller of
     $\nu_2=\min(\epsilon_0,1)/20000$ and
     $\nu_3=\min(\epsilon_0/\max(K_0,1),1)/4$. Then $\nu=1/600000000$, and
@@ -225,8 +221,7 @@ of such a protocol is Lemma~\ref{prop:peps_dyadic_protocol}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_from_angular_and_patch_bounds,
-        thm:peps_adaptive_patch_constraint}
+    \uses{thm:peps_protocol_from_angular_and_patch_bounds,thm:peps_adaptive_patch_constraint}
     This is the explicit form of
     Theorem~\ref{thm:peps_protocol_from_angular_and_patch_bounds}, whose
     hypothesis holds by Theorem~\ref{thm:peps_adaptive_patch_constraint}. The
@@ -245,7 +240,7 @@ of such a protocol is Lemma~\ref{prop:peps_dyadic_protocol}.
         TNLean.PEPS.Approximation.DyadicProtocol.participation_eq_card,
         TNLean.PEPS.Approximation.DyadicProtocol.participation_le_of_uses}
     \leanok
-    \uses{def:peps_dyadic_protocol, def:peps_dyadic_used_parties}
+    \uses{def:peps_dyadic_protocol,def:peps_dyadic_used_parties}
     Let a protocol satisfy the Section~8 bounds of
     Definition~\ref{def:peps_dyadic_protocol} with $C_E\ge0$, on a square of side
     $L\ge1$, for a unit vector $\Omega$. Then:
@@ -260,7 +255,7 @@ of such a protocol is Lemma~\ref{prop:peps_dyadic_protocol}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_density, thm:peps_dyadic_lifetime_parties}
+    \uses{thm:peps_protocol_density,thm:peps_dyadic_lifetime_parties}
     The changes are contractions, $\lVert r_0\rVert=1$, and the circuit and
     reference vectors agree at the first stage, so the first item is
     Lemma~\ref{thm:peps_protocol_density} with

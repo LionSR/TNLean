@@ -49,9 +49,7 @@
         TNLean.PEPS.regularTwoCycleExchange_twice_product,
         TNLean.PEPS.regularTwoCycleExchange_twice_classes}
     \leanok
-    \uses{def:peps_regular_two_cycle_exchange,
-        thm:peps_conjugacy_class_invariance,
-        thm:peps_regular_two_cycle_conjugation}
+    \uses{def:peps_regular_two_cycle_exchange,thm:peps_conjugacy_class_invariance,thm:peps_regular_two_cycle_conjugation}
     The permutation $H$ commutes with simultaneous conjugation.
     Its square retains the other coordinates and satisfies
     \begin{align}
@@ -74,8 +72,7 @@
         TNLean.PEPS.regularCycleOrientation,
         TNLean.PEPS.regularOrientedThreePlaquetteDoubleExchange}
     \leanok
-    \uses{def:peps_regular_three_plaquette_coordinates,
-        def:peps_regular_two_cycle_exchange}
+    \uses{def:peps_regular_three_plaquette_coordinates,def:peps_regular_two_cycle_exchange}
     Define $\Phi=C^{-1}H^2C$ on directed bond labels.
     For a common orientation flag $\varepsilon\in\{0,1\}$, let
     $I_0z=z$ and $I_1z=z^{-1}$ coordinatewise, and define
@@ -91,9 +88,7 @@
         TNLean.PEPS.regularOrientedThreePlaquetteDoubleExchange_coordinates,
         TNLean.PEPS.regularOrientedThreePlaquetteDoubleExchange_apply_other}
     \leanok
-    \uses{thm:peps_regular_three_plaquette_coordinates,
-        def:peps_regular_three_plaquette_double_exchange,
-        thm:peps_regular_two_cycle_exchange}
+    \uses{thm:peps_regular_three_plaquette_coordinates,def:peps_regular_three_plaquette_double_exchange,thm:peps_regular_two_cycle_exchange}
     For every $z\in G^J$ and $x\in G$, the maps $I_\varepsilon$,
     $\Phi$ and $\Phi_\varepsilon$ commute with simultaneous conjugation.
     Their coordinate action satisfies
@@ -119,8 +114,7 @@
     \label{thm:peps_regular_three_plaquette_double_exchange_physical}
     \lean{TNLean.PEPS.exists_unitary_regularOrientedThreePlaquetteDoubleExchange}
     \leanok
-    \uses{thm:peps_regular_three_plaquette_double_exchange,
-        thm:peps_regular_cycle_global_permutation}
+    \uses{thm:peps_regular_three_plaquette_double_exchange,thm:peps_regular_cycle_global_permutation}
     Let $G$ be finite, let $R$ be a finite graph region with a chosen spanning
     tree and root, and choose three distinct internal bonds outside the tree.
     Suppose the original site tensors are locally $G$-isometric for the

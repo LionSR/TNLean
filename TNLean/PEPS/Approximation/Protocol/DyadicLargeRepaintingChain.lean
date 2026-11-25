@@ -331,7 +331,8 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀'
     {l : List X} (hl : l.Nodup) {x : X} (hx : x ∈ l) (A : X → Frame (cellCenterPos L) q
       (ProtocolParty k)) :
     let Bl := repaintBaseline R done
-    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ)
+    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs'
+      (EuclideanSpace.single (fun _ ↦ ()) 1)
         {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
           Fs' ≠ []) 9
       (treatedFrame (q := q) P rank R hr ∅ (Bl.nbrLabel e)
@@ -377,12 +378,13 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀'
   have hlen : ms.length = 2 := by cases e <;> rfl
   -- the lens exchange on the treated sheets
   have hpair := (edgeExchange_hasPairChange hD hLL hΩ hΩ₁ hm₀ hA₀ hc hL hk2 P rank R hlarge done E e
-    (S := {p | EventUses (.inl R.1) p}) hC.eventUses (r := 2 * b) (K := K) (rs := 2 * b)).mono_error
+    (S := {p | EventUses (.inl R.1) p}) (r := 2 * b) (K := K) (rs := 2 * b)).mono_error
     (four_mul_zpow_neg_thirty_le (by omega) hb)
   rw [← e.toFinset_endpointList] at hpair
   have h₃ : HasSourceBoundedChange Ω
       (T gm ms.toFinset :: l.map (Function.update A x (T ga ms.toFinset)))
-      (T gm' ms.toFinset :: l.map (Function.update A x (T ga' ms.toFinset))) (ℓ := []) (1 : ℂ)
+      (T gm' ms.toFinset :: l.map (Function.update A x (T ga' ms.toFinset)))
+        (EuclideanSpace.single (fun _ ↦ ()) 1)
       {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) := by
     have := hasSourceBoundedChange_of_hasPairChange hl hx
       (A := Function.update A x (T ga ms.toFinset)) (Function.update_self x _ A) hΩ1 hpair
@@ -392,9 +394,9 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q G a A₀ m₀ 60 D L₀'
   have c₄ := isStepChain_main l (Function.update A x (T ga' ms.toFinset)) hΩ1
     (huntreat hum')
   have c₅ := isStepChain_aux (T gm' ∅) hl hx A hΩ1 (huntreat hua')
-  have c₃ := IsStepChain.single (Rel := fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := [])
-    (1 : ℂ) {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
-      Fs' ≠ []) ⟨h₃, List.cons_ne_nil _ _⟩
+  have c₃ := IsStepChain.single (Rel := fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs'
+    (EuclideanSpace.single (fun _ ↦ ()) 1) {p | EventUses (.inl R.1) p} (2 * b) K (2 * b)
+      ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧ Fs' ≠ []) ⟨h₃, List.cons_ne_nil _ _⟩
   exact ((((c₁.trans c₂).trans c₃).trans c₄).trans c₅).cast_length (by rw [hlen])
 
 /-- **The edge construction as a chain of changes, conditional on Proposition 3.4.** At the
@@ -422,7 +424,8 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q G a A₀ m₀ 60 D L
     (hA : A x = Frame.raw fun _ => labelParty R ((repaintBaseline R done).nbrLabel e))
     (L₁ L₂ : GuideLabel) :
     let Bl := repaintBaseline R done
-    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ)
+    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs'
+      (EuclideanSpace.single (fun _ ↦ ()) 1)
         {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
           Fs' ≠ []) 45
       (treatedFrame (q := q) P rank R hr ∅ L₁ (Bl.completedGuide E) :: l.map A)
@@ -436,7 +439,8 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q G a A₀ m₀ 60 D L
   have haux0 : treatedFrame (q := q) P rank R hr ∅ Ce (Bl.auxGuide e (bandWord Ce [])) = A x :=
     (treatedFrame_auxStart_eq_raw P rank R hr done e Ce).trans hA.symm
   have hstart := treatedFrame_edgeStart (q := q) P rank R hc hL hlarge done he Ce Ce
-  have c₀ : IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ)
+  have c₀ : IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs'
+    (EuclideanSpace.single (fun _ ↦ ()) 1)
       {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
         Fs' ≠ []) 1
       (treatedFrame (q := q) P rank R hr ∅ L₁ (Bl.completedGuide E) :: l.map A)
@@ -512,7 +516,8 @@ theorem isStepChain_largeRepainting (hD : IsAngularScale q G a A₀ m₀ 60 D L�
     (hinj : Function.Injective xs) {A : X → Frame (cellCenterPos L) q (ProtocolParty k)}
     (hA : ∀ e, A (xs e) = Frame.raw fun _ => labelParty R ((repaintBaseline R done).nbrLabel e))
     (L₁ L₂ : GuideLabel) :
-    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs' (ℓ := []) (1 : ℂ)
+    IsStepChain (fun Fs Fs' => HasSourceBoundedChange Ω Fs Fs'
+      (EuclideanSpace.single (fun _ ↦ ()) 1)
         {p | EventUses (.inl R.1) p} (2 * b) K (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) ∧
           Fs' ≠ []) 189
       (treatedFrame (q := q) P rank R hr ∅ L₁ (repaintBaseline R done).guide :: l.map A)

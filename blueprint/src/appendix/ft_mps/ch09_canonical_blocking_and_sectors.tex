@@ -39,14 +39,14 @@ through its own period agrees with the directly $p$-blocked block.
     \label{thm:common_blocking_period_tp_irreducible}
     \lean{MPSTensor.exists_common_blocking_all_primitive_of_TP_irr}
     \leanok
-    \uses{thm:blocking_primitivity, thm:common_blocking_period}
+    \uses{thm:blocking_primitivity,thm:common_blocking_period}
     Let $(B_k)_{k=1}^r$ be a finite family of positive-bond-dimension,
     left-canonical, tensor-irreducible MPS tensors. Then there is a single
     blocking length $p>0$ such that $\E_{B_k^{[p]}}$ is primitive for every~$k$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:blocking_primitivity, thm:common_blocking_period}
+    \uses{thm:blocking_primitivity,thm:common_blocking_period}
     Lemma~\ref{thm:blocking_primitivity} gives a positive primitive blocking
     period for each block, and Lemma~\ref{thm:common_blocking_period} combines
     these periods through their least common multiple into a single positive
@@ -57,7 +57,7 @@ through its own period agrees with the directly $p$-blocked block.
     \label{thm:transfer_map_block_tensor_quasi_idempotent}
     \lean{MPSTensor.transferMap_blockTensor_quasi_idempotent}
     \leanok
-    \uses{def:blocked_tensor, def:transfer_map}
+    \uses{def:blocked_tensor,def:transfer_map}
     Let $A$ be an MPS tensor and let $c\in\C$. If
     \begin{align}
         \E_A^2 & =c\E_A,
@@ -143,7 +143,7 @@ through its own period agrees with the directly $p$-blocked block.
     \lean{MPSTensor.transferMap_blockTensor,
         MPSTensor.transferMap_blockTensor_apply}
     \leanok
-    \uses{def:blocked_tensor, def:transfer_map}
+    \uses{def:blocked_tensor,def:transfer_map}
     For every tensor $A$ and every $L$, $\E_{A^{[L]}}=\E_A^{\,L}$.
 \end{lemma}
 
@@ -161,7 +161,7 @@ through its own period agrees with the directly $p$-blocked block.
     \lean{MPSTensor.transferMap_blockTensor_fixedPoint}
     \lean{Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM}
     \leanok
-    \uses{def:blocked_tensor, def:irreducible_tensor, def:primitive_mps, thm:left_canonical_blocking, thm:channel_posdef_fixed_point_unique_irreducible, thm:transfer_channel}
+    \uses{def:blocked_tensor,def:irreducible_tensor,def:primitive_mps,thm:left_canonical_blocking,thm:channel_posdef_fixed_point_unique_irreducible,thm:transfer_channel}
     Let $A$ be left-canonical, tensor-irreducible, and have primitive transfer
     map. Then $A$ has primitive fixed-point data $(\rho,P_\rho,N)$ with
     $\rho>0$ and $N^n\to0$. For every blocking length~$P$, the tensor
@@ -178,7 +178,7 @@ through its own period agrees with the directly $p$-blocked block.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:primitive_mps, thm:left_canonical_blocking, thm:channel_posdef_fixed_point_unique_irreducible, thm:transfer_channel, thm:blocked_transfer_map}
+    \uses{def:primitive_mps,thm:left_canonical_blocking,thm:channel_posdef_fixed_point_unique_irreducible,thm:transfer_channel,thm:blocked_transfer_map}
     Peripheral primitivity, tensor irreducibility, and left-canonical
     normalization first give primitive fixed-point data, and tensor
     irreducibility makes its positive semidefinite fixed point positive
@@ -196,7 +196,7 @@ through its own period agrees with the directly $p$-blocked block.
     \label{thm:blocked_irreducible_tp_primitive}
     \lean{MPSTensor.isIrreducibleFamily_blockTensor_of_tp_primitive_irr}
     \leanok
-    \uses{def:blocked_tensor, def:irreducible_tensor, def:primitive_mps, lem:blocked_irreducibility_direct_support, thm:transfer_channel}
+    \uses{def:blocked_tensor,def:irreducible_tensor,def:primitive_mps,lem:blocked_irreducibility_direct_support,thm:transfer_channel}
     Let $A$ be left-canonical, irreducible, primitive, of positive bond
     dimension. For every $P>0$, the blocked tensor $A^{[P]}$ is irreducible:
     there is no orthogonal projection $Q$ with $Q\neq0$, $Q\neq\Id$ such that
@@ -204,7 +204,7 @@ through its own period agrees with the directly $p$-blocked block.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:primitive_mps, lem:blocked_irreducibility_direct_support, thm:transfer_channel}
+    \uses{def:primitive_mps,lem:blocked_irreducibility_direct_support,thm:transfer_channel}
     Lemma~\ref{lem:blocked_irreducibility_direct_support} gives primitive
     fixed-point data with $\rho>0$. In particular, if
     $P_\rho(X)=\tr(X)\rho/\tr(\rho)$ and $N:=\E_A-P_\rho$, the primitive
@@ -259,7 +259,7 @@ through its own period agrees with the directly $p$-blocked block.
     \label{thm:tp_primitive_irreducible_extra_blocking}
     \lean{MPSTensor.tp_primitive_irreducible_extra_blocking}
     \leanok
-    \uses{def:blocked_tensor, thm:blocked_irreducible_tp_primitive}
+    \uses{def:blocked_tensor,thm:blocked_irreducible_tp_primitive}
     Let $A$ have positive bond dimension and be trace-preserving, primitive,
     and tensor-irreducible. For every $k>0$,
     \begin{align}
@@ -286,7 +286,7 @@ through its own period agrees with the directly $p$-blocked block.
 \begin{lemma}[Blocking the weighted block sum]%
     \label{thm:block_tensor_to_tensor_from_blocks}
     \lean{MPSTensor.sameMPV₂_blockTensor_toTensorFromBlocks}\leanok
-    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2}
+    \uses{def:blocked_tensor,def:block_diagonal_tensor,def:same_mpv2}
     For nonzero weights $(\mu_k)_{k=1}^r$, blocks $(B_k)_{k=1}^r$, and any
     $p\ge1$, the blocking identity
     (\ref{eq:canonical_block_weight_power}) holds, where $\sim$ denotes
@@ -296,7 +296,7 @@ through its own period agrees with the directly $p$-blocked block.
 \begin{lemma}[Blocking a weighted block-sum presentation]%
     \label{thm:block_tensor_of_same_mpv_to_tensor_from_blocks}
     \lean{MPSTensor.sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks}\leanok
-    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2}
+    \uses{def:blocked_tensor,def:block_diagonal_tensor,def:same_mpv2}
     If $A$ generates the same MPV family as $\bigoplus_k\mu_kB_k$ at every
     length, then for every $p\ge0$ the blocked tensor $A^{[p]}$ generates the
     same MPV family as $\bigoplus_k\mu_k^pB_k^{[p]}$ at every length.
@@ -317,7 +317,7 @@ through its own period agrees with the directly $p$-blocked block.
 \begin{lemma}[Positive-length equality survives blocking]%
     \label{thm:same_mpv2_pos_block_tensor}
     \lean{MPSTensor.sameMPV₂Pos_blockTensor}\leanok
-    \uses{def:blocked_tensor, def:same_mpv2_pos}
+    \uses{def:blocked_tensor,def:same_mpv2_pos}
     If two tensors have the same MPV coefficients at every positive length, then
     so do their blocked tensors after any positive blocking length.
 \end{lemma}
@@ -325,7 +325,7 @@ through its own period agrees with the directly $p$-blocked block.
 \begin{lemma}[Eventual nonzero proportionality survives blocking]%
     \label{thm:eventual_nonzero_proportional_mpv_blocking}
     \lean{MPSTensor.EventuallyNonzeroProportionalMPV₂.blockTensor}\leanok
-    \uses{def:blocked_tensor, def:eventually_nonzero_proportional_mpv}
+    \uses{def:blocked_tensor,def:eventually_nonzero_proportional_mpv}
     If two tensors have eventually nonzero proportional MPV coefficients, then
     so do their blocked tensors after any positive blocking length.
 \end{lemma}
@@ -340,7 +340,7 @@ through its own period agrees with the directly $p$-blocked block.
 \begin{lemma}[Positive-length blocking of a weighted block sum]%
     \label{thm:same_mpv2_pos_block_tensor_to_tensor_from_blocks}
     \lean{MPSTensor.sameMPV₂Pos_blockTensor_toTensorFromBlocks}\leanok
-    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2_pos, thm:same_mpv2_pos_block_tensor, thm:block_tensor_to_tensor_from_blocks}
+    \uses{def:blocked_tensor,def:block_diagonal_tensor,def:same_mpv2_pos,thm:same_mpv2_pos_block_tensor,thm:block_tensor_to_tensor_from_blocks}
     If $A$ and $\bigoplus_k\mu_kB_k$ have the same MPV coefficients at every
     positive length, then after any positive blocking length $p$, $A^{[p]}$ and
     $\bigoplus_k\mu_k^{\,p}B_k^{[p]}$ have the same MPV coefficients at every
@@ -350,7 +350,7 @@ through its own period agrees with the directly $p$-blocked block.
 \begin{lemma}[Positive-length equality of powered block sums]%
     \label{thm:same_mpv2_pos_to_tensor_from_blocks_block_power}
     \lean{MPSTensor.sameMPV₂Pos_toTensorFromBlocks_blockPower}\leanok
-    \uses{def:blocked_tensor, def:block_diagonal_tensor, def:same_mpv2_pos, thm:same_mpv2_pos_block_tensor, thm:block_tensor_to_tensor_from_blocks}
+    \uses{def:blocked_tensor,def:block_diagonal_tensor,def:same_mpv2_pos,thm:same_mpv2_pos_block_tensor,thm:block_tensor_to_tensor_from_blocks}
     If $\bigoplus_j\mu_j^AA_j$ and $\bigoplus_k\mu_k^BB_k$ have the same MPV
     coefficients at every positive length, then after any positive common
     blocking length $p$, $\bigoplus_j(\mu_j^A)^pA_j^{[p]}$ and
@@ -368,7 +368,7 @@ through its own period agrees with the directly $p$-blocked block.
 \begin{lemma}[Iterated blocking at the transfer-map level]%
     \label{thm:iterated_blocking_transfer}
     \lean{MPSTensor.transferMap_blockTensor_mul}\leanok
-    \uses{def:blocked_tensor, def:transfer_map}
+    \uses{def:blocked_tensor,def:transfer_map}
     For any MPS tensor $A$ and $m,n\ge0$,
     \begin{align}
         \E_{(A^{[m]})^{[n]}}
@@ -505,7 +505,7 @@ multiple cyclic-sector families into a single common blocked alphabet.
     \label{thm:ft_after_blocking_per_block_cyclic_nonzero_blocks}
     \lean{MPSTensor.afterBlocking_perBlockCyclicData_of_sameMPV₂Pos}
     \leanok
-    \uses{thm:tp_gauge_arbitrary, def:same_mpv2_pos, def:primitive_irreducible_cyclic_sectors, thm:cyclic_sector_decomp_irr_tp_prim_irr}
+    \uses{thm:tp_gauge_arbitrary,def:same_mpv2_pos,def:primitive_irreducible_cyclic_sectors,thm:cyclic_sector_decomp_irr_tp_prim_irr}
     If $A$ and $B$ generate the same MPV family at every positive length, then
     after removing the all-zero blocks and applying the trace-preserving gauge
     there are weighted nonzero-block tensors
@@ -534,7 +534,7 @@ multiple cyclic-sector families into a single common blocked alphabet.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:tp_gauge_arbitrary, thm:cyclic_sector_decomp_irr_tp_prim_irr}
+    \uses{thm:tp_gauge_arbitrary,thm:cyclic_sector_decomp_irr_tp_prim_irr}
     Lemma~\ref{thm:tp_gauge_arbitrary}, applied separately to $A$ and $B$,
     establishes (\ref{eq:canonical_nonzero_part_a}) and
     (\ref{eq:canonical_nonzero_part_b}) at every positive length. Chaining these
@@ -548,7 +548,7 @@ multiple cyclic-sector families into a single common blocked alphabet.
 \begin{lemma}[Common reblocking of cyclic-sector families]%
     \label{thm:exists_common_blocked_cyclic_sector_family}
     \lean{MPSTensor.exists_commonBlockedCyclicSectorFamily_of_hasPrimitiveIrreducibleCyclicSectors}\leanok
-    \uses{def:primitive_irreducible_cyclic_sectors, def:blocked_tensor}
+    \uses{def:primitive_irreducible_cyclic_sectors,def:blocked_tensor}
     Given a finite family $(B_k)_{k=1}^r$, each with primitive irreducible cyclic
     sectors, there is a common blocking length $p$ such that each $B_k^{[p]}$
     admits a unit-weight direct-sum decomposition over a single common blocked
@@ -605,7 +605,7 @@ multiple cyclic-sector families into a single common blocked alphabet.
 \begin{lemma}[Reindexed nonzero-part identity]%
     \label{thm:common_blocked_cyclic_sector_reindexed_nonzero_part}
     \lean{MPSTensor.CommonBlockedCyclicSectorFamily.reindexed_nonzero_part}\leanok
-    \uses{thm:common_blocked_cyclic_sector_reindexed_samempv, thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
+    \uses{thm:common_blocked_cyclic_sector_reindexed_samempv,thm:common_blocked_cyclic_sector_block_tensor_common_reindexed}
     The powered nonzero-part decomposition
     $\bigoplus_k\mu_k^pB_k^{[p]}$ carries over under the common-alphabet
     identification of
@@ -625,13 +625,13 @@ non-increasing weight modulus produces a normal canonical form.
 \begin{lemma}[Self-overlap is derived in normal canonical form]%
     \label{thm:ncf_overlap_tendsto_one}
     \lean{MPSTensor.IsNormalCanonicalForm.overlap_tendsto_one}\leanok
-    \uses{def:is_normal_canonical_form, def:mpv_overlap}
+    \uses{def:is_normal_canonical_form,def:mpv_overlap}
     If $(\mu_k,A_k)$ satisfies the normal canonical form conditions, then
     $O_{A_kA_k}(N)\to1$ for every block~$k$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:is_normal_canonical_form, thm:primitive_overlap}
+    \uses{def:is_normal_canonical_form,thm:primitive_overlap}
     For each block~$k$, irreducibility and the TP normalization give a nonzero
     positive semidefinite fixed point $\rho$ of $\E_{A_k}$ with fixed-point
     projector $P$, while primitivity gives the complementary gap
@@ -645,7 +645,7 @@ non-increasing weight modulus produces a normal canonical form.
     \label{thm:exists_normal_canonical_form}
     \lean{MPSTensor.exists_normalCanonicalForm_of_primitive_blockDecomp}
     \leanok
-    \uses{def:is_normal_canonical_form, def:blocked_tensor}
+    \uses{def:is_normal_canonical_form,def:blocked_tensor}
     Suppose $A$ generates the same MPV family as $\bigoplus_k\mu_kA_k$, and
     that each $A_k$ is irreducible, satisfies
     $\sum_i(A_k^i)^\dagger A_k^i=\Id$, and has primitive transfer map, all

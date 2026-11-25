@@ -52,7 +52,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
         MPSTensor.polarIso_blockTensor_repeatedBlockSum,
         MPSTensor.polarPos_blockTensor_repeatedBlockSum}
     \leanok
-    \uses{def:ldp_repeated_block_sum, lem:ldp_orthogonal_sum_polar}
+    \uses{def:ldp_repeated_block_sum,lem:ldp_orthogonal_sum_polar}
     Let $A$ be the direct sum with multiplicities of
     Definition~\ref{def:ldp_repeated_block_sum}. Its periodic state on $N\geq1$
     sites is $\sum_j\beta_j\ket{\phi_N(A_j)}$ with $\beta_j=\sum_k\mu_{j,k}^N$.
@@ -86,8 +86,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
     \lean{MPSTensor.copyFixedPointState, MPSTensor.copyApproxVector,
         MPSTensor.copyApproxOverlap, MPSTensor.copyApproxOverlap_eq}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:ldp_repeated_block_sum,
-        thm:ldp_repeated_block_polar}
+    \uses{def:ldp_non_normal_fixed_point,def:ldp_repeated_block_sum,thm:ldp_repeated_block_polar}
     With the notation of Definition~\ref{def:ldp_repeated_block_sum} and
     Lemma~\ref{thm:ldp_repeated_block_polar}, fixed points
     $\rho_j$ of the blocks, and $\ket{\Omega_j}$ the product of the pairs of
@@ -118,9 +117,7 @@ for it when the states of distinct blocks on $q$ sites are orthogonal
         MPSTensor.exists_approximationError_le_mul_repeatedBlockSum,
         MPSTensor.copyApproxVector_repeatedBlockSum}
     \leanok
-    \uses{def:ldp_repeated_block_state, thm:ldp_repeated_block_polar,
-        thm:ldp_approximation_error_orthogonal_blocks,
-        thm:ldp_approximation_error_repeated_overlapping, def:correlation_length}
+    \uses{def:ldp_repeated_block_state,thm:ldp_repeated_block_polar,thm:ldp_approximation_error_orthogonal_blocks,thm:ldp_approximation_error_repeated_overlapping,def:correlation_length}
     With the notation of Lemma~\ref{thm:ldp_repeated_block_polar}, let the
     blocks $A_j$ be normal in the gauge (\ref{eq:ldp_normal_gauge}) with fixed
     points $\rho_j$, let $\lambda_2$ bound the moduli of the eigenvalues other

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Network.DistributedContraction.SourceSampleIndices
-import TNLean.Lattice.Compression.AllSourceSlots
+import QICLean.Circuit.Party.Compression.PartialExpansion.Sources
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 
@@ -25,9 +25,9 @@ and 568–588.
 -/
 
 noncomputable section
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice.Compression
-variable {P : Type}
+namespace QuantumCircuit.Party.SourceCircuit
+open TNLean.Network
+variable {P : Type} [DecidableEq P]
 
 open Classical in
 /-- Count sample positions on an abstract finite gate family before inserting
@@ -47,8 +47,8 @@ open Classical in
 /-- The original ordered source slots are counted by the pair samples at each
 original nonempty gate occurrence. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 342–417 and 568–588. -/
-theorem length_allSourceSlots_eq_sum_pairSampleLabels {a b : Layout P}
-    (w : SourceCircuit a b) :
+theorem length_allSourceSlots_eq_sum_pairSampleLabels {X Y : P → Type}
+    (w : SourceCircuit X Y) :
     (partialSlots (fun _ : P ↦ true) w).length =
       ∑ g : w.nonemptyGateLocations, (pairSampleLabels (w.participants g.1)).card := by
   have hCard := Fintype.card_congr ((allSourceSlotEquiv w).trans (sourceSampleEquiv w))
@@ -60,8 +60,8 @@ open Classical in
 /-- The common sample averaging factor is the product of the averaging factors
 at the original nonempty gate occurrences. This includes zero sample size.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 568–588. -/
-theorem inv_sampleSize_pow_allSourceSlots_eq_prod {a b : Layout P}
-    (w : SourceCircuit a b) (k : ℕ) :
+theorem inv_sampleSize_pow_allSourceSlots_eq_prod {X Y : P → Type}
+    (w : SourceCircuit X Y) (k : ℕ) :
     (k : ℂ)⁻¹ ^ (partialSlots (fun _ : P ↦ true) w).length =
       ∏ g : w.nonemptyGateLocations,
         (k : ℂ)⁻¹ ^ (pairSampleLabels (w.participants g.1)).card := by
@@ -70,4 +70,4 @@ theorem inv_sampleSize_pow_allSourceSlots_eq_prod {a b : Layout P}
     (fun g : w.nonemptyGateLocations ↦ (pairSampleLabels (w.participants g.1)).card)
     (k : ℂ)⁻¹).symm
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

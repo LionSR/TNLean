@@ -4,7 +4,7 @@
     \label{thm:mpu_source_u_staggered_gram}
     \lean{MPOTensor.SourceFactors.sourceU_gram_eq_staggered_four_u}
     \leanok
-    \uses{def:mpu_source_uv, def:mpu_weighted_source_factors}
+    \uses{def:mpu_source_uv,def:mpu_weighted_source_factors}
     Let $M_i=X_iY_i$ be given source factorizations for $\mathcal U$ and
     the weight $\rho$. For retained physical pairs $p=(p_1,p_2)$ and
     $q=(q_1,q_2)$, one has
@@ -25,7 +25,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_source_uv, thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations}
+    \uses{def:mpu_source_uv,thm:mpu_source_factorizations,thm:mpu_source_factor_normalizations}
     Since the first cut has rows $(i,\beta)$ and columns $(\alpha,j)$,
     its weighted normalization gives
     \begin{align}
@@ -55,7 +55,7 @@
     \lean{MPOTensor.SourceFactors.sourceU_gram_eq_transpose_fixed_pair_trace}
     \leanok
     \discussion{7632}
-    \uses{def:mpu_source_uv, def:mpu_weighted_source_factors, def:mpu_double_layer}
+    \uses{def:mpu_source_uv,def:mpu_weighted_source_factors,def:mpu_double_layer}
     Let $\mathcal U$ be an MPO tensor, let $\rho$ be a bond matrix, and let
     $M_i=X_iY_i$ be given source factorizations for $\mathcal U$ and $\rho$.
     Construct the source tensor $u=Y_2\mathbin{-}Y_1$. For retained physical
@@ -76,7 +76,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_u_staggered_gram, thm:mpu_source_v_four_u_expansions}
+    \uses{thm:mpu_source_u_staggered_gram,thm:mpu_source_v_four_u_expansions}
     Enumerate each doubled-bond coordinate as
     $\operatorname{flat}(\alpha,\alpha')$. Expanding a diagonal entry of the
     matrix under the trace gives
@@ -99,8 +99,7 @@
         MPOTensor.SourceFactors.sourceU_gram_eq_normalized_input_tail}
     \leanok
     \discussion{7633}
-    \uses{thm:mpu_source_u_transpose_fixed_pair_trace,
-        thm:mpu_normalized_input_tail_closed_trace}
+    \uses{thm:mpu_source_u_transpose_fixed_pair_trace,thm:mpu_normalized_input_tail_closed_trace}
     Let $\mathcal U$ be an MPO tensor with physical dimension $d>0$, let $W$
     be its double layer, and put $E=d^{-1}\sum_iW^{ii}$. Let $\rho$ be
     symmetric, set $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$, and
@@ -132,8 +131,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_u_transpose_fixed_pair_trace,
-        thm:mpu_normalized_input_tail_closed_trace}
+    \uses{thm:mpu_source_u_transpose_fixed_pair_trace,thm:mpu_normalized_input_tail_closed_trace}
     Symmetry changes the inserted vector
     $\lvert\rho^{\mathsf T})$ to $\lvert\rho)$ in
     Lemma~\ref{thm:mpu_source_u_transpose_fixed_pair_trace}; substituting the
@@ -145,7 +143,7 @@
     \lean{MPOTensor.SourceFactors.sourceU_gram_eq_normalized_mpo_input_tail_of_isDiag}
     \leanok
     \discussion{5982}
-    \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_source_uv, def:mpo_family}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_source_uv,def:mpo_family}
     % Revalidation boundary: docs/paper-gaps/mpu_source_cut_orientation.tex.
     Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$ and bond
     dimension $D>0$. Let $\rho>0$ be diagonal with $\tr(\rho)=1$, and put
@@ -170,8 +168,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_u_retained_interior,
-        thm:mpu_blocked_transfer_power_rank_one}
+    \uses{thm:mpu_source_u_retained_interior,thm:mpu_blocked_transfer_power_rank_one}
     With $K=JD^2$, trace normalization makes the given rank-one transfer
     matrix idempotent, and the normalized blocked-transfer identity therefore
     gives
@@ -188,7 +185,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceV_isIsometry,
         MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_le}
     \leanok
-    \uses{def:mpu_simple, def:mpu_source_uv, def:mpu_double_layer, def:mpu_canonical_form_ii}
+    \uses{def:mpu_simple,def:mpu_source_uv,def:mpu_double_layer,def:mpu_canonical_form_ii}
     Let $\mathcal U$ be simple and in canonical form II, with ambient fixed
     matrix $\rho$. Let $v$ be the source operator
     of $\mathcal U$ built from that same weight $\rho$. Then
@@ -199,8 +196,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_simple_canonical_boundary_contractions,
-        thm:mpu_source_v_complete_contraction, thm:mpu_source_v_dressed_gram_cancel}
+    \uses{thm:mpug_simple_canonical_boundary_contractions,thm:mpu_source_v_complete_contraction,thm:mpu_source_v_dressed_gram_cancel}
     Lemma~\ref{thm:mpug_simple_canonical_boundary_contractions} gives
     the insertion identity for the recorded canonical boundaries:
     $W^{ij}W^{k\ell}=W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}$. Since $\rho$
@@ -216,8 +212,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceV_blockTensor_isIsometry,
         MPOTensor.IsMPUCanonicalFormII.exists_sourceV_blockTensor_isIsometry}
     \leanok
-    \uses{thm:mpu_canonical_form_ii_positive_blocking,
-        thm:mpu_simple_source_v_isometry, thm:mpu_bounded_simple_blocking}
+    \uses{thm:mpu_canonical_form_ii_positive_blocking,thm:mpu_simple_source_v_isometry,thm:mpu_bounded_simple_blocking}
     Let $\mathcal U$ be an MPU in canonical form II, with recorded weight
     $\rho$. If $p>0$ and $\mathcal U^{[p]}$ is simple, then the source operator
     $v$ computed from the source cuts of $\mathcal U^{[p]}$, using this same
@@ -227,9 +222,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_ii_positive_blocking,
-        thm:mpu_simple_source_v_isometry, thm:mpu_bounded_simple_blocking,
-        thm:mpu_canonical_form_ii_positive_dimensions}
+    \uses{thm:mpu_canonical_form_ii_positive_blocking,thm:mpu_simple_source_v_isometry,thm:mpu_bounded_simple_blocking,thm:mpu_canonical_form_ii_positive_dimensions}
     The blocked tensor retains canonical form II with the same recorded
     matrix $\rho$. The source-$v$ contraction for a simple tensor therefore
     applies to its own source cuts and gives the isometry. The blocking
@@ -240,7 +233,7 @@
     \label{thm:mpu_simple_of_source_v_isometry}
     \lean{MPOTensor.IsMPU.isMPUSimple_of_sourceV_isIsometry}
     \leanok
-    \uses{def:mpu, def:mpu_simple, def:mpu_source_uv}
+    \uses{def:mpu,def:mpu_simple,def:mpu_source_uv}
     Let $\mathcal U$ be an MPU tensor, let $\rho>0$, and let $v$ be its
     source operator built from $\rho$. If $v^\dagger v=\Id_{r\ell}$, then
     $\mathcal U$ is simple, with boundary vectors $(\Phi\rvert$ and
@@ -250,7 +243,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_v_dressed_gram_cancel, thm:mpu_source_v_complete_contraction, thm:mpu_all_later_simple_blockings}
+    \uses{thm:mpu_source_v_dressed_gram_cancel,thm:mpu_source_v_complete_contraction,thm:mpu_all_later_simple_blockings}
     By Lemma~\ref{thm:mpu_source_v_dressed_gram_cancel}, $v^\dagger v=\Id$
     gives the dressed Gram equation, and
     Lemma~\ref{thm:mpu_source_v_complete_contraction} turns it into
@@ -267,7 +260,7 @@
         MPOTensor.IsMPUCanonicalFormII.mul_self_le_rightRank_mul_leftRank}
     \leanok
     \discussion{5708}
-    \uses{def:mpu_source_uv, def:mpu_canonical_form_ii}
+    \uses{def:mpu_source_uv,def:mpu_canonical_form_ii}
     For any MPU tensor $\mathcal U$ under the source's standing
     canonical-form-II convention, let $r$ and $\ell$ be the two source-cut
     ranks and let $u$ be the source operator. Then
@@ -280,7 +273,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_admissible_source_u_isometry, thm:mpu_canonical_form_ii_transfer_stabilization}
+    \uses{lem:mpu_admissible_source_u_isometry,thm:mpu_canonical_form_ii_transfer_stabilization}
     The convention records a positive diagonal ambient weight $\rho$ and,
     by Lemma~\ref{thm:mpu_canonical_form_ii_transfer_stabilization}, the
     stabilized power $E^J=\lvert\rho)(\Phi\rvert$ at the positive exponent
@@ -300,8 +293,7 @@
     % by the source-labelled Lemma III.7 above. Orientation documented
     % in docs/paper-gaps/mpu_canonical_form_full_support.tex and
     % docs/paper-gaps/mpu_source_cut_orientation.tex.
-    \uses{def:mpu, def:mpu_source_uv, def:mpu_weighted_source_factors,
-        def:mpu_double_layer}
+    \uses{def:mpu,def:mpu_source_uv,def:mpu_weighted_source_factors,def:mpu_double_layer}
     Let $\mathcal U$ be an MPU tensor with physical dimension $d>0$. Let $W$
     be its double layer, put $E=d^{-1}\sum_iW^{ii}$, and let $\rho>0$ be
     diagonal. Put $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$ and
@@ -321,8 +313,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_u_retained_interior,
-        thm:mpu_normalized_input_tail_isometry}
+    \uses{thm:mpu_source_u_retained_interior,thm:mpu_normalized_input_tail_isometry}
     The retained-interior identity and input-first MPU unitarity give, for all
     physical pairs $p,q$,
     \begin{align}
@@ -341,7 +332,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.isMPUSimple_tfae}
     \leanok
     \discussion{5708}
-    \uses{lemuisometry, def:mpu_simple, def:mpu_source_uv, def:mpu_canonical_form_ii}
+    \uses{lemuisometry,def:mpu_simple,def:mpu_source_uv,def:mpu_canonical_form_ii}
     Let $\mathcal U$ be an MPU tensor under the source's standing
     canonical-form-II convention. Let $r$ and $\ell$ be its source-cut ranks,
     and let $u$ and $v$ be its source operators, both built from the ambient
@@ -359,10 +350,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lemuisometry,
-        thm:mpu_simple_source_v_isometry,
-        thm:mpu_source_gates_two_site_factorization,
-        thm:mpu_simple_of_source_v_isometry}
+    \uses{lemuisometry,thm:mpu_simple_source_v_isometry,thm:mpu_source_gates_two_site_factorization,thm:mpu_simple_of_source_v_isometry}
     The convention gives $u^\dagger u=\Id$ and
     $d^2\leq r\ell$ before any of the four conditions is assumed. Follow the
     cycle $1\to2\to3\to4\to1$.
@@ -389,8 +377,7 @@
         MPOTensor.IsMPUCanonicalFormII.sourceFactors_isThreeLegged,
         MPOTensor.IsMPUCanonicalFormII.exists_threeLegged}
     \leanok
-    \uses{ThmFund1, def:mpu_weighted_source_factors, def:mpu_source_uv,
-        def:mpu_canonical_form_ii, def:mpu_simple}
+    \uses{ThmFund1,def:mpu_weighted_source_factors,def:mpu_source_uv,def:mpu_canonical_form_ii,def:mpu_simple}
     Let $\mathcal U$ be a simple MPU tensor of physical dimension $d$ under
     the standing canonical-form-II convention, whose periodic operator is
     unitary on every chain of length at least two, and let $\rho>0$ be its
@@ -418,7 +405,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{ThmFund1, def:mpu_weighted_source_factors}
+    \uses{ThmFund1,def:mpu_weighted_source_factors}
     Items 1, 3 and the one-sided inverses of item 4 are the defining
     identities of the weighted source factors. Since $\mathcal U$ is simple,
     Theorem~\ref{ThmFund1} gives $r\ell=d^2$ and unitarity of $u$ and $v$,
@@ -429,8 +416,7 @@
     \label{SF}
     \leanok
     \discussion{6019}
-    \uses{ThmFund1, def:mpu_source_uv,
-        lem:mpu_simple_reduced_literal_standard_form}
+    \uses{ThmFund1,def:mpu_source_uv,lem:mpu_simple_reduced_literal_standard_form}
     Let $\mathcal U$ be a simple tensor with positive physical and bond
     dimensions. Choose its simple canonical representative $\mathcal V$,
     of no larger bond dimension and with the same periodic operator at every
@@ -588,8 +574,7 @@
     \lean{MPOTensor.TwoSiteStandardFormData.mpo_apply_eq_shifted_mul_unshifted,
         MPOTensor.TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted}
     \leanok
-    \uses{def:mpu_supplied_two_site_standard_form,
-        def:mpu_two_site_circuit_layers}
+    \uses{def:mpu_supplied_two_site_standard_form,def:mpu_two_site_circuit_layers}
     Let $W$ have given two-site standard-form data $(u,v,X_1,X_2)$.
     For every $N>0$ and pair configurations $i,j$,
     \begin{align}
@@ -608,8 +593,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_supplied_two_site_standard_form,
-        def:mpu_two_site_circuit_layers}
+    \uses{def:mpu_supplied_two_site_standard_form,def:mpu_two_site_circuit_layers}
     Expanding the periodic trace as a sum over closed bond configurations and
     inserting the given $X_2$--$u$--$X_1$ expression at each site shows that, for
     each $x$, the bond label between sites $x$ and $x+1$ contracts
@@ -624,8 +608,7 @@
     \lean{MPOTensor.TwoSiteStandardFormData.mpo_mem_unitaryGroup,
         MPOTensor.TwoSiteStandardFormData.isMPU}
     \leanok
-    \uses{thm:mpu_supplied_two_site_periodic_circuit,
-        thm:mpu_two_site_circuit_layers_unitary}
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,thm:mpu_two_site_circuit_layers_unitary}
     If $W$ has given two-site standard-form data, then
     \begin{align}
         U^{(N)}(W)^{\dagger}U^{(N)}(W)
@@ -636,8 +619,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_supplied_two_site_periodic_circuit,
-        thm:mpu_two_site_circuit_layers_unitary}
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,thm:mpu_two_site_circuit_layers_unitary}
     The periodic operator is the product $C_{v,N}C_{u,N}$ of two unitary
     layers, and the physical-pair identification preserves unitarity.
 \end{proof}
@@ -654,7 +636,7 @@
         MPOTensor.twoSite_evalWord_open_gate_factorization,
         MPOTensor.twoSite_trace_open_gate_with_endpoints}
     \leanok
-    \uses{def:mpu_supplied_two_site_standard_form, def:mpo_eval_word}
+    \uses{def:mpu_supplied_two_site_standard_form,def:mpo_eval_word}
     For a two-site tensor $W$ with given standard-form data, write
     $L(i)_{\alpha t}=X_2(\alpha,i_1)_t$,
     $R(i)_{s\gamma}=X_1(i_2,\gamma)_s$,
@@ -732,7 +714,7 @@
         MPOTensor.twoSiteThreeBlockTrace,
         MPOTensor.twoSiteBufferedTrace}
     \leanok
-    \uses{def:mpu_supplied_two_site_standard_form, def:mpo_eval_word}
+    \uses{def:mpu_supplied_two_site_standard_form,def:mpo_eval_word}
     Let $W$ have given two-site standard-form data. Fix virtual indices
     $\alpha,\gamma$, exterior output half-sites $e_-,e_+$, and exterior
     input pairs $j_0,j_2$. For two neighboring output pairs
@@ -806,8 +788,7 @@
     \lean{MPOTensor.twoSite_threeBlock_trace_intertwiner_with_endpoints,
         MPOTensor.twoSite_threeBlock_buffered_intertwiner}
     \leanok
-    \uses{lem:mpu_two_site_open_three_block_locality,
-        def:mpu_two_site_open_three_block, def:mpo_eval_word}
+    \uses{lem:mpu_two_site_open_three_block_locality,def:mpu_two_site_open_three_block,def:mpo_eval_word}
     Replace the open word in $F_{\alpha,\gamma}$ by its virtual trace with
     arbitrary matrices $P,Q$ at the left and right ends. The resulting
     matrix $F_{P,Q}$ obeys
@@ -821,8 +802,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_two_site_open_three_block_locality,
-        lem:mpo_eval_word_append}
+    \uses{lem:mpu_two_site_open_three_block_locality,lem:mpo_eval_word_append}
     If $E$ is the open three-letter word, cyclicity of the virtual trace
     gives
     \begin{align}
@@ -839,7 +819,7 @@
     \label{thm:mpu_cfii_left_canonical}
     \lean{MPOTensor.IsMPUCanonicalFormII.isLeftCanonical_normalizedFlattening}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_normalized_flattening}
+    \uses{def:mpu_canonical_form_ii,def:mpu_normalized_flattening}
     Let $\mathcal U$ be a matrix product unitary in full-support canonical
     form II, with bond dimension $D$ and physical dimension $d$. Its normalized
     flattening $A^{ij}=d^{-1/2}U^{ij}$ is left-canonical:
@@ -851,7 +831,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_full_support_geometry}
+    \uses{thm:mpu_normalized_transfer_trace,thm:mpu_shifted_transfer_trace_single_block,thm:mpu_transfer_eigenvalue_one,thm:mpu_ambient_block_isometry_intertwining,thm:mpu_unique_full_support_geometry}
     The normalized transfer traces satisfy $\tr(E^N)=1$ for $N>1$. Hence the
     canonical form has one retained block $B$, with coefficient $\mu$
     satisfying $|\mu|^2=1$. Let $W$ be its inclusion into the ambient bond
@@ -868,7 +848,7 @@
     \label{thm:mpu_cfii_equal_periodic_virtual_unitary}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_unitary_virtual_gauge_of_mpo_eq}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu}
+    \uses{def:mpu_canonical_form_ii,def:mpu}
     Let $\mathcal U$ and $\mathcal V$ be matrix product unitaries on the same
     physical space, each in full-support canonical form II, with bond
     dimensions $D_{\mathcal U}$ and $D_{\mathcal V}$. Suppose that their
@@ -889,7 +869,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_ii_normal, thm:normal_proportional_mpv_geometric_phase, thm:cpsv_normal_mpv_phase_gauge, thm:mpu_cfii_left_canonical, lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    \uses{thm:mpu_canonical_form_ii_normal,thm:normal_proportional_mpv_geometric_phase,thm:cpsv_normal_mpv_phase_gauge,thm:mpu_cfii_left_canonical,lem:left_canonical_irreducible_same_phase_unitary_gauge}
     The rescaled flattenings $A_{\mathcal U}^{ij}=d^{-1/2}U^{ij}$ and
     $A_{\mathcal V}^{ij}=d^{-1/2}V^{ij}$ are both normal tensors. Equality
     of periodic operators for $N>1$ makes their matrix product vectors
@@ -916,8 +896,7 @@
     \label{def:mpu_source_open_two_site_standard_form}
     \lean{MPOTensor.IsMPUCanonicalFormII.twoSiteStandardFormData}
     \leanok
-    \uses{def:mpu_supplied_two_site_standard_form, ThmFund1,
-        def:mpu_source_uv}
+    \uses{def:mpu_supplied_two_site_standard_form,ThmFund1,def:mpu_source_uv}
     Let $\mathcal U$ be simple and have a reduced full-support
     canonical-form-II presentation with positive diagonal fixed matrix $\rho$.
     The two-site tensor $\mathcal U_2$ has a two-site standard form with
@@ -938,8 +917,7 @@
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{ThmFund1, thm:mpu_source_u_open_two_site,
-        thm:mpu_canonical_form_ii_positive_dimensions}
+    \uses{ThmFund1,thm:mpu_source_u_open_two_site,thm:mpu_canonical_form_ii_positive_dimensions}
     The source-cut factorization gives the open contraction of
     $\mathcal U_2$ through $X_2,u,X_1$, while the definition of $v$ gives
     its $X_1,X_2$ contraction. The simple-tensor equivalence makes both
@@ -952,8 +930,7 @@
     \lean{MPOTensor.twoSiteChainConfigEquiv,
         MPOTensor.IsMPUCanonicalFormII.mpo_even_eq_source_circuit}
     \leanok
-    \uses{def:mpu_source_open_two_site_standard_form,
-        def:mpu_two_site_circuit_layers}
+    \uses{def:mpu_source_open_two_site_standard_form,def:mpu_two_site_circuit_layers}
     Let $\mathcal U$ be simple and have a reduced full-support
     canonical-form-II presentation with positive diagonal fixed matrix $\rho$.
     Let $u$ and $v$ be its source gates. For $N>0$, flatten each pair
@@ -977,10 +954,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_source_open_two_site_standard_form,
-        thm:mpu_supplied_two_site_periodic_circuit,
-        thm:mpdo_block_two_as_positive_blocking,
-        thm:mpdo_closed_chain_physical_blocking}
+    \uses{def:mpu_source_open_two_site_standard_form,thm:mpu_supplied_two_site_periodic_circuit,thm:mpdo_block_two_as_positive_blocking,thm:mpdo_closed_chain_physical_blocking}
     Applying the periodic circuit identity to the two-site block of $\mathcal U$,
     the two physical-blocking identities identify its length-$N$ periodic
     operator with $U^{(2N)}(\mathcal U)$ under $\Phi_N$. For $N=2$, the two
@@ -1011,12 +985,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_source_open_two_site_standard_form,
-        thm:mpu_bounded_simple_blocking,
-        thm:mpu_canonical_form_ii_positive_blocking,
-        thm:mpu_canonical_form_ii_positive_dimensions,
-        thm:mpdo_block_two_as_positive_blocking,
-        lem:mpu_iterated_physical_blocking}
+    \uses{def:mpu_source_open_two_site_standard_form,thm:mpu_bounded_simple_blocking,thm:mpu_canonical_form_ii_positive_blocking,thm:mpu_canonical_form_ii_positive_dimensions,thm:mpdo_block_two_as_positive_blocking,lem:mpu_iterated_physical_blocking}
     At the simple blocking length $k=D^2$,
     canonical form II persists under positive blocking with the same
     fixed matrix, so Definition~\ref{def:mpu_source_open_two_site_standard_form} applies to
@@ -1030,8 +999,7 @@
     \label{lem:mpu_original_site_residual_two_site_word}
     \lean{MPOTensor.mpo_apply_prefix_twoSiteBlock_suffix}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpdo_two_site_blocking,
-        def:mpo_eval_word, def:mpo_family}
+    \uses{def:mpdo_physical_blocking,def:mpdo_two_site_blocking,def:mpo_eval_word,def:mpo_family}
     Let $U$ be any MPO tensor, let $k,p,m,s\in\mathbb N$, and write
     $W=(U^{[k]})_2$. For a word $\sigma$ of $m$ blocks of length $2k$,
     let $\eta\sigma$ relabel each block as two consecutive words of length
@@ -1050,8 +1018,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpdo_physical_blocking_residuals,
-        thm:mpu_bounded_source_open_standard_form}
+    \uses{lem:mpdo_physical_blocking_residuals,thm:mpu_bounded_source_open_standard_form}
     Residual-site blocking gives the trace with middle factor
     $(U^{[2k]})^{\sigma,\tau}$. The two-site relabeling identifies this
     factor, letter by letter and in the same order, with
@@ -1062,8 +1029,7 @@
     \label{thm:mpu_original_site_three_block_window_entry}
     \lean{MPOTensor.originalSite_threeBlock_window_entry}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpu_two_site_open_three_block,
-        def:mpo_family}
+    \uses{def:mpdo_physical_blocking,def:mpu_two_site_open_three_block,def:mpo_family}
     Suppose $W=(U^{[k]})_2$ has given two-site standard-form data.
     Let three consecutive blocks of length $2k$ lie between an arbitrary
     original-site prefix of length $p$ and suffix of length $s$. Under the
@@ -1094,8 +1060,7 @@
         MPOTensor.originalSiteThreeBlockWindow,
         MPOTensor.originalSite_threeBlock_window_with_buffers_intertwiner}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpu_two_site_open_three_block,
-        def:mpo_family}
+    \uses{def:mpdo_physical_blocking,def:mpu_two_site_open_three_block,def:mpo_family}
     Suppose $W=(U^{[k]})_2$ has given two-site standard-form data.
     Let $i^-,j^-$ be original-site words of length $p$ and $i^+,j^+$
     original-site words of length $s$. Let
@@ -1131,9 +1096,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_original_site_residual_two_site_word,
-        lem:mpo_eval_word_append,
-        lem:mpu_two_site_open_three_block_buffers}
+    \uses{lem:mpu_original_site_residual_two_site_word,lem:mpo_eval_word_append,lem:mpu_two_site_open_three_block_buffers}
     The residual-word identity first leaves both original-site products
     in the trace. Two word concatenations split the relabeled middle
     product into the left complete-block word, the three window letters,
@@ -1146,7 +1109,7 @@
     \label{lem:mpu_two_site_original_residual_locality}
     \lean{MPOTensor.twoSite_threeBlock_originalSite_residual_intertwiner}
     \leanok
-    \uses{def:mpu_two_site_open_three_block, def:mpo_eval_word}
+    \uses{def:mpu_two_site_open_three_block,def:mpo_eval_word}
     Let $W=(U^{[k]})_2$ have given two-site standard-form data. For
     arbitrary original-site prefix and suffix word pairs, put
     $P=U^{i^-,j^-}$ and $Q=U^{i^+,j^+}$. The three-block coefficient
@@ -1168,7 +1131,7 @@
     \label{FundamentalMPU}
     \notready
     \discussion{6020}
-    \uses{SF, thm:mpu_fundamental_half_factors}
+    \uses{SF,thm:mpu_fundamental_half_factors}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors written in standard
     form, with source unitaries $(u_{\mathcal U},v_{\mathcal U})$ and
     $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU for every
@@ -1207,7 +1170,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.mpo_eq_iff_exists_unitary_conj,
         MPOTensor.mpo_eq_of_unitary_conj}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpo_family}
+    \uses{def:mpu_canonical_form_ii,def:mpo_family}
     Let $\mathcal U$ and $\mathcal V$ be tensors in canonical form II with
     bond dimensions $D_1$ and $D_2$. Then $U^{(N)}=V^{(N)}$ for every
     $N\ge 2$ if and only if $D_1=D_2$ and there is a unitary $z$ on
@@ -1228,8 +1191,7 @@
         MPOTensor.IsMPUCanonicalFormII.eq_virtualSandwich_of_mpo_eq,
         MPOTensor.IsMPUCanonicalFormII.fundamentalTheorem}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv,
-        def:mpu_virtual_sandwich}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpu_source_uv,def:mpu_virtual_sandwich}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
     of the same bond dimension with $U^{(N)}=V^{(N)}$ for every $N\ge2$. Then
     $\mathcal V=z\,\mathcal U\,z^\dagger$ letterwise for a unitary $z$, the
@@ -1241,8 +1203,7 @@
     % Source: paper_v2.tex 624--648, equation SFuu and the contraction of SFvv.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_fundamental_letters,
-        thm:mpu_source_gates_virtual_unitary_gauge}
+    \uses{thm:mpu_fundamental_letters,thm:mpu_source_gates_virtual_unitary_gauge}
     Lemma~\ref{thm:mpu_fundamental_letters} gives $z$; the selected source
     gates of a unitary virtual conjugate are related to the reindexed gates
     by unitaries on the two rank spaces.
@@ -1255,7 +1216,7 @@
         MPOTensor.IsMPUCanonicalFormII.mpo_blockTwo_eq_of_source_gate_gauges,
         MPOTensor.TwoSiteStandardFormData.reindexRanks}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpu_source_uv}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
     of the same bond dimension whose selected source gates satisfy, after an
     identification of the rank spaces, $u_{\mathcal V}=(x\otimes y)u_{\mathcal U}$
@@ -1267,7 +1228,7 @@
     % forms; the parity obstruction limits it to even lengths.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_standard_form_parity_obstruction, lem:mpdo_tensor_power_laws}
+    \uses{thm:mpu_standard_form_parity_obstruction,lem:mpdo_tensor_power_laws}
     Using Lemma~\ref{lem:mpdo_tensor_power_laws}, express both operators as
     the two-layer circuits of their standard forms. In the circuit of
     $\mathcal V$ the unitary placed on the internal leg of
@@ -1282,9 +1243,7 @@
         MPOTensor.TwoSiteStandardFormData.exists_gate_gauges_of_mpo_eq,
         MPOTensor.TwoSiteStandardFormData.mpo_eq_iff_exists_gate_gauges}
     \leanok
-    \uses{def:mpu_supplied_two_site_standard_form,
-        thm:mpu_supplied_two_site_periodic_circuit,
-        thm:mpu_fundamental_gates_sufficiency}
+    \uses{def:mpu_supplied_two_site_standard_form,thm:mpu_supplied_two_site_periodic_circuit,thm:mpu_fundamental_gates_sufficiency}
     Let $W$ and $W'$ be two-site tensors, of arbitrary bond dimensions, in
     supplied standard form with unitary gates $(u,v)$ and $(u',v')$ of the
     same shape. Then $W$ and $W'$ generate the same operators on every ring of
@@ -1302,8 +1261,7 @@
     % Source lines: paper_v2.tex 640--652.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_supplied_two_site_periodic_circuit,
-        thm:mpu_fundamental_gates_sufficiency}
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,thm:mpu_fundamental_gates_sufficiency}
     Both operators are two-layer circuits. Put $M=uu'^\dagger$, a unitary on
     $\mathbb C^\ell\otimes\mathbb C^r$. On a ring of two blocks the circuit
     identity gives
@@ -1330,8 +1288,7 @@
         MPOTensor.TwoSiteStandardFormData.mpo_eq_of_half_factor_gauges,
         MPOTensor.SourceFactors.sourceU_eq_of_factor_gauges}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv,
-        def:mpu_supplied_two_site_standard_form, thm:mpu_fundamental_letters}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpu_source_uv,def:mpu_supplied_two_site_standard_form,thm:mpu_fundamental_letters}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II,
     of bond dimensions $D_1$ and $D_2$, with $U^{(N)}=V^{(N)}$ for every
     $N\ge2$. Build their factors from any compact decompositions of the two
@@ -1353,8 +1310,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_fundamental_letters, thm:mpu_source_factors_virtual_unitary_gauge,
-        thm:mpu_source_factors_change_of_svd}
+    \uses{thm:mpu_fundamental_letters,thm:mpu_source_factors_virtual_unitary_gauge,thm:mpu_source_factors_change_of_svd}
     By Lemma~\ref{thm:mpu_fundamental_letters}, $D_1=D_2$ and
     $\mathcal V=z\,\mathcal U\,z^\dagger$ letterwise. The factors of the
     conjugate differ from the transported factors of $\mathcal U$ by unitaries
@@ -1382,8 +1338,7 @@
         MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges_sourceFactorsOf,
         MPOTensor.IsMPUCanonicalFormII.mpo_two_mul_eq_of_source_gate_gauges_sourceFactorsOf}
     \leanok
-    \uses{thm:mpu_source_factors_change_of_svd, lemuisometry, ThmFund1, SF, FundamentalMPU,
-        thm:mpu_fundamental_gates_necessity, thm:mpu_fundamental_gates_sufficiency}
+    \uses{thm:mpu_source_factors_change_of_svd,lemuisometry,ThmFund1,SF,FundamentalMPU,thm:mpu_fundamental_gates_necessity,thm:mpu_fundamental_gates_sufficiency}
     Let $\mathcal U$ be a matrix product unitary in canonical form II with
     $\rho$ its fixed matrix, and let the factors and gates be built from any
     compact decompositions of its two source cuts. Then $u$ is an isometry;
@@ -1434,7 +1389,7 @@
     \label{thm:mpu_identity_tensor_simple}
     \lean{MPOTensor.isMPUSimple_idTensor}
     \leanok
-    \uses{def:mpu_simple, def:mpo_stacked_layers}
+    \uses{def:mpu_simple,def:mpo_stacked_layers}
     For every physical dimension $d$, the bond-one identity tensor
     $\mathcal I^{ij}=\delta_{ij}$ is simple.
 \end{lemma}
@@ -1447,7 +1402,7 @@
     \label{thm:mpu_standard_form_parity_obstruction}
     \lean{MPOTensor.exists_simple_blockTwo_eq_mpo_three_ne}
     \leanok
-    \uses{def:mpu_simple, def:mpdo_physical_blocking, def:mpo_family}
+    \uses{def:mpu_simple,def:mpdo_physical_blocking,def:mpo_family}
     There are simple matrix product unitaries $\mathcal U,\mathcal V$ of
     physical dimension two and bond dimension one whose two-site blocked
     tensors agree, but whose periodic operators differ at length three:
@@ -1463,10 +1418,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_simple, def:mpo_family, def:mpo_stacked_layers,
-        thm:mpu_double_layer_scalar_invariance, thm:mpu_identity_tensor_simple,
-        thm:mpdo_block_tensor_scalar_scaling,
-        thm:mpdo_mpo_scalar_scaling}
+    \uses{def:mpu_simple,def:mpo_family,def:mpo_stacked_layers,thm:mpu_double_layer_scalar_invariance,thm:mpu_identity_tensor_simple,thm:mpdo_block_tensor_scalar_scaling,thm:mpdo_mpo_scalar_scaling}
     Let $\mathcal U^{ij}=\delta_{ij}$ on its one-dimensional bond space and
     set $\mathcal V^{ij}=-\mathcal U^{ij}$. Their double-layer letters are
     both $\delta_{ij}$, so the simplicity contractions hold with unit
@@ -1487,7 +1439,7 @@
         MPOTensor.rightRank_parityNegativeIdentityTensor,
         MPOTensor.leftRank_parityNegativeIdentityTensor}
     \leanok
-    \uses{thm:mpu_standard_form_parity_obstruction, def:mpu_right_rank}
+    \uses{thm:mpu_standard_form_parity_obstruction,def:mpu_right_rank}
     The two tensors of the parity obstruction are in canonical form II with
     $\rho=1$, and have cut matrices $\pm I_2$ and ranks $r=\ell=2$. With the factors $X_1=X_2=I$, $Y_1=Y_2=Z_1=Z_2=I$ for the identity
     tensor and $X_1=X_2=I$, $Y_1=Y_2=Z_1=Z_2=-I$ for its negative, both satisfying the
@@ -1517,7 +1469,7 @@
     \label{def:mpu_specified_source_index_value}
     \lean{MPOTensor.sourceIndexValue}
     \leanok
-    \uses{def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_right_rank,def:mpu_left_rank}
     For a specified tensor $\mathcal U$ whose right and left source-cut ranks
     $r$ and $\ell$ are positive, define
     \begin{align}
@@ -1536,7 +1488,7 @@
         MPOTensor.sourceIndexValue_eq_logb_rightRank_div,
         MPOTensor.sourceIndexValue_eq_neg_logb_leftRank_div}
     \leanok
-    \uses{def:mpu_specified_source_index_value, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_specified_source_index_value,def:mpu_right_rank,def:mpu_left_rank}
     A specified tensor with equal positive source ranks
     $r_{\mathcal U}=\ell_{\mathcal U}$ has
     $\operatorname{ind}_{\mathrm{src}}(\mathcal U)=0$.
@@ -1589,7 +1541,7 @@
     \label{thm:mpu_source_index_value_tensor_product}
     \lean{MPOTensor.sourceIndexValue_tensorProduct}
     \leanok
-    \uses{def:mpu_specified_source_index_value, thm:mpu_tensor_product_source_ranks}
+    \uses{def:mpu_specified_source_index_value,thm:mpu_tensor_product_source_ranks}
     If $\mathcal U$ and $\mathcal V$ have positive right and left source
     ranks, then
     \begin{align}
@@ -1606,7 +1558,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_tensor_product_source_ranks, thm:mpu_specified_source_index_identities}
+    \uses{thm:mpu_tensor_product_source_ranks,thm:mpu_specified_source_index_identities}
     Both source ranks are multiplicative, so the logarithms add.
 \end{proof}
 
@@ -1634,7 +1586,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_specified_source_index_identities, thm:mpu_source_cut_rank_blocking_saturation}
+    \uses{thm:mpu_specified_source_index_identities,thm:mpu_source_cut_rank_blocking_saturation}
     Exact blocking growth gives the common positive factor $d^{k-k_0}$:
     \begin{align}
         r_k    & =d^{k-k_0}r_{k_0},    \\
@@ -1651,8 +1603,7 @@
         MPOTensor.IsMPU.rightRank_mul_leftRank_blockTensor_of_isMPUCanonicalForm}
     \leanok
     \discussion{6014}
-    \uses{ThmFund1, thm:mpu_bounded_simple_blocking, def:mpu_canonical_form,
-        thm:mpu_canonical_form_similar_cfii}
+    \uses{ThmFund1,thm:mpu_bounded_simple_blocking,def:mpu_canonical_form,thm:mpu_canonical_form_similar_cfii}
     Let $\mathcal U$ be a tensor in canonical form generating matrix product
     unitaries, let $k\geq1$ be any blocking length for which $\mathcal U_k$ is
     simple, and let $r$ and $\ell$ be its right and left source-cut ranks. The
@@ -1687,7 +1638,7 @@
     % **Scope restriction (canonical-form-II representative):** this index is
     % defined for a tensor already in canonical form II, not yet for every MPU.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_canonical_form_ii, def:mpu_specified_source_index_value}
+    \uses{def:mpu_canonical_form_ii,def:mpu_specified_source_index_value}
     Let $\mathcal U$ be an MPU in canonical form II. Choose any positive
     blocking length $k$ for which $\mathcal U_k$ is simple, and let $r_k$ and
     $\ell_k$ be its right and left source-cut ranks. Such a blocking exists,
@@ -1713,8 +1664,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceRanks_eq_of_mpo_eq,
         MPOTensor.IsMPUCanonicalFormII.index_eq_of_mpo_eq}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_admissible_index,
-        def:mpo_family}
+    \uses{def:mpu_canonical_form_ii,def:mpu_admissible_index,def:mpo_family}
     Let $U$ and $V$ be full-support canonical-form-II tensors on the same
     physical space, possibly with different bond dimensions. If
     $U^{(N)}=V^{(N)}$ for every $N>1$, then their right and left source-cut
@@ -1724,10 +1674,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_cfii_equal_periodic_virtual_unitary,
-        thm:mpu_virtual_sandwich_source_ranks,
-        lem:mpu_common_simple_blocking_finite,
-        prop:mpu_admissible_index_well_defined}
+    \uses{thm:mpu_cfii_equal_periodic_virtual_unitary,thm:mpu_virtual_sandwich_source_ranks,lem:mpu_common_simple_blocking_finite,prop:mpu_admissible_index_well_defined}
     Equality of the periodic operators gives a unitary virtual similarity,
     which preserves both source-cut ranks. For a common positive simple
     blocking length $k$ of $U$ and $V$, the periodic
@@ -1746,7 +1693,7 @@
     \label{def:mpu_reduced_representative_index}
     \lean{MPOTensor.IsMPU.index}
     \leanok
-    \uses{thm:mpu_reduced_cfii_representative, def:mpu_admissible_index}
+    \uses{thm:mpu_reduced_cfii_representative,def:mpu_admissible_index}
     Let $d,D>0$, and let $U$ be an MPU tensor. Choose a reduced
     canonical-form-II representative $U_{\mathrm{red}}$ with
     $U_{\mathrm{red}}^{(N)}=U^{(N)}$ for every $N>0$, and set
@@ -1762,8 +1709,7 @@
     \lean{MPOTensor.IsMPU.index_eq_canonical_representative,
         MPOTensor.IsMPU.index_eq_of_mpo_eq}
     \leanok
-    \uses{def:mpu_reduced_representative_index,
-        def:mpu_canonical_form_ii, def:mpo_family}
+    \uses{def:mpu_reduced_representative_index,def:mpu_canonical_form_ii,def:mpo_family}
     Every canonical-form-II representative with the same positive-length
     periodic operators as $U$ has index $\operatorname{ind}(U)$. In
     particular, positive-dimensional MPU tensors $U,V$ with
@@ -1772,8 +1718,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_cfii_representative,
-        thm:mpu_cfii_index_periodic_comparison}
+    \uses{thm:mpu_reduced_cfii_representative,thm:mpu_cfii_index_periodic_comparison}
     For reduced canonical-form-II representatives of $U$ and $V$,
     their periodic operators agree for $N>1$, so their canonical source
     indices agree by Lemma~\ref{thm:mpu_cfii_index_periodic_comparison}.
@@ -1786,8 +1731,7 @@
     \lean{MPOTensor.IsMPU.index_blockTensor,
         MPOTensor.IsMPU.index_physicalAdjointTensor}
     \leanok
-    \uses{def:mpu_reduced_representative_index,
-        def:mpdo_physical_blocking, def:mpdo_physical_adjoint}
+    \uses{def:mpu_reduced_representative_index,def:mpdo_physical_blocking,def:mpdo_physical_adjoint}
     Let $U$ be a positive-dimensional MPU tensor. For every positive integer
     $p$, physical blocking preserves its representative index, while
     physical adjunction reverses its sign:
@@ -1798,11 +1742,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_cfii_representative,
-        thm:mpu_reduced_representative_index_invariance,
-        prop:mpu_admissible_index_well_defined,
-        thm:mpu_cfii_index_physical_adjoint,
-        thm:mpdo_closed_chain_physical_blocking, def:mpdo_physical_adjoint}
+    \uses{thm:mpu_reduced_cfii_representative,thm:mpu_reduced_representative_index_invariance,prop:mpu_admissible_index_well_defined,thm:mpu_cfii_index_physical_adjoint,thm:mpdo_closed_chain_physical_blocking,def:mpdo_physical_adjoint}
     Let $U_{\mathrm{red}}$ be a reduced canonical-form-II representative.
     Under the standard identification of blocked configurations with
     concatenated configurations, the periodic operators satisfy
@@ -1827,7 +1767,7 @@
         MPOTensor.IsMPU.blockTensor_isMPUSimple_of_isMPUCanonicalForm}
     \leanok
     \discussion{6014}
-    \uses{def:index, ThmFund1, thm:mpu_source_cut_rank_blocking, thm:mpu_source_cut_rank_blocking_saturation, thm:mpu_specified_source_index_blocking_invariance, thm:mpu_all_later_simple_blockings, thm:mpu_canonical_form_similar_cfii}
+    \uses{def:index,ThmFund1,thm:mpu_source_cut_rank_blocking,thm:mpu_source_cut_rank_blocking_saturation,thm:mpu_specified_source_index_blocking_invariance,thm:mpu_all_later_simple_blockings,thm:mpu_canonical_form_similar_cfii}
     Let $\mathcal U$ be a tensor in canonical form generating matrix product
     unitaries. The source index is independent of the chosen simple blocking.
     More precisely, if $k\geq k_0\geq1$ and $\mathcal U_{k_0}$ is simple, then
@@ -1845,8 +1785,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_similar_cfii, thm:mpu_virtual_sandwich_blocking,
-        prop:mpu_admissible_index_well_defined}
+    \uses{thm:mpu_canonical_form_similar_cfii,thm:mpu_virtual_sandwich_blocking,prop:mpu_admissible_index_well_defined}
     Passing to the similar tensor in canonical form II preserves the
     operators, the simple blockings, and the ranks; for that representative the
     statement is the canonical-form-II version.
@@ -1866,7 +1805,7 @@
     % blocking and presentation independence for one such tensor, not equality
     % across arbitrary representatives of the same MPU. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_index, def:mpu_canonical_form_ii}
+    \uses{def:mpu_admissible_index,def:mpu_canonical_form_ii}
     Let $\mathcal U$ be an MPU in canonical form II. If $k_0$ and $k$ are
     positive blocking lengths for which $\mathcal U_{k_0}$ and $\mathcal U_k$
     are simple, then both blocks give the same index. When $k\geq k_0$, their
@@ -1884,10 +1823,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_ii_positive_blocking, ThmFund1,
-        thm:mpu_source_cut_rank_blocking_saturation,
-        thm:mpu_specified_source_index_blocking_invariance,
-        lem:mpu_iterated_physical_blocking}
+    \uses{thm:mpu_canonical_form_ii_positive_blocking,ThmFund1,thm:mpu_source_cut_rank_blocking_saturation,thm:mpu_specified_source_index_blocking_invariance,lem:mpu_iterated_physical_blocking}
     Each simple block retains canonical form II. The source-gate criterion
     gives $r_j\ell_j=d^{2j}$ at $j=k_0,k$, and therefore both ranks are
     positive. The source-rank blocking bounds, together with these two
@@ -1903,7 +1839,7 @@
     \label{thm:mpu_cfii_index_physical_adjoint}
     \lean{MPOTensor.IsMPUCanonicalFormII.index_physicalAdjointTensor}
     \leanok
-    \uses{def:mpu_admissible_index, def:mpdo_physical_adjoint}
+    \uses{def:mpu_admissible_index,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPU in canonical form II. Its physical adjoint is
     again in canonical form II, and
     \begin{align}
@@ -1918,9 +1854,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_physical_adjoint_source_ranks,
-        thm:mpu_double_layer_blocking, ThmFund1,
-        def:mpu_admissible_index}
+    \uses{thm:mpu_physical_adjoint_source_ranks,thm:mpu_double_layer_blocking,ThmFund1,def:mpu_admissible_index}
     For any positive simple block $\mathcal U_k$, physical adjunction
     exchanges its two source-cut ranks, so the rank-product criterion makes
     $(\mathcal U_k)^\sharp$ simple as well. At this block the right-rank
@@ -1959,14 +1893,14 @@
     \lean{MPOTensor.rightShiftTensor_isMPU}
     \lean{MPOTensor.leftShiftTensor_isMPU}
     \leanok
-    \uses{def:mpu_shift_tensors, def:mpu, thm:mpu_physical_adjoint_identities}
+    \uses{def:mpu_shift_tensors,def:mpu,thm:mpu_physical_adjoint_identities}
     For every $N>0$, the tensors in Definition~\ref{def:mpu_shift_tensors}
     generate $T^{(N)}$ and $T^{(N)\dagger}$, respectively.  Both tensors are
     matrix product unitaries.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpo_eval_word, def:mpo_rotate_config, lem:eval_word_of_fn_prod, thm:trace_eval_word_eq_sum_cyclic, def:mpu, thm:mpu_physical_adjoint_identities}
+    \uses{def:mpo_eval_word,def:mpo_rotate_config,lem:eval_word_of_fn_prod,thm:trace_eval_word_eq_sum_cyclic,def:mpu,thm:mpu_physical_adjoint_identities}
     Closing the virtual indices of $A^{ij}=\lvert i\rangle\langle j\rvert$
     leaves one nonzero virtual configuration.  If
     $\tau_n=\sigma_{n+1}$ for every $n$ modulo $N$, then
@@ -1987,7 +1921,7 @@
     \lean{MPOTensor.shiftExampleU₂}
     \lean{MPOTensor.shiftExampleU₃}
     \leanok
-    \uses{def:mpu_shift_tensors, def:mpu_independent_tensor_product, def:mpo_stacked_layers}
+    \uses{def:mpu_shift_tensors,def:mpu_independent_tensor_product,def:mpo_stacked_layers}
     On two $d$-dimensional spins per site, define
     \begin{align}
         U_1^{(N)} & =(\Id\otimes\Id)^{\otimes N},   \\
@@ -2008,14 +1942,14 @@
     \lean{MPOTensor.shiftExampleU₂_isMPU}
     \lean{MPOTensor.shiftExampleU₃_isMPU}
     \leanok
-    \uses{threeMPU, thm:mpu_shift_tensor_formulas, thm:mpu_finite_tensor_product, thm:mpu_tensor_product, def:mpu}
+    \uses{threeMPU,thm:mpu_shift_tensor_formulas,thm:mpu_finite_tensor_product,thm:mpu_tensor_product,def:mpu}
     The three tensors generate the operators displayed in
     Definition~\ref{threeMPU} on every nonempty chain, and each tensor is a
     matrix product unitary.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpo_stacked_layers, thm:mpu_finite_tensor_product, thm:mpu_shift_tensor_formulas, thm:mpu_tensor_product, def:mpu}
+    \uses{def:mpo_stacked_layers,thm:mpu_finite_tensor_product,thm:mpu_shift_tensor_formulas,thm:mpu_tensor_product,def:mpu}
     The bond-one identity tensor generates the identity at every length.  The
     finite-chain operator of an independent tensor product is the Kronecker
     product of the two finite-chain operators, after the sitewise identification
@@ -2034,7 +1968,7 @@
         MPOTensor.rightRank_identityMPUTensor,
         MPOTensor.leftRank_identityMPUTensor}
     \leanok
-    \uses{def:mpu_admissible_index, threeMPU}
+    \uses{def:mpu_admissible_index,threeMPU}
     Let $d>0$. The bond-one tensor generating the identity operator has a
     canonical-form-II presentation with fixed matrix $\rho=1$. For every
     canonical-form-II presentation of this tensor,
@@ -2048,8 +1982,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_ii_stabilization_converse, ThmFund1,
-        def:mpu_admissible_index, def:mpu_physical_reindexing}
+    \uses{thm:mpu_canonical_form_ii_stabilization_converse,ThmFund1,def:mpu_admissible_index,def:mpu_physical_reindexing}
     In bond dimension one the normalized transfer matrix is the identity;
     the positive fixed matrix $\rho=1$ therefore gives a canonical-form-II
     presentation. Both source ranks of the identity tensor equal $d$, so the
@@ -2064,8 +1997,7 @@
     \lean{MPOTensor.IsMPU.index_tensorProduct}
     \leanok
     \discussion{6015}
-    \uses{def:index, def:mpu_reduced_representative_index,
-        def:mpu_independent_tensor_product}
+    \uses{def:index,def:mpu_reduced_representative_index,def:mpu_independent_tensor_product}
     Let $\mathcal U$ and $\mathcal V$ be MPU tensors of positive physical and
     bond dimensions. Then
     \begin{align}
@@ -2095,8 +2027,7 @@
     % already in canonical form II. No comparison with an arbitrary unreduced
     % representative is claimed.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_admissible_index, def:mpu_canonical_form_ii,
-        def:mpu_independent_tensor_product, threeMPU}
+    \uses{def:mpu_admissible_index,def:mpu_canonical_form_ii,def:mpu_independent_tensor_product,threeMPU}
     Let $\mathcal U$ and $\mathcal V$ be MPUs in canonical form II. Their
     independent tensor product is again in canonical form II, and
     \begin{align}
@@ -2117,13 +2048,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_ii_tensor_product,
-        lem:mpu_common_simple_blocking_finite,
-        thm:mpu_block_tensor_product,
-        thm:mpu_tensor_product_source_ranks,
-        thm:mpu_specified_source_index_identities,
-        prop:mpu_admissible_index_well_defined,
-        thm:mpu_identity_index}
+    \uses{thm:mpu_canonical_form_ii_tensor_product,lem:mpu_common_simple_blocking_finite,thm:mpu_block_tensor_product,thm:mpu_tensor_product_source_ranks,thm:mpu_specified_source_index_identities,prop:mpu_admissible_index_well_defined,thm:mpu_identity_index}
     At a common positive simple blocking length $k$ for $\mathcal U$,
     $\mathcal V$, and their tensor product, blocking commutes with the independent tensor product
     up to a physical relabeling, so their source ranks satisfy
@@ -2144,8 +2069,7 @@
     \lean{MPOTensor.IsMPU.index_identityMPUTensor,
         MPOTensor.IsMPU.index_tensorProduct_identityMPUTensor}
     \leanok
-    \uses{def:mpu_reduced_representative_index,
-        def:mpu_independent_tensor_product, thm:mpu_tensor_product, threeMPU}
+    \uses{def:mpu_reduced_representative_index,def:mpu_independent_tensor_product,thm:mpu_tensor_product,threeMPU}
     Let $U$ and $V$ be positive-dimensional MPU tensors, possibly with
     different physical and bond dimensions. Their independent tensor product
     satisfies
@@ -2160,10 +2084,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_cfii_representative,
-        thm:mpu_reduced_representative_index_invariance,
-        thm:mpu_admissible_index_tensor, thm:mpu_identity_index,
-        thm:mpu_finite_tensor_product}
+    \uses{thm:mpu_reduced_cfii_representative,thm:mpu_reduced_representative_index_invariance,thm:mpu_admissible_index_tensor,thm:mpu_identity_index,thm:mpu_finite_tensor_product}
     For reduced canonical-form-II representatives $U_{\mathrm{red}}$ and
     $V_{\mathrm{red}}$, Lemma~\ref{thm:mpu_finite_tensor_product} gives, for every $N>0$,
     the periodic factorization
@@ -2190,8 +2111,7 @@
         MPOTensor.mpo_tensorPhysicalId,
         MPOTensor.IsMPU.index_tensorPhysicalId}
     \leanok
-    \uses{def:equivalent-tensors, def:mpu_independent_tensor_product, threeMPU,
-        def:mpu_reduced_representative_index}
+    \uses{def:equivalent-tensors,def:mpu_independent_tensor_product,threeMPU,def:mpu_reduced_representative_index}
     Let $U$ be a tensor and let $U^{(n)}=U\otimes\Id_n$ denote attachment
     of an identity ancilla of dimension $n$ at each physical site, keeping
     the bond dimension fixed. For every chain length $N$, its periodic
@@ -2212,9 +2132,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_finite_tensor_product, thm:threeMPU_chain_formulas,
-        thm:mpu_reduced_representative_index_invariance,
-        thm:mpu_representative_index_tensor_product}
+    \uses{thm:mpu_finite_tensor_product,thm:threeMPU_chain_formulas,thm:mpu_reduced_representative_index_invariance,thm:mpu_representative_index_tensor_product}
     Both constructions give the displayed Kronecker product in the same
     sitewise coordinates. Equality of the periodic operators identifies
     their representative indices, and the bond-one identity factor has
@@ -2234,9 +2152,7 @@
         MPOTensor.rightRank_blockTensor_le_of_isReduction,
         MPOTensor.leftRank_blockTensor_le_of_isReduction}
     \leanok
-    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
-        def:mpu_right_rank, def:mpu_left_rank, def:mps_rectangular_reduction,
-        def:mpdo_physical_blocking}
+    \uses{def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank,def:mps_rectangular_reduction,def:mpdo_physical_blocking}
     Let $\mathcal U$ be a matrix product operator tensor of physical
     dimension $d$ and bond dimension $D$. For arbitrary matrices
     $A\in\mathbb C^{E\times D}$ and $B\in\mathbb C^{D\times E}$, put
@@ -2281,7 +2197,7 @@
     \lean{MPOTensor.rightRank_blockTensor_mulTensor_four_le,
         MPOTensor.leftRank_blockTensor_mulTensor_four_le}
     \leanok
-    \uses{def:mpdo_operator_product, def:mpdo_physical_blocking, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpdo_operator_product,def:mpdo_physical_blocking,def:mpu_right_rank,def:mpu_left_rank}
     Let $\mathcal U$ and $\mathcal V$ be arbitrary matrix product operator
     tensors of common physical dimension $d$. For their product tensor,
     four-site blocking satisfies
@@ -2296,12 +2212,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_v_open_two_site,
-        thm:mpu_source_u_open_two_site,
-        thm:mpdo_blocking_product,
-        thm:mpdo_block_two_as_positive_blocking,
-        thm:mpu_source_ranks_physical_reindexing,
-        lem:mpu_iterated_physical_blocking}
+    \uses{thm:mpu_source_v_open_two_site,thm:mpu_source_u_open_two_site,thm:mpdo_blocking_product,thm:mpdo_block_two_as_positive_blocking,thm:mpu_source_ranks_physical_reindexing,lem:mpu_iterated_physical_blocking}
     The canonical physical reindexing identifies iterated two-site
     blocking with direct four-site blocking. For the right cut, writing each
     two-site block in the $v$--$Y_1$--$Y_2$ form and grouping $v$ with $Y_2$ on one
@@ -2354,8 +2265,7 @@
     \lean{MPOTensor.IsMPU.index_mulTensor}
     \leanok
     \discussion{6016}
-    \uses{def:index, def:mpu_reduced_representative_index,
-        def:mpdo_operator_product}
+    \uses{def:index,def:mpu_reduced_representative_index,def:mpdo_operator_product}
     Let $\mathcal U$ and $\mathcal U'$ be MPU tensors with a common positive
     physical dimension and positive bond dimensions, and let $\mathcal W$ be
     the tensor with doubled auxiliary indices that generates the composition
@@ -2373,8 +2283,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_admissible_index_composition,
-        lem:mpu_four_site_composition_source_rank_bounds}
+    \uses{thm:mpu_admissible_index_composition,lem:mpu_four_site_composition_source_rank_bounds}
     This is the first assertion of
     Lemma~\ref{thm:mpu_admissible_index_composition}, whose proof follows the
     source's rank-saturation argument on the blocking of length $4k$.
@@ -2384,8 +2293,7 @@
     \label{thm:mpu_canonical_representative_reduction}
     \lean{MPOTensor.exists_isReduction_of_mpo_eq_cfii}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mps_rectangular_reduction,
-        def:mpo_family}
+    \uses{def:mpu_canonical_form_ii,def:mps_rectangular_reduction,def:mpo_family}
     Let $\mathcal U$ and $\mathcal V$ have the same physical dimension and
     bond dimensions $D$ and $E$, respectively. Suppose $\mathcal V$ is in
     canonical form II and their periodic operators agree at every positive
@@ -2399,8 +2307,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mps_equality_reduction_exists, def:mpu_canonical_form_ii,
-        thm:mpu_canonical_form_ii_normal}
+    \uses{thm:mps_equality_reduction_exists,def:mpu_canonical_form_ii,thm:mpu_canonical_form_ii_normal}
     The normalized flattening of $\mathcal V$ is normal. Multiplication by
     the nonzero scalar $\sqrt d$ preserves normality, so its unnormalized
     flattening is normal as well. Equality of the periodic operators gives
@@ -2412,8 +2319,7 @@
     \label{thm:mpu_composition_rank_saturation}
     \lean{MPOTensor.IsMPUCanonicalFormII.compositionRanks_of_isReduction}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mps_rectangular_reduction,
-        def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mps_rectangular_reduction,def:mpu_right_rank,def:mpu_left_rank}
     Let $\mathcal U,\mathcal V,\mathcal R$ be canonical-form-II tensors of
     physical dimension $d$. Suppose $\mathcal U$ and $\mathcal V$ are simple,
     $\mathcal R_4$ is simple, and $\mathcal R$ is a rectangular reduction of
@@ -2425,9 +2331,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_rectangular_reduction_source_ranks,
-        lem:mpu_four_site_composition_source_rank_bounds,
-        prop:mpu_admissible_index_well_defined, ThmFund1}
+    \uses{lem:mpu_rectangular_reduction_source_ranks,lem:mpu_four_site_composition_source_rank_bounds,prop:mpu_admissible_index_well_defined,ThmFund1}
     Rectangular reduction and the four-site composition bounds give the
     corresponding upper bounds. Simplicity gives
     \begin{align}
@@ -2443,8 +2347,7 @@
     \label{thm:mpu_admissible_index_composition}
     \lean{MPOTensor.IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor}
     \leanok
-    \uses{def:mpu_reduced_representative_index, def:mpdo_operator_product,
-        def:mpo_family}
+    \uses{def:mpu_reduced_representative_index,def:mpdo_operator_product,def:mpo_family}
     Let $\mathcal U$ and $\mathcal V$ be MPUs with a common positive physical
     dimension and positive bond dimensions. For the index defined through a reduced canonical-form-II
     representative,
@@ -2461,13 +2364,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_cfii_representative,
-        thm:mpu_reduced_representative_index_invariance,
-        thm:mpu_canonical_representative_reduction,
-        lem:mpu_common_simple_blocking_finite,
-        thm:mpu_composition_rank_saturation,
-        thm:mpu_specified_source_index_identities,
-        prop:mpu_admissible_index_well_defined}
+    \uses{thm:mpu_reduced_cfii_representative,thm:mpu_reduced_representative_index_invariance,thm:mpu_canonical_representative_reduction,lem:mpu_common_simple_blocking_finite,thm:mpu_composition_rank_saturation,thm:mpu_specified_source_index_identities,prop:mpu_admissible_index_well_defined}
     For reduced canonical representatives of the two factors and their
     composition, the positive-length periodic operators still satisfy the
     composition identity. Lemma~\ref{thm:mpu_canonical_representative_reduction} gives a rectangular
@@ -2489,7 +2386,7 @@
     \lean{MPOTensor.StrictlyEquivalent, MPOTensor.padBond,
         MPOTensor.StrictlyEquivalent.of_fixedBond}
     \leanok
-    \uses{def:mpu, def:mpu_physical_reindexing, def:mpu_canonical_form}
+    \uses{def:mpu,def:mpu_physical_reindexing,def:mpu_canonical_form}
     Let $\mathcal U$ and $\mathcal V$ be canonical-form MPU tensors with
     physical dimensions $d_a$ and $d_b$ and virtual bond dimensions $D_a$ and
     $D_b$. For a tensor $\mathcal U$ of bond dimension $D$ and $D'\geq D$,
@@ -2554,7 +2451,7 @@
         MPOTensor.tensorPhysicalIdCFIIData,
         MPOTensor.hasFullSupport_tensorPhysicalIdCFIIData}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,def:mpu_full_support}
     Let $x>0$. After adjoining an identity ancilla of dimension $x$, the
     normalized flattening is the physical reindexing of the original flattening
     with a normalized diagonal ancilla alphabet. Its transfer map is exactly the
@@ -2591,9 +2488,7 @@
         MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor,
         MPOTensor.IsMPU.isMPUCanonicalForm_blockTensor_tensorPhysicalId}
     \leanok
-    \uses{def:mpu_canonical_form, def:normal,
-        thm:mpu_normalized_full_support_normal,
-        thm:mpu_identity_ancilla_reduced_cfii}
+    \uses{def:mpu_canonical_form,def:normal,thm:mpu_normalized_full_support_normal,thm:mpu_identity_ancilla_reduced_cfii}
     A normal tensor is in canonical form, with one block of weight one
     filling the bond space. Consequently, if an MPU tensor $\mathcal U$ of
     physical dimension $d$ is in canonical form, then so are $\mathcal U_k$,
@@ -2603,8 +2498,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_full_support_normal,
-        thm:mpu_identity_ancilla_reduced_cfii}
+    \uses{thm:mpu_normalized_full_support_normal,thm:mpu_identity_ancilla_reduced_cfii}
     By Lemma~\ref{thm:mpu_normalized_full_support_normal}, the normalized
     tensor $d^{-1/2}\mathcal U$ is normal. Attaching the identity ancilla
     replaces it by a physical reindexing of its normalized diagonal lift,
@@ -2621,7 +2515,7 @@
     \label{def:equivalent-tensors}
     \lean{MPOTensor.Equivalent}
     \leanok
-    \uses{def:mpu, def:strictly-equivalent-tensors, lem:mpu_blocking}
+    \uses{def:mpu,def:strictly-equivalent-tensors,lem:mpu_blocking}
     Let $\mathcal U$ and $\mathcal V$ be MPU
     tensors with physical dimensions $d_a$ and $d_b$. They are equivalent if
     there are a
@@ -2698,7 +2592,7 @@
         LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues_mem_unitInterval,
         LinearMap.IsSymmetricProjection.rangeCompressionEigenvalues_eq_zero_or_eq_one_or_exists_angle_block}
     \leanok
-    \uses{def:mpu_two_projection_compression_spectral_data, thm:mpu_two_projection_angle_block}
+    \uses{def:mpu_two_projection_compression_spectral_data,thm:mpu_two_projection_angle_block}
     Let $P$ and $Q$ be orthogonal projections on a finite-dimensional complex
     inner-product space, with compression spectral data $(x_i,\mu_i)$. Then, for
     every $i$, $\mu_i\in[0,1]$ and exactly one of the following alternatives
@@ -2716,7 +2610,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_two_projection_compression_spectral_data, thm:mpu_two_projection_angle_block}
+    \uses{def:mpu_two_projection_compression_spectral_data,thm:mpu_two_projection_angle_block}
     The finite-dimensional spectral theorem applied to the self-adjoint compression
     of $Q$ to $\operatorname{ran}P$ diagonalizes $PQP|_{\operatorname{ran}P}$. For a unit compression eigenvector $x$ with
     eigenvalue $\mu$, the angle-defect identity gives
@@ -2769,7 +2663,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_two_projection_angle_defect_block, thm:mpu_two_projection_compression_spectrum, thm:mpu_two_projection_angle_block}
+    \uses{def:mpu_two_projection_angle_defect_block,thm:mpu_two_projection_compression_spectrum,thm:mpu_two_projection_angle_block}
     Since $Px_i=x_i$, symmetry of $P$ and the compression eigenvalue equation give
     \begin{align}
         \langle x_i,d_j\rangle
@@ -2936,7 +2830,7 @@
     \lean{LinearMap.IsSymmetricProjection.disjoint_ker_range_reducedProjection,
         Matrix.disjoint_ker_range_reducedProjection}
     \leanok
-    \uses{def:mpu_two_projection_reduced_projection, thm:mpu_two_projection_reduced_projection}
+    \uses{def:mpu_two_projection_reduced_projection,thm:mpu_two_projection_reduced_projection}
     For orthogonal projections $P$ and $Q$, the reduced range contains no
     nonzero vector annihilated by $Q$:
     \begin{align}
@@ -2998,7 +2892,7 @@
         Matrix.second_mul_reducedProjection,
         Matrix.exists_reducedProjection_rightFactor}
     \leanok
-    \uses{def:mpu_matrix_reduced_projection, thm:mpu_two_projection_reduced_projection, thm:mpu_two_projection_reduced_projection_right_factor}
+    \uses{def:mpu_matrix_reduced_projection,thm:mpu_two_projection_reduced_projection,thm:mpu_two_projection_reduced_projection_right_factor}
     If $P$ and $Q$ are orthogonal projections, then $\widetilde P$ is an
     orthogonal projection and
     \begin{align}
@@ -3019,7 +2913,7 @@
     \label{lem:mpu_transfer_map_virtual_sandwich}
     \lean{MPOTensor.transferMap_virtualSandwich}
     \leanok
-    \uses{def:mpo_transfer_map, def:mpu_virtual_sandwich}
+    \uses{def:mpo_transfer_map,def:mpu_virtual_sandwich}
     Let $U=(U^{ij})$ be an MPO tensor, and let
     $\widehat U^{ij}=AU^{ij}B$. Then
     \begin{align}
@@ -3037,8 +2931,7 @@
     \lean{MPOTensor.transferMap_normalizedFlattening_virtualSandwich,
         MPOTensor.transferMap_normalizedFlattening_reducedProjection}
     \leanok
-    \uses{def:mpu_normalized_flattening, def:mpu_virtual_sandwich,
-        def:mpu_matrix_reduced_projection}
+    \uses{def:mpu_normalized_flattening,def:mpu_virtual_sandwich,def:mpu_matrix_reduced_projection}
     Let $W=(W^{ij})$ be an MPO tensor, let $\widehat E_W$ denote the transfer
     map of its normalized flattening, and set $\widehat W^{ij}=AW^{ij}B$.
     For every bond matrix $X$,
@@ -3060,8 +2953,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_normalized_flattening, def:mpu_virtual_sandwich,
-        thm:mpu_matrix_reduced_projection}
+    \uses{def:mpu_normalized_flattening,def:mpu_virtual_sandwich,thm:mpu_matrix_reduced_projection}
     Scalar normalization commutes with left and right multiplication.
     Expanding the normalized transfer map therefore gives the first identity
     by collecting the constant factors outside the finite sum. For the
@@ -3098,7 +2990,7 @@
         MPOTensor.trace_compressed_fixed_pair_reducedProjection,
         MPOTensor.compressed_fixed_pair_posDef_reducedProjection}
     \leanok
-    \uses{def:mpo_family, def:mpo_transfer_map, def:mpu_virtual_sandwich, def:mpu_matrix_reduced_projection, lem:mpu_transfer_map_virtual_sandwich, lem:mpu_support_compression_posdef, thm:mpu_matrix_reduced_projection, thm:mpu_two_projection_reduced_projection_transversality}
+    \uses{def:mpo_family,def:mpo_transfer_map,def:mpu_virtual_sandwich,def:mpu_matrix_reduced_projection,lem:mpu_transfer_map_virtual_sandwich,lem:mpu_support_compression_posdef,thm:mpu_matrix_reduced_projection,thm:mpu_two_projection_reduced_projection_transversality}
     Let $W=(W^{ij})$ be an MPO tensor. Let $L,R\succeq0$ satisfy
     \begin{align}
         E_W(X)                & =\operatorname{tr}(LX)R, &
@@ -3206,7 +3098,7 @@
     \label{thm:mpu_simple_reduced_support}
     \lean{MPOTensor.IsMPUSimple.reducedProjection}
     \leanok
-    \uses{def:mpu_simple, def:mpu_matrix_reduced_projection}
+    \uses{def:mpu_simple,def:mpu_matrix_reduced_projection}
     Let $W$ be simple with $d>0$. Let $P$ be an orthogonal projection and
     $Q$ a square matrix on its bond space, with $W^{ij}P=W^{ij}=QW^{ij}$.
     Suppose the normalized diagonal $E$ of its double layer has a rank-one
@@ -3215,9 +3107,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_matrix_reduced_projection, thm:mpu_reduced_representative,
-        thm:mpu_supplied_projector_simple2, thm:mpu_all_later_simple_blockings,
-        thm:mpu_simple_is_mpu}
+    \uses{thm:mpu_matrix_reduced_projection,thm:mpu_reduced_representative,thm:mpu_supplied_projector_simple2,thm:mpu_all_later_simple_blockings,thm:mpu_simple_is_mpu}
     With $F^{ij}$ denoting the double-layer letters and
     $\mathcal P=\overline P\otimes P$,
     $\mathcal Q=\overline Q\otimes Q$, and $H=\overline T\otimes T$,
@@ -3245,7 +3135,7 @@
     \label{thm:reduced_projection_invertible_factor}
     \lean{Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor}
     \leanok
-    \uses{def:mpu_matrix_reduced_projection, def:mpu_ambient_support_inverse_extension}
+    \uses{def:mpu_matrix_reduced_projection,def:mpu_ambient_support_inverse_extension}
     Let $L,R\succeq0$, let $P$ and $Q$ be their support projections, and let
     $\widetilde P$ be the reduced projection of $P$ and $Q$. There are
     invertible support-inverse extensions of $L$ and $R$, together with an
@@ -3264,7 +3154,7 @@
         MPOTensor.rightRank_hat_eq_reducedProjection,
         MPOTensor.leftRank_hat_eq_reducedProjection}
     \leanok
-    \uses{def:mpo_family, def:mpu_virtual_sandwich, def:mpu_matrix_reduced_projection, def:mpu_right_rank, def:mpu_left_rank, def:mpu_ambient_support_inverse_extension, thm:reduced_projection_invertible_factor}
+    \uses{def:mpo_family,def:mpu_virtual_sandwich,def:mpu_matrix_reduced_projection,def:mpu_right_rank,def:mpu_left_rank,def:mpu_ambient_support_inverse_extension,thm:reduced_projection_invertible_factor}
     Let $W=(W^{ij})$ be an MPO tensor, let $L$, $R$, $X$, $Z$, $Y$ be square
     matrices of the same size, let $P$ be an orthogonal projection, let $Q$
     be a square matrix of the same size, and set $\widetilde P$ equal to
@@ -3303,7 +3193,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_virtual_sandwich, thm:mpu_matrix_reduced_projection, thm:mpu_virtual_sandwich_source_ranks, thm:mpu_ambient_support_inverse_extension}
+    \uses{def:mpu_virtual_sandwich,thm:mpu_matrix_reduced_projection,thm:mpu_virtual_sandwich_source_ranks,thm:mpu_ambient_support_inverse_extension}
     Expanding each virtual sandwich and using $XL=P$ and $RZ=Q$ gives
     (\ref{eq:mpu_reduced_hat_chain_pwqy}). The absorptions
     $QW^{ij}=W^{ij}=W^{ij}P$ give, letter by letter,
@@ -3423,7 +3313,7 @@
         MPOTensor.rightRank_blockTensor_virtualSandwich,
         MPOTensor.leftRank_blockTensor_virtualSandwich}
     \leanok
-    \uses{thm:mpu_virtual_sandwich_source_ranks, def:mpu_simple, def:mpdo_physical_blocking}
+    \uses{thm:mpu_virtual_sandwich_source_ranks,def:mpu_simple,def:mpdo_physical_blocking}
     Let $A,B$ be square matrices on the bond space with $BA=I$. The tensor with
     letters $AU^{ij}B$ has the blockings $A\,U_L\,B$, the same periodic
     operators as $\mathcal U$, and is simple if and only if $\mathcal U$ is;
@@ -3444,9 +3334,7 @@
         MPOTensor.transported_source_factor_premises_at_selected_ranks,
         MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges}
     \leanok
-    \uses{def:mpu_simple, def:mpu_canonical_form_ii,
-        def:mpu_virtual_sandwich, def:mpu_weighted_source_factors,
-        thm:mpu_virtual_sandwich_source_ranks}
+    \uses{def:mpu_simple,def:mpu_canonical_form_ii,def:mpu_virtual_sandwich,def:mpu_weighted_source_factors,thm:mpu_virtual_sandwich_source_ranks}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
     with $V^{ij}=zU^{ij}z^\dagger$ for a unitary $z$ on the virtual space.
     Their recorded positive matrices need not be related. Write
@@ -3475,12 +3363,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_virtual_sandwich_source_cuts,
-        thm:mpu_virtual_sandwich_source_ranks,
-        thm:mpu_source_factorizations,
-        thm:mpu_source_factor_normalizations,
-        thm:mpu_source_factor_right_inverses, ThmFund1,
-        cor:mpug_normalized_source_decomposition_gauges}
+    \uses{thm:mpu_virtual_sandwich_source_cuts,thm:mpu_virtual_sandwich_source_ranks,thm:mpu_source_factorizations,thm:mpu_source_factor_normalizations,thm:mpu_source_factor_right_inverses,ThmFund1,cor:mpug_normalized_source_decomposition_gauges}
     The two cut identities of
     Lemma~\ref{thm:mpu_virtual_sandwich_source_cuts}, applied to the
     selected factorizations of Lemma~\ref{thm:mpu_source_factorizations},
@@ -3528,9 +3411,7 @@
     \label{thm:mpu_source_gates_virtual_unitary_gauge}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_selected_source_gate_unitary_gauges}
     \leanok
-    \uses{def:mpu_simple, def:mpu_canonical_form_ii,
-        def:mpu_virtual_sandwich, def:mpu_source_uv,
-        thm:mpu_virtual_sandwich_source_ranks}
+    \uses{def:mpu_simple,def:mpu_canonical_form_ii,def:mpu_virtual_sandwich,def:mpu_source_uv,thm:mpu_virtual_sandwich_source_ranks}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
     with $V^{ij}=zU^{ij}z^\dagger$ for a unitary $z$. Let
     $e_r:r[\mathcal U]\simeq r[\mathcal V]$ and
@@ -3719,7 +3600,7 @@
     \lean{MPOTensor.mpo_rectangularSandwich_of_absorb,
         MPOTensor.exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul}
     \leanok
-    \uses{def:mpu, def:mpu_canonical_form_ii, def:mpu_virtual_sandwich, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu,def:mpu_canonical_form_ii,def:mpu_virtual_sandwich,def:mpu_right_rank,def:mpu_left_rank}
     Let $\mathcal W$ generate MPU with $d>0$, and suppose that its normalized
     transfer map is $X\mapsto\operatorname{tr}(LX)R$ with $L,R\succeq0$. Then
     there is a tensor $\mathcal B$ in canonical form II such that
@@ -3733,7 +3614,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_rank_one_transfer_trace_pair, lem:mpu_posdef_congruence_diagonal, thm:mpu_reduced_representative, thm:mpu_reduced_to_hat_source_ranks, thm:reduced_projection_invertible_factor, lem:mpu_rectangular_reduction_source_ranks, thm:mpu_canonical_form_ii_stabilization_converse}
+    \uses{lem:mpu_rank_one_transfer_trace_pair,lem:mpu_posdef_congruence_diagonal,thm:mpu_reduced_representative,thm:mpu_reduced_to_hat_source_ranks,thm:reduced_projection_invertible_factor,lem:mpu_rectangular_reduction_source_ranks,thm:mpu_canonical_form_ii_stabilization_converse}
     Let $P,Q$ be the support projections of $L,R$ and let $\widetilde P$ be
     their reduced projection. By
     Lemma~\ref{lem:mpu_rank_one_transfer_trace_pair}, the letters satisfy
@@ -3766,7 +3647,7 @@
     \lean{MPOTensor.transferMatrix_normalizedFlattening_blockTensor,
         MPOTensor.IsMPU.exists_transferMatrix_blockTensor_eq_vecMulVec}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening}
+    \uses{def:mpu,def:mpu_normalized_flattening}
     The normalized transfer matrix of the block of $k$ sites is the $k$-th
     power of the normalized transfer matrix. If $\mathcal W$ generates MPU
     with $d>0$ and $k\geq D^2$, it equals $|\rho)(\Phi|$ for vectors with
@@ -3775,7 +3656,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_normalized_transfer_stabilization}
+    \uses{thm:mpu_blocked_double_layer_diagonal,thm:mpu_normalized_transfer_stabilization}
     Write $E_{\mathcal W}$ for the normalized transfer matrix of
     $\mathcal W$. The normalized transfer matrix of the block is the
     normalized physical diagonal of its double layer, so
@@ -3795,8 +3676,7 @@
         MPOTensor.IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor_of_mpo_eq,
         MPOTensor.IsMPU.sourceRanks_blockTensor_eq_factorFreeSandwich}
     \leanok
-    \uses{def:mpu, def:mpu_canonical_form_ii, def:mpu_factor_free_sandwich, def:mpu_right_rank, def:mpu_left_rank,
-        thm:mpu_bounded_simple_blocking}
+    \uses{def:mpu,def:mpu_canonical_form_ii,def:mpu_factor_free_sandwich,def:mpu_right_rank,def:mpu_left_rank,thm:mpu_bounded_simple_blocking}
     Let $\mathcal W$ generate MPU with $d>0$, let $k\geq D^2$, and let
     $\mathcal U$, of bond dimension $D'$, be in canonical form II and generate
     the same MPU as $\mathcal W$. Then $D'\leq D$, the block $\mathcal U_k$ is
@@ -3811,7 +3691,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_cfii_representative, thm:mpu_cfii_equal_periodic_virtual_unitary, thm:mpu_bounded_simple_blocking, prop:mpu_admissible_index_well_defined, lem:mpu_blocked_transfer_rank_one, lem:mpu_rank_one_transfer_trace_pair, lem:mpu_rank_one_transfer_canonical_form, thm:mpu_cfii_index_periodic_comparison, thm:mpu_canonical_form_ii_positive_blocking, thm:mpu_factor_free_sandwich_continuous}
+    \uses{thm:mpu_reduced_cfii_representative,thm:mpu_cfii_equal_periodic_virtual_unitary,thm:mpu_bounded_simple_blocking,prop:mpu_admissible_index_well_defined,lem:mpu_blocked_transfer_rank_one,lem:mpu_rank_one_transfer_trace_pair,lem:mpu_rank_one_transfer_canonical_form,thm:mpu_cfii_index_periodic_comparison,thm:mpu_canonical_form_ii_positive_blocking,thm:mpu_factor_free_sandwich_continuous}
     Canonical-form-II tensors generating the same MPU are related by a unitary
     virtual gauge, so $D'$ equals the bond dimension of the reduced
     representative, which is at most $D$. Hence $D'^2\leq k$ and
@@ -3832,7 +3712,7 @@
         MPOTensor.lowerSemicontinuous_leftRank,
         MPOTensor.sourceRanks_const_of_fixed_product}
     \leanok
-    \uses{def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_right_rank,def:mpu_left_rank}
     Both source ranks are lower semicontinuous along a continuous family of
     tensors. If $[0,1]\ni x\mapsto\mathcal V(x)$ is continuous and
     $r[\mathcal V(x)]\ell[\mathcal V(x)]=c>0$ for every $x$, then both ranks
@@ -3841,7 +3721,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_rank_lower_semicontinuous, thm:mpu_fixed_product_preconnected}
+    \uses{thm:mpu_rank_lower_semicontinuous,thm:mpu_fixed_product_preconnected}
     The source cuts are coordinate rearrangements of the tensor, so they vary
     continuously and their ranks are lower semicontinuous. The fixed positive
     product makes both ranks constant on the connected interval.
@@ -3854,7 +3734,7 @@
         MPOTensor.continuous_blockTensor,
         Continuous.blockTensor}
     \leanok
-    \uses{def:mpu, def:mpu_simple, def:mpdo_physical_blocking}
+    \uses{def:mpu,def:mpu_simple,def:mpdo_physical_blocking}
     Let $d,D>0$.  Every bond-$D$ MPU tensor becomes simple after blocking
     exactly $D^4$ sites.  For each fixed $L$, the map
     \begin{align}
@@ -3869,7 +3749,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_bounded_simple_blocking, thm:mpu_all_later_simple_blockings}
+    \uses{thm:mpu_bounded_simple_blocking,thm:mpu_all_later_simple_blockings}
     Every tensor is simple after blocking any $k\geq D^2$ sites, in
     particular after blocking $D^4\geq D^2$ sites.
     For fixed blocked ket and bra words, every matrix entry of the blocked
@@ -3886,7 +3766,7 @@
         MPOTensor.IsMPU.sourceRanks_canonicalForm_blockTensor_const}
     \leanok
     \discussion{6022}
-    \uses{def:mpu, def:mpu_canonical_form, def:mpu_canonical_form_ii, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu,def:mpu_canonical_form,def:mpu_canonical_form_ii,def:mpu_right_rank,def:mpu_left_rank}
     Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors of
     physical dimension $d>0$ and bond dimension $D$ generating MPUs, without
     requiring the path to be in canonical form. For each $x$, let
@@ -3898,7 +3778,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_canonical_ranks_factor_free, lem:mpu_path_fixed_product_source_ranks, thm:mpu_factor_free_sandwich_continuous, thm:mpu_canonical_form_similar_cfii, thm:mpu_reduced_cfii_representative}
+    \uses{lem:mpu_canonical_ranks_factor_free,lem:mpu_path_fixed_product_source_ranks,thm:mpu_factor_free_sandwich_continuous,thm:mpu_canonical_form_similar_cfii,thm:mpu_reduced_cfii_representative}
     A tensor in canonical form is similar to one in canonical form II, and
     blocking commutes with this similarity without changing the source ranks,
     so it suffices to take $\mathcal U(x)$ in canonical form II. Fix
@@ -3915,14 +3795,14 @@
     \label{thm:mpu_path_index_constant}
     \lean{MPOTensor.IsMPU.index_const_of_continuous}
     \leanok
-    \uses{def:mpu_reduced_representative_index, prop:continuity-index}
+    \uses{def:mpu_reduced_representative_index,prop:continuity-index}
     Under the hypotheses of Lemma~\ref{prop:continuity-index}, the index of
     $\mathcal W(x)$ is independent of $x\in[0,1]$.
     % Source lines: paper_v2.tex 681--688 and 733--818.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{prop:continuity-index, thm:mpu_reduced_representative_index_invariance, prop:mpu_admissible_index_well_defined, thm:mpu_reduced_cfii_representative}
+    \uses{prop:continuity-index,thm:mpu_reduced_representative_index_invariance,prop:mpu_admissible_index_well_defined,thm:mpu_reduced_cfii_representative}
     The index of $\mathcal W(x)$ is the index of a reduced canonical-form-II
     representative $\mathcal U(x)$, computed from the source ranks of its
     simple block of $D^2$ sites as
@@ -3939,7 +3819,7 @@
     % arbitrary MPU paths and uses ranks of reduced representatives. Here each
     % path tensor itself has canonical-form-II data. See
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu_canonical_form_ii, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_canonical_form_ii,def:mpu_right_rank,def:mpu_left_rank}
     Let $[0,1]\ni x\mapsto\mathcal U(x)$ be a continuous path of tensors of
     fixed physical dimension $d$ and bond dimension $D$. Suppose that each
     $\mathcal U(x)$ is in canonical form II. Then for all $x,y\in[0,1]$,
@@ -3954,10 +3834,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_common_pow_four_simple_blocking,
-        prop:mpu_admissible_index_well_defined,
-        thm:mpu_rank_lower_semicontinuous,
-        thm:mpu_fixed_product_preconnected}
+    \uses{thm:mpu_common_pow_four_simple_blocking,prop:mpu_admissible_index_well_defined,thm:mpu_rank_lower_semicontinuous,thm:mpu_fixed_product_preconnected}
     Blocking is continuous, and the two source cuts are coordinate
     rearrangements of the blocked tensor. Thus their ranks are lower
     semicontinuous functions of $x$. The common block of length $D^4$ is
@@ -3974,15 +3851,13 @@
     \label{thm:mpu_cfii_path_index}
     \lean{MPOTensor.IsMPUCanonicalFormII.index_const_of_continuous}
     \leanok
-    \uses{def:mpu_admissible_index, def:mpu_canonical_form_ii,
-        thm:mpu_cfii_path_source_ranks}
+    \uses{def:mpu_admissible_index,def:mpu_canonical_form_ii,thm:mpu_cfii_path_source_ranks}
     Under the hypotheses of Lemma~\ref{thm:mpu_cfii_path_source_ranks},
     the index of $\mathcal U(x)$ is independent of $x\in[0,1]$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_cfii_path_source_ranks,
-        prop:mpu_admissible_index_well_defined}
+    \uses{thm:mpu_cfii_path_source_ranks,prop:mpu_admissible_index_well_defined}
     Every $D^4$-site block is simple, so for every $x\in[0,1]$,
     \begin{align}
         \operatorname{ind}(\mathcal U(x))
@@ -3999,8 +3874,7 @@
         MPOTensor.Equivalent.index_eq,
         MPOTensor.not_equivalent_of_index_ne}
     \leanok
-    \uses{def:mpu_reduced_representative_index,
-        def:strictly-equivalent-tensors, def:equivalent-tensors}
+    \uses{def:mpu_reduced_representative_index,def:strictly-equivalent-tensors,def:equivalent-tensors}
     Let $\mathcal U$ and $\mathcal V$ be MPU tensors of positive physical and
     bond dimensions. If $\mathcal U$ and $\mathcal V$ are strictly equivalent,
     or more generally equivalent, then
@@ -4014,10 +3888,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_path_index_constant,
-        thm:mpu_representative_index_blocking_adjoint,
-        thm:mpu_physical_ancilla_index,
-        thm:mpu_reduced_representative_index_invariance}
+    \uses{thm:mpu_path_index_constant,thm:mpu_representative_index_blocking_adjoint,thm:mpu_physical_ancilla_index,thm:mpu_reduced_representative_index_invariance}
     Suppose first that $\mathcal U$ and $\mathcal V$ are strictly equivalent,
     with a path $\mathcal W(p)$ of MPU tensors of bond dimension $D'$ from
     $\mathcal U_{\uparrow D'}$ to $\mathcal V_{\uparrow D'}$. Adjoining unused
@@ -4044,9 +3915,7 @@
     \label{thm:mpu_blocked_tensor_joined_to_gates}
     \lean{MPOTensor.IsMPU.exists_joinedIn_standardFormTensorOfGates}
     \leanok
-    \uses{def:mpu_canonical_form, thm:mpu_canonical_form_similar_cfii,
-        def:mpu_tensor_from_two_gates, lem:mpu_gauge_padding_paths,
-        lem:mpu_standard_form_interpolation, prop:mpu_admissible_index_well_defined}
+    \uses{def:mpu_canonical_form,thm:mpu_canonical_form_similar_cfii,def:mpu_tensor_from_two_gates,lem:mpu_gauge_padding_paths,lem:mpu_standard_form_interpolation,prop:mpu_admissible_index_well_defined}
     Let $W$ be an MPU tensor in canonical form, of physical dimension $c$ and
     bond dimension $D$, and let $m\geq D^2$ and $n=c^m$. There are unitary
     gates
@@ -4068,9 +3937,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_similar_cfii, lem:mpu_gauge_padding_paths,
-        lem:mpu_standard_form_interpolation,
-        prop:mpu_admissible_index_well_defined}
+    \uses{thm:mpu_canonical_form_similar_cfii,lem:mpu_gauge_padding_paths,lem:mpu_standard_form_interpolation,prop:mpu_admissible_index_well_defined}
     Write $W=X^{-1}YX$ with $Y$ in canonical form~II, and join $W_{2m}$ to
     $Y_{2m}$ by a path of gauges. Since $m\geq D^2$, the block $Y_m$ is
     simple, and $Y_{2m}$ is its two-site block, in standard form with the
@@ -4087,10 +3954,7 @@
         MPOTensor.IsMPU.equivalent_of_index_eq,
         MPOTensor.IsMPU.equivalent_iff_index_eq}
     \leanok
-    \uses{thm:mpu_blocked_tensor_joined_to_gates, lem:mpu_tensor_from_gates_path,
-        thm:mpu_canonical_form_ancilla_blocking, thm:mpu_physical_ancilla_index,
-        def:strictly-equivalent-tensors, def:equivalent-tensors,
-        thm:mpu_equivalence_index_eq}
+    \uses{thm:mpu_blocked_tensor_joined_to_gates,lem:mpu_tensor_from_gates_path,thm:mpu_canonical_form_ancilla_blocking,thm:mpu_physical_ancilla_index,def:strictly-equivalent-tensors,def:equivalent-tensors,thm:mpu_equivalence_index_eq}
     Let $\mathcal U$ and $\mathcal V$ be MPU tensors in canonical form, of
     positive physical and bond dimensions. If they have the same physical
     dimension and the same index, their blocks of $2m$ sites are strictly
@@ -4102,9 +3966,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_blocked_tensor_joined_to_gates, lem:mpu_tensor_from_gates_path,
-        thm:mpu_canonical_form_ancilla_blocking, thm:mpu_physical_ancilla_index,
-        thm:mpu_equivalence_index_eq}
+    \uses{thm:mpu_blocked_tensor_joined_to_gates,lem:mpu_tensor_from_gates_path,thm:mpu_canonical_form_ancilla_blocking,thm:mpu_physical_ancilla_index,thm:mpu_equivalence_index_eq}
     Let the physical dimensions be $d_a$ and $d_b$, with greatest common divisor
     $g$, and put $p_a=d_b/g$ and $p_b=d_a/g$. These are coprime and
     $p_ad_a=p_bd_b$. The tensors $\mathcal U^{(p_a)}$ and $\mathcal V^{(p_b)}$
@@ -4124,11 +3986,7 @@
     \lean{MPOTensor.IsMPU.indexTheorem}
     \leanok
     \discussion{6023}
-    \uses{def:index, def:mpu_reduced_representative_index,
-        thm:mpu_representative_index_blocking_adjoint,
-        lem:mpu_index_tensor, lem:mpu_index_composition,
-        thm:mpu_path_index_constant,
-        def:equivalent-tensors, thm:mpu_equivalent_of_index_eq}
+    \uses{def:index,def:mpu_reduced_representative_index,thm:mpu_representative_index_blocking_adjoint,lem:mpu_index_tensor,lem:mpu_index_composition,thm:mpu_path_index_constant,def:equivalent-tensors,thm:mpu_equivalent_of_index_eq}
     For MPU tensors under the source's standing canonical-form convention, take
     the index defined from any simple blocking. This index has the following
     properties.
@@ -4150,10 +4008,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_representative_index_blocking_adjoint,
-        lem:mpu_index_tensor, lem:mpu_index_composition,
-        thm:mpu_path_index_constant,
-        thm:mpu_equivalent_of_index_eq}
+    \uses{thm:mpu_representative_index_blocking_adjoint,lem:mpu_index_tensor,lem:mpu_index_composition,thm:mpu_path_index_constant,thm:mpu_equivalent_of_index_eq}
     Clauses (i)--(iii) are
     Lemmas~\ref{thm:mpu_representative_index_blocking_adjoint},
     \ref{lem:mpu_index_tensor},
@@ -4166,7 +4021,7 @@
     \label{lem:mpu_path_fixed_gate_dims}
     \lean{MPOTensor.IsMPU.exists_standardForm_fixed_gateDims_of_path}
     \leanok
-    \uses{prop:continuity-index, SF}
+    \uses{prop:continuity-index,SF}
     Let $p\mapsto\mathcal U(p)$, $p\in[0,1]$, be a continuous path of tensors
     generating matrix product unitaries, not necessarily in canonical form, and
     let $k_0=D^4$ and $d'=d^{k_0}$. There are integers $\ell$ and $r$ such that
@@ -4357,7 +4212,7 @@
     \lean{MPOTensor.IsMPU.exists_continuous_standardForm_of_path}
     \leanok
     \discussion{6024}
-    \uses{prop:continuity-index, IndexTh, SF}
+    \uses{prop:continuity-index,IndexTh,SF}
     For every continuous path $p\mapsto\mathcal U(p)$ of MPU tensors, not
     necessarily in canonical form, there are an integer $k_0\leq D^4$ and
     continuous paths of unitaries $u(p)$ and $v(p)$ such that
@@ -4366,9 +4221,7 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_path_fixed_gate_dims,
-        lem:mpu_standard_form_gates_continuous_mod_local,
-        lem:kronecker_path_lifting}
+    \uses{lem:mpu_path_fixed_gate_dims,lem:mpu_standard_form_gates_continuous_mod_local,lem:kronecker_path_lifting}
     Take $k_0=D^4$. By Lemma~\ref{lem:mpu_path_fixed_gate_dims} the blocked
     tensors have standard forms with gates $u(p)$, $v(p)$ of dimensions
     independent of $p$, and by
@@ -4409,7 +4262,7 @@
 
 \begin{proof}
     \leanok
-    \uses{SF, thm:mpu_fundamental_gates_supplied}
+    \uses{SF,thm:mpu_fundamental_gates_supplied}
     Unitary gates form a compact set. If gates $u(q_n)$ with $q_n\to p$
     stayed outside $(x\otimes y)u(p)+W$ for all unitaries $x,y$, a subsequence
     of $(u(q_n),v(q_n))$ would converge to a unitary pair $(u^*,v^*)$. The
@@ -4444,7 +4297,7 @@
         MPOTensor.IsMPUSimple.letter_mul_normalizedDiagonal_mul_letter,
         MPOTensor.simple2_of_normalizedDiagonal_insertion}
     \leanok
-    \uses{def:mpu_simple, def:mpu_double_layer}
+    \uses{def:mpu_simple,def:mpu_double_layer}
     For double-layer letters $E^{ij}$, let
     $E=d^{-1}\sum_{q=0}^{d-1}E^{qq}$, where $d>0$.
     A simple tensor satisfies
@@ -4493,9 +4346,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_doubled_rectangular_bond_map,
-        lem:mpu_rectangular_reduction_source_ranks,
-        thm:mpu_double_layer_blocking}
+    \uses{lem:mpu_doubled_rectangular_bond_map,lem:mpu_rectangular_reduction_source_ranks,thm:mpu_double_layer_blocking}
     The open-word identities of length $N$ say that the $N$-site blocks
     satisfy $V_N^{IJ}=AU_N^{IJ}B$. Apply the preceding lemma to these
     blocks; the double layer of an $N$-site block at the pair of words
@@ -4507,7 +4358,7 @@
     \lean{MPOTensor.IsMPUSimple.normalizedDiagonal_insertion_of_isReduction,
         MPOTensor.IsMPUCanonicalFormII.isMPUSimple_of_isReduction}
     \leanok
-    \uses{def:mpu_simple, def:mpu_double_layer, def:mpu_canonical_form_ii}
+    \uses{def:mpu_simple,def:mpu_double_layer,def:mpu_canonical_form_ii}
     Let $d>0$, let $U$ be simple, and suppose $AB=\Id$ and $AU^wB=V^w$
     for every open word $w$. Then the double layer of $V$ satisfies
     \begin{align}
@@ -4519,10 +4370,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_doubled_open_word_reduction,
-        lem:mpu_normalized_diagonal_insertions,
-        thm:mpu_canonical_form_ii_transfer_stabilization,
-        thm:mpu_all_later_simple_blockings}
+    \uses{lem:mpu_doubled_open_word_reduction,lem:mpu_normalized_diagonal_insertions,thm:mpu_canonical_form_ii_transfer_stabilization,thm:mpu_all_later_simple_blockings}
     Write $E_U$ and $E_V$ for the normalized diagonals. The three- and
     two-letter cases of Lemma~\ref{lem:mpu_doubled_open_word_reduction},
     averaged over the middle letter, and the insertion identity for $U$
@@ -4551,16 +4399,14 @@
     \label{lem:mpu_simple_reduced_canonical_representative}
     \lean{MPOTensor.IsMPUSimple.exists_reduced_cfii_representative}
     \leanok
-    \uses{def:mpu_simple, def:mpu_canonical_form_ii}
+    \uses{def:mpu_simple,def:mpu_canonical_form_ii}
     Let $d,D>0$ and let $U$ be a simple MPU tensor of bond dimension $D$.
     There is a simple tensor $V$ in canonical form II, of bond dimension
     $0<E\leq D$, such that $V^{(N)}=U^{(N)}$ for every $N>0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_cfii_representative,
-        thm:mpu_canonical_representative_reduction,
-        lem:mpu_simple_canonical_reduction}
+    \uses{thm:mpu_reduced_cfii_representative,thm:mpu_canonical_representative_reduction,lem:mpu_simple_canonical_reduction}
     Take the reduced canonical-form-II representative $V$ of $U$. The
     canonical representative is normal, so equality of the periodic
     families supplies a rectangular reduction of all open words onto it.
@@ -4571,8 +4417,7 @@
     \label{lem:mpu_simple_reduced_literal_standard_form}
     \lean{MPOTensor.IsMPUSimple.exists_reduced_twoSiteStandardFormData}
     \leanok
-    \uses{def:mpu_simple, def:mpu_canonical_form_ii,
-        def:mpu_supplied_two_site_standard_form, def:mpu_source_uv}
+    \uses{def:mpu_simple,def:mpu_canonical_form_ii,def:mpu_supplied_two_site_standard_form,def:mpu_source_uv}
     Every simple MPU tensor $U$ with $d,D>0$ has a simple canonical
     representative $V$, with $0<E\leq D$ and $V^{(N)}=U^{(N)}$ for all $N>0$,
     whose two-site block has standard form with the literal corrected source
@@ -4589,8 +4434,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_simple_reduced_canonical_representative,
-        def:mpu_source_open_two_site_standard_form}
+    \uses{lem:mpu_simple_reduced_canonical_representative,def:mpu_source_open_two_site_standard_form}
     Take the simple canonical representative $V$ of the preceding lemma.
     Its two-site block has the open standard form built from the source
     cuts of $V$, whose gates are the source operators of $V$.
