@@ -371,16 +371,16 @@ Concatenating this tensor vertically generates the matrix product vectors of
 the vertical direction, and the vertical canonical form of
 arXiv:1606.00608, Proposition 4.13, is a statement about this tensor. -/
 def verticalTensor (M : MPOTensor d D) : MPSTensor (D * D) d :=
-  fun ab i j => M i j ab.divNat ab.modNat
+  fun ab i j => M (i, j) ab.divNat ab.modNat
 
 @[simp] lemma verticalTensor_apply (M : MPOTensor d D) (ab : Fin (D * D))
-    (i j : Fin d) : verticalTensor M ab i j = M i j ab.divNat ab.modNat :=
+    (i j : Fin d) : verticalTensor M ab i j = M (i, j) ab.divNat ab.modNat :=
   rfl
 
 /-- The vertical letter at an explicitly paired bond index $(a, b)$. -/
 lemma verticalTensor_finProdFinEquiv (M : MPOTensor d D) (a b : Fin D)
     (i j : Fin d) :
-    verticalTensor M (finProdFinEquiv (a, b)) i j = M i j a b := by
+    verticalTensor M (finProdFinEquiv (a, b)) i j = M (i, j) a b := by
   simp
 
 /-- The vertical view of the MPO adjoint exchanges the oriented horizontal
@@ -403,10 +403,10 @@ $\langle\sigma|\rho^{(N)}(M)|\sigma\rangle$ of the generated operator
 canonical form.  The tensor generating the vertical direction itself is
 `verticalTensor`. -/
 def diagonalTensor (M : MPOTensor d D) : MPSTensor d D :=
-  fun i => M i i
+  fun i => M (i, i)
 
 @[simp] lemma diagonalTensor_apply (M : MPOTensor d D) (i : Fin d) :
-    diagonalTensor M i = M i i :=
+    diagonalTensor M i = M (i, i) :=
   rfl
 
 /-- The diagonal tensor is the doubled-index tensor restricted to the diagonal pair

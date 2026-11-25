@@ -57,7 +57,7 @@ variable {d : ℕ}
 conjugate transpose of its on-site matrix is the on-site matrix of `N`. -/
 theorem physicalAdjointTensor_eq_of_conjTranspose_physicalSlice {M N : MPOTensor d 1}
     (h : (physicalSlice M 0 0)ᴴ = physicalSlice N 0 0) : physicalAdjointTensor M = N := by
-  ext i j β α
+  ext ⟨i, j⟩ β α
   rw [Subsingleton.elim β 0, Subsingleton.elim α 0, physicalAdjointTensor_apply]
   exact congrFun (congrFun h i) j
 
@@ -154,8 +154,8 @@ theorem exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq_of_con
     (c := c) (by rw [hcdef]; field_simp) rfl
   set g := mixedEndpointBondWeight 1 1 c
   have hadj : ∀ i j β α,
-      physicalAdjointTensor (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) i j β α =
-        g β / g α * arbitraryPhysicalMixedMPO A₀ A₁ T₀' T₁' V₀' V₁' W₀' W₁' i j β α := by
+      physicalAdjointTensor (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) (i, j) β α =
+        g β / g α * arbitraryPhysicalMixedMPO A₀ A₁ T₀' T₁' V₀' V₁' W₀' W₁' (i, j) β α := by
     intro i j β α
     rw [arbitraryPhysicalMixedMPO, arbitraryPhysicalMixedMPO,
       physicalAdjointTensor_changePhysicalBasis]

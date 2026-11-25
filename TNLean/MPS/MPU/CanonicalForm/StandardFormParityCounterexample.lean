@@ -130,13 +130,13 @@ theorem exists_simple_blockTwo_eq_mpo_three_ne :
 
 /-- The entries of the bond-one identity tensor. -/
 theorem parityIdentityTensor_apply (i j : Fin 2) (α β : Fin 1) :
-    parityIdentityTensor i j α β = if i = j then 1 else 0 := by
+    parityIdentityTensor (i, j) α β = if i = j then 1 else 0 := by
   obtain rfl := Subsingleton.elim α β
   by_cases h : i = j <;> simp [parityIdentityTensor, idTensor, h]
 
 /-- The entries of the negative bond-one identity tensor. -/
 theorem parityNegativeIdentityTensor_apply (i j : Fin 2) (α β : Fin 1) :
-    parityNegativeIdentityTensor i j α β = -(if i = j then 1 else 0) := by
+    parityNegativeIdentityTensor (i, j) α β = -(if i = j then 1 else 0) := by
   by_cases h : i = j <;> simp [parityNegativeIdentityTensor, parityIdentityTensor_apply, h]
 
 /-- The first source cut of the identity tensor is the identity, up to the order of the

@@ -43,15 +43,15 @@ Source: arXiv:1703.09188, Proposition IV.5, Figure `IV_index4.png`, lines
 807--812. -/
 noncomputable def doubledVirtualContraction (W : MPOTensor d D)
     (E : Matrix (Fin (D * D)) (Fin (D * D)) ℂ) : MPOTensor d D :=
-  fun i j a b ↦ ∑ c : Fin D, ∑ e : Fin D,
-    E (finProdFinEquiv (b, e)) (finProdFinEquiv (c, a)) * W i j c e
+  fun (i, j) a b ↦ ∑ c : Fin D, ∑ e : Fin D,
+    E (finProdFinEquiv (b, e)) (finProdFinEquiv (c, a)) * W (i, j) c e
 
 /-- Entrywise expansion of the doubled-virtual contraction. -/
 @[simp] theorem doubledVirtualContraction_apply (W : MPOTensor d D)
     (E : Matrix (Fin (D * D)) (Fin (D * D)) ℂ) (i j : Fin d) (a b : Fin D) :
-    doubledVirtualContraction W E i j a b =
+    doubledVirtualContraction W E (i, j) a b =
       ∑ c : Fin D, ∑ e : Fin D,
-        E (finProdFinEquiv (b, e)) (finProdFinEquiv (c, a)) * W i j c e :=
+        E (finProdFinEquiv (b, e)) (finProdFinEquiv (c, a)) * W (i, j) c e :=
   rfl
 
 /-- A rank-one doubled-virtual contraction is an ordinary virtual sandwich.
@@ -66,14 +66,14 @@ theorem doubledVirtualContraction_vecMulVec (W : MPOTensor d D)
         (fun a c ↦ Phi (finProdFinEquiv (c, a))) W
         (fun e b ↦ rho (finProdFinEquiv (b, e))) := by
   classical
-  ext i j a b
+  ext ⟨i, j⟩ a b
   simp only [doubledVirtualContraction_apply, Matrix.vecMulVec_apply]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro e _
   change (∑ c : Fin D,
-      rho (finProdFinEquiv (b, e)) * Phi (finProdFinEquiv (c, a)) * W i j c e) =
-    (∑ c : Fin D, Phi (finProdFinEquiv (c, a)) * W i j c e) *
+      rho (finProdFinEquiv (b, e)) * Phi (finProdFinEquiv (c, a)) * W (i, j) c e) =
+    (∑ c : Fin D, Phi (finProdFinEquiv (c, a)) * W (i, j) c e) *
       rho (finProdFinEquiv (b, e))
   rw [Finset.sum_mul]
   apply Finset.sum_congr rfl
@@ -112,7 +112,7 @@ theorem continuous_doubledVirtualContraction {X : Type*} [TopologicalSpace X]
 /-- The physical-adjoint double layer depends continuously on the MPO tensor. -/
 theorem continuous_doubleLayerTensor :
     Continuous (doubleLayerTensor : MPOTensor d D → MPOTensor d (D * D)) := by
-  refine continuous_pi fun i ↦ continuous_pi fun j ↦
+  refine continuous_pi fun ⟨i, j⟩ ↦
     continuous_pi fun p ↦ continuous_pi fun q ↦ ?_
   rcases finProdFinEquiv.surjective p with ⟨⟨p₁, p₂⟩, rfl⟩
   rcases finProdFinEquiv.surjective q with ⟨⟨q₁, q₂⟩, rfl⟩
@@ -150,10 +150,10 @@ noncomputable def factorFreeSandwich (W : MPOTensor d D) : MPOTensor d D :=
 /-- Entrywise expansion of the factor-free sandwich. -/
 @[simp] theorem factorFreeSandwich_apply (W : MPOTensor d D)
     (i j : Fin d) (a b : Fin D) :
-    factorFreeSandwich W i j a b =
+    factorFreeSandwich W (i, j) a b =
       ∑ c : Fin D, ∑ e : Fin D,
         normalizedDiagonal (doubleLayerTensor W)
-          (finProdFinEquiv (b, e)) (finProdFinEquiv (a, c)) * W i j c e := by
+          (finProdFinEquiv (b, e)) (finProdFinEquiv (a, c)) * W (i, j) c e := by
   simp [factorFreeSandwich, doubledVirtualContraction]
 
 /-- The factor-free contraction equals $L W^{ij}R$ when the normalized

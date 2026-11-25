@@ -295,7 +295,7 @@ theorem fusionChainTensor_apply_verticalCopyChainBondEquiv
     ∀ {N : ℕ} (p : Fin (N + 1) → H.VerticalCopy)
       (x y : H.VerticalCopyChainFiber p) (a b : Fin D),
       H.toBNTFusionCoisometryFamily.fusionChainTensor
-          (p 0).1 (H.reverseAppendedLabels p) a b
+          (p 0).1 (H.reverseAppendedLabels p) (a, b)
           (H.verticalCopyChainBondEquiv p x)
           (H.verticalCopyChainBondEquiv p y) =
         (List.ofFn fun n : Fin (N + 1) ↦
@@ -315,7 +315,7 @@ theorem fusionChainTensor_apply_verticalCopyChainBondEquiv
       change mulTensor
           (H.toBNTFusionCoisometryFamily.fusionChainTensor
             ((Fin.init p) 0).1 (H.reverseAppendedLabels (Fin.init p)))
-          (verticalBNTMPO (H.tensor (p (Fin.last (N + 1))).1)) a b
+          (verticalBNTMPO (H.tensor (p (Fin.last (N + 1))).1)) (a, b)
           (finProdFinEquiv
             (H.verticalCopyChainBondEquiv (Fin.init p) xInit,
               x (Fin.last (N + 1))))
@@ -365,7 +365,7 @@ separate exact reconstruction requires the discarded complement to be a zero sec
 `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 def retainedVerticalAssembledMPO (H : BNTFusionTensorClause M) :
     MPOTensor H.verticalRetainedDim D :=
-  fun i j a b ↦ verticalAssembledTensor H.bondDim H.multiplicity H.weight H.tensor
+  fun (i, j) a b ↦ verticalAssembledTensor H.bondDim H.multiplicity H.weight H.tensor
     (finProdFinEquiv (a, b)) i j
 
 /-- Conjugating the local physical coordinates by the retained-row vertical coisometry gives
@@ -376,7 +376,7 @@ theorem changePhysicalBasis_verticalCoisometry_eq_retainedVerticalAssembledMPO
     (H : BNTFusionTensorClause M) :
     changePhysicalBasis H.verticalCoisometry M =
       H.retainedVerticalAssembledMPO := by
-  ext i j a b
+  ext ⟨i, j⟩ a b
   unfold changePhysicalBasis retainedVerticalAssembledMPO
   have hs : physicalSlice M a b = verticalTensor M (finProdFinEquiv (a, b)) := by
     ext s t
@@ -390,8 +390,8 @@ theorem changePhysicalBasis_verticalCoisometry_copy_same
     (H : BNTFusionTensorClause M) (p : H.VerticalCopy)
     (x y : Fin (H.bondDim p.1)) :
     changePhysicalBasis H.verticalCoisometry M
-        ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩)
-        ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, y⟩) =
+        ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩,
+            (verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, y⟩) =
       H.weight p.1 p.2 • H.verticalCopyChainLetter p x y := by
   rw [H.changePhysicalBasis_verticalCoisometry_eq_retainedVerticalAssembledMPO]
   ext a b
@@ -411,8 +411,8 @@ theorem changePhysicalBasis_verticalCoisometry_copy_ne
     (H : BNTFusionTensorClause M) (p q : H.VerticalCopy) (hpq : p ≠ q)
     (x : Fin (H.bondDim p.1)) (y : Fin (H.bondDim q.1)) :
     changePhysicalBasis H.verticalCoisometry M
-        ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩)
-        ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨q, y⟩) = 0 := by
+        ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩,
+            (verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨q, y⟩) = 0 := by
   rw [H.changePhysicalBasis_verticalCoisometry_eq_retainedVerticalAssembledMPO]
   ext a b
   have hAssembled := congrFun (congrFun
@@ -503,8 +503,8 @@ theorem mpo_changePhysicalBasis_verticalCoisometry_copy_ne
   have hzero : (0 : Matrix (Fin D) (Fin D) ℂ) ∈
       List.ofFn fun i : Fin (N + 1) ↦
         changePhysicalBasis H.verticalCoisometry M
-          ((H.verticalCopyChainEquiv N).symm ⟨p, x⟩ i)
-          ((H.verticalCopyChainEquiv N).symm ⟨q, y⟩ i) :=
+          ((H.verticalCopyChainEquiv N).symm ⟨p, x⟩ i,
+              (H.verticalCopyChainEquiv N).symm ⟨q, y⟩ i) :=
     List.mem_ofFn.mpr ⟨n, by
       rw [H.verticalCopyChainEquiv_symm_apply,
         H.verticalCopyChainEquiv_symm_apply]
@@ -546,7 +546,7 @@ theorem changePhysicalBasis_conjTranspose_verticalCoisometry_reconstruction
     changePhysicalBasis H.verticalCoisometryᴴ
       (changePhysicalBasis H.verticalCoisometry M) = M := by
   rw [H.changePhysicalBasis_verticalCoisometry_eq_retainedVerticalAssembledMPO]
-  ext i j a b
+  ext ⟨i, j⟩ a b
   unfold changePhysicalBasis retainedVerticalAssembledMPO physicalSlice
   rw [Matrix.conjTranspose_conjTranspose]
   have hReconstruction := congrFun (congrFun

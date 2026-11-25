@@ -98,7 +98,7 @@ once-blocked decorated CZX tensor of arXiv:2502.20257, `eq:MPU_CZX`. -/
 theorem pairTwist_czxPhaseGate_blockTwo_reviewCZXTensor :
     pairTwist czxPhaseGate (czxPhaseGate.map (starRingEnd ℂ))
         (blockTwo CZXCompression.reviewCZXTensor) = -CZX.tensor := by
-  funext i j
+  funext ⟨i, j⟩
   ext l r
   simp only [pairTwist, czxPhaseGate, Matrix.map_apply, Matrix.diagonal_apply, ite_smul,
     zero_smul, Finset.sum_ite_eq, Finset.mem_univ, ite_true, Matrix.smul_apply, Pi.neg_apply,

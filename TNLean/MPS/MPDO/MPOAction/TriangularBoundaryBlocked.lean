@@ -68,7 +68,7 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
       ∃ K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c)))
           (Fin (Kraus.blockPhysDim p L) × Fin (Kraus.blockPhysDim p L)) ℂ,
         ∀ (a b : Λ) (x y : Fin (D a)) (x' y' : Fin (D b)),
-          (∑ i, ∑ j, K ⟨a, x, y⟩ (i, j) * blockTensor (T b) L i j x' y') =
+          (∑ i, ∑ j, K ⟨a, x, y⟩ (i, j) * blockTensor (T b) L (i, j) x' y') =
             if he : a = b then
               if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
             else 0 := by
@@ -92,7 +92,7 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
     obtain ⟨k, rfl⟩ := e.symm.surjective b
     intro x y x' y'
     change (∑ i, ∑ l, Krow (e.symm j) (x, y) (i, l) *
-      blockTensor (T (e.symm k)) L i l x' y') = _
+      blockTensor (T (e.symm k)) L (i, l) x' y') = _
     rw [hKrow j]
     have hspec := hK j k x y x' y'
     by_cases hjk : j = k
@@ -191,7 +191,7 @@ theorem exists_triangular_blockTensor_leftInverse :
         ∀ (a b : Fin r ⊕ Fin s) (x y : Fin (triangularBondDim χ D a))
           (x' y' : Fin (triangularBondDim χ D b)),
           (∑ i, ∑ j, K ⟨a, x, y⟩ (i, j) *
-            blockTensor (triangularTensor O A b) L i j x' y') =
+            blockTensor (triangularTensor O A b) L (i, j) x' y') =
             if he : a = b then
               if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
             else 0 := by

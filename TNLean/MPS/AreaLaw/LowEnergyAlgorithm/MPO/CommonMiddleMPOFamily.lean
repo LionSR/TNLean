@@ -231,7 +231,7 @@ private noncomputable def actualCommonFixedMiddleMPOFamilyStatement
     (show b + 1 ≤ L by have hs := s.isLt; omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v, τ v))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
@@ -318,7 +318,7 @@ private theorem exists_common_fixed_middle_twoMarkerCoefficient_mpo_family
     (show b + 1 ≤ L by have hs := s.isLt; omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v, τ v))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
@@ -495,7 +495,7 @@ theorem exists_common_fixed_middle_grid_mpo_family
     (show b + 1 ≤ L by have hs := s.isLt; omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v, τ v))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
@@ -556,7 +556,7 @@ theorem exists_common_fixed_middle_grid_mpo_family
     (show b + 1 ≤ L by have hs := s.isLt; omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v, τ v))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))

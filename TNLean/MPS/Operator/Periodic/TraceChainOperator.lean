@@ -31,7 +31,7 @@ lines 986–993, and ALVV Proposition 5.7, lines 1311–1333. -/
 noncomputable def traceChainOperator {L q D : ℕ}
     (A : Fin L → MPOTensor q D) (C : Matrix (Fin D) (Fin D) ℂ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  fun σ τ ↦ Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod)
+  fun σ τ ↦ Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v, τ v))).prod)
 
 /-- A closing matrix can be multiplied into the first tensor of a nonempty
 site-dependent chain, with the same virtual dimension. The physical and virtual
@@ -42,12 +42,12 @@ private theorem exists_trace_mul_prod_eq_trace_prod {L q D : ℕ}
     (hL : 1 ≤ L) (C : Matrix (Fin D) (Fin D) ℂ)
     (A : Fin L → MPOTensor q D) :
     ∃ A' : Fin L → MPOTensor q D, ∀ σ τ : Fin L → Fin q,
-      Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod) =
-        Matrix.trace ((List.ofFn (fun v ↦ A' v (σ v) (τ v))).prod) := by
+      Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v, τ v))).prod) =
+        Matrix.trace ((List.ofFn (fun v ↦ A' v (σ v, τ v))).prod) := by
   cases L with
   | zero => simp at hL
   | succ n =>
-    refine ⟨Fin.cons (fun x y ↦ C * A 0 x y) (fun v ↦ A v.succ), ?_⟩
+    refine ⟨Fin.cons (fun xy ↦ C * A 0 xy) (fun v ↦ A v.succ), ?_⟩
     intro σ τ
     simp only [List.ofFn_succ, List.prod_cons, Fin.cons_zero, Fin.cons_succ,
       Matrix.mul_assoc]
@@ -65,9 +65,9 @@ theorem exists_traceChainOperator_one {L q D : ℕ}
   obtain ⟨A', hA'⟩ := exists_trace_mul_prod_eq_trace_prod hL C A
   refine ⟨A', ?_⟩
   ext σ τ
-  change Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod) =
+  change Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v, τ v))).prod) =
     Matrix.trace ((1 : Matrix (Fin D) (Fin D) ℂ) *
-      (List.ofFn (fun v ↦ A' v (σ v) (τ v))).prod)
+      (List.ofFn (fun v ↦ A' v (σ v, τ v))).prod)
   rw [Matrix.one_mul]
   exact hA' σ τ
 
@@ -95,15 +95,15 @@ theorem exists_traceChainOperator_of_finite_matrix {n q : ℕ}
   let e : Fin B ≃ V := (Fintype.equivFin V).symm
   let f : Fin n → Fin q → Fin q → Fin B → ℂ := fun u s t v ↦
     if (e v).1 u = s ∧ (e v).2 u = t then 1 else 0
-  let A : Fin n → MPOTensor q B := fun u s t ↦ Matrix.diagonal (f u s t)
+  let A : Fin n → MPOTensor q B := fun u (s, t) ↦ Matrix.diagonal (f u s t)
   let c : Fin B → ℂ := fun v ↦ M (e v).1 (e v).2
   refine ⟨B, A, Matrix.diagonal c, ?_⟩
   ext σ τ
-  have hp : (List.ofFn (fun u ↦ A u (σ u) (τ u))).prod =
+  have hp : (List.ofFn (fun u ↦ A u (σ u, τ u))).prod =
       Matrix.diagonal (fun v ↦ if v = e.symm (σ, τ) then (1 : ℂ) else 0) := by
     have hd := (map_list_prod (Matrix.diagonalRingHom (Fin B) ℂ)
       (List.ofFn (fun u ↦ f u (σ u) (τ u)))).symm
-    have hd' : (List.ofFn (fun u ↦ A u (σ u) (τ u))).prod =
+    have hd' : (List.ofFn (fun u ↦ A u (σ u, τ u))).prod =
         Matrix.diagonal (List.ofFn (fun u ↦ f u (σ u) (τ u))).prod := by
       simpa only [A, List.map_ofFn, Function.comp_def, Matrix.diagonalRingHom_apply] using hd
     rw [hd']
@@ -122,7 +122,7 @@ theorem exists_traceChainOperator_of_finite_matrix {n q : ℕ}
         exact fun _ ↦ ⟨rfl, rfl⟩
     simp only [Fintype.prod_ite_zero, Finset.prod_const_one, hv]
   change M σ τ = Matrix.trace
-    (Matrix.diagonal c * (List.ofFn (fun u ↦ A u (σ u) (τ u))).prod)
+    (Matrix.diagonal c * (List.ofFn (fun u ↦ A u (σ u, τ u))).prod)
   rw [hp, Matrix.diagonal_mul_diagonal, Matrix.trace_diagonal]
   simp [c, mul_ite]
 

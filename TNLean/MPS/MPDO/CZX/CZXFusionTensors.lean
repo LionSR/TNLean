@@ -128,7 +128,7 @@ block `x`, in the product-bond order `finProdFinEquiv`.
 
 Source: arXiv:2502.20257, `eq:MPU_CZX`, lines 4505--4547. -/
 theorem mulTensor_diagonal_letter_coordinates (x : Fin 2) :
-    MPOTensor.mulTensor tensor tensor (finProdFinEquiv (x, x)) (finProdFinEquiv (x, x)) =
+    MPOTensor.mulTensor tensor tensor (finProdFinEquiv (x, x), finProdFinEquiv (x, x)) =
       if x = 0 then !![0, 0, 0, 0; -1, 1, -1, 1; 0, 0, 0, 0; 0, 0, 0, 0]
       else !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0] := by
   have h := fusion_product_letter_eq (finProdFinEquiv (x, x)) (finProdFinEquiv (x, x))

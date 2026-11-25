@@ -117,7 +117,7 @@ noncomputable def ofVirtualMatrices (F : PhysicalSectorFactorization K)
   ext ⟨k, a⟩ ⟨h, b⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
   have hLetter (i j : Fin d) :
-      L i j = X * K i j * Y := by
+      L (i, j) = X * K (i, j) * Y := by
     simpa only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
       MPSTensor.finProdFinEquiv_modNat] using
       hTransport (finProdFinEquiv (i, j))

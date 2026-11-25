@@ -55,18 +55,18 @@ theorem IsMPUCanonicalFormII.doubleLayer_boundary_contractions
       (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)
     let ρ : Fin (D * D) → ℂ := fun x ↦ hU.ρ.vec (finProdFinEquiv.symm x)
     ∀ i j k l : Fin d,
-      Matrix.vecMul Φ (doubleLayerTensor U i j * doubleLayerTensor U k l) =
-        (if i = j then (1 : ℂ) else 0) • Matrix.vecMul Φ (doubleLayerTensor U k l) ∧
-      (doubleLayerTensor U i j * doubleLayerTensor U k l) *ᵥ ρ =
-        (if k = l then (1 : ℂ) else 0) • (doubleLayerTensor U i j *ᵥ ρ) := by
+      Matrix.vecMul Φ (doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l)) =
+        (if i = j then (1 : ℂ) else 0) • Matrix.vecMul Φ (doubleLayerTensor U (k, l)) ∧
+      (doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l)) *ᵥ ρ =
+        (if k = l then (1 : ℂ) else 0) • (doubleLayerTensor U (i, j) *ᵥ ρ) := by
   have := hU.neZero_phys
   dsimp only
   let Φ : Fin (D * D) → ℂ := fun x ↦
     (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)
   let ρ : Fin (D * D) → ℂ := fun x ↦ hU.ρ.vec (finProdFinEquiv.symm x)
   have h₂ : ∀ i j k l : Fin d,
-      doubleLayerTensor U i j * doubleLayerTensor U k l =
-        doubleLayerTensor U i j * Matrix.vecMulVec ρ Φ * doubleLayerTensor U k l :=
+      doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l) =
+        doubleLayerTensor U (i, j) * Matrix.vecMulVec ρ Φ * doubleLayerTensor U (k, l) :=
     hU.simple2_recorded_fixed_pair hsimple
   have h₁ := hU.isMPU.simple1_of_simple2_supplied Φ ρ h₂
   intro i j k l
@@ -117,10 +117,10 @@ theorem IsMPUCanonicalFormII.physicalAdjoint_doubleLayer_boundary_contractions
       (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)
     let ρ : Fin (D * D) → ℂ := fun x ↦ hU.ρ.vec (finProdFinEquiv.symm x)
     ∀ i j k l : Fin d,
-      Matrix.vecMul Φ (doubleLayerTensor V i j * doubleLayerTensor V k l) =
-        (if i = j then (1 : ℂ) else 0) • Matrix.vecMul Φ (doubleLayerTensor V k l) ∧
-      (doubleLayerTensor V i j * doubleLayerTensor V k l) *ᵥ ρ =
-        (if k = l then (1 : ℂ) else 0) • (doubleLayerTensor V i j *ᵥ ρ) :=
+      Matrix.vecMul Φ (doubleLayerTensor V (i, j) * doubleLayerTensor V (k, l)) =
+        (if i = j then (1 : ℂ) else 0) • Matrix.vecMul Φ (doubleLayerTensor V (k, l)) ∧
+      (doubleLayerTensor V (i, j) * doubleLayerTensor V (k, l)) *ᵥ ρ =
+        (if k = l then (1 : ℂ) else 0) • (doubleLayerTensor V (i, j) *ᵥ ρ) :=
   hU.physicalAdjointTensor.doubleLayer_boundary_contractions hadjoint
 
 private theorem sum_doubled_bond (f : Fin (D * D) → ℂ) :
@@ -132,10 +132,10 @@ private theorem upper_boundary_entries
     (hadjoint : IsMPUSimple (MPOTensor.physicalAdjointTensor U))
     (i j k l : Fin d) (b r : Fin D) :
     (∑ x : Fin D, ∑ m : Fin D, ∑ n : Fin D,
-      (∑ p : Fin d, U i p x m * star (U j p x n)) *
-        (∑ q : Fin d, U k q m b * star (U l q n r))) =
+      (∑ p : Fin d, U (i, p) x m * star (U (j, p) x n)) *
+        (∑ q : Fin d, U (k, q) m b * star (U (l, q) n r))) =
       (if i = j then (1 : ℂ) else 0) *
-        ∑ x : Fin D, ∑ q : Fin d, U k q x b * star (U l q x r) := by
+        ∑ x : Fin D, ∑ q : Fin d, U (k, q) x b * star (U (l, q) x r) := by
   have h := congrArg (fun v ↦ v (finProdFinEquiv (b, r)))
     ((hU.physicalAdjoint_doubleLayer_boundary_contractions hadjoint i j k l).1)
   simpa [Matrix.vecMul, dotProduct, Matrix.mul_apply, sum_doubled_bond,
@@ -146,11 +146,11 @@ private theorem lower_boundary_entries
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U) (i j k l : Fin d) (x a : Fin D) :
     (∑ r : Fin D, ∑ t : Fin D, ∑ n : Fin D, ∑ z : Fin D,
-      (∑ p : Fin d, star (U p i x n) * U p j a z) *
-        (∑ q : Fin d, star (U q k n r) * U q l z t) * hU.ρ t r) =
+      (∑ p : Fin d, star (U (p, i) x n) * U (p, j) a z) *
+        (∑ q : Fin d, star (U (q, k) n r) * U (q, l) z t) * hU.ρ t r) =
       (if k = l then (1 : ℂ) else 0) *
         ∑ r : Fin D, ∑ t : Fin D,
-          (∑ p : Fin d, star (U p i x r) * U p j a t) * hU.ρ t r := by
+          (∑ p : Fin d, star (U (p, i) x r) * U (p, j) a t) * hU.ρ t r := by
   have h := congrArg (fun v ↦ v (finProdFinEquiv (x, a)))
     ((hU.doubleLayer_boundary_contractions hsimple i j k l).2)
   simpa [Matrix.mulVec, dotProduct, Matrix.mul_apply, sum_doubled_bond,
@@ -169,8 +169,8 @@ For diagonal \(\rho\), the only surviving terms have \(t=r\), as in the
 source diagram. -/
 noncomputable def adjointSimpleContraction (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) : MPOTensor d D :=
-  fun i j a b ↦ ∑ p : Fin d, ∑ x : Fin D, ∑ r : Fin D, ∑ t : Fin D,
-    U i p x b * (∑ q : Fin d, star (U q p x r) * U q j a t) * ρ t r
+  fun (i, j) a b ↦ ∑ p : Fin d, ∑ x : Fin D, ∑ r : Fin D, ∑ t : Fin D,
+    U (i, p) x b * (∑ q : Fin d, star (U (q, p) x r) * U (q, j) a t) * ρ t r
 
 /-- The first source cut of the raw adjoint-simple contraction is the source
 cut Gram matrix dressed by the product-index boundary weight. The transpose
@@ -203,16 +203,16 @@ theorem sourceCutM₁_adjointSimpleContraction_raw (T : MPOTensor d D)
 private noncomputable def sixTensorContraction (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (i j k l : Fin d) (a b : Fin D) : ℂ :=
   ∑ p : Fin d, ∑ x : Fin D, ∑ q : Fin d, ∑ m : Fin D,
-    (U i p x m * U k q m b) *
+    (U (i, p) x m * U (k, q) m b) *
       (∑ r : Fin D, ∑ t : Fin D, ∑ n : Fin D, ∑ z : Fin D,
-        (∑ v : Fin d, star (U v p x n) * U v j a z) *
-          (∑ w : Fin d, star (U w q n r) * U w l z t) * ρ t r)
+        (∑ v : Fin d, star (U (v, p) x n) * U (v, j) a z) *
+          (∑ w : Fin d, star (U (w, q) n r) * U (w, l) z t) * ρ t r)
 
 private theorem sixTensorContraction_lower
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U) (i j k l : Fin d) (a b : Fin D) :
     sixTensorContraction U hU.ρ i j k l a b =
-      (adjointSimpleContraction U hU.ρ i j * U k l) a b := by
+      (adjointSimpleContraction U hU.ρ (i, j) * U (k, l)) a b := by
   simp only [sixTensorContraction, lower_boundary_entries hU hsimple]
   simp only [mul_ite, one_mul, mul_zero, mul_assoc, ite_mul, zero_mul,
     Finset.sum_ite_irrel, Finset.sum_const_zero, Finset.sum_ite_eq',
@@ -234,10 +234,10 @@ private theorem sixTensorContraction_reorder (U : MPOTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (i j k l : Fin d) (a b : Fin D) :
     sixTensorContraction U ρ i j k l a b =
       ∑ v : Fin d, ∑ w : Fin d, ∑ z : Fin D, ∑ t : Fin D, ∑ r : Fin D,
-        (U v j a z * U w l z t * ρ t r) *
+        (U (v, j) a z * U (w, l) z t * ρ t r) *
           (∑ x : Fin D, ∑ m : Fin D, ∑ n : Fin D,
-            (∑ p : Fin d, U i p x m * star (U v p x n)) *
-              (∑ q : Fin d, U k q m b * star (U w q n r))) := by
+            (∑ p : Fin d, U (i, p) x m * star (U (v, p) x n)) *
+              (∑ q : Fin d, U (k, q) m b * star (U (w, q) n r))) := by
   simp only [sixTensorContraction, Finset.mul_sum, Finset.sum_mul]
   let e :
       (Fin d × Fin D × Fin d × Fin D × Fin D × Fin D × Fin D × Fin D × Fin d × Fin d) ≃
@@ -248,12 +248,12 @@ private theorem sixTensorContraction_reorder (U : MPOTensor d D)
       right_inv := by rintro ⟨v, w, z, t, r, x, m, n, q, p⟩; rfl }
   have h := Fintype.sum_equiv e
     (fun ⟨p, x, q, m, r, t, n, z, w, v⟩ ↦
-      (U i p x m * U k q m b) *
-        ((star (U v p x n) * U v j a z) *
-          (star (U w q n r) * U w l z t) * ρ t r))
+      (U (i, p) x m * U (k, q) m b) *
+        ((star (U (v, p) x n) * U (v, j) a z) *
+          (star (U (w, q) n r) * U (w, l) z t) * ρ t r))
     (fun ⟨v, w, z, t, r, x, m, n, q, p⟩ ↦
-      (U v j a z * U w l z t * ρ t r) *
-        ((U i p x m * star (U v p x n)) * (U k q m b * star (U w q n r))))
+      (U (v, j) a z * U (w, l) z t * ρ t r) *
+        ((U (i, p) x m * star (U (v, p) x n)) * (U (k, q) m b * star (U (w, q) n r))))
     (by rintro ⟨p, x, q, m, r, t, n, z, w, v⟩; dsimp [e]; ring)
   simpa only [Fintype.sum_prod_type] using h
 
@@ -262,7 +262,7 @@ private theorem sixTensorContraction_upper
     (hadjoint : IsMPUSimple (MPOTensor.physicalAdjointTensor U))
     (i j k l : Fin d) (a b : Fin D) :
     sixTensorContraction U hU.ρ i j k l a b =
-      (U i j * adjointSimpleContraction U hU.ρ k l) a b := by
+      (U (i, j) * adjointSimpleContraction U hU.ρ (k, l)) a b := by
   rw [sixTensorContraction_reorder]
   simp only [upper_boundary_entries hU hadjoint]
   simp only [mul_ite, one_mul, mul_zero, mul_assoc, ite_mul, zero_mul,
@@ -278,10 +278,10 @@ private theorem sixTensorContraction_upper
       right_inv := by rintro ⟨z, q, x, r, t, w⟩; rfl }
   have h := Fintype.sum_equiv e
     (fun ⟨w, z, t, r, x, q⟩ ↦
-      (U i j a z * (U w l z t * hU.ρ t r)) *
-        (U k q x b * star (U w q x r)))
+      (U (i, j) a z * (U (w, l) z t * hU.ρ t r)) *
+        (U (k, q) x b * star (U (w, q) x r)))
     (fun ⟨z, q, x, r, t, w⟩ ↦
-      U i j a z * (U k q x b * (star (U w q x r) * U w l z t) * hU.ρ t r))
+      U (i, j) a z * (U (k, q) x b * (star (U (w, q) x r) * U (w, l) z t) * hU.ρ t r))
     (by rintro ⟨w, z, t, r, x, q⟩; dsimp [e]; ring)
   simpa only [Fintype.sum_prod_type, mul_assoc] using h
 
@@ -297,8 +297,8 @@ theorem IsMPUCanonicalFormII.adjointSimpleContraction_cross_mul
     (hsimple : IsMPUSimple U)
     (hadjoint : IsMPUSimple (MPOTensor.physicalAdjointTensor U))
     (i j k l : Fin d) :
-    adjointSimpleContraction U hU.ρ i j * U k l =
-      U i j * adjointSimpleContraction U hU.ρ k l := by
+    adjointSimpleContraction U hU.ρ (i, j) * U (k, l) =
+      U (i, j) * adjointSimpleContraction U hU.ρ (k, l) := by
   ext a b
   exact (sixTensorContraction_lower hU hsimple i j k l a b).symm.trans
     (sixTensorContraction_upper hU hadjoint i j k l a b)
@@ -314,7 +314,7 @@ theorem IsMPUCanonicalFormII.adjointSimpleContraction_eq_smul
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (hsimple : IsMPUSimple U)
     (hadjoint : IsMPUSimple (MPOTensor.physicalAdjointTensor U)) :
-    ∃ δ : ℂ, ∀ i j : Fin d, adjointSimpleContraction U hU.ρ i j = δ • U i j := by
+    ∃ δ : ℂ, ∀ i j : Fin d, adjointSimpleContraction U hU.ρ (i, j) = δ • U (i, j) := by
   have := hU.neZero_phys
   have := hU.neZero_bond
   have hnormal : Kraus.IsNormal U.normalizedFlattening :=

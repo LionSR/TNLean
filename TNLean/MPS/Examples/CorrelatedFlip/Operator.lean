@@ -74,7 +74,7 @@ def purifierTerm (i j : Fin 4) (k : Fin 2) : Matrix (Fin 2 × Fin 2) (Fin 2 × F
 /-- The corrected $p=1/4$ tensor for CPSV16 Example 4.10, lines 897--905, obtained by tracing
 the two-valued channel ancilla of `purifier` at each site. This is distinct from the repeated-left
 expression printed in the source. -/
-def M : MPOTensor 4 4 := fun i j =>
+def M : MPOTensor 4 4 := fun (i, j) =>
   Matrix.submatrix (∑ k : Fin 2, purifierTerm i j k) pairEquiv pairEquiv
 
 /-- The corrected tensor has the displayed local purification from CPSV16 Example 4.10,

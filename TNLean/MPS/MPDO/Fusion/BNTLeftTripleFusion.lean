@@ -57,8 +57,8 @@ private theorem kronecker_sum_mulTensor {p a bd1 bd2 : ℕ} (X : Matrix (Fin a) 
     (E : Fin a × Fin (bd1 * bd2) ≃ (Fin a × Fin bd1) × Fin bd2)
     (hE : E = (Equiv.prodCongr (Equiv.refl (Fin a)) finProdFinEquiv.symm).trans
         (Equiv.prodAssoc (Fin a) (Fin bd1) (Fin bd2)).symm) :
-    (∑ j : Fin p, (X ⊗ₖ Y i j) ⊗ₖ Z j k) =
-      (X ⊗ₖ mulTensor Y Z i k).submatrix E.symm E.symm := by
+    (∑ j : Fin p, (X ⊗ₖ Y (i, j)) ⊗ₖ Z (j, k)) =
+      (X ⊗ₖ mulTensor Y Z (i, k)).submatrix E.symm E.symm := by
   subst hE
   rw [mulTensor_apply]
   ext ⟨⟨x1, x2⟩, x3⟩ ⟨⟨y1, y2⟩, y3⟩
@@ -68,7 +68,7 @@ private theorem kronecker_sum_mulTensor {p a bd1 bd2 : ℕ} (X : Matrix (Fin a) 
     Equiv.symm_apply_apply]
   simpa only [mul_assoc] using
     Fintype.sum_mul_mul_eq_mul_sum_mul (X x1 y1)
-      (fun j => Y i j x2 y2) (fun j => Z j k x3 y3)
+      (fun j => Y (i, j) x2 y2) (fun j => Z (j, k) x3 y3)
 
 namespace BNTFusionIsometryFamily
 
@@ -142,11 +142,11 @@ private theorem fuseFirstTwoStep_isometry (α β γ : Λ) :
 
 private theorem fuseFirstTwoStep_apply (α β γ : Λ) (i k : Fin p) :
     Fam.fuseFirstTwoStep α β γ *
-        (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) i k *
+        (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) (i, k) *
         (Fam.fuseFirstTwoStep α β γ)ᴴ =
       (∑ j : Fin p,
-          (Matrix.blockDiagonal' fun δ => Fam.chi.matrix α β δ ⊗ₖ Fam.tensor δ i j) ⊗ₖ
-            Fam.tensor γ j k).submatrix (Fam.pairBondEquiv α β γ).symm
+          (Matrix.blockDiagonal' fun δ => Fam.chi.matrix α β δ ⊗ₖ Fam.tensor δ (i, j)) ⊗ₖ
+            Fam.tensor γ (j, k)).submatrix (Fam.pairBondEquiv α β γ).symm
         (Fam.pairBondEquiv α β γ).symm := by
   unfold fuseFirstTwoStep
   rw [mulTensor_apply, Matrix.conjTranspose_submatrix,
@@ -180,17 +180,17 @@ private theorem blockPiece_isometry (α β γ δ : Λ) :
 
 /-- Conjugating a fixed `δ`-block of the fused pair, summed against the third factor's physical
 index, by `blockPiece` reduces to the fusion identity of `fusionIsometry δ γ` applied to the
-letter `mulTensor (tensor δ) (tensor γ) i k`, with `chi.matrix α β δ` carried through as a
+letter `mulTensor (tensor δ) (tensor γ) (i, k)`, with `chi.matrix α β δ` carried through as a
 spectator factor.
 
 Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--993. -/
 private theorem blockPiece_apply (α β γ δ : Λ) (i k : Fin p) :
     Fam.blockPiece α β γ δ *
-        (∑ j : Fin p, (Fam.chi.matrix α β δ ⊗ₖ Fam.tensor δ i j) ⊗ₖ
-            Fam.tensor γ j k) *
+        (∑ j : Fin p, (Fam.chi.matrix α β δ ⊗ₖ Fam.tensor δ (i, j)) ⊗ₖ
+            Fam.tensor γ (j, k)) *
         (Fam.blockPiece α β γ δ)ᴴ =
       Fam.chi.matrix α β δ ⊗ₖ
-        Matrix.blockDiagonal' fun ε => Fam.chi.matrix δ γ ε ⊗ₖ Fam.tensor ε i k := by
+        Matrix.blockDiagonal' fun ε => Fam.chi.matrix δ γ ε ⊗ₖ Fam.tensor ε (i, k) := by
   rw [kronecker_sum_mulTensor _ _ _ _ _ (Fam.tripleMultEquiv α β δ γ) rfl]
   unfold blockPiece
   rw [Matrix.conjTranspose_submatrix,
@@ -232,12 +232,12 @@ private theorem tripleFlatten_blockDiagonal' (α β γ : Λ)
 Source: bookkeeping lemma for arXiv:1606.00608, Theorem IV.13(iii), lines 986--993. -/
 private theorem pairBond_sum_blockDiagonal (α β γ : Λ) (i k : Fin p) :
     (∑ j : Fin p,
-        (Matrix.blockDiagonal' fun δ => Fam.chi.matrix α β δ ⊗ₖ Fam.tensor δ i j) ⊗ₖ
-          Fam.tensor γ j k).submatrix (Fam.pairBondEquiv α β γ).symm
+        (Matrix.blockDiagonal' fun δ => Fam.chi.matrix α β δ ⊗ₖ Fam.tensor δ (i, j)) ⊗ₖ
+          Fam.tensor γ (j, k)).submatrix (Fam.pairBondEquiv α β γ).symm
         (Fam.pairBondEquiv α β γ).symm =
       Matrix.blockDiagonal' fun δ =>
-        ∑ j : Fin p, (Fam.chi.matrix α β δ ⊗ₖ Fam.tensor δ i j) ⊗ₖ
-          Fam.tensor γ j k := by
+        ∑ j : Fin p, (Fam.chi.matrix α β δ ⊗ₖ Fam.tensor δ (i, j)) ⊗ₖ
+          Fam.tensor γ (j, k) := by
   ext ⟨δ, m1, m2, b⟩ ⟨δ', m1', m2', b'⟩
   simp only [Matrix.submatrix_apply, pairBondEquiv, Equiv.sigmaProdDistrib_symm_apply,
     Matrix.sum_apply, Matrix.kronecker_apply, Matrix.blockDiagonal'_apply]
@@ -318,19 +318,19 @@ Source: arXiv:1606.00608, Theorem IV.13(iii), lines 986--993, and the associativ
 995--999, of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
 theorem leftFusion_apply (α β γ : Λ) (i k : Fin p) :
     Fam.leftFusionIsometry α β γ *
-        (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) i k *
+        (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) (i, k) *
         (Fam.leftFusionIsometry α β γ)ᴴ =
       Matrix.blockDiagonal' fun δ => Matrix.blockDiagonal' fun ε =>
-        Fam.chi.matrix α β δ ⊗ₖ (Fam.chi.matrix δ γ ε ⊗ₖ Fam.tensor ε i k) := by
+        Fam.chi.matrix α β δ ⊗ₖ (Fam.chi.matrix δ γ ε ⊗ₖ Fam.tensor ε (i, k)) := by
   unfold leftFusionIsometry
   rw [Matrix.submatrix_left_conj_equiv]
   have hreassoc :
       Matrix.blockDiagonal' (Fam.blockPiece α β γ) * Fam.fuseFirstTwoStep α β γ *
-          (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) i k *
+          (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) (i, k) *
           (Matrix.blockDiagonal' (Fam.blockPiece α β γ) * Fam.fuseFirstTwoStep α β γ)ᴴ =
         Matrix.blockDiagonal' (Fam.blockPiece α β γ) *
           (Fam.fuseFirstTwoStep α β γ *
-              (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) i k *
+              (mulTensor (mulTensor (Fam.tensor α) (Fam.tensor β)) (Fam.tensor γ)) (i, k) *
               (Fam.fuseFirstTwoStep α β γ)ᴴ) *
           (Matrix.blockDiagonal' (Fam.blockPiece α β γ))ᴴ := by
     rw [Matrix.conjTranspose_mul]

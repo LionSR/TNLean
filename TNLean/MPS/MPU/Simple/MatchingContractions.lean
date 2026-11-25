@@ -91,14 +91,14 @@ theorem IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
     let Φ' : Fin (D * D) → ℂ := fun i ↦
       (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm i)
     (∀ i j : Fin (Kraus.blockPhysDim d (J * (D * D))),
-      Φ' ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *ᵥ ρ') =
+      Φ' ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (i, j) *ᵥ ρ') =
         if i = j then 1 else 0) ∧
     (∀ i j k l : Fin (Kraus.blockPhysDim d (J * (D * D))),
-      doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
-          doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l =
-        doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
+      doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (i, j) *
+          doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (k, l) =
+        doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (i, j) *
           Matrix.vecMulVec ρ' Φ' *
-            doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l) := by
+            doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (k, l)) := by
   classical
   let V := MPOTensor.blockTensor U J
   let ρ' : Fin (D * D) → ℂ := fun i ↦ ρ.vec (finProdFinEquiv.symm i)
@@ -156,14 +156,14 @@ theorem IsMPUCanonicalFormII.forced_block_simple_contractions
     let Φ' : Fin (D * D) → ℂ := fun i ↦
       (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm i)
     (∀ i j : Fin (Kraus.blockPhysDim d (J * (D * D))),
-      Φ' ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *ᵥ ρ') =
+      Φ' ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (i, j) *ᵥ ρ') =
         if i = j then 1 else 0) ∧
     (∀ i j k l : Fin (Kraus.blockPhysDim d (J * (D * D))),
-      doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
-          doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l =
-        doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
+      doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (i, j) *
+          doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (k, l) =
+        doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (i, j) *
           Matrix.vecMulVec ρ' Φ' *
-            doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l) := by
+            doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) (k, l)) := by
   have := hU.neZero_bond
   have := hU.neZero_phys
   exact hU.isMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power

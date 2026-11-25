@@ -30,8 +30,8 @@ operator unchanged. -/
 theorem mpo_eq_of_unitary_conj {d D₁ D₂ : ℕ} {U : MPOTensor d D₁} {V : MPOTensor d D₂}
     (hdim : D₁ = D₂) (z : Matrix.unitaryGroup (Fin D₂) ℂ)
     (hV : ∀ i j : Fin d,
-      V i j = (z : Matrix (Fin D₂) (Fin D₂) ℂ) *
-        (cast (congrArg (MPOTensor d) hdim) U) i j *
+      V (i, j) = (z : Matrix (Fin D₂) (Fin D₂) ℂ) *
+        (cast (congrArg (MPOTensor d) hdim) U) (i, j) *
         (z : Matrix (Fin D₂) (Fin D₂) ℂ)ᴴ) (N : ℕ) :
     mpo U N = mpo V N := by
   subst hdim
@@ -54,8 +54,8 @@ theorem IsMPUCanonicalFormII.mpo_eq_iff_exists_unitary_conj
     (∀ N : ℕ, 1 < N → mpo U N = mpo V N) ↔
       ∃ hdim : D₁ = D₂, ∃ z : Matrix.unitaryGroup (Fin D₂) ℂ,
         ∀ i j : Fin d,
-          V i j = (z : Matrix (Fin D₂) (Fin D₂) ℂ) *
-            (cast (congrArg (MPOTensor d) hdim) U) i j *
+          V (i, j) = (z : Matrix (Fin D₂) (Fin D₂) ℂ) *
+            (cast (congrArg (MPOTensor d) hdim) U) (i, j) *
             (z : Matrix (Fin D₂) (Fin D₂) ℂ)ᴴ := by
   constructor
   · exact fun hEq => hU.exists_unitary_virtual_gauge_of_mpo_eq hV hEq
@@ -70,16 +70,16 @@ Source: Sahinoglu, Shukla, Bi, Chen, arXiv:1704.01943, Corollary 1 (pulling thro
 separation and isometry equations, which are the simplicity identities of CPSV17. -/
 theorem pulling_through_of_simple_witnesses {d D : ℕ} {U : MPOTensor d D}
     {a b : Fin (D * D) → ℂ}
-    (h1 : ∀ i j : Fin d, a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0)
+    (h1 : ∀ i j : Fin d, a ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ b) = if i = j then 1 else 0)
     (h2 : ∀ i j k l : Fin d,
-      doubleLayerTensor U i j * doubleLayerTensor U k l =
-        doubleLayerTensor U i j * vecMulVec b a * doubleLayerTensor U k l) :
+      doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l) =
+        doubleLayerTensor U (i, j) * vecMulVec b a * doubleLayerTensor U (k, l)) :
     (∀ i j k l : Fin d,
-      a ᵥ* (doubleLayerTensor U i j * doubleLayerTensor U k l) =
-        if i = j then a ᵥ* doubleLayerTensor U k l else 0) ∧
+      a ᵥ* (doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l)) =
+        if i = j then a ᵥ* doubleLayerTensor U (k, l) else 0) ∧
     (∀ i j k l : Fin d,
-      (doubleLayerTensor U i j * doubleLayerTensor U k l) *ᵥ b =
-        if k = l then doubleLayerTensor U i j *ᵥ b else 0) := by
+      (doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l)) *ᵥ b =
+        if k = l then doubleLayerTensor U (i, j) *ᵥ b else 0) := by
   refine ⟨?_, ?_⟩
   · intro i j k l
     rw [h2 i j k l, ← Matrix.vecMul_vecMul, ← Matrix.vecMul_vecMul, Matrix.vecMul_vecMulVec,
@@ -96,13 +96,13 @@ any witnesses of simplicity). -/
 theorem IsMPUSimple.exists_pulling_through {d D : ℕ} {U : MPOTensor d D}
     (h : IsMPUSimple U) :
     ∃ a b : Fin (D * D) → ℂ,
-      (∀ i j : Fin d, a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0) ∧
+      (∀ i j : Fin d, a ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ b) = if i = j then 1 else 0) ∧
       (∀ i j k l : Fin d,
-        a ᵥ* (doubleLayerTensor U i j * doubleLayerTensor U k l) =
-          if i = j then a ᵥ* doubleLayerTensor U k l else 0) ∧
+        a ᵥ* (doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l)) =
+          if i = j then a ᵥ* doubleLayerTensor U (k, l) else 0) ∧
       (∀ i j k l : Fin d,
-        (doubleLayerTensor U i j * doubleLayerTensor U k l) *ᵥ b =
-          if k = l then doubleLayerTensor U i j *ᵥ b else 0) := by
+        (doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l)) *ᵥ b =
+          if k = l then doubleLayerTensor U (i, j) *ᵥ b else 0) := by
   obtain ⟨a, b, h1, h2⟩ := h
   exact ⟨a, b, h1, (pulling_through_of_simple_witnesses h1 h2).1,
     (pulling_through_of_simple_witnesses h1 h2).2⟩

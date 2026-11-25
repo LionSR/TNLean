@@ -349,7 +349,7 @@ theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
   fin_cases ij
   simp only [MPOTensor.toMPSTensor, Fin.divNat, Fin.modNat]
   simp only [doubledTensor, Nat.div_one, Fin.zero_eta, Fin.isValue, Nat.mod_succ,
-    Nat.reduceMul, mul_one, MPOTensor.blockTwo_apply, Matrix.coe_units_inv,
+    Nat.reduceMul, mul_one, MPOTensor.blockTwo, Matrix.coe_units_inv,
     Matrix.submatrix_mul_equiv]
   have h₁ : (finProdFinEquiv.symm (0 : Fin (1 * 1))).1 = (0 : Fin 1) :=
     Subsingleton.elim _ _

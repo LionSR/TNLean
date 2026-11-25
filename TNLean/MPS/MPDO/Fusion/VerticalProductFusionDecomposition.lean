@@ -296,16 +296,16 @@ theorem exists_bntFusionCoisometryFamily
       (∀ (α β : Fin g) (i j : Fin D),
         U α β *
             (mulTensor (verticalBNTMPO (B α))
-              (verticalBNTMPO (B β))) i j *
+              (verticalBNTMPO (B β))) (i, j) *
             (U α β)ᴴ =
           Matrix.blockDiagonal' fun γ =>
-            chi.matrix α β γ ⊗ₖ verticalBNTMPO (B γ) i j) ∧
+            chi.matrix α β γ ⊗ₖ verticalBNTMPO (B γ) (i, j)) ∧
       ∀ (α β : Fin g) (i j : Fin D),
         (mulTensor (verticalBNTMPO (B α))
-          (verticalBNTMPO (B β))) i j =
+          (verticalBNTMPO (B β))) (i, j) =
           (U α β)ᴴ *
             (Matrix.blockDiagonal' fun γ =>
-              chi.matrix α β γ ⊗ₖ verticalBNTMPO (B γ) i j) *
+              chi.matrix α β γ ⊗ₖ verticalBNTMPO (B γ) (i, j)) *
             U α β := by
   obtain ⟨O⟩ := S.exists_originalCornerFamily C hMult hWeight
     mult₂ hMult₂ weight₂ hWeight₂ sigma hDim V hLetter
@@ -372,16 +372,16 @@ theorem HasVerticalBNTProductInputs.exists_positiveFusionDecomposition_of_unitar
       (∀ (α β : Fin g₁) (i j : Fin D),
         U α β *
             (mulTensor (verticalBNTMPO (A₁ α))
-              (verticalBNTMPO (A₁ β))) i j *
+              (verticalBNTMPO (A₁ β))) (i, j) *
             (U α β)ᴴ =
           Matrix.blockDiagonal' fun γ =>
-            chi.matrix α β γ ⊗ₖ verticalBNTMPO (A₁ γ) i j) ∧
+            chi.matrix α β γ ⊗ₖ verticalBNTMPO (A₁ γ) (i, j)) ∧
       ∀ (α β : Fin g₁) (i j : Fin D),
         (mulTensor (verticalBNTMPO (A₁ α))
-          (verticalBNTMPO (A₁ β))) i j =
+          (verticalBNTMPO (A₁ β))) (i, j) =
           (U α β)ᴴ *
             (Matrix.blockDiagonal' fun γ =>
-              chi.matrix α β γ ⊗ₖ verticalBNTMPO (A₁ γ) i j) *
+              chi.matrix α β γ ⊗ₖ verticalBNTMPO (A₁ γ) (i, j)) *
             U α β := by
   classical
   obtain ⟨R⟩ := hInputs.exists_retainedProductSpectralFamily
@@ -425,16 +425,16 @@ theorem transportedVerticalSector_exists_positiveFusionDecomposition
       (∀ (α β : Fin g₁) (i j : Fin D),
         U α β *
             (mulTensor (verticalBNTMPO (h.A₁ α))
-              (verticalBNTMPO (h.A₁ β))) i j *
+              (verticalBNTMPO (h.A₁ β))) (i, j) *
             (U α β)ᴴ =
           Matrix.blockDiagonal' fun γ =>
-            chi.matrix α β γ ⊗ₖ verticalBNTMPO (h.A₁ γ) i j) ∧
+            chi.matrix α β γ ⊗ₖ verticalBNTMPO (h.A₁ γ) (i, j)) ∧
       ∀ (α β : Fin g₁) (i j : Fin D),
         (mulTensor (verticalBNTMPO (h.A₁ α))
-          (verticalBNTMPO (h.A₁ β))) i j =
+          (verticalBNTMPO (h.A₁ β))) (i, j) =
           (U α β)ᴴ *
             (Matrix.blockDiagonal' fun γ =>
-              chi.matrix α β γ ⊗ₖ verticalBNTMPO (h.A₁ γ) i j) *
+              chi.matrix α β γ ⊗ₖ verticalBNTMPO (h.A₁ γ) (i, j)) *
             U α β := by
   classical
   obtain ⟨sigma, hDim, V, _hContract, hLetter⟩ :=

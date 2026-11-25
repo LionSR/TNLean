@@ -175,7 +175,7 @@ Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1875--1913, and arXiv:2203
 through the action on a state. -/
 theorem actTensor_mul_kronId_of_intertwine {X' : MPOTensor d D₁} {X : MPOTensor d D₂}
     (B : MPSTensor d D₃) {P : Matrix (Fin D₁) (Fin D₂) ℂ}
-    (hX : ∀ i l, X' i l * P = P * X i l) (i : Fin d) :
+    (hX : ∀ i l, X' (i, l) * P = P * X (i, l)) (i : Fin d) :
     actTensor X' B i * kronId P D₃ = kronId P D₃ * actTensor X B i := by
   rw [actTensor_apply, actTensor_apply, submatrix_sum_mul_kronId, kronId_mul_submatrix_sum]
   simp only [hX]

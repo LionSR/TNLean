@@ -138,7 +138,7 @@ with eigenvalue `λ`, which is `(O ⊗ 1_anc) Ψ_A = λ Ψ_A`. -/
 theorem mpo_mul_eq_smul_iff_purification
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     {L : ℕ} (O : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (c : ℂ) :
     O * mpo M L = c • mpo M L ↔
@@ -166,7 +166,7 @@ eigenvalues `λ_a^{(L)}` exactly when the purifying state satisfies
 theorem isStrongMPOSymmetry_one_iff_localPurification {ι : Type*} {χ : ι → ℕ}
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     (O : ∀ a, MPOTensor d (χ a)) (c : ι → ℕ → ℂ) :
     IsStrongMPOSymmetry O M 1 c ↔
@@ -244,7 +244,7 @@ theorem isStrongOnSiteSymmetry_of_gaugePhase_purification {G : Type*} [Monoid G]
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     (X : G → GL (Fin D') ℂ) (ζ : G → ℂ)
     (hA : ∀ g i k, ∑ j, U g i j • A j k = ζ g • ((X g : Matrix (Fin D') (Fin D') ℂ) * A i k *
@@ -278,7 +278,7 @@ theorem isWeakOnSiteSymmetry_of_gaugePhase_purification {G : Type*} [Monoid G]
     (V : G → Matrix (Fin dK) (Fin dK) ℂ) (hV : ∀ g, (V g)ᴴ * V g = 1)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     (X : G → GL (Fin D') ℂ) (ζ : G → ℂ)
     (hA : ∀ g i k, ∑ l, V g k l • ∑ j, U g i j • A j l =

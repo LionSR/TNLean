@@ -96,7 +96,7 @@ namespace MPOTensor
 variable {d D D₁ D₂ ℓ r : ℕ}
 
 private theorem evalWord_replicate (M : MPOTensor d D) (i j : Fin d) (N : ℕ) :
-    evalWord M (List.replicate N i) (List.replicate N j) = M i j ^ N := by
+    evalWord M (List.replicate N i) (List.replicate N j) = M (i, j) ^ N := by
   induction N with
   | zero => simp
   | succ N ih => rw [List.replicate_succ, List.replicate_succ, evalWord_cons, ih, pow_succ']
@@ -108,7 +108,7 @@ Source context: arXiv:1703.09188, MPU unitarity at lengths `N = 2, 3, …`, line
 theorem mpo_one_eq_one_of_forall_one_lt {T : MPOTensor d D}
     (h : ∀ N : ℕ, 1 < N → mpo T N = 1) : mpo T 1 = 1 := by
   have hpow : ∀ (i j : Fin d) (N : ℕ), 1 < N →
-      Matrix.trace (T i j ^ N) = if i = j then 1 else 0 := by
+      Matrix.trace (T (i, j) ^ N) = if i = j then 1 else 0 := by
     intro i j N hN
     have hentry := congrFun (congrFun (h N hN) (fun _ ↦ i)) (fun _ ↦ j)
     rw [mpo_apply, mpoMatrixEntry, List.ofFn_const, List.ofFn_const, evalWord_replicate]
@@ -131,7 +131,7 @@ theorem mpo_one_eq_one_of_forall_one_lt {T : MPOTensor d D}
     refine Matrix.trace_eq_one_of_forall_trace_pow_eq_one_of_one_lt _ fun N hN ↦ ?_
     rw [hpow _ _ N hN, ite_eq_left h0]
   · rw [ite_eq_right (fun h ↦ h0 (hστ.mp h))]
-    have hnil := Matrix.isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt (T (σ 0) (τ 0))
+    have hnil := Matrix.isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt (T (σ 0, τ 0))
       fun N hN ↦ by rw [hpow _ _ N hN, ite_eq_right h0]
     exact (Matrix.isNilpotent_trace_of_isNilpotent hnil).eq_zero
 

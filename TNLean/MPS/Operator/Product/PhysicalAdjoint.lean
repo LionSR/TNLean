@@ -92,11 +92,11 @@ def productBondSwapEquiv (D₁ D₂ : ℕ) : Fin (D₁ * D₂) ≃ Fin (D₂ * D
 /-- Transport both virtual indices of an MPO tensor along a bond-space equivalence. -/
 def reindexBond {D D' : ℕ} (e : Fin D' ≃ Fin D) (K : MPOTensor d D) :
     MPOTensor d D' :=
-  fun i j a b ↦ K i j (e a) (e b)
+  fun (i, j) a b ↦ K (i, j) (e a) (e b)
 
 @[simp] theorem reindexBond_apply {D D' : ℕ} (e : Fin D' ≃ Fin D)
     (K : MPOTensor d D) (i j : Fin d) (a b : Fin D') :
-    reindexBond e K i j a b = K i j (e a) (e b) := rfl
+    reindexBond e K (i, j) a b = K (i, j) (e a) (e b) := rfl
 
 /-- The physical adjoint of an MPO tensor swaps its ket and bra indices and conjugates each
 virtual matrix entry, without transposing the virtual indices:
@@ -108,17 +108,17 @@ This local adjoint relates layer annihilation to the two-sided support condition
 Source: arXiv:1606.00608, Appendix C.2, equations `AppKxKy=0`--`PjKiPj`,
 lines 1634--1689. -/
 def physicalAdjointTensor (K : MPOTensor d D) : MPOTensor d D :=
-  fun i j β α ↦ star (K j i β α)
+  fun (i, j) β α ↦ star (K (j, i) β α)
 
 /-- Evaluating the physical adjoint swaps the physical indices and conjugates the entry. -/
 @[simp] theorem physicalAdjointTensor_apply (K : MPOTensor d D)
     (i j : Fin d) (β α : Fin D) :
-    physicalAdjointTensor K i j β α = star (K j i β α) := rfl
+    physicalAdjointTensor K (i, j) β α = star (K (j, i) β α) := rfl
 
 /-- Scalar multiplication is conjugated by the physical adjoint. -/
 @[simp] theorem physicalAdjointTensor_smul (c : ℂ) (U : MPOTensor d D) :
     physicalAdjointTensor (c • U) = star c • physicalAdjointTensor U := by
-  ext i j a b
+  ext ⟨i, j⟩ a b
   simp [physicalAdjointTensor]
 
 /-- The physical adjoint reverses the order of an MPO tensor product. Since `mulTensor U V`
@@ -134,7 +134,7 @@ theorem physicalAdjointTensor_mulTensor {D₁ D₂ : ℕ}
       reindexBond (productBondSwapEquiv D₁ D₂)
         (mulTensor (physicalAdjointTensor V) (physicalAdjointTensor U)) := by
   classical
-  ext i k x y
+  ext ⟨i, k⟩ x y
   simp only [physicalAdjointTensor_apply, mulTensor_apply, reindexBond_apply,
     Matrix.submatrix_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply]
   rcases hx : finProdFinEquiv.symm x with ⟨x₁, x₂⟩
@@ -142,10 +142,10 @@ theorem physicalAdjointTensor_mulTensor {D₁ D₂ : ℕ}
   simp only [productBondSwapEquiv, Equiv.trans_apply, Equiv.prodComm_apply,
     Equiv.symm_apply_apply, hx, hy, Prod.swap_prod_mk]
   calc
-    star (∑ j, U k j x₁ y₁ * V j i x₂ y₂) =
-        ∑ j, star (U k j x₁ y₁ * V j i x₂ y₂) := by
+    star (∑ j, U (k, j) x₁ y₁ * V (j, i) x₂ y₂) =
+        ∑ j, star (U (k, j) x₁ y₁ * V (j, i) x₂ y₂) := by
       exact star_sum Finset.univ _
-    _ = ∑ j, star (V j i x₂ y₂) * star (U k j x₁ y₁) := by
+    _ = ∑ j, star (V (j, i) x₂ y₂) * star (U (k, j) x₁ y₁) := by
       exact Finset.sum_congr rfl fun j _ ↦ star_mul _ _
 
 /-- Physical slices of the physical adjoint are the conjugate transposes of the original
@@ -174,7 +174,7 @@ theorem evalWord_physicalAdjointTensor (K : MPOTensor d D)
       | cons j js =>
           simp only [List.length_cons, Nat.succ.injEq] at hlen
           simp only [evalWord_cons, ih js hlen]
-          exact ((starRingEnd ℂ).mapMatrix.map_mul (K j i) (evalWord K js is)).symm
+          exact ((starRingEnd ℂ).mapMatrix.map_mul (K (j, i)) (evalWord K js is)).symm
 
 /-- The physical adjoint generates the conjugate-transposed periodic operator family without
 spatial reflection.

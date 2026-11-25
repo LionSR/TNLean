@@ -34,8 +34,8 @@ the adjoint change of coordinates. -/
 theorem changePhysicalBasis_inverse_apply_eq_sum
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D)
     (hV : Vᴴ * V = 1) (i j : Fin d) :
-    M i j = ∑ x : Fin e, ∑ y : Fin e,
-      (star (V x i) * V y j) • changePhysicalBasis V M x y := by
+    M (i, j) = ∑ x : Fin e, ∑ y : Fin e,
+      (star (V x i) * V y j) • changePhysicalBasis V M (x, y) := by
   ext beta alpha
   have hmatrix :
       Vᴴ * (V * physicalSlice M beta alpha * Vᴴ) * V =
@@ -48,7 +48,7 @@ theorem changePhysicalBasis_inverse_apply_eq_sum
   have hentry := congrFun (congrFun hmatrix i) j
   change physicalSlice M beta alpha i j =
     (∑ x : Fin e, ∑ y : Fin e,
-      (star (V x i) * V y j) • changePhysicalBasis V M x y) beta alpha
+      (star (V x i) * V y j) • changePhysicalBasis V M (x, y)) beta alpha
   rw [← hentry]
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, physicalSlice,
     Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, changePhysicalBasis]
@@ -67,7 +67,7 @@ noncomputable def sectorCoordinateMatrixFamily (F : PhysicalSectorFactorization 
     (q : Fin (Fintype.card (Σ k : Fin F.sectorCount, F.SectorIndex k)) ×
       Fin (Fintype.card (Σ k : Fin F.sectorCount, F.SectorIndex k))) :
     Matrix (Fin D) (Fin D) ℂ :=
-  F.sectorCoordinateTensor q.1 q.2
+  F.sectorCoordinateTensor (q.1, q.2)
 
 /-- If the original MPO tensor is injective, its matrices in sector
 coordinates still span the full virtual matrix algebra. -/
@@ -76,7 +76,7 @@ theorem sectorCoordinateMatrixFamily_span_eq_top
     Submodule.span ℂ (Set.range F.sectorCoordinateMatrixFamily) = ⊤ := by
   classical
   let S := Submodule.span ℂ (Set.range F.sectorCoordinateMatrixFamily)
-  have hKmem (i j : Fin d) : K i j ∈ S := by
+  have hKmem (i j : Fin d) : K (i, j) ∈ S := by
     have hrepr := changePhysicalBasis_inverse_apply_eq_sum
       F.physicalCoordinateMatrix K F.physicalCoordinateMatrix_isometry i j
     rw [← F.sectorCoordinateTensor_eq_changePhysicalBasis] at hrepr
@@ -105,7 +105,7 @@ the within-sector virtual matrices. Off-diagonal sector entries vanish. -/
 theorem sectorCoordinateTensor_mem_span_sectorVirtualMatrixFamily
     (F : PhysicalSectorFactorization K)
     (i j : Fin (Fintype.card (Σ k : Fin F.sectorCount, F.SectorIndex k))) :
-    F.sectorCoordinateTensor i j ∈
+    F.sectorCoordinateTensor (i, j) ∈
       Submodule.span ℂ (Set.range F.sectorVirtualMatrixFamily) := by
   classical
   generalize hi : F.sectorFinEquiv i = si
@@ -123,7 +123,7 @@ theorem sectorCoordinateTensor_mem_span_sectorVirtualMatrixFamily
   by_cases hkh : k = h
   · subst h
     have heq : F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨k, x⟩) (F.sectorFinEquiv.symm ⟨k, y⟩) =
+        (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) =
         F.sectorVirtualMatrix k x y := by
       ext beta alpha
       simp [sectorVirtualMatrix]
@@ -131,7 +131,7 @@ theorem sectorCoordinateTensor_mem_span_sectorVirtualMatrixFamily
     apply Submodule.subset_span
     exact ⟨⟨k, (x, y)⟩, rfl⟩
   · have heq : F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨k, x⟩) (F.sectorFinEquiv.symm ⟨h, y⟩) = 0 := by
+        (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) = 0 := by
       ext beta alpha
       simpa using F.sectorCoordinateTensor_apply_ne hkh x y beta alpha
     rw [heq]

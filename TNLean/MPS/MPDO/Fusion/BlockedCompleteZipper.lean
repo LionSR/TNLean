@@ -104,13 +104,13 @@ theorem blockedFusionAnalysis_mul_pairLetter
     (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L))
     (hzipper : Fam.fusionIsometry α β *
           mulTensor (blockTensor (Fam.tensor α) L)
-            (blockTensor (Fam.tensor β) L) I J =
+            (blockTensor (Fam.tensor β) L) (I, J) =
         Fam.blockedUnweightedDirectSumLetter L α β I J *
           Fam.fusionIsometry α β) :
     Fam.blockedFusionAnalysis α β *
         (∑ K : Fin (Kraus.blockPhysDim p L),
-          blockTensor (Fam.tensor α) L I K ⊗ₖ
-            blockTensor (Fam.tensor β) L K J) =
+          blockTensor (Fam.tensor α) L (I, K) ⊗ₖ
+            blockTensor (Fam.tensor β) L (K, J)) =
       Fam.blockedUnweightedDirectSumLetter L α β I J *
         Fam.blockedFusionAnalysis α β := by
   ext x y
@@ -120,12 +120,12 @@ theorem blockedFusionAnalysis_mul_pairLetter
     (∑ xy : Fin (Fam.bondDim α) × Fin (Fam.bondDim β),
       Fam.fusionIsometry α β x (finProdFinEquiv xy) *
         (∑ K : Fin (Kraus.blockPhysDim p L),
-          blockTensor (Fam.tensor α) L I K ⊗ₖ
-            blockTensor (Fam.tensor β) L K J) xy y) =
+          blockTensor (Fam.tensor α) L (I, K) ⊗ₖ
+            blockTensor (Fam.tensor β) L (K, J)) xy y) =
         ∑ q : Fin (Fam.bondDim α * Fam.bondDim β),
           Fam.fusionIsometry α β x q *
             mulTensor (blockTensor (Fam.tensor α) L)
-              (blockTensor (Fam.tensor β) L) I J q
+              (blockTensor (Fam.tensor β) L) (I, J) q
                 (finProdFinEquiv y) := by
       simpa [mulTensor_apply] using
         Equiv.sum_comp
@@ -134,7 +134,7 @@ theorem blockedFusionAnalysis_mul_pairLetter
               Fin (Fam.bondDim α * Fam.bondDim β))
           (fun q ↦ Fam.fusionIsometry α β x q *
             mulTensor (blockTensor (Fam.tensor α) L)
-              (blockTensor (Fam.tensor β) L) I J q
+              (blockTensor (Fam.tensor β) L) (I, J) q
                 (finProdFinEquiv y))
     _ = ∑ z, Fam.blockedUnweightedDirectSumLetter L α β I J x z *
           Fam.fusionIsometry α β z (finProdFinEquiv y) := by
@@ -148,13 +148,13 @@ theorem pairLetter_mul_blockedFusionSynthesis
     {g L : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p)
     (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L))
     (hzipper : mulTensor (blockTensor (Fam.tensor α) L)
-          (blockTensor (Fam.tensor β) L) I J *
+          (blockTensor (Fam.tensor β) L) (I, J) *
         (Fam.fusionIsometry α β)ᴴ =
       (Fam.fusionIsometry α β)ᴴ *
         Fam.blockedUnweightedDirectSumLetter L α β I J) :
     (∑ K : Fin (Kraus.blockPhysDim p L),
-        blockTensor (Fam.tensor α) L I K ⊗ₖ
-          blockTensor (Fam.tensor β) L K J) *
+        blockTensor (Fam.tensor α) L (I, K) ⊗ₖ
+          blockTensor (Fam.tensor β) L (K, J)) *
         Fam.blockedFusionSynthesis α β =
       Fam.blockedFusionSynthesis α β *
         Fam.blockedUnweightedDirectSumLetter L α β I J := by
@@ -164,12 +164,12 @@ theorem pairLetter_mul_blockedFusionSynthesis
   calc
     (∑ xy : Fin (Fam.bondDim α) × Fin (Fam.bondDim β),
       (∑ K : Fin (Kraus.blockPhysDim p L),
-        blockTensor (Fam.tensor α) L I K ⊗ₖ
-          blockTensor (Fam.tensor β) L K J) x xy *
+        blockTensor (Fam.tensor α) L (I, K) ⊗ₖ
+          blockTensor (Fam.tensor β) L (K, J)) x xy *
         (Fam.fusionIsometry α β)ᴴ (finProdFinEquiv xy) y) =
       ∑ q : Fin (Fam.bondDim α * Fam.bondDim β),
         mulTensor (blockTensor (Fam.tensor α) L)
-            (blockTensor (Fam.tensor β) L) I J
+            (blockTensor (Fam.tensor β) L) (I, J)
               (finProdFinEquiv x) q *
           (Fam.fusionIsometry α β)ᴴ q y := by
       simpa [mulTensor_apply] using
@@ -178,7 +178,7 @@ theorem pairLetter_mul_blockedFusionSynthesis
             (Fin (Fam.bondDim α) × Fin (Fam.bondDim β)) ≃
               Fin (Fam.bondDim α * Fam.bondDim β))
           (fun q ↦ mulTensor (blockTensor (Fam.tensor α) L)
-              (blockTensor (Fam.tensor β) L) I J
+              (blockTensor (Fam.tensor β) L) (I, J)
                 (finProdFinEquiv x) q *
             (Fam.fusionIsometry α β)ᴴ q y)
     _ = ∑ z, (Fam.fusionIsometry α β)ᴴ (finProdFinEquiv x) z *
@@ -193,13 +193,13 @@ theorem pairLetter_eq_blockedFusionSynthesis_mul_directSum_mul_analysis
     {g L : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p)
     (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L))
     (hreconstruct : mulTensor (blockTensor (Fam.tensor α) L)
-          (blockTensor (Fam.tensor β) L) I J =
+          (blockTensor (Fam.tensor β) L) (I, J) =
         (Fam.fusionIsometry α β)ᴴ *
           Fam.blockedUnweightedDirectSumLetter L α β I J *
             Fam.fusionIsometry α β) :
     (∑ K : Fin (Kraus.blockPhysDim p L),
-      blockTensor (Fam.tensor α) L I K ⊗ₖ
-        blockTensor (Fam.tensor β) L K J) =
+      blockTensor (Fam.tensor α) L (I, K) ⊗ₖ
+        blockTensor (Fam.tensor β) L (K, J)) =
       Fam.blockedFusionSynthesis α β *
         Fam.blockedUnweightedDirectSumLetter L α β I J *
           Fam.blockedFusionAnalysis α β := by

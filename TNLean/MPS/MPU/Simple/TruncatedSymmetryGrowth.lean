@@ -117,15 +117,15 @@ theorem truncatedSymmetryOfEndpoints_cons_snoc (U : MPOTensor d D)
   change _ = ∑ t, ∑ s, wL t *
     truncatedSymmetryOfEndpoints U Y₂ Y₁ N (t, σ, s) (b, τ, c) * wR s
   have hentry1 (i : Fin d) (β α : Fin D) (j : Fin d) :
-      (X₁ * Y₁) (i, β) (α, j) = U i j α β := by
+      (X₁ * Y₁) (i, β) (α, j) = U (i, j) α β := by
     rw [← hfac1]
     rfl
   have hentry2 (α : Fin D) (i j : Fin d) (β : Fin D) :
-      (X₂ * Y₂) (α, i) (j, β) = U i j α β := by
+      (X₂ * Y₂) (α, i) (j, β) = U (i, j) α β := by
     rw [← hfac2]
     rfl
   have hL (α : Fin D) :
-      (∑ γ, Y₂ l (a, γ) * U i b γ α) =
+      (∑ γ, Y₂ l (a, γ) * U (i, b) γ α) =
         ∑ t, wL t * Y₂ t (b, α) := by
     simp only [wL, Finset.sum_mul]
     rw [Finset.sum_comm]
@@ -134,7 +134,7 @@ theorem truncatedSymmetryOfEndpoints_cons_snoc (U : MPOTensor d D)
     rw [← hentry2 γ i b α, Matrix.mul_apply, Finset.mul_sum]
     exact Finset.sum_congr rfl fun t _ ↦ (mul_assoc _ _ _).symm
   have hR (β : Fin D) :
-      (∑ δ, U j c β δ * Y₁ r (δ, e)) =
+      (∑ δ, U (j, c) β δ * Y₁ r (δ, e)) =
         ∑ s, Y₁ s (β, c) * wR s := by
     simp only [wR, Finset.mul_sum]
     rw [Finset.sum_comm]
@@ -144,9 +144,9 @@ theorem truncatedSymmetryOfEndpoints_cons_snoc (U : MPOTensor d D)
     exact Finset.sum_congr rfl fun s _ ↦ by ac_rfl
   simp only [truncatedSymmetryOfEndpoints]
   rw [evalWord_ofFn_cons_snoc]
-  trans ∑ α, ∑ β, (∑ γ, Y₂ l (a, γ) * U i b γ α) *
+  trans ∑ α, ∑ β, (∑ γ, Y₂ l (a, γ) * U (i, b) γ α) *
     evalWord U (List.ofFn σ) (List.ofFn τ) α β *
-      (∑ δ, U j c β δ * Y₁ r (δ, e))
+      (∑ δ, U (j, c) β δ * Y₁ r (δ, e))
   · simp only [Matrix.mul_apply, Finset.sum_mul, Finset.mul_sum]
     rw [Fintype.sum_last_first_four]
     refine Finset.sum_congr₂ fun α _ β _ ↦ ?_
@@ -176,7 +176,7 @@ theorem truncatedSymmetryOfEndpoints_cons (U : MPOTensor d D)
   let wL := fun t ↦ ∑ γ, Y₂ l (a, γ) * X₂ (γ, i) t
   change _ = ∑ t, wL t * truncatedSymmetryOfEndpoints U Y₂ Y₁ N (t, σ, r) (b, τ, c)
   have hentry2 (α : Fin D) (i j : Fin d) (β : Fin D) :
-      (X₂ * Y₂) (α, i) (j, β) = U i j α β := by
+      (X₂ * Y₂) (α, i) (j, β) = U (i, j) α β := by
     rw [← hfac2]
     rfl
   simp only [truncatedSymmetryOfEndpoints, List.ofFn_cons, evalWord_cons, Matrix.mul_apply,

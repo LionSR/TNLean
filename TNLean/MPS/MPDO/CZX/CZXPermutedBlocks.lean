@@ -176,10 +176,10 @@ def tensorInt (i j : Fin 4) : Matrix (Fin 2) (Fin 2) ℤ := fun l r ↦
     (-1) ^ edgeExponent i r else 0
 
 theorem tensor_eq_complexOfInt :
-    tensor = fun i j ↦ complexOfInt (tensorInt i j) := by
-  funext i j
+    tensor = Function.uncurry fun i j ↦ complexOfInt (tensorInt i j) := by
+  funext ⟨i, j⟩
   ext l r
-  rw [tensor_apply, complexOfInt_apply, tensorInt]
+  rw [tensor_apply, Function.uncurry_apply_pair, complexOfInt_apply, tensorInt]
   split_ifs <;> simp
 
 /-- The integer row `(0, 1, -1, 0)`; the printed cap `F^<_{g,g}` is `-i` times it. -/
@@ -192,9 +192,10 @@ theorem fusionV_eq_smul : fusionV = (-Complex.I) • complexOfInt fusionVInt := 
 
 /-- The stacked square of the CZX tensor is the image of the integer stacked square. -/
 theorem mulTensor_tensor_eq_complexOfInt :
-    mulTensor tensor tensor = fun i j ↦ complexOfInt (mulTensorR tensorInt tensorInt i j) := by
+    mulTensor tensor tensor =
+        Function.uncurry fun i j ↦ complexOfInt (mulTensorR tensorInt tensorInt i j) := by
   rw [tensor_eq_complexOfInt]
-  exact funext₂ fun i j ↦ mulTensor_complexOfRing _ tensorInt tensorInt i j
+  exact funext fun p ↦ mulTensor_complexOfRing _ tensorInt tensorInt p.1 p.2
 
 /-- The integer letters of the triple product of the CZX tensor. -/
 def cubeInt (a : Fin (4 * 4)) : Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ :=
@@ -239,7 +240,7 @@ theorem fusionData_isAssociator :
   have hT : (GroupFamily.tripleTensor family orderTwoGen orderTwoGen
       orderTwoGen).toMPSTensor = fun a ↦ complexOfInt (cubeInt a) := by
     funext a
-    change mulTensor (mulTensor tensor tensor) tensor a.divNat a.modNat = _
+    change mulTensor (mulTensor tensor tensor) tensor (a.divNat, a.modNat) = _
     rw [mulTensor_tensor_eq_complexOfInt, tensor_eq_complexOfInt]
     exact mulTensor_complexOfRing _ _ tensorInt _ _
   rw [hT]

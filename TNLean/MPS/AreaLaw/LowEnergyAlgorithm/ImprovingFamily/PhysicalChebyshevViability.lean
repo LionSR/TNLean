@@ -70,7 +70,7 @@ theorem exists_common_physical_chebyshev_viable_family_fin
         (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
       let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
         (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-          Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
+          Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u, τ u))).prod))
       let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
       let J := interval L (a + ell) (b + ell + 1)
       let eJ := intervalShiftOrderIso

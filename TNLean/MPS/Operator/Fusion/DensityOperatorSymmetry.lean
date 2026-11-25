@@ -253,7 +253,7 @@ end Family
 /-- **The tensor of an on-site operator.** The bond-dimension-one tensor with
 `(onSite u)^{ij} = u_{ij}`, whose periodic operator is `u^{⊗L}` (`mpo_onSite`). -/
 noncomputable def onSite (u : Matrix (Fin d) (Fin d) ℂ) : MPOTensor d 1 :=
-  fun i j => u i j • 1
+  fun (i, j) => u i j • 1
 
 /-- The periodic operator of an on-site tensor is the Kronecker power `u^{⊗L}`. -/
 theorem mpo_onSite (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :

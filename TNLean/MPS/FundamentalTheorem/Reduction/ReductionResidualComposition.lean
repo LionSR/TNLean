@@ -266,7 +266,7 @@ private theorem kronecker_sub' {l m n p : Type*} (Z : Matrix n p ℂ) (X Y : Mat
 tensor: `(X - W A V)^{ij} = X^{ij} - W A^{ij} V`. -/
 private def residualTensor (X : MPOTensor d D₂) (A : MPOTensor d D₁)
     (V : Matrix (Fin D₁) (Fin D₂) ℂ) (W : Matrix (Fin D₂) (Fin D₁) ℂ) : MPOTensor d D₂ :=
-  fun i j ↦ X i j - W * A i j * V
+  fun ij ↦ X ij - W * A ij * V
 
 private theorem toMPSTensor_residualTensor (X : MPOTensor d D₂) (A : MPOTensor d D₁)
     (V : Matrix (Fin D₁) (Fin D₂) ℂ) (W : Matrix (Fin D₂) (Fin D₁) ℂ) :

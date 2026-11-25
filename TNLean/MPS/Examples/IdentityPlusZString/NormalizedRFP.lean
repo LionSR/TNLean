@@ -212,8 +212,8 @@ theorem refineMap_isKrausCPTP : IsKrausCPTP refineMap := by
   exact Matrix.rectangularKrausMap_isKrausCPTP refineKraus refineKraus_resolution
 
 private lemma Mhat_diagonal_mul (p : Fin 2 × Fin 2) :
-    Mhat p.1 p.1 * Mhat p.2 p.2 =
-      (1 / 2 : ℂ) • Mhat (pairParity p) (pairParity p) := by
+    Mhat (p.1, p.1) * Mhat (p.2, p.2) =
+      (1 / 2 : ℂ) • Mhat (pairParity p, pairParity p) := by
   obtain ⟨i, j⟩ := p
   ext a b
   fin_cases i <;> fin_cases j <;> fin_cases a <;> fin_cases b <;>

@@ -352,7 +352,7 @@ theorem IsMPU.residualSlice_doubleLayerTensor_blockTensor_single_mem_threeFormSu
     E (residualAlgebra U) hEidem
     (hU.normalizedDiagonal_mul_mem_residualAlgebra_mul_normalizedDiagonal_eq_zero ρ Φ hE)
     hN (fun l hl hlen ↦ hU.residualAlgebra_list_prod_eq_zero l hl hlen) c S
-  have hentry : MPOTensor.blockTensor (doubleLayerTensor U) (D * D) I J =
+  have hentry : MPOTensor.blockTensor (doubleLayerTensor U) (D * D) (I, J) =
       (List.ofFn (fun k ↦ c k • E + (S k : Matrix (Fin (D * D)) (Fin (D * D)) ℂ))).prod := by
     simp only [blockTensor_apply, Kraus.wordOfBlock, MPOTensor.evalWord_ofFn]
     apply congrArg List.prod

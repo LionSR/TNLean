@@ -49,13 +49,13 @@ Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines
 noncomputable def cyclicEdgeWeightTensor
     (w : Fin d → Fin d → Fin d → Fin d → ℂ) :
     MPOTensor d (d * d) :=
-  fun i j a b ↦
+  fun (i, j) a b ↦
     if a = finProdFinEquiv (i, j) then w i j b.divNat b.modNat else 0
 
 @[simp] theorem cyclicEdgeWeightTensor_apply_eq
     (w : Fin d → Fin d → Fin d → Fin d → ℂ)
     (i j i' j' : Fin d) :
-    cyclicEdgeWeightTensor w i j (finProdFinEquiv (i, j))
+    cyclicEdgeWeightTensor w (i, j) (finProdFinEquiv (i, j))
         (finProdFinEquiv (i', j')) =
       w i j i' j' := by
   simp [cyclicEdgeWeightTensor]
@@ -77,9 +77,9 @@ theorem mpo_cyclicEdgeWeightTensor
     (fun n ↦ finProdFinEquiv (sigma n, tau n))
   rw [MPSTensor.evalWord_ofFn_eq_prod] at h
   have h' :
-      (List.ofFn fun i ↦ cyclicEdgeWeightTensor w (sigma i) (tau i)).prod.trace =
+      (List.ofFn fun i ↦ cyclicEdgeWeightTensor w (sigma i, tau i)).prod.trace =
         ∑ g : Fin N → Fin (d * d), ∏ v : Fin N,
-          cyclicEdgeWeightTensor w (sigma v) (tau v) (g v) (g (v + 1)) := by
+          cyclicEdgeWeightTensor w (sigma v, tau v) (g v) (g (v + 1)) := by
     simpa only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
       MPSTensor.finProdFinEquiv_modNat] using h
   rw [h']

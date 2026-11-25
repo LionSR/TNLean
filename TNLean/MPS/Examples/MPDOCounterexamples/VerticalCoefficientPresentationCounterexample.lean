@@ -78,7 +78,7 @@ This project-derived tensor belongs to the counterexample to the added
 cross-presentation assertion, formulated using the algebraic form in
 CPSV16, Proposition 4.13 and Theorem 4.14(ii), lines 943--985. -/
 def leftMPO : MPOTensor 1 2 :=
-  fun _ _ ↦ leftMatrix
+  fun (_, _) ↦ leftMatrix
 
 /-- The one-letter MPO whose only matrix is the horizontal gauge image
 \(\left(\begin{smallmatrix}1&3/4\\0&0\end{smallmatrix}\right)\).
@@ -88,7 +88,7 @@ cross-presentation assertion, formulated using the algebraic form in
 CPSV16, Proposition 4.13 and Theorem 4.14(ii), lines 943--985.  No literal
 horizontal CPSV canonical-form assertion is made for this tensor. -/
 def rightMPO : MPOTensor 1 2 :=
-  fun _ _ ↦ rightMatrix
+  fun (_, _) ↦ rightMatrix
 
 private def horizontalGauge : GL I ℂ where
   val := !![1, -3 / 4; 0, 1]
@@ -479,7 +479,7 @@ private theorem leftVerticalRepresentative_localProduct :
     mulTensor (verticalBNTMPO leftVerticalRepresentative)
         (verticalBNTMPO leftVerticalRepresentative) =
       verticalBNTMPO leftVerticalRepresentative := by
-  funext i k
+  funext ⟨i, k⟩
   ext x y
   fin_cases i <;> fin_cases k <;> fin_cases x <;> fin_cases y <;>
     norm_num [mulTensor, verticalBNTMPO, leftVerticalRepresentative,
@@ -490,7 +490,7 @@ private theorem rightVerticalRepresentative_localProduct :
     mulTensor (verticalBNTMPO rightVerticalRepresentative)
         (verticalBNTMPO rightVerticalRepresentative) =
       (4 / 5 : ℂ) • verticalBNTMPO rightVerticalRepresentative := by
-  funext i k
+  funext ⟨i, k⟩
   ext x y
   fin_cases i <;> fin_cases k <;> fin_cases x <;> fin_cases y <;>
     norm_num [mulTensor, verticalBNTMPO, rightVerticalRepresentative,

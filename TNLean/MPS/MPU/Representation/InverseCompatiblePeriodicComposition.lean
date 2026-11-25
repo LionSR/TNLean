@@ -70,8 +70,8 @@ noncomputable def inverseCompatibleComplementaryArc (n m : ℕ) :
 the independently defined complementary arc. No simplicity, canonicality, or phase is needed.
 Source: raw sewing for arXiv:2502.20257, lines 5486–5487, using lines 5390–5432. -/
 theorem inverseCompatibleGroupedMPO_eq_wordB_mul_complementaryArc
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T) (n m : ℕ) :
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T) (n m : ℕ) :
     inverseCompatibleGroupedMPO U n m =
       (inverseCompatibleWordB U T n ⊗ₖ
         (1 : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ)) *
@@ -99,8 +99,8 @@ Source: shared-boundary local composition associated with arXiv:2502.20257,
 lines 5486–5487. This does not assert a disjoint-complement version of `eq:UUU`. -/
 theorem inverseCompatibleFirstArcEmbedding_mul_groupedMPO
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
       (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1) (n m : ℕ) :
     inverseCompatibleFirstArcEmbedding U T n m * inverseCompatibleGroupedMPO U n m =

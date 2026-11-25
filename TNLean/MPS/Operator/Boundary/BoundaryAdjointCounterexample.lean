@@ -31,7 +31,7 @@ namespace MPOTensor.BoundaryAdjointCounterexample
 
 /-- Bond-one tensor whose physical matrix is the nonorthogonal idempotent
 \(P=\begin{pmatrix}1&1\\0&0\end{pmatrix}\). -/
-def tensor : MPOTensor 2 1 := fun i _ ↦ if i = 0 then 1 else 0
+def tensor : MPOTensor 2 1 := fun (i, _) ↦ if i = 0 then 1 else 0
 
 /-- The bond-one product state \(|0\rangle\). -/
 def state : MPSTensor 2 1 := fun i ↦ if i = 0 then 1 else 0
@@ -68,7 +68,7 @@ theorem state_isNormal : Kraus.IsNormal state := state_isInjective.isNormal
 
 /-- The exact local fusion equation is the idempotence of the physical matrix. -/
 theorem mulTensor_tensor : mulTensor tensor tensor = tensor := by
-  funext i j
+  funext ⟨i, j⟩
   ext a b
   fin_cases i <;> fin_cases j <;> fin_cases a <;> fin_cases b <;>
     norm_num [mulTensor, tensor, Fin.sum_univ_two, Matrix.kroneckerMap_apply,

@@ -154,12 +154,12 @@ the second the input column.
 
 Source: arXiv:2203.12563, lines 2204–2222 (the tensor `T̂_g`). -/
 def tensor (ω : ScalarThreeCochain G) (g : G) : MPOTensor n n :=
-  fun i j ↦ Matrix.of fun l r ↦
+  fun (i, j) ↦ Matrix.of fun l r ↦
     if i = siteShift e g j ∧ r = j then (ω g (e.symm j) ((e.symm j)⁻¹ * e.symm l) : ℂ)
     else 0
 
 theorem tensor_apply (ω : ScalarThreeCochain G) (g : G) (i j l r : Fin n) :
-    tensor e ω g i j l r =
+    tensor e ω g (i, j) l r =
       if i = siteShift e g j ∧ r = j then (ω g (e.symm j) ((e.symm j)⁻¹ * e.symm l) : ℂ)
       else 0 := rfl
 

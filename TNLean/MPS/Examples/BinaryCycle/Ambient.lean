@@ -120,8 +120,8 @@ def ambientM : MPOTensor 4 4 :=
 
 /-- Exact equality on the supported one-site physical slice. -/
 theorem ambientM_supported (k h : Fin 2) :
-    ambientM (siteEmbedding k) (siteEmbedding h) =
-      CPSVExample411BinarySupport.M k h := by
+    ambientM (siteEmbedding k, siteEmbedding h) =
+      CPSVExample411BinarySupport.M (k, h) := by
   ext beta alpha
   simp [ambientM, changePhysicalBasis, physicalSlice, Matrix.mul_apply,
     Matrix.conjTranspose_apply, inclusion_apply]
@@ -129,7 +129,7 @@ theorem ambientM_supported (k h : Fin 2) :
 /-- A physical ket leg outside the supported two-qubit basis slice vanishes. -/
 theorem ambientM_left_unsupported (i : Fin 4)
     (hi : ∀ k : Fin 2, i ≠ siteEmbedding k) (j : Fin 4) :
-    ambientM i j = 0 := by
+    ambientM (i, j) = 0 := by
   rw [ambientM, changePhysicalBasis_apply_eq_sum]
   apply Finset.sum_eq_zero
   intro p _
@@ -138,7 +138,7 @@ theorem ambientM_left_unsupported (i : Fin 4)
 /-- A physical bra leg outside the supported two-qubit basis slice vanishes. -/
 theorem ambientM_right_unsupported (j : Fin 4)
     (hj : ∀ k : Fin 2, j ≠ siteEmbedding k) (i : Fin 4) :
-    ambientM i j = 0 := by
+    ambientM (i, j) = 0 := by
   rw [ambientM, changePhysicalBasis_apply_eq_sum]
   apply Finset.sum_eq_zero
   intro p _

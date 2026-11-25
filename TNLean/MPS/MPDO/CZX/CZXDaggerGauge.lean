@@ -51,7 +51,7 @@ theorem daggerGauge_mem_unitaryGroup :
 /-- The exact adjoint diagram of arXiv:2502.20257, lines 4547–4559:
 physical adjunction is conjugation by `Y`, with no extra scalar. -/
 theorem physicalAdjointTensor_tensor (u v : Fin 4) :
-    physicalAdjointTensor tensor u v = daggerGauge * tensor u v * daggerGauge := by
+    physicalAdjointTensor tensor (u, v) = daggerGauge * tensor (u, v) * daggerGauge := by
   have hc : ∀ j : Fin 4, complementSite j = j.rev := by decide
   have hb : ∀ i : Fin 4, siteBits i =
       (show ZMod 2 from Fin.divNat (m := 2) (n := 2) i,
@@ -72,10 +72,10 @@ def daggerGaugeUnitary : Matrix.unitaryGroup (Fin 2) ℂ :=
 identifying it with any choice-selected gauge (arXiv:2502.20257, `eq:defT`
 and lines 4547–4559). -/
 theorem physicalAdjointTensor_tensor_eq_unitaryGauge (u v : Fin 4) :
-    physicalAdjointTensor tensor u v =
-      (daggerGaugeUnitary : Matrix (Fin 2) (Fin 2) ℂ)ᴴ * tensor u v *
+    physicalAdjointTensor tensor (u, v) =
+      (daggerGaugeUnitary : Matrix (Fin 2) (Fin 2) ℂ)ᴴ * tensor (u, v) *
         (daggerGaugeUnitary : Matrix (Fin 2) (Fin 2) ℂ) := by
-  change physicalAdjointTensor tensor u v = daggerGaugeᴴ * tensor u v * daggerGauge
+  change physicalAdjointTensor tensor (u, v) = daggerGaugeᴴ * tensor (u, v) * daggerGauge
   rw [daggerGauge_conjTranspose, physicalAdjointTensor_tensor]
 
 /-- Entrywise conjugation negates `Y` (arXiv:2502.20257, lines 4547–4559). -/

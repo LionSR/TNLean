@@ -174,13 +174,13 @@ private theorem assocInv_two_one_two :
 
 private theorem mulTensor_uTensor_uTensor :
     mulTensor uTensor uTensor =
-      fun i j ↦ complexOfEisenstein (mulTensorR uEis uEis i j) :=
-  funext₂ fun i j ↦ mulTensor_complexOfRing _ uEis uEis i j
+      fun (i, j) ↦ complexOfEisenstein (mulTensorR uEis uEis i j) :=
+  funext fun p ↦ mulTensor_complexOfRing _ uEis uEis p.1 p.2
 
 private theorem mulTensor_uTensor_uDagTensor :
     mulTensor uTensor uDagTensor =
-      fun i j ↦ complexOfEisenstein (mulTensorR uEis uDagEis i j) :=
-  funext₂ fun i j ↦ mulTensor_complexOfRing _ uEis uDagEis i j
+      fun (i, j) ↦ complexOfEisenstein (mulTensorR uEis uDagEis i j) :=
+  funext fun p ↦ mulTensor_complexOfRing _ uEis uDagEis p.1 p.2
 
 private theorem tripleUUU_eq (a : Fin 9) :
     (family.tripleTensor z3Gen z3Gen z3Gen).toMPSTensor a =

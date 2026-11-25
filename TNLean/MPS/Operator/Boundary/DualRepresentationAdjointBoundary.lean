@@ -54,7 +54,7 @@ representation of the convolution dual. Source: arXiv:2204.05940v1, Section 4
 and Proposition 5.4. -/
 def ofDualRepresentation (φ : H →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ)
     (ψ : WithConv (H →ₗ[ℂ] ℂ) →ₐ[ℂ] Matrix (Fin D) (Fin D) ℂ) : MPOTensor d D :=
-  fun i j ↦ ψ (dualCoefficient φ i j)
+  fun (i, j) ↦ ψ (dualCoefficient φ i j)
 
 omit [Coalgebra ℂ H] in
 /-- Physical star compatibility swaps coefficient indices under the intrinsic

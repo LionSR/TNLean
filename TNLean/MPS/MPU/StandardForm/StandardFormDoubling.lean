@@ -277,7 +277,7 @@ theorem doubled_v_apply (S : TwoSiteStandardFormData W u v) (i₁ i₂ : Fin (d 
 
 theorem doubled_W_apply (S : TwoSiteStandardFormData W u v) (i j : Fin ((d * d) * (d * d)))
     (α γ : Fin D) :
-    blockTwo W i j α γ = ∑ t : Fin (ℓ * d), ∑ s : Fin (d * r),
+    blockTwo W (i, j) α γ = ∑ t : Fin (ℓ * d), ∑ s : Fin (d * r),
       S.doubledX₂ (α, (finProdFinEquiv.symm i).1) t *
         doubledU u v (t, s) (finProdFinEquiv.symm j) *
           S.doubledX₁ ((finProdFinEquiv.symm i).2, γ) s := by

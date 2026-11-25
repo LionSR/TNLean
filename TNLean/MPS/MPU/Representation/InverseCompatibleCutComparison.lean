@@ -95,8 +95,8 @@ size as the first source cut. This uses $L\mathcal M_1R=I_\ell$ and
 $\operatorname{rank}(XY)\leq\ell$, not normalization or simplicity.
 Source: arXiv:2502.20257, the invertible-comparison step at lines 5432–5443. -/
 theorem rightRank_eq_leftRank_of_physicalAdjointTensor_eq_unitary_gauge
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T) :
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T) :
     r[U] = ℓ[U] := by
   let L := (sourceZ₂ U)ᴴ * (inverseCompatibleLeftGauge (d := d) T)ᴴ
   let R := (inverseCompatibleRightGauge (d := d) T)ᴴ * sourceX₂ U
@@ -142,8 +142,8 @@ identities are derived from the actual source factorizations and one-sided
 inverses. No adjoint comparison or new normalization is assumed.
 Source: arXiv:2502.20257, lines 5432–5443. -/
 theorem inverseCompatibleComparison
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     let X := inverseCompatibleX₁ U T
     let Y := inverseCompatibleY₁ U T
@@ -194,8 +194,8 @@ variable {d D : ℕ} (U : MPOTensor d D) (T : Matrix.unitaryGroup (Fin D) ℂ)
 of the weighted first source factor. This does not use $J=K^\dagger$.
 Source: arXiv:2502.20257, lines 5440–5443, with the maintained product-index order. -/
 theorem sourceY₂_eq_inverseCompatibleComparisonK_adjoint
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     sourceY₂ U = (inverseCompatibleComparisonK U T ρ hρ)ᴴ *
       (sourceX₁ U ρ hρ)ᴴ * inverseCompatibleLeftGauge (d := d) T := by
@@ -214,8 +214,8 @@ $K$ the actual weighted comparison and no permutation of the gate indices.
 Source: arXiv:2502.20257, lines 5444–5487. This is an algebraic gate identity,
 not the subsequent unitarity conclusion. -/
 theorem sourceU_eq_smul_inverseCompatibleComparisonK_kronecker_sourceV_adjoint
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (σ : ℂ)
     (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
       (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1) :
@@ -290,8 +290,8 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D) (T : Matrix.unitaryGroup (Fin D) ℂ)
   (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-  (hT : ∀ i j, physicalAdjointTensor U i j =
-    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+  (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
 
 include hU hsimple hT in
 /-- Both source ranks equal the physical dimension under the self-adjoint

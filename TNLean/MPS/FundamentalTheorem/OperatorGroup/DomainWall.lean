@@ -91,7 +91,7 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 774--832 (the MPU
 applied to the domain-wall tensor in `eq:localcdef`). -/
 noncomputable def actRect (T : MPOTensor d D₁) (e : Fin d → Matrix (Fin m) (Fin n) ℂ)
     (i : Fin d) : Matrix (Fin (D₁ * m)) (Fin (D₁ * n)) ℂ :=
-  (∑ j : Fin d, T i j ⊗ₖ e j).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
+  (∑ j : Fin d, T (i, j) ⊗ₖ e j).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
 
 /-- The action of an operator tensor on a family of matrices indexed by the physical
 configurations of a chain of length `L`:

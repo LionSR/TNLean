@@ -81,7 +81,8 @@ def czxDecoratedIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
 being the output.
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1164–1180. -/
-def czxDecoratedTensor : MPOTensor 2 2 := fun i j => complexOfInt (czxDecoratedIntTensor i j)
+def czxDecoratedTensor : MPOTensor 2 2 :=
+    Function.uncurry fun i j => complexOfInt (czxDecoratedIntTensor i j)
 
 /-- The entries of the decorated tensor: the output `i` is the flip of the input `j`, the
 outgoing bond carries `i`, and the incoming bond `l` contributes `(-1)^{l i}`, times the sign
@@ -89,7 +90,7 @@ outgoing bond carries `i`, and the incoming bond `l` contributes `(-1)^{l i}`, t
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1140–1180. -/
 theorem czxDecoratedTensor_apply (i j l r : Fin 2) :
-    czxDecoratedTensor i j l r =
+    czxDecoratedTensor (i, j) l r =
       if i = j.rev ∧ r = i then (-1 : ℂ) ^ (l.val * i.val + i.val) else 0 := by
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
     simp [czxDecoratedTensor, czxDecoratedIntTensor, complexOfInt, Fin.rev]
@@ -97,7 +98,7 @@ theorem czxDecoratedTensor_apply (i j l r : Fin 2) :
 /-- Bridge: the decorated tensor is the one-site tensor `MPOTensor.CZX.decoratedSiteTensor`
 of arXiv:2502.20257 with every matrix transposed, that is, with its two bonds exchanged. -/
 theorem czxDecoratedTensor_eq_transpose (i j : Fin 2) :
-    czxDecoratedTensor i j = (MPOTensor.CZX.decoratedSiteTensor i j)ᵀ := by
+    czxDecoratedTensor (i, j) = (MPOTensor.CZX.decoratedSiteTensor (i, j))ᵀ := by
   ext l r
   rw [Matrix.transpose_apply, czxDecoratedTensor_apply]
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
@@ -106,7 +107,7 @@ theorem czxDecoratedTensor_eq_transpose (i j : Fin 2) :
 /-- Bridge: `MPOTensor.CZX.decoratedSiteTensor` is the review's CZX tensor with a Pauli `Z` on
 the output, `(-1)^i` times the letter at output `i`. -/
 theorem decoratedSiteTensor_eq_smul_reviewCZXTensor (i j : Fin 2) :
-    MPOTensor.CZX.decoratedSiteTensor i j = ((-1 : ℂ) ^ i.val) • reviewCZXTensor i j := by
+    MPOTensor.CZX.decoratedSiteTensor (i, j) = ((-1 : ℂ) ^ i.val) • reviewCZXTensor (i, j) := by
   ext l r
   rw [Matrix.smul_apply, reviewCZXTensor_apply]
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>

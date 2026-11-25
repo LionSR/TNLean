@@ -51,8 +51,8 @@ noncomputable def inverseCompatibleV :
 This is algebraic: no adjoint identification of $J$ or unitarity is assumed.
 Source: arXiv:2502.20257, comparison at lines 5432–5443 and new gates at lines 5486–5487. -/
 theorem inverseCompatibleU_eq_comparisonJ_mul_sourceU
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     inverseCompatibleU U T =
       ((1 : Matrix (Fin ℓ[U]) (Fin ℓ[U]) ℂ) ⊗ₖ inverseCompatibleComparisonJ U T ρ hρ) *
@@ -72,8 +72,8 @@ theorem inverseCompatibleU_eq_comparisonJ_mul_sourceU
 /-- The new $v$ is the old weighted source gate dressed by the comparison $K$.
 Source: arXiv:2502.20257, comparison at lines 5432–5443 and new gates at lines 5486–5487. -/
 theorem inverseCompatibleV_eq_sourceV_mul_comparisonK
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) :
     inverseCompatibleV U T = sourceV U ρ hρ *
       (inverseCompatibleComparisonK U T ρ hρ ⊗ₖ
@@ -95,8 +95,8 @@ not a new normalization or a rank-space identification.
 Source: arXiv:2502.20257, lines 5440–5487, for the decomposition at lines 5342–5348. -/
 theorem inverseCompatibleGates_unitary_and_phase
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
       (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1) :
     (inverseCompatibleU U T).IsUnitaryBetween ∧

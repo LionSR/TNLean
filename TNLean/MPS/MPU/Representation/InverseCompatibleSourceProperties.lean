@@ -57,8 +57,8 @@ namespace MPOTensor
 
 variable {d D : ℕ} (U : MPOTensor d D) (T : Matrix.unitaryGroup (Fin D) ℂ)
   (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-  (hT : ∀ i j, physicalAdjointTensor U i j =
-    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+  (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
   (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
     (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1)
 

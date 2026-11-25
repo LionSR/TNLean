@@ -28,7 +28,7 @@ theorem IsMPUCanonicalFormII.oneLetter_output_contraction
     (hU : IsMPUCanonicalFormII U)
     (hadjoint : IsMPUSimple (MPOTensor.physicalAdjointTensor U)) (i j : Fin d) :
     (∑ x : Fin D, ∑ α : Fin D, ∑ β : Fin D, ∑ p : Fin d,
-      U i p x α * star (U j p x β) * hU.ρ β α) =
+      U (i, p) x α * star (U (j, p) x β) * hU.ρ β α) =
         if i = j then 1 else 0 := by
   simpa only [physicalAdjointTensor_apply, star_star,
     IsMPUCanonicalFormII.physicalAdjointTensor] using

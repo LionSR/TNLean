@@ -53,15 +53,15 @@ both physical and virtual indices.
 Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
 def tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) :
     MPOTensor (d * e) (D * E) :=
-  fun ij kl ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv
-    (U ij.divNat kl.divNat ⊗ₖ V ij.modNat kl.modNat)
+  fun (ij, kl) ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv
+    (U (ij.divNat, kl.divNat) ⊗ₖ V (ij.modNat, kl.modNat))
 
 /-- Entry formula for the independent tensor product. -/
 @[simp] theorem tensorProduct_apply (U : MPOTensor d D) (V : MPOTensor e E)
     (i j : Fin d) (k l : Fin e) (α β : Fin D) (γ δ : Fin E) :
-    tensorProduct U V (finProdFinEquiv (i, k)) (finProdFinEquiv (j, l))
+    tensorProduct U V (finProdFinEquiv (i, k), finProdFinEquiv (j, l))
         (finProdFinEquiv (α, γ)) (finProdFinEquiv (β, δ)) =
-      U i j α β * V k l γ δ := by
+      U (i, j) α β * V (k, l) γ δ := by
   simp [tensorProduct, Matrix.reindex_apply]
 
 /-- Split every letter of a blocked product alphabet and re-encode the two
@@ -119,7 +119,7 @@ theorem blockTensor_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E) (L : �
     blockTensor (tensorProduct U V) L =
       reindexPhysical (tensorProductBlockEquiv d e L)
         (tensorProduct (blockTensor U L) (blockTensor V L)) := by
-  funext I J
+  funext ⟨I, J⟩
   simp only [blockTensor_apply, reindexPhysical, tensorProduct]
   rw [evalWord_tensorProduct]
   simp only [Kraus.wordOfBlock, List.map_ofFn]

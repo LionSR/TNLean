@@ -167,7 +167,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 1381--1388; the explicit physical-slice form appears at lines 1435--1448. -/
 noncomputable def sectorCoordinateTensor (F : PhysicalSectorFactorization K) :
     MPOTensor (Fintype.card (Σ k : Fin F.sectorCount, SectorIndex F k)) D :=
-  fun i j ↦ Matrix.of fun beta alpha ↦
+  fun (i, j) ↦ Matrix.of fun beta alpha ↦
     F.transformedPhysicalSlice beta alpha (F.sectorFinEquiv i) (F.sectorFinEquiv j)
 
 /-- An entry of the sector-coordinate tensor is the corresponding entry of
@@ -178,7 +178,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 @[simp] theorem sectorCoordinateTensor_apply (F : PhysicalSectorFactorization K)
     (i j : Fin (Fintype.card (Σ k : Fin F.sectorCount, SectorIndex F k)))
     (beta alpha : Fin D) :
-    F.sectorCoordinateTensor i j beta alpha =
+    F.sectorCoordinateTensor (i, j) beta alpha =
       F.transformedPhysicalSlice beta alpha (F.sectorFinEquiv i) (F.sectorFinEquiv j) :=
   rfl
 
@@ -191,7 +191,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
     (F : PhysicalSectorFactorization K) (k : Fin F.sectorCount)
     (x y : SectorIndex F k) (beta alpha : Fin D) :
     F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨k, x⟩) (F.sectorFinEquiv.symm ⟨k, y⟩) beta alpha =
+        (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) beta alpha =
       F.leftTensor k beta x.1 y.1 * F.rightTensor k alpha x.2 y.2 := by
   rw [sectorCoordinateTensor_apply]
   simp only [Equiv.apply_symm_apply]
@@ -207,7 +207,7 @@ Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
     (F : PhysicalSectorFactorization K) {k h : Fin F.sectorCount} (hkh : k ≠ h)
     (x : SectorIndex F k) (y : SectorIndex F h) (beta alpha : Fin D) :
     F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨k, x⟩) (F.sectorFinEquiv.symm ⟨h, y⟩) beta alpha = 0 := by
+        (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) beta alpha = 0 := by
   rw [sectorCoordinateTensor_apply]
   simp only [Equiv.apply_symm_apply]
   rw [F.transformedPhysicalSlice_eq, Matrix.blockDiagonal'_apply_ne _ _ _ hkh]

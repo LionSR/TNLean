@@ -64,11 +64,11 @@ This construction is source-independent. It is used with the Hayashi unitary
 from arXiv:1606.00608, Appendix C.2, lines 1434--1464. -/
 noncomputable def conjugatePhysical (K : MPOTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) : MPOTensor d D :=
-  fun i j β α => (U * physicalSlice K β α * Uᴴ) i j
+  fun (i, j) β α => (U * physicalSlice K β α * Uᴴ) i j
 
 @[simp] private lemma conjugatePhysical_apply (K : MPOTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) (i j : Fin d) (β α : Fin D) :
-    conjugatePhysical K U i j β α =
+    conjugatePhysical K U (i, j) β α =
       (U * physicalSlice K β α * Uᴴ) i j :=
   rfl
 
@@ -78,9 +78,9 @@ linear combination of the original physical matrices.
 Source: arXiv:1606.00608, Appendix C.2, lines 1421--1438. -/
 theorem conjugatePhysical_eq_sum (K : MPOTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) (i j : Fin d) :
-    conjugatePhysical K U i j =
+    conjugatePhysical K U (i, j) =
       ∑ p : Fin d, ∑ q : Fin d,
-        (U i p * star (U j q)) • K p q := by
+        (U i p * star (U j q)) • K (p, q) := by
   classical
   ext β α
   simp only [conjugatePhysical, Matrix.mul_apply, Matrix.conjTranspose_apply,
@@ -111,8 +111,7 @@ private theorem conjugatePhysical_sectorFactorization_apply
     (q : Fin hη.m) (iL jL : Fin (hη.dL q))
     (iR jR : Fin (hη.dR q)) (β α : Fin D) :
     conjugatePhysical K hη.U_B
-        (hη.decompB.symm ⟨q, (iL, iR)⟩)
-        (hη.decompB.symm ⟨q, (jL, jR)⟩) β α =
+        (hη.decompB.symm ⟨q, (iL, iR)⟩, hη.decompB.symm ⟨q, (jL, jR)⟩) β α =
       l q β iL jL * r q α iR jR := by
   rw [conjugatePhysical_apply]
   have h := congrFun (congrFun (hfactor β α)
@@ -173,8 +172,7 @@ theorem mpo_submatrix_sector_eq_cyclicEtaTensorProduct
     MPOTensor.evalWord_ofFn]
   have hlocal : ∀ n : Fin N,
       conjugatePhysical K hη.U_B
-        (hη.decompB.symm ⟨k n, x n⟩)
-        (hη.decompB.symm ⟨k n, y n⟩) =
+        (hη.decompB.symm ⟨k n, x n⟩, hη.decompB.symm ⟨k n, y n⟩) =
       Matrix.of (fun β α =>
         l (k n) β (x n).1 (y n).1 * r (k n) α (x n).2 (y n).2) := by
     intro n
@@ -184,8 +182,7 @@ theorem mpo_submatrix_sector_eq_cyclicEtaTensorProduct
   have hlist :
       List.ofFn (fun n : Fin N =>
         conjugatePhysical K hη.U_B
-          (hη.decompB.symm ⟨k n, x n⟩)
-          (hη.decompB.symm ⟨k n, y n⟩)) =
+          (hη.decompB.symm ⟨k n, x n⟩, hη.decompB.symm ⟨k n, y n⟩)) =
       List.ofFn (fun n : Fin N => Matrix.of fun β α =>
         l (k n) β (x n).1 (y n).1 * r (k n) α (x n).2 (y n).2) := by
     exact congrArg List.ofFn (funext fun n => hlocal n)
@@ -218,14 +215,12 @@ private theorem trace_conjugatePhysical_sector_word_eq_zero_of_ne
     Matrix.trace (Kraus.evalWord
         (fun n : Fin N =>
           conjugatePhysical K hη.U_B
-            (hη.decompB.symm ⟨k n, x n⟩)
-            (hη.decompB.symm ⟨h n, y n⟩))
+            (hη.decompB.symm ⟨k n, x n⟩, hη.decompB.symm ⟨h n, y n⟩))
         (List.ofFn id)) = 0 := by
   obtain ⟨n, hn⟩ := Function.ne_iff.mp hne
   have hlocal :
       conjugatePhysical K hη.U_B
-        (hη.decompB.symm ⟨k n, x n⟩)
-        (hη.decompB.symm ⟨h n, y n⟩) =
+        (hη.decompB.symm ⟨k n, x n⟩, hη.decompB.symm ⟨h n, y n⟩) =
       (0 : Matrix (Fin D) (Fin D) ℂ) := by
     ext β α
     simp only [Matrix.zero_apply, conjugatePhysical_apply]

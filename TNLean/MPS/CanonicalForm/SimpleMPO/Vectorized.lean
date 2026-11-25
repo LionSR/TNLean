@@ -74,23 +74,26 @@ variable {d D : ℕ}
 M^{kl}`: `u` acts on the ket leg and `v` on the bra leg. -/
 noncomputable def pairTwist (u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) :
     MPOTensor d D :=
-  fun i j => ∑ k, u i k • ∑ l, v j l • M k l
+  fun (i, j) => ∑ k, u i k • ∑ l, v j l • M (k, l)
 
 /-- Twisting the ket leg by `u` multiplies the periodic operators by `u^{⊗L}` on the left. -/
 theorem mpo_ketTwist (u : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) (L : ℕ) :
-    mpo (fun i j => ∑ k, u i k • M k j) L = (Matrix.piKronecker fun _ : Fin L => u) * mpo M L := by
+    mpo (Function.uncurry fun i j => ∑ k, u i k • M (k, j)) L =
+      (Matrix.piKronecker fun _ : Fin L => u) * mpo M L := by
   ext σ τ
-  rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.trace_prod_ofFn_sum_smul, Matrix.mul_apply]
+  simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Function.uncurry_apply_pair]
+  rw [Matrix.trace_prod_ofFn_sum_smul, Matrix.mul_apply]
   refine Finset.sum_congr rfl fun κ _ => ?_
   rw [Matrix.piKronecker_apply, mpo_apply, mpoMatrixEntry, evalWord_ofFn]
 
 /-- Twisting the bra leg by `v` multiplies the periodic operators by `(v^{⊗L})^T` on the
 right. -/
 theorem mpo_braTwist (v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) (L : ℕ) :
-    mpo (fun i j => ∑ l, v j l • M i l) L =
+    mpo (Function.uncurry fun i j => ∑ l, v j l • M (i, l)) L =
       mpo M L * (Matrix.piKronecker fun _ : Fin L => v)ᵀ := by
   ext σ τ
-  rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.trace_prod_ofFn_sum_smul, Matrix.mul_apply]
+  simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Function.uncurry_apply_pair]
+  rw [Matrix.trace_prod_ofFn_sum_smul, Matrix.mul_apply]
   refine Finset.sum_congr rfl fun κ _ => ?_
   rw [Matrix.transpose_apply, Matrix.piKronecker_apply, mpo_apply, mpoMatrixEntry,
     evalWord_ofFn, mul_comm]
@@ -112,11 +115,12 @@ Source: arXiv:2603.28349, lines 364–368, with the boundary of
 arXiv:2504.16985, lines 175–182. -/
 theorem mpoWithBoundary_ketTwist (u : Matrix (Fin d) (Fin d) ℂ)
     (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
-    mpoWithBoundary (fun i j => ∑ k, u i k • M k j) X L =
+    mpoWithBoundary (Function.uncurry fun i j => ∑ k, u i k • M (k, j)) X L =
       (Matrix.piKronecker fun _ : Fin L => u) * mpoWithBoundary M X L := by
   ext σ τ
-  rw [mpoWithBoundary, evalWord_ofFn, Matrix.trace_mul_prod_ofFn_sum_smul,
-    Matrix.mul_apply]
+  rw [mpoWithBoundary, evalWord_ofFn]
+  simp only [Function.uncurry_apply_pair]
+  rw [Matrix.trace_mul_prod_ofFn_sum_smul, Matrix.mul_apply]
   refine Finset.sum_congr rfl fun κ _ => ?_
   rw [Matrix.piKronecker_apply, mpoWithBoundary, evalWord_ofFn]
 
@@ -124,11 +128,12 @@ theorem mpoWithBoundary_ketTwist (u : Matrix (Fin d) (Fin d) ℂ)
 Source: arXiv:2603.28349, lines 364–368. -/
 theorem mpoWithBoundary_braTwist (v : Matrix (Fin d) (Fin d) ℂ)
     (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
-    mpoWithBoundary (fun i j => ∑ l, v j l • M i l) X L =
+    mpoWithBoundary (Function.uncurry fun i j => ∑ l, v j l • M (i, l)) X L =
       mpoWithBoundary M X L * (Matrix.piKronecker fun _ : Fin L => v)ᵀ := by
   ext σ τ
-  rw [mpoWithBoundary, evalWord_ofFn, Matrix.trace_mul_prod_ofFn_sum_smul,
-    Matrix.mul_apply]
+  rw [mpoWithBoundary, evalWord_ofFn]
+  simp only [Function.uncurry_apply_pair]
+  rw [Matrix.trace_mul_prod_ofFn_sum_smul, Matrix.mul_apply]
   refine Finset.sum_congr rfl fun κ _ => ?_
   rw [Matrix.transpose_apply, Matrix.piKronecker_apply, mpoWithBoundary,
     evalWord_ofFn, mul_comm]
@@ -150,7 +155,7 @@ Bridge: `pairTwist u \bar u M = changePhysicalBasis u M`, the conjugation
 theorem pairTwist_map_star (u : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) :
     pairTwist u (u.map (starRingEnd ℂ)) M =
       PhysicalSectorFactorization.changePhysicalBasis u M := by
-  funext i j
+  funext ⟨i, j⟩
   ext β α
   simp only [pairTwist, PhysicalSectorFactorization.changePhysicalBasis, physicalSlice,
     Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Matrix.mul_apply,
@@ -214,7 +219,7 @@ theorem twistedTensor_toMPSTensor_pairRep (U V : G →* Matrix (Fin d) (Fin d) �
     MPSTensor.twistedTensor (toMPSTensor M) (pairRep U V) g =
       toMPSTensor (pairTwist (U g) (V g) M) := by
   funext p
-  change ∑ q, pairOperator (U g) (V g) p q • M q.divNat q.modNat = _
+  change ∑ q, pairOperator (U g) (V g) p q • M (q.divNat, q.modNat) = _
   rw [← (finProdFinEquiv : Fin d × Fin d ≃ Fin (d * d)).sum_comp, Fintype.sum_prod_type]
   simp only [pairOperator_apply, MPSTensor.finProdFinEquiv_divNat,
     MPSTensor.finProdFinEquiv_modNat, toMPSTensor, pairTwist, Finset.smul_sum, smul_smul]

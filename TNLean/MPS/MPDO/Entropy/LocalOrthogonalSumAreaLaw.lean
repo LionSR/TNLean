@@ -142,25 +142,25 @@ private theorem firstSiteMatrix_mul_normalizedMPO_of_ketLeftMul_eq
   rw [firstSiteMatrix_mul_apply]
   simp only [Fin.cons_zero, Function.comp_def, Fin.cons_succ, normalizedMPO,
     Matrix.smul_apply, smul_eq_mul, mpo_cons_cons]
-  have hPMab := congrFun (congrFun hPM a) b
+  have hPMab := congrFun hPM (a, b)
   simp only [ketLeftMul] at hPMab
   calc
     ∑ i : Fin d, P a i *
         ((mpo M (N + 1)).trace⁻¹ *
-          Matrix.trace (M i b * evalWord M (List.ofFn σ') (List.ofFn τ')))
+          Matrix.trace (M (i, b) * evalWord M (List.ofFn σ') (List.ofFn τ')))
         = (mpo M (N + 1)).trace⁻¹ *
             ∑ i : Fin d, P a i *
-              Matrix.trace (M i b * evalWord M (List.ofFn σ') (List.ofFn τ')) := by
+              Matrix.trace (M (i, b) * evalWord M (List.ofFn σ') (List.ofFn τ')) := by
           rw [Finset.mul_sum]
           apply Finset.sum_congr rfl
           intro i _hi
           ring
     _ = (mpo M (N + 1)).trace⁻¹ *
-        Matrix.trace ((∑ i : Fin d, P a i • M i b) *
+        Matrix.trace ((∑ i : Fin d, P a i • M (i, b)) *
           evalWord M (List.ofFn σ') (List.ofFn τ')) := by
       rw [sum_mul_trace_eq_trace_sum_smul]
     _ = (mpo M (N + 1)).trace⁻¹ *
-        Matrix.trace (M a b * evalWord M (List.ofFn σ') (List.ofFn τ')) := by
+        Matrix.trace (M (a, b) * evalWord M (List.ofFn σ') (List.ofFn τ')) := by
       rw [hPMab]
 
 /-- Left local invariance is preserved by taking a nonempty contiguous

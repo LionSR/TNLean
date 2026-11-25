@@ -175,7 +175,7 @@ theorem fibSiteLetter_fibEdgeTauLetter (x : Fin 2) :
 plaquette, lower edge label), the left bond letter `p` and the right bond letter `q = (a, d)`
 (upper-right and lower-right plaquettes), its entry is `G^{abc}_{def} √(v_a v_b v_c v_d)` when the
 edge label passes through, `e' = e`, and `p = (b, c)`, and zero otherwise. -/
-def fibStringNetTensor (f : Fin 2) : MPOTensor 4 (fibBlockDim f) := fun i j =>
+def fibStringNetTensor (f : Fin 2) : MPOTensor 4 (fibBlockDim f) := fun (i, j) =>
   Matrix.of fun p q =>
     if (fibSiteLetter i).2 = (fibSiteLetter j).2 ∧
         fibBondLetter f p = ((fibSiteLetter i).1, (fibSiteLetter j).1) then
@@ -187,11 +187,11 @@ def fibStringNetTensor (f : Fin 2) : MPOTensor 4 (fibBlockDim f) := fun i j =>
 
 /-- The letters of the source's tensor `fibStringNetTensor` at edge label `τ`, indexed by the
 outgoing and incoming plaquettes `(x', x)`. -/
-def fibStringNetEdgeTau (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun x' x =>
-  fibStringNetTensor f (fibEdgeTauLetter x') (fibEdgeTauLetter x)
+def fibStringNetEdgeTau (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun (x', x) =>
+  fibStringNetTensor f (fibEdgeTauLetter x', fibEdgeTauLetter x)
 
 theorem fibStringNetEdgeTau_apply (f x' x : Fin 2) (p q : Fin (fibBlockDim f)) :
-    fibStringNetEdgeTau f x' x p q =
+    fibStringNetEdgeTau f (x', x) p q =
       if fibBondLetter f p = (x', x) then
         fibGSymbol (fibBondLetter f q).1 x' x (fibBondLetter f q).2 1 f *
           ((Real.sqrt (fibLoopFactor (fibBondLetter f q).1 * fibLoopFactor x' *
@@ -230,7 +230,7 @@ theorem fibTauGolden_apply_eq_fSymbol (x' x : Fin 2) (p q : Fin 3) :
 `[F^{f x τ}_{a}]_{x'}^{d}` at the letter `(x', x)` and the bond letters `p = (x', x)`,
 `q = (a, d)`, and zero when `p ≠ (x', x)`. -/
 theorem fibBlock_apply_eq_fSymbol (f x' x : Fin 2) (p q : Fin (fibBlockDim f)) :
-    fibBlock f x' x p q =
+    fibBlock f (x', x) p q =
       if fibBondLetter f p = (x', x) then
         goldenToComplex (fibFSymbolGolden f x 1 (fibBondLetter f q).1 x' (fibBondLetter f q).2)
       else 0 := by
@@ -259,8 +259,8 @@ letter of the F-symbol block: `h S^{x'x} h⁻¹ = B_f^{x'x}`. The G-symbol is mo
 F-symbol slots of `fibBlock_eq_fSymbol` by the tetrahedral symmetry, and the factors
 `√(v_a v_b v_c v_d)/(v_{x'} v_d)` are absorbed by `h`. -/
 theorem fibStringNetEdgeTau_conj (f x' x : Fin 2) :
-    Matrix.diagonal (fibStringNetGauge f) * fibStringNetEdgeTau f x' x *
-        Matrix.diagonal (fibStringNetGauge f)⁻¹ = fibBlock f x' x := by
+    Matrix.diagonal (fibStringNetGauge f) * fibStringNetEdgeTau f (x', x) *
+        Matrix.diagonal (fibStringNetGauge f)⁻¹ = fibBlock f (x', x) := by
   ext p q
   rw [Matrix.mul_diagonal, Matrix.diagonal_mul, fibStringNetEdgeTau_apply,
     fibBlock_apply_eq_fSymbol]
@@ -359,10 +359,10 @@ def fibTauFullGolden : Fin 4 → Fin 4 → Matrix (Fin 3) (Fin 3) GoldenInt :=
   fibEdgeGraded fibTauGolden (fibEdgeOneGolden fibLetter)
 
 /-- The trivial block on the four physical letters. -/
-def fibOneFull : MPOTensor 4 2 := fun i j => complexOfGolden (fibOneFullGolden i j)
+def fibOneFull : MPOTensor 4 2 := Function.uncurry fun i j => complexOfGolden (fibOneFullGolden i j)
 
 /-- The `τ` block on the four physical letters. -/
-def fibTauFull : MPOTensor 4 3 := fun i j => complexOfGolden (fibTauFullGolden i j)
+def fibTauFull : MPOTensor 4 3 := Function.uncurry fun i j => complexOfGolden (fibTauFullGolden i j)
 
 /-- The F-symbol blocks `B_1`, `B_τ` extended to the four physical letters (plaquette, edge
 label): at edge label `τ` their letters are those of `fibBlock`, at edge label `1` the diagonal
@@ -373,7 +373,7 @@ def fibBlockFull : (f : Fin 2) → MPOTensor 4 (fibBlockDim f)
 
 /-- At edge label `τ` the extended blocks are the F-symbol blocks. -/
 theorem fibBlockFull_edgeTau (f x' x : Fin 2) :
-    fibBlockFull f (fibEdgeTauLetter x') (fibEdgeTauLetter x) = fibBlock f x' x := by
+    fibBlockFull f (fibEdgeTauLetter x', fibEdgeTauLetter x) = fibBlock f (x', x) := by
   fin_cases f
   · exact congrArg complexOfGolden (fibEdgeGraded_edgeTau _ _ x' x)
   · exact congrArg complexOfGolden (fibEdgeGraded_edgeTau _ _ x' x)
@@ -391,7 +391,7 @@ theorem goldenToComplex_fibEdgeOneGolden {D : ℕ} (bond : Fin D → Fin 2 × Fi
 
 /-- The entries of the extended blocks at edge label `1`. -/
 theorem fibBlockFull_edgeOne_apply (f x' x : Fin 2) (p q : Fin (fibBlockDim f)) :
-    fibBlockFull f (fibEdgeOneLetter x') (fibEdgeOneLetter x) p q =
+    fibBlockFull f (fibEdgeOneLetter x', fibEdgeOneLetter x) p q =
       if p = q ∧ fibBondLetter f p = (x', x) then 1 else 0 := by
   match f, p, q with
   | 0, p, q =>
@@ -405,7 +405,7 @@ theorem fibBlockFull_edgeOne_apply (f x' x : Fin 2) (p q : Fin (fibBlockDim f)) 
 
 /-- The extended blocks vanish when the edge label changes. -/
 theorem fibBlockFull_edgeOne_edgeTau (f x' x : Fin 2) :
-    fibBlockFull f (fibEdgeOneLetter x') (fibEdgeTauLetter x) = 0 := by
+    fibBlockFull f (fibEdgeOneLetter x', fibEdgeTauLetter x) = 0 := by
   have h0 : ∀ D : ℕ, complexOfGolden (0 : Matrix (Fin D) (Fin D) GoldenInt) = 0 := fun _ => by
     ext
     exact map_zero goldenToComplex
@@ -414,7 +414,7 @@ theorem fibBlockFull_edgeOne_edgeTau (f x' x : Fin 2) :
   | 1 => exact (congrArg complexOfGolden (fibEdgeGraded_edgeOne_edgeTau _ _ x' x)).trans (h0 _)
 
 theorem fibBlockFull_edgeTau_edgeOne (f x' x : Fin 2) :
-    fibBlockFull f (fibEdgeTauLetter x') (fibEdgeOneLetter x) = 0 := by
+    fibBlockFull f (fibEdgeTauLetter x', fibEdgeOneLetter x) = 0 := by
   have h0 : ∀ D : ℕ, complexOfGolden (0 : Matrix (Fin D) (Fin D) GoldenInt) = 0 := fun _ => by
     ext
     exact map_zero goldenToComplex
@@ -442,9 +442,9 @@ they are the diagonal matrix units of `fibBlockFull`: by the selection rule
 `G^{bbc}_{c1f} v_b v_c = 1` whenever `(b, c)` is a bond letter of the block `f`. -/
 theorem fibStringNetTensor_edgeOne_conj (f b c : Fin 2) :
     Matrix.diagonal (fibStringNetGauge f) *
-        fibStringNetTensor f (fibEdgeOneLetter b) (fibEdgeOneLetter c) *
+        fibStringNetTensor f (fibEdgeOneLetter b, fibEdgeOneLetter c) *
         Matrix.diagonal ((fibStringNetGauge f)⁻¹) =
-      fibBlockFull f (fibEdgeOneLetter b) (fibEdgeOneLetter c) := by
+      fibBlockFull f (fibEdgeOneLetter b, fibEdgeOneLetter c) := by
   ext p q
   rw [Matrix.mul_diagonal, Matrix.diagonal_mul, fibBlockFull_edgeOne_apply]
   simp only [fibStringNetTensor, Matrix.of_apply, fibSiteLetter_fibEdgeOneLetter, true_and,
@@ -471,8 +471,8 @@ theorem fibStringNetTensor_edgeOne_conj (f b c : Fin 2) :
 source's tensor (arXiv:1511.08090, `AnyonsPEPS.tex` lines 1262–1265), at both edge labels, to
 the letter of the extended F-symbol block: `h S_f^{ij} h⁻¹ = B_f^{ij}`. -/
 theorem fibStringNetTensor_conj (f : Fin 2) (i j : Fin 4) :
-    Matrix.diagonal (fibStringNetGauge f) * fibStringNetTensor f i j *
-        Matrix.diagonal ((fibStringNetGauge f)⁻¹) = fibBlockFull f i j := by
+    Matrix.diagonal (fibStringNetGauge f) * fibStringNetTensor f (i, j) *
+        Matrix.diagonal ((fibStringNetGauge f)⁻¹) = fibBlockFull f (i, j) := by
   rcases exists_fibEdgeOneLetter_or_fibEdgeTauLetter i with ⟨x', rfl⟩ | ⟨x', rfl⟩ <;>
     rcases exists_fibEdgeOneLetter_or_fibEdgeTauLetter j with ⟨x, rfl⟩ | ⟨x, rfl⟩
   · exact fibStringNetTensor_edgeOne_conj f x' x
@@ -502,7 +502,7 @@ plaquette `C = x`, the left bond letter `p` and the right bond letter `q = (B, D
 the source's `fibFSymbolGolden`, with the selection rule `δ_{abe} δ_{cde} δ_{adf} δ_{bcf}` of
 `AnyonsPEPS.tex` lines 1245–1257, in place of the rule printed at `TN-Review-main.tex` line 2623
 (the Local fix of the module header). -/
-def fibReviewTensor (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun x' x =>
+def fibReviewTensor (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun (x', x) =>
   Matrix.of fun p q =>
     if fibBondLetter f p = (x', x) then
       (((Real.sqrt (fibDim x' * fibDim (fibBondLetter f q).2))⁻¹ : ℝ) : ℂ) *
@@ -521,9 +521,9 @@ def fibReviewWeight (L : ℕ) : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ :
 scalar. -/
 theorem fibReviewTensor_conj (f x' x : Fin 2) :
     Matrix.diagonal (fun p => (fibLoopFactor (fibBondLetter f p).2 : ℂ)⁻¹) *
-        fibReviewTensor f x' x *
+        fibReviewTensor f (x', x) *
         Matrix.diagonal (fun p => (fibLoopFactor (fibBondLetter f p).2 : ℂ)⁻¹)⁻¹ =
-      ((fibLoopFactor x' : ℂ)⁻¹ * (fibLoopFactor x : ℂ)⁻¹) • fibBlock f x' x := by
+      ((fibLoopFactor x' : ℂ)⁻¹ * (fibLoopFactor x : ℂ)⁻¹) • fibBlock f (x', x) := by
   ext p q
   rw [Matrix.mul_diagonal, Matrix.diagonal_mul, Matrix.smul_apply, fibBlock_apply_eq_fSymbol]
   simp only [fibReviewTensor, Matrix.of_apply, Pi.inv_apply]
@@ -548,8 +548,9 @@ theorem fibReviewTensor_conj (f x' x : Fin 2) :
 `W^{-1/2} = diag ∏_k d_{x_k}^{-1/2}`. -/
 theorem mpo_fibReviewTensor (f : Fin 2) (L : ℕ) :
     mpo (fibReviewTensor f) L = fibReviewWeight L * mpo (fibBlock f) L * fibReviewWeight L := by
-  rw [mpo_eq_of_diagonal_conj _ (fun _ => fibLoopFactor_complex_inv_ne_zero _)
-    (fibReviewTensor_conj f) L]
+  rw [mpo_eq_of_diagonal_conj (N := Function.uncurry fun x' x =>
+      (fun x' x => (fibLoopFactor x' : ℂ)⁻¹ * (fibLoopFactor x : ℂ)⁻¹) x' x • fibBlock f (x', x))
+    _ (fun _ => fibLoopFactor_complex_inv_ne_zero _) (fibReviewTensor_conj f) L]
   ext σ τ
   rw [mpo_letterwise_smul, fibReviewWeight, Matrix.mul_diagonal, Matrix.diagonal_mul,
     Finset.prod_mul_distrib]
@@ -557,7 +558,7 @@ theorem mpo_fibReviewTensor (f : Fin 2) (L : ℕ) :
 
 /-- The periodic operator of a tensor on one site is the trace of its letter. -/
 private theorem mpo_one_apply {D : ℕ} (M : MPOTensor 2 D) (σ τ : Fin 1 → Fin 2) :
-    mpo M 1 σ τ = Matrix.trace (M (σ 0) (τ 0)) := by
+    mpo M 1 σ τ = Matrix.trace (M (σ 0, τ 0)) := by
   simp [mpoMatrixEntry]
 
 /-- Project result: the review's prefactored operators (arXiv:2011.12127, `TN-Review-main.tex`
@@ -579,7 +580,7 @@ theorem not_isMPOFusionAlgebra_fibReviewTensor :
     simp only [Fin.prod_univ_one]
     generalize σ 0 = a
     generalize ρ 0 = b
-    change (fibLoopFactor a : ℂ)⁻¹ * Matrix.trace (fibOne a b) * (fibLoopFactor b : ℂ)⁻¹ = _
+    change (fibLoopFactor a : ℂ)⁻¹ * Matrix.trace (fibOne (a, b)) * (fibLoopFactor b : ℂ)⁻¹ = _
     have hd0 : (fibLoopFactor 0 : ℂ)⁻¹ = 1 := by simp [fibLoopFactor, fibDim]
     have hd1 : (fibLoopFactor 1 : ℂ)⁻¹ * (fibLoopFactor 1 : ℂ)⁻¹ =
         ((Real.goldenRatio : ℝ) : ℂ)⁻¹ := by
@@ -603,8 +604,8 @@ theorem not_isMPOFusionAlgebra_fibReviewTensor :
 
 /-- The review's tensor with the letterwise factor `d_x` of the incoming plaquette, whose
 periodic operator is `O_f^{rev} W`. -/
-def fibReviewWeightedTensor (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun x' x =>
-  ((fibDim x : ℝ) : ℂ) • fibReviewTensor f x' x
+def fibReviewWeightedTensor (f : Fin 2) : MPOTensor 2 (fibBlockDim f) := fun (x', x) =>
+  ((fibDim x : ℝ) : ℂ) • fibReviewTensor f (x', x)
 
 /-- Project result: the review's operators become a Fibonacci fusion algebra after multiplying
 by `W` on the right, `O_f^{rev} W = W^{-1/2} O_f W^{1/2}`, which is similar to the operator of
@@ -625,8 +626,8 @@ theorem isMPOFusionAlgebra_fibReviewWeightedTensor :
     change (fibLoopFactor x : ℂ) ^ 2 * _ = _
     field_simp
   have hmpo := congrFun (congrFun (mpo_fibReviewTensor a L) σ) τ
-  rw [show fibReviewWeightedTensor a = fun i j =>
-      (fun _ x => ((fibDim x : ℝ) : ℂ)) i j • fibReviewTensor a i j from rfl,
+  rw [show fibReviewWeightedTensor a = Function.uncurry fun i j =>
+      (fun _ x => ((fibDim x : ℝ) : ℂ)) i j • fibReviewTensor a (i, j) from rfl,
     mpo_letterwise_smul, hmpo]
   simp only [fibReviewWeight, Matrix.mul_diagonal, Matrix.diagonal_mul, Pi.inv_apply]
   have hprod : (∏ k, ((fibDim (τ k) : ℝ) : ℂ)) * ∏ k, (fibLoopFactor (τ k) : ℂ)⁻¹ =

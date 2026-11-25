@@ -137,7 +137,7 @@ omit [Fintype Λ] [DecidableEq Λ] in
 /-- The pair letter of the product is the corresponding letter of the product tensor, read on
 the product bond space. -/
 private theorem pairLetter_apply (a b : Λ) (i k : Fin p) (x x' : Fin (D a) × Fin (D b)) :
-    (∑ j : Fin p, T a i j ⊗ₖ T b j k) x x' =
+    (∑ j : Fin p, T a (i, j) ⊗ₖ T b (j, k)) x x' =
       (mulTensor (T a) (T b)).toMPSTensor (finProdFinEquiv (i, k))
         (finProdFinEquiv x) (finProdFinEquiv x') := by
   simp [MPOTensor.toMPSTensor, mulTensor_apply, Matrix.submatrix_apply]
@@ -148,9 +148,9 @@ the product is the sum of its compressed blocks, equation `inversegaugeone`.
 Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 181--191. -/
 theorem pairLetter_eq_compressionSynthesis_mul {a b : Λ} (P : PairCompression T N a b)
     (hP : P.remainder = 0) (i k : Fin p) :
-    (∑ j : Fin p, T a i j ⊗ₖ T b j k) =
+    (∑ j : Fin p, T a (i, j) ⊗ₖ T b (j, k)) =
       compressionSynthesis P * Matrix.blockDiagonal' (fun c =>
-        (1 : Matrix (Fin (N a b c)) (Fin (N a b c)) ℂ) ⊗ₖ T c i k) *
+        (1 : Matrix (Fin (N a b c)) (Fin (N a b c)) ℂ) ⊗ₖ T c (i, k)) *
         compressionAnalysis P := by
   have hrec := congrFun hP (finProdFinEquiv (i, k))
   simp only [MPSTensor.MultiBlockCompression.remainder, Pi.zero_apply, sub_eq_zero] at hrec
@@ -190,7 +190,7 @@ noncomputable def ofCompression (hD : ∀ a, 0 < D a)
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0)
     (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ)
     (hK : ∀ (c d : Λ) (x y : Fin (D c)) (x' y' : Fin (D d)),
-      (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d i k x' y') =
+      (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d (i, k) x' y') =
         if h : c = d then
           if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
         else 0) :
@@ -272,7 +272,7 @@ noncomputable def ofStar (hD : ∀ a, 0 < D a)
       Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)).toMPSTensor))
     (K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c))) (Fin p × Fin p) ℂ)
     (hK : ∀ (c d : Λ) (x y : Fin (D c)) (x' y' : Fin (D d)),
-      (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d i k x' y') =
+      (∑ i : Fin p, ∑ k : Fin p, K ⟨c, x, y⟩ (i, k) * T d (i, k) x' y') =
         if h : c = d then
           if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
         else 0) :

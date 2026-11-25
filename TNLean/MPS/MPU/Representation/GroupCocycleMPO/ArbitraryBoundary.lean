@@ -68,14 +68,14 @@ The first physical index is the output row, the second the input column.
 
 Source: arXiv:2203.12563, lines 2005–2024. -/
 def boundaryTensor (ω : ScalarThreeCochain G) (g : G) : MPOTensor (n * n) n :=
-  fun i j ↦ Matrix.of fun k l ↦
+  fun (i, j) ↦ Matrix.of fun k l ↦
     if j = finProdFinEquiv (k, l) ∧ i = finProdFinEquiv (siteShift e g k, siteShift e g l) then
       (ω g (e.symm l) ((e.symm l)⁻¹ * e.symm k) : ℂ)
     else 0
 
 theorem boundaryTensor_apply (ω : ScalarThreeCochain G) (g : G) (i j : Fin (n * n))
     (k l : Fin n) :
-    boundaryTensor e ω g i j k l =
+    boundaryTensor e ω g (i, j) k l =
       if j = finProdFinEquiv (k, l) ∧ i = finProdFinEquiv (siteShift e g k, siteShift e g l) then
         (ω g (e.symm l) ((e.symm l)⁻¹ * e.symm k) : ℂ)
       else 0 := rfl
@@ -159,7 +159,7 @@ theorem mpo_boundaryTensor (ω : ScalarThreeCochain G) (g : G) :
     mpo (boundaryTensor e ω g) N =
       halfSiteEmbedding n N * mpo (tensor e ω g) N * (halfSiteEmbedding n N)ᴴ := by
   have key : ∀ (s t : Fin N → Fin (n * n)) (b : Fin N → Fin n),
-      ∏ i, boundaryTensor e ω g (s i) (t i) (b i) (b (i + 1)) =
+      ∏ i, boundaryTensor e ω g (s i, t i) (b i) (b (i + 1)) =
         if t = halfSiteConfig b ∧ s = halfSiteConfig (shift e g N b) then
           ∏ i, (ω g (e.symm (b (i + 1))) ((e.symm (b (i + 1)))⁻¹ * e.symm (b i)) : ℂ)
         else 0 := fun s t b ↦ by

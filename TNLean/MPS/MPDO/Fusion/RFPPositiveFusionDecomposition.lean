@@ -302,16 +302,16 @@ theorem exists_positiveFusionDecomposition_of_isRFPViaTS
         (∀ (α β : Fin g) (i j : Fin D),
           U α β *
               (mulTensor (verticalBNTMPO (A α))
-                (verticalBNTMPO (A β))) i j *
+                (verticalBNTMPO (A β))) (i, j) *
               (U α β)ᴴ =
             Matrix.blockDiagonal' fun γ ↦
-              chi.matrix α β γ ⊗ₖ verticalBNTMPO (A γ) i j) ∧
+              chi.matrix α β γ ⊗ₖ verticalBNTMPO (A γ) (i, j)) ∧
         ∀ (α β : Fin g) (i j : Fin D),
           (mulTensor (verticalBNTMPO (A α))
-            (verticalBNTMPO (A β))) i j =
+            (verticalBNTMPO (A β))) (i, j) =
             (U α β)ᴴ *
               (Matrix.blockDiagonal' fun γ ↦
-                chi.matrix α β γ ⊗ₖ verticalBNTMPO (A γ) i j) *
+                chi.matrix α β γ ⊗ₖ verticalBNTMPO (A γ) (i, j)) *
               U α β := by
   classical
   obtain ⟨D₁⟩ := (hHorizontal.hasVerticalBNTGroupingInputs M hM).exists_cpsvVerticalDecomposition

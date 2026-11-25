@@ -84,7 +84,7 @@ noncomputable def TwoSiteStandardFormData.transpositionPhaseDeformation
   v_apply := S.v_apply
   W_apply := by
     intro i j α γ
-    change transpositionPhaseScalar φ t * W i j α γ = _
+    change transpositionPhaseScalar φ t * W (i, j) α γ = _
     rw [S.W_apply, Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro l _

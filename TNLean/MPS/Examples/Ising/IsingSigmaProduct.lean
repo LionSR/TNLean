@@ -49,11 +49,11 @@ open MPSTensor Zsqrtd
 
 /-- Every complex letter of `Â_σ = √2 A_σ` is a scaled matrix unit. -/
 theorem isingSigma_eq_smul_single (h h' : Fin 10) :
-    isingSigma h h' = zsqrt2ToComplex (isingSigmaCoefZ h h') •
+    isingSigma (h, h') = zsqrt2ToComplex (isingSigmaCoefZ h h') •
       Matrix.single (isingSigmaRow h h') (isingSigmaCol h h') 1 := by
   ext a b
   simp only [isingSigma, isingSigmaZ_eq_smul_single h h', complexOfZsqrt2_apply,
-    Matrix.smul_apply, Matrix.single_apply, smul_eq_mul]
+    Matrix.smul_apply, Matrix.single_apply, smul_eq_mul, Function.uncurry_apply_pair]
   split_ifs <;> simp
 
 /-- At the input label `6 = (σ,1,σ)` a letter of `Â_σ` is nonzero only at the outputs `0`

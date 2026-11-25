@@ -240,8 +240,8 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_gauge_of_mpo_eq
     (hEq : ∀ N : ℕ, 1 < N → mpo U N = mpo V N) :
     ∃ hdim : D₁ = D₂, ∃ z : Matrix.unitaryGroup (Fin D₂) ℂ,
       ∀ i j : Fin d,
-        V i j = (z : Matrix (Fin D₂) (Fin D₂) ℂ) *
-          (cast (congrArg (MPOTensor d) hdim) U) i j *
+        V (i, j) = (z : Matrix (Fin D₂) (Fin D₂) ℂ) *
+          (cast (congrArg (MPOTensor d) hdim) U) (i, j) *
           (z : Matrix (Fin D₂) (Fin D₂) ℂ)ᴴ := by
   let : NeZero d := hU.neZero_phys
   let : NeZero D₁ := hU.neZero_bond
@@ -301,8 +301,8 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
     (hEq : ∀ N : ℕ, 1 < N → Even N → mpo U N = mpo V N) :
     ∃ (hdim : D₁ = D₂) (η : ℂ) (z : Matrix.unitaryGroup (Fin D₂) ℂ),
       (η = 1 ∨ η = -1) ∧ ∀ i j : Fin d,
-        V i j = η • ((z : Matrix (Fin D₂) (Fin D₂) ℂ) *
-          (cast (congrArg (MPOTensor d) hdim) U) i j *
+        V (i, j) = η • ((z : Matrix (Fin D₂) (Fin D₂) ℂ) *
+          (cast (congrArg (MPOTensor d) hdim) U) (i, j) *
           (z : Matrix (Fin D₂) (Fin D₂) ℂ)ᴴ) := by
   let : NeZero d := hU.neZero_phys
   let : NeZero D₁ := hU.neZero_bond

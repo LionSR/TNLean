@@ -40,21 +40,21 @@ variable {d : ℕ}
 private theorem mapStar_tensorProduct {d₁ d₂ D₁ D₂ : ℕ} (A : MPOTensor d₁ D₁)
     (B : MPOTensor d₂ D₂) :
     mapStar (tensorProduct A B) = tensorProduct (mapStar A) (mapStar B) := by
-  funext i j
+  funext ⟨i, j⟩
   simp only [mapStar, tensorProduct]
   rw [show ∀ M : Matrix _ _ ℂ, (reindex finProdFinEquiv finProdFinEquiv M).map (starRingEnd ℂ) =
       reindex finProdFinEquiv finProdFinEquiv (M.map (starRingEnd ℂ)) from fun _ ↦ rfl,
     map_star_kronecker]
 
 private theorem mapStar_rightShiftTensor : mapStar (rightShiftTensor d) = rightShiftTensor d := by
-  funext i j
+  funext ⟨i, j⟩
   ext α β
   simp only [mapStar, map_apply, rightShiftTensor_apply]
   split_ifs <;> simp
 
 private theorem mapStar_physicalAdjointTensor {D : ℕ} (K : MPOTensor d D) :
     mapStar (physicalAdjointTensor K) = physicalAdjointTensor (mapStar K) := by
-  funext i j
+  funext ⟨i, j⟩
   ext α β
   simp [mapStar, physicalAdjointTensor]
 
@@ -63,7 +63,7 @@ private theorem mapStar_leftShiftTensor : mapStar (leftShiftTensor d) = leftShif
 
 private theorem mapStar_identityMPUTensor :
     mapStar (identityMPUTensor d) = identityMPUTensor d := by
-  funext i j
+  funext ⟨i, j⟩
   simp only [mapStar, identityMPUTensor, idTensor]
   split_ifs <;> simp
 
@@ -111,7 +111,7 @@ theorem shiftExampleU₃_canonicalFormII (d : ℕ) [NeZero d] :
 
 /-- Entries of `U₁`: the identity on each physical pair, with bond dimension one. -/
 theorem shiftExampleU₁_apply (a b : Fin (d * d)) :
-    shiftExampleU₁ d a b = if a = b then 1 else 0 := by
+    shiftExampleU₁ d (a, b) = if a = b then 1 else 0 := by
   obtain ⟨⟨a₁, a₂⟩, rfl⟩ := finProdFinEquiv.surjective a
   obtain ⟨⟨b₁, b₂⟩, rfl⟩ := finProdFinEquiv.surjective b
   ext α β

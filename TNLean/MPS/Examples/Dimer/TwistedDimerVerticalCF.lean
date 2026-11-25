@@ -169,12 +169,12 @@ theorem verticalCoisometry_conj (M : Matrix (Fin 8) (Fin 8) ℂ) (x y : Retained
 /-! ### The conjugated vertical letters -/
 
 /-- The letter of `T` between physical indices with different flags vanishes. -/
-lemma T_apply_eq_zero_of_bitF_ne {i j : Fin 8} (h : bitF i ≠ bitF j) : T i j = 0 := by
+lemma T_apply_eq_zero_of_bitF_ne {i j : Fin 8} (h : bitF i ≠ bitF j) : T (i, j) = 0 := by
   simp [T, coef, h]
 
 /-- The letter of a flag sector at an explicitly paired bond index. -/
 lemma flagFamily_finProdFinEquiv (f : Fin 2) (a b : Fin 8) :
-    flagFamily f (finProdFinEquiv (a, b)) = flagMPO f a b := by
+    flagFamily f (finProdFinEquiv (a, b)) = flagMPO f (a, b) := by
   unfold flagFamily MPOTensor.toMPSTensor
   rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
@@ -199,7 +199,7 @@ theorem verticalCoisometry_conj_verticalTensor (v : Fin (8 * 8)) :
   by_cases hf : f = f'
   · subst hf
     rw [sectorCoord_apply, sectorCoord_apply, verticalAssembledTensor_apply_copy_same]
-    have hv : flagFamily f v = flagMPO f v.divNat v.modNat := rfl
+    have hv : flagFamily f v = flagMPO f (v.divNat, v.modNat) := rfl
     rw [hv, flagMPO_apply_eq_T]
     simp only [sectorWeight]
     have hmu : ((mu : ℝ) : ℂ) ≠ 0 := by norm_num [mu]

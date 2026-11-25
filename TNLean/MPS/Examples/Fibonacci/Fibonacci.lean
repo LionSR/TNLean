@@ -145,10 +145,10 @@ def fibOneGolden : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) GoldenInt
   | _, _ => 0
 
 /-- The `τ` block as a matrix product operator tensor. -/
-def fibTau : MPOTensor 2 3 := fun i j => complexOfGolden (fibTauGolden i j)
+def fibTau : MPOTensor 2 3 := Function.uncurry fun i j => complexOfGolden (fibTauGolden i j)
 
 /-- The trivial block as a matrix product operator tensor. -/
-def fibOne : MPOTensor 2 2 := fun i j => complexOfGolden (fibOneGolden i j)
+def fibOne : MPOTensor 2 2 := Function.uncurry fun i j => complexOfGolden (fibOneGolden i j)
 
 /-- The `τ` block read as a tensor over the pair alphabet `Fin 4`. -/
 def fibTauMPS : MPSTensor 4 3 := fibTau.toMPSTensor

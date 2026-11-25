@@ -73,7 +73,8 @@ def czyReducedIntTensor : Fin 2 → Fin 2 → Matrix (Fin 3) (Fin 3) ℤ
 
 /-- The tensor `A_0` as a matrix product operator tensor (arXiv:2509.03600, main.tex
 lines 223–239). -/
-def czyReducedTensor : MPOTensor 2 3 := fun i j => complexOfInt (czyReducedIntTensor i j)
+def czyReducedTensor : MPOTensor 2 3 :=
+    Function.uncurry fun i j => complexOfInt (czyReducedIntTensor i j)
 
 /-- The integer matrices of `A_0` in the pair-alphabet order `(0,0), (0,1), (1,0), (1,1)`. -/
 def czyReducedIntMPS : Fin 4 → Matrix (Fin 3) (Fin 3) ℤ
@@ -351,11 +352,12 @@ theorem czyY00Int_fusion (i k : Fin 2) :
 /-- **The one-sided fusion identity** `Y_{0,0} (∑_j A_0^{ij} ⊗ A_0^{jk}) = A_0^{ik} Y_{0,0}`
 (arXiv:2509.03600, main.tex lines 249–253, with `Y_{0,0}` from lines 700–714). -/
 theorem czyY00_fusion (i k : Fin 2) :
-    complexOfInt czyY00Int * MPOTensor.mulTensor czyReducedTensor czyReducedTensor i k =
-      czyReducedTensor i k * complexOfInt czyY00Int := by
-  rw [show MPOTensor.mulTensor czyReducedTensor czyReducedTensor i k =
+    complexOfInt czyY00Int * MPOTensor.mulTensor czyReducedTensor czyReducedTensor (i, k) =
+      czyReducedTensor (i, k) * complexOfInt czyY00Int := by
+  rw [show MPOTensor.mulTensor czyReducedTensor czyReducedTensor (i, k) =
       complexOfInt (mulIntTensor czyReducedIntTensor czyReducedIntTensor i k) from
     mulTensor_complexOfRing _ czyReducedIntTensor czyReducedIntTensor i k,
-    czyReducedTensor, ← complexOfInt_mul, ← complexOfInt_mul, czyY00Int_fusion]
+    czyReducedTensor, Function.uncurry_apply_pair, ← complexOfInt_mul, ← complexOfInt_mul,
+    czyY00Int_fusion]
 
 end CZYCompression

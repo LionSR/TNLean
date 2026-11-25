@@ -39,7 +39,7 @@ Source: arXiv:1703.09188, Definition III.2, equations `simple1` and `simple2`, l
 the reduction is the one used for chapter Example 4.9 (next-nearest-neighbour controlled-\(Z\)). -/
 theorem isMPUSimple_of_rankOne_diagonal {U : MPOTensor d D} (X Y : Fin d → Fin (D * D) → ℂ)
     (a b : Fin (D * D) → ℂ)
-    (hW : ∀ i j, doubleLayerTensor U i j = if i = j then vecMulVec (X i) (Y i) else 0)
+    (hW : ∀ i j, doubleLayerTensor U (i, j) = if i = j then vecMulVec (X i) (Y i) else 0)
     (hYX : ∀ i k, Y i ⬝ᵥ X k = (Y i ⬝ᵥ b) * (a ⬝ᵥ X k))
     (hab : ∀ i, (a ⬝ᵥ X i) * (Y i ⬝ᵥ b) = 1) :
     IsMPUSimple U := by

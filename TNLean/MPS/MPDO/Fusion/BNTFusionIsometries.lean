@@ -160,9 +160,9 @@ structure BNTFusionIsometryFamily (Λ : Type*) [Fintype Λ] [DecidableEq Λ]
   Source: arXiv:1606.00608, Theorem IV.13(iii), label Ualphabeta,
   lines 986--993 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
   fusion : ∀ (α β : Λ) (i j : Fin p),
-    fusionIsometry α β * (mulTensor (tensor α) (tensor β)) i j *
+    fusionIsometry α β * (mulTensor (tensor α) (tensor β)) (i, j) *
         (fusionIsometry α β)ᴴ =
-      Matrix.blockDiagonal' fun γ => chi.matrix α β γ ⊗ₖ tensor γ i j
+      Matrix.blockDiagonal' fun γ => chi.matrix α β γ ⊗ₖ tensor γ (i, j)
 
 namespace BNTFusionIsometryFamily
 
@@ -201,16 +201,16 @@ multiplicities is asserted here.
 Source: arXiv:1606.00608, Theorem IV.13(iii), equation `Ualphabeta`; arXiv:1511.08090,
 Section ``Fusion tensors'', equations `inversegaugeone` and `zippercondition2`. -/
 theorem fusionIsometry_mul_mulTensor (α β : Λ) (i j : Fin p) :
-    Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j =
+    Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) =
       (Matrix.blockDiagonal' fun γ =>
-        Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j) * Fam.fusionIsometry α β := by
+        Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (i, j)) * Fam.fusionIsometry α β := by
   calc
-    Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j =
-        (Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j *
+    Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) =
+        (Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) *
           (Fam.fusionIsometry α β)ᴴ) * Fam.fusionIsometry α β := by
       rw [Matrix.mul_assoc, Fam.isometry, Matrix.mul_one]
     _ = (Matrix.blockDiagonal' fun γ =>
-        Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j) * Fam.fusionIsometry α β := by
+        Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (i, j)) * Fam.fusionIsometry α β := by
       rw [Fam.fusion]
 
 /-- **A product letter carries the adjoint fusion map to its weighted direct sum.**
@@ -234,19 +234,19 @@ separation remain necessary.
 Source: arXiv:1606.00608, Theorem IV.13(iii), equation `Ualphabeta`; arXiv:1511.08090,
 Section ``Fusion tensors'', equations `inversegaugeone` and `zippercondition2`. -/
 theorem mulTensor_mul_fusionIsometry_conjTranspose (α β : Λ) (i j : Fin p) :
-    mulTensor (Fam.tensor α) (Fam.tensor β) i j * (Fam.fusionIsometry α β)ᴴ =
+    mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) * (Fam.fusionIsometry α β)ᴴ =
       (Fam.fusionIsometry α β)ᴴ *
         Matrix.blockDiagonal' fun γ =>
-          Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j := by
+          Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (i, j) := by
   calc
-    mulTensor (Fam.tensor α) (Fam.tensor β) i j * (Fam.fusionIsometry α β)ᴴ =
+    mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) * (Fam.fusionIsometry α β)ᴴ =
         (Fam.fusionIsometry α β)ᴴ *
-          (Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j *
+          (Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) *
             (Fam.fusionIsometry α β)ᴴ) := by
       rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, Fam.isometry, Matrix.one_mul]
     _ = (Fam.fusionIsometry α β)ᴴ *
         Matrix.blockDiagonal' fun γ =>
-          Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j := by
+          Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (i, j) := by
       rw [Fam.fusion]
 
 /-- **The length-independent left zipper identity.**
@@ -266,10 +266,10 @@ theorem fusionIsometry_mul_mulTensor_of_lengthIndependent
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) (α β : Λ) (i j : Fin p) :
-    Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j =
+    Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) =
       (Matrix.blockDiagonal' fun γ =>
         (1 : Matrix (Fin (Fam.chi.dim α β γ))
-          (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ Fam.tensor γ i j) *
+          (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ Fam.tensor γ (i, j)) *
         Fam.fusionIsometry α β := by
   rw [Fam.fusionIsometry_mul_mulTensor]
   simp_rw [Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI]
@@ -292,11 +292,11 @@ theorem mulTensor_mul_fusionIsometry_conjTranspose_of_lengthIndependent
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) (α β : Λ) (i j : Fin p) :
-    mulTensor (Fam.tensor α) (Fam.tensor β) i j * (Fam.fusionIsometry α β)ᴴ =
+    mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) * (Fam.fusionIsometry α β)ᴴ =
       (Fam.fusionIsometry α β)ᴴ *
         Matrix.blockDiagonal' fun γ =>
           (1 : Matrix (Fin (Fam.chi.dim α β γ))
-            (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ Fam.tensor γ i j := by
+            (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ Fam.tensor γ (i, j) := by
   rw [Fam.mulTensor_mul_fusionIsometry_conjTranspose]
   simp_rw [Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI]
 
@@ -319,26 +319,26 @@ theorem mulTensor_eq_conjTranspose_mul_unweightedDirectSum_mul_of_lengthIndepend
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) (α β : Λ) (i j : Fin p) :
-    mulTensor (Fam.tensor α) (Fam.tensor β) i j =
+    mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) =
       (Fam.fusionIsometry α β)ᴴ *
         (Matrix.blockDiagonal' fun γ =>
           (1 : Matrix (Fin (Fam.chi.dim α β γ))
-            (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ Fam.tensor γ i j) *
+            (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ Fam.tensor γ (i, j)) *
         Fam.fusionIsometry α β := by
   calc
-    mulTensor (Fam.tensor α) (Fam.tensor β) i j =
+    mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) =
         ((Fam.fusionIsometry α β)ᴴ * Fam.fusionIsometry α β) *
-          mulTensor (Fam.tensor α) (Fam.tensor β) i j *
+          mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) *
           ((Fam.fusionIsometry α β)ᴴ * Fam.fusionIsometry α β) := by
       rw [Fam.isometry, Matrix.one_mul, Matrix.mul_one]
     _ = (Fam.fusionIsometry α β)ᴴ *
-        (Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j *
+        (Fam.fusionIsometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) *
           (Fam.fusionIsometry α β)ᴴ) * Fam.fusionIsometry α β := by
       simp only [Matrix.mul_assoc]
     _ = (Fam.fusionIsometry α β)ᴴ *
         (Matrix.blockDiagonal' fun γ =>
           (1 : Matrix (Fin (Fam.chi.dim α β γ))
-            (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ Fam.tensor γ i j) *
+            (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ Fam.tensor γ (i, j)) *
         Fam.fusionIsometry α β := by
       rw [Fam.fusion]
       simp_rw [Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI]
@@ -361,18 +361,18 @@ theorem mpo_mul_mpo_eq_sum (L : ℕ) (hL : 0 < L) (α β : Λ) :
   set U := Fam.fusionIsometry α β with hUdef
   have hUiso : Uᴴ * U = 1 := Fam.isometry α β
   have hletters : (fun l : Fin (n + 1) =>
-      U * mulTensor (Fam.tensor α) (Fam.tensor β) (σ l) (τ l) * Uᴴ) =
+      U * mulTensor (Fam.tensor α) (Fam.tensor β) (σ l, τ l) * Uᴴ) =
       fun l => Matrix.blockDiagonal'
-        fun γ => Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (σ l) (τ l) := by
+        fun γ => Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (σ l, τ l) := by
     funext l
     exact Fam.fusion α β (σ l) (τ l)
   have hconj := listProd_conj_of_conjTranspose_mul_self U hUiso
-    (fun l => mulTensor (Fam.tensor α) (Fam.tensor β) (σ l) (τ l))
+    (fun l => mulTensor (Fam.tensor α) (Fam.tensor β) (σ l, τ l))
   set P := (List.ofFn fun l =>
-    mulTensor (Fam.tensor α) (Fam.tensor β) (σ l) (τ l)).prod with hPdef
+    mulTensor (Fam.tensor α) (Fam.tensor β) (σ l, τ l)).prod with hPdef
   have htraceP : Matrix.trace P =
       Matrix.trace ((List.ofFn fun l => Matrix.blockDiagonal'
-        fun γ => Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (σ l) (τ l)).prod) := by
+        fun γ => Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (σ l, τ l)).prod) := by
     rw [← hletters, hconj, Matrix.trace_mul_comm, ← Matrix.mul_assoc, hUiso,
       Matrix.one_mul]
   rw [htraceP, listProd_blockDiagonal'_kronecker, Matrix.trace_blockDiagonal']

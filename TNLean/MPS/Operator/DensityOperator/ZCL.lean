@@ -79,7 +79,7 @@ from the doubled-index completely positive map `transferMap`, which sums
 `∑_{i,j} M^{ij} X (M^{ij})ᴴ` over both physical legs; the physical-trace transfer
 instead contracts the two legs of a single tensor. -/
 noncomputable def physTraceTransfer (M : MPOTensor d D) : Matrix (Fin D) (Fin D) ℂ :=
-  ∑ i : Fin d, M i i
+  ∑ i : Fin d, M (i, i)
 
 /-- **Literal physical-trace idempotence.** An MPO tensor satisfies the
 zero-correlation-length diagram of arXiv:1606.00608, Definition 4.2,

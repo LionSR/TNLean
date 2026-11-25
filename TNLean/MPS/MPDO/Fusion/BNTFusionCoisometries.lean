@@ -84,15 +84,15 @@ structure BNTFusionCoisometryFamily (Λ : Type*) [Fintype Λ] [DecidableEq Λ]
   /-- Conjugation onto the retained space gives the positive weighted direct
   sum, letter by letter. -/
   fusion : ∀ (α β : Λ) (i j : Fin p),
-    fusionCoisometry α β * (mulTensor (tensor α) (tensor β)) i j *
+    fusionCoisometry α β * (mulTensor (tensor α) (tensor β)) (i, j) *
         (fusionCoisometry α β)ᴴ =
-      Matrix.blockDiagonal' fun γ => chi.matrix α β γ ⊗ₖ tensor γ i j
+      Matrix.blockDiagonal' fun γ => chi.matrix α β γ ⊗ₖ tensor γ (i, j)
   /-- The retained direct sum reconstructs every product letter; equivalently,
   the omitted common corner is zero. -/
   reconstruction : ∀ (α β : Λ) (i j : Fin p),
-    (mulTensor (tensor α) (tensor β)) i j =
+    (mulTensor (tensor α) (tensor β)) (i, j) =
       (fusionCoisometry α β)ᴴ *
-        (Matrix.blockDiagonal' fun γ => chi.matrix α β γ ⊗ₖ tensor γ i j) *
+        (Matrix.blockDiagonal' fun γ => chi.matrix α β γ ⊗ₖ tensor γ (i, j)) *
         fusionCoisometry α β
 
 namespace BNTFusionCoisometryFamily
@@ -103,9 +103,9 @@ variable (Fam : BNTFusionCoisometryFamily Λ p)
 /-- The fusion coisometry carries every product letter to its retained
 weighted direct sum. -/
 theorem fusionCoisometry_mul_mulTensor (α β : Λ) (i j : Fin p) :
-    Fam.fusionCoisometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) i j =
+    Fam.fusionCoisometry α β * mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) =
       (Matrix.blockDiagonal' fun γ =>
-        Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j) *
+        Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (i, j)) *
         Fam.fusionCoisometry α β := by
   rw [Fam.reconstruction]
   simp only [← Matrix.mul_assoc, Fam.coisometry, Matrix.one_mul]
@@ -114,11 +114,11 @@ theorem fusionCoisometry_mul_mulTensor (α β : Λ) (i j : Fin p) :
 weighted direct sum. -/
 theorem mulTensor_mul_fusionCoisometry_conjTranspose
     (α β : Λ) (i j : Fin p) :
-    mulTensor (Fam.tensor α) (Fam.tensor β) i j *
+    mulTensor (Fam.tensor α) (Fam.tensor β) (i, j) *
         (Fam.fusionCoisometry α β)ᴴ =
       (Fam.fusionCoisometry α β)ᴴ *
         Matrix.blockDiagonal' fun γ =>
-          Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ i j := by
+          Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (i, j) := by
   rw [Fam.reconstruction]
   simp only [Matrix.mul_assoc, Fam.coisometry, Matrix.mul_one]
 
@@ -145,17 +145,17 @@ theorem mpo_mul_mpo_eq_sum (L : ℕ) (hL : 0 < L) (α β : Λ) :
       ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ)))
       ((γ : Λ) × (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) ℂ :=
     fun l => Matrix.blockDiagonal' fun γ =>
-      Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (σ l) (τ l)
+      Fam.chi.matrix α β γ ⊗ₖ Fam.tensor γ (σ l, τ l)
   set W := Uᴴ
   have hW : Wᴴ * W = 1 := by
     simpa [W] using hU
   have hletters : (fun l : Fin (n + 1) => W * G l * Wᴴ) =
-      fun l => mulTensor (Fam.tensor α) (Fam.tensor β) (σ l) (τ l) := by
+      fun l => mulTensor (Fam.tensor α) (Fam.tensor β) (σ l, τ l) := by
     funext l
     simpa [W, U, G] using (Fam.reconstruction α β (σ l) (τ l)).symm
   have hconj := listProd_conj_of_conjTranspose_mul_self W hW G
   have htraceP : Matrix.trace (List.ofFn fun l =>
-      mulTensor (Fam.tensor α) (Fam.tensor β) (σ l) (τ l)).prod =
+      mulTensor (Fam.tensor α) (Fam.tensor β) (σ l, τ l)).prod =
       Matrix.trace (List.ofFn G).prod := by
     rw [← hletters, hconj, Matrix.trace_mul_comm,
       ← Matrix.mul_assoc, hW, Matrix.one_mul]

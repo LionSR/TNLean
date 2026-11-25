@@ -263,13 +263,13 @@ theorem aFusionData_isAssociator :
     GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen, kronId_complexOfRing,
     idKron_complexOfRing]
   have h2 : mulTensor tensorA tensorA =
-      fun i j ↦ complexOfInt (mulTensorR tensorAInt tensorAInt i j) :=
-    funext₂ fun i j ↦ mulTensor_complexOfRing _ tensorAInt tensorAInt i j
+      Function.uncurry fun i j ↦ complexOfInt (mulTensorR tensorAInt tensorAInt i j) :=
+    funext fun p ↦ mulTensor_complexOfRing _ tensorAInt tensorAInt p.1 p.2
   have hT : (GroupFamily.tripleTensor (GroupFamily.orderTwoFamily (idTensor 2) tensorA)
       GroupFamily.orderTwoGen GroupFamily.orderTwoGen
       GroupFamily.orderTwoGen).toMPSTensor = fun a ↦ complexOfInt (tensorACubeInt a) := by
     funext a
-    change mulTensor (mulTensor tensorA tensorA) tensorA a.divNat a.modNat = _
+    change mulTensor (mulTensor tensorA tensorA) tensorA (a.divNat, a.modNat) = _
     rw [h2]
     exact mulTensor_complexOfRing _ _ tensorAInt _ _
   rw [hT]
@@ -295,8 +295,8 @@ def shiftDeltaInt (c : Fin 2) (i j : Fin 2) : Matrix (Fin 1) (Fin 1) ℤ :=
   if i = j + c then 1 else 0
 
 private theorem bLabelTensor_eq (c : Fin 2) :
-    bLabelTensor c = fun i j ↦ complexOfInt (shiftDeltaInt c i j) := by
-  funext i j
+    bLabelTensor c = Function.uncurry fun i j ↦ complexOfInt (shiftDeltaInt c i j) := by
+  funext ⟨i, j⟩
   fin_cases c <;> fin_cases i <;> fin_cases j <;>
     simp [bLabelTensor, tensorB, idTensor, shiftDeltaInt, complexOfInt_one, complexOfInt_zero]
 

@@ -362,16 +362,16 @@ source factors (chapter Lemma `lem:twosite`; arXiv:1703.09188, `SVDforms2` and `
 lines 525--543, with the factors of lines 479--502; ME.tex, Corollary 1.4). -/
 theorem trace_mul_eq_sourceV_mul_sourceU_swap {ρ : Matrix (Fin D) (Fin D) ℂ}
     (S : SourceFactors U ρ) (i₁ i₂ j₁ j₂ : Fin d) :
-    Matrix.trace (U i₁ j₁ * U i₂ j₂) =
+    Matrix.trace (U (i₁, j₁) * U (i₂, j₂)) =
       ∑ lr : Fin ℓ[U] × Fin r[U],
         sourceV U S (i₁, i₂) (lr.2, lr.1) * sourceU U S lr (j₂, j₁) := by
   classical
   simp only [Matrix.trace, Matrix.diag, Matrix.mul_apply]
   have h₁ (α β : Fin D) :
-      U i₁ j₁ α β = ∑ r, S.X₁ (i₁, β) r * S.Y₁ r (α, j₁) := by
+      U (i₁, j₁) α β = ∑ r, S.X₁ (i₁, β) r * S.Y₁ r (α, j₁) := by
     simpa only [Matrix.mul_apply] using (X₁_mul_Y₁_apply U S i₁ β α j₁).symm
   have h₂ (β α : Fin D) :
-      U i₂ j₂ β α = ∑ l, S.X₂ (β, i₂) l * S.Y₂ l (j₂, α) := by
+      U (i₂, j₂) β α = ∑ l, S.X₂ (β, i₂) l * S.Y₂ l (j₂, α) := by
     simpa only [Matrix.mul_apply] using (X₂_mul_Y₂_apply U S β i₂ j₂ α).symm
   simp_rw [h₁, h₂]
   simp only [Finset.mul_sum, Finset.sum_mul]

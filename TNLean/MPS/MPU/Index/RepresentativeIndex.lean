@@ -77,7 +77,7 @@ theorem IsMPUCanonicalFormII.sourceRanks_eq_of_mpo_eq
   obtain ⟨rfl, z, hG⟩ := hU.exists_unitary_virtual_gauge_of_mpo_eq hV hEq
   have hVeq : V = virtualSandwich (z : Matrix (Fin D₁) (Fin D₁) ℂ) U
       (z : Matrix (Fin D₁) (Fin D₁) ℂ)ᴴ :=
-    funext fun i => funext fun j => hG i j
+    funext fun p => hG p.1 p.2
   rw [hVeq]
   exact ⟨rightRank_virtualSandwich _ U _ Unitary.isUnit_coe Unitary.isUnit_coe.star,
     leftRank_virtualSandwich _ U _ Unitary.isUnit_coe Unitary.isUnit_coe.star⟩

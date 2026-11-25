@@ -55,19 +55,19 @@ open MPSTensor
 /-- The three weighted summands in the bond ordering of data file §1.4. -/
 theorem thetaThree_eq_directSum : thetaThree = MPOTensor.directSum ((5 : ℂ) • isingOne)
     (MPOTensor.directSum ((3 : ℂ) • isingPsi) ((Real.sqrt 2 : ℂ) • isingSigma)) := by
-  ext h h' i j
+  ext ⟨h, h'⟩ i j
   simp only [thetaThree, thetaThreeZ, complexOfZsqrt2_apply, MPOTensor.directSum,
     Matrix.submatrix_apply, Equiv.trans_apply, Equiv.sumCongr_apply,
-    Pi.smul_apply]
+    Pi.smul_apply, Function.uncurry_apply_pair]
   rcases (finSumFinEquiv (m := 3) (n := 7)).symm i with a | a <;>
     rcases (finSumFinEquiv (m := 3) (n := 7)).symm j with b | b
-  · simp [isingOne, map_ofNat]
+  · simp [isingOne, map_ofNat, Function.uncurry_apply_pair]
   · simp
   · simp
   · simp only [Matrix.fromBlocks_apply₂₂]
     rcases ha : (finSumFinEquiv (m := 3) (n := 4)).symm a with a | a <;>
       rcases hb : (finSumFinEquiv (m := 3) (n := 4)).symm b with b | b <;>
-      simp [ha, hb, isingPsi, isingSigma, map_ofNat]
+      simp [ha, hb, isingPsi, isingSigma, map_ofNat, Function.uncurry_apply_pair]
 
 /-- The full three-object operator fusion (data file §1.4): the hidden `σ` object
 feeds the `1` and `ψ` channels, while the other two objects both feed `σ`. -/

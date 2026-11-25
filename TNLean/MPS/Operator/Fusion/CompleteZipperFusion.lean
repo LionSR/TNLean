@@ -158,31 +158,31 @@ def leftFinalRow (a b c d : Λ) :
 
 private theorem rectangularIntertwiner_eq_zero (d e : Λ) (hde : d ≠ e)
     (C : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim e)) ℂ)
-    (hC : ∀ (i k : Fin p), Fus.tensor d i k * C = C * Fus.tensor e i k) :
+    (hC : ∀ (i k : Fin p), Fus.tensor d (i, k) * C = C * Fus.tensor e (i, k)) :
     C = 0 := by
   classical
   calc
     C = (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ) * C := by
       rw [Matrix.one_mul]
     _ = (∑ i : Fin p, ∑ k : Fin p,
-          Fus.finalBlockSelector d (i, k) • Fus.tensor d i k) * C := by
+          Fus.finalBlockSelector d (i, k) • Fus.tensor d (i, k)) * C := by
       rw [Fus.finalBlockSelector_sum d d]
       simp
     _ = ∑ i : Fin p, ∑ k : Fin p,
-          (Fus.finalBlockSelector d (i, k) • Fus.tensor d i k) * C := by
+          (Fus.finalBlockSelector d (i, k) • Fus.tensor d (i, k)) * C := by
       rw [Matrix.sum_mul]
       congr 1
       funext i
       rw [Matrix.sum_mul]
     _ = ∑ i : Fin p, ∑ k : Fin p,
-          C * (Fus.finalBlockSelector d (i, k) • Fus.tensor e i k) := by
+          C * (Fus.finalBlockSelector d (i, k) • Fus.tensor e (i, k)) := by
       apply Finset.sum_congr rfl
       intro i hi
       apply Finset.sum_congr rfl
       intro k hk
       rw [Matrix.smul_mul, Matrix.mul_smul, hC]
     _ = C * (∑ i : Fin p, ∑ k : Fin p,
-          Fus.finalBlockSelector d (i, k) • Fus.tensor e i k) := by
+          Fus.finalBlockSelector d (i, k) • Fus.tensor e (i, k)) := by
       rw [Matrix.mul_sum]
       congr 1
       funext i
@@ -220,7 +220,7 @@ theorem fullPrintedFMatrix_finalSector_eq_zero
     fun u v => Fus.fullPrintedFMatrix a b c
       (Fus.rightFinalRow a b c d ⟨mR, u⟩)
       (Fus.leftFinalRow a b c d' ⟨mL, v⟩)
-  have hC : ∀ (i k : Fin p), Fus.tensor d i k * C = C * Fus.tensor d' i k := by
+  have hC : ∀ (i k : Fin p), Fus.tensor d (i, k) * C = C * Fus.tensor d' (i, k) := by
     intro i k
     funext u v
     have hFull := Fus.rightTripleDirectSumLetter_mul_fullPrintedFMatrix a b c i k
@@ -232,7 +232,7 @@ theorem fullPrintedFMatrix_finalSector_eq_zero
           Fus.fullPrintedFMatrix a b c)
             (Fus.rightFinalRow a b c d ⟨mR, u⟩)
             (Fus.leftFinalRow a b c d' ⟨mL, v⟩) =
-          ∑ z : Fin (Fus.bondDim d), Fus.tensor d i k u z *
+          ∑ z : Fin (Fus.bondDim d), Fus.tensor d (i, k) u z *
             Fus.fullPrintedFMatrix a b c
               (Fus.rightFinalRow a b c d ⟨mR, z⟩)
               (Fus.leftFinalRow a b c d' ⟨mL, v⟩) := by
@@ -261,7 +261,7 @@ theorem fullPrintedFMatrix_finalSector_eq_zero
             Fus.fullPrintedFMatrix a b c
               (Fus.rightFinalRow a b c d ⟨mR, u⟩)
               (Fus.leftFinalRow a b c d' ⟨mL, z⟩) *
-                Fus.tensor d' i k z v := by
+                Fus.tensor d' (i, k) z v := by
       rw [Matrix.mul_apply, Fintype.sum_sigma]
       rw [Finset.sum_eq_single d'
         (fun q _ hq => Finset.sum_eq_zero fun z _ => by
@@ -307,7 +307,7 @@ theorem exists_printedFMatrixAmplified_eq_kronecker_one (a b c d : Λ) :
       (Fus.rightTripleDirectSumLetter a b c i k * Fus.fullPrintedFMatrix a b c)
           (Fus.rightFinalRow a b c d ⟨mR, x⟩)
           (Fus.leftFinalRow a b c d ⟨mL, y⟩) =
-        ∑ z : Fin (Fus.bondDim d), Fus.tensor d i k x z *
+        ∑ z : Fin (Fus.bondDim d), Fus.tensor d (i, k) x z *
           Fus.fullPrintedFMatrix a b c
             (Fus.rightFinalRow a b c d ⟨mR, z⟩)
             (Fus.leftFinalRow a b c d ⟨mL, y⟩) := by
@@ -335,7 +335,7 @@ theorem exists_printedFMatrixAmplified_eq_kronecker_one (a b c d : Λ) :
         ∑ z : Fin (Fus.bondDim d),
           Fus.fullPrintedFMatrix a b c
             (Fus.rightFinalRow a b c d ⟨mR, x⟩)
-            (Fus.leftFinalRow a b c d ⟨mL, z⟩) * Fus.tensor d i k z y := by
+            (Fus.leftFinalRow a b c d ⟨mL, z⟩) * Fus.tensor d (i, k) z y := by
     rw [Matrix.mul_apply, Fintype.sum_sigma]
     rw [Finset.sum_eq_single d
       (fun q _ hq => Finset.sum_eq_zero fun z _ => by

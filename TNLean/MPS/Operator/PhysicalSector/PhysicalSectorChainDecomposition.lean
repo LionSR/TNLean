@@ -127,7 +127,7 @@ private theorem conjugatePhysical_apply_same
     (F : PhysicalSectorFactorization K) (k : Fin F.sectorCount)
     (x y : SectorIndex F k) (beta alpha : Fin D) :
     conjugatePhysical K F.physicalIsometry
-        (F.sectorEquiv.symm ⟨k, x⟩) (F.sectorEquiv.symm ⟨k, y⟩) beta alpha =
+        (F.sectorEquiv.symm ⟨k, x⟩, F.sectorEquiv.symm ⟨k, y⟩) beta alpha =
       F.leftTensor k beta x.1 y.1 * F.rightTensor k alpha x.2 y.2 := by
   have h := congrFun (congrFun (F.factorization beta alpha) ⟨k, x⟩) ⟨k, y⟩
   simpa [conjugatePhysical, physicalSlice, Matrix.reindex_apply,
@@ -138,7 +138,7 @@ private theorem conjugatePhysical_apply_ne
     (hkh : k ≠ h) (x : SectorIndex F k) (y : SectorIndex F h)
     (beta alpha : Fin D) :
     conjugatePhysical K F.physicalIsometry
-        (F.sectorEquiv.symm ⟨k, x⟩) (F.sectorEquiv.symm ⟨h, y⟩) beta alpha = 0 := by
+        (F.sectorEquiv.symm ⟨k, x⟩, F.sectorEquiv.symm ⟨h, y⟩) beta alpha = 0 := by
   have hentry := congrFun (congrFun (F.factorization beta alpha) ⟨k, x⟩) ⟨h, y⟩
   simpa [conjugatePhysical, physicalSlice, Matrix.reindex_apply,
     Matrix.blockDiagonal'_apply_ne _ _ _ hkh] using hentry
@@ -159,8 +159,7 @@ theorem mpo_submatrix_sector_eq_cyclicNeighboringProduct
     MPOTensor.evalWord_ofFn, cyclicNeighboringProduct]
   have hlocal : ∀ n : Fin N,
       conjugatePhysical K F.physicalIsometry
-          (F.sectorEquiv.symm ⟨k n, x n⟩)
-          (F.sectorEquiv.symm ⟨k n, y n⟩) =
+          (F.sectorEquiv.symm ⟨k n, x n⟩, F.sectorEquiv.symm ⟨k n, y n⟩) =
         Matrix.of fun beta alpha ↦
           F.leftTensor (k n) beta (x n).1 (y n).1 *
             F.rightTensor (k n) alpha (x n).2 (y n).2 := by
@@ -195,8 +194,7 @@ private theorem mpo_entry_eq_zero_of_sector_ne
   have hzero : Matrix.trace (Kraus.evalWord
       (fun i : Fin N ↦
         conjugatePhysical K F.physicalIsometry
-          (F.sectorEquiv.symm ⟨k i, x i⟩)
-          (F.sectorEquiv.symm ⟨h i, y i⟩))
+          (F.sectorEquiv.symm ⟨k i, x i⟩, F.sectorEquiv.symm ⟨h i, y i⟩))
       (List.ofFn id)) = 0 := by
     rw [MPSTensor.trace_evalWord_eq_sum_cyclic]
     apply Finset.sum_eq_zero

@@ -28,7 +28,7 @@ namespace MPOTensor.TwistedDimer
 def bondSiteEquiv : Bond ≃ Fin 4 := finProdFinEquiv
 
 /-- The matrix-unit tensor of the mixed-Bell dimer. -/
-def sigmaDimer : MPOTensor 4 4 := fun i j =>
+def sigmaDimer : MPOTensor 4 4 := fun (i, j) =>
   let a := bondSiteEquiv.symm i
   let b := bondSiteEquiv.symm j
   Matrix.single (bondSiteEquiv (a.1, b.1)) (bondSiteEquiv (a.2, b.2))
@@ -43,8 +43,8 @@ lemma sigmaDimer_physClose1 (X : Matrix (Fin 4) (Fin 4) ℂ) (a b : Bond) :
 
 /-- Two letters contract precisely when both intermediate qubits agree. -/
 lemma sigmaDimer_mul (a b c d : Bond) :
-    sigmaDimer (bondSiteEquiv a) (bondSiteEquiv b) *
-      sigmaDimer (bondSiteEquiv c) (bondSiteEquiv d) =
+    sigmaDimer (bondSiteEquiv a, bondSiteEquiv b) *
+      sigmaDimer (bondSiteEquiv c, bondSiteEquiv d) =
       if a.2 = c.1 ∧ b.2 = d.1 then
         Matrix.single (bondSiteEquiv (a.1, b.1)) (bondSiteEquiv (c.2, d.2))
           ((Cmat 0 a.1 b.1 : ℂ) * (Cmat 0 c.1 d.1 : ℂ)) else 0 := by

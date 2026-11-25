@@ -94,7 +94,7 @@ def oneLabelMInt (i j : Fin 4) : Matrix (Fin 4) (Fin 4) ℤ :=
 
 /-- The vertical tensor of the one-label candidate, as a matrix product operator tensor. -/
 noncomputable def oneLabelM : MPOTensor 4 4 :=
-  fun i j => (25 : ℂ)⁻¹ • complexOfInt (oneLabelMInt i j)
+  fun (i, j) => (25 : ℂ)⁻¹ • complexOfInt (oneLabelMInt i j)
 
 /-- The vertical tensor of the one-label candidate on the sixteen-letter pair alphabet. -/
 noncomputable def oneLabelTarget : MPSTensor 16 4 := oneLabelM.toMPSTensor

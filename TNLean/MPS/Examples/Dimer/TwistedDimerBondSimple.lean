@@ -163,9 +163,8 @@ private lemma blockTensor_one_toMPSTensor {d D : ℕ} (M : MPOTensor d D) :
       Kraus.reindexPhysical (doubledSingleBlockEquiv d) M.toMPSTensor := by
   funext ij
   change
-    M (Kraus.singleBlockEquiv d ij.divNat)
-        (Kraus.singleBlockEquiv d ij.modNat) * 1 =
-      M ((doubledSingleBlockEquiv d) ij).divNat ((doubledSingleBlockEquiv d) ij).modNat
+    M (Kraus.singleBlockEquiv d ij.divNat, Kraus.singleBlockEquiv d ij.modNat) * 1 =
+      M (((doubledSingleBlockEquiv d) ij).divNat, ((doubledSingleBlockEquiv d) ij).modNat)
   simp [doubledSingleBlockEquiv]
 
 private lemma doubledPhysTraceTransfer_reindex_singleBlock {d D : ℕ}

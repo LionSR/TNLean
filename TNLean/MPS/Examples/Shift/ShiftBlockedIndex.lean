@@ -121,7 +121,7 @@ Source: arXiv:1703.09188, lines 1980--1987 (the shift $T^{(N)}$), blocked as in
 Proposition IV.2, lines 697--704. -/
 theorem blockTensor_rightShiftTensor_apply (k : ℕ)
     (I J : Fin (Kraus.blockPhysDim d (k + 1))) :
-    blockTensor (rightShiftTensor d) (k + 1) I J =
+    blockTensor (rightShiftTensor d) (k + 1) (I, J) =
       if Fin.init (Kraus.decodeBlock d (k + 1) J) = Fin.tail (Kraus.decodeBlock d (k + 1) I)
       then Matrix.single (Kraus.decodeBlock d (k + 1) I 0)
         (Kraus.decodeBlock d (k + 1) J (Fin.last k)) 1
@@ -436,7 +436,7 @@ lines 1980--1987. -/
 theorem rightShiftTensor_isMPUSimple (d : ℕ) [NeZero d] :
     IsMPUSimple (rightShiftTensor d) := by
   classical
-  have hW : ∀ i k, doubleLayerTensor (rightShiftTensor d) i k =
+  have hW : ∀ i k, doubleLayerTensor (rightShiftTensor d) (i, k) =
       Matrix.vecMulVec (shiftPhi d) (shiftBasis d i k) := by
     intro i k
     ext x y
@@ -466,7 +466,7 @@ tensor at lines 1980--1987. -/
 theorem leftShiftTensor_isMPUSimple (d : ℕ) [NeZero d] :
     IsMPUSimple (leftShiftTensor d) := by
   classical
-  have hW : ∀ i k, doubleLayerTensor (leftShiftTensor d) i k =
+  have hW : ∀ i k, doubleLayerTensor (leftShiftTensor d) (i, k) =
       Matrix.vecMulVec (shiftBasis d i k) (shiftPhi d) := by
     intro i k
     ext x y

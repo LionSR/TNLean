@@ -64,10 +64,10 @@ locally refines the finite-chain statements in arXiv:1703.09188, lines
 theorem shiftExampleU₃_physicalSwap_eq_swapMatrix_mul_shiftExampleU₂_mul_swapMatrix
     (d : ℕ) (i₁ i₂ j₁ j₂ : Fin d) :
     Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
-        (shiftExampleU₃ d (finProdFinEquiv (i₂, i₁)) (finProdFinEquiv (j₂, j₁))) =
+        (shiftExampleU₃ d (finProdFinEquiv (i₂, i₁), finProdFinEquiv (j₂, j₁))) =
       Matrix.swapMatrix d *
         Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
-          (shiftExampleU₂ d (finProdFinEquiv (i₁, i₂)) (finProdFinEquiv (j₁, j₂))) *
+          (shiftExampleU₂ d (finProdFinEquiv (i₁, i₂), finProdFinEquiv (j₁, j₂))) *
         Matrix.swapMatrix d := by
   ext ⟨α₁, α₂⟩ ⟨β₁, β₂⟩
   rw [swapMatrix_mul_mul_swapMatrix_apply]

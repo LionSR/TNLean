@@ -98,7 +98,7 @@ bits, with coefficient `c i j`.  The horizontal blocks of the twisted dimer and
 its flag sectors are all of this shape.
 
 Project example; not from CPSV16. -/
-def unitTensor (c : Fin 8 → Fin 8 → ℂ) : MPOTensor 8 4 := fun i j =>
+def unitTensor (c : Fin 8 → Fin 8 → ℂ) : MPOTensor 8 4 := fun (i, j) =>
   Matrix.single (finProdFinEquiv (bitL i, bitL j)) (finProdFinEquiv (bitR i, bitR j)) (c i j)
 
 /-- The horizontal block `k` of the twisted dimer is the matrix-unit tensor of
@@ -121,8 +121,8 @@ configurations $(l, r)$ and $(l', r')$ is $\mu^{-1}$ times the bond-matrix
 entry of `T` at the physical letters $((l, r, f), (l', r', f))$ carrying the
 common flag value $f$. -/
 theorem flagMPO_apply_eq_T (f : Fin 2) (a b : Fin 8) (l r l' r' : Fin 2) :
-    flagMPO f a b (finProdFinEquiv (l, r)) (finProdFinEquiv (l', r')) =
-      ((mu : ℝ) : ℂ)⁻¹ * T (physIdx l r f) (physIdx l' r' f) a b := by
+    flagMPO f (a, b) (finProdFinEquiv (l, r)) (finProdFinEquiv (l', r')) =
+      ((mu : ℝ) : ℂ)⁻¹ * T (physIdx l r f, physIdx l' r' f) a b := by
   obtain ⟨p, p', k, rfl⟩ := exists_eq_physIdx a
   obtain ⟨q, q', k', rfl⟩ := exists_eq_physIdx b
   rw [T_apply_blocks]
@@ -152,11 +152,12 @@ arbitrary pair, multiplied on the left by a letter of a matrix-unit tensor,
 is again a matrix unit or zero according to the bond-matching condition. -/
 lemma unitTensor_mul_single (c : Fin 8 → Fin 8 → ℂ) (i j : Fin 8) (l l' r r' : Fin 2)
     (u : ℂ) :
-    unitTensor c i j * Matrix.single (finProdFinEquiv (l, l')) (finProdFinEquiv (r, r')) u =
+    unitTensor c (i, j) * Matrix.single (finProdFinEquiv (l, l')) (finProdFinEquiv (r, r')) u =
       if bitR i = l ∧ bitR j = l' then
         Matrix.single (finProdFinEquiv (bitL i, bitL j)) (finProdFinEquiv (r, r')) (c i j * u)
       else 0 := by
   unfold unitTensor
+  dsimp only
   by_cases h : bitR i = l ∧ bitR j = l'
   · obtain ⟨h1, h2⟩ := h
     rw [ite_eq_left ⟨h1, h2⟩, h1, h2, Matrix.single_mul_single_same]
@@ -282,9 +283,9 @@ def flagFamily (f : Fin 2) : MPSTensor (8 * 8) 4 := (flagMPO f).toMPSTensor
 
 /-- Recombining the doubled physical index of `flagFamily` recovers the flag-sector MPO. -/
 lemma verticalBNTMPO_flagFamily (f : Fin 2) : verticalBNTMPO (flagFamily f) = flagMPO f := by
-  funext a b
-  change flagMPO f (finProdFinEquiv.symm (finProdFinEquiv (a, b))).1
-    (finProdFinEquiv.symm (finProdFinEquiv (a, b))).2 = flagMPO f a b
+  funext ⟨a, b⟩
+  change flagMPO f ((finProdFinEquiv.symm (finProdFinEquiv (a, b))).1,
+    (finProdFinEquiv.symm (finProdFinEquiv (a, b))).2) = flagMPO f (a, b)
   rw [Equiv.symm_apply_apply]
 
 /-- **The sector operator family.**  The family $L \mapsto O_L(\widehat M_f)$

@@ -60,7 +60,7 @@ theorem sourceWL_second_network_apply
       sourceV U S (i, j) (r, k) := by
   classical
   trans ∑ α : Fin D, ∑ β : Fin D,
-    S.Y₂ l (a, α) * U i b α β * S.X₂ (β, j) k
+    S.Y₂ l (a, α) * U (i, b) α β * S.X₂ (β, j) k
   · simp only [sourceWL, Finset.sum_mul, Finset.mul_sum]
     rw [Fintype.sum_reverse_three]
     refine Finset.sum_congr₂ fun α _ β _ ↦ ?_

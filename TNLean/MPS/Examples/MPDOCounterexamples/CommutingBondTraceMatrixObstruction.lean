@@ -49,7 +49,7 @@ noncomputable def sectorWeight (k : Fin 2) : ℂ := if k = 0 then 1 else 0
 /-- The bond-dimension-one pure product MPDO with only
 $\mathcal K^{0,0}$ nonzero. -/
 noncomputable def tensor : MPOTensor 2 1 :=
-  fun i j => if i = j then Matrix.of fun _ _ => sectorWeight i else 0
+  fun (i, j) => if i = j then Matrix.of fun _ _ => sectorWeight i else 0
 
 /-- The two-dimensional physical space as two one-dimensional sectors in the
 decomposition of Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1. -/
@@ -97,7 +97,7 @@ noncomputable def factorization : PhysicalSectorFactorization tensor where
       simp [sectorWeight]
     · simp only [Matrix.reindex_apply, Matrix.conjTranspose_one, Matrix.one_mul,
         Matrix.mul_one]
-      change tensor k h beta alpha =
+      change tensor (k, h) beta alpha =
         Matrix.blockDiagonal'
           (fun q => Matrix.kroneckerMap (· * ·)
             (Matrix.of fun _ _ => sectorWeight q)
@@ -259,7 +259,7 @@ lemma tensor_isInjective : tensor.IsInjective := by
   have hdiv : (0 : Fin (2 * 2)).divNat = (0 : Fin 2) := by decide
   have hmod : (0 : Fin (2 * 2)).modNat = (0 : Fin 2) := by decide
   have hone : tensor.toMPSTensor (0 : Fin (2 * 2)) = 1 := by
-    change tensor (0 : Fin (2 * 2)).divNat (0 : Fin (2 * 2)).modNat = 1
+    change tensor ((0 : Fin (2 * 2)).divNat, (0 : Fin (2 * 2)).modNat) = 1
     rw [hdiv, hmod]
     ext a b
     fin_cases a

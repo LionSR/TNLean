@@ -78,7 +78,7 @@ Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
 theorem shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁
     (d : ℕ) [NeZero d] (I J : Fin ((d * d) * (d * d)))
     (α γ : Fin (d * d)) :
-    blockTwo (shiftExampleU₂ d) I J α γ =
+    blockTwo (shiftExampleU₂ d) (I, J) α γ =
       ∑ l : Fin ℓ[shiftExampleU₂ d], ∑ r : Fin r[shiftExampleU₂ d],
         (shiftExampleU₂SourceFactors d).X₂
             (α, (finProdFinEquiv.symm I).1) l *
@@ -100,7 +100,7 @@ Source: arXiv:1703.09188, equation `eq:uv2_U2` (lines 2018--2026). -/
 theorem shiftExampleU₂_blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
     (d : ℕ) [NeZero d] (I J : Fin ((d * d) * (d * d)))
     (α γ : Fin (d * d)) :
-    blockTwo (shiftExampleU₂ d) I J α γ =
+    blockTwo (shiftExampleU₂ d) (I, J) α γ =
       ∑ r : Fin r[shiftExampleU₂ d], ∑ l : Fin ℓ[shiftExampleU₂ d],
         ((d : ℂ)⁻¹ *
           (swapTensorSwapMatrix d * identitySwapIdentityMatrix d)
@@ -173,7 +173,7 @@ Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
 theorem shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁
     (d : ℕ) [NeZero d] (I J : Fin ((d * d) * (d * d)))
     (α γ : Fin (d * d)) :
-    blockTwo (shiftExampleU₃ d) I J α γ =
+    blockTwo (shiftExampleU₃ d) (I, J) α γ =
       ∑ l : Fin ℓ[shiftExampleU₃ d], ∑ r : Fin r[shiftExampleU₃ d],
         (shiftExampleU₃SourceFactors d).X₂
             (α, (finProdFinEquiv.symm I).1) l *
@@ -195,7 +195,7 @@ Source: arXiv:1703.09188, equation `eq:uv2_U3` (lines 2028--2034). -/
 theorem shiftExampleU₃_blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
     (d : ℕ) [NeZero d] (I J : Fin ((d * d) * (d * d)))
     (α γ : Fin (d * d)) :
-    blockTwo (shiftExampleU₃ d) I J α γ =
+    blockTwo (shiftExampleU₃ d) (I, J) α γ =
       ∑ r : Fin r[shiftExampleU₃ d], ∑ l : Fin ℓ[shiftExampleU₃ d],
         ((d : ℂ)⁻¹ * identitySwapIdentityMatrix d
           ((shiftTwoSitePhysicalEquiv d).symm

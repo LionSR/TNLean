@@ -194,8 +194,8 @@ theorem IsMPUCanonicalFormII.sourceFactors_pleasantProperties
       X₂_physical_contraction := hU.sourceX₂_physical_contraction hsimple hadjoint }
 
 variable (U) (T : Matrix.unitaryGroup (Fin D) ℂ)
-  (hT : ∀ i j, physicalAdjointTensor U i j =
-    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+  (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+    (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
 
 /-- The gate $u$ of the inverse-compatible record is the literal new gate
 $Y_2\mathbin{-}Y$ with its first-rank coordinate transported along the rank

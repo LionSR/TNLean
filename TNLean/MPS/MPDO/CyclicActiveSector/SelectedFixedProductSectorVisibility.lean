@@ -77,7 +77,7 @@ theorem changePhysicalBasis_physicalCoordinateMatrix_isInjective
     F.physicalCoordinateMatrixᴴ _ K ?_ hK
   rw [changePhysicalBasis_changePhysicalBasis,
     F.physicalCoordinateMatrix_isometry]
-  ext i j beta alpha
+  ext ⟨i, j⟩ beta alpha
   simp [changePhysicalBasis, physicalSlice]
 
 /-- A matrix from a non-cyclic-active sector has zero trace pairing with every
@@ -96,9 +96,8 @@ theorem trace_sectorCoordinateTensor_mul_eq_zero_of_not_isCyclicActiveSector
     (x y : F.SectorIndex k)
     (u v : Fin (Fintype.card F.SectorSiteIndex)) :
     Matrix.trace
-      (F.sectorCoordinateTensor (F.sectorFinEquiv.symm ⟨k, x⟩)
-        (F.sectorFinEquiv.symm ⟨k, y⟩) *
-        F.sectorCoordinateTensor u v) = 0 := by
+      (F.sectorCoordinateTensor (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) *
+        F.sectorCoordinateTensor (u, v)) = 0 := by
   generalize hu : F.sectorFinEquiv u = su
   generalize hv : F.sectorFinEquiv v = sv
   obtain ⟨r, a⟩ := su
@@ -131,8 +130,7 @@ theorem trace_sectorCoordinateTensor_mul_eq_zero_of_not_isCyclicActiveSector
       have htrace := congrArg Matrix.trace hprod
       simpa [oneSiteSectorMatrix] using htrace
   · have hzero : F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨r, a⟩)
-        (F.sectorFinEquiv.symm ⟨s, b⟩) = 0 := by
+        (F.sectorFinEquiv.symm ⟨r, a⟩, F.sectorFinEquiv.symm ⟨s, b⟩) = 0 := by
       ext beta alpha
       exact F.sectorCoordinateTensor_apply_ne hrs a b beta alpha
     rw [hzero, Matrix.mul_zero, Matrix.trace_zero]
@@ -156,28 +154,24 @@ theorem changePhysicalBasis_apply_ne_eq_zero_of_mpo_two_eq_smul
     {k h : Fin F.sectorCount} (hkh : k ≠ h)
     (x : F.SectorIndex k) (y : F.SectorIndex h) :
     changePhysicalBasis F.physicalCoordinateMatrix K
-        (F.sectorFinEquiv.symm ⟨k, x⟩)
-        (F.sectorFinEquiv.symm ⟨h, y⟩) = 0 := by
+        (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) = 0 := by
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
   have hM : M.IsInjective :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
-  change M (F.sectorFinEquiv.symm ⟨k, x⟩)
-    (F.sectorFinEquiv.symm ⟨h, y⟩) = 0
+  change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) = 0
   apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
   intro p
   set u := p.divNat
   set v := p.modNat
   change Matrix.trace
-    (M (F.sectorFinEquiv.symm ⟨k, x⟩)
-      (F.sectorFinEquiv.symm ⟨h, y⟩) * M u v) = 0
+    (M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) * M (u, v)) = 0
   have h2 := congrFun (congrFun hmpo
     (Fin.cons (F.sectorFinEquiv.symm ⟨k, x⟩)
       (fun _ : Fin 1 ↦ u)))
     (Fin.cons (F.sectorFinEquiv.symm ⟨h, y⟩)
       (fun _ : Fin 1 ↦ v))
   have hCzero : F.sectorCoordinateTensor
-      (F.sectorFinEquiv.symm ⟨k, x⟩)
-      (F.sectorFinEquiv.symm ⟨h, y⟩) = 0 := by
+      (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) = 0 := by
     ext beta alpha
     exact F.sectorCoordinateTensor_apply_ne hkh x y beta alpha
   simp [mpo_apply, mpoMatrixEntry, List.ofFn_succ, hCzero] at h2
@@ -200,20 +194,17 @@ theorem changePhysicalBasis_apply_eq_zero_of_not_isCyclicActiveSector
     (k : Fin F.sectorCount) (hk : ¬ F.IsCyclicActiveSector k)
     (x y : F.SectorIndex k) :
     changePhysicalBasis F.physicalCoordinateMatrix K
-        (F.sectorFinEquiv.symm ⟨k, x⟩)
-        (F.sectorFinEquiv.symm ⟨k, y⟩) = 0 := by
+        (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) = 0 := by
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
   have hM : M.IsInjective :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
-  change M (F.sectorFinEquiv.symm ⟨k, x⟩)
-    (F.sectorFinEquiv.symm ⟨k, y⟩) = 0
+  change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) = 0
   apply MPSTensor.eq_zero_of_forall_trace_mul_right_eq_zero hM
   intro p
   set u := p.divNat
   set v := p.modNat
   change Matrix.trace
-    (M (F.sectorFinEquiv.symm ⟨k, x⟩)
-      (F.sectorFinEquiv.symm ⟨k, y⟩) * M u v) = 0
+    (M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) * M (u, v)) = 0
   have h2 := congrFun (congrFun hmpo
     (Fin.cons (F.sectorFinEquiv.symm ⟨k, x⟩)
       (fun _ : Fin 1 ↦ u)))
@@ -245,11 +236,9 @@ theorem changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero
     (k h : Fin F.sectorCount) (hkh : F.neighboringOperator k h = 0)
     (x y : F.SectorIndex k) (a b : F.SectorIndex h) :
     changePhysicalBasis F.physicalCoordinateMatrix K
-        (F.sectorFinEquiv.symm ⟨k, x⟩)
-        (F.sectorFinEquiv.symm ⟨k, y⟩) *
+        (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) *
       changePhysicalBasis F.physicalCoordinateMatrix K
-        (F.sectorFinEquiv.symm ⟨h, a⟩)
-        (F.sectorFinEquiv.symm ⟨h, b⟩) = 0 := by
+        (F.sectorFinEquiv.symm ⟨h, a⟩, F.sectorFinEquiv.symm ⟨h, b⟩) = 0 := by
   let M := changePhysicalBasis F.physicalCoordinateMatrix K
   have hM : M.IsInjective :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
@@ -258,10 +247,8 @@ theorem changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero
   set u := p.divNat
   set v := p.modNat
   change Matrix.trace
-    ((M (F.sectorFinEquiv.symm ⟨k, x⟩)
-      (F.sectorFinEquiv.symm ⟨k, y⟩) *
-        M (F.sectorFinEquiv.symm ⟨h, a⟩)
-          (F.sectorFinEquiv.symm ⟨h, b⟩)) * M u v) = 0
+    ((M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) *
+        M (F.sectorFinEquiv.symm ⟨h, a⟩, F.sectorFinEquiv.symm ⟨h, b⟩)) * M (u, v)) = 0
   have h3 := congrFun (congrFun hmpo
     (Fin.cons (F.sectorFinEquiv.symm ⟨k, x⟩) <|
       Fin.cons (F.sectorFinEquiv.symm ⟨h, a⟩)
@@ -299,8 +286,7 @@ theorem exists_changePhysicalBasis_apply_ne_zero_of_isCyclicActiveSector
     (q : Fin F.sectorCount) (hq : F.IsCyclicActiveSector q) :
     ∃ x y : F.SectorIndex q,
       changePhysicalBasis F.physicalCoordinateMatrix K
-        (F.sectorFinEquiv.symm ⟨q, x⟩)
-        (F.sectorFinEquiv.symm ⟨q, y⟩) ≠ 0 := by
+        (F.sectorFinEquiv.symm ⟨q, x⟩, F.sectorFinEquiv.symm ⟨q, y⟩) ≠ 0 := by
   classical
   obtain ⟨N, hNinst, hN, k, hk0, z, hz⟩ :=
     F.exists_cyclicNeighboringProduct_diag_ne_zero_of_isCyclicActiveSector
@@ -346,8 +332,7 @@ noncomputable def cyclicActiveOriginalOneSiteMatrixFamily
     (u : F.CyclicActiveOriginalEntryIndex) :
     Matrix (Fin D) (Fin D) ℂ :=
   changePhysicalBasis F.physicalCoordinateMatrix K
-    (F.sectorFinEquiv.symm ⟨u.1, u.2.1⟩)
-    (F.sectorFinEquiv.symm ⟨u.1, u.2.2⟩)
+    (F.sectorFinEquiv.symm ⟨u.1, u.2.1⟩, F.sectorFinEquiv.symm ⟨u.1, u.2.2⟩)
 
 /-- The cyclic-active selected-sector matrices of the original injective
 tensor span its full virtual matrix algebra.
@@ -371,7 +356,7 @@ theorem cyclicActiveOriginalOneSiteMatrixFamily_span_eq_top
   rw [← hM.span_eq_top]
   apply Submodule.span_le.2
   rintro A ⟨p, rfl⟩
-  change M p.divNat p.modNat ∈ _
+  change M (p.divNat, p.modNat) ∈ _
   generalize hi : F.sectorFinEquiv p.divNat = si
   generalize hj : F.sectorFinEquiv p.modNat = sj
   obtain ⟨k, x⟩ := si
@@ -384,8 +369,7 @@ theorem cyclicActiveOriginalOneSiteMatrixFamily_span_eq_top
     rw [Equiv.apply_symm_apply, hj]
   rw [hi', hj']
   change changePhysicalBasis F.physicalCoordinateMatrix K
-    (F.sectorFinEquiv.symm ⟨k, x⟩)
-    (F.sectorFinEquiv.symm ⟨h, y⟩) ∈ _
+    (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) ∈ _
   by_cases hkh : k = h
   · subst h
     by_cases hk : F.IsCyclicActiveSector k
@@ -502,8 +486,7 @@ theorem cyclicActive_reflTransGen_neighboringOperator_ne_zero_of_closed_mpo
     (fun (r : F.CyclicActiveSector)
         (xy : F.SectorIndex r × F.SectorIndex r) ↦
       changePhysicalBasis F.physicalCoordinateMatrix K
-        (F.sectorFinEquiv.symm ⟨r, xy.1⟩)
-        (F.sectorFinEquiv.symm ⟨r, xy.2⟩))
+        (F.sectorFinEquiv.symm ⟨r, xy.1⟩, F.sectorFinEquiv.symm ⟨r, xy.2⟩))
     (fun a b : F.CyclicActiveSector ↦
       F.neighboringOperator a b ≠ 0)
   · exact F.cyclicActiveOriginalOneSiteMatrixFamily_span_eq_top hK c₂ h₂

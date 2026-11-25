@@ -64,7 +64,7 @@ private theorem trace_mul_eq_of_mpo_eq_one {D : ℕ} {M : MPOTensor d D}
   have hlet : ∀ a b, (M.toMPSTensor a * M.toMPSTensor b).trace =
       (M.toMPSTensor a).trace * (M.toMPSTensor b).trace := by
     intro a b
-    have e1 : ∀ i j, (M i j).trace = if i = j then 1 else 0 := fun i j ↦ by
+    have e1 : ∀ i j, (M (i, j)).trace = if i = j then 1 else 0 := fun i j ↦ by
       have := congrFun (congrFun h1 (fun _ ↦ i)) (fun _ ↦ j)
       simpa [mpoMatrixEntry, Matrix.one_apply, funext_iff] using this
     have e2 := congrFun (congrFun h2 ![a.divNat, b.divNat]) ![a.modNat, b.modNat]
@@ -72,8 +72,8 @@ private theorem trace_mul_eq_of_mpo_eq_one {D : ℕ} {M : MPOTensor d D}
       evalWord_nil, Matrix.mul_one, Matrix.one_apply, funext_iff, Fin.forall_fin_two] at e2
     simp only [Matrix.cons_val_zero, Matrix.cons_val_one,
       Fin.succ_zero_eq_one] at e2
-    change (M a.divNat a.modNat * M b.divNat b.modNat).trace =
-      (M a.divNat a.modNat).trace * (M b.divNat b.modNat).trace
+    change (M (a.divNat, a.modNat) * M (b.divNat, b.modNat)).trace =
+      (M (a.divNat, a.modNat)).trace * (M (b.divNat, b.modNat)).trace
     rw [e2, e1, e1]
     by_cases hA : a.divNat = a.modNat <;> by_cases hB : b.divNat = b.modNat <;> simp [hA, hB]
   have hspan : ∀ Z : Matrix (Fin D) (Fin D) ℂ,
@@ -122,7 +122,7 @@ theorem bondDim_le_one_of_mpo_eq_one {D : ℕ} {M : MPOTensor d D}
 Source: arXiv:2203.12563, line 1213. -/
 theorem eq_ite_one_of_mpo_eq_one {D : ℕ} {M : MPOTensor d D}
     (hM : Kraus.IsInjective M.toMPSTensor) (h1 : mpo M 1 = 1) (h2 : mpo M 2 = 1)
-    (i j : Fin d) : M i j = if i = j then 1 else 0 := by
+    (i j : Fin d) : M (i, j) = if i = j then 1 else 0 := by
   have hsub : Subsingleton (Fin D) :=
     Fin.subsingleton_iff_le_one.2 (bondDim_le_one_of_mpo_eq_one hM h1 h2)
   have e1 := congrFun (congrFun h1 (fun _ ↦ i)) (fun _ ↦ j)
@@ -150,13 +150,13 @@ Source: arXiv:2203.12563, line 1213 ("we decompose the product of the three MPO 
 theorem bondDim_le_one_of_mulTensor_eq_ite {D₁ D₂ : ℕ} {A : MPOTensor d D₁}
     {B : MPOTensor d D₂} (hA : Kraus.IsInjective A.toMPSTensor)
     {P : Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) ℂ} {Q : Matrix (Fin (D₂ * D₁)) (Fin (D₂ * D₁)) ℂ}
-    (hP : ∀ i k, mulTensor A B i k = if i = k then P else 0)
-    (hQ : ∀ i k, mulTensor B A i k = if i = k then Q else 0) (htr : P.trace ≠ 0) :
+    (hP : ∀ i k, mulTensor A B (i, k) = if i = k then P else 0)
+    (hQ : ∀ i k, mulTensor B A (i, k) = if i = k then Q else 0) (htr : P.trace ≠ 0) :
     D₁ ≤ 1 := by
   -- the entry identity on letters
   have hlet : ∀ (i k : Fin d) (a c : Fin D₁) (b : Fin D₂),
-      P (finProdFinEquiv (a, b)) (finProdFinEquiv (a, b)) * A i k c c =
-        A i k a a * Q (finProdFinEquiv (b, c)) (finProdFinEquiv (b, c)) := by
+      P (finProdFinEquiv (a, b)) (finProdFinEquiv (a, b)) * A (i, k) c c =
+        A (i, k) a a * Q (finProdFinEquiv (b, c)) (finProdFinEquiv (b, c)) := by
     intro i k a c b
     have h := congrFun (congrFun (mulTensor_assoc A B A i k)
       (finProdFinEquiv (finProdFinEquiv (a, b), c)))
@@ -165,7 +165,7 @@ theorem bondDim_le_one_of_mulTensor_eq_ite {D₁ D₂ : ℕ} {A : MPOTensor d D�
       Matrix.kroneckerMap_apply, Equiv.symm_apply_apply, mulTensorAssocEquiv,
       Equiv.trans_apply, Equiv.prodCongr_apply, Prod.map_apply, Equiv.refl_apply,
       Equiv.prodAssoc_apply] at h
-    have hPe : ∀ i' j : Fin d, ∑ c', A i' c' a a * B c' j b b =
+    have hPe : ∀ i' j : Fin d, ∑ c', A (i', c') a a * B (c', j) b b =
         if i' = j then P (finProdFinEquiv (a, b)) (finProdFinEquiv (a, b)) else 0 := by
       intro i' j
       have := congrFun (congrFun (hP i' j) (finProdFinEquiv (a, b))) (finProdFinEquiv (a, b))
@@ -173,7 +173,7 @@ theorem bondDim_le_one_of_mulTensor_eq_ite {D₁ D₂ : ℕ} {A : MPOTensor d D�
         Matrix.kroneckerMap_apply, Equiv.symm_apply_apply] at this
       rw [this]
       split_ifs <;> rfl
-    have hQe : ∀ i' j : Fin d, ∑ c', B i' c' b b * A c' j c c =
+    have hQe : ∀ i' j : Fin d, ∑ c', B (i', c') b b * A (c', j) c c =
         if i' = j then Q (finProdFinEquiv (b, c)) (finProdFinEquiv (b, c)) else 0 := by
       intro i' j
       have := congrFun (congrFun (hQ i' j) (finProdFinEquiv (b, c))) (finProdFinEquiv (b, c))
@@ -277,7 +277,7 @@ def FusionData.IsClosed (fd : FusionData F) : Prop :=
 /-- Closed fusion in terms of the two physical indices. -/
 theorem FusionData.IsClosed.mulTensor_apply {fd : FusionData F} (hfd : fd.IsClosed)
     (g h : G) (i k : Fin d) :
-    mulTensor (F.tensor g) (F.tensor h) i k = fd.W g h * F.tensor (g * h) i k * fd.V g h := by
+    mulTensor (F.tensor g) (F.tensor h) (i, k) = fd.W g h * F.tensor (g * h) (i, k) * fd.V g h := by
   simpa only [toMPSTensor_finProdFinEquiv] using hfd g h (finProdFinEquiv (i, k))
 
 /-- **Every bond dimension is one.** For an injective representation with `U_e = 1` and closed
@@ -290,11 +290,11 @@ theorem bondDim_eq_one_of_closed_fusion
     (g : G) : F.bondDim g = 1 := by
   refine le_antisymm ?_ (F.bondDim_pos g)
   have hδ : ∀ {a : G}, a = 1 → ∀ i k : Fin d,
-      F.tensor a i k = if i = k then 1 else 0 := by
+      F.tensor a (i, k) = if i = k then 1 else 0 := by
     rintro a rfl i k
     exact eq_ite_one_of_mpo_eq_one (hinj 1) (hone 1 one_pos) (hone 2 two_pos) i k
   have hclosed : ∀ a b : G, a * b = 1 → ∀ i k : Fin d,
-      mulTensor (F.tensor a) (F.tensor b) i k = if i = k then fd.W a b * fd.V a b else 0 := by
+      mulTensor (F.tensor a) (F.tensor b) (i, k) = if i = k then fd.W a b * fd.V a b else 0 := by
     intro a b hab i k
     rw [hfd.mulTensor_apply, hδ hab]
     split_ifs <;> simp
@@ -315,9 +315,9 @@ theorem isOnSite_of_closed_fusion
     (hinj : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor)
     (hone : ∀ N, 0 < N → mpo (F.tensor 1) N = 1) {fd : FusionData F} (hfd : fd.IsClosed) :
     F.IsOnSite := by
-  refine ⟨fun g i j ↦ (F.tensor g i j).trace, fun g N hN σ τ ↦ ?_⟩
+  refine ⟨fun g i j ↦ (F.tensor g (i, j)).trace, fun g N hN σ τ ↦ ?_⟩
   have key : ∀ (D : ℕ) (M : MPOTensor d D), D = 1 →
-      mpo M N σ τ = ∏ n, (M (σ n) (τ n)).trace := by
+      mpo M N σ τ = ∏ n, (M (σ n, τ n)).trace := by
     rintro D M rfl
     have : NeZero N := ⟨hN.ne'⟩
     rw [mpo_apply_of_bondOne]

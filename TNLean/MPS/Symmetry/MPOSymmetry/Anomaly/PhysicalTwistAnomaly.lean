@@ -93,7 +93,7 @@ variable {d D D₁ D₂ : ℕ}
 /-- Two physical twists compose: `pairTwist a b (pairTwist u v M) = pairTwist (a u) (b v) M`. -/
 theorem pairTwist_pairTwist (a b u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) :
     pairTwist a b (pairTwist u v M) = pairTwist (a * u) (b * v) M := by
-  funext i j
+  funext ⟨i, j⟩
   ext r c
   simp only [pairTwist, Matrix.mul_apply, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
     Finset.mul_sum, Finset.sum_mul]
@@ -109,7 +109,7 @@ theorem pairTwist_pairTwist (a b u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTenso
 
 /-- The trivial physical twist is the identity. -/
 @[simp] theorem pairTwist_one_one (M : MPOTensor d D) : pairTwist 1 1 M = M := by
-  funext i j
+  funext ⟨i, j⟩
   simp [pairTwist, Matrix.one_apply, ite_smul]
 
 /-- A unitary change of physical basis is undone by the adjoint change of basis. -/
@@ -140,7 +140,7 @@ theorem mulTensor_pairTwist_map_star {u : Matrix (Fin d) (Fin d) ℂ} (hu : star
   have hδ : ∀ b c, ∑ k, starRingEnd ℂ (u k b) * u k c = if b = c then 1 else 0 := by
     intro b c
     simpa [Matrix.mul_apply, Matrix.one_apply] using congrFun (congrFun hu b) c
-  funext i j
+  funext ⟨i, j⟩
   ext r s
   simp only [pairTwist, mulTensor_apply, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.smul_apply, Matrix.map_apply, Matrix.kroneckerMap_apply, smul_eq_mul,
@@ -168,7 +168,7 @@ theorem mulTensor_pairTwist_map_star {u : Matrix (Fin d) (Fin d) ℂ} (hu : star
 theorem pairTwist_idTensor {u : Matrix (Fin d) (Fin d) ℂ} (hu : star u * u = 1) :
     pairTwist u (u.map (starRingEnd ℂ)) (idTensor d) = idTensor d := by
   have hu' : u * star u = 1 := mul_eq_one_comm.1 hu
-  funext i j
+  funext ⟨i, j⟩
   have hij := congrFun (congrFun hu' i) j
   simp only [Matrix.mul_apply, Matrix.star_apply, Matrix.one_apply, RCLike.star_def] at hij
   simp only [pairTwist, idTensor, Matrix.map_apply, smul_ite, smul_zero, Finset.sum_ite_eq,

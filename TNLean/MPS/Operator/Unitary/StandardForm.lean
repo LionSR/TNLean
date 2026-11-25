@@ -38,16 +38,16 @@ theorem mul_apply_eq_sum_of_sourceCut_factorizations
     (X₂ : Matrix (Fin D × Fin d) L ℂ) (Y₂ : Matrix L (Fin d × Fin D) ℂ)
     (h₁ : sourceCutM₁ U = X₁ * Y₁) (h₂ : sourceCutM₂ U = X₂ * Y₂)
     (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
-    (U i₁ j₁ * U i₂ j₂) α γ =
+    (U (i₁, j₁) * U (i₂, j₂)) α γ =
       ∑ l : L, ∑ r : R, X₂ (α, i₁) l *
         (∑ β : Fin D, Y₂ l (j₁, β) * Y₁ r (β, j₂)) * X₁ (i₂, γ) r := by
   classical
   simp only [Matrix.mul_apply]
-  have hleft (β : Fin D) : U i₁ j₁ α β =
+  have hleft (β : Fin D) : U (i₁, j₁) α β =
       ∑ l : L, X₂ (α, i₁) l * Y₂ l (j₁, β) := by
     simpa only [sourceCutM₂_apply, Matrix.mul_apply] using
       congrArg (fun M ↦ M (α, i₁) (j₁, β)) h₂
-  have hright (β : Fin D) : U i₂ j₂ β γ =
+  have hright (β : Fin D) : U (i₂, j₂) β γ =
       ∑ r : R, X₁ (i₂, γ) r * Y₁ r (β, j₂) := by
     simpa only [sourceCutM₁_apply, Matrix.mul_apply] using
       congrArg (fun M ↦ M (i₂, γ) (β, j₂)) h₁
@@ -70,7 +70,7 @@ theorem sum_sourceV_mul_Y₁
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (i₁ j₁ i₂ : Fin d) (α : Fin D) (l : Fin ℓ[U]) :
     (∑ r : Fin r[U], sourceV U S (i₁, i₂) (r, l) * S.Y₁ r (α, j₁)) =
-      ∑ β : Fin D, U i₁ j₁ α β * S.X₂ (β, i₂) l := by
+      ∑ β : Fin D, U (i₁, j₁) α β * S.X₂ (β, i₂) l := by
   classical
   simp only [sourceV_apply, Finset.sum_mul]
   rw [Finset.sum_comm]
@@ -92,7 +92,7 @@ Source: CPSV17 equations `uuvv` and `vdagger`, lines 532--543. -/
 theorem mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
-    (U i₁ j₁ * U i₂ j₂) α γ =
+    (U (i₁, j₁) * U (i₂, j₂)) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
         sourceV U S (i₁, i₂) (r, l) * S.Y₁ r (α, j₁) * S.Y₂ l (j₂, γ) := by
   classical
@@ -105,12 +105,12 @@ theorem mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
       apply Finset.sum_congr rfl
       intro l _
       rw [Finset.sum_mul]
-    _ = ∑ l : Fin ℓ[U], (∑ β : Fin D, U i₁ j₁ α β * S.X₂ (β, i₂) l) *
+    _ = ∑ l : Fin ℓ[U], (∑ β : Fin D, U (i₁, j₁) α β * S.X₂ (β, i₂) l) *
           S.Y₂ l (j₂, γ) := by
       apply Finset.sum_congr rfl
       intro l _
       rw [sum_sourceV_mul_Y₁ U S]
-    _ = ∑ β : Fin D, U i₁ j₁ α β *
+    _ = ∑ β : Fin D, U (i₁, j₁) α β *
         (∑ l : Fin ℓ[U], S.X₂ (β, i₂) l * S.Y₂ l (j₂, γ)) := by
       simp only [Finset.sum_mul]
       rw [Finset.sum_comm]
@@ -120,7 +120,7 @@ theorem mul_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
       apply Finset.sum_congr rfl
       intro l _
       ring
-    _ = ∑ β : Fin D, U i₁ j₁ α β * U i₂ j₂ β γ := by
+    _ = ∑ β : Fin D, U (i₁, j₁) α β * U (i₂, j₂) β γ := by
       apply Finset.sum_congr rfl
       intro β _
       rw [← Matrix.mul_apply, X₂_mul_Y₂_apply]
@@ -138,7 +138,7 @@ Source: CPSV17 equations `uuvv` and `uu`, lines 532--543. -/
 theorem mul_apply_eq_sum_X₂_mul_sourceU_mul_X₁
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
-    (U i₁ j₁ * U i₂ j₂) α γ =
+    (U (i₁, j₁) * U (i₂, j₂)) α γ =
       ∑ l : Fin ℓ[U], ∑ r : Fin r[U],
         S.X₂ (α, i₁) l * sourceU U S (l, r) (j₁, j₂) * S.X₁ (i₂, γ) r := by
   simpa only [sourceU_apply] using
@@ -151,7 +151,7 @@ Source: CPSV17 equations `uuvv` and `uu`, lines 532--543. -/
 theorem blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (i j : Fin (d * d)) (α γ : Fin D) :
-    blockTwo U i j α γ =
+    blockTwo U (i, j) α γ =
       ∑ l : Fin ℓ[U], ∑ r : Fin r[U],
         S.X₂ (α, (finProdFinEquiv.symm i).1) l *
           sourceU U S (l, r) (finProdFinEquiv.symm j) *
@@ -166,7 +166,7 @@ Source: CPSV17 equations `uuvv` and `vdagger`, lines 532--543. -/
 theorem blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (i j : Fin (d * d)) (α γ : Fin D) :
-    blockTwo U i j α γ =
+    blockTwo U (i, j) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
         sourceV U S (finProdFinEquiv.symm i) (r, l) *
           S.Y₁ r (α, (finProdFinEquiv.symm j).1) *
@@ -186,7 +186,7 @@ theorem sum_sourceV_mul_sourceY₁
     (i₁ j₁ i₂ : Fin d) (α : Fin D) (l : Fin ℓ[U]) :
     (∑ r : Fin r[U],
       sourceV U ρ hρ (i₁, i₂) (r, l) * sourceY₁ U ρ hρ r (α, j₁)) =
-      ∑ β : Fin D, U i₁ j₁ α β * sourceX₂ U (β, i₂) l := by
+      ∑ β : Fin D, U (i₁, j₁) α β * sourceX₂ U (β, i₂) l := by
   classical
   simp only [sourceV_apply, Finset.sum_mul]
   rw [Finset.sum_comm]
@@ -209,7 +209,7 @@ Source: CPSV17 equations `uuvv` and `vdagger`, lines 532--543. -/
 theorem mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i₁ j₁ i₂ j₂ : Fin d) (α γ : Fin D) :
-    (U i₁ j₁ * U i₂ j₂) α γ =
+    (U (i₁, j₁) * U (i₂, j₂)) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
         sourceV U ρ hρ (i₁, i₂) (r, l) * sourceY₁ U ρ hρ r (α, j₁) *
           sourceY₂ U l (j₂, γ) := by
@@ -227,7 +227,7 @@ source gate $u$. -/
 theorem mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂_pair
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (q j : Fin d × Fin d) (α γ : Fin D) :
-    (U q.1 j.1 * U q.2 j.2) α γ =
+    (U (q.1, j.1) * U (q.2, j.2)) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
         sourceV U ρ hρ q (r, l) * sourceY₁ U ρ hρ r (α, j.1) *
           sourceY₂ U l (j.2, γ) :=
@@ -241,7 +241,7 @@ Source: CPSV17 equations `uuvv` and `uu`, lines 532--543. -/
 theorem blockTwo_apply_eq_sum_sourceX₂_mul_sourceU_mul_sourceX₁
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i j : Fin (d * d)) (α γ : Fin D) :
-    blockTwo U i j α γ =
+    blockTwo U (i, j) α γ =
       ∑ l : Fin ℓ[U], ∑ r : Fin r[U],
         sourceX₂ U (α, (finProdFinEquiv.symm i).1) l *
           sourceU U ρ hρ (l, r) (finProdFinEquiv.symm j) *
@@ -257,7 +257,7 @@ Source: CPSV17 equations `uuvv` and `vdagger`, lines 532--543. -/
 theorem blockTwo_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i j : Fin (d * d)) (α γ : Fin D) :
-    blockTwo U i j α γ =
+    blockTwo U (i, j) α γ =
       ∑ r : Fin r[U], ∑ l : Fin ℓ[U],
         sourceV U ρ hρ (finProdFinEquiv.symm i) (r, l) *
           sourceY₁ U ρ hρ r (α, (finProdFinEquiv.symm j).1) *

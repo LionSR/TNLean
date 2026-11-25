@@ -72,7 +72,7 @@ variable {d D : ℕ}
 private theorem braRightMul_eq (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) :
     M.braRightMul P =
       physicalTransposeTensor ((physicalTransposeTensor M).ketLeftMul Pᵀ) := by
-  funext i j
+  funext ⟨i, j⟩
   ext β α
   simp [braRightMul, ketLeftMul, physicalTransposeTensor, physicalAdjointTensor, mapStar,
     Matrix.sum_apply]
@@ -91,7 +91,7 @@ theorem mpo_braRightMul (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) (N 
 private theorem conjugatePhysical_eq_ketLeftMul_braRightMul (K : MPOTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) :
     conjugatePhysical K U = (K.ketLeftMul U).braRightMul Uᴴ := by
-  funext i j
+  funext ⟨i, j⟩
   ext β α
   simp only [conjugatePhysical, physicalSlice, ketLeftMul, braRightMul, Matrix.mul_apply,
     Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Finset.sum_mul, Finset.mul_sum]
@@ -243,12 +243,12 @@ private theorem joinedIn_bond_step (d : ℕ) {S : FiniteChainOperatorSymmetry (d
       (reindexPhysical (siteSwap d) (shiftExampleU₂ d)) (shiftExampleU₃ d) := by
   set Y := reindexPhysical (siteSwap d) (shiftExampleU₂ d)
   have hmpo : ∀ x : ℝ, ∀ N : ℕ, mpo Y N =
-      mpo (fun i j => swapPathFin d x * Y i j * (swapPathFin d x)ᴴ :
+      mpo (fun (i, j) => swapPathFin d x * Y (i, j) * (swapPathFin d x)ᴴ :
         MPOTensor (d * d) (d * d)) N := fun x N ↦
     mpo_eq_of_conj (mem_unitaryGroup_iff.mp (swapPathFin_mem_unitaryGroup d x))
       (mem_unitaryGroup_iff'.mp (swapPathFin_mem_unitaryGroup d x)) (fun _ _ => rfl) N
   refine JoinedIn.ofLine
-    (f := fun x => (fun i j => swapPathFin d x * Y i j * (swapPathFin d x)ᴴ :
+    (f := fun x => (fun ij => swapPathFin d x * Y ij * (swapPathFin d x)ᴴ :
       MPOTensor (d * d) (d * d)))
     ((continuous_bondConj _).comp (continuous_swapPathFin d)).continuousOn ?_ ?_ ?_
   · funext i j

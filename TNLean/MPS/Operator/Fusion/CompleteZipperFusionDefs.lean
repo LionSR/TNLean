@@ -120,18 +120,18 @@ structure CompleteZipperFusionFamily (Λ : Type u) [Fintype Λ] [DecidableEq Λ]
 
   Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 193--196. -/
   pairLetter_mul_synthesis : ∀ (a b : Λ) (i k : Fin p),
-    (∑ j : Fin p, tensor a i j ⊗ₖ tensor b j k) * fusionSynthesis a b =
+    (∑ j : Fin p, tensor a (i, j) ⊗ₖ tensor b (j, k)) * fusionSynthesis a b =
       fusionSynthesis a b * Matrix.blockDiagonal' (fun c =>
         (1 : Matrix (Fin (fusionMultiplicity a b c))
-          (Fin (fusionMultiplicity a b c)) ℂ) ⊗ₖ tensor c i k)
+          (Fin (fusionMultiplicity a b c)) ℂ) ⊗ₖ tensor c (i, k))
   /-- The second zipper identity, $X^+B_{ab}=(1_N\otimes B)X^+$.
 
   Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 198--200. -/
   analysis_mul_pairLetter : ∀ (a b : Λ) (i k : Fin p),
-    fusionAnalysis a b * (∑ j : Fin p, tensor a i j ⊗ₖ tensor b j k) =
+    fusionAnalysis a b * (∑ j : Fin p, tensor a (i, j) ⊗ₖ tensor b (j, k)) =
       Matrix.blockDiagonal' (fun c =>
         (1 : Matrix (Fin (fusionMultiplicity a b c))
-          (Fin (fusionMultiplicity a b c)) ℂ) ⊗ₖ tensor c i k) *
+          (Fin (fusionMultiplicity a b c)) ℂ) ⊗ₖ tensor c (i, k)) *
         fusionAnalysis a b
   /-- Every product-MPO letter is reconstructed through the fusion support.
 
@@ -139,10 +139,10 @@ structure CompleteZipperFusionFamily (Λ : Type u) [Fintype Λ] [DecidableEq Λ]
   lines 184--186. -/
   pairLetter_eq_synthesis_mul_directSum_mul_analysis : ∀
       (a b : Λ) (i k : Fin p),
-    (∑ j : Fin p, tensor a i j ⊗ₖ tensor b j k) =
+    (∑ j : Fin p, tensor a (i, j) ⊗ₖ tensor b (j, k)) =
       fusionSynthesis a b * Matrix.blockDiagonal' (fun c =>
         (1 : Matrix (Fin (fusionMultiplicity a b c))
-          (Fin (fusionMultiplicity a b c)) ℂ) ⊗ₖ tensor c i k) *
+          (Fin (fusionMultiplicity a b c)) ℂ) ⊗ₖ tensor c (i, k)) *
         fusionAnalysis a b
   /-- A simultaneous left inverse of the labelled block-letter matrix.
 
@@ -155,7 +155,7 @@ structure CompleteZipperFusionFamily (Λ : Type u) [Fintype Λ] [DecidableEq Λ]
   blockLeftInverse_apply : ∀ (c d : Λ) (x y : Fin (bondDim c))
       (x' y' : Fin (bondDim d)),
     (∑ i : Fin p, ∑ k : Fin p,
-      blockLeftInverse ⟨c, x, y⟩ (i, k) * tensor d i k x' y') =
+      blockLeftInverse ⟨c, x, y⟩ (i, k) * tensor d (i, k) x' y') =
       if h : c = d then
         if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
       else 0
@@ -302,21 +302,21 @@ space. -/
 noncomputable def tripleProductLetter (a b c : Λ) (i l : Fin p) :
     Matrix (Fus.TripleBond a b c) (Fus.TripleBond a b c) ℂ :=
   ∑ j : Fin p, ∑ k : Fin p,
-    (Fus.tensor a i j ⊗ₖ Fus.tensor b j k) ⊗ₖ Fus.tensor c k l
+    (Fus.tensor a (i, j) ⊗ₖ Fus.tensor b (j, k)) ⊗ₖ Fus.tensor c (k, l)
 
 /-- The direct sum of final-block letters in the left-tree coordinates. -/
 noncomputable def leftTripleDirectSumLetter (a b c : Λ) (i l : Fin p) :
     Matrix (Fus.LeftTripleIndex a b c) (Fus.LeftTripleIndex a b c) ℂ :=
   Matrix.blockDiagonal' fun d =>
     (1 : Matrix (Fus.LeftTripleMultiplicity a b c d)
-      (Fus.LeftTripleMultiplicity a b c d) ℂ) ⊗ₖ Fus.tensor d i l
+      (Fus.LeftTripleMultiplicity a b c d) ℂ) ⊗ₖ Fus.tensor d (i, l)
 
 /-- The direct sum of final-block letters in the right-tree coordinates. -/
 noncomputable def rightTripleDirectSumLetter (a b c : Λ) (i l : Fin p) :
     Matrix (Fus.RightTripleIndex a b c) (Fus.RightTripleIndex a b c) ℂ :=
   Matrix.blockDiagonal' fun d =>
     (1 : Matrix (Fus.RightTripleMultiplicity a b c d)
-      (Fus.RightTripleMultiplicity a b c d) ℂ) ⊗ₖ Fus.tensor d i l
+      (Fus.RightTripleMultiplicity a b c d) ℂ) ⊗ₖ Fus.tensor d (i, l)
 
 end CompleteZipperFusionFamily
 

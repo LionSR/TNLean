@@ -50,7 +50,7 @@ sum of the two letters, the bond space `Fin (D₁ + D₂)` being identified with
 by `finSumFinEquiv`. -/
 noncomputable def directSum (M : MPOTensor d D₁) (N : MPOTensor d D₂) :
     MPOTensor d (D₁ + D₂) :=
-  fun i j => (Matrix.fromBlocks (M i j) 0 0 (N i j)).submatrix finSumFinEquiv.symm
+  fun ij => (Matrix.fromBlocks (M ij) 0 0 (N ij)).submatrix finSumFinEquiv.symm
     finSumFinEquiv.symm
 
 /-- Word evaluation of a direct sum is the block-diagonal sum of the word evaluations. -/

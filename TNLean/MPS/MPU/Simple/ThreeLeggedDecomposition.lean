@@ -145,8 +145,8 @@ Source: arXiv:2502.20257, Theorem `thm:mpu` and line 809. -/
 theorem exists_threeLegged (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U) :
     ∃ S : SourceFactors U hU.ρ,
       (∀ (i j : Fin d) (α β : Fin D),
-        (S.X₁ * S.Y₁) (i, β) (α, j) = U i j α β ∧
-          (S.X₂ * S.Y₂) (α, i) (j, β) = U i j α β) ∧
+        (S.X₁ * S.Y₁) (i, β) (α, j) = U (i, j) α β ∧
+          (S.X₂ * S.Y₂) (α, i) (j, β) = U (i, j) α β) ∧
       (SourceFactors.sourceU U S).IsUnitaryBetween ∧
       (SourceFactors.sourceV U S).IsUnitaryBetween ∧
       S.X₂ᴴ * S.X₂ = 1 ∧ S.X₁ᴴ * sourceWeight (d := d) hU.ρ * S.X₁ = 1 ∧

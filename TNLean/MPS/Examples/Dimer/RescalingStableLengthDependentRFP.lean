@@ -152,11 +152,11 @@ lemma bondEquiv_val (x y : Fin 2) : bondEquiv (x, y) =
   fin_cases x <;> fin_cases y <;> rfl
 
 def R : MPOTensor 4 4 :=
-  fun p q a b => (25/32 : ℂ) * (A a ⊗ₖ (A b).map (starRingEnd ℂ))
+  fun (p, q) a b => (25/32 : ℂ) * (A a ⊗ₖ (A b).map (starRingEnd ℂ))
     (bondEquiv.symm p) (bondEquiv.symm q)
 
 @[simp]
-lemma R_apply (p q a b : Fin 4) : R p q a b =
+lemma R_apply (p q a b : Fin 4) : R (p, q) a b =
     (25/32 : ℂ) * (A a ⊗ₖ (A b).map (starRingEnd ℂ)) (bondEquiv.symm p) (bondEquiv.symm q) := rfl
 
 /-! ### Physical-trace transfer idempotence -/
@@ -630,7 +630,7 @@ trace factorization of `mpo R N`.
 
 Project example; not from CPSV16. -/
 lemma R_eq_vecMulVec (p q : Fin 4) :
-    R p q = (25/32 : ℂ) • Matrix.vecMulVec (fun a => A a (bondBit1 p) (bondBit1 q))
+    R (p, q) = (25/32 : ℂ) • Matrix.vecMulVec (fun a => A a (bondBit1 p) (bondBit1 q))
       (fun b => A b (bondBit2 p) (bondBit2 q)) := by
   ext a b
   simp only [Matrix.smul_apply, Matrix.vecMulVec_apply, smul_eq_mul, R_apply,
@@ -715,7 +715,7 @@ theorem mpo_R_entry_formula {N : ℕ} (hN : 0 < N) (p q : Fin N → Fin 4) :
     mpo R N p q = (25/32 : ℂ) ^ N * chainIndicator N p q * wN N (φ N p) (φ N q) := by
   obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
   simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
-  have hRstep : ∀ i : Fin (n + 1), R (p i) (q i) =
+  have hRstep : ∀ i : Fin (n + 1), R (p i, q i) =
       (25/32 : ℂ) • Matrix.vecMulVec (fun a => A a (bondBit1 (p i)) (bondBit1 (q i)))
         (fun b => A b (bondBit2 (p i)) (bondBit2 (q i))) := fun i => R_eq_vecMulVec (p i) (q i)
   simp only [hRstep]

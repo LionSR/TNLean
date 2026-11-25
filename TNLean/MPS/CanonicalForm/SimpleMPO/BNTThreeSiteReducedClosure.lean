@@ -48,7 +48,7 @@ Source: arXiv:1606.00608, Appendix C.2, the BNT convention at lines
 1628--1632 and the canonical-form display at lines 1660--1665. -/
 def basisMPOTensor (S : SectorDecomposition (d * d))
     (j : Fin S.basisCount) : MPOTensor d (S.basisDim j) :=
-  fun a b ↦ S.basis j (finProdFinEquiv (a, b))
+  fun ab ↦ S.basis j (finProdFinEquiv ab)
 
 /-- Converting the representative MPO back to a doubled-index MPS tensor
 recovers the original BNT representative.
@@ -259,8 +259,8 @@ theorem reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos
               (S.basisMPOTensor j).verticalLoop ^ L) := by
       rw [sum_mpo_threeSite_prefix_diagonal_tail]
     _ = Matrix.trace
-          (S.basisMPOTensor j i₁ j₁ * S.basisMPOTensor j i₂ j₂ *
-            S.basisMPOTensor j i₃ j₃ *
+          (S.basisMPOTensor j (i₁, j₁) * S.basisMPOTensor j (i₂, j₂) *
+            S.basisMPOTensor j (i₃, j₃) *
               S.normalizedThreeSiteClosingMatrix M L j) := by
       simp only [MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix,
         MPSTensor.SectorDecomposition.threeSiteClosingMatrix,

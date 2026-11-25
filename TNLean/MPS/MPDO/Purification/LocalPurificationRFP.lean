@@ -122,7 +122,7 @@ noncomputable def witnessAcombined : MPSTensor (2 * 2) 1 :=
 
 /-- The ancilla-contracted MPO tensor `M^{ij}` at `D = D' = 1`. -/
 noncomputable def witnessM : MPOTensor 2 1 :=
-  fun i j => (∑ k : Fin 2,
+  fun (i, j) => (∑ k : Fin 2,
     (witnessA i k) ⊗ₖ ((witnessA j k).map (starRingEnd ℂ))).submatrix
       ⇑(finProdFinEquiv (m := 1) (n := 1)).symm ⇑(finProdFinEquiv (m := 1) (n := 1)).symm
 
@@ -132,7 +132,7 @@ private lemma sqrt2_inv_mul_self :
 
 /-- The single entry of the contracted MPO tensor: `M^{ij} = ½` if `i = j`, else `0`. -/
 lemma witnessM_entry (i j : Fin 2) :
-    witnessM i j 0 0 = if i = j then (2⁻¹ : ℂ) else 0 := by
+    witnessM (i, j) 0 0 = if i = j then (2⁻¹ : ℂ) else 0 := by
   have amp_mul_conj : ∀ a b c : Fin 2,
       witnessAmplitude a c * (starRingEnd ℂ) (witnessAmplitude b c)
         = if a = c ∧ b = c then (2⁻¹ : ℂ) else 0 := by
@@ -210,7 +210,7 @@ theorem exists_isPRFP_not_isZCL :
 the ket and bra physical legs gives 𝒯 = M⁰⁰ + M¹¹ = ½ + ½ = 1. -/
 lemma physTraceTransfer_witnessM : physTraceTransfer witnessM = 1 := by
   have hentry : physTraceTransfer witnessM 0 0 = 1 := by
-    rw [show physTraceTransfer witnessM = ∑ i : Fin 2, witnessM i i from rfl,
+    rw [show physTraceTransfer witnessM = ∑ i : Fin 2, witnessM (i, i) from rfl,
       Matrix.sum_apply, Fin.sum_univ_two, witnessM_entry, witnessM_entry,
       ite_eq_left rfl, ite_eq_left rfl]
     norm_num
@@ -262,7 +262,7 @@ idempotence. -/
 theorem purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq
     {dK D' : ℕ} (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e) :
     MPSTensor.IsTransferIdempotent (purificationTensor A) ↔
       physTraceTransfer M * physTraceTransfer M = physTraceTransfer M := by
@@ -301,7 +301,7 @@ theorem purificationTensor_isTransferIdempotent_iff_physTraceTransfer_sq
   -- Closing the physical legs identifies `𝒯_M` with a reindexing of `K`.
   have hPT : physTraceTransfer M = K.submatrix (⇑e) (⇑e) := by
     ext a b
-    rw [show physTraceTransfer M = ∑ i : Fin d, M i i from rfl, Matrix.sum_apply,
+    rw [show physTraceTransfer M = ∑ i : Fin d, M (i, i) from rfl, Matrix.sum_apply,
       Matrix.submatrix_apply, hKdef, Matrix.sum_apply]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [hM i i, Matrix.submatrix_apply]
@@ -450,7 +450,7 @@ positive-length restriction is needed. -/
 theorem mpo_eq_purificationDensity {dK D' : ℕ}
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     (N : ℕ) :
     mpo M N = purificationDensity A N := by

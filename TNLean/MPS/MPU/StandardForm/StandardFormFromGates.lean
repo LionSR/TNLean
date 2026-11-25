@@ -52,7 +52,7 @@ Source: CPSV17, StandardForm, lines 603--617; Appendix, line 2308. -/
 def standardFormTensorOfGates
     (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
     (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ) : MPOTensor (d * d) (d * r) :=
-  fun i j α γ => ∑ t : Fin ℓ, ∑ s : Fin r,
+  fun (i, j) α γ => ∑ t : Fin ℓ, ∑ s : Fin r,
     gateHalfLeft v (α, (finProdFinEquiv.symm i).1) t *
       u (t, s) (finProdFinEquiv.symm j) *
         gateHalfRight ((finProdFinEquiv.symm i).2, γ) s

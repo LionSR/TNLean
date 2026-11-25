@@ -50,7 +50,7 @@ This definition implements the local bulk contraction in that diagram in
 our `Fin 4` physical coordinates; it is not one of the printed boundary
 action tensors and does not assert the empty-word interior equation. -/
 def actedSector (x : Fin 2) : MPSTensor 4 2 :=
-  fun i l r ↦ ∑ j, tensor i j l r * blockedSector x j 0 0
+  fun i l r ↦ ∑ j, tensor (i, j) l r * blockedSector x j 0 0
 
 /-- The actual target sector, with the two GHZ labels exchanged.
 
@@ -86,7 +86,7 @@ local coordinate construction for the printed `eq:action_interior`
 (lines 1841–1869), not a matrix printed there or one of those boundary
 action tensors; its coordinates are proved in `actionMatrix_coordinates`. -/
 def actionMatrix (x : Fin 2) : Matrix (Fin 2) (Fin 2) ℂ :=
-  tensor (actionLetter x) (finProdFinEquiv (x, x))
+  tensor (actionLetter x, finProdFinEquiv (x, x))
 
 /-- The printed bra $p_0=(0,-i)$, $p_1=(1,0)$.
 Source: arXiv:2502.20257, lines 4690–4694. -/

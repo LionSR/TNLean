@@ -72,7 +72,7 @@ instance (a b c : Fin 2) : Subsingleton (Fin (fibMult a b c)) :=
   Fin.subsingleton_iff_le_one.mpr (fibMult_le_one a b c)
 
 theorem fibBlock_eq_complexOfGolden (a : Fin 2) :
-    fibBlock a = fun i j ↦ complexOfGolden (fibBlockGolden a i j) := by
+    fibBlock a = Function.uncurry fun i j ↦ complexOfGolden (fibBlockGolden a i j) := by
   fin_cases a <;> rfl
 
 theorem fibNimTargets_eq_complexOfGolden (x : Fin 2) :

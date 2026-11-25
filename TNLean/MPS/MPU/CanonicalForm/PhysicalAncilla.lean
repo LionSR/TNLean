@@ -48,13 +48,13 @@ $\mathcal U^{(x)}_{(i,a),(j,b);\beta,\alpha}
 
 Source: arXiv:1703.09188, lines 706--724. -/
 def tensorPhysicalId (U : MPOTensor d D) (x : ℕ) : MPOTensor (d * x) D :=
-  fun ia jb ↦ if ia.modNat = jb.modNat then U ia.divNat jb.divNat else 0
+  fun (ia, jb) ↦ if ia.modNat = jb.modNat then U (ia.divNat, jb.divNat) else 0
 
 /-- Coordinate formula for physical identity-ancilla attachment. -/
 @[simp] theorem tensorPhysicalId_apply (U : MPOTensor d D) (i j : Fin d)
     (a b : Fin x) (β α : Fin D) :
-    tensorPhysicalId U x (finProdFinEquiv (i, a)) (finProdFinEquiv (j, b)) β α =
-      U i j β α * if a = b then 1 else 0 := by
+    tensorPhysicalId U x (finProdFinEquiv (i, a), finProdFinEquiv (j, b)) β α =
+      U (i, j) β α * if a = b then 1 else 0 := by
   by_cases h : a = b <;> simp [tensorPhysicalId, h]
 
 private theorem evalWord_tensorPhysicalId (U : MPOTensor d D) (x : ℕ)
@@ -236,7 +236,7 @@ theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
   rw [show (tensorPhysicalId U x).normalizedFlattening
       (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))) =
         ((Real.sqrt (d * x) : ℂ)⁻¹) •
-          tensorPhysicalId U x (finProdFinEquiv (i, a)) (finProdFinEquiv (j, b)) by
+          tensorPhysicalId U x (finProdFinEquiv (i, a), finProdFinEquiv (j, b)) by
       simp [normalizedFlattening, MPOTensor.toMPSTensor]]
   rw [show Kraus.reindexPhysical (finDoubledProdEquiv d x)
       (normalizedDiagonalLift U.normalizedFlattening x)

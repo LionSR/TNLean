@@ -53,9 +53,8 @@ variable {d D : ℕ}
 /-- Two-site blocking is continuous in the tensor. Source: arXiv:1703.09188,
 definition `blocking`, lines 297--305. -/
 theorem continuous_blockTwo : Continuous (blockTwo : MPOTensor d D → MPOTensor (d * d) D) := by
-  refine continuous_pi fun i ↦ continuous_pi fun j ↦ ?_
-  exact ((continuous_apply _).comp (continuous_apply _)).matrix_mul
-    ((continuous_apply _).comp (continuous_apply _))
+  refine continuous_pi fun ⟨i, j⟩ ↦ ?_
+  exact (continuous_apply _).matrix_mul (continuous_apply _)
 
 /-- Equal periodic operators at every positive length give equal periodic
 operators of the two-site blocks. Source: arXiv:1703.09188, definition

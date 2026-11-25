@@ -140,11 +140,11 @@ private theorem prod_mulTensor_entry {L q D₁ D₂ : ℕ}
     (A : Fin L → MPOTensor q D₁) (B : Fin L → MPOTensor q D₂)
     (σ τ : Fin L → Fin q) (a b : Fin D₁ × Fin D₂) :
     let e : Fin (D₁ * D₂) ≃ Fin D₁ × Fin D₂ := finProdFinEquiv.symm
-    (List.ofFn (fun v ↦ mulTensor (A v) (B v) (σ v) (τ v))).prod
+    (List.ofFn (fun v ↦ mulTensor (A v) (B v) (σ v, τ v))).prod
         (e.symm a) (e.symm b) =
       ∑ ρ : Fin L → Fin q,
-        (List.ofFn (fun v ↦ A v (σ v) (ρ v))).prod a.1 b.1 *
-          (List.ofFn (fun v ↦ B v (ρ v) (τ v))).prod a.2 b.2 := by
+        (List.ofFn (fun v ↦ A v (σ v, ρ v))).prod a.1 b.1 *
+          (List.ofFn (fun v ↦ B v (ρ v, τ v))).prod a.2 b.2 := by
   intro e
   simpa only [Matrix.single_kronecker_single, one_mul,
     Matrix.submatrix_single_equiv, Matrix.trace_single_mul, one_smul] using
@@ -195,7 +195,7 @@ arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
 def interiorMatrixSlice {L q B : ℕ}
     (A : Fin L → MPOTensor q B) (a b : Fin B) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  fun σ τ ↦ (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod a b
+  fun σ τ ↦ (List.ofFn (fun v ↦ A v (σ v, τ v))).prod a b
 
 /-- An ordered product of exposed interior slices is the corresponding
 entry of the existing sitewise stacked tensor. The virtual word is encoded
@@ -205,7 +205,7 @@ private theorem prod_interiorMatrixSlice_eq_stackedTensor {L q B : ℕ}
     (A : Fin L → MPOTensor q B) (p : ℕ) (u v : Fin p → Fin B)
     (σ τ : Fin L → Fin q) :
     (List.ofFn (fun r ↦ interiorMatrixSlice A (u r) (v r))).prod σ τ =
-      (List.ofFn (fun j ↦ stackedTensor (A j) p (σ j) (τ j))).prod
+      (List.ofFn (fun j ↦ stackedTensor (A j) p (σ j, τ j))).prod
         (stackWordIndex u) (stackWordIndex v) := by
   induction p generalizing σ τ with
   | zero =>
@@ -244,7 +244,7 @@ theorem sum_word_slices_eq_trace_stackedTensor {L q B : ℕ}
     (∑ w : Fin p → Fin B × Fin B,
       c w * (List.ofFn (fun r ↦ interiorMatrixSlice A (w r).1 (w r).2)).prod σ τ) =
       Matrix.trace (stackClosingMatrix c *
-        (List.ofFn (fun j ↦ stackedTensor (A j) p (σ j) (τ j))).prod) := by
+        (List.ofFn (fun j ↦ stackedTensor (A j) p (σ j, τ j))).prod) := by
   rw [← (Equiv.arrowProdEquivProdArrow (Fin p)
     (fun _ ↦ Fin B) (fun _ ↦ Fin B)).symm.sum_comp, Fintype.sum_prod_type]
   change (∑ u : Fin p → Fin B, ∑ v : Fin p → Fin B,
@@ -253,12 +253,12 @@ theorem sum_word_slices_eq_trace_stackedTensor {L q B : ℕ}
   simp_rw [prod_interiorMatrixSlice_eq_stackedTensor]
   change (∑ u : Fin p → Fin B, ∑ v : Fin p → Fin B,
     c (fun r ↦ (u r, v r)) *
-      (List.ofFn (fun j ↦ stackedTensor (A j) p (σ j) (τ j))).prod
+      (List.ofFn (fun j ↦ stackedTensor (A j) p (σ j, τ j))).prod
         (stackWordIndex u) (stackWordIndex v)) =
     (∑ a : Fin (B ^ p), ∑ b : Fin (B ^ p),
       c (fun r ↦ ((stackWordIndex (B := B) (p := p)).symm b r,
         (stackWordIndex (B := B) (p := p)).symm a r)) *
-        (List.ofFn (fun j ↦ stackedTensor (A j) p (σ j) (τ j))).prod b a)
+        (List.ofFn (fun j ↦ stackedTensor (A j) p (σ j, τ j))).prod b a)
   conv_rhs => rw [Finset.sum_comm]
   rw [← (stackWordIndex (B := B) (p := p)).symm.sum_comp]
   refine Finset.sum_congr rfl fun a _ ↦ ?_

@@ -187,7 +187,7 @@ private def lastFrom (i : Fin 4) : List (Fin 4) → Fin 4
   | j :: w => lastFrom j w
 
 private lemma tensor_apply_eq_zero_of_ne {i j : Fin 4} (hij : i ≠ j) :
-    tensor i j = 0 := by
+    tensor (i, j) = 0 := by
   simp [tensor, hij]
 
 private lemma evalWord_same_eq (i : Fin 4) (w : List (Fin 4)) :

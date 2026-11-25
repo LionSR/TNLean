@@ -97,7 +97,7 @@ private theorem physicalBond_val (g i : Fin 4) :
 
 /-- Canonical entries, with the first physical index the output row. -/
 theorem symTensor_apply (g o i : Fin 4) (l r : Fin (bondDim g)) :
-    symTensor g o i l r =
+    symTensor g (o, i) l r =
       if o = gmul g i ∧ r = physicalBond g i then
         (-1 : ℂ) ^ (l.val * (i.val % 2)) else 0 := by
   fin_cases g <;> simp only [bondDim] at l r ⊢ <;>

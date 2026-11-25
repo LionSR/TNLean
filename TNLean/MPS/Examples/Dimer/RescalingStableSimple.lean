@@ -56,14 +56,12 @@ theorem toMPSTensor_blockTensor_R_one :
       Kraus.reindexPhysical oneSiteDoubledEquiv R.toMPSTensor := by
   funext ij
   change
-    R (Kraus.singleBlockEquiv 4 ij.divNat)
-        (Kraus.singleBlockEquiv 4 ij.modNat) * 1 =
-      R (finProdFinEquiv
+    R (Kraus.singleBlockEquiv 4 ij.divNat, Kraus.singleBlockEquiv 4 ij.modNat) * 1 =
+      R ((finProdFinEquiv
           (Kraus.singleBlockEquiv 4 ij.divNat,
-            Kraus.singleBlockEquiv 4 ij.modNat)).divNat
-        (finProdFinEquiv
+            Kraus.singleBlockEquiv 4 ij.modNat)).divNat, (finProdFinEquiv
           (Kraus.singleBlockEquiv 4 ij.divNat,
-            Kraus.singleBlockEquiv 4 ij.modNat)).modNat
+            Kraus.singleBlockEquiv 4 ij.modNat)).modNat)
   rw [mul_one, MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
 /-- The rescaling-stable dimer tensor is simple in the sense of Definition 4.7.

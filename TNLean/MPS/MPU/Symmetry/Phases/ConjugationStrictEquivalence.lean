@@ -473,7 +473,7 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_reindexPhysical_of_gate_path
 sites. -/
 theorem reindexPhysical_twoSiteBlockEquiv_symm_blockTwo {E : ℕ} (W : MPOTensor d E) :
     reindexPhysical (twoSiteBlockEquiv d).symm (blockTwo W) = blockTensor W 2 := by
-  funext i j
+  funext ⟨i, j⟩
   rw [blockTwo_eq_blockTensor_reindex]
   simp [reindexPhysical]
 

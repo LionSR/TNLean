@@ -50,7 +50,7 @@ Kronecker product. See arXiv:1606.00608, Section 4.3. -/
 def IsLPDO (M : MPOTensor d D) : Prop :=
   ∃ (dK D' : ℕ) (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D'),
-    ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e
 
 /-- The list product of LPDO tensor entries decomposes via Kronecker products
@@ -62,10 +62,10 @@ lemma lpdo_prod_decomp {dK D' : ℕ}
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D')
     {M : MPOTensor d D}
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     {N : ℕ} (σ τ : Fin N → Fin d) :
-    (List.ofFn fun l => M (σ l) (τ l)).prod =
+    (List.ofFn fun l => M (σ l, τ l)).prod =
       (∑ κ : Fin N → Fin dK,
         (List.ofFn fun l => A (σ l) (κ l)).prod ⊗ₖ
         ((List.ofFn fun l => A (τ l) (κ l)).prod).map

@@ -43,7 +43,7 @@ theorem isInjective_of_eq_changePhysicalBasis
   apply Submodule.span_le.mpr
   rintro X ⟨ij, rfl⟩
   rw [hM]
-  change changePhysicalBasis V K ij.divNat ij.modNat ∈
+  change changePhysicalBasis V K (ij.divNat, ij.modNat) ∈
     Submodule.span ℂ (Set.range K.toMPSTensor)
   rw [changePhysicalBasis_apply_eq_sum]
   apply Submodule.sum_mem
@@ -107,7 +107,7 @@ theorem changePhysicalBasis_eq_self_of_twoSided_physicalSlice
     (hSupport : ∀ β α, P * physicalSlice K β α = physicalSlice K β α ∧
       physicalSlice K β α * P = physicalSlice K β α) :
     changePhysicalBasis P K = K := by
-  ext i j β α
+  ext ⟨i, j⟩ β α
   change (P * physicalSlice K β α * Pᴴ) i j = physicalSlice K β α i j
   rw [hP.1.eq, (hSupport β α).1, (hSupport β α).2]
 

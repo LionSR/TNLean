@@ -77,7 +77,7 @@ theorem twoSite_letter_factorization
     {u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ}
     {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData W u v) (i j : Fin (d * d)) :
-    W i j = twoSiteLeftHalf S i * twoSiteInputGate u j * twoSiteRightHalf S i := by
+    W (i, j) = twoSiteLeftHalf S i * twoSiteInputGate u j * twoSiteRightHalf S i := by
   ext α γ
   simp only [S.W_apply, Matrix.mul_apply, twoSiteLeftHalf, twoSiteInputGate,
     twoSiteRightHalf]

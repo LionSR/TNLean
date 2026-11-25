@@ -98,10 +98,10 @@ def kxIntTensor (o i : Fin 4) : Matrix (Fin 2) (Fin 2) ℤ := (-1) ^ (i.val % 2)
 def kxyIntTensor (o i : Fin 4) : Matrix (Fin 2) (Fin 2) ℤ := (-1) ^ (i.val % 2) • xyIntTensor o i
 
 /-- The dressed tensor of `x` from its integer letters. -/
-def kxTensor : MPOTensor 4 2 := fun o i ↦ complexOfInt (kxIntTensor o i)
+def kxTensor : MPOTensor 4 2 := Function.uncurry fun o i ↦ complexOfInt (kxIntTensor o i)
 
 /-- The dressed tensor of `xy` from its integer letters. -/
-def kxyTensor : MPOTensor 4 2 := fun o i ↦ complexOfInt (kxyIntTensor o i)
+def kxyTensor : MPOTensor 4 2 := Function.uncurry fun o i ↦ complexOfInt (kxyIntTensor o i)
 
 private theorem secondZSign_eq (g : Multiplicative (ZMod 2 × ZMod 2)) (i : Fin 4) :
     secondZSign g i = (((-1 : ℤ) ^ ((Multiplicative.toAdd g).1.val * (i.val % 2)) : ℤ) : ℂ) := by
@@ -109,13 +109,13 @@ private theorem secondZSign_eq (g : Multiplicative (ZMod 2 × ZMod 2)) (i : Fin 
 
 /-- The dressing of the identity element is trivial. -/
 theorem kleinTensor_one : kleinTensor 1 = eTensor := by
-  funext o i
+  funext ⟨o, i⟩
   simp [kleinTensor, secondZSign, symTensor, kleinEquiv]
   rfl
 
 /-- The dressing of `y = (0,1)` is trivial. -/
 theorem kleinTensor_y : kleinTensor (Multiplicative.ofAdd (0, 1)) = yTensor := by
-  funext o i
+  funext ⟨o, i⟩
   simp [kleinTensor, secondZSign]
   rfl
 
@@ -123,7 +123,7 @@ theorem kleinTensor_y : kleinTensor (Multiplicative.ofAdd (0, 1)) = yTensor := b
 theorem kleinTensor_x : kleinTensor (Multiplicative.ofAdd (1, 0)) = kxTensor := by
   have hs : symTensor (kleinEquiv (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2))) = xTensor :=
     rfl
-  funext o i
+  funext ⟨o, i⟩
   rw [kleinTensor, hs]
   change secondZSign (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) i •
       complexOfInt (xIntTensor o i) = complexOfInt ((-1) ^ (i.val % 2) • xIntTensor o i)
@@ -134,7 +134,7 @@ theorem kleinTensor_x : kleinTensor (Multiplicative.ofAdd (1, 0)) = kxTensor := 
 theorem kleinTensor_xy : kleinTensor (Multiplicative.ofAdd (1, 1)) = kxyTensor := by
   have hs : symTensor (kleinEquiv (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2))) = xyTensor :=
     rfl
-  funext o i
+  funext ⟨o, i⟩
   rw [kleinTensor, hs]
   change secondZSign (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) i •
       complexOfInt (xyIntTensor o i) = complexOfInt ((-1) ^ (i.val % 2) • xyIntTensor o i)
@@ -333,14 +333,16 @@ private theorem kxyCube_int (a : Fin 16) :
 /-- The triple product of an integer tensor is the image of its integer triple product. -/
 theorem triple_complexOfInt (M : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ)
     (a : Fin 16) :
-    (mulTensor (mulTensor (fun o i ↦ complexOfInt (M o i)) (fun o i ↦ complexOfInt (M o i)))
-        (fun o i ↦ complexOfInt (M o i))).toMPSTensor a =
+    (mulTensor (mulTensor (Function.uncurry fun o i ↦ complexOfInt (M o i))
+        (Function.uncurry fun o i ↦ complexOfInt (M o i)))
+        (Function.uncurry fun o i ↦ complexOfInt (M o i))).toMPSTensor a =
       complexOfInt (mulIntTensor (mulIntTensor M M) M (@Fin.divNat 4 4 a)
         (@Fin.modNat 4 4 a)) := by
-  have h2 : mulTensor (fun o i ↦ complexOfInt (M o i)) (fun o i ↦ complexOfInt (M o i)) =
-      fun o i ↦ complexOfInt (mulIntTensor M M o i) :=
-    funext₂ fun o i ↦ mulTensor_complexOfRing _ M M o i
-  change mulTensor _ _ (@Fin.divNat 4 4 a) (@Fin.modNat 4 4 a) = _
+  have h2 : mulTensor (Function.uncurry fun o i ↦ complexOfInt (M o i))
+      (Function.uncurry fun o i ↦ complexOfInt (M o i)) =
+      Function.uncurry fun o i ↦ complexOfInt (mulIntTensor M M o i) :=
+    funext fun p ↦ mulTensor_complexOfRing _ M M p.1 p.2
+  change mulTensor _ _ (@Fin.divNat 4 4 a, @Fin.modNat 4 4 a) = _
   rw [h2]
   exact mulTensor_complexOfRing _ _ M _ _
 

@@ -63,9 +63,9 @@ Supporting the cut movement in ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1332–1333. -/
 def identityExtendInterval {T L q B : ℕ}
     (A : Fin L → MPOTensor q B) (a : ℕ) (_ha : a + L ≤ T) :
-    Fin T → MPOTensor q B := fun v i j ↦
+    Fin T → MPOTensor q B := fun v (i, j) ↦
   if h : a ≤ v.val ∧ v.val < a + L then
-    A ⟨v.val - a, by omega⟩ i j
+    A ⟨v.val - a, by omega⟩ (i, j)
   else if i = j then 1 else 0
 
 /-- When the two physical configurations agree off the interval, the exterior
@@ -75,10 +75,10 @@ private theorem prod_identityExtendInterval_of_eq_outside {T L q B : ℕ}
     (A : Fin L → MPOTensor q B) (a : ℕ) (ha : a + L ≤ T)
     (σ τ : Fin T → Fin q)
     (h : ∀ v, (∀ r : Fin L, (⟨a + r.val, by omega⟩ : Fin T) ≠ v) → σ v = τ v) :
-    (List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v) (τ v))).prod =
+    (List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v, τ v))).prod =
       (List.ofFn (fun r : Fin L ↦
-        A r (σ ⟨a + r.val, by omega⟩) (τ ⟨a + r.val, by omega⟩))).prod := by
-  let f := List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v) (τ v))
+        A r ((σ ⟨a + r.val, by omega⟩), (τ ⟨a + r.val, by omega⟩)))).prod := by
+  let f := List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v, τ v))
   have hp : f.take a = List.replicate a (1 : Matrix (Fin B) (Fin B) ℂ) := by
     apply List.ext_getElem
     · simp only [f, List.length_take, List.length_ofFn, List.length_replicate]
@@ -93,7 +93,7 @@ private theorem prod_identityExtendInterval_of_eq_outside {T L q B : ℕ}
       simp only [f, List.getElem_take, List.getElem_ofFn, List.getElem_replicate]
       simp [identityExtendInterval, show ¬(a ≤ i ∧ i < a + L) by omega, heq]
   have hm : (f.drop a).take L = List.ofFn (fun r : Fin L ↦
-      A r (σ ⟨a + r.val, by omega⟩) (τ ⟨a + r.val, by omega⟩)) := by
+      A r ((σ ⟨a + r.val, by omega⟩), (τ ⟨a + r.val, by omega⟩))) := by
     apply List.ext_getElem
     · simp only [f, List.length_take, List.length_drop, List.length_ofFn]
       omega
@@ -131,10 +131,10 @@ private theorem trace_identityExtendInterval_eq_placeAlong {T L q B : ℕ}
     (A : Fin L → MPOTensor q B) (C : Matrix (Fin B) (Fin B) ℂ)
     (a : ℕ) (ha : a + L ≤ T) :
     (Matrix.of fun σ τ : Fin T → Fin q ↦ Matrix.trace (C *
-      (List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v) (τ v))).prod)) =
+      (List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v, τ v))).prod)) =
       ManyBody.placeAlong (X := fun _ ↦ Fin q) (ManyBody.chainWindow a ha)
         (Matrix.of fun σ τ : Fin L → Fin q ↦ Matrix.trace
-          (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod)) := by
+          (C * (List.ofFn (fun v ↦ A v (σ v, τ v))).prod)) := by
   classical
   ext σ τ
   rw [ManyBody.placeAlong_apply]
@@ -153,10 +153,10 @@ private theorem trace_identityExtendInterval_eq_placeAlong {T L q B : ℕ}
       apply Fin.ext
       change a + (v.val - a) = v.val
       omega
-    have hz : identityExtendInterval A a ha v (σ v) (τ v) = 0 := by
+    have hz : identityExtendInterval A a ha v (σ v, τ v) = 0 := by
       simp [identityExtendInterval, hout, hne]
     have hmem : (0 : Matrix (Fin B) (Fin B) ℂ) ∈
-        List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v) (τ v)) := by
+        List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v, τ v)) := by
       simp only [List.mem_ofFn]
       exact ⟨v, hz⟩
     simp only [Matrix.of_apply, List.prod_eq_zero hmem, Matrix.mul_zero, Matrix.trace_zero]
@@ -255,12 +255,12 @@ private theorem trace_identityExtendInterval_nested_inclusion
     ManyBody.placeAlong (X := fun _ ↦ Fin q) inc
         (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
           (Matrix.of fun σ τ : Fin (b - a) → Fin q ↦
-            Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod))) =
+            Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v, τ v))).prod))) =
       ManyBody.placeAlong (X := fun _ ↦ Fin q) eE.toEquiv.toEmbedding
         (Matrix.of fun σ τ : Fin (d - c) → Fin q ↦
           Matrix.trace (C * (List.ofFn (fun v ↦
             identityExtendInterval (T := d - c) A (a - c) (by omega)
-              v (σ v) (τ v))).prod)) := by
+              v (σ v, τ v))).prod)) := by
   intro eK eE inc
   have hpad := trace_identityExtendInterval_eq_placeAlong (T := d - c)
     A C (a - c) (by omega)
@@ -269,7 +269,7 @@ private theorem trace_identityExtendInterval_nested_inclusion
         (ManyBody.placeAlong (X := fun _ ↦ Fin q)
           (ManyBody.chainWindow (a - c) (show a - c + (b - a) ≤ d - c by omega))
           (Matrix.of fun σ τ : Fin (b - a) → Fin q ↦
-            Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod))) :=
+            Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v, τ v))).prod))) :=
       placeAlong_nestedInterval_inclusion hca hab hbd hd _
     _ = _ := congrArg
       (fun K : Matrix (Fin (d - c) → Fin q) (Fin (d - c) → Fin q) ℂ ↦
@@ -466,12 +466,12 @@ theorem trace_identityExtendInterval_nested_natural
     (ManyBody.placeAlong (X := fun _ ↦ Fin q) inc
       (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
         (Matrix.of fun σ τ : Fin (b - a) → Fin q ↦
-          Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod)))).submatrix
+          Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v, τ v))).prod)))).submatrix
         (fun σ : Fin (d - c) → Fin q ↦ σ ∘ eE.symm)
         (fun σ : Fin (d - c) → Fin q ↦ σ ∘ eE.symm) =
       (Matrix.of fun σ τ : Fin (d - c) → Fin q ↦ Matrix.trace (C *
         (List.ofFn (fun v ↦ identityExtendInterval (T := d - c) A (a - c)
-          (by omega) v (σ v) (τ v))).prod)) := by
+          (by omega) v (σ v, τ v))).prod)) := by
   intro eK eE inc
   have hME := trace_identityExtendInterval_nested_inclusion hca hab hbd hd A C
   have hread := congrArg

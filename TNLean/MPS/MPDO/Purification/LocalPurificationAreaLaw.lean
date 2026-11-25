@@ -222,7 +222,7 @@ theorem bipartitionedNormalizedMPO_eq_tensorMapBoth_blockAncillaryTraceMap
     {dK D' : ℕ} (M : MPOTensor d D)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D')
-    (hM : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hM : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     (N L K : ℕ) (h : N = L + K) :
     bipartitionedNormalizedMPO M N L K h =
@@ -366,7 +366,7 @@ theorem mutualInfoChain_le_of_lpdoWitness
     {dK D' : ℕ} (M : MPOTensor d D)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D')
-    (hcoeff : ∀ i j : Fin d, M i j = (∑ k : Fin dK,
+    (hcoeff : ∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
       (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e)
     (N L : ℕ) (hL : L ≤ N) (hpos : (mpo M N).PosSemidef)
     (htrA : Matrix.trace
@@ -402,7 +402,7 @@ theorem IsLPDO.exists_mutualInfoChain_le_purifyingBond
     ∃ (dK D' : ℕ)
       (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
       (e : Fin D ≃ Fin D' × Fin D'),
-      (∀ i j : Fin d, M i j = (∑ k : Fin dK,
+      (∀ i j : Fin d, M (i, j) = (∑ k : Fin dK,
         (A i k) ⊗ₖ ((A j k).map (starRingEnd ℂ))).submatrix ↑e ↑e) ∧
       mutualInfoChain M N L hL (hLPDO.isMPDO N hN) ≤ 4 * Real.log D' := by
   have hpos := hLPDO.isMPDO N hN

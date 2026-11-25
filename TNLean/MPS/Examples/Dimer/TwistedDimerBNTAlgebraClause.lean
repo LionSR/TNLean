@@ -62,7 +62,7 @@ namespace MPOTensor.TwistedDimer
 diagonal matrix unit at the right bits with the squared modulus of the
 coefficient. -/
 lemma conjTranspose_flagMPO_mul_self (f : Fin 2) (a b : Fin 8) :
-    (flagMPO f a b)ᴴ * flagMPO f a b =
+    (flagMPO f (a, b))ᴴ * flagMPO f (a, b) =
       Matrix.single (finProdFinEquiv (bitR a, bitR b)) (finProdFinEquiv (bitR a, bitR b))
         (star (flagCoef f a b) * flagCoef f a b) := by
   simp [flagMPO, unitTensor, Matrix.conjTranspose_single, Matrix.single_mul_single_same]

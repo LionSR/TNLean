@@ -92,7 +92,7 @@ def shiftedGateCut (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ) :
 private theorem tensorOfHalves_apply_finProd {K : ℕ} (X₁ : Matrix (Fin d × Fin K) (Fin r) ℂ)
     (X₂ : Matrix (Fin K × Fin d) (Fin ℓ) ℂ) (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
     (i₁ i₂ : Fin d) (j : Fin d × Fin d) :
-    tensorOfHalves X₁ X₂ u (finProdFinEquiv (i₁, i₂)) (finProdFinEquiv j) =
+    tensorOfHalves X₁ X₂ u (finProdFinEquiv (i₁, i₂), finProdFinEquiv j) =
       ∑ t : Fin ℓ, ∑ s : Fin r, u (t, s) j •
         Matrix.vecMulVec (fun α => X₂ (α, i₁) t) (fun γ => X₁ (i₂, γ) s) := by
   ext α γ
@@ -106,7 +106,7 @@ private theorem sum_star_smul_tensorOfHalves {K : ℕ} (X₁ : Matrix (Fin d × 
     (X₂ : Matrix (Fin K × Fin d) (Fin ℓ) ℂ) (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
     (hu : u * uᴴ = 1) (i₁ i₂ : Fin d) (t : Fin ℓ) (s : Fin r) :
     (∑ j : Fin d × Fin d, star (u (t, s) j) •
-        tensorOfHalves X₁ X₂ u (finProdFinEquiv (i₁, i₂)) (finProdFinEquiv j)) =
+        tensorOfHalves X₁ X₂ u (finProdFinEquiv (i₁, i₂), finProdFinEquiv j)) =
       Matrix.vecMulVec (fun α => X₂ (α, i₁) t) (fun γ => X₁ (i₂, γ) s) := by
   have hδ : ∀ (t' : Fin ℓ) (s' : Fin r),
       (∑ j : Fin d × Fin d, star (u (t, s) j) * u (t', s') j) =
@@ -218,7 +218,7 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
     refine Submodule.eq_top_of_forall_single_mem _ fun a b ↦ ?_
     set T := Submodule.span ℂ (Set.range W.toMPSTensor)
     have hletter : ∀ (i₁ i₂ : Fin d) (j : Fin d × Fin d),
-        W (finProdFinEquiv (i₁, i₂)) (finProdFinEquiv j) ∈ T := fun i₁ i₂ j ↦ by
+        W (finProdFinEquiv (i₁, i₂), finProdFinEquiv j) ∈ T := fun i₁ i₂ j ↦ by
       refine Submodule.subset_span ⟨finProdFinEquiv (finProdFinEquiv (i₁, i₂),
         finProdFinEquiv j), ?_⟩
       simp [toMPSTensor]

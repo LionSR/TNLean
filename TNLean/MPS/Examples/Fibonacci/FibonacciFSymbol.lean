@@ -202,7 +202,7 @@ theorem fibTauGolden_eq_fSymbol (x' x : Fin 2) :
 
 /-- Bridge: the complex form of `fibTauGolden_eq_fSymbol`. -/
 theorem fibTau_eq_fSymbol (x' x : Fin 2) :
-    fibTau x' x = complexOfGolden (Matrix.of fun p q =>
+    fibTau (x', x) = complexOfGolden (Matrix.of fun p q =>
       if fibLetter p = (x', x) then
         fibFSymbolGolden 1 x 1 (fibLetter q).1 x' (fibLetter q).2
       else 0) := by

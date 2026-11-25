@@ -83,14 +83,15 @@ def czxIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
   | _, _ => 0
 
 /-- The CZX tensor of the note as a matrix product operator tensor. -/
-def czxTensor : MPOTensor 2 2 := fun i j => complexOfInt (czxIntTensor i j)
+def czxTensor : MPOTensor 2 2 := Function.uncurry fun i j => complexOfInt (czxIntTensor i j)
 
 /-- The integer tensor of the identity operator, of bond dimension one. -/
 def identityIntTensor : Fin 2 → Fin 2 → Matrix (Fin 1) (Fin 1) ℤ :=
   fun i j => if i = j then 1 else 0
 
 /-- The identity operator as a matrix product operator tensor of bond dimension one. -/
-def identityTensor : MPOTensor 2 1 := fun i j => complexOfInt (identityIntTensor i j)
+def identityTensor : MPOTensor 2 1 :=
+    Function.uncurry fun i j => complexOfInt (identityIntTensor i j)
 
 /-- The CZX tensor read as a tensor over the pair alphabet `Fin 4`. -/
 def czxMPS : MPSTensor 4 2 := czxTensor.toMPSTensor

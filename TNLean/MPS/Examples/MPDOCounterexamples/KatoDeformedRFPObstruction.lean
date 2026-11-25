@@ -75,31 +75,31 @@ $\operatorname{diag}(I/2,X/4)$ into $\operatorname{diag}(I/2,Z/4)$.
 
 Source: arXiv:2410.22696, lines 712--721. -/
 noncomputable def tensor : MPOTensor 2 2 :=
-  fun i j => if i = j then
+  fun (i, j) => if i = j then
     Matrix.diagonal ![(1 / 2 : ℂ), (1 / 4 : ℂ) * siteSign i]
   else 0
 
 @[simp] private lemma tensor_zero_zero :
-    tensor 0 0 = !![(1 / 2 : ℂ), 0; 0, (1 / 4 : ℂ)] := by
+    tensor (0, 0) = !![(1 / 2 : ℂ), 0; 0, (1 / 4 : ℂ)] := by
   ext a b
   fin_cases a <;> fin_cases b <;> norm_num [tensor, siteSign, pauliZ]
 
 @[simp] private lemma tensor_one_one :
-    tensor 1 1 = !![(1 / 2 : ℂ), 0; 0, -(1 / 4 : ℂ)] := by
+    tensor (1, 1) = !![(1 / 2 : ℂ), 0; 0, -(1 / 4 : ℂ)] := by
   ext a b
   fin_cases a <;> fin_cases b <;> norm_num [tensor, siteSign, pauliZ]
 
-@[simp] private lemma tensor_zero_one : tensor 0 1 = 0 := by
+@[simp] private lemma tensor_zero_one : tensor (0, 1) = 0 := by
   simp [tensor]
 
-@[simp] private lemma tensor_one_zero : tensor 1 0 = 0 := by
+@[simp] private lemma tensor_one_zero : tensor (1, 0) = 0 := by
   simp [tensor]
 
 /-! ### Closed operators at arbitrary length -/
 
 private lemma prod_tensor_diagonal :
     ∀ {N : ℕ} (σ : Fin N → Fin 2),
-      (List.ofFn fun k => tensor (σ k) (σ k)).prod =
+      (List.ofFn fun k => tensor (σ k, σ k)).prod =
         Matrix.diagonal ![(1 / 2 : ℂ) ^ N,
           (1 / 4 : ℂ) ^ N * configurationSign σ] := by
   intro N
@@ -466,7 +466,7 @@ private theorem toMPSTensor_eq_toTensorFromBlocks :
   funext p; ext x y
   simp only [MPOTensor.toMPSTensor, MPSTensor.toTensorFromBlocks,
     Matrix.reindex_apply, katoCFWeights, katoCFBlocks]
-  change tensor (p.divNat) (p.modNat) x y =
+  change tensor (p.divNat, p.modNat) x y =
     (Matrix.blockDiagonal' (fun k : Fin 2 => (katoCFWeights k) • (katoCFBlocks k p)))
       (e.symm x) (e.symm y)
   rw [hflat_symm x, hflat_symm y]

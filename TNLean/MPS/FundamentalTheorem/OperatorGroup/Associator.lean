@@ -410,8 +410,8 @@ theorem isCocycle_omega (hF : F.IsNormalRepresentation) :
   have h3 := (((isAssociator_omega (fd := fd) hF h k l).mulTensor_idKron
     (F.tensor g)).mul_left (fd.V g (h * k * l))).of_intertwine hPQ hQP (fun i ↦ by
       change mulTensor (mulTensor (mulTensor (F.tensor g) (F.tensor h)) (F.tensor k))
-          (F.tensor l) i.divNat i.modNat * _ = _ * mulTensor (F.tensor g)
-          (mulTensor (mulTensor (F.tensor h) (F.tensor k)) (F.tensor l)) i.divNat i.modNat
+          (F.tensor l) (i.divNat, i.modNat) * _ = _ * mulTensor (F.tensor g)
+          (mulTensor (mulTensor (F.tensor h) (F.tensor k)) (F.tensor l)) (i.divNat, i.modNat)
       rw [← Matrix.mul_assoc, mulTensor_mul_kronId_of_intertwine (F.tensor l)
         (mulTensor_mul_assocMatrix (F.tensor g) (F.tensor h) (F.tensor k)),
         Matrix.mul_assoc, mulTensor_mul_assocMatrix, Matrix.mul_assoc])

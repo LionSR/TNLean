@@ -266,16 +266,17 @@ private theorem czx_pair (L : Matrix (Fin 2) (Fin 8) ℤ)
       czxDecoratedIntTensor i j * L * czxDecoratedCubeInt k l) (a b : Fin 4) :
     complexOfInt L * czxDecoratedCube.toMPSTensor a * czxDecoratedCube.toMPSTensor b =
       czxDecoratedTensor.toMPSTensor a * complexOfInt L * czxDecoratedCube.toMPSTensor b := by
-  change complexOfInt L * czxDecoratedCube _ _ * czxDecoratedCube _ _ =
-    czxDecoratedTensor _ _ * complexOfInt L * czxDecoratedCube _ _
-  rw [czxDecoratedCube_eq, czxDecoratedCube_eq, czxDecoratedTensor, ← complexOfInt_mul,
+  change complexOfInt L * czxDecoratedCube (_, _) * czxDecoratedCube (_, _) =
+    czxDecoratedTensor (_, _) * complexOfInt L * czxDecoratedCube (_, _)
+  rw [czxDecoratedCube_eq, czxDecoratedCube_eq, czxDecoratedTensor, Function.uncurry_apply_pair,
+      ← complexOfInt_mul,
     ← complexOfInt_mul, ← complexOfInt_mul, ← complexOfInt_mul, hL]
 
 private theorem czx_letter (a : Fin 4) :
     complexOfInt czxAssocLeftInt * czxDecoratedCube.toMPSTensor a =
       (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube.toMPSTensor a) := by
-  change complexOfInt czxAssocLeftInt * czxDecoratedCube _ _ =
-    (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube _ _)
+  change complexOfInt czxAssocLeftInt * czxDecoratedCube (_, _) =
+    (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube (_, _))
   rw [czxDecoratedCube_eq, ← complexOfInt_mul, ← complexOfInt_mul, czx_letter_int,
     complexOfInt_neg, neg_one_smul]
 

@@ -67,11 +67,11 @@ theorem physicalAdjointTensor_mixedEndpointMPO
       W₁' μ (finProdFinEquiv (α, r)) s) :
     MPOTensor.physicalAdjointTensor (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁) =
       mixedEndpointMPO T₀' T₁' V₀' V₁' W₀' W₁' := by
-  have ht₀ : ∀ i j α β, star (T₀ j i α β) = T₀' i j α β :=
-    fun i j α β => congrArg (fun T => T i j α β) hT₀
-  have ht₁ : ∀ i j α β, star (T₁ j i α β) = T₁' i j α β :=
-    fun i j α β => congrArg (fun T => T i j α β) hT₁
-  ext i j α β
+  have ht₀ : ∀ i j α β, star (T₀ (j, i) α β) = T₀' (i, j) α β :=
+    fun i j α β => congrArg (fun T => T (i, j) α β) hT₀
+  have ht₁ : ∀ i j α β, star (T₁ (j, i) α β) = T₁' (i, j) α β :=
+    fun i j α β => congrArg (fun T => T (i, j) α β) hT₁
+  ext ⟨i, j⟩ α β
   obtain ⟨⟨r, s⟩, rfl⟩ := (mixedEndpointPhysicalEquiv D₀ D₁).surjective i
   obtain ⟨⟨k, l⟩, rfl⟩ := (mixedEndpointPhysicalEquiv D₀ D₁).surjective j
   obtain ⟨α, rfl⟩ := finSumFinEquiv.surjective α

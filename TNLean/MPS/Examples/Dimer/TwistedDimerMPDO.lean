@@ -177,18 +177,18 @@ lemma coef_physIdx (k l r f l' r' f' : Fin 2) :
 /-- The $\mathbb Z_2$-twisted quantum dimer: for physical letter `(i, j)`, the bond
 matrix is the sum over the block label `k` of the matrix unit at
 `((bitL i, bitL j, k), (bitR i, bitR j, k))` with coefficient `coef k i j`. -/
-def T : MPOTensor 8 8 := fun i j =>
+def T : MPOTensor 8 8 := fun (i, j) =>
   ∑ k : Fin 2,
     Matrix.single (physIdx (bitL i) (bitL j) k) (physIdx (bitR i) (bitR j) k) (coef k i j)
 
 /-- The two horizontal blocks, each an MPO tensor with bond dimension four. -/
-def block (k : Fin 2) : MPOTensor 8 4 := fun i j =>
+def block (k : Fin 2) : MPOTensor 8 4 := fun (i, j) =>
   Matrix.single (finProdFinEquiv (bitL i, bitL j)) (finProdFinEquiv (bitR i, bitR j)) (coef k i j)
 
 /-- The tensor is the direct sum of its two blocks along the block label. -/
 lemma T_apply_blocks (i j : Fin 8) (p p' k q q' k' : Fin 2) :
-    T i j (physIdx p p' k) (physIdx q q' k') =
-      if k = k' then block k i j (finProdFinEquiv (p, p')) (finProdFinEquiv (q, q')) else 0 := by
+    T (i, j) (physIdx p p' k) (physIdx q q' k') =
+      if k = k' then block k (i, j) (finProdFinEquiv (p, p')) (finProdFinEquiv (q, q')) else 0 := by
   fin_cases k <;> fin_cases k' <;>
     simp [T, block, Matrix.sum_apply, Matrix.single_apply, physIdx_inj, Fin.sum_univ_two,
       finProdFinEquiv.injective.eq_iff]
@@ -226,7 +226,7 @@ instance decidableIsBondMatchedPair (i₁ i₂ : Fin 8) : Decidable (IsBondMatch
 /-- The product of two letters keeps a common block label and is gated by the
 bond-matching condition. -/
 lemma T_mul_T (i₁ j₁ i₂ j₂ : Fin 8) :
-    T i₁ j₁ * T i₂ j₂ =
+    T (i₁, j₁) * T (i₂, j₂) =
       if IsBondMatchedPair i₁ i₂ ∧ IsBondMatchedPair j₁ j₂ then
         ∑ k : Fin 2, Matrix.single (physIdx (bitL i₁) (bitL j₁) k)
           (physIdx (bitR i₂) (bitR j₂) k) (coef k i₁ j₁ * coef k i₂ j₂)
@@ -263,8 +263,8 @@ has nilpotent physical-trace transfer in the sense used by Definition 4.7 of
 arXiv:1606.00608, lines 815--822. This does not assert non-simplicity of `T`. -/
 theorem physTraceTransfer_block_one : physTraceTransfer (block 1) = 0 := by
   unfold physTraceTransfer
-  rw [← Fintype.sum_equiv physEquiv (fun x => block 1 (physEquiv x) (physEquiv x))
-    (fun i => block 1 i i) (fun _ => rfl)]
+  rw [← Fintype.sum_equiv physEquiv (fun x => block 1 (physEquiv x, physEquiv x))
+    (fun i => block 1 (i, i)) (fun _ => rfl)]
   simp only [Fintype.sum_prod_type, physEquiv, Equiv.coe_fn_mk, block, bitL_physIdx,
     bitR_physIdx]
   ext a b
@@ -285,8 +285,8 @@ theorem physTraceTransfer_block_zero :
       ∑ l : Fin 2, ∑ r : Fin 2,
         Matrix.single (finProdFinEquiv (l, l)) (finProdFinEquiv (r, r)) ((Cmat 0 l l : ℝ) : ℂ) := by
   unfold physTraceTransfer
-  rw [← Fintype.sum_equiv physEquiv (fun x => block 0 (physEquiv x) (physEquiv x))
-    (fun i => block 0 i i) (fun _ => rfl)]
+  rw [← Fintype.sum_equiv physEquiv (fun x => block 0 (physEquiv x, physEquiv x))
+    (fun i => block 0 (i, i)) (fun _ => rfl)]
   simp only [Fintype.sum_prod_type, physEquiv, Equiv.coe_fn_mk, block, bitL_physIdx,
     bitR_physIdx]
   refine Finset.sum_congr rfl fun l _ => Finset.sum_congr rfl fun r _ => ?_

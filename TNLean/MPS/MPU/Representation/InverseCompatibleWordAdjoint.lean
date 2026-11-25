@@ -34,8 +34,8 @@ variable {d D : ℕ} (U : MPOTensor d D) (T : Matrix.unitaryGroup (Fin D) ℂ)
 /-- The local physical-adjoint gauge lifts to equal-length words by unitary cancellation.
 Source: arXiv:2502.20257, `eq:defT` (lines 1552–1557), iterated along a finite word. -/
 theorem evalWord_physicalAdjointTensor_eq_unitary_gauge
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (p q : List (Fin d)) (hlen : p.length = q.length) :
     evalWord (physicalAdjointTensor U) p q =
       (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * evalWord U p q * T := by
@@ -54,7 +54,7 @@ theorem evalWord_physicalAdjointTensor_eq_unitary_gauge
           have hpq : p.length = q.length := Nat.succ.inj hlen
           rw [evalWord_cons, evalWord_cons, hT, ih q hpq]
           calc
-            _ = (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j *
+            _ = (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) *
                 ((T : Matrix (Fin D) (Fin D) ℂ) *
                   (T : Matrix (Fin D) (Fin D) ℂ)ᴴ) * evalWord U p q * T := by
               simp only [Matrix.mul_assoc]
@@ -96,8 +96,8 @@ noncomputable def inverseCompatibleWordB (N : ℕ) :
 This is the local substitution extending arXiv:2502.20257, lines 5444–5487,
 not the subsequent finite-chain sewing or `eq:UUU`. -/
 theorem inverseCompatibleWordA_eq_smul_wordB_adjoint
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
       (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1) (N : ℕ) :
     inverseCompatibleWordA U T N = σ • (inverseCompatibleWordB U T N)ᴴ := by

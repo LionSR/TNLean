@@ -44,7 +44,7 @@ def physicalTransposeTensor {d D : ℕ} (U : MPOTensor d D) : MPOTensor d D :=
 /-- Physical transposition exchanges the two physical letters and preserves
 the virtual matrix orientation. Source: CPSV17, lines 1258–1267. -/
 @[simp] theorem physicalTransposeTensor_apply {d D : ℕ} (U : MPOTensor d D)
-    (i j : Fin d) : physicalTransposeTensor U i j = U j i := by
+    (i j : Fin d) : physicalTransposeTensor U (i, j) = U (j, i) := by
   ext α β
   simp [physicalTransposeTensor, MPOTensor.mapStar, MPOTensor.physicalAdjointTensor,
     Matrix.map_apply]

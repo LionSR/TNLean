@@ -125,7 +125,7 @@ theorem horizontalSlice_twoSidedCompression
     (M : MPOTensor d D) (L R : Matrix (Fin d) (Fin n) ℂ) (r s : Fin n) :
     horizontalSlice (fun v ↦ Lᴴ * verticalTensor M v * R) r s =
       ∑ i : Fin d, ∑ j : Fin d,
-        (star (L i r) * R j s) • M i j := by
+        (star (L i r) * R j s) • M (i, j) := by
   ext a b
   simp only [horizontalSlice, Matrix.mul_apply, Matrix.conjTranspose_apply,
     verticalTensor_finProdFinEquiv, Matrix.sum_apply, Matrix.smul_apply,

@@ -56,7 +56,7 @@ variable {d D : ℕ}
 
 private theorem evalWord_mul_of_letterwise_right_absorption
     (W : MPOTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
-    (hWP : ∀ i j, W i j * P = W i j) :
+    (hWP : ∀ i j, W (i, j) * P = W (i, j)) :
     ∀ {is js : List (Fin d)}, is.length = js.length → is ≠ [] →
       evalWord W is js * P = evalWord W is js := by
   intro is
@@ -77,7 +77,7 @@ private theorem evalWord_mul_of_letterwise_right_absorption
 
 private theorem mul_evalWord_of_letterwise_left_absorption
     (W : MPOTensor d D) (Q : Matrix (Fin D) (Fin D) ℂ)
-    (hQW : ∀ i j, Q * W i j = W i j) :
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j)) :
     ∀ {is js : List (Fin d)}, is.length = js.length → is ≠ [] →
       Q * evalWord W is js = evalWord W is js := by
   intro is js hlen his
@@ -93,8 +93,8 @@ private theorem mul_evalWord_of_letterwise_left_absorption
 private theorem evalWord_virtualSandwich_reducedProjection
     (W : MPOTensor d D) (P Q : Matrix (Fin D) (Fin D) ℂ)
     (hP : IsOrthogonalProjection P)
-    (hWP : ∀ i j, W i j * P = W i j)
-    (hQW : ∀ i j, Q * W i j = W i j) :
+    (hWP : ∀ i j, W (i, j) * P = W (i, j))
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j)) :
     ∀ {is js : List (Fin d)}, is.length = js.length → is ≠ [] →
       evalWord (virtualSandwich (Matrix.reducedProjection P Q) W
         (Matrix.reducedProjection P Q)) is js =
@@ -126,20 +126,20 @@ private theorem evalWord_virtualSandwich_reducedProjection
                 _ = (P * Q) * evalWord W is js := by rw [hTQ]
                 _ = P * evalWord W is js := by rw [Matrix.mul_assoc, hQtail]
             simp only [evalWord_cons, virtualSandwich_apply, ih htail his]
-            change (T * W i j * T) * (T * evalWord W is js * T) =
-              T * (W i j * evalWord W is js) * T
+            change (T * W (i, j) * T) * (T * evalWord W is js * T) =
+              T * (W (i, j) * evalWord W is js) * T
             calc
-              (T * W i j * T) * (T * evalWord W is js * T) =
-                  T * W i j * (T * T) * evalWord W is js * T := by
+              (T * W (i, j) * T) * (T * evalWord W is js * T) =
+                  T * W (i, j) * (T * T) * evalWord W is js * T := by
                     noncomm_ring
-              _ = T * W i j * (T * evalWord W is js) * T := by
+              _ = T * W (i, j) * (T * evalWord W is js) * T := by
                     rw [hTT]
                     noncomm_ring
-              _ = T * W i j * (P * evalWord W is js) * T := by rw [hTtail]
-              _ = T * (W i j * P) * evalWord W is js * T := by
+              _ = T * W (i, j) * (P * evalWord W is js) * T := by rw [hTtail]
+              _ = T * (W (i, j) * P) * evalWord W is js * T := by
                     noncomm_ring
-              _ = T * W i j * evalWord W is js * T := by rw [hWP]
-              _ = T * (W i j * evalWord W is js) * T := by noncomm_ring
+              _ = T * W (i, j) * evalWord W is js * T := by rw [hWP]
+              _ = T * (W (i, j) * evalWord W is js) * T := by noncomm_ring
 
 /-- The reduced tensor and the original tensor define the same periodic MPO at every
 system size, under the paper's explicit letterwise support absorptions.
@@ -148,8 +148,8 @@ Source: arXiv:1703.09188, Proposition IV.5, lines 756 and 773--783. -/
 theorem mpo_virtualSandwich_reducedProjection_eq
     (W : MPOTensor d D) (P Q : Matrix (Fin D) (Fin D) ℂ)
     (hP : IsOrthogonalProjection P)
-    (hWP : ∀ i j, W i j * P = W i j)
-    (hQW : ∀ i j, Q * W i j = W i j) (N : ℕ) :
+    (hWP : ∀ i j, W (i, j) * P = W (i, j))
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j)) (N : ℕ) :
     mpo (virtualSandwich (Matrix.reducedProjection P Q) W
       (Matrix.reducedProjection P Q)) N = mpo W N := by
   let T := Matrix.reducedProjection P Q

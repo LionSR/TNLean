@@ -50,7 +50,7 @@ theorem continuous_ketLeftMul (Q : Matrix (Fin d) (Fin d) ℂ) :
 private theorem ketLeftMul_comp (W : MPOTensor d D)
     (P Q : Matrix (Fin d) (Fin d) ℂ) :
     (W.ketLeftMul P).ketLeftMul Q = W.ketLeftMul (Q * P) := by
-  ext i j a b
+  ext ⟨i, j⟩ a b
   simp only [ketLeftMul, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
   simp only [Matrix.mul_apply, Finset.mul_sum, Finset.sum_mul, mul_assoc]
   rw [Finset.sum_comm]
@@ -63,7 +63,7 @@ theorem ketLeftMul_involutive (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q * Q = 1) 
   intro W
   change (W.ketLeftMul Q).ketLeftMul Q = W
   rw [ketLeftMul_comp, hQ]
-  ext i j a b
+  ext ⟨i, j⟩ a b
   simp [ketLeftMul, Matrix.one_apply]
 
 private theorem joinedIn_ketLeftMul
@@ -187,7 +187,7 @@ and Definition `def:equivalent-symmetry`, lines 1356--1366. -/
 theorem blockTensor_ketLeftMul (W : MPOTensor d D)
     (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
     blockTensor (W.ketLeftMul Q) k = (blockTensor W k).ketLeftMul (MPSTensor.blockKron k Q) := by
-  funext i j
+  funext ⟨i, j⟩
   change evalWord (W.ketLeftMul Q)
     (List.ofFn (Kraus.decodeBlock d k i)) (List.ofFn (Kraus.decodeBlock d k j)) =
       ∑ l : Fin (Kraus.blockPhysDim d k),

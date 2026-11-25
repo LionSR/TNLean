@@ -65,9 +65,9 @@ noncomputable def inverseCompatibleY₁ : Matrix (Fin ℓ[U]) (Fin D × Fin d) �
 /-- Unitary cancellation reverses the supplied adjoint gauge equation.
 Source: arXiv:2502.20257, lines 5391–5410. -/
 theorem eq_unitary_mul_physicalAdjointTensor_mul_conjTranspose
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T) (i j : Fin d) :
-    U i j = (T : Matrix (Fin D) (Fin D) ℂ) * physicalAdjointTensor U i j *
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T) (i j : Fin d) :
+    U (i, j) = (T : Matrix (Fin D) (Fin D) ℂ) * physicalAdjointTensor U (i, j) *
       (T : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
   have hunit : (T : Matrix (Fin D) (Fin D) ℂ) *
       (T : Matrix (Fin D) (Fin D) ℂ)ᴴ = 1 := T.property.2
@@ -78,8 +78,8 @@ theorem eq_unitary_mul_physicalAdjointTensor_mul_conjTranspose
 /-- The first cut is the dressed adjoint of the second cut.
 Source: arXiv:2502.20257, lines 5391–5431. -/
 theorem sourceCutM₁_eq_inverseCompatible_dressed_cut
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T) :
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T) :
     sourceCutM₁ U = inverseCompatibleLeftGauge (d := d) T * (sourceCutM₂ U)ᴴ *
       inverseCompatibleRightGauge (d := d) T := by
   rw [← sourceCutM₁_physicalAdjointTensor]
@@ -114,8 +114,8 @@ private theorem inverseCompatibleRightGauge_coisometry :
 /-- The candidate factors multiply to the first source cut.
 Source: arXiv:2502.20257, lines 5390–5432. -/
 theorem sourceCutM₁_eq_inverseCompatibleX₁_mul_inverseCompatibleY₁
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T) :
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T) :
     sourceCutM₁ U = inverseCompatibleX₁ U T * inverseCompatibleY₁ U T := by
   rw [sourceCutM₁_eq_inverseCompatible_dressed_cut U T hT,
     sourceCutM₂_eq_sourceX₂_mul_sourceY₂, Matrix.conjTranspose_mul]
@@ -161,8 +161,8 @@ theorem IsRepresentation.physicalAdjointTensor_eq_daggerInverseGauge_of_inv_eq
       MPSTensor.IsLeftCanonical (F.tensor a).normalizedFlattening)
     (g : G) (hg : g⁻¹ = g) (i j : Fin d) :
     let T := hF.daggerInverseGauge F hcanonical g
-    physicalAdjointTensor (F.tensor g) i j =
-      (T : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ)ᴴ * F.tensor g i j * T := by
+    physicalAdjointTensor (F.tensor g) (i, j) =
+      (T : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ)ᴴ * F.tensor g (i, j) * T := by
   have hinv : inverseFlattening F hF g = (F.tensor g).toMPSTensor :=
     reindex_tensor_toMPSTensor_eq F g⁻¹ g hg (hF.bondDim_inv F g).symm
   have h := hF.physicalAdjointTensor_eq_daggerInverseGauge F hcanonical g

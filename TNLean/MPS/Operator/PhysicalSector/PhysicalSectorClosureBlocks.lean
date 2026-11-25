@@ -50,20 +50,17 @@ theorem s0Regrouped_threeSiteClosure_block_eq
       threeSiteNeighboringOperator,
       Matrix.blockDiagonal'_apply] using hg
   · have hz : F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨l, (u.1.2, u.2.1)⟩)
-        (F.sectorFinEquiv.symm ⟨m, (v.1.2, v.2.1)⟩) = 0 := by
+        (F.sectorFinEquiv.symm ⟨l, (u.1.2, u.2.1)⟩,
+            F.sectorFinEquiv.symm ⟨m, (v.1.2, v.2.1)⟩) = 0 := by
       ext beta alpha
       exact sectorCoordinateTensor_apply_ne F hlm _ _ beta alpha
     change Matrix.trace
       (F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm ⟨k, (a.1, u.1.1)⟩)
-          (F.sectorFinEquiv.symm ⟨k, (b.1, v.1.1)⟩) *
+          (F.sectorFinEquiv.symm ⟨k, (a.1, u.1.1)⟩, F.sectorFinEquiv.symm ⟨k, (b.1, v.1.1)⟩) *
         F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm ⟨l, (u.1.2, u.2.1)⟩)
-          (F.sectorFinEquiv.symm ⟨m, (v.1.2, v.2.1)⟩) *
+          (F.sectorFinEquiv.symm ⟨l, (u.1.2, u.2.1)⟩, F.sectorFinEquiv.symm ⟨m, (v.1.2, v.2.1)⟩) *
         F.sectorCoordinateTensor
-          (F.sectorFinEquiv.symm ⟨h, (u.2.2, a.2)⟩)
-          (F.sectorFinEquiv.symm ⟨h, (v.2.2, b.2)⟩) * X) =
+          (F.sectorFinEquiv.symm ⟨h, (u.2.2, a.2)⟩, F.sectorFinEquiv.symm ⟨h, (v.2.2, b.2)⟩) * X) =
       F.boundaryOperator k h X a b *
         F.threeSiteNeighboringOperator k h ⟨l, u⟩ ⟨m, v⟩
     rw [hz]
@@ -91,25 +88,23 @@ theorem s0Regrouped_threeSiteClosure_apply_of_outer_ne
     not_and_or.mp (fun h ↦ hne (Prod.ext h.1 h.2))
   change Matrix.trace
     (F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨kh.1, (a.1, u.1.1)⟩)
-        (F.sectorFinEquiv.symm ⟨pq.1, (b.1, v.1.1)⟩) *
+        (F.sectorFinEquiv.symm ⟨kh.1, (a.1, u.1.1)⟩, F.sectorFinEquiv.symm ⟨pq.1, (b.1, v.1.1)⟩) *
       F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨l, (u.1.2, u.2.1)⟩)
-        (F.sectorFinEquiv.symm ⟨m, (v.1.2, v.2.1)⟩) *
+        (F.sectorFinEquiv.symm ⟨l, (u.1.2, u.2.1)⟩, F.sectorFinEquiv.symm ⟨m, (v.1.2, v.2.1)⟩) *
       F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨kh.2, (u.2.2, a.2)⟩)
-        (F.sectorFinEquiv.symm ⟨pq.2, (v.2.2, b.2)⟩) * X) = 0
+        (F.sectorFinEquiv.symm ⟨kh.2, (u.2.2, a.2)⟩,
+            F.sectorFinEquiv.symm ⟨pq.2, (v.2.2, b.2)⟩) * X) = 0
   rcases houter with hfirst | hthird
   · have hz : F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨kh.1, (a.1, u.1.1)⟩)
-        (F.sectorFinEquiv.symm ⟨pq.1, (b.1, v.1.1)⟩) = 0 := by
+        (F.sectorFinEquiv.symm ⟨kh.1, (a.1, u.1.1)⟩,
+            F.sectorFinEquiv.symm ⟨pq.1, (b.1, v.1.1)⟩) = 0 := by
       ext beta alpha
       exact sectorCoordinateTensor_apply_ne F hfirst _ _ beta alpha
     rw [hz]
     simp
   · have hz : F.sectorCoordinateTensor
-        (F.sectorFinEquiv.symm ⟨kh.2, (u.2.2, a.2)⟩)
-        (F.sectorFinEquiv.symm ⟨pq.2, (v.2.2, b.2)⟩) = 0 := by
+        (F.sectorFinEquiv.symm ⟨kh.2, (u.2.2, a.2)⟩,
+            F.sectorFinEquiv.symm ⟨pq.2, (v.2.2, b.2)⟩) = 0 := by
       ext beta alpha
       exact sectorCoordinateTensor_apply_ne F hthird _ _ beta alpha
     rw [hz]

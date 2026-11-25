@@ -28,7 +28,7 @@ variable {d D : ℕ}
 Source: arXiv:1703.09188, equation `Erightleft`, lines 269--281. -/
 theorem normalizedDiagonal_eq_smul_sum_diagonal
     (W : MPOTensor d D) :
-    normalizedDiagonal W = ((d : ℂ)⁻¹) • ∑ q : Fin d, W q q := by
+    normalizedDiagonal W = ((d : ℂ)⁻¹) • ∑ q : Fin d, W (q, q) := by
   classical
   simp only [normalizedDiagonal, contractPhysical, Matrix.one_apply, ite_smul,
     one_smul, zero_smul, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
@@ -39,43 +39,43 @@ double-layer letters. Source: arXiv:1703.09188, equations `simple1` and
 theorem IsMPUSimple.letter_mul_normalizedDiagonal_mul_letter
     [NeZero d] {W : MPOTensor d D} (hW : IsMPUSimple W)
     (i j k l : Fin d) :
-    doubleLayerTensor W i j * normalizedDiagonal (doubleLayerTensor W) *
-        doubleLayerTensor W k l =
-      doubleLayerTensor W i j * doubleLayerTensor W k l := by
+    doubleLayerTensor W (i, j) * normalizedDiagonal (doubleLayerTensor W) *
+        doubleLayerTensor W (k, l) =
+      doubleLayerTensor W (i, j) * doubleLayerTensor W (k, l) := by
   classical
   obtain ⟨a, b, h₁, h₂⟩ := hW
   let R := Matrix.vecMulVec b a
   have hsandwich (q : Fin d) :
-      R * doubleLayerTensor W q q * R = R := by
+      R * doubleLayerTensor W (q, q) * R = R := by
     have h := Matrix.vecMulVec_mul_mul_vecMulVec_eq_trace_smul
-      b a (doubleLayerTensor W q q)
-    have htrace : Matrix.trace (doubleLayerTensor W q q * R) = 1 := by
-      change Matrix.trace (doubleLayerTensor W q q * Matrix.vecMulVec b a) = 1
+      b a (doubleLayerTensor W (q, q))
+    have htrace : Matrix.trace (doubleLayerTensor W (q, q) * R) = 1 := by
+      change Matrix.trace (doubleLayerTensor W (q, q) * Matrix.vecMulVec b a) = 1
       rw [Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, dotProduct_comm]
       simpa using h₁ q q
     simpa only [R, htrace, one_smul] using h
   rw [normalizedDiagonal_eq_smul_sum_diagonal]
   simp only [Matrix.mul_smul, Matrix.smul_mul, Finset.mul_sum, Finset.sum_mul]
   have hterm (q : Fin d) :
-      doubleLayerTensor W i j * doubleLayerTensor W q q *
-          doubleLayerTensor W k l =
-        doubleLayerTensor W i j * R * doubleLayerTensor W k l := by
+      doubleLayerTensor W (i, j) * doubleLayerTensor W (q, q) *
+          doubleLayerTensor W (k, l) =
+        doubleLayerTensor W (i, j) * R * doubleLayerTensor W (k, l) := by
     calc
-      _ = (doubleLayerTensor W i j * R * doubleLayerTensor W q q) *
-          doubleLayerTensor W k l := by rw [← h₂ i j q q]
-      _ = doubleLayerTensor W i j * R *
-          (doubleLayerTensor W q q * R * doubleLayerTensor W k l) := by
+      _ = (doubleLayerTensor W (i, j) * R * doubleLayerTensor W (q, q)) *
+          doubleLayerTensor W (k, l) := by rw [← h₂ i j q q]
+      _ = doubleLayerTensor W (i, j) * R *
+          (doubleLayerTensor W (q, q) * R * doubleLayerTensor W (k, l)) := by
             rw [← h₂ q q k l]; simp [Matrix.mul_assoc]
-      _ = doubleLayerTensor W i j * (R * doubleLayerTensor W q q * R) *
-          doubleLayerTensor W k l := by simp [Matrix.mul_assoc]
-      _ = doubleLayerTensor W i j * R * doubleLayerTensor W k l := by rw [hsandwich]
+      _ = doubleLayerTensor W (i, j) * (R * doubleLayerTensor W (q, q) * R) *
+          doubleLayerTensor W (k, l) := by simp [Matrix.mul_assoc]
+      _ = doubleLayerTensor W (i, j) * R * doubleLayerTensor W (k, l) := by rw [hsandwich]
   simp_rw [hterm]
   have hd : (d : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr (NeZero.ne d)
   rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin]
   ext x y
   simp only [Matrix.smul_apply]
   change (d : ℂ)⁻¹ * ((d : ℕ) •
-    (doubleLayerTensor W i j * R * doubleLayerTensor W k l) x y) = _
+    (doubleLayerTensor W (i, j) * R * doubleLayerTensor W (k, l)) x y) = _
   rw [nsmul_eq_mul, ← mul_assoc, inv_mul_cancel₀ hd, one_mul]
   exact congrArg (fun M ↦ M x y) (h₂ i j k l).symm
 
@@ -89,39 +89,39 @@ and 429--438. -/
 theorem simple2_of_normalizedDiagonal_insertion
     {W : MPOTensor d D}
     (hinsert : ∀ i j k l : Fin d,
-      doubleLayerTensor W i j * normalizedDiagonal (doubleLayerTensor W) *
-        doubleLayerTensor W k l =
-          doubleLayerTensor W i j * doubleLayerTensor W k l)
+      doubleLayerTensor W (i, j) * normalizedDiagonal (doubleLayerTensor W) *
+        doubleLayerTensor W (k, l) =
+          doubleLayerTensor W (i, j) * doubleLayerTensor W (k, l))
     (ρ Φ : Fin (D * D) → ℂ) (J : ℕ) (hJ : 0 < J)
     (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
       Matrix.vecMulVec ρ Φ) :
     ∀ i j k l : Fin d,
-      doubleLayerTensor W i j * doubleLayerTensor W k l =
-        doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
-          doubleLayerTensor W k l := by
+      doubleLayerTensor W (i, j) * doubleLayerTensor W (k, l) =
+        doubleLayerTensor W (i, j) * Matrix.vecMulVec ρ Φ *
+          doubleLayerTensor W (k, l) := by
   intro i j k l
   let E := normalizedDiagonal (doubleLayerTensor W)
-  have hE : E = ((d : ℂ)⁻¹) • ∑ q : Fin d, doubleLayerTensor W q q :=
+  have hE : E = ((d : ℂ)⁻¹) • ∑ q : Fin d, doubleLayerTensor W (q, q) :=
     normalizedDiagonal_eq_smul_sum_diagonal (doubleLayerTensor W)
-  have hleftIdem : doubleLayerTensor W i j * E * E =
-      doubleLayerTensor W i j * E := by
+  have hleftIdem : doubleLayerTensor W (i, j) * E * E =
+      doubleLayerTensor W (i, j) * E := by
     calc
-      doubleLayerTensor W i j * E * E =
-          doubleLayerTensor W i j * E *
-            (((d : ℂ)⁻¹) • ∑ q : Fin d, doubleLayerTensor W q q) := by rw [hE]
+      doubleLayerTensor W (i, j) * E * E =
+          doubleLayerTensor W (i, j) * E *
+            (((d : ℂ)⁻¹) • ∑ q : Fin d, doubleLayerTensor W (q, q)) := by rw [hE]
       _ = ((d : ℂ)⁻¹) • ∑ q : Fin d,
-            doubleLayerTensor W i j * E * doubleLayerTensor W q q := by
+            doubleLayerTensor W (i, j) * E * doubleLayerTensor W (q, q) := by
               rw [Matrix.mul_smul, Finset.mul_sum]
       _ = ((d : ℂ)⁻¹) • ∑ q : Fin d,
-            doubleLayerTensor W i j * doubleLayerTensor W q q := by
+            doubleLayerTensor W (i, j) * doubleLayerTensor W (q, q) := by
               congr 1
               apply Finset.sum_congr rfl
               intro q _
               exact hinsert i j q q
-      _ = doubleLayerTensor W i j * E := by
+      _ = doubleLayerTensor W (i, j) * E := by
               rw [hE, Matrix.mul_smul, Finset.mul_sum]
   have hleftPow : ∀ N : ℕ, 0 < N →
-      doubleLayerTensor W i j * E ^ N = doubleLayerTensor W i j * E := by
+      doubleLayerTensor W (i, j) * E ^ N = doubleLayerTensor W (i, j) * E := by
     intro N hN
     obtain ⟨N, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hN)
     clear hN
@@ -130,11 +130,11 @@ theorem simple2_of_normalizedDiagonal_insertion
     | succ N ih =>
         rw [pow_succ, ← Matrix.mul_assoc, ih, hleftIdem]
   calc
-    doubleLayerTensor W i j * doubleLayerTensor W k l =
-        doubleLayerTensor W i j * E ^ J * doubleLayerTensor W k l := by
+    doubleLayerTensor W (i, j) * doubleLayerTensor W (k, l) =
+        doubleLayerTensor W (i, j) * E ^ J * doubleLayerTensor W (k, l) := by
           rw [hleftPow J hJ, hinsert i j k l]
-    _ = doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
-        doubleLayerTensor W k l := by rw [hpower]
+    _ = doubleLayerTensor W (i, j) * Matrix.vecMulVec ρ Φ *
+        doubleLayerTensor W (k, l) := by rw [hpower]
 
 /-- If a simple tensor has a positive normalized-diagonal power equal to a
 supplied rank-one matrix, then `simple2` holds with exactly those supplied
@@ -153,9 +153,9 @@ theorem IsMPUSimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec
     (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
       Matrix.vecMulVec ρ Φ) :
     ∀ i j k l : Fin d,
-      doubleLayerTensor W i j * doubleLayerTensor W k l =
-        doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
-          doubleLayerTensor W k l :=
+      doubleLayerTensor W (i, j) * doubleLayerTensor W (k, l) =
+        doubleLayerTensor W (i, j) * Matrix.vecMulVec ρ Φ *
+          doubleLayerTensor W (k, l) :=
   simple2_of_normalizedDiagonal_insertion
     hW.letter_mul_normalizedDiagonal_mul_letter ρ Φ J hJ hpower
 
@@ -169,12 +169,12 @@ Corollary `cor:mpu` and Proposition `prop:MPUsplus`, lines 1013--1050 and
 theorem IsMPUCanonicalFormII.simple2_recorded_fixed_pair
     {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U) :
     ∀ i j k l : Fin d,
-      doubleLayerTensor U i j * doubleLayerTensor U k l =
-        doubleLayerTensor U i j * Matrix.vecMulVec
+      doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l) =
+        doubleLayerTensor U (i, j) * Matrix.vecMulVec
           (fun x : Fin (D * D) ↦ hU.ρ.vec (finProdFinEquiv.symm x))
           (fun x : Fin (D * D) ↦
             (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x)) *
-          doubleLayerTensor U k l := by
+          doubleLayerTensor U (k, l) := by
   have := hU.neZero_phys
   exact hsimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec
     _ _ (max (D * D - 1) 1) (by omega) hU.normalizedDiagonal_pow_eq_vecMulVec
@@ -209,13 +209,13 @@ theorem doubleLayerTensor_rankOne_mul_eq_normalizedDiagonal_tail
     (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
       Matrix.vecMulVec ρ Φ)
     (i j k l : Fin d) :
-    doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
-        doubleLayerTensor W k l =
+    doubleLayerTensor W (i, j) * Matrix.vecMulVec ρ Φ *
+        doubleLayerTensor W (k, l) =
       ((d : ℂ)⁻¹) ^ J •
         ∑ τ : Fin J → Fin d,
-          doubleLayerTensor W i j *
+          doubleLayerTensor W (i, j) *
             evalWord (doubleLayerTensor W) (List.ofFn τ) (List.ofFn τ) *
-              doubleLayerTensor W k l := by
+              doubleLayerTensor W (k, l) := by
   rw [← hpower, normalizedDiagonal_pow_eq_sum_evalWord]
   simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_sum, Finset.sum_mul]
 
@@ -231,16 +231,16 @@ theorem doubleLayerTensor_mul_eq_normalizedDiagonal_tail_of_simple2
     (hpower : normalizedDiagonal (doubleLayerTensor W) ^ J =
       Matrix.vecMulVec ρ Φ)
     (hsimple2 : ∀ i j k l : Fin d,
-      doubleLayerTensor W i j * doubleLayerTensor W k l =
-        doubleLayerTensor W i j * Matrix.vecMulVec ρ Φ *
-          doubleLayerTensor W k l)
+      doubleLayerTensor W (i, j) * doubleLayerTensor W (k, l) =
+        doubleLayerTensor W (i, j) * Matrix.vecMulVec ρ Φ *
+          doubleLayerTensor W (k, l))
     (i j k l : Fin d) :
-    doubleLayerTensor W i j * doubleLayerTensor W k l =
+    doubleLayerTensor W (i, j) * doubleLayerTensor W (k, l) =
       ((d : ℂ)⁻¹) ^ J •
         ∑ τ : Fin J → Fin d,
-          doubleLayerTensor W i j *
+          doubleLayerTensor W (i, j) *
             evalWord (doubleLayerTensor W) (List.ofFn τ) (List.ofFn τ) *
-              doubleLayerTensor W k l := by
+              doubleLayerTensor W (k, l) := by
   rw [hsimple2]
   exact doubleLayerTensor_rankOne_mul_eq_normalizedDiagonal_tail
     W ρ Φ J hpower i j k l

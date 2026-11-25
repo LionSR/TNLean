@@ -143,7 +143,7 @@ theorem isingSigmaSigma_conj (h h' : Fin 10) :
 
 theorem complexOfZsqrt2_isingOnePsiZ (h h' : Fin 10) :
     complexOfZsqrt2 (isingOnePsiZ h h') =
-      ((2 : ℂ) • MPOTensor.directSum isingOne isingPsi) h h' := by
+      ((2 : ℂ) • MPOTensor.directSum isingOne isingPsi) (h, h') := by
   ext a b
   simp only [isingOnePsiZ, MPOTensor.directSum, complexOfZsqrt2_apply, Matrix.submatrix_apply,
     Pi.smul_apply, Matrix.smul_apply]
@@ -159,13 +159,13 @@ operator fusion rules only for the Fibonacci blocks. The square of the periodic 
 theorem isingSigma_mul_isingSigma {N : ℕ} (hN : 0 < N) :
     MPOTensor.mpo isingSigma N * MPOTensor.mpo isingSigma N =
       (2 : ℂ) ^ N • (MPOTensor.mpo isingOne N + MPOTensor.mpo isingPsi N) := by
-  rw [show isingSigma = fun i j => complexOfZsqrt2 (isingSigmaZ i j) from rfl,
+  rw [show isingSigma = Function.uncurry fun i j => complexOfZsqrt2 (isingSigmaZ i j) from rfl,
     mpo_mul_eq_of_zsqrt2_conj isingSigmaZ isingSigmaZ isingOnePsiZ (z := 10) isingGaugeSigmaSigmaZ
       isingGaugeSigmaSigmaZᵀ 2 (by decide) isingGaugeSigmaSigmaZ_mul_transpose
       isingGaugeSigmaSigmaZ_transpose_mul isingSigmaSigma_conj hN]
-  rw [show (fun i j => complexOfZsqrt2 (isingOnePsiZ i j)) =
+  rw [show (Function.uncurry fun i j => complexOfZsqrt2 (isingOnePsiZ i j)) =
       (2 : ℂ) • MPOTensor.directSum isingOne isingPsi from
-      funext fun i => funext fun j => complexOfZsqrt2_isingOnePsiZ i j,
+      funext fun p => complexOfZsqrt2_isingOnePsiZ p.1 p.2,
     MPOTensor.mpo_smul, MPOTensor.mpo_directSum]
 
 /-- **`O_σ² = O_1 + O_ψ`.** Source: arXiv:1511.08090, lines 1312 and 1323, as in

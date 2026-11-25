@@ -237,7 +237,7 @@ theorem NeighboringTraceFactorization.localizedPhysicalTMap_threeSiteClosure_eq_
         (physClose3 F.sectorCoordinateTensor X))
       i₄ j₄ =
       physClose2 F.sectorCoordinateTensor
-        (F.sectorCoordinateTensor i₄ j₄ * X) by
+        (F.sectorCoordinateTensor (i₄, j₄) * X) by
       ext a b
       simp [Matrix.bipartiteSlice, threeSiteFirstTwoEquiv,
         Matrix.reindex_apply, Matrix.mul_assoc]]
@@ -319,7 +319,7 @@ theorem NeighboringTraceFactorization.localizedPhysicalSMap_fourSiteClosure_eq_t
         (physClose4 F.sectorCoordinateTensor X))
       i₃ j₃ =
       physClose3 F.sectorCoordinateTensor
-        (F.sectorCoordinateTensor i₃ j₃ * X) by
+        (F.sectorCoordinateTensor (i₃, j₃) * X) by
       ext a b
       simp [Matrix.bipartiteSlice, fourSiteFirstThreeEquiv,
         Matrix.reindex_apply, physClose4_apply, Matrix.mul_assoc]]

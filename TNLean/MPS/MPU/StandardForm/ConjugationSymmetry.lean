@@ -98,7 +98,7 @@ variable {d D ℓ r N : ℕ}
 /-- Entrywise conjugation of an MPO tensor, without a physical or virtual
 index swap. Source: arXiv:1703.09188, `prop1conj`, lines 1008–1010. -/
 def mapStar (W : MPOTensor d D) : MPOTensor d D :=
-  fun i j ↦ (W i j).map (starRingEnd ℂ)
+  fun ij ↦ (W ij).map (starRingEnd ℂ)
 
 /-- Conjugating every coefficient conjugates the periodic operator at each
 length, including zero. This is the finite-chain meaning of conjugation in
@@ -114,7 +114,7 @@ theorem mpo_map_star (W : MPOTensor d D) (N : ℕ) :
   simpa only [List.map_ofFn, Function.comp_def, RingHom.mapMatrix_apply,
     MPOTensor.mapStar] using
     (map_list_prod (starRingEnd ℂ).mapMatrix
-      (List.ofFn fun i : Fin N ↦ W (σ i) (τ i))).symm
+      (List.ofFn fun i : Fin N ↦ W (σ i, τ i))).symm
 
 /-- Conjugating every coefficient transports the actual supplied standard
 form to the conjugate tensor, with gates exactly `conj(u), conj(v)`.

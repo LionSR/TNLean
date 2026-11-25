@@ -39,7 +39,7 @@ noncomputable def oneSiteSectorMatrix (F : PhysicalSectorFactorization K)
     (k : Fin F.sectorCount) (x y : SectorIndex F k) :
     Matrix (Fin D) (Fin D) ℂ :=
   F.sectorCoordinateTensor
-    (F.sectorFinEquiv.symm ⟨k, x⟩) (F.sectorFinEquiv.symm ⟨k, y⟩)
+    (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩)
 
 /-- A vanishing neighboring operator makes the corresponding one-site sector
 matrices vanish in the directed product order.

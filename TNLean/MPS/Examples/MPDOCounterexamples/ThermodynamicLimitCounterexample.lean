@@ -71,14 +71,14 @@ private noncomputable def virtualWeight (a : Fin 3) (i j : Fin 2) : ℂ :=
 This is the counterexample to the unrestricted thermodynamic-limit clause of
 arXiv:1606.00608, Proposition 4.5, lines 801--806. -/
 noncomputable def parityTensor : MPOTensor 2 3 :=
-  fun i j => Matrix.diagonal fun a => virtualWeight a i j
+  fun (i, j) => Matrix.diagonal fun a => virtualWeight a i j
 
 @[simp] private lemma parityTensor_apply (i j : Fin 2) :
-    parityTensor i j = Matrix.diagonal fun a => virtualWeight a i j :=
+    parityTensor (i, j) = Matrix.diagonal fun a => virtualWeight a i j :=
   rfl
 
 private lemma prod_parityTensor {N : ℕ} (σ τ : Fin N → Fin 2) :
-    (List.ofFn fun k => parityTensor (σ k) (τ k)).prod =
+    (List.ofFn fun k => parityTensor (σ k, τ k)).prod =
       Matrix.diagonal fun a => ∏ k, virtualWeight a (σ k) (τ k) := by
   induction N with
   | zero =>

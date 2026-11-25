@@ -52,8 +52,8 @@ rank spaces are derived, not assumed.
 Source: arXiv:2502.20257, lines 5444–5487. -/
 theorem inverseCompatibleComparisonK_isUnitaryBetween
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
       (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1) :
     (inverseCompatibleComparisonK U T hU.ρ hU.ρ_posDef).IsUnitaryBetween := by
@@ -92,8 +92,8 @@ source's comparison paragraph, without assuming it there.
 Source: arXiv:2502.20257, lines 5432–5443 and 5444–5487. -/
 theorem inverseCompatibleComparisonJ_eq_conjTranspose
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
       (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1) :
     inverseCompatibleComparisonJ U T hU.ρ hU.ρ_posDef =
@@ -115,8 +115,8 @@ Source: arXiv:2502.20257, lines 5486–5487, with the source normalization
 of arXiv:1703.09188, `Y1Y1X1X1` (lines 487–494). -/
 theorem inverseCompatibleX₁_weighted_isometry
     (hU : IsMPUCanonicalFormII U) (hsimple : IsMPUSimple U)
-    (hT : ∀ i j, physicalAdjointTensor U i j =
-      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U i j * T)
+    (hT : ∀ i j, physicalAdjointTensor U (i, j) =
+      (T : Matrix (Fin D) (Fin D) ℂ)ᴴ * U (i, j) * T)
     (σ : ℂ) (hσ : (T : Matrix (Fin D) (Fin D) ℂ) *
       (T : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = σ • 1) :
     (inverseCompatibleX₁ U T)ᴴ * sourceWeight (d := d) hU.ρ *
@@ -152,8 +152,8 @@ theorem IsRepresentation.inverseCompatibleComparison_unitary_of_inv_eq
         inverseCompatibleX₁ (F.tensor g) T = 1 := by
   let T := hF.daggerInverseGauge F hcanonical g
   let σ := hF.daggerInverseScalar F hcanonical g
-  have hT : ∀ i j, physicalAdjointTensor (F.tensor g) i j =
-      (T : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ)ᴴ * F.tensor g i j * T :=
+  have hT : ∀ i j, physicalAdjointTensor (F.tensor g) (i, j) =
+      (T : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ)ᴴ * F.tensor g (i, j) * T :=
     hF.physicalAdjointTensor_eq_daggerInverseGauge_of_inv_eq F hcanonical g hg
   have hσ : (T : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ) *
       (T : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ).map (starRingEnd ℂ) =

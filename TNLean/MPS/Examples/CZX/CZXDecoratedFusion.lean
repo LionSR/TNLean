@@ -218,10 +218,10 @@ def czxDecoratedCubeInt (i j : Fin 2) : Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2
     i j
 
 theorem czxDecoratedCube_eq (i j : Fin 2) :
-    czxDecoratedCube i j = complexOfInt (czxDecoratedCubeInt i j) := by
-  have h2 : MPOTensor.mulTensor czxDecoratedTensor czxDecoratedTensor = fun i j =>
+    czxDecoratedCube (i, j) = complexOfInt (czxDecoratedCubeInt i j) := by
+  have h2 : MPOTensor.mulTensor czxDecoratedTensor czxDecoratedTensor = Function.uncurry fun i j =>
       complexOfInt (mulIntTensor czxDecoratedIntTensor czxDecoratedIntTensor i j) :=
-    funext₂ fun i j => mulTensor_complexOfRing _ czxDecoratedIntTensor czxDecoratedIntTensor i j
+    funext fun p => mulTensor_complexOfRing _ czxDecoratedIntTensor czxDecoratedIntTensor p.1 p.2
   rw [czxDecoratedCube, h2]
   exact mulTensor_complexOfRing _ _ czxDecoratedIntTensor i j
 
@@ -278,13 +278,15 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 481–499 (`eq:Ua
 lines 1128–1136 ("the CZX symmetry ..., which has an anomaly, i.e., `ω = -1`"), with the fusion
 tensors of lines 1225–1244. -/
 theorem czxDecorated_associator_eq_neg_one (i₀ j₀ i₁ j₁ i₂ j₂ : Fin 2) :
-    czxAssocLeft * czxDecoratedCube i₀ j₀ * czxDecoratedCube i₁ j₁ * czxDecoratedCube i₂ j₂ *
+    czxAssocLeft * czxDecoratedCube (i₀, j₀) * czxDecoratedCube (i₁, j₁) *
+        czxDecoratedCube (i₂, j₂) *
         czxAssocRight =
-      (-1 : ℂ) • (czxDecoratedTensor i₀ j₀ * czxDecoratedTensor i₁ j₁ *
-        czxDecoratedTensor i₂ j₂) := by
+      (-1 : ℂ) • (czxDecoratedTensor (i₀, j₀) * czxDecoratedTensor (i₁, j₁) *
+        czxDecoratedTensor (i₂, j₂)) := by
   rw [czxAssocLeft_eq, czxAssocRight_eq, czxDecoratedCube_eq, czxDecoratedCube_eq,
     czxDecoratedCube_eq, neg_one_smul]
-  simp only [czxDecoratedTensor, ← complexOfInt_mul, ← complexOfInt_neg]
+  simp only [czxDecoratedTensor, ← complexOfInt_mul, ← complexOfInt_neg,
+      Function.uncurry_apply_pair]
   rw [czxDecorated_associator_int]
 
 end CZXCompression

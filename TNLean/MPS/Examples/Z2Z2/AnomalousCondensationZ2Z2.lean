@@ -127,16 +127,16 @@ def xyIntTensor : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ
   | _, _ => 0
 
 /-- The tensor of `U_e` as a matrix product operator tensor. -/
-def eTensor : MPOTensor 4 1 := fun o i => complexOfInt (eIntTensor o i)
+def eTensor : MPOTensor 4 1 := Function.uncurry fun o i => complexOfInt (eIntTensor o i)
 
 /-- The tensor of `U_y` as a matrix product operator tensor. -/
-def yTensor : MPOTensor 4 1 := fun o i => complexOfInt (yIntTensor o i)
+def yTensor : MPOTensor 4 1 := Function.uncurry fun o i => complexOfInt (yIntTensor o i)
 
 /-- The tensor of `U_x` as a matrix product operator tensor. -/
-def xTensor : MPOTensor 4 2 := fun o i => complexOfInt (xIntTensor o i)
+def xTensor : MPOTensor 4 2 := Function.uncurry fun o i => complexOfInt (xIntTensor o i)
 
 /-- The tensor of `U_xy` as a matrix product operator tensor. -/
-def xyTensor : MPOTensor 4 2 := fun o i => complexOfInt (xyIntTensor o i)
+def xyTensor : MPOTensor 4 2 := Function.uncurry fun o i => complexOfInt (xyIntTensor o i)
 
 /-! ### The pair-alphabet view -/
 

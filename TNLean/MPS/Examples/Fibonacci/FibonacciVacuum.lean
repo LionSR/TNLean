@@ -97,7 +97,7 @@ theorem fibAdmissibility_zero : fibAdmissibility (fun _ : Fin N ↦ (0 : Fin 2))
 
 /-- The entries of the vacuum block: `(B_1^{ij})_{lr} = δ_{ij} δ_{lj} K_{jr}`. -/
 theorem fibOne_apply (i j l r : Fin 2) :
-    fibOne i j l r = if i = j ∧ l = j then (fibAdjacency j r : ℂ) else 0 := by
+    fibOne (i, j) l r = if i = j ∧ l = j then (fibAdjacency j r : ℂ) else 0 := by
   fin_cases i <;> fin_cases j <;> fin_cases l <;> fin_cases r <;>
     simp [fibOne, fibOneGolden, fibAdjacency]
 

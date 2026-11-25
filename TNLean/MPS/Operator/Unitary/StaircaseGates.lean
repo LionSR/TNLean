@@ -92,7 +92,7 @@ theorem sourceWL_kronecker_sourceWR_mul_middle_sourceU
   simp only [Finset.mem_univ, ite_true, Finset.sum_ite_irrel, Finset.sum_const_zero,
     Finset.sum_ite_eq, Finset.sum_ite_eq']
   trans ∑ γ : Fin D, ∑ α : Fin D,
-    S.Y₂ l (j₁, α) * (U i₂ j₂ * U i₃ j₃) α γ * S.Y₁ r (γ, j₄)
+    S.Y₂ l (j₁, α) * (U (i₂, j₂) * U (i₃, j₃)) α γ * S.Y₁ r (γ, j₄)
   · simp only [sourceWL, sourceWR, Finset.sum_mul, Finset.mul_sum]
     rw [Fintype.sum_last_two_first_four]
     refine Finset.sum_congr₂ fun γ _ α _ ↦ ?_

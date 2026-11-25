@@ -51,8 +51,8 @@ variable {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
 /-- Expansion of one basis-conjugated local entry over the physical indices. -/
 private theorem conjugatePhysical_entry_expand (K : MPOTensor d D)
     (U : Matrix (Fin d) (Fin d) ℂ) (a b : Fin d) (β α : Fin D) :
-    conjugatePhysical K U a b β α =
-      ∑ p : Fin d × Fin d, U a p.1 * K p.1 p.2 β α * star (U b p.2) := by
+    conjugatePhysical K U (a, b) β α =
+      ∑ p : Fin d × Fin d, U a p.1 * K (p.1, p.2) β α * star (U b p.2) := by
   simp only [conjugatePhysical, Matrix.mul_apply, Matrix.conjTranspose_apply,
     physicalSlice, Fintype.sum_prod_type, Finset.sum_mul]
   rw [Finset.sum_comm]
@@ -76,15 +76,15 @@ theorem mpo_conjugatePhysical_eq (K : MPOTensor d D)
   ext σ τ
   rw [mpo_apply_eq_sum_cyclic]
   have hexp : ∀ g : Fin N → Fin D,
-      (∏ n : Fin N, conjugatePhysical K U (σ n) (τ n) (g n) (g (n + 1))) =
+      (∏ n : Fin N, conjugatePhysical K U (σ n, τ n) (g n) (g (n + 1))) =
       ∑ P : Fin N → Fin d × Fin d, ∏ n : Fin N,
-        (U (σ n) (P n).1 * K (P n).1 (P n).2 (g n) (g (n + 1)) *
+        (U (σ n) (P n).1 * K ((P n).1, (P n).2) (g n) (g (n + 1)) *
           star (U (τ n) (P n).2)) := by
     intro g
     simp_rw [conjugatePhysical_entry_expand]
     rw [Finset.prod_univ_sum
       (fun _ : Fin N => (Finset.univ : Finset (Fin d × Fin d)))
-      (fun n p => U (σ n) p.1 * K p.1 p.2 (g n) (g (n + 1)) *
+      (fun n p => U (σ n) p.1 * K (p.1, p.2) (g n) (g (n + 1)) *
         star (U (τ n) p.2))]
     simp only [Fintype.piFinset_univ]
   simp_rw [hexp]
@@ -100,12 +100,12 @@ theorem mpo_conjugatePhysical_eq (K : MPOTensor d D)
       (Equiv.arrowProdEquivProdArrow (Fin N) (fun _ => Fin d)
         (fun _ => Fin d))
       _ (fun pr : (Fin N → Fin d) × (Fin N → Fin d) => ∏ n : Fin N,
-        U (σ n) (pr.1 n) * K (pr.1 n) (pr.2 n) (g n) (g (n + 1)) *
+        U (σ n) (pr.1 n) * K (pr.1 n, pr.2 n) (g n) (g (n + 1)) *
           star (U (τ n) (pr.2 n)))
       fun P => rfl)
     (Fintype.sum_prod_type
       (f := fun pr : (Fin N → Fin d) × (Fin N → Fin d) => ∏ n : Fin N,
-        U (σ n) (pr.1 n) * K (pr.1 n) (pr.2 n) (g n) (g (n + 1)) *
+        U (σ n) (pr.1 n) * K (pr.1 n, pr.2 n) (g n) (g (n + 1)) *
           star (U (τ n) (pr.2 n))))
 
 /-- The chain operators of the physically conjugated tensor inherit positive

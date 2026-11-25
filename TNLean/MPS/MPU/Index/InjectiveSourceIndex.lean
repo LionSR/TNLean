@@ -44,7 +44,7 @@ private theorem exists_cfii_simple_same_sourceRanks [NeZero d]
   obtain ⟨V, hV, X, hX, hMpo⟩ := hU.exists_cfii_representative_of_isInjective hI
   have hVeq : V = virtualSandwich (X : Matrix (Fin D) (Fin D) ℂ) U
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) :=
-    funext fun i => funext fun j => hX i j
+    funext fun p => hX p.1 p.2
   have hS' : IsMPUSimple V := by
     rw [hVeq]
     exact hS.rectangularSandwich _ _ (by simp)

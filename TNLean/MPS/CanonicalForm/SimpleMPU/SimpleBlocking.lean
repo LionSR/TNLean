@@ -67,20 +67,20 @@ Proposition III.3, lines 363--374 and 442--446. -/
 theorem IsMPU.simple1_of_simple2_supplied {U : MPOTensor d D} (hU : IsMPU U)
     (a b : Fin (D * D) → ℂ)
     (h₂ : ∀ i j k l : Fin d,
-      doubleLayerTensor U i j * doubleLayerTensor U k l =
-        doubleLayerTensor U i j * Matrix.vecMulVec b a *
-          doubleLayerTensor U k l) :
+      doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l) =
+        doubleLayerTensor U (i, j) * Matrix.vecMulVec b a *
+          doubleLayerTensor U (k, l)) :
     ∀ i j : Fin d,
-      a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0 := by
+      a ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ b) = if i = j then 1 else 0 := by
   classical
   let P : Matrix (Fin (D * D)) (Fin (D * D)) ℂ → Prop :=
-    fun A ↦ ∃ i j, A = doubleLayerTensor U i j
+    fun A ↦ ∃ i j, A = doubleLayerTensor U (i, j)
   have hpair : ∀ A B, P A → P B →
       A * B = A * Matrix.vecMulVec b a * B := by
     rintro A B ⟨i, j, rfl⟩ ⟨k, l, rfl⟩
     exact h₂ i j k l
   have hpower (N : ℕ) (hN : 1 < N) (i j : Fin d) :
-      (a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b)) ^ N =
+      (a ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ b)) ^ N =
         if i = j then 1 else 0 := by
     let σ : Fin N → Fin d := fun _ ↦ i
     let τ : Fin N → Fin d := fun _ ↦ j
@@ -89,7 +89,7 @@ theorem IsMPU.simple1_of_simple2_supplied {U : MPOTensor d D} (hU : IsMPU U)
           (1 : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) by
         rw [mpo_doubleLayerTensor, hU.conjTranspose_mpo_mul_mpo hN])
     rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn] at hentry
-    let l := List.ofFn (fun _ : Fin N ↦ doubleLayerTensor U i j)
+    let l := List.ofFn (fun _ : Fin N ↦ doubleLayerTensor U (i, j))
     have hlP : ∀ A ∈ l, P A := by
       intro A hA
       simp only [l, List.mem_ofFn] at hA
@@ -106,7 +106,7 @@ theorem IsMPU.simple1_of_simple2_supplied {U : MPOTensor d D} (hU : IsMPU U)
         rfl
     simpa [l, σ, τ, List.map_ofFn, List.prod_ofFn, Matrix.one_apply, hστ] using hentry
   intro i j
-  let x := a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b)
+  let x := a ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ b)
   have hx2 : x ^ 2 = if i = j then 1 else 0 := hpower 2 (by omega) i j
   have hx3 : x ^ 3 = if i = j then 1 else 0 := hpower 3 (by omega) i j
   by_cases hij : i = j
@@ -125,9 +125,9 @@ lines 442--446. -/
 theorem IsMPU.isMPUSimple_of_simple2 {U : MPOTensor d D} (hU : IsMPU U)
     (a b : Fin (D * D) → ℂ)
     (h₂ : ∀ i j k l : Fin d,
-      doubleLayerTensor U i j * doubleLayerTensor U k l =
-        doubleLayerTensor U i j * Matrix.vecMulVec b a *
-          doubleLayerTensor U k l) :
+      doubleLayerTensor U (i, j) * doubleLayerTensor U (k, l) =
+        doubleLayerTensor U (i, j) * Matrix.vecMulVec b a *
+          doubleLayerTensor U (k, l)) :
     IsMPUSimple U :=
   ⟨a, b, hU.simple1_of_simple2_supplied a b h₂, h₂⟩
 
@@ -143,7 +143,7 @@ theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
   classical
   obtain ⟨a, b, h₁, h₂⟩ := hU
   let P : Matrix (Fin (D * D)) (Fin (D * D)) ℂ → Prop :=
-    fun A ↦ ∃ i j, A = doubleLayerTensor U i j
+    fun A ↦ ∃ i j, A = doubleLayerTensor U (i, j)
   have hpair : ∀ A B, P A → P B →
       A * B = A * Matrix.vecMulVec b a * B := by
     rintro A B ⟨i, j, rfl⟩ ⟨k, l, rfl⟩
@@ -154,8 +154,7 @@ theorem IsMPUSimple.blockTensor {U : MPOTensor d D} (hU : IsMPUSimple U)
     simp only [Kraus.wordOfBlock]
     rw [MPOTensor.evalWord_ofFn]
     let l := List.ofFn (fun k : Fin L ↦
-      doubleLayerTensor U (Kraus.decodeBlock d L I k)
-        (Kraus.decodeBlock d L J k))
+      doubleLayerTensor U (Kraus.decodeBlock d L I k, Kraus.decodeBlock d L J k))
     have hl : l ≠ [] := by simp [l, Nat.ne_of_gt hL]
     have hlP : ∀ A ∈ l, P A := by
       intro A hA
@@ -202,15 +201,15 @@ theorem blockTensor_succ_simple2_of_supplied
     {d D : ℕ} {U : MPOTensor d D} {k : ℕ}
     (a b : Fin (D * D) → ℂ)
     (h₂ : ∀ i j m l : Fin (Kraus.blockPhysDim d k),
-      doubleLayerTensor (blockTensor U k) i j *
-          doubleLayerTensor (blockTensor U k) m l =
-        doubleLayerTensor (blockTensor U k) i j * Matrix.vecMulVec b a *
-          doubleLayerTensor (blockTensor U k) m l) :
+      doubleLayerTensor (blockTensor U k) (i, j) *
+          doubleLayerTensor (blockTensor U k) (m, l) =
+        doubleLayerTensor (blockTensor U k) (i, j) * Matrix.vecMulVec b a *
+          doubleLayerTensor (blockTensor U k) (m, l)) :
     ∀ I J K L : Fin (Kraus.blockPhysDim d (k + 1)),
-      doubleLayerTensor (blockTensor U (k + 1)) I J *
-          doubleLayerTensor (blockTensor U (k + 1)) K L =
-        doubleLayerTensor (blockTensor U (k + 1)) I J * Matrix.vecMulVec b a *
-          doubleLayerTensor (blockTensor U (k + 1)) K L := by
+      doubleLayerTensor (blockTensor U (k + 1)) (I, J) *
+          doubleLayerTensor (blockTensor U (k + 1)) (K, L) =
+        doubleLayerTensor (blockTensor U (k + 1)) (I, J) * Matrix.vecMulVec b a *
+          doubleLayerTensor (blockTensor U (k + 1)) (K, L) := by
   classical
   let W := doubleLayerTensor U
   let suffixIndex (I : Fin (Kraus.blockPhysDim d (k + 1))) :
@@ -242,8 +241,7 @@ theorem blockTensor_succ_simple2_of_supplied
   have hfirst (I J : Fin (Kraus.blockPhysDim d (k + 1))) :
       evalWord W (List.ofFn (Kraus.decodeBlock d (k + 1) I))
           (List.ofFn (Kraus.decodeBlock d (k + 1) J)) =
-        W (Kraus.decodeBlock d (k + 1) I 0)
-            (Kraus.decodeBlock d (k + 1) J 0) *
+        W (Kraus.decodeBlock d (k + 1) I 0, Kraus.decodeBlock d (k + 1) J 0) *
           evalWord W
             (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) I x.succ)
             (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) J x.succ) := by
@@ -254,8 +252,8 @@ theorem blockTensor_succ_simple2_of_supplied
         evalWord W
             (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) I x.castSucc)
             (List.ofFn fun x : Fin k ↦ Kraus.decodeBlock d (k + 1) J x.castSucc) *
-          W (Kraus.decodeBlock d (k + 1) I (Fin.last k))
-            (Kraus.decodeBlock d (k + 1) J (Fin.last k)) := by
+          W (Kraus.decodeBlock d (k + 1) I (Fin.last k),
+              Kraus.decodeBlock d (k + 1) J (Fin.last k)) := by
     rw [List.ofFn_succ', List.ofFn_succ', List.concat_eq_append,
       List.concat_eq_append, evalWord_append W _ _ _ _ (by simp)]
     simp
@@ -264,10 +262,8 @@ theorem blockTensor_succ_simple2_of_supplied
     Kraus.wordOfBlock]
   rw [hfirst I J, hlast K L]
   have h := congrArg
-    (fun X ↦ W (Kraus.decodeBlock d (k + 1) I 0)
-        (Kraus.decodeBlock d (k + 1) J 0) * X *
-      W (Kraus.decodeBlock d (k + 1) K (Fin.last k))
-        (Kraus.decodeBlock d (k + 1) L (Fin.last k)))
+    (fun X ↦ W (Kraus.decodeBlock d (k + 1) I 0, Kraus.decodeBlock d (k + 1) J 0) * X *
+      W (Kraus.decodeBlock d (k + 1) K (Fin.last k), Kraus.decodeBlock d (k + 1) L (Fin.last k)))
     (hmiddle I J K L)
   simpa only [Matrix.mul_assoc] using h
 
@@ -316,7 +312,7 @@ private theorem IsMPU.normalized_fixed_points_simple1_of_stabilization
       normalizedDiagonal (doubleLayerTensor U) *ᵥ ρ = ρ ∧
       Matrix.vecMul Φ (normalizedDiagonal (doubleLayerTensor U)) = Φ ∧
       ∀ i j : Fin d,
-        Φ ⬝ᵥ (doubleLayerTensor U i j *ᵥ ρ) = if i = j then 1 else 0 := by
+        Φ ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ ρ) = if i = j then 1 else 0 := by
   classical
   let J := data.exponent
   let E := normalizedDiagonal (doubleLayerTensor U)
@@ -402,7 +398,7 @@ private theorem IsMPU.exists_normalized_fixed_points_pow
       normalizedDiagonal (doubleLayerTensor U) *ᵥ ρ = ρ ∧
       Matrix.vecMul Φ (normalizedDiagonal (doubleLayerTensor U)) = Φ ∧
       ∀ i j : Fin d,
-        Φ ⬝ᵥ (doubleLayerTensor U i j *ᵥ ρ) = if i = j then 1 else 0 := by
+        Φ ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ ρ) = if i = j then 1 else 0 := by
   by_cases hD : D = 1
   · subst D
     exact hU.normalized_fixed_points_simple1_of_stabilization
@@ -424,7 +420,7 @@ theorem IsMPU.exists_normalized_fixed_points_simple1
       normalizedDiagonal (doubleLayerTensor U) *ᵥ ρ = ρ ∧
       Matrix.vecMul Φ (normalizedDiagonal (doubleLayerTensor U)) = Φ ∧
       ∀ i j : Fin d,
-        Φ ⬝ᵥ (doubleLayerTensor U i j *ᵥ ρ) = if i = j then 1 else 0 := by
+        Φ ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ ρ) = if i = j then 1 else 0 := by
   obtain ⟨_, _, Φ, ρ, hpair, _, hρ, hΦ, hsimple1⟩ := hU.exists_normalized_fixed_points_pow
   exact ⟨Φ, ρ, hpair, hρ, hΦ, hsimple1⟩
 
@@ -435,7 +431,7 @@ Source: arXiv:1703.09188, Corollary `simple1`, lines 429--438. -/
 theorem IsMPU.simple1 [NeZero d] [NeZero D] {U : MPOTensor d D}
     (hU : IsMPU U) :
     ∃ a b : Fin (D * D) → ℂ, ∀ i j : Fin d,
-      a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0 := by
+      a ⬝ᵥ (doubleLayerTensor U (i, j) *ᵥ b) = if i = j then 1 else 0 := by
   obtain ⟨Φ, ρ, _, _, _, hsimple1⟩ := hU.exists_normalized_fixed_points_simple1
   exact ⟨Φ, ρ, hsimple1⟩
 
@@ -494,7 +490,7 @@ of its physical indices.
 Source: arXiv:1703.09188, equation `WIsom` and lines 405--410. -/
 theorem IsMPU.trace_doubleLayerTensor
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U) (i j : Fin d) :
-    Matrix.trace (doubleLayerTensor U i j) = if i = j then 1 else 0 := by
+    Matrix.trace (doubleLayerTensor U (i, j)) = if i = j then 1 else 0 := by
   rw [entry_eq_diagonal_add_residual (doubleLayerTensor U) i j, Matrix.trace_add,
     Matrix.trace_smul, hU.trace_normalizedDiagonal_doubleLayerTensor,
     hU.trace_residualSlice_doubleLayerTensor_eq_zero, smul_eq_mul, mul_one, add_zero]
@@ -508,8 +504,8 @@ and 390--395. -/
 theorem IsMPU.trace_prod_ofFn_doubleLayerTensor
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     {N : ℕ} (hN : 0 < N) (σ τ : Fin N → Fin d) :
-    Matrix.trace (List.ofFn fun k ↦ doubleLayerTensor U (σ k) (τ k)).prod =
-      ∏ k, Matrix.trace (doubleLayerTensor U (σ k) (τ k)) := by
+    Matrix.trace (List.ofFn fun k ↦ doubleLayerTensor U (σ k, τ k)).prod =
+      ∏ k, Matrix.trace (doubleLayerTensor U (σ k, τ k)) := by
   classical
   simp only [hU.trace_doubleLayerTensor]
   rw [Finset.prod_boole]
@@ -518,7 +514,7 @@ theorem IsMPU.trace_prod_ofFn_doubleLayerTensor
       (show mpo (doubleLayerTensor U) N =
           (1 : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) by
         rw [mpo_doubleLayerTensor, hU.conjTranspose_mpo_mul_mpo hN1])
-    have htr : Matrix.trace (List.ofFn fun k ↦ doubleLayerTensor U (σ k) (τ k)).prod =
+    have htr : Matrix.trace (List.ofFn fun k ↦ doubleLayerTensor U (σ k, τ k)).prod =
         if σ = τ then 1 else 0 := by
       simpa [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.one_apply] using h
     rw [htr]
@@ -534,11 +530,11 @@ Source: arXiv:1703.09188, equation `WIsom`, lines 390--395. -/
 noncomputable def doubleLayerAlgebra (U : MPOTensor d D) :
     NonUnitalSubalgebra ℂ (Matrix (Fin (D * D)) (Fin (D * D)) ℂ) :=
   NonUnitalAlgebra.adjoin ℂ
-    (Set.range fun ij : Fin d × Fin d ↦ doubleLayerTensor U ij.1 ij.2)
+    (Set.range fun ij : Fin d × Fin d ↦ doubleLayerTensor U (ij.1, ij.2))
 
 /-- Every double-layer letter lies in the double-layer algebra. -/
 theorem doubleLayerTensor_mem_doubleLayerAlgebra (U : MPOTensor d D) (i j : Fin d) :
-    doubleLayerTensor U i j ∈ doubleLayerAlgebra U :=
+    doubleLayerTensor U (i, j) ∈ doubleLayerAlgebra U :=
   NonUnitalAlgebra.subset_adjoin ℂ ⟨(i, j), rfl⟩
 
 /-- The normalized double-layer diagonal lies in the double-layer algebra. -/
@@ -552,14 +548,14 @@ theorem normalizedDiagonal_mem_doubleLayerAlgebra (U : MPOTensor d D) :
 private theorem IsMPU.trace_list_prod_of_mem_doubleLayerLetters
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (l : List (Matrix (Fin (D * D)) (Fin (D * D)) ℂ))
-    (hl : ∀ A ∈ l, A ∈ Set.range fun ij : Fin d × Fin d ↦ doubleLayerTensor U ij.1 ij.2)
+    (hl : ∀ A ∈ l, A ∈ Set.range fun ij : Fin d × Fin d ↦ doubleLayerTensor U (ij.1, ij.2))
     (hne : l ≠ []) :
     Matrix.trace l.prod = (l.map Matrix.trace).prod := by
   classical
-  have hX : ∀ k : Fin l.length, ∃ ij : Fin d × Fin d, doubleLayerTensor U ij.1 ij.2 = l[k] :=
+  have hX : ∀ k : Fin l.length, ∃ ij : Fin d × Fin d, doubleLayerTensor U (ij.1, ij.2) = l[k] :=
     fun k ↦ hl l[k] (List.get_mem l k)
   choose ij hij using hX
-  have hword : l = List.ofFn fun k ↦ doubleLayerTensor U (ij k).1 (ij k).2 := by
+  have hword : l = List.ofFn fun k ↦ doubleLayerTensor U ((ij k).1, (ij k).2) := by
     calc
       l = List.ofFn (fun k ↦ l[k]) := (List.ofFn_get l).symm
       _ = _ := by
@@ -569,11 +565,11 @@ private theorem IsMPU.trace_list_prod_of_mem_doubleLayerLetters
   have hpos : 0 < l.length := List.length_pos_iff.mpr hne
   calc
     Matrix.trace l.prod
-        = Matrix.trace (List.ofFn fun k ↦ doubleLayerTensor U (ij k).1 (ij k).2).prod :=
+        = Matrix.trace (List.ofFn fun k ↦ doubleLayerTensor U ((ij k).1, (ij k).2)).prod :=
       congrArg (fun xs ↦ Matrix.trace xs.prod) hword
-    _ = ∏ k, Matrix.trace (doubleLayerTensor U (ij k).1 (ij k).2) :=
+    _ = ∏ k, Matrix.trace (doubleLayerTensor U ((ij k).1, (ij k).2)) :=
       hU.trace_prod_ofFn_doubleLayerTensor hpos (fun k ↦ (ij k).1) (fun k ↦ (ij k).2)
-    _ = ((List.ofFn fun k ↦ doubleLayerTensor U (ij k).1 (ij k).2).map Matrix.trace).prod := by
+    _ = ((List.ofFn fun k ↦ doubleLayerTensor U ((ij k).1, (ij k).2)).map Matrix.trace).prod := by
       rw [List.map_ofFn, List.prod_ofFn]
       rfl
     _ = (l.map Matrix.trace).prod :=
@@ -588,7 +584,7 @@ theorem IsMPU.trace_mul_of_mem_doubleLayerAlgebra
     (ha : a ∈ doubleLayerAlgebra U) (hb : b ∈ doubleLayerAlgebra U) :
     Matrix.trace (a * b) = Matrix.trace a * Matrix.trace b := by
   classical
-  let S := Set.range fun ij : Fin d × Fin d ↦ doubleLayerTensor U ij.1 ij.2
+  let S := Set.range fun ij : Fin d × Fin d ↦ doubleLayerTensor U (ij.1, ij.2)
   have hword : ∀ x ∈ Subsemigroup.closure S, ∀ y ∈ Subsemigroup.closure S,
       Matrix.trace (x * y) = Matrix.trace x * Matrix.trace y := by
     intro x hx y hy
@@ -685,22 +681,22 @@ theorem IsMPU.blockTensor_sq_isMPUSimple
       (∀ x ∈ l, x ∈ 𝒩) → l.length = D * D → l.prod = 0 := fun l hl hlen ↦
     𝒩.matrix_list_prod_eq_zero_of_forall_isNilpotent hnil l hl (by simpa using hlen)
   have hletter (i j : Fin d) :
-      doubleLayerTensor U i j - (if i = j then (1 : ℂ) else 0) • p ∈ 𝒩 := by
+      doubleLayerTensor U (i, j) - (if i = j then (1 : ℂ) else 0) • p ∈ 𝒩 := by
     refine (mem_doubleLayerTraceKernel hU).mpr
       ⟨sub_mem (doubleLayerTensor_mem_doubleLayerAlgebra U i j) (𝒜.smul_mem _ hpA), ?_⟩
     rw [Matrix.trace_sub, Matrix.trace_smul, htrp, hU.trace_doubleLayerTensor]
     simp
   have hthree (I K : Fin (Kraus.blockPhysDim d (D * D))) :
-      doubleLayerTensor (MPOTensor.blockTensor U (D * D)) I K -
+      doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (I, K) -
           (if I = K then (1 : ℂ) else 0) • p ∈ threeFormSubmodule p 𝒩 := by
     let σ := Kraus.decodeBlock d (D * D) I
     let τ := Kraus.decodeBlock d (D * D) K
     let c : Fin (D * D) → ℂ := fun k ↦ if σ k = τ k then 1 else 0
     let S : Fin (D * D) → 𝒩 := fun k ↦
-      ⟨doubleLayerTensor U (σ k) (τ k) - c k • p, hletter (σ k) (τ k)⟩
+      ⟨doubleLayerTensor U (σ k, τ k) - c k • p, hletter (σ k) (τ k)⟩
     have hword := ordered_prod_smul_projector_add_sub_mem_threeFormSubmodule
       p 𝒩 hpp hpNp hNpos hvanish c S
-    have hentry : doubleLayerTensor (MPOTensor.blockTensor U (D * D)) I K =
+    have hentry : doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (I, K) =
         (List.ofFn fun k ↦
           c k • p + (S k : Matrix (Fin (D * D)) (Fin (D * D)) ℂ)).prod := by
       rw [doubleLayerTensor_blockTensor]
@@ -712,13 +708,13 @@ theorem IsMPU.blockTensor_sq_isMPUSimple
     rw [hentry, ← diagonal_coeff_prod_eq I K]
     exact hword
   have hsimple2 : ∀ I K L M : Fin (Kraus.blockPhysDim d (D * D)),
-      doubleLayerTensor (MPOTensor.blockTensor U (D * D)) I K *
-          doubleLayerTensor (MPOTensor.blockTensor U (D * D)) L M =
-        doubleLayerTensor (MPOTensor.blockTensor U (D * D)) I K * Matrix.vecMulVec ρ Φ *
-          doubleLayerTensor (MPOTensor.blockTensor U (D * D)) L M := by
+      doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (I, K) *
+          doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (L, M) =
+        doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (I, K) * Matrix.vecMulVec ρ Φ *
+          doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (L, M) := by
     intro I K L M
-    set X := doubleLayerTensor (MPOTensor.blockTensor U (D * D)) I K
-    set Y := doubleLayerTensor (MPOTensor.blockTensor U (D * D)) L M
+    set X := doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (I, K)
+    set Y := doubleLayerTensor (MPOTensor.blockTensor U (D * D)) (L, M)
     set x : ℂ := if I = K then 1 else 0
     set y : ℂ := if L = M then 1 else 0
     have hXY := mul_eq_mul_projector_mul_of_mem_threeFormSubmodule p 𝒩 hpp hpNp
@@ -752,7 +748,7 @@ formation of the double layer. This is the local coordinate identity used to com
 iterated and direct physical blockings. -/
 theorem doubleLayerTensor_reindexPhysical {d' : ℕ}
     (e : Fin d' ≃ Fin d) (U : MPOTensor d D) (i j : Fin d') :
-    doubleLayerTensor (reindexPhysical e U) i j = doubleLayerTensor U (e i) (e j) := by
+    doubleLayerTensor (reindexPhysical e U) (i, j) = doubleLayerTensor U (e i, e j) := by
   classical
   simp only [doubleLayerTensor_apply, reindexPhysical]
   rw [← e.sum_comp]
@@ -784,7 +780,7 @@ theorem reindexPhysical_blockTensor_blockTensor
     reindexPhysical (MPSTensor.directIteratedBlockEquiv d m n)
         (MPOTensor.blockTensor (MPOTensor.blockTensor U m) n) =
       MPOTensor.blockTensor U (m * n) := by
-  funext i j
+  funext ⟨i, j⟩
   simp only [reindexPhysical, blockTensor_apply, Kraus.wordOfBlock]
   rw [evalWord_blockTensor_ofFn]
   change evalWord U

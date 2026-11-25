@@ -431,7 +431,7 @@ theorem sourceCutM₂_eq_sourceX₂_mul_sourceY₂ :
 theorem sourceX₁_mul_sourceY₁_apply
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef)
     (i : Fin d) (β : Fin D) (α : Fin D) (j : Fin d) :
-    (sourceX₁ U ρ hρ * sourceY₁ U ρ hρ) (i, β) (α, j) = U i j α β := by
+    (sourceX₁ U ρ hρ * sourceY₁ U ρ hρ) (i, β) (α, j) = U (i, j) α β := by
   rw [← sourceCutM₁_eq_sourceX₁_mul_sourceY₁ U ρ hρ]
   rfl
 
@@ -440,7 +440,7 @@ theorem sourceX₁_mul_sourceY₁_apply
 @[simp]
 theorem sourceX₂_mul_sourceY₂_apply
     (α : Fin D) (i : Fin d) (j : Fin d) (β : Fin D) :
-    (sourceX₂ U * sourceY₂ U) (α, i) (j, β) = U i j α β := by
+    (sourceX₂ U * sourceY₂ U) (α, i) (j, β) = U (i, j) α β := by
   rw [← sourceCutM₂_eq_sourceX₂_mul_sourceY₂ U]
   rfl
 

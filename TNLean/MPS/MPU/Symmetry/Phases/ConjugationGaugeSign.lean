@@ -42,15 +42,15 @@ theorem IsMPUCanonicalFormII.exists_conjugation_gauge {V : MPOTensor d D}
     (hV : IsMPUCanonicalFormII V)
     (hc : ∀ N : ℕ, 1 < N → mpo V N = (mpo V N).map (starRingEnd ℂ)) :
     ∃ X : Matrix.unitaryGroup (Fin D) ℂ, ∀ i j,
-      (V i j).map (starRingEnd ℂ) =
-        (X : Matrix (Fin D) (Fin D) ℂ)ᴴ * V i j * (X : Matrix (Fin D) (Fin D) ℂ) := by
+      (V (i, j)).map (starRingEnd ℂ) =
+        (X : Matrix (Fin D) (Fin D) ℂ)ᴴ * V (i, j) * (X : Matrix (Fin D) (Fin D) ℂ) := by
   obtain ⟨hdim, z, hz⟩ := hV.exists_unitary_virtual_gauge_of_mpo_eq hV.mapStar fun N hN ↦ by
     rw [mpo_map_star]
     exact hc N hN
   refine ⟨star z, fun i j ↦ ?_⟩
   have h := hz i j
   simp only [cast_eq] at h
-  change (MPOTensor.mapStar V) i j = _
+  change (MPOTensor.mapStar V) (i, j) = _
   rw [h]
   simp [Matrix.star_eq_conjTranspose]
 
@@ -58,7 +58,7 @@ theorem IsMPUCanonicalFormII.exists_conjugation_gauge {V : MPOTensor d D}
 every word, hence of every block of `𝒰`. Source: arXiv:1703.09188, line 1774. -/
 theorem evalWord_map_star_of_conjugation_gauge {V : MPOTensor d D}
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ Matrix.unitaryGroup (Fin D) ℂ)
-    (hg : ∀ i j, (V i j).map (starRingEnd ℂ) = Xᴴ * V i j * X) :
+    (hg : ∀ i j, (V (i, j)).map (starRingEnd ℂ) = Xᴴ * V (i, j) * X) :
     ∀ w w' : List (Fin d), (evalWord V w w').map (starRingEnd ℂ) = Xᴴ * evalWord V w w' * X := by
   have hXX : X * Xᴴ = 1 := by
     simpa [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff.mp hX
@@ -83,15 +83,15 @@ theorem evalWord_map_star_of_conjugation_gauge {V : MPOTensor d D}
 /-- A conjugation gauge of `𝒰` is a conjugation gauge of the block of `m` sites. -/
 theorem blockTensor_map_star_of_conjugation_gauge {V : MPOTensor d D}
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ Matrix.unitaryGroup (Fin D) ℂ)
-    (hg : ∀ i j, (V i j).map (starRingEnd ℂ) = Xᴴ * V i j * X) (m : ℕ) :
-    ∀ i j, (blockTensor V m i j).map (starRingEnd ℂ) = Xᴴ * blockTensor V m i j * X :=
+    (hg : ∀ i j, (V (i, j)).map (starRingEnd ℂ) = Xᴴ * V (i, j) * X) (m : ℕ) :
+    ∀ i j, (blockTensor V m (i, j)).map (starRingEnd ℂ) = Xᴴ * blockTensor V m (i, j) * X :=
   fun _ _ ↦ evalWord_map_star_of_conjugation_gauge hX hg _ _
 
 /-- A conjugation gauge of `𝒰` is a conjugation gauge of its two-site block. -/
 theorem blockTwo_map_star_of_conjugation_gauge {V : MPOTensor d D}
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ Matrix.unitaryGroup (Fin D) ℂ)
-    (hg : ∀ i j, (V i j).map (starRingEnd ℂ) = Xᴴ * V i j * X) :
-    ∀ i j, (blockTwo V i j).map (starRingEnd ℂ) = (1 : ℂ) • (Xᴴ * blockTwo V i j * X) := by
+    (hg : ∀ i j, (V (i, j)).map (starRingEnd ℂ) = Xᴴ * V (i, j) * X) :
+    ∀ i j, (blockTwo V (i, j)).map (starRingEnd ℂ) = (1 : ℂ) • (Xᴴ * blockTwo V (i, j) * X) := by
   intro i j
   have h := blockTwo_map_star_eq_of_gauge X
     (by simpa [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff.mp hX) 1
@@ -103,8 +103,8 @@ unitary conjugation gauge of its two-site block satisfies `X conj(X) = ±1`.
 Source: arXiv:1703.09188, eq. `eq:mps-class-gauge-trafo`, lines 1761--1770. -/
 theorem IsMPUCanonicalFormII.mul_map_star_eq_one_or_neg_one_of_conjugation_gauge
     {V : MPOTensor d D} (hV : IsMPUCanonicalFormII V) (X : Matrix.unitaryGroup (Fin D) ℂ)
-    {ζ : ℂ} (hg : ∀ i j, (MPOTensor.blockTwo V i j).map (starRingEnd ℂ) =
-      ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * MPOTensor.blockTwo V i j * X)) :
+    {ζ : ℂ} (hg : ∀ i j, (MPOTensor.blockTwo V (i, j)).map (starRingEnd ℂ) =
+      ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * MPOTensor.blockTwo V (i, j) * X)) :
     (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ∨
       (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
         -1 := by
@@ -132,8 +132,8 @@ theorem TwoSiteStandardFormData.isConjugationCase_iff_sign [NeZero D]
     {v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ} (T : TwoSiteStandardFormData W u v)
     (hcase : IsConjugationCaseI u v ∨ IsConjugationCaseII u v)
     (X : Matrix.unitaryGroup (Fin D) ℂ) (ζ : ℂ)
-    (hg : ∀ i j, (W i j).map (starRingEnd ℂ) =
-      ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * W i j * X))
+    (hg : ∀ i j, (W (i, j)).map (starRingEnd ℂ) =
+      ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * W (i, j) * X))
     (hs : (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ∨
       (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = -1) :
     (IsConjugationCaseI u v ↔

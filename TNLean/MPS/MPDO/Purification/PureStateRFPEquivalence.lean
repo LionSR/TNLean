@@ -71,9 +71,9 @@ private theorem doubledTensor_mul_eq_of_blocking_isometry
     (hprod : ∀ i₁ i₂ : Fin d,
       A i₁ * A i₂ = ∑ j : Fin d, V (i₁, i₂) j • A j)
     (i₁ i₂ j₁ j₂ : Fin d) :
-    doubledTensor A i₁ j₁ * doubledTensor A i₂ j₂ =
+    doubledTensor A (i₁, j₁) * doubledTensor A (i₂, j₂) =
       ∑ a : Fin d, ∑ b : Fin d,
-        (V (i₁, i₂) a * star (V (j₁, j₂) b)) • doubledTensor A a b := by
+        (V (i₁, i₂) a * star (V (j₁, j₂) b)) • doubledTensor A (a, b) := by
   rw [doubledTensor, doubledTensor,
     Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm,
     ← Matrix.mul_kronecker_mul]

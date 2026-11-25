@@ -236,9 +236,9 @@ theorem isingFusion_of_signedPerm {DX DY k z : ℕ}
           G y (finProdFinEquiv (r h j, r' j h'))).sum) =
         t h h' • Matrix.single (Fin.castAdd z (lt h h')) (Fin.castAdd z (rt h h')) 1)
     {L : ℕ} (hL : 0 < L) :
-    MPOTensor.mpo (fun i j => complexOfZsqrt2 (XZ i j)) L *
-        MPOTensor.mpo (fun i j => complexOfZsqrt2 (YZ i j)) L =
-      MPOTensor.mpo (fun i j => complexOfZsqrt2 (TZ i j)) L :=
+    MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (XZ i j)) L *
+        MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (YZ i j)) L =
+      MPOTensor.mpo (Function.uncurry fun i j => complexOfZsqrt2 (TZ i j)) L :=
   mpo_mul_eq_of_zsqrt2_conj XZ YZ TZ G Gᵀ 1 one_ne_zero (by rw [one_smul, hGG])
     (by rw [one_smul, hGG'])
     (isingConj_of_rho_eq hXρ hYρ hTρ fun h h' hρ => by
@@ -251,20 +251,20 @@ private theorem isingPsiFlip_eq_iff : ∀ a b : Fin 3, isingPsiFlip a = isingPsi
 
 /-- Every letter of `A_1` is the matrix unit `E_{x' x}` on the diagonal of the physical labels. -/
 theorem isingOne_eq_smul_single (h h' : Fin 10) :
-    isingOne h h' = (if h' = h then 1 else 0 : ℂ) •
+    isingOne (h, h') = (if h' = h then 1 else 0 : ℂ) •
       Matrix.single (isingLeft h) (isingRight h) 1 := by
   ext a b
   simp only [isingOne, isingOneZ_eq_smul_single h h', complexOfZsqrt2_apply, Matrix.smul_apply,
-    Matrix.single_apply, smul_eq_mul]
+    Matrix.single_apply, smul_eq_mul, Function.uncurry_apply_pair]
   split_ifs <;> simp
 
 /-- Every letter of `A_ψ` is a signed matrix unit between the label and its fusion with `ψ`. -/
 theorem isingPsi_eq_smul_single (h h' : Fin 10) :
-    isingPsi h h' = (if h' = isingPsiFuse h then (if h = 7 then -1 else 1) else 0 : ℂ) •
+    isingPsi (h, h') = (if h' = isingPsiFuse h then (if h = 7 then -1 else 1) else 0 : ℂ) •
       Matrix.single (isingPsiFlip (isingLeft h)) (isingPsiFlip (isingRight h)) 1 := by
   ext a b
   simp only [isingPsi, isingPsiZ_eq_smul_single h h', complexOfZsqrt2_apply, Matrix.smul_apply,
-    Matrix.single_apply, smul_eq_mul]
+    Matrix.single_apply, smul_eq_mul, Function.uncurry_apply_pair]
   split_ifs <;> simp
 
 /-- **The vacuum operator is the projector onto the closed fusion paths.** Project result: the

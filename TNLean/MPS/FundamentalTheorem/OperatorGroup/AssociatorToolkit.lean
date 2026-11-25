@@ -242,13 +242,13 @@ theorem idTensor_isNormal [NeZero d] : Kraus.IsNormal (idTensor d).toMPSTensor :
 identification of `Fin (1 * D)` with `Fin D`. -/
 theorem mulTensor_idTensor_left (M : MPOTensor d D) :
     mulTensor (idTensor d) M =
-      fun i j ↦ (M i j).submatrix (finCongr (one_mul D)) (finCongr (one_mul D)) := by
+      fun ij ↦ (M ij).submatrix (finCongr (one_mul D)) (finCongr (one_mul D)) := by
   have h : ∀ r : Fin (1 * D),
       finProdFinEquiv.symm r = ((0 : Fin 1), finCongr (one_mul D) r) := fun r ↦ by
     refine Prod.ext (Subsingleton.elim _ _) (Fin.ext ?_)
     simp only [finProdFinEquiv_symm_apply, Fin.coe_modNat, finCongr_apply, Fin.val_cast]
     exact Nat.mod_eq_of_lt (by simpa using r.isLt)
-  funext i j
+  funext ⟨i, j⟩
   ext r c
   simp only [mulTensor_apply, idTensor, Matrix.submatrix_apply, h, Matrix.sum_apply,
     Matrix.kroneckerMap_apply]
@@ -260,13 +260,13 @@ theorem mulTensor_idTensor_left (M : MPOTensor d D) :
 identification of `Fin (D * 1)` with `Fin D`. -/
 theorem mulTensor_idTensor_right (M : MPOTensor d D) :
     mulTensor M (idTensor d) =
-      fun i j ↦ (M i j).submatrix (finCongr (mul_one D)) (finCongr (mul_one D)) := by
+      fun ij ↦ (M ij).submatrix (finCongr (mul_one D)) (finCongr (mul_one D)) := by
   have h : ∀ r : Fin (D * 1),
       finProdFinEquiv.symm r = (finCongr (mul_one D) r, (0 : Fin 1)) := fun r ↦ by
     refine Prod.ext (Fin.ext ?_) (Subsingleton.elim _ _)
     simp only [finProdFinEquiv_symm_apply, Fin.coe_divNat, finCongr_apply, Fin.val_cast]
     exact Nat.div_one _
-  funext i j
+  funext ⟨i, j⟩
   ext r c
   simp only [mulTensor_apply, idTensor, Matrix.submatrix_apply, h, Matrix.sum_apply,
     Matrix.kroneckerMap_apply]

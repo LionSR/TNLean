@@ -43,12 +43,12 @@ doubled multiplication. Source: CPSV17, Proposition IV.5, lines 773–804. -/
 theorem doubleLayer_rectangularSandwich {d D E : ℕ}
     (W : MPOTensor d D) (A : Matrix (Fin E) (Fin D) ℂ)
     (B : Matrix (Fin D) (Fin E) ℂ) (i j : Fin d) :
-    doubleLayerTensor (fun i j ↦ A * W i j * B) i j =
-      doubledBondMap A * doubleLayerTensor W i j * doubledBondMap B := by
+    doubleLayerTensor (fun ij ↦ A * W ij * B) (i, j) =
+      doubledBondMap A * doubleLayerTensor W (i, j) * doubledBondMap B := by
   simp only [doubleLayerTensor_apply, doubledBondMap,
     Matrix.submatrix_mul_equiv]
-  change ((∑ q : Fin d, ((A * W q i * B).map (starRingEnd ℂ)) ⊗ₖ
-    (A * W q j * B)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm) = _
+  change ((∑ q : Fin d, ((A * W (q, i) * B).map (starRingEnd ℂ)) ⊗ₖ
+    (A * W (q, j) * B)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm) = _
   simp only [Matrix.map_mul, Matrix.mul_kronecker_mul, Matrix.mul_sum, Matrix.sum_mul]
   rfl
 
@@ -77,7 +77,7 @@ private theorem isMPUSimple_of_doubleLayer_inclusion {d D E : ℕ}
     (A : Matrix (Fin (E * E)) (Fin (D * D)) ℂ)
     (B : Matrix (Fin (D * D)) (Fin (E * E)) ℂ)
     (hBA : B * A = 1)
-    (hV : ∀ i j, doubleLayerTensor V i j = A * doubleLayerTensor U i j * B) :
+    (hV : ∀ i j, doubleLayerTensor V (i, j) = A * doubleLayerTensor U (i, j) * B) :
     IsMPUSimple V := by
   obtain ⟨a, b, h₁, h₂⟩ := hU
   refine ⟨a ᵥ* B, A *ᵥ b, ?_, ?_⟩
@@ -95,7 +95,7 @@ private theorem isMPUSimple_of_doubleLayer_split_compression {d D E : ℕ}
     (A : Matrix (Fin (E * E)) (Fin (D * D)) ℂ)
     (B : Matrix (Fin (D * D)) (Fin (E * E)) ℂ)
     (hBA : B * A = 1)
-    (hletters : ∀ i j, doubleLayerTensor V i j = A * doubleLayerTensor U i j * B) :
+    (hletters : ∀ i j, doubleLayerTensor V (i, j) = A * doubleLayerTensor U (i, j) * B) :
     IsMPUSimple U := by
   obtain ⟨a, b, h₁, h₂⟩ := hV
   refine ⟨a ᵥ* A, B *ᵥ b, ?_, ?_⟩
@@ -112,7 +112,7 @@ theorem IsMPUSimple.rectangularSandwich {d D E : ℕ}
     {W : MPOTensor d D} (hW : W.IsMPUSimple)
     (A : Matrix (Fin E) (Fin D) ℂ) (B : Matrix (Fin D) (Fin E) ℂ)
     (hBA : B * A = 1) :
-    IsMPUSimple (fun i j ↦ A * W i j * B) :=
+    IsMPUSimple (fun ij ↦ A * W ij * B) :=
   isMPUSimple_of_doubleLayer_inclusion hW
     (doubledBondMap A) (doubledBondMap B)
     (doubledBondMap_mul_eq_one A B hBA)
@@ -124,7 +124,7 @@ theorem isMPUSimple_of_rectangularSandwich {d D E : ℕ}
     (W : MPOTensor d D)
     (A : Matrix (Fin E) (Fin D) ℂ) (B : Matrix (Fin D) (Fin E) ℂ)
     (hBA : B * A = 1)
-    (hW : IsMPUSimple (fun i j ↦ A * W i j * B)) :
+    (hW : IsMPUSimple (fun ij ↦ A * W ij * B)) :
     W.IsMPUSimple :=
   isMPUSimple_of_doubleLayer_split_compression hW
     (doubledBondMap A) (doubledBondMap B)
@@ -171,25 +171,25 @@ private theorem compressed_simple2 {D : ℕ}
 /-- Right support of the letters induces right support of the double layer. -/
 private theorem doubleLayer_mul_support {d D : ℕ}
     (W : MPOTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
-    (hWP : ∀ i j, W i j * P = W i j) (i j : Fin d) :
-    doubleLayerTensor W i j * doubledBondMap P =
-      doubleLayerTensor W i j := by
+    (hWP : ∀ i j, W (i, j) * P = W (i, j)) (i j : Fin d) :
+    doubleLayerTensor W (i, j) * doubledBondMap P =
+      doubleLayerTensor W (i, j) := by
   simpa only [Matrix.one_mul, hWP, doubledBondMap_one] using
     (doubleLayer_rectangularSandwich W 1 P i j).symm
 
 /-- Left support of the letters induces left support of the double layer. -/
 private theorem support_mul_doubleLayer {d D : ℕ}
     (W : MPOTensor d D) (Q : Matrix (Fin D) (Fin D) ℂ)
-    (hQW : ∀ i j, Q * W i j = W i j) (i j : Fin d) :
-    doubledBondMap Q * doubleLayerTensor W i j =
-      doubleLayerTensor W i j := by
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j)) (i j : Fin d) :
+    doubledBondMap Q * doubleLayerTensor W (i, j) =
+      doubleLayerTensor W (i, j) := by
   simpa only [Matrix.mul_one, hQW, doubledBondMap_one] using
     (doubleLayer_rectangularSandwich W Q 1 i j).symm
 
 /-- The normalized diagonal inherits a common right support of the letters. -/
 private theorem normalizedDiagonal_mul_support {d D : ℕ}
     (W : MPOTensor d D) (P : Matrix (Fin D) (Fin D) ℂ)
-    (hWP : ∀ i j, W i j * P = W i j) :
+    (hWP : ∀ i j, W (i, j) * P = W (i, j)) :
     normalizedDiagonal W * P = normalizedDiagonal W := by
   simp only [normalizedDiagonal, contractPhysical,
     Matrix.smul_mul, Matrix.sum_mul, hWP]
@@ -197,7 +197,7 @@ private theorem normalizedDiagonal_mul_support {d D : ℕ}
 /-- The normalized diagonal inherits a common left support of the letters. -/
 private theorem support_mul_normalizedDiagonal {d D : ℕ}
     (W : MPOTensor d D) (Q : Matrix (Fin D) (Fin D) ℂ)
-    (hQW : ∀ i j, Q * W i j = W i j) :
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j)) :
     Q * normalizedDiagonal W = normalizedDiagonal W := by
   simp only [normalizedDiagonal, contractPhysical,
     Matrix.mul_smul, Matrix.mul_sum, hQW]
@@ -216,12 +216,12 @@ does not change their product. -/
 private theorem doubleLayer_reducedProjection_insertion {d D : ℕ}
     (W : MPOTensor d D) (P Q : Matrix (Fin D) (Fin D) ℂ)
     (hP : IsOrthogonalProjection P)
-    (hWP : ∀ i j, W i j * P = W i j)
-    (hQW : ∀ i j, Q * W i j = W i j) (i j k l : Fin d) :
-    doubleLayerTensor W i j *
+    (hWP : ∀ i j, W (i, j) * P = W (i, j))
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j)) (i j k l : Fin d) :
+    doubleLayerTensor W (i, j) *
         doubledBondMap (Matrix.reducedProjection P Q) *
-        doubleLayerTensor W k l =
-      doubleLayerTensor W i j * doubleLayerTensor W k l :=
+        doubleLayerTensor W (k, l) =
+      doubleLayerTensor W (i, j) * doubleLayerTensor W (k, l) :=
   mul_projection_mul_of_supports _ _ (doubledBondMap P) (doubledBondMap Q) _
     (doubleLayer_mul_support W P hWP i j)
     (support_mul_doubleLayer W Q hQW k l)
@@ -233,15 +233,15 @@ Source: CPSV17, Proposition IV.5, lines 773–804. -/
 private theorem isMPUSimple_reducedProjection_of_compressed_isMPU {d D : ℕ} [NeZero d]
     (W : MPOTensor d D) (hW : W.IsMPUSimple)
     (P Q : Matrix (Fin D) (Fin D) ℂ) (hP : IsOrthogonalProjection P)
-    (hWP : ∀ i j, W i j * P = W i j)
-    (hQW : ∀ i j, Q * W i j = W i j)
+    (hWP : ∀ i j, W (i, j) * P = W (i, j))
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j))
     (ρ Φ : Fin (D * D) → ℂ)
     (hE : normalizedDiagonal (doubleLayerTensor W) =
       Matrix.vecMulVec ρ Φ)
     (hU : IsMPU
-      (fun i j ↦ Matrix.reducedProjection P Q * W i j * Matrix.reducedProjection P Q)) :
+      (fun ij ↦ Matrix.reducedProjection P Q * W ij * Matrix.reducedProjection P Q)) :
     IsMPUSimple
-      (fun i j ↦ Matrix.reducedProjection P Q * W i j * Matrix.reducedProjection P Q) := by
+      (fun ij ↦ Matrix.reducedProjection P Q * W ij * Matrix.reducedProjection P Q) := by
   apply hU.isMPUSimple_of_simple2
     (Φ ᵥ* doubledBondMap (Matrix.reducedProjection P Q))
     (doubledBondMap (Matrix.reducedProjection P Q) *ᵥ ρ)
@@ -269,9 +269,9 @@ its support. Source: CPSV17, Proposition IV.5, lines 773–804. -/
 theorem isMPUSimple_supportCoordinates {d D k : ℕ}
     (W : MPOTensor d D) (T : Matrix (Fin D) (Fin D) ℂ)
     (V : Matrix (Fin D) (Fin k) ℂ) (hV : Vᴴ * V = 1) (hRange : V * Vᴴ = T)
-    (hW : IsMPUSimple (fun i j ↦ T * W i j * T)) :
-    IsMPUSimple (fun i j ↦ Vᴴ * W i j * V) :=
-  isMPUSimple_of_rectangularSandwich (fun i j ↦ Vᴴ * W i j * V) V Vᴴ hV
+    (hW : IsMPUSimple (fun ij ↦ T * W ij * T)) :
+    IsMPUSimple (fun ij ↦ Vᴴ * W ij * V) :=
+  isMPUSimple_of_rectangularSandwich (fun (i, j) ↦ Vᴴ * W (i, j) * V) V Vᴴ hV
     (by simpa only [← hRange, Matrix.mul_assoc] using hW)
 
 /-- Support compression of a simple MPU with rank-one normalized transfer
@@ -281,8 +281,8 @@ Source: CPSV17, Proposition IV.5, lines 773–804. -/
 theorem IsMPUSimple.reducedProjection {d D : ℕ} [NeZero d]
     {W : MPOTensor d D} (hW : W.IsMPUSimple)
     (P Q : Matrix (Fin D) (Fin D) ℂ) (hP : IsOrthogonalProjection P)
-    (hWP : ∀ i j, W i j * P = W i j)
-    (hQW : ∀ i j, Q * W i j = W i j)
+    (hWP : ∀ i j, W (i, j) * P = W (i, j))
+    (hQW : ∀ i j, Q * W (i, j) = W (i, j))
     (ρ Φ : Fin (D * D) → ℂ)
     (hE : normalizedDiagonal (doubleLayerTensor W) = Matrix.vecMulVec ρ Φ) :
     IsMPUSimple (virtualSandwich (Matrix.reducedProjection P Q) W

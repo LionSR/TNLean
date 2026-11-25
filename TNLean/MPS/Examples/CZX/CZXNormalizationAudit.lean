@@ -27,7 +27,7 @@ namespace MPOTensor.CZX
 /-- The literal printed tensor of arXiv:1703.09188, Example `example:czx`
 (lines 1923–1929). This is a counterexample witness, not the shared CZX MPU. -/
 def printed2017Tensor : MPOTensor 2 2 :=
-  fun u d l r ↦ MPSTensor.pauliX u d * (if u = l then 1 else 0) *
+  fun (u, d) l r ↦ MPSTensor.pauliX u d * (if u = l then 1 else 0) *
     ((↑(Real.sqrt 2) : ℂ)⁻¹ * (-1) ^ (l.val * r.val))
 
 /-- At two sites the all-zero output row has just one entry, of value one half.

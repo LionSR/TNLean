@@ -39,9 +39,9 @@ private theorem endpoint_fusion_entry {d r : ℕ} {χ : Fin r → ℕ}
       (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
     (i j : Fin d) (α γ : Fin (χ a)) (β δ : Fin (χ b)) :
-    (∑ k, O a i k α γ * O b k j β δ) =
+    (∑ k, O a (i, k) α γ * O b (k, j) β δ) =
       ∑ c, ∑ μ : Fin (N a b c),
-        (WF a b c μ * (O c i j * VF a b c μ))
+        (WF a b c μ * (O c (i, j) * VF a b c μ))
           (finProdFinEquiv (α, β)) (finProdFinEquiv (γ, δ)) := by
   have he := congrArg
     (fun Z ↦ Z (finProdFinEquiv (α, β)) (finProdFinEquiv (γ, δ)))

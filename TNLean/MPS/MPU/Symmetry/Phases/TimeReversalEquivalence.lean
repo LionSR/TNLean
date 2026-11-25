@@ -101,7 +101,7 @@ theorem IsMPU.intrinsicTimeReversalSign_blockTensor_four_mul [NeZero d] [NeZero 
   have hU : MPOTensor.blockTensor V 2 =
       MPOTensor.reindexPhysical (twoSiteBlockEquiv d).symm (MPOTensor.blockTwo V) := by
     rw [blockTwo_eq_blockTensor_reindex]
-    funext i j
+    funext ⟨i, j⟩
     simp [MPOTensor.reindexPhysical]
   have hTR₂ : ∀ N : ℕ, 1 < N → Even N →
       mpo (MPOTensor.blockTensor V 2) N = (mpo (MPOTensor.blockTensor V 2) N)ᴴ := by

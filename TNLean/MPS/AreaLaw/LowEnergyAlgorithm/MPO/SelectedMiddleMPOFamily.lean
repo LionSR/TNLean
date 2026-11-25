@@ -192,7 +192,7 @@ private theorem exists_finite_actual_natural_affine_family {T L q B : ℕ}
         (z.1 ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)).submatrix
           (retainedIntervalEquiv a ha).symm (retainedIntervalEquiv a ha).symm +
         z.2 • (Matrix.of fun σ τ : Fin T → Fin q ↦ Matrix.trace
-          (C * (List.ofFn (fun v : Fin T ↦ Afull v (σ v) (τ v))).prod)))).prod =
+          (C * (List.ofFn (fun v : Fin T ↦ Afull v (σ v, τ v))).prod)))).prod =
           ∑ r, V r := by
   intro n
   let R : Fin B × Fin B → Matrix (actualAffineRetainedConfig T L q a)
@@ -251,7 +251,7 @@ private noncomputable def actualSelectedMiddleWordStatement
         fun x y hxy ↦ Subtype.ext (by simpa using congrArg Subtype.val hxy)⟩
     let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
       (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-        Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
+        Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v, τ v))).prod))
     let ME := ManyBody.placeAlong (X := fun _ ↦ Fin q) inc Mphys
     ∀ (K : Matrix (E → Fin q) (E → Fin q) ℂ)
       (U : Fin rU → Matrix (E → Fin q) (E → Fin q) ℂ)
@@ -308,7 +308,7 @@ private theorem exists_actual_selected_middle_word_mpo_family
       fun x y hxy ↦ Subtype.ext (by simpa using congrArg Subtype.val hxy)⟩
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v, τ v))).prod))
   let ME := ManyBody.placeAlong (X := fun _ ↦ Fin q) inc Mphys
   intro K U W hK hU hW
   have hp := p.isLt
@@ -344,7 +344,7 @@ private theorem exists_actual_selected_middle_word_mpo_family
     MPOTensor.identityExtendInterval Acore (a + 2 * ell - cE) hpad
   let Hnat : Matrix (Fin N → Fin q) (Fin N → Fin q) ℂ :=
     Matrix.of fun σ τ ↦ Matrix.trace
-      (C0 * (List.ofFn (fun v ↦ Afull v (σ v) (τ v))).prod)
+      (C0 * (List.ofFn (fun v ↦ Afull v (σ v, τ v))).prod)
   have hME : natPull ME = Hnat := by
     exact MPOTensor.trace_identityExtendInterval_nested_natural
       hca hcore hbd hd Acore C0
@@ -430,7 +430,7 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
     (show b + 1 ≤ L by have hs := s.isLt; omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v, τ v))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
@@ -482,7 +482,7 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
     (show b + 1 ≤ L by have hs := s.isLt; omega)
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
-      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
+      Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v, τ v))).prod))
   let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))

@@ -36,7 +36,7 @@ sum. Copies with the same outer label give the same tensor after the canonical
 bond-dimension identification. -/
 def flatBasisMPOTensor (S : MPSTensor.SectorDecomposition (d * d))
     (s : Fin S.totalCopies) : MPOTensor d (S.flatDim s) :=
-  fun a b ↦ S.flatBasis s (finProdFinEquiv (a, b))
+  fun ab ↦ S.flatBasis s (finProdFinEquiv ab)
 
 @[simp]
 theorem flatBasisMPOTensor_toMPSTensor

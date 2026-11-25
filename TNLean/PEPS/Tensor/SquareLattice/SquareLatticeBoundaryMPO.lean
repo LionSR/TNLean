@@ -99,7 +99,7 @@ boundary fixed point, or the `T` and `S` maps shown later in FigureDavid2. -/
 noncomputable def localBoundaryMPOTensor
     (A : Fin Dh → Fin Dh → Fin Dv → Fin Dv → Fin d → ℂ) :
     MPOTensor Dv (Dh * Dh) :=
-  fun upKet upBra left right ↦
+  fun (upKet, upBra) left right ↦
     ∑ s : Fin d, ∑ down : Fin Dv,
       A left.divNat right.divNat upKet down s *
         (starRingEnd ℂ) (A left.modNat right.modNat upBra down s)
@@ -113,7 +113,7 @@ theorem localBoundaryMPOTensor_apply
     (A : Fin Dh → Fin Dh → Fin Dv → Fin Dv → Fin d → ℂ)
     (upKet upBra : Fin Dv)
     (left right : Fin (Dh * Dh)) :
-    localBoundaryMPOTensor A upKet upBra left right =
+    localBoundaryMPOTensor A (upKet, upBra) left right =
       ∑ s : Fin d, ∑ down : Fin Dv,
         A left.divNat right.divNat upKet down s *
           (starRingEnd ℂ) (A left.modNat right.modNat upBra down s) :=
@@ -132,7 +132,7 @@ theorem localBoundaryMPOTensor_finProdFinEquiv_apply
     (A : Fin Dh → Fin Dh → Fin Dv → Fin Dv → Fin d → ℂ)
     (uKet uBra : Fin Dv)
     (lKet lBra rKet rBra : Fin Dh) :
-    localBoundaryMPOTensor A uKet uBra
+    localBoundaryMPOTensor A (uKet, uBra)
         (finProdFinEquiv (lKet, lBra)) (finProdFinEquiv (rKet, rBra)) =
       ∑ s : Fin d, ∑ down : Fin Dv,
         A lKet rKet uKet down s *

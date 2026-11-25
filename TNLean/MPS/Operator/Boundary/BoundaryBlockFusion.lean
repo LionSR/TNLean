@@ -69,10 +69,10 @@ theorem mulTensor_intertwine_stackedBondMap
     (T₁ : MPOTensor d D₁) (T₂ : MPOTensor d D₂)
     (S₁ : MPOTensor d E₁) (S₂ : MPOTensor d E₂)
     (W₁ : Matrix (Fin D₁) (Fin E₁) ℂ) (W₂ : Matrix (Fin D₂) (Fin E₂) ℂ)
-    (hW₁ : ∀ i j, T₁ i j * W₁ = W₁ * S₁ i j)
-    (hW₂ : ∀ i j, T₂ i j * W₂ = W₂ * S₂ i j) (i k : Fin d) :
-    mulTensor T₁ T₂ i k * stackedBondMap W₁ W₂ =
-      stackedBondMap W₁ W₂ * mulTensor S₁ S₂ i k := by
+    (hW₁ : ∀ i j, T₁ (i, j) * W₁ = W₁ * S₁ (i, j))
+    (hW₂ : ∀ i j, T₂ (i, j) * W₂ = W₂ * S₂ (i, j)) (i k : Fin d) :
+    mulTensor T₁ T₂ (i, k) * stackedBondMap W₁ W₂ =
+      stackedBondMap W₁ W₂ * mulTensor S₁ S₂ (i, k) := by
   simp only [mulTensor_apply, stackedBondMap, Matrix.submatrix_mul_equiv]
   congr 1
   rw [Matrix.sum_mul, Matrix.mul_sum]
@@ -95,8 +95,8 @@ theorem IsBoundaryClosed.exists_fusionDecomposition_of_retracts
     (V₂ : Matrix (Fin E₂) (Fin (∑ c : Fin r, dim c)) ℂ)
     (W₂ : Matrix (Fin (∑ c : Fin r, dim c)) (Fin E₂) ℂ)
     (hVW₁ : V₁ * W₁ = 1) (hVW₂ : V₂ * W₂ = 1)
-    (hW₁ : ∀ i j, T i j * W₁ = W₁ * S₁ i j)
-    (hW₂ : ∀ i j, T i j * W₂ = W₂ * S₂ i j) :
+    (hW₁ : ∀ i j, T (i, j) * W₁ = W₁ * S₁ (i, j))
+    (hW₂ : ∀ i j, T (i, j) * W₂ = W₂ * S₂ (i, j)) :
     ∃ (m : Fin r → ℕ)
       (V : ∀ c, Fin (m c) → Matrix (Fin (dim c)) (Fin (E₁ * E₂)) ℂ)
       (W : ∀ c, Fin (m c) → Matrix (Fin (E₁ * E₂)) (Fin (dim c)) ℂ),
@@ -137,8 +137,8 @@ theorem IsBoundaryClosed.exists_blockFusionDecomposition
       MPSTensor.IsBiorthogonalDecomposition (mulTensor (A a) (A b)).toMPSTensor
         (fun q : (c : Fin r) × Fin (m c) ↦ (A q.1).toMPSTensor)
         (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) := by
-  have hinter c i j : T i j * MPSTensor.blockInclusion dim c =
-      MPSTensor.blockInclusion dim c * A c i j := by
+  have hinter c i j : T (i, j) * MPSTensor.blockInclusion dim c =
+      MPSTensor.blockInclusion dim c * A c (i, j) := by
     have h := MPSTensor.toTensorFromBlocks_mul_blockInclusion
       (fun _ ↦ 1) (fun c ↦ (A c).toMPSTensor) c (finProdFinEquiv (i, j))
     rw [← hBlocks] at h
@@ -172,7 +172,7 @@ theorem actTensor_intertwine_stackedBondMap
     (T : MPOTensor d D₁) (A : MPSTensor d D₂)
     (S : MPOTensor d E₁) (B : MPSTensor d E₂)
     (W₁ : Matrix (Fin D₁) (Fin E₁) ℂ) (W₂ : Matrix (Fin D₂) (Fin E₂) ℂ)
-    (hW₁ : ∀ i j, T i j * W₁ = W₁ * S i j)
+    (hW₁ : ∀ i j, T (i, j) * W₁ = W₁ * S (i, j))
     (hW₂ : ∀ i, A i * W₂ = W₂ * B i) (i : Fin d) :
     actTensor T A i * stackedBondMap W₁ W₂ =
       stackedBondMap W₁ W₂ * actTensor S B i := by
@@ -205,7 +205,7 @@ theorem IsBoundaryCompatible.exists_blockActionDecomposition
   obtain ⟨b, hb⟩ := (isBoundaryCompatible_iff_exists_linearMap T A).mp h
   let U := MPSTensor.blockInclusion opDim a
   let J := MPSTensor.blockInclusion dim x
-  have hU i j : T i j * U = U * S a i j := by
+  have hU i j : T (i, j) * U = U * S a (i, j) := by
     have hh := MPSTensor.toTensorFromBlocks_mul_blockInclusion
       (fun _ ↦ 1) (fun a ↦ (S a).toMPSTensor) a (finProdFinEquiv (i, j))
     rw [← hT] at hh

@@ -102,7 +102,7 @@ def thetaThreeZ (h h' : Fin 10) : Matrix (Fin 10) (Fin 10) (ℤ√2) :=
 with the weights ten times the generic P6 point `(λ_1, λ_ψ, λ_σ) = (1/2, 3/10, 1/5)`
 (data file §1.4). -/
 noncomputable def thetaThree : MPOTensor 10 10 :=
-  fun h h' => complexOfZsqrt2 (thetaThreeZ h h')
+  Function.uncurry fun h h' => complexOfZsqrt2 (thetaThreeZ h h')
 
 /-! ### The fusion-tree product states -/
 

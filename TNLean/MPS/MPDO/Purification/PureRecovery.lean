@@ -23,15 +23,15 @@ variable {d D : ℕ}
 /-- Embed a pure MPS tensor as a diagonal MPO with trivial bra structure:
 `M^{ij} = δ_{ij} A^i`. -/
 def toMPOTensor (A : MPSTensor d D) : MPOTensor d D :=
-  fun i j => if i = j then A i else 0
+  fun (i, j) => if i = j then A i else 0
 
 @[simp] lemma toMPOTensor_apply_same (A : MPSTensor d D) (i : Fin d) :
-    A.toMPOTensor i i = A i := by
+    A.toMPOTensor (i, i) = A i := by
   simp [toMPOTensor]
 
 @[simp] lemma toMPOTensor_apply_ne (A : MPSTensor d D) {i j : Fin d}
     (hij : i ≠ j) :
-    A.toMPOTensor i j = 0 := by
+    A.toMPOTensor (i, j) = 0 := by
   simp [toMPOTensor, hij]
 
 /-- Word evaluation for the diagonal embedding vanishes unless the ket and

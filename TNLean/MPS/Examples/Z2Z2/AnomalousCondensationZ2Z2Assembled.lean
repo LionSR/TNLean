@@ -84,7 +84,7 @@ def symIntTensor : (g : Fin 4) → Fin 4 → Fin 4 → Matrix (Fin (bondDim g)) 
   | 3 => xyIntTensor
 
 theorem symTensor_eq (g : Fin 4) (i j : Fin 4) :
-    symTensor g i j = complexOfInt (symIntTensor g i j) := by
+    symTensor g (i, j) = complexOfInt (symIntTensor g i j) := by
   fin_cases g <;> rfl
 
 /-- The first bond coordinate of each summand inside the bond space of `N = M_e ⊕ M_x ⊕ M_y ⊕
@@ -127,20 +127,20 @@ private theorem condensationInt_eq (i j : Fin 4) :
 `N = M_e ⊕ M_x ⊕ M_y ⊕ M_xy` is the block-diagonal matrix of the four summands, relabelled along
 `condensationBond`. -/
 theorem condensationTensor_eq_blockDiagonal (i j : Fin 4) :
-    condensationTensor i j =
-      (Matrix.blockDiagonal' fun g => symTensor g i j).submatrix condensationBond.symm
+    condensationTensor (i, j) =
+      (Matrix.blockDiagonal' fun g => symTensor g (i, j)).submatrix condensationBond.symm
         condensationBond.symm := by
-  have h1 : directSum eTensor xTensor = fun i j => complexOfInt
+  have h1 : directSum eTensor xTensor = Function.uncurry fun i j => complexOfInt
       ((Matrix.fromBlocks (eIntTensor i j) 0 0 (xIntTensor i j)).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm) :=
-    funext fun i => funext fun j => directSum_complexOfRing _ eIntTensor xIntTensor i j
-  have h2 : directSum (directSum eTensor xTensor) yTensor = fun i j => complexOfInt
+    funext fun p => directSum_complexOfRing _ eIntTensor xIntTensor p.1 p.2
+  have h2 : directSum (directSum eTensor xTensor) yTensor = Function.uncurry fun i j => complexOfInt
       ((Matrix.fromBlocks ((Matrix.fromBlocks (eIntTensor i j) 0 0 (xIntTensor i j)).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (yIntTensor i j)).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm) := by
     rw [h1]
-    exact funext fun i => funext fun j => directSum_complexOfRing _ _ yIntTensor i j
-  have h : condensationTensor i j = complexOfInt ((Matrix.fromBlocks
+    exact funext fun p => directSum_complexOfRing _ _ yIntTensor p.1 p.2
+  have h : condensationTensor (i, j) = complexOfInt ((Matrix.fromBlocks
       ((Matrix.fromBlocks
         ((Matrix.fromBlocks (eIntTensor i j) 0 0 (xIntTensor i j)).submatrix
           finSumFinEquiv.symm finSumFinEquiv.symm) 0 0 (yIntTensor i j)).submatrix

@@ -219,18 +219,18 @@ theorem mpo_condensationTensor_sq (L : ℕ) (hL : 0 < L) :
 contributes to it. -/
 theorem mpo_condensationTensor_apply_zero (L : ℕ) (hL : 0 < L) :
     mpo condensationTensor L (fun _ => 0) (fun _ => 0) = 1 := by
-  have he : eTensor 0 0 = 1 := by
+  have he : eTensor (0, 0) = 1 := by
     have h0 : eIntTensor 0 0 = 1 := by decide
-    rw [eTensor, h0, complexOfInt_one]
-  have hx : xTensor 0 0 = 0 := by
+    rw [eTensor, Function.uncurry_apply_pair, h0, complexOfInt_one]
+  have hx : xTensor (0, 0) = 0 := by
     have h0 : xIntTensor 0 0 = 0 := by decide
-    rw [xTensor, h0, complexOfInt_zero]
-  have hy : yTensor 0 0 = 0 := by
+    rw [xTensor, Function.uncurry_apply_pair, h0, complexOfInt_zero]
+  have hy : yTensor (0, 0) = 0 := by
     have h0 : yIntTensor 0 0 = 0 := by decide
-    rw [yTensor, h0, complexOfInt_zero]
-  have hxy : xyTensor 0 0 = 0 := by
+    rw [yTensor, Function.uncurry_apply_pair, h0, complexOfInt_zero]
+  have hxy : xyTensor (0, 0) = 0 := by
     have h0 : xyIntTensor 0 0 = 0 := by decide
-    rw [xyTensor, h0, complexOfInt_zero]
+    rw [xyTensor, Function.uncurry_apply_pair, h0, complexOfInt_zero]
   rw [mpo_condensationTensor]
   simp only [Matrix.add_apply, mpo_apply, mpoMatrixEntry]
   rw [evalWord_ofFn, evalWord_ofFn, evalWord_ofFn, evalWord_ofFn]

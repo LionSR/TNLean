@@ -42,10 +42,10 @@ variable {d D : ℕ}
 diagonal entry `c j` at the input index; the periodic operators are those of `M` followed by
 the on-site operator `diag(c)` applied first (`MPOTensor.mpo_mulDiagonal`). -/
 def mulDiagonal (M : MPOTensor d D) (c : Fin d → ℂ) : MPOTensor d D :=
-  fun i j ↦ c j • M i j
+  fun (i, j) ↦ c j • M (i, j)
 
 @[simp] theorem mulDiagonal_apply (M : MPOTensor d D) (c : Fin d → ℂ) (i j : Fin d) :
-    M.mulDiagonal c i j = c j • M i j := rfl
+    M.mulDiagonal c (i, j) = c j • M (i, j) := rfl
 
 /-- **The periodic operators of a dressed tensor**: `O_N diag(c)^{⊗N}`, where `diag(c)^{⊗N}` is
 the diagonal matrix with entry `∏_k c (t k)` at the configuration `t`.

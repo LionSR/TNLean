@@ -294,7 +294,7 @@ theorem firstAbsorbed_not_isNormalTensor :
 /-- The ambient two-sector MPO, assembled from the absorbed representatives.
 Source: arXiv:1606.00608, lines 1646--1665. -/
 noncomputable def ambient : MPOTensor 3 2 :=
-  fun i j ↦ if i = j then Matrix.diagonal fun s ↦
+  fun (i, j) ↦ if i = j then Matrix.diagonal fun s ↦
     if s = 0 then (if i = 2 then 0 else (1 / 2 : ℂ))
     else if i = 2 then 1 else 0
   else 0
@@ -313,14 +313,14 @@ private noncomputable def ambientVirtualWeight
 Source: arXiv:1606.00608, canonical assembly at lines 237--246 and
 1646--1665. -/
 private lemma ambient_eq_diagonal (i j : Fin 3) :
-    ambient i j = Matrix.diagonal fun s ↦ ambientVirtualWeight s i j := by
+    ambient (i, j) = Matrix.diagonal fun s ↦ ambientVirtualWeight s i j := by
   by_cases hij : i = j <;> simp [ambient, ambientVirtualWeight, hij]
 
 /-- Ambient-letter products remain diagonal, with sectorwise scalar products.
 Source: arXiv:1606.00608, periodic canonical contractions at lines 237--246
 and the absorbed BNT display at lines 1660--1665. -/
 private lemma prod_ambient {N : ℕ} (σ τ : Fin N → Fin 3) :
-    (List.ofFn fun k ↦ ambient (σ k) (τ k)).prod =
+    (List.ofFn fun k ↦ ambient (σ k, τ k)).prod =
       Matrix.diagonal fun s ↦ ∏ k, ambientVirtualWeight s (σ k) (τ k) := by
   induction N with
   | zero =>
@@ -377,7 +377,7 @@ weighted representatives.
 Source: arXiv:1606.00608, the BNT decomposition
 `eq:II_ABasicTensors` and canonical-form assembly `Eq19`, lines 271--308. -/
 lemma ambient_eq_weighted_basis_blocks (i j : Fin 3) :
-    ambient i j = Matrix.diagonal fun s : Fin 2 ↦
+    ambient (i, j) = Matrix.diagonal fun s : Fin 2 ↦
       if s = 0 then
         (invSqrtTwo • basis 0 (finProdFinEquiv (i, j))) 0 0
       else (basis 1 (finProdFinEquiv (i, j))) 0 0 := by
@@ -440,8 +440,7 @@ theorem ambient_toMPSTensor_eq_sectors_toTensor :
   funext p
   rw [← finProdFinEquiv.apply_symm_apply p]
   obtain ⟨i, j⟩ := finProdFinEquiv.symm p
-  change ambient (finProdFinEquiv (i, j)).divNat
-      (finProdFinEquiv (i, j)).modNat = _
+  change ambient ((finProdFinEquiv (i, j)).divNat, (finProdFinEquiv (i, j)).modNat) = _
   rw [MPSTensor.finProdFinEquiv_divNat i j,
     MPSTensor.finProdFinEquiv_modNat i j]
   rw [sectors_toTensor_eq_diagonal]
@@ -860,7 +859,7 @@ theorem printed_absorbed_normality_step_is_false :
       (∀ s, ‖weight s‖ ≤ 1) ∧ (∃ s, ‖weight s‖ = 1) ∧
       (∀ s, MPSTensor.IsNormalTensor (basis s)) ∧
       (∀ i, basis 0 i ≠ 0 → basis 1 i = 0) ∧
-      (∀ i j, ambient i j = Matrix.diagonal fun s : Fin 2 ↦
+      (∀ i j, ambient (i, j) = Matrix.diagonal fun s : Fin 2 ↦
         if s = 0 then
           (invSqrtTwo • basis 0 (finProdFinEquiv (i, j))) 0 0
         else (basis 1 (finProdFinEquiv (i, j))) 0 0) ∧

@@ -124,10 +124,10 @@ theorem generatorB_mulVec_cluster (c : ℂ) :
 
 /-- A bond-two MPO tensor for `U_a`, obtained by flipping the input of the decorated CZX
 tensor (arXiv:2203.12563, line 1884). -/
-def tensorA : MPOTensor 2 2 := fun i j ↦ czxDecoratedTensor i j.rev
+def tensorA : MPOTensor 2 2 := fun (i, j) ↦ czxDecoratedTensor (i, j.rev)
 
 /-- The bond-one spin-flip tensor for `U_b` (arXiv:2203.12563, line 1884). -/
-def tensorB : MPOTensor 2 1 := fun i j ↦ MPOTensor.idTensor 2 i j.rev
+def tensorB : MPOTensor 2 1 := fun (i, j) ↦ MPOTensor.idTensor 2 (i, j.rev)
 
 /-- The bond-two tensor generates the printed diagonal operator at every positive length. -/
 theorem mpo_tensorA : MPOTensor.mpo tensorA N = generatorA N := by

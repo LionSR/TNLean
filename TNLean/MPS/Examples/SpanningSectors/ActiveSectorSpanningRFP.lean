@@ -423,12 +423,12 @@ private lemma physTraceTransfer_blockTwo {d D : ℕ} (M : MPOTensor d D) :
     Finset.sum_mul, Finset.mul_sum]
   calc
     _ = ∑ i : Fin d, ∑ k : Fin D, ∑ j : Fin d,
-        M i i a k * M j j k b := by
+        M (i, i) a k * M (j, j) k b := by
       apply Finset.sum_congr rfl
       intro i _
       exact Finset.sum_comm
     _ = ∑ k : Fin D, ∑ i : Fin d, ∑ j : Fin d,
-        M i i a k * M j j k b := Finset.sum_comm
+        M (i, i) a k * M (j, j) k b := Finset.sum_comm
     _ = _ := by
       apply Finset.sum_congr rfl
       intro k _

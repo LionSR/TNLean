@@ -138,14 +138,14 @@ theorem exists_traceChainOperator_of_operatorSchmidtRank_le {L q D : ℕ}
   obtain ⟨B, c, _, hψ⟩ := hmps
   let : NeZero L := ⟨by omega⟩
   let A : Fin L → MPOTensor q D :=
-    fun v s t ↦ B.zeroPad v (finProdFinEquiv (s, t))
+    fun v (s, t) ↦ B.zeroPad v (finProdFinEquiv (s, t))
   have hM : M = traceChainOperator A (c • 1) := by
     ext σ τ
     have he := hψ (pairCfgEquiv q L (σ, τ))
     simp only [ψ, Equiv.symm_apply_apply] at he
     rw [← B.coeff_zeroPad] at he
     change M σ τ = Matrix.trace ((c • (1 : Matrix (Fin D) (Fin D) ℂ)) *
-      (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod)
+      (List.ofFn (fun v ↦ A v (σ v, τ v))).prod)
     rw [Matrix.smul_mul, Matrix.one_mul, Matrix.trace_smul]
     simpa only [MPSChainTensor.coeff, MPSChainTensor.eval, pairCfgEquiv_apply,
       Fin.prod_eq_prod_map_finRange, ← List.ofFn_eq_map, smul_eq_mul] using he

@@ -31,7 +31,7 @@ namespace MPOTensor
 /-- The letter of the doubled-index view at an encoded pair of physical indices is the
 corresponding one-site matrix. -/
 @[simp] theorem toMPSTensor_finProdFinEquiv {d D : ℕ} (M : MPOTensor d D) (i j : Fin d) :
-    M.toMPSTensor (finProdFinEquiv (i, j)) = M i j := by
+    M.toMPSTensor (finProdFinEquiv (i, j)) = M (i, j) := by
   unfold MPOTensor.toMPSTensor
   rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
@@ -40,13 +40,13 @@ matrices. This is the bond-one case of `MPOTensor.mpo_apply_eq_prod_of_forced_bo
 only one closed bond configuration, so no other configuration has to vanish. -/
 theorem mpo_apply_of_bondOne {N : ℕ} [NeZero N] {d : ℕ} (M : MPOTensor d 1)
     (σ τ : Fin N → Fin d) :
-    M.mpo N σ τ = ∏ k, M (σ k) (τ k) 0 0 := by
+    M.mpo N σ τ = ∏ k, M (σ k, τ k) 0 0 := by
   rw [mpo_apply_eq_prod_of_forced_bond M σ τ 0 fun g hg ↦ absurd (Subsingleton.elim g 0) hg]
   rfl
 
 /-- A bond-one tensor one of whose one-site matrices is the scalar `1` is normal: that
 matrix already spans the one-by-one matrices. -/
-theorem isNormal_of_bondOne {d : ℕ} (M : MPOTensor d 1) (i j : Fin d) (h : M i j 0 0 = 1) :
+theorem isNormal_of_bondOne {d : ℕ} (M : MPOTensor d 1) (i j : Fin d) (h : M (i, j) 0 0 = 1) :
     Kraus.IsNormal M.toMPSTensor := by
   refine Kraus.IsInjective.isNormal (Submodule.eq_top_of_forall_single_mem _ fun p q => ?_)
   refine Submodule.subset_span ⟨finProdFinEquiv (i, j), ?_⟩
