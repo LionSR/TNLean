@@ -48,7 +48,7 @@ at `openai/math@adc7f124`.
 open Filter TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators symmDiff
 
-open ManyBody (ambientDilation edgeBoundary planeDomainGraph)
+open ManyBody (ambientDilation edgeBoundary planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -224,7 +224,7 @@ private theorem ball_subset_of_middle {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonem
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (σ : PhysicalPartition ↥Λ) (hsub : middle σ ⊆ S.truncationSet L) (i : I)
     (hsplit : (S.ball i ∩ middle σ).Nonempty) : S.ball i ⊆ S.A := by
   obtain ⟨y, hy⟩ := hsplit
@@ -259,7 +259,7 @@ theorem historyProperties_of_scales {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempt
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hbad : (∑ h : History S.K S.m S.M (S.n * S.m),
       if ¬ S.IsGoodThrough h then historyWeight h else 0) ≤ (S.n : ℝ) ^ (-p)) :
     S.HistoryProperties L μ p := by
@@ -362,7 +362,7 @@ theorem eventually_historyProperties {ell kappa mu Cr C1 Ct : ℝ} (hell : 0 < e
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - ell)⌋₊ + 10 * S.r₀ : ℕ) : ℤ) <
-          ambientSupDistance t z) →
+          (supDist t z : ℤ)) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ b) →
       S.HistoryProperties ⌊(n : ℝ) ^ (1 - ell)⌋₊ b p := by
   filter_upwards [eventually_bad_history_probability_le.{u} hell hkappa hkappamu hmu hCr

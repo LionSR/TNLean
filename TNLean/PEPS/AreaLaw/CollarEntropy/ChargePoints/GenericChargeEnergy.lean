@@ -32,7 +32,8 @@ open Filter MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction ambientDepth
+  supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -66,7 +67,7 @@ theorem ScannerExponents.badOldHistory_of_badOldHistoryThreshold_le (F : Scanner
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
-          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
@@ -110,7 +111,7 @@ private theorem exists_generic_badOldHistory_threshold (F : ScannerExponents) {C
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
-          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
@@ -139,7 +140,7 @@ private theorem generic_actualCharge_energy_of_threshold_le
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
-          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
@@ -265,7 +266,7 @@ theorem ScannerExponents.actualCharge_energy_coefficients_of_threshold_le
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
-          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
@@ -395,7 +396,7 @@ theorem ScannerExponents.exists_actualCharge_energy_coefficients
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
-          10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →

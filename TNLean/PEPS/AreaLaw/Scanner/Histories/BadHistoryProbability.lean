@@ -23,7 +23,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 286–329, at `openai/math@adc7f124`.
 -/
 
-open ManyBody (planeDomainGraph)
+open ManyBody (planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -60,7 +60,7 @@ theorem sum_chargePathWeight_bad_endpoint_planeDomainGraph_le
     (x : ↥Λ) (hxA : x ∈ S.A) (hn : 0 < S.n) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ μ) :
     (∑ c : Fin k → ChargeChoices S.K S.M,
       if S.IsBadBandEndpoint offsets g side x c

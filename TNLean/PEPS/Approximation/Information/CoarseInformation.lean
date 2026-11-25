@@ -64,7 +64,8 @@ open scoped Matrix.Norms.L2Operator
 open TNLean.PEPS.AreaLaw
 
 open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction rectangleEmbedding
-  rectangleSiteEquiv rectangleSiteEquiv_val graphNeighborhood planeDomainGraph ambientDilation)
+  rectangleSiteEquiv rectangleSiteEquiv_val graphNeighborhood planeDomainGraph ambientDilation
+  supDist natCast_supDist)
 
 namespace TNLean.PEPS.Approximation
 
@@ -138,11 +139,11 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
-          (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
+          (∀ x ∈ T, ∀ y ∈ T, ((supDist x y : ℤ) : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : ↥Λ ↦ x.val ∈ T),
           ∀ E : Finset ↥Λ,
             (∀ t ∈ T, ∀ y ∈ E,
-              u ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t y.val : ℝ)) →
+              u ^ (Exponents.beta : ℝ) < ((supDist t y.val : ℤ) : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤ max Ca 0 := by
   classical
   unfold coarseInformationThreshold coarseScaleFactor
@@ -269,9 +270,9 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
         ⌊(n : ℝ) ^ (1 - ε)⌋₊) (2 * r)) := by
     rw [Finset.disjoint_left]
     intro y hyE hyN
-    obtain ⟨t, ht, hdist⟩ := exists_ambientSupDistance_le_of_mem_graphNeighborhood
+    obtain ⟨t, ht, hdist⟩ := exists_supDist_le_of_mem_graphNeighborhood
       Tt.nonempty (fun x hx ↦ (Finset.mem_filter.mp hx).2) hyN
-    have hdist' : (Scan.ambientSupDistance t y.val : ℝ) ≤
+    have hdist' : ((supDist t y.val : ℤ) : ℝ) ≤
         (⌊(n : ℝ) ^ (1 - ε)⌋₊ : ℝ) + 2 * r := by
       exact_mod_cast hdist
     linarith [hE t ht y hyE]
@@ -355,10 +356,10 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
-          (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
+          (∀ x ∈ T, ∀ y ∈ T, ((supDist x y : ℤ) : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : ↥Λ ↦ x.val ∈ T),
           ∀ E : Finset ↥Λ,
-            (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
+            (∀ t ∈ T, ∀ y ∈ E, u ^ β < ((supDist t y.val : ℤ) : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤ C := by
   obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
@@ -397,11 +398,11 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
-          (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
+          (∀ x ∈ T, ∀ y ∈ T, ((supDist x y : ℤ) : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun v : Vertex L ↦ rectangleEmbedding v + c ∈ T),
           ∀ E : Finset (Vertex L),
             (∀ t ∈ T, ∀ v ∈ E,
-              u ^ β < (Scan.ambientSupDistance t (rectangleEmbedding v + c) : ℝ)) →
+              u ^ β < ((supDist t (rectangleEmbedding v + c) : ℤ) : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤ C := by
   classical
   obtain ⟨β, hβ, C, u₀, hmain⟩ :=
@@ -409,12 +410,12 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
   refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ hgap hspan c T hT hdiam X hX E hE ↦ ?_⟩
   set σ := rectangleSiteEquiv L L
   have hdist (x y : ℤ × ℤ) :
-      Scan.ambientSupDistance (x + -c) y = Scan.ambientSupDistance x (y + c) := by
-    simp only [Scan.ambientSupDistance, Prod.fst_add, Prod.snd_add, Prod.fst_neg,
+      (supDist (x + -c) y : ℤ) = (supDist x (y + c) : ℤ) := by
+    simp only [natCast_supDist, Prod.fst_add, Prod.snd_add, Prod.fst_neg,
       Prod.snd_neg]
     congr 2 <;> ring_nf
   have hdist' (x y : ℤ × ℤ) :
-      Scan.ambientSupDistance (x + -c) (y + -c) = Scan.ambientSupDistance x y := by
+      (supDist (x + -c) (y + -c) : ℤ) = (supDist x y : ℤ) := by
     rw [hdist, neg_add_cancel_right]
   obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan
   have h := hmain u hu (ManyBody.rectangularDomain L L)

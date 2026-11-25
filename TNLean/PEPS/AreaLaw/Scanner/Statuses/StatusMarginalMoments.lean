@@ -7,7 +7,8 @@ import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusMarginalBudget
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.ActualMarginalTails
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.Collar.Scales.StatusScaleSeparation
-import TNLean.PEPS.AreaLaw.Collar.CompactCollarCounting
+import QICLean.ManyBody.Sites.Lattice.SupDistance
+import TNLean.PEPS.AreaLaw.Collar.PhysicalPartition
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadChargeRatioBound
 
 /-!
@@ -56,7 +57,7 @@ section
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth supDist)
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
@@ -150,7 +151,7 @@ theorem exists_truncated_statusMarginal_moment_bounds
           (∀ d : ℕ, 1 ≤ d → d ≤ L →
             (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-            ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+            ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           let g := Δ / positiveNormalization 1 (Δ / 2) J
           let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
           let C₀ := 512 * Real.exp 1 * (2 / g)
@@ -217,7 +218,8 @@ section
 
 open Filter Matrix
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth
+  card_filter_ambientDepth_le_quadratic supDist)
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
@@ -260,7 +262,7 @@ theorem exists_source_statusMarginal_moment_bounds
           (∀ d : ℕ, 1 ≤ d → d ≤ L →
             (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-            ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+            ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           1 ≤ S.K ∧
           let g := Δ / positiveNormalization 1 (Δ / 2) J
           let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
@@ -312,7 +314,7 @@ theorem exists_source_statusMarginal_moment_bounds
     exact (source_lengths_le (n := S.n) (mu := mu) (by omega) hell.le (by linarith)).1
   have hcard : ((S.truncationSet L).card : ℝ) ≤ (Ct + 1) * (S.n : ℝ) ^ 2 := by
     simpa only [truncationSet, hdepth] using
-      card_compact_collar_le_quadratic hT S.A hLn hsize hrows
+      card_filter_ambientDepth_le_quadratic hT S.A hLn hsize hrows
   exact ⟨hKpos, hstatusq Λ T hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor L hn2 hradius
     hcard hr hDpos hDm hKL hrows hclear⟩
 
@@ -327,7 +329,7 @@ noncomputable section
 
 open Matrix Filter
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth supDist)
 open scoped BigOperators Matrix.Norms.L2Operator
 
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
@@ -354,7 +356,7 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
         (∀ d : ℕ, 1 ≤ d → d ≤ L →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
         1 ≤ B ∧
           ∀ {J Δ : ℝ} (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)

@@ -149,16 +149,15 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Ambient rows and graph-ball localization]
     \label{thm:al_scan_ambient_rows}
-    \lean{TNLean.PEPS.AreaLaw.Scan.ambientSupDistance,
-        TNLean.PEPS.AreaLaw.Scan.ambientDepth,
-        TNLean.PEPS.AreaLaw.Scan.ambientDepth_nonneg,
-        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le,
-        TNLean.PEPS.AreaLaw.Scan.ambientDepth_le_iff_mem_dilation,
-        TNLean.PEPS.AreaLaw.Scan.ambientDepth_eq_iff_mem_dilation_sdiff,
-        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_walk_length,
-        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_of_edist_le,
-        TNLean.PEPS.AreaLaw.Scan.ambientSupDistance_le_one_of_planeDomainGraph_adj,
-        TNLean.PEPS.AreaLaw.Scan.abs_ambientDepth_sub_le_planeDomainGraph,
+    \lean{ManyBody.ambientDepth,
+        ManyBody.ambientDepth_nonneg,
+        ManyBody.abs_ambientDepth_sub_le,
+        ManyBody.ambientDepth_le_iff_mem_ambientDilation,
+        ManyBody.ambientDepth_eq_iff_mem_ambientDilation_sdiff,
+        ManyBody.abs_ambientDepth_sub_le_walk_length,
+        ManyBody.abs_ambientDepth_sub_le_of_edist_le,
+        ManyBody.supDist_le_one_of_planeDomainGraph_adj,
+        ManyBody.abs_ambientDepth_sub_le_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball,
         TNLean.PEPS.AreaLaw.Scan.depthRow_ambientDepth_length_le,
         TNLean.PEPS.AreaLaw.Scan.depthRow_ambientDepth_length_le_of_row_bound,
@@ -2249,7 +2248,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 
 \begin{lemma}[Quadratic volume of the compact collar]
     \label{thm:al_scan_compact_quadratic_volume}
-    \lean{TNLean.PEPS.AreaLaw.Scan.card_compact_collar_le_quadratic}
+    \lean{ManyBody.card_filter_ambientDepth_le_quadratic}
     \uses{thm:al_scan_ambient_rows}
     If $T\ne\varnothing$, $L\le n$, $|T|\le Cn^2$, and
     $|T_d\setminus T_{d-1}|\le n$ ($1\le d\le L$), then

@@ -81,7 +81,7 @@ Source: `08-scanner.tex`, lines 900--905. -/
 theorem terminalPartition_collar_entropy_identity
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
     (hT : T.Nonempty) (S : CollarScan ↥Λ I)
-    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hdepth : S.depth = fun x ↦ ManyBody.ambientDepth T hT x.val)
     (H L : ℕ) (hL : 8 * S.K * S.m ≤ L) (Ωt : EuclideanSpace ℂ (↥Λ → Fin q))
     (j : terminalFamily S.K S.m S.M H) (g : Fin S.K) :
     let X := S.A.filter fun x ↦ x.val ∈ T
@@ -133,7 +133,7 @@ Source: `08-scanner.tex`, lines 906--911. -/
 theorem two_mutualInformation_le_actualTerminal_average
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
     (hT : T.Nonempty) (S : CollarScan ↥Λ I)
-    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hdepth : S.depth = fun x ↦ ManyBody.ambientDepth T hT x.val)
     (hK : 0 < S.K) (H L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (Ωt : EuclideanSpace ℂ (↥Λ → Fin q)) (tree : MeanTree (terminalFamily S.K S.m S.M H)) :
     let X := S.A.filter fun x ↦ x.val ∈ T
@@ -207,7 +207,7 @@ noncomputable section
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
-open ManyBody (ambientDilation_zero)
+open ManyBody (ambientDilation_zero ambientDepth ambientDepth_le_iff_mem_ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -285,7 +285,7 @@ theorem actualCharge_two_mutualInformation_le_selectedSharpExpression
     refine Finset.disjoint_left.mpr fun x hx hout ↦ ?_
     have hd : S.depth x ≤ 0 := by
       simpa only [hdepth, Nat.cast_zero] using
-        (ambientDepth_le_iff_mem_dilation T hT x.val 0).mpr
+        (ambientDepth_le_iff_mem_ambientDilation T hT x.val 0).mpr
           ((ambientDilation_zero T).symm ▸ (Finset.mem_filter.mp hx).2)
     exact (Finset.mem_compl.mp hout) (Finset.mem_filter.mpr
       ⟨(Finset.mem_filter.mp hx).1, hd.trans (Nat.cast_nonneg L)⟩)

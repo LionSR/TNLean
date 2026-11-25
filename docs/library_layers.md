@@ -2119,7 +2119,7 @@ approximation statements), by the decision recorded in question 3 of Part I.
 | `EntropyInequalities` | sites / entropy | the boundary-edge lemmas `card_boundaryEdges_prefix_le`, `exists_interval_subset_boundaryEdges_sdiff_ssubset`, `card_crossingTerms_le_mul_card_boundaryEdges` (the definition `boundaryEdges` and its basic lemmas are QICLean's); `regionEntropy_le_mul_card_boundaryEdges_of_intervals` | keep the boundary-edge lemmas in `Chain`, the entropy lemma into `Entropy` |
 | `ComponentReduction` | sites / entropy | `domainBoundaryEdges`, `domainRegion`, `IsDomainEdge`, `card_domainBoundaryEdges`, `boundaryEdges_symmDiff_interval`; versus `domainAreaLaw`, `regionEntropy_le_mul_card_domainBoundaryEdges` | domain geometry to `Chain`, domain area law stays in `Entropy` |
 | `MPSApproximation` | entropy / TN | `surprisalTail_region_le_of_family_budget`, `surprisalTail_leftBlock_le*`, `tailPrefactorRoot*`, `spectralProjectionGE_leftBlock_bounds`; versus `chainBondDimension` and the MPS approximation theorems | surprisal-tail lemmas to `Entropy` (QICLean), the MPS statements stay in `Approximation` |
-| `StripApproximation` | geometry / TN | `stripSnakeRows`, `stripSnakeEquiv`, `stripSnakePrefix`, `card_snakePrefix_sdiff_le`, `regionEntropy_stripSnakePrefix_le`; versus the two MPS statements | snake ordering to `Chain` beside `StripGeometry` |
+| `StripApproximation` | entropy / TN | `regionEntropy_stripSnakePrefix_le`; versus the two MPS statements | the snake ordering is QICLean's `ManyBody.Sites.Lattice.SnakeOrder` (`ManyBody.snakeFlip`, `snakeEquiv`, `snakePrefix`, `card_snakePrefix_sdiff_le`) |
 | `CutMatrixGrowth` | matrix / TN | `rank_regroup_left`, `rank_regroup_right`, `prefixConfigurations`, `suffixConfigurations`, `coefficient_matrix_eq_reindex`; versus the MPS bond statements | rank regrouping to QICLean; then `SupportedCutRank` needs no TN import and can follow |
 | `ViableSet.Basic` | sites, matrix / TN | `LeftBlockVector`, `cutColumn`, `leftSupportSubmodule`, `spanProjection`; versus `IsViableMPS`, `IsLeftOpenMPS` and the viable-MPS lemmas | cut columns and left supports to QICLean (sites), viable MPS stay |
 | `ViableSet.BoundarySDP.RationalContractionCost` | other / TN | `Arithmetic`, `rationalAdd`, `rationalSub`, `rationalMul`, `complexAdd`, `complexMul`, `run_*`; versus the contraction counts | the counted arithmetic to a generic module; then `RationalArithmeticTrace` and `ComplexArithmeticHeights` no longer import TN modules |
@@ -2524,7 +2524,7 @@ the amplification proposition and its clearances (`AmplificationProof`,
 `AmplificationCutClearance`, `GraphNeighborhoodCutClearance`), the corollaries
 (`RectangularBoundary`, `RectangularSpecialization`, `SquareAreaLawSpecialization`,
 `SquareAreaLawExplicitConstant`, `SafeRectangleAreaLaw`, `RangeSquareGroundState`,
-`OriginalNestedPatchEntropy`, `SnakeGridGeometry`, `SnakeGridApproximation`) and the
+`OriginalNestedPatchEntropy`, `SnakeGridApproximation`) and the
 frustration-free area law (`FrustrationFreeAmplification`, `FrustrationFreeAreaLaw`). Root
 modules import every subdirectory they need; no subdirectory imports the root.
 

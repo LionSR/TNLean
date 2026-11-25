@@ -36,7 +36,8 @@ open Matrix TensorPower PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology symmDiff
 
-open ManyBody (ambientDilation ambientDilation_zero planeDomainGraph)
+open ManyBody (ambientDilation ambientDilation_zero planeDomainGraph ambientDepth
+  ambientDepth_le_iff_mem_ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -120,7 +121,7 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
   specialize hu regions
   have hdepthX : ∀ x ∈ X, S.depth x ≤ 0 := fun x hx ↦ by
     simpa only [hdepth, Nat.cast_zero] using
-      (ambientDepth_le_iff_mem_dilation T hT x.val 0).mpr
+      (ambientDepth_le_iff_mem_ambientDilation T hT x.val 0).mpr
         ((ambientDilation_zero T).symm ▸ (Finset.mem_filter.mp hx).2)
   have hdisjoint : ∀ D ∈ regions, Disjoint X D :=
     List.forall_mem_ofFn_iff.mpr fun j ↦ Finset.disjoint_left.mpr fun x hx hx' ↦

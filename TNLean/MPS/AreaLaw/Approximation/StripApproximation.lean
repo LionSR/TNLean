@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Entropy.StripBufferDiscount
+import QICLean.ManyBody.Sites.Lattice.SnakeOrder
 import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
 import TNLean.MPS.AreaLaw.Approximation.MPSApproximation
 import QICLean.ManyBody.Sites.Relabel
@@ -30,75 +31,10 @@ open Matrix
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction rectangularDomain)
 open ManyBody (card_crossingTerms_stripPrefix_le card_stripInterval_le mem_stripInterval
-  stripColumn stripInterval)
+  stripColumn stripInterval snakeEquiv snakePrefix mem_snakePrefix stripInterval_subset_snakePrefix
+  snakePrefix_subset_stripInterval card_snakePrefix_sdiff_le)
 
 namespace TNLean.MPS.AreaLaw
-
-/-- Reverse the rows in odd columns. -/
-def stripSnakeRows (L w : ℕ) : Equiv.Perm (Fin L × Fin w) where
-  toFun x := (x.1, if Even x.1.val then x.2 else x.2.rev)
-  invFun x := (x.1, if Even x.1.val then x.2 else x.2.rev)
-  left_inv x := by by_cases hx : Even x.1.val <;> simp [hx]
-  right_inv x := by by_cases hx : Even x.1.val <;> simp [hx]
-
-/-- Column-snake order on the actual physical sites. -/
-noncomputable def stripSnakeEquiv (L w : ℕ) : Fin (L * w) ≃ ↥(rectangularDomain L w) :=
-  finProdFinEquiv.symm.trans ((stripSnakeRows L w).trans (ManyBody.rectangleSiteEquiv L w))
-
-/-- A chain position belongs to its quotient column, including the reversed columns. -/
-theorem stripColumn_stripSnakeEquiv {L w : ℕ} (i : Fin (L * w)) :
-    stripColumn (stripSnakeEquiv L w i) = i.val / w := by
-  change ((i.val / w : ℕ) : ℤ).toNat = i.val / w
-  simp only [Int.toNat_natCast]
-
-/-- The physical region of a snake prefix. -/
-noncomputable def stripSnakePrefix (L w k : ℕ) : Finset ↥(rectangularDomain L w) :=
-  (leftBlock (L * w) k).map (stripSnakeEquiv L w).toEmbedding
-
-/-- A snake prefix contains every earlier column. -/
-theorem stripInterval_subset_snakePrefix {L w k : ℕ} (hw : 1 ≤ w) :
-    stripInterval L w 0 (k / w) ⊆ stripSnakePrefix L w k := by
-  intro x hx
-  let i := (stripSnakeEquiv L w).symm x
-  have hi : stripColumn x = i.val / w := by
-    simpa only [i, Equiv.apply_symm_apply] using stripColumn_stripSnakeEquiv i
-  have hx' := (mem_stripInterval.mp hx).2
-  have hik : i.val < k := by
-    have hiw := Nat.mod_add_div i.val w
-    have hkw := Nat.mod_add_div k w
-    have hmod := Nat.mod_lt i.val (by omega : 0 < w)
-    rw [hi] at hx'
-    have hstep := Nat.mul_le_mul_left w (Nat.succ_le_of_lt hx')
-    simp only [Nat.succ_eq_add_one, mul_add, mul_one] at hstep
-    nlinarith only [hiw, hkw, hmod, hstep, Nat.zero_le (k % w)]
-  apply Finset.mem_map.mpr
-  exact ⟨i, by simpa using hik, (stripSnakeEquiv L w).apply_symm_apply x⟩
-
-/-- A snake prefix uses no column beyond its last partial column. -/
-theorem snakePrefix_subset_stripInterval {L w k : ℕ} (_hw : 1 ≤ w) :
-    stripSnakePrefix L w k ⊆ stripInterval L w 0 (k / w + 1) := by
-  intro x hx
-  obtain ⟨i, hi, rfl⟩ := Finset.mem_map.mp hx
-  have hik : i.val < k := by simpa using hi
-  rw [mem_stripInterval]
-  change 0 ≤ stripColumn (stripSnakeEquiv L w i) ∧ _
-  rw [stripColumn_stripSnakeEquiv]
-  exact ⟨Nat.zero_le _, Nat.lt_succ_of_le (Nat.div_le_div_right hik.le)⟩
-
-/-- The snake prefix differs from a whole-column prefix in at most `w` sites. -/
-theorem card_snakePrefix_sdiff_le {L w k : ℕ} (hw : 1 ≤ w) :
-    (stripSnakePrefix L w k \ stripInterval L w 0 (k / w)).card ≤ w := by
-  classical
-  have hsub : stripSnakePrefix L w k \ stripInterval L w 0 (k / w) ⊆
-      stripInterval L w (k / w) (k / w + 1) := by
-    intro x hx
-    have hcol := mem_stripInterval.mp (snakePrefix_subset_stripInterval hw
-      (Finset.mem_sdiff.mp hx).1)
-    have hn := (Finset.mem_sdiff.mp hx).2
-    simp only [mem_stripInterval] at hn ⊢
-    omega
-  exact (Finset.card_le_card hsub).trans (by
-    simpa using card_stripInterval_le L w (k / w) (k / w + 1))
 
 /-- Entropy of an actual snake prefix, including the partial final column. -/
 theorem regionEntropy_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
@@ -109,11 +45,11 @@ theorem regionEntropy_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (k : ℕ) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q)
-      Ω (stripSnakePrefix L w k) ≤
+      Ω (snakePrefix L w k) ≤
       stripAreaLawConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 + w * Real.log q := by
   let P := stripInterval L w 0 (k / w)
-  let D := stripSnakePrefix L w k \ P
-  have hPD : P ∪ D = stripSnakePrefix L w k :=
+  let D := snakePrefix L w k \ P
+  have hPD : P ∪ D = snakePrefix L w k :=
     Finset.union_sdiff_of_subset (stripInterval_subset_snakePrefix hw)
   have hu := ManyBody.regionEntropy_union_le _ Ω hΩ _ _
     (show Disjoint P D from Finset.disjoint_sdiff)
@@ -134,13 +70,13 @@ noncomputable def stripPrefixBudgetConst (q R : ℕ) : ℝ :=
 theorem cutLogBudget_stripSnakePrefix_le {q w : ℕ} (hq : 1 ≤ q) (hw : 1 ≤ w)
     (L R k : ℕ) :
     ManyBody.cutLogBudget (fun X : AdmissibleSupport (rectangularDomain L w) R ↦ X.1) (fun _ ↦ q)
-        (stripSnakePrefix L w k) ≤
+        (snakePrefix L w k) ≤
       stripPrefixBudgetConst q R * w := by
   have hc : ((ManyBody.crossingTerms
       (fun X : AdmissibleSupport (rectangularDomain L w) R ↦ X.1)
-      (stripSnakePrefix L w k)).card : ℝ) ≤
+      (snakePrefix L w k)).card : ℝ) ≤
       (((R + 1) * 2 ^ (2 * R * (R + 1))) * w : ℕ) := by
-    exact_mod_cast card_crossingTerms_stripPrefix_le (stripSnakePrefix L w k)
+    exact_mod_cast card_crossingTerms_stripPrefix_le (snakePrefix L w k)
       (stripInterval_subset_snakePrefix hw) (snakePrefix_subset_stripInterval hw)
   have hw' : (1 : ℝ) ≤ w := by exact_mod_cast hw
   refine (ManyBody.cutLogBudget_le_card hq _).trans ?_
@@ -160,11 +96,11 @@ theorem surprisalTail_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (k : ℕ) (u : ℝ) (hu : 0 ≤ u) :
     Entropy.surprisalTail
       (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (stripSnakePrefix L w k) Ω).eigenvalues
-      (ManyBody.regionEntropy Ω (stripSnakePrefix L w k)) u ≤
+        (snakePrefix L w k) Ω).eigenvalues
+      (ManyBody.regionEntropy Ω (snakePrefix L w k)) u ≤
       2 * Real.exp (Real.exp 1 / 2) * Real.exp
         (-(u / (32 * Real.sqrt ((1 + J / Δ) * (stripPrefixBudgetConst q R * w))))) := by
-  let A := stripSnakePrefix L w k
+  let A := snakePrefix L w k
   let budget := Entropy.cutLogBudget
     (ManyBody.crossingTerms (fun X : AdmissibleSupport (rectangularDomain L w) R ↦ X.1) A)
     (Entropy.supportDim (fun _ : ↥(rectangularDomain L w) ↦ q) ∘ fun X ↦ X.1)
@@ -211,7 +147,7 @@ noncomputable def stripSnakeState {L w : ℕ} (q : ℕ)
     (Ω : EuclideanSpace ℂ (↥(rectangularDomain L w) → Fin q)) :
     EuclideanSpace ℂ (Fin (L * w) → Fin q) :=
   ManyBody.relabelVector (X := fun _ : ↥(rectangularDomain L w) ↦ Fin q)
-    (X' := fun _ : Fin (L * w) ↦ Fin q) (stripSnakeEquiv L w).symm (fun _ ↦ Equiv.refl _) Ω
+    (X' := fun _ : Fin (L * w) ↦ Fin q) (snakeEquiv L w).symm (fun _ ↦ Equiv.refl _) Ω
 
 /-- Snake relabelling preserves the normalization of the original lattice vector. -/
 theorem norm_stripSnakeState {L w q : ℕ} (Ω : EuclideanSpace ℂ (↥(rectangularDomain L w) → Fin q)) :
@@ -222,10 +158,10 @@ theorem regionEntropy_stripSnakeState {L w q : ℕ}
     (Ω : EuclideanSpace ℂ (↥(rectangularDomain L w) → Fin q))
     (k : ℕ) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) (stripSnakeState q Ω)
-      (leftBlock (L * w) k) = ManyBody.regionEntropy Ω (stripSnakePrefix L w k) := by
+      (leftBlock (L * w) k) = ManyBody.regionEntropy Ω (snakePrefix L w k) := by
   apply ManyBody.regionEntropy_relabel
-    (stripSnakePrefix L w k) (leftBlock (L * w) k) (stripSnakeEquiv L w).symm
-    (fun x ↦ by simp [stripSnakePrefix]) (fun _ ↦ Equiv.refl _)
+    (snakePrefix L w k) (leftBlock (L * w) k) (snakeEquiv L w).symm
+    (fun x ↦ by simp [mem_snakePrefix]) (fun _ ↦ Equiv.refl _)
 
 /-- The actual chain marginal inherits the physical prefix tail under the snake bijection. -/
 theorem surprisalTail_stripSnakeState_le {L w q R : ℕ} {J Δ : ℝ}
@@ -241,10 +177,10 @@ theorem surprisalTail_stripSnakeState_le {L w q R : ℕ} {J Δ : ℝ}
       (ManyBody.regionEntropy (stripSnakeState q Ω) (leftBlock (L * w) k)) u ≤
       2 * Real.exp (Real.exp 1 / 2) * Real.exp
         (-(u / (32 * Real.sqrt ((1 + J / Δ) * (stripPrefixBudgetConst q R * w))))) := by
-  let A := stripSnakePrefix L w k
+  let A := snakePrefix L w k
   let P := leftBlock (L * w) k
-  let e := (stripSnakeEquiv L w).symm
-  have hA : ∀ x, x ∈ A ↔ e x ∈ P := fun x ↦ by simp [A, P, e, stripSnakePrefix]
+  let e := (snakeEquiv L w).symm
+  have hA : ∀ x, x ∈ A ↔ e x ∈ P := fun x ↦ by simp [A, P, e, mem_snakePrefix]
   let eA := ManyBody.regionConfigurationEquiv (X := fun _ : ↥(rectangularDomain L w) ↦ Fin q)
     (X' := fun _ : Fin (L * w) ↦ Fin q) A P e hA (fun _ ↦ Equiv.refl _)
   have hrho := ManyBody.regionState_relabel (X := fun _ : ↥(rectangularDomain L w) ↦ Fin q)
@@ -488,7 +424,7 @@ theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
     (fun hu k _ ↦ surprisalTail_stripSnakeState_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan k _ hu)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (ManyBody.siteConfigurationEquiv (X := fun _ : ↥(rectangularDomain L w) ↦ Fin q)
-      (X' := fun _ : Fin (L * w) ↦ Fin q) (stripSnakeEquiv L w).symm (fun _ ↦ Equiv.refl _))
+      (X' := fun _ : Fin (L * w) ↦ Fin q) (snakeEquiv L w).symm (fun _ ↦ Equiv.refl _))
   let Φ := U.symm Ψ
   have hΦ : stripSnakeState q Φ = Ψ := U.apply_symm_apply Ψ
   let D := ⌊Real.exp (C + 64 * s * Real.log

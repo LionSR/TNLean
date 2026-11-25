@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixComparison
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
+import TNLean.PEPS.AreaLaw.Collar.PhysicalPartition
 
 /-!
 # Target and positive-depth receiving regions
@@ -30,7 +31,7 @@ OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open ManyBody (ambientDilation_zero)
+open ManyBody (ambientDilation_zero ambientDepth ambientDepth_le_iff_mem_ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -75,7 +76,7 @@ private theorem target_positiveNear_regions_of_ambientDepth
   case refine_2 =>
     rw [hdepth] at hd
     simpa only [ambientDilation_zero] using
-      (ambientDepth_le_iff_mem_dilation T hT x.val 0).mp hd
+      (ambientDepth_le_iff_mem_ambientDilation T hT x.val 0).mp hd
 
 namespace CollarScan
 
@@ -98,7 +99,7 @@ theorem state_target_subset_receiving_near
   apply S.bandState_of_initial_assigned
   have hd : S.depth x ≤ 0 := by
     rw [hdepth]
-    exact (ambientDepth_le_iff_mem_dilation T hT x.val 0).mpr
+    exact (ambientDepth_le_iff_mem_ambientDilation T hT x.val 0).mpr
       (by simpa only [ambientDilation_zero] using hxT)
   simp [initialPartition, hxA, show S.depth x ≤ S.lower g (h.1 g) from
     hd.trans (by unfold lower; positivity)]
@@ -119,7 +120,7 @@ theorem oldChargeState_target_subset_receiving_near
   apply S.oldChargeState_of_initial_assigned h g
   have hd : S.depth x ≤ 0 := by
     rw [hdepth]
-    exact (ambientDepth_le_iff_mem_dilation T hT x.val 0).mpr
+    exact (ambientDepth_le_iff_mem_ambientDilation T hT x.val 0).mpr
       (by simpa only [ambientDilation_zero] using hxT)
   simp [initialPartition, hxA, show S.depth x ≤ S.lower g (h.1 g) from
     hd.trans (by unfold lower; positivity)]

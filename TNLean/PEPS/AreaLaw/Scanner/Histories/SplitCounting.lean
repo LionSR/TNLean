@@ -18,7 +18,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Lemma 9.1(2), at `openai/math@adc7f124`.
 -/
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 namespace CollarScan
@@ -88,7 +88,7 @@ theorem sum_card_state_designatedSplitIncidence_le_planeDomainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (∑ g : Fin S.K, ∑ side : Bool,
       (Finset.univ.filter fun i ↦ S.designatedSplitIncidence (S.state h g) L i side).card) ≤
       10 * S.K * S.n * S.D * μ := by
@@ -114,7 +114,7 @@ theorem sum_card_old_designatedSplitIncidence_le_planeDomainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (∑ g : Fin S.K, ∑ side : Bool,
       (Finset.univ.filter fun i ↦
         S.designatedSplitIncidence (S.oldChargeState h g) L i side).card) ≤

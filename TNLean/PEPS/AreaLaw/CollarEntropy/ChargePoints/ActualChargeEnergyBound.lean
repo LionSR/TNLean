@@ -37,7 +37,8 @@ open MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction ambientDepth
+  supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -62,7 +63,7 @@ theorem actualCharge_energyError_le_planeDomainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {a : ℝ} (ha : 0 ≤ a) (k : ℕ)
     (pre : (r : ℕ) → Config r
       (fun v ↦ Fin (augmentedDimensions (V := ↥Λ) q aux v)) → ℂ)

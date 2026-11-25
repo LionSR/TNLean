@@ -22,7 +22,9 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 225–233, at `openai/math@adc7f124`.
 -/
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph abs_ambientDepth_sub_le_planeDomainGraph
+  ambientDepth ambientDepth_le_iff_mem_ambientDilation ambientDepth_nonneg
+  ambientDepth_eq_zero_of_mem)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -33,10 +35,10 @@ theorem mem_ambientDilation_singleton_of_planeDomainGraph_edist_le
     (h : (planeDomainGraph Λ).edist x a ≤ (r : ℕ∞)) :
     x.val ∈ ambientDilation {a.val} r := by
   have hd := abs_ambientDepth_sub_le_planeDomainGraph {a.val} (Finset.singleton_nonempty _) h
-  have hz : ambientDepth {a.val} (Finset.singleton_nonempty _) a.val = 0 := by
-    simp [ambientDepth, ambientSupDistance]
+  have hz : ambientDepth {a.val} (Finset.singleton_nonempty _) a.val = 0 :=
+    ambientDepth_eq_zero_of_mem _ _ (Finset.mem_singleton_self _)
   rw [hz, sub_zero, abs_of_nonneg (ambientDepth_nonneg _ _ _)] at hd
-  exact (ambientDepth_le_iff_mem_dilation _ _ _ _).mp hd
+  exact (ambientDepth_le_iff_mem_ambientDilation _ _ _ _).mp hd
 
 /-- A graph ball has at most `(2r+1)²` physical sites. No geometric regularity
 of the finite domain is required. -/

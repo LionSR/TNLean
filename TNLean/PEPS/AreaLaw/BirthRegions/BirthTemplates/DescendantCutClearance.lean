@@ -10,7 +10,7 @@ import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.BeltMarks
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
 import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 
 /-!
 # Cut clearance of belt and descendant birth templates
@@ -203,8 +203,8 @@ private theorem repairHalfSide_iterate_mem {S : ℝ} (hS : 1 ≤ S) :
 
 /-- The real sup distance of two lattice points is their integer sup distance. -/
 private theorem dist_integerPoint_eq (t z : ℤ × ℤ) :
-    dist (integerPoint t) (integerPoint z) = (Scan.ambientSupDistance t z : ℝ) := by
-  simp [integerPoint, Prod.dist_eq, Real.dist_eq, Scan.ambientSupDistance]
+    dist (integerPoint t) (integerPoint z) = ((ManyBody.supDist t z : ℤ) : ℝ) := by
+  simp [integerPoint, Prod.dist_eq, Real.dist_eq, ManyBody.natCast_supDist]
 
 /-! ### Template clearances from endpoint distance -/
 
@@ -226,7 +226,7 @@ theorem Template.cutClearance_of_endpoint_dist_ge {Ctpl D₀ CB u : ℝ} {n s₀
       ((C : ℝ) - 1) * 2 ^ k ≤ dist (integerPoint t) (integerPoint z))
     (hs : (s₀ : ℝ) ≤ 2 * u) (hn : n ≤ ⌈CB * u⌉₊) :
     T.IsSeparated D₀ Z ∧ ∀ t ∈ T.points, ∀ z ∈ Z,
-      2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ) := by
+      2 * (n : ℝ) ^ (Exponents.beta : ℝ) < ((ManyBody.supDist t z : ℤ) : ℝ) := by
   set R : ℝ := (2 : ℝ) ^ k
   set tk : ℝ := (2 : ℝ) ^ fineScaleIndex k
   have hR0 : 0 < R := by positivity
@@ -234,7 +234,7 @@ theorem Template.cutClearance_of_endpoint_dist_ge {Ctpl D₀ CB u : ℝ} {n s₀
     have : (2 : ℝ) ≤ C := by exact_mod_cast hC
     linarith
   have hRle : R ≤ ((C : ℝ) - 1) * R := le_mul_of_one_le_left hR0.le hC1
-  have hfar : ∀ t ∈ T.points, ∀ z ∈ Z, R ≤ (Scan.ambientSupDistance t z : ℝ) :=
+  have hfar : ∀ t ∈ T.points, ∀ z ∈ Z, R ≤ ((ManyBody.supDist t z : ℤ) : ℝ) :=
     fun t ht z hz ↦ hRle.trans ((hdist t ht z hz).trans_eq (dist_integerPoint_eq t z))
   refine ⟨fun t ht z hz ↦ ?_, fun t ht z hz ↦ ?_⟩
   · have hD : 4 * D₀ * s₀ < R := by
@@ -349,7 +349,7 @@ theorem initialBelt_birthTemplate_cutClearance_of_le {D₀ CB : ℝ} (o : ℝ ×
         (s₀ : ℝ) ≤ 2 * (2 : ℝ) ^ fineScaleIndex s.1.val →
         n ≤ ⌈CB * (2 : ℝ) ^ fineScaleIndex s.1.val⌉₊ →
         T.IsSeparated D₀ Z ∧ ∀ t ∈ T.points, ∀ w ∈ Z,
-          2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t w : ℝ) := by
+          2 * (n : ℝ) ^ (Exponents.beta : ℝ) < ((ManyBody.supDist t w : ℤ) : ℝ) := by
   intro x s hxs
   obtain ⟨⟨k, hk⟩, ⟨z, hz⟩, R⟩ := s
   subst hxs
@@ -396,7 +396,7 @@ theorem initialBelt_birthTemplate_cutClearance (D₀ CB : ℝ) :
           (s₀ : ℝ) ≤ 2 * (2 : ℝ) ^ fineScaleIndex s.1.val →
           n ≤ ⌈CB * (2 : ℝ) ^ fineScaleIndex s.1.val⌉₊ →
           T.IsSeparated D₀ Z ∧ ∀ t ∈ T.points, ∀ w ∈ Z,
-            2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t w : ℝ) :=
+            2 * (n : ℝ) ^ (Exponents.beta : ℝ) < ((ManyBody.supDist t w : ℤ) : ℝ) :=
   ⟨_, fun o k₀ Z C a b hC h₀ hK₀ ↦
     initialBelt_birthTemplate_cutClearance_of_le o k₀ Z C a b hC h₀ hK₀⟩
 
@@ -428,7 +428,7 @@ theorem descendant_birthTemplate_cutClearance_of_le {Sstar : ℝ}
           n ≤ ⌈CB * repairHalfSide ((repairStage o Λ A C k₀ hC h₀ Sstar j).scale m)⌉₊ →
           T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
             ∀ t ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
-              2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ) := by
+              2 * (n : ℝ) ^ (Exponents.beta : ℝ) < ((ManyBody.supDist t z : ℤ) : ℝ) := by
   intro j x m hx
   have hU := isUniformRepairInduction_of_le hS o Λ A C k₀ hC h₀ (le_of_max_le_left hK)
   obtain ⟨k, hk, hu, hdist⟩ :=
@@ -481,7 +481,7 @@ theorem descendant_birthTemplate_cutClearance :
               n ≤ ⌈CB * repairHalfSide ((repairStage o Λ A C k₀ hC h₀ Sstar j).scale m)⌉₊ →
               T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
                 ∀ t ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
-                  2 * (n : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ) :=
+                  2 * (n : ℝ) ^ (Exponents.beta : ℝ) < ((ManyBody.supDist t z : ℤ) : ℝ) :=
   ⟨_, fun _ hS C D₀ CB ↦ ⟨_, descendant_birthTemplate_cutClearance_of_le hS C D₀ CB⟩⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

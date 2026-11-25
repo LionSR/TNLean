@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.SnakeGridGeometry
+import QICLean.ManyBody.Sites.Lattice.SnakeOrder
 import TNLean.MPS.Tensor.VaryingBond.SnakeGridParameters
 import TNLean.MPS.Tensor.VaryingBond.SequentialTruncation
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.TailParameter
@@ -46,7 +46,8 @@ open scoped Matrix.Norms.L2Operator
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
+open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction snakeEquiv snakePrefix
+  card_edgeBoundary_snakePrefix_le)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -69,7 +70,7 @@ noncomputable def snakeGridStateEquiv (L q : ℕ) :
       EuclideanSpace ℂ (Fin (L * L) → Fin q) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (ManyBody.siteConfigurationEquiv (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q)
-      (snakeGridEquiv L).symm (fun _ ↦ Equiv.refl _))
+      (snakeEquiv L L).symm (fun _ ↦ Equiv.refl _))
 
 /-- A one-site square vector already has a bond-one open MPS representation.
 There are no internal cuts. -/
@@ -86,13 +87,13 @@ Source: area-law `eq:initial-local-tail-parameter` and the square-grid
 cutwidth comparison in the polynomial-PEPS manuscript, Section 1. -/
 theorem cutLogBudget_snakeGridPrefix_le {q : ℕ} (hq : 1 ≤ q) (R L k : ℕ) :
     ManyBody.cutLogBudget (fun X : AdmissibleSupport (ManyBody.rectangularDomain L L) R ↦ X.1)
-        (fun _ ↦ q) (snakeGridPrefix L k) ≤
+        (fun _ ↦ q) (snakePrefix L L k) ≤
       PEPS.AreaLaw.tailParameterConstant q R * ((L : ℝ) + 2) := by
   have hC := PEPS.AreaLaw.one_le_tailParameterConstant hq R
   have hcard : ((ManyBody.edgeBoundary
       (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L))
-      (snakeGridPrefix L k)).card : ℝ) ≤ (L : ℝ) + 1 := by
-    exact_mod_cast card_edgeBoundary_snakeGridPrefix_le L k
+      (snakePrefix L L k)).card : ℝ) ≤ (L : ℝ) + 1 := by
+    exact_mod_cast card_edgeBoundary_snakePrefix_le L L k
   exact (PEPS.AreaLaw.cutLogBudget_le_edgeBoundary hq R _).trans
     (mul_le_mul_of_nonneg_left (by linarith) (by linarith))
 
@@ -152,10 +153,10 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   have hw : 0 ≤ w := mul_nonneg (by positivity) (Real.log_nonneg hy.le)
   let ψ := snakeGridStateEquiv L q Ω
   have hψ : ‖ψ‖ = 1 := (snakeGridStateEquiv L q).norm_map Ω |>.trans hΩ
-  let A := snakeGridPrefix L
+  let A := snakePrefix L L
   let S : ℕ → ℝ := fun k ↦ ManyBody.regionEntropy Ω (A k)
   let ρ := fun k ↦ ManyBody.regionState Ω (A k)
-  let e := (snakeGridEquiv L).symm
+  let e := (snakeEquiv L L).symm
   have hA (k : ℕ) (v : ↥(ManyBody.rectangularDomain L L)) :
       v ∈ A k ↔ e v ∈ leftBlock (L * L) k := by simp [A, e]
   let f := fun k ↦ ManyBody.regionConfigurationEquiv (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q)
@@ -175,7 +176,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     have h := harea _ H hH hHJ E₀ Ω hΩ hgap hspan (A k)
     have hc : ((ManyBody.edgeBoundary (ManyBody.planeDomainGraph _) (A k)).card : ℝ) ≤
         (L : ℝ) + 1 := by
-      exact_mod_cast card_edgeBoundary_snakeGridPrefix_le L k
+      exact_mod_cast card_edgeBoundary_snakePrefix_le L L k
     exact h.trans (mul_le_mul_of_nonneg_left hc hC₀)
   have hbudget (k : ℕ) :
       Real.sqrt ((1 + J / Δ) *

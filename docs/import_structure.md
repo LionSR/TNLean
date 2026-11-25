@@ -56,8 +56,9 @@ uses the component paths of QICLean's `Algebra.Combinatorics.IntegerHasseGraph` 
 comparisons in QICLean's `Algebra.Combinatorics.GraphDistanceTransport` to bound each finite-radius
 sphere by two sites. This supplies the growth bound for domain localization.
 
-The square-grid specialization `PEPS.AreaLaw.SnakeGridGeometry` uses the open
-rectangle geometry of QICLean's `ManyBody.Sites.Lattice.Rectangle`.
+The snake order of a rectangle and the edge boundary of its prefixes are QICLean's
+`ManyBody.Sites.Lattice.SnakeOrder`, over the open rectangle geometry of
+`ManyBody.Sites.Lattice.Rectangle`.
 `PEPS.AreaLaw.SnakeGridApproximation` combines its cut-width bound with the
 lattice marginal tail and the sequential truncation of `MPS.Tensor.VaryingBond`,
 and instantiates the uniform area-law premise with `PEPS.AreaLaw.AreaLawTheorem`.

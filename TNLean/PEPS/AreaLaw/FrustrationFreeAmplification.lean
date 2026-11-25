@@ -48,7 +48,7 @@ comparison of the general proof give `eq:far`.
 
 open Matrix
 open ManyBody (PlaneInteraction Config edgeBoundary graphNeighborhood ambientDilation
-  mem_ambientDilation_iff planeDomainGraph)
+  mem_ambientDilation_iff planeDomainGraph supDist)
 open scoped InnerProductSpace Kronecker Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.AreaLaw.FrustrationFree
@@ -232,7 +232,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
-                    (Scan.ambientSupDistance t z : ℝ)) →
+                    ((supDist t z : ℤ) : ℝ)) →
                 graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A) := by

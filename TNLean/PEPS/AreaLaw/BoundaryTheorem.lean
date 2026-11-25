@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -57,7 +57,9 @@ open scoped Matrix.Norms.L2Operator
 
 open scoped BigOperators
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction abs_ambientDepth_sub_le_walk_length
+  ambientDepth ambientDepth_le_iff_mem_ambientDilation supDist
+  supDist_le_one_of_planeDomainGraph_adj exists_mem_ambientDepth_eq supDist_comm)
 
 open ManyBody (planeDomainGraph edgeBoundary graphNeighborhood ambientDilation)
 
@@ -109,7 +111,7 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
-                    (Scan.ambientSupDistance t z : ℝ)) →
+                    ((supDist t z : ℤ) : ℝ)) →
                 graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A)
@@ -153,7 +155,7 @@ def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : 
             ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                 (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                     (n : ℝ) ^ (Exponents.beta : ℝ) <
-                  (Scan.ambientSupDistance t z : ℝ)) →
+                  ((supDist t z : ℤ) : ℝ)) →
               graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A)
@@ -170,20 +172,20 @@ theorem amplificationBound_iff_forall_exists_amplificationBoundAt {q R : ℕ} {J
 /-- A graph neighborhood of the part of an ambient collar inside a domain stays
 within the enlarged ambient collar: every graph step moves by at most one in
 sup-norm. Source: proof of Theorem 1.1, `10-geometry.tex` lines 830–832. -/
-theorem exists_ambientSupDistance_le_of_mem_graphNeighborhood
+theorem exists_supDist_le_of_mem_graphNeighborhood
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) {S : Finset ↥Λ} {L k : ℕ}
     (hS : ∀ x ∈ S, x.val ∈ ambientDilation T L) {y : ↥Λ}
     (hy : y ∈ graphNeighborhood (planeDomainGraph Λ) S k) :
-    ∃ t ∈ T, Scan.ambientSupDistance t y.val ≤ L + k := by
+    ∃ t ∈ T, (supDist t y.val : ℤ) ≤ L + k := by
   classical
   obtain ⟨x, hx, p, hp⟩ := ManyBody.mem_graphNeighborhood_iff_exists_walk.mp hy
-  have hxd := (Scan.ambientDepth_le_iff_mem_dilation T hT x.val L).mpr (hS x hx)
-  have hvar := Scan.abs_ambientDepth_sub_le_walk_length T hT Subtype.val
-    (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_planeDomainGraph_adj) p
-  obtain ⟨t, ht, hmin⟩ := T.exists_mem_eq_inf' hT (Scan.ambientSupDistance y.val)
+  have hxd := (ambientDepth_le_iff_mem_ambientDilation T hT x.val L).mpr (hS x hx)
+  have hvar := abs_ambientDepth_sub_le_walk_length T hT Subtype.val
+    (fun _ _ ↦ supDist_le_one_of_planeDomainGraph_adj) p
+  obtain ⟨t, ht, hmin⟩ := exists_mem_ambientDepth_eq T hT y.val
   refine ⟨t, ht, ?_⟩
-  have hdepth : Scan.ambientDepth T hT y.val = Scan.ambientSupDistance t y.val := by
-    simp only [Scan.ambientDepth, hmin, Scan.ambientSupDistance, abs_sub_comm]
+  have hdepth : ambientDepth T hT y.val = (supDist t y.val : ℤ) := by
+    rw [hmin, supDist_comm]
   rw [abs_le] at hvar
   have hp' : (p.length : ℤ) ≤ k := by exact_mod_cast hp
   omega
@@ -276,7 +278,7 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_at
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
-                    (Scan.ambientSupDistance t z : ℝ)) →
+                    ((supDist t z : ℤ) : ℝ)) →
                 graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A))
@@ -290,9 +292,9 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_at
           (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
           (∀ i, uniformAreaLawScale N₁ N₂ C₂ ≤ n i) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ)) ∧
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t z : ℤ) : ℝ)) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
-            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t x.val : ℤ) : ℝ)) ∧
           ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C₃ * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ManyBody.regionEntropy Ω A ≤
       uniformAreaLawConstantOf q C₂ C₃ * (edgeBoundary (planeDomainGraph Λ) A).card := by
@@ -345,9 +347,9 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_at
       rw [Finset.disjoint_union_left]
       refine ⟨disjoint_compl_left.mono_right hA, Finset.disjoint_left.mpr ?_⟩
       intro y hy hyN
-      obtain ⟨t, ht, hty⟩ := exists_ambientSupDistance_le_of_mem_graphNeighborhood
+      obtain ⟨t, ht, hty⟩ := exists_supDist_le_of_mem_graphNeighborhood
         (T i).nonempty (fun x hx ↦ (Finset.mem_filter.mp hx).2) hyN
-      have hty' : (Scan.ambientSupDistance t y.val : ℝ) ≤
+      have hty' : ((supDist t y.val : ℤ) : ℝ) ≤
           (⌊(n i : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) + 2 * r := by
         exact_mod_cast hty
       linarith only [hord i t ht y hy, hty', hsmall, hβ]
@@ -435,7 +437,7 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
-                    (Scan.ambientSupDistance t z : ℝ)) →
+                    ((supDist t z : ℤ) : ℝ)) →
                 graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A))
@@ -450,9 +452,9 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
           (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
           (∀ i, uniformAreaLawScale N₁ N₂ C₂ ≤ n i) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ)) ∧
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t z : ℤ) : ℝ)) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
-            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t x.val : ℤ) : ℝ)) ∧
           ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C₃ * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),

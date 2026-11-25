@@ -43,7 +43,7 @@ noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth supDist)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -94,7 +94,7 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-            ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+            ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
           (∀ j : ℕ, j ≤ F.L S.n →
             ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
@@ -355,7 +355,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFami
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-            ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+            ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
           (∀ j : ℕ, j ≤ F.L S.n →
             ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
@@ -500,7 +500,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-            ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+            ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
           (∀ j : ℕ, j ≤ F.L S.n →
             ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
@@ -641,7 +641,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-            ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+            ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
           (∀ j : ℕ, j ≤ F.L S.n →
             ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
