@@ -12,9 +12,7 @@ All coordinate bases in this section are finite orthonormal bases.
     \lean{QuantumCircuit.Party.affectedSideReadout,
         QuantumCircuit.Party.exteriorSideReadout}
     \leanok
-    \uses{def:peps_party_partition,
-        def:peps_basis_partition_bases,
-        def:peps_basis_partition_output_coordinates}
+    \uses{def:peps_party_partition}
     Write the output register list as a physical register list followed by a
     discarded register list, and partition each list into affected and exterior
     party registers. Choose orthonormal bases $(a_x)$ and $(e_y)$ of the
@@ -29,55 +27,12 @@ All coordinate bases in this section are finite orthonormal bases.
     output isometry is defined analogously.
 \end{definition}
 
-\begin{lemma}[Regrouping physical and discarded coordinates]
-    \label{thm:peps_partition_output_coordinates}
-    \uses{def:peps_partition_output_bases,
-        thm:peps_basis_memory_equalities,
-        thm:peps_basis_partition_coordinates,
-        thm:peps_basis_partition_output_coordinates}
-    For every output vector $z$, its coordinate at $((x,y),(i,j))$ in
-    physical/discarded order equals its coordinate at $((x,i),(y,j))$ after
-    the affected/exterior partition. The affected and exterior output
-    isometries preserve the coordinate pairs $(x,i)$ and $(y,j)$, respectively.
-    For $v\in\C^X\otimes D$, taking the partial inner product with $e_x$
-    followed by the $d_i$-coordinate recovers the $(x,i)$-coordinate of $v$.
-\end{lemma}
-
-\begin{proof}
-    \uses{def:peps_partition_output_bases}
-    The register permutation maps $(a_x\otimes e_y)\otimes(d_i\otimes f_j)$ to
-    $(a_x\otimes d_i)\otimes(e_y\otimes f_j)$. Since this map is unitary,
-    taking inner products with $z$ gives the coordinate equality, and
-    linearity extends the partial-inner-product identity from elementary
-    tensors to all $v\in\C^X\otimes D$.
-\end{proof}
-
-\begin{lemma}[Output coordinates under owner relabelling]
-    \label{thm:peps_owner_output_coordinates}
-    \uses{thm:peps_partition_output_coordinates,
-        thm:peps_basis_owner_coordinates}
-    Under any owner relabelling (or composition of two owner relabellings),
-    mapping the physical and discarded bases by the induced memory
-    isometries preserves every physical/discarded coordinate of an output
-    vector. Partitioning into affected and exterior registers after the two
-    relabellings therefore gives the coordinates $((x,i),(y,j))$ described
-    above.
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:peps_partition_output_coordinates}
-    Owner relabelling leaves the underlying register spaces unchanged and
-    commutes with list concatenation, so its memory isometry preserves inner
-    products with the mapped basis vectors. Applying this twice and then
-    applying the partition coordinate identity gives the claim.
-\end{proof}
-
 \begin{lemma}[Coordinates of a local Schmidt expansion]
     \label{thm:peps_local_schmidt_output_coordinates}
     \lean{QuantumCircuit.Party.Word.kronecker_mulVec_eq_separatedPhysicalCoordinates}
     \lean{QuantumCircuit.Party.Word.kronecker_mulVec_eq_separatedPhysicalCoordinates}
     \leanok
-    \uses{thm:peps_owner_output_coordinates}
+    \uses{def:peps_partition_output_bases}
     Let $V,W$ be the two local output maps, let $F,G$ be input isometries, and
     suppose that the affected/exterior partition of an output vector $z_k$ is
     \begin{align}
@@ -99,14 +54,15 @@ All coordinate bases in this section are finite orthonormal bases.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_partition_output_coordinates,thm:peps_owner_output_coordinates}
-    Substitute (\ref{eq:peps_local_schmidt_output_vector}) into the partition
-    coordinate identity. By linearity and the factorization of the inner
+    \uses{def:peps_partition_output_bases}
+    Substitute (\ref{eq:peps_local_schmidt_output_vector}) into the coordinates
+    of Definition~\ref{def:peps_partition_output_bases}, in which the
+    coordinate at $((x,y),(i,j))$ is the coordinate at $((x,i),(y,j))$. By linearity and the factorization of the inner
     product on tensor products, the $((x,i),(y,j))$ coordinate of each summand
     is the product of its $(x,i)$ and $(y,j)$ coordinates, which equal
     $\langle d_i,C_{x,V}F e_{(k,t)}\rangle$ and
-    $\langle f_j,C_{y,W}G e_t\rangle$. Mapping the bases across the two
-    owner relabellings gives the final claim.
+    $\langle f_j,C_{y,W}G e_t\rangle$. Owner relabellings leave the
+    register spaces and the coordinates unchanged, which gives the final claim.
 \end{proof}
 
 \begin{lemma}[Original physical dimensions after the two owner maps]
@@ -115,7 +71,6 @@ All coordinate bases in this section are finite orthonormal bases.
         QuantumCircuit.Party.exteriorSideEquiv}
     \lean{QuantumCircuit.Party.card_affectedSides_true}
     \leanok
-    \uses{def:peps_basis_owner_restriction}
     Let the parties be listed without repetition, with physical space
     $\C^{d_p}$ at party $p$. For an affected subset $A$ of parties, relabel
     the parties in $A$ individually, collapse all parties outside $A$ to a

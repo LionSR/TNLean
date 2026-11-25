@@ -71,7 +71,6 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
         TNLean.PEPS.EncodedFrame.emptyBlock_braAt,
         TNLean.PEPS.EncodedFrame.emptyBlock_op}
     \leanok
-    \uses{lem:peps_grouped_monomial_placement}
     A rank-one block $b=(T,E,v,w)$ consists of disjoint sets $T,E\subseteq\Lambda$, with
     $U=\Lambda\setminus(T\cup E)$, and vectors $v,w\in\C^{[q]^T\times[q]^U}$. Its operator $\mathrm{op}(b)=(\ket v\bra w)_{T\cup U}\otimes\id_E$ has matrix entries
     \begin{align}
@@ -113,8 +112,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
         TNLean.PEPS.EncodedFrame.exists_monomial_listProd,
         TNLean.PEPS.EncodedFrame.exists_zeroChain}
     \leanok
-    \uses{lem:peps_rank_one_chain,def:peps_rank_one_block,
-        lem:peps_grouped_monomial_placement}
+    \uses{lem:peps_rank_one_chain,def:peps_rank_one_block}
     Let $b=(T,E,v,w)$ be a rank-one block with unit vectors $v,w$, where the site registers
     of $T$ have owner $p_A$ before and $p_A'$ after, those of $U$ have $p_B$
     and $p_B'$, and those of $E$ keep their owner. Then
@@ -133,9 +131,8 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 \end{lemma}
 
 \begin{proof}\leanok
-    Grouping the site registers of $T$ and $U$, applying
-    Lemma~\ref{lem:peps_rank_one_chain}, and ungrouping via
-    Lemma~\ref{lem:peps_grouped_monomial_placement} proves the main claim; item~1 follows by partitioning $O=T\cup U$ by owner and setting $E=\Lambda\setminus O$, item~2 by contracting with $\bra0$ at the old owner and preparing $\ket0$ at the new owner at each $x_i$, and item~3 by Lemma~\ref{lem:peps_rank_one_chain}.
+    Applying Lemma~\ref{lem:peps_rank_one_chain} on the sites of $T$ and $U$, read in the
+    configurations of the frame registers, proves the main claim; item~1 follows by partitioning $O=T\cup U$ by owner and setting $E=\Lambda\setminus O$, item~2 by contracting with $\bra0$ at the old owner and preparing $\ket0$ at the new owner at each $x_i$, and item~3 by Lemma~\ref{lem:peps_rank_one_chain}.
 \end{proof}
 
 \begin{lemma}[A product term as a product of blocks]

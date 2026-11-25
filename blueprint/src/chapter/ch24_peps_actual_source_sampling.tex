@@ -7,35 +7,17 @@ This section completes the Gaussian sampling estimate for a source-only circuit 
 The circuit retains its source occurrences, local branch labels, physical registers,
 and discarded registers; its tensor-network representation is proved separately.
 
-\begin{lemma}[Finite-dimensional spaces of discarded registers]
-    \label{thm:peps_finite_register_memories}
-    For any finite ordered list $R$ of registers with finite-dimensional complex
-    Hilbert spaces, $\mathcal H_R$ is finite-dimensional, and remains so after
-    relabelling register parties twice and restricting to either side of any
-    party partition.
-\end{lemma}
-\begin{proof}
-    Induction on $R$ shows $\dim\mathcal H_R<\infty$; party relabelling preserves
-    each register's Hilbert space, and restriction selects a sublist of $R$.
-\end{proof}
-
-\begin{definition}[Orthonormal coordinates of selected discarded registers]
-    \label{def:peps_restricted_discard_basis}
-    \uses{thm:peps_finite_register_memories}
-    Under Lemma~\ref{thm:peps_finite_register_memories}, choose a finite
-    orthonormal basis of the restricted discarded space indexed by
-    $\{0,\ldots,d-1\}$, where $d$ is its dimension.
-\end{definition}
-
 \begin{definition}[Exterior physical coordinates]
     \label{def:peps_exterior_family_physical_basis}
+    \lean{QuantumCircuit.Party.exteriorSideEquiv}
+    \leanok
     \uses{def:peps_family_physical_output,thm:peps_affected_original_dimensions}
-    For a finite party set $P$ listed without repetition with physical
-    dimensions $d_p$ and $A\subseteq P$, mapping the product physical basis
-    outside $A$ (indexed by $\prod_{p\notin A}\{0,\ldots,d_p-1\}$) through the
-    party identifications of Definition~\ref{def:peps_family_physical_output}
-    and Lemma~\ref{thm:peps_affected_original_dimensions} gives an orthonormal
-    basis of the exterior physical space.
+    For a finite party set $P$ with physical dimensions $d_p$ and $A\subseteq P$,
+    the party identifications of Definition~\ref{def:peps_family_physical_output}
+    and Lemma~\ref{thm:peps_affected_original_dimensions} identify the
+    configurations of the exterior physical side with
+    $\prod_{p\notin A}\{0,\ldots,d_p-1\}$; the corresponding standard basis
+    vectors form an orthonormal basis of the exterior physical space.
 \end{definition}
 
 \begin{lemma}[Exterior physical dimension]
@@ -149,9 +131,9 @@ and discarded registers; its tensor-network representation is proved separately.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_actual_corrected_source_bound,thm:peps_actual_source_lifetime_cost,thm:peps_affected_original_dimensions,def:peps_exterior_family_physical_basis,def:peps_restricted_discard_basis}
-    Using the bases of Definitions~\ref{def:peps_restricted_discard_basis}
-    and~\ref{def:peps_exterior_family_physical_basis},
+    \uses{thm:peps_actual_corrected_source_bound,thm:peps_actual_source_lifetime_cost,thm:peps_affected_original_dimensions,def:peps_exterior_family_physical_basis}
+    Using the configuration bases of the discarded registers and the
+    exterior coordinates of Definition~\ref{def:peps_exterior_family_physical_basis},
     Lemma~\ref{thm:peps_affected_original_dimensions} gives
     $|X|^2=\prod_{p\in A(S)}d_p^2$, and combining
     (\ref{eq:peps_actual_corrected_bound}) with
@@ -340,7 +322,7 @@ and discarded registers; its tensor-network representation is proved separately.
     \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum}
     \leanok
     \uses{thm:peps_actual_pure_physical_source_replacement,
-        thm:peps_actual_source_column_physical_trace,thm:peps_actual_sampled_physical_scalar,
+        thm:peps_actual_sampled_physical_scalar,
         def:peps_selected_physical_private_basis}
     For product input $\psi$, product physical basis of dimensions $d_p$,
     grouped local physical-and-private bases
@@ -365,11 +347,9 @@ and discarded registers; its tensor-network representation is proved separately.
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_pure_physical_source_replacement,
-        thm:peps_actual_source_column_physical_trace,thm:peps_actual_sampled_physical_scalar}
+        thm:peps_actual_sampled_physical_scalar}
     Expand $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ over $\xi,\zeta$ by
-    Lemma~\ref{thm:peps_actual_pure_physical_source_replacement}, pass to the
-    party-grouped private basis via
-    Lemma~\ref{thm:peps_actual_source_column_physical_trace}, and factor each
+    Lemma~\ref{thm:peps_actual_pure_physical_source_replacement} and factor each
     $(\xi,\zeta)$ term by Lemma~\ref{thm:peps_actual_sampled_physical_scalar}
     to obtain (\ref{eq:peps_actual_pure_sampled_physical_sum}).
 \end{proof}

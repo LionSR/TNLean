@@ -83,9 +83,9 @@ the empty sublist $R_W|_{\{*\}}=\varnothing$ has exterior memory $\C$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_actual_source_input_basis,def:peps_actual_source_column_matrix,thm:peps_basis_final_scalar}
+    \uses{def:peps_actual_source_input_basis,def:peps_actual_source_column_matrix}
     By Definition~\ref{def:peps_actual_source_input_basis} and
-    Lemma~\ref{thm:peps_basis_final_scalar},
+    the identification of the terminal factor $\C$,
     $b_x^+=J_{R_W,\varnothing}^{-1}(b_x\otimes1)$, which substituted into
     $\langle\beta_j,T_\xi b_x^+\rangle$ gives~(\ref{eq:peps_actual_source_columns}).
 \end{proof}
@@ -183,11 +183,11 @@ the empty sublist $R_W|_{\{*\}}=\varnothing$ has exterior memory $\C$.
 
 \begin{proof}\leanok
     \uses{def:peps_partial_source_choices,thm:peps_empty_party_gate_scalar,
-        thm:peps_excluded_mapped_owners,thm:peps_party_restriction}
+        thm:peps_party_restriction}
     By Definition~\ref{def:peps_partial_source_choices}, the residual of $G$ is
     $\Lambda_*(\widetilde G;\tau^f)$ with $\widetilde G=UGU^{-1}$ on $\C$ and
-    relabelled spectators $\tau^f$ owned by $P$. Since
-    $\tau^f|_{\{*\}}=\varnothing$ by Lemma~\ref{thm:peps_excluded_mapped_owners}
+    relabelled spectators $\tau^f$ owned by $P$. Since $*\notin P$, we have
+    $\tau^f|_{\{*\}}=\varnothing$,
     and $G=(\sum_{i\in I}c_i)\operatorname{id}_{\mathbb C}$ by
     Lemma~\ref{thm:peps_empty_party_gate_scalar},
     Lemma~\ref{thm:peps_party_restriction} gives
@@ -281,11 +281,10 @@ the empty sublist $R_W|_{\{*\}}=\varnothing$ has exterior memory $\C$.
     \label{def:peps_actual_party_source_matrices}
     \lean{QuantumCircuit.Party.PartyCircuit.partyOp}
     \leanok
-    \uses{def:peps_actual_source_input_basis,def:peps_actual_private_preparation,
-        def:peps_party_grouped_basis}
+    \uses{def:peps_actual_source_input_basis,def:peps_actual_private_preparation}
     For finite $P$ and $Q=P\sqcup\{*\}$ ordered without repetition, choose
     orthonormal input and output bases $B_q,C_q$ at each $q\in Q$, with grouped
-    bases $B,C$ (Definition~\ref{def:peps_party_grouped_basis}), and let $E$ be
+    product bases $B,C$, and let $E$ be
     the source input basis $(b_x^+)_{x\in I_W}$. For the prepared word
     $\widetilde W_\xi=T_\xi$, define the basis-change matrix $R$ and party
     matrices $A_{\xi,q}$ by
@@ -311,12 +310,11 @@ the empty sublist $R_W|_{\{*\}}=\varnothing$ has exterior memory $\C$.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_actual_source_column_coordinates,thm:peps_actual_party_word_entries,
+    \uses{thm:peps_actual_source_column_coordinates,thm:peps_actual_party_word_entries,
         def:peps_actual_party_source_matrices}
     By Lemma~\ref{thm:peps_actual_party_word_entries},
     $[\widetilde W_\xi]_{B,C}=\bigotimes_{q\in Q}A_{\xi,q}$. Composing with
     $R=[\operatorname{id}]_{E,B}$ via
-    Lemma~\ref{thm:peps_matrix_orthonormal_coordinates} and
     Lemma~\ref{thm:peps_actual_source_column_coordinates} gives
     \begin{align}
         D_\xi=[\widetilde W_\xi]_{E,C}
@@ -343,9 +341,9 @@ the empty sublist $R_W|_{\{*\}}=\varnothing$ has exterior memory $\C$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_actual_source_column_coordinates,
+    \uses{thm:peps_actual_source_column_coordinates,
         thm:peps_actual_party_mixed_matrix,def:peps_actual_party_source_matrices}
-    By Lemma~\ref{thm:peps_matrix_orthonormal_coordinates} and
+    By
     Lemma~\ref{thm:peps_actual_source_column_coordinates},
     $D_\xi[U]_E D_\zeta^\dagger=[\widetilde W_\xi]_{B,C}[U]_{B,B}[\widetilde W_\zeta]_{B,C}^\dagger$,
     which factors into~(\ref{eq:peps_actual_source_mixed}) by
@@ -429,11 +427,11 @@ the empty sublist $R_W|_{\{*\}}=\varnothing$ has exterior memory $\C$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_endpoint_matrix_average,def:peps_actual_sampled_endpoint_word,
+    \uses{thm:peps_endpoint_matrix_average,def:peps_actual_sampled_endpoint_word,
         def:peps_original_sampled_endpoint_factors,def:peps_actual_source_input_basis}
     Applying Lemma~\ref{thm:peps_endpoint_matrix_average} along $\sigma$ and
-    transporting the matrix representation to $E$ via
-    Lemma~\ref{thm:peps_matrix_orthonormal_coordinates} yields~(\ref{eq:peps_actual_sampled_average}).
+    reading the matrices in the source input basis $E$
+    yields~(\ref{eq:peps_actual_sampled_average}).
 \end{proof}
 
 \begin{lemma}[Sampled contraction before the physical trace]
@@ -533,42 +531,6 @@ the empty sublist $R_W|_{\{*\}}=\varnothing$ has exterior memory $\C$.
 \end{proof}
 
 
-\begin{lemma}[Physical traces of mixed source-column matrices]
-    \label{thm:peps_actual_source_column_physical_trace}
-    \uses{thm:peps_selected_physical_private_trace,thm:peps_actual_source_column_coordinates}
-    For any source-coordinate matrix $X$, monomial choices $\xi,\zeta$, prepared
-    column matrices $D_\xi,D_\zeta$ in the party-grouped physical and private
-    bases $E_q$, and matrices $D_\xi^{\mathrm{ref}},D_\zeta^{\mathrm{ref}}$ in
-    the physical basis tensored with any finite orthonormal basis of $G$, the
-    coordinate bijection $\chi$ separating physical and private indices gives
-    the partial-trace identity of \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}:
-    \begin{align}
-        \operatorname{tr}_{\prod_qE_q}
-        \left((D_\xi X D_\zeta^\dagger)^\chi\right)
-         & =\operatorname{tr}_{G}
-        \left(D_\xi^{\mathrm{ref}}X
-        (D_\zeta^{\mathrm{ref}})^\dagger\right).
-        \label{eq:peps_actual_source_column_physical_trace}
-    \end{align}
-    % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:peps_selected_physical_private_trace,thm:peps_actual_source_column_coordinates}
-    Expanding $X=\sum_{s,t}X_{s,t}e_se_t^\dagger$ gives
-    $D_\xi XD_\zeta^\dagger=\sum_{s,t}X_{s,t}(D_\xi e_s)(D_\zeta e_t)^\dagger$.
-    By Lemma~\ref{thm:peps_selected_physical_private_trace} and
-    Lemma~\ref{thm:peps_actual_source_column_coordinates}, each $(s,t)$ term
-    satisfies
-    \begin{align}
-        \operatorname{tr}_{\prod_qE_q}
-        \left(\left((D_\xi e_s)(D_\zeta e_t)^\dagger\right)^\chi\right)
-         & =\operatorname{tr}_{G}
-        \left((D_\xi^{\mathrm{ref}}e_s)(D_\zeta^{\mathrm{ref}}e_t)^\dagger\right),\notag
-    \end{align}
-    and linearity yields~(\ref{eq:peps_actual_source_column_physical_trace}).
-\end{proof}
-
 \begin{lemma}[Local output traces of the sampled contraction]
     \label{thm:peps_actual_sampled_local_output_trace}
     \lean{QuantumCircuit.Party.SourceCircuit.partialTraceRight_mixed_endpointAverage}
@@ -596,45 +558,11 @@ the empty sublist $R_W|_{\{*\}}=\varnothing$ has exterior memory $\C$.
     Lemma~\ref{thm:peps_party_product_partial_trace}.
 \end{proof}
 
-\begin{definition}[Mixed physical trace of restricted words]
-    \label{def:peps_restricted_mixed_physical_trace}
-    \uses{thm:peps_party_restriction,def:peps_actual_party_source_matrices}
-    For a party selection $S$, source-free words $u,t:a\to b$ and $v:a\to a$,
-    finite orthonormal input basis $B$, and output basis $C$ indexed by
-    $H\times E$ (physical $H$, private $E$), let $A_u=[u|_S]_{B,C}$,
-    $A_t=[t|_S]_{B,C}$, and $U_v=[v|_S]_{B,B}$. As in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, define
-    \begin{align}
-        \Phi_S(u,t,v;B,C)
-         & =\operatorname{tr}_{E}(A_uU_vA_t^\dagger).
-        \label{eq:peps_restricted_mixed_physical_trace}
-    \end{align}
-    % Source: 04-compression.tex, lines 574--579.
-\end{definition}
-
-\begin{definition}[The local physical factor]
-    \label{def:peps_actual_sampled_physical_factor}
-    \uses{def:peps_restricted_mixed_physical_trace,
-        def:peps_selected_physical_private_basis,
-        def:peps_actual_party_source_matrices,def:peps_actual_sampled_endpoint_word}
-    For monomial choices $\xi,\zeta$, sample assignment $j$, and owner $q\in Q$,
-    define the local physical factor
-    \begin{align}
-        \Phi_q^{\xi,\zeta}(j)
-         & =\operatorname{tr}_{\mathrm{private},q}
-        \bigl(A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^{\dagger}\bigr),
-        \label{eq:peps_actual_sampled_physical_factor}
-    \end{align}
-    indexed by $\{0,\ldots,d_p-1\}$ at $p\in P$ and by a singleton at $*$.
-    % Source: 04-compression.tex, lines 574--579.
-\end{definition}
-
 \begin{lemma}[Sampled factors on the original physical parties]
     \label{thm:peps_actual_sampled_physical_factors}
     \lean{QuantumCircuit.Party.SourceCircuit.partialTraceRight_mixed_sampledSourceMatrix}
     \leanok
     \uses{thm:peps_actual_sampled_local_output_trace,
-        def:peps_actual_sampled_physical_factor,
         def:peps_selected_physical_private_basis,thm:peps_selected_physical_product_scalar}
     Let $\chi$ separate retained physical and discarded private coordinates and
     $\eta$ identify the retained coordinates with

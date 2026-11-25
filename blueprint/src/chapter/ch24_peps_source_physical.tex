@@ -75,21 +75,17 @@ traces are used.
     $|\langle t,Os\rangle|\leq\|C_{y,W}t\|\,\|C_{x,V}s\|\leq\|t\|\,\|s\|$.
 \end{proof}
 
-\begin{definition}[Joint physical and discarded output coordinates]
-    \label{def:peps_physical_output_matrix}
-    \uses{def:peps_physical_component}
-    In a finite orthonormal basis of $D$, let $K_V$ be the matrix of $JV$ in the
-    product output basis on $\C^X\otimes D$ and the chosen input basis on $H$.
-\end{definition}
-
 \begin{lemma}[Partial trace and exterior contraction]
     \label{thm:peps_exterior_contraction}
     \lean{QuantumCircuit.Party.Word.partialTraceRight_mul_op_mul_conjTranspose_apply}
     \lean{QuantumCircuit.Party.Word.norm_mul_op_mul_le_one}
     \lean{QuantumCircuit.Party.Word.rectangularTraceNorm_partialTraceRight_mul_op_le}
     \leanok
-    \uses{def:peps_physical_output_matrix,def:peps_physical_gram}
-    For any rectangular matrix $\rho:H'\to H$,
+    \uses{def:peps_physical_component,def:peps_physical_gram}
+    In a finite orthonormal basis of $D$, let $K_V$ be the matrix of $JV$ in
+    the product output basis on $\C^X\otimes D$ and the chosen input basis on
+    $H$, and define $K_W$ in the same way. For any rectangular matrix
+    $\rho:H'\to H$,
     \begin{align}
         \bigl[\operatorname{tr}_{D}(K_V\rho K_W^\dagger)\bigr]_{xy}
          & =\sum_{i,j}\rho_{ij}O_{ji}.
@@ -551,12 +547,6 @@ traces are used.
     operation factors across the $\mathcal A_S$ partition into allowed
     source-free words $C$ and $D$.
 \end{proof}
-
-% The concatenation/partition-commutation pair repeats the coordinate
-% development verbatim. Retain its canonical coordinate-chapter home
-% (Definition~\ref{def:peps_basis_partition_join} and
-% Lemma~\ref{thm:peps_basis_partition_concat}) and cite that entry rather
-% than duplicate its declaration tags here.
 
 \begin{definition}[An explicit positive sample count]
     \label{def:peps_source_sample_count}

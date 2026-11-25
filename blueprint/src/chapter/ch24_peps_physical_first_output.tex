@@ -24,87 +24,13 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Preservation of gate and source occurrences]
-    \label{thm:peps_physical_first_occurrences}
-    \uses{def:peps_physical_first_replacement}
-    Appending $\tau$ preserves the gate occurrences, source occurrences,
-    participating sets, branch-label types, branch coefficients, endpoint spaces and source
-    vectors of $R$. It preserves source order, each party's total number
-    of participating occurrences, and the bounds on monomial counts and
-    coefficient sums.
-\end{lemma}
-
-\begin{proof}
-    The exchange consists only of permutations of register order and
-    introduces no gate or source occurrence. Including each occurrence of
-    $R$ into the first part of the composition leaves the defining data at
-    these occurrences unchanged, while the second part contributes
-    empty occurrence sets. The gate and source cardinalities are therefore unchanged,
-    and allowedness is equivalent before and after the exchange.
-    Formula~(\ref{eq:peps_physical_first_exchange}) extends by linearity
-    to the full operator identity.
-\end{proof}
-
-\begin{lemma}[Finite-dimensional discarded registers]
-    \label{thm:peps_auxiliary_register_finiteness}
-    \uses{thm:peps_circuit_effect_error}
-    Every auxiliary register constructed by the source replacement is
-    finite-dimensional. If every original discarded private register is
-    finite-dimensional, the same holds for every register of
-    $\mathcal A\otimes\mathcal E$ and for their tensor product.
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:peps_finite_register_memories}
-    A prepared pair stack consists of finitely many finite-dimensional
-    Euclidean registers. Induction on the stack length, on the monomial,
-    on the gate expansion, and on the original chronology proves the
-    assertion for each auxiliary register. Changing an owner leaves the
-    register space unchanged, and concatenation preserves this assertion.
-    Finally, a finite tensor product of finite-dimensional spaces is
-    finite-dimensional.
-\end{proof}
-
-\begin{lemma}[Physical partial trace after the exchange]
-    \label{thm:peps_physical_first_trace}
-    \uses{def:peps_physical_first_replacement}
-    Choose orthonormal coordinates indexed by $U$, $X$ and $V$ on
-    $\mathcal A$, $\mathcal H$ and $\mathcal E$, respectively. For
-    $z\in\mathcal A\otimes(\mathcal H\otimes\mathcal E)$, let
-    $z_{i,(k,j)}$ denote its coordinates when the physical coordinate
-    precedes the private and auxiliary coordinates. The coordinates of
-    $\tau z$ are $(\tau z)_{i,(j,k)}=z_{i,(k,j)}$. Consequently,
-    \begin{align}
-        \operatorname{Tr}_{\mathcal A\otimes\mathcal E}
-        |\tau z\rangle\langle\tau z|
-        =\operatorname{Tr}_{\mathcal E\otimes\mathcal A}
-        |z\rangle\langle z|.
-        \label{eq:peps_physical_first_trace}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \lean{QuantumCircuit.Party.SourceCircuit.physicalDensity_pure_input}
-    \leanok
-    Formula~(\ref{eq:peps_physical_first_exchange}) gives the coordinate
-    identity on pure tensors. Tensor-product induction extends it to
-    arbitrary vectors. Their outer-product matrices are related by the
-    simultaneous reindexing $(i,(j,k))\mapsto(i,(k,j))$. Reindexing the
-    traced coordinate by the bijection $U\times V\to V\times U$
-    preserves the partial trace. The physical-first coordinate isometry uses the
-    tensor product of the physical basis and the auxiliary--private basis.
-    Evaluation of a pure input has density equal to the outer product of its
-    evaluated vector in these coordinates. Applying this to the output vector of
-    the composed circuit proves the final assertion.
-\end{proof}
-
 \begin{lemma}[Exact sources recover the replacement physical state]
     \label{thm:peps_physical_first_exact_sources}
     \lean{QuantumCircuit.Party.SourceCircuit.physicalDensity_pure_input}
     \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_exact}
     \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le}
     \leanok
-    \uses{thm:peps_physical_first_trace,thm:peps_source_only_density_error}
+    \uses{thm:peps_source_only_density_error}
     Let $W$ be an original circuit with at most $M$ nonprivate gates,
     satisfying the original expansion bounds. Set
     $\delta=\varepsilon/(8\max\{1,M\})$ for $\varepsilon>0$, and
@@ -120,8 +46,9 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 
 \begin{proof}\leanok
     Exact source operators recover the output operator of the source-only
-    circuit. Formula~(\ref{eq:peps_physical_first_trace}) identifies its
-    physical partial trace with $\rho_R$, and applying
+    circuit. The physical density of a pure input is the partial trace of the
+    outer product of its output vector, so the physical partial trace of
+    this operator is $\rho_R$, and applying
     Lemma~\ref{thm:peps_source_only_density_error} at the original
     gate-count bound $M$ gives the trace-norm bound.
 \end{proof}

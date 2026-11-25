@@ -437,28 +437,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     and the death monomial computes $K^\dagger(\bra s\otimes\id_{\mathcal B_E})(t\otimes Vu)=K^\dagger K(t\otimes u)$.
 \end{proof}
 
-\begin{lemma}[Homogeneous birth and death on grouped registers]
-    \label{thm:peps_frame_birth_bounded_grouped}
-    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
-        lem:peps_frame_birth_monomial_operators}
-    Under the hypotheses of Theorem~\ref{thm:peps_frame_birth}, on grouped
-    registers $\mathcal H_T,\mathcal H_U$ followed by arbitrary untouched
-    registers, the birth and death monomials of
-    Lemma~\ref{lem:peps_frame_birth_monomial_operators} are allowed monomials
-    using only $\{P_\circ,Q_\circ\}$ with operator $K^\dagger K\otimes\id$ (and
-    $B=\id_E\otimes K^\dagger K$ on $\mathcal H_\Lambda$), where $\mathcal H_U$
-    is owned by $P_\circ$ throughout and $\mathcal H_T$ changes between
-    $P_\circ$ and $Q_\circ$.
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:peps_frame_birth,lem:peps_frame_birth_monomial_operators,
-        lem:peps_frame_birth_partition_owners}
-    Combine Theorem~\ref{thm:peps_frame_birth},
-    Lemma~\ref{lem:peps_frame_birth_partition_owners}, and
-    Lemma~\ref{lem:peps_frame_birth_monomial_operators}.
-\end{proof}
-
 \begin{lemma}[Reorderings of site registers]
     \label{lem:lattice_register_reorderings}
     \lean{QuantumCircuit.Party.Word.isAllowed_frame,
@@ -526,29 +504,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     commute.
 \end{proof}
 
-\begin{lemma}[Coordinates of ordered region registers]
-    \label{thm:peps_region_register_coordinates}
-    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates}
-    For a site list $\ell$, $T,E\subseteq\Lambda$, and $U=\Lambda\setminus(T\cup E)$,
-    filter $\ell$ into $\ell_T=\{x\in\ell:x\in T\}$ and $\ell_R=\{x\in\ell:x\notin T\}$,
-    and filter $\ell_R$ into $\ell_U=\{x\in\ell_R:x\in U\}$ and
-    $\ell_E=\{x\in\ell_R:x\notin U\}$. If $\ell$ lists $\Lambda$ without
-    repetition and $T\cap E=\varnothing$, then $\ell_T,\ell_R,\ell_U,\ell_E$
-    list $T,\Lambda\setminus T,U,E$ without repetition, and the grouping
-    isometries $G_T,G_U$ satisfy
-    \begin{align}
-        G_T\ket c_{\ell_T} & =\ket{c|_T},\notag \\
-        G_U\ket c_{\ell_U} & =\ket{c|_U}.
-        \label{eq:peps_region_grouping_basis}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \uses{lem:peps_register_reorderings,lem:peps_frame_registers_coordinates}
-    Follows from Lemma~\ref{lem:peps_register_reorderings} and the product-basis
-    coordinate identification of Lemma~\ref{lem:peps_frame_registers_coordinates}.
-\end{proof}
-
 \begin{lemma}[Reconstructing a configuration from its restrictions]
     \label{thm:peps_region_configuration}
     \lean{ManyBody.threeCutEquiv_symm_apply_of_mem,
@@ -574,29 +529,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     Since $\Lambda=T\sqcup E\sqcup U$, a configuration in $[q]^\Lambda$ is
     uniquely determined by its restrictions to $T$, $E$, and $U$.
-\end{proof}
-
-\begin{lemma}[Grouped monomials on the registers of a frame]
-    \label{lem:peps_grouped_monomial_placement}
-    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
-        lem:peps_register_reorderings,lem:peps_front_registers}
-    Let $T,E\subseteq\Lambda$ be disjoint and $U=\Lambda\setminus(T\cup E)$,
-    with $T$ and $U$ each held by a single party before and after a site-owner
-    change that fixes owners on $E$. Moving the site registers of $T$ and $U$ to
-    the front and grouping them via $G_T,G_U$ at their owners (and the inverse
-    ungrouping) are allowed effect-free words using only those owners and
-    $s=0$; conjugating a grouped operator $M\otimes\id$ by grouping and
-    ungrouping yields $\id_{\rm tags}\otimes(\id_E\otimes M)$ in the product
-    coordinates of Definition~\ref{def:peps_frame_registers}.
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration}
-    By~(\ref{eq:peps_region_grouping_basis}) and~(\ref{eq:peps_region_reconstruction}),
-    on a basis state $\ket c$, grouping extracts $\ket{c|_T}\otimes\ket{c|_U}$,
-    $M$ maps it to $\sum_{a,b}M_{(a,b),(c|_T,c|_U)}\ket a\otimes\ket b$, and
-    ungrouping reconstructs $\sum_{a,b}M_{(a,b),(c|_T,c|_U)}\ket{m(a,b;c)}
-        =(\id_E\otimes M)\ket c$.
 \end{proof}
 
 \begin{lemma}[A birth and a death behind front registers]
@@ -645,13 +577,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
-        thm:peps_frame_birth_bounded_grouped,lem:peps_grouped_monomial_placement,
-        thm:peps_monomial_composition_counts}
-    Compose the grouping word of Lemma~\ref{lem:peps_grouped_monomial_placement},
-    the grouped birth/death monomial of
-    Lemma~\ref{thm:peps_frame_birth_bounded_grouped}, and the ungrouping word
-    via Lemma~\ref{thm:peps_monomial_composition_counts}; the resulting
-    operator is $\id_{\rm tags}\otimes(\id_E\otimes K^\dagger K)=\id_{\rm tags}\otimes B$,
+        lem:lattice_front_births}
+    By Lemma~\ref{lem:peps_frame_birth_partition_owners}, the owners of the
+    frame satisfy the hypotheses of Lemma~\ref{lem:lattice_front_births}; apply
+    that lemma with the tag registers as the block of front registers. The
+    resulting operator is $\id_{\rm tags}\otimes(\id_E\otimes K^\dagger K)=\id_{\rm tags}\otimes B$,
     which satisfies~(\ref{eq:peps_frame_birth_bound}) by
     Theorem~\ref{thm:peps_frame_birth}.
 \end{proof}
@@ -1026,18 +956,25 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Exchange corrections as one private contraction]
     \label{lem:peps_frame_exchange_correction_monomial}
+    \lean{ManyBody.configBufferCorrection_mul_pairSwapOp_eq,
+        ManyBody.correctionMatrix,
+        ManyBody.norm_correctionMatrix_le_one,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.correctionWord,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.isAllowed_correctionWord,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.usesOnly_correctionWord}
+    \leanok
     \uses{def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,lem:peps_front_registers,
         def:peps_monomial_parties,lem:lattice_exchange_correction_matrix}
     In Definition~\ref{def:peps_frame_exchange_map},
     $D_UF_A=\id_{(T\cup E)^{\otimes 2}}\otimes W$, where
     $W=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}F_A$ acts on
-    $\mathcal H_U^{\otimes 2}$ with $\lVert W\rVert\le 1$. On two grouped
-    $\mathcal H_U$ registers held by $P_\circ$ followed by untouched registers,
-    $W\otimes\id$ is realized by a single allowed private contraction at
+    $\mathcal H_U^{\otimes 2}$ with $\lVert W\rVert\le 1$. On the registers of
+    the two frames, where both copies of $\mathcal H_U$ are held by $P_\circ$,
+    $\id\otimes W$ is realized by a single allowed private contraction at
     $P_\circ$ (\texttt{05-frames.tex}, lines 503--515).
 \end{lemma}
 
-\begin{proof}
+\begin{proof}\leanok
     Since $A\subseteq U$, both $F_A$ and $D_U$ act on $\mathcal H_U^{\otimes 2}$
     with norm $\le 1$, and Lemma~\ref{lem:peps_front_registers} realizes $W$ as
     a local contraction at $P_\circ$ (Lemma~\ref{lem:peps_frame_exchange_owners}).
@@ -1130,11 +1067,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration,
+    \uses{thm:peps_region_configuration,
         lem:peps_frame_registers_coordinates}
-    Apply~(\ref{eq:peps_region_grouping_basis}) of
-    Lemma~\ref{thm:peps_region_register_coordinates} on each copy of $U$ to
-    obtain~(\ref{eq:peps_two_region_basis}), and use $c_j^{u_j}|_U=u_j$
+    By Lemma~\ref{lem:peps_frame_registers_coordinates}, the product basis
+    vector on the $U$-site registers of each sheet is the basis vector of the
+    restriction $c_j|_U$, which gives~(\ref{eq:peps_two_region_basis}); use $c_j^{u_j}|_U=u_j$
     from~(\ref{eq:peps_region_reconstruction}) for~(\ref{eq:peps_two_region_inverse}).
 \end{proof}
 
@@ -1252,22 +1189,6 @@ three owners meet and no encoded holes are needed.
     $P_\circ$, $T=Z\cap Y$, $E=Z\setminus Y$ and $A=Y\setminus Z$, the
     implemented map is $C=D_UF_AF_Y$.
 \end{definition}
-
-\begin{lemma}[Sheets as encoded frames without holes]
-    \label{lem:peps_sheet_frame}
-    \uses{def:lattice_sheet,def:peps_frame_registers}
-    Placed in the plane, a sheet is the encoded frame without holes with the
-    same owners. Its registers are those of the frame, its product coordinates
-    are those of the frame without the trivial tag coordinate, and handing a set
-    of sites to another party commutes with the passage to frames. For $q\ge1$,
-    where the reference vector of an encoded frame is defined, the two
-    reference vectors agree.
-\end{lemma}
-
-\begin{proof}
-    With no holes the encoder is the identity, so the frame places $\Omega$ in
-    the site registers.
-\end{proof}
 
 \begin{lemma}[Birth and death of sheets: bounded change]
     \label{thm:lattice_sheet_birth_bounded}

@@ -31,27 +31,6 @@ owner identification for the affected and exterior systems in
     \end{align}
 \end{definition}
 
-\begin{lemma}[Compatibility with concatenation]
-    \label{thm:peps_owner_concatenation}
-    \uses{def:peps_owner_layout}
-    With $C_{\ell,m}:\mathcal H_{\ell m}\to\mathcal H_\ell\otimes\mathcal H_m$
-    the concatenation isometry and $(\ell m)^f=\ell^f m^f$, every
-    $x\in\mathcal H_\ell$ and $y\in\mathcal H_m$ satisfy
-    \begin{align}
-        R_{f,\ell m}C_{\ell,m}^{-1}(x\otimes y)
-         & =C_{\ell^f,m^f}^{-1}
-        (R_{f,\ell}x\otimes R_{f,m}y),
-        \label{eq:peps_owner_concatenation}
-    \end{align}
-    or equivalently $R_{f,\ell m}C_{\ell,m}^{-1}=C_{\ell^f,m^f}^{-1}(R_{f,\ell}\otimes R_{f,m})$.
-\end{lemma}
-
-\begin{proof}
-    Induction on $\ell$ using (\ref{eq:peps_owner_head}) gives
-    (\ref{eq:peps_owner_concatenation}) on elementary tensors, and linearity
-    gives the operator identity.
-\end{proof}
-
 \begin{definition}[Sources remaining between distinct owners]
     \label{def:peps_owner_sources}
     \lean{QuantumCircuit.Party.PairSource.mapOwner}
@@ -162,8 +141,8 @@ owner identification for the affected and exterior systems in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_owner_concatenation,thm:peps_internal_pair_preparation}
-    By induction on $F$, Lemma~\ref{thm:peps_owner_concatenation} intertwines
+    \uses{thm:peps_internal_pair_preparation}
+    By induction on $F$, conjugation by $R_{f,\cdot}$ intertwines
     local maps, Lemma~\ref{thm:peps_internal_pair_preparation} intertwines
     internal pair preparations, and surviving sources, exchanges, and untouched
     registers commute with $R_{f,\cdot}$, giving (\ref{eq:peps_owner_composition}),

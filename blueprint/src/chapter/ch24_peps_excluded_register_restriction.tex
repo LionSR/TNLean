@@ -1,17 +1,7 @@
 \subsection{Restrictions with excluded registers}
 
 For party label sets $P,Q$, an ordered finite register list $\ell$ (each register consisting of an owner and a complex inner product space) has right-associated tensor memory $\mathcal H_\ell$ with terminal factor $\C$ ($\mathcal H_\varnothing=\C$; Definition~\ref{def:peps_party_registers}).
-For a selection $s:Q\to\{0,1\}$ with $A=\{p\in Q:s(p)=1\}$ (Definition~\ref{def:peps_party_partition}) and an owner map $q:P\to Q$ (Definition~\ref{def:peps_owner_layout}), let $\ell|_A$ be the ordered sublist with owners in $A$ and $\ell^q$ the list obtained by relabeling owners via $q$.
-
-\begin{lemma}[An owner map with no selected image]
-    \label{thm:peps_excluded_mapped_owners}
-    \uses{def:peps_party_registers,def:peps_owner_layout,def:peps_party_partition}
-    If $q:P\to Q$ and $s:Q\to\{0,1\}$ satisfy $s(q(p))=0$ for all $p\in P$, then $(\ell^q)|_A=\varnothing$ for every register list $\ell$ with owners in $P$.
-\end{lemma}
-
-\begin{proof}
-    Any register in $(\ell^q)|_A$ has an original owner $p\in P$ with $s(q(p))=1$, contradicting $s\circ q=0$.
-\end{proof}
+For a selection $s:Q\to\{0,1\}$ with $A=\{p\in Q:s(p)=1\}$ (Definition~\ref{def:peps_party_partition}), let $\ell|_A$ be the ordered sublist with owners in $A$.
 
 A source-free composition $W:\ell\to m$ is a finite composite of local linear operations, register exchanges, and identities without pair-source preparations; write $W|_A:\mathcal H_{\ell|_A}\to\mathcal H_{m|_A}$ for its restriction to $A$ (Lemma~\ref{thm:peps_party_restriction}), and for a spectator list $\rho$ write $\widetilde W:\rho\ell\to\rho m$ for $W$ framed by $\rho$ (with list concatenation denoted by juxtaposition).
 

@@ -124,62 +124,11 @@ gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
 
 \section{Finite coordinates for the local memories}
 
-The coordinate spaces below are the memories of the ordered registers in
+The local memories of the source and discarded registers in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 17--19, 253--267, 409--434 and 565--588,
-with no numerical bound on private register dimensions.
-
-\begin{lemma}[Finite endpoint registers in fixed source slots]
-    \label{thm:peps_finite_source_slot_registers}
-    \uses{def:peps_source_slots}
-    For a finite ordered list $R$ of pair-source occurrences with
-    finite-dimensional endpoint spaces $U_i,V_i$, every register in the slot
-    layout of Definition~\ref{def:peps_source_slots} is finite-dimensional.
-\end{lemma}
-
-\begin{proof}
-    \uses{def:peps_source_slots}
-    By induction on $R$: the empty list has no registers, and adjoining $i$
-    prepends two registers with finite-dimensional spaces $U_i,V_i$.
-\end{proof}
-
-\begin{lemma}[Finite registers in the all-party source layout]
-    \label{thm:peps_finite_all_party_source_registers}
-    \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
-    For any chronological source composition $W$ on $P$, every register in the
-    all-party source layout $R_W$ (Definition~\ref{def:peps_all_party_source_registers})
-    is finite-dimensional.
-\end{lemma}
-
-\begin{proof}
-    \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
-    Each source occurrence $e$ has finite-dimensional halfspaces
-    $\C^{u_e},\C^{v_e}$, so Lemma~\ref{thm:peps_finite_source_slot_registers}
-    applies.
-\end{proof}
-
-\begin{definition}[Finite orthonormal coordinates of a local source memory]
-    \label{def:peps_all_party_local_source_basis}
-    \uses{thm:peps_finite_all_party_source_registers,
-        thm:peps_finite_register_memories,def:peps_party_registers}
-    For $q\in Q=P\sqcup\{*\}$, let $R_W(q)$ be the sublist of $R_W$ owned by $q$
-    (Definition~\ref{def:peps_party_registers}) and $H_q=\mathcal H_{R_W(q)}$.
-    By Lemmas~\ref{thm:peps_finite_all_party_source_registers}
-    and~\ref{thm:peps_finite_register_memories}, choose a finite orthonormal
-    basis $(b_{q,i})_{0\le i<\dim_{\C}H_q}$ of $H_q$.
-\end{definition}
-
-\begin{definition}[Finite orthonormal coordinates of a local discarded memory]
-    \label{def:peps_all_party_local_discard_basis}
-    \uses{thm:peps_finite_register_memories,def:peps_affected_owner,
-        def:peps_party_registers}
-    Let $G$ be a finite ordered list of finite-dimensional discarded registers.
-    Relabeling each owner $p\in P$ into $Q=P\sqcup\{*\}$
-    (Definition~\ref{def:peps_affected_owner}) and restricting to $q\in Q$ gives
-    sublist $G(q)$ and finite-dimensional memory $K_q=\mathcal H_{G(q)}$
-    (Lemma~\ref{thm:peps_finite_register_memories}); choose a finite
-    orthonormal basis $(c_{q,j})_{0\le j<\dim_{\C}K_q}$ of $K_q$.
-\end{definition}
+carry the orthonormal bases of their configurations, with no numerical bound
+on private register dimensions.
 
 \begin{lemma}[Distributed physical approximation from local gate expansions]
     \label{thm:peps_approximate_sampled_distributed_error}
@@ -187,8 +136,7 @@ with no numerical bound on private register dimensions.
     \leanok
     \uses{def:peps_approximate_original_operators,
         thm:peps_approximate_source_sample,
-        thm:peps_actual_sampled_distributed_contraction,
-        def:peps_all_party_local_source_basis,def:peps_all_party_local_discard_basis}
+        thm:peps_actual_sampled_distributed_contraction}
     Let $P$ be a finite party set listed without repetition, with
     finite-dimensional initial memories $H_p$, unit vectors $x_p\in H_p$, input
     $\psi=\bigotimes_{p\in P}x_p$, contraction gates $G_g$, physical dimensions
@@ -210,8 +158,7 @@ with no numerical bound on private register dimensions.
         k        & =\left\lceil\left(\frac{8\max\{1,N_R\}Q}{\varepsilon}\right)^2\right\rceil+1.
         \label{eq:peps_approximate_sampled_distributed_params}
     \end{align}
-    In the local bases of Definitions~\ref{def:peps_all_party_local_source_basis}
-    and~\ref{def:peps_all_party_local_discard_basis}, there exist normalized
+    In the configuration bases of the local source and discarded memories, there exist normalized
     Schmidt data and a Gaussian sample $\omega$ such that the distributed
     contraction $\mathcal C_R(\omega)$ of
     Lemma~\ref{thm:peps_actual_sampled_distributed_contraction} with weights
@@ -232,19 +179,13 @@ with no numerical bound on private register dimensions.
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_source_sample,
-        thm:peps_actual_sampled_distributed_contraction,
-        thm:peps_finite_whole_party_input,thm:peps_auxiliary_register_finiteness,
-        def:peps_all_party_local_source_basis,def:peps_all_party_local_discard_basis}
-    By Lemmas~\ref{thm:peps_finite_whole_party_input}
-    and~\ref{thm:peps_auxiliary_register_finiteness}, the initial and discarded
-    memories are finite-dimensional. Lemma~\ref{thm:peps_approximate_source_sample}
+        thm:peps_actual_sampled_distributed_contraction}
+    Lemma~\ref{thm:peps_approximate_source_sample}
     provides normalized Schmidt data and a sample $\omega$ whose sampled
     physical operator $\widehat\rho$ satisfies
     $\|\widehat\rho-\rho_G\|_1\le\varepsilon$, and
     Lemma~\ref{thm:peps_actual_sampled_distributed_contraction} identifies
-    $\widehat\rho=\gamma_R\mathcal C_R(\omega)$ in the bases of
-    Definitions~\ref{def:peps_all_party_local_source_basis}
-    and~\ref{def:peps_all_party_local_discard_basis}.
+    $\widehat\rho=\gamma_R\mathcal C_R(\omega)$ in these configuration bases.
 \end{proof}
 
 \section{Original resources of the sampled contraction}
@@ -320,7 +261,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     \leanok
     \uses{thm:peps_actual_density_link_incidence,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
-        thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
+        thm:peps_source_only_resources}
     For an original circuit $W$ with expansion bound $(r,S)$, gate arity at most
     $b$, and party participation at most $b$, the physical-first source
     replacement $R$ at any tolerance $\delta>0$ in
@@ -333,10 +274,10 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     \leanok
     \uses{thm:peps_actual_density_link_incidence,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
-        thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
+        thm:peps_source_only_resources}
     By Definition~\ref{def:peps_physical_first_original_locality} and
-    Lemmas~\ref{thm:peps_physical_first_original_locality},
-    \ref{thm:peps_physical_first_occurrences}, and~\ref{thm:peps_source_only_resources},
+    Lemmas~\ref{thm:peps_physical_first_original_locality}
+    and~\ref{thm:peps_source_only_resources},
     $R$ inherits the gate arity and party participation bounds $\le b$, so
     Lemma~\ref{thm:peps_actual_density_link_incidence} gives the bound
     $2b(b-1)$.

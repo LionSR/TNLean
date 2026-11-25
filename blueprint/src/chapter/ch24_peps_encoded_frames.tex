@@ -219,19 +219,14 @@ norm of matrices, rectangular ones included.
 
 \begin{definition}[Site registers]
     \label{def:lattice_site_registers}
+    \lean{QuantumCircuit.Party.Sheet.system}
+    \leanok
     \uses{def:peps_party_layout}
-    For an owner $o$ of each site of a finite set $\Lambda$ and a list $\ell$ of
-    sites, the site registers of $\ell$ are one register $\C^q$ for each entry
-    of $\ell$, held by the owner of that site, in the order of $\ell$. A fixed
-    list of the sites of $\Lambda$ contains every site exactly once, so taking
-    the site at a position gives a bijection from its positions to $\Lambda$.
-    If every site of a list has owner $p$, every site register of the list is
-    held by $p$.
+    For an owner $o$ of each site of a finite set $\Lambda$, the site
+    registers are one register $\C^q$ for each site, held by the owner of that
+    site: the basis of the memory of a party $p$ is indexed by the
+    configurations $[q]^{o^{-1}(p)}$ of the sites it owns.
 \end{definition}
-
-\begin{proof}
-    Immediate from the definitions.
-\end{proof}
 
 \begin{definition}[Registers of a frame]
     \label{def:peps_frame_registers}
@@ -251,25 +246,24 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Canonical coordinates of site registers]
     \label{lem:lattice_site_register_coordinates}
+    \lean{ManyBody.blockConfigEquiv,
+        ManyBody.blockConfigEquiv_apply,
+        QuantumCircuit.Party.Sheet.refVec_apply}
+    \leanok
     \uses{def:lattice_site_registers}
-    For a list $\ell$ of sites, including lists with repetitions, write
-    $\ket c_\ell$ for the product basis vector of a configuration $c$ on the
-    site registers of $\ell$. If $c(x)=c'(x)$ for every site in $\ell$, then
-    $\ket c_\ell=\ket{c'}_\ell$. If $\ell$ has length $n$, a unitary identifies
-    its site registers with $\C^{[q]^n}$ and sends $\ket c_\ell$ to the basis
-    vector of the configuration $k\mapsto c(\ell_k)$ read along the list. More
-    generally, for a bijection $e$ from the positions of $\ell$ to a finite set $K$
-    and a map $f:K\to\Lambda$ with $\ell_k=f(e(k))$ for every position $k$, the
-    grouping along $e$ is a unitary onto $\C^{[q]^K}$ sending $\ket c_\ell$ to
-    $\ket{c\circ f}$. Under the canonical unitary for
-    concatenating register lists, $\ket c_{\ell_1\ell_2}$ is identified with
-    $\ket c_{\ell_1}\otimes\ket c_{\ell_2}$; the empty list contributes the
-    scalar one.
+    The configurations of the site registers, one configuration of the sites
+    of each party, are identified with the configurations $c\in[q]^\Lambda$:
+    the configuration at a site $x$ is read at its owner $o(x)$. This gives a
+    unitary from the memory of the site registers onto $\C^{[q]^\Lambda}$
+    sending the product basis vector of a configuration to $\ket c$, and a
+    vector $\Omega$ of $\C^{[q]^\Lambda}$ placed in the site registers has the
+    coordinate $\Omega(c)$ at the configuration corresponding to $c$.
 \end{lemma}
 
-\begin{proof}
-    By induction on the list of registers, identifying $\C^\alpha\otimes\C^\beta$
-    with $\C^{\alpha\times\beta}$ at each step.
+\begin{proof}\leanok
+    The sets $o^{-1}(p)$ of sites owned by the parties $p$ partition
+    $\Lambda$, so a configuration of $\Lambda$ is the same as one
+    configuration of $o^{-1}(p)$ for each party $p$.
 \end{proof}
 
 \begin{lemma}[Canonical coordinates of the registers]

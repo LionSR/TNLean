@@ -5,19 +5,6 @@ The following bounds concern the source replacement and its prescribed
 star and sample alphabets (without asserting an identification of the
 sampled physical operator with a contraction of local tensors).
 
-\begin{lemma}[Finite coordinates for the original input]
-    \label{thm:peps_finite_whole_party_input}
-    For any finite party set $P$ and finite-dimensional private memories
-    $H_p$ (with no bound on $\dim H_p$), the ordered memory
-    $\bigotimes_{p\in P}H_p$ is finite-dimensional and admits a finite
-    orthonormal basis.
-\end{lemma}
-\begin{proof}
-    A finite tensor product of finite-dimensional spaces $H_p$ (including
-    empty products and zero-dimensional factors) is finite-dimensional.
-\end{proof}
-
-
 \begin{lemma}[Source positions after the physical output exchange]
     \label{thm:peps_physical_first_source_count}
     \lean{QuantumCircuit.Party.OriginalCircuit.card_sourceLocations_replacement_le}
@@ -28,11 +15,9 @@ sampled physical operator with a contraction of local tensors).
     and private dimensions).
 \end{lemma}
 \begin{proof}
-    \uses{thm:peps_physical_first_occurrences}
     \leanok
     Each replacement gate has $\binom{|\text{participants}|}{2}\le\binom a2$
-    source slots, and the physical output exchange adds no gates or sources
-    (Lemma~\ref{thm:peps_physical_first_occurrences}).
+    source slots.
 \end{proof}
 
 \begin{lemma}[Polynomial sample count from original resources]
@@ -100,11 +85,10 @@ sampled physical operator with a contraction of local tensors).
     \label{def:peps_physical_first_original_locality}
     \lean{QuantumCircuit.Party.OriginalCircuit.replacementLocationsEquiv}
     \leanok
-    \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences}
+    \uses{thm:peps_replacement_participants}
     Let $E$ be the bijection from original nonprivate gate occurrences to
-    physical-first replacement gate occurrences obtained by composing the
-    correspondences of Lemmas~\ref{thm:peps_replacement_participants}
-    and~\ref{thm:peps_physical_first_occurrences}.
+    physical-first replacement gate occurrences given by the
+    correspondence of Lemma~\ref{thm:peps_replacement_participants}.
 \end{definition}
 
 \begin{lemma}[Original participants and link locality]
@@ -120,10 +104,9 @@ sampled physical operator with a contraction of local tensors).
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences,
+    \uses{thm:peps_replacement_participants,
         thm:compression_original_gate_locality}
-    By Lemmas~\ref{thm:peps_replacement_participants}
-    and~\ref{thm:peps_physical_first_occurrences}, $E$ preserves
+    By Lemma~\ref{thm:peps_replacement_participants}, $E$ preserves
     participating sets; Lemma~\ref{thm:compression_original_gate_locality}
     places both endpoints of each link in the participating set of its
     gate.

@@ -14,53 +14,16 @@ For a division of the parties into two classes, write $\Pi_L$ for the
 isometry gathering the two classes in their inherited orders.
 Relabelling parties changes neither the order nor the Hilbert spaces.
 
-\begin{lemma}[Identifying equal register lists]
-    \uses{thm:peps_basis_memory_equalities}
-    \label{thm:peps_register_identifications}
-    % The register-identification equality is tagged in its canonical
-    % coordinate-chapter home; cite that entry rather than duplicate its tag.
-    \uses{thm:peps_basis_memory_equalities}
-    Identifying two equal register lists $L=L'$ preserves vectors in $\mathcal H_L$ and word evaluations, and commutes with source
-    preparation and with $\alpha_{L,M}\colon\mathcal H_{L+M}\to\mathcal H_L\otimes\mathcal H_M$.
-\end{lemma}
-\begin{proof}
-    Substitution along $L=L'$ reduces each claim to reflexivity.
-\end{proof}
-
-\begin{definition}[Ordered source positions]
+\begin{definition}[Source positions]
     \label{def:peps_ordered_source_positions}
-    For a family of pair sources $r_i$ and a finite ordered list $J$ of positions,
-    let $L_J$ be the concatenation of their two-register lists and
-    $P_J(\eta)$ the word preparing the vectors $\eta_i$ ($i\in J$) in order.
-    Then $L_{J+K}=L_J+L_K$; filtering $J$ by a predicate retains the
-    inherited order, endpoint parties and spaces, and replacing $\eta_i$ by $0$ preserves $L_J$.
+    \lean{QuantumCircuit.Party.SourceInventory.freeSlotSystem,
+        QuantumCircuit.Party.SourceInventory.prepareFreeSlots}
+    \leanok
+    For a family of pair sources $r_i$ and a set $J$ of positions, let $L_J$
+    be the two endpoint registers of the sources $r_i$ ($i\in J$), held by
+    their endpoint parties and kept at their positions in the family, and let
+    $P_J(\eta)$ be the composition preparing the vectors $\eta_i$ ($i\in J$).
 \end{definition}
-
-\begin{lemma}[Preparation in an ordered list]
-    \label{thm:peps_ordered_source_preparation}
-    Preparation indexed by $J$ equals preparation of the corresponding
-    ordered source records; under Lemma~\ref{thm:peps_register_identifications},
-    $P_{J+K}(\eta)=P_J(\eta)P_K(\eta)$, and filtering $J$ by a predicate prepares the filtered sublist of sources.
-\end{lemma}
-\begin{proof}
-    \uses{def:peps_ordered_source_positions,thm:peps_register_identifications}
-    Induction on $J$, prepending $\eta_i$ at each step and applying Lemma~\ref{thm:peps_register_identifications} on the spectator registers.
-\end{proof}
-
-\begin{lemma}[Uniform permutation of source registers]
-    \label{thm:peps_reorder_source_positions}
-    If $J'$ is a permutation of $J$, then for any spectator register list there is an allowed source-free composition $U$ (independent of $\eta$, without normalization assumptions) such that for every $\eta$,
-    \begin{align}
-        U P_J(\eta) & = P_{J'}(\eta).
-        \label{eq:peps_frames_reorder}
-    \end{align}
-    In particular, any filtered sublist of free positions can be placed before
-    its complement while preserving the internal order of each part.
-\end{lemma}
-\begin{proof}
-    \uses{thm:peps_ordered_source_preparation}
-    Induction on a decomposition of the permutation into adjacent transpositions of two-register source blocks using Lemma~\ref{thm:peps_ordered_source_preparation}; specializing $J'$ to the filtered sublist followed by its complement gives the second claim.
-\end{proof}
 
 \begin{definition}[The joint vector of selected sources]
     \label{def:peps_free_source_vector}
@@ -120,17 +83,6 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     By Definition~\ref{def:peps_corrected_crossing_blocks}, every occurrence in $S$ has both endpoints in $A(S)$ and therefore cannot cross between $A(S)$ and its complement.
 \end{proof}
 
-\begin{lemma}[A common corrected-source rearrangement]
-    \label{thm:peps_corrected_reordering}
-    There is an allowed source-free composition $U$ from $C+T$ (followed by the original input) to the
-    original free-register order satisfying~(\ref{eq:peps_frames_reorder})
-    for every free-source vector family, chosen before the partial branch $\xi$ and any corrected-source coordinate.
-\end{lemma}
-\begin{proof}
-    \uses{thm:peps_reorder_source_positions,thm:peps_corrected_crossing_masks}
-    Apply Lemma~\ref{thm:peps_reorder_source_positions} to the free positions with the corrected positions selected; by Lemma~\ref{thm:peps_corrected_crossing_masks}, the complement is the crossing list.
-\end{proof}
-
 \begin{lemma}[Preparing vectors from the scalar unit]
     \label{thm:peps_source_scalar_preparation}
     \lean{QuantumCircuit.Party.SourceInventory.op_prepare_append}
@@ -143,17 +95,17 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_free_source_norm,thm:peps_register_identifications}
-    Specializing~(\ref{eq:peps_frames_prepare}) of Lemma~\ref{thm:peps_free_source_norm} to $x=1$ and commuting spectator identity maps past source preparations via Lemma~\ref{thm:peps_register_identifications} gives all claims.
+    \uses{thm:peps_free_source_norm}
+    Specializing~(\ref{eq:peps_frames_prepare}) of Lemma~\ref{thm:peps_free_source_norm} to $x=1$ and commuting spectator identity maps past source preparations gives all claims.
 \end{proof}
 
 \begin{definition}[Absorbing the original input preparation]
     \label{def:peps_prepared_reordered_word}
     \lean{QuantumCircuit.Party.SourceInventory.prepareFreeSlots}
     \leanok
-    Given a scalar-input composition $p_0$, a register permutation $U$, fixed
+    Given a scalar-input composition $p_0$, fixed
     source vectors, and a residual composition $V$, let $\widetilde V$ be the word with input $C+T$ that
-    retains $C+T$ as spectators of $p_0$, applies $U$, prepares the
+    retains $C+T$ as spectators of $p_0$, prepares the
     fixed sources, and applies $V$ to the input vector
     $\alpha_{C,T}^{-1}(\eta_C\otimes\eta_T)$.
     For a partial circuit branch $\xi$, let $\widetilde V_\xi$ be the word formed from the residual and fixed-source vectors of $\xi$.
@@ -163,41 +115,37 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     \label{thm:peps_prepared_reordered_vector}
     \lean{QuantumCircuit.Party.SourceInventory.op_prepareSelected_mul_op_prepareFreeSlots}
     \leanok
-    If $U$ satisfies~(\ref{eq:peps_frames_reorder}), then $\widetilde V\bigl(\alpha_{C,T}^{-1}(\eta_C\otimes\eta_T)\bigr)$ equals $V$ applied after full source preparation on $p_0(1)$ (with the prescribed
+    The vector $\widetilde V\bigl(\alpha_{C,T}^{-1}(\eta_C\otimes\eta_T)\bigr)$ equals $V$ applied after full source preparation on $p_0(1)$ (with the prescribed
     fixed vectors outside the free positions), and the same holds for $\widetilde V_\xi$ on every partial branch $\xi$ and free-vector family.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{def:peps_prepared_reordered_word,thm:peps_source_scalar_preparation}
-    By Lemma~\ref{thm:peps_source_scalar_preparation} and~(\ref{eq:peps_frames_reorder}), commuting $p_0$ past the free-source preparations and applying $U$ combines the free and fixed preparations into the full source preparation on $p_0(1)$.
+    By Lemma~\ref{thm:peps_source_scalar_preparation}, commuting $p_0$ past the free-source preparations combines the free and fixed preparations into the full source preparation on $p_0(1)$.
 \end{proof}
-
-\begin{definition}[Uniform equality of corrected inputs]
-    \label{def:peps_uniform_corrected_input}
-    The uniform corrected-input identity asserts the existence of one allowed
-    source-free $U$ for which the evaluation identity of
-    Lemma~\ref{thm:peps_prepared_reordered_vector} holds for every partial
-    branch $\xi$ and every free-source family.
-\end{definition}
 
 \begin{lemma}[Construction of the uniform input identity]
     \label{thm:peps_uniform_corrected_input}
     \lean{QuantumCircuit.Party.SourceInventory.op_prepareSelected_mul_op_prepareFreeSlots}
     \leanok
-    Every circuit and scalar-input composition satisfy Definition~\ref{def:peps_uniform_corrected_input}, without normalization or contraction assumptions.
+    For every circuit and scalar-input composition, the evaluation identity of
+    Lemma~\ref{thm:peps_prepared_reordered_vector} holds for every partial
+    branch $\xi$ and every free-source family, without normalization or
+    contraction assumptions.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_corrected_reordering,thm:peps_prepared_reordered_vector}
-    Combine the common permutation $U$ of Lemma~\ref{thm:peps_corrected_reordering}
-    with Lemma~\ref{thm:peps_prepared_reordered_vector}.
+    \uses{thm:peps_prepared_reordered_vector}
+    The corrected and crossing positions are fixed before $\xi$, so
+    Lemma~\ref{thm:peps_prepared_reordered_vector} applies to every $\xi$ and
+    every free-source family.
 \end{proof}
 
 \begin{lemma}[Local factors of the rearranged composition]
     \label{thm:peps_reordered_local_factors}
     \lean{QuantumCircuit.Party.SourceCircuit.exists_corrected_source_partition}
     \leanok
-    For an allowed circuit, after applying $U$ from Lemma~\ref{thm:peps_corrected_reordering}, the
+    For an allowed circuit, the
     selectively prepared residual factors across $(A(S),A(S)^c)$ into two allowed source-free words $D_A,D_E$ with
     $\|D_A\|,\|D_E\|\le1$; if $p_0$ is also allowed and source-free, the same holds for $\widetilde V_\xi$ with input $C+T$ on every free input vector.
 \end{lemma}
@@ -226,8 +174,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:peps_source_input_isometries,thm:peps_ordered_source_preparation}
-    Evaluate each matrix isometry on standard basis vectors and induct along $J$ using Lemma~\ref{thm:peps_ordered_source_preparation}.
+    \uses{def:peps_source_input_isometries}
+    Evaluate each matrix isometry on standard basis vectors and induct along $J$.
 \end{proof}
 
 \begin{definition}[The corrected-source isometry]
@@ -283,22 +231,18 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     By Lemma~\ref{thm:peps_free_source_norm}, $\|\beta_\xi\|=1$, and the finite-dimensional Schmidt decomposition of $\beta_\xi\in\mathcal H_{T_A}\otimes\mathcal H_{T_E}$ supplies $(J,\tau,L,R)$ satisfying~(\ref{eq:peps_frames_crossing_schmidt}).
 \end{proof}
 
-\begin{definition}[Schmidt input isometries]
-    \label{def:peps_schmidt_input_frames}
-    Given $Q\colon\ell^2(I)\to\mathcal H_C$ and $\beta\in\mathcal H_{T_A}\otimes\mathcal H_{T_E}$, a Schmidt input representation consists of probabilities $\tau_j$ ($j\in J$) and linear isometries
-    $A\colon\ell^2(I\times J)\to\mathcal H_{(C+T)_A}$ and $B\colon\ell^2(J)\to\mathcal H_{(C+T)_E}$, chosen before $i\in I$, such that for all $i\in I$,
-    \begin{align}
-        \Pi_{C+T}\alpha_{C,T}^{-1}(Qe_i\otimes\Pi_T^{-1}\beta)
-         & = \sum_{j\in J}\sqrt{\tau_j}\,Ae_{(i,j)}\otimes Be_j.
-        \label{eq:peps_frames_input_schmidt}
-    \end{align}
-\end{definition}
-
 \begin{lemma}[Construction of the input isometries]
     \label{thm:peps_actual_schmidt_input_frames}
     \lean{QuantumCircuit.Party.SourceCircuit.exists_correctedInputFrames}
     \leanok
-    For each partial branch $\xi$ and orthonormal-column endpoint matrices, $Q_\xi$ and $\beta_\xi$ admit a Schmidt input representation~(\ref{eq:peps_frames_input_schmidt}).
+    For each partial branch $\xi$ and orthonormal-column endpoint matrices,
+    there are probabilities $\tau_j$ ($j\in J$) and linear isometries
+    $A\colon\ell^2(I\times J)\to\mathcal H_{(C+T)_A}$ and $B\colon\ell^2(J)\to\mathcal H_{(C+T)_E}$, chosen before $i\in I$, such that for all $i\in I$,
+    \begin{align}
+        \Pi_{C+T}\alpha_{C,T}^{-1}(Q_\xi e_i\otimes\Pi_T^{-1}\beta_\xi)
+         & = \sum_{j\in J}\sqrt{\tau_j}\,Ae_{(i,j)}\otimes Be_j.
+        \label{eq:peps_frames_input_schmidt}
+    \end{align}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -331,24 +275,19 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:peps_schmidt_input_frames,def:peps_schmidt_local_output}
+    \uses{thm:peps_actual_schmidt_input_frames,def:peps_schmidt_local_output}
     Applying $D_A\otimes D_E$ linearly to~(\ref{eq:peps_frames_input_schmidt}) yields~(\ref{eq:peps_frames_output_schmidt}), with $\|D_A\|,\|D_E\|\le1$ by allowedness.
 \end{proof}
-
-\begin{definition}[The corrected-column input identity]
-    \label{def:peps_corrected_schmidt_inputs}
-    The corrected-column input identity asserts that one allowed source-free
-    rearrangement $U$, chosen before $\xi$ and $i\in I$,
-    identifies the original partially prepared output at $(i,\xi)$ with $\widetilde V_\xi\bigl(\alpha_{C,T}^{-1}(Q_\xi e_i\otimes\Pi_T^{-1}\beta_\xi)\bigr)$.
-\end{definition}
 
 \begin{lemma}[Substitution of the corrected endpoint columns]
     \label{thm:peps_corrected_schmidt_input_identity}
     \lean{QuantumCircuit.Party.SourceCircuit.prepareFreeSlots_partialSchmidt_mulVec,
         QuantumCircuit.Party.SourceCircuit.product_partialSchmidtSourceVectors}
     \leanok
-    Every circuit, endpoint matrix family and scalar-input composition satisfy
-    Definition~\ref{def:peps_corrected_schmidt_inputs}, without orthonormality or contraction hypotheses.
+    For every circuit, endpoint matrix family and scalar-input composition,
+    the original partially prepared output at $(i,\xi)$ equals
+    $\widetilde V_\xi\bigl(\alpha_{C,T}^{-1}(Q_\xi e_i\otimes\Pi_T^{-1}\beta_\xi)\bigr)$
+    for every partial branch $\xi$ and every $i\in I$, without orthonormality or contraction hypotheses.
 \end{lemma}
 \begin{proof}
     \leanok

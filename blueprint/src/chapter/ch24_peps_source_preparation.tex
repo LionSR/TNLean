@@ -3,25 +3,33 @@
 
 \begin{lemma}[Exchanging lists of registers]
     \label{thm:peps_register_exchange}
+    \lean{QuantumCircuit.Party.PartyCircuit.relabel,
+        QuantumCircuit.Party.PartyCircuit.op_relabel,
+        QuantumCircuit.Party.PartyCircuit.gates_relabel,
+        QuantumCircuit.Party.Word.isAllowed_relabel,
+        QuantumCircuit.Party.Word.sources_relabel}
+    \leanok
     \uses{def:peps_party_layout}
-    For ordered register lists $A,B,C$ with memories $\mathcal H_A,\mathcal H_B,\mathcal H_C$, adjacent exchanges form an allowed source-free composition sending $a\otimes(b\otimes c)\mapsto b\otimes(a\otimes c)$ while preserving the internal order of each list (and moving a single register $B=(r)$ to the front).
-\end{lemma}
-
-\begin{proof}
-    Let $J_{A,C}:\mathcal H_{(A,C)}\xrightarrow{\cong}\mathcal H_A\otimes\mathcal H_C$. Inducting on $A$ constructs an allowed source-free move $M_{r;A,C}$ of a single register $r$ past $A$ satisfying
+    For two systems of registers and a bijection between the basis
+    configurations of the two memories of each party, relabelling along these
+    bijections is an allowed source-free composition without gates, whose
+    operator is the permutation matrix of the induced bijection of
+    configurations. In particular, for ordered register lists $A,B,C$ with
+    memories $\mathcal H_A,\mathcal H_B,\mathcal H_C$, exchanging $A$ and $B$
+    while preserving the internal order of each list (for instance moving a
+    single register $B=(r)$ to the front) is such a composition $X_{A,B;C}$:
     \begin{align}
-        M_{r;A,C}J_{A,(r,C)}^{-1}(a\otimes(x\otimes c))
-         & =x\otimes J_{A,C}^{-1}(a\otimes c),
-        \label{eq:peps_register_head_move}
-    \end{align}
-    and inducting on $B$ by composing $M_{r;A,C}$ on the head of $B$ with the exchange of the tail yields an allowed source-free composition $X_{A,B;C}$ satisfying
-    \begin{align}
-        X_{A,B;C}J_{A,(B,C)}^{-1}
-        \bigl(a\otimes J_{B,C}^{-1}(b\otimes c)\bigr)
-         & =J_{B,(A,C)}^{-1}
-        \bigl(b\otimes J_{A,C}^{-1}(a\otimes c)\bigr).
+        X_{A,B;C}\bigl(a\otimes(b\otimes c)\bigr)
+         & =b\otimes(a\otimes c).
         \label{eq:peps_register_block_exchange}
     \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    At each party the relabelling applies the permutation matrix of a
+    bijection of basis configurations, which has norm at most one, and it
+    prepares no source. Exchanging $A$ and $B$ permutes the configurations
+    of the registers of each party, which gives~(\ref{eq:peps_register_block_exchange}).
 \end{proof}
 
 \begin{definition}[The sources of a composition]

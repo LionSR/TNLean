@@ -224,23 +224,6 @@
 \end{proof}
 
 
-\begin{lemma}[Finite coordinates for a finite family of source vectors]
-    \label{thm:peps_finite_pair_coordinates}
-    For complex inner product spaces $U,V$, finite $\Xi$, and algebraic tensors
-    $\eta_\xi\in U\otimes V$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 279--299), there exist $a,b\in\N$,
-    linear isometries $f:\C^a\to U$ and $g:\C^b\to V$, and vectors
-    $\eta^0_\xi\in\C^a\otimes\C^b$ such that $(f\otimes g)\eta^0_\xi=\eta_\xi$
-    and $\|\eta^0_\xi\|=\|\eta_\xi\|$ for all $\xi\in\Xi$.
-\end{lemma}
-
-\begin{proof}
-    Span the finitely many elementary tensor factors of $\{\eta_\xi\}_{\xi\in\Xi}$
-    by finite-dimensional subspaces $U_0\subseteq U$ and $V_0\subseteq V$, and
-    choose orthonormal coordinate isometries $f:\C^a\simeq U_0\hookrightarrow U$
-    and $g:\C^b\simeq V_0\hookrightarrow V$.
-\end{proof}
-
 \begin{lemma}[Source preparations in finite coordinates]
     \label{thm:peps_finite_source_coordinates}
     \lean{QuantumCircuit.Party.SourceInventory.ofSlots_pairMap_expands}
@@ -257,10 +240,11 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_finite_pair_coordinates,thm:peps_source_cons_mapL,
+    \uses{thm:peps_source_cons_mapL,
         thm:peps_source_expansion_operations}
-    Apply Lemma~\ref{thm:peps_finite_pair_coordinates} at each slot $e$, and
-    compose the local isometries $f_e,g_e$ across the slots by
+    At each slot $e$ the halfspaces $U_e,V_e$ are finite-dimensional, so
+    orthonormal bases give isometries $f_e,g_e$ and coordinate vectors
+    $\eta^0_{\xi,e}$; compose the local isometries $f_e,g_e$ across the slots by
     Lemmas~\ref{thm:peps_source_cons_mapL}
     and~\ref{thm:peps_source_expansion_operations}.
 \end{proof}

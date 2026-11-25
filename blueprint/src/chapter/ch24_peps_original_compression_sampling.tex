@@ -67,26 +67,6 @@ contraction of local tensors is proved separately.
     $\|x_p\|=1$.
 \end{proof}
 
-\begin{lemma}[The original physical density in grouped coordinates]
-    \label{thm:peps_distributed_grouped_physical_trace}
-    \uses{def:peps_distributed_construction_density,
-        thm:peps_selected_physical_private_trace}
-    For a distributed construction with circuit output $v$ and grouped
-    coordinates $b_v$, in the notation of
-    Lemma~\ref{thm:peps_selected_physical_private_trace} and
-    Definition~\ref{def:peps_distributed_construction_density},
-    $\rho=\operatorname{tr}_{\mathrm{private}}((b_vb_v^\dagger)^\chi)$.
-    % Source: 04-compression.tex, lines 137--153 and 574--579.
-\end{lemma}
-
-\begin{proof}
-    \uses{def:peps_distributed_construction_density,
-        thm:peps_selected_physical_private_trace}
-    Set $t=v$ in~(\ref{eq:peps_original_physical_mixed_trace}) of
-    Lemma~\ref{thm:peps_selected_physical_private_trace} using the reference
-    private basis of Definition~\ref{def:peps_distributed_construction_density}.
-\end{proof}
-
 \begin{lemma}[A fixed inverse power meets the per-gate error tolerance]
     \label{thm:peps_fixed_power_gate_budget}
     \lean{QuantumCircuit.Party.inversePower_le_sourceGateBudget_half}
@@ -159,13 +139,11 @@ contraction of local tensors is proved separately.
     source replacement $R$ has branch-coefficient sum at most $B$.
 \end{lemma}
 \begin{proof}
-    \uses{thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
+    \uses{thm:peps_source_only_resources}
     \leanok
     Finiteness of the gate list yields a common length bound $K$.
     The coefficient sum bound $\le B$ follows from
-    Lemma~\ref{thm:peps_physical_first_occurrences} and
-    Lemma~\ref{thm:peps_source_only_resources}, as the final exchange of
-    physical and auxiliary registers adds no gate and alters no coefficient.
+    Lemma~\ref{thm:peps_source_only_resources}.
 \end{proof}
 
 \begin{lemma}[Physical approximation after replacement and sampling]
@@ -206,10 +184,9 @@ contraction of local tensors is proved separately.
 
 \begin{proof}\leanok
     \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
-        thm:peps_auxiliary_register_finiteness,thm:peps_original_finite_expansion_bound}
+        thm:peps_original_finite_expansion_bound}
     Preparing each $\psi_p:\mathbb C\to H_p$ locally prepares $\psi$ with no
-    pair source. By Lemmas~\ref{thm:peps_auxiliary_register_finiteness}
-    and~\ref{thm:peps_original_finite_expansion_bound}, $R$ is an allowed
+    pair source. By Lemma~\ref{thm:peps_original_finite_expansion_bound}, $R$ is an allowed
     contraction circuit with finite-dimensional discarded registers, participation
     bound $\ell$, and coefficient-sum bound $B$.
     Lemma~\ref{thm:peps_actual_source_sampling} provides Schmidt data and a
@@ -251,9 +228,8 @@ contraction of local tensors is proved separately.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_sampled_original_density,thm:peps_approximate_physical_error,thm:peps_finite_whole_party_input}
-    By Lemma~\ref{thm:peps_finite_whole_party_input}, the initial party memories
-    admit finite orthonormal bases. Rescaling by $(1+\delta_a)^{-1}\le 1$
+    \uses{thm:peps_sampled_original_density,thm:peps_approximate_physical_error}
+    Rescaling by $(1+\delta_a)^{-1}\le 1$
     preserves participants, pair-effect counts $\le r$, and coefficient sums
     $\le B$. Lemma~\ref{thm:peps_sampled_original_density} gives
     $\|\widehat\rho-\rho_W\|_1\le3\varepsilon/4$, and
@@ -432,7 +408,7 @@ contraction of local tensors is proved separately.
 \begin{proof}\leanok
     \uses{thm:compression_incidence_containment,thm:compression_gate_incidence_bound,
         thm:compression_tagging_cardinality,thm:peps_physical_first_original_locality,
-        thm:peps_source_only_resources,thm:peps_physical_first_occurrences,
+        thm:peps_source_only_resources,
         thm:peps_original_produced_resource_bounds}
     By Lemmas~\ref{thm:compression_incidence_containment},
     \ref{thm:compression_gate_incidence_bound}, and~\ref{thm:compression_tagging_cardinality},
@@ -444,7 +420,7 @@ contraction of local tensors is proved separately.
     \end{align}
     Restricting to nonempty occurrences gives the source-circuit bound. By
     Lemmas~\ref{thm:peps_physical_first_original_locality},
-    \ref{thm:peps_source_only_resources}, \ref{thm:peps_physical_first_occurrences},
+    \ref{thm:peps_source_only_resources},
     and~\ref{thm:peps_original_produced_resource_bounds}, the physical-first
     replacement $R$ and recorded-expansion reading preserve participant sets and
     do not increase party lifetimes, so (\ref{eq:peps_separate_arity_incidence})
