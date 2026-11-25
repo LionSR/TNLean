@@ -17,11 +17,11 @@ and 565–579.
 
 noncomputable section
 
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
+namespace QuantumCircuit.Party.SourceCircuit
 
-open TNLean.Lattice.Compression
+open TNLean.Network
 
-variable {P : Type}
+variable {P : Type} [DecidableEq P]
 
 open Classical in
 /-- Recovering an all-party choice from its original gate-label function and
@@ -29,7 +29,7 @@ then taking its incident labels gives the restriction of that same function.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381
 and 565–579. -/
 theorem originalGateLabelsAtOfAllChoices_eq_restrictGates
-    {a b : Layout P} (w : SourceCircuit a b) (p : P)
+    {X Y : P → Type} (w : SourceCircuit X Y) (p : P)
     (η : (g : w.nonemptyGateLocations) → w.branchLabels g.1) :
     originalGateLabelsAtOfAllChoices w p ((allChoicesNonemptyLabelsEquiv w).symm η) =
       DistributedOperatorContraction.restrictGates
@@ -42,4 +42,4 @@ theorem originalGateLabelsAtOfAllChoices_eq_restrictGates
       ((allChoicesNonemptyLabelsEquiv w).symm η) g.1.1 = η g.1.1
   exact congrFun ((allChoicesNonemptyLabelsEquiv w).apply_symm_apply η) g.1.1
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

@@ -42,7 +42,7 @@ open scoped BigOperators Matrix Matrix.Norms.Frobenius
 
 noncomputable section
 
-namespace TNLean.Lattice.WholeGroup
+namespace TNLean.Network.WholeGroup
 
 /-! ### Configurations on subtypes -/
 
@@ -648,4 +648,4 @@ theorem rectangularTraceNorm_flattening_le_one [∀ v, DecidableEq (P v)]
 
 end Bipartition
 
-end TNLean.Lattice.WholeGroup
+end TNLean.Network.WholeGroup

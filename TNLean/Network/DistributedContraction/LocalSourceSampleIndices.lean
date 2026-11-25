@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Network.DistributedContraction.SourceSampleIndices
-import TNLean.Lattice.Compression.PartialSourcePreparation
+import QICLean.Circuit.Party.Compression.PartialExpansion.Sources
 import TNLean.Network.DistributedContraction.IncidentGateLabels
 
 /-!
@@ -21,16 +21,15 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 -/
 
 noncomputable section
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice TNLean.Lattice.PartyCircuit
-open TNLean.Lattice.Compression
-variable {P : Type}
+namespace QuantumCircuit.Party.SourceCircuit
+open TNLean.Network
+variable {P : Type} [DecidableEq P]
 
 open Classical in
 /-- Incidence of a sample pair is exactly incidence of its original two
 source endpoints. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
 lines 342–364 and 568–579. -/
-theorem mem_sourceSampleEquiv_iff {a b : Layout P} (w : SourceCircuit a b)
+theorem mem_sourceSampleEquiv_iff {X Y : P → Type} (w : SourceCircuit X Y)
     (p : P) (e : w.sourceLocations) :
     p ∈ (sourceSampleEquiv w e).2.1.toFinset ↔
       (w.endpoints e).1 = p ∨ (w.endpoints e).2 = p := by
@@ -44,10 +43,10 @@ open Classical in
 of the distributed contraction. No sample value at another source position
 is chosen. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
 lines 253–267, 383–417 and 568–579. -/
-def partialSlotSampleEquiv {a b : Layout P} (w : SourceCircuit a b) (p : P) :
+def partialSlotSampleEquiv {X Y : P → Type} (w : SourceCircuit X Y) (p : P) :
     let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
       (affectedOwner (fun _ : P ↦ true) t)
-    Fin (partialSlots A w).length ≃ Compression.DistributedOperatorContraction.SampleAt
+    Fin (partialSlots A w).length ≃ DistributedOperatorContraction.SampleAt
       (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) p := by
   intro A
   refine (partialSlotEquiv A w).trans ((sourceSampleEquiv w).subtypeEquiv ?_)
@@ -55,6 +54,6 @@ def partialSlotSampleEquiv {a b : Layout P} (w : SourceCircuit a b) (p : P) :
   rw [mem_sourceSampleEquiv_iff]
   dsimp only [A]
   simp_rw [partySelector_affectedOwner_all_apply]
-  simp only [partySelector, decide_eq_true_eq]
+  simp only [partySelector_eq_true_iff]
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit
