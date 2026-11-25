@@ -43,9 +43,7 @@ preserving the register spaces and order of operations.
     \label{thm:peps_owner_disjoint_restriction}
     \lean{QuantumCircuit.Party.Word.partyOp_coarsen_apply_of_forall_ne}
     \leanok
-    \uses{def:peps_single_party_selector,def:peps_owner_composition,
-        def:peps_party_registers,thm:peps_owner_composition,
-        thm:peps_party_restriction}
+    \uses{def:peps_single_party_selector,def:peps_owner_composition,def:peps_party_registers,thm:peps_owner_composition,thm:peps_party_restriction}
     Suppose that $W$ contains no pair-source preparation and that
     $f(p)\ne q$ for every $p\in P$. Let $V$ be the restriction of $W^f$
     to the owner $q$. Then $V$ has no participating parties, and its operator is
@@ -54,9 +52,7 @@ preserving the register spaces and order of operations.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_free_owner_parties,thm:peps_party_restriction,
-        def:peps_single_party_selector,thm:peps_party_factorization,
-        thm:peps_owner_composition}
+    \uses{thm:peps_source_free_owner_parties,thm:peps_party_restriction,def:peps_single_party_selector,thm:peps_party_factorization,thm:peps_owner_composition}
     Since $W^f$ has the same pair-source list as $W$ up to owner relabeling,
     $W^f$ contains no pair-source preparation and its restriction $V$ is
     well-defined. If $S$ is the set of participating parties of $W$, then that

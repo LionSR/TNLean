@@ -56,7 +56,7 @@ ends of that bond and the dual action at its tail.
     \lean{TNLean.PEPS.DependentBondNetwork.isGInjective_representationAveragingSite,
         TNLean.PEPS.DependentBondNetwork.isGInjective_averagingSite}
     \leanok
-    \uses{def:peps_dependent_averaging_site, def:peps_g_injective}
+    \uses{def:peps_dependent_averaging_site,def:peps_g_injective}
     Every $A_v^0$ is $G$-injective for its representation $\rho_v$.
     In particular this holds for independently chosen incident bond actions.
 \end{lemma}
@@ -73,7 +73,7 @@ ends of that bond and the dual action at its tail.
         TNLean.PEPS.DependentBondNetwork.network_incidentMatrix,
         TNLean.PEPS.DependentBondNetwork.network_averagingSite}
     \leanok
-    \uses{def:peps_dependent_network, def:peps_dependent_averaging_site}
+    \uses{def:peps_dependent_network,def:peps_dependent_averaging_site}
     Local sums expand independently, and local scalars multiply:
     $\mathcal N_{\sum_i A^i}(B)=\sum_{q:\mathcal V\to J}
         \mathcal N_{(A^{q_v}_v)_v}(B)$ and
@@ -93,7 +93,7 @@ ends of that bond and the dual action at its tail.
     % Source: Papers/1001.3807/paper_v3.tex:1582--1621.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_incidence_sums, def:peps_dependent_incident_action}
+    \uses{thm:peps_dependent_incidence_sums,def:peps_dependent_incident_action}
     Expanding each local average collects the factor $|G|^{-n}$, and regrouping
     the incident matrix factors by bonds turns the independent sum over the two
     indices of each bond into the displayed three-matrix product by
@@ -140,8 +140,7 @@ ends of that bond and the dual action at its tail.
     \lean{TNLean.PEPS.DependentBondNetwork.physicalMap_cutMap,
         TNLean.PEPS.DependentBondNetwork.physicalMap_network}
     \leanok
-    \uses{def:peps_dependent_physical_site, def:peps_dependent_physical_product,
-        def:peps_dependent_cut}
+    \uses{def:peps_dependent_physical_site,def:peps_dependent_physical_product,def:peps_dependent_cut}
     Let $\mathcal F=\bigotimes_vF_v$. For every joint boundary $M$ and
     every bond-matrix family $B$,
     $\mathcal F\mathcal C_{A,C}(M)=\mathcal C_{FA,C}(M)$ and
@@ -161,8 +160,7 @@ ends of that bond and the dual action at its tail.
         TNLean.PEPS.DependentBondNetwork.cutMap_recover_representationAveragingSite,
         TNLean.PEPS.DependentBondNetwork.iInf_cutSpace_eq_map_representationAveragingSite}
     \leanok
-    \uses{def:peps_dependent_physical_site, def:peps_dependent_averaging_site,
-        def:peps_g_injective}
+    \uses{def:peps_dependent_physical_site,def:peps_dependent_averaging_site,def:peps_g_injective}
     Suppose the physical alphabets are finite and every $T_v$ is
     $G$-injective for a representation $\rho_v$ on its virtual space.
     There are $L_v$ with $L_vT_v=P_v$; hence $LA=A^0$.
@@ -182,8 +180,7 @@ ends of that bond and the dual action at its tail.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_g_injective_left_inverse,
-        thm:peps_dependent_physical_contraction}
+    \uses{thm:peps_g_injective_left_inverse,thm:peps_dependent_physical_contraction}
     Each $L_v$ is given by the left-inverse characterization of $G$-injectivity,
     and averaging the invariance equations gives $T_vP_v=T_v$, so
     the physical-contraction identities yield
@@ -201,7 +198,7 @@ ends of that bond and the dual action at its tail.
         TNLean.PEPS.DependentBondNetwork.network_identitySite,
         TNLean.PEPS.DependentBondNetwork.averagingProjector}
     \leanok
-    \uses{def:peps_dependent_averaging_site, def:peps_dependent_physical_product}
+    \uses{def:peps_dependent_averaging_site,def:peps_dependent_physical_product}
     The identity tensor has coefficients $I_v(\eta,s)=\delta_{\eta,s}$,
     so $\mathcal N_I(B)(\sigma)=w_B(R^{-1}\sigma)$.
     Define the product invariant projection $\mathcal P=\bigotimes_vP_v$.
@@ -219,8 +216,7 @@ ends of that bond and the dual action at its tail.
     $\mathcal P\mathcal N_I(B)=\mathcal N_{A^0}(B)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_averaging_injective,
-        thm:peps_dependent_common_inverse, thm:peps_dependent_physical_contraction}
+    \uses{thm:peps_dependent_averaging_injective,thm:peps_dependent_common_inverse,thm:peps_dependent_physical_contraction}
     Canonical recovery applied to the $G$-injective
     tensors $A^0$ gives the first equality; for the second, applying $P_v$ to the physical leg of
     $I_v$ gives $A_v^0$, and commuting these local changes through the network completes the proof.

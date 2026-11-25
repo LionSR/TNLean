@@ -9,8 +9,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \label{thm:periodic_ft}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_derivedPeriods}
     \leanok
-    \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
-        def:scalar_gauge_equiv}
+    \uses{def:spectral_periodic_tensor,def:same_mpv2_pos,def:scalar_gauge_equiv}
     Let $A$ and $B$ be MPS tensors in irreducible form, written
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i), \notag \\
@@ -50,8 +49,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:spectral_periodic_period_existence,
-        thm:periodic_ft_supplied_periods}
+    \uses{thm:spectral_periodic_period_existence,thm:periodic_ft_supplied_periods}
     Lemma~\ref{thm:spectral_periodic_period_existence} yields a positive
     period $m_j$ for each block $A_j$ and $n_k$ for each block $B_k$. Applying
     Corollary~\ref{thm:periodic_ft_supplied_periods} with these derived periods
@@ -66,8 +64,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \label{thm:periodic_ft_supplied_periods}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm}
     \leanok
-    \uses{def:spectral_periodic_tensor, def:same_mpv2_pos,
-        def:scalar_gauge_equiv}
+    \uses{def:spectral_periodic_tensor,def:same_mpv2_pos,def:scalar_gauge_equiv}
     Under the hypotheses of Theorem~\ref{thm:periodic_ft}, suppose in addition
     that positive integers $m_j$ and $n_k$ are given such that each $A_j$ is
     spectrally $m_j$-periodic and each $B_k$ is spectrally $n_k$-periodic
@@ -76,10 +73,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_ft_equal_case_trace_preserving,
-        lem:block_scalar_gauge_comm,
-        thm:spectral_periodic_sector_normalization,
-        thm:periodic_sector_basis_replacement_gauge}
+    \uses{thm:periodic_ft_equal_case_trace_preserving,lem:block_scalar_gauge_comm,thm:spectral_periodic_sector_normalization,thm:periodic_sector_basis_replacement_gauge}
     Normalizing each representative by its positive-definite adjoint Perron
     fixed point, as in \cite[lines~313--332]{DeLasCuevas2017Irreducible},
     produces periodic representatives with trace-preserving block maps that are
@@ -110,7 +104,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \label{thm:zgauge_construction}
     \lean{MPSTensor.zgauge_construction}
     \leanok
-    \uses{lem:z_gauge_diagonal_pow, lem:z_gauge_diagonal_mul}
+    \uses{lem:z_gauge_diagonal_pow,lem:z_gauge_diagonal_mul}
     Let $(\mu_i)_{i\in I}$ and $(\nu_i)_{i\in I}$ be two finite lists of
     nonzero multiplicity entries. If $\mu_i^m=\nu_i^m$ for every $i\in I$,
     then there exists a diagonal matrix $Z$ such that
@@ -173,7 +167,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \label{lem:matched_sector_weight_pow_equiv_period}
     \lean{MPSTensor.matched_sector_weight_pow_equiv_of_period_multiple}
     \leanok
-    \uses{lem:sector_power_weights, lem:sector_bnt_matched_sector_weight_equiv}
+    \uses{lem:sector_power_weights,lem:sector_bnt_matched_sector_weight_equiv}
     Let two sector decompositions have distinguished blocks $j_0$ and $k_0$,
     with multiplicity entries $(\mu_{j_0,q})_q$ and $(\nu_{k_0,q})_q$, and let
     $\zeta$ be a nonzero scalar. Suppose that
@@ -228,9 +222,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \label{thm:periodic_equalcase_coefficient_extraction}
     \lean{MPSTensor.SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis}
     \leanok
-    \uses{def:same_mpv2_pos, def:periodic_tensor, lem:paper_decomp_formula,
-        thm:periodic_basis_nonzero_subfamily_li,
-        thm:pgvwc07_normalized_periodic_state_vector_decomposition}
+    \uses{def:same_mpv2_pos,def:periodic_tensor,lem:paper_decomp_formula,thm:periodic_basis_nonzero_subfamily_li,thm:pgvwc07_normalized_periodic_state_vector_decomposition}
     Let
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
@@ -279,8 +271,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \label{thm:periodic_equalcase_blockwise_zgauge}
     \lean{MPSTensor.equalCase_blockwise_zgauge}
     \leanok
-    \uses{thm:periodic_equalcase_coefficient_extraction,
-        lem:matched_sector_weight_pow_equiv_period, thm:zgauge_construction}
+    \uses{thm:periodic_equalcase_coefficient_extraction,lem:matched_sector_weight_pow_equiv_period,thm:zgauge_construction}
     Under the hypotheses of
     Lemma~\ref{thm:periodic_equalcase_coefficient_extraction}, for every
     $j\in J$ the multiplicity matrices $R_j$ and $S_{\pi(j)}$ have the same
@@ -335,7 +326,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \label{thm:periodic_equalcase_global_zgauge}
     \lean{MPSTensor.equalCase_global_zgauge_of_blockwise}
     \leanok
-    \uses{def:periodic_tensor, def:same_mpv2_pos}
+    \uses{def:periodic_tensor,def:same_mpv2_pos}
     Let
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
@@ -417,7 +408,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
     \label{thm:periodic_ft_equal_case_trace_preserving}
     \lean{MPSTensor.fundamentalTheorem_periodic_equalCase_sectorDecomposition}
     \leanok
-    \uses{def:periodic_tensor, def:same_mpv2_pos, def:scalar_gauge_equiv}
+    \uses{def:periodic_tensor,def:same_mpv2_pos,def:scalar_gauge_equiv}
     Let $A$ and $B$ carry the multiplicity-bearing forms
     \begin{align}
         A^i & =\bigoplus_{j\in J}(R_j\otimes A_j^i),
@@ -465,13 +456,7 @@ reduction to this normalization via blockwise similarity (\cite[eq.~\emph{unital
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:periodic_multiplicity_nondecaying_overlap,
-        thm:periodic_conditional_block_matching,
-        thm:periodic_repeated_blocks_period_eq_tp,
-        thm:periodic_equalcase_coefficient_extraction,
-        lem:matched_sector_weight_pow_equiv_period,
-        thm:periodic_equalcase_global_zgauge,
-        lem:left_canonical_irreducible_same_phase_unitary_gauge}
+    \uses{thm:periodic_multiplicity_nondecaying_overlap,thm:periodic_conditional_block_matching,thm:periodic_repeated_blocks_period_eq_tp,thm:periodic_equalcase_coefficient_extraction,lem:matched_sector_weight_pow_equiv_period,thm:periodic_equalcase_global_zgauge,lem:left_canonical_irreducible_same_phase_unitary_gauge}
     Equality of the generated matrix-product vectors is in particular
     proportionality, so
     Lemma~\ref{thm:periodic_multiplicity_nondecaying_overlap} yields

@@ -16,8 +16,7 @@ layer $k$. The estimates below establish the local mesh and scale bounds in
     \label{thm:area_law_near_mark_quarter_mesh}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_near_mark_quarter_mesh}
     \leanok
-    \uses{def:area_law_fine_layer_indices,def:area_law_belt_cell_marks,
-        def:area_law_affine_mesh}
+    \uses{def:area_law_fine_layer_indices,def:area_law_belt_cell_marks,def:area_law_affine_mesh}
     Let $k\ge 50{,}000{,}000$ and let $z,w$ be fine-cell indices
     in layers $k,h$, respectively. Suppose $v\in M_{k,z}$ and the closed
     cell indexed by $w$ meets the closed square of sup radius $10t$
@@ -30,8 +29,7 @@ layer $k$. The estimates below establish the local mesh and scale bounds in
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_local_layer_exclusion,thm:area_law_fine_cell_containment,
-        thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh}
+    \uses{thm:area_law_local_layer_exclusion,thm:area_law_fine_cell_containment,thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh}
     The reference mark and a contact point belong to their respective
     closed layers, and their distance is at most $10t$.
     Nonadjacent layers are separated by at least $16t$, so their
@@ -55,8 +53,7 @@ layer $k$. The estimates below establish the local mesh and scale bounds in
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_neighborhood_endpoint_distance,thm:area_law_dyadic_layer_distance,
-        thm:area_law_scale_side_ratios}
+    \uses{thm:area_law_neighborhood_endpoint_distance,thm:area_law_dyadic_layer_distance,thm:area_law_scale_side_ratios}
     There is an endpoint $u\in Z$ with
     $\|x-u\|_\infty\le(C+1)2^{k_0}$, while
     $\|y-u\|_\infty\ge C2^k$. The triangle inequality and

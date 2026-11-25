@@ -16,8 +16,7 @@ its scanner scale and birth template as follows.
     \lean{TNLean.PEPS.AreaLaw.Geometry.primaryScannerScale,
         TNLean.PEPS.AreaLaw.Geometry.primaryBirthTemplate}
     \leanok
-    \uses{def:area_law_primary_regions,def:area_law_fine_belt_scales,
-        def:area_law_template}
+    \uses{def:area_law_primary_regions,def:area_law_fine_belt_scales,def:area_law_template}
     For a constant $C_P$, define the primary scanner scale at layer $k$ by
     \begin{align}
         n_k & =\bigl\lceil C_P r^{1+2\delta_0}\bigr\rceil.
@@ -47,12 +46,7 @@ its scanner scale and birth template as follows.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:area_law_primary_birth_template,
-        thm:area_law_primary_fragment_union,
-        thm:area_law_primary_fragment_rectangles,
-        thm:area_law_primary_diameter_separation,
-        thm:area_law_primary_fragment_count,
-        thm:area_law_fine_belt_scales}
+    \uses{def:area_law_primary_birth_template,thm:area_law_primary_fragment_union,thm:area_law_primary_fragment_rectangles,thm:area_law_primary_diameter_separation,thm:area_law_primary_fragment_count,thm:area_law_fine_belt_scales}
     Each $F_{j,z}$ ($z\in J_j$) has endpoints of the form $o_i+m$ ($m\in\mathbb Z$)
     with strict inequality, so $F_{j,z}\cap\mathbb Z^2\ne\varnothing$; since
     $R_j=\bigcup_{z\in J_j}F_{j,z}$ (Lemma~\ref{thm:area_law_primary_fragment_union}),
@@ -84,8 +78,7 @@ its scanner scale and birth template as follows.
     parameters $(n_k,r)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_primary_birth_template_points,
-        def:area_law_primary_birth_template}
+    \uses{thm:area_law_primary_birth_template_points,def:area_law_primary_birth_template}
     For $C_{\rm tpl}>0$ and $r\ge1$,~(\ref{eq:area_law_primary_birth_points_count})
     gives
     \begin{align}
@@ -110,8 +103,7 @@ its scanner scale and birth template as follows.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_primary_birth_template_points,
-        thm:area_law_dyadic_layer_distance}
+    \uses{thm:area_law_primary_birth_template_points,thm:area_law_dyadic_layer_distance}
     Since $T\subseteq R_j\subseteq\overline{D_k}$
     (Lemma~\ref{thm:area_law_primary_birth_template_points}),
     Lemma~\ref{thm:area_law_dyadic_layer_distance} gives

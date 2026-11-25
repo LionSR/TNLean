@@ -170,7 +170,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     \label{thm:peps_dyadic_band_clearance}
     \lean{TNLean.PEPS.Approximation.BandOperation.clearance, TNLean.PEPS.Approximation.auxBirthB, TNLean.PEPS.Approximation.auxBirthA, TNLean.PEPS.Approximation.auxBirthC, TNLean.PEPS.Approximation.mainDeathC, TNLean.PEPS.Approximation.mainDeathA, TNLean.PEPS.Approximation.mainBirthC, TNLean.PEPS.Approximation.mainDeathB}
     \leanok
-    \uses{lem:peps_dyadic_conical_band, def:peps_dyadic_normal_words}
+    \uses{lem:peps_dyadic_conical_band,def:peps_dyadic_normal_words}
     For any of the seven elementary births and deaths of
     Definition~\ref{def:peps_dyadic_normal_words}, let $f_b$, $f_a$, $f_s$ carry
     its before, after, and surrounding normal words on $\{-8<x<2\}$ with
@@ -191,7 +191,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     \label{thm:peps_dyadic_lens_clearance}
     \lean{TNLean.PEPS.Approximation.lensExchange_clearance}
     \leanok
-    \uses{lem:peps_dyadic_conical_band, def:peps_dyadic_normal_words}
+    \uses{lem:peps_dyadic_conical_band,def:peps_dyadic_normal_words}
     Let $f_m=C$ on $\{-8<x<0\}$, and let $f_{\rm aux}$ carry the word
     (\ref{eq:pdg_aux_word}) on $\{-8<x<2\}$ and equal $C$ off it. Every
     $y\in\overline{\{p:\neg(f_m(p)=f_{\rm aux}(p)=C)\}}$ and $z\in\partial Y$
@@ -217,7 +217,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     \label{def:peps_dyadic_schedule}
     \lean{TNLean.PEPS.Approximation.RepaintingBaseline, TNLean.PEPS.Approximation.openSquare, TNLean.PEPS.Approximation.closedSquare, TNLean.PEPS.Approximation.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.edgeInterface, TNLean.PEPS.Approximation.auxSteps, TNLean.PEPS.Approximation.mainSteps}
     \leanok
-    \uses{def:peps_dyadic_normal_words, thm:peps_dyadic_central_clearance}
+    \uses{def:peps_dyadic_normal_words,thm:peps_dyadic_central_clearance}
     A repainting of $S=[0,n]^2$ ($n>0$) starts from a guide $g$ equal to $A$ on
     $(0,n)^2$ and to $C_e$ on the exterior neighbor $\{0<s<n,\ -n<d<0\}$ across
     each edge $e$. The central guide equals $B$ on the central region $R$ of
@@ -237,7 +237,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     \label{lem:peps_dyadic_schedule_guides}
     \lean{TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_mem_edgeBand, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_edgeStartWord, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_eq_mainGuide_start, TNLean.PEPS.Approximation.RepaintingBaseline.lensExchange_mainGuide, TNLean.PEPS.Approximation.auxSteps_chain, TNLean.PEPS.Approximation.mainSteps_chain, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mainWordFive, TNLean.PEPS.Approximation.RepaintingBaseline.auxGuide_uniform, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_notMem_closedSquare, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_of_mem_openSquare, TNLean.PEPS.Approximation.exists_edgeBand_of_notMem_centralRegion, TNLean.PEPS.Approximation.mem_centralRegion_of_forall_notMem}
     \leanok
-    \uses{def:peps_dyadic_schedule, lem:peps_dyadic_band_disjoint, lem:peps_dyadic_lens_word}
+    \uses{def:peps_dyadic_schedule,lem:peps_dyadic_band_disjoint,lem:peps_dyadic_lens_word}
     For $e\notin E$:
     \begin{enumerate}
         \item On the band $\{-8<x<2\}$ of $e$ off $x\in\{0,1\}$, $g_E$ carries
@@ -304,7 +304,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     \label{thm:peps_dyadic_angular_separation}
     \lean{TNLean.PEPS.Approximation.blockRepainting_central, TNLean.PEPS.Approximation.blockRepainting_auxStep, TNLean.PEPS.Approximation.blockRepainting_mainStep, TNLean.PEPS.Approximation.blockRepainting_exchange, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_central, TNLean.PEPS.Approximation.RepaintingBaseline.dist_le_central, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_auxStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_mainStep, TNLean.PEPS.Approximation.RepaintingBaseline.clearance_exchange, TNLean.PEPS.Approximation.BandOperation.clearance_bandUpdate, TNLean.PEPS.Approximation.BandOperation.dist_le_bandUpdate, TNLean.PEPS.Approximation.dist_le_of_mem_closure_edgeLens, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_changed_subset, TNLean.PEPS.Approximation.RepaintingBaseline.dist_le_exchange}
     \leanok
-    \uses{thm:peps_dyadic_central_clearance, thm:peps_dyadic_band_clearance, thm:peps_dyadic_lens_clearance, lem:peps_dyadic_band_disjoint, lem:peps_dyadic_schedule_guides, lem:peps_dyadic_translation}
+    \uses{thm:peps_dyadic_central_clearance,thm:peps_dyadic_band_clearance,thm:peps_dyadic_lens_clearance,lem:peps_dyadic_band_disjoint,lem:peps_dyadic_schedule_guides,lem:peps_dyadic_translation}
     Let $a_0=1/5000$ and $n>0$, and consider the repainting of an $n$-block $S$
     from a block guide via Definition~\ref{def:peps_dyadic_schedule}.
     \begin{enumerate}
@@ -343,7 +343,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     \label{lem:peps_dyadic_active_labels}
     \lean{TNLean.PEPS.Approximation.blockRepainting_final, TNLean.PEPS.Approximation.levelLabels_insert_of_ne, TNLean.PEPS.Approximation.blockGuide_levelLabels_start, TNLean.PEPS.Approximation.levelLabels_mem, TNLean.PEPS.Approximation.levelLabels_empty_mem, TNLean.PEPS.Approximation.levelLabels_mem_of_subset, TNLean.PEPS.Approximation.blockRepainting_labels, TNLean.PEPS.Approximation.edgeWords, TNLean.PEPS.Approximation.edgeWords_mem, TNLean.PEPS.Approximation.bandWord_mem, TNLean.PEPS.Approximation.levelLabels_mem_owners, TNLean.PEPS.Approximation.SquareEdge.nbrBlock_adjacent, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_mem, TNLean.PEPS.Approximation.RepaintingBaseline.mainGuide_of_notMem}
     \leanok
-    \uses{lem:peps_dyadic_schedule_guides, def:peps_dyadic_block_guide}
+    \uses{lem:peps_dyadic_schedule_guides,def:peps_dyadic_block_guide}
     During the pass to level $n$:
     \begin{enumerate}
         \item Completing the four edges of a root-square block $S$ leaves a main
@@ -371,7 +371,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     \label{lem:peps_dyadic_sites}
     \lean{TNLean.PEPS.Approximation.IsCellCenter, TNLean.PEPS.Approximation.IsCellCenter.sub_blockCorner, TNLean.PEPS.Approximation.IsCellCenter.mem_openSquare_or_notMem_closedSquare, TNLean.PEPS.Approximation.IsCellCenter.notMem_edgeInterface, TNLean.PEPS.Approximation.blockRepainting_start_site, TNLean.PEPS.Approximation.blockRepainting_final_site}
     \leanok
-    \uses{lem:peps_dyadic_schedule_guides, lem:peps_dyadic_active_labels}
+    \uses{lem:peps_dyadic_schedule_guides,lem:peps_dyadic_active_labels}
     For integer $n$, no cell center $(i+\tfrac12,j+\tfrac12)$ lies on $\partial S$
     or on the curves $x\in\{0,1\}$ of any edge of $S$. Hence at every cell center,
     $g_E=g_{E,e}(C_e\mid A\mid B)$ at the start of edge $e$, and the final guide
@@ -456,7 +456,7 @@ and~\ref{lem:peps_dyadic_readings_exist}.
     \label{lem:peps_dyadic_chamber_sampling}
     \lean{TNLean.PEPS.Approximation.IsLocallyInLines.eventually_notMem, TNLean.PEPS.Approximation.HasLineWalls.isChamberSampling_iff, TNLean.PEPS.Approximation.HasLineWalls.exists_isChamberSampling, TNLean.PEPS.Approximation.hasLineWalls_lt, TNLean.PEPS.Approximation.hasLineWalls_floor, TNLean.PEPS.Approximation.isLocallyInLines_bandWidth_eq, TNLean.PEPS.Approximation.isLocallyInLines_div_eq_int, TNLean.PEPS.Approximation.hasLineWalls_mem_edgeBand, TNLean.PEPS.Approximation.hasLineWalls_mem_centralRegion, TNLean.PEPS.Approximation.hasLineWalls_mem_ball, TNLean.PEPS.Approximation.hasLineWalls_bandCoord_lt, TNLean.PEPS.Approximation.hasLineWalls_bandWord, TNLean.PEPS.Approximation.word_subset_wallThresholds, TNLean.PEPS.Approximation.hasLineWalls_blockGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.isRayConstant, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.hasLineWalls, TNLean.PEPS.Approximation.hasLineWalls_schedule, TNLean.PEPS.Approximation.isChamberSampling_schedule}
     \leanok
-    \uses{def:peps_dyadic_chamber_sampling, lem:peps_dyadic_readings_exist, lem:peps_dyadic_schedule_guides, def:peps_dyadic_block_guide}
+    \uses{def:peps_dyadic_chamber_sampling,lem:peps_dyadic_readings_exist,lem:peps_dyadic_schedule_guides,def:peps_dyadic_block_guide}
     Every guide of Lemma~\ref{lem:peps_dyadic_readings_exist} is locally constant
     off a locally finite union of lines with normals in $\mathcal N$. Consequently,
     for every generic displacement $v$, a labelling is sampled from its open
@@ -479,7 +479,7 @@ and~\ref{lem:peps_dyadic_readings_exist}.
     \label{thm:peps_dyadic_angular_separation_sampled}
     \lean{TNLean.PEPS.Approximation.exists_isChamberSampling_blockRepainting, TNLean.PEPS.Approximation.blockRepainting_central_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_auxStep_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_mainStep_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_exchange_of_chamberSampling}
     \leanok
-    \uses{thm:peps_dyadic_angular_separation, lem:peps_dyadic_sampled_guides, lem:peps_dyadic_chamber_sampling}
+    \uses{thm:peps_dyadic_angular_separation,lem:peps_dyadic_sampled_guides,lem:peps_dyadic_chamber_sampling}
     Let $a_0=1/5000$, $n>0$, and let $v$ be a generic displacement. For the
     repainting of an $n$-block $S$, the chamber-sampled guides after $v$ exist and
     satisfy all bounds of Lemma~\ref{thm:peps_dyadic_angular_separation}: every
@@ -546,7 +546,7 @@ and~\ref{lem:peps_dyadic_readings_exist}.
     \label{lem:peps_dyadic_hole_enlargement}
     \lean{TNLean.PEPS.Approximation.tapered_clearance_of_center, TNLean.PEPS.Approximation.lens_clearance_of_center, TNLean.PEPS.Approximation.RepaintingBaseline.floor_exchange_outerHole}
     \leanok
-    \uses{lem:peps_dyadic_floor, lem:peps_dyadic_birth_enlargement}
+    \uses{lem:peps_dyadic_floor,lem:peps_dyadic_birth_enlargement}
     Let $g,h$ be $1$-Lipschitz, $a,t>0$, $2\epsilon_0(a+1)\le a/2$, and
     $Q_x=\max\{t,\min(n,h(x))\}$. If $g(c)\ge aQ_c$, then $|x-c|\le2\epsilon_0t$
     implies $g(x)\ge\tfrac a2Q_x$. In particular, for $2\epsilon_0(a_0+1)\le a_0/2$,
@@ -638,7 +638,7 @@ and~\ref{lem:peps_dyadic_readings_exist}.
         TNLean.PEPS.Approximation.mainDeathB_insertsOne,
         TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.angularConstant_mul_le_mul_max, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.disjoint_closedBall_of_forall_le_dist, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_mem, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
     \leanok
-    \uses{lem:peps_dyadic_floor, lem:peps_dyadic_incident_change, def:peps_dyadic_schedule}
+    \uses{lem:peps_dyadic_floor,lem:peps_dyadic_incident_change,def:peps_dyadic_schedule}
     For a repainting baseline of side $n$ and $t\le n$, let $g_0,g_1$ be its
     starting and central guides homogenized to $A$ on the open radius-$t$ corner
     squares; if $\operatorname{dist}(p,\{g_0\ne g_1\})<a_0t$, then $g_0(p)=A$ and
@@ -681,7 +681,7 @@ protocol and are not formalized here.
     \label{lem:peps_dyadic_tags}
     \lean{TNLean.PEPS.Approximation.IsTrueVertex.exists_isTagHolder, TNLean.PEPS.Approximation.isTagHolder_congr, TNLean.PEPS.Approximation.IsTagHolder.mem_of_forall, TNLean.PEPS.Approximation.isTagHolder_levelStart, TNLean.PEPS.Approximation.isTagHolder_level, TNLean.PEPS.Approximation.isTagHolder_blockRepainting, TNLean.PEPS.Approximation.isTagHolder_levelEnd, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem_range_mainGuide}
     \leanok
-    \uses{def:peps_dyadic_incident_labels, lem:peps_dyadic_active_labels}
+    \uses{def:peps_dyadic_incident_labels,lem:peps_dyadic_active_labels}
     Every true vertex $c$ satisfies $|I_f(c)\setminus\{\ast\}|\ge2$, so a tag
     holder exists in $f(\mathbb R^2)\setminus\{\ast\}$, and $I_f(c)=I_g(c)$
     implies identical tag holders at $c$. Consequently, during the pass to level
@@ -803,7 +803,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{lem:peps_dyadic_direct_repainting}
     \lean{TNLean.PEPS.Approximation.IsTrueVertex.eq_blockCorner, TNLean.PEPS.Approximation.IsBlockCornerOf, TNLean.PEPS.Approximation.isBlockCornerOf_of_mem_closedSquare, TNLean.PEPS.Approximation.le_dist_blockCorner, TNLean.PEPS.Approximation.isTrueVertex_blockGuide_update, TNLean.PEPS.Approximation.levelLabels_insert, TNLean.PEPS.Approximation.isTrueVertex_levelLabels_insert}
     \leanok
-    \uses{def:peps_dyadic_block_guide, lem:peps_dyadic_incident_change}
+    \uses{def:peps_dyadic_block_guide,lem:peps_dyadic_incident_change}
     For $n>0$, every true vertex of an $n$-block guide is a grid corner
     $(na,nb)\in n\mathbb Z^2$. Changing the label of one block $S$ changes the
     true-vertex status and incident labels only at the four corners of $S$, and
@@ -822,7 +822,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{lem:peps_dyadic_choice_K0}
     \lean{TNLean.PEPS.Approximation.le_dist_blockCorner_of_ne, TNLean.PEPS.Approximation.disjoint_ball_blockCorner, TNLean.PEPS.Approximation.bandWidth_of_le_half, TNLean.PEPS.Approximation.bandWidth_of_half_le, TNLean.PEPS.Approximation.mem_edgeBand_iff_of_mem_ball, TNLean.PEPS.Approximation.mem_edgeBand_iff_of_mem_ball_end, TNLean.PEPS.Approximation.eq_point_of_mem_rim, TNLean.PEPS.Approximation.eq_point_of_mem_rim_end, TNLean.PEPS.Approximation.rim_separation}
     \leanok
-    \uses{def:peps_dyadic_edge_band, lem:peps_dyadic_direct_repainting}
+    \uses{def:peps_dyadic_edge_band,lem:peps_dyadic_direct_repainting}
     Distinct grid corners in $n\mathbb Z^2$ are at sup distance at least $n$, so
     for $n>20t$ the squares of radius $10t$ about distinct grid corners are
     disjoint. With $\sigma=\min(s,n-s)$ the parallel distance from an endpoint of
@@ -846,7 +846,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{lem:peps_dyadic_unmodified_vertices}
     \lean{TNLean.PEPS.Approximation.HasTwoLabelsNear, TNLean.PEPS.Approximation.HasTwoLabelsNear.not_isTrueVertex, TNLean.PEPS.Approximation.HasTwoLabelsNear.congr, TNLean.PEPS.Approximation.hasTwoLabelsNear_of_eventuallyEq_const, TNLean.PEPS.Approximation.hasTwoLabelsNear_blockGuide, TNLean.PEPS.Approximation.HasTwoLabelsNear.comp, TNLean.PEPS.Approximation.bandWord_eventually_step, TNLean.PEPS.Approximation.bandWord_eventually_mem, TNLean.PEPS.Approximation.continuousAt_bandCoord, TNLean.PEPS.Approximation.eq_point_zero_of_mem_closedEdgeBand, TNLean.PEPS.Approximation.eq_point_end_of_mem_closedEdgeBand, TNLean.PEPS.Approximation.hasTwoLabelsNear_bandUpdate, TNLean.PEPS.Approximation.IsSquareCorner, TNLean.PEPS.Approximation.isSquareCorner_point_zero, TNLean.PEPS.Approximation.isSquareCorner_point_end, TNLean.PEPS.Approximation.isOpen_openSquare, TNLean.PEPS.Approximation.isOpen_centralRegion, TNLean.PEPS.Approximation.exists_edge_of_mem_closedSquare, TNLean.PEPS.Approximation.mem_openSquare_of_mem_closure_centralRegion, TNLean.PEPS.Approximation.mem_centralRegion_of_nor_eq_two_mul, TNLean.PEPS.Approximation.notMem_closedEdgeBand_of_nor_eq_two_mul, TNLean.PEPS.Approximation.mainWords, TNLean.PEPS.Approximation.auxWordExchanged, TNLean.PEPS.Approximation.auxWords, TNLean.PEPS.Approximation.mainWords_props, TNLean.PEPS.Approximation.auxWords_props, TNLean.PEPS.Approximation.exists_eq_bandWord_of_mem_mainWords, TNLean.PEPS.Approximation.exists_eq_bandWord_of_mem_auxWords, TNLean.PEPS.Approximation.mem_mainWords_of_mem_mainSteps, TNLean.PEPS.Approximation.mem_auxWords_of_mem_auxSteps, TNLean.PEPS.Approximation.RepaintingBaseline.hasTwoLabelsNear_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_nbrLabel, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_finalLabel, TNLean.PEPS.Approximation.RepaintingBaseline.hasTwoLabelsNear_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.hasTwoLabelsNear_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.hasTwoLabelsNear_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.hasTwoLabelsNear, TNLean.PEPS.Approximation.IsTrueVertex.eq_blockCorner_of_isUnmodifiedGuide, TNLean.PEPS.Approximation.eq_blockCorner_of_isTrueVertex_of_mem_closedBall, TNLean.PEPS.Approximation.exists_eventuallyEq_bandUpdate_of_mem_closedEdgeBand}
     \leanok
-    \uses{lem:peps_dyadic_schedule_guides, lem:peps_dyadic_direct_repainting, lem:peps_dyadic_choice_K0, def:peps_dyadic_incident_labels}
+    \uses{lem:peps_dyadic_schedule_guides,lem:peps_dyadic_direct_repainting,lem:peps_dyadic_choice_K0,def:peps_dyadic_incident_labels}
     An unmodified guide of a block repainting is the starting block guide, the
     central guide, a completed guide $g_E$, or a main or auxiliary guide along an
     edge carrying one of that sheet's normal words (including the post-exchange
@@ -871,7 +871,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{lem:peps_dyadic_rim_pattern}
     \lean{TNLean.PEPS.Approximation.bandWord_eventually_eq, TNLean.PEPS.Approximation.edgeCurves, TNLean.PEPS.Approximation.mainWords_eventually_eq, TNLean.PEPS.Approximation.auxWords_eventually_eq, TNLean.PEPS.Approximation.eventually_bandUpdate_eq, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.eventually_completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.eventually_eq, TNLean.PEPS.Approximation.rimPattern, TNLean.PEPS.Approximation.rimPattern_finite, TNLean.PEPS.Approximation.dist_of_mem_rimPattern, TNLean.PEPS.Approximation.le_dist_of_mem_rimPattern, TNLean.PEPS.Approximation.mem_rimPattern_of_grid, TNLean.PEPS.Approximation.mem_rimPattern_of_curve, TNLean.PEPS.Approximation.mem_rimPattern_of_incidentLabels}
     \leanok
-    \uses{lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_choice_K0}
+    \uses{lem:peps_dyadic_unmodified_vertices,lem:peps_dyadic_choice_K0}
     For $v\in\mathbb R^2$ and $t>0$, the rim pattern
     \begin{align}
         \mathcal P(v,t)=\{v+(\sigma t,jt/1000),\ v+(jt/1000,\sigma t):\sigma\in\{\pm1\},\ j\in\mathbb Z,\ |j|\le6\}
@@ -899,7 +899,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_temporary_holes}
     \lean{TNLean.PEPS.Approximation.isTrueVertex_homogenize_cases, TNLean.PEPS.Approximation.le_dist_of_isTrueVertex_homogenize, TNLean.PEPS.Approximation.homogenize_outerHoles_disjoint, TNLean.PEPS.Approximation.IsDisplacedReading.preimage_subset_closure, TNLean.PEPS.Approximation.IsDisplacedReading.isTrueVertex, TNLean.PEPS.Approximation.homogenize_reading_outerHoles_disjoint}
     \leanok
-    \uses{lem:peps_dyadic_rim_pattern, lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_incident_change, lem:peps_dyadic_readings_exist}
+    \uses{lem:peps_dyadic_rim_pattern,lem:peps_dyadic_unmodified_vertices,lem:peps_dyadic_incident_change,lem:peps_dyadic_readings_exist}
     For $20t<n$, a finite set $\mathcal M\subset n\mathbb Z^2$, and an unmodified
     guide homogenized to $P$ on $\bigcup_{v\in\mathcal M}B(v,t)$, every true
     vertex of the homogenized guide (or of any reading of it after a displacement)
@@ -924,7 +924,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_point_ratio}
     \lean{TNLean.PEPS.Approximation.SquareEdge.par_smul, TNLean.PEPS.Approximation.SquareEdge.nor_inv_smul, TNLean.PEPS.Approximation.bandWidth_inv_mul, TNLean.PEPS.Approximation.mem_edgeBand_inv_smul, TNLean.PEPS.Approximation.bandCoord_inv_smul, TNLean.PEPS.Approximation.mem_centralRegion_inv_smul, TNLean.PEPS.Approximation.bandUpdate_inv_smul, TNLean.PEPS.Approximation.comp_bandWord, TNLean.PEPS.Approximation.bandUpdate_comp, TNLean.PEPS.Approximation.comp_mainWords, TNLean.PEPS.Approximation.comp_auxWords, TNLean.PEPS.Approximation.exists_mainWords_comp, TNLean.PEPS.Approximation.exists_auxWords_comp, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.mainGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.auxGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRescale.isUnmodifiedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.centralGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.completedGuide_eq, TNLean.PEPS.Approximation.RepaintingBaseline.IsRelabel.isUnmodifiedGuide, TNLean.PEPS.Approximation.IsConicalAt, TNLean.PEPS.Approximation.IsSquareCorner.trichotomy, TNLean.PEPS.Approximation.SquareEdge.par_add_smul, TNLean.PEPS.Approximation.SquareEdge.nor_add_smul, TNLean.PEPS.Approximation.mem_edgeBand_conical, TNLean.PEPS.Approximation.bandCoord_conical, TNLean.PEPS.Approximation.mem_centralRegion_conical, TNLean.PEPS.Approximation.isConicalAt_blockGuide, TNLean.PEPS.Approximation.IsConicalAt.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.isConicalAt, TNLean.PEPS.Approximation.isTrueVertex_comp_iff, TNLean.PEPS.Approximation.isTrueVertex_comp_homeomorph, TNLean.PEPS.Approximation.similarityInv, TNLean.PEPS.Approximation.similarityInv_apply, TNLean.PEPS.Approximation.image_similarity_closedBall, TNLean.PEPS.Approximation.HasTwoOwnerFootprints.congr, TNLean.PEPS.Approximation.referenceRepainting, TNLean.PEPS.Approximation.nbrBlock_zero_mem_blockWindow, TNLean.PEPS.Approximation.isRelabel_referenceRepainting, TNLean.PEPS.Approximation.isRescale_blockBaseline, TNLean.PEPS.Approximation.RepaintingBaseline.completedGuide_congr, TNLean.PEPS.Approximation.RepaintingBaseline.finite_isUnmodifiedGuide, TNLean.PEPS.Approximation.pointTreated, TNLean.PEPS.Approximation.classRep, TNLean.PEPS.Approximation.classRep_spec, TNLean.PEPS.Approximation.injOn_range_classRep, TNLean.PEPS.Approximation.TemplateIndex, TNLean.PEPS.Approximation.footprintTemplate, TNLean.PEPS.Approximation.cornerOffset, TNLean.PEPS.Approximation.isSquareCorner_cornerOffset, TNLean.PEPS.Approximation.blockCorner_sub_blockCorner, TNLean.PEPS.Approximation.blockIndex_mem_blockWindow, TNLean.PEPS.Approximation.exists_reference_eq, TNLean.PEPS.Approximation.exists_template_eq, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio, TNLean.PEPS.Approximation.homogenize_iUnion_eq_of_mem_ball, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion, TNLean.PEPS.Approximation.exists_template_injOn}
     \leanok
-    \uses{lem:peps_dyadic_footprint_uniform, lem:peps_dyadic_unmodified_vertices, lem:peps_dyadic_choice_K0, lem:peps_dyadic_floor, thm:peps_dyadic_block_ratio}
+    \uses{lem:peps_dyadic_footprint_uniform,lem:peps_dyadic_unmodified_vertices,lem:peps_dyadic_choice_K0,lem:peps_dyadic_floor,thm:peps_dyadic_block_ratio}
     For every $\epsilon_0>0$ there exists $\nu>0$ such that for $8t<n$, any
     unmodified guide of the repainting of an $n$-block $S$, any corner $v$ of $S$,
     and either no homogenization or homogenization on $B(v,t)$ (or simultaneously
@@ -952,7 +952,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_block_ratio}
     \lean{TNLean.PEPS.Approximation.blockWindow, TNLean.PEPS.Approximation.BlockSlot, TNLean.PEPS.Approximation.blockSlot, TNLean.PEPS.Approximation.blockSlotLabel, TNLean.PEPS.Approximation.blockSlotLabel_blockSlot, TNLean.PEPS.Approximation.floor_mem_Icc, TNLean.PEPS.Approximation.blockGuide_eq_blockSlot, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio, TNLean.PEPS.Approximation.exists_resizing_footprintRatio, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed, TNLean.PEPS.Approximation.blockGuide_eq_classRep, TNLean.PEPS.Approximation.norm_smul_inv_sub_lt_iff, TNLean.PEPS.Approximation.mem_Icc_of_mem_holeRadius_pair}
     \leanok
-    \uses{lem:peps_dyadic_footprint_uniform, lem:peps_dyadic_small_radius, lem:peps_dyadic_direct_repainting}
+    \uses{lem:peps_dyadic_footprint_uniform,lem:peps_dyadic_small_radius,lem:peps_dyadic_direct_repainting}
     For any $\rho$ and $0<r_0\le r_1$, there exists $\nu>0$ such that every
     $s$-block guide ($s>0$), about every $v\in s\mathbb Z^2$ and for every
     $r\in[r_0s,r_1s]$, satisfies the two-owner condition
@@ -984,7 +984,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_sampled_ratio}
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.range_subset, TNLean.PEPS.Approximation.IsDisplacedReading.eq_on_ball, TNLean.PEPS.Approximation.IsRayConstant.comp_affine, TNLean.PEPS.Approximation.IsRayConstant.pointTreated, TNLean.PEPS.Approximation.HasLineWalls.pointTreated, TNLean.PEPS.Approximation.isChamberSampling_pointTreated, TNLean.PEPS.Approximation.isRayConstant_footprintTemplate, TNLean.PEPS.Approximation.IsLocallyInLines.preimage_affine, TNLean.PEPS.Approximation.HasLineWalls.comp_affine, TNLean.PEPS.Approximation.hasLineWalls_footprintTemplate, TNLean.PEPS.Approximation.HasLineWalls.eventually_eq_of_sameSide, TNLean.PEPS.Approximation.IsDisplacedReading.of_sameSide, TNLean.PEPS.Approximation.finite_wallNormals, TNLean.PEPS.Approximation.HasLineWalls.finite_genericReadings, TNLean.PEPS.Approximation.exists_template_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_reading, TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_iUnion_reading, TNLean.PEPS.Approximation.exists_blockGuide_footprintRatio_reading, TNLean.PEPS.Approximation.exists_directRepainting_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_reading, TNLean.PEPS.Approximation.exists_resizing_footprintRatio_mixed_reading}
     \leanok
-    \uses{thm:peps_dyadic_point_ratio, thm:peps_dyadic_block_ratio, lem:peps_dyadic_readings_exist, lem:peps_dyadic_chamber_sampling}
+    \uses{thm:peps_dyadic_point_ratio,thm:peps_dyadic_block_ratio,lem:peps_dyadic_readings_exist,lem:peps_dyadic_chamber_sampling}
     There exists $\nu>0$, depending only on the fixed constants, such that for
     every generic displacement $v$ the conclusions of
     Lemmas~\ref{thm:peps_dyadic_point_ratio} and~\ref{thm:peps_dyadic_block_ratio}
@@ -1017,7 +1017,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
         TNLean.PEPS.Approximation.resizeRatio_le_div,
         TNLean.PEPS.Approximation.resizing_footprintRatio_mixed_reading_of_le}
     \leanok
-    \uses{def:peps_dyadic_block_guide, lem:peps_dyadic_readings_exist}
+    \uses{def:peps_dyadic_block_guide,lem:peps_dyadic_readings_exist}
     Let $g'$ be a labelling that reads, after any displacement, the guide uniform
     on the blocks of side $s>0$, and let every true vertex of $g'$ within $s$ of
     the working set $W$ be a hole center. Then every footprint radius $\delta$
@@ -1104,7 +1104,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{lem:peps_dyadic_address_locality}
     \lean{TNLean.PEPS.Approximation.dyadicAnchor_lt_two_pow, TNLean.PEPS.Approximation.dyadicAnchor_lt_add, TNLean.PEPS.Approximation.dyadicAnchor_dist_lt, TNLean.PEPS.Approximation.dyadicAnchor_dist_lt_of_adjacent, TNLean.PEPS.Approximation.card_blocks_meeting_le}
     \leanok
-    \uses{def:peps_dyadic_hierarchy, lem:peps_dyadic_active_labels}
+    \uses{def:peps_dyadic_hierarchy,lem:peps_dyadic_active_labels}
     In each coordinate:
     \begin{enumerate}
         \item $a_j(r)\in[2^jr,2^j(r+1))\subset[0,2^k)$. % chktex 44
@@ -1174,7 +1174,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_active_label_parties}
     \lean{TNLean.PEPS.Approximation.levelLabels_eq_party, TNLean.PEPS.Approximation.OwnsLevelBlock.scale, TNLean.PEPS.Approximation.levelLabels_empty_eq_party, TNLean.PEPS.Approximation.levelLabels_eq_party_of_subset, TNLean.PEPS.Approximation.repaintingUses_of_levelLabels, TNLean.PEPS.Approximation.incidentLabels_blockGuide_corner, TNLean.PEPS.Approximation.junctionUses_of_incidentLabels}
     \leanok
-    \uses{def:peps_dyadic_used_parties, def:peps_dyadic_block_guide}
+    \uses{def:peps_dyadic_used_parties,def:peps_dyadic_block_guide}
     Under an injective assignment of non-placeholder parties to blocks:
     \begin{enumerate}
         \item Between repaintings at level $2^{j'}$, every block party occurring
@@ -1202,7 +1202,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_lifetime_parties}
     \lean{TNLean.PEPS.Approximation.RepaintingUses.near, TNLean.PEPS.Approximation.JunctionUses.near, TNLean.PEPS.Approximation.card_dyadicJunction_uses_le, TNLean.PEPS.Approximation.card_gates_le_of_uses}
     \leanok
-    \uses{def:peps_dyadic_used_parties, def:peps_dyadic_near_block}
+    \uses{def:peps_dyadic_used_parties,def:peps_dyadic_near_block}
     Every repainting using the block party $(j,r,s)$ is $0$-near $(j,r,s)$ (at
     most $32$ such repaintings), and every junction resize using $(j,r,s)$ is
     $1$-near $(j,r,s)$ and is one of at most $9$ junctions. Consequently, if each
@@ -1260,7 +1260,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{lem:peps_dyadic_frozen_hole_count}
     \lean{TNLean.PEPS.Approximation.lens_exchange_auxWord, TNLean.PEPS.Approximation.RepaintingBaseline.lensExchange_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_auxGuide_subset, TNLean.PEPS.Approximation.RepaintingBaseline.ncard_isTrueVertex_auxGuide_le, TNLean.PEPS.Approximation.RepaintingBaseline.ncard_isTrueVertex_shiftGuide_auxGuide_le, TNLean.PEPS.Approximation.frozenAuxGuide, TNLean.PEPS.Approximation.ncard_isTrueVertex_frozenAuxGuide_le, TNLean.PEPS.Approximation.sum_frozenHoles_le, TNLean.PEPS.Approximation.sum_frozenHoles_le_cube}
     \leanok
-    \uses{thm:peps_dyadic_protocol_schedule_counts, lem:peps_dyadic_unmodified_vertices}
+    \uses{thm:peps_dyadic_protocol_schedule_counts,lem:peps_dyadic_unmodified_vertices}
     Exchanging the starting main guide with the auxiliary guide on $Y=\{-7<x<-7/2\}$
     leaves on the auxiliary sheet the word $C\mid A\mid B\mid C$ at $-3,-2,-1$.
     Every true vertex of an auxiliary guide (for any auxiliary word) is one of the
@@ -1286,7 +1286,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{def:peps_dyadic_protocol_parties}
     \lean{TNLean.PEPS.Approximation.DyadicSquare.toTriple, TNLean.PEPS.Approximation.DyadicSquare.ofTriple, TNLean.PEPS.Approximation.RepaintedSquare, TNLean.PEPS.Approximation.ProtocolParty, TNLean.PEPS.Approximation.ProtocolParty.square, TNLean.PEPS.Approximation.protocolPlacement, TNLean.PEPS.Approximation.GuideLabel, TNLean.PEPS.Approximation.guidePlaceholder, TNLean.PEPS.Approximation.validLabels, TNLean.PEPS.Approximation.labelParty, TNLean.PEPS.Approximation.EventUses}
     \leanok
-    \uses{def:peps_dyadic_protocol_schedule, def:peps_dyadic_used_parties}
+    \uses{def:peps_dyadic_protocol_schedule,def:peps_dyadic_used_parties}
     The protocol parties consist of one block party for each hierarchy square
     $Q=(j,r,s)$ and one placeholder party $\ast_S$ for each non-root square $S$
     (attached to $S$ with the scale and address of $S$). Guides take values in the
@@ -1333,7 +1333,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_dyadic_active_labels, thm:peps_dyadic_protocol_parties}
+    \uses{lem:peps_dyadic_active_labels,thm:peps_dyadic_protocol_parties}
     Combine Lemma~\ref{lem:peps_dyadic_active_labels}(2) with
     Lemma~\ref{thm:peps_dyadic_protocol_parties}.
 \end{proof}
@@ -1361,7 +1361,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{def:peps_dyadic_guide_patch_rewrite}
     \lean{TNLean.PEPS.Approximation.GuidePatchRewrite, TNLean.PEPS.Approximation.GuidePatchRewrite.footprint, TNLean.PEPS.Approximation.GuidePatchRewrite.parties, TNLean.PEPS.Approximation.GuidePatchRewrite.IsJunctionResize, TNLean.PEPS.Approximation.GuidePatchRewrite.IsDirectRepainting}
     \leanok
-    \uses{def:peps_dyadic_block_guide, def:peps_dyadic_incident_labels}
+    \uses{def:peps_dyadic_block_guide,def:peps_dyadic_incident_labels}
     Patch data $\mathcal D=(f_{\rm old},f_{\rm new},C_{\rm pat},u,H_{\rm old},H_{\rm new},R_h)$
     for a candidate small-patch rewrite consists of old and new guides
     $f_{\rm old},f_{\rm new}$, patch centers $C_{\rm pat}$ with inner radius $u$,
@@ -1407,7 +1407,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_patch_rewrite_parties}
     \lean{TNLean.PEPS.Approximation.GuidePatchRewrite.parties_subset, TNLean.PEPS.Approximation.junctionUses_of_blockGuide_eq, TNLean.PEPS.Approximation.repaintingUses_of_blockGuide_eq, TNLean.PEPS.Approximation.GuidePatchRewrite.IsJunctionResize.uses, TNLean.PEPS.Approximation.GuidePatchRewrite.IsDirectRepainting.uses}
     \leanok
-    \uses{def:peps_dyadic_guide_patch_rewrite, def:peps_dyadic_used_parties}
+    \uses{def:peps_dyadic_guide_patch_rewrite,def:peps_dyadic_used_parties}
     Under an injective assignment of non-placeholder parties to blocks, if
     $R_h>0$ then $P(\mathcal D)\subset f_{\rm old}(F(\mathcal D))\cup f_{\rm new}(F(\mathcal D))$.
     Every block party in $P(\mathcal D)$ for a junction resize at $(2^ju,2^jv)$ is
@@ -1418,7 +1418,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_block_index_near, thm:peps_dyadic_active_label_parties}
+    \uses{thm:peps_dyadic_block_index_near,thm:peps_dyadic_active_label_parties}
     Since $R_h>0$, $\overline B(h,R_h)$ is a neighborhood of $h$, so
     $I_f(h)\subset f(\overline B(h,R_h))\subset f(F(\mathcal D))$. The block-index
     bounds of Lemma~\ref{thm:peps_dyadic_block_index_near} and the owner
@@ -1448,8 +1448,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_dyadic_nets, lem:peps_dyadic_small_radius,
-        lem:peps_dyadic_direct_repainting}
+    \uses{lem:peps_dyadic_nets,lem:peps_dyadic_small_radius,lem:peps_dyadic_direct_repainting}
     Since $h_{2^{j-1}}\le h_{2^j}\le\epsilon_02^j$ and $h_n\le\epsilon_0n$, the
     sets to be covered lie in closed sup balls of radius $2\epsilon_02^j$ (about
     $c$) and $(1/2+2\epsilon_0)n$ (about the center of $S$). Applying
@@ -1480,7 +1479,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{def:peps_dyadic_local_guides}
     \lean{TNLean.PEPS.Approximation.RepaintingBaseline.localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide, TNLean.PEPS.Approximation.levelBaseline, TNLean.PEPS.Approximation.GuidePatchRewrite.IsLargeRepaintingStep}
     \leanok
-    \uses{def:peps_dyadic_schedule, def:peps_dyadic_guide_patch_rewrite}
+    \uses{def:peps_dyadic_schedule,def:peps_dyadic_guide_patch_rewrite}
     For a repainting of $S=[0,n]^2$ starting from $g$ with final label $B$, the
     local labels are $\mathcal L_{\rm loc}=\{B\}\cup\{g(p):\operatorname{dist}(p,S)<n\}$.
     A guide $f$ is local over a base guide $g_{\rm base}\in\{g,C_e\}$ if
@@ -1496,7 +1495,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_local_guides}
     \lean{TNLean.PEPS.Approximation.SquareEdge.point_mem_closedSquare, TNLean.PEPS.Approximation.edgeBand_subset_thickening, TNLean.PEPS.Approximation.edgeTreated_subset_thickening, TNLean.PEPS.Approximation.cornerTreated_subset_thickening, TNLean.PEPS.Approximation.edgeLens_subset_thickening, TNLean.PEPS.Approximation.RepaintingBaseline.finalLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.guide_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.oldLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.edgeWords_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_guide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_const, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.update, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.homogenize, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.piecewise, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.changed_subset, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_exchangedMain, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_exchangedAux}
     \leanok
-    \uses{def:peps_dyadic_local_guides, lem:peps_dyadic_floor}
+    \uses{def:peps_dyadic_local_guides,lem:peps_dyadic_floor}
     In a repainting of $S=[0,n]^2$:
     \begin{enumerate}
         \item $A,B,C_e\in\mathcal L_{\rm loc}$, so the starting, central,
@@ -1511,7 +1510,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_dyadic_schedule_guides, lem:peps_dyadic_active_labels}
+    \uses{lem:peps_dyadic_schedule_guides,lem:peps_dyadic_active_labels}
     Every band $\{-8<x<2\}$ lies within $8w(s)\le n/250<n/2$ of $S$, and for
     $t\le n/2$ the corner squares of radius $t$ and the lens $Y$ lie in
     $\{p:\operatorname{dist}(p,S)<n/2\}$, while $A,B,C_e\in\mathcal L_{\rm loc}$
@@ -1522,7 +1521,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_large_repainting_parties}
     \lean{TNLean.PEPS.Approximation.repaintingUses_of_mem_localLabels, TNLean.PEPS.Approximation.GuidePatchRewrite.IsLargeRepaintingStep.uses}
     \leanok
-    \uses{def:peps_dyadic_local_guides, def:peps_dyadic_used_parties}
+    \uses{def:peps_dyadic_local_guides,def:peps_dyadic_used_parties}
     Under an injective assignment of non-placeholder parties to blocks, every block
     party in $\mathcal L_{\rm loc}$ for the repainting of $S=(j',r,s)$ — and hence
     every block party in $P(\mathcal D)$ for any large-scale repainting step
@@ -1531,7 +1530,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_patch_rewrite_parties, thm:peps_dyadic_local_guides}
+    \uses{thm:peps_dyadic_patch_rewrite_parties,thm:peps_dyadic_local_guides}
     By Lemma~\ref{thm:peps_dyadic_block_index_near} and
     Lemma~\ref{thm:peps_dyadic_active_label_parties}, every block label within
     sup distance $2^{j'}$ of $S$ (along with the new party $B$ of $S$) is used by
@@ -1564,7 +1563,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_dyadic_nets, thm:peps_dyadic_local_guides}
+    \uses{lem:peps_dyadic_nets,thm:peps_dyadic_local_guides}
     Apply Lemma~\ref{lem:peps_dyadic_nets}: in item~1 the covered set lies in
     $\overline B(c,(1+2\epsilon_0)t)$ and
     $(1+2\epsilon_0+3\nu)t<2t\le n$; in item~2,
@@ -1577,8 +1576,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_large_repainting_lifetime}
     \lean{TNLean.PEPS.Approximation.card_gates_le_of_repaintingRewrites}
     \leanok
-    \uses{def:peps_dyadic_local_guides, def:peps_dyadic_guide_patch_rewrite,
-        def:peps_dyadic_used_parties}
+    \uses{def:peps_dyadic_local_guides,def:peps_dyadic_guide_patch_rewrite,def:peps_dyadic_used_parties}
     If each event of a schedule has at most $G$ gates, each gate carries
     junction-resize, direct-repainting, or large-scale repainting patch data
     $\mathcal D$ for its event, and a block party participates in a gate only when
@@ -1587,8 +1585,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_patch_rewrite_parties, thm:peps_dyadic_large_repainting_parties,
-        thm:peps_dyadic_lifetime_parties}
+    \uses{thm:peps_dyadic_patch_rewrite_parties,thm:peps_dyadic_large_repainting_parties,thm:peps_dyadic_lifetime_parties}
     Combine Lemmas~\ref{thm:peps_dyadic_patch_rewrite_parties},
     \ref{thm:peps_dyadic_large_repainting_parties},
     and~\ref{thm:peps_dyadic_lifetime_parties}.
@@ -1598,8 +1595,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_protocol_lifetime}
     \lean{TNLean.PEPS.Approximation.participation_le_of_eventUses, TNLean.PEPS.Approximation.participation_le_of_repaintingRewrites, TNLean.PEPS.Approximation.card_gates_event_le, TNLean.PEPS.Approximation.participation_le_of_schedule}
     \leanok
-    \uses{def:peps_dyadic_protocol_parties, def:peps_dyadic_guide_patch_rewrite,
-        def:peps_dyadic_local_guides}
+    \uses{def:peps_dyadic_protocol_parties,def:peps_dyadic_guide_patch_rewrite,def:peps_dyadic_local_guides}
     If each event has at most $G$ gates and every gate in which a party $p\in P$
     participates belongs to an event using $p$ (in particular, when block parties
     participate only via $P(\mathcal D)$ and placeholder parties $\ast_S$ only in
@@ -1610,8 +1606,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_lifetime_parties, thm:peps_dyadic_large_repainting_lifetime,
-        thm:peps_dyadic_protocol_schedule_counts}
+    \uses{thm:peps_dyadic_lifetime_parties,thm:peps_dyadic_large_repainting_lifetime,thm:peps_dyadic_protocol_schedule_counts}
     Combine Lemmas~\ref{thm:peps_dyadic_lifetime_parties}
     and~\ref{thm:peps_dyadic_large_repainting_lifetime} with
     Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}, noting that $\ast_S$ is

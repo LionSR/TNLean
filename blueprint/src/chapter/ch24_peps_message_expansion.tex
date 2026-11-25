@@ -63,8 +63,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{definition}[Prepending and composing monomials]
     \label{def:peps_compose_actual_monomials}
-    \lean{QuantumCircuit.Party.PartyCircuit.comp}
-    \lean{QuantumCircuit.Party.PartyCircuit.comp}
+    \lean{QuantumCircuit.Party.PartyCircuit}
     \leanok
     Prepending a word to a monomial composes it with the monomial's initial
     segment. Composing two monomials with matching intermediate registers
@@ -74,12 +73,9 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{lemma}[Operators and pair effects of composed monomials]
     \label{thm:peps_compose_actual_monomials}
-    \lean{QuantumCircuit.Party.PartyCircuit.op_comp}
-    \lean{QuantumCircuit.Party.Monomial.effectCount_comp}
-    \lean{QuantumCircuit.Party.PartyCircuit.op_comp}
     \lean{QuantumCircuit.Party.Monomial.effectCount_comp}
     \leanok
-    \uses{def:peps_compose_actual_monomials}
+    \uses{def:peps_compose_actual_monomials,thm:peps_monomial_composition_counts}
     Prepending an allowed source-only word to an allowed monomial preserves its
     allowedness and pair-effect count. For composable monomials $M,N$, their
     composition $N\circ M$ has operator $N\circ M$, pair-effect count
@@ -245,8 +241,7 @@ parties, using message monomials as in
     \label{thm:peps_message_gate_segment_expansion}
     \lean{QuantumCircuit.Party.MessageGate.expand_map_segment}
     \leanok
-    \uses{def:peps_party_monomial,def:peps_message_monomial,
-        def:peps_message_gate_expand}
+    \uses{def:peps_party_monomial,def:peps_message_monomial,def:peps_message_gate_expand}
     Viewing a list $A=((c_j,M_j))_{j=0}^{K-1}$ of message-free party monomials
     as single-segment message monomials gives $\widetilde A=A$.
 \end{lemma}

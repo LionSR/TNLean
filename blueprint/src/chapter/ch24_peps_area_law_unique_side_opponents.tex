@@ -31,8 +31,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     No layer-membership or late-scale assumption is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_unsplit_side_endpoints,
-        thm:area_law_elementary_side_geometry}
+    \uses{thm:area_law_unsplit_side_endpoints,thm:area_law_elementary_side_geometry}
     Each whole side has length $t>0$ and a constant coordinate equal
     to a boundary coordinate of the square. An elementary segment is
     either this whole side or one of its two midpoint halves. Its
@@ -44,8 +43,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     \label{thm:area_law_unique_elementary_side_opponent}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_elementarySide_opponent}
     \leanok
-    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales,def:area_law_actual_side_mask}
+    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales,def:area_law_actual_side_mask}
     Fix a common origin $o\in\mathbb R^2$, finite endpoint set $Z$,
     integer width $C_0\ge2$ and natural indices $k_0\le k$ with
     $k\ge50\,000\,000$. Let $z\in F_{k,\ell_k}$ index a fine
@@ -67,14 +65,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     layer index is imposed beyond $h\ge k_0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_elementary_side_opponent,
-        thm:area_law_elementary_side_boundary_geometry,
-        thm:area_law_fine_cells_disjoint,thm:area_law_dummy_layer_disjoint,
-        thm:area_law_fine_cell_containment,thm:area_law_dyadic_closures,
-        thm:area_law_elementary_corner_endpoint,
-        thm:area_law_dummy_corner_elementary_side,
-        thm:area_law_cell_fan_mark_vertices,
-        thm:area_law_belt_marks_closed_cell}
+    \uses{thm:area_law_elementary_side_opponent,thm:area_law_elementary_side_boundary_geometry,thm:area_law_fine_cells_disjoint,thm:area_law_dummy_layer_disjoint,thm:area_law_fine_cell_containment,thm:area_law_dyadic_closures,thm:area_law_elementary_corner_endpoint,thm:area_law_dummy_corner_elementary_side,thm:area_law_cell_fan_mark_vertices,thm:area_law_belt_marks_closed_cell}
     Existence follows from the preceding opposing-region theorem.
     To prove uniqueness, put $x=(a_i+b_i)/2$. The segment is
     nondegenerate and lies on one side of the reference square, so

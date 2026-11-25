@@ -50,7 +50,7 @@ independent of the chain length and the requested accuracy.
     \label{thm:ldp_unequal_polar_tree}
     \lean{MPSPreparation.exists_isometryTree_matrix_eq_cfgPolarIso}
     \leanok
-    \uses{def:ldp_bounded_isometry_tree, def:ldpolar_matrix, def:injective}
+    \uses{def:ldp_bounded_isometry_tree,def:ldpolar_matrix,def:injective}
     Let $s\ge1$, and assume that $A$ blocked over every $m\ge s$ sites
     is injective. If $2^h s\le n\le2^h c$, its polar isometry $V_n$
     is the contraction of a tree of coarse depth $h$ whose physical
@@ -79,7 +79,7 @@ independent of the chain length and the requested accuracy.
         MPSPreparation.isIsometry_supportedMergeIso,
         MPSPreparation.exists_isometryTree_matrix_eq_supportedCfgPolarIso}
     \leanok
-    \uses{def:ldp_bounded_isometry_tree, def:ldpolar_injective_on}
+    \uses{def:ldp_bounded_isometry_tree,def:ldpolar_injective_on}
     Let $S$ be a set of bond pairs and let $J\colon\C^\chi\to\C^{D^2}$
     be an injective coordinate inclusion with range $\C^S$.
     Suppose that for every $m\ge s\ge1$, the matrices of $A^{[m]}$
@@ -131,7 +131,7 @@ independent of the chain length and the requested accuracy.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_tensor_injective_on, lem:ldp_polar_merge}
+    \uses{thm:ldpolar_tensor_injective_on,lem:ldp_polar_merge}
     The polar support is the coordinate projection $JJ^\dagger$,
     so $V_m$ vanishes outside the selected columns and
     $J^\dagger V_m^\dagger V_mJ=I_\chi$.
@@ -186,8 +186,7 @@ independent of the chain length and the requested accuracy.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_bounded_tree_isometry, thm:ldp_chain_block_iso_inner,
-        thm:ldp_isometric_extension_overlap, thm:ldp_unitary_implementing_isometry}
+    \uses{thm:ldp_bounded_tree_isometry,thm:ldp_chain_block_iso_inner,thm:ldp_isometric_extension_overlap,thm:ldp_unitary_implementing_isometry}
     Completing the unit column $\ket\omega$ to a unitary taking
     $\ket{0,0}$ to it realizes the top pair, while tensor products of the
     normalized pairs have norm one and the isometric forest preserves
@@ -199,7 +198,7 @@ independent of the chain length and the requested accuracy.
     \lean{MPSPreparation.UnequalMERA.state_eq_blockIsometryState,
         MPSPreparation.UnequalMERA.exists_of_trees_eq_blockIsometryState}
     \leanok
-    \uses{def:ldp_unequal_mera, def:ldp_block_isometry_state}
+    \uses{def:ldp_unequal_mera,def:ldp_block_isometry_state}
     If $T_k=V_{\ell_k}$ and the top unitary prepares $\ket\omega$,
     the network state equals
     $(\bigotimes_k V_{\ell_k})\bigotimes_k\ket\omega_{R_kL_{k+1}}$.
@@ -208,7 +207,7 @@ independent of the chain length and the requested accuracy.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:ldp_unequal_mera, def:ldp_block_isometry_state, thm:ldp_unequal_mera_norm}
+    \uses{def:ldp_unequal_mera,def:ldp_block_isometry_state,thm:ldp_unequal_mera_norm}
     Substituting the tree contractions into
     (\ref{eq:ldp_unequal_mera_state}) regroups the physical
     configurations according to the prescribed block partition.
@@ -238,7 +237,7 @@ independent of the chain length and the requested accuracy.
     \label{thm:ldp_every_length_mera}
     \lean{MPSPreparation.exists_unequalMERA_every_length}
     \leanok
-    \uses{def:ldp_unequal_mera, def:normal}
+    \uses{def:ldp_unequal_mera,def:normal}
     Let $A$ be a normal tensor of physical dimension $d$ and bond
     dimension $D$. There are constants $R\ge1$ and $C\ge2$, chosen
     before $\varepsilon$ and $N$, such that for every $\varepsilon>0$
@@ -260,10 +259,7 @@ independent of the chain length and the requested accuracy.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_unequal_polar_tree, thm:ldp_unequal_mera_polar_state,
-        thm:ldp_unequal_mera_caps, thm:ldp_block_approximation_error,
-        thm:ldp_short_chain_preparation, lem:ldp_normalized_state_rescaling,
-        thm:ldp_depth_upper_bound_divisible, thm:prep_pair_norm}
+    \uses{thm:ldp_unequal_polar_tree,thm:ldp_unequal_mera_polar_state,thm:ldp_unequal_mera_caps,thm:ldp_block_approximation_error,thm:ldp_short_chain_preparation,lem:ldp_normalized_state_rescaling,thm:ldp_depth_upper_bound_divisible,thm:prep_pair_norm}
     For $\varepsilon>1$, a product state suffices, so assume
     $0<\varepsilon\le1$. Passing to a normal left-canonical representative $B$ changes
     normalized states only by a phase; let $s\ge1$ be its
@@ -299,14 +295,14 @@ independent of the chain length and the requested accuracy.
     \label{thm:ldp_eventual_every_length_mera}
     \lean{MPSPreparation.exists_unequalMERA_of_normal}
     \leanok
-    \uses{def:ldp_unequal_mera, def:normal}
+    \uses{def:ldp_unequal_mera,def:normal}
     For a normal tensor with $D\ge1$, the same fixed dimension and
     layer bounds hold for all $N\ge N_0$, for some fixed $N_0$,
     without a separate nonvanishing hypothesis.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_every_length_mera, lem:ldp_periodic_state_nonzero}
+    \uses{thm:ldp_every_length_mera,lem:ldp_periodic_state_nonzero}
     Normality implies eventual nonvanishing of the periodic state, so
     Lemma~\ref{thm:ldp_every_length_mera} applies beyond that threshold.
 \end{proof}

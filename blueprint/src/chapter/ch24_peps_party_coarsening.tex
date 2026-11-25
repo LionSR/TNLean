@@ -15,9 +15,8 @@ owner identification for the affected and exterior systems in
 \begin{definition}[Changing register owners]
     \label{def:peps_owner_layout}
     \lean{ManyBody.blockSystem}
-    \lean{ManyBody.blockConfigEquiv}
     \leanok
-    \uses{def:peps_party_registers}
+    \uses{def:peps_party_registers,def:qc_blocked_local_channel_conversion}
     For a register list $\ell=((p_1,H_1),\ldots,(p_n,H_n))$ (with no
     injectivity or finiteness assumption on $f,P,Q$), put
     $\ell^f=((f(p_1),H_1),\ldots,(f(p_n),H_n))$, preserving empty lists and
@@ -127,10 +126,8 @@ owner identification for the affected and exterior systems in
     \label{thm:peps_owner_composition}
     \lean{QuantumCircuit.Party.Word.isAllowed_coarsen}
     \lean{QuantumCircuit.Party.Word.sources_coarsen}
-    \lean{QuantumCircuit.Party.Word.op_coarsen}
-    \lean{QuantumCircuit.Party.Word.op_coarsen}
     \leanok
-    \uses{def:peps_owner_composition,def:peps_owner_sources}
+    \uses{def:peps_owner_composition,def:peps_owner_sources,thm:peps_owner_evaluation_identification}
     Without assuming norm bounds, $F$ and $F^f$ satisfy
     \begin{align}
         R_{f,\ell'}F & =F^fR_{f,\ell}.
@@ -171,8 +168,7 @@ owner identification for the affected and exterior systems in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_owner_sources_internal,thm:peps_owner_composition,
-        thm:peps_party_binary_factorization,thm:peps_party_restriction}
+    \uses{thm:peps_owner_sources_internal,thm:peps_owner_composition,thm:peps_party_binary_factorization,thm:peps_party_restriction}
     By Lemmas~\ref{thm:peps_owner_sources_internal} and
     \ref{thm:peps_owner_composition}, $F^f$ is allowed with empty source list
     $S_f$; applying Lemmas~\ref{thm:peps_party_binary_factorization} and

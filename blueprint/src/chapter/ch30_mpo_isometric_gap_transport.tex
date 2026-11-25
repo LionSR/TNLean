@@ -111,10 +111,7 @@ $E^\dagger$, so their coefficients are complex conjugated as in
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpo_isometry_support_commute,
-        thm:spt_isometric_interaction_ground_space,
-        thm:spt_sector_bond_gap,thm:spt_isometric_parent_interaction,
-        thm:spt_periodic_hamiltonian_order}
+    \uses{thm:mpo_isometry_support_commute,thm:spt_isometric_interaction_ground_space,thm:spt_sector_bond_gap,thm:spt_isometric_parent_interaction,thm:spt_periodic_hamiltonian_order}
     The interaction $B$ is the isometric extension of zero and is an
     orthogonal projection. Since the original zero Hamiltonian has the
     whole chain as its kernel, the exact kernel relation for commuting
@@ -230,8 +227,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     $\psi=0$; a nonzero ground vector is not a hypothesis.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spt_isometric_interaction_zero_modes,
-        thm:mpo_isometry_inactive_bound,thm:mpo_isometry_abstract_kernel}
+    \uses{thm:spt_isometric_interaction_zero_modes,thm:mpo_isometry_inactive_bound,thm:mpo_isometry_abstract_kernel}
     The tensor power $W_N$ is an isometry, and the periodic
     intertwining identity is $H'_NW_N=W_NH_N$.
     Lemma~\ref{thm:mpo_isometry_inactive_bound} gives the strict
@@ -253,9 +249,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     eigenvalue.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spt_isometric_interaction_zero_modes,
-        thm:spt_periodic_hamiltonian_order,thm:mpo_isometry_inactive_bound,
-        thm:mpo_isometry_abstract_quadratic}
+    \uses{thm:spt_isometric_interaction_zero_modes,thm:spt_periodic_hamiltonian_order,thm:mpo_isometry_inactive_bound,thm:mpo_isometry_abstract_quadratic}
     Positivity of $h$ and $h'$ makes both periodic sums positive. For a
     positive matrix, the eigenvalue condition with constant $\delta$ is
     equivalent to the quadratic-form bound
@@ -336,8 +330,7 @@ These assertions require no symmetry of the endpoint tensors.
     \label{def:mpo_arbitrary_physical_tensor}
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInterpolation}
     \leanok
-    \uses{def:mpo_mixed_endpoint_tensor,def:ldpolar_tensor,
-        def:spt_common_physical_endpoints}
+    \uses{def:mpo_mixed_endpoint_tensor,def:ldpolar_tensor,def:spt_common_physical_endpoints}
     Let $\mathcal B(\gamma)$ be the mixed interpolation of $B_0,B_1$
     from Definition~\ref{def:mpo_mixed_endpoint_tensor}. Define
     \begin{align}
@@ -359,8 +352,7 @@ These assertions require no symmetry of the endpoint tensors.
     $0<\gamma<1$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpo_mixed_interior,thm:mpo_polar_support_injective,
-        thm:spt_common_physical_endpoints}
+    \uses{thm:mpo_mixed_interior,thm:mpo_polar_support_injective,thm:spt_common_physical_endpoints}
     The mixed tensor depends continuously on $\gamma$, and physical
     mixing by the fixed matrix $J$ is continuous. Injectivity of
     $B_0,B_1$ gives interior injectivity of $\mathcal B(\gamma)$.
@@ -377,8 +369,7 @@ These assertions require no symmetry of the endpoint tensors.
         MPSTensor.MPOSymmetry.mpv_arbitraryPhysicalMixedInterpolation_zero,
         MPSTensor.MPOSymmetry.mpv_arbitraryPhysicalMixedInterpolation_one}
     \leanok
-    \uses{def:mpo_arbitrary_physical_tensor,def:mpo_mixed_first_endpoint,
-        def:mpo_mixed_endpoint_swap}
+    \uses{def:mpo_arbitrary_physical_tensor,def:mpo_mixed_first_endpoint,def:mpo_mixed_endpoint_swap}
     Extending a square-alphabet tensor by zero into its diagonal
     physical sector is exactly physical mixing by $I_p$.
     In particular, the auxiliary small-bond tensors
@@ -395,9 +386,7 @@ These assertions require no symmetry of the endpoint tensors.
     The equality at $p$ requires injectivity only of $A_p$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spt_common_physical_polar_endpoints,
-        thm:ldpolar_tensor_decomposition,
-        thm:mpo_mixed_periodic_line_continuity}
+    \uses{thm:spt_common_physical_polar_endpoints,thm:ldpolar_tensor_decomposition,thm:mpo_mixed_periodic_line_continuity}
     The coordinate inclusion agrees with the original tensor on its
     sector and vanishes elsewhere. The identities
     $E_pF_p=JI_p$ and $A_p=F_pB_p$ give
@@ -429,8 +418,7 @@ original bond-$D_p$ tensors.
     \label{def:mpo_arbitrary_physical_interaction}
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction}
     \leanok
-    \uses{def:mpo_mixed_extended_support,def:mpo_arbitrary_physical_tensor,
-        def:spt_isometric_interaction_extension}
+    \uses{def:mpo_mixed_extended_support,def:mpo_arbitrary_physical_tensor,def:spt_isometric_interaction_extension}
     For any square-alphabet tensors $C_0,C_1$, let
     $h_{C_0,C_1}(\gamma)$ be the matrix of
     $I-\Pi_{\mathcal S'_\gamma}$ for their extended mixed two-site
@@ -459,9 +447,7 @@ original bond-$D_p$ tensors.
     $\widetilde h_\gamma$ is continuous on $\R$, including at $0$ and $1$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpo_mixed_endpoint_projector_comparison,
-        thm:mpo_mixed_support_continuity,thm:mpo_polar_support_injective,
-        thm:mpo_isometry_inactive_bound}
+    \uses{thm:mpo_mixed_endpoint_projector_comparison,thm:mpo_mixed_support_continuity,thm:mpo_polar_support_injective,thm:mpo_isometry_inactive_bound}
     The complement of an orthogonal projection is positive.
     Passing to matrix coordinates preserves positivity and continuity
     in finite dimension. Under the stated injectivity hypotheses,
@@ -510,10 +496,7 @@ original bond-$D_p$ tensors.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpo_polar_support_injective,
-        thm:mpo_mixed_periodic_line_continuity,
-        thm:mpo_arbitrary_interaction_continuity,
-        thm:mpo_isometry_positive_kernel}
+    \uses{thm:mpo_polar_support_injective,thm:mpo_mixed_periodic_line_continuity,thm:mpo_arbitrary_interaction_continuity,thm:mpo_isometry_positive_kernel}
     The support-coordinate theorem gives the nonzero periodic vector
     of $\mathcal B(\gamma)$ and its exact ground line.
     The coordinate identity identifies its Euclidean Hamiltonian with
@@ -540,11 +523,7 @@ original bond-$D_p$ tensors.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpo_polar_support_injective,
-        thm:mpo_mixed_uniform_periodic_path_gap,
-        thm:mpo_arbitrary_interaction_continuity,
-        thm:mpo_isometry_positive_gap,
-        thm:mpo_arbitrary_periodic_ground_line}
+    \uses{thm:mpo_polar_support_injective,thm:mpo_mixed_uniform_periodic_path_gap,thm:mpo_arbitrary_interaction_continuity,thm:mpo_isometry_positive_gap,thm:mpo_arbitrary_periodic_ground_line}
     For the derived injective tensors $B_0,B_1$, which have square physical
     alphabets, the uniform mixed-path gap theorem gives $\delta>0$,
     independent of $\gamma\in[0,1]$ and $N\geq2$, with

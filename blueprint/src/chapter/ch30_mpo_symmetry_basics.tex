@@ -122,8 +122,7 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 
 \begin{remark}[On-site symmetries]%
     \label{rem:mposym_onsite}
-    \uses{def:on_site_symmetric, thm:virtual_symmetry_eq,
-        cor:virtual_rep_cocycle, def:mpo_family}
+    \uses{def:on_site_symmetric,thm:virtual_symmetry_eq,cor:virtual_rep_cocycle,def:mpo_family}
     A representation $u\colon G\to\GL_d(\C)$ acts on a chain of $N$ sites by
     $u_g^{\otimes N}$, the periodic operator of the bond-dimension-one tensor
     $T_g^{ij}=u(g)_{ij}$; as in \cite[Section~4]{GarreRubio2023MPOSym},
@@ -141,7 +140,7 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 
 \begin{remark}[Groups represented by matrix product unitaries]%
     \label{rem:mposym_mpu_groups}
-    \uses{def:mpu, def:mpug_positive_mpu, def:mpug_group_representation}
+    \uses{def:mpu,def:mpug_positive_mpu,def:mpug_group_representation}
     A symmetry need not act site by site to be local. A matrix product
     unitary (Definition~\ref{def:mpu}) is a matrix product operator whose
     periodic operator is unitary at every length $N>1$. A finite group is
@@ -162,9 +161,7 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 
 \begin{remark}[Group operators from a three-cocycle and the anomaly]%
     \label{rem:mposym_group_cocycle}
-    \uses{def:mpug_three_cocycle, def:asymex_group_cocycle_tensor,
-        thm:asymex_group_cocycle_mul, thm:asymex_group_cocycle_z2,
-        thm:mpug_anomaly_obstruction}
+    \uses{def:mpug_three_cocycle,def:asymex_group_cocycle_tensor,thm:asymex_group_cocycle_mul,thm:asymex_group_cocycle_z2,thm:mpug_anomaly_obstruction}
     Every normalized three-cocycle $\omega$ of a finite group $G$
     (Definition~\ref{def:mpug_three_cocycle}) gives matrix product operators
     $U_g$ on the chain with site space $\C[G]$: a left shift by $g$ on every
@@ -209,9 +206,7 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
         MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_of_closed_fusion,
         MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion}
     \leanok
-    \uses{def:injective, def:mpo_to_mps, def:mpdo_operator_product,
-        def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec,
-        def:mpug_anomaly_class}
+    \uses{def:injective,def:mpo_to_mps,def:mpdo_operator_product,def:mpug_anomaly_three_cochain,thm:mpug_anomaly_three_cochain_spec,def:mpug_anomaly_class}
     Let $\{T_g\}_{g\in G}$ be matrix product operator tensors of a group $G$
     whose doubled-index tensors are injective, with $U_gU_h=U_{gh}$ and
     $U_e=\Id$ on every nonempty chain, and let $(F^<_{g,h},F^>_{g,h})$ be
@@ -260,8 +255,7 @@ $O_a^{(N)}\ket{V^{(N)}(A)}$. Chain lengths are positive, $N\geq1$.
 \end{center}
 
 \begin{proof}\leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec,
-        cor:mpug_anomaly_class}
+    \uses{def:mpug_anomaly_three_cochain,thm:mpug_anomaly_three_cochain_spec,cor:mpug_anomaly_class}
     The tensor $T_e$ is injective with $\tr T_e^{ij}=\delta_{ij}$ and
     $\tr(T_e^{ij}T_e^{kl})=\delta_{ij}\delta_{kl}$, so
     $\tr(XY)=\tr X\,\tr Y$ on the whole matrix algebra; testing on two
@@ -299,7 +293,7 @@ periodic boundary conditions~\cite[Section~3]{GarreRubio2023MPOSym}; see
     \label{def:mpo_fusion_algebra}
     \lean{MPOTensor.IsMPOFusionAlgebra}
     \leanok
-    \uses{def:mpo_tensor, def:mpo_family}
+    \uses{def:mpo_tensor,def:mpo_family}
     A finite family $(T_a)_{a\in I}$ of matrix product operator tensors with
     structure constants $N_{ab}^c\in\N$ is a \emph{fusion algebra}
     (\cite[Section~2]{GarreRubio2023MPOSym}; \cite{Bultinck2017Anyons}) if, for
@@ -467,8 +461,7 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
 
 \begin{remark}[The unit is a projector]%
     \label{rem:mposym_unit_projector}
-    \uses{def:fusion_unit_invertible, lem:asymex_fib_vacuum,
-        thm:asymex_ising_path_operators}
+    \uses{def:fusion_unit_invertible,lem:asymex_fib_vacuum,thm:asymex_ising_path_operators}
     If $e$ is a unit of a fusion algebra, then $N_{ee}^c=\delta_{ec}$ gives
     $\bigl(O_e^{(N)}\bigr)^2=O_e^{(N)}$ and $O_e^{(N)}O_a^{(N)}=O_a^{(N)}
         O_e^{(N)}=O_a^{(N)}$ for every $a$. Thus $O_e^{(N)}$ is an idempotent
@@ -493,9 +486,7 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
         FibonacciCompression.perronFrobeniusDim_fibNim_one,
         FibonacciCompression.not_isInvertibleLabel_fibNim_tau}
     \leanok
-    \uses{def:mposym_pf_dimension, lem:mposym_pf_dimension_positive,
-        def:asymex_fib_anomaly_nim, thm:asymex_fib_anomaly_fusion_algebra,
-        def:asymex_fib_fsymbols}
+    \uses{def:mposym_pf_dimension,lem:mposym_pf_dimension_positive,def:asymex_fib_anomaly_nim,thm:asymex_fib_anomaly_fusion_algebra,def:asymex_fib_fsymbols}
     The Fibonacci labels are $1$ and $\tau$, with unit $1$ and
     $\tau\times\tau=1+\tau$. Its fusion matrix $N_\tau$ in the order
     $(1,\tau)$ is (\ref{eq:asymex_fib_anomaly_matrix}),
@@ -529,9 +520,7 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
         IsingTwist.not_isInvertibleLabel_isingFusion_sigma,
         IsingTwist.mpo_isingBlock_sigma_mul_sub}
     \leanok
-    \uses{def:mposym_pf_dimension, lem:mposym_pf_dimension_positive,
-        thm:asymex_ising_sigma_fusion, thm:asymex_ising_sigma_square,
-        ex:mpo_symmetry_ising}
+    \uses{def:mposym_pf_dimension,lem:mposym_pf_dimension_positive,thm:asymex_ising_sigma_fusion,thm:asymex_ising_sigma_square,ex:mpo_symmetry_ising}
     The Ising labels are $1$, $\psi$ and $\sigma$, with unit $1$ and the
     fusion rules of Section~\ref{sec:asymex_ising_tensors}, of which the only
     non-invertible one is $\sigma\times\sigma=1+\psi$. In the order
@@ -557,8 +546,7 @@ the lattice form of the non-invertible symmetries of Ising and anyon chains
 
 \begin{remark}[Kramers--Wannier duality]%
     \label{rem:mposym_kramers_wannier}
-    \uses{def:asymex_kw, cor:asymex_kw_square, lem:asymex_kw_sectors,
-        rem:mpoalg_kramers_wannier}
+    \uses{def:asymex_kw,cor:asymex_kw_square,lem:asymex_kw_sectors,rem:mpoalg_kramers_wannier}
     The Kramers--Wannier duality of the transverse-field Ising chain is a
     matrix product operator of bond dimension two
     (Definition~\ref{def:asymex_kw}). With the normalization
@@ -600,7 +588,7 @@ relation between word traces has nonnegative integer coefficients.
     \lean{MPOTensor.IsMPOSymmetricFamily,
         MPOTensor.IsMPOSymmetric}
     \leanok
-    \uses{def:mpo_fusion_algebra, def:mps_tensor}
+    \uses{def:mpo_fusion_algebra,def:mps_tensor}
     A finite family $(A_x)_{x\in K}$ of matrix product state tensors is
     \emph{symmetric} under $(T_a)_{a\in I}$ with coefficients
     $M_{a,x}^y\in\C$ if, for all $a$, $x$ and $N\geq1$,
@@ -699,7 +687,7 @@ relation between word traces has nonnegative integer coefficients.
     \label{thm:asymex_fib_anomaly_integral_action}
     \lean{MPOTensor.exists_nat_eq_of_mpo_mulVec_mpv_eq_smul}
     \leanok
-    \uses{thm:asymex_fib_anomaly_trace_integral, cor:asym_action_tensors}
+    \uses{thm:asymex_fib_anomaly_trace_integral,cor:asym_action_tensors}
     Let $T$ be a matrix product operator tensor and $A$ a word-normal
     matrix product state tensor of positive bond dimension, with the
     same physical alphabet. Suppose there is a single scalar $c\in\C$
@@ -776,8 +764,7 @@ $N$-th power of one phase.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpoalg_unimodular_power_sum, thm:asym_unblocked_coefficients,
-        cor:asym_action_tensors}
+    \uses{thm:mpoalg_unimodular_power_sum,thm:asym_unblocked_coefficients,cor:asym_action_tensors}
     By Corollary~\ref{cor:asym_action_tensors} the left-hand side is the
     periodic vector of the tensor $T\cdot A$. Lemma~\ref{thm:asym_unblocked_coefficients},
     applied to $T\cdot A$ and the single normal target $B$, gives nonzero
@@ -794,7 +781,7 @@ $N$-th power of one phase.
     \label{thm:mpoalg_multiblock_trace_integral}
     \lean{MPSTensor.exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul}
     \leanok
-    \uses{def:asym_word_module, def:normal}
+    \uses{def:asym_word_module,def:normal}
     Let $(A_y)_{y\in K}$ be normal tensors of positive bond dimension with
     pairwise non-isomorphic word modules, let $B$ be a tensor on the same
     physical alphabet, and let $c_y\in\C$ satisfy
@@ -836,7 +823,7 @@ $N$-th power of one phase.
         MPOTensor.sum_fusion_mul_eq_sum_mul_of_isMPOSymmetricFamily,
         MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily}
     \leanok
-    \uses{def:mpo_symmetric_family, def:fusion_character_nimrep, def:normal}
+    \uses{def:mpo_symmetric_family,def:fusion_character_nimrep,def:normal}
     Let $(A_x)_{x\in K}$ be normal tensors of positive bond dimension whose
     periodic vectors are linearly independent at some length $N_0\geq1$,
     symmetric under a fusion algebra with coefficients $M_{a,x}^y$. Then, as
@@ -865,7 +852,7 @@ $N$-th power of one phase.
     \label{thm:mpo_symmetric_character}
     \lean{MPOTensor.exists_isFusionCharacter_of_isMPOSymmetric}
     \leanok
-    \uses{def:mpo_symmetric_family, def:fusion_character_nimrep}
+    \uses{def:mpo_symmetric_family,def:fusion_character_nimrep}
     If a normal tensor of positive bond dimension is symmetric under a fusion
     algebra with eigenvalues $c_a$ and $c_e=1$, then $c_a\in\N$ for every $a$
     and $a\mapsto c_a$ is a fusion character.
@@ -907,8 +894,7 @@ $N$-th power of one phase.
         MPOTensor.IsNIMRep.exists_equiv_of_isInvertibleLabel,
         MPOTensor.exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel}
     \leanok
-    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetric_character,
-        def:fusion_unit_invertible}
+    \uses{thm:mpo_symmetric_nimrep,thm:mpo_symmetric_character,def:fusion_unit_invertible}
     A fusion character with values in $\N$ is $1$ on every invertible label,
     so an invertible label fixes the periodic vectors of a single symmetric
     normal tensor with $c_e=1$. For a family as in
@@ -923,7 +909,7 @@ $N$-th power of one phase.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetric_character}
+    \uses{thm:mpo_symmetric_nimrep,thm:mpo_symmetric_character}
     From $m_am_b=m_e=1$ in $\N$ one gets $m_a=1$. For the family, the
     multiplicity matrices satisfy $M_aM_b=M_bM_a=M_e=\Id$ with nonnegative
     integer entries, so each row of $M_a$ is a standard basis vector, and the
@@ -938,8 +924,7 @@ $N$-th power of one phase.
         FibonacciCompression.isNIMRep_fibNim,
         FibonacciCompression.not_isFusionCharacter_fibNim}
     \leanok
-    \uses{cor:mpo_symmetric_no_go, thm:asymex_fib_anomaly_fusion_algebra,
-        thm:asymex_fib_anomaly_nim_rep}
+    \uses{cor:mpo_symmetric_no_go,thm:asymex_fib_anomaly_fusion_algebra,thm:asymex_fib_anomaly_nim_rep}
     The Fibonacci operators of Section~\ref{sec:asymex_fibonacci} form a
     fusion algebra with unit $1$ and $\tau\times\tau=1+\tau$; the two normal
     states with $\tau\cdot x_1=x_\tau$ and $\tau\cdot x_\tau=x_1+x_\tau$ form
@@ -959,7 +944,7 @@ $N$-th power of one phase.
         FibonacciCompression.exists_equiv_of_isNIMRep_fibNim_of_card_eq_two,
         FibonacciCompression.exists_equiv_of_isMPOSymmetricFamily_fibBlock}
     \leanok
-    \uses{def:asymex_fib_anomaly_nim, thm:mpo_symmetric_nimrep}
+    \uses{def:asymex_fib_anomaly_nim,thm:mpo_symmetric_nimrep}
     Let $M$ be a nonnegative integer representation of the Fibonacci ring on
     a set $K$ of blocks with $M_{1,x}^y=\delta_{xy}$. If $K$ has one element,
     no such $M$ exists. If $K$ has two elements, then after labelling the
@@ -975,8 +960,7 @@ $N$-th power of one phase.
 \end{corollary}
 
 \begin{proof}
-    \uses{def:asymex_fib_anomaly_nim, thm:asymex_fib_anomaly_fusion_algebra,
-        thm:mpo_symmetric_nimrep}
+    \uses{def:asymex_fib_anomaly_nim,thm:asymex_fib_anomaly_fusion_algebra,thm:mpo_symmetric_nimrep}
     \leanok
     Relation (\ref{eq:mpo_nimrep}) at $a=b=\tau$ with
     $\tau\times\tau=1+\tau$ gives $M_\tau^2=\Id+M_\tau$. On one block this is
@@ -1016,9 +1000,7 @@ $N$-th power of one phase.
         IsingTwist.not_isFusionCharacter_isingFusion,
         IsingTwist.not_isMPOSymmetric_ising}
     \leanok
-    \uses{def:mpo_symmetry_ising_data, cor:mpo_symmetric_no_go,
-        thm:asymex_ising_path_operators, cor:asymex_ising_sigma_fusion_unscaled,
-        thm:asymex_ising_sigma_square}
+    \uses{def:mpo_symmetry_ising_data,cor:mpo_symmetric_no_go,thm:asymex_ising_path_operators,cor:asymex_ising_sigma_fusion_unscaled,thm:asymex_ising_sigma_square}
     The blocks of Definition~\ref{def:mpo_symmetry_ising_data} form a fusion
     algebra with unit $1$ and these structure constants
     \cite{Bultinck2017Anyons}. A fusion character
@@ -1076,7 +1058,7 @@ $N$-th power of one phase.
         MPOTensor.isNIMRep_repS3Z2, MPOTensor.isNIMRep_repS3Z3,
         MPOTensor.repS3Z3Printed, MPOTensor.not_isNIMRep_repS3Z3Printed}
     \leanok
-    \uses{thm:mposym_su24_reps3_units, def:fusion_character_nimrep}
+    \uses{thm:mposym_su24_reps3_units,def:fusion_character_nimrep}
     The following actions on blocks, with the unit acting as the identity,
     satisfy (\ref{eq:mpo_nimrep}).
     \begin{enumerate}
@@ -1140,7 +1122,7 @@ $N$-th power of one phase.
     \lean{MPOTensor.isFusionCharacter_repS3Fusion_iff,
         MPOTensor.not_isFusionCharacter_su24Fusion}
     \leanok
-    \uses{def:mposym_su24_reps3, def:fusion_character_nimrep}
+    \uses{def:mposym_su24_reps3,def:fusion_character_nimrep}
     The only fusion character of $\mathrm{Rep}(S_3)$ with values in $\N$ is
     $(m_1,m_\pi,m_\psi)=(1,2,1)$, the $\Z_1$ phase; $su(2)_4$ has no fusion
     character with values in $\N$.
@@ -1179,7 +1161,7 @@ $N$-th power of one phase.
         MPOTensor.exists_isNIMRepSummand_su24,
         MPOTensor.exists_equiv_of_isIndecomposable_su24}
     \leanok
-    \uses{thm:mposym_su24_reps3_nimreps, def:mposym_dual_nimrep}
+    \uses{thm:mposym_su24_reps3_nimreps,def:mposym_dual_nimrep}
     Let $M$ be a dual action satisfying (\ref{eq:mpo_nimrep}) on a finite
     set of blocks, with the unit acting as the identity. Every label of
     either ring is self-dual, so every $M_a$ is symmetric.
@@ -1247,7 +1229,7 @@ $N$-th power of one phase.
     \lean{MPOTensor.repS3NonDual, MPOTensor.isNIMRep_repS3NonDual,
         MPOTensor.not_isTransposeDual_repS3NonDual}
     \leanok
-    \uses{def:mposym_dual_nimrep, def:mposym_su24_reps3}
+    \uses{def:mposym_dual_nimrep,def:mposym_su24_reps3}
     On two blocks, $M_\psi=1$ and
     $M_\pi=\begin{pmatrix}0&1\\2&1\end{pmatrix}$ satisfy
     (\ref{eq:mpo_nimrep}) with the unit acting as the identity, but $M_\pi$
@@ -1310,7 +1292,7 @@ fusion ring.
         MPOTensor.IsFusionRing.perronFrobeniusDim_pos,
         Matrix.exists_eq_smul_of_pos_of_mulVec_eq}
     \leanok
-    \uses{def:mposym_fusion_ring, def:mposym_pf_dimension}
+    \uses{def:mposym_fusion_ring,def:mposym_pf_dimension}
     For a fusion ring there are positive numbers $r_b$ with
     $\sum_br_bN_{ab}^c=d_a\,r_c$ for all labels $a$ and $c$, where $d_a$ is
     the Perron--Frobenius dimension of $a$, and $d_a>0$ for every $a$.
@@ -1318,7 +1300,7 @@ fusion ring.
 
 \begin{proof}
     \leanok
-    \uses{thm:mposym_pf_eigenvector, lem:mposym_pf_dimension_positive}
+    \uses{thm:mposym_pf_eigenvector,lem:mposym_pf_dimension_positive}
     The coefficient of $c$ in $(b\times b^*)\times c$ is at least
     $N_{bb^*}^eN_{ec}^c=1$, and by associativity it equals the coefficient
     of $c$ in $b\times(b^*\times c)$; so for all $b,c$ some label $a$ has
@@ -1341,8 +1323,7 @@ fusion ring.
     \lean{MPOTensor.IsNIMRep.exists_pos_left_eigenvector,
         MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim}
     \leanok
-    \uses{def:mposym_fusion_ring, def:fusion_character_nimrep,
-        def:mposym_pf_dimension}
+    \uses{def:mposym_fusion_ring,def:fusion_character_nimrep,def:mposym_pf_dimension}
     Let $N$ be a fusion ring with unit $e$ and let $M_{a,x}^y$ be a
     nonnegative integer representation of it on a finite set $K$ with
     $M_{e,x}^y=\delta_{xy}$. Then there are positive numbers $v_x$ with
@@ -1358,7 +1339,7 @@ fusion ring.
 
 \begin{proof}
     \leanok
-    \uses{thm:mposym_fusion_ring_regular, lem:mposym_pf_dimension_positive}
+    \uses{thm:mposym_fusion_ring_regular,lem:mposym_pf_dimension_positive}
     Let $r$ be as in Lemma~\ref{thm:mposym_fusion_ring_regular} and
     $S=\sum_br_bM_b$. By (\ref{eq:mpo_nimrep}),
     $M_bM_a=\sum_cN_{ab}^cM_c$, so
@@ -1374,8 +1355,7 @@ fusion ring.
     \lean{MPOTensor.IsMPOSymmetricFamily.mpo_mulVec_sum_eq_smul,
         MPOTensor.exists_pos_symmetric_boundary_state}
     \leanok
-    \uses{def:normal, def:mpo_symmetric_family, def:mposym_fusion_ring,
-        def:mposym_pf_dimension}
+    \uses{def:normal,def:mpo_symmetric_family,def:mposym_fusion_ring,def:mposym_pf_dimension}
     Let $(A_x)_{x\in K}$, with $K$ nonempty, be normal tensors of positive bond dimension whose
     periodic vectors are linearly independent at some length $N_0\geq1$,
     symmetric under a fusion algebra whose structure constants form a fusion
@@ -1395,7 +1375,7 @@ fusion ring.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpo_symmetric_nimrep, thm:mposym_nimrep_pos_eigenvector}
+    \uses{thm:mpo_symmetric_nimrep,thm:mposym_nimrep_pos_eigenvector}
     By Theorem~\ref{thm:mpo_symmetric_nimrep} the coefficients $M_{a,x}^y$
     form a nonnegative integer representation. Take $v$ from
     Lemma~\ref{thm:mposym_nimrep_pos_eigenvector}. Then
@@ -1413,9 +1393,7 @@ fusion ring.
         FibonacciCompression.mpo_fibTau_mulVec_boundary,
         FibonacciCompression.mpo_fibOne_mulVec_boundary}
     \leanok
-    \uses{def:mposym_fusion_ring, thm:mposym_symmetric_boundary_state,
-        thm:asymex_fib_anomaly_nim_rep, ex:mpo_symmetry_fibonacci,
-        ex:mposym_fibonacci_dimension}
+    \uses{def:mposym_fusion_ring,thm:mposym_symmetric_boundary_state,thm:asymex_fib_anomaly_nim_rep,ex:mpo_symmetry_fibonacci,ex:mposym_fibonacci_dimension}
     The Fibonacci structure constants form a fusion ring with unit $1$ and
     both labels self-dual. For the family of
     Example~\ref{ex:mpo_symmetry_fibonacci}, $M_\tau=N_\tau$ and
@@ -1437,9 +1415,7 @@ fusion ring.
 
 \begin{remark}[Zipper and pulling-through conditions]%
     \label{rem:mposym_zipper}
-    \uses{def:mpdo_complete_zipper_fusion_family, rem:asym_zipper,
-        def:mpoalg_fusion_tensors, def:mpoalg_action_tensors,
-        cor:asym_zipper_fusion_uniqueness}
+    \uses{def:mpdo_complete_zipper_fusion_family,rem:asym_zipper,def:mpoalg_fusion_tensors,def:mpoalg_action_tensors,cor:asym_zipper_fusion_uniqueness}
     The fusion rule (\ref{eq:mpo_fusion_algebra}) is an identity of periodic
     operators. Its local form, the \emph{zipper condition}, asks for maps
     $X_{ab,\mu}^c\colon\C^{\chi_c}\to\C^{\chi_a}\otimes\C^{\chi_b}$ and left

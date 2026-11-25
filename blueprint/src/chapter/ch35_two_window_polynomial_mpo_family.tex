@@ -43,10 +43,7 @@ the coefficient operators; see
     \label{thm:physical_polynomial_canonical_middle_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_polynomial_mpo_family}
     \leanok
-    \uses{def:crossing_frequency_index,thm:global_two_window_polynomial_recovery,
-        thm:common_middle_grid_mpo_family,
-        thm:common_middle_low_frequency_cardinality,
-        def:regional_middle_transferred_family,thm:chain_two_window_family_cardinality}
+    \uses{def:crossing_frequency_index,thm:global_two_window_polynomial_recovery,thm:common_middle_grid_mpo_family,thm:common_middle_low_frequency_cardinality,def:regional_middle_transferred_family,thm:chain_two_window_family_cardinality}
     Let
     \begin{align}
         \kappa=\{0,\ldots,2\ell-1\}^2\times
@@ -107,9 +104,7 @@ the coefficient operators; see
     sharper source bond; no running-time assertion is made.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:global_two_window_polynomial_recovery,thm:common_middle_grid_mpo_family,
-        thm:common_middle_low_frequency_cardinality,
-        thm:chain_two_window_family_cardinality}
+    \uses{thm:global_two_window_polynomial_recovery,thm:common_middle_grid_mpo_family,thm:common_middle_low_frequency_cardinality,thm:chain_two_window_family_cardinality}
     Choose the common scalar recovery points and weights before the operator
     family and the polynomial coefficients. For every crossing position and
     low-frequency pair, apply the supplied-node middle-family theorem at those

@@ -35,14 +35,14 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     \label{thm:psd_fp_pd}
     \lean{Kraus.posSemidef_fixedPoint_isPosDef}
     \leanok
-    \uses{def:injective, def:transfer_map}
+    \uses{def:injective,def:transfer_map}
     Let $A$ be an injective MPS tensor and let $\rho \ge 0$,
     $\rho \neq 0$, be a fixed point of $\E_A$. Then $\rho$ is positive
     definite.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:injective_irreducible, thm:transfer_psd_fp_pd_irred}
+    \uses{thm:injective_irreducible,thm:transfer_psd_fp_pd_irred}
     Because injectivity implies irreducibility of the transfer map,
     Lemma~\ref{thm:transfer_psd_fp_pd_irred} yields positive definiteness.
 \end{proof}
@@ -71,13 +71,13 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
     \label{thm:psd_fp_unique}
     \lean{Kraus.posSemidef_fixedPoint_unique}
     \leanok
-    \uses{def:injective, def:transfer_map}
+    \uses{def:injective,def:transfer_map}
     Let $A$ be an injective MPS tensor. If $\rho,\sigma\geq0$ are nonzero
     fixed points of $\E_A$, then $\sigma=c\rho$ for some $c\in\C$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:injective_irreducible, thm:psd_fp_unique_irred}
+    \uses{thm:injective_irreducible,thm:psd_fp_unique_irred}
     Because injectivity implies irreducibility of the transfer map,
     Lemma~\ref{thm:psd_fp_unique_irred} yields uniqueness up to scaling.
 \end{proof}
@@ -110,7 +110,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 \begin{theorem}[Quantum Perron--Frobenius]\label{thm:qpf}
     \lean{Kraus.quantum_perron_frobenius}
     \leanok
-    \uses{def:injective, def:transfer_map}
+    \uses{def:injective,def:transfer_map}
     Assume $D \ge 1$. Let $A$ be an injective MPS tensor with
     $\sum_i (A^i)^\dagger A^i = \Id$.
     Then the transfer map $\E_A$ has a unique positive semidefinite fixed point
@@ -119,7 +119,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 
 \begin{proof}
     \leanok
-    \uses{thm:psd_fp_exists, thm:psd_fp_pd, thm:psd_fp_unique}
+    \uses{thm:psd_fp_exists,thm:psd_fp_pd,thm:psd_fp_unique}
     Lemmas~\ref{thm:psd_fp_exists},~\ref{thm:psd_fp_pd},
     and~\ref{thm:psd_fp_unique} together provide existence, positive
     definiteness, and uniqueness up to scaling.
@@ -138,7 +138,7 @@ Wolf~\cite[Chapter~6]{Wolf2012Quantum} and Evans~\cite{Evans1978Spectral}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:psd_fp_exists, thm:transfer_psd_fp_pd_irred, thm:psd_fp_unique_irred}
+    \uses{thm:psd_fp_exists,thm:transfer_psd_fp_pd_irred,thm:psd_fp_unique_irred}
     Existence is the channel fixed-point theorem
     (Lemma~\ref{thm:psd_fp_exists}). Irreducibility upgrades the fixed point
     to positive definite, and Lemma~\ref{thm:psd_fp_unique_irred} gives
@@ -260,7 +260,7 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:transfer_map_irreducible_of_tensor}
     \lean{Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily}
     \leanok
-    \uses{def:irreducible_tensor, def:transfer_map}
+    \uses{def:irreducible_tensor,def:transfer_map}
     If an MPS tensor $A$ is irreducible, then its transfer map $\E_A$ is
     irreducible.
 \end{lemma}
@@ -280,7 +280,7 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:posDef_adjoint_eigenvector}
     \lean{MPSTensor.exists_posDef_adjoint_eigenvector}
     \leanok
-    \uses{def:irreducible_tensor, def:transfer_map}
+    \uses{def:irreducible_tensor,def:transfer_map}
     Combining the eigenvector-existence statement of
     \cite[Theorem~6.5]{Wolf2012Quantum} with the irreducible positive-definiteness
     upgrade of \cite[Theorem~6.3(2)--(3)]{Wolf2012Quantum} and applying them to
@@ -307,7 +307,7 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
     \label{thm:tp_data_irreducible}
     \lean{MPSTensor.exists_tp_data_of_irreducible}
     \leanok
-    \uses{def:irreducible_tensor, def:gauge_equiv}
+    \uses{def:irreducible_tensor,def:gauge_equiv}
     Following the spectral rescaling and trace-preserving gauge construction of
     \cite[Appendix~A]{Cirac2016MPDO_arXiv}, let $A$ be an irreducible MPS tensor
     with $D > 0$ and some $A^i \neq 0$.
@@ -322,7 +322,7 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:posDef_adjoint_eigenvector, thm:tp_gauge_from_adjoint_eigenvector, lem:tp_gauge_equiv}
+    \uses{thm:posDef_adjoint_eigenvector,thm:tp_gauge_from_adjoint_eigenvector,lem:tp_gauge_equiv}
     Lemma~\ref{thm:posDef_adjoint_eigenvector} provides a positive definite
     $\sigma$ and $r > 0$ with $\E_A^\dagger(\sigma) = r\sigma$. For
     $c = r^{-1/2}$ and $A'^i = cA^i$, this gives $\E_{A'}^\dagger(\sigma) = \sigma$.
@@ -352,7 +352,7 @@ Cirac et al.~\cite[Appendix~A]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:posDef_adjoint_eigenvector, thm:unital_gauge_of_pd_fixed_point}
+    \uses{thm:posDef_adjoint_eigenvector,thm:unital_gauge_of_pd_fixed_point}
     Applying Lemma~\ref{thm:posDef_adjoint_eigenvector} to the
     conjugate-transposed Kraus family (to which irreducibility and the nonzero
     Kraus hypothesis transfer) and translating the resulting adjoint eigenvector

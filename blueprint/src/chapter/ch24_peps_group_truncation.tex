@@ -99,7 +99,7 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
         TNLean.Network.WholeGroup.flattening,
         TNLean.Network.WholeGroup.flattening_contraction}
     \leanok
-    \uses{def:peps_group_contraction, def:peps_group_nuclear_norm}
+    \uses{def:peps_group_contraction,def:peps_group_nuclear_norm}
     Under the hypotheses of Lemma~\ref{thm:peps_group_contraction_norm}, for
     every $T\subseteq V$, the matrix reshaping $Z_T$ of $Z$ with rows indexed
     by $\prod_{v\in T}P_v$ and columns by $\prod_{v\in V\setminus T}P_v$
@@ -107,7 +107,7 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_group_contraction_norm, lem:peps_group_nuclear_holder}
+    \uses{thm:peps_group_contraction_norm,lem:peps_group_nuclear_holder}
     By Lemma~\ref{thm:peps_group_contraction_norm}, the partial contractions
     $A$ on $T$ and $B$ on $V\setminus T$ satisfy $\lVert A\rVert_2,\lVert B\rVert_2\le1$,
     and grouping the edges between $T$ and $V\setminus T$ gives
@@ -163,8 +163,7 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_group_contraction_norm, thm:peps_group_contraction_nuclear,
-        lem:peps_group_truncation_abstract}
+    \uses{thm:peps_group_contraction_norm,thm:peps_group_contraction_nuclear,lem:peps_group_truncation_abstract}
     Lemmas~\ref{thm:peps_group_contraction_norm} and
     \ref{thm:peps_group_contraction_nuclear} give $\lVert Z\rVert\le1$ and
     $\lVert Z_T\rVert_1\le1$. Since $|P_v|=1$ when $v$ has no open legs, the

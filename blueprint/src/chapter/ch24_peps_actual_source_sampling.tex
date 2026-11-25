@@ -293,8 +293,8 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Polynomial number of replacement monomials]
     \label{thm:peps_effect_replacement_polynomial}
+    \uses{thm:peps_physical_first_branch_polynomial}
     \lean{QuantumCircuit.Party.replacementMonomialBound_le_of_power_bounds}
-    \lean{QuantumCircuit.Party.OriginalCircuit.card_branchLabels_replacement_le_power}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:peps_effect_stack_polynomial}, if
     $K\in\N$ satisfies $K\leq C_KL^a$ ($C_K\geq0$, $a\in\N$), then
@@ -321,9 +321,7 @@ and discarded registers; its tensor-network representation is proved separately.
     \label{thm:peps_actual_pure_sampled_physical_sum}
     \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum}
     \leanok
-    \uses{thm:peps_actual_pure_physical_source_replacement,
-        thm:peps_actual_sampled_physical_scalar,
-        def:peps_selected_physical_private_basis}
+    \uses{thm:peps_actual_pure_physical_source_replacement,thm:peps_actual_sampled_physical_scalar,def:peps_selected_physical_private_basis}
     For product input $\psi$, product physical basis of dimensions $d_p$,
     grouped local physical-and-private bases
     (Definition~\ref{def:peps_selected_physical_private_basis}), branch
@@ -346,8 +344,7 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_actual_pure_physical_source_replacement,
-        thm:peps_actual_sampled_physical_scalar}
+    \uses{thm:peps_actual_pure_physical_source_replacement,thm:peps_actual_sampled_physical_scalar}
     Expand $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ over $\xi,\zeta$ by
     Lemma~\ref{thm:peps_actual_pure_physical_source_replacement} and factor each
     $(\xi,\zeta)$ term by Lemma~\ref{thm:peps_actual_sampled_physical_scalar}

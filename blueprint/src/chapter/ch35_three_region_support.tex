@@ -84,8 +84,7 @@ The statements below give supporting locality algebra for
     \label{thm:three_region_two_window_collars}
     \lean{TNLean.MPS.AreaLaw.exists_threeCut_two_window_factors_with_collars}
     \leanok
-    \uses{def:chain_model,lem:peps_frame_split_forms,
-        thm:three_region_partial_support}
+    \uses{def:chain_model,lem:peps_frame_split_forms,thm:three_region_partial_support}
     Consider a chain of $L$ sites and nonnegative integers $a,b,\ell$ with
     $a+2\ell\le b$ and $b+2\ell\le L-1$.
     Let the label set consist of $L_r,R_r$ for $0\le r<2\ell$, together
@@ -133,9 +132,7 @@ The statements below give supporting locality algebra for
     complementary sums of bond terms is assumed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms,
-        thm:peps_supported_left_factor_rank,thm:peps_supported_right_factor_rank,
-        thm:three_region_partial_support}
+    \uses{thm:chain_two_cut_edge_supports,lem:peps_frame_split_forms,thm:peps_supported_left_factor_rank,thm:peps_supported_right_factor_rank,thm:three_region_partial_support}
     The selected bonds meet each side of their cut at one site, so their
     crossing operators have operator Schmidt rank at most $q^2$.
     Every other left-window bond lies either in $T$ or in $E$, according as

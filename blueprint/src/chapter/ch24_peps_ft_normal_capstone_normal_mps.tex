@@ -41,7 +41,7 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.cycleNormalPEPSBlockingHypotheses}
     \lean{TNLean.PEPS.isCrossingEdge_cycleEdge_iff}
     \leanok
-    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_regionInjectivityData}
+    \uses{def:peps_normalPEPSBlockingHypotheses,def:peps_regionInjectivityData}
     On the cycle graph of $n$ vertices, let $A(v,\ell)=\{v,v+1,\ldots,v+\ell-1\}\pmod n$
     be the clockwise arc of length $\ell$ from $v$. Suppose $0<L$, $3L\le n$,
     $\inj\bigl(A(v,L)\bigr)$ holds for all $v$, and $\inj$ satisfies union
@@ -69,7 +69,7 @@ chains, one tensor per site, which is the setting of
     \label{def:peps_normalCycleArcMPS}
     \lean{TNLean.PEPS.IsNormalCycleArcMPS}
     \leanok
-    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, def:peps_regionInjectivityDataOf}
+    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses,def:peps_regionInjectivityDataOf}
     A tensor $A$ on the $n$-site cycle graph is a \emph{normal MPS with
         blocking length $L$} when $\inj_A\bigl(A(v,L)\bigr)$ holds for every site
     $v$ and $D_e>0$ for every bond $e$
@@ -81,7 +81,7 @@ chains, one tensor per site, which is the setting of
     \label{cor:fundamentalTheorem_normalMPS_cycle}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle}
     \leanok
-    \uses{def:peps_normalCycleArcMPS, def:GaugeEquivPEPS}
+    \uses{def:peps_normalCycleArcMPS,def:GaugeEquivPEPS}
     Let $A$ and $B$ be normal MPS with blocking length $L>0$
     (Definition~\ref{def:peps_normalCycleArcMPS}) on the $n$-site cycle with
     $n\ge 3L$ and common physical dimension $d>0$. If $\Coeff_A=\Coeff_B$, then
@@ -96,7 +96,7 @@ chains, one tensor per site, which is the setting of
     giving the first corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_connected, lem:peps_injectiveRegion_union_pos}
+    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses,thm:fundamentalTheorem_normalPEPS_connected,lem:peps_injectiveRegion_union_pos}
     Since $D_e>0$, Lemma~\ref{lem:peps_injectiveRegion_union_pos} gives union
     closure for $\inj_A\wedge\inj_B$.
     Lemma~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses} then supplies the
@@ -109,7 +109,7 @@ chains, one tensor per site, which is the setting of
     \label{cor:fundamentalTheorem_normalMPS_cycle_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle_gauge_unique}
     \leanok
-    \uses{def:peps_normalCycleArcMPS, def:gaugeVertex}
+    \uses{def:peps_normalCycleArcMPS,def:gaugeVertex}
     In the setting of Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle}, if
     $A$ and $B$ are normal MPS with blocking length $L>0$ ($n\ge 3L$) and equal
     bond dimensions, any two invertible bond-gauge families $Z,Z'$ satisfying
@@ -117,7 +117,7 @@ chains, one tensor per site, which is the setting of
     scalars $c_i\in\C^\times$ \cite[Section~4]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:peps_injectiveRegion_union_pos}
+    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses,thm:fundamentalTheorem_normalPEPS_gauge_unique,lem:peps_injectiveRegion_union_pos}
     Combine Lemma~\ref{lem:peps_injectiveRegion_union_pos} and
     Lemma~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses} with the per-edge
     uniqueness Lemma~\ref{thm:fundamentalTheorem_normalPEPS_gauge_unique}.
@@ -130,7 +130,7 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.cycleRightIncident}
     \lean{TNLean.PEPS.cycleTensorOfMPS}
     \leanok
-    \uses{def:peps_tensor, def:mps_tensor}
+    \uses{def:peps_tensor,def:mps_tensor}
     On the $n$-site cycle ($n\ge 3$), each site $v$ has incident bonds
     $e_{v-1}=(v-1,v)$ and $e_v=(v,v+1)$. The \emph{cycle tensor} of an MPS
     tensor $A=(A^i)_{i=0}^{d-1}\in\MN{D}^d$ places $A$ at every site $v$ with
@@ -143,7 +143,7 @@ chains, one tensor per site, which is the setting of
     \lean{MPSTensor.evalWord_ofFn_apply}
     \lean{TNLean.PEPS.stateCoeff_cycleTensorOfMPS}
     \leanok
-    \uses{def:cycleTensorOfMPS, def:peps_stateCoeff, def:mpv}
+    \uses{def:cycleTensorOfMPS,def:peps_stateCoeff,def:mpv}
     For $n \ge 3$ and $\sigma = (i_1, \ldots, i_n)$, the state coefficient of
     the cycle tensor of $A$ (Definition~\ref{def:cycleTensorOfMPS}) is
     \begin{align}
@@ -166,7 +166,7 @@ chains, one tensor per site, which is the setting of
     \lean{TNLean.PEPS.matrix_eq_zero_of_isNBlkInjective}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_cycleTensorOfMPS}
     \leanok
-    \uses{def:cycleTensorOfMPS, def:l_blk_injective, def:peps_regionInjectivityDataOf}
+    \uses{def:cycleTensorOfMPS,def:l_blk_injective,def:peps_regionInjectivityDataOf}
     If $0 < L < n$, $n \ge 3$, $D>0$, and $A$ is $L$-block injective
     (Definition~\ref{def:l_blk_injective}), then the cycle tensor of $A$
     satisfies $\inj_A\bigl(A(v,L)\bigr)$ for every site $v$.
@@ -199,7 +199,7 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \label{cor:fundamentalTheorem_normalMPS}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS}
     \leanok
-    \uses{def:l_blk_injective, def:mpv}
+    \uses{def:l_blk_injective,def:mpv}
     Let $0 < L$, $2L + 1 \le n$, $D>0$, and let $A,B\in\MN{D}^d$ be $L$-block
     injective with $V^{(n)}(A)=V^{(n)}(B)$. Then there exist invertible matrices
     $(Z_v)_{v=1}^n$ ($Z_{n+1}\equiv Z_1$) such that
@@ -220,7 +220,7 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \label{lem:gaugeFamily_bond_proportional}
     \lean{TNLean.PEPS.gaugeFamily_bond_proportional}
     \leanok
-    \uses{def:l_blk_injective, def:eval_word}
+    \uses{def:l_blk_injective,def:eval_word}
     Let $n\ge 1$, let $A,B\in\MN{D}^d$ with $A$ being $L$-block injective, and
     let $(Z_v)_{v=1}^n,(Z'_v)_{v=1}^n$ ($Z_{n+1}\equiv Z_1$, $Z'_{n+1}\equiv Z'_1$)
     be invertible matrices satisfying $B^i = Z_v^{-1} A^i Z_{v+1} = Z'^{-1}_v A^i Z'_{v+1}$
@@ -261,7 +261,7 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \label{lem:gaugeFamily_succ_proportional}
     \lean{TNLean.PEPS.gaugeFamily_succ_proportional}
     \leanok
-    \uses{def:l_blk_injective, def:eval_word}
+    \uses{def:l_blk_injective,def:eval_word}
     Let $n\ge 1$, let $A,B\in\MN{D}^d$ with $A$ being $L$-block injective, and
     let $(Z_v)_{v=1}^n$ ($Z_{n+1}\equiv Z_1$) be invertible matrices satisfying
     (\ref{eq:peps_normal_mps_per_bond}). Then for each $v$ there exists
@@ -282,7 +282,7 @@ translation-invariant corollary of \cite[Section~4]{Molnar2018NormalPEPS}.
     \label{cor:fundamentalTheorem_normalMPS_translationInvariant}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant}
     \leanok
-    \uses{def:l_blk_injective, def:mpv}
+    \uses{def:l_blk_injective,def:mpv}
     Let $0 < L$, $2L + 1 \le n$, $D>0$, and let $A,B\in\MN{D}^d$ be $L$-block
     injective with $V^{(n)}(A) = V^{(n)}(B)$. Then there exist an invertible
     matrix $Z\in\GL_D(\C)$ and $\lambda\in\C$ with $\lambda^n = 1$ such that
@@ -352,7 +352,7 @@ size to $n \ge 2L + 1$.
     \cite[Section~``Normal MPS: alternative proof'']{Molnar2018NormalPEPS}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:eval_word, thm:wordspan_blk_inj_succ}
+    \uses{def:eval_word,thm:wordspan_blk_inj_succ}
     By induction on $m\ge L$ via Lemma~\ref{thm:wordspan_blk_inj_succ}: writing
     $\Id=\sum_{|u|=L}\alpha_u A^u$ expresses any $P\in\MN{D}$ as
     $\sum_{i,|w|=L-1}\alpha_{iw} A^i(A^w P)$, and expanding each $A^w P$ in
@@ -364,14 +364,14 @@ size to $n \ge 2L + 1$.
     \lean{MPSTensor.exists_mpvTransport}
     \lean{MPSTensor.exists_evalWordTransport}
     \leanok
-    \uses{def:l_blk_injective, def:mpv, def:eval_word}
+    \uses{def:l_blk_injective,def:mpv,def:eval_word}
     Let $A,B\in\MN{D}^d$, let $n = k + q$, and suppose $\{A^x:|x|=k\}$ and
     $\{A^y:|y|=q\}$ each span $\MN{D}$. If $V^{(n)}(A)=V^{(n)}(B)$ (or if
     $A^w=B^w$ for all $|w|=n$), then there exists a linear map
     $\Lambda:\MN{D}\to\MN{D}$ such that $\Lambda(A^x)=B^x$ for all $|x|=k$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpv, def:eval_word}
+    \uses{def:mpv,def:eval_word}
     Define $\Psi_A,\Psi_B:\MN{D}\to\C^{d^q}$ by
     $\Psi_A(M)_y=\tr(M A^y)$ and $\Psi_B(M)_y=\tr(M B^y)$ ($|y|=q$). Since
     $\{A^y:|y|=q\}$ spans $\MN{D}$ and the trace pairing is nondegenerate,
@@ -387,7 +387,7 @@ size to $n \ge 2L + 1$.
     \lean{MPSTensor.overlapWindow_exists_bondOperator}
     \lean{MPSTensor.bondOperator_unique}
     \leanok
-    \uses{def:l_blk_injective, def:eval_word}
+    \uses{def:l_blk_injective,def:eval_word}
     Let $0 < L$, $2L + 1 \le n$, let $B\in\MN{D}^d$ be $L$-block injective, and
     let $C_0, \ldots, C_L:\{0,\ldots,d-1\}^L\to\MN{D}$ satisfy, for all
     $0\le j < L$, $|p|=j$, $|u|=L+1$, and $|s|=n-j-L-1$,
@@ -408,7 +408,7 @@ size to $n \ge 2L + 1$.
     (Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:chain_overlapWindow_exists_bondOperator, def:eval_word}
+    \uses{lem:chain_overlapWindow_exists_bondOperator,def:eval_word}
     Apply Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator} to the
     constant chain with tensor $B$ at every site.
 \end{proof}
@@ -417,7 +417,7 @@ size to $n \ge 2L + 1$.
     \label{lem:exists_conjugation_of_mpv_eq}
     \lean{MPSTensor.exists_conjugation_of_mpv_eq}
     \leanok
-    \uses{def:l_blk_injective, def:mpv, def:eval_word}
+    \uses{def:l_blk_injective,def:mpv,def:eval_word}
     Let $0 < L$, $2L + 1 \le n$, $0<D$, and let $A,B\in\MN{D}^d$ be $L$-block
     injective with $V^{(n)}(A)=V^{(n)}(B)$. Then there exists $Z\in\GL_D(\C)$
     such that
@@ -428,7 +428,7 @@ size to $n \ge 2L + 1$.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap, thm:mps_chain_gaugeEquiv_sameState}
+    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,thm:mps_chain_gaugeEquiv_sameState}
     Regarding $A$ and $B$ as constant chains on $n$ sites,
     Corollary~\ref{cor:fundamentalTheorem_normalMPSChain_of_overlap} gives bond
     gauges $(Z_v)_{v=0}^{n-1}$ with $B^i=Z_v A^i Z_{v+1}^{-1}$, and
@@ -440,13 +440,13 @@ size to $n \ge 2L + 1$.
     \label{lem:proportional_of_evalWord_eq}
     \lean{MPSTensor.proportional_of_evalWord_eq}
     \leanok
-    \uses{def:l_blk_injective, def:eval_word}
+    \uses{def:l_blk_injective,def:eval_word}
     Let $0 < L$, $2L + 1 \le n$, $0 < D$, and let $A,C\in\MN{D}^d$ be $L$-block
     injective with $C^w = A^w$ for all $|w|=n$. Then there exists $\lambda\in\C$
     with $\lambda^n = 1$ such that $C^i = \lambda A^i$ for all $i$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:exists_mpvTransport, lem:isNBlkInjective_of_le, def:eval_word}
+    \uses{lem:exists_mpvTransport,lem:isNBlkInjective_of_le,def:eval_word}
     Since $2L+1\le n$, Lemma~\ref{lem:isNBlkInjective_of_le} and the word-product
     form of Lemma~\ref{lem:exists_mpvTransport} give linear bijections
     $\Lambda_k:\MN{D}\to\MN{D}$ with $\Lambda_k(A^x)=C^x$ for $|x|=k\in\{L,L+1,n-1-L,n-L\}$.
@@ -462,7 +462,7 @@ size to $n \ge 2L + 1$.
     \label{cor:fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_translationInvariant_of_overlap}
     \leanok
-    \uses{def:l_blk_injective, def:mpv}
+    \uses{def:l_blk_injective,def:mpv}
     Let $0 < L$, $2L + 1 \le n$, $0<D$, and let $A,B\in\MN{D}^d$ be $L$-block
     injective with $V^{(n)}(A) = V^{(n)}(B)$. Then there exist $Z\in\GL_D(\C)$
     and $\lambda\in\C$ with $\lambda^n = 1$ satisfying
@@ -470,7 +470,7 @@ size to $n \ge 2L + 1$.
     \cite[Section~``Normal MPS: alternative proof'']{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{lem:exists_conjugation_of_mpv_eq, lem:proportional_of_evalWord_eq}
+    \uses{lem:exists_conjugation_of_mpv_eq,lem:proportional_of_evalWord_eq}
     By Lemma~\ref{lem:exists_conjugation_of_mpv_eq}, there exists $Z\in\GL_D(\C)$
     such that $\widetilde B^i := Z B^i Z^{-1}$ satisfies $\widetilde B^w = A^w$
     for all $|w|=n$. Applying Lemma~\ref{lem:proportional_of_evalWord_eq} to $A$
@@ -483,7 +483,7 @@ size to $n \ge 2L + 1$.
     \label{cor:fundamentalTheorem_normalMPS_of_overlap}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_of_overlap}
     \leanok
-    \uses{def:l_blk_injective, def:mpv}
+    \uses{def:l_blk_injective,def:mpv}
     Let $0 < L$, $2L + 1 \le n$, $0<D$, and let $A,B\in\MN{D}^d$ be $L$-block
     injective with $V^{(n)}(A)=V^{(n)}(B)$. Then there exist invertible matrices
     $(Z_v)_{v=1}^n$ ($Z_{n+1}\equiv Z_1$) satisfying

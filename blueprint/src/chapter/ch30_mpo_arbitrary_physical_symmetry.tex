@@ -69,8 +69,7 @@ the operator to preserve the physical support.
         MPSTensor.linearIndependent_polarPosTensor,
         MPSTensor.polarIsoMatrix_mul_physicalSlice_of_isBiorthogonalDecomposition}
     \leanok
-    \uses{thm:mpo_physical_basis_action,thm:mpo_polar_support_injective,
-        thm:ldpolar_tensor_decomposition}
+    \uses{thm:mpo_physical_basis_action,thm:mpo_polar_support_injective,thm:ldpolar_tensor_decomposition}
     Let $U:\C^e\to\C^d$, let $B$ have linearly independent letters, and
     suppose $T\cdot(UB)=\sum_cW_cA_cV_c$ exactly, where physical mixing
     by $G$ fixes every target $A_c$. Then every physical slice $s$ of
@@ -112,8 +111,7 @@ the operator to preserve the physical support.
         MPSTensor.MPOSymmetry.mpo_mulVec_mpv_commonPhysicalEmbeddingLeft,
         MPSTensor.MPOSymmetry.mpo_mulVec_mpv_commonPhysicalEmbeddingRight}
     \leanok
-    \uses{def:mpo_arbitrary_mixed_operator,thm:mpo_mixed_action_exact,
-        thm:mpo_support_invariance,thm:mpo_arbitrary_endpoint_vectors}
+    \uses{def:mpo_arbitrary_mixed_operator,thm:mpo_mixed_action_exact,thm:mpo_support_invariance,thm:mpo_arbitrary_endpoint_vectors}
     Suppose that $(T_p\cdot A_p)^x=\sum_{\mu=0}^{m-1}W_{p,\mu}A_p^xV_{p,\mu}$
     and $V_{p,\mu}W_{p,\nu}=\delta_{\mu\nu}\Id$ for $p=0,1$. Then
     $S_p$ acts on $B_p$ by the same maps, and for every $\gamma\in\R$,
@@ -151,9 +149,7 @@ the operator to preserve the physical support.
         MPSTensor.MPOSymmetry.isMPOFusionAlgebra_arbitraryPhysicalMixedMPO,
         MPSTensor.MPOSymmetry.isMPOSymmetric_arbitraryPhysicalMixedInterpolation}
     \leanok
-    \uses{thm:mpo_arbitrary_mixed_action,thm:mpo_mixed_fusion_exact,
-        thm:mpo_mixed_fusion_periodic,thm:mpo_support_invariance,
-        def:mpo_symmetric_family,thm:mpo_physical_basis_action}
+    \uses{thm:mpo_arbitrary_mixed_action,thm:mpo_mixed_fusion_exact,thm:mpo_mixed_fusion_periodic,thm:mpo_support_invariance,def:mpo_symmetric_family,thm:mpo_physical_basis_action}
     Let $(T_{p,a})_a$ be operator families with exact biorthogonal fusion
     into copies $T_{p,c}$, with multiplicities $N_{ab}^c$, and exact
     actions on $A_p$ with multiplicities $m_a$, for $p=0,1$. Suppose
@@ -194,9 +190,7 @@ chosen raw matrices rather than equivalent classes; see
         MPSTensor.MPOSymmetry.tendsto_arbitraryPhysicalMixed_groundSpace_starProjection,
         MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_groundSpace_starProjection}
     \leanok
-    \uses{thm:mpo_arbitrary_periodic_ground_line,
-        thm:mpo_arbitrary_endpoint_attachment_gap,
-        thm:mpo_mixed_periodic_line_continuity}
+    \uses{thm:mpo_arbitrary_periodic_ground_line,thm:mpo_arbitrary_endpoint_attachment_gap,thm:mpo_mixed_periodic_line_continuity}
     Suppose $D_0,D_1>0$ and $A_0,A_1$ are one-site injective, and fix
     $N\geq2$. Let $P_\gamma$ be the orthogonal projection onto
     $\ker\widetilde H_{\gamma,N}$ and let $Q_p$ be the orthogonal
@@ -258,11 +252,7 @@ of the two-site boundary range of the common operator.
         MPSTensor.MPOSymmetry.hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary,
         MPSTensor.MPOSymmetry.hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo}
     \leanok
-    \uses{thm:mpo_arbitrary_mixed_action,
-        thm:mpo_arbitrary_interior_parent,
-        thm:mpo_arbitrary_interaction_continuity,
-        thm:glm_boundary_parent_local,thm:glm_boundary_parent_periodic,
-        thm:glm_boundary_embed_commutation}
+    \uses{thm:mpo_arbitrary_mixed_action,thm:mpo_arbitrary_interior_parent,thm:mpo_arbitrary_interaction_continuity,thm:glm_boundary_parent_local,thm:glm_boundary_parent_periodic,thm:glm_boundary_embed_commutation}
     Assume the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action},
     that $D_0,D_1>0$, and that $A_0,A_1$ are one-site injective. Assume
     in addition, as a restriction not made by the source, that
@@ -311,9 +301,7 @@ as a square matrix and $V_p$ for $V_{p,0}$, so that $V_pY_p=\Id$.
         MPSTensor.MPOSymmetry.exists_star_synthesis_analysis_of_isHermitian,
         MPSTensor.MPOSymmetry.exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq}
     \leanok
-    \uses{def:mpo_arbitrary_mixed_operator,def:mpo_mixed_action_tensor,
-        def:mpdo_physical_adjoint,thm:glm_boundary_physical_adjoint,
-        thm:glm_boundary_similarity}
+    \uses{def:mpo_arbitrary_mixed_operator,def:mpo_mixed_action_tensor,def:mpdo_physical_adjoint,thm:glm_boundary_physical_adjoint,thm:glm_boundary_similarity}
     Restrict the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action}
     to on-site endpoint operators with $m=1$ as above. Suppose that $u_0$
     and $u_1$ are Hermitian, and that $c_pY_p$ is Hermitian for some
@@ -349,8 +337,7 @@ tensors are in canonical form.
         MPSTensor.MPOSymmetry.sum_smul_eq_bondOneActionGauge_mul_mul,
         MPSTensor.MPOSymmetry.exists_isHermitian_smul_bondOneActionGauge}
     \leanok
-    \uses{def:injective,thm:virtual_gauge_fixes_boundary_state,
-        thm:mpo_arbitrary_hermitian_gauge_adjoint_closure}
+    \uses{def:injective,thm:virtual_gauge_fixes_boundary_state,thm:mpo_arbitrary_hermitian_gauge_adjoint_closure}
     Let $A$ be injective with $\E_A(\Id)=\Id$ and with a positive definite
     $\Lambda$ satisfying $\E_A^\dagger(\Lambda)=\Lambda$, and let a unitary
     on-site matrix $u$ with $u^2=\Id$ act on $A$ as above, with action
@@ -378,9 +365,7 @@ tensors are in canonical form.
         MPSTensor.MPOSymmetry.hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_isHermitian,
         MPSTensor.MPOSymmetry.hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_canonical}
     \leanok
-    \uses{thm:mpo_arbitrary_parent_commutation_adjoint_closed,
-        thm:mpo_arbitrary_hermitian_gauge_adjoint_closure,
-        thm:mpo_arbitrary_canonical_hermitian_gauge}
+    \uses{thm:mpo_arbitrary_parent_commutation_adjoint_closed,thm:mpo_arbitrary_hermitian_gauge_adjoint_closure,thm:mpo_arbitrary_canonical_hermitian_gauge}
     Assume the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action}
     restricted to on-site endpoint operators with $m=1$ as above, that
     $D_0,D_1>0$, and that $A_0,A_1$ are one-site injective. Assume, as a
@@ -427,10 +412,7 @@ operator of the label $g$.
         MPSTensor.MPOSymmetry.conjTranspose_physicalSlice_eq_inv,
         MPSTensor.MPOSymmetry.exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_inv_eq}
     \leanok
-    \uses{def:mpo_arbitrary_mixed_operator,def:mpo_mixed_action_tensor,
-        def:mpdo_physical_adjoint,def:injective,thm:glm_boundary_physical_adjoint,
-        thm:mpo_arbitrary_hermitian_gauge_adjoint_closure,
-        thm:mpo_arbitrary_canonical_hermitian_gauge}
+    \uses{def:mpo_arbitrary_mixed_operator,def:mpo_mixed_action_tensor,def:mpdo_physical_adjoint,def:injective,thm:glm_boundary_physical_adjoint,thm:mpo_arbitrary_hermitian_gauge_adjoint_closure,thm:mpo_arbitrary_canonical_hermitian_gauge}
     This concerns the common operator $T_a$ of
     \cite[Section~5]{GarreRubio2023MPOSym}, with its crossed blocks
     $T^{0,1}_a$ and $T^{1,0}_a$. Suppose that $A_0,A_1$ are one-site
@@ -474,10 +456,7 @@ operator of the label $g$.
         MPSTensor.MPOSymmetry.hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary,
         MPSTensor.MPOSymmetry.hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary_canonical}
     \leanok
-    \uses{thm:mpo_arbitrary_unitary_gauge_union_closure,
-        thm:mpo_arbitrary_mixed_action,thm:mpo_arbitrary_interior_parent,
-        thm:glm_boundary_parent_local_family,
-        thm:glm_boundary_embed_commutation}
+    \uses{thm:mpo_arbitrary_unitary_gauge_union_closure,thm:mpo_arbitrary_mixed_action,thm:mpo_arbitrary_interior_parent,thm:glm_boundary_parent_local_family,thm:glm_boundary_embed_commutation}
     Assume the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action}
     for every label, restricted to unitary on-site endpoint representations
     of a group $G$ with $m=1$ as above, that $D_0,D_1>0$, and that
@@ -499,9 +478,7 @@ operator of the label $g$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_arbitrary_parent_commutation_adjoint_closed,
-        thm:mpo_arbitrary_canonical_hermitian_gauge,
-        thm:virtual_gauge_fixes_boundary_state,def:mpdo_commuting_boundary}
+    \uses{thm:mpo_arbitrary_parent_commutation_adjoint_closed,thm:mpo_arbitrary_canonical_hermitian_gauge,thm:virtual_gauge_fixes_boundary_state,def:mpdo_commuting_boundary}
     For $0<\gamma<1$, Lemma~\ref{thm:mpo_arbitrary_interior_parent}
     identifies $\widetilde h_\gamma$ with the canonical two-site parent of
     $\widetilde A(\gamma)$, which is compatible with every $\widetilde T_g$
@@ -542,8 +519,7 @@ one.
         MPSTensor.MPOSymmetry.hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_weakHopf,
         MPSTensor.MPOSymmetry.toEuclideanLin_arbitraryPhysicalMixedInteraction_eq_one_sub_weakHopfAverage}
     \leanok
-    \uses{thm:mpo_arbitrary_mixed_action,def:glm_wha_representation,
-        def:glm_wha_average}
+    \uses{thm:mpo_arbitrary_mixed_action,def:glm_wha_representation,def:glm_wha_average}
     Assume the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action},
     that $D_0,D_1>0$, and that $A_0,A_1$ are one-site injective. Assume in
     addition, as a restriction not made by Section~5 of the source, that
@@ -559,13 +535,7 @@ one.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_wha_integral_normalization,
-        thm:mpo_arbitrary_parent_commutation_adjoint_closed,
-        thm:mpo_arbitrary_tensor_continuity,
-        lem:one_block_injective_of_injective,
-        thm:glm_wha_parent_average,
-        thm:spt_parent_hamiltonian_symmetry,
-        thm:mpo_arbitrary_interior_parent}
+    \uses{thm:glm_wha_integral_normalization,thm:mpo_arbitrary_parent_commutation_adjoint_closed,thm:mpo_arbitrary_tensor_continuity,lem:one_block_injective_of_injective,thm:glm_wha_parent_average,thm:spt_parent_hamiltonian_symmetry,thm:mpo_arbitrary_interior_parent}
     The star structure of the representation makes the boundary range
     closed under the adjoint at every length, by
     Lemma~\ref{thm:glm_wha_integral_normalization}, so

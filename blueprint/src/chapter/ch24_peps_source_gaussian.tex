@@ -160,8 +160,7 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
     \label{thm:peps_prepared_source_frames}
     \lean{QuantumCircuit.Party.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
     \leanok
-    \uses{thm:peps_selected_multilinear_expansion,
-        thm:peps_prepared_source_contraction}
+    \uses{thm:peps_selected_multilinear_expansion,thm:peps_prepared_source_contraction}
     Let $V,V'$ be words acting after a common ordered pair-source layout with finite orthonormal bases on the input/output memories and source halfspaces. Fix source vectors $\eta_i,\zeta_i$ and a subset $S$ of slots. For $i\in S$, let $M_i\in\operatorname{Mat}_{K_i^2\times(K'_i)^2}(\C)$ be mapped by endpoint families $u_i,v_i$ on the ket side and $u'_i,v'_i$ on the bra side. Contracting these mapped matrices against the prepared density coefficient of $(V,V')$ on $S$, with $|\eta_i\rangle\langle\zeta_i|$ outside $S$, yields
     \begin{align}
         \sum_{a\in\prod_{i\in S}K_i^2}
@@ -191,8 +190,7 @@ With the notation of Definition~\ref{def:peps_source_substitution}, write $\math
     \label{thm:peps_corrected_gaussian_sum}
     \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceTerm_gaussian_eq_sum}
     \leanok
-    \uses{def:peps_partial_schmidt_assignments,thm:peps_prepared_source_frames,
-        thm:peps_unbiased_original_sources,thm:peps_corrected_source_contraction}
+    \uses{def:peps_partial_schmidt_assignments,thm:peps_prepared_source_frames,thm:peps_unbiased_original_sources,thm:peps_corrected_source_contraction}
     Suppose every position in $S\subseteq\mathcal E$ is incident to $\mathcal A$ and the fixed weights and frames satisfy (\ref{eq:peps_local_schmidt_source}). For every sample $\omega$ and input matrix $\rho$,
     \begin{align}
         F_S(\Delta(\omega))

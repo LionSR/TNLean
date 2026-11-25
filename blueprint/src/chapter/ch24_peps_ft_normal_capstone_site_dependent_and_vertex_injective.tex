@@ -37,7 +37,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{lem:isWindowInjective_one_of_isInjective}
     \lean{MPSChainTensor.isWindowInjective_one_of_isInjective}
     \leanok
-    \uses{def:chain_arc_window_injective, def:injective}
+    \uses{def:chain_arc_window_injective,def:injective}
     If every $A_s$ in a closed chain is injective
     ($\spn\{A_s^i\}_{i=0}^{d-1}=\MN{D}$), then the chain is window injective
     at length~$1$.
@@ -125,8 +125,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     (with constant specialization Lemma~\ref{lem:overlapWindow_exists_bondOperator}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:isWindowInjective_arc_span, def:chain_arc_window_injective,
-        lem:chain_spanning_matrix_cancellation}
+    \uses{lem:isWindowInjective_arc_span,def:chain_arc_window_injective,lem:chain_spanning_matrix_cancellation}
     Since $n-L-1\ge L$, Lemma~\ref{lem:isWindowInjective_arc_span} and trace
     nondegeneracy strip the complementary arc to give
     $C_j(u_1\cdots u_L)A_{r+j+L}^{u_{L+1}}=A_{r+j}^{u_1}C_{j+1}(u_2\cdots u_{L+1})$
@@ -141,7 +140,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{lem:exists_arcTransport}
     \lean{MPSChainTensor.exists_arcTransport}
     \leanok
-    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    \uses{def:chain_arc_window_injective,def:non_ti_chain}
     Let site-dependent chains $A,B$ on $n$ sites generate the same closed-chain
     state, let $k+q=n$, and suppose $\spn\{A_{(s)}^x:|x|=k\}=\MN{D}$ and
     $\spn\{A_{(s+k)}^y:|y|=q\}=\MN{D}$. Then there exists a linear map
@@ -149,7 +148,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     $|x|=k$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:exists_mpvTransport, def:chain_arc_window_injective}
+    \uses{lem:exists_mpvTransport,def:chain_arc_window_injective}
     As in Lemma~\ref{lem:exists_mpvTransport}, define
     $\Psi_A(M)_y=\tr(M A_{(s+k)}^y)$ and $\Psi_B(M)_y=\tr(M B_{(s+k)}^y)$
     ($|y|=q$). Injectivity of $\Psi_A$ and the equality
@@ -163,7 +162,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \lean{MPSChainTensor.exists_insertionHom}
     \lean{MPSChainTensor.insertionHom_unique}
     \leanok
-    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    \uses{def:chain_arc_window_injective,def:non_ti_chain}
     Let $0<L$, $2L+1\le n$, let $A$ and $B$ be site-dependent chains on $n$
     sites, each window injective at length $L$, generating the same
     closed-chain state, and fix a site $r$. Then there exists a unique linear
@@ -177,7 +176,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     of \cite[Lemma~5]{Molnar2018NormalPEPS}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:chain_overlapWindow_exists_bondOperator, lem:exists_arcTransport, lem:isWindowInjective_arc_span}
+    \uses{lem:chain_overlapWindow_exists_bondOperator,lem:exists_arcTransport,lem:isWindowInjective_arc_span}
     For $X\in\MN{D}$ and $0\le j\le L$, transfer the deformed window
     $u\mapsto A_{(r+j)}^{u_1\cdots u_{L-j}} X A_{(r+L)}^{u_{L-j+1}\cdots u_L}$
     to $B$ via $\Lambda_{r+j}$ (Lemma~\ref{lem:exists_arcTransport}) to obtain
@@ -194,7 +193,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{lem:chain_exists_conjugation_of_sameState}
     \lean{MPSChainTensor.exists_conjugation_of_sameState}
     \leanok
-    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    \uses{def:chain_arc_window_injective,def:non_ti_chain}
     Under the hypotheses of Lemma~\ref{lem:chain_exists_insertionHom} with
     $D>0$, for every site $p$ there exists $Z_p\in\GL_D(\C)$ such that
     \begin{align}
@@ -218,7 +217,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{cor:fundamentalTheorem_normalMPSChain_of_overlap}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap}
     \leanok
-    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    \uses{def:chain_arc_window_injective,def:non_ti_chain}
     Let $0<L$, $2L+1\le n$, $D>0$, and let $A,B$ be site-dependent chains on
     $n$ sites, each window injective at length $L$, generating the same
     closed-chain state. Then there exist invertible matrices
@@ -231,7 +230,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \cite[Section~``Normal MPS: alternative proof'']{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{lem:chain_exists_conjugation_of_sameState, lem:chain_overlapWindow_exists_bondOperator, lem:isWindowInjective_arc_span}
+    \uses{lem:chain_exists_conjugation_of_sameState,lem:chain_overlapWindow_exists_bondOperator,lem:isWindowInjective_arc_span}
     For $L\le m\le n-L$, combining (\ref{eq:peps_chain_conj_full_length}) at
     $p$ and $p+m$ with Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}
     and Lemma~\ref{lem:isWindowInjective_arc_span} gives
@@ -248,7 +247,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \lean{MPSChainTensor.arcEval_eq_gauge_conj}
     \lean{MPSChainTensor.GaugeEquiv.sameState}
     \leanok
-    \uses{def:chain_arc_window_injective, def:non_ti_chain}
+    \uses{def:chain_arc_window_injective,def:non_ti_chain}
     If site-dependent chains $A,B$ on $n$ sites satisfy
     $B_v^i=Z_vA_v^iZ_{v+1}^{-1}$ for all $v,i$ ($Z_n\equiv Z_0$), then for every
     site $s$ and word $x$ of length $\ell$,
@@ -265,7 +264,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_of_sameState}
     \leanok
-    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap, lem:isWindowInjective_one_of_isInjective}
+    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,lem:isWindowInjective_one_of_isInjective}
     Let $A=(A_0,\ldots,A_{n-1})$ and $B=(B_0,\ldots,B_{n-1})$ be site-dependent
     closed chains on $n\ge 3$ sites with common physical dimension $d$ and
     bond dimension $D>0$. If every $A_v$ and $B_v$ is injective and $A,B$
@@ -274,7 +273,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \cite[Theorem~\textup{thm:inj\_MPS}, lines~688--725]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap, lem:isWindowInjective_one_of_isInjective}
+    \uses{cor:fundamentalTheorem_normalMPSChain_of_overlap,lem:isWindowInjective_one_of_isInjective}
     Apply Corollary~\ref{cor:fundamentalTheorem_normalMPSChain_of_overlap} with
     $L=1$ ($2L+1=3\le n$), using
     Lemma~\ref{lem:isWindowInjective_one_of_isInjective}.
@@ -297,7 +296,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \lean{TNLean.PEPS.Tensor.cycleShift}
     \lean{TNLean.PEPS.IsCycleShiftInvariantState}
     \leanok
-    \uses{def:peps_tensor, def:peps_same_state}
+    \uses{def:peps_tensor,def:peps_same_state}
     On the $n$-site cycle ($n\ge 3$) with rotation $r(v)=v+1\bmod n$, the cyclic
     shift of $A=(A_0,\ldots,A_{n-1})$ is the pullback $(r^*A)_v=A_{v+1}$
     \cite[lines~1807--1827]{Molnar2018NormalPEPS}. Its state is cyclic-shift
@@ -310,8 +309,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \lean{TNLean.PEPS.bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState}
     \lean{TNLean.PEPS.bondDim_eq_of_isCycleShiftInvariantState}
     \leanok
-    \uses{def:peps_cycle_tensor_cyclic_shift, thm:fundamentalTheorem_PEPS, def:cycleTensorOfMPS,
-        def:peps_injective_tensor}
+    \uses{def:peps_cycle_tensor_cyclic_shift,thm:fundamentalTheorem_PEPS,def:cycleTensorOfMPS,def:peps_injective_tensor}
     Let $A=(A_0,\ldots,A_{n-1})$ be a site-dependent injective closed MPS on
     $n\ge 3$ sites with bond dimensions $D_e>0$. If $\Coeff_{r^*A}=\Coeff_A$,
     then $D_e=D_f$ for all bonds $e,f$
@@ -354,7 +352,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_cyclicShift}
     \leanok
-    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState, def:mps_chain_cyclic_shift}
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState,def:mps_chain_cyclic_shift}
     Let $A=(A_0,\ldots,A_{n-1})$ be an injective closed chain with bond
     dimension $D>0$ on $n\ge 3$ sites. If its state is cyclic-shift invariant
     (Definition~\ref{def:mps_chain_cyclic_shift}), then there exist
@@ -390,7 +388,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{cor:exists_gauge_to_first_of_cyclicShiftInvariantState}
     \lean{TNLean.PEPS.exists_gauge_to_first_of_cyclicShiftInvariantState}
     \leanok
-    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift, cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,cor:exists_gauge_to_first_of_cyclicShift_gaugeEquiv}
     If $A=(A_0,\ldots,A_{n-1})$ is an injective closed chain with $D>0$ on
     $n\ge 3$ sites and cyclic-shift-invariant state, then for every site $v$
     there exist $L_v,R_v\in\GL_D(\C)$ such that $A_v^i=L_v A_0^i R_v^{-1}$ for
@@ -406,7 +404,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     \lean{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     \leanok
-    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift, def:mps_chain_cyclic_shift}
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_cyclicShift,def:mps_chain_cyclic_shift}
     Let $A=(A_0,\ldots,A_{n-1})$ be an injective closed chain on $n\ge 3$ sites
     with physical dimension $d$ and bond dimension $D>0$. If its state is
     cyclic-shift invariant, then there exists an injective tensor
@@ -442,7 +440,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \lean{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond}
     \leanok
     \discussion{3371}
-    \uses{cor:peps_cycle_shift_bond_uniform, cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
+    \uses{cor:peps_cycle_shift_bond_uniform,cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     Let $A=(A_0,\ldots,A_{n-1})$ be a site-dependent injective closed MPS on
     $n\ge 3$ sites with bond dimensions $D_e>0$. If $\Coeff_{r^*A}=\Coeff_A$
     \cite[lines~1803--1890]{Molnar2018NormalPEPS}, then there exist $D>0$ and an
@@ -489,9 +487,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \lean{TNLean.PEPS.%
         torusUniformBondDim_of_isTorusTranslationInvariantState}
     \leanok
-    \uses{def:peps_injective_tensor,
-        def:peps_torus_state_translation_invariant,
-        def:peps_torus_uniform_bond_dim}
+    \uses{def:peps_injective_tensor,def:peps_torus_state_translation_invariant,def:peps_torus_uniform_bond_dim}
     Let $A$ be an injective PEPS on an $n\times m$ torus ($n,m>1$). If its
     represented state is translation invariant, then $D_A$ is
     orientation-uniform with $D_h=D_A(e_h)$ on every horizontal edge and
@@ -499,9 +495,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \cite[lines~1891--1894]{Molnar2018NormalPEPS}.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:peps_sameState_translate_of_state_translation_invariant,
-        thm:peps_injective_sameState_bondDim_eq,
-        thm:peps_torusUniformBondDim_of_translationInvariant}
+    \uses{thm:peps_sameState_translate_of_state_translation_invariant,thm:peps_injective_sameState_bondDim_eq,thm:peps_torusUniformBondDim_of_translationInvariant}
     By Lemma~\ref{thm:peps_sameState_translate_of_state_translation_invariant}
     and Lemma~\ref{thm:peps_injective_sameState_bondDim_eq},
     $D_A(\tau_{a,b}(e))=D_A(e)$ for all $(a,b)$, and translations act
@@ -629,7 +623,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{thm:peps_independent_leg_physical_image}
     \lean{TNLean.PEPS.stateCoeff_eq_piKronecker_mulVec}
     \leanok
-    \uses{def:peps_independent_leg_coefficient, thm:peps_physical_product_reindex}
+    \uses{def:peps_independent_leg_coefficient,thm:peps_physical_product_reindex}
     Let $X$ be finite, and let
     $\mathcal E_v:X\to\prod_{e\ni v}\{0,\ldots,D_e-1\}$ be bijections. Suppose a common array $F$ and incidence matrices $K_{v,e}$
     satisfy
@@ -642,7 +636,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     $R(x)=R_K((\mathcal E_vx_v)_v)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_independent_leg_coefficient, thm:peps_physical_product_reindex}
+    \uses{def:peps_independent_leg_coefficient,thm:peps_physical_product_reindex}
     Expand the local arrays in the state coefficient and exchange the finite
     sums. Each original bond index contracts its two incidence matrices
     into $K_{u,e}^{\mathsf T}K_{v,e}$. Reindex each remaining local
@@ -722,7 +716,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{thm:peps_repeated_four_leg_injective}
     \lean{TNLean.PEPS.isInjective_torusFourLegTensor}
     \leanok
-    \uses{def:peps_repeated_four_leg_tensor, def:peps_injective_tensor}
+    \uses{def:peps_repeated_four_leg_tensor,def:peps_injective_tensor}
     If the bond dimensions are positive and the family $F$ is linearly
     independent, the repeated tensor of
     Definition~\ref{def:peps_repeated_four_leg_tensor} is injective.
@@ -737,7 +731,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{thm:peps_repeated_four_leg_translation_invariant}
     \lean{TNLean.PEPS.isTorusTranslationInvariant_torusFourLegTensor}
     \leanok
-    \uses{def:peps_repeated_four_leg_tensor, def:peps_torus_translation_invariant}
+    \uses{def:peps_repeated_four_leg_tensor,def:peps_torus_translation_invariant}
     Every repeated tensor of
     Definition~\ref{def:peps_repeated_four_leg_tensor} is fixed by transport
     under each torus translation.
@@ -767,7 +761,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{thm:peps_common_local_translation_orbit}
     \lean{TNLean.PEPS.exists_torus_common_local_orbit_incident}
     \leanok
-    \uses{def:peps_common_four_leg_coordinates, def:peps_torus_state_translation_invariant}
+    \uses{def:peps_common_four_leg_coordinates,def:peps_torus_state_translation_invariant}
     Let $A$ be injective on an $n\times m$ torus with $n,m\ge3$, and
     suppose its state is translation invariant. Its bond dimensions determine
     the coordinates of Definition~\ref{def:peps_common_four_leg_coordinates}.
@@ -783,7 +777,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     in~\cite[lines~1891--1894]{Molnar2018NormalPEPS}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:fundamentalTheorem_PEPS, cor:peps_state_translation_bond_uniform}
+    \uses{thm:fundamentalTheorem_PEPS,cor:peps_state_translation_bond_uniform}
     Apply the injective Fundamental Theorem to $A$ and its transport by the
     translation taking the origin to $p$. The resulting gauge equation gives
     invertible matrices on the actual incidence spaces, using a transpose
@@ -829,7 +823,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{def:peps_independent_port_product}
     \lean{TNLean.PEPS.independentPortProduct}
     \leanok
-    \uses{def:peps_native_incidence_matrices, def:peps_independent_leg_coefficient}
+    \uses{def:peps_native_incidence_matrices,def:peps_independent_leg_coefficient}
     For direction-indexed matrices $E_{r,p}$ and independent incidence
     coordinates $x_{p,r,b}$, put
     \begin{align}
@@ -841,8 +835,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{thm:peps_independent_port_coefficient}
     \lean{TNLean.PEPS.independentLegEdgeCoefficient_eq_torusNativeProduct}
     \leanok
-    \uses{def:peps_independent_port_product,def:peps_native_incidence_matrices,
-        def:peps_common_four_leg_coordinates}
+    \uses{def:peps_independent_port_product,def:peps_native_incidence_matrices,def:peps_common_four_leg_coordinates}
     Let the incidence matrices $K_{p,e}$ be invertible and let $E_{r,p}$
     be their native matrices. For any independent port assignment $x$, put
     $\widehat x_p=(x_{p,v,0},x_{p,h,1},x_{p,v,1},x_{p,h,0})$. Then
@@ -894,7 +887,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \lean{TNLean.PEPS.torusFourLegKernelOnPort}
     \lean{TNLean.PEPS.torusUniformBondLegKernel}
     \leanok
-    \uses{def:peps_repeated_four_leg_tensor, def:peps_native_incidence_matrices}
+    \uses{def:peps_repeated_four_leg_tensor,def:peps_native_incidence_matrices}
     For $P_i\in\GL(D_i,\C)$ define
     $(\mathcal P F)(x,\sigma)=\sum_y\prod_iP_i(x_i,y_i)F(y,\sigma)$.
     Write $P_{r,1}$ and $P_{r,0}$ for its outgoing and incoming matrices.
@@ -946,7 +939,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{thm:peps_uniform_edge_representation}
     \lean{TNLean.PEPS.exists_torus_uniform_edge_representation}
     \leanok
-    \uses{def:peps_independent_port_product, def:peps_torus_state_translation_invariant}
+    \uses{def:peps_independent_port_product,def:peps_torus_state_translation_invariant}
     Let $A$ be injective on an $n\times m$ torus, with $n,m\ge3$,
     and suppose its state is translation invariant. Let $F$ be its origin
     array in canonical coordinates. There are
@@ -955,10 +948,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     $Q_r$ on every edge of direction $r$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_common_local_translation_orbit,
-        thm:peps_independent_leg_physical_image,thm:peps_common_map_reflects_invariance,
-        thm:peps_independent_port_coefficient,thm:peps_independent_port_translation,
-        thm:peps_directional_product_factors}
+    \uses{thm:peps_common_local_translation_orbit,thm:peps_independent_leg_physical_image,thm:peps_common_map_reflects_invariance,thm:peps_independent_port_coefficient,thm:peps_independent_port_translation,thm:peps_directional_product_factors}
     The local translation orbit and independent-leg contraction give
     $\Coeff_A=F^{\otimes V}R_E$. Since $F$ is injective, reflection through
     this common product map makes $R_E$ translation invariant. Reindexing
@@ -972,7 +962,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{thm:peps_uniform_bond_absorption}
     \lean{TNLean.PEPS.stateCoeff_torusFourLegTensor_uniformBondAbsorption}
     \leanok
-    \uses{def:peps_common_four_leg_transformation, def:peps_independent_port_product}
+    \uses{def:peps_common_four_leg_transformation,def:peps_independent_port_product}
     On the torus of Definition~\ref{def:peps_common_four_leg_coordinates},
     let $F$ be any common four-leg array and let $Q_h,Q_v$ be invertible.
     If $\mathcal P$ has leg matrices
@@ -980,9 +970,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     $B_{\mathcal P F}$ satisfies $\Coeff_{B_{\mathcal P F}}=F^{\otimes V}R_Q$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_independent_leg_physical_image,thm:peps_physical_product_reindex,
-        thm:peps_four_leg_incident_expansion,thm:peps_four_leg_native_edge_matrix,
-        thm:peps_independent_port_coefficient}
+    \uses{thm:peps_independent_leg_physical_image,thm:peps_physical_product_reindex,thm:peps_four_leg_incident_expansion,thm:peps_four_leg_native_edge_matrix,thm:peps_independent_port_coefficient}
     The actual-incidence formula of
     Lemma~\ref{thm:peps_four_leg_incident_expansion} allows the
     independent-leg contraction formula to be applied to $B_{\mathcal P F}$.
@@ -995,9 +983,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
     \label{thm:exists_constant_injectivePEPS_of_translationInvariantState}
     \lean{TNLean.PEPS.exists_isTorusTranslationInvariant_sameState}
     \leanok
-    \uses{def:peps_injective_tensor, def:peps_torus_translation_invariant,
-        def:peps_torus_state_translation_invariant,
-        def:peps_torus_uniform_bond_dim, def:peps_same_state}
+    \uses{def:peps_injective_tensor,def:peps_torus_translation_invariant,def:peps_torus_state_translation_invariant,def:peps_torus_uniform_bond_dim,def:peps_same_state}
     Let $A$ be an injective PEPS on a discrete $n\times m$ torus with
     $n,m\ge3$. If the generated state is invariant
     under all lattice translations $\tau_{a,b}$, that is,
@@ -1012,11 +998,7 @@ the bond dimensions of $A$ are orientation-uniform with positive horizontal
 and vertical values, this is the two-dimensional Applications-section
 corollary of \cite[lines~1891--1894]{Molnar2018NormalPEPS}.
 \begin{proof}\leanok
-    \uses{cor:peps_state_translation_bond_uniform,
-        thm:peps_uniform_edge_representation, thm:peps_uniform_bond_absorption,
-        thm:peps_invertible_leg_injectivity, thm:peps_repeated_four_leg_injective,
-        thm:peps_repeated_four_leg_translation_invariant,
-        thm:peps_repeated_four_leg_scaling}
+    \uses{cor:peps_state_translation_bond_uniform,thm:peps_uniform_edge_representation,thm:peps_uniform_bond_absorption,thm:peps_invertible_leg_injectivity,thm:peps_repeated_four_leg_injective,thm:peps_repeated_four_leg_translation_invariant,thm:peps_repeated_four_leg_scaling}
     The bond dimensions are orientation-uniform by
     Corollary~\ref{cor:peps_state_translation_bond_uniform}.
     Write $F$ for the tensor at the origin in the order top, right, down, left.
@@ -1055,7 +1037,7 @@ corollary of \cite[lines~1891--1894]{Molnar2018NormalPEPS}.
     \label{thm:fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_injectiveMPSChain_gauge_unique}
     \leanok
-    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState, def:chain_arc_window_injective}
+    \uses{cor:fundamentalTheorem_injectiveMPSChain_of_sameState,def:chain_arc_window_injective}
     Under the hypotheses of
     Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}, if
     invertible families $(Z_v)_{v=0}^{n-1}$ and $(Z'_v)_{v=0}^{n-1}$ both satisfy
@@ -1079,7 +1061,7 @@ $L=1$ specialization of the corollaries above for $n\ge 3$.
     \label{thm:fundamentalTheorem_normalPEPS_of_vertexInjective}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_of_vertexInjective}
     \leanok
-    \uses{thm:fundamentalTheorem_PEPS, def:peps_normalPEPSBlockingHypotheses, def:GaugeEquivPEPS, def:peps_injective_tensor}
+    \uses{thm:fundamentalTheorem_PEPS,def:peps_normalPEPSBlockingHypotheses,def:GaugeEquivPEPS,def:peps_injective_tensor}
     If PEPS tensors $A$ and $B$ on a connected graph are vertex-injective with
     $\Coeff_A=\Coeff_B$ and $A$ satisfies
     Definition~\ref{def:peps_normalPEPSBlockingHypotheses}, then $A$ and $B$ are

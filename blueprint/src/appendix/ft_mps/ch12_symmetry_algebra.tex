@@ -25,7 +25,7 @@ reordering basis states rather than by a general linear map. % The statements of
 \begin{definition}[Permutation-twisted tensor]\label{def:perm_twisted_tensor}
     \lean{MPSTensor.TwistedTensor}
     \leanok
-    \uses{def:on_site_symmetry_perm, def:mps_tensor}
+    \uses{def:on_site_symmetry_perm,def:mps_tensor}
     Given an action $\sigma$ of $G$ on $I$, the
     \emph{permutation-twisted tensor} at the element $g$ is
     \begin{align}
@@ -140,7 +140,7 @@ The same bookkeeping applies to a general matrix acting on the physical index.
     \label{lem:mpv_rotate_physical}
     \lean{MPSTensor.mpv_rotatePhysical}
     \leanok
-    \uses{def:rotate_physical, def:mpv}
+    \uses{def:rotate_physical,def:mpv}
     For $M\in\C^{m\times d}$ and a length-$N$ physical configuration
     $s=(s_0,\ldots,s_{N-1})\in\{0,\ldots,m-1\}^N$, physical rotation
     satisfies
@@ -164,7 +164,7 @@ The same bookkeeping applies to a general matrix acting on the physical index.
     \label{thm:block_tensor_rotate_physical}
     \lean{MPSTensor.blockTensor_rotatePhysical}
     \leanok
-    \uses{def:rotate_physical, def:blocked_tensor}
+    \uses{def:rotate_physical,def:blocked_tensor}
     For $W\in\C^{m\times n}$, a tensor~$C$ with physical dimension~$n$, and
     $L\ge0$, blocking the rotated tensor over $L$ sites is rotating the
     blocked tensor by the $L$-fold Kronecker power of $W$:
@@ -240,12 +240,12 @@ target tensor differ by a scalar multiple.
     \label{lem:gauge_ratio_isScalar}
     \lean{MPSTensor.gauge_ratio_isScalar}
     \leanok
-    \uses{lem:gauge_ratio_commutes, def:injective, lem:center_scalar}
+    \uses{lem:gauge_ratio_commutes,def:injective,lem:center_scalar}
     Under the same hypotheses, if $A$ is also injective, then
     $Y^{-1} X = \lambda \Id_D$ for some scalar $\lambda \in \C$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:gauge_ratio_commutes, lem:center_scalar}
+\begin{proof}\leanok\uses{lem:gauge_ratio_commutes,lem:center_scalar}
     By Lemma~\ref{lem:gauge_ratio_commutes}, $Y^{-1}X$ commutes with
     all $A^i$.
     Since $\{A^i\}$ spans $\MN{D}$, the matrix $Y^{-1}X$ commutes
@@ -257,7 +257,7 @@ target tensor differ by a scalar multiple.
     \label{thm:gaugeMatrix_projective_mul}
     \lean{MPSTensor.gaugeMatrix_projective_mul}
     \leanok
-    \uses{lem:gauge_ratio_isScalar, def:injective, def:on_site_symmetric, lem:twisted_tensor_mul}
+    \uses{lem:gauge_ratio_isScalar,def:injective,def:on_site_symmetric,lem:twisted_tensor_mul}
     Let $A$ be an injective MPS tensor with on-site symmetry under a
     group representation $U : G \to \GL_d(\C)$.
     For each $g \in G$, let $X(g) \in \GL_D(\C)$ satisfy
@@ -288,7 +288,7 @@ target tensor differ by a scalar multiple.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:gauge_ratio_isScalar, lem:twisted_tensor_mul}
+    \uses{lem:gauge_ratio_isScalar,lem:twisted_tensor_mul}
     By the composition law $\widetilde{A}_{gh} = \widetilde{(\widetilde{A}_h)}_g$
     (Lemma~\ref{lem:twisted_tensor_mul}), both $X(h)\,X(g)$ and $X(gh)$
     conjugate $A$ to $\widetilde{A}_{gh}$.
@@ -326,7 +326,7 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
     \label{thm:coboundary_iff_cohomologous_one}
     \lean{ScalarCohomology.isMulCoboundary₂_div_iff_quotient_mk_eq}
     \leanok
-    \uses{def:is_coboundary, def:cohomologous_to}
+    \uses{def:is_coboundary,def:cohomologous_to}
     Two scalar $2$-cochains satisfy $\omega_1\sim\omega_2$ if and only if
     the pointwise ratio $\omega_1\omega_2^{-1}$ is a coboundary. In
     particular, $\omega$ is a coboundary if and only if $\omega \sim \Id$,
@@ -337,7 +337,7 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
     includes arbitrary cochains, not only cocycles.
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
+\begin{proof}\leanok\uses{def:is_coboundary,def:cohomologous_to}
     Dividing both sides of (\ref{eq:symmetry_cohomologous}) by
     $\omega_2(g,h)$ and reordering the factors of
     $\varphi(g)\varphi(h)\varphi(gh)^{-1}$ in the commutative group
@@ -351,12 +351,12 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
     \label{thm:cochain_coboundary_preserves_cocycle}
     \lean{ScalarCohomology.isMulCocycle₂_of_isMulCoboundary₂_div}
     \leanok
-    \uses{def:cohomologous_to, def:is_cocycle}
+    \uses{def:cohomologous_to,def:is_cocycle}
     If two scalar two-cochains $\omega_1$ and $\omega_2$ are
     cohomologous and $\omega_2$ is a cocycle, then $\omega_1$ is a cocycle.
 \end{lemma}
 
-\begin{proof}\leanok\uses{def:cohomologous_to, def:is_cocycle}
+\begin{proof}\leanok\uses{def:cohomologous_to,def:is_cocycle}
     Write $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$.
     Substituting in the cocycle equation for $\omega_1$ leaves the common
     factor $\varphi(g)\varphi(h)\varphi(k)\varphi(ghk)^{-1}$ multiplying

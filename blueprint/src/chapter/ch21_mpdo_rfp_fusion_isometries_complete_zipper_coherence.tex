@@ -144,7 +144,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         exists_blocked_completeZipperFusionFamily}
     \leanok
-    \uses{thm:mpdo_bnt_common_positive_blocked_fusion, thm:mpdo_pair_fusion_bnt_completeness, thm:mpdo_one_letter_simultaneous_inverse, def:mpdo_complete_zipper_fusion_family}
+    \uses{thm:mpdo_bnt_common_positive_blocked_fusion,thm:mpdo_pair_fusion_bnt_completeness,thm:mpdo_one_letter_simultaneous_inverse,def:mpdo_complete_zipper_fusion_family}
     Suppose that the labelled tensors of a fusion-isometry family with
     length-independent structure coefficients
     $c_{\alpha,\beta,\gamma}^{(L)}
@@ -195,7 +195,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         exists_ofStar_fusionTensor_eq}
     \leanok
-    \uses{def:mpdo_complete_zipper_fusion_family, thm:asym_multiblock}
+    \uses{def:mpdo_complete_zipper_fusion_family,thm:asym_multiblock}
     Let $B_a^{ij}$, $a\in\Lambda$, be injective MPO blocks of positive bond
     dimension whose labelled letters have a simultaneous left inverse as in
     Definition~\ref{def:mpdo_complete_zipper_fusion_family}. Suppose that for
@@ -214,8 +214,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     conclusion holds.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_complete_zipper_fusion_family, thm:asym_multiblock,
-        thm:asym_splitting}
+    \uses{def:mpdo_complete_zipper_fusion_family,thm:asym_multiblock,thm:asym_splitting}
     Biorthogonality (\ref{eq:rfp_fusion_biorthogonality}) is
     $W_sV_t=\delta_{st}\Id$. Since the remainder
     $B_{ab}^{ik}-\sum_sV_sB_{c(s)}^{ik}W_s$ vanishes, this sum is the
@@ -243,8 +242,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
         ofCompressionBlocked_fusionTensorLeftInverse}
     \lean{MPOTensor.CompleteZipperFusionFamily.ofStarBlocked}
     \leanok
-    \uses{thm:mpdo_complete_zipper_of_compression, def:mpdo_block_left_inverse,
-        def:blockwise_product_word_span}
+    \uses{thm:mpdo_complete_zipper_of_compression,def:mpdo_block_left_inverse,def:blockwise_product_word_span}
     Let $B_1,\ldots,B_m$ be MPO blocks of positive bond dimension which,
     read as tensors on the doubled physical alphabet, are normal, and no two
     of which are gauge equivalent up to a nonzero scalar. Then there is $L>0$
@@ -270,8 +268,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     dropped~\cite{gap:bmwshv17_joint_block_left_inverse}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_complete_zipper_of_compression, def:mpdo_block_left_inverse,
-        def:blockwise_product_word_span, thm:mpdo_one_letter_simultaneous_inverse}
+    \uses{thm:mpdo_complete_zipper_of_compression,def:mpdo_block_left_inverse,def:blockwise_product_word_span,thm:mpdo_one_letter_simultaneous_inverse}
     After a gauge and a nonzero rescaling each block has transfer map of
     spectral radius one. Rescaling a block multiplies its words of length $L$
     by a nonzero constant, so it changes neither the joint span nor
@@ -353,7 +350,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         inversePrintedFMatrix_mul_printedFMatrix}
     \leanok
-    \uses{def:mpdo_complete_zipper_fusion_family, lem:mpdo_complete_zipper_final_block_selector, lem:matrix_kronecker_identity_cancellation}
+    \uses{def:mpdo_complete_zipper_fusion_family,lem:mpdo_complete_zipper_final_block_selector,lem:matrix_kronecker_identity_cancellation}
     Fix $a,b,c,d\in\Lambda$. Following \cite[Section~3.4]{Bultinck2017Anyons},
     there is an invertible $F$-move matrix
     \begin{align}
@@ -375,7 +372,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     with the matrix in the opposite orientation as its two-sided inverse.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_complete_zipper_final_block_selector, lem:matrix_kronecker_identity_cancellation}
+    \uses{def:mpdo_complete_zipper_final_block_selector,lem:matrix_kronecker_identity_cancellation}
     Let $L$ and $R$ be the full left- and right-associated synthesis matrices,
     with analysis matrices $L^+$ and $R^+$. Applying
     (\ref{eq:rfp_fusion_reconstruction}) twice to the two associative
@@ -455,8 +452,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     \lean{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge}
     \lean{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_regauge}
     \leanok
-    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove,
-        lem:matrix_kronecker_identity_cancellation}
+    \uses{def:mpdo_complete_zipper_fusion_family,thm:mpdo_complete_zipper_printed_fmove,lem:matrix_kronecker_identity_cancellation}
     For every triple of labels let $Y^c_{ab}$ be an invertible
     $N_{ab}^{c}\times N_{ab}^{c}$ matrix, write
     $\Pi_{ab}=\bigoplus_c (Y^c_{ab})^{\mathsf T}\otimes\Id_{D_c}$, and let $X_{ab}$ and
@@ -490,8 +486,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     the $F$-symbols in \cite[lines~415--422]{GarreRubio2023MPOSym}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove,
-        lem:matrix_kronecker_identity_cancellation}
+    \uses{def:mpdo_complete_zipper_fusion_family,thm:mpdo_complete_zipper_printed_fmove,lem:matrix_kronecker_identity_cancellation}
     Write $\mathcal B^{ik}_{ab}=\bigoplus_c\Id_{N_{ab}^c}\otimes B_c^{ik}$,
     so that (\ref{eq:rfp_fusion_reconstruction}) reads
     $B_{ab}^{ik}=X_{ab}\mathcal B^{ik}_{ab}X^+_{ab}$. Since $\Pi_{ab}$ acts
@@ -593,7 +588,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     \lean{MPOTensor.CompleteZipperFusionFamily.%
         twoEdgeInversePrintedFMatrix}
     \leanok
-    \uses{def:mpdo_complete_zipper_fusion_family, thm:mpdo_complete_zipper_printed_fmove}
+    \uses{def:mpdo_complete_zipper_fusion_family,thm:mpdo_complete_zipper_printed_fmove}
     Fix labels $a,b,c,d,e$. The five fusion trees in equation~(33) of
     \cite{Bultinck2017Anyons} determine five multiplicity spaces and five
     synthesis maps into the fourfold bond space. These spaces use the integer
@@ -639,7 +634,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
         threeEdgeInversePrintedFMatrix_eq_twoEdgeInversePrintedFMatrix}
     \lean{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon}
     \leanok
-    \uses{def:mpdo_complete_zipper_fourfold_fusion_data, thm:mpdo_complete_zipper_printed_fmove, lem:matrix_kronecker_identity_cancellation}
+    \uses{def:mpdo_complete_zipper_fourfold_fusion_data,thm:mpdo_complete_zipper_printed_fmove,lem:matrix_kronecker_identity_cancellation}
     The three-edge and two-edge composites of the forward
     $F$-matrices are equal. The corresponding composites of the inverse
     $F$-matrices are also equal. In the upper/lower convention of
@@ -680,7 +675,7 @@ $B_{ab}^{ik}$ on the vertical bond between $B_a$ and $B_b$.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         fourfoldBondMatrix_threeEdge_eq_twoEdge}
     \leanok
-    \uses{def:mpdo_operator_product_associator, def:mpdo_bnt_fusion_isometry_family}
+    \uses{def:mpdo_operator_product_associator,def:mpdo_bnt_fusion_isometry_family}
     Fix four labels $\alpha,\beta,\gamma,\delta$ in a BNT fusion-isometry
     family, and write $A=\{0,\ldots,D_\alpha-1\}$,
     $B=\{0,\ldots,D_\beta-1\}$, $C=\{0,\ldots,D_\gamma-1\}$, and

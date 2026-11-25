@@ -49,7 +49,7 @@ Hamiltonian.
 \begin{lemma}[The GHZ state is an MPS]\label{thm:ghz_d_mpv}
     \lean{MPSTensor.mpv_ghzTensorD}
     \leanok
-    \uses{def:ghz_tensor_d, def:ghz_state_d, def:mpv}
+    \uses{def:ghz_tensor_d,def:ghz_state_d,def:mpv}
     As in~\cite[Appendix~A, ``The GHZ
         state'']{Cirac2021Matrix}, for every $N$ the matrix product vector of
     the tensor of Definition~\ref{def:ghz_tensor_d} on $N$ sites equals the GHZ
@@ -68,7 +68,7 @@ Hamiltonian.
     \lean{MPSTensor.ghzTensorD_transferMap,
         MPSTensor.ghzTensorD_isTransferIdempotent}
     \leanok
-    \uses{def:ghz_tensor_d, def:transfer_map, def:mps_transfer_idempotence}
+    \uses{def:ghz_tensor_d,def:transfer_map,def:mps_transfer_idempotence}
     The transfer map of the GHZ tensor on a $d$-level system extracts the
     diagonal, $\E_A(X)_{\alpha\beta}=\delta_{\alpha\beta}X_{\alpha\alpha}$. In
     particular $\E_A^2=\E_A$, so the tensor is a renormalization fixed point.
@@ -83,7 +83,7 @@ Hamiltonian.
 \begin{lemma}[GHZ tensor is not injective for $d\ge2$]\label{thm:ghz_d_not_injective}
     \lean{MPSTensor.ghzTensorD_not_isInjective}
     \leanok
-    \uses{def:ghz_tensor_d, def:injective}
+    \uses{def:ghz_tensor_d,def:injective}
     For $d\ge2$ the GHZ tensor on a $d$-level system is not injective.
 \end{lemma}
 
@@ -97,7 +97,7 @@ Hamiltonian.
         MPSTensor.ghzCyclicShiftAction,
         MPSTensor.ghzTensorD_isOnSiteSymmetric_cyclic}
     \leanok
-    \uses{def:ghz_tensor_d, def:on_site_symmetric}
+    \uses{def:ghz_tensor_d,def:on_site_symmetric}
     Let the symmetric group on $\{0,\ldots,d-1\}$ act on $\C^d$ by permutation
     matrices. The GHZ tensor on a $d$-level system is on-site symmetric under
     this action. In particular, for $d\ge1$ it is on-site symmetric under the
@@ -141,7 +141,7 @@ representative in the remainder of this section.
 \begin{lemma}[The two-level case]\label{lem:ghz_tensor_d_two}
     \lean{MPSTensor.ghzTensorD_two}
     \leanok
-    \uses{def:ghz_tensor_d, def:ghz_tensor}
+    \uses{def:ghz_tensor_d,def:ghz_tensor}
     At $d=2$, the $d$-level GHZ tensor coincides with the two-level GHZ tensor of
     Definition~\ref{def:ghz_tensor}: both have $A^0=\ketbra{0}{0}$ and
     $A^1=\ketbra{1}{1}$.
@@ -178,7 +178,7 @@ representative in the remainder of this section.
 \begin{lemma}[GHZ transfer map is idempotent]\label{thm:ghz_transfer_idempotent}
     \lean{MPSTensor.ghz_transferMap_idempotent}
     \leanok
-    \uses{def:ghz_tensor, def:transfer_map}
+    \uses{def:ghz_tensor,def:transfer_map}
     The transfer map of the GHZ tensor satisfies $\E_A^2 = \E_A$.
 \end{lemma}
 
@@ -191,7 +191,7 @@ representative in the remainder of this section.
 \begin{lemma}[GHZ tensor is a renormalization fixed point]\label{thm:ghz_is_rfp}
     \lean{MPSTensor.ghz_isTransferIdempotent}
     \leanok
-    \uses{def:ghz_tensor, def:mps_transfer_idempotence, thm:ghz_transfer_idempotent}
+    \uses{def:ghz_tensor,def:mps_transfer_idempotence,thm:ghz_transfer_idempotent}
     The GHZ tensor is a renormalization fixed point.
 \end{lemma}
 
@@ -205,7 +205,7 @@ representative in the remainder of this section.
 \begin{lemma}[GHZ tensor is not injective]\label{thm:ghz_not_injective}
     \lean{MPSTensor.ghz_not_isInjective}
     \leanok
-    \uses{def:ghz_tensor, def:injective}
+    \uses{def:ghz_tensor,def:injective}
     The GHZ tensor is not injective: $\spn_{\C}\{A^0, A^1\}$ is the
     two-dimensional space of diagonal matrices in~$\MN{2}$, which does
     not equal~$\MN{2}$.
@@ -221,7 +221,7 @@ representative in the remainder of this section.
 \begin{lemma}[$\Z_2$ on-site symmetry of the GHZ tensor]\label{thm:ghz_z2_symmetric}
     \lean{MPSTensor.ghz_isOnSiteSymmetric_Z2}
     \leanok
-    \uses{def:ghz_tensor, def:on_site_symmetric}
+    \uses{def:ghz_tensor,def:on_site_symmetric}
     Let $\Z_2 = \{1, \sigma_x\}$ act on $\C^2$ by the Pauli-$X$
     matrix~$\sigma_x$. The GHZ tensor is on-site symmetric under this
     action: for each $g \in \Z_2$, the twisted tensor $\widetilde A_g$
@@ -250,7 +250,7 @@ representative in the remainder of this section.
 \begin{lemma}[Virtual $\Z_2$ symmetry of the GHZ tensor]\label{thm:ghz_virtual_z2}
     \lean{MPSTensor.ghz_virtual_Z2_symmetric}
     \leanok
-    \uses{def:ghz_tensor, def:ghz_virtual_z2_action}
+    \uses{def:ghz_tensor,def:ghz_virtual_z2_action}
     The matrix $\sigma_z$ commutes with every GHZ matrix $A^i$. A non-scalar
     matrix commuting with all $A^i$ is the hallmark of a non-injective
     ($\Z_2$-injective) tensor: the on-site symmetry of
@@ -268,7 +268,7 @@ representative in the remainder of this section.
 \begin{lemma}[GHZ order parameter is a transfer-map fixed point]\label{thm:ghz_order_param}
     \lean{MPSTensor.ghz_orderParam_fixed}
     \leanok
-    \uses{def:ghz_tensor, def:transfer_map}
+    \uses{def:ghz_tensor,def:transfer_map}
     The order-parameter operator $\sigma_z$ is a fixed point of the GHZ transfer
     map, $\E_A(\sigma_z) = \sigma_z$.
 \end{lemma}
@@ -290,7 +290,7 @@ representative in the remainder of this section.
 \begin{lemma}[GHZ zero correlation length]\label{thm:ghz_zcl}
     \lean{MPSTensor.ghz_isZCL}
     \leanok
-    \uses{def:is_zcl, thm:ghz_is_rfp, thm:zcl_iff_idempotent_transfer}
+    \uses{def:is_zcl,thm:ghz_is_rfp,thm:zcl_iff_idempotent_transfer}
     The GHZ tensor has zero correlation length: its idempotent transfer map
     (Lemma~\ref{thm:ghz_is_rfp}) gives correlations independent of the
     separation. This contrasts with the AKLT state
@@ -300,7 +300,7 @@ representative in the remainder of this section.
 
 \begin{proof}
     \leanok
-    \uses{thm:zcl_iff_idempotent_transfer, thm:ghz_is_rfp}
+    \uses{thm:zcl_iff_idempotent_transfer,thm:ghz_is_rfp}
     By Theorem~\ref{thm:zcl_iff_idempotent_transfer}, transfer-map idempotence
     is equivalent to zero correlation length, so the idempotence of the GHZ
     transfer map yields the claim.
@@ -337,8 +337,7 @@ GHZ state to arbitrary groups.
         MPSTensor.gInjTensor_isTransferIdempotent,
         MPSTensor.gInjTensor_eq_one_of_hasEigenvalue}
     \leanok
-    \uses{def:ghz_g_injective_tensor, def:transfer_map,
-        def:mps_transfer_idempotence, thm:transfer_idempotent_eigenvalue_eq_one}
+    \uses{def:ghz_g_injective_tensor,def:transfer_map,def:mps_transfer_idempotence,thm:transfer_idempotent_eigenvalue_eq_one}
     As in \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}, the
     transfer map of the $G$-injective tensor is
     $\E_A(X)_{\alpha\beta}=|G|^{-1}\sum_{k\in G}X_{\alpha k,\beta k}$, which is
@@ -359,7 +358,7 @@ GHZ state to arbitrary groups.
         MPSTensor.gInjVirtualShift, MPSTensor.gInjVirtualShift_apply,
         MPSTensor.isGInjective_gInjTensor}
     \leanok
-    \uses{def:ghz_g_injective_tensor, def:peps_g_injective}
+    \uses{def:ghz_g_injective_tensor,def:peps_g_injective}
     Let $G$ act on the two virtual legs by $L_g\otimes\bar L_g$. In the sense
     of \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix} and
     \cite[Section~``Two dimensions: $G$-injective PEPS'']{Schuch2010PEPS}, the
@@ -381,7 +380,7 @@ GHZ state to arbitrary groups.
     \lean{MPSTensor.gInjPhysShift, MPSTensor.gInjPhysRep,
         MPSTensor.twistedTensor_gInjTensor, MPSTensor.gInjTensor_isOnSiteSymmetric}
     \leanok
-    \uses{def:ghz_g_injective_tensor, def:on_site_symmetric}
+    \uses{def:ghz_g_injective_tensor,def:on_site_symmetric}
     Let $G$ act on the physical index by $L_g\otimes\bar L_g$, that is
     $(i,j)\mapsto(gi,gj)$. As in
     \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}, each matrix
@@ -400,7 +399,7 @@ GHZ state to arbitrary groups.
         MPSTensor.z2FourierGInjTensor, MPSTensor.gInjTensor_z2_apply,
         MPSTensor.z2FourierGInjTensor_eq_blockTensor_ghz}
     \leanok
-    \uses{def:ghz_g_injective_tensor, def:ghz_tensor_d, def:gauge_equiv}
+    \uses{def:ghz_g_injective_tensor,def:ghz_tensor_d,def:gauge_equiv}
     For $G=\Z_2$ the tensor is $A^{ij}=\tfrac12\sigma_x^{i+j}$. Let
     $H=\bigl(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\bigr)$. As noted in
     \cite[Section~III.A, ``Virtual symmetries'']{Cirac2021Matrix}, applying the

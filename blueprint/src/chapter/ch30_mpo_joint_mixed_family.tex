@@ -151,8 +151,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:mpo_joint_mixed_family,thm:mpo_joint_one_site_span,
-        thm:spt_normalized_bond_interpolation,thm:mpo_mixed_interior}
+    \uses{def:mpo_joint_mixed_family,thm:mpo_joint_one_site_span,thm:spt_normalized_bond_interpolation,thm:mpo_mixed_interior}
     Decomposing an arbitrary tuple $Z=(Z_x)_x$ into its four virtual
     corners, (\ref{eq:mpo_joint_mixed_endpoint_span}) gives common
     coefficients $c_i^p$ with
@@ -182,8 +181,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:mpo_joint_mixed_family,thm:mpo_joint_mixed_span,
-        thm:mpo_joint_one_site_span,def:spt_coordinate_inclusions}
+    \uses{def:mpo_joint_mixed_family,thm:mpo_joint_mixed_span,thm:mpo_joint_one_site_span,def:spt_coordinate_inclusions}
     The compression retains the $00$ virtual corner. The letters
     $(00,i)$ give $(A_x^0)^i$, while each other letter gives zero.
     Since $V_{x,0}^*V_{x,0}=I_{D_x^0}$,
@@ -215,8 +213,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
         MPSTensor.MPOSymmetry.range_blockInsertedGroundSpaceMap_eq_of_isUnit,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedGroundSpace_eq_iSup}
     \leanok
-    \uses{def:mpo_joint_inserted_boundary,def:mpo_joint_mixed_support,
-        def:block_ground_space_map}
+    \uses{def:mpo_joint_inserted_boundary,def:mpo_joint_mixed_support,def:block_ground_space_map}
     Let $(B_x)_x$ be any block family and $W_x$ any square insertion
     matrices of the matching sizes. At every length $N\geq1$,
     \begin{align}
@@ -238,8 +235,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:mpo_joint_inserted_boundary,def:block_ground_space_map,
-        def:mpo_joint_mixed_family,thm:mpo_mixed_interior}
+    \uses{def:mpo_joint_inserted_boundary,def:block_ground_space_map,def:mpo_joint_mixed_family,thm:mpo_mixed_interior}
     Associativity regroups the alternating product
     and gives~(\ref{eq:mpo_joint_mixed_boundary_change}) after taking
     traces and summing over $x$. Invertibility makes
@@ -285,8 +281,7 @@ $\mathcal I$; the block label $x$ is fixed on both sides.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_joint_mixed_span,thm:mpo_joint_inserted_injective,
-        thm:mpo_joint_inserted_open_kernel,thm:spt_normalized_bond_interpolation}
+    \uses{thm:mpo_joint_mixed_span,thm:mpo_joint_inserted_injective,thm:mpo_joint_inserted_open_kernel,thm:spt_normalized_bond_interpolation}
     Lemma~\ref{thm:mpo_joint_mixed_span} gives simultaneous spanning
     of $(C_x)_x$. Since $D_x^0,D_x^1>0$, the matrix $W_x(\gamma)$
     could vanish only if both $1-\gamma=0$ and $\gamma=0$, which is

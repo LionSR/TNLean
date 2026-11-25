@@ -22,7 +22,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         exists_isRFPViaTS_not_lengthIndependent_bntCoefficients}
     \leanok
-    \uses{def:mpdo_bnt_label_length_independent, thm:mpdo_bond_two_singleton_normalized_algebra, thm:mpdo_bnt_algebra_tensor_to_rfp}
+    \uses{def:mpdo_bnt_label_length_independent,thm:mpdo_bond_two_singleton_normalized_algebra,thm:mpdo_bnt_algebra_tensor_to_rfp}
     There is a tensor $M$ in canonical form that generates matrix product
     density operators, is a renormalization fixed point, and
     has a vertical basis-of-normal-tensors presentation with one element and structure
@@ -31,7 +31,7 @@
     for the exhibited presentation depend on the length.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_bond_two_singleton_ambient_ghz, thm:mpdo_bond_two_singleton_cpsv_form, thm:mpdo_bond_two_singleton_normalized_algebra, thm:mpdo_bond_two_singleton_tensor_clause, thm:mpdo_bnt_algebra_tensor_to_rfp}
+    \uses{thm:mpdo_bond_two_singleton_ambient_ghz,thm:mpdo_bond_two_singleton_cpsv_form,thm:mpdo_bond_two_singleton_normalized_algebra,thm:mpdo_bond_two_singleton_tensor_clause,thm:mpdo_bnt_algebra_tensor_to_rfp}
     The bond-dimension-two tensor with a one-element vertical basis of normal tensors
     generates positive operators on every nonempty chain, is in canonical form, and
     satisfies the displayed multiplication law and the corresponding
@@ -60,7 +60,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         oneLabelCoeffs_rescaling_stable_not_lengthIndependent}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent, def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_bnt_label_coefficient_family,def:mpdo_bnt_label_length_independent,def:mpo_physical_trace_transfer}
     Lemma~\ref{thm:mpdo_length_dependent_rfp_example} gives length-dependent
     structure coefficients for a specified BNT presentation, as asked in
     \cite[lines~995--999]{Cirac2016MPDO_arXiv}.
@@ -119,7 +119,7 @@
     motivated by the discussion in \cite[lines~995--1010]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpo_physical_trace_transfer, def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent}
+    \uses{def:mpo_physical_trace_transfer,def:mpdo_bnt_label_coefficient_family,def:mpdo_bnt_label_length_independent}
     The $(a,b)$ entry of $\mathcal T_R$ is
     $\frac{25}{32}\tr(A^a)\tr(A^b)$, and
     $\sum_a\tr(A^a)^2=2\cdot(\frac45)^2=\frac{32}{25}$,
@@ -177,7 +177,7 @@
     \lean{MPOTensor.TwistedDimer.physTraceTransfer_block_one}
     \lean{MPOTensor.TwistedDimer.physTraceTransfer_block_zero}
     \leanok
-    \uses{def:mpdo_twisted_dimer_tensor, def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_twisted_dimer_tensor,def:mpo_physical_trace_transfer}
     For a bond matrix $X$, the one-site physical closure $M_1(X)$ of the
     twisted dimer has entries
     \begin{align}
@@ -212,7 +212,7 @@
     \lean{MPOTensor.TwistedDimer.mpo_T_eq_smul_hadamard}
     \lean{MPOTensor.TwistedDimer.T_isMPDO}
     \leanok
-    \uses{def:mpdo, def:mpdo_twisted_dimer_tensor}
+    \uses{def:mpdo,def:mpdo_twisted_dimer_tensor}
     The closed operator $\rho^{(N)}(M)$ of the twisted quantum dimer is
     positive semidefinite for every positive chain length $N$, so $M$
     generates MPDOs. Writing $l_n$, $r_n$, $f_n$ for the three bits at
@@ -298,7 +298,7 @@
     \label{lem:mpdo_twisted_dimer_bond_state_entries}
     \lean{MPOTensor.TwistedDimer.bondState_apply}
     \leanok
-    \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_controlled_flip}
+    \uses{def:mpdo_twisted_dimer_tensor,def:mpdo_twisted_dimer_controlled_flip}
     For $k\in\{0,1\}$, put $\sigma_k=\frac78\Pi_++(-1)^k\frac18\Pi_-$,
     where $\Pi_\pm$ are the Bell projections of
     Definition~\ref{def:mpdo_twisted_dimer_controlled_flip}.
@@ -314,7 +314,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_controlled_flip}
+    \uses{def:mpdo_twisted_dimer_tensor,def:mpdo_twisted_dimer_controlled_flip}
     Expanding the two Bell projections in the computational basis gives the
     displayed matrix entries.
 \end{proof}
@@ -353,7 +353,7 @@
     \lean{MPOTensor.TwistedDimer.decoratedState, MPOTensor.TwistedDimer.chainUnitary}
     \lean{MPOTensor.TwistedDimer.chainUnitary_apply}
     \leanok
-    \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_controlled_flip}
+    \uses{def:mpdo_twisted_dimer_tensor,def:mpdo_twisted_dimer_controlled_flip}
     For $N\ge0$, write each physical configuration as
     $s=((l_m,r_m,f_m))_m$, with cyclic indices when $N>0$.
     At $N=0$ the configurations are empty. The incoming cells are
@@ -394,7 +394,7 @@
     $\rho^{(N)}(M)=U_ND_NU_N^\dagger$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:mpdo_twisted_dimer_controlled_flip, lem:mpdo_twisted_dimer_bond_state_entries, thm:mpdo_twisted_dimer_ismpdo}
+    \uses{lem:mpdo_twisted_dimer_controlled_flip,lem:mpdo_twisted_dimer_bond_state_entries,thm:mpdo_twisted_dimer_ismpdo}
     Taking tensor products of the identities in
     Lemma~\ref{lem:mpdo_twisted_dimer_controlled_flip} and separating
     the bond and flag strings gives
@@ -426,7 +426,7 @@ the bond and flag factors decouple, yielding the state-level product form.
     \lean{MPOTensor.TwistedDimer.evenFlagState_posSemidef}
     \lean{MPOTensor.TwistedDimer.trace_evenFlagState}
     \leanok
-    \uses{def:mpdo_twisted_dimer_bond_flag_regrouping, thm:cpsv_example412_normalized_rfp_maps}
+    \uses{def:mpdo_twisted_dimer_bond_flag_regrouping,thm:cpsv_example412_normalized_rfp_maps}
     Let $\widehat M$ be the density-normalized tensor of
     Lemma~\ref{thm:cpsv_example412_normalized_rfp_maps}. For every
     $N\geq0$, the flag operator satisfies
@@ -437,7 +437,7 @@ the bond and flag factors decouple, yielding the state-level product form.
     $\omega_0$ and $\rho^{(0)}(\widehat M)$ are the scalar $2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:cpsv_example412_normalized_rfp_maps, thm:cpsv_example412_literal_formula}
+    \uses{thm:cpsv_example412_normalized_rfp_maps,thm:cpsv_example412_literal_formula}
     Substituting the identity and Pauli $Z$ matrices in the definition of
     $\omega_N$ identifies $2^{-N}(\Id^{\otimes N}+Z^{\otimes N})$
     with the closed operator of $\widehat M$ by
@@ -456,14 +456,14 @@ the bond and flag factors decouple, yielding the state-level product form.
     \lean{MPOTensor.TwistedDimer.trace_decoratedState}
     \lean{MPOTensor.TwistedDimer.trace_mpo_T}
     \leanok
-    \uses{def:mpdo_twisted_dimer_controlled_flip, def:mpdo_twisted_dimer_bond_flag_regrouping, def:mpdo_twisted_dimer_tensor}
+    \uses{def:mpdo_twisted_dimer_controlled_flip,def:mpdo_twisted_dimer_bond_flag_regrouping,def:mpdo_twisted_dimer_tensor}
     The bond operator $\sigma$ is positive semidefinite and has trace one.
     Every tensor power $\sigma^{\otimes N}$ has trace one, including
     $N=0$. For every $N>0$, $D_N$ is positive semidefinite and
     $\tr D_N=\tr\rho^{(N)}(M)=1$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:mpdo_twisted_dimer_bond_state_entries, thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
+    \uses{lem:mpdo_twisted_dimer_bond_state_entries,thm:mpdo_twisted_dimer_flag_factor,thm:mpdo_twisted_dimer_unitary_factorization}
     The Bell projectors are positive rank-one operators, and
     Lemma~\ref{lem:mpdo_twisted_dimer_bond_state_entries} gives
     $\tr\sigma=C_0[0,0]+C_0[1,1]=1$.
@@ -486,7 +486,7 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
     \lean{MPOTensor.TwistedDimer.bondSiteEquiv, MPOTensor.TwistedDimer.sigmaDimer}
     \lean{MPOTensor.TwistedDimer.incomingBondEquiv}
     \leanok
-    \uses{def:mpdo_twisted_dimer_controlled_flip, def:mpdo_twisted_dimer_tensor}
+    \uses{def:mpdo_twisted_dimer_controlled_flip,def:mpdo_twisted_dimer_tensor}
     Let
     \begin{align}
         C & =\begin{pmatrix}1/2&3/8\\3/8&1/2\end{pmatrix}.
@@ -516,7 +516,7 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
     \lean{MPOTensor.TwistedDimer.sigmaDimer_isMPDO}
     \lean{MPOTensor.TwistedDimer.trace_mpo_sigmaDimer}
     \leanok
-    \uses{def:mpdo_twisted_dimer_bond_tensor, def:mpdo}
+    \uses{def:mpdo_twisted_dimer_bond_tensor,def:mpdo}
     For every $N>0$, the tensor $Q$ of
     Definition~\ref{def:mpdo_twisted_dimer_bond_tensor} satisfies
     \begin{align}
@@ -575,7 +575,7 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
     empty closed operator is $4$ and the empty bond product is $1$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_twisted_dimer_bond_tensor, lem:matrix_cyclic_path_sum, lem:mpdo_twisted_dimer_bond_state_entries, thm:mpdo_twisted_dimer_factor_normalization}
+    \uses{def:mpdo_twisted_dimer_bond_tensor,lem:matrix_cyclic_path_sum,lem:mpdo_twisted_dimer_bond_state_entries,thm:mpdo_twisted_dimer_factor_normalization}
     Fix independent configurations $s_m=(l_m,r_m)$ and
     $t_m=(l'_m,r'_m)$, with $m=0,\ldots,N-1$ and cyclic successors.
     The cyclic trace expansion of Lemma~\ref{lem:matrix_cyclic_path_sum}
@@ -607,7 +607,7 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
     \lean{MPOTensor.TwistedDimer.bondInsertionEquiv}
     \lean{MPOTensor.TwistedDimer.sigmaDimerRefine, MPOTensor.TwistedDimer.sigmaDimerCoarse}
     \leanok
-    \uses{def:mpdo_twisted_dimer_controlled_flip, def:mpdo_twisted_dimer_bond_tensor}
+    \uses{def:mpdo_twisted_dimer_controlled_flip,def:mpdo_twisted_dimer_bond_tensor}
     Let $J$ be the basis permutation from an exterior site and an
     inserted bond to two sites:
     \begin{align}
@@ -635,7 +635,7 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
     \lean{MPOTensor.TwistedDimer.sigmaDimerCoarse_physClose2}
     \lean{MPOTensor.TwistedDimer.sigmaDimer_isRFPViaTS}
     \leanok
-    \uses{def:mpdo_twisted_dimer_bond_channels, def:is_rfp_via_ts}
+    \uses{def:mpdo_twisted_dimer_bond_channels,def:is_rfp_via_ts}
     The maps $\mathcal T_Q$ and $\mathcal S_Q$ of
     Definition~\ref{def:mpdo_twisted_dimer_bond_channels} are trace-preserving
     completely positive maps.
@@ -653,7 +653,7 @@ representatives $\Id/\sqrt2,Z/\sqrt2$.
     Definition~\ref{def:is_rfp_via_ts}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_factor_normalization, def:mpdo_twisted_dimer_bond_tensor, lem:mpdo_twisted_dimer_bond_state_entries}
+    \uses{thm:mpdo_twisted_dimer_factor_normalization,def:mpdo_twisted_dimer_bond_tensor,lem:mpdo_twisted_dimer_bond_state_entries}
     Preparation of the positive trace-one state $\sigma$, permutation
     of basis coordinates, and partial trace are trace-preserving completely
     positive maps.
@@ -700,7 +700,7 @@ and $1/8$.
     \label{def:mpdo_twisted_dimer_onsite_split}
     \lean{MPOTensor.TwistedDimer.onsiteBondFlagEquiv}
     \leanok
-    \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_twisted_dimer_bond_tensor}
+    \uses{def:mpdo_twisted_dimer_tensor,def:mpdo_twisted_dimer_bond_tensor}
     For $N$ sites, let $H_N$ be the basis permutation separating each
     site's two bond qubits from its flag:
     \begin{align}
@@ -718,7 +718,7 @@ and $1/8$.
     \lean{MPOTensor.TwistedDimer.decoratedState_eq_mpo_factors}
     \lean{MPOTensor.TwistedDimer.mpo_eq_unitary_mpo_factors}
     \leanok
-    \uses{def:mpdo_twisted_dimer_onsite_split, def:mpdo_twisted_dimer_bond_flag_regrouping, thm:mpdo_twisted_dimer_flag_factor}
+    \uses{def:mpdo_twisted_dimer_onsite_split,def:mpdo_twisted_dimer_bond_flag_regrouping,thm:mpdo_twisted_dimer_flag_factor}
     Let $Q$ be the mixed-Bell bond tensor and let $\widehat M$ be the
     density-normalized tensor identified in
     Lemma~\ref{thm:mpdo_twisted_dimer_flag_factor}. For every $N>0$,
@@ -737,7 +737,7 @@ and $1/8$.
     \ref{thm:mpdo_twisted_dimer_flag_factor}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_bond_product, thm:mpdo_twisted_dimer_flag_factor, thm:mpdo_twisted_dimer_unitary_factorization}
+    \uses{thm:mpdo_twisted_dimer_bond_product,thm:mpdo_twisted_dimer_flag_factor,thm:mpdo_twisted_dimer_unitary_factorization}
     The coordinate permutations satisfy
     $(B_N\otimes\Id)H_N=S_NE_N$: both read the incoming bonds
     $(r_{m-1},l_m)$ and the unchanged flags $f_m$.
@@ -762,7 +762,7 @@ qubits from the site flags.
     \lean{MPOTensor.TwistedDimer.coarseMap_physClose2}
     \lean{MPOTensor.TwistedDimer.isRFPViaTS_T}
     \leanok
-    \uses{def:is_rfp_via_ts, def:mpdo_twisted_dimer_tensor}
+    \uses{def:is_rfp_via_ts,def:mpdo_twisted_dimer_tensor}
     The twisted quantum dimer of
     Definition~\ref{def:mpdo_twisted_dimer_tensor} is a renormalization fixed
     point in the sense of Definition~\ref{def:is_rfp_via_ts}.
@@ -787,7 +787,7 @@ qubits from the site flags.
     \cite[lines~995--1010]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_twisted_dimer_tensor, thm:mpdo_twisted_dimer_closures}
+    \uses{def:mpdo_twisted_dimer_tensor,thm:mpdo_twisted_dimer_closures}
     Fix a one-site basis index $(l,r,f)$. The two-site indices in the
     support of a refinement Kraus operator carry the outer bits $l$ and
     $r$, the two prepared flags, and a free shared bond bit. Each of the

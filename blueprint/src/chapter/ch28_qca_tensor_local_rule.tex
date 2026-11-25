@@ -65,9 +65,7 @@ in the ordered pair coordinates of
     \label{lem:qca_tensor_output_fixed_local_rule}
     \lean{SpinChain.PropagatesWithin.twoLinkOutputObservable_eq_constantMargolusGateRule}
     \leanok
-    \uses{lem:qca_bipartite_kronecker_product,
-        lem:qca_consecutive_pair_observable_translation,
-        lem:mpu_two_link_output_matrix_units,lem:qca_fixed_margolus_gates}
+    \uses{lem:qca_bipartite_kronecker_product,lem:qca_consecutive_pair_observable_translation,lem:mpu_two_link_output_matrix_units,lem:qca_fixed_margolus_gates}
     Embed the four-site output in the ordered pairs $(-1,0)$ and $(1,2)$.
     Its observable is exactly the fixed Margolus expression for $K=uAu^\dagger$:
     the first shifted gate acts on $(-1,0)$ and the second on $(1,2)$.
@@ -82,8 +80,7 @@ in the ordered pair coordinates of
     \label{lem:qca_constructed_tensor_actual_local_rule}
     \lean{SpinChain.PropagatesWithin.exists_standardFormTensor_actual_margolus_rule}
     \leanok
-    \uses{lem:qca_fixed_margolus_gates,def:mpu_tensor_from_two_gates,
-        lem:mpu_tensor_from_gates_periodic_circuit,lem:qca_tensor_output_fixed_local_rule}
+    \uses{lem:qca_fixed_margolus_gates,def:mpu_tensor_from_two_gates,lem:mpu_tensor_from_gates_periodic_circuit,lem:qca_tensor_output_fixed_local_rule}
     Let $\omega$ be a translation-covariant automorphism with
     nearest-neighbour propagation on the homogeneous chain. There are
     unitary gates $u,v$ and a tensor $W$ on the ordered two-site alphabet,

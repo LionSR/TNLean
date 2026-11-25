@@ -383,8 +383,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.CollarScan.designated_split_mixture_dilution_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.fill_split_mixture_dilution_planeDomainGraph}
     \leanok
-    \uses{thm:al_scan_unconditional_split_interval,thm:al_scan_offset_count,
-        def:al_scan_designated_incidence,thm:al_scan_designated_sampling}
+    \uses{thm:al_scan_unconditional_split_interval,thm:al_scan_offset_count,def:al_scan_designated_incidence,thm:al_scan_designated_sampling}
     Suppose $n,m,D>0$, $C_1>0$, $r_0\le D$, $4D\le m$, $8Km\le L$, and the row
     and clearance bounds of Lemma~\ref{thm:al_scan_ambient_rows} hold. For
     every label $i$ and mixture parameter $p\in[0,1]$, the total weight of
@@ -454,9 +453,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSplitIncidence_isTerminalSplit_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSplitIncidence_isTerminalSplit_planeDomainGraph}
     \leanok
-    \uses{def:al_scan_terminal_split,def:al_scan_designated_incidence,
-        thm:al_scan_front_separation,thm:al_scan_band_nesting,
-        thm:al_scan_designated_sampling,thm:al_scan_unconditional_split_interval}
+    \uses{def:al_scan_terminal_split,def:al_scan_designated_incidence,thm:al_scan_front_separation,thm:al_scan_band_nesting,thm:al_scan_designated_sampling,thm:al_scan_unconditional_split_interval}
     Under the row and clearance bounds of Lemma~\ref{thm:al_scan_ambient_rows}
     with $8Km\le L$, $n>0$, $1\le D$, $r_0\le D$, and $4D\le m$, every
     designated receiving--middle incidence at a completed ($k\le nm$) or
@@ -476,8 +473,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_state_designatedSplitIncidence_le_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_old_designatedSplitIncidence_le_planeDomainGraph}
     \leanok
-    \uses{thm:al_scan_unconditional_split_interval,thm:al_scan_terminal_split,
-        def:al_scan_designated_incidence}
+    \uses{thm:al_scan_unconditional_split_interval,thm:al_scan_terminal_split,def:al_scan_designated_incidence}
     Under the hypotheses of Lemma~\ref{thm:al_scan_terminal_split} with
     $n,m\ge2$, $4(D+2r_0)\le m$, and at most $\mu$ labels per anchor,
     \begin{align}
@@ -655,8 +651,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     matching \cite[Lemma~9.1(2)]{OpenAI2026AreaLaw}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_physical_ambient_boundary,
-        lem:area_law_ambient_boundary_layers,thm:al_physical_cut_calculus}
+    \uses{thm:area_law_physical_ambient_boundary,lem:area_law_ambient_boundary_layers,thm:al_physical_cut_calculus}
     Clearance gives $T_j\cap Z=\varnothing$, so $|\partial_\Lambda P_j|\le|\partial T_j|\le4n$
     by Lemma~\ref{thm:area_law_physical_ambient_boundary} and
     Lemma~\ref{lem:area_law_ambient_boundary_layers} (and $P_j=\varnothing$ for
@@ -716,8 +711,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_augmentedPartition_eq_target_near_middle,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_augmentedPartition_eq_target_near_middle}
     \leanok
-    \uses{def:al_scan_actual_histories,def:al_scan_augmented_partitions,
-        def:al_scan_comparison_prefixes}
+    \uses{def:al_scan_actual_histories,def:al_scan_augmented_partitions,def:al_scan_comparison_prefixes}
     Under the embedding $\iota:\Lambda\hookrightarrow\Lambda\sqcup\{C,R\}$, the
     augmented partition of Definition~\ref{def:al_scan_augmented_partitions} at
     any completed or pre-charge status satisfies
@@ -911,9 +905,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_cut_bounds_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_cut_bounds_planeDomainGraph}
     \leanok
-    \uses{thm:al_scan_physical_prefix_approximation,
-        thm:al_scan_prefix_boundary,thm:al_physical_cut_calculus,
-        lem:al_scan_status_differences}
+    \uses{thm:al_scan_physical_prefix_approximation,thm:al_scan_prefix_boundary,thm:al_physical_cut_calculus,lem:al_scan_status_differences}
     Under the hypotheses of Lemma~\ref{thm:al_scan_physical_prefix_approximation}
     and $\operatorname{dist}_\infty(T,Z)>2L+10r_0$, every completed ($k\le nm$)
     or pre-charge ($k+1\le nm$) status satisfies
@@ -981,8 +973,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove_eta,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeMoveCost_chargeEntropyCost}
     \leanok
-    \uses{thm:al_scan_regional_move_entropy,def:al_scan_charge_entropy_cost,
-        thm:al_scan_augmented_transitions}
+    \uses{thm:al_scan_regional_move_entropy,def:al_scan_charge_entropy_cost,thm:al_scan_augmented_transitions}
     In Definition~\ref{def:al_scan_charge_entropy_cost},
     $F_{h,g,s}(B;\theta)\ge0$, and for the set $\Delta_g(c)$ removed by charge
     choice $c$ toward side $s_g(c)$,
@@ -1031,8 +1022,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \label{thm:al_scan_actual_charge_admissible}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeData_isAdmissible}
     \leanok
-    \uses{def:al_scan_actual_charge_data,thm:al_scan_augmented_transitions,
-        thm:al_scan_history_mean_tree_endpoints}
+    \uses{def:al_scan_actual_charge_data,thm:al_scan_augmented_transitions,thm:al_scan_history_mean_tree_endpoints}
     For $m,M>0$, the transition data of
     Definition~\ref{def:al_scan_actual_charge_data} are admissible (positive
     leaf weights, valid partitions, and middle-subset moves).
@@ -1246,9 +1236,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_augmented_supports,thm:al_scan_actual_charge_admissible,
-        thm:al_scan_charge_entropy_sampling,thm:al_scan_incidence_split_entropy,
-        thm:al_scan_old_entropy_integral}
+    \uses{thm:al_scan_augmented_supports,thm:al_scan_actual_charge_admissible,thm:al_scan_charge_entropy_sampling,thm:al_scan_incidence_split_entropy,thm:al_scan_old_entropy_integral}
     Combine~(\ref{eq:al_scan_charge_entropy_sampling}) and
     (\ref{eq:al_scan_incidence_split_entropy}) to obtain the first inequality in
     (\ref{eq:al_scan_actual_old_entropy_sampling}), then apply $J_h$ and sum
@@ -1408,8 +1396,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_state_not_constant_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.log_designatedSupport_dimension_le_of_old_not_constant_planeDomainGraph}
     \leanok
-    \uses{thm:al_scan_physical_subsystem_size,thm:al_scan_noncontained_support_radius,
-        def:al_scan_physical_dimension_cap}
+    \uses{thm:al_scan_physical_subsystem_size,thm:al_scan_noncontained_support_radius,def:al_scan_physical_dimension_cap}
     For any physical region $B\subseteq\Lambda$,
     $\log(e\dim B)=1+|B|\log q$. Thus $\ell_q(r_0)\ge1$ bounds $\log(e\dim B)$
     for every charge transfer and (when $8Km\le L$) every non-contained
@@ -1627,8 +1614,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.log_surprisalMoment_truncated_regionState_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.surprisalTail_truncated_regionState_le}
     \leanok
-    \uses{def:al_scan_actual_energy_terms,def:area_law_ground_entropy,
-        thm:al_exact_cut_budget}
+    \uses{def:al_scan_actual_energy_terms,def:area_law_ground_entropy,thm:al_exact_cut_budget}
     For $q\ge1$, a local Hamiltonian $H=\sum_i h_i$ of range $R$ and norm bound
     $J$, $\|\Omega\|=1$, $\Delta>0$, and the truncated terms $\widetilde h_i$ of
     Definition~\ref{def:al_scan_actual_energy_terms} at depth $L$, set
@@ -1663,8 +1649,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_actual_energy_terms,thm:area_law_cut_marginal,
-        thm:al_exact_cut_budget}
+    \uses{thm:al_scan_actual_energy_terms,thm:area_law_cut_marginal,thm:al_exact_cut_budget}
     Apply \cite[Lemma~3.1]{OpenAI2026AreaLaw} to $\widetilde H$ using
     Lemma~\ref{thm:al_scan_actual_energy_terms}, (\ref{eq:al_scan_truncated_gap}),
     Lemma~\ref{thm:area_law_cut_marginal}, and
@@ -1746,9 +1731,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     for all $i\in E$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary,
-        thm:al_exact_cut_budget,thm:al_scan_compact_collar_card,
-        thm:al_lattice_crossing_budget,lem:al_scan_fixed_ancestry_cutoff}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary,thm:al_exact_cut_budget,thm:al_scan_compact_collar_card,thm:al_lattice_crossing_budget,lem:al_scan_fixed_ancestry_cutoff}
     Summing layers gives $|S_0|\le|T|+nL\le(C_T+1)n^2$, and
     (\ref{eq:al_scan_prefix_boundary}) at $j=0$ gives $|\partial_\Lambda X|\le4n$.
     Apply Lemma~\ref{thm:al_scan_exists_marginal_tails} with $C_0=C_T+1$ and
@@ -1767,9 +1750,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     which $C_B>0$ and $N\ge2$ depend only on $(R,J,\Delta,C_T,q)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary,
-        thm:al_scan_compact_collar_card,thm:al_lattice_crossing_budget,
-        thm:al_exact_cut_budget,lem:al_scan_fixed_ancestry_cutoff}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary,thm:al_scan_compact_collar_card,thm:al_lattice_crossing_budget,thm:al_exact_cut_budget,lem:al_scan_fixed_ancestry_cutoff}
     Lemma~\ref{thm:al_scan_exists_marginal_tails} furnishes $C_{\mathrm{tr}}$
     for $C_0=C_T+1$ independently of $q$ (strengthening
     \cite[Proposition~4.5]{OpenAI2026AreaLaw}), and the remainder of the proof
@@ -1783,8 +1764,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_planeDomainGraph}
     \leanok
-    \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data,
-        def:al_scan_actual_energy_terms,def:al_scan_physical_dimension_cap}
+    \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data,def:al_scan_actual_energy_terms,def:al_scan_physical_dimension_cap}
     There exist universal constants
     $c_0>0$ and $C_{\mathrm{ent}},e_{\mathrm{ent}},C_{\mathrm{en}},e_{\mathrm{en}}\in\mathbb R$
     such that the following holds for both a fill round and a charge round at
@@ -1855,11 +1835,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible,
-        thm:al_scan_actual_energy_terms,thm:al_scan_actual_fill_supports,
-        thm:al_scan_augmented_supports,thm:al_scan_nested_band_metrics,
-        thm:al_scan_physical_subsystem_dimension,
-        thm:al_scan_actual_transport_dimension}
+    \uses{thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible,thm:al_scan_actual_energy_terms,thm:al_scan_actual_fill_supports,thm:al_scan_augmented_supports,thm:al_scan_nested_band_metrics,thm:al_scan_physical_subsystem_dimension,thm:al_scan_actual_transport_dimension}
     By Lemmas~\ref{thm:al_scan_actual_fill_admission},
     \ref{thm:al_scan_actual_charge_admissible},
     \ref{thm:al_scan_actual_energy_terms},
@@ -1889,8 +1865,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_actual_old_entropy_sampling,thm:al_scan_actual_transport_estimates,
-        thm:al_scan_old_parameter_integral}
+    \uses{thm:al_scan_actual_old_entropy_sampling,thm:al_scan_actual_transport_estimates,thm:al_scan_old_parameter_integral}
     Integrate $\alpha\mathcal Q(p)\le\mathcal G_{r,\xi}(p)$ from
     (\ref{eq:al_scan_actual_old_entropy_sampling}) over $[p_0,p_1]$ using
     Lemma~\ref{thm:al_scan_old_parameter_integral} and combine with
@@ -2050,8 +2025,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \label{thm:al_scan_actual_charge_energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_planeDomainGraph}
     \leanok
-    \uses{def:al_scan_actual_charge_data,def:al_scan_literal_measures,
-        def:al_scan_physical_dimension_cap}
+    \uses{def:al_scan_actual_charge_data,def:al_scan_literal_measures,def:al_scan_physical_dimension_cap}
     Suppose
     \begin{align}
         n         & \ge2,  & s+1 & \le nm, & r_0 & \le D, & D & \ge1, &
@@ -2076,10 +2050,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_split_count,thm:al_scan_designated_dilution,
-        thm:al_scan_actual_transport_dimension,thm:al_scan_literal_integrals,
-        thm:al_scan_literal_scalars,thm:al_scan_split_entropy_cap,
-        thm:al_scan_finite_charge_energy}
+    \uses{thm:al_scan_split_count,thm:al_scan_designated_dilution,thm:al_scan_actual_transport_dimension,thm:al_scan_literal_integrals,thm:al_scan_literal_scalars,thm:al_scan_split_entropy_cap,thm:al_scan_finite_charge_energy}
     Substitute $N=A$ (Lemma~\ref{thm:al_scan_split_count}), $d=10D/m$
     (Lemma~\ref{thm:al_scan_designated_dilution}), and $B=2\ell$
     (Lemmas~\ref{thm:al_scan_actual_transport_dimension}
@@ -2104,8 +2075,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         TNLean.PEPS.AreaLaw.Scan.CollarScan.integrableOn_Icc_actualChargeScanRound_chargeDefect,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_Icc_actualChargeScanRound_chargeDefect}
     \leanok
-    \uses{def:al_scan_literal_measures,thm:al_scan_literal_scalars,
-        thm:al_scan_old_parameter_integral}
+    \uses{def:al_scan_literal_measures,thm:al_scan_literal_scalars,thm:al_scan_old_parameter_integral}
     For admissible finite transition data with $t\ge0$ and cross-band
     commutation (in particular, fill and charge rounds with $t=a/2\ge0$), the
     round defect $\mathcal Q_k(p)$ is a.e.\ measurable on $(0,1)$ and $[0,1]$
@@ -2150,8 +2120,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{lemma}[One cut bound for every physical status]
     \label{thm:al_scan_common_status_budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_statusMarginal_cutLogBudget_le_log}
-    \uses{thm:al_scan_nonfar_compact,def:al_scan_status_marginals,
-        thm:al_scan_status_cuts,thm:al_lattice_crossing_budget,thm:al_exact_cut_budget}
+    \uses{thm:al_scan_nonfar_compact,def:al_scan_status_marginals,thm:al_scan_status_cuts,thm:al_lattice_crossing_budget,thm:al_exact_cut_budget}
     Fix $q\ge1$, interaction range $R$, and $C_r\ge0$. There exists $C_B>0$
     such that whenever $n\ge2$, $T\ne\varnothing$,
     \begin{align}
@@ -2213,8 +2182,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{lemma}[One truncated vector for all physical marginal inputs]
     \label{thm:al_scan_common_status_moments}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_statusMarginal_moment_bounds}
-    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_common_status_budget,
-        thm:al_scan_common_moment_interval}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_common_status_budget,thm:al_scan_common_moment_interval}
     Fix $R$, $J\ge0$, $\Delta>0$, and $C_{\mathrm{card}}\ge0$. There exist
     $C_{\mathrm{tr}}>0$ and (for each $q\ge1$) $C_B>0$ such that under the
     hypotheses of Lemma~\ref{thm:al_scan_exists_marginal_tails} with
@@ -2271,8 +2239,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{lemma}[Physical marginal moments at the source scales]
     \label{thm:al_scan_source_status_moments}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_statusMarginal_moment_bounds}
-    \uses{thm:al_scan_compact_quadratic_volume,thm:al_scan_positive_source_bands,
-        thm:al_scan_status_scale_separation,thm:al_scan_common_status_moments}
+    \uses{thm:al_scan_compact_quadratic_volume,thm:al_scan_positive_source_bands,thm:al_scan_status_scale_separation,thm:al_scan_common_status_moments}
     Fix $R$, $J\ge0$, $\Delta>0$, $C_T\ge0$, $0<\ell<1$, and
     $0<\kappa<\mu<1-\ell$. There exist $C_{\mathrm{tr}}>0$, $N\ge2$, and (for
     each $q\ge1$) $C_B>0$ such that for $n\ge N$, with
@@ -2439,9 +2406,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_logDim_move_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_finiteFamilyTransportBound}
     \leanok
-    \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,
-        def:al_scan_physical_dimension_cap,
-        def:al_scan_finite_family_transport_bound}
+    \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,def:al_scan_physical_dimension_cap,def:al_scan_finite_family_transport_bound}
     There exist real constants
     $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}},C_{\mathrm{en}},e_{\mathrm{en}}$,
     with $c_0>0$, satisfying the finite-family transport bound of
@@ -2491,10 +2456,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     uniformly across $0\le j<2nm$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible,
-        thm:al_scan_actual_energy_terms,thm:al_scan_actual_fill_supports,
-        thm:al_scan_augmented_supports,thm:al_scan_nested_band_metrics,
-        thm:al_scan_actual_transport_dimension}
+    \uses{thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible,thm:al_scan_actual_energy_terms,thm:al_scan_actual_fill_supports,thm:al_scan_augmented_supports,thm:al_scan_nested_band_metrics,thm:al_scan_actual_transport_dimension}
     Apply the finite-family form of \cite[Proposition~7.4]{OpenAI2026AreaLaw}
     to $\{\mathscr D_j\}_{j<2nm}$ using $s_j+1\le nm$ and the proof of
     Lemma~\ref{thm:al_scan_actual_transport_estimates}.
@@ -2531,8 +2493,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_planeDomainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_crossBandCommute}
     \leanok
-    \uses{def:al_scan_actual_round_family,def:al_scan_physical_dimension_cap,
-        def:al_scan_finite_family_transport_bound}
+    \uses{def:al_scan_actual_round_family,def:al_scan_physical_dimension_cap,def:al_scan_finite_family_transport_bound}
     Let $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}},C_{\mathrm{en}},e_{\mathrm{en}}$
     satisfy the finite-family transport bound. Take a scanner on a finite
     $\Lambda\subset\mathbb Z^2$ with the induced nearest-neighbor graph, with
@@ -2552,8 +2513,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_actual_round_transport,thm:al_scan_actual_round_telescope,
-        thm:al_scan_nested_band_metrics}
+    \uses{thm:al_scan_actual_round_transport,thm:al_scan_actual_round_telescope,thm:al_scan_nested_band_metrics}
     Apply the finite-family transport bound to the rounds $\mathscr D_j$ with
     no energy terms, so that every energy hypothesis holds vacuously; its
     entropy part is~(\ref{eq:al_scan_transport_int_bound}), with admissibility
@@ -2613,9 +2573,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         TNLean.PEPS.AreaLaw.Scan.CollarScan.historyFacts_actualScanRound,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_historyFacts_actualScanRound}
     \leanok
-    \uses{def:al_scan_actual_round_family,thm:al_scan_designated_dilution,
-        thm:al_scan_split_count,thm:al_scan_uniform_bad_old,
-        thm:al_scan_designated_sampling}
+    \uses{def:al_scan_actual_round_family,thm:al_scan_designated_dilution,thm:al_scan_split_count,thm:al_scan_uniform_bad_old,thm:al_scan_designated_sampling}
     Fix scanner exponents, range $R$, local dimension $q$, $C_r>0$, and
     $C_T\ge0$. There exist $C,c,C_1>0$ and $C_l=4$ such that for all
     sufficiently large $n$, at the scales~(\ref{eq:al_scan_uniform_tail_scales})
@@ -2635,9 +2593,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{enumerate}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:al_scan_actual_round_family,thm:al_scan_designated_dilution,
-        thm:al_scan_split_count,thm:al_scan_uniform_bad_old,
-        thm:al_scan_designated_sampling}
+    \uses{def:al_scan_actual_round_family,thm:al_scan_designated_dilution,thm:al_scan_split_count,thm:al_scan_uniform_bad_old,thm:al_scan_designated_sampling}
     With anchor multiplicity $\mathfrak m=2^{2R(R+1)}$, combine
     Lemma~\ref{thm:al_scan_history_weights} (item~1),
     Lemma~\ref{thm:al_scan_designated_dilution} (item~2),
@@ -2663,8 +2619,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         TNLean.PEPS.AreaLaw.Scan.CollarScan.continuous_log_filteredNormSq_actualRoundData,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTransportInputs_actualScan}
     \leanok
-    \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,
-        def:al_scan_physical_dimension_cap}
+    \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,def:al_scan_physical_dimension_cap}
     Fix scanner exponents, $q\ge1$, and $C_r\ge0$. There exist $c_0>0$ and
     thresholds $C_0,C_{l,0}$ such that for all $C\ge C_0$, $C_l\ge C_{l,0}$, and
     sufficiently large $n$, at the scales~(\ref{eq:al_scan_uniform_tail_scales})
@@ -2701,10 +2656,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     conclusions at $k\ge1$ depend only on the given vectors.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:al_scan_actual_round_family,thm:al_scan_actual_round_transport,
-        thm:al_scan_actual_round_telescope,thm:al_scan_literal_integrals,
-        thm:al_scan_literal_scalars,thm:al_scan_literal_parameter_integral,
-        thm:al_scan_actual_history_facts}
+    \uses{def:al_scan_actual_round_family,thm:al_scan_actual_round_transport,thm:al_scan_actual_round_telescope,thm:al_scan_literal_integrals,thm:al_scan_literal_scalars,thm:al_scan_literal_parameter_integral,thm:al_scan_actual_history_facts}
     Combine Lemmas~\ref{thm:al_scan_literal_integrals},
     \ref{thm:al_scan_literal_scalars},
     \ref{thm:al_scan_literal_parameter_integral},
@@ -2724,9 +2676,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         TNLean.PEPS.AreaLaw.Scan.sqrt_truncationError_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTruncation}
     \leanok
-    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
-        thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
-        thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
     Fix scanner exponents, range $R$, $J\ge0$, $\Delta>0$, $C_T\ge0$, and
     $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. There exist $C_r>0$ and (for
     each $q\ge1$) $C_0$ such that for all $C\ge C_0$ and sufficiently large $n$,
@@ -2754,9 +2704,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{enumerate}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
-        thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
-        thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
     Combine Lemmas~\ref{thm:al_scan_exists_marginal_tails},
     \ref{thm:al_scan_target_typical_window},
     \ref{thm:area_law_regional_entropy_continuity}, and
@@ -2808,8 +2756,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_actual_charge_energy_decay,lem:al_scanner_scale_facts,
-        thm:al_scan_transport_coefficients_log}
+    \uses{thm:al_scan_actual_charge_energy_decay,lem:al_scanner_scale_facts,thm:al_scan_transport_coefficients_log}
     Substitute $a=W/K$ into~(\ref{eq:al_scan_actual_charge_energy_decay}), use
     $nD^2/(mK)\le C_sn^\ell D^2$ from Lemma~\ref{lem:al_scanner_scale_facts},
     and bound the $\ell_q$-powers via
@@ -2857,8 +2804,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_scan_entropy_gain_nonneg,thm:al_scan_actual_old_entropy_sampling,
-        thm:al_scan_old_parameter_integral,thm:al_scan_actual_round_entropy}
+    \uses{thm:al_scan_entropy_gain_nonneg,thm:al_scan_actual_old_entropy_sampling,thm:al_scan_old_parameter_integral,thm:al_scan_actual_round_entropy}
     By Lemmas~\ref{thm:al_scan_actual_old_entropy_sampling}
     and~\ref{thm:al_scan_entropy_gain_nonneg},
     \begin{align}
@@ -2902,8 +2848,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \label{thm:al_scan_actual_rough_upper}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_rough_upper}
     \leanok
-    \uses{def:al_scan_comparison_prefixes,def:al_scan_actual_fill_transport,
-        def:al_scan_actual_charge_data}
+    \uses{def:al_scan_comparison_prefixes,def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data}
     Suppose $n,m,M>0$, $r_0\le D$, $1\le D$, $4D\le m$, $8Km\le L$,
     $|T_j\setminus T_{j-1}|\le n$ ($1\le j\le L$), $q\ge1$, $a>0$, and a unit
     physical vector $\widetilde\Omega$ satisfies
@@ -2933,10 +2878,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{cor:al_scan_front_prefix_family,thm:al_scan_physical_prefix_approximation,
-        lem:al_scan_status_differences,thm:al_augmented_prevector_symmetry,
-        thm:al_augmented_root_compression,thm:al_scan_receiving_regions,
-        def:al_scan_augmented_partitions}
+    \uses{cor:al_scan_front_prefix_family,thm:al_scan_physical_prefix_approximation,lem:al_scan_status_differences,thm:al_augmented_prevector_symmetry,thm:al_augmented_root_compression,thm:al_scan_receiving_regions,def:al_scan_augmented_partitions}
     By Corollary~\ref{cor:al_scan_front_prefix_family} and
     Lemma~\ref{thm:al_scan_physical_prefix_approximation}, $U$ and $UY$ at
     every terminal status differ from $Q_0,\ldots,Q_L$ by at most $3nD$ sites;

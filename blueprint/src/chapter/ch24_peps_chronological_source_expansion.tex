@@ -33,8 +33,8 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_prepared_gate_grouped}
-    By Lemma~\ref{thm:peps_prepared_gate_grouped} each gate is a contraction,
+    \uses{thm:peps_grouped_gate_sum}
+    By Lemma~\ref{thm:peps_grouped_gate_sum} and the remark after it, each gate is a contraction,
     and composition, identity extension, and register swaps preserve
     $\|\cdot\|\le1$.
 \end{proof}
@@ -116,9 +116,9 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_affected_source_occurrences,thm:peps_prepared_gate_properties,thm:peps_grouped_block_map,thm:peps_prepared_gate_grouped}
+    \uses{thm:peps_affected_source_occurrences,thm:peps_prepared_gate_properties,thm:peps_grouped_block_map,thm:peps_grouped_gate_sum}
     Induct on the composition using Lemmas~\ref{thm:peps_prepared_gate_properties},
-    \ref{thm:peps_prepared_gate_grouped}, \ref{thm:peps_grouped_block_map}, and
+    \ref{thm:peps_grouped_gate_sum}, \ref{thm:peps_grouped_block_map}, and
     \ref{thm:peps_affected_source_occurrences}: untouched gates are contractions
     on exterior memory, and exterior-endpoint pairs become local normalized
     preparations under owner grouping.
@@ -142,7 +142,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_grouped,thm:peps_grouped_block_map,def:peps_source_circuit}
+    \uses{thm:peps_grouped_gate_sum,thm:peps_grouped_block_map,def:peps_source_circuit}
     By Lemma~\ref{thm:peps_grouped_gate_sum}, summing $\xi_g\in\Xi_g$ at
     $g\in\mathcal G_{\mathcal A}$ recovers the gate operator, while
     $g\notin\mathcal G_{\mathcal A}$ already carries its aggregate operator;
@@ -204,7 +204,6 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[The density expansion in orthonormal coordinates]
     \label{thm:peps_partial_source_density}
-    \lean{QuantumCircuit.Party.SourceCircuit.expandedEval_eq_reindex_op}
     \lean{QuantumCircuit.Party.SourceCircuit.sum_coefficient_smul_op_partialWord}
     \lean{QuantumCircuit.Party.SourceCircuit.matrix_eval_eq_sum_partialWord}
     \lean{QuantumCircuit.Party.SourceCircuit.density_eval_eq_sum_partialWord}
@@ -245,9 +244,8 @@ the subsequent separation and second-moment arguments.
     \lean{QuantumCircuit.Party.SourceCircuit.filterMap_sourceAt_comp}
     \lean{QuantumCircuit.Party.SourceCircuit.filterMap_sourceAt_gate}
     \lean{QuantumCircuit.Party.SourceCircuit.sources_partialWord_eq_filterMap}
-    \lean{QuantumCircuit.Party.SourceCircuit.ofSlots_partialSlotVector}
     \leanok
-    \uses{def:peps_source_circuit_positions,def:peps_partial_source_choices}
+    \uses{def:peps_source_circuit_positions,def:peps_partial_source_choices,thm:peps_partial_fixed_layout}
     The set $\mathcal E$ admits a fixed duplicate-free ordering (listing later
     compositions first and preserving intra-gate slot order), with fixed
     halfspaces $\C^{u_e},\C^{v_e}$ at each $e\in\mathcal E$. For every

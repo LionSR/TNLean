@@ -218,8 +218,7 @@ Definition~\ref{def:glm_boundary_action_l_matrix}.
         MPSTensor.MPOSymmetry.blockCrossEndpoint_actionTree_contraction_apply,
         MPSTensor.MPOSymmetry.blockCrossEndpoint_fusion_entry}
     \leanok
-    \uses{thm:mpo_mixed_fusion_cross,thm:glm_boundary_action_l_exists,
-        def:glm_boundary_action_l_matrix}
+    \uses{thm:mpo_mixed_fusion_cross,thm:glm_boundary_action_l_exists,def:glm_boundary_action_l_matrix}
     Assume that all blocks $A^p_x$ are injective with $D^p_x>0$, and
     that $L_{0,ab;xy}=L_{1,ab;xy}$ for a pair of labels $a,b$ and a pair
     of blocks $x,y$. Then the crossed contraction
@@ -244,8 +243,7 @@ Definition~\ref{def:glm_boundary_action_l_matrix}.
         MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_blockMixedMPO,
         MPSTensor.MPOSymmetry.isMPOFusionAlgebra_blockMixedMPO}
     \leanok
-    \uses{thm:mpo_block_mixed_fusion_cross,thm:mpo_mixed_fusion_maps,
-        def:mpo_mixed_fusion_maps,def:mpo_fusion_algebra}
+    \uses{thm:mpo_block_mixed_fusion_cross,thm:mpo_mixed_fusion_maps,def:mpo_mixed_fusion_maps,def:mpo_fusion_algebra}
     Assume (\ref{eq:mpo_block_action_input}),
     (\ref{eq:mpo_block_fusion_input}), that every block $A^p_x$ is
     injective with $D^p_x>0$, and that $L_{0,ab;xy}=L_{1,ab;xy}$ for a pair
@@ -315,10 +313,7 @@ case.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_block_mixed_injective,thm:mpo_block_mixed_fusion_cross,
-        thm:mpo_mixed_interior,thm:mpo_mixed_periodic_line_continuity,
-        thm:block_ground_space_continuity,thm:compact_block_parent_gap,
-        lem:uncle_local_projector_continuity}
+    \uses{thm:mpo_block_mixed_injective,thm:mpo_block_mixed_fusion_cross,thm:mpo_mixed_interior,thm:mpo_mixed_periodic_line_continuity,thm:block_ground_space_continuity,thm:compact_block_parent_gap,lem:uncle_local_projector_continuity}
     For $\gamma\in(0,1)$ every block is injective, and since the blocks
     occupy separated physical sectors, the letters of length one span
     $\bigoplus_xM_{D^0_x+D^1_x}$. The block-injective parent Hamiltonian

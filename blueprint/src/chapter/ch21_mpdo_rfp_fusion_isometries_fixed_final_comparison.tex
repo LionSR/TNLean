@@ -32,7 +32,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         conjugatedProjectorQBlock_isOrthogonalProjection}
     \leanok
-    \uses{def:mpdo_full_support_virtual_projector_one_fusion, thm:mpdo_pair_fusion_bnt_completeness}
+    \uses{def:mpdo_full_support_virtual_projector_one_fusion,thm:mpdo_pair_fusion_bnt_completeness}
     Suppose that $\{M_\alpha\}_\alpha$ is a BNT and that the structure
     coefficients
     $c_{\alpha,\beta,\gamma}^{(L)}
@@ -68,7 +68,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
     \leanok
-    \uses{thm:mpdo_pair_fusion_selector_completeness, def:mpdo_left_fusion_isometry}
+    \uses{thm:mpdo_pair_fusion_selector_completeness,def:mpdo_left_fusion_isometry}
     Under the hypotheses of
     Lemma~\ref{thm:mpdo_pair_fusion_selector_completeness},
     $U^{\mathrm L}_{\alpha,\beta,\gamma}
@@ -88,7 +88,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
     \leanok
-    \uses{thm:mpdo_pair_fusion_selector_completeness, def:mpdo_right_fusion_isometry}
+    \uses{thm:mpdo_pair_fusion_selector_completeness,def:mpdo_right_fusion_isometry}
     Under the same hypotheses,
     $U^{\mathrm R}_{\alpha,\beta,\gamma}
         (U^{\mathrm R}_{\alpha,\beta,\gamma})^{\dagger}=1$.
@@ -110,7 +110,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
     \leanok
-    \uses{lem:mpdo_triple_fusion_comparison_left_range, thm:mpdo_left_fusion_selector_completeness}
+    \uses{lem:mpdo_triple_fusion_comparison_left_range,thm:mpdo_left_fusion_selector_completeness}
     Under the same hypotheses, the comparison of the full direct sums satisfies
     $C_{\alpha,\beta,\gamma}C_{\alpha,\beta,\gamma}^{\dagger}=1$.
 \end{lemma}
@@ -125,7 +125,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         conjTranspose_mul_tripleFusionComparison_eq_one_of_lengthIndependent_of_selectorWords}
     \leanok
-    \uses{lem:mpdo_triple_fusion_comparison_right_range, thm:mpdo_right_fusion_selector_completeness}
+    \uses{lem:mpdo_triple_fusion_comparison_right_range,thm:mpdo_right_fusion_selector_completeness}
     Under the same hypotheses,
     $C_{\alpha,\beta,\gamma}^{\dagger}C_{\alpha,\beta,\gamma}=1$.
     This proves invertibility on the full direct sums, but not yet
@@ -142,7 +142,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         tripleFusionComparison_finalSector_submatrix_eq_zero}
     \leanok
-    \uses{def:mpdo_triple_fusion_comparison, def:mpdo_final_label_selector_words}
+    \uses{def:mpdo_triple_fusion_comparison,def:mpdo_final_label_selector_words}
     Suppose that the structure coefficients
     $c_{\alpha,\beta,\gamma}^{(L)}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$,
@@ -203,7 +203,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         card_leftFinalMultiplicity_eq_card_rightFinalMultiplicity_of_lengthIndependent}
     \leanok
-    \uses{def:mpdo_final_sector_multiplicity_spaces, def:mpdo_bnt_label_linear_independent, def:mpdo_bnt_label_length_independent}
+    \uses{def:mpdo_final_sector_multiplicity_spaces,def:mpdo_bnt_label_linear_independent,def:mpdo_bnt_label_length_independent}
     Suppose that the structure coefficients
     $c_{\alpha,\beta,\gamma}^{(L)}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$,
@@ -226,7 +226,7 @@
     \cite[lines~237--241]{Bultinck2017Anyons}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_coeff_associativity, thm:mpdo_bnt_label_length_independent_natural}
+    \uses{thm:mpdo_bnt_label_coeff_associativity,thm:mpdo_bnt_label_length_independent_natural}
     At a positive length beyond the linear-independence threshold,
     associativity of the product of the operators $O_L(M_\alpha)$ equates
     the two sums of products of structure coefficients.
@@ -240,7 +240,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusionMap}
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusionMap}
     \leanok
-    \uses{def:mpdo_final_sector_multiplicity_spaces, def:mpdo_left_fusion_isometry, def:mpdo_right_fusion_isometry}
+    \uses{def:mpdo_final_sector_multiplicity_spaces,def:mpdo_left_fusion_isometry,def:mpdo_right_fusion_isometry}
     The maps $U^{\mathrm L}_{\alpha,\beta,\gamma;\varepsilon}$ and
     $U^{\mathrm R}_{\alpha,\beta,\gamma;\varepsilon}$ are obtained by
     restricting the rows of the two iterated fusion isometries to the
@@ -254,7 +254,7 @@
     \label{thm:mpdo_left_final_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFinalFusion_apply}
     \leanok
-    \uses{def:mpdo_final_sector_fusion_maps, def:mpdo_operator_product, thm:mpdo_left_fusion_apply, lem:matrix_block_conjugation_restriction}
+    \uses{def:mpdo_final_sector_fusion_maps,def:mpdo_operator_product,thm:mpdo_left_fusion_apply,lem:matrix_block_conjugation_restriction}
     For every final label $\varepsilon$, the left-associated restriction
     satisfies
     \begin{align}
@@ -280,7 +280,7 @@
     \label{thm:mpdo_right_final_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFinalFusion_apply}
     \leanok
-    \uses{def:mpdo_final_sector_fusion_maps, def:mpdo_operator_product, thm:mpdo_right_fusion_apply, lem:matrix_block_conjugation_restriction}
+    \uses{def:mpdo_final_sector_fusion_maps,def:mpdo_operator_product,thm:mpdo_right_fusion_apply,lem:matrix_block_conjugation_restriction}
     For every final label $\varepsilon$, the right-associated restriction
     satisfies
     \begin{align}
@@ -307,7 +307,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         exists_reindexed_intertwiner_eq_kronecker_one_of_isInjective}
     \leanok
-    \uses{def:mpdo_final_sector_multiplicity_spaces, def:injective}
+    \uses{def:mpdo_final_sector_multiplicity_spaces,def:injective}
     Suppose that $M_\varepsilon$ is injective. Let $C$ be a matrix from the
     right final-sector space to the left final-sector space. Under
     the canonical identifications with
@@ -402,7 +402,7 @@ left forces the factorization on the right.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation}
     \leanok
-    \uses{def:mpdo_triple_fusion_comparison, def:mpdo_final_label_selector_words, def:mpdo_final_sector_multiplicity_spaces}
+    \uses{def:mpdo_triple_fusion_comparison,def:mpdo_final_label_selector_words,def:mpdo_final_sector_multiplicity_spaces}
     Suppose that the structure coefficients
     $c_{\alpha,\beta,\gamma}^{(L)}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$,
@@ -425,7 +425,7 @@ left forces the factorization on the right.
     $C^{\varepsilon,\varepsilon'}_{\alpha,\beta,\gamma}=0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_triple_fusion_comparison_intertwines, thm:mpdo_triple_fusion_comparison_final_sector_vanishing, thm:mpdo_injective_fixed_final_intertwiner}
+    \uses{thm:mpdo_triple_fusion_comparison_intertwines,thm:mpdo_triple_fusion_comparison_final_sector_vanishing,thm:mpdo_injective_fixed_final_intertwiner}
     Taking the $\varepsilon$--$\varepsilon$ block of the full comparison
     identity gives, for every pair $i,j$,
     \begin{align}
@@ -451,7 +451,7 @@ left forces the factorization on the right.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         conjTranspose_mul_tripleFusionComparison_finalSector_eq_one}
     \leanok
-    \uses{def:mpdo_final_label_selector_words, def:mpdo_final_sector_multiplicity_spaces, def:mpdo_triple_fusion_comparison}
+    \uses{def:mpdo_final_label_selector_words,def:mpdo_final_sector_multiplicity_spaces,def:mpdo_triple_fusion_comparison}
     Suppose that the structure coefficients
     $c_{\alpha,\beta,\gamma}^{(L)}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$,
@@ -475,7 +475,7 @@ left forces the factorization on the right.
     from the simultaneous inverse in~\cite[lines~247--277]{Bultinck2017Anyons}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_triple_fusion_comparison_right_inverse, thm:mpdo_triple_fusion_comparison_left_inverse, thm:mpdo_triple_fusion_comparison_final_sector_vanishing}
+    \uses{thm:mpdo_triple_fusion_comparison_right_inverse,thm:mpdo_triple_fusion_comparison_left_inverse,thm:mpdo_triple_fusion_comparison_final_sector_vanishing}
     Order each full direct sum first by its final label. In the product
     $CC^\dagger$, the $\varepsilon$-diagonal block is
     $\sum_{\varepsilon'}
@@ -493,7 +493,7 @@ left forces the factorization on the right.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         exists_tripleFusionComparison_finalSector_eq_kronecker_one_and_unitary}
     \leanok
-    \uses{def:mpdo_final_label_selector_words, def:mpdo_final_sector_multiplicity_spaces, def:mpdo_triple_fusion_comparison, lem:matrix_kronecker_identity_cancellation}
+    \uses{def:mpdo_final_label_selector_words,def:mpdo_final_sector_multiplicity_spaces,def:mpdo_triple_fusion_comparison,lem:matrix_kronecker_identity_cancellation}
     Assume the hypotheses of
     Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_unitary}.
     Suppose in addition that $M_\varepsilon$ is injective at the present
@@ -516,7 +516,7 @@ left forces the factorization on the right.
     \cite[Section~3.4]{Bultinck2017Anyons}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_triple_fusion_comparison_final_sector_kronecker, thm:mpdo_triple_fusion_comparison_final_sector_unitary, lem:matrix_kronecker_identity_cancellation}
+    \uses{thm:mpdo_triple_fusion_comparison_final_sector_kronecker,thm:mpdo_triple_fusion_comparison_final_sector_unitary,lem:matrix_kronecker_identity_cancellation}
     Injectivity gives
     $C_\varepsilon=F_\varepsilon\otimes1_{D_\varepsilon}$.
     Substituting this expression into

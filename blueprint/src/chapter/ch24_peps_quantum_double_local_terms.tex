@@ -178,8 +178,7 @@ The factor $|G|^{-1}$ in (\ref{eq:peps_qd_bond_average}) is necessary: for $S_e=
         TNLean.PEPS.range_quantumDoubleKBondContraction,
         TNLean.PEPS.mem_range_quantumDoubleKBondContraction_iff}
     \leanok
-    \uses{def:peps_quantum_double_local_projector,
-        thm:peps_quantum_double_bond_fixed}
+    \uses{def:peps_quantum_double_local_projector,thm:peps_quantum_double_bond_fixed}
     Let $\mathsf C\ket\beta=\Psi_\beta$ be the contraction map of (\ref{eq:peps_qd_bond_contraction}) and set $P_{00}=P_0\otimes P_0$. Then $P_{00}A_e=A_eP_{00}$, $Q_e=A_eP_{00}$ is an orthogonal projector, and
     \begin{align}
         \operatorname{ran}\mathsf C & =\operatorname{ran}Q_e
@@ -280,8 +279,7 @@ Contracting four copies of $K$ at NW, NE, SE, SW over the shared N, W, S, E bond
         TNLean.PEPS.quantumDoubleKPlaquetteProjector_commute_topBond,
         TNLean.PEPS.quantumDoubleKPlaquetteProjector_commute_topBondAverage}
     \leanok
-    \uses{def:peps_quantum_double_bond_average,
-        def:peps_quantum_double_hole_projector}
+    \uses{def:peps_quantum_double_bond_average,def:peps_quantum_double_hole_projector}
     Let $W_u=V_u\otimes I$ act by $V_u$ on $(\sigma_{NW},\sigma_{NE})$ and the identity on $(\sigma_{SE},\sigma_{SW})$. Then $P_\square$ commutes with $W_u$ for all $u\in G$ and with $|G|^{-1}\sum_{u\in G}W_u$.
 \end{lemma}
 \begin{proof}\leanok

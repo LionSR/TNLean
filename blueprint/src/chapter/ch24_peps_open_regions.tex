@@ -119,7 +119,7 @@ bonds.
         TNLean.PEPS.regularBoundaryDensity,
         TNLean.PEPS.regularBoundaryTranslationState}
     \leanok
-    \uses{thm:peps_regular_boundary_invariants, thm:peps_group_averaging}
+    \uses{thm:peps_regular_boundary_invariants,thm:peps_group_averaging}
     Set $b=n+1$ and $r=|G|^n$, and let $P$ be the averaging projector
     on $\mathbb C[G^b]$. The unnormalized bipartite boundary vector has
     coefficients
@@ -156,7 +156,7 @@ bonds.
         TNLean.PEPS.regularBoundaryTranslationState_eq_sum_prod,
         TNLean.PEPS.regularBoundaryState_eq_smul_translationState}
     \leanok
-    \uses{def:peps_regular_boundary_state, thm:peps_regular_boundary_invariants}
+    \uses{def:peps_regular_boundary_state,thm:peps_regular_boundary_invariants}
     The averaging matrix $P$ is real, symmetric, and idempotent, with
     rank and trace $r$. Its entries are $|G|^{-1}$ on pairs in the same
     orbit and zero otherwise. The vector with coefficient matrix $C$
@@ -188,7 +188,7 @@ bonds.
         TNLean.PEPS.regularPhysicalCutMatrix_eq_mul_projector_mul_transpose,
         TNLean.PEPS.regularOpenRegionMatrix_mul_schmidtMatrix_mul_transpose}
     \leanok
-    \uses{def:peps_regular_physical_cut, def:peps_regular_boundary_state}
+    \uses{def:peps_regular_physical_cut,def:peps_regular_boundary_state}
     Suppose the coefficient tensor at every site is invariant under
     simultaneous left translation of all its virtual group labels.
     Then the open tensor of every region is invariant under
@@ -339,8 +339,7 @@ bonds.
         TNLean.PEPS.regularProjectorOpenRegionMatrix_apply,
         TNLean.PEPS.regionIncidentBoundaryLabel_regularGroup_iff}
     \leanok
-    \uses{def:peps_open_region_contraction, def:peps_regular_site_gram,
-        thm:peps_finite_indicator_sum}
+    \uses{def:peps_open_region_contraction,def:peps_regular_site_gram,thm:peps_finite_indicator_sum}
     Let $R$ be a finite region of the original graph, $E_R$ its incident
     edges, and $\partial R$ its crossing edges. Write $E_v$ for the
     incident edges at $v$ and put $\kappa=|G|$. The canonical physical
@@ -374,7 +373,7 @@ bonds.
         TNLean.PEPS.regionPhysicalMap_regularProjectorOpenRegionMatrix,
         TNLean.PEPS.exists_regularProjectorOpenRegionMatrix}
     \leanok
-    \uses{def:peps_regular_projector_open_region, def:peps_g_injective}
+    \uses{def:peps_regular_projector_open_region,def:peps_g_injective}
     Suppose the local regular site maps $A_v$ are $G$-isometric,
     with positive factors $c_v$. Let $T_R(\theta)$ be the
     contracted physical column with crossing labels $\theta$,
@@ -399,7 +398,7 @@ bonds.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_site_gram, thm:peps_region_physical_maps}
+    \uses{thm:peps_regular_site_gram,thm:peps_region_physical_maps}
     The local identities are
     $c_v^{-1}A_v^\dagger A_v=P_v$ and $A_vP_v=A_v$.
     The first follows from the local regular Gram kernel; the second
@@ -438,8 +437,7 @@ bonds.
         TNLean.PEPS.regularProjectorTwistedRegionMatrix_one,
         TNLean.PEPS.regularProjectorTwistedRegionMatrix_apply}
     \leanok
-    \uses{def:peps_regular_twisted_region,
-        def:peps_regular_projector_open_region, thm:peps_finite_indicator_sum}
+    \uses{def:peps_regular_twisted_region,def:peps_regular_projector_open_region,thm:peps_finite_indicator_sum}
     For arbitrary inserted group elements $u_e$, including those on
     crossing bonds, define
     \begin{align}
@@ -483,8 +481,7 @@ bonds.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_open_region_accessibility,
-        thm:peps_region_physical_maps}
+    \uses{thm:peps_regular_open_region_accessibility,thm:peps_region_physical_maps}
     Applying the physical product map inside the contraction preserves
     the local identity $F_vA_v=P_v$ at the modified
     virtual label $\eta^u|_{E_v}$, proving the forward equality.
@@ -514,7 +511,7 @@ bonds.
         TNLean.PEPS.torusGClosure_assembleRegion_eq_regularPhysicalCutMatrix,
         TNLean.PEPS.torusGClosure_cut_eq_regularPhysicalCutState}
     \leanok
-    \uses{def:peps_torus_g_closure, def:peps_regular_twisted_region}
+    \uses{def:peps_torus_g_closure,def:peps_regular_twisted_region}
     On a torus of width and height at least three, the four incident
     graph edges are exactly the top, right, down and left virtual legs.
     The closure vector $\psi_{g,h}$ equals the contraction of

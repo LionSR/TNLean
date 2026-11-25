@@ -53,7 +53,7 @@
     \label{thm:peps_horizontal_consecutive_window_extend_eq}
     \lean{TNLean.PEPS.horizontalConsecutiveWindow_extend_eq}
     \leanok
-    \uses{def:peps_corner_extension, thm:peps_corner_extension_state_preserves}
+    \uses{def:peps_corner_extension,thm:peps_corner_extension_state_preserves}
     Assume the one-orientation $L\times K$ window-injectivity hypotheses,
     union closure for injective regions, positive bond dimensions, and $2\le L$,
     $2\le K$, $2L+1\le W$, and $2K+1\le H$. If horizontally consecutive
@@ -84,7 +84,7 @@
     \label{thm:peps_horizontal_staircase_patch_extend_eq}
     \lean{TNLean.PEPS.horizontalStaircase_patch_extend_eq}
     \leanok
-    \uses{def:peps_horizontal_staircase_patch, thm:peps_corner_extension_state_preserves}
+    \uses{def:peps_horizontal_staircase_patch,thm:peps_corner_extension_state_preserves}
     Assume positive bond dimensions, $0<L$, $0<K$, $2L\le W$, and $2K\le H$. If
     $\Psi_{A,W_{\mathrm{right}},C_0}=\Psi_{A,W_{\mathrm{left}},C_{\mathrm{end}}}$,
     then on the staircase patch $P$,
@@ -146,7 +146,7 @@
     \label{thm:peps_corner_extension_coefficient_composition}
     \lean{TNLean.PEPS.threeBlockBlueCoeff_comp}
     \leanok
-    \uses{def:peps_corner_extension, lem:peps_two_block_merge_collapse}
+    \uses{def:peps_corner_extension,lem:peps_two_block_merge_collapse}
     For nested regions $R\subseteq S\subseteq P$
     \cite[Section~4, proof of Theorem~3]{Molnar2018NormalPEPS},
     \begin{align}
@@ -169,7 +169,7 @@
     \lean{TNLean.PEPS.bareExtendInsert_trans}
     \lean{TNLean.PEPS.extendInsert_trans}
     \leanok
-    \uses{def:peps_corner_extension, thm:peps_corner_extension_coefficient_composition}
+    \uses{def:peps_corner_extension,thm:peps_corner_extension_coefficient_composition}
     Both $\overline{\Ext}_{R\subseteq S}$ and $\Ext_{R\subseteq S}$ are linear
     in $C$, and for $R\subseteq S\subseteq P$,
     \begin{align}
@@ -227,7 +227,7 @@
     \label{thm:peps_extend_insert_kernel_trivial_added_injective}
     \lean{TNLean.PEPS.extendInsert_kernel_trivial_of_addedInjective}
     \leanok
-    \uses{def:peps_corner_extension, def:peps_assemble_subregion_physical_config, thm:peps_assemble_subregion_physical_config_restricts}
+    \uses{def:peps_corner_extension,def:peps_assemble_subregion_physical_config,thm:peps_assemble_subregion_physical_config_restricts}
     For $R\subseteq S$ with positive bond dimensions and $Q=S\setminus R$
     blocked-tensor injective, $\Ext_{R\subseteq S}(C)=0\implies C=0$.
 \end{lemma}
@@ -270,7 +270,7 @@
     \label{thm:peps_extend_insert_cancel_added_injective}
     \lean{TNLean.PEPS.extendInsert_cancel_addedInjective}
     \leanok
-    \uses{thm:peps_corner_extension_linear_transitive, thm:peps_extend_insert_kernel_trivial_added_injective}
+    \uses{thm:peps_corner_extension_linear_transitive,thm:peps_extend_insert_kernel_trivial_added_injective}
     If $R\subseteq S$, all bond dimensions are positive, and $S\setminus R$ is
     blocked-tensor injective, then
     $\Ext_{R\subseteq S}(C_1)=\Ext_{R\subseteq S}(C_2)\implies C_1=C_2$.

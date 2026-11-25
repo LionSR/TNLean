@@ -11,7 +11,7 @@ nilpotency length of the resulting residual algebra.
     \lean{MPSTensor.coefficientDualInverse,
         MPSTensor.reductionCrossMatrix}
     \leanok
-    \uses{def:mps_tensor, def:injective}
+    \uses{def:mps_tensor,def:injective}
     Let $\widetilde A=(\widetilde A^i)_i$ be injective, with bond dimension
     $D_A$, and choose the coefficient dual $C=(C^i)_i$ from a right inverse
     to the linear-combination map of $\widetilde A$.  Thus
@@ -109,8 +109,7 @@ nilpotency length of the resulting residual algebra.
         MPSTensor.reductionOpenBoundaryContraction_of_sameMPV₂Pos,
         MPSTensor.reductionOpenBoundaryMatrixContraction_blockTensor_of_sameMPV₂Pos}
     \leanok
-    \uses{def:same_mpv2_pos, def:injective,
-        def:mps_reduction_cross_matrix, thm:same_mpv2_pos_block_tensor}
+    \uses{def:same_mpv2_pos,def:injective,def:mps_reduction_cross_matrix,thm:same_mpv2_pos_block_tensor}
     Suppose $\widetilde A$ and $\widetilde B$ have equal positive-length
     MPV coefficients and $\widetilde A$ is injective.  This equality hypothesis
     is the $\lambda=1$ specialization of the proportional premise printed in
@@ -174,7 +173,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{lem:mps_reduction_cross_matrix_power, lem:eval_word_block}
+    \uses{lem:mps_reduction_cross_matrix_power,lem:eval_word_block}
     Expanding $K^n$ by Lemma~\ref{lem:mps_reduction_cross_matrix_power} and
     taking the trace of the Kronecker product expresses $\tr K(\widetilde B,C)^n$
     in terms of word traces of $\widetilde B$.  Positive-length MPV equality
@@ -250,8 +249,7 @@ nilpotency length of the resulting residual algebra.
     \lean{MPSTensor.exists_isReduction_of_isInjective_of_sameMPV₂Pos,
         MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos}
     \leanok
-    \uses{def:mps_rectangular_reduction, def:same_mpv2_pos, def:injective,
-        def:normal}
+    \uses{def:mps_rectangular_reduction,def:same_mpv2_pos,def:injective,def:normal}
     Let $A$ and $B$ have the same physical alphabet and positive target bond
     dimension $D_A>0$.  Suppose that
     $\ket{V^{(N)}(B)}=\ket{V^{(N)}(A)}$ for every $N>0$.
@@ -268,12 +266,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{lem:one_block_injective_of_injective,
-        lem:isNBlkInjective_iff_blockTensor_isInjective,
-        thm:same_mpv2_pos_block_tensor,
-        thm:mps_reduction_cross_trace_open,
-        thm:mpu_semisimple_scaled_trace_rank_one,
-        thm:rank_one_factorizations}
+    \uses{lem:one_block_injective_of_injective,lem:isNBlkInjective_iff_blockTensor_isInjective,thm:same_mpv2_pos_block_tensor,thm:mps_reduction_cross_trace_open,thm:mpu_semisimple_scaled_trace_rank_one,thm:rank_one_factorizations}
     First suppose that $A$ is injective; equivalently, take blocking length
     $p=1$.  More generally, for any positive blocking length $p$ at which the
     blocked target $\widetilde A=A^{[p]}$ is injective, positive blocking
@@ -354,8 +347,7 @@ nilpotency length of the resulting residual algebra.
     \lean{MPSTensor.exists_isReduction_smul_of_isInjective_of_mpv_eq_pow_mul,
         MPSTensor.exists_isReduction_smul_of_isNormal_of_mpv_eq_pow_mul}
     \leanok
-    \uses{def:mpv, def:injective, def:normal,
-        def:mps_rectangular_reduction}
+    \uses{def:mpv,def:injective,def:normal,def:mps_rectangular_reduction}
     Let $A$ and $B$ have the same physical alphabet and positive target bond
     dimension $D_A>0$.  Let $c\in\C$ be nonzero, and suppose that
     \begin{align}
@@ -413,8 +405,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{lem:eval_word_smul, thm:mps_equality_reduction_exists,
-        lem:mps_reduction_scalar_covariance}
+    \uses{lem:eval_word_smul,thm:mps_equality_reduction_exists,lem:mps_reduction_scalar_covariance}
     For the rescaled tensor $\widetilde B=c^{-1}B$,
     Lemma~\ref{lem:eval_word_smul} and
     (\ref{eq:mps_proportional_reduction_hypothesis}) equate the
@@ -529,8 +520,7 @@ nilpotency length of the resulting residual algebra.
     \label{thm:mps_reduction_residual_exterior_sandwich}
     \lean{MPSTensor.IsReduction.evalWord_mul_reductionResidual_mul_evalWord_eq_zero}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_algebra}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For arbitrary exterior words
     $\mathbf p,\mathbf q$ and every nonempty word $\mathbf u$,
     \begin{align}
@@ -559,8 +549,7 @@ nilpotency length of the resulting residual algebra.
     \label{thm:mps_reduction_residual_sandwich}
     \lean{MPSTensor.IsReduction.evalWord_reductionResidual_sandwich_eq_zero}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_algebra}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For every nonempty word
     $\mathbf u$,
     \begin{align}
@@ -586,8 +575,7 @@ nilpotency length of the resulting residual algebra.
         MPSTensor.reductionInitialWindowRangeSum,
         MPSTensor.reductionStrictWindowRangeSum}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra, def:eval_word}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_algebra,def:eval_word}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For a word $\mathbf w$, set
     $\mathcal I(\varnothing)=\mathcal W(\varnothing)=0$ and define
     recursively
@@ -621,8 +609,7 @@ nilpotency length of the resulting residual algebra.
     \label{thm:mps_reduction_recursive_residual_expansion}
     \lean{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowSum}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_strict_window_sums}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_strict_window_sums}
     Under the reduction hypothesis, every word satisfies
     \begin{align}
         B^{\mathbf i}=N^{\mathbf i}+\mathcal W(\mathbf i).
@@ -634,8 +621,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_residual_sandwich,
-        thm:mps_rectangular_reduction_identities}
+    \uses{thm:mps_reduction_residual_sandwich,thm:mps_rectangular_reduction_identities}
     We induct on the word and split the first letter as $B^i=N^i+WA^iV$, while
     the induction hypothesis gives the recursive window decomposition on the
     remaining word.  By (\ref{eq:mps_reduction_residual_sandwich}),
@@ -655,8 +641,7 @@ nilpotency length of the resulting residual algebra.
         MPSTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedSum,
         MPSTensor.IsReduction.evalWord_mul_eq_reductionRightContractedSum}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_algebra}
     Let $(V,W)$ be a reduction from $B$ to $A$, and write
     $\mathbf i=(i_1,\ldots,i_n)$.  Then
     \begin{align}
@@ -679,9 +664,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_rectangular_reduction_identities,
-        thm:mps_reduction_residual_sandwich,
-        thm:mps_reduction_recursive_residual_expansion}
+    \uses{thm:mps_rectangular_reduction_identities,thm:mps_reduction_residual_sandwich,thm:mps_reduction_recursive_residual_expansion}
     We prove both identities by induction on the word.  For the left
     contraction, decomposing the first letter and applying
     (\ref{eq:mps_reduction_recursive_residual_expansion}) to the tail produces
@@ -695,8 +678,7 @@ nilpotency length of the resulting residual algebra.
     \label{thm:mps_reduction_strict_window_range}
     \lean{MPSTensor.IsReduction.reductionStrictWindowSum_eq_reductionStrictWindowRangeSum}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_strict_window_sums}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_strict_window_sums}
     Under the reduction hypothesis, for every word $\mathbf i$,
     \begin{align}
         \mathcal W(\mathbf i)=\widehat{\mathcal W}(\mathbf i).
@@ -705,9 +687,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_all_cut_contracted,
-        thm:mps_reduction_recursive_residual_expansion,
-        thm:mps_reduction_residual_sandwich}
+    \uses{thm:mps_reduction_all_cut_contracted,thm:mps_reduction_recursive_residual_expansion,thm:mps_reduction_residual_sandwich}
     We induct on the length of the word.  The summands with $r=0$ constitute
     $\widehat{\mathcal I}$, and the left all-cut identity gives
     \begin{align}
@@ -724,8 +704,7 @@ nilpotency length of the resulting residual algebra.
     \label{thm:mps_reduction_residual_expansion}
     \lean{MPSTensor.IsReduction.evalWord_eq_reductionResidual_add_strictWindowRangeSum}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_strict_window_sums}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_strict_window_sums}
     Let $(V,W)$ be a reduction from $B$ to $A$.  For every word
     $\mathbf i=(i_1,\ldots,i_n)$,
     \begin{align}
@@ -744,8 +723,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_recursive_residual_expansion,
-        thm:mps_reduction_strict_window_range}
+    \uses{thm:mps_reduction_recursive_residual_expansion,thm:mps_reduction_strict_window_range}
     Substituting
     $\mathcal W(\mathbf i)=\widehat{\mathcal W}(\mathbf i)$ into
     (\ref{eq:mps_reduction_recursive_residual_expansion}) and reindexing
@@ -759,8 +737,7 @@ nilpotency length of the resulting residual algebra.
         MPSTensor.IsReduction.trace_eq_zero_of_mem_reductionResidualAlgebra,
         MPSTensor.IsReduction.isNilpotent_of_mem_reductionResidualAlgebra}
     \leanok
-    \uses{def:same_mpv2_pos, def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra}
+    \uses{def:same_mpv2_pos,def:mps_rectangular_reduction,def:mps_reduction_residual_algebra}
     Let $(V,W)$ be a reduction from $B$ to $A$, and assume
     $\mc{V}^+(B)=\mc{V}^+(A)$.  In this $\lambda=1$ equality setting of
     \cite[Proposition~21]{Molnar2018SemiInjective} (see
@@ -771,14 +748,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_residual_expansion,
-        thm:mps_reduction_residual_exterior_sandwich,
-        thm:mps_reduction_residual_sandwich,
-        thm:mps_reduction_strict_window_range,
-        thm:mps_rectangular_reduction_identities,
-        thm:mps_reduction_cross_trace_open,
-        lem:subsemigroup_closure_nonempty_product,
-        thm:mpu_shifted_zero_trace_power_nilpotent}
+    \uses{thm:mps_reduction_residual_expansion,thm:mps_reduction_residual_exterior_sandwich,thm:mps_reduction_residual_sandwich,thm:mps_reduction_strict_window_range,thm:mps_rectangular_reduction_identities,thm:mps_reduction_cross_trace_open,lem:subsemigroup_closure_nonempty_product,thm:mpu_shifted_zero_trace_power_nilpotent}
     Taking the trace of the corrected residual expansion, cyclicity of the
     trace on each mixed term in the explicit strict-window sum gives
     \begin{align}
@@ -820,9 +790,7 @@ nilpotency length of the resulting residual algebra.
         MPSTensor.IsReduction.reductionResidualNilpotencyLength_le_bondDim,
         MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_bondDim_le_length}
     \leanok
-    \uses{def:same_mpv2_pos, def:mps_rectangular_reduction,
-        def:mps_reduction_residual_algebra,
-        def:mps_reduction_residual_nilpotency_length}
+    \uses{def:same_mpv2_pos,def:mps_rectangular_reduction,def:mps_reduction_residual_algebra,def:mps_reduction_residual_nilpotency_length}
     Let $(V,W)$ be a reduction from $B$ to $A$, and assume
     $\mc{V}^+(B)=\mc{V}^+(A)$.  Then every mixed product of $D_B$ elements of
     $\mathcal R(B,A;V,W)$ vanishes, so $D_B$ is a residual-word
@@ -839,10 +807,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_residual_algebra_nilpotent,
-        thm:mps_reduction_residual_mem_algebra,
-        thm:mps_reduction_residual_bound_consequences,
-        thm:mpu_nil_matrices}
+    \uses{thm:mps_reduction_residual_algebra_nilpotent,thm:mps_reduction_residual_mem_algebra,thm:mps_reduction_residual_bound_consequences,thm:mpu_nil_matrices}
     By the finite-dimensional nil-matrix theorem applied to the residual
     algebra, every product of $D_B$ algebra elements vanishes.  Since the
     residual letters lie in this algebra, $D_B$ is a bound; well-ordering gives
@@ -878,8 +843,7 @@ nilpotency length of the resulting residual algebra.
         MPSTensor.IsReduction.mul_evalWord_eq_reductionLeftContractedRangeSum,
         MPSTensor.IsReduction.evalWord_mul_eq_reductionRightContractedRangeSum}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_nilpotency_length}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_nilpotency_length}
     Let $(V,W)$ be a reduction from $B$ to $A$, let $L$ be any residual-word
     nilpotency bound, and write
     $\mathbf i=(i_1,\ldots,i_n)$.  Then
@@ -903,8 +867,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_all_cut_contracted,
-        thm:mps_reduction_residual_bound_consequences}
+    \uses{thm:mps_reduction_all_cut_contracted,thm:mps_reduction_residual_bound_consequences}
     In the all-cut expansions (\ref{eq:mps_reduction_left_all_cut}) and
     (\ref{eq:mps_reduction_right_all_cut}), every omitted term on the left has
     a residual suffix of length at least $L$ and every omitted term on the
@@ -917,8 +880,7 @@ nilpotency length of the resulting residual algebra.
     \label{thm:mps_reduction_exterior_buffer}
     \lean{MPSTensor.IsReduction.evalWord_mul_reduced_exterior_eq_evalWord_append}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_residual_nilpotency_length}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_residual_nilpotency_length}
     Let $(V,W)$ be a reduction from $B$ to $A$, and let $L$ be any
     residual-word nilpotency bound.  If the central word
     $\mathbf c$ is nonempty and the exterior words $\mathbf p,\mathbf q$
@@ -988,10 +950,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_rectangular_reduction_identities,
-        thm:mps_reduction_residual_exterior_sandwich,
-        thm:mps_reduction_recursive_residual_expansion,
-        thm:mps_reduction_residual_bound_consequences}
+    \uses{thm:mps_rectangular_reduction_identities,thm:mps_reduction_residual_exterior_sandwich,thm:mps_reduction_recursive_residual_expansion,thm:mps_reduction_residual_bound_consequences}
     Induction along the right exterior word shows first that a positive
     residual block preceded by $V$ vanishes once its length together with the
     right buffer reaches $L$.  Expanding the left exterior word
@@ -1040,10 +999,7 @@ nilpotency length of the resulting residual algebra.
         MPSTensor.IsReductionExteriorBufferLength.blockTensor,
         MPSTensor.IsReductionExteriorBufferLength.reindexPhysical}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_exterior_buffer_length,
-        def:mps_reduction_residual_nilpotency_length,
-        def:same_mpv2_pos, def:blocked_tensor}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_exterior_buffer_length,def:mps_reduction_residual_nilpotency_length,def:same_mpv2_pos,def:blocked_tensor}
     Let $(V,W)$ be a reduction from $B$ to $A$.  If $N$ is a residual-word
     nilpotency bound, then $N-1$ is an exterior buffer length; in particular,
     if $\mc{V}^+(B)=\mc{V}^+(A)$, then $\ell(B,A;V,W)-1$ is an exterior
@@ -1059,9 +1015,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_exterior_buffer,
-        thm:mps_reduction_residual_dimension_bound,
-        lem:eval_word_block}
+    \uses{thm:mps_reduction_exterior_buffer,thm:mps_reduction_residual_dimension_bound,lem:eval_word_block}
     The bounds $N\leq|\mathbf p|+1$ and $N\leq|\mathbf q|+1$ in
     Lemma~\ref{thm:mps_reduction_exterior_buffer} read
     $N-1\leq|\mathbf p|$ and $N-1\leq|\mathbf q|$, and
@@ -1096,10 +1050,7 @@ nilpotency length of the resulting residual algebra.
     \label{thm:mps_reduction_common_blocking}
     \lean{MPSTensor.IsReduction.blockTensor_commonBufferLength_one}
     \leanok
-    \uses{def:mps_rectangular_reduction,
-        def:mps_reduction_exterior_buffer_length,
-        def:mps_reduction_residual_nilpotency_length,
-        def:common_buffer_length, def:blocked_tensor}
+    \uses{def:mps_rectangular_reduction,def:mps_reduction_exterior_buffer_length,def:mps_reduction_residual_nilpotency_length,def:common_buffer_length,def:blocked_tensor}
     Let $(N_i)_{i\in I}$ be a finite family of natural numbers with common
     buffer length $L$, and let $(V,W)$ be a reduction from $B$ to $A$ for
     which $N_i$ is a residual-word nilpotency bound for some $i\in I$.  As in
@@ -1127,8 +1078,7 @@ nilpotency length of the resulting residual algebra.
         MPSTensor.IsReduction.exists_boundary_dressed_proportional_of_nilpotencyLength_le}
     \leanok
     \discussion{7395}
-    \uses{def:same_mpv2_pos, def:mps_rectangular_reduction,
-        def:mps_reduction_residual_nilpotency_length, def:normal}
+    \uses{def:same_mpv2_pos,def:mps_rectangular_reduction,def:mps_reduction_residual_nilpotency_length,def:normal}
     Let $A$ be normal, let $B$ have the same physical alphabet, and let
     $(V,W)$ and $(\widetilde V,\widetilde W)$ be two reductions from $B$ to
     $A$.  Suppose that $N_0\in\mathbb N$ is a residual-word nilpotency bound
@@ -1205,11 +1155,7 @@ nilpotency length of the resulting residual algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_rectangular_reduction_identities,
-        thm:mps_reduction_residual_dimension_bound,
-        thm:mps_reduction_residual_bound_consequences,
-        thm:mps_reduction_exterior_buffer, def:l_blk_injective,
-        thm:exact_block_injectivity_positive_multiple}
+    \uses{thm:mps_rectangular_reduction_identities,thm:mps_reduction_residual_dimension_bound,thm:mps_reduction_residual_bound_consequences,thm:mps_reduction_exterior_buffer,def:l_blk_injective,thm:exact_block_injectivity_positive_multiple}
     If the target bond dimension is zero, both dressed identities hold
     entrywise for $\lambda=1$ because the relevant target row or column index is
     empty; assume therefore that the target bond dimension is positive, and

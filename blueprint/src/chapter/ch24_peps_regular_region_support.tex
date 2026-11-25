@@ -2,7 +2,7 @@
     \label{thm:peps_regular_region_range}
     \lean{TNLean.PEPS.range_regularOpenRegionMatrix_eq_regionGroundSpace}
     \leanok
-    \uses{def:peps_region_ground_space, def:peps_open_region_contraction}
+    \uses{def:peps_region_ground_space,def:peps_open_region_contraction}
     For a finite PEPS region with regular group labels, numbering its
     crossing bonds identifies the columns of its open-region matrix
     $T_R$ with the open tensors defining $\mathcal G_R$.
@@ -20,8 +20,7 @@
     \lean{TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_regular_connected_cut,
         TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_regular_connected}
     \leanok
-    \uses{def:peps_region_reduced_density, def:peps_region_ground_space,
-        def:peps_g_injective}
+    \uses{def:peps_region_reduced_density,def:peps_region_ground_space,def:peps_g_injective}
     Let $G$ be a finite group, and put regular $G$-injective tensors at
     the vertices of a finite connected graph. Suppose the subgraphs
     induced by $R$ and $R^c$ are connected. Then the reduced density of
@@ -35,11 +34,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_ginjective_cut_range,
-        thm:peps_connected_regular_region_injectivity,
-        thm:peps_regular_region_range,
-        thm:peps_region_reduced_density_support,
-        thm:peps_open_region_cut}
+    \uses{thm:peps_regular_ginjective_cut_range,thm:peps_connected_regular_region_injectivity,thm:peps_regular_region_range,thm:peps_region_reduced_density_support,thm:peps_open_region_cut}
     Choose one numbering for the crossing bonds on both sides. Let
     $T_R,T_{R^c}$ denote the resulting open-region matrices. Both maps
     are injective on the invariant boundary space, and the coefficient
@@ -58,7 +53,7 @@
     \label{thm:peps_same_state_regular_region_spaces}
     \lean{TNLean.PEPS.regionGroundSpace_eq_of_sameState_regular_connected}
     \leanok
-    \uses{def:peps_g_injective, def:peps_region_ground_space}
+    \uses{def:peps_g_injective,def:peps_region_ground_space}
     Consider two regular $G$-injective PEPS tensor families on the same
     finite connected graph, with the same physical spaces. If their
     closed coefficient vectors agree, then
@@ -81,8 +76,7 @@
         TNLean.PEPS.rank_regionReducedDensity_of_regular_connected_cut,
         TNLean.PEPS.stateCoeff_groupBondTensor_ne_zero_of_regular_connected_cut}
     \leanok
-    \uses{def:peps_g_injective, def:peps_region_ground_space,
-        def:peps_region_reduced_density}
+    \uses{def:peps_g_injective,def:peps_region_ground_space,def:peps_region_reduced_density}
     Consider regular $G$-injective tensors on a finite graph and a
     connected region $R$ with $n+1$ crossing bonds. Then
     $\dim\mathcal G_R=|G|^n$. If the complementary induced region is
@@ -93,11 +87,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_connected_regular_region_injectivity,
-        thm:peps_g_injective_invariants_range,
-        thm:peps_regular_boundary_invariants,
-        thm:peps_regular_region_range,
-        thm:peps_regular_region_support}
+    \uses{thm:peps_connected_regular_region_injectivity,thm:peps_g_injective_invariants_range,thm:peps_regular_boundary_invariants,thm:peps_regular_region_range,thm:peps_regular_region_support}
     The open-region map is injective on the invariant boundary space
     and has range $\mathcal G_R$. The simultaneous regular action on
     $n+1$ boundary labels has invariant dimension $|G|^n$. If the
@@ -110,7 +100,7 @@
     \label{thm:peps_regular_group_order_rigidity}
     \lean{TNLean.PEPS.card_group_eq_of_sameState_regular_connected_cut}
     \leanok
-    \uses{def:peps_g_injective, def:peps_region_reduced_density}
+    \uses{def:peps_g_injective,def:peps_region_reduced_density}
     Let two tensor families be $G$-injective and $H$-injective for
     the regular representations of finite groups $G$ and $H$,
     respectively, and represent the same closed PEPS vector on

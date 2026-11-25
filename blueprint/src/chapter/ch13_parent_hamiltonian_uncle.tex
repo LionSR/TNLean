@@ -89,7 +89,7 @@ one scalar need not be a similarity transformation.
     \label{lem:uncle_injective_perturbation}
     \lean{MPSTensor.isInjective_uncleTensor_of_isInjective_perturbation}
     \leanok
-    \uses{def:two_block_uncle_tensor, def:injective}
+    \uses{def:two_block_uncle_tensor,def:injective}
     Let $A_i\in\mathcal M_a$, $B_i\in\mathcal M_b$ and let $R_i,L_i$
     have matching rectangular sizes. Suppose the matrices
     $T_i=\left(\begin{smallmatrix}A_i&R_i\\L_i&B_i\end{smallmatrix}\right)$
@@ -139,8 +139,7 @@ one scalar need not be a similarity transformation.
     \lean{MPSTensor.tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation}
     \lean{MPSTensor.tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation_real}
     \leanok
-    \uses{lem:uncle_local_projector_continuity,lem:uncle_regularization,
-        def:blocked_configuration_isometry,def:parent_hamiltonian}
+    \uses{lem:uncle_local_projector_continuity,lem:uncle_regularization,def:blocked_configuration_isometry,def:parent_hamiltonian}
     Suppose the explicit uncle tensor $U$ is injective. The canonical
     two-site parent interactions of $C(\varepsilon)$ converge, in operator
     norm as $\varepsilon\to0$ through nonzero complex parameters, to
@@ -151,8 +150,7 @@ one scalar need not be a similarity transformation.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:uncle_local_projector_continuity,lem:uncle_virtual_rescaling,
-        lem:uncle_regularization}
+    \uses{lem:uncle_local_projector_continuity,lem:uncle_virtual_rescaling,lem:uncle_regularization}
     For nonzero parameters, virtual rescaling preserves the physical range
     and hence the canonical projector. The regular interpolant has injective
     value $U$ at zero, so its projector converges to $\Pi[U]$. The existing
@@ -167,7 +165,7 @@ one scalar need not be a similarity transformation.
     \lean{MPSTensor.tendsto_toMatrix'_parentInteraction_twoBlockPerturbation_of_isInjective_perturbation,
         MPSTensor.tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation_of_isInjective_perturbation}
     \leanok
-    \uses{lem:uncle_injective_perturbation, thm:two_block_uncle_parent_limit}
+    \uses{lem:uncle_injective_perturbation,thm:two_block_uncle_parent_limit}
     If the full matrices $T_i$ of Lemma~\ref{lem:uncle_injective_perturbation}
     span $\mathcal M_{a+b}$, then the canonical interactions of
     $C(\varepsilon)$ converge to $\Pi[U]$. At every fixed periodic length
@@ -203,8 +201,7 @@ infinite-volume Hamiltonian is included here.
         MPSTensor.hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_right,
         MPSTensor.span_mpv_le_ker_hamiltonian_uncleInteraction}
     \leanok
-    \uses{def:two_block_uncle_tensor,thm:two_block_uncle_parent_limit,
-        def:ground_space_map,def:chain_ground_space}
+    \uses{def:two_block_uncle_tensor,thm:two_block_uncle_parent_limit,def:ground_space_map,def:chain_ground_space}
     Let $A,B,R,L$ have the matching block sizes in
     (\ref{eq:uncle_explicit_tensor}), with no injectivity assumption.
     The two-site spaces $\mathcal G_2(A)$ and $\mathcal G_2(B)$ lie in
@@ -275,7 +272,7 @@ infinite-volume Hamiltonian is included here.
     \lean{MPSTensor.uncleBoundaryMap}
     \lean{MPSTensor.uncleBoundarySpace}
     \leanok
-    \uses{def:two_block_uncle_tensor, def:uncle_boundary_product}
+    \uses{def:two_block_uncle_tensor,def:uncle_boundary_product}
     Write $T_i=\left(\begin{smallmatrix}A_i&R_i\\L_i&B_i\end{smallmatrix}\right)$.
     For a word $w=(i_1,\ldots,i_n)$, let $F(w)$ have diagonal blocks
     $A_{i_1}\cdots A_{i_n}$ and $B_{i_1}\cdots B_{i_n}$ and off-diagonal blocks
@@ -294,7 +291,7 @@ infinite-volume Hamiltonian is included here.
     \label{lem:uncle_boundary_length_two}
     \lean{MPSTensor.uncleBoundaryMap_two}
     \leanok
-    \uses{def:uncle_boundary_space, def:two_block_uncle_tensor}
+    \uses{def:uncle_boundary_space,def:two_block_uncle_tensor}
     For every $X\in\mathcal M_{a+b}$, the vector $(\tr(F(i,j)X))_{i,j}$ is
     the two-site vector of $X$ built from the matrices $U_{ij}$ in
     (\ref{eq:uncle_explicit_tensor}). Hence $S_2$ is the two-site uncle

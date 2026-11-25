@@ -92,34 +92,29 @@ source and physical input coordinates, following
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis,
-        thm:peps_source_preparation_sums}
+    \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis,thm:peps_source_preparation_sums}
     By Lemma~\ref{thm:peps_source_preparation_sums} and
     Definition~\ref{def:peps_source_slot_basis},
     $K_T(a)[\psi]=[T(s_a\otimes\psi)]=A_{T,\psi}(:,a)$, so
     Lemma~\ref{thm:peps_prepared_vector_density} yields~(\ref{eq:peps_pure_source_density_coefficient}).
 \end{proof}
 
-\begin{definition}[The product source matrix]
-    \label{def:peps_product_source_matrix}
-    \lean{Matrix.piKronecker}
-    \leanok
-    \uses{def:peps_source_inventory}
-    For index sets $K_e$ at the ordered source positions,
-    $\mathcal A_K=\prod_e K_e$, and matrices $X_e\in\C^{K_e\times K_e}$, define
-    $\mathcal X\in\C^{\mathcal A_K\times\mathcal A_K}$ by
-    \begin{align}
-        \mathcal X(\alpha,\beta)
-         & =\prod_e X_e(\alpha_e,\beta_e).
-        \label{eq:peps_product_source_matrix}
-    \end{align}
-\end{definition}
+
+For index sets $K_e$ at the ordered source positions, $\mathcal A_K=\prod_e K_e$,
+and matrices $X_e\in\C^{K_e\times K_e}$, write
+$\mathcal X\in\C^{\mathcal A_K\times\mathcal A_K}$ for their finite Kronecker
+product (Definition~\ref{def:finite_kronecker_product}):
+\begin{align}
+    \mathcal X(\alpha,\beta)
+     & =\prod_e X_e(\alpha_e,\beta_e).
+    \label{eq:peps_product_source_matrix}
+\end{align}
 
 \begin{lemma}[Finite contraction of source columns]
     \label{thm:peps_source_column_contraction}
     \lean{Matrix.sourceContraction_vecMulVec_eq_mul_piKronecker}
     \leanok
-    \uses{def:peps_product_source_matrix}
+    \uses{def:finite_kronecker_product}
     For finite $K_e$, arbitrary sets $\mathcal R,\mathcal T$, matrices
     $L\in\C^{\mathcal R\times\mathcal A_K}$,
     $M\in\C^{\mathcal T\times\mathcal A_K}$, $X_e\in\C^{K_e\times K_e}$, and
@@ -132,7 +127,7 @@ source and physical input coordinates, following
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_product_source_matrix}
+    \uses{def:finite_kronecker_product}
     By (\ref{eq:peps_product_source_matrix}), the $(r,s)$ entry of
     $\mathcal C_H(X)$ is
     \begin{align}
@@ -150,8 +145,7 @@ source and physical input coordinates, following
     \label{thm:peps_pure_source_contraction}
     \lean{QuantumCircuit.Party.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
     \leanok
-    \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient,
-        def:peps_product_source_matrix}
+    \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient,def:finite_kronecker_product}
     In the bases of Definition~\ref{def:peps_source_slot_basis} with
     $K_e=I_e\times J_e$, for any $X_e\in\C^{K_e\times K_e}$, $\psi\in\mathcal H$,
     and $H(\alpha,\beta)=K_T(\alpha)|\psi\rangle\langle\psi|K_{T'}(\beta)^\dagger$,
@@ -163,8 +157,7 @@ source and physical input coordinates, following
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_pure_source_density_coefficient,
-        thm:peps_source_column_contraction}
+    \uses{thm:peps_pure_source_density_coefficient,thm:peps_source_column_contraction}
     Substitute (\ref{eq:peps_pure_source_density_coefficient}) into $H(\alpha,\beta)$
     and apply (\ref{eq:peps_source_column_contraction}).
 \end{proof}
@@ -194,10 +187,9 @@ source and physical input coordinates, following
 
 \begin{lemma}[Mixed products of party matrices]
     \label{thm:peps_party_product_conjugation}
-    \lean{Matrix.conjTranspose_piKronecker,
-        Matrix.piKronecker_mul}
+    \lean{Matrix.piKronecker_mul}
     \leanok
-    \uses{def:peps_dependent_physical_product}
+    \uses{def:peps_dependent_physical_product,thm:spt_physical_embedding_boundary}
     For finite $P$, finite input alphabets $I_p$, output alphabets $O_p$, and
     matrices $A_p,B_p\in\C^{O_p\times I_p}$, $X_p\in\C^{I_p\times I_p}$,
     \begin{align}
@@ -227,8 +219,7 @@ source and physical input coordinates, following
     \label{thm:peps_party_product_partial_trace}
     \lean{Matrix.partialTraceRight_piKronecker_submatrix}
     \leanok
-    \uses{def:peps_dependent_physical_product,
-        thm:peps_party_product_conjugation}
+    \uses{def:peps_dependent_physical_product,thm:peps_party_product_conjugation}
     For finite $P$, physical alphabets $H_p$, finite private alphabets $D_p$,
     and $M_p\in\C^{(H_p\times D_p)\times(H_p\times D_p)}$, under
     $\prod_p(H_p\times D_p)\simeq(\prod_pH_p)\times(\prod_pD_p)$,
@@ -452,8 +443,7 @@ source and physical input coordinates, following
     \label{thm:peps_actual_pure_source_contraction}
     \leanok
     \lean{QuantumCircuit.Party.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
-    \uses{def:peps_actual_source_column_matrix,def:peps_product_source_matrix,
-        thm:peps_pure_source_density_coefficient}
+    \uses{def:peps_actual_source_column_matrix,def:finite_kronecker_product,thm:peps_pure_source_density_coefficient}
     For private product input $\psi$, monomial choices $\xi,\zeta$, prepared
     output coefficients $C_{\xi,\zeta}(x,y)$ of $\ketbra{\psi}{\psi}$ for
     residuals $V_\xi,V_\zeta$ at $b_x,b_y$ ($x,y\in I_W$), and matrices $X_e$
@@ -469,8 +459,7 @@ source and physical input coordinates, following
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_actual_private_preparation,
-        thm:peps_pure_source_density_coefficient,thm:peps_source_column_contraction}
+    \uses{thm:peps_actual_private_preparation,thm:peps_pure_source_density_coefficient,thm:peps_source_column_contraction}
     By Lemmas~\ref{thm:peps_actual_private_preparation}
     and~\ref{thm:peps_pure_source_density_coefficient},
     $C_{\xi,\zeta}(x,y)=M_\xi(:,x)M_\zeta(:,y)^\dagger$, so
@@ -514,8 +503,7 @@ source and physical input coordinates, following
     \label{thm:peps_original_source_sample_incidence}
     \lean{QuantumCircuit.Party.SourceCircuit.mem_sourceSampleEquiv_iff}
     \leanok
-    \uses{def:peps_original_source_pair_indices,
-        def:peps_original_source_sample_indices}
+    \uses{def:peps_original_source_pair_indices,def:peps_original_source_sample_indices}
     For an original source position $e$ with endpoints $(p_e,q_e)$ and any
     $p\in P$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the
     sample position of $e$ is incident to $p$ if and only if $p=p_e$ or $p=q_e$.
@@ -532,9 +520,7 @@ source and physical input coordinates, following
     \label{def:peps_local_source_sample_indices}
     \lean{QuantumCircuit.Party.SourceCircuit.partialSlotSampleEquiv}
     \leanok
-    \uses{def:peps_partial_fixed_positions,
-        def:peps_original_source_sample_indices,
-        thm:peps_original_source_sample_incidence}
+    \uses{def:peps_partial_fixed_positions,def:peps_original_source_sample_indices,thm:peps_original_source_sample_incidence}
     For $p\in P$, enumerating the $r_p$ original ordered source slots incident
     to $p$ defines a bijection from $\{0,\ldots,r_p-1\}$ to the sample
     positions incident to $p$, so local sample-link assignments in
@@ -613,8 +599,7 @@ source and physical input coordinates, following
     \label{thm:peps_original_source_sample_count}
     \lean{QuantumCircuit.Party.SourceCircuit.length_allSourceSlots_eq_sum_pairSampleLabels}
     \leanok
-    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
-        thm:peps_source_pair_count}
+    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,thm:peps_source_pair_count}
     Let $G$ be the nonempty-participant gate occurrences of the chronological
     composition in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, with
     participant sets $C_g$ and unordered distinct-pair sets $\mathcal E(C_g)$.
@@ -629,8 +614,7 @@ source and physical input coordinates, following
 
 \begin{proof}
     \leanok
-    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
-        thm:peps_source_pair_count}
+    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,thm:peps_source_pair_count}
     By Definitions~\ref{def:peps_all_original_source_slots}
     and~\ref{def:peps_original_source_sample_indices}, the $N$ slots are in
     bijection with $\bigsqcup_{g\in G}\mathcal E(C_g)$, and

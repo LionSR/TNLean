@@ -26,7 +26,7 @@ interaction term; see \cite{gap:pgvwc07_open_parent_domain}.
     \label{def:varying_physical_scalar_state}
     \lean{Matrix.varyingPhysicalScalarState}
     \leanok
-    \uses{def:varying_physical_actual_site_extension, def:varying_obc_scalar_state}
+    \uses{def:varying_physical_actual_site_extension,def:varying_obc_scalar_state}
     Suppose $D_0=D_N=1$. Read the common-alphabet product at the
     embedded configurations. This gives the vector $\Omega$ on the original
     physical configuration space with coefficients
@@ -42,10 +42,7 @@ interaction term; see \cite{gap:pgvwc07_open_parent_domain}.
     \label{lem:varying_physical_scalar_state_normalized}
     \lean{Matrix.norm_varyingPhysicalScalarState_eq_one}
     \leanok
-    \uses{def:varying_physical_scalar_state,
-        lem:varying_physical_kernel_actual_pullback,
-        lem:uniform_physical_parent_kernel_comparison,
-        lem:varying_obc_scalar_state_normalized}
+    \uses{def:varying_physical_scalar_state,lem:varying_physical_kernel_actual_pullback,lem:uniform_physical_parent_kernel_comparison,lem:varying_obc_scalar_state_normalized}
     Let $N\ge2$, $D_0=D_N=1$, and suppose that
     $\sum_iB^{[j]}_iB^{[j]\dagger}_i=I_{D_j}$ at each site. Then $\|\Omega\|=1$.
 \end{lemma}
@@ -61,10 +58,7 @@ interaction term; see \cite{gap:pgvwc07_open_parent_domain}.
     \lean{Matrix.ker_varyingPhysicalParentHamiltonian_eq_span,
         Matrix.finrank_ker_varyingPhysicalParentHamiltonian_eq_one}
     \leanok
-    \uses{lem:varying_physical_scalar_state_normalized,
-        lem:uniform_physical_parent_kernel_comparison,
-        lem:varying_obc_actual_parent_unique_line,
-        lem:varying_physical_parent_embedding_transport}
+    \uses{lem:varying_physical_scalar_state_normalized,lem:uniform_physical_parent_kernel_comparison,lem:varying_obc_actual_parent_unique_line,lem:varying_physical_parent_embedding_transport}
     This is \cite[Theorem~9]{PerezGarcia2007Matrix}. Consider $N\ge2$ sites
     with arbitrary physical dimensions $d_j$, singleton endpoint bonds, and
     canonical row equations. Suppose each site family

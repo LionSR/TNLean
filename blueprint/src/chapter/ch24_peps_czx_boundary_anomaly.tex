@@ -27,7 +27,7 @@ identity at every blocked length and agrees with $O(A)$ on the boundary
         MPOTensor.GroupFamily.FusionData.smulTensor,
         MPOTensor.GroupFamily.FusionData.omega_smulTensor}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_anomaly_three_cochain_spec}
+    \uses{def:mpug_anomaly_three_cochain,thm:mpug_anomaly_three_cochain_spec}
     Let $g\mapsto T_g$ be a group of matrix product operator tensors with
     normal tensors and $O_gO_h=O_{gh}$ on every nonempty chain, and fix
     fusion tensors with anomaly three-cochain $\omega$. Let $u$ be a unitary
@@ -62,9 +62,7 @@ identity at every blocked length and agrees with $O(A)$ on the boundary
         TNLean.PEPS.not_isTrivialGaugeClass_omega_czxBoundaryFamily,
         TNLean.PEPS.czxBoundaryFamily_anomalyClass_ne_zero}
     \leanok
-    \uses{thm:czx_rectangle_review_mpo, thm:czx_wrapping_boundary,
-        def:asymex_czx_review_tensor, lem:czx_boundary_anomaly_transport,
-        thm:mpug_czx_anomaly_class, def:mpug_anomaly_class}
+    \uses{thm:czx_rectangle_review_mpo,thm:czx_wrapping_boundary,def:asymex_czx_review_tensor,lem:czx_boundary_anomaly_transport,thm:mpug_czx_anomaly_class,def:mpug_anomaly_class}
     Let $R$ be a positive proper bounded or cyclic coordinate rectangle of the
     torus, with faithful boundary map $F_R$ and physical symmetry
     $U_R=\bigotimes_{v\in R}U_{CZX}$. Let $B$ be the printed CZX tensor $A$
@@ -82,8 +80,7 @@ identity at every blocked length and agrees with $O(A)$ on the boundary
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:czx_rectangle_review_mpo, thm:czx_wrapping_boundary,
-        lem:czx_boundary_anomaly_transport, thm:mpug_czx_anomaly_class}
+    \uses{thm:czx_rectangle_review_mpo,thm:czx_wrapping_boundary,lem:czx_boundary_anomaly_transport,thm:mpug_czx_anomaly_class}
     Blocking two sites identifies $O_{2n}(A)$ with $O_n(B)$, so
     (\ref{eq:czx_boundary_anomaly}) is $U_RF_R=F_RO_P(A)$ of
     Lemmas~\ref{thm:czx_rectangle_review_mpo} and

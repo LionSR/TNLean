@@ -67,7 +67,7 @@ bounds in low dimensions.
     If $D\ge1$ and $A$ is $0$-block injective, then $D=1$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:wordspan_blk_inj, lem:wordspan_zero_ne_top}
+\begin{proof}\leanok\uses{lem:wordspan_blk_inj,lem:wordspan_zero_ne_top}
     By Lemma~\ref{lem:wordspan_blk_inj}, $0$-block injectivity gives
     $S_0(A)=\MN{D}$. Lemma~\ref{lem:wordspan_zero_ne_top} excludes
     $D\ge2$, so the nonzero bond dimension must be~$1$.
@@ -104,7 +104,7 @@ The next two lemmas connect irreducible matrix actions with the cumulative word
 span used throughout Chapter~\ref{ch:wielandt}.
 
 \begin{remark}[Burnside input for cumulative spanning]
-    \uses{thm:irreducible_tensor_to_action, thm:burnside_matrix, lem:algspan_cumulative_span}
+    \uses{thm:irreducible_tensor_to_action,thm:burnside_matrix,lem:algspan_cumulative_span}
     The passage from irreducible tensors to full algebra spanning first passes
     through the irreducible action on $\C^D$. Burnside's theorem then says that
     the resulting irreducible subalgebra of $\MN{D}$ is all of $\MN{D}$. Once
@@ -116,7 +116,7 @@ span used throughout Chapter~\ref{ch:wielandt}.
     \label{lem:irreducible_action_to_tensor}
     \lean{Kraus.isIrreducibleFamily_of_isIrreducibleAction}
     \leanok
-    \uses{def:irreducible_action, def:irreducible_tensor}
+    \uses{def:irreducible_action,def:irreducible_tensor}
     If the letters of $A$ act irreducibly on $\C^D$, then $A$ has no nontrivial
     invariant orthogonal projection.
 \end{lemma}
@@ -133,7 +133,7 @@ span used throughout Chapter~\ref{ch:wielandt}.
     \label{lem:algspan_cumulative_span}
     \lean{Kraus.exists_cumulativeSpan_eq_top_of_algSpan_eq_top}
     \leanok
-    \uses{def:alg_span, def:cumulative_span}
+    \uses{def:alg_span,def:cumulative_span}
     If the generated unital algebra satisfies $\algspn(A)=\MN{D}$, then there
     exists $N$ such that $T_N(A)=\MN{D}$.
 \end{lemma}
@@ -153,14 +153,14 @@ span used throughout Chapter~\ref{ch:wielandt}.
 \begin{lemma}[Cumulative span reaches $\MN{D}$ --- explicit bound]\label{thm:cumulative_eq_top_bound}
     \lean{MPSTensor.cumulativeSpan_eq_top_of_isNormal_bound}
     \leanok
-    \uses{def:cumulative_span, def:normal}
+    \uses{def:cumulative_span,def:normal}
     Let $D>0$. If $A$ is normal, then
     $T_{D^2}(A)=\MN{D}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:cumulative_strict_mono, lem:cumulative_finrank_le}
+    \uses{thm:cumulative_strict_mono,lem:cumulative_finrank_le}
     By Lemma~\ref{thm:cumulative_strict_mono}, if
     $T_n\neq T_{n+1}$, then $\dim T_{n+1}>\dim T_n$.
     Since $\dim T_n\le D^2$ by Lemma~\ref{lem:cumulative_finrank_le},
@@ -224,7 +224,7 @@ span used throughout Chapter~\ref{ch:wielandt}.
 \begin{lemma}[Vector span from matrix span]\label{lem:vector_span_from_matrix}
     \lean{Kraus.cumulativeVectorSpan_eq_top_of_cumulativeSpan_eq_top}
     \leanok
-    \uses{def:cumulative_vector_span, def:cumulative_span}
+    \uses{def:cumulative_vector_span,def:cumulative_span}
     If $T_N(A)=\MN{D}$ and $\varphi\neq0$, then
     $K_N(A,\varphi)=\C^D$.
 \end{lemma}
@@ -279,7 +279,7 @@ eigenvector.
         Kraus.wordSpan_oneStepAugment_one,
         Kraus.wordSpan_oneStepAugment_eq}
     \leanok
-    \uses{def:one_step_augment, def:word_span, lem:kraus_mem_word_span_one}
+    \uses{def:one_step_augment,def:word_span,lem:kraus_mem_word_span_one}
     Let $X\in S_1(A)$, and let $\widetilde A$ be the one-step
     augmentation of $A$ by $X$. Then
     $S_n(\widetilde A)=S_n(A)$ for every $n\ge0$.
@@ -299,7 +299,7 @@ eigenvector.
     \lean{MPSTensor.isNormal_oneStepAugment_of_mem_wordSpan_one,
         MPSTensor.krausRank_oneStepAugment}
     \leanok
-    \uses{def:one_step_augment, def:normal, lem:one_step_augment_word_span}
+    \uses{def:one_step_augment,def:normal,lem:one_step_augment_word_span}
     Let $X\in S_1(A)$, and let $\widetilde A$ be the one-step augmentation
     of $A$ by $X$. If $A$ is normal, then $\widetilde A$ is normal, and
     $\krausrk(\widetilde A)=\krausrk(A)$.
@@ -320,7 +320,7 @@ eigenvector.
     \lean{MPSTensor.wordSpan_eq_top_of_isNormal_of_isUnit,
         MPSTensor.iIndex_le_of_isNormal_of_isUnit}
     \leanok
-    \uses{def:word_span, def:normal}
+    \uses{def:word_span,def:normal}
     Let $A$ be a normal MPS tensor with bond dimension $D>0$, and suppose
     that some Kraus operator $A^{i_0}$ is invertible. Then
     \begin{align}
@@ -350,7 +350,7 @@ eigenvector.
     \lean{MPSTensor.wordSpan_eq_top_of_isNormal_of_noninvertible_eigenvector,
         MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector}
     \leanok
-    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span, cor:wielandt_case3_one_step_index}
+    \uses{lem:kraus_mem_word_span_one,thm:wielandt_case3_one_step_span,cor:wielandt_case3_one_step_index}
     Let $A$ be a normal MPS tensor with bond dimension $D\ge1$.
     If some Kraus operator $A^{i_0}$ is non-invertible and has an
     eigenvector $\varphi\neq0$ with nonzero eigenvalue~$\mu$, then
@@ -366,7 +366,7 @@ eigenvector.
 
 \begin{proof}
     \leanok
-    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span, cor:wielandt_case3_one_step_index}
+    \uses{lem:kraus_mem_word_span_one,thm:wielandt_case3_one_step_span,cor:wielandt_case3_one_step_index}
     Since $X=A^{i_0}$ belongs to $S_1(A)$ by
     Lemma~\ref{lem:kraus_mem_word_span_one}, the one-step theorem and index
     bound apply directly.
@@ -382,13 +382,13 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 \begin{lemma}[Blocking preserves normality]\label{thm:isNormal_blockTensor}
     \lean{MPSTensor.isNormal_blockTensor_of_isNormal}
     \leanok
-    \uses{def:normal, def:blocked_tensor}
+    \uses{def:normal,def:blocked_tensor}
     If $A$ is normal and $L>0$, then the blocked tensor
     $A^{[L]}$ is also normal.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:word_span_le_blockTensor, lem:word_span_mul}
+    \uses{lem:word_span_le_blockTensor,lem:word_span_mul}
     Normality provides $N$ with $S_N(A)=\MN{D}$, so $\Id\in S_N(A)$ expands as
     $\Id=\sum_r c_rA^{w_r}$ with each $|w_r|=N$, and every $M\in S_N(A)$
     satisfies
@@ -414,7 +414,7 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
     \label{lem:word_span_le_blockTensor}
     \lean{MPSTensor.wordSpan_le_wordSpan_blockTensor}
     \leanok
-    \uses{def:word_span, def:blocked_tensor}
+    \uses{def:word_span,def:blocked_tensor}
     One has $S_{nL}(A)\subseteq S_n(A^{[L]})$ for all $n,L$.
 \end{lemma}
 
@@ -447,7 +447,7 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 \begin{lemma}[Blocked fixed-length matrix spanning]\label{thm:wielandt_blocked_assembly}
     \lean{MPSTensor.wielandt_blocked_assembly}
     \leanok
-    \uses{def:word_span, def:normal, def:blocked_tensor}
+    \uses{def:word_span,def:normal,def:blocked_tensor}
     Suppose $A$ has bond dimension $D>0$, is normal, and $L>0$, and we have:
     \begin{enumerate}
         \item a word $w_0$ of length $L$ with eigenvector
@@ -471,7 +471,7 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 
 \begin{proof}
     \leanok
-    \uses{thm:isNormal_blockTensor, thm:blockTensor_single_eigenvector, thm:eigenvector_spreading, lem:blocking_transfer, thm:lemma2b_assembly}
+    \uses{thm:isNormal_blockTensor,thm:blockTensor_single_eigenvector,thm:eigenvector_spreading,lem:blocking_transfer,thm:lemma2b_assembly}
     The blocked tensor $B=A^{[L]}$ is normal by
     Lemma~\ref{thm:isNormal_blockTensor}, and the word eigenvectors transfer
     to single-index eigenvectors of $B$ and $B^T$ by
@@ -495,7 +495,7 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
     \label{thm:rankone_extraction_blockTensor}
     \lean{MPSTensor.exists_rankOne_mem_wordSpan_blockTensor}
     \leanok
-    \uses{def:word_span, def:normal, def:blocked_tensor}
+    \uses{def:word_span,def:normal,def:blocked_tensor}
     Suppose $A$ has bond dimension $D>0$, is normal, and $N_0\ge1$ with
     $S_{N_0}(A)=\MN{D}$.
     Then there exist words $\sigma_0,\tau_0$ of length~$N_0$,
@@ -510,7 +510,7 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 
 \begin{proof}
     \leanok
-    \uses{def:blocked_tensor, thm:isNormal_blockTensor}
+    \uses{def:blocked_tensor,thm:isNormal_blockTensor}
     For $B=A^{[N_0]}$, (\ref{eq:mps_blocked_tensor}) and
     $S_{N_0}(A)=\MN{D}$ give $S_1(B)=\MN{D}$, so $\Id\in S_1(B)$ and some
     blocked generator $B^{j_0}$ has $\tr(B^{j_0})\neq0$.
@@ -534,7 +534,7 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 \begin{lemma}[Fixed-length word-span saturation via blocking]\label{thm:wielandt_lemma2b}
     \lean{MPSTensor.wielandt_lemma2b}
     \leanok
-    \uses{def:word_span, def:normal}
+    \uses{def:word_span,def:normal}
     Via a blocked fixed-length construction under normality (whereas the
     quantitative result of \cite[Lemma~2(b)]{Sanz2010Quantum} is
     Lemma~\ref{lem:rank_one_noninvertible_eigenvector}), if $A$ is
@@ -544,7 +544,7 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
 
 \begin{proof}
     \leanok
-    \uses{thm:rankone_extraction_blockTensor, thm:wielandt_blocked_assembly}
+    \uses{thm:rankone_extraction_blockTensor,thm:wielandt_blocked_assembly}
     By normality, some $N_0>0$ has $S_{N_0}(A)=\MN{D}$.
     Lemma~\ref{thm:rankone_extraction_blockTensor} produces eigenvectors
     and a rank-one element
@@ -563,7 +563,7 @@ uniqueness.
 \begin{lemma}[Primitive overlap convergence]\label{thm:prim_overlap_one}
     \lean{Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one}
     \leanok
-    \uses{def:primitive_mps, def:mpv_overlap}
+    \uses{def:primitive_mps,def:mpv_overlap}
     If $A$ is a primitive MPS tensor, then $O_{AA}(N)\to1$.
 \end{lemma}
 
@@ -578,7 +578,7 @@ uniqueness.
     \lean{MPSTensor.%
         overlap_tendsto_one_of_peripheralPrimitive_of_irreducible}
     \leanok
-    \uses{def:irreducible_tensor, def:mpv_overlap}
+    \uses{def:irreducible_tensor,def:mpv_overlap}
     Let $A$ have positive bond dimension and satisfy
     $\sum_i(A^i)^\dagger A^i=\Id$.
     If $A$ is tensor-irreducible and the transfer map is primitive, then
@@ -595,7 +595,7 @@ uniqueness.
 \begin{lemma}[Primitive MPS tensors have nonzero word products]\label{lem:prim_nonzero_word}
     \lean{MPSTensor.exists_nonzero_evalWord_of_hasComplementaryFixedPointGap}
     \leanok
-    \uses{def:primitive_mps, def:eval_word}
+    \uses{def:primitive_mps,def:eval_word}
     If $A$ is a primitive MPS tensor,
     then for every $n\ge0$ there exists a word $w$ of length
     \emph{exactly}~$n$ with $A^w\neq0$.
@@ -612,7 +612,7 @@ uniqueness.
 \begin{lemma}[Iterated transfer does not vanish]\label{lem:transfer_pow_ne_zero}
     \lean{MPSTensor.transferMap_pow_ne_zero_of_hasComplementaryFixedPointGap}
     \leanok
-    \uses{def:primitive_mps, def:transfer_map}
+    \uses{def:primitive_mps,def:transfer_map}
     If $A$ is a primitive MPS tensor, then
     $\E_A^n\neq0$ for all $n\ge0$.
 \end{lemma}
@@ -726,7 +726,7 @@ grow monotonically and coincide with cumulative spans.
     \label{thm:cumspan_eq_wordspan}
     \lean{Kraus.cumulativeSpan_eq_wordSpan_of_one_mem_wordSpan_one}
     \leanok
-    \uses{def:cumulative_span, def:word_span}
+    \uses{def:cumulative_span,def:word_span}
     If $\Id\in S_1(A)$, then $T_n(A)=S_n(A)$ for every~$n$.
 \end{lemma}
 
@@ -741,7 +741,7 @@ grow monotonically and coincide with cumulative spans.
     \label{thm:cumspan_to_normal}
     \lean{MPSTensor.isNormal_of_cumulativeSpan_eq_top_of_aperiodic}
     \leanok
-    \uses{def:normal, def:cumulative_span, def:word_span}
+    \uses{def:normal,def:cumulative_span,def:word_span}
     If $T_N(A)=\MN{D}$ and $\Id\in S_1(A)$, then $A$ is normal.
 \end{lemma}
 

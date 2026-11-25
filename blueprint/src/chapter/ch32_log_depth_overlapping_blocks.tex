@@ -29,7 +29,7 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
         MPSTensor.exists_norm_mpvOverlap_le_of_mixedMapLM,
         MPSTensor.exp_neg_div_correlationLength_le_one}
     \leanok
-    \uses{def:correlation_length, thm:ldp_positive_part_rate}
+    \uses{def:correlation_length,thm:ldp_positive_part_rate}
     Let $X$ and $Y$ be tensors with $d$ physical indices and bond dimensions
     $D_1,D_2\geq1$, with mixed transfer map
     $\E_{XY}(Z)=\sum_iX^iZ(Y^i)^\dagger$ on $D_1\times D_2$ matrices, and let
@@ -92,9 +92,7 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
         norm_prod_range_sub_pow_le_of_forall_norm_pow_le,
         MPSTensor.exists_norm_mpvOverlap_sub_trace_pow_le}
     \leanok
-    \uses{lem:ldp_mixed_transfer_decay, thm:ldp_positive_part_rate, thm:ldp_sqrt_holder,
-        thm:ldp_approximation_error_normal, lem:ldp_positive_part_overlap,
-        thm:overlap_trace_rect}
+    \uses{lem:ldp_mixed_transfer_decay,thm:ldp_positive_part_rate,thm:ldp_sqrt_holder,thm:ldp_approximation_error_normal,lem:ldp_positive_part_overlap,thm:overlap_trace_rect}
     Let $A_1,\dots,A_b$ be tensors with $d$ physical indices and bond dimensions $D_j$,
     normal in the gauge (\ref{eq:ldp_normal_gauge}) with positive definite fixed points
     $\rho_j$ of trace one, with $\mathcal B_j$ the blocked map of $A_j$ on $q$ sites. Let
@@ -186,8 +184,7 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
         MPSTensor.exists_norm_gram_blockTensor_blockSum_sub_le,
         MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le}
     \leanok
-    \uses{lem:ldp_shared_overlap_estimates, lem:ldp_mixed_transfer_decay,
-        thm:ldp_positive_part_rate, thm:ldp_sqrt_lipschitz, thm:ldp_polar_uniqueness}
+    \uses{lem:ldp_shared_overlap_estimates,lem:ldp_mixed_transfer_decay,thm:ldp_positive_part_rate,thm:ldp_sqrt_lipschitz,thm:ldp_polar_uniqueness}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ be the direct sum with weights $\mu_j\in\C$ of
     blocks $A_j$ of bond dimensions $D_j$, each placed on its own bond coordinates by an
     isometry $E_j$, and put $K_j=E_j\otimes E_j$. Let every $A_j$ be normal in the
@@ -258,9 +255,7 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
         MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le,
         MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le}
     \leanok
-    \uses{lem:ldp_overlapping_positive_part, lem:ldp_shared_overlap_estimates,
-        lem:ldp_mixed_transfer_decay, def:ldp_non_normal_fixed_point, def:prep_fixed_point_tensor,
-        lem:ldp_positive_part_overlap, thm:ldp_approximation_error_normal}
+    \uses{lem:ldp_overlapping_positive_part,lem:ldp_shared_overlap_estimates,lem:ldp_mixed_transfer_decay,def:ldp_non_normal_fixed_point,def:prep_fixed_point_tensor,lem:ldp_positive_part_overlap,thm:ldp_approximation_error_normal}
     \begin{enumerate}
         \item For an isometry $E$ placing the bond coordinates of a block and a
               positive semidefinite $\sigma$, the pair of $\sigma$ placed along $E$ on
@@ -314,9 +309,7 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
         MPSTensor.exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le,
         MPSTensor.exists_abs_norm_mpvState_blockSum_weight_sq_sub_le}
     \leanok
-    \uses{lem:ldp_overlapping_overlaps, lem:ldp_overlapping_positive_part,
-        lem:ldp_shared_overlap_estimates, lem:ldp_positive_part_overlap, lem:ldp_mixed_transfer_decay,
-        thm:ldp_approximation_error_normal}
+    \uses{lem:ldp_overlapping_overlaps,lem:ldp_overlapping_positive_part,lem:ldp_shared_overlap_estimates,lem:ldp_positive_part_overlap,lem:ldp_mixed_transfer_decay,thm:ldp_approximation_error_normal}
     \begin{enumerate}
         \item For blocks placed as in Lemma~\ref{lem:ldp_overlapping_positive_part},
               positive semidefinite $\rho_k$ and reals $t_k\geq0$, the mixed transfer map
@@ -362,8 +355,7 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
     \lean{MPSTensor.exists_approximationError_le_overlappingBlockSum,
         MPSTensor.exists_approximationError_le_mul_overlappingBlockSum}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, thm:ldp_approximation_error_complex_weights,
-        def:correlation_length}
+    \uses{def:ldp_non_normal_fixed_point,thm:ldp_approximation_error_complex_weights,def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^bA_j^i$ with $b\geq1$ be the direct sum with weights one
     of normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}), with positive
     definite fixed points $\rho_j$ of trace one, each placed on its own bond
@@ -405,8 +397,7 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
     \lean{MPSTensor.exists_approximationError_le_overlappingBlockSum_weight,
         MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_weight}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, thm:ldp_approximation_error_complex_weights,
-        def:correlation_length}
+    \uses{def:ldp_non_normal_fixed_point,thm:ldp_approximation_error_complex_weights,def:correlation_length}
     Let $A^i=\bigoplus_{j=1}^bw_jA_j^i$ be the direct sum with real weights
     $w_j\geq0$, not all zero, of normal blocks $A_j$ in the gauge
     (\ref{eq:ldp_normal_gauge}), with positive definite fixed points $\rho_j$ of trace one,

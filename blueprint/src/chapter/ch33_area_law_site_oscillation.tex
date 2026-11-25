@@ -214,8 +214,7 @@ means using $K=I\setminus Q$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:qc_spectator_blocks,def:qc_site_expectation,
-        lem:qc_site_expectation_properties}
+    \uses{thm:qc_spectator_blocks,def:qc_site_expectation,lem:qc_site_expectation_properties}
     This is~\cite[``Preservation of spectator factors'']{QICLean2026Blueprint}.
     By Lemma~\ref{thm:qc_spectator_blocks}, the $(a,b)$ block of $A\otimes S$ is $S_{ab}A$, so linearity of $E_K$
     gives $E_K(S_{ab}A)=S_{ab}E_K(A)$, proving~(\ref{eq:qc_spectator_tensor}).

@@ -17,8 +17,7 @@ points and assign to each point its smallest incident cell side; see
     \label{thm:area_law_finite_sparse_belt_family}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_finitely_supported_sparse_belt_shifts}
     \leanok
-    \uses{def:area_law_belt_cells,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales}
+    \uses{def:area_law_belt_cells,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     For every finite domain $\Lambda$, cut $A$, origin $o$ and
     nonnegative integer $C_0$, there are coordinate residues $a_k,b_k$
     at every scale. Write $F_k$ for their belt-cell index set.
@@ -42,8 +41,7 @@ points and assign to each point its smallest incident cell side; see
     \label{thm:area_law_uniform_initial_mark_count}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_initial_mark_bound}
     \leanok
-    \uses{def:area_law_belt_marks,def:area_law_belt_cells,
-        def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
+    \uses{def:area_law_belt_marks,def:area_law_belt_cells,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     There is a positive constant $B$ such that, for every finite domain,
     cut, origin, nonnegative integer $C_0$ and lower index $k_0$, one can
     choose the residues from the preceding theorem and a finite set $M$
@@ -59,8 +57,7 @@ points and assign to each point its smallest incident cell side; see
     support cutoff may depend on those data.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_finite_sparse_belt_family,thm:area_law_belt_mark_count,
-        thm:area_law_polynomial_finite_sums}
+    \uses{thm:area_law_finite_sparse_belt_family,thm:area_law_belt_mark_count,thm:area_law_polynomial_finite_sums}
     Let $B_0>0$ be the uniform finite-sum constant for the zero polynomial
     exponent, and set $B=576B_0$. The union of the marks
     over the finite support restricted to $k\ge k_0$ has the stated
@@ -81,8 +78,7 @@ points and assign to each point its smallest incident cell side; see
     \label{thm:area_law_fine_layer_mark_separation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_marks_dist_ge}
     \leanok
-    \uses{def:area_law_belt_marks,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales}
+    \uses{def:area_law_belt_marks,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     Fix an origin $o$ and a finite endpoint set $Z$, and form all layers
     from these data with $C_0\ge2$. Let $k,h\ge50{,}000{,}000$. If $x$ and $y$ are
     distinct marks of fine-layer cells in layers $k$ and $h$,
@@ -95,9 +91,7 @@ points and assign to each point its smallest incident cell side; see
     fine-layer cell, hence to every selected belt cell.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,
-        thm:area_law_belt_marks_quarter_mesh,thm:area_law_affine_mesh_point_separation,
-        thm:area_law_fine_cell_containment}
+    \uses{thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh,thm:area_law_affine_mesh_point_separation,thm:area_law_fine_cell_containment}
     Suppose that the distance is less than $t_k/4$. Each mark is in the
     closure of its layer. Layer locality forces $k\le h+1$.
     Monotonicity and the adjacent-scale estimate give
@@ -151,9 +145,7 @@ points and assign to each point its smallest incident cell side; see
     of its marks has side at least $s(v)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_uniform_initial_mark_count,
-        thm:area_law_least_incident_mark_scales,
-        thm:area_law_fine_layer_mark_separation}
+    \uses{thm:area_law_uniform_initial_mark_count,thm:area_law_least_incident_mark_scales,thm:area_law_fine_layer_mark_separation}
     For the counted finite union and residues from the uniform initial-mark
     bound, taking the least
     layer index admitting an incident selected cell at each point of $M$

@@ -10,8 +10,7 @@ independent, and each source uses one shared sample index at its two endpoints.
     \label{thm:peps_singleton_fibre_local_part}
     \lean{QuantumCircuit.Party.Word.localPartOp_coarsen_of_fiber}
     \leanok
-    \uses{thm:peps_source_preparation,def:peps_owner_composition,
-        def:peps_single_party_selector,def:peps_party_registers}
+    \uses{thm:peps_source_preparation,def:peps_owner_composition,def:peps_single_party_selector,def:peps_party_registers}
     Let $f:P\to Q$ satisfy $f^{-1}(\{q\})=\{p\}$, and let $U:a\to b$ be a
     chronological word with source-register list $s_U$ and local part
     $L(U):s_Ua\to b$ (Lemma~\ref{thm:peps_source_preparation};
@@ -26,18 +25,15 @@ independent, and each source uses one shared sample index at its two endpoints.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_free_local_part_restriction,
-        thm:peps_retained_spectator_framing,
-        thm:peps_owner_selection_commutation,thm:peps_owner_framed_word,
-        thm:peps_owner_evaluation_identification}
+    \uses{thm:peps_source_free_local_part_restriction,thm:peps_append_spectators_restriction,thm:peps_owner_selection_commutation,thm:peps_owner_spectator_extension,thm:peps_owner_evaluation_identification}
     We induct on $U$. Source-free elementary steps satisfy~(\ref{eq:peps_singleton_fibre_local_part})
     by Lemma~\ref{thm:peps_source_free_local_part_restriction},
     Lemma~\ref{thm:peps_owner_selection_commutation}, and
     Lemma~\ref{thm:peps_owner_evaluation_identification}. Since
     $f^{-1}(\{q\})=\{p\}$, the source registers of $U^f$ at $q$ are those of
     $U$ at $p$, relabelled by $f$; hence compositions and framed words follow
-    from Lemma~\ref{thm:peps_retained_spectator_framing} and
-    Lemma~\ref{thm:peps_owner_framed_word}. At a pair source with
+    from Lemma~\ref{thm:peps_append_spectators_restriction} and
+    Lemma~\ref{thm:peps_owner_spectator_extension}. At a pair source with
     distinct owners $p_1\ne p_2$, either $f(p_1)\ne f(p_2)$ so both local parts
     are $\Id$, or $f(p_1)=f(p_2)\ne q$ (since $f^{-1}(\{q\})=\{p\}$ has size
     $1$) so its merged preparation is erased at $q$.
@@ -50,9 +46,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     \label{thm:peps_prepared_incident_operator}
     \lean{QuantumCircuit.Party.SourceCircuit.partyOp_partialSourceWord_eq_incidentSourceOp}
     \leanok
-    \uses{def:peps_actual_private_preparation,thm:peps_incident_gate_labels,
-        def:peps_canonical_source_residual,thm:peps_partial_fixed_layout,
-        def:peps_incident_source_word}
+    \uses{def:peps_actual_private_preparation,thm:peps_incident_gate_labels,def:peps_canonical_source_residual,thm:peps_partial_fixed_layout,def:peps_incident_source_word}
     Let $\mathcal W:a\to b$ be a chronological circuit with private product
     input $\psi$ (Definition~\ref{def:peps_actual_private_preparation}) and
     all-party partial choice $\xi$ with incident gate labels $\eta=\xi_p$
@@ -72,8 +66,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
 
 \begin{proof}
     \leanok
-    \uses{def:peps_incident_source_word,
-        thm:peps_incident_source_word_well_defined}
+    \uses{def:peps_incident_source_word,thm:peps_incident_source_word_well_defined}
     The choice $\xi$ itself has incident labels $\xi_p$, so by
     Definition~\ref{def:peps_incident_source_word} and
     Lemma~\ref{thm:peps_incident_source_word_well_defined}, $D_{p,\xi_p}$ is
@@ -86,8 +79,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     \lean{QuantumCircuit.Party.pairFactorMatrix}
     \lean{QuantumCircuit.Party.SourceInventory.slotSiteEquiv}
     \leanok
-    \uses{def:peps_source_inventory,def:peps_source_slots,
-        def:peps_source_register_operator_word}
+    \uses{def:peps_source_inventory,def:peps_source_slots,def:peps_source_register_operator_word}
     Let $R=((p_i,q_i))_{i=0}^{n-1}$ be an ordered pair-source list with
     endpoint spaces $U_i,V_i$ of finite orthonormal bases, let $A_i$ and $B_i$
     be operators on $U_i$ and $V_i$, and let the source registers stand in
@@ -109,11 +101,9 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
 
 \begin{lemma}[Restriction retains the ordered endpoint operators]
     \label{thm:peps_restricted_ordered_endpoint_operators}
-    \lean{QuantumCircuit.Party.SourceInventory.partyOp_endpointWord,
-        QuantumCircuit.Party.SourceInventory.partyOp_endpointWord_congr}
+    \lean{QuantumCircuit.Party.SourceInventory.partyOp_endpointWord}
     \leanok
-    \uses{def:peps_ordered_endpoint_register_operators,
-        def:peps_source_register_operator_word,thm:peps_party_restriction}
+    \uses{def:peps_ordered_endpoint_register_operators,def:peps_source_register_operator_word,thm:peps_party_restriction,thm:peps_source_register_operator_local_congruence}
     For a party $p$, the endpoint word $Z_R=Z_R(A,B)$
     (Definition~\ref{def:peps_source_register_operator_word}) satisfies, in
     the coordinates of Definition~\ref{def:peps_ordered_endpoint_register_operators},
@@ -140,10 +130,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     \label{def:peps_incident_sampled_endpoint_word}
     \lean{QuantumCircuit.Party.SourceCircuit.incidentSampledEndpointOp}
     \leanok
-    \uses{thm:peps_incident_gate_labels,def:peps_partial_fixed_positions,
-        def:peps_original_sampled_endpoint_factors,
-        def:peps_source_register_operator_word,
-        def:peps_all_party_source_registers}
+    \uses{thm:peps_incident_gate_labels,def:peps_partial_fixed_positions,def:peps_original_sampled_endpoint_factors,def:peps_source_register_operator_word,def:peps_all_party_source_registers}
     For a chronological circuit $\mathcal W:a\to b$ with all-party
     source-register list $S_{\rm all}$, fix incident label assignments
     $\eta,\theta$ at $p$, enumerate the source occurrences incident to $p$ in
@@ -180,8 +167,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     \label{thm:peps_incident_sampled_endpoint_comparison}
     \lean{QuantumCircuit.Party.SourceCircuit.partyOp_sampledEndpointWord_eq_incidentSampledEndpointOp}
     \leanok
-    \uses{def:peps_incident_sampled_endpoint_word,
-        def:peps_actual_sampled_endpoint_word,thm:peps_incident_gate_labels}
+    \uses{def:peps_incident_sampled_endpoint_word,def:peps_actual_sampled_endpoint_word,thm:peps_incident_gate_labels}
     For a chronological circuit $\mathcal W:a\to b$, all-party choices $\xi,\zeta$,
     the endpoint matrix families, sample number $k$, and Gaussian arrays $\omega$
     of Definition~\ref{def:peps_incident_sampled_endpoint_word}, and a global
@@ -201,8 +187,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_restricted_ordered_endpoint_operators,
-        thm:peps_incident_gate_labels}
+    \uses{thm:peps_restricted_ordered_endpoint_operators,thm:peps_incident_gate_labels}
     By Lemma~\ref{thm:peps_restricted_ordered_endpoint_operators},
     $U^{\rm all}_{\xi,\zeta,j,\omega}|_{p_{\rm all}}$ and
     $U_{p,\xi_p,\zeta_p,j_p,\omega}$ depend only on the endpoint operators at
@@ -218,8 +203,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     \label{def:peps_incident_sampled_physical_factor}
     \lean{QuantumCircuit.Party.SourceCircuit.incidentSampledPhysicalFactor}
     \leanok
-    \uses{def:peps_incident_source_word,def:peps_incident_sampled_endpoint_word,
-        def:peps_selected_physical_private_basis,def:peps_private_product_input}
+    \uses{def:peps_incident_source_word,def:peps_incident_sampled_endpoint_word,def:peps_selected_physical_private_basis,def:peps_private_product_input}
     For $d:P\to\N$, party enumeration $p_0,\ldots,p_{m-1}$ with physical
     register list $h_d$ ($\mathcal H_{p_i}=\C^{d_{p_i}}$), private output list $c$,
     and chronological circuit $\mathcal W:a\to h_dc$ with product input $\psi$
@@ -253,8 +237,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     \label{thm:peps_incident_sampled_physical_factor_comparison}
     \lean{QuantumCircuit.Party.SourceCircuit.sampledPhysicalFactor_eq_incidentSampledPhysicalFactor}
     \leanok
-    \uses{def:peps_incident_sampled_physical_factor,
-        thm:peps_actual_sampled_physical_factors,thm:peps_incident_gate_labels}
+    \uses{def:peps_incident_sampled_physical_factor,thm:peps_actual_sampled_physical_factors,thm:peps_incident_gate_labels}
     In the setting of Definition~\ref{def:peps_incident_sampled_physical_factor},
     for all-party choices $\xi,\zeta$ and a global sample assignment $j$ with
     restriction $j_p(i)=j(e_i)$, the local physical factor
@@ -270,9 +253,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_prepared_incident_operator,
-        thm:peps_incident_sampled_endpoint_comparison,
-        def:peps_incident_sampled_physical_factor}
+    \uses{thm:peps_prepared_incident_operator,thm:peps_incident_sampled_endpoint_comparison,def:peps_incident_sampled_physical_factor}
     By Lemma~\ref{thm:peps_prepared_incident_operator} and
     Lemma~\ref{thm:peps_incident_sampled_endpoint_comparison}, the matrices of
     $T_\xi|_{p_{\rm all}}$, $T_\zeta|_{p_{\rm all}}$, and
@@ -286,8 +267,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     \label{thm:peps_incident_source_sample_compatibility}
     \lean{QuantumCircuit.Party.SourceCircuit.restrict_sourceSampleAssignment_eq}
     \leanok
-    \uses{def:peps_original_source_sample_indices,
-        def:peps_local_source_sample_indices,def:peps_partial_fixed_positions}
+    \uses{def:peps_original_source_sample_indices,def:peps_local_source_sample_indices,def:peps_partial_fixed_positions}
     Let $\tau:\mathcal E\to\mathcal S$ be the canonical bijection between original
     source positions $\mathcal E$ and distributed sample positions $\mathcal S$
     (Definition~\ref{def:peps_original_source_sample_indices}), and let
@@ -305,8 +285,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
 
 \begin{proof}
     \leanok
-    \uses{def:peps_original_source_sample_indices,
-        def:peps_local_source_sample_indices}
+    \uses{def:peps_original_source_sample_indices,def:peps_local_source_sample_indices}
     By Definition~\ref{def:peps_original_source_sample_indices} and
     Definition~\ref{def:peps_local_source_sample_indices}, $\tau_p(i)=\tau(e_i)$,
     so $j^{\rm samp}(\tau_p(i))=j(\tau^{-1}(\tau(e_i)))=j(e_i)=j_p(i)$,
@@ -317,9 +296,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     \label{thm:peps_incident_pure_sampled_physical_sum}
     \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum}
     \leanok
-    \uses{def:peps_incident_sampled_physical_factor,
-        thm:peps_incident_sampled_physical_factor_comparison,
-        thm:peps_actual_pure_sampled_physical_sum}
+    \uses{def:peps_incident_sampled_physical_factor,thm:peps_incident_sampled_physical_factor_comparison,thm:peps_actual_pure_sampled_physical_sum}
     For finite $P$, in the setting of
     Definition~\ref{def:peps_incident_sampled_physical_factor} and
     Lemma~\ref{thm:peps_actual_pure_sampled_physical_sum} with $N$ source
@@ -339,8 +316,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_actual_pure_sampled_physical_sum,
-        thm:peps_incident_sampled_physical_factor_comparison}
+    \uses{thm:peps_actual_pure_sampled_physical_sum,thm:peps_incident_sampled_physical_factor_comparison}
     Substitute $M^{\xi,\zeta}_{j,p_{\rm all}}=M^{\rm inc}_{p,\xi_p,\zeta_p,j_p,\omega}$
     from~(\ref{eq:peps_incident_sampled_physical_factor_comparison}) into each
     summand of~(\ref{eq:peps_actual_pure_sampled_physical_sum}) of

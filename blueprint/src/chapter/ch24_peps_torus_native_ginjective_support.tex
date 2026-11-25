@@ -7,7 +7,7 @@
         TNLean.PEPS.IsGInjective.isGInjective_torusIncidentSite,
         TNLean.PEPS.torusGClosure_one_eq_stateCoeff_torusIncidentSite}
     \leanok
-    \uses{lem:peps_torus_singleton_geometry, def:peps_g_injective}
+    \uses{lem:peps_torus_singleton_geometry,def:peps_g_injective}
     Let $G$ be a finite group and let a four-leg tensor be $G$-injective
     for the regular representation. On a native square torus with
     both periods at least three, identify its four virtual labels with
@@ -34,8 +34,7 @@
     \lean{TNLean.PEPS.IsGInjective.range_regionReducedDensity_torus_singleton,
         TNLean.PEPS.IsGInjective.rank_regionReducedDensity_torus_singleton}
     \leanok
-    \uses{lem:peps_native_regular_incident_injectivity,
-        def:peps_region_reduced_density, def:peps_region_ground_space}
+    \uses{lem:peps_native_regular_incident_injectivity,def:peps_region_reduced_density,def:peps_region_ground_space}
     Place one regular $G$-injective four-leg tensor at every site of a
     native square torus whose periods are at least three. For its
     untwisted closed vector, the physical density of every site $v$
@@ -47,8 +46,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_torus_singleton_support,
-        lem:peps_native_regular_incident_injectivity}
+    \uses{thm:peps_regular_torus_singleton_support,lem:peps_native_regular_incident_injectivity}
     Express native $G$-injectivity on the incident bonds and
     apply the single-site support and rank statements.
 \end{proof}
@@ -58,8 +56,7 @@
     \lean{TNLean.PEPS.regionGroundSpace_torus_singleton_eq_of_torusGClosure_one_eq,
         TNLean.PEPS.card_group_eq_of_torusGClosure_one_eq}
     \leanok
-    \uses{lem:peps_native_regular_incident_injectivity,
-        def:peps_g_injective, def:peps_region_ground_space}
+    \uses{lem:peps_native_regular_incident_injectivity,def:peps_g_injective,def:peps_region_ground_space}
     Consider two native four-leg regular $G$-injective tensors with
     the same physical space on a square torus whose periods are at
     least three. If their untwisted closed coefficient vectors agree,
@@ -73,8 +70,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_torus_local_rigidity,
-        lem:peps_native_regular_incident_injectivity}
+    \uses{thm:peps_regular_torus_local_rigidity,lem:peps_native_regular_incident_injectivity}
     Identity native closures are the ordinary graph contractions.
     The incident-bond descriptions remain $G$-injective, so the local
     ground-space and group-order rigidity statements apply.

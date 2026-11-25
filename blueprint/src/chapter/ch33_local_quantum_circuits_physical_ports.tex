@@ -44,7 +44,7 @@ It does not identify the unrestricted local-channel model with the source's phas
         KrausFamily.IsTP.encode,
         KrausFamily.map_encode_map_embed}
     \leanok
-    \uses{def:mpu_initialized_basis_inclusion, thm:mpu_initialized_isometry_synthesis}
+    \uses{def:mpu_initialized_basis_inclusion,thm:mpu_initialized_isometry_synthesis}
     An injection $e\colon\alpha\hookrightarrow\beta$ of finite sets defines an isometry $E=\sum_a\ket{e(a)}\bra{a}$ ($E^\dagger E=I$) and the encoding $\mathcal E(X)=EXE^\dagger$. For $x_0\in\alpha$, the completed decoder
     \begin{align}
         D(Y) & =E^\dagger YE+\sum_{b\notin e(\alpha)}\bra{b}Y\ket{b}\,\ketbra{x_0}{x_0}\notag
@@ -72,7 +72,7 @@ It does not identify the unrestricted local-channel model with the source's phas
 
 \begin{lemma}[Product onsite coding on arbitrary chain inputs]
     \label{lem:qc_product_register_encoding}
-    \uses{def:qc_onsite_channel, lem:qc_register_code_completion}
+    \uses{def:qc_onsite_channel,lem:qc_register_code_completion}
     \lean{QuantumCircuit.encodeCircuit,
         QuantumCircuit.decodeCircuit,
         QuantumCircuit.map_encodeCircuit,
@@ -99,7 +99,7 @@ It does not identify the unrestricted local-channel model with the source's phas
 
 \begin{lemma}[Encoding a native channel layer]
     \label{thm:qc_encode_native_channel_layer}
-    \uses{def:qc_local_channel_circuit, lem:qc_product_register_encoding}
+    \uses{def:qc_local_channel_circuit,lem:qc_product_register_encoding}
     \lean{QuantumCircuit.Layer.exists_encoded}
     \leanok
     Let $\Lambda$ be a layer of CPTP channels on pairwise disjoint bonds and onsite channels at
@@ -109,7 +109,7 @@ It does not identify the unrestricted local-channel model with the source's phas
     $\widehat\Lambda\circ\mathcal E_e=\mathcal E_f\circ\Lambda$.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_register_code_completion, lem:qc_product_register_encoding}
+    \uses{lem:qc_register_code_completion,lem:qc_product_register_encoding}
     \leanok
     The output bases of a CPTP map are nonempty, so the target of every $f_i$ has a point in
     the image of $f_i$. Carry every channel on a bond and every onsite channel along the
@@ -144,7 +144,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
 
 \begin{lemma}[A fixed-register word for a bounded native protocol]
     \label{thm:qc_fixed_register_word}
-    \uses{def:qc_dimension_bounded_protocol, lem:qc_product_register_encoding}
+    \uses{def:qc_dimension_bounded_protocol,lem:qc_product_register_encoding}
     \lean{QuantumCircuit.Circuit.exists_seq_encoded,
         QuantumCircuit.IsBoundedProtocol.exists_seq_encoded}
     \leanok
@@ -156,7 +156,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
     $\Phi_w\circ\mathcal E_e=\mathcal E_f\circ\Psi$.
 \end{lemma}
 \begin{proof}
-    \uses{thm:qc_encode_native_channel_layer, lem:qc_product_register_encoding}
+    \uses{thm:qc_encode_native_channel_layer,lem:qc_product_register_encoding}
     \leanok
     By induction on the layers of $\Psi$. The protocol without layers is replaced by the encoding
     of the identity layer along $e$ and $f$ (Lemma~\ref{thm:qc_encode_native_channel_layer}), a
@@ -203,9 +203,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
     $\Gamma_\Lambda\circ\iota=\iota\circ\Lambda$.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_port_matching_swaps, thm:qc_encode_native_channel_layer,
-        lem:qc_whole_site_channels, thm:qc_physical_port_unitary_dilation,
-        thm:qc_appended_environment_composition}
+    \uses{lem:qc_port_matching_swaps,thm:qc_encode_native_channel_layer,lem:qc_whole_site_channels,thm:qc_physical_port_unitary_dilation,thm:qc_appended_environment_composition}
     \leanok
     Let $C$ be the set of the left ends $j$ of the bonds $\{j,j+1\}$ of $\Lambda$. Since $N\ge2$,
     the disjointness of the bonds gives $j+1\notin C$ for $j\in C$. For each $t<k$ run three
@@ -226,8 +224,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
 
 \begin{lemma}[Uniform bounded-register matching simulation]
     \label{thm:qc_bounded_physical_port_simulation}
-    \uses{def:qc_physical_port_protocol, lem:qc_register_code_completion,
-        thm:qc_native_port_layer}
+    \uses{def:qc_physical_port_protocol,lem:qc_register_code_completion,thm:qc_native_port_layer}
     \lean{QuantumCircuit.IsBoundedProtocol.exists_portRing}
     \leanok
     Fix $d\ge1$ and $k\ge0$, and consider a ring of $N\ge2$ sites with $2k+1$ qudits of dimension
@@ -246,8 +243,7 @@ alphabet, and then realizes those operations on the fixed physical ports.
     acts on the two port wires alone and the environments stay at their sites.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_register_code_completion, thm:qc_encode_native_channel_layer,
-        thm:qc_native_port_layer, thm:qc_appended_environment_composition}
+    \uses{lem:qc_register_code_completion,thm:qc_encode_native_channel_layer,thm:qc_native_port_layer,thm:qc_appended_environment_composition}
     \leanok
     By induction on the layers of $\Psi$. Every basis along $\Psi$ has between $1$ and
     $B\le d^k$ elements, so it has an injection into the registers. Encode each layer along the
@@ -266,7 +262,7 @@ that also charges every onsite operation.
 
 \begin{lemma}[Product-zero port and data codes]
     \label{thm:qc_physical_port_codes}
-    \uses{lem:qc_product_register_encoding, def:qc_physical_port_protocol}
+    \uses{lem:qc_product_register_encoding,def:qc_physical_port_protocol}
     \lean{QuantumCircuit.portWireEmbedding,
         QuantumCircuit.exists_portRing_recode}
     \leanok
@@ -285,8 +281,7 @@ that also charges every onsite operation.
     \end{align}
 \end{lemma}
 \begin{proof}
-    \uses{thm:qc_encode_native_channel_layer, lem:qc_whole_site_channels,
-        lem:qc_product_register_encoding}
+    \uses{thm:qc_encode_native_channel_layer,lem:qc_whole_site_channels,lem:qc_product_register_encoding}
     \leanok
     Encode the identity layer on the single sites along $a$ and $a'$
     (Lemma~\ref{thm:qc_encode_native_channel_layer}) and realize the encoded layer of channels on
@@ -296,8 +291,7 @@ that also charges every onsite operation.
 
 \begin{lemma}[Bounded protocols between codes on the wires]
     \label{lem:qc_physical_register_encoding}
-    \uses{thm:qc_bounded_physical_port_simulation, thm:qc_physical_port_codes,
-        def:qc_dimension_bounded_protocol}
+    \uses{thm:qc_bounded_physical_port_simulation,thm:qc_physical_port_codes,def:qc_dimension_bounded_protocol}
     \lean{QuantumCircuit.IsBoundedProtocol.exists_portRing_of_code}
     \leanok
     Let $N\ge2$, $d\ge1$ and $B\le d^k$, and let $\Psi$ be a native protocol of depth $T$ whose
@@ -326,8 +320,7 @@ that also charges every onsite operation.
     every environment stays at its site.
 \end{lemma}
 \begin{proof}
-    \uses{thm:qc_physical_port_codes, thm:qc_bounded_physical_port_simulation,
-        thm:qc_appended_environment_composition}
+    \uses{thm:qc_physical_port_codes,thm:qc_bounded_physical_port_simulation,thm:qc_appended_environment_composition}
     \leanok
     The bases of $\Psi$ have between $1$ and $B\le d^k$ elements, so they have sitewise
     injections $e$ and $f$ into the registers. Change the code $a$ into the data code of $e$
@@ -362,7 +355,7 @@ its environments at prescribed wires.
 
 \begin{lemma}[Operators on original wires with an appended environment]
     \label{thm:qc_appended_environment_operators}
-    \uses{def:qc_appended_environment, lem:qc_product_register_encoding}
+    \uses{def:qc_appended_environment,lem:qc_product_register_encoding}
     \lean{QuantumCircuit.map_prepareCircuit_apply,
         QuantumCircuit.map_traceCircuit_apply,
         QuantumCircuit.map_relabelCircuit_apply,
@@ -388,7 +381,7 @@ its environments at prescribed wires.
 
 \begin{lemma}[Composition with disjoint fresh environments]
     \label{thm:qc_appended_environment_composition}
-    \uses{def:qc_physical_port_protocol, thm:qc_appended_environment_operators}
+    \uses{def:qc_physical_port_protocol,thm:qc_appended_environment_operators}
     \lean{QuantumCircuit.isUnitaryDilation_id,
         QuantumCircuit.IsUnitaryDilation.mono,
         QuantumCircuit.IsUnitaryDilation.comp}
@@ -418,7 +411,7 @@ its environments at prescribed wires.
 
 \begin{lemma}[Fresh onsite unitary dilations]
     \label{thm:qc_fresh_onsite_unitary_dilation}
-    \uses{def:qc_appended_environment, def:qc_physical_port_protocol}
+    \uses{def:qc_appended_environment,def:qc_physical_port_protocol}
     \lean{KrausFamily.IsTP.exists_unitary_dilation,
         QuantumCircuit.Layer.IsUnitaryOff,
         QuantumCircuit.Layer.isUnitaryDilation}
@@ -446,7 +439,7 @@ its environments at prescribed wires.
 
 \begin{lemma}[Same-depth unitary realization with one final discard]
     \label{thm:qc_physical_port_unitary_dilation}
-    \uses{def:qc_physical_port_protocol, def:qc_appended_environment}
+    \uses{def:qc_physical_port_protocol,def:qc_appended_environment}
     \lean{QuantumCircuit.Circuit.IsUnitaryOff,
         QuantumCircuit.Circuit.isUnitaryOff_of_forall_isUnitary,
         QuantumCircuit.Circuit.isUnitaryDilation}
@@ -464,8 +457,7 @@ its environments at prescribed wires.
     and hence $((\mathcal D_F\circ\operatorname{Ad}_U\circ\mathcal I_E)\otimes\operatorname{id}_R)=\Phi\otimes\operatorname{id}_R$ for any reference $R$. A circuit of unitary gates satisfies the hypothesis for every $D$, and every protocol of depth at most $T$ on nonempty input bases satisfies~(\ref{eq:qc_physical_port_dilation}) with $D$ the set of all wires.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:qc_appended_environment_operators, thm:qc_fresh_onsite_unitary_dilation,
-        thm:qc_appended_environment_composition}
+    \uses{thm:qc_appended_environment_operators,thm:qc_fresh_onsite_unitary_dilation,thm:qc_appended_environment_composition}
     By induction on the layers: the sequence without layers is the identity, of depth $0$
     (Lemma~\ref{thm:qc_appended_environment_composition}), every layer is dilated at its own
     depth by Lemma~\ref{thm:qc_fresh_onsite_unitary_dilation}, and the dilations compose
@@ -545,8 +537,7 @@ its environments at prescribed wires.
 \begin{lemma}[Bounded pure-state conversion on the original ports]
     \label{lem:qc_bounded_port_pure_output}
     \discussion{8640}
-    \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
-        lem:qc_physical_register_encoding, thm:qc_physical_port_pure_output}
+    \uses{def:qc_dimension_bounded_protocol,thm:qc_physical_port_codes,lem:qc_physical_register_encoding,thm:qc_physical_port_pure_output}
     Fix $d\ge2$ and an intermediate dimension bound $B$. Let $N\ge2$,
     let $\Psi$ be a $B$-dimension-bounded native protocol of depth $T$,
     and suppose
@@ -573,8 +564,7 @@ its environments at prescribed wires.
     of $N$. No adaptive protocol-block or control condition is asserted.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_register_code_completion, lem:qc_physical_register_encoding,
-        thm:qc_physical_port_pure_output}
+    \uses{lem:qc_register_code_completion,lem:qc_physical_register_encoding,thm:qc_physical_port_pure_output}
     The explicit port code is an isometry, so $V_{\rm port}\psi$ and $V_{\rm port}\phi$ are
     normalized. The channel identity of
     Lemma~\ref{lem:qc_physical_register_encoding} gives
@@ -592,8 +582,7 @@ its environments at prescribed wires.
 \begin{lemma}[Approximate pure-state conversion on the original ports]
     \label{lem:qc_bounded_port_approximate_output}
     \discussion{8640}
-    \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
-        def:qc_approx_local_channel_conversion}
+    \uses{def:qc_dimension_bounded_protocol,thm:qc_physical_port_codes,def:qc_approx_local_channel_conversion}
     \lean{QuantumCircuit.IsBoundedProtocol.exists_portRing_unit_product_approx}
     \leanok
     Fix $d\ge2$ and an intermediate dimension bound $B$. Let $N\ge2$ and
@@ -619,7 +608,7 @@ its environments at prescribed wires.
     $B$ before the chain length.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_physical_register_encoding, thm:qc_physical_port_unitary_dilation}
+    \uses{lem:qc_physical_register_encoding,thm:qc_physical_port_unitary_dilation}
     \leanok
     Construct the actual port channel and its unitary dilation. The full
     dilation identity identifies the marginal of its actual output, while

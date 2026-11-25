@@ -106,7 +106,7 @@ and does not assert a running-time bound.
     \lean{TNLean.MPS.AreaLaw.exists_softTruncation_mpo_of_cluster_order}
     \leanok
 
-    \uses{thm:shifted_regional_heat_mpo, lem:trace_chain_linear_combination}
+    \uses{thm:shifted_regional_heat_mpo,lem:trace_chain_linear_combination}
     Let $U=A-\epsilon I\geq0$ have the preceding actual local
     decomposition, and let $m\geq0$, $t>0$, $\ell\geq1$, and
     $b=2(e^{m/t}-1)\leq1$. There are actual operator tensors of
@@ -118,7 +118,7 @@ and does not assert a running-time bound.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:shifted_regional_heat_mpo, lem:trace_chain_linear_combination}
+    \uses{thm:shifted_regional_heat_mpo,lem:trace_chain_linear_combination}
     Expand $h_{m,t}$ as the finite heat sum with coefficients
     $c_a$. Construct each heat approximant directly at time $a/t$,
     and combine its actual tensors by diagonal blocks. Every heat
@@ -134,8 +134,7 @@ and does not assert a running-time bound.
         TNLean.MPS.AreaLaw.exists_softTruncatedHamiltonian_mpo_of_accuracy}
     \leanok
 
-    \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
-        lem:trace_chain_linear_combination}
+    \uses{thm:soft_mpo_cluster_order,lem:local_sum_scalar_mpo,lem:trace_chain_linear_combination}
     Let $h_i$, $0\leq i<N$, be Hermitian matrices on a chain of
     $N+1$ sites of local dimension $q\geq1$. Suppose $h_i$ is supported
     on $\{i,i+1\}$ and $\|h_i\|\leq1$, and write $H=\sum_i h_i$.
@@ -165,8 +164,7 @@ and does not assert a running-time bound.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
-        lem:trace_chain_linear_combination}
+    \uses{thm:soft_mpo_cluster_order,lem:local_sum_scalar_mpo,lem:trace_chain_linear_combination}
     The hypotheses give $m/t\leq1/3$. The strict inequality
     $1/3<\log(3/2)$ gives $b<1$, and every required heat time
     lies in $[0,1/3]$.
@@ -211,8 +209,7 @@ running-time claim and the multi-region spectral argument are not included.
         TNLean.MPS.AreaLaw.exists_softTruncatedHamiltonian_mpo_of_lt_log_two}
     \leanok
 
-    \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
-        lem:trace_chain_linear_combination}
+    \uses{thm:soft_mpo_cluster_order,lem:local_sum_scalar_mpo,lem:trace_chain_linear_combination}
     Keep the chain, the interactions, the set $I$, the regional sum $A$
     and the lower energy $\epsilon I\leq A$ of
     Theorem~\ref{thm:soft_hamiltonian_mpo_accuracy}. Let $m\geq1$,
@@ -233,8 +230,7 @@ running-time claim and the multi-region spectral argument are not included.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:soft_mpo_cluster_order, lem:local_sum_scalar_mpo,
-        lem:trace_chain_linear_combination}
+    \uses{thm:soft_mpo_cluster_order,lem:local_sum_scalar_mpo,lem:trace_chain_linear_combination}
     The hypothesis gives $t>0$ and $m/t<\log2/2$, so every heat time
     $a/t$, $0\leq a\leq m$, satisfies $e^{a/t}\leq e^{\log2/2}=\sqrt2$,
     and every heat-time base is at most $b$. Since $1<\sqrt2<3/2$,

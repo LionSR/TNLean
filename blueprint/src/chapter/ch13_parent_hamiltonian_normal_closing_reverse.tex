@@ -9,7 +9,7 @@ left-multiplied boundary comparison.
     \label{lem:closure_property_boundary_first_products_restrictions}
     \lean{MPSTensor.closure_property_boundary_first_products_of_restrictions}
     \leanok
-    \uses{def:ground_space_map, rem:cyclic_window_operators}
+    \uses{def:ground_space_map,rem:cyclic_window_operators}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $L_0\le M$. Let
     $\psi$ be a vector on $M+1$ sites, and suppose the two length-$(L_0+1)$
     boundary restrictions are represented by
@@ -36,7 +36,7 @@ left-multiplied boundary comparison.
     \label{lem:closure_property_wrapped_mirror_left_word_products_boundary_restrictions}
     \lean{MPSTensor.closure_property_wrapped_mirror_left_word_products_of_boundary_restrictions}
     \leanok
-    \uses{def:ground_space_map, rem:cyclic_window_operators, lem:closure_property_boundary_first_products_restrictions}
+    \uses{def:ground_space_map,rem:cyclic_window_operators,lem:closure_property_boundary_first_products_restrictions}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $L_0\le M$. Let
     $\psi$ be a vector on $M+1$ sites, and let $Y_i(\tau)$ represent the
     length-$(L_0+1)$ cyclic restrictions of $\psi$. Assume that for every
@@ -71,7 +71,7 @@ left-multiplied boundary comparison.
     \label{thm:closure_property_wrapped_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_wrapped_mirror_left_word_products_of_groundSpaceMap}
     \leanok
-    \uses{def:ground_space_map, rem:cyclic_window_operators, thm:closure_property_boundary_restrictions_ground_space_map, lem:closure_property_wrapped_mirror_left_word_products_boundary_restrictions}
+    \uses{def:ground_space_map,rem:cyclic_window_operators,thm:closure_property_boundary_restrictions_ground_space_map,lem:closure_property_wrapped_mirror_left_word_products_boundary_restrictions}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ be an open-chain representation, and
     let $Y_i(\tau)$ represent the length-$(L_0+1)$ cyclic restrictions of
@@ -115,7 +115,7 @@ left-multiplied boundary comparison.
     \label{thm:closure_property_mirror_left_word_products_ground_space}
     \lean{MPSTensor.closure_property_mirror_left_word_products_of_groundSpaceMap}
     \leanok
-    \uses{def:ground_space_map, rem:cyclic_window_operators, thm:closure_property_wrapped_mirror_left_word_products_ground_space, lem:closure_property_boundary_one_sided_products_ground_space_map}
+    \uses{def:ground_space_map,rem:cyclic_window_operators,thm:closure_property_wrapped_mirror_left_word_products_ground_space,lem:closure_property_boundary_one_sided_products_ground_space_map}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $L_0<M$, and
     $D\ge1$. Let $\psi=\Gamma_{M+1}(X)$ be an open-chain representation, and
     let $Y_i(\tau)$ represent the length-$(L_0+1)$ cyclic restrictions of
@@ -158,7 +158,7 @@ left-multiplied boundary comparison.
     \label{lem:closure_property_fixed_boundary_letter_chain_ground_space}
     \lean{MPSTensor.closure_property_fixed_boundary_letter_eq_of_chainGroundSpace}
     \leanok
-    \uses{def:chain_ground_space, rem:cyclic_window_operators, lem:chain_ground_space_window_witnesses, thm:boundary_closing_right_products_chain_ground_space}
+    \uses{def:chain_ground_space,rem:cyclic_window_operators,lem:chain_ground_space_window_witnesses,thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let
     $L_0<M$, and let $\psi\in\mathcal G_{M+1,L_0+1}(A)$ with
     $\psi=\Gamma_{M+1}(X)$. Let $R_j$ denote restriction to the first physical
@@ -197,7 +197,7 @@ left-multiplied boundary comparison.
     \label{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
     \lean{MPSTensor.closure_property_auxiliary_boundary_product_eq_of_groundSpaceMap}
     \leanok
-    \uses{def:l_blk_injective, def:ground_space_map, rem:cyclic_window_operators, thm:closure_property_mirror_left_word_products_ground_space, thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
+    \uses{def:l_blk_injective,def:ground_space_map,rem:cyclic_window_operators,thm:closure_property_mirror_left_word_products_ground_space,thm:closure_property_auxiliary_boundary_product_ground_space_left_words}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let $\psi$ be a
     state on the chain of length $M+1$ with open-chain representation
     $\psi=\Gamma_{M+1}(X)$. Let $Y_i(\tau)$ be matrices satisfying
@@ -254,7 +254,7 @@ left-multiplied boundary comparison.
     \label{thm:boundary_closing_word_equation_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_closing_product_eq_of_chainGroundSpace}
     \leanok
-    \uses{def:chain_ground_space, def:ground_space_map, rem:cyclic_window_operators}
+    \uses{def:chain_ground_space,def:ground_space_map,rem:cyclic_window_operators}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
     $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
     $\psi=\Gamma_{M+1}(X)$. Let $Y_i(\tau)$ be matrices satisfying
@@ -271,7 +271,7 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \leanok
-    \uses{thm:closure_property_auxiliary_boundary_product_chain_ground_space, thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
+    \uses{thm:closure_property_auxiliary_boundary_product_chain_ground_space,thm:boundary_closing_product_pointwise_compatible_boundary_assignments}
     Lemma~\ref{thm:closure_property_auxiliary_boundary_product_chain_ground_space}
     gives boundary conditions $\rho^+_{j,\sigma}$ and
     $\rho^-_{j,\sigma}$ satisfying
@@ -307,7 +307,7 @@ left-multiplied boundary comparison.
     \label{thm:boundary_closing_right_products_chain_ground_space}
     \lean{MPSTensor.closure_property_boundary_right_products_eq_of_chainGroundSpace}
     \leanok
-    \uses{thm:boundary_closing_word_equation_chain_ground_space, lem:padded_complement_annihilation}
+    \uses{thm:boundary_closing_word_equation_chain_ground_space,lem:padded_complement_annihilation}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$. Let
     $\psi\in\mathcal G_{M+1,L_0+1}(A)$ have an open-chain representation
     $\psi=\Gamma_{M+1}(X)$. Let $Y_i(\tau)$ be matrices satisfying
@@ -351,7 +351,7 @@ left-multiplied boundary comparison.
     \label{thm:wrapped_mirror_witness_agree_chain_ground_space}
     \lean{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}
     \leanok
-    \uses{thm:reduced_wrapped_boundary_compatibilities, lem:wrapped_mirror_right_products_determine, thm:boundary_closing_right_products_chain_ground_space}
+    \uses{thm:reduced_wrapped_boundary_compatibilities,lem:wrapped_mirror_right_products_determine,thm:boundary_closing_right_products_chain_ground_space}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, let $N\ge2$,
     $L_0+1<N$, and $L_0<L\le N$, and let
     $\psi\in\mathcal G_{N,L}(A)$ have an open-chain representation
@@ -446,7 +446,7 @@ left-multiplied boundary comparison.
     \label{thm:full_ring_boundary_change_of_cut}
     \lean{MPSTensor.groundSpaceMap_mul_eq_of_cyclicTranslate_groundSpaceMap_eq}
     \leanok
-    \uses{def:ground_space_map, def:parent_cyclic_translate_state}
+    \uses{def:ground_space_map,def:parent_cyclic_translate_state}
     Let $A$ be any tensor. If
     \begin{align}
         T_{L_0}\!\left(\Gamma_{L_0+1}(X)\right)
@@ -475,7 +475,7 @@ left-multiplied boundary comparison.
     \label{thm:full_ring_boundary_intertwines_step}
     \lean{MPSTensor.full_ring_boundary_intertwines_of_cyclicTranslate_groundSpaceMap_eq}
     \leanok
-    \uses{def:l_blk_injective, def:ground_space_map, def:parent_cyclic_translate_state}
+    \uses{def:l_blk_injective,def:ground_space_map,def:parent_cyclic_translate_state}
     Let $A$ be $L_0$-block-injective with $L_0>0$. If
     \begin{align}
         T_{L_0}\!\left(\Gamma_{L_0+1}(X)\right)
@@ -487,7 +487,7 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \leanok
-    \uses{thm:full_ring_boundary_change_of_cut, thm:ground_space_map_injective_blk}
+    \uses{thm:full_ring_boundary_change_of_cut,thm:ground_space_map_injective_blk}
     Lemma~\ref{thm:full_ring_boundary_change_of_cut} gives
     \begin{align}
         \Gamma_{L_0}(XA^j)
@@ -509,7 +509,7 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_cyclic_translate_preserves_chain_space, thm:cyclic_normal_open_chain_range_reduction, thm:full_ring_boundary_intertwines_step, thm:parent_cyclic_translate_add, thm:ground_space_map_injective_blk, thm:wordspan_blk_inj_succ, lem:boundary_matrix_commutes_long_words}
+    \uses{lem:parent_cyclic_translate_preserves_chain_space,thm:cyclic_normal_open_chain_range_reduction,thm:full_ring_boundary_intertwines_step,thm:parent_cyclic_translate_add,thm:ground_space_map_injective_blk,thm:wordspan_blk_inj_succ,lem:boundary_matrix_commutes_long_words}
     Let $s$ denote the cut shift by $L_0$ and $Y_i$ the boundary matrix of
     the translated state at cut $i$. Translation invariance of the chain space,
     the cyclic open-chain reduction, and the composition law yield compatible
@@ -530,7 +530,7 @@ left-multiplied boundary comparison.
     \label{thm:full_ring_ground_space_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring}
     \leanok
-    \uses{def:l_blk_injective, def:mpv_submodule}
+    \uses{def:l_blk_injective,def:mpv_submodule}
     If $A$ is $L_0$-block-injective with $L_0>0$ and $D\ge1$, then
     \begin{align}
         \mathcal G_{L_0+1,L_0+1}(A)
@@ -541,7 +541,7 @@ left-multiplied boundary comparison.
 
 \begin{proof}
     \leanok
-    \uses{thm:cyclic_normal_open_chain_range_reduction, thm:full_ring_boundary_intertwines, thm:ground_space_map_mpv_of_long_word_commutes}
+    \uses{thm:cyclic_normal_open_chain_range_reduction,thm:full_ring_boundary_intertwines,thm:ground_space_map_mpv_of_long_word_commutes}
     Let $\psi\in\mathcal G_{L_0+1,L_0+1}(A)$. The cyclic open-chain reduction
     gives $\psi=\Gamma_{L_0+1}(X)$. Lemma~\ref{thm:full_ring_boundary_intertwines}
     shows that $X$ commutes with every letter, and hence with every word of
@@ -562,14 +562,14 @@ theorem replaces the complementary-word comparison.
     \label{thm:chain_ground_space_eq_mpv_blk}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule}
     \leanok
-    \uses{def:chain_ground_space, def:mpv_submodule, def:injective}
+    \uses{def:chain_ground_space,def:mpv_submodule,def:injective}
     If $A$ is injective, $D \ge 1$, $N \ge 2$, and $1 < L \le N$, then
     $\mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{lem:contiguous_mem_ground_space, thm:boundary_matrix_commutes, thm:ground_space_map_injective, lem:mpv_mem_chain_ground_space}
+    \uses{lem:contiguous_mem_ground_space,thm:boundary_matrix_commutes,thm:ground_space_map_injective,lem:mpv_mem_chain_ground_space}
     Let $\psi \in \mathcal G_{N,L}(A)$. The non-wrapping window conditions and
     Lemma~\ref{lem:contiguous_mem_ground_space} imply $\psi \in G_{N}(A)$, so
     $\psi = \Gamma_{N}(X)$ for some boundary matrix $X$. The periodic boundary
@@ -584,7 +584,7 @@ theorem replaces the complementary-word comparison.
     \label{thm:normal_range_reduction_containment}
     \lean{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction}
     \leanok
-    \uses{def:chain_ground_space, def:mpv_submodule, def:normal, def:l_blk_injective, thm:cyclic_normal_open_chain_range_reduction, thm:reduced_wrapped_boundary_compatibilities, thm:wrapped_mirror_witness_agree_chain_ground_space, thm:conditional_normal_range_reduction_witness_comparison}
+    \uses{def:chain_ground_space,def:mpv_submodule,def:normal,def:l_blk_injective,thm:cyclic_normal_open_chain_range_reduction,thm:reduced_wrapped_boundary_compatibilities,thm:wrapped_mirror_witness_agree_chain_ground_space,thm:conditional_normal_range_reduction_witness_comparison}
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites,
     with $N \ge 2$, $L_0+1\le N$, and $L_0 < L \le N$, then
     $\mathcal G_{N,L}(A) \subseteq \spn\bigl\{V^{(N)}(A)\bigr\}$.
@@ -592,7 +592,7 @@ theorem replaces the complementary-word comparison.
 
 \begin{proof}
     \leanok
-    \uses{lem:cyclic_window_range_antitonicity, thm:reduced_wrapped_boundary_compatibilities, thm:conditional_normal_range_reduction_witness_comparison, lem:padded_complement_annihilation, thm:full_ring_ground_space_containment}
+    \uses{lem:cyclic_window_range_antitonicity,thm:reduced_wrapped_boundary_compatibilities,thm:conditional_normal_range_reduction_witness_comparison,lem:padded_complement_annihilation,thm:full_ring_ground_space_containment}
     If $N=L_0+1$, range antitonicity gives
     \begin{align}
         \mathcal G_{N,L}(A)
@@ -621,7 +621,7 @@ theorem replaces the complementary-word comparison.
     \label{thm:chain_ground_space_eq_mpv_normal}
     \lean{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}
     \leanok
-    \uses{thm:normal_range_reduction_containment, lem:mpv_mem_chain_ground_space, def:normal, def:l_blk_injective}
+    \uses{thm:normal_range_reduction_containment,lem:mpv_mem_chain_ground_space,def:normal,def:l_blk_injective}
     If $A$ is normal, $D \ge 1$, and injective after blocking $L_0>0$ sites,
     with $N \ge 2$, $L_0+1\le N$, and $L_0 < L \le N$, then
     $\mathcal G_{N,L}(A) = \spn\bigl\{V^{(N)}(A)\bigr\}$.
@@ -631,7 +631,7 @@ theorem replaces the complementary-word comparison.
     \label{thm:parent_hamiltonian_unique_gs}
     \lean{MPSTensor.parentHamiltonian_unique_gs}
     \leanok
-    \uses{def:chain_ground_space, def:l_blk_injective, def:has_unique_ground_state}
+    \uses{def:chain_ground_space,def:l_blk_injective,def:has_unique_ground_state}
     If $D \ge 1$, $A$ is injective after blocking $L_0>0$ sites, and
     $L_0 < L \le N$, then the parent Hamiltonian of interaction range $L$ has
     a unique periodic ground state: $V^{(N)}(A)\ne0$, and the ground space at
@@ -643,7 +643,7 @@ theorem replaces the complementary-word comparison.
 
 \begin{proof}
     \leanok
-    \uses{def:normal, thm:chain_ground_space_eq_mpv_normal, thm:mpv_ne_zero_blk_injective, thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    \uses{def:normal,thm:chain_ground_space_eq_mpv_normal,thm:mpv_ne_zero_blk_injective,thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     Block injectivity at the positive length $L_0$ makes $A$ normal. Hence
     Lemma~\ref{thm:chain_ground_space_eq_mpv_normal} gives
     \begin{align}
@@ -680,7 +680,7 @@ theorem replaces the complementary-word comparison.
     \label{thm:unique_gs_injective}
     \lean{MPSTensor.parentHamiltonian_unique_gs_injective}
     \leanok
-    \uses{def:chain_ground_space, def:l_blk_injective, def:has_unique_ground_state}
+    \uses{def:chain_ground_space,def:l_blk_injective,def:has_unique_ground_state}
     If $A$ becomes injective after blocking $L_0 > 0$ sites and $D \ge 1$,
     the parent Hamiltonian with interaction range $2L_0$ has a unique ground
     state on every periodic chain with $N \ge 2L_0$: $V^{(N)}(A)\ne0$ and
@@ -699,7 +699,7 @@ theorem replaces the complementary-word comparison.
     \label{thm:unique_gs_normal}
     \lean{MPSTensor.parentHamiltonian_unique_gs_normal}
     \leanok
-    \uses{def:chain_ground_space, def:normal, def:l_blk_injective, def:has_unique_ground_state}
+    \uses{def:chain_ground_space,def:normal,def:l_blk_injective,def:has_unique_ground_state}
     If $A$ is normal, becomes injective after blocking $L_0 > 0$ sites, and
     $D \ge 1$, then the parent Hamiltonian with interaction range $L_0 + 1$
     has a unique ground state on every periodic chain with $L_0+1\le N$:

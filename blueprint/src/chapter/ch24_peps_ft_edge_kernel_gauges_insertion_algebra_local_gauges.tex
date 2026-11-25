@@ -18,7 +18,7 @@
     \label{thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
     \lean{TNLean.PEPS.isEdgeBlockedInsertionAlgebraIsomorphism}
     \leanok
-    \uses{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property, thm:peps_edgeBlockedThreeSiteInjective, thm:peps_virtualInsertionPhysicalRealization, thm:peps_edgeInsertedCoeff_endpointPhysicalRealization, thm:peps_edgeInsertedCoeff_injective, thm:peps_physical_to_virtual_insertion, thm:peps_sameState_edgeBlockedCoeff_eq, def:peps_edgeInsertedCoeff}
+    \uses{def:peps_edgeBlockedInsertionAlgebraIsomorphism_property,thm:peps_edgeBlockedThreeSiteInjective,thm:peps_virtualInsertionPhysicalRealization,thm:peps_edgeInsertedCoeff_endpointPhysicalRealization,thm:peps_edgeInsertedCoeff_injective,thm:peps_physical_to_virtual_insertion,thm:peps_sameState_edgeBlockedCoeff_eq,def:peps_edgeInsertedCoeff}
     If the edge-blocked three-site chains of $A$ and $B$ at $e$ are injective, $D_A,D_B>0$, and $A$ and $B$ define the same PEPS state, then (\ref{eq:peps_edge_blocked_insertion_alg_iso}) holds.
     % Scope restriction: the unrestricted Section 3 statement requires deriving
     % positive bond dimensions from injectivity; see
@@ -106,7 +106,7 @@
     \label{thm:peps_exists_edgeGaugeFamily}
     \lean{TNLean.PEPS.exists_edgeGaugeFamily}
     \leanok
-    \uses{thm:peps_edgeBlockedThreeSiteInjective, thm:peps_edgeBlockedInsertionAlgebraIsomorphism, thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
+    \uses{thm:peps_edgeBlockedThreeSiteInjective,thm:peps_edgeBlockedInsertionAlgebraIsomorphism,thm:peps_edgeGaugeFromInsertionAlgebraIsomorphism}
     Let $A$ and $B$ be vertex-injective PEPS tensors defining the same state with $D_A=D_B>0$. Then there exist $X_e\in\GL(D_A(e))$ and $\C$-algebra isomorphisms $\Phi_e:\MN{D_A(e)}\to\MN{D_B(e)}$ for every edge $e$ such that $C_A(e,\sigma,M)=C_B(e,\sigma,\Phi_e(M))$ and $\Phi_e(M)=\phi_{h_e}(X_eMX_e^{-1})$ for all $\sigma$ and $M$, where $\phi_{h_e}$ is induced by $h_e:D_A(e)=D_B(e)$.
 \end{lemma}
 \begin{proof}\leanok
@@ -145,7 +145,7 @@
     \label{def:peps_hasFactorizedLocalGauge}
     \lean{TNLean.PEPS.HasFactorizedLocalGauge}
     \leanok
-    \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
+    \uses{def:peps_localTensorMap,def:peps_localLeftInverse}
     In \cite[Section~3]{Molnar2018NormalPEPS}, for $A,B$ with $D_A=D_B$ at a vertex $v$, let $\mathcal T^A_v$ be the local tensor map of $A$, $L^A_v$ its left inverse, and $\Pi^A_v=\mathcal T^A_vL^A_v$. A factorized local gauge datum at $v$ consists of $X_e\in\GL(D_A(e))$ ($e\ni v$) such that for all local virtual configurations $\eta,\eta'$,
     \begin{align}
         \Pi^A_v B_v(\eta,-)
@@ -175,7 +175,7 @@
     \label{thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula}
     \lean{TNLean.PEPS.hasFactorizedLocalGauge_of_localGaugeFormula}
     \leanok
-    \uses{def:peps_blockedMiddleGaugeFormula, def:peps_hasFactorizedLocalGauge}
+    \uses{def:peps_blockedMiddleGaugeFormula,def:peps_hasFactorizedLocalGauge}
     If (\ref{eq:peps_blocked_middle_gauge_formula}) holds at $v$ with matrices $X_e$, then (\ref{eq:peps_has_factorized_local_gauge}) holds at $v$ with the same $X_e$.
     % Open: derive the displayed blocked-middle formula from equality of PEPS
     % states by the edge-centred three-site reduction.
@@ -188,7 +188,7 @@
     \label{thm:peps_localGauge_exists_of_blockedMiddleGaugeFormula}
     \lean{TNLean.PEPS.localGauge_exists_of_blockedMiddleGaugeFormula}
     \leanok
-    \uses{def:peps_blockedMiddleGaugeFormula, thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula, thm:localGauge_exists}
+    \uses{def:peps_blockedMiddleGaugeFormula,thm:peps_hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula,thm:localGauge_exists}
     If $X_e\in\GL(D_A(e))$ ($e\ni v$) satisfy (\ref{eq:peps_blocked_middle_gauge_formula}), then $(X_e)_{e\ni v}$ is a local gauge at $v$.
 \end{lemma}
 \begin{proof}\leanok

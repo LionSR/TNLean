@@ -36,7 +36,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:ground_space_map_es, def:gram_reshuffle, def:primitive_bulk_observable}
+    \uses{def:ground_space_map_es,def:gram_reshuffle,def:primitive_bulk_observable}
     Pair both sides of the first identity with matrix-unit boundary vectors.
     The resulting finite sums agree term by term.
     Insertion transfers multiply under consecutive tensor products,
@@ -58,7 +58,7 @@
     $E^\ell E_XE^r\to\eta_A(X)P_\rho$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:primitive_insertion_expectation, thm:primitive_fnw_remainder_power}
+    \uses{def:primitive_insertion_expectation,thm:primitive_fnw_remainder_power}
     Substitution into the rank-one projection gives the first identity.
     For $n\geq1$, the decomposition
     $E^n=P_\rho+(E-P_\rho)^n$ and decay of the complementary powers
@@ -74,7 +74,7 @@
     free intervals tend to infinity.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_insertion_boundary_identity, thm:primitive_insertion_transfer_limit}
+    \uses{thm:primitive_insertion_boundary_identity,thm:primitive_insertion_transfer_limit}
     Apply the continuous linear reshuffling map to the insertion limit.
 \end{proof}
 
@@ -95,9 +95,7 @@
     for all $\psi\in G_N$ with $\|\psi\|\leq1$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_insertion_gram_limit, thm:primitive_ground_space_gram_tendsto_fixed_point,
-        thm:primitive_ground_space_map_eventual_inverse_gram_bound,
-        thm:injective_boundary_compression_norm}
+    \uses{thm:primitive_insertion_gram_limit,thm:primitive_ground_space_gram_tendsto_fixed_point,thm:primitive_ground_space_map_eventual_inverse_gram_bound,thm:injective_boundary_compression_norm}
     Subtract $\eta_A(X)\Gamma_N^*\Gamma_N$ from the limiting boundary
     compression. The difference tends to zero. The boundary maps are
     eventually injective and their inverse Gram operators remain bounded.
@@ -120,7 +118,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_bulk_ground_compression, thm:injective_boundary_compression_norm}
+    \uses{thm:primitive_bulk_ground_compression,thm:injective_boundary_compression_norm}
     The projection norm is bounded by the centered compression norm.
     Squaring preserves its zero limit. For unit vectors, the scalar
     expectation deviation is bounded by the scalar compression norm.
@@ -166,7 +164,7 @@
     \cite[Section~3, equations (3.1)--(3.2b)]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:primitive_insertion_expectation, thm:primitive_insertion_positive}
+    \uses{def:primitive_insertion_expectation,thm:primitive_insertion_positive}
     Linearity follows from linearity of the insertion and the trace.
     The positive numerator and denominator give positivity.
     At a fixed point, $E^m(\rho)=\rho$, so the identity insertion
@@ -189,7 +187,7 @@
     $\|X_{\ell,r}\psi_N\|^2\to\operatorname{Re}\eta_A(X^*X)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_bulk_ground_vector_limits, def:primitive_bulk_observable}
+    \uses{thm:primitive_bulk_ground_vector_limits,def:primitive_bulk_observable}
     The interior inclusion preserves products and adjoints, so
     $\langle\psi_N,(X^*X)_{\ell,r}\psi_N\rangle
         =\|X_{\ell,r}\psi_N\|^2$.
@@ -220,8 +218,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_bulk_excitation_norm_limit, thm:primitive_bulk_ground_vector_limits,
-        thm:commutator_gap_projection_limit}
+    \uses{thm:primitive_bulk_excitation_norm_limit,thm:primitive_bulk_ground_vector_limits,thm:commutator_gap_projection_limit}
     The excitation norm squared tends to $\operatorname{Re}\eta_A(X^*X)$,
     while the squared norm of its full ground-space projection tends to zero.
     Take limits in the finite-volume commutator gap inequality.
@@ -238,7 +235,7 @@
     \cite[Section~3, equations (3.1)--(3.2b)]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:local_interval_coordinate_inclusion, def:primitive_bulk_observable}
+    \uses{thm:local_interval_coordinate_inclusion,def:primitive_bulk_observable}
     Write $\sigma=(\sigma_1,\sigma_2,\sigma_3)$ and $\tau=(\tau_1,\tau_2,\tau_3)$
     for the restrictions of configurations to the first $b$ sites, the middle
     $N$ sites, and the last $c$ sites. The interval inclusion formula gives
@@ -274,7 +271,7 @@
     \cite[Section~3, equations (3.1)--(3.2b)]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_insertion_local_state, thm:primitive_insertion_positive}
+    \uses{thm:primitive_insertion_local_state,thm:primitive_insertion_positive}
     Positivity and complex linearity give a positive functional on the
     finite matrix algebra. Its norm is its value at the identity, which is
     one. A positive complex-linear functional preserves adjoints.
@@ -333,9 +330,7 @@
     no spectral-gap assumption is made.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:finite_open_interaction_matrix,
-        def:fixed_local_commutator_observable,
-        lem:qc_placed_operators, thm:bulk_observable_algebra}
+    \uses{def:finite_open_interaction_matrix,def:fixed_local_commutator_observable,lem:qc_placed_operators,thm:bulk_observable_algebra}
     Terms disjoint from the support of $X$ have zero commutator. The remaining
     terms are precisely the translates in the enlarged interval. Reindex
     their sum and use multiplicativity of the interval inclusion. Multiplying
@@ -356,7 +351,7 @@
         \to\operatorname{Re}\eta_A(Y)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_bulk_ground_vector_limits, thm:finite_open_commutator_locality}
+    \uses{thm:primitive_bulk_ground_vector_limits,thm:finite_open_commutator_locality}
     The commutator energy operator is the inclusion of $Y$ starting at $n$.
     Apply the primitive local expectation limit to $Y$.
     Conjugate symmetry of the inner product preserves its real part.
@@ -371,8 +366,7 @@
     space at every length $N_i$, whose norms are eventually one.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_ground_space_map_eventual_inverse_gram_bound,
-        def:ground_space_map_es}
+    \uses{thm:primitive_ground_space_map_eventual_inverse_gram_bound,def:ground_space_map_es}
     Choose a nonzero matrix-unit boundary vector $u$ and set
     $\psi_i=\|\Gamma_{N_i}u\|^{-1}\Gamma_{N_i}u$, with zero inverse
     interpreted as zero. The boundary map is eventually injective, so these
@@ -402,10 +396,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_local_commutator_energy_limit,
-        thm:primitive_bulk_excitation_norm_limit,
-        thm:primitive_bulk_ground_vector_limits, thm:commutator_gap_projection_limit,
-        thm:finite_open_commutator_locality}
+    \uses{thm:primitive_local_commutator_energy_limit,thm:primitive_bulk_excitation_norm_limit,thm:primitive_bulk_ground_vector_limits,thm:commutator_gap_projection_limit,thm:finite_open_commutator_locality}
     The excitation norm squared tends to $\operatorname{Re}\eta_A(X^*X)$;
     its full ground-space projection tends to zero. The canonical matrix
     interaction sum is the open parent Hamiltonian. Apply the commutator
@@ -424,9 +415,7 @@
     The interaction is $h=I-P_{G_R(A)}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:normal_from_primitive_posdef, thm:normal_open_gap_every_sufficient_range,
-        thm:open_parent_hamiltonian_kernel_ground_space,
-        thm:primitive_unit_boundary_approximants, thm:primitive_local_commutator_gap}
+    \uses{thm:normal_from_primitive_posdef,thm:normal_open_gap_every_sufficient_range,thm:open_parent_hamiltonian_kernel_ground_space,thm:primitive_unit_boundary_approximants,thm:primitive_local_commutator_gap}
     Primitivity and positive definiteness imply normality.
     The dimension bound gives injectivity at $D^4$ and hence at $R-1$.
     The open-chain kernel is therefore the MPS ground space, and the normal
@@ -470,8 +459,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_bulk_commutator_gap_reduction,
-        thm:primitive_local_commutator_energy_limit, thm:finite_open_commutator_locality}
+    \uses{thm:primitive_bulk_commutator_gap_reduction,thm:primitive_local_commutator_energy_limit,thm:finite_open_commutator_locality}
     The open matrix sum represents the open interaction Hamiltonian.
     Its commutator energy tends to the expectation of the fixed local patch.
     Apply the primitive boundary commutator reduction, which derives the
@@ -492,11 +480,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:normal_from_primitive_posdef, thm:normal_open_gap_every_sufficient_range,
-        thm:open_positive_parent_gap, thm:open_parent_interaction_kernel_equal,
-        thm:open_parent_hamiltonian_kernel_ground_space,
-        thm:primitive_unit_boundary_approximants,
-        thm:primitive_local_open_interaction_commutator_gap}
+    \uses{thm:normal_from_primitive_posdef,thm:normal_open_gap_every_sufficient_range,thm:open_positive_parent_gap,thm:open_parent_interaction_kernel_equal,thm:open_parent_hamiltonian_kernel_ground_space,thm:primitive_unit_boundary_approximants,thm:primitive_local_open_interaction_commutator_gap}
     The canonical open Hamiltonian has a uniform positive gap and the MPS
     ground-space kernel. Positive local comparison transfers the gap and
     preserves that kernel. Choose eventually normalized boundary vectors
@@ -617,8 +601,7 @@
     for every quasi-local observable $X$. No primitivity or purity is asserted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mps_quasi_local_expectation, def:mps_compatible_local_state,
-        thm:qca_compatible_state_evaluation, thm:qca_compatible_state_extension}
+    \uses{def:mps_quasi_local_expectation,def:mps_compatible_local_state,thm:qca_compatible_state_evaluation,thm:qca_compatible_state_extension}
     Apply the completion theorem for compatible local states. Its finite-region
     evaluation formula gives the asserted restriction, and interval evaluation
     gives the original trace insertion formula.
@@ -673,8 +656,7 @@
     no purity conclusion is asserted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mps_finite_region_translation_invariance,
-        thm:mps_quasi_local_expectation_state, def:qca_quasi_local_translation}
+    \uses{thm:mps_finite_region_translation_invariance,thm:mps_quasi_local_expectation_state,def:qca_quasi_local_translation}
     The equality holds on every finite-region algebra. Translation and the
     completed expectation are continuous, so it extends from the dense
     algebraic local algebra to its completion.
@@ -690,7 +672,7 @@
     the completed state satisfies $\omega_A(j_{a,k}(X))=\eta_A(X)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mps_quasi_local_expectation_state, thm:quasi_local_interval_observable}
+    \uses{thm:mps_quasi_local_expectation_state,thm:quasi_local_interval_observable}
     Apply interval evaluation after mapping the matrix observable to
     the interval algebra. The inverse coordinate maps cancel.
 \end{proof}
@@ -718,8 +700,7 @@
     \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_local_positive_parent_commutator_gap,
-        thm:mps_quasi_local_interval_expectation, thm:quasi_local_interval_observable}
+    \uses{thm:primitive_local_positive_parent_commutator_gap,thm:mps_quasi_local_interval_expectation,thm:quasi_local_interval_observable}
     The interval inclusion preserves products and adjoints. Evaluate both
     sides with the trace insertion formula and apply the finite-interval
     primitive-sector bound.
@@ -864,9 +845,7 @@
     or purity of a completed state is inferred.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:sector_compression_assembly, thm:primitive_bulk_ground_compression,
-        thm:bulk_cross_compression_decay, thm:inequivalent_block_ground_space_overlap_decay,
-        thm:bulk_observable_algebra}
+    \uses{thm:sector_compression_assembly,thm:primitive_bulk_ground_compression,thm:bulk_cross_compression_decay,thm:inequivalent_block_ground_space_overlap_decay,thm:bulk_observable_algebra}
     The sector overlaps tend uniformly to zero by inequivalence and
     primitivity. The diagonal compression tends to zero because the
     observable is centered in sector $\alpha$. Every off-diagonal
@@ -1046,8 +1025,7 @@
     pure GVBS ground-state face remains a separate assertion.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:multiblock_local_parent_commutator_gap,
-        thm:mps_quasi_local_interval_expectation, thm:quasi_local_interval_observable}
+    \uses{thm:multiblock_local_parent_commutator_gap,thm:mps_quasi_local_interval_expectation,thm:quasi_local_interval_observable}
     The common finite-interval bound is expressed in the constructed states
     by interval evaluation. The interval inclusions preserve products and
     adjoints, so the centered hypothesis and both terms agree exactly.
@@ -1150,8 +1128,7 @@
     No normalized representatives or invariant matrices are given.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_word_span_primitive_normalization,
-        thm:multiblock_quasi_local_parent_commutator_gap}
+    \uses{thm:block_word_span_primitive_normalization,thm:multiblock_quasi_local_parent_commutator_gap}
     Primitive normalization preserves each block support and simultaneous
     injectivity. Hence it also preserves the combined local support and
     the parent-interaction kernel. Apply the common bound to the normalized
@@ -1242,7 +1219,7 @@
     It is a self-adjoint idempotent. Its inclusion $j_{a,N}(p_A(N))$
     into the quasi-local algebra on the interval beginning at $a$ is also
     a self-adjoint idempotent, including when $N=0$.
-    \uses{def:ground_space_es, thm:quasi_local_interval_observable}
+    \uses{def:ground_space_es,thm:quasi_local_interval_observable}
 \end{definition}
 \begin{proof}\leanok
     Coordinate identification and the interval inclusion preserve products
@@ -1886,8 +1863,7 @@
         MPSTensor.extractWindow_join_cyclicActiveBlock,
         MPSTensor.toEuclideanLin_translationInvariant_term_apply}
     \leanok
-    \uses{def:cyclic_active_block_coordinates,
-        def:open_local_interaction_sum}
+    \uses{def:cyclic_active_block_coordinates,def:open_local_interaction_sum}
     Suppose $W\leq N$, fix a cyclic start $s$, and let $q<W$ satisfy
     $q+R\leq W$. Replacing the range-$R$ subwindow beginning at $s+q$
     changes only the active configuration. Restriction to this subwindow
@@ -1923,10 +1899,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_block_sum_open_gap_all_lengths,
-        thm:ph_primitive_blocks_open_kernel,
-        lem:parent-finite-interval-comparison,
-        lem:open_parent_range_comparison}
+    \uses{thm:primitive_block_sum_open_gap_all_lengths,thm:ph_primitive_blocks_open_kernel,lem:parent-finite-interval-comparison,lem:open_parent_range_comparison}
     Choose a canonical interaction range $W=2p$ above the original range
     and both kernel thresholds, with canonical gap $\delta>0$ uniform in
     the volume. Finite dimensionality and positivity give
@@ -2125,10 +2098,7 @@
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_word_span_primitive_normalization,
-        thm:block-word-span-separation,thm:ph_block_replacement_parent_equality,
-        thm:primitive_multiblock_quasi_local_ground_state_classification,
-        thm:primitive_multiblock_pure_ground_state_classification}
+    \uses{thm:block_word_span_primitive_normalization,thm:block-word-span-separation,thm:ph_block_replacement_parent_equality,thm:primitive_multiblock_quasi_local_ground_state_classification,thm:primitive_multiblock_pure_ground_state_classification}
     Normalize each block by a nonzero rescaling and a virtual gauge.
     These operations preserve every block ground space and the simultaneous
     word span. The weighted joint ground spaces therefore coincide at every

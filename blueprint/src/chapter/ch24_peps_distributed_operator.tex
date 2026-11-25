@@ -311,8 +311,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
     \lean{TNLean.Network.DistributedOperatorContraction.flattening_contractedOperator_column_eq_mul,
         TNLean.Network.DistributedOperatorContraction.rank_flattening_contractedOperator_column_le}
     \leanok
-    \uses{def:compression_operator_operator,def:compression_operator_links,
-        def:compression_operator_alphabets,def:peps_ket_column_dependent_fix_input}
+    \uses{def:compression_operator_operator,def:compression_operator_links,def:compression_operator_alphabets,def:peps_ket_column_dependent_fix_input}
     For $\sigma$ as in Definition~\ref{def:compression_operator_operator}, $z\in\prod_{p\in P}Y_p$, and $S\subseteq P$, let $F_{S,z}$ be the flattening across $S\mid S^c$ of $x\mapsto\sigma(x,z)$, and let $U_{S,z},U_{S^c,z}$ be the partial contractions on $S,S^c$ of the input-fixed local tensors $A_{p,z}(\eta_p,x_p):=A_p(\eta_p;x_p,z_p)$ (Definition~\ref{def:peps_ket_column_dependent_fix_input}). Then
     \begin{align}
         F_{S,z} & =U_{S,z}U_{S^c,z}^{\mathsf T},
@@ -327,8 +326,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_identity_cut_factorization,
-        def:peps_ket_column_dependent_fix_input,def:compression_operator_operator}
+    \uses{thm:peps_identity_cut_factorization,def:peps_ket_column_dependent_fix_input,def:compression_operator_operator}
     By Definitions~\ref{def:compression_operator_operator} and~\ref{def:peps_ket_column_dependent_fix_input}, the identity-bond contraction of $(A_{p,z})_{p\in P}$ on $\mathcal L$ is $x\mapsto\sigma(x,z)$, so Lemma~\ref{thm:peps_identity_cut_factorization} gives (\ref{eq:compression_column_cut_factor}) and (\ref{eq:compression_column_cut_rank}).
 \end{proof}
 

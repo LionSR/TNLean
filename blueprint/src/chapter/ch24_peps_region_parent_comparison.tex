@@ -11,8 +11,7 @@ regions below are finite.
     \lean{TNLean.PEPS.IsRegionParentInteraction.ker_toEuclideanLin,
         TNLean.PEPS.IsRegionParentInteraction.exists_pos_comparison}
     \leanok
-    \uses{def:peps_region_parent_interaction,
-        thm:peps_canonical_region_interaction}
+    \uses{def:peps_region_parent_interaction,thm:peps_canonical_region_interaction}
     Let $h_R$ be a positive regional parent interaction, and let $P_R$
     be the orthogonal projector onto $\mathcal G_R^\perp$. There are
     strictly positive constants $\kappa_R,C_R$ such that
@@ -35,7 +34,7 @@ regions below are finite.
         ManyBody.place_le_place,
         TNLean.PEPS.hamiltonian_ofPlace_comparison}
     \leanok
-    \uses{def:peps_region_parent_hamiltonian, thm:peps_regional_extension_algebra}
+    \uses{def:peps_region_parent_hamiltonian,thm:peps_regional_extension_algebra}
     Extension by the identity on the complementary physical space
     is linear and preserves Loewner order. In particular, if two
     collections $(h_i)_{i\in I}$ and $(k_i)_{i\in I}$ on the same
@@ -65,8 +64,7 @@ regions below are finite.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_region_parent_projection_comparison,
-        thm:peps_region_extension_order}
+    \uses{thm:peps_region_parent_projection_comparison,thm:peps_region_extension_order}
     For a nonempty family take $\kappa=\min_i\kappa_i$ and
     $C=\max_i C_i$ in (\ref{eq:peps_region_parent_bounds}).
     The empty family gives zero Hamiltonians, so any positive

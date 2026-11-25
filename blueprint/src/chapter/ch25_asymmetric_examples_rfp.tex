@@ -186,10 +186,7 @@ Both the physical and auxiliary dimensions are eight.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_twisted_dimer_unitary_factorization,
-        lem:mpdo_twisted_dimer_controlled_flip,
-        thm:mpdo_twisted_dimer_factor_normalization,
-        thm:mpdo_twisted_dimer_flag_factor}
+    \uses{thm:mpdo_twisted_dimer_unitary_factorization,lem:mpdo_twisted_dimer_controlled_flip,thm:mpdo_twisted_dimer_factor_normalization,thm:mpdo_twisted_dimer_flag_factor}
     Put $\sigma'=xP_+-yP_-$. The entries of
     $xP_++(-1)^kyP_-$ on the matched bond subspace are $C_k(u,v)$.
     In a positive-length auxiliary trace of~(\ref{eq:asymex_T_tensor}),
@@ -266,8 +263,7 @@ not establish these equations for arbitrary boundary matrices.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,
-        thm:mpdo_twisted_dimer_is_rfp_via_ts}
+    \uses{thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,thm:mpdo_twisted_dimer_is_rfp_via_ts}
     For $R$, set $h=(25/32)w$. Its spectral probabilities are
     $p_0=25/32$ and $p_1=7/32$. The refinement Kraus operators act by
     \begin{align}
@@ -492,9 +488,7 @@ and trace scalars $m_\alpha$ of
         MPOTensor.BNTLabelTraceScalarFamily.rescale,
         MPOTensor.BNTLabelTraceScalarFamily.rescale_traceScalar}
     \leanok
-    \uses{def:mpdo_diagonal_chi_family,
-        def:mpdo_bnt_label_coefficient_family,
-        def:mpdo_bnt_label_trace_scalar_family}
+    \uses{def:mpdo_diagonal_chi_family,def:mpdo_bnt_label_coefficient_family,def:mpdo_bnt_label_trace_scalar_family}
     Let $\Lambda$ be a label set and let $s_\alpha\in\C$
     for every $\alpha\in\Lambda$. In the algebraic formulas below,
     division is extended by $z/0=0$. Their interpretation as changes
@@ -549,8 +543,7 @@ and trace scalars $m_\alpha$ of
     \lean{MPOTensor.BNTLabelTraceScalarFamily.hasIdempotentCoefficientForm_rescale_iff,
         MPOTensor.BNTLabelTraceScalarFamily.rescale_coefficient_sum}
     \leanok
-    \uses{def:asymex_rescaling,
-        def:mpdo_bnt_label_idempotent_coefficient_form}
+    \uses{def:asymex_rescaling,def:mpdo_bnt_label_idempotent_coefficient_form}
     Suppose $\Lambda$ is finite and every $s_\alpha$ is nonzero.
     The vector $m'$ is idempotent for $c'{}^{(1)}$ if and only if
     $m$ is idempotent for $c^{(1)}$. Explicitly, the equations
@@ -567,8 +560,7 @@ and trace scalars $m_\alpha$ of
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:asymex_rescaling,
-        def:mpdo_bnt_label_idempotent_coefficient_form}
+    \uses{def:asymex_rescaling,def:mpdo_bnt_label_idempotent_coefficient_form}
     Substituting~(\ref{eq:asymex_c_rescale})
     and~(\ref{eq:asymex_m_rescale}) and cancelling the nonzero
     scales in each summand gives
@@ -616,7 +608,7 @@ it remains a vertical component, not the physical tensor $R$.
         P6Compression.oneLabelStacked, P6Compression.oneLabelBlocks,
         P6Compression.oneLabelWeights}
     \leanok
-    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+    \uses{def:mpo_tensor,def:mpo_to_mps,def:mpdo_operator_product}
     Set $M^{(i,j)}=A^i\otimes A^j$, of bond dimension four.
     Its sixteen-letter MPS reading is the target tensor.
     Let $B^{(i,k)}=\sum_jM^{(i,j)}\otimes M^{(j,k)}$ be the stacked
@@ -667,7 +659,7 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
     \label{thm:asymex_one_label_normal}
     \lean{P6Compression.oneLabelTarget_isNormal}
     \leanok
-    \uses{def:asymex_one_label, def:normal}
+    \uses{def:asymex_one_label,def:normal}
     The vertical tensor is normal at blocking length one in the sense
     of Definition~\ref{def:normal}: its sixteen matrices are scaled
     matrix units covering every position of $\MN{4}$.
@@ -686,7 +678,7 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
     \lean{P6Compression.oneLabelCompression, P6Compression.oneLabel_z_eq,
         P6Compression.oneLabel_dim_eq, P6Compression.oneLabel_remainder}
     \leanok
-    \uses{def:asymex_one_label, thm:asym_multiblock}
+    \uses{def:asymex_one_label,thm:asym_multiblock}
     The stacked tensor $B$ has the block triangular form of
     Theorem~\ref{thm:asym_multiblock} for $C_s=\mu_sM$, with an
     eight-dimensional zero complement, $z=8$, and $16=4+4+8$.
@@ -697,7 +689,7 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:asymex_stacked_pair, prop:asym_projector_weighted_sum}
+    \uses{thm:asymex_stacked_pair,prop:asym_projector_weighted_sum}
     For the integer tensors, twice the stacked letter is the sum
     of the two adapted-basis blocks with coefficients $25$ and $7$.
     This is the integer identity of
@@ -751,7 +743,7 @@ $B^a$. Only the virtual legs are closed; the physical pair legs remain open.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:asymex_one_label_compression, prop:asym_compression_trace}
+    \uses{thm:asymex_one_label_compression,prop:asym_compression_trace}
     Lemma~\ref{prop:asym_compression_trace} applied to
     Lemma~\ref{thm:asymex_one_label_compression} gives the two
     weighted target traces. Scalar word evaluation contributes
@@ -784,7 +776,7 @@ in Subsection~\ref{sec:asymex_vertical_dictionary}.
         P6Compression.dimerStacked, P6Compression.dimerBlocks,
         P6Compression.dimerWeights}
     \leanok
-    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpdo_operator_product}
+    \uses{def:mpo_tensor,def:mpo_to_mps,def:mpdo_operator_product}
     For $a=(p,p',k)$ and $b=(q,q',k')$, define
     \begin{align}
         M_f^{ab} & =\delta_{kk'} \frac12C_k(p,p')\tau_k(f)
@@ -846,7 +838,7 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     \label{lem:asymex_dimer_flag_sector}
     \lean{P6Compression.dimerM_eq_smul_flagMPO}
     \leanok
-    \uses{def:asymex_dimer, def:mpdo_twisted_dimer_flag_sectors}
+    \uses{def:asymex_dimer,def:mpdo_twisted_dimer_flag_sectors}
     For each $f\in\{0,1\}$, the sector $M_f$
     of~(\ref{eq:asymex_dimer_letters}) equals $\frac58\widehat M_f$, where
     $\widehat M_f$ is the rescaled flag sector of the twisted quantum dimer
@@ -865,14 +857,13 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
     \label{thm:asymex_dimer_normal}
     \lean{P6Compression.dimerTarget_isNormal}
     \leanok
-    \uses{def:asymex_dimer, def:normal}
+    \uses{def:asymex_dimer,def:normal}
     Each sector $M_f$ is normal at blocking length one in the sense of
     Definition~\ref{def:normal}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:asymex_dimer_flag_sector, thm:normality_rescaling_invariance,
-        thm:mpdo_twisted_dimer_vertical_cf}
+    \uses{lem:asymex_dimer_flag_sector,thm:normality_rescaling_invariance,thm:mpdo_twisted_dimer_vertical_cf}
     By Lemma~\ref{lem:asymex_dimer_flag_sector}, $M_f=\frac58\widehat M_f$.
     Lemma~\ref{thm:mpdo_twisted_dimer_vertical_cf} shows that the rescaled
     flag sector $\widehat M_f$ is normal, and
@@ -919,7 +910,7 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
         P6Compression.dimerFusion_mul_right_eq_right_mul,
         P6Compression.dimerFusion_left_mul_eq_mul_left}
     \leanok
-    \uses{def:asymex_dimer, thm:asym_multiblock}
+    \uses{def:asymex_dimer,thm:asym_multiblock}
     For every pair of sectors $f,f'$, let $B=B_{f,f'}$.
     It has the block triangular form of
     Theorem~\ref{thm:asym_multiblock} for $C_s=\mu_sM_{f+f'+s}$, where
@@ -933,8 +924,7 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:asymex_dimer_sign_rule, thm:asymex_stacked_pair,
-        prop:asym_projector_weighted_sum}
+    \uses{lem:asymex_dimer_sign_rule,thm:asymex_stacked_pair,prop:asym_projector_weighted_sum}
     Twice the integer stacked letter decomposes in the adapted basis
     with coefficients $7,1$, the integer form
     of~(\ref{eq:asymex_dimer_split}), giving the hypotheses of
@@ -1000,7 +990,7 @@ Bell density $\sigma$ in~(\ref{eq:asymex_T_density}).
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:asymex_dimer_compression, prop:asym_compression_trace}
+    \uses{thm:asymex_dimer_compression,prop:asym_compression_trace}
     Lemma~\ref{prop:asym_compression_trace} applied to
     Lemma~\ref{thm:asymex_dimer_compression} gives the two weighted
     target traces. Scalar word evaluation gives the factors

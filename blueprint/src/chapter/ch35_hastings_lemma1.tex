@@ -177,7 +177,7 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
         ManyBody.ChainInteraction.isHermitian_bufferPart_localized,
         TNLean.MPS.AreaLaw.isSupportedOn_localized_sub_self}
     \leanok
-    \uses{thm:hastings_part_commutators, thm:chain_lieb_robinson, thm:hastings_three_way_splitting_sum}
+    \uses{thm:hastings_part_commutators,thm:chain_lieb_robinson,thm:hastings_three_way_splitting_sum}
     In the setting of Lemma~\ref{thm:hastings_part_commutators}, let $q>0$,
     $h=q/\Delta E^2$, $S_B=S_L\cup S_R$, and for real $\ell$ let $K_\bullet$ be
     the neighbourhood $N_\ell(S_\bullet)$ of Lemma~\ref{thm:chain_lieb_robinson}
@@ -212,7 +212,7 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \begin{lemma}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
-    \uses{thm:hastings_localized_parts, def:hastings_spectral_cutoff, thm:hastings_spectral_cutoff_obd, thm:hastings_spectral_cutoff_norm, thm:hastings_spectral_cutoff_support, thm:hastings_spectral_cutoff_commute}
+    \uses{thm:hastings_localized_parts,def:hastings_spectral_cutoff,thm:hastings_spectral_cutoff_obd,thm:hastings_spectral_cutoff_norm,thm:hastings_spectral_cutoff_support,thm:hastings_spectral_cutoff_commute}
     For $\theta>0$ and Hermitian $M_L,M_R$ supported on $X_{1,j}$ and
     $X_{j+1,N}$, let $O_L=1_{[-\theta,\theta]}(M_L)$ and
     $O_R=1_{[-\theta,\theta]}(M_R)$. Then $O_L,O_R$ are commuting orthogonal
@@ -256,7 +256,7 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
         TNLean.MPS.AreaLaw.graphNeighborhood_pathGraph_interval_subset,
         ManyBody.norm_gaussianFilteredTerm_sub_self_le}
     \leanok
-    \uses{thm:hastings_localized_parts, thm:hastings_cutoffs, thm:hastings_part_commutators}
+    \uses{thm:hastings_localized_parts,thm:hastings_cutoffs,thm:hastings_part_commutators}
     Let $\Psi_0$ be a gapped ground vector of $H$ (range $R$, term norm bound
     $J\ge0$, ground energy $E_0$, gap $\Delta E>0$). For cut $j$, buffer width
     $m$, filter parameter $q\ge0$, and localization radius $k$ with
@@ -318,7 +318,7 @@ $\|P_BX-P_0\|$ \cite[lines 877--905]{Hastings2007AreaLaw}.
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx,
         TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx_exp}
     \leanok
-    \uses{def:hastings_interaction_average, thm:chain_lieb_robinson}
+    \uses{def:hastings_interaction_average,thm:chain_lieb_robinson}
     Let $H$ have range $R$, local dimension $d\ge1$, and term norm bound $J$ on
     $L$ sites. Let $H_0,A,B$ be Hermitian with $H-H_0$ supported on $Z$, and let
     $P_B$ be the interaction average of
@@ -380,7 +380,7 @@ $X_{j-l+1,j+l}$.
         ManyBody.IsGapped.sub_smul_one_self,
         ManyBody.groundSpace_sub_smul_one_self}
     \leanok
-    \uses{thm:hastings_three_way_splitting_sum, thm:hastings_three_way_splitting_supports, thm:hastings_part_commutators, thm:hastings_localized_parts, thm:hastings_cutoffs, thm:hastings_gaussian_time_average_stability, thm:hastings_moved_estimate, thm:hastings_interaction_average_last, thm:hastings_boundary_localization}
+    \uses{thm:hastings_three_way_splitting_sum,thm:hastings_three_way_splitting_supports,thm:hastings_part_commutators,thm:hastings_localized_parts,thm:hastings_cutoffs,thm:hastings_gaussian_time_average_stability,thm:hastings_moved_estimate,thm:hastings_interaction_average_last,thm:hastings_boundary_localization}
     Let $H$ have range $R$, term norm bound $J$, unique ground state $\Psi_0$,
     gap $\Delta E>0$, and ground projector
     $P_0=|\Psi_0\rangle\langle\Psi_0|$. Set $\xi=8\max(2v_0/\Delta E,1)$, where
@@ -435,10 +435,7 @@ $X_{j-l+1,j+l}$.
     $e^{-l/(2\xi')}$, as in Lemma~\ref{thm:hastings_positive_factorization}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_cutoff_pair, thm:hastings_moved_estimate,
-        thm:hastings_boundary_factorization, thm:hastings_decay_slack,
-        thm:hastings_positive_factorization, thm:hastings_factorization_rate,
-        thm:hastings_positive_factorization_rate}
+    \uses{thm:hastings_cutoff_pair,thm:hastings_moved_estimate,thm:hastings_boundary_factorization,thm:hastings_decay_slack,thm:hastings_positive_factorization,thm:hastings_factorization_rate,thm:hastings_positive_factorization_rate}
     Shift $H$ so that $E_0=0$. For $l\ge12R+8$, set $s=2l/(3\xi)$,
     $\theta=e^{-s/4}$, $T=s/\Delta E$, $k=\lceil l/4\rceil$, $m=R+k$, and
     $\ell'=l-3R-2k$. Combining Lemmas~\ref{thm:hastings_cutoff_pair},
@@ -489,8 +486,7 @@ $X_{j-l+1,j+l}$.
         TNLean.MPS.AreaLaw.lemmaOneConst_le_pow,
         TNLean.MPS.AreaLaw.sixteen_le_lemmaOneLength_and_le}
     \leanok
-    \uses{thm:hastings_projector_factorization_scaled,
-        thm:hastings_positive_factorization}
+    \uses{thm:hastings_projector_factorization_scaled,thm:hastings_positive_factorization}
     Let $\kappa>6$. There is a constant $K\ge0$, depending only on $R$ and
     $\kappa$, with the following property. Under the assumptions of
     Lemma~\ref{thm:hastings_projector_factorization}, with $\hat\xi$ the
@@ -515,10 +511,7 @@ $X_{j-l+1,j+l}$.
     recorded in~\cite{gap:hastings07_gaussian_average_exponent}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_projector_factorization_scaled,
-        thm:hastings_projector_factorization,
-        thm:hastings_positive_factorization_rate,
-        thm:hastings_factorization_mono}
+    \uses{thm:hastings_projector_factorization_scaled,thm:hastings_projector_factorization,thm:hastings_positive_factorization_rate,thm:hastings_factorization_mono}
     In Lemma~\ref{thm:hastings_projector_factorization} applied to
     $H/\Delta E$ at $\xi'=\kappa\hat\xi$ with $x=J/\Delta E\le\hat\xi$ and
     $\hat\xi\ge16$, the budget parameters satisfy $a=\mathcal O_R(\hat\xi^3)$,
@@ -598,11 +591,7 @@ rate $e^{-l/(2\xi')}$ by Lemma~\ref{thm:hastings_positive_repair}
 % Lean statement pending.
 \begin{theorem}[Approximate factorization of the ground-state projector]
     \label{lem:hastings_lemma1}
-    \uses{thm:hastings_projector_factorization,
-        thm:hastings_effect_from_factorization,
-        thm:hastings_positive_factorization,
-        thm:hastings_lemma1_polynomial_constant,
-        thm:hastings_lemma1_endpoint}
+    \uses{thm:hastings_projector_factorization,thm:hastings_effect_from_factorization,thm:hastings_positive_factorization,thm:hastings_lemma1_polynomial_constant,thm:hastings_lemma1_endpoint}
     Let $H$ satisfy the finite-range, finite-strength, and gap conditions of
     \cite[Lemma~1, lines 246--267]{Hastings2007AreaLaw}. For any $j$ and $l$
     there exist Hermitian positive definite $O_B(j,l),O_L(j,l),O_R(j,l)$ of

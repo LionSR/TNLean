@@ -53,9 +53,7 @@ Section~\ref{sec:area_law_initial_exponent_gain}.
     $m\le B$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_bootstrap_round_log_bound,
-        thm:area_law_initial_exponent_gain_bounds,
-        thm:area_law_bootstrap_margins}
+    \uses{thm:area_law_bootstrap_round_log_bound,thm:area_law_initial_exponent_gain_bounds,thm:area_law_bootstrap_margins}
     By Lemmas~\ref{thm:area_law_initial_exponent_gain_bounds} and
     \ref{thm:area_law_bootstrap_margins},
     \begin{align}
@@ -111,8 +109,7 @@ Section~\ref{sec:area_law_initial_exponent_gain}.
 \end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.Scan.boxEntropy_le_boxError_explicit}
-    \uses{thm:area_law_initial_round_budget_bound,
-        thm:arealaw-physical-box-fixed-exponent}
+    \uses{thm:area_law_initial_round_budget_bound,thm:arealaw-physical-box-fixed-exponent}
     In Proposition~9.5 \cite[lines~788--805]{OpenAI2026AreaLaw}
     (Theorem~\ref{thm:arealaw-physical-box-fixed-exponent}), the logarithmic
     round count $m$ satisfies $m\le B$ by

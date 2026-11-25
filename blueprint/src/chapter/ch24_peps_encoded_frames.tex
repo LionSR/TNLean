@@ -246,11 +246,10 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Canonical coordinates of site registers]
     \label{lem:lattice_site_register_coordinates}
-    \lean{ManyBody.blockConfigEquiv,
-        ManyBody.blockConfigEquiv_apply,
+    \lean{ManyBody.blockConfigEquiv_apply,
         QuantumCircuit.Party.Sheet.refVec_apply}
     \leanok
-    \uses{def:lattice_site_registers}
+    \uses{def:lattice_site_registers,def:qc_blocked_local_channel_conversion}
     The configurations of the site registers, one configuration of the sites
     of each party, are identified with the configurations $c\in[q]^\Lambda$:
     the configuration at a site $x$ is read at its owner $o(x)$. This gives a
@@ -268,11 +267,8 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Canonical coordinates of the registers]
     \label{lem:peps_frame_registers_coordinates}
-    \lean{TNLean.PEPS.EncodedFrame.tagSystem,
-        TNLean.PEPS.EncodedFrame.tagConfigEquiv,
-        TNLean.PEPS.EncodedFrame.layoutSystem,
+    \lean{TNLean.PEPS.EncodedFrame.tagConfigEquiv,
         TNLean.PEPS.EncodedFrame.layoutConfigEquiv,
-        TNLean.PEPS.EncodedFrame.Frame.system,
         TNLean.PEPS.EncodedFrame.Frame.configEquiv}
     \leanok
     \uses{def:peps_frame_registers,lem:lattice_site_register_coordinates}
@@ -415,8 +411,7 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.frameEncoder_submatrix_of_rawProd_eq,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_norm_le_one_and_refVec_sub_le_of_perm}
     \leanok
-    \uses{lem:peps_frame_rewrite_contraction,lem:peps_frame_rewrite_intertwining,
-        lem:peps_frame_telescoping}
+    \uses{lem:peps_frame_rewrite_contraction,lem:peps_frame_rewrite_intertwining,lem:peps_frame_telescoping}
     Under conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data}, if every patch projector $P_i$ and affected
     old-hole projector $Q_t$ satisfies $\lVert(\id-P_i)\Omega\rVert,\lVert(\id-Q_t)\Omega\rVert\le\varepsilon$, then $\lVert M\rVert\le1$ and
     \begin{align}
@@ -592,8 +587,7 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_owners_of_isOpen_inl,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_owners_of_isOpen_inr}
     \leanok
-    \uses{lem:peps_frame_branches,lem:peps_frame_wires,
-        lem:peps_frame_chain_network}
+    \uses{lem:peps_frame_branches,lem:peps_frame_wires,lem:peps_frame_chain_network}
     Assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data} and fix a branch $\beta=(a,s,b)$. Its site operator is
     \begin{align}
         B_aC_sA_b^\dagger
@@ -621,8 +615,7 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_liftBranch_le,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_contractive_approx}
     \leanok
-    \uses{lem:peps_frame_branch_network,lem:peps_frame_chain_truncation,
-        lem:peps_frame_rescale}
+    \uses{lem:peps_frame_branch_network,lem:peps_frame_chain_truncation,lem:peps_frame_rescale}
     Assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data}, let $N$ be the number of branches, and set
     $k=\lceil(4Nm/\delta)^2\rceil+1$ for $\delta>0$ (e.g.\ $\delta=L^{-a}$). Each branch $M_\beta$ is approximated in operator norm within
     $2m/\sqrt k$ by at most $k^{2m}$ product terms with coefficients $\lvert c_{\beta,i}\rvert\le1$, and the rescaled sum
@@ -650,11 +643,7 @@ norm of matrices, rectangular ones included.
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_refVec}
     \leanok
-    \uses{thm:peps_frame_small_rewrite,lem:peps_frame_branches,
-        lem:peps_frame_wires,lem:peps_frame_rescale,
-        lem:peps_frame_approx_reference,thm:peps_group_tensor,
-        thm:peps_frame_small_rewrite_product_terms,
-        thm:peps_frame_small_rewrite_monomials}
+    \uses{thm:peps_frame_small_rewrite,lem:peps_frame_branches,lem:peps_frame_wires,lem:peps_frame_rescale,lem:peps_frame_approx_reference,thm:peps_group_tensor,thm:peps_frame_small_rewrite_product_terms,thm:peps_frame_small_rewrite_monomials}
     In the setting of the frame construction, where every hole and additional patch projector has $\sum_jd_j\le CL^c$
     cylinder terms (\texttt{05-frames.tex}, lines
     34--46), assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data} with $m,r_{\rm old},r_{\rm new}\le b$ and at most $b$ specified parties. Then for every
@@ -770,10 +759,7 @@ pair sources with the same constant.
         TNLean.PEPS.Approximation.resize_step_reading_isSourceBounded_of_le,
         TNLean.PEPS.Approximation.pointTreatment_step_reading_isSourceBounded_of_le}
     \leanok
-    \uses{thm:peps_frame_small_rewrite_gate, lem:peps_party_gate_source_bound,
-        thm:peps_guide_frame_rewrite_events,
-        thm:peps_guide_frame_resize_treatment_gates,
-        thm:peps_guide_frame_reading_gates}
+    \uses{thm:peps_frame_small_rewrite_gate,lem:peps_party_gate_source_bound,thm:peps_guide_frame_rewrite_events,thm:peps_guide_frame_resize_treatment_gates,thm:peps_guide_frame_reading_gates}
     In the setting of Lemma~\ref{thm:peps_frame_small_rewrite_gate}, the
     circuit can be chosen to satisfy the pair-source bound with constant $2b$. The same holds for the
     guide-frame rewrites of Lemma~\ref{thm:peps_guide_frame_rewrite} and, in the dyadic protocol of
@@ -785,15 +771,7 @@ pair sources with the same constant.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_guide_frame_patch_congruence,
-        thm:peps_frame_small_rewrite_polynomial, lem:peps_party_gate_source_bound,
-        thm:peps_original_finite_expansion_bound, def:peps_party_monomial,
-        thm:peps_guide_frame_rewrite, lem:peps_register_reorderings,
-        lem:peps_circuit_source_bound_monomials, def:peps_original_circuit,
-        thm:peps_guide_frame_rewrite_events, lem:peps_treated_true_vertices,
-        thm:peps_guide_frame_resize_treatment_gates,
-        thm:peps_dyadic_sampled_ratio, lem:peps_dyadic_floor,
-        thm:peps_guide_frame_reading_gates, def:peps_dyadic_block_guide}
+    \uses{thm:peps_guide_frame_patch_congruence,thm:peps_frame_small_rewrite_polynomial,lem:peps_party_gate_source_bound,thm:peps_original_finite_expansion_bound,def:peps_party_monomial,thm:peps_guide_frame_rewrite,lem:peps_register_reorderings,lem:peps_circuit_source_bound_monomials,def:peps_original_circuit,thm:peps_guide_frame_rewrite_events,lem:peps_treated_true_vertices,thm:peps_guide_frame_resize_treatment_gates,thm:peps_dyadic_sampled_ratio,lem:peps_dyadic_floor,thm:peps_guide_frame_reading_gates,def:peps_dyadic_block_guide}
     Each monomial in Lemma~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
     $2m\le 2b$ normalized pair sources, and Lemma~\ref{lem:peps_party_gate_source_bound} preserves this bound on
     the gate, while the tag-register exchanges in Lemma~\ref{thm:peps_guide_frame_rewrite} add no nonprivate gates.

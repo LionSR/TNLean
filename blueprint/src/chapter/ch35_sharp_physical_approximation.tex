@@ -80,9 +80,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:independent_truncation_threshold_constant,
-        thm:quarter_power_truncation_filter_scale,
-        thm:squared_chebyshev_error_le_accuracy}
+    \uses{thm:independent_truncation_threshold_constant,thm:quarter_power_truncation_filter_scale,thm:squared_chebyshev_error_le_accuracy}
     Use the universal threshold constant. Increasing its logarithmic
     variable from $1+\log(1/g)+\log(1/\delta)$ to $a$ decreases the tail.
     Apply the quarter-power window choice with gap $4g/5$ and exponent $a$,
@@ -158,9 +156,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:physical_interval_all_accuracy_family,
-        thm:sharp_approximation_scalar_parameters,
-        thm:independent_long_middle_actual_dg_family}
+    \uses{thm:physical_interval_all_accuracy_family,thm:sharp_approximation_scalar_parameters,thm:independent_long_middle_actual_dg_family}
     The bootstrap gives a fixed $0.015$-viable $W_0$ with
     $\dim W_0<(\dim G)D_0^{24}$ before the accuracy or vector is chosen.
     If $|J|\le4\ell_1$, use $\phi=\psi$; the full regional dimension
@@ -200,8 +196,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:physical_dg_normalized_approximation_independent,
-        thm:sharp_approximation_log_rank_budget}
+    \uses{thm:physical_dg_normalized_approximation_independent,thm:sharp_approximation_log_rank_budget}
     Use the integer rank budget and set
     $K_0=22(A+1)(6+2\log(A+1))$ and
     $b=(7C)^{1/4}(5/4)^{1/4}$.
@@ -239,9 +234,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:physical_dg_interval_normalized_approximation,
-        thm:chain_sequential_truncation_eigen,
-        thm:chain_sequential_truncation_sq}
+    \uses{thm:physical_dg_interval_normalized_approximation,thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq}
     Set $\delta_c=\delta/(16(N+1))$.
     The fixed-cut bound gives a common logarithmic rank budget
     $\log r+E$ for every prefix cut, where
@@ -349,9 +342,7 @@ capped estimates with the uncapped exponent printed in
         TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_interval_normalized_approximation_uncapped,
         TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_normalized_isOpenMPS_approximation_uncapped}
     \leanok
-    \uses{thm:physical_dg_gap_upper_bound,
-        thm:physical_dg_interval_normalized_approximation,
-        thm:physical_dg_normalized_mps_approximation}
+    \uses{thm:physical_dg_gap_upper_bound,thm:physical_dg_interval_normalized_approximation,thm:physical_dg_normalized_mps_approximation}
     In the setting of Lemma~\ref{thm:physical_dg_interval_normalized_approximation}
     and Theorem~\ref{thm:physical_dg_normalized_mps_approximation}, the bounds hold
     with $u^3/g+g^{-1/4}a^{3/4}u$ replaced by
@@ -367,9 +358,7 @@ capped estimates with the uncapped exponent printed in
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:physical_dg_gap_upper_bound,
-        thm:physical_dg_interval_normalized_approximation,
-        thm:physical_dg_normalized_mps_approximation}
+    \uses{thm:physical_dg_gap_upper_bound,thm:physical_dg_interval_normalized_approximation,thm:physical_dg_normalized_mps_approximation}
     Since $1/g=\max\{\gamma,1\}/\gamma$ and $\gamma(1/\gamma)^{1/4}\ge1$ for
     $\gamma\ge1$, the capped exponent is at most $\max\{\gamma,1\}$ times the
     uncapped one. The factor is bounded by

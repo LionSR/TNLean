@@ -141,7 +141,7 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
     $\mathcal C_{A,C}(\delta_\eta)=\mathcal N_A(E^\eta)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_dependent_cut, def:peps_dependent_network}
+    \uses{def:peps_dependent_cut,def:peps_dependent_network}
     Expand $M=\sum_\eta M(\eta)\delta_\eta$ and use linearity.
     In the contraction with $M_B$, the factors on $C$ are the entries of
     $B_e$, and the remaining factors are identity entries. Products of
@@ -151,8 +151,8 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{definition}[Products of independently sized physical maps]%
     \label{def:peps_dependent_physical_product}
-    \lean{Matrix.piKronecker,
-        Matrix.piKronecker_mulVec_apply}
+    \uses{def:finite_kronecker_product}
+    \lean{Matrix.piKronecker_mulVec_apply}
     \leanok
     For finite input alphabets $J_v$, arbitrary output alphabets $K_v$, and
     matrices $F_v: \C^{J_v}\to\C^{K_v}$, put
@@ -166,12 +166,9 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{lemma}[Products, single-coordinate actions, and fixed slices]%
     \label{thm:peps_dependent_product_calculus}
-    \lean{Matrix.piKronecker_mul,
-        Matrix.piKronecker_one,
-        Matrix.piKronecker_update_one_mulVec_apply,
-        Matrix.piKronecker_mulVec_eq_self_of_slice}
+    \lean{Matrix.piKronecker_mulVec_eq_self_of_slice}
     \leanok
-    \uses{def:peps_dependent_physical_product}
+    \uses{def:peps_dependent_physical_product,lem:mpdo_tensor_power_laws,thm:peps_four_cut_common_product_algebra,thm:peps_party_product_conjugation}
     Products compose coordinatewise: $(\bigotimes_vF_v)(\bigotimes_vL_v)
         =\bigotimes_v(F_vL_v)$, at both the matrix and linear-map levels.
     Products of identities are identities. The product with $P_v$ at one
@@ -190,10 +187,9 @@ linkwise matching in \cite[Definition~5.1]{Schuch2010PEPS}.
 
 \begin{lemma}[A product range is determined by its slices]%
     \label{thm:peps_dependent_product_range}
-    \lean{Matrix.piKronecker_mulVec_slice_mem_range,
-        Matrix.mem_range_mulVecLin_piKronecker_iff}
+    \lean{Matrix.mem_range_mulVecLin_piKronecker_iff}
     \leanok
-    \uses{def:peps_dependent_physical_product}
+    \uses{def:peps_dependent_physical_product,thm:peps_four_cut_common_product_range}
     Every one-coordinate slice of $\mathcal F\chi$ lies in
     $\operatorname{im}F_v$. If all input and output alphabets are finite,
     the converse holds:

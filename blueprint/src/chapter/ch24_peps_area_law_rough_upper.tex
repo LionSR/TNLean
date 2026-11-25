@@ -69,8 +69,7 @@
     \label{thm:al_actual_sharp_upper}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_sharp_upper}
     \leanok
-    \uses{thm:al_global_schmidt_bell_prevector,def:al_scan_actual_histories,
-        def:al_scan_status_marginals}
+    \uses{thm:al_global_schmidt_bell_prevector,def:al_scan_actual_histories,def:al_scan_status_marginals}
     Fix finite $\Lambda,T\subseteq\mathbb Z^2$ ($T\ne\varnothing$), local
     dimension $q>0$, a unit vector $\Omega_t$ on $\Lambda$, and a collar
     scanner with $K$ bands, initial near region $A\subseteq\Lambda$, scales
@@ -114,9 +113,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_scan_band_nesting,thm:al_scan_receiving_regions,
-        thm:al_augmented_root_compression,thm:al_scan_nested_band_metrics,
-        thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
+    \uses{thm:al_scan_band_nesting,thm:al_scan_receiving_regions,thm:al_augmented_root_compression,thm:al_scan_nested_band_metrics,thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
     Combine all completed and pre-charge partitions up to $nm$ into one finite
     family; terminal maps preserve the partitions and mean-tree weights, and
     Lemma~\ref{thm:al_scan_band_nesting} provides the common band order.
@@ -194,9 +191,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_scan_target_typical_window,thm:al_scan_common_status_budget,
-        thm:al_scan_status_scale_separation,thm:al_moment_weight_smallness,
-        thm:al_scan_common_moment_interval,thm:al_actual_sharp_upper}
+    \uses{thm:al_scan_target_typical_window,thm:al_scan_common_status_budget,thm:al_scan_status_scale_separation,thm:al_moment_weight_smallness,thm:al_scan_common_moment_interval,thm:al_actual_sharp_upper}
     Lemma~\ref{thm:al_scan_target_typical_window} supplies $\Omega_t$, and
     Lemma~\ref{thm:al_scan_common_status_budget} bounds all completed and
     pre-charge statuses on $\Omega_t$ by $B$ in

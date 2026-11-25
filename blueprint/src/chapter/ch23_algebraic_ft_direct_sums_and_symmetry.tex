@@ -14,7 +14,7 @@ Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{lemma}[Gauge equivalence of direct sums with phase-weight absorption]%
     \label{lem:gauge_equiv_block_gauge_phase_weight}
     \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGaugePhase_weight}\leanok
-    \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv, def:gauge_phase_equiv}
+    \uses{lem:tensor_from_blocks_globalGauge_conj,def:gauge_equiv,def:gauge_phase_equiv}
     Let $A_k, B_k$ be block families, and let $X_k \in \GL_{D_k}(\C)$
     and scalars $\zeta_k \in \C$ satisfy
     $B_k^i = \zeta_k \cdot X_k A_k^i X_k^{-1}$ for every block $k$ and
@@ -49,7 +49,7 @@ Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{lemma}[Per-block application of the single-block theorem]\label{lem:multi_block_ft}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_blocks}
     \leanok
-    \uses{def:block_diagonal_tensor, def:injective}
+    \uses{def:block_diagonal_tensor,def:injective}
     If all block tensors $A_k$ are injective and the per-block
     same-MPV condition holds ($A_k$ and $B_k$ generate the same
     MPV family for each~$k$),
@@ -67,7 +67,7 @@ Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{lemma}[Per-block same MPV implies global same MPV]\label{lem:block_to_global_mpv}
     \lean{MPSTensor.sameMPV_toTensorFromBlocks_of_blockSameMPV}
     \leanok
-    \uses{def:block_diagonal_tensor, def:same_mpv}
+    \uses{def:block_diagonal_tensor,def:same_mpv}
     If $A_k$ and $B_k$ generate the same MPV family for each
     block~$k$, then the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$
@@ -88,7 +88,7 @@ Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{lemma}[Gauge equivalence for same-index direct sums]\label{lem:multi_block_global}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_global}
     \leanok
-    \uses{def:block_diagonal_tensor, def:injective, def:same_mpv, lem:multi_block_ft}
+    \uses{def:block_diagonal_tensor,def:injective,def:same_mpv,lem:multi_block_ft}
     If each block $A_k$ is injective and each pair $(A_k, B_k)$ generates
     the same MPV family, then the block-diagonal tensors
     $\bigoplus_k \mu_k A_k$ and $\bigoplus_k \mu_k B_k$ are gauge equivalent.
@@ -110,7 +110,7 @@ Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
     \label{lem:fundamentalTheorem_multiBlock_full}
     \lean{MPSTensor.fundamentalTheorem_multiBlock_full}
     \leanok
-    \uses{def:injective, def:same_mpv, def:gauge_equiv, def:block_diagonal_tensor, lem:tensor_from_blocks_globalGauge_conj}
+    \uses{def:injective,def:same_mpv,def:gauge_equiv,def:block_diagonal_tensor,lem:tensor_from_blocks_globalGauge_conj}
     Let $\{A_k\}_{k=0}^{r-1}$ and $\{B_k\}_{k=0}^{r-1}$ be two families
     of MPS tensors with block dimensions $D_k$, each $A_k$ injective, and
     $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$.
@@ -131,7 +131,7 @@ Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
     \end{align}
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:multi_block_ft, lem:multi_block_global}
+\begin{proof}\leanok\uses{lem:multi_block_ft,lem:multi_block_global}
     Per-block gauge equivalence follows from applying the single-block
     Fundamental Theorem to each block, using injectivity of
     $A_k$ and $\mc{V}(A_k) = \mc{V}(B_k)$.
@@ -187,7 +187,7 @@ Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
 
 \begin{lemma}[MPV invariance under block permutation]\label{lem:mpv_perm_blocks}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_perm}\leanok
-    \uses{def:block_diagonal_tensor, def:same_mpv2}
+    \uses{def:block_diagonal_tensor,def:same_mpv2}
     The $\mathrm{SameMPV}_2$ family of a weighted block-diagonal tensor is
     invariant under permuting the block index set and reindexing the weights
     accordingly.
@@ -201,7 +201,7 @@ Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
 
 \begin{lemma}[MPV invariance under dimension cast]\label{lem:mpv_cast_blocks}
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_cast}\leanok
-    \uses{def:block_diagonal_tensor, def:same_mpv2}
+    \uses{def:block_diagonal_tensor,def:same_mpv2}
     If two block-dimension families agree pointwise, the corresponding
     weighted block-diagonal tensors generate the same $\mathrm{SameMPV}_2$
     family after identifying the blocks along the dimension equalities.
@@ -214,7 +214,7 @@ Lemma~\ref{thm:sector_bnt_equal_global_gauge}.
 
 \begin{lemma}[MPV invariance under block reindexing]\label{lem:mpv_reindex_blocks}
     \lean{MPSTensor.mpv_toTensorFromBlocks_reindex}\leanok
-    \uses{def:block_diagonal_tensor, thm:mpv_decomposition}
+    \uses{def:block_diagonal_tensor,thm:mpv_decomposition}
     Let $e : \{0,\ldots,r'-1\}\simeq\{0,\ldots,r-1\}$ be a bijection of block
     indices. For weights $\mu_k$, block tensors $A_k$, word length $N$, and
     configuration $\sigma$, the coefficient of the block-diagonal MPV is unchanged
@@ -263,7 +263,7 @@ specialization needed here; no additional formal declaration is required.
 
 \begin{theorem}[Fundamental theorem for canonical forms with the same block structure]\label{thm:ft_canonical_form_same_structure}
     \lean{MPSTensor.fundamentalTheorem_canonicalForm_sameStructure}\leanok
-    \uses{lem:canonical_toTensor_eq, lem:multi_block_global}
+    \uses{lem:canonical_toTensor_eq,lem:multi_block_global}
     Let $C$ be a canonical-form record with block weights $\mu_k^C$ and block
     tensors $A_k^C$. Let $\{B_k\}$ be a family of MPS tensors on the same
     block dimensions, and assume that each $A_k^C$ is injective and generates
@@ -272,7 +272,7 @@ specialization needed here; no additional formal declaration is required.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:canonical_toTensor_eq, lem:multi_block_global}
+    \uses{lem:canonical_toTensor_eq,lem:multi_block_global}
     Rewriting $T_C$ as a weighted block-diagonal tensor via
     Lemma~\ref{lem:canonical_toTensor_eq} reduces the claim to the
     multi-block global gauge-equivalence lemma
@@ -283,7 +283,7 @@ specialization needed here; no additional formal declaration is required.
     \label{lem:perBlock_sameMPV_iff_gaugeEquiv}
     \lean{MPSTensor.perBlock_sameMPV_iff_gaugeEquiv}
     \leanok
-    \uses{def:injective, def:same_mpv, def:gauge_equiv}
+    \uses{def:injective,def:same_mpv,def:gauge_equiv}
     Let $\{A_k\}$ be a family of injective block tensors.
     Then $\mc{V}(A_k) = \mc{V}(B_k)$ for all~$k$ if and only if
     $A_k$ and $B_k$ are gauge equivalent for all~$k$.
@@ -319,7 +319,7 @@ yields the scalar law underlying the global-symmetry consequences.
     \label{thm:ti_reduction_corollary}
     \lean{MPSChainTensor.ti_reduction_corollary}
     \leanok
-    \uses{def:injective, def:same_mpv}
+    \uses{def:injective,def:same_mpv}
     Let $A$ and $B$ be MPS tensors of bond dimension $D$ with $A$
     injective.
     Consider the two constant translation-invariant chains

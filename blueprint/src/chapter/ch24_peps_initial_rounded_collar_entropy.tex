@@ -31,8 +31,7 @@ input to the proof of Proposition~9.5, lines~693--729.
     \label{thm:area_law_initial_rounded_collar_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionEntropy_initial_rounded_collar_le_rpow}
     \leanok
-    \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
-        def:area_law_safe_rectangle,def:area_law_bootstrap_parameters}
+    \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,def:area_law_safe_rectangle,def:area_law_bootstrap_parameters}
     Fix a local dimension $q\ge1$, an interaction range $R\in\mathbb N$,
     a term norm bound $J\ge0$, and a gap $\Delta>0$.
     There exist constants $C\ge0$ and $e_0\in(0,1)$, depending only on
@@ -59,9 +58,7 @@ input to the proof of Proposition~9.5, lines~693--729.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_initial_rectangle_shell_entropy,
-        thm:area_law_bootstrap_margins,thm:area_law_bootstrap_collar_clearance,
-        thm:area_law_rounded_collar_power}
+    \uses{thm:area_law_initial_rectangle_shell_entropy,thm:area_law_bootstrap_margins,thm:area_law_bootstrap_collar_clearance,thm:area_law_rounded_collar_power}
     Choose $C$ and $e_0$ from
     Lemma~\ref{thm:area_law_initial_rectangle_shell_entropy}.
     The fixed parameter bounds give $0<\ell<1$, and hence $0<\eta<1$.

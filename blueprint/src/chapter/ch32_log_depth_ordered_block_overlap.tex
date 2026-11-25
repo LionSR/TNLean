@@ -49,10 +49,7 @@ here is a project result.
         =\lVert\iota(P)-\iota(P_\infty)\rVert^2/2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ldp_unit_vector_deficit,
-        thm:ldp_positive_part_overlap_second_order,
-        lem:ldp_overlapping_overlaps_second_order,
-        thm:ldpolar_blocked_transfer}
+    \uses{thm:ldp_unit_vector_deficit,thm:ldp_positive_part_overlap_second_order,lem:ldp_overlapping_overlaps_second_order,thm:ldpolar_blocked_transfer}
     The positive polar tensor has the same transfer map as $B$. Thus
     $\lVert\iota(P)\rVert=\lVert\iota(P_\infty)\rVert=1$ and
     $\langle\iota(P_\infty),\iota(P)\rangle=\alpha$.
@@ -215,7 +212,7 @@ preparation error is estimated separately by a squared-distance inequality.
         \le Cy e^{Cy}$, where $y=Me^{-\gamma q/\xi}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:ldp_positive_part_overlap, thm:ldp_ordered_telescoping_bound}
+    \uses{lem:ldp_positive_part_overlap,thm:ldp_ordered_telescoping_bound}
     Each mixed transfer matrix is within $Ke^{-\gamma\ell/\xi}$ of the
     fixed-point idempotent $e$, whose positive powers have trace one.
     Since $\ell_j\ge q$,
@@ -235,10 +232,7 @@ preparation error is estimated separately by a squared-distance inequality.
         \le Cu e^{Cu}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ldp_ordered_compression_quadratic,
-        thm:ldp_polar_compression_nonnegative,
-        thm:ldp_polar_compression_deficit,
-        thm:ldp_positive_part_overlap_second_order}
+    \uses{thm:ldp_ordered_compression_quadratic,thm:ldp_polar_compression_nonnegative,thm:ldp_polar_compression_deficit,thm:ldp_positive_part_overlap_second_order}
     The fixed-point transfer matrix $e$ satisfies $e^2=e$ and
     $\Tr e=1$. Each factor has scalar compression
     $e\tau_\ell e=\alpha_\ell e$.

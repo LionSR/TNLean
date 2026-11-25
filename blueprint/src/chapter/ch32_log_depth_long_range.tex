@@ -43,7 +43,7 @@ depth $O(q)$.
         MPSPreparation.registerCfg_of_forall_pairSite_ne,
         MPSPreparation.windowGHZState_extend}
     \leanok
-    \uses{thm:ldp_approximating_state_depth, def:ldp_pair_family_fixed_point}
+    \uses{thm:ldp_approximating_state_depth,def:ldp_pair_family_fixed_point}
     Cut the ring of $N$ sites into $M\geq1$ blocks of lengths
     $\ell_k\geq2r_1$. The \emph{register} $R_k$ consists of the last $r_1$
     sites of block $k$, and its \emph{ancilla} of the first $r_1$ sites of
@@ -66,8 +66,7 @@ depth $O(q)$.
     \lean{MPSPreparation.blockLayerOp_mulVec_eq_comp,
         MPSPreparation.pairLayerOp_mulVec_eq_comp}
     \leanok
-    \uses{lem:qc_configuration_layers, def:ldp_window_ghz_state,
-        thm:ldp_approximating_state_depth}
+    \uses{lem:qc_configuration_layers,def:ldp_window_ghz_state,thm:ldp_approximating_state_depth}
     Cut the ring of $N$ sites into $M$ blocks of lengths $\ell_k$. If operators
     $U_k$ on the $\ell_k$ sites of the blocks act by maps $f_k$ of the
     configurations of the blocks, $U_k(v)=v\circ f_k$, then the layer of the
@@ -89,8 +88,7 @@ depth $O(q)$.
     \lean{MPSPreparation.copyShift, MPSPreparation.blockShift,
         MPSPreparation.tailShift, MPSPreparation.exists_blockShiftUnitary}
     \leanok
-    \uses{lem:qc_configuration_layers, thm:qc_bounded_unitary_two_site_gates,
-        thm:ldp_approximating_state_depth}
+    \uses{lem:qc_configuration_layers,thm:qc_bounded_unitary_two_site_gates,thm:ldp_approximating_state_depth}
     Let $r_1\geq1$ and values be taken in $\mathbb Z_d$. There is $C$ such
     that for every $q\geq3r_1$ some unitary on $q$ sites, a product of at most
     $Cq$ gates on neighbouring sites, acts by the map of configurations that
@@ -111,9 +109,7 @@ depth $O(q)$.
     \label{thm:ldp_window_ghz_measurement}
     \lean{MPSPreparation.exists_isOneRoundConversion_windowGHZState}
     \leanok
-    \uses{def:ldp_window_ghz_state, def:qc_measurement_preparation,
-        lem:qc_configuration_layers, lem:ldp_block_layers_configurations,
-        lem:ldp_block_shift, thm:qc_ghz_measurement}
+    \uses{def:ldp_window_ghz_state,def:qc_measurement_preparation,lem:qc_configuration_layers,lem:ldp_block_layers_configurations,lem:ldp_block_shift,thm:qc_ghz_measurement}
     Let $r_1\geq2$. There is $C$ such that for every ring of $N$ sites cut into
     $M\geq1$ blocks of lengths $3r_1\leq\ell_k\leq L$ and every unit vector
     $\alpha$ on $(\C^d)^{\otimes r_1}$, the GHZ-type state on the registers of
@@ -176,8 +172,7 @@ depth $O(q)$.
         MPSPreparation.SparseRegister.gate_interior,
         MPSPreparation.SparseRegister.padding_conj_gates}
     \leanok
-    \uses{thm:ldp_window_ghz_measurement, def:qc_measurement_rounds,
-        thm:qc_register_layer}
+    \uses{thm:ldp_window_ghz_measurement,def:qc_measurement_rounds,thm:qc_register_layer}
     Fix $d\ge1$ and $r_1\ge2$. There is $C$ such that, for every cyclic
     partition into $M\ge1$ blocks of lengths $\ell_k\ge3r_1$ and every unit
     vector $\alpha$ on $(\C^d)^{\otimes r_1}$, the GHZ-type state of
@@ -249,8 +244,7 @@ depth $O(q)$.
         MPSPreparation.sum_star_polarIsoMatrix_mul,
         MPSPreparation.sum_mul_self_le_pow, MPSPreparation.exists_blockSumUnitary}
     \leanok
-    \uses{lem:ldp_sequential_factorization_first_inputs,
-        thm:ldp_approximating_state_depth, lem:ldp_orthogonal_sum_polar}
+    \uses{lem:ldp_sequential_factorization_first_inputs,thm:ldp_approximating_state_depth,lem:ldp_orthogonal_sum_polar}
     Let $A_1,\dots,A_b$ be tensors of bond dimensions $D_j$, and place their bond
     indices side by side, so that the bond index $a$ of block $j$ becomes the
     index $\iota_j(a)$ among $D_1+\cdots+D_b\geq1$ indices; encode these
@@ -281,9 +275,7 @@ depth $O(q)$.
     \lean{MPSPreparation.exists_isOneRoundConversion_sum_blockIsometryState_of_encoding,
         MPSPreparation.exists_isOneRoundConversion_sum_blockIsometryState}
     \leanok
-    \uses{def:qc_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
-        thm:ldp_block_sum_unitary, def:ldp_block_isometry_state,
-        thm:ldp_approximating_state_depth}
+    \uses{def:qc_measurement_circuit_preparation,thm:ldp_window_ghz_measurement,thm:ldp_block_sum_unitary,def:ldp_block_isometry_state,thm:ldp_approximating_state_depth}
     For every family of bond dimensions $D_1,\dots,D_b$ there are $C$ and $L_0$
     such that the following holds. Let $A_j$ be tensors of bond dimensions $D_j$,
     $\omega_j$ unit vectors on $\C^{D_j}\otimes\C^{D_j}$ and $\alpha$ a unit
@@ -321,8 +313,7 @@ depth $O(q)$.
         MPSPreparation.sum_norm_sq_copyApproxVector,
         MPSPreparation.exists_isOneRoundConversion_copyApproxVector}
     \leanok
-    \uses{thm:ldp_orthogonal_blocks_measurement, def:ldp_repeated_block_state,
-        thm:ldp_repeated_block_polar, thm:ldp_approximating_state_depth}
+    \uses{thm:ldp_orthogonal_blocks_measurement,def:ldp_repeated_block_state,thm:ldp_repeated_block_polar,thm:ldp_approximating_state_depth}
     There are $C$ and $L_0$, depending only on $d$ and the bond dimensions
     $D_1,\dots,D_b$, such that the following holds. Let $A$ be the direct sum
     with multiplicities of Definition~\ref{def:ldp_repeated_block_sum}, let
@@ -383,10 +374,7 @@ depth $O(q)$.
     \label{thm:ldp_long_range_measurement_depth}
     \lean{MPSPreparation.exists_isOneRoundConversion_le_log_repeatedBlockSum}
     \leanok
-    \uses{thm:ldp_repeated_block_measurement,
-        thm:ldp_approximation_error_repeated_orthogonal_blocks, lem:ldp_common_gap,
-        thm:ldp_depth_upper_bound_divisible, lem:ldp_depth_log_window,
-        lem:ldp_block_length_threshold_error}
+    \uses{thm:ldp_repeated_block_measurement,thm:ldp_approximation_error_repeated_orthogonal_blocks,lem:ldp_common_gap,thm:ldp_depth_upper_bound_divisible,lem:ldp_depth_log_window,lem:ldp_block_length_threshold_error}
     Let $A$ be the direct sum with multiplicities of
     Definition~\ref{def:ldp_repeated_block_sum}, with $b\geq1$ blocks, every
     block $A_j$ normal in the gauge (\ref{eq:ldp_normal_gauge}) with a positive
@@ -429,8 +417,7 @@ depth $O(q)$.
     \label{lem:ldp_arbitrary_blocked_sectors}
     \lean{MPSTensor.exists_blockTensor_normal_sectors, MPSTensor.exists_blockTensor_normal_sectors_fixedPoints}
     \leanok
-    \uses{thm:cpsv_canonical_form_representative_after_blocking,
-        thm:cpsv_canonical_form_bnt_refinement, thm:ldp_inequivalent_mixed_gap}
+    \uses{thm:cpsv_canonical_form_representative_after_blocking,thm:cpsv_canonical_form_bnt_refinement,thm:ldp_inequivalent_mixed_gap}
     For every tensor $A$, there are $p>0$ and a finite family of gauge-phase inequivalent
     left-canonical normal tensors $B_j$, with nonzero copy weights
     $\mu_{j,k}$, such that at every $M>0$,
@@ -475,10 +462,7 @@ depth $O(q)$.
     \label{lem:ldp_measurement_sector_expansion}
     \lean{MPSPreparation.exists_isOneRoundConversion_le_log_of_mpv_eq_sum}
     \leanok
-    \uses{thm:ldp_injective_on_measurement, thm:ldp_overlapping_unequal_blocks_error,
-        lem:ldp_overlapping_block_injectivity, lem:ldp_overlapping_one_block_chain,
-        lem:ldp_common_mixed_gap, thm:ldp_chain_depth, thm:ldp_short_chain_preparation,
-        lem:ldp_log_threshold_error}
+    \uses{thm:ldp_injective_on_measurement,thm:ldp_overlapping_unequal_blocks_error,lem:ldp_overlapping_block_injectivity,lem:ldp_overlapping_one_block_chain,lem:ldp_common_mixed_gap,thm:ldp_chain_depth,thm:ldp_short_chain_preparation,lem:ldp_log_threshold_error}
     Suppose $\ket{\phi_N(A)}=\sum_j\beta_j(N)\ket{\phi_N(B_j)}$ at every
     positive length, where the $B_j$ are normal and left-canonical, have
     faithful trace-one stationary matrices, and their distinct mixed transfer
@@ -535,8 +519,7 @@ depth $O(q)$.
     \label{lem:ldp_arbitrary_blocked_measurement}
     \lean{MPSPreparation.exists_isOneRoundConversion_blockTensor_le_log, MPSPreparation.exists_isMeasurementConversion_blockTensor_le_log_log}
     \leanok
-    \uses{lem:ldp_arbitrary_blocked_sectors, lem:ldp_measurement_sector_expansion,
-        thm:ldp_nonnormal_loglog}
+    \uses{lem:ldp_arbitrary_blocked_sectors,lem:ldp_measurement_sector_expansion,thm:ldp_nonnormal_loglog}
     For every tensor $A$, each of the following depth bounds holds after a
     fixed positive blocking $p$: $O(\log(M/\varepsilon))$ with measurements
     followed by a circuit, and $O(\log(1+\log(M/\varepsilon)))$ with
@@ -555,7 +538,7 @@ depth $O(q)$.
 
 \begin{theorem}[All translation-invariant MPS with measurements]
     \label{thm:ldp_all_ti_measurement_source}
-    \uses{thm:ldp_long_range_measurement_depth, thm:ldp_overlapping_measurement_depth}
+    \uses{thm:ldp_long_range_measurement_depth,thm:ldp_overlapping_measurement_depth}
     Every translation-invariant MPS of constant bond dimension, short- or
     long-range correlated, is prepared with error $\varepsilon$ in depth
     $O(\log(N/\varepsilon))$ by local circuits assisted by measurements, the

@@ -27,7 +27,7 @@ the number $Np$ of original sites.
     \lean{MPSTensor.groundSpaceMap_blockTensor_blockedConfigEquiv}
     \lean{MPSTensor.blockedConfigLinearIsometryEquiv_groundSpaceMapES}
     \leanok
-    \uses{def:blocked_configuration_isometry, def:blocked_tensor, def:ground_space_map, def:ground_space_map_es}
+    \uses{def:blocked_configuration_isometry,def:blocked_tensor,def:ground_space_map,def:ground_space_map_es}
     For every $x\in\ell^2(\Fin{D}\times\Fin{D})$, the Euclidean boundary maps
     intertwine with the blocked-configuration isometry:
     \begin{align}
@@ -39,7 +39,7 @@ the number $Np$ of original sites.
 
 \begin{proof}
     \leanok
-    \uses{lem:eval_word_block, lem:ground_space_map_apply, thm:ground_space_map_es_frobenius}
+    \uses{lem:eval_word_block,lem:ground_space_map_apply,thm:ground_space_map_es_frobenius}
     For a blocked configuration $J=(J_1,\ldots,J_N)$, its flattened word
     $\sigma$, and a boundary matrix $X\in\MN{D}$, blocked-word evaluation gives
     \begin{align}
@@ -61,7 +61,7 @@ the number $Np$ of original sites.
     \lean{MPSTensor.CPSVCanonicalFormData.%
         groundSpace_blockTensor_eq_iSup_representatives}
     \leanok
-    \uses{def:ground_space_parent, thm:block_sum_local_ground_space}
+    \uses{def:ground_space_parent,thm:block_sum_local_ground_space}
     Let $A=(A^i)$ and $C=(C^i)$ have the same physical alphabet, and suppose
     there is a coisometry $U:\C^D\to\C^n$ such that
     $UU^\dagger=I_n$ and $A^i=U^\dagger C^iU$ for every $i$. Then, for every
@@ -126,8 +126,7 @@ the number $Np$ of original sites.
     \lean{MPSTensor.%
         hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_wordTupleSpanTop_one}
     \leanok
-    \uses{lem:block_diagonal_chain_space_comparison_parent_spanning,
-        thm:chain_ground_space_eq_mpv_blk}
+    \uses{lem:block_diagonal_chain_space_comparison_parent_spanning,thm:chain_ground_space_eq_mpv_blk}
     Let $B=\bigoplus_{j=1}^{g}\mu_jA_j$, where every $\mu_j$ is nonzero and
     every bond dimension is positive. Suppose that the simultaneous one-letter
     evaluations span the product algebra:
@@ -149,8 +148,7 @@ the number $Np$ of original sites.
 
 \begin{proof}
     \leanok
-    \uses{lem:block_diagonal_chain_space_comparison_parent_spanning,
-        thm:chain_ground_space_eq_mpv_blk}
+    \uses{lem:block_diagonal_chain_space_comparison_parent_spanning,thm:chain_ground_space_eq_mpv_blk}
     Equation~(\ref{eq:block_diagonal_one_site_span}) gives common
     coefficients $c_i$ satisfying $\sum_i c_iA_j^i=I_{D_j}$ for every $j$.
     In the restriction-intersection argument of the proof of
@@ -172,8 +170,7 @@ the number $Np$ of original sites.
     \lean{MPSTensor.HasParentHamiltonianGroundSpaceSpanning.%
         of_groundSpace_eq}
     \leanok
-    \uses{def:parent_hamiltonian_ground_space_spanning,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    \uses{def:parent_hamiltonian_ground_space_spanning,thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     Let $B$ and $C$ have the same physical alphabet and satisfy $G_L(B)=G_L(C)$.
     Their periodic chain spaces agree for every $N$:
     \begin{align}
@@ -210,8 +207,7 @@ the number $Np$ of original sites.
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_bnt_hasParentHamiltonianGroundSpaceSpanning}
     \leanok
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv,
-        def:parent_hamiltonian_ground_space_spanning}
+    \uses{def:cpsv_canonical_form,def:bnt_cpsv,def:parent_hamiltonian_ground_space_spanning}
     Let $A$ be in CPSV canonical form with positive ambient bond
     dimension $D$, and suppose that the physical dimension satisfies $1<d$.
     There are a basis of normal tensors $(A_j)_{j=1}^{g}$ and a positive
@@ -237,18 +233,7 @@ the number $Np$ of original sites.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_canonical_form_bnt_refinement,
-        thm:cpsv_bnt_dimension_bound,
-        thm:gs_eq_bnt_span_source_normalization,
-        lem:cyclic_window_range_antitonicity,
-        lem:bnt_span_le_parent_hamiltonian_kernel,
-        lem:coisometric_reconstruction_local_space,
-        lem:parent_spanning_of_local_space_eq,
-        thm:exact_pow_four_block_injectivity_normal_left_canonical,
-        thm:chain_ground_space_eq_mpv_normal,
-        thm:block_diagonal_one_site_span_parent_spanning,
-        thm:unital_gauge_of_pd_fixed_point,
-        thm:pgvwc07_dual_diag_unital}
+    \uses{thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_bnt_dimension_bound,thm:gs_eq_bnt_span_source_normalization,lem:cyclic_window_range_antitonicity,lem:bnt_span_le_parent_hamiltonian_kernel,lem:coisometric_reconstruction_local_space,lem:parent_spanning_of_local_space_eq,thm:exact_pow_four_block_injectivity_normal_left_canonical,thm:chain_ground_space_eq_mpv_normal,thm:block_diagonal_one_site_span_parent_spanning,thm:unital_gauge_of_pd_fixed_point,thm:pgvwc07_dual_diag_unital}
     Selecting one normal representative from each BNT phase class and placing
     each representative in a Perron gauge gives
     \begin{align}
@@ -322,8 +307,7 @@ the number $Np$ of original sites.
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_bnt_blocked_hasNearestNeighborParentHamiltonian}
     \leanok
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:blocked_tensor,
-        def:parent_hamiltonian_ground_space_spanning}
+    \uses{def:cpsv_canonical_form,def:bnt_cpsv,def:blocked_tensor,def:parent_hamiltonian_ground_space_spanning}
     Let $A$ be in CPSV canonical form with positive ambient bond
     dimension $D$. There are a basis of normal tensors
     $(A_j)_{j=1}^{g}$ and an integer $p$ satisfying
@@ -347,14 +331,7 @@ the number $Np$ of original sites.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_canonical_form_bnt_refinement,
-        thm:cpsv_bnt_dimension_bound, thm:cpsv_bnt_sharp_span_ambient_cap,
-        thm:cpsv_bnt_blocked_simultaneous_span,
-        thm:cpsv_bnt_positive_blocking,
-        lem:coisometric_reconstruction_local_space,
-        thm:block_sum_local_ground_space,
-        thm:block_diagonal_one_site_span_parent_spanning,
-        lem:parent_spanning_of_local_space_eq}
+    \uses{thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_bnt_dimension_bound,thm:cpsv_bnt_sharp_span_ambient_cap,thm:cpsv_bnt_blocked_simultaneous_span,thm:cpsv_bnt_positive_blocking,lem:coisometric_reconstruction_local_space,thm:block_sum_local_ground_space,thm:block_diagonal_one_site_span_parent_spanning,lem:parent_spanning_of_local_space_eq}
     For a block length $p$ at which the simultaneous one-letter evaluations of
     the blocked normal representatives span the product of their full matrix
     algebras, positive blocking preserves the BNT property, and for the direct
@@ -386,7 +363,7 @@ the number $Np$ of original sites.
     \lean{MPSTensor.starProjection_groundSpaceES_blockTensor_conj}
     \lean{MPSTensor.starProjection_groundSpaceES_three_blockTensor_conj}
     \leanok
-    \uses{def:blocked_configuration_isometry, def:blocked_tensor, def:ground_space_es, lem:blocked_boundary_map_transport}
+    \uses{def:blocked_configuration_isometry,def:blocked_tensor,def:ground_space_es,lem:blocked_boundary_map_transport}
     The Euclidean local space of the blocked tensor is carried exactly to the
     original Euclidean local space:
     \begin{align}
@@ -411,7 +388,7 @@ the number $Np$ of original sites.
 
 \begin{proof}
     \leanok
-    \uses{lem:blocked_boundary_map_transport, thm:range_ground_space_map_es}
+    \uses{lem:blocked_boundary_map_transport,thm:range_ground_space_map_es}
     The exact range identification for the Euclidean boundary map and
     (\ref{eq:blocked_boundary_map_transport}) give
     \begin{align}

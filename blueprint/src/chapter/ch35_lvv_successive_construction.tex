@@ -22,7 +22,7 @@ All polynomial bounds have the quantitative scope specified in those constructio
         TNLean.MPS.AreaLaw.lvvSuccessiveBondBound,
         TNLean.MPS.AreaLaw.lvvSuccessiveError_pos}
     \leanok
-    \uses{thm:lvv_size_bond_trimmed_family, def:huang_filter_parameters}
+    \uses{thm:lvv_size_bond_trimmed_family,def:huang_filter_parameters}
     Put $c_\Delta=(\Delta/169)^2>0$. Let $D$ be the constant-cut bond bound
     used in size trimming at precision $c_\Delta$, and define
     \begin{align}
@@ -43,8 +43,7 @@ All polynomial bounds have the quantitative scope specified in those constructio
     \label{thm:lvv_successive_polynomial_budgets}
     \lean{TNLean.MPS.AreaLaw.exists_lvvSuccessive_uniform_polynomial}
     \leanok
-    \uses{def:lvv_successive_budgets, thm:huang_filter_uniform_polynomial,
-        lem:lvv_bond_trimming_radius_polynomial}
+    \uses{def:lvv_successive_budgets,thm:huang_filter_uniform_polynomial,lem:lvv_bond_trimming_radius_polynomial}
     There are natural numbers $P,d$, with $P\ge1$, depending only on $q,\Delta$
     and chosen before the length, such that for every $L\ge1$,
     \begin{align}
@@ -71,7 +70,7 @@ All polynomial bounds have the quantitative scope specified in those constructio
         TNLean.MPS.AreaLaw.card_successiveStep_le,
         TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_successiveStep}
     \leanok
-    \uses{def:lvv_bond_trimmed_family, def:lvv_error_reduction_family}
+    \uses{def:lvv_bond_trimmed_family,def:lvv_error_reduction_family}
     Let $i\le L$, let $m$ be a trimming radius, let $(A_j)_{j\in J}$ be a
     finite family of left factors at the cut after $i$ sites, and let $T_0$
     be a finite family of left vectors at that cut. The step applied to
@@ -96,9 +95,7 @@ All polynomial bounds have the quantitative scope specified in those constructio
         TNLean.MPS.AreaLaw.card_lvvSweepStep_le,
         TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_lvvSweepStep}
     \leanok
-    \uses{def:lvv_successive_budgets, def:lvv_successive_step,
-        def:lvv_size_trimming_selection, def:huang_gaussian_filter_factors,
-        thm:huang_positive_chain_operator}
+    \uses{def:lvv_successive_budgets,def:lvv_successive_step,def:lvv_size_trimming_selection,def:huang_gaussian_filter_factors,thm:huang_positive_chain_operator}
     Let $L\ge1$ and $i+1\le L$. Let $H=\sum_{j=0}^{L-2}h_j$, where $h_j$ is
     supported on sites $j,j+1$ and $0\le h_j\le I$. The step of the sweep
     sends a family $S$ on the first $i$ sites to the step of
@@ -115,8 +112,7 @@ All polynomial bounds have the quantitative scope specified in those constructio
     \label{thm:lvv_complete_successive_step_factors}
     \lean{TNLean.MPS.AreaLaw.isViable_lvvSweepStep}
     \leanok
-    \uses{def:lvv_sweep_step, thm:lvv_size_trimmed_family_bond_trim_set,
-        thm:huang_positive_chain_error_reduction_factors, thm:lvv_viable_extension}
+    \uses{def:lvv_sweep_step,thm:lvv_size_trimmed_family_bond_trim_set,thm:huang_positive_chain_error_reduction_factors,thm:lvv_viable_extension}
     In the setting of Definition~\ref{def:lvv_sweep_step}, for every unit
     ground vector $\Gamma$ with projector gap $\Delta$,
     $(i,c_\Delta/L)$-viability of $S$ implies $(i+1,c_\Delta/L)$-viability
@@ -178,8 +174,7 @@ All polynomial bounds have the quantitative scope specified in those constructio
     \label{thm:lvv_sweep_spec}
     \lean{TNLean.MPS.AreaLaw.lvvSweep_spec}
     \leanok
-    \uses{def:lvv_sweep, thm:lvv_complete_successive_step_factors,
-        lem:lvv_initial_scalar_family}
+    \uses{def:lvv_sweep,thm:lvv_complete_successive_step_factors,lem:lvv_initial_scalar_family}
     Let $\Delta>0$ and $0\le i\le L$. The family $S_i$ of the sweep has at most
     $s_L$ members, and every member has effective MPS bond bound $b_L$; at the
     empty cut the family is the scalar singleton, with one member of bond one.
@@ -200,7 +195,7 @@ All polynomial bounds have the quantitative scope specified in those constructio
     \label{thm:lvv_coherent_successive_sequence}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_successive_viable_sets}
     \leanok
-    \uses{def:lvv_sweep, thm:lvv_sweep_spec}
+    \uses{def:lvv_sweep,thm:lvv_sweep_spec}
     Under the physical hypotheses of Definition~\ref{def:lvv_sweep_step},
     there is one sequence $S_0,\ldots,S_L$, chosen before every ground pair,
     with $S_0$ the scalar singleton, in which each $S_{i+1}$ is the step of
@@ -219,8 +214,7 @@ All polynomial bounds have the quantitative scope specified in those constructio
     \label{thm:lvv_uniform_successive_approximation}
     \lean{TNLean.MPS.AreaLaw.exists_uniform_positive_chain_successive_approximation}
     \leanok
-    \uses{thm:lvv_successive_polynomial_budgets, thm:lvv_sweep_spec,
-        def:huang_gaussian_filter_factors, thm:lvv_left_span_bond}
+    \uses{thm:lvv_successive_polynomial_budgets,thm:lvv_sweep_spec,def:huang_gaussian_filter_factors,thm:lvv_left_span_bond}
     Fix $q\ge2$ and $\Delta>0$. There exist natural numbers $P,d$, with $P\ge1$,
     chosen before $L$ and the interaction, such that the following holds.
     For every $L\ge1$ and every adjacent-pair positive-contraction interaction,

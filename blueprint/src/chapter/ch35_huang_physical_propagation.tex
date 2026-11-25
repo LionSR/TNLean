@@ -36,7 +36,7 @@ It supplies the full-chain propagator approximation used in
         TNLean.MPS.AreaLaw.chainGridBlockHamiltonian_mem_supported,
         TNLean.MPS.AreaLaw.isHermitian_chainGridBlockHamiltonian}
     \leanok
-    \uses{def:huang_grid_hamiltonian, thm:huang_chain_grid_edges}
+    \uses{def:huang_grid_hamiltonian,thm:huang_chain_grid_edges}
     The omitted edge indices are distinct and satisfy $e_k+1=c_k$.
     Every non-omitted edge is contained in its assigned block, and
     \[
@@ -88,7 +88,7 @@ It supplies the full-chain propagator approximation used in
         TNLean.MPS.AreaLaw.chainGridLRPrefactor_pos,
         TNLean.MPS.AreaLaw.norm_chainGridBoundaryTerm_sub_regionExpectation_le}
     \leanok
-    \uses{thm:huang_grid_hamiltonian_decomposition, thm:huang_chain_grid_buffers}
+    \uses{thm:huang_grid_hamiltonian_decomposition,thm:huang_chain_grid_buffers}
     Suppose the original terms are Hermitian and $\|h_i\|\le1$. Set
     \[
         v=8e^2+1,\qquad C=\frac{8(2+8e^2)e}{1-e^{-1/2}}>0.
@@ -115,7 +115,7 @@ It supplies the full-chain propagator approximation used in
     \lean{TNLean.MPS.AreaLaw.chainGridPropagator,
         TNLean.MPS.AreaLaw.chainGridPropagator_spec}
     \leanok
-    \uses{def:qc_disjoint_projected_propagator, thm:huang_grid_exact_evolution}
+    \uses{def:qc_disjoint_projected_propagator,thm:huang_grid_exact_evolution}
     Let $w>0$ and $r\ge0$. The grid propagator $K(t)$ is the product of the
     block evolutions $e^{-itH_j}$ of the retained Hamiltonian, in order,
     followed by the ordered product of the projected propagators
@@ -128,8 +128,7 @@ It supplies the full-chain propagator approximation used in
     \label{thm:huang_grid_propagator}
     \lean{TNLean.MPS.AreaLaw.exists_chainGrid_propagator_approximation}
     \leanok
-    \uses{thm:huang_grid_generator_localization, thm:huang_grid_exact_evolution,
-        thm:huang_two_interval_layer_ranks, def:huang_grid_propagator}
+    \uses{thm:huang_grid_generator_localization,thm:huang_grid_exact_evolution,thm:huang_two_interval_layer_ranks,def:huang_grid_propagator}
     Let $2r+2\le w$ and let $m=\lfloor(L-1)/w\rfloor$. The original terms determine
     a family $K(t)$ such that
     \[
@@ -178,7 +177,7 @@ It supplies the full-chain propagator approximation used in
         TNLean.MPS.AreaLaw.positiveChainPropagator,
         TNLean.MPS.AreaLaw.positiveChainPropagator_spec}
     \leanok
-    \uses{def:huang_grid_propagator, thm:huang_propagation_radius}
+    \uses{def:huang_grid_propagator,thm:huang_propagation_radius}
     For $T\ge0$ and $\varepsilon>0$, the physical chain propagator is the grid
     propagator of Definition~\ref{def:huang_grid_propagator} with the radius
     $r$ of Lemma~\ref{thm:huang_propagation_radius} and width $w=2r+2$. For
@@ -192,8 +191,7 @@ It supplies the full-chain propagator approximation used in
     \lean{TNLean.MPS.AreaLaw.exists_physical_chain_propagator_approximation,
         TNLean.MPS.AreaLaw.exists_positive_chain_propagator_approximation}
     \leanok
-    \uses{thm:huang_grid_propagator, thm:huang_propagation_radius,
-        def:huang_physical_propagator}
+    \uses{thm:huang_grid_propagator,thm:huang_propagation_radius,def:huang_physical_propagator}
     Let $q\ge1$, let $H=\sum_ih_i$ be the original nearest-neighbor Hamiltonian,
     and suppose $0\le h_i\le I$. For $T\ge0$ and $\varepsilon>0$, choose the radius
     above and put $w=2r+2$. There is one family $K(t)$ with

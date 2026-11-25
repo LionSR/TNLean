@@ -66,8 +66,7 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_ket_column_hilbert_schmidt,thm:peps_ket_column_selection,
-        thm:peps_ket_column_normalization}
+    \uses{thm:peps_ket_column_hilbert_schmidt,thm:peps_ket_column_selection,thm:peps_ket_column_normalization}
     With $E=\sigma-\ket\Omega\langle\Omega|$, $f_z=E\ket z$, and $a_z=\braket{\Omega}{z}$, Lemma~\ref{thm:peps_ket_column_hilbert_schmidt} gives $\sum_z\lVert f_z\rVert^2\le\eta^2$ while $\sum_z|a_z|^2=1$. Lemma~\ref{thm:peps_ket_column_selection} selects $z$ with $a_z\ne0$ and $\lVert f_z\rVert\le\eta|a_z|$, and Lemma~\ref{thm:peps_ket_column_normalization} applied to $v=\sigma\ket z=f_z+a_z\Omega$ concludes.
 \end{proof}
 
@@ -157,8 +156,7 @@ An operator tensor on the open square is a square-grid tensor with physical dime
         TNLean.PEPS.Approximation.operatorCoeff_pinnedTensorToGraphTensor,
         TNLean.PEPS.Approximation.operatorCoeff_vectorTensorToGraphTensor}
     \leanok
-    \uses{def:peps_ket_column_square_fix_input,thm:peps_square_grid_contraction,
-        def:peps_ket_column_tensor_fix_input}
+    \uses{def:peps_ket_column_square_fix_input,thm:peps_square_grid_contraction,def:peps_ket_column_tensor_fix_input}
     Conversion of square-grid tensors (Definition~\ref{def:peps_ket_column_square_fix_input}) to simple-graph tensors (Definition~\ref{def:peps_ket_column_tensor_fix_input}) commutes with fixing inputs and preserves the contracted operator $\sigma$.
 \end{lemma}
 
@@ -299,6 +297,6 @@ The following estimates formalize \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_ket_column_square, cor:peps_ket_column_square_main}
+    \uses{thm:peps_ket_column_square,cor:peps_ket_column_square_main}
     Since $\Tr_{\rm private}|\Omega\otimes\Xi\rangle\langle\Omega\otimes\Xi|=\lVert\Xi\rVert^2|\Omega\rangle\langle\Omega|$, contractivity of $\Tr_{\rm private}$ gives $\lVert\Tr_{\rm private}|\Psi\rangle\langle\Psi|-|\Omega\rangle\langle\Omega|\rVert_1\le 2\varepsilon+(1-\lVert\Xi\rVert^2)\le 2\varepsilon+2\delta$, so $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\le\alpha<1$ and Lemma~\ref{thm:peps_ket_column_square} and Corollary~\ref{cor:peps_ket_column_square_main} apply.
 \end{proof}

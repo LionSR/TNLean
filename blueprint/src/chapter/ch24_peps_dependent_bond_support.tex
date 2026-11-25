@@ -35,7 +35,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     \lean{TNLean.PEPS.DependentBondNetwork.outputBondPairing,
         TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction}
     \leanok
-    \uses{def:peps_dependent_bond_product, thm:peps_torus_projector_extraction}
+    \uses{def:peps_dependent_bond_product,thm:peps_torus_projector_extraction}
     Given linear functionals $K_e$ on the bond matrices, define
     \begin{align}
         K(\psi)=\sum_{\beta\in\prod_e(X_e\times X_e)}
@@ -54,7 +54,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
         TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_sum,
         TNLean.PEPS.DependentBondNetwork.sum_representationBondProduct_eq_iff}
     \leanok
-    \uses{def:peps_dependent_bond_coefficient, def:peps_semiregular}
+    \uses{def:peps_dependent_bond_coefficient,def:peps_semiregular}
     For arbitrary $K_e$ and $B_e$, $K(b_B)=\prod_eK_e(B_e)$.
     If every $U_e$ is semi-regular, then
     \begin{align}
@@ -97,7 +97,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
         TNLean.PEPS.DependentBondNetwork.network_averagingSite_eq_sum_matrixBondProduct,
         TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_network_averagingSite}
     \leanok
-    \uses{def:peps_dependent_bond_slice, def:peps_dependent_bond_coefficient}
+    \uses{def:peps_dependent_bond_slice,def:peps_dependent_bond_coefficient}
     A coordinate slice of $\prod_w f_w(\tau_w)$ is
     $(\prod_{w\ne e}f_w(\tau_w))f_e$.
     With $n=|\mathcal V|$, the canonical contraction and its regrouping obey
@@ -112,8 +112,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     These identities require neither semi-regularity nor restrictions on $B$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_projector_expansion,
-        thm:peps_dependent_coefficient_extraction}
+    \uses{thm:peps_dependent_projector_expansion,thm:peps_dependent_coefficient_extraction}
     Separating the $e$-th factor establishes the slice identity, while
     regrouping (\ref{eq:peps_dependent_projector_expansion}) by $J$ yields the
     first two formulas and applying the product-functional identity to each
@@ -125,7 +124,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     \lean{TNLean.PEPS.DependentBondNetwork.physicalBondSlice_network_averagingSite_mem_range,
         TNLean.PEPS.DependentBondNetwork.physicalBondSlice_mem_range_of_mem_cutSpace}
     \leanok
-    \uses{def:peps_dependent_bond_slice, def:peps_dependent_cut}
+    \uses{def:peps_dependent_bond_slice,def:peps_dependent_cut}
     If $B_e=I$, then every $S_{e,\tau}\mathcal N_{A^0}(B)$ lies in
     $\operatorname{im}F_e$. Consequently, if $e\notin C$ and
     $\psi\in\mathcal S_{A^0,C}$, then
@@ -133,7 +132,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     the cut boundary is arbitrarily correlated.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_canonical_bond_sum, thm:peps_dependent_cut_basis}
+    \uses{thm:peps_dependent_canonical_bond_sum,thm:peps_dependent_cut_basis}
     In a summand of (\ref{eq:peps_dependent_canonical_bonds}), an identity
     insertion gives $B_e(q)=U_e(q_{h(e)}q_{t(e)}^{-1})$, so
     every slice is a scalar multiple of this representation matrix and sums
@@ -148,7 +147,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
         TNLean.PEPS.DependentBondNetwork.exists_bondCoefficients_of_mem_cutSpaces,
         TNLean.PEPS.DependentBondNetwork.eq_sum_extracted_bondProducts_of_mem_cutSpaces}
     \leanok
-    \uses{def:peps_dependent_cut, def:peps_dependent_bond_coefficient}
+    \uses{def:peps_dependent_cut,def:peps_dependent_bond_coefficient}
     Let $(C_i)_{i\in J}$ be any family of cuts such that every bond is uncut
     in at least one $C_i$. If $\psi\in\mathcal S_{A^0,C_i}$ for every $i$,
     then $\mathcal R\psi\in\operatorname{im}(\bigotimes_eF_e)$.
@@ -160,8 +159,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_uncut_support, thm:peps_dependent_product_range,
-        thm:peps_dependent_coefficient_extraction}
+    \uses{thm:peps_dependent_uncut_support,thm:peps_dependent_product_range,thm:peps_dependent_coefficient_extraction}
     Choosing a cut for each bond that leaves it uncut, the preceding theorem
     places every slice in $\operatorname{im}F_e$. The product-range
     criterion then provides a preimage under $\bigotimes_eF_e$ whose entries
@@ -175,7 +173,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
         TNLean.PEPS.DependentBondNetwork.bondCoefficientExtraction_eq_zero_of_mem_cutSpace_of_incompatible,
         TNLean.PEPS.DependentBondNetwork.exists_vertexLabels_of_bondCoefficientExtraction_ne_zero}
     \leanok
-    \uses{def:peps_dependent_bond_coefficient, def:peps_dependent_cut}
+    \uses{def:peps_dependent_bond_coefficient,def:peps_dependent_cut}
     Assume every $U_e$ is semi-regular. If $B_e=I$ outside $C$ and no
     $q:\mathcal V\to G$ satisfies
     $p_e=q_{h(e)}q_{t(e)}^{-1}$ simultaneously for all $e\notin C$, then
@@ -190,8 +188,7 @@ four-block comparison of \cite[Theorem~5.5]{Schuch2010PEPS}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_canonical_bond_sum,
-        thm:peps_dependent_coefficient_extraction, thm:peps_dependent_cut_basis}
+    \uses{thm:peps_dependent_canonical_bond_sum,thm:peps_dependent_coefficient_extraction,thm:peps_dependent_cut_basis}
     For any vertex assignment $q$ in the extracted sum of
     (\ref{eq:peps_dependent_canonical_bonds}), incompatibility yields
     an uncut bond with $p_e\ne q_{h(e)}q_{t(e)}^{-1}$ whose trace-dual

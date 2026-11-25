@@ -485,8 +485,7 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     time is asserted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_interleaved_tree,lem:physical_dg_automatic_refinement,
-        lem:full_interval_viability,lem:full_interval_trim_native_mps}
+    \uses{lem:physical_interleaved_tree,lem:physical_dg_automatic_refinement,lem:full_interval_viability,lem:full_interval_trim_native_mps}
     The ceiling gives $aN_{\rm tree}\ge1$, hence
     $1/(1000E_{\rm tree}\sqrt{L+1})\le\xi_{\max}$.
     The automatic reference and radius choice therefore serves the new
@@ -608,10 +607,7 @@ root then yields the literal refinement and polynomial MPS Ritz conclusion.
     families are chosen before the radius and recursive operation.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:independent_physical_dg_word_family,
-        lem:interleaved_actual_suppression,lem:interleaved_common_clipped_reference,
-        lem:interval_family_trim_step,lem:interval_family_trim_iterates,
-        lem:balanced_interval_choice}
+    \uses{lem:independent_physical_dg_word_family,lem:interleaved_actual_suppression,lem:interleaved_common_clipped_reference,lem:interval_family_trim_step,lem:interval_family_trim_iterates,lem:balanced_interval_choice}
     The actual physical filter supplies its tensor factors, minimum
     target gain one, squared complementary contraction $\Delta$, and
     every ordered-word estimate. The regional coordinate identity
@@ -716,8 +712,7 @@ or running time; see \cite{gap:alvv16_approximation_parameters}.
     exterior retained. The true failure event is Borel as well.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:canonical_sampled_interval_interleaved_parent,
-        lem:borel_literal_interval_family_trim_iterates}
+    \uses{def:canonical_sampled_interval_interleaved_parent,lem:borel_literal_interval_family_trim_iterates}
     Fixed coordinate relabeling of the actual candidate projection is
     continuous. The canonical sampled projection is jointly Borel across
     rank changes, and its transport back to the interval is a fixed
@@ -745,8 +740,7 @@ running-time bound.
     entire span.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:canonical_sampled_interval_interleaved_parent,
-        lem:interval_family_trim_iterates}
+    \uses{def:canonical_sampled_interval_interleaved_parent,lem:interval_family_trim_iterates}
     The transported sample has dimension at most $s$ for every seed.
     At the fixed count $k=\lceil\log_D(D^2s)\rceil$, the numerical profile
     gives $N^ks\le D^6s^3$. Apply the existing dimension and recorded-rank
@@ -780,10 +774,7 @@ running-time bound.
     see \cite{gap:alvv16_approximation_parameters}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_interleaved_iterates,
-        lem:canonical_interleaved_parent_unconditional_profile,
-        lem:borel_canonical_sampled_interval_interleaved_parent,
-        thm:actual_adjacent_interval_merge}
+    \uses{lem:physical_interleaved_iterates,lem:canonical_interleaved_parent_unconditional_profile,lem:borel_canonical_sampled_interval_interleaved_parent,thm:actual_adjacent_interval_merge}
     The merged input has dimension at most $M^2=D^{12}s^6$. Actual target
     closeness transfers its original-ground-space viability to
     quarter-viability for the chosen clipped target. The native canonical
@@ -835,8 +826,7 @@ the joint probability estimate. No running-time assertion follows here.
     This holds on every history, including those where viability fails.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:canonical_interleaved_parent_unconditional_profile,
-        lem:full_short_interval_dimension_rank_bounds}
+    \uses{lem:canonical_interleaved_parent_unconditional_profile,lem:full_short_interval_dimension_rank_bounds}
     Apply the existing balanced-recursion invariant. A short leaf is its
     actual full space. Every long parent is its actual canonical sample
     and literal interleaved trim, which has the unconditional profile for
@@ -860,8 +850,7 @@ the joint probability estimate. No running-time assertion follows here.
     hard-clipped-family qualifications remain unchanged.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_canonical_interleaved_parent_true_failure,
-        lem:canonical_sampled_tree_unconditional_profile}
+    \uses{lem:physical_canonical_interleaved_parent_true_failure,lem:canonical_sampled_tree_unconditional_profile}
     Select the data once from the physical parent theorem. The original
     spectral hypotheses give $q\ge2$ and nonzero ground-space dimension.
     The actual common radius is at most one. The shared numerical leaf
@@ -895,8 +884,7 @@ sampled root hierarchy.
     For a valid root interval, the event $\mathcal G$ is Borel.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:canonical_interval_sampling_tree_good,
-        lem:borel_canonical_interval_sampling_tree}
+    \uses{def:canonical_interval_sampling_tree_good,lem:borel_canonical_interval_sampling_tree}
     Each actual retained-space viability event is Borel. Intersect the
     root event with those for the finite list of its internal intervals.
 \end{proof}
@@ -928,9 +916,7 @@ sampled root hierarchy.
     soft-Hamiltonian energy assertion is made by this theorem.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:physical_canonical_interval_sampling_data,
-        lem:borel_canonical_interval_sampling_tree_good,
-        thm:canonical_interval_joint_probability}
+    \uses{lem:physical_canonical_interval_sampling_data,lem:borel_canonical_interval_sampling_tree_good,thm:canonical_interval_joint_probability}
     Select the physical data once. At every fixed baseline history, the
     actual two children satisfy the common size bounds, independently of
     whether previous viability conditions succeeded. When they are
@@ -999,9 +985,7 @@ sampled root hierarchy.
     No measurability of a chosen Ritz basis or running time is asserted.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:physical_canonical_tree_joint_probability,
-        lem:physical_dg_automatic_refinement,lem:full_interval_trim_native_mps,
-        lem:interleaved_filter_scale_count}
+    \uses{thm:physical_canonical_tree_joint_probability,lem:physical_dg_automatic_refinement,lem:full_interval_trim_native_mps,lem:interleaved_filter_scale_count}
     Select the physical data once. The scalar reference and refinement
     estimates choose $C,k$ before length and accuracy. The inequality
     $a\lceil1/a\rceil\ge1$ places the automatic radius below the same

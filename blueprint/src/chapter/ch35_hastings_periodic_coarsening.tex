@@ -126,8 +126,7 @@ corrected deficiency and the additional closing window of
         TNLean.MPS.AreaLaw.LocalSolution.residual_roundedPeriodicOperator_le,
         TNLean.MPS.AreaLaw.LocalSolution.centeredNorm_roundedPeriodicOperator_le}
     \leanok
-    \uses{thm:hastings_regular_periodic_grouping,
-        thm:hastings_rounded_periodic_grouping}
+    \uses{thm:hastings_regular_periodic_grouping,thm:hastings_rounded_periodic_grouping}
     Let the $M_i$ be Hermitian, let $\psi$ be unit, let $J,\varepsilon\ge0$, and suppose
     $\|M_i\|\le J$ and
     $\|(M_i-\langle\psi,M_i\psi\rangle)\psi\|\le\varepsilon$.
@@ -152,8 +151,7 @@ corrected deficiency and the additional closing window of
     \lean{TNLean.MPS.AreaLaw.LocalSolution.hierarchyTruncationError_mul_length_le_eighth_gap,
         TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_periodicHierarchyProjection_of_error}
     \leanok
-    \uses{thm:hastings05_explicit_projection_length,
-        thm:hastings05_physical_gap_count}
+    \uses{thm:hastings05_explicit_projection_length,thm:hastings05_physical_gap_count}
     Let $h\ge2$, $J_*,\Delta>0$, and
     $r\ge512h^2(1+\max\{0,\log(J_*/\Delta)\})$. Then
     $2^hJ_*r e^{-r}\le\Delta/8$.
@@ -163,8 +161,7 @@ corrected deficiency and the additional closing window of
     twice the physical ground-space dimension.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings05_explicit_projection_length,
-        thm:hastings05_physical_gap_count}
+    \uses{thm:hastings05_explicit_projection_length,thm:hastings05_physical_gap_count}
     Apply the window-energy bound with $K=2J_*r/9$, and use
     $e^{-r}\le e^{-r/(4h)}$. The sum of all radii is at most
     $\Delta/4$; adding the two expectation errors costs at most
@@ -205,9 +202,7 @@ corrected deficiency and the additional closing window of
         TNLean.MPS.AreaLaw.LocalSolution.exists_unit_mem_roundedPeriodicProjection_of_chosen_radius,
         TNLean.MPS.AreaLaw.LocalSolution.card_le_two_mul_re_trace_of_roundedPeriodicProjection_of_chosen_radius}
     \leanok
-    \uses{thm:hastings_periodic_chosen_radius,
-        thm:hastings_periodic_linear_pair_bounds,
-        thm:hastings05_quantitative_periodic}
+    \uses{thm:hastings_periodic_chosen_radius,thm:hastings_periodic_linear_pair_bounds,thm:hastings05_quantitative_periodic}
     Let $H=\sum_iH_i$ on a periodic chain of $M\ge1$ sites, with
     Hermitian $H_i$, spectral gap $\Delta>0$, and a unit ground vector
     $\psi$ of energy $E_0$. Let $J,\eta>0$ and choose $\ell,r$ as in
@@ -231,10 +226,7 @@ corrected deficiency and the additional closing window of
     own hierarchy depth.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_periodic_linear_pair_bounds,
-        thm:hastings_periodic_linear_truncation_error,
-        thm:hastings_periodic_chosen_radius,
-        thm:hastings05_quantitative_periodic}
+    \uses{thm:hastings_periodic_linear_pair_bounds,thm:hastings_periodic_linear_truncation_error,thm:hastings_periodic_chosen_radius,thm:hastings05_quantitative_periodic}
     The derived pair bound is $K=8\ell J=(8J/\eta)r$.
     The local residuals give a pair residual at most $K e^{-r}$, so the
     quantitative hierarchy produces the nearby retained unit vector.
@@ -259,9 +251,7 @@ corrected deficiency and the additional closing window of
     are the full filtered terms.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_regular_periodic_grouping,
-        thm:hastings_periodic_linear_pair_bounds,
-        thm:hastings05_quantitative_periodic}
+    \uses{thm:hastings_regular_periodic_grouping,thm:hastings_periodic_linear_pair_bounds,thm:hastings05_quantitative_periodic}
     Use the exact number $2\ell$ of terms assigned to each edge in place
     of $4\ell$. The remaining argument is unchanged.
 \end{proof}
@@ -298,7 +288,7 @@ corrected deficiency and the additional closing window of
         TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalTruncatedTerm_localization,
         TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy}
     \leanok
-    \uses{thm:hastings_periodic_physical_metric, thm:hastings_periodic_physical_log_squared}
+    \uses{thm:hastings_periodic_physical_metric,thm:hastings_periodic_physical_log_squared}
     Fix $R\ge0$, $J>0$ and $\Delta>0$. There are constants $c_1,\eta>0$
     and $C\ge0$, independent of physical chain length, with the following
     property. Let $H=\sum_iH_i$ be a Hermitian local Hamiltonian on a
@@ -330,7 +320,7 @@ corrected deficiency and the additional closing window of
     or gap of an approximating Hamiltonian is an additional premise.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_periodic_physical_metric, thm:hastings_periodic_physical_log_squared, thm:hastings_periodic_chosen_radius}
+    \uses{thm:hastings_periodic_physical_metric,thm:hastings_periodic_physical_log_squared,thm:hastings_periodic_chosen_radius}
     The physical ball count gives a uniform finite-range metric
     localization estimate for $R>0$. Thus the displayed $M_i$ are
     Hermitian, supported in their radius-$\ell$ balls, have norm at
@@ -348,7 +338,7 @@ corrected deficiency and the additional closing window of
     \label{thm:hastings_periodic_unique_ground_hierarchy}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy_of_isGapped}
     \leanok
-    \uses{thm:hastings_periodic_physical_hierarchy, thm:hastings_periodic_physical_log_squared}
+    \uses{thm:hastings_periodic_physical_hierarchy,thm:hastings_periodic_physical_log_squared}
     Fix $R\ge0$, $J>0$ and $\Delta>0$. There are $c_1,\eta>0$ and
     $C\ge0$, chosen before the chain and its ground-state data, with the
     following property. Let $H=\sum_iH_i$ on a nonempty periodic chain,

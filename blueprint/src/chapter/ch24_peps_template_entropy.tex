@@ -66,13 +66,11 @@
         TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core,
         TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_shell}
     \leanok
-    \uses{def:area_law_template,def:area_law_safe_rectangle,thm:area_template_dyadic_rectangle,
-        thm:area_law_capped_dyadic_partition}
+    \uses{def:area_law_template,def:area_law_safe_rectangle,thm:area_template_dyadic_rectangle,thm:area_law_capped_dyadic_partition}
     For a cut-separated template $T$, integer $D_0\ge1$, and $0\le j\le s_0$ (\cite[Lemma~9.4]{OpenAI2026AreaLaw}), every integer rectangle $Q\subseteq T_j$ with $\operatorname{size}(Q)\le s_0$ is safe; in particular, if $2^K\le s_0$, every square in the scale-$K$ capped dyadic partitions of $T$ and $T_j\setminus T$ is safe.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:area_law_template_dyadic_clearance,thm:area_template_dyadic_rectangle,
-        thm:area_law_capped_dyadic_partition}
+    \uses{lem:area_law_template_dyadic_clearance,thm:area_template_dyadic_rectangle,thm:area_law_capped_dyadic_partition}
     For $x\in Q\subseteq T_j$, choosing $p\in T$ with $\|p-x\|_\infty\le j\le s_0\le D_0s_0$ gives, for every cut endpoint $z$ (Lemma~\ref{lem:area_law_template_dyadic_clearance}),
     \begin{align}
         D_0\operatorname{size}(Q)\le D_0s_0 < 4D_0s_0-j < \|p-z\|_\infty-j \le \|x-z\|_\infty, \notag
@@ -132,8 +130,7 @@
     \label{thm:area_template_safe_box_entropy}
     \lean{TNLean.PEPS.AreaLaw.Geometry.template_entropy_bounds_of_real_safe_box}
     \leanok
-    \uses{def:area_law_template,def:area_law_ground_entropy,def:area_law_cell_counts,
-        def:area_law_safe_rectangle}
+    \uses{def:area_law_template,def:area_law_ground_entropy,def:area_law_cell_counts,def:area_law_safe_rectangle}
     For finite $\Lambda$, $A\subseteq\Lambda$ with cut-edge endpoints $Z$, unit vector $\Omega$, $q\ge1$, and reals $D_0\ge1$, $e>0$, $C\in\mathbb R$ with $C_+=\max(C,0)$, suppose every integer rectangle $Q$ with $\operatorname{dist}_\infty(Q,Z)>D_0\operatorname{size}(Q)$ satisfies $S_\Omega(A\cap Q)\le C\operatorname{size}(Q)^{1+e}$.
     Then for every template $T$ with $C_{\rm tpl}\ge24$ and $\operatorname{dist}_\infty(T,Z)>4D_0s_0$, all $1\le L\le s_0$, $0\le j\le L$, and $Y\subseteq T_j\setminus T_{j-1}$ (for $j\ge1$; \cite[Lemma~9.4]{OpenAI2026AreaLaw}),
     \begin{align}
@@ -147,11 +144,7 @@
 \end{lemma}
 \begin{proof}\leanok
     \lean{ManyBody.cast_supDist}
-    \uses{lem:area_law_template_dyadic_clearance,
-        thm:area_law_template_weighted_core_cover,thm:area_template_weighted_shell,
-        thm:area_template_partial_row,thm:area_template_dyadic_rectangle,
-        thm:area_law_capped_dyadic_partition,
-        thm:area_law_capped_dyadic_entropy_cover_of_forall}
+    \uses{lem:area_law_template_dyadic_clearance,thm:area_law_template_weighted_core_cover,thm:area_template_weighted_shell,thm:area_template_partial_row,thm:area_template_dyadic_rectangle,thm:area_law_capped_dyadic_partition,thm:area_law_capped_dyadic_entropy_cover_of_forall}
     For any square $Q\subseteq T_j$ ($j\le s_0$) of side $u\le s_0$ in the capped dyadic partitions of $T$ (capped at $2^K\le s_0$) or $T_j\setminus T$ (capped at $2^K\le L\le s_0$), Lemma~\ref{lem:area_law_template_dyadic_clearance} gives $\operatorname{dist}_\infty(Q,Z)\ge\operatorname{dist}_\infty(T_j,Z)>4D_0s_0-j>D_0s_0\ge D_0u$, so $S_\Omega(A\cap Q)\le C_+u^{1+e}$.
     Combining Lemma~\ref{thm:area_law_capped_dyadic_entropy_cover_of_forall} with (\ref{eq:template_core_cover}) and (\ref{eq:template_shell_cover}) yields (\ref{eq:tpl_entropy_core})--(\ref{eq:tpl_entropy_shell}), and adding (\ref{eq:template_partial_row}) to (\ref{eq:tpl_entropy_shell}) at $j-1$ yields (\ref{eq:tpl_entropy_prefix}).
 \end{proof}

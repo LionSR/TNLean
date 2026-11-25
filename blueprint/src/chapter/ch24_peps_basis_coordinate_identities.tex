@@ -29,9 +29,8 @@ For $d\in\N$, write $[d]=\{0,\ldots,d-1\}$ (with $[0]=\varnothing$). With local 
 
 \begin{definition}[Physical and regional coordinate isometries]
     \label{def:peps_basis_physical_readouts}
-    \lean{QuantumCircuit.Party.physicalReadout,
-        ManyBody.cutEquiv,
-        QuantumCircuit.Party.regionalReadout}
+    \uses{def:peps_party_partition,def:peps_physical_component}
+    \lean{QuantumCircuit.Party.regionalReadout}
     \leanok
     At each party $p$, let the output consist of the physical register $\C^{d_p}$ followed by a private register with basis labels $V_p$, so that the output configurations are $\prod_{p\in P}([d_p]\times V_p)$, and write $\mathcal V=\prod_{p\in P}V_p$. Define the coordinate isometry $R:\C^{\prod_p([d_p]\times V_p)}\to\C^{\mathcal X\times\mathcal V}$ and, for finite $A\subseteq P$ under the restriction bijection $\mathcal X\simeq\mathcal X_A\times\mathcal X_{P\setminus A}$ ($s\sqcup t\leftrightarrow(s,t)$), the regional coordinate isometry $R_A:\C^{\prod_p([d_p]\times V_p)}\to\C^{\mathcal X_A\times(\mathcal X_{P\setminus A}\times\mathcal V)}$ by
     \begin{align}
@@ -97,17 +96,15 @@ These are the tensor-coordinate identities used in
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_actual_singleton_factorization,
-        thm:peps_basis_party_map_entries}
-    By~(\ref{eq:peps_actual_singleton_factorization}), $W$ is the Kronecker product of its party restrictions $W|_{\{p\}}$, and Lemma~\ref{thm:peps_basis_party_map_entries} yields~(\ref{eq:peps_actual_party_word_entries}).
+    \uses{thm:peps_basis_party_map_entries}
+    Since $W$ has no sources, it is the Kronecker product of its party restrictions $W|_{\{p\}}$, and Lemma~\ref{thm:peps_basis_party_map_entries} yields~(\ref{eq:peps_actual_party_word_entries}).
 \end{proof}
 
 \begin{lemma}[Mixed matrices of three source-free compositions]
     \label{thm:peps_actual_party_mixed_matrix}
     \lean{QuantumCircuit.Party.PartyCircuit.op_mul_op_mul_conjTranspose_op_eq_piKronecker}
     \leanok
-    \uses{def:peps_dependent_physical_product,
-        thm:peps_party_restriction}
+    \uses{def:peps_dependent_physical_product,thm:peps_party_restriction}
     In the setting of Lemma~\ref{thm:peps_actual_party_word_entries}, let $W,V:\mathcal H_a\to\mathcal H_z$ and $U:\mathcal H_a\to\mathcal H_a$ be source-free compositions with matrices $M_W,M_V,M_U$ in configuration coordinates, and let $A_p,B_p,X_p$ be the matrices of $W|_{\{p\}},V|_{\{p\}},U|_{\{p\}}$. Then
     \begin{align}
         M_W M_U M_V^\dagger

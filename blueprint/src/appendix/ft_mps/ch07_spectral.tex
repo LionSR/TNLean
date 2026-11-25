@@ -18,7 +18,7 @@ identities.
 \begin{lemma}[Self-transfer]\label{thm:mixed_self}
     \lean{Kraus.mixedMapLM_self}
     \leanok
-    \uses{def:mixed_transfer, def:transfer_map}
+    \uses{def:mixed_transfer,def:transfer_map}
     Setting $B=A$ recovers the ordinary transfer map: $F_{AA}=\E_A$.
 \end{lemma}
 
@@ -31,7 +31,7 @@ identities.
 \begin{lemma}[Iterated mixed transfer]\label{thm:mixed_pow}
     \lean{Kraus.mixedMapLM_pow_apply}
     \leanok
-    \uses{def:mixed_transfer, def:eval_word}
+    \uses{def:mixed_transfer,def:eval_word}
     For every $X\in\MN{D}$ and $N\geq0$,
     \begin{align}
         F_{AB}^N(X)
@@ -105,7 +105,7 @@ Lemma~\ref{thm:transfer_operator_gap_rect_irr_tp}.
     \label{thm:gauged_intertwining_core}
     \lean{Kraus.gauged_intertwining_core}
     \leanok
-    \uses{def:mixed_transfer_rect, thm:qpf}
+    \uses{def:mixed_transfer_rect,thm:qpf}
     Let $A$ be a normalized tensor of bond dimension $D_1$ and $B$ a
     normalized tensor of bond dimension $D_2$. Suppose $\rho_A,\rho_B$ are
     fixed points of the respective transfer maps and $S_A,S_B$ are
@@ -252,7 +252,7 @@ Theorem~\ref{thm:overlap_decay}.
 \begin{lemma}[Cross-correlation decay]\label{thm:cross_decay}
     \lean{MPSTensor.cross_correlation_tendsto_zero}
     \leanok
-    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
+    \uses{def:mixed_transfer,def:gauge_phase_equiv,def:injective}
     If $A$ and $B$ are injective normalized tensors that are not gauge-phase
     equivalent, then $\tr(F_{AB}^N(X))\to0$ as $N\to\infty$ for every
     $X\in\MN{D}$.

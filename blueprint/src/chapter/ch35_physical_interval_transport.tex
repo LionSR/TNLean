@@ -57,8 +57,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     \label{def:physical_interval_complement_coordinates}
     \lean{TNLean.MPS.AreaLaw.intervalComplementEquiv}
     \leanok
-    \uses{def:physical_interval_increasing_coordinates,
-        thm:physical_interval_subinterval_coordinates}
+    \uses{def:physical_interval_increasing_coordinates,thm:physical_interval_subinterval_coordinates}
     For $c\le d\le T$ and $c\le u$, restriction of $e_{c,d}$ gives a
     bijection
     \begin{align}
@@ -93,8 +92,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     \label{thm:physical_interval_nested_trace}
     \lean{MPOTensor.trace_identityExtendInterval_nested_natural}
     \leanok
-    \uses{def:physical_interval_increasing_coordinates,
-        def:physical_interval_identity_extension}
+    \uses{def:physical_interval_increasing_coordinates,def:physical_interval_identity_extension}
     Suppose $c\le a\le b\le d\le T$. Let $A_r(i,j)$ be the supplied core
     tensors on $b-a$ sites, with scalar closing matrix $C$ on the same
     $B$-dimensional virtual space. Let $H_K$ be their trace-form operator
@@ -154,8 +152,7 @@ finite chain. Subtraction of natural numbers is truncated at zero.
     \label{thm:supported_interval_trace_chain}
     \lean{TNLean.MPS.AreaLaw.exists_traceChainOperator_of_supported_interval}
     \leanok
-    \uses{def:chain_model,def:trace_chain_operator,
-        def:physical_interval_increasing_coordinates}
+    \uses{def:chain_model,def:trace_chain_operator,def:physical_interval_increasing_coordinates}
     Let $0\le c\le d\le L$ and let $A$ be supported on the interval
     $J=\{c,\ldots,d-1\}$. There are a finite bond dimension, site tensors
     on a chain of $d-c$ sites and a closing matrix whose trace contraction,

@@ -39,8 +39,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_cross_tensor_realization_coefficients,
-        thm:peps_arc_window_all_bond_dimensions}
+    \uses{thm:peps_cross_tensor_realization_coefficients,thm:peps_arc_window_all_bond_dimensions}
     By Lemma~\ref{thm:peps_arc_window_all_bond_dimensions}, $D_A=D_B>0$, so
     $P_A(W)=\prod_{g\notin\partial W}D_A(g)=P_B(W)>0$. Canceling $P_A(W)=P_B(W)$
     in $P_B(W)C_A(W,e,X)=P_A(W)C_B(W,e,F_{AB}(X))$ from
@@ -59,8 +58,7 @@
 \end{definition}
 \begin{proof}
     \leanok
-    \uses{thm:peps_staircase_unscaled_coefficients,
-        def:peps_staircase_cross_tensor_algebra_isomorphism}
+    \uses{thm:peps_staircase_unscaled_coefficients,def:peps_staircase_cross_tensor_algebra_isomorphism}
     The coefficient identities hold by
     Lemma~\ref{thm:peps_staircase_unscaled_coefficients}, and multiplicativity
     and unitality hold by
@@ -78,9 +76,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_staircase_unscaled_coefficients,
-        thm:peps_torus_window_complement_injectivity,
-        thm:peps_regionInsertedCoeff_injective}
+    \uses{thm:peps_staircase_unscaled_coefficients,thm:peps_torus_window_complement_injectivity,thm:peps_regionInsertedCoeff_injective}
     By (\ref{eq:peps_staircase_unscaled_coefficients}),
     $C_B(W,e,T(X);\sigma,\tau)=C_B(W,e,F_{AB}(X);\sigma,\tau)$. Injectivity of
     $B$ on $W$ and $W^c$ (Lemma~\ref{thm:peps_torus_window_complement_injectivity})
@@ -103,9 +99,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:peps_staircase_cross_tensor_algebra_isomorphism,
-        thm:matrixAlgEquiv_inner_of_fin,
-        thm:peps_staircase_unscaled_coefficients}
+    \uses{def:peps_staircase_cross_tensor_algebra_isomorphism,thm:matrixAlgEquiv_inner_of_fin,thm:peps_staircase_unscaled_coefficients}
     Applying Lemma~\ref{thm:matrixAlgEquiv_inner_of_fin} to
     Definition~\ref{def:peps_staircase_cross_tensor_algebra_isomorphism} gives
     $F_{AB}(X)=ZXZ^{-1}$; substituting into
@@ -124,9 +118,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_staircase_unscaled_gauge,
-        def:peps_window_edge_coeff_identity_witness_of_hypotheses,
-        thm:peps_regionInjectivityUnionClosure_of_overlap}
+    \uses{thm:peps_staircase_unscaled_gauge,def:peps_window_edge_coeff_identity_witness_of_hypotheses,thm:peps_regionInjectivityUnionClosure_of_overlap}
     Combine (\ref{eq:peps_staircase_unscaled_gauge}) with normal-window
     injectivity (Lemma~\ref{thm:peps_regionInjectivityUnionClosure_of_overlap})
     in Definition~\ref{def:peps_window_edge_coeff_identity_witness_of_hypotheses};
@@ -152,11 +144,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_arc_window_all_bond_dimensions,
-        thm:peps_horizontal_arc_window_witness,
-        thm:peps_vertical_arc_window_witness,
-        thm:peps_absorbed_family_reference_witnesses,
-        thm:peps_window_absorbed_scalar}
+    \uses{thm:peps_arc_window_all_bond_dimensions,thm:peps_horizontal_arc_window_witness,thm:peps_vertical_arc_window_witness,thm:peps_absorbed_family_reference_witnesses,thm:peps_window_absorbed_scalar}
     By Lemma~\ref{thm:peps_arc_window_all_bond_dimensions}, $D_A=D_B$.
     Lemmas~\ref{thm:peps_horizontal_arc_window_witness} and
     \ref{thm:peps_vertical_arc_window_witness} (at $(1,0)$ and its coordinate
@@ -187,10 +175,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_arc_window_covariant_gauge_existence,
-        thm:peps_window_gauge_unique, thm:peps_window_corner_injectivity,
-        thm:peps_regionInjectivityUnionClosure_of_overlap,
-        thm:peps_common_scalar_volume}
+    \uses{thm:peps_arc_window_covariant_gauge_existence,thm:peps_window_gauge_unique,thm:peps_window_corner_injectivity,thm:peps_regionInjectivityUnionClosure_of_overlap,thm:peps_common_scalar_volume}
     Lemma~\ref{thm:peps_arc_window_covariant_gauge_existence} gives the
     covariant family (with reference values $X,Y$) and $\lambda$ satisfying
     (\ref{eq:peps_normal_window_ft}). For any competing gauge with scalar

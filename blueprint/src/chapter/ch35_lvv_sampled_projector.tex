@@ -83,15 +83,14 @@ $C=(1-\varepsilon_0/n)^{-1}$.
         TNLean.MPS.AreaLaw.norm_bondComplement_le_one,
         TNLean.MPS.AreaLaw.norm_bondComplementWord_le_one}
     \leanok
-    \uses{def:lvv_sampled_projector, def:lvv_power_projector}
+    \uses{def:lvv_sampled_projector,def:lvv_power_projector}
     For a uniform word $I$ of length $m$, $\mathbb E[C^mP_I]=A$ and
     $\|C^mP_I-A\|\le C^m+1$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:lvv_power_expansion, thm:lvv_power_projector_basic,
-        lem:lvv_ground_energy_range}
+    \uses{thm:lvv_power_expansion,thm:lvv_power_projector_basic,lem:lvv_ground_energy_range}
     Every word has probability $n^{-m}$, so
     $\mathbb E[C^mP_I]=C^mn^{-m}\sum_IP_I=A$ by
     Lemma~\ref{thm:lvv_power_expansion}. Since $0\le P_i\le1$, every letter
@@ -104,7 +103,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
     \label{lem:lvv_sampled_accuracy}
     \lean{TNLean.MPS.AreaLaw.measureReal_le_norm_sampledProjector_sub_le}
     \leanok
-    \uses{def:lvv_sampled_projector, def:lvv_power_projector}
+    \uses{def:lvv_sampled_projector,def:lvv_power_projector}
     Let $\ell\ge1$, $t>0$ and $R=C^m+1$. Then
     \begin{align*}
         \Pr(\|K-A\|\ge t)\le2q^n\exp\Bigl(-\frac{\ell t^2}{2R^2+2Rt/3}\Bigr).
@@ -113,7 +112,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
 
 \begin{proof}
     \leanok
-    \uses{thm:lvv_matrix_bernstein, lem:lvv_sampled_term}
+    \uses{thm:lvv_matrix_bernstein,lem:lvv_sampled_term}
     The terms $X_k=C^mP_{I_k}$ are independent and identically distributed, with
     $K=\ell^{-1}\sum_kX_k$. By Lemma~\ref{lem:lvv_sampled_term} their mean is
     $A$ and $\|X_k-A\|\le R$, so both variance terms are at most $R^2$, and
@@ -159,7 +158,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
         TNLean.MPS.AreaLaw.sampledProjectorWordCount,
         TNLean.MPS.AreaLaw.sampledProjectorLetterBound}
     \leanok
-    \uses{def:lvv_sampled_projector, def:lvv_power_projector}
+    \uses{def:lvv_sampled_projector,def:lvv_power_projector}
     Let $\eta>0$, let $m\ge0$ and $R=C^m+1$, and let $\ell\ge1$ and $\kappa$
     satisfy
     \begin{align}
@@ -192,9 +191,7 @@ $C=(1-\varepsilon_0/n)^{-1}$.
 
 \begin{proof}
     \leanok
-    \uses{lem:lvv_sampled_accuracy, lem:lvv_letter_multiplicity,
-        lem:lvv_ground_energy_range, thm:lvv_power_threshold,
-        thm:lvv_power_word_rank}
+    \uses{lem:lvv_sampled_accuracy,lem:lvv_letter_multiplicity,lem:lvv_ground_energy_range,thm:lvv_power_threshold,thm:lvv_power_word_rank}
     Put $D=2R^2+2R\eta/3$. By Lemma~\ref{lem:lvv_sampled_accuracy},
     $\Pr(\|K-A\|\ge\eta)\le2q^ne^{-\ell\eta^2/D}\le2q^n/(8q^nn^3)=1/(4n^3)$ for
     $q\ge1$, and the probability vanishes for $q=0$. Put $t=\kappa-m/n$ and

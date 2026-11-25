@@ -23,7 +23,7 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.%
         normalSquarePEPSBlockingHypotheses_mem_withSite_iff_of_marginCovers}
     \leanok
-    \uses{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows, def:peps_normalPEPSBlockingHypotheses, def:peps_normalOneSiteSeparationHypotheses}
+    \uses{thm:peps_normalSquareTranslatedEdgeBlockingHypotheses_of_windows,def:peps_normalPEPSBlockingHypotheses,def:peps_normalOneSiteSeparationHypotheses}
     Given rectangular injectivity hypotheses, finite union closure, oriented
     margin-and-cover data at every edge $e$, and one-site separation
     (Definition~\ref{def:peps_normalOneSiteSeparationHypotheses}), the finite
@@ -44,7 +44,7 @@ product states, and the square lattice.
 \begin{theorem}[Fundamental Theorem for normal PEPS]%
     \label{thm:fundamentalTheorem_normalPEPS}
     \notready
-    \uses{thm:peps_normalEdgeBlockingHypotheses_injectiveChain, def:peps_normalPEPSBlockingHypotheses, thm:peps_oneVertexComplementComparison, def:GaugeEquivPEPS}
+    \uses{thm:peps_normalEdgeBlockingHypotheses_injectiveChain,def:peps_normalPEPSBlockingHypotheses,thm:peps_oneVertexComplementComparison,def:GaugeEquivPEPS}
     Suppose two normal PEPS $A$ and $B$ generate the same state, satisfy the
     three-site injective-chain blocking around every edge, and at every site $v$
     admit injective regions $R_v$ and $S_v=R_v\cup\{v\}$ ($v\notin R_v$) with
@@ -69,8 +69,7 @@ product states, and the square lattice.
     % blockings and the single-crossing hypothesis are the source's blocking
     % hypothesis made explicit, not restrictions; both readings are recorded
     % in \path{docs/paper-gaps/peps_normal_ft_section3_route.tex}.
-    \uses{def:peps_normalPEPSPairHypotheses, def:peps_normalPEPSBlockingHypotheses,
-        def:peps_regionInjectivityDataPair, def:GaugeEquivPEPS}
+    \uses{def:peps_normalPEPSPairHypotheses,def:peps_normalPEPSBlockingHypotheses,def:peps_regionInjectivityDataPair,def:GaugeEquivPEPS}
     Let $A$ and $B$ be a pair of normal PEPS tensors
     (Definition~\ref{def:peps_normalPEPSPairHypotheses}) on a connected finite
     simple graph with physical dimension $d>0$, generating the same state, and
@@ -97,7 +96,7 @@ product states, and the square lattice.
     % so that they meet only along the distinguished edge.
     \begin{proof}
         \leanok
-        \uses{thm:peps_bondDim_eq_of_normalBlocking, lem:peps_injectiveRegion_union_pos, thm:peps_region_edge_gauge_of_coeff_transfer, thm:gaugeConsistency}
+        \uses{thm:peps_bondDim_eq_of_normalBlocking,lem:peps_injectiveRegion_union_pos,thm:peps_region_edge_gauge_of_coeff_transfer,thm:gaugeConsistency}
         By Lemma~\ref{thm:peps_bondDim_eq_of_normalBlocking}, $D_A=D_B$, and
         by Lemma~\ref{lem:peps_injectiveRegion_union_pos}, injective regions of
         $A$ and $B$ are closed under unions. At each $e\in E$,
@@ -121,8 +120,7 @@ product states, and the square lattice.
     \label{thm:fundamentalTheorem_normalPEPS_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_gauge_unique}
     \leanok
-    \uses{def:peps_normalPEPSPairHypotheses, def:peps_normalPEPSBlockingHypotheses,
-        def:peps_regionInjectivityDataPair, def:gaugeVertex}
+    \uses{def:peps_normalPEPSPairHypotheses,def:peps_normalPEPSBlockingHypotheses,def:peps_regionInjectivityDataPair,def:gaugeVertex}
     Let $A$ and $B$ be a pair of normal PEPS tensors
     (Definition~\ref{def:peps_normalPEPSPairHypotheses}) on a finite simple
     graph with $D_A=D_B$. If two families of invertible edge matrices $X$ and
@@ -133,7 +131,7 @@ product states, and the square lattice.
     equality nor graph connectivity is needed.
     \begin{proof}
         \leanok
-        \uses{thm:peps_gaugeConj_eq_of_coeffIdentities, lem:peps_injectiveRegion_union_pos}
+        \uses{thm:peps_gaugeConj_eq_of_coeffIdentities,lem:peps_injectiveRegion_union_pos}
         Multilinearity of the edge-inserted coefficient in the site tensors gives
         $C_B(e,M;\sigma)=C_{A^X}(e,M;\sigma)=C_{A^{X'}}(e,M;\sigma)$ at every
         $e\in E$. By the blocking hypotheses and
@@ -163,8 +161,7 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.stateCoeff_physicalTensorAction}
     \leanok
 
-    \uses{def:peps_physical_tensor_action,
-        def:peps_dependent_physical_product, def:peps_stateCoeff}
+    \uses{def:peps_physical_tensor_action,def:peps_dependent_physical_product,def:peps_stateCoeff}
     For a tensor $A$ on a finite simple graph with vertex set $V$ and
     $U\in\MN{d}$, the tensor $B=U\cdot A$ has state
     \begin{align}
@@ -202,13 +199,13 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.regionBlockedTensorInjective_of_sameState_of_bondDim_eq}
     \leanok
 
-    \uses{def:peps_regionInjectivityDataOf, def:peps_same_state}
+    \uses{def:peps_regionInjectivityDataOf,def:peps_same_state}
     Let $A$ and $B$ have the same state and the same positive bond
     dimensions. If a region $R$ and its complement are injective for $A$,
     then $R$ is injective for $B$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_region_partial_state, thm:peps_region_partial_state_same_state}
+    \uses{def:peps_region_partial_state,thm:peps_region_partial_state_same_state}
     Write $F_{A,R}$ and $F_{B,R}$ for the blocked maps from the common
     boundary space to the physical space of $R$. Injectivity of the
     complement for $A$ identifies the range of $F_{A,R}$ with the span of
@@ -246,15 +243,14 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.normalPairHypothesesOfSameStateOfBondDimEq}
     \leanok
 
-    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_normalPEPSPairHypotheses,
-        def:peps_same_state}
+    \uses{def:peps_normalPEPSBlockingHypotheses,def:peps_normalPEPSPairHypotheses,def:peps_same_state}
     Suppose $A$ admits the normal blocking regions of
     Definition~\ref{def:peps_normalPEPSBlockingHypotheses}, with nonzero
     virtual spaces. If $B$ has the same state and bond dimensions, the
     inherited pair blockings use exactly these regions for both tensors.
 \end{definition}
 \begin{proof}\leanok
-    \uses{thm:peps_regional_injectivity_from_state, lem:peps_injectiveRegion_union_pos}
+    \uses{thm:peps_regional_injectivity_from_state,lem:peps_injectiveRegion_union_pos}
     For each edge blocking, the complement of each of the three regions
     is the disjoint union of the other two, hence is injective for $A$.
     The one-site comparison regions already have injective complements.
@@ -268,8 +264,7 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.gaugeEquiv_physicalTensorAction_of_normal_symmetry}
     \leanok
 
-    \uses{def:peps_physical_tensor_action, def:peps_normalPEPSBlockingHypotheses,
-        def:peps_normalPEPSPairHypotheses, def:GaugeEquivPEPS}
+    \uses{def:peps_physical_tensor_action,def:peps_normalPEPSBlockingHypotheses,def:peps_normalPEPSPairHypotheses,def:GaugeEquivPEPS}
     Let $A$ be a normal tensor network on a connected finite simple graph
     with nonzero virtual spaces. Assume the edge blockings and one-site
     comparison regions of
@@ -285,10 +280,7 @@ product states, and the square lattice.
     in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_physical_tensor_action, thm:peps_state_physical_tensor_action,
-        def:peps_normal_pair_blockings_from_state,
-        thm:peps_physical_dimension_pos_of_region,
-        thm:fundamentalTheorem_normalPEPS_connected}
+    \uses{def:peps_physical_tensor_action,thm:peps_state_physical_tensor_action,def:peps_normal_pair_blockings_from_state,thm:peps_physical_dimension_pos_of_region,thm:fundamentalTheorem_normalPEPS_connected}
     Put $B=U\cdot A$. Its state equals that of $A$, and its bond
     dimensions are unchanged. Definition~\ref{def:peps_normal_pair_blockings_from_state}
     gives the required shared injective regions for $A$ and $B$, retaining
@@ -319,7 +311,7 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.gaugeVertex_applyGauge}
     \leanok
 
-    \uses{def:gaugeVertex, def:applyGauge}
+    \uses{def:gaugeVertex,def:applyGauge}
     For invertible edge-matrix families $X$ and $Y$, the vertex tensors
     satisfy $(A^X)^Y_v=A^{YX}_v$.
 \end{lemma}
@@ -349,7 +341,7 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.physicalTensorAction_applyGauge_component}
     \leanok
 
-    \uses{def:peps_physical_tensor_action, def:gaugeVertex, def:applyGauge}
+    \uses{def:peps_physical_tensor_action,def:gaugeVertex,def:applyGauge}
     For a physical matrix $U$ and an invertible edge-matrix family $X$,
     the vertex tensors satisfy $(U\cdot A^X)_v=(U\cdot A)^X_v$.
 \end{lemma}
@@ -372,7 +364,7 @@ product states, and the square lattice.
     \lean{TNLean.PEPS.exists_virtualRepresentation_of_normal_symmetry}
     \leanok
 
-    \uses{def:projective_rep, thm:peps_normal_onsite_symmetry_gauge}
+    \uses{def:projective_rep,thm:peps_normal_onsite_symmetry_gauge}
     Let $A$ satisfy all the graph and blocking hypotheses of
     Lemma~\ref{thm:peps_normal_onsite_symmetry_gauge}. Let $H$ be a group
     and $U:H\to\GL_d(\C)$ a representation such that
@@ -395,11 +387,7 @@ product states, and the square lattice.
     connectedness correction in~\cite{gap:peps_gaugeConsistency_connectivity_gap}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_normal_onsite_symmetry_gauge,
-        def:peps_normal_pair_blockings_from_state,
-        thm:peps_physical_action_composition, thm:peps_physical_virtual_commute,
-        thm:peps_gauge_action_composition,
-        thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:cocycle_of_assoc}
+    \uses{thm:peps_normal_onsite_symmetry_gauge,def:peps_normal_pair_blockings_from_state,thm:peps_physical_action_composition,thm:peps_physical_virtual_commute,thm:peps_gauge_action_composition,thm:fundamentalTheorem_normalPEPS_gauge_unique,lem:cocycle_of_assoc}
     Choose gauges $Z(g)$ from
     Lemma~\ref{thm:peps_normal_onsite_symmetry_gauge}.
     Composition and commutation give

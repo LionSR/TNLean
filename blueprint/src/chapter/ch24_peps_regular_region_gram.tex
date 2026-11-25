@@ -14,7 +14,7 @@ adapted to a spanning tree of the region.
         TNLean.PEPS.regionIncidentBoundaryLabel_regular_iff,
         TNLean.PEPS.regularOpenRegionMatrix_gram_apply_group}
     \leanok
-    \uses{def:peps_open_region_contraction, def:peps_regular_site_gram}
+    \uses{def:peps_open_region_contraction,def:peps_regular_site_gram}
     For any finite region $R$, the entry $(\mu,\nu)$ of
     $T_R^\dagger T_R$ is the sum over pairs of incident-edge assignments
     with crossing labels $\mu,\nu$ of
@@ -85,7 +85,7 @@ adapted to a spanning tree of the region.
         TNLean.PEPS.regularRegionGramScalar,
         TNLean.PEPS.regularOpenRegionMatrix_gram_of_connected}
     \leanok
-    \uses{thm:peps_open_region_gram_expansion, thm:peps_region_group_synchronization, thm:peps_region_internal_bond_count}
+    \uses{thm:peps_open_region_gram_expansion,thm:peps_region_group_synchronization,thm:peps_region_internal_bond_count}
     Let $R$ induce a nonempty connected graph, with $V_R$ vertices
     and $I_R$ internal edges. Suppose the local Gram kernels are
     $A_v^\dagger A_v=c_vP_v$. For unnormalized regular bonds and
@@ -326,7 +326,7 @@ adapted to a spanning tree of the region.
     the argument does not assume local isometry.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_regular_region_projector_coordinates, thm:peps_regular_open_region_accessibility}
+    \uses{thm:peps_regular_region_projector_coordinates,thm:peps_regular_open_region_accessibility}
     Applying the product of the local inverses to the open tensor yields
     its canonical averaging-projector contraction.
     Choosing a spanning tree and a root, in the coordinates of
@@ -357,8 +357,7 @@ adapted to a spanning tree of the region.
         TNLean.PEPS.regularRegionBoundaryTransport_head,
         TNLean.PEPS.regularTwistedLabels_gauge}
     \leanok
-    \uses{def:peps_regular_region_coordinates,
-        def:peps_regular_twisted_region}
+    \uses{def:peps_regular_region_coordinates,def:peps_regular_twisted_region}
     Let $G$ be finite, choose a spanning tree $T$ of the region $R$,
     and fix a root $o$. Assign a group operator $u_e$ to each oriented
     edge $e=(s,t)$. There is a unique vertex gauge $k$ with $k_o=1$
@@ -391,8 +390,7 @@ adapted to a spanning tree of the region.
     regular blocking operations in \cite[\S6.2--6.3]{Schuch2010PEPS}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_regular_region_coordinates,
-        def:peps_regular_twisted_region}
+    \uses{def:peps_regular_region_coordinates,def:peps_regular_twisted_region}
     Inverting the tree-gradient bijection at $(u_e)_{e\in T}$ yields
     the normalized $k$, so on a tree edge
     $k_t^{-1}u_ek_s=k_t^{-1}(k_tk_s^{-1})k_s=1$.

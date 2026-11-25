@@ -20,7 +20,7 @@
         MPOTensor.physicalIdMatrix_mem_unitaryGroup,
         MPOTensor.ketLeftMul_tensorPhysicalId}
     \leanok
-    \uses{def:mpu_physical_identity_matrix, thm:mpu_reindex_unitary}
+    \uses{def:mpu_physical_identity_matrix,thm:mpu_reindex_unitary}
     Identity-ancilla extension of physical matrices preserves the identity,
     multiplication, adjunction, and transposition. A real matrix remains
     real, and a unitary matrix remains unitary. For every local tensor
@@ -48,8 +48,7 @@
     \lean{MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix,
         MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix}
     \leanok
-    \uses{def:mpu_finite_chain_operator_symmetry,
-        def:mpdo_sitewise_physical_matrix}
+    \uses{def:mpu_finite_chain_operator_symmetry,def:mpdo_sitewise_physical_matrix}
     For a complex square matrix $Q$ and $N>0$, put $Q_N=Q^{\otimes N}$.
     Retaining $Q$ as part of the physical data defines the full actions
     $X\mapsto Q_NX^\dagger Q_N$ and $X\mapsto Q_NX^{\mathsf T}Q_N$.
@@ -64,8 +63,7 @@
         MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_tensorPhysicalId_semiconj,
         MPOTensor.conjugationSymmetry_tensorPhysicalId_semiconj}
     \leanok
-    \uses{def:mpu_distinguished_physical_matrix_actions,
-        def:mpu_physical_identity_matrix, def:mpu_finite_chain_operator_symmetry}
+    \uses{def:mpu_distinguished_physical_matrix_actions,def:mpu_physical_identity_matrix,def:mpu_finite_chain_operator_symmetry}
     Let $J_x(X)=X\otimes I_{x^N}$ in sitewise product coordinates.
     For every $Q,x,N$, $J_x$ intertwines each of the two actions with
     its enlarged action specified by $Q\otimes I_x$. It also intertwines
@@ -88,9 +86,7 @@
         MPOTensor.ancillaSwapDaggerSymmetry,
         MPOTensor.ancillaSwapTransposeSymmetry}
     \leanok
-    \uses{def:mpu_physical_identity_matrix,
-        def:mpu_finite_chain_operator_symmetry,
-        def:mpu_blocked_physical_positive_actions, threeMPU2}
+    \uses{def:mpu_physical_identity_matrix,def:mpu_finite_chain_operator_symmetry,def:mpu_blocked_physical_positive_actions,threeMPU2}
     On $H\otimes\mathbb C^x$, where
     $H=\mathbb C^d\otimes\mathbb C^d$, define
     $Q_x=\mathbb S\otimes I_x$ and $B_{x,k}=Q_x^{\otimes k}$.
@@ -113,7 +109,7 @@
         MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff,
         MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff}
     \leanok
-    \uses{def:mpu_ancilla_swap_actions, def:strictly-equivalent-symmetry}
+    \uses{def:mpu_ancilla_swap_actions,def:strictly-equivalent-symmetry}
     Let $\mathcal U,\mathcal V$ have physical space
     $\mathbb C^d\otimes\mathbb C^d$ and arbitrary virtual dimensions.
     Put $\widetilde{\mathcal U}=\mathbb S\mathcal U$ and
@@ -128,10 +124,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_ancilla_output_action,
-        lem:mpu_blocked_physical_involution_paths,
-        def:mpdo_physical_adjoint, thm:mpu_one_sided_swap_invariance,
-        thm:threeMPU2_chain_formulas}
+    \uses{lem:mpu_ancilla_output_action,lem:mpu_blocked_physical_involution_paths,def:mpdo_physical_adjoint,thm:mpu_one_sided_swap_invariance,thm:threeMPU2_chain_formulas}
     The matrices $B=B_{x,k}$ and $C=C_{x,k,N}$ are real, symmetric,
     self-adjoint involutions. Therefore, on every enlarged operator,
     \begin{align}
@@ -153,7 +146,7 @@
         MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff,
         MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff}
     \leanok
-    \uses{def:mpu_ancilla_swap_actions, def:strictly-equivalent-symmetry}
+    \uses{def:mpu_ancilla_swap_actions,def:strictly-equivalent-symmetry}
     For each of the three comparisons of
     Lemma~\ref{lem:mpu_fixed_ancilla_swap_comparison}, a common ancilla
     size $x>0$ and common blocking length $k>0$ giving the first strict
@@ -173,8 +166,7 @@
         MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapDagger,
         MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapTranspose}
     \leanok
-    \uses{def:mpu_physical_identity_matrix, threeMPU2,
-        lem:mpu_ancilla_output_action, def:mpdo_physical_adjoint}
+    \uses{def:mpu_physical_identity_matrix,threeMPU2,lem:mpu_ancilla_output_action,def:mpdo_physical_adjoint}
     Let $P=\lvert0\rangle\langle0\rvert$ on $\mathbb C^2$. Then
     $S_2(P\otimes I_2)S_2=I_2\otimes P$ is not of the form
     $Y\otimes I_2$ for any two-dimensional matrix $Y$. Consequently no
@@ -203,7 +195,7 @@
     \lean{MPOTensor.symmetryFamily_at_ne_shiftSwapDagger,
         MPOTensor.symmetryFamily_at_ne_shiftSwapTranspose}
     \leanok
-    \uses{def:mpu_coherent_symmetry_family, def:mpu_swap_comparison_symmetries}
+    \uses{def:mpu_coherent_symmetry_family,def:mpu_swap_comparison_symmetries}
     Let a family of operator actions commute with every identity-ancilla
     embedding. If the species space $\mathbb C^d$ has two distinct basis
     states, then its component at dimension $d^2$ is neither the
@@ -240,8 +232,7 @@
         MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapDagger,
         MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapTranspose}
     \leanok
-    \uses{def:mpu_physical_identity_matrix, threeMPU2,
-        lem:mpu_ancilla_output_action}
+    \uses{def:mpu_physical_identity_matrix,threeMPU2,lem:mpu_ancilla_output_action}
     Let $P=\lvert0\rangle\langle0\rvert$ on $\mathbb C^4$, and write
     $S_m$ for the standard flattened swap on
     $\mathbb C^m\otimes\mathbb C^m$. The identity-ancilla embedding

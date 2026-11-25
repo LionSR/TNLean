@@ -8,8 +8,7 @@
         MPSTensor.mpvState_cyclic_invariant,
         MPSTensor.exists_mpvState_eq_iff_cyclic_invariant}
     \leanok
-    \uses{thm:seqanc_cut_rank_attained, thm:seqanc_cut_rank_bounds,
-        thm:pgvwc07_site_independent_matrices}
+    \uses{thm:seqanc_cut_rank_attained,thm:seqanc_cut_rank_bounds,thm:pgvwc07_site_independent_matrices}
     Let $N>0$ and let $\psi\ne0$ be a finite vector satisfying
     $\psi(\sigma\circ\tau_s)=\psi(\sigma)$ for every cyclic translation
     $\tau_s$. There is a periodic trace-MPS representation of $\psi$
@@ -57,8 +56,7 @@
     \label{lem:uniform_bond_cyclic_ground_sector}
     \lean{MPSTensor.exists_uniform_bond_on_cyclic_ground_sector}
     \leanok
-    \uses{thm:eventual_mps_prime_length_dichotomy,
-        lem:periodic_finite_cyclic_representation, lem:periodic_uniform_bond_padding}
+    \uses{thm:eventual_mps_prime_length_dichotomy,lem:periodic_finite_cyclic_representation,lem:periodic_uniform_bond_padding}
     Suppose the permitted ground spaces $\ker H_M$, $M\ge L$, are
     one-dimensional, and a bond-$D$ tensor $B$ generates their nonzero
     ground lines for every $M\ge M_0$. Then the single matrix size
@@ -136,8 +134,7 @@
     \lean{MPSTensor.exists_cyclic_ground_of_normal_bondOne_local_kernel,
         MPSTensor.uniform_bondOne_ground_family_translationInvariant_of_normal_local_kernel}
     \leanok
-    \uses{lem:spwc_bond_one_all_volume_nonvanishing, lem:local_mps_kernel_all_volumes,
-        lem:periodic_finite_cyclic_representation}
+    \uses{lem:spwc_bond_one_all_volume_nonvanishing,lem:local_mps_kernel_all_volumes,lem:periodic_finite_cyclic_representation}
     Suppose the normal tensor in the eventual fixed-state construction
     has bond dimension one. Retain the derived inclusion of its
     length-$L$ local MPS space in $\ker h$. Then its periodic
@@ -168,8 +165,7 @@
     \label{lem:spwc_bond_one_prime_ground_family}
     \lean{MPSTensor.exists_uniform_bondOne_ground_family_of_prime_length_bound}
     \leanok
-    \uses{lem:spwc_bond_one_finite_prefix_ground,
-        lem:prime_small_representation_fixed_tensor}
+    \uses{lem:spwc_bond_one_finite_prefix_ground,lem:prime_small_representation_fixed_tensor}
     Let $h$ be the one fixed positive interaction of range $L$, and
     assume every permitted periodic Hamiltonian has a one-dimensional
     zero-energy space. If one prime $N\geq L+4$ has a nonzero
@@ -253,7 +249,7 @@
         MPSTensor.ShortMomentum.not_isNBlkInjective_threeLetterTensor_seven,
         MPSTensor.ShortMomentum.exists_trace_evalWord_ne_zero_of_eight_le}
     \leanok
-    \uses{lem:short_volume_weyl_charges, lem:short_volume_weyl_products}
+    \uses{lem:short_volume_weyl_charges,lem:short_volume_weyl_products}
     Let $q$ be a primitive fifth root of unity.
     The three-letter tensor is injective at every degree at least eight and
     therefore normal. Every degree-seven word is traceless, so it is
@@ -353,7 +349,7 @@
         MPSTensor.ShortMomentum.eq_zero_of_seven_cyclic_local_membership,
         MPSTensor.ShortMomentum.chainGroundSpace_threeLetterTensor_seven_eq_bot}
     \leanok
-    \uses{lem:short_volume_weyl_cyclic_phase, lem:short_volume_weyl_charges}
+    \uses{lem:short_volume_weyl_cyclic_phase,lem:short_volume_weyl_charges}
     The seven-site periodic parent space formed from the
     seven-site local boundary space of the three-letter Weyl tensor
     is zero. More precisely, two seven-site boundary vectors agreeing
@@ -379,8 +375,7 @@
         MPSTensor.ShortMomentum.exists_smul_mpv_of_cyclic_agreement,
         MPSTensor.ShortMomentum.mem_mpvSubmodule_of_cyclic_local_membership}
     \leanok
-    \uses{lem:short_volume_weyl_cyclic_phase,
-        lem:short_volume_weyl_seven_periodic_zero}
+    \uses{lem:short_volume_weyl_cyclic_phase,lem:short_volume_weyl_seven_periodic_zero}
     At every degree at least seven, two global boundary vectors
     agreeing across a cyclic cut close to the periodic trace line.
     This conclusion presupposes only their global boundary-space
@@ -400,7 +395,7 @@
     \label{lem:short_volume_weyl_long_intersection}
     \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_of_eight_le}
     \leanok
-    \uses{lem:short_volume_weyl_normality, lem:short_volume_weyl_letter_relations}
+    \uses{lem:short_volume_weyl_normality,lem:short_volume_weyl_letter_relations}
     If the common middle of two overlapping boundary windows has at
     least eight sites, their left and right constraints imply
     membership in the next boundary space. No intersection identity
@@ -418,7 +413,7 @@
     \label{lem:short_volume_weyl_overlap_charge_coefficients}
     \lean{MPSTensor.ShortMomentum.exists_overlap_charge_coefficients}
     \leanok
-    \uses{lem:short_volume_weyl_cyclic_phase, lem:short_volume_weyl_local_spaces}
+    \uses{lem:short_volume_weyl_cyclic_phase,lem:short_volume_weyl_local_spaces}
     Suppose every restriction obtained by fixing the first or last site
     of a vector lies in the corresponding boundary MPS space.
     There are functions of the total charge for each fixed endpoint
@@ -465,11 +460,7 @@
     \lean{MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_eight,
         MPSTensor.ShortMomentum.groundSpace_intersection_threeLetterTensor_nine}
     \leanok
-    \uses{lem:short_weyl_overlap_charge_bridges,
-        lem:short_volume_weyl_overlap_charge_coefficients,
-        lem:short_volume_weyl_local_spaces,
-        lem:short_volume_weyl_global_boundary_closure,
-        lem:short_volume_weyl_charges}
+    \uses{lem:short_weyl_overlap_charge_bridges,lem:short_volume_weyl_overlap_charge_coefficients,lem:short_volume_weyl_local_spaces,lem:short_volume_weyl_global_boundary_closure,lem:short_volume_weyl_charges}
     For the three-letter fifth-root Weyl tensor, a vector on eight sites
     whose first and last seven-site coefficient sections belong to the
     respective boundary spaces belongs to the eight-site boundary space.
@@ -499,11 +490,7 @@
         MPSTensor.ShortMomentum.ker_hamiltonian_parentRingInteraction_threeLetterTensor_seven_eq_bot,
         MPSTensor.ShortMomentum.mpvState_threeLetterTensor_ne_zero}
     \leanok
-    \uses{lem:short_volume_weyl_normality,
-        lem:short_volume_weyl_seven_periodic_zero,
-        lem:short_volume_weyl_global_boundary_closure,
-        lem:short_volume_weyl_long_intersection,
-        lem:short_weyl_eight_nine_intersections}
+    \uses{lem:short_volume_weyl_normality,lem:short_volume_weyl_seven_periodic_zero,lem:short_volume_weyl_global_boundary_closure,lem:short_volume_weyl_long_intersection,lem:short_weyl_eight_nine_intersections}
     Let the local interaction be the orthogonal projection onto
     the complement of the seven-site boundary space of the three-letter
     Weyl tensor. Its periodic Hamiltonian has zero kernel at
@@ -563,9 +550,7 @@ matrix product representations.
     \lean{MPSTensor.ShortMomentum.ker_sevenSectorHamiltonian_of_eight_le}
     \lean{MPSTensor.ShortMomentum.ker_sevenSectorHamiltonian_seven}
     \leanok
-    \uses{def:seven_sector_interaction,lem:physical_sum_full_kernel,
-        lem:short_volume_weyl_periodic_kernel,lem:pvbs_pure_window_large_kernel,
-        lem:pvbs_matching_volume_kernel}
+    \uses{def:seven_sector_interaction,lem:physical_sum_full_kernel,lem:short_volume_weyl_periodic_kernel,lem:pvbs_pure_window_large_kernel,lem:pvbs_matching_volume_kernel}
     Suppose $\zeta$ is a primitive fifth root of unity, and let
     $H_M=\sum_i h_i$ be the periodic Hamiltonian of $h$.
     If $q\ne0$ and $M\ge8$, then
@@ -628,8 +613,7 @@ matrix product representations.
     \lean{MPSTensor.ShortMomentum.eq_zero_of_sevenSectorHamiltonian_fixed}
     \lean{MPSTensor.ShortMomentum.mpvState_eq_zero_of_sevenSectorHamiltonian_eq_zero}
     \leanok
-    \uses{lem:seven_sector_periodic_kernels,lem:pvbs_matching_volume_no_fixed_ground_vector,
-        lem:periodic_finite_cyclic_representation}
+    \uses{lem:seven_sector_periodic_kernels,lem:pvbs_matching_volume_no_fixed_ground_vector,lem:periodic_finite_cyclic_representation}
     Suppose additionally $q\ne1$. Every vector in $\ker H_7$ fixed exactly
     by every cyclic translation is zero. Consequently, at every bond
     dimension, an ordinary site-independent periodic trace-MPS vector
@@ -648,8 +632,7 @@ matrix product representations.
     \label{lem:seven_sector_concrete_interaction}
     \lean{MPSTensor.ShortMomentum.exists_seven_site_interaction_without_short_fixed_ground}
     \leanok
-    \uses{lem:seven_sector_interaction_positive,lem:seven_sector_permitted_ground_lines,
-        lem:seven_sector_eventual_fixed_tensor,lem:seven_sector_no_short_trace_ground}
+    \uses{lem:seven_sector_interaction_positive,lem:seven_sector_permitted_ground_lines,lem:seven_sector_eventual_fixed_tensor,lem:seven_sector_no_short_trace_ground}
     There exists one positive seven-site interaction on five physical letters
     with the following properties. At every $M\ge7$ its periodic
     kernel is one-dimensional and contains a nonzero vector killed by every

@@ -9,7 +9,7 @@
     \label{def:horizontal_cf_mpdo}
     \lean{MPOTensor.IsHorizontalCF}
     \leanok
-    \uses{def:mpo_tensor, def:sector_bnt_cf, def:gauge_equiv}
+    \uses{def:mpo_tensor,def:sector_bnt_cf,def:gauge_equiv}
     An MPO tensor is in \emph{normalized BNT-refined horizontal form} if its
     doubled-index MPS tensor is a BNT sector decomposition with an independent
     gauge on every repeated copy:
@@ -51,7 +51,7 @@
     \label{def:horizontal_cf_mpv_representation}
     \lean{MPOTensor.HasHorizontalCFMPVRepresentation}
     \leanok
-    \uses{def:mpo_tensor, def:sector_bnt_cf, def:same_mpv2_pos}
+    \uses{def:mpo_tensor,def:sector_bnt_cf,def:same_mpv2_pos}
     An MPO tensor has a \emph{horizontal-canonical-form MPV representation} if
     its doubled-index MPS tensor generates the same positive-length MPV family as a
     BNT canonical form
@@ -70,7 +70,7 @@
     \label{thm:horizontal_cf_gives_mpv_representation}
     \lean{MPOTensor.IsHorizontalCF.hasHorizontalCFMPVRepresentation}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:horizontal_cf_mpv_representation}
+    \uses{def:horizontal_cf_mpdo,def:horizontal_cf_mpv_representation}
     Every MPO tensor in normalized BNT-refined horizontal form has the
     associated positive-length BNT matrix-product-vector representation.
 \end{lemma}
@@ -142,7 +142,7 @@
     \lean{MPOTensor.bondPairSwap_involutive}
     \lean{MPOTensor.verticalTensor_adjointTensor}
     \leanok
-    \uses{def:vertical_tensor_mpdo, def:mpo_adjoint_tensor}
+    \uses{def:vertical_tensor_mpdo,def:mpo_adjoint_tensor}
     Adjunction exchanges the two oriented horizontal bond indices in the
     vertical view:
     \begin{align}
@@ -161,7 +161,7 @@
 \begin{definition}[Vertical canonical form for an MPO]\label{def:vertical_cf_mpdo}
     \lean{MPOTensor.IsVerticalCF}
     \leanok
-    \uses{def:mpo_tensor, def:vertical_tensor_mpdo, def:bnt, def:block_diagonal_tensor}
+    \uses{def:mpo_tensor,def:vertical_tensor_mpdo,def:bnt,def:block_diagonal_tensor}
     An MPO tensor is in \emph{vertical canonical form} if there are a basis of
     normal tensors $\{M_\alpha\}_\alpha$ for its vertically viewed tensor
     $\widetilde M$, positive diagonal matrices
@@ -477,7 +477,7 @@ contraction yields the inverse identity $K^{-1}K=\bigoplus_j\Id_j$.
     \label{lem:single_block_word_tuple_span}
     \lean{MPSTensor.wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective}
     \leanok
-    \uses{def:l_blk_injective, rem:word_tuple_span_top}
+    \uses{def:l_blk_injective,rem:word_tuple_span_top}
     Let $(A_j)_{j=0}^{g-1}$ be a family with $g=1$. If its unique block is
     $L$-block injective, then the simultaneous length-$L$ word evaluations
     span the full one-block product algebra.
@@ -485,7 +485,7 @@ contraction yields the inverse identity $K^{-1}K=\bigoplus_j\Id_j$.
 
 \begin{proof}
     \leanok
-    \uses{def:l_blk_injective, rem:word_tuple_span_top}
+    \uses{def:l_blk_injective,rem:word_tuple_span_top}
     For every matrix $X$, block injectivity gives coefficients such that
     $X=\sum_{|w|=L}c_wA_0^w$.
     Since the family has only the block $A_0$, this is precisely the required

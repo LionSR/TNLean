@@ -65,7 +65,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_sheet_initialization, thm:peps_frame_norm}
+    \uses{thm:peps_sheet_initialization,thm:peps_frame_norm}
     With no holes, the hole-projector product is $\id$, so $\lVert\Omega_{\mathcal F}\rVert=\lVert\Omega\rVert=1$ (Lemma~\ref{thm:peps_frame_norm}) and tensor products preserve unit norm.
 \end{proof}
 
@@ -105,11 +105,10 @@ no holes, this is the normalization of $\Omega$.
 \begin{definition}[The final regrouping]
     \label{def:peps_final_regrouping}
     \lean{TNLean.PEPS.EncodedFrame.trivialTag,
-        TNLean.PEPS.EncodedFrame.nonprivateCount_readoutCircuit,
         TNLean.PEPS.EncodedFrame.readoutCircuit,
         TNLean.PEPS.EncodedFrame.readoutPrivate}
     \leanok
-    \uses{def:peps_sheet_stack}
+    \uses{def:peps_sheet_stack,thm:peps_final_reference}
     With the main frame $\mathcal M$ first in the sheet memory (Definition~\ref{def:peps_sheet_stack}), the final regrouping moves the raw registers of $\mathcal M$ ahead of its tag registers, privately renames each site's raw register at its owning party as that party's physical register, and privately prepares a $1$-dimensional physical register at each site-free party. Physical registers are ordered by sites then site-free parties; private registers consist of the tags of $\mathcal M$ followed by all other sheets and idle copies (\texttt{06-geometry.tex}, lines 48--51 and 669--681).
 \end{definition}
 
@@ -129,7 +128,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.DyadicProtocol.physicalConfigEquiv_apply_val,
         TNLean.PEPS.Approximation.DyadicProtocol.readout_eq_euclideanTensorVector}
     \leanok
-    \uses{def:peps_final_regrouping, def:peps_dyadic_protocol}
+    \uses{def:peps_final_regrouping,def:peps_dyadic_protocol}
     The final regrouping (Definition~\ref{def:peps_final_regrouping}) has $0$ nonprivate gates. If $\mathcal M$ has injective raw owner and empty physical outer sample at every hole, and the physical dimension is $q$ at site parties and $1$ elsewhere, then for any $\Omega$ and idle vector $\xi$ the regrouped reference vector $\Omega_{\mathcal M}\otimes\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}\otimes\xi$ has physical-private coordinates $\Omega\otimes\Xi$ with
     \begin{align}
         \lVert\Xi\rVert & = \lVert\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}\otimes\xi\rVert. \notag
@@ -152,13 +151,12 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.mem_initialFrames,
         TNLean.PEPS.Approximation.DyadicProtocol.exists_originalCircuit_initialFrames}
     \leanok
-    \uses{def:peps_sheet_stack, def:peps_dyadic_protocol,
-        def:peps_dyadic_protocol_parties, def:peps_dyadic_protocol_schedule}
+    \uses{def:peps_sheet_stack,def:peps_dyadic_protocol,def:peps_dyadic_protocol_parties,def:peps_dyadic_protocol_schedule}
     Let $L\ge1$ and $\lVert\Omega\rVert=1$. The initial sheets consist of the hole-free main copy of $\Omega$ at the root-square party and one hole-free copy per auxiliary-initializing schedule change at its (arbitrary) future owner, totaling at most $1+4(\#\text{squares}+\#\text{junctions})$ sheets. If each party's initial private memory and vector are the memory and product reference vector of its held initial sheets, then one private map per party followed by a sheet reordering ($0$ nonprivate gates) maps the protocol's initial reference vector exactly to the reference vector of the initial sheets (\texttt{06-geometry.tex}, lines 21--23, 576, 649--652 and 658--667).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_sheet_raw_initialization, thm:peps_dyadic_protocol_schedule_counts}
+    \uses{thm:peps_sheet_raw_initialization,thm:peps_dyadic_protocol_schedule_counts}
     Every initial sheet is hole-free and held by a single party, so Lemma~\ref{thm:peps_sheet_raw_initialization} applies; Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts} bounds the auxiliary initializations by $4(\#\text{squares}+\#\text{junctions})$.
 \end{proof}
 
@@ -177,16 +175,12 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.unitLevelFrame_owner_injective,
         TNLean.PEPS.Approximation.DyadicProtocol.exists_reference_changes_unitLevel}
     \leanok
-    \uses{def:peps_final_regrouping, def:peps_guide_frame,
-        def:peps_dyadic_protocol_parties, def:peps_dyadic_protocol_schedule,
-        def:peps_dyadic_protocol}
+    \uses{def:peps_final_regrouping,def:peps_guide_frame,def:peps_dyadic_protocol_parties,def:peps_dyadic_protocol_schedule,def:peps_dyadic_protocol}
     Let $L\le 2^k<2L$ and $\lVert\Omega\rVert=1$. At the end of level $n=1$, each unit block of the root square carries its own label, so the site at $(i+\frac12,j+\frac12)$ is owned by the $(i,j)$ unit-square party injectively. Suppose the main frame has holes at grid corners of outer radius $<1/2$, the remaining sheets are one frozen auxiliary frame per auxiliary initialization (each with at most as many holes as true vertices of its final guide, using patches from the adaptive patch constraint at accuracy $L^{-60}$), and the idle registers carry a unit vector. Then the final regrouping (Definition~\ref{def:peps_final_regrouping}) produces protocol readout $\Omega\otimes\Xi$ with $1-214\,L^{-57}\le\lVert\Xi\rVert\le1$ (\texttt{06-geometry.tex}, lines 43--51, 653--656 and 669--681).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_final_reference, thm:peps_guide_frame_norm,
-        lem:peps_guide_frame_patch_data, lem:peps_dyadic_frozen_hole_count,
-        thm:peps_dyadic_repainting_valid_labels}
+    \uses{thm:peps_final_reference,thm:peps_guide_frame_norm,lem:peps_guide_frame_patch_data,lem:peps_dyadic_frozen_hole_count,thm:peps_dyadic_repainting_valid_labels}
     Each site $(i+\frac12,j+\frac12)$ lies in unit block $(i,j)\subset[0,2^k]^2$, which has been repainted to the $(i,j)$ unit-square party's label (Lemma~\ref{thm:peps_dyadic_repainting_valid_labels}). By Lemma~\ref{thm:peps_guide_frame_norm}, all main-frame holes have empty physical outer sample; by Lemma~\ref{lem:peps_dyadic_frozen_hole_count}, the frozen auxiliary frames have at most $214\,L^3$ holes in total, each with projector error $\le L^{-60}$. Lemma~\ref{thm:peps_final_reference} yields the readout and norm bound.
 \end{proof}
 
@@ -214,8 +208,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.EncodedFrame.hasBoundedChange_perm_liftOne,
         TNLean.PEPS.EncodedFrame.exists_isBoundedChange_of_frame_eq}
     \leanok
-    \uses{def:peps_bounded_change,thm:peps_sheet_reordering,thm:peps_identity_change,
-        thm:lattice_bounded_change_closure}
+    \uses{def:peps_bounded_change,thm:peps_sheet_reordering,thm:peps_identity_change,thm:lattice_bounded_change_closure}
     Let $\lVert\Omega\rVert\le1$ and $\lVert\xi\rVert\le1$.
     \begin{enumerate}
         \item Sheet permutations and equal-frame transitions are bounded changes for any $S,r,K$ and $\varepsilon\ge0$, and composing a bounded change with a sheet permutation on either side preserves $(S,r,K,\varepsilon)$.
@@ -225,8 +218,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_sheet_reordering,
-        thm:peps_original_produced_resource_bounds}
+    \uses{thm:peps_sheet_reordering,thm:peps_original_produced_resource_bounds}
     Sheet permutations are exact exchange words with $0$ nonprivate gates (Lemma~\ref{thm:peps_sheet_reordering}), and original circuits are contractions. Spectator frames have reference vectors of norm $\le\lVert\Omega\rVert\le1$. Allowed words and chains convert to original circuits with one two-party single-monomial gate per pair source or pair effect (Lemma~\ref{thm:peps_original_produced_resource_bounds}).
 \end{proof}
 
@@ -234,12 +226,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_guide_frame_owner_agreement}
     \lean{TNLean.PEPS.Approximation.guideFrame_eq_of_owner_eq}
     \leanok
-    \uses{def:peps_guide_frame, def:peps_dyadic_protocol_parties}
+    \uses{def:peps_guide_frame,def:peps_dyadic_protocol_parties}
     Let $g$ be a guide taking only valid labels and avoiding the placeholder at every site, and let party maps $\rho,\rho'$ satisfy $\rho(\ell)=\rho'(\ell)$ for every valid non-placeholder label $\ell$. For any common label rank, finite set $V$ of true vertices of $g$, and square patches on $V$ with pairwise disjoint physical outer samples, the guide frames of $g$ under $\rho$ and $\rho'$ coincide.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_guide_frame, lem:peps_guide_frame_tags, lem:peps_dyadic_tags}
+    \uses{def:peps_guide_frame,lem:peps_guide_frame_tags,lem:peps_dyadic_tags}
     Site labels are non-placeholder, so raw owners agree; canonical tag holders on $V$ are also valid non-placeholder labels by Lemmas~\ref{lem:peps_guide_frame_tags} and~\ref{lem:peps_dyadic_tags}, so tag owners and hole lists agree as well.
 \end{proof}
 
@@ -260,8 +252,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_guide_frame_owner_agreement, thm:peps_dyadic_guide_owners,
-        lem:peps_dyadic_sampled_guides, thm:peps_bounded_change_closure}
+    \uses{thm:peps_guide_frame_owner_agreement,thm:peps_dyadic_guide_owners,lem:peps_dyadic_sampled_guides,thm:peps_bounded_change_closure}
     Every hierarchy block label is mapped to its block party by every repainting's party map, and tag holders at true vertices are non-placeholder incident labels, so Lemma~\ref{thm:peps_guide_frame_owner_agreement} and Lemma~\ref{thm:peps_bounded_change_closure} apply. Every point of $(0,2^k)^2$ has a neighborhood in $(0,2^k)^2$ where the level block guide takes block labels, which displaced readings preserve (Lemma~\ref{lem:peps_dyadic_sampled_guides}).
 \end{proof}
 
@@ -282,29 +273,12 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isBoundedChange_of_death,
         TNLean.PEPS.Approximation.isBoundedChange_of_exchange}
     \leanok
-    \uses{thm:peps_bounded_change_closure,
-        def:peps_dyadic_protocol_parties,
-        thm:peps_dyadic_direct_repainting_constants,
-        def:peps_dyadic_block_guide,
-        def:peps_dyadic_hierarchy}
+    \uses{thm:peps_bounded_change_closure,def:peps_dyadic_protocol_parties,thm:peps_dyadic_direct_repainting_constants,def:peps_dyadic_block_guide,def:peps_dyadic_hierarchy}
     Every hierarchy square has its index in the root square of its level, and the protocol constants satisfy $\epsilon_0<1/4000$. Under the party map of a repainting of $R$, the labels of the $3\times3$ window around $R$ at any stage of its level pass, the new label of $R$, and the placeholder all map to parties used by the repainting of $R$. Consequently, under Lemma~\ref{thm:peps_dyadic_direct_repainting_constants}, direct repainting of $R$ is a bounded change with participants used by $R$, error $(2b+1)L^{-20}$, and $\le 2b$ pair sources per monomial ($b$ the protocol patch bound). Likewise, each point treatment, treatment removal, resize, bulk birth, bulk death, or lens exchange (with $0$ nonprivate gates) is a bounded change with participants among the parties of its step theorem (\texttt{06-geometry.tex}, lines 91--100, 328--541 and 559--596).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_direct_repainting_constants,
-        thm:peps_dyadic_protocol_parties,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_dyadic_active_label_parties,
-        def:peps_dyadic_used_parties,
-        def:peps_dyadic_protocol_parties,
-        thm:peps_dyadic_block_ratio,
-        thm:peps_guide_frame_resize_treatment_gates,
-        lem:peps_dyadic_active_labels,
-        thm:peps_bounded_change_closure,
-        thm:peps_protocol_constants,
-        def:peps_bounded_change,
-        def:peps_sheet_stack,
-        def:peps_dyadic_block_guide}
+    \uses{thm:peps_dyadic_direct_repainting_constants,thm:peps_dyadic_protocol_parties,thm:peps_dyadic_repainting_valid_labels,thm:peps_dyadic_active_label_parties,def:peps_dyadic_used_parties,def:peps_dyadic_protocol_parties,thm:peps_dyadic_block_ratio,thm:peps_guide_frame_resize_treatment_gates,lem:peps_dyadic_active_labels,thm:peps_bounded_change_closure,thm:peps_protocol_constants,def:peps_bounded_change,def:peps_sheet_stack,def:peps_dyadic_block_guide}
     The root-index bound follows from Definition~\ref{def:peps_dyadic_hierarchy}, and $2\epsilon_0(a_0+1)\le a_0/2$ with $a_0=1/5000$ gives $\epsilon_0\le 1/20004<1/4000$ (Lemma~\ref{thm:peps_protocol_constants}). By Lemma~\ref{lem:peps_dyadic_active_labels} and Lemma~\ref{thm:peps_dyadic_active_label_parties}, labels in the $3\times3$ window around $R$ map to parties used by $R$ (Definition~\ref{def:peps_dyadic_used_parties}). Lemma~\ref{thm:peps_bounded_change_closure} and Lemma~\ref{thm:peps_dyadic_direct_repainting_constants} then convert each step to a bounded change while preserving the $2b$ pair-source bound.
 \end{proof}
 
@@ -315,7 +289,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.coe_subset_eventUses_of_junctionWindow,
         TNLean.PEPS.Approximation.coe_subset_eventUses_of_junctionWindow_placeholder}
     \leanok
-    \uses{def:peps_dyadic_protocol_parties, def:peps_dyadic_used_parties}
+    \uses{def:peps_dyadic_protocol_parties,def:peps_dyadic_used_parties}
     At the end of the level-$2^j$ pass, consider the resize at grid corner $(2^ju,2^jv)$ under the party map of any repainting $R$. Every root-square block in $(u-1,v-1)+\{-1,0,1\}^2$ is held by a block party used by the resize, while any block outside the root square carries the placeholder party of $R$ (\texttt{06-geometry.tex}, lines 91--100, 127--131, 529--541 and 594).
 \end{lemma}
 
@@ -329,8 +303,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.norm_trajectory_sub_stackRef_le,
         TNLean.PEPS.Approximation.card_participation_le_of_eventUses}
     \leanok
-    \uses{thm:peps_bounded_change_closure, def:peps_dyadic_protocol_schedule,
-        thm:peps_dyadic_protocol_lifetime}
+    \uses{thm:peps_bounded_change_closure,def:peps_dyadic_protocol_schedule,thm:peps_dyadic_protocol_lifetime}
     Given a sequence of frame stacks joined by bounded changes of error $\le CL^{-20}$ along a schedule of length $\le 5040L^3$ (for $1\le L$ and $2^k<2L$), the trajectory started at the initial reference vector stays within $5040\,CL^{-17}$ of the reference vector at every stage. If each schedule change has $\le1$ nonprivate gate with participants used by its event, every party participates in at most $64\cdot189$ nonprivate gates (\texttt{06-geometry.tex}, lines 25--41 and 572--631).
 \end{lemma}
 
@@ -350,9 +323,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.pow_le_paddedSide,
         TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_frames}
     \leanok
-    \uses{def:peps_dyadic_protocol, thm:peps_dyadic_protocol_initial_step,
-        thm:peps_dyadic_protocol_final_step, thm:peps_protocol_bounded_trajectory,
-        thm:peps_dyadic_protocol_locality, thm:peps_dyadic_protocol_parties}
+    \uses{def:peps_dyadic_protocol,thm:peps_dyadic_protocol_initial_step,thm:peps_dyadic_protocol_final_step,thm:peps_protocol_bounded_trajectory,thm:peps_dyadic_protocol_locality,thm:peps_dyadic_protocol_parties}
     Every hierarchy event uses at most $19$ parties. Let $L\ge2$, $L\le2^k<2L$, $\lVert\Omega\rVert=1$, and suppose frame stacks on the hierarchy parties of $[0,2^k]^2$ are given at every stage such that:
     \begin{enumerate}
         \item The initial frames have no holes, and each is held entirely by one
@@ -378,10 +349,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_sheet_raw_initialization,
-        thm:peps_dyadic_protocol_lifetime,
-        thm:peps_dyadic_protocol_schedule_counts,
-        thm:peps_original_produced_resource_bounds}
+    \uses{thm:peps_sheet_raw_initialization,thm:peps_dyadic_protocol_lifetime,thm:peps_dyadic_protocol_schedule_counts,thm:peps_original_produced_resource_bounds}
     A square repainting uses $\le 18$ neighbor block parties plus its placeholder ($19$ total); a junction resize uses $\le 9$. Combining exact private initialization (Lemma~\ref{thm:peps_dyadic_protocol_initial_step}), the $\le 5040L^3$ schedule changes (Lemmas~\ref{thm:peps_protocol_bounded_trajectory} and~\ref{thm:peps_dyadic_protocol_locality} and Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}), and the exact final regrouping (Lemma~\ref{thm:peps_dyadic_protocol_final_step}) yields all bounds of Definition~\ref{def:peps_dyadic_protocol}.
 \end{proof}
 
@@ -403,14 +371,12 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.exists_frames_of_segments,
         TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_hasSourceBoundedChange}
     \leanok
-    \uses{def:peps_bounded_change, def:peps_circuit_source_bound,
-        thm:peps_protocol_from_bounded_trajectory}
+    \uses{def:peps_bounded_change,def:peps_circuit_source_bound,thm:peps_protocol_from_bounded_trajectory}
     A source-bounded change (a bounded change with $\le r_s$ pair sources per monomial, Definition~\ref{def:peps_circuit_source_bound}) is preserved by enlarging $(S,r,K,r_s,\varepsilon)$, by composing with sheet permutations or identity changes, and (when $\lVert\Omega\rVert,\lVert\xi\rVert\le1$) by lifting from one or two adjacent sheets to a larger stack. Consequently, if each event in the schedule carries a segment of source-bounded changes connecting its starting stack to the next event's starting stack with participants used by that event, these segments concatenate into a full schedule trajectory, and under the remaining hypotheses of Lemma~\ref{thm:peps_protocol_from_bounded_trajectory} its conclusion holds (\texttt{06-geometry.tex}, lines 82--100, 127--131 and 572--681; \texttt{04-compression.tex}, lines 143--147).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_bounded_change_closure, thm:peps_sheet_reordering,
-        lem:peps_circuit_source_bound_monomials, thm:peps_protocol_from_bounded_trajectory}
+    \uses{thm:peps_bounded_change_closure,thm:peps_sheet_reordering,lem:peps_circuit_source_bound_monomials,thm:peps_protocol_from_bounded_trajectory}
     By Lemma~\ref{thm:peps_bounded_change_closure} and Lemma~\ref{lem:peps_circuit_source_bound_monomials}, tensoring with untouched spectator registers adds no pair sources and does not increase the error when $\lVert\Omega\rVert,\lVert\xi\rVert\le1$. Inducting along the event list concatenates the segments, and Lemma~\ref{thm:peps_protocol_from_bounded_trajectory} concludes.
 \end{proof}
 
@@ -421,10 +387,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.levelVertices,
         TNLean.PEPS.Approximation.levelFrame}
     \leanok
-    \uses{def:peps_guide_frame, def:peps_dyadic_protocol_parties,
-        def:peps_adaptive_patch_constraint, lem:peps_level_true_vertices,
-        def:peps_dyadic_block_guide, thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_guide_frame_supplied_gates, def:peps_frame}
+    \uses{def:peps_guide_frame,def:peps_dyadic_protocol_parties,def:peps_adaptive_patch_constraint,lem:peps_level_true_vertices,def:peps_dyadic_block_guide,thm:peps_dyadic_repainting_valid_labels,thm:peps_guide_frame_supplied_gates,def:peps_frame}
     For a plane labelling $G$, its sampled guide at $p$ is $\lim_{\varepsilon\to0^+}G(p+\varepsilon(1,1))$ when eventually constant, and $G(p)$ otherwise. Given hierarchy depth $k$, level $0\le j\le k$, repainted blocks $\mathcal D$, a label rank, a reference repainting party map, an adaptive patch supply $P$ with parameters $(B_0,C,c,60,L)$, and a radius function $0<\rho(z)\le B_0\log L$, the level guide is the sampled level-$j$ block guide; its true vertices form a finite set of grid corners in $[0,2^k]^2$. The level frame is the guide frame (Definition~\ref{def:peps_guide_frame}) with supplied patches of radius $\rho(z)$ at those true vertices if their outer physical samples are pairwise disjoint, and the root-owned raw frame otherwise (\texttt{06-geometry.tex}, lines 69--125).
 \end{definition}
 
@@ -446,9 +409,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.pairwise_disjoint_levelHoles,
         TNLean.PEPS.Approximation.isTrueVertex_levelGuide_insert_iff}
     \leanok
-    \uses{def:peps_protocol_level_frame, def:peps_sheet_stack,
-        thm:peps_protocol_event_segments, def:peps_circuit_source_bound,
-        lem:peps_dyadic_sampled_guides, lem:peps_dyadic_readings_exist}
+    \uses{def:peps_protocol_level_frame,def:peps_sheet_stack,thm:peps_protocol_event_segments,def:peps_circuit_source_bound,lem:peps_dyadic_sampled_guides,lem:peps_dyadic_readings_exist}
     \begin{enumerate}
         \item Every $(1,1)$-displaced reading of $G$ equals its sampled guide, and when $G$ is ray-constant (in particular for block guides) the sampled guide is a $(1,1)$-reading.
         \item When $q\ge1$ and $\lVert\Omega\rVert,\lVert\xi\rVert\le1$, a source-bounded change of the main frame, of one auxiliary frame (indexed in a duplicate-free list), or of both together lifts to the full sheet memory with the same bounds $(S,r,K,r_s,\varepsilon)$ via sheet permutations moving the active auxiliary frame adjacent to the main frame.
@@ -457,15 +418,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_protocol_level_frame, def:peps_guide_frame,
-        thm:peps_guide_frame_patch_congruence,
-        lem:peps_dyadic_readings_exist, thm:peps_protocol_event_segments,
-        lem:peps_level_true_vertices, lem:peps_dyadic_choice_K0,
-        thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates,
-        def:peps_dyadic_block_guide, lem:peps_dyadic_direct_repainting,
-        lem:peps_dyadic_incident_change, lem:peps_dyadic_sampled_guides,
-        thm:peps_dyadic_temporary_holes, lem:peps_dyadic_active_labels,
-        def:peps_dyadic_incident_labels, thm:peps_dyadic_repainting_valid_labels}
+    \uses{def:peps_protocol_level_frame,def:peps_guide_frame,thm:peps_guide_frame_patch_congruence,lem:peps_dyadic_readings_exist,thm:peps_protocol_event_segments,lem:peps_level_true_vertices,lem:peps_dyadic_choice_K0,thm:peps_guide_frame_norm,thm:peps_guide_frame_supplied_gates,def:peps_dyadic_block_guide,lem:peps_dyadic_direct_repainting,lem:peps_dyadic_incident_change,lem:peps_dyadic_sampled_guides,thm:peps_dyadic_temporary_holes,lem:peps_dyadic_active_labels,def:peps_dyadic_incident_labels,thm:peps_dyadic_repainting_valid_labels}
     Ray-constancy of block guides (Lemma~\ref{lem:peps_dyadic_readings_exist}) gives (1), and Lemma~\ref{thm:peps_protocol_event_segments} gives (2). For (3), Lemma~\ref{lem:peps_level_true_vertices} and Lemma~\ref{thm:peps_guide_frame_patch_congruence} identify the true vertices and frames; grid corners at level $j$ have spacing $\ge 2^j>4r$, so outer samples of radius $2r$ are disjoint; and outside the four corners of a repainted block the block guide is locally unchanged or interior to the block, preserving true-vertex status.
 \end{proof}
 
@@ -485,11 +438,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.resize_hasSourceBoundedChange_of_le,
         TNLean.PEPS.Approximation.exists_resize_hasSourceBoundedChange}
     \leanok
-    \uses{def:peps_protocol_level_frame, thm:peps_protocol_constants,
-        def:peps_dyadic_protocol_parties, thm:peps_protocol_event_segments,
-        def:peps_dyadic_hierarchy, def:peps_adaptive_patch_constraint,
-        thm:peps_dyadic_direct_repainting_constants, def:peps_circuit_source_bound,
-        def:peps_sheet_stack}
+    \uses{def:peps_protocol_level_frame,thm:peps_protocol_constants,def:peps_dyadic_protocol_parties,thm:peps_protocol_event_segments,def:peps_dyadic_hierarchy,def:peps_adaptive_patch_constraint,thm:peps_dyadic_direct_repainting_constants,def:peps_circuit_source_bound,def:peps_sheet_stack}
     Let $2\le L\le 2^k$, $q\ge1$, $\lVert\Omega\rVert=1$, protocol constants $(K_0,\epsilon_0,\nu,a,D,B_0)$ as in Lemma~\ref{thm:peps_protocol_constants} with patch bound $b$, and let $P$ be an adaptive patch supply for $\Omega$ with parameters $(B_0,C,c,60,L)$. Fix a label rank, reference party map, spectator frames, and integers $C'\ge\max(C,1)$, $c'\ge c$. Then $t=D\log L$ and $h_n=\epsilon_0\min(n,t)$ satisfy $0<h_n\le B_0\log L$ for all $n>0$, and with
     \begin{align}
         K_{\mathrm{rw}} & =(C'+1)^{3b}
@@ -526,14 +475,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_party_map_switch, thm:peps_guide_frame_owner_agreement,
-        thm:peps_protocol_level_frame_facts, thm:peps_protocol_bounded_changes,
-        thm:peps_guide_frame_supplied_gates, lem:peps_protocol_junction_resize_parties,
-        thm:peps_protocol_event_segments, thm:peps_protocol_constants,
-        thm:peps_dyadic_guide_owners, def:peps_dyadic_chamber_sampling,
-        lem:peps_dyadic_incident_change, def:peps_dyadic_block_guide,
-        thm:peps_dyadic_repainting_valid_labels, thm:peps_dyadic_protocol_parties,
-        lem:peps_dyadic_floor, thm:peps_dyadic_block_ratio}
+    \uses{thm:peps_protocol_party_map_switch,thm:peps_guide_frame_owner_agreement,thm:peps_protocol_level_frame_facts,thm:peps_protocol_bounded_changes,thm:peps_guide_frame_supplied_gates,lem:peps_protocol_junction_resize_parties,thm:peps_protocol_event_segments,thm:peps_protocol_constants,thm:peps_dyadic_guide_owners,def:peps_dyadic_chamber_sampling,lem:peps_dyadic_incident_change,def:peps_dyadic_block_guide,thm:peps_dyadic_repainting_valid_labels,thm:peps_dyadic_protocol_parties,lem:peps_dyadic_floor,thm:peps_dyadic_block_ratio}
     Since $0<\epsilon_0<1\le K_0$ and $K_0D\le B_0$, we have $0<h_n\le\epsilon_0D\log L\le B_0\log L$, and $4\epsilon_0<1$ ensures disjoint outer physical samples at spacing $s$ (Lemma~\ref{thm:peps_protocol_level_frame_facts}). Switching to the event's party map via Lemma~\ref{thm:peps_protocol_party_map_switch} (and Lemma~\ref{lem:peps_protocol_junction_resize_parties} for the junction placeholder), the supplied-gate bounds of Lemmas~\ref{thm:peps_guide_frame_supplied_gates} and~\ref{thm:peps_protocol_bounded_changes} lifted by Lemma~\ref{thm:peps_protocol_level_frame_facts} yield both claims.
 \end{proof}
 
@@ -583,9 +525,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.frame_eq_of_owner_holes,
         TNLean.PEPS.Approximation.finalMain_pairwise}
     \leanok
-    \uses{def:peps_protocol_level_frame, def:peps_dyadic_protocol_schedule,
-        def:peps_adaptive_patch_constraint, def:peps_frame,
-        def:peps_dyadic_hierarchy, lem:peps_dyadic_floor}
+    \uses{def:peps_protocol_level_frame,def:peps_dyadic_protocol_schedule,def:peps_adaptive_patch_constraint,def:peps_frame,def:peps_dyadic_hierarchy,lem:peps_dyadic_floor}
     In a depth-$k$ hierarchy ($0\le j\le k$), a level-$j$ square repainting has rank $2(k-j)+1$ and a scale-$j$ junction resize has rank $2(k-\max\{j-1,0\})$. The event schedule is duplicate-free with nondecreasing ranks covering $[2,2k+1]$ (when $k\ge1$). After a scale-$j$ resize or level-$j$ repainting, its corner or block index is added to the resized corners $\mathcal C_j$ or repainted blocks $\mathcal D_j$; when the next event has strictly larger rank (or at schedule end), all root-square blocks at level $j$ lie in $\mathcal D_j$.
 
     Let $k\ge1$, $L\le 2^k$, $q\ge1$, $\epsilon_0,t>0$ with $\epsilon_0t\le B_0\log L$, and $h_n=\epsilon_0\min(n,t)\in(0,B_0\log L]$. Fix an adaptive patch supply for $\Omega$ with parameters $(B_0,C,c,60,L)$, a label rank, and a reference party map. Define the main frame (Definition~\ref{def:peps_protocol_level_frame}) before each event as:
@@ -598,19 +538,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_protocol_schedule_counts,
-        lem:peps_dyadic_direct_repainting, lem:peps_dyadic_unmodified_vertices,
-        thm:peps_dyadic_temporary_holes, lem:peps_dyadic_active_labels,
-        thm:peps_protocol_level_events, thm:peps_protocol_party_map_switch,
-        thm:peps_dyadic_protocol_parties, thm:peps_dyadic_protocol_final_step,
-        thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates,
-        lem:peps_dyadic_sampled_guides, thm:peps_protocol_level_frame_facts,
-        def:peps_protocol_level_frame, def:peps_dyadic_block_guide,
-        thm:peps_dyadic_repainting_valid_labels, def:peps_guide_frame,
-        def:peps_dyadic_protocol_schedule, def:peps_dyadic_used_parties,
-        lem:peps_adaptive_patch_supply, lem:peps_level_true_vertices,
-        thm:peps_protocol_bounded_changes, lem:peps_protocol_junction_resize_parties,
-        def:peps_frame}
+    \uses{thm:peps_dyadic_protocol_schedule_counts,lem:peps_dyadic_direct_repainting,lem:peps_dyadic_unmodified_vertices,thm:peps_dyadic_temporary_holes,lem:peps_dyadic_active_labels,thm:peps_protocol_level_events,thm:peps_protocol_party_map_switch,thm:peps_dyadic_protocol_parties,thm:peps_dyadic_protocol_final_step,thm:peps_guide_frame_norm,thm:peps_guide_frame_supplied_gates,lem:peps_dyadic_sampled_guides,thm:peps_protocol_level_frame_facts,def:peps_protocol_level_frame,def:peps_dyadic_block_guide,thm:peps_dyadic_repainting_valid_labels,def:peps_guide_frame,def:peps_dyadic_protocol_schedule,def:peps_dyadic_used_parties,lem:peps_adaptive_patch_supply,lem:peps_level_true_vertices,thm:peps_protocol_bounded_changes,lem:peps_protocol_junction_resize_parties,def:peps_frame}
     Rank monotonicity and coverage follow from Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}, and when the rank increases the completed block guide of level $j$ equals the starting guide of level $j-1$ (Lemma~\ref{lem:peps_dyadic_active_labels}). Frame congruence (Lemma~\ref{thm:peps_protocol_level_frame_facts}) identifies the transitions across rank boundaries. The root guide has no true vertices (Lemma~\ref{thm:peps_protocol_level_events}) and cell centers lie in $(0,2^k)^2$ (Lemma~\ref{thm:peps_protocol_party_map_switch}), giving the initial raw frame; at the unit level, $2h_1\le 2\epsilon_0<1/2$ gives empty outer physical squares by Lemmas~\ref{thm:peps_guide_frame_norm} and~\ref{thm:peps_dyadic_protocol_final_step}.
 \end{proof}
 
@@ -628,11 +556,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings_of_le,
         TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings}
     \leanok
-    \uses{def:peps_dyadic_protocol, def:peps_adaptive_patch_constraint,
-        thm:peps_protocol_constants, thm:peps_dyadic_direct_repainting_constants,
-        thm:peps_protocol_main_frame_schedule, def:peps_dyadic_protocol_schedule,
-        thm:peps_protocol_event_segments, def:peps_circuit_source_bound,
-        def:peps_dyadic_protocol_parties, def:peps_frame, thm:peps_protocol_level_events}
+    \uses{def:peps_dyadic_protocol,def:peps_adaptive_patch_constraint,thm:peps_protocol_constants,thm:peps_dyadic_direct_repainting_constants,thm:peps_protocol_main_frame_schedule,def:peps_dyadic_protocol_schedule,thm:peps_protocol_event_segments,def:peps_circuit_source_bound,def:peps_dyadic_protocol_parties,def:peps_frame,thm:peps_protocol_level_events}
     Fix $0<\epsilon_0\le1/16$ and let $\nu'=\min(\epsilon_0,1)/8$. For every
     $0<\nu\le\nu'$, every $k\in\N$, constants of the protocol with an
     admissible direct-repainting ratio, $q\ge1$, $L\ge2$ with $L\le2^k<2L$,
@@ -670,9 +594,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_main_frame_schedule, thm:peps_protocol_level_events,
-        thm:peps_protocol_event_segments, thm:peps_dyadic_protocol_schedule_counts,
-        def:peps_dyadic_protocol_schedule, def:peps_frame, thm:peps_protocol_constants}
+    \uses{thm:peps_protocol_main_frame_schedule,thm:peps_protocol_level_events,thm:peps_protocol_event_segments,thm:peps_dyadic_protocol_schedule_counts,def:peps_dyadic_protocol_schedule,def:peps_frame,thm:peps_protocol_constants}
     By Lemma~\ref{thm:peps_protocol_main_frame_schedule}, the main frame follows the schedule transitions from the initial raw copy to the final unit-square frame. Resizes and direct repaintings ($2^j\le K_0t$) act on the main frame by a single rewrite of Lemma~\ref{thm:peps_protocol_level_events} and freeze no auxiliary sheet, while large repaintings ($2^j>K_0t$) use the assumed $189$-step segments (matching the operation count of Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}). Lemma~\ref{thm:peps_protocol_event_segments} joins all segments into the protocol.
 \end{proof}
 
@@ -695,19 +617,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.treatedFrame,
         TNLean.PEPS.Approximation.treatedFrame_eq}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_block_guide,
-        def:peps_dyadic_protocol_parties,
-        def:peps_frame,
-        def:peps_frame_square_patch,
-        def:peps_guide_frame,
-        def:peps_protocol_level_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_floor,
-        lem:peps_treated_true_vertices,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_protocol_bounded_changes}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_dyadic_block_guide,def:peps_dyadic_protocol_parties,def:peps_frame,def:peps_frame_square_patch,def:peps_guide_frame,def:peps_protocol_level_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_floor,lem:peps_treated_true_vertices,thm:peps_guide_frame_supplied_gates,thm:peps_protocol_bounded_changes}
     Given level $j\in\N$, square index $S\in\Z^2$, $t\in\R$, a finite mark set $M$ of grid corners, homogenizing label $L_0$, and a local guide $g$, the treated guide places $g$ on the block $nS+[0,n]^2$ ($n=2^j$), homogenizes it to $L_0$ on $\bigcup_{Q\in M}B_\infty(nQ,t)$, and samples along $(1,1)$ as in Definition~\ref{def:peps_protocol_level_frame}. Its treated vertex set is the set of true vertices among the grid corners in $[0,N+1]^2$ ($N=2^{k-j}$) and the finite rim patterns of radius $t$ about $M$.
 
     Given an adaptive patch supply $P$ for $\Omega$ with parameters $(B_0,C,c,60,L)$, a label rank, a repaintable square $R$ at level $j<k$, and $0<\epsilon_0t\le B_0\log L$, the treated frame $F_M^{L_0}(g)$ is the encoded guide frame (Definition~\ref{def:peps_guide_frame}) with supplied patches of radius $\epsilon_0t$ at the treated vertex set when their outer physical samples are pairwise disjoint, and the raw frame owned by $R$ otherwise.
@@ -721,12 +631,7 @@ no holes, this is the normalization of $\Omega$.
     \label{def:peps_frame_change}
     \lean{TNLean.PEPS.Approximation.HasFrameChange}
     \leanok
-    \uses{def:peps_bounded_change,
-        def:peps_circuit_source_bound,
-        def:peps_frame,
-        def:peps_frame_registers,
-        def:peps_original_circuit,
-        def:peps_sheet_stack}
+    \uses{def:peps_bounded_change,def:peps_circuit_source_bound,def:peps_frame,def:peps_frame_registers,def:peps_original_circuit,def:peps_sheet_stack}
     For $q\ge1$, a bounded frame change between frames $F,F'$ with participant set $S$ and bounds $(r,K,r_s,\eta)$ is an original circuit between their register layouts that is a bounded change (Definition~\ref{def:peps_bounded_change}) from $\Omega_F$ to $\Omega_{F'}$ with parameters $(S,r,K,\eta)$ and has $\le r_s$ pair sources per expansion monomial (Definition~\ref{def:peps_circuit_source_bound}).
 \end{definition}
 
@@ -747,39 +652,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_treated_frame_spec}
     \lean{TNLean.PEPS.Approximation.treatedFrame_spec}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_block_guide,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_used_parties,
-        def:peps_guide_frame,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_birth_enlargement,
-        lem:peps_dyadic_floor,
-        lem:peps_dyadic_sampled_guides,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_constants,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_dyadic_block_guide,def:peps_dyadic_protocol_parties,def:peps_dyadic_used_parties,def:peps_guide_frame,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_birth_enlargement,lem:peps_dyadic_floor,lem:peps_dyadic_sampled_guides,lem:peps_dyadic_unmodified_vertices,thm:peps_dyadic_repainting_valid_labels,thm:peps_guide_frame_supplied_gates,thm:peps_protocol_bounded_changes,thm:peps_protocol_constants,thm:peps_treated_radius_bounds}
     Under protocol constants with $L\ge2$, $t=D\log L$, a repaintable square $R$ at level $j<k$ of side $2^j>K_0t$, an adaptive patch supply $P$ with parameters $(B_0,C,c,60,L)$, and any unmodified guide $g$ of the repainting baseline of $R$, finite mark set $M$, and label $L_0$, the treated guide of Definition~\ref{def:peps_protocol_treated_frame} is a $(1,1)$-reading of the homogenized guide on $R$, its true vertices equal the treated vertex set, their supplied outer samples are pairwise disjoint, and $F_M^{L_0}(g)$ equals the encoded guide frame (\texttt{06-geometry.tex}, lines 69--80, 102--125 and 328--355).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_block_guide,
-        def:peps_protocol_treated_frame,
-        lem:peps_dyadic_chamber_sampling,
-        lem:peps_dyadic_readings_exist,
-        lem:peps_treated_true_vertices,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_dyadic_temporary_holes,
-        thm:peps_guide_frame_norm,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_level_frame_facts,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_dyadic_block_guide,def:peps_protocol_treated_frame,lem:peps_dyadic_chamber_sampling,lem:peps_dyadic_readings_exist,lem:peps_treated_true_vertices,thm:peps_dyadic_repainting_valid_labels,thm:peps_dyadic_temporary_holes,thm:peps_guide_frame_norm,thm:peps_guide_frame_supplied_gates,thm:peps_protocol_bounded_changes,thm:peps_protocol_level_frame_facts,thm:peps_treated_radius_bounds}
     Ray-constancy (Lemma~\ref{lem:peps_dyadic_readings_exist}) gives the $(1,1)$-reading, Lemma~\ref{lem:peps_treated_true_vertices} and Lemma~\ref{thm:peps_dyadic_temporary_holes} identify the true vertices and their separation $>4\epsilon_0t$, and disjointness selects the encoded guide-frame branch of Definition~\ref{def:peps_protocol_treated_frame}.
 \end{proof}
 
@@ -800,22 +678,7 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.pointTreatment_hasSourceBoundedChange_of_le,
         TNLean.PEPS.Approximation.exists_pointTreatment_hasSourceBoundedChange}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_block_guide,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_used_parties,
-        def:peps_frame_change,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_direct_repainting,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_dyadic_block_ratio,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_constants,
-        thm:peps_protocol_level_events,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_dyadic_block_guide,def:peps_dyadic_protocol_parties,def:peps_dyadic_used_parties,def:peps_frame_change,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_direct_repainting,lem:peps_dyadic_unmodified_vertices,thm:peps_dyadic_block_ratio,thm:peps_dyadic_repainting_valid_labels,thm:peps_protocol_bounded_changes,thm:peps_protocol_constants,thm:peps_protocol_level_events,thm:peps_treated_radius_bounds}
     Fix $0<\epsilon_0\le1/16$ and let $\nu'=\min(\epsilon_0,1)/20000$. The following holds for
     every $0<\nu\le\nu'$. Choose protocol constants, natural
     $L\ge2$ and $q\ge1$, a unit vector $\Omega$, an adaptive supplied-patch family $P$ for
@@ -837,13 +700,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_chamber_sampling,
-        lem:peps_treated_true_vertices,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_patch_bound_lower,
-        thm:peps_treated_frame_spec,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_dyadic_chamber_sampling,lem:peps_treated_true_vertices,thm:peps_guide_frame_supplied_gates,thm:peps_protocol_bounded_changes,thm:peps_protocol_patch_bound_lower,thm:peps_treated_frame_spec,thm:peps_treated_radius_bounds}
     The $(1,1)$-readings of the two homogenized guides agree outside $\overline B_\infty(Q_0,t)$ and their frames equal the encoded guide frames by Lemma~\ref{thm:peps_treated_frame_spec}. Rewriting the supplied radius-$\epsilon_0t$ patches via auxiliary patches of radius $u=\nu t/2\le B_0\log L$ (Lemma~\ref{thm:peps_guide_frame_supplied_gates}) uses a square net of size $\le((4+8\epsilon_0+2\nu)/\nu+1)^2\le b$ with $b\ge53$ (Lemma~\ref{thm:peps_protocol_patch_bound_lower}), yielding the bounds $(2b,K_{\mathrm{rw}},2b,(2b+1)L^{-20})$ and participants used by $R$ (Lemma~\ref{thm:peps_protocol_bounded_changes}).
 \end{proof}
 
@@ -851,17 +708,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_readings_far_change}
     \lean{TNLean.PEPS.Approximation.readings_isTrueVertex_iff_of_far}
     \leanok
-    \uses{def:peps_dyadic_incident_labels,
-        lem:peps_dyadic_birth_enlargement,
-        lem:peps_dyadic_sampled_guides}
+    \uses{def:peps_dyadic_incident_labels,lem:peps_dyadic_birth_enlargement,lem:peps_dyadic_sampled_guides}
     If plane labellings $G_b,G_a$ have the same true vertices, each at distance $\ge\delta>0$ from $\overline{\{G_b\ne G_a\}}$, then their readings $f_b,f_a$ along any common displacement have the same true vertices and the same incident labels at them.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_incident_labels,
-        lem:peps_dyadic_incident_change,
-        lem:peps_dyadic_sampled_guides,
-        thm:peps_dyadic_temporary_holes}
+    \uses{def:peps_dyadic_incident_labels,lem:peps_dyadic_incident_change,lem:peps_dyadic_sampled_guides,thm:peps_dyadic_temporary_holes}
     Since $\{f_b\ne f_a\}\subseteq\overline{\{G_b\ne G_a\}}$ (Lemma~\ref{lem:peps_dyadic_sampled_guides}), $f_b$ and $f_a$ agree on a neighborhood of every guide vertex, so their incident labels and true-vertex sets coincide (Lemma~\ref{thm:peps_dyadic_temporary_holes}).
 \end{proof}
 
@@ -870,17 +722,12 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.guideFrame_eq_changeOwner,
         TNLean.PEPS.Approximation.guideFrame_eq_changeOwner_of_ne}
     \leanok
-    \uses{def:peps_dyadic_incident_labels,
-        def:peps_frame_birth_partition,
-        def:peps_frame_square_patch,
-        def:peps_guide_frame}
+    \uses{def:peps_dyadic_incident_labels,def:peps_frame_birth_partition,def:peps_frame_square_patch,def:peps_guide_frame}
     For two guides $g,g'$ sharing a finite center set $V$, patch family with disjoint outer samples, owner map, placeholder, and label rank, if $g'$ assigns owner $Q$ on a site set $T$, agrees with the owners of $g$ off $T$, and has the same tag holders on $V$, then the guide frame of $g'$ is $F[T\mapsto Q]$ (where $F$ is the guide frame of $g$). In particular, if $T=\{s\mid g(s)\ne g'(s)\}$, $g'\equiv B$ on $T$, and $g,g'$ have equal incident label sets at every $z\in V$, then the guide frame of $g'$ is $F[T\mapsto\text{owner}(B)]$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_guide_frame,
-        lem:peps_guide_frame_tags,
-        thm:peps_protocol_main_frame_schedule}
+    \uses{def:peps_guide_frame,lem:peps_guide_frame_tags,thm:peps_protocol_main_frame_schedule}
     Site owners match $F[T\mapsto Q]$ everywhere and the ordered tagged holes on $V$ are identical (Definition~\ref{def:peps_guide_frame}); in the corollary, equal incident label sets on $V$ yield equal canonical tag holders (Lemma~\ref{lem:peps_guide_frame_tags}).
 \end{proof}
 
@@ -888,14 +735,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_reading_changed_values}
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.values_of_ne}
     \leanok
-    \uses{def:peps_dyadic_block_guide,
-        lem:peps_dyadic_sampled_guides}
+    \uses{def:peps_dyadic_block_guide,lem:peps_dyadic_sampled_guides}
     If labellings $H_b,H_a$ satisfy $H_b=A$ and $H_a\in\{A,B\}$ on the open $\delta$-neighborhood ($\delta>0$) of $\{H_b\ne H_a\}$, then for any $(1,1)$-readings $f_b,f_a$ of their translates by $d$, every point with $f_b(p)\ne f_a(p)$ satisfies $f_b(p)=A$ and $f_a(p)=B$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_dyadic_sampled_guides,
-        lem:peps_dyadic_translation}
+    \uses{lem:peps_dyadic_sampled_guides,lem:peps_dyadic_translation}
     Any $p$ with $f_b(p)\ne f_a(p)$ has $p-d\in\overline{\{H_b\ne H_a\}}$ (Lemmas~\ref{lem:peps_dyadic_sampled_guides} and~\ref{lem:peps_dyadic_translation}), so for small $\eta>0$, $p-d+\eta(1,1)$ lies in the $\delta$-neighborhood where $f_b(p)=A$ and $f_a(p)\in\{A,B\}\setminus\{A\}=\{B\}$.
 \end{proof}
 
@@ -903,10 +748,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_treated_band_support}
     \lean{TNLean.PEPS.Approximation.BandOperation.treated_ne_subset}
     \leanok
-    \uses{def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_schedule,
-        lem:peps_dyadic_floor}
+    \uses{def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_schedule,lem:peps_dyadic_floor}
     For any edge band operation, real $n,t$, edge, and background guide, the difference set of its endpoint-treated before and after guides is contained in the open edge band $\{-8<x<2\}$.
 \end{lemma}
 
@@ -918,11 +760,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_treated_band_values}
     \lean{TNLean.PEPS.Approximation.BandOperation.treated_mem}
     \leanok
-    \uses{def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_schedule,
-        lem:peps_dyadic_floor,
-        thm:peps_dyadic_no_changed_vertex}
+    \uses{def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_schedule,lem:peps_dyadic_floor,thm:peps_dyadic_no_changed_vertex}
     For an edge band operation inserting a single label $Q$ with surrounding label $P_\circ$ and $t\le n$, on the open $a_0t$-neighborhood of the difference of its endpoint-treated guides both treated guides take values in $\{P_\circ,Q\}$ and the treated surrounding guide equals $P_\circ$.
 \end{lemma}
 
@@ -935,21 +773,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_treated_band_readings}
     \lean{TNLean.PEPS.Approximation.BandOperation.readings_of_ne}
     \leanok
-    \uses{def:peps_dyadic_block_guide,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        lem:peps_dyadic_floor,
-        lem:peps_dyadic_sampled_guides,
-        thm:peps_dyadic_no_changed_vertex}
+    \uses{def:peps_dyadic_block_guide,def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,lem:peps_dyadic_floor,lem:peps_dyadic_sampled_guides,thm:peps_dyadic_no_changed_vertex}
     For an elementary edge operation inserting $Q$ with surrounding label $P_\circ$ and $0<t\le n$, let $f_b,f_a,f_\circ$ be $(1,1)$-readings of translates of the endpoint-treated before, after, and surrounding guides. At every point where $f_b\ne f_a$, one has $f_\circ=P_\circ$ and $f_b,f_a\in\{P_\circ,Q\}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_dyadic_sampled_guides,
-        lem:peps_dyadic_translation,
-        thm:peps_treated_band_values}
+    \uses{lem:peps_dyadic_sampled_guides,lem:peps_dyadic_translation,thm:peps_treated_band_values}
     A point where $f_b\ne f_a$ translates into the closure of the local guide difference, whose open $a_0t$-neighborhood contains small positive $(1,1)$-displacements; Lemma~\ref{thm:peps_treated_band_values} concludes.
 \end{proof}
 
@@ -957,28 +786,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_treated_band_frame_facts}
     \lean{TNLean.PEPS.Approximation.BandOperation.treated_frame_facts}
     \leanok
-    \uses{def:peps_dyadic_block_guide,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_incident_labels,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        lem:peps_dyadic_birth_enlargement,
-        lem:peps_dyadic_floor,
-        lem:peps_dyadic_sampled_guides,
-        thm:peps_dyadic_no_changed_vertex}
+    \uses{def:peps_dyadic_block_guide,def:peps_dyadic_edge_band,def:peps_dyadic_incident_labels,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,lem:peps_dyadic_birth_enlargement,lem:peps_dyadic_floor,lem:peps_dyadic_sampled_guides,thm:peps_dyadic_no_changed_vertex}
     Under the hypotheses of Lemma~\ref{thm:peps_treated_band_readings} with $2\epsilon_0<a_0$, the $(1,1)$-readings $f_b,f_a$ have the same true vertices and incident labels, every $p\in\{f_b\ne f_a\}$ satisfies $d_\infty(p,z)>2\epsilon_0t$ for every true vertex $z$, and $d_\infty(p,p')\le n$ for all $p,p'\in\{f_b\ne f_a\}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_dyadic_band_disjoint,
-        lem:peps_dyadic_sampled_guides,
-        lem:peps_dyadic_translation,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_dyadic_no_changed_vertex,
-        thm:peps_dyadic_temporary_holes,
-        thm:peps_readings_far_change,
-        thm:peps_treated_band_support}
+    \uses{lem:peps_dyadic_band_disjoint,lem:peps_dyadic_sampled_guides,lem:peps_dyadic_translation,thm:peps_bulk_steps_treated_frames,thm:peps_dyadic_no_changed_vertex,thm:peps_dyadic_temporary_holes,thm:peps_readings_far_change,thm:peps_treated_band_support}
     By Lemma~\ref{thm:peps_dyadic_no_changed_vertex}, the treated guides share the same true vertices at distance $\ge a_0t>2\epsilon_0t$ from the closure of their difference, so Lemma~\ref{thm:peps_readings_far_change} gives equal reading vertices, incident labels, and clearance $>2\epsilon_0t$. Lemma~\ref{thm:peps_treated_band_support} places $\{f_b\ne f_a\}$ inside the closed edge band of diameter $\le n$ (Lemma~\ref{thm:peps_bulk_steps_treated_frames}).
 \end{proof}
 
@@ -986,25 +799,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_band_step_changes}
     \lean{TNLean.PEPS.Approximation.bandBirth_hasFrameChange}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_block_guide,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_dyadic_used_parties,
-        def:peps_frame_change,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_dyadic_no_changed_vertex,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_constants,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_block_guide,def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_dyadic_used_parties,def:peps_frame_change,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_unmodified_vertices,thm:peps_bulk_steps_treated_frames,thm:peps_dyadic_no_changed_vertex,thm:peps_dyadic_repainting_valid_labels,thm:peps_protocol_bounded_changes,thm:peps_protocol_constants,thm:peps_treated_radius_bounds}
     Let $q\ge1$, fix a family of states, and let $\Omega$ be a unit vector of the family.
     Assume that $D$ is an angular scale as in Definition~\ref{def:peps_angular_scale} for
     the family with parameters $q,a,A_0,m_0$, test
@@ -1025,19 +820,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_frame_change,
-        lem:peps_guide_frame_outer_holes_disjoint,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_circuit_source_bound_monomials,
-        thm:peps_bounded_change_closure,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_guide_frame_change_owner,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_repainted_square_side_bound,
-        thm:peps_treated_band_frame_facts,
-        thm:peps_treated_band_readings,
-        thm:peps_treated_frame_spec,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_frame_change,lem:peps_guide_frame_outer_holes_disjoint,lem:peps_adaptive_patch_supply,lem:peps_circuit_source_bound_monomials,thm:peps_bounded_change_closure,thm:peps_bulk_steps_treated_frames,thm:peps_guide_frame_change_owner,thm:peps_guide_frame_supplied_gates,thm:peps_repainted_square_side_bound,thm:peps_treated_band_frame_facts,thm:peps_treated_band_readings,thm:peps_treated_frame_spec,thm:peps_treated_radius_bounds}
     By Lemmas~\ref{thm:peps_treated_frame_spec}, \ref{thm:peps_treated_band_readings}, and~\ref{thm:peps_treated_band_frame_facts}, the before and after readings share the same true vertices and incident labels, and the changed site set $T$ avoids all outer holes ($d_\infty(p,z)>2\epsilon_0t$), has diameter $\le n\le L$ (Lemma~\ref{thm:peps_repainted_square_side_bound}), and switches labels from $P_\circ$ to $Q$. Thus $F_a=F_b[T\mapsto Q_\circ]$ by Lemma~\ref{thm:peps_guide_frame_change_owner}, and the bulk birth of Lemma~\ref{thm:peps_bulk_steps_treated_frames} (converted via Lemma~\ref{thm:peps_bounded_change_closure}) gives the bounded frame change with $\le1$ pair source and error $L^{-30}$.
 \end{proof}
 
@@ -1045,25 +828,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_band_death_change}
     \lean{TNLean.PEPS.Approximation.bandDeath_hasFrameChange}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_block_guide,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_dyadic_used_parties,
-        def:peps_frame_change,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_dyadic_no_changed_vertex,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_constants,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_block_guide,def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_dyadic_used_parties,def:peps_frame_change,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_unmodified_vertices,thm:peps_bulk_steps_treated_frames,thm:peps_dyadic_no_changed_vertex,thm:peps_dyadic_repainting_valid_labels,thm:peps_protocol_bounded_changes,thm:peps_protocol_constants,thm:peps_treated_radius_bounds}
     Let $q\ge1$, fix a family of states, and let $\Omega$ be a unit vector of the family.
     Assume that $D$ is an angular scale as in Definition~\ref{def:peps_angular_scale} for
     the family with parameters $q,a,A_0,m_0$, test
@@ -1085,19 +850,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_frame_change,
-        lem:peps_guide_frame_outer_holes_disjoint,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_circuit_source_bound_monomials,
-        thm:peps_bounded_change_closure,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_guide_frame_change_owner,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_repainted_square_side_bound,
-        thm:peps_treated_band_frame_facts,
-        thm:peps_treated_band_readings,
-        thm:peps_treated_frame_spec,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_frame_change,lem:peps_guide_frame_outer_holes_disjoint,lem:peps_adaptive_patch_supply,lem:peps_circuit_source_bound_monomials,thm:peps_bounded_change_closure,thm:peps_bulk_steps_treated_frames,thm:peps_guide_frame_change_owner,thm:peps_guide_frame_supplied_gates,thm:peps_repainted_square_side_bound,thm:peps_treated_band_frame_facts,thm:peps_treated_band_readings,thm:peps_treated_frame_spec,thm:peps_treated_radius_bounds}
     Just as in Lemma~\ref{thm:peps_protocol_band_step_changes}, Lemma~\ref{thm:peps_guide_frame_change_owner} gives $F_b=F_a[T\mapsto Q_\circ]$, and the bulk death of Lemma~\ref{thm:peps_bulk_steps_treated_frames} (which uses one pair effect, requiring $r\ge1$) yields the bounded frame change with error $L^{-30}$.
 \end{proof}
 
@@ -1105,8 +858,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_central_treated_support}
     \lean{TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_ne_subset}
     \leanok
-    \uses{def:peps_dyadic_schedule,
-        lem:peps_dyadic_floor}
+    \uses{def:peps_dyadic_schedule,lem:peps_dyadic_floor}
     For any repainting baseline of side $n$ and real $t$, homogenizing its starting and central guides to its old label on the open radius-$t$ sup squares about the four corners produces guides that differ only inside $[0,n]^2$.
 \end{lemma}
 
@@ -1119,27 +871,7 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.centralBirth_hasFrameChange_of,
         TNLean.PEPS.Approximation.centralBirth_hasFrameChange}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_block_guide,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_dyadic_used_parties,
-        def:peps_frame_change,
-        def:peps_frame_square_patch,
-        def:peps_guide_frame,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_birth_enlargement,
-        lem:peps_dyadic_floor,
-        lem:peps_dyadic_sampled_guides,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_constants,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_block_guide,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_dyadic_used_parties,def:peps_frame_change,def:peps_frame_square_patch,def:peps_guide_frame,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_birth_enlargement,lem:peps_dyadic_floor,lem:peps_dyadic_sampled_guides,thm:peps_bulk_steps_treated_frames,thm:peps_dyadic_repainting_valid_labels,thm:peps_guide_frame_supplied_gates,thm:peps_protocol_bounded_changes,thm:peps_protocol_constants,thm:peps_treated_radius_bounds}
     For the sampled-guide change, let $k,L,q$ be natural numbers with $q\ge1$,
     fix a family of states, and let $\Omega$ be a unit vector of the family on
     the $L\times L$ system. Assume the exponent-$60$ angular-scale condition
@@ -1182,24 +914,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_frame_change,
-        lem:peps_guide_frame_outer_holes_disjoint,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_circuit_source_bound_monomials,
-        lem:peps_dyadic_sampled_guides,
-        lem:peps_dyadic_translation,
-        thm:peps_bounded_change_closure,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_central_treated_support,
-        thm:peps_dyadic_no_changed_vertex,
-        thm:peps_dyadic_temporary_holes,
-        thm:peps_guide_frame_change_owner,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_reading_changed_values,
-        thm:peps_readings_far_change,
-        thm:peps_repainted_square_side_bound,
-        thm:peps_treated_frame_spec,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_frame_change,lem:peps_guide_frame_outer_holes_disjoint,lem:peps_adaptive_patch_supply,lem:peps_circuit_source_bound_monomials,lem:peps_dyadic_sampled_guides,lem:peps_dyadic_translation,thm:peps_bounded_change_closure,thm:peps_bulk_steps_treated_frames,thm:peps_central_treated_support,thm:peps_dyadic_no_changed_vertex,thm:peps_dyadic_temporary_holes,thm:peps_guide_frame_change_owner,thm:peps_guide_frame_supplied_gates,thm:peps_reading_changed_values,thm:peps_readings_far_change,thm:peps_repainted_square_side_bound,thm:peps_treated_frame_spec,thm:peps_treated_radius_bounds}
     By Lemmas~\ref{thm:peps_dyadic_no_changed_vertex}, \ref{thm:peps_readings_far_change}, and~\ref{thm:peps_reading_changed_values}, the two readings share the same true vertices and incident labels, and the changed site set $T$ switches from $A$ to $B$, avoids all outer holes ($d_\infty(p,z)>2\epsilon_0t$), and has diameter $\le n\le L$ (Lemmas~\ref{thm:peps_central_treated_support} and~\ref{thm:peps_repainted_square_side_bound}). Lemma~\ref{thm:peps_guide_frame_change_owner} and the bulk birth of Lemma~\ref{thm:peps_bulk_steps_treated_frames} conclude.
 \end{proof}
 
@@ -1207,14 +922,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_reading_piecewise}
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_piecewise}
     \leanok
-    \uses{def:peps_dyadic_block_guide,
-        lem:peps_dyadic_sampled_guides}
+    \uses{def:peps_dyadic_block_guide,lem:peps_dyadic_sampled_guides}
     Let $Y,U\subseteq\R^2$ be open with $\partial Y\subseteq U$, let guides $H_1,H_2$ both equal $C$ on $U$, and let $f_1,f_2,g$ be $(1,1)$-readings of the translates by $d$ of $H_1,H_2$ and of the piecewise guide $H$ equal to $H_2$ on $Y$ and $H_1$ on $Y^c$. Then $g(p)=f_2(p)$ for $p-d\in Y$ and $g(p)=f_1(p)$ for $p-d\notin Y$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_block_guide,
-        lem:peps_dyadic_sampled_guides}
+    \uses{def:peps_dyadic_block_guide,lem:peps_dyadic_sampled_guides}
     Set $u_\eta=p+\eta(1,1)-d$ for small $\eta>0$. Since $Y$, $U$, and $(\overline Y)^c=(Y\cup\partial Y)^c\supseteq(Y\cup U)^c$ are open, $u_\eta$ stays in $Y$ when $p-d\in Y$ (giving $g(p)=H_2(u_\eta)=f_2(p)$), in $U$ when $p-d\in U\setminus Y$ (giving $g(p)=C=H_1(u_\eta)=f_1(p)$), and in $(\overline Y)^c$ when $p-d\notin Y\cup U$ (giving $g(p)=H_1(u_\eta)=f_1(p)$).
 \end{proof}
 
@@ -1222,8 +935,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_reading_constant_open}
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_of_mem_open}
     \leanok
-    \uses{def:peps_dyadic_block_guide,
-        lem:peps_dyadic_sampled_guides}
+    \uses{def:peps_dyadic_block_guide,lem:peps_dyadic_sampled_guides}
     If $U\subseteq\R^2$ is open, $H\equiv C$ on $U$, and $f$ is a $(1,1)$-reading of the translate of $H$ by $d$, then $f(p)=C$ for every $p$ with $p-d\in U$.
 \end{lemma}
 
@@ -1236,17 +948,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_exchange_holes_perm}
     \lean{TNLean.PEPS.Approximation.guideFrame_exchange_holes_perm}
     \leanok
-    \uses{def:peps_frame,
-        def:peps_frame_square_patch,
-        def:peps_guide_frame,
-        lem:peps_dyadic_birth_enlargement}
+    \uses{def:peps_frame,def:peps_frame_square_patch,def:peps_guide_frame,lem:peps_dyadic_birth_enlargement}
     Let $Y'\subseteq\R^2$, let $U'\subseteq\R^2$ be open with $\partial Y'\subseteq U'$, and suppose guides $f_1,f_2$ both equal $C$ on $U'$. For the piecewise guide $f$ equal to $f_2$ on $Y'$ and $f_1$ on $(Y')^c$, with exact finite true-vertex sets $V_1,V_2,W$ and a common patch family (with pairwise disjoint outer samples on each vertex set), owner map, placeholder, and rank, the holes of $f_1$ centered in $(Y')^c$ followed by the holes of $f_2$ centered in $Y'$ form a permutation of the holes (including tag owners) of the guide frame of $f$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_guide_frame,
-        lem:peps_dyadic_incident_change,
-        lem:peps_guide_frame_tags}
+    \uses{def:peps_guide_frame,lem:peps_dyadic_incident_change,lem:peps_guide_frame_tags}
     Since $f_1=f_2=C$ on $U'\supseteq\partial Y'$, the true vertices $W$ of $f$ partition into $V_1\setminus Y'$ and $V_2\cap Y'$ with matching incident label sets and canonical tag holders (Lemmas~\ref{lem:peps_dyadic_incident_change} and~\ref{lem:peps_guide_frame_tags}).
 \end{proof}
 
@@ -1254,11 +961,7 @@ no holes, this is the normalization of $\Omega$.
     \label{def:peps_protocol_pair_change}
     \lean{TNLean.PEPS.Approximation.HasPairChange}
     \leanok
-    \uses{def:peps_bounded_change,
-        def:peps_circuit_source_bound,
-        def:peps_frame,
-        def:peps_frame_registers,
-        def:peps_original_circuit}
+    \uses{def:peps_bounded_change,def:peps_circuit_source_bound,def:peps_frame,def:peps_frame_registers,def:peps_original_circuit}
     For $q\ge1$, a bounded pair change from $(F_1,F_2)$ to $(F'_1,F'_2)$ with participant set $S$ and bounds $(r,K,r_s,\eta)$ is an original circuit from the concatenated registers of $F_1,F_2$ to those of $F'_1,F'_2$ that is a bounded change (Definition~\ref{def:peps_bounded_change}) from $\Omega_{F_1}\otimes\Omega_{F_2}$ to $\Omega_{F'_1}\otimes\Omega_{F'_2}$ with parameters $(S,r,K,\eta)$ and has $\le r_s$ pair sources per expansion monomial (Definition~\ref{def:peps_circuit_source_bound}).
 \end{definition}
 
@@ -1266,17 +969,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_pair_change_reorder}
     \lean{TNLean.PEPS.Approximation.HasPairChange.reorder}
     \leanok
-    \uses{def:peps_frame,
-        def:peps_protocol_pair_change}
+    \uses{def:peps_frame,def:peps_protocol_pair_change}
     Any bounded pair change (Definition~\ref{def:peps_protocol_pair_change}) into $(N_1,N_2)$ is also a bounded pair change with the same bounds $(S,r,K,r_s,\eta)$ into any $(G_1,G_2)$ having the same site owners and permuted hole lists.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_protocol_pair_change,
-        lem:peps_circuit_source_bound_monomials,
-        lem:peps_register_reorderings,
-        thm:peps_bounded_change_closure,
-        thm:peps_guide_frame_rewrite}
+    \uses{def:peps_protocol_pair_change,lem:peps_circuit_source_bound_monomials,lem:peps_register_reorderings,thm:peps_bounded_change_closure,thm:peps_guide_frame_rewrite}
     By Lemma~\ref{lem:peps_register_reorderings} and Lemma~\ref{thm:peps_guide_frame_rewrite}, tensor-factor reorderings (with $0$ nonprivate gates) map $\Omega_{N_1}\otimes\Omega_{N_2}\mapsto\Omega_{G_1}\otimes\Omega_{G_2}$, preserving all bounds by Lemma~\ref{thm:peps_bounded_change_closure}.
 \end{proof}
 
@@ -1285,31 +983,7 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.edgeExchange_hasPairChange_of,
         TNLean.PEPS.Approximation.edgeExchange_hasPairChange}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_block_guide,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_dyadic_used_parties,
-        def:peps_frame_square_patch,
-        def:peps_guide_frame,
-        def:peps_protocol_pair_change,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_birth_enlargement,
-        lem:peps_dyadic_floor,
-        lem:peps_dyadic_sampled_guides,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_dyadic_no_changed_vertex,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_constants,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_block_guide,def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_dyadic_used_parties,def:peps_frame_square_patch,def:peps_guide_frame,def:peps_protocol_pair_change,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_birth_enlargement,lem:peps_dyadic_floor,lem:peps_dyadic_sampled_guides,lem:peps_dyadic_unmodified_vertices,thm:peps_bulk_steps_treated_frames,thm:peps_dyadic_no_changed_vertex,thm:peps_dyadic_repainting_valid_labels,thm:peps_guide_frame_supplied_gates,thm:peps_protocol_bounded_changes,thm:peps_protocol_constants,thm:peps_treated_radius_bounds}
     For the sampled-guide exchange, let $k,L,q$ be natural with $q\ge1$,
     fix a family of states, and suppose $\Omega$ is a unit vector of the
     family on the $L\times L$ system. Assume the exponent-$60$ angular-scale
@@ -1356,27 +1030,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_frame_exchange_data,
-        def:peps_protocol_pair_change,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_circuit_source_bound_monomials,
-        lem:peps_dyadic_floor,
-        lem:peps_dyadic_frozen_hole_count,
-        lem:peps_dyadic_lens_sides,
-        lem:peps_dyadic_schedule_guides,
-        thm:peps_bounded_change_closure,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_dyadic_angular_separation,
-        thm:peps_dyadic_no_changed_vertex,
-        thm:peps_exchange_holes_perm,
-        thm:peps_guide_frame_norm,
-        thm:peps_guide_frame_supplied_gates,
-        thm:peps_pair_change_reorder,
-        thm:peps_reading_constant_open,
-        thm:peps_reading_piecewise,
-        thm:peps_repainted_square_side_bound,
-        thm:peps_treated_frame_spec,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_frame_exchange_data,def:peps_protocol_pair_change,lem:peps_adaptive_patch_supply,lem:peps_circuit_source_bound_monomials,lem:peps_dyadic_floor,lem:peps_dyadic_frozen_hole_count,lem:peps_dyadic_lens_sides,lem:peps_dyadic_schedule_guides,thm:peps_bounded_change_closure,thm:peps_bulk_steps_treated_frames,thm:peps_dyadic_angular_separation,thm:peps_dyadic_no_changed_vertex,thm:peps_exchange_holes_perm,thm:peps_guide_frame_norm,thm:peps_guide_frame_supplied_gates,thm:peps_pair_change_reorder,thm:peps_reading_constant_open,thm:peps_reading_piecewise,thm:peps_repainted_square_side_bound,thm:peps_treated_frame_spec,thm:peps_treated_radius_bounds}
     Let $Y$ be the local lens and $Y'=d+Y$ its translate to $R$. Both treated before-guides equal $C_e$ on the open $a_0t$-neighborhood of $\partial Y$, so the after-readings are pieced along $Y'$ (Lemmas~\ref{thm:peps_reading_piecewise} and~\ref{thm:peps_reading_constant_open}), every outer hole $\overline B_\infty(z,2\epsilon_0t)$ lies wholly in $Y'$ or $(Y')^c$ (Lemma~\ref{lem:peps_dyadic_lens_sides}), and $Y'$ has diameter $\le n\le L$ (Lemma~\ref{thm:peps_repainted_square_side_bound}). Applying the bulk exchange of Lemma~\ref{thm:peps_bulk_steps_treated_frames} on $Y'$ and reordering the permuted hole lists via Lemmas~\ref{thm:peps_exchange_holes_perm} and~\ref{thm:peps_pair_change_reorder} yields the pair change with $0$ nonprivate gates and error $4L^{-30}$.
 \end{proof}
 
@@ -1401,7 +1055,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_affine_avoidance, def:peps_dyadic_schedule}
+    \uses{thm:peps_protocol_affine_avoidance,def:peps_dyadic_schedule}
     By Lemma~\ref{thm:peps_protocol_affine_avoidance}, both coordinates of $p+\eta(1,1)$ avoid $\{0,n\}$ for small $\eta>0$, so membership in $[0,n]^2$ forces membership in $(0,n)^2$.
 \end{proof}
 
@@ -1409,13 +1063,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_band_interface_avoidance}
     \lean{TNLean.PEPS.Approximation.RepaintingBaseline.eventually_notMem_edgeInterface}
     \leanok
-    \uses{def:peps_dyadic_schedule, def:peps_dyadic_edge_band}
+    \uses{def:peps_dyadic_schedule,def:peps_dyadic_edge_band}
     For any repainting baseline, edge, and $p\in\R^2$, $p+\eta(1,1)$ avoids that edge's interface for all sufficiently small $\eta>0$ (\texttt{06-geometry.tex}, lines 69--80 and 161--168).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_affine_avoidance, def:peps_dyadic_edge_band,
-        def:peps_dyadic_schedule}
+    \uses{thm:peps_protocol_affine_avoidance,def:peps_dyadic_edge_band,def:peps_dyadic_schedule}
     Along $p+\eta(1,1)$, the normal and tangential coordinates are $a+\sigma\eta$ and $b+\eta$ ($\sigma\in\{\pm1\}$). Since $\sigma,\sigma\mp 1/1000\ne0$, Lemma~\ref{thm:peps_protocol_affine_avoidance} gives $a+\sigma\eta\notin\{0,\min(b+\eta,n-b-\eta)/1000\}$ for small $\eta>0$.
 \end{proof}
 
@@ -1436,12 +1089,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_block_coordinates}
     \lean{TNLean.PEPS.Approximation.sub_blockCorner_mem_closedSquare}
     \leanok
-    \uses{def:peps_dyadic_block_guide, def:peps_dyadic_schedule}
+    \uses{def:peps_dyadic_block_guide,def:peps_dyadic_schedule}
     If $n>0$ and $x\in\R^2$ has scale-$n$ block index $S=\lfloor x/n\rfloor\in\Z^2$, then $x-nS\in[0,n]^2$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_block_guide, def:peps_dyadic_schedule}
+    \uses{def:peps_dyadic_block_guide,def:peps_dyadic_schedule}
     Since $S_i=\lfloor x_i/n\rfloor$, we have $nS_i\le x_i<n(S_i+1)$, so $0\le x_i-nS_i\le n$.
 \end{proof}
 
@@ -1449,9 +1102,7 @@ no holes, this is the normalization of $\Omega$.
     \label{def:peps_protocol_repaint_baseline}
     \lean{TNLean.PEPS.Approximation.repaintBaseline}
     \leanok
-    \uses{def:peps_dyadic_protocol_parties, def:peps_dyadic_block_guide,
-        def:peps_dyadic_schedule, thm:peps_dyadic_repainting_valid_labels,
-        def:peps_dyadic_used_parties}
+    \uses{def:peps_dyadic_protocol_parties,def:peps_dyadic_block_guide,def:peps_dyadic_schedule,thm:peps_dyadic_repainting_valid_labels,def:peps_dyadic_used_parties}
     For a non-root repaintable square $R$ of level $j<k$, index $S$, and side $n=2^j$ at stage $\mathcal D\subseteq\Z^2$, its repainting baseline $\mathcal B$ is the block baseline at $S$ with the level-$j$ labels at $\mathcal D$ and the fresh label of $R$; its starting guide $g_{\mathrm{start}}(x)$ is the level-$j$ block guide evaluated at $x+nS$ (\texttt{06-geometry.tex}, lines 82--125 and 142--160).
 \end{definition}
 
@@ -1460,21 +1111,12 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.treatedGuide_completedGuide,
         TNLean.PEPS.Approximation.treatedGuide_empty}
     \leanok
-    \uses{def:peps_protocol_repaint_baseline, def:peps_protocol_treated_frame,
-        def:peps_protocol_level_frame, def:peps_dyadic_block_guide,
-        def:peps_dyadic_schedule}
+    \uses{def:peps_protocol_repaint_baseline,def:peps_protocol_treated_frame,def:peps_protocol_level_frame,def:peps_dyadic_block_guide,def:peps_dyadic_schedule}
     Treating any guide at $M=\varnothing$ (Definition~\ref{def:peps_protocol_treated_frame}) yields the sampled translate of the guide to the block $2^iT+[0,2^i]^2$. For the baseline $\mathcal B$ of $R$ at $\mathcal D$ and any list $E$ containing all four edges, the completed guide $g_{\mathrm{done}}(E)$ placed on $R$ and treated at $M=\varnothing$ equals the level-$j$ guide at $\mathcal D\cup\{S\}$ (\texttt{06-geometry.tex}, lines 69--80 and 215--221).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_protocol_treated_frame, def:peps_protocol_level_frame,
-        def:peps_protocol_repaint_baseline, def:peps_dyadic_block_guide,
-        lem:peps_dyadic_floor, thm:peps_protocol_reading_congruence,
-        thm:peps_protocol_square_boundary_avoidance,
-        thm:peps_protocol_block_coordinates, lem:peps_dyadic_schedule_guides,
-        lem:peps_dyadic_active_labels, thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_protocol_level_frame_facts,
-        thm:peps_protocol_bounded_changes}
+    \uses{def:peps_protocol_treated_frame,def:peps_protocol_level_frame,def:peps_protocol_repaint_baseline,def:peps_dyadic_block_guide,lem:peps_dyadic_floor,thm:peps_protocol_reading_congruence,thm:peps_protocol_square_boundary_avoidance,thm:peps_protocol_block_coordinates,lem:peps_dyadic_schedule_guides,lem:peps_dyadic_active_labels,thm:peps_dyadic_repainting_valid_labels,thm:peps_protocol_level_frame_facts,thm:peps_protocol_bounded_changes}
     At $M=\varnothing$ the homogenized region is empty. Once all four edges are in $E$, $g_{\mathrm{done}}(E)$ takes the fresh label of $R$ on $(0,n)^2$ and the starting label on $([0,n]^2)^c$ (Lemma~\ref{lem:peps_dyadic_schedule_guides}); Lemmas~\ref{thm:peps_protocol_square_boundary_avoidance}, \ref{thm:peps_protocol_block_coordinates}, and~\ref{thm:peps_protocol_reading_congruence} identify its sampled translate with the level-$j$ guide at $\mathcal D\cup\{S\}$.
 \end{proof}
 
@@ -1483,13 +1125,12 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.treatedFrame_congr,
         TNLean.PEPS.Approximation.treatedFrame_empty_congr}
     \leanok
-    \uses{def:peps_protocol_treated_frame, def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_protocol_parties}
+    \uses{def:peps_protocol_treated_frame,def:peps_adaptive_patch_constraint,def:peps_dyadic_protocol_parties}
     In Definition~\ref{def:peps_protocol_treated_frame}, for $0<\epsilon_0t\le B_0\log L$, equal treated guides with the same finite mark set $M$ produce equal treated frames $F_M^\lambda(g)$; in particular, $F_\varnothing^\lambda(g)$ is independent of the homogenizing label $\lambda$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_protocol_treated_frame, thm:peps_protocol_unmarked_guides}
+    \uses{def:peps_protocol_treated_frame,thm:peps_protocol_unmarked_guides}
     By Definition~\ref{def:peps_protocol_treated_frame}, $F_M^\lambda(g)$ depends on $(g,\lambda)$ only through the treated guide, which at $M=\varnothing$ is independent of $\lambda$ by Lemma~\ref{thm:peps_protocol_unmarked_guides}.
 \end{proof}
 
@@ -1500,12 +1141,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.treatedFrame_edgeStart,
         TNLean.PEPS.Approximation.treatedFrame_auxStart_eq_raw}
     \leanok
-    \uses{def:peps_protocol_repaint_baseline, def:peps_protocol_treated_frame,
-        def:peps_protocol_level_frame, def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_protocol_parties, def:peps_dyadic_schedule,
-        def:peps_dyadic_edge_band, thm:peps_protocol_constants, def:peps_frame,
-        def:peps_dyadic_normal_words,
-        thm:peps_treated_radius_bounds}
+    \uses{def:peps_protocol_repaint_baseline,def:peps_protocol_treated_frame,def:peps_protocol_level_frame,def:peps_adaptive_patch_constraint,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_dyadic_edge_band,thm:peps_protocol_constants,def:peps_frame,def:peps_dyadic_normal_words,thm:peps_treated_radius_bounds}
     Let $R$ be a non-root repaintable square of level $j<k$, index $S$, side $n=2^j$, and baseline $\mathcal B$ at stage $\mathcal D\subseteq\Z^2$ (Definition~\ref{def:peps_protocol_repaint_baseline}).
     \begin{enumerate}
         \item For $0<\epsilon_0t\le B_0\log L$ and any edge $e$ with neighbor label $C_e$, the unmarked treated frame of the uniform auxiliary guide at $C_e$ is the hole-free raw copy owned by the party of $C_e$.
@@ -1515,19 +1151,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_unmarked_guides, def:peps_protocol_repaint_baseline,
-        thm:peps_protocol_treated_frame_congruence,
-        thm:peps_protocol_reading_congruence,
-        thm:peps_protocol_band_interface_avoidance,
-        thm:peps_protocol_party_map_switch, thm:peps_protocol_level_frame_facts,
-        lem:peps_dyadic_schedule_guides, thm:peps_guide_frame_supplied_gates,
-        lem:peps_dyadic_floor, lem:peps_dyadic_sampled_guides,
-        lem:peps_dyadic_incident_change, def:peps_protocol_treated_frame,
-        thm:peps_protocol_level_events, thm:peps_protocol_constants,
-        def:peps_dyadic_block_guide, def:peps_dyadic_edge_band,
-        def:peps_dyadic_schedule, def:peps_dyadic_normal_words,
-        def:peps_guide_frame, def:peps_frame, def:peps_protocol_level_frame,
-        thm:peps_treated_radius_bounds, thm:peps_treated_frame_spec}
+    \uses{thm:peps_protocol_unmarked_guides,def:peps_protocol_repaint_baseline,thm:peps_protocol_treated_frame_congruence,thm:peps_protocol_reading_congruence,thm:peps_protocol_band_interface_avoidance,thm:peps_protocol_party_map_switch,thm:peps_protocol_level_frame_facts,lem:peps_dyadic_schedule_guides,thm:peps_guide_frame_supplied_gates,lem:peps_dyadic_floor,lem:peps_dyadic_sampled_guides,lem:peps_dyadic_incident_change,def:peps_protocol_treated_frame,thm:peps_protocol_level_events,thm:peps_protocol_constants,def:peps_dyadic_block_guide,def:peps_dyadic_edge_band,def:peps_dyadic_schedule,def:peps_dyadic_normal_words,def:peps_guide_frame,def:peps_frame,def:peps_protocol_level_frame,thm:peps_treated_radius_bounds,thm:peps_treated_frame_spec}
     The uniform guide at $C_e$ has no true vertices, giving (1). For (2), $g_{\mathrm{done}}(E)$ and $g_{\mathrm{main}}(E,e,w_{\mathrm{start}})$ agree off the interface of $e$ (Lemma~\ref{lem:peps_dyadic_schedule_guides}), so Lemmas~\ref{thm:peps_protocol_band_interface_avoidance}, \ref{thm:peps_protocol_reading_congruence}, and~\ref{thm:peps_protocol_treated_frame_congruence} identify their unmarked frames. For (3), Lemma~\ref{thm:peps_protocol_unmarked_guides} identifies the sampled guides with the level-$j$ guides at $\mathcal D$ and $\mathcal D\cup\{S\}$, $h_n=\epsilon_0\min(n,t)=\epsilon_0t$ matches the patch radii, and Lemma~\ref{thm:peps_protocol_party_map_switch} switches the party map to $R_0$.
 \end{proof}
 
@@ -1558,14 +1182,12 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isStepChain_aux,
         TNLean.PEPS.Approximation.hasSourceBoundedChange_of_hasPairChange}
     \leanok
-    \uses{def:peps_protocol_step_chain, def:peps_frame_change,
-        thm:peps_protocol_event_segments, def:peps_protocol_pair_change}
+    \uses{def:peps_protocol_step_chain,def:peps_frame_change,thm:peps_protocol_event_segments,def:peps_protocol_pair_change}
     Step chains (Definition~\ref{def:peps_protocol_step_chain}) contain $0$-step reflexive chains and $1$-step single transitions, compose by adding lengths ($m+n$), and push forward under relation-preserving maps. Given mark-indexed states $T(M),T'(M)$ and a mark list of length $m$ with underlying set $M_*$, if adding (for $T$) and removing (for $T'$) each listed mark is a step and $\mathcal R(T(M_*),T'(M_*))$, then $T(\varnothing)$ reaches $T'(\varnothing)$ in $2m+1$ steps. When $q\ge1$ and $\lVert\Omega\rVert\le1$, chains of bounded changes (Definitions~\ref{def:peps_frame_change} and~\ref{def:peps_protocol_pair_change}) of the main sheet, of an auxiliary sheet in a duplicate-free index list, or of both together lift to the full sheet memory with the same bounds $(S,r,K,r_s,\varepsilon)$ (\texttt{06-geometry.tex}, lines 328--339 and 572--583).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_protocol_step_chain, thm:peps_protocol_level_frame_facts,
-        def:peps_frame_change, def:peps_protocol_pair_change}
+    \uses{def:peps_protocol_step_chain,thm:peps_protocol_level_frame_facts,def:peps_frame_change,def:peps_protocol_pair_change}
     Induction along the mark list gives $m$-step treatment and untreatment chains, which concatenate with the middle step to length $m+1+m=2m+1$; the memory lifts follow from Lemma~\ref{thm:peps_protocol_level_frame_facts}.
 \end{proof}
 
@@ -1574,16 +1196,12 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.HasFrameChange.mono_error,
         TNLean.PEPS.Approximation.HasPairChange.mono_error}
     \leanok
-    \uses{def:peps_frame,
-        def:peps_frame_change,
-        def:peps_protocol_pair_change}
+    \uses{def:peps_frame,def:peps_frame_change,def:peps_protocol_pair_change}
     For $\varepsilon\le\varepsilon'$, any bounded frame or pair change (Definitions~\ref{def:peps_frame_change} and~\ref{def:peps_protocol_pair_change}) with bounds $(S,r,K,r_s,\varepsilon)$ is also one with bounds $(S,r,K,r_s,\varepsilon')$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_frame_change,
-        def:peps_protocol_pair_change,
-        thm:peps_bounded_change_closure}
+    \uses{def:peps_frame_change,def:peps_protocol_pair_change,thm:peps_bounded_change_closure}
     Immediate from the monotonicity of bounded changes (Lemma~\ref{thm:peps_bounded_change_closure}).
 \end{proof}
 
@@ -1596,9 +1214,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isBlockCornerOf_of_mem_cornerList,
         TNLean.PEPS.Approximation.SquareEdge.isBlockCornerOf_of_mem_endpointList}
     \leanok
-    \uses{def:peps_dyadic_edge_band,
-        lem:peps_dyadic_direct_repainting,
-        thm:peps_bulk_steps_treated_frames}
+    \uses{def:peps_dyadic_edge_band,lem:peps_dyadic_direct_repainting,thm:peps_bulk_steps_treated_frames}
     For a block index $S\in\mathbb Z^2$, its ordered corner list is $[S,S+(1,0),S+(0,1),S+(1,1)]$, and its bottom, right, top, and left edge endpoint lists are respectively
     \begin{align}
          & [S,S+(1,0)],\quad [S+(1,0),S+(1,1)],\quad
@@ -1608,9 +1224,7 @@ no holes, this is the normalization of $\Omega$.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_edge_band,
-        lem:peps_dyadic_direct_repainting,
-        thm:peps_bulk_steps_treated_frames}
+    \uses{def:peps_dyadic_edge_band,lem:peps_dyadic_direct_repainting,thm:peps_bulk_steps_treated_frames}
     Immediate by inspection of the four corners and edges.
 \end{proof}
 
@@ -1621,23 +1235,12 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isHomogenizing_finalLabel,
         TNLean.PEPS.Approximation.isHomogenizing_nbrLabel}
     \leanok
-    \uses{def:peps_dyadic_edge_band,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_used_parties,
-        def:peps_protocol_repaint_baseline,
-        thm:peps_dyadic_block_ratio,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_protocol_bounded_changes}
+    \uses{def:peps_dyadic_edge_band,def:peps_dyadic_protocol_parties,def:peps_dyadic_used_parties,def:peps_protocol_repaint_baseline,thm:peps_dyadic_block_ratio,thm:peps_dyadic_repainting_valid_labels,thm:peps_protocol_bounded_changes}
     For a repaintable square $R$ of index $S$ at stage $\mathcal D\subseteq\mathbb Z^2$, a guide label is local if it is the new label of $R$ or the level label at $\mathcal D$ of a block in $S+\{-1,0,1\}^2$. In particular, the old label $A$, the final label $B$, and the neighbor label $C_e$ across each edge $e$ of $R$ are local.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_block_guide,
-        def:peps_dyadic_edge_band,
-        def:peps_protocol_repaint_baseline,
-        thm:peps_dyadic_point_ratio,
-        thm:peps_dyadic_repainting_valid_labels,
-        thm:peps_protocol_bounded_changes}
+    \uses{def:peps_dyadic_block_guide,def:peps_dyadic_edge_band,def:peps_protocol_repaint_baseline,thm:peps_dyadic_point_ratio,thm:peps_dyadic_repainting_valid_labels,thm:peps_protocol_bounded_changes}
     The old label corresponds to offset $(0,0)\in\{-1,0,1\}^2$, the final label is the new label of $R$, and each edge neighbor lies in $S+\{-1,0,1\}^2$.
 \end{proof}
 
@@ -1645,17 +1248,7 @@ no holes, this is the normalization of $\Omega$.
     \label{def:peps_protocol_local_point_treatments}
     \lean{TNLean.PEPS.Approximation.IsPointTreatable}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_protocol_parties,
-        def:peps_frame_change,
-        def:peps_protocol_local_labels,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_direct_repainting,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_protocol_bounded_changes}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_dyadic_protocol_parties,def:peps_frame_change,def:peps_protocol_local_labels,def:peps_protocol_repaint_baseline,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_direct_repainting,lem:peps_dyadic_unmodified_vertices,thm:peps_protocol_bounded_changes}
     Given $q\ge1$, an adaptive patch supply $P$ for $\Omega$ with parameters $(B_0,C,c,60,L)$, a label rank, a repaintable square $R$ at stage $\mathcal D\subseteq\mathbb Z^2$, and $0<\epsilon_0t\le B_0\log L$, the repainting has bounded point treatments with participants $S$ and bounds $(r,K,r_s,\varepsilon)$ if for every unmodified baseline guide $g$, corner $Q_0$ of $R$, finite mark sets $M,M'\subseteq\mathbb Z^2$ agreeing away from $Q_0$, and local label $\lambda$ (Definition~\ref{def:peps_protocol_local_labels}), the treated frames $F_M^\lambda(g)$ and $F_{M'}^\lambda(g)$ (Definition~\ref{def:peps_protocol_treated_frame}) are joined by a bounded frame change with parameters $(S,r,K,r_s,\varepsilon)$.
 \end{definition}
 
@@ -1675,26 +1268,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_sheet_operation_chains}
     \lean{TNLean.PEPS.Approximation.isStepChain_sheetOperation}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_protocol_parties,
-        def:peps_frame_change,
-        def:peps_protocol_local_labels,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_direct_repainting,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_protocol_bounded_changes}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_dyadic_protocol_parties,def:peps_frame_change,def:peps_protocol_local_labels,def:peps_protocol_local_point_treatments,def:peps_protocol_repaint_baseline,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_direct_repainting,lem:peps_dyadic_unmodified_vertices,thm:peps_protocol_bounded_changes}
     Assume bounded point treatments with parameters $(S,r,K,r_s,\varepsilon)$ as in Definition~\ref{def:peps_protocol_local_point_treatments}. For any unmodified guides $g,g'$, local label $\lambda$, and list of $m$ corners of $R$ with underlying finite set $M$, a bounded frame change from $F_M^\lambda(g)$ to $F_M^\lambda(g')$ with bounds $(S,r,K,r_s,\varepsilon)$ extends to a chain of $2m+1$ such bounded frame changes from $F_\varnothing^\lambda(g)$ to $F_\varnothing^\lambda(g')$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_protocol_local_point_treatments,
-        def:peps_protocol_treated_frame,
-        lem:peps_protocol_change_chains}
+    \uses{def:peps_protocol_local_point_treatments,def:peps_protocol_treated_frame,lem:peps_protocol_change_chains}
     Adding or removing one listed corner changes mark membership only at that corner, which Definition~\ref{def:peps_protocol_local_point_treatments} implements; Lemma~\ref{lem:peps_protocol_change_chains} combines the $m$ treatments, the bulk step on $M$, and the $m$ untreatments into $2m+1$ steps.
 \end{proof}
 
@@ -1702,14 +1281,12 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_local_label_event_uses}
     \lean{TNLean.PEPS.Approximation.IsLocalLabel.eventUses}
     \leanok
-    \uses{def:peps_dyadic_protocol_parties,
-        def:peps_protocol_local_labels}
+    \uses{def:peps_dyadic_protocol_parties,def:peps_protocol_local_labels}
     For any repaintable square $R$ at stage $\mathcal D\subseteq\mathbb Z^2$, the party of every local label $\lambda$ (Definition~\ref{def:peps_protocol_local_labels}) belongs to the participant set $S_R$ of the block event $R$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_protocol_local_labels,
-        thm:peps_protocol_bounded_changes}
+    \uses{def:peps_protocol_local_labels,thm:peps_protocol_bounded_changes}
     Immediate from Definition~\ref{def:peps_protocol_local_labels} and Lemma~\ref{thm:peps_protocol_bounded_changes}.
 \end{proof}
 
@@ -1717,18 +1294,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_central_birth_chain}
     \lean{TNLean.PEPS.Approximation.isStepChain_centralBirth}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame_change,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        thm:peps_protocol_constants}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame_change,def:peps_protocol_local_point_treatments,def:peps_protocol_repaint_baseline,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
     constants below be real. Fix a family of states and assume the angular-scale
     condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
@@ -1756,15 +1322,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_protocol_parties,
-        def:peps_protocol_bulk_operation_marks,
-        def:peps_protocol_local_labels,
-        lem:peps_protocol_frame_change_error_mono,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_central_birth_change,
-        thm:peps_protocol_local_label_event_uses,
-        thm:peps_protocol_sheet_operation_chains,
-        thm:peps_protocol_small_patch_error_bounds}
+    \uses{def:peps_dyadic_protocol_parties,def:peps_protocol_bulk_operation_marks,def:peps_protocol_local_labels,lem:peps_protocol_frame_change_error_mono,thm:peps_protocol_bounded_changes,thm:peps_protocol_central_birth_change,thm:peps_protocol_local_label_event_uses,thm:peps_protocol_sheet_operation_chains,thm:peps_protocol_small_patch_error_bounds}
     By Definition~\ref{def:peps_protocol_local_labels} and Lemma~\ref{thm:peps_protocol_local_label_event_uses}, the parties of $A$ and $B$ belong to $S$. Enlarging the central-birth error $L^{-30}\le\delta_b$ via Lemma~\ref{thm:peps_protocol_small_patch_error_bounds} and Lemma~\ref{lem:peps_protocol_frame_change_error_mono}, Lemma~\ref{thm:peps_protocol_sheet_operation_chains} applied to the $4$-corner list of Definition~\ref{def:peps_protocol_bulk_operation_marks} yields the $9$-step chain.
 \end{proof}
 
@@ -1772,23 +1330,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_band_operation_chain}
     \lean{TNLean.PEPS.Approximation.isStepChain_bandOperation}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame_change,
-        def:peps_protocol_local_labels,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_dyadic_no_changed_vertex,
-        thm:peps_protocol_constants}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame_change,def:peps_protocol_local_labels,def:peps_protocol_local_point_treatments,def:peps_protocol_repaint_baseline,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_unmodified_vertices,thm:peps_dyadic_no_changed_vertex,thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
     constants below be real. Fix a family of states and assume the angular-scale
     condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
@@ -1821,21 +1363,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_edge_band,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame_change,
-        def:peps_protocol_bulk_operation_marks,
-        def:peps_protocol_treated_frame,
-        lem:peps_protocol_change_chains,
-        lem:peps_protocol_frame_change_error_mono,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_protocol_band_death_change,
-        thm:peps_protocol_band_step_changes,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_local_label_event_uses,
-        thm:peps_protocol_sheet_operation_chains,
-        thm:peps_protocol_small_patch_error_bounds}
+    \uses{def:peps_dyadic_edge_band,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame_change,def:peps_protocol_bulk_operation_marks,def:peps_protocol_treated_frame,lem:peps_protocol_change_chains,lem:peps_protocol_frame_change_error_mono,thm:peps_bulk_steps_treated_frames,thm:peps_protocol_band_death_change,thm:peps_protocol_band_step_changes,thm:peps_protocol_bounded_changes,thm:peps_protocol_local_label_event_uses,thm:peps_protocol_sheet_operation_chains,thm:peps_protocol_small_patch_error_bounds}
     Lemma~\ref{thm:peps_protocol_band_step_changes} (birth) or Lemma~\ref{thm:peps_protocol_band_death_change} (death) gives the endpoint-treated frame change with error $L^{-30}\le\delta_b$ (Lemma~\ref{thm:peps_protocol_small_patch_error_bounds} and Lemma~\ref{lem:peps_protocol_frame_change_error_mono}) and participants in $S$ (Lemma~\ref{thm:peps_protocol_local_label_event_uses}); Lemma~\ref{thm:peps_protocol_sheet_operation_chains} applied to the $2$-endpoint list of $e$ (Definition~\ref{def:peps_protocol_bulk_operation_marks}) gives $2\cdot2+1=5$ steps.
 \end{proof}
 
@@ -1843,20 +1371,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_auxiliary_birth_chain}
     \lean{TNLean.PEPS.Approximation.isStepChain_auxBirths}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame_change,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        thm:peps_protocol_constants}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame_change,def:peps_protocol_local_point_treatments,def:peps_protocol_repaint_baseline,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
     constants below be real. Fix a family of states and assume the angular-scale
     condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
@@ -1885,14 +1400,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_schedule,
-        def:peps_protocol_local_labels,
-        def:peps_protocol_repaint_baseline,
-        lem:peps_dyadic_unmodified_vertices,
-        lem:peps_protocol_change_chains,
-        thm:peps_dyadic_no_changed_vertex,
-        thm:peps_protocol_band_operation_chain,
-        thm:peps_protocol_treated_frame_congruence}
+    \uses{def:peps_dyadic_schedule,def:peps_protocol_local_labels,def:peps_protocol_repaint_baseline,lem:peps_dyadic_unmodified_vertices,lem:peps_protocol_change_chains,thm:peps_dyadic_no_changed_vertex,thm:peps_protocol_band_operation_chain,thm:peps_protocol_treated_frame_congruence}
     The labels $A,B,C_e$ are local (Definition~\ref{def:peps_protocol_local_labels}) and all intermediate auxiliary words produce unmodified guides (Lemma~\ref{lem:peps_dyadic_unmodified_vertices}). Applying Lemma~\ref{thm:peps_protocol_band_operation_chain} to each of the $3$ auxiliary births and switching the unmarked homogenizing label to $\lambda$ via Lemma~\ref{thm:peps_protocol_treated_frame_congruence} gives $3\cdot 5=15$ steps (Lemma~\ref{lem:peps_protocol_change_chains}).
 \end{proof}
 
@@ -1900,20 +1408,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_main_steps_chain}
     \lean{TNLean.PEPS.Approximation.isStepChain_mainSteps}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame_change,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        thm:peps_protocol_constants}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame_change,def:peps_protocol_local_point_treatments,def:peps_protocol_repaint_baseline,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,thm:peps_protocol_constants}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
     constants below be real. Fix a family of states and assume the angular-scale
     condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
@@ -1944,14 +1439,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_schedule,
-        def:peps_protocol_local_labels,
-        def:peps_protocol_repaint_baseline,
-        lem:peps_dyadic_unmodified_vertices,
-        lem:peps_protocol_change_chains,
-        thm:peps_dyadic_no_changed_vertex,
-        thm:peps_protocol_band_operation_chain,
-        thm:peps_protocol_treated_frame_congruence}
+    \uses{def:peps_dyadic_schedule,def:peps_protocol_local_labels,def:peps_protocol_repaint_baseline,lem:peps_dyadic_unmodified_vertices,lem:peps_protocol_change_chains,thm:peps_dyadic_no_changed_vertex,thm:peps_protocol_band_operation_chain,thm:peps_protocol_treated_frame_congruence}
     Applying Lemma~\ref{thm:peps_protocol_band_operation_chain} to the $4$ elementary band operations on the main sheet (first death, second death, birth, final death) and replacing the unmarked homogenizing labels by $\lambda$ via Lemma~\ref{thm:peps_protocol_treated_frame_congruence} yields $4\cdot 5=20$ steps (Lemma~\ref{lem:peps_protocol_change_chains}).
 \end{proof}
 
@@ -1959,22 +1447,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_lens_exchange_chain}
     \lean{TNLean.PEPS.Approximation.isStepChain_lensExchange}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_protocol_constants,
-        thm:peps_protocol_event_segments}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame,def:peps_protocol_local_point_treatments,def:peps_protocol_repaint_baseline,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_unmodified_vertices,thm:peps_protocol_constants,thm:peps_protocol_event_segments}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
     constants below be real. Fix a family of states and assume the angular-scale
     condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
@@ -2013,28 +1486,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_edge_band,
-        def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame,
-        def:peps_frame_change,
-        def:peps_protocol_bulk_operation_marks,
-        def:peps_protocol_local_labels,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_direct_repainting,
-        lem:peps_dyadic_unmodified_vertices,
-        lem:peps_protocol_change_chains,
-        lem:peps_protocol_frame_change_error_mono,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_event_segments,
-        thm:peps_protocol_lens_exchange_change,
-        thm:peps_protocol_local_label_event_uses,
-        thm:peps_protocol_small_patch_error_bounds}
+    \uses{def:peps_dyadic_edge_band,def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame,def:peps_frame_change,def:peps_protocol_bulk_operation_marks,def:peps_protocol_local_labels,def:peps_protocol_local_point_treatments,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_direct_repainting,lem:peps_dyadic_unmodified_vertices,lem:peps_protocol_change_chains,lem:peps_protocol_frame_change_error_mono,thm:peps_protocol_bounded_changes,thm:peps_protocol_event_segments,thm:peps_protocol_lens_exchange_change,thm:peps_protocol_local_label_event_uses,thm:peps_protocol_small_patch_error_bounds}
     Treat the main sheet ($2$ steps) and $x$-auxiliary sheet ($2$ steps) at the endpoints of $e$, apply the lifted two-sheet lens exchange of Lemma~\ref{thm:peps_protocol_lens_exchange_change} (with error $4L^{-30}\le\delta_b$ by Lemma~\ref{thm:peps_protocol_small_patch_error_bounds} since $b\ge2$), and untreat both sheets ($2+2$ steps) via Lemma~\ref{lem:peps_protocol_change_chains}, giving $2+2+1+2+2=9$ steps.
 \end{proof}
 
@@ -2042,21 +1494,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_edge_construction_chain}
     \lean{TNLean.PEPS.Approximation.isStepChain_edgeConstruction}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_protocol_constants,
-        thm:peps_protocol_event_segments}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_edge_band,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame,def:peps_protocol_local_point_treatments,def:peps_protocol_repaint_baseline,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_unmodified_vertices,thm:peps_protocol_constants,thm:peps_protocol_event_segments}
     Let $k,m_0,L,b,K,q\in\mathbb N$ with $q\ge1$, and let all the scale
     constants below be real. Fix a family of states and assume the angular-scale
     condition for it with parameters $q,a,A_0,m_0,60,D,L_*$ and $L_*\le L$. Let
@@ -2097,20 +1535,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_normal_words,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_dyadic_unmodified_vertices,
-        lem:peps_protocol_change_chains,
-        thm:peps_protocol_auxiliary_birth_chain,
-        thm:peps_protocol_event_segments,
-        thm:peps_protocol_lens_exchange_chain,
-        thm:peps_protocol_main_steps_chain,
-        thm:peps_protocol_treated_frame_congruence,
-        thm:peps_protocol_treated_frame_ends}
+    \uses{def:peps_dyadic_normal_words,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_dyadic_unmodified_vertices,lem:peps_protocol_change_chains,thm:peps_protocol_auxiliary_birth_chain,thm:peps_protocol_event_segments,thm:peps_protocol_lens_exchange_chain,thm:peps_protocol_main_steps_chain,thm:peps_protocol_treated_frame_congruence,thm:peps_protocol_treated_frame_ends}
     By Lemma~\ref{thm:peps_protocol_treated_frame_ends}, $\mathcal A(x)=F_\varnothing^{C_e}(g_{\mathrm{aux}}(e,\varnothing))$ ($1$ identity step) and $F_\varnothing^{\lambda_1}(g_{\mathrm{done}}(E))=F_\varnothing^{C_e}(g_{\mathrm{main}}(E,e,w_{\mathrm{start}}))$ since $e\notin E$. Concatenating with the lifted $15$-step auxiliary birth chain (Lemma~\ref{thm:peps_protocol_auxiliary_birth_chain}), the $9$-step lens exchange chain (Lemma~\ref{thm:peps_protocol_lens_exchange_chain}), and the lifted $20$-step main-sheet chain (Lemma~\ref{thm:peps_protocol_main_steps_chain}) gives $1+15+9+20=45$ steps.
 \end{proof}
 
@@ -2118,16 +1543,7 @@ no holes, this is the normalization of $\Omega$.
     \label{def:peps_protocol_auxiliary_final_frame}
     \lean{TNLean.PEPS.Approximation.auxFinal}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_unmodified_vertices}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_dyadic_edge_band,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame,def:peps_protocol_repaint_baseline,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_unmodified_vertices}
     Given an adaptive patch supply with parameters $(B_0,C,c,60,L)$, a label rank, a repaintable square $R$ at stage $\mathcal D\subseteq\mathbb Z^2$, and $0<\epsilon_0D\log L\le B_0\log L$, the final auxiliary frame of edge $e$ is $A_e=F_\varnothing^{C_e}(g_{\mathrm{aux}}(e,w_{\mathrm{exch}}))$ (Definition~\ref{def:peps_protocol_treated_frame}), where $C_e$ is the neighbor label across $e$ (\texttt{06-geometry.tex}, lines 198--214 and 620--624).
 \end{definition}
 
@@ -2135,8 +1551,7 @@ no holes, this is the normalization of $\Omega$.
     \label{def:peps_protocol_event_auxiliary_indices}
     \lean{TNLean.PEPS.Approximation.eventAuxIndices}
     \leanok
-    \uses{def:peps_dyadic_hierarchy,
-        def:peps_dyadic_protocol_schedule}
+    \uses{def:peps_dyadic_hierarchy,def:peps_dyadic_protocol_schedule}
     For a hierarchy depth $k\in\mathbb N$ and a Boolean predicate designating large dyadic squares, the auxiliary-index list of a repainting event $S$ consists of the four pairs $(S,\alpha_e)$ (where $\alpha_e$ denotes the auxiliary initialization of edge $e$) in edge order when $S$ is large, and is empty for small repaintings and junction resizes.
 \end{definition}
 
@@ -2149,20 +1564,12 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.mem_auxIndices,
         TNLean.PEPS.Approximation.eq_auxInit_of_mem_auxIndices}
     \leanok
-    \uses{def:peps_dyadic_edge_band,
-        def:peps_dyadic_hierarchy,
-        def:peps_dyadic_protocol_schedule,
-        def:peps_protocol_event_auxiliary_indices,
-        thm:peps_dyadic_protocol_schedule_counts,
-        thm:peps_protocol_from_large_repaintings}
+    \uses{def:peps_dyadic_edge_band,def:peps_dyadic_hierarchy,def:peps_dyadic_protocol_schedule,def:peps_protocol_event_auxiliary_indices,thm:peps_dyadic_protocol_schedule_counts,thm:peps_protocol_from_large_repaintings}
     Filtering a large repainting's operation list for auxiliary initializations yields the four edge initializations in edge order. The global auxiliary-index list is the duplicate-free concatenation of the per-event lists of Definition~\ref{def:peps_protocol_event_auxiliary_indices} along the event schedule, so its elements with first component $S$ are precisely $(S,\alpha_e)$ for the four edges $e$ of a scheduled large repainting $S$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_protocol_schedule,
-        def:peps_protocol_event_auxiliary_indices,
-        thm:peps_dyadic_protocol_schedule_counts,
-        thm:peps_protocol_from_large_repaintings}
+    \uses{def:peps_dyadic_protocol_schedule,def:peps_protocol_event_auxiliary_indices,thm:peps_dyadic_protocol_schedule_counts,thm:peps_protocol_from_large_repaintings}
     By Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}, each large repainting contributes its $4$ distinct edge initializations and the schedule has no repeated events, so the concatenation is duplicate-free.
 \end{proof}
 
@@ -2170,21 +1577,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_large_repainting_chain}
     \lean{TNLean.PEPS.Approximation.isStepChain_largeRepainting}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame,
-        def:peps_protocol_auxiliary_final_frame,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_step_chain,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        thm:peps_protocol_constants,
-        thm:peps_protocol_event_segments}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_edge_band,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame,def:peps_protocol_auxiliary_final_frame,def:peps_protocol_local_point_treatments,def:peps_protocol_repaint_baseline,def:peps_protocol_step_chain,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,thm:peps_protocol_constants,thm:peps_protocol_event_segments}
     Let $k,L,q\in\mathbb N$ with $q\ge1$ and $L\ge2$. Fix real
     $a,A_0,D,L'_0,K_0,\epsilon_0,\nu,B_0,C,c$, $m_0\in\mathbb N$ and a family
     of states. Assume the angular-scale condition for the family with parameters
@@ -2209,13 +1602,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_protocol_auxiliary_final_frame,
-        def:peps_protocol_repaint_baseline,
-        def:polynomial_peps_model,
-        lem:peps_protocol_change_chains,
-        thm:peps_protocol_central_birth_chain,
-        thm:peps_protocol_edge_construction_chain,
-        thm:peps_protocol_treated_frame_congruence}
+    \uses{def:peps_protocol_auxiliary_final_frame,def:peps_protocol_repaint_baseline,def:polynomial_peps_model,lem:peps_protocol_change_chains,thm:peps_protocol_central_birth_chain,thm:peps_protocol_edge_construction_chain,thm:peps_protocol_treated_frame_congruence}
     Since $\|\Omega\|=1$, the central birth lifts to the memory without an
     additional norm assumption.
     Concatenate its $9$ changes with the $45$ changes on each edge, in the
@@ -2228,22 +1615,7 @@ no holes, this is the normalization of $\Omega$.
     \label{thm:peps_protocol_large_repainting_segment}
     \lean{TNLean.PEPS.Approximation.exists_largeRepainting_segment}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_angular_scale,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_hierarchy,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_protocol_schedule,
-        def:peps_frame,
-        def:peps_protocol_auxiliary_final_frame,
-        def:peps_protocol_local_point_treatments,
-        def:peps_protocol_repaint_baseline,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        thm:peps_protocol_constants,
-        thm:peps_protocol_event_segments,
-        thm:peps_protocol_from_large_repaintings,
-        thm:peps_protocol_main_frame_schedule}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_angular_scale,def:peps_dyadic_edge_band,def:peps_dyadic_hierarchy,def:peps_dyadic_protocol_parties,def:peps_dyadic_protocol_schedule,def:peps_frame,def:peps_protocol_auxiliary_final_frame,def:peps_protocol_local_point_treatments,def:peps_protocol_repaint_baseline,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,thm:peps_protocol_constants,thm:peps_protocol_event_segments,thm:peps_protocol_from_large_repaintings,thm:peps_protocol_main_frame_schedule}
     Fix $k,L,q\in\mathbb N$, with $q\ge1$ and $L\ge2$, a family of states,
     and the real angular-scale parameters $(a,A_0,D,L'_0)$ with
     $m_0\in\mathbb N$. Assume the angular-scale condition for the family at
@@ -2273,15 +1645,7 @@ no holes, this is the normalization of $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_protocol_schedule,
-        def:peps_frame,
-        thm:peps_protocol_auxiliary_index_facts,
-        thm:peps_protocol_constants,
-        thm:peps_protocol_from_large_repaintings,
-        thm:peps_protocol_large_repainting_chain,
-        thm:peps_protocol_main_frame_schedule,
-        thm:peps_protocol_treated_frame_ends}
+    \uses{def:peps_dyadic_protocol_parties,def:peps_dyadic_protocol_schedule,def:peps_frame,thm:peps_protocol_auxiliary_index_facts,thm:peps_protocol_constants,thm:peps_protocol_from_large_repaintings,thm:peps_protocol_large_repainting_chain,thm:peps_protocol_main_frame_schedule,thm:peps_protocol_treated_frame_ends}
     By Lemmas~\ref{thm:peps_protocol_main_frame_schedule}, \ref{thm:peps_protocol_treated_frame_ends}, and~\ref{thm:peps_protocol_auxiliary_index_facts}, the starting and completed unmarked main frames match the main frames at indices $i$ and $i+1$, and the four auxiliary slots $(S,\alpha_e)$ transition from idle raw copies to $A_e$ while all other auxiliary slots remain fixed; Lemma~\ref{thm:peps_protocol_large_repainting_chain} gives the $189$-step chain.
 \end{proof}
 
@@ -2294,20 +1658,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.protocolFrozen_auxInit,
         TNLean.PEPS.Approximation.protocolAuxOwner_auxInit}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_hierarchy,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_protocol_schedule,
-        def:peps_dyadic_schedule,
-        def:peps_frame,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_treated_frame,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_dyadic_protocol_initial_step,
-        thm:peps_protocol_main_frame_schedule}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_dyadic_edge_band,def:peps_dyadic_hierarchy,def:peps_dyadic_protocol_parties,def:peps_dyadic_protocol_schedule,def:peps_dyadic_schedule,def:peps_frame,def:peps_protocol_repaint_baseline,def:peps_protocol_treated_frame,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_dyadic_unmodified_vertices,thm:peps_dyadic_protocol_initial_step,thm:peps_protocol_main_frame_schedule}
     In a depth-$k$ hierarchy, the schedule index $i(E)$ of an event $E$ is its first position in the event schedule (or the schedule length if absent), so the $i$th scheduled event $E_i$ satisfies $i(E_i)=i$. Given an adaptive patch supply with parameters $(B_0,C,c,60,L)$, a label rank, and $0<\epsilon_0t\le B_0\log L$, at an auxiliary index $(S,\alpha_e)$ of a level-$j$ repainting $S$ ($j<k$), the frozen frame is $A_e$ (Definition~\ref{def:peps_protocol_auxiliary_final_frame}) and the idle owner is the party of $C_e$ at stage $\mathcal D_{k,i(S),j}$ (and the root raw frame and root party for all other indices) (\texttt{06-geometry.tex}, lines 183--187, 620--624 and 653--667).
 \end{definition}
 
@@ -2321,41 +1672,12 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.norm_act_proj_sub_le_of_mem_holes_protocolFrozen,
         TNLean.PEPS.Approximation.length_holes_protocolFrozen_le}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_protocol_schedule,
-        def:peps_frame,
-        def:peps_frame_square_patch,
-        def:peps_protocol_frozen_frames,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_front_registers,
-        thm:peps_protocol_constants,
-        thm:peps_protocol_from_large_repaintings}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_dyadic_protocol_parties,def:peps_dyadic_protocol_schedule,def:peps_frame,def:peps_frame_square_patch,def:peps_protocol_frozen_frames,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,lem:peps_front_registers,thm:peps_protocol_constants,thm:peps_protocol_from_large_repaintings}
     In Definition~\ref{def:peps_protocol_frozen_frames} with $L\ge1$ and $0<\epsilon_0t\le B_0\log L$, every hole $h$ of every frozen frame satisfies $\|\Pi_h\Omega-\Omega\|\le L^{-60}$. Under protocol constants with $L\ge2$ and $t=D\log L$, the frozen frame of every auxiliary index for the large-square choice $2^j>K_0t$ has at most $2$ holes (\texttt{06-geometry.tex}, lines 108--118, 620--624 and 653--655).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_block_guide,
-        def:peps_dyadic_edge_band,
-        def:peps_dyadic_protocol_parties,
-        def:peps_dyadic_schedule,
-        def:peps_frame,
-        def:peps_protocol_frozen_frames,
-        def:peps_protocol_repaint_baseline,
-        def:peps_protocol_treated_frame,
-        lem:peps_adaptive_patch_supply,
-        lem:peps_dyadic_floor,
-        lem:peps_dyadic_frozen_hole_count,
-        lem:peps_dyadic_unmodified_vertices,
-        thm:peps_bulk_steps_treated_frames,
-        thm:peps_dyadic_temporary_holes,
-        thm:peps_guide_frame_norm,
-        thm:peps_protocol_auxiliary_index_facts,
-        thm:peps_protocol_bounded_changes,
-        thm:peps_protocol_from_large_repaintings,
-        thm:peps_protocol_main_frame_schedule,
-        thm:peps_treated_frame_spec}
+    \uses{def:peps_dyadic_block_guide,def:peps_dyadic_edge_band,def:peps_dyadic_protocol_parties,def:peps_dyadic_schedule,def:peps_frame,def:peps_protocol_frozen_frames,def:peps_protocol_repaint_baseline,def:peps_protocol_treated_frame,lem:peps_adaptive_patch_supply,lem:peps_dyadic_floor,lem:peps_dyadic_frozen_hole_count,lem:peps_dyadic_unmodified_vertices,thm:peps_bulk_steps_treated_frames,thm:peps_dyadic_temporary_holes,thm:peps_guide_frame_norm,thm:peps_protocol_auxiliary_index_facts,thm:peps_protocol_bounded_changes,thm:peps_protocol_from_large_repaintings,thm:peps_protocol_main_frame_schedule,thm:peps_treated_frame_spec}
     Each hole uses a supplied patch of radius $\epsilon_0t\le B_0\log L$, giving $\|\Pi_h\Omega-\Omega\|\le L^{-60}$ (Lemma~\ref{lem:peps_adaptive_patch_supply}). By Lemma~\ref{thm:peps_bulk_steps_treated_frames} and Lemma~\ref{lem:peps_dyadic_frozen_hole_count}, the unmarked exchanged auxiliary guide of an edge $e$ has true vertices only at the translates of the two endpoints of $e$, hence at most $2$ holes.
 \end{proof}
 
@@ -2401,8 +1723,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.protocolSchedule_fst_eq_of_le,
         TNLean.PEPS.Approximation.near_of_eventUses_repaint}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_dyadic_protocol}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_dyadic_protocol}
     Assume the adaptive patch constraint of Proposition~4.1. For every
     $q\in\mathbb N$ with $q\ge2$ and real $J,\Delta>0$, there are a real
     constant $C$ and natural constants $b,\kappa,r,L_0$, chosen before the
@@ -2420,23 +1741,7 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:peps_dyadic_protocol_parties,
-        def:peps_protocol_frozen_frames,
-        def:polynomial_peps_model,
-        lem:peps_adaptive_patch_supply,
-        thm:peps_angular_information_from_gap,
-        thm:peps_angular_scale_exists,
-        thm:peps_angular_scale_monotonicity,
-        thm:peps_dyadic_direct_repainting_constants,
-        lem:peps_dyadic_protocol_mesh_ratio,
-        thm:peps_dyadic_padding_bounds,
-        thm:peps_dyadic_protocol_schedule_counts,
-        thm:peps_protocol_constants,
-        thm:peps_protocol_from_large_repaintings,
-        thm:peps_protocol_frozen_frame_bounds,
-        thm:peps_protocol_large_repainting_segment,
-        thm:peps_protocol_level_events,
-        thm:peps_protocol_point_treatment_change}
+    \uses{def:peps_dyadic_protocol_parties,def:peps_protocol_frozen_frames,def:polynomial_peps_model,lem:peps_adaptive_patch_supply,thm:peps_angular_information_from_gap,thm:peps_angular_scale_exists,thm:peps_angular_scale_monotonicity,thm:peps_dyadic_direct_repainting_constants,lem:peps_dyadic_protocol_mesh_ratio,thm:peps_dyadic_padding_bounds,thm:peps_dyadic_protocol_schedule_counts,thm:peps_protocol_constants,thm:peps_protocol_from_large_repaintings,thm:peps_protocol_frozen_frame_bounds,thm:peps_protocol_large_repainting_segment,thm:peps_protocol_level_events,thm:peps_protocol_point_treatment_change}
     The angular information bound of Proposition~3.4 holds by
     Theorem~\ref{thm:peps_angular_information_from_gap}. Fix the constants in
     the order of the source: $K_0=20$, a small $\epsilon_0$, the mesh ratio

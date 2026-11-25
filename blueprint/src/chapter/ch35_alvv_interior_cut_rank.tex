@@ -103,8 +103,7 @@ of~\cite{Arad2016RigorousRG}.
     \label{thm:alvv_two_window_chebyshev_projector}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_two_window_chebyshev_spectral_projector}
     \leanok
-    \uses{thm:chain_two_window_polynomial_rank,
-        thm:alvv_two_window_interior_cut_rank}
+    \uses{thm:chain_two_window_polynomial_rank,thm:alvv_two_window_interior_cut_rank}
     Let $L,q,\ell,a,b$ be natural numbers with $\ell\ge1$, $a+2\ell\le b$ and
     $b+2\ell\le L-1$, and let $F_\alpha$ be the two-window family of
     Lemma~\ref{thm:chain_two_window_polynomial_rank}. Suppose that
@@ -157,8 +156,7 @@ of~\cite{Arad2016RigorousRG}.
     computing it are separate assertions.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_two_window_polynomial_rank,
-        thm:alvv_two_window_interior_cut_rank}
+    \uses{thm:chain_two_window_polynomial_rank,thm:alvv_two_window_interior_cut_rank}
     Let $p$ be the normalized Chebyshev polynomial of degree $k$ for the
     interval $[\eta_0,\eta_1]$ and the upper bound $u$ given by
     \cite[``The Chebyshev filter near the normalization point'']
@@ -249,8 +247,7 @@ of~\cite{Arad2016RigorousRG}.
     \label{cor:alvv_good_projector_hard_truncation}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_two_window_chebyshev_projector_degree_sq}
     \leanok
-    \uses{thm:alvv_two_window_chebyshev_projector,
-        lem:alvv_three_bulk_hard_truncation_spectral_comparison}
+    \uses{thm:alvv_two_window_chebyshev_projector,lem:alvv_three_bulk_hard_truncation_spectral_comparison}
     Let $H$ be a Hermitian Hamiltonian of the two-window form of
     Lemma~\ref{thm:alvv_two_window_chebyshev_projector}, with $q\ge1$,
     $\|H\|\le u$ and $\eta_0<\eta_1\le u$. There is a real polynomial $p$ of
@@ -293,8 +290,7 @@ of~\cite{Arad2016RigorousRG}.
     \label{cor:alvv_good_projector_hard_truncation_combined}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_three_bulk_hard_truncation_good_projector}
     \leanok
-    \uses{lem:alvv_three_bulk_hard_truncation_spectral_comparison,
-        cor:alvv_good_projector_hard_truncation}
+    \uses{lem:alvv_three_bulk_hard_truncation_spectral_comparison,cor:alvv_good_projector_hard_truncation}
     Under the hypotheses of
     Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison}, the
     truncated Hamiltonian $\tilde H$ of that lemma has all of its properties,
@@ -314,8 +310,7 @@ of~\cite{Arad2016RigorousRG}.
     are those of Lemma~\ref{thm:alvv_two_window_chebyshev_projector}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:alvv_three_bulk_hard_truncation_spectral_comparison,
-        cor:alvv_good_projector_hard_truncation}
+    \uses{lem:alvv_three_bulk_hard_truncation_spectral_comparison,cor:alvv_good_projector_hard_truncation}
     Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison} writes
     $\tilde H$ in the two-window form with $\|\tilde H\|\le3t+4\ell$, so
     Lemma~\ref{cor:alvv_good_projector_hard_truncation} applies to it with

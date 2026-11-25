@@ -12,8 +12,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     \label{thm:actual_scan_sharp_lower_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_sharp_lower_norm}
     \leanok
-    \uses{def:al_scan_actual_histories,def:al_scan_actual_energy_terms,
-        thm:al_scan_literal_scalars}
+    \uses{def:al_scan_actual_histories,def:al_scan_actual_energy_terms,thm:al_scan_literal_scalars}
     Fix a finite lattice domain $\Lambda$, interaction range $R$, term
     norm bound $J$, physical and auxiliary dimensions $q,d\ge1$,
     and $a>0$. There exist $c,C_f\geq0$ (independent of the scanner,
@@ -83,9 +82,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
 
 \begin{proof}
     \leanok
-    \uses{thm:al_scan_band_nesting,thm:al_augmented_root_compression,
-        thm:al_scan_actual_round_global_energy,thm:al_scan_nested_band_metrics,
-        thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
+    \uses{thm:al_scan_band_nesting,thm:al_augmented_root_compression,thm:al_scan_actual_round_global_energy,thm:al_scan_nested_band_metrics,thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
     By Lemmas~\ref{thm:al_scan_band_nesting}
     and~\ref{thm:al_scan_nested_band_metrics}, the disjoint near and middle
     terminal regions nest across bands, so the regional sharp lower norm
@@ -173,8 +170,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     \label{thm:actual_scan_supplied_prevector_sharp_lower}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_sharp_lower}
     \leanok
-    \uses{thm:actual_scan_sharp_lower_norm,def:actual_sharp_lower_remainder,
-        def:al_scan_status_marginals,def:al_scan_auxiliary_coordinates}
+    \uses{thm:actual_scan_sharp_lower_norm,def:actual_sharp_lower_remainder,def:al_scan_status_marginals,def:al_scan_auxiliary_coordinates}
     Under the scanner and gap hypotheses of
     Lemma~\ref{thm:actual_scan_sharp_lower_norm} at horizon $nm$ with
     $K_{\rm mom}\geq0$, $a>0$, and $10a\leq\min\{r_{\rm mom},1\}$, let
@@ -200,10 +196,7 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
 
 \begin{proof}
     \leanok
-    \uses{thm:actual_scan_sharp_lower_norm,thm:actual_sharp_lower_label_defect,
-        thm:actual_sharp_lower_remainder_limit,thm:al_augmented_prevector_norm,
-        thm:al_augmented_prevector_symmetry,
-        def:al_scan_auxiliary_coordinates}
+    \uses{thm:actual_scan_sharp_lower_norm,thm:actual_sharp_lower_label_defect,thm:actual_sharp_lower_remainder_limit,thm:al_augmented_prevector_norm,thm:al_augmented_prevector_symmetry,def:al_scan_auxiliary_coordinates}
     By Lemmas~\ref{thm:al_augmented_prevector_norm},
     \ref{thm:al_augmented_prevector_symmetry},
     and~\ref{thm:actual_sharp_lower_label_defect}, $u_k$ satisfies the

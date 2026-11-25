@@ -30,7 +30,7 @@ from the marginal tail bound and bound the failure probability of each.
     \label{thm:al_amp_typical_projection_cut}
     \lean{TNLean.PEPS.AreaLaw.typicalProjection_failure_le_surprisalTail}
     \leanok
-    \uses{def:al_amp_typical_projection, thm:area_law_marginal_tails}
+    \uses{def:al_amp_typical_projection,thm:area_law_marginal_tails}
     Let $\Omega$ be a unit vector, $A\subseteq\Lambda$, and $w\in\mathbb R$.
     Then $P_A^w$ is an orthogonal projection commuting with $\rho_A$. Every
     retained eigenvalue satisfies $p_j>0$ and
@@ -65,8 +65,7 @@ from the marginal tail bound and bound the failure probability of each.
     \end{align*}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_marginal_tails, thm:area_law_tail_parameter,
-        thm:al_amp_typical_projection_cut}
+    \uses{thm:area_law_marginal_tails,thm:area_law_tail_parameter,thm:al_amp_typical_projection_cut}
     Let $C_1$ be the constant of Lemma~\ref{thm:area_law_tail_parameter}
     and set $\vartheta=J/\Delta$. Then
     $\mathcal B_A\le C_1(1+C_0n)\le C_1(1+C_0)n$. By
@@ -102,7 +101,7 @@ from the marginal tail bound and bound the failure probability of each.
     preceding the Schmidt expansion of $\Omega$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_amp_typical_failure, thm:al_amp_typical_projection_cut}
+    \uses{thm:al_amp_typical_failure,thm:al_amp_typical_projection_cut}
     Since $x^{20K}\mathrm e^{-cx}\to0$ as $x\to\infty$, setting $x=n^{1/10}$
     shows that the bound $C\exp(-cn^{1/10})$ of
     Lemma~\ref{thm:al_amp_typical_failure} is at most $n^{-2K}$ for all

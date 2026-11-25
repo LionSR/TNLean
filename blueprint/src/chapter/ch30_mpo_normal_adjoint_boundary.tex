@@ -123,8 +123,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
     between distinct blocks is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mps_equality_reduction_exists,thm:glm_dual_bond_dimension,
-        thm:glm_boundary_physical_adjoint,thm:glm_boundary_similarity}
+    \uses{thm:mps_equality_reduction_exists,thm:glm_dual_bond_dimension,thm:glm_boundary_physical_adjoint,thm:glm_boundary_similarity}
     A normal-target reduction gives $V_aW_a=I$ and
     $V_a(T_a^\sharp)^{ij}W_a=T_{a^\vee}^{ij}$.
     Equality of the two bond dimensions makes the right inverse two-sided
@@ -262,8 +261,7 @@ arbitrary $X\in\MN{\chi}$.
     \lean{MPOTensor.IsPeriodicAdjointFamily.exists_blockSumAdjointBoundary,
         MPOTensor.IsPeriodicAdjointFamily.isBoundaryAdjointClosed_blockSum}
     \leanok
-    \uses{def:glm_periodic_adjoint_family,def:normal,
-        def:glm_block_adjoint_transport,def:glm_boundary_adjoint_closed}
+    \uses{def:glm_periodic_adjoint_family,def:normal,def:glm_block_adjoint_transport,def:glm_boundary_adjoint_closed}
     Suppose $a\mapsto a^\vee$ is involutive, the $T_a$ are normal with
     positive bond dimensions, and (\ref{eq:glm_periodic_adjoint}) holds.
     There exist maps $V_a,W_a$ satisfying
@@ -276,8 +274,7 @@ arbitrary $X\in\MN{\chi}$.
     In particular the block sum is boundary adjoint closed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:glm_normal_adjoint_gauge,thm:glm_adjoint_block_diagonal,
-        def:glm_adjoint_block_inclusion,def:glm_block_adjoint_transport}
+    \uses{thm:glm_normal_adjoint_gauge,thm:glm_adjoint_block_diagonal,def:glm_adjoint_block_inclusion,def:glm_block_adjoint_transport}
     Choose the exact dual gauges block by block. Taking adjoints in
     (\ref{eq:glm_adjoint_block_diagonal}), then applying
     (\ref{eq:glm_dual_boundary}), gives
@@ -418,8 +415,7 @@ physical $*$-representation or weak-Hopf assumptions discussed in
     Every boundary commutes with every virtual tensor letter.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:glm_counterexample_local,
-        thm:glm_boundary_closedness_of_decomposition}
+    \uses{thm:glm_counterexample_local,thm:glm_boundary_closedness_of_decomposition}
     The exact identities (\ref{eq:glm_counterexample_local}) give
     one-copy biorthogonal fusion and action decompositions with both
     analysis and synthesis maps equal to $1$.

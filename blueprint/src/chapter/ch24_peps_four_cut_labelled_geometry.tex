@@ -195,9 +195,7 @@
     For every $w,\ell>0$, $p$ is flat if and only if $p=q\cdot\kappa(g,h)$ (equivalently $q^{-1}\cdot p=\kappa(g,h)$) for some $q:\Lambda\to G$ and commuting $g,h\in G$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_bond_flat_transport,thm:peps_torus_flat_connection_gauge,
-        thm:peps_bond_tree_closure,thm:peps_bond_closure_flat,
-        thm:peps_bond_flat_gauge,def:peps_bond_gauge}
+    \uses{thm:peps_bond_flat_transport,thm:peps_torus_flat_connection_gauge,thm:peps_bond_tree_closure,thm:peps_bond_closure_flat,thm:peps_bond_flat_gauge,def:peps_bond_gauge}
     If $p$ is flat, Lemmas~\ref{thm:peps_torus_flat_connection_gauge} and~\ref{thm:peps_bond_tree_closure} give $q\cdot p=\kappa(g,h)$ with $g=B_{0,\ell}^{-1}$ and $h=A_w$ commuting; the converse follows from Lemmas~\ref{thm:peps_bond_closure_flat} and~\ref{thm:peps_bond_flat_gauge}.
 \end{proof}
 
@@ -238,8 +236,7 @@
         TNLean.PEPS.torusBondGauge_closureSeamGauge,
         TNLean.PEPS.exists_torusBondGauge_eq_closureAt}
     \leanok
-    \uses{def:peps_bond_seam_gauge,def:peps_bond_closure_at,
-        def:peps_bond_gauge}
+    \uses{def:peps_bond_seam_gauge,def:peps_bond_closure_at,def:peps_bond_gauge}
     If $gh=hg$ and $w,\ell>0$ (\cite[Section~5]{Schuch2010PEPS}), then (pulling one-coordinate functions back to $\Lambda$)
     \begin{align}
         s_{h,c}\cdot\kappa_{0,r}(g,h)      & =\kappa_{c,r}(g,h),\nonumber \\

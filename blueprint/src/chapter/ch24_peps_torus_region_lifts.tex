@@ -105,7 +105,7 @@ seams.
     \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_additive_circle_lift_coordinates, thm:peps_finite_compact_cell_images}
+    \uses{thm:peps_additive_circle_lift_coordinates,thm:peps_finite_compact_cell_images}
     The quotient projection is continuous, so each projected closed
     square is compact. The finite coproduct of the compact convex
     squares maps continuously and surjectively onto $X_R$. This is a
@@ -179,8 +179,7 @@ seams.
         TNLean.PEPS.torusRegionPlanarRealization_cell_periodTranslate_disjoint,
         TNLean.PEPS.exists_integerLift_periodTranslate_disjoint_of_isSimplyConnected}
     \leanok
-    \uses{thm:peps_torus_region_realization,
-        thm:peps_torus_region_planar_lift}
+    \uses{thm:peps_torus_region_realization,thm:peps_torus_region_planar_lift}
     Let the torus periods $w,H$ be positive, and let
     $F:X_R\to\mathbb R^2$ be a continuous lift of the inclusion.
     For $j=(j_1,j_2)\in\mathbb Z^2$, write
@@ -241,7 +240,7 @@ seams.
         TNLean.PEPS.integerClosedCellUnion_image_eq_torusRegionPlanarRealization,
         TNLean.PEPS.exists_integerLift_no_finite_cellHole_of_isSimplyConnected}
     \leanok
-    \uses{thm:peps_torus_region_realization, thm:peps_torus_region_planar_lift}
+    \uses{thm:peps_torus_region_realization,thm:peps_torus_region_planar_lift}
     For a finite set $A\subset\mathbb Z^2$, the union
     \begin{align}
         P_A & =\bigcup_{a\in A}\bigl(a+[-1/2,1/2]^2\bigr)
@@ -413,9 +412,7 @@ seams.
         TNLean.PEPS.torusRealProjection_not_mem_of_mem_planarExteriorCollar,
         TNLean.PEPS.exists_integerLift_exteriorCollar_of_isSimplyConnected}
     \leanok
-    \uses{thm:peps_torus_region_period_separation,
-        thm:peps_torus_region_realization,
-        thm:peps_torus_region_planar_lift}
+    \uses{thm:peps_torus_region_period_separation,thm:peps_torus_region_realization,thm:peps_torus_region_planar_lift}
     Let $w,H>0$, and let a continuous lift of the
     closed-cell region $X_R$ have planar image
     $P=\bigcup_{v\in R}(L(v)+[-1/2,1/2]^2)$ with integer centers.
@@ -464,8 +461,7 @@ seams.
         TNLean.PEPS.regularRegionTreeGauge_eq_torusRegionLiftRootGauge,
         TNLean.PEPS.regularRegionTreeCycleResidual_torusClosure_eq_one}
     \leanok
-    \uses{thm:peps_regular_region_tree_gauge,
-        thm:peps_regular_torus_closure_cut_identification}
+    \uses{thm:peps_regular_region_tree_gauge,thm:peps_regular_torus_closure_cut_identification}
     Let both torus circumferences $w,H$ be at least three, and let
     $R$ be a set of native torus vertices. Suppose a map
     $L:R\to\mathbb Z^2$ projects modulo $(w,H)$ to the original
@@ -517,8 +513,7 @@ seams.
     \lean{TNLean.PEPS.torusDirectedWinding_eq_of_integerUnitStep,
         TNLean.PEPS.torusIntegerDeckCoordinate}
     \leanok
-    \uses{thm:peps_torus_walk_winding,
-        thm:peps_torus_region_integer_lift_gauge}
+    \uses{thm:peps_torus_walk_winding,thm:peps_torus_region_integer_lift_gauge}
     Let the torus periods $w,H$ be at least three. For $a\in\mathbb Z^2$,
     put
     \begin{align}
@@ -539,8 +534,7 @@ seams.
     \label{thm:peps_torus_exterior_path_approximation}
     \lean{TNLean.PEPS.exists_complementWalk_of_exterior_planePath}
     \leanok
-    \uses{thm:peps_torus_region_realization,
-        thm:peps_torus_walk_winding}
+    \uses{thm:peps_torus_region_realization,thm:peps_torus_walk_winding}
     Let the torus periods $w,H$ be at least three, and let $X_R$ be
     the closed-cell realization of a finite native region $R$.
     Let $a,b\in\mathbb Z^2$ project to exterior native vertices $v,t$.
@@ -582,7 +576,7 @@ seams.
         TNLean.PEPS.exists_exterior_integerUnitStep_of_isTorusRegionIntegerLift,
         TNLean.PEPS.exists_exterior_integerEndpoints_of_regionWalk}
     \leanok
-    \uses{thm:peps_torus_integer_unit_step_winding, thm:peps_torus_region_planar_lift}
+    \uses{thm:peps_torus_integer_unit_step_winding,thm:peps_torus_region_planar_lift}
     A native site center belongs to the closed-cell union $X_R$ exactly
     when its site belongs to $R$. For the crossing and walk assertions,
     take both torus periods at least three. Suppose $L$ is an integer lift
@@ -690,7 +684,7 @@ seams.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_torus_region_integer_lift_gauge, thm:peps_regular_region_gauge_gram, thm:peps_regular_torus_closure_cut_identification}
+    \uses{thm:peps_torus_region_integer_lift_gauge,thm:peps_regular_region_gauge_gram,thm:peps_regular_torus_closure_cut_identification}
     Expressing the native four-leg tensor on its four incident graph edges
     preserves local regular isometry. Since the arithmetic lift gauge
     has the native closure assignment as its internal gradient,
@@ -723,7 +717,7 @@ seams.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_torus_region_realization, thm:peps_torus_region_integer_lift_gram}
+    \uses{thm:peps_torus_region_realization,thm:peps_torus_region_integer_lift_gram}
     Graph connectivity gives a region vertex, and simple connectedness
     of the cell realization gives an integer lift preserving
     every internal native unit step by
@@ -761,7 +755,7 @@ seams.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_twisted_projector_coordinates, thm:peps_regular_region_projector_coordinates}
+    \uses{thm:peps_regular_twisted_projector_coordinates,thm:peps_regular_region_projector_coordinates}
     Every cycle residual is the identity by
     Lemma~\ref{thm:peps_torus_region_integer_lift_gauge}. The exact twisted
     coefficient formula therefore reduces to the untwisted coefficient

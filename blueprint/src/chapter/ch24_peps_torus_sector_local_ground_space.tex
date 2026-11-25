@@ -2,7 +2,7 @@
     \label{lem:peps_regular_complementary_twists_region_space}
     \lean{TNLean.PEPS.regionGroundSpace_regularTwistedSite_eq_of_trivial_on_incident}
     \leanok
-    \uses{def:peps_region_ground_space, def:peps_open_region_contraction}
+    \uses{def:peps_region_ground_space,def:peps_open_region_contraction}
     For a finite graph tensor $A$ with regular group labels and bond insertions
     $u_e\in G$ satisfying $u_e=1$ for every $e\in\operatorname{Inc}(R)$, the
     inserted tensor $A^u$ has $\mathcal G_R(A^u)=\mathcal G_R(A)$.
@@ -23,7 +23,7 @@
         TNLean.PEPS.torusGClosure_sum_slice_mem_regionGroundSpace_interior_rectangle,
         TNLean.PEPS.place_torusGClosure_sum_eq_zero_interior_rectangle}
     \leanok
-    \uses{def:peps_region_ground_space, def:peps_region_parent_interaction}
+    \uses{def:peps_region_ground_space,def:peps_region_parent_interaction}
     Place a four-leg tensor $A$ with regular group labels on a native square
     torus $\Z_{L_x}\times\Z_{L_y}$ with $L_x,L_y\ge 3$, and let
     $R=[x_0,x_1]\times[y_0,y_1]$ be a strict interior rectangle
@@ -41,8 +41,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_regular_complementary_twists_region_space,
-        thm:peps_region_ground_space_slice}
+    \uses{lem:peps_regular_complementary_twists_region_space,thm:peps_region_ground_space_slice}
     The closure $\Psi_{g,h}=\Psi(A^{u_{g,h}})$ inserts $g,h$ only on seam
     bonds, none of which is incident to the strict interior rectangle $R$.
     Lemma~\ref{lem:peps_regular_complementary_twists_region_space} gives

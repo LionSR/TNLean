@@ -4,7 +4,7 @@
     \label{thm:peps_labelled_conditional_entropy}
     \lean{TNLean.PEPS.AreaLaw.regionEntropy_conditional_le_residual_add_sum}
     \leanok
-    \uses{def:area_law_ground_entropy, def:area_law_two_family_partition}
+    \uses{def:area_law_ground_entropy,def:area_law_two_family_partition}
     Let $\Omega$ be a normalized pure state on a finite domain, and let $G,B,C$
     be pairwise-disjoint regions. Suppose an ordered two-family partition
     (Definition~\ref{def:area_law_two_family_partition}) of $G$ has remainder $D$,
@@ -256,8 +256,7 @@
     number at most $C(1+\log s)^{K}$ in total.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:peps_cell_partition_constants,lem:peps_cell_generation_invariant,
-        thm:peps_cell_generation_count,thm:peps_cell_partition_constants_bounds}
+    \uses{def:peps_cell_partition_constants,lem:peps_cell_generation_invariant,thm:peps_cell_generation_count,thm:peps_cell_partition_constants_bounds}
     Iterating the recursion of Lemma~\ref{lem:peps_cell_generation_invariant}
     from the chosen cell until the side drops below $u_*$ (for which
     $1000u^{\gamma}\le u$ and $8u^{\gamma}\le u^{\gamma'}$ hold for $u\ge u_*$,
@@ -290,8 +289,7 @@
     number at most $C(1+\log s)^{K}$ in total.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_cell_two_family_partition_explicit,
-        def:peps_cell_partition_constants,thm:peps_cell_partition_constants_bounds}
+    \uses{thm:peps_cell_two_family_partition_explicit,def:peps_cell_partition_constants,thm:peps_cell_partition_constants_bounds}
     Take $u_*$, $C$ and $K$ from
     Definition~\ref{def:peps_cell_partition_constants} and apply
     Lemma~\ref{thm:peps_cell_two_family_partition_explicit}.

@@ -325,8 +325,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     \label{def:peps_party_monomial}
     \lean{QuantumCircuit.Party.Monomial}
     \lean{QuantumCircuit.Party.Monomial.toEffectChain}
-    \lean{QuantumCircuit.Party.PartyCircuit.IsAllowed,
-        QuantumCircuit.Party.ChainGate.IsAllowed}
+    \lean{QuantumCircuit.Party.ChainGate.IsAllowed}
     \lean{QuantumCircuit.Party.Monomial.effectParties}
     \lean{QuantumCircuit.Party.WeightedGate}
     \lean{QuantumCircuit.Party.WeightedGate.toGate}
@@ -413,10 +412,9 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
     \label{thm:peps_party_combine_sources}
     \lean{QuantumCircuit.Party.Word.op_combineSources}
     \lean{QuantumCircuit.Party.Word.isAllowed_combineSources}
-    \lean{EuclideanSpace.pairCombine}
     \lean{QuantumCircuit.Party.Word.combineSources}
     \leanok
-    \uses{def:peps_party_layout}
+    \uses{def:peps_party_layout,thm:peps_pair_combine}
     For pair vectors $\eta\in\mathcal U\otimes\mathcal V$ and
     $\eta'\in\mathcal U'\otimes\mathcal V'$ on $p\ne q$, preparing $\eta'$ and
     $\eta$ and merging the local registers into $\mathcal U\otimes\mathcal U'$

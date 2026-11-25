@@ -78,7 +78,7 @@ $C_2=7$ as recorded in~\cite{gap:hastings07_relent_constants}.
     \label{thm:hastings_relent_window}
     \lean{TNLean.MPS.AreaLaw.Hastings.relent_of_projectorFactorization_of_le_entropy}
     \leanok
-    \uses{def:chain_model, def:hastings_bootstrap_remainder}
+    \uses{def:chain_model,def:hastings_bootstrap_remainder}
     Let $\Omega$, $c$, $l$, $\xi'$, $C_1$, $A$, and $B$ be as in
     Lemma~\ref{thm:hastings_relent_projector}, with $q\ge2$ and
     $c+l\le L$. Suppose that for every $m\in\N$ with $c+m\le L$ there exist
@@ -99,7 +99,7 @@ $C_2=7$ as recorded in~\cite{gap:hastings07_relent_constants}.
     Lemma~1 at every scale $m$ as a hypothesis.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_relent_projector, thm:hastings_bootstrap_chain_stage}
+    \uses{thm:hastings_relent_projector,thm:hastings_bootstrap_chain_stage}
     Since $\sigma=\rho_{\lbrack0,c)}\otimes\rho_{\lbrack c,L)}$ is a mixture of pure product
     states across $c$ (each of Schmidt rank $k=1$), the overlap is
     $P=\operatorname{tr}(\sigma P_0)=\sum_iw_i|\langle\psi_i,\Omega\rangle|^2$.
@@ -119,8 +119,7 @@ $C_2=7$ as recorded in~\cite{gap:hastings07_relent_constants}.
     \label{thm:hastings_relent}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGapped}
     \leanok
-    \uses{def:chain_model, def:hastings_bootstrap_remainder,
-        thm:hastings_lemma1_endpoint}
+    \uses{def:chain_model,def:hastings_bootstrap_remainder,thm:hastings_lemma1_endpoint}
     For every range $R\in\N$ there is a constant $K\ge0$ depending only on $R$
     with the following property. Let $\Omega$ be a gapped ground vector with
     gap $\Delta E>0$ of a range-$R$ Hamiltonian on the chain of $L$ sites with
@@ -138,8 +137,7 @@ $C_2=7$ as recorded in~\cite{gap:hastings07_relent_constants}.
     choice is used in Lemma~\ref{thm:hastings_relent_source}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_relent_window, thm:hastings_lemma1_endpoint,
-        thm:hastings_factorization_mono, lem:chain_entropy_inequalities}
+    \uses{thm:hastings_relent_window,thm:hastings_lemma1_endpoint,thm:hastings_factorization_mono,lem:chain_entropy_inequalities}
     Lemma~\ref{thm:hastings_lemma1_endpoint} supplies $K_0\ge0$ and operators
     $O_B,O_L,O_R$ at every $(c,m)$ with
     $\|O_BO_LO_R-P_0\|\le K_0\tilde\xi^3e^{-m/(6\tilde\xi)}$. Setting

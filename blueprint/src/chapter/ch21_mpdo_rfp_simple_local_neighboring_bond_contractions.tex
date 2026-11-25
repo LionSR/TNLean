@@ -119,7 +119,7 @@
         MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_apply,
         MPOTensor.PhysicalSectorFactorization.neighboringOperatorWithMatrix_one}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator}
+    \uses{def:mpdo_physical_sector_factorization,def:mpdo_minimal_neighboring_operator}
     For a virtual matrix $P$, define
     \begin{align}
         \eta_{k,h}(P)
@@ -163,7 +163,7 @@
     \label{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices_neighboringOperator}
     \leanok
-    \uses{def:mpdo_minimal_neighboring_operator, def:mpdo_matrix_weighted_neighboring_operator, def:mpdo_physical_sector_factorization_virtual_matrices}
+    \uses{def:mpdo_minimal_neighboring_operator,def:mpdo_matrix_weighted_neighboring_operator,def:mpdo_physical_sector_factorization_virtual_matrices}
     Combining the virtual corner in
     \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
     neighboring contraction in
@@ -232,7 +232,7 @@
         MPSTensor.SectorDecomposition.flatBlockInclusion_conjTranspose_mul_toTensor,
         MPSTensor.SectorDecomposition.flatWeight_smul_flatBasis_eq_compression}
     \leanok
-    \uses{def:sector_weight_data, thm:block_inclusion_projection}
+    \uses{def:sector_weight_data,thm:block_inclusion_projection}
     Let $A=\bigoplus_t \mu_t A_t$ be a weighted block-diagonal tensor in
     flattened virtual coordinates. As in the blockwise virtual-corner identity
     of \cite[Section~2.3, equation \emph{II\_Aiplusk1},
@@ -284,7 +284,7 @@
     \label{thm:mpdo_physical_sector_factorization_virtual_compression_neighbor}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualCompression_neighboringOperator}
     \leanok
-    \uses{def:mpdo_minimal_neighboring_operator, def:mpdo_matrix_weighted_neighboring_operator, def:mpdo_physical_sector_factorization_virtual_compression}
+    \uses{def:mpdo_minimal_neighboring_operator,def:mpdo_matrix_weighted_neighboring_operator,def:mpdo_physical_sector_factorization_virtual_compression}
     Combining the virtual corner in
     \cite[Section~2.3, lines~195--219]{Cirac2016MPDO_arXiv} with the
     neighboring contraction in
@@ -311,7 +311,7 @@
         MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator,
         MPOTensor.PhysicalSectorFactorization.ofGaugeEquiv_neighboringOperator_posSemidef}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator, def:mpdo_physical_sector_factorization_virtual_matrices}
+    \uses{def:mpdo_physical_sector_factorization,def:mpdo_minimal_neighboring_operator,def:mpdo_physical_sector_factorization_virtual_matrices}
     Suppose that two MPO tensors of the same virtual dimension differ by an
     invertible virtual gauge $X$.  The induced factorization is precisely the
     virtual-matrix transformation by $X$ and $X^{-1}$.  Thus every physical-sector
@@ -323,7 +323,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_matrix_weighted_neighboring_operator, thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
+    \uses{def:mpdo_matrix_weighted_neighboring_operator,thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
     Specializing the virtual-matrix neighboring identity to a gauge and its
     inverse replaces the weighting matrix by their product $I$, and
     contraction through the identity matrix recovers the ordinary neighboring
@@ -355,7 +355,7 @@
         oneSiteSectorMatrix_mul_eq_zero_of_neighboringOperator_eq_zero}
     \lean{MPOTensor.PhysicalSectorFactorization.oneSiteSectorSpace_mul_eq_zero}
     \leanok
-    \uses{def:mpdo_minimal_neighboring_operator, def:mpdo_one_site_sector_matrix_space}
+    \uses{def:mpdo_minimal_neighboring_operator,def:mpdo_one_site_sector_matrix_space}
     As in the directed local-orthogonality implication of
     \cite[Appendix~C.2, lines~1463--1470]{Cirac2016MPDO_arXiv}, let $S$ and $C$
     be sets of sectors. If $\eta_{k,h}=0$ for every $k\in S$ and $h\in C$,
@@ -381,7 +381,7 @@
     \label{def:mpdo_physical_sector_rephasing}
     \lean{MPOTensor.PhysicalSectorFactorization.rephase}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator}
+    \uses{def:mpdo_physical_sector_factorization,def:mpdo_minimal_neighboring_operator}
     Let $z_k\in\C$ satisfy $|z_k|=1$ for every sector. Replacing
     \begin{align}
         (l_k)_a & \longmapsto z_k(l_k)_a,
@@ -400,7 +400,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.%
         rephase_neighboringOperator_ne_zero_iff}
     \leanok
-    \uses{def:mpdo_physical_sector_rephasing, def:mpdo_minimal_neighboring_operator}
+    \uses{def:mpdo_physical_sector_rephasing,def:mpdo_minimal_neighboring_operator}
     As in \cite[Appendix~C.2, lines~1434--1450]{Cirac2016MPDO_arXiv}, vertex
     rephasing transforms the neighboring operators by
     $\eta_{k,h}\longmapsto z_k^{-1}z_h\,\eta_{k,h}$, while leaving every sector
@@ -413,7 +413,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.zeroRightTensorOnInactive}
     \lean{MPOTensor.PhysicalSectorFactorization.zeroRightTensorOnInactive_neighboringOperator}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator}
+    \uses{def:mpdo_physical_sector_factorization,def:mpdo_minimal_neighboring_operator}
     Let $S$ be a set of active sectors in a physical-sector factorization,
     and suppose that $(l_k)_\beta=0$ for every $k\notin S$ and every $\beta$.
     Using the reparameterization freedom in the factorization and neighboring
@@ -447,7 +447,7 @@
     \label{def:mpdo_inverse_map_physical_sector_factorization}
     \lean{MPOTensor.inverseMapPhysicalSectorFactorization}
     \leanok
-    \uses{thm:mpdo_sector_factorization, def:mpdo_physical_sector_factorization, lem:mpdo_trace_one_nonempty}
+    \uses{thm:mpdo_sector_factorization,def:mpdo_physical_sector_factorization,lem:mpdo_trace_one_nonempty}
     Let $\mc K$ be injective, let $\rho$ be its three-site closure against
     a virtual tail $R$, and choose a Hayashi decomposition of $\rho$. Fix
     outer indices such that $R_{\beta_3,\alpha_1}\ne0$. Because the
@@ -464,7 +464,7 @@
     \label{thm:mpdo_inverse_map_factorization_neighboring_operator}
     \lean{MPOTensor.inverseMapPhysicalSectorFactorization_neighboringOperator_eq_sectorEta}
     \leanok
-    \uses{def:mpdo_inverse_map_physical_sector_factorization, def:mpdo_sector_eta, def:mpdo_minimal_neighboring_operator}
+    \uses{def:mpdo_inverse_map_physical_sector_factorization,def:mpdo_sector_eta,def:mpdo_minimal_neighboring_operator}
     As in equation \texttt{etarl} of
     \cite[Appendix~C.2, lines~1441--1445]{Cirac2016MPDO_arXiv}, for all sectors
     $k,h$, the neighboring contraction of the resulting physical-sector
@@ -480,7 +480,7 @@
     \label{def:mpdo_zero_weight_reparameterized_inverse_map_factorization}
     \lean{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization}
     \leanok
-    \uses{def:mpdo_inverse_map_physical_sector_factorization, def:mpdo_physical_sector_inactive_right_zero, lem:mpdo_sector_tensor_left_zero_of_weight_zero}
+    \uses{def:mpdo_inverse_map_physical_sector_factorization,def:mpdo_physical_sector_inactive_right_zero,lem:mpdo_sector_tensor_left_zero_of_weight_zero}
     To resolve the zero-weight freedom left by the Hayashi decomposition used
     in \cite[Appendix~C.2, lines~1415--1445]{Cirac2016MPDO_arXiv}, retain every
     physical sector and its factor spaces in the inverse-map factorization and
@@ -503,7 +503,7 @@
     \lean{MPOTensor.zeroWeightReparameterizedInverseMapPhysicalSectorFactorization_neighboringOperator}
     \lean{MPOTensor.probability_ne_zero_of_reparameterized_neighboringOperator_ne_zero}
     \leanok
-    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization, thm:mpdo_inverse_map_factorization_neighboring_operator}
+    \uses{def:mpdo_zero_weight_reparameterized_inverse_map_factorization,thm:mpdo_inverse_map_factorization_neighboring_operator}
     The neighboring operators of the reparameterized factorization are
     \begin{align}
         \widehat\eta_{k,h}
@@ -530,7 +530,7 @@
     \label{cor:mpdo_sal_raw_physical_sector_factorization}
     \lean{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL}
     \leanok
-    \uses{thm:mpdo_four_site_sal_eta_structure, thm:mpdo_normalized_four_site_tail_entry_ne_zero, def:mpdo_inverse_map_physical_sector_factorization}
+    \uses{thm:mpdo_four_site_sal_eta_structure,thm:mpdo_normalized_four_site_tail_entry_ne_zero,def:mpdo_inverse_map_physical_sector_factorization}
     Every injective MPO tensor satisfying SAL admits a physical-sector
     factorization. This is only the algebraic factorization from Lemma C.4
     and equations \texttt{formK} and \texttt{etarl}; coherent positivity of
@@ -545,7 +545,7 @@
         MPOTensor.PhysicalSectorFactorization.sectorChainEquiv,
         MPOTensor.PhysicalSectorFactorization.cyclicNeighboringProduct}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator}
+    \uses{def:mpdo_physical_sector_factorization,def:mpdo_minimal_neighboring_operator}
     Let $N\geq1$. For a cyclic sector configuration
     $k=(k_0,\ldots,k_{N-1})$, write
     \begin{align}
@@ -611,7 +611,7 @@
     \label{cor:mpdo_sal_positive_cyclic_sector_products}
     \lean{MPOTensor.exists_physicalSectorFactorization_with_cyclicNeighboringProduct_posSemidef_of_isSAL}
     \leanok
-    \uses{cor:mpdo_sal_raw_physical_sector_factorization, thm:mpdo_conjugated_chain_congruence, thm:mpdo_physical_sector_chain_decomposition}
+    \uses{cor:mpdo_sal_raw_physical_sector_factorization,thm:mpdo_conjugated_chain_congruence,thm:mpdo_physical_sector_chain_decomposition}
     Establishing the projected-chain inequality of
     \cite[Appendix~C.2, Lemma~C.4, lines~1446--1450]{Cirac2016MPDO_arXiv},
     every injective MPO tensor satisfying SAL admits a physical-sector
@@ -626,7 +626,7 @@
 
 \begin{proof}
     \leanok
-    \uses{cor:mpdo_sal_raw_physical_sector_factorization, thm:mpdo_conjugated_chain_congruence, thm:mpdo_physical_sector_chain_decomposition}
+    \uses{cor:mpdo_sal_raw_physical_sector_factorization,thm:mpdo_conjugated_chain_congruence,thm:mpdo_physical_sector_chain_decomposition}
     For the algebraic physical-sector factorization given by SAL, the physical
     basis change sends the positive $N$-site MPO to a positive congruence.
     Each cyclic neighboring product is a diagonal sector compression of this
@@ -660,7 +660,7 @@
         MPOTensor.PhysicalSectorFactorization.twoSiteSectorEmbedding,
         MPOTensor.PhysicalSectorFactorization.twoSiteSectorClosure}
     \leanok
-    \uses{def:phys_close, def:mpdo_physical_sector_factorization}
+    \uses{def:phys_close,def:mpdo_physical_sector_factorization}
     Passing to the physical basis selected by $U$ so that each slice is written
     in the sector coordinates of
     Definition~\ref{def:mpdo_physical_sector_factorization}, form the two-site
@@ -678,7 +678,7 @@
     \label{thm:mpdo_two_site_sector_closure_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.twoSiteSectorClosure_eq}
     \leanok
-    \uses{def:mpdo_two_site_sector_closure, def:mpdo_minimal_neighboring_operator, def:mpdo_sector_boundary_operator}
+    \uses{def:mpdo_two_site_sector_closure,def:mpdo_minimal_neighboring_operator,def:mpdo_sector_boundary_operator}
     For every virtual matrix $X$ and every sector pair $(k,h)$,
     \begin{align}
         \mc K_{2;k,h}(X)
@@ -688,7 +688,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:mpdo_two_site_sector_closure, def:mpdo_minimal_neighboring_operator, def:mpdo_sector_boundary_operator, def:phys_close, def:mpdo_physical_sector_factorization}
+    \uses{def:mpdo_two_site_sector_closure,def:mpdo_minimal_neighboring_operator,def:mpdo_sector_boundary_operator,def:phys_close,def:mpdo_physical_sector_factorization}
     At the regrouped matrix entry indexed by
     $((\lambda_k,\rho_h),(\rho_k,\lambda_h))$ and
     $((\lambda'_k,\rho'_h),(\rho'_k,\lambda'_h))$, the virtual trace expands
@@ -712,7 +712,7 @@
         MPOTensor.PhysicalSectorFactorization.threeSiteSectorEmbedding,
         MPOTensor.PhysicalSectorFactorization.threeSiteSectorClosure}
     \leanok
-    \uses{def:phys_close, def:mpdo_physical_sector_factorization}
+    \uses{def:phys_close,def:mpdo_physical_sector_factorization}
     Passing to the physical basis selected by $U$ and forming the three-site
     closure of the resulting sector-coordinate tensor, restrict this closure
     to the sectors $(k,l,h)$ and reindex its physical factors by
@@ -729,7 +729,7 @@
     \label{thm:mpdo_three_site_sector_closure_factorization}
     \lean{MPOTensor.PhysicalSectorFactorization.threeSiteSectorClosure_eq}
     \leanok
-    \uses{def:mpdo_three_site_sector_closure, def:mpdo_minimal_neighboring_operator, def:mpdo_sector_boundary_operator}
+    \uses{def:mpdo_three_site_sector_closure,def:mpdo_minimal_neighboring_operator,def:mpdo_sector_boundary_operator}
     For every virtual matrix $X$ and fixed sectors $(k,l,h)$,
     \begin{align}
         \mc K_{3;k,l,h}(X)
@@ -791,7 +791,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:mpdo_three_site_sector_closure, def:mpdo_minimal_neighboring_operator, def:mpdo_sector_boundary_operator, def:phys_close, def:mpdo_physical_sector_factorization}
+    \uses{def:mpdo_three_site_sector_closure,def:mpdo_minimal_neighboring_operator,def:mpdo_sector_boundary_operator,def:phys_close,def:mpdo_physical_sector_factorization}
     At the regrouped matrix entry indexed by
     $((\lambda_k,\rho_h),((\rho_k,\lambda_l),(\rho_l,\lambda_h)))$ and its
     primed counterpart, the left-hand side is the scalar
@@ -920,7 +920,7 @@
         MPOTensor.PhysicalSectorFactorization.exists_neighboringTraceFactorization_changePhysicalBasis_iff,
         MPOTensor.PhysicalSectorFactorization.exists_neighboringTraceFactorization_changePhysicalBasis_iff_of_isUnitaryBetween}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization}
+    \uses{def:mpdo_physical_sector_factorization,def:mpdo_neighboring_trace_factorization}
     Let $V:\C^d\to\C^e$ satisfy
     $V^\dagger V=\Id_d$ and $VV^\dagger=\Id_e$, and define
     ${\cal K}^V_{\beta,\alpha}
@@ -969,7 +969,7 @@
         MPOTensor.PhysicalSupportRestrictionData.changePhysicalBasis_supportCoordinateChange,
         MPOTensor.PhysicalSupportRestrictionData.exists_neighboringTraceFactorization_restriction_iff}
     \leanok
-    \uses{def:gauge_equiv, def:mpdo_neighboring_trace_factorization, def:mpdo_physical_support_restriction}
+    \uses{def:gauge_equiv,def:mpdo_neighboring_trace_factorization,def:mpdo_physical_support_restriction}
     Suppose that two MPO tensors of the same physical and virtual dimensions
     differ by an invertible virtual gauge.  One admits a physical-sector
     factorization with neighboring data $\eta_{k,h}$, $a_k$, and $b_h$ if and
@@ -1006,7 +1006,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_physical_sector_factorization_gauge, thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
+    \uses{thm:mpdo_physical_sector_factorization_gauge,thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
     For the virtual gauge $L^i=XK^iX^{-1}$, let
     $\eta^K_{k,h}(M)$ denote the neighboring contraction with $M$ inserted
     between the conjugated virtual factors.  Their composition is
@@ -1052,7 +1052,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.trace_threeSiteNeighboringOperator,
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_threeSiteNeighboringOperator}
     \leanok
-    \uses{def:mpdo_physical_sector_three_site_neighboring_operator, def:mpdo_neighboring_trace_factorization}
+    \uses{def:mpdo_physical_sector_three_site_neighboring_operator,def:mpdo_neighboring_trace_factorization}
     Under the neighboring-operator trace factorization of
     Definition~\ref{def:mpdo_neighboring_trace_factorization}, every
     outer-sector pair $(k,h)$ satisfies the normalization used in the
@@ -1117,7 +1117,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_physTraceTransfer_eq_one,
         MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.trace_mpo_eq_one}
     \leanok
-    \uses{def:mpdo_physical_sector_factorization, def:mpdo_neighboring_trace_factorization, def:mpo_physical_trace_transfer, def:mpo_family}
+    \uses{def:mpdo_physical_sector_factorization,def:mpdo_neighboring_trace_factorization,def:mpo_physical_trace_transfer,def:mpo_family}
     Let $M$ be an MPO tensor admitting a physical-sector factorization whose
     neighboring operators satisfy the trace factorization of
     Definition~\ref{def:mpdo_neighboring_trace_factorization}. Closing the
@@ -1156,7 +1156,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_neighboring_trace_factorization, def:mpo_physical_trace_transfer, thm:mpdo_closed_sector_physical_trace_transfer, lem:mpdo_trace_loop_chain}
+    \uses{def:mpdo_neighboring_trace_factorization,def:mpo_physical_trace_transfer,thm:mpdo_closed_sector_physical_trace_transfer,lem:mpdo_trace_loop_chain}
     Closing the physical legs of each factorized slice and using unitary
     invariance of the trace expresses each entry of the physical-trace
     transfer as $\sum_k\tr((l_k)_\beta)\tr((r_k)_\alpha)$, which is the
@@ -1182,7 +1182,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \lean{MPOTensor.PhysicalSectorFactorization.partialTraceRight_threeSiteSectorClosure}
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.sum_threeSite_trace_coefficients}
     \leanok
-    \uses{thm:mpdo_two_site_sector_closure_factorization, thm:mpdo_three_site_sector_closure_factorization, def:mpdo_neighboring_trace_factorization}
+    \uses{thm:mpdo_two_site_sector_closure_factorization,thm:mpdo_three_site_sector_closure_factorization,def:mpdo_neighboring_trace_factorization}
     For every virtual matrix $X$,
     \begin{align}
         \tr_{R_k\otimes L_h}\!\left(\mc K_{2;k,h}(X)\right)
@@ -1202,7 +1202,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_two_site_sector_closure_factorization, thm:mpdo_three_site_sector_closure_factorization}
+    \uses{thm:mpdo_two_site_sector_closure_factorization,thm:mpdo_three_site_sector_closure_factorization}
     The partial trace of $A\otimes B$ is $\tr(B)A$. The two-site identity
     follows immediately. For three sites, the coefficient is
     \begin{align}

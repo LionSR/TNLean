@@ -232,8 +232,7 @@ running-time conclusion, remain.
     No regional minimum or scalar estimate is supplied as an input.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:soft_word_energy_update,def:balanced_regional_energy_assignment,
-        thm:regional_energy_node_relation_assignment,thm:actual_adjacent_interval_merge}
+    \uses{def:soft_word_energy_update,def:balanced_regional_energy_assignment,thm:regional_energy_node_relation_assignment,thm:actual_adjacent_interval_merge}
     Recurse on the interval length. At a short leaf, choose an actual
     attained minimum of its original regional Hamiltonian. At a long node,
     first compute the two shorter child estimates. Their certified errors
@@ -284,8 +283,7 @@ energy-power count, or prove a running-time bound.
     listed internal node.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:root_energy_node_relation_assignment,def:soft_word_energy_update,def:balanced_interval_merge_list,
-        thm:actual_adjacent_interval_merge}
+    \uses{lem:root_energy_node_relation_assignment,def:soft_word_energy_update,def:balanced_interval_merge_list,thm:actual_adjacent_interval_merge}
     Use the same well-founded scalar recursion. Its node relation
     requires the actual raw update when the interval belongs to the
     root list and an original attained minimum otherwise. Thus the
@@ -324,9 +322,7 @@ energy-power count, or prove a running-time bound.
     the two attained collar minima, and lies in $[e_M-10,e_M]$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:balanced_interval_merge_closure,lem:soft_word_node_energy_update,
-        lem:balanced_root_regional_energy_assignment,
-        def:canonical_interval_sampling_operation}
+    \uses{lem:balanced_interval_merge_closure,lem:soft_word_node_energy_update,lem:balanced_root_regional_energy_assignment,def:canonical_interval_sampling_operation}
     A short child is the full local space and hence viable. A long
     child is in its parent's merge list and therefore in the original
     root list by closure. Its actual viability is among the stated

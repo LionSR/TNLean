@@ -24,7 +24,7 @@
     \label{def:mpdo_blocked_fixed_point_algebra_tower}
     \lean{MPOTensor.HasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_algebra_structure_data, def:mpo_tensor}
+    \uses{def:mpdo_algebra_structure_data,def:mpo_tensor}
     An MPO tensor $M$ has a family of algebras of blocked adjoint fixed points
     if there exists a family of support algebras with blocking and inclusion
     maps as in Definition~\ref{def:mpdo_algebra_structure_data} such that, for
@@ -47,7 +47,7 @@
     \label{thm:mpdo_blocked_fixed_point_algebra_tower_from_zcl}
     \lean{MPOTensor.hasBlockedAdjointFixedPointAlgebraTower_of_isZCL_of_isTP_of_posDef_fixed}
     \leanok
-    \uses{def:mpo_is_zcl, def:mpdo_blocked_fixed_point_algebra_tower}
+    \uses{def:mpo_is_zcl,def:mpdo_blocked_fixed_point_algebra_tower}
     Assume the transfer map of the doubled tensor is trace-preserving and
     admits a positive-definite fixed point. If $E_1^2 = E_1$, then there is a
     stationary family of support algebras
@@ -243,7 +243,7 @@ coefficients.
     \label{thm:mpdo_fixedpoint_coefficients_reconstruct}
     \lean{MPOTensor.AlgebraStructureData.reconstructFromBlockedCoefficients_of_fixedPoint}
     \leanok
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpdo_blocked_coefficients}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower,def:mpdo_blocked_coefficients}
     If the support algebras are compatible with an MPO tensor $M$ and
     $E_n^\dagger X = X$ for a positive blocking size $n$, then
     $X \in \mathcal{A}_n$. Writing $(X_i)_{i \in I_n}$ for its coordinates
@@ -309,7 +309,7 @@ coefficients.
     \label{thm:mpdo_algebra_root_of_unity_eigenvalue}
     \lean{MPOTensor.adjoint_transferMap_eigenvalue_eq_one_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_descent, lem:mpdo_adjoint_blocked_eigenvector}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower,thm:mpdo_adjoint_fix_descent,lem:mpdo_adjoint_blocked_eigenvector}
     Assume there is a compatible family of support algebras. If $X\ne 0$,
     $E_1^\dagger X=\lambda X$, and $\lambda^n=1$ for some $n>0$, then
     $\lambda=1$.
@@ -325,7 +325,7 @@ coefficients.
     \label{thm:mpdo_adjoint_fix_equality_from_algebra}
     \lean{MPOTensor.adjoint_blockedTransferMap_apply_iff_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_descent, lem:mpdo_adjoint_fix_reverse}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower,thm:mpdo_adjoint_fix_descent,lem:mpdo_adjoint_fix_reverse}
     If an MPO tensor has a compatible family of support algebras, then
     $\Fix(E_n^{\dagger})=\Fix(E_1^{\dagger})$ for every positive blocking
     size $n$.
@@ -339,7 +339,7 @@ coefficients.
     \label{thm:mpdo_stationary_tower_from_algebra}
     \lean{MPOTensor.stationaryOfFaithfulFixedPoint_compatible_of_hasBlockedAdjointFixedPointAlgebraTower}
     \leanok
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, thm:mpdo_adjoint_fix_equality_from_algebra}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower,thm:mpdo_adjoint_fix_equality_from_algebra}
     Under the trace-preserving normalization and a positive-definite fixed
     point, if $M$ has a compatible family of support algebras, then the
     stationary family $\mathcal{A}_n = \Fix(E_1^\dagger)$ is
@@ -351,7 +351,7 @@ coefficients.
     \label{thm:mpdo_algebra_tower_not_imply_zcl}
     \lean{MPOTensor.exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL}
     \leanok
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpo_is_zcl, thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower,def:mpo_is_zcl,thm:mpdo_algebra_from_stabilized_adjoint_fixedpoints}
     There exists an MPO tensor of physical and bond dimension two whose
     doubled-tensor transfer map is trace-preserving and has a
     positive-definite fixed point, and which has a compatible family of
@@ -384,7 +384,7 @@ coefficients.
 
 \begin{remark}[Stabilized fixed points and the vertical algebra condition]%
     \label{rem:mpdo_algebra_tower_to_zcl_gap}
-    \uses{def:mpdo_blocked_fixed_point_algebra_tower, def:mpo_is_zcl, thm:mpdo_algebra_tower_not_imply_zcl}
+    \uses{def:mpdo_blocked_fixed_point_algebra_tower,def:mpo_is_zcl,thm:mpdo_algebra_tower_not_imply_zcl}
     Write $E=E_1$ for the one-site transfer map. Compatibility gives
     $\Fix((E^n)^\dagger)=\Fix(E^\dagger)$ for every $n>0$.
     Hence a nonzero matrix $X$ with $E^\dagger X=\lambda X$ and

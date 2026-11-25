@@ -54,7 +54,7 @@ Sun~\cite{Sun2025Anomalous}.
     \lean{Z3Anomalous.uTensor, Z3Anomalous.uDagTensor, Z3Anomalous.identityTensor,
         Z3Anomalous.uMPS, Z3Anomalous.uDagMPS, Z3Anomalous.identityMPS}
     \leanok
-    \uses{def:mpo_tensor, def:mpo_to_mps, def:mpo_family}
+    \uses{def:mpo_tensor,def:mpo_to_mps,def:mpo_family}
     The tensor $M$ has bond dimension two, with
     \begin{align}
         M^{1,0} & =\begin{pmatrix}1&0\\1&0\end{pmatrix},        &
@@ -195,7 +195,7 @@ operator satisfies $\mathcal C_N^2=3\mathcal C_N$ for every $N>0$
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_z3anomalous_uu_trace, thm:asymex_z3anomalous_group_law}
+    \uses{thm:asymex_z3anomalous_uu_trace,thm:asymex_z3anomalous_group_law}
     Lemma~\ref{thm:asymex_z3anomalous_uu_trace} gives $U_NU_N=V_N$, so
     $V_N=U_N^2$. Lemma~\ref{thm:asymex_z3anomalous_group_law} gives
     $V_NU_N=\Id$, hence $U_N^3=U_N^2U_N=V_NU_N=\Id$.
@@ -233,8 +233,7 @@ operator satisfies $\mathcal C_N^2=3\mathcal C_N$ for every $N>0$
         Z3Anomalous.uMPS_not_isInjective,
         MPSTensor.isNBlkInjective_of_scaled_single}
     \leanok
-    \uses{def:asymex_z3anomalous_tensors, def:normal, def:l_blk_injective,
-        def:injective}
+    \uses{def:asymex_z3anomalous_tensors,def:normal,def:l_blk_injective,def:injective}
     The length-two words of $M$ span $\MN{2}$, as do those of $M^\dagger$.
     The length-one words of $\delta$ span $\MN{1}$. Thus each tensor is proportional
     to a normal tensor (NT); the NT convention additionally normalizes the spectral
@@ -312,7 +311,7 @@ fusion rules follow from them.
         Z3Anomalous.dd_right_eq, Z3Anomalous.dd_left_eq, Z3Anomalous.dd_dim_eq,
         Z3Anomalous.dd_evalWord_remainder_eq_zero, Z3Anomalous.dd_remainder_mul_ne_zero}
     \leanok
-    \uses{def:asymex_z3anomalous_tensors, thm:asym_multiblock}
+    \uses{def:asymex_z3anomalous_tensors,thm:asym_multiblock}
     The stacked tensor $B=M\cdot M$ has the block triangular form of
     Theorem~\ref{thm:asym_multiblock} for the single target $M^\dagger$ with $z=2$
     one-dimensional zero diagonal blocks, $4=2+2$. The compression pair is
@@ -392,8 +391,7 @@ $U_L^2=O_L(M^\dagger)$:
     \lean{Z3Anomalous.uu_trace_evalWord, Z3Anomalous.dd_trace_evalWord, Z3Anomalous.mpo_uu,
         Z3Anomalous.mpo_dd}
     \leanok
-    \uses{thm:asymex_z3anomalous_uu_compression, prop:asym_compression_trace,
-        thm:asym_mpo_product}
+    \uses{thm:asymex_z3anomalous_uu_compression,prop:asym_compression_trace,thm:asym_mpo_product}
     For every nonempty word $w$, $\tr(B^w)=\tr((M^\dagger)^w)$, where $B=M\cdot M$.
     Similarly, $\tr((M^\dagger\cdot M^\dagger)^w)=\tr(M^w)$. Hence
     $O_L(M)O_L(M)=O_L(M^\dagger)$ and
@@ -415,7 +413,7 @@ $U_L^2=O_L(M^\dagger)$:
         Z3Anomalous.du_right_eq, Z3Anomalous.du_left_eq, Z3Anomalous.du_dim_eq,
         Z3Anomalous.du_evalWord_remainder_eq_zero, Z3Anomalous.du_remainder_mul_ne_zero}
     \leanok
-    \uses{def:asymex_z3anomalous_tensors, thm:asym_multiblock}
+    \uses{def:asymex_z3anomalous_tensors,thm:asym_multiblock}
     The stacked tensor $B=M\cdot M^\dagger$ has the block triangular form of
     Theorem~\ref{thm:asym_multiblock} for the single target $\delta$ with $z=3$
     one-dimensional zero diagonal blocks, $4=1+3$. The compression pair satisfies
@@ -449,8 +447,7 @@ $U_L^2=O_L(M^\dagger)$:
         Z3Anomalous.mpo_du, Z3Anomalous.mpo_u_mul_uDag, Z3Anomalous.mpo_uDag_mul_u,
         Z3Anomalous.mpo_identityTensor}
     \leanok
-    \uses{thm:asymex_z3anomalous_ud_compression, thm:asymex_z3anomalous_uu_trace,
-        prop:asym_compression_trace, thm:asym_mpo_product}
+    \uses{thm:asymex_z3anomalous_ud_compression,thm:asymex_z3anomalous_uu_trace,prop:asym_compression_trace,thm:asym_mpo_product}
     The periodic operator of the identity tensor is the identity map at every length,
     $O_L(\delta)=\Id$. For every nonempty word $w$, both
     $\tr((M\cdot M^\dagger)^w)$ and $\tr((M^\dagger\cdot M)^w)$ equal $\tr(\delta^w)$.
@@ -526,10 +523,7 @@ operator laws; injectivity holds after blocking two sites.
         Z3Anomalous.family, Z3Anomalous.repBondDim, Z3Anomalous.repTensor,
         MPOTensor.GroupFamily.IsRawRepresentation.of_isNBlkInjective}
     \leanok
-    \uses{thm:asymex_z3_physical_kernels, thm:asymex_z3anomalous_group_law,
-        thm:asymex_z3anomalous_uu_trace, thm:asymex_z3anomalous_normal,
-        def:mpug_group_representation, def:mpug_common_blocking,
-        def:mpug_raw_group_representation}
+    \uses{thm:asymex_z3_physical_kernels,thm:asymex_z3anomalous_group_law,thm:asymex_z3anomalous_uu_trace,thm:asymex_z3anomalous_normal,def:mpug_group_representation,def:mpug_common_blocking,def:mpug_raw_group_representation}
     Set $T_0=\delta$, $T_1=M$ and $T_2=M^\dagger$, with indices in $\Z_3$.
     Every $T_g$ is a matrix product unitary on nonempty chains, and for
     every $N>0$ and all $g,h\in\Z_3$,
@@ -590,8 +584,7 @@ conjugate by one diagonal unitary built from on-site and two-site gates
         Z3Anomalous.cocycleGauge_mem_unitaryGroup,
         Z3Anomalous.mpo_family_eq_cocycleGauge_conj}
     \leanok
-    \uses{thm:asymex_z3anomalous_family,
-        thm:asymex_z3anomalous_cocycle_family}
+    \uses{thm:asymex_z3anomalous_family,thm:asymex_z3anomalous_cocycle_family}
     For $N>0$ define the diagonal unitary $V_N$ by
     $V_N\ket{t}=\omega^{E(t)}\ket{t}$, where
     \begin{align}
@@ -614,7 +607,7 @@ conjugate by one diagonal unitary built from on-site and two-site gates
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_z3_physical_kernels, thm:asymex_group_cocycle_cyclic}
+    \uses{thm:asymex_z3_physical_kernels,thm:asymex_group_cocycle_cyclic}
     For $g=1$ both sides vanish at $(s,t)$ unless $s=Xt$. On that support
     the left side is $\omega^{F(t)+E(t)}$, by
     Lemma~\ref{thm:asymex_z3_physical_kernels}, and the right side is
@@ -663,11 +656,7 @@ proved here.
         Z3Anomalous.not_isTrivialGaugeClass_omega_z3,
         Z3Anomalous.family_anomalyClass_ne_zero}
     \leanok
-    \uses{thm:asymex_z3anomalous_family, thm:asymex_z3anomalous_normal,
-        thm:asymex_z3anomalous_uu_compression,
-        thm:asymex_z3anomalous_ud_compression,
-        thm:mpug_anomaly_three_cochain_spec, thm:mpug_anomaly_three_cocycle_gauge,
-        thm:mpug_cyclic_invariant_gauge, def:mpug_anomaly_class}
+    \uses{thm:asymex_z3anomalous_family,thm:asymex_z3anomalous_normal,thm:asymex_z3anomalous_uu_compression,thm:asymex_z3anomalous_ud_compression,thm:mpug_anomaly_three_cochain_spec,thm:mpug_anomaly_three_cocycle_gauge,thm:mpug_cyclic_invariant_gauge,def:mpug_anomaly_class}
     The tensors $T_0=\delta$, $T_1=M$, $T_2=M^\dagger$ are normal and
     represent $\Z_3$ exactly on nonempty chains. Choose the fusion tensors
     to be the identity whenever a factor is $T_0$, and the compressions of
@@ -711,7 +700,7 @@ proved here.
         Z3Anomalous.cyclicInvariant_omega_z3_mul_cyclicCocycle_one,
         eisensteinOmega_eq_exp}
     \leanok
-    \uses{thm:asymex_z3anomalous_cocycle_family, thm:asymex_z3anomalous_anomaly_class}
+    \uses{thm:asymex_z3anomalous_cocycle_family,thm:asymex_z3anomalous_anomaly_class}
     Let $g$ be the generator of $\Z_3$. The cocycle $\omega_1$
     of~\cite{GarreRubioSchuch2024DomainWall} has
     $\omega_1(g,e,g)\,\omega_1(g,g,g)\,\omega_1(g,g^2,g)=\omega$, while the
@@ -747,11 +736,7 @@ not a discrepancy between the two definitions of the anomaly.
         Z3Anomalous.domainWallPhase_cocycleFusionData,
         Z3Anomalous.cocycleFamily_not_isNormalRepresentation}
     \leanok
-    \uses{thm:asymex_group_cocycle_inverse_cocycle,
-        thm:asymex_group_cocycle_identity_not_normal,
-        thm:asymex_z3anomalous_cocycle_family,
-        thm:asymex_z3anomalous_class_orientation,
-        thm:asymex_group_cocycle_cyclic_domain_wall}
+    \uses{thm:asymex_group_cocycle_inverse_cocycle,thm:asymex_group_cocycle_identity_not_normal,thm:asymex_z3anomalous_cocycle_family,thm:asymex_z3anomalous_class_orientation,thm:asymex_group_cocycle_cyclic_domain_wall}
     With the fusion tensors of
     Definition~\ref{def:asymex_group_cocycle_fusion_tensors}, the anomaly
     three-cochain of the construction for $\omega_1$ is $\omega_1^{-1}$,
@@ -785,9 +770,7 @@ not a discrepancy between the two definitions of the anomaly.
         Z3Anomalous.cohomologousTo_cyclicCocycle_two_omega_z3,
         Z3Anomalous.anomalyClass_family_eq_cyclicCocycle_two}
     \leanok
-    \uses{thm:asymex_z3anomalous_anomaly_class,
-        thm:asymex_group_cocycle_cyclic_domain_wall,
-        thm:asymex_group_cocycle_cyclic_classes}
+    \uses{thm:asymex_z3anomalous_anomaly_class,thm:asymex_group_cocycle_cyclic_domain_wall,thm:asymex_group_cocycle_cyclic_classes}
     For every choice of fusion tensors, the anomaly three-cochain
     $\omega_{\mathrm{an}}$ of the family has, at the generator $g$, the same
     cyclic invariant as the cocycle $\omega_2$ of
@@ -803,10 +786,7 @@ not a discrepancy between the two definitions of the anomaly.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_z3anomalous_anomaly_class,
-        thm:asymex_group_cocycle_cyclic_domain_wall,
-        thm:asymex_group_cocycle_cyclic_classes,
-        def:asymex_group_cocycle_domain_wall_phase}
+    \uses{thm:asymex_z3anomalous_anomaly_class,thm:asymex_group_cocycle_cyclic_domain_wall,thm:asymex_group_cocycle_cyclic_classes,def:asymex_group_cocycle_domain_wall_phase}
     The primitive cube root $\omega$ equals $e^{2\pi\mathrm{i}/3}=\zeta$, so
     the invariant $\omega^2$ of
     Lemma~\ref{thm:asymex_z3anomalous_anomaly_class} is $\zeta^2$, the
@@ -833,7 +813,7 @@ pair blocks, each compressing onto one group tensor.
     \lean{Z3Anomalous.summandDim, Z3Anomalous.summandMPS, Z3Anomalous.defectTensor,
         Z3Anomalous.defectMPS}
     \leanok
-    \uses{def:asymex_z3anomalous_tensors, def:mpdo_operator_product}
+    \uses{def:asymex_z3anomalous_tensors,def:mpdo_operator_product}
     The condensation defect is the block-diagonal tensor
     $A=\delta\oplus M\oplus M^\dagger$ of bond dimension five.
     Its three diagonal blocks have bond dimensions one, two and two
@@ -885,11 +865,7 @@ pair blocks, each compressing onto one group tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_z3anomalous_defect_sum, thm:asymex_z3_physical_kernels,
-        lem:asymex_z3_physical_cube, thm:asymex_z3anomalous_group_law,
-        thm:mpug_finite_group_unitary_average_projection,
-        thm:asymex_z3anomalous_defect_square, thm:asymex_z3anomalous_family,
-        def:mpug_operator_representation}
+    \uses{thm:asymex_z3anomalous_defect_sum,thm:asymex_z3_physical_kernels,lem:asymex_z3_physical_cube,thm:asymex_z3anomalous_group_law,thm:mpug_finite_group_unitary_average_projection,thm:asymex_z3anomalous_defect_square,thm:asymex_z3anomalous_family,def:mpug_operator_representation}
     Lemma~\ref{thm:asymex_z3anomalous_defect_sum} and
     Lemma~\ref{lem:asymex_z3_physical_cube} give
     $P_L=(\Id+U_L+U_L^2)/3$, and
@@ -923,7 +899,7 @@ targets separately.
     \lean{Z3Anomalous.defectSquare, Z3Anomalous.defectSquareEis_eq, Z3Anomalous.pairStackEis,
         Z3Anomalous.squareBond}
     \leanok
-    \uses{def:asymex_z3anomalous_defect, def:mpdo_operator_product}
+    \uses{def:asymex_z3anomalous_defect,def:mpdo_operator_product}
     Write $M_0=\delta$, $M_1=M$, $M_2=M^\dagger$, and
     $B_{gh}=(M_g\cdot M_h)^a$ for the pair block at a fixed letter $a$.
     Reindexing the bond coordinate $p=5p_1+p_2$ by the summand pair and its
@@ -964,8 +940,7 @@ targets separately.
     \label{thm:asymex_z3anomalous_defect_square}
     \lean{Z3Anomalous.defectSquare_trace_evalWord, Z3Anomalous.mpo_defect_mul_defect}
     \leanok
-    \uses{thm:asymex_z3anomalous_defect_square_blocks, thm:asymex_z3anomalous_defect_sum,
-        prop:asym_compression_trace}
+    \uses{thm:asymex_z3anomalous_defect_square_blocks,thm:asymex_z3anomalous_defect_sum,prop:asym_compression_trace}
     For every nonempty word $w$, $\tr((A\cdot A)^w)=3\bigl(\tr(\delta^w)+\tr(M^w)+
         \tr((M^\dagger)^w)\bigr)$; that is, $O_L(A)O_L(A)=3\,O_L(A)$ at every positive length $L$.
 \end{lemma}
@@ -998,9 +973,7 @@ targets separately.
         Z3Anomalous.defectSquare_evalWord_remainder_eq_zero,
         Z3Anomalous.defectSquare_remainder_mul_ne_zero, Z3Anomalous.sum_pairTargetDim}
     \leanok
-    \uses{thm:asymex_z3anomalous_defect_square_blocks, thm:asym_multiblock,
-        thm:asymex_z3anomalous_uu_compression, thm:asymex_z3anomalous_ud_compression,
-        thm:asymex_explicit_gauge, thm:asymex_direct_sum_compression}
+    \uses{thm:asymex_z3anomalous_defect_square_blocks,thm:asym_multiblock,thm:asymex_z3anomalous_uu_compression,thm:asymex_z3anomalous_ud_compression,thm:asymex_explicit_gauge,thm:asymex_direct_sum_compression}
     The stacked tensor $A\cdot A$ has the block triangular form of
     Theorem~\ref{thm:asym_multiblock} for the nine targets $M_{g+h}$,
     $(g,h)\in\{0,1,2\}^2$, with $z=10$ one-dimensional zero diagonal
@@ -1017,10 +990,7 @@ targets separately.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_explicit_gauge, thm:asymex_direct_sum_compression,
-        thm:asymex_z3anomalous_defect_square_blocks,
-        thm:asymex_z3anomalous_uu_compression,
-        thm:asymex_z3anomalous_ud_compression}
+    \uses{thm:asymex_explicit_gauge,thm:asymex_direct_sum_compression,thm:asymex_z3anomalous_defect_square_blocks,thm:asymex_z3anomalous_uu_compression,thm:asymex_z3anomalous_ud_compression}
     On the five pairs with $g=0$ or $h=0$, the pair block equals its
     target under the natural bond identification and requires no zero
     diagonal block, whereas on the other four pairs the gauges of

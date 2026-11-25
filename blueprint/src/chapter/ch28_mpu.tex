@@ -126,7 +126,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.not_isMPU_oddRingTensor,
         MPOTensor.rightRank_oddRingTensor, MPOTensor.leftRank_oddRingTensor}
     \leanok
-    \uses{def:mpu, def:mpu_right_rank}
+    \uses{def:mpu,def:mpu_right_rank}
     Let $d=D=3$ with indices in $\mathbb Z_3$ and $M^{ij}=|{-(i+j)})(j|$. The
     operator on $N\geq1$ sites is the matrix of the map $j\mapsto i$,
     $i_n=-(j_{n-1}+j_n)$, which is $\mathbb Z_3$-linear, injective for odd $N$, and
@@ -150,7 +150,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.leftRank_blockTensor_czTensor_two,
         MPOTensor.isMPUSimple_of_rankOne_diagonal}
     \leanok
-    \uses{def:mpu, def:mpu_simple, def:mpdo_physical_blocking, def:mpu_right_rank}
+    \uses{def:mpu,def:mpu_simple,def:mpdo_physical_blocking,def:mpu_right_rank}
     Let $d=2$, $D=4$, bond indices $\alpha=(\alpha_1,\alpha_2)\in\{0,1\}^2$, and
     $U^{ij}_{\alpha\beta}=\delta_{ij}\delta_{\alpha_2\beta_1}\delta_{\beta_2i}(-1)^{\alpha_1i}$.
     For $N\geq1$ the operator on $N$ sites is diagonal with entries
@@ -225,7 +225,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_composition}
     \lean{MPOTensor.IsMPU.mulTensor}
     \leanok
-    \uses{def:mpu, def:mpdo_operator_product, thm:mpdo_operator_product_mpo}
+    \uses{def:mpu,def:mpdo_operator_product,thm:mpdo_operator_product_mpo}
     Let $\mathcal U$ and $\mathcal V$ be matrix product unitary tensors with the
     same physical dimension.  Contracting the output index of $\mathcal U$
     with the input index of $\mathcal V$ gives a matrix product unitary tensor
@@ -263,7 +263,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{center}
 
 \begin{proof}\leanok
-    \uses{def:mpu, thm:mpdo_operator_product_mpo}
+    \uses{def:mpu,thm:mpdo_operator_product_mpo}
     For every $N>1$, both $U^{(N)}$ and $V^{(N)}$ are unitary.  The defining
     contraction of the product tensor gives the periodic operator
     $U^{(N)}V^{(N)}$, which is unitary because the unitary matrices form a
@@ -284,7 +284,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu, thm:mpu_reindex_unitary, thm:mpdo_closed_chain_physical_blocking}
+    \uses{def:mpu,thm:mpu_reindex_unitary,thm:mpdo_closed_chain_physical_blocking}
     At system size $N$, closing the blocked tensor gives $U^{(NL)}$, up to the
     canonical bijection between $N$ blocked configurations and $NL$ unblocked
     configurations.  If $N>1$ and $L>0$, then $NL>1$, so $U^{(NL)}$ is
@@ -298,7 +298,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.doubleLayerTensor,
         MPOTensor.doubleLayerTensor_apply}
     \leanok
-    \uses{def:mpdo_physical_adjoint, def:mpdo_operator_product}
+    \uses{def:mpdo_physical_adjoint,def:mpdo_operator_product}
     For an MPO tensor $\mathcal U$, let $\mathcal W$ be the double-layer
     tensor obtained by placing the physical adjoint above $\mathcal U$ and
     contracting the adjacent physical legs:
@@ -384,7 +384,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{center}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_physical_adjoint, thm:mpdo_operator_product_mpo}
+    \uses{def:mpdo_physical_adjoint,thm:mpdo_operator_product_mpo}
     The operator family is multiplicative under the local product tensor, and
     the physical adjoint generates the conjugate transpose without reflecting
     the chain.
@@ -396,7 +396,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.IsMPU.physicalAdjointTensor,
         MPOTensor.mpo_physicalAdjointTensor_eq_conjTranspose}
     \leanok
-    \uses{def:mpu, def:mpdo_physical_adjoint}
+    \uses{def:mpu,def:mpdo_physical_adjoint}
     The physical adjoint is involutive. If $\mathcal U$ generates matrix
     product unitaries, then so does $\mathcal U^\sharp$, and for every chain
     length $N$,
@@ -407,7 +407,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu, def:mpdo_physical_adjoint, lem:mpu_mul_adjoint}
+    \uses{def:mpu,def:mpdo_physical_adjoint,lem:mpu_mul_adjoint}
     Applying the physical adjoint twice conjugates every entry twice and
     exchanges the physical indices twice. Closing a physical-adjoint tensor
     exchanges the two physical configurations and conjugates the resulting
@@ -420,7 +420,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_output_first_double_layer_entry}
     \lean{MPOTensor.doubleLayerTensor_physicalAdjointTensor_apply}
     \leanok
-    \uses{def:mpu_double_layer, def:mpdo_physical_adjoint}
+    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint}
     Order the left doubled bond as $(\alpha,\gamma)$ and the right doubled
     bond as $(\beta,\delta)$. Then the double layer whose lower tensor is
     $\mathcal U^\sharp$ has entries
@@ -433,7 +433,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_double_layer, def:mpdo_physical_adjoint}
+    \uses{def:mpu_double_layer,def:mpdo_physical_adjoint}
     Expanding the double layer and applying the physical adjoint to its upper
     factor shows that the two exchanges of physical indices leave the contracted index
     $j$ in the second physical position of both factors. The product-index
@@ -562,13 +562,13 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_simple_is_mpu}
     \lean{MPOTensor.IsMPUSimple.isMPU}
     \leanok
-    \uses{def:mpu, def:mpu_simple}
+    \uses{def:mpu,def:mpu_simple}
     Every simple tensor generates matrix product unitaries.
     In \cite[Proposition~III.3(i)]{Cirac2017MPU}, this implication shows that simplicity implies the MPU property.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_closed_double_layer, thm:mpu_simple_closed_identity}
+    \uses{thm:mpu_closed_double_layer,thm:mpu_simple_closed_identity}
     For every $N>1$, the closed-double-layer identity and the sequential
     contraction give
     \begin{align}
@@ -584,7 +584,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.physicalAdjointTensor_blockTensor,
         MPOTensor.doubleLayerTensor_blockTensor}
     \leanok
-    \uses{def:mpu_double_layer, thm:mpdo_closed_chain_physical_blocking}
+    \uses{def:mpu_double_layer,thm:mpdo_closed_chain_physical_blocking}
     For every blocking length $L$, physical adjunction commutes with blocking,
     and consequently
     \begin{align}
@@ -609,7 +609,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.normalizedDiagonal_doubleLayerTensor_blockTensor,
         MPOTensor.IsMPU.normalizedDiagonal_doubleLayerTensor_blockTensor_eq_vecMulVec}
     \leanok
-    \uses{def:mpu_double_layer, def:mpu_normalized_flattening, thm:mpu_double_layer_blocking}
+    \uses{def:mpu_double_layer,def:mpu_normalized_flattening,thm:mpu_double_layer_blocking}
     Assume $d>0$, and let $E$ be the normalized transfer matrix of
     $\mathcal U$.  After blocking $L$ sites, the normalized physical diagonal of the double layer is
     exactly $E^L$.  More precisely, if
@@ -627,7 +627,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_double_layer_blocking, thm:mpu_normalized_transfer_stabilization}
+    \uses{thm:mpu_double_layer_blocking,thm:mpu_normalized_transfer_stabilization}
     On one site, expanding the diagonal double-layer contraction gives the
     transfer matrix after the stated product reindexing.  The factor
     $d^{-1}$ is the square of the local factor $d^{-1/2}$.  Summing blocked
@@ -724,7 +724,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.trace_prod_contractPhysical_of_mpo_eq_one,
         MPOTensor.IsMPU.trace_prod_contractPhysical_doubleLayerTensor}
     \leanok
-    \uses{def:mpu, def:mpu_double_layer}
+    \uses{def:mpu,def:mpu_double_layer}
     Suppose a length-$N$ closed tensor equals the physical identity.  For
     arbitrary physical matrices $X_0,\ldots,X_{N-1}$,
     \begin{align}
@@ -748,7 +748,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.IsMPU.trace_residualSlice_doubleLayerTensor_eq_zero,
         MPOTensor.IsMPU.trace_prod_mixedResidualFactor_doubleLayerTensor_eq_zero_of_pos}
     \leanok
-    \uses{def:mpu, def:mpu_double_layer}
+    \uses{def:mpu,def:mpu_double_layer}
     Let $\mathcal U$ be an MPU with physical dimension $d>0$.  Every closed
     product of positive length that contains at least one residual coefficient
     has zero trace.  In particular, this includes a single residual
@@ -757,7 +757,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_WIsom, thm:mpu_multilinear_physical_contraction, thm:mpu_shifted_zero_trace_power_nilpotent}
+    \uses{thm:mpu_WIsom,thm:mpu_multilinear_physical_contraction,thm:mpu_shifted_zero_trace_power_nilpotent}
     At lengths greater than one, represent identity factors by
     $d^{-1}\Id$ and residual factors by traceless physical arguments.  The
     multilinear contraction identity then vanishes.  For a single residual
@@ -773,7 +773,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.IsMPU.normalizedDiagonal_mul_prod_residualSlice_mul_normalizedDiagonal_eq_zero,
         MPOTensor.IsMPU.blocked_normalizedDiagonal_sandwich_residual_prod_eq_zero}
     \leanok
-    \uses{def:mpu, def:mpu_double_layer, thm:mpu_blocked_double_layer_diagonal}
+    \uses{def:mpu,def:mpu_double_layer,thm:mpu_blocked_double_layer_diagonal}
     Let $\mathcal U$ be an MPU with physical dimension $d>0$, and let
     $N>1$.  Every closed product of $N$ identity and residual
     coefficients that contains at least one residual coefficient has zero
@@ -788,7 +788,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_WIsom, thm:mpu_multilinear_physical_contraction, thm:mpu_blocked_double_layer_diagonal}
+    \uses{thm:mpu_WIsom,thm:mpu_multilinear_physical_contraction,thm:mpu_blocked_double_layer_diagonal}
     Represent identity factors by $d^{-1}\Id$ and residual factors by their
     traceless physical arguments.  Since $N>1$, the multilinear contraction
     identity applies, and one trace factor vanishes.  For a nonempty residual
@@ -823,7 +823,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.IsMPU.trace_pow_eq_zero_of_mem_residualAlgebra,
         MPOTensor.IsMPU.isNilpotent_of_mem_residualAlgebra}
     \leanok
-    \uses{def:mpu, def:mpu_residual_algebra}
+    \uses{def:mpu,def:mpu_residual_algebra}
     If $\mathcal U$ is an MPU with positive physical dimension, then every
     nonempty product of residual generators has zero trace.  Consequently,
     for every $A\in\mathfrak S$ and every integer $N>1$,
@@ -835,7 +835,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_positive_mixed_residual_trace, thm:mpu_shifted_zero_trace_power_nilpotent}
+    \uses{thm:mpu_positive_mixed_residual_trace,thm:mpu_shifted_zero_trace_power_nilpotent}
     A nonempty product in the multiplicative semigroup generated by
     $\mathcal S$ is a nonempty residual word, so its trace vanishes by the
     positive-length mixed residual identity.  The generated nonunital algebra
@@ -851,7 +851,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.IsMPU.residualAlgebra_list_prod_eq_zero,
         MPOTensor.IsMPU.prod_residualSlice_doubleLayerTensor_eq_zero}
     \leanok
-    \uses{def:mpu, def:mpu_residual_algebra}
+    \uses{def:mpu,def:mpu_residual_algebra}
     Let $\mathcal U$ be an MPU of bond dimension $D$ and positive physical
     dimension.  Every ordered product of exactly $D^2$ elements of
     $\mathfrak S$ vanishes.  In particular, for arbitrary residual generators,
@@ -864,7 +864,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_residual_algebra, thm:mpu_nil_matrices, thm:mpu_residual_algebra_nilpotent}
+    \uses{def:mpu_residual_algebra,thm:mpu_nil_matrices,thm:mpu_residual_algebra_nilpotent}
     The algebra $\mathfrak S$ acts on a space of dimension $D^2$, and every
     element is nilpotent.  The finite-dimensional nil-matrix theorem therefore
     annihilates every ordered product of $D^2$ elements.  Each residual
@@ -924,7 +924,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.IsMPU.residualSlice_doubleLayerTensor_blockTensor_mem_threeFormSubmodule,
         MPOTensor.diagonal_coeff_prod_eq}
     \leanok
-    \uses{def:mpu, def:mpu_residual_algebra, def:mpu_three_form_subspace}
+    \uses{def:mpu,def:mpu_residual_algebra,def:mpu_three_form_subspace}
     Let the first-block tensor be an MPU of bond dimension $D>0$.  Assume its
     normalized double-layer diagonal $E$ is a rank-one idempotent.  After a
     second blocking of exactly $D^2$ sites, every residual coefficient belongs
@@ -936,7 +936,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_controlled_mixed_residual_trace, thm:mpu_residual_product_d_sq, thm:mpu_ordered_second_block_expansion}
+    \uses{thm:mpu_controlled_mixed_residual_trace,thm:mpu_residual_product_d_sq,thm:mpu_ordered_second_block_expansion}
     First extend $EPE=0$ from nonempty residual words $P$ to every element of
     $\mathfrak S$ by writing the generated algebra as the linear span of the
     multiplicative semigroup of residual generators.  For a blocked matrix
@@ -983,7 +983,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.IsMPU.blockTensor_sq_simple_contractions_of_normalizedDiagonal_eq_vecMulVec,
         MPOTensor.IsMPU.blockTensor_sq_isMPUSimple_of_normalizedDiagonal_eq_vecMulVec}
     \leanok
-    \uses{thm:mpu_second_block_residual_three_forms, thm:mpu_three_form_contractions}
+    \uses{thm:mpu_second_block_residual_three_forms,thm:mpu_three_form_contractions}
     Let $\mathcal V$ be an MPU of positive physical and bond dimensions whose
     normalized double-layer diagonal is
     \begin{align}
@@ -1020,7 +1020,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_eval_word_physical_reindexing}
     \lean{MPOTensor.evalWord_reindexPhysical}
     \leanok
-    \uses{def:mpu_physical_reindexing, def:mpo_eval_word}
+    \uses{def:mpu_physical_reindexing,def:mpo_eval_word}
     For ket and bra words $i,j$, physical reindexing gives
     \begin{align}
         (e^*\mathcal U)[i,j] & =\mathcal U[e_*i,e_*j].
@@ -1028,7 +1028,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_physical_reindexing, def:mpo_eval_word}
+    \uses{def:mpu_physical_reindexing,def:mpo_eval_word}
     Simultaneous induction along the two words proves the identity: the empty pair gives the
     identity matrix, mismatched lengths give zero, and the nonempty case
     applies the defining equality to the first letters and the induction
@@ -1039,7 +1039,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_finite_size_physical_reindexing}
     \lean{MPOTensor.mpo_reindexPhysical}
     \leanok
-    \uses{def:mpu_physical_reindexing, def:mpo_family}
+    \uses{def:mpu_physical_reindexing,def:mpo_family}
     At every length $N$, the sitewise configuration bijection identifies
     \begin{align}
         (e^*\mathcal U)^{(N)} & \cong\mathcal U^{(N)}.
@@ -1047,7 +1047,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_physical_reindexing, def:mpo_family, thm:mpu_eval_word_physical_reindexing}
+    \uses{def:mpu_physical_reindexing,def:mpo_family,thm:mpu_eval_word_physical_reindexing}
     Applying the word identity to every pair of configurations and taking the
     virtual trace gives simultaneous row and column reindexing by $e_*$.
 \end{proof}
@@ -1056,7 +1056,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_double_layer_physical_reindexing}
     \lean{MPOTensor.doubleLayerTensor_reindexPhysical}
     \leanok
-    \uses{def:mpu_physical_reindexing, def:mpu_double_layer}
+    \uses{def:mpu_physical_reindexing,def:mpu_double_layer}
     For every physical-index bijection $e$, taking the double layer commutes
     with physical reindexing:
     \begin{align}
@@ -1065,7 +1065,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_physical_reindexing, def:mpu_double_layer}
+    \uses{def:mpu_physical_reindexing,def:mpu_double_layer}
     This follows entrywise from the definitions of physical reindexing and the
     double layer.
 \end{proof}
@@ -1074,7 +1074,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{lem:mpu_iterated_physical_blocking}
     \lean{MPOTensor.reindexPhysical_blockTensor_blockTensor}
     \leanok
-    \uses{def:mpu_physical_reindexing, def:mpdo_physical_blocking}
+    \uses{def:mpu_physical_reindexing,def:mpdo_physical_blocking}
     Let $e$ be the canonical bijection which groups a word of length $mn$ into
     $n$ consecutive words of length $m$. Iterating blocking at lengths $m$ and
     $n$, then applying this physical reindexing, agrees with direct blocking at
@@ -1085,7 +1085,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_physical_reindexing, def:mpdo_physical_blocking}
+    \uses{def:mpu_physical_reindexing,def:mpdo_physical_blocking}
     Expanding the two blocked words shows that the canonical regrouping concatenates their
     $n$ words of length $m$ into the direct word of length $mn$.
 \end{proof}
@@ -1096,7 +1096,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.doubleLayerTensor_mem_doubleLayerAlgebra,
         MPOTensor.normalizedDiagonal_mem_doubleLayerAlgebra}
     \leanok
-    \uses{def:mpu_double_layer, def:mpu_normalized_flattening}
+    \uses{def:mpu_double_layer,def:mpu_normalized_flattening}
     Let $\mathcal U$ have bond dimension $D$.  The double-layer algebra
     $\mathcal A\subseteq M_{D^2}(\mathbb C)$ is the not necessarily unital
     algebra generated by the double-layer letters $W^{ij}$.  It contains every
@@ -1111,7 +1111,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.IsMPU.trace_prod_ofFn_doubleLayerTensor,
         MPOTensor.IsMPU.trace_mul_of_mem_doubleLayerAlgebra}
     \leanok
-    \uses{def:mpu, def:mpu_double_layer_algebra, thm:mpu_positive_mixed_residual_trace, thm:mpu_normalized_transfer_stabilization, thm:mpu_normalized_transfer_fin_one}
+    \uses{def:mpu,def:mpu_double_layer_algebra,thm:mpu_positive_mixed_residual_trace,thm:mpu_normalized_transfer_stabilization,thm:mpu_normalized_transfer_fin_one}
     Let $\mathcal U$ be an MPU of positive physical and bond dimensions, and
     let $\mathcal A$ be its double-layer algebra.  The normalized diagonal $E$
     has trace one.  Every nonempty word satisfies
@@ -1123,7 +1123,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_positive_mixed_residual_trace, thm:mpu_normalized_transfer_stabilization, thm:mpu_normalized_transfer_fin_one}
+    \uses{thm:mpu_positive_mixed_residual_trace,thm:mpu_normalized_transfer_stabilization,thm:mpu_normalized_transfer_fin_one}
     Let $E^J=|\rho)(\Phi|=p$ with $J>0$, $(\Phi|\rho)=1$ and $E|\rho)=|\rho)$.
     Then $Ep=pE=p^2=p$, so $(E-p)^N=E^N-p$ for $N>0$ and $E-p$ is nilpotent.
     Hence $\tr E=\tr p=1$.  Writing $W^{ij}=\delta_{ij}E+R_{ij}$ with a
@@ -1145,7 +1145,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.IsMPUSimple.blockTensor,
         MPOTensor.IsMPUSimple.reindexPhysical}
     \leanok
-    \uses{thm:mpu_double_layer_trace_character, thm:mpu_nil_matrices, thm:mpu_ordered_second_block_expansion, thm:mpu_three_form_contractions, thm:mpu_all_later_simple_blockings}
+    \uses{thm:mpu_double_layer_trace_character,thm:mpu_nil_matrices,thm:mpu_ordered_second_block_expansion,thm:mpu_three_form_contractions,thm:mpu_all_later_simple_blockings}
     Every MPU of positive physical and bond dimensions becomes simple after
     blocking exactly $D^2$ sites, and hence after blocking any $k\geq D^2$
     sites.  The boundary vectors at length $D^2$ are the normalized fixed vectors
@@ -1159,7 +1159,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpu_double_layer_algebra, thm:mpu_double_layer_trace_character, thm:mpu_shifted_zero_trace_power_nilpotent, thm:mpu_nil_matrices, thm:mpu_ordered_second_block_expansion, thm:mpu_second_block_residual_three_forms, thm:mpu_three_form_contractions, thm:mpu_all_later_simple_blockings}
+    \uses{def:mpu_double_layer_algebra,thm:mpu_double_layer_trace_character,thm:mpu_shifted_zero_trace_power_nilpotent,thm:mpu_nil_matrices,thm:mpu_ordered_second_block_expansion,thm:mpu_second_block_residual_three_forms,thm:mpu_three_form_contractions,thm:mpu_all_later_simple_blockings}
     Let $\mathcal A$ be the double-layer algebra, $p=E^J=|\rho)(\Phi|$ the
     stabilized transfer power, and
     \begin{align}
@@ -1205,7 +1205,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_blocked_double_layer_diagonal, thm:mpu_second_block_simple, thm:mpu_bounded_simple_blocking, lem:mpu_blocking, thm:mpu_double_layer_physical_reindexing}
+    \uses{thm:mpu_blocked_double_layer_diagonal,thm:mpu_second_block_simple,thm:mpu_bounded_simple_blocking,lem:mpu_blocking,thm:mpu_double_layer_physical_reindexing}
     First block $J$ sites.  The normalized diagonal of this block is the
     reindexed rank-one matrix $|\rho)(\Id|$, and the trace-one condition is
     exactly $(\Id|\rho)=1$.  The exact second-block contraction theorem then
@@ -1219,7 +1219,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_blocked_transfer_power_rank_one}
     \lean{MPOTensor.normalizedDiagonal_blockTensor_mul_sq_eq_vecMulVec_of_transfer_power}
     \leanok
-    \uses{def:mpu_double_layer, def:mpu_normalized_flattening, def:mpdo_physical_blocking}
+    \uses{def:mpu_double_layer,def:mpu_normalized_flattening,def:mpdo_physical_blocking}
     Let $\mathcal U$ be an MPO tensor with $d,D>0$, let $E$ be the transfer
     matrix of its normalized flattening, and suppose that for some $J\geq0$
     and some trace-one $\rho$,
@@ -1243,7 +1243,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_normalized_input_tail_isometry}
     \lean{MPOTensor.IsMPU.normalized_mpo_tail_isometry}
     \leanok
-    \uses{def:mpu, def:mpo_family}
+    \uses{def:mpu,def:mpo_family}
     Let $d>0$, let $\mathcal U$ be an MPU, and let $K\geq0$.  For
     $p,q\in\Fin d\times\Fin d$, separate the first two input sites from a
     common input tail $\tau\in\Fin K\to\Fin d$.  Then
@@ -1277,7 +1277,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         MPOTensor.blockTensor_succ_simple2_of_supplied,
         MPOTensor.IsMPU.simple1_of_simple2_supplied}
     \leanok
-    \uses{def:mpu, def:mpu_simple}
+    \uses{def:mpu,def:mpu_simple}
     Let $\mathcal U$ generate an MPU.  If specified vectors $a,b$ satisfy the
     two-letter insertion identity
     \begin{align}
@@ -1293,7 +1293,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_blocking, lem:mpu_adjoint_mul, thm:mpu_closed_double_layer, thm:mpu_double_layer_blocking}
+    \uses{lem:mpu_blocking,lem:mpu_adjoint_mul,thm:mpu_closed_double_layer,thm:mpu_double_layer_blocking}
     First suppose vectors $a,b$ satisfy the rank-one insertion identity
     \begin{align}
         W^{ij}W^{k\ell} & =W^{ij}|b)(a|W^{k\ell}.
@@ -1327,7 +1327,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple,
         MPOTensor.IsMPU.exists_common_blockTensor_isMPUSimple_three}
     \leanok
-    \uses{def:mpu, def:mpu_simple, def:mpdo_physical_blocking}
+    \uses{def:mpu,def:mpu_simple,def:mpdo_physical_blocking}
     Let $\mathcal U_1,\mathcal U_2$ be MPU tensors with positive physical and
     bond dimensions, which may differ between the tensors. There is a length
     $k>0$ for which both direct length-$k$ blockings are simple. The same
@@ -1339,7 +1339,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_bounded_simple_blocking, thm:mpu_all_later_simple_blockings}
+    \uses{thm:mpu_bounded_simple_blocking,thm:mpu_all_later_simple_blockings}
     A tensor of bond dimension $D$ is simple after blocking any $k\geq D^2$
     sites.  The sum of the squares of the bond dimensions is positive and
     bounds every square from above, so it is a common simple blocking length
@@ -1415,7 +1415,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_rank_one_insertion_diagonal_tail}
     \lean{MPOTensor.doubleLayerTensor_rankOne_mul_eq_normalizedDiagonal_tail}
     \leanok
-    \uses{def:mpu_double_layer, thm:mpu_normalized_diagonal_word_expansion}
+    \uses{def:mpu_double_layer,thm:mpu_normalized_diagonal_word_expansion}
     Let $W$ be the double layer of an MPO tensor, and let $R$ be its
     normalized physical diagonal.  If
     \begin{align}
@@ -1443,7 +1443,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \label{thm:mpu_simple_two_letter_diagonal_tail}
     \lean{MPOTensor.doubleLayerTensor_mul_eq_normalizedDiagonal_tail_of_simple2}
     \leanok
-    \uses{def:mpu_double_layer, thm:mpu_rank_one_insertion_diagonal_tail}
+    \uses{def:mpu_double_layer,thm:mpu_rank_one_insertion_diagonal_tail}
     In the setting of Lemma~\ref{thm:mpu_rank_one_insertion_diagonal_tail},
     suppose in addition that the
     same fixed pair satisfies the two-letter contraction
@@ -1474,7 +1474,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \lean{MPOTensor.IsMPU.exists_normalized_fixed_points_simple1,
         MPOTensor.IsMPU.simple1}
     \leanok
-    \uses{def:mpu, thm:mpu_positive_mixed_residual_trace, thm:mpu_normalized_transfer_stabilization, thm:mpu_normalized_transfer_fin_one}
+    \uses{def:mpu,thm:mpu_positive_mixed_residual_trace,thm:mpu_normalized_transfer_stabilization,thm:mpu_normalized_transfer_fin_one}
     For every MPU of positive physical and bond dimensions there are normalized
     left and right fixed vectors $\Phi$ and $\rho$ of the transfer matrix such
     that the unblocked double layer satisfies
@@ -1607,7 +1607,7 @@ the nonzero spectrum as a set.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_shifted_trace_power_moments, thm:mpu_trace_power_all}
+    \uses{thm:mpu_shifted_trace_power_moments,thm:mpu_trace_power_all}
     For every positive integer $r$, the shifted moments give
     \begin{align}
         \tr((A^2)^r) & =\tr(A^{2r})=1,
@@ -1691,7 +1691,7 @@ the nonzero spectrum as a set.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_shifted_trace_power_moments, thm:mpu_trace_power_all, thm:mpu_shifted_trace_power_spectrum, thm:mpu_root_multiplicity_one_square}
+    \uses{thm:mpu_shifted_trace_power_moments,thm:mpu_trace_power_all,thm:mpu_shifted_trace_power_spectrum,thm:mpu_root_multiplicity_one_square}
     Applying the all-positive trace-power theorem to $A^2$ gives
     \begin{align}
         \chi_{A^2}(X) & =X^{n-1}(X-1),
@@ -1831,7 +1831,7 @@ the nonzero spectrum as a set.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_shifted_zero_trace_power_moments, thm:mpu_zero_trace_power_charpoly}
+    \uses{thm:mpu_shifted_zero_trace_power_moments,thm:mpu_zero_trace_power_charpoly}
     Every positive power of $A^2$ has vanishing trace. Hence
     \begin{align}
         \chi_{A^2}(X) & =X^n.
@@ -1892,7 +1892,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceCutM₁Fin_apply,
         MPOTensor.sourceCutM₁_rank_eq_sourceCutM₁Fin_rank}
     \leanok
-    \uses{def:mpo_tensor, def:mps_independent_tensor_product}
+    \uses{def:mpo_tensor,def:mps_independent_tensor_product}
     % Source-orientation audit: docs/paper-gaps/mpu_source_cut_orientation.tex.
     The matrix $M_1$ is obtained by combining the upper physical index with the
     right auxiliary index, and the left auxiliary index with the lower physical
@@ -1965,7 +1965,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.sourceCutM₁_physicalAdjointTensor,
         MPOTensor.sourceCutM₂_physicalAdjointTensor}
     \leanok
-    \uses{def:mpdo_physical_adjoint, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpdo_physical_adjoint,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Physical adjunction exchanges the two source cuts and takes their adjoints:
     \begin{align}
         M_1(\mathcal U^\sharp) & =M_2(\mathcal U)^\dagger, \\
@@ -1974,7 +1974,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_physical_adjoint, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpdo_physical_adjoint,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Physical adjunction exchanges the upper and lower physical indices and
     complex conjugates every entry. Under the source-cut regroupings, it also
     exchanges rows and columns. Hence the first cut becomes the conjugate
@@ -1998,7 +1998,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_physical_adjoint_normalized_flattening}
     \lean{MPOTensor.normalizedFlattening_physicalAdjointTensor}
     \leanok
-    \uses{def:mpdo_physical_adjoint, def:mpu_normalized_flattening, def:mpu_physical_pair_swap}
+    \uses{def:mpdo_physical_adjoint,def:mpu_normalized_flattening,def:mpu_physical_pair_swap}
     The normalized flattening of the physical adjoint satisfies
     \begin{align}
         \widetilde{\mathcal U^\sharp}^{\,(i,j)}
@@ -2007,7 +2007,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_physical_adjoint, def:mpu_normalized_flattening, def:mpu_physical_pair_swap}
+    \uses{def:mpdo_physical_adjoint,def:mpu_normalized_flattening,def:mpu_physical_pair_swap}
     For every pair of physical indices $(i,j)$,
     \begin{align}
         \widetilde{\mathcal U^\sharp}^{\,(i,j)}
@@ -2023,7 +2023,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{def:mpu_physical_adjoint_cfii_data}
     \lean{MPSTensor.CPSVCanonicalFormIIData.physicalAdjointNormalizedFlattening}
     \leanok
-    \uses{def:cpsv_cfii, def:mpu_physical_pair_swap, thm:mpu_physical_adjoint_normalized_flattening, thm:cpsv_map_star_preservation, thm:cpsv_physical_reindexing, thm:cpsv_map_star_transfer_fixed_point}
+    \uses{def:cpsv_cfii,def:mpu_physical_pair_swap,thm:mpu_physical_adjoint_normalized_flattening,thm:cpsv_map_star_preservation,thm:cpsv_physical_reindexing,thm:cpsv_map_star_transfer_fixed_point}
     Given canonical-form-II data for $\widetilde{\mathcal U}$, define the
     transformed tuple by
     \begin{align}
@@ -2040,13 +2040,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_physical_adjoint_cfii}
     \lean{MPSTensor.IsCPSVCanonicalFormII.physicalAdjointNormalizedFlattening}
     \leanok
-    \uses{def:cpsv_cfii, def:mpdo_physical_adjoint, def:mpu_normalized_flattening}
+    \uses{def:cpsv_cfii,def:mpdo_physical_adjoint,def:mpu_normalized_flattening}
     If $\widetilde{\mathcal U}$ is in canonical form II, then
     $\widetilde{\mathcal U^\sharp}$ is in canonical form II.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_physical_adjoint_cfii_data, thm:cpsv_map_star_preservation, thm:cpsv_physical_reindexing}
+    \uses{def:mpu_physical_adjoint_cfii_data,thm:cpsv_map_star_preservation,thm:cpsv_physical_reindexing}
     Lemma~\ref{thm:cpsv_map_star_preservation} independently preserves
     normality and left-canonical normalization under entrywise conjugation, and
     Lemma~\ref{thm:cpsv_physical_reindexing} preserves these properties under
@@ -2076,7 +2076,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_physical_adjoint_full_support}
     \lean{MPSTensor.CPSVCanonicalFormIIData.hasFullSupport_physicalAdjointNormalizedFlattening}
     \leanok
-    \uses{def:mpu_full_support, def:mpu_physical_adjoint_cfii_data}
+    \uses{def:mpu_full_support,def:mpu_physical_adjoint_cfii_data}
     If canonical-form-II data for $\widetilde{\mathcal U}$ have full
     support, then the data from
     Definition~\ref{def:mpu_physical_adjoint_cfii_data} also have full
@@ -2084,7 +2084,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_full_support, def:mpu_physical_adjoint_cfii_data}
+    \uses{def:mpu_full_support,def:mpu_physical_adjoint_cfii_data}
     Complex conjugation of the weights leaves the block indices and their bond
     dimensions unchanged, so the full-support sum is unchanged.
 \end{proof}
@@ -2099,7 +2099,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.rightRank_physicalAdjointTensor,
         MPOTensor.leftRank_physicalAdjointTensor}
     \leanok
-    \uses{def:mpdo_physical_adjoint, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpdo_physical_adjoint,def:mpu_right_rank,def:mpu_left_rank}
     Physical adjunction exchanges the two source ranks:
     \begin{align}
         r(\mathcal U^\sharp)    & =\ell(\mathcal U), \\
@@ -2108,7 +2108,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_physical_adjoint_source_cuts, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{thm:mpu_physical_adjoint_source_cuts,def:mpu_right_rank,def:mpu_left_rank}
     Lemma~\ref{thm:mpu_physical_adjoint_source_cuts} and the invariance
     of matrix rank under conjugate transpose interchange the two ranks.
 \end{proof}
@@ -2118,7 +2118,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.sourceCutM₁_reindexPhysical,
         MPOTensor.sourceCutM₂_reindexPhysical}
     \leanok
-    \uses{def:mpu_physical_reindexing, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_physical_reindexing,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     A bijective relabeling of the physical basis simultaneously relabels the
     physical component of every source-cut row and column. Hence
     \begin{align}
@@ -2129,7 +2129,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_physical_reindexing, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_physical_reindexing,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Evaluating each cut after relabeling places the upper physical index
     in the row and the lower physical index in the column, with the
     virtual index occupying the other product coordinate. Applying $e$ to both
@@ -2141,7 +2141,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.rightRank_reindexPhysical,
         MPOTensor.leftRank_reindexPhysical}
     \leanok
-    \uses{def:mpu_physical_reindexing, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_physical_reindexing,def:mpu_right_rank,def:mpu_left_rank}
     Bijective physical relabeling preserves both source ranks:
     \begin{align}
         r(e^*\mathcal U) & =r(\mathcal U),
@@ -2150,7 +2150,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_cuts_physical_reindexing, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{thm:mpu_source_cuts_physical_reindexing,def:mpu_right_rank,def:mpu_left_rank}
     Matrix rank is unchanged by bijective row and column relabelings, and applying this
     invariance to the two source-cut identities preserves both ranks.
 \end{proof}
@@ -2195,7 +2195,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mps_eval_word_independent_tensor_product}
     \lean{MPSTensor.evalWord_tensorProduct}
     \leanok
-    \uses{def:mps_independent_tensor_product, def:eval_word}
+    \uses{def:mps_independent_tensor_product,def:eval_word}
     If $w$ has length $n$ and
     \begin{align}
         w   & =\bigl(\pi_{d,e}(i_1,k_1),\ldots,
@@ -2214,7 +2214,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mps_independent_tensor_product, def:eval_word}
+    \uses{def:mps_independent_tensor_product,def:eval_word}
     By induction on the length of $w$, the empty word uses
     $\Id_D\otimes\Id_E=\Id_{DE}$ and the invariance of the
     identity under the coordinate bijection.  For a leading letter
@@ -2235,7 +2235,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPSTensor.isInjective_tensorProduct,
         MPSTensor.isNormal_tensorProduct}
     \leanok
-    \uses{def:mps_independent_tensor_product, def:word_span, def:normal}
+    \uses{def:mps_independent_tensor_product,def:word_span,def:normal}
     Let $S_N(A)=\spn_{\C}\{A^w:|w|=N\}$.  The pointwise splitting of
     length-$N$ words gives
     \begin{align}
@@ -2256,7 +2256,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mps_eval_word_independent_tensor_product, def:word_span, def:normal}
+    \uses{thm:mps_eval_word_independent_tensor_product,def:word_span,def:normal}
     For every product word $w$, let $(u,v)$ be its pointwise component words.
     The bijection between $w$ and $(u,v)$ and
     Lemma~\ref{thm:mps_eval_word_independent_tensor_product} give
@@ -2283,7 +2283,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPSTensor.leftCanonical_tensorProduct,
         MPSTensor.IsNormalTensor.tensorProduct_of_leftCanonical}
     \leanok
-    \uses{def:mps_independent_tensor_product, def:left_canonical_tensor, def:nt_cpsv}
+    \uses{def:mps_independent_tensor_product,def:left_canonical_tensor,def:nt_cpsv}
     Let $A$ and $B$ be CPSV normal tensors, and suppose that
     \begin{align}
         \sum_i(A^i)^\dagger A^i & =\Id_D, &
@@ -2310,7 +2310,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mps_word_span_tensor_product, thm:cpsv_normal_eventually_injective, thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{thm:mps_word_span_tensor_product,thm:cpsv_normal_eventually_injective,thm:is_normal_tensor_of_is_normal_left_canonical}
     The adjoint and multiplication laws for Kronecker products, together
     with the fact that simultaneous reindexing preserves adjoints, products,
     and finite sums, give
@@ -2341,7 +2341,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{def:mpu_independent_tensor_product}
     \lean{MPOTensor.tensorProduct, MPOTensor.tensorProduct_apply}
     \leanok
-    \uses{def:mpo_tensor, def:mps_independent_tensor_product}
+    \uses{def:mpo_tensor,def:mps_independent_tensor_product}
     Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d,e$ and
     auxiliary dimensions $D,E$, respectively. Their independent tensor
     product $\mathcal U\boxtimes\mathcal V$ has dimensions $de$ and $DE$ and
@@ -2394,7 +2394,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_finite_tensor_product}
     \lean{MPOTensor.mpo_tensorProduct}
     \leanok
-    \uses{def:mpu_independent_tensor_product, def:mpo_family}
+    \uses{def:mpu_independent_tensor_product,def:mpo_family}
     For every system size $N$, the sitewise configuration bijection identifies
     the finite-size operator with
     \begin{align}
@@ -2404,7 +2404,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_independent_tensor_product, def:mpo_family}
+    \uses{def:mpu_independent_tensor_product,def:mpo_family}
     Grouping the two auxiliary indices makes every closed-word matrix a
     Kronecker product. The identity
     \begin{align}
@@ -2418,14 +2418,14 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_tensor_product}
     \lean{MPOTensor.IsMPU.tensorProduct}
     \leanok
-    \uses{def:mpu, def:mpu_independent_tensor_product}
+    \uses{def:mpu,def:mpu_independent_tensor_product}
     The independent tensor product of two matrix product unitary tensors is a
     matrix product unitary tensor. In the proof of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}, this construction is the tensoring
     operation.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_independent_tensor_product, thm:mpu_finite_tensor_product, thm:mpu_reindex_unitary, lem:mpu_mul_adjoint}
+    \uses{def:mpu_independent_tensor_product,thm:mpu_finite_tensor_product,thm:mpu_reindex_unitary,lem:mpu_mul_adjoint}
     The multiplication rule $(A\otimes B)(C\otimes D)=AC\otimes BD$ gives
     \begin{align}
          & (\mathcal U^{(N)}\otimes\mathcal V^{(N)})
@@ -2441,7 +2441,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_block_tensor_product}
     \lean{MPOTensor.blockTensor_tensorProduct}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpu_physical_reindexing, def:mpu_independent_tensor_product, def:mpu_tensor_product_block_equiv}
+    \uses{def:mpdo_physical_blocking,def:mpu_physical_reindexing,def:mpu_independent_tensor_product,def:mpu_tensor_product_block_equiv}
     For every blocking length $L$, separating each blocked product letter by
     the canonical equivalence $q$ gives the exact identity
     \begin{align}
@@ -2453,7 +2453,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_physical_blocking, def:mpu_physical_reindexing, def:mpu_independent_tensor_product, thm:mpu_tensor_product_block_decoding}
+    \uses{def:mpdo_physical_blocking,def:mpu_physical_reindexing,def:mpu_independent_tensor_product,thm:mpu_tensor_product_block_decoding}
     Evaluating both sides on blocked ket and bra letters and multiplying words of
     local Kronecker products gives
     \begin{align}
@@ -2482,7 +2482,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.sourceCutM₁_tensorProduct,
         MPOTensor.sourceCutM₂_tensorProduct}
     \leanok
-    \uses{def:mpu_independent_tensor_product, def:mpu_tensor_product_cut_shuffle, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_independent_tensor_product,def:mpu_tensor_product_cut_shuffle,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     The source cuts satisfy
     \begin{align}
         M_1(\mathcal U\boxtimes\mathcal V)
@@ -2494,7 +2494,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_independent_tensor_product, def:mpu_tensor_product_cut_shuffle, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_independent_tensor_product,def:mpu_tensor_product_cut_shuffle,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Entrywise evaluation of both source cuts after the displayed row and column
     shuffles expresses each entry as the product of the corresponding entries of the
     two source cuts.
@@ -2521,7 +2521,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.rightRank_tensorProduct,
         MPOTensor.leftRank_tensorProduct}
     \leanok
-    \uses{def:mpu_independent_tensor_product, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_independent_tensor_product,def:mpu_right_rank,def:mpu_left_rank}
     The right and left source-cut ranks are multiplicative:
     \begin{align}
         r(\mathcal U\boxtimes\mathcal V)
@@ -2534,7 +2534,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_independent_tensor_product, thm:mpu_tensor_product_source_cuts, def:mpu_right_rank, def:mpu_left_rank, thm:mpu_kronecker_rank}
+    \uses{def:mpu_independent_tensor_product,thm:mpu_tensor_product_source_cuts,def:mpu_right_rank,def:mpu_left_rank,thm:mpu_kronecker_rank}
     Matrix rank is unchanged by row and column bijections and satisfies
     $\operatorname{rank}(A\otimes B)=\operatorname{rank}(A)
         \operatorname{rank}(B)$.
@@ -2546,7 +2546,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.doubleLayerTensorProductShuffle_apply,
         MPOTensor.doubleLayerTensor_tensorProduct}
     \leanok
-    \uses{def:mpu_double_layer, def:mpu_independent_tensor_product}
+    \uses{def:mpu_double_layer,def:mpu_independent_tensor_product}
     Let $W_{\mathcal U}$ and $W_{\mathcal V}$ be the double layers of
     $\mathcal U$ and $\mathcal V$. Identify the double-layer bond space of
     $\mathcal U\boxtimes\mathcal V$ with the tensor product of the two
@@ -2560,7 +2560,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_double_layer, def:mpu_independent_tensor_product}
+    \uses{def:mpu_double_layer,def:mpu_independent_tensor_product}
     The contracted physical index of the product runs over pairs $(m,n)$, and
     each summand factors as a product of an entry of
     $\sum_m(\mathcal U^{mi})^{*}\otimes\mathcal U^{mj}$ and an entry of
@@ -2571,7 +2571,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_simple_tensor_product}
     \lean{MPOTensor.IsMPUSimple.tensorProduct}
     \leanok
-    \uses{def:mpu_simple, def:mpu_independent_tensor_product}
+    \uses{def:mpu_simple,def:mpu_independent_tensor_product}
     If $\mathcal U$ and $\mathcal V$ are simple, then
     $\mathcal U\boxtimes\mathcal V$ is simple. If $a,b$ are boundary vectors for
     $\mathcal U$ and $a',b'$ are boundary vectors for $\mathcal V$, then
@@ -2582,7 +2582,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_double_layer_tensor_product, def:mpu_simple}
+    \uses{lem:mpu_double_layer_tensor_product,def:mpu_simple}
     By Lemma~\ref{lem:mpu_double_layer_tensor_product}, and since
     $|b\otimes b')(a\otimes a'|=|b)(a|\otimes|b')(a'|$,
     \begin{align}
@@ -2601,7 +2601,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.rightRank_blockTensor_succ_le,
         MPOTensor.leftRank_blockTensor_succ_le}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpu_source_matrix_one, def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpdo_physical_blocking,def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank}
     Let $\mathcal U^{[L]}$ denote the direct blocking of $L$ sites of a tensor
     $\mathcal U$ with physical dimension $d$, and let $r_L$ and $\ell_L$ be
     its right and left source-cut ranks. Then
@@ -2754,7 +2754,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.SourceCutSVD, MPOTensor.sourceSVD₁,
         MPOTensor.sourceSVD₂, MPOTensor.sourceGram₁}
     \leanok
-    \uses{thm:mpu_compact_svd, def:mpu_source_matrix_one, def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank, def:mpu_source_weight}
+    \uses{thm:mpu_compact_svd,def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank,def:mpu_source_weight}
     Choose compact singular-value decompositions
     \begin{align}
         M_i & =V_i^\dagger D_iU_i,
@@ -2782,7 +2782,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{def:mpu_source_svd_data, thm:mpu_source_weight_posdef}
+    \uses{def:mpu_source_svd_data,thm:mpu_source_weight_posdef}
     The map $V_1^\dagger$ is injective because $V_1V_1^\dagger=\Id_r$.
     Positive definiteness of $W_\rho$ is therefore preserved by this
     congruence.
@@ -2801,7 +2801,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceX₂Of, MPOTensor.sourceY₂Of, MPOTensor.sourceZ₂Of,
         MPOTensor.sourceFactors_eq_sourceFactorsOf}
     \leanok
-    \uses{def:mpu_source_svd_data, thm:mpu_source_gram_posdef}
+    \uses{def:mpu_source_svd_data,thm:mpu_source_gram_posdef}
     Let $\rho\in\MN{D}$ be positive definite and let compact decompositions of
     the two source cuts be given (any; the chosen ones of
     Definition~\ref{def:mpu_source_svd_data} are one value). Define
@@ -2818,7 +2818,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{def:mpu_source_weight, def:mpu_source_svd_data, thm:mpu_source_gram_posdef}
+    \uses{def:mpu_source_weight,def:mpu_source_svd_data,thm:mpu_source_gram_posdef}
     Since $A$ is positive definite, its support projection is the identity and
     \begin{align}
         A^{-1/2}A^{1/2} & =\Id_r,
@@ -2859,7 +2859,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceU_sourceFactorsOf_eq,
         Matrix.IsHermitian.cfc_eq_of_eq_unitary_conj}
     \leanok
-    \uses{def:mpu_source_svd_data, def:mpu_weighted_source_factors, def:mpu_source_uv}
+    \uses{def:mpu_source_svd_data,def:mpu_weighted_source_factors,def:mpu_source_uv}
     Two compact decompositions $M=V^\dagger DU=V'^\dagger D'U'$ of one source cut
     have $V^\dagger V=V'^\dagger V'$ and $U^\dagger U=U'^\dagger U'$, and $x=V'V^\dagger$ is a
     unitary of the intermediate space with $V'=xV$ and $D'U'=xDU$. With the
@@ -2937,7 +2937,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{def:mpu_weighted_source_factors, def:mpu_source_svd_data}
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_svd_data}
     The source-factor construction gives $M_1=X_1Y_1$. The second
     compact singular-value decomposition gives $M_2=X_2Y_2$ directly.
 \end{proof}
@@ -2949,7 +2949,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceX₁_mul_sourceY₁_apply,
         MPOTensor.sourceX₂_mul_sourceY₂_apply}
     \leanok
-    \uses{thm:mpu_source_factorizations, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{thm:mpu_source_factorizations,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     The entries of the two products satisfy
     \begin{align}
         (X_1Y_1)_{(i,\beta),(\alpha,j)}
@@ -2963,7 +2963,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpu_source_factorizations, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{thm:mpu_source_factorizations,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Evaluating the two matrix factorizations at
     $((i,\beta),(\alpha,j))$ and $((\alpha,i),(j,\beta))$ gives the two entry formulas.
 \end{proof}
@@ -2975,7 +2975,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceX₂_isometry,
         MPOTensor.sourceX₂_isometry_apply}
     \leanok
-    \uses{def:mpu_weighted_source_factors, def:mpu_source_weight}
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_weight}
     The left factors satisfy
     \begin{align}
         X_1^\dagger W_\rho X_1 & =\Id_r,
@@ -2990,7 +2990,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{def:mpu_weighted_source_factors, def:mpu_source_svd_data}
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_svd_data}
     The source-factor construction gives
     $X_1^\dagger W_\rho X_1=\Id_r$; evaluating at $(r,r')$ gives the displayed
     weighted sum. Since $X_2=V_2^\dagger$, the
@@ -3021,7 +3021,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{def:mpu_weighted_source_factors, thm:mpu_source_factorization_entries, thm:mpu_source_factor_normalizations}
+    \uses{def:mpu_weighted_source_factors,thm:mpu_source_factorization_entries,thm:mpu_source_factor_normalizations}
     Substituting the entry factorization $M_2=X_2Y_2$ into the left-hand side
     and reordering the finite sums contracts the two $X_2$ factors to
     $X_2^\dagger X_2=\Id_\ell$, so the two source indices coincide and the
@@ -3033,7 +3033,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \lean{MPOTensor.sourceY₁_eq_sourceX₁_conjTranspose_mul_weight_mul_sourceCutM₁,
         MPOTensor.sourceY₂_eq_sourceX₂_conjTranspose_mul_sourceCutM₂}
     \leanok
-    \uses{def:mpu_source_weight, def:mpu_weighted_source_factors, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_source_weight,def:mpu_weighted_source_factors,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     The right source factors are recovered from the two source matrices by
     \begin{align}
         Y_1 & =X_1^\dagger W_\rho M_1,
@@ -3044,7 +3044,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations}
+    \uses{thm:mpu_source_factorizations,thm:mpu_source_factor_normalizations}
     Left multiplication of $M_1=X_1Y_1$ by $X_1^\dagger W_\rho$ and the normalization
     $X_1^\dagger W_\rho X_1=I_r$ give the first equation; left multiplication of
     $M_2=X_2Y_2$ by $X_2^\dagger$ together with
@@ -3066,7 +3066,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{def:mpu_weighted_source_factors, def:mpu_source_svd_data}
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_svd_data}
     The source-factor construction gives $Y_1Z_1=\Id_r$. For the
     second cut,
     \begin{align}
@@ -3149,7 +3149,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.mpo_two_pair_entry_eq_sourceV_mul_sourceU_swap,
         MPOTensor.mpo_two_reindex_eq_sourceV_mul_sourceU_swap}
     \leanok
-    \uses{def:mpu_source_uv, def:mpo_family}
+    \uses{def:mpu_source_uv,def:mpo_family}
     Identify a two-site physical configuration with an ordered pair in
     $\Fin d\times\Fin d$. Then
     \begin{align}
@@ -3184,8 +3184,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.mul_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂_pair,
         MPOTensor.blockTwo_apply_eq_sum_sourceV_mul_sourceY₁_mul_sourceY₂}
     \leanok
-    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
-        thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv,def:mpdo_two_site_blocking,thm:mpu_source_factorization_entries}
     For $q=(q_1,q_2)$ and $j=(j_1,j_2)$, the untraced two-site product is
     \begin{align}
         (\mathcal U^{q_1j_1}\mathcal U^{q_2j_2})_{\alpha,\gamma}
@@ -3201,7 +3200,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_source_uv, thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv,thm:mpu_source_factorization_entries}
     Unfolding $v$ as the contraction of $X_1$ with $X_2$ and contracting $X_1$
     with $Y_1$ gives the first tensor letter, while contracting $X_2$ with
     $Y_2$ gives the second. Reordering the finite sums proves the open product
@@ -3215,8 +3214,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.SourceFactors.blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁,
         MPOTensor.blockTwo_apply_eq_sum_sourceX₂_mul_sourceU_mul_sourceX₁}
     \leanok
-    \uses{def:mpu_source_uv, def:mpdo_two_site_blocking,
-        thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv,def:mpdo_two_site_blocking,thm:mpu_source_factorization_entries}
     The same untraced two-site product also satisfies
     \begin{align}
         (\mathcal U^{i_1j_1}\mathcal U^{i_2j_2})_{\alpha,\gamma}
@@ -3228,7 +3226,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_source_uv, thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_uv,thm:mpu_source_factorization_entries}
     Expanding the first tensor letter through $M_2=X_2Y_2$ and the second through
     $M_1=X_1Y_1$ contracts $Y_2$ with $Y_1$ along the common auxiliary index to
     give $u$. Summing the two remaining source indices gives the formula. The
@@ -3240,7 +3238,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_normalized_input_tail_closed_trace}
     \lean{MPOTensor.normalized_mpo_input_tail_eq_closed_doubleLayer_trace}
     \leanok
-    \uses{def:mpo_family, def:mpu_double_layer}
+    \uses{def:mpo_family,def:mpu_double_layer}
     Assume $d>0$. For any MPO tensor $\mathcal U$, tail length $K$, and
     $p,q\in\Fin d\times\Fin d$, let $W$ be its double layer and let
     $E=d^{-1}\sum_i W^{ii}$ be the normalized physical diagonal. Then
@@ -3256,7 +3254,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_closed_double_layer, thm:mpu_normalized_diagonal_word_expansion}
+    \uses{thm:mpu_closed_double_layer,thm:mpu_normalized_diagonal_word_expansion}
     Closing the common output word gives the double-layer identity
     \begin{align}
         \sum_\eta
@@ -3289,7 +3287,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceVRegroupEquiv_symm_apply,
         MPOTensor.SourceVDressedGram}
     \leanok
-    \uses{def:mpu_weighted_source_factors, def:mpu_source_uv}
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_uv}
     Put
     \begin{align}
         Y & =Y_1\otimes Y_2,
@@ -3319,7 +3317,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.doubleLayerTensor_rankOne_mul_apply_four_u,
         MPOTensor.sourceYTensor_gram_eq_four_u_weighted}
     \leanok
-    \uses{def:mpu_source_v_dressing, def:mpu_double_layer, thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations, thm:mpu_source_y_two_rotated_gram}
+    \uses{def:mpu_source_v_dressing,def:mpu_double_layer,thm:mpu_source_factorizations,thm:mpu_source_factor_normalizations,thm:mpu_source_y_two_rotated_gram}
     Let $p=(p_1,p_2)$ be the starred physical pair,
     $q=(q_1,q_2)$ the unstarred pair, and let $a=(a_1,a_2)$ and
     $b=(b_1,b_2)$ be virtual paths. The weighted first-cut contraction is
@@ -3364,7 +3362,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{def:mpu_source_v_dressing, def:mpu_double_layer, thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations, thm:mpu_source_y_two_rotated_gram}
+    \uses{def:mpu_source_v_dressing,def:mpu_double_layer,thm:mpu_source_factorizations,thm:mpu_source_factor_normalizations,thm:mpu_source_y_two_rotated_gram}
     Entrywise expansion of the ordinary and rank-one-inserted matrix products reduces both sides.
     For the tensorized Gram entry, the normalizations
     $X_1^\dagger(\Id_d\otimes\rho)X_1=\Id_r$ on the first cut and
@@ -3378,8 +3376,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_source_v_mul_source_y_tensor_entry}
     \lean{MPOTensor.sourceV_mul_sourceYTensor_apply}
     \leanok
-    \uses{def:mpu_source_v_dressing, def:mpu_source_uv,
-        thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_v_dressing,def:mpu_source_uv,thm:mpu_source_factorization_entries}
     Let $\rho>0$. For $z=(z_1,z_2)$, $p=(p_1,p_2)$, and
     $a=(a_1,a_2)$,
     \begin{align}
@@ -3391,8 +3388,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_source_v_dressing, def:mpu_source_uv,
-        thm:mpu_source_factorization_entries}
+    \uses{def:mpu_source_v_dressing,def:mpu_source_uv,thm:mpu_source_factorization_entries}
     Expanding the matrix product and tensor product, reordering the finite sums, and
     contracting $X_1Y_1$ and $X_2Y_2$ by the two source-cut factorizations gives the entry formula.
 \end{proof}
@@ -3407,7 +3403,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.sourceYTensor_gram_apply_eq_doubleLayerTensor_rankOne_mul_apply,
         MPOTensor.sourceVDressedGram_iff_simple2_transpose_fixed_pair}
     \leanok
-    \uses{def:mpu_source_uv, def:mpu_source_v_dressing, def:mpu_double_layer}
+    \uses{def:mpu_source_uv,def:mpu_source_v_dressing,def:mpu_double_layer}
     Let $\rho>0$, and compute both source cuts, the source operator $v$, and
     the right source factors $Y_1,Y_2$ from the same tensor $\mathcal U$ using
     $\rho$. Let $W$ be the double layer of $\mathcal U$, let
@@ -3446,7 +3442,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_v_mul_source_y_tensor_entry, thm:mpu_source_v_four_u_expansions}
+    \uses{thm:mpu_source_v_mul_source_y_tensor_entry,thm:mpu_source_v_four_u_expansions}
     Regrouping gives
     $(Y_1\otimes Y_2)^\dagger v^\dagger v(Y_1\otimes Y_2)
         =\bigl(v(Y_1\otimes Y_2)\bigr)^\dagger v(Y_1\otimes Y_2)$, and
@@ -3496,7 +3492,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_source_v_dressed_entries}
     \lean{MPOTensor.sourceVDressedGram_iff_regrouped_entries}
     \leanok
-    \uses{def:mpu_source_v_dressing, def:mpu_source_uv}
+    \uses{def:mpu_source_v_dressing,def:mpu_source_uv}
     For every positive definite source weight $\rho$, and for
     $x=R^{-1}(p,a)$ and $y=R^{-1}(q,b)$, the dressed Gram equation is
     equivalent to
@@ -3545,7 +3541,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_source_v_dressed_gram_cancel}
     \lean{MPOTensor.sourceVDressedGram_iff_isIsometry}
     \leanok
-    \uses{def:mpu_source_v_dressing, def:mpu_source_uv}
+    \uses{def:mpu_source_v_dressing,def:mpu_source_uv}
     For every positive definite source weight $\rho$,
     \begin{align}
         Y^\dagger(v^\dagger v)Y=Y^\dagger Y
@@ -3555,7 +3551,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpu_source_yz_tensor, thm:mpu_dressed_gram_cancel}
+    \uses{thm:mpu_source_yz_tensor,thm:mpu_dressed_gram_cancel}
     Right-inverse cancellation with $G=v^\dagger v$ and
     $Z=Z_1\otimes Z_2$ gives $v^\dagger v=\Id_{r\ell}$.
 \end{proof}
@@ -3621,7 +3617,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_reduced_normalized_flattening_cfii}
     \lean{MPOTensor.IsMPU.exists_reduced_normalizedFlattening_cfii}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support, def:normal, def:same_mpv2_pos}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,def:mpu_full_support,def:normal,def:same_mpv2_pos}
     Let $d,D>0$, let $U$ be an MPU tensor of physical dimension $d$ and
     bond dimension $D$, and let $\widetilde U=d^{-1/2}U$ be its normalized
     doubled-index tensor. There are an integer $D_{\mathrm{red}}>0$, a normal
@@ -3653,7 +3649,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, thm:nonzero_irreducible_block_decomposition, lem:overlap_eq_of_pos_mpv, thm:mpu_transfer_matrix_overlap, thm:mpu_normalized_transfer_trace, thm:mpu_transfer_matrix_eigenvalues, thm:mpu_dependent_block_inclusion_identities, lem:transfer_map_corner_intertwine, lem:irreducible_transfer_perron_pair, lem:irreducible_block_spectral_normalization, thm:mpu_shifted_trace_power_spectrum, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_shifted_transfer_trace_primitive, thm:mpu_unique_full_support_normal, thm:cpsv_cf_to_cfii_gauge, thm:gauge_invariance, thm:mpu_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_full_support_geometry, thm:coisometry_reconstruction_same_mpv_pos}
+    \uses{def:cpsv_canonical_form,thm:nonzero_irreducible_block_decomposition,lem:overlap_eq_of_pos_mpv,thm:mpu_transfer_matrix_overlap,thm:mpu_normalized_transfer_trace,thm:mpu_transfer_matrix_eigenvalues,thm:mpu_dependent_block_inclusion_identities,lem:transfer_map_corner_intertwine,lem:irreducible_transfer_perron_pair,lem:irreducible_block_spectral_normalization,thm:mpu_shifted_trace_power_spectrum,thm:mpu_shifted_transfer_trace_single_block,thm:mpu_shifted_transfer_trace_primitive,thm:mpu_unique_full_support_normal,thm:cpsv_cf_to_cfii_gauge,thm:gauge_invariance,thm:mpu_transfer_eigenvalue_one,thm:mpu_ambient_block_isometry_intertwining,thm:mpu_unique_full_support_geometry,thm:coisometry_reconstruction_same_mpv_pos}
     Remove the zero irreducible blocks of $\widetilde U$ and write
     \begin{align}
         A_0^i & =\bigoplus_{k=1}^{r}B_k^i,
@@ -3760,7 +3756,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_reduced_cfii_representative}
     \lean{MPOTensor.IsMPU.exists_reduced_cfii_representative}
     \leanok
-    \uses{def:mpu, def:mpu_canonical_form_ii}
+    \uses{def:mpu,def:mpu_canonical_form_ii}
     Let $d,D>0$ and let $U$ be an MPU tensor. There are
     $D_{\mathrm{red}}>0$ and an MPO tensor $U_{\mathrm{red}}$ of bond
     dimension $D_{\mathrm{red}}$ carrying a canonical-form-II presentation in
@@ -3780,7 +3776,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_normalized_flattening_cfii, lem:mpv_smul, lem:mpdo_three_first_site_contraction_coefficients, def:mpu_canonical_form_ii}
+    \uses{thm:mpu_reduced_normalized_flattening_cfii,lem:mpv_smul,lem:mpdo_three_first_site_contraction_coefficients,def:mpu_canonical_form_ii}
     Let $A_{\mathrm{red}}$ be the representative from Lemma~\ref{thm:mpu_reduced_normalized_flattening_cfii} and
     define
     \begin{align}
@@ -3809,7 +3805,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_full_support_blocking}
     \lean{MPSTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor}
     \leanok
-    \uses{def:mpu_full_support, thm:cpsv_literal_canonical_form_positive_blocking}
+    \uses{def:mpu_full_support,thm:cpsv_literal_canonical_form_positive_blocking}
     Suppose that canonical-form data have full support:
     \begin{align}
         \sum_{k=1}^rD_k & =D.
@@ -3819,7 +3815,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_full_support, thm:cpsv_literal_canonical_form_positive_blocking}
+    \uses{def:mpu_full_support,thm:cpsv_literal_canonical_form_positive_blocking}
     Positive blocking gives canonical-form data with the same block
     dimensions, so the full-support sum is unchanged.
 \end{proof}
@@ -3828,13 +3824,13 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \label{thm:mpu_full_support_reindexing}
     \lean{MPSTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical}
     \leanok
-    \uses{def:mpu_full_support, thm:cpsv_physical_reindexing}
+    \uses{def:mpu_full_support,thm:cpsv_physical_reindexing}
     A bijective relabeling of the physical alphabet preserves full
     support of canonical-form data.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_full_support, thm:cpsv_physical_reindexing}
+    \uses{def:mpu_full_support,thm:cpsv_physical_reindexing}
     Physical relabeling leaves the blocks and their bond
     dimensions unchanged, so the full-support sum is unchanged.
 \end{proof}
@@ -3849,7 +3845,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, thm:irreducible_tensor_smul_conj}
+    \uses{def:cpsv_canonical_form,thm:irreducible_tensor_smul_conj}
     If $k$ is the block with $D_k=D$, the total-dimension bound gives
     \begin{align}
         D = D_k \leq \sum_{j=1}^r D_j \leq D.
@@ -3935,7 +3931,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPSTensor.trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap,
         MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap}
     \leanok
-    \uses{def:mixed_transfer, def:transfer_map, def:mpv_overlap, def:mps_tensor}
+    \uses{def:mixed_transfer,def:transfer_map,def:mpv_overlap,def:mps_tensor}
     Let $A$ and $B$ be matrix product tensors with the same positive bond
     dimension, and let $F_{A,B}(X)=\sum_i A^iX(B^i)^\dagger$ be their mixed
     transfer map.  Then
@@ -3949,7 +3945,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:overlap_trace, thm:mixed_self}
+    \uses{thm:overlap_trace,thm:mixed_self}
     Replace the matrix power by the transfer matrix of the corresponding
     operator power, identify matrix trace with operator trace, and expand the
     latter over periodic words.  For the ordinary self-transfer statement,
@@ -3961,7 +3957,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{def:mpu_normalized_flattening}
     \lean{MPOTensor.normalizedFlattening}
     \leanok
-    \uses{def:mpo_tensor, def:mps_tensor, def:mpo_to_mps}
+    \uses{def:mpo_tensor,def:mps_tensor,def:mpo_to_mps}
     For an MPO tensor $U$ of physical dimension $d>0$, its normalized
     flattening is the doubled-physical-index MPS tensor
     \begin{align}
@@ -3998,10 +3994,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_normalized_flattening_tensor_product}
     \lean{MPOTensor.normalizedFlattening_tensorProduct}
     \leanok
-    \uses{def:mpu_doubled_product_coordinate_equiv,
-        def:mpu_normalized_flattening,
-        def:mpu_independent_tensor_product,
-        def:mps_independent_tensor_product}
+    \uses{def:mpu_doubled_product_coordinate_equiv,def:mpu_normalized_flattening,def:mpu_independent_tensor_product,def:mps_independent_tensor_product}
     Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d,e$ and
     auxiliary dimensions $D,E$, respectively.  With the coordinate
     equivalence $s_{d,e}$ of
@@ -4027,10 +4020,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_doubled_product_coordinate_equiv,
-        def:mpu_normalized_flattening,
-        def:mpu_independent_tensor_product,
-        def:mps_independent_tensor_product}
+    \uses{def:mpu_doubled_product_coordinate_equiv,def:mpu_normalized_flattening,def:mpu_independent_tensor_product,def:mps_independent_tensor_product}
     Applying the two product-coordinate entry formulas after the regrouping in
     (\ref{eq:mpu_tensor_flattening_shuffle}) matches the matrix entries, and the scalar normalizations agree
     because
@@ -4054,10 +4044,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.tensorProductCFIIData,
         MPOTensor.hasFullSupport_tensorProductCFIIData}
     \leanok
-    \uses{def:cpsv_cfii, def:mpu_full_support,
-        thm:mps_normal_block_tensor_product,
-        thm:mpu_normalized_flattening_tensor_product,
-        thm:cpsv_physical_reindexing}
+    \uses{def:cpsv_cfii,def:mpu_full_support,thm:mps_normal_block_tensor_product,thm:mpu_normalized_flattening_tensor_product,thm:cpsv_physical_reindexing}
     Let $A$ and $B$ have chosen canonical-form-II data with retained blocks
     $A_a$ and $B_b$, dimensions $D_a$ and $E_b$, weights $\mu_a$ and $\nu_b$,
     diagonal positive-definite fixed points $\Lambda_a$ and $\Gamma_b$, and
@@ -4136,9 +4123,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mps_normal_block_tensor_product,
-        thm:mpu_normalized_flattening_tensor_product,
-        thm:cpsv_physical_reindexing}
+    \uses{thm:mps_normal_block_tensor_product,thm:mpu_normalized_flattening_tensor_product,thm:cpsv_physical_reindexing}
     For physical labels $i$ and $k$, set
     \begin{align}
         \mathsf B_A^i & =\bigoplus_a\mu_aA_a^i,
@@ -4183,7 +4168,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_canonical_form_ii_tensor_product}
     \lean{MPOTensor.IsMPUCanonicalFormII.tensorProduct}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_independent_tensor_product}
+    \uses{def:mpu_canonical_form_ii,def:mpu_independent_tensor_product}
     Let $\mathcal U$ and $\mathcal V$ be MPUs in canonical form II,
     with recorded ambient right fixed matrices $\rho_U$ and $\rho_V$. Their
     independent tensor product is in canonical form II in the product bond
@@ -4200,9 +4185,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_tensor_product_cfii_data, thm:mpu_tensor_product,
-        thm:mpu_normalized_flattening_tensor_product,
-        thm:cpsv_physical_reindexing}
+    \uses{thm:mpu_tensor_product_cfii_data,thm:mpu_tensor_product,thm:mpu_normalized_flattening_tensor_product,thm:cpsv_physical_reindexing}
     Tensor the chosen canonical blocks and their diagonal positive fixed
     matrices, then apply the doubled physical-coordinate relabeling. The
     retained dimensions multiply and their sum is the product bond dimension.
@@ -4223,7 +4206,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{lem:mpu_normalized_flattening_composition}
     \lean{MPOTensor.normalizedFlattening_mulTensor_apply}
     \leanok
-    \uses{def:mpu_normalized_flattening, def:mpdo_operator_product}
+    \uses{def:mpu_normalized_flattening,def:mpdo_operator_product}
     Let $\mathcal U$ and $\mathcal V$ be MPO tensors with the same positive
     physical dimension $d$, and let
     \begin{align}
@@ -4244,7 +4227,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_normalized_flattening, def:mpdo_operator_product}
+    \uses{def:mpu_normalized_flattening,def:mpdo_operator_product}
     Substituting $U^{ij}=\sqrt d\,\widetilde U^{ij}$ and
     $V^{jk}=\sqrt d\,\widetilde V^{jk}$ into the defining contraction for
     $W^{ik}$ and multiplying the result by $d^{-1/2}$ gives the identity.
@@ -4254,7 +4237,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_normalized_flattening_blocking}
     \lean{MPOTensor.normalizedFlattening_blockTensor}
     \leanok
-    \uses{def:mpu_normalized_flattening, thm:mpdo_blocking_doubled_index}
+    \uses{def:mpu_normalized_flattening,thm:mpdo_blocking_doubled_index}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$, and let
     $L\geq0$. For the normalized-tensor interpretation assume $d>0$, as in
     Definition~\ref{def:mpu_normalized_flattening}; with the convention
@@ -4277,7 +4260,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_normalized_flattening, thm:mpdo_blocking_doubled_index}
+    \uses{def:mpu_normalized_flattening,thm:mpdo_blocking_doubled_index}
     A blocked letter is a product of $L$ original letters. The identity
     \begin{align}
         \bigl(\sqrt{d^L}\bigr)^{-1}
@@ -4292,7 +4275,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{lemma}[Left-canonical normalization under blocking and relabeling]
     \label{thm:mpu_left_canonical_blocking_reindexing}
     \leanok
-    \uses{def:blocked_tensor, def:left_canonical_tensor, thm:left_canonical_blocking}
+    \uses{def:blocked_tensor,def:left_canonical_tensor,thm:left_canonical_blocking}
     Suppose that an MPS tensor $A$ is left-canonical:
     \begin{align}
         \sum_i (A^i)^\dagger A^i & =\Id.
@@ -4313,7 +4296,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:blocked_tensor, def:left_canonical_tensor, thm:left_canonical_blocking, thm:cpsv_physical_reindexing}
+    \uses{def:blocked_tensor,def:left_canonical_tensor,thm:left_canonical_blocking,thm:cpsv_physical_reindexing}
     Expanding~(\ref{eq:mpu_left_canonical_blocking}) as a sum over
     length-$L$ words and summing one letter at a time by repeated application of the
     one-site left-canonical identity collapses the sum to $\Id_D$. For $L=0$, the unique empty word
@@ -4328,7 +4311,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPSTensor.CPSVCanonicalFormIIData.reindexPhysical,
         MPOTensor.blockTensorCFIIData}
     \leanok
-    \uses{def:cpsv_cfii, def:mpu_normalized_flattening, thm:cpsv_literal_canonical_form_positive_blocking, thm:cpsv_physical_reindexing, lem:blocked_irreducibility_direct_support, thm:mpu_left_canonical_blocking_reindexing, thm:mpu_normalized_flattening_blocking}
+    \uses{def:cpsv_cfii,def:mpu_normalized_flattening,thm:cpsv_literal_canonical_form_positive_blocking,thm:cpsv_physical_reindexing,lem:blocked_irreducibility_direct_support,thm:mpu_left_canonical_blocking_reindexing,thm:mpu_normalized_flattening_blocking}
     Let $A$ have canonical-form-II data with retained weights $\mu_k$, blocks
     $A_k$, and positive definite diagonal fixed matrices $\Lambda_k$. For
     every positive integer $L$, the blocked tensor $A^{[L]}$ has
@@ -4369,8 +4352,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.hasFullSupport_blockTensorCFIIData,
         MPOTensor.IsMPUCanonicalFormII.blockTensor}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_cfii_blocking_reindexing,
-        thm:mpu_full_support_blocking, thm:mpu_normalized_flattening_blocking}
+    \uses{def:mpu_canonical_form_ii,def:mpu_cfii_blocking_reindexing,thm:mpu_full_support_blocking,thm:mpu_normalized_flattening_blocking}
     Let $\mathcal U$ be an MPU in canonical form II, with recorded ambient
     right fixed matrix $\rho$. For every positive physical blocking length
     $p$, the blocked tensor $\mathcal U^{[p]}$ is in canonical form II in the
@@ -4380,9 +4362,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_cfii_blocking_reindexing, thm:mpu_full_support_blocking,
-        thm:mpu_normalized_flattening_blocking, lem:mpu_blocking,
-        thm:cpsv_physical_reindexing, thm:mpu_full_support_reindexing}
+    \uses{def:mpu_cfii_blocking_reindexing,thm:mpu_full_support_blocking,thm:mpu_normalized_flattening_blocking,lem:mpu_blocking,thm:cpsv_physical_reindexing,thm:mpu_full_support_reindexing}
     Block each canonical tensor and relabel the blocked physical alphabet.
     Blocking leaves the retained bond dimensions unchanged, so their sum is
     still the ambient bond dimension. The transfer identities in
@@ -4402,7 +4382,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPSTensor.mpvOverlap_smul_self,
         MPOTensor.mpvOverlap_normalizedFlattening_self}
     \leanok
-    \uses{def:mpu_normalized_flattening, def:mpv_overlap, def:mpo_to_mps, def:mpo_tensor, def:mps_tensor}
+    \uses{def:mpu_normalized_flattening,def:mpv_overlap,def:mpo_to_mps,def:mpo_tensor,def:mps_tensor}
     For a matrix product tensor $A$, a complex number $c$, and a nonnegative
     integer $N$, scaling every local matrix by $c$ gives
     \begin{align}
@@ -4434,7 +4414,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_normalized_transfer_trace}
     \lean{MPOTensor.IsMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one}
     \leanok
-    \uses{def:mpu, def:mpo_tensor, def:mps_tensor, def:mpu_normalized_flattening, def:transfer_map}
+    \uses{def:mpu,def:mpo_tensor,def:mps_tensor,def:mpu_normalized_flattening,def:transfer_map}
     Let $U$ be an MPU tensor with positive physical and bond dimensions, and
     let $E$ be the transfer matrix of its normalized flattening.  For every
     integer $N>1$,
@@ -4446,7 +4426,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_transfer_matrix_overlap, thm:mpu_self_overlap_scaling, thm:mpdo_doubled_overlap_hilbert_schmidt, lem:mpu_mul_adjoint}
+    \uses{thm:mpu_transfer_matrix_overlap,thm:mpu_self_overlap_scaling,thm:mpdo_doubled_overlap_hilbert_schmidt,lem:mpu_mul_adjoint}
     Scaling both tensor copies by $1/\sqrt d$ multiplies the length-$N$
     self-overlap by $d^{-N}$.  The doubled-index overlap identity and MPU
     unitarity give the complete chain
@@ -4520,7 +4500,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{def:mpu_ambient_block_inclusion}
     \lean{MPSTensor.CPSVCanonicalFormData.ambientBlockInclusion}
     \leanok
-    \uses{def:cpsv_canonical_form, def:mpu_dependent_block_inclusion}
+    \uses{def:cpsv_canonical_form,def:mpu_dependent_block_inclusion}
     If $U$ is the reconstruction coisometry and $J_k$ is the inclusion of the
     $k$th retained block, define
     \begin{align}
@@ -4533,7 +4513,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPSTensor.CPSVCanonicalFormData.ambientBlockInclusion_conjTranspose_mul_self,
         MPSTensor.CPSVCanonicalFormData.mul_ambientBlockInclusion}
     \leanok
-    \uses{def:cpsv_canonical_form, def:mpu_ambient_block_inclusion}
+    \uses{def:cpsv_canonical_form,def:mpu_ambient_block_inclusion}
     For every retained block and physical index $i$,
     \begin{align}
         V_k^\dagger V_k & =\Id,              \\
@@ -4583,7 +4563,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_ambient_block_isometry_intertwining, thm:mpu_shifted_trace_power_spectrum, thm:mpu_transfer_matrix_eigenvalues}
+    \uses{thm:mpu_ambient_block_isometry_intertwining,thm:mpu_shifted_trace_power_spectrum,thm:mpu_transfer_matrix_eigenvalues}
     For a nonzero fixed matrix $X_k$ of the unweighted normal block, setting
     $Y_k=V_kX_kV_k^\dagger$ and using the isometry and intertwining identities gives
     \begin{align}
@@ -4600,7 +4580,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPSTensor.CPSVCanonicalFormData.dim_eq_of_r_eq_one_of_fullSupport,
         MPSTensor.CPSVCanonicalFormData.ambientBlockInclusion_mul_conjTranspose_eq_one}
     \leanok
-    \uses{def:mpu_full_support, def:mpu_ambient_block_inclusion}
+    \uses{def:mpu_full_support,def:mpu_ambient_block_inclusion}
     If there is exactly one block $k$ and the blocks fill the
     ambient bond space, then
     \begin{align}
@@ -4635,7 +4615,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:transfer_map_corner_intertwine, thm:mpu_dependent_block_inclusion_identities, thm:mpu_shifted_trace_power_moments, thm:mpu_shifted_trace_power_spectrum, thm:mpu_trace_power_all, thm:mpu_transfer_matrix_eigenvalues}
+    \uses{lem:transfer_map_corner_intertwine,thm:mpu_dependent_block_inclusion_identities,thm:mpu_shifted_trace_power_moments,thm:mpu_shifted_trace_power_spectrum,thm:mpu_trace_power_all,thm:mpu_transfer_matrix_eigenvalues}
     Each normal block $A_k$ has a nonzero transfer fixed vector $X_k$.
     Let $U$ be the reconstruction coisometry and let $J_k$ be the flattened
     inclusion of the $k$th block.  Define the ambient inclusion and conjugated
@@ -4692,7 +4672,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_shifted_trace_power_spectrum, thm:mpu_transfer_matrix_eigenvalues}
+    \uses{thm:mpu_shifted_trace_power_spectrum,thm:mpu_transfer_matrix_eigenvalues}
     The shifted traces give
     \begin{align}
         \sigma(\widehat T)\setminus\{0\} & =\{1\}.
@@ -4715,7 +4695,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.IsMPU.normalizedFlattening_nonzero_spectrum,
         MPOTensor.IsMPU.normalizedFlattening_charpoly}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:transfer_map}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:transfer_map}
     Let $U$ be an MPU tensor with positive physical and bond dimensions, and
     let $E$ be the transfer matrix of its normalized flattening. Then
     \begin{align}
@@ -4728,7 +4708,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_trace_power_charpoly}
+    \uses{thm:mpu_normalized_transfer_trace,thm:mpu_shifted_trace_power_charpoly}
     For every integer $N>1$, the normalized transfer identity gives
     \begin{align}
         \tr(E^N) & =1.
@@ -4745,7 +4725,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_normalized_transfer_stabilization}
     \lean{MPOTensor.IsMPU.exists_normalized_transfer_stabilizes_to_rank_one}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:transfer_map, thm:mpu_normalized_transfer_nonzero_spectrum}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:transfer_map,thm:mpu_normalized_transfer_nonzero_spectrum}
     Let $U$ be an MPU tensor with physical dimension $d>0$ and bond
     dimension $D>1$, and let $E$ be the transfer matrix of its normalized
     flattening. There is an integer
@@ -4775,7 +4755,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_nonzero_spectrum, thm:mpu_normalized_transfer_trace}
+    \uses{thm:mpu_normalized_transfer_nonzero_spectrum,thm:mpu_normalized_transfer_trace}
     The exact characteristic polynomial is
     \begin{align}
         \chi_E(X) & =X^{D^2-1}(X-1).
@@ -4811,7 +4791,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_reduced_cfii_transfer_stabilization}
     \lean{MPOTensor.IsMPU.normalized_transfer_power_eq_vecMulVec_of_reduced_cfii}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support, def:mpu_ambient_block_inclusion}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,def:mpu_full_support,def:mpu_ambient_block_inclusion}
     Suppose $d>0$, $D>1$, and $\mathcal U$ is an MPU whose normalized
     flattening is presented by chosen canonical-form-II data with blocks
     filling the bond space. There is a
@@ -4840,7 +4820,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_transfer_eigenvalue_one, thm:mpu_ambient_block_isometry_intertwining, thm:mpu_unique_full_support_geometry, thm:matrix_posdef_coisometric_transport, lem:transfer_map_corner_intertwine, thm:mpu_normalized_transfer_stabilization, thm:mpu_stabilized_fixed_pair_uniqueness}
+    \uses{thm:mpu_normalized_transfer_trace,thm:mpu_shifted_transfer_trace_single_block,thm:mpu_transfer_eigenvalue_one,thm:mpu_ambient_block_isometry_intertwining,thm:mpu_unique_full_support_geometry,thm:matrix_posdef_coisometric_transport,lem:transfer_map_corner_intertwine,thm:mpu_normalized_transfer_stabilization,thm:mpu_stabilized_fixed_pair_uniqueness}
     The shifted trace identities satisfy $\tr(E^N)=1$ for every integer
     $N>1$ and give
     \begin{align}
@@ -4896,7 +4876,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_reduced_cfii_forced_block_simple_contractions}
     \lean{MPOTensor.IsMPUCanonicalFormII.forced_block_simple_contractions}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpdo_physical_blocking, def:mpu_double_layer}
+    \uses{def:mpu_canonical_form_ii,def:mpdo_physical_blocking,def:mpu_double_layer}
     Let $\mathcal U$ be an MPU in canonical form II, with ambient fixed
     matrix $\rho$. Put $J=\max(D^2-1,1)$ and $W=\mathcal U_{JD^2}$. With
     the vectorized pair $\rho',\Phi'$ of $\rho$ and of the identity, the
@@ -4911,7 +4891,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_matching_direct_block_contractions, thm:mpu_canonical_form_ii_transfer_stabilization, thm:mpu_canonical_form_ii_positive_dimensions}
+    \uses{thm:mpu_matching_direct_block_contractions,thm:mpu_canonical_form_ii_transfer_stabilization,thm:mpu_canonical_form_ii_positive_dimensions}
     The convention records a positive trace-one ambient fixed matrix, and
     Lemma~\ref{thm:mpu_canonical_form_ii_transfer_stabilization} identifies
     the stabilized power with $\lvert\rho)(\Phi\rvert$ at the positive exponent
@@ -4924,7 +4904,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_normalized_transfer_fin_one}
     \lean{MPOTensor.IsMPU.normalized_transfer_matrix_eq_one_fin_one}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening}
+    \uses{def:mpu,def:mpu_normalized_flattening}
     If the physical dimension satisfies $d>0$ and the bond dimension is $D=1$,
     then the normalized transfer matrix satisfies
     \begin{align}
@@ -4944,7 +4924,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.IsMPUCanonicalFormII,
         MPOTensor.IsMPUCanonicalFormII.hasFullSupport}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:cpsv_cfii,def:mpu_full_support}
     Let $\mathcal U$ be an MPO tensor, and write
     $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ and
     $E=\mathcal E_{\widetilde{\mathcal U}}$. A canonical-form-II presentation
@@ -5057,7 +5037,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.continuous_virtualSandwich_of_trace_pair,
         Continuous.factorFreeSandwich}
     \leanok
-    \uses{def:mpu_factor_free_sandwich, def:mpu_virtual_sandwich}
+    \uses{def:mpu_factor_free_sandwich,def:mpu_virtual_sandwich}
     Let $L,R\in\mathbb C^{D\times D}$ and let $\operatorname{vec}$ stack
     matrix columns, so
     \begin{align}
@@ -5120,7 +5100,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.sourceCutM₁_virtualSandwich,
         MPOTensor.sourceCutM₂_virtualSandwich}
     \leanok
-    \uses{def:mpu_virtual_sandwich, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_virtual_sandwich,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     The two source cuts satisfy the explicit formulas
     \begin{align}
         M_1(\widehat{\mathcal U})
@@ -5137,7 +5117,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_virtual_sandwich, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_virtual_sandwich,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Expanding an entry of each right-hand side shows that the identity factors collapse the
     two physical sums. For the first cut, the entries of $B^{\mathsf T}$ and
     $A^{\mathsf T}$ put $B_{\delta\beta}$ on the left and
@@ -5156,7 +5136,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.rightRank_virtualSandwich,
         MPOTensor.leftRank_virtualSandwich}
     \leanok
-    \uses{def:mpu_virtual_sandwich, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_virtual_sandwich,def:mpu_right_rank,def:mpu_left_rank}
     If $A$ and $B$ are invertible, then
     \begin{align}
         r[\widehat{\mathcal U}]    & =r[\mathcal U],    &
@@ -5179,8 +5159,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_positive_canonical_gauge}
     \lean{MPOTensor.exists_canonicalFormII_positiveGauge}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:nt_cpsv,
-        def:mpu_canonical_form_ii, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:nt_cpsv,def:mpu_canonical_form_ii,def:mpu_right_rank,def:mpu_left_rank}
     Let $\mathcal U$ generate an MPU, suppose its normalized flattening
     $\widetilde{\mathcal U}$ is normal, and let $L$ be positive definite
     with $\mathcal E_{\widetilde{\mathcal U}}^*(L)=L$.
@@ -5201,8 +5180,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:CFII_data, thm:cpsv_normal_tensor_gauge_transport,
-        def:cpsv_cfii, thm:mpu_virtual_sandwich_source_ranks}
+    \uses{thm:CFII_data,thm:cpsv_normal_tensor_gauge_transport,def:cpsv_cfii,thm:mpu_virtual_sandwich_source_ranks}
     With $S=L^{1/2}$ and $\mathcal G^{ij}=S\mathcal U^{ij}S^{-1}$,
     the adjoint fixed-point equation gives
     \begin{align}
@@ -5276,7 +5254,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPSTensor.MPUCanonicalFormData,
         MPSTensor.IsMPUCanonicalForm}
     \leanok
-    \uses{def:transfer_map, def:block_diagonal_tensor}
+    \uses{def:transfer_map,def:block_diagonal_tensor}
     A tensor $A$ of physical dimension $d$ and bond dimension $D$ is in MPU
     canonical form if there are positive block dimensions $D_k$, nonzero
     weights $\mu_k\in\mathbb C$, tensors $A_k$ of bond dimension $D_k$, and a
@@ -5302,7 +5280,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_canonical_form_of_cfii}
     \lean{MPOTensor.IsMPUCanonicalFormII.isMPUCanonicalForm}
     \leanok
-    \uses{def:mpu_canonical_form, def:cpsv_cfii}
+    \uses{def:mpu_canonical_form,def:cpsv_cfii}
     Let $d\geq1$. A matrix product unitary tensor in canonical form II is in
     canonical form.
 \end{lemma}
@@ -5318,7 +5296,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_canonical_form_similar_cfii}
     \lean{MPOTensor.IsMPU.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm}
     \leanok
-    \uses{def:mpu_canonical_form, def:mpu_canonical_form_ii, def:mpu}
+    \uses{def:mpu_canonical_form,def:mpu_canonical_form_ii,def:mpu}
     Let $d,D\geq1$ and let $\mathcal U$ be a matrix product unitary tensor in
     canonical form. There is an invertible $X$ on the bond space such that the
     tensor with letters $XU^{ij}X^{-1}$ is in canonical form II; it generates
@@ -5340,7 +5318,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_normalized_full_support_normal}
     \lean{MPOTensor.IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm}
     \leanok
-    \uses{def:mpu, def:mpu_normalized_flattening, def:mpu_canonical_form, def:normal}
+    \uses{def:mpu,def:mpu_normalized_flattening,def:mpu_canonical_form,def:normal}
     Let $U$ be an MPU tensor with positive physical and bond dimensions.
     Suppose that the original local tensor is in canonical form, with nonzero
     weights and blocks occupying the full ambient bond space. Then the
@@ -5356,7 +5334,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_shifted_transfer_trace_primitive, thm:mpu_unique_full_support_normal}
+    \uses{thm:mpu_normalized_transfer_trace,thm:mpu_shifted_transfer_trace_single_block,thm:mpu_shifted_transfer_trace_primitive,thm:mpu_unique_full_support_normal}
     Normalizing the local tensor multiplies each weight $\mu_k$ by
     $d^{-1/2}\ne0$ and leaves each block unchanged. With $\widetilde U$
     denoting the normalized flattening and $E$ its transfer matrix, for every
@@ -5384,7 +5362,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_canonical_form_ii_normal}
     \lean{MPOTensor.IsMPUCanonicalFormII.isNormalTensor_normalizedFlattening}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:nt_cpsv}
+    \uses{def:mpu_canonical_form_ii,def:nt_cpsv}
     Let $d,D>0$. If an MPO tensor $\mathcal U$ has a canonical-form-II
     presentation in the sense of
     Definition~\ref{def:mpu_canonical_form_ii}, then its normalized flattening
@@ -5395,7 +5373,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_single_block, thm:mpu_shifted_transfer_trace_primitive, thm:mpu_unique_full_support_normal}
+    \uses{thm:mpu_normalized_transfer_trace,thm:mpu_shifted_transfer_trace_single_block,thm:mpu_shifted_transfer_trace_primitive,thm:mpu_unique_full_support_normal}
     The canonical-form-II presentation has normal blocks and full support.
     The shifted transfer traces give one block, transfer spectral radius one,
     and peripheral spectrum $\{1\}$. The unique block has dimension $D$ and
@@ -5408,7 +5386,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.IsMPUCanonicalFormII.normalized_transfer_power_eq_vecMulVec,
         MPOTensor.IsMPUCanonicalFormII.normalizedDiagonal_pow_eq_vecMulVec}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_double_layer}
+    \uses{def:mpu_canonical_form_ii,def:mpu_double_layer}
     Let $\mathcal U$ be an MPU in canonical form II with ambient fixed
     matrix $\rho$, and put $J=\max(D^2-1,1)$. Then
     \begin{align}
@@ -5432,7 +5410,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reduced_cfii_transfer_stabilization, thm:mpu_normalized_transfer_fin_one, thm:mpu_blocked_double_layer_diagonal, thm:mpu_canonical_form_ii_positive_dimensions}
+    \uses{thm:mpu_reduced_cfii_transfer_stabilization,thm:mpu_normalized_transfer_fin_one,thm:mpu_blocked_double_layer_diagonal,thm:mpu_canonical_form_ii_positive_dimensions}
     If $D=1$, the normalized transfer matrix is the identity, $\rho=1$ by
     $\tr(\rho)=1$, and both identities hold at $J=1$. If $D>1$, then
     $J=D^2-1$, and
@@ -5465,7 +5443,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \label{thm:mpu_canonical_form_ii_stabilization_converse}
     \lean{MPOTensor.IsMPU.exists_canonicalFormII_of_supplied_transfer_power}
     \leanok
-    \uses{def:mpu, def:mpu_canonical_form_ii, thm:mpu_normalized_transfer_trace}
+    \uses{def:mpu,def:mpu_canonical_form_ii,thm:mpu_normalized_transfer_trace}
     Let $\mathcal U$ be an MPU with physical dimension $d>0$, and let $E$
     be the transfer matrix of its normalized flattening. Suppose that
     $\rho\in\MN{D}$ is positive definite and diagonal and that, for some
@@ -5481,7 +5459,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_normalized_transfer_trace, thm:mpu_shifted_transfer_trace_primitive, thm:mpu_normalized_transfer_fin_one}
+    \uses{thm:mpu_normalized_transfer_trace,thm:mpu_shifted_transfer_trace_primitive,thm:mpu_normalized_transfer_fin_one}
     With $t=\tr(\rho)$ and $P=\lvert\rho)(\Phi\rvert$, the rank-one operator satisfies
     $P^2=tP$ and $\tr(P)=t$. If $K\geq2$, the normalized transfer trace at
     length $K$ gives $t=1$. If $K=1$, lengths two and three give

@@ -6,8 +6,7 @@
         TNLean.MPS.AreaLaw.exists_interval_physical_scaled_soft_reverse_residual,
         TNLean.MPS.AreaLaw.exists_interval_physical_scaled_soft_residuals}
     \leanok
-    \uses{thm:interval_regional_exponential_moment,
-        thm:nearest_neighbour_weighted_low_restriction}
+    \uses{thm:interval_regional_exponential_moment,thm:nearest_neighbour_weighted_low_restriction}
     Let $H$ be a positive unit nearest-neighbour chain with one
     prescribed interval, and let its attained original regional
     minima be chosen before the approximate interval energy
@@ -69,8 +68,7 @@
     \label{thm:physical_soft_windows_and_mpo}
     \lean{TNLean.MPS.AreaLaw.exists_interval_physical_soft_closeness_and_mpo}
     \leanok
-    \uses{thm:interval_physical_scaled_soft_windows,
-        thm:soft_hamiltonian_mpo_accuracy}
+    \uses{thm:interval_physical_scaled_soft_windows,thm:soft_hamiltonian_mpo_accuracy}
     For the preceding uniformly chosen $m$ and $t=3m$, the same
     actual physical $\widetilde H$ has both directed window
     comparisons and, for every $\xi>0$, actual operator tensors
@@ -82,8 +80,7 @@
     minimum. The cluster order depends only on $N,m,\xi$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:interval_physical_scaled_soft_windows,
-        thm:soft_hamiltonian_mpo_accuracy}
+    \uses{thm:interval_physical_scaled_soft_windows,thm:soft_hamiltonian_mpo_accuracy}
     Use the constructed window theorem and retain its literal
     soft Hamiltonian. Its regional lower bound and
     $\epsilon\leq\epsilon_J$ supply the lower energy for the heat

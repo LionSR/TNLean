@@ -124,7 +124,7 @@
     \label{def:mpdo_bond_two_singleton_base_mpo}
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseMPO}
     \leanok
-    \uses{def:mpo_tensor, def:mpdo_bond_two_singleton_deformation}
+    \uses{def:mpo_tensor,def:mpdo_bond_two_singleton_deformation}
     Let $I=\{0,1\}$ and identify $I\times I$ with four bond coordinates.
     Define the bond-four MPO tensor $M$ by
     \begin{align}
@@ -140,7 +140,7 @@
     \label{thm:mpdo_bond_two_singleton_vertical_identity}
     \lean{MPOTensor.BondTwoSingletonBaseModel.verticalTensor_baseMPO}
     \leanok
-    \uses{def:mpdo_bond_two_singleton_base_mpo, def:mpdo_bond_two_singleton_deformation}
+    \uses{def:mpdo_bond_two_singleton_base_mpo,def:mpdo_bond_two_singleton_deformation}
     The vertical tensor of $M$ is exactly the matrix-unit tensor $A$ from
     Definition~\ref{def:mpdo_bond_two_singleton_deformation}.
 \end{lemma}
@@ -189,7 +189,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         twoSite_baseMPO_eq_bellProjector}
     \leanok
-    \uses{thm:mpdo_bond_two_singleton_ambient_ghz, def:mpdo_bond_two_singleton_deformation}
+    \uses{thm:mpdo_bond_two_singleton_ambient_ghz,def:mpdo_bond_two_singleton_deformation}
     Let $\varepsilon$ identify a binary word of length two with its ordered
     pair of letters, and put $\ket{\Phi}=\ket{0,0}+\ket{1,1}$. Then
     \begin{align}
@@ -254,7 +254,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         verticalTensor_gaugeDeformedBaseMPO}
     \leanok
-    \uses{def:mpdo_bond_two_singleton_physical_deformation, thm:mpdo_bond_two_singleton_vertical_identity}
+    \uses{def:mpdo_bond_two_singleton_physical_deformation,thm:mpdo_bond_two_singleton_vertical_identity}
     For every vertical letter $v$, the vertical tensor of $M_X$ satisfies
     $\widetilde M_X^v=XA^vX^{-1}$.
     Drawing the vertical letter $v$ as the upper leg, the physical
@@ -281,7 +281,7 @@
     \end{center}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_vertical_one_site_actions, thm:mpdo_bond_two_singleton_vertical_identity}
+    \uses{def:mpdo_vertical_one_site_actions,thm:mpdo_bond_two_singleton_vertical_identity}
     Left and right multiplication on the physical indices become matrix
     multiplication on the vertically viewed tensor, and
     Lemma~\ref{thm:mpdo_bond_two_singleton_vertical_identity} identifies
@@ -293,7 +293,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         oneSite_gaugeDeformedBaseMPO_eq_terminalJ}
     \leanok
-    \uses{def:mpdo_bond_two_singleton_physical_deformation, def:mpdo_bond_two_singleton_deformation}
+    \uses{def:mpdo_bond_two_singleton_physical_deformation,def:mpdo_bond_two_singleton_deformation}
     After identifying one-site words with their single letters in $I$, the
     one-site operator of $M_X$ is
     \begin{align}
@@ -311,7 +311,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         twoSite_gaugeDeformedBaseMPO_eq_bellProjector}
     \leanok
-    \uses{def:mpdo_bond_two_singleton_physical_deformation, thm:mpdo_bond_two_singleton_bell_identity}
+    \uses{def:mpdo_bond_two_singleton_physical_deformation,thm:mpdo_bond_two_singleton_bell_identity}
     Under the ordered-pair identification $\varepsilon$ from
     Lemma~\ref{thm:mpdo_bond_two_singleton_bell_identity},
     \begin{align}
@@ -332,13 +332,13 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         gaugeGram_eq_pos_smul_one_of_gaugeDeformedBaseMPO_isMPDO}
     \leanok
-    \uses{thm:mpdo_bond_two_singleton_physical_one_site, thm:mpdo_bond_two_singleton_physical_two_site, thm:mpdo_bond_two_singleton_scalar_gram}
+    \uses{thm:mpdo_bond_two_singleton_physical_one_site,thm:mpdo_bond_two_singleton_physical_two_site,thm:mpdo_bond_two_singleton_scalar_gram}
     If $M_X$ generates MPDOs, then there is a real number $\omega>0$ such
     that $X^\dagger X=\omega\Id$. Thus a physical similarity with
     nonscalar $X^\dagger X$ does not preserve MPDO positivity in this family.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_bond_two_singleton_physical_one_site, thm:mpdo_bond_two_singleton_physical_two_site, thm:mpdo_bond_two_singleton_scalar_gram}
+    \uses{thm:mpdo_bond_two_singleton_physical_one_site,thm:mpdo_bond_two_singleton_physical_two_site,thm:mpdo_bond_two_singleton_scalar_gram}
     Positivity of the one- and two-site operators implies Hermiticity, so the
     two exact reindexing identities and
     Lemma~\ref{thm:mpdo_bond_two_singleton_scalar_gram} force
@@ -363,12 +363,12 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.%
         gaugeDeformedBaseMPO_gauge_not_isMPDO}
     \leanok
-    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram, lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
+    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram,lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
     For $X=\frac12\begin{pmatrix}3&1\\1&3\end{pmatrix}$, the physical
     deformation $M_X$ does not generate MPDOs.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram, lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
+    \uses{thm:mpdo_bond_two_singleton_physical_scalar_gram,lem:mpdo_bond_two_singleton_physical_nonscalar_gram}
     Otherwise Lemma~\ref{thm:mpdo_bond_two_singleton_physical_scalar_gram}
     would make $X^\dagger X$ scalar, contrary to
     Lemma~\ref{lem:mpdo_bond_two_singleton_physical_nonscalar_gram}.
@@ -567,7 +567,7 @@
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseMPOBNTAlgebraTensorClause}
     \lean{MPOTensor.BondTwoSingletonBaseModel.baseMPO_hasBNTAlgebraTensorClause}
     \leanok
-    \uses{thm:mpdo_bond_two_singleton_vertical_identity, thm:mpdo_bond_two_singleton_normalized_algebra, thm:mpdo_bond_two_singleton_coisometry}
+    \uses{thm:mpdo_bond_two_singleton_vertical_identity,thm:mpdo_bond_two_singleton_normalized_algebra,thm:mpdo_bond_two_singleton_coisometry}
     The physical tensor $M$ has a vertical basis of normal tensors with one label, one copy,
     and bond dimension two. Its normalized representative is
     $M_0=\widehat A$, its multiplicity matrix is $\mu_0=(s^{-1})$, and

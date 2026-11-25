@@ -69,7 +69,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{thm:rg_flow_converges_of_cf}
     \lean{MPSTensor.rg_flow_converges_of_cf}
     \leanok
-    \uses{def:is_canonical_form, def:transfer_map, thm:exponential_convergence_primitive}
+    \uses{def:is_canonical_form,def:transfer_map,thm:exponential_convergence_primitive}
     Fix one block $A_k$ in a family satisfying
     Definition~\ref{def:is_canonical_form}. As in the per-block primitive
     convergence of \cite[Appendix~B, lines~1211--1244]{Cirac2016MPDO_arXiv},
@@ -97,7 +97,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{thm:cpsv_canonical_form_flow_phase_obstruction}
     \lean{MPSTensor.cubePhaseTensor_not_tendsto_dyadic_transferMap}
     \leanok
-    \uses{def:cpsv_canonical_form, def:transfer_map}
+    \uses{def:cpsv_canonical_form,def:transfer_map}
     Let $\omega=e^{2\pi i/3}$ and consider the tensor with one physical
     component
     \begin{align}
@@ -139,7 +139,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \lean{MPOTensor.IsOneLetterRFPViaTSUpToVirtualGauge}
     \lean{MPSTensor.IsPureOneLetterRFPViaTSUpToVirtualGauge}
     \leanok
-    \uses{def:mpdo_two_site_blocking, def:gauge_equiv, def:doubled_tensor}
+    \uses{def:mpdo_two_site_blocking,def:gauge_equiv,def:doubled_tensor}
     For an MPO tensor $M$ with one physical component, the Appendix~D blocking
     diagram holds up to virtual gauge if $M^{[2]}$ and $M$ are related by
     similarity on the virtual indices. For a pure tensor $A$, this condition is
@@ -157,7 +157,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{def:blocked_gauge_phase_fixed_point}
     \lean{MPSTensor.IsBlockedGaugePhaseFixedPoint}
     \leanok
-    \uses{def:blocked_tensor, def:unit_gauge_phase_equiv}
+    \uses{def:blocked_tensor,def:unit_gauge_phase_equiv}
     A tensor $A$ with one physical component satisfies the one-letter MPS
     blocking relation if there exist an invertible matrix $X$ and a scalar
     $\zeta$ with $|\zeta|=1$ such that
@@ -194,7 +194,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{thm:blocked_gauge_phase_to_doubled_mpdo}
     \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
     \leanok
-    \uses{def:one_letter_mpdo_virtual_gauge_rfp, def:blocked_gauge_phase_fixed_point}
+    \uses{def:one_letter_mpdo_virtual_gauge_rfp,def:blocked_gauge_phase_fixed_point}
     If $A = \zeta X A^{[2]} X^{-1}$ satisfies the one-letter MPS blocking relation with $|\zeta|=1$, then the doubled tensor $M = A \otimes \overline{A}$ satisfies
     \begin{align}
         M & = (X \otimes \overline{X}) M^{[2]} (X \otimes \overline{X})^{-1},
@@ -223,7 +223,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \lean{MPSTensor.cubePhaseTensor_not_isTransferIdempotent}
     \lean{MPSTensor.cpsv16_pure_rfp_gauge_equivalence_false}
     \leanok
-    \uses{def:blocked_tensor, def:doubled_tensor, def:mpdo, def:one_letter_mpdo_virtual_gauge_rfp, def:cube_phase_swap_gauge, def:cpsv_canonical_form, def:mps_transfer_idempotence}
+    \uses{def:blocked_tensor,def:doubled_tensor,def:mpdo,def:one_letter_mpdo_virtual_gauge_rfp,def:cube_phase_swap_gauge,def:cpsv_canonical_form,def:mps_transfer_idempotence}
     Let $\omega=e^{2\pi i/3}$, and set
     \begin{align}
         A & =\begin{pmatrix}1&0\\0&\omega\end{pmatrix},
@@ -245,7 +245,7 @@ produce the dyadic powers $\E_B^{2^n}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:ft_perm_gl, lem:ft_perm_gl_identities, lem:ft_perm_matrix_conj_submatrix, def:cube_phase_swap_gauge, def:mpdo, lem:bond_dimension_one_identity_transfer_normal, def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo, thm:cpsv_canonical_form_flow_phase_obstruction}
+    \uses{def:ft_perm_gl,lem:ft_perm_gl_identities,lem:ft_perm_matrix_conj_submatrix,def:cube_phase_swap_gauge,def:mpdo,lem:bond_dimension_one_identity_transfer_normal,def:cpsv_canonical_form,thm:blocked_gauge_phase_to_doubled_mpdo,thm:cpsv_canonical_form_flow_phase_obstruction}
     On every nonempty chain, $M=A\otimes\overline A$ generates the rank-one
     operator $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, which is positive semidefinite.
     In addition, $M$ is the direct sum of four bond-one scalar blocks with weights
@@ -275,7 +275,7 @@ produce the dyadic powers $\E_B^{2^n}$.
 \end{remark}
 
 \begin{remark}\label{rem:zero_correlation_length}
-    \uses{thm:spectral_radius_le_one, def:correlation_length, def:mps_transfer_idempotence}
+    \uses{thm:spectral_radius_le_one,def:correlation_length,def:mps_transfer_idempotence}
     When the transfer map is idempotent ($\E^2=\E$), connected correlations become
     separation-independent for all separations $n\ge 1$. In the rank-one
     (primitive) case where the peripheral spectrum consists only of the simple
@@ -356,7 +356,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{def:physical_two_point_expectation}
     \lean{MPSTensor.physicalTwoPointExpectation}
     \leanok
-    \uses{def:physical_observable_transfer, def:transfer_map}
+    \uses{def:physical_observable_transfer,def:transfer_map}
     Let $O_1,O_2$ act on blocks of $L_1,L_2$ physical spins, separated around
     the periodic chain by complementary gaps of lengths $n_1,n_2$. Their
     two-observable expectation is
@@ -410,7 +410,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{def:is_positive_gap_physical_cid}
     \lean{MPSTensor.IsPositiveGapPhysicalCID}
     \leanok
-    \uses{def:physical_observable_transfer, def:physical_two_point_expectation}
+    \uses{def:physical_observable_transfer,def:physical_two_point_expectation}
     Let $O_1,O_2$ be observables on disjoint blocks of a periodic chain, with
     observable transfer maps $\E_{O_1},\E_{O_2}$
     (Definition~\ref{def:physical_observable_transfer}). The tensor has
@@ -432,7 +432,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{lem:is_positive_gap_physical_cid_of_physical_cid}
     \lean{MPSTensor.isPositiveGapPhysicalCID_of_isPhysicalCID}
     \leanok
-    \uses{def:source_physical_cid, def:is_positive_gap_physical_cid}
+    \uses{def:source_physical_cid,def:is_positive_gap_physical_cid}
     If an MPS tensor satisfies physical distance independence
     (Definition~\ref{def:source_physical_cid}), then it satisfies the
     positive-gap condition
@@ -447,7 +447,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{thm:is_positive_gap_physical_cid_of_is_rfp}
     \lean{MPSTensor.isPositiveGapPhysicalCID_of_isTransferIdempotent}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:is_positive_gap_physical_cid}
+    \uses{def:mps_transfer_idempotence,def:is_positive_gap_physical_cid}
     If $\E_A^2=\E_A$, then $A$ satisfies positive-gap physical distance
     independence (Definition~\ref{def:is_positive_gap_physical_cid}).
 \end{lemma}
@@ -469,7 +469,7 @@ produce the dyadic powers $\E_B^{2^n}$.
 \begin{definition}[Virtual-insertion zero correlation length]\label{def:is_zcl}
     \lean{MPSTensor.IsZCL}
     \leanok
-    \uses{def:is_locally_orthogonal, def:is_bnt_zcl, def:is_cid, def:source_bnt_zcl}
+    \uses{def:is_locally_orthogonal,def:is_bnt_zcl,def:is_cid,def:source_bnt_zcl}
     A tensor $A$ satisfies the virtual-insertion zero-correlation-length
     condition if its transfer map is idempotent ($\E_A^2=\E_A$) and it satisfies
     virtual-insertion distance independence (Definition~\ref{def:is_cid}).
@@ -479,7 +479,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{thm:isCID_implies_isTransferIdempotent}
     \lean{MPSTensor.isCID_implies_isTransferIdempotent}
     \leanok
-    \uses{def:is_cid, def:mps_transfer_idempotence, def:transfer_map}
+    \uses{def:is_cid,def:mps_transfer_idempotence,def:transfer_map}
     If the virtual-insertion condition (Definition~\ref{def:is_cid}) holds for
     every positive-definite right fixed point $\rho^R>0$ of the transfer map,
     then $\E_A^2=\E_A$.
@@ -504,7 +504,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \label{thm:zcl_iff_idempotent_transfer}
     \lean{MPSTensor.zcl_iff_idempotent_transfer}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:is_cid, def:is_locally_orthogonal}
+    \uses{def:mps_transfer_idempotence,def:is_cid,def:is_locally_orthogonal}
     A tensor satisfies the virtual-insertion zero-correlation-length condition
     (Definition~\ref{def:is_zcl}) if and only if its transfer map is
     idempotent:

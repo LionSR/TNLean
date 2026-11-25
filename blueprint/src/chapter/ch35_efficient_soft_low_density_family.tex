@@ -17,8 +17,7 @@ than for the source's parameter choice.
         TNLean.MPS.AreaLaw.ALVV.exists_soft_low_density_polynomial_core}
     \leanok
 
-    \uses{thm:uniform_physical_soft_improving_family,
-        lem:alvv_same_soft_representation}
+    \uses{thm:uniform_physical_soft_improving_family,lem:alvv_same_soft_representation}
     Keep the chain, the cuts, the interactions and the parameters $q\geq2$,
     $\ell,k\geq1$, $m\geq2$, $t\geq3m$, $\xi>0$ of
     Theorem~\ref{thm:uniform_physical_soft_improving_family}. The original
@@ -46,8 +45,7 @@ than for the source's parameter choice.
     of $G$ at $\mu+\eta$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:uniform_physical_soft_improving_family,
-        lem:alvv_same_soft_representation}
+    \uses{thm:uniform_physical_soft_improving_family,lem:alvv_same_soft_representation}
     Construct the regional data and the windowed comparisons for $G$ by
     Lemma~\ref{lem:alvv_same_soft_representation} at the three bulks. From
     the same lower regional minimum construct the native soft middle operator
@@ -112,9 +110,7 @@ than for the source's parameter choice.
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_efficient_soft_low_density_family}
     \leanok
 
-    \uses{lem:soft_low_density_polynomial_core,
-        lem:soft_low_density_window_closeness,
-        lem:soft_low_density_chebyshev_viability}
+    \uses{lem:soft_low_density_polynomial_core,lem:soft_low_density_window_closeness,lem:soft_low_density_chebyshev_viability}
     Keep the data of Lemma~\ref{lem:soft_low_density_polynomial_core}, and
     write $M=3t(1+\log m)+4\ell+34+\xi$. The middle operators are chosen
     before every estimate $p$ and every band width. For each estimate, let
@@ -140,9 +136,7 @@ than for the source's parameter choice.
     $\Delta=(2e^{-2k\sqrt{(c_1-c_0)/(M-c_0)}})^2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:soft_low_density_polynomial_core,
-        lem:soft_low_density_window_closeness,
-        lem:soft_low_density_chebyshev_viability}
+    \uses{lem:soft_low_density_polynomial_core,lem:soft_low_density_window_closeness,lem:soft_low_density_chebyshev_viability}
     Apply the windowed comparisons of
     Lemma~\ref{lem:soft_low_density_polynomial_core} with buffer $w/2$ at
     the band widths $\eta-3w\geq0$ and $\eta-w/2$; their conditions follow
@@ -201,8 +195,7 @@ The next two statements choose the parameters.
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_efficient_soft_low_density_family}
     \leanok
 
-    \uses{thm:efficient_soft_low_density_family,
-        lem:soft_low_density_calibration_budgets}
+    \uses{thm:efficient_soft_low_density_family,lem:soft_low_density_calibration_budgets}
     Let $q\geq2$ and $0<w\leq1$. The parameters of
     Lemma~\ref{lem:soft_low_density_calibration_budgets} and a polynomial bound
     $C_{\mathrm{pol}}(N+1)^{p}$ for the member bond are chosen before the chain
@@ -214,8 +207,7 @@ The next two statements choose the parameters.
     $D^{12}\Delta\leq10^{-5}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:efficient_soft_low_density_family,
-        lem:soft_low_density_calibration_budgets}
+    \uses{thm:efficient_soft_low_density_family,lem:soft_low_density_calibration_budgets}
     Apply Lemma~\ref{thm:efficient_soft_low_density_family} at these parameters,
     with $T=u^9$ and the window resolution $h$, and bound its losses by
     Lemma~\ref{lem:soft_low_density_calibration_budgets}.

@@ -119,7 +119,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
         TNLean.MPS.AreaLaw.regionState_leftBlock_eq_leftMarginal
     }
     \leanok
-    \uses{def:chain_trim, def:chain_constant_bond}
+    \uses{def:chain_trim,def:chain_constant_bond}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on a chain of
     local dimension $q\ge1$, and let $\delta>0$. For every cut $k$ and
@@ -155,7 +155,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
         ManyBody.IsGapped.posSemidef_sub_ground
     }
     \leanok
-    \uses{def:chain_trim, thm:chain_constant_bond_overlap}
+    \uses{def:chain_trim,thm:chain_constant_bond_overlap}
     Let $H=H_L+H_R+K$ on a chain, with $H_L$ supported on the first $k$
     sites, $H_R$ on the remaining sites and $0\le K\le1$, and let $\Omega$
     be a gapped ground vector of $H$ with energy $E_0$ and gap $\Delta>0$.
@@ -212,7 +212,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
     length and the cut.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_constant_bond_overlap, thm:chain_trim_energy}
+    \uses{thm:chain_constant_bond_overlap,thm:chain_trim_energy}
     Take $v$ the normalized trimmed vector of $\Omega$ at $B_{\delta_0}$.
     Lemma~\ref{thm:chain_constant_bond_overlap} gives
     $\operatorname{Re}\langle v,\Omega\rangle\ge1-\delta_0\ge1-\delta$

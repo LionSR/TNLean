@@ -9,36 +9,28 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 \begin{definition}[Private product inputs and exact local operations]
     \label{def:peps_private_product_input}
     \lean{QuantumCircuit.Party.Word.op_prepareProduct_mulVec}
-    \lean{QuantumCircuit.Party.Word.op_prepareProduct_mulVec}
     \lean{QuantumCircuit.Party.Word.isAllowed_prepareProduct}
-    \lean{QuantumCircuit.Party.norm_toLp_productVector_eq_one}
-    \lean{QuantumCircuit.productVector_cutEquiv_symm}
     \lean{QuantumCircuit.productVector_cutEquiv_symm}
     \lean{QuantumCircuit.Party.Word.prepareProduct}
     \lean{QuantumCircuit.Party.Word.sources_prepareProduct}
-    \lean{QuantumCircuit.productVector}
     \leanok
-    \uses{def:peps_party_layout,def:peps_party_monomial}
+    \uses{def:peps_party_layout,def:peps_party_monomial,def:product_state_tensor,thm:peps_free_source_norm}
     For an ordered register list with spaces $H_1,\ldots,H_n$ (or one private memory per party) and unit vectors $x_j\in H_j$, set $x=x_1\otimes\cdots\otimes x_n$ ($1$ for $n=0$) and define the preparation isometry $\C\to\bigotimes_{j=1}^n H_j$, $z\mapsto zx$. Restricting to owners in $A$ splits $x$ into unit vectors $x_A\otimes x_{A^c}$, and owner relabelings preserve $x$ under the induced memory identification.
 \end{definition}
 
 \begin{definition}[Prepared sources and retained spectators]
     \label{def:peps_source_replacement_operations}
     \lean{QuantumCircuit.Party.EffectCircuit}
-    \lean{QuantumCircuit.Party.Word.op_frame,
-        QuantumCircuit.Party.SourceCircuit.op_frame}
+    \lean{QuantumCircuit.Party.SourceCircuit.op_frame}
     \lean{QuantumCircuit.Party.SourceCircuit.op_ofLocalWord}
     \lean{QuantumCircuit.Party.SourceCircuit.frame}
     \lean{QuantumCircuit.Party.PartyCircuit.isAllowed_frame}
     \lean{QuantumCircuit.Party.SourceCircuit.isAllowed_ofLocalWord}
     \lean{QuantumCircuit.Party.SourceCircuit.ofLocalWord}
     \lean{QuantumCircuit.Party.SourceInventory.norm_vector}
-    \lean{QuantumCircuit.Party.Word.op_localPrepare}
-    \lean{QuantumCircuit.Party.Word.isAllowed_localPrepare}
-    \lean{QuantumCircuit.Party.Word.localPrepare}
     \lean{QuantumCircuit.Party.WeightedGate.exists_prepared_effectReplacement}
     \leanok
-    \uses{def:peps_private_product_input,def:peps_party_monomial}
+    \uses{def:peps_private_product_input,def:peps_party_monomial,def:peps_internal_pair_preparation,thm:peps_append_spectators,thm:peps_internal_pair_preparation}
     A source-only operation is a composition of local contractions, register permutations, and normalized pair-source preparations $y\mapsto x\otimes y$ ($\|x\|=1$). For an operation $T$ and spectator memory $R$, retaining $R$ acts as $I_R\otimes T$, block exchange acts as $r\otimes s\otimes y\mapsto s\otimes r\otimes y$, and equal register lists are identified isometrically; none of these adds nonprivate gates.
 \end{definition}
 
@@ -82,28 +74,24 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \lean{QuantumCircuit.Party.EffectCircuit.auxiliaryVector}
     \lean{QuantumCircuit.Party.PartyCircuit.numGates}
     \lean{QuantumCircuit.Party.EffectCircuit.replacement}
-    \lean{QuantumCircuit.Party.SourceCircuit.op_frame}
     \lean{QuantumCircuit.Party.WeightedGate.exists_prepared_effectReplacement_native}
     \lean{QuantumCircuit.Party.WeightedGate.exists_prepared_effectReplacement_uniform}
     \lean{QuantumCircuit.Party.WeightedGate.replacementCoefficients}
     \lean{QuantumCircuit.Party.EffectCircuit.norm_referenceOp_le_one}
     \lean{QuantumCircuit.Party.EffectCircuit.referenceOp}
-    \uses{cor:peps_pair_effects_rescaling}
+    \uses{cor:peps_pair_effects_rescaling,def:peps_source_replacement_operations}
     By Lemma~\ref{cor:peps_pair_effects_rescaling}, each nonprivate gate $G_j$ has a source-only contraction $\widetilde G_j$ and unit auxiliary vector $\Gamma_j$ with $\|\widetilde G_j-|\Gamma_j\rangle\otimes G_j\|\le 2\delta$. Setting $\Gamma=\bigotimes_{j=1}^N\Gamma_j$ and inducting over the circuit composition via $\|B_2B_1-A_2A_1\|\le\|B_2-A_2\|+\|B_1-A_1\|$ for contractions (while private gates and permutations contribute $0$) yields (\ref{eq:peps_circuit_effect_error}).
 \end{proof}
 
 \begin{lemma}[Preservation of participating parties]
     \label{thm:peps_replacement_participants}
-    \lean{QuantumCircuit.Party.OriginalCircuit.replacementLocationsEquiv}
-    \lean{QuantumCircuit.Party.OriginalCircuit.participants_replacementLocationsEquiv}
     \lean{QuantumCircuit.Party.OriginalCircuit.card_participants_ne_one}
     \leanok
-    \uses{def:peps_original_circuit}
+    \uses{def:peps_original_circuit,def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
     The nonprivate gates of the original circuit correspond bijectively to the expanded gates of the replacement circuit, preserving each gate's participating party set.
 \end{lemma}
 
 \begin{proof}\leanok
-    \lean{QuantumCircuit.Party.EffectCircuit.participants_replacementLocationsEquiv}
     \lean{QuantumCircuit.Party.EffectCircuit.participants_replacementLocationsEquiv}
     \lean{QuantumCircuit.Party.EffectCircuit.replacementLocationsEquiv}
     \lean{QuantumCircuit.Party.SourceCircuit.numGates_ofLocalWord}
@@ -115,11 +103,10 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 \begin{lemma}[Physical density error]
     \label{thm:peps_source_only_density_error}
     \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le}
-    \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le}
     \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half}
     \lean{QuantumCircuit.Party.sourceGateBudget_eq_of_pos}
     \leanok
-    \uses{thm:peps_circuit_effect_error}
+    \uses{thm:peps_circuit_effect_error,thm:peps_physical_first_exact_sources}
     Decompose the original output memory into physical and discarded registers. For $\|x\|\le1$, let $\rho=\operatorname{Tr}_{\rm disc}(|Tx\rangle\langle Tx|)$ and let $\widetilde\rho=\operatorname{Tr}_{{\rm disc},\,{\rm aux}}(|\widetilde Tx\rangle\langle\widetilde Tx|)$. Then
     \begin{align}
         \|\widetilde\rho-\rho\|_1\le4\delta N.
@@ -135,15 +122,13 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \lean{Matrix.rectangularTraceNorm_appendAuxiliaryVector_error_le_two}
     \lean{QuantumCircuit.Party.EffectCircuit.originalPhysicalDensity}
     \lean{QuantumCircuit.Party.EffectCircuit.rectangularTraceNorm_replacement_density_sub_le}
-    \lean{QuantumCircuit.Party.EffectCircuit.replacementPhysicalDensity}
-    \lean{QuantumCircuit.Party.extendedReadout}
     \lean{QuantumCircuit.Party.toEuclideanLin_extendedReadout_prepMatrix}
     \lean{QuantumCircuit.Party.norm_extendedReadout_le_one}
     \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half}
     \lean{QuantumCircuit.Party.sourceGateBudget}
     \lean{QuantumCircuit.Party.sourceGateBudget_pos}
     \lean{QuantumCircuit.Party.sourceGateBudget_spec}
-    \uses{thm:peps_circuit_effect_error}
+    \uses{thm:peps_circuit_effect_error,def:peps_physical_first_replacement}
     Set $u=\widetilde T x$ and $v=\Gamma\otimes Tx$, so $\|u\|,\|v\|\le1$ and $\|u-v\|\le2\delta N$ by (\ref{eq:peps_circuit_effect_error}). Since $\operatorname{Tr}_E(|v\rangle\langle v|)=\|\Gamma\|^2\rho=\rho$ under the partial trace $\operatorname{Tr}_E$ over discarded and auxiliary registers,
     \begin{align}
         \|\widetilde\rho-\rho\|_1
@@ -158,10 +143,7 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \label{thm:peps_family_regional_dimensions}
     \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
     \leanok
-    \uses{def:peps_family_physical_output,
-        thm:peps_source_only_density_error,
-        thm:peps_basis_physical_dimensions,
-        thm:peps_basis_regional_readouts}
+    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error,thm:peps_basis_physical_dimensions,thm:peps_basis_regional_readouts}
     If $d_p\le D$ for all $p\in A$, the physical memory $\mathcal H_A$ of $A$ satisfies
     \begin{align}
         \dim\mathcal H_A=\prod_{p\in A}d_p\le D^{|A|},
@@ -171,26 +153,10 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_only_density_error,
-        def:peps_basis_physical_readouts,
-        def:peps_basis_region_coordinates,
-        thm:peps_basis_physical_dimensions,
-        def:peps_family_physical_output,
-        thm:peps_basis_regional_readouts}
+    \uses{thm:peps_source_only_density_error,def:peps_basis_physical_readouts,def:peps_basis_region_coordinates,thm:peps_basis_physical_dimensions,def:peps_family_physical_output,thm:peps_basis_regional_readouts}
     Lemma~\ref{thm:peps_basis_physical_dimensions} gives (\ref{eq:peps_family_regional_dimension}), and applying Lemma~\ref{thm:peps_source_only_density_error} to the regional readout decomposing the physical registers into $A$ and $A^c$ (Lemma~\ref{thm:peps_basis_regional_readouts}) yields $\|\widetilde\rho_A-\rho_A\|_1\le\varepsilon/2$.
 \end{proof}
 
-\begin{lemma}[Constant-dimensional regional density estimate]
-    \label{thm:peps_constant_family_regional_density}
-    \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
-    \leanok
-    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
-    If $d_p=d$ for all $p$, the discarded private memory is finite-dimensional, $N\le M$, and $\delta=\varepsilon/(8\max\{1,M\})$, then the regional reduced densities on $A$ for a whole-party unit product input satisfy $\|\widetilde\rho_A-\rho_A\|_1\le\varepsilon/2$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:peps_source_only_density_error,def:peps_family_physical_output}
-    Specialize Lemma~\ref{thm:peps_source_only_density_error} to $d_p=d$ and the regional readout on $A$ (Definition~\ref{def:peps_family_physical_output}).
-\end{proof}
 
 \begin{lemma}[Resources of the constructed source-only circuit]
     \label{thm:peps_source_only_resources}
@@ -201,11 +167,10 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \lean{QuantumCircuit.Party.OriginalCircuit.isExpansionBounded_replacement}
     \lean{QuantumCircuit.Party.PreparedSourceGate.length_sources_branchWord_eq_choose}
     \lean{QuantumCircuit.Party.SourceCircuit.slotCount_eq_choose}
-    \lean{QuantumCircuit.Party.OriginalCircuit.card_sourceLocations_replacement_le}
     \lean{QuantumCircuit.Party.OriginalCircuit.participationCount_replacement}
     \lean{QuantumCircuit.Party.OriginalCircuit.participationCount_replacement_le}
     \leanok
-    \uses{thm:peps_circuit_effect_error,thm:peps_replacement_participants}
+    \uses{thm:peps_circuit_effect_error,thm:peps_replacement_participants,thm:peps_physical_first_source_count}
     Suppose each original nonprivate gate has at most $K$ monomials, absolute coefficient sum at most $S$, at most $r$ pair effects per monomial, and at most $b$ participating parties, and each party participates in at most $b$ nonprivate gates. With $m=\lceil(rS/\delta)^2\rceil+1$, each replacement gate has absolute coefficient sum at most $S$ and at most $Km^r$ monomials, where
     \begin{align}
         m    & \le(rS/\delta)^2+2,                 \\
@@ -228,14 +193,13 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \lean{QuantumCircuit.Party.OriginalCircuit.participation}
     \lean{QuantumCircuit.Party.OriginalCircuit.participationLocationsEquiv}
     \lean{QuantumCircuit.Party.PartyCircuit.participationCount}
-    \lean{QuantumCircuit.Party.SourceInventory.length_eq_choose}
     \lean{QuantumCircuit.Party.PreparedSourceGate.length_sources_branchWord}
     \lean{QuantumCircuit.Party.PreparedSourceGate.length_sources_branchWord_le_choose}
     \lean{QuantumCircuit.Party.SourceCircuit.card_sourceLocations_eq_sum_choose}
     \lean{QuantumCircuit.Party.SourceCircuit.card_sourceLocations_le}
     \lean{QuantumCircuit.Party.SourceCircuit.IsExpansionBounded.at_gate}
     \lean{QuantumCircuit.Party.SourceCircuit.participationCount_eq_card_incidentGates}
-    \uses{cor:peps_pair_effects_rescaling,thm:peps_replacement_participants}
+    \uses{cor:peps_pair_effects_rescaling,thm:peps_replacement_participants,thm:peps_source_pair_count}
     By Lemma~\ref{cor:peps_pair_effects_rescaling}, cyclic insertion averaging and rescaling by $(1+\delta)^{-1}<1$ keep the coefficient $\ell_1$-norm at most $S$ and expand each of the $K$ monomials into $m^r$ terms, where $\lceil x\rceil+1\le x+2$ gives (\ref{eq:peps_replacement_resource_bound}). Summing $\binom q2\le\binom b2$ over the $N$ gates bounds the total source slots by $N\binom b2$, and Lemma~\ref{thm:peps_replacement_participants} preserves each party's gate participation count.
 \end{proof}
 

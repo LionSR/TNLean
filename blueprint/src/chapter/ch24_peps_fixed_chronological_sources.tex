@@ -33,8 +33,7 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_circuit_incidence,thm:peps_affected_owner_equality,
-        thm:peps_partial_source_order}
+    \uses{thm:peps_source_circuit_incidence,thm:peps_affected_owner_equality,thm:peps_partial_source_order}
     Combine Lemma~\ref{thm:peps_source_circuit_incidence}, Lemma~\ref{thm:peps_affected_owner_equality}, and Lemma~\ref{thm:peps_partial_source_order} on the filtered list (\ref{eq:peps_partial_fixed_positions}).
 \end{proof}
 
@@ -58,19 +57,17 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_partial_source_inventory,thm:peps_partial_fixed_layout,
-        thm:peps_source_preparation,thm:peps_common_source_lists}
+    \uses{thm:peps_partial_source_inventory,thm:peps_partial_fixed_layout,thm:peps_source_preparation,thm:peps_common_source_lists}
     Transport the normalized source inventory of Lemma~\ref{thm:peps_partial_source_inventory} along the common layout of Lemma~\ref{thm:peps_partial_fixed_layout} and Lemma~\ref{thm:peps_common_source_lists}, then apply Lemma~\ref{thm:peps_source_preparation}.
 \end{proof}
 
 \begin{definition}[The original label and vector at a position]
     \label{def:peps_partial_original_source_vector}
     \lean{QuantumCircuit.Party.SourceCircuit.choiceAt}
-    \lean{QuantumCircuit.Party.SourceCircuit.sourceVectorAt}
     \lean{QuantumCircuit.Party.SourceCircuit.partialSlotChoice}
     \lean{QuantumCircuit.Party.SourceCircuit.partialSlotVector}
     \leanok
-    \uses{def:peps_partial_source_choices,def:peps_partial_fixed_positions}
+    \uses{def:peps_partial_source_choices,def:peps_partial_fixed_positions,def:peps_source_coordinates}
     For a touched gate occurrence $g$, $\xi\in\Xi_{\mathcal A}$ determines $\xi_g\in\Xi_g$. Writing $\nu_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$ for the source vector at $e=(g,j)$ and $\alpha\in\Xi_g$, set at reference index $i$ ($e_i=(g_i,j_i)$):
     \begin{align}
         \eta^{\mathrm{orig}}_{\xi,i}
@@ -81,19 +78,17 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
 
 \begin{lemma}[Recovery of the locally selected source vectors]
     \label{thm:peps_partial_original_source_vector}
-    \lean{QuantumCircuit.Party.SourceCircuit.norm_sourceVectorAt}
     \lean{QuantumCircuit.Party.SourceCircuit.isTouched_of_source_endpoint}
     \lean{QuantumCircuit.Party.SourceCircuit.sourceAt_eq_mapOwner_sourceVectorAt}
     \lean{QuantumCircuit.Party.SourceCircuit.eq_partialSlotVector_of_inventory_eq}
     \lean{QuantumCircuit.Party.SourceCircuit.exists_partial_source_preparation_with_original_vectors}
     \leanok
-    \uses{def:peps_partial_original_source_vector,thm:peps_partial_fixed_preparation}
+    \uses{def:peps_partial_original_source_vector,thm:peps_partial_fixed_preparation,thm:peps_local_schmidt_sources}
     Every $e_i\in\mathcal E_{\mathcal A}$ belongs to a touched gate $g_i$, $\|\nu_{e,\alpha}\|=1$, and (\ref{eq:peps_partial_fixed_preparation}) of Lemma~\ref{thm:peps_partial_fixed_preparation} holds with $\eta_{\xi,i}=\eta^{\mathrm{orig}}_{\xi,i}$ from (\ref{eq:peps_partial_original_source_vector}), which depends only on $\xi_{g_i}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_circuit_incidence,thm:peps_partial_source_order,
-        thm:peps_partial_fixed_layout,thm:peps_partial_fixed_preparation}
+    \uses{thm:peps_source_circuit_incidence,thm:peps_partial_source_order,thm:peps_partial_fixed_layout,thm:peps_partial_fixed_preparation}
     By Lemma~\ref{thm:peps_source_circuit_incidence}, $e_i\in\mathcal E_{\mathcal A}$ implies $C_{g_i}\cap\mathcal A\ne\varnothing$, and comparing the ordered source inventory (Lemma~\ref{thm:peps_partial_source_order}) with the common layout (Lemma~\ref{thm:peps_partial_fixed_layout}) identifies the $i$th prepared vector in (\ref{eq:peps_partial_fixed_preparation}) with $\eta^{\mathrm{orig}}_{\xi,i}$.
 \end{proof}
 
@@ -121,9 +116,8 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_preparation,thm:peps_selective_preparation_recovery,
-        thm:peps_selective_partition}
-    Write $W=VP_\eta$ by Lemma~\ref{thm:peps_source_preparation} and apply Lemma~\ref{thm:peps_selective_partition} and Lemma~\ref{thm:peps_selective_preparation_recovery} to the internal unit vectors prepared by $P_{\mathrm{fix}}$.
+    \uses{thm:peps_source_preparation,thm:peps_prepared_reordered_vector,thm:peps_selective_partition}
+    Write $W=VP_\eta$ by Lemma~\ref{thm:peps_source_preparation} and apply Lemma~\ref{thm:peps_selective_partition} and Lemma~\ref{thm:peps_prepared_reordered_vector} to the internal unit vectors prepared by $P_{\mathrm{fix}}$.
 \end{proof}
 
 \begin{definition}[Choices as labels at touched occurrences]

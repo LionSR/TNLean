@@ -13,8 +13,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
         SpinChain.PropagatesWithin.outputPairEquiv,
         SpinChain.PropagatesWithin.outputPairEquiv_coe}
     \leanok
-    \uses{lem:star_subalgebra_coordinate_equivalences,
-        lem:qca_physical_pair_adjacent_generation}
+    \uses{lem:star_subalgebra_coordinate_equivalences,lem:qca_physical_pair_adjacent_generation}
     An injective star-algebra homomorphism identifies a star-subalgebra
     with its actual image and evaluates as the original ambient map.
     Equality of two star-subalgebras identifies them without changing
@@ -35,9 +34,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
     \lean{SpinChain.PropagatesWithin.coherentEvenOneMatrixEquiv,
         SpinChain.PropagatesWithin.coherentEvenOneMatrixEquiv_symm_embed}
     \leanok
-    \uses{lem:qca_support_coordinate_equivalences,
-        thm:qca_site_indexed_support_algebras_two_site_covariance,
-        lem:qca_margolus_matrix_rules}
+    \uses{lem:qca_support_coordinate_equivalences,thm:qca_site_indexed_support_algebras_two_site_covariance,lem:qca_margolus_matrix_rules}
     Fix the matrix coordinates $e_0$ on $\mathcal R_0$. The actual
     two-site translation gives an isomorphism
     $\tau_2:\widehat{\mathcal R}_0\to\widehat{\mathcal R}_2$.
@@ -67,8 +64,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
         SpinChain.PropagatesWithin.coherentMargolusOutputRule_right,
         SpinChain.PropagatesWithin.coherentMargolus_alternating_kronecker}
     \leanok
-    \uses{lem:qca_margolus_coherent_even_coordinates,
-        lem:qca_commuting_product_coordinates,lem:qca_margolus_matrix_rules}
+    \uses{lem:qca_margolus_coherent_even_coordinates,lem:qca_commuting_product_coordinates,lem:qca_margolus_matrix_rules}
     In the shared coordinates there is a star-isomorphism
     $G:M_r\otimes M_\ell\to M_{d^2}$ satisfying
     \begin{align}
@@ -98,8 +94,7 @@ factors is odd then even, namely $\mathbb C^r\otimes\mathbb C^\ell$.
     \lean{SpinChain.PropagatesWithin.constantMargolusGateRule,
         SpinChain.PropagatesWithin.exists_fixed_margolus_unitary_gates}
     \leanok
-    \uses{lem:qca_margolus_coherent_output_rule,
-        lem:qca_full_matrix_spatial_implementer,def:qca_consecutive_pair_coordinates}
+    \uses{lem:qca_margolus_coherent_output_rule,lem:qca_full_matrix_spatial_implementer,def:qca_consecutive_pair_coordinates}
     There are unitary maps
     \begin{align}
         U & : \mathbb C^d\otimes\mathbb C^d\longrightarrow

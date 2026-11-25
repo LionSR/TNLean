@@ -12,7 +12,7 @@
     \lean{MPOTensor.BNTFusionTensorClause.%
         HasTerminalSpectralProjectorRefinement}
     \leanok
-    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_density_operator, def:mpdo_topological_projector_recursion, thm:mpdo_terminal_transfer_positivity}
+    \uses{def:mpdo,def:mpdo_bnt_fusion_tensor_clause,def:mpdo_topological_density_operator,def:mpdo_topological_projector_recursion,thm:mpdo_terminal_transfer_positivity}
     Let $M$ generate MPDOs, and fix a fusion decomposition of its vertical
     BNT $\{M_\alpha\}_\alpha$ with positive diagonal matrices
     $\chi_{\alpha,\beta,\gamma}$. For every terminal label $\gamma$, close the
@@ -83,7 +83,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \label{def:mpdo_terminal_spectral_refinement}
     \lean{MPOTensor.rfpBNTFusionTensorClause}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_fusion_clause_terminal_spectral_refinement, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
+    \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,def:mpdo_bnt_fusion_tensor_clause,def:mpdo_fusion_clause_terminal_spectral_refinement,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
     For an MPDO in normalized BNT-refined horizontal form satisfying the
     RFP condition, fix the fusion decomposition given by that
     construction. For every terminal label $\gamma$, close the horizontal
@@ -119,7 +119,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \lean{MPOTensor.BNTFusionTensorClause.%
         hasTerminalSpectralProjectorRefinement}
     \leanok
-    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_fusion_clause_terminal_spectral_refinement, thm:mpdo_fusion_clause_topological_density_decomposition, cor:mpdo_fusion_clause_topological_density_factor_commutator}
+    \uses{def:mpdo,def:mpdo_bnt_fusion_tensor_clause,def:mpdo_fusion_clause_terminal_spectral_refinement,thm:mpdo_fusion_clause_topological_density_decomposition,cor:mpdo_fusion_clause_topological_density_factor_commutator}
     Let $M$ generate MPDOs, fix a fusion decomposition on the nonzero product
     sectors, and suppose that its structure coefficients
     $c_{\alpha,\beta,\gamma}^{(L)}
@@ -167,7 +167,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \label{thm:mpdo_terminal_spectral_projector_refinement}
     \lean{MPOTensor.terminalSpectralProjectorRefinement_of_isRFPViaTS}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, def:mpdo_terminal_spectral_refinement, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
+    \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,def:mpdo_terminal_spectral_refinement,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
     and satisfy the RFP condition. Fix the fusion decomposition given by
     that construction, and suppose that its structure coefficients
@@ -214,7 +214,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite[lines~1003--1012]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_topological_projector_recursion, thm:mpdo_topological_density_decomposition, cor:mpdo_topological_density_factor_commutator}
+    \uses{thm:mpdo_topological_projector_recursion,thm:mpdo_topological_density_decomposition,cor:mpdo_topological_density_factor_commutator}
     Positivity of the one-site density operator passes to every fixed BNT
     block, and division by its strictly positive multiplicity weight shows that
     each $K_\gamma$ is positive semidefinite. The finite-dimensional
@@ -299,7 +299,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
         singleKrausMap_physicalIndexedGibbsDecomposition_eq_mpo}
     \lean{MPOTensor.BNTFusionTensorClause.hasTopologicalGibbsDecomposition}
     \leanok
-    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_gibbs_data_at_least_two, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
+    \uses{def:mpdo,def:mpdo_bnt_fusion_tensor_clause,def:mpdo_topological_gibbs_data_at_least_two,thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Let $M$ generate MPDOs, and fix a fusion decomposition on the nonzero
     product sectors of a vertical canonical decomposition of $M$.
     Suppose that the structure coefficients
@@ -357,7 +357,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite{gap:cpsv16_topological_gibbs_length_one}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_fusion_clause_topological_density_decomposition, cor:mpdo_fusion_clause_topological_density_factor_commutator, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
+    \uses{thm:mpdo_fusion_clause_topological_density_decomposition,cor:mpdo_fusion_clause_topological_density_factor_commutator,thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Each diagonal entry of $\mu$ is strictly positive, so its negative
     logarithm is real. The translated terms are diagonal, and each site
     contributes once to their sum; exponentiating gives
@@ -379,7 +379,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \label{thm:mpdo_topological_gibbs_at_least_two}
     \lean{MPOTensor.topologicalGibbsDecomposition_of_isRFPViaTS}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+    \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
     Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
     and satisfy the RFP condition. Select the fusion decomposition on the
     nonzero product sectors given by that condition, and suppose that the
@@ -409,7 +409,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \lean{MPOTensor.BNTFusionTensorClause.%
         hasPhysicalTopologicalGibbsDecomposition}
     \leanok
-    \uses{def:mpdo, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_topological_gibbs_data_at_least_two, thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+    \uses{def:mpdo,def:mpdo_bnt_fusion_tensor_clause,def:mpdo_topological_gibbs_data_at_least_two,thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
     Let $M$ generate MPDOs, and fix a fusion decomposition on the nonzero
     product sectors of a vertical canonical decomposition of $M$.
     Suppose that the structure coefficients
@@ -493,7 +493,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \label{thm:mpdo_physical_coordinate_gibbs_at_least_two}
     \lean{MPOTensor.physicalTopologicalGibbsDecomposition_of_isRFPViaTS}
     \leanok
-    \uses{def:horizontal_cf_mpdo, def:mpdo, def:is_rfp_via_ts, thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    \uses{def:horizontal_cf_mpdo,def:mpdo,def:is_rfp_via_ts,thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor,thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     Let $M$ generate MPDOs, be in normalized BNT-refined horizontal form,
     and satisfy the RFP condition. Select the fusion decomposition on the
     nonzero product sectors given by that condition, and suppose that the
@@ -525,7 +525,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \label{def:mpdo_literal_cpsv_rfp_bnt_fusion_tensor_clause}
     \lean{MPOTensor.cpsvRFPBNTFusionTensorClause}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:is_rfp_via_ts,def:mpdo_bnt_fusion_tensor_clause,thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}
     Let $M$ generate MPDOs, suppose that its MPS tensor with paired physical
     indices is in CF as defined by CPSV, and suppose that $M$ satisfies the
     RFP condition. Choose one fusion decomposition of the vertical BNT on
@@ -555,7 +555,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \lean{MPOTensor.%
         physicalTopologicalGibbsDecomposition_of_isRFPViaTS_of_cpsvCanonicalForm}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause, def:mpdo_literal_cpsv_rfp_bnt_fusion_tensor_clause, def:mpdo_topological_gibbs_data_at_least_two, thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor, thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:is_rfp_via_ts,def:mpdo_bnt_fusion_tensor_clause,def:mpdo_literal_cpsv_rfp_bnt_fusion_tensor_clause,def:mpdo_topological_gibbs_data_at_least_two,thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor,thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
     Let $M$ generate MPDOs, suppose that its MPS tensor with paired physical
     indices is in CF as defined by CPSV, and suppose that $M$ satisfies the
     RFP condition. Select the fusion decomposition on the nonzero product

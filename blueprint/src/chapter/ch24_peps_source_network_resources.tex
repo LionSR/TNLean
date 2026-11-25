@@ -13,8 +13,7 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
     \label{thm:peps_source_density_link_card}
     \lean{QuantumCircuit.Party.SourceCircuit.card_alphabet_source_density}
     \leanok
-    \uses{def:peps_source_gate_root,def:compression_distributed_links,
-        def:compression_operator_alphabets}
+    \uses{def:peps_source_gate_root,def:compression_distributed_links,def:compression_operator_alphabets}
     For any $k\in\N$ and any constructed link $e$ in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \begin{align}
@@ -40,8 +39,7 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
     \label{thm:peps_source_density_link_card_bound}
     \lean{QuantumCircuit.Party.SourceCircuit.card_alphabet_source_density_le}
     \leanok
-    \uses{def:peps_source_gate_root,def:compression_distributed_links,
-        def:compression_operator_alphabets}
+    \uses{def:peps_source_gate_root,def:compression_distributed_links,def:compression_operator_alphabets}
     For $k,M\in\N$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, if
     $|\Xi_g|\le M$ for all $g\in G$, then every constructed link $e$ satisfies
     $|D_e|\le\max\{M^2,k\}$.
@@ -60,8 +58,7 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
     \label{thm:peps_source_density_link_locality}
     \lean{QuantumCircuit.Party.SourceCircuit.distributedLinkParties_source_subset}
     \leanok
-    \uses{def:peps_source_gate_root,def:compression_distributed_links,
-        def:compression_distributed_link_parties}
+    \uses{def:peps_source_gate_root,def:compression_distributed_links,def:compression_distributed_link_parties}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, every constructed
     link $e$ satisfies $\partial e\subseteq C_{g(e)}$.
     % Source: 04-compression.tex, lines 581--588.
@@ -102,8 +99,7 @@ gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
     \label{thm:peps_actual_density_link_incidence}
     \lean{QuantumCircuit.Party.SourceCircuit.card_incidentSourceDensityLinks_le}
     \leanok
-    \uses{def:peps_source_gate_root,def:compression_distributed_links,
-        thm:peps_nonempty_gate_participation}
+    \uses{def:peps_source_gate_root,def:compression_distributed_links,thm:peps_nonempty_gate_participation}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, if $b\in\N$,
     $|C_g|\le b$ for all $g\in G$, and every party participates in at most $b$
     gate occurrences, then at most $2b(b-1)$ density-network links are incident
@@ -113,8 +109,7 @@ gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_gate_root_mem,thm:peps_nonempty_gate_participation,
-        thm:compression_distributed_incidence_bound}
+    \uses{thm:peps_source_gate_root_mem,thm:peps_nonempty_gate_participation,thm:compression_distributed_incidence_bound}
     By Lemmas~\ref{thm:peps_source_gate_root_mem}
     and~\ref{thm:peps_nonempty_gate_participation}, $r_g\in C_g$ and
     $|\{g\in G:p\in C_g\}|\le b$, so
@@ -134,9 +129,7 @@ on private register dimensions.
     \label{thm:peps_approximate_sampled_distributed_error}
     \lean{QuantumCircuit.Party.EffectCircuit.exists_sampled_contractedOperator_approximate_error_le}
     \leanok
-    \uses{def:peps_approximate_original_operators,
-        thm:peps_approximate_source_sample,
-        thm:peps_actual_sampled_distributed_contraction}
+    \uses{def:peps_approximate_original_operators,thm:peps_approximate_source_sample,thm:peps_actual_sampled_distributed_contraction}
     Let $P$ be a finite party set listed without repetition, with
     finite-dimensional initial memories $H_p$, unit vectors $x_p\in H_p$, input
     $\psi=\bigotimes_{p\in P}x_p$, contraction gates $G_g$, physical dimensions
@@ -178,8 +171,7 @@ on private register dimensions.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_approximate_source_sample,
-        thm:peps_actual_sampled_distributed_contraction}
+    \uses{thm:peps_approximate_source_sample,thm:peps_actual_sampled_distributed_contraction}
     Lemma~\ref{thm:peps_approximate_source_sample}
     provides normalized Schmidt data and a sample $\omega$ whose sampled
     physical operator $\widehat\rho$ satisfies
@@ -219,9 +211,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     \label{thm:peps_actual_physicalFirst_density_polynomial}
     \lean{QuantumCircuit.Party.OriginalCircuit.card_physicalFirstDensityAlphabet_le_power}
     \leanok
-    \uses{thm:peps_actual_density_alphabet_power,
-        thm:peps_physical_first_branch_polynomial,
-        thm:peps_physical_first_sample_polynomial}
+    \uses{thm:peps_actual_density_alphabet_power,thm:peps_physical_first_branch_polynomial,thm:peps_physical_first_sample_polynomial}
     Let $W:a\to H_{\mathrm{phys}}\otimes H_{\mathrm{priv}}$ be an original
     chronological circuit with at most $N$ nonprivate gates, at most $b$
     participants per gate, at most $K$ monomials per gate, at most $r$ pair
@@ -245,9 +235,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_actual_density_alphabet_power,
-        thm:peps_physical_first_branch_polynomial,
-        thm:peps_physical_first_sample_polynomial}
+    \uses{thm:peps_actual_density_alphabet_power,thm:peps_physical_first_branch_polynomial,thm:peps_physical_first_sample_polynomial}
     Lemmas~\ref{thm:peps_physical_first_branch_polynomial}
     and~\ref{thm:peps_physical_first_sample_polynomial} give
     $|\Xi_g|\leq C_b L^{u+2r(n+s+p)}$ and $k\leq C_k L^{2(n+4\ell s+4d+p)}$,
@@ -259,9 +247,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     \label{thm:peps_actual_physicalFirst_density_incidence}
     \lean{QuantumCircuit.Party.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le}
     \leanok
-    \uses{thm:peps_actual_density_link_incidence,
-        def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
-        thm:peps_source_only_resources}
+    \uses{thm:peps_actual_density_link_incidence,def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,thm:peps_source_only_resources}
     For an original circuit $W$ with expansion bound $(r,S)$, gate arity at most
     $b$, and party participation at most $b$, the physical-first source
     replacement $R$ at any tolerance $\delta>0$ in
@@ -272,9 +258,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_actual_density_link_incidence,
-        def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
-        thm:peps_source_only_resources}
+    \uses{thm:peps_actual_density_link_incidence,def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,thm:peps_source_only_resources}
     By Definition~\ref{def:peps_physical_first_original_locality} and
     Lemmas~\ref{thm:peps_physical_first_original_locality}
     and~\ref{thm:peps_source_only_resources},
@@ -287,8 +271,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
     \label{thm:peps_actual_physicalFirst_density_locality}
     \lean{QuantumCircuit.Party.OriginalCircuit.exists_original_gate_of_physicalFirst_density_link}
     \leanok
-    \uses{thm:peps_source_density_link_locality,
-        def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
+    \uses{thm:peps_source_density_link_locality,def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
     For $W,R,\delta$ as in Lemma~\ref{thm:peps_actual_physicalFirst_density_incidence},
     any two parties incident to a density-network link of $R$ in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
@@ -298,8 +281,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_density_link_locality,
-        def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
+    \uses{thm:peps_source_density_link_locality,def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
     By Lemma~\ref{thm:peps_source_density_link_locality}, $\partial e\subseteq C_{g(e)}$
     in $R$, and the occurrence bijection of
     Definition~\ref{def:peps_physical_first_original_locality} and

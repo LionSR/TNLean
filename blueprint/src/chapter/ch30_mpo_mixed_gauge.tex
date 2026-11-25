@@ -156,9 +156,7 @@ class, and specializes the coefficients to scalar symbols for groups.
         MPOTensor.singleBlockLambda_ne_zero,
         MPOTensor.fusionFMatrix_eq_singleBlockLambda,
         MPOTensor.exists_fusionFMatrix_eq_one_of_singleBlock}
-    \uses{def:glm_single_block_lambda,thm:glm_unblocked_mixed_pentagon,
-        thm:glm_boundary_action_l_exists,lem:glm_mixed_gauge_coefficients,
-        lem:glm_mixed_gauge_scalar}
+    \uses{def:glm_single_block_lambda,thm:glm_unblocked_mixed_pentagon,thm:glm_boundary_action_l_exists,lem:glm_mixed_gauge_coefficients,lem:glm_mixed_gauge_scalar}
     Let the operator blocks be individually injective, have positive bond
     dimensions, and have no scalar-gauge duplicates. Let the state have a
     single injective block $x$ of positive bond dimension with $M_{a,x}^x=1$
@@ -224,8 +222,7 @@ class, and specializes the coefficients to scalar symbols for groups.
     \leanok
     \label{lem:glm_group_coupled_pentagon}
     \lean{MPOTensor.groupLScalar_ne_zero,MPOTensor.groupFScalar_mul_groupLScalar}
-    \uses{def:glm_group_scalar_symbols,thm:glm_unblocked_mixed_pentagon,
-        thm:glm_boundary_action_l_exists}
+    \uses{def:glm_group_scalar_symbols,thm:glm_unblocked_mixed_pentagon,thm:glm_boundary_action_l_exists}
     Under the hypotheses of the coupled pentagon, with injective,
     positive-dimensional, scalar-gauge-separated operator and state blocks,
     every $L^x_{g,h}$ is nonzero and

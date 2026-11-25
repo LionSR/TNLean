@@ -16,7 +16,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         ProjectiveRepresentation.circlePhaseInclusion_eq,
         ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem}
     \leanok
-    \uses{def:projective_rep, def:cohomologous_to}
+    \uses{def:projective_rep,def:cohomologous_to}
     Multiplying each matrix $V_g$ of a projective representation with factor system
     $\omega$ by a scalar $\lambda_g\neq0$ gives a projective representation with
     factor system $\lambda_g\lambda_h\lambda_{gh}^{-1}\omega(g,h)$.  Consequently, let
@@ -54,8 +54,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         MPSTensor.sptFixedPointAction_eq_of_forall_eq_smul,
         MPSTensor.exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint}
     \leanok
-    \uses{thm:spt_unitary_rephasing, thm:spt_direct_sum_fixed_point_path,
-        def:spt_fixed_point_tensor}
+    \uses{thm:spt_unitary_rephasing,thm:spt_direct_sum_fixed_point_path,def:spt_fixed_point_tensor}
     Let $D_0,D_1>0$, and let $V^0$ and $V^1$ be unitary projective
     representations with cohomologous factor systems $\omega_0$ and
     $\omega_1$. There is a unitary projective representation $V^{0\prime}$
@@ -161,8 +160,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_local_matrix_conjugator,
-        thm:spt_continuous_inverse_coefficients}
+    \uses{thm:spt_local_matrix_conjugator,thm:spt_continuous_inverse_coefficients}
     Construct the continuous inner action from inverse tensor
     coefficients, then apply the matrix-unit conjugator formula.
     Exact on-site symmetry gives pointwise gauge equivalence by the
@@ -342,9 +340,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_common_physical_endpoints,
-        thm:spt_spectator_bond_transport,
-        thm:spt_normalized_bond_local_symmetry}
+    \uses{thm:spt_common_physical_endpoints,thm:spt_spectator_bond_transport,thm:spt_normalized_bond_local_symmetry}
     The enlarged local term is
     $I-Q^{\otimes2}(I-h)Q^{\otimes2\dagger}$, where $Q$ includes the active
     physical summand. Resolving each site into the active summand and its
@@ -497,7 +493,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         MPSTensor.ExactMPSGroundPath.of_supported_isometric_bond_intertwiner,
         MPSTensor.ExactMPSGroundPath.supportedBondLift}
     \leanok
-    \uses{def:spt_supported_bond_lift, def:spt_exact_mps_gapped_phase}
+    \uses{def:spt_supported_bond_lift,def:spt_exact_mps_gapped_phase}
     Suppose $T^iV=VA_0^i$ and $VV^\dagger T^i=T^i$ for every letter.
     The supported lift satisfies $B_0=T$, depends continuously on a
     continuous family $A_\gamma$, and has exactly the same periodic
@@ -541,8 +537,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_common_physical_fixed_point_ground_path,
-        def:spt_exact_ground_path_concatenation}
+    \uses{thm:spt_common_physical_fixed_point_ground_path,def:spt_exact_ground_path_concatenation}
     If $0\le A\le B$ and $\ker A\subseteq\ker B$, positivity implies
     equality of the two kernels. Every ordered affine combination has
     the same kernel and least energy zero. Keep its MPS tensor constant.
@@ -574,9 +569,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_common_physical_polar_endpoints,
-        thm:spt_common_physical_fixed_point_path,
-        thm:spt_unitary_factor_alignment}
+    \uses{thm:spt_common_physical_polar_endpoints,thm:spt_common_physical_fixed_point_path,thm:spt_unitary_factor_alignment}
     A unit-circle rephasing aligns the factors and cancels out
     of adjoint tensor covariance. The two common physical polar paths
     therefore reach the prescribed included fixed-point tensors.
@@ -685,7 +678,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \lean{MPSTensor.commonPhysicalLeftPolarExactMPSGroundPath,
         MPSTensor.commonPhysicalRightPolarExactMPSGroundPath}
     \leanok
-    \uses{def:spt_common_physical_polar_paths, def:spt_supported_bond_lift}
+    \uses{def:spt_common_physical_polar_paths,def:spt_supported_bond_lift}
     The two common-space polar parent paths have exact MPS ground
     realizations in the common bond space of dimension $D_0+D_1$.
     For endpoint $j$, include the scaled polar tensor family by the
@@ -694,9 +687,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{thm:spt_canonical_injective_ground_path,
-        thm:spt_supported_bond_lift,
-        thm:spt_common_physical_polar_endpoints}
+    \uses{thm:spt_canonical_injective_ground_path,thm:spt_supported_bond_lift,thm:spt_common_physical_polar_endpoints}
     The small-bond polar tensors are continuous and one-site injective,
     and their canonical parents are the prescribed physical interactions.
     The weighted endpoint satisfies the bond intertwining and row-support
@@ -741,11 +732,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{thm:spt_supported_bond_lift,
-        thm:spt_common_physical_polar_ground_endpoints,
-        thm:spt_common_physical_canonical_ground_path,
-        thm:spt_common_physical_injective_path,
-        def:spt_exact_ground_reverse_three_stage}
+    \uses{thm:spt_supported_bond_lift,thm:spt_common_physical_polar_ground_endpoints,thm:spt_common_physical_canonical_ground_path,thm:spt_common_physical_injective_path,def:spt_exact_ground_reverse_three_stage}
     The supported bond lifts preserve the polar periodic vectors and
     give exactly the weighted fixed-point endpoint tensors. They
     therefore join the canonical fixed-point ground realization.
@@ -773,12 +760,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:spt_common_physical_injective_ground_path,
-        thm:spt_common_physical_endpoint_orthogonality,
-        thm:spt_exact_phase_one_site_path,
-        thm:spt_unitary_factor_alignment,
-        thm:spt_exact_phase_unitary_preparation,
-        thm:spt_exact_phase_gauge_invariance}
+    \uses{def:spt_common_physical_injective_ground_path,thm:spt_common_physical_endpoint_orthogonality,thm:spt_exact_phase_one_site_path,thm:spt_unitary_factor_alignment,thm:spt_exact_phase_unitary_preparation,thm:spt_exact_phase_gauge_invariance}
     For unitary virtual actions with a common factor, use the constructed
     common-space path and its exact ground realization. The physical
     inclusions are isometric, orthogonal, and intertwine the original
@@ -837,9 +819,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_physical_path_chain_character,
-        thm:spt_character_from_positive_lengths,
-        thm:spt_physical_character_twist}
+    \uses{thm:spt_physical_path_chain_character,thm:spt_character_from_positive_lengths,thm:spt_physical_character_twist}
     Equality of nonzero vector rays transfers symmetry eigenvalues to
     each pointwise minimal injective representative. The characters
     $c_2$ and $c_3$ of the fixed finite-chain ground lines are independent
@@ -872,10 +852,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_physical_path_chain_character,
-        thm:spt_character_from_positive_lengths,
-        thm:spt_physical_character_twist,
-        thm:spt_tensor_path_class_invariance}
+    \uses{thm:spt_physical_path_chain_character,thm:spt_character_from_positive_lengths,thm:spt_physical_character_twist,thm:spt_tensor_path_class_invariance}
     The chain characters are independent of the path parameter.
     Their ratio $c_3/c_2$ gives one site character for every tensor.
     Remove it from the physical action, lift the resulting exact tensor
@@ -899,7 +876,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         MPSTensor.SamePositiveMpvRay.rank_twoSiteSchmidtMatrix_eq,
         MPSTensor.ExactMPSGroundPath.eventually_minimalBondDimension_ge}
     \leanok
-    \uses{def:spt_two_site_schmidt_matrix, def:spt_exact_mps_gapped_phase}
+    \uses{def:spt_two_site_schmidt_matrix,def:spt_exact_mps_gapped_phase}
     A one-site injective tensor of bond dimension $D$ has
     $\operatorname{rank}C_2(A)=D^2$. Along a continuous exact MPS ground
     realization, suppose an injective representative at $t_0$ has
@@ -986,8 +963,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_finite_two_site_trace_quotient,
-        thm:spt_finite_three_site_trace_algebra}
+    \uses{thm:spt_finite_two_site_trace_quotient,thm:spt_finite_three_site_trace_algebra}
     The dimension equality identifies the matrix spaces.
     At positive bond dimension, the normalized map $(c_2/c_3)T$ is
     a nonzero multiplicative linear endomorphism. Skolem--Noether represents it by conjugation with an
@@ -1041,8 +1017,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         Matrix.exists_open_continuous_traceQuotientProductCoordinates,
         Matrix.exists_local_continuous_traceQuotientProductCoordinates}
     \leanok
-    \uses{def:spt_trace_quotient_product_coordinates,
-        thm:spt_trace_quotient_fixed_section}
+    \uses{def:spt_trace_quotient_product_coordinates,thm:spt_trace_quotient_fixed_section}
     Suppose $G(t)$ has constant rank $r$, and for each fixed section
     $F$ the contracted columns $R_F(t)$ depend continuously on $t$.
     Then $F$ can be chosen so that the multiplication coefficients
@@ -1107,8 +1082,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         Matrix.traceQuotientProductCoordinates_algebraRecovery,
         Matrix.traceQuotientProductCoordinates_algebraRecovery_of_two_three_trace_eq}
     \leanok
-    \uses{def:spt_trace_quotient_product_coordinates,
-        thm:spt_trace_quotient_contraction}
+    \uses{def:spt_trace_quotient_product_coordinates,thm:spt_trace_quotient_contraction}
     Suppose $r=D^2$, $GF$ is injective, and the preceding trace
     proportionalities hold with $\alpha_2\alpha_3\ne0$.
     Then $Q:\C^r\to M_D(\C)$ is a linear isomorphism and
@@ -1140,8 +1114,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_trace_quotient_continuous_algebra}
     \lean{Matrix.exists_local_continuous_traceQuotientAlgebra}
     \leanok
-    \uses{thm:spt_trace_quotient_continuous_product,
-        thm:spt_trace_quotient_matrix_algebra_recovery}
+    \uses{thm:spt_trace_quotient_continuous_product,thm:spt_trace_quotient_matrix_algebra_recovery}
     Let $B(t)$ be continuous in a fixed ambient bond dimension.
     Suppose at each parameter it has a one-site injective representative
     $A(t)$ whose two- and three-site traces are proportional to those
@@ -1315,8 +1288,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_continuous_projection_frame,
-        thm:spt_invariant_bond_compression}
+    \uses{thm:spt_continuous_projection_frame,thm:spt_invariant_bond_compression}
     With $J(t)J(t)^\dagger=P(t)$, compress by
     $J(t)^\dagger V_g(t)J(t)$. Invariance inserts the projection between
     products, preserving the projective multiplication law and unitarity.
@@ -1351,8 +1323,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_global_virtual_gauge,
-        thm:spt_virtual_path_class_invariance}
+    \uses{thm:spt_global_virtual_gauge,thm:spt_virtual_path_class_invariance}
     Apply interval lifting separately to each symmetry twist.
     Uniqueness of the injective bond gauge up to scalar gives the
     projective multiplication law, using inverse-group indexing for
@@ -1461,8 +1432,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_continuous_spectral_corner,
-        thm:spt_continuous_projection_frame}
+    \uses{thm:spt_continuous_spectral_corner,thm:spt_continuous_projection_frame}
     The real spectrum at $t_0$ is finite, so its nonzero positive values
     have a positive lower bound. Choose both cutoffs below that bound.
     Upper hemicontinuity of the spectrum preserves the intervening gap
@@ -1542,9 +1512,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_local_spectral_support,
-        thm:spt_supported_frame_comparison,
-        thm:spt_local_invariant_compression}
+    \uses{thm:spt_local_spectral_support,thm:spt_supported_frame_comparison,thm:spt_local_invariant_compression}
     Retain the separated spectral corner whose base value is the full
     support of $\sigma(t_0)$, and extend $K(t_0)$ to its continuous
     isometric frame $J(t)$. This corner lies in the support of
@@ -1574,8 +1542,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_invariant_bond_compression,
-        thm:spt_tensor_path_class_invariance}
+    \uses{thm:spt_invariant_bond_compression,thm:spt_tensor_path_class_invariance}
     Commutation with $JJ^\dagger$ gives
     $J^\dagger X=(J^\dagger XJ)J^\dagger$ and
     $X^\dagger J=J(J^\dagger XJ)^\dagger$. Hence conjugation descends
@@ -1675,12 +1642,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_stationary_density_compression,
-        thm:spt_unique_stationary_symmetry,
-        thm:spt_local_stationary_density,
-        thm:spt_local_spectral_support,
-        thm:spt_supported_frame_comparison,
-        thm:spt_local_invariant_compression}
+    \uses{thm:spt_stationary_density_compression,thm:spt_unique_stationary_symmetry,thm:spt_local_stationary_density,thm:spt_local_spectral_support,thm:spt_supported_frame_comparison,thm:spt_local_invariant_compression}
     Compression preserves stationary uniqueness. Exact physical covariance
     then forces each virtual action to commute with the compressed
     density. Apply the spectral-corner argument on the open neighborhood.
@@ -1762,9 +1724,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_local_invariant_compression,
-        thm:spt_continuous_right_perron_data,
-        thm:unital_gauge_of_pd_fixed_point}
+    \uses{thm:spt_local_invariant_compression,thm:spt_continuous_right_perron_data,thm:unital_gauge_of_pd_fixed_point}
     Injectivity persists locally. Choose the normalized Perron data
     there. Positive square roots and their inverses are continuous on
     the positive definite matrices, so~(\ref{eq:spt_continuous_unital_tensor})
@@ -1793,9 +1753,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spt_continuous_unital_normalization,
-        thm:injective_irreducible,
-        thm:spt_local_stationary_density}
+    \uses{thm:spt_continuous_unital_normalization,thm:injective_irreducible,thm:spt_local_stationary_density}
     Gauge equivalence and nonzero scalar normalization preserve
     injectivity. For the unital base tensor, the adjoint channel is
     trace preserving and irreducible. Its normalized stationary density
@@ -1910,8 +1868,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     in addition $P(t)C(t)=C(t)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spt_trace_quotient_fixed_section, thm:spt_gram_left_inverse,
-        thm:spt_idempotent_rank}
+    \uses{thm:spt_trace_quotient_fixed_section,thm:spt_gram_left_inverse,thm:spt_idempotent_rank}
     Choose a section at the base parameter. Injectivity persists nearby.
     Equality of dimensions identifies its range with the matrix range.
     Apply the Gram left inverse and the preceding local rank result.
@@ -1947,9 +1904,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     tensors or algebra identifications is assumed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spt_trace_quotient_continuous_unit,
-        thm:spt_continuous_nearby_idempotent,
-        thm:spt_primitive_left_ideal_dimension, thm:spt_idempotent_rank}
+    \uses{thm:spt_trace_quotient_continuous_unit,thm:spt_continuous_nearby_idempotent,thm:spt_primitive_left_ideal_dimension,thm:spt_idempotent_rank}
     In the base matrix algebra choose a diagonal matrix unit and
     pass it to the quotient. Keep its coordinates fixed and
     correct its left-regular action to a nearby idempotent.
@@ -2015,8 +1970,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     letters are gauge-equivalent to $\kappa A$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spt_gram_left_inverse, thm:spt_left_ideal_frame_realization,
-        thm:spt_trace_quotient_contraction, thm:trace_pairing_injective}
+    \uses{thm:spt_gram_left_inverse,thm:spt_left_ideal_frame_realization,thm:spt_trace_quotient_contraction,thm:trace_pairing_injective}
     Injectivity of the minimal tensor makes its trace pairing
     nondegenerate. The Gram left inverse recovers the unique letter
     coordinates. Apply the preceding inner-conjugacy statement.
@@ -2027,8 +1981,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \lean{Matrix.continuousOn_leftIdealFrameAction,
         Matrix.continuousOn_traceQuotientLetterCoordinates}
     \leanok
-    \uses{def:spt_left_ideal_frame_action,
-        def:spt_trace_quotient_letter_coordinates}
+    \uses{def:spt_left_ideal_frame_action,def:spt_trace_quotient_letter_coordinates}
     Continuous multiplication coefficients, frames, left inverses,
     and letter coordinates give continuous represented letters.
     The letter coordinates are continuous wherever the fixed section
@@ -2078,11 +2031,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     the ambient tensor's longer periodic rays.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spt_continuous_trace_quotient_primitive,
-        thm:spt_continuous_idempotent_frame,
-        thm:spt_left_ideal_frame_realization,
-        thm:spt_trace_quotient_letter_recovery,
-        thm:spt_continuous_left_ideal_letters}
+    \uses{thm:spt_continuous_trace_quotient_primitive,thm:spt_continuous_idempotent_frame,thm:spt_left_ideal_frame_realization,thm:spt_trace_quotient_letter_recovery,thm:spt_continuous_left_ideal_letters}
     Recover the continuous quotient product and unit, choose a
     continuous primitive left ideal, and construct a continuous frame
     for that ideal. Left multiplication in the frame represents
@@ -2102,9 +2051,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     given pointwise representatives is assumed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spt_positive_ray_finite_traces,
-        thm:spt_continuous_minimal_finite_trace_realization,
-        thm:spt_exact_phase_gauge_invariance}
+    \uses{thm:spt_positive_ray_finite_traces,thm:spt_continuous_minimal_finite_trace_realization,thm:spt_exact_phase_gauge_invariance}
     Obtain nonzero two-site and three-site trace factors from the
     full ray equality. Apply the preceding reconstruction.
     Nonzero scalar multiplication and bond conjugation preserve
@@ -2125,9 +2072,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \cite{gap:spc11_spt_interpolation_upper_range}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:spt_continuous_minimal_ray_realization,
-        thm:spt_continuous_canonical_normalization,
-        thm:spt_exact_phase_gauge_invariance}
+    \uses{thm:spt_continuous_minimal_ray_realization,thm:spt_continuous_canonical_normalization,thm:spt_exact_phase_gauge_invariance}
     Apply continuous Perron normalization to the reconstructed family
     on a smaller neighborhood. Its scalar gauge preserves the full
     ray family. Restrict the continuous unital tensor and stationary

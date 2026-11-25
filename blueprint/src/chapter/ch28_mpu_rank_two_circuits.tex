@@ -164,9 +164,7 @@ removes the spectral conditioning hypothesis at every fixed bond bound.
     and depth $O(N^{1+\log_2 6})$ with the same auxiliary-space bound.
 \end{lemma}
 \begin{proof}
-    \uses{thm:mpu_schmidt_span_contraction,
-        thm:mpu_constant_branching_cost, lem:mpu_two_schmidt_sectors,
-        thm:mpu_two_sector_merging, thm:mpu_two_sector_cancellation}
+    \uses{thm:mpu_schmidt_span_contraction,thm:mpu_constant_branching_cost,lem:mpu_two_schmidt_sectors,thm:mpu_two_sector_merging,thm:mpu_two_sector_cancellation}
     At each balanced split the two-sector decomposition applies.
     A clean qubit records the eigenvalue of $R$ by a Hadamard,
     controlled $R$, and a second Hadamard, after which $A_0,A_1$ act conditioned
@@ -254,8 +252,7 @@ proof, rather than providing a circuit complexity lower bound.
     even one unitary element.
 \end{lemma}
 \begin{proof}
-    \uses{thm:mpu_spin_one_reflection,
-        thm:mpu_qubit_unitary_space_obstruction}
+    \uses{thm:mpu_spin_one_reflection,thm:mpu_qubit_unitary_space_obstruction}
     The four left factors $I,J_1,J_2,J_3$ are linearly independent,
     as are the four right factors $I,\sigma_1,\sigma_2,\sigma_3$.
     In the extension, replace the left identity coefficient by $D$
@@ -318,7 +315,7 @@ proof, rather than providing a circuit complexity lower bound.
     space at the first cut contains no unitary matrix.
 \end{lemma}
 \begin{proof}
-    \uses{thm:mpu_pauli_control_unitary, thm:mpu_pauli_control_space_obstruction}
+    \uses{thm:mpu_pauli_control_unitary,thm:mpu_pauli_control_space_obstruction}
     Let $q_0=e_1$, $q_1=e_2$, $q_2=e_3$,
     $q_3=(3e_1+4e_2)/5$, and
     $O=I-2\mathbf 1\mathbf 1^T/3$, with $\mathbf 1=(1,1,1)^T$.
@@ -666,9 +663,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_compact_affine_gram_slice,
-        thm:mpu_determinant_stationarity,
-        thm:mpu_dual_gram_metric_algebra}
+    \uses{thm:mpu_compact_affine_gram_slice,thm:mpu_determinant_stationarity,thm:mpu_dual_gram_metric_algebra}
     The compactness lemma gives a positive definite determinant
     maximizer $P_*$. Both signs of every affine
     tangent direction $H$ are feasible near $P_*$, so
@@ -843,8 +838,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_vectorized_density_isometry}
     \lean{MPUCircuit.vectorizedWeightedInterval_gram, MPUCircuit.vectorizedWeightedInterval_isometry_of_density_tests}
     \leanok
-    \uses{def:mpu_density_interval_grams,
-        def:mpu_vectorized_weighted_interval}
+    \uses{def:mpu_density_interval_grams,def:mpu_vectorized_weighted_interval}
     The vectorized map $V$ has Gram $V^\dagger V=K(L^\dagger L,RR^\dagger)$.
     Hence $V$ is an isometry if
     $\operatorname{Tr}(RR^\dagger\mathcal T_\rho(L^\dagger L))=1$
@@ -861,16 +855,14 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_affine_interval_isometry}
     \lean{MPUCircuit.intervalInputGram_eq_one_of_prefixGramAffineHull, MPUCircuit.vectorizedWeightedInterval_isometry_of_prefixGramAffineHull}
     \leanok
-    \uses{def:mpu_prefix_gram_affine_hull,
-        def:mpu_vectorized_weighted_interval}
+    \uses{def:mpu_prefix_gram_affine_hull,def:mpu_vectorized_weighted_interval}
     Suppose $P\in\mathcal C_F$ and $P,Q\succeq0$, with
     $\operatorname{Tr}(XQ)=1$ for every $X\in\mathcal C_{FA}$.
     The interval map with amplitudes $\sqrt P A_{ab}\sqrt Q$ is
     an isometry.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_prefix_affine_hull_transfer,
-        thm:mpu_vectorized_density_isometry}
+    \uses{thm:mpu_prefix_affine_hull_transfer,thm:mpu_vectorized_density_isometry}
     For every density matrix $\rho$, transfer membership gives
     $\mathcal T_\rho(P)\in\mathcal C_{FA}$, so its trace pairing
     with $Q$ is one, and the full density-test isometry identity
@@ -881,8 +873,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_two_cut_balanced_isometry}
     \lean{MPUCircuit.exists_balanced_prefix_metrics_interval_isometry}
     \leanok
-    \uses{def:mpu_prefix_gram_affine_hull,
-        def:mpu_dual_gram_metric, def:mpu_vectorized_weighted_interval}
+    \uses{def:mpu_prefix_gram_affine_hull,def:mpu_dual_gram_metric,def:mpu_vectorized_weighted_interval}
     Suppose the two affine spaces $\mathcal C_F$ and $\mathcal C_{FA}$
     each contain a positive definite matrix and each admit a positive
     definite trace normalizer. Their bond dimensions are $r,s\geq1$.
@@ -893,9 +884,7 @@ left multiplication, right vector $b$ and left functional the trace.
     $\sqrt P A_{ab}\sqrt{S^{-1}/s}$ is an isometry.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_affine_gram_balancing,
-        thm:mpu_affine_interval_isometry,
-        thm:mpu_prefix_gram_positivity}
+    \uses{thm:mpu_affine_gram_balancing,thm:mpu_affine_interval_isometry,thm:mpu_prefix_gram_positivity}
     Determinant balancing on both Hermitian affine spaces, combined
     with the earlier chosen metric and the later dual metric in
     the affine interval-isometry theorem, gives the balanced interval isometry.
@@ -918,7 +907,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_global_cap_gram_normalization}
     \lean{MPUPrefixGram.trace_prefixGram_mul_suffixGram, MPUPrefixGram.prefixGram_posSemidef, MPUPrefixGram.suffixGram_posSemidef, MPUPrefixGram.trace_prefixGram_mul_suffixGram_of_isIsometry, MPUPrefixGram.trace_prefixGram_mul_suffixGram_normalizedIdentity, MPUPrefixGram.prefixGram_eq_prefixInputGram}
     \leanok
-    \uses{def:mpu_finite_cut_cap_grams, def:mpu_density_interval_grams}
+    \uses{def:mpu_finite_cut_cap_grams,def:mpu_density_interval_grams}
     For arbitrary matrices $\rho,\tau$, one has
     \begin{align}
         \operatorname{Tr}(P_F(\rho)Q_G(\tau))
@@ -945,7 +934,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_minimal_cap_gram_witnesses}
     \lean{MPUPrefixGram.prefixGram_normalizedIdentity_posDef_of_span_eq_top, MPUPrefixGram.suffixGram_normalizedIdentity_posDef_of_span_eq_top, MPUPrefixGram.exists_posDef_prefixInputGram_normalizer_of_isIsometry, MPUPrefixGram.exists_posDef_mem_densityPrefixGrams_of_span_eq_top, MPUPrefixGram.exists_posDef_mem_prefixGramAffineHull_of_span_eq_top}
     \leanok
-    \uses{def:mpu_finite_cut_cap_grams, def:mpu_prefix_gram_affine_hull}
+    \uses{def:mpu_finite_cut_cap_grams,def:mpu_prefix_gram_affine_hull}
     Suppose the physical input spaces are nonzero. If the prefix rows
     span $\mathbb C^r$, their maximally mixed Gram is positive definite,
     providing a positive definite point in both $\mathcal S_F$ and
@@ -977,7 +966,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_factorization_reassociation}
     \lean{MPUCircuit.factorizedOperator_reassociate, MPUCircuit.factorizedOperator_isometry_reassociate}
     \leanok
-    \uses{def:mpu_three_part_factorization, def:mpu_finite_cut_cap_grams}
+    \uses{def:mpu_three_part_factorization,def:mpu_finite_cut_cap_grams}
     The operators obtained by contracting $(FA)G$ and $F(AG)$
     differ only by reassociation of their physical index triples.
     Global isometry is preserved by this reassociation.
@@ -992,15 +981,14 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_affine_normalizer_global_isometry}
     \lean{MPUCircuit.exists_posDef_prefixGramAffineHull_normalizer_of_isIsometry}
     \leanok
-    \uses{def:mpu_finite_cut_cap_grams, def:mpu_prefix_gram_affine_hull}
+    \uses{def:mpu_finite_cut_cap_grams,def:mpu_prefix_gram_affine_hull}
     Suppose $U=FG$ is globally isometric, its suffix input space is
     nonzero, and the suffix columns span the bond space. Then a
     positive definite matrix $Q$ satisfies
     $\operatorname{Tr}(XQ)=1$ for every $X\in\mathcal C_F$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_minimal_cap_gram_witnesses,
-        thm:mpu_real_affine_gram_identities}
+    \uses{thm:mpu_minimal_cap_gram_witnesses,thm:mpu_real_affine_gram_identities}
     Taking the maximally mixed suffix Gram and extending its physical
     trace normalization to the real affine hull gives the normalizer.
 \end{proof}
@@ -1009,8 +997,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_balanced_interval_global_isometry}
     \lean{MPUCircuit.exists_balanced_interval_isometry_of_factorizedOperator_isometry}
     \leanok
-    \uses{def:mpu_three_part_factorization, def:mpu_prefix_gram_affine_hull,
-        def:mpu_dual_gram_metric, def:mpu_vectorized_weighted_interval}
+    \uses{def:mpu_three_part_factorization,def:mpu_prefix_gram_affine_hull,def:mpu_dual_gram_metric,def:mpu_vectorized_weighted_interval}
     Let $U=FAG$ be globally isometric, with nonzero physical input
     spaces and bond dimensions $r,s\geq1$. Suppose the rows of $F$
     and $FA$, and the columns of $AG$ and $G$, span their respective
@@ -1021,10 +1008,7 @@ left multiplication, right vector $b$ and left functional the trace.
     with amplitudes $\sqrt P A_{cd}\sqrt{S^{-1}/s}$ is an isometry.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_factorization_reassociation,
-        thm:mpu_affine_normalizer_global_isometry,
-        thm:mpu_minimal_cap_gram_witnesses,
-        thm:mpu_two_cut_balanced_isometry}
+    \uses{thm:mpu_factorization_reassociation,thm:mpu_affine_normalizer_global_isometry,thm:mpu_minimal_cap_gram_witnesses,thm:mpu_two_cut_balanced_isometry}
     Global normalization and the spanning criterion at both
     cuts yield positive definite normalizers and positive
     definite points in both affine spaces, to which the two-cut
@@ -1069,8 +1053,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_balanced_interval_minimal_cut_ranks}
     \lean{MPUCircuit.exists_balanced_interval_isometry_of_coefficientFlattening_ranks}
     \leanok
-    \uses{def:mpu_physical_coefficient_flattenings,
-        thm:mpu_balanced_interval_global_isometry}
+    \uses{def:mpu_physical_coefficient_flattenings,thm:mpu_balanced_interval_global_isometry}
     Let $FAG$ be globally isometric, with nonzero physical input
     spaces and virtual dimensions $r,s\geq1$. If its two bounding
     physical cut matrices have ranks $r,s$, then the balanced
@@ -1079,8 +1062,7 @@ left multiplication, right vector $b$ and left functional the trace.
     Lemma~\ref{thm:mpu_balanced_interval_global_isometry} exist.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_minimal_cut_ranks_spanning_caps,
-        thm:mpu_balanced_interval_global_isometry}
+    \uses{thm:mpu_minimal_cut_ranks_spanning_caps,thm:mpu_balanced_interval_global_isometry}
     Derive the four spanning conditions from the two rank equalities,
     and apply the global-isometry result.
 \end{proof}
@@ -1089,9 +1071,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_simultaneous_balanced_cut_metrics}
     \lean{MPUCircuit.exists_balanced_prefix_metric_of_factorizedOperator_isometry, MPUCircuit.exists_simultaneous_balanced_prefix_metrics_of_factorizedOperator_isometries, MPUCircuit.exists_simultaneous_balanced_prefix_metrics_of_coefficientFlattening_ranks}
     \leanok
-    \uses{thm:mpu_affine_normalizer_global_isometry,
-        thm:mpu_minimal_cap_gram_witnesses,
-        thm:mpu_affine_gram_balancing}
+    \uses{thm:mpu_affine_normalizer_global_isometry,thm:mpu_minimal_cap_gram_witnesses,thm:mpu_affine_gram_balancing}
     Consider an indexed family of globally isometric two-part
     factorizations $F_jG_j$ with spanning prefix rows and suffix
     columns. The physical spaces and positive bond dimensions $r_j$
@@ -1127,8 +1107,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_endpoint_gram_normalization}
     \lean{MPUCircuit.intervalInputGram_scalar_bonds, MPUCircuit.prefixInputGram_eq_trace_smul_one_of_isIsometry, MPUCircuit.densityPrefixGrams_eq_singleton_one_of_isIsometry, MPUCircuit.prefixGramAffineHull_eq_singleton_one_of_isIsometry, MPUCircuit.emptyPrefixCap_isIsometry, MPUCircuit.emptyPrefixCap_prefixGramAffineHull, MPUCircuit.dualGramMetric_one_of_card_eq_one, MPUCircuit.dualGramMetric_one_unit}
     \leanok
-    \uses{def:mpu_scalar_endpoint_caps, def:mpu_prefix_gram_affine_hull,
-        def:mpu_dual_gram_metric}
+    \uses{def:mpu_scalar_endpoint_caps,def:mpu_prefix_gram_affine_hull,def:mpu_dual_gram_metric}
     If the physical matrix of a scalar-bond prefix is an isometry,
     then $P_F(\rho)=\operatorname{Tr}(\rho)I$ for every complex
     input matrix $\rho$. For a nonzero input space, both its
@@ -1162,8 +1141,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_balanced_merger_success_amplitude}
     \lean{MPUCircuit.normalizedBalancedGramContraction_vec_inner, MPUCircuit.weighted_interval_normalized_contraction, MPUCircuit.contractedWeightedIntervals_balanced, MPUCircuit.contractedWeightedIntervals_balanced_gram}
     \leanok
-    \uses{def:mpu_normalized_interval_merger,
-        def:mpu_vectorized_weighted_interval}
+    \uses{def:mpu_normalized_interval_merger,def:mpu_vectorized_weighted_interval}
     The joining contraction $C$ has squared Hilbert--Schmidt norm one.
     For arbitrary outside weights $L,R$ and adjacent coefficients
     $A_{ab},B_{cd}$,
@@ -1308,8 +1286,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_uniform_postselection_amplification}
     \lean{Matrix.postselectionAmplificationStep_mem_unitaryGroup, Matrix.amplificationPlane_postselection_eq_self, Matrix.postselectionAmplificationStep_pow_mul, Matrix.postselectionAmplificationStep_pow_eq_success, Matrix.projection_mul_eq_self_of_uniform_probability_one}
     \leanok
-    \uses{def:mpu_uniform_postselection,
-        def:mpu_exact_subspace_amplification}
+    \uses{def:mpu_uniform_postselection,def:mpu_exact_subspace_amplification}
     Suppose $V^\dagger V=I$ and $P$ is an orthogonal projection.
     The operator $Q$ is unitary on the entire output space.
     If $V^\dagger PV=\sin^2\theta\,I$ with $0<\theta<\pi/2$,
@@ -1322,9 +1299,7 @@ left multiplication, right vector $b$ and left functional the trace.
     If instead $V^\dagger PV=I$, then already $PV=V$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_amplification_reflections,
-        thm:mpu_exact_subspace_amplification,
-        thm:mpu_uniform_postselection_decomposition}
+    \uses{thm:mpu_amplification_reflections,thm:mpu_exact_subspace_amplification,thm:mpu_uniform_postselection_decomposition}
     Derive the orthogonal isometric decomposition. In the first
     quadrant, $\sqrt{1-\sin^2\theta}=\cos\theta$, so it is the
     initial amplification plane, where the rotation identities apply.
@@ -1447,8 +1422,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_minimal_cut_coordinate_reconstruction}
     \lean{MPSPreparation.exists_cutBasisFamily_with_endpoints, MPSPreparation.cutEvaluationMatrix_apply, MPSPreparation.cutEvaluationMap_step, MPSPreparation.cutEvaluationMatrix_step, MPSPreparation.cutEvaluationMatrix_eq_initial_mul_eval, MPSPreparation.initialCutEvaluation_row, MPSPreparation.initialCutEvaluation_mul_apply, MPSPreparation.cutPrefixChain_eval_entry, MPSPreparation.minimalCutChain_coeff}
     \leanok
-    \uses{def:mpu_minimal_cut_coordinate_chain,
-        thm:mpu_padded_bond_products}
+    \uses{def:mpu_minimal_cut_coordinate_chain,thm:mpu_padded_bond_products}
     For a nonzero tensor of positive length, the endpoint bases can
     be chosen as $1$ and $\psi$. Successive slice matrices reconstruct
     prefix evaluation. Their full product between the zero endpoint
@@ -1495,8 +1469,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_minimal_cut_factors}
     \lean{MPSPreparation.cutCoefficientMatrix_eq_prefix_mul_suffix, MPSPreparation.cutPrefixMatrix_rank, MPSPreparation.cutSuffixMatrix_rank, MPSPreparation.cutPrefixMatrix_rows_and_cutSuffixMatrix_cols_span, MPSPreparation.cutPrefixMatrix_step, MPSPreparation.cutSlice_column, MPSPreparation.cutSuffixMatrix_step, MPSPreparation.minimalCutChain_cutCoefficientMatrix_factorization, MPSPreparation.cutPrefixMatrix_zero, MPSPreparation.cutSuffixMatrix_last, MPSPreparation.exists_obcChainTensor_minimal_factorizations}
     \leanok
-    \uses{def:mpu_minimal_cut_factors,
-        thm:mpu_minimal_finite_chain_representation}
+    \uses{def:mpu_minimal_cut_factors,thm:mpu_minimal_finite_chain_representation}
     At every cut, $C_k=F_kG_k$ and
     $\operatorname{rank}F_k=\operatorname{rank}G_k=r_k$.
     The prefix rows and suffix columns both span the bond space.
@@ -1538,9 +1511,7 @@ left multiplication, right vector $b$ and left functional the trace.
         QuantumCircuit.isGateProduct_zeroConjunctionStep,
         QuantumCircuit.isGateProduct_zeroConjunctionPerm}
     \leanok
-    \uses{def:mpu_reversible_zero_conjunction,
-        thm:mpu_quantitative_unitary_synthesis,
-        thm:mpu_arbitrary_circuit_placement}
+    \uses{def:mpu_reversible_zero_conjunction,thm:mpu_quantitative_unitary_synthesis,thm:mpu_arbitrary_circuit_placement}
     For $d\geq2$ and every logical configuration $x$, the conjunction
     keeps $x$ and writes in temporary coordinate $j$ whether its
     first $j+1$ data coordinates are all zero. Each step acts on
@@ -1577,8 +1548,7 @@ left multiplication, right vector $b$ and left functional the trace.
         QuantumCircuit.zeroRegisterReflection_eq_diagonal,
         QuantumCircuit.zeroRegisterReflection_apply_clean}
     \leanok
-    \uses{def:mpu_clean_zero_register_reflection,
-        thm:mpu_reversible_zero_conjunction}
+    \uses{def:mpu_clean_zero_register_reflection,thm:mpu_reversible_zero_conjunction}
     Let the local dimension satisfy $d\geq2$.
     The constructed circuit is unitary on the full register and,
     for every logical input, returns the temporary register to zero
@@ -1674,9 +1644,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_normalized_bond_dilation}
     \lean{MPUCircuit.normalizedBondDilation_mem_unitaryGroup, MPUCircuit.normalizedBondReset_mul_conjTranspose_mul, MPUCircuit.normalizedBondDilation_mul_fromRows, MPUCircuit.normalizedBondDilation_first_branch}
     \leanok
-    \uses{def:mpu_normalized_bond_dilation,
-        thm:mpu_normalized_row_reset,
-        thm:mpu_partial_isometry_dilation}
+    \uses{def:mpu_normalized_bond_dilation,thm:mpu_normalized_row_reset,thm:mpu_partial_isometry_dilation}
     A positive definite balanced metric gives a unitary bond dilation.
     On a clean flag input, its first output branch applies exactly
     the normalized contraction and resets the bond pair to the
@@ -1750,9 +1718,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_exact_uniform_merging}
     \lean{Matrix.postselectionAmplificationStep_pow_eq_first_branch, MPUCircuit.mergingAttenuation_pos_le_one, Matrix.postselectionSuccess_attenuatedIsometry_eq_first_branch, Matrix.exists_exact_uniform_merging}
     \leanok
-    \uses{def:mpu_exact_uniform_merging,
-        thm:mpu_uniform_success_attenuation,
-        thm:mpu_uniform_postselection_amplification}
+    \uses{def:mpu_exact_uniform_merging,thm:mpu_uniform_success_attenuation,thm:mpu_uniform_postselection_amplification}
     Let $V^\dagger V=I$, let $P$ be an orthogonal projection,
     and suppose $V^\dagger PV=r^{-2}I$, with $r\geq1$.
     Attenuation by $0<t_r\leq1$ and $\ell(r)\leq r$
@@ -1824,8 +1790,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_minimal_physical_unitary_cuts}
     \lean{MPUCircuit.exists_minimal_obcChainTensor_of_unitary, MPUCircuit.operatorCoefficientTensor_apply, MPUCircuit.operatorCoefficientTensor_ne_zero, MPUCircuit.physicalCutConfigEquiv_pair}
     \leanok
-    \uses{def:mpu_paired_operator_coefficients,
-        thm:mpu_minimal_finite_chain_representation}
+    \uses{def:mpu_paired_operator_coefficients,thm:mpu_minimal_finite_chain_representation}
     Pairing and splitting commute, and the paired tensor recovers
     every original operator entry. A finite unitary on a positive
     physical alphabet has a nonzero coefficient tensor. If its
@@ -1852,9 +1817,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_metrics_from_finite_unitary}
     \lean{MPUCircuit.exists_cutBases_simultaneous_balanced_metrics_of_unitary, MPUCircuit.factorizedOperator_minimalOperatorFactors, MPUCircuit.minimalOperatorFactors_isIsometry, MPUCircuit.minimalOperatorFactors_spans, MPUCircuit.exists_simultaneous_balanced_minimalOperator_metrics}
     \leanok
-    \uses{def:mpu_minimal_operator_factors,
-        thm:mpu_minimal_cut_factors,
-        thm:mpu_simultaneous_balanced_cut_metrics}
+    \uses{def:mpu_minimal_operator_factors,thm:mpu_minimal_cut_factors,thm:mpu_simultaneous_balanced_cut_metrics}
     Every finite unitary on a positive-length chain with $d>0$
     admits endpoint-compatible minimal cut bases and a simultaneous
     family of balanced positive metrics. At cut $j$, the metric
@@ -1941,9 +1904,7 @@ left multiplication, right vector $b$ and left functional the trace.
     \label{thm:mpu_initialized_isometry_synthesis}
     \lean{QuantumCircuit.exists_isGateProduct_mul_basisInclusion_eq, Matrix.basisInclusion_isIsometry, Matrix.mul_basisInclusion_apply, QuantumCircuit.exists_isGateProduct_isCleanImplementation, QuantumCircuit.isCleanImplementation_zeroRegisterReflection}
     \leanok
-    \uses{def:mpu_initialized_basis_inclusion,
-        thm:mpu_quantitative_unitary_synthesis,
-        thm:mpu_clean_zero_register_reflection}
+    \uses{def:mpu_initialized_basis_inclusion,thm:mpu_quantitative_unitary_synthesis,thm:mpu_clean_zero_register_reflection}
     A basis inclusion is an isometry, and multiplication by it selects
     the corresponding columns. For an isometry $V$, injective input
     and output encodings in a register of $n\geq1$ qudits of
@@ -3528,9 +3489,7 @@ remain separate assertions.
     assumptions.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_column_coordinate_transport,
-        thm:mpu_joining_reset_columns,
-        thm:mpu_actual_parent_isometry}
+    \uses{thm:mpu_column_coordinate_transport,thm:mpu_joining_reset_columns,thm:mpu_actual_parent_isometry}
     Reindexing the initialized basis inclusion and canceling the input-coordinate
     bijection, the normalized joining identity gives the weighted parent tensor.
     The zero-label identity identifies the reset output inclusion with
@@ -3568,12 +3527,7 @@ remain separate assertions.
     workspace is returned to zero on every logical input.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_permuted_encoded_merger,
-        thm:mpu_actual_merging_support,
-        thm:mpu_encoded_joint_columns,
-        thm:mpu_encoded_actual_parent_columns,
-        thm:mpu_parent_invariant_from_joint_columns,
-        thm:mpu_uniform_numeric_resources}
+    \uses{thm:mpu_permuted_encoded_merger,thm:mpu_actual_merging_support,thm:mpu_encoded_joint_columns,thm:mpu_encoded_actual_parent_columns,thm:mpu_parent_invariant_from_joint_columns,thm:mpu_uniform_numeric_resources}
     The minimal intervals determine the shared cut encoding, product coordinates, selected initialized
     sites, and normalized parent isometry.
     Exact clean amplification in these coordinates, followed by returning to the original
@@ -3596,11 +3550,7 @@ remain separate assertions.
     returned to zero, and the physical action has the exact phase of $U$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:mpu_actual_leaf_columns,
-        thm:mpu_actual_minimal_interval_merger,
-        thm:mpu_actual_interval_recursion,
-        thm:mpu_actual_root_columns,
-        thm:mpu_uniform_numeric_resources}
+    \uses{thm:mpu_actual_leaf_columns,thm:mpu_actual_minimal_interval_merger,thm:mpu_actual_interval_recursion,thm:mpu_actual_root_columns,thm:mpu_uniform_numeric_resources}
     The unitary $U$ determines the minimal representation, normalized metrics, and leaf
     circuits; applying the interval merger in the midpoint-tree induction, using the uniform
     resource estimate, and identifying the root columns with $U$ completes the construction.
@@ -3624,43 +3574,7 @@ remain separate assertions.
     circuit implementations have polynomial resources at fixed $D$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_affine_gram_balancing,
-        thm:mpu_balanced_interval_minimal_cut_ranks,
-        thm:mpu_simultaneous_balanced_cut_metrics,
-        thm:mpu_endpoint_gram_normalization,
-        thm:mpu_balanced_merger_success_amplitude,
-        thm:mpu_amplification_reflections,
-        thm:mpu_exact_subspace_amplification,
-        thm:mpu_uniform_postselection_amplification,
-        thm:mpu_uniform_success_attenuation,
-        thm:mpu_exact_amplification_budget,
-        thm:mpu_constant_branching_cost,
-        thm:mpu_metrics_for_all_minimal_intervals,
-        thm:mpu_common_register_layout,
-        thm:mpu_clean_leaf_circuit,
-        thm:mpu_compatible_bond_dilation,
-        thm:mpu_selected_flag_reflection,
-        thm:mpu_clean_circuit_placement,
-        thm:mpu_exact_clean_amplification_circuit,
-        thm:mpu_explicit_amplified_recursion_bound,
-        thm:mpu_actual_tree_gate_count,
-        thm:mpu_minimal_leaf_placement,
-        thm:mpu_encoded_merging,
-        thm:mpu_interval_initialization,
-        thm:mpu_joint_child_columns,
-        thm:mpu_uniform_numeric_resources,
-        thm:mpu_amplification_support,
-        thm:mpu_interval_column_encoding,
-        thm:mpu_actual_parent_isometry,
-        thm:mpu_supported_child_columns,
-        thm:mpu_quantitative_site_permutation,
-        thm:mpu_actual_interval_child_columns,
-        thm:mpu_actual_minimal_interval_merger,
-        thm:mpu_explicit_exact_bounded_cut_circuit,
-        thm:mpu_actual_root_columns,
-        thm:mpu_single_site_complete,
-        thm:mpu_complete_register,
-        thm:mpu_periodic_operator_cut_rank}
+    \uses{thm:mpu_affine_gram_balancing,thm:mpu_balanced_interval_minimal_cut_ranks,thm:mpu_simultaneous_balanced_cut_metrics,thm:mpu_endpoint_gram_normalization,thm:mpu_balanced_merger_success_amplitude,thm:mpu_amplification_reflections,thm:mpu_exact_subspace_amplification,thm:mpu_uniform_postselection_amplification,thm:mpu_uniform_success_attenuation,thm:mpu_exact_amplification_budget,thm:mpu_constant_branching_cost,thm:mpu_metrics_for_all_minimal_intervals,thm:mpu_common_register_layout,thm:mpu_clean_leaf_circuit,thm:mpu_compatible_bond_dilation,thm:mpu_selected_flag_reflection,thm:mpu_clean_circuit_placement,thm:mpu_exact_clean_amplification_circuit,thm:mpu_explicit_amplified_recursion_bound,thm:mpu_actual_tree_gate_count,thm:mpu_minimal_leaf_placement,thm:mpu_encoded_merging,thm:mpu_interval_initialization,thm:mpu_joint_child_columns,thm:mpu_uniform_numeric_resources,thm:mpu_amplification_support,thm:mpu_interval_column_encoding,thm:mpu_actual_parent_isometry,thm:mpu_supported_child_columns,thm:mpu_quantitative_site_permutation,thm:mpu_actual_interval_child_columns,thm:mpu_actual_minimal_interval_merger,thm:mpu_explicit_exact_bounded_cut_circuit,thm:mpu_actual_root_columns,thm:mpu_single_site_complete,thm:mpu_complete_register,thm:mpu_periodic_operator_cut_rank}
     In a minimal open-boundary MPO representation with cut dimensions
     $r_j\leq D$ and $r_0=r_N=1$, let $f_{\mathbf a,\mathbf b}$ be
     its prefix rows at cut $j$. For each prefix density matrix $\rho$,

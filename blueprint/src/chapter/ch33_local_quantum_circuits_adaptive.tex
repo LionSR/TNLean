@@ -55,7 +55,7 @@ permitted within one block
 
 \begin{definition}[Finite adaptive local protocol]
     \label{def:qc_adaptive_protocol}
-    \uses{def:qc_onsite_feedforward, def:qc_local_channel_circuit}
+    \uses{def:qc_onsite_feedforward,def:qc_local_channel_circuit}
     \lean{QuantumCircuit.IsAdaptiveProtocol,
         QuantumCircuit.IsAdaptiveConversion}
     \leanok
@@ -117,7 +117,7 @@ permitted within one block
 
 \begin{lemma}[Measurement rounds act on density matrices]
     \label{thm:qc_measurement_round_channel}
-    \uses{def:qc_measurement_round_channel, def:qc_measurement_rounds}
+    \uses{def:qc_measurement_round_channel,def:qc_measurement_rounds}
     \lean{QuantumCircuit.Circuit.map_vecMulVec,
         QuantumCircuit.Circuit.IsImplementationOn.map_vecMulVec_eq,
         QuantumCircuit.IsMeasurementConversion.isAdaptiveConversion}
@@ -143,7 +143,7 @@ permitted within one block
 
 \begin{lemma}[Measurement rounds are adaptive protocols]
     \label{thm:qc_measurement_round_adaptive}
-    \uses{def:qc_measurement_round_channel, def:qc_adaptive_protocol}
+    \uses{def:qc_measurement_round_channel,def:qc_adaptive_protocol}
     \lean{QuantumCircuit.Circuit.isAdaptiveProtocol_map}
     \leanok
     The average channel of a computational-basis measurement round is a

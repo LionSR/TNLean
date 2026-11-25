@@ -26,7 +26,7 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
     \label{thm:ldp_explicit_usable_scale}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_min_of_rate}
     \leanok
-    \uses{def:ldp_pair_approximable, def:qc_local_circuit}
+    \uses{def:ldp_pair_approximable,def:qc_local_circuit}
     There is $C=C(d,D)$ with the following property. Let $A$ be an
     inhomogeneous chain with bond dimensions at most $D$ on $N\ge1$ sites,
     with nonzero periodic state. Let $K,r>0$, let $k,L\ge0$ be integers, and
@@ -50,8 +50,7 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_polynomial_exponential_scale, thm:ldp_inhomogeneous,
-        thm:ldp_inhomogeneous_exact}
+    \uses{thm:ldp_polynomial_exponential_scale,thm:ldp_inhomogeneous,thm:ldp_inhomogeneous_exact}
     Since $\log(N/\varepsilon)\ge0$, the selected scale satisfies
     $q\ge L$ and $q\ge3D+1$. If $q\le N$, the block circuit has depth
     at most $2C_bq$, and
@@ -97,7 +96,7 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_ordered_mixing_pair_rate, thm:ldp_explicit_usable_scale}
+    \uses{thm:ldp_ordered_mixing_pair_rate,thm:ldp_explicit_usable_scale}
     Taking $k=1$, $L=0$, prefactor $C_pK$, $a=1/r$, and
     $b=\max(\log(C_pK),0)/r+3D+1$ in
     Lemma~\ref{thm:ldp_explicit_usable_scale} yields the claim.
@@ -124,10 +123,7 @@ physical dimension satisfies $d\ge1$ and $0<\varepsilon\le1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_block_approximation_error, thm:ldp_approximating_state_depth,
-        thm:ldp_inhomogeneous_exact, thm:ldp_polynomial_exponential_scale,
-        lem:ldp_normalized_state_rescaling, thm:wordspan_blk_inj_succ,
-        lem:isNBlkInjective_iff_blockTensor_isInjective}
+    \uses{thm:ldp_block_approximation_error,thm:ldp_approximating_state_depth,thm:ldp_inhomogeneous_exact,thm:ldp_polynomial_exponential_scale,lem:ldp_normalized_state_rescaling,thm:wordspan_blk_inj_succ,lem:isNBlkInjective_iff_blockTensor_isInjective}
     For $\gamma=\xi/(2a)\in(0,1)$, the unequal-block bound gives
     $KMe^{-2\gamma q/\xi}=KMe^{-q/a}$. With $L$ an eventual injectivity
     length and $b=a\max(\log K,0)+L+3D+1$, when $q\le N$ the

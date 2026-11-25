@@ -282,8 +282,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth,
         TNLean.PEPS.EncodedFrame.Frame.death}
     \leanok
-    \uses{lem:peps_frame_birth_map,lem:peps_frame_pass_encoding,
-        def:peps_frame_birth_partition,lem:peps_frame_birth_partition_owners}
+    \uses{lem:peps_frame_birth_map,lem:peps_frame_pass_encoding,def:peps_frame_birth_partition,lem:peps_frame_birth_partition_owners}
     In an encoded frame $\mathcal F$ with $\lVert\Omega\rVert=1$, let $T$ be
     owned by $P_\circ$ with $T\cap H^+(\mathcal F)=\varnothing$, and let
     $\mathcal F',E,U$ be as in Definition~\ref{def:peps_frame_birth_partition}.
@@ -302,9 +301,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_frame_splitting,lem:peps_frame_birth_map,
-        lem:peps_frame_pass_encoding,def:peps_frame_birth_partition,
-        lem:peps_frame_birth_partition_owners}
+    \uses{lem:peps_frame_splitting,lem:peps_frame_birth_map,lem:peps_frame_pass_encoding,def:peps_frame_birth_partition,lem:peps_frame_birth_partition_owners}
     By Lemma~\ref{lem:peps_frame_birth_partition_owners}, $T\cap E=\varnothing$,
     so Lemma~\ref{lem:peps_frame_splitting} provides splitting data with error
     $\le L^{-30}$. Since $H^+(\mathcal F)\subseteq E$, every hole encoder acts
@@ -331,10 +328,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{lemma}[Composition without additional pair effects]
     \label{thm:peps_monomial_composition_counts}
     \lean{QuantumCircuit.Party.Monomial.sourceCount_comp,
-        QuantumCircuit.Party.Monomial.effectCount_comp,
         QuantumCircuit.Party.PartyCircuit.op_comp}
     \leanok
-    \uses{def:peps_monomial_parties}
+    \uses{def:peps_monomial_parties,thm:peps_compose_actual_monomials}
     Let $M$ be an allowed monomial using only parties in $S$, and let $W_0,W_1$
     be effect-free allowed words using only parties in $S$ with compatible
     boundary registers. Then $M_0=M\circ W_0$ and $M_1=W_1\circ M$ are allowed
@@ -359,10 +355,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{Matrix.toEuclideanLin,
         Matrix.toLpLin_apply,
         Matrix.l2_opNorm_def,
-        Matrix.toEuclideanLin_mul_apply,
         QuantumCircuit.Party.PartyCircuit.op_localOp}
     \leanok
-    \uses{def:peps_party_layout}
+    \uses{def:peps_party_layout,lem:chain_sequential_truncation}
     Under the identification of two registers $\C^\alpha,\C^\beta$ of party $p$
     with $\C^{\alpha\times\beta}$ (Definition~\ref{def:peps_party_layout}), any
     matrix $A$ between one or two registers of $p$ defines a local operation at
@@ -422,8 +417,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         QuantumCircuit.Party.Sheet.forallGate_isRight_deathChain,
         QuantumCircuit.Party.Sheet.numGates_deathChain}
     \leanok
-    \uses{def:peps_frame_birth_monomials,def:peps_monomial_parties,
-        lem:peps_frame_birth_map}
+    \uses{def:peps_frame_birth_monomials,def:peps_monomial_parties,lem:peps_frame_birth_map}
     The birth and death monomials of Definition~\ref{def:peps_frame_birth_monomials}
     are allowed, use only $\{P_\circ,Q_\circ\}$, satisfy $(s,e)\le(1,0)$ for
     birth and $(s,e)\le(0,1)$ for death, and evaluate on
@@ -439,11 +433,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Reorderings of site registers]
     \label{lem:lattice_register_reorderings}
-    \lean{QuantumCircuit.Party.Word.isAllowed_frame,
-        QuantumCircuit.Party.PartyCircuit.UsesOnly.frame,
+    \lean{QuantumCircuit.Party.PartyCircuit.UsesOnly.frame,
         QuantumCircuit.Party.PartyCircuit.gateCount_frame}
     \leanok
-    \uses{def:lattice_site_registers,lem:lattice_site_register_coordinates}
+    \uses{def:lattice_site_registers,lem:lattice_site_register_coordinates,thm:peps_append_spectators}
     For a list $\ell$ of sites and a condition $f$, let $\ell_+$ and $\ell_-$
     retain the sites satisfying $f$ and not satisfying it, in their original
     order; if $\ell$ has no repeated site, neither part has one. The following
@@ -470,11 +463,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{lemma}[Reordering registers]
     \label{lem:peps_register_reorderings}
     \lean{TNLean.PEPS.EncodedFrame.tagSystemAppendEquiv,
-        TNLean.PEPS.EncodedFrame.tagAppendEquiv_tagConfigEquiv,
-        TNLean.PEPS.EncodedFrame.exists_tagReorderWord}
+        TNLean.PEPS.EncodedFrame.tagAppendEquiv_tagConfigEquiv}
     \leanok
-    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,def:peps_monomial_parties,
-        lem:lattice_register_reorderings}
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,def:peps_monomial_parties,lem:lattice_register_reorderings,thm:peps_frame_exchange_bounded}
     For a duplicate-free site list $\ell$ and predicate $f$, let $\ell_+=\{x\in\ell:f(x)\}$
     and $\ell_-=\{x\in\ell:\neg f(x)\}$ in the order of $\ell$. Partitioning
     $\ell\mapsto(\ell_+,\ell_-)$ and its inverse, reassociating or swapping
@@ -564,8 +555,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth_bounded,
         TNLean.PEPS.EncodedFrame.Frame.death_bounded}
     \leanok
-    \uses{thm:peps_frame_birth,def:peps_frame_registers,lem:peps_frame_registers_coordinates,
-        def:peps_monomial_parties,lem:lattice_front_births}
+    \uses{thm:peps_frame_birth,def:peps_frame_registers,lem:peps_frame_registers_coordinates,def:peps_monomial_parties,lem:lattice_front_births}
     Under the hypotheses of Theorem~\ref{thm:peps_frame_birth}, there exists an
     allowed monomial between the frame registers of $\mathcal F$ and
     $\mathcal F'$ (Definition~\ref{def:peps_frame_registers}) using only
@@ -576,8 +566,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
-        lem:lattice_front_births}
+    \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,lem:lattice_front_births}
     By Lemma~\ref{lem:peps_frame_birth_partition_owners}, the owners of the
     frame satisfy the hypotheses of Lemma~\ref{lem:lattice_front_births}; apply
     that lemma with the tag registers as the block of front registers. The
@@ -624,8 +613,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_frame_sheet_swap,thm:peps_frame_sheet_swap_norm,
-        thm:peps_frame_identity_tensor_norm}
+    \uses{def:peps_frame_sheet_swap,thm:peps_frame_sheet_swap_norm,thm:peps_frame_identity_tensor_norm}
     By Lemma~\ref{thm:peps_frame_identity_tensor_norm},
     $\|T(A)\|\le\|A\otimes I\|+\|I\otimes A\|\le 2\|A\|$; combining this with
     $\|F_R\|\le 1$ (Lemma~\ref{thm:peps_frame_sheet_swap_norm}) and the
@@ -653,10 +641,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_sheet_swap_boundary_expansion,
-        thm:peps_sheet_swap_conjugate_support,
-        thm:peps_sheet_swap_doubled_cancellation,
-        thm:peps_sheet_swap_doubled_term_norm,thm:peps_square_edge_count}
+    \uses{thm:peps_sheet_swap_boundary_expansion,thm:peps_sheet_swap_conjugate_support,thm:peps_sheet_swap_doubled_cancellation,thm:peps_sheet_swap_doubled_term_norm,thm:peps_square_edge_count}
     By~(\ref{eq:peps_sheet_swap_boundary_expansion}) and
     Lemma~\ref{thm:peps_sheet_swap_conjugate_support}, $FKF^\dagger-K$ is a
     sum over $e\in\partial R$ of terms supported on $e\subseteq Z$. By~(\ref{eq:peps_sheet_swap_doubled_term_norm})
@@ -698,8 +683,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_out_form,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exists_in_form}
     \leanok
-    \uses{def:peps_frame_exchange_data,lem:peps_frame_split_forms,lem:peps_frame_commute,
-        lem:lattice_sheet_split_swap}
+    \uses{def:peps_frame_exchange_data,lem:peps_frame_split_forms,lem:peps_frame_commute,lem:lattice_sheet_split_swap}
     With $K_{\rm in}=K_{\mathcal F_1}\otimes K_{\mathcal F_2}$ and
     $K_{\rm out}=K_{\mathcal F_1'}\otimes K_{\mathcal F_2'}$,
     \begin{align}
@@ -862,9 +846,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.liftTags_mul_kronecker,
         ManyBody.commute_configBufferCorrection}
     \leanok
-    \uses{lem:peps_frame_exchange_intertwining,lem:peps_frame_exchange_net_map,
-        lem:peps_frame_exchange_error,def:peps_frame_exchange_map,
-        lem:peps_frame_sheet_swap_compose,lem:peps_frame_exchange_owners}
+    \uses{lem:peps_frame_exchange_intertwining,lem:peps_frame_exchange_net_map,lem:peps_frame_exchange_error,def:peps_frame_exchange_map,lem:peps_frame_sheet_swap_compose,lem:peps_frame_exchange_owners}
     In the setting of Definition~\ref{def:peps_frame_exchange_map} with
     $\lVert\Omega\rVert=1$ and $I_\Omega(T:E)\le L^{-60}$, for splitting data
     with error $\le L^{-30}$ the map $C=D_UF_A\mathcal R$ satisfies
@@ -879,11 +861,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_frame_splitting,lem:peps_frame_exchange_intertwining,
-        def:peps_frame_sheet_swap,lem:peps_frame_sheet_swap_compose,
-        lem:peps_frame_exchange_net_map,lem:peps_frame_exchange_error,
-        def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,
-        lem:peps_frame_encoder_contraction}
+    \uses{lem:peps_frame_splitting,lem:peps_frame_exchange_intertwining,def:peps_frame_sheet_swap,lem:peps_frame_sheet_swap_compose,lem:peps_frame_exchange_net_map,lem:peps_frame_exchange_error,def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,lem:peps_frame_encoder_contraction}
     By Lemma~\ref{lem:peps_frame_exchange_owners}, $D_U$ and $F_A$ act on $U$,
     disjoint from $H^+(\mathcal F_1')\cup H^+(\mathcal F_2')$, so they commute
     with $K_{\rm out}$. Combining~(\ref{eq:peps_frame_exchange_intertwining})
@@ -916,8 +894,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_frame_exchange,thm:peps_frame_small_rewrite,
-        lem:peps_frame_exchange_error}
+    \uses{thm:peps_frame_exchange,thm:peps_frame_small_rewrite,lem:peps_frame_exchange_error}
     By Theorem~\ref{thm:peps_frame_small_rewrite} (\texttt{05-frames.tex},
     lines 84--85), reordering holes with disjoint outer footprints yields a tag
     relabelling unitary $G$ satisfying
@@ -931,10 +908,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         ManyBody.correctionMatrix,
         ManyBody.norm_correctionMatrix_le_one,
         ManyBody.reindex_pairSwapOp_eq_submatrix_of_subset,
-        ManyBody.configBufferCorrection_mul_pairSwapOp_eq,
-        QuantumCircuit.Party.Sheet.correctionWord}
+        ManyBody.configBufferCorrection_mul_pairSwapOp_eq}
     \leanok
-    \uses{lem:lattice_site_register_coordinates}
+    \uses{lem:lattice_site_register_coordinates,lem:lattice_front_correction_word}
     Let $\sigma$ be splitting data for disjoint sets $T,E$ of sites, with isometry
     $V$, let $U$ be the complement of $T\cup E$, and let $A\subseteq U$. Write $F_A$
     for the exchange of two copies of the configurations at the sites of $A$ and
@@ -956,15 +932,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Exchange corrections as one private contraction]
     \label{lem:peps_frame_exchange_correction_monomial}
-    \lean{ManyBody.configBufferCorrection_mul_pairSwapOp_eq,
-        ManyBody.correctionMatrix,
-        ManyBody.norm_correctionMatrix_le_one,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.correctionWord,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.isAllowed_correctionWord,
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.isAllowed_correctionWord,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.usesOnly_correctionWord}
     \leanok
-    \uses{def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,lem:peps_front_registers,
-        def:peps_monomial_parties,lem:lattice_exchange_correction_matrix}
+    \uses{def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,lem:peps_front_registers,def:peps_monomial_parties,lem:lattice_exchange_correction_matrix,lem:peps_exchange_correction_word}
     In Definition~\ref{def:peps_frame_exchange_map},
     $D_UF_A=\id_{(T\cup E)^{\otimes 2}}\otimes W$, where
     $W=(V^{\otimes2})^\dagger F_{\mathcal B_T}V^{\otimes2}F_A$ acts on
@@ -1026,8 +997,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.renameWord,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.op_renameWord}
     \leanok
-    \uses{def:peps_frame_exchange_data,lem:peps_register_reorderings,lem:peps_two_frame_registers,
-        lem:lattice_block_renaming_word}
+    \uses{def:peps_frame_exchange_data,lem:peps_register_reorderings,lem:peps_two_frame_registers,lem:lattice_block_renaming_word}
     The renaming $\mathcal R$ of Definition~\ref{def:peps_frame_exchange_data}
     is realized by an allowed register reordering (Lemma~\ref{lem:peps_register_reorderings})
     between the registers of $(\mathcal F_1,\mathcal F_2)$ and
@@ -1046,8 +1016,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \label{thm:peps_two_region_coordinates}
     \lean{QuantumCircuit.Party.Sheet.exchangeEquivP}
     \leanok
-    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
-        thm:peps_region_configuration}
+    \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,thm:peps_region_configuration}
     For $T,E\subseteq\Lambda$ and $U=\Lambda\setminus(T\cup E)$, let
     $\ket c_{U,j}$ be the product basis vector on the $U$-site registers of
     sheet $j\in\{1,2\}$, and let $\iota_U$ be the inverse concatenation
@@ -1068,8 +1037,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_region_configuration,
-        lem:peps_frame_registers_coordinates}
+    \uses{thm:peps_region_configuration,lem:peps_frame_registers_coordinates}
     By Lemma~\ref{lem:peps_frame_registers_coordinates}, the product basis
     vector on the $U$-site registers of each sheet is the basis vector of the
     restriction $c_j|_U$, which gives~(\ref{eq:peps_two_region_basis}); use $c_j^{u_j}|_U=u_j$
@@ -1106,8 +1074,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.correctionWord,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.op_correctionWord}
     \leanok
-    \uses{lem:peps_register_reorderings,lem:peps_two_frame_registers,
-        lem:peps_frame_exchange_correction_monomial,lem:lattice_front_correction_word}
+    \uses{lem:peps_register_reorderings,lem:peps_two_frame_registers,lem:peps_frame_exchange_correction_monomial,lem:lattice_front_correction_word}
     For disjoint $T,E\subseteq\Lambda$ with $U=\Lambda\setminus(T\cup E)$ held
     by $P_\circ$ on both frames, moving the $U$-registers of both sheets to the
     front, applying the private contraction $W$ of
@@ -1131,8 +1098,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_ofFrames_bounded,
         TNLean.PEPS.EncodedFrame.exists_tagReorderWord}
     \leanok
-    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
-        def:peps_frame_registers,def:peps_monomial_parties}
+    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,def:peps_frame_registers,def:peps_monomial_parties}
     Under the hypotheses of Theorem~\ref{thm:peps_frame_exchange} (or
     Lemma~\ref{thm:peps_frame_exchange_any_order} for arbitrary hole
     orderings), the two-sheet exchange is realized by an allowed monomial
@@ -1144,10 +1110,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,
-        lem:peps_exchange_renaming_word,lem:peps_exchange_correction_word,
-        lem:peps_frame_exchange_correction_monomial,
-        lem:peps_frame_exchange_owners,lem:peps_register_reorderings}
+    \uses{thm:peps_frame_exchange,thm:peps_frame_exchange_any_order,lem:peps_exchange_renaming_word,lem:peps_exchange_correction_word,lem:peps_frame_exchange_correction_monomial,lem:peps_frame_exchange_owners,lem:peps_register_reorderings}
     Compose the tag-reordering word of Lemma~\ref{lem:peps_register_reorderings}
     (if needed), the renaming word of Lemma~\ref{lem:peps_exchange_renaming_word},
     and the correction word of Lemma~\ref{lem:peps_exchange_correction_word};
@@ -1168,9 +1131,6 @@ three owners meet and no encoded holes are needed.
 \begin{definition}[Sheets without holes]
     \label{def:lattice_sheet}
     \lean{QuantumCircuit.Party.Sheet,
-        QuantumCircuit.Party.Sheet.system,
-        ManyBody.blockConfigEquiv,
-        QuantumCircuit.Party.Sheet.refVec,
         QuantumCircuit.Party.Sheet.twoConfigEquiv,
         QuantumCircuit.Party.Sheet.changeOwner,
         QuantumCircuit.Party.Sheet.birthEnv,
@@ -1178,7 +1138,7 @@ three owners meet and no encoded holes are needed.
         QuantumCircuit.Party.Sheet.exchangeEnv,
         QuantumCircuit.Party.Sheet.exchangeOp}
     \leanok
-    \uses{def:lattice_site_registers,def:peps_frame_sheet_swap,def:peps_frame_buffer_correction}
+    \uses{def:lattice_site_registers,def:peps_frame_sheet_swap,def:peps_frame_buffer_correction,def:lattice_sheet_stack,def:qc_blocked_local_channel_conversion}
     A sheet on $\Lambda$ is an owner for each site; its registers are one
     register $\C^q$ per site, held by its owner, identified with
     $\mathcal H_\Lambda$ in product coordinates, and its reference vector is
@@ -1197,8 +1157,7 @@ three owners meet and no encoded holes are needed.
         QuantumCircuit.Party.Sheet.death_bounded,
         QuantumCircuit.Party.Sheet.changeOwner_birth_owners}
     \leanok
-    \uses{def:lattice_sheet,lem:peps_frame_splitting,def:peps_frame_birth_map,
-        lem:peps_frame_birth_map,def:peps_monomial_parties}
+    \uses{def:lattice_sheet,lem:peps_frame_splitting,def:peps_frame_birth_map,lem:peps_frame_birth_map,def:peps_monomial_parties}
     In a sheet, let $T$ be a set of sites owned by $P_\circ$, let $E$ be the set
     of sites not owned by $P_\circ$, let $\lVert\Omega\rVert=1$, let $L\ge0$ and
     let $p$ be real, and suppose $I_\Omega(T:E)\le L^{-2p}$. There are splitting data and an allowed
@@ -1231,8 +1190,7 @@ three owners meet and no encoded holes are needed.
         QuantumCircuit.Party.Sheet.op_renameWord,
         QuantumCircuit.Party.Sheet.exchangeOp_eq}
     \leanok
-    \uses{def:lattice_sheet,lem:peps_frame_splitting,lem:lattice_exchange_net_map,
-        def:peps_monomial_parties}
+    \uses{def:lattice_sheet,lem:peps_frame_splitting,lem:lattice_exchange_net_map,def:peps_monomial_parties}
     For two sheets, a region $Y$, a party $P_\circ$ with $Z$, $T$, $E$, $U$ as
     above, $\lVert\Omega\rVert=1$, $L\ge0$ and real $p$ with
     $I_\Omega(T:E)\le L^{-2p}$, there
@@ -1248,9 +1206,7 @@ three owners meet and no encoded holes are needed.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_frame_splitting,lem:lattice_block_renaming_word,
-        lem:lattice_front_correction_word,lem:lattice_exchange_correction_matrix,
-        lem:peps_frame_exchange_error,lem:lattice_register_reorderings}
+    \uses{lem:peps_frame_splitting,lem:lattice_block_renaming_word,lem:lattice_front_correction_word,lem:lattice_exchange_correction_matrix,lem:peps_frame_exchange_error,lem:lattice_register_reorderings}
     The renaming of Lemma~\ref{lem:lattice_block_renaming_word} with empty
     blocks of tags exchanges the configurations of the two sheets inside $Y$,
     so its operator is $F_Y$; the corrections act as $D_UF_A$. Since $Y$ is
@@ -1267,11 +1223,9 @@ three owners meet and no encoded holes are needed.
         QuantumCircuit.Party.norm_stackVec,
         QuantumCircuit.Party.norm_stackVec_le,
         QuantumCircuit.Party.framesVec,
-        QuantumCircuit.Party.prodVec,
-        QuantumCircuit.Party.HasBoundedChange,
-        QuantumCircuit.Party.HasSourceBoundedChange}
+        QuantumCircuit.Party.prodVec}
     \leanok
-    \uses{def:peps_circuit_source_bound}
+    \uses{def:peps_circuit_source_bound,def:lattice_sheet_stack}
     An original circuit is a bounded change from a vector $x$ to a vector $y$, with
     participants in a set $S$, bounds $r$ and $K$ and error $\varepsilon$, if it has
     at most one nonprivate gate, every participant of that gate lies in $S$, every
@@ -1339,13 +1293,11 @@ three owners meet and no encoded holes are needed.
         QuantumCircuit.Party.hasSourceBoundedChange_liftOne,
         QuantumCircuit.Party.HasSourceBoundedChange.mono,
         QuantumCircuit.Party.hasSourceBoundedChange_of_perm,
-        QuantumCircuit.Party.isSourceBounded_liftOne,
         QuantumCircuit.Party.hasSourceBoundedChange_perm_liftOne,
         QuantumCircuit.Party.HasSourceBoundedChange.perm_left,
-        QuantumCircuit.Party.HasSourceBoundedChange.hasBoundedChange,
-        QuantumCircuit.Party.isSourceBounded_liftTwo}
+        QuantumCircuit.Party.HasSourceBoundedChange.hasBoundedChange}
     \leanok
-    \uses{def:lattice_bounded_change,thm:peps_original_produced_resource_bounds}
+    \uses{def:lattice_bounded_change,thm:peps_original_produced_resource_bounds,thm:peps_protocol_event_segments}
     Let every reference vector of a sheet and the vector $\xi$ of the further
     registers have norm at most one.
     \begin{enumerate}

@@ -246,8 +246,7 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_substitution_partial,thm:peps_weighted_density_sum,
-        thm:peps_canonical_substitution_recovery,thm:peps_source_preparation_sums}
+    \uses{thm:peps_source_substitution_partial,thm:peps_weighted_density_sum,thm:peps_canonical_substitution_recovery,thm:peps_source_preparation_sums}
     Expand $M_{S,u}$ by (\ref{eq:peps_substitution_partial}) and $F_S(E;\rho)$
     by (\ref{eq:peps_weighted_density_sum}). By
     (\ref{eq:peps_substituted_recovery}) and multilinearity of source
@@ -259,13 +258,12 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{definition}[Selected retained positions]
     \label{def:peps_selected_retained_positions}
-    \lean{QuantumCircuit.Party.SourceCircuit.selectedPartialSlots}
     \lean{QuantumCircuit.Party.SourceCircuit.mem_selectedPartialSlots}
     \lean{QuantumCircuit.Party.SourceCircuit.selectedPartialSlotEquiv}
     \lean{QuantumCircuit.Party.SourceCircuit.selectedSourceCoordinateEquiv}
     \lean{QuantumCircuit.Party.SourceCircuit.selectedSourceCoordinateEquiv_apply}
     \leanok
-    \uses{def:peps_partial_fixed_positions}
+    \uses{def:peps_partial_fixed_positions,def:peps_corrected_crossing_blocks}
     For the retained-position enumeration $i\mapsto e_i$
     (Definition~\ref{def:peps_partial_fixed_positions}), set
     $S_{\mathcal A}=\{i:e_i\in S\}$. When every $e\in S$ has an endpoint in
@@ -406,8 +404,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_corrected_partial,thm:peps_selected_retained_coordinates,
-        thm:peps_selected_source_contraction}
+    \uses{thm:peps_corrected_partial,thm:peps_selected_retained_coordinates,thm:peps_selected_source_contraction}
     Apply (\ref{eq:peps_selected_contraction}) to each $(\xi,\zeta)$ pair and
     reindex $S_{\mathcal A}\to S$ by Lemma~\ref{thm:peps_selected_retained_coordinates}
     to match (\ref{eq:peps_corrected_partial}).
@@ -464,8 +461,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_corrected_source_contraction,thm:peps_corrected_empty,
-        thm:peps_prepared_subset_identity,thm:peps_all_source_subsets}
+    \uses{thm:peps_corrected_source_contraction,thm:peps_corrected_empty,thm:peps_prepared_subset_identity,thm:peps_all_source_subsets}
     Apply (\ref{eq:peps_corrected_contraction}) with $\mathcal A=P$ to
     $S=\varnothing$ (using Lemma~\ref{thm:peps_corrected_empty}) and to
     general $S\subseteq\mathcal E$, then combine (\ref{eq:peps_prepared_subsets})
@@ -490,11 +486,10 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{definition}
 \begin{lemma}[The physical corrected-subset identity]
     \label{thm:peps_physical_corrected_subsets}
-    \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_exact}
     \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_sub_exact}
     \lean{QuantumCircuit.Party.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le}
     \leanok
-    \uses{def:peps_physical_source_replacement}
+    \uses{def:peps_physical_source_replacement,thm:peps_physical_first_exact_sources}
     We have $\widehat\rho_{\mathrm{phys}}(X)=\rho_{\mathrm{phys}}$ and
     \begin{align}
         \widehat\rho_{\mathrm{phys}}(X+E)-\rho_{\mathrm{phys}}
@@ -548,8 +543,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_private_product_input,lem:lattice_register_reorderings,
-        thm:peps_owner_composition}
+    \uses{def:peps_private_product_input,lem:lattice_register_reorderings,thm:peps_owner_composition}
     By Definition~\ref{def:peps_private_product_input},
     Lemma~\ref{lem:lattice_register_reorderings}, and
     (\ref{eq:peps_owner_composition}), $P_\psi(y\otimes 1)=y\otimes\psi$, and

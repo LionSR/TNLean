@@ -20,7 +20,7 @@
     \label{def:mpdo_eta_of_hayashi_markov}
     \lean{MPOTensor.ExplicitEtaOperators.ofHayashiMarkov}
     \leanok
-    \uses{def:mpdo_eta_structure, def:mpdo_explicit_eta_operators, thm:matrix_possemidef_partial_traces}
+    \uses{def:mpdo_eta_structure,def:mpdo_explicit_eta_operators,thm:matrix_possemidef_partial_traces}
     Every Hayashi decomposition $h_\eta$ canonically produces an
     explicit neighboring $\eta$-family by Kronecker-multiplying the
     sector-reduced states on the neighboring bond spaces:
@@ -45,7 +45,7 @@
     \lean{MPOTensor.ExplicitEtaOperators.traceMatrixRe_ofHayashiMarkov}
     \lean{MPOTensor.ExplicitEtaOperators.trace_traceMatrixRe_ofHayashiMarkov}
     \leanok
-    \uses{def:mpdo_eta_of_hayashi_markov, def:mpdo_explicit_eta_trace_matrix}
+    \uses{def:mpdo_eta_of_hayashi_markov,def:mpdo_explicit_eta_trace_matrix}
     The trace matrix induced by the extracted family is entrywise
     $T_{k,h}=1$ in both its complex-valued form and its real-valued form.
     If there are $m$ sectors, then
@@ -54,7 +54,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_eta_of_hayashi_markov, def:mpdo_explicit_eta_trace_matrix}
+    \uses{def:mpdo_eta_of_hayashi_markov,def:mpdo_explicit_eta_trace_matrix}
     Each $\rho_{b_2 C}^{(k)}$ is a density matrix, hence has unit trace; the
     partial trace $\tr_C$ preserves the trace. The analogous statement holds
     for $\tr_A \rho_{A b_1}^{(h)}$. Multiplicativity of the trace under
@@ -163,7 +163,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:matrix_trace_rankone_predicates, thm:matrix_hermitian_trace_square_eigenvalues}
+    \uses{def:matrix_trace_rankone_predicates,thm:matrix_hermitian_trace_square_eigenvalues}
     The spectral theorem diagonalizes the positive semidefinite matrix with
     non-negative real eigenvalues. The trace gives that their sum is $1$, while
     the second trace moment gives that the sum of their squares is also $1$.
@@ -279,7 +279,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:matrix_positive_idempotent_rank_one, thm:matrix_pairing_sq_eq_cube, thm:matrix_idempotent_trace_one_rank_one}
+    \uses{thm:matrix_positive_idempotent_rank_one,thm:matrix_pairing_sq_eq_cube,thm:matrix_idempotent_trace_one_rank_one}
     Primitivity gives $m\geq1$ such that $(T^m)_{i,j}>0$ for every $i,j$.
     Stabilization gives $T^{2m}=T^2$. Thus, for every $i,j$,
     \begin{align}
@@ -411,7 +411,7 @@ which is the displayed identity of
 
 \begin{proof}
     \leanok
-    \uses{thm:matrix_pairing_idempotent, thm:matrix_idempotent_trace_one_rank_one}
+    \uses{thm:matrix_pairing_idempotent,thm:matrix_idempotent_trace_one_rank_one}
     Lemma~\ref{thm:matrix_pairing_idempotent} gives $T^2=T$, and the
     idempotent trace-one criterion of
     Lemma~\ref{thm:matrix_idempotent_trace_one_rank_one} gives the
@@ -431,7 +431,7 @@ which is the displayed identity of
 
 \begin{proof}
     \leanok
-    \uses{def:matrix_trace_rankone_predicates, thm:matrix_psd_trace_power_rank_one}
+    \uses{def:matrix_trace_rankone_predicates,thm:matrix_psd_trace_power_rank_one}
     The positive-semidefinite matrix criterion diagonalizes $T$, uses the first
     two trace moments to show that exactly one eigenvalue is nonzero, and hence
     gives the factorization. Taking traces and using
@@ -502,7 +502,7 @@ which is the displayed identity of
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_pairing_idempotent, thm:matrix_pairing_sq_eq_cube}
+    \uses{thm:mpdo_sector_pairing_idempotent,thm:matrix_pairing_sq_eq_cube}
     The operator identity $M^2=M$ established in the proof of
     Lemma~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2=T^3$ and
     the constant trace powers by Lemma~\ref{thm:matrix_pairing_sq_eq_cube},
@@ -520,7 +520,7 @@ which is the displayed identity of
     \lean{MPOTensor.SectorPairingData.l_ne_zero}
     \lean{MPOTensor.SectorPairingData.linearIndependent_l}
     \leanok
-    \uses{def:mpdo_sector_pairing_data, thm:matrix_primitive_row_col_pos}
+    \uses{def:mpdo_sector_pairing_data,thm:matrix_primitive_row_col_pos}
     Suppose the sector trace matrix $T$ of
     Definition~\ref{def:mpdo_sector_pairing_data} is primitive. Then every
     closed sector tensor satisfies $|l_k)\neq0$. If, in addition, each
@@ -542,7 +542,7 @@ which is the displayed identity of
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_pairing_idempotent}
     \lean{MPOTensor.sal_zcl_implies_rank_one_T_of_sector_supports}
     \leanok
-    \uses{def:mpdo_sector_pairing_data, def:matrix_trace_rankone_predicates}
+    \uses{def:mpdo_sector_pairing_data,def:matrix_trace_rankone_predicates}
     Let $T$ be a sector trace matrix with $\tr(T)=1$, paired
     from sector tensors satisfying the zero-correlation-length identity of
     Definition~\ref{def:mpdo_sector_pairing_data}. If the closed sector
@@ -564,7 +564,7 @@ which is the displayed identity of
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_pairing_idempotent, thm:mpdo_sector_pairing_trace_powers, thm:mpdo_sector_tensors_independent, thm:matrix_idempotent_trace_one_rank_one}
+    \uses{thm:mpdo_sector_pairing_idempotent,thm:mpdo_sector_pairing_trace_powers,thm:mpdo_sector_tensors_independent,thm:matrix_idempotent_trace_one_rank_one}
     Lemma~\ref{thm:mpdo_sector_pairing_idempotent} gives $T^2=T$, and
     Lemma~\ref{thm:mpdo_sector_pairing_trace_powers} gives the constant
     trace powers unconditionally. The idempotent trace-one criterion of

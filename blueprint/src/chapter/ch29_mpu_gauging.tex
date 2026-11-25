@@ -78,13 +78,13 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     \label{thm:mpug_positive_mpu_to_mpu}
     \lean{MPOTensor.IsMPUPos.isMPU}
     \leanok
-    \uses{def:mpug_positive_mpu, def:mpu}
+    \uses{def:mpug_positive_mpu,def:mpu}
     Every matrix product unitary on nonempty chains is a matrix product unitary
     in the sense of Definition~\ref{def:mpu}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_positive_mpu, def:mpu}
+    \uses{def:mpug_positive_mpu,def:mpu}
     The nonempty-chain condition applies in particular to every $N>1$.
 \end{proof}
 
@@ -92,13 +92,13 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     \label{thm:mpug_positive_mpu_blocking}
     \lean{MPOTensor.IsMPUPos.blockTensor}
     \leanok
-    \uses{def:mpug_positive_mpu, def:mpdo_physical_blocking}
+    \uses{def:mpug_positive_mpu,def:mpdo_physical_blocking}
     If $\mathcal U$ is a matrix product unitary on nonempty chains and $L>0$,
     then $\mathcal U^{[L]}$ is also a matrix product unitary on nonempty chains.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_reindex_unitary, thm:mpdo_closed_chain_physical_blocking}
+    \uses{thm:mpu_reindex_unitary,thm:mpdo_closed_chain_physical_blocking}
     At chain length $N\geq1$, the canonical reindexing of configurations gives
     \begin{align}
         O_N(\mathcal U^{[L]}) & \cong U^{(NL)}.
@@ -112,7 +112,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     \lean{MPOTensor.GroupFamily,
         MPOTensor.GroupFamily.IsRepresentation}
     \leanok
-    \uses{def:injective, def:mpu_simple, def:mpug_positive_mpu}
+    \uses{def:injective,def:mpu_simple,def:mpug_positive_mpu}
     A group representation by simple injective MPUs consists of the
     dependent-bond family $\{\mathcal U_g\}_{g\in G}$ above such that every
     $\mathcal U_g$ is injective and simple, every $\mathcal U_g$ is a matrix
@@ -202,7 +202,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
         MPOTensor.GroupFamily.IsNormalRepresentation.isMPOFusionAlgebra,
         MPOTensor.GroupFamily.isInvertibleLabel_groupFusion}
     \leanok
-    \uses{def:mpo_fusion_algebra, def:fusion_unit_invertible}
+    \uses{def:mpo_fusion_algebra,def:fusion_unit_invertible}
     Let $G$ be a finite group and $\{\mathcal U_g\}_{g\in G}$ matrix product
     operator tensors whose periodic operators satisfy
     $U_g^{(N)}U_h^{(N)}=U_{gh}^{(N)}$ for all $g,h\in G$ and $N\geq1$. Then
@@ -241,7 +241,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_group_representation, def:mpug_operator_representation}
+    \uses{def:mpug_group_representation,def:mpug_operator_representation}
     A representation consists of matrix product unitaries on nonempty chains
     satisfying the identity and multiplication laws, so for fixed $N\geq1$
     Definition~\ref{def:mpug_operator_representation} gives a group
@@ -270,7 +270,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_group_representation, thm:mpug_operator_power}
+    \uses{def:mpug_group_representation,thm:mpug_operator_power}
     Evaluating (\ref{eq:mpug_operator_power}) at $n=\operatorname{ord}(g)$,
     together with the finite-order identity $g^{\operatorname{ord}(g)}=e$ and
     the representation identity law, gives
@@ -284,7 +284,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     \label{thm:mpug_product_tensor_operator}
     \lean{MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_mulTensor}
     \leanok
-    \uses{def:mpug_group_representation, def:mpdo_operator_product}
+    \uses{def:mpug_group_representation,def:mpdo_operator_product}
     Let $\mathcal U_g\mathbin{\cdot}\mathcal U_h$ denote the product MPO tensor,
     whose virtual bond dimension is $D_gD_h$. For every $N\geq1$,
     \begin{align}
@@ -299,7 +299,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_group_representation, thm:mpdo_operator_product_mpo}
+    \uses{def:mpug_group_representation,thm:mpdo_operator_product_mpo}
     Multiplicativity of the periodic operator under product-tensor contraction gives
     $O_N(\mathcal U_g\mathbin{\cdot}\mathcal U_h) = U_g^{(N)}U_h^{(N)}$, which equals $U_{gh}^{(N)}$ by~(\ref{eq:mpug_rep_multiplication}).
 \end{proof}
@@ -308,7 +308,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     \label{thm:mpug_physical_adjoint_inverse}
     \lean{MPOTensor.GroupFamily.IsRepresentation.mpo_physicalAdjointTensor_eq_inv}
     \leanok
-    \uses{def:mpug_group_representation, def:mpdo_physical_adjoint}
+    \uses{def:mpug_group_representation,def:mpdo_physical_adjoint}
     As in the first assertion of
     \cite[line~1552]{FrancoRubio2025MPUGauging}, without any finiteness
     assumption on $G$, for every $g\in G$ and every $N\geq1$ the physical
@@ -321,7 +321,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_group_representation, def:mpdo_physical_adjoint}
+    \uses{def:mpug_group_representation,def:mpdo_physical_adjoint}
     The representation law and unitarity give
     \begin{align}
         U_{g^{-1}}^{(N)}U_g^{(N)}              & =U_e^{(N)}=\Id, \\
@@ -344,8 +344,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     \label{thm:mpug_physical_adjoint_inverse_mpv}
     \lean{MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_physicalAdjointTensor_inv}
     \leanok
-    \uses{def:mpug_group_representation, def:mpdo_physical_adjoint,
-        def:mpo_to_mps, def:same_mpv2_pos}
+    \uses{def:mpug_group_representation,def:mpdo_physical_adjoint,def:mpo_to_mps,def:same_mpv2_pos}
     When $\mathcal U_g^\sharp$ and $\mathcal U_{g^{-1}}$ are viewed as MPS
     tensors by pairing their two physical indices, they generate the same
     matrix product vectors at every positive length:
@@ -357,8 +356,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_physical_adjoint_inverse,
-        lem:mpdo_three_first_site_contraction_coefficients}
+    \uses{thm:mpug_physical_adjoint_inverse,lem:mpdo_three_first_site_contraction_coefficients}
     For a doubled physical configuration $\rho$, decoding each site as a pair of
     ket and bra indices $(\sigma_n,\tau_n)$ identifies the corresponding matrix
     product vector coefficient with the $(\sigma,\tau)$ matrix entry of the
@@ -387,8 +385,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
     \label{thm:mpug_physical_adjoint_product_reversal}
     \lean{MPOTensor.physicalAdjointTensor_mulTensor}
     \leanok
-    \uses{def:mpug_product_bond_swap, def:mpdo_operator_product,
-        def:mpdo_physical_adjoint}
+    \uses{def:mpug_product_bond_swap,def:mpdo_operator_product,def:mpdo_physical_adjoint}
     Let $M$ and $N$ be MPO tensors with bond dimensions $D_M$ and $D_N$.
     Write a left bond index of the product tensor as a pair
     $(\alpha,\gamma)$, with $\alpha$ in the bond space of $M$ and $\gamma$ in
@@ -411,8 +408,7 @@ $\mathcal U_g$. Throughout this section the chain length is positive: $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_product_bond_swap, def:mpdo_operator_product,
-        def:mpdo_physical_adjoint}
+    \uses{def:mpug_product_bond_swap,def:mpdo_operator_product,def:mpdo_physical_adjoint}
     Expanding the left side gives the complex conjugate of the
     $\bigl((\alpha,\gamma),(\beta,\delta)\bigr)$ entry of
     $\sum_j M^{kj}\otimes N^{ji}$, namely
@@ -438,8 +434,7 @@ normalized flattening of every $\mathcal U_g$ is left-canonical.
         MPOTensor.GroupFamily.IsRepresentation.daggerInverseGauge,
         MPOTensor.GroupFamily.IsRepresentation.physicalAdjointTensor_eq_daggerInverseGauge}
     \leanok
-    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
-        def:left_canonical_tensor, def:mpdo_physical_adjoint}
+    \uses{def:mpug_group_representation,def:mpu_normalized_flattening,def:left_canonical_tensor,def:mpdo_physical_adjoint}
     Let $G$ be a group, and let
     $\{\mathcal U_g\}_{g\in G}$ be a representation by simple injective MPU
     tensors whose normalized flattenings are left-canonical.  Then
@@ -484,12 +479,7 @@ normalized flattening of every $\mathcal U_g$ is left-canonical.
 \end{center}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_physical_adjoint_inverse_mpv,
-        thm:mps_equality_reduction_exists,
-        thm:mps_rectangular_reduction_identities, thm:ft_single,
-        thm:injective_irreducible,
-        lem:left_canonical_irreducible_same_phase_unitary_gauge,
-        thm:mpu_physical_adjoint_normalized_flattening}
+    \uses{thm:mpug_physical_adjoint_inverse_mpv,thm:mps_equality_reduction_exists,thm:mps_rectangular_reduction_identities,thm:ft_single,thm:injective_irreducible,lem:left_canonical_irreducible_same_phase_unitary_gauge,thm:mpu_physical_adjoint_normalized_flattening}
     Applying the equality-case reduction theorem first to
     $\mathcal U_g^\dagger$ and $\mathcal U_{g^{-1}}$, and then with $g$ and
     $g^{-1}$ exchanged, gives $D_{g^{-1}}\leq D_g$ and $D_g\leq D_{g^{-1}}$,
@@ -538,12 +528,7 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_dagger_inverse_gauge,
-        thm:mpu_physical_adjoint_identities,
-        lem:gauge_unique_up_to_scalar,
-        thm:mpug_unitary_entrywise_scalar_phase,
-        thm:mpug_unitary_entrywise_paired_scalars,
-        thm:mpug_unitary_entrywise_self_sign}
+    \uses{thm:mpug_dagger_inverse_gauge,thm:mpu_physical_adjoint_identities,lem:gauge_unique_up_to_scalar,thm:mpug_unitary_entrywise_scalar_phase,thm:mpug_unitary_entrywise_paired_scalars,thm:mpug_unitary_entrywise_self_sign}
     Applying physical adjunction to (\ref{eq:mpug_dagger_inverse_gauge}) for
     $g^{-1}$, and using its involutivity and unitarity, produces a second gauge
     $T_{g^{-1}}^*$ from $\mathcal U_{g^{-1}}$ to $\mathcal U_g^\dagger$. By
@@ -588,8 +573,7 @@ the comparison matrix $K$.
     \label{def:mpug_inverse_cut_factors}
     \lean{MPOTensor.inverseCompatibleX₁, MPOTensor.inverseCompatibleY₁}
     \leanok
-    \uses{def:mpug_inverse_cut_gauges, def:mpu_weighted_source_factors,
-        def:mpu_source_matrix_two}
+    \uses{def:mpug_inverse_cut_gauges,def:mpu_weighted_source_factors,def:mpu_source_matrix_two}
     Let $\mathcal U$ be a tensor of physical dimension $d$ and bond
     dimension $D$, and let $T$ be unitary on $\C^D$. Let
     $\ell=\operatorname{rank}M_2(\mathcal U)$. For the chosen compact
@@ -632,8 +616,7 @@ the comparison matrix $K$.
     \label{thm:mpug_inverse_cut_dressed}
     \lean{MPOTensor.sourceCutM₁_eq_inverseCompatible_dressed_cut}
     \leanok
-    \uses{def:mpug_inverse_cut_gauges, def:mpu_source_matrix_one,
-        def:mpu_source_matrix_two, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_cut_gauges,def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a tensor of physical dimension $d$ and bond
     dimension $D$. Suppose that $T$ is unitary and that, for every
     physical pair $i,j$, $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$.
@@ -644,9 +627,7 @@ the comparison matrix $K$.
     $M_1(\mathcal U)=AM_2(\mathcal U)^\dagger B$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_reverse_gauge,
-        thm:mpu_physical_adjoint_source_cuts, def:mpug_inverse_cut_gauges,
-        def:mpu_source_matrix_one}
+    \uses{thm:mpug_inverse_cut_reverse_gauge,thm:mpu_physical_adjoint_source_cuts,def:mpug_inverse_cut_gauges,def:mpu_source_matrix_one}
     Physical adjunction gives
     $M_2(\mathcal U)^\dagger=M_1(\mathcal U^\sharp)$.
     For physical indices $i,j$ and virtual indices $a,b$, expanding the matrix
@@ -664,8 +645,7 @@ the comparison matrix $K$.
     \label{thm:mpug_inverse_cut_factorization}
     \lean{MPOTensor.sourceCutM₁_eq_inverseCompatibleX₁_mul_inverseCompatibleY₁}
     \leanok
-    \uses{def:mpug_inverse_cut_factors, def:mpu_source_matrix_one,
-        def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_cut_factors,def:mpu_source_matrix_one,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a tensor and $T$ a unitary virtual matrix such
     that, for every physical pair $i,j$,
     $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$. As in
@@ -674,8 +654,7 @@ the comparison matrix $K$.
     $M_1(\mathcal U)=XY$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_dressed, thm:mpu_source_factorizations,
-        def:mpug_inverse_cut_factors}
+    \uses{thm:mpug_inverse_cut_dressed,thm:mpu_source_factorizations,def:mpug_inverse_cut_factors}
     Substituting the second-cut factorization $M_2(\mathcal U)=X_2Y_2$ into the
     dressed-cut identity gives
     \begin{align}
@@ -689,7 +668,7 @@ the comparison matrix $K$.
     \label{thm:mpug_inverse_cut_left_inverse}
     \lean{MPOTensor.inverseCompatibleX₁_leftInverse}
     \leanok
-    \uses{def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors}
+    \uses{def:mpug_inverse_cut_factors,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be any tensor and $T$ any unitary virtual matrix.
     Without assuming any adjoint gauge relation, as in
     \cite[line~5432]{FrancoRubio2025MPUGauging}, the candidate
@@ -698,8 +677,7 @@ the comparison matrix $K$.
     $(Z_2^\dagger A^\dagger)X=I_\ell$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpug_inverse_cut_gauges, def:mpug_inverse_cut_factors,
-        thm:mpu_source_factor_right_inverses}
+    \uses{def:mpug_inverse_cut_gauges,def:mpug_inverse_cut_factors,thm:mpu_source_factor_right_inverses}
     Unitarity of $T$ gives
     $A^\dagger A=I_d\otimes(T^{\mathsf T}\overline T)=I_{dD}$.
     Hence
@@ -714,7 +692,7 @@ the comparison matrix $K$.
     \label{thm:mpug_inverse_cut_right_inverse}
     \lean{MPOTensor.inverseCompatibleY₁_rightInverse}
     \leanok
-    \uses{def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors}
+    \uses{def:mpug_inverse_cut_factors,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be any tensor and $T$ any unitary virtual matrix.
     Without assuming any adjoint gauge relation, as in
     \cite[line~5432]{FrancoRubio2025MPUGauging}, the candidate
@@ -723,8 +701,7 @@ the comparison matrix $K$.
     $Y(B^\dagger X_2)=I_\ell$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpug_inverse_cut_gauges, def:mpug_inverse_cut_factors,
-        thm:mpu_source_factor_normalizations}
+    \uses{def:mpug_inverse_cut_gauges,def:mpug_inverse_cut_factors,thm:mpu_source_factor_normalizations}
     Unitarity of $T$ gives
     $BB^\dagger=(T^{\mathsf T}\overline T)\otimes I_d=I_{Dd}$.
     Hence $Y(B^\dagger X_2)=X_2^\dagger(BB^\dagger)X_2
@@ -735,8 +712,7 @@ the comparison matrix $K$.
     \label{thm:mpug_involutive_adjoint_gauge}
     \lean{MPOTensor.GroupFamily.IsRepresentation.physicalAdjointTensor_eq_daggerInverseGauge_of_inv_eq}
     \leanok
-    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
-        def:left_canonical_tensor, thm:mpug_dagger_inverse_gauge}
+    \uses{def:mpug_group_representation,def:mpu_normalized_flattening,def:left_canonical_tensor,thm:mpug_dagger_inverse_gauge}
     Let $G$ be a group and $\{\mathcal U_a\}_{a\in G}$ a representation
     by simple injective MPUs whose normalized flattenings are left-canonical
     for every $a\in G$. Specializing the gauge relation of
@@ -759,9 +735,7 @@ the comparison matrix $K$.
     \label{thm:mpug_involutive_first_cut}
     \lean{MPOTensor.GroupFamily.IsRepresentation.inverseCompatibleFirstCut_of_inv_eq}
     \leanok
-    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
-        def:left_canonical_tensor, thm:mpug_dagger_inverse_gauge,
-        def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors}
+    \uses{def:mpug_group_representation,def:mpu_normalized_flattening,def:left_canonical_tensor,thm:mpug_dagger_inverse_gauge,def:mpug_inverse_cut_factors,def:mpu_weighted_source_factors}
     Let $G$ be a group and $\{\mathcal U_a\}_{a\in G}$ a representation
     by simple injective MPUs whose normalized flattenings are
     left-canonical for every $a\in G$. For $g^{-1}=g$ with the chosen gauge
@@ -780,9 +754,7 @@ the comparison matrix $K$.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_involutive_adjoint_gauge,
-        thm:mpug_inverse_cut_factorization, thm:mpug_inverse_cut_left_inverse,
-        thm:mpug_inverse_cut_right_inverse}
+    \uses{thm:mpug_involutive_adjoint_gauge,thm:mpug_inverse_cut_factorization,thm:mpug_inverse_cut_left_inverse,thm:mpug_inverse_cut_right_inverse}
     Lemma~\ref{thm:mpug_involutive_adjoint_gauge} gives
     $(\mathcal U_g^\sharp)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$.
     Lemma~\ref{thm:mpug_inverse_cut_factorization} therefore gives
@@ -803,7 +775,7 @@ decomposition is asserted here.
     \label{thm:mpug_inverse_cut_rank_equality}
     \lean{MPOTensor.rightRank_eq_leftRank_of_physicalAdjointTensor_eq_unitary_gauge}
     \leanok
-    \uses{def:mpu_right_rank, def:mpu_left_rank, def:mpdo_physical_adjoint}
+    \uses{def:mpu_right_rank,def:mpu_left_rank,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
     dimension $D$. Suppose that $T$ is unitary on $\C^D$ and
     $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -814,9 +786,7 @@ decomposition is asserted here.
     No positivity, simplicity, or positive-dimension assumption is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_factorization,
-        thm:mpug_inverse_cut_left_inverse, thm:mpug_inverse_cut_right_inverse,
-        def:mpug_inverse_cut_factors}
+    \uses{thm:mpug_inverse_cut_factorization,thm:mpug_inverse_cut_left_inverse,thm:mpug_inverse_cut_right_inverse,def:mpug_inverse_cut_factors}
     With $X=AY_2^\dagger$, $Y=X_2^\dagger B$, $L=Z_2^\dagger A^\dagger$, and
     $R=B^\dagger X_2$ formed from the gauge matrices and second-cut factors of
     Definition~\ref{def:mpug_inverse_cut_factors}, the factorization $M_1=XY$
@@ -831,8 +801,7 @@ decomposition is asserted here.
     \lean{MPOTensor.inverseCompatible_sourceRanks_eq_physical,
         MPOTensor.inverseCompatiblePhysicalEquiv}
     \leanok
-    \uses{def:mpu_right_rank, def:mpu_left_rank, def:mpu_simple,
-        def:mpu_canonical_form_ii, def:mpdo_physical_adjoint}
+    \uses{def:mpu_right_rank,def:mpu_left_rank,def:mpu_simple,def:mpu_canonical_form_ii,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of physical dimension $d$ and bond
     dimension $D$ in canonical form II. Suppose that $T$ is unitary on
     $\C^D$ and that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
@@ -846,7 +815,7 @@ decomposition is asserted here.
     to the physical index.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_rank_equality, ThmFund1}
+    \uses{thm:mpug_inverse_cut_rank_equality,ThmFund1}
     Lemma~\ref{thm:mpug_inverse_cut_rank_equality} gives $r=\ell$ from
     the adjoint gauge relation alone. Simplicity of a canonical-form-II
     tensor is equivalent to $r\ell=d^2$ by Theorem~\ref{ThmFund1}.
@@ -857,7 +826,7 @@ decomposition is asserted here.
     \label{def:mpug_inverse_cut_comparison_k}
     \lean{MPOTensor.inverseCompatibleComparisonK}
     \leanok
-    \uses{def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors}
+    \uses{def:mpug_inverse_cut_factors,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$, let $T$ be
     unitary on $\C^D$, and let $\rho$ be a positive-definite matrix on
     $\C^D$. Put $r=\operatorname{rank}M_1(\mathcal U)$ and
@@ -879,8 +848,7 @@ decomposition is asserted here.
     \label{def:mpug_inverse_cut_comparison_j}
     \lean{MPOTensor.inverseCompatibleComparisonJ}
     \leanok
-    \uses{def:mpug_inverse_cut_factors, def:mpug_inverse_cut_gauges,
-        def:mpu_weighted_source_factors}
+    \uses{def:mpug_inverse_cut_factors,def:mpug_inverse_cut_gauges,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$, let $T$ be
     unitary on $\C^D$, and let $\rho$ be positive definite on $\C^D$.
     Let $\widetilde X$ be its first source factor with weight $\rho$,
@@ -899,9 +867,7 @@ decomposition is asserted here.
     \label{thm:mpug_inverse_cut_comparison}
     \lean{MPOTensor.inverseCompatibleComparison}
     \leanok
-    \uses{def:mpug_inverse_cut_comparison_k, def:mpug_inverse_cut_comparison_j,
-        def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors,
-        def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_cut_comparison_k,def:mpug_inverse_cut_comparison_j,def:mpug_inverse_cut_factors,def:mpu_weighted_source_factors,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$, let $T$ be
     unitary on $\C^D$, and suppose that
     $(\mathcal U^\sharp)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -939,10 +905,7 @@ decomposition is asserted here.
     identities, not adjoint or unitarity identities.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_factorization_comparison,
-        thm:mpug_inverse_cut_factorization, thm:mpug_inverse_cut_left_inverse,
-        thm:mpug_inverse_cut_right_inverse, thm:mpu_source_factorizations,
-        thm:mpu_source_factor_normalizations, thm:mpu_source_factor_right_inverses}
+    \uses{thm:mpug_factorization_comparison,thm:mpug_inverse_cut_factorization,thm:mpug_inverse_cut_left_inverse,thm:mpug_inverse_cut_right_inverse,thm:mpu_source_factorizations,thm:mpu_source_factor_normalizations,thm:mpu_source_factor_right_inverses}
     The two first-cut factorizations give $XY=\widetilde X\widetilde Y$, while
     their one-sided inverses satisfy $\widetilde L\widetilde X=I_r$,
     $LX=I_\ell$, $YR=I_\ell$, and $\widetilde Y\widetilde Z=I_r$. Applying
@@ -959,8 +922,7 @@ decomposition is asserted here.
     \label{thm:mpug_inverse_cut_adjoint_comparison}
     \lean{MPOTensor.sourceY₂_eq_inverseCompatibleComparisonK_adjoint}
     \leanok
-    \uses{def:mpug_inverse_cut_comparison_k, def:mpug_inverse_cut_gauges,
-        def:mpu_weighted_source_factors, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_cut_comparison_k,def:mpug_inverse_cut_gauges,def:mpu_weighted_source_factors,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
     dimension $D$, let $\rho$ be positive definite on $\C^D$, and let
     $T$ be unitary on $\C^D$. Suppose that
@@ -979,8 +941,7 @@ decomposition is asserted here.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_comparison, def:mpug_inverse_cut_factors,
-        def:mpug_inverse_cut_gauges}
+    \uses{thm:mpug_inverse_cut_comparison,def:mpug_inverse_cut_factors,def:mpug_inverse_cut_gauges}
     Lemma~\ref{thm:mpug_inverse_cut_comparison} gives
     $AY_2^\dagger=\widetilde X_1K$. Since $A^\dagger A=I$,
     \begin{align}
@@ -995,9 +956,7 @@ decomposition is asserted here.
     \label{thm:mpug_inverse_cut_gate_identity}
     \lean{MPOTensor.sourceU_eq_smul_inverseCompatibleComparisonK_kronecker_sourceV_adjoint}
     \leanok
-    \uses{def:mpug_inverse_cut_comparison_k, def:mpug_inverse_cut_gauges,
-        def:mpu_weighted_source_factors, def:mpdo_physical_adjoint,
-        def:mpu_source_uv}
+    \uses{def:mpug_inverse_cut_comparison_k,def:mpug_inverse_cut_gauges,def:mpu_weighted_source_factors,def:mpdo_physical_adjoint,def:mpu_source_uv}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
     dimension $D$, let $\rho$ be positive definite on $\C^D$, and let
     $T$ be unitary on $\C^D$. Suppose that
@@ -1023,9 +982,7 @@ decomposition is asserted here.
     swap or identification of the rank coordinates.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_adjoint_comparison,
-        thm:mpug_inverse_cut_comparison, def:mpug_inverse_cut_factors,
-        def:mpug_inverse_cut_gauges, def:mpu_source_uv}
+    \uses{thm:mpug_inverse_cut_adjoint_comparison,thm:mpug_inverse_cut_comparison,def:mpug_inverse_cut_factors,def:mpug_inverse_cut_gauges,def:mpu_source_uv}
     Conjugating the phase relation by $T$ gives
     $\overline T T=T^\dagger(T\overline T)T=\sigma I_D$.
     Lemma~\ref{thm:mpug_inverse_cut_adjoint_comparison} and
@@ -1071,8 +1028,7 @@ decomposition is asserted here.
     \label{thm:mpug_inverse_cut_comparison_unitary}
     \lean{MPOTensor.inverseCompatibleComparisonK_isUnitaryBetween}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpug_inverse_cut_comparison_k}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpug_inverse_cut_comparison_k}
     Let $\mathcal U$ be a simple MPU of physical dimension $d$ and bond
     dimension $D$, with a canonical-form-II presentation and its recorded
     positive-definite matrix $\rho$. Let $T$ be unitary on $\C^D$ and
@@ -1095,9 +1051,7 @@ decomposition is asserted here.
     $KK^\dagger=I_r$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lemuisometry, ThmFund1, thm:mpug_inverse_cut_gate_identity,
-        thm:mpug_unitary_entrywise_scalar_phase,
-        thm:matrix_unitary_adjoint_kronecker}
+    \uses{lemuisometry,ThmFund1,thm:mpug_inverse_cut_gate_identity,thm:mpug_unitary_entrywise_scalar_phase,thm:matrix_unitary_adjoint_kronecker}
     Canonical form gives $d,D>0$, and Lemma~\ref{lemuisometry} gives
     $d^2\leq r\ell$, so both rank spaces are nonempty. By
     Lemma~\ref{thm:mpug_unitary_entrywise_scalar_phase},
@@ -1123,9 +1077,7 @@ decomposition is asserted here.
     \lean{MPOTensor.inverseCompatibleComparisonJ_eq_conjTranspose,
         MPOTensor.inverseCompatibleX₁_weighted_isometry}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpug_inverse_cut_comparison_k,
-        def:mpug_inverse_cut_comparison_j, def:mpug_inverse_cut_factors}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpug_inverse_cut_comparison_k,def:mpug_inverse_cut_comparison_j,def:mpug_inverse_cut_factors}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$, with a
     canonical-form-II presentation and recorded positive-definite matrix
     $\rho$. Suppose that $T$ is unitary on $\C^D$, that
@@ -1147,8 +1099,7 @@ decomposition is asserted here.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_comparison_unitary,
-        thm:mpug_inverse_cut_comparison, thm:mpu_source_factor_normalizations}
+    \uses{thm:mpug_inverse_cut_comparison_unitary,thm:mpug_inverse_cut_comparison,thm:mpu_source_factor_normalizations}
     Lemmas~\ref{thm:mpug_inverse_cut_comparison_unitary}
     and~\ref{thm:mpug_inverse_cut_comparison} give
     $K^\dagger K=I_\ell$ and $KJ=I_r$. Hence
@@ -1167,10 +1118,7 @@ decomposition is asserted here.
     \label{thm:mpug_involutive_comparison_unitary}
     \lean{MPOTensor.GroupFamily.IsRepresentation.inverseCompatibleComparison_unitary_of_inv_eq}
     \leanok
-    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
-        def:left_canonical_tensor, def:mpu_canonical_form_ii,
-        thm:mpug_dagger_inverse_gauge, def:mpug_inverse_cut_comparison_k,
-        def:mpug_inverse_cut_comparison_j, def:mpug_inverse_cut_factors}
+    \uses{def:mpug_group_representation,def:mpu_normalized_flattening,def:left_canonical_tensor,def:mpu_canonical_form_ii,thm:mpug_dagger_inverse_gauge,def:mpug_inverse_cut_comparison_k,def:mpug_inverse_cut_comparison_j,def:mpug_inverse_cut_factors}
     Let $G$ be a group and let $\{\mathcal U_a\}_{a\in G}$ be a
     representation by simple injective MPUs of physical dimension $d$.
     Suppose that the normalized flattening of $\mathcal U_a$ is
@@ -1193,10 +1141,7 @@ decomposition is asserted here.
     normalized flattenings is required throughout the family.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpug_group_representation, thm:mpug_involutive_adjoint_gauge,
-        thm:mpug_dagger_inverse_scalar,
-        thm:mpug_inverse_cut_comparison_unitary,
-        thm:mpug_inverse_cut_unitary_consequences}
+    \uses{def:mpug_group_representation,thm:mpug_involutive_adjoint_gauge,thm:mpug_dagger_inverse_scalar,thm:mpug_inverse_cut_comparison_unitary,thm:mpug_inverse_cut_unitary_consequences}
     The representation makes $\mathcal U_g$ simple.
     Lemma~\ref{thm:mpug_involutive_adjoint_gauge} gives
     $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$ for
@@ -1222,7 +1167,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     \label{def:mpug_inverse_cut_rank_equiv}
     \lean{MPOTensor.inverseCompatibleRankEquiv}
     \leanok
-    \uses{thm:mpug_inverse_cut_rank_equality, def:mpdo_physical_adjoint}
+    \uses{thm:mpug_inverse_cut_rank_equality,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$ and let $T$
     be unitary on $\C^D$. Suppose that
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -1247,9 +1192,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
         MPOTensor.inverseCompatibleSourceFactors_Z₂,
         MPOTensor.inverseCompatibleSourceFactors_apply}
     \leanok
-    \uses{def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_factors,
-        def:mpu_weighted_source_factors, def:mpu_canonical_form_ii,
-        def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_cut_rank_equiv,def:mpug_inverse_cut_factors,def:mpu_weighted_source_factors,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU in canonical form II, with recorded
     positive-definite matrix $\rho$. Suppose that $T$ is unitary on
     $\C^D$, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
@@ -1283,10 +1226,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     isometry, and the two right-inverse identities at the same weight $\rho$.
 \end{definition}
 \begin{proof}\leanok
-    \uses{def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_factors,
-        def:mpu_weighted_source_factors, thm:mpug_inverse_cut_factorization,
-        thm:mpug_inverse_cut_unitary_consequences,
-        thm:mpug_inverse_cut_right_inverse}
+    \uses{def:mpug_inverse_cut_rank_equiv,def:mpug_inverse_cut_factors,def:mpu_weighted_source_factors,thm:mpug_inverse_cut_factorization,thm:mpug_inverse_cut_unitary_consequences,thm:mpug_inverse_cut_right_inverse}
     The second factors and their identities are unchanged. Put
     $W=I_d\otimes\rho$. The candidate identities are
     $XY=M_1(\mathcal U)$, $X^\dagger WX=I_\ell$, and $YY^\dagger=I_\ell$;
@@ -1310,10 +1250,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     \lean{MPOTensor.inverseCompatibleSourceFactors_unitary_transport,
         MPOTensor.inverseCompatibleSourceFactors_gram_eq}
     \leanok
-    \uses{def:mpug_inverse_compatible_source_factors,
-        def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_comparison_k,
-        def:mpu_weighted_source_factors, def:mpu_canonical_form_ii,
-        def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_source_factors,def:mpug_inverse_cut_rank_equiv,def:mpug_inverse_cut_comparison_k,def:mpu_weighted_source_factors,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
     form II, with recorded positive-definite matrix $\rho$. Suppose
     that $T$ is unitary on $\C^D$, that
@@ -1345,9 +1282,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_comparison_unitary,
-        thm:mpug_inverse_cut_comparison, thm:mpug_inverse_cut_unitary_consequences,
-        def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_compatible_source_factors}
+    \uses{thm:mpug_inverse_cut_comparison_unitary,thm:mpug_inverse_cut_comparison,thm:mpug_inverse_cut_unitary_consequences,def:mpug_inverse_cut_rank_equiv,def:mpug_inverse_compatible_source_factors}
     The comparison results give $K^\dagger K=I_\ell$, $KK^\dagger=I_r$,
     $X=\widetilde X_1K$, and $Y=K^\dagger\widetilde Y_1$ for the
     untransported candidates $X,Y$. Reindexing the columns of $K$
@@ -1379,8 +1314,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     \label{thm:mpug_inverse_source_y_physical}
     \lean{MPOTensor.inverseCompatibleSourceFactors_Y_physical_contractions}
     \leanok
-    \uses{def:mpug_inverse_compatible_source_factors, def:mpu_canonical_form_ii,
-        def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_source_factors,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
     form II, with recorded positive-definite matrix $\rho$. Suppose
     that $T$ is unitary, that
@@ -1404,9 +1338,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_source_unitary_transport,
-        thm:mpug_source_y_physical_contractions,
-        def:mpug_inverse_compatible_source_factors}
+    \uses{thm:mpug_inverse_source_unitary_transport,thm:mpug_source_y_physical_contractions,def:mpug_inverse_compatible_source_factors}
     Write $\widetilde Y_1,Y_2$ for the original source factors at $\rho$.
     The external Gram equality gives
     \begin{align}
@@ -1426,8 +1358,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     \label{thm:mpug_inverse_source_y_rank}
     \lean{MPOTensor.inverseCompatibleSourceFactors_Y_rank_normalizations}
     \leanok
-    \uses{def:mpug_inverse_compatible_source_factors, def:mpu_canonical_form_ii,
-        def:mpu_simple, def:mpdo_physical_adjoint, def:mpu_source_weight}
+    \uses{def:mpug_inverse_compatible_source_factors,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpu_source_weight}
     Let $\mathcal U$ be an MPU of dimensions $d,D$ in canonical form II,
     with recorded positive-definite matrix $\rho$. Assume that both
     $\mathcal U$ and $\mathcal U^\dagger$ are simple. Suppose that $T$
@@ -1446,10 +1377,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_source_unitary_transport,
-        thm:mpug_source_y_one_normalization,
-        thm:mpug_source_y_two_normalization,
-        def:mpug_inverse_compatible_source_factors}
+    \uses{thm:mpug_inverse_source_unitary_transport,thm:mpug_source_y_one_normalization,thm:mpug_source_y_two_normalization,def:mpug_inverse_compatible_source_factors}
     Let $\widetilde Y_1,Y_2$ be the original factors. The unitary change of basis
     gives $\widehat Y_1=C^\dagger\widetilde Y_1$ with $C^\dagger C=I_r$.
     Conjugating the original scalar Gram matrix yields
@@ -1466,8 +1394,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     \label{thm:mpug_inverse_source_x_physical}
     \lean{MPOTensor.inverseCompatibleSourceFactors_X_physical_contractions}
     \leanok
-    \uses{def:mpug_inverse_compatible_source_factors, def:mpu_canonical_form_ii,
-        def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_source_factors,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPU of dimensions $d,D$ in canonical form II,
     with recorded positive-definite matrix $\rho$. Assume that both
     $\mathcal U$ and $\mathcal U^\dagger$ are simple. Suppose that $T$
@@ -1490,10 +1417,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_source_unitary_transport,
-        thm:mpug_source_x_one_physical_normalization,
-        thm:mpug_source_x_two_physical_normalization,
-        def:mpug_inverse_compatible_source_factors}
+    \uses{thm:mpug_inverse_source_unitary_transport,thm:mpug_source_x_one_physical_normalization,thm:mpug_source_x_two_physical_normalization,def:mpug_inverse_compatible_source_factors}
     For the original factors $\widetilde X_1,X_2$, multiplying the
     $((i,\alpha),(j,\beta))$ entries of the external Gram equality by
     $\rho_{\beta\alpha}$ and summing over the virtual indices gives
@@ -1521,10 +1445,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_inverse_movement_transport}
     \lean{MPOTensor.inverseCompatibleSourceFactors_movement_transport}
     \leanok
-    \uses{def:mpug_inverse_compatible_source_factors,
-        def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_comparison_k,
-        def:mpug_staircase_gates, def:mpu_weighted_source_factors,
-        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_source_factors,def:mpug_inverse_cut_rank_equiv,def:mpug_inverse_cut_comparison_k,def:mpug_staircase_gates,def:mpu_weighted_source_factors,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$ with a
     canonical-form-II presentation and recorded positive-definite matrix
     $\rho$. Let $T$ be unitary on $\C^D$ and let $\sigma\in\C$ satisfy
@@ -1552,8 +1473,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_source_unitary_transport,
-        def:mpug_inverse_compatible_source_factors, def:mpug_staircase_gates}
+    \uses{thm:mpug_inverse_source_unitary_transport,def:mpug_inverse_compatible_source_factors,def:mpug_staircase_gates}
     The second factors are unchanged, giving the left-gate equality.
     For the first factors, Lemma~\ref{thm:mpug_inverse_source_unitary_transport}
     gives $X_1(S)=X_1(S_0)C$ and $Y_1(S)=C^\dagger Y_1(S_0)$.
@@ -1575,8 +1495,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_inverse_movement_unitary}
     \lean{MPOTensor.inverseCompatibleSourceFactors_movement_isUnitaryBetween}
     \leanok
-    \uses{def:mpug_inverse_compatible_source_factors, def:mpug_staircase_gates,
-        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_source_factors,def:mpug_staircase_gates,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$ with a
     canonical-form-II presentation and recorded positive-definite matrix
     $\rho$. Suppose that $T$ is unitary on $\C^D$, that
@@ -1592,9 +1511,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     No simplicity hypothesis on the physical adjoint is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_source_unitary_transport,
-        thm:mpug_staircase_gates_unitary, thm:mpug_inverse_movement_transport,
-        thm:matrix_unitary_between_kronecker}
+    \uses{thm:mpug_inverse_source_unitary_transport,thm:mpug_staircase_gates_unitary,thm:mpug_inverse_movement_transport,thm:matrix_unitary_between_kronecker}
     Lemma~\ref{thm:mpug_inverse_source_unitary_transport} makes $C$
     unitary, and Lemma~\ref{thm:mpug_staircase_gates_unitary} makes the
     chosen gates $w_L(S_0),w_R(S_0)$ unitary. While the left gate is unchanged,
@@ -1610,7 +1527,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{def:mpug_inverse_compatible_gates}
     \lean{MPOTensor.inverseCompatibleU, MPOTensor.inverseCompatibleV}
     \leanok
-    \uses{def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors}
+    \uses{def:mpug_inverse_cut_factors,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be any MPO tensor of dimensions $d,D$ and $T$ any
     unitary virtual matrix. Put $\ell=\operatorname{rank}M_2(\mathcal U)$.
     From the candidates $X=(I_d\otimes\overline T)Y_2^\dagger$ and
@@ -1633,8 +1550,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_inverse_new_u_transport}
     \lean{MPOTensor.inverseCompatibleU_eq_comparisonJ_mul_sourceU}
     \leanok
-    \uses{def:mpug_inverse_compatible_gates, def:mpug_inverse_cut_comparison_j,
-        def:mpu_source_uv, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_gates,def:mpug_inverse_cut_comparison_j,def:mpu_source_uv,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor, $\rho$ a positive-definite virtual
     matrix, and $T$ a unitary virtual matrix satisfying
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -1648,8 +1564,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     $u_{\mathrm{new}}=(I_\ell\otimes J)u$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_comparison, def:mpug_inverse_compatible_gates,
-        def:mpu_source_uv}
+    \uses{thm:mpug_inverse_cut_comparison,def:mpug_inverse_compatible_gates,def:mpu_source_uv}
     For the old first factor $\widetilde Y_1$, substituting
     $Y=J\widetilde Y_1$ and interchanging the finite sums gives
     \begin{align}
@@ -1665,8 +1580,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_inverse_new_v_transport}
     \lean{MPOTensor.inverseCompatibleV_eq_sourceV_mul_comparisonK}
     \leanok
-    \uses{def:mpug_inverse_compatible_gates, def:mpug_inverse_cut_comparison_k,
-        def:mpu_source_uv, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_gates,def:mpug_inverse_cut_comparison_k,def:mpu_source_uv,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor, $\rho$ a positive-definite virtual
     matrix, and $T$ a unitary virtual matrix satisfying
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -1678,8 +1592,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     $v_{\mathrm{new}}=v(K\otimes I_\ell)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_cut_comparison, def:mpug_inverse_compatible_gates,
-        def:mpu_source_uv}
+    \uses{thm:mpug_inverse_cut_comparison,def:mpug_inverse_compatible_gates,def:mpu_source_uv}
     For the old first factor $\widetilde X_1$, substituting
     $X=\widetilde X_1K$ and interchanging the finite sums gives
     \begin{align}
@@ -1694,8 +1607,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_inverse_new_gates_unitary_phase}
     \lean{MPOTensor.inverseCompatibleGates_unitary_and_phase}
     \leanok
-    \uses{def:mpug_inverse_compatible_gates, def:mpu_canonical_form_ii,
-        def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_gates,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU in canonical form II, with recorded
     positive-definite matrix $\rho$. Suppose that $T$ is unitary,
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -1708,10 +1620,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     $u_{\mathrm{new}}=\sigma v_{\mathrm{new}}^\dagger$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_new_u_transport, thm:mpug_inverse_new_v_transport,
-        thm:mpug_inverse_cut_comparison_unitary,
-        thm:mpug_inverse_cut_unitary_consequences, ThmFund1,
-        thm:matrix_unitary_between_kronecker, thm:mpug_inverse_cut_gate_identity}
+    \uses{thm:mpug_inverse_new_u_transport,thm:mpug_inverse_new_v_transport,thm:mpug_inverse_cut_comparison_unitary,thm:mpug_inverse_cut_unitary_consequences,ThmFund1,thm:matrix_unitary_between_kronecker,thm:mpug_inverse_cut_gate_identity}
     For the old source gates $u,v$ at the recorded weight $\rho$, the
     comparison results give $J=K^\dagger$ and $K^\dagger K=I_\ell$, so
     \begin{align}
@@ -1736,10 +1645,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_involutive_new_gates}
     \lean{MPOTensor.GroupFamily.IsRepresentation.inverseCompatibleGates_unitary_and_phase_of_inv_eq}
     \leanok
-    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
-        def:left_canonical_tensor, def:mpu_canonical_form_ii,
-        thm:mpug_dagger_inverse_gauge, thm:mpug_dagger_inverse_scalar,
-        def:mpug_inverse_compatible_gates}
+    \uses{def:mpug_group_representation,def:mpu_normalized_flattening,def:left_canonical_tensor,def:mpu_canonical_form_ii,thm:mpug_dagger_inverse_gauge,thm:mpug_dagger_inverse_scalar,def:mpug_inverse_compatible_gates}
     Let $G$ be a group and $\{\mathcal U_a\}_{a\in G}$ a representation
     by simple injective MPUs. Assume that the normalized flattening of
     $\mathcal U_a$ is left-canonical for every $a\in G$. Fix $g$ with
@@ -1754,8 +1660,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     common second-cut rank-pair space.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpug_group_representation, thm:mpug_involutive_adjoint_gauge,
-        thm:mpug_dagger_inverse_scalar, thm:mpug_inverse_new_gates_unitary_phase}
+    \uses{def:mpug_group_representation,thm:mpug_involutive_adjoint_gauge,thm:mpug_dagger_inverse_scalar,thm:mpug_inverse_new_gates_unitary_phase}
     The representation gives simplicity at $g$, where the chosen gauge and
     scalar satisfy
     \begin{align}
@@ -1771,10 +1676,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_involutive_source_properties}
     \lean{MPOTensor.GroupFamily.IsRepresentation.inverseCompatibleSourceProperties_of_inv_eq}
     \leanok
-    \uses{def:mpug_group_representation, def:mpu_normalized_flattening,
-        def:left_canonical_tensor, def:mpu_canonical_form_ii,
-        def:mpug_inverse_compatible_source_factors, def:mpu_source_weight,
-        thm:mpug_dagger_inverse_gauge, thm:mpug_dagger_inverse_scalar}
+    \uses{def:mpug_group_representation,def:mpu_normalized_flattening,def:left_canonical_tensor,def:mpu_canonical_form_ii,def:mpug_inverse_compatible_source_factors,def:mpu_source_weight,thm:mpug_dagger_inverse_gauge,thm:mpug_dagger_inverse_scalar}
     Let $G$ be a group and $\{\mathcal U_a\}_{a\in G}$ a representation by
     simple injective MPUs whose normalized flattenings are all
     left-canonical. Fix $g$ with $g^{-1}=g$, give $\mathcal U_g$ a
@@ -1819,11 +1721,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_involutive_adjoint_gauge, thm:mpug_dagger_inverse_scalar,
-        thm:mpug_inverse_source_y_physical, thm:mpug_inverse_source_y_rank,
-        thm:mpug_inverse_source_x_physical, ThmFund1,
-        thm:mpu_physical_adjoint_source_ranks,
-        def:mpug_adjoint_canonical_boundaries}
+    \uses{thm:mpug_involutive_adjoint_gauge,thm:mpug_dagger_inverse_scalar,thm:mpug_inverse_source_y_physical,thm:mpug_inverse_source_y_rank,thm:mpug_inverse_source_x_physical,ThmFund1,thm:mpu_physical_adjoint_source_ranks,def:mpug_adjoint_canonical_boundaries}
     The representation gives simplicity of $\mathcal U_g$, and its
     chosen gauge and scalar satisfy
     $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$ and
@@ -1846,7 +1744,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_inverse_word_gauge}
     \lean{MPOTensor.evalWord_physicalAdjointTensor_eq_unitary_gauge}
     \leanok
-    \uses{def:mpo_eval_word, def:mpdo_physical_adjoint}
+    \uses{def:mpo_eval_word,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$ and $T$ a
     unitary matrix on $\C^D$. Suppose that
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -1875,8 +1773,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_inverse_endpoint_recovery}
     \lean{MPOTensor.sourceY₂_eq_inverseCompatibleX₁_adjoint_mul_leftGauge}
     \leanok
-    \uses{def:mpug_inverse_cut_factors, def:mpug_inverse_cut_gauges,
-        def:mpu_weighted_source_factors}
+    \uses{def:mpug_inverse_cut_factors,def:mpug_inverse_cut_gauges,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be any MPO tensor and $T$ any unitary virtual
     matrix. As in the endpoint recovery of
     \cite[line~5432]{FrancoRubio2025MPUGauging}, the gauge matrix
@@ -1884,7 +1781,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     $Y_2=X^\dagger A$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpug_inverse_cut_factors, def:mpug_inverse_cut_gauges}
+    \uses{def:mpug_inverse_cut_factors,def:mpug_inverse_cut_gauges}
     Unitarity gives $A^\dagger A=I$, so
     $X^\dagger A=Y_2A^\dagger A=Y_2$.
 \end{proof}
@@ -1895,8 +1792,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
         MPOTensor.inverseCompatibleWordA_zero_apply,
         MPOTensor.inverseCompatibleWordB_zero_apply}
     \leanok
-    \uses{def:mpug_inverse_cut_factors, def:mpu_weighted_source_factors,
-        def:mpo_eval_word, def:mpug_inverse_compatible_gates}
+    \uses{def:mpug_inverse_cut_factors,def:mpu_weighted_source_factors,def:mpo_eval_word,def:mpug_inverse_compatible_gates}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$ and $T$ a
     unitary virtual matrix. With the second source factors $X_2,Y_2$
     and the candidates $X=(I_d\otimes\overline T)Y_2^\dagger$,
@@ -1931,7 +1827,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \end{align}
 \end{definition}
 \begin{proof}\leanok
-    \uses{def:mpo_eval_word, def:mpug_inverse_compatible_gates}
+    \uses{def:mpo_eval_word,def:mpug_inverse_compatible_gates}
     At length zero, $\mathcal U[\varnothing,\varnothing]=I_D$.
     The entry $\delta_{\alpha\beta}$ contracts the two sums, respectively, to
     \begin{align}
@@ -1944,7 +1840,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{thm:mpug_inverse_word_adjoint}
     \lean{MPOTensor.inverseCompatibleWordA_eq_smul_wordB_adjoint}
     \leanok
-    \uses{def:mpug_inverse_word_endpoints, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_word_endpoints,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor and $T$ a unitary virtual matrix.
     Suppose that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
     for every physical pair and that $T\overline T=\sigma I_D$ for a
@@ -1959,10 +1855,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     without reversing either word or inserting an additional swap.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_word_gauge, thm:mpug_inverse_endpoint_recovery,
-        def:mpug_inverse_word_endpoints, def:mpug_inverse_cut_factors,
-        def:mpug_inverse_cut_gauges, def:mpdo_physical_adjoint,
-        def:mpo_eval_word}
+    \uses{thm:mpug_inverse_word_gauge,thm:mpug_inverse_endpoint_recovery,def:mpug_inverse_word_endpoints,def:mpug_inverse_cut_factors,def:mpug_inverse_cut_gauges,def:mpdo_physical_adjoint,def:mpo_eval_word}
     Fix $p,q\in\Omega_N$ and physical indices $a,b$. Put
     $M=\mathcal U[p,q]$ and $W=\overline{\mathcal U[q,p]}$, and define
     slices $C_{t\gamma}=\overline{X_{(a,\gamma),t}}$ and
@@ -1998,7 +1891,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \label{def:mpug_common_blocking}
     \lean{MPOTensor.GroupFamily.block}
     \leanok
-    \uses{def:mpug_group_representation, def:mpdo_physical_blocking}
+    \uses{def:mpug_group_representation,def:mpdo_physical_blocking}
     For a positive integer $L$, the common length-$L$ physical blocking is the
     family
     \begin{align}
@@ -2040,11 +1933,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_positive_mpu_blocking,
-        thm:mpdo_blocking_doubled_index,
-        thm:mpu_bounded_simple_blocking,
-        thm:mpdo_closed_chain_physical_blocking,
-        thm:mpdo_blocking_product}
+    \uses{thm:mpug_positive_mpu_blocking,thm:mpdo_blocking_doubled_index,thm:mpu_bounded_simple_blocking,thm:mpdo_closed_chain_physical_blocking,thm:mpdo_blocking_product}
     Physical blocking preserves nonempty-chain unitarity, injectivity, and
     simplicity. By (\ref{eq:mpug_blocked_operator}), the blocked periodic operator is
     the original operator at length $NL$ up to the canonical simultaneous reindexing.
@@ -2062,8 +1951,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \label{def:mpug_raw_group_representation}
     \lean{MPOTensor.GroupFamily.IsRawRepresentation}
     \leanok
-    \uses{def:injective, def:mpug_positive_mpu,
-        def:mpug_group_representation}
+    \uses{def:injective,def:mpug_positive_mpu,def:mpug_group_representation}
     An injective MPU representation is a dependent-bond family
     $\{\mathcal U_g\}_{g\in G}$ of injective matrix product unitaries on
     nonempty chains satisfying (\ref{eq:mpug_rep_identity}) and
@@ -2089,9 +1977,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.GroupFamily.IsRawRepresentation.block_common,
         MPOTensor.GroupFamily.IsRawRepresentation.block_common_then_block}
     \leanok
-    \uses{def:mpug_raw_group_representation,
-        def:mpug_common_simple_length, def:mpug_group_representation,
-        def:mpu_simple, def:mpdo_physical_blocking}
+    \uses{def:mpug_raw_group_representation,def:mpug_common_simple_length,def:mpug_group_representation,def:mpu_simple,def:mpdo_physical_blocking}
     Let $\{\mathcal U_g\}_{g\in G}$ be an injective MPU representation without
     an assumed simplicity condition. Then $L_*>0$,
     and every $\mathcal U_g^{[L_*]}$ is simple. For every $K>0$, each further
@@ -2102,13 +1988,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_positive_mpu_blocking,
-        thm:mpug_positive_mpu_to_mpu,
-        thm:mpu_common_pow_four_simple_blocking,
-        thm:mpu_all_later_simple_blockings,
-        thm:mpdo_blocking_doubled_index,
-        thm:mpdo_closed_chain_physical_blocking,
-        thm:mpug_common_blocking_representation}
+    \uses{thm:mpug_positive_mpu_blocking,thm:mpug_positive_mpu_to_mpu,thm:mpu_common_pow_four_simple_blocking,thm:mpu_all_later_simple_blockings,thm:mpdo_blocking_doubled_index,thm:mpdo_closed_chain_physical_blocking,thm:mpug_common_blocking_representation}
     Positivity of the bond dimensions gives $L_*>0$. For each $g$, the direct
     block of length $D_g^4$ is simple, and $D_g^4\leq L_*$ by
     (\ref{eq:mpug_common_simple_length}). Simplicity holds at every later direct
@@ -2129,10 +2009,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.GroupFamily.ReductionFamily.nilpotencyLength,
         MPOTensor.GroupFamily.ReductionFamily.HasExteriorBufferLength}
     \leanok
-    \uses{def:mpug_group_representation, def:mpdo_operator_product,
-        def:mpo_to_mps, def:mps_rectangular_reduction,
-        def:mps_reduction_residual_nilpotency_length,
-        def:mps_reduction_exterior_buffer_length}
+    \uses{def:mpug_group_representation,def:mpdo_operator_product,def:mpo_to_mps,def:mps_rectangular_reduction,def:mps_reduction_residual_nilpotency_length,def:mps_reduction_exterior_buffer_length}
     For $g,h\in G$, write
     \begin{align}
         B_{g,h} & =\mathcal U_g\mathbin{\cdot}\mathcal U_h,
@@ -2230,15 +2107,14 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \label{thm:mpug_pair_reductions_exist}
     \lean{MPOTensor.GroupFamily.IsRepresentation.nonempty_reductionFamily}
     \leanok
-    \uses{def:mpug_group_representation, def:mpug_pair_reductions}
+    \uses{def:mpug_group_representation,def:mpug_pair_reductions}
     Every MPU representation by simple injective tensors admits a family of
     selected reductions.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:mpug_product_tensor_operator,
-        thm:mps_equality_reduction_exists}
+    \uses{thm:mpug_product_tensor_operator,thm:mps_equality_reduction_exists}
     By (\ref{eq:mpug_product_tensor_positive_chain}), $B_{g,h}$ and $A_{g,h}$
     have the same positive-length matrix product vectors, and $A_{g,h}$ is
     injective with $D_{gh}>0$.  Lemma~\ref{thm:mps_equality_reduction_exists}
@@ -2259,7 +2135,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 
 \begin{proof}
     \leanok
-    \uses{thm:mps_reduction_blocking, thm:mpug_product_tensor_operator}
+    \uses{thm:mps_reduction_blocking,thm:mpug_product_tensor_operator}
     Equality of the positive-length matrix product vectors of $B_{g,h}$ and
     $A_{g,h}$ makes $N_0(g,h)$ a residual-word nilpotency bound, so
     Lemma~\ref{thm:mps_reduction_blocking} applies; enlarging the buffer
@@ -2275,8 +2151,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.GroupFamily.ReductionFamily.commonBufferLength_pos,
         MPOTensor.GroupFamily.ReductionFamily.nilpotencyLength_le_commonBufferLength_add_one}
     \leanok
-    \uses{def:mpug_pair_reductions, def:mpug_common_blocking,
-        def:common_buffer_length}
+    \uses{def:mpug_pair_reductions,def:mpug_common_blocking,def:common_buffer_length}
     Let $L>0$.  Under the canonical pairing of blocked ket and bra words,
     \begin{align}
         \mathcal U_g^{[L]}\mathbin{\cdot}\mathcal U_h^{[L]}
@@ -2301,7 +2176,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.GroupFamily.IsRepresentation.exists_block_reductionFamily_one}
     \leanok
     \discussion{7396}
-    \uses{def:mpug_pair_reductions_block, def:mpug_group_representation}
+    \uses{def:mpug_pair_reductions_block,def:mpug_group_representation}
     Let $\{\mathcal U_g\}_{g\in G}$ be an MPU representation by simple
     injective tensors with a family of selected reductions, and let $L>0$
     satisfy $N_0(g,h)\leq L+1$ for every pair.  Then the blocked family of
@@ -2332,10 +2207,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 
 \begin{proof}
     \leanok
-    \uses{lem:mpug_pair_reductions_exterior, thm:mps_reduction_blocking,
-        thm:mpdo_blocking_doubled_index, thm:mpdo_blocking_product,
-        thm:mpug_common_blocking_representation,
-        thm:mpug_pair_reductions_exist}
+    \uses{lem:mpug_pair_reductions_exterior,thm:mps_reduction_blocking,thm:mpdo_blocking_doubled_index,thm:mpdo_blocking_product,thm:mpug_common_blocking_representation,thm:mpug_pair_reductions_exist}
     By Lemma~\ref{lem:mpug_pair_reductions_exterior}, $N_0(g,h)-1$ is an
     exterior buffer length for the pair $(g,h)$, and $N_0(g,h)-1\leq L$.
     Lemma~\ref{thm:mps_reduction_blocking} with $k=1$ makes $1$ an
@@ -2427,11 +2299,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.GroupFamily.ReductionFamily.block_smul}
     \leanok
     \discussion{7397}
-    \uses{def:mpug_fusion_tensors, def:mpug_pair_reductions,
-        def:mpug_pair_reductions_block, def:scalar_cocycle,
-        def:mps_rectangular_reduction,
-        def:mps_reduction_residual_nilpotency_length,
-        def:mps_reduction_exterior_buffer_length}
+    \uses{def:mpug_fusion_tensors,def:mpug_pair_reductions,def:mpug_pair_reductions_block,def:scalar_cocycle,def:mps_rectangular_reduction,def:mps_reduction_residual_nilpotency_length,def:mps_reduction_exterior_buffer_length}
     Let $(V,W)$ be a reduction from $B$ to $A$ and let
     $\beta\in\C^\times$.  Then $(\beta^{-1}V,\beta W)$ is again a reduction
     from $B$ to $A$; its residual letters $N^i=B^i-WA^iV$ are unchanged, hence
@@ -2471,8 +2339,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \label{thm:mpug_zero_specified_source_index_ranks}
     \lean{MPOTensor.sourceRanks_eq_physDim_of_sourceIndexValue_eq_zero}
     \leanok
-    \uses{def:mpu_specified_source_index_value,
-        def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_specified_source_index_value,def:mpu_right_rank,def:mpu_left_rank}
     Let $\mathcal U$ be a specified MPO tensor of positive physical dimension
     $d$, with positive right and left source-cut ranks $r$ and $\ell$. As in
     the arithmetic conclusion of \cite[line~1547]{FrancoRubio2025MPUGauging},
@@ -2618,8 +2485,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \label{lem:mpug_inverse_contraction_open_alternating_network}
     \lean{MPSTensor.inverseContraction_openAlternatingNetwork}
     \leanok
-    \uses{def:injective, def:decomposition_map,
-        def:mpug_open_alternating_network}
+    \uses{def:injective,def:decomposition_map,def:mpug_open_alternating_network}
     Suppose that every $A_i$ is injective.  For the matrix unit $E_{z_i,q_i}$,
     let $c_i^{\sigma_i}(z_i,q_i)$ be its coefficients under a one-sided
     inverse of $A_i$, so that
@@ -2653,7 +2519,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \label{thm:mpug_alternating_network_nondegenerate}
     \lean{MPSTensor.exists_scalars_of_openAlternatingNetwork_eq}
     \leanok
-    \uses{def:injective, def:mpug_open_alternating_network}
+    \uses{def:injective,def:mpug_open_alternating_network}
     Let $n\geq 0$, and let $D_0,\ldots,D_n$ be horizontal bond dimensions.
     For each $0\leq i<n$, let $A_i$ be an injective MPS tensor with square bond
     dimension $D_i$, and let $B_i,B'_i$ be tensors whose left and right
@@ -2686,9 +2552,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:decomposition_map,
-        lem:mpug_inverse_contraction_open_alternating_network,
-        thm:periodic_product_tensor_phase_extraction}
+    \uses{def:decomposition_map,lem:mpug_inverse_contraction_open_alternating_network,thm:periodic_product_tensor_phase_extraction}
     Applying Lemma~\ref{lem:mpug_inverse_contraction_open_alternating_network}
     to both sides of (\ref{eq:mpug_alternating_network_equality}) with matrix
     units chosen to prescribe arbitrary entries of all $B_i$ isolates those
@@ -2811,8 +2675,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_mul_middle_sourceU}
     \leanok
     \discussion{7314}
-    \uses{def:mpug_staircase_gates, def:mpug_staircase_middle,
-        def:mpu_source_uv}
+    \uses{def:mpug_staircase_gates,def:mpug_staircase_middle,def:mpu_source_uv}
     Let $\mathcal U$ have source factors as in
     Definition~\ref{def:mpug_staircase_gates}, and form $u,v,w_L,w_R$
     from those same factors. As in the first diagram in the proof of the
@@ -2826,7 +2689,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_source_u_open_two_site, thm:mpu_source_v_open_two_site}
+    \uses{thm:mpu_source_u_open_two_site,thm:mpu_source_v_open_two_site}
     Expanding the crossed contractions on both sides at output index
     $((l,i_2),(i_3,r))$ and input index $((j_1,j_2),(j_3,j_4))$ and applying
     the two open factorizations identifies both entries with
@@ -2843,8 +2706,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_eq}
     \leanok
     \discussion{7314}
-    \uses{def:mpug_staircase_gates, def:mpug_staircase_middle,
-        def:mpu_source_uv}
+    \uses{def:mpug_staircase_gates,def:mpug_staircase_middle,def:mpu_source_uv}
     Let $\mathcal U$ have source factors as in
     Definition~\ref{def:mpug_staircase_gates}, and form $u,v,w_L,w_R$
     from those same factors. If $u$ is a coisometry, so that
@@ -2864,8 +2726,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_staircase_network_uncancelled,
-        thm:mpug_staircase_middle_composition}
+    \uses{thm:mpug_staircase_network_uncancelled,thm:mpug_staircase_middle_composition}
     Right-multiplying (\ref{eq:mpug_staircase_network_uncancelled}) by
     $(u^\dagger)_{23}$ composes the middle layers to
     $(uu^\dagger)_{23}=I$, which gives
@@ -2898,7 +2759,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.SourceFactors.sourceWL_second_network}
     \leanok
     \discussion{7314}
-    \uses{def:mpug_staircase_gates, def:mpu_source_uv}
+    \uses{def:mpug_staircase_gates,def:mpu_source_uv}
     Let $\mathcal U$ have source factors as in
     Definition~\ref{def:mpug_staircase_gates}, and form $u,v,w_L$ from
     those same factors. Write $d_l,d_r$ for the source-cut ranks. Under
@@ -2920,8 +2781,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_staircase_gates, def:mpu_source_uv,
-        thm:mpu_source_factorization_entries}
+    \uses{def:mpug_staircase_gates,def:mpu_source_uv,thm:mpu_source_factorization_entries}
     Expanding the crossed gates and using $M_2=X_2Y_2$ reduces the
     left-hand entry to
     \begin{align}
@@ -2938,7 +2798,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \label{thm:mpug_staircase_first_network_isometry}
     \lean{MPOTensor.SourceFactors.sourceWL_kronecker_sourceWR_isIsometry}
     \leanok
-    \uses{def:mpug_staircase_gates, def:mpu_source_uv}
+    \uses{def:mpug_staircase_gates,def:mpu_source_uv}
     Let $\mathcal U$ have source factors as in
     Definition~\ref{def:mpug_staircase_gates}. If the associated operators
     $u$ and $v$ are unitary between their respective spaces, then
@@ -2948,8 +2808,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_staircase_network_cancelled,
-        thm:mpug_staircase_middle_isometry}
+    \uses{thm:mpug_staircase_network_cancelled,thm:mpug_staircase_middle_isometry}
     Lemma~\ref{thm:mpug_staircase_network_cancelled} expresses
     $w_L\otimes w_R$ as $v_{23}(u\otimes u)(u^\dagger)_{23}$.
     Each factor is an isometry, so their product is an isometry.
@@ -2959,7 +2818,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \label{thm:mpug_staircase_second_network_isometry}
     \lean{MPOTensor.SourceFactors.sourceWL_second_network_isIsometry}
     \leanok
-    \uses{def:mpug_staircase_gates, def:mpu_source_uv}
+    \uses{def:mpug_staircase_gates,def:mpu_source_uv}
     Let $\mathcal U$ have source factors as in
     Definition~\ref{def:mpug_staircase_gates}, with left source-cut rank
     $d_l$. If $u^\dagger u=I$ and $v^\dagger v=I$, then
@@ -2980,8 +2839,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceWL_sourceWR_isUnitaryBetween}
     \leanok
     \discussion{7314}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpug_staircase_gates}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpug_staircase_gates}
     Let $\mathcal U$ be a simple MPU in canonical form II, with recorded
     positive diagonal fixed matrix $\rho$. Construct the source factors
     from $\mathcal U$ and this same $\rho$, and let $d_l,d_r$ be their
@@ -2995,9 +2853,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{ThmFund1, thm:mpug_staircase_first_network_isometry,
-        thm:mpug_kronecker_identity_factors,
-        thm:mpug_staircase_second_network_isometry}
+    \uses{ThmFund1,thm:mpug_staircase_first_network_isometry,thm:mpug_kronecker_identity_factors,thm:mpug_staircase_second_network_isometry}
     Theorem~\ref{ThmFund1} gives unitary $u,v$ and $d_rd_l=d^2>0$.
     Lemma~\ref{thm:mpug_staircase_first_network_isometry} gives
     \begin{align}
@@ -3023,8 +2879,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.SourceFactors.truncatedSymmetry}
     \leanok
     \discussion{7319}
-    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
-        def:mpo_eval_word, def:mpu_weighted_source_factors}
+    \uses{def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpo_eval_word,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
     dimension $D$, and let $d_l=\operatorname{rank}M_2$ and
     $d_r=\operatorname{rank}M_1$. Choose arbitrary complex endpoint matrices
@@ -3088,7 +2943,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \lean{MPOTensor.truncatedSymmetryOfEndpoints_zero,
         MPOTensor.SourceFactors.truncatedSymmetry_zero}
     \leanok
-    \uses{def:mpug_truncated_symmetry, def:mpu_source_uv}
+    \uses{def:mpug_truncated_symmetry,def:mpu_source_uv}
     Let $\mathcal U$ and the arbitrary endpoint matrices $Y_2,Y_1$ have
     the dimensions in Definition~\ref{def:mpug_truncated_symmetry}.
     For endpoint indices $l,r,a,b$ and the empty words $\varnothing$,
@@ -3104,7 +2959,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     Definition~\ref{def:mpu_source_uv}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpug_truncated_symmetry, def:mpo_eval_word, def:mpu_source_uv}
+    \uses{def:mpug_truncated_symmetry,def:mpo_eval_word,def:mpu_source_uv}
     The bulk product $\mathcal U^{\varnothing,\varnothing}$ is the empty
     ordered product $I_D$, so $(\mathcal U^{\varnothing,\varnothing})_{\alpha\beta}
         =\delta_{\alpha\beta}$. Instantiating
@@ -3124,8 +2979,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.SourceFactors.truncatedSymmetry_cons}
     \leanok
     \discussion{7319}
-    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
-        def:mpug_staircase_gates}
+    \uses{def:mpug_truncated_symmetry,def:mpu_source_matrix_two,def:mpug_staircase_gates}
     Let $\mathcal U$ be an MPO tensor with physical dimension $d$ and bond
     dimension $D$, and put $d_l=\operatorname{rank}M_2$ and
     $d_r=\operatorname{rank}M_1$. Let
@@ -3158,8 +3012,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     movement operator of Definition~\ref{def:mpug_staircase_gates}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_two,
-        def:mpo_eval_word}
+    \uses{def:mpug_truncated_symmetry,def:mpu_source_matrix_two,def:mpo_eval_word}
     The second cut factorization gives, for each virtual index $\alpha$,
     \begin{align}
         \sum_{\gamma=0}^{D-1}(Y_2)_{l,(a,\gamma)}
@@ -3188,8 +3041,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
         MPOTensor.SourceFactors.truncatedSymmetry_cons_snoc}
     \leanok
     \discussion{7319}
-    \uses{def:mpug_truncated_symmetry, def:mpu_source_matrix_one,
-        def:mpu_source_matrix_two, def:mpug_staircase_gates}
+    \uses{def:mpug_truncated_symmetry,def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpug_staircase_gates}
     Let $\mathcal U$ be an MPO tensor of physical dimension $d$ and bond
     dimension $D$, with $d_l=\operatorname{rank}M_2$ and
     $d_r=\operatorname{rank}M_1$. Let
@@ -3236,8 +3088,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     movement relation.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two,
-        def:mpug_truncated_symmetry, def:mpo_eval_word}
+    \uses{def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpug_truncated_symmetry,def:mpo_eval_word}
     The enlarged bulk product expands as
     $\mathcal U^{i\sigma j,b\tau c}
         =\mathcal U^{i,b}\mathcal U^{\sigma,\tau}\mathcal U^{j,c}$.
@@ -3284,8 +3135,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \lean{MPOTensor.IsMPUCanonicalFormII.truncatedSymmetry_isUnitaryBetween}
     \leanok
     \discussion{7319}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpu_weighted_source_factors, def:mpug_truncated_symmetry}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpu_weighted_source_factors,def:mpug_truncated_symmetry}
     Let $\mathcal U$ be a simple MPU with a canonical-form-II presentation
     and recorded positive diagonal fixed matrix $\rho$. Construct the
     source factors from this tensor and this same $\rho$. For every
@@ -3323,9 +3173,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     % assertions are not marked complete.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{ThmFund1, thm:mpug_staircase_gates_unitary,
-        thm:mpug_truncated_symmetry_zero, thm:mpug_truncated_symmetry_left_growth,
-        thm:matrix_unitary_between_kronecker, def:mpug_truncated_symmetry}
+    \uses{ThmFund1,thm:mpug_staircase_gates_unitary,thm:mpug_truncated_symmetry_zero,thm:mpug_truncated_symmetry_left_growth,thm:matrix_unitary_between_kronecker,def:mpug_truncated_symmetry}
     Theorem~\ref{ThmFund1} gives unitary $u$, and
     Lemma~\ref{thm:mpug_staircase_gates_unitary} gives unitary $w_L$,
     both for the constructed source factors. We proceed by induction on
@@ -3356,9 +3204,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \lean{MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_apply,
         MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_eq}
     \leanok
-    \uses{def:mpug_inverse_compatible_source_factors,
-        thm:mpug_inverse_source_unitary_transport, def:mpug_truncated_symmetry,
-        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_source_factors,thm:mpug_inverse_source_unitary_transport,def:mpug_truncated_symmetry,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
     form II, with recorded positive-definite matrix $\rho$. Suppose that
     $T$ is unitary, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
@@ -3399,8 +3245,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     physical adjoint is needed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_source_unitary_transport,
-        def:mpug_inverse_compatible_source_factors, def:mpug_truncated_symmetry}
+    \uses{thm:mpug_inverse_source_unitary_transport,def:mpug_inverse_compatible_source_factors,def:mpug_truncated_symmetry}
     With $\widetilde Y_1,Y_2$ for the chosen endpoints and
     $\widehat Y_1,\widehat Y_2$ for the compatible ones, substituting
     $\widehat Y_1=C^\dagger\widetilde Y_1$ and $\widehat Y_2=Y_2$
@@ -3423,8 +3268,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \label{thm:mpug_inverse_truncation_unitary}
     \lean{MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_isUnitaryBetween}
     \leanok
-    \uses{def:mpug_inverse_compatible_source_factors, def:mpug_truncated_symmetry,
-        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_compatible_source_factors,def:mpug_truncated_symmetry,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
     form II, with recorded positive-definite matrix $\rho$. Suppose that
     $T$ is unitary, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
@@ -3443,9 +3287,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     is needed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_source_unitary_transport,
-        thm:mpug_inverse_truncation_transport,
-        thm:matrix_unitary_between_kronecker, thm:mpug_truncated_symmetry_unitary}
+    \uses{thm:mpug_inverse_source_unitary_transport,thm:mpug_inverse_truncation_transport,thm:matrix_unitary_between_kronecker,thm:mpug_truncated_symmetry_unitary}
     The comparison $C$ is unitary. By
     Lemma~\ref{thm:matrix_unitary_between_kronecker},
     $Q_N=I_\ell\otimes(I_{\Omega_N}\otimes C^\dagger)$ is unitary.
@@ -3470,10 +3312,7 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     \lean{MPOTensor.inverseCompatibleWordA_eq_reindex_truncatedSymmetry,
         MPOTensor.inverseCompatibleWordA_isUnitaryBetween}
     \leanok
-    \uses{def:mpug_inverse_word_endpoints,
-        def:mpug_inverse_compatible_source_factors,
-        def:mpug_inverse_cut_rank_equiv, def:mpug_truncated_symmetry,
-        def:mpu_canonical_form_ii, def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_word_endpoints,def:mpug_inverse_compatible_source_factors,def:mpug_inverse_cut_rank_equiv,def:mpug_truncated_symmetry,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
     form II. Suppose that $T$ is unitary, that
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -3515,9 +3354,7 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     $N+2$ so $N=0$ has total length two.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpug_inverse_word_endpoints, def:mpug_truncated_symmetry,
-        def:mpug_inverse_compatible_source_factors,
-        def:mpug_inverse_cut_rank_equiv, thm:mpug_inverse_truncation_unitary}
+    \uses{def:mpug_inverse_word_endpoints,def:mpug_truncated_symmetry,def:mpug_inverse_compatible_source_factors,def:mpug_inverse_cut_rank_equiv,thm:mpug_inverse_truncation_unitary}
     The compatible endpoints obey $\widehat Y_2=Y_2$ and
     $(\widehat Y_1)_{e(s),(\beta,b)}=Y_{s,(\beta,b)}$. Substitution gives
     \begin{align}
@@ -3548,8 +3385,7 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     \label{thm:mpug_inverse_word_phase_cancellation}
     \lean{MPOTensor.inverseCompatibleWord_mul_eq_smul_one}
     \leanok
-    \uses{def:mpug_inverse_word_endpoints, def:mpu_canonical_form_ii,
-        def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_word_endpoints,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical
     form II. Suppose that $T$ is unitary, that
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -3572,8 +3408,7 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     independent of $N$ at total source length $N+2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_word_unitary, thm:mpug_inverse_word_adjoint,
-        thm:mpug_unitary_entrywise_scalar_phase, def:mpu_canonical_form_ii}
+    \uses{thm:mpug_inverse_word_unitary,thm:mpug_inverse_word_adjoint,thm:mpug_unitary_entrywise_scalar_phase,def:mpu_canonical_form_ii}
     Canonical form II gives $D>0$.
     Lemma~\ref{thm:mpug_unitary_entrywise_scalar_phase} applied to
     $T\overline T=\sigma I_D$ therefore gives
@@ -3604,7 +3439,7 @@ the disjoint complement of the first.
     \label{def:mpug_source_periodic_arcs}
     \lean{MPOTensor.sourcePeriodicArcA, MPOTensor.sourcePeriodicArcB}
     \leanok
-    \uses{def:mpo_eval_word, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpo_eval_word,def:mpu_right_rank,def:mpu_left_rank}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$, and let
     $X_1,Y_1$ and $X_2,Y_2$ be any factorizations of its two source cuts
     through $\C^r$ and $\C^\ell$. For $N\geq0$ and configurations
@@ -3631,8 +3466,7 @@ the disjoint complement of the first.
     \lean{MPOTensor.trace_two_marked_evalWord_eq_sourcePeriodic_sewing,
         MPOTensor.mpo_two_marked_entry_eq_sourcePeriodic_sewing}
     \leanok
-    \uses{def:mpug_source_periodic_arcs, def:mpo_eval_word, def:mpo_family,
-        def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpug_source_periodic_arcs,def:mpo_eval_word,def:mpo_family,def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Let $\mathcal U$ be an MPO tensor with $M_1(\mathcal U)=X_1Y_1$ and
     $M_2(\mathcal U)=X_2Y_2$. Fix bulk lengths $n,m$, marked physical
     indices $a,a',b,b'$, and configurations $p,p'\in\Omega_n$,
@@ -3654,8 +3488,7 @@ the disjoint complement of the first.
     simplicity, normalization, or unitarity.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpug_source_periodic_arcs, def:mpu_source_matrix_one,
-        def:mpu_source_matrix_two, def:mpo_eval_word, def:mpo_family}
+    \uses{def:mpug_source_periodic_arcs,def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpo_eval_word,def:mpo_family}
     With $P=\mathcal U[p,p']$ and $Q=\mathcal U[q,q']$, define the slices
     \begin{align}
         C_{t\alpha}  & =(X_1)_{(a,\alpha),t},  \\
@@ -3687,7 +3520,7 @@ the disjoint complement of the first.
         MPOTensor.inverseCompatibleFirstArcEmbedding,
         MPOTensor.inverseCompatibleComplementaryArc}
     \leanok
-    \uses{def:mpo_family, def:mpug_inverse_word_endpoints}
+    \uses{def:mpo_family,def:mpug_inverse_word_endpoints}
     Fix bulk lengths $n,m$ and group a periodic configuration as
     $((a,p,b),q)$ with $p\in\Omega_n$ and $q\in\Omega_m$, placed on the
     ring in the order $(a,p,b,q)$. Let $M_{n,m}$ be the periodic operator
@@ -3716,8 +3549,7 @@ the disjoint complement of the first.
     \label{thm:mpug_inverse_periodic_factorization}
     \lean{MPOTensor.inverseCompatibleGroupedMPO_eq_wordB_mul_complementaryArc}
     \leanok
-    \uses{def:mpug_inverse_periodic_grouping, def:mpug_inverse_word_endpoints,
-        def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_periodic_grouping,def:mpug_inverse_word_endpoints,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$ and $T$ a
     unitary virtual matrix with
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -3731,9 +3563,7 @@ the disjoint complement of the first.
     rearrangement of $M_{n,m}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_source_periodic_sewing, def:mpug_inverse_periodic_grouping,
-        def:mpug_inverse_word_endpoints, def:mpug_inverse_cut_factors,
-        thm:mpug_inverse_cut_factorization, thm:mpu_source_factorizations}
+    \uses{thm:mpug_source_periodic_sewing,def:mpug_inverse_periodic_grouping,def:mpug_inverse_word_endpoints,def:mpug_inverse_cut_factors,thm:mpug_inverse_cut_factorization,thm:mpu_source_factorizations}
     Applying Lemma~\ref{thm:mpug_source_periodic_sewing} to the
     factorization $M_1=\widehat X_1\widehat Y_1$ of
     Lemma~\ref{thm:mpug_inverse_cut_factorization} and the factorization
@@ -3751,8 +3581,7 @@ the disjoint complement of the first.
     \label{thm:mpug_inverse_periodic_one_phase}
     \lean{MPOTensor.inverseCompatibleFirstArcEmbedding_mul_groupedMPO}
     \leanok
-    \uses{def:mpug_inverse_periodic_grouping, def:mpu_canonical_form_ii,
-        def:mpu_simple, def:mpdo_physical_adjoint}
+    \uses{def:mpug_inverse_periodic_grouping,def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be a simple MPU of dimensions $d,D$ in canonical form
     II. Suppose that $T$ is unitary, that
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
@@ -3767,9 +3596,7 @@ the disjoint complement of the first.
     symmetries of Lemma~\ref{thm:mpug_inverse_complementary_truncation}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_periodic_factorization,
-        thm:mpug_inverse_word_phase_cancellation,
-        def:mpug_inverse_periodic_grouping}
+    \uses{thm:mpug_inverse_periodic_factorization,thm:mpug_inverse_word_phase_cancellation,def:mpug_inverse_periodic_grouping}
     Substituting (\ref{eq:mpug_inverse_periodic_factorization}) and
     using $(A_n\otimes I_{\Omega_m})(B_n\otimes I_{\Omega_m})
         =(A_nB_n)\otimes I_{\Omega_m}$ gives
@@ -3790,7 +3617,7 @@ the disjoint complement of the first.
     \lean{MPOTensor.IsMPUCanonicalFormII.oneLetter_physical_contraction}
     \leanok
     \discussion{7314}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple}
     Let $\mathcal U$ be a simple MPU in canonical form II, with physical
     dimension $d$, bond dimension $D$, and recorded fixed matrix $\rho$.
     For $0\leq p,q<d$, the one-letter diagram in the proof of part~(b) of
@@ -3805,8 +3632,7 @@ the disjoint complement of the first.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_simple_canonical_boundary_contractions,
-        thm:mpu_all_later_simple_blockings}
+    \uses{thm:mpug_simple_canonical_boundary_contractions,thm:mpu_all_later_simple_blockings}
     Lemma~\ref{thm:mpug_simple_canonical_boundary_contractions}
     gives the two-letter insertion identity with the recorded canonical
     boundaries $(\Phi|_{(a,b)}=\delta_{a,b}$ and
@@ -3831,8 +3657,7 @@ the disjoint complement of the first.
         MPOTensor.IsMPUCanonicalFormII.sourceY₁_physical_contraction}
     \leanok
     \discussion{7314}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpu_weighted_source_factors}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be a simple MPU in canonical form II, with physical
     dimension $d$, bond dimension $D$, and recorded positive diagonal
     fixed matrix $\rho$. Let $Y_1,Y_2$ be the source factors constructed
@@ -3858,9 +3683,7 @@ the disjoint complement of the first.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_one_letter_physical_contraction,
-        thm:mpu_source_y_two_rotated_gram,
-        thm:mpu_source_v_four_u_expansions}
+    \uses{thm:mpug_one_letter_physical_contraction,thm:mpu_source_y_two_rotated_gram,thm:mpu_source_v_four_u_expansions}
     Lemma~\ref{thm:mpu_source_y_two_rotated_gram} at $a=\alpha,b=\beta$
     gives
     \begin{align}
@@ -3892,8 +3715,7 @@ the disjoint complement of the first.
     \label{def:mpug_pleasant_properties}
     \lean{MPOTensor.SourceFactors.PleasantProperties}
     \leanok
-    \uses{def:mpu_weighted_source_factors, thm:mpu_three_legged_decomposition,
-        def:mpug_staircase_gates}
+    \uses{def:mpu_weighted_source_factors,thm:mpu_three_legged_decomposition,def:mpug_staircase_gates}
     Let $\mathcal U$ be an MPU tensor of dimensions $d,D$, let $\rho$ be a
     positive-definite matrix, and let $X_1,Y_1,X_2,Y_2$ be source factors of
     $\mathcal U$ for $\rho$, with leg dimensions $d_r=r$ and $d_l=\ell$. They
@@ -3935,7 +3757,7 @@ the disjoint complement of the first.
     \label{thm:mpug_canonical_adjoint_simple}
     \lean{MPOTensor.IsMPUCanonicalFormII.isMPUSimple_physicalAdjointTensor}
     \leanok
-    \uses{ThmFund1, def:mpdo_physical_adjoint}
+    \uses{ThmFund1,def:mpdo_physical_adjoint}
     If $\mathcal U$ is simple and in canonical form II, then its physical
     adjoint $\mathcal U^\dagger$ is simple.
 \end{lemma}
@@ -3951,12 +3773,7 @@ the disjoint complement of the first.
     \label{thm:mpug_source_pleasant_properties}
     \lean{MPOTensor.IsMPUCanonicalFormII.sourceFactors_pleasantProperties}
     \leanok
-    \uses{def:mpug_pleasant_properties, thm:mpu_three_legged_decomposition,
-        thm:mpug_staircase_gates_unitary, thm:mpug_canonical_adjoint_simple,
-        thm:mpug_source_y_physical_contractions,
-        thm:mpug_source_y_one_normalization, thm:mpug_source_y_two_normalization,
-        thm:mpug_source_x_one_physical_normalization,
-        thm:mpug_source_x_two_physical_normalization}
+    \uses{def:mpug_pleasant_properties,thm:mpu_three_legged_decomposition,thm:mpug_staircase_gates_unitary,thm:mpug_canonical_adjoint_simple,thm:mpug_source_y_physical_contractions,thm:mpug_source_y_one_normalization,thm:mpug_source_y_two_normalization,thm:mpug_source_x_one_physical_normalization,thm:mpug_source_x_two_physical_normalization}
     Let $\mathcal U$ be a simple MPU tensor in canonical form II with recorded
     fixed point $\rho$. Its weighted source factors for $\rho$ have the
     pleasant properties.
@@ -3980,8 +3797,7 @@ the disjoint complement of the first.
     \lean{MPOTensor.sourceU_inverseCompatibleSourceFactors,
         MPOTensor.sourceV_inverseCompatibleSourceFactors}
     \leanok
-    \uses{def:mpug_inverse_compatible_source_factors,
-        def:mpug_inverse_compatible_gates, def:mpu_source_uv}
+    \uses{def:mpug_inverse_compatible_source_factors,def:mpug_inverse_compatible_gates,def:mpu_source_uv}
     The gates $u$ and $v$ of the inverse-compatible source factors are the
     gates on the common second-cut space, with the first-cut coordinate
     identified along the equality of the two source ranks.
@@ -3997,7 +3813,7 @@ the disjoint complement of the first.
     \label{def:mpug_complementary_truncated_symmetry}
     \lean{MPOTensor.SourceFactors.complementaryTruncatedSymmetry}
     \leanok
-    \uses{def:mpug_truncated_symmetry, def:mpug_inverse_periodic_grouping}
+    \uses{def:mpug_truncated_symmetry,def:mpug_inverse_periodic_grouping}
     Let $X_1,Y_1,X_2,Y_2$ be source factors of an MPO tensor $\mathcal U$,
     let $e$ identify the indices $0\leq l<d_l$ with the indices
     $0\leq r<d_r$, and group a ring of $n+m+2$ sites as $((a,p,b),q)$ as in
@@ -4021,9 +3837,7 @@ the disjoint complement of the first.
     \label{thm:mpug_inverse_complementary_truncation}
     \lean{MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_mul_groupedMPO}
     \leanok
-    \uses{def:mpug_complementary_truncated_symmetry,
-        def:mpug_inverse_compatible_source_factors,
-        thm:mpug_inverse_periodic_one_phase, thm:mpug_inverse_word_unitary}
+    \uses{def:mpug_complementary_truncated_symmetry,def:mpug_inverse_compatible_source_factors,thm:mpug_inverse_periodic_one_phase,thm:mpug_inverse_word_unitary}
     Let $\mathcal U$ be a simple MPU tensor of dimensions $d,D$ in canonical
     form II. Suppose that $T$ is unitary, that
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every physical
@@ -4044,7 +3858,7 @@ the disjoint complement of the first.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_inverse_periodic_one_phase, thm:mpug_inverse_word_unitary}
+    \uses{thm:mpug_inverse_periodic_one_phase,thm:mpug_inverse_word_unitary}
     The first-cut factors of the inverse-compatible source factors are the
     candidates with their intermediate index identified along $e$, so
     $(A_N)_{(l,p,s),x}=(U^{N+2})_{(l,p,e(s)),x}$ for the endpoint matrices of
@@ -4060,12 +3874,7 @@ the disjoint complement of the first.
         MPOTensor.exists_inverseCompatible_pleasantProperties,
         MPOTensor.GroupFamily.IsRepresentation.exists_inverseCompatible_pleasantProperties_of_inv_eq}
     \leanok
-    \uses{def:mpug_pleasant_properties, def:mpug_inverse_compatible_source_factors,
-        thm:mpug_inverse_record_gates, thm:mpug_inverse_new_gates_unitary_phase,
-        thm:mpug_inverse_movement_unitary, thm:mpug_inverse_source_y_physical,
-        thm:mpug_inverse_source_y_rank, thm:mpug_inverse_source_x_physical,
-        thm:mpug_canonical_adjoint_simple, thm:mpug_involutive_adjoint_gauge,
-        thm:mpug_dagger_inverse_scalar, thm:mpug_inverse_complementary_truncation}
+    \uses{def:mpug_pleasant_properties,def:mpug_inverse_compatible_source_factors,thm:mpug_inverse_record_gates,thm:mpug_inverse_new_gates_unitary_phase,thm:mpug_inverse_movement_unitary,thm:mpug_inverse_source_y_physical,thm:mpug_inverse_source_y_rank,thm:mpug_inverse_source_x_physical,thm:mpug_canonical_adjoint_simple,thm:mpug_involutive_adjoint_gauge,thm:mpug_dagger_inverse_scalar,thm:mpug_inverse_complementary_truncation}
     Let $\mathcal U$ be a simple MPU tensor of dimensions $d,D$ in canonical
     form II with recorded fixed point $\rho$. Suppose that $T$ is unitary on
     $\C^D$, that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every

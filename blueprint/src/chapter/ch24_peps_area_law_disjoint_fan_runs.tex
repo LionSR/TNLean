@@ -5,8 +5,7 @@
     \label{thm:area_law_fan_cut_runs_disjoint}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_sdiff_radials_pairwise_disjoint}
     \leanok
-    \uses{def:area_law_cell_fan,def:area_law_cell_fan_successor,
-        def:area_law_fan_runs}
+    \uses{def:area_law_cell_fan,def:area_law_cell_fan_successor,def:area_law_fan_runs}
     Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary, and let
     $Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square
     with center $c$.
@@ -30,12 +29,7 @@
     retained graph remain distinct runs even when their colors agree.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:area_law_cell_fan,def:area_law_fan_runs,
-        thm:area_law_cell_fan_successor_iff,
-        thm:area_law_cell_fan_intersections,
-        thm:area_law_fan_triangle_contact,
-        thm:area_law_fan_run_opposite,
-        thm:area_law_fan_run_monochromatic}
+    \uses{def:area_law_cell_fan,def:area_law_fan_runs,thm:area_law_cell_fan_successor_iff,thm:area_law_cell_fan_intersections,thm:area_law_fan_triangle_contact,thm:area_law_fan_run_opposite,thm:area_law_fan_run_monochromatic}
     Suppose that $R\ne T$ and that
     $x\in(T_R\setminus K)\cap(T_T\setminus K)$.
     Choose $i\in R$ and $j\in T$ with $x\in P_i\cap P_j$.

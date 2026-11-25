@@ -25,8 +25,7 @@
     \cite[lines 540--552]{Hastings2007AreaLaw}).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_bootstrap_scale, thm:hastings_mixture_tail,
-        thm:hastings_cut_coordinates, lem:chain_sequential_truncation}
+    \uses{thm:hastings_bootstrap_scale,thm:hastings_mixture_tail,thm:hastings_cut_coordinates,lem:chain_sequential_truncation}
     Projecting $\{0,\dots,j-1\}$ onto the top $k$ eigenvectors of $\rho$ gives
     $\psi=E\Omega$ of Schmidt rank at most $k$ with
     $P=\langle\psi,\Omega\rangle=\|\psi\|^2=\sum_{a=1}^kp_a\ge1/2$. Applying
@@ -120,8 +119,7 @@
     \cite{gap:hastings07_mps_error_measure,gap:hastings07_schmidt_tail_constant}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq,
-        thm:hastings_schmidt_tail_rpow}
+    \uses{thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq,thm:hastings_schmidt_tail_rpow}
     By Lemma~\ref{thm:chain_sequential_truncation_eigen}
     and Theorem~\ref{thm:chain_sequential_truncation_sq},
     $\|\Phi-\psi\|^2\le\sum_{j=1}^{L-1}\sum_{a>k'}p_{j,a}$; apply
@@ -149,8 +147,7 @@
         gap:hastings07_schmidt_tail_constant}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_schmidt_tail_constraint_entropy, thm:hastings_schmidt_tail_mps,
-        thm:chain_sequential_truncation_eigen, thm:chain_sequential_truncation_sq}
+    \uses{thm:hastings_schmidt_tail_constraint_entropy,thm:hastings_schmidt_tail_mps,thm:chain_sequential_truncation_eigen,thm:chain_sequential_truncation_sq}
     For $L\ge2$ and $D\ge2$, combine
     Lemma~\ref{thm:hastings_schmidt_tail_constraint_entropy} ($k=k_0$) with
     Lemma~\ref{thm:hastings_schmidt_tail_mps} ($c=4C_1^2$). For $L<2$ or
@@ -162,15 +159,14 @@
     \label{thm:hastings_mps_from_entropy_lemma1}
     \lean{TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy}
     \leanok
-    \uses{thm:hastings_mps_from_entropy, def:hastings_factorization_at}
+    \uses{thm:hastings_mps_from_entropy,def:hastings_factorization_at}
     Lemma~\ref{thm:hastings_mps_from_entropy} holds when, for every internal
     cut $j$ and $j+m\le L$, $|\Omega\rangle\langle\Omega|$ admits an
     approximate factorization (Definition~\ref{def:hastings_factorization_at})
     with error $C_1e^{-m/\xi'}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_mps_from_entropy, def:hastings_factorization_at,
-        thm:hastings_factorization_bootstrap_form}
+    \uses{thm:hastings_mps_from_entropy,def:hastings_factorization_at,thm:hastings_factorization_bootstrap_form}
     Combine Lemma~\ref{thm:hastings_factorization_bootstrap_form} with
     Lemma~\ref{thm:hastings_mps_from_entropy}.
 \end{proof}
@@ -210,7 +206,7 @@
     \cite{gap:hastings07_schmidt_tail_constant}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_mps_from_entropy_lemma1, thm:hastings_area_law_from_factorization}
+    \uses{thm:hastings_mps_from_entropy_lemma1,thm:hastings_area_law_from_factorization}
     By Lemma~\ref{thm:hastings_area_law_from_factorization}, $S_j\le S_{\max}$
     for every internal cut $j$, so $\exp(2S_j)/2\le k_0$; apply
     Lemma~\ref{thm:hastings_mps_from_entropy_lemma1}
@@ -221,7 +217,7 @@
     \label{thm:hastings_mps_gapped_chain}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint}
     \leanok
-    \uses{thm:hastings_lemma1_endpoint, thm:hastings_area_law}
+    \uses{thm:hastings_lemma1_endpoint,thm:hastings_area_law}
     For every range $R$ there exists $K=K(R)\ge0$ such that, for any term norm
     bound $J\ge0$, gap $\Delta E>0$, raised-velocity length $\zeta=\tilde\xi$ of
     Lemma~\ref{thm:hastings_lemma1_endpoint}, $\xi'=6\zeta$,
@@ -244,8 +240,7 @@
     \cite{gap:hastings07_schmidt_tail_constant}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_lemma1_endpoint, thm:hastings_mps_ground_state,
-        thm:hastings_factorization_mono}
+    \uses{thm:hastings_lemma1_endpoint,thm:hastings_mps_ground_state,thm:hastings_factorization_mono}
     Combine Lemma~\ref{thm:hastings_lemma1_endpoint} (with
     $C_1=\max(K\zeta^3,1)$ via Lemma~\ref{thm:hastings_factorization_mono})
     and Lemma~\ref{thm:hastings_mps_ground_state}
@@ -278,8 +273,7 @@
     \cite{gap:hastings07_schmidt_tail_constant}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_lemma1_polynomial_constant, thm:hastings_mps_ground_state,
-        thm:hastings_factorization_mono}
+    \uses{thm:hastings_lemma1_polynomial_constant,thm:hastings_mps_ground_state,thm:hastings_factorization_mono}
     Combine Lemma~\ref{thm:hastings_lemma1_polynomial_constant} (with
     $C_1=\max(K\hat\xi^3,1)$ via Lemma~\ref{thm:hastings_factorization_mono})
     and Lemma~\ref{thm:hastings_mps_ground_state}
@@ -291,8 +285,7 @@
     \label{thm:hastings_mps_source}
     \lean{TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source}
     \leanok
-    \uses{thm:hastings_source_factorization,thm:hastings_area_law_source,
-        thm:hastings_mps_from_entropy}
+    \uses{thm:hastings_source_factorization,thm:hastings_area_law_source,thm:hastings_mps_from_entropy}
     For each range $R$ there are constants $c_0>0$ and $K\ge0$, depending
     only on $R$, with the following property. Let $H$ be a chain Hamiltonian
     of range $R$, term norms at most $J\ge0$, unique unit ground vector
@@ -321,8 +314,7 @@
         gap:hastings07_schmidt_tail_constant}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:hastings_source_factorization,thm:hastings_area_law_source,
-        thm:hastings_mps_from_entropy}
+    \uses{thm:hastings_source_factorization,thm:hastings_area_law_source,thm:hastings_mps_from_entropy}
     Theorem~\ref{thm:hastings_area_law_source} gives
     $e^{2S_\Omega([0,j))}/2\le e^{2S_{\max}}/2\le k_0$ at every cut.
     Theorem~\ref{thm:hastings_source_factorization} gives factorization at

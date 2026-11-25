@@ -4,8 +4,7 @@
         TNLean.PEPS.torusVacatingPlaquetteMove,
         TNLean.PEPS.torusSweptPhysicalRouteOperators}
     \leanok
-    \uses{def:peps_torus_swept_physical_endpoint_route,
-        def:peps_torus_directed_bond_update,def:peps_torus_swept_string_assignment}
+    \uses{def:peps_torus_swept_physical_endpoint_route,def:peps_torus_directed_bond_update,def:peps_torus_swept_string_assignment}
     On a torus with periods $L_x\ge 8$ and $L_y\ge 7$, starting from the four-endpoint string assignment $u_0$ of Definition~\ref{def:peps_torus_swept_string_assignment}, define $u_n$ ($0\le n\le 12$) recursively along the $12$-step translated plaquette-base route
     \begin{align}
          & (1,1)\to(2,1)\to(2,2)\to(3,2)\to(4,2)\to(4,1)\to(4,0) \notag                         \\
@@ -24,8 +23,7 @@
         TNLean.PEPS.regularWalkHolonomy_torusSweptPhysicalRoute_target_vacancy,
         TNLean.PEPS.regularWalkHolonomy_torusSweptPhysicalRoute_movingFlux}
     \leanok
-    \uses{def:peps_torus_swept_route_bond_assignments,
-        thm:peps_torus_directed_bond_update,thm:peps_torus_plaquette_holonomy}
+    \uses{def:peps_torus_swept_route_bond_assignments,thm:peps_torus_directed_bond_update,thm:peps_torus_plaquette_holonomy}
     Each update in (\ref{eq:swept_route_updates}) sets the clockwise source plaquette holonomy to $1$.
     Along (\ref{eq:swept_route_path}), each step's target plaquette is vacant in $u_{n-1}$, and the moving based flux at stage $n$ is
     \begin{align}
@@ -51,8 +49,7 @@
         TNLean.PEPS.torusSweptPhysicalRouteReunionConnector,
         TNLean.PEPS.torusSweptPhysicalRouteBReunionLoop}
     \leanok
-    \uses{def:peps_torus_swept_route_bond_assignments,
-        def:peps_torus_swept_patch_endpoint_walks}
+    \uses{def:peps_torus_swept_route_bond_assignments,def:peps_torus_swept_patch_endpoint_walks}
     Relative to the translation vertex, define the final endpoint bases
     \begin{align}
         (A_2,A_1,B'_1,B_2) = \bigl((-1,1),\ (3,1),\ (0,-2),\ (1,-2)\bigr), \label{eq:final_endpoint_bases}
@@ -72,9 +69,7 @@
         TNLean.PEPS.regularWalkHolonomy_torusSweptPhysicalRoute_BReunionLoop_conjClass,
         TNLean.PEPS.regularWalkHolonomy_torusSweptPhysicalRoute_BReunionLoop_eq_one_iff}
     \leanok
-    \uses{def:peps_torus_swept_route_partner_walks,
-        thm:peps_torus_swept_route_vacancies,thm:peps_regular_connector_holonomy,
-        thm:peps_conjugacy_class_invariance}
+    \uses{def:peps_torus_swept_route_partner_walks,thm:peps_torus_swept_route_vacancies,thm:peps_regular_connector_holonomy,thm:peps_conjugacy_class_invariance}
     Under the final assignment $u_{12}$ of Definition~\ref{def:peps_torus_swept_route_bond_assignments}, the based endpoint fluxes at (\ref{eq:final_endpoint_bases}) are
     \begin{align}
         \bigl(H_{A_2},H_{A_1},H_{B'_1},H_{B_2}\bigr) = (g^{-1},\ g,\ hghg^{-1}h^{-1},\ h^{-1}). \label{eq:final_endpoint_fluxes}

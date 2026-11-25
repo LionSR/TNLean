@@ -32,7 +32,7 @@ and semi-regular $G$-injective tensors.
         TNLean.PEPS.torusPhysicalMap_torusBondNetwork,
         TNLean.PEPS.torusPhysicalMap_torusGClosure}
     \leanok
-    \uses{def:peps_physical_product_map, def:peps_torus_g_closure}
+    \uses{def:peps_physical_product_map,def:peps_torus_g_closure}
     Applying $F$ at every physical site composes the local site map
     with $F$ and preserves every virtual bond operator. In particular,
     \begin{align}
@@ -88,7 +88,7 @@ and semi-regular $G$-injective tensors.
     \lean{TNLean.PEPS.siteMap_injective,
         TNLean.PEPS.physicalMapSite_eq_iff_siteMap_comp}
     \leanok
-    \uses{def:peps_g_injective, def:peps_physical_product_map}
+    \uses{def:peps_g_injective,def:peps_physical_product_map}
     The four-leg coefficients are uniquely determined by the site map.
     For a physical matrix $F$ and tensors $A,B$, the coefficient identity
     $FA=B$ is equivalent to $F\mathcal P(A)=\mathcal P(B)$.
@@ -144,7 +144,7 @@ and semi-regular $G$-injective tensors.
     \label{thm:peps_regular_averaging_site_isometry}
     \lean{TNLean.PEPS.isGIsometric_regularAveragingSite}
     \leanok
-    \uses{def:peps_regular_averaging_site, def:peps_torus_regular_coordinates}
+    \uses{def:peps_regular_averaging_site,def:peps_torus_regular_coordinates}
     For four regular virtual legs, $A_0$ is $G$-isometric with
     normalization factor one.
 \end{lemma}
@@ -164,7 +164,7 @@ and semi-regular $G$-injective tensors.
         TNLean.PEPS.torusDress_single,
         TNLean.PEPS.torusBondNetwork_averagingSite}
     \leanok
-    \uses{def:peps_torus_regular_coordinates, def:peps_regular_averaging_site}
+    \uses{def:peps_torus_regular_coordinates,def:peps_regular_averaging_site}
     Let $U$ be a finite-dimensional representation of a finite group $G$, and let
     $\Pi$ be the four-leg averaging projector. Write $e(v)$ and $n(v)$ for the
     neighbours east and north of $v$, and let $s_v=(t_v,r_v,b_v,l_v)$ denote the
@@ -219,8 +219,7 @@ and semi-regular $G$-injective tensors.
         TNLean.PEPS.torusProjectorExtraction_torusGClosure,
         TNLean.PEPS.torusProjectorExtraction_normalization_pos}
     \leanok
-    \uses{def:peps_semiregular, def:peps_regular_averaging_site,
-        def:peps_torus_g_closure, def:peps_delta_operator}
+    \uses{def:peps_semiregular,def:peps_regular_averaging_site,def:peps_torus_g_closure,def:peps_delta_operator}
     Let $U$ be a semi-regular representation of a finite group $G$ on
     a virtual space with finite basis $V$. Let $\Lambda$ be a rectangular
     torus with positive width and height, and let $A_0$ be the averaging-
@@ -240,8 +239,7 @@ and semi-regular $G$-injective tensors.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_semiregular_trace, thm:peps_torus_projector_expansion,
-        thm:peps_torus_nonseam_connectivity}
+    \uses{thm:peps_semiregular_trace,thm:peps_torus_projector_expansion,thm:peps_torus_nonseam_connectivity}
     Put $\delta_p(M)=\tr(U_{p^{-1}}M\Delta)$ and
     $\phi=\sum_p\delta_p$. Trace duality gives
     $\delta_p(U_z)=\delta_{p,z}$ and $\phi(U_z)=1$.
@@ -298,7 +296,7 @@ and semi-regular $G$-injective tensors.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_site_coefficients_composition, thm:peps_g_injective_left_inverse, thm:peps_torus_physical_map_contraction}
+    \uses{thm:peps_site_coefficients_composition,thm:peps_g_injective_left_inverse,thm:peps_torus_physical_map_contraction}
     The local inverse and virtual invariance give $LT=\Pi$ and
     $T\Pi=T$. By Lemma~\ref{thm:peps_site_coefficients_composition},
     these are coefficient identities, and applying
@@ -331,7 +329,7 @@ and semi-regular $G$-injective tensors.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_g_injective_closure_inverse, thm:peps_torus_projector_extraction, thm:peps_pair_conjugacy_operator_independence}
+    \uses{thm:peps_regular_g_injective_closure_inverse,thm:peps_torus_projector_extraction,thm:peps_pair_conjugacy_operator_independence}
     Choosing the same local inverse $L$ for every closure vector and denoting by $N$ the number of vertices, the explicit map $E$ gives
     \begin{align}
         E L^{\otimes\Lambda}\ket{\mathcal M(A\mid C)}
@@ -391,8 +389,7 @@ and semi-regular $G$-injective tensors.
         TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass,
         TNLean.PEPS.IsGInjective.linearIndependent_torusGClosureClass_commuting}
     \leanok
-    \uses{def:peps_torus_regular_coordinates,
-        thm:peps_semiregular_g_injective_closure_independence}
+    \uses{def:peps_torus_regular_coordinates,thm:peps_semiregular_g_injective_closure_independence}
     For a regular $G$-injective tensor on any nonempty rectangular torus,
     every closure vector is nonzero and the vectors indexed by
     distinct pair-conjugacy classes are linearly independent. In
@@ -407,8 +404,7 @@ and semi-regular $G$-injective tensors.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_torus_regular_coordinates,
-        thm:peps_semiregular_g_injective_closure_independence}
+    \uses{def:peps_torus_regular_coordinates,thm:peps_semiregular_g_injective_closure_independence}
     The native regular representation is semi-regular by its group-basis
     equivalence with the group-algebra regular representation, so
     Lemma~\ref{thm:peps_semiregular_g_injective_closure_independence} applies directly.
@@ -431,8 +427,7 @@ and semi-regular $G$-injective tensors.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_g_injective_closure_inverse,
-        thm:peps_physical_product_cut_rank}
+    \uses{thm:peps_regular_g_injective_closure_inverse,thm:peps_physical_product_cut_rank}
     The same forward and reverse physical product maps act on every
     summand. By linearity they recover the superpositions
     (\ref{eq:peps_closure_superposition_pair}) from each other, and Lemma~\ref{thm:peps_physical_product_cut_rank}

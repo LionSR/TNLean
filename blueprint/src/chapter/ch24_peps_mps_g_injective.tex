@@ -61,7 +61,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
         TNLean.PEPS.concatLeftInverse_comp_mpsSiteMap,
         TNLean.PEPS.IsGInjective.mpsSiteMap_concatTensor}
     \leanok
-    \uses{def:peps_mps_g_injective, def:peps_delta_operator}
+    \uses{def:peps_mps_g_injective,def:peps_delta_operator}
     Let $A$ and $B$ be $G$-injective matrix product tensors for the same
     representation, with left inverses $L_A$ and $L_B$ satisfying
     $L_A\mathcal{P}(A)=L_B\mathcal{P}(B)=\sigma$. Then $C^{ij}=A^iB^j$ is
@@ -74,8 +74,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_mps_g_injective_source_form,
-        thm:peps_g_injective_left_inverse, thm:peps_delta_expansion}
+    \uses{thm:peps_mps_g_injective_source_form,thm:peps_g_injective_left_inverse,thm:peps_delta_expansion}
     Invariance of $C$ follows from
     $U_gA^iB^jU_g^{-1}=(U_gA^iU_g^{-1})(U_gB^jU_g^{-1})$. For the left
     inverse, first $\sum_i\tr[A^iY]\,L_A\ket{i}=\sigma(Y)$ for every $Y$.
@@ -107,7 +106,7 @@ $\mathcal{P}(A)X=\sum_i\tr[A^iX]\ket{i}$
         MPSTensor.toLin'_evalWord,
         MPSTensor.isGInjective_mpsSiteMap_blockTensor}
     \leanok
-    \uses{def:peps_mps_g_injective, def:blocked_tensor}
+    \uses{def:peps_mps_g_injective,def:blocked_tensor}
     If $A$ is $G$-injective, then the tensor obtained by blocking $L\ge1$
     sites, $(i_1,\dots,i_L)\mapsto A^{i_1}\cdots A^{i_L}$, is $G$-injective.
 \end{lemma}
@@ -144,7 +143,7 @@ $M$, $N$, $U_g$ sit on a bond.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_mps_g_injective_source_form, thm:peps_group_averaging}
+    \uses{thm:peps_mps_g_injective_source_form,thm:peps_group_averaging}
     Invariance of $C$ is invariance of the map $X\mapsto(\tr[C^iX])_i$ under
     conjugation, and an invariant map does not see the average over the
     group. For the second claim, $U_gYZU_g^{-1}=(U_gYU_g^{-1})Z$.
@@ -171,8 +170,7 @@ $M$, $N$, $U_g$ sit on a bond.
     \label{thm:peps_mps_g_injective_intersection}
     \lean{TNLean.PEPS.IsGInjective.intersection_property}
     \leanok
-    \uses{thm:peps_mps_g_injective_source_form,
-        thm:peps_mps_g_injective_concatenation}
+    \uses{thm:peps_mps_g_injective_source_form,thm:peps_mps_g_injective_concatenation}
     \begin{align*}
         \Big\{\sum_{ijk}\tr[A^iB^jM^k]\ket{ijk}\ \Big|\ M\Big\}\cap
         \Big\{\sum_{ijk}\tr[N^iB^jA^k]\ket{ijk}\ \Big|\ N\Big\}
@@ -182,8 +180,7 @@ $M$, $N$, $U_g$ sit on a bond.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_mps_g_injective_twirl,
-        lem:peps_mps_g_injective_left_inverse_traces}
+    \uses{lem:peps_mps_g_injective_twirl,lem:peps_mps_g_injective_left_inverse_traces}
     The right-hand side lies in both sets, with $M^k=A^kX$ and $N^i=XA^i$.
     Conversely, let $\tr[A^iB^jM^k]=\tr[N^iB^jA^k]$ for all $i,j,k$. Fix
     left inverses with $L_A\mathcal{P}(A)=L_B\mathcal{P}(B)=\sigma$, and let
@@ -204,8 +201,7 @@ $M$, $N$, $U_g$ sit on a bond.
     \lean{TNLean.PEPS.IsGInjective.eq_sum_of_closure,
         TNLean.PEPS.IsGInjective.closure_property}
     \leanok
-    \uses{thm:peps_mps_g_injective_source_form,
-        thm:peps_mps_g_injective_concatenation, def:peps_delta_operator}
+    \uses{thm:peps_mps_g_injective_source_form,thm:peps_mps_g_injective_concatenation,def:peps_delta_operator}
     \begin{align*}
         \Big\{\sum_{ij}\tr[B^iA^jM]\ket{ij}\ \Big|\ M\Big\}\cap
         \Big\{\sum_{ij}\tr[B^iNA^j]\ket{ij}\ \Big|\ N\Big\}
@@ -218,8 +214,7 @@ $M$, $N$, $U_g$ sit on a bond.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_mps_g_injective_twirl,
-        lem:peps_mps_g_injective_left_inverse_traces}
+    \uses{lem:peps_mps_g_injective_twirl,lem:peps_mps_g_injective_left_inverse_traces}
     The right-hand side lies in both sets, with $M=N=\sum_g\lambda_gU_g$,
     since $U_g$ commutes with $A^j$. Conversely, let
     $\tr[B^iA^jM]=\tr[B^iNA^j]$ for all $i,j$, and let $L_C$ be the left
@@ -252,8 +247,7 @@ $G$-injective for the representation $U$.
     \lean{MPSTensor.mem_groundSpace_add_two_of_isGInjective,
         MPSTensor.chainGroundSpace_le_groundSpace_of_isGInjective}
     \leanok
-    \uses{thm:peps_mps_g_injective_intersection,
-        cor:peps_mps_g_injective_blocking, def:chain_ground_space}
+    \uses{thm:peps_mps_g_injective_intersection,cor:peps_mps_g_injective_blocking,def:chain_ground_space}
     Let $K\ge1$. A vector on $K+2$ sites whose restrictions to the first and to
     the last $K+1$ sites lie in
     $\{\sum_{\sigma}\tr[A^{\sigma_1}\cdots A^{\sigma_{K+1}}X]\ket{\sigma}\mid X\}$
@@ -279,8 +273,7 @@ $G$-injective for the representation $U$.
         MPSTensor.groundSpaceMap_rep_mem_chainGroundSpace,
         MPSTensor.chainGroundSpace_eq_span_closure_of_isGInjective}
     \leanok
-    \uses{lem:peps_mps_g_injective_open_chain,
-        thm:peps_mps_g_injective_closure}
+    \uses{lem:peps_mps_g_injective_open_chain,thm:peps_mps_g_injective_closure}
     If $2\le L\le N$, then
     \begin{align*}
         \mathcal G_{N,L}(A)=\spn_{\C}\bigl\{\ket{\mathcal M(A|U_g)}\ \big|\
@@ -313,8 +306,7 @@ $G$-injective for the representation $U$.
         Representation.linearIndependent_of_isSemiRegular,
         Representation.linearIndependent_averageMap_conjClasses}
     \leanok
-    \uses{thm:peps_isotypic_projectors, thm:peps_group_averaging,
-        thm:peps_semiregular_trace}
+    \uses{thm:peps_isotypic_projectors,thm:peps_group_averaging,thm:peps_semiregular_trace}
     The isotypic projectors $P_i$ commute with every $U_g$, are linearly
     independent, and
     \begin{align*}
@@ -351,8 +343,7 @@ $G$-injective for the representation $U$.
         MPSTensor.finrank_chainGroundSpace_of_isSemiRegular,
         MPSTensor.card_irreducibleCharacterFinset_of_isSemiRegular}
     \leanok
-    \uses{thm:peps_mps_g_injective_parent_hamiltonian,
-        lem:peps_twirled_representation, def:peps_semiregular}
+    \uses{thm:peps_mps_g_injective_parent_hamiltonian,lem:peps_twirled_representation,def:peps_semiregular}
     Let $2\le L\le N$, and let $\chi_1,\dots,\chi_I$ be the distinct
     characters of the irreducible representations occurring in $U$, with
     isotypic projectors $P_i$. The states $\ket{\mathcal M(A|P_i)}$ are

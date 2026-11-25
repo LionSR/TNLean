@@ -50,8 +50,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
         TNLean.MPS.AreaLaw.exists_fixed_bandwidth_regional_dyadic_low_energy_word_family,
         TNLean.MPS.AreaLaw.exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family}
     \leanok
-    \uses{lem:chebyshev_nested_word_family,lem:dyadic_regional_low_energy_family,
-        lem:dyadic_long_interval_low_energy_family}
+    \uses{lem:chebyshev_nested_word_family,lem:dyadic_regional_low_energy_family,lem:dyadic_long_interval_low_energy_family}
     In the setting of Lemmas~\ref{lem:dyadic_regional_low_energy_family}
     and~\ref{lem:dyadic_long_interval_low_energy_family}, the family on a
     long interval consists of $N\le D_i^2$ operators, chosen before the
@@ -136,13 +135,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     \label{lem:physical_ld_sampled_interval_tree}
     \lean{TNLean.MPS.AreaLaw.exists_physical_ld_sampled_interval_tree}
     \leanok
-    \uses{lem:dyadic_long_interval_low_energy_word_family,
-        lem:sampled_parent_two_windows,
-        lem:sampled_interval_witness_tree_targets,
-        thm:low_energy_orthonormal_mps_basis,
-        thm:interval_trimming_reference,
-        lem:full_interval_viability,
-        lem:full_interval_mps_span}
+    \uses{lem:dyadic_long_interval_low_energy_word_family,lem:sampled_parent_two_windows,lem:sampled_interval_witness_tree_targets,thm:low_energy_orthonormal_mps_basis,thm:interval_trimming_reference,lem:full_interval_viability,lem:full_interval_mps_span}
     Fix $\eta_{\rm LD}>0$. There is a constant $C\ge\max\{100,19+\eta_{\rm LD}\}$
     with the following property. Let $q\ge2$, $m\ge q$ and $w>0$, put
     $m'=4m$, $g=\min\{w,1\}$, $u=1+\log m'+\log(1/g)$,
@@ -167,13 +160,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     $10^6D_{\rm ref}^2(L+1)M^2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:dyadic_long_interval_low_energy_word_family,
-        lem:sampled_parent_two_windows,
-        lem:sampled_interval_witness_tree_targets,
-        thm:low_energy_orthonormal_mps_basis,
-        thm:interval_trimming_reference,
-        lem:full_interval_viability,
-        lem:full_interval_mps_span}
+    \uses{lem:dyadic_long_interval_low_energy_word_family,lem:sampled_parent_two_windows,lem:sampled_interval_witness_tree_targets,thm:low_energy_orthonormal_mps_basis,thm:interval_trimming_reference,lem:full_interval_viability,lem:full_interval_mps_span}
     Take the word families of
     Lemma~\ref{lem:dyadic_long_interval_low_energy_word_family} at the index
     $i=2$, so that each comparison has loss $1/51200\le10^{-4}$. For every
@@ -226,8 +213,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     see~\cite{gap:alvv16_low_energy_family_scope}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_ld_sampled_interval_tree,lem:canonical_word_trim_tree_failure,
-        lem:canonical_sampled_parent}
+    \uses{lem:physical_ld_sampled_interval_tree,lem:canonical_word_trim_tree_failure,lem:canonical_sampled_parent}
     The union bound of Lemma~\ref{lem:canonical_word_trim_tree_failure} holds
     with one target per interval, with the same proof. At a long parent cut at
     its midpoint, the children are viable for a window that contains the upper
@@ -245,11 +231,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     \label{lem:physical_ld_root_refinement}
     \lean{TNLean.MPS.AreaLaw.exists_physical_ld_root_refinement}
     \leanok
-    \uses{lem:dyadic_long_interval_low_energy_word_family,
-        thm:low_energy_orthonormal_mps_basis,
-        thm:interval_trimming_reference,
-        lem:full_interval_viability,
-        lem:full_interval_mps_span}
+    \uses{lem:dyadic_long_interval_low_energy_word_family,thm:low_energy_orthonormal_mps_basis,thm:interval_trimming_reference,lem:full_interval_viability,lem:full_interval_mps_span}
     Fix $\eta_{\rm LD}>0$, and let $C$ be the constant of
     Lemma~\ref{lem:dyadic_long_interval_low_energy_word_family} and $K$ that
     of Theorem~\ref{thm:low_energy_orthonormal_mps_basis}. Let
@@ -273,11 +255,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     length $a$ of a family of at most $D_i^2$ operators.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:dyadic_long_interval_low_energy_word_family,
-        thm:low_energy_orthonormal_mps_basis,
-        thm:interval_trimming_reference,
-        lem:full_interval_viability,
-        lem:full_interval_mps_span}
+    \uses{lem:dyadic_long_interval_low_energy_word_family,thm:low_energy_orthonormal_mps_basis,thm:interval_trimming_reference,lem:full_interval_viability,lem:full_interval_mps_span}
     The index $i$ makes each comparison loss at most $\delta/200$. The space
     $S_0$ is $1/25$-viable for the upper target of the family on the whole
     chain, and its word image is $\Delta^a/(24/25)^2$-viable for the lower
@@ -345,8 +323,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     \lean{TNLean.MPS.AreaLaw.exists_physical_ld_sampled_interval_tree_of_clause,
         TNLean.MPS.AreaLaw.exists_low_density_tree_algorithm}
     \leanok
-    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,
-        lem:window_extraction}
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,lem:window_extraction}
     In the setting of Lemma~\ref{lem:physical_ld_sampled_interval_tree},
     suppose $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$ and put
     $\eta=\eta_{\rm LD}-3w\lceil\log_2L\rceil$. For every failure parameter,
@@ -364,8 +341,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     drawn from them.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,
-        lem:window_extraction}
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,lem:window_extraction}
     The tree is stated with its conclusion at the root left as any
     consequence of the closeness, dimension and matrix product bounds of
     the root. Take that consequence to be the refinement of
@@ -395,8 +371,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     a success probability; and no running time is asserted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,
-        lem:window_extraction}
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,lem:window_extraction}
     Put $A=\|H-E_0\|$, $\rho=3x/\delta+1$ and
     $\delta'=\min(1/2,\delta/(3((1+\rho)A+x+\delta+1)))$. Then
     $x/\rho\le\delta/3$, $(1+\rho)A\delta'\le\delta/3$ and

@@ -36,8 +36,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
     \label{thm:area_law_initial_active_radial}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_near_mark_iff_active_radial}
     \leanok
-    \uses{thm:area_law_actual_sector_assignment,
-        def:area_law_initial_birth_regions,def:area_law_cell_fan}
+    \uses{thm:area_law_actual_sector_assignment,def:area_law_initial_birth_regions,def:area_law_cell_fan}
     For every $x\in B_\infty(v,r)$,
     \begin{align}
         x\in\bigcup_{i\in\mathcal I}\partial X_i^0
@@ -50,16 +49,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
     \input{figures/area_law_initial_active_radial}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_actual_sector_assignment,
-        thm:area_law_finite_cover_frontier,
-        thm:area_law_cell_fan_regularity,
-        thm:area_law_cell_fan_cover,
-        thm:area_law_centered_dyadic_cell_ball,
-        thm:area_law_initial_birth_regularity,
-        thm:area_law_initial_open_disjoint,
-        thm:area_law_initial_sector_no_active,
-        thm:area_law_fan_triangle_contact,
-        thm:area_law_cell_fan_intersections}
+    \uses{thm:area_law_actual_sector_assignment,thm:area_law_finite_cover_frontier,thm:area_law_cell_fan_regularity,thm:area_law_cell_fan_cover,thm:area_law_centered_dyadic_cell_ball,thm:area_law_initial_birth_regularity,thm:area_law_initial_open_disjoint,thm:area_law_initial_sector_no_active,thm:area_law_fan_triangle_contact,thm:area_law_cell_fan_intersections}
     With $K=\sigma(\mathcal J)$ and
     $E_i=\bigcup_{\sigma(s)=i}P_s$ for each $i\in K$, the sets $E_i$ form
     a finite closed family covering
@@ -107,8 +97,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
     \label{thm:area_law_initial_active_radial_closed}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_small_closedBall_iff_active_radial}
     \leanok
-    \uses{thm:area_law_actual_sector_assignment,
-        def:area_law_initial_birth_regions,def:area_law_cell_fan}
+    \uses{thm:area_law_actual_sector_assignment,def:area_law_initial_birth_regions,def:area_law_cell_fan}
     For every $x\in\overline B_\infty(v,r/2)$,
     \begin{align}
         x\in\bigcup_{i\in\mathcal I}\partial X_i^0
@@ -134,8 +123,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
     \label{thm:area_law_initial_active_ray_closed}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_small_closedBall_iff_active_ray}
     \leanok
-    \uses{thm:area_law_actual_sector_assignment,
-        def:area_law_initial_birth_regions,def:area_law_cell_fan_successor}
+    \uses{thm:area_law_actual_sector_assignment,def:area_law_initial_birth_regions,def:area_law_cell_fan_successor}
     Retain the origin, endpoint set, width, initial layer, arbitrary
     valid pitch residues, fine cell, and mark fixed above.
     Let $\tau$ be the perimeter successor, and put
@@ -157,9 +145,7 @@ $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$; let $\mathcal A$ be the set of such p
     records successive sectors without identifying such occurrences.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_initial_active_radial_closed,
-        thm:area_law_cell_fan_successor_iff,
-        thm:area_law_cell_fan_radial_ray_restriction}
+    \uses{thm:area_law_initial_active_radial_closed,thm:area_law_cell_fan_successor_iff,thm:area_law_cell_fan_radial_ray_restriction}
     Endpoint adjacency is exactly the successor relation, so the active
     pairs are $(s,\tau(s))$ with $s\in\mathcal A_*$.
     The active radial description on the smaller closed square therefore identifies the boundary

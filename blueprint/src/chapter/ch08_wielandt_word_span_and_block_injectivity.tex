@@ -11,7 +11,7 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
     \lean{Kraus.wordSpan_eq_top_of_ge_of_unital}
     \lean{MPSTensor.isNBlkInjective_of_ge_of_unital}
     \leanok
-    \uses{def:word_span, def:l_blk_injective}
+    \uses{def:word_span,def:l_blk_injective}
     Suppose
     \begin{align}
         \sum_i A^i(A^i)^\dagger
@@ -45,7 +45,7 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
     \label{thm:algspan_to_normal}
     \lean{MPSTensor.isNormal_of_algSpan_eq_top_of_aperiodic}
     \leanok
-    \uses{def:normal, def:alg_span, def:word_span}
+    \uses{def:normal,def:alg_span,def:word_span}
     If $\algspn(A)=\MN{D}$ and $\Id\in S_1(A)$, then $A$ is normal.
 \end{lemma}
 
@@ -70,7 +70,7 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
     \label{thm:tp_primitive_irred_block_injective}
     \lean{MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible}
     \leanok
-    \uses{thm:normal_tp_primitive_irred, lem:one_block_injective_of_injective, cor:blk_inj_zero_dim_one}
+    \uses{thm:normal_tp_primitive_irred,lem:one_block_injective_of_injective,cor:blk_inj_zero_dim_one}
     Let $A$ be a left-canonical MPS tensor with $D>0$.
     Suppose that $A$ is tensor-irreducible and that its transfer map is
     primitive.
@@ -79,7 +79,7 @@ Section~\ref{sec:app_wielandt_identity_in_span}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:normal_tp_primitive_irred, lem:one_block_injective_of_injective, cor:blk_inj_zero_dim_one}
+    \uses{thm:normal_tp_primitive_irred,lem:one_block_injective_of_injective,cor:blk_inj_zero_dim_one}
     If $D=1$, trace preservation gives a nonzero one-site Kraus matrix, and
     every nonzero scalar matrix spans $\MN{1}$.
     Hence $A$ is one-site injective, so

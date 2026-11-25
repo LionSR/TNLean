@@ -61,7 +61,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
         MPSPreparation.BinaryMERA.sum_star_topPair_mul,
         MPSPreparation.BinaryMERA.norm_state}
     \leanok
-    \uses{def:ldp_binary_mera, thm:prep_pair_product_norm}
+    \uses{def:ldp_binary_mera,thm:prep_pair_product_norm}
     The tree map (\ref{eq:ldp_binary_mera_tree}) of a binary finite-range
     network is an isometry, and the state (\ref{eq:ldp_binary_mera_state})
     is a unit vector.
@@ -95,8 +95,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
         MPSTensor.isInjective_blockTensor_iterate_pairPosTensor,
         MPSTensor.isIsometry_treeLayers}
     \leanok
-    \uses{thm:ldp_tree_factorization, thm:ldpolar_tensor_injective,
-        thm:block_tensor_rotate_physical}
+    \uses{thm:ldp_tree_factorization,thm:ldpolar_tensor_injective,thm:block_tensor_rotate_physical}
     Let the two-site blocked tensor of $A$ be injective, and let $V^{(j)}$ and
     $T_j$ be as in Lemma~\ref{thm:ldp_tree_factorization}. Then for every
     $j\ge1$ the two-site blocked tensor of $T_{j-1}$ is injective, so each
@@ -125,7 +124,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \label{def:ldp_tree_mera}
     \lean{MPSPreparation.treeMERA}
     \leanok
-    \uses{def:ldp_binary_mera, lem:ldp_tree_layers_isometries}
+    \uses{def:ldp_binary_mera,lem:ldp_tree_layers_isometries}
     Let the two-site blocked tensor of $A$ be injective and let $u$ be a unitary
     on $\C^D\otimes\C^D$. The \emph{tree network} of $A$ with $k+1$ isometry
     layers is the binary finite-range network with isometries
@@ -136,8 +135,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \label{lem:ldp_tree_mera_disentangler}
     \lean{MPSPreparation.exists_disentangler_fixedPointPair}
     \leanok
-    \uses{def:prep_pair_product_state, thm:prep_pair_norm,
-        thm:ldp_unitary_implementing_isometry}
+    \uses{def:prep_pair_product_state,thm:prep_pair_norm,thm:ldp_unitary_implementing_isometry}
     Let $D\ge1$ and let $\rho\ge0$ with $\tr\rho=1$. Then there is a unitary
     $u$ on $\C^D\otimes\C^D$ with $u\ket0\ket0=\ket\omega$, the pair of the
     fixed-point state.
@@ -158,9 +156,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \label{thm:ldp_approximating_state_tree_mera}
     \lean{MPSPreparation.approximatingMPVState_eq_state_treeMERA}
     \leanok
-    \uses{def:ldp_tree_mera, def:ldp_approximating_state,
-        thm:ldp_tree_factorization, lem:ldp_approximating_state_unit_norm,
-        lem:ldp_tree_layers_isometries}
+    \uses{def:ldp_tree_mera,def:ldp_approximating_state,thm:ldp_tree_factorization,lem:ldp_approximating_state_unit_norm,lem:ldp_tree_layers_isometries}
     Let the two-site blocked tensor of $A$ be injective, let $\rho\ge0$ with
     $\tr\rho=1$, and let $u$ be a unitary with $u\ket0\ket0=\ket\omega$. For
     $q=2^{k+1}$ and $M\ge1$, the approximating state
@@ -215,9 +211,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \lean{MPSPreparation.exists_state_treeMERA_approximationError_le,
         MPSPreparation.exists_state_treeMERA_approximationError_le_and_le_logb}
     \leanok
-    \uses{thm:ldp_approximating_state_tree_mera,
-        thm:ldp_approximation_error_normal, lem:ldp_mera_threshold_error,
-        lem:ldp_mera_least_layers, def:correlation_length}
+    \uses{thm:ldp_approximating_state_tree_mera,thm:ldp_approximation_error_normal,lem:ldp_mera_threshold_error,lem:ldp_mera_least_layers,def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let $0<t<1$
     bound the moduli of the eigenvalues of $\E_A$ other than $1$, with
     $\xi=-1/\log t$, and let the two-site blocked tensor of $A$ be injective.
@@ -277,7 +271,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \label{lem:ldp_register_mera_norm}
     \lean{MPSPreparation.BinaryMERA.norm_registerState}
     \leanok
-    \uses{def:ldp_register_mera, lem:ldp_binary_mera_norm}
+    \uses{def:ldp_register_mera,lem:ldp_binary_mera_norm}
     The state on registers of a binary finite-range network with sites of
     dimension $d^s$ is a unit vector.
 \end{lemma}
@@ -292,10 +286,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \label{thm:ldp_approximating_state_register_mera}
     \lean{MPSPreparation.approximatingMPVState_eq_registerState_treeMERA}
     \leanok
-    \uses{def:ldp_register_mera, def:ldp_tree_mera,
-        def:ldp_approximating_state, lem:ldp_approximating_state_unit_norm,
-        thm:ldp_tree_factorization, lem:ldp_tree_layers_isometries,
-        thm:ldp_register_tree_isometry}
+    \uses{def:ldp_register_mera,def:ldp_tree_mera,def:ldp_approximating_state,lem:ldp_approximating_state_unit_norm,thm:ldp_tree_factorization,lem:ldp_tree_layers_isometries,thm:ldp_register_tree_isometry}
     Let $A$ blocked over $s$ sites be injective, let $\rho\ge0$ with
     $\tr\rho=1$, and let $u$ be a unitary with $u\ket0\ket0=\ket\omega$. For
     $q=s2^{k+1}$ and $M\ge1$, the approximating state
@@ -325,9 +316,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \lean{MPSPreparation.exists_registerState_treeMERA_approximationError_le,
         MPSPreparation.exists_registerState_treeMERA_approximationError_le_and_le_logb}
     \leanok
-    \uses{thm:ldp_approximating_state_register_mera,
-        thm:ldp_approximation_error_normal, lem:ldp_mera_threshold_error,
-        lem:ldp_mera_least_layers, def:correlation_length}
+    \uses{thm:ldp_approximating_state_register_mera,thm:ldp_approximation_error_normal,lem:ldp_mera_threshold_error,lem:ldp_mera_least_layers,def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), and let
     $0<t<1$ bound the moduli of the eigenvalues of $\E_A$ other than $1$,
     with $\xi=-1/\log t$. There is $C>0$ such that for every $s\ge1$ with $A$
@@ -361,9 +350,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \label{thm:ldp_normal_mps_mera}
     \lean{MPSPreparation.exists_binaryMERA_registerState_approximationError_le}
     \leanok
-    \uses{thm:ldp_register_mera_error, thm:ldp_depth_upper_bound_divisible,
-        lem:ldp_tree_mera_disentangler,
-        lem:ldp_normalized_state_rescaling}
+    \uses{thm:ldp_register_mera_error,thm:ldp_depth_upper_bound_divisible,lem:ldp_tree_mera_disentangler,lem:ldp_normalized_state_rescaling}
     Let $A$ be a normal tensor with $D\ge1$. There are $s_0\ge1$, $\xi>0$
     and $C>0$ such that for every $s\ge s_0$, every $\varepsilon>0$ and every
     $M\ge1$ there are $k\ge0$ and a binary finite-range network with sites of

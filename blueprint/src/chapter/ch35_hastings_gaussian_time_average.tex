@@ -79,8 +79,7 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
     \lean{GaussianFilter.norm_gaussianTimeAverage_sub_le,
         ManyBody.norm_gaussianTimeAverage_sub_groundProjector_le_add}
     \leanok
-    \uses{def:hastings_gaussian_time_average,
-        thm:hastings_gaussian_time_average_gap}
+    \uses{def:hastings_gaussian_time_average,thm:hastings_gaussian_time_average_gap}
     For $M=M^\dagger$, $H=H^\dagger$, $\Delta E>0$, and $q\in\R$ (writing
     $\sqrt q=\sqrt{\max(q,0)}$),
     \begin{align}
@@ -97,7 +96,7 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
     first inequality of \cite[lines 849--864]{Hastings2007AreaLaw}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_unitary_path_difference, thm:hastings_gaussian_time_average_gap}
+    \uses{thm:hastings_unitary_path_difference,thm:hastings_gaussian_time_average_gap}
     Integrating~(\ref{eq:hastings_unitary_path_difference}) against $\gamma_h$
     and applying the first absolute moment of a Gaussian
     \cite[``First absolute moment of a Gaussian'']{QICLean2026Blueprint} gives

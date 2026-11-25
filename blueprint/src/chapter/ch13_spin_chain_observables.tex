@@ -195,7 +195,7 @@
         SpinChain.siteTranslation_symm_apply_val,SpinChain.Config.translation,
         SpinChain.Config.translation_apply,SpinChain.Config.translation_symm_apply}
     \leanok
-    \uses{def:qca_local_algebra, def:qca_translate_region}
+    \uses{def:qca_local_algebra,def:qca_translate_region}
     Translation gives bijections
     \begin{align}
         t_{a,\Lambda} & \colon\Lambda\longrightarrow\Lambda+a,
@@ -211,7 +211,7 @@
     \label{def:qca_finite_local_translation}
     \lean{SpinChain.localTranslation,SpinChain.localTranslation_apply}
     \leanok
-    \uses{def:qca_local_algebra, def:qca_finite_configuration_translation}
+    \uses{def:qca_local_algebra,def:qca_finite_configuration_translation}
     Relabelling configurations defines a star-algebra equivalence
     \begin{align}
         \tau_{a,\Lambda} & \colon\mathcal A_\Lambda
@@ -259,7 +259,7 @@
         SpinChain.localTranslation_apply_translation,
         SpinChain.localTranslation_zero,SpinChain.localTranslation_add}
     \leanok
-    \uses{def:qca_finite_configuration_translation, def:qca_finite_local_translation}
+    \uses{def:qca_finite_configuration_translation,def:qca_finite_local_translation}
     Translation by zero acts trivially on sites, configurations, and
     finite-region observables. Successive translations by $a$ and $b$ agree
     with translation by $a+b$. Pointwise, for $i\in\Lambda$,
@@ -307,7 +307,7 @@
     \label{lem:qca_finite_local_translation_naturality}
     \lean{SpinChain.localTranslation_localInclusion}
     \leanok
-    \uses{def:qca_local_inclusion, def:qca_translate_region, def:qca_finite_local_translation}
+    \uses{def:qca_local_inclusion,def:qca_translate_region,def:qca_finite_local_translation}
     If $\Lambda\subseteq\Gamma$, then for every
     $A\in\mathcal A_\Lambda$,
     \begin{align}
@@ -336,7 +336,7 @@
         SpinChain.AlgebraicLocalAlgebra,SpinChain.localObservable,
         SpinChain.localObservable_localInclusion}
     \leanok
-    \uses{def:qca_local_algebra, def:qca_local_inclusion, lem:qca_local_inclusion_refl, lem:qca_local_inclusion_trans}
+    \uses{def:qca_local_algebra,def:qca_local_inclusion,lem:qca_local_inclusion_refl,lem:qca_local_inclusion_trans}
     The finite-region local algebras form a directed system under the maps
     $\iota_{\Lambda,\Gamma}$.  Its algebraic direct limit is the algebraic
     local algebra
@@ -363,7 +363,7 @@
         SpinChain.instNormAlgebraicLocalAlgebra,
         SpinChain.norm_localObservable}
     \leanok
-    \uses{def:qca_algebraic_local_algebra, lem:qca_local_inclusion_norm}
+    \uses{def:qca_algebraic_local_algebra,lem:qca_local_inclusion_norm}
     Assume $d>0$.  If a local observable $A\in\mathcal A_{\mathrm{loc}}$
     is represented by $A_\Lambda\in\mathcal A_\Lambda$ on a finite region
     $\Lambda$, define its operator norm by
@@ -509,7 +509,7 @@
         SpinChain.SupportedIn.star,SpinChain.SupportedIn.zero,
         SpinChain.SupportedIn.one,SpinChain.exists_supportedIn}
     \leanok
-    \uses{def:qca_supported_in, lem:qca_local_inclusion_injective}
+    \uses{def:qca_supported_in,lem:qca_local_inclusion_injective}
     Every local observable is supported in some finite region.  If $A$ is
     supported in $\Lambda$ and $\Lambda\subseteq\Gamma$, then $A$ is supported
     in $\Gamma$.  If $A$ and $B$ are supported in $\Lambda$ and $\Gamma$,
@@ -520,7 +520,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_algebraic_local_algebra, lem:qca_local_inclusion_injective}
+    \uses{def:qca_algebraic_local_algebra,lem:qca_local_inclusion_injective}
     Enlarge representatives by tensoring with the identity on the added sites.
     Two representatives can therefore be moved to the finite union of their
     regions, where sums and products are formed.  The canonical inclusions are
@@ -537,7 +537,7 @@
     \lean{SpinChain.algebraicLocalTranslationHom,
         SpinChain.algebraicLocalTranslationHom_localObservable}
     \leanok
-    \uses{def:qca_finite_local_translation, def:qca_algebraic_local_algebra}
+    \uses{def:qca_finite_local_translation,def:qca_algebraic_local_algebra}
     For $a\in\mathbb Z$, finite-region translations induce a star-algebra
     homomorphism
     \begin{align}
@@ -552,7 +552,7 @@
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{def:qca_translate_region, def:qca_algebraic_local_algebra, lem:qca_finite_local_translation_naturality, thm:qca_algebraic_local_algebra_universal}
+    \uses{def:qca_translate_region,def:qca_algebraic_local_algebra,lem:qca_finite_local_translation_naturality,thm:qca_algebraic_local_algebra_universal}
     Naturality gives, for $\Lambda\subseteq\Gamma$,
     \begin{align}
         \iota_{\Gamma+a}\!\left(\tau_{a,\Gamma}(\iota_{\Lambda,\Gamma}(A))\right)
@@ -577,7 +577,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_translate_region, def:qca_algebraic_local_algebra, lem:qca_finite_translation_action, thm:qca_algebraic_local_algebra_universal}
+    \uses{def:qca_translate_region,def:qca_algebraic_local_algebra,lem:qca_finite_translation_action,thm:qca_algebraic_local_algebra_universal}
     On a representative $A\in\mathcal A_\Lambda$, the two sides of the
     composition law are represented on the equal finite regions
     $(\Lambda+a)+b$ and $\Lambda+(a+b)$. The finite-region action identity
@@ -609,7 +609,7 @@
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{def:qca_algebraic_local_translation_hom, lem:qca_algebraic_local_translation_hom_action}
+    \uses{def:qca_algebraic_local_translation_hom,lem:qca_algebraic_local_translation_hom_action}
     The homomorphism action laws give
     \begin{align}
         \tau_{-a}\circ\tau_a & =\tau_0=\operatorname{id}, \\
@@ -635,7 +635,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_algebraic_local_translation, lem:qca_algebraic_local_translation_hom_action}
+    \uses{def:qca_algebraic_local_translation,lem:qca_algebraic_local_translation_hom_action}
     The first two identities are the homomorphism action laws expressed as
     identities of star-algebra automorphisms. Taking $b=-a$ in the composition
     law gives
@@ -651,13 +651,13 @@
     \lean{SpinChain.algebraicLocalTranslation_supportedIn,
         SpinChain.algebraicLocalTranslation_supportedIn_iff}
     \leanok
-    \uses{def:qca_supported_in, def:qca_algebraic_local_translation}
+    \uses{def:qca_supported_in,def:qca_algebraic_local_translation}
     A local observable $A$ is supported in a finite region $\Lambda$ if and only
     if $\tau_a(A)$ is supported in $\Lambda+a$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_translate_region, def:qca_algebraic_local_translation, lem:qca_algebraic_local_translation_hom_action}
+    \uses{def:qca_translate_region,def:qca_algebraic_local_translation,lem:qca_algebraic_local_translation_hom_action}
     If $A=\iota_\Lambda(A_\Lambda)$, then
     \begin{align}
         \tau_a(A)
@@ -674,7 +674,7 @@
     \lean{SpinChain.norm_algebraicLocalTranslation,
         SpinChain.algebraicLocalTranslation_isometry}
     \leanok
-    \uses{def:qca_algebraic_local_operator_norm, def:qca_algebraic_local_translation}
+    \uses{def:qca_algebraic_local_operator_norm,def:qca_algebraic_local_translation}
     If $d>0$, then every translation preserves the operator norm and distance:
     \begin{align}
         \lVert\tau_a(A)\rVert           & =\lVert A\rVert,   \\
@@ -683,7 +683,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_algebraic_local_operator_norm, def:qca_algebraic_local_translation, lem:qca_finite_local_translation_norm, thm:qca_local_observable_finite_support}
+    \uses{def:qca_algebraic_local_operator_norm,def:qca_algebraic_local_translation,lem:qca_finite_local_translation_norm,thm:qca_local_observable_finite_support}
     For $A_\Lambda\in\mathcal A_\Lambda$ with
     $A=\iota_\Lambda(A_\Lambda)$, finite-region translation is a star-algebra
     equivalence of matrix algebras, hence preserves the operator norm. Therefore
@@ -724,7 +724,7 @@
     \label{def:qca_quasi_local_algebra}
     \lean{SpinChain.QuasiLocalAlgebra,SpinChain.algebraicToQuasiLocal}
     \leanok
-    \uses{def:qca_algebraic_local_cstar_ring, def:qca_algebraic_local_normed_star_algebra, def:completion_cstar_algebra}
+    \uses{def:qca_algebraic_local_cstar_ring,def:qca_algebraic_local_normed_star_algebra,def:completion_cstar_algebra}
     For $d>0$, the quasi-local observable algebra is the operator-norm
     completion
     \begin{align}
@@ -757,7 +757,7 @@
     \label{def:qca_quasi_local_observable}
     \lean{SpinChain.quasiLocalObservable}
     \leanok
-    \uses{def:qca_quasi_local_algebra, def:qca_algebraic_local_algebra}
+    \uses{def:qca_quasi_local_algebra,def:qca_algebraic_local_algebra}
     For every finite region $\Lambda$, define
     \begin{align}
         j_\Lambda\colon\mathcal A_\Lambda & \longrightarrow\mathcal A,
@@ -773,7 +773,7 @@
         SpinChain.quasiLocalObservable_injective,
         SpinChain.quasiLocalObservable_localInclusion}
     \leanok
-    \uses{def:qca_quasi_local_observable, def:qca_algebraic_local_operator_norm, def:qca_algebraic_local_algebra}
+    \uses{def:qca_quasi_local_observable,def:qca_algebraic_local_operator_norm,def:qca_algebraic_local_algebra}
     For every finite region $\Lambda$, the map $j_\Lambda$ is an injective
     isometry.  If $\Lambda\subseteq\Gamma$, then
     \begin{align}
@@ -782,7 +782,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_quasi_local_observable, def:qca_algebraic_local_operator_norm, def:qca_algebraic_local_algebra}
+    \uses{def:qca_quasi_local_observable,def:qca_algebraic_local_operator_norm,def:qca_algebraic_local_algebra}
     The algebraic inclusion $\iota_\Lambda$ and the completion map $j$ both
     preserve the norm.  Their composite is therefore an isometry and hence
     injective.  Compatibility follows from
@@ -807,7 +807,7 @@
     \lean{SpinChain.denseRange_algebraicToQuasiLocal,
         SpinChain.dense_iUnion_range_quasiLocalObservable}
     \leanok
-    \uses{def:qca_quasi_local_algebra, def:qca_quasi_local_observable, thm:qca_local_observable_finite_support, thm:completion_map_dense_range}
+    \uses{def:qca_quasi_local_algebra,def:qca_quasi_local_observable,thm:qca_local_observable_finite_support,thm:completion_map_dense_range}
     Algebraic local observables are dense in the quasi-local algebra.  Equivalently,
     \begin{align}
         \overline{j(\mathcal A_{\mathrm{loc}})}
@@ -876,7 +876,7 @@ algebra.
         SpinChain.quasiLocalTranslation_algebraicToQuasiLocal,
         SpinChain.quasiLocalTranslation_quasiLocalObservable}
     \leanok
-    \uses{def:completion_star_alg_equiv, def:qca_algebraic_local_translation, def:qca_quasi_local_algebra, def:qca_quasi_local_observable, lem:qca_algebraic_local_translation_isometry}
+    \uses{def:completion_star_alg_equiv,def:qca_algebraic_local_translation,def:qca_quasi_local_algebra,def:qca_quasi_local_observable,lem:qca_algebraic_local_translation_isometry}
     For $d>0$ and every $a\in\mathbb Z$, algebraic-local translation extends to
     a star-algebra automorphism
     \begin{align}
@@ -894,7 +894,7 @@ algebra.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{def:completion_star_alg_equiv, def:qca_algebraic_local_translation, def:qca_quasi_local_algebra, def:qca_quasi_local_observable, lem:qca_algebraic_local_translation_action, lem:qca_algebraic_local_translation_isometry}
+    \uses{def:completion_star_alg_equiv,def:qca_algebraic_local_translation,def:qca_quasi_local_algebra,def:qca_quasi_local_observable,lem:qca_algebraic_local_translation_action,lem:qca_algebraic_local_translation_isometry}
     Algebraic-local translation and its inverse translation by $-a$ are
     operator-norm isometries, hence continuous.  Extend this equivalence to the
     norm completion to obtain~(\ref{eq:qca_trans_dense}).
@@ -960,7 +960,7 @@ algebra.
         SpinChain.Config.blocking_symm_apply,
         SpinChain.Config.restrict_blocking}
     \leanok
-    \uses{def:qca_configuration_blocking, thm:qca_expanded_region_coordinates}
+    \uses{def:qca_configuration_blocking,thm:qca_expanded_region_coordinates}
     Evaluation at $Lx+r$ reads the $r$th letter of the blocked spin at $x$.
     Conversely, encoding collects these letters in increasing residue order.
     At the configuration level, decoding commutes with restriction from
@@ -968,7 +968,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_configuration_blocking, thm:qca_expanded_region_coordinates}
+    \uses{def:qca_configuration_blocking,thm:qca_expanded_region_coordinates}
     The two evaluation formulas are the inverse laws for the ordered word
     encoding.  Restriction preserves the quotient block coordinate and residue,
     so both sides have the same value at every expanded site.
@@ -978,7 +978,7 @@ algebra.
     \label{def:qca_local_blocking}
     \lean{SpinChain.localBlocking}
     \leanok
-    \uses{def:qca_local_algebra, def:qca_configuration_blocking}
+    \uses{def:qca_local_algebra,def:qca_configuration_blocking}
     Reindexing matrix rows and columns by the configuration blocking
     equivalence gives a star-algebra equivalence
     \begin{align}
@@ -1026,7 +1026,7 @@ algebra.
     \lean{SpinChain.subset_expandedRegion_blockHull,SpinChain.blockHull_mono,
         SpinChain.blockHull_expandedRegion}
     \leanok
-    \uses{def:qca_block_hull, def:qca_expanded_region}
+    \uses{def:qca_block_hull,def:qca_expanded_region}
     Let $L>0$.  Every finite original region is contained in the expansion of
     its block hull,
     \begin{align}
@@ -1043,7 +1043,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_block_hull, thm:qca_expanded_region_coordinates}
+    \uses{def:qca_block_hull,thm:qca_expanded_region_coordinates}
     The quotient coordinate of each $z\in\Delta$ belongs to the image defining
     the hull, which proves containment after expansion.  Monotonicity follows
     by retaining the same point $z$ in the larger region.  Finally, every
@@ -1056,7 +1056,7 @@ algebra.
     \label{lem:qca_local_blocking_inclusion}
     \lean{SpinChain.localBlocking_localInclusion}
     \leanok
-    \uses{def:qca_local_blocking, thm:qca_configuration_blocking_formulas, def:qca_local_inclusion}
+    \uses{def:qca_local_blocking,thm:qca_configuration_blocking_formulas,def:qca_local_inclusion}
     Let $L>0$.  For finite blocked regions $\Lambda\subseteq\Gamma$, the
     square formed by finite blocking and the two canonical local inclusions
     commutes:
@@ -1068,7 +1068,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:qca_local_blocking_formulas, thm:qca_configuration_blocking_formulas}
+    \uses{thm:qca_local_blocking_formulas,thm:qca_configuration_blocking_formulas}
     For configurations $x,y$ on $\widehat\Gamma_L$, let $\widetilde x$ and
     $\widetilde y$ be their block encodings on $\Gamma$.  The two matrix
     entries in the commuting square are
@@ -1095,7 +1095,7 @@ algebra.
     \lean{SpinChain.algebraicLocalBlockingHom,
         SpinChain.algebraicLocalUnblockingHom}
     \leanok
-    \uses{def:qca_algebraic_local_algebra, def:qca_local_blocking, def:qca_block_hull}
+    \uses{def:qca_algebraic_local_algebra,def:qca_local_blocking,def:qca_block_hull}
     Let $L>0$.  The compatible finite blocking maps induce a star-algebra
     homomorphism
     \begin{align}
@@ -1113,7 +1113,7 @@ algebra.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{lem:qca_block_hull_properties, lem:qca_local_blocking_inclusion, thm:qca_algebraic_local_algebra_universal}
+    \uses{lem:qca_block_hull_properties,lem:qca_local_blocking_inclusion,thm:qca_algebraic_local_algebra_universal}
     For $\Lambda\subseteq\Gamma$, the finite commuting square gives
     \begin{align}
         \iota_{\widehat\Gamma_L}
@@ -1141,7 +1141,7 @@ algebra.
         SpinChain.algebraicLocalUnblockingHom_localObservable,
         SpinChain.algebraicLocalBlockingHom_comp_unblockingHom}
     \leanok
-    \uses{def:qca_algebraic_blocking_maps, lem:qca_block_hull_properties}
+    \uses{def:qca_algebraic_blocking_maps,lem:qca_block_hull_properties}
     Let $L>0$.  The forward map applies finite blocking to a representative on
     $\Lambda$ and regards the result as supported on $\widehat\Lambda_L$.  The
     reverse map enlarges a representative on $\Delta$ to the expansion of its
@@ -1156,7 +1156,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_local_blocking_inclusion, lem:qca_block_hull_properties}
+    \uses{lem:qca_local_blocking_inclusion,lem:qca_block_hull_properties}
     These are the evaluation formulas for the two compatible-family lifts.
     Forward compatibility is the commuting square.  Reverse compatibility
     follows by monotonicity of block hulls, composition of local inclusions,
@@ -1180,7 +1180,7 @@ algebra.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_maps_evaluation, thm:qca_local_observable_finite_support, lem:qca_local_blocking_inclusion}
+    \uses{lem:qca_algebraic_blocking_maps_evaluation,thm:qca_local_observable_finite_support,lem:qca_local_blocking_inclusion}
     The identity $\mathcal B_L\mathcal U_L=\operatorname{id}$ makes
     $\mathcal B_L$ surjective.  For injectivity, represent two blocked
     observables on finite regions $\Lambda$ and $\Gamma$, enlarge both to
@@ -1204,7 +1204,7 @@ algebra.
         SpinChain.algebraicLocalBlocking_isometry,
         SpinChain.algebraicLocalBlocking_symm_isometry}
     \leanok
-    \uses{def:qca_algebraic_blocking, lem:qca_algebraic_blocking_maps_evaluation}
+    \uses{def:qca_algebraic_blocking,lem:qca_algebraic_blocking_maps_evaluation}
     Let $d>0$ and $L>0$.  The equivalence agrees with the forward lift, and
     its inverse agrees with the block-hull unblocking map.  For
     $A\in\mathcal A^{(d^L)}_\Lambda$ and
@@ -1229,7 +1229,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_maps_evaluation, lem:qca_block_hull_properties, thm:qca_local_blocking_formulas, def:qca_algebraic_local_operator_norm}
+    \uses{lem:qca_algebraic_blocking_maps_evaluation,lem:qca_block_hull_properties,thm:qca_local_blocking_formulas,def:qca_algebraic_local_operator_norm}
     The first two formulas are the evaluation identities for the forward and
     reverse maps.  For an expanded region, the block-hull identity removes the
     enlargement and leaves the inverse finite blocking equivalence.  On a
@@ -1244,7 +1244,7 @@ algebra.
     \label{def:qca_quasi_local_blocking}
     \lean{SpinChain.quasiLocalBlocking}
     \leanok
-    \uses{def:qca_quasi_local_algebra, def:qca_algebraic_blocking, lem:qca_algebraic_blocking_formulas}
+    \uses{def:qca_quasi_local_algebra,def:qca_algebraic_blocking,lem:qca_algebraic_blocking_formulas}
     For $d>0$ and $L>0$, site blocking extends uniquely by continuity to a
     star-algebra equivalence
     \begin{align}
@@ -1256,7 +1256,7 @@ algebra.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_formulas, def:completion_star_alg_equiv}
+    \uses{lem:qca_algebraic_blocking_formulas,def:completion_star_alg_equiv}
     The algebraic blocking equivalence and its inverse are isometries, hence
     continuous.  Extending both maps to the operator-norm completions gives
     mutually inverse star-algebra homomorphisms.
@@ -1273,7 +1273,7 @@ algebra.
         SpinChain.norm_quasiLocalBlocking,
         SpinChain.quasiLocalBlocking_isometry}
     \leanok
-    \uses{def:qca_quasi_local_blocking, lem:qca_algebraic_blocking_formulas, lem:qca_quasi_local_observable}
+    \uses{def:qca_quasi_local_blocking,lem:qca_algebraic_blocking_formulas,lem:qca_quasi_local_observable}
     Let $d>0$ and $L>0$.  Write $j^{(d)}$ for the canonical map from the
     algebraic-local algebra into its completion.  The underlying map of
     $\overline{\mathcal B}_L$ is the continuous extension of $\mathcal B_L$,
@@ -1319,7 +1319,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:completion_star_alg_equiv, def:qca_quasi_local_observable, lem:qca_algebraic_blocking_formulas, lem:qca_block_hull_properties}
+    \uses{def:completion_star_alg_equiv,def:qca_quasi_local_observable,lem:qca_algebraic_blocking_formulas,lem:qca_block_hull_properties}
     Equalities~(\ref{eq:qca_blocking_dense_fwd}) and~(\ref{eq:qca_blocking_dense_rev}) are the defining continuous extensions of the algebraic equivalence and its inverse.
     Composing them with the finite-region canonical maps gives~(\ref{eq:qca_blocking_fin_fwd}) and~(\ref{eq:qca_blocking_fin_rev}).
     The exact formula~(\ref{eq:qca_blocking_fin_exact}) uses $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.
@@ -1330,7 +1330,7 @@ algebra.
     \label{lem:qca_expanded_region_translation}
     \lean{SpinChain.expandedRegion_translateRegion}
     \leanok
-    \uses{def:qca_translate_region, def:qca_expanded_region}
+    \uses{def:qca_translate_region,def:qca_expanded_region}
     Let $L>0$, let $a\in\mathbb Z$, and let $\Lambda\subset\mathbb Z$ be a
     finite blocked region.  Then
     \begin{align}
@@ -1353,7 +1353,7 @@ algebra.
     \label{def:qca_blocked_neighborhood}
     \lean{SpinChain.blockedNeighborhood}
     \leanok
-    \uses{def:qca_expanded_region, def:qca_block_hull, def:qca_region_sumset}
+    \uses{def:qca_expanded_region,def:qca_block_hull,def:qca_region_sumset}
     Let $L>0$ and let $\mathcal N\subset\mathbb Z$ be a finite original-lattice
     neighborhood.  Write $\widehat{\{0\}}_L=\{0,\ldots,L-1\}$ for the sites in
     the reference block.  Define the induced blocked-lattice neighborhood by
@@ -1373,7 +1373,7 @@ algebra.
     \lean{SpinChain.mem_blockedNeighborhood,
         SpinChain.mem_blockedNeighborhood_iff_exists_eq}
     \leanok
-    \uses{def:qca_blocked_neighborhood, thm:qca_expanded_region_coordinates}
+    \uses{def:qca_blocked_neighborhood,thm:qca_expanded_region_coordinates}
     Let $L>0$, let $\mathcal N\subset\mathbb Z$ be finite, and let
     $b\in\mathbb Z$.  Then
     \begin{align}
@@ -1394,7 +1394,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:qca_blocked_neighborhood, def:qca_block_hull, thm:qca_expanded_region_coordinates}
+    \uses{def:qca_blocked_neighborhood,def:qca_block_hull,thm:qca_expanded_region_coordinates}
     An element of $\widehat{\{0\}}_L+\mathcal N$ has the form $r+n$ with
     $0\leq r<L$ and $n\in\mathcal N$.  Taking its block coordinate gives the
     first equivalence.  Euclidean division writes $r+n=bL+s$ with the unique
@@ -1406,7 +1406,7 @@ algebra.
     \label{lem:qca_block_hull_region_sumset}
     \lean{SpinChain.blockHull_regionSumset_expandedRegion}
     \leanok
-    \uses{def:qca_blocked_neighborhood, def:qca_region_sumset, def:qca_expanded_region, def:qca_block_hull}
+    \uses{def:qca_blocked_neighborhood,def:qca_region_sumset,def:qca_expanded_region,def:qca_block_hull}
     Let $L>0$.  For every finite blocked region $\Lambda$ and every finite
     original-lattice neighborhood $\mathcal N$,
     \begin{align}
@@ -1419,7 +1419,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_blocked_neighborhood_membership, thm:qca_expanded_region_coordinates}
+    \uses{lem:qca_blocked_neighborhood_membership,thm:qca_expanded_region_coordinates}
     Every expanded site has the form $xL+r$ with $x\in\Lambda$ and $0\leq r<L$.
     For $n\in\mathcal N$, Euclidean division gives
     \begin{align}
@@ -1435,7 +1435,7 @@ algebra.
     \label{lem:qca_region_sumset_expanded_region_subset}
     \lean{SpinChain.regionSumset_expandedRegion_subset}
     \leanok
-    \uses{lem:qca_block_hull_region_sumset, lem:qca_block_hull_properties}
+    \uses{lem:qca_block_hull_region_sumset,lem:qca_block_hull_properties}
     Let $L>0$.  For every finite blocked region $\Lambda$ and every finite
     original-lattice neighborhood $\mathcal N$,
     \begin{align}
@@ -1446,7 +1446,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_block_hull_region_sumset, lem:qca_block_hull_properties}
+    \uses{lem:qca_block_hull_region_sumset,lem:qca_block_hull_properties}
     Every finite original region is contained in the expansion of its block
     hull; applying this containment to
     $\widehat\Lambda_L+\mathcal N$ and using
@@ -1457,7 +1457,7 @@ algebra.
     \label{lem:qca_algebraic_blocking_translation}
     \lean{SpinChain.algebraicLocalBlocking_translation}
     \leanok
-    \uses{lem:qca_expanded_region_translation, def:qca_algebraic_blocking, def:qca_algebraic_local_translation}
+    \uses{lem:qca_expanded_region_translation,def:qca_algebraic_blocking,def:qca_algebraic_local_translation}
     Let $d,L>0$.  If $\mathcal B_L$ denotes the algebraic-local blocking
     equivalence, then for every $a\in\mathbb Z$,
     \begin{align}
@@ -1469,7 +1469,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_expanded_region_translation, lem:qca_algebraic_blocking_formulas, def:qca_algebraic_local_translation}
+    \uses{lem:qca_expanded_region_translation,lem:qca_algebraic_blocking_formulas,def:qca_algebraic_local_translation}
     On a representative supported in a finite blocked region $\Lambda$, both
     sides apply the same matrix reindexing.  Their supports agree because
     \begin{align}
@@ -1484,7 +1484,7 @@ algebra.
     \label{lem:qca_quasi_local_blocking_translation}
     \lean{SpinChain.quasiLocalBlocking_translation}
     \leanok
-    \uses{lem:qca_algebraic_blocking_translation, def:qca_quasi_local_blocking, def:qca_quasi_local_translation}
+    \uses{lem:qca_algebraic_blocking_translation,def:qca_quasi_local_blocking,def:qca_quasi_local_translation}
     Let $d,L>0$.  If $\overline{\mathcal B}_L$ denotes the quasi-local blocking
     equivalence, then for every $a\in\mathbb Z$,
     \begin{align}
@@ -1496,7 +1496,7 @@ algebra.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:qca_algebraic_blocking_translation, lem:qca_quasi_local_blocking_formulas, def:qca_quasi_local_translation}
+    \uses{lem:qca_algebraic_blocking_translation,lem:qca_quasi_local_blocking_formulas,def:qca_quasi_local_translation}
     The two sides are continuous maps on the quasi-local algebra.  On the dense
     algebraic-local subalgebra their values agree by
     Lemma~\ref{lem:qca_algebraic_blocking_translation}.  They therefore agree
@@ -1537,7 +1537,7 @@ algebra.
     expressed in increasing integer-site coordinates.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:local_interval_coordinates, def:qca_local_inclusion}
+    \uses{def:local_interval_coordinates,def:qca_local_inclusion}
     Restriction to $I$ selects the middle $N$ coordinates. Equality of the
     two configurations on $J\setminus I$ is equality on all added sites.
     Substituting these identifications into the local inclusion formula gives the matrix entry.
@@ -1557,7 +1557,7 @@ algebra.
     convention.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{def:local_interval_coordinates, def:qca_quasi_local_observable}
+    \uses{def:local_interval_coordinates,def:qca_quasi_local_observable}
     The coordinate equivalence is isometric between the finite matrix
     algebras, and the finite-region inclusion preserves norm in the completion.
 \end{proof}
@@ -1589,8 +1589,7 @@ algebra.
     \lean{SpinChain.CompatibleLocalState.algebraicFunctional,
         SpinChain.CompatibleLocalState.algebraicContinuousFunctional}
     \leanok
-    \uses{def:qca_compatible_local_state, def:qca_algebraic_local_algebra,
-        def:qca_algebraic_local_normed_star_algebra}
+    \uses{def:qca_compatible_local_state,def:qca_algebraic_local_algebra,def:qca_algebraic_local_normed_star_algebra}
     Compatibility determines a complex-linear functional
     $f_{\mathrm{loc}}\colon\mathcal A_{\mathrm{loc}}\to\C$ by
     $f_{\mathrm{loc}}(\iota_\Lambda(X))=f_\Lambda(X)$.
@@ -1611,8 +1610,7 @@ algebra.
 
 \begin{proof}
     \leanok
-    \uses{def:qca_compatible_state_algebraic_extension,
-        def:qca_algebraic_local_operator_norm}
+    \uses{def:qca_compatible_state_algebraic_extension,def:qca_algebraic_local_operator_norm}
     The direct-limit property gives the stated values. Every algebraic local
     observable has a finite-region representative, and its norm is the norm
     of that representative. Thus
@@ -1624,8 +1622,7 @@ algebra.
     \label{def:qca_compatible_state_completion}
     \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional}
     \leanok
-    \uses{def:qca_quasi_local_algebra,
-        thm:qca_compatible_state_algebraic_bound}
+    \uses{def:qca_quasi_local_algebra,thm:qca_compatible_state_algebraic_bound}
     For $d>0$, let $\omega\colon\mathcal A\to\C$ be the continuous linear
     extension of $f_{\mathrm{loc}}$ to the operator-norm completion.
 \end{definition}
@@ -1635,7 +1632,7 @@ algebra.
     \lean{SpinChain.CompatibleLocalState.quasiLocalFunctional_algebraicToQuasiLocal,
         SpinChain.CompatibleLocalState.quasiLocalFunctional_quasiLocalObservable}
     \leanok
-    \uses{def:qca_compatible_state_completion, def:qca_quasi_local_observable}
+    \uses{def:qca_compatible_state_completion,def:qca_quasi_local_observable}
     For every algebraic local observable $A$, one has
     $\omega(j(A))=f_{\mathrm{loc}}(A)$. For every finite region $\Lambda$ and
     $X\in\mathcal A_\Lambda$, one has $\omega(j_\Lambda(X))=f_\Lambda(X)$.
@@ -1643,8 +1640,7 @@ algebra.
 
 \begin{proof}
     \leanok
-    \uses{def:qca_compatible_state_completion,
-        thm:qca_compatible_state_algebraic_bound}
+    \uses{def:qca_compatible_state_completion,thm:qca_compatible_state_algebraic_bound}
     Continuous extension preserves the values on the original normed space,
     giving the finite-region formula at $A=\iota_\Lambda(X)$.
 \end{proof}
@@ -1669,10 +1665,7 @@ algebra.
 
 \begin{proof}
     \leanok
-    \uses{thm:qca_compatible_state_evaluation,
-        thm:qca_compatible_state_algebraic_bound,
-        def:qca_quasi_local_algebra,
-        def:qca_algebraic_local_algebra}
+    \uses{thm:qca_compatible_state_evaluation,thm:qca_compatible_state_algebraic_bound,def:qca_quasi_local_algebra,def:qca_algebraic_local_algebra}
     The sets defined by $|\omega(A)|\leq\lVert A\rVert$ and
     $\omega(A^\dagger A)\geq0$ are closed, since multiplication, involution,
     and $\omega$ are continuous. These inequalities hold on the dense
@@ -1727,7 +1720,7 @@ algebra.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:qca_state_convex_support, def:qca_state_space_purity}
+    \uses{thm:qca_state_convex_support,def:qca_state_space_purity}
     In a nontrivial convex decomposition of $\omega$, each constituent
     has expectation one on every $P_i$. The uniqueness hypothesis forces
     the left constituent to equal $\omega$, which is the extreme-point
@@ -1761,7 +1754,7 @@ algebra.
     No translation-invariance condition is imposed on these states.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:quasi_local_state_space_convex, def:qca_state_space_purity}
+    \uses{thm:quasi_local_state_space_convex,def:qca_state_space_purity}
     The state $\varphi$ belongs to the convex hull of the $\omega_i$.
     This hull is contained in the full state space, so extremality in the
     state space implies extremality in the smaller hull. Every extreme
@@ -1780,7 +1773,7 @@ algebra.
     Negative starts and the empty interval are included.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:local_interval_coordinates, def:qca_expanded_region}
+    \uses{def:local_interval_coordinates,def:qca_expanded_region}
     Euclidean division by $L$ shows that the quotient $q=\lfloor z/L\rfloor$ of an integer $z$
     satisfies $a\leq q<a+N$ exactly when $aL\leq z<(a+N)L$.
 \end{proof}
@@ -1807,8 +1800,7 @@ algebra.
     coordinates.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:qca_blocking_interval_region, def:local_interval_coordinates,
-        def:qca_configuration_blocking, thm:qca_local_blocking_formulas}
+    \uses{lem:qca_blocking_interval_region,def:local_interval_coordinates,def:qca_configuration_blocking,thm:qca_local_blocking_formulas}
     The site $L(a+i)+r$ has interval coordinate $Li+r$ relative to $aL$.
     Thus decoding followed by consecutive numbering agrees with flattening
     the blocked configurations on both matrix indices.
@@ -1827,9 +1819,7 @@ algebra.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:qca_blocking_interval_coordinates,
-        lem:qca_quasi_local_blocking_formulas,
-        thm:quasi_local_interval_observable}
+    \uses{thm:qca_blocking_interval_coordinates,lem:qca_quasi_local_blocking_formulas,thm:quasi_local_interval_observable}
     Evaluating the completed blocking equivalence on the finite interval
     representative and applying the finite coordinate identity gives the formula.
 \end{proof}

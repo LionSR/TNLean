@@ -34,10 +34,9 @@ contraction of local tensors is proved separately.
 
 \begin{definition}[Original input and physical density]
     \label{def:peps_distributed_construction_density}
-    \lean{QuantumCircuit.Party.DistributedConstructionData.input,
-        QuantumCircuit.Party.DistributedConstruction.physicalDensity}
+    \lean{QuantumCircuit.Party.DistributedConstruction.physicalDensity}
     \leanok
-    \uses{def:peps_distributed_construction}
+    \uses{def:peps_distributed_construction,def:peps_original_gate_construction_input}
     The input of a distributed construction is the unit product vector
     $\psi=\bigotimes_{p\in P}x_p$, and its unnormalized physical density in the
     party-indexed physical coordinates is
@@ -183,8 +182,7 @@ contraction of local tensors is proved separately.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,
-        thm:peps_original_finite_expansion_bound}
+    \uses{thm:peps_physical_first_exact_sources,thm:peps_actual_source_sampling,thm:peps_original_finite_expansion_bound}
     Preparing each $\psi_p:\mathbb C\to H_p$ locally prepares $\psi$ with no
     pair source. By Lemma~\ref{thm:peps_original_finite_expansion_bound}, $R$ is an allowed
     contraction circuit with finite-dimensional discarded registers, participation
@@ -406,10 +404,7 @@ contraction of local tensors is proved separately.
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:compression_incidence_containment,thm:compression_gate_incidence_bound,
-        thm:compression_tagging_cardinality,thm:peps_physical_first_original_locality,
-        thm:peps_source_only_resources,
-        thm:peps_original_produced_resource_bounds}
+    \uses{thm:compression_incidence_containment,thm:compression_gate_incidence_bound,thm:compression_tagging_cardinality,thm:peps_physical_first_original_locality,thm:peps_source_only_resources,thm:peps_original_produced_resource_bounds}
     By Lemmas~\ref{thm:compression_incidence_containment},
     \ref{thm:compression_gate_incidence_bound}, and~\ref{thm:compression_tagging_cardinality},
     each $g\in G_p=\{g\in G:p\in P_g\}$ contributes at most $|P_g|-1$ star links
@@ -432,8 +427,7 @@ contraction of local tensors is proved separately.
     \lean{QuantumCircuit.Party.DistributedConstruction.exists_uniform_sampled_network_of_arity_lifetime,
         QuantumCircuit.Party.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime}
     \leanok
-    \uses{def:peps_distributed_construction,def:peps_distributed_construction_density,
-        def:compression_operator_operator,def:compression_operator_alphabets}
+    \uses{def:peps_distributed_construction,def:peps_distributed_construction_density,def:compression_operator_operator,def:compression_operator_alphabets}
     In the message-free case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS},
     let $(\mathcal C_i)_{i\in I}$ be a family of distributed constructions with
     sizes $L_i\ge2$. Fix $a,b,n,d,r,u,v\in\mathbb N$ with $a\le b$ and
@@ -465,9 +459,7 @@ contraction of local tensors is proved separately.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_uniform_approximate_operator_network_of_le,
-        thm:peps_distributed_construction_gate_maps_density,
-        thm:peps_separate_arity_incidence,thm:peps_compression_retained_norm}
+    \uses{thm:peps_uniform_approximate_operator_network_of_le,thm:peps_distributed_construction_gate_maps_density,thm:peps_separate_arity_incidence,thm:peps_compression_retained_norm}
     By Definition~\ref{def:peps_distributed_construction_gate_maps} and
     Lemma~\ref{thm:peps_distributed_construction_gate_maps_density}, the
     recorded expansions reproduce each gate operator with zero approximation

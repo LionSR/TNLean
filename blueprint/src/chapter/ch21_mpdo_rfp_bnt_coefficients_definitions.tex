@@ -76,7 +76,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum}
     \leanok
-    \uses{def:mpdo_bnt_label_operator_family, def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_operator_family,def:mpdo_bnt_label_coefficient_family}
     For a finite set of BNT labels, the operators $O_L(M_\alpha)$ satisfy
     the product identity with coefficients $c^{(L)}_{\alpha,\beta,\gamma}$
     when, for every positive length $L$ and all labels $\alpha,\beta$,
@@ -158,7 +158,7 @@
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm}
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum}
     \leanok
-    \uses{def:mpdo_bnt_label_trace_scalar_family, def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_trace_scalar_family,def:mpdo_bnt_label_coefficient_family}
     For a finite set of BNT labels, the vector $m=(m_\alpha)_\alpha$ is an
     idempotent for the multiplication induced by $c^{(1)}$ when, for every
     label $\gamma$,
@@ -195,7 +195,7 @@
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.targetLabel}
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.blocked_coeff_eq}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_blocked_structure_coefficients, def:mpdo_bnt_blocked_basis_label_assignment}
+    \uses{def:mpdo_bnt_label_coefficient_family,def:mpdo_blocked_structure_coefficients,def:mpdo_bnt_blocked_basis_label_assignment}
     A comparison between the BNT structure coefficients and the chosen
     blocked-basis coefficients consists of an assignment of BNT labels
     together with the equality
@@ -217,7 +217,7 @@
     \label{def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_diagonal_chi_family}
+    \uses{def:mpdo_bnt_label_coefficient_family,def:mpdo_diagonal_chi_family}
     The coefficients $c^{(L)}_{\alpha,\beta,\gamma}$ satisfy the trace-power
     formula for a family of diagonal matrices $\chi_{\alpha,\beta,\gamma}$
     when, for every positive length $L$ and all labels,
@@ -236,7 +236,7 @@
     \label{lem:mpdo_bnt_label_chi_eq_trace_matrix_pow}
     \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.eq_trace_matrix_pow}
     \leanok
-    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form, thm:mpdo_trace_matrix_pow}
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,thm:mpdo_trace_matrix_pow}
     Under the trace-power condition at positive lengths, for every $L>0$,
     $c^{(L)}_{\alpha,\beta,\gamma}
         = \tr(\chi_{\alpha,\beta,\gamma}^{L})$.
@@ -250,7 +250,7 @@
     \label{lem:mpdo_bnt_label_of_chi_positive_length_trace_power}
     \lean{MPOTensor.BNTLabelCoefficientFamily.ofChi_hasPositiveLengthChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    \uses{def:mpdo_bnt_label_coefficient_family,def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     The coefficients defined by
     $c^{(L)}_{\alpha,\beta,\gamma}=\tr(\chi_{\alpha,\beta,\gamma}^{L})$
     for a family of diagonal matrices satisfy the trace-power condition at
@@ -265,7 +265,7 @@
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm}
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.ofChi}
     \leanok
-    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form, def:mpdo_diagonal_chi_family, lem:mpdo_bnt_label_of_chi_positive_length_trace_power}
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,def:mpdo_diagonal_chi_family,lem:mpdo_bnt_label_of_chi_positive_length_trace_power}
     For given coefficients $c^{(L)}_{\alpha,\beta,\gamma}$, consider diagonal
     matrices $\chi_{\alpha,\beta,\gamma}$, independent of $L$, with strictly
     positive diagonal entries, such that
@@ -280,7 +280,7 @@
     \label{lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.eq_trace_pow}
     \leanok
-    \uses{def:mpdo_positive_bnt_label_chi_trace_power_form, lem:mpdo_bnt_label_chi_eq_trace_matrix_pow}
+    \uses{def:mpdo_positive_bnt_label_chi_trace_power_form,lem:mpdo_bnt_label_chi_eq_trace_matrix_pow}
     If the coefficients have a trace-power representation by positive
     diagonal matrices $\chi_{\alpha,\beta,\gamma}$ independent of $L$, then
     for every $L>0$,
@@ -296,7 +296,7 @@
     \label{thm:mpdo_bnt_label_same_length_product_eq_sum_chi_trace_pow}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_chi_trace_pow}
     \leanok
-    \uses{def:mpdo_bnt_label_same_length_product_form, lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    \uses{def:mpdo_bnt_label_same_length_product_form,lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     Suppose the product identity for BNT operators at the same length holds
     and its coefficients have a trace-power representation by positive
     diagonal matrices $\chi_{\alpha,\beta,\gamma}$ independent of $L$.
@@ -319,7 +319,7 @@
     \label{thm:mpdo_bnt_label_same_length_product_eq_sum_of_chi_trace_pow}
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.eq_sum_ofChi_trace_pow}
     \leanok
-    \uses{def:mpdo_bnt_label_same_length_product_form, def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_same_length_product_form,def:mpdo_bnt_label_coefficient_family}
     If the product identity for BNT operators at the same length holds with
     coefficients defined by traces of powers of diagonal matrices
     $\chi_{\alpha,\beta,\gamma}$, then for every $L>0$,
@@ -341,7 +341,7 @@
     \label{thm:mpdo_bnt_label_idempotent_eq_sum_chi_trace}
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_chi_trace}
     \leanok
-    \uses{def:mpdo_bnt_label_idempotent_coefficient_form, lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    \uses{def:mpdo_bnt_label_idempotent_coefficient_form,lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     If $m$ is an idempotent for the multiplication induced by $c^{(1)}$ and
     the coefficients have a trace-power representation by positive diagonal
     matrices $\chi_{\alpha,\beta,\gamma}$ independent of $L$, then
@@ -363,7 +363,7 @@
     \label{thm:mpdo_bnt_label_idempotent_eq_sum_of_chi_trace}
     \lean{MPOTensor.BNTLabelTraceScalarFamily.HasIdempotentCoefficientForm.eq_sum_ofChi_trace}
     \leanok
-    \uses{def:mpdo_bnt_label_idempotent_coefficient_form, def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_idempotent_coefficient_form,def:mpdo_bnt_label_coefficient_family}
     If $m$ is an idempotent for the multiplication induced by $c^{(1)}$,
     where the coefficients are defined by traces of powers of diagonal
     matrices $\chi_{\alpha,\beta,\gamma}$, then
@@ -389,7 +389,7 @@
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
         blocked_coeff_eq_pulledBlockedChi_trace_pow}
     \leanok
-    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison, def:mpdo_positive_bnt_label_chi_trace_power_form, lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,def:mpdo_positive_bnt_label_chi_trace_power_form,lem:mpdo_positive_bnt_label_chi_eq_trace_matrix_pow}
     Suppose the chosen blocked-basis coefficients satisfy the comparison
     equality with the BNT structure coefficients, and the latter have a
     trace-power representation by positive diagonal matrices
@@ -455,7 +455,7 @@
     \label{def:mpdo_has_blocked_structure_chi_trace_power_form}
     \lean{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_blocked_structure_coefficients, def:mpdo_blocked_structure_chi_family}
+    \uses{def:mpdo_blocked_structure_coefficients,def:mpdo_blocked_structure_chi_family}
     The blocked multiplication coefficients are in trace-power form when, for
     every positive blocking length $n$ and every multiplication triple $(i,j,k)$,
     the coefficient $c^{(n)}_{i,j,k}$ equals
@@ -472,7 +472,7 @@
     \lean{MPOTensor.AlgebraStructureData.HasBlockedStructureChiTracePowerForm.eq_trace_matrix_pow}
     \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm.eq_trace_pow}
     \leanok
-    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form, lem:mpdo_blocked_structure_chi_trace_matrix_pow}
+    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form,lem:mpdo_blocked_structure_chi_trace_matrix_pow}
     Under trace-power form for the blocked multiplication coefficients,
     for every positive blocking length $n$,
     $c^{(n)}_{i,j,k}=\tr(\chi_{n,i,j,k}^{\,n})$.
@@ -486,7 +486,7 @@
     \label{def:mpdo_positive_blocked_structure_chi_trace_power_form}
     \lean{MPOTensor.AlgebraStructureData.PositiveBlockedStructureChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form, def:mpdo_blocked_structure_chi_family}
+    \uses{def:mpdo_has_blocked_structure_chi_trace_power_form,def:mpdo_blocked_structure_chi_family}
     Consider a family of blocked diagonal matrices with strictly positive
     diagonal entries satisfying
     $c^{(n)}_{i,j,k}=\tr(\chi_{n,i,j,k}^{\,n})$ for every $n>0$ and every
@@ -511,7 +511,7 @@
     \lean{MPOTensor.BNTBlockedBasisCoefficientComparison.%
         toPositiveBlockedStructureChiTracePowerForm}
     \leanok
-    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison, def:mpdo_positive_bnt_label_chi_trace_power_form, def:mpdo_positive_blocked_structure_chi_trace_power_form}
+    \uses{def:mpdo_bnt_blocked_basis_coefficient_comparison,def:mpdo_positive_bnt_label_chi_trace_power_form,def:mpdo_positive_blocked_structure_chi_trace_power_form}
     Suppose the chosen blocked-basis coefficients satisfy the comparison
     equality with the BNT structure coefficients, and the latter have a
     trace-power representation by positive diagonal matrices
@@ -578,7 +578,7 @@
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.entry_eq_one_of_lengthIndependent}
     \lean{MPOTensor.PositiveBNTLabelChiTracePowerForm.coeff_eq_dim_of_lengthIndependent}
     \leanok
-    \uses{def:mpdo_bnt_label_length_independent, def:mpdo_bnt_label_positive_length_chi_trace_power_form, def:mpdo_positive_bnt_label_chi_trace_power_form, lem:constant_power_sum_dichotomy}
+    \uses{def:mpdo_bnt_label_length_independent,def:mpdo_bnt_label_positive_length_chi_trace_power_form,def:mpdo_positive_bnt_label_chi_trace_power_form,lem:constant_power_sum_dichotomy}
     Suppose the BNT structure coefficients have the trace-power form
     $c^{(L)}_{\alpha,\beta,\gamma}
         = \tr(\chi_{\alpha,\beta,\gamma}^{\,L})$
@@ -608,7 +608,7 @@
     \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.%
         lengthIndependent_of_forall_entry_eq_one}
     \leanok
-    \uses{def:mpdo_bnt_label_length_independent, def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    \uses{def:mpdo_bnt_label_length_independent,def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     If the BNT structure coefficients have a trace-power representation by
     diagonal matrices all of whose diagonal entries equal one, then for
     every $L>0$, $c^{(L)}_{\alpha,\beta,\gamma}
@@ -648,7 +648,7 @@
     \lean{MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm.%
         lengthIndependent_iff_coeff_two_three}
     \leanok
-    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form, thm:positive_power_second_difference, thm:mpdo_bnt_label_length_independent_of_unit_entries}
+    \uses{def:mpdo_bnt_label_positive_length_chi_trace_power_form,thm:positive_power_second_difference,thm:mpdo_bnt_label_length_independent_of_unit_entries}
     Suppose the structure coefficients admit a trace-power presentation
     by positive diagonal matrices. They are length independent if and
     only if, for every triple of labels,

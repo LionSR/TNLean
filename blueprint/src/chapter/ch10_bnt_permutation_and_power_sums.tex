@@ -10,7 +10,7 @@ the overlaps.
     \label{thm:bnt_perm_same_card}
     \lean{MPSTensor.exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho}
     \leanok
-    \uses{def:injective, def:mpv_overlap, def:gauge_phase_equiv}
+    \uses{def:injective,def:mpv_overlap,def:gauge_phase_equiv}
     % CPSV16 source boundary: arXiv:1606.00608, local source lines
     % 522--525 and 1305--1307.
     Let $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$ be injective families of positive
@@ -21,7 +21,7 @@ the overlaps.
     $B_{\pi(j)}$ have the same bond dimension and are gauge-phase equivalent.
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:bnt_eventual_change_basis, thm:overlap_decay, thm:overlap_decay_rect}
+\begin{proof}\leanok\uses{lem:bnt_eventual_change_basis,thm:overlap_decay,thm:overlap_decay_rect}
     For large $N$, Lemma~\ref{lem:bnt_eventual_change_basis} gives an
     invertible matrix $U_N$ relating the two MPV families. For a fixed $j$,
     expanding $\ket{V^{(N)}(B_j)}=\sum_i u_{ij}^{(N)}\ket{V^{(N)}(A_i)}$ with
@@ -53,7 +53,7 @@ the overlaps.
 \begin{lemma}[Permutation rigidity with asymptotically orthonormal overlaps]\label{lem:bnt_perm_simple}
     \lean{MPSTensor.exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho}
     \leanok
-    \uses{def:injective, def:mpv, def:mpv_overlap, def:gauge_phase_equiv}
+    \uses{def:injective,def:mpv,def:mpv_overlap,def:gauge_phase_equiv}
     Let $(A_j)_{j=1}^{g_A}$ and $(B_k)_{k=1}^{g_B}$ be two
     families of injective tensors of positive bond dimension satisfying the TP normalization
     $\sum_i (A_j^i)^\dagger A_j^i = \Id$ and
@@ -71,7 +71,7 @@ the overlaps.
     dimension and are gauge-phase equivalent for each~$j$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:bnt_finite_index_overlap_orthonormal_li, thm:bnt_perm_same_card}
+\begin{proof}\leanok\uses{lem:bnt_finite_index_overlap_orthonormal_li,thm:bnt_perm_same_card}
     By Lemma~\ref{lem:bnt_finite_index_overlap_orthonormal_li}, both families are
     linearly independent for all sufficiently large $N$. For $N$ large
     enough that both families are linearly independent and the assumed span
@@ -95,7 +95,7 @@ exact sector matching.
     \lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP}
     \lean{MPSTensor.exists_ge_not_forall_mpv_eq_mul_of_blocksNotGaugePhaseEquiv_of_irreducible_TP}
     \leanok
-    \uses{def:gauge_phase_equiv, def:mpv_overlap, def:irreducible_tensor}
+    \uses{def:gauge_phase_equiv,def:mpv_overlap,def:irreducible_tensor}
     Let $A$ and $B$ be irreducible trace-preserving blocks whose
     self-overlaps converge to $1$. If they are not gauge-phase equivalent,
     then for every lower bound $N_0$ there is $N \ge N_0$ such that

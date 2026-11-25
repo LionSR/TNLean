@@ -2,7 +2,7 @@
     \label{thm:cyclic_sector_offdiag_shift}
     \lean{MPSTensor.IsCyclicSectorDecomp.offDiag_shift}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp, thm:offdiag_shift_adjoint_cyclic_shift}
+    \uses{def:periodic_tensor,def:cyclic_sector_decomp,thm:offdiag_shift_adjoint_cyclic_shift}
     If a periodic tensor admits a cyclic sector decomposition, then for every
     $k$ and every physical letter $i$ there exists a family
     $P_0,\ldots,P_{m-1}$ such that each $P_u$ is an orthogonal projection,
@@ -29,7 +29,7 @@
     \label{thm:cyclic_sector_eq_sum_offdiag}
     \lean{MPSTensor.IsCyclicSectorDecomp.eq_sum_offDiag}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp, thm:eq_sum_offdiag_adjoint_cyclic_shift}
+    \uses{def:periodic_tensor,def:cyclic_sector_decomp,thm:eq_sum_offdiag_adjoint_cyclic_shift}
     If a periodic tensor admits a cyclic sector decomposition, then for every
     physical letter $i$ there exists a family $P_0,\ldots,P_{m-1}$ such that
     each $P_u$ is an orthogonal projection,
@@ -59,7 +59,7 @@
     \label{thm:cyclic_sector_decomp_after_blocking_periodic}
     \lean{MPSTensor.exists_cyclic_sector_decomp_after_blocking_of_isPeriodic}
     \leanok
-    \uses{def:cyclic_sector_decomp, def:periodic_tensor}
+    \uses{def:cyclic_sector_decomp,def:periodic_tensor}
     If $A$ is periodic with period $m$, then the blocked tensor $A^{(m)}$
     admits a cyclic sector decomposition. Thus there are projectors $P_u$ and
     corner tensors $C_u=P_u A^{(m)}$ which reproduce the blocked matrix-product
@@ -80,7 +80,7 @@
     \label{thm:cyclic_sector_compression_letter}
     \lean{MPSTensor.exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic}
     \leanok
-    \uses{thm:cyclic_sector_decomp_after_blocking_periodic, def:blocked_tensor}
+    \uses{thm:cyclic_sector_decomp_after_blocking_periodic,def:blocked_tensor}
     Under the hypotheses of the cyclic-sector construction for the blocked
     tensor $A^{(m)}$, there are sector tensors $C_k$, projections $P_k$, and
     linear corner isomorphisms
@@ -141,7 +141,7 @@
     \label{thm:cyclic_sector_compression_letter_isometry_periodic}
     \lean{MPSTensor.exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic}
     \leanok
-    \uses{thm:cyclic_sector_decomp_after_blocking_isometry, def:periodic_tensor}
+    \uses{thm:cyclic_sector_decomp_after_blocking_isometry,def:periodic_tensor}
     If $A$ is periodic with period $m$, then the cyclic-sector decomposition of
     $A^{(m)}$ may be chosen with rectangular support isometries $V_k$ such that
     \begin{align}
@@ -164,7 +164,7 @@
     \label{lem:sector_overlap_succ_eq_cyclic_sector_decomp}
     \lean{MPSTensor.sectorOverlap_succ_eq_of_cyclicSectorDecomp}
     \leanok
-    \uses{def:cyclic_sector_decomp, def:mpv_overlap, def:blocked_tensor, thm:offdiag_shift_adjoint_cyclic_shift}
+    \uses{def:cyclic_sector_decomp,def:mpv_overlap,def:blocked_tensor,thm:offdiag_shift_adjoint_cyclic_shift}
     Let $A$ and $B$ be left-canonical tensors with cyclic sector
     decompositions $\{A_u\}_{u\in\Z_m}$ and
     $\{B_v\}_{v\in\Z_m}$. For every $u,v\in\Z_m$ and every $N>0$,
@@ -196,7 +196,7 @@
     \label{lem:offdiag_eigenvector_eq_zero_periodic}
     \lean{MPSTensor.offDiag_eigenvector_eq_zero_of_isPeriodic}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp}
+    \uses{def:periodic_tensor,def:cyclic_sector_decomp}
     Let $A$ be periodic of period $m$. Let $P_0,\ldots,P_{m-1}$ be
     orthogonal projections satisfying
     \begin{align}
@@ -292,7 +292,7 @@
 \begin{lemma}[Sector-block normality for periodic tensors]\label{lem:sector_blocked_normal_periodic}
     \lean{MPSTensor.sectorBlocked_isNormal_of_isPeriodic}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp}
+    \uses{def:periodic_tensor,def:cyclic_sector_decomp}
     For a periodic tensor equipped with a cyclic sector decomposition,
     each nonzero blocked sector tensor is normal.
 \end{lemma}
@@ -301,7 +301,7 @@
     \label{thm:periodic_overlap_zero_no_sector_match}
     \lean{MPSTensor.periodicOverlap_tendsto_zero_of_no_sector_match}
     \leanok
-    \uses{def:periodic_tensor, lem:sector_blocked_normal_periodic}
+    \uses{def:periodic_tensor,lem:sector_blocked_normal_periodic}
     Suppose $A$ and $B$ have the same total bond dimension and the same
     period $m$. Let $A_u$ and $B_v$ be period-blocked sector tensors of virtual
     dimensions $d_u$ and $e_v$, indexed by $u,v\in\Z_m$, such that
@@ -325,7 +325,7 @@
     Then $\lim_{N\to\infty}O_{AB}(N)=0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:sector_blocked_normal_periodic, thm:periodic_self_overlap_tendsto, thm:overlap_decay_irr_tp, thm:overlap_decay_rect_irr_tp}
+    \uses{lem:sector_blocked_normal_periodic,thm:periodic_self_overlap_tendsto,thm:overlap_decay_irr_tp,thm:overlap_decay_rect_irr_tp}
     Write $\bar A\sim\bigoplus_{u\in\Z_m}A_u$ and
     $\bar B\sim\bigoplus_{v\in\Z_m}B_v$. For every $N$,
     \begin{align}
@@ -389,7 +389,7 @@
 \begin{lemma}[Sector-match propagation under translation]\label{lem:sector_match_propagation}
     \lean{MPSTensor.sectorMatch_propagation}
     \leanok
-    \uses{def:periodic_tensor, def:cyclic_sector_decomp, lem:sector_overlap_succ_eq_cyclic_sector_decomp}
+    \uses{def:periodic_tensor,def:cyclic_sector_decomp,lem:sector_overlap_succ_eq_cyclic_sector_decomp}
     Let $A$ and $B$ be left-canonical tensors with period $m$, and let
     $\bar A\sim\bigoplus_uA_u$ and $\bar B\sim\bigoplus_vB_v$ be unit-weight
     cyclic sector decompositions whose sectors are left-canonical. Suppose
@@ -486,7 +486,7 @@
     \label{lem:periodic_global_gauge_assembly}
     \lean{MPSTensor.repeatedBlocks_of_globalGauge}
     \leanok
-    \uses{def:cyclic_sector_decomp, def:periodic_global_gauge, lem:periodic_global_gauge_eq_sum, lem:left_canonical_irreducible_unitary_gauge}
+    \uses{def:cyclic_sector_decomp,def:periodic_global_gauge,lem:periodic_global_gauge_eq_sum,lem:left_canonical_irreducible_unitary_gauge}
     Let $m\ge1$, and let $A$ and $B$ carry the cyclic off-diagonal structure
     \begin{align}
         A^i & =\sum_uP_uA^iP_{u+1}, \notag \\
@@ -517,7 +517,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:cyclic_sector_decomp, lem:periodic_global_gauge_eq_sum}
+    \uses{def:cyclic_sector_decomp,lem:periodic_global_gauge_eq_sum}
     The corner relation $U_v=P_{v-q}U_vQ_v$ gives
     $P_uU_{u+q}Q_{u+q}=U_{u+q}$, so $U=\sum_vU_v$ after reindexing. Distinct
     projections are orthogonal, $Q_vQ_w=0$ and $P_{v-q}P_{w-q}=0$ for

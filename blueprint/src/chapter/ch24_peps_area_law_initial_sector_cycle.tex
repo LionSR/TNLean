@@ -30,8 +30,7 @@ the working fan of half-side $2r=t_k/32$.
     \label{thm:area_law_initial_sector_changes_even}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_sector_assignment_changes_even}
     \leanok
-    \uses{thm:area_law_actual_sector_assignment,
-        def:area_law_cell_fan_successor,def:area_law_initial_region_colors}
+    \uses{thm:area_law_actual_sector_assignment,def:area_law_cell_fan_successor,def:area_law_initial_region_colors}
     The number of sector-index changes around these
     eight fan members is even:
     \begin{align}
@@ -40,8 +39,7 @@ the working fan of half-side $2r=t_k/32$.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_initial_sector_colors,
-        thm:area_law_cell_fan_successor_endpoints}
+    \uses{thm:area_law_initial_sector_colors,thm:area_law_cell_fan_successor_endpoints}
     For $c_s=\chi(\sigma(s))$, the successor endpoint identity makes
     $s$ and $\tau(s)$ adjacent, so opposite coloring of distinct adjacent
     sectors gives

@@ -25,7 +25,7 @@ conjugate-transposed tensor.
     \lean{MPSTensor.halfChainSwapMatrix}
     \lean{MPSTensor.halfChainSwapMatrix_apply}
     \leanok
-    \uses{def:mps_tensor, def:eval_word}
+    \uses{def:mps_tensor,def:eval_word}
     For a tensor $A$ and a half-chain length $L$, the \emph{half-chain family}
     is the matrix $\Psi$ with rows indexed by configurations
     $\sigma\in\Fin{d}^L$ and columns indexed by boundary pairs
@@ -60,7 +60,7 @@ conjugate-transposed tensor.
     \label{lem:half_chain_kernel_split}
     \lean{MPSTensor.halfChainKernel_eq_mul}
     \leanok
-    \uses{def:half_chain_family, def:half_chain_kernel}
+    \uses{def:half_chain_family,def:half_chain_kernel}
     The coefficient kernel factors as the product $\Psi\Phi$ of the
     half-chain family with its complementary family. Equivalently,
     \begin{align}
@@ -117,7 +117,7 @@ conjugate-transposed tensor.
     \label{lem:half_chain_gram_transfer}
     \lean{MPSTensor.halfChainGram_apply_eq_transferMap_pow}
     \leanok
-    \uses{def:half_chain_gram, def:transfer_map}
+    \uses{def:half_chain_gram,def:transfer_map}
     The half-chain overlaps are matrix elements of the $L$-fold transfer map
     on matrix units:
     \begin{align}
@@ -142,7 +142,7 @@ conjugate-transposed tensor.
     \lean{MPSTensor.halfChainReducedMatrix_eq_mul_swap_gram}
     \lean{MPSTensor.halfChainSwapMatrix_mul_conjTranspose}
     \leanok
-    \uses{def:half_chain_reduced, def:half_chain_gram}
+    \uses{def:half_chain_reduced,def:half_chain_gram}
     Let $S$ denote the swap of the two boundary indices. The unnormalized
     half-chain reduced density matrix factors exactly as
     \begin{align}
@@ -167,7 +167,7 @@ conjugate-transposed tensor.
     \label{thm:half_chain_charpoly}
     \lean{MPSTensor.charpoly_halfChainReducedMatrix}
     \leanok
-    \uses{def:half_chain_reduced, def:half_chain_gram}
+    \uses{def:half_chain_reduced,def:half_chain_gram}
     The characteristic polynomials of the half-chain reduced density matrix
     and of the boundary comparison matrix $(SG^{\mathsf T}S)G$ of size $D^2$
     agree after matching the trivial kernel factors:
@@ -182,7 +182,7 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:half_chain_schmidt_factorization, lem:matrix_rectangular_charpoly_cyclicity}
+    \uses{thm:half_chain_schmidt_factorization,lem:matrix_rectangular_charpoly_cyclicity}
     Applying rectangular cyclicity of the characteristic polynomial to the
     factorization (\ref{eq:half_chain_factorization}) after regrouping the product
     as $\Psi$ times $(SG^{\mathsf T}S)\Psi^{\dagger}$ replaces $\rho_L$ by the reversed product
@@ -193,7 +193,7 @@ conjugate-transposed tensor.
     \label{thm:half_chain_gram_geometric}
     \lean{MPSTensor.exists_geometric_bound_halfChainGram_sub_fixedPointProj}
     \leanok
-    \uses{def:half_chain_gram, def:transfer_map}
+    \uses{def:half_chain_gram,def:transfer_map}
     Let $A$ have trace-preserving transfer map $\E_A$ with fixed point
     $\Lambda$, $\tr(\Lambda)\neq0$, and suppose
     \begin{align}
@@ -221,7 +221,7 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    \uses{lem:half_chain_gram_transfer, thm:geometric_bound_of_spectral_radius_lt_one}
+    \uses{lem:half_chain_gram_transfer,thm:geometric_bound_of_spectral_radius_lt_one}
     For $L\geq1$, the power decomposition gives
     $\E_A^{L}=P_{\Lambda}+(\E_A-P_{\Lambda})^{L}$. By (\ref{eq:half_chain_gram_transfer}),
     the deviation of each Gram entry from the corresponding fixed-point projection
@@ -260,7 +260,7 @@ conjugate-transposed tensor.
     \label{thm:half_chain_comparison_geometric}
     \lean{MPSTensor.exists_geometric_bound_halfChainComparison_sub_diagonal}
     \leanok
-    \uses{def:half_chain_gram, def:transfer_map}
+    \uses{def:half_chain_gram,def:transfer_map}
     Let $A$ have trace-preserving transfer map with diagonal fixed point
     $\Lambda=\operatorname{diag}(\lambda_1,\ldots,\lambda_D)$,
     $\tr(\Lambda)\neq0$, satisfying the spectral condition
@@ -287,7 +287,7 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:half_chain_gram_geometric, lem:half_chain_gram_limit_diagonal}
+    \uses{thm:half_chain_gram_geometric,lem:half_chain_gram_limit_diagonal}
     By Lemma~\ref{thm:half_chain_gram_geometric} and
     Lemma~\ref{lem:half_chain_gram_limit_diagonal}, both factors of
     $(SG^{\mathsf T}S)G$ lie entrywise within $Cr^{L}$ of their diagonal
@@ -368,7 +368,7 @@ conjugate-transposed tensor.
     \lean{MPSTensor.normalizedHalfChainSpectralMatrix}
     \lean{MPSTensor.halfChainEigenvalues}
     \leanok
-    \uses{def:half_chain_reduced, def:half_chain_gram, def:half_chain_ordered_spectrum}
+    \uses{def:half_chain_reduced,def:half_chain_gram,def:half_chain_ordered_spectrum}
     Write $W_L=\Phi_L\Phi_L^\dagger=SG_L^{\mathsf T}S$ and define
     \begin{align}
         H_L            & = \sqrt{G_L}\,W_L\sqrt{G_L},
@@ -419,7 +419,7 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:half_chain_charpoly, thm:half_chain_padded_charpoly}
+    \uses{thm:half_chain_charpoly,thm:half_chain_padded_charpoly}
     Because $H_L$ is a positive congruence of $W_L$, it is positive
     semidefinite, and cyclicity of trace together with $\sqrt{G_L}\sqrt{G_L}=G_L$
     yields (\ref{eq:half_chain_actual_norm}). Applying the rectangular-product
@@ -457,7 +457,7 @@ conjugate-transposed tensor.
     \lean{MPSTensor.tendsto_halfChainEigenvalues_of_spectralMatrix}
     \lean{MPSTensor.tendsto_halfChainEigenvalues}
     \leanok
-    \uses{def:half_chain_positive_density, def:half_chain_limiting_density}
+    \uses{def:half_chain_positive_density,def:half_chain_limiting_density}
     Suppose $\E_A$ is trace preserving, fixes $\Lambda$, and satisfies
     (\ref{eq:half_chain_c2_gap}). Then $Z_L\to1$, so $Z_L>0$ for all
     sufficiently large $L$. The normalized physical eigenvalues obey
@@ -474,8 +474,7 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:half_chain_gram_geometric, thm:half_chain_positive_comparison,
-        thm:half_chain_weyl}
+    \uses{thm:half_chain_gram_geometric,thm:half_chain_positive_comparison,thm:half_chain_weyl}
     The geometric transfer estimate $Cr^L$ gives $G_L\to G_\infty$.
     More generally, whenever $G_L\to\operatorname{diag}(g_p)$ with $g_p\geq0$,
     continuity of the positive square root implies
@@ -532,7 +531,7 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    \uses{thm:half_chain_adjoint_gram, thm:half_chain_ordered_limit}
+    \uses{thm:half_chain_adjoint_gram,thm:half_chain_ordered_limit}
     Normality gives irreducibility and a unique peripheral eigenvalue, both of
     which pass to the adjoint family $B_i=A_i^\dagger$ because the dual channel
     has the same eigenvalues under the trace pairing. Its complementary
@@ -571,7 +570,7 @@ conjugate-transposed tensor.
 
 \begin{proof}
     \leanok
-    \uses{lem:pgvwc07_block_irreducible, thm:half_chain_unital_limit}
+    \uses{lem:pgvwc07_block_irreducible,thm:half_chain_unital_limit}
     The faithful dual fixed point and scalar fixed-point condition imply
     irreducibility: an invariant projection has a positive defect with
     zero pairing against $\Lambda$, hence is fixed, scalar, and trivial.
@@ -698,8 +697,7 @@ conjugate-transposed tensor.
     excludes only other peripheral values.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:half_chain_canonical_sector_eigenvalues,
-        lem:pgvwc07_ti_canonical_representation_single_block}
+    \uses{lem:half_chain_canonical_sector_eigenvalues,lem:pgvwc07_ti_canonical_representation_single_block}
     By (\ref{eq:half_chain_canonical_blockwise_transfer}) and unitality
     of the blocks,
     \begin{align}
@@ -729,8 +727,7 @@ conjugate-transposed tensor.
     $\|\psi_N(A)-\psi_N(A^j)\|\to0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:half_chain_c2_dominant_sector, lem:half_chain_weighted_remainder,
-        lem:half_chain_canonical_sector_eigenvalues, lem:pgvwc07_block_irreducible}
+    \uses{lem:half_chain_c2_dominant_sector,lem:half_chain_weighted_remainder,lem:half_chain_canonical_sector_eigenvalues,lem:pgvwc07_block_irreducible}
     Canonical unitality, the faithful dual fixed point, and scalar fixed
     points give irreducibility of the block. Its peripheral eigenvalues
     lift to those of the actual tensor, so C2 excludes every peripheral
@@ -854,10 +851,7 @@ conjugate-transposed tensor.
     \label{thm:half_chain_general_c2_source}
     \lean{MPSTensor.PGVWC07CanonicalFormData.exists_halfChainSpectrumLimit_of_c2}
     \leanok
-    \uses{lem:half_chain_c2_dominant_physical_limit,
-        lem:half_chain_canonical_normalized_dual,
-        lem:half_chain_normalized_physical_remainder,
-        lem:half_chain_physical_eigenvalue_stability,thm:half_chain_unital_limit}
+    \uses{lem:half_chain_c2_dominant_physical_limit,lem:half_chain_canonical_normalized_dual,lem:half_chain_normalized_physical_remainder,lem:half_chain_physical_eigenvalue_stability,thm:half_chain_unital_limit}
     Let $A$ be a general weighted TI canonical tensor with transfer
     spectral radius one, satisfying generic Condition C2 with algebraic
     multiplicity: its only peripheral root is the simple root $1$.

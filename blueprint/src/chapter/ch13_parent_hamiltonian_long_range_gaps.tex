@@ -12,7 +12,7 @@ tensors.
     \lean{MPSTensor.wordSpan_smul_eq, MPSTensor.isNBlkInjective_smul_iff,
         MPSTensor.isNormal_smul_iff}
     \leanok
-    \uses{def:word_span, def:l_blk_injective, def:normal}
+    \uses{def:word_span,def:l_blk_injective,def:normal}
     Let $\zeta\neq0$ and let $A$ be a tensor.  For every $N$ the length-$N$
     word spans of $A$ and of $\zeta A$ agree, so $\zeta A$ is $N$-block
     injective exactly when $A$ is, and $\zeta A$ is normal exactly when $A$ is.
@@ -65,14 +65,14 @@ tensors.
     \lean{MPSTensor.GaugeEquiv.groundSpace_le,
         MPSTensor.GaugeEquiv.groundSpace_eq}
     \leanok
-    \uses{def:gauge_equiv, def:ground_space_parent}
+    \uses{def:gauge_equiv,def:ground_space_parent}
     Let $A$ and $B$ be gauge equivalent.  For every $L$ one has
     $G_L(A)=G_L(B)$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{lem:eval_word_gauge, lem:trace_gauge_boundary}
+    \uses{lem:eval_word_gauge,lem:trace_gauge_boundary}
     By Lemma~\ref{lem:eval_word_gauge}, $B^i=XA^iX^{-1}$ implies
     $B^\sigma=XA^\sigma X^{-1}$ for every length-$L$ configuration $\sigma$, so
     Lemma~\ref{lem:trace_gauge_boundary} identifies the boundary
@@ -104,8 +104,7 @@ tensors.
         MPSTensor.parentHamiltonian_eq_of_groundSpace_eq,
         MPSTensor.hamiltonian_parentRingInteraction_eq_of_groundSpace_eq}
     \leanok
-    \uses{def:ground_space_parent, def:parent_interaction,
-        def:parent_hamiltonian, def:parent_hamiltonian_es}
+    \uses{def:ground_space_parent,def:parent_interaction,def:parent_hamiltonian,def:parent_hamiltonian_es}
     Let $A$ and $B$ have the same bond dimension and satisfy $G_L(A)=G_L(B)$.
     Then their canonical parent interactions at length $L$ agree, hence so do
     all their translated local terms and their parent Hamiltonians
@@ -115,8 +114,7 @@ tensors.
 
 \begin{proof}
     \leanok
-    \uses{def:ground_space_es, def:parent_interaction, def:local_term_parent,
-        def:parent_hamiltonian, def:parent_hamiltonian_es}
+    \uses{def:ground_space_es,def:parent_interaction,def:local_term_parent,def:parent_hamiltonian,def:parent_hamiltonian_es}
     The parent interaction at length $L$ is the orthogonal projector onto
     $G_L(A)^\perp$, so it depends on $G_L(A)$ alone.  Every translated local
     term is built from that single projector, and the parent Hamiltonian is
@@ -127,8 +125,7 @@ tensors.
     \label{thm:normal_irreducible_tensor}
     \lean{MPSTensor.isIrreducibleFamily_of_isNormal}
     \leanok
-    \uses{def:normal, def:has_inv_proj,
-        def:irreducible_tensor}
+    \uses{def:normal,def:has_inv_proj,def:irreducible_tensor}
     Let $A$ be a normal tensor, with no normalization imposed on $A$.  Then
     $A$ has no nontrivial invariant projection, so $A$ is
     irreducible in the sense of Definition~\ref{def:irreducible_tensor}.
@@ -149,9 +146,7 @@ tensors.
     \label{thm:normalized_primitive_gauge}
     \lean{MPSTensor.exists_hasComplementaryFixedPointGap_gauge_of_isNormal}
     \leanok
-    \uses{def:normal, def:primitive_mps, def:gauge_equiv, def:mpv,
-        def:ground_space_parent, def:parent_interaction,
-        def:chain_ground_space}
+    \uses{def:normal,def:primitive_mps,def:gauge_equiv,def:mpv,def:ground_space_parent,def:parent_interaction,def:chain_ground_space}
     Let $D>0$ and let $A$ be a normal tensor.  There exist a scalar
     $\zeta\neq0$, a tensor $B$, and a matrix $\rho>0$ such that $\zeta A$ and
     $B$ are gauge equivalent, the pair $(B,\rho)$ is primitive, and
@@ -186,15 +181,7 @@ tensors.
 
 \begin{proof}
     \leanok
-    \uses{thm:normal_irreducible_tensor,
-        thm:normalized_normal_strongly_irreducible,
-        thm:normality_rescaling_invariance,
-        thm:local_ground_space_rescaling, thm:normal_tensor_nonzero_matrix,
-        thm:tp_data_irreducible, thm:gauge_invariance_normal,
-        thm:gauge_invariance, thm:local_ground_space_gauge_invariance,
-        lem:eval_word_smul,
-        thm:parent_hamiltonian_from_ground_space,
-        lem:parent_spanning_of_local_space_eq}
+    \uses{thm:normal_irreducible_tensor,thm:normalized_normal_strongly_irreducible,thm:normality_rescaling_invariance,thm:local_ground_space_rescaling,thm:normal_tensor_nonzero_matrix,thm:tp_data_irreducible,thm:gauge_invariance_normal,thm:gauge_invariance,thm:local_ground_space_gauge_invariance,lem:eval_word_smul,thm:parent_hamiltonian_from_ground_space,lem:parent_spanning_of_local_space_eq}
     Lemma~\ref{thm:normal_irreducible_tensor} makes $A$ an irreducible
     tensor, with no normalization imposed on $A$, and
     Lemma~\ref{thm:normal_tensor_nonzero_matrix} gives the nonzero matrix
@@ -224,7 +211,7 @@ tensors.
     \label{thm:normal_parent_hamiltonian_finite_range_knabe_gap}
     \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_isNormal}
     \leanok
-    \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
+    \uses{def:normal,def:l_blk_injective,def:parent_hamiltonian_es}
     Let $D>0$ and let $A$ be a normal tensor, with no normalization imposed on
     $A$.  There exist $l>1$, $\epsilon_l\geq0$, an integer $m\geq l+1$, and
     $\delta>0$ such that $A$ is $l$-block injective,
@@ -248,11 +235,7 @@ tensors.
 
 \begin{proof}
     \leanok
-    \uses{thm:normalized_primitive_gauge,
-        thm:primitive_parent_hamiltonian_finite_range_knabe_gap,
-        thm:parent_hamiltonian_from_ground_space,
-        thm:normality_rescaling_invariance,
-        lem:gauge_invariance_block_injective}
+    \uses{thm:normalized_primitive_gauge,thm:primitive_parent_hamiltonian_finite_range_knabe_gap,thm:parent_hamiltonian_from_ground_space,thm:normality_rescaling_invariance,lem:gauge_invariance_block_injective}
     Applying Theorem~\ref{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}
     to the normalized primitive representative $B$ of
     Lemma~\ref{thm:normalized_primitive_gauge} yields the bound for $B$.
@@ -388,7 +371,7 @@ tensors.
 \end{lemma}
 
 \begin{proof}
-    \uses{thm:weighted_sum_kernel, thm:weighted_sum_loewner, lem:positive_gap_transfer_loewner}
+    \uses{thm:weighted_sum_kernel,thm:weighted_sum_loewner,lem:positive_gap_transfer_loewner}
     The weighted sum is positive and, by
     Lemma~\ref{thm:weighted_sum_loewner}, dominated by the unweighted
     sum; by the kernel equality~(\ref{eq:ph_weighted_sum_kernel}) of
@@ -447,7 +430,7 @@ tensors.
     \label{thm:normal_mps_parent_hamiltonian_gap}
     \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_uniform_gap_of_isNormal}
     \leanok
-    \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
+    \uses{def:normal,def:l_blk_injective,def:parent_hamiltonian_es}
     Let $D>0$ and let $A$ be a normal tensor. For the normal-tensor case of
     the uniform gap assertion in \cite[lines~2183--2187]{Cirac2021Matrix},
     there exist a suitable interaction range $l+1$ with $l>1$ and a constant
@@ -458,8 +441,7 @@ tensors.
 
 \begin{proof}
     \leanok
-    \uses{thm:normal_parent_hamiltonian_finite_range_knabe_gap,
-        thm:parent_hamiltonian_eventual_gap}
+    \uses{thm:normal_parent_hamiltonian_finite_range_knabe_gap,thm:parent_hamiltonian_eventual_gap}
     Lemma~\ref{thm:normal_parent_hamiltonian_finite_range_knabe_gap}
     gives $l>1$, $m\geq l+1$, and $\delta>0$ with the required norm
     inequality for $N\geq2m$, and
@@ -519,8 +501,7 @@ tensors.
     \label{def:grouped_open_ground_projections}
     \lean{MPSTensor.groupedNestedGroundProjectionsES,MPSTensor.groupedIntervalGroundProjectionES}
     \leanok
-    \uses{def:fixed-volume-prefix-ground-projections,
-        def:open_suffix_parent_hamiltonian_es}
+    \uses{def:fixed-volume-prefix-ground-projections,def:open_suffix_parent_hamiltonian_es}
     Fix $p\geq1$, $M\geq2$, and an open chain of length $N=pM$.
     For $0\leq n\leq M$, let $G_n$ be the ground projection of the range-$2p$ parent
     Hamiltonian on $[0,pn)$, extended by the identity on the remaining
@@ -543,10 +524,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:grouped_open_ground_projections,
-        thm:physical-outside-window-martingale-cancellation,
-        thm:fixed-volume-c3-boundary-indices,
-        thm:fixed-volume-prefix-ground-projections-nested}
+    \uses{def:grouped_open_ground_projections,thm:physical-outside-window-martingale-cancellation,thm:fixed-volume-c3-boundary-indices,thm:fixed-volume-prefix-ground-projections-nested}
     In the first case both prefix Hamiltonians have support disjoint from
     the interval defining $Q_n$. In the second case their kernels are
     contained in the local interval kernel. The corresponding orthogonal
@@ -590,12 +568,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:grouped_open_ground_projection_locality,
-        thm:nachtergaele_c1_c3_full_range_norm_gap,
-        thm:grouped_open_parent_c1, thm:grouped_open_suffix_c2,
-        lem:open_parent_hamiltonian_es_positive,
-        thm:fixed-volume-c3-boundary-indices,
-        thm:fixed-volume-c3-projector-conjugacy}
+    \uses{lem:grouped_open_ground_projection_locality,thm:nachtergaele_c1_c3_full_range_norm_gap,thm:grouped_open_parent_c1,thm:grouped_open_suffix_c2,lem:open_parent_hamiltonian_es_positive,thm:fixed-volume-c3-boundary-indices,thm:fixed-volume-c3-projector-conjugacy}
     Applying the full-range martingale estimate to the grouped filtration with
     window width one, where each local window Hamiltonian is the projection
     $I-Q_n$, yields the result: Lemma~\ref{thm:grouped_open_suffix_c2} gives
@@ -612,7 +585,7 @@ tensors.
     \label{thm:grouped_open_parent_c1}
     \lean{MPSTensor.grouped_hamiltonian_parentChainInteraction_C1}
     \leanok
-    \uses{def:open_suffix_parent_hamiltonian_es, def:open_parent_hamiltonian_es}
+    \uses{def:open_suffix_parent_hamiltonian_es,def:open_parent_hamiltonian_es}
     Let $p\geq1$, $M\geq0$, and $N=pM$. For every vector $v$ on the
     $N$-site chain,
     \begin{align}
@@ -623,8 +596,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:open_parent_hamiltonian_c1_full_range,
-        lem:fixed-volume-hamiltonians-positive}
+    \uses{thm:open_parent_hamiltonian_c1_full_range,lem:fixed-volume-hamiltonians-positive}
     The indices $p(n+1)-1$, for $0\leq n<M$, are distinct and belong to
     $\{0,\ldots,pM-1\}$. Positivity bounds the sum over these indices by
     the full sum, which is bounded by the open-chain energy.
@@ -664,10 +636,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:open-hamiltonian-right-spectator-conjugacy,
-        thm:fixed-volume-c3-projector-conjugacy,
-        lem:right-spectator-kernel-projection,
-        thm:left_boundary_map_range_eq}
+    \uses{thm:open-hamiltonian-right-spectator-conjugacy,thm:fixed-volume-c3-projector-conjugacy,lem:right-spectator-kernel-projection,thm:left_boundary_map_range_eq}
     Decomposing a vector $v$ on $n+r$ sites according to the last $r$
     physical coordinates, with $v_s$ denoting the vector on $n$ sites
     obtained by fixing these coordinates to $s\in\{0,\ldots,d-1\}^r$, shows
@@ -693,8 +662,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:fixed-volume-c3-projector-conjugacy,
-        thm:spectator_boundary_hilbert_factorization}
+    \uses{thm:fixed-volume-c3-projector-conjugacy,thm:spectator_boundary_hilbert_factorization}
     Let $\sigma$ denote the reassociation isometry from the physical space
     on $K+(L+Q)$ sites to that on $(K+L)+Q$ sites. Because $\sigma$ preserves
     the ordered physical coordinates, every family $(S_n)_n$ of subspaces of
@@ -725,8 +693,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:cyclic_active_block_local_conjugacy,
-        thm:ph_reassociated_suffix_kernel}
+    \uses{thm:cyclic_active_block_local_conjugacy,thm:ph_reassociated_suffix_kernel}
     The physical coordinate isometry identifies both interval operators
     with the corresponding $W$-site operators tensored with the identity on
     the remaining sites. Tensoring with the identity preserves equality of
@@ -753,10 +720,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ph_prefix_kernel_free_right_sites,
-        thm:ph_reassociated_suffix_kernel,
-        thm:fixed-volume-c3-projector-conjugacy, thm:range_ground_space_map_es,
-        thm:reassociated_tail_boundary_factorization}
+    \uses{thm:ph_prefix_kernel_free_right_sites,thm:ph_reassociated_suffix_kernel,thm:fixed-volume-c3-projector-conjugacy,thm:range_ground_space_map_es,thm:reassociated_tail_boundary_factorization}
     The whole-chain boundary space lies in the suffix boundary space,
     so $TF=F$. Thus $T(P-F)=TP-F$. Taking adjoints, using that orthogonal
     projections are self-adjoint, and reversing the sign gives the identity.
@@ -766,7 +730,7 @@ tensors.
     \label{thm:periodic_gap_from_divisible_open}
     \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_eventually_divisible_gap}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
+    \uses{def:open_parent_hamiltonian_es,def:parent_hamiltonian_es}
     Let $A$ be a tensor, let $p,R\geq 1$ be integers, and let $\gamma>0$.
     Suppose that, for every sufficiently large integer $M$, every nonzero
     eigenvalue of $H^{\mathrm{open}}_{pM,R}(A)$ is at least $\gamma$.
@@ -788,8 +752,7 @@ tensors.
     \label{thm:grouped_spectator_norm}
     \lean{MPSTensor.norm_suffixGroundProjection_comp_prefixDifference_le_active}
     \leanok
-    \uses{def:fixed-volume-prefix-ground-projections,
-        def:open_suffix_parent_hamiltonian_es}
+    \uses{def:fixed-volume-prefix-ground-projections,def:open_suffix_parent_hamiltonian_es}
     Let the interaction range satisfy $R>0$, let $p\leq n$, and add
     $r\geq0$ sites to the right of an active interval of length $n$.
     In each ambient volume $s\in\{n,n+r\}$, write $P^{(s)}_a$ for the
@@ -804,8 +767,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:open-hamiltonian-right-spectator-conjugacy,
-        lem:right-spectator-kernel-projection, lem:right-spectator-extension}
+    \uses{thm:open-hamiltonian-right-spectator-conjugacy,lem:right-spectator-kernel-projection,lem:right-spectator-extension}
     Let $\Phi$ be the isometry $\ell^2([d]^{n+r})\to\ell^2([d]^n\times[d]^r)$
     splitting a configuration into its active and spectator coordinates, and
     write $T^{\oplus[d]^r}$ for the fiberwise extension of an operator $T$
@@ -854,9 +816,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:grouped_open_ground_projection_locality,
-        thm:grouped_c3_from_second_index,
-        thm:ph_active_grouped_projector_error,thm:grouped_spectator_norm}
+    \uses{lem:grouped_open_ground_projection_locality,thm:grouped_c3_from_second_index,thm:ph_active_grouped_projector_error,thm:grouped_spectator_norm}
     The products at indices zero and one vanish, so by
     Lemma~\ref{thm:grouped_c3_from_second_index} it suffices to treat
     $n\geq2$. For such $n$, setting $K=p(n-1)$ gives an active interval of
@@ -884,9 +844,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ph_primitive_blocks_open_kernel,
-        thm:ph_block_diagonal_projector_decay,
-        thm:grouped_c3_from_projector_defect,thm:grouped_open_parent_gap}
+    \uses{thm:ph_primitive_blocks_open_kernel,thm:ph_block_diagonal_projector_decay,thm:grouped_c3_from_projector_defect,thm:grouped_open_parent_gap}
     Choosing $p$ above $R_*$ and the open-kernel threshold, and sufficiently
     large that the three-interval projector error is at most $1/2$ for
     every pair of outer lengths at least $p$, ensures that the grouped C3
@@ -909,13 +867,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:primitive_block_sum_open_gap_subsequence,
-        thm:ph_primitive_blocks_open_kernel,
-        thm:ph_block_diagonal_projector_decay,
-        thm:ph_prefix_kernel_free_right_sites,
-        thm:ph_terminal_interval_kernel,
-        thm:open_interval_gap_transport,
-        thm:open_parent_overlapping_interval_gap}
+    \uses{thm:primitive_block_sum_open_gap_subsequence,thm:ph_primitive_blocks_open_kernel,thm:ph_block_diagonal_projector_decay,thm:ph_prefix_kernel_free_right_sites,thm:ph_terminal_interval_kernel,thm:open_interval_gap_transport,thm:open_parent_overlapping_interval_gap}
     Fix $p$ as in
     Lemma~\ref{thm:primitive_block_sum_open_gap_subsequence}, above the
     open-kernel threshold and so large that the three-interval projector
@@ -951,8 +903,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:primitive_block_sum_open_gap_subsequence,
-        thm:periodic_gap_from_divisible_open}
+    \uses{thm:primitive_block_sum_open_gap_subsequence,thm:periodic_gap_from_divisible_open}
     Choosing $p\geq\max\{1,R_*\}$ by
     Lemma~\ref{thm:primitive_block_sum_open_gap_subsequence} and setting
     $R=2p$, the uniform open-chain gap on lengths $pM$, $M\geq2$, yields a
@@ -1067,8 +1018,7 @@ tensors.
     \label{thm:parent-gap-fixed-range-transfer}
     \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_larger_range}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, def:ground_space_es,
-        def:parent_hamiltonian_es}
+    \uses{def:open_parent_hamiltonian_es,def:ground_space_es,def:parent_hamiltonian_es}
     Let $A$ be an MPS tensor, and let $R,W$ be positive integers with
     $W\geq2R$. Suppose that the open range-$R$ Hamiltonian on $W$
     sites has kernel $\mathcal G_W(A)$. If the periodic parent Hamiltonians
@@ -1077,9 +1027,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:parent-finite-interval-comparison,
-        thm:periodic-parent-range-comparison,
-        lem:positive-comparison-kernel-gap}
+    \uses{lem:parent-finite-interval-comparison,thm:periodic-parent-range-comparison,lem:positive-comparison-kernel-gap}
     Lemma~\ref{lem:parent-finite-interval-comparison} provides
     $\kappa,C>0$ such that
     $\kappa h_W\leq K_{R,W}\leq Ch_W$, and summing all cyclic translates by
@@ -1126,9 +1074,7 @@ tensors.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:full-interval-parent-interaction,
-        thm:cyclic_active_block_local_conjugacy,
-        thm:cyclic_knabe_block_open_parent_hamiltonian}
+    \uses{lem:full-interval-parent-interaction,thm:cyclic_active_block_local_conjugacy,thm:cyclic_knabe_block_open_parent_hamiltonian}
     Extending each local inequality by the identity on the complementary sites
     and conjugating by the cyclic identification of the chosen interval
     preserves operator order. Summing over all cyclic origins then gives the
@@ -1179,8 +1125,7 @@ tensors.
     every $N\geq N_R$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_block_sum_parent_gap,thm:parent-gap-fixed-range-transfer,
-        thm:ph_primitive_blocks_sharp_open_kernel}
+    \uses{thm:primitive_block_sum_parent_gap,thm:parent-gap-fixed-range-transfer,thm:ph_primitive_blocks_sharp_open_kernel}
     The common block-injectivity hypothesis identifies the kernel of the
     open-chain range-$R$ Hamiltonian on every interval of length at least
     $R$ with the local MPS space. For a uniformly gapped range
@@ -1214,7 +1159,7 @@ tensors.
     \label{thm:fnw-transfer-eigenvalue-from-remainder}
     \lean{Kraus.HasComplementaryFixedPointGap.fnwTransfer_hasEigenvalue_of_remainder}
     \leanok
-    \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_limit_map}
+    \uses{def:primitive_mps,def:fnw_transfer_map,def:fnw_limit_map}
     Let $A$ be primitive with nonzero bond dimension and fixed point $\rho$.
     Write $E=E_{\mathrm{FNW},A}$ for its observable transfer map and
     $P=E_\infty^\rho$ for its stationary projection. Every nonzero
@@ -1232,8 +1177,7 @@ tensors.
     \lean{Kraus.HasComplementaryFixedPointGap.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues}
     \lean{Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues}
     \leanok
-    \uses{def:primitive_mps, def:fnw_transfer_map,
-        def:fnw_weighted_remainder_data, def:fnw_mixing_quantity}
+    \uses{def:primitive_mps,def:fnw_transfer_map,def:fnw_weighted_remainder_data,def:fnw_mixing_quantity}
     Let $A$ be primitive with nonzero bond dimension and positive-definite
     fixed point $\rho$. Suppose $\lambda>0$ and every eigenvalue
     $\nu\neq1$ of its observable transfer map satisfies $|\nu|<\lambda$.
@@ -1259,7 +1203,7 @@ tensors.
     \label{thm:fnw-eventual-prescribed-prefactor}
     \lean{Kraus.HasComplementaryFixedPointGap.eventually_fnwMixingQuantity_le_of_pos_prefactor}
     \leanok
-    \uses{def:primitive_mps, def:fnw_transfer_map, def:fnw_mixing_quantity}
+    \uses{def:primitive_mps,def:fnw_transfer_map,def:fnw_mixing_quantity}
     Let $A$ be primitive with nonzero bond dimension and a positive-definite
     trace-one fixed point $\rho$. Suppose $\lambda>0$ exceeds the modulus
     of every nonunit transfer eigenvalue. For every $c>0$, there is an integer
@@ -1281,9 +1225,7 @@ tensors.
     \label{thm:fnw-eventual-projector-prescribed-prefactor}
     \lean{Kraus.HasComplementaryFixedPointGap.eventually_projector_defect_le_of_pos_prefactor}
     \leanok
-    \uses{def:primitive_mps, def:fnw_transfer_map,
-        def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es,
-        def:ground_space_es}
+    \uses{def:primitive_mps,def:fnw_transfer_map,def:reassociated_tail_boundary_map,def:spectator_boundary_maps_es,def:ground_space_es}
     Under the preceding hypotheses, suppose additionally that $\lambda<1$.
     In the version of \cite[Section~6, equation~(6.1)]{Nachtergaele1996Spectral}
     with the additional onset stated
@@ -1299,8 +1241,7 @@ tensors.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:fnw-eventual-prescribed-prefactor,thm:fnw_projector_defect_geometric,
-        thm:normal_from_primitive_posdef}
+    \uses{thm:fnw-eventual-prescribed-prefactor,thm:fnw_projector_defect_geometric,thm:normal_from_primitive_posdef}
     Once the onset is large enough that the overlap exceeds an injectivity
     length and $c\lambda^m<1$, the preceding mixing estimate satisfies the
     hypotheses of the fixed-overlap FNW projector estimate, uniformly in the
@@ -1374,7 +1315,7 @@ tensors.
     \label{thm:spectator-multiplier-interval-space}
     \lean{MPSTensor.marked_groundSpaceMap_mem_tailBoundaryRange,MPSTensor.marked_groundSpaceMap_mem_leftBoundaryRange}
     \leanok
-    \uses{def:ground_space_map, def:spectator_boundary_maps_es}
+    \uses{def:ground_space_map,def:spectator_boundary_maps_es}
     Let $K,L\in\N$ and $X\in\MN{D}$. Let $\varphi$ be a complex function of
     the prefix configurations $u\colon\Fin K\to\Fin d$ and $\psi$ a complex
     function of the suffix configurations $\tau\colon\Fin L\to\Fin d$. Then
@@ -1384,7 +1325,7 @@ tensors.
     of $\Gamma^{\mathrm{left}}_{K,L}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:tail_boundary_map, def:left_boundary_map}
+    \uses{def:tail_boundary_map,def:left_boundary_map}
     Factoring the matrix product at the boundary of the interval gives
     \begin{align}
         \varphi(u)\,\Gamma_{K+L}(X)(u,\tau)
@@ -1423,7 +1364,7 @@ tensors.
     \label{thm:fnw-marked-path-interval-spaces}
     \lean{MPSTensor.FNWDimensionConstant.pathVector_first_mark_mem_tailBoundaryRange,MPSTensor.FNWDimensionConstant.pathVector_last_mark_mem_leftBoundaryRange}
     \leanok
-    \uses{def:weighted-matrix-unit-path-vectors, def:spectator_boundary_maps_es}
+    \uses{def:weighted-matrix-unit-path-vectors,def:spectator_boundary_maps_es}
     For every real function $u$ on the vertices and all endpoints $a,f$,
     \begin{align}
         v_{a,f}(u\otimes\mathbf 1)
@@ -1631,7 +1572,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:fnw_dimension_markov_matrix, thm:fnw_dimension_matrix_unit_transfer, thm:weighted-matrix-unit-normalization}
+    \uses{thm:fnw_dimension_markov_matrix,thm:fnw_dimension_matrix_unit_transfer,thm:weighted-matrix-unit-normalization}
     The positive coefficients ensure that the physical letters span all matrix
     units. Column stochasticity gives trace preservation, and row stochasticity
     gives unitality. On diagonal matrices the transfer map acts by $P$, while it
@@ -1693,7 +1634,7 @@ tensors.
     \label{thm:block_injective_of_word_tuple_span}
     \lean{MPSTensor.isNBlkInjective_of_wordTupleSpanTop}
     \leanok
-    \uses{def:blockwise_product_word_span, def:l_blk_injective}
+    \uses{def:blockwise_product_word_span,def:l_blk_injective}
     Let $A^0,\ldots,A^{r-1}$ be tensors with bond dimensions
     $D_0,\ldots,D_{r-1}$, and let $L\in\mathbb N$. Suppose that their
     simultaneous word evaluations at length $L$ span
@@ -1723,9 +1664,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:product_span_block_image_direct_sum, thm:ground_space_map_injective_blk,
-        thm:gauge_phase_mpv_scaling, lem:mpv_mem_ground_space,
-        lem:mpv_eq_ground_space_map_one, thm:block_injective_of_word_tuple_span}
+    \uses{lem:product_span_block_image_direct_sum,thm:ground_space_map_injective_blk,thm:gauge_phase_mpv_scaling,lem:mpv_mem_ground_space,lem:mpv_eq_ground_space_map_one,thm:block_injective_of_word_tuple_span}
     The local ground spaces of the blocks at length $S$ are independent. Each
     block is $S$-block injective by
     Lemma~\ref{thm:block_injective_of_word_tuple_span}, so each boundary
@@ -1752,9 +1691,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:block_injective_of_word_tuple_span,
-        thm:normalized_primitive_gauge,thm:word_tuple_span_gauge_invariance,
-        thm:block_word_span_independent_rescaling,thm:ph_tp_word_span_propagation}
+    \uses{thm:block_injective_of_word_tuple_span,thm:normalized_primitive_gauge,thm:word_tuple_span_gauge_invariance,thm:block_word_span_independent_rescaling,thm:ph_tp_word_span_propagation}
     Each block is $S$-block injective and hence normal. Rescaling and
     conjugating each block into normalized primitive form preserves
     the simultaneous span at $S$, trace preservation propagates that span
@@ -1777,9 +1714,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:block_word_span_primitive_normalization,
-        thm:ph_tp_word_span_propagation,thm:ph_tp_block_open_ground_space,
-        thm:ph_block_replacement_parent_equality}
+    \uses{thm:block_word_span_primitive_normalization,thm:ph_tp_word_span_propagation,thm:ph_tp_block_open_ground_space,thm:ph_block_replacement_parent_equality}
     Normalizing the blocks preserves their simultaneous span at $S$
     and every component local space. Trace preservation gives the span
     at all lengths at least $S$, so the open-chain intersection theorem
@@ -1805,12 +1740,7 @@ tensors.
     $H^{\mathrm{open}}_{N,R}(B)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_word_span_primitive_normalization,
-        thm:block-word-span-separation,
-        thm:block_open_kernel_simultaneous_injectivity,
-        thm:primitive_block_sum_open_gap_all_lengths,
-        lem:parent-finite-interval-comparison,
-        lem:open_parent_range_comparison}
+    \uses{thm:block_word_span_primitive_normalization,thm:block-word-span-separation,thm:block_open_kernel_simultaneous_injectivity,thm:primitive_block_sum_open_gap_all_lengths,lem:parent-finite-interval-comparison,lem:open_parent_range_comparison}
     Independent normalization of the blocks into primitive form preserves
     their simultaneous span at $S$ and all component local ground spaces, and
     simultaneous injectivity separates these normalized blocks. The
@@ -1838,8 +1768,7 @@ tensors.
     $H^{\mathrm{open}}_{N,R}(B)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
-        thm:cpsv_bnt_sharp_span_ambient_cap}
+    \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,thm:cpsv_bnt_sharp_span_ambient_cap}
     The dimension-bound blocking theorem gives a positive simultaneous
     injectivity length $S$ with $S+1\leq3D_*^5$, so the open-chain gap
     theorem applies at every $R\geq S+1$.
@@ -1869,9 +1798,7 @@ tensors.
     $R\geq3D^5$ without a given injectivity length.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
-        thm:block_open_kernel_simultaneous_injectivity,
-        thm:canonical_bounded_range_ground_space}
+    \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,thm:block_open_kernel_simultaneous_injectivity,thm:canonical_bounded_range_ground_space}
     The canonical reconstruction preserves every positive-length local
     ground space, identifying the open parent Hamiltonians and their
     boundary-condition spaces with those of the distinct representatives, to
@@ -1930,8 +1857,7 @@ tensors.
     are simultaneously injective at $S>0$ and $R\geq S+1$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:open_local_interaction_sum_properties,
-        thm:canonical_open_gap_all_lengths}
+    \uses{lem:open_local_interaction_sum_properties,thm:canonical_open_gap_all_lengths}
     Finite-dimensional positivity and the prescribed local kernel give
     $\kappa h_R(A)\leq h\leq C h_R(A)$, and summing the translated
     comparisons yields the two-sided operator bounds. Because the two positive
@@ -1992,8 +1918,7 @@ tensors.
     The constant may depend on $M$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_open_kernel_simultaneous_injectivity,
-        thm:block_word_span_propagation}
+    \uses{thm:block_open_kernel_simultaneous_injectivity,thm:block_word_span_propagation}
     At each fixed $N\geq R$, simultaneous injectivity gives continuous
     local ground projections at lengths $R$ and $N$. The open Hamiltonian
     depends continuously on the first projection, and its kernel is $G_N$.
@@ -2038,9 +1963,7 @@ tensors.
     $\sum_s\widetilde h_s=H^{\mathrm{open}}_{N,R}(A)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:open_knabe_padding,lem:transported_es_local_projections,
-        lem:transported_es_nonoverlap_positive,
-        thm:physical-outside-window-martingale-cancellation}
+    \uses{def:open_knabe_padding,lem:transported_es_local_projections,lem:transported_es_nonoverlap_positive,thm:physical-outside-window-martingale-cancellation}
     Each term is a local projection or zero. At the stated separation,
     either $\bar s+R\leq\overline{s+e}$ or
     $\overline{s+e}+R\leq\bar s$. When both terms are active, their
@@ -2093,8 +2016,7 @@ tensors.
     least $\delta$ for every $N\geq R$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:open_knabe_padding_properties,thm:open_knabe_clipped_windows,
-        thm:finite_range_cyclic_knabe,lem:quadratic_form_to_norm_bound}
+    \uses{thm:open_knabe_padding_properties,thm:open_knabe_clipped_windows,thm:finite_range_cyclic_knabe,lem:quadratic_form_to_norm_bound}
     For each physical volume $N$, with period $P=N+2m$,
     the padded projections have sum $H^{\mathrm{open}}_{N,R}(A)$ and
     satisfy the separated commutation hypothesis. Every cyclic window
@@ -2124,9 +2046,7 @@ tensors.
     $x_0$ (and the same assertion holds for one fixed $N\geq R$).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_ground_space_continuity,thm:block_word_span_propagation,
-        thm:block_open_kernel_simultaneous_injectivity,
-        thm:kernel_gap_perturbation}
+    \uses{thm:block_ground_space_continuity,thm:block_word_span_propagation,thm:block_open_kernel_simultaneous_injectivity,thm:kernel_gap_perturbation}
     The ground projections at $R$ and $N$ are continuous. The open
     Hamiltonian is a finite sum of translates of $I-P_{G_R}$, hence
     continuous, and its kernel is $G_N$, so the projection onto its kernel
@@ -2149,8 +2069,7 @@ tensors.
     one neighborhood of $x_0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:open_gap_bounded_volume_continuity,thm:open_finite_range_knabe_gap,
-        thm:block_open_kernel_simultaneous_injectivity}
+    \uses{thm:open_gap_bounded_volume_continuity,thm:open_finite_range_knabe_gap,thm:block_open_kernel_simultaneous_injectivity}
     For $m\geq R$ chosen with $m\gamma/2>(R-1)^2$, continuity preserves
     the bound $\gamma/2$ on every $R\leq W\leq m+R-1$ in one
     neighborhood. Simultaneous injectivity identifies each kernel with
@@ -2173,8 +2092,7 @@ tensors.
     $H^{\mathrm{open}}_{N,R}(B_x)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
-        thm:open_gap_all_length_neighborhood}
+    \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,thm:open_gap_all_length_neighborhood}
     The pointwise all-length open gap gives a positive bound at each
     parameter. The preceding theorem preserves some positive bound on
     a neighborhood, uniformly in $N$. A finite subcover of $K$ and the
@@ -2195,8 +2113,7 @@ tensors.
     $H^{\mathrm{open}}_{N,R}(B_x)$ uniformly for $x\in K$ and all $N\geq R$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:cpsv_bnt_sharp_span_ambient_cap,thm:block_word_span_propagation,
-        thm:compact_block_open_gap}
+    \uses{thm:cpsv_bnt_sharp_span_ambient_cap,thm:block_word_span_propagation,thm:compact_block_open_gap}
     The dimension-bound span theorem gives, at each parameter, a positive
     simultaneous injectivity length $L_x$ with $L_x+1\leq3D_*^5$.
     Propagation gives the common length $S=3D_*^5-1>0$, so the compact
@@ -2218,9 +2135,7 @@ tensors.
     Nonzero weights need not be continuous.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:compact_block_open_gap,thm:compact_normal_block_open_gap,
-        thm:block_ground_space_continuity,thm:block_word_span_propagation,
-        thm:cpsv_bnt_sharp_span_ambient_cap,thm:compact_open_positive_parent_gap}
+    \uses{thm:compact_block_open_gap,thm:compact_normal_block_open_gap,thm:block_ground_space_continuity,thm:block_word_span_propagation,thm:cpsv_bnt_sharp_span_ambient_cap,thm:compact_open_positive_parent_gap}
     The local ground projections are continuous at range $R$.
     The canonical open gaps are uniform on $K$ and all $N\geq R$ by
     the two preceding compact results. Compact positive comparison gives
@@ -2246,12 +2161,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:block_word_span_primitive_normalization,
-        thm:block-word-span-separation,
-        thm:primitive_block_sum_open_gap_subsequence,
-        thm:block_open_kernel_simultaneous_injectivity,
-        lem:parent-finite-interval-comparison,lem:open_parent_range_comparison,
-        thm:ph_block_replacement_parent_equality}
+    \uses{thm:block_word_span_primitive_normalization,thm:block-word-span-separation,thm:primitive_block_sum_open_gap_subsequence,thm:block_open_kernel_simultaneous_injectivity,lem:parent-finite-interval-comparison,lem:open_parent_range_comparison,thm:ph_block_replacement_parent_equality}
     Normalizing the blocks preserves all local spaces and the span at $S$,
     and the simultaneous span separates the blocks. Choosing $p\geq R$ and a
     uniform open-chain gap $\gamma>0$ at range $2p$ on every length $pM$,
@@ -2305,11 +2215,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:block_word_span_primitive_normalization, thm:block-word-span-separation,
-        thm:primitive_block_sum_parent_gap,
-        thm:parent-gap-fixed-range-transfer, thm:parent_hamiltonian_eventual_gap,
-        thm:ph_tp_word_span_propagation, thm:ph_tp_block_open_ground_space,
-        thm:ph_block_replacement_parent_equality}
+    \uses{thm:block_word_span_primitive_normalization,thm:block-word-span-separation,thm:primitive_block_sum_parent_gap,thm:parent-gap-fixed-range-transfer,thm:parent_hamiltonian_eventual_gap,thm:ph_tp_word_span_propagation,thm:ph_tp_block_open_ground_space,thm:ph_block_replacement_parent_equality}
     Normalizing the blocks retains simultaneous injectivity at $S$ and
     all local ground spaces, and simultaneous injectivity forces distinct
     blocks to be inequivalent. The grouped martingale estimate and finite-range
@@ -2342,8 +2248,7 @@ tensors.
     reconstruction of the original tensor.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ph_canonical_representative_local_spaces,
-        thm:block_sum_local_ground_space}
+    \uses{thm:ph_canonical_representative_local_spaces,thm:block_sum_local_ground_space}
     The local ground spaces satisfy
     \begin{align}
         G_R(A)=\bigvee_jG_R(B_j)=G_R(B).\notag
@@ -2413,8 +2318,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:canonical_bounded_range_ground_space,
-        thm:canonical-decomposition-gap-simultaneous-injectivity}
+    \uses{thm:canonical_bounded_range_ground_space,thm:canonical-decomposition-gap-simultaneous-injectivity}
     For any canonical decomposition of $A$, the dimension estimate gives a
     simultaneous injectivity length $S>0$ for its distinct normal
     representatives with $S+1\leq3D^5\leq R$, and the canonical gap at that
@@ -2616,8 +2520,7 @@ tensors.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:canonical_parent_gap_bounded_range,
-        thm:positive-parent-interaction-uniform-gap}
+    \uses{thm:canonical_parent_gap_bounded_range,thm:positive-parent-interaction-uniform-gap}
     The canonical projector interaction has a uniform positive periodic
     gap at range $R$. Comparison with the fixed interaction $h$ preserves
     the kernel and gives a positive gap independent of $N$.
@@ -2677,11 +2580,7 @@ shorter interaction range.
     condition C2 of~\cite{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:positive-kernel-projection-comparison,
-        lem:right-spectator-kernel-projection,
-        thm:ph_spectator_operator_order,
-        thm:open-hamiltonian-right-spectator-conjugacy,
-        thm:cyclic_active_block_local_conjugacy}
+    \uses{lem:positive-kernel-projection-comparison,lem:right-spectator-kernel-projection,thm:ph_spectator_operator_order,thm:open-hamiltonian-right-spectator-conjugacy,thm:cyclic_active_block_local_conjugacy}
     For the finite-interval operator $T$ and its ground projection $P$,
     the given gap gives $\kappa(I-P)\leq T$. Extension by free sites
     preserves this inequality. The kernel projection extends to
@@ -2709,8 +2608,7 @@ shorter interaction range.
         part~(ii)]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:friedrichs_ground_space_excitation_anticommutator,
-        lem:quadratic_form_to_norm_bound,lem:positive_gap_transfer_loewner}
+    \uses{thm:friedrichs_ground_space_excitation_anticommutator,lem:quadratic_form_to_norm_bound,lem:positive_gap_transfer_loewner}
     If $z\in U\cap V$ and $z\perp W$, the projection defect gives
     $\|z\|\leq c\|z\|$, hence $z=0$. Subtracting $P_Wv$ from an
     arbitrary $v\in U\cap V$ proves $W=U\cap V$.
@@ -2761,8 +2659,7 @@ shorter interaction range.
     \label{thm:primitive-prescribed-projector-defect}
     \lean{Kraus.HasComplementaryFixedPointGap.eventually_openChain_groundProjection_defect_mul_sqrt_lt}
     \leanok
-    \uses{def:primitive_mps,def:l_blk_injective,
-        def:open_chain_ground_subspaces_es,def:ground_space_es}
+    \uses{def:primitive_mps,def:l_blk_injective,def:open_chain_ground_subspaces_es,def:ground_space_es}
     Let $A$ be a normalized primitive tensor with positive bond dimension
     and a positive-definite invariant matrix. For every $a>0$, every
     sufficiently large integer $l$ satisfies $l>1$, $l$-block injectivity,
@@ -2808,10 +2705,7 @@ shorter interaction range.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:primitive-prescribed-projector-defect,
-        thm:literal_fixed_volume_martingale_c3,
-        thm:open_parent_hamiltonian_fixed_c3_gap,
-        thm:parent-prescribed-gap-window}
+    \uses{thm:primitive-prescribed-projector-defect,thm:literal_fixed_volume_martingale_c3,thm:open_parent_hamiltonian_fixed_c3_gap,thm:parent-prescribed-gap-window}
     The geometric projector estimate gives
     $\epsilon_l=c\lambda^l(1+c\lambda^l)/(1-c\lambda^l)$ and
     $\epsilon_l\sqrt{l+1}\to0$. Choose $l$ above the injectivity
@@ -2840,10 +2734,7 @@ shorter interaction range.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ph_primitive_blocks_open_kernel,
-        thm:ph_block_diagonal_projector_decay,
-        thm:grouped_c3_from_projector_defect,
-        thm:grouped_open_parent_gap,thm:parent-prescribed-gap-window}
+    \uses{thm:ph_primitive_blocks_open_kernel,thm:ph_block_diagonal_projector_decay,thm:grouped_c3_from_projector_defect,thm:grouped_open_parent_gap,thm:parent-prescribed-gap-window}
     Choose $p$ above the open-kernel threshold and large enough that
     the three-interval projector error is at most
     $\epsilon=\eta/(4\sqrt2)$. The grouped open-chain bound on
@@ -2872,10 +2763,7 @@ shorter interaction range.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:normalized_primitive_gauge,
-        thm:ph_primitive_representatives_parent_equality,
-        thm:primitive-parent-prescribed-gap,
-        thm:primitive-block-parent-prescribed-gap}
+    \uses{thm:normalized_primitive_gauge,thm:ph_primitive_representatives_parent_equality,thm:primitive-parent-prescribed-gap,thm:primitive-block-parent-prescribed-gap}
     Replace the tensor, or each block independently, by its normalized
     primitive representative. The canonical parent Hamiltonians agree
     exactly at every interaction range and every chain length, so the
@@ -2929,7 +2817,7 @@ shorter interaction range.
         MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_shortRangeHeisenbergMagnon,
         MPSTensor.not_exists_eventual_uniform_gap_shortRangeHeisenbergTensor_two}
     \leanok
-    \uses{lem:three_normal_blocks_singlet_parent, def:parent_hamiltonian_es}
+    \uses{lem:three_normal_blocks_singlet_parent,def:parent_hamiltonian_es}
     For the preceding tensor, the periodic range-two parent Hamiltonian
     has a nonzero eigenvector of eigenvalue
     $\varepsilon_N=1-\cos(2\pi/N)>0$ for every $N\geq2$.
@@ -3125,8 +3013,7 @@ shorter interaction range.
     \cite[Theorem~2.1(ii)]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:grouped_c3_from_projector_defect,thm:grouped_spectator_norm,
-        thm:nachtergaele_c1_c3_full_range_energy_estimate}
+    \uses{thm:grouped_c3_from_projector_defect,thm:grouped_spectator_norm,thm:nachtergaele_c1_c3_full_range_energy_estimate}
     Apply the grouped martingale energy inequality directly to the sampled
     interaction sum. Every sampled term annihilates $U$, so decomposition
     into $U$ and $U^\perp$ gives the operator inequality. Free-site extension
@@ -3150,9 +3037,7 @@ shorter interaction range.
     $(1-\sqrt2\epsilon)^2(1-\epsilon)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:sparse_grouped_open_energy_gap,
-        thm:sharp_two_ground_projection_gap,thm:ph_terminal_interval_kernel,
-        thm:ph_prefix_kernel_free_right_sites}
+    \uses{thm:sparse_grouped_open_energy_gap,thm:sharp_two_ground_projection_gap,thm:ph_terminal_interval_kernel,thm:ph_prefix_kernel_free_right_sites}
     Let $U$ be the prefix ground space at length $pM$, and let $V$ be
     the terminal ground space on $2p$ sites. Their overlap contains
     $2p-q\geq p$ sites. Put $\kappa=(1-\sqrt2\epsilon)^2\leq1$.
@@ -3179,9 +3064,7 @@ shorter interaction range.
     \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:sparse_grouped_terminal_open_gap,
-        thm:grouped_open_parent_gap,thm:ph_primitive_blocks_open_kernel,
-        thm:ph_block_diagonal_projector_decay}
+    \uses{thm:sparse_grouped_terminal_open_gap,thm:grouped_open_parent_gap,thm:ph_primitive_blocks_open_kernel,thm:ph_block_diagonal_projector_decay}
     Choose $\epsilon=\eta/(4\sqrt2)$ and take $p$ above the kernel
     threshold and the projector-decay threshold for every overlap length
     at least $p$. Write $N=pM+q$, with $M\geq2$ and $0\leq q<p$.
@@ -3209,8 +3092,7 @@ shorter interaction range.
     \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:primitive_block_open_prescribed_gap,
-        thm:normal_blocks_primitive_representatives}
+    \uses{thm:primitive_block_open_prescribed_gap,thm:normal_blocks_primitive_representatives}
     Independent primitive normalization preserves all block ground spaces
     and therefore every combined canonical open Hamiltonian. It also
     preserves inequivalence. Apply the primitive block theorem to the

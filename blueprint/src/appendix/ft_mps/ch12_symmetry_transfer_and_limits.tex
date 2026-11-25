@@ -24,7 +24,7 @@ Definition~\ref{def:physical_string_order_param}.
     \label{lem:twisted_transfer_eq_mixed_transfer}
     \lean{MPSTensor.twistedTransferMap_eq_mixedTransfer}
     \leanok
-    \uses{def:twisted_transfer_map, def:twisted_mixed_companion, def:mixed_transfer}
+    \uses{def:twisted_transfer_map,def:twisted_mixed_companion,def:mixed_transfer}
     The twisted transfer map of $A$ is the mixed transfer operator of the pair
     $(A,B_u)$:
     \begin{align}
@@ -44,7 +44,7 @@ Definition~\ref{def:physical_string_order_param}.
     \label{lem:transfer_map_twisted_companion}
     \lean{MPSTensor.transferMap_twistedMixedCompanion_eq}
     \leanok
-    \uses{def:twisted_mixed_companion, def:transfer_map}
+    \uses{def:twisted_mixed_companion,def:transfer_map}
     If $uu^\dagger=\Id_d$, then for every $X\in\MN{D}$ the companion family
     $B_u$ satisfies
     \begin{align}
@@ -70,7 +70,7 @@ Definition~\ref{def:physical_string_order_param}.
     \label{def:string_order_boundary_param}
     \lean{MPSTensor.stringOrderBoundaryParam}
     \leanok
-    \uses{def:twisted_transfer_map, def:string_order_param}
+    \uses{def:twisted_transfer_map,def:string_order_param}
     For a boundary state $\Lambda$ and boundary matrices $X,Y \in \MN{D}$, the
     \emph{virtual-boundary twist functional} is
     \begin{align}
@@ -175,7 +175,7 @@ common trace-preserving gauge.
     \label{def:twisted_tp_gauge_setup_construction}
     \lean{MPSTensor.twistedTPGaugeSetup}
     \leanok
-    \uses{def:twisted_tp_gauge_setup, lem:transfer_map_twisted_companion, thm:psd_fp_unique}
+    \uses{def:twisted_tp_gauge_setup,lem:transfer_map_twisted_companion,thm:psd_fp_unique}
     Let $D>0$. When $A$ is injective, $uu^\dagger=\Id_d$, and
     $\E_A(\Id)=\Id$, the unique positive definite stationary state of the
     adjoint channel provides the data of
@@ -202,7 +202,7 @@ common trace-preserving gauge.
     \label{thm:twisted_tp_gauge_has_eigenvalue}
     \lean{MPSTensor.twistedTPGaugeSetup_hasEigenvalue}
     \leanok
-    \uses{def:twisted_tp_gauge_setup, lem:twisted_transfer_eq_mixed_transfer}
+    \uses{def:twisted_tp_gauge_setup,lem:twisted_transfer_eq_mixed_transfer}
     If $V\ne0$ and $\E_u(V)=\lambda V$, then $\lambda$ is an eigenvalue of the
     mixed transfer map $F_{A',B'}$ in any common trace-preserving gauge setup.
 \end{lemma}
@@ -225,7 +225,7 @@ common trace-preserving gauge.
     \label{lem:boundary_string_order_tendsto_zero}
     \lean{MPSTensor.stringOrderBoundaryParam_tendsto_zero_of_spectralRadius_lt_one}
     \leanok
-    \uses{def:string_order_boundary_param, def:twisted_transfer_map}
+    \uses{def:string_order_boundary_param,def:twisted_transfer_map}
     If $\rho(\E_u) < 1$, then, as $L \to \infty$, for all boundary matrices
     $X,Y,\Lambda \in \MN{D}$ one has
     $R_L(u;X,Y) \longrightarrow 0$.
@@ -248,7 +248,7 @@ virtual-boundary nondecay is invariant under symmetry-preserving equivalences.
     \label{thm:has_string_order_iff_of_symmetric_injective}
     \lean{MPSTensor.hasStringOrder_iff_of_symmetric_injective}
     \leanok
-    \uses{def:has_string_order, def:on_site_symmetric, def:injective}
+    \uses{def:has_string_order,def:on_site_symmetric,def:injective}
     If $A$ and $B$ are injective, both on-site symmetric under a
     unitary representation $U$, and if $\E_A(\Id)=\Id$,
     $\E_B(\Id)=\Id$, $\Lambda_A$ and $\Lambda_B$ are positive

@@ -14,8 +14,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_sublinear_collar,
-        thm:area_law_conditional_collar_two_families}
+    \uses{thm:area_law_sublinear_collar,thm:area_law_conditional_collar_two_families}
     Choosing $D_0>2R+10$ and $C_{\rm tpl}\ge24$ for $R$, Lemma~\ref{thm:area_law_sublinear_collar} establishes the sublinear collar bound at $(D_0,C_{\rm tpl})$, and Lemma~\ref{thm:area_law_conditional_collar_two_families} yields $S_\Omega(A)\le C|\partial_\Lambda A|$.
 \end{proof}
 
@@ -34,8 +33,7 @@ The uniform area law implies a linear entropy bound for safe rectangles, which t
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_physical_ambient_boundary,
-        lem:area_law_ambient_boundary_layers,thm:area_law_buffer_contours}
+    \uses{thm:area_law_physical_ambient_boundary,lem:area_law_ambient_boundary_layers,thm:area_law_buffer_contours}
     By Lemma~\ref{thm:area_law_physical_ambient_boundary}, Lemma~\ref{lem:area_law_ambient_boundary_layers}, and Lemma~\ref{thm:area_law_buffer_contours} (\cite[Lemma~9.4]{OpenAI2026AreaLaw}) with $\operatorname{size}(Q)\ge1$,
     \begin{align}
         |\partial_\Lambda(A\cap Q)|
@@ -89,9 +87,7 @@ The uniform area law implies a linear entropy bound for safe rectangles, which t
     \end{enumerate}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_initial_buffer,
-        thm:area_law_safe_rectangle_linear_entropy,
-        thm:area_law_regional_state_identities}
+    \uses{thm:area_law_initial_buffer,thm:area_law_safe_rectangle_linear_entropy,thm:area_law_regional_state_identities}
     Choose $(c,b_0)$ from Lemma~\ref{thm:area_law_initial_buffer} and $K$ from Lemma~\ref{thm:area_law_safe_rectangle_linear_entropy}, and set $b=\max\{b_0,K\}$.
     By (\ref{eq:safe_rect_linear_entropy}) and Lemma~\ref{thm:area_law_regional_state_identities}, $0\le F_d(t)\le Kt$ for all $t\ge0$; since $\alpha=(1-p_0/2)M^2+2p_0(c+2)M\ge0$ and $M\le M^2$,
     \begin{align}

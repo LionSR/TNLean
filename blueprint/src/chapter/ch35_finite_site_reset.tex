@@ -18,8 +18,8 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Operators on parts of a sheet]
     \label{lem:peps_frame_split_forms}
-    \lean{ManyBody.threeCutEquiv,
-        ManyBody.threeCutEquiv_apply_fst_fst,
+    \uses{thm:peps_region_configuration}
+    \lean{ManyBody.threeCutEquiv_apply_fst_fst,
         ManyBody.threeCutEquiv_apply_fst_snd,
         ManyBody.threeCutEquiv_apply_snd,
         ManyBody.reindex_threeCutEquiv_piKronecker,
@@ -166,8 +166,7 @@ sum of Hamiltonians on two factors is a product vector
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,
-        thm:permutation_matrix_unitary}
+    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,thm:permutation_matrix_unitary}
     If $S\subseteq R$, Lemma~\ref{thm:peps_sheet_swap_supported_exchange}
     gives $F_R(A\otimes I)=(I\otimes A)F_R$ and $F_R(I\otimes A)=(A\otimes I)F_R$;
     if $S\cap R=\varnothing$, Lemma~\ref{lem:peps_frame_sheet_swap_compose}
@@ -249,8 +248,7 @@ sum of Hamiltonians on two factors is a product vector
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_sheet_swap_interaction_restriction,
-        thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
+    \uses{thm:peps_sheet_swap_interaction_restriction,thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
     Put $K=R\cap S$. Restricting the swap gives
     $F_R(A\otimes B)F_R^\dagger=F_K^\dagger(A\otimes B)F_K$.
     In paired-site coordinates, $F_K$ is supported on $K\subseteq S$,

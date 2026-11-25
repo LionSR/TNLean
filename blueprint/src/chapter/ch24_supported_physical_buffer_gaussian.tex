@@ -28,9 +28,7 @@
     \lean{ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integral,
         ManyBody.SquareInteraction.supported_buffer_gaussian_integral}
     \leanok
-    \uses{def:polynomial_peps_model,def:qc_site_pair_coordinates,
-        def:peps_frame_sheet_swap,def:qc_site_expectation,
-        def:peps_square_localization_constants}
+    \uses{def:polynomial_peps_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap,def:qc_site_expectation,def:peps_square_localization_constants}
     Fix $q\ge1$ and $J\ge0$, and set $C=C_\square$, $v=v_\square(J)$, and
     $c=1/2$ from Definition~\ref{def:peps_square_localization_constants}
     (or positive constants $C,v+1,c$). Let $L\ge0$ and let
@@ -86,11 +84,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_physical_buffer_coordinates,
-        thm:peps_swapped_doubled_boundary_bound,
-        thm:swapped_square_hamiltonian_interaction,
-        thm:area_supported_gaussian_integral,
-        def:peps_square_localization_constants}
+    \uses{thm:peps_physical_buffer_coordinates,thm:peps_swapped_doubled_boundary_bound,thm:swapped_square_hamiltonian_interaction,thm:area_supported_gaussian_integral,def:peps_square_localization_constants}
     Lemma~\ref{thm:swapped_square_hamiltonian_interaction} realizes $K'$ via
     a range-$1$ interaction family of local dimension $q^2$ and term bound
     $2J\ge0$ using the Hermitian parts of the terms of $H$. By
@@ -151,9 +145,7 @@ on a finite domain $\Lambda$.
     \lean{ManyBody.PlaneInteraction.pairSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing,
         ManyBody.PlaneInteraction.swapped_doubled_boundary_bound}
     \leanok
-    \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
-        def:peps_frame_sheet_swap,def:peps_crossing_supports,
-        def:chain_swapped_doubled_hamiltonian}
+    \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap,def:peps_crossing_supports,def:chain_swapped_doubled_hamiltonian}
     Let $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on a finite domain $\Lambda$
     with Hermitian terms satisfying $\|h_X\|\le J$, let $A\subseteq\Lambda$,
     and in paired-site coordinates set $K=H\otimes I+I\otimes H$ and
@@ -183,8 +175,7 @@ on a finite domain $\Lambda$.
     \label{thm:peps_swapped_doubled_edge_boundary}
     \lean{ManyBody.PlaneInteraction.swapped_doubled_boundary_bound_edgeBoundary}
     \leanok
-    \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
-        def:peps_frame_sheet_swap,def:peps_crossing_supports}
+    \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap,def:peps_crossing_supports}
     Under the hypotheses of Lemma~\ref{thm:peps_swapped_local_hamiltonian},
     with $\partial_\Lambda A$ the edge boundary of $A$ in the induced
     nearest-neighbour graph of $\Lambda$,
@@ -197,8 +188,7 @@ on a finite domain $\Lambda$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_swapped_local_hamiltonian,
-        thm:peps_sheet_swap_doubled_term_norm,thm:area_law_crossing_supports}
+    \uses{thm:peps_swapped_local_hamiltonian,thm:peps_sheet_swap_doubled_term_norm,thm:area_law_crossing_supports}
     By Lemmas~\ref{thm:peps_swapped_local_hamiltonian} and
     \ref{thm:peps_sheet_swap_doubled_term_norm}, only crossing supports
     contribute to $K'-K$, each with norm at most $4J$.
@@ -211,10 +201,7 @@ on a finite domain $\Lambda$.
     \label{thm:peps_supported_physical_buffer_gaussian_range}
     \lean{ManyBody.PlaneInteraction.supported_buffer_gaussian_integral}
     \leanok
-    \uses{thm:peps_swapped_local_hamiltonian,
-        thm:peps_physical_buffer_coordinates,
-        thm:area_supported_gaussian_integral,
-        def:area_graph_ball_localization_constants}
+    \uses{thm:peps_swapped_local_hamiltonian,thm:peps_physical_buffer_coordinates,thm:area_supported_gaussian_integral,def:area_graph_ball_localization_constants}
     Fix $q\ge1$ and $J\ge0$, let $H$ be a range-$R$ Hamiltonian on a finite
     domain $\Lambda$ with term norms at most $J$, and let $A,C\subseteq\Lambda$
     be disjoint with $Q=(A\cup C)^c$. Define $K,K',V$ as in

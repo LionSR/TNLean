@@ -33,7 +33,7 @@ $(x-1,y)$ to $v$ (left).
         TNLean.PEPS.torusLeftEdge_add_one, TNLean.PEPS.torusDownEdge_add_one,
         TNLean.PEPS.torusSiteTensor}
     \leanok
-    \uses{def:peps_tensor, def:peps_torus_uniform_bond_dim}
+    \uses{def:peps_tensor,def:peps_torus_uniform_bond_dim}
     For a four-leg tensor $a^i_{\alpha\beta\gamma\delta}$ with physical
     dimension $d$ and bond dimension $D$, its torus PEPS on the $w\times h$
     torus has bond dimension $D$ on every edge and local tensor $a$ at every
@@ -66,7 +66,7 @@ $(x-1,y)$ to $v$ (left).
         TNLean.PEPS.torusRightEdge_ne_torusUpEdge, TNLean.PEPS.torusEdgeEquiv,
         TNLean.PEPS.stateCoeff_torusSiteTensor}
     \leanok
-    \uses{def:peps_torus_site_tensor, def:peps_stateCoeff}
+    \uses{def:peps_torus_site_tensor,def:peps_stateCoeff}
     For $w,h\ge 3$, the right edges $e_{\mathrm R}(x,y)$ and up edges
     $e_{\mathrm U}(x,y)$ are pairwise distinct and partition $E$, and the torus
     PEPS of $a$ (Definition~\ref{def:peps_torus_site_tensor}) has coefficient
@@ -146,8 +146,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     \label{thm:peps_ghz_state}
     \lean{TNLean.PEPS.sum_prod_ghzSiteTensor, TNLean.PEPS.stateCoeff_ghzPEPS}
     \leanok
-    \uses{def:peps_ghz_tensor, def:peps_stateCoeff,
-        lem:peps_torus_site_tensor_contraction}
+    \uses{def:peps_ghz_tensor,def:peps_stateCoeff,lem:peps_torus_site_tensor_contraction}
     For $w,h\ge1$ and the GHZ tensor $A$ (Definition~\ref{def:peps_ghz_tensor}),
     \begin{align}
         \sum_{h,v}\prod_{(x,y)}
@@ -172,7 +171,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     \lean{TNLean.PEPS.ghzSiteTensor_not_linearIndependent,
         TNLean.PEPS.ghzPEPS_not_isVertexInjective}
     \leanok
-    \uses{def:peps_ghz_tensor, def:IsVertexInjective}
+    \uses{def:peps_ghz_tensor,def:IsVertexInjective}
     For $d\ge2$, the four-leg GHZ tensor is not injective, and for $d\ge2$,
     $w,h\ge2$, the simple-graph GHZ PEPS is not vertex-injective.
 \end{lemma}
@@ -190,7 +189,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
         TNLean.PEPS.sum_prod_ghzSiteTensor_perm,
         TNLean.PEPS.stateCoeff_ghzPEPS_perm, TNLean.PEPS.stateCoeff_ghzPEPS_add}
     \leanok
-    \uses{def:peps_ghz_tensor, def:peps_stateCoeff, thm:peps_ghz_state}
+    \uses{def:peps_ghz_tensor,def:peps_stateCoeff,thm:peps_ghz_state}
     Every permutation $\pi\in S_d$ satisfies
     \begin{align}
         A^{\pi(i)}_{\pi(\alpha)\pi(\beta)\pi(\gamma)\pi(\delta)}
@@ -228,7 +227,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     \label{thm:peps_cluster_state}
     \lean{TNLean.PEPS.stateCoeff_clusterPEPS}
     \leanok
-    \uses{def:peps_cluster_tensor, def:peps_stateCoeff}
+    \uses{def:peps_cluster_tensor,def:peps_stateCoeff}
     For $w,h\ge 3$ and $N=wh$, the cluster PEPS
     (Definition~\ref{def:peps_cluster_tensor}) has coefficient
     \begin{align}
@@ -297,7 +296,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
         TNLean.PEPS.clusterStabilizer_fixed_iff,
         TNLean.PEPS.stateCoeff_clusterPEPS_ne_zero}
     \leanok
-    \uses{def:peps_cluster_tensor, def:peps_graph_stabilizers}
+    \uses{def:peps_cluster_tensor,def:peps_graph_stabilizers}
     On a torus with $w,h\ge3$ and $N=wh$, the cluster PEPS satisfies
     $\Coeff(\sigma)=2^{-N}g(\sigma)\neq 0$, and $\C\cdot\Coeff$ is the common
     $+1$ eigenspace of
@@ -308,7 +307,7 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_cluster_state, thm:peps_graph_stabilizer_line}
+    \uses{thm:peps_cluster_state,thm:peps_graph_stabilizer_line}
     Combine Lemma~\ref{thm:peps_cluster_state} ($\Coeff(\sigma)=2^{-N}g(\sigma)$,
     $\Coeff(0)=2^{-N}\neq 0$) with Lemma~\ref{thm:peps_graph_stabilizer_line}.
 \end{proof}
@@ -384,7 +383,7 @@ The brick wall is the honeycomb on tori of even width and height
         TNLean.PEPS.honeycombClusterPEPS, TNLean.PEPS.honeycombStabilizer,
         TNLean.PEPS.honeycombHamiltonian, TNLean.PEPS.honeycombVertical}
     \leanok
-    \uses{def:peps_stateCoeff, def:peps_graph_stabilizers}
+    \uses{def:peps_stateCoeff,def:peps_graph_stabilizers}
     For a finite simple graph with ordered vertices, the graph-state PEPS
     has bond dimension two on every edge and the copy tensor
     $\ket{0\ldots0}+\ket{1\ldots1}$ at every vertex, with the matrix
@@ -449,8 +448,7 @@ The brick wall is the honeycomb on tori of even width and height
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_graph_state_peps, thm:peps_graph_stabilizer_line,
-        thm:peps_graph_stabilizer_hamiltonian}
+    \uses{thm:peps_graph_state_peps,thm:peps_graph_stabilizer_line,thm:peps_graph_stabilizer_hamiltonian}
     The coefficient and the stabilizer are Lemma~\ref{thm:peps_graph_state_peps}.
     Lemma~\ref{thm:peps_graph_stabilizer_line} identifies the common fixed
     space with $\C\cdot\Coeff$, and
@@ -493,7 +491,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
     \label{thm:peps_czx_plaquette_product}
     \lean{TNLean.PEPS.czx_bond_iff_plaquette, TNLean.PEPS.stateCoeff_czxPEPS}
     \leanok
-    \uses{def:peps_czx_tensor, def:peps_stateCoeff}
+    \uses{def:peps_czx_tensor,def:peps_stateCoeff}
     For $w,h\ge 3$ and $\sigma(v)=(i_v,j_v,k_v,l_v)$, the CZX PEPS
     (Definition~\ref{def:peps_czx_tensor}) has coefficient
     \begin{align}
@@ -540,7 +538,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
     \lean{TNLean.PEPS.prod_neg_one_pow_czxCZExponent,
         TNLean.PEPS.onSiteOperator_czxOnSite_mulVec_stateCoeff_czxPEPS}
     \leanok
-    \uses{def:peps_czx_on_site, thm:peps_czx_plaquette_product}
+    \uses{def:peps_czx_on_site,thm:peps_czx_plaquette_product}
     For $w,h\ge 3$, $U_{CZX}^{\otimes V}\Coeff=\Coeff$
     \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix},
     \cite{ChenLiuWen2011CZX}.
@@ -571,7 +569,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
     \label{thm:peps_czx_pull_through}
     \lean{TNLean.PEPS.czxOnSite_mul_czxSiteTensor}
     \leanok
-    \uses{def:peps_czx_on_site, def:peps_czx_leg_operator}
+    \uses{def:peps_czx_on_site,def:peps_czx_leg_operator}
     For the CZX site tensor $A^s_{trbl}$
     \cite[Section~III.B, ``Non-injective PEPS: SPT phases'']{Cirac2021Matrix},
     \begin{align}
@@ -607,8 +605,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
         TNLean.PEPS.czxBoundaryEmbedding_conjTranspose_mul_onSiteOperator_mul,
         TNLean.PEPS.onSiteOperator_czxLegOperator_mul_czxBoundaryEmbedding_review}
     \leanok
-    \uses{def:peps_czx_leg_operator, def:peps_czx_boundary_embedding,
-        thm:asymex_czx_kernel, def:asymex_czx_review_tensor}
+    \uses{def:peps_czx_leg_operator,def:peps_czx_boundary_embedding,thm:asymex_czx_kernel,def:asymex_czx_review_tensor}
     For every $N>0$ and $U_N\ket{c}=(-1)^{\sum_m c_m c_{m+1}}\ket{\bar c}$
     (Lemma~\ref{thm:asymex_czx_kernel}), $\iota$ and $V$
     (Definitions~\ref{def:peps_czx_leg_operator}--\ref{def:peps_czx_boundary_embedding})
@@ -628,7 +625,7 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:asymex_czx_kernel, thm:asymex_czx_review_kernel}
+    \uses{thm:asymex_czx_kernel,thm:asymex_czx_review_kernel}
     Injectivity of $c\mapsto\bigl((c_m,c_{m+1})\bigr)_{m=0}^{N-1}$ gives
     $\iota^\dagger\iota=\Id$; applying $V$ to each pair $(c_m,c_{m+1})$ produces
     $\prod_m(-1)^{c_mc_{m+1}}\iota\ket{\bar c}=\iota U_N\ket{c}$
@@ -696,8 +693,7 @@ $P_{\pi}$ permute the four factors by $\pi\in S_4$.
         TNLean.PEPS.akltSiteTensorFun, TNLean.PEPS.akltSiteTensor,
         TNLean.PEPS.akltPEPS}
     \leanok
-    \uses{def:peps_aklt_sym_projector, def:peps_torus_site_tensor,
-        def:aklt_tensor_review}
+    \uses{def:peps_aklt_sym_projector,def:peps_torus_site_tensor,def:aklt_tensor_review}
     With $Y=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$ and
     $L=\mathbb{1}\otimes\mathbb{1}\otimes Y\otimes Y$, the AKLT tensor on the
     square lattice is $A=\Pi_{\mathrm{sym}}L$, with physical index
@@ -712,7 +708,7 @@ $P_{\pi}$ permute the four factors by $\pi\in S_4$.
         TNLean.PEPS.legWeight_vec, TNLean.PEPS.akltSiteTensorFun_apply,
         TNLean.PEPS.akltLegs_mul_transpose, TNLean.PEPS.span_akltSiteTensorFun}
     \leanok
-    \uses{def:peps_aklt_tensor, lem:peps_aklt_sym_projector}
+    \uses{def:peps_aklt_tensor,lem:peps_aklt_sym_projector}
     The AKLT tensor (Definition~\ref{def:peps_aklt_tensor}) has entries
     \begin{align}
         A^{s}_{\alpha\beta\gamma\delta}=
@@ -736,7 +732,7 @@ $P_{\pi}$ permute the four factors by $\pi\in S_4$.
         Matrix.adjugate_eq_star_of_mem_specialUnitaryGroup,
         TNLean.PEPS.akltSiteTensor_su2_covariant}
     \leanok
-    \uses{def:peps_aklt_tensor, lem:peps_aklt_sym_projector}
+    \uses{def:peps_aklt_tensor,lem:peps_aklt_sym_projector}
     For every $U\in\MN{2}$ and $V=(\operatorname{adj}U)^T$ (with $V=\bar U$ when
     $U\in SU(2)$),
     \begin{align}
@@ -757,7 +753,7 @@ $P_{\pi}$ permute the four factors by $\pi\in S_4$.
     \label{thm:peps_aklt_state}
     \lean{TNLean.PEPS.akltLegs_vec, TNLean.PEPS.stateCoeff_akltPEPS}
     \leanok
-    \uses{def:peps_aklt_tensor, lem:peps_torus_site_tensor_contraction}
+    \uses{def:peps_aklt_tensor,lem:peps_torus_site_tensor_contraction}
     For $w,h\ge 3$, the AKLT PEPS (Definition~\ref{def:peps_aklt_tensor}) has
     coefficient
     \begin{align}
@@ -830,7 +826,7 @@ $\ket{01}-\ket{10}+\ket{22}$; extending by $0$ would make $A=0$,
     \lean{TNLean.PEPS.IsTorusDimerCovering, TNLean.PEPS.rvbCoveringBonds,
         TNLean.PEPS.stateCoeff_rvbPEPS}
     \leanok
-    \uses{def:peps_rvb_tensor, def:peps_stateCoeff}
+    \uses{def:peps_rvb_tensor,def:peps_stateCoeff}
     For $w,h\ge3$, let $\mathcal D$ be the set of dimer coverings $c\subseteq E$
     (every site $v$ lies on a unique edge $(v,v+e)\in c$, $e\in\{(1,0),(0,1)\}$).
     The RVB PEPS (Definition~\ref{def:peps_rvb_tensor}) has coefficient
@@ -842,7 +838,7 @@ $\ket{01}-\ket{10}+\ket{22}$; extending by $0$ would make $A=0$,
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_torus_site_tensor_contraction, lem:peps_rvb_local}
+    \uses{lem:peps_torus_site_tensor_contraction,lem:peps_rvb_local}
     In (\ref{eq:peps_torus_site_contraction}) of
     Lemma~\ref{lem:peps_torus_site_tensor_contraction},
     Lemma~\ref{lem:peps_rvb_local} bijects nonzero bond labellings $(h_\bullet,v_\bullet)$
@@ -891,8 +887,7 @@ Let $q\ge 1$, $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$, and $\beta\in\mathbb{R
         TNLean.PEPS.conj_mul_stateCoeff_classicalPEPS,
         TNLean.PEPS.normSq_stateCoeff_classicalPEPS}
     \leanok
-    \uses{def:peps_classical_tensor, def:peps_classical_energy,
-        def:peps_stateCoeff}
+    \uses{def:peps_classical_tensor,def:peps_classical_energy,def:peps_stateCoeff}
     For $w,h\ge 3$, the classical-model PEPS
     (Definition~\ref{def:peps_classical_tensor}) has coefficient
     $\Coeff(\sigma)=e^{-\beta H(\sigma)/2}$ and Gibbs weight
@@ -913,8 +908,7 @@ Let $q\ge 1$, $h\colon\{0,\ldots,q-1\}^{2}\to\mathbb{R}$, and $\beta\in\mathbb{R
     \label{thm:peps_classical_expectation}
     \lean{TNLean.PEPS.expectation_classicalPEPS}
     \leanok
-    \uses{def:peps_classical_tensor, def:peps_classical_energy,
-        def:peps_stateCoeff}
+    \uses{def:peps_classical_tensor,def:peps_classical_energy,def:peps_stateCoeff}
     For $w,h\ge 3$, a diagonal observable
     $O=\sum_{\sigma}O(\sigma)\ket{\sigma}\bra{\sigma}$, and
     $\ket{\psi}=\sum_{\sigma}\Coeff(\sigma)\ket{\sigma}$,

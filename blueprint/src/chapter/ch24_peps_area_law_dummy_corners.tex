@@ -13,20 +13,14 @@ cell individually; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \label{thm:area_law_dummy_corner_side}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_side}
     \leanok
-    \uses{def:area_law_dyadic_layers,def:area_law_cell_corner,
-        def:area_law_dyadic_cell_side,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales}
+    \uses{def:area_law_dyadic_layers,def:area_law_cell_corner,def:area_law_dyadic_cell_side,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     Suppose $C_0\ge2$, $k\ge k_0$, $z\in F_{k,\ell_k}$, and
     $w\in P_{k_0}$. For $\varepsilon\in\{0,1\}^2$, set
     $x=o+2^{k_0}(w+\varepsilon)$. If $x$ lies on the side $S_{\ell_k,z,s}$,
     then $x=a_{\ell_k,z,s}$ or $x=b_{\ell_k,z,s}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_dummy_contact_index,thm:area_law_fine_cell_containment,
-        thm:area_law_fine_belt_scales,thm:area_law_cell_fan_mark_vertices,
-        thm:area_law_belt_marks_closed_cell,thm:area_law_dyadic_closures,
-        thm:area_law_dyadic_cell_distance,
-        def:area_law_affine_mesh,thm:area_law_affine_mesh_point_separation}
+    \uses{thm:area_law_dummy_contact_index,thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales,thm:area_law_cell_fan_mark_vertices,thm:area_law_belt_marks_closed_cell,thm:area_law_dyadic_closures,thm:area_law_dyadic_cell_distance,def:area_law_affine_mesh,thm:area_law_affine_mesh_point_separation}
     The corner $x$ belongs to $\overline{N_{k_0}}$, while the side
     $S_{\ell_k,z,s}=[a,b]$ lies in $\overline{Q_{k,z}}\subseteq\overline{D_k}$,
     so $k=k_0$. Set $q=2^{\ell_{k_0}}$. Since $\ell_{k_0}\le k_0$, the point
@@ -43,9 +37,7 @@ cell individually; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \label{thm:area_law_dummy_corner_elementary_side}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_corner_on_elementarySide}
     \leanok
-    \uses{def:area_law_dyadic_layers,def:area_law_cell_corner,
-        def:area_law_cell_fan,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales}
+    \uses{def:area_law_dyadic_layers,def:area_law_cell_corner,def:area_law_cell_fan,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     Suppose $C_0\ge2$, $k\ge k_0$, $z\in F_{k,\ell_k}$, and
     $w\in P_{k_0}$. Choose any midpoint subdivision of the sides of
     $\overline{Q_{k,z}}$ and let $[u,v]$ be one of its elementary segments.

@@ -16,8 +16,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{definition}[Source positions]
     \label{def:peps_ordered_source_positions}
-    \lean{QuantumCircuit.Party.SourceInventory.freeSlotSystem,
-        QuantumCircuit.Party.SourceInventory.prepareFreeSlots}
+    \uses{def:peps_prepared_reordered_word}
+    \lean{QuantumCircuit.Party.SourceInventory.freeSlotSystem}
     \leanok
     For a family of pair sources $r_i$ and a set $J$ of positions, let $L_J$
     be the two endpoint registers of the sources $r_i$ ($i\in J$), held by
@@ -32,13 +32,15 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     For selected positions $J$, let $\eta_J\in\mathcal H_{L_J}$ be the ordered
     tensor product of $\eta_i$ ($i\in J$), with $\eta_\emptyset=1$; each register in $L_J$ is one of the two endpoint registers of some $i\in J$.
     For a bipartition of the parties, the crossing vector is $\Pi_{L_J}\eta_J$ with the registers of $L_J$ relabelled by their side of the bipartition.
+    For a branch $\xi$ with crossing sources $T$, write
+    $\beta_\xi=\Pi_T\eta_T\in\mathcal H_{T_A}\otimes\mathcal H_{T_E}$ for its crossing
+    vector, partitioned into affected and exterior registers.
 \end{definition}
 
 \begin{lemma}[Preparation and normalization of source vectors]
     \label{thm:peps_free_source_norm}
-    \lean{QuantumCircuit.Party.SourceInventory.op_prepareFreeSlots}
+    \uses{thm:peps_crossing_schmidt,thm:peps_source_input_columns}
     \lean{QuantumCircuit.Party.norm_toLp_productVector_eq_one}
-    \lean{QuantumCircuit.Party.SourceCircuit.norm_sourceCrossingVector}
     \leanok
     For every spectator vector $x\in\mathcal H_M$,
     \begin{align}
@@ -69,9 +71,6 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     \lean{QuantumCircuit.Party.SourceCircuit.isSome_selectedPartialSlot}
     \lean{QuantumCircuit.Party.SourceCircuit.correctedFreeSlots_eq_true_iff_mem_union}
     \lean{QuantumCircuit.Party.SourceCircuit.disjoint_selectedPartialSlots_crossingSlots}
-    \lean{QuantumCircuit.Party.SourceCircuit.correctedFreeSlots_eq_true_iff_mem_union,
-        QuantumCircuit.Party.SourceCircuit.disjoint_selectedPartialSlots_crossingSlots}
-    \lean{QuantumCircuit.Party.SourceCircuit.isSome_selectedPartialSlot}
     \lean{QuantumCircuit.Party.SourceCircuit.correctedMask_meets}
     \leanok
     Both endpoints of every corrected position lie in $A(S)$, so every occurrence in $S$ meets $A(S)$, the corrected
@@ -85,9 +84,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 
 \begin{lemma}[Preparing vectors from the scalar unit]
     \label{thm:peps_source_scalar_preparation}
+    \uses{thm:peps_source_input_columns}
     \lean{QuantumCircuit.Party.SourceInventory.op_prepare_append}
     \lean{QuantumCircuit.Party.SourceInventory.op_prepare_apply}
-    \lean{QuantumCircuit.Party.SourceInventory.op_prepareFreeSlots}
     \leanok
     Evaluating $P_J(\eta)$ on $1\in\mathbb C$ gives $\eta_J$, and concatenating two inventories gives
     $\alpha_{L,M}^{-1}(\eta_L\otimes\eta_M)$. A scalar-input composition
@@ -124,22 +123,6 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     By Lemma~\ref{thm:peps_source_scalar_preparation}, commuting $p_0$ past the free-source preparations combines the free and fixed preparations into the full source preparation on $p_0(1)$.
 \end{proof}
 
-\begin{lemma}[Construction of the uniform input identity]
-    \label{thm:peps_uniform_corrected_input}
-    \lean{QuantumCircuit.Party.SourceInventory.op_prepareSelected_mul_op_prepareFreeSlots}
-    \leanok
-    For every circuit and scalar-input composition, the evaluation identity of
-    Lemma~\ref{thm:peps_prepared_reordered_vector} holds for every partial
-    branch $\xi$ and every free-source family, without normalization or
-    contraction assumptions.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:peps_prepared_reordered_vector}
-    The corrected and crossing positions are fixed before $\xi$, so
-    Lemma~\ref{thm:peps_prepared_reordered_vector} applies to every $\xi$ and
-    every free-source family.
-\end{proof}
 
 \begin{lemma}[Local factors of the rearranged composition]
     \label{thm:peps_reordered_local_factors}
@@ -160,15 +143,17 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceFrame}
     \leanok
     Each matrix $E$ with $E^*E=1$ defines a linear isometry by its columns; tensoring the two endpoint isometries along an ordered list $J$ of selected source positions (keeping repeated endpoint parties as distinct tensor factors) yields a linear isometry from the Euclidean space on the selected endpoint coordinates into $\mathcal H_{L_J}$.
+    For a partial branch $\xi$, orthonormal-column endpoint matrices $E_e,F_e$,
+    and $I=\prod_{e\in S}(J_e\times J_e)$, tensoring their columns at the local
+    labels of $\xi$ in the original occurrence order and relabelling the
+    registers to the affected side gives the corrected-source isometry
+    $Q_\xi\colon\ell^2(I)\to\mathcal H_C$.
 \end{definition}
 
 \begin{lemma}[Columns are the prepared endpoint vectors]
     \label{thm:peps_source_input_columns}
-    \lean{Matrix.toEuclideanLin_single_one_apply}
-    \lean{QuantumCircuit.Party.SourceInventory.op_prepareFreeSlots,
-        QuantumCircuit.Party.SourceCircuit.correctedSourceFrame_apply}
-    \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceFrame_apply}
-    \lean{QuantumCircuit.Party.SourceCircuit.exists_correctedInputFrames}
+    \uses{thm:peps_actual_schmidt_input_frames,thm:peps_corrected_source_columns,thm:peps_ket_column_vector}
+    \lean{QuantumCircuit.Party.SourceInventory.op_prepareFreeSlots}
     \leanok
     The column of the isometry of Definition~\ref{def:peps_source_input_isometries} at an endpoint coordinate assignment is the ordered tensor product of the corresponding endpoint columns (independent of coordinates outside $J$) and, when tensored with a spectator vector, equals the preparation of those elementary pair vectors.
 \end{lemma}
@@ -178,15 +163,6 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     Evaluate each matrix isometry on standard basis vectors and induct along $J$.
 \end{proof}
 
-\begin{definition}[The corrected-source isometry]
-    \label{def:peps_corrected_source_frame}
-    \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceFrame}
-    \leanok
-    For a partial branch $\xi$, orthonormal-column endpoint matrices $E_e,F_e$, and $I=\prod_{e\in S}(J_e\times J_e)$,
-    tensoring their columns at the local labels of $\xi$ in the original
-    occurrence order and relabelling the registers to the affected side defines a linear
-    isometry $Q_\xi\colon\ell^2(I)\to\mathcal H_C$.
-\end{definition}
 
 \begin{lemma}[Corrected coordinates preserve the source order]
     \label{thm:peps_corrected_source_columns}
@@ -202,14 +178,6 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     Apply Lemma~\ref{thm:peps_source_input_columns} to the corrected positions and use Lemma~\ref{thm:peps_free_source_norm} to drop coordinates outside $S$.
 \end{proof}
 
-\begin{definition}[The crossing-source vector]
-    \label{def:peps_actual_crossing_vector}
-    \lean{QuantumCircuit.Party.SourceCircuit.sourceCrossingVector}
-    \leanok
-    For branch $\xi$, let $\beta_\xi=\Pi_T\eta_T\in\mathcal H_{T_A}\otimes\mathcal H_{T_E}$
-    be the ordered tensor of its crossing sources, relabelled and
-    partitioned into affected and exterior registers (whose ambient memories $\mathcal H_{T_A},\mathcal H_{T_E}$ depend only on the fixed register lists).
-\end{definition}
 
 \begin{lemma}[Schmidt isometries for the crossing vector]
     \label{thm:peps_crossing_schmidt}
@@ -227,7 +195,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_free_source_norm,def:peps_actual_crossing_vector}
+    \uses{thm:peps_free_source_norm,def:peps_free_source_vector}
     By Lemma~\ref{thm:peps_free_source_norm}, $\|\beta_\xi\|=1$, and the finite-dimensional Schmidt decomposition of $\beta_\xi\in\mathcal H_{T_A}\otimes\mathcal H_{T_E}$ supplies $(J,\tau,L,R)$ satisfying~(\ref{eq:peps_frames_crossing_schmidt}).
 \end{proof}
 
@@ -246,7 +214,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_corrected_crossing_masks,thm:peps_crossing_schmidt,def:peps_corrected_source_frame}
+    \uses{thm:peps_corrected_crossing_masks,thm:peps_crossing_schmidt,def:peps_source_input_isometries}
     Using $(C+T)_A=C+T_A$ and $(C+T)_E=T_E$ from Lemma~\ref{thm:peps_corrected_crossing_masks}, define $Ae_{(i,j)}=\alpha_{C,T_A}^{-1}(Q_\xi e_i\otimes Le_j)$ and $Be_j=Re_j$ from~(\ref{eq:peps_frames_crossing_schmidt}) of Lemma~\ref{thm:peps_crossing_schmidt}; linearity across the tensor product gives~(\ref{eq:peps_frames_input_schmidt}).
 \end{proof}
 
@@ -291,8 +259,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_uniform_corrected_input,thm:peps_corrected_crossing_masks,thm:peps_free_source_norm}
-    By Lemmas~\ref{thm:peps_corrected_crossing_masks} and~\ref{thm:peps_free_source_norm}, substituting the endpoint columns of $E_e,F_e$ at $i\in I$ into the corrected positions in Lemma~\ref{thm:peps_uniform_corrected_input} leaves the crossing vector $\beta_\xi$ and fixed sources unchanged.
+    \uses{thm:peps_prepared_reordered_vector,thm:peps_corrected_crossing_masks,thm:peps_free_source_norm}
+    By Lemmas~\ref{thm:peps_corrected_crossing_masks} and~\ref{thm:peps_free_source_norm}, substituting the endpoint columns of $E_e,F_e$ at $i\in I$ into the corrected positions in Lemma~\ref{thm:peps_prepared_reordered_vector} leaves the crossing vector $\beta_\xi$ and fixed sources unchanged.
 \end{proof}
 
 \begin{lemma}[Schmidt expansion of the partial output]

@@ -33,7 +33,7 @@
     \label{thm:peps_isTwoBlockInjective_regionComplementTwoBlock}
     \lean{TNLean.PEPS.isTwoBlockInjective_regionComplementTwoBlock}
     \leanok
-    \uses{def:peps_regionComplementTwoBlock, def:peps_regionInjectivityData}
+    \uses{def:peps_regionComplementTwoBlock,def:peps_regionInjectivityData}
     For any finite $R\subseteq V$,
     $\inj(T_{A,V\setminus R})\Longrightarrow\inj(B_{A,R^c})$.
 \end{lemma}
@@ -48,7 +48,7 @@
     \label{def:peps_regionInsertedCoeff}
     \lean{TNLean.PEPS.regionInsertedCoeff}
     \leanok
-    \uses{def:peps_regionTwoBlock, def:peps_regionComplementTwoBlock}
+    \uses{def:peps_regionTwoBlock,def:peps_regionComplementTwoBlock}
     For $f\in\partial R$ and $M\in\MN{D_f}$, the region insertion coefficient is
     \begin{align}
         C_A(R,f,M;\sigma,\tau)
@@ -101,7 +101,7 @@
     \label{thm:peps_deformedRegionState_bondInsertedRegionInsert}
     \lean{TNLean.PEPS.deformedRegionState_bondInsertedRegionInsert}
     \leanok
-    \uses{def:peps_bond_inserted_region_insert, def:peps_regionInsertedCoeff}
+    \uses{def:peps_bond_inserted_region_insert,def:peps_regionInsertedCoeff}
     For all physical configurations $\sigma$ on $R$ and $\tau$ on $V\setminus R$,
     $\Psi_{A,R,I_{A,R,f,M}}(\sigma,\tau)=C_A(R,f,M;\sigma,\tau)$.
 \end{lemma}
@@ -119,7 +119,7 @@ $\omega_{R,\sigma,\tau}|_{V\setminus R}=\tau$.
     \label{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff}
+    \uses{def:peps_regionInsertedCoeff,def:peps_edgeInsertedCoeff}
     For $f\in\partial R$, $N\in\MN{D_B(f)}$, and
     $p_B(R)=\prod_{g\notin\partial R}D_B(g)$,
     \begin{align}
@@ -155,7 +155,7 @@ $\omega_{R,\sigma,\tau}|_{V\setminus R}=\tau$.
     \label{thm:peps_regionInsertedCoeff_eq_extendInsert_bondInserted}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_extendInsert_bondInserted}
     \leanok
-    \uses{thm:peps_deformedRegionState_bondInsertedRegionInsert, thm:peps_corner_extension_state_preserves}
+    \uses{thm:peps_deformedRegionState_bondInsertedRegionInsert,thm:peps_corner_extension_state_preserves}
     If $R\subseteq S$ and $\forall e\in E,\ D_A(e)>0$, then for every global
     physical configuration $\sigma$,
     \begin{align}
@@ -175,7 +175,7 @@ $\omega_{R,\sigma,\tau}|_{V\setminus R}=\tau$.
     \label{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
     \lean{TNLean.PEPS.twoBlockInsertedCoeff_eq_regionInsertedCoeff}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_regionTwoBlock, def:peps_regionComplementTwoBlock}
+    \uses{def:peps_regionInsertedCoeff,def:peps_regionTwoBlock,def:peps_regionComplementTwoBlock}
     For $(B_{A,R},B_{A,R^c})$ from Definitions~\ref{def:peps_regionTwoBlock}
     and~\ref{def:peps_regionComplementTwoBlock},
     $C_{B_{A,R},B_{A,R^c}}(f,M;*,*,\sigma,\tau)=C_A(R,f,M;\sigma,\tau)$.
@@ -206,7 +206,7 @@ $\omega_{R,\sigma,\tau}|_{V\setminus R}=\tau$.
     \label{thm:peps_sameTwoBlockInsertions_of_regionInsertedCoeff_eq}
     \lean{TNLean.PEPS.sameTwoBlockInsertions_of_regionInsertedCoeff_eq}
     \leanok
-    \uses{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff, thm:peps_regionInsertedCoeff_reindexTensor}
+    \uses{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff,thm:peps_regionInsertedCoeff_reindexTensor}
     Let $B^h$ be $B$ reindexed along $h:D_A=D_B$ with induced bond isomorphism
     $\phi_f$. If $C_A(R,f,N;\sigma,\tau)=C_B(R,f,\phi_f(N);\sigma,\tau)$ for all
     $f\in\partial R,N,\sigma,\tau$, then
@@ -244,7 +244,7 @@ $\omega_{R,\sigma,\tau}|_{V\setminus R}=\tau$.
     \label{thm:peps_regionInsertedCoeff_complement_reading}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_complementTwoBlock}
     \leanok
-    \uses{thm:peps_twoBlockInsertedCoeff_swap, thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
+    \uses{thm:peps_twoBlockInsertedCoeff_swap,thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff}
     For $f\in\partial R$, with $C_{A,R^c;R}$ the insertion coefficient of
     $(B_{A,R^c},B_{A,R})$,
     $C_A(R,f,X;\sigma,\tau)=C_{A,R^c;R}(f,X^T;\tau,\sigma)$.
@@ -274,7 +274,7 @@ $\omega_{R,\sigma,\tau}|_{V\setminus R}=\tau$.
     \label{thm:peps_region_insertion_virtual_pullback_realizes}
     \lean{TNLean.PEPS.localTensorMap_localVirtualOpOfPhysicalOpAt_regionInsertionOp}
     \leanok
-    \uses{def:peps_same_state, def:IsVertexInjective, def:peps_localTensorMap, thm:peps_physical_to_virtual_insertion}
+    \uses{def:peps_same_state,def:IsVertexInjective,def:peps_localTensorMap,thm:peps_physical_to_virtual_insertion}
     If $A,B$ are vertex-injective with positive bond dimensions and
     $\Coeff_A=\Coeff_B$, and $W$ is the virtual pullback for $B$ at the
     in-region endpoint $v$ of $f$ of the physical operator $O_{A,R,f}(X^T)$,
@@ -327,7 +327,7 @@ $\omega_{R,\sigma,\tau}|_{V\setminus R}=\tau$.
         TNLean.PEPS.regionInsertedCoeff_eq_regionRealizationSum_compl,
         TNLean.PEPS.regionInsertedCoeff_eq_smul_op_regionStateVec_compl}
     \leanok
-    \uses{def:peps_region_out_endpoint_block_inverse, thm:peps_regionInsertedCoeff_complement_reading}
+    \uses{def:peps_region_out_endpoint_block_inverse,thm:peps_regionInsertedCoeff_complement_reading}
     With $f'\in\partial(V\setminus R)$ corresponding to $f\in\partial R$ and
     $\sigma^{cc}$ the reindexing of $\sigma$ across $V\setminus(V\setminus R)=R$,
     \begin{align}
@@ -356,7 +356,7 @@ $\omega_{R,\sigma,\tau}|_{V\setminus R}=\tau$.
         TNLean.PEPS.regionBlockedLeftInverse_complement_regionInsertedCoeff,
         TNLean.PEPS.regionBlockedLeftInverse_region_regionInsertedCoeff}
     \leanok
-    \uses{def:peps_region_out_endpoint_block_inverse, thm:peps_regionInsertedCoeff_complement_cast}
+    \uses{def:peps_region_out_endpoint_block_inverse,thm:peps_regionInsertedCoeff_complement_cast}
     Assume $\inj(A_v)$ at both endpoints of $f\in\partial R$ and
     $\Coeff_A=\Coeff_B$. With interior bond products $P_R,P_{R^c}$, endpoint
     physical operators $O^{\mathrm{in}}_f(X),O^{\mathrm{out}}_f(X)$, and row

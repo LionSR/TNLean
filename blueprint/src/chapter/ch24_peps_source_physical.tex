@@ -11,7 +11,6 @@ traces are used.
 \begin{definition}[Physical components of a word]
     \label{def:peps_physical_component}
     \lean{QuantumCircuit.Party.Word.physicalComponent}
-    \lean{QuantumCircuit.Party.Word.physicalComponent}
     \lean{QuantumCircuit.Party.physicalReadout}
     \lean{QuantumCircuit.Party.toEuclideanLin_physicalReadout_apply}
     \leanok
@@ -29,7 +28,6 @@ traces are used.
 \begin{lemma}[Component contraction]
     \label{thm:peps_physical_component_contraction}
     \lean{QuantumCircuit.Party.Word.norm_physicalComponent_le_one}
-    \lean{QuantumCircuit.Party.Word.norm_physicalComponent_le_one}
     \leanok
     \uses{def:peps_physical_component}
     If $V$ is allowed, then $\|C_{x,V}\|\leq1$ and $\|A_{x,V}\|\leq1$.
@@ -46,8 +44,6 @@ traces are used.
     \label{def:peps_physical_gram}
     \lean{QuantumCircuit.Party.Word.physicalGramMatrix}
     \lean{QuantumCircuit.Party.Word.physicalGramMatrix_apply}
-    \lean{QuantumCircuit.Party.Word.physicalGramMatrix}
-    \lean{QuantumCircuit.Party.Word.physicalGramMatrix_apply}
     \leanok
     For words $V:H\to K$ and $W:H'\to K$ with output identification $J$ and
     finite orthonormal bases $(e_i)$ of $H$ and $(e'_j)$ of $H'$, define
@@ -61,7 +57,6 @@ traces are used.
 
 \begin{lemma}[Gram contraction]
     \label{thm:peps_physical_gram_contraction}
-    \lean{QuantumCircuit.Party.Word.norm_physicalGramMatrix_le_one}
     \lean{QuantumCircuit.Party.Word.norm_physicalGramMatrix_le_one}
     \leanok
     \uses{def:peps_physical_gram,thm:peps_physical_component_contraction}
@@ -124,10 +119,9 @@ traces are used.
 \begin{lemma}[Contraction in proper frames]
     \label{thm:peps_physical_frame_contraction}
     \lean{QuantumCircuit.Party.Word.norm_physicalFrameGramMatrix_le_one}
-    \lean{QuantumCircuit.Party.Word.norm_mul_op_mul_le_one}
     \lean{QuantumCircuit.Party.Word.rectangularTraceNorm_partialTraceRight_mul_op_mul_le}
     \leanok
-    \uses{def:peps_physical_frames,thm:peps_physical_component_contraction}
+    \uses{def:peps_physical_frames,thm:peps_physical_component_contraction,thm:peps_exterior_contraction}
     For allowed $V,W$, the matrices in (\ref{eq:peps_physical_frames}) satisfy
     $\|A_{x,V,F}\|,\|O\|,\|K_{V,F}\|\le 1$, and for any rectangular $Z$,
     \begin{align}
@@ -528,30 +522,10 @@ traces are used.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Selective preparation gives two-side factors]
-    \label{thm:peps_corrected_source_partition}
-    \lean{QuantumCircuit.Party.SourceCircuit.exists_corrected_source_partition}
-    \leanok
-    \uses{def:peps_corrected_free_sources,def:peps_actual_tensor_partition}
-    For any allowed chronological composition, any $S\subseteq\mathcal E$, and
-    any partial branch for $\mathcal A_S$, the word obtained by preparing the
-    nonfree sources of Definition~\ref{def:peps_corrected_free_sources} followed
-    by the partial residual admits a tensor partition
-    (\ref{eq:peps_actual_tensor_partition}) with free input spaces independent of
-    the branch.
-\end{lemma}
-
-\begin{proof}\leanok
-    Every nonfree source is normalized with both endpoints on the same side of
-    $\mathcal A_S$, and the partial residual is allowed and source-free, so each
-    operation factors across the $\mathcal A_S$ partition into allowed
-    source-free words $C$ and $D$.
-\end{proof}
 
 \begin{definition}[An explicit positive sample count]
     \label{def:peps_source_sample_count}
     \lean{binomialSampleCount}
-    \lean{binomialSampleCount_bounds}
     \lean{binomialSampleCount_bounds}
     \leanok
     For $N\in\N$, $Q\in\R$, and $\epsilon>0$, define
@@ -566,8 +540,7 @@ traces are used.
 \begin{lemma}[Finite subset summation and the sample-count estimate]
     \label{thm:peps_source_sample_count_bound}
     \lean{Finset.sum_powerset_erase_empty_pow_card}
-    \lean{Real.div_sqrt_le_of_sq_le,
-        binomialSampleCount_bounds}
+    \lean{Real.div_sqrt_le_of_sq_le}
     \lean{Finset.sum_powerset_erase_empty_binomialSampleCount_le}
     \leanok
     \uses{def:peps_source_sample_count}

@@ -44,7 +44,7 @@ translation-invariant specialization and its periodic closure.
 \begin{lemma}[Site-independent families]\label{lem:site_open_coeff_const}
     \lean{MPSTensor.siteOpenCoeff_const}
     \leanok
-    \uses{def:site_open_coeff, def:open_state}
+    \uses{def:site_open_coeff,def:open_state}
     If $A^{[s]}=A$ for every site $s$, the site-dependent open-boundary
     contraction of $(\sigma_1,\ldots,\sigma_N)$ is the amplitude of the
     open-boundary state of $A$ at that configuration.
@@ -58,7 +58,7 @@ translation-invariant specialization and its periodic closure.
 \begin{lemma}[Product states are MPS with $D=1$]\label{thm:product_state_mps}
     \lean{MPSTensor.siteOpenCoeff_productSiteTensor}
     \leanok
-    \uses{def:product_state_tensor, def:site_open_coeff}
+    \uses{def:product_state_tensor,def:site_open_coeff}
     As in \cite[Appendix~A, ``Product states'']{Cirac2021Matrix}, every product
     state is a matrix product state with bond dimension one:
     for the tensor of Definition~\ref{def:product_state_tensor}, with
@@ -85,7 +85,7 @@ translation-invariant specialization and its periodic closure.
     \lean{MPSTensor.openState_productSiteTensor_const,
         MPSTensor.mpv_productSiteTensor_const}
     \leanok
-    \uses{thm:product_state_mps, lem:site_open_coeff_const, def:mpv}
+    \uses{thm:product_state_mps,lem:site_open_coeff_const,def:mpv}
     If every site carries the same local vector $\sum_i a^i\ket{i}$, the
     one-site tensor with $1\times1$ matrices $a^i$ generates the product vector
     $\bigl(\sum_i a^i\ket{i}\bigr)^{\otimes N}$ both as an open-boundary state
@@ -95,7 +95,7 @@ translation-invariant specialization and its periodic closure.
 
 \begin{proof}
     \leanok
-    \uses{thm:product_state_mps, lem:site_open_coeff_const}
+    \uses{thm:product_state_mps,lem:site_open_coeff_const}
     Combining Lemma~\ref{thm:product_state_mps} with
     Lemma~\ref{lem:site_open_coeff_const} gives the open-boundary statement.
     Because the trace of a $1\times1$ matrix is its sole entry, the periodic

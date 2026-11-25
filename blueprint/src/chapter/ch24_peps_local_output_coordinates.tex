@@ -30,7 +30,6 @@ All coordinate bases in this section are finite orthonormal bases.
 \begin{lemma}[Coordinates of a local Schmidt expansion]
     \label{thm:peps_local_schmidt_output_coordinates}
     \lean{QuantumCircuit.Party.Word.kronecker_mulVec_eq_separatedPhysicalCoordinates}
-    \lean{QuantumCircuit.Party.Word.kronecker_mulVec_eq_separatedPhysicalCoordinates}
     \leanok
     \uses{def:peps_partition_output_bases}
     Let $V,W$ be the two local output maps, let $F,G$ be input isometries, and
@@ -67,8 +66,8 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{lemma}[Original physical dimensions after the two owner maps]
     \label{thm:peps_affected_original_dimensions}
-    \lean{QuantumCircuit.Party.affectedSideEquiv,
-        QuantumCircuit.Party.exteriorSideEquiv}
+    \uses{def:peps_exterior_family_physical_basis}
+    \lean{QuantumCircuit.Party.affectedSideEquiv}
     \lean{QuantumCircuit.Party.card_affectedSides_true}
     \leanok
     Let the parties be listed without repetition, with physical space

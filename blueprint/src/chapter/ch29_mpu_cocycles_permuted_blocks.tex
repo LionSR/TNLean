@@ -30,7 +30,7 @@
     \lean{ActionTensorGauge,
         LSymbol.gauge}
     \leanok
-    \uses{def:mpug_l_symbols, def:mpug_fusion_gauge}
+    \uses{def:mpug_l_symbols,def:mpug_fusion_gauge}
     An action-tensor scalar gauge is a function
     $\gamma\colon G\times\mathsf X\to\C^\times$, written $\gamma^x_g$.
     Together with a fusion-tensor scalar gauge $\beta\colon G^2\to\C^\times$,
@@ -79,7 +79,7 @@
     \lean{LSymbol.IsNormalized,
         ActionTensorGauge.IsNormalized}
     \leanok
-    \uses{def:mpug_l_symbols, def:mpug_l_gauge}
+    \uses{def:mpug_l_symbols,def:mpug_l_gauge}
     As in \cite{FrancoRubio2025MPUGauging}, the $L$-symbol is normalized when,
     for every $x\in\mathsf X$ and $g\in G$,
     \begin{align}
@@ -114,7 +114,7 @@
         TNLean.Algebra.RestrictedScalarGauge}
     \leanok
     \discussion{7700}
-    \uses{def:mpug_fusion_gauge, def:mpug_l_gauge, def:mpug_l_normalized}
+    \uses{def:mpug_fusion_gauge,def:mpug_l_gauge,def:mpug_l_normalized}
     A fusion scalar $\beta\colon G^2\to\C^\times$ is
     \emph{inverse-normalized} when, for every $g\in G$,
     \begin{align}
@@ -143,8 +143,7 @@
         LSymbol.isNormalized_gauge_iff,
         LSymbol.IsNormalized.gauge}
     \leanok
-    \uses{def:mpug_fusion_gauge, def:mpug_l_symbols,
-        def:mpug_l_gauge, def:mpug_l_normalized}
+    \uses{def:mpug_fusion_gauge,def:mpug_l_symbols,def:mpug_l_gauge,def:mpug_l_normalized}
     If $L$ is compatible with $\omega$, then
     $(\beta,\gamma)\mathbin{\triangleright}L$ is compatible with
     $\beta\mathbin{\triangleright}\omega$. On the identity axes, the gauge
@@ -166,8 +165,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_fusion_gauge, def:mpug_l_symbols, def:mpug_l_gauge,
-        def:mpug_l_normalized}
+    \uses{def:mpug_fusion_gauge,def:mpug_l_symbols,def:mpug_l_gauge,def:mpug_l_normalized}
     This is~\cite[``Joint scalar gauges preserve L-symbol
         compatibility'']{QICLean2026Blueprint}.
     With $L'=(\beta,\gamma)\mathbin{\triangleright}L$, substituting
@@ -217,8 +215,7 @@
     \lean{LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
         LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq}
     \leanok
-    \uses{def:mpug_l_symbols, def:mpug_cochain_restriction,
-        def:mpug_fusion_gauge, def:mpug_trivial_gauge_class}
+    \uses{def:mpug_l_symbols,def:mpug_cochain_restriction,def:mpug_fusion_gauge,def:mpug_trivial_gauge_class}
     Let $L$ be compatible with $\omega$, let $f\colon H\to G$ be a group
     homomorphism, and let $x\in\mathsf X$ satisfy $f(a)x=x$ for every
     $a\in H$. Then $f^*\omega$ has trivial gauge class; explicitly,
@@ -232,8 +229,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_l_symbols, def:mpug_fusion_gauge,
-        def:mpug_cochain_restriction, def:mpug_trivial_gauge_class}
+    \uses{def:mpug_l_symbols,def:mpug_fusion_gauge,def:mpug_cochain_restriction,def:mpug_trivial_gauge_class}
     For $a,b,c\in H$, with $g=f(a)$, $h=f(b)$, and $k=f(c)$, the invariance
     $kx=x$ turns (\ref{eq:mpug_l_compatibility}) into
     \begin{align}
@@ -292,11 +288,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_restricted_scalar_gauge,
-        thm:mpug_gauge_preserves_cocycle,
-        thm:mpug_gauge_preserves_normalization,
-        thm:mpug_l_gauge_composition,
-        thm:mpug_l_gauge_preservation}
+    \uses{def:mpug_restricted_scalar_gauge,thm:mpug_gauge_preserves_cocycle,thm:mpug_gauge_preserves_normalization,thm:mpug_l_gauge_composition,thm:mpug_l_gauge_preservation}
     The three specified values of $\beta$ and the identity value of $\gamma$
     remain equal to $1$ under pointwise products and inverses, so the general
     preservation laws apply to~(\ref{eq:mpug_restricted_gauge_action}).
@@ -314,7 +306,7 @@
         MPOTensor.GroupFamily.ActionData.fuseV,
         MPOTensor.GroupFamily.ActionData.lSymbol}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols, def:mpv_state}
+    \uses{def:mpug_anomaly_three_cochain,def:mpug_l_symbols,def:mpv_state}
     Let $\{O_g\}$ be as in Definition~\ref{def:mpug_anomaly_three_cochain},
     and let $A$ be a matrix product state tensor with
     $O_g\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ for every $g$ and every $N\geq1$.
@@ -405,8 +397,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
-        thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    \uses{cor:asym_action_tensors,thm:mpug_action_tensor_reductions,thm:mpug_reduction_composition,thm:mpug_dressed_proportionality}
     Existence is Corollary~\ref{cor:asym_action_tensors}. By
     Lemmas~\ref{thm:mpug_action_tensor_reductions}
     and~\ref{thm:mpug_reduction_composition}, both $\alpha_{g,h}$ and
@@ -420,8 +411,7 @@
     \label{thm:mpug_single_block_l_compatibility}
     \lean{MPOTensor.GroupFamily.ActionData.isCompatible_lSymbol}
     \leanok
-    \uses{def:mpug_single_block_l_symbol, thm:mpug_single_block_l_symbol_spec,
-        def:mpug_anomaly_three_cochain, def:mpug_l_symbols}
+    \uses{def:mpug_single_block_l_symbol,thm:mpug_single_block_l_symbol_spec,def:mpug_anomaly_three_cochain,def:mpug_l_symbols}
     In the setting of Lemma~\ref{thm:mpug_single_block_l_symbol_spec},
     (\ref{eq:mpug_l_compatibility}) for a one-point set of blocks holds for
     all $g,h,k\in G$:
@@ -432,9 +422,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_single_block_l_symbol_spec,
-        thm:mpug_action_tensor_reductions, thm:mpug_reduction_composition,
-        thm:mpug_anomaly_three_cochain_spec, thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_single_block_l_symbol_spec,thm:mpug_action_tensor_reductions,thm:mpug_reduction_composition,thm:mpug_anomaly_three_cochain_spec,thm:mpug_dressed_proportionality}
     For the triple action $B=((O_gO_h)O_k)\cdot A$ and the two fusion trees
     $V^L$, $V^R$ of $(g,h,k)$ in
     Definition~\ref{def:mpug_anomaly_three_cochain}, the naturality and
@@ -490,8 +478,7 @@
     \lean{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant,
         MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, def:mpug_trivial_gauge_class,
-        def:mpv_state}
+    \uses{def:mpug_anomaly_three_cochain,def:mpug_trivial_gauge_class,def:mpv_state}
     Let $\{O_g\}$ be matrix product operator tensors with normal
     doubled-index tensors and $O_gO_h=O_{gh}$ on every nonempty chain. If a
     normal matrix product state tensor of positive bond dimension satisfies
@@ -504,9 +491,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_single_block_l_symbol_spec,
-        thm:mpug_single_block_l_compatibility,
-        thm:mpug_fixed_block_trivializes}
+    \uses{thm:mpug_single_block_l_symbol_spec,thm:mpug_single_block_l_compatibility,thm:mpug_fixed_block_trivializes}
     Action tensors exist by
     Lemma~\ref{thm:mpug_single_block_l_symbol_spec}, so
     Lemma~\ref{thm:mpug_single_block_l_compatibility} applies, and Lemma~\ref{thm:mpug_fixed_block_trivializes} for the
@@ -532,8 +517,7 @@ $N\geq1$.
         MPOTensor.GroupFamily.BlockActionData.fuseV,
         MPOTensor.GroupFamily.BlockActionData.lSymbol}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, def:mpug_l_symbols,
-        def:mpug_single_block_l_symbol}
+    \uses{def:mpug_anomaly_three_cochain,def:mpug_l_symbols,def:mpug_single_block_l_symbol}
     Action tensors for the family $(A_x)$ are, for every $g$ and $x$, a
     reduction $(V_{g,x},W_{g,x})$ of $O_g\cdot A_x$ onto $A_{gx}$. The stacked
     action $B=(O_gO_h)\cdot A_x$ then reduces onto $A_{g(hx)}=A_{(gh)x}$ along
@@ -566,8 +550,7 @@ $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{cor:asym_action_tensors, thm:mpug_action_tensor_reductions,
-        thm:mpug_reduction_composition, thm:mpug_dressed_proportionality}
+    \uses{cor:asym_action_tensors,thm:mpug_action_tensor_reductions,thm:mpug_reduction_composition,thm:mpug_dressed_proportionality}
     As in Lemma~\ref{thm:mpug_single_block_l_symbol_spec}: existence is
     Corollary~\ref{cor:asym_action_tensors} applied to $O_g\cdot A_x$ and
     $A_{gx}$, which generate the same vectors. By
@@ -588,9 +571,7 @@ $N\geq1$.
     \lean{MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol,
         MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed}
     \leanok
-    \uses{def:mpug_permuted_block_l_symbol, thm:mpug_anomaly_three_cochain_spec,
-        thm:mpug_permuted_block_l_symbol_spec,
-        thm:mpug_dressed_proportionality, thm:mpug_fixed_block_trivializes}
+    \uses{def:mpug_permuted_block_l_symbol,thm:mpug_anomaly_three_cochain_spec,thm:mpug_permuted_block_l_symbol_spec,thm:mpug_dressed_proportionality,thm:mpug_fixed_block_trivializes}
     For all $x\in\mathsf X$ and $g,h,k\in G$,
     \begin{align}
         L^x_{g,hk}L^x_{h,k}
@@ -602,9 +583,7 @@ $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_permuted_block_l_symbol_spec,
-        thm:mpug_anomaly_three_cochain_spec,
-        thm:mpug_fixed_block_trivializes}
+    \uses{thm:mpug_permuted_block_l_symbol_spec,thm:mpug_anomaly_three_cochain_spec,thm:mpug_fixed_block_trivializes}
     Write
     \begin{align}
         \alpha^x_{g,h}  & =V_{g,hx}(\mathbf 1\otimes V_{h,x})\,\mathsf a^{-1}, &
@@ -723,10 +702,7 @@ $N\geq1$.
         MPOTensor.GroupFamily.BlockActionData.lSymbol_eq_gauge,
         MPOTensor.GroupFamily.BlockActionData.lSymbol_rescale}
     \leanok
-    \uses{def:mpug_permuted_block_l_symbol,
-        thm:mpug_permuted_block_l_symbol_spec,
-        thm:mpug_anomaly_three_cocycle_gauge, def:mpug_l_gauge,
-        thm:mpug_dressed_proportionality}
+    \uses{def:mpug_permuted_block_l_symbol,thm:mpug_permuted_block_l_symbol_spec,thm:mpug_anomaly_three_cocycle_gauge,def:mpug_l_gauge,thm:mpug_dressed_proportionality}
     Keep the setting of Definition~\ref{def:mpug_permuted_block_l_symbol}
     and let the doubled-index tensors be normal. Take two choices of fusion
     tensors and two choices of action tensors, with $L$ and $L'$ the
@@ -762,8 +738,7 @@ $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_permuted_block_l_symbol_spec,
-        thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_permuted_block_l_symbol_spec,thm:mpug_dressed_proportionality}
     As in the proof of Lemma~\ref{thm:mpug_permuted_block_l_compatibility},
     write $\alpha^x_{g,h}$ and $\varphi^x_{g,h}$ for the two left boundaries
     of Definition~\ref{def:mpug_permuted_block_l_symbol}, and
@@ -795,8 +770,7 @@ $N\geq1$.
     \label{lem:mpug_single_block_gauge_trivial}
     \lean{MPOTensor.GroupFamily.BlockActionData.exists_rescale_omega_eq_one_lSymbol_eq_one}
     \leanok
-    \uses{lem:mpug_permuted_block_l_gauge,
-        thm:mpug_permuted_block_l_compatibility}
+    \uses{lem:mpug_permuted_block_l_gauge,thm:mpug_permuted_block_l_compatibility}
     In the setting of Lemma~\ref{lem:mpug_permuted_block_l_gauge}, if the set
     $\mathsf X$ has exactly one element, some rescaling of the fusion and
     action tensors gives $\omega(g,h,k)=1$ and $L_{g,h}=1$ for all
@@ -805,8 +779,7 @@ $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpug_permuted_block_l_gauge,
-        thm:mpug_permuted_block_l_compatibility}
+    \uses{lem:mpug_permuted_block_l_gauge,thm:mpug_permuted_block_l_compatibility}
     Rescale the fusion tensors by $\beta_{g,h}=L_{g,h}^{-1}$ and leave the
     action tensors unchanged. By Lemma~\ref{lem:mpug_permuted_block_l_gauge}
     the new $L$-symbols are $\beta_{g,h}L_{g,h}=1$, and compatibility,
@@ -860,7 +833,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.physAct_wallChain,
         MPOTensor.exists_evalWord_mul_mul_evalWord_ne_zero}
     \leanok
-    \uses{def:mpug_domain_wall_action, def:mpug_permuted_block_l_symbol}
+    \uses{def:mpug_domain_wall_action,def:mpug_permuted_block_l_symbol}
     Suppose $h$ carries the domain wall $e_1$ between $x$ and $y$ to $e_2$
     with phase $B^h_{x,y}$ and $g$ carries $e_2$ to $e_3$ with phase
     $B^g_{hx,hy}$. Then $gh$ carries $e_1$ to $e_3$ with phase
@@ -875,7 +848,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_permuted_block_l_symbol_spec, thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_permuted_block_l_symbol_spec,thm:mpug_dressed_proportionality}
     Acting with $O_g$ on the local relation of $h$, which holds for every
     configuration of a chain with long regions, passes the boundary matrices
     $V_{h,x}$, $W_{h,y}$ through as $\mathbf 1\otimes V_{h,x}$ and
@@ -925,8 +898,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mps_reduction_residual_dimension_bound,
-        thm:mps_reduction_exterior_buffer}
+    \uses{thm:mps_reduction_residual_dimension_bound,thm:mps_reduction_exterior_buffer}
     The coefficient of $O_g\ket{\psi}$ is the trace of the acted chain.
     Inserting the reduced block $W_{g,z}A_{gz}^{\mathbf c}V_{g,z}$ into each
     of the two acted regions leaves long words unchanged by the residual
@@ -960,8 +932,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mps_reduction_residual_dimension_bound,
-        thm:mps_reduction_exterior_buffer}
+    \uses{thm:mps_reduction_residual_dimension_bound,thm:mps_reduction_exterior_buffer}
     Splitting the middle word as $\mathbf p\mathbf c\mathbf q$ with long
     outer parts and inserting the reduced block
     $W_{g,y}A_{gy}^{\mathbf c}V_{g,y}$ leaves the word unchanged by the
@@ -1026,7 +997,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_left,
         MPOTensor.GroupFamily.BlockActionData.wallString_mulVec_mpv_right}
     \leanok
-    \uses{def:mpug_domain_wall_string, thm:mpug_domain_wall_state}
+    \uses{def:mpug_domain_wall_string,thm:mpug_domain_wall_state}
     On the periodic chain of every length $L\geq2$ and for all sites $i<j$,
     \begin{align}
         O^{[i,j]}\ket{\psi_A}
@@ -1063,7 +1034,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.wallString_inner_mul_outer_mulVec_mpv_apply,
         MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv}
     \leanok
-    \uses{thm:mpug_domain_wall_string_creation, thm:mpug_domain_wall_pair}
+    \uses{thm:mpug_domain_wall_string_creation,thm:mpug_domain_wall_pair}
     Suppose $g$ carries $e_{AB}$ to $e_{BA}$ with phase $c_{AB}$ and $e_{BA}$
     to $e_{AB}$ with phase $c_{BA}$. For sites $i_2<i_1<j_1<j_2$ whose three
     inner regions are longer than a fixed buffer,
@@ -1119,8 +1090,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \lean{MPOTensor.isInjective_of_physPairing_eq_one,
         MPOTensor.GroupFamily.BlockActionData.wallString_mul_wallString_mulVec_mpv_of_mpo_mul_self_eq_one}
     \leanok
-    \uses{thm:mpug_domain_wall_string_exchange,
-        lem:mpug_domain_wall_exchange_phase_square}
+    \uses{thm:mpug_domain_wall_string_exchange,lem:mpug_domain_wall_exchange_phase_square}
     In the setting of Lemma~\ref{thm:mpug_domain_wall_string_exchange},
     suppose that $U=O_g$ satisfies $U^2=\mathbf 1$ on the periodic chain of
     every length. Then the relation of
@@ -1224,8 +1194,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         LSymbol.prod_div_eq_inv_cyclicInvariant,
         LSymbol.prod_Ico_div_eq_inv_cyclicInvariant}
     \leanok
-    \uses{def:mpug_domain_wall_family, def:mpug_permuted_block_l_symbol,
-        def:mpug_anomaly_three_cochain}
+    \uses{def:mpug_domain_wall_family,def:mpug_permuted_block_l_symbol,def:mpug_anomaly_three_cochain}
     As in \cite[Section~IV.C]{GarreRubioSchuch2024DomainWall}, for a family
     of domain walls permuted by the group, every $g$ with $g^n=e$, and every
     block $x$, the interchange phase depends only on the anomaly:
@@ -1242,7 +1211,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
+    \uses{thm:mpug_domain_wall_pentagon,thm:mpug_permuted_block_l_compatibility}
     With $\beta_k=B^{g^k}_{gx,x}$,
     Lemma~\ref{thm:mpug_domain_wall_pentagon} for $(g,g^k)$ gives
     $B^g_{g^k(gx),g^kx}\,\beta_k=(L^{gx}_{g,g^k}/L^x_{g,g^k})\,\beta_{k+1}$.
@@ -1260,7 +1229,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed_self}
     \leanok
-    \uses{def:mpug_domain_wall_family, def:mpug_permuted_block_l_symbol}
+    \uses{def:mpug_domain_wall_family,def:mpug_permuted_block_l_symbol}
     Let $H_{y,z}$ be the subgroup of elements fixing the blocks $y$ and $z$.
     For $a,b\in H_{y,z}$,
     \begin{align}
@@ -1278,7 +1247,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_permuted_block_l_compatibility}
+    \uses{thm:mpug_domain_wall_pentagon,thm:mpug_permuted_block_l_compatibility}
     The first identity is Lemma~\ref{thm:mpug_domain_wall_pentagon} with
     $by=y$ and $bz=z$. Dividing the compatibility relations at $y$ and at $z$
     for $(a,b,c)$ with $c\in H_{y,z}$ cancels $\omega(a,b,c)$ and gives the
@@ -1293,7 +1262,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.groupWallString,
         MPOTensor.nestedWallCoeff}
     \leanok
-    \uses{def:mpug_domain_wall_string, def:mpug_domain_wall_family}
+    \uses{def:mpug_domain_wall_string,def:mpug_domain_wall_family}
     Let the blocks $A_x$ form a finite family with left inverses $\hat A_x$
     of separated supports: $\hat A_x$ is a left inverse of $A_x$ and
     $\sum_\sigma(\hat A_x^\sigma)_{\alpha\beta}(A_y^\sigma)_{\gamma\delta}=0$
@@ -1314,8 +1283,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.rightAct_groupWallRightEndpoint,
         MPOTensor.GroupFamily.BlockActionData.groupWallString_mulVec_mpv}
     \leanok
-    \uses{def:mpug_group_domain_wall_string,
-        thm:mpug_domain_wall_string_creation}
+    \uses{def:mpug_group_domain_wall_string,thm:mpug_domain_wall_string_creation}
     On the periodic chain of every length $L\geq2$ and for all sites $i<j$,
     $O_g^{[i,j]}\ket{\psi_{A_x}}=\ket{\psi(x,gx)}$, the state with the domain
     wall $e_{x,gx}$ at $i$, the block $A_{gx}$ between $i$ and $j$, and the
@@ -1337,7 +1305,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.groupWallString_cross_mulVec_mpv_apply,
         MPOTensor.GroupFamily.BlockActionData.groupWallString_mul_groupWallString_mulVec_mpv_swap_left}
     \leanok
-    \uses{lem:mpug_group_domain_wall_string_creation, thm:mpug_domain_wall_pair}
+    \uses{lem:mpug_group_domain_wall_string_creation,thm:mpug_domain_wall_pair}
     In the setting of Definition~\ref{def:mpug_group_domain_wall_string},
     let the regions between the sites considered below be longer than a
     fixed buffer. For sites $i_2<i_1<j_1<j_2$,
@@ -1383,8 +1351,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.mpo_mulVec_twoWallMPV_eq_omega,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallAction.congr_elem}
     \leanok
-    \uses{def:mpug_domain_wall_action, def:mpug_permuted_block_l_symbol,
-        def:mpug_anomaly_three_cochain}
+    \uses{def:mpug_domain_wall_action,def:mpug_permuted_block_l_symbol,def:mpug_anomaly_three_cochain}
     Let $g^2=e$ exchange the blocks $x$ and $y$, let $g$ carry the domain wall
     $e_{AB}$ between $x$ and $y$ to $e_{BA}$ with phase $c_{AB}$ and
     $e_{BA}$ to $e_{AB}$ with phase $c_{BA}$. Then
@@ -1404,9 +1371,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_domain_wall_pentagon, thm:mpug_domain_wall_state,
-        thm:mpug_permuted_block_l_compatibility,
-        thm:mpug_involution_anomaly_identity_ratio}
+    \uses{thm:mpug_domain_wall_pentagon,thm:mpug_domain_wall_state,thm:mpug_permuted_block_l_compatibility,thm:mpug_involution_anomaly_identity_ratio}
     Applying $g$ twice, Lemma~\ref{thm:mpug_domain_wall_pentagon} shows that
     $g^2=e$ carries $e_{AB}$ to itself with phase
     $b=(L^y_{g,g}/L^x_{g,g})\,c_{BA}c_{AB}\neq0$. The same theorem for $(e,e)$
@@ -1533,8 +1498,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
     \lean{MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_of_wallString,
         MPOTensor.GroupFamily.BlockActionData.star_dotProduct_groupCommutator_mulVec_mpv_eq_omega}
     \leanok
-    \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
-        thm:mpug_domain_wall_involution}
+    \uses{lem:mpug_truncation_commutator,thm:mpug_domain_wall_string_exchange,thm:mpug_domain_wall_involution}
     In the setting of Lemma~\ref{thm:mpug_domain_wall_string_exchange}, let
     $O_1=O^{[i_1,j_1]}$ and $O_2=O^{[i_2,j_2]}$ be domain-wall strings on
     sites $i_2<i_1<j_1<j_2$ whose three inner regions are longer than a fixed
@@ -1564,8 +1528,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpug_truncation_commutator, thm:mpug_domain_wall_string_exchange,
-        thm:mpug_domain_wall_involution}
+    \uses{lem:mpug_truncation_commutator,thm:mpug_domain_wall_string_exchange,thm:mpug_domain_wall_involution}
     By Lemma~\ref{thm:mpug_domain_wall_string_exchange} and the hypotheses,
     $U_2U_1\ket{\psi_A}=c_{AB}c_{BA}\,U_1U_2\ket{\psi_A}$, and
     Lemma~\ref{lem:mpug_truncation_commutator} gives the first identity. The

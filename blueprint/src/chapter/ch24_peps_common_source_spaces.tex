@@ -48,8 +48,8 @@
 
 \begin{definition}[Orthogonal sums of branch spaces]
     \label{def:peps_common_halfspaces}
+    \uses{lem:matrix_sigma_block_inclusion}
     \lean{QuantumCircuit.Party.PairSource.commonBasis}
-    \lean{Matrix.sigmaBlockInclusion}
     \lean{QuantumCircuit.Party.PairSource.commonProjection}
     \leanok
     For a finite index set $\Xi$ and complex inner product spaces $U_\xi$ in
@@ -159,8 +159,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_ordering,thm:peps_common_pair_source,thm:peps_source_cons_mapL,
-        thm:peps_source_expansion_operations}
+    \uses{thm:peps_source_ordering,thm:peps_common_pair_source,thm:peps_source_cons_mapL,thm:peps_source_expansion_operations}
     Reorder each $S_\xi$ by Lemma~\ref{thm:peps_source_ordering}, embed each
     slot into the orthogonal sums $\widehat U_e,\widehat V_e$ via
     Lemma~\ref{thm:peps_common_pair_source}, and recover each slot by
@@ -190,8 +189,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_complete_pair_sources,thm:peps_complete_prepared_party_maps,
-        thm:peps_common_source_lists,thm:peps_party_factorization}
+    \uses{thm:peps_complete_pair_sources,thm:peps_complete_prepared_party_maps,thm:peps_common_source_lists,thm:peps_party_factorization}
     Complete the sources of each $F_\xi$ to all unordered pairs in $P$ by
     Lemmas~\ref{thm:peps_complete_pair_sources}
     and~\ref{thm:peps_complete_prepared_party_maps}, embed into common
@@ -240,8 +238,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_cons_mapL,
-        thm:peps_source_expansion_operations}
+    \uses{thm:peps_source_cons_mapL,thm:peps_source_expansion_operations}
     At each slot $e$ the halfspaces $U_e,V_e$ are finite-dimensional, so
     orthonormal bases give isometries $f_e,g_e$ and coordinate vectors
     $\eta^0_{\xi,e}$; compose the local isometries $f_e,g_e$ across the slots by
@@ -273,8 +270,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_common_party_maps,thm:peps_common_source_lists,
-        thm:peps_finite_source_coordinates,thm:peps_party_factorization}
+    \uses{thm:peps_common_party_maps,thm:peps_common_source_lists,thm:peps_finite_source_coordinates,thm:peps_party_factorization}
     Combine Lemmas~\ref{thm:peps_common_party_maps}
     and~\ref{thm:peps_common_source_lists} with
     Lemma~\ref{thm:peps_finite_source_coordinates}, factor the resulting

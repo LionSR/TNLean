@@ -6,7 +6,7 @@
         MPOTensor.shiftSwapDaggerSymmetry,
         MPOTensor.shiftSwapTransposeSymmetry}
     \leanok
-    \uses{def:mpu_finite_chain_operator_symmetry, threeMPU2}
+    \uses{def:mpu_finite_chain_operator_symmetry,threeMPU2}
     Following \cite[Sections~IV.A--IV.C]{Cirac2017MPU}, the adjunction,
     transposition, and conjugation actions on every positive-length chain
     are $U\mapsto U^\dagger$, $U\mapsto U^{\mathsf T}$, and
@@ -65,7 +65,7 @@
         MPOTensor.isInvariantUnderSymmetry_shiftSwapTranspose_iff,
         MPOTensor.isInvariantUnderSymmetry_conjugation_ketLeftMul_swap_iff}
     \leanok
-    \uses{def:mpu_swap_comparison_symmetries, threeMPU2}
+    \uses{def:mpu_swap_comparison_symmetries,threeMPU2}
     Let $\mathcal U$ be a local tensor with two $d$-dimensional physical
     spins, and let $\widetilde{\mathcal U}=\mathbb S\mathcal U$ denote the
     action on its output physical leg. The swap satisfies $\mathbb S^2=I$.
@@ -84,9 +84,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:threeMPU2_chain_formulas,
-        thm:mpu_pointwise_symmetry_invariance_comparison,
-        thm:mpu_involution_combined_fixed_equation}
+    \uses{thm:threeMPU2_chain_formulas,thm:mpu_pointwise_symmetry_invariance_comparison,thm:mpu_involution_combined_fixed_equation}
     The swap satisfies
     $S_N^2=I$, $S_N^\dagger=S_N^{\mathsf T}=S_N$, and
     $\overline{S_N}=S_N$. Consequently, for every $N>0$,
@@ -134,7 +132,7 @@
     \label{thm:mpu_canonical_form_physical_left_action}
     \lean{MPOTensor.isMPUCanonicalForm_ketLeftMul}
     \leanok
-    \uses{def:mpu_canonical_form, def:mpdo_vertical_one_site_actions}
+    \uses{def:mpu_canonical_form,def:mpdo_vertical_one_site_actions}
     Let $\mathcal U$ be a canonical-form MPO tensor, and let
     $Q\in\MN{d}$ be unitary. Then $Q\mathcal U$, with $Q$ acting on the
     physical output, is again in canonical form. Its canonical blocks
@@ -143,9 +141,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_map_rotate_physical,
-        thm:irreducible_tensor_rotate_physical,
-        thm:rotate_physical_blocks}
+    \uses{thm:transfer_map_rotate_physical,thm:irreducible_tensor_rotate_physical,thm:rotate_physical_blocks}
     On the doubled physical alphabet, the output action is the unitary
     rotation $Q\otimes I$. Applying this rotation to every canonical block
     preserves irreducibility and the transfer map, hence its spectral
@@ -157,8 +153,7 @@
     \lean{MPOTensor.joinedIn_isMPU_isInvariantUnderSymmetry_iff_ketLeftMul,
         MPOTensor.strictlyEquivalentUnderSymmetry_iff_ketLeftMul}
     \leanok
-    \uses{def:strictly-equivalent-symmetry,
-        def:mpdo_vertical_one_site_actions}
+    \uses{def:strictly-equivalent-symmetry,def:mpdo_vertical_one_site_actions}
     Fix $d$, two finite-chain operator symmetries $\mathcal S,\mathcal T$,
     and a unitary $Q\in\MN{d}$ with $Q^2=I$. Suppose that, for every local
     tensor $\mathcal W$ with physical dimension $d$ and any virtual
@@ -178,9 +173,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_continuous_involutive_left_action,
-        thm:threeMPU2_chain_formulas,
-        thm:mpu_canonical_form_physical_left_action}
+    \uses{thm:mpu_continuous_involutive_left_action,thm:threeMPU2_chain_formulas,thm:mpu_canonical_form_physical_left_action}
     If $p\mapsto\mathcal W(p)$ is the first path, then
     $p\mapsto Q\mathcal W(p)$ is continuous and has the required
     endpoints and symmetry. Its periodic operators are
@@ -197,7 +190,7 @@
     \label{thm:mpu_physical_left_action_blocking}
     \lean{MPOTensor.blockTensor_ketLeftMul}
     \leanok
-    \uses{def:blocked_tensor, def:mpdo_vertical_one_site_actions}
+    \uses{def:blocked_tensor,def:mpdo_vertical_one_site_actions}
     For every local MPO tensor $\mathcal U$, one-site matrix $Q$, and
     $k\geq0$, output-leg multiplication commutes with blocking:
     \begin{align}
@@ -220,9 +213,7 @@
     \label{thm:mpu_positive_block_symmetry_path_transport}
     \lean{MPOTensor.exists_strictlyEquivalentUnderSymmetry_blockTensor_iff_ketLeftMul}
     \leanok
-    \uses{def:mpu_blocked_finite_chain_symmetry,
-        def:strictly-equivalent-symmetry,
-        def:mpdo_vertical_one_site_actions}
+    \uses{def:mpu_blocked_finite_chain_symmetry,def:strictly-equivalent-symmetry,def:mpdo_vertical_one_site_actions}
     Fix $d$, finite-chain operator symmetries $\mathcal S,\mathcal T$,
     and a unitary involution $Q\in\MN{d}$. For every $k>0$, suppose that
     every local tensor $\mathcal W$ of physical dimension $d^k$ and any
@@ -239,8 +230,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_symmetry_path_transport,
-        thm:mpu_physical_left_action_blocking}
+    \uses{thm:mpu_symmetry_path_transport,thm:mpu_physical_left_action_blocking}
     For each positive blocking length $k$, the matrix $Q^{\otimes k}$ is
     again a unitary involution on the blocked physical space, so
     Lemma~\ref{thm:mpu_symmetry_path_transport} applies to
@@ -255,9 +245,7 @@
         MPOTensor.exists_strictlyEquivalentUnderSymmetry_blockTensor_shiftSwapTranspose_iff,
         MPOTensor.exists_strictlyEquivalentUnderSymmetry_blockTensor_conjugation_swap_iff}
     \leanok
-    \uses{def:mpu_blocked_finite_chain_symmetry,
-        def:mpu_swap_comparison_symmetries,
-        def:strictly-equivalent-symmetry, threeMPU2}
+    \uses{def:mpu_blocked_finite_chain_symmetry,def:mpu_swap_comparison_symmetries,def:strictly-equivalent-symmetry,threeMPU2}
     Let $\mathcal U,\mathcal V$ be tensors with two $d$-dimensional
     physical spins. Put
     $\widetilde{\mathcal U}=\mathbb S\mathcal U$ and
@@ -272,11 +260,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_positive_block_symmetry_path_transport,
-        thm:mpu_pointwise_symmetry_invariance_comparison,
-        thm:mpu_involution_combined_fixed_equation,
-        thm:mpu_one_sided_swap_invariance,
-        thm:threeMPU2_chain_formulas}
+    \uses{thm:mpu_positive_block_symmetry_path_transport,thm:mpu_pointwise_symmetry_invariance_comparison,thm:mpu_involution_combined_fixed_equation,thm:mpu_one_sided_swap_invariance,thm:threeMPU2_chain_formulas}
     Blocking identifies the sitewise swap with
     $B_N=(\mathbb S^{\otimes k})^{\otimes N}$. Reindexing the original
     $Nk$ physical sites preserves adjunction, transposition, and

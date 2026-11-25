@@ -23,8 +23,7 @@ The following are supporting geometric and counting results for
     \label{thm:common_middle_low_frequency_cardinality}
     \lean{TNLean.MPS.AreaLaw.actual_common_fixed_middle_mpo_card_low_frequency_le}
     \leanok
-    \uses{thm:selected_common_natural_cardinality,
-        thm:selected_common_natural_low_frequency_cardinality}
+    \uses{thm:selected_common_natural_cardinality,thm:selected_common_natural_low_frequency_cardinality}
     Retain the geometric data and positions above. Set $E=[a+p+1,b+s+1)$,
     $Z=[a+2\ell+1,b)$, and $\rho=|\mathcal C(E\setminus Z)|$.
     Let $\mathcal W_{k,i,j}$ be the two-marker index set with $q^2$ labels
@@ -49,10 +48,7 @@ The following are supporting geometric and counting results for
     \label{thm:common_middle_grid_mpo_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_fixed_middle_grid_mpo_family}
     \leanok
-    \uses{thm:common_middle_interval_bounds,thm:selected_common_natural_mpo_family,
-        thm:regional_middle_from_numbered_three_regions,
-        thm:interval_mpo_common_family_transfer,
-        thm:interval_trace_common_family_transfer,def:regional_middle_transferred_family}
+    \uses{thm:common_middle_interval_bounds,thm:selected_common_natural_mpo_family,thm:regional_middle_from_numbered_three_regions,thm:interval_mpo_common_family_transfer,thm:interval_trace_common_family_transfer,def:regional_middle_transferred_family}
     Retain the geometric data and positions above, and suppose $q\ge1$.
     Let $B,k,i,j$ be arbitrary nonnegative integers. Supply window operators
     $W^L_r,W^R_r$, supported on $[a+r,a+r+2)$ and
@@ -130,11 +126,7 @@ The following are supporting geometric and counting results for
     is included.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:selected_common_natural_mpo_family,
-        thm:regional_middle_from_numbered_three_regions,
-        thm:interval_mpo_common_family_transfer,
-        thm:interval_trace_common_family_transfer,thm:common_middle_interval_bounds,
-        thm:chain_mps_of_cut_rank,thm:chain_cut_rank_of_mps}
+    \uses{thm:selected_common_natural_mpo_family,thm:regional_middle_from_numbered_three_regions,thm:interval_mpo_common_family_transfer,thm:interval_trace_common_family_transfer,thm:common_middle_interval_bounds,thm:chain_mps_of_cut_rank,thm:chain_cut_rank_of_mps}
     Choose the selected natural family separately at each supplied node.
     Pass its joint exterior decomposition to regional coordinates, then
     transfer the middle from $E$ to $J$. The geometric inequalities give the
