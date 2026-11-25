@@ -41,9 +41,9 @@ Remark 5.3, `04-compression.tex`, lines 137–175 and 602–611; Lemma 8.1,
 noncomputable section
 open scoped BigOperators Matrix
 
-namespace TNLean.Lattice.Compression.DistributedOperatorContraction
+namespace TNLean.Network.DistributedOperatorContraction
 
-open TNLean.Lattice.DependentBondNetwork
+open TNLean.Network.DependentBondNetwork
 
 private theorem rank_flattening_normalize_eq
     {V : Type*} [Fintype V] [DecidableEq V]
@@ -126,13 +126,12 @@ theorem exists_useful_column_of_sub_pure_le
     rw [hcoords]
     exact rank_flattening_contractedOperator_column_le gates participants root hroot Label k c T z S
 
-end TNLean.Lattice.Compression.DistributedOperatorContraction
+end TNLean.Network.DistributedOperatorContraction
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.Lattice.DependentBondNetwork
-open TNLean.Lattice.PartyCircuit TNLean.Lattice.Compression
-open TNLean.Lattice.Compression.DistributedOperatorContraction
+open QuantumCircuit.Party TNLean.Network TNLean.Network.DependentBondNetwork
+open TNLean.Network.DistributedOperatorContraction
 
 private theorem card_crossing_subtype_eq_prefixCrossingLinks
     {L w : ℕ} {Gate : Type} [DecidableEq Gate]
@@ -163,18 +162,22 @@ polynomial-PEPS Theorem 5.2, Remark 5.3 and Lemma 8.1. -/
 theorem exists_uniform_sampled_block_column
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
     (length width : ι → ℕ)
-    (C₀ : ∀ L, DistributedConstruction (Party (length L) (width L)))
+    (X : ∀ L, Party (length L) (width L) → Type) [∀ L j, Fintype (X L j)]
+    [∀ L j, DecidableEq (X L j)] (physicalDim : ∀ L, Party (length L) (width L) → ℕ)
+    (V : ∀ L, Party (length L) (width L) → Type) [∀ L j, Fintype (V L j)]
+    [∀ L j, DecidableEq (V L j)]
+    (C₀ : ∀ L, DistributedConstruction (Party (length L) (width L)) (X L) (physicalDim L) (V L))
     (a b χ : ℕ) (hab : a ≤ b) (hχ : 8 * (2 * b * (a - 1)) ≤ χ)
     (n d r u v : ℕ) (C_N C_D C_K C_S : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
-    (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
+    (hphysical₀ : ∀ L j, (physicalDim L j : ℝ) ≤ C_D * size L ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ a)
-    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
+    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participation j ≤ b)
     (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ C_K * size L ^ u)
     (hexpansion₀ : ∀ L, (C₀ L).circuit.IsExpansionBounded r (C_S * size L ^ v))
     (Ω : ∀ L, EuclideanSpace ℂ
-      ((j : Party (length L) (width L)) → Fin ((C₀ L).physicalDimension j)))
+      ((j : Party (length L) (width L)) → Fin (physicalDim L j)))
     (hΩ : ∀ L, ‖Ω L‖ = 1) (η : ι → ℝ)
     (hpure : ∀ L, Matrix.rectangularTraceNorm
       ((C₀ L).physicalDensity - Matrix.euclideanOuterProduct (Ω L) (Ω L)) ≤ η L)
@@ -192,7 +195,7 @@ theorem exists_uniform_sampled_block_column
         (T : (j : Party (length L) (width L)) → GateLabelsAt
             (Finset.univ : Finset Gate) participants Label j →
           (SampleAt (Finset.univ : Finset Gate) participants j → Fin k) →
-          Matrix (Fin ((C₀ L).physicalDimension j)) (Fin ((C₀ L).physicalDimension j)) ℂ),
+          Matrix (Fin (physicalDim L j)) (Fin (physicalDim L j)) ℂ),
         Matrix.rectangularTraceNorm
             (contractedOperator Finset.univ participants root hroot Label k c T -
               Matrix.euclideanOuterProduct (Ω L) (Ω L)) ≤ size L ^ (-p) + η L ∧
@@ -214,9 +217,9 @@ theorem exists_uniform_sampled_block_column
           Fintype.card (alphabet Finset.univ participants root Label k e) ≤
             max 1 ⌈C_p * size L ^ α⌉₊) ∧
         (size L ^ (-p) + η L < 1 →
-          ∃ (z : (j : Party (length L) (width L)) → Fin ((C₀ L).physicalDimension j))
+          ∃ (z : (j : Party (length L) (width L)) → Fin (physicalDim L j))
             (ψ : EuclideanSpace ℂ
-              ((j : Party (length L) (width L)) → Fin ((C₀ L).physicalDimension j))),
+              ((j : Party (length L) (width L)) → Fin (physicalDim L j))),
             (∀ x, ψ x = network (src Finset.univ participants root)
               (tgt Finset.univ participants root) (alphabet Finset.univ participants root Label k)
               (fixInput (src Finset.univ participants root) (tgt Finset.univ participants root)
@@ -245,22 +248,14 @@ theorem exists_uniform_sampled_block_column
                 (max 1 ⌈C_p * size L ^ α⌉₊) ^ χ ∧
               (WholeGroup.flattening (⇑(((‖ψ‖ : ℂ)⁻¹) • ψ)) S).rank ≤
                 (max 1 ⌈C_p * size L ^ α⌉₊) ^ χ) := by
-  have hdec (L : ι) : (fun a b : Party (length L) (width L) ↦
-      Classical.propDecidable (a = b)) =
-      (@instDecidableEqSum _ _ (instDecidableEqFin _) (instDecidableEqFin _)) :=
-    Subsingleton.elim _ _
   classical
   have hcompression :=
     DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
-      size hsize
-      (fun L ↦ Party (length L) (width L)) C₀ a b n d r u v hab C_N C_D C_K C_S
-      hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ hexpansion₀ Ω
-      (by intro L; rw [hdec]; exact hΩ L) η
-      (by intro L; rw [hdec]; exact hpure L) p hp
+      size hsize (fun L ↦ Party (length L) (width L)) X physicalDim V C₀ a b n d r u v hab
+      C_N C_D C_K C_S hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ hexpansion₀ Ω hΩ η hpure p hp
   obtain ⟨C_p, α, hC, hα, hfamily⟩ := hcompression
   refine ⟨C_p, α, hC, hα, fun L ↦ ?_⟩
   have hmember := hfamily L
-  rw [hdec] at hmember
   obtain ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
     hσ, herror, hlow, hhigh, hdim, hinc, hcommon⟩ := hmember
   have hdegree : ∀ j,

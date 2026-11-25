@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolSweepMiddle
 import TNLean.Network.DistributedContraction.DistributedOperatorContraction
-import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
 import Mathlib.Data.Nat.Dist
 import Mathlib.Data.Fintype.Card
 import Mathlib.Tactic.NormNum
@@ -54,8 +53,8 @@ open scoped BigOperators
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
-open TNLean.Lattice.Compression
+open Matrix QuantumCircuit.Party TNLean.Network
+open ManyBody (Config)
 
 variable {L w q : ℕ}
 
@@ -274,7 +273,8 @@ DERIVED by its preparation theorem, not added as a physical assumption.
 In particular the middle specialization below derives it from c and hc.
 Source: Part II, thm:compression and routing, lines 454–471 and 591–603. -/
 theorem prefixCrossingLinks_card_le_of_originalCircuit
-    {a b : Layout (Party L w)} (d : OriginalCircuit a b)
+    {X Y : Party L w → Type} [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
+    (d : OriginalCircuit X Y)
     (hgate : ∀ (g : d.nonprivateLocations) (p t : Party L w),
       p ∈ d.participants g → t ∈ d.participants g →
         Nat.dist (partyLevel p) (partyLevel t) ≤ 2)
@@ -301,19 +301,11 @@ theorem prefixCrossingLinks_card_le_of_originalCircuit
 
 end OriginalGraph
 
-/-- The existing equality-transport induction, specialized to a property of
-actual participant sets. Source: Part II, routing, lines 591–603. -/
-private theorem forall_participants_castLayouts {P : Type}
-    (Q : Finset P → Prop) {a b a' b' : Layout P} (d : OriginalCircuit a b)
-    (ha : a = a') (hb : b = b') (h : ∀ g, Q (d.participants g)) :
-    ∀ g, Q ((d.castLayouts ha hb).participants g) :=
-  OriginalCircuit.castLayouts_induction (fun _ _ d ↦ ∀ g, Q (d.participants g)) ha hb h
-
 section Middle
 
 variable (c : (k : Fin (stageCount L w)) → (j : Fin 18) → OriginalCircuit
-  (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) [])
-  (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k (j.val + 1)) []))
+  (stackSystem (Sheet.system q) (stageBoundaryFrames L w k j.val) fun _ ↦ Unit)
+  (stackSystem (Sheet.system q) (stageBoundaryFrames L w k (j.val + 1)) fun _ ↦ Unit))
 variable (Ω : EuclideanSpace ℂ (Fin L → Fin q))
 
 /- The literal existing local-family conclusion, curried over stages. Its
@@ -321,14 +313,14 @@ geometric participant conclusion is used below; no aggregate locality or
 congestion hypothesis is added. -/
 variable (hc : ∀ k j, (c k j).IsBoundedChange (stageParticipants k j) 1 1
     (4 * (L : ℝ) ^ (-12 : ℤ))
-    (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val))
-    (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
+    (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k j.val))
+    (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
   (c k j).IsSourceBounded 1 ∧ (c k j).nonprivateCount ≤ 1 ∧
   ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) → (c k j).nonprivateCount = 0 ∧
-    ‖(c k j).eval (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val)) -
-      framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
-    HEq (c k j) (OriginalCircuit.id (stackRegs (Sheet.regs q)
-      (stageBoundaryFrames L w k j.val) []))))
+    ‖toEuclideanLin (c k j).op
+        (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k j.val)) -
+      framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
+    (c k j).toPartyCircuit.IsLocal))
 
 include hc
 
@@ -341,7 +333,7 @@ private theorem localCircuit_participants_subset_stage
   exact ⟨k, j, (hc k j).1.participants_subset g⟩
 
 /-- Every actual step's gate retains its original stage/slot support through
-Path's proved layout equalities. The identity tail has no gate witness.
+Path's proved sheet-list equalities. The empty tail has no gate witness.
 Source: Part II, con:sweep and routing, lines 333–342 and 591–599. -/
 private theorem middleStep_participants_subset_stage (n : ℕ) :
     ∀ g : (sweepMiddleStep c n).nonprivateLocations,
@@ -352,14 +344,13 @@ private theorem middleStep_participants_subset_stage (n : ℕ) :
   let Q : Finset (Party L w) → Prop := fun s ↦
     ∃ k : Fin (stageCount L w), ∃ j : Fin 18,
       (↑s : Set (Party L w)) ⊆ stageParticipants k j
-  let W {a b : Layout (Party L w)} (d : OriginalCircuit a b) : Prop :=
-    ∀ g, Q (d.participants g)
-  change W (sweepMiddleStep c n)
-  unfold sweepMiddleStep
-  split
-  · exact forall_participants_castLayouts Q _ _ _
+  change ∀ g, Q ((sweepMiddleStep c n).participants g)
+  by_cases hn : n < sweepOperationCount L w
+  · rw [show sweepMiddleStep c n = _ from dite_eq_left hn]
+    exact OriginalCircuit.forall_participants_castSystems _ _ _
       (localCircuit_participants_subset_stage c Ω hc _ _)
-  · exact forall_participants_castLayouts Q _ _ _ (fun g ↦ Empty.elim g)
+  · rw [show sweepMiddleStep c n = _ from dite_eq_right hn]
+    exact OriginalCircuit.forall_participants_castSystems _ _ _ (fun g ↦ Empty.elim g)
 
 /-- Each actual middle gate has a derived stage and slot whose prescribed
 participants contain its entire participant set. The witness is a conclusion,
@@ -375,7 +366,7 @@ theorem sweepMiddleCircuit_participants_subset_stage
       (↑s : Set (Party L w)) ⊆ stageParticipants k j
   have h : ∀ g, Q ((sweepMiddleCircuit c).participants g) := by
     unfold sweepMiddleCircuit
-    exact forall_participants_castLayouts Q _ _ _
+    exact OriginalCircuit.forall_participants_castSystems _ _ _
       (OriginalCircuit.forall_participants_sequence _ _ Q _
         (fun n _ ↦ middleStep_participants_subset_stage c Ω hc n))
   exact h g
@@ -454,8 +445,7 @@ section
 
 noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
-open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Compression
-attribute [local instance] Classical.propDecidable
+open QuantumCircuit.Party TNLean.Network
 
 /-- Uniform sampling of the actual three-party preparation has at most
 1280 crossing links at every block cut, hence satisfies the printed bound1600.
@@ -463,17 +453,20 @@ Source: Part II, thm:B, part2b_mps_protocol.tex:594–614. -/
 theorem exists_uniform_sampled_network_with_prefixCrossingLinks_le_1600
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
     (length width : ι → ℕ)
-    (C₀ : ∀ L, DistributedConstruction (Party (length L) (width L)))
+    (X : ∀ L, Party (length L) (width L) → Type) [∀ L j, Fintype (X L j)]
+    [∀ L j, DecidableEq (X L j)] (physicalDim : ∀ L, Party (length L) (width L) → ℕ)
+    (V : ∀ L, Party (length L) (width L) → Type) [∀ L j, Fintype (V L j)]
+    [∀ L j, DecidableEq (V L j)]
+    (C₀ : ∀ L, DistributedConstruction (Party (length L) (width L)) (X L) (physicalDim L) (V L))
     (n d r u v : ℕ) (C_N C_D C_K C_S : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
-    (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
+    (hphysical₀ : ∀ L j, (physicalDim L j : ℝ) ≤ C_D * size L ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ 3)
-    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ 40)
+    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participation j ≤ 40)
     (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ C_K * size L ^ u)
     (hexpansion₀ : ∀ L, (C₀ L).circuit.IsExpansionBounded r (C_S * size L ^ v))
-    (Ω : ∀ L, EuclideanSpace ℂ
-      ((j : Party (length L) (width L)) → Fin ((C₀ L).physicalDimension j)))
+    (Ω : ∀ L, EuclideanSpace ℂ ((j : Party (length L) (width L)) → Fin (physicalDim L j)))
     (hΩ : ∀ L, ‖Ω L‖ = 1) (η : ι → ℝ)
     (hpure : ∀ L, Matrix.rectangularTraceNorm
       ((C₀ L).physicalDensity - Matrix.euclideanOuterProduct (Ω L) (Ω L)) ≤ η L)
@@ -493,7 +486,7 @@ theorem exists_uniform_sampled_network_with_prefixCrossingLinks_le_1600
             (Finset.univ : Finset Gate) participants Label j →
           (DistributedOperatorContraction.SampleAt (Finset.univ : Finset Gate)
             participants j → Fin k) →
-          Matrix (Fin ((C₀ L).physicalDimension j)) (Fin ((C₀ L).physicalDimension j)) ℂ),
+          Matrix (Fin (physicalDim L j)) (Fin (physicalDim L j)) ℂ),
         Matrix.rectangularTraceNorm
             (DistributedOperatorContraction.contractedOperator Finset.univ participants root
               hroot Label k c T - Matrix.euclideanOuterProduct (Ω L) (Ω L)) ≤
@@ -514,22 +507,14 @@ theorem exists_uniform_sampled_network_with_prefixCrossingLinks_le_1600
                 j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) ∧
           (∀ r', (prefixCrossingLinks Finset.univ participants root r').card ≤ 1280) ∧
           (∀ r', (prefixCrossingLinks Finset.univ participants root r').card ≤ 1600) := by
-  have hdec (L : ι) : (fun a b : Party (length L) (width L) ↦
-      Classical.propDecidable (a = b)) =
-      (@instDecidableEqSum _ _ (instDecidableEqFin _) (instDecidableEqFin _)) :=
-    Subsingleton.elim _ _
   obtain ⟨C_p, α, hC, hα, hfamily⟩ :=
     DistributedConstruction.exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
-      size hsize (fun L ↦ Party (length L) (width L)) C₀
+      size hsize (fun L ↦ Party (length L) (width L)) X physicalDim V C₀
       3 40 n d r u v (by decide) C_N C_D C_K C_S
-      hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ hexpansion₀ Ω
-      (by intro L; rw [hdec]; exact hΩ L) η
-      (by intro L; rw [hdec]; exact hpure L) p hp
+      hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ hexpansion₀ Ω hΩ η hpure p hp
   refine ⟨C_p, α, hC, hα, fun L ↦ ?_⟩
-  have hmember := hfamily L
-  rw [hdec] at hmember
   obtain ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
-    hσ, herror, hlow, hhigh, hdim, hinc, hlocal⟩ := hmember
+    hσ, herror, hlow, hhigh, hdim, hinc, hlocal⟩ := hfamily L
   have hdegree (j : Party (length L) (width L)) :
       (incidentDistributedLinks Finset.univ participants root j).card ≤ 160 := by
     simpa using hinc j

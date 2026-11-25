@@ -40,7 +40,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
+open QuantumCircuit.Party
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
 open ManyBody (cutMatrix)
@@ -161,15 +161,14 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
   let length := fun i : ι ↦ i.val.1
   let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
   let ground := fun i : ι ↦ i.val.2.2.1
-  let hLpos := fun i : ι ↦ Nat.lt_of_lt_of_le (by omega : 0 < L₀) i.property.1
-  obtain ⟨hx, circuits, hsize, hcount, hphysical, harity, hlifetime,
+  obtain ⟨φ, hφ, circuits, hsize, _hinput, hcount, hphysical, harity, hlifetime,
       hmonomial, hexpansion, htarget, hdensity, hgate, _houter, hwidths⟩ := hfamily
-  let C₀ := fun i : ι ↦
-    preparationConstruction (w := width i) (ground i) (hLpos i) (hx i) (circuits i)
+  let C₀ := fun i : ι ↦ preparationConstruction (φ i) (hφ i) (circuits i)
   let target := fun i : ι ↦ LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (mainConfigurationEquiv (length i) (width i) q) (ground i)
   obtain ⟨Cp, α, hCp, hα, hnetwork⟩ := exists_uniform_sampled_block_column
-    (fun i : ι ↦ (length i : ℝ)) hsize length width C₀
+    (fun i : ι ↦ (length i : ℝ)) hsize length width _
+    (fun i ↦ physicalDimension (length i) (width i) q) _ C₀
     3 40 1600 (by decide) (by decide)
     1 s 1 0 0 2 K 1 1 hcount hphysical harity hlifetime hmonomial hexpansion
     target htarget (fun i : ι ↦ 52 * (length i : ℝ) ^ (-11 : ℤ))
@@ -209,7 +208,7 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
       change 3 * (20 * w) ≤ L at hm
       omega
     have hprefix (r : ℕ) (_hr : 0 < r) (_hrm : r ≤ stageCount L w) :
-        (TNLean.Lattice.WholeGroup.flattening (fun y ↦ u y)
+        (TNLean.Network.WholeGroup.flattening (fun y ↦ u y)
           (Finset.univ.filter fun p : Party L w ↦ partyLevel p < r)).rank ≤
             (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ 1600 := by
       simpa only [u, C₀, preparationConstruction, length, width, i] using! (hranks r).2.2.2

@@ -27,10 +27,9 @@ open scoped Matrix.Norms.L2Operator
 
 noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
-open QuantumCircuit TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
+open QuantumCircuit QuantumCircuit.Party TNLean.Network
 
 open ManyBody (IsGapped groundSpace)
-open TNLean.Lattice.Compression
 
 /-- The physical hypotheses alone give uniformly polynomial sampled networks
 whose every block cut has at most 1280 crossing links, hence at most 1600.
@@ -38,7 +37,7 @@ All preparation resource bounds are retained for the same actual circuit.
 Source: Part II, thm:B, part2b_mps_protocol.tex:587–614. -/
 theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
-    ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
+    ∃ (D K : ℝ) (s L₀ : ℕ) (_ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
       let ι := {a : Σ L : ℕ, ManyBody.ChainInteraction L q R ×
           EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
         L₀ ≤ a.1 ∧ (∀ X, (a.2.1.term X).IsHermitian) ∧ (∀ X, ‖a.2.1.term X‖ ≤ J) ∧ ‖a.2.2.1‖ = 1 ∧
@@ -47,41 +46,31 @@ theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
       let length := fun i : ι ↦ i.val.1
       let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
       let ground := fun i : ι ↦ i.val.2.2.1
-      let hL := fun i : ι ↦
-        Nat.lt_of_lt_of_le (by omega : 0 < L₀) i.property.1
       let Fs := fun i : ι ↦ initialFrames (length i) (width i)
-      let holder := fun (i : ι) (F : Sheet (Fin (length i)) (Party (length i) (width i))) ↦
-        F.owner ⟨0, hL i⟩
-      let H := fun (i : ι) p ↦ framesSpace (Sheet.regs q) ((Fs i).filter fun F ↦ holder i F = p)
-      ∃ hx : ∀ (i : ι) p,
-          ‖framesVec (Sheet.refFamily (ground i)) ((Fs i).filter fun F ↦ holder i F = p)‖ = 1,
-        ∃ C : ∀ i : ι, OriginalCircuit (ProductInput.wholePartyLayout (H i))
-            (familyPhysicalOutputLayout (physicalDimension (length i) (width i) q)
-              (physicalOrder (length i) (width i)) (privateLayout (length i) (width i) q)),
-          let C₀ := fun i : ι ↦
-            preparationConstruction (w := width i) (ground i) (hL i) (hx i) (C i)
+      ∃ (φ : ∀ (i : ι) (p : Party (length i) (width i)), EuclideanSpace ℂ
+          (stackSystem (Sheet.system q) (Fs i) (fun _ ↦ Unit) p)) (hφ : ∀ i p, ‖φ i p‖ = 1),
+        ∃ C : ∀ i : ι, OriginalCircuit (stackSystem (Sheet.system q) (Fs i) fun _ ↦ Unit)
+            (physicalSystem (physicalDimension (length i) (width i) q)
+              (privateSystem (length i) (width i) q)),
+          let C₀ := fun i : ι ↦ preparationConstruction (φ i) (hφ i) (C i)
           let target := fun i : ι ↦
             LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
               (mainConfigurationEquiv (length i) (width i) q) (ground i)
           ((∀ i : ι, (2 : ℝ) ≤ length i) ∧
+            (∀ i : ι, (C₀ i).input = framesVec (fun S ↦ S.refVec (ground i)) (Fs i)) ∧
             (∀ i : ι, ((C₀ i).circuit.nonprivateCount : ℝ) ≤
               2 * (length i : ℝ) ^ (1 : ℕ)) ∧
-            (∀ (i : ι) p, ((C₀ i).physicalDimension p : ℝ) ≤
+            (∀ (i : ι) p, (physicalDimension (length i) (width i) q p : ℝ) ≤
               K * (length i : ℝ) ^ s) ∧
             (∀ (i : ι) g, ((C₀ i).circuit.participants g).card ≤ 3) ∧
-            (∀ (i : ι) p, (C₀ i).circuit.participationCount p ≤ 40) ∧
+            (∀ (i : ι) p, (C₀ i).circuit.participation p ≤ 40) ∧
             (∀ i : ι, ∃ M : ℕ, (C₀ i).circuit.IsMonomialBounded M ∧
               (M : ℝ) ≤ 1 * (length i : ℝ) ^ (0 : ℕ)) ∧
             (∀ i : ι, (C₀ i).circuit.IsExpansionBounded 1
               (1 * (length i : ℝ) ^ (0 : ℕ))) ∧
             (∀ i : ι, ‖target i‖ = 1) ∧
             (∀ i : ι, Matrix.rectangularTraceNorm
-              ((show Matrix
-                  ((p : Party (length i) (width i)) →
-                    Fin (physicalDimension (length i) (width i) q p))
-                  ((p : Party (length i) (width i)) →
-                    Fin (physicalDimension (length i) (width i) q p)) ℂ
-                from (C₀ i).physicalDensity) -
+              ((C₀ i).physicalDensity -
                 Matrix.euclideanOuterProduct (target i) (target i)) ≤
                   52 * (length i : ℝ) ^ (-11 : ℤ)) ∧
             (∀ (i : ι) (g : (C₀ i).circuit.nonprivateLocations)
@@ -105,7 +94,8 @@ theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
                     (Finset.univ : Finset Gate) participants Label j →
                   (DistributedOperatorContraction.SampleAt (Finset.univ : Finset Gate)
                     participants j → Fin k) →
-                  Matrix (Fin ((C₀ i).physicalDimension j)) (Fin ((C₀ i).physicalDimension j)) ℂ),
+                  Matrix (Fin (physicalDimension (length i) (width i) q j))
+                    (Fin (physicalDimension (length i) (width i) q j)) ℂ),
                 Matrix.rectangularTraceNorm
                     ((show Matrix
                         ((p : Party (length i) (width i)) →
@@ -137,15 +127,16 @@ theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
   obtain ⟨D, K, s, L₀, hL₀, hD, hK, hfamily⟩ :=
     exists_uniform_preparation_family q hq R J Δ hΔ
   refine ⟨D, K, s, L₀, hL₀, hD, hK, ?_⟩
-  intro ι length width ground hL Fs holder H
-  obtain ⟨hx, C, hresources⟩ := hfamily
-  refine ⟨hx, C, ?_⟩
+  intro ι length width ground Fs
+  obtain ⟨φ, hφ, C, hresources⟩ := hfamily
+  refine ⟨φ, hφ, C, ?_⟩
   intro C₀ target
   refine ⟨hresources, ?_⟩
-  obtain ⟨hsize, hcount, hphysical, harity, hlifetime, hmonomial, hexpansion,
+  obtain ⟨hsize, _hinput, hcount, hphysical, harity, hlifetime, hmonomial, hexpansion,
     htarget, hdensity, hgate, _houter, _hwidth⟩ := hresources
   exact exists_uniform_sampled_network_with_prefixCrossingLinks_le_1600
-    (fun i : ι ↦ (length i : ℝ)) hsize length width C₀
+    (fun i : ι ↦ (length i : ℝ)) hsize length width _
+    (fun i ↦ physicalDimension (length i) (width i) q) _ C₀
     1 s 1 0 0 2 K 1 1 hcount hphysical harity hlifetime hmonomial hexpansion
     target htarget (fun i : ι ↦ 52 * (length i : ℝ) ^ (-11 : ℤ))
     hdensity hgate 5 (by norm_num)
