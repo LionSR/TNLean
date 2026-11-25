@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Replica.BandMetric.EntropyGain
 import QICLean.ManyBody.Replica.BandMetric.Energy
 import QICLean.Channel.OperatorMean.ErrorFourier
-import TNLean.PEPS.AreaLaw.Collar.RegionalMoveEntropy
+import QICLean.ManyBody.Replica.BandMetric.MoveEntropy
 
 /-!
 # Entropy integrals in the actual old transported state

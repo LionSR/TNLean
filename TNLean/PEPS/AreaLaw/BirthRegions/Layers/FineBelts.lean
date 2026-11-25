@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicRefinement
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DyadicScales
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.SparseBelts
+import QICLean.Algebra.Combinatorics.ZModIntCast
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
@@ -72,7 +72,7 @@ theorem exists_fine_belt_shift (o : ℝ × ℝ) (k ℓ p : ℕ)
           (beltCellIndices (fineLayerIndices o k ℓ (boundaryEndpoints Λ A) C)
             (2 ^ (p - ℓ)) a b).card ≤
         16 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card * 4 ^ (k - ℓ) := by
-  obtain ⟨a, b, hab⟩ := exists_sparse_belt_shift
+  obtain ⟨a, b, hab⟩ := Finset.exists_mul_card_filter_emod_or_emod_le
     (fineLayerIndices o k ℓ (boundaryEndpoints Λ A) C)
     (2 ^ (p - ℓ)) (pow_pos (by norm_num) _)
   refine ⟨a, b, hab.trans ?_⟩

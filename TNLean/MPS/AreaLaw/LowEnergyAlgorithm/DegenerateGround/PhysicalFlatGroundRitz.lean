@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.FullIntervalFilterIteration
 import TNLean.MPS.Tensor.OpenMPS.OpenMPSCutRank
-import QICLean.Spectral.LowEnergy.RitzCompression
+import QICLean.Spectral.Eigenvalue.RitzCompression
 import QICLean.Analysis.Subspace.ViableSubspace
 
 /-!

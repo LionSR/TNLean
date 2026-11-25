@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
 import QICLean.Channel.Choi.OperatorNormFrobenius
 import QICLean.Spectral.Radius.PowerDecay
-import QICLean.Channel.Peripheral.Spectrum.Primitive
+import QICLean.Channel.FixedPoint.MeanErgodic.FixedPointProjection
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Tensor.Overlap
 
