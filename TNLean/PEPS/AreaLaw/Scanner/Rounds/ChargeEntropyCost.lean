@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Histories.DesignatedMoveCost
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.PhysicalBandCommutation
-import TNLean.PEPS.AreaLaw.Collar.RegionalMoveEntropy
+import QICLean.ManyBody.Replica.BandMetric.MoveEntropy
 
 /-!
 # Conditional mutual information sampled by the actual charge

@@ -12,7 +12,5 @@ import TNLean.PEPS.AreaLaw.Collar.AugmentedPartition
 import TNLean.PEPS.AreaLaw.Collar.ChargeSlots
 import TNLean.PEPS.AreaLaw.Collar.Defs
 import TNLean.PEPS.AreaLaw.Collar.FillCoverage
-import TNLean.PEPS.AreaLaw.Collar.NestedBandMetric
 import TNLean.PEPS.AreaLaw.Collar.PhysicalPartition
-import TNLean.PEPS.AreaLaw.Collar.RegionalMoveEntropy
 import TNLean.PEPS.AreaLaw.Collar.Scales

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual
-import QICLean.Spectral.LowEnergy.Order
+import QICLean.Analysis.Order.LowEnergyPerturbation
 import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
 import Mathlib.Algebra.Order.Floor.Semiring
 import Mathlib.Tactic.FieldSimp

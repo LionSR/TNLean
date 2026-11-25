@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Combinatorics.FinSumPermutation
-import QICLean.Analysis.Norm.TraceNormContractivity
+import QICLean.Analysis.TraceNorm.TraceNormContractivity
 import TNLean.MPS.Examples.NonCartesianSectors.NonCartesianActiveSectorCandidate
 import TNLean.MPS.Operator.Product.PhysicalBlocking
 
