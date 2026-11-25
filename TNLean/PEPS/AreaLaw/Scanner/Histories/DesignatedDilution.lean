@@ -27,7 +27,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 at `openai/math@adc7f124`.
 -/
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -80,7 +80,7 @@ theorem old_designated_split_dilution_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (∑ h : History S.K S.m S.M k,
       if ∃ g side, S.designatedSplitIncidence (S.oldChargeState h g) L i side
       then historyWeight h else 0) ≤ 10 * (S.D : ℝ) / S.m := by
@@ -109,7 +109,7 @@ theorem state_designated_split_dilution_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (∑ h : History S.K S.m S.M k,
       if ∃ g side, S.designatedSplitIncidence (S.state h g) L i side
       then historyWeight h else 0) ≤ 10 * (S.D : ℝ) / S.m := by
@@ -138,7 +138,7 @@ theorem designated_split_mixture_dilution_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {p : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1) :
     (1 - p) * (∑ h : History S.K S.m S.M k,
       if ∃ g side, S.designatedSplitIncidence (S.oldChargeState h g) L i side
@@ -166,7 +166,7 @@ theorem fill_split_mixture_dilution_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {p : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1) :
     (1 - p) * (∑ h : History S.K S.m S.M k,
       if ∃ g side, S.designatedSplitIncidence (S.state h g) L i side

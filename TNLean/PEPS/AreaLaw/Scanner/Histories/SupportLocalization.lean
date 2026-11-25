@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
+import TNLean.PEPS.AreaLaw.Collar.PhysicalPartition
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 
 /-!
@@ -27,7 +28,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph abs_ambientDepth_sub_le_planeDomainGraph
+  ambientDepth supDist exists_mem_ambientDepth_eq supDist_comm)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -37,7 +39,7 @@ exactly as in `scanner:test-geometry`. Source: `08-scanner.tex`, lines 225–233
 theorem planeDomainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
     (hT : T.Nonempty) (A : Finset ↥Λ) (L r₀ : ℕ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-      ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {anchor : ↥Λ}
     (hmeet : ∃ y ∈ A, ambientDepth T hT y.val ≤ L ∧
       (planeDomainGraph Λ).edist anchor y ≤ (r₀ : ℕ∞)) :
@@ -68,11 +70,11 @@ theorem planeDomainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
   have hz : u.val ∈ Geometry.boundaryEndpoints Λ A := by
     refine Finset.mem_image.mpr ⟨u, ?_, rfl⟩
     exact Finset.mem_biUnion.mpr ⟨s(u, w), hcut, by simp⟩
-  obtain ⟨t, ht, hmin⟩ := T.exists_mem_eq_inf' hT (ambientSupDistance u.val)
+  obtain ⟨t, ht, hmin⟩ := exists_mem_ambientDepth_eq T hT u.val
   have hseparate := hclear t ht u.val hz
   have hdeep : ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientDepth T hT u.val := by
-    rw [ambientDepth, hmin]
-    simpa only [ambientSupDistance, abs_sub_comm] using hseparate
+    rw [hmin, supDist_comm]
+    exact hseparate
   rw [abs_le] at hvariation
   omega
 

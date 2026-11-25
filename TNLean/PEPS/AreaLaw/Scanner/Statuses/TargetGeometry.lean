@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadChargeRatioBound
-import TNLean.PEPS.AreaLaw.Collar.CompactCollarCounting
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Collar.Defs
 import TNLean.PEPS.AreaLaw.Scanner.Histories.DesignatedSampling
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixBoundary
@@ -24,7 +24,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open ManyBody (ambientDilation ambientDilation_zero edgeBoundary planeDomainGraph)
+open ManyBody (ambientDilation ambientDilation_zero edgeBoundary planeDomainGraph ambientDepth
+  ambientDepth_le_iff_mem_ambientDilation card_filter_ambientDepth_le supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -52,7 +53,7 @@ theorem source_target_geometry (E : ScannerExponents) (T : Finset (ℤ × ℤ))
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ E.L S.n →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * E.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
+      ((2 * E.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     ((S.truncationSet (E.L S.n)).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
       (S.A.filter fun x ↦ x.val ∈ T) ⊆ S.truncationSet (E.L S.n) ∧
       (edgeBoundary (planeDomainGraph Λ) (S.A.filter fun x ↦ x.val ∈ T)).card ≤ 4 * S.n := by
@@ -60,14 +61,14 @@ theorem source_target_geometry (E : ScannerExponents) (T : Finset (ℤ × ℤ))
   obtain ⟨hLpos, hLn⟩ := E.one_le_L_le hn
   have hcard : (S.truncationSet (E.L S.n)).card ≤ T.card + S.n * E.L S.n := by
     simpa only [truncationSet, hdepth] using
-      card_compact_collar_le hT S.A S.n (E.L S.n) hrows
+      card_filter_ambientDepth_le hT S.A S.n (E.L S.n) hrows
   have hprefix : depthPrefix S.A (fun x ↦ ambientDepth T hT x.val) 0 =
       S.A.filter fun x ↦ x.val ∈ T := by
     ext x
     simp only [depthPrefix, Finset.mem_filter]
     refine and_congr_right fun _ ↦ ?_
     change ambientDepth T hT x.val ≤ ((0 : ℕ) : ℤ) ↔ x.val ∈ T
-    rw [ambientDepth_le_iff_mem_dilation, ambientDilation_zero]
+    rw [ambientDepth_le_iff_mem_ambientDilation, ambientDilation_zero]
   refine ⟨?_, ?_, ?_⟩
   · have hcardR : ((S.truncationSet (E.L S.n)).card : ℝ) ≤
         (T.card : ℝ) + (S.n : ℝ) * E.L S.n := by exact_mod_cast hcard

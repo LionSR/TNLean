@@ -30,7 +30,8 @@ Source: polynomial-PEPS manuscript, Proposition 3.1 (`prop:coarse`),
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction rectangleEmbedding)
+open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction rectangleEmbedding supDist
+  natCast_supDist)
 
 namespace TNLean.PEPS.Approximation
 
@@ -116,11 +117,11 @@ theorem coarse_mutualInformation_le_closed {q R : ℕ} (hq : 1 ≤ q) {J Δ : �
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
-          (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
+          (∀ x ∈ T, ∀ y ∈ T, ((supDist x y : ℤ) : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : ↥Λ ↦ x.val ∈ T),
           ∀ E : Finset ↥Λ,
             (∀ t ∈ T, ∀ y ∈ E,
-              u ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t y.val : ℝ)) →
+              u ^ (Exponents.beta : ℝ) < ((supDist t y.val : ℤ) : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤
               coarseInformationConstantClosed q R J Δ := by
   have hcol := sublinearCollarBoundAt_closed (R := R) (D₀ := 2 * (R : ℝ) + 11) hq hJ hΔ
@@ -143,10 +144,10 @@ theorem coarse_mutualInformation_le {q R : ℕ} (hq : 1 ≤ q) {J Δ : ℝ}
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
-          (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
+          (∀ x ∈ T, ∀ y ∈ T, ((supDist x y : ℤ) : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : ↥Λ ↦ x.val ∈ T),
           ∀ E : Finset ↥Λ,
-            (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
+            (∀ t ∈ T, ∀ y ∈ E, u ^ β < ((supDist t y.val : ℤ) : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤ C := by
   have hcol : SublinearCollarBound q R J Δ (2 * (R : ℝ) + 11) 24 :=
     sublinearCollarBound_real q R hq hJ hΔ (by linarith) (by norm_num)
@@ -167,11 +168,11 @@ theorem coarse_mutualInformation_le_square {q : ℕ} (hq : 1 ≤ q)
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ c : ℤ × ℤ, ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
-          (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
+          (∀ x ∈ T, ∀ y ∈ T, ((supDist x y : ℤ) : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun v : Vertex L ↦ rectangleEmbedding v + c ∈ T),
           ∀ E : Finset (Vertex L),
             (∀ t ∈ T, ∀ v ∈ E,
-              u ^ β < (Scan.ambientSupDistance t (rectangleEmbedding v + c) : ℝ)) →
+              u ^ β < ((supDist t (rectangleEmbedding v + c) : ℤ) : ℝ)) →
             ManyBody.regionMutualInformation Ω X E ≤ C := by
   have hcol : SublinearCollarBound q 1 J Δ 13 24 :=
     sublinearCollarBound_real q 1 hq hJ hΔ (by norm_num) (by norm_num)
@@ -203,8 +204,8 @@ theorem coarse_mutualInformation_le_translated_square {q : ℕ} (hq : 1 ≤ q)
   refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ hgap hspan d T hT hdiam X hX E hE ↦ ?_⟩
   have hdist (x y : ℤ × ℤ) :
       dist (Geometry.integerPoint x + d) (Geometry.integerPoint y + d) =
-        (Scan.ambientSupDistance x y : ℝ) := by
-    simp only [dist_add_right, Scan.ambientSupDistance, Geometry.integerPoint,
+        ((supDist x y : ℤ) : ℝ) := by
+    simp only [dist_add_right, natCast_supDist, Geometry.integerPoint,
       Prod.dist_eq, Real.dist_eq, Int.cast_max, Int.cast_abs, Int.cast_sub]
   exact hmain u hu L h hh hhJ E₀ Ω hΩ hgap hspan 0 T hT
     (fun x hx y hy ↦ by simpa only [hdist] using hdiam x hx y hy)

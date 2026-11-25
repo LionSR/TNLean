@@ -30,7 +30,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open ManyBody (IntRect IsSafe card_dilate_sdiff_le rectRegion supDist)
+open ManyBody (IntRect IsSafe card_dilate_sdiff_le rectRegion supDist ambientDepth
+  ambientDepth_le_iff_mem_ambientDilation)
 
 noncomputable section
 
@@ -69,7 +70,7 @@ private theorem rectangleBootstrap_clearance {Λ : Finset (ℤ × ℤ)}
     {A : Finset ↥Λ} {D₀ L r₀ : ℕ} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) (hbudget : 2 * L + 10 * r₀ ≤ D₀ * Q.size) :
     ∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-      ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z := by
+      ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ) := by
   classical
   intro t ht z hz
   obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hz
@@ -77,9 +78,7 @@ private theorem rectangleBootstrap_clearance {Λ : Finset (ℤ × ℤ)}
   have hvEdge : v ∈ e := by simpa using hve
   have hnat : 2 * L + 10 * r₀ < supDist t v.val :=
     hbudget.trans_lt (hsafe e he v hvEdge t ht)
-  have hcast : ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t v.val : ℤ) := by
-    exact_mod_cast hnat
-  simpa [supDist, ambientSupDistance] using hcast
+  exact_mod_cast hnat
 
 /-- The actual finite-history scanner for the native integer rectangle.
 All scale fields are literal rounded values with row scale ceil(24 size Q).
@@ -123,7 +122,7 @@ theorem rectangleBootstrapScanner_geometry_of_threshold_le (F : ScannerExponents
       (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
         (ambientDilation Q.toFinset r \ ambientDilation Q.toFinset (r - 1)).card ≤ S.n) ∧
       (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-        ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) ∧
+        ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) ∧
       (S.A.filter fun x ↦ x.val ∈ Q.toFinset) = rectRegion A Q ∧
       (∀ j : ℕ, positiveDepthPrefix S.A S.depth (j : ℤ) =
         A.filter fun x ↦ x.val ∈ (Q.dilate j).toFinset \ Q.toFinset) ∧
@@ -155,7 +154,7 @@ theorem rectangleBootstrapScanner_geometry_of_threshold_le (F : ScannerExponents
   · intro L
     ext x
     simp only [S, rectangleBootstrapScanner, CollarScan.truncationSet, rectRegion,
-      Finset.mem_filter, ambientDepth_le_iff_mem_dilation, ← Q.toFinset_dilate L]
+      Finset.mem_filter, ambientDepth_le_iff_mem_ambientDilation, ← Q.toFinset_dilate L]
 
 open Classical in
 /-- One threshold supplies the literal weak-rectangle geometry needed by the
@@ -183,7 +182,7 @@ theorem exists_rectangleBootstrapScanner_geometry (F : ScannerExponents)
         (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
           (ambientDilation Q.toFinset r \ ambientDilation Q.toFinset (r - 1)).card ≤ S.n) ∧
         (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) ∧
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) ∧
         (S.A.filter fun x ↦ x.val ∈ Q.toFinset) = rectRegion A Q ∧
         (∀ j : ℕ, positiveDepthPrefix S.A S.depth (j : ℤ) =
           A.filter fun x ↦ x.val ∈ (Q.dilate j).toFinset \ Q.toFinset) ∧

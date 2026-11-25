@@ -34,7 +34,7 @@ open TensorPower TensorPower.ReplicaTransport
 
 noncomputable section
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -79,7 +79,7 @@ theorem actualChargeScanRound_splitOld_incidence
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {hist : History S.K S.m S.M s} {i : I}
     (hi : (S.actualChargeScanRound hm hM s n E a pre).splitOld i hist) :
     ∃ g side, S.designatedSplitIncidence (S.oldChargeState hist g) L i side := by
@@ -107,7 +107,7 @@ theorem actualChargeScanRound_splitNew_incidence
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {hist : History S.K S.m S.M s} {c : ChargeChoices S.K S.M} {i : I}
     (hi : (S.actualChargeScanRound hm hM s n E a pre).splitNew i hist c) :
     ∃ g side, S.designatedSplitIncidence (S.state (extendHistory hist c) g) L i side := by
@@ -135,7 +135,7 @@ theorem actualFillScanRound_splitOld_incidence
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {hist : History S.K S.m S.M s} {i : I}
     (hi : (S.actualFillScanRound hm hM s n E a pre).splitOld i hist) :
     ∃ g side, S.designatedSplitIncidence (S.state hist g) L i side := by
@@ -162,7 +162,7 @@ theorem actualFillScanRound_splitNew_incidence
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {hist : History S.K S.m S.M s} {c : Unit} {i : I}
     (hi : (S.actualFillScanRound hm hM s n E a pre).splitNew i hist c) :
     ∃ g side, S.designatedSplitIncidence (S.oldChargeState hist g) L i side := by
@@ -190,7 +190,7 @@ theorem actualChargeScanRound_card_splitOld_le
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hist : History S.K S.m S.M s) :
     ((Finset.univ.filter fun i ↦
@@ -216,7 +216,7 @@ theorem actualChargeScanRound_card_splitNew_le
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hist : History S.K S.m S.M s) (c : ChargeChoices S.K S.M) :
     ((Finset.univ.filter fun i ↦
@@ -242,7 +242,7 @@ theorem actualFillScanRound_card_splitOld_le
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hist : History S.K S.m S.M s) :
     ((Finset.univ.filter fun i ↦
@@ -268,7 +268,7 @@ theorem actualFillScanRound_card_splitNew_le
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hist : History S.K S.m S.M s) (c : Unit) :
     ((Finset.univ.filter fun i ↦
@@ -295,7 +295,7 @@ theorem actualChargeScanRound_splitWeight_le
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {p : ℝ} (hp : p ∈ Icc (0 : ℝ) 1) (i : I) :
     (S.actualChargeScanRound hm hM s n E a pre).splitWeight p i ≤ 10 * (S.D : ℝ) / S.m := by
   let Rd := S.actualChargeScanRound hm hM s n E a pre
@@ -363,7 +363,7 @@ theorem actualFillScanRound_splitWeight_le
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {p : ℝ} (hp : p ∈ Icc (0 : ℝ) 1) (i : I) :
     (S.actualFillScanRound hm hM s n E a pre).splitWeight p i ≤ 10 * (S.D : ℝ) / S.m := by
   let Rd := S.actualFillScanRound hm hM s n E a pre

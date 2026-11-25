@@ -35,7 +35,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth supDist)
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
@@ -147,7 +147,7 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
         (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let L := F.L S.n
         let X := S.A.filter fun x ↦ x.val ∈ T
         let g := Δ / positiveNormalization 1 (Δ / 2) J
@@ -259,7 +259,7 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
         (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let L := F.L S.n
         let X := S.A.filter fun x ↦ x.val ∈ T
         let g := Δ / positiveNormalization 1 (Δ / 2) J
@@ -338,7 +338,7 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
         (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let L := F.L S.n
         let X := S.A.filter fun x ↦ x.val ∈ T
         let g := Δ / positiveNormalization 1 (Δ / 2) J
@@ -405,7 +405,7 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
         (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let L := F.L S.n
         let X := S.A.filter fun x ↦ x.val ∈ T
         let g := Δ / positiveNormalization 1 (Δ / 2) J

@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 
 /-!
@@ -23,7 +23,9 @@ from the earlier pieces are further geometric inputs.
 -/
 
 open ManyBody (planeDomainGraph graphNeighborhood ambientDilation mem_ambientDilation_iff
-  exists_edgeBoundary_of_walk)
+  exists_edgeBoundary_of_walk abs_ambientDepth_sub_le_walk_length ambientDepth
+  ambientDepth_le_iff_mem_ambientDilation supDist supDist_le_one_of_planeDomainGraph_adj
+  exists_mem_ambientDepth_eq supDist_comm natCast_supDist)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -40,7 +42,7 @@ partition and the earlier-family clearance estimates are separate results. -/
 theorem graphNeighborhood_subset_of_cut_clearance
     (Λ T : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (L R : ℕ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-      ((L + R : ℕ) : ℤ) < Scan.ambientSupDistance t z) :
+      ((L + R : ℕ) : ℤ) < (supDist t z : ℤ)) :
     graphNeighborhood (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T L) R ⊆
       A.filter (fun x ↦ x.val ∈ ambientDilation T (L + R)) := by
   classical
@@ -50,24 +52,24 @@ theorem graphNeighborhood_subset_of_cut_clearance
   have hT : T.Nonempty :=
     let ⟨t, ht, _⟩ := Finset.mem_biUnion.mp hyDil
     ⟨t, ht⟩
-  have hydepth := (Scan.ambientDepth_le_iff_mem_dilation T hT y.val L).mpr hyDil
+  have hydepth := (ambientDepth_le_iff_mem_ambientDilation T hT y.val L).mpr hyDil
   refine Finset.mem_filter.mpr ⟨?_, ?_⟩
   · by_contra hxA
     obtain ⟨u, w, -, -, hcut, p', hp'⟩ := exists_edgeBoundary_of_walk p hyA hxA
     have hz : u.val ∈ Geometry.boundaryEndpoints Λ A :=
       Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary hcut (by simp)
-    have hvariation := (Scan.abs_ambientDepth_sub_le_walk_length T hT Subtype.val
-      (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_planeDomainGraph_adj) p').trans
+    have hvariation := (abs_ambientDepth_sub_le_walk_length T hT Subtype.val
+      (fun _ _ ↦ supDist_le_one_of_planeDomainGraph_adj) p').trans
         (Int.ofNat_le.mpr (hp'.trans hp))
-    obtain ⟨t, ht, hmin⟩ := T.exists_mem_eq_inf' hT (Scan.ambientSupDistance u.val)
-    have hdeep : ((L + R : ℕ) : ℤ) < Scan.ambientDepth T hT u.val := by
-      simpa only [Scan.ambientDepth, hmin, Scan.ambientSupDistance, abs_sub_comm]
-        using hclear t ht u.val hz
+    obtain ⟨t, ht, hmin⟩ := exists_mem_ambientDepth_eq T hT u.val
+    have hdeep : ((L + R : ℕ) : ℤ) < ambientDepth T hT u.val := by
+      rw [hmin, supDist_comm]
+      exact hclear t ht u.val hz
     rw [abs_le] at hvariation
     omega
-  · apply (Scan.ambientDepth_le_iff_mem_dilation T hT x.val (L + R)).mp
-    have hvariation := (Scan.abs_ambientDepth_sub_le_walk_length T hT Subtype.val
-      (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_planeDomainGraph_adj) p).trans
+  · apply (ambientDepth_le_iff_mem_ambientDilation T hT x.val (L + R)).mp
+    have hvariation := (abs_ambientDepth_sub_le_walk_length T hT Subtype.val
+      (fun _ _ ↦ supDist_le_one_of_planeDomainGraph_adj) p).trans
         (Int.ofNat_le.mpr hp)
     rw [abs_le] at hvariation
     omega
@@ -86,15 +88,15 @@ proof text is reused. -/
 theorem exterior_union_subset_graphNeighborhood_compl_of_clearance
     (Λ T : Finset (ℤ × ℤ)) (A J : Finset ↥Λ) (L R : ℕ)
     (hcut : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-      ((L + R : ℕ) : ℤ) < Scan.ambientSupDistance t z)
+      ((L + R : ℕ) : ℤ) < (supDist t z : ℤ))
     (hremote : ∀ t ∈ T, ∀ x ∈ J,
-      ((L + R : ℕ) : ℤ) < Scan.ambientSupDistance t x.val) :
+      ((L + R : ℕ) : ℤ) < (supDist t x.val : ℤ)) :
     Aᶜ ∪ J ⊆
       (graphNeighborhood (planeDomainGraph Λ)
         (A.filter fun x ↦ x.val ∈ ambientDilation T L) R)ᶜ := by
   have hN := graphNeighborhood_subset_of_cut_clearance Λ T A L R hcut
   simp_all only [Finset.subset_iff, Finset.mem_compl, Finset.mem_union, Finset.mem_filter,
-    mem_ambientDilation_iff, Scan.ambientSupDistance, lt_max_iff, lt_abs]
+    mem_ambientDilation_iff, natCast_supDist, lt_max_iff, lt_abs]
   grind
 
 

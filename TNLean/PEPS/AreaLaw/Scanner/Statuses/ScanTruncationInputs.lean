@@ -45,7 +45,8 @@ The source's estimate `t = O(n^(-500))` (`08-scanner.tex`, lines 400–403) is s
 
 open Filter Matrix
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth
+  ambientDepth_le_iff_mem_ambientDilation supDist)
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
@@ -95,7 +96,8 @@ theorem shell_subset_truncationSet {T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
   obtain ⟨hxA, hxj, -⟩ := Finset.mem_filter.mp hx
   refine Finset.mem_filter.mpr ⟨hxA, ?_⟩
   rw [hdepth]
-  exact ((ambientDepth_le_iff_mem_dilation T hT x.val j).mpr hxj).trans (by exact_mod_cast hj)
+  exact ((ambientDepth_le_iff_mem_ambientDilation T hT x.val j).mpr hxj).trans
+    (by exact_mod_cast hj)
 
 end CollarScan
 
@@ -155,7 +157,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
         (∀ d : ℕ, 1 ≤ d → d ≤ X.L n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
         (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤
           κ.Ce * (n * (X.L n : ℝ) ^ X.e + n)) →

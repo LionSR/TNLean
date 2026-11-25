@@ -44,7 +44,7 @@ open scoped Matrix.Norms.L2Operator
 
 noncomputable section
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction supDist natCast_supDist)
 
 namespace TNLean.PEPS.Approximation
 
@@ -153,9 +153,9 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
     exact ⟨n, hn, fun j ↦ (a₁ j, a₂ j), fun j ↦ (b₁ j, b₂ j),
       hT.trans (congrArg (fun F : Fin n → Finset (ℤ × ℤ) ↦ Finset.univ.biUnion F)
         (funext fun j ↦ (hR j).trans (Finset.Icc_product_Icc _ _ _ _)))⟩
-  have hdist (x y : ℤ × ℤ) : (Scan.ambientSupDistance x y : ℝ) =
+  have hdist (x y : ℤ × ℤ) : ((supDist x y : ℤ) : ℝ) =
       dist (integerPoint x) (integerPoint y) := by
-    simp only [Scan.ambientSupDistance, integerPoint, Prod.dist_eq, Real.dist_eq,
+    simp only [natCast_supDist, integerPoint, Prod.dist_eq, Real.dist_eq,
       Int.cast_max, Int.cast_abs, Int.cast_sub]
   have hGB : Disjoint G B := Finset.disjoint_left.mpr fun x hxG hxB ↦
     hm₀ (((CellPartition.mem_cellSample (lt_of_lt_of_le zero_lt_one hs)).mp

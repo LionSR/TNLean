@@ -33,7 +33,7 @@ open scoped BigOperators
 open TensorPower TensorPower.ReplicaTransport
 noncomputable section
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -71,7 +71,7 @@ theorem good_sum_splitEta_le_choiceEntropySymbol_planeDomainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hgood : S.IsGoodOldHistory h) (θ : (∀ v, Fin (n v)) → ℂ) :
     ((1 / (2 * (S.C₁ + 1))) / ((S.n : ℝ) * S.D)) *
         (∑ i, (S.actualChargeData hm0 hM k).splitEta E i ⟨h, none⟩
@@ -120,7 +120,7 @@ theorem actualChargeEntropyDefect_le_entropyGain_planeDomainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {t : ℝ} (ht : 0 ≤ t) (r : ℕ)
     (pre : Config r (fun v => Fin (n v)) → ℂ) (p : ℝ) :
     ((1 / (2 * (S.C₁ + 1))) / ((S.n : ℝ) * S.D)) *

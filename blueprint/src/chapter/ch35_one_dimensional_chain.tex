@@ -2838,29 +2838,27 @@ allowed. These are the two-replica operators in
 % The older Part IIb, Section 7 citation does not locate that argument.
 \begin{definition}[Snake ordering of an open square]
     \label{def:snake_grid_order}
-    \lean{TNLean.MPS.AreaLaw.snakeNativeEquiv,
-        TNLean.MPS.AreaLaw.snakeIndex,
-        TNLean.MPS.AreaLaw.snakeIndex_val,
-        TNLean.MPS.AreaLaw.snakeGridEquiv,
-        TNLean.MPS.AreaLaw.snakeGridPrefix,
-        TNLean.MPS.AreaLaw.mem_snakeGridPrefix,
-        TNLean.MPS.AreaLaw.snakeGridPrefix_eq_map,
-        TNLean.MPS.AreaLaw.snakeGridStateEquiv}
+    \lean{TNLean.MPS.AreaLaw.snakeGridStateEquiv}
     \leanok
+    \uses{def:strip_snake}
     On $\{0,\ldots,L-1\}^2$, visit the rows in increasing order, the
     columns in increasing order in even rows and decreasing order in odd
-    rows. Let $A_k$ be the first $k$ sites. Relabelling the tensor factors
+    rows. Let $A_k$ be the first $k$ sites. This is the ordering of
+    Definition~\ref{def:strip_snake} for the square, $w=L$, with its
+    prefixes. Relabelling the tensor factors
     in this order is a linear isometry of the physical Hilbert space.
 \end{definition}
 
 \begin{lemma}[Snake cut boundary and finite-range budget]
     \label{lem:snake_grid_cut_budget}
-    \lean{TNLean.MPS.AreaLaw.card_edgeBoundary_snakeGridPrefix_le,
+    \lean{ManyBody.card_edgeBoundary_snakePrefix_le,
         TNLean.MPS.AreaLaw.cutLogBudget_snakeGridPrefix_le,
         TNLean.MPS.AreaLaw.snakeGrid_window_le_linear}
     \leanok
-    \uses{def:snake_grid_order, thm:area_law_tail_parameter}
-    Every prefix has $|\partial A_k|\le L+1$. For local dimension
+    \uses{def:snake_grid_order, def:strip_snake, thm:area_law_tail_parameter}
+    Every prefix has $|\partial A_k|\le L+1$; more generally, every prefix
+    of the ordering of Definition~\ref{def:strip_snake} of an $L\times w$
+    rectangle has at most $w+1$ boundary edges. For local dimension
     $q\ge1$, the logarithmic budget of the actual range-$R$ interaction
     supports satisfies $\mathcal B_{A_k}\le C_{\mathrm{tail}}(q,R)(L+2)$,
     where $C_{\mathrm{tail}}(q,R)\ge1$ is the constant $C$ of the
@@ -3051,25 +3049,31 @@ In particular the ground eigenspace is one-dimensional.
 
 \begin{definition}[Physical column-snake ordering]
     \label{def:strip_snake}
-    \lean{TNLean.MPS.AreaLaw.stripSnakeRows,
-        TNLean.MPS.AreaLaw.stripSnakeEquiv,
-        TNLean.MPS.AreaLaw.stripColumn_stripSnakeEquiv,
-        TNLean.MPS.AreaLaw.stripSnakePrefix,
+    \lean{ManyBody.snakeFlip,
+        ManyBody.snakeEquiv,
+        ManyBody.snakeIndex,
+        ManyBody.snakeIndex_val,
+        ManyBody.stripColumn_snakeEquiv,
+        ManyBody.snakePrefix,
+        ManyBody.mem_snakePrefix,
         TNLean.MPS.AreaLaw.stripSnakeState,
         TNLean.MPS.AreaLaw.norm_stripSnakeState,
         TNLean.MPS.AreaLaw.regionEntropy_stripSnakeState}
     \leanok
     Number the $Lw$ physical sites column by column, reversing the row
-    order in each odd column. The position $i$ lies in column $\lfloor i/w\rfloor$.
+    order in each odd column. The position $i$ lies in column $\lfloor i/w\rfloor$,
+    and the site in column $c$ and row $r$ has position $wc+r$ for even $c$
+    and $wc+(w-1-r)$ for odd $c$. The prefix of length $k$ is the set of
+    the first $k$ sites.
     This bijection preserves vector norms and the entropies of corresponding
     regions. Each physical site retains local dimension $q$.
 \end{definition}
 
 \begin{lemma}[Entropy and tails at every snake prefix]
     \label{lem:strip_prefix_tails}
-    \lean{TNLean.MPS.AreaLaw.stripInterval_subset_snakePrefix,
-        TNLean.MPS.AreaLaw.snakePrefix_subset_stripInterval,
-        TNLean.MPS.AreaLaw.card_snakePrefix_sdiff_le,
+    \lean{ManyBody.stripInterval_subset_snakePrefix,
+        ManyBody.snakePrefix_subset_stripInterval,
+        ManyBody.card_snakePrefix_sdiff_le,
         TNLean.MPS.AreaLaw.regionEntropy_stripSnakePrefix_le,
         TNLean.MPS.AreaLaw.stripPrefixBudgetConst,
         TNLean.MPS.AreaLaw.cutLogBudget_stripSnakePrefix_le,

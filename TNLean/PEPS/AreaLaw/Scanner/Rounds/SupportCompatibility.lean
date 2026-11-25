@@ -32,7 +32,7 @@ at `openai/math@adc7f124`.
 
 section
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -115,7 +115,7 @@ theorem chargeTransportData_supportCompatible_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (n : ↥Λ ⊕ Bool → ℕ) (E : EnergyTerms (↥Λ ⊕ Bool) n I)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
@@ -144,7 +144,7 @@ end
 
 section
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -167,7 +167,7 @@ theorem fillTransportData_supportCompatible_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (n : ↥Λ ⊕ Bool → ℕ) (E : EnergyTerms (↥Λ ⊕ Bool) n I)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map

@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadHistoryUnion
-import TNLean.PEPS.AreaLaw.Collar.CompactCollarCounting
+import QICLean.ManyBody.Sites.Lattice.SupDistance
+import TNLean.PEPS.AreaLaw.Collar.PhysicalPartition
 import TNLean.PEPS.AreaLaw.Scanner.Histories.HistoryPrefixes
 
 /-!
@@ -23,7 +24,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 286–329, at `openai/math@adc7f124`.
 -/
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth card_filter_ambientDepth_le supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -58,7 +59,7 @@ theorem sum_historyWeight_bad_through_planeDomainGraph_le
     {N L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ μ) :
@@ -74,7 +75,7 @@ theorem sum_historyWeight_bad_through_planeDomainGraph_le
     dsimp [C]
     apply Nat.cast_le.mpr
     apply Nat.mul_le_mul_left
-    simpa only [hdepth] using card_compact_collar_le hT S.A S.n L hrows
+    simpa only [hdepth] using card_filter_ambientDepth_le hT S.A S.n L hrows
   calc
     _ ≤ ∑ h : History S.K S.m S.M N, ∑ t : Fin (N + 1),
         if ¬ S.IsGoodCompletedHistory (prefixHistory h t (Nat.le_of_lt_succ t.isLt))

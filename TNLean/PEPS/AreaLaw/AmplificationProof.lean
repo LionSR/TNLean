@@ -65,8 +65,9 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix MeasureTheory SpectralFilter QuantumCircuit
 open scoped Kronecker NNReal ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace AdmissibleSupport IsAdmissibleSupport graphBall planeDomainGraph
-  PlaneInteraction edgeBoundary graphNeighborhood ambientDilation mem_ambientDilation_iff)
+open ManyBody (IsGapped groundSpace AdmissibleSupport IsAdmissibleSupport graphBall
+  planeDomainGraph PlaneInteraction edgeBoundary graphNeighborhood ambientDilation
+  mem_ambientDilation_iff supDist)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -196,7 +197,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
-                    (Scan.ambientSupDistance t z : ℝ)) →
+                    ((supDist t z : ℤ) : ℝ)) →
                 graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A) := by
@@ -624,7 +625,7 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
-                    (Scan.ambientSupDistance t z : ℝ)) →
+                    ((supDist t z : ℤ) : ℝ)) →
                 graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A) := by
