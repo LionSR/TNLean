@@ -11,11 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.Frames.FrameBoundedChanges
 import TNLean.PEPS.Approximation.Frames.FrameRegisters
 import TNLean.PEPS.Approximation.Frames.HomogeneousOwnership
-import TNLean.PEPS.Approximation.Frames.MonomialFixesOutside
-import TNLean.PEPS.Approximation.Frames.OwnershipMonomials
 import TNLean.PEPS.Approximation.Frames.RankOneBlocks
-import TNLean.PEPS.Approximation.Frames.RegisterReordering
-import TNLean.PEPS.Approximation.Frames.SheetFrame
 import TNLean.PEPS.Approximation.Frames.SheetStack
 import TNLean.PEPS.Approximation.Frames.SheetStackChange
 import TNLean.PEPS.Approximation.Frames.SheetStackEndpoints
@@ -25,4 +21,3 @@ import TNLean.PEPS.Approximation.Frames.SheetStackSourceBoundedChange
 import TNLean.PEPS.Approximation.Frames.TagRegisters
 import TNLean.PEPS.Approximation.Frames.TwoSheetExchange
 import TNLean.PEPS.Approximation.Frames.TwoSheetRegisters
-import TNLean.PEPS.Approximation.Frames.WordSwapsMeet

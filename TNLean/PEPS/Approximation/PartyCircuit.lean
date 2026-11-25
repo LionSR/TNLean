@@ -11,10 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.PartyCircuit.ActualSourcePolynomial
 import TNLean.PEPS.Approximation.PartyCircuit.AllPartyBranchLocality
 import TNLean.PEPS.Approximation.PartyCircuit.CommonSourceGate
-import TNLean.PEPS.Approximation.PartyCircuit.DistributedPhysicalPrivateTrace
 import TNLean.PEPS.Approximation.PartyCircuit.EndpointWordRestrictionCongruence
-import TNLean.PEPS.Approximation.PartyCircuit.FamilySourceOnlyReduction
-import TNLean.PEPS.Approximation.PartyCircuit.LayoutPartitionWord
 import TNLean.PEPS.Approximation.PartyCircuit.LocalSourceSampleCompatibility
 import TNLean.PEPS.Approximation.PartyCircuit.MessageGateCircuit
 import TNLean.PEPS.Approximation.PartyCircuit.MessageGateSegmentExpansion
@@ -22,9 +19,6 @@ import TNLean.PEPS.Approximation.PartyCircuit.NetworkScalarAbsorption
 import TNLean.PEPS.Approximation.PartyCircuit.OriginalCircuitGateMaps
 import TNLean.PEPS.Approximation.PartyCircuit.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.PartyCircuit.PartialSourceDensity
-import TNLean.PEPS.Approximation.PartyCircuit.PartyChainRestriction
-import TNLean.PEPS.Approximation.PartyCircuit.PartyGateCircuit
-import TNLean.PEPS.Approximation.PartyCircuit.PartyGateOriginalCircuit
 import TNLean.PEPS.Approximation.PartyCircuit.PartyGateSourceBound
 import TNLean.PEPS.Approximation.PartyCircuit.PartyPhysicalCoordinates
 import TNLean.PEPS.Approximation.PartyCircuit.PreparedMatrixNorm
@@ -34,5 +28,4 @@ import TNLean.PEPS.Approximation.PartyCircuit.SourceFrameMatrix
 import TNLean.PEPS.Approximation.PartyCircuit.SourceSlotMaps
 import TNLean.PEPS.Approximation.PartyCircuit.SpectatorOwnerExclusion
 import TNLean.PEPS.Approximation.PartyCircuit.UniformMessageGateCompression
-import TNLean.PEPS.Approximation.PartyCircuit.WordSelectedRestriction
 import TNLean.PEPS.Approximation.PartyCircuit.WordSelectivePartition

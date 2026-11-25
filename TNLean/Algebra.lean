@@ -18,6 +18,7 @@ import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.LSymbolFreeAction
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
+import TNLean.Algebra.ProtocolDensityError
 import TNLean.Algebra.RepresentationOrthogonalSectors
 import TNLean.Algebra.RepresentationThetaPositive
 import TNLean.Algebra.RestrictedScalarGauge
