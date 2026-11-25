@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Real.ExplicitThresholds
 import TNLean.Network.SampledApproximation.UniformApproximateSampledNetwork
-import TNLean.Lattice.Compression.MessageGateLists
 
 /-!
 # Uniform compression of original gates containing bounded messages
@@ -47,13 +46,11 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 137–175 and 565–588.
 -/
 
-section
-
 noncomputable section
 open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.Lattice.PartyCircuit.GateMapConstruction
-open TNLean.Lattice.PartyCircuit
-open TNLean.Lattice.Compression
+
+namespace QuantumCircuit.Party.GateMapConstruction
+open TNLean.Network ManyBody
 attribute [local instance] Classical.propDecidable
 
 /-- Original message-containing expansions available at every fixed
@@ -65,15 +62,16 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 137–175, 565–588 and 590–600. -/
 theorem exists_uniform_message_sampled_network
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
-    (P : ι → Type) [∀ L, Fintype (P L)]
-    (C₀ : ∀ L, GateMapConstruction (P L))
+    (P : ι → Type) [∀ L, Fintype (P L)] [∀ L, DecidableEq (P L)]
+    (X : ∀ L, P L → Type) [∀ L j, Fintype (X L j)] [∀ L j, DecidableEq (X L j)]
+    (physicalDim : ∀ L, P L → ℕ)
+    (V : ∀ L, P L → Type) [∀ L j, Fintype (V L j)] [∀ L j, DecidableEq (V L j)]
+    (C₀ : ∀ L, GateMapConstruction (P L) (X L) (physicalDim L) (V L))
     (b n d : ℕ) (C_N C_D : ℝ)
-    (hN₀ : ∀ L, ((C₀ L).circuit.expandedGateCount : ℝ) ≤ C_N * (size L) ^ n)
-    (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * (size L) ^ d)
+    (hN₀ : ∀ L, ((C₀ L).circuit.numGates : ℝ) ≤ C_N * (size L) ^ n)
+    (hphysical₀ : ∀ L j, (physicalDim L j : ℝ) ≤ C_D * (size L) ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ b)
-    (hlifetime₀ : ∀ L j,
-      Nat.card {g : (C₀ L).circuit.gateLocations //
-        j ∈ (C₀ L).circuit.participants g} ≤ b)
+    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
     (hMessageAvailability : ∀ q : ℕ,
       ∃ (r m : ℕ) (C_K C_C C_M : ℝ) (u v z : ℕ), ∀ L,
           ∃ (lists : (C₀ L).circuit.MessageGateLists) (K : ℕ),
@@ -88,12 +86,6 @@ theorem exists_uniform_message_sampled_network
     let q := n + t + ⌈16 * countC⌉₊
     ∃ (r : ℕ) (C_p : ℝ) (α : ℕ), 0 ≤ C_p ∧ 0 < α ∧ ∀ L,
       let C := C₀ L
-      let H := C.initialSpace
-      let hH := C.finite_initialSpace
-      let physicalDim := C.physicalDimension
-      let ps := C.physicalOrder
-      let priv := C.privateOutput
-      let hpriv := C.finite_privateOutput
       let ref := C.circuit
       let Goriginal := C.gateMaps
       let hL : 2 ≤ (size L) := hsize L
@@ -101,8 +93,8 @@ theorem exists_uniform_message_sampled_network
       ∃ lists : ref.GateLists,
         let w := ref.reexpand lists
         let G := ref.reexpandGateMaps lists Goriginal
-        let hNre : (w.expandedGateCount : ℝ) ≤ countC * (size L) ^ n := by
-          rw [ref.expandedGateCount_reexpand lists]
+        let hNre : (w.numGates : ℝ) ≤ countC * (size L) ^ n := by
+          rw [ref.numGates_reexpand lists]
           exact (hN₀ L).trans (mul_le_mul_of_nonneg_right
             ((le_max_left _ _).trans (le_add_of_nonneg_left zero_le_one)) (by positivity))
         ∃ (B : ℝ≥0) (_ : 1 ≤ B)
@@ -110,26 +102,21 @@ theorem exists_uniform_message_sampled_network
           (happrox : w.IsGateApproximation ((size L) ^ q)⁻¹ G),
         let ε := ((size L) ^ t)⁻¹
         let hε : 0 < ε := by positivity
-        let hbudget : w.IsGateApproximation
-            (sourceGateBudget (ε / 2) w.expandedGateCount) G := by
+        let hbudget : w.IsGateApproximation (sourceGateBudget (ε / 2) w.numGates) G := by
           have hprecision : w.IsGateApproximation
               ((size L) ^ (n + ⌈(t : ℝ)⌉₊ + ⌈16 * countC⌉₊))⁻¹ G := by
             simpa only [Nat.ceil_natCast] using happrox
           simpa only [Real.rpow_neg (by linarith [hsize L] : 0 ≤ (size L)),
             Real.rpow_natCast] using
             w.isGateApproximation_budget_of_power_bound G (size L) countC (t : ℝ)
-              w.expandedGateCount n (hsize L) (by dsimp [countC]; linarith [le_max_right C_N 0])
+              w.numGates n (hsize L) (by dsimp [countC]; linarith [le_max_right C_N 0])
               hNre hprecision
         let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) _).le G hbudget
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
-        let R := W.produce.physicalFirstReplacement (sourceGateBudget_pos hε w.expandedGateCount)
-          (familyPhysicalLayout physicalDim ps) priv W.isAllowed_produce
-          ((W.isExpansionBounded_produce_iff r (B : ℝ)).mpr hbW)
-        let k := sourceSamplingCount (Fintype.card R.sourceLocations)
+        let R := W.replacement (sourceGateBudget_pos hε w.numGates) hbW
+        let k := binomialSampleCount (max 1 (Fintype.card R.sourceLocations))
           ((B : ℝ) ^ (4 * b) * (D : ℝ) ^ (4 : ℕ)) ε
-        letI := ProductInput.finiteDimensional_wholePartyMem H hH
-        letI := Layout.finiteDimensional_mem_of_registers priv hpriv
         ∃ T : (j : P L) → DistributedOperatorContraction.GateLabelsAt
             (Finset.univ : Finset R.nonemptyGateLocations)
             (fun g ↦ R.participants g.1)
@@ -137,7 +124,7 @@ theorem exists_uniform_message_sampled_network
             (DistributedOperatorContraction.SampleAt
               (Finset.univ : Finset R.nonemptyGateLocations)
               (fun g ↦ R.participants g.1) j → Fin k) →
-            Matrix (Fin (physicalDim j)) (Fin (physicalDim j)) ℂ,
+            Matrix (Fin (physicalDim L j)) (Fin (physicalDim L j)) ℂ,
           Matrix.rectangularTraceNorm
             (DistributedOperatorContraction.contractedOperator
                 (Finset.univ : Finset R.nonemptyGateLocations)
@@ -156,7 +143,8 @@ theorem exists_uniform_message_sampled_network
             (Fintype.card (DistributedOperatorContraction.alphabet
               (Finset.univ : Finset R.nonemptyGateLocations)
               (fun g ↦ R.participants g.1) (SourceCircuit.sourceGateRoot R)
-              (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) k e) : ℝ) ≤ C_p * (size L) ^ α) ∧
+              (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) k e) : ℝ) ≤
+                C_p * (size L) ^ α) ∧
           (∀ j, (incidentDistributedLinks (Finset.univ : Finset R.nonemptyGateLocations)
             (fun g ↦ R.participants g.1) (SourceCircuit.sourceGateRoot R) j).card ≤
               2 * b * (b - 1)) ∧
@@ -223,22 +211,9 @@ theorem exists_uniform_message_sampled_network
         _ = _ := by dsimp [C, D, Ccoeff]; rw [mul_pow, pow_add, pow_add, pow_mul]; ring
     exact ⟨expanded, K', hterm.mono_coefficient hcoeffPower, hcount,
       hceilPower, w.isGateApproximation_expandMessageGateLists lists (C₀ L).gateMaps happrox⟩
-  exact exists_uniform_approximate_sampled_network size hsize P C₀ b n d C_N C_D
+  exact exists_uniform_approximate_sampled_network size hsize P X physicalDim V C₀ b n d C_N C_D
     hN₀ hphysical₀ harity₀ hlifetime₀ hExpandedAvailability p hp
 
-end TNLean.Lattice.PartyCircuit.GateMapConstruction
-end
-
-end
-
-section
-
-noncomputable section
-open scoped Matrix ComplexConjugate NNReal
-namespace TNLean.Lattice.PartyCircuit.GateMapConstruction
-open TNLean.Lattice.PartyCircuit
-open TNLean.Lattice.Compression
-attribute [local instance] Classical.propDecidable
 
 /-- Exact original message-containing expansions yield uniform literal operator
 networks for the original physical density. The resource constants and the
@@ -247,15 +222,16 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43,
 137–175 and 565–588. -/
 theorem exists_uniform_exact_message_sampled_network
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
-    (P : ι → Type) [∀ L, Fintype (P L)]
-    (C₀ : ∀ L, GateMapConstruction (P L))
+    (P : ι → Type) [∀ L, Fintype (P L)] [∀ L, DecidableEq (P L)]
+    (X : ∀ L, P L → Type) [∀ L j, Fintype (X L j)] [∀ L j, DecidableEq (X L j)]
+    (physicalDim : ∀ L, P L → ℕ)
+    (V : ∀ L, P L → Type) [∀ L j, Fintype (V L j)] [∀ L j, DecidableEq (V L j)]
+    (C₀ : ∀ L, GateMapConstruction (P L) (X L) (physicalDim L) (V L))
     (b n d : ℕ) (C_N C_D : ℝ)
-    (hN₀ : ∀ L, ((C₀ L).circuit.expandedGateCount : ℝ) ≤ C_N * (size L) ^ n)
-    (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * (size L) ^ d)
+    (hN₀ : ∀ L, ((C₀ L).circuit.numGates : ℝ) ≤ C_N * (size L) ^ n)
+    (hphysical₀ : ∀ L j, (physicalDim L j : ℝ) ≤ C_D * (size L) ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ b)
-    (hlifetime₀ : ∀ L j,
-      Nat.card {g : (C₀ L).circuit.gateLocations //
-        j ∈ (C₀ L).circuit.participants g} ≤ b)
+    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
     (r₀ m₀ : ℕ) (C_K C_C C_M : ℝ) (u v z : ℕ)
     (hExactMessageExpansion : ∀ L,
       ∃ (lists : (C₀ L).circuit.MessageGateLists) (K : ℕ),
@@ -269,12 +245,6 @@ theorem exists_uniform_exact_message_sampled_network
     let q := n + t + ⌈16 * countC⌉₊
     ∃ (r : ℕ) (C_p : ℝ) (α : ℕ), 0 ≤ C_p ∧ 0 < α ∧ ∀ L,
       let C := C₀ L
-      let H := C.initialSpace
-      let hH := C.finite_initialSpace
-      let physicalDim := C.physicalDimension
-      let ps := C.physicalOrder
-      let priv := C.privateOutput
-      let hpriv := C.finite_privateOutput
       let ref := C.circuit
       let Goriginal := C.gateMaps
       let hL : 2 ≤ (size L) := hsize L
@@ -282,8 +252,8 @@ theorem exists_uniform_exact_message_sampled_network
       ∃ lists : ref.GateLists,
         let w := ref.reexpand lists
         let G := ref.reexpandGateMaps lists Goriginal
-        let hNre : (w.expandedGateCount : ℝ) ≤ countC * (size L) ^ n := by
-          rw [ref.expandedGateCount_reexpand lists]
+        let hNre : (w.numGates : ℝ) ≤ countC * (size L) ^ n := by
+          rw [ref.numGates_reexpand lists]
           exact (hN₀ L).trans (mul_le_mul_of_nonneg_right
             ((le_max_left _ _).trans (le_add_of_nonneg_left zero_le_one)) (by positivity))
         ∃ (B : ℝ≥0) (_ : 1 ≤ B)
@@ -291,26 +261,21 @@ theorem exists_uniform_exact_message_sampled_network
           (happrox : w.IsGateApproximation ((size L) ^ q)⁻¹ G),
         let ε := ((size L) ^ t)⁻¹
         let hε : 0 < ε := by positivity
-        let hbudget : w.IsGateApproximation
-            (sourceGateBudget (ε / 2) w.expandedGateCount) G := by
+        let hbudget : w.IsGateApproximation (sourceGateBudget (ε / 2) w.numGates) G := by
           have hprecision : w.IsGateApproximation
               ((size L) ^ (n + ⌈(t : ℝ)⌉₊ + ⌈16 * countC⌉₊))⁻¹ G := by
             simpa only [Nat.ceil_natCast] using happrox
           simpa only [Real.rpow_neg (by linarith [hsize L] : 0 ≤ (size L)),
             Real.rpow_natCast] using
             w.isGateApproximation_budget_of_power_bound G (size L) countC (t : ℝ)
-              w.expandedGateCount n (hsize L) (by dsimp [countC]; linarith [le_max_right C_N 0])
+              w.numGates n (hsize L) (by dsimp [countC]; linarith [le_max_right C_N 0])
               hNre hprecision
         let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) _).le G hbudget
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
-        let R := W.produce.physicalFirstReplacement (sourceGateBudget_pos hε w.expandedGateCount)
-          (familyPhysicalLayout physicalDim ps) priv W.isAllowed_produce
-          ((W.isExpansionBounded_produce_iff r (B : ℝ)).mpr hbW)
-        let k := sourceSamplingCount (Fintype.card R.sourceLocations)
+        let R := W.replacement (sourceGateBudget_pos hε w.numGates) hbW
+        let k := binomialSampleCount (max 1 (Fintype.card R.sourceLocations))
           ((B : ℝ) ^ (4 * b) * (D : ℝ) ^ (4 : ℕ)) ε
-        letI := ProductInput.finiteDimensional_wholePartyMem H hH
-        letI := Layout.finiteDimensional_mem_of_registers priv hpriv
         ∃ T : (j : P L) → DistributedOperatorContraction.GateLabelsAt
             (Finset.univ : Finset R.nonemptyGateLocations)
             (fun g ↦ R.participants g.1)
@@ -318,7 +283,7 @@ theorem exists_uniform_exact_message_sampled_network
             (DistributedOperatorContraction.SampleAt
               (Finset.univ : Finset R.nonemptyGateLocations)
               (fun g ↦ R.participants g.1) j → Fin k) →
-            Matrix (Fin (physicalDim j)) (Fin (physicalDim j)) ℂ,
+            Matrix (Fin (physicalDim L j)) (Fin (physicalDim L j)) ℂ,
           Matrix.rectangularTraceNorm
             (DistributedOperatorContraction.contractedOperator
                 (Finset.univ : Finset R.nonemptyGateLocations)
@@ -337,7 +302,8 @@ theorem exists_uniform_exact_message_sampled_network
             (Fintype.card (DistributedOperatorContraction.alphabet
               (Finset.univ : Finset R.nonemptyGateLocations)
               (fun g ↦ R.participants g.1) (SourceCircuit.sourceGateRoot R)
-              (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) k e) : ℝ) ≤ C_p * (size L) ^ α) ∧
+              (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) k e) : ℝ) ≤
+                C_p * (size L) ^ α) ∧
           (∀ j, (incidentDistributedLinks (Finset.univ : Finset R.nonemptyGateLocations)
             (fun g ↦ R.participants g.1) (SourceCircuit.sourceGateRoot R) j).card ≤
               2 * b * (b - 1)) ∧
@@ -363,10 +329,7 @@ theorem exists_uniform_exact_message_sampled_network
     have hL0 : 0 ≤ (size L) := (by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)
     exact ⟨lists, K, hresources, hK,
       hExact.mono (inv_nonneg.mpr (pow_nonneg hL0 q))⟩
-  exact exists_uniform_message_sampled_network size hsize P C₀ b n d C_N C_D
+  exact exists_uniform_message_sampled_network size hsize P X physicalDim V C₀ b n d C_N C_D
     hN₀ hphysical₀ harity₀ hlifetime₀ hAvailability p hp
 
-end TNLean.Lattice.PartyCircuit.GateMapConstruction
-end
-
-end
+end QuantumCircuit.Party.GateMapConstruction

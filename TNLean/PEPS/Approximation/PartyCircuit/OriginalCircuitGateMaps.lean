@@ -20,37 +20,37 @@ lines 21–43 and 137–151, revision
 
 noncomputable section
 
-namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
+open scoped Matrix.Norms.L2Operator
 
-variable {P : Type}
+namespace QuantumCircuit.Party.OriginalCircuit
+
+variable {P : Type} [DecidableEq P] {X Y : P → Type} [∀ p, Fintype (X p)]
+  [∀ p, DecidableEq (X p)]
 
 /-- The exact gate sums of the original chronology at the same occurrences: at every
 nonprivate occurrence, the sum of its recorded monomial list.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 21–43 and 137–151. -/
-def canonicalGateMaps {a b : Layout P} (w : OriginalCircuit a b) : w.produce.GateMaps :=
-  w.produce.expansionGateMaps
+def canonicalGateMaps (w : OriginalCircuit X Y) : w.toEffectCircuit.GateMaps :=
+  w.toEffectCircuit.expansionGateMaps
 
 /-- Canonical maps retain the original full operator, including private maps.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 21–43. -/
-theorem evalWithGateMaps_canonicalGateMaps {a b : Layout P} (w : OriginalCircuit a b) :
-    w.produce.evalWithGateMaps w.canonicalGateMaps = w.eval :=
-  w.produce.evalWithGateMaps_expansionGateMaps.trans w.eval_produce
+theorem evalWithGateMaps_canonicalGateMaps [Fintype P] (w : OriginalCircuit X Y) :
+    w.toEffectCircuit.evalWithGateMaps w.canonicalGateMaps = w.op :=
+  (EffectCircuit.evalWithGateMaps_expansionGateMaps _).trans w.op_toEffectCircuit
 
 /-- Every prescribed gate is its exact sum, with zero local approximation error.
 The contraction and monomial allowedness conditions are those of the original gate.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 28–43 and 137–151. -/
-theorem isGateApproximation_zero_canonicalGateMaps {a b : Layout P}
-    (w : OriginalCircuit a b) :
-    w.produce.IsGateApproximation 0 w.canonicalGateMaps := by
+theorem isGateApproximation_zero_canonicalGateMaps (w : OriginalCircuit X Y) :
+    w.toEffectCircuit.IsGateApproximation 0 w.canonicalGateMaps := by
   induction w with
-  | id => trivial
+  | done => trivial
   | comp w v ihw ihv => exact ⟨ihw, ihv⟩
-  | privateMap p ha hb A hA tail => exact hA
-  | nonprivateGate owner hC L hL hG tail =>
-      dsimp only [produce, canonicalGateMaps, EffectCircuit.expansionGateMaps,
-        EffectCircuit.IsGateApproximation]
-      exact ⟨hC, hL, hG, by simp only [sub_self, norm_zero, le_refl]⟩
-  | swap => trivial
-  | frame r w ih => exact ih
+  | gate D hY g =>
+      exact ⟨g.card_ne_one, g.monomials_allowed, g.norm_ev_le_one,
+        norm_le_zero_iff.mpr (sub_eq_zero.mpr rfl)⟩
+  | localOp p hY U hU => exact hU
+  | localOps U hU => exact hU
 
-end TNLean.Lattice.PartyCircuit.OriginalCircuit
+end QuantumCircuit.Party.OriginalCircuit

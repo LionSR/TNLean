@@ -23,6 +23,8 @@ party instead, as the original circuits require.
 
 * `TNLean.PEPS.PairEffect.norm_le_norm_placeBetween`: placing a matrix on a region does not
   decrease its norm when the configurations outside the region exist.
+* `QuantumCircuit.Party.WeightedGate.exists_originalCircuit_of_norm_le_one`: a contraction on a
+  set of parties with allowed monomials is an original circuit of these parties.
 * `QuantumCircuit.Party.WeightedGate.exists_originalCircuit_isSourceBounded`: such a sum is an
   original circuit with at most one nonprivate gate, whose participants lie in `S`, with the
   pair-effect, coefficient, monomial and pair-source bounds of the sum.
@@ -102,6 +104,34 @@ open TNLean.PEPS.PairEffect
 variable {P : Type} [Fintype P] [DecidableEq P] {X Y : P → Type} [∀ p, Fintype (X p)]
   [∀ p, DecidableEq (X p)] [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)]
 
+/-- **A contraction with allowed monomials on a set of parties is one gate of these parties.** A
+weighted gate `g` on the cell `S` whose monomials are allowed and whose matrix is a contraction,
+placed on `S`, is the operator of an original circuit with at most one nonprivate gate, whose
+participants lie in `S`, and whose expansion has the coefficients and the monomials of `g`. If `S`
+has a single party, the circuit is a contraction of that party. Polynomial-PEPS manuscript,
+`04-compression.tex`, lines 21–43 and 199–208. -/
+theorem exists_originalCircuit_of_norm_le_one (S : Finset P) (hY : ∀ v ∉ S, Y v = X v)
+    (g : WeightedGate S X Y) (hA : WeightedGate.IsAllowed g) (hN : ‖WeightedGate.ev g ()‖ ≤ 1) :
+    ∃ c : OriginalCircuit X Y,
+      c.op = placeBetween S hY (WeightedGate.ev g ()) ∧
+      c.nonprivateCount ≤ 1 ∧ (∀ i, (↑(c.participants i) : Set P) ⊆ ↑S) ∧
+      (∀ (r : ℕ) (s : ℝ), (∀ t ∈ g.terms, t.2.effectCount ≤ r) →
+        (g.terms.map fun t ↦ ‖t.1‖).sum ≤ s → c.IsExpansionBounded r s) ∧
+      (∀ K : ℕ, g.terms.length ≤ K → c.IsMonomialBounded K) ∧
+      ∀ r : ℕ, (∀ t ∈ g.terms, t.2.sourceCount ≤ r) → c.IsSourceBounded r := by
+  by_cases hC : S.card = 1
+  · obtain ⟨p, hp⟩ := Finset.card_eq_one.mp hC
+    have hYp : ∀ v ≠ p, Y v = X v := fun v hv ↦ hY v (by simpa [hp] using hv)
+    let U := reindex (singletonConfigEquiv Y hp) (singletonConfigEquiv X hp) (WeightedGate.ev g ())
+    have hU1 : ‖U‖ ≤ 1 := (l2_opNorm_reindex_le _ _ _).trans hN
+    refine ⟨OriginalCircuit.localOp p hYp U hU1, ?_, by simp, fun i ↦ i.elim, fun _ _ _ _ ↦ trivial,
+      fun _ _ ↦ trivial, fun _ _ ↦ trivial⟩
+    rw [OriginalCircuit.op_localOp]
+    exact placeBetween_submatrix_singletonConfigEquiv hp hY _
+  · exact ⟨OriginalCircuit.gate S hY (OriginalGate.ofWeightedGate g hC hA hN), by
+      rw [OriginalCircuit.op_gate]; rfl, by simp, fun _ ↦ subset_rfl, fun _ _ hr hs ↦ ⟨hr, hs⟩,
+      fun _ hK ↦ hK, fun _ hr ↦ hr⟩
+
 /-- **A sum of monomials on a set of parties as one gate, with its pair sources.** Let
 `g = ∑_ξ c_ξ M_ξ` be a weighted gate on a cell `D` whose monomials are allowed and use only the
 parties of `S ⊆ D`, the bases outside `S` being equal, and let the gate placed on its cell be a
@@ -111,14 +141,12 @@ the parties of `S`, so the pair-effect and coefficient bounds of `g`, its number
 the number of pair sources of every monomial are kept. If `S` has a single party, the circuit is a
 contraction of that party.
 
-The configurations are assumed to exist; this excludes a basis type with no element, on which
-every operator vanishes. Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43, 143–147
-and 199–208, and `06-geometry.tex`, lines 574–583. -/
+Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43, 143–147 and 199–208, and
+`06-geometry.tex`, lines 574–583. -/
 theorem exists_originalCircuit_isSourceBounded {D : Finset P} (S : Finset P) (hSD : S ⊆ D)
     (hY : ∀ v ∉ S, Y v = X v) (g : WeightedGate D X Y) (hA : WeightedGate.IsAllowed g)
     (hU : ∀ t ∈ g.terms, t.2.UsesOnly S)
-    (hN : ‖placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ())‖ ≤ 1)
-    (hne : Nonempty (Config X)) :
+    (hN : ‖placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ())‖ ≤ 1) :
     ∃ c : OriginalCircuit X Y,
       c.op = placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ()) ∧
       c.nonprivateCount ≤ 1 ∧ (∀ i, (↑(c.participants i) : Set P) ⊆ ↑S) ∧
@@ -126,40 +154,42 @@ theorem exists_originalCircuit_isSourceBounded {D : Finset P} (S : Finset P) (hS
         (g.terms.map fun t ↦ ‖t.1‖).sum ≤ s → c.IsExpansionBounded r s) ∧
       c.IsMonomialBounded g.terms.length ∧
       ∀ r : ℕ, (∀ t ∈ g.terms, t.2.sourceCount ≤ r) → c.IsSourceBounded r := by
-  obtain ⟨x₀⟩ := hne
   set g' := g.restrict S hSD hU
   have hop : placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ()) =
       placeBetween S hY (WeightedGate.ev g' ()) := by
     have h := WeightedGate.op_gate_restrict S hSD g hU (fun v hv ↦ hY v fun h ↦ hv (hSD h)) hY
     rw [PartyCircuit.op_gate, PartyCircuit.op_gate] at h
     exact h
-  have hN' : ‖WeightedGate.ev g' ()‖ ≤ 1 :=
-    (norm_le_norm_placeBetween S hY _ fun v ↦ x₀ v).trans (hop ▸ hN)
-  by_cases hC : S.card = 1
-  · obtain ⟨p, hp⟩ := Finset.card_eq_one.mp hC
-    have hYp : ∀ v ≠ p, Y v = X v := fun v hv ↦ hY v (by simpa [hp] using hv)
-    let U := reindex (singletonConfigEquiv Y hp) (singletonConfigEquiv X hp) (WeightedGate.ev g' ())
-    have hU1 : ‖U‖ ≤ 1 := (l2_opNorm_reindex_le _ _ _).trans hN'
-    refine ⟨OriginalCircuit.localOp p hYp U hU1, ?_, by simp, fun i ↦ i.elim, fun _ _ _ _ ↦ trivial,
-      trivial, fun _ _ ↦ trivial⟩
-    rw [OriginalCircuit.op_localOp, hop]
-    exact placeBetween_submatrix_singletonConfigEquiv hp hY _
-  · refine ⟨OriginalCircuit.gate S hY
-      (OriginalGate.ofWeightedGate g' hC (WeightedGate.isAllowed_restrict S hSD hU hA) hN'),
-      ?_, by simp, fun _ ↦ subset_rfl, fun r s hr hs ↦ ⟨fun t ht ↦ ?_, ?_⟩, ?_, fun r hr t ht ↦ ?_⟩
-    · rw [OriginalCircuit.op_gate, hop]
-      rfl
+  by_cases hN' : ‖WeightedGate.ev g' ()‖ ≤ 1
+  · obtain ⟨c, h₁, h₂, h₃, h₄, h₅, h₆⟩ := exists_originalCircuit_of_norm_le_one S hY g'
+      (WeightedGate.isAllowed_restrict S hSD hU hA) hN'
+    refine ⟨c, h₁.trans hop.symm, h₂, h₃, fun r s hr hs ↦ h₄ r s (fun t ht ↦ ?_) ?_,
+      h₅ _ (WeightedGate.length_terms_restrict S hSD g hU).le, fun r hr ↦ h₆ r fun t ht ↦ ?_⟩
     · obtain ⟨t', ht', h⟩ := WeightedGate.exists_mem_terms_of_mem_restrict S hSD (h := hU) ht
       rw [h]
       exact (Monomial.effectCount_restrict S hSD t'.2 (hU t' ht')).trans_le (hr t' ht')
     · have h := congrArg (List.map fun z : ℂ ↦ ‖z‖) (WeightedGate.map_fst_terms_restrict S hSD g hU)
       simp only [List.map_map] at h
-      change (g'.terms.map fun t ↦ ‖t.1‖).sum ≤ s
       exact (congrArg List.sum h).trans_le hs
-    · exact (WeightedGate.length_terms_restrict S hSD g hU).le
     · obtain ⟨t', ht', h⟩ := WeightedGate.exists_mem_terms_of_mem_restrict S hSD (h := hU) ht
       rw [h]
       exact (Monomial.sourceCount_restrict S hSD t'.2 (hU t' ht')).trans_le (hr t' ht')
+  · -- The gate on `S` is not a contraction, so the configurations outside `S` do not exist, and
+    -- neither do the configurations of all parties: the operator vanishes, and the gate with no
+    -- monomials realizes it.
+    have hE : IsEmpty (Config X) :=
+      ⟨fun x ↦ hN' ((norm_le_norm_placeBetween S hY _ fun v ↦ x v).trans (hop ▸ hN))⟩
+    obtain ⟨c, h₁, h₂, h₃, h₄, h₅, h₆⟩ := exists_originalCircuit_of_norm_le_one S hY
+      (⟨[]⟩ : WeightedGate S X Y) (fun _ h ↦ absurd h List.not_mem_nil)
+      (by simp [WeightedGate.ev])
+    refine ⟨c, ?_, h₂, h₃, fun r s _ hs ↦ ?_, h₅ _ (Nat.zero_le _), fun r _ ↦ h₆ r fun _ h ↦
+      absurd h List.not_mem_nil⟩
+    · ext _ x
+      exact isEmptyElim x
+    · refine c.isExpansionBounded_mono (h₄ r 0 (fun _ h ↦ absurd h List.not_mem_nil) le_rfl) le_rfl
+        ((List.sum_nonneg fun _ h ↦ ?_).trans hs)
+      obtain ⟨t, -, rfl⟩ := List.mem_map.mp h
+      exact norm_nonneg _
 
 /-- **A sum of monomials using a set of parties is one gate of these parties.** The conclusion of
 `exists_originalCircuit_isSourceBounded` without the pair-source bound: an original circuit with
@@ -171,8 +201,7 @@ Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43 and 199–208, a
 theorem exists_originalCircuit {D : Finset P} (S : Finset P) (hSD : S ⊆ D)
     (hY : ∀ v ∉ S, Y v = X v) (g : WeightedGate D X Y) (hA : WeightedGate.IsAllowed g)
     (hU : ∀ t ∈ g.terms, t.2.UsesOnly S)
-    (hN : ‖placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ())‖ ≤ 1)
-    (hne : Nonempty (Config X)) :
+    (hN : ‖placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ())‖ ≤ 1) :
     ∃ c : OriginalCircuit X Y,
       c.op = placeBetween D (fun v hv ↦ hY v fun h ↦ hv (hSD h)) (WeightedGate.ev g ()) ∧
       c.nonprivateCount ≤ 1 ∧ (∀ i, (↑(c.participants i) : Set P) ⊆ ↑S) ∧
@@ -180,7 +209,7 @@ theorem exists_originalCircuit {D : Finset P} (S : Finset P) (hSD : S ⊆ D)
         (g.terms.map fun t ↦ ‖t.1‖).sum ≤ s → c.IsExpansionBounded r s) ∧
       c.IsMonomialBounded g.terms.length := by
   obtain ⟨c, h₁, h₂, h₃, h₄, h₅, -⟩ :=
-    exists_originalCircuit_isSourceBounded S hSD hY g hA hU hN hne
+    exists_originalCircuit_isSourceBounded S hSD hY g hA hU hN
   exact ⟨c, h₁, h₂, h₃, h₄, h₅⟩
 
 end QuantumCircuit.Party.WeightedGate
