@@ -54,7 +54,7 @@ end TNLean.PEPS.EncodedFrame
 
 namespace TNLean.PEPS.Approximation
 
-open Set EncodedFrame TNLean.Lattice.PartyCircuit
+open Set EncodedFrame QuantumCircuit.Party
 
 /-! ### Empty targets -/
 
@@ -63,13 +63,17 @@ frame unchanged, and it is the change without operations: no nonprivate gate and
 error. Polynomial-PEPS manuscript, `06-geometry.tex`, lines 432–438 (“Empty physical targets
 need no information estimate”). -/
 theorem emptyTarget_step {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q]
-    {pos : ι → ℝ × ℝ} {Party : Type} (Ω : EuclideanSpace ℂ (ι → Fin q))
-    (F : Frame pos q Party) (Q : Party) :
-    ∃ c : OriginalCircuit F.regs (F.changeOwner ∅ Q).regs, c.nonprivateCount = 0 ∧
+    {pos : ι → ℝ × ℝ} {Party : Type} [Fintype Party] [DecidableEq Party]
+    (Ω : EuclideanSpace ℂ (ι → Fin q)) (F : Frame pos q Party) (Q : Party) :
+    ∃ c : OriginalCircuit F.system (F.changeOwner ∅ Q).system, c.nonprivateCount = 0 ∧
       (∀ (S : Set Party) g, (↑(c.participants g) : Set Party) ⊆ S) ∧
       (∀ r s, c.IsExpansionBounded r s) ∧ (∀ K, c.IsMonomialBounded K) ∧
-      c.eval (F.regRef Ω) = (F.changeOwner ∅ Q).regRef Ω :=
-  exists_originalCircuit_of_frame_eq Ω (F.changeOwner_empty Q).symm
+      Matrix.toEuclideanLin c.op (F.regRef Ω) = (F.changeOwner ∅ Q).regRef Ω := by
+  obtain ⟨c, h0, hc⟩ := exists_originalCircuit_of_frame_eq Ω (F.changeOwner_empty Q).symm
+  exact ⟨c, h0, fun S ↦ OriginalCircuit.forall_participants_of_nonprivateCount_eq_zero
+      (Q := fun D ↦ (↑D : Set Party) ⊆ S) h0,
+    OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero h0,
+    OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero h0, hc⟩
 
 /-! ### Labels of the guides of a repainting -/
 

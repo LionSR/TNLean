@@ -58,7 +58,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet
+open EncodedFrame
 
 /-! ### The canonical tag holder -/
 
@@ -206,7 +206,7 @@ at a center of `V` has error at most `ε` on `Ω`, then `1 - |V| ε ≤ ‖Ω_F�
 
 Polynomial-PEPS manuscript (Sept 24 2026), `05-frames.tex:84–94`. -/
 theorem one_sub_mul_le_norm_refVec_guideFrame [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)}
-    (hΩ : ‖Ω‖ = 1) {ε : ℝ} (hε : ∀ z ∈ V, ‖act (patch z).proj Ω - Ω‖ ≤ ε) :
+    (hΩ : ‖Ω‖ = 1) {ε : ℝ} (hε : ∀ z ∈ V, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ε) :
     1 - V.card * ε ≤ ‖(guideFrame pos q g own ph rank V patch hV).refVec Ω‖ ∧
       ‖(guideFrame pos q g own ph rank V patch hV).refVec Ω‖ ≤ 1 := by
   have h := Frame.one_sub_mul_le_norm_refVec (guideFrame pos q g own ph rank V patch hV) hΩ
@@ -227,7 +227,7 @@ theorem one_sub_mul_le_norm_refVec_guideFrame_patchAt [NeZero q]
     1 - V.card * (L : ℝ) ^ (-p) ≤
         ‖(guideFrame pos q g own ph rank V (fun z => patchAt S z hr) hV).refVec Ω‖ ∧
       ‖(guideFrame pos q g own ph rank V (fun z => patchAt S z hr) hV).refVec Ω‖ ≤ 1 :=
-  one_sub_mul_le_norm_refVec_guideFrame hΩ fun _ _ => norm_act_proj_patchAt_sub_le S _ hr
+  one_sub_mul_le_norm_refVec_guideFrame hΩ fun _ _ => norm_toEuclideanLin_proj_patchAt_sub_le S _ hr
 
 /-! ### Trivial holes at the last level -/
 
@@ -271,7 +271,7 @@ theorem guideFrame_unitLevel [NeZero q] (hpos : ∀ x, IsCellCenter (pos x))
     obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hP
     exact h.patch.proj_of_outer_eq_empty (hempty h hh)
   refine ⟨hempty, by rw [F.encoder_conjTranspose_mul_self, hprod], fun Ω => ?_⟩
-  rw [F.norm_refVec_eq, hprod, act_one]
+  rw [F.norm_refVec_eq, hprod, toEuclideanLin_one_apply]
 
 end Frames
 
