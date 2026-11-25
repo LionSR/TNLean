@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualEntropySampling
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.OldStateParameterIntegral
+import QICLean.ManyBody.Replica.BandMetric.OldLeafIntegral
 
 /-!
 # Derived parameter regularity of actual charge defects

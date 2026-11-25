@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.ManyBody.Replica.BandMetric.SplitEntropy
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ChargeEntropyCost
 
 /-!
@@ -21,59 +22,6 @@ at `openai/math@adc7f124`.
 
 open scoped BigOperators
 open TensorPower TensorPower.ReplicaTransport
-namespace TensorPower.ReplicaTransport
-
-variable {V : Type*} [Fintype V] [DecidableEq V]
-
-private theorem not_middle_side_of_contains (π : PYF V) (hπ : π.IsPartition)
-    (B : Finset V) (hc : π.Contains B) :
-    ¬ ((B ∩ π.Y).Nonempty ∧ ((B ∩ π.P).Nonempty ∨ (B ∩ π.F).Nonempty)) := by
-  rintro ⟨⟨x, hx⟩, hs⟩
-  obtain ⟨hxB, hxY⟩ := Finset.mem_inter.mp hx
-  rcases hc with hP | hY | hF
-  · exact Finset.disjoint_left.mp hπ.1 (hP hxB) hxY
-  · rcases hs with ⟨y, hy⟩ | ⟨y, hy⟩
-    · exact Finset.disjoint_left.mp hπ.1 (Finset.mem_inter.mp hy).2
-        (hY (Finset.mem_inter.mp hy).1)
-    · exact Finset.disjoint_left.mp hπ.2.2.1 (hY (Finset.mem_inter.mp hy).1)
-        (Finset.mem_inter.mp hy).2
-  · exact Finset.disjoint_left.mp hπ.2.2.1 hxY (hF hxB)
-
-open Classical in
-/-- A contained support has no receiving-middle incidence. Otherwise its
-unique receiving side contributes precisely the split entropy. -/
-theorem incidence_sum_eq_splitBandEta (n : V → ℕ) (π : PYF V) (hπ : π.IsPartition)
-    (B : Finset V) (hcase : π.Contains B ∨ π.SplitsToP B ∨ π.SplitsToF B)
-    (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
-    (if (B ∩ π.F).Nonempty ∧ (B ∩ π.Y).Nonempty then
-        moveEta n π (.toF (B ∩ π.Y)) θ else 0) +
-      (if (B ∩ π.P).Nonempty ∧ (B ∩ π.Y).Nonempty then
-        moveEta n π (.toP (B ∩ π.Y)) θ else 0) =
-      if π.Contains B then 0 else splitBandEta n π B θ := by
-  classical
-  by_cases hc : π.Contains B
-  · have hn := not_middle_side_of_contains π hπ B hc
-    have hP : ¬ ((B ∩ π.P).Nonempty ∧ (B ∩ π.Y).Nonempty) :=
-      fun h => hn ⟨h.2, Or.inl h.1⟩
-    have hF : ¬ ((B ∩ π.F).Nonempty ∧ (B ∩ π.Y).Nonempty) :=
-      fun h => hn ⟨h.2, Or.inr h.1⟩
-    simp only [hP, hF, hc, ↓reduceIte, add_zero]
-  · rcases hcase with hc' | hP | hF
-    · exact (hc hc').elim
-    · have hnF : ¬ (B ∩ π.F).Nonempty := by
-        rw [Finset.disjoint_iff_inter_eq_empty.mp hP.2.2]
-        simp
-      simp only [hc, hP.1, hP.2.1, hnF, false_and, and_self, ↓reduceIte,
-        zero_add, splitBandEta, hP, moveEta]
-    · have hnP : ¬ (B ∩ π.P).Nonempty := by
-        rw [Finset.disjoint_iff_inter_eq_empty.mp hF.2.2]
-        simp
-      have hnSplitP : ¬ π.SplitsToP B := fun hP => hnP hP.2.1
-      simp only [hc, hF.1, hF.2.1, hnP, false_and, and_self, ↓reduceIte,
-        add_zero, splitBandEta, hnSplitP, moveEta]
-
-end TensorPower.ReplicaTransport
-
 namespace TNLean.PEPS.AreaLaw.Scan
 
 variable {V I : Type*} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]

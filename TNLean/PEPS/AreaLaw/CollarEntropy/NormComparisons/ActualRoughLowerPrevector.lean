@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualRoughLower
-import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualRoughLowerRemainder
+import QICLean.Representation.Bell.LabelDimensionRemainder
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaPrevectorProperties
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
 
@@ -131,8 +131,8 @@ theorem exists_actualScan_suppliedPrevector_rough_lower_of_weight
   simpa only [roughLowerRemainderAtWeight] using!
     hlower S hSK hm hM (S.n * S.m) h hh hhJ Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos
       pre k hk hprenonzero hprenorm hsym
-      (ell k) Sent (roughLowerLabelDefect ell Sent k) hC hR
-      (roughLowerLabelDefect_label_bound ell Sent k).2 s p
+      (ell k) Sent (labelDimensionDefect ell Sent k) hC hR
+      (labelDimensionDefect_label_bound ell Sent k).2 s p
 
 
 open Classical in
