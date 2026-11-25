@@ -20,11 +20,11 @@ principles of that document:
 
 Work already under way is taken as given and not redesigned here:
 
-- `TNLean/Circuit` and the top level of `TNLean/Lattice` have moved to QICLean;
+- `TNLean/Circuit` and all of `TNLean/Lattice` have moved to QICLean;
 - the generic modules of `TNLean/Algebra` and the finite-ring dynamics of
   `MPS/Preparation` are moving there;
 - the party calculus (`Lattice/PartyCircuit`, `Compression`, `Sheet`) is
-  tracked in issue #10958;
+  `QICLean/Circuit/Party` (issue #10958); `TNLean/Lattice` is deleted;
 - the 44 modules of `Lattice/Compression` that contract a network of tensors
   have moved to the new lowest tensor-network layer `TNLean/Network` (see "The
   layers").
@@ -34,7 +34,7 @@ Work already under way is taken as given and not redesigned here:
 | | Before | After the map |
 |---|---:|---:|
 | Modules with declarations | 5,311 | 4,768 |
-| Directories with more than 40 modules at one level | 20 (in the tensor-network directories) | 0 (4 remain in `Algebra`, `Lattice/Compression`, `Lattice/PartyCircuit`, `QCA`, all bound for QICLean) |
+| Directories with more than 40 modules at one level | 20 (in the tensor-network directories) | 0 (2 remain in `Algebra` and `QCA`, both bound for QICLean; `Lattice` is deleted) |
 | Pairs of directories importing each other (depth of `check_import_layers.py`) | 54 | 11 |
 | Imports pointing outside the allowed layers | not defined | 52, all recorded with the declarations to move |
 
@@ -91,7 +91,7 @@ the only violations left were those listed here as declaration-level work.
 ```mermaid
 flowchart BT
   Q["QICLean<br/>matrices, channels, sites, dynamics, Hamiltonians, circuits"]
-  B["base: Algebra, Circuit, Lattice, QCA, Tactic<br/>no tensor network; moving to QICLean"]
+  B["base: Algebra, Circuit, QCA, Tactic<br/>no tensor network; moving to QICLean"]
   N["Network<br/>contractions with link-dependent virtual alphabets, party networks, distributed contraction"]
   T["MPS/Tensor<br/>tensors, words, mpv, gauge, blocking, chains, local ground spaces"]
   R["MPS/Transfer<br/>transfer maps, primitivity, spectra, overlaps, correlations"]
@@ -256,7 +256,7 @@ declarations that sit in the wrong module (for example `IncidentEdge` in
 |---|---:|---|
 | `Algebra` | 255 (+1) | Kept as it is. Its generic modules are moving to QICLean (step 3A). The map adds `Algebra/GInjective` (G-injective linear maps) for the same move. Of its modules, 5 name a tensor in a statement, by the scan: `BlockTriangularWord`, `CyclicInsertion`, `FiniteGroupCommutant`, `TensorProductContraction`, `TensorProductRegrouping`. Step 3A decides whether they stay. |
 | `Circuit` | 22 | Kept; being emptied into QICLean. |
-| `Lattice` | 360 | Kept. The party calculus (`PartyCircuit` 69, `Compression` 254, `Sheet` 20) is #10958. The 44 modules of `Compression` that contract a network of tensors have since moved to `Network`, leaving 210 in `Compression`. The ten root modules are QICLean-bound Hamiltonian, entropy and region material (`FiniteDomain`, `MarginalTails`, `RegionEntropyInequalities`, `RegionalReset`, `RegionalResetEntropy`, `RegionalSwapSupport`, `ReplicaSwap`, `PhysicalBufferCoordinates`, `SiteRelabelEntropy`, `StateSpace`). The map adds the four lattice modules of the two-dimensional area law that the chain area law imports: `BufferedRectangles`, `GraphInteractionBudget`, `GraphInteractionDiamondCounting`, and `InitialBuffer` renamed `BufferedRectangleEntropy`. |
+| `Lattice` | 360 | Deleted. The party calculus (`PartyCircuit` 69, `Compression` 254, `Sheet` 20) is `QICLean/Circuit/Party` (#10958); the 44 modules of `Compression` that contract a network of tensors moved to `Network` before, and `DistributedLinks`, `SourceNetworkIncidence`, `PhysicalFirstNetworkResources` were merged into their consumers in `Network`. The root modules went to QICLean earlier. |
 | `QCA` | 58 | Kept, except `MargolusTensorLocalRule` (it mentions an MPU and moves to `MPS/MPU/QuasiLocal`). The other 57 mention no tensor network and are QICLean-bound: 31 about sites and quasi-local algebras, 17 about automorphisms and cellular automata, 5 about matrix algebras, 4 about Margolus gates. The 57 are divided into seven subdirectories by object (Part II, "`MPS/MPU` and `QCA`"). |
 | `Tactic` | 2 | Kept. |
 
@@ -1088,8 +1088,8 @@ The two-dimensional area law mentions no tensor network in any of its 534
 modules. It stays in TNLean all the same; see question 3 below.
 
 The directories outside the map that are already moving are not counted above:
-`Algebra` (250 of 255 without a tensor), `Circuit` (22), and the non-party part
-of `Lattice`.
+`Algebra` (250 of 255 without a tensor), `Circuit` (22), and `Lattice` (since
+deleted: its party calculus is `QICLean/Circuit/Party`).
 
 ## Namespaces naming a directory that disappears
 
@@ -2379,7 +2379,10 @@ network. They split into two groups.
     `qiclean:hamiltonian`.
   - `SquareLatticeConnectivity` is `qiclean:graph`.
 - **Party calculus (issue #10958; `qiclean:circuit`).** The `note` column of the
-  `.tsv` gives the destination of each module.
+  `.tsv` gives the destination of each module. (Done: the calculus is
+  `QICLean/Circuit/Party`; these modules stayed in `PEPS/Approximation` and were
+  ported to it, or deleted where QICLean states their content, and
+  `TNLean/Lattice` is deleted.)
   - **With `Lattice/PartyCircuit`:** `PartyGateCircuit`,
     `PartyGateOriginalCircuit`, `PartyGateSourceBound`, `PartyChainRestriction`,
     `WordSelectedRestriction`, `LayoutPartitionWord`, `ActualSourceGateDensity`,
@@ -2446,7 +2449,7 @@ names, which are unchanged.
 | `DyadicTreatedTrueVertices` | `Guides` by statements; `FrameChanges` by imports | none: it uses only guide geometry; the imports of `DyadicPointTreatmentRewrite` and `DyadicLevelTrueVertices` are unused | import the `Guides` modules directly and move it to `Guides` |
 | `DyadicProtocolParties` | `Guides` (no tensor network) by statements; above `Routing` (a tensor-network module) by imports | `InGrid` from `DyadicRoutingPEPS` | move `InGrid` (a predicate on dyadic placements) into `DyadicHierarchy/DyadicRouting`; `Guides` then no longer imports `Routing` |
 | `AngularInformationBound` | `Information` by statements; above `Guides` by imports | `AngularSeparation.translate` (with `cappedMarkDistance_translate`) in `AngularSeparationBridges` | move both lemmas into `Cells/AngularAnnularLayers`; `Information` then no longer imports `Guides` |
-| `SquarePatchRelabel` | `NestedPatches`, imports `Information` | none from `InformationReset`; it uses only lattice and site-embedding lemmas reached through it | import `Lattice.Sheet.Splitting`, `Circuit.SiteEmbedding` and `Lattice.RegionalReset` directly |
+| `SquarePatchRelabel` | `NestedPatches`, imports `Information` | none from `InformationReset`; it uses only lattice and site-embedding lemmas reached through it | import the QICLean modules of the three-region cut, the site embedding and the regional reset directly |
 | `RangeSquareGroundState` | `PEPS/AreaLaw` by statements; imports `OriginalNestedPatchEntropy` without using it | none | resolved by the override in §3 (both go down); the import can also be replaced by `SquareAreaLawSpecialization` |
 
 ### `PEPS/AreaLaw`
@@ -2528,7 +2531,7 @@ the amplification proposition and its clearances (`AmplificationProof`,
 frustration-free area law (`FrustrationFreeAmplification`, `FrustrationFreeAreaLaw`). Root
 modules import every subdirectory they need; no subdirectory imports the root.
 
-Outside `PEPS/AreaLaw`: `TNLean/Lattice` receives the four `base` modules
+Outside `PEPS/AreaLaw`: `TNLean/Lattice` (since deleted) was to receive the four `base` modules
 (`BufferedRectangles`, `GraphInteractionBudget`, `GraphInteractionDiamondCounting`,
 `BufferedRectangleEntropy` = old `InitialBuffer`, renamed because "Initial" names a proof
 stage); `TNLean/PEPS/Approximation` keeps `EncodedFrame`, `HoleEncoder`, `PatchRewrite`,
