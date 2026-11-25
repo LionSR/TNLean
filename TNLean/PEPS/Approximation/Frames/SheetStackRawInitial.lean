@@ -17,10 +17,10 @@ frame without holes, held entirely by one party.
 A frame without holes has reference vector `Ω` on its raw registers, of norm `‖Ω‖`
 (`EncodedFrame.Frame.norm_refVec_of_holes_eq_nil`). Hence, when `‖Ω‖ = 1`, the product of the
 reference vectors of any list of such frames has norm one
-(`EncodedFrame.norm_framesRef_of_holes_eq_nil`), and every such frame has a reference vector of
-norm one, which is the normalization hypothesis of the initial local operations
-`EncodedFrame.exists_originalCircuit_initial`. The initial step of the protocol follows
-(`EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil`).
+(`EncodedFrame.norm_framesRef_of_holes_eq_nil`), and the product of the norms of the reference
+vectors of the frames held by any party is one, which is the normalization hypothesis of the
+initial local operations `EncodedFrame.exists_originalCircuit_initial`. The initial step of the
+protocol follows (`EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil`).
 
 ## Main results
 
@@ -74,8 +74,10 @@ theorem exists_originalCircuit_initial_of_holes_eq_nil {Ω : EuclideanSpace ℂ 
     ∃ c : OriginalCircuit (fun _ : Party ↦ Unit) (framesSystem q pos Fs fun _ ↦ Unit),
       c.nonprivateCount = 0 ∧
         toEuclideanLin c.op (EuclideanSpace.single (fun _ ↦ ()) 1) = framesRef Ω Fs := by
-  refine exists_originalCircuit_initial Ω Fs holder (fun F hF p hp ↦ ?_)
-    fun F hF ↦ (F.norm_refVec_of_holes_eq_nil (hraw F hF) Ω).trans hΩ
+  refine exists_originalCircuit_initial Ω Fs holder (fun F hF p hp ↦ ?_) fun p ↦
+    List.prod_eq_one fun r hr ↦ by
+      obtain ⟨F, hF, rfl⟩ := List.mem_map.mp hr
+      exact (F.norm_refVec_of_holes_eq_nil (hraw F (List.mem_filter.mp hF).1) Ω).trans hΩ
   have hown' := hown F hF
   have hraw' := hraw F hF
   obtain ⟨own, holes, hd⟩ := F

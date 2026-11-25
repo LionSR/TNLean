@@ -23,8 +23,9 @@ encoded frames, for the registers of a list of frames (`EncodedFrame.framesSyste
   party that carries the reference vector of the frames, in the old order, to the reference
   vector in the new order (`EncodedFrame.exists_originalCircuit_stackRef_of_perm`).
 * **The initial local operations.** If each frame of a list is held entirely by one party and
-  has a reference vector of norm one, one local operation at every party prepares the reference
-  vector of all frames (`EncodedFrame.exists_originalCircuit_initial`).
+  the product of the norms of the reference vectors of the frames held by each party is one, one
+  local operation at every party prepares the reference vector of all frames
+  (`EncodedFrame.exists_originalCircuit_initial`).
 * **The norm of the reference vector.** If every frame satisfies the frame constraint at
   accuracy `ε`, the reference vector has norm at least one minus `ε` times the total number of
   holes (`EncodedFrame.one_sub_mul_le_norm_stackRef`). With at most `C L³` holes in total and
@@ -91,11 +92,12 @@ theorem exists_originalCircuit_of_frame_eq (Ω : EuclideanSpace ℂ (ι → Fin 
 /-! ### The initial local operations -/
 
 /-- **The initial local operations.** Let every frame `F` of the list `Fs` be held entirely by
-the party `holder F` (the registers of every other party on `F` are a single point), with a
-reference vector of norm one. One local operation at every party prepares, from the system with
-one basis vector at every party, the reference vector of `Fs`: the product across the parties of
-the reference vectors of the frames each party holds. The resulting original circuit has no
-nonprivate gate.
+the party `holder F` (the registers of every other party on `F` are a single point), and let the
+product reference vector `⊗_{F at p} Ω_F` of the frames held by each party `p` have norm one,
+that is, the product of the norms `‖Ω_F‖` over these frames is one. One local operation at every
+party prepares, from the system with one basis vector at every party, the reference vector of
+`Fs`: the product across the parties of the reference vectors of the frames each party holds.
+The resulting original circuit has no nonprivate gate.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 21–23 and 658–667 (“Initialize all
 required copies of `Ω` privately at their future owners, including the main copy at the root.
@@ -104,12 +106,22 @@ This is a pure product initialization across parties”), and the product inputs
 theorem exists_originalCircuit_initial (Ω : EuclideanSpace ℂ (ι → Fin q))
     (Fs : List (Frame pos q Party)) (holder : Frame pos q Party → Party)
     (hown : ∀ F ∈ Fs, ∀ p ≠ holder F, Fintype.card (F.system p) = 1)
-    (hx : ∀ F ∈ Fs, ‖F.refVec Ω‖ = 1) :
+    (hx : ∀ p, ((Fs.filter fun F ↦ holder F = p).map fun F ↦ ‖F.refVec Ω‖).prod = 1) :
     ∃ c : OriginalCircuit (fun _ : Party ↦ Unit) (framesSystem q pos Fs fun _ ↦ Unit),
       c.nonprivateCount = 0 ∧
-        toEuclideanLin c.op (EuclideanSpace.single (fun _ ↦ ()) 1) = framesRef Ω Fs :=
-  exists_originalCircuit_framesVec (fun F : Frame pos q Party ↦ F.regRef Ω) holder hown
-    fun F hF ↦ (F.norm_regRef Ω).trans (hx F hF)
+        toEuclideanLin c.op (EuclideanSpace.single (fun _ ↦ ()) 1) = framesRef Ω Fs := by
+  obtain ⟨φ, hφn, hφ⟩ :=
+    exists_productVector_eq_framesVec (fun F : Frame pos q Party ↦ F.regRef Ω) holder Fs hown
+  have hφ1 : ∀ p, ‖φ p‖ = 1 := fun p ↦ by
+    rw [hφn p, List.map_congr_left fun F _ ↦ F.norm_regRef Ω, hx p]
+  refine ⟨(Word.prepareProduct φ).toOriginalCircuit (Word.isAllowed_prepareProduct φ hφ1),
+    Word.nonprivateCount_toOriginalCircuit_of_sourceCount_eq_zero _ _ rfl, ?_⟩
+  have h1 : WithLp.ofLp (EuclideanSpace.single (fun _ : Party ↦ ()) (1 : ℂ)) = fun _ ↦ 1 := by
+    funext z
+    rw [show z = fun _ ↦ () from Subsingleton.elim _ _]
+    simp
+  rw [Word.op_toOriginalCircuit, framesRef, ← hφ, ← Word.op_prepareProduct_mulVec, ← h1]
+  rfl
 
 /-! ### The norm of the reference vector -/
 
