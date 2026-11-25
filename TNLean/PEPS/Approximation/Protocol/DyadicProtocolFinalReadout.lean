@@ -21,7 +21,7 @@ reference factors, the frozen auxiliary frames and the idle registers, form `Ξ`
 
 * `DyadicProtocol.exists_reference_changes_of_readoutCircuit`: for any protocol whose
   unit-square parties are the raw owners of a main frame `M` with trivial holes, whose final
-  private registers are those of the final regrouping of the stack `M :: Fs`,
+  private registers are identified with those of the final regrouping of the stack `M :: Fs`,
   and whose final reference vector is the regrouped reference vector of that stack, the readout
   of the final reference vector is `Ω ⊗ Ξ` with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`, given the frame
   constraints of the other sheets at accuracy `L⁻⁶⁰` and at most `C L³` holes on them.
@@ -74,30 +74,14 @@ theorem physicalDimension_eq_one_of_site_eq {own : SquareLatticeVertex L L → P
     D.physicalDimension p = 1 :=
   D.physicalDimension_eq_one p fun ⟨v, hv⟩ => hp ⟨v, (hsite v).symm.trans hv⟩
 
-omit [Fintype P] in
-/-- Transport of a physical-private readout along an equality of the private registers. -/
-private theorem exists_physicalReadout_eq_of_eq [Fintype P] {d : P → ℕ} {V V' : P → Type}
-    [i₁ : ∀ p, Fintype (V p)] [j₁ : ∀ p, DecidableEq (V p)] [i₂ : ∀ p, Fintype (V' p)]
-    [j₂ : ∀ p, DecidableEq (V' p)] (hV : V = V')
-    {x : EuclideanSpace ℂ (Config (physicalSystem d V))}
-    {y : EuclideanSpace ℂ (Config (physicalSystem d V'))}
-    (hx : x = OriginalCircuit.castVector (congrArg (physicalSystem d) hV).symm y)
-    {Ω' : EuclideanSpace ℂ ((p : P) → Fin (d p))} (Ξ' : EuclideanSpace ℂ (Config V'))
-    (h : toEuclideanLin (physicalReadout d V') y = euclideanTensorVector Ω' Ξ') :
-    ∃ Ξ : EuclideanSpace ℂ (Config V), ‖Ξ‖ = ‖Ξ'‖ ∧
-      toEuclideanLin (physicalReadout d V) x = euclideanTensorVector Ω' Ξ := by
-  subst hV hx
-  obtain rfl : i₁ = i₂ := Subsingleton.elim _ _
-  obtain rfl : j₁ = j₂ := Subsingleton.elim _ _
-  exact ⟨Ξ', rfl, h⟩
-
 /-- **The final reference vector of a protocol.** Let the unit-square parties of a protocol be
-the raw owners of a main frame `M` with trivial holes, let its final private registers be those of
-the final regrouping of the stack `M :: Fs` followed by the idle system `W`, and let its final
-reference vector be the regrouped reference vector of that stack with an idle vector of norm
-one. If `‖Ω‖ = 1`, every hole of the other sheets satisfies the frame constraint at accuracy
-`L⁻⁶⁰`, and the other sheets carry at most `C L³` holes in total, then the readout of the final
-reference vector is `Ω ⊗ Ξ` with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
+the raw owners of a main frame `M` with trivial holes, let its final private registers be
+identified, through `epriv`, with those of the final regrouping of the stack `M :: Fs` followed by
+the idle system `W`, and let its final reference vector be the regrouped reference vector of that
+stack with an idle vector of norm one, read through this identification. If `‖Ω‖ = 1`, every hole
+of the other sheets satisfies the frame constraint at accuracy `L⁻⁶⁰`, and the other sheets carry
+at most `C L³` holes in total, then the readout of the final reference vector is `Ω ⊗ Ξ` with
+`1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 4, `06-geometry.tex`,
 lines 43–51, and its proof, lines 653–656 and 669–681. -/
@@ -105,13 +89,14 @@ theorem exists_reference_changes_of_readoutCircuit [NeZero q]
     {pos : SquareLatticeVertex L L → ℝ × ℝ} (M : Frame pos q P) (Fs : List (Frame pos q P))
     (W : P → Type) [∀ p, Fintype (W p)] [∀ p, DecidableEq (W p)]
     (hown : Function.Injective M.owner) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
-    (hsite : ∀ v, D.site v = M.owner v) (hpriv : D.privateOutput = readoutPrivate M Fs W)
+    (hsite : ∀ v, D.site v = M.owner v) (epriv : ∀ p, D.privateOutput p ≃ readoutPrivate M Fs W p)
     {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1) (hL : 0 < L) {C : ℝ}
     (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
     {ξ : EuclideanSpace ℂ (Config W)} (hξ : ‖ξ‖ = 1)
-    (href : OriginalCircuit.castVector D.system_changes (D.reference D.changes) =
-      OriginalCircuit.castVector (congrArg (physicalSystem D.physicalDimension) hpriv).symm
+    (href : D.reference D.changes = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+      (Equiv.piCongrRight fun p ↦
+        (D.finalSystemEquiv p).trans ((Equiv.refl _).prodCongr (epriv p))).symm
         (toEuclideanLin (readoutCircuit D.physicalDimension M Fs W hown
           (D.physicalDimension_eq_of_site_eq hsite)
           (D.physicalDimension_eq_one_of_site_eq hsite)).op (stackRef Ω (M :: Fs) ξ))) :
@@ -120,10 +105,20 @@ theorem exists_reference_changes_of_readoutCircuit [NeZero q]
         D.readout (D.reference D.changes) = euclideanTensorVector Ω Ξ := by
   have he : ∀ σ v, (D.physicalConfigEquiv σ v : ℕ) = σ (M.owner v) := fun σ v => by
     rw [D.physicalConfigEquiv_apply_val, hsite]
-  obtain ⟨Ξ', h1, h2, h3⟩ := exists_readoutCircuit_norm D.physicalDimension M Fs hown _ _ hM _ he
+  obtain ⟨Ξ', h1, h2, h3⟩ := exists_readoutCircuit_norm D.physicalDimension M Fs hown
+    (D.physicalDimension_eq_of_site_eq hsite) (D.physicalDimension_eq_one_of_site_eq hsite) hM _ he
     hΩ hL hε hholes hξ
-  obtain ⟨Ξ, hΞ, h⟩ := exists_physicalReadout_eq_of_eq hpriv href Ξ' h3
-  exact ⟨Ξ, hΞ ▸ h1, hΞ ▸ h2, D.readout_eq_euclideanTensorVector _ Ω Ξ h⟩
+  refine ⟨LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight epriv).symm Ξ',
+    by rwa [LinearIsometryEquiv.norm_map], by rwa [LinearIsometryEquiv.norm_map],
+    D.readout_eq_euclideanTensorVector _ Ω _ ?_⟩
+  ext ⟨σ, z⟩
+  have hc := congrArg (fun y ↦ y (σ, Equiv.piCongrRight epriv z)) h3
+  simp only [toEuclideanLin_physicalReadout_apply, euclideanTensorVector_apply] at hc ⊢
+  rw [href]
+  simp only [LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply, Equiv.symm_symm]
+  convert hc using 3
+  funext p
+  simp [Equiv.arrowProdEquivProdArrow]
 
 end DyadicProtocol
 
@@ -213,7 +208,8 @@ below `1/2`. The other sheets are frozen auxiliary frames, one for each change o
 that initializes an auxiliary sheet, each with at most as many holes as its final guide has true
 vertices and with patches supplied by Proposition 4.1 at accuracy `L⁻⁶⁰`, followed by idle
 registers with a vector of norm one. The unit-square party of a site is the party of its unit
-square, and the final private registers and reference vector are those of the final regrouping.
+square, and the final private registers and reference vector are, through an identification
+of the bases, those of the final regrouping.
 Then, for
 `‖Ω‖ = 1`, the readout of the final reference vector is `Ω ⊗ Ξ` with
 `1 - 214 L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
@@ -237,10 +233,11 @@ theorem DyadicProtocol.exists_reference_changes_unitLevel [NeZero q]
     (W : ProtocolParty k → Type) [∀ p, Fintype (W p)] [∀ p, DecidableEq (W p)]
     {ξ : EuclideanSpace ℂ (Config W)} (hξ : ‖ξ‖ = 1)
     (hsite : ∀ v, D.site v = .inl (unitSquare hk v))
-    (hpriv : D.privateOutput = readoutPrivate (unitLevelFrame k done S rank V patch hV)
-      (((protocolSchedule k large).filter fun x => x.2.IsAuxInit).map aux) W)
-    (href : OriginalCircuit.castVector D.system_changes (D.reference D.changes) =
-      OriginalCircuit.castVector (congrArg (physicalSystem D.physicalDimension) hpriv).symm
+    (epriv : ∀ p, D.privateOutput p ≃ readoutPrivate (unitLevelFrame k done S rank V patch hV)
+      (((protocolSchedule k large).filter fun x => x.2.IsAuxInit).map aux) W p)
+    (href : D.reference D.changes = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+      (Equiv.piCongrRight fun p ↦
+        (D.finalSystemEquiv p).trans ((Equiv.refl _).prodCongr (epriv p))).symm
         (toEuclideanLin (readoutCircuit D.physicalDimension
           (unitLevelFrame k done S rank V patch hV)
           (((protocolSchedule k large).filter fun x => x.2.IsAuxInit).map aux) W
@@ -264,7 +261,7 @@ theorem DyadicProtocol.exists_reference_changes_unitLevel [NeZero q]
     isCellCenter_cellCenterPos hc hcorner hs).1
   refine D.exists_reference_changes_of_readoutCircuit _ _ W
     (unitLevelFrame_owner_injective hk hdone) hM
-    (fun v => (hsite v).trans (unitLevelFrame_owner hk hdone v).symm) hpriv hΩ hL
+    (fun v => (hsite v).trans (unitLevelFrame_owner hk hdone v).symm) epriv hΩ hL
     ?_ ?_ hξ href
   · intro F hF h hh
     obtain ⟨x, hx, rfl⟩ := List.mem_map.1 hF

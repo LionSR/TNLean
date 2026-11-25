@@ -78,6 +78,7 @@ Three consequences are proved for every protocol satisfying the bounds:
 
 ## Main definitions
 
+* `TNLean.PEPS.EncodedFrame.heldRef`: the vector, at one party, of the copies of `Ω` it holds.
 * `TNLean.PEPS.Approximation.DyadicProtocol`: the data of a protocol.
 * `TNLean.PEPS.Approximation.DyadicProtocol.trajectory`: the actual vector at every stage.
 * `TNLean.PEPS.Approximation.DyadicProtocol.readout`: the physical and private coordinates of
@@ -136,6 +137,43 @@ module does not construct it.
   `07-assembly.tex:18–51`; immutable revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
   These are original proofs; no OpenAI Lean code is copied or adapted.
 -/
+
+/-! ### The copies held by one party -/
+
+noncomputable section
+
+namespace TNLean.PEPS.EncodedFrame
+
+open ManyBody QuantumCircuit.Party
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type} [Fintype Party]
+  [DecidableEq Party] {pos : ι → ℝ × ℝ}
+
+/-- The factor at the party `p` of the reference vector `K_F Ω` of a frame `F` held by the party
+`holder F`: the reference vector read on the registers of `p` when `p` holds the frame, and the
+vector `1` otherwise.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+`06-geometry.tex:21–23, 658–660`. -/
+def Frame.heldFactor (Ω : EuclideanSpace ℂ (ι → Fin q)) (holder : Frame pos q Party → Party)
+    (p : Party) (F : Frame pos q Party) : EuclideanSpace ℂ (F.system p) :=
+  WithLp.toLp 2 fun a ↦
+    if holder F = p then ∑ z : Config F.system, if z p = a then F.regRef Ω z else 0 else 1
+
+/-- The vector at the party `p` of the copies of `Ω` that it holds in a list of frames, each held
+by the party `holder F`: the product of the factors at `p` of the reference vectors of the frames,
+on the registers of `p` on all the frames.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
+`06-geometry.tex:21–23, 658–660`. -/
+def heldRef (Ω : EuclideanSpace ℂ (ι → Fin q)) (holder : Frame pos q Party → Party) (p : Party) :
+    (Fs : List (Frame pos q Party)) → EuclideanSpace ℂ (framesSystem q pos Fs (fun _ ↦ Unit) p)
+  | [] => EuclideanSpace.single () 1
+  | F :: Fs => EuclideanSpace.vecKron (F.heldFactor Ω holder p) (heldRef Ω holder p Fs)
+
+end TNLean.PEPS.EncodedFrame
+
+end
 
 section
 
@@ -223,8 +261,9 @@ structure DyadicProtocol (L q : ℕ) (P : Type) [Fintype P] [DecidableEq P] wher
   [fintype_privateOutput : ∀ p, Fintype (privateOutput p)]
   /-- The private registers have decidable equality. -/
   [decidableEq_privateOutput : ∀ p, DecidableEq (privateOutput p)]
-  /-- The final memory: at every party the physical register, then the private register. -/
-  system_changes : system changes = physicalSystem physicalDimension privateOutput
+  /-- The final memory: at every party the physical register, then the private register, through
+  an identification of the bases. -/
+  finalSystemEquiv : ∀ p, system changes p ≃ physicalSystem physicalDimension privateOutput p
   /-- The party assigned to each square of the padded hierarchy, including the root square.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
@@ -306,7 +345,7 @@ square, and the configuration of the private registers.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:43–51`, with the physical
 and private registers of Theorem 5.2, `04-compression.tex:148–153`. -/
 def finalConfigEquiv : Config (D.system D.changes) ≃ Configuration L q × Config D.privateOutput :=
-  (Equiv.piCongrRight fun p ↦ Equiv.cast (congrFun D.system_changes p)).trans
+  (Equiv.piCongrRight D.finalSystemEquiv).trans
     ((Equiv.arrowProdEquivProdArrow P (fun p ↦ Fin (D.physicalDimension p)) D.privateOutput).trans
       (D.physicalConfigEquiv.prodCongr (Equiv.refl _)))
 
@@ -425,8 +464,9 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
   encoded frames are the main frame followed by the auxiliary frames; each is a copy of `Ω` with
   no hole, held entirely by one party, its designated party; and the whole initial memory of each
   party is the memory of the copies it holds (its registers on the frames, which are a single
-  point on the frames held by other parties), with initial vector the product of their reference
-  vectors. The party holding the first frame holds the main copy.
+  point on the frames held by other parties, through an identification `e` of the bases), with
+  initial vector the product of the reference vectors of these copies
+  (`EncodedFrame.heldRef`). The party holding the first frame holds the main copy.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
   `06-geometry.tex:21–23`: “Initialization is a pure product across parties. One party initially
@@ -434,9 +474,10 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
   parties”; and the initialization in the proof, `06-geometry.tex:658–660`. -/
   initialCopies : D.frames 0 ≠ [] ∧ ∃ holder : EncodedFrame.Frame (cellCenterPos L) q P → P,
     (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧
-      ∃ h : D.system 0 = EncodedFrame.framesSystem q (cellCenterPos L) (D.frames 0) (fun _ ↦ Unit),
-        ∀ [NeZero q], D.reference 0 =
-          OriginalCircuit.castVector h.symm (EncodedFrame.framesRef Ω (D.frames 0))
+      ∃ e : ∀ p, D.system 0 p ≃
+          EncodedFrame.framesSystem q (cellCenterPos L) (D.frames 0) (fun _ ↦ Unit) p,
+        ∀ [NeZero q], ∀ p, D.initialVector p = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+          (e p).symm (EncodedFrame.heldRef Ω holder p (D.frames 0))
   /-- Item 2: at most `C_N L³` changes. -/
   changes_le : (D.changes : ℝ) ≤ C_N * (L : ℝ) ^ 3
   /-- Item 2: each change has a fixed number of nonprivate gates. -/
@@ -461,7 +502,8 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
           b * 2 ^ D.placement.scale p
   /-- Item 4: the reference vector of every intermediate stage is the product of the reference
   vectors `K_F Ω` of the encoded frames of that stage, of the protocol's own `Ω`, an unlabelled
-  list of the encoded copies. All its factors have norm at most one. Read per stage, being the
+  list of the encoded copies, read through an identification `e` of the memory of each party with
+  its registers on the frames. All its factors have norm at most one. Read per stage, being the
   main copy carries no content beyond the designations at the endpoints, which are stated by
   `initialCopies` at the initial stage and by `mainFrame_owner` before the last change. The
   initial stage is the product initialization of `initialCopies`, and the last stage is described
@@ -475,8 +517,10 @@ structure IsDistributionProtocol (Ω : StateSpace L q) (C_N C_K C_E : ℝ) (b k 
   one.” -/
   reference_frames : ∀ [NeZero q], ∀ t, 0 < t → t < D.changes →
     (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
-      ∃ h : D.system t = EncodedFrame.framesSystem q (cellCenterPos L) (D.frames t) (fun _ ↦ Unit),
-        D.reference t = OriginalCircuit.castVector h.symm (EncodedFrame.framesRef Ω (D.frames t))
+      ∃ e : ∀ p, D.system t p ≃
+          EncodedFrame.framesSystem q (cellCenterPos L) (D.frames t) (fun _ ↦ Unit) p,
+        D.reference t = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight e).symm
+          (EncodedFrame.framesRef Ω (D.frames t))
   /-- Item 4: every intermediate stage has at least one encoded frame.
 
   Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 4,

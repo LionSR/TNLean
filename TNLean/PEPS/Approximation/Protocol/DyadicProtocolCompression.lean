@@ -122,7 +122,7 @@ theorem isMonomialBounded_chain {K : ℕ} (n : ℕ)
 
 /-- The protocol, read as one distributed construction of Theorem 5.2: its composed changes, with
 their recorded monomial expansions, from the initial memory to the final memory of the protocol,
-read as physical and private registers.
+read as physical and private registers through the relabelling of the bases of the final memory.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:45–49`, and Theorem 5.2,
 `04-compression.tex:137–151`. -/
 def toDistributedConstruction (hL : 0 < L) :
@@ -130,22 +130,21 @@ def toDistributedConstruction (hL : 0 < L) :
   nonemptyParties := ⟨D.site (⟨0, hL⟩, ⟨0, hL⟩)⟩
   initialVector := D.initialVector
   norm_initialVector := D.norm_initialVector
-  circuit := (D.chain D.changes).castSystems rfl D.system_changes
+  circuit := (D.chain D.changes).comp (OriginalCircuit.relabel fun p ↦ (D.finalSystemEquiv p).symm)
 
-/-- Every property of the composed changes that passes to identified systems holds for the
-circuit of the protocol read as a distributed construction, which only identifies its final
-memory with the physical and private registers.
+/-- Every property of the composed changes that passes to a relabelling of the bases of the
+output holds for the circuit of the protocol read as a distributed construction, which only
+relabels its final memory as the physical and private registers.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:45–49`. -/
 theorem toDistributedConstruction_circuit_induction (hL : 0 < L)
     (Q : ∀ (X Y : P → Type) [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
       [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)], OriginalCircuit X Y → Prop)
-    (hcast : ∀ (X Y X' Y' : P → Type) [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
-      [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)] [∀ p, Fintype (X' p)]
-      [∀ p, DecidableEq (X' p)] [∀ p, Fintype (Y' p)] [∀ p, DecidableEq (Y' p)]
-      (w : OriginalCircuit X Y) (hX : X = X') (hY : Y = Y'), Q X Y w →
-        Q X' Y' (w.castSystems hX hY))
+    (hrel : ∀ (X Y Z : P → Type) [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
+      [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)] [∀ p, Fintype (Z p)]
+      [∀ p, DecidableEq (Z p)] (w : OriginalCircuit X Y) (e : ∀ p, Z p ≃ Y p), Q X Y w →
+        Q X Z (w.comp (OriginalCircuit.relabel e)))
     (h : Q _ _ (D.chain D.changes)) : Q _ _ (D.toDistributedConstruction hL).circuit :=
-  hcast _ _ _ _ _ rfl D.system_changes h
+  hrel _ _ _ _ _ h
 
 /-- Every nonprivate gate of the protocol circuit has the participating set of a nonprivate gate
 of one change.
@@ -154,11 +153,11 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 theorem exists_participants_toDistributedConstruction_circuit (hL : 0 < L)
     (g : (D.toDistributedConstruction hL).circuit.nonprivateLocations) :
     ∃ t < D.changes, ∃ g' : (D.step t).nonprivateLocations,
-      (D.toDistributedConstruction hL).circuit.participants g = (D.step t).participants g' :=
-  OriginalCircuit.forall_participants_castSystems
-    (Q := fun S ↦ ∃ t < D.changes, ∃ g' : (D.step t).nonprivateLocations,
-      S = (D.step t).participants g')
-    (D.chain D.changes) rfl D.system_changes (D.exists_participants_chain D.changes) g
+      (D.toDistributedConstruction hL).circuit.participants g = (D.step t).participants g' := by
+  rcases g with g | g
+  · exact D.exists_participants_chain D.changes g
+  · exact ((OriginalCircuit.isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero
+      (OriginalCircuit.nonprivateCount_relabel _)).false g).elim
 
 namespace IsDistributionProtocol
 
@@ -173,7 +172,8 @@ theorem nonprivateCount_toDistributedConstruction_circuit_le
     (D.toDistributedConstruction hL).circuit.nonprivateCount ≤ D.changes * b := by
   have hcount : (D.toDistributedConstruction hL).circuit.nonprivateCount =
       (D.chain D.changes).nonprivateCount :=
-    OriginalCircuit.nonprivateCount_castSystems _ rfl D.system_changes
+    (OriginalCircuit.nonprivateCount_comp _ _).trans
+      (by rw [OriginalCircuit.nonprivateCount_relabel, add_zero])
   rw [hcount, DyadicProtocol.nonprivateCount_chain]
   simpa using Finset.sum_le_card_nsmul _ _ b fun t ht ↦
     h.nonprivateCount_le t (Finset.mem_range.mp ht)
@@ -186,7 +186,8 @@ theorem participation_toDistributedConstruction_circuit_le
     (D.toDistributedConstruction hL).circuit.participation p ≤ b := by
   have hcount : (D.toDistributedConstruction hL).circuit.participation p =
       (D.chain D.changes).participation p :=
-    OriginalCircuit.participation_castSystems _ rfl D.system_changes p
+    (OriginalCircuit.participation_comp _ _ p).trans
+      (by rw [OriginalCircuit.participation_relabel, add_zero])
   rw [hcount, DyadicProtocol.participation_chain]
   exact h.participation_le p
 
@@ -196,8 +197,9 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 theorem isMonomialBounded_toDistributedConstruction_circuit
     (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 0 < L) :
     (D.toDistributedConstruction hL).circuit.IsMonomialBounded ⌊C_K * (L : ℝ) ^ k⌋₊ :=
-  (OriginalCircuit.isMonomialBounded_castSystems _ rfl D.system_changes).mpr
-    (D.isMonomialBounded_chain _ h.monomialBounded)
+  (OriginalCircuit.isMonomialBounded_comp _ _ _).mpr ⟨D.isMonomialBounded_chain _ h.monomialBounded,
+    OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero
+      (OriginalCircuit.nonprivateCount_relabel _) _⟩
 
 /-- In the protocol circuit, every monomial has at most `r` pair effects and every gate has
 absolute coefficient sum at most `C_K L^k`.
@@ -207,8 +209,10 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 theorem isExpansionBounded_toDistributedConstruction_circuit
     (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 0 < L) :
     (D.toDistributedConstruction hL).circuit.IsExpansionBounded r (C_K * (L : ℝ) ^ k) :=
-  (OriginalCircuit.isExpansionBounded_castSystems _ rfl D.system_changes).mpr
-    (D.isExpansionBounded_chain _ h.expansionBounded)
+  (OriginalCircuit.isExpansionBounded_comp _ _ _ _).mpr
+    ⟨D.isExpansionBounded_chain _ h.expansionBounded,
+      OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero
+        (OriginalCircuit.nonprivateCount_relabel _) _ _⟩
 
 end IsDistributionProtocol
 
@@ -230,24 +234,27 @@ theorem physicalDensity_toDistributedConstruction (hL : 0 < L) :
       D.physicalDensity.submatrix D.physicalConfigEquiv D.physicalConfigEquiv := by
   set e := D.physicalConfigEquiv
   set J := physicalReadout D.physicalDimension D.privateOutput
-  set w := Matrix.toEuclideanLin J
-    (OriginalCircuit.castVector D.system_changes (D.trajectory D.changes))
+  set w := Matrix.toEuclideanLin J (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+    (Equiv.piCongrRight D.finalSystemEquiv) (D.trajectory D.changes))
   have hC : (D.toDistributedConstruction hL).physicalDensity =
       Matrix.partialTraceRight (Matrix.euclideanOuterProduct w w) := by
     rw [DistributedConstruction.physicalDensity, OriginalCircuit.physicalDensity_eq]
     have h : Matrix.toEuclideanLin (D.toDistributedConstruction hL).circuit.op
         (D.toDistributedConstruction hL).input =
-        OriginalCircuit.castVector D.system_changes (D.trajectory D.changes) := by
-      change Matrix.toEuclideanLin ((D.chain D.changes).castSystems rfl D.system_changes).op
-        (OriginalCircuit.castVector rfl (D.trajectory 0)) = _
-      rw [OriginalCircuit.toEuclideanLin_op_castSystems, D.toEuclideanLin_op_chain_trajectory]
+        LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight D.finalSystemEquiv)
+          (D.trajectory D.changes) := by
+      change Matrix.toEuclideanLin ((D.chain D.changes).comp
+        (OriginalCircuit.relabel fun p ↦ (D.finalSystemEquiv p).symm)).op (D.trajectory 0) = _
+      rw [OriginalCircuit.op_comp, Matrix.toLpLin_mul (q := 2), LinearMap.comp_apply,
+        D.toEuclideanLin_op_chain_trajectory, OriginalCircuit.toEuclideanLin_op_relabel]
+      rfl
     rw [h]
   have hw : D.readout (D.trajectory D.changes) =
       LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (e.prodCongr (Equiv.refl _)) w := by
     ext ⟨c, i⟩
     change (D.trajectory D.changes) (D.finalConfigEquiv.symm (c, i)) =
-      (Matrix.toEuclideanLin J (OriginalCircuit.castVector D.system_changes
-        (D.trajectory D.changes))) (e.symm c, i)
+      (Matrix.toEuclideanLin J (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        (Equiv.piCongrRight D.finalSystemEquiv) (D.trajectory D.changes))) (e.symm c, i)
     rw [toEuclideanLin_physicalReadout_apply]
     rfl
   have hD : D.physicalDensity = Matrix.partialTraceRight

@@ -153,40 +153,6 @@ theorem pow_le_paddedSide {L k : ℕ} (h : 2 ^ k < 2 * L) : 2 ^ k ≤ paddedSide
   exact Nat.pow_le_pow_right two_pos (Nat.lt_succ_iff.1 ((Nat.pow_lt_pow_iff_right
     (by norm_num)).1 h1))
 
-/-- Reading a vector along an identification of systems and back does nothing. -/
-theorem castVector_castVector_symm {P : Type} [Fintype P] [DecidableEq P] {X X' : P → Type}
-    [∀ p, Fintype (X p)] [∀ p, Fintype (X' p)] (h : X = X')
-    (x : EuclideanSpace ℂ (Config X')) :
-    OriginalCircuit.castVector h (OriginalCircuit.castVector h.symm x) = x := by
-  subst h
-  rfl
-
-/-- The reference vector of equal lists of frames, across the identification of their
-systems. -/
-theorem castVector_framesRef {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q]
-    {pos : ι → ℝ × ℝ} {Party : Type} [Fintype Party] [DecidableEq Party]
-    (Ω : EuclideanSpace ℂ (ι → Fin q)) {Fs Fs' : List (Frame pos q Party)} (h : Fs = Fs') :
-    OriginalCircuit.castVector (congrArg (framesSystem q pos · fun _ ↦ Unit) h)
-      (framesRef Ω Fs) = framesRef Ω Fs' := by
-  subst h
-  rfl
-
-/-- A frame without holes held entirely by one party has a one-point basis at every other
-party. -/
-theorem Frame.card_system_eq_one_of_holes_eq_nil {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ}
-    {pos : ι → ℝ × ℝ} {Party : Type} [DecidableEq Party] {F : Frame pos q Party} {o : Party}
-    (hraw : F.holes = []) (hown : ∀ x, F.owner x = o) {p : Party} (hp : p ≠ o) :
-    Fintype.card (F.system p) = 1 := by
-  obtain ⟨own, holes, hd⟩ := F
-  simp only at hraw hown
-  subst hraw
-  rw [Fintype.card_prod]
-  simp only [Fintype.card_pi, Finset.prod_const, Fintype.card_fin]
-  rw [Finset.card_univ, Fintype.card_coe,
-    show blockPreimage own {p} = ∅ from Finset.filter_eq_empty_iff.mpr fun x _ ↦ by
-      simpa using fun h ↦ hp (h.symm.trans (hown x)), Finset.card_empty, pow_zero]
-  rfl
-
 /-- A square of the padded hierarchy of `[0, 2 ^ k] ^ 2` is a square of the hierarchy of depth
 `k`: its scale is at most `k` and its block indices are below `2 ^ (k - j)`.
 
@@ -343,15 +309,17 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
   classical
   set sch := protocolSchedule k large with hsch
   set n := sch.length with hn
-  -- the initial reference vector is a product of unit vectors across the parties
-  obtain ⟨φ, hφn, hφ⟩ := exists_productVector_eq_framesVec
-    (fun F : Frame (cellCenterPos L) q (ProtocolParty k) ↦ F.regRef Ω) holder (st 0)
-    fun F hF p hp ↦ Frame.card_system_eq_one_of_holes_eq_nil (hraw F hF) (hown F hF) hp
-  have hφ1 : ∀ p, ‖φ p‖ = 1 := fun p ↦ by
-    rw [hφn p]
-    exact List.prod_eq_one fun x hx ↦ by
-      obtain ⟨F, hF, rfl⟩ := List.mem_map.mp hx
-      rw [F.norm_regRef, F.norm_refVec_of_holes_eq_nil (hraw F (List.mem_filter.mp hF).1), hΩ]
+  -- the initial reference vector is the product of the vectors of the copies held by the parties
+  have hcard : ∀ F ∈ st 0, ∀ p ≠ holder F, Fintype.card (F.system p) = 1 := fun F hF p hp ↦
+    Frame.card_system_eq_one_of_holes_eq_nil (hraw F hF) (hown F hF) hp
+  let φ : ∀ p, EuclideanSpace ℂ (framesSystem q (cellCenterPos L) (st 0) (fun _ ↦ Unit) p) :=
+    fun p ↦ heldRef Ω holder p (st 0)
+  have hφ1 : ∀ p, ‖φ p‖ = 1 := fun p ↦ norm_heldRef Ω holder p (st 0) hcard fun F hF ↦ by
+    rw [F.norm_regRef, F.norm_refVec_of_holes_eq_nil (hraw F hF), hΩ]
+  have hφ : (WithLp.toLp 2 (productVector fun p x ↦ φ p x) :
+      EuclideanSpace ℂ (Config (framesSystem q (cellCenterPos L) (st 0) fun _ ↦ Unit))) =
+      framesRef Ω (st 0) :=
+    toLp_productVector_heldRef Ω holder (st 0) hcard
   have hinj : Function.Injective M.owner := fun v w h => by
     rw [hMown, hMown] at h
     exact unitSquare_injective hkL (Sum.inl_injective h)
@@ -394,7 +362,8 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
       physicalDimension_site := fun v => by rw [← hMown]; exact hd v
       physicalDimension_eq_one := fun p hp => hd1 p (by rwa [← hrange])
       privateOutput := readoutPrivate M Fs fun _ ↦ Unit
-      system_changes := chainSystem_succ_of_lt (Nat.lt_succ_self n)
+      finalSystemEquiv := fun p ↦
+        Equiv.cast (congrFun (chainSystem_succ_of_lt (Nat.lt_succ_self n)) p)
       squareParty := protocolSquareParty hN
       repaintingSquare := fun t => if h : 0 < t ∧ t - 1 < n then
         Sum.elim (fun S => some S.toTriple) (fun _ => none) (sch[t - 1]'h.2).1 else none
@@ -515,22 +484,26 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
   -- the initial copies of `Ω`, each held privately by one party
   have hinit : D.frames 0 ≠ [] ∧ ∃ holder : Frame (cellCenterPos L) q (ProtocolParty k) →
       ProtocolParty k, (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧
-        ∃ h : D.system 0 = framesSystem q (cellCenterPos L) (D.frames 0) (fun _ ↦ Unit),
-          ∀ [NeZero q], D.reference 0 =
-            OriginalCircuit.castVector h.symm (framesRef Ω (D.frames 0)) := by
-    exact ⟨hne 0 (Nat.zero_le _), holder, fun F hF => ⟨hraw F hF, hown F hF⟩, rfl, hφ⟩
+        ∃ e : ∀ p, D.system 0 p ≃ framesSystem q (cellCenterPos L) (D.frames 0) (fun _ ↦ Unit) p,
+          ∀ [NeZero q], ∀ p, D.initialVector p = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+            (e p).symm (heldRef Ω holder p (D.frames 0)) := by
+    refine ⟨hne 0 (Nat.zero_le _), holder, fun F hF => ⟨hraw F hF, hown F hF⟩,
+      fun _ ↦ Equiv.refl _, fun p ↦ ?_⟩
+    ext x
+    rfl
   -- the intermediate reference vectors are the reference vectors of the frames
   have hframes : ∀ [NeZero q], ∀ t, 0 < t → t < D.changes →
       (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
-        ∃ h : D.system t = framesSystem q (cellCenterPos L) (D.frames t) (fun _ ↦ Unit),
-          D.reference t = OriginalCircuit.castVector h.symm (framesRef Ω (D.frames t)) := by
+        ∃ e : ∀ p, D.system t p ≃ framesSystem q (cellCenterPos L) (D.frames t) (fun _ ↦ Unit) p,
+          D.reference t = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight e).symm
+            (framesRef Ω (D.frames t)) := by
     intro _ t ht0 htn
     obtain ⟨s, rfl⟩ : ∃ s, t = s + 1 := ⟨t - 1, by omega⟩
     have hs : s ≤ n := by change s + 1 < n + 2 at htn; omega
-    exact ⟨fun F _ => (F.norm_refVec_le Ω).trans hΩ.le,
-      chainSystem_succ_of_le (A := framesSystem q (cellCenterPos L) (st 0) fun _ ↦ Unit)
+    exact ⟨fun F _ => (F.norm_refVec_le Ω).trans hΩ.le, fun p ↦ Equiv.cast (congrFun
+      (chainSystem_succ_of_le (A := framesSystem q (cellCenterPos L) (st 0) fun _ ↦ Unit)
         (B := fun t => framesSystem q (cellCenterPos L) (st t) fun _ ↦ Unit)
-        (Z := physicalSystem d (readoutPrivate M Fs fun _ ↦ Unit)) hs,
+        (Z := physicalSystem d (readoutPrivate M Fs fun _ ↦ Unit)) hs) p),
       chainVec_succ_of_le x₀ (fun t => framesRef Ω (st t))
         (toEuclideanLin e.op (framesRef Ω (st n))) hs⟩
   -- every intermediate stage has a frame
@@ -616,13 +589,17 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
       exacts [hεC, div_nonneg hCE (by positivity)]
     exact key.trans hb
   · refine D.exists_reference_changes_of_readoutCircuit M Fs (fun _ ↦ Unit) hinj hM
-      (fun v => (hMown v).symm) rfl hΩ (by omega) hε hholes
+      (fun v => (hMown v).symm) (fun _ ↦ Equiv.refl _) hΩ (by omega) hε hholes
       (ξ := EuclideanSpace.single (fun _ ↦ ()) 1) (by simp) ?_
     have hz : D.reference D.changes = _ :=
       chainVec_succ_of_lt x₀ (fun t => framesRef Ω (st t))
         (toEuclideanLin e.op (framesRef Ω (st n))) (Nat.lt_succ_self n)
-    rw [hz, castVector_castVector_symm, ← castVector_framesRef Ω hfin.symm,
-      toEuclideanLin_op_castSystems]
+    have hcastRef : ∀ {Fs₁ Fs₂ : List (Frame (cellCenterPos L) q (ProtocolParty k))}
+        (h : Fs₁ = Fs₂), castVector (congrArg (framesSystem q (cellCenterPos L) · fun _ ↦ Unit) h)
+          (framesRef Ω Fs₁) = framesRef Ω Fs₂ := by
+      rintro _ _ rfl
+      rfl
+    rw [hz, ← hcastRef hfin.symm, toEuclideanLin_op_castSystems]
     rfl
 
 end Approximation

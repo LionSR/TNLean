@@ -168,7 +168,8 @@ theorem physicalConfigEquiv_apply_val (σ : (p : P) → Fin (D.physicalDimension
   rfl
 
 /-- **The readout of the final memory of a protocol.** If the physical-private readout of the
-final memory of a protocol, with the physical configurations of the parties, is `Ω' ⊗ Ξ`, where
+final memory of a protocol, read through the identification of its bases with the physical and
+private registers and with the physical configurations of the parties, is `Ω' ⊗ Ξ`, where
 `Ω'` reads `Ω` through the configuration of the square, then the readout of the protocol is
 `Ω ⊗ Ξ`.
 
@@ -177,7 +178,7 @@ lines 43–51. -/
 theorem readout_eq_euclideanTensorVector (x : EuclideanSpace ℂ (Config (D.system D.changes)))
     (Ω : StateSpace L q) (Ξ : EuclideanSpace ℂ (Config D.privateOutput))
     (h : toEuclideanLin (physicalReadout D.physicalDimension D.privateOutput)
-        (OriginalCircuit.castVector D.system_changes x) =
+        (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight D.finalSystemEquiv) x) =
       euclideanTensorVector (WithLp.toLp 2 fun σ ↦ Ω (D.physicalConfigEquiv σ)) Ξ) :
     D.readout x = euclideanTensorVector Ω Ξ := by
   ext ⟨c, i⟩
@@ -185,8 +186,8 @@ theorem readout_eq_euclideanTensorVector (x : EuclideanSpace ℂ (Config (D.syst
   simp only [toEuclideanLin_physicalReadout_apply, euclideanTensorVector_apply,
     Equiv.apply_symm_apply] at hc
   rw [euclideanTensorVector_apply, ← hc]
-  simp only [readout, finalConfigEquiv, OriginalCircuit.castVector,
-    LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply]
+  simp only [readout, finalConfigEquiv, LinearIsometryEquiv.piLpCongrLeft_apply,
+    Equiv.piCongrLeft'_apply]
   rfl
 
 end TNLean.PEPS.Approximation.DyadicProtocol
