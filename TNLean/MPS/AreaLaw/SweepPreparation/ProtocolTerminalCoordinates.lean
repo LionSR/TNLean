@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.PartyCircuit.SiteRegisters
-import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
+import QICLean.Circuit.Party.Original.Density
 import QICLean.Channel.PartialTrace.BasisInvariance
 import QICLean.Analysis.TraceNorm.SubnormalizedPureStateError
 import Mathlib.Algebra.BigOperators.Fin
@@ -32,11 +31,9 @@ this distinction are recorded in
 
 noncomputable section
 
-open scoped TensorProduct
+open Matrix ManyBody QuantumCircuit.Party
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
-
-open TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 /-- The number of completed stages. Source: Part II, `con:sweep`, lines 329–342. -/
 def stageCount (L w : ℕ) : ℕ := L / (20 * w) - 3
@@ -151,103 +148,94 @@ theorem localConfigurationEquiv_restrict (L w q : ℕ)
 
 variable {L w q : ℕ}
 
-private def rawReadout (rs : List (RawLabel L w)) (hn : rs.Nodup)
-    (hc : ∀ r, r ∈ rs) :
-    Mem (siteRegs q (rawOwner L w) rs) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (RawLabel L w → Fin q) :=
-  groupIso (rawOwner L w) rs (List.Nodup.getEquivOfForallMemList rs hn hc)
+/-- The private system: at every party, the auxiliary registers it retains, with their copy and
+site labels. Source: Part II, `con:band`, lines 271–272, and `prop:sweep`, lines 355–360. -/
+abbrev privateSystem (L w q : ℕ) : Party L w → Type :=
+  fun p ↦ AuxiliarySites L w p → Fin q
 
-private def auxiliaryList (L w : ℕ) : List (AuxiliarySite L w) := Finset.univ.toList
+instance (p : Party L w) : Fintype (privateSystem L w q p) :=
+  inferInstanceAs (Fintype (AuxiliarySites L w p → Fin q))
 
-/-- The discarded layout contains every labelled auxiliary register at its actual
-owner. Source: Part II, `con:band`, lines 271–272, and `prop:sweep`, lines 355–360. -/
-def privateLayout (L w q : ℕ) : Layout (Party L w) :=
-  siteRegs q (auxiliaryOwner L w) (auxiliaryList L w)
+instance (p : Party L w) : DecidableEq (privateSystem L w q p) :=
+  inferInstanceAs (DecidableEq (AuxiliarySites L w p → Fin q))
 
-private def auxiliaryReadout (L w q : ℕ) :
-    Mem (privateLayout L w q) ≃ₗᵢ[ℂ] EuclideanSpace ℂ (AuxiliarySite L w → Fin q) :=
-  groupIso (auxiliaryOwner L w) (auxiliaryList L w)
-    (List.Nodup.getEquivOfForallMemList _ (Finset.nodup_toList _)
-      (by simp [auxiliaryList]))
+/-- The terminal system before regrouping: at every party, its labelled main and auxiliary
+registers. Source: Part II, `prop:sweep`, lines 355–360. -/
+abbrev rawSystem (L w q : ℕ) : Party L w → Type :=
+  fun p ↦ {r : RawLabel L w // rawOwner L w r = p} → Fin q
 
-/-- Every original party occurs once, including parties with scalar physical
-output. Source: Part II, `prop:sweep`, lines 349–360. -/
-def physicalOrder (L w : ℕ) : List (Party L w) := Finset.univ.toList
+instance (p : Party L w) : Fintype (rawSystem L w q p) :=
+  inferInstanceAs (Fintype ({r : RawLabel L w // rawOwner L w r = p} → Fin q))
 
-private def physicalBasis (L w q : ℕ) :=
-  familyLabelledPhysicalBasis (physicalDimension L w q) (physicalOrder L w)
-    (Finset.nodup_toList _) (by simp [physicalOrder])
+instance (p : Party L w) : DecidableEq (rawSystem L w q p) :=
+  inferInstanceAs (DecidableEq ({r : RawLabel L w // rawOwner L w r = p} → Fin q))
 
-private def auxiliaryBasis (L w q : ℕ) :=
-  (EuclideanSpace.basisFun (AuxiliarySite L w → Fin q) ℂ).map
-    (auxiliaryReadout L w q).symm
+/-- A configuration of the terminal system is a configuration of all labelled registers.
+Source: Part II, `prop:sweep`, lines 355–360. -/
+def rawConfigEquiv (L w q : ℕ) : Config (rawSystem L w q) ≃ (RawLabel L w → Fin q) :=
+  (Equiv.piCongrFiberwise (γ₁ := fun _ ↦ Fin q) (f := rawOwner L w)
+    fun _ ↦ Equiv.refl _).symm
 
-/-- Coordinates of the actual terminal memory before block encoding: one main
+/-- The auxiliary configurations read at their actual owners.
+Source: Part II, `con:band`, lines 271–272. -/
+def auxiliaryConfigEquiv (L w q : ℕ) :
+    (AuxiliarySite L w → Fin q) ≃ Config (privateSystem L w q) :=
+  Equiv.piCongrFiberwise (γ₁ := fun _ ↦ Fin q) (f := auxiliaryOwner L w) fun _ ↦ Equiv.refl _
+
+/-- Coordinates of the actual terminal system before block encoding: one main
 configuration and every original auxiliary label.
 Source: Part II, `prop:sweep`, lines 355–360. -/
-def sheetReadout (rs : List (RawLabel L w)) (hn : rs.Nodup)
-    (hc : ∀ r, r ∈ rs) :=
-  (rawReadout (q := q) rs hn hc).trans
-    (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (Equiv.sumArrowEquivProdArrow (Fin L) (AuxiliarySite L w) (Fin q)))
+def sheetReadout (L w q : ℕ) :
+    EuclideanSpace ℂ (Config (rawSystem L w q)) ≃ₗᵢ[ℂ]
+      EuclideanSpace ℂ ((Fin L → Fin q) × (AuxiliarySite L w → Fin q)) :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+    ((rawConfigEquiv L w q).trans (Equiv.sumArrowEquivProdArrow _ _ _))
 
-/-- The explicit coordinate identification with the physical block layout and
-the unchanged auxiliary layout. Its owner-local factorization is specified
-by `localConfigurationEquiv_restrict`; realization by a private word is separate.
+/-- The explicit coordinate identification with one physical block register and the unchanged
+auxiliary registers at every party: the owner-local maps `localConfigurationEquiv`.
 Source: Part II, `prop:sweep`, lines 355–360, and Theorem B, lines 575–583. -/
-def terminalRegrouping (rs : List (RawLabel L w)) (hn : rs.Nodup)
-    (hc : ∀ r, r ∈ rs) :
-    Mem (siteRegs q (rawOwner L w) rs) ≃ₗᵢ[ℂ]
-      Mem (familyPhysicalOutputLayout (physicalDimension L w q)
-        (physicalOrder L w) (privateLayout L w q)) :=
-  (rawReadout (q := q) rs hn hc).trans
-    ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (terminalConfigurationEquiv L w q)).trans
-        (((physicalBasis L w q).tensorProduct (auxiliaryBasis L w q)).repr.symm.trans
-          (appendIso _ _).symm))
+def terminalRegrouping (L w q : ℕ) :
+    EuclideanSpace ℂ (Config (rawSystem L w q)) ≃ₗᵢ[ℂ]
+      EuclideanSpace ℂ (Config (physicalSystem (physicalDimension L w q) (privateSystem L w q))) :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight (localConfigurationEquiv L w q))
+
+/-- The owner-local maps, read on all parties at once, encode the main configuration and keep
+the auxiliary labels. -/
+private theorem piCongrRight_localConfigurationEquiv_symm
+    (s : (p : Party L w) → Fin (physicalDimension L w q p)) (a : AuxiliarySite L w → Fin q) :
+    (Equiv.piCongrRight (localConfigurationEquiv L w q)).symm
+        ((Equiv.arrowProdEquivProdArrow _ _ _).symm (s, auxiliaryConfigEquiv L w q a)) =
+      (rawConfigEquiv L w q).symm
+        ((Equiv.sumArrowEquivProdArrow _ _ _).symm ((mainConfigurationEquiv L w q).symm s, a)) := by
+  funext p ⟨r, hr⟩
+  subst hr
+  cases r <;> rfl
 
 /-- For every actual terminal vector, the standard physical/private readout has
 the physical marginal obtained by tracing precisely the original auxiliary
 labels, in the constructed block coordinates. No product or normalization
 assumption is made on the vector. Source: Part II, Theorem B, lines 575–583.
 This is an intermediate coordinate result, not the full sweep theorem. -/
-theorem physicalDensity_terminalRegrouping
-    (rs : List (RawLabel L w)) (hn : rs.Nodup) (hc : ∀ r, r ∈ rs)
-    (Ψ : Mem (siteRegs q (rawOwner L w) rs)) :
-    letI := (auxiliaryReadout L w q).symm.toLinearEquiv.finiteDimensional
-    let v := familyLabelledPhysicalReadout (physicalDimension L w q) (physicalOrder L w)
-      (Finset.nodup_toList _) (by simp [physicalOrder]) (privateLayout L w q)
-      (terminalRegrouping rs hn hc Ψ)
-    Matrix.partialTraceRight (Matrix.euclideanOuterProduct v v) =
-      Matrix.reindex (mainConfigurationEquiv L w q) (mainConfigurationEquiv L w q)
-        (Matrix.partialTraceRight (Matrix.euclideanOuterProduct
-          (sheetReadout (q := q) rs hn hc Ψ) (sheetReadout (q := q) rs hn hc Ψ))) := by
-  classical
-  let := (auxiliaryReadout L w q).symm.toLinearEquiv.finiteDimensional
-  let z := appendIso (familyPhysicalLayout (physicalDimension L w q) (physicalOrder L w))
-    (privateLayout L w q) (terminalRegrouping rs hn hc Ψ)
-  let b := physicalBasis L w q
-  let g := auxiliaryBasis L w q
-  have hchange := OrthonormalBasis.tensorProduct_rankOne_basisChange b b g
-    (stdOrthonormalBasis ℂ (Mem (privateLayout L w q)).carrier) z z
-  have htrace := Matrix.partialTraceRight_kronecker_conj_of_right_isometry
-    (b.toBasis.toMatrix b)
-    ((stdOrthonormalBasis ℂ (Mem (privateLayout L w q)).carrier).toBasis.toMatrix g)
-    (OrthonormalBasis.toMatrix_orthonormalBasis_conjTranspose_mul_self
-      (stdOrthonormalBasis ℂ (Mem (privateLayout L w q)).carrier) g)
-    (Matrix.euclideanOuterProduct ((b.tensorProduct g).repr z) ((b.tensorProduct g).repr z))
-  simp only [Matrix.euclideanOuterProduct, Pi.star_def, starRingEnd_apply] at htrace hchange
-  rw [hchange] at htrace
-  have hself : b.toBasis.toMatrix b = 1 := Module.Basis.toMatrix_self b.toBasis
-  simp only [hself, Matrix.conjTranspose_one, Matrix.one_mul, Matrix.mul_one] at htrace
-  have hz : (b.tensorProduct g).repr z =
-      (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (terminalConfigurationEquiv L w q))
-        (rawReadout rs hn hc Ψ) := by
-    exact ((appendIso
-      (familyPhysicalLayout (physicalDimension L w q) (physicalOrder L w))
-      (privateLayout L w q)).trans (b.tensorProduct g).repr).apply_symm_apply _
-  refine htrace.trans ?_
-  rw [hz]
-  rfl
+theorem physicalDensity_terminalRegrouping (Ψ : EuclideanSpace ℂ (Config (rawSystem L w q))) :
+    let v := toEuclideanLin (physicalReadout (physicalDimension L w q) (privateSystem L w q))
+      (terminalRegrouping L w q Ψ)
+    partialTraceRight (euclideanOuterProduct v v) =
+      reindex (mainConfigurationEquiv L w q) (mainConfigurationEquiv L w q)
+        (partialTraceRight (euclideanOuterProduct (sheetReadout L w q Ψ)
+          (sheetReadout L w q Ψ))) := by
+  intro v
+  have hv (s : (p : Party L w) → Fin (physicalDimension L w q p))
+      (a : AuxiliarySite L w → Fin q) :
+      v (s, auxiliaryConfigEquiv L w q a) =
+        sheetReadout L w q Ψ ((mainConfigurationEquiv L w q).symm s, a) := by
+    simp only [v, toEuclideanLin_physicalReadout_apply, terminalRegrouping, sheetReadout,
+      LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply]
+    rw [piCongrRight_localConfigurationEquiv_symm]
+    rfl
+  ext s s'
+  simp only [partialTraceRight_apply, reindex_apply, submatrix_apply, euclideanOuterProduct,
+    vecMulVec_apply, Pi.star_apply]
+  rw [← (auxiliaryConfigEquiv L w q).sum_comp]
+  simp only [hv]
 
 end TNLean.MPS.AreaLaw.ChainSweep
