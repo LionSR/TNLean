@@ -7,8 +7,8 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{definition}[A local bra and a message summand]
     \label{def:peps_local_message_summand}
-    \lean{TNLean.Lattice.PartyCircuit.Word.localDiscard}
-    \lean{TNLean.Lattice.PartyCircuit.Word.transferTerm}
+    \lean{QuantumCircuit.Party.Word.localDiscard}
+    \lean{QuantumCircuit.Party.Word.transferTerm}
     \leanok
     \uses{def:peps_party_layout}
     For $u\in H$ at party $a$, the local bra is
@@ -19,11 +19,11 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{lemma}[Local message summands]
     \label{thm:peps_local_message_summands}
-    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_localDiscard}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_localDiscard_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_transferTerm}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sources_transferTerm}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_transferTerm_tmul}
+    \lean{QuantumCircuit.Party.Word.isAllowed_localDiscard}
+    \lean{QuantumCircuit.Party.Word.op_localDiscard}
+    \lean{QuantumCircuit.Party.Word.isAllowed_transferTerm}
+    \lean{QuantumCircuit.Party.Word.sources_transferTerm}
+    \lean{QuantumCircuit.Party.Word.op_transferTerm}
     \leanok
     For $\|u\|=1$, $\|\langle u|\otimes I_K\|\le 1$. Each message summand is an
     allowed source-free composition of local contractions sending
@@ -43,7 +43,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{lemma}[The exact message identity]
     \label{thm:peps_exact_message_identity}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sum_eval_transferTerm}
+    \lean{QuantumCircuit.Party.Word.sum_op_transferTerm}
     \leanok
     Summing the message summands over $(e_i)_{i\in I}$ gives the identity
     transfer from $a$ to $b$:
@@ -63,8 +63,7 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{definition}[Prepending and composing monomials]
     \label{def:peps_compose_actual_monomials}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.prependWord}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.comp}
+    \lean{QuantumCircuit.Party.PartyCircuit}
     \leanok
     Prepending a word to a monomial composes it with the monomial's initial
     segment. Composing two monomials with matching intermediate registers
@@ -74,14 +73,9 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{lemma}[Operators and pair effects of composed monomials]
     \label{thm:peps_compose_actual_monomials}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.eval_prependWord}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.isAllowed_prependWord}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.effectCount_prependWord}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.eval_comp}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.isAllowed_comp}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.effectCount_comp}
+    \lean{QuantumCircuit.Party.Monomial.effectCount_comp}
     \leanok
-    \uses{def:peps_compose_actual_monomials}
+    \uses{def:peps_compose_actual_monomials,thm:peps_monomial_composition_counts}
     Prepending an allowed source-only word to an allowed monomial preserves its
     allowedness and pair-effect count. For composable monomials $M,N$, their
     composition $N\circ M$ has operator $N\circ M$, pair-effect count
@@ -96,12 +90,12 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{lemma}[The finite expansion of a message]
     \label{thm:peps_message_expansion_count}
-    \lean{TNLean.Lattice.PartyCircuit.gate_toGate_eq_sum}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.transfer}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.length_transfer}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.isAllowed_effectCount_transfer}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.sum_norm_coeff_transfer}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.eval_transfer}
+    \lean{QuantumCircuit.Party.WeightedGate.gate_toGate}
+    \lean{QuantumCircuit.Party.WeightedGate.transferTerms}
+    \lean{QuantumCircuit.Party.WeightedGate.length_transferTerms}
+    \lean{QuantumCircuit.Party.WeightedGate.isAllowed_effectCount_transferTerms}
+    \lean{QuantumCircuit.Party.WeightedGate.sum_norm_coeff_transferTerms}
+    \lean{QuantumCircuit.Party.WeightedGate.gate_toGate_transferTerms}
     \leanok
     The unit-weighted list of message summands for $H$ has length $\dim H$,
     absolute coefficient sum $\dim H$, allowed terms with $0$ pair effects, and
@@ -117,8 +111,8 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{definition}[Composition of gate expansions]
     \label{def:peps_composed_gate_expansion}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.comp}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.mem_comp}
+    \lean{QuantumCircuit.Party.WeightedGate.compTerms}
+    \lean{QuantumCircuit.Party.WeightedGate.mem_compTerms}
     \leanok
     \uses{def:peps_compose_actual_monomials}
     For ordered gate expansions $L=((c_j,M_j))_j$ and $K=((d_k,N_k))_k$ with
@@ -128,11 +122,11 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{lemma}[Operator and resources of composed expansions]
     \label{thm:peps_composed_gate_resources}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.gate_comp}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.length_comp}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.sum_norm_comp}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.isAllowed_comp}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate.effectCount_comp_le}
+    \lean{QuantumCircuit.Party.WeightedGate.gate_toGate_compTerms}
+    \lean{QuantumCircuit.Party.WeightedGate.length_compTerms}
+    \lean{QuantumCircuit.Party.WeightedGate.sum_norm_compTerms}
+    \lean{QuantumCircuit.Party.WeightedGate.isAllowed_compTerms}
+    \lean{QuantumCircuit.Party.WeightedGate.effectCount_compTerms_le}
     \leanok
     \uses{def:peps_composed_gate_expansion}
     The composition $K\circ L$ evaluates to $G_K G_L$, has length $|L||K|$,
@@ -151,12 +145,12 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{definition}[Monomials with finite-dimensional messages]
     \label{def:peps_message_monomial}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.eval}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.IsAllowed}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.messageDimensions}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.effectCount}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expand}
+    \lean{QuantumCircuit.Party.MessageMonomial}
+    \lean{QuantumCircuit.Party.MessageMonomial.op}
+    \lean{QuantumCircuit.Party.MessageMonomial.IsAllowed}
+    \lean{QuantumCircuit.Party.MessageMonomial.messageDimensions}
+    \lean{QuantumCircuit.Party.MessageMonomial.effectCount}
+    \lean{QuantumCircuit.Party.MessageMonomial.expand}
     \leanok
     \uses{def:peps_party_monomial}
     A monomial with messages $M$ is a chronological composition of party
@@ -170,9 +164,9 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 \begin{lemma}[Exact expansion and resources of bounded messages]
     \label{thm:peps_message_expansion}
     \uses{def:peps_message_monomial}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.eval_expand}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.isAllowed_effectCount_expand}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size}
+    \lean{QuantumCircuit.Party.MessageMonomial.op_expand}
+    \lean{QuantumCircuit.Party.MessageMonomial.isAllowed_effectCount_expand}
+    \lean{QuantumCircuit.Party.MessageMonomial.expansion_size}
     \leanok
     The expansion $\mathcal E(M)$ evaluates to $M$. If $M$ is allowed, every
     term of $\mathcal E(M)$ is an allowed party monomial with $r_M$ pair
@@ -194,8 +188,8 @@ arbitrary spectator memory, with no bound on the spectator dimension.
 
 \begin{lemma}[Polynomial cost of boundedly many messages]
     \label{thm:peps_message_expansion_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size_le}
-    \lean{TNLean.Lattice.PartyCircuit.MessageMonomial.expansion_size_le_of_power_bounds}
+    \lean{QuantumCircuit.Party.MessageMonomial.expansion_size_le}
+    \lean{QuantumCircuit.Party.MessageMonomial.expansion_size_le_of_power_bounds}
     \leanok
     If $M$ contains $s\le m$ messages of dimensions $d_j\le D$ ($D\ge 1$), then
     $|\mathcal E(M)|=\sum_{(c,N)\in\mathcal E(M)}|c|\le D^m$. If
@@ -219,8 +213,8 @@ parties, using message monomials as in
 
 \begin{definition}[Weighted message monomials]
     \label{def:peps_message_gate}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate,
-        TNLean.Lattice.PartyCircuit.MessageGate.eval}
+    \lean{QuantumCircuit.Party.MessageGate,
+        QuantumCircuit.Party.MessageGate.op}
     \leanok
     \uses{def:peps_message_monomial}
     A weighted message-gate list is a finite ordered list
@@ -230,8 +224,8 @@ parties, using message monomials as in
 
 \begin{definition}[Expanding all messages in a gate]
     \label{def:peps_message_gate_expand}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.expand,
-        TNLean.Lattice.PartyCircuit.MessageGate.mem_expand}
+    \lean{QuantumCircuit.Party.MessageGate.expand,
+        QuantumCircuit.Party.MessageGate.mem_expand}
     \leanok
     \uses{def:peps_message_gate}
     For $L=((c_j,M_j))_{j=0}^{K-1}$ with $\mathcal E(M_j)=((a_{j,t},N_{j,t}))_t$,
@@ -245,10 +239,9 @@ parties, using message monomials as in
 
 \begin{lemma}[Expansion of a gate without messages]
     \label{thm:peps_message_gate_segment_expansion}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.expand_map_segment}
+    \lean{QuantumCircuit.Party.MessageGate.expand_map_segment}
     \leanok
-    \uses{def:peps_party_monomial,def:peps_message_monomial,
-        def:peps_message_gate_expand}
+    \uses{def:peps_party_monomial,def:peps_message_monomial,def:peps_message_gate_expand}
     Viewing a list $A=((c_j,M_j))_{j=0}^{K-1}$ of message-free party monomials
     as single-segment message monomials gives $\widetilde A=A$.
 \end{lemma}
@@ -262,9 +255,9 @@ parties, using message monomials as in
 
 \begin{lemma}[Operator and effect count under message expansion]
     \label{thm:peps_message_gate_eval}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.eval_expand,
-        TNLean.Lattice.PartyCircuit.MessageGate.isAllowed_expand,
-        TNLean.Lattice.PartyCircuit.MessageGate.effectCount_expand_le}
+    \lean{QuantumCircuit.Party.MessageGate.op_expand,
+        QuantumCircuit.Party.MessageGate.isAllowed_expand,
+        QuantumCircuit.Party.MessageGate.effectCount_expand_le}
     \leanok
     \uses{def:peps_message_gate_expand}
     The expanded list $\widetilde L$ evaluates to $G_L$. If every $M_j$ is
@@ -281,9 +274,9 @@ parties, using message monomials as in
 
 \begin{lemma}[Term count and coefficient sum]
     \label{thm:peps_message_gate_size}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.expansion_size,
-        TNLean.Lattice.PartyCircuit.MessageGate.expansion_size_le,
-        TNLean.Lattice.PartyCircuit.MessageGate.expansion_size_le_of_coeff_le}
+    \lean{QuantumCircuit.Party.MessageGate.expansion_size,
+        QuantumCircuit.Party.MessageGate.expansion_size_le,
+        QuantumCircuit.Party.MessageGate.expansion_size_le_of_coeff_le}
     \leanok
     \uses{def:peps_message_gate_expand}
     If $M_j$ has message dimensions $d_{j,1},\ldots,d_{j,m_j}$ and
@@ -308,7 +301,7 @@ parties, using message monomials as in
 
 \begin{definition}[The corresponding original circuit gate]
     \label{def:peps_message_gate_circuit}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.toOriginalCircuit}
+    \lean{QuantumCircuit.Party.MessageGate.toOriginalCircuit}
     \leanok
     \uses{thm:peps_message_gate_eval}
     For a participant set $C$ with $|C|\ne1$, embedding $\iota:C\hookrightarrow P$,
@@ -319,9 +312,9 @@ parties, using message monomials as in
 
 \begin{lemma}[Operator and occurrences of the constructed gate]
     \label{thm:peps_message_gate_circuit_properties}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.eval_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.MessageGate.nonprivateCount_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.MessageGate.participants_toOriginalCircuit}
+    \lean{QuantumCircuit.Party.MessageGate.op_toOriginalCircuit,
+        QuantumCircuit.Party.MessageGate.nonprivateCount_toOriginalCircuit,
+        QuantumCircuit.Party.MessageGate.participants_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
     The gate of Definition~\ref{def:peps_message_gate_circuit} has operator
@@ -338,8 +331,8 @@ parties, using message monomials as in
 
 \begin{lemma}[Resource bounds for the constructed gate]
     \label{thm:peps_message_gate_circuit_bounds}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.isExpansionBounded_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.MessageGate.isMonomialBounded_toOriginalCircuit}
+    \lean{QuantumCircuit.Party.MessageGate.isExpansionBounded_toOriginalCircuit,
+        QuantumCircuit.Party.MessageGate.isMonomialBounded_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
     Under the hypotheses of Lemma~\ref{thm:peps_message_gate_size}, if

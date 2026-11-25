@@ -61,7 +61,7 @@ a site-independent tensor with the global phase of
     \lean{TNLean.PEPS.Tensor.transport}
     \lean{TNLean.PEPS.Tensor.transport_bondDim}
     \leanok
-    \uses{def:peps_tensor, def:peps_torus_geometry_translation}
+    \uses{def:peps_tensor,def:peps_torus_geometry_translation}
     For a graph isomorphism $\phi:G\simeq G'$, the relabelled tensor $A^\phi$ on
     $G'$ has bond dimensions $D^\phi_{e'}=D_{\phi^{-1}(e')}$ ($e'\in E(G')$) and
     local tensor at $w\in V(G')$ given by $A_{\phi^{-1}(w)}$ transported along
@@ -72,7 +72,7 @@ a site-independent tensor with the global phase of
     \label{thm:peps_stateCoeff_transport}
     \lean{TNLean.PEPS.stateCoeff_transport}
     \leanok
-    \uses{def:peps_stateCoeff, def:peps_tensor_transport}
+    \uses{def:peps_stateCoeff,def:peps_tensor_transport}
     For every graph isomorphism $\phi:G\simeq G'$ and physical configuration
     $\sigma$ on $V(G')$,
     \begin{align}
@@ -91,7 +91,7 @@ a site-independent tensor with the global phase of
     \label{thm:peps_sameState_transport}
     \lean{TNLean.PEPS.SameState.transport}
     \leanok
-    \uses{def:peps_same_state, thm:peps_stateCoeff_transport}
+    \uses{def:peps_same_state,thm:peps_stateCoeff_transport}
     If $\Coeff_A=\Coeff_B$ on $G$ and $\phi:G\simeq G'$, then
     $\Coeff_{A^\phi}=\Coeff_{B^\phi}$ on $G'$.
 \end{lemma}
@@ -110,7 +110,7 @@ a site-independent tensor with the global phase of
     \label{def:peps_torus_translation_invariant}
     \lean{TNLean.PEPS.IsTorusTranslationInvariant}
     \leanok
-    \uses{def:peps_tensor_transport, def:peps_torus_geometry_translation}
+    \uses{def:peps_tensor_transport,def:peps_torus_geometry_translation}
     A torus PEPS tensor $A$ is translation invariant if $A^{\tau_{a,b}}=A$ for
     all $(a,b)$ \cite[Theorem~3]{Molnar2018NormalPEPS}.
 \end{definition}
@@ -119,7 +119,7 @@ a site-independent tensor with the global phase of
     \label{thm:peps_stateCoeff_translationInvariant}
     \lean{TNLean.PEPS.stateCoeff_translationInvariant}
     \leanok
-    \uses{def:peps_torus_translation_invariant, thm:peps_stateCoeff_transport}
+    \uses{def:peps_torus_translation_invariant,thm:peps_stateCoeff_transport}
     If $A^{\tau_{a,b}}=A$ for all $(a,b)$, then
     $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for all $(a,b)$ and $\sigma$.
 \end{lemma}
@@ -137,7 +137,7 @@ a site-independent tensor with the global phase of
     \label{def:peps_torus_state_translation_invariant}
     \lean{TNLean.PEPS.IsTorusTranslationInvariantState}
     \leanok
-    \uses{def:peps_stateCoeff, def:peps_torus_geometry_translation}
+    \uses{def:peps_stateCoeff,def:peps_torus_geometry_translation}
     A torus PEPS tensor $A$ (possibly site-dependent) represents a
     translation-invariant state if, for all $(a,b)$ and $\sigma$,
     \begin{align}
@@ -152,8 +152,7 @@ a site-independent tensor with the global phase of
     \lean{TNLean.PEPS.IsTorusTranslationInvariant.%
         isTorusTranslationInvariantState}
     \leanok
-    \uses{def:peps_torus_translation_invariant,
-        def:peps_torus_state_translation_invariant}
+    \uses{def:peps_torus_translation_invariant,def:peps_torus_state_translation_invariant}
     If $A$ is translation invariant (Definition~\ref{def:peps_torus_translation_invariant}),
     then $A$ satisfies~(\ref{eq:peps_torus_state_ti}) for all $(a,b)$ and $\sigma$.
 \end{lemma}
@@ -167,8 +166,7 @@ a site-independent tensor with the global phase of
     \lean{TNLean.PEPS.%
         sameState_transport_of_isTorusTranslationInvariantState}
     \leanok
-    \uses{def:peps_torus_state_translation_invariant,
-        def:peps_tensor_transport, def:peps_same_state}
+    \uses{def:peps_torus_state_translation_invariant,def:peps_tensor_transport,def:peps_same_state}
     If $A$ satisfies~(\ref{eq:peps_torus_state_ti}), then
     $\Coeff_A(\sigma)=\Coeff_{A^{\tau_{a,b}}}(\sigma)$ for all $(a,b)$ and $\sigma$.
 \end{lemma}
@@ -205,7 +203,7 @@ a site-independent tensor with the global phase of
     \lean{TNLean.PEPS.torusUniformBondDim_of_translate}
     \lean{TNLean.PEPS.torusUniformBondDim_of_translationInvariant}
     \leanok
-    \uses{def:peps_torus_translation_invariant, def:peps_torus_uniform_bond_dim}
+    \uses{def:peps_torus_translation_invariant,def:peps_torus_uniform_bond_dim}
     If $A^{\tau_{a,b}}=A$ for all $(a,b)$, then $D_A$ is orientation-uniform
     with $D_h=D_{e_h}$ and $D_v=D_{e_v}$.
 \end{lemma}
@@ -253,7 +251,7 @@ a site-independent tensor with the global phase of
     \label{lem:peps_reference_edge_boundary_windows}
     \lean{TNLean.PEPS.isRegionBoundaryEdge_staircaseWindow_referenceEdge}
     \leanok
-    \uses{lem:peps_reference_edge_left_endpoint_staircase_window, lem:peps_reference_edge_right_endpoint_staircase_window}
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,lem:peps_reference_edge_right_endpoint_staircase_window}
     If $j=0$ or $L\le j$, then $e\in\partial W_j$.
 \end{lemma}
 \begin{proof}\leanok
@@ -266,7 +264,7 @@ a site-independent tensor with the global phase of
     \label{lem:peps_reference_edge_interior_windows}
     \lean{TNLean.PEPS.referenceEdge_endpoints_mem_staircaseWindow_of_interior}
     \leanok
-    \uses{lem:peps_reference_edge_left_endpoint_staircase_window, lem:peps_reference_edge_right_endpoint_staircase_window}
+    \uses{lem:peps_reference_edge_left_endpoint_staircase_window,lem:peps_reference_edge_right_endpoint_staircase_window}
     If $1\le j<L$, then $u,w\in W_j$.
 \end{lemma}
 \begin{proof}\leanok

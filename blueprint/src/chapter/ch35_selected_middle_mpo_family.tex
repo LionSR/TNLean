@@ -12,11 +12,7 @@ discussed in~\cite{gap:alvv16_chebyshev_middle_bond}.
     \label{thm:selected_common_natural_mpo_family}
     \lean{TNLean.MPS.AreaLaw.exists_common_physical_twoMarkerCoefficient_mpo_family}
     \leanok
-    \uses{thm:selected_coefficient_prescribed_middle,
-        thm:selected_middle_fixed_physical_data,thm:finite_natural_retained_core_family,
-        thm:actual_natural_affine_product,thm:retained_single_trace_insert,
-        thm:physical_interval_nested_trace,
-        thm:physical_interval_retained_matrix,def:two_marker_middle_index}
+    \uses{thm:selected_coefficient_prescribed_middle,thm:selected_middle_fixed_physical_data,thm:finite_natural_retained_core_family,thm:actual_natural_affine_product,thm:retained_single_trace_insert,thm:physical_interval_nested_trace,thm:physical_interval_retained_matrix,def:two_marker_middle_index}
     Let the chain have $L$ sites with local dimension $q\ge0$.
     Let $a,b,\ell$ be nonnegative integers satisfying
     $a+2\ell\le b$ and $b+2\ell\le L-1$, and choose $0\le p,s<2\ell$.
@@ -88,12 +84,7 @@ discussed in~\cite{gap:alvv16_chebyshev_middle_bond}.
     into separate left and right operators is asserted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:selected_coefficient_prescribed_middle,
-        thm:selected_middle_fixed_physical_data,thm:finite_natural_retained_core_family,
-        thm:actual_natural_affine_product,thm:retained_single_trace_insert,
-        thm:physical_interval_nested_trace,
-        thm:physical_interval_retained_matrix,def:two_marker_middle_index,
-        thm:two_marker_prescribed_span}
+    \uses{thm:selected_coefficient_prescribed_middle,thm:selected_middle_fixed_physical_data,thm:finite_natural_retained_core_family,thm:actual_natural_affine_product,thm:retained_single_trace_insert,thm:physical_interval_nested_trace,thm:physical_interval_retained_matrix,def:two_marker_middle_index,thm:two_marker_prescribed_span}
     The prescribed-middle coefficient decomposition first gives one ordered
     middle factor for every index $w\in\mathcal W_{k,i,j}$, before the exterior
     pair or the scalars $c_h$ are chosen. Its ordinary factor has the form
@@ -126,8 +117,7 @@ discussed in~\cite{gap:alvv16_chebyshev_middle_bond}.
     \label{thm:selected_common_natural_cardinality}
     \lean{TNLean.MPS.AreaLaw.actual_common_physical_mpo_card_le}
     \leanok
-    \uses{thm:selected_middle_collar_cardinality,thm:two_marker_middle_cardinality,
-        def:physical_interval_complement_coordinates}
+    \uses{thm:selected_middle_collar_cardinality,thm:two_marker_middle_cardinality,def:physical_interval_complement_coordinates}
     Retain the geometric data and positions above, and suppose $q\ge1$ and
     $k\ge1$. For arbitrary nonnegative $i,j,n$, the numerical implication
     \begin{align}
@@ -139,8 +129,7 @@ discussed in~\cite{gap:alvv16_chebyshev_middle_bond}.
     holds. No low-frequency restriction is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:selected_middle_collar_cardinality,thm:two_marker_middle_cardinality,
-        def:physical_interval_complement_coordinates}
+    \uses{thm:selected_middle_collar_cardinality,thm:two_marker_middle_cardinality,def:physical_interval_complement_coordinates}
     The collar bound gives $\rho\le q^{4\ell}$, and hence
     $\rho^2\le q^{8\ell}$. With $m=i+j$ and $v=k+1$, the middle index count is
     at most $2^m q^{2m}v^{m+1}$. Since $v\ge2$, it is at most

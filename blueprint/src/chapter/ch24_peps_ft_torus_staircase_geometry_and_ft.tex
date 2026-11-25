@@ -73,7 +73,7 @@
     \lean{TNLean.PEPS.horizontalStaircasePatch_eq_endPair_union_corner}
     \lean{TNLean.PEPS.horizontalStaircasePatch_sdiff_endPair}
     \leanok
-    \uses{def:peps_horizontal_staircase_patch, lem:peps_horizontal_staircase_end_pair_disjoint}
+    \uses{def:peps_horizontal_staircase_patch,lem:peps_horizontal_staircase_end_pair_disjoint}
     If $L,K>0$, $2L\le W$, and $2K\le H$, then $C\cap S=\varnothing$,
     $P=S\cup C$, and $P\setminus S=C$.
 \end{lemma}
@@ -89,7 +89,7 @@
     \label{def:peps_torusRectangleInjectivityHypotheses}
     \lean{TNLean.PEPS.NormalTorusRectangleInjectivityHypotheses}
     \leanok
-    \uses{def:peps_regionInjectivityData, def:peps_torus_geometry_translation}
+    \uses{def:peps_regionInjectivityData,def:peps_torus_geometry_translation}
     On the discrete $n\times m$ torus
     (Definition~\ref{def:peps_torus_geometry_translation}), the \emph{torus
         rectangular injectivity hypotheses} for $\inj$
@@ -101,7 +101,7 @@
     \label{def:peps_normalTorusRectanglePEPS}
     \lean{TNLean.PEPS.IsNormalTorusRectanglePEPS}
     \leanok
-    \uses{def:peps_torusRectangleInjectivityHypotheses, def:peps_regionInjectivityDataOf}
+    \uses{def:peps_torusRectangleInjectivityHypotheses,def:peps_regionInjectivityDataOf}
     A PEPS tensor $A$ on the discrete torus is \emph{normal with injective
         rectangles} if $\inj_A$ (Definition~\ref{def:peps_regionInjectivityDataOf})
     satisfies Definition~\ref{def:peps_torusRectangleInjectivityHypotheses} and
@@ -119,7 +119,7 @@
     \lean{TNLean.PEPS.isCrossingEdge_torusHorizontalRectangleBlockingDatum}
     \lean{TNLean.PEPS.isCrossingEdge_torusVerticalRectangleBlockingDatum}
     \leanok
-    \uses{def:peps_torusRectangleInjectivityHypotheses, def:peps_regionInjectivityData, def:peps_torus_geometry_translation}
+    \uses{def:peps_torusRectangleInjectivityHypotheses,def:peps_regionInjectivityData,def:peps_torus_geometry_translation}
     At a frame origin $(x_0,y_0)$ with $2\le x_0$, $1\le y_0$ (or $1\le x_0$,
     $2\le y_0$ vertically) and either $x_0+5=n$, $y_0+5=m$ or $x_0+7\le n$,
     $y_0+7\le m$, let $e_h=e_{\mathrm R}(x_0+1,y_0+2)$ and
@@ -149,8 +149,7 @@
     \label{thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
     \lean{TNLean.PEPS.bondDim_eq_of_normalTorusRectangle}
     \leanok
-    \uses{def:peps_torus_translation_invariant, def:peps_same_state,
-        def:peps_normalTorusRectanglePEPS}
+    \uses{def:peps_torus_translation_invariant,def:peps_same_state,def:peps_normalTorusRectanglePEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors
     (Definition~\ref{def:peps_torus_translation_invariant}) on the $n\times m$
     torus with $n,m\ge 7$ and $d>0$, generating the same state
@@ -160,11 +159,7 @@
         1407--1500]{Molnar2018NormalPEPS}.
     \begin{proof}
         \leanok
-        \uses{lem:peps_injectiveRegion_union_pos,
-            lem:peps_torusRectangleReferenceBlockingData,
-            thm:peps_bondDim_eq_of_normalBlocking,
-            thm:peps_torusUniformBondDim_of_translationInvariant,
-            def:peps_torus_geometry_translation}
+        \uses{lem:peps_injectiveRegion_union_pos,lem:peps_torusRectangleReferenceBlockingData,thm:peps_bondDim_eq_of_normalBlocking,thm:peps_torusUniformBondDim_of_translationInvariant,def:peps_torus_geometry_translation}
         By Lemma~\ref{lem:peps_injectiveRegion_union_pos}, $D_A,D_B>0$ gives
         union closure for $\inj_A$ and $\inj_B$. At $(x_0,y_0)=(n-5,m-5)$
         ($n,m\ge 7$), Lemma~\ref{lem:peps_torusRectangleReferenceBlockingData}
@@ -183,7 +178,7 @@
 \begin{corollary}[Fundamental Theorem for normal PEPS on the torus]%
     \label{thm:fundamentalTheorem_normalTorusPEPS}
     \leanok
-    \uses{thm:fundamentalTheorem_normalSquarePEPS, thm:peps_oneVertexComplementComparison, def:peps_torus_translation_invariant, thm:peps_torusUniformBondDim_of_translationInvariant, def:GaugeEquivPEPS, thm:fundamentalTheorem_normalTorusPEPS_unconditional, thm:torusAbsorbedGauge_unique_scalar, thm:torusCovariantAbsorbedGauge_unique_classScalar, thm:torusGauge_unique_scalar_of_perVertex}
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,thm:peps_oneVertexComplementComparison,def:peps_torus_translation_invariant,thm:peps_torusUniformBondDim_of_translationInvariant,def:GaugeEquivPEPS,thm:fundamentalTheorem_normalTorusPEPS_unconditional,thm:torusAbsorbedGauge_unique_scalar,thm:torusCovariantAbsorbedGauge_unique_classScalar,thm:torusGauge_unique_scalar_of_perVertex}
     Let $A$ and $B$ be translationally invariant normal PEPS on the $n\times m$
     torus ($n,m\ge 7$) whose $2\times 3$ and $3\times 2$ regions are injective.
     If $A$ and $B$ generate the same state, then they are related by horizontal
@@ -203,11 +198,7 @@
     \label{thm:fundamentalTheorem_normalTorusPEPS_unconditional}
     \lean{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional}
     \leanok
-    \uses{thm:fundamentalTheorem_normalSquarePEPS,
-        thm:peps_oneVertexComplementComparison, thm:peps_sameState_transport,
-        thm:peps_stateCoeff_translationInvariant,
-        thm:peps_torusUniformBondDim_of_translationInvariant,
-        def:peps_normalTorusRectanglePEPS, def:GaugeEquivPEPS}
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,thm:peps_oneVertexComplementComparison,thm:peps_sameState_transport,thm:peps_stateCoeff_translationInvariant,thm:peps_torusUniformBondDim_of_translationInvariant,def:peps_normalTorusRectanglePEPS,def:GaugeEquivPEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
     $n\times m$ torus ($n,m\ge 7$) with $d>0$, generating the same state, and
     both normal with injective rectangles
@@ -231,7 +222,7 @@
     Lemmas~\ref{thm:torusAbsorbedGauge_unique_scalar}--\ref{thm:torusGauge_unique_scalar_of_perVertex}.
     \begin{proof}
         \leanok
-        \uses{lem:peps_injectiveRegion_union_pos, thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
+        \uses{lem:peps_injectiveRegion_union_pos,thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
         Lemma~\ref{lem:peps_injectiveRegion_union_pos} gives union closure of
         injective regions, and
         Lemma~\ref{thm:peps_bondDim_eq_of_normalTorusRectangularInjectivity}
@@ -284,7 +275,7 @@
     \label{thm:torusAbsorbedGauge_unique_scalar}
     \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar}
     \leanok
-    \uses{def:applyGauge, def:peps_edgeInsertedCoeff, def:peps_normalTorusRectanglePEPS}
+    \uses{def:applyGauge,def:peps_edgeInsertedCoeff,def:peps_normalTorusRectanglePEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the $n\times m$
     torus ($n,m\ge 7$) with $d>0$ and $D_A=D_B$, generating the same state, and
     both normal with injective rectangles
@@ -322,7 +313,7 @@
     \label{thm:torusCovariantAbsorbedGauge_unique_classScalar}
     \lean{TNLean.PEPS.torusCovariantAbsorbedGauge_unique_classScalar}
     \leanok
-    \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
+    \uses{def:applyGauge,def:peps_edgeInsertedCoeff}
     In the setting of Lemma~\ref{thm:torusAbsorbedGauge_unique_scalar},
     suppose $X$ and $X'$ realize $C_A(e,M;\sigma)=C_{B^X}(e,M;\sigma)=C_{B^{X'}}(e,M;\sigma)$
     at every $e\in E$ and are both translation covariant (meaning $X_{\tau e}=X_e$
@@ -362,7 +353,7 @@
     \label{thm:torusGauge_unique_scalar_of_perVertex}
     \lean{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}
     \leanok
-    \uses{def:gaugeVertex, def:applyGauge, def:peps_normalTorusRectanglePEPS}
+    \uses{def:gaugeVertex,def:applyGauge,def:peps_normalTorusRectanglePEPS}
     Let $A$ and $B$ be as in
     Lemma~\ref{thm:torusAbsorbedGauge_unique_scalar}. If two families of
     invertible edge matrices $X,X'$ and scalars $\lambda,\lambda'$ with
@@ -373,7 +364,7 @@
     \cite[Theorem~3]{Molnar2018NormalPEPS}.
     \begin{proof}
         \leanok
-        \uses{thm:torusAbsorbedGauge_unique_scalar, def:peps_edgeInsertedCoeff}
+        \uses{thm:torusAbsorbedGauge_unique_scalar,def:peps_edgeInsertedCoeff}
         By multilinearity of $C_A(e,M;\sigma)$
         (Definition~\ref{def:peps_edgeInsertedCoeff}) over the $nm$ sites and
         $\lambda^{nm}={\lambda'}^{nm}=1$,

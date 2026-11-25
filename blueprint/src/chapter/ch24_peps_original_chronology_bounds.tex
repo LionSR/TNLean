@@ -8,7 +8,7 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
 \begin{definition}[Chronological composite]
     \label{def:peps_original_chronology_composite}
     \leanok
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sequence}
+    \lean{QuantumCircuit.Party.OriginalCircuit.sequence}
     For original distributed circuits
     $W_t:\mathcal H_{A_t}\to\mathcal H_{A_{t+1}}$, define
     $W^{[0]}=1$ and $W^{[t+1]}=W_tW^{[t]}$.
@@ -18,14 +18,14 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
     \label{thm:peps_original_chronology_composition}
     \leanok
     \uses{def:peps_original_chronology_composite}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.eval_sequence_zero}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.eval_sequence_succ}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_sequence}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateCount_sequence}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.forall_participants_sequence}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_sequence}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_comp}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_sequence}
+    \lean{QuantumCircuit.Party.OriginalCircuit.op_sequence_zero}
+    \lean{QuantumCircuit.Party.OriginalCircuit.op_sequence_succ}
+    \lean{QuantumCircuit.Party.OriginalCircuit.isExpansionBounded_sequence}
+    \lean{QuantumCircuit.Party.OriginalCircuit.nonprivateCount_sequence}
+    \lean{QuantumCircuit.Party.OriginalCircuit.forall_participants_sequence}
+    \lean{QuantumCircuit.Party.OriginalCircuit.isMonomialBounded_sequence}
+    \lean{QuantumCircuit.Party.OriginalCircuit.participation_comp}
+    \lean{QuantumCircuit.Party.OriginalCircuit.participation_sequence}
     For original distributed circuits $W_t:\mathcal H_{A_t}\to\mathcal H_{A_{t+1}}$
     ($0\le t<T$) and $v\in\mathcal H_{A_0}$, $W^{[0]}v=v$ and
     $W^{[t+1]}v=W_t(W^{[t]}v)$. Writing $N(W)$ for the number of nonprivate
@@ -50,7 +50,7 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
 \begin{definition}[Recorded local operators]
     \label{def:peps_original_recorded_gate_maps}
     \leanok
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.canonicalGateMaps}
+    \lean{QuantumCircuit.Party.OriginalCircuit.canonicalGateMaps}
     For an original distributed circuit $W$, let $\widehat W$ be the evaluation
     of the chronology of $W$ when each nonprivate occurrence with monomial list
     $L$ is assigned its recorded sum $\sum_{m\in L}m$.
@@ -60,8 +60,8 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
     \label{thm:peps_original_exact_gate_maps}
     \leanok
     \uses{def:peps_original_recorded_gate_maps}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.evalWithGateMaps_canonicalGateMaps}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps}
+    \lean{QuantumCircuit.Party.OriginalCircuit.evalWithGateMaps_canonicalGateMaps}
+    \lean{QuantumCircuit.Party.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps}
     For every original distributed circuit $W$, $\widehat W=W$ (including
     private operations), with zero local approximation error and unchanged
     contraction and pair-effect conditions.
@@ -77,8 +77,8 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
 \begin{lemma}[Original monomial and expansion bounds]
     \label{thm:peps_original_produced_resource_bounds}
     \leanok
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.monomialCount_produce_le_of_isMonomialBounded}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_mono}
+    \lean{QuantumCircuit.Party.OriginalCircuit.monomialCount_toEffectCircuit_le_of_isMonomialBounded}
+    \lean{QuantumCircuit.Party.OriginalCircuit.isExpansionBounded_mono}
     If every original monomial list has $|L|\le K$, then every produced
     occurrence has $|L|\le K$; if $W$ has pair-effect bound $r$ and
     coefficient-sum bound $S$, then any $r'\ge r$ and $S'\ge S$ also bound $W$.

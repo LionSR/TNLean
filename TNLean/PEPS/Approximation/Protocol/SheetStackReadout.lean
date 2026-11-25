@@ -18,18 +18,18 @@ trivial tags, and the other reference factors form the vector `Ξ` of registers 
 This file computes the final regrouping `EncodedFrame.readoutCircuit` of
 `TNLean.PEPS.Approximation.SheetStackReadoutCircuit` on the reference vector of a sheet stack.
 After the regrouping, the physical-private readout of the reference vector is `Ω ⊗ Ξ`, where `Ξ`
-is the vector of the private registers, of the norm of the reference vector of the other sheets
-(`EncodedFrame.readout_eval_readoutCircuit_stackVec`). With the total hole count of the other
-sheets at most `C L³` this norm is between `1 - C L⁻⁵⁷` and `1`
-(`EncodedFrame.exists_readoutCircuit_norm`). For a protocol, the physical-private readout of the
-final layout, read on the configurations of the square, is the readout of the protocol
+is the vector of the private registers (`EncodedFrame.readoutPrivateRef`), of the norm of the
+reference vector of the other sheets (`EncodedFrame.physicalReadout_readoutCircuit_stackRef`).
+With the total hole count of the other sheets at most `C L³` this norm is between `1 - C L⁻⁵⁷`
+and `1` (`EncodedFrame.exists_readoutCircuit_norm`). For a protocol, the physical-private readout
+of the final memory, read on the configurations of the square, is the readout of the protocol
 (`DyadicProtocol.readout_eq_euclideanTensorVector`).
 
 ## Main results
 
-* `EncodedFrame.eval_readoutCircuit_stackVec`: the regrouped reference vector.
-* `EncodedFrame.readout_eval_readoutCircuit_stackVec`, `EncodedFrame.exists_readoutCircuit_norm`:
-  the readout `Ω ⊗ Ξ`, with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
+* `EncodedFrame.physicalReadout_readoutCircuit_stackRef`, `EncodedFrame.norm_readoutPrivateRef`,
+  `EncodedFrame.exists_readoutCircuit_norm`: the readout `Ω ⊗ Ξ`, with
+  `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
 * `DyadicProtocol.physicalConfigEquiv_apply_val`, `DyadicProtocol.readout_eq_euclideanTensorVector`.
 
 ## References
@@ -43,133 +43,108 @@ open ManyBody (SquareLatticeVertex)
 
 noncomputable section
 
-open scoped TensorProduct
-open ContinuousLinearMap
-
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
-open TNLean.Lattice.PartyCircuit
+open ManyBody QuantumCircuit.Party Matrix
 
-variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {Party : Type} {pos : ι → ℝ × ℝ}
+variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {Party : Type} [DecidableEq Party]
+  {pos : ι → ℝ × ℝ}
+
+/-- The tag configurations of holes with empty outer samples form a single point. -/
+theorem subsingleton_config_tagSystem (l : List (Hole pos q Party))
+    (hl : ∀ h ∈ l, h.patch.outer = ∅) : Subsingleton (Config (tagSystem l)) :=
+  ⟨fun a b ↦ (tagConfigEquiv l).injective (by
+    rw [eq_trivialTag l hl (tagConfigEquiv l a), eq_trivialTag l hl (tagConfigEquiv l b)])⟩
+
+variable [Fintype Party]
 
 section Readout
 
-variable (d : Party → ℕ) [Fintype Party] [DecidableEq Party]
+variable (d : Party → ℕ) {W : Party → Type} [∀ p, Fintype (W p)] [∀ p, DecidableEq (W p)]
 
-omit [Fintype Party] [DecidableEq Party] in
-private theorem memCongr_assoc_symm (a b c : Layout Party) (x : Mem a) (y : Mem b)
-    (z : Mem c) :
-    (Layout.memCongr (List.append_assoc a b c).symm).symm
-        ((appendIso (a ++ b) c).symm ((appendIso a b).symm (x ⊗ₜ y) ⊗ₜ z)) =
-      (appendIso a (b ++ c)).symm (x ⊗ₜ (appendIso b c).symm (y ⊗ₜ z)) :=
-  by
-    rw [← Layout.memCongr_symm]
-    exact eq_of_heq ((Layout.memCongr_apply_heq _ _).trans
-      (appendIso_assoc_symm_heq a b c x y z).symm)
+/-- The configurations of a stack of frames with a first frame have decidable equality. -/
+instance instDecidableEqConfigFramesSystemCons (M : Frame pos q Party)
+    (Fs : List (Frame pos q Party)) : DecidableEq (Config (framesSystem q pos (M :: Fs) W)) :=
+  @Fintype.decidablePiFintype Party _ (fun _ ↦ inferInstance) _
 
-/-- The final regrouping on the reference vector of the stack: the main factor becomes `Ω` on the
-physical registers, and the private registers carry the identity tags of the main sheet and the
-reference vector of the other sheets. -/
-theorem eval_readoutCircuit_stackVec [NeZero q] (M : Frame pos q Party)
-    (Fs : List (Frame pos q Party)) (ℓ : Layout Party) (hd : ∀ x, d (M.owner x) = q)
-    (hd1 : ∀ p ∉ Set.range M.owner, d p = 1) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
-    (e : ((p : Party) → Fin (d p)) ≃ (ι → Fin q))
-    (he : ∀ σ x, (e σ x : ℕ) = σ (M.owner x)) (Ω : EuclideanSpace ℂ (ι → Fin q)) (ξ : Mem ℓ) :
-    (readoutCircuit d M Fs ℓ hd hd1).eval (stackVec Ω (M :: Fs) ξ) =
-      ∑ c, Ω c • (appendIso (familyPhysicalLayout d (siteOrder M.owner))
-        (readoutPrivate M Fs ℓ)).symm (physVec d (siteOrder M.owner) (e.symm c) ⊗ₜ
-          (appendIso (tagRegs M.holes) (stackRegs Fs ℓ)).symm
-            (tagVec M.holes (trivialTag M.holes hM) ⊗ₜ stackVec Ω Fs ξ)) := by
-  change (siteCircuit d M.owner hd _ _ _ (sites ι)).eval
-    ((OriginalCircuit.castLayouts _ _ _).eval ((appendIso M.regs (stackRegs Fs ℓ)).symm
-      (M.regRef Ω ⊗ₜ stackVec Ω Fs ξ))) = _
-  rw [M.regRef_of_outer_eq_empty hM, TensorProduct.sum_tmul, map_sum, map_sum, map_sum]
-  refine Finset.sum_congr rfl fun c _ => ?_
-  rw [← TensorProduct.smul_tmul', map_smul, map_smul, map_smul]
-  congr 1
-  rw [Circuit.eval_castLayouts]
-  simp only [comp_apply, isoL_apply, layoutVec]
-  rw [memCongr_assoc_symm, Word.eval_toOriginalCircuit, Word.eval_exchangeBlocks_appendIso_symm]
-  exact eval_siteCircuit d M.owner hd _ _ _ c (e.symm c)
-    (fun x => by rw [← he, Equiv.apply_symm_apply]) _ (sites ι)
+/-- The configurations of the final system of the regrouping have decidable equality. -/
+instance instDecidableEqConfigPhysicalSystemReadoutPrivate (M : Frame pos q Party)
+    (Fs : List (Frame pos q Party)) :
+    DecidableEq (Config (physicalSystem d (readoutPrivate M Fs W))) :=
+  @Fintype.decidablePiFintype Party _ (fun _ ↦ inferInstance) _
+
+/-- The vector `Ξ` of the private registers after the final regrouping: the identity tags of the
+main sheet `M`, and the reference vector of the other sheets with the idle vector `ξ`. -/
+def readoutPrivateRef [NeZero q] (M : Frame pos q Party) (Fs : List (Frame pos q Party))
+    (hM : ∀ h ∈ M.holes, h.patch.outer = ∅) (Ω : EuclideanSpace ℂ (ι → Fin q))
+    (ξ : EuclideanSpace ℂ (Config W)) :
+    EuclideanSpace ℂ (Config (readoutPrivate M Fs W)) :=
+  prodVec (EuclideanSpace.single ((tagConfigEquiv M.holes).symm (trivialTag M.holes hM)) 1)
+    (stackRef Ω Fs ξ)
+
+omit [∀ p, DecidableEq (W p)] in
+/-- The vector of the private registers has the norm of the reference vector of the other
+sheets. -/
+theorem norm_readoutPrivateRef [NeZero q] (M : Frame pos q Party) (Fs : List (Frame pos q Party))
+    (hM : ∀ h ∈ M.holes, h.patch.outer = ∅) (Ω : EuclideanSpace ℂ (ι → Fin q))
+    (ξ : EuclideanSpace ℂ (Config W)) :
+    ‖readoutPrivateRef M Fs hM Ω ξ‖ = ‖stackRef Ω Fs ξ‖ := by
+  rw [readoutPrivateRef, norm_prodVec, PiLp.norm_single, norm_one, one_mul]
 
 /-- **The final reference vector is `Ω ⊗ Ξ`.** After the final regrouping, the physical-private
 readout of the reference vector of a stack whose main sheet `M` has trivial holes is `Ω ⊗ Ξ`,
 where `Ω` is read on the configurations of the parties through `e` and `Ξ` is the vector of the
-private registers, of the norm of the reference vector of the other sheets.
+private registers.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 4, `06-geometry.tex`,
 lines 43–51, and its proof, lines 669–681. -/
-theorem readout_eval_readoutCircuit_stackVec [NeZero q] (M : Frame pos q Party)
-    (Fs : List (Frame pos q Party)) (ℓ : Layout Party) (hown : Function.Injective M.owner)
+theorem physicalReadout_readoutCircuit_stackRef [NeZero q] (M : Frame pos q Party)
+    (Fs : List (Frame pos q Party)) (hinj : Function.Injective M.owner)
     (hd : ∀ x, d (M.owner x) = q) (hd1 : ∀ p ∉ Set.range M.owner, d p = 1)
     (hM : ∀ h ∈ M.holes, h.patch.outer = ∅) (e : ((p : Party) → Fin (d p)) ≃ (ι → Fin q))
-    (he : ∀ σ x, (e σ x : ℕ) = σ (M.owner x))
-    [FiniteDimensional ℂ (Mem (readoutPrivate M Fs ℓ)).carrier]
-    (Ω : EuclideanSpace ℂ (ι → Fin q)) (ξ : Mem ℓ) :
-    ∃ Ξ : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem (readoutPrivate M Fs ℓ)).carrier)),
-      ‖Ξ‖ = ‖stackVec Ω Fs ξ‖ ∧
-        familyLabelledPhysicalReadout d (siteOrder M.owner) (nodup_siteOrder hown)
-            (mem_siteOrder M.owner) (readoutPrivate M Fs ℓ)
-            ((readoutCircuit d M Fs ℓ hd hd1).eval (stackVec Ω (M :: Fs) ξ)) =
-          Matrix.euclideanTensorVector (WithLp.toLp 2 fun σ => Ω (e σ)) Ξ := by
-  set π : Mem (readoutPrivate M Fs ℓ) := (appendIso (tagRegs M.holes) (stackRegs Fs ℓ)).symm
-    (tagVec M.holes (trivialTag M.holes hM) ⊗ₜ stackVec Ω Fs ξ)
-  set B := stdOrthonormalBasis ℂ (Mem (readoutPrivate M Fs ℓ)).carrier
-  refine ⟨B.repr π, ?_, ?_⟩
-  · rw [LinearIsometryEquiv.norm_map, LinearIsometryEquiv.norm_map, TensorProduct.norm_tmul,
-      ← (tagIso M.holes).norm_map, tagIso_tagVec, PiLp.norm_single, norm_one, one_mul]
-  · set Bp := familyLabelledPhysicalBasis d (siteOrder M.owner) (nodup_siteOrder hown)
-      (mem_siteOrder M.owner)
-    have hsum : (∑ c, Ω c • (appendIso (familyPhysicalLayout d (siteOrder M.owner))
-        (readoutPrivate M Fs ℓ)).symm (physVec d (siteOrder M.owner) (e.symm c) ⊗ₜ π)) =
-        (appendIso (familyPhysicalLayout d (siteOrder M.owner)) (readoutPrivate M Fs ℓ)).symm
-          ((∑ c, Ω c • Bp (e.symm c)) ⊗ₜ π) := by
-      rw [TensorProduct.sum_tmul, map_sum]
-      refine Finset.sum_congr rfl fun c _ => ?_
-      rw [← TensorProduct.smul_tmul', map_smul, familyLabelledPhysicalBasis_eq_physVec]
-    rw [eval_readoutCircuit_stackVec d M Fs ℓ hd hd1 hM e he Ω ξ, hsum]
-    ext ⟨σ, i⟩
-    change ((Bp.tensorProduct B).repr ((appendIso _ _) ((appendIso _ _).symm _))) (σ, i) = _
-    rw [LinearIsometryEquiv.apply_symm_apply, OrthonormalBasis.tensorProduct_repr_tmul_apply,
-      Matrix.euclideanTensorVector_apply, map_sum, mul_comm]
-    congr 1
-    simp only [map_smul, OrthonormalBasis.repr_self, WithLp.ofLp_sum, WithLp.ofLp_smul,
-      Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
-    rw [Finset.sum_eq_single (e σ)]
-    · simp
-    · intro c _ hc
-      have h1 : e.symm c ≠ σ := fun h => hc (by rw [← h, Equiv.apply_symm_apply])
-      simp [Ne.symm h1]
-    · simp
+    (he : ∀ σ x, (e σ x : ℕ) = σ (M.owner x)) (Ω : EuclideanSpace ℂ (ι → Fin q))
+    (ξ : EuclideanSpace ℂ (Config W)) :
+    toEuclideanLin (physicalReadout d (readoutPrivate M Fs W))
+        (toEuclideanLin (readoutCircuit d M Fs W hinj hd hd1).op (stackRef Ω (M :: Fs) ξ)) =
+      euclideanTensorVector (WithLp.toLp 2 fun σ ↦ Ω (e σ)) (readoutPrivateRef M Fs hM Ω ξ) := by
+  have := subsingleton_config_tagSystem M.holes hM
+  ext ⟨σ, z⟩
+  rw [toEuclideanLin_physicalReadout_apply, euclideanTensorVector_apply,
+    Matrix.toLpLin_apply, PiLp.toLp_apply, op_readoutCircuit_mulVec]
+  change prodVec (M.regRef Ω) (stackRef Ω Fs ξ) _ = _
+  rw [prodVec_apply, M.regRef_of_outer_eq_empty hM, readoutPrivateRef, prodVec_apply,
+    show (fun p ↦ (z p).1) = (tagConfigEquiv M.holes).symm (trivialTag M.holes hM) from
+      Subsingleton.elim _ _, PiLp.single_eq_same, one_mul, PiLp.toLp_apply]
+  refine congrArg (· * _) (congrArg Ω.ofLp (funext fun x ↦ Fin.ext ?_))
+  rw [he]
+  simp only [layoutConfigEquiv_apply]
+  exact (physEquiv_apply_of_owner d M hinj hd hd1 x _).symm.trans (by simp [readoutEquiv])
 
 /-- **The final reference vector, with its norm.** If `‖Ω‖ = 1`, every hole of the other sheets
 satisfies the frame constraint at accuracy `L⁻⁶⁰`, the other sheets have at most `C L³` holes in
 total, and the idle vector has norm one, then the vector `Ξ` of the private registers in
-`readout_eval_readoutCircuit_stackVec` satisfies `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
+`physicalReadout_readoutCircuit_stackRef` satisfies `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 4, `06-geometry.tex`,
 lines 43–47, and its proof, lines 653–656 and 674–679. -/
 theorem exists_readoutCircuit_norm [NeZero q] (M : Frame pos q Party)
-    (Fs : List (Frame pos q Party)) (ℓ : Layout Party) (hown : Function.Injective M.owner)
+    (Fs : List (Frame pos q Party)) (hinj : Function.Injective M.owner)
     (hd : ∀ x, d (M.owner x) = q) (hd1 : ∀ p ∉ Set.range M.owner, d p = 1)
     (hM : ∀ h ∈ M.holes, h.patch.outer = ∅) (e : ((p : Party) → Fin (d p)) ≃ (ι → Fin q))
     (he : ∀ σ x, (e σ x : ℕ) = σ (M.owner x))
-    [FiniteDimensional ℂ (Mem (readoutPrivate M Fs ℓ)).carrier]
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℕ} (hL : 0 < L) {C : ℝ}
-    (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
-    {ξ : Mem ℓ} (hξ : ‖ξ‖ = 1) :
-    ∃ Ξ : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem (readoutPrivate M Fs ℓ)).carrier)),
+    (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hholes : (Fs.map fun F ↦ (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
+    {ξ : EuclideanSpace ℂ (Config W)} (hξ : ‖ξ‖ = 1) :
+    ∃ Ξ : EuclideanSpace ℂ (Config (readoutPrivate M Fs W)),
       ‖Ξ‖ ≤ 1 ∧ 1 - C / (L : ℝ) ^ 57 ≤ ‖Ξ‖ ∧
-        familyLabelledPhysicalReadout d (siteOrder M.owner) (nodup_siteOrder hown)
-            (mem_siteOrder M.owner) (readoutPrivate M Fs ℓ)
-            ((readoutCircuit d M Fs ℓ hd hd1).eval (stackVec Ω (M :: Fs) ξ)) =
-          Matrix.euclideanTensorVector (WithLp.toLp 2 fun σ => Ω (e σ)) Ξ := by
-  obtain ⟨Ξ, hn, hr⟩ := readout_eval_readoutCircuit_stackVec d M Fs ℓ hown hd hd1 hM e he Ω ξ
-  obtain ⟨h1, h2⟩ := one_sub_div_pow_le_norm_stackVec hΩ hL Fs hε hholes hξ
-  exact ⟨Ξ, hn ▸ h2, hn ▸ h1, hr⟩
+        toEuclideanLin (physicalReadout d (readoutPrivate M Fs W))
+            (toEuclideanLin (readoutCircuit d M Fs W hinj hd hd1).op (stackRef Ω (M :: Fs) ξ)) =
+          euclideanTensorVector (WithLp.toLp 2 fun σ ↦ Ω (e σ)) Ξ := by
+  obtain ⟨h1, h2⟩ := one_sub_div_pow_le_norm_stackRef hΩ hL Fs hε hholes hξ
+  exact ⟨readoutPrivateRef M Fs hM Ω ξ, (norm_readoutPrivateRef M Fs hM Ω ξ).symm ▸ h2,
+    (norm_readoutPrivateRef M Fs hM Ω ξ).symm ▸ h1,
+    physicalReadout_readoutCircuit_stackRef d M Fs hinj hd hd1 hM e he Ω ξ⟩
 
 end Readout
 
@@ -179,9 +154,9 @@ end TNLean.PEPS.EncodedFrame
 
 namespace TNLean.PEPS.Approximation.DyadicProtocol
 
-open TNLean.Lattice.PartyCircuit
+open ManyBody QuantumCircuit.Party Matrix
 
-variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
+variable {L q : ℕ} {P : Type} [Fintype P] [DecidableEq P] (D : DyadicProtocol L q P)
 
 /-- The configuration of the square read from the physical configuration of the parties: the
 value at a site is the physical value of its unit-square party. -/
@@ -193,25 +168,25 @@ theorem physicalConfigEquiv_apply_val (σ : (p : P) → Fin (D.physicalDimension
   rfl
 
 /-- **The readout of the final memory of a protocol.** If the physical-private readout of the
-final layout of a protocol, with the physical configurations of the parties, is `Ω' ⊗ Ξ`, where
+final memory of a protocol, read through the identification of its bases with the physical and
+private registers and with the physical configurations of the parties, is `Ω' ⊗ Ξ`, where
 `Ω'` reads `Ω` through the configuration of the square, then the readout of the protocol is
 `Ω ⊗ Ξ`.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 4, `06-geometry.tex`,
 lines 43–51. -/
-theorem readout_eq_euclideanTensorVector [DecidableEq P] (x : Mem (D.layout D.changes))
-    (Ω : StateSpace L q)
-    (Ξ : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem D.privateOutput))))
-    [FiniteDimensional ℂ (Mem D.privateOutput).carrier]
-    (h : familyLabelledPhysicalReadout D.physicalDimension D.physicalOrder D.physicalOrder_nodup
-        D.mem_physicalOrder D.privateOutput (Layout.memCongr D.layout_changes x) =
-      Matrix.euclideanTensorVector (WithLp.toLp 2 fun σ => Ω (D.physicalConfigEquiv σ)) Ξ) :
-    D.readout x = Matrix.euclideanTensorVector Ω Ξ := by
+theorem readout_eq_euclideanTensorVector (x : EuclideanSpace ℂ (Config (D.system D.changes)))
+    (Ω : StateSpace L q) (Ξ : EuclideanSpace ℂ (Config D.privateOutput))
+    (h : toEuclideanLin (physicalReadout D.physicalDimension D.privateOutput)
+        (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight D.finalSystemEquiv) x) =
+      euclideanTensorVector (WithLp.toLp 2 fun σ ↦ Ω (D.physicalConfigEquiv σ)) Ξ) :
+    D.readout x = euclideanTensorVector Ω Ξ := by
   ext ⟨c, i⟩
-  have hc := congrArg (fun y => y (D.physicalConfigEquiv.symm c, i)) h
-  simp only [Matrix.euclideanTensorVector_apply, Equiv.apply_symm_apply] at hc ⊢
-  rw [← hc]
-  simp only [readout, LinearIsometryEquiv.trans_apply, LinearIsometryEquiv.piLpCongrLeft_apply,
+  have hc := congrArg (fun y ↦ y (D.physicalConfigEquiv.symm c, i)) h
+  simp only [toEuclideanLin_physicalReadout_apply, euclideanTensorVector_apply,
+    Equiv.apply_symm_apply] at hc
+  rw [euclideanTensorVector_apply, ← hc]
+  simp only [readout, finalConfigEquiv, LinearIsometryEquiv.piLpCongrLeft_apply,
     Equiv.piCongrLeft'_apply]
   rfl
 

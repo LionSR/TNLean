@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Histories.DesignatedSampling
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
 
 /-!
@@ -23,7 +23,8 @@ Independently written from the manuscript; no upstream Lean proof reused.
 
 noncomputable section
 
-open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph ambientDepth
+  ambientDepth_le_iff_mem_ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -56,6 +57,6 @@ theorem finalTemplateScanner_truncationSet {Λ T : Finset (ℤ × ℤ)}
   classical
   ext x
   simp only [finalTemplateScanner, CollarScan.truncationSet, Finset.mem_filter,
-    ambientDepth_le_iff_mem_dilation]
+    ambientDepth_le_iff_mem_ambientDilation]
 
 end TNLean.PEPS.AreaLaw.Scan

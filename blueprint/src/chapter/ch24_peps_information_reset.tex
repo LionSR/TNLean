@@ -28,8 +28,7 @@ The unitary of Lemma~\ref{thm:peps_reset_unitary} acts away from two regional co
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores,
-        lem:lattice_supported_unitary_entropy}
+    \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores,lem:lattice_supported_unitary_entropy}
     Combine Lemma~\ref{thm:peps_reset_paired_support}, Lemma~\ref{thm:peps_reset_exchanged_cores}, and Lemma~\ref{lem:lattice_supported_unitary_entropy}.
 \end{proof}
 
@@ -85,9 +84,7 @@ The unitary of Lemma~\ref{thm:peps_reset_unitary} acts away from two regional co
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_unitary_explicit,thm:peps_reset_support_cores,
-        thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar,
-        def:peps_reset_constants}
+    \uses{thm:peps_reset_unitary_explicit,thm:peps_reset_support_cores,thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar,def:peps_reset_constants}
     At $r=2p+10$, $K=K(J,\Delta,r)$, and $C=C_U(J,\Delta,r)$, the radius $\ell=\lceil K(1+b+\log L)\rceil$ satisfies $\ell+1\le(K+2)(1+b+\log L)=w$. Lemma~\ref{thm:peps_reset_unitary_explicit} and Lemma~\ref{thm:peps_reset_support_cores} provide $U$ supported outside $R_0\cup C_0$ with $\|U\Psi-\Phi\|\le CL^{-r}$, and Lemmas~\ref{thm:peps_reset_cores_entropy} and~\ref{thm:peps_reset_entropy_scalar} (with $|R_0|\le L^2$ and $\lambda=\log q$) yield $I_\Omega(R_0:C_0)\le L^{-p}$.
 \end{proof}
 
@@ -162,9 +159,7 @@ This subsection extends Lemma~\ref{thm:peps_information_reset_explicit} from $R=
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_unitary_range,thm:peps_reset_support_cores_range,
-        thm:peps_reset_cores_entropy_sites,thm:peps_reset_entropy_scalar,
-        thm:peps_square_site_count}
+    \uses{thm:peps_reset_unitary_range,thm:peps_reset_support_cores_range,thm:peps_reset_cores_entropy_sites,thm:peps_reset_entropy_scalar,thm:peps_square_site_count}
     With $r=2p+10$ and $B=1+b+\log L\ge1$, the support radius $\ell=\lceil K_RB\rceil$ of the unitary $U$ from Lemma~\ref{thm:peps_reset_unitary_range} satisfies $\ell+R\le C_pB$. Combining Lemma~\ref{thm:peps_reset_support_cores_range}, Lemma~\ref{thm:peps_reset_cores_entropy_sites}, Lemma~\ref{thm:peps_square_site_count}, and Lemma~\ref{thm:peps_reset_entropy_scalar} yields (\ref{eq:peps_information_reset_range}).
 \end{proof}
 

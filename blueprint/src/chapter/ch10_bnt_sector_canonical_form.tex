@@ -43,7 +43,7 @@ sector weights $\mu_{j,q}$ and coefficients $c_N^{(j)} = \sum_q \mu_{j,q}^{\,N}$
     \label{def:sector_decomposition_block_tensor}
     \lean{MPSTensor.SectorDecomposition.blockTensor}
     \leanok
-    \uses{def:sector_weight_data, def:blocked_tensor}
+    \uses{def:sector_weight_data,def:blocked_tensor}
     For the two-layer decomposition of \cite[lines~283--301]{Cirac2016MPDO_arXiv},
     let $P$ be a sector decomposition with representatives $A_j$,
     multiplicities $r_j$, and copy weights $\mu_{j,q}$. Its physical
@@ -147,7 +147,7 @@ single family.
     \label{thm:cpsv_canonical_form_bnt_existence}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors}
     \leanok
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv}
+    \uses{def:cpsv_canonical_form,def:bnt_cpsv}
     % Maintainer source anchors: CPSV16 prop:char-BNT, lines 271--280 and 1137--1146.
     Every tensor with CPSV canonical-form data admits a finite basis of
     normal tensors $(B_j)_{j=1}^{g}$, each of positive bond dimension. The
@@ -156,7 +156,7 @@ single family.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_canonical_form_bnt_characterization, def:mpv_phase_class_data, thm:cpsv_normal_mpv_phase_gauge}
+    \uses{thm:cpsv_canonical_form_bnt_characterization,def:mpv_phase_class_data,thm:cpsv_normal_mpv_phase_gauge}
     Partitioning the finite block family by matrix-product-vector phase
     equivalence and selecting one representative from each class gives normal
     representatives of positive bond dimension such that distinct
@@ -189,7 +189,7 @@ single family.
     \lean{MPSTensor.blockIndexCoordinateEquiv,
         MPSTensor.toTensorFromBlocks_eq_reindex_blockDiagonal_equiv}
     \leanok
-    \uses{def:cpsv_canonical_form, def:mpv_phase_class_data, thm:cpsv_canonical_form_bnt_characterization, thm:cpsv_normal_mpv_phase_gauge, def:block_diagonal_tensor, def:global_gauge_of_blocks}
+    \uses{def:cpsv_canonical_form,def:mpv_phase_class_data,thm:cpsv_canonical_form_bnt_characterization,thm:cpsv_normal_mpv_phase_gauge,def:block_diagonal_tensor,def:global_gauge_of_blocks}
     Let
     \begin{align}
         A^i & =U^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)U.
@@ -249,7 +249,7 @@ single family.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpv_phase_class_data, thm:cpsv_canonical_form_bnt_characterization, thm:cpsv_normal_mpv_phase_gauge, def:block_diagonal_tensor, def:global_gauge_of_blocks}
+    \uses{def:mpv_phase_class_data,thm:cpsv_canonical_form_bnt_characterization,thm:cpsv_normal_mpv_phase_gauge,def:block_diagonal_tensor,def:global_gauge_of_blocks}
     Enumerating the block indices by their phase classes and selecting one
     normal representative in each class, the normal-tensor phase theorem gives
     the dimension equality, unit phase, and invertible gauge in
@@ -292,7 +292,7 @@ single family.
     \lean{MPSTensor.IsBNTSectorPresentation.%
         exists_pos_mpvState_ne_zero}
     \leanok
-    \uses{def:sector_weight_data, def:nt_cpsv, def:same_mpv2_pos}
+    \uses{def:sector_weight_data,def:nt_cpsv,def:same_mpv2_pos}
     Recording the nonzero canonical summands constructed at
     \cite[lines~217--246]{Cirac2016MPDO_arXiv} with repeated copies and their
     weights kept explicit, a \emph{BNT sector presentation} of a tensor $A$ is
@@ -311,7 +311,7 @@ single family.
     \lean{MPSTensor.IsBNTSectorPresentation.%
         equiv_of_sameMPV₂Pos}
     \leanok
-    \uses{def:cpsv_bnt_sector_presentation, def:same_mpv2_pos}
+    \uses{def:cpsv_bnt_sector_presentation,def:same_mpv2_pos}
     Two BNT presentations of the same positive-length matrix product
     vector family have equally many representatives. After a permutation,
     corresponding representatives have equal bond dimension and are related
@@ -319,7 +319,7 @@ single family.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_bnt_characterization, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, thm:cpsv_normal_mpv_phase_gauge}
+    \uses{thm:cpsv_bnt_characterization,thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,thm:cpsv_normal_mpv_phase_gauge}
     Applying Theorem~\ref{thm:cpsv_bnt_characterization} first to the
     direct-sum tensor of the first presentation with the representatives of the
     second as a BNT, and then with the presentations interchanged, gives a
@@ -357,7 +357,7 @@ single family.
     \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         isBNTSectorPresentation}
     \leanok
-    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_bnt_blocked_simultaneous_span, def:cpsv_bnt_sector_presentation}
+    \uses{thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_bnt_blocked_simultaneous_span,def:cpsv_bnt_sector_presentation}
     In the notation of
     Lemma~\ref{thm:cpsv_canonical_form_bnt_refinement}, let
     $k(j,q)$ be the listed block corresponding to the
@@ -390,7 +390,7 @@ single family.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_bnt_blocked_simultaneous_span, thm:coisometry_reconstruction_same_mpv_pos, thm:gauge_invariance, lem:paper_decomp_formula}
+    \uses{thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_bnt_blocked_simultaneous_span,thm:coisometry_reconstruction_same_mpv_pos,thm:gauge_invariance,lem:paper_decomp_formula}
     The class-copy equivalence reindexes the listed blocks.
     (\ref{eq:cpsv_active_representative_weight}) combines the original
     coefficient with the unit phase relating its block to $C_j$; both factors
@@ -408,7 +408,7 @@ single family.
     \label{def:sector_bnt_cf}
     \lean{MPSTensor.IsBNTCanonicalForm}
     \leanok
-    \uses{def:sector_weight_data, def:bnt, def:bnt_cpsv}
+    \uses{def:sector_weight_data,def:bnt,def:bnt_cpsv}
     Let $P$ be a sector decomposition. In addition to spanning and eventual
     linear independence, the canonical form specifies irreducible
     left-canonical representatives, self-overlap normalization, pairwise
@@ -477,7 +477,7 @@ single family.
     \label{thm:single_sector_decomposition_bnt}
     \lean{MPSTensor.isBNTCanonicalForm_singleSectorDecomposition}
     \leanok
-    \uses{def:sector_bnt_cf, def:single_sector_decomposition}
+    \uses{def:sector_bnt_cf,def:single_sector_decomposition}
     Let $A$ have positive bond dimension, be irreducible and left-canonical,
     and satisfy $O_{AA}(N)\longrightarrow1$. Then its single-sector
     decomposition is a BNT canonical form.
@@ -500,7 +500,7 @@ single family.
     \label{thm:normal_single_sector_bnt_gauge}
     \lean{MPSTensor.IsNormalTensor.exists_gaugeEquiv_singleSectorDecomposition}
     \leanok
-    \uses{def:nt_cpsv, def:gauge_equiv, def:sector_bnt_cf, def:single_sector_decomposition, def:same_mpv2_pos}
+    \uses{def:nt_cpsv,def:gauge_equiv,def:sector_bnt_cf,def:single_sector_decomposition,def:same_mpv2_pos}
     Every normal tensor is gauge equivalent to a tensor whose single-sector
     decomposition is a BNT canonical form. The original tensor and the total
     tensor of this decomposition generate the same matrix product vectors at
@@ -508,7 +508,7 @@ single family.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:single_sector_decomposition_bnt, thm:cpsv_normal_tp_gauge, thm:peripheral_primitive_irreducible_overlap_one, thm:gauge_invariance, lem:paper_decomp_formula}
+    \uses{thm:single_sector_decomposition_bnt,thm:cpsv_normal_tp_gauge,thm:peripheral_primitive_irreducible_overlap_one,thm:gauge_invariance,lem:paper_decomp_formula}
     In the pure trace-preserving Perron gauge, the gauged tensor is irreducible
     and left-canonical, and primitivity gives self-overlap converging to one,
     so the preceding theorem gives the BNT canonical form. If $P$ denotes
@@ -541,7 +541,7 @@ single family.
     \label{cor:sector_bnt_cf_basis_normal}
     \lean{MPSTensor.IsBNTCanonicalForm.basis_isNormal}
     \leanok
-    \uses{def:sector_bnt_cf, thm:bnt_normality_from_self_overlap}
+    \uses{def:sector_bnt_cf,thm:bnt_normality_from_self_overlap}
     If $P$ is in BNT canonical form, then every basis block $P_j$ is normal
     in the algebraic sense of Definition~\ref{def:normal}.
 \end{lemma}
@@ -557,13 +557,13 @@ single family.
     \label{thm:sector_bnt_cf_is_bnt}
     \lean{MPSTensor.IsBNTCanonicalForm.isBNT}
     \leanok
-    \uses{def:bnt, def:sector_bnt_cf, cor:sector_bnt_cf_basis_normal}
+    \uses{def:bnt,def:sector_bnt_cf,cor:sector_bnt_cf_basis_normal}
     If $P$ is in BNT canonical form, then its basis blocks form an algebraic
     basis of normal tensors for the total tensor associated with $P$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{cor:sector_bnt_cf_basis_normal, def:sector_weight_data}
+    \uses{cor:sector_bnt_cf_basis_normal,def:sector_weight_data}
     The preceding corollary gives normality of every basis block. The sector
     coefficient formula (\ref{eq:bnt_sector_decomp}) expresses the total MPV
     as a linear combination of the basis MPVs at each positive length, and the
@@ -574,14 +574,14 @@ single family.
     \label{thm:sector_bnt_cf_block_tensor}
     \lean{MPSTensor.SectorDecomposition.IsBNTCanonicalForm.blockTensor}
     \leanok
-    \uses{def:sector_decomposition_block_tensor, def:sector_bnt_cf, thm:bnt_primitivity_normality_from_self_overlap}
+    \uses{def:sector_decomposition_block_tensor,def:sector_bnt_cf,thm:bnt_primitivity_normality_from_self_overlap}
     Let $P$ be a BNT canonical form and let $p\geq1$. Then the blocked
     sector decomposition $P^{[p]}$ is again a BNT canonical form.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:sector_decomposition_block_tensor_mpv, thm:bnt_primitivity_normality_from_self_overlap}
+    \uses{thm:sector_decomposition_block_tensor_mpv,thm:bnt_primitivity_normality_from_self_overlap}
     For each representative $A_j$, normalized self-overlap gives peripheral
     period one, hence a primitive transfer map. Positive blocking therefore
     preserves irreducibility and left-canonical normalization. In addition,
@@ -606,7 +606,7 @@ single family.
     \label{thm:cpsv_bnt_positive_blocking}
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.blockTensor}
     \leanok
-    \uses{def:bnt_cpsv, def:blocked_tensor, thm:cpsv_normal_tensor_positive_blocking}
+    \uses{def:bnt_cpsv,def:blocked_tensor,thm:cpsv_normal_tensor_positive_blocking}
     If $(A_j)_{j=1}^{g}$ is a basis of normal tensors for $A$ and $p\geq1$,
     then $(A_j^{[p]})_{j=1}^{g}$ is a basis of normal tensors for $A^{[p]}$.
 \end{lemma}
@@ -643,7 +643,7 @@ single family.
     \label{thm:bnt_representatives_exact_total_dimension_pow_four}
     \lean{MPSTensor.IsBNTCanonicalForm.basis_isNBlkInjective_totalDim_pow_four}
     \leanok
-    \uses{def:sector_bnt_cf, thm:sector_basis_dimension_le_total_dimension, thm:bnt_normality_from_self_overlap, thm:exact_pow_four_block_injectivity_normal_left_canonical, thm:wordspan_blk_inj_succ}
+    \uses{def:sector_bnt_cf,thm:sector_basis_dimension_le_total_dimension,thm:bnt_normality_from_self_overlap,thm:exact_pow_four_block_injectivity_normal_left_canonical,thm:wordspan_blk_inj_succ}
     Let $P$ be a BNT canonical form of total bond dimension $D$, with
     representatives $A_j$ of bond dimensions $D_j$. For every
     $0\leq j<g$, the representative $A_j$ is $D^4$-block injective:
@@ -652,7 +652,7 @@ single family.
 
 \begin{proof}
     \leanok
-    \uses{def:sector_bnt_cf, thm:sector_basis_dimension_le_total_dimension, thm:bnt_normality_from_self_overlap, thm:exact_pow_four_block_injectivity_normal_left_canonical, thm:wordspan_blk_inj_succ}
+    \uses{def:sector_bnt_cf,thm:sector_basis_dimension_le_total_dimension,thm:bnt_normality_from_self_overlap,thm:exact_pow_four_block_injectivity_normal_left_canonical,thm:wordspan_blk_inj_succ}
     The BNT hypotheses make $A_j$ irreducible and left-canonical, with
     $O_{A_jA_j}(N)\to1$. The preceding theorem therefore makes $A_j$ normal,
     and quantum Wielandt gives $S_{D_j^4}(A_j)=\MN{D_j}$.
@@ -666,7 +666,7 @@ single family.
     \lean{MPSTensor.IsBNTCanonicalForm.exists_basis_wordTupleSpanTop_le_three_totalDim_pow_five}
     \lean{MPSTensor.three_mul_pred_mul_pow_four_add_one_le_three_mul_pow_five}
     \leanok
-    \uses{def:sector_bnt_cf, def:blockwise_product_word_span, thm:bnt_representatives_exact_total_dimension_pow_four, lem:bnt_direct_sum_block_separation_word_span}
+    \uses{def:sector_bnt_cf,def:blockwise_product_word_span,thm:bnt_representatives_exact_total_dimension_pow_four,lem:bnt_direct_sum_block_separation_word_span}
     As in the block-injectivity estimate in
     \cite[lines~340--345]{Cirac2016MPDO_arXiv}, let $P$ be a BNT canonical
     form with total bond dimension $D$. There is a positive integer $N\leq3D^5$
@@ -680,7 +680,7 @@ single family.
 
 \begin{proof}
     \leanok
-    \uses{thm:bnt_representatives_exact_total_dimension_pow_four, lem:bnt_direct_sum_block_separation_word_span, thm:sector_basis_dimension_le_total_dimension}
+    \uses{thm:bnt_representatives_exact_total_dimension_pow_four,lem:bnt_direct_sum_block_separation_word_span,thm:sector_basis_dimension_le_total_dimension}
     Every representative is block-injective at $D^4$, and homogeneous-span
     propagation gives the same conclusion at $D^4+1$ and $3(D^4+1)$. If
     $g=1$, $N=D^4$ suffices. If $g\geq2$,
@@ -720,7 +720,7 @@ and the combined-family linear independence.
     \label{lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     \lean{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
     \leanok
-    \uses{def:mpv_overlap, def:sector_bnt_cf}
+    \uses{def:mpv_overlap,def:sector_bnt_cf}
     If $P$ is a BNT canonical form and $j \neq k$, then
     $O_{P_j P_k}(N) \to 0$.
     % Source: normal-tensor overlap dichotomy, Cirac2016MPDO_arXiv lines
@@ -738,7 +738,7 @@ and the combined-family linear independence.
     \label{lem:sector_bnt_combined_family_eventually_li}
     \lean{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}
     \leanok
-    \uses{lem:bnt_two_family_overlap_orthonormal_li, lem:sector_bnt_cross_overlap_basis_tendsto_zero}
+    \uses{lem:bnt_two_family_overlap_orthonormal_li,lem:sector_bnt_cross_overlap_basis_tendsto_zero}
     % Source: corollary at Cirac2016MPDO_arXiv lines 1121--1132; the BNT
     % linear-independence input is recorded at Cirac2021Matrix line 1850.
     As in \cite[Appendix~A]{Cirac2016MPDO_arXiv}, let $P$ and $Q$ each be a
@@ -793,7 +793,7 @@ Definition~\ref{def:sector_bnt_cf}.
     \label{thm:prepared_bnt_blocks_after_blocking}
     \lean{MPSTensor.exists_prepared_BNT_blocks_afterBlocking_pos}
     \leanok
-    \uses{thm:unconditional_common_primitive_irreducible_blocks, thm:common_injective_blocking_tp_primitive_irreducible_family}
+    \uses{thm:unconditional_common_primitive_irreducible_blocks,thm:common_injective_blocking_tp_primitive_irreducible_family}
     Let $A$ be an MPS tensor. Then there is a blocking length $p\ge 1$, nonzero
     weights $\mu_k$, and blocks $B_k$ over the $p$-blocked alphabet such that:
     \begin{enumerate}
@@ -822,7 +822,7 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
     \label{thm:paperbnt_collapsed_prepared}
     \lean{MPSTensor.isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks}
     \leanok
-    \uses{def:mpv_phase_class_data, def:sector_bnt_cf}
+    \uses{def:mpv_phase_class_data,def:sector_bnt_cf}
     Let $(B_k)_{k=1}^r$ have positive bond dimensions and suppose that every
     $B_k$ is trace-preserving, primitive, and irreducible. Assume
     $\mu_k\ne0$ and $|\mu_k|\le1$ for every $k$, and
@@ -834,7 +834,7 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpv_phase_class_data, def:sector_bnt_cf}
+    \uses{def:mpv_phase_class_data,def:sector_bnt_cf}
     The chosen representatives inherit irreducibility and trace preservation,
     while primitivity gives normalized self-overlap. Distinct phase classes
     give gauge-phase-distinct representatives. The collapsed phase-class
@@ -907,7 +907,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{thm:prepared_phase_equiv_gauge}
     \lean{MPSTensor.gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr}
     \leanok
-    \uses{def:mpv_block_phase_equiv, def:gauge_phase_equiv, def:irreducible_tensor}
+    \uses{def:mpv_block_phase_equiv,def:gauge_phase_equiv,def:irreducible_tensor}
     Let $X$ and $Y$ be trace-preserving, primitive, irreducible NTs of positive
     bond dimensions. If their matrix-product-vector families differ by a
     nonzero scalar power, then their bond dimensions are equal and, after
@@ -915,7 +915,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:prepared_phase_equiv_dim_eq, thm:not_gauge_phase_eventually_not_proportional, thm:peripheral_primitive_irreducible_overlap_one}
+    \uses{lem:prepared_phase_equiv_dim_eq,thm:not_gauge_phase_eventually_not_proportional,thm:peripheral_primitive_irreducible_overlap_one}
     Lemma~\ref{lem:prepared_phase_equiv_dim_eq} identifies the bond dimensions.
     If the resulting same-dimensional blocks were not gauge-phase equivalent,
     Lemma~\ref{thm:not_gauge_phase_eventually_not_proportional} would give a
@@ -929,7 +929,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{lem:prepared_phase_equiv_fixed_scalar_gauge}
     \lean{MPSTensor.exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr}
     \leanok
-    \uses{def:mpv_block_phase_equiv, def:gauge_phase_equiv, def:irreducible_tensor}
+    \uses{def:mpv_block_phase_equiv,def:gauge_phase_equiv,def:irreducible_tensor}
     Let $X$ and $Y$ be trace-preserving, primitive, irreducible NTs of positive
     bond dimensions. Fix $\zeta\in\C\setminus\{0\}$ and suppose that, for every
     positive length $N$
@@ -948,7 +948,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:prepared_phase_equiv_gauge, thm:peripheral_primitive_irreducible_overlap_one, thm:gauge_phase_mpv_scaling}
+    \uses{thm:prepared_phase_equiv_gauge,thm:peripheral_primitive_irreducible_overlap_one,thm:gauge_phase_mpv_scaling}
     Lemma~\ref{thm:prepared_phase_equiv_gauge} gives an invertible $G$ and a
     nonzero scalar $\eta$ such that $Y^i=\eta G X^iG^{-1}$. By
     Lemma~\ref{thm:gauge_phase_mpv_scaling},
@@ -965,7 +965,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{thm:paperbnt_supplier_prepared_total_dim}
     \lean{MPSTensor.exists_isBNTCanonicalForm_of_tp_primitive_irr_blocks_and_totalDim}
     \leanok
-    \uses{thm:paperbnt_collapsed_prepared, thm:prepared_phase_equiv_gauge, def:sector_weight_data}
+    \uses{thm:paperbnt_collapsed_prepared,thm:prepared_phase_equiv_gauge,def:sector_weight_data}
     Under the hypotheses of
     Lemma~\ref{thm:paperbnt_collapsed_prepared}, there is a BNT canonical-form
     sector decomposition $P$ such that
@@ -980,7 +980,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:paperbnt_collapsed_prepared, thm:prepared_phase_equiv_gauge}
+    \uses{thm:paperbnt_collapsed_prepared,thm:prepared_phase_equiv_gauge}
     In the phase-class sector decomposition from
     Lemma~\ref{thm:paperbnt_collapsed_prepared}, the flattened copies are in
     bijection with the original blocks, and phase-equivalent blocks have equal
@@ -1027,7 +1027,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{thm:paperbnt_supplier_prepared_exact}
     \lean{MPSTensor.exists_isBNTCanonicalForm_exact_of_tp_primitive_irr_blocks}
     \leanok
-    \uses{thm:paperbnt_collapsed_prepared, def:block_diagonal_tensor, def:sector_weight_data}
+    \uses{thm:paperbnt_collapsed_prepared,def:block_diagonal_tensor,def:sector_weight_data}
     Under the hypotheses of
     Lemma~\ref{thm:paperbnt_collapsed_prepared}, there are a BNT
     canonical-form sector decomposition $P$, an equivalence $E$ of flattened
@@ -1046,7 +1046,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpv_phase_class_data, thm:paperbnt_collapsed_prepared, lem:prepared_collapsed_bnt_sector_decomp_total_dim, lem:prepared_phase_equiv_fixed_scalar_gauge, lem:tensor_from_blocks_globalGauge_conj, thm:heterogeneous_block_sum_reindex, def:global_gauge_of_blocks}
+    \uses{def:mpv_phase_class_data,thm:paperbnt_collapsed_prepared,lem:prepared_collapsed_bnt_sector_decomp_total_dim,lem:prepared_phase_equiv_fixed_scalar_gauge,lem:tensor_from_blocks_globalGauge_conj,thm:heterogeneous_block_sum_reindex,def:global_gauge_of_blocks}
     Partitioning the prepared blocks into matrix-product-vector phase classes
     and retaining for the copy $q$ in class $j$ the precise class scalar
     $\zeta_{j,q}$ chosen in the weight $\zeta_{j,q}\mu_{j,q}$, the
@@ -1067,7 +1067,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \begin{lemma}[Gauge equivalence of direct sums from per-block gauge equivalence]%
     \label{lem:gauge_equiv_from_block_gauge}
     \lean{MPSTensor.gaugeEquiv_toTensorFromBlocks_of_blockGauge}\leanok
-    \uses{lem:tensor_from_blocks_globalGauge_conj, def:gauge_equiv}
+    \uses{lem:tensor_from_blocks_globalGauge_conj,def:gauge_equiv}
     If each pair $(A_k, B_k)$ is gauge equivalent, then the weighted
     block-diagonal tensors $\bigoplus_k \mu_k A_k$ and
     $\bigoplus_k \mu_k B_k$ are gauge equivalent.
@@ -1101,7 +1101,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{thm:cpsv_sector_bnt}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm}
     \leanok
-    \uses{def:cpsv_canonical_form, def:sector_bnt_cf, def:same_mpv2_pos}
+    \uses{def:cpsv_canonical_form,def:sector_bnt_cf,def:same_mpv2_pos}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
     condition~(\ref{eq:cpsv_weight_normalization}), and assume $A\ne0$. Then
     there is a BNT canonical-form sector decomposition $P$ such that
@@ -1117,7 +1117,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_sector_bnt_exact, thm:coisometry_reconstruction_same_mpv_pos, thm:gauge_invariance}
+    \uses{thm:cpsv_sector_bnt_exact,thm:coisometry_reconstruction_same_mpv_pos,thm:gauge_invariance}
     The reconstruction in Lemma~\ref{thm:cpsv_sector_bnt_exact}
     gives $A^i=U^\dagger B^iU$, where $UU^\dagger=\Id$ and
     $B^i=XP^iX^{-1}$. Lemma~\ref{thm:coisometry_reconstruction_same_mpv_pos}
@@ -1132,7 +1132,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \label{thm:cpsv_sector_bnt_exact}
     \lean{MPSTensor.CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact}
     \leanok
-    \uses{def:cpsv_canonical_form, def:sector_bnt_cf}
+    \uses{def:cpsv_canonical_form,def:sector_bnt_cf}
     Let $A$ have CPSV canonical-form data satisfying the separate normalization
     condition~(\ref{eq:cpsv_weight_normalization}), and assume $A\ne0$. There
     are a BNT canonical-form sector decomposition $P$, a coisometry
@@ -1151,7 +1151,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:cpsv_canonical_form, thm:cpsv_normal_tp_gauge, lem:gauge_equiv_from_block_gauge, thm:paperbnt_supplier_prepared_exact}
+    \uses{def:cpsv_canonical_form,thm:cpsv_normal_tp_gauge,lem:gauge_equiv_from_block_gauge,thm:paperbnt_supplier_prepared_exact}
     The canonical-form data give the exact reconstruction
     \begin{align}
         A^i        & =V^\dagger\left(\bigoplus_{k=1}^{r}\mu_kA_k^i\right)V,
@@ -1191,7 +1191,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     \lean{MPSTensor.CPSVCanonicalFormData.%
         fundamentalTheorem_equal_ambient_canonicalForm}
     \leanok
-    \uses{def:cpsv_canonical_form, def:same_mpv2_pos, def:gauge_equiv}
+    \uses{def:cpsv_canonical_form,def:same_mpv2_pos,def:gauge_equiv}
     Let $A$ and $B$ have the same ambient bond dimension $D$. Suppose each
     tensor has CPSV canonical-form data, both data satisfy the separate weight
     normalization condition~(\ref{eq:cpsv_weight_normalization}), neither tensor
@@ -1210,7 +1210,7 @@ from the retained tensors to the ambient tensors is the coisometric lifting of
 Lemma~\ref{thm:coisometry_reconstruction_gauge_equiv}.
 
 \begin{proof}\leanok
-    \uses{thm:cpsv_sector_bnt_exact, thm:coisometry_reconstruction_same_mpv_pos, thm:cpgsv_equal_case_source, thm:coisometry_reconstruction_gauge_equiv, thm:gauge_invariance}
+    \uses{thm:cpsv_sector_bnt_exact,thm:coisometry_reconstruction_same_mpv_pos,thm:cpgsv_equal_case_source,thm:coisometry_reconstruction_gauge_equiv,thm:gauge_invariance}
     Lemma~\ref{thm:cpsv_sector_bnt_exact} provides
     BNT canonical forms $P,Q$, coisometries $U_A,U_B$, and retained-space
     gauges $X_A,X_B$ with
@@ -1244,7 +1244,7 @@ statement.
     \label{thm:paperbnt_supplier_after_blocking_normalized}
     \lean{MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized}
     \leanok
-    \uses{thm:prepared_bnt_blocks_after_blocking, thm:paperbnt_supplier_prepared, thm:paperbnt_weight_normalization, lem:mpv_to_tensor_from_blocks_weight_mul_left, thm:mpv_decomposition, lem:eval_word_append, lem:eval_word_block}
+    \uses{thm:prepared_bnt_blocks_after_blocking,thm:paperbnt_supplier_prepared,thm:paperbnt_weight_normalization,lem:mpv_to_tensor_from_blocks_weight_mul_left,thm:mpv_decomposition,lem:eval_word_append,lem:eval_word_block}
     Let $A$ be an MPS tensor whose matrix-product family has a nonzero
     coefficient at some positive length. Then there exist a blocking length
     $p\geq1$, a positive real $m$, and a sector decomposition $P$ over the

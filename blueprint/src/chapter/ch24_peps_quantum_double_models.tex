@@ -76,7 +76,7 @@ primal tensor and the toric code.
         TNLean.PEPS.ToricCodeGroup,
         TNLean.PEPS.isGIsometric_toricCodeDualTensor}
     \leanok
-    \uses{def:peps_g_injective, def:peps_quantum_double_dual}
+    \uses{def:peps_g_injective,def:peps_quantum_double_dual}
     For every finite group $G$ the dual quantum-double tensor is
     $G$-injective and $G$-isometric, with constant $c=|G|$, for the
     color-shift representation
@@ -106,8 +106,7 @@ primal tensor and the toric code.
         TNLean.PEPS.colorShiftRep_eq_torusLegRep,
         TNLean.PEPS.torusBondNetwork_quantumDoubleDual_westSouthOperatorString_eq}
     \leanok
-    \uses{thm:peps_quantum_double_dual_g_isometric,
-        thm:peps_torus_operator_string_deformation}
+    \uses{thm:peps_quantum_double_dual_g_isometric,thm:peps_torus_operator_string_deformation}
     Let $R_g$ be the permutation matrix of $h\mapsto hg$. The color shift of
     the dual tensor is the action of $R_g$ on the incoming and $R_g^{-1}$ on
     the outgoing legs. Hence, in the torus network of the dual tensor with
@@ -201,8 +200,7 @@ around the two non-contractible cycles must be trivial.
         TNLean.PEPS.forall_eq_quantumDoubleDualSpins_iff,
         TNLean.PEPS.stateCoeff_quantumDoubleDualPEPS}
     \leanok
-    \uses{def:peps_quantum_double_dual, lem:peps_torus_site_tensor_contraction,
-        lem:peps_torus_parallel_section}
+    \uses{def:peps_quantum_double_dual,lem:peps_torus_site_tensor_contraction,lem:peps_torus_parallel_section}
     Let $w,h\ge3$ and place the dual quantum-double tensor at every torus site, with plaquette spins $(s_1,s_2,s_3,s_4)$ (top-left, top-right, bottom-right, bottom-left). A spin configuration obeys Gauss's law if
     \begin{align}
         s_2(v)s_1(v)         & =s_3(v)s_4(v),              &
@@ -270,7 +268,7 @@ around the two non-contractible cycles must be trivial.
         TNLean.PEPS.quantumDoublePrimalPEPS,
         TNLean.PEPS.sum_smul_torusWestSouthString_quantumDoublePrimalPEPS_eq}
     \leanok
-    \uses{def:peps_quantum_double_primal, lem:peps_torus_string_pull_through}
+    \uses{def:peps_quantum_double_primal,lem:peps_torus_string_pull_through}
     Place the primal tensor of Definition~\ref{def:peps_quantum_double_primal} at every site of a $w\times h$ torus ($w,h\ge2$; four distinct bonds per site for $w,h\ge3$ \cite{gap:rmp_peps_examples_small_torus}). For any representation $\pi$ of $G$, inserting $\pi(g)$ along the west and south boundary of a site rectangle yields the same contracted network as inserting $\pi(g)$ along its north and east boundary \cite[Appendix~A, ``The Toric Code and quantum double models'']{Cirac2021Matrix}; around a single site this reproduces (\ref{eq:peps_qd_primal_fusion}).
 \end{lemma}
 

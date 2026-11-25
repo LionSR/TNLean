@@ -102,8 +102,7 @@ identities.
         Z3Clock.mpo_uTensor_eq_cocycle, Z3Clock.mpo_vTensor_eq_cocycle,
         Z3Clock.clockTensor_isMPUPos}
     \leanok
-    \uses{def:asymex_z3clock_tensors, def:asymex_group_cocycle_tensor,
-        def:asymex_group_cocycle_cyclic, thm:asymex_group_cocycle_kernel}
+    \uses{def:asymex_z3clock_tensors,def:asymex_group_cocycle_tensor,def:asymex_group_cocycle_cyclic,thm:asymex_group_cocycle_kernel}
     On a periodic chain of $N>0$ qutrits, the periodic operator of
     $T_{g,f}$ is monomial:
     \begin{align}
@@ -201,7 +200,7 @@ follows on a ring of $N$ sites.
     \lean{MPOTensor.GroupCocycle.isMPOFusionAlgebra, MPOTensor.GroupCocycle.sum_mpo_mul_sum_mpo,
         Z3Clock.cocycleDefect, Z3Clock.cocycleDefect_mul_self}
     \leanok
-    \uses{thm:asymex_group_cocycle_mul, def:mpo_fusion_algebra}
+    \uses{thm:asymex_group_cocycle_mul,def:mpo_fusion_algebra}
     For every finite group $G$ and every three-cocycle, the periodic
     operators $U_g$ of Definition~\ref{def:asymex_group_cocycle_tensor}
     form a matrix product operator fusion algebra with structure constants
@@ -234,7 +233,7 @@ follows on a ring of $N$ sites.
         Z3Clock.defect_coeff_eq, Z3Clock.mpo_defect_mul_defect_eq_three_smul_iff,
         Z3Clock.not_exists_const_defect_coeff}
     \leanok
-    \uses{def:asymex_z3clock_defect, thm:asymex_z3clock_table}
+    \uses{def:asymex_z3clock_defect,thm:asymex_z3clock_table}
     On every periodic chain of length $N>0$,
     \begin{align}
         O_N(A)^2 & =(1+2\omega^N)\,\Id+3\,U_N+(2+\omega^N)\,V_N,
@@ -264,7 +263,7 @@ follows on a ring of $N$ sites.
     \label{thm:asymex_z3clock_not_fusion_algebra}
     \lean{Z3Clock.repBondDim, Z3Clock.repTensor, Z3Clock.not_isMPOFusionAlgebra}
     \leanok
-    \uses{thm:asymex_z3clock_defect_square, def:mpo_fusion_algebra}
+    \uses{thm:asymex_z3clock_defect_square,def:mpo_fusion_algebra}
     For no nonnegative integers $m_{ab}^{c}$, independent of the length, do
     the periodic operators of $\delta$, $U$ and $V$ satisfy
     $O_N(T_a)O_N(T_b)=\sum_cm_{ab}^{c}O_N(T_c)$ at every positive length.
@@ -323,9 +322,7 @@ follows on a ring of $N$ sites.
         Z3Clock.mpv_clockState,
         Z3Clock.det_clockExponent}
     \leanok
-    \uses{def:asymex_z3clock_rescaled, thm:asymex_z3clock_table,
-        thm:mpug_anomaly_obstruction, def:mpug_anomaly_class,
-        def:mpug_cyclic_invariant}
+    \uses{def:asymex_z3clock_rescaled,thm:asymex_z3clock_table,thm:mpug_anomaly_obstruction,def:mpug_anomaly_class,def:mpug_cyclic_invariant}
     For every cube root $\alpha$ of $\omega$ the rescaled clock operators
     $U'_N=\alpha^NU_N$ and $V'_N=(\alpha^2\omega)^NV_N$ satisfy
     \begin{align}

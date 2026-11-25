@@ -27,7 +27,7 @@ Supplemental Material, Lemma 2, the two-window connected correlator.
 
 noncomputable section
 
-open TNLean.Lattice Matrix QuantumCircuit MPSPreparation
+open Matrix QuantumCircuit MPSPreparation
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
 namespace MPSTensor

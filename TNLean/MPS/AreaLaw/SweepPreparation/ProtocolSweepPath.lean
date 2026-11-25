@@ -35,7 +35,7 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice
+open QuantumCircuit.Party
 
 variable {L w : ℕ}
 

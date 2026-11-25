@@ -188,7 +188,7 @@ $\varphi^{\pm1/4}$; those identities are proved over $\C$.
         FibonacciCompression.fibTauMPS, FibonacciCompression.fibOneMPS,
         FibonacciCompression.fibStack, FibonacciCompression.fibTargets}
     \leanok
-    \uses{def:asymex_golden_ring, def:mpo_tensor, def:mpdo_operator_product}
+    \uses{def:asymex_golden_ring,def:mpo_tensor,def:mpdo_operator_product}
     Read a physical letter as the pair $(x',x)$ of outgoing and incoming
     labels, ordered as $(0,0),(0,1),(1,0),(1,1)$. The reduced vertex
     weight is
@@ -297,7 +297,7 @@ that tensor on both edge labels.
         FibonacciCompression.fibFSymbolGolden,
         FibonacciCompression.fibGSymbolGolden}
     \leanok
-    \uses{def:asymex_golden_ring, def:asymex_fib_anomaly_nim}
+    \uses{def:asymex_golden_ring,def:asymex_fib_anomaly_nim}
     The Fibonacci theory has the labels $1$ and $\tau$, with fusion
     multiplicities
     $N_{11}^1=N_{\tau1}^\tau=N_{1\tau}^\tau=N_{\tau\tau}^1=N_{\tau\tau}^\tau=1$
@@ -344,8 +344,7 @@ that tensor on both edge labels.
         FibonacciCompression.goldenToComplex_fibQuantumDimGolden_one,
         goldenSigmaReal_sq, goldenSigmaReal_eq_inv_sqrt_goldenRatio}
     \leanok
-    \uses{def:asymex_fib_fsymbols, def:asymex_fib_anomaly_nim,
-        def:asymex_golden_ring}
+    \uses{def:asymex_fib_fsymbols,def:asymex_fib_anomaly_nim,def:asymex_golden_ring}
     The multiplicities $N_{ab}^c$ of
     Definition~\ref{def:asymex_fib_anomaly_nim} are the Fibonacci
     fusion multiplicities listed in
@@ -377,7 +376,7 @@ that tensor on both edge labels.
         FibonacciCompression.fibTauGolden_eq_fSymbol,
         FibonacciCompression.fibLetter}
     \leanok
-    \uses{def:asymex_fib, def:asymex_fib_fsymbols, def:asymex_golden_ring}
+    \uses{def:asymex_fib,def:asymex_fib_fsymbols,def:asymex_golden_ring}
     Index the three bond coordinates of $B_\tau$ by the admissible
     letters $(1,\tau)$, $(\tau,1)$, $(\tau,\tau)$, in this order. For
     every physical letter $(x',x)$, every incoming bond letter $p$ and
@@ -418,7 +417,7 @@ that tensor on both edge labels.
         FibonacciCompression.mpo_fibStringNetTensor_edgeTau,
         MPOTensor.mpo_apply_comp}
     \leanok
-    \uses{def:asymex_fib_gsymbol_tensor, thm:asymex_fib_tau_fsymbol}
+    \uses{def:asymex_fib_gsymbol_tensor,thm:asymex_fib_tau_fsymbol}
     The $G$-symbols satisfy $G^{abc}_{def}=G^{fce}_{abd}$, and both blocks
     are $F$-symbol tensors:
     $(B_f^{x'x})_{p,(q',q'')}=\delta_{p,(x',x)}[F^{fx\tau}_{q'}]_{x'}^{q''}$
@@ -488,8 +487,7 @@ that tensor on both edge labels.
         FibonacciCompression.fibTauOneFullStack_eq, FibonacciCompression.fibTauTauFullStack_eq,
         MPOTensor.IsMPOFusionAlgebra.of_mpo_eq_mul_mul}
     \leanok
-    \uses{thm:asymex_fib_gsymbol_similarity, thm:asymex_fib_anomaly_fusion_algebra,
-        def:mpo_fusion_algebra}
+    \uses{thm:asymex_fib_gsymbol_similarity,thm:asymex_fib_anomaly_fusion_algebra,def:mpo_fusion_algebra}
     Extend $B_1$ and $B_\tau$ to the four physical letters (plaquette, edge
     label) by keeping $B_f^{x'x}$ at edge label $\tau$, putting the diagonal
     matrix unit $E_{pp}$ at the bond letter $p=(x',x)$ at edge label $1$
@@ -505,7 +503,7 @@ that tensor on both edge labels.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_golden_ring, thm:asymex_fib_anomaly_fusion_algebra}
+    \uses{thm:asymex_golden_ring,thm:asymex_fib_anomaly_fusion_algebra}
     At edge label $1$ the selection rule of $G^{abc}_{d1f}$ forces $a=b$ and
     $c=d$, and $G^{bbc}_{c1f}v_bv_c=1$ whenever $(b,c)$ is a bond letter of
     the block $f$. So the letter of $S_f$ at $\bigl((b,1),(c,1)\bigr)$ is the
@@ -534,8 +532,7 @@ that tensor on both edge labels.
         FibonacciCompression.isMPOFusionAlgebra_fibReviewWeightedTensor,
         MPOTensor.mpo_letterwise_smul}
     \leanok
-    \uses{def:asymex_fib_gsymbol_tensor, thm:asymex_fib_anomaly_fusion_algebra,
-        def:mpo_fusion_algebra}
+    \uses{def:asymex_fib_gsymbol_tensor,thm:asymex_fib_anomaly_fusion_algebra,def:mpo_fusion_algebra}
     For both labels $f$ and every length $N$, the periodic operator of the
     tensor (\ref{eq:asymex_fib_review_tensor}) is the congruence
     \begin{align}
@@ -577,7 +574,7 @@ upon composing $O_N(R_f)$ with the diagonal weight matrix $W$.
     \lean{FibonacciCompression.fibOneMPS_isNormal,
         FibonacciCompression.fibTauMPS_isNormal}
     \leanok
-    \uses{def:asymex_fib, def:normal}
+    \uses{def:asymex_fib,def:normal}
     Both blocks $B_1$ and $B_\tau$ are normal: their length-three words
     satisfy $\spn_{\C}\{B_1^w : |w|=3\} = \MN{2}$ and
     $\spn_{\C}\{B_\tau^w : |w|=3\} = \MN{3}$.
@@ -626,7 +623,7 @@ cyclic neighboring pair $00$.
         FibonacciCompression.fibAdmissibility,
         FibonacciCompression.fibAdmissibility_eq_one_iff}
     \leanok
-    \uses{def:asymex_fib, def:mpo_family}
+    \uses{def:asymex_fib,def:mpo_family}
     For $N\geq1$, the vacuum operator $P_N=O_N(B_1)$ has matrix elements
     \begin{align}
         \bra{y}P_N\ket{x} & =\delta_{yx}p_N(x).
@@ -670,7 +667,7 @@ cyclic neighboring pair $00$.
         FibonacciCompression.fibOne_mul_fibTau,
         FibonacciCompression.fibTau_mul_fibOne}
     \leanok
-    \uses{def:asymex_fib, def:mpo_family}
+    \uses{def:asymex_fib,def:mpo_family}
     For every $N\geq1$, the periodic operators satisfy
     \begin{align}
         O_N(B_1)^2 & =O_N(B_1).
@@ -728,7 +725,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     \lean{FibonacciCompression.fibWeight, FibonacciCompression.fibPMPO,
         FibonacciCompression.fibDelta, FibonacciCompression.fibProjector}
     \leanok
-    \uses{def:asymex_fib, def:mpo_direct_sum, def:mpo_family}
+    \uses{def:asymex_fib,def:mpo_direct_sum,def:mpo_family}
     The weights of the two labels are
     $w_1=1/(1+\varphi^2)$ and $w_\tau=\varphi/(1+\varphi^2)$, the quantum
     dimensions divided by the square of the total quantum dimension.
@@ -748,7 +745,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     \label{thm:asymex_fib_projector_weights}
     \lean{FibonacciCompression.fibWeight_fusion}
     \leanok
-    \uses{def:asymex_fib_projector, def:asymex_fib_anomaly_nim}
+    \uses{def:asymex_fib_projector,def:asymex_fib_anomaly_nim}
     For each label $c\in\{1,\tau\}$,
     $\sum_{a,b\in\{1,\tau\}}N_{ab}^cw_aw_b=w_c$.
 \end{lemma}
@@ -781,7 +778,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
 
 \begin{proof}
     \leanok
-    \uses{lem:mpo_direct_sum_eval_word, thm:mpo_direct_sum_additive}
+    \uses{lem:mpo_direct_sum_eval_word,thm:mpo_direct_sum_additive}
     Word evaluation of the direct sum is block diagonal by
     Lemma~\ref{lem:mpo_direct_sum_eval_word}. Multiplication by the
     block-diagonal matrix $\Delta$ scales the two blocks by $w_1$ and
@@ -802,8 +799,7 @@ $w_\tau=\varphi/(1+\varphi^2)$.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_fib_unit, thm:asymex_fib_fusion,
-        thm:asymex_fib_projector_weights}
+    \uses{thm:asymex_fib_unit,thm:asymex_fib_fusion,thm:asymex_fib_projector_weights}
     Expanding the square and using the unit laws of
     Lemma~\ref{thm:asymex_fib_unit} and the fusion rule of
     Lemma~\ref{thm:asymex_fib_fusion} gives
@@ -926,8 +922,7 @@ operators~\cite{Cirac2021Matrix}.
         FibonacciCompression.goldenChainHamiltonian_commute_fibProjector,
         FibonacciCompression.goldenChainHamiltonian_commute_mpo_fibStringNetEdgeTau}
     \leanok
-    \uses{def:asymex_fib, def:asymex_fib_golden_chain, def:asymex_fib_projector,
-        def:asymex_fib_gsymbol_tensor}
+    \uses{def:asymex_fib,def:asymex_fib_golden_chain,def:asymex_fib_projector,def:asymex_fib_gsymbol_tensor}
     For every $N\geq2$, the golden chain $H_N$ commutes with $O_N(B_\tau)$,
     with $O_N(B_1)$ and with the projector $\Pi_N$, and, for each label $f$,
     with the periodic operator of the operator tensor $S_f$ restricted to
@@ -936,8 +931,7 @@ operators~\cite{Cirac2021Matrix}.
 
 \begin{proof}
     \leanok
-    \uses{thm:mpo_site_operator_neighbour_kernel,
-        thm:asymex_fib_gsymbol_similarity}
+    \uses{thm:mpo_site_operator_neighbour_kernel,thm:asymex_fib_gsymbol_similarity}
     In the $\tau$ block the bond index at site $n$ is determined by the
     pair $(x_n',x_n)$, so the only closed bond configuration that survives
     gives
@@ -1017,8 +1011,7 @@ These vectors are not normalized unless this is stated explicitly.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_fib_state_action, thm:asymex_fib_unit,
-        thm:asymex_fib_anomaly_nim_rep}
+    \uses{thm:asymex_fib_state_action,thm:asymex_fib_unit,thm:asymex_fib_anomaly_nim_rep}
     The bond-one trace is $\prod_v\delta_{x_v1}$.
     For the chain, put
     $H=\begin{pmatrix}0&\sigma\\1&-\sigma^2\end{pmatrix}$.
@@ -1053,7 +1046,7 @@ length.
     \lean{FibonacciCompression.fibAllTau_isNormal,
         FibonacciCompression.fibChain_isNormal}
     \leanok
-    \uses{def:asymex_fib_states, def:normal}
+    \uses{def:asymex_fib_states,def:normal}
     The length-one words of $A$ span $\MN{1}$, and the length-three
     words of $C$ span $\MN{2}$. Thus both tensors are normal.
 \end{lemma}
@@ -1088,7 +1081,7 @@ length.
         FibonacciCompression.mpo_fibTau_mulVec_allTau,
         FibonacciCompression.mpo_fibTau_mulVec_chain}
     \leanok
-    \uses{def:asymex_fib, def:asymex_fib_states, def:mpo_family}
+    \uses{def:asymex_fib,def:asymex_fib_states,def:mpo_family}
     For every $N\geq1$,
     \begin{align}
         O_N(B_1)\ket{V^{(N)}(A)}
@@ -1232,7 +1225,7 @@ exact computation in the ring of golden integers.
         FibonacciCompression.fibonacci_evalWord_remainder_eq_zero,
         FibonacciCompression.fibonacci_remainder_eq_zero}
     \leanok
-    \uses{def:asymex_fib, thm:asym_multiblock}
+    \uses{def:asymex_fib,thm:asym_multiblock}
     The source of Definition~\ref{def:asymex_fib} carries the block
     triangular form of Theorem~\ref{thm:asym_multiblock}, with target
     blocks $C_1=B_1$ and $C_\tau=B_\tau$, and $z=4$ zero slots.
@@ -1253,7 +1246,7 @@ exact computation in the ring of golden integers.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_explicit_gauge, thm:asymex_golden_ring}
+    \uses{thm:asymex_explicit_gauge,thm:asymex_golden_ring}
     The adapted basis has as its first columns the two fusion tensors,
     followed by a basis of the four-dimensional subspace annihilated
     by every source letter. Writing $Q$ for this basis matrix,
@@ -1283,7 +1276,7 @@ exact computation in the ring of golden integers.
         FibonacciCompression.fibonacci_fusion_rule,
         FibonacciCompression.fibStack_mpv}
     \leanok
-    \uses{def:asymex_fib, def:mpo_family}
+    \uses{def:asymex_fib,def:mpo_family}
     For every nonempty word $w$ over the alphabet of label pairs,
     \begin{align}
         \tr(B^w) & =\tr(B_1^w)+\tr(B_\tau^w).
@@ -1297,7 +1290,7 @@ exact computation in the ring of golden integers.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_fib_compression, prop:asym_compression_trace}
+    \uses{thm:asymex_fib_compression,prop:asym_compression_trace}
     Applying Lemma~\ref{prop:asym_compression_trace} to
     Lemma~\ref{thm:asymex_fib_compression}
     yields~(\ref{eq:asymex_fib_trace}).
@@ -1337,7 +1330,7 @@ Lemma~\ref{thm:asymex_fib_unit} fail at length zero as well.
         FibonacciCompression.fibStack_mul_fusionRight,
         FibonacciCompression.fusionLeft_mul_fibStack}
     \leanok
-    \uses{def:asymex_fib, thm:asymex_fib_compression}
+    \uses{def:asymex_fib,thm:asymex_fib_compression}
     The compression maps of the two target blocks are the fusion tensors
     of the Fibonacci algebra. The map $V_s$ is the column block of the
     adapted basis carrying $s$, and $W_s$ is the matching row block of

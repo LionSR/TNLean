@@ -42,8 +42,7 @@ kernel $f(t)=O(e^{-c|t|^\alpha})$ gives
         TNLean.PEPS.AreaLaw.localizationPrefactor_nonneg,
         TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints}
     \leanok
-    \uses{thm:qc_graph_ball_localization, lem:al_site_expectation_order,
-        lem:qc_lr_closed_region}
+    \uses{thm:qc_graph_ball_localization,lem:al_site_expectation_order,lem:qc_lr_closed_region}
     There are constants $C\ge0$ and $c>0$, depending only on
     $p,R,v_R,b_0,J,\Delta$ and the sphere-growth constants of $G$, such that the
     operators $k_i$ of~(\ref{eq:al_filtered_constraint}) and
@@ -78,8 +77,7 @@ kernel $f(t)=O(e^{-c|t|^\alpha})$ gives
     \label{lem:al_quasilocal_roots}
     \lean{TNLean.PEPS.AreaLaw.sqrt_mul_exp_neg, TNLean.PEPS.AreaLaw.quasilocalRoots}
     \leanok
-    \uses{thm:al_positive_replacement, lem:al_site_expectation_order,
-        thm:al_root_channel_commutant}
+    \uses{thm:al_positive_replacement,lem:al_site_expectation_order,thm:al_root_channel_commutant}
     Set $G_i=(I-k_i)^{1/2}$, $K_i=k_i^{1/2}$, $G_{i,l}=(I-k_{i,l})^{1/2}$, and
     $K_{i,l}=k_{i,l}^{1/2}$. These lie in $[0,I]$ and satisfy
     $G_i\Omega=\Omega$, $K_i\Omega=0$, $G_{i,l}^2+K_{i,l}^2=I$, and
@@ -155,8 +153,7 @@ at most $\mu$ labels share any anchor.
         TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_of_gap,
         Matrix.PosSemidef.eq_inner_smul_of_gap}
     \leanok
-    \uses{lem:al_truncation_error, thm:al_positive_replacement,
-        thm:area_law_ground_eigenspace}
+    \uses{lem:al_truncation_error,thm:al_positive_replacement,thm:area_law_ground_eigenspace}
     Take $p=1$ ($\alpha=1/2$) in Theorem~\ref{thm:al_positive_replacement}, set
     $H_F=\sum_i k_i$, $\widetilde H=\sum_i\widetilde h_i$, and $g=\Delta/c_*$,
     and fix $C_0>0$. There is $C_1$ such that for all $n\ge2$ and $S_0$ with
@@ -303,7 +300,7 @@ at most $\mu$ labels share any anchor.
     \label{thm:al_truncation_schmidt_bell_prevector}
     \lean{TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap}
     \leanok
-    \uses{thm:al_truncation, thm:al_global_schmidt_bell_prevector}
+    \uses{thm:al_truncation,thm:al_global_schmidt_bell_prevector}
     Combining \cite[Sections~4 and~8]{OpenAI2026AreaLaw}, under the hypotheses
     of Lemma~\ref{thm:al_truncation}, the same $C_1,\widetilde H,e_0,\widetilde\Omega$
     satisfy Lemma~\ref{thm:al_truncation} and, for every $X\subseteq V$ and
@@ -413,8 +410,7 @@ only on the parameters named below.
         TNLean.PEPS.AreaLaw.card_anchor_fiber_le,
         TNLean.PEPS.AreaLaw.card_interedges_compl_le_card_edgeBoundary}
     \leanok
-    \uses{def:area_law_hamiltonian, thm:area_diamond_count, thm:area_diamond_budget,
-        lem:area_domain_graph_counts, thm:area_law_crossing_supports}
+    \uses{def:area_law_hamiltonian,thm:area_diamond_count,thm:area_diamond_budget,lem:area_domain_graph_counts,thm:area_law_crossing_supports}
     In $\Lambda$, $|N_d(x)|\le2(d+1)^2$, at most $\mu_R$ supports contain a
     given site (Lemma~\ref{thm:area_law_crossing_supports}), at most $\mu_R$
     labels share an anchor, and
@@ -433,7 +429,7 @@ only on the parameters named below.
     \label{thm:al_lattice_positive_replacement}
     \lean{TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints}
     \leanok
-    \uses{thm:al_positive_replacement, lem:area_domain_graph_counts, def:area_law_ground_entropy}
+    \uses{thm:al_positive_replacement,lem:area_domain_graph_counts,def:area_law_ground_entropy}
     Fix $p\in\mathbb N_{\ge1}$, $\alpha=p/(p+1)$, $R,J\ge0$, and $\Delta>0$.
     There are $C\ge0$ and $c>0$, depending only on $p,R,J,\Delta$, such that for
     every $q\ge1$, finite domain $\Lambda$, interaction, anchor choice, and
@@ -459,8 +455,7 @@ only on the parameters named below.
     \label{thm:al_lattice_quasilocal_roots}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots}
     \leanok
-    \uses{lem:al_quasilocal_roots, thm:al_lattice_positive_replacement,
-        thm:al_root_channel_commutant}
+    \uses{lem:al_quasilocal_roots,thm:al_lattice_positive_replacement,thm:al_root_channel_commutant}
     With $p,R,J,\Delta$ as in Theorem~\ref{thm:al_lattice_positive_replacement},
     there are $C\ge0$ and $c>0$ depending only on $p,R,J,\Delta$ such that the
     roots $G_i,K_i,G_{i,l},K_{i,l}$ and channels $\mathcal E_i,\mathcal E_{i,l}$
@@ -485,8 +480,7 @@ only on the parameters named below.
     \lean{TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation,
         TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span}
     \leanok
-    \uses{thm:al_truncation, thm:al_lattice_counts, lem:area_domain_graph_counts,
-        def:area_law_ground_entropy, thm:area_law_ground_eigenspace}
+    \uses{thm:al_truncation,thm:al_lattice_counts,lem:area_domain_graph_counts,def:area_law_ground_entropy,thm:area_law_ground_eigenspace}
     Take $p=1$ ($\alpha=1/2$) in
     Theorem~\ref{thm:al_lattice_positive_replacement} and fix $C_0\ge0$. There
     is $C_1>0$, depending only on $R,J,\Delta,C_0$, such that for every lattice
@@ -517,7 +511,7 @@ only on the parameters named below.
     \lean{TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget,
         TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log}
     \leanok
-    \uses{thm:al_crossing_budget, thm:al_lattice_counts}
+    \uses{thm:al_crossing_budget,thm:al_lattice_counts}
     For $q\ge1$ there is $C\ge0$, depending only on $q,R$, such that for every
     finite domain $\Lambda$, anchor choice, $S_0,r_0$, and $X\subseteq S_0$ with
     $b_X=|\partial_\Lambda X|$, every $i\in\mathcal C_X$ has

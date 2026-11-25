@@ -42,7 +42,7 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf.
 
 open ManyBody (interval)
 
-open Matrix Polynomial TNLean.Lattice TNLean.Lattice.Sheet QuantumCircuit
+open Matrix Polynomial
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 noncomputable section

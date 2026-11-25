@@ -23,7 +23,6 @@ open ManyBody (Edge)
 
 noncomputable section
 namespace TNLean.PEPS.NativeTorus
-open TNLean.Lattice
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]
@@ -38,7 +37,7 @@ local notation "head" => (graphEdgeHead (Γ := torusGraph width height))
 
 /-- The actual incident virtual coordinates, with each bond's own alphabet. -/
 abbrev LocalConfig (D : Bond → Type*) (v : Vertex) :=
-  Lattice.DependentBondNetwork.LocalConfig tail head D v
+  TNLean.Network.DependentBondNetwork.LocalConfig tail head D v
 
 variable (D : Edge (torusGraph width height) → Type*) [∀ e, Fintype (D e)] [∀ e, DecidableEq (D e)]
 variable {Phys Out : TorusVertex width height → Type*}
@@ -49,7 +48,7 @@ def closure
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ)
     (A : (v : Vertex) → LocalConfig D v → Phys v → ℂ) (g h : G) :
     ((v : Vertex) → Phys v) → ℂ :=
-  Lattice.DependentBondNetwork.network tail head D A
+  TNLean.Network.DependentBondNetwork.network tail head D A
     (fun e ↦ U e (torusClosureEdgeAssignment g h e))
 
 /-- The span of actual closures with commuting seam labels. -/
@@ -65,7 +64,7 @@ theorem physicalMap_closure [∀ v, Fintype (Phys v)]
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ)
     (F : (v : Vertex) → Matrix (Out v) (Phys v) ℂ)
     (A : (v : Vertex) → LocalConfig D v → Phys v → ℂ) (g h : G) :
-    dependentPhysicalProductFamilyMap F (closure D U A g h) =
+    (Matrix.piKronecker F).mulVecLin (closure D U A g h) =
       closure D U (DependentBondNetwork.physicalMapSite tail head D F A) g h :=
   DependentBondNetwork.physicalMap_network tail head D F A _
 
@@ -74,7 +73,7 @@ theorem map_commutingClosureSpan [∀ v, Fintype (Phys v)]
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ)
     (F : (v : Vertex) → Matrix (Out v) (Phys v) ℂ)
     (A : (v : Vertex) → LocalConfig D v → Phys v → ℂ) :
-    (commutingClosureSpan D U A).map (dependentPhysicalProductFamilyMap F) =
+    (commutingClosureSpan D U A).map (Matrix.piKronecker F).mulVecLin =
       commutingClosureSpan D U (DependentBondNetwork.physicalMapSite tail head D F A) := by
   simp only [commutingClosureSpan, Submodule.map_span, ← Set.range_comp]
   congr 2
@@ -101,8 +100,9 @@ theorem map_commutingClosureSpan_recover
       DependentBondNetwork.incidentRepresentation tail head D U v g =
         DependentBondNetwork.localSiteMap tail head D A v) :
     (commutingClosureSpan D U (canonicalSites D U)).map
-      (dependentPhysicalProductFamilyMap (fun v ↦ LinearMap.toMatrix'
-        (DependentBondNetwork.localSiteMap tail head D A v))) = commutingClosureSpan D U A := by
+      (Matrix.piKronecker fun v ↦ LinearMap.toMatrix'
+        (DependentBondNetwork.localSiteMap tail head D A v)).mulVecLin =
+      commutingClosureSpan D U A := by
   rw [map_commutingClosureSpan]
   rw [show DependentBondNetwork.physicalMapSite tail head D
       (fun v ↦ LinearMap.toMatrix' (DependentBondNetwork.localSiteMap tail head D A v))

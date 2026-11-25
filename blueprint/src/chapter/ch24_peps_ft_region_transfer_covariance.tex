@@ -6,7 +6,7 @@
     \label{thm:peps_regionComplementWeight_transport}
     \lean{TNLean.PEPS.regionComplementWeight_transport}
     \leanok
-    \uses{def:peps_tensor_transport, def:peps_regionComplementTwoBlock}
+    \uses{def:peps_tensor_transport,def:peps_regionComplementTwoBlock}
     For any graph isomorphism $\phi:G\simeq G'$,
     \begin{align}
         T_{A^\phi,V'\setminus\phi(R)}^{(\phi\cdot\eta)^c}(\phi\cdot\tau)
@@ -44,7 +44,7 @@
     \label{thm:peps_regionInsertedCoeff_transport}
     \lean{TNLean.PEPS.regionInsertedCoeff_transport}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_tensor_transport, thm:peps_regionComplementWeight_transport, thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
+    \uses{def:peps_regionInsertedCoeff,def:peps_tensor_transport,thm:peps_regionComplementWeight_transport,thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
     For a graph isomorphism $\phi:G\simeq G'$ and $f\in\partial R$,
     \begin{align}
         C_{A^\phi}(\phi(R),\phi(f),M;\phi\cdot\sigma,\phi\cdot\tau)
@@ -87,7 +87,7 @@
     \label{thm:peps_bondDim_boundaryEdgeMap_translate}
     \lean{TNLean.PEPS.bondDim_boundaryEdgeMap_translate}
     \leanok
-    \uses{def:peps_torus_translation_invariant, def:peps_torus_geometry_translation}
+    \uses{def:peps_torus_translation_invariant,def:peps_torus_geometry_translation}
     If $A$ is translation invariant on the discrete torus, then for every
     $f\in\partial R$ and translation $T_{a,b}$,
     $D_A(T_{a,b}(f))=D_A(f)$.
@@ -101,7 +101,7 @@
     \label{thm:peps_regionInsertedCoeff_translate_coeffIdentity}
     \lean{TNLean.PEPS.regionInsertedCoeff_translate_coeffIdentity}
     \leanok
-    \uses{thm:peps_regionInsertedCoeff_transport, thm:peps_regionInsertedCoeff_congrTensor, thm:peps_bondDim_boundaryEdgeMap_translate, def:peps_torus_translation_invariant}
+    \uses{thm:peps_regionInsertedCoeff_transport,thm:peps_regionInsertedCoeff_congrTensor,thm:peps_bondDim_boundaryEdgeMap_translate,def:peps_torus_translation_invariant}
     Let $A,B$ be translation invariant on the discrete torus and $f\in\partial R$.
     If $C_A(R,f,M;\sigma,\tau)=C_B(R,f,g(M);\sigma,\tau)$ for all $M,\sigma,\tau$,
     then for every translation $T_{a,b}$,
@@ -139,7 +139,7 @@
     \label{thm:peps_isTwoBlockInjective_vertexTwoBlock}
     \lean{TNLean.PEPS.isTwoBlockInjective_vertexTwoBlock}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_vertexTwoBlock}
+    \uses{def:IsVertexInjective,def:peps_vertexTwoBlock}
     If $A$ is vertex-injective, then $\inj(T_v)$ holds for every $v\in V$.
 \end{lemma}
 \begin{proof}\leanok
@@ -179,7 +179,7 @@
     \lean{TNLean.PEPS.vertexComplementBoundaryConfigEquiv_regionBoundaryLabel}
     \lean{TNLean.PEPS.regionBlockedWeight_vertexComplement}
     \leanok
-    \uses{def:peps_vertexComplementRegionEquivs, def:peps_complementTwoBlock}
+    \uses{def:peps_vertexComplementRegionEquivs,def:peps_complementTwoBlock}
     Under $(\Psi_v,\Phi_v)$ from Definition~\ref{def:peps_vertexComplementRegionEquivs},
     \begin{align}
         T_{A,V\setminus\{v\}}^{\rho}(\tau)
@@ -208,12 +208,12 @@
     \label{thm:peps_vertexComplementTensorInjective}
     \lean{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_tensor}
+    \uses{def:IsVertexInjective,def:peps_tensor}
     If $A$ is vertex-injective and $\forall e\in E,\ D_A(e)>0$, then
     $\eta\mapsto A_{v^c}(\eta,-)$ is linearly independent for every $v\in V$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_regionBlockedWeight_vertexComplement, thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    \uses{thm:peps_regionBlockedWeight_vertexComplement,thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     Lemma~\ref{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     gives $\inj(T_{A,V\setminus\{v\}})$, which transports across the bijections
     $(\Psi_v,\Phi_v)$ of Lemma~\ref{thm:peps_regionBlockedWeight_vertexComplement}
@@ -224,7 +224,7 @@
     \label{thm:peps_isTwoBlockInjective_complementTwoBlock}
     \lean{TNLean.PEPS.isTwoBlockInjective_complementTwoBlock}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_complementTwoBlock, thm:peps_vertexComplementTensorInjective}
+    \uses{def:IsVertexInjective,def:peps_complementTwoBlock,thm:peps_vertexComplementTensorInjective}
     If $A$ is vertex-injective and $\forall e\in E,\ D_A(e)>0$, then
     $\inj(T_{v^c})$ holds for every $v\in V$.
 \end{lemma}
@@ -239,7 +239,7 @@
     \label{thm:peps_oneVertexComplementComparison}
     \lean{TNLean.PEPS.one_vertex_complement_comparison}
     \leanok
-    \uses{thm:peps_postAbsorptionEdgeInsertionEquality, thm:peps_twoInjectiveTensorInsertionComparison}
+    \uses{thm:peps_postAbsorptionEdgeInsertionEquality,thm:peps_twoInjectiveTensorInsertionComparison}
     Suppose the shared bond type and external boundary spaces are nonempty, and
     $A_v,A_{v^c},\widetilde B_v,\widetilde B_{v^c}$ are injective two-block
     tensors satisfying, for all $b,X,\eta_v,\eta_{v^c},\sigma_v,\sigma_{v^c}$,
@@ -320,7 +320,7 @@
     \label{thm:fundamentalTheorem_PEPS_of_bondDim}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}
     \leanok
-    \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison, def:GaugeEquivPEPS, def:peps_injective_tensor}
+    \uses{thm:gaugeConsistency,thm:peps_oneVertexComplementComparison,def:GaugeEquivPEPS,def:peps_injective_tensor}
     On a connected graph with identified virtual bond spaces $D_A=D_B$, if $A,B$
     are injective PEPS tensors with $\Coeff_A=\Coeff_B$, then $A$ and $B$ are
     gauge equivalent via invertible edge matrices $(X_e)_{e\in E}$:
@@ -337,15 +337,14 @@
     \lean{TNLean.PEPS.bondDim_eq_of_matrixAlgEquiv}
     \lean{TNLean.PEPS.bondDim_eq_of_isInjective_sameState}
     \leanok
-    \uses{def:peps_injective_tensor, def:peps_same_state}
+    \uses{def:peps_injective_tensor,def:peps_same_state}
     If $A,B$ are injective PEPS tensors on the same finite simple graph with
     $\Coeff_A=\Coeff_B$, then $D_A(e)=D_B(e)$ for every $e\in E$
     (\cite[lines~279--282 and 571--582]{Molnar2018NormalPEPS}, without
     requiring connectedness).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_edgeBlockedThreeSiteInjective,
-        thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    \uses{thm:peps_edgeBlockedThreeSiteInjective,thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
     For each $e\in E$, Lemmas~\ref{thm:peps_edgeBlockedThreeSiteInjective}
     and~\ref{thm:peps_edgeBlockedInsertionAlgebraIsomorphism} give an algebra
     isomorphism $\MN{D_A(e)}\simeq\MN{D_B(e)}$, so
@@ -360,7 +359,7 @@
     % \cite{Molnar2018NormalPEPS} are part of the injectivity hypothesis,
     % as recorded in
     % \path{docs/paper-gaps/peps_injective_ft_section3_route.tex}.
-    \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS, def:peps_injective_tensor}
+    \uses{thm:fundamentalTheorem_PEPS_of_bondDim,def:GaugeEquivPEPS,def:peps_injective_tensor}
     Let $A,B$ be injective PEPS tensors on a connected finite simple graph. If
     $\Coeff_A=\Coeff_B$, then $\forall e\in E,\ D_A(e)=D_B(e)$ and, after
     identifying these bond spaces, there exist invertible edge matrices

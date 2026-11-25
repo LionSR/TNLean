@@ -2,7 +2,7 @@
     \label{def:peps_normalOneSiteSeparationHypotheses}
     \lean{TNLean.PEPS.NormalOneSiteSeparationHypotheses}
     \leanok
-    \uses{def:peps_regionInjectivityData, def:peps_regionComplement}
+    \uses{def:peps_regionInjectivityData,def:peps_regionComplement}
     For a region-injectivity assignment $\inj$
     (Definition~\ref{def:peps_regionInjectivityData}), the \emph{normal one-site
         separation hypotheses} assign to each $v\in V$ two regions
@@ -62,7 +62,7 @@
         NormalPEPSBlockingHypotheses.endpoint_injective_disjoint_cover_at_edge}
     \lean{TNLean.PEPS.NormalPEPSBlockingHypotheses.mem_withSite_iff}
     \leanok
-    \uses{def:peps_normalEdgeBlockingHypotheses, def:peps_normalOneSiteSeparationHypotheses}
+    \uses{def:peps_normalEdgeBlockingHypotheses,def:peps_normalOneSiteSeparationHypotheses}
     The \emph{normal PEPS blocking hypotheses} for a region-injectivity
     assignment $\inj$ combine the edge-blocking hypotheses of
     Definition~\ref{def:peps_normalEdgeBlockingHypotheses} (an injective
@@ -185,7 +185,7 @@
     \label{def:peps_normalPEPSPairHypotheses}
     \lean{TNLean.PEPS.NormalPEPSPairHypotheses}
     \leanok
-    \uses{def:peps_normalPEPSBlockingHypotheses, def:peps_regionInjectivityDataPair}
+    \uses{def:peps_normalPEPSBlockingHypotheses,def:peps_regionInjectivityDataPair}
     Two PEPS tensors $A$ and $B$ on a finite simple graph form a
     \emph{pair of normal PEPS tensors} if they satisfy the normal blocking
     hypotheses (Definition~\ref{def:peps_normalPEPSBlockingHypotheses}) for the
@@ -203,8 +203,7 @@
     \lean{TNLean.PEPS.bondDim_eq_of_normalBlocking}
     \lean{TNLean.PEPS.bondDim_apply_eq_of_blockingData}
     \leanok
-    \uses{def:peps_normalPEPSPairHypotheses, def:peps_normalPEPSBlockingHypotheses,
-        def:peps_regionInjectivityDataPair}
+    \uses{def:peps_normalPEPSPairHypotheses,def:peps_normalPEPSBlockingHypotheses,def:peps_regionInjectivityDataPair}
     Let $A$ and $B$ be a pair of normal PEPS tensors
     (Definition~\ref{def:peps_normalPEPSPairHypotheses}) on a finite simple
     graph with physical dimension $d>0$, generating the same state, such that
@@ -217,7 +216,7 @@
     algebra isomorphism $\MN{D_A(e)}\cong\MN{D_B(e)}$.
     \begin{proof}
         \leanok
-        \uses{thm:peps_edgeBlockedThreeSiteInjective, thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+        \uses{thm:peps_edgeBlockedThreeSiteInjective,thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
         Fix $e\in E$. Blocking $A$ and $B$ into $(R_e,B_e,C_e)$ yields two
         three-site chains on $K_3$ with injective super-sites
         (Lemma~\ref{thm:peps_edgeBlockedThreeSiteInjective}). The coarse state
@@ -241,7 +240,7 @@
     \lean{TNLean.PEPS.NormalSquareBlockingRegions}
     \lean{TNLean.PEPS.normalSquareBlockingRegions_of_TCover}
     \leanok
-    \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityData, lem:peps_normalSquareRegionRS_injective_of_unionClosure, lem:peps_normalSquareRegionT_injective_of_cover}
+    \uses{def:peps_normalRectangleInjectivityHypotheses,def:peps_regionInjectivityData,lem:peps_normalSquareRegionRS_injective_of_unionClosure,lem:peps_normalSquareRegionT_injective_of_cover}
     The abstract square-lattice blocking-region datum combines the rectangular
     injectivity hypotheses of
     Definition~\ref{def:peps_normalRectangleInjectivityHypotheses} for
@@ -305,7 +304,7 @@
 \begin{lemma}[Normal edge blocking to a three-site injective chain]%
     \label{thm:peps_normalEdgeBlockingToInjectiveChain}
     \notready
-    \uses{lem:peps_injectiveRegion_union, def:peps_normalSquareBlockingRegions, def:peps_normalEdgeBlockingHypotheses, thm:peps_normalEdgeBlockingHypotheses_injectiveChain, thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
+    \uses{lem:peps_injectiveRegion_union,def:peps_normalSquareBlockingRegions,def:peps_normalEdgeBlockingHypotheses,thm:peps_normalEdgeBlockingHypotheses_injectiveChain,thm:peps_edgeBlockedInsertionAlgebraIsomorphism}
     Under the square-lattice normality hypotheses of
     \cite[Theorem~3]{Molnar2018NormalPEPS}, periodic translates of the regions
     $R,S,T$ of Definition~\ref{def:peps_normalSquareBlockingRegions} yield an
@@ -355,7 +354,7 @@
 \begin{lemma}[Translationally invariant normal gauge absorption]%
     \label{thm:peps_tiNormalGaugeAbsorption}
     \notready
-    \uses{thm:peps_normalEdgeBlockingToInjectiveChain, thm:peps_edge_gauge_absorption}
+    \uses{thm:peps_normalEdgeBlockingToInjectiveChain,thm:peps_edge_gauge_absorption}
     In the translationally invariant normal square-lattice setting of
     \cite[Theorem~3]{Molnar2018NormalPEPS}, the edge gauges from
     Lemma~\ref{thm:peps_normalEdgeBlockingToInjectiveChain} are represented by
@@ -406,7 +405,7 @@
 \begin{theorem}[Fundamental Theorem for normal square-lattice PEPS]%
     \label{thm:fundamentalTheorem_normalSquarePEPS}
     \notready
-    \uses{thm:peps_tiNormalGaugeAbsorption, thm:peps_oneVertexComplementComparison, def:GaugeEquivPEPS}
+    \uses{thm:peps_tiNormalGaugeAbsorption,thm:peps_oneVertexComplementComparison,def:GaugeEquivPEPS}
     Let $A$ and $B$ be translationally invariant normal square-lattice PEPS
     tensors whose $2\times 3$ and $3\times 2$ regions are injective. If they
     generate the same state on an $n\times m$ lattice with $n,m\ge 7$, then they
@@ -426,9 +425,7 @@
     \label{thm:fundamentalTheorem_normalSquarePEPS_unconditional}
     \lean{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional}
     \leanok
-    \uses{thm:fundamentalTheorem_normalSquarePEPS,
-        def:peps_normalSquareLatticeRectanglePEPS, def:applyGauge,
-        def:peps_edgeInsertedCoeff}
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,def:peps_normalSquareLatticeRectanglePEPS,def:applyGauge,def:peps_edgeInsertedCoeff}
     Let $A$ and $B$ be PEPS tensors on the open $n\times m$ square lattice
     with physical dimension $d>0$ and $D_A=D_B$, generating the same state, and
     both normal with injective rectangles

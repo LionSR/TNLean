@@ -75,9 +75,7 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
     Under the hypotheses of Lemma~\ref{thm:peps_fourier_open_contractions}, $Q_R\mathcal G_R(U)=\mathcal G_R(L)$ for every region $R$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_fourier_open_contractions,
-        thm:peps_fourier_reverse_coordinates,
-        thm:peps_fourier_product_composition}
+    \uses{thm:peps_fourier_open_contractions,thm:peps_fourier_reverse_coordinates,thm:peps_fourier_product_composition}
     Equation~(\ref{eq:peps_fourier_open_generator}) gives $Q_R\mathcal G_R(U)\subseteq\mathcal G_R(L)$, while applying (\ref{eq:peps_fourier_open_generator}) to $Q^\dagger$ via Lemma~\ref{thm:peps_fourier_reverse_coordinates} and $Q_R(Q^\dagger)_R=I$ (Lemma~\ref{thm:peps_fourier_product_composition}) gives $\mathcal G_R(L)\subseteq Q_R\mathcal G_R(U)$.
 \end{proof}
 
@@ -115,8 +113,7 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
     so $\dim\mathcal P_{\mathcal R}(U)=\dim\mathcal P_{\mathcal R}(L)$, and for any finite $\mathcal R$ and positive local interactions $H,K$ with local kernels $\mathcal G_R(U),\mathcal G_R(L)$, $\mathcal Q(\ker H)=\ker K$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_global_coordinate_inverse,
-        thm:peps_oriented_coordinate_parent,thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_oriented_global_coordinate_inverse,thm:peps_oriented_coordinate_parent,thm:peps_region_parent_common_kernel}
     Specializing Lemmas~\ref{thm:peps_oriented_global_coordinate_inverse} and~\ref{thm:peps_oriented_coordinate_parent} to $o_e=0$ ($\forall e\in E$) yields $\mathcal Q\mathcal Q^\dagger=\mathcal Q^\dagger\mathcal Q=I$ and (\ref{eq:peps_fourier_coordinate_parent}); Lemma~\ref{thm:peps_region_parent_common_kernel} identifies $\ker H=\mathcal P_{\mathcal R}(U)$ and $\ker K=\mathcal P_{\mathcal R}(L)$.
 \end{proof}
 
@@ -146,8 +143,7 @@ For a finite group $G$, representations $U,L$ on finite sets $X,Y$, and $Q:\C^X\
     and for finite $\mathcal R$ and positive local interactions $H,K$ with these regional kernels, $T(\ker H)=\ker K$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_copy_parent_equivalence,thm:peps_fourier_coordinate_parent,
-        thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_copy_parent_equivalence,thm:peps_fourier_coordinate_parent,thm:peps_region_parent_common_kernel}
     Composing $M_d:\mathcal P_{\mathcal R}(A_d)\xrightarrow{\cong}\mathcal P_{\mathcal R}(D^{[d]})$ (Lemma~\ref{thm:peps_copy_parent_equivalence}) with $\mathcal Q:\mathcal P_{\mathcal R}(D^{[d]})\xrightarrow{\cong}\mathcal P_{\mathcal R}(A_{\mathrm{reg}})$ (Lemma~\ref{thm:peps_fourier_coordinate_parent}) and applying Lemma~\ref{thm:peps_region_parent_common_kernel} yields the claims.
 \end{proof}
 

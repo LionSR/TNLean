@@ -135,7 +135,7 @@ assumption as one step toward Theorem~\ref{thm:openai_polynomial_peps}.
     \label{def:peps_large_size_dyadic_operator_network}
     \lean{TNLean.PEPS.Approximation.DyadicOperatorNetworkAt}
     \leanok
-    \uses{def:peps_dyadic_hv_routing, def:peps_party_operator_fix_input}
+    \uses{def:peps_dyadic_hv_routing,def:peps_party_operator_fix_input}
     Following~\cite[Section~8.1, Proposition~7.1, and Lemma~8.2]{OpenAI2026PolynomialPEPS}
     (\texttt{07-assembly.tex}, lines 53--63, 102--114, 128--131), fix $q\ge2$,
     a state family $\mathcal F$, $C,C_1,k\in\R$, and
@@ -169,7 +169,7 @@ assumption as one step toward Theorem~\ref{thm:openai_polynomial_peps}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_party_column_routing_polynomial, thm:peps_exponent_monotone}
+    \uses{thm:peps_party_column_routing_polynomial,thm:peps_exponent_monotone}
     Replace $C_1,k$ by $\max\{C_1,1\},\max\{k,0\}$. For
     $L\ge\max\{2,L_0,\lceil2C\rceil\}$, $2C\le L\le L^4$ gives
     $2CL^{-5}\le L^{-1}\le1/2$ and $CL^{-5}<1$.
@@ -193,8 +193,7 @@ bounds of Definition~\ref{def:peps_dyadic_protocol}
         TNLean.PEPS.Approximation.DyadicProtocol.physicalDensity_toDistributedConstruction,
         TNLean.PEPS.Approximation.DyadicProtocol.physicalOut_foldVertex}
     \leanok
-    \uses{def:peps_dyadic_protocol, def:peps_dyadic_hv_routing,
-        def:compression_operator_finite_coordinates}
+    \uses{def:peps_dyadic_protocol,def:peps_dyadic_hv_routing,def:compression_operator_finite_coordinates}
     Let a protocol for a unit vector $\Omega$ on the $L\times L$ square
     ($L\ge1$) satisfy Definition~\ref{def:peps_dyadic_protocol} with constants
     $C_N$, $C_E\ge0$, and $b$, and final state $\Psi_n$. If $\tau$ is a
@@ -212,7 +211,7 @@ bounds of Definition~\ref{def:peps_dyadic_protocol}
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_dyadic_protocol_consequences, thm:compression_operator_finite_coordinates}
+    \uses{thm:peps_dyadic_protocol_consequences,thm:compression_operator_finite_coordinates}
     Reading each unit-square party at its fold-fixed site anchor and every
     other party at physical dimension $1$ identifies $\sigma$ with $\tau$ by
     Lemma~\ref{thm:compression_operator_finite_coordinates}. The triangle
@@ -225,7 +224,7 @@ bounds of Definition~\ref{def:peps_dyadic_protocol}
     \label{lem:peps_protocol_circuit_bounds}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.exists_participants_toDistributedConstruction_circuit,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.nonprivateCount_toDistributedConstruction_circuit_le,
-        TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.participationCount_toDistributedConstruction_circuit_le,
+        TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.participation_toDistributedConstruction_circuit_le,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.isMonomialBounded_toDistributedConstruction_circuit,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.isExpansionBounded_toDistributedConstruction_circuit}
     \leanok
@@ -251,7 +250,7 @@ bounds of Definition~\ref{def:peps_dyadic_protocol}
     \label{thm:peps_large_size_network_from_protocol}
     \lean{TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
     \leanok
-    \uses{def:peps_dyadic_protocol, def:peps_large_size_dyadic_operator_network}
+    \uses{def:peps_dyadic_protocol,def:peps_large_size_dyadic_operator_network}
     Fix $q\ge2$, a unit-state family $\mathcal F$, and constants
     $C_N,C_K,C_E,b,k,r,L_0$. If every $L\ge\max\{2,L_0\}$ and
     $\Omega\in\mathcal F(L)$ admit a protocol satisfying
@@ -265,9 +264,7 @@ bounds of Definition~\ref{def:peps_dyadic_protocol}
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_distributed_construction_compression_of_le, def:peps_compression_constants,
-        lem:peps_protocol_compressed_party_network,
-        lem:peps_protocol_circuit_bounds}
+    \uses{thm:peps_distributed_construction_compression_of_le,def:peps_compression_constants,lem:peps_protocol_compressed_party_network,lem:peps_protocol_circuit_bounds}
     By Lemma~\ref{lem:peps_protocol_circuit_bounds}, the composed circuits for
     $L\ge\max\{2,L_0\}$ and $\Omega\in\mathcal F(L)$ have at most $bC_NL^3$
     nonprivate gates, $\le b$ parties per gate, $\le b$ gates per party,

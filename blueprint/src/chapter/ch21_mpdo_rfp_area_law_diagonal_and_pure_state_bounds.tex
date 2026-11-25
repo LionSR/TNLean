@@ -67,7 +67,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{thm:mpo_diagonal_cut_classical_mutual_information}
     \lean{MPOTensor.diagonalCut_classicalMutualInformation_le_two_log}
     \leanok
-    \uses{thm:mpo_diagonal_cut_rank, thm:matrix_rank_scalar_extension}
+    \uses{thm:mpo_diagonal_cut_rank,thm:matrix_rank_scalar_extension}
     Let $D\geq1$, and let $W$ be a real diagonal coefficient matrix across a
     periodic cut of an MPO with bond dimension $D$. Suppose its scalar
     extension to $\C$ is the cut matrix $P^{\C}$ from
@@ -137,7 +137,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
         MPOTensor.normalizedDiagonalCutDistribution_isJointDistribution,
         MPOTensor.diagonalFiniteChain_classicalMutualInformation_le_two_log}
     \leanok
-    \uses{def:mpo_normalized_diagonal_cut_distribution, thm:mpo_diagonal_cut_rank}
+    \uses{def:mpo_normalized_diagonal_cut_distribution,thm:mpo_diagonal_cut_rank}
     Let $D\geq1$. Suppose that $\rho^{(L+R)}(M)$ is diagonal and positive
     semidefinite, and that $Z>0$. Then $W_{x,y}\geq0$, the scalar extension of
     $W$ to $\C$ is the diagonal cut matrix of
@@ -168,7 +168,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     diagonal coefficients satisfies $I(X:Y)\leq2\log D$.
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information, lem:mpo_diagonal_cut_mass_trace}
+    \uses{thm:mpo_diagonal_finite_chain_classical_mutual_information,lem:mpo_diagonal_cut_mass_trace}
     Global diagonality and positivity give the fixed-length hypotheses of
     Lemma~\ref{thm:mpo_diagonal_finite_chain_classical_mutual_information}.
     Since the chain operator is diagonal,
@@ -448,7 +448,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_split_normalized_mpo, lem:mpdo_chain_mutual_information_bipartition, thm:mpdo_periodic_cut_operator_schmidt_rank}
+    \uses{def:mpdo_split_normalized_mpo,lem:mpdo_chain_mutual_information_bipartition,thm:mpdo_periodic_cut_operator_schmidt_rank}
     Reindexing the normalized chain operator across the consecutive cut preserves
     its unit trace and positivity, yielding
     \begin{align}
@@ -467,7 +467,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{thm:mpdo_finite_chain_mutual_information_four_log}
     \lean{MPOTensor.IsMPDO.mutualInfoChain_le_four_log_bondDim}
     \leanok
-    \uses{def:mutual_info_chain, def:mpdo}
+    \uses{def:mutual_info_chain,def:mpdo}
     As invoked in \cite[Proposition~4.5]{Cirac2016MPDO_arXiv}, let $M$ be a
     matrix product density operator of operator bond dimension $D$. For every
     positive chain length $N$, every cut $0\leq L\leq N$, and every nonzero
@@ -479,7 +479,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo, thm:mpdo_finite_chain_mutual_information_two_log}
+    \uses{def:mpdo,thm:mpdo_finite_chain_mutual_information_two_log}
     Global positivity gives positivity at the chosen positive chain
     length, so Lemma~\ref{thm:mpdo_finite_chain_mutual_information_two_log}
     gives $I_L^{(N)}\leq 2\log D$, and the same nonzero-trace argument gives
@@ -548,7 +548,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \begin{definition}[Purification tensor]\label{def:doubled_tensor}
     \lean{doubledTensor}
     \leanok
-    \uses{def:mps_tensor, def:mpo_tensor}
+    \uses{def:mps_tensor,def:mpo_tensor}
     For an MPS tensor $A$ on bond space $\C^D$, the single-ancilla
     purification tensor of \cite{Cirac2016MPDO_arXiv} is the associated MPO
     tensor $M$ on bond space $\C^{D^2}$ defined by
@@ -558,7 +558,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \begin{lemma}[Pure state as a purification MPDO]\label{lem:mpo_doubled}
     \lean{mpo_doubledTensor}
     \leanok
-    \uses{def:mps_tensor, def:mpo_family, def:doubled_tensor}
+    \uses{def:mps_tensor,def:mpo_family,def:doubled_tensor}
     In the single-ancilla case of the purification picture of
     \cite{Cirac2016MPDO_arXiv}, which lets the MPDO block-entropy theory apply
     to pure-state block entropies, the pure-state operator
@@ -587,7 +587,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{lem:blockEntropy_doubledTensor}
     \lean{blockEntropy_doubledTensor}
     \leanok
-    \uses{lem:mpo_doubled, def:block_entropy, def:pure_sal}
+    \uses{lem:mpo_doubled,def:block_entropy,def:pure_sal}
     For an MPS tensor $A$, system size $N$, and block length $L\le N$, the MPDO
     block entropy of the tensor $M^{ij}=A^i\otimes\overline{A^j}$ agrees
     with the pure-state block entropy:
@@ -648,7 +648,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \begin{lemma}[Pure-state area-law monotonicity]\label{prop:pure_area_monotone}
     \lean{pureBlockEntropy_monotone}
     \leanok
-    \uses{def:pure_sal, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
+    \uses{def:pure_sal,lem:schmidt_symmetry,lem:blockEntropy_doubledTensor}
     In the pure-state area law of \cite[Section~3, line~599]{Cirac2016MPDO_arXiv},
     let $A$ be an MPS tensor with $V^{(N)}(A)\neq0$. For every block length $L$
     with $2L+1\le N$, covering $1\le L<\lfloor N/2\rfloor$,
@@ -739,7 +739,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \lean{MPSTensor.schmidtLeft_gram_eq_of_isTransferIdempotent,
         MPSTensor.schmidtRight_gram_eq_of_isTransferIdempotent}
     \leanok
-    \uses{def:mps_transfer_idempotence, lem:schmidt_gram_transfer_power}
+    \uses{def:mps_transfer_idempotence,lem:schmidt_gram_transfer_power}
     Let $A$ be a renormalization fixed point. For every $L\ge1$ and
     $m\ge1$, the operator-Schmidt Grams of the $L$-block and of the
     $m$-site complement are the one-site Grams:
@@ -797,7 +797,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{thm:rfp-saturates-area-law}
     \lean{MPSTensor.isSAL_of_isTransferIdempotent}
     \leanok
-    \uses{def:mps_transfer_idempotence, def:pure_sal, lem:pure_block_entropy_env_charpoly, lem:rfp_schmidt_gram_collapse}
+    \uses{def:mps_transfer_idempotence,def:pure_sal,lem:pure_block_entropy_env_charpoly,lem:rfp_schmidt_gram_collapse}
     If an MPS tensor $A$ is a renormalization fixed point, then it saturates the
     area law: for every chain length $N$ and every block length
     $1\le L<\lfloor N/2\rfloor$, the pure-state block entropy is constant in the
@@ -807,7 +807,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     assuming canonical form.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:pure_block_entropy_env_charpoly, lem:rfp_schmidt_gram_collapse}
+    \uses{lem:pure_block_entropy_env_charpoly,lem:rfp_schmidt_gram_collapse}
     Write $c=(\tr\rho^{(N)})^{-1}$. Lemma~\ref{lem:pure_block_entropy_env_charpoly}
     computes the entropy from the bond environment:
     \begin{align}
@@ -855,7 +855,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{thm:rfp_constant_entropy}
     \lean{MPSTensor.pureBlockEntropy_eq_of_isTransferIdempotent}
     \leanok
-    \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}
+    \uses{thm:rfp-saturates-area-law,lem:pure_sal_const}
     As the constant-entropy consequence of area-law saturation
     \cite[Definition~3.13, line~600]{Cirac2016MPDO_arXiv} for fixed points, if an
     MPS tensor $A$ is a renormalization fixed point, then all block entropies
@@ -869,7 +869,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \end{align}
 \end{corollary}
 \begin{proof}\leanok
-    \uses{thm:rfp-saturates-area-law, lem:pure_sal_const}
+    \uses{thm:rfp-saturates-area-law,lem:pure_sal_const}
     The fixed point saturates the area law
     (Theorem~\ref{thm:rfp-saturates-area-law}), so by the telescoping of
     saturation (Lemma~\ref{lem:pure_sal_const}) the block entropies at any two
@@ -919,7 +919,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \begin{lemma}[Pure-state area-law upper bound]\label{prop:pure_area_upper}
     \lean{MPSTensor.pureBlockEntropy_le}
     \leanok
-    \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank, lem:reduced_pure_block_state_density}
+    \uses{lem:operator_schmidt_rank,lem:trace_one_positive_rank,lem:reduced_pure_block_state_density}
     Let $A$ be an MPS tensor of bond dimension $D\geq1$ with
     $V^{(N)}(A)\neq0$. For every block length $L\le N$,
     $S_L^{(N)}(A)\leq2\log D$, uniformly in $L$ and $N$. This is the area law of
@@ -927,7 +927,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     by a constant independent of the block size.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:operator_schmidt_rank, lem:trace_one_positive_rank, lem:reduced_pure_block_state_density}
+    \uses{lem:operator_schmidt_rank,lem:trace_one_positive_rank,lem:reduced_pure_block_state_density}
     The reduced state $\rho_L^{(N)}(A)$ is a density matrix
     (Lemma~\ref{lem:reduced_pure_block_state_density}), so its rank is positive
     by Lemma~\ref{lem:trace_one_positive_rank}. Its rank is at most $D^2$ by
@@ -939,7 +939,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{lem:pure_block_entropy_nonneg}
     \lean{MPSTensor.pureBlockEntropy_nonneg}
     \leanok
-    \uses{def:pure_sal, lem:reduced_pure_block_state_density}
+    \uses{def:pure_sal,lem:reduced_pure_block_state_density}
     For an MPS tensor $A$ with $V^{(N)}(A)\neq0$ and every block length
     $L\le N$, the pure-state block entropy is non-negative:
     $0\le S_L^{(N)}(A)$.
@@ -974,12 +974,12 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{lem:pure_block_entropy_empty}
     \lean{MPSTensor.pureBlockEntropy_empty}
     \leanok
-    \uses{def:pure_sal, lem:pure_entropy_full, lem:schmidt_symmetry}
+    \uses{def:pure_sal,lem:pure_entropy_full,lem:schmidt_symmetry}
     For an MPS tensor $A$ with $V^{(N)}(A)\neq0$, the pure-state block entropy of
     the empty block vanishes: $S_0^{(N)}(A)=0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:pure_entropy_full, lem:schmidt_symmetry}
+    \uses{lem:pure_entropy_full,lem:schmidt_symmetry}
     By the Schmidt symmetry $S_0^{(N)}(A)=S_N^{(N)}(A)$, and the entropy of the
     full system vanishes for a pure state
     (Lemma~\ref{lem:pure_entropy_full}).
@@ -989,13 +989,13 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{lem:pure_sal_const}
     \lean{MPSTensor.pureBlockEntropy_eq_of_isSAL}
     \leanok
-    \uses{def:pure_sal, lem:finite_interval_constancy}
+    \uses{def:pure_sal,lem:finite_interval_constancy}
     If an MPS tensor $A$ saturates the area law, then the block entropies
     coincide for all $1\le L,L'\le\lfloor N/2\rfloor$:
     $S_L^{(N)}(A)=S_{L'}^{(N)}(A)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:pure_sal, lem:finite_interval_constancy}
+    \uses{def:pure_sal,lem:finite_interval_constancy}
     Because the defining condition gives
     $S_m^{(N)}(A)=S_{m+1}^{(N)}(A)$ throughout the interval
     $1\le m<\lfloor N/2\rfloor$, Lemma~\ref{lem:finite_interval_constancy}
@@ -1006,7 +1006,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \label{lem:mutual_info_doubled}
     \lean{mutualInfoChain_doubledTensor}
     \leanok
-    \uses{lem:pure_entropy_full, lem:schmidt_symmetry, lem:blockEntropy_doubledTensor}
+    \uses{lem:pure_entropy_full,lem:schmidt_symmetry,lem:blockEntropy_doubledTensor}
     For an MPS tensor $A$ with $V^{(N)}(A)\neq0$, the mutual information of the
     purification MPDO equals twice the pure-state block entropy:
     $I_L=2S_L^{(N)}(A)$.
@@ -1021,7 +1021,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 \begin{lemma}[Pure-state mutual-information bound]\label{prop:pure_mutual_info_bound}
     \lean{mutualInfoChain_doubledTensor_le}
     \leanok
-    \uses{prop:pure_area_upper, lem:mutual_info_doubled}
+    \uses{prop:pure_area_upper,lem:mutual_info_doubled}
     Let $A$ be an MPS tensor of bond dimension $D\geq1$ with
     $V^{(N)}(A)\neq0$. For the purification MPDO of $A$, whose generated
     operator is the pure state

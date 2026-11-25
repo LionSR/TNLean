@@ -44,8 +44,7 @@
         MPSTensor.MPOSymmetry.continuous_mixedEndpoint_insertedBoundaryMap,
         MPSTensor.MPOSymmetry.continuous_mixedEndpoint_extendedBoundarySupport_starProjection}
     \leanok
-    \uses{def:mpo_mixed_extended_boundary,def:injective,
-        def:open_local_interaction_sum}
+    \uses{def:mpo_mixed_extended_boundary,def:injective,def:open_local_interaction_sum}
     If $A$ is injective and $W\neq0$, then the extended products span
     the full matrix algebra at every $N\geq1$. Consequently
     $\Gamma'_{W,N}$ is injective and $\dim\mathcal S'_{W,N}=D^2$.
@@ -58,9 +57,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:one_block_injective_of_injective,
-        lem:block_injective_two_sided_word_span,thm:mpo_mixed_interior,
-        thm:spt_normalized_bond_interpolation,lem:uncle_local_projector_continuity}
+    \uses{lem:one_block_injective_of_injective,lem:block_injective_two_sided_word_span,thm:mpo_mixed_interior,thm:spt_normalized_bond_interpolation,lem:uncle_local_projector_continuity}
     The one-letter assertion is injectivity of $A$. If the length-$N$
     extended products span all matrices, then their products on the left
     by $A^iW$ span all $RWS$. A nonzero entry $W_{ab}$ yields every
@@ -151,8 +148,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_mixed_extended_intersection,
-        thm:mpo_mixed_extended_boundary_rank}
+    \uses{thm:mpo_mixed_extended_intersection,thm:mpo_mixed_extended_boundary_rank}
     Each summand is positive, so zero total energy is equivalent to
     membership in every local kernel. In coordinates, extending a local
     interaction by the identity means applying it to every exterior

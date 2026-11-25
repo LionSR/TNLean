@@ -19,7 +19,7 @@ periodic operators.
         MPOTensor.mpo_eq_pow_smul_of_trace_evalWord_toMPSTensor,
         MPSTensor.trace_evalWord_smul}
     \leanok
-    \uses{def:mpo_family, def:mpo_to_mps}
+    \uses{def:mpo_family,def:mpo_to_mps}
     The trace of a length-$N$ word in the paired indices of $M$ is the
     matrix entry of $O_N(M)$ at the ket and bra configurations specified
     by the word. Consequently, if two tensors $M$ and $\widetilde M$
@@ -107,8 +107,7 @@ periodic operators.
     \label{cor:asym_fusion_tensors_group}
     \lean{MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors}
     \leanok
-    \uses{cor:asym_single_block, def:mpo_to_mps, def:normal,
-        def:mpdo_operator_product}
+    \uses{cor:asym_single_block,def:mpo_to_mps,def:normal,def:mpdo_operator_product}
     Let $\{U_g\}_{g\in G}$ be a matrix product operator representation of
     a group $G$, not necessarily unitary, by tensors $T_g$ of positive bond
     dimension whose doubled-index tensors are normal, with $U_gU_h=U_{gh}$
@@ -137,7 +136,7 @@ periodic operators.
     \lean{MPOTensor.exists_isReduction_actTensor_of_isNormal,
         MPOTensor.exists_multiBlockCompression_actTensor_of_isNormal}
     \leanok
-    \uses{cor:asym_single_block, thm:asym_weighted_compression}
+    \uses{cor:asym_single_block,thm:asym_weighted_compression}
     Let $T$ be a matrix product operator tensor and $A_x$ a matrix product
     state tensor, and let $T\cdot A_x$ be the tensor of the operator applied
     to the state, $(T\cdot A_x)^i=\sum_jT^{ij}\otimes A_x^j$. If the periodic
@@ -179,7 +178,7 @@ periodic operators.
 
 \begin{proof}
     \leanok
-    \uses{cor:asym_single_block, thm:asym_weighted_compression}
+    \uses{cor:asym_single_block,thm:asym_weighted_compression}
     The periodic vectors of $T\cdot A_x$ are the images of those of $A_x$
     under the periodic operators of $T$, so
     Corollary~\ref{cor:asym_single_block} and

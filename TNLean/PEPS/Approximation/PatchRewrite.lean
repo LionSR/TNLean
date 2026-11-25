@@ -58,7 +58,6 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
@@ -320,19 +319,19 @@ Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, line
 proof lines 234–252. -/
 theorem norm_rewrite_refVec_sub_le [NeZero q] (hR : R.AvoidsUntouched)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} {ε : ℝ}
-    (hpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ε)
-    (hold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ε) :
-    ‖act R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
+    (hpatch : ∀ P ∈ R.patches, ‖toEuclideanLin P.proj Ω - Ω‖ ≤ ε)
+    (hold : ∀ h ∈ R.oldAffected, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ε) :
+    ‖toEuclideanLin R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
       (R.patches.length + R.oldAffected.length) * ε := by
-  have hE : act R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω =
-      act R.newFrame.encoder
-        (act (projProd (R.patches ++ R.oldAffected.map Hole.patch)) Ω - Ω) := by
-    rw [Frame.refVec, Frame.refVec, ← act_mul, R.rewrite_mul_encoder hR, act_mul,
-      projProd_append, act_sub_right]
+  have hE : toEuclideanLin R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω =
+      toEuclideanLin R.newFrame.encoder
+        (toEuclideanLin (projProd (R.patches ++ R.oldAffected.map Hole.patch)) Ω - Ω) := by
+    rw [Frame.refVec, Frame.refVec, ← toEuclideanLin_mul_apply, R.rewrite_mul_encoder hR,
+      toEuclideanLin_mul_apply, projProd_append, map_sub]
     rfl
   rw [hE]
-  refine (norm_act_le_of_norm_le_one R.newFrame.norm_encoder_le_one _).trans ?_
-  refine (norm_act_projProd_sub_le (ε := ε) fun p hp => ?_).trans ?_
+  refine (norm_toEuclideanLin_apply_le_of_norm_le_one R.newFrame.norm_encoder_le_one _).trans ?_
+  refine (norm_toEuclideanLin_projProd_sub_le (ε := ε) fun p hp => ?_).trans ?_
   · rcases List.mem_append.mp hp with hp | hp
     · exact hpatch p hp
     · obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
@@ -347,10 +346,11 @@ the canonical map `M` between the old and new layouts is a contraction and
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–213;
 proof lines 221–252. -/
 theorem norm_rewrite_le_one_and_refVec_sub_le [NeZero q] (hR : R.Conditions)
-    {Ω : EuclideanSpace ℂ (ι → Fin q)} {ε : ℝ} (hpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ε)
-    (hold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ε) :
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} {ε : ℝ}
+    (hpatch : ∀ P ∈ R.patches, ‖toEuclideanLin P.proj Ω - Ω‖ ≤ ε)
+    (hold : ∀ h ∈ R.oldAffected, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ε) :
     ‖R.rewrite‖ ≤ 1 ∧
-      ‖act R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
+      ‖toEuclideanLin R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
         (R.patches.length + R.oldAffected.length) * ε :=
   ⟨R.norm_rewrite_le_one, R.norm_rewrite_refVec_sub_le hR.avoidsUntouched hpatch hold⟩
 
@@ -369,10 +369,11 @@ Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, line
 theorem exists_norm_le_one_and_refVec_sub_le_of_perm [NeZero q] (hR : R.AvoidsUntouched)
     (Fo Fn : Frame pos q Party) (ho : (R.untouched ++ R.oldAffected).Perm Fo.holes)
     (hn : (R.untouched ++ R.newAffected).Perm Fn.holes) {Ω : EuclideanSpace ℂ (ι → Fin q)}
-    {ε : ℝ} (hpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ε)
-    (hold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ε) :
+    {ε : ℝ} (hpatch : ∀ P ∈ R.patches, ‖toEuclideanLin P.proj Ω - Ω‖ ≤ ε)
+    (hold : ∀ h ∈ R.oldAffected, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ε) :
     ∃ M : Matrix Fn.Layout Fo.Layout ℂ, ‖M‖ ≤ 1 ∧
-      ‖act M (Fo.refVec Ω) - Fn.refVec Ω‖ ≤ (R.patches.length + R.oldAffected.length) * ε := by
+      ‖toEuclideanLin M (Fo.refVec Ω) - Fn.refVec Ω‖ ≤
+        (R.patches.length + R.oldAffected.length) * ε := by
   obtain ⟨eO, heO⟩ := exists_tagEquiv_of_perm R.disjoint_old ho
   obtain ⟨eN, heN⟩ := exists_tagEquiv_of_perm R.disjoint_new hn
   set eO' := eO.prodCongr (Equiv.refl (ι → Fin q))
@@ -385,12 +386,14 @@ theorem exists_norm_le_one_and_refVec_sub_le_of_perm [NeZero q] (hR : R.AvoidsUn
       submatrix_submatrix, Equiv.self_comp_symm, Function.comp_id, submatrix_id_id]
   refine ⟨reindex eN' eO' R.rewrite, (l2_opNorm_reindex_le _ _ _).trans R.norm_rewrite_le_one,
     ?_⟩
-  have hE : act (reindex eN' eO' R.rewrite) (Fo.refVec Ω) - Fn.refVec Ω =
-      act ((R.rewrite * R.oldFrame.encoder - R.newFrame.encoder).submatrix eN'.symm id) Ω := by
-    rw [Frame.refVec, Frame.refVec, ← act_mul, ← act_sub, hKo, hKn, reindex_apply,
-      submatrix_mul_equiv]
+  have hE : toEuclideanLin (reindex eN' eO' R.rewrite) (Fo.refVec Ω) - Fn.refVec Ω =
+      toEuclideanLin
+        ((R.rewrite * R.oldFrame.encoder - R.newFrame.encoder).submatrix eN'.symm id) Ω := by
+    rw [Frame.refVec, Frame.refVec, ← toEuclideanLin_mul_apply, ← LinearMap.sub_apply,
+      ← map_sub, hKo, hKn, reindex_apply, submatrix_mul_equiv]
     rfl
-  rw [hE, norm_act_submatrix_equiv, act_sub, act_mul]
+  rw [hE, norm_toEuclideanLin_submatrix_apply, map_sub, LinearMap.sub_apply,
+    toEuclideanLin_mul_apply]
   exact R.norm_rewrite_refVec_sub_le hR hpatch hold
 
 end SmallPatchRewrite

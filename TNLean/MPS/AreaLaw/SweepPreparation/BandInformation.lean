@@ -33,7 +33,7 @@ open ManyBody (interval mem_interval ChainInteraction)
 
 noncomputable section
 
-open TNLean.Lattice
+open QuantumCircuit.Party
 
 open ManyBody (IsGapped groundSpace)
 
@@ -41,7 +41,7 @@ namespace TNLean.MPS.AreaLaw.OneBand
 
 section Geometry
 
-variable {L : ℕ} {Party : Type}
+variable {L : ℕ} {Party : Type} [DecidableEq Party]
 
 /-- An interval is separated from the exterior of any sufficiently enlarged interval. -/
 private theorem interval_separation_of_notMem {b c u v w : ℕ}
@@ -63,6 +63,7 @@ private theorem separation_of_owner_window (F : Sheet (Fin L) Party) (P : Party)
   intro hywindow
   exact (Sheet.mem_birthEnv F).mp hy (howner y hywindow)
 
+omit [DecidableEq Party] in
 /-- The actual after-death owner windows. No exterior owner is prescribed.
 Source: Part II, Lemma lem:band, the after-exchange ownership calculation. -/
 private theorem after_death_owner_windows
@@ -257,7 +258,7 @@ theorem primitive_information_of_logarithmic_separation
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ (Party : Type)
+      ∀ (Party : Type) [DecidableEq Party]
         (own : Fin L → Party) (A B C : Party) (a w : ℕ),
         A ≠ C → B ≠ C → 1 ≤ w → 8 * w ≤ a →
         (∀ x ∈ interval L (a - 8 * w) a, own x = C) →
@@ -293,7 +294,7 @@ theorem primitive_information_of_logarithmic_separation
     ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation
       q hq R J Δ hΔ 24 (by norm_num) 1 le_rfl
   refine ⟨D₂₄, L₀, hD, hL₀, ?_⟩
-  intro L hL h hh hhJ Ω E₀ hΩ hgap hspan Party own A B C a w hAC hBC hw hleft hC hA hB hwidth
+  intro L hL h hh hhJ Ω E₀ hΩ hgap hspan Party _ own A B C a w hAC hBC hw hleft hC hA hB hwidth
   obtain ⟨hd₀, hd₁, hd₂, hd₃, hd₄, hd₅, hd₆, hd₇⟩ :=
     primitive_separation own A B C a w
       hAC hBC hw hleft hC hA hB

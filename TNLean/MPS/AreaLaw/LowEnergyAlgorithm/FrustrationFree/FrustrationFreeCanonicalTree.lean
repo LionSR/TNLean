@@ -53,7 +53,7 @@ open MeasureTheory
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-open TNLean.MPS.AreaLaw TNLean.Lattice
+open TNLean.MPS.AreaLaw
 
 /-- **Success probability of the merge tree for a unique frustration-free ground state.** Under
 the hypotheses and with the parameters of `exists_unique_ground_state_tree_ritz_approximation`,

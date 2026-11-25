@@ -59,7 +59,7 @@ not assumed, and the ground space may be degenerate.
 
 open ManyBody (interval)
 
-open Matrix Polynomial TNLean.Lattice TNLean.Lattice.Sheet QuantumCircuit
+open Matrix Polynomial
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 noncomputable section

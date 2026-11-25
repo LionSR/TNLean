@@ -25,7 +25,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
     \label{def:asymex_explicit_gauge}
     \lean{MPSTensor.complexOfInt, MPSTensor.mulIntTensor, MPSTensor.gaugeOfMatrix}
     \leanok
-    \uses{def:mps_tensor, def:mpdo_operator_product}
+    \uses{def:mps_tensor,def:mpdo_operator_product}
     Let $\tau$ be a bijection between the graded coordinate space of a slot
     family and the bond index set $\{0,\ldots,D_B-1\}$, and let $G$ and
     $G^{-1}$ be mutually inverse matrices in $\MN{D_B}$. The \emph{explicit
@@ -45,7 +45,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
         MPSTensor.MultiBlockCompression.left_gaugeOfMatrix,
         MPSTensor.MultiBlockCompression.right_gaugeOfMatrix}
     \leanok
-    \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
+    \uses{def:asymex_explicit_gauge,thm:asym_multiblock}
     Conjugation by the explicit gauge attached to $(\tau,G)$ sends a bond
     matrix $A$ to the matrix $GAG^{-1}$ relabelled along $\tau$. Entrywise
     coercion is multiplicative, and for integer tensors $M, N$ and $c \in \C$,
@@ -80,7 +80,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
         MPSTensor.MultiBlockCompression.ofEq,
         MPSTensor.MultiBlockCompression.ofScalarFlagFour}
     \leanok
-    \uses{def:asymex_explicit_gauge, thm:asym_multiblock}
+    \uses{def:asymex_explicit_gauge,thm:asym_multiblock}
     For a stacked product of two integer matrix product operator tensors,
     read over the pair alphabet, the letter at $a=do+i$ is
     $(M\mathbin{\cdot}N)^{oi}$. A \emph{one-slot compression datum} for a
@@ -180,7 +180,7 @@ map is given by an invertible matrix and a labelling of coordinates by slots.
         MPSTensor.MultiBlockCompression.evalWord_remainder_directSum_eq_zero,
         MPSTensor.MultiBlockCompression.evalWord_remainder_directSum_ne_zero}
     \leanok
-    \uses{def:asymex_one_slot, thm:asym_multiblock}
+    \uses{def:asymex_one_slot,thm:asym_multiblock}
     Let the letters of a tensor $B$ be, after a relabelling of the bond
     coordinates, block diagonal with blocks $B_k$, $k$ in a finite set $K$,
     and let every $B_k$ carry a one-slot compression datum onto a target
@@ -338,7 +338,7 @@ for those examples.
     \label{thm:asymex_stacked_pair}
     \lean{P6Compression.stackedPair_letter_identity}
     \leanok
-    \uses{def:asymex_basis_proj, prop:asym_projector_weighted_sum}
+    \uses{def:asymex_basis_proj,prop:asym_projector_weighted_sum}
     Suppose $B=c_B\widehat B$ and $C_s=c_C\widehat C_s$, where the
     tensors with hats have integer entries and $s\in\{0,1\}$.
     Suppose a nonzero integer $n$ and integers $k_s$ satisfy, for each
@@ -508,7 +508,7 @@ nothing to positive-length traces.
     \label{thm:asymex_parity_normal}
     \lean{ParityGraded.parA_isNormal}
     \leanok
-    \uses{def:asymex_parity, def:normal}
+    \uses{def:asymex_parity,def:normal}
     The block $A$ is normal: its length-two words span $\MN{2}$.
 \end{lemma}
 
@@ -627,7 +627,7 @@ $\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
         ParityGraded.parityGraded_evalWord_remainder_eq_zero,
         ParityGraded.parityGraded_remainder_sq_ne_zero}
     \leanok
-    \uses{def:asymex_parity, thm:asym_multiblock}
+    \uses{def:asymex_parity,thm:asym_multiblock}
     The source of Definition~\ref{def:asymex_parity} carries the block
     triangular form of Theorem~\ref{thm:asym_multiblock} for
     $S=\{+,-\}$, with targets $C_+=A$, $C_-=-A$, one zero slot
@@ -745,7 +745,7 @@ $\ket{V^{(N)}(A)}$ is always nonzero in the specified computational basis.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_parity_compression, prop:asym_compression_trace}
+    \uses{thm:asymex_parity_compression,prop:asym_compression_trace}
     Lemma~\ref{prop:asym_compression_trace} applied to the datum of
     Lemma~\ref{thm:asymex_parity_compression} gives
     $\tr(B^w)=\tr(A^w)+\tr((-A)^w)$. By

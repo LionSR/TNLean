@@ -4,16 +4,19 @@ Status: adopted 2026-11-16. This document fixes the architecture of everything
 between single-system channel theory (QICLean) and tensor networks (TNLean):
 finite tensor products indexed by sites, local Hamiltonians, and circuits. It
 supersedes the "Migration policy" section of `circuit_channel_architecture.md`.
-The directories `TNLean/Circuit` and `TNLean/Lattice` are split along the
-layers below, redesigned, and moved to QICLean. `TNLean/Circuit` and the top
-level of `TNLean/Lattice` are gone (pin move to LionSR/QICLean#1185); the party
-calculus `Lattice/PartyCircuit`, `Lattice/Sheet` and `Lattice/Compression`
-remains. The 44 modules of `Lattice/Compression` that contract a network of
-tensors whose links carry their own virtual alphabets (edge-dependent bond
-networks, party networks, the distributed operator contraction and everything
-that imports it) are tensor networks; they moved to `TNLean/Network`, the
-lowest tensor-network layer, which both `MPS` and `PEPS` import. What remains
-in `Lattice` imports nothing from `Network`.
+The directories `TNLean/Circuit` and `TNLean/Lattice` were split along the
+layers below, redesigned, and moved to QICLean; both are gone. `TNLean/Circuit`
+and the top level of `TNLean/Lattice` left at the pin move to LionSR/QICLean#1185.
+The party calculus (`Lattice/PartyCircuit`, `Lattice/Sheet`, `Lattice/Compression`)
+was restated in `QICLean/Circuit/Party` (LionSR/QICLean#1196 to #1216) and deleted
+from TNLean at the pin move to QICLean `3149c3445e`. The 44 modules of
+`Lattice/Compression` that contract a network of tensors whose links carry their own
+virtual alphabets (edge-dependent bond networks, party networks, the distributed
+operator contraction and everything that imports it) are tensor networks; they had
+moved earlier to `TNLean/Network`, the lowest tensor-network layer, which both `MPS`
+and `PEPS` import. Three modules of `Lattice/Compression` that exist only to build or
+count the distributed network (`DistributedLinks`, `SourceNetworkIncidence`,
+`PhysicalFirstNetworkResources`) were merged into their consumers in `TNLean/Network`.
 
 ## Architecture
 
@@ -98,7 +101,7 @@ flowchart BT
 | Hamiltonians | spectral properties of an interaction on a finite set of sites | `groundSpace` and the one gap predicate `IsGapped`, stated for any matrix; spectral and Gaussian filters, truncation, low-energy bases; the models as choices of sites and supports | `TNLean/Lattice` (root, `ClusterExpansion`); five separate structures | `QICLean/ManyBody/Hamiltonian` | Sites, Dynamics |
 | Gates | unitaries on a finite basis, with no sites | two-level and Givens words, controlled elements, permutation matrices, dilations, amplification | parts of `TNLean/Circuit/Gates`, eight root modules of `TNLean/Circuit` | `QICLean/Circuit/Gate` | matrices |
 | Circuits | a geometry of cells on a set of sites, and operations layered on it | `Layer`, `Circuit`, its Kraus family, depth and gate count | `TNLean/Circuit` (the rest) | `QICLean/Circuit` | Sites, Gates |
-| Party calculus | registers with owners | one syntax of local maps, sources and gates | `TNLean/Lattice/PartyCircuit`, `Compression`, `Sheet` | reusable part: `QICLean/Circuit/Party`; proof-specific part stays in TNLean | Sites, Circuits |
+| Party calculus | registers with owners | one syntax of local maps, sources and gates | `TNLean/Lattice/PartyCircuit`, `Compression`, `Sheet` (deleted) | `QICLean/Circuit/Party`; the uses specific to tensor networks are in `TNLean/Network`, `MPS/AreaLaw`, `PEPS/Approximation` | Sites, Circuits |
 
 Circuits and Hamiltonians are siblings. A circuit statement never needs an
 interaction, and a Hamiltonian statement never needs a layer; the permutation
@@ -212,7 +215,8 @@ the pin and deletes what was replaced, with no copy and no alias left behind.
 ### Enforcement
 
 `scripts/check_import_layers.py` assigns the modules of `TNLean/Algebra`,
-`TNLean/Circuit` and `TNLean/Lattice` to these layers and rejects an import
+`TNLean/Circuit` and `TNLean/QCA` to these layers (the party and Hamiltonian
+layers have no TNLean modules since `TNLean/Lattice` was deleted) and rejects an import
 that points upward or sideways. Imports are read with comments removed, and an
 imported aggregator counts as everything it re-exports. It runs in the module-policy job of
 `pr-ci.yml`. Its `UPWARD_IMPORTS` set lists recorded violations and may only shrink; CI
@@ -487,9 +491,10 @@ this is checked against the party calculus before the core is fixed (step
 3C.0). A second calculus with a comparison theorem is not an acceptable
 outcome.
 
-## `TNLean/Lattice`
+## `TNLean/Lattice` (deleted)
 
-`TNLean/Lattice` (363 modules, 55,609 lines; 371 and 58,208 before pin move 6, 469 and
+This section records the directory as it was before it left TNLean; it no longer
+exists. `TNLean/Lattice` (363 modules, 55,609 lines; 371 and 58,208 before pin move 6, 469 and
 77,689 before pin move 5)
 has the same shape as `TNLean/Circuit`: its transitive imports inside TNLean
 are itself, 15 modules of `Algebra` and 9 modules of `Circuit`, and nothing
@@ -744,7 +749,8 @@ Wave 5, parties:
 - **5.2** (both, pin move 4). Registers become basis types; party circuits
   become a restriction of `Circuit`; the reusable part moves.
 - **5.3** (TNLean). The single-lemma modules of `Lattice/Compression` are
-  merged; what stays leaves the `Lattice` directory.
+  merged; what stays leaves the `Lattice` directory. Done: the calculus is
+  `QICLean/Circuit/Party`, and `TNLean/Lattice` is deleted.
 
 Tensor types:
 

@@ -19,7 +19,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 274–284, at `openai/math@adc7f124`.
 -/
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -150,7 +150,7 @@ theorem old_split_anchor_bounds_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (h
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hsplit : (S.ball i ∩ receiving (S.oldChargeState h g) side).Nonempty ∧
       (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty) :
     S.front g (h.1 g) (k + 1) side - S.r₀ ≤ orientedDepth S.depth side (S.anchor i) ∧
@@ -174,7 +174,7 @@ theorem state_split_anchor_bounds_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} 
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hsplit : (S.ball i ∩ receiving (S.state h g) side).Nonempty ∧
       (S.ball i ∩ middle (S.state h g)).Nonempty) :
     S.front g (h.1 g) k side - S.r₀ ≤ orientedDepth S.depth side (S.anchor i) ∧

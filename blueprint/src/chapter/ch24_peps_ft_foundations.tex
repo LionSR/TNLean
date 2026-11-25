@@ -29,7 +29,7 @@ injectivity condition together with the local inverse it provides.
     \label{def:peps_tensor}
     \lean{TNLean.PEPS.Tensor}
     \leanok
-    \uses{def:peps_edge, def:peps_incident_edge}
+    \uses{def:peps_edge,def:peps_incident_edge}
     A PEPS tensor $A$ on $G=(V,E)$ with physical dimension $d$ consists of a bond
     dimension $D_e$ for each $e\in E$ and a local tensor
     $A_v:\prod_{e\ni v}\{0,\ldots,D_e-1\}\times\{0,\ldots,d-1\}\to\C$ at each
@@ -41,7 +41,7 @@ injectivity condition together with the local inverse it provides.
     \label{def:peps_virtual_config}
     \lean{TNLean.PEPS.VirtualConfig}
     \leanok
-    \uses{def:peps_tensor, def:peps_edge}
+    \uses{def:peps_tensor,def:peps_edge}
     A \emph{virtual configuration} is an assignment
     $\eta\in\prod_{e\in E}\{0,\ldots,D_e-1\}$.
 \end{definition}
@@ -71,7 +71,7 @@ injectivity condition together with the local inverse it provides.
     \lean{TNLean.PEPS.virtualConfigSplit_mergeVirtualConfig}
     \lean{TNLean.PEPS.virtualConfigCongr_mergeVirtualConfig}
     \leanok
-    \uses{def:peps_virtual_config_split_reindex, def:peps_virtual_config_merge}
+    \uses{def:peps_virtual_config_split_reindex,def:peps_virtual_config_merge}
     On their respective domains, $(\eta|_p)(e)=\eta(e)$ and
     $(\eta|_{\neg p})(e)=\eta(e)$. With $m_p(\eta,\xi)$ the piecewise merge of
     Definition~\ref{def:peps_virtual_config_merge},
@@ -153,7 +153,7 @@ injectivity condition together with the local inverse it provides.
     \label{def:peps_stateCoeff}
     \lean{TNLean.PEPS.stateCoeff}
     \leanok
-    \uses{def:peps_tensor, def:peps_virtual_config}
+    \uses{def:peps_tensor,def:peps_virtual_config}
     For a physical configuration $\sigma:V\to\{0,\ldots,d-1\}$, the PEPS state
     coefficient is
     $\Coeff_A(\sigma)=\sum_{\eta}\prod_{v\in V}A_v(\eta|_v,\sigma_v)$.
@@ -252,7 +252,7 @@ gauge transformation preserving $\Coeff_A$.
     \label{thm:peps_absorbEdgeGauges_component}
     \lean{TNLean.PEPS.absorbEdgeGauges_component}
     \leanok
-    \uses{def:peps_absorbEdgeGauges, def:gaugeVertex}
+    \uses{def:peps_absorbEdgeGauges,def:gaugeVertex}
     With $M_{ie}=X_{v,e}$ on each $ie\ni v$,
     $\widetilde B_v(\eta,\sigma)
         =\sum_{\eta'}(\prod_{ie\ni v}M_{ie}(\eta(ie),\eta'(ie)))
@@ -275,7 +275,7 @@ gauge transformation preserving $\Coeff_A$.
     \label{thm:applyGauge_stateCoeff}
     \lean{TNLean.PEPS.applyGauge_stateCoeff}
     \leanok
-    \uses{def:applyGauge, def:peps_stateCoeff}
+    \uses{def:applyGauge,def:peps_stateCoeff}
     For every $\sigma$, $\Coeff_{A^X}(\sigma)=\Coeff_A(\sigma)$, since on each
     edge $e=(u,w)$ the endpoint insertions satisfy
     % Formula: contraction of X_e with the transposed inverse on the other endpoint
@@ -293,7 +293,7 @@ gauge transformation preserving $\Coeff_A$.
     \label{thm:GaugeEquiv_sameState}
     \lean{TNLean.PEPS.GaugeEquiv.sameState}
     \leanok
-    \uses{def:GaugeEquivPEPS, def:peps_same_state, thm:applyGauge_stateCoeff}
+    \uses{def:GaugeEquivPEPS,def:peps_same_state,thm:applyGauge_stateCoeff}
     If $A \sim B$, then $\Coeff_A(\sigma) = \Coeff_B(\sigma)$ for all $\sigma$.
 \end{lemma}
 
@@ -337,7 +337,7 @@ physical operators on $\C^d$.
     \label{def:peps_localTensorMap}
     \lean{TNLean.PEPS.localTensorMap}
     \leanok
-    \uses{def:peps_tensor, def:peps_incident_edge}
+    \uses{def:peps_tensor,def:peps_incident_edge}
     At $v\in V$, the local tensor map $\Phi_v:\C^{\mathcal V_v}\to\C^d$ is
     $\Phi_v(c)(\tau)=\sum_{\eta\in\mathcal V_v}c(\eta)A_v(\eta,\tau)$.
 \end{definition}
@@ -346,7 +346,7 @@ physical operators on $\C^d$.
     \label{lem:peps_localCoeff_eq_zero_of_contract_zero}
     \lean{TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_localTensorMap}
+    \uses{def:IsVertexInjective,def:peps_localTensorMap}
     If $A$ is vertex-injective and $\Phi_v(R)(\tau)=\sum_{\eta}R(\eta)A_v(\eta,\tau)=0$
     for all $\tau$, then $R=0$.
 \end{lemma}
@@ -368,7 +368,7 @@ physical operators on $\C^d$.
     \label{def:peps_physRealizeLocalOp}
     \lean{TNLean.PEPS.physRealizeLocalOpAt}
     \leanok
-    \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
+    \uses{def:peps_localTensorMap,def:peps_localLeftInverse}
     For $T\in\End(\C^{\mathcal V_v})$, define the physical realization
     $O_T=\Phi_v\circ T\circ\Psi_v\in\End(\C^d)$.
 \end{definition}
@@ -390,7 +390,7 @@ physical operators on $\C^d$.
     \label{thm:peps_physRealizeLocalOp_injective}
     \lean{TNLean.PEPS.physRealizeLocalOpAt_injective}
     \leanok
-    \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, def:peps_localTensorMap}
+    \uses{def:peps_physRealizeLocalOp,thm:peps_physRealizeLocalOp_spec,def:peps_localTensorMap}
     If $\Phi_v$ is injective and $O_T=O_{T'}$, then $T=T'$.
 \end{lemma}
 \begin{proof}\leanok
@@ -411,7 +411,7 @@ physical operators on $\C^d$.
     \label{def:peps_localVirtualOpOfPhysicalOp}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt}
     \leanok
-    \uses{def:peps_localTensorMap, def:peps_localLeftInverse}
+    \uses{def:peps_localTensorMap,def:peps_localLeftInverse}
     In the physical-to-virtual step of \cite[Section~3]{Molnar2018NormalPEPS},
     for $O\in\End(\C^d)$ at $v$, define its virtual pullback
     $T_O=\Psi_v\circ O\circ\Phi_v\in\End(\C^{\mathcal V_v})$.
@@ -421,7 +421,7 @@ physical operators on $\C^d$.
     \label{thm:peps_localVirtualOpOfPhysicalOp_spec}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_spec}
     \leanok
-    \uses{def:peps_localVirtualOpOfPhysicalOp, def:peps_physRealizeLocalOp, def:peps_localProjector}
+    \uses{def:peps_localVirtualOpOfPhysicalOp,def:peps_physRealizeLocalOp,def:peps_localProjector}
     For every $c\in\C^{\mathcal V_v}$,
     $\Phi_v(T_Oc)=P_v(O(\Phi_v(c)))$.
 \end{lemma}
@@ -449,7 +449,7 @@ physical operators on $\C^d$.
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_of_realizes}
     \leanok
-    \uses{def:peps_localTensorMap, thm:peps_localVirtualOpOfPhysicalOp_spec}
+    \uses{def:peps_localTensorMap,thm:peps_localVirtualOpOfPhysicalOp_spec}
     Suppose $\Phi_v$ is injective. If $O(\Phi_v(c))=\Phi_v(Tc)$ for all
     $c\in\C^{\mathcal V_v}$, then $T_O=T$.
 \end{lemma}
@@ -463,7 +463,7 @@ physical operators on $\C^d$.
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_action_eq}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_iff_projected_action_eq}
     \leanok
-    \uses{def:peps_localTensorMap, thm:peps_localVirtualOpOfPhysicalOp_spec}
+    \uses{def:peps_localTensorMap,thm:peps_localVirtualOpOfPhysicalOp_spec}
     When $\Phi_v$ is injective, two physical operations $O,O'\in\End(\C^d)$
     satisfy
     \begin{align}
@@ -483,7 +483,7 @@ physical operators on $\C^d$.
     \label{thm:peps_localVirtualOpOfPhysicalOp_physRealizeLocalOp}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_physRealizeLocalOpAt}
     \leanok
-    \uses{def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec, thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
+    \uses{def:peps_physRealizeLocalOp,thm:peps_physRealizeLocalOp_spec,thm:peps_localVirtualOpOfPhysicalOp_eq_of_realizes}
     When $\Phi_v$ is injective, $T_{O_T}=T$.
 \end{lemma}
 \begin{proof}\leanok
@@ -496,7 +496,7 @@ physical operators on $\C^d$.
     \label{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
     \lean{TNLean.PEPS.physRealizeLocalOpAt_localVirtualOpOfPhysicalOpAt}
     \leanok
-    \uses{def:peps_physRealizeLocalOp, def:peps_localVirtualOpOfPhysicalOp, def:peps_localProjector}
+    \uses{def:peps_physRealizeLocalOp,def:peps_localVirtualOpOfPhysicalOp,def:peps_localProjector}
     With $P_v=\Phi_v\circ\Psi_v$ and $T_O=\Psi_v\circ O\circ\Phi_v$,
     $O_{T_O}=\Phi_v\circ T_O\circ\Psi_v=P_v\circ O\circ P_v$.
 \end{lemma}
@@ -509,7 +509,7 @@ physical operators on $\C^d$.
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_of_projected_realization_eq}
     \leanok
-    \uses{thm:peps_physRealizeLocalOp_injective, thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
+    \uses{thm:peps_physRealizeLocalOp_injective,thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp}
     When $\Phi_v$ is injective, $P_vOP_v=O_T$ implies $T_O=T$.
 \end{lemma}
 \begin{proof}\leanok
@@ -522,7 +522,7 @@ physical operators on $\C^d$.
     \label{thm:peps_localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq}
     \lean{TNLean.PEPS.localVirtualOpOfPhysicalOpAt_eq_iff_projected_realization_eq}
     \leanok
-    \uses{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp, thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
+    \uses{thm:peps_physRealizeLocalOp_localVirtualOpOfPhysicalOp,thm:peps_localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq}
     When $\Phi_v$ is injective, $P_vOP_v=O_T\iff T_O=T$.
 \end{lemma}
 \begin{proof}\leanok
@@ -534,7 +534,7 @@ physical operators on $\C^d$.
     \label{def:peps_localIncidentMatrixOp}
     \lean{TNLean.PEPS.localIncidentMatrixOp}
     \leanok
-    \uses{def:peps_incident_edge, def:peps_localVirtualConfigSplitAt}
+    \uses{def:peps_incident_edge,def:peps_localVirtualConfigSplitAt}
     Under the split $\eta\leftrightarrow(i,\eta_{\widehat e})$ at an incident
     edge $e\ni v$ from Definition~\ref{def:peps_localVirtualConfigSplitAt}, a
     matrix $M\in\MN{D_e}$ defines $T_{v,e}(M)\in\End(\C^{\mathcal V_v})$ by
@@ -545,7 +545,7 @@ physical operators on $\C^d$.
     \label{thm:peps_localIncidentMatrixOp_single}
     \lean{TNLean.PEPS.localIncidentMatrixOp_single}
     \leanok
-    \uses{def:peps_localIncidentMatrixOp, def:peps_localVirtualConfigSplitAt}
+    \uses{def:peps_localIncidentMatrixOp,def:peps_localVirtualConfigSplitAt}
     For the basis vector $e_{(j,\lambda)}\in\C^{\mathcal V_v}$,
     $T_{v,e}(M)e_{(j,\lambda)}=\sum_i M_{ij}e_{(i,\lambda)}$.
 \end{lemma}
@@ -558,7 +558,7 @@ physical operators on $\C^d$.
     \label{thm:peps_localTensorMap_localIncidentMatrixOp_single}
     \lean{TNLean.PEPS.localTensorMap_localIncidentMatrixOp_single}
     \leanok
-    \uses{thm:peps_localIncidentMatrixOp_single, def:peps_localTensorMap}
+    \uses{thm:peps_localIncidentMatrixOp_single,def:peps_localTensorMap}
     For every $(j,\lambda)$ and physical index $\tau$,
     $\Phi_v(T_{v,e}(M)e_{(j,\lambda)})(\tau)=\sum_i M_{ij}A_v((i,\lambda),\tau)$.
 \end{lemma}
@@ -571,7 +571,7 @@ physical operators on $\C^d$.
     \label{thm:peps_localIncidentMatrixOp_physicalRealization}
     \lean{TNLean.PEPS.localIncidentMatrixOp_physicalRealizationAt}
     \leanok
-    \uses{def:peps_localIncidentMatrixOp, def:peps_physRealizeLocalOp, thm:peps_physRealizeLocalOp_spec}
+    \uses{def:peps_localIncidentMatrixOp,def:peps_physRealizeLocalOp,thm:peps_physRealizeLocalOp_spec}
     If $\Phi_v$ is injective, then $O_{T_{v,e}(M)}\in\End(\C^d)$ satisfies
     $O_{T_{v,e}(M)}(\Phi_v(c))=\Phi_v(T_{v,e}(M)c)$ for all
     $c\in\C^{\mathcal V_v}$.
@@ -584,7 +584,7 @@ physical operators on $\C^d$.
     \label{def:peps_localVirtualConfigSplitAt}
     \lean{TNLean.PEPS.localVirtualConfigSplitAt}
     \leanok
-    \uses{def:peps_tensor, def:peps_incident_edge}
+    \uses{def:peps_tensor,def:peps_incident_edge}
     For an incident edge $e\ni v$, the bijection
     $\mathcal V_v\simeq\{0,\ldots,D_e-1\}\times\prod_{f\ni v,\,f\ne e}\{0,\ldots,D_f-1\}$
     writes $\eta\in\mathcal V_v$ as $(\eta(e),\eta_{\widehat e})$.
@@ -630,7 +630,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{thm:peps_prod_univ_splitAtEdge}
     \lean{TNLean.PEPS.prod_univ_splitAtEdge}
     \leanok
-    \uses{def:peps_edgeMiddleVertices, thm:peps_edgeVertices_union}
+    \uses{def:peps_edgeMiddleVertices,thm:peps_edgeVertices_union}
     For any edge $e=(u,v)$ and $f:V\to M$ into a commutative monoid $M$,
     \begin{align}
         \prod_{x\in V}f(x)
@@ -646,7 +646,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{thm:peps_stateCoeff_splitAtEdge}
     \lean{TNLean.PEPS.stateCoeff_splitAtEdge}
     \leanok
-    \uses{def:peps_stateCoeff, def:peps_edgeMiddleVertices, thm:peps_prod_univ_splitAtEdge}
+    \uses{def:peps_stateCoeff,def:peps_edgeMiddleVertices,thm:peps_prod_univ_splitAtEdge}
     For any edge $e=(u,v)$,
     $\Coeff_A(\sigma)=\sum_{\eta}A_u(\eta|_u,\sigma_u)
         (\prod_{x\in V\setminus\{u,v\}}A_x(\eta|_x,\sigma_x))A_v(\eta|_v,\sigma_v)$.
@@ -660,7 +660,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeBoundaryConfig}
     \lean{TNLean.PEPS.EdgeBoundaryConfig}
     \leanok
-    \uses{def:peps_tensor, def:peps_localVirtualConfigSplitAt}
+    \uses{def:peps_tensor,def:peps_localVirtualConfigSplitAt}
     For an edge $e=(u,v)$, an edge-boundary configuration is a triple
     $\beta=(a,\lambda,\rho)$ consisting of $a\in\{0,\ldots,D_e-1\}$ on $e$ and
     residual configurations $\lambda$ on $\{f\ni u:f\ne e\}$ and $\rho$ on
@@ -671,7 +671,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeBoundaryOfVirtualConfig}
     \lean{TNLean.PEPS.edgeBoundaryOfVirtualConfig}
     \leanok
-    \uses{def:peps_edgeBoundaryConfig, def:peps_virtual_config}
+    \uses{def:peps_edgeBoundaryConfig,def:peps_virtual_config}
     A global virtual configuration $\eta$ determines the boundary configuration
     $\partial_e(\eta)=(\eta(e),\eta|_{u,\widehat e},\eta|_{v,\widehat e})$.
 \end{definition}
@@ -680,7 +680,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeBoundaryMatches}
     \lean{TNLean.PEPS.edgeBoundaryMatches}
     \leanok
-    \uses{def:peps_edgeBoundaryConfig, def:peps_virtual_config}
+    \uses{def:peps_edgeBoundaryConfig,def:peps_virtual_config}
     A global virtual configuration $\eta$ is compatible with
     $\beta=(a,\lambda,\rho)$ if $\partial_e(\eta)=\beta$, i.e., $\eta(e)=a$,
     $\eta|_{u,\widehat e}=\lambda$, and $\eta|_{v,\widehat e}=\rho$.
@@ -699,7 +699,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_virtualConfigEquivEdgeBoundary}
     \lean{TNLean.PEPS.virtualConfigEquivEdgeBoundary}
     \leanok
-    \uses{def:peps_edgeBoundaryOfVirtualConfig, def:peps_edgeMiddleConfig}
+    \uses{def:peps_edgeBoundaryOfVirtualConfig,def:peps_edgeMiddleConfig}
     Fiberwise decomposition by $\partial_e$ identifies global virtual
     configurations $\eta$ with pairs $(\beta,\eta_{M_e})$ where
     $\partial_e(\eta_{M_e})=\beta$.
@@ -709,7 +709,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeLeftLocalConfig}
     \lean{TNLean.PEPS.edgeLeftLocalConfig}
     \leanok
-    \uses{def:peps_edgeBoundaryConfig, def:peps_localVirtualConfigSplitAt}
+    \uses{def:peps_edgeBoundaryConfig,def:peps_localVirtualConfigSplitAt}
     From $\beta=(a,\lambda,\rho)$, the left endpoint local configuration
     $\beta_u\in\mathcal V_u$ is reconstructed from $(a,\lambda)$ via
     Definition~\ref{def:peps_localVirtualConfigSplitAt}.
@@ -719,7 +719,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeRightLocalConfig}
     \lean{TNLean.PEPS.edgeRightLocalConfig}
     \leanok
-    \uses{def:peps_edgeBoundaryConfig, def:peps_localVirtualConfigSplitAt}
+    \uses{def:peps_edgeBoundaryConfig,def:peps_localVirtualConfigSplitAt}
     From $\beta=(a,\lambda,\rho)$, the right endpoint local configuration
     $\beta_v\in\mathcal V_v$ is reconstructed from $(a,\rho)$ via
     Definition~\ref{def:peps_localVirtualConfigSplitAt}.
@@ -729,7 +729,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{thm:peps_edgeLeftLocalConfig_eq_of_boundaryMatches}
     \lean{TNLean.PEPS.edgeLeftLocalConfig_eq_of_boundaryMatches}
     \leanok
-    \uses{def:peps_edgeBoundaryMatches, def:peps_edgeLeftLocalConfig}
+    \uses{def:peps_edgeBoundaryMatches,def:peps_edgeLeftLocalConfig}
     If $\partial_e(\eta)=\beta$, then $\eta|_u=\beta_u$.
 \end{lemma}
 
@@ -737,7 +737,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{thm:peps_edgeRightLocalConfig_eq_of_boundaryMatches}
     \lean{TNLean.PEPS.edgeRightLocalConfig_eq_of_boundaryMatches}
     \leanok
-    \uses{def:peps_edgeBoundaryMatches, def:peps_edgeRightLocalConfig}
+    \uses{def:peps_edgeBoundaryMatches,def:peps_edgeRightLocalConfig}
     If $\partial_e(\eta)=\beta$, then $\eta|_v=\beta_v$.
 \end{lemma}
 
@@ -745,7 +745,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeInsertedBoundaryConfig}
     \lean{TNLean.PEPS.EdgeInsertedBoundaryConfig}
     \leanok
-    \uses{def:peps_tensor, def:peps_localVirtualConfigSplitAt}
+    \uses{def:peps_tensor,def:peps_localVirtualConfigSplitAt}
     For an edge $e=(u,v)$, inserted-edge boundary data are quadruples
     $\beta=(a,b,\lambda,\rho)$ with $a,b\in\{0,\ldots,D_e-1\}$ on $e$ and
     residual configurations $\lambda$ at $u$ and $\rho$ at $v$.
@@ -755,7 +755,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeBoundaryToInsertedBoundaryConfig}
     \lean{TNLean.PEPS.edgeBoundaryToInsertedBoundaryConfig}
     \leanok
-    \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
+    \uses{def:peps_edgeBoundaryConfig,def:peps_edgeInsertedBoundaryConfig}
     Ordinary boundary data $\beta=(a,\lambda,\rho)$ map to diagonal
     inserted-edge boundary data $\Delta(\beta)=(a,a,\lambda,\rho)$.
 \end{definition}
@@ -764,7 +764,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeBoundaryRightIndexEquivInsertedBoundaryConfig}
     \lean{TNLean.PEPS.edgeBoundaryRightIndexEquivInsertedBoundaryConfig}
     \leanok
-    \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
+    \uses{def:peps_edgeBoundaryConfig,def:peps_edgeInsertedBoundaryConfig}
     Pairs $((a,\lambda,\rho),b)$ of ordinary boundary data and a right bond
     index $b$ identify bijectively with inserted-edge boundary data
     $(a,b,\lambda,\rho)$.
@@ -774,7 +774,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeBoundaryLeftIndexEquivInsertedBoundaryConfig}
     \lean{TNLean.PEPS.edgeBoundaryLeftIndexEquivInsertedBoundaryConfig}
     \leanok
-    \uses{def:peps_edgeBoundaryConfig, def:peps_edgeInsertedBoundaryConfig}
+    \uses{def:peps_edgeBoundaryConfig,def:peps_edgeInsertedBoundaryConfig}
     Pairs $((b,\lambda,\rho),a)$ of ordinary boundary data and a left bond
     index $a$ identify bijectively with inserted-edge boundary data
     $(a,b,\lambda,\rho)$.
@@ -793,7 +793,7 @@ Section~\ref{sec:peps_edge_middle}.
     \label{def:peps_edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig}
     \lean{TNLean.PEPS.edgeBoundaryConfigEquivDiagonalInsertedBoundaryConfig}
     \leanok
-    \uses{def:peps_edgeBoundaryConfig, def:peps_edgeDiagonalInsertedBoundaryConfig, def:peps_edgeBoundaryToInsertedBoundaryConfig}
+    \uses{def:peps_edgeBoundaryConfig,def:peps_edgeDiagonalInsertedBoundaryConfig,def:peps_edgeBoundaryToInsertedBoundaryConfig}
     The diagonal map $\Delta:(a,\lambda,\rho)\mapsto(a,a,\lambda,\rho)$ is a
     bijection onto the diagonal inserted-boundary configurations.
 \end{definition}

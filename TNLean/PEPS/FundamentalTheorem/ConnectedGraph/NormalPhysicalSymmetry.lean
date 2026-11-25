@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Dimension.OrzechProperty
 import TNLean.PEPS.FundamentalTheorem.ConnectedGraph.NormalGeneralFundamentalTheorem
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence
-import TNLean.Lattice.Compression.DependentPhysicalProductRangeSupport
+import QICLean.Algebra.Kronecker.PiKroneckerRange
 
 /-!
 # Virtual gauges for a physical symmetry of a normal tensor network
@@ -27,8 +27,6 @@ noncomputable section
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
-
-open TNLean.Lattice
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
@@ -62,10 +60,10 @@ Source: arXiv:1804.04964, Applications, lines 1696–1713. -/
 theorem stateCoeff_physicalTensorAction (A : Tensor G d)
     (U : Matrix (Fin d) (Fin d) ℂ) :
     stateCoeff (physicalTensorAction A U) =
-      dependentPhysicalProductFamilyMap (fun _ : V => U) (stateCoeff A) := by
+      Matrix.piKronecker (fun _ : V => U) *ᵥ stateCoeff A := by
   classical
   funext σ
-  simp only [dependentPhysicalProductFamilyMap_apply, stateCoeff]
+  simp only [Matrix.piKronecker_mulVec_apply, stateCoeff]
   exact sum_prod_physical_mul (Site := V) (Config := VirtualConfig A) Finset.univ U
     (fun η v τ => A.component v (fun ie => η ie.1) τ) σ
 
@@ -143,8 +141,6 @@ theorem regionBlockedTensorInjective_of_sameState_of_bondDim_eq
 end TNLean.PEPS
 
 namespace TNLean.PEPS
-
-open TNLean.Lattice
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
@@ -260,7 +256,7 @@ theorem gaugeEquiv_physicalTensorAction_of_normal_symmetry
         (hA.edgeBlocking.blue e) g ↔ g = e)
     (hconn : G.Connected)
     (U : Matrix (Fin d) (Fin d) ℂ)
-    (hSym : dependentPhysicalProductFamilyMap (fun _ : V => U) (stateCoeff A) =
+    (hSym : Matrix.piKronecker (fun _ : V => U) *ᵥ stateCoeff A =
       stateCoeff A) :
     GaugeEquiv A (physicalTensorAction A U) := by
   classical

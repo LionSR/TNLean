@@ -10,7 +10,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{definition}[A chronological composition]
     \label{def:peps_source_circuit}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit}
+    \lean{QuantumCircuit.Party.SourceCircuit}
     \leanok
     \uses{def:peps_prepared_source_gate,def:peps_party_registers}
     For a party set $P$, a chronological composition from register list $a$ to
@@ -25,7 +25,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[Norm of the complete composition]
     \label{thm:peps_source_circuit_norm}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.norm_eval_le_one}
+    \lean{QuantumCircuit.Party.PartyCircuit.norm_op_le_one}
     \leanok
     \uses{def:peps_source_circuit}
     Every allowed chronological composition satisfies $\|W\|\leq1$.
@@ -33,24 +33,24 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_prepared_gate_grouped}
-    By Lemma~\ref{thm:peps_prepared_gate_grouped} each gate is a contraction,
+    \uses{thm:peps_grouped_gate_sum}
+    By Lemma~\ref{thm:peps_grouped_gate_sum} and the remark after it, each gate is a contraction,
     and composition, identity extension, and register swaps preserve
     $\|\cdot\|\le1$.
 \end{proof}
 
 \begin{definition}[Gate occurrences and source positions]
     \label{def:peps_source_circuit_positions}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.gateLocations}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.gateLocationsFintype}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotCount}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceLocations}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceLocationsFintype}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.participants}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchLabels}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchLabelsFintype}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchCoefficient}
+    \lean{QuantumCircuit.Party.PartyCircuit.gateLocations}
+    \lean{QuantumCircuit.Party.PartyCircuit.instFintypeGateLocations}
+    \lean{QuantumCircuit.Party.SourceCircuit.slotCount}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceLocations}
+    \lean{QuantumCircuit.Party.SourceCircuit.instFintypeSourceLocations}
+    \lean{QuantumCircuit.Party.PartyCircuit.participants}
+    \lean{QuantumCircuit.Party.SourceCircuit.endpoints}
+    \lean{QuantumCircuit.Party.SourceCircuit.branchLabels}
+    \lean{QuantumCircuit.Party.SourceCircuit.instFintypeBranchLabels}
+    \lean{QuantumCircuit.Party.SourceCircuit.branchCoefficient}
     \leanok
     \uses{def:peps_source_circuit}
     Let $\mathcal G$ be the finite set of nonprivate gate occurrences $g$, each
@@ -62,8 +62,8 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[Incidence of the original source positions]
     \label{thm:peps_source_circuit_incidence}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_mem_participants}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_ne}
+    \lean{QuantumCircuit.Party.SourceCircuit.endpoints_mem_participants}
+    \lean{QuantumCircuit.Party.SourceCircuit.endpoints_ne}
     \leanok
     \uses{def:peps_source_circuit_positions}
     Each $(g,e)\in\mathcal E$ has two distinct endpoints in $C_g$.
@@ -78,13 +78,13 @@ the subsequent separation and second-moment arguments.
 
 \begin{definition}[The partial branch choices]
     \label{def:peps_partial_source_choices}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsTouched}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_gate_iff}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.Choices}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesFintype}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval}
+    \lean{QuantumCircuit.Party.SourceCircuit.IsTouched}
+    \lean{QuantumCircuit.Party.SourceCircuit.isTouched_gate_iff}
+    \lean{QuantumCircuit.Party.SourceCircuit.Choices}
+    \lean{QuantumCircuit.Party.SourceCircuit.choicesFintype}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.coefficient}
+    \lean{QuantumCircuit.Party.SourceCircuit.expandedEval}
     \leanok
     \uses{def:peps_source_circuit_positions,def:peps_affected_owner}
     For affected parties $\mathcal A\subseteq P$, let
@@ -101,10 +101,10 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[Allowed partial branches and their retained sources]
     \label{thm:peps_partial_source_inventory}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_partialWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedSources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_sources_partialWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.isAllowed_partialWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.expandedSources}
+    \lean{QuantumCircuit.Party.SourceCircuit.sources_partialWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.mem_sources_partialWord}
     \leanok
     \uses{def:peps_partial_source_choices}
     If the original composition is allowed, every $W_\xi$ ($\xi\in\Xi_{\mathcal A}$)
@@ -116,9 +116,9 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_affected_source_occurrences,thm:peps_prepared_gate_properties,thm:peps_grouped_block_map,thm:peps_prepared_gate_grouped}
+    \uses{thm:peps_affected_source_occurrences,thm:peps_prepared_gate_properties,thm:peps_grouped_block_map,thm:peps_grouped_gate_sum}
     Induct on the composition using Lemmas~\ref{thm:peps_prepared_gate_properties},
-    \ref{thm:peps_prepared_gate_grouped}, \ref{thm:peps_grouped_block_map}, and
+    \ref{thm:peps_grouped_gate_sum}, \ref{thm:peps_grouped_block_map}, and
     \ref{thm:peps_affected_source_occurrences}: untouched gates are contractions
     on exterior memory, and exterior-endpoint pairs become local normalized
     preparations under owner grouping.
@@ -126,11 +126,9 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[Exact chronological operator identity]
     \label{thm:peps_partial_source_evaluation}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_sum_appendTail}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partial_gate}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_comp}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_frame}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_mapOwner}
+    \lean{QuantumCircuit.Party.SourceCircuit.expandedEval_comp}
+    \lean{QuantumCircuit.Party.SourceCircuit.expandedEval_frame}
+    \lean{QuantumCircuit.Party.SourceCircuit.expandedEval_eq_reindex_op}
     \leanok
     \uses{def:peps_partial_source_choices}
     With $I_a,I_b$ the isometries identifying the input and output memories with
@@ -144,7 +142,7 @@ the subsequent separation and second-moment arguments.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_grouped,thm:peps_grouped_block_map,def:peps_source_circuit}
+    \uses{thm:peps_grouped_gate_sum,thm:peps_grouped_block_map,def:peps_source_circuit}
     By Lemma~\ref{thm:peps_grouped_gate_sum}, summing $\xi_g\in\Xi_g$ at
     $g\in\mathcal G_{\mathcal A}$ recovers the gate operator, while
     $g\notin\mathcal G_{\mathcal A}$ already carries its aggregate operator;
@@ -154,13 +152,12 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[Local contributions to the scalar cost]
     \label{thm:peps_partial_source_local_cost}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_gate_of_touches}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_gate_of_exterior}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_comp}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_frame}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_id}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_localMap}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_swap}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_gate_of_touches}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_gate_of_exterior}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_comp}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_frame}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_done}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_localOp}
     \leanok
     \uses{def:peps_partial_source_choices}
     In $\sum_{\xi\in\Xi_{\mathcal A}}|c_\xi|$, a touched gate $g\in\mathcal G_{\mathcal A}$
@@ -178,10 +175,10 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[The exact product of the gate costs]
     \label{thm:peps_partial_source_product_cost}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_eq_prod}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_le_pow_card}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_mul_conj_eq_prod_sq}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_mul_conj_le_pow_card}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_eq_prod}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_le_pow_card}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_mul_conj_eq_prod_sq}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_mul_conj_le_pow_card}
     \leanok
     \uses{def:peps_partial_source_choices}
     With $t=|\mathcal G_{\mathcal A}|$,
@@ -207,9 +204,9 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[The density expansion in orthonormal coordinates]
     \label{thm:peps_partial_source_density}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.expandedEval_eq_mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.toMatrix_eval_eq_sum_partialWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.density_eval_eq_sum_partialWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_coefficient_smul_op_partialWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.matrix_eval_eq_sum_partialWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.density_eval_eq_sum_partialWord}
     \leanok
     \uses{thm:peps_partial_source_evaluation}
     In finite orthonormal bases of the grouped input and output memories, let
@@ -236,20 +233,19 @@ the subsequent separation and second-moment arguments.
 
 \begin{lemma}[Fixed positions for every partial source inventory]
     \label{thm:peps_partial_source_order}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_sourceOrder}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.nodup_sourceOrder}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder_gate}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceDims}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceAt}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceAt_isSome_iff}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceAt_eq_some_spec}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.filterMap_sourceAt_comp}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.filterMap_sourceAt_gate}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialWord_eq_filterMap}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.layout_sources_partialWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceOrder}
+    \lean{QuantumCircuit.Party.SourceCircuit.mem_sourceOrder}
+    \lean{QuantumCircuit.Party.SourceCircuit.nodup_sourceOrder}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceOrder_gate}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceDims}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceAt}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceAt_isSome_iff}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceAt_eq_some_spec}
+    \lean{QuantumCircuit.Party.SourceCircuit.filterMap_sourceAt_comp}
+    \lean{QuantumCircuit.Party.SourceCircuit.filterMap_sourceAt_gate}
+    \lean{QuantumCircuit.Party.SourceCircuit.sources_partialWord_eq_filterMap}
     \leanok
-    \uses{def:peps_source_circuit_positions,def:peps_partial_source_choices}
+    \uses{def:peps_source_circuit_positions,def:peps_partial_source_choices,thm:peps_partial_fixed_layout}
     The set $\mathcal E$ admits a fixed duplicate-free ordering (listing later
     compositions first and preserving intra-gate slot order), with fixed
     halfspaces $\C^{u_e},\C^{v_e}$ at each $e\in\mathcal E$. For every

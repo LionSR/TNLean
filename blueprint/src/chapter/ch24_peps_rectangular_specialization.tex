@@ -26,8 +26,7 @@ rectangular and vertex-boundary implication in
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:openai_uniform_area_law,thm:rectangular_entropy_from_uniform,
-        thm:area_law_conditional_vertex_bounds}
+    \uses{thm:openai_uniform_area_law,thm:rectangular_entropy_from_uniform,thm:area_law_conditional_vertex_bounds}
     Theorem~\ref{thm:openai_uniform_area_law} supplies the uniform constant.
     Lemma~\ref{thm:rectangular_entropy_from_uniform} applies it at range
     one to the rectangle, and
@@ -41,7 +40,7 @@ rectangular and vertex-boundary implication in
         TNLean.PEPS.AreaLaw.RectangleStateSpace,
         ManyBody.RectangleInteraction}
     \leanok
-    \uses{def:square_interaction_labels, def:square_interaction_support}
+    \uses{def:square_interaction_labels,def:square_interaction_support}
     For each site $v$ and undirected nearest-neighbor edge $e$, choose matrices
     $h_v,h_e$, supported on $\{v\}$ and $e$, respectively, with
     $\|h_v\|,\|h_e\|\le J$. Only their sum

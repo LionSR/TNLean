@@ -19,14 +19,13 @@ noncomputable section
 open scoped BigOperators
 
 namespace TNLean.PEPS.DependentTorus
-open TNLean.Lattice
 
 abbrev Vertex := TorusVertex 2 2
 abbrev Bond := TorusLabelledBond 2 2
 
 /-- The actual four incident virtual indices at one site, with their own types. -/
 abbrev LocalConfig (D : Bond → Type*) (v : Vertex) :=
-  DependentBondNetwork.LocalConfig torusLabelledBondTail torusLabelledBondHead D v
+  TNLean.Network.DependentBondNetwork.LocalConfig torusLabelledBondTail torusLabelledBondHead D v
 
 variable (D : Bond → Type*) [∀ e, Fintype (D e)] [∀ e, DecidableEq (D e)]
 variable {Phys Out : Vertex → Type*}
@@ -37,14 +36,15 @@ def cutBonds (v : Vertex) : Finset Bond := torusSeamCutBonds v.1 v.2
 /-- The source's intersection of four actual correlated-boundary ranges. -/
 def fourCutSpace (A : (v : Vertex) → LocalConfig D v → Phys v → ℂ) :
     Submodule ℂ (((v : Vertex) → Phys v) → ℂ) :=
-  ⨅ v, DependentBondNetwork.cutSpace torusLabelledBondTail torusLabelledBondHead D A (cutBonds v)
+  ⨅ v, TNLean.Network.DependentBondNetwork.cutSpace torusLabelledBondTail torusLabelledBondHead D A
+    (cutBonds v)
 
 /-- Membership keeps the four actual cut-range conditions, without changing
 the physical configuration type or restricting boundary correlations. -/
 theorem mem_fourCutSpace_iff
     (A : (v : Vertex) → LocalConfig D v → Phys v → ℂ)
     (ψ : ((v : Vertex) → Phys v) → ℂ) :
-    ψ ∈ fourCutSpace D A ↔ ∀ v, ψ ∈ DependentBondNetwork.cutSpace
+    ψ ∈ fourCutSpace D A ↔ ∀ v, ψ ∈ TNLean.Network.DependentBondNetwork.cutSpace
       torusLabelledBondTail torusLabelledBondHead D A (cutBonds v) :=
   Submodule.mem_iInf _
 
@@ -59,7 +59,7 @@ def closure
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ)
     (A : (v : Vertex) → LocalConfig D v → Phys v → ℂ) (g h : G) :
     ((v : Vertex) → Phys v) → ℂ :=
-  DependentBondNetwork.network torusLabelledBondTail torusLabelledBondHead D A
+  TNLean.Network.DependentBondNetwork.network torusLabelledBondTail torusLabelledBondHead D A
     (fun e ↦ U e (torusLabelledClosure g h e))
 
 /-- The span of actual closures with commuting seam labels. -/
@@ -75,7 +75,7 @@ theorem physicalMap_closure [∀ v, Fintype (Phys v)]
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ)
     (F : (v : Vertex) → Matrix (Out v) (Phys v) ℂ)
     (A : (v : Vertex) → LocalConfig D v → Phys v → ℂ) (g h : G) :
-    dependentPhysicalProductFamilyMap F (closure D U A g h) =
+    (Matrix.piKronecker F).mulVecLin (closure D U A g h) =
       closure D U (DependentBondNetwork.physicalMapSite
         torusLabelledBondTail torusLabelledBondHead D F A) g h :=
   DependentBondNetwork.physicalMap_network torusLabelledBondTail torusLabelledBondHead D F A _
@@ -85,7 +85,7 @@ theorem map_commutingClosureSpan [∀ v, Fintype (Phys v)]
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ)
     (F : (v : Vertex) → Matrix (Out v) (Phys v) ℂ)
     (A : (v : Vertex) → LocalConfig D v → Phys v → ℂ) :
-    (commutingClosureSpan D U A).map (dependentPhysicalProductFamilyMap F) =
+    (commutingClosureSpan D U A).map (Matrix.piKronecker F).mulVecLin =
       commutingClosureSpan D U (DependentBondNetwork.physicalMapSite
         torusLabelledBondTail torusLabelledBondHead D F A) := by
   simp only [commutingClosureSpan, Submodule.map_span, ← Set.range_comp]
@@ -107,9 +107,9 @@ theorem fourCutSpace_eq_map_averagingSite [∀ v, Finite (Phys v)]
     fourCutSpace D A =
       (fourCutSpace D (DependentBondNetwork.averagingSite
         torusLabelledBondTail torusLabelledBondHead D U)).map
-        (dependentPhysicalProductFamilyMap (fun v ↦ LinearMap.toMatrix'
+        (Matrix.piKronecker (fun v ↦ LinearMap.toMatrix'
           (DependentBondNetwork.localSiteMap
-            torusLabelledBondTail torusLabelledBondHead D A v))) :=
+            torusLabelledBondTail torusLabelledBondHead D A v))).mulVecLin :=
   DependentBondNetwork.iInf_cutSpace_eq_map_representationAveragingSite
     torusLabelledBondTail torusLabelledBondHead D (0, 0) _ A hA cutBonds
 
@@ -125,9 +125,9 @@ theorem map_commutingClosureSpan_recover
       DependentBondNetwork.localSiteMap torusLabelledBondTail torusLabelledBondHead D A v) :
     (commutingClosureSpan D U (DependentBondNetwork.averagingSite
       torusLabelledBondTail torusLabelledBondHead D U)).map
-        (dependentPhysicalProductFamilyMap (fun v ↦ LinearMap.toMatrix'
+        (Matrix.piKronecker (fun v ↦ LinearMap.toMatrix'
           (DependentBondNetwork.localSiteMap
-            torusLabelledBondTail torusLabelledBondHead D A v))) =
+            torusLabelledBondTail torusLabelledBondHead D A v))).mulVecLin =
       commutingClosureSpan D U A := by
   rw [map_commutingClosureSpan]
   congr 1

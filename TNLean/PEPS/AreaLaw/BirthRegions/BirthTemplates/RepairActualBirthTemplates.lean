@@ -64,7 +64,7 @@ theorem repairStage_birth_templates_of_le (Ctpl : ℝ) (hCtpl : 1 ≤ Ctpl) (D�
             T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
             ∀ y ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
               2 * (n : ℝ) ^ (Exponents.beta : ℝ) <
-                (Scan.ambientSupDistance y z : ℝ) := by
+                ((ManyBody.supDist y z : ℤ) : ℝ) := by
   classical
   set CP := primaryScannerConstant Ctpl
   set CB := beltScannerConstant Ctpl
@@ -129,8 +129,8 @@ theorem repairStage_birth_templates_of_le (Ctpl : ℝ) (hCtpl : 1 ≤ Ctpl) (D�
         have hmargin : 2 * (primaryScannerScale CP k.val : ℝ) ^
             (Exponents.beta : ℝ) < (C : ℝ) * 2 ^ k.val := by nlinarith
         have hdist : dist (integerPoint y) (integerPoint v) =
-            (Scan.ambientSupDistance y v : ℝ) := by
-          simp [integerPoint, Prod.dist_eq, Real.dist_eq, Scan.ambientSupDistance]
+            ((ManyBody.supDist y v : ℤ) : ℝ) := by
+          simp [integerPoint, Prod.dist_eq, Real.dist_eq, ManyBody.natCast_supDist]
         rw [hdist] at hd
         exact hmargin.trans_le hd
     · have hrank : repairStageBirthRank o Λ A C k₀ hC h₀ Sstar 0
@@ -204,7 +204,7 @@ theorem exists_uniform_repairStage_birth_templates (Ctpl : ℝ) (hCtpl : 1 ≤ C
                           T.IsSeparated D₀ (boundaryEndpoints Λ A) ∧
                           ∀ y ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
                             2 * (n : ℝ) ^ (Exponents.beta : ℝ) <
-                              (Scan.ambientSupDistance y z : ℝ) :=
+                              ((ManyBody.supDist y z : ℤ) : ℝ) :=
   ⟨_, _, one_le_primaryScannerConstant Ctpl, beltScannerConstant_pos hCtpl, fun D₀ ↦
     ⟨_, one_le_repairMarginThreshold _, fun _ hS C hWidth ↦
       ⟨_, repairStage_birth_templates_of_le Ctpl hCtpl D₀ hS C hWidth⟩⟩⟩

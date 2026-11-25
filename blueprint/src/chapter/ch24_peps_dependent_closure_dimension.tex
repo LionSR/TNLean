@@ -48,8 +48,7 @@ kernel is separate).
         TNLean.PEPS.DependentTorus.bondCoefficientExtraction_closure_self,
         TNLean.PEPS.DependentTorus.bondCoefficientExtraction_closure_self_ne_zero}
     \leanok
-    \uses{def:peps_dependent_bond_coefficient, def:peps_full_four_cut_canonical,
-        def:peps_pair_conjugacy, def:peps_semiregular}
+    \uses{def:peps_dependent_bond_coefficient,def:peps_full_four_cut_canonical,def:peps_pair_conjugacy,def:peps_semiregular}
     For finite $G$, semi-regular bond representations $U_e$, and the
     trace-dual functional $E_{a,b}=c_{p^{a,b}}$, any pairs $(a,b),(g,h)$
     satisfy
@@ -66,7 +65,7 @@ kernel is separate).
     $E_{a,b}(\zeta_{A^0}(g,h))=0$ when $[(a,b)]\ne[(g,h)]$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_closure_gauge, thm:peps_dependent_canonical_bond_sum}
+    \uses{thm:peps_dependent_closure_gauge,thm:peps_dependent_canonical_bond_sum}
     By Lemma~\ref{thm:peps_dependent_canonical_bond_sum}, expanding the
     four local averages and applying $E_{a,b}$ gives
     \begin{align}
@@ -88,14 +87,13 @@ kernel is separate).
     \lean{TNLean.PEPS.DependentTorus.closure_conjugate,
         TNLean.PEPS.DependentTorus.closure_eq_of_pairConjugacyClass_eq}
     \leanok
-    \uses{def:peps_full_four_cut_space, def:peps_pair_conjugacy}
+    \uses{def:peps_full_four_cut_space,def:peps_pair_conjugacy}
     For finite $G$ and locally invariant tensors $A_v$ (without assuming
     semi-regularity or injectivity),
     $\zeta_A(xgx^{-1},xhx^{-1})=\zeta_A(g,h)$ for all $x,g,h\in G$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_closure_gauge, thm:peps_dependent_vertex_gauge,
-        thm:peps_full_four_cut_transport}
+    \uses{thm:peps_dependent_closure_gauge,thm:peps_dependent_vertex_gauge,thm:peps_full_four_cut_transport}
     By Lemmas~\ref{thm:peps_dependent_closure_gauge}
     and~\ref{thm:peps_dependent_vertex_gauge}, a constant vertex gauge
     gives $\zeta_{A^0}(xgx^{-1},xhx^{-1})=\zeta_{A^0}(g,h)$. Since
@@ -122,16 +120,14 @@ kernel is separate).
         TNLean.PEPS.DependentTorus.linearIndependent_closureClass,
         TNLean.PEPS.DependentTorus.linearIndependent_closureClass_commuting}
     \leanok
-    \uses{def:peps_dependent_closure_class, def:peps_g_injective,
-        def:peps_semiregular}
+    \uses{def:peps_dependent_closure_class,def:peps_g_injective,def:peps_semiregular}
     If each $U_e$ is semi-regular and each $A_v$ is $G$-injective (with
     arbitrary independent physical and virtual dimensions), then
     $(\zeta_A(C))_C$ is linearly independent over all pair-conjugacy
     classes $C$, and hence over all commuting classes.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dependent_closure_extraction, thm:peps_dependent_common_inverse,
-        thm:peps_full_four_cut_transport}
+    \uses{thm:peps_dependent_closure_extraction,thm:peps_dependent_common_inverse,thm:peps_full_four_cut_transport}
     Applying $E_{g,h}$ ($[(g,h)]=C$) to $\sum_{C'}\lambda_{C'}\zeta_{A^0}(C')=0$
     gives $\lambda_C|G|^{-4}|C_G(g,h)|=0$ by
     (\ref{eq:peps_dependent_closure_extract})--(\ref{eq:peps_dependent_closure_diagonal}),
@@ -185,14 +181,14 @@ kernel is separate).
     \lean{TNLean.PEPS.DependentTorus.finrank_commutingClosureSpan,
         TNLean.PEPS.DependentTorus.finrank_fourCutSpace}
     \leanok
-    \uses{def:peps_full_four_cut_space, def:peps_dependent_closure_class}
+    \uses{def:peps_full_four_cut_space,def:peps_dependent_closure_class}
     Under the hypotheses of
     Lemma~\ref{thm:peps_dependent_closure_independent}, the commuting
     closures $\zeta_A(C)$ form a basis of $\mathcal I_A=\mathcal Z_A$, so
     $\dim_{\C}\mathcal I_A=\dim_{\C}\mathcal Z_A=K$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_four_cut_closure, thm:peps_dependent_closure_independent}
+    \uses{thm:peps_four_cut_closure,thm:peps_dependent_closure_independent}
     Combine Theorem~\ref{thm:peps_four_cut_closure} with
     Lemma~\ref{thm:peps_dependent_closure_independent}.
 \end{proof}

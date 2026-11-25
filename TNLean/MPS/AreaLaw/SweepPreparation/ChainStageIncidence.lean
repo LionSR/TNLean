@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.SweepPreparation.BandDissolution
-import TNLean.Lattice.PartyCircuit.OriginalCircuitSequence
+import QICLean.Circuit.Party.Original.Sequence
 import Mathlib.Data.Finset.Prod
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Data.Fintype.BigOperators
@@ -36,7 +36,7 @@ This is a combinatorial assertion about the prescribed primitive positions.
 An actual sweep must still construct its original circuits and identify their
 nonprivate occurrences with these positions. Its chronological composition and
 participation sums are the existing `OriginalCircuit.sequence`,
-`nonprivateCount_sequence`, and `participationCount_sequence`; no second circuit
+`nonprivateCount_sequence`, and `participation_sequence`; no second circuit
 structure or assumed lifetime bound is introduced here.
 
 Source: the one-dimensional note, Part II, `part2b_mps_protocol.tex`,
@@ -201,7 +201,7 @@ def scheduledParticipationCount (p : Party L w) : ℕ := (stageOccurrences p).ca
 
 open Classical in
 /-- Counting the actual stage-slot pairs equals summing the per-stage counts.
-This is the finite-sum form used by `OriginalCircuit.participationCount_sequence`
+This is the finite-sum form used by `OriginalCircuit.participation_sequence`
 when the actual stages are assembled; it is not yet a circuit-count identity.
 Source: Part II, `con:sweep`, lines 333–342. -/
 theorem scheduledParticipationCount_eq_sum (p : Party L w) :

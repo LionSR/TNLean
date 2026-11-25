@@ -74,7 +74,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
+open EncodedFrame Matrix QuantumCircuit.Party
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {κ Party : Type}
 
@@ -85,7 +85,8 @@ gate; `2b` is also the bound on its pair effects.
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 507–527 and 574–583; Lemma 6.3
 `lem:small-rewrite`, `05-frames.tex`, lines 188–218; Theorem 5.2, item 3, `04-compression.tex`,
 lines 143–147. -/
-theorem directRepainting_step_isSourceBounded [NeZero q] {n r u : ℝ} (hn : 0 < n) (hr : 0 < r)
+theorem directRepainting_step_isSourceBounded [NeZero q] [Fintype Party] [DecidableEq Party]
+    {n r u : ℝ} (hn : 0 < n) (hr : 0 < r)
     (hu : 0 < u) (hsep : 3 * u + 4 * r < n) {lab lab' : ℤ × ℤ → κ} {S : ℤ × ℤ}
     (hlab : ∀ Q, Q ≠ S → lab' Q = lab Q) {v : ℝ × ℝ} {g g' : ℝ × ℝ → κ}
     (hg : IsDisplacedReading g (blockGuide n lab) v)
@@ -108,33 +109,29 @@ theorem directRepainting_step_isSourceBounded [NeZero q] {n r u : ℝ} (hn : 0 <
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
     (hb : (2 * (n / 2 + 2 * r + u) / u + 1) ^ 2 ≤ b) (hb18 : 18 ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (htag : ∀ z, Nonempty (hole z).Tag) :
+    (hεpatch : ∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖toEuclideanLin (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
     ∃ P : Finset Party, P.card ≤ 18 ∧
       (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + S)) ∨ x = own (lab' (R + S))) ∧
-      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).regs
-        (guideFrame pos q g' own ph rank V' hole hpV').regs,
+      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).system
+        (guideFrame pos q g' own ph rank V' hole hpV').system,
       w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧
       w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^
         (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
       w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
-      ‖w.eval ((guideFrame pos q g own ph rank V hole hpV).regIso.symm
-          ((guideFrame pos q g own ph rank V hole hpV).refVec Ω)) -
-        (guideFrame pos q g' own ph rank V' hole hpV').regIso.symm
-          ((guideFrame pos q g' own ph rank V' hole hpV').refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q g own ph rank V hole hpV).regRef Ω) -
+        (guideFrame pos q g' own ph rank V' hole hpV').regRef Ω‖ ≤
         (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
       w.IsSourceBounded (2 * b) := by
-  obtain ⟨G, hG, ho, hn', how, hph, hrk, hho, hhn, hpt, hUA, hUA', hA, hA', hN, hP, hP₀,
+  obtain ⟨G, hG, ho, hn', how, hph, hrk, hho, hhn, hpt, hUA, hUA', hA, hA', hN, hP, -,
     hdesc⟩ := exists_directRepainting_planeConditions (Party := Party) hn hr hu hsep hlab hg hg'
       own ph rank hV hV' hVc hVc' hVV' hole patch hhole hpatch htwo htwo'
   subst ho hn' how hph hrk hho hpt
   obtain ⟨w, h₁, h₂, h₃, h₄, h₅, h₆⟩ := hG.exists_originalCircuit_isSourceBounded (C := C)
     (c := c) (b := b) hL (fun a _ => hhn ▸ hcardHole a) (fun z _ => hcardPatch z)
     (fun a _ => hcardHole a) (by exact_mod_cast hN.trans hb) (hA.trans (by omega))
-    (hA'.trans (by omega)) (hP.trans hb18) hΩ (fun z _ => hεpatch z) (fun a _ => hεhole a) hP₀
-    (fun z _ => htag z)
+    (hA'.trans (by omega)) (hP.trans hb18) hΩ (fun z _ => hεpatch z) (fun a _ => hεhole a)
   have e₁ := G.oldFrame_eq hUA hpV
   have e₂ : G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V' G.holeOld hpV' :=
     guideFrame_congr hUA' hhn _ _
@@ -143,8 +140,8 @@ theorem directRepainting_step_isSourceBounded [NeZero q] {n r u : ℝ} (hn : 0 <
 
 /-- **The direct repainting of a block as one gate.** In the setting of
 `exists_directRepainting_planeConditions`, suppose moreover that every hole and every patch has
-at most `C L^c` cylinder terms and error at most `L^{-60}` on `Ω`, with `‖Ω‖ ≤ 1`, that every hole
-has a tag, and that `b` is at least `18` and the number `(2 (n / 2 + 2 r + u) / u + 1)²` of net
+at most `C L^c` cylinder terms and error at most `L^{-60}` on `Ω`, with `‖Ω‖ ≤ 1`, and that `b` is
+at least `18` and the number `(2 (n / 2 + 2 r + u) / u + 1)²` of net
 patches. There is a set of at most `18` parties, those of the labels of the nine blocks around `S`,
 and an original circuit from the registers of the frame of `g` with holes at
 `V` to those of the frame of `g'` with holes at `V'`, with at most one nonprivate gate, all
@@ -154,7 +151,8 @@ participants in that set, expansion bounds as in
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 507–527 and 574–583; Lemma 6.3
 `lem:small-rewrite`, `05-frames.tex`, lines 188–218. -/
-theorem directRepainting_step [NeZero q] {n r u : ℝ} (hn : 0 < n) (hr : 0 < r) (hu : 0 < u)
+theorem directRepainting_step [NeZero q] [Fintype Party] [DecidableEq Party]
+    {n r u : ℝ} (hn : 0 < n) (hr : 0 < r) (hu : 0 < u)
     (hsep : 3 * u + 4 * r < n) {lab lab' : ℤ × ℤ → κ} {S : ℤ × ℤ}
     (hlab : ∀ Q, Q ≠ S → lab' Q = lab Q) {v : ℝ × ℝ} {g g' : ℝ × ℝ → κ}
     (hg : IsDisplacedReading g (blockGuide n lab) v)
@@ -177,26 +175,23 @@ theorem directRepainting_step [NeZero q] {n r u : ℝ} (hn : 0 < n) (hr : 0 < r)
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
     (hb : (2 * (n / 2 + 2 * r + u) / u + 1) ^ 2 ≤ b) (hb18 : 18 ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (htag : ∀ z, Nonempty (hole z).Tag) :
+    (hεpatch : ∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖toEuclideanLin (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
     ∃ P : Finset Party, P.card ≤ 18 ∧
       (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + S)) ∨ x = own (lab' (R + S))) ∧
-      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).regs
-        (guideFrame pos q g' own ph rank V' hole hpV').regs,
+      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).system
+        (guideFrame pos q g' own ph rank V' hole hpV').system,
       w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧
       w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^
         (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
       w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
-      ‖w.eval ((guideFrame pos q g own ph rank V hole hpV).regIso.symm
-          ((guideFrame pos q g own ph rank V hole hpV).refVec Ω)) -
-        (guideFrame pos q g' own ph rank V' hole hpV').regIso.symm
-          ((guideFrame pos q g' own ph rank V' hole hpV').refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q g own ph rank V hole hpV).regRef Ω) -
+        (guideFrame pos q g' own ph rank V' hole hpV').regRef Ω‖ ≤
         (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
   obtain ⟨P, h₁, h₂, w, h₃, h₄, h₅, h₆, h₇, -⟩ := directRepainting_step_isSourceBounded hn hr hu
     hsep hlab hg hg' own ph rank hV hV' hVc hVc' hVV' hole patch hhole hpatch htwo htwo' hpV hpV'
-    hL hcardHole hcardPatch hb hb18 hΩ hεpatch hεhole htag
+    hL hcardHole hcardPatch hb hb18 hΩ hεpatch hεhole
   exact ⟨P, h₁, h₂, w, h₃, h₄, h₅, h₆, h₇⟩
 
 end TNLean.PEPS.Approximation
@@ -212,7 +207,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
+open EncodedFrame Matrix QuantumCircuit.Party
 
 /-- **An admissible ratio for the direct repaintings.** For every generic displacement `v`, every
 level `0 < n ≤ K₀ t` and every reading `g'` after `v` of a guide uniform on the `n`-blocks, `g'`
@@ -335,7 +330,8 @@ without the separation, patch-count and two-owner hypotheses.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 507–527, 559–570 and 574–583; Lemma 6.3
 `lem:small-rewrite`, `05-frames.tex`, lines 188–218. -/
-theorem directRepainting_step_of_protocolSeparations [NeZero q] {K₀ ε₀ ν B₀ t ℓ : ℝ}
+theorem directRepainting_step_of_protocolSeparations [NeZero q] [Fintype Party] [DecidableEq Party]
+    {K₀ ε₀ ν B₀ t ℓ : ℝ}
     (hm : IsDirectRepaintingRatio K₀ ε₀ ν) (hs : ProtocolSeparations K₀ ε₀ ν B₀ t ℓ) {n : ℝ}
     (hn : 0 < n) (hK : n ≤ K₀ * t) {v : ℝ × ℝ} (hv : IsGenericDisplacement v)
     {lab lab' : ℤ × ℤ → κ} {S : ℤ × ℤ} (hlab : ∀ Q, Q ≠ S → lab' Q = lab Q) {g g' : ℝ × ℝ → κ}
@@ -354,13 +350,12 @@ theorem directRepainting_step_of_protocolSeparations [NeZero q] {K₀ ε₀ ν B
     {C c L : ℕ} (hL : 1 ≤ L) (hcardHole : ∀ z, Fintype.card (hole z).Tag ≤ C * L ^ c)
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (htag : ∀ z, Nonempty (hole z).Tag) :
+    (hεpatch : ∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖toEuclideanLin (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
     ∃ P : Finset Party, P.card ≤ 18 ∧
       (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + S)) ∨ x = own (lab' (R + S))) ∧
-      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).regs
-        (guideFrame pos q g' own ph rank V' hole hpV').regs,
+      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).system
+        (guideFrame pos q g' own ph rank V' hole hpV').system,
       w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧
       w.IsExpansionBounded (2 * protocolPatchBound ε₀ ν)
         ((C + 1) ^ (3 * protocolPatchBound ε₀ ν) *
@@ -373,10 +368,8 @@ theorem directRepainting_step_of_protocolSeparations [NeZero q] {K₀ ε₀ ν B
             (2 * protocolPatchBound ε₀ ν) *
           L ^ (3 * protocolPatchBound ε₀ ν * c +
             4 * protocolPatchBound ε₀ ν * (3 * protocolPatchBound ε₀ ν * c + 30))) ∧
-      ‖w.eval ((guideFrame pos q g own ph rank V hole hpV).regIso.symm
-          ((guideFrame pos q g own ph rank V hole hpV).refVec Ω)) -
-        (guideFrame pos q g' own ph rank V' hole hpV').regIso.symm
-          ((guideFrame pos q g' own ph rank V' hole hpV').refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q g own ph rank V hole hpV).regRef Ω) -
+        (guideFrame pos q g' own ph rank V' hole hpV').regRef Ω‖ ≤
         (2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
       w.IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
   obtain ⟨hr, hu, -, hsep, hb⟩ := hs.direct n hn
@@ -384,7 +377,7 @@ theorem directRepainting_step_of_protocolSeparations [NeZero q] {K₀ ε₀ ν B
     hVc' hVV' hole
     patch hhole hpatch (hm.hasTwoOwnerFootprints hv hn hs.t_pos hK lab S hg)
     (hm.hasTwoOwnerFootprints hv hn hs.t_pos hK lab' S hg') hpV hpV' hL hcardHole hcardPatch hb
-    (by exact_mod_cast hs.eighteen_le) hΩ hεpatch hεhole htag
+    (by exact_mod_cast hs.eighteen_le) hΩ hεpatch hεhole
 
 /-- **The direct repainting as one gate at the constants of the protocol.** For constants chosen
 in the source's order with an admissible ratio `ν`, every `L ≥ 2` and `t = D log L`, every direct
@@ -393,7 +386,8 @@ repainting at a level `0 < n ≤ K₀ t`, with holes of radius `h_n` and patches
 at most `2 b` pair sources in each monomial.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 507–527, 559–570 and 574–583. -/
-theorem IsProtocolConstants.directRepainting_step [NeZero q] {K₀ ε₀ ν a D B₀ : ℝ}
+theorem IsProtocolConstants.directRepainting_step [NeZero q] [Fintype Party] [DecidableEq Party]
+    {K₀ ε₀ ν a D B₀ : ℝ}
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hm : IsDirectRepaintingRatio K₀ ε₀ ν) {L : ℕ}
     (hL : 2 ≤ L) {n : ℝ} (hn : 0 < n) (hK : n ≤ K₀ * (D * Real.log L)) {v : ℝ × ℝ}
     (hv : IsGenericDisplacement v)
@@ -414,13 +408,12 @@ theorem IsProtocolConstants.directRepainting_step [NeZero q] {K₀ ε₀ ν a D 
     {C c : ℕ} (hcardHole : ∀ z, Fintype.card (hole z).Tag ≤ C * L ^ c)
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (htag : ∀ z, Nonempty (hole z).Tag) :
+    (hεpatch : ∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖toEuclideanLin (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
     ∃ P : Finset Party, P.card ≤ 18 ∧
       (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + S)) ∨ x = own (lab' (R + S))) ∧
-      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).regs
-        (guideFrame pos q g' own ph rank V' hole hpV').regs,
+      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).system
+        (guideFrame pos q g' own ph rank V' hole hpV').system,
       w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧
       w.IsExpansionBounded (2 * protocolPatchBound ε₀ ν)
         ((C + 1) ^ (3 * protocolPatchBound ε₀ ν) *
@@ -433,16 +426,14 @@ theorem IsProtocolConstants.directRepainting_step [NeZero q] {K₀ ε₀ ν a D 
             (2 * protocolPatchBound ε₀ ν) *
           L ^ (3 * protocolPatchBound ε₀ ν * c +
             4 * protocolPatchBound ε₀ ν * (3 * protocolPatchBound ε₀ ν * c + 30))) ∧
-      ‖w.eval ((guideFrame pos q g own ph rank V hole hpV).regIso.symm
-          ((guideFrame pos q g own ph rank V hole hpV).refVec Ω)) -
-        (guideFrame pos q g' own ph rank V' hole hpV').regIso.symm
-          ((guideFrame pos q g' own ph rank V' hole hpV').refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q g own ph rank V hole hpV).regRef Ω) -
+        (guideFrame pos q g' own ph rank V' hole hpV').regRef Ω‖ ≤
         (2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
       w.IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
   have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
   exact directRepainting_step_of_protocolSeparations hm (hc.protocolSeparations hℓ) hn hK hv
     hlab hg hg' own ph rank hV hV' hVc hVc' hVV' hole patch hhole hpatch hpV hpV'
-    (by omega) hcardHole hcardPatch hΩ hεpatch hεhole htag
+    (by omega) hcardHole hcardPatch hΩ hεpatch hεhole
 
 end TNLean.PEPS.Approximation
 end

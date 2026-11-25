@@ -14,7 +14,7 @@ import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 The construction combines the two initial births, the actual eight-operation
 bands, and the exceptional first
-left death with seven identity circuits. The source and target are the existing
+left death with seven empty circuits. The source and target are the existing
 nineteen stage boundaries. Private entrance and exit permutations are composed
 inside the adjacent primitive operations and occupy no additional slot.
 
@@ -66,9 +66,19 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
+open Matrix QuantumCircuit.Party
+open ManyBody (Config)
 
 variable {L w q : ℕ}
+
+/-- A bounded change of the chain sheets, with at most `rs` pair sources in each monomial, read
+from the copies of `Ω` and with the trivial idle system.
+Source: Part II, bounded changes, `part2b_mps_protocol.tex`, lines 47–64. -/
+private abbrev HasSheetsChange (Ω : EuclideanSpace ℂ (Fin L → Fin q))
+    (Fs Fs' : List (Sheet (Fin L) (Party L w))) (S : Set (Party L w)) (r K rs : ℕ) (ε : ℝ) :
+    Prop :=
+  HasSourceBoundedChange (sys := Sheet.system q) (W := fun _ ↦ Unit) (fun S ↦ S.refVec Ω) Fs Fs'
+    (EuclideanSpace.single (fun _ ↦ ()) 1) S r K rs ε
 
 /-- The actual local boundary may select or restore the labelled left copy.
 Source: Part II, `con:sweep`, move (3), lines 336–338. -/
@@ -132,15 +142,14 @@ private theorem band_changes (own : Fin L → Party L w) (A B C : Party L w) (a 
       * w)) ((OneBand.main₈ (Party := Party L w) own A B C a w).birthEnv C) ≤
       (L : ℝ) ^ (-24 : ℤ))
     (post : List (Sheet (Fin L) (Party L w))) :
-    ∀ j : Fin 8, Sheet.HasSourceBoundedChange (ℓ := []) Ω
+    ∀ j : Fin 8, HasSheetsChange Ω
       (OneBand.frames (Party := Party L w) own A B C a w j.val ++ post)
       (OneBand.frames (Party := Party L w) own A B C a w (j.val + 1) ++ post)
-        (1 : ℂ)
       (OneBand.participants A B C j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
-  obtain ⟨c, hc⟩ := OneBand.circuits_of_primitive_information (ℓ := []) own A
+  obtain ⟨c, hc⟩ := OneBand.circuits_of_primitive_information (W := fun _ ↦ Unit) own A
     B C a w
     hw hleft hC hA hΩ
-    hI0 hI1 hI2 hI3 hI4 hI5 hI6 hI7 [] post (1 : ℂ) (by simp)
+    hI0 hI1 hI2 hI3 hI4 hI5 hI6 hI7 [] post (EuclideanSpace.single (fun _ ↦ ()) 1) (by simp)
   intro j
   have he : (if j.val = 3 then 4 * (L : ℝ) ^ (-12 : ℤ)
       else (L : ℝ) ^ (-12 : ℤ)) ≤ 4 * (L : ℝ) ^ (-12 : ℤ) := by
@@ -167,7 +176,7 @@ private theorem first_band_owned (k : Fin (stageCount L w)) (hk : k.val = 0) :
 
 /-- The actual local circuits of a stage, conditional only on the original-state
 primitive information inequalities. The seven exceptional padding positions
-are actual identities with zero error and no nonprivate gate.
+are empty circuits, without gates and with zero error.
 This is an intermediate statement, not the physical information theorem.
 Source: Part II, `con:sweep`, lines 330–343, and `prop:sweep`, lines 365–378. -/
 theorem local_stage_circuits_of_primitive_information
@@ -256,48 +265,51 @@ theorem local_stage_circuits_of_primitive_information
       (leftBandMain L w k).owner (Sum.inl k.castSucc) (Sum.inl k.succ)
       (Sum.inr k) ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
     : ∃ c : (j : Fin 18) → OriginalCircuit
-        (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) [])
-        (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k (j.val + 1)) []),
+        (stackSystem (Sheet.system q) (stageBoundaryFrames L w k j.val) fun _ ↦ Unit)
+        (stackSystem (Sheet.system q) (stageBoundaryFrames L w k (j.val + 1)) fun _ ↦ Unit),
       ∀ j, (c j).IsBoundedChange (stageParticipants k j) 1 1
           (4 * (L : ℝ) ^ (-12 : ℤ))
-          (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val))
-          (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
+          (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k j.val))
+          (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
         (c j).IsSourceBounded 1 ∧ (c j).nonprivateCount ≤ 1 ∧
         ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) →
           (c j).nonprivateCount = 0 ∧
-            ‖(c j).eval (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val)) -
-              framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
-            HEq (c j) (OriginalCircuit.id
-              (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) []))) := by
+            ‖toEuclideanLin (c j).op
+                (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k j.val)) -
+              framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
+            (c j).toPartyCircuit.IsLocal) := by
   classical
   have hε : 0 ≤ (L : ℝ) ^ (-12 : ℤ) := by positivity
   have h4ε : 0 ≤ 4 * (L : ℝ) ^ (-12 : ℤ) := by positivity
   have hsmall : (L : ℝ) ^ (-12 : ℤ) ≤ 4 * (L : ℝ) ^ (-12 : ℤ) := by nlinarith
-  have hbirth0 : Sheet.HasSourceBoundedChange (ℓ := []) Ω
+  have hbirth0 : HasSheetsChange Ω
       (stageBoundaryFrames L w k 0) (stageBoundaryFrames L w k 1)
-      (1 : ℂ) {Sum.inl k.castSucc, Sum.inl k.succ} 1 1 1
+      {Sum.inl k.castSucc, Sum.inl k.succ} 1 1 1
       (4 * (L : ℝ) ^ (-12 : ℤ)) := by
-    have hop := OneBand.birth_liftOne (ℓ := []) (stageFrame L w k.castSucc)
+    have hop := OneBand.birth_liftOne (W := fun _ ↦ Unit) (stageFrame L w k.castSucc)
       (remainderBirthTarget L w k) (Sum.inl k.castSucc) (Sum.inl k.succ)
       (birth_targets_owned hw k).1 hΩ hRem []
-      ((initialAuxiliaryOrder L w).map (auxiliaryFrameBefore L w k.val)) (1 : ℂ) (by simp)
+      ((initialAuxiliaryOrder L w).map (auxiliaryFrameBefore L w k.val))
+      (EuclideanSpace.single (fun _ ↦ ()) 1) (by simp)
     have hwiden := hop.mono (fun _ h ↦ h) le_rfl le_rfl le_rfl hsmall
     simpa only [stageBoundaryFrames_zero, stageBoundaryFrames_one, sweepFrames,
       afterRemainderBirth, Fin.val_castSucc, List.nil_append] using hwiden
-  have hbirth1 : Sheet.HasSourceBoundedChange (ℓ := []) Ω
+  have hbirth1 : HasSheetsChange Ω
       (stageBoundaryFrames L w k 1) (stageBoundaryFrames L w k 2)
-      (1 : ℂ) {Sum.inl k.castSucc, Sum.inr k} 1 1 1
+      {Sum.inl k.castSucc, Sum.inr k} 1 1 1
       (4 * (L : ℝ) ^ (-12 : ℤ)) := by
-    have hop := OneBand.birth_liftOne (ℓ := []) (afterRemainderBirth L w k)
+    have hop := OneBand.birth_liftOne (W := fun _ ↦ Unit) (afterRemainderBirth L w k)
       (blockBirthTarget L w k) (Sum.inl k.castSucc) (Sum.inr k)
       (birth_targets_owned hw k).2 hΩ hBlock []
-      ((initialAuxiliaryOrder L w).map (auxiliaryFrameBefore L w k.val)) (1 : ℂ) (by simp)
+      ((initialAuxiliaryOrder L w).map (auxiliaryFrameBefore L w k.val))
+      (EuclideanSpace.single (fun _ ↦ ()) 1) (by simp)
     have hwiden := hop.mono (fun _ h ↦ h) le_rfl le_rfl le_rfl hsmall
     simpa only [stageBoundaryFrames_one, stageBoundaryFrames_two, afterBlockBirth,
       List.nil_append] using hwiden
-  have hleft (hk : 0 < k.val) : ∀ j : Fin 8, Sheet.HasSourceBoundedChange (ℓ := []) Ω
+  have hleft (hk : 0 < k.val) : ∀ j : Fin 8,
+      HasSheetsChange Ω
       (stageBoundaryFrames L w k (j.val + 2))
-      (stageBoundaryFrames L w k (j.val + 2 + 1)) (1 : ℂ)
+      (stageBoundaryFrames L w k (j.val + 2 + 1))
       (OneBand.participants (Sum.inl k.castSucc) (Sum.inr k)
         (Sum.inr ⟨k.val - 1, by omega⟩) j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
     obtain ⟨hC, hA, -⟩ := left_band_owners hw k hk
@@ -310,16 +322,16 @@ theorem local_stage_circuits_of_primitive_information
         (auxiliaryFrameBefore L w k.val))
     intro j
     have hop := hb j
-    change Sheet.HasSourceBoundedChange (ℓ := []) Ω (leftBandFrames L w k hk j.val)
-      (leftBandFrames L w k hk (j.val + 1)) (1 : ℂ) _ 1 1 1 _ at hop
+    change HasSheetsChange Ω (leftBandFrames L w k hk j.val)
+      (leftBandFrames L w k hk (j.val + 1)) _ 1 1 1 _ at hop
     have ht := left_boundary_perm k hk j.succ
     have he : j.val + 1 + 2 = j.val + 2 + 1 := by omega
     simpa only [Fin.val_castSucc, Fin.val_succ, he] using
       (hop.perm_left (left_boundary_perm k hk j.castSucc)).perm_right
         ht.symm
-  have hright : ∀ j : Fin 8, Sheet.HasSourceBoundedChange (ℓ := []) Ω
+  have hright : ∀ j : Fin 8, HasSheetsChange Ω
       (stageBoundaryFrames L w k (j.val + 10))
-      (stageBoundaryFrames L w k (j.val + 10 + 1)) (1 : ℂ)
+      (stageBoundaryFrames L w k (j.val + 10 + 1))
       (OneBand.participants (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k) j)
       1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
     obtain ⟨hC, hA, -⟩ := right_band_owners k
@@ -336,16 +348,17 @@ theorem local_stage_circuits_of_primitive_information
       (((initialAuxiliaryOrder L w).erase (Sum.inl k)).map (leftAuxiliaryFrame L w k))
     intro j
     have hop := hb j
-    change Sheet.HasSourceBoundedChange (ℓ := []) Ω (rightBandFrames L w k j.val)
-      (rightBandFrames L w k (j.val + 1)) (1 : ℂ) _ 1 1 1 _ at hop
+    change HasSheetsChange Ω (rightBandFrames L w k j.val)
+      (rightBandFrames L w k (j.val + 1)) _ 1 1 1 _ at hop
     have ht := right_boundary_perm k j.succ
     have he : j.val + 1 + 10 = j.val + 10 + 1 := by omega
     simpa only [Fin.val_castSucc, Fin.val_succ, he] using
       (hop.perm_left (right_boundary_perm k j.castSucc)).perm_right
         ht.symm
-  have hboundary (hk : k.val = 0) : Sheet.HasSourceBoundedChange (ℓ := []) Ω
+  have hboundary (hk : k.val = 0) :
+      HasSheetsChange Ω
       (stageBoundaryFrames L w k 2) (stageBoundaryFrames L w k 3)
-      (1 : ℂ) {Sum.inr k, Sum.inl k.castSucc} 1 1 1
+      {Sum.inr k, Sum.inl k.castSucc} 1 1 1
       (4 * (L : ℝ) ^ (-12 : ℤ)) := by
     have hraw : OneBand.main₀
         (afterBlockBirth L w k).owner = afterBlockBirth L w k := rfl
@@ -355,33 +368,32 @@ theorem local_stage_circuits_of_primitive_information
           (afterBlockBirth L w k).owner).changeOwner (interval L 0 w)
             (Sum.inr k)).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ) := by
       simpa only [afterLeftTransfer, ht, hraw] using hBoundary hk
-    have hop := OneBand.boundary_change_of_primitive_information (ℓ := [])
+    have hop := OneBand.boundary_change_of_primitive_information (W := fun _ ↦ Unit)
       (afterBlockBirth L w k).owner (Sum.inl k.castSucc) (Sum.inr k) w
       (first_band_owned k hk) hΩ hI []
       ((initialAuxiliaryOrder L w).map (auxiliaryFrameBefore L w k.val))
-      (1 : ℂ) (by simp)
+      (EuclideanSpace.single (fun _ ↦ ()) 1) (by simp)
     have hwiden := hop.mono (fun _ h ↦ h) le_rfl le_rfl le_rfl hsmall
     rw [stageBoundaryFrames_two, stageBoundaryFrames_first_death k hk, ht]
     simpa only [List.nil_append, hraw] using hwiden
   have hsteps : ∀ j : Fin 18, ∃ c : OriginalCircuit
-        (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) [])
-        (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k (j.val + 1)) []),
+        (stackSystem (Sheet.system q) (stageBoundaryFrames L w k j.val) fun _ ↦ Unit)
+        (stackSystem (Sheet.system q) (stageBoundaryFrames L w k (j.val + 1)) fun _ ↦ Unit),
       c.IsBoundedChange (stageParticipants k j) 1 1 (4 * (L : ℝ) ^ (-12 : ℤ))
-          (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val))
-          (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
+          (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k j.val))
+          (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
         c.IsSourceBounded 1 ∧
         ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) → c.nonprivateCount = 0 ∧
-          ‖c.eval (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val)) -
-            framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
-          HEq c (OriginalCircuit.id
-            (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) []))) := by
+          ‖toEuclideanLin c.op (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k j.val)) -
+            framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
+          c.toPartyCircuit.IsLocal) := by
     intro j
     by_cases h0 : j.val = 0
     · have he : j = 0 := Fin.ext h0
       subst j
       obtain ⟨c, hc, hs⟩ := hbirth0
       refine ⟨c, ?_, hs, ?_⟩
-      · simpa [stageParticipants] using hc
+      · exact hc.mono (fun x hx ↦ by simpa [stageParticipants] using hx) le_rfl le_rfl le_rfl
       · rintro ⟨_, hlo, _⟩
         omega
     · by_cases h1 : j.val = 1
@@ -389,7 +401,7 @@ theorem local_stage_circuits_of_primitive_information
         subst j
         obtain ⟨c, hc, hs⟩ := hbirth1
         refine ⟨c, ?_, hs, ?_⟩
-        · simpa [stageParticipants] using hc
+        · exact hc.mono (fun x hx ↦ by simpa [stageParticipants] using hx) le_rfl le_rfl le_rfl
         · rintro ⟨_, hlo, _⟩
           omega
       · by_cases hlt : j.val < 10
@@ -402,9 +414,9 @@ theorem local_stage_circuits_of_primitive_information
               simp only [stageParticipants, dite_eq_right h0, dite_eq_right h1,
                 dite_eq_left hlt, dite_eq_left hk]
               rfl
-            have hop : Sheet.HasSourceBoundedChange (ℓ := []) Ω
+            have hop : HasSheetsChange Ω
                 (stageBoundaryFrames L w k j.val)
-                (stageBoundaryFrames L w k (j.val + 1)) (1 : ℂ)
+                (stageBoundaryFrames L w k (j.val + 1))
                 (stageParticipants k j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
               rw [hp]
               simpa only [he] using hleft hk u
@@ -418,7 +430,8 @@ theorem local_stage_circuits_of_primitive_information
               subst j
               obtain ⟨c, hc, hs⟩ := hboundary hk0
               refine ⟨c, ?_, hs, ?_⟩
-              · simpa [stageParticipants, hk0] using hc
+              · exact hc.mono (fun x hx ↦ by simpa [stageParticipants, hk0] using hx)
+                  le_rfl le_rfl le_rfl
               · rintro ⟨_, hlo, _⟩
                 omega
             · have hS : stageBoundaryFrames L w k j.val = afterLeftFrames L w k :=
@@ -427,23 +440,21 @@ theorem local_stage_circuits_of_primitive_information
                   afterLeftFrames L w k :=
                 stageBoundaryFrames_first_left k hk0 (by omega) (by omega)
               rw [hS, hT]
-              refine ⟨OriginalCircuit.id _,
-                OriginalCircuit.isBoundedChange_id (stageParticipants k j) 1 1 h4ε _,
-                trivial, ?_⟩
-              intro _
-              refine ⟨rfl, ?_, HEq.rfl⟩
-              change ‖framesVec (Sheet.refFamily Ω) (afterLeftFrames L w k) -
-                framesVec (Sheet.refFamily Ω) (afterLeftFrames L w k)‖ = 0
-              simp
+              refine ⟨OriginalCircuit.done _, ?_,
+                OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero rfl 1,
+                fun _ ↦ ⟨rfl, by simp, trivial⟩⟩
+              simpa using OriginalCircuit.isBoundedChange_of_nonprivateCount_eq_zero
+                (c := OriginalCircuit.done _) rfl (stageParticipants k j) 1 1 h4ε
+                (framesVec (fun S ↦ S.refVec Ω) (afterLeftFrames L w k))
         · let u : Fin 8 := ⟨j.val - 10, by have hj := j.isLt; omega⟩
           have he : u.val + 10 = j.val := by dsimp [u]; omega
           have hp : stageParticipants k j =
               OneBand.participants (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k) u := by
             simp only [stageParticipants, dite_eq_right h0, dite_eq_right h1, dite_eq_right hlt]
             rfl
-          have hop : Sheet.HasSourceBoundedChange (ℓ := []) Ω
+          have hop : HasSheetsChange Ω
               (stageBoundaryFrames L w k j.val)
-              (stageBoundaryFrames L w k (j.val + 1)) (1 : ℂ)
+              (stageBoundaryFrames L w k (j.val + 1))
               (stageParticipants k j) 1 1 1 (4 * (L : ℝ) ^ (-12 : ℤ)) := by
             rw [hp]
             simpa only [he] using hright u
@@ -467,12 +478,13 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
+open Matrix QuantumCircuit.Party
+open ManyBody (Config)
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
 
 /-- The physical assumptions imply the actual eighteen local circuits at
-every stage, including the seven identity operations after the first direct
+every stage, including the seven empty operations after the first direct
 death. The constants precede all chain and state data. Neither information
 bounds nor owner, circuit, endpoint or norm conclusions are assumed.
 Source: Part II, `prop:sweep`, construction and geometric proof, lines 365–378,
@@ -489,19 +501,19 @@ theorem local_stage_circuits_of_logarithmic_separation
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
         ∃ c : (j : Fin 18) → OriginalCircuit
-            (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) [])
-            (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k (j.val + 1)) []),
+            (stackSystem (Sheet.system q) (stageBoundaryFrames L w k j.val) fun _ ↦ Unit)
+            (stackSystem (Sheet.system q) (stageBoundaryFrames L w k (j.val + 1)) fun _ ↦ Unit),
           ∀ j, (c j).IsBoundedChange (stageParticipants k j) 1 1
               (4 * (L : ℝ) ^ (-12 : ℤ))
-              (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val))
-              (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
+              (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k j.val))
+              (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k (j.val + 1))) ∧
             (c j).IsSourceBounded 1 ∧ (c j).nonprivateCount ≤ 1 ∧
             ((k.val = 0 ∧ 3 ≤ j.val ∧ j.val < 10) →
               (c j).nonprivateCount = 0 ∧
-                ‖(c j).eval (framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k j.val)) -
-                  framesVec (Sheet.refFamily Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
-                HEq (c j) (OriginalCircuit.id
-                  (stackRegs (Sheet.regs q) (stageBoundaryFrames L w k j.val) []))) := by
+                ‖toEuclideanLin (c j).op
+                (framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k j.val)) -
+                  framesVec (fun S ↦ S.refVec Ω) (stageBoundaryFrames L w k (j.val + 1))‖ = 0 ∧
+                (c j).toPartyCircuit.IsLocal) := by
   classical
   obtain ⟨Dstage, Nstage, hDstage, hNstage, hstage⟩ :=
     birth_death_information_of_logarithmic_separation q hq R J Δ hΔ

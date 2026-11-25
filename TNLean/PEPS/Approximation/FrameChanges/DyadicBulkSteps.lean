@@ -29,10 +29,10 @@ of states `G` for which the angular scale holds; the ground vectors of the model
 
 * `bulkBirth_step`: a bulk birth is an allowed word using only `P∘` and `Q∘`, with at most one
   pair source and error `L^{-30}`.
-* `bulkDeath_step`: a bulk death is an allowed monomial using only `P∘` and `Q∘`, without pair
-  sources, with at most one pair effect and error `L^{-30}`.
-* `lensExchange_step`: a lens exchange is an allowed word using only `C`, without pair resources,
-  with error `4 L^{-30}`.
+* `bulkDeath_step`: a bulk death is an allowed monomial using only `P∘` and `Q∘`, whose gates
+  are pair effects, at most one of them, with error `L^{-30}`.
+* `lensExchange_step`: a lens exchange is a relabelling of the tag orders and of the sheets
+  followed by an allowed word using only `C`, without pair resources, with error `4 L^{-30}`.
 * `lensExchange_step_of_frontier`: the same, with the tapering separation checked against the
   boundary of the lens, as in `06-geometry.tex`, lines 418–426.
 
@@ -50,12 +50,12 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open Set EncodedFrame TNLean.Lattice.PartyCircuit
-open EuclideanSpace (vecKron)
+open Set EncodedFrame Matrix QuantumCircuit.Party
 
 variable {q : ℕ} [NeZero q] {a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
   {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q}
-  {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type}
+  {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type} [Fintype Party]
+  [DecidableEq Party]
   {V : Finset (ℝ × ℝ)} {n : ℝ}
 
 omit [NeZero q] in
@@ -90,11 +90,10 @@ theorem bulkBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L�
     (hV : V.card ≤ m₀) (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hsep : AngularSeparation (pos '' T) (pos '' F.birthEnv P) n (D * Real.log L) a V) :
-    ∃ w : Word F.regs (F.changeOwner T Q).regs,
+    ∃ w : Word F.system (F.changeOwner T Q).system,
       w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
-      ‖w.eval (F.regIso.symm (F.refVec Ω)) -
-        (F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)‖ ≤
-          (L : ℝ) ^ (-30 : ℤ) := by
+      ‖toEuclideanLin w.op (F.regRef Ω) - (F.changeOwner T Q).regRef Ω‖ ≤
+        (L : ℝ) ^ (-30 : ℤ) := by
   obtain ⟨-, -, -, w, hA, hU, hS, -, herr⟩ := F.birth_bounded (Q := Q) hTP hTH hΩ₁
     (mutualInformation_le_of_isAngularScale hD hL hΩ hpos hV (F.disjoint_birthEnv hTP hTH) hn
       hnL hdiam hsep)
@@ -102,8 +101,8 @@ theorem bulkBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L�
 
 /-- **Bulk death, conditional on Proposition 3.4.** In the setting of `bulkBirth_step`, with `F`
 the frame after the death, in which `T` is owned by `P∘`, the death from the frame in which `T`
-is owned by `Q∘` is an allowed monomial using only `P∘` and `Q∘`, without pair sources, with at
-most one pair effect and reference-vector error at most `L^{-30}`.
+is owned by `Q∘` is an allowed monomial using only `P∘` and `Q∘`, whose gates are pair effects,
+at most one of them, with reference-vector error at most `L^{-30}`.
 
 Source: `06-geometry.tex`, lines 357–387 and 440–445, applying the reverse form of Lemma 6.5
 `lem:birth` (`05-frames.tex`, lines 407–410) with Proposition 3.4 at accuracy `L^{-60}`. -/
@@ -114,22 +113,26 @@ theorem bulkDeath_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L�
     (hV : V.card ≤ m₀) (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hsep : AngularSeparation (pos '' T) (pos '' F.birthEnv P) n (D * Real.log L) a V) :
-    ∃ M : PartyChain (F.changeOwner T Q).regs F.regs,
-      M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount ≤ 1 ∧
-      ‖M.toEffectChain.eval ((F.changeOwner T Q).regIso.symm ((F.changeOwner T Q).refVec Ω)) -
-        F.regIso.symm (F.refVec Ω)‖ ≤ (L : ℝ) ^ (-30 : ℤ) := by
-  obtain ⟨-, -, -, M, hA, hU, hS, hE, -, herr⟩ := F.death_bounded (Q := Q) hTP hTH hΩ₁
+    ∃ M : PartyCircuit (ChainGate (P := Party)) (F.changeOwner T Q).system F.system,
+      M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly {P, Q} ∧
+      M.ForallGate (fun _ _ _ g ↦ Sum.isRight g) ∧ M.numGates ≤ 1 ∧
+      ‖toEuclideanLin (M.op chainEv) ((F.changeOwner T Q).regRef Ω) - F.regRef Ω‖ ≤
+        (L : ℝ) ^ (-30 : ℤ) := by
+  obtain ⟨-, -, -, M, hA, hU, hG, hn, -, herr⟩ := F.death_bounded (Q := Q) hTP hTH hΩ₁
     (mutualInformation_le_of_isAngularScale hD hL hΩ hpos hV (F.disjoint_birthEnv hTP hTH) hn
       hnL hdiam hsep)
-  exact ⟨M, hA, hU, hS, hE, herr⟩
+  exact ⟨M, hA, hU, hG, hn, herr⟩
 
 /-- **Lens exchange, conditional on Proposition 3.4.** In the setting of `bulkBirth_step`, let
 `F₁`, `F₂` be two encoded frames and `Y` the physical sample of the lens, with every hole of
 either frame classified as outside `Y` or inside it. Let `T` and `E` be the sites inside and
 outside `Y` that are not common to `C` on both sheets or lie in an outer hole of either frame
 (`eq:exchange-partition`). If `T` has diameter at most `A₀ n` and is separated from `E` by
-`a max{D log L, min(n, d_V)}`, the exchange is an allowed word using only `C`, without pair
-resources, with reference-vector error at most `4 L^{-30}`.
+`a max{D log L, min(n, d_V)}`, the exchange is a relabelling `g` of the bases of the parties
+(the canonical identification of tag orderings), then the renaming of the two sheets, then an
+allowed word using only `C`, without pair resources; the reference-vector error of the whole is
+at most `4 L^{-30}`. The relabellings use no pair resource, and the renaming keeps every register
+at its party.
 
 Source: `06-geometry.tex`, lines 389–430 and 440–445, applying Lemma 6.6 `lem:exchange`
 (`05-frames.tex`, lines 460–479) with Proposition 3.4 at accuracy `L^{-60}`. -/
@@ -147,30 +150,35 @@ theorem lensExchange_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : 
         dist (pos x) (pos y) ≤ A₀ * n)
     (hsep : AngularSeparation (pos '' (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).tSet C)
       (pos '' (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).eSet C) n (D * Real.log L) a V) :
-    ∃ w : Word (F₁.regs ++ F₂.regs)
-        ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.regs ++
-          (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.regs),
-      w.IsAllowed ∧ w.UsesOnly {C} ∧ w.sourceCount = 0 ∧
-      ‖w.eval ((twoLayoutIso _ _ F₁.owner F₂.owner).symm
-          (vecKron (F₁.refVec Ω) (F₂.refVec Ω))) -
-        (twoLayoutIso _ _ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.owner
-            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.owner).symm
-          (vecKron ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.refVec Ω)
-            ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω))‖ ≤
-        4 * (L : ℝ) ^ (-30 : ℤ) := by
-  obtain ⟨-, -, -, -, -, -, -, w, hA, hU, hS, -, herr⟩ :=
+    ∃ g : Word (fun p ↦ F₁.system p × F₂.system p)
+        (fun p ↦ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).frame₁.system p ×
+          (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).frame₂.system p),
+      g.IsAllowed ∧ g.sourceCount = 0 ∧
+      ∃ w : Word (fun p ↦ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.system p ×
+            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.system p)
+          (fun p ↦ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.system p ×
+            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.system p),
+        w.IsAllowed ∧ w.UsesOnly {C} ∧ w.sourceCount = 0 ∧
+        ‖toEuclideanLin
+            (Word.op ((g.comp (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).renameWord).comp
+              w)) (pairRef F₁ F₂ Ω) -
+          pairRef (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁
+            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂ Ω‖ ≤
+          4 * (L : ℝ) ^ (-30 : ℤ) := by
+  obtain ⟨-, -, -, -, -, -, -, g, hgA, hgS, w, hA, hU, hS, -, herr⟩ :=
     TwoSheetExchange.exchange_ofFrames_bounded F₁ F₂ Y out hout hin C hΩ₁
       (mutualInformation_le_of_isAngularScale hD hL hΩ hpos hV
         ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).disjoint_tSet_eSet C) hn hnL hdiam
         hsep)
-  exact ⟨w, hA, hU, hS, herr⟩
+  exact ⟨g, hgA, hgS, w, hA, hU, hS, herr⟩
 
 /-- **Lens exchange from a floor against the lens boundary, conditional on Proposition 3.4.** In
 the setting of `lensExchange_step`, let the sites of `Y` be exactly those placed in a plane set
 `K`. If every point of the target `T` satisfies the floor `a max{D log L, min(n, d_V)}` against
 every point of the boundary of `K`, then the target is separated from the exterior: any segment
-from a point of `T` to a point of `E` crosses the boundary. The exchange is then an allowed word
-using only `C`, without pair resources, with reference-vector error at most `4 L^{-30}`.
+from a point of `T` to a point of `E` crosses the boundary. The exchange is then, after the
+relabellings of `lensExchange_step`, an allowed word using only `C`, without pair resources, with
+reference-vector error at most `4 L^{-30}`.
 
 Source: `06-geometry.tex`, lines 389–430 and 440–445. -/
 theorem lensExchange_step_of_frontier (hD : IsAngularScale q G a A₀ m₀ 60 D L₀)
@@ -189,17 +197,21 @@ theorem lensExchange_step_of_frontier (hD : IsAngularScale q G a A₀ m₀ 60 D 
     (hfloor : ∀ x ∈ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).tSet C,
       ∀ z ∈ frontier K, a * max (D * Real.log L) (cappedMarkDistance n V (pos x)) ≤
         dist (pos x) z) :
-    ∃ w : Word (F₁.regs ++ F₂.regs)
-        ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.regs ++
-          (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.regs),
-      w.IsAllowed ∧ w.UsesOnly {C} ∧ w.sourceCount = 0 ∧
-      ‖w.eval ((twoLayoutIso _ _ F₁.owner F₂.owner).symm
-          (vecKron (F₁.refVec Ω) (F₂.refVec Ω))) -
-        (twoLayoutIso _ _ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.owner
-            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.owner).symm
-          (vecKron ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.refVec Ω)
-            ((TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.refVec Ω))‖ ≤
-        4 * (L : ℝ) ^ (-30 : ℤ) := by
+    ∃ g : Word (fun p ↦ F₁.system p × F₂.system p)
+        (fun p ↦ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).frame₁.system p ×
+          (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).frame₂.system p),
+      g.IsAllowed ∧ g.sourceCount = 0 ∧
+      ∃ w : Word (fun p ↦ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.system p ×
+            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.system p)
+          (fun p ↦ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁.system p ×
+            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂.system p),
+        w.IsAllowed ∧ w.UsesOnly {C} ∧ w.sourceCount = 0 ∧
+        ‖toEuclideanLin
+            (Word.op ((g.comp (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).renameWord).comp
+              w)) (pairRef F₁ F₂ Ω) -
+          pairRef (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₁
+            (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).newFrame₂ Ω‖ ≤
+          4 * (L : ℝ) ^ (-30 : ℤ) := by
   refine lensExchange_step hD hL hΩ hΩ₁ hpos F₁ F₂ Y out hout hin C hV hn hnL hdiam
     (angularSeparation_of_frontier (K := K) (Or.inl ⟨?_, ?_⟩) ?_)
   · rintro _ ⟨x, hx, rfl⟩

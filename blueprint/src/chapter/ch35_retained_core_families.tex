@@ -47,8 +47,7 @@ All products of site matrices retain their natural order.
     \label{thm:actual_retained_interval_trace}
     \lean{MPOTensor.trace_actual_retainedInterval_eq}
     \leanok
-    \uses{def:retained_interval_coordinates,def:actual_retained_interval_closing,
-        def:trace_chain_operator}
+    \uses{def:retained_interval_coordinates,def:actual_retained_interval_closing,def:trace_chain_operator}
     Use $a+L\le T$, the full-chain tensors $A_v$, the closing matrix $C$,
     the coordinate equivalence $e$, and the fixed retained configurations
     $\eta,\theta$ of (\ref{eq:actual_retained_interval_closing}).
@@ -165,10 +164,7 @@ All products of site matrices retain their natural order.
     \label{thm:finite_natural_retained_core_family}
     \lean{MPOTensor.exists_finite_natural_retained_core_family}
     \leanok
-    \uses{def:retained_interval_coordinates,def:retained_stack_core,
-        def:trace_core_matrix_slice,thm:core_word_product,
-        thm:trace_core_slice_words,thm:trace_core_open_square,
-        thm:chain_fixed_configuration_extension}
+    \uses{def:retained_interval_coordinates,def:retained_stack_core,def:trace_core_matrix_slice,thm:core_word_product,thm:trace_core_slice_words,thm:trace_core_open_square,thm:chain_fixed_configuration_extension}
     Fix $a+L\le T$, interior tensors $A_v$ of virtual dimension $B$, and
     a retained index set $m=\mathcal R$. Choose $R_{ab}\in\C^{m\times m}$
     and a list $s$ of $h$ affine steps on $m$.
@@ -191,9 +187,7 @@ All products of site matrices retain their natural order.
     dimensions are included whenever the stated retained data exist.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:retained_interval_coordinates,def:retained_stack_core,
-        thm:core_word_product,thm:trace_core_slice_words,thm:trace_core_open_square,
-        thm:chain_fixed_configuration_extension}
+    \uses{def:retained_interval_coordinates,def:retained_stack_core,thm:core_word_product,thm:trace_core_slice_words,thm:trace_core_open_square,thm:chain_fixed_configuration_extension}
     Expand the ordered affine product over words of each length $0\le t\le h$.
     Resolve every retained coefficient on the matrix units of $m$. For fixed
     $t,i,j$, the scalar word coefficients are exactly

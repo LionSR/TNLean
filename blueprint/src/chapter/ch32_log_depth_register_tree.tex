@@ -62,8 +62,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
         MPSPreparation.exists_rounds_regTreeOp_aux,
         MPSPreparation.exists_rounds_blockLayerOp_regTreeOp}
     \leanok
-    \uses{thm:qc_register_layer, lem:qc_round_implementation_compose,
-        lem:qc_placed_operators}
+    \uses{thm:qc_register_layer,lem:qc_round_implementation_compose,lem:qc_placed_operators}
     Let $k\ge0$, $q=s2^{k+1}$, and cut the ring of $N=Mq$ sites into $M\ge1$
     blocks of $q$ sites, each grouped into $2^{k+1}$ registers of $s$
     consecutive sites. For $0\le j\le k$ and $0\le p<2^j$ the sub-block $p$ of
@@ -139,10 +138,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
         MPSPreparation.regTreeOp_apply_regLeafCfg,
         MPSPreparation.regTreeOp_apply_blockInputCfg}
     \leanok
-    \uses{thm:ldp_tree_factorization, lem:ldp_tree_layers_isometries,
-        thm:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes,
-        lem:qc_placed_configurations, thm:ldp_register_tree_rounds,
-        thm:ldpolar_tensor_decomposition}
+    \uses{thm:ldp_tree_factorization,lem:ldp_tree_layers_isometries,thm:ldp_unitary_implementing_isometry,lem:ldp_tree_amplitudes,lem:qc_placed_configurations,thm:ldp_register_tree_rounds,thm:ldpolar_tensor_decomposition}
     Let $A$ be a tensor whose blocked tensor $\mathcal B$ over $s$ sites has an
     injective two-site blocked tensor, let $k\ge0$ and $q=s2^{k+1}$, and let
     $\mathcal B_q=VP$ be the polar decomposition of $A$ blocked over $q$ sites.
@@ -184,10 +180,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     \lean{MPSPreparation.isZeroOn_regCentralSites_pairLayerOp_mulVec,
         MPSPreparation.exists_isMeasurementConversion_approximatingMPVState}
     \leanok
-    \uses{thm:ldp_register_tree_isometry, thm:ldp_register_tree_rounds,
-        thm:ldp_approximating_state_depth, def:ldp_approximating_state,
-        thm:qc_bounded_unitary_two_site_gates, thm:ldp_chain_depth,
-        def:qc_measurement_rounds}
+    \uses{thm:ldp_register_tree_isometry,thm:ldp_register_tree_rounds,thm:ldp_approximating_state_depth,def:ldp_approximating_state,thm:qc_bounded_unitary_two_site_gates,thm:ldp_chain_depth,def:qc_measurement_rounds}
     For every $s\ge1$ there is $C$, depending only on $d$ and $s$, with the
     following property. Let $A$ be a tensor whose blocked tensor over $s$ sites
     is injective, and let $\sigma\ge0$ with $\Tr\sigma=1$. For every $k\ge0$
@@ -220,11 +213,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     \lean{MPSPreparation.exists_isMeasurementConversion_approximationError_le,
         MPSPreparation.exists_isMeasurementConversion_le_logb_log}
     \leanok
-    \uses{thm:ldp_register_tree_approximating_state,
-        lem:ldp_approximation_error_slope_threshold,
-        thm:normalized_primitive_gauge, lem:ldp_normal_gap,
-        lem:ldp_approximating_state_unit_norm,
-        lem:ldp_normalized_state_rescaling}
+    \uses{thm:ldp_register_tree_approximating_state,lem:ldp_approximation_error_slope_threshold,thm:normalized_primitive_gauge,lem:ldp_normal_gap,lem:ldp_approximating_state_unit_norm,lem:ldp_normalized_state_rescaling}
     Let $A$ be normal with $D\ge1$. There are $s\ge1$, $C$, $a>0$ and $b\ge1$,
     depending only on $A$, with the following property. Let $\varepsilon>0$,
     $N\ge1$ and $k\ge0$ be such that $s2^{k+1}$ divides $N$ and

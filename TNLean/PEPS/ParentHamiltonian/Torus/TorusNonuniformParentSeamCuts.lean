@@ -29,8 +29,7 @@ open ManyBody (Edge)
 
 noncomputable section
 namespace TNLean.PEPS
-open TNLean.Lattice
-open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
+open DependentBondNetwork TNLean.Network.DependentBondNetwork
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (2 < width)] [Fact (2 < height)]
@@ -62,7 +61,7 @@ theorem exists_nonuniform_seamBoundaries_of_mem_torusPlaquetteParentKernel
     (hΨ : Ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
       torusPlaquetteRegion H).hamiltonian).ker) :
     ∃ ψ : ((v : X) → Phys v) → ℂ,
-      dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys)) ψ = Ψ ∧
+      (Matrix.piKronecker (physicalPaddingMatrix (Phys := Phys))).mulVecLin ψ = Ψ ∧
       ∀ (c : ZMod width) (r : ZMod height),
         ∃ M : CutConfig (torusGraphSeamCut c r) (fun e ↦ Fin (N e)) → ℂ,
           ∀ σ, cutCoeff graphEdgeTail graphEdgeHead (fun e ↦ Fin (N e)) A
@@ -72,14 +71,14 @@ theorem exists_nonuniform_seamBoundaries_of_mem_torusPlaquetteParentKernel
     (incidentRepresentation graphEdgeTail graphEdgeHead (fun e ↦ Fin (N e)) U) A hA
   have hN := bondDim_ne_zero_of_isSemiRegular B U hU
   rw [ker_hamiltonian_ofPlace B torusPlaquetteRegion H hH] at hΨ
-  refine ⟨dependentPhysicalProductFamilyMap (physicalRestrictionMatrix (Phys := Phys)) Ψ, ?_, ?_⟩
+  refine ⟨(Matrix.piKronecker (physicalRestrictionMatrix (Phys := Phys))).mulVecLin Ψ, ?_, ?_⟩
   · exact padding_restriction_eq_self_of_mem_regionParentGroundSpace N A hN (0 : X)
       torusPlaquetteRegion (fun v ↦ ⟨v, mem_torusPlaquetteRegion_self v⟩) hΨ
   · intro c r
     obtain ⟨M, hM⟩ := torusPlaquetteParentGroundSpace_le_graphSeamCut B U hU hB c r hΨ
     refine ⟨M, fun σ ↦ ?_⟩
     have heq := congrArg
-      (dependentPhysicalProductFamilyMap (physicalRestrictionMatrix (Phys := Phys))) hM
+      (Matrix.piKronecker (physicalRestrictionMatrix (Phys := Phys))).mulVecLin hM
     exact congrFun ((restriction_cutMap_graphPhysicalPaddingTensor N A
       (torusGraphSeamCut c r) M).symm.trans heq) σ
 
@@ -88,8 +87,8 @@ omit [Fact (2 < width)] [Fact (2 < height)] in
 parent vector is unique, including outside any chosen local tensor images. -/
 theorem nonuniform_physicalRepresentative_unique
     {ψ χ : ((v : X) → Phys v) → ℂ}
-    (h : dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys)) ψ =
-      dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys)) χ) : ψ = χ :=
+    (h : (Matrix.piKronecker (physicalPaddingMatrix (Phys := Phys))).mulVecLin ψ =
+      (Matrix.piKronecker (physicalPaddingMatrix (Phys := Phys))).mulVecLin χ) : ψ = χ :=
   physicalPaddingProduct_injective h
 
 end TNLean.PEPS

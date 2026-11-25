@@ -10,7 +10,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 \begin{definition}[Periodic non-TI chain data]\label{def:non_ti_chain}
     \lean{MPSChainTensor.coeff, MPSChainTensor.IsInjective}
     \leanok
-    \uses{def:mps_tensor, def:injective, def:periodic_mps_tensor, def:periodic_relations}
+    \uses{def:mps_tensor,def:injective,def:periodic_mps_tensor,def:periodic_relations}
     Fix a chain length $n$.
     A \emph{non-translation-invariant periodic MPS chain} consists of sitewise
     tensors $A_k=\{A_k^i\}_{i=0}^{d-1}$, where $k=0,\ldots,n-1$ and each
@@ -110,7 +110,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     \label{def:varying_bond_obc_ti}
     \lean{OBCChainTensor.IsTranslationInvariantState}
     \leanok
-    \uses{def:varying_bond_obc_coeff, def:varying_bond_obc_translation}
+    \uses{def:varying_bond_obc_coeff,def:varying_bond_obc_translation}
     For $N\geq1$, a varying-bond open chain represents a
     translation-invariant state at length $N$ if, for every
     $s\in\mathbb Z/N\mathbb Z$ and every physical configuration $\sigma$,
@@ -158,7 +158,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     \label{def:varying_bond_obc_zero_pad}
     \lean{OBCChainTensor.zeroPad}
     \leanok
-    \uses{def:varying_bond_obc_chain, def:non_ti_chain}
+    \uses{def:varying_bond_obc_chain,def:non_ti_chain}
     For each site $k$, embed $A_k^i$ into the upper-left
     $D_k\times D_{k+1}$ corner of a $D\times D$ matrix
     $\widetilde A_k^i$ and set every other entry to zero. The matrices
@@ -173,13 +173,13 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     \label{thm:varying_bond_obc_zero_pad_zero}
     \lean{OBCChainTensor.coeff_zeroPad_zero}
     \leanok
-    \uses{def:varying_bond_obc_zero_pad, def:non_ti_chain}
+    \uses{def:varying_bond_obc_zero_pad,def:non_ti_chain}
     At $N=0$, the coefficient of the padded square chain is $D$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{def:varying_bond_obc_zero_pad, def:non_ti_chain}
+    \uses{def:varying_bond_obc_zero_pad,def:non_ti_chain}
     The empty matrix product is the $D\times D$ identity, whose trace is $D$.
 \end{proof}
 
@@ -219,7 +219,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 
 \begin{proof}
     \leanok
-    \uses{lem:eval_word_of_fn_prod, thm:trace_eval_word_eq_sum_cyclic}
+    \uses{lem:eval_word_of_fn_prod,thm:trace_eval_word_eq_sum_cyclic}
     Encode the site and physical indices as one enlarged physical index and
     apply the cyclic trace expansion for a closed matrix product.
 \end{proof}
@@ -228,7 +228,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     \label{thm:varying_bond_obc_zero_pad_coeff}
     \lean{OBCChainTensor.coeff_zeroPad}
     \leanok
-    \uses{def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
+    \uses{def:varying_bond_obc_coeff,def:varying_bond_obc_zero_pad}
     Let $N\geq1$. For every physical configuration $\sigma$,
     \begin{align}
         \tr\!\left(\widetilde A_0^{\sigma_0}\cdots
@@ -243,7 +243,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 
 \begin{proof}
     \leanok
-    \uses{thm:chain_coeff_sum_cyclic, thm:pi_fin_sum_zero_extension, def:varying_bond_obc_coeff, def:varying_bond_obc_zero_pad}
+    \uses{thm:chain_coeff_sum_cyclic,thm:pi_fin_sum_zero_extension,def:varying_bond_obc_coeff,def:varying_bond_obc_zero_pad}
     Expanding the left-hand side by~(\ref{eq:chain_coeff_sum_cyclic}) and extending the
     dependent sum in~(\ref{eq:varying_bond_obc_coeff}) to the common dimension
     $D$ via Lemma~\ref{thm:pi_fin_sum_zero_extension} isolates the rectangular bond ranges: every extended path
@@ -256,7 +256,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     \label{thm:varying_bond_obc_zero_pad_zero_bond}
     \lean{OBCChainTensor.coeff_zeroPad_eq_zero_of_bondDim_eq_zero}
     \leanok
-    \uses{def:non_ti_chain, def:varying_bond_obc_zero_pad}
+    \uses{def:non_ti_chain,def:varying_bond_obc_zero_pad}
     Let $N\geq1$. If $D_k=0$ for some
     $k\in\{0,\ldots,N\}$, then the padded square-chain coefficient vanishes
     for every physical configuration.
@@ -264,7 +264,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 
 \begin{proof}
     \leanok
-    \uses{thm:varying_bond_obc_zero_pad_coeff, thm:varying_bond_obc_zero_bond}
+    \uses{thm:varying_bond_obc_zero_pad_coeff,thm:varying_bond_obc_zero_bond}
     Positive-length coefficient preservation equates the padded coefficient to the open-chain contraction, which vanishes whenever a virtual dimension is zero.
 \end{proof}
 \begin{definition}[Cyclic block tensor at fixed length]
@@ -293,7 +293,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     \label{thm:chain_cyclic_block_average}
     \lean{MPSChainTensor.mpv_cyclicBlockTensor_eq_average}
     \leanok
-    \uses{def:chain_cyclic_block_tensor, def:non_ti_chain}
+    \uses{def:chain_cyclic_block_tensor,def:non_ti_chain}
     For every basis configuration $\sigma\in\{0,\ldots,d-1\}^N$, the
     length-$N$ coefficient of the tensor in
     Definition~\ref{def:chain_cyclic_block_tensor} is
@@ -310,7 +310,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 
 \begin{proof}
     \leanok
-    \uses{def:chain_cyclic_block_tensor, def:non_ti_chain, lem:eval_word_smul}
+    \uses{def:chain_cyclic_block_tensor,def:non_ti_chain,lem:eval_word_smul}
     Write $D_i=\operatorname{diag}(A_0^i,\ldots,A_{N-1}^i)$ and omit the
     scalar normalization temporarily. Commuting the cyclic permutation through
     a block diagonal gives
@@ -342,7 +342,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
     \lean{OBCChainTensor.pgvwc07_site_independent_matrices,
         OBCChainTensor.exists_pgvwc07_site_independent_tensor}
     \leanok
-    \uses{def:varying_bond_obc_ti, def:varying_bond_obc_zero_pad, def:chain_cyclic_block_tensor}
+    \uses{def:varying_bond_obc_ti,def:varying_bond_obc_zero_pad,def:chain_cyclic_block_tensor}
     Let $N\geq1$, and suppose a translation-invariant state on the $N$-site
     ring has a varying-bond open-chain representation whose virtual dimensions are
     at most $D$. Conditional on this open-chain input, the cyclic-block construction in
@@ -354,7 +354,7 @@ begin with a varying-bond open chain. Both fixed-length constructions are define
 
 \begin{proof}
     \leanok
-    \uses{thm:chain_coeff_sum_cyclic, thm:varying_bond_obc_zero_pad_coeff, thm:chain_cyclic_block_average}
+    \uses{thm:chain_coeff_sum_cyclic,thm:varying_bond_obc_zero_pad_coeff,thm:chain_cyclic_block_average}
     The cyclic rotation of the padded square chain satisfies
     \begin{align}
         c_{(\widetilde A)^{(k)},\sigma}
@@ -524,7 +524,7 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
         MPSTensor.QuadraticReconstructionSolution.isUnit_chainIntertwiner,
         MPSTensor.QuadraticReconstructionSolution.chainIntertwiner_mul_kronecker}
     \leanok
-    \uses{def:pgvwc07_quadratic_system, lem:pgvwc07_quadratic_system_units}
+    \uses{def:pgvwc07_quadratic_system,lem:pgvwc07_quadratic_system_units}
     Let two solutions of the quadratic reconstruction system over the same
     window be given, with row unknowns $Y_j$, $Y'_j$, column unknowns $Z_j$,
     $Z'_j$, and tensors $B_i$, $C_i$. For every window site $j$ carrying an
@@ -560,7 +560,7 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     \label{lem:pgvwc07_complete_chain_intertwiner}
     \lean{MPSTensor.exists_intertwiner_of_kronecker_chain}
     \leanok
-    \uses{lem:pgvwc07_chain_combination, lem:pgvwc07_kronecker_intertwiner}
+    \uses{lem:pgvwc07_chain_combination,lem:pgvwc07_kronecker_intertwiner}
     Let $B,C\in\MN{D}^d$ and let $W_0,\ldots,W_{D^4}$ be nonzero matrices on
     the doubled bond space with
     \begin{align}
@@ -594,8 +594,7 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
     \lean{MPSTensor.QuadraticReconstructionSolution.exists_unitary_phase,
         MPSTensor.QuadraticReconstructionSolution.exists_rephased_solution_exact_gauge}
     \leanok
-    \uses{def:pgvwc07_quadratic_system, def:pgvwc07_ti_canonical_representation,
-        def:l_blk_injective}
+    \uses{def:pgvwc07_quadratic_system,def:pgvwc07_ti_canonical_representation,def:l_blk_injective}
     Consider a nonzero translation-invariant state on a ring of $N$ sites
     with unique open-boundary canonical form such that the rank of each
     reduced density operator of successive spins is bounded by $D^2$.
@@ -641,15 +640,7 @@ criteria follow \cite[Theorems~7 and~8]{PerezGarcia2007Matrix}.
 
 \begin{proof}
     \leanok
-    \uses{lem:quadratic_original_canonical_obc_window,
-        lem:quadratic_prescribed_prefix_basis,
-        lem:quadratic_actual_physical_window_solution,
-        lem:pgvwc07_quadratic_system_units,
-        lem:quadratic_window_spanning_length,
-        lem:quadratic_gauged_endpoint,
-        lem:quadratic_gauged_complete_chain,
-        lem:pgvwc07_intertwiner_unitary,
-        lem:quadratic_solution_rephasing}
+    \uses{lem:quadratic_original_canonical_obc_window,lem:quadratic_prescribed_prefix_basis,lem:quadratic_actual_physical_window_solution,lem:pgvwc07_quadratic_system_units,lem:quadratic_window_spanning_length,lem:quadratic_gauged_endpoint,lem:quadratic_gauged_complete_chain,lem:pgvwc07_intertwiner_unitary,lem:quadratic_solution_rephasing}
     Part~1 is Lemma~\ref{lem:quadratic_original_canonical_obc_window}. The
     canonical equations of the open-boundary form identify its bonds with
     the physical cut ranks, condition C1 forces rank $D^2$ at every cut of
@@ -803,7 +794,7 @@ on a finite ring by an $N$th-root phase
         MPSTensor.linearIndependent_rightCutVector,
         MPSTensor.isNBlkInjective_of_le_of_unital}
     \leanok
-    \uses{def:pgvwc07_cut_vectors, def:l_blk_injective}
+    \uses{def:pgvwc07_cut_vectors,def:l_blk_injective}
     If $A$ is $L$-block injective, then the $D^2$ left cut vectors of length
     $L$ are linearly independent, and so are the $D^2$ right cut vectors of
     length $L$. If $\sum_iA_iA_i^\dagger=\Id$ as well, then $A$ is
@@ -856,8 +847,7 @@ on a finite ring by an $N$th-root phase
 
 \begin{proof}
     \leanok
-    \uses{lem:pgvwc07_cut_vectors_linearIndependent,
-        thm:peps_existsUnique_virtualOperation_of_endPair}
+    \uses{lem:pgvwc07_cut_vectors_linearIndependent,thm:peps_existsUnique_virtualOperation_of_endPair}
     Both decompositions (\ref{eq:pgvwc07_cut_resolution}) of the same
     coefficients have $D^2$ terms. The dual functionals of the linearly
     independent right cut vectors of $B$ read off a matrix $G$ with
@@ -877,7 +867,7 @@ on a finite ring by an $N$th-root phase
     \lean{MPSTensor.exists_intertwiner_of_fixedLength_mpv_eq,
         MPSTensor.exists_pgvwc07_chain_root}
     \leanok
-    \uses{def:l_blk_injective, def:mpv}
+    \uses{def:l_blk_injective,def:mpv}
     Let $B$ be a tensor of bond dimension $D\ge1$ with
     $\sum_iB_iB_i^\dagger=\Id$ that is $L_0$-block injective, let
     $N\ge2L_0+D^4$, and let $C$ be a tensor of bond dimension $D$ with the
@@ -893,8 +883,7 @@ on a finite ring by an $N$th-root phase
 
 \begin{proof}
     \leanok
-    \uses{lem:pgvwc07_cut_vectors_linearIndependent,
-        lem:pgvwc07_cut_intertwiner, lem:pgvwc07_complete_chain_intertwiner}
+    \uses{lem:pgvwc07_cut_vectors_linearIndependent,lem:pgvwc07_cut_intertwiner,lem:pgvwc07_complete_chain_intertwiner}
     Consider the $D^4+1$ cuts after $L_0,\ldots,L_0+D^4$ sites; each leaves
     at least $L_0$ sites on both sides, so by
     Lemma~\ref{lem:pgvwc07_cut_vectors_linearIndependent} the cut vectors of
@@ -913,7 +902,7 @@ on a finite ring by an $N$th-root phase
         MPSTensor.exists_unitaryConj_of_intertwines_of_isNBlkInjective,
         MPSTensor.mpv_eq_pow_mul_mpv_of_unitaryConj}
     \leanok
-    \uses{def:l_blk_injective, def:mpv}
+    \uses{def:l_blk_injective,def:mpv}
     Let $B$ and $C$ satisfy $\sum_iB_iB_i^\dagger=\Id$ and
     $\sum_iC_iC_i^\dagger=\Id$, let $B$ be $L_0$-block injective, and let
     $R\neq0$ and $x\neq0$ satisfy (\ref{eq:pgvwc07_fixed_length_intertwiner}).
@@ -974,8 +963,7 @@ on a finite ring by an $N$th-root phase
     \label{lem:pgvwc07_ti_canonical_representation_of_blocks}
     \lean{MPSTensor.isPGVWC07CanonicalForm_toTensorFromBlocks}
     \leanok
-    \uses{def:pgvwc07_ti_canonical_representation,
-        thm:pgvwc07_ti_canonical_form}
+    \uses{def:pgvwc07_ti_canonical_representation,thm:pgvwc07_ti_canonical_form}
     The weighted direct sum $\bigoplus_k\mu_kA_k$ of positive-dimensional
     blocks produced by Theorem~\ref{thm:pgvwc07_ti_canonical_form}, with
     positive weights $\mu_k\le1$, is a translation-invariant canonical
@@ -995,7 +983,7 @@ on a finite ring by an $N$th-root phase
         MPSTensor.PGVWC07CanonicalFormData.sum_mul_conjTranspose_eq,
         MPSTensor.PGVWC07CanonicalFormData.exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective}
     \leanok
-    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective}
+    \uses{def:pgvwc07_ti_canonical_representation,def:l_blk_injective}
     Let $A$ be a translation-invariant canonical representation with the
     block form (\ref{eq:pgvwc07_ti_canonical_representation_block_form}).
     Every product $A_{i_1}\cdots A_{i_L}$ is block diagonal, with
@@ -1033,7 +1021,7 @@ on a finite ring by an $N$th-root phase
         MPSTensor.sum_smul_mul_conjTranspose_smul,
         MPSTensor.sum_inv_smul_mul_conjTranspose_eq_one}
     \leanok
-    \uses{def:l_blk_injective, def:mpv}
+    \uses{def:l_blk_injective,def:mpv}
     Let $B$ and $C$ be tensors of bond dimension $D$ with
     $\sum_iB_iB_i^\dagger=\lambda_B^2\,\Id$ and
     $\sum_iC_iC_i^\dagger=\lambda_C^2\,\Id$ for some $\lambda_B,\lambda_C>0$,
@@ -1050,8 +1038,7 @@ on a finite ring by an $N$th-root phase
 
 \begin{proof}
     \leanok
-    \uses{thm:pgvwc07_fixed_length_intertwiner,
-        lem:pgvwc07_intertwiner_unitary}
+    \uses{thm:pgvwc07_fixed_length_intertwiner,lem:pgvwc07_intertwiner_unitary}
     For $\lambda_B=\lambda_C=1$,
     Lemma~\ref{thm:pgvwc07_fixed_length_intertwiner} gives $R\neq0$ and
     $x\neq0$ with $RC_i=\tfrac1xB_iR$, and
@@ -1072,7 +1059,7 @@ on a finite ring by an $N$th-root phase
 \begin{theorem}[Uniqueness of the canonical form, as printed]
     \label{thm:pgvwc07_ti_uniqueness_printed}
     \notready
-    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective}
+    \uses{def:pgvwc07_ti_canonical_representation,def:l_blk_injective}
     Let $\lvert\psi\rangle=\sum\operatorname{tr}(B_{i_1}\cdots B_{i_N})
         \lvert i_1\cdots i_N\rangle$ be a translation-invariant canonical
     $D$-MPS such that condition C1 holds at some length $L_0$, the
@@ -1094,8 +1081,7 @@ on a finite ring by an $N$th-root phase
         MPSTensor.pgvwc07_uniqueness_of_canonical_form_rephased,
         MPSTensor.pgvwc07_uniqueness_of_canonical_form_unitGaugePhaseEquiv}
     \leanok
-    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective,
-        def:mpv}
+    \uses{def:pgvwc07_ti_canonical_representation,def:l_blk_injective,def:mpv}
     Let $B=(B_i)_i$ and $C=(C_i)_i$ be translation-invariant canonical
     representations of bond dimension $D$ in the sense of
     Definition~\ref{def:pgvwc07_ti_canonical_representation}. Assume that
@@ -1116,10 +1102,7 @@ on a finite ring by an $N$th-root phase
 
 \begin{proof}
     \leanok
-    \uses{lem:pgvwc07_ti_canonical_representation_single_block,
-        thm:pgvwc07_fixed_length_intertwiner,
-        lem:pgvwc07_intertwiner_unitary,
-        lem:pgvwc07_ti_uniqueness_single_block}
+    \uses{lem:pgvwc07_ti_canonical_representation_single_block,thm:pgvwc07_fixed_length_intertwiner,lem:pgvwc07_intertwiner_unitary,lem:pgvwc07_ti_uniqueness_single_block}
     The state is nonzero, so $D\ge1$, and
     Lemma~\ref{lem:pgvwc07_ti_canonical_representation_single_block} leaves
     $B$ with a single block: $\sum_iB_iB_i^\dagger=\lambda_B^2\,\Id$ with
@@ -1168,7 +1151,7 @@ on the bond as a physical operation on the local index.
 \begin{definition}[Decomposition map]\label{def:decomposition_map}
     \lean{Kraus.decompositionMap}
     \leanok
-    \uses{def:injective, lem:exists_rightInverse}
+    \uses{def:injective,lem:exists_rightInverse}
     Let $A$ be an injective MPS tensor.
     The \emph{decomposition map}
     $\Psi_A\colon\MN{D}\to\C^d$ is a fixed choice of right inverse of
@@ -1248,7 +1231,7 @@ used in the virtual bond gauge.
     \label{lem:physRealize_spec}
     \lean{MPSTensor.physRealize_spec}
     \leanok
-    \uses{def:phys_realize, def:decomposition_map}
+    \uses{def:phys_realize,def:decomposition_map}
     For every $X\in\MN{D}$ and every physical index $i$,
     \begin{align}
         A^iX
@@ -1270,7 +1253,7 @@ used in the virtual bond gauge.
     \label{thm:physRealize_mul}
     \lean{MPSTensor.physRealize_mul}
     \leanok
-    \uses{def:phys_realize, lem:physRealize_spec, def:injective}
+    \uses{def:phys_realize,lem:physRealize_spec,def:injective}
     Let $A$ be an injective MPS tensor.
     For all $X,Y\in\MN{D}$,
     $O_A(XY)=O_A(X)O_A(Y)$.
@@ -1299,7 +1282,7 @@ used in the virtual bond gauge.
 
 \begin{remark}[General injective case]
     \label{rem:physRealize_mul_general}
-    \uses{thm:physRealize_mul, def:injective, def:decomposition_map}
+    \uses{thm:physRealize_mul,def:injective,def:decomposition_map}
     When $d>D^2$, the decomposition map $\Psi_A$ need not be unique.
     Nevertheless, Lemma~\ref{thm:physRealize_mul} is already the
     general injective statement: for the fixed choice of $\Psi_A$ in
@@ -1329,7 +1312,7 @@ $\MN{D}$ consists of scalars.
 \begin{lemma}[Blocking preserves injectivity]\label{lem:blocking_preserves_injectivity}
     \lean{MPSTensor.chainCombinedTensor_isInjective}
     \leanok
-    \uses{def:injective, def:blocked_tensor}
+    \uses{def:injective,def:blocked_tensor}
     Let $A_0,\ldots,A_{m-1}$ be injective MPS tensors with compatible
     bond dimensions.
     Then the blocked tensor
@@ -1360,7 +1343,7 @@ insertion data.
     \label{lem:virtual_bond_gauge}
     \lean{MPSTensor.virtual_bond_gauge}
     \leanok
-    \uses{thm:physRealize_mul, thm:simplicity}
+    \uses{thm:physRealize_mul,thm:simplicity}
     Let $A=(A_0,A_1,A_2)$ and $B=(B_0,B_1,B_2)$ be two
     3-site injective periodic chains with common bond dimension
     $D\ge1$ and $\mc{V}(A)=\mc{V}(B)$ (same MPV family).
@@ -1382,7 +1365,7 @@ insertion data.
 
 \begin{proof}
     \leanok
-    \uses{thm:physRealize_mul, thm:simplicity, lem:blocking_preserves_injectivity}
+    \uses{thm:physRealize_mul,thm:simplicity,lem:blocking_preserves_injectivity}
     The $\mc{V}(A)=\mc{V}(B)$ hypothesis gives, for every $X\in\MN{D}$,
     equality of the virtual-insertion trace coefficients
     \begin{align}
@@ -1414,7 +1397,7 @@ shows that this agreement forces the local tensors to be proportional.
     \label{lem:tensor_proportional}
     \lean{MPSTensor.tensor_proportional}
     \leanok
-    \uses{def:injective, def:decomposition_map, lem:center_scalar}
+    \uses{def:injective,def:decomposition_map,lem:center_scalar}
     Let $A_1,A_2$ and $B_1,B_2$ be injective MPS tensors with
     the same positive bond dimension $D$.
     Suppose that, for all $X\in\MN{D}$ on the internal bond,
@@ -1477,7 +1460,7 @@ shows that this agreement forces the local tensors to be proportional.
 
 \begin{proof}
     \leanok
-    \uses{def:decomposition_map, lem:center_scalar}
+    \uses{def:decomposition_map,lem:center_scalar}
     By cyclicity and non-degeneracy of the trace pairing,
     the conditions in (\ref{eq:internal_bond})
     and (\ref{eq:external_bond}) give, for all physical indices $i,j$,

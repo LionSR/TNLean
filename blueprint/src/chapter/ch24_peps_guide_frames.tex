@@ -48,22 +48,19 @@ outer sample.
 \begin{lemma}[Adaptive patches on cell centers]
     \label{lem:peps_adaptive_patch_supply}
     \lean{TNLean.PEPS.EncodedFrame.SquarePatch.proj_eq_cylSum,
-        TNLean.PEPS.EncodedFrame.SquarePatch.norm_act_proj_sub_le,
+        TNLean.PEPS.EncodedFrame.SquarePatch.norm_toEuclideanLin_proj_sub_le,
         TNLean.PEPS.EncodedFrame.SquarePatch.card_tag_le_max,
         TNLean.PEPS.EncodedFrame.SquarePatch.translate,
         TNLean.PEPS.EncodedFrame.HasAdaptivePatch.translate,
         TNLean.PEPS.EncodedFrame.patchAt,
-        TNLean.PEPS.EncodedFrame.norm_act_proj_patchAt_sub_le,
+        TNLean.PEPS.EncodedFrame.norm_toEuclideanLin_proj_patchAt_sub_le,
         TNLean.PEPS.EncodedFrame.card_tag_patchAt_le,
         TNLean.PEPS.Approximation.cellCenterPos,
         TNLean.PEPS.Approximation.cellCenterPos_eq_sitePosition_add,
         TNLean.PEPS.Approximation.AdaptivePatchSupply.cellCenterPos,
         TNLean.PEPS.Approximation.AdaptivePatchConstraint.supply_cellCenterPos}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint,
-        def:peps_frame_hole_encoder,
-        def:peps_angular_information_bound,
-        def:peps_squareLatticeCoordinateRegions}
+    \uses{def:peps_adaptive_patch_constraint,def:peps_frame_hole_encoder,def:peps_angular_information_bound,def:peps_squareLatticeCoordinateRegions}
     If the outer sample of square cylinder data is nonempty, its projector is
     $P_{c,h}=\Pi$; in all cases
     $\lVert(\id-P_{c,h})\Omega\rVert\le\lVert(\id-\Pi)\Omega\rVert$ and the
@@ -91,7 +88,7 @@ outer sample.
     \lean{TNLean.PEPS.Approximation.tagHolder,
         TNLean.PEPS.Approximation.guideFrame}
     \leanok
-    \uses{def:peps_dyadic_incident_labels, def:peps_frame}
+    \uses{def:peps_dyadic_incident_labels,def:peps_frame}
     In the construction of \cite[Section~7]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
     lines 69--80 and 109--125), fix a ranking of the labels by natural numbers and a placeholder label $\ast$. The
     canonical tag holder of a point $c$ of a guide is the incident label at $c$
@@ -131,7 +128,7 @@ outer sample.
         TNLean.PEPS.Approximation.rank_tagHolder_le,
         TNLean.PEPS.Approximation.tagHolder_congr}
     \leanok
-    \uses{def:peps_guide_frame, lem:peps_dyadic_tags}
+    \uses{def:peps_guide_frame,lem:peps_dyadic_tags}
     At a true vertex $c$, the canonical tag holder is an incident label other than $\ast$ of least rank among such labels. Guides with the same
     incident labels at $c$ have the same canonical tag holder there, so the
     tag of a hole accompanies it through every change that preserves the incident
@@ -154,7 +151,7 @@ outer sample.
         TNLean.PEPS.Approximation.outer_eq_empty_of_isCellCenter,
         TNLean.PEPS.Approximation.guideFrame_unitLevel}
     \leanok
-    \uses{def:peps_guide_frame, thm:peps_frame_norm, lem:peps_adaptive_patch_supply}
+    \uses{def:peps_guide_frame,thm:peps_frame_norm,lem:peps_adaptive_patch_supply}
     Patches whose closed outer squares $Q^+(c,h)$ are disjoint in $\R^2$ have disjoint
     outer samples. Let $\lVert\Omega\rVert=1$. If every patch at $c\in V$
     has projector error $\lVert(\id-P_{c,h})\Omega\rVert\le\varepsilon$, the reference vector $\Omega_{\mathcal F}$ of
@@ -180,8 +177,7 @@ outer sample.
     \label{lem:peps_guide_frame_outer_holes_disjoint}
     \lean{TNLean.PEPS.Approximation.disjoint_outerHoles_guideFrame}
     \leanok
-    \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
-        def:peps_guide_frame}
+    \uses{def:peps_frame_square_patch,def:peps_frame_rewrite_data,def:peps_guide_frame}
     Let $I$ be a finite set of sites with positions $p_x\in\mathbb R^2$, and
     let $q\in\N$ be the local dimension. Fix a guide, owner map,
     placeholder label and label ranking. Let $V$ be a finite indexing
@@ -193,8 +189,7 @@ outer sample.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
-        thm:peps_guide_frame_norm}
+    \uses{def:peps_frame_square_patch,def:peps_frame_rewrite_data,thm:peps_guide_frame_norm}
     Every hole of $\mathcal F$ is $P_z$ for some $z\in V$, whose outer
     sample consists of sites $x$ with $\operatorname{dist}(p_x,c_z)\le2r_z$, disjoint from $T$ by hypothesis.
 \end{proof}
@@ -204,11 +199,10 @@ outer sample.
     \lean{TNLean.PEPS.Approximation.GuideFrameRewrite,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.conditions,
-        TNLean.PEPS.EncodedFrame.Frame.exists_permWord,
+        TNLean.PEPS.EncodedFrame.Frame.exists_relabel_of_perm,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit}
     \leanok
-    \uses{def:peps_guide_frame, lem:peps_guide_frame_tags,
-        thm:peps_frame_small_rewrite_gate}
+    \uses{def:peps_guide_frame,lem:peps_guide_frame_tags,thm:peps_frame_small_rewrite_gate}
     Consider old and new guides $g_{\rm old},g_{\rm new}$ with one owner map $\varpi$, a
     finite set $V_{\rm unt}$ of untouched hole centers, finite sets $V_{\rm old},V_{\rm new}$ of old and new affected
     hole centers, hole patches of the two frames $\mathcal F_{\rm old}=\mathcal F(g_{\rm old},V_{\rm unt}\cup V_{\rm old})$ and $\mathcal F_{\rm new}=\mathcal F(g_{\rm new},V_{\rm unt}\cup V_{\rm new})$, additional
@@ -231,14 +225,14 @@ outer sample.
 \begin{lemma}[Patch data of adaptive small-patch rewrites]
     \label{lem:peps_guide_frame_patch_data}
     \lean{TNLean.PEPS.EncodedFrame.IsSuppliedPatch,
-        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.norm_act_proj_sub_le,
+        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.norm_toEuclideanLin_proj_sub_le,
         TNLean.PEPS.EncodedFrame.IsSuppliedPatch.card_tag_le,
         TNLean.PEPS.EncodedFrame.IsSuppliedPatch.nonempty_tag,
         TNLean.PEPS.Approximation.GuideFrameRewrite.IsSupplied,
         TNLean.PEPS.Approximation.GuideFrameRewrite.IsSupplied.patchData,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit_of_isSupplied}
     \leanok
-    \uses{lem:peps_adaptive_patch_supply, thm:peps_guide_frame_rewrite}
+    \uses{lem:peps_adaptive_patch_supply,thm:peps_guide_frame_rewrite}
     Let $\lVert\Omega\rVert=1$ and $L\ge2$, and let every additional patch and
     every hole patch of a rewrite between guide frames be supplied by Lemma~\ref{lem:peps_adaptive_patch_supply} at test exponent $p=60$ with constants
     $C,c$, as at \cite[Section~7]{OpenAI2026PolynomialPEPS},
@@ -311,8 +305,7 @@ outer sample.
         TNLean.PEPS.Approximation.IsProtocolConstants.protocolSeparations,
         TNLean.PEPS.Approximation.IsProtocolConstants.eventually_protocolSeparations}
     \leanok
-    \uses{thm:peps_guide_frame_rewrite_events, lem:peps_dyadic_small_radius,
-        lem:peps_dyadic_choice_K0}
+    \uses{thm:peps_guide_frame_rewrite_events,lem:peps_dyadic_small_radius,lem:peps_dyadic_choice_K0}
     Fix the constants in the order of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
     \texttt{06-geometry.tex}, lines 559--570: given the clearance constant $a_0$, choose $K_0\ge20$, then $\epsilon_0>0$ with
     $2\epsilon_0(a_0+1)\le a_0/2$, then $\nu>0$ with $2\epsilon_0+3\nu<1$, then
@@ -405,7 +398,7 @@ outer sample.
         TNLean.PEPS.Approximation.card_blockParties_le,
         TNLean.PEPS.Approximation.pointTreatment_step}
     \leanok
-    \uses{thm:peps_guide_frame_rewrite_events, lem:peps_treated_true_vertices}
+    \uses{thm:peps_guide_frame_rewrite_events,lem:peps_treated_true_vertices}
     Assume the hole and patch bounds of Lemma~\ref{thm:peps_frame_small_rewrite_gate}: at most $CL^c$ cylinder terms, projector error at most
     $L^{-60}$ on $\Omega$ with $\lVert\Omega\rVert\le1$, and at least one tag per hole.
     \begin{enumerate}
@@ -491,9 +484,7 @@ outer sample.
         TNLean.PEPS.Approximation.pointTreatment_footprintRatio_homogenize_reading_of_le,
         TNLean.PEPS.Approximation.pointTreatment_step_reading_of_le}
     \leanok
-    \uses{thm:peps_guide_frame_resize_treatment_gates,
-        thm:peps_dyadic_sampled_ratio, thm:peps_guide_frame_mark_ratio,
-        thm:peps_dyadic_block_reading_ratio}
+    \uses{thm:peps_guide_frame_resize_treatment_gates,thm:peps_dyadic_sampled_ratio,thm:peps_guide_frame_mark_ratio,thm:peps_dyadic_block_reading_ratio}
     Fix $0<\epsilon_0\le\tfrac1{16}$. Each of the following two statements
     holds with its own threshold $\nu'>0$, independent of the scales: for the
     first the threshold is $\nu'=\min(\epsilon_0,1)/8$, and for the second it
@@ -546,7 +537,7 @@ outer sample.
         TNLean.PEPS.Approximation.resize_step_supplied_of_le,
         TNLean.PEPS.Approximation.pointTreatment_step_supplied_of_le}
     \leanok
-    \uses{thm:peps_guide_frame_reading_gates, lem:peps_guide_frame_patch_data}
+    \uses{thm:peps_guide_frame_reading_gates,lem:peps_guide_frame_patch_data}
     Assume the adaptive patch constraint (Definition~\ref{def:peps_adaptive_patch_constraint}) at test exponent $p=60$ on the sheet,
     and choose every hole patch and net patch as the supplied patch of Lemma~\ref{lem:peps_adaptive_patch_supply} at
     its center and radius in $(0,B_0\log L]$. Let
@@ -561,8 +552,7 @@ outer sample.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:peps_guide_frame_patch_data, lem:peps_adaptive_patch_supply,
-        thm:peps_frame_small_rewrite_gate_sources}
+    \uses{lem:peps_guide_frame_patch_data,lem:peps_adaptive_patch_supply,thm:peps_frame_small_rewrite_gate_sources}
     By Lemma~\ref{lem:peps_adaptive_patch_supply}, the supplied patch at $(z,u)$ depends only on $(z,u)$, so
     the old and new holes agree wherever their radii agree. By Lemma~\ref{lem:peps_guide_frame_patch_data}, each patch has at most
     $C'L^{c'}$ tags, projector error at most $L^{-60}$ on $\Omega$, and at least one tag, discharging the hypotheses of
@@ -582,8 +572,7 @@ outer sample.
         TNLean.PEPS.Approximation.directRepainting_step_of_protocolSeparations,
         TNLean.PEPS.Approximation.IsProtocolConstants.directRepainting_step}
     \leanok
-    \uses{thm:peps_dyadic_block_reading_ratio, thm:peps_guide_frame_rewrite_events,
-        thm:peps_protocol_constants}
+    \uses{thm:peps_dyadic_block_reading_ratio,thm:peps_guide_frame_rewrite_events,thm:peps_protocol_constants}
     For $\epsilon_0>0$ and any $K_0$, let
     $\nu_3=\min(\epsilon_0/\max(K_0,1),1)/4$. Every $\nu\in(0,\nu_3]$ serves as
     the ratio of Lemma~\ref{thm:peps_dyadic_sampled_ratio} for the direct
@@ -608,10 +597,7 @@ outer sample.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_block_reading_ratio,
-        lem:peps_dyadic_small_radius,
-        thm:peps_protocol_constants,
-        thm:peps_frame_small_rewrite_gate_sources}
+    \uses{thm:peps_dyadic_block_reading_ratio,lem:peps_dyadic_small_radius,thm:peps_protocol_constants,thm:peps_frame_small_rewrite_gate_sources}
     The hole radius satisfies $h_n\ge\epsilon_0n/\max(K_0,1)$ by
     Lemma~\ref{lem:peps_dyadic_small_radius}, so $\nu\le\nu_3$ gives
     $2\nu n\le h_n/2<h_n$ and $2\nu n\le n/2<n$, and
@@ -632,7 +618,7 @@ outer sample.
         TNLean.PEPS.Approximation.blockRepainting_treated_mem_validLabels,
         TNLean.PEPS.Approximation.guideFrame_owner_eq_iff}
     \leanok
-    \uses{thm:peps_dyadic_repainting_valid_labels, def:peps_guide_frame}
+    \uses{thm:peps_dyadic_repainting_valid_labels,def:peps_guide_frame}
     At level $2^j$ ($j<k$), the level block guides (before and after a direct
     repainting), the guides of Lemma~\ref{thm:peps_dyadic_repainting_valid_labels}
     shifted to a block and homogenized on any set to a label in
@@ -644,7 +630,7 @@ outer sample.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_repainting_valid_labels, thm:peps_dyadic_protocol_parties}
+    \uses{thm:peps_dyadic_repainting_valid_labels,thm:peps_dyadic_protocol_parties}
     Shifting, homogenizing to a label in $\mathcal L_{\rm val}$, and taking a
     reading preserve $\mathcal L_{\rm val}$-valuedness, and $\pi_S$ is injective on
     $\mathcal L_{\rm val}$ by Lemma~\ref{thm:peps_dyadic_protocol_parties}.

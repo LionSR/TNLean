@@ -43,7 +43,7 @@ one physical alphabet.
     \leanok
     \label{thm:glm_triangular_boundary_exact}
     \lean{MPOTensor.isBiorthogonalDecomposition_triangularTensor}
-    \uses{def:glm_triangular_boundary_family, def:glm_boundary_decomposition}
+    \uses{def:glm_triangular_boundary_family,def:glm_boundary_decomposition}
     Suppose the original matrices are exact biorthogonal decompositions
     of every $O_aO_b$ into the $O_c$ channels and of every $O_a\cdot A_x$
     into the $A_y$ channels. For every $u,v\in\Lambda$, the matrices
@@ -53,7 +53,7 @@ one physical alphabet.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_triangular_padding_products, thm:glm_triangular_padding_decomposition}
+    \uses{thm:glm_triangular_padding_products,thm:glm_triangular_padding_decomposition}
     On an operator/operator pair, padding the original fusion decomposition
     in the retained corner preserves the identity; on an operator/state pair,
     padding the original action decomposition in the retained column does the
@@ -67,7 +67,7 @@ one physical alphabet.
     \leanok
     \label{thm:glm_triangular_boundary_blocking}
     \lean{MPSTensor.IsBiorthogonalDecomposition.blockMPO_fintype}
-    \uses{def:glm_boundary_decomposition, def:mpdo_operator_product}
+    \uses{def:glm_boundary_decomposition,def:mpdo_operator_product}
     Let an operator family have any finite label set, and suppose a
     pairwise product has an exact biorthogonal decomposition into that
     family. Blocking the incoming tensors and every target tensor by a
@@ -86,7 +86,7 @@ one physical alphabet.
     \leanok
     \label{thm:glm_triangular_boundary_inverse_relabel}
     \lean{MPOTensor.exists_blockTensor_leftInverse_of_labelEquiv}
-    \uses{def:mpo_tensor, def:gauge_phase_equiv, def:injective, def:normal}
+    \uses{def:mpo_tensor,def:gauge_phase_equiv,def:injective,def:normal}
     Let $T_c$ be a finite family of algebraically normal operator tensors
     with positive dimensions $\Delta_c$. Suppose no two different labels
     are related by an invertible similarity and a nonzero scalar, and
@@ -115,7 +115,7 @@ one physical alphabet.
     \leanok
     \label{thm:glm_triangular_boundary_inverse}
     \lean{MPOTensor.exists_triangular_blockTensor_leftInverse}
-    \uses{def:glm_triangular_boundary_family, def:injective, def:gauge_phase_equiv}
+    \uses{def:glm_triangular_boundary_family,def:injective,def:gauge_phase_equiv}
     Suppose every $O_a$ on its doubled physical alphabet and every $A_x$
     is injective, with $\chi_a,D_x>0$. Exclude scalar-gauge duplicates
     separately among the operators and among the states.
@@ -126,10 +126,7 @@ one physical alphabet.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_triangular_padding_injectivity,
-        thm:glm_triangular_padding_gauge_restriction,
-        thm:glm_triangular_padding_gauge_separation,
-        thm:glm_triangular_boundary_inverse_relabel}
+    \uses{thm:glm_triangular_padding_injectivity,thm:glm_triangular_padding_gauge_restriction,thm:glm_triangular_padding_gauge_separation,thm:glm_triangular_boundary_inverse_relabel}
     Padding preserves injectivity and the positive virtual dimensions.
     A scalar-gauge relation within either kind would restrict to an
     excluded original relation, while a relation between the two kinds is
@@ -158,8 +155,7 @@ one physical alphabet.
         MPOTensor.CompleteZipperFusionFamily.ofTriangularBiorthogonalBlocked_tensor,
         MPOTensor.CompleteZipperFusionFamily.ofTriangularBiorthogonalBlocked_fusionSynthesis,
         MPOTensor.CompleteZipperFusionFamily.ofTriangularBiorthogonalBlocked_fusionAnalysis}
-    \uses{def:glm_triangular_boundary_family, def:glm_triangular_boundary_length,
-        def:mpdo_complete_zipper_fusion_family, def:glm_boundary_decomposition}
+    \uses{def:glm_triangular_boundary_family,def:glm_triangular_boundary_length,def:mpdo_complete_zipper_fusion_family,def:glm_boundary_decomposition}
     Assume the individual block hypotheses of
     Lemma~\ref{thm:glm_triangular_boundary_inverse} and the original
     exact fusion and action decompositions of
@@ -182,8 +178,7 @@ one physical alphabet.
 \end{definition}
 \begin{proof}
     \leanok
-    \uses{thm:glm_triangular_boundary_exact, thm:glm_triangular_boundary_blocking,
-        thm:glm_triangular_boundary_inverse, def:glm_boundary_zipper_family}
+    \uses{thm:glm_triangular_boundary_exact,thm:glm_triangular_boundary_blocking,thm:glm_triangular_boundary_inverse,def:glm_boundary_zipper_family}
     Blocking the exact disjoint-union pair decompositions at the chosen
     length leaves their maps and multiplicities unchanged, and the derived
     simultaneous inverse gives the remaining complete-family data.

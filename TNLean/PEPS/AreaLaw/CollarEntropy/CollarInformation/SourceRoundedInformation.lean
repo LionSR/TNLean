@@ -31,7 +31,7 @@ noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth supDist)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -94,7 +94,7 @@ theorem sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
-              10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+              10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
@@ -161,7 +161,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_th
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
-              10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+              10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
@@ -218,7 +218,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
-              10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+              10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →

@@ -21,8 +21,7 @@ origin and neighboring-layer locality; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \label{thm:area_law_corner_side_subdivision}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_side}
     \leanok
-    \uses{def:area_law_cell_corner,def:area_law_cell_fan,
-        def:area_law_fine_layer_indices}
+    \uses{def:area_law_cell_corner,def:area_law_cell_fan,def:area_law_fine_layer_indices}
     Fix a common origin $o$, finite endpoint set $Z$, and integer
     width $C_0\ge2$. Let $z$ and $w$ index fine cells of layers
     $k$ and $h$, respectively, with $k\ge50\,000\,000$. Write $[a,b]$
@@ -31,11 +30,7 @@ origin and neighboring-layer locality; see \cite[Section~11]{OpenAI2026AreaLaw}.
     $x=a$, $x=(a+b)/2$, or $x=b$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:area_law_cell_corner,def:area_law_cell_fan,
-        thm:area_law_dyadic_closures,thm:area_law_fine_cell_containment,
-        thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,
-        def:area_law_affine_mesh,thm:area_law_cell_fan_mark_vertices,
-        thm:area_law_belt_marks_closed_cell}
+    \uses{def:area_law_cell_corner,def:area_law_cell_fan,thm:area_law_dyadic_closures,thm:area_law_fine_cell_containment,thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,def:area_law_affine_mesh,thm:area_law_cell_fan_mark_vertices,thm:area_law_belt_marks_closed_cell}
     Because $x$ belongs to both closed layers, $|h-k|\le1$, and thus the fine
     exponents satisfy $\ell_k\le\ell_h+1$. Put $t=2^{\ell_k}$. The corner $x$
     lies in $o+(t/2)\mathbb Z^2$, so its coordinate along $[a,b]$, measured

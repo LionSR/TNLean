@@ -26,8 +26,7 @@ reference state. Neither uses the clocks or the spectral estimates.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_uniform_collar_threshold,
-        thm:area_law_graph_neighborhood_cut_clearance}
+    \uses{thm:area_law_uniform_collar_threshold,thm:area_law_graph_neighborhood_cut_clearance}
     For $N$ chosen so that $L+2r<n^\beta$ for every admissible radius, one has
     $L+2r<L+n^\beta<\operatorname{dist}_\infty(T,Z)$, so a walk of length at
     most $2r$ from $S_0$ cannot cross the cut, and
@@ -133,8 +132,7 @@ reference state. Neither uses the clocks or the spectral estimates.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:area_law_amplification_before_polar,
-        thm:area_law_amplification_unitary_error}
+    \uses{thm:area_law_amplification_before_polar,thm:area_law_amplification_unitary_error}
     The first truncation estimate gives $\|(L'R_0\otimes I)\phi\|\le1+3\varepsilon$,
     so the preceding theorem with $b=3\varepsilon$ yields $U$.
 \end{proof}

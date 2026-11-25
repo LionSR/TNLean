@@ -45,7 +45,7 @@ proof is copied or adapted.
 
 section
 
-open ManyBody (planeDomainGraph)
+open ManyBody (planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -114,7 +114,7 @@ private theorem designatedSupport_not_near_far_planeDomainGraph
     (hlead : ∀ side x, x ∈ S.A → σ x = some side →
       orientedDepth S.depth side x ≤ S.front g r k side + S.D + S.r₀)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (i : I) :
     ¬ ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
         receiving σ false).Nonempty ∧
@@ -158,7 +158,7 @@ theorem state_designatedSupport_not_near_far_planeDomainGraph
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hL : 8 * S.K * S.m ≤ L)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (g : Fin S.K) (i : I) :
     ¬ ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
         receiving (S.state h g) false).Nonempty ∧
@@ -179,7 +179,7 @@ theorem old_designatedSupport_not_near_far_planeDomainGraph
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hL : 8 * S.K * S.m ≤ L)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (g : Fin S.K) (i : I) :
     ¬ ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
         receiving (S.oldChargeState h g) false).Nonempty ∧

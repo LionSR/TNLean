@@ -10,9 +10,7 @@ closed walks.
     \label{thm:peps_regular_twisted_projector_coordinates}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_coordinates}
     \leanok
-    \uses{def:peps_regular_region_coordinates,
-        thm:peps_regular_region_tree_gauge,
-        def:peps_regular_projector_twisted_region}
+    \uses{def:peps_regular_region_coordinates,thm:peps_regular_region_tree_gauge,def:peps_regular_projector_twisted_region}
     Choose a spanning tree $T$ rooted at $o$ in the finite region $R$,
     and insert arbitrary operators $u_e\in G$ on its incident bonds.
     Let $k_o=1$, $k_tk_s^{-1}=u_e$ on $T$, and
@@ -104,7 +102,7 @@ closed walks.
         TNLean.PEPS.openRegionWeight_regularRegionGauge,
         TNLean.PEPS.openRegionWeight_eq_untwisted_of_regularRegionGaugeResidual_eq_one}
     \leanok
-    \uses{def:peps_regular_twisted_region, def:peps_open_region_contraction}
+    \uses{def:peps_regular_twisted_region,def:peps_open_region_contraction}
     Suppose each original site coefficient is invariant under simultaneous
     left translation of its incident regular labels. Let $k_v\in G$ be
     arbitrary gauges at the vertices of a finite region $R$, and let $u_e$
@@ -198,7 +196,7 @@ closed walks.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_region_gauge_contraction, thm:peps_regular_region_gauge_boundary, thm:peps_connected_regular_region_isometry}
+    \uses{thm:peps_regular_region_gauge_contraction,thm:peps_regular_region_gauge_boundary,thm:peps_connected_regular_region_isometry}
     The ordered coefficient identities follow from the contraction
     identity in Lemma~\ref{thm:peps_regular_region_gauge_contraction}.
     With identity internal residuals, the matrix is the untwisted block
@@ -289,7 +287,7 @@ closed walks.
         TNLean.PEPS.regularWalkHolonomy_torusClosureEdgeAssignment,
         TNLean.PEPS.regularWalkHolonomy_torusClosure_eq_of_winding_eq}
     \leanok
-    \uses{thm:peps_regular_walk_holonomy, thm:peps_regular_torus_closure_cut_identification}
+    \uses{thm:peps_regular_walk_holonomy,thm:peps_regular_torus_closure_cut_identification}
     Consider the native torus graph with both periods at least three.
     For a directed step, count $+1$ at a rightward horizontal seam
     crossing and at an upward vertical seam crossing, count $-1$ in
@@ -370,7 +368,7 @@ closed walks.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_walk_holonomy, thm:peps_regular_region_tree_gauge}
+    \uses{thm:peps_regular_walk_holonomy,thm:peps_regular_region_tree_gauge}
     Applying the native walk product to the free generators and using the fact that evaluation
     commutes with each product and inverse yields the residual holonomy.
     The tree gauge removes each tree operator and retains exactly the

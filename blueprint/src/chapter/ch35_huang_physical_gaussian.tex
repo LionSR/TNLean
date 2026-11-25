@@ -14,7 +14,7 @@ finite operator approximation in \cite[Section 5.4, Lemma 19 and equations
         TNLean.MPS.AreaLaw.positiveChainGaussianApproximant,
         TNLean.MPS.AreaLaw.positiveChainGaussianApproximant_spec}
     \leanok
-    \uses{def:huang_physical_propagator, thm:huang_unitary_quadrature}
+    \uses{def:huang_physical_propagator,thm:huang_unitary_quadrature}
     In the setting of Lemma~\ref{thm:huang_physical_gaussian} below, let
     $t_j$ be the representatives and $w_j$ the Gaussian masses of the time
     mesh of width $\eta/(\|H-EI\|+1)$ in $[-T,T]$, with $N$ cells. The
@@ -31,8 +31,7 @@ finite operator approximation in \cite[Section 5.4, Lemma 19 and equations
     \label{thm:huang_physical_gaussian}
     \lean{TNLean.MPS.AreaLaw.exists_positive_chain_gaussian_approximation}
     \leanok
-    \uses{thm:huang_unitary_quadrature, thm:huang_physical_propagation,
-        thm:huang_weighted_interval_layer_ranks, def:huang_physical_gaussian}
+    \uses{thm:huang_unitary_quadrature,thm:huang_physical_propagation,thm:huang_weighted_interval_layer_ranks,def:huang_physical_gaussian}
     Let $q\ge1$ and let $H=\sum_{i=0}^{L-2}h_i$, where $h_i$ is supported on
     sites $i,i+1$ and $0\le h_i\le I$. Let $a\ge0$, $E\in\mathbb R$, $T\ge0$
     and $\eta,\rho>0$. Put

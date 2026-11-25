@@ -32,8 +32,7 @@ the chain partition or establish its Lieb--Robinson estimates.
     \lean{ManyBody.disjointProjectedPropagator,
         ManyBody.disjointProjectedPropagator_spec}
     \leanok
-    \uses{def:qc_projected_relative_evolution,
-        thm:qc_disjoint_evolution_product_rule}
+    \uses{def:qc_projected_relative_evolution,thm:qc_disjoint_evolution_product_rule}
     In the setting of Lemma~\ref{thm:qc_disjoint_projected_propagator} below,
     the projected propagator on $K_j$ is the projected relative evolution of
     $A$ against $A-B_j$ on $K_j$ (Definition~\ref{def:qc_projected_relative_evolution}).
@@ -46,9 +45,7 @@ the chain partition or establish its Lieb--Robinson estimates.
     \label{thm:qc_disjoint_projected_propagator}
     \lean{ManyBody.exists_disjoint_projected_propagator_approximation}
     \leanok
-    \uses{thm:qc_disjoint_evolution_product_rule,
-        thm:qc_supported_projected_relative_evolution,
-        def:qc_disjoint_projected_propagator}
+    \uses{thm:qc_disjoint_evolution_product_rule,thm:qc_supported_projected_relative_evolution,def:qc_disjoint_projected_propagator}
     Let the sites form a finite set, let $q\ge1$, and let $K_j$,
     $0\le j<m$, be pairwise disjoint sets of sites. Let $A,B_j$ be
     Hermitian operators and put $H=A-\sum_jB_j$. Write $E_{K_j}$ for

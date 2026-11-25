@@ -51,8 +51,7 @@ with their multiplicities. All norms are operator norms.
     when $\neg P(i)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_channel_word_norm,thm:al_root_channel_contraction,
-        thm:al_channel_word_append}
+    \uses{thm:al_channel_word_norm,thm:al_root_channel_contraction,thm:al_channel_word_append}
     Linearity holds letter by letter, and contractivity follows from
     Lemma~\ref{thm:al_channel_word_norm}. With $A=\mathcal E_w(B)$ and
     $R=\mathcal E_{w|_P}(B)$, if $P(i)$ holds then
@@ -141,8 +140,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_channel_word_omission_bounds,thm:al_channel_word_omission_telescope,
-        thm:al_channel_word_filter,thm:al_poisson_omitted_prefix_occupation}
+    \uses{thm:al_channel_word_omission_bounds,thm:al_channel_word_omission_telescope,thm:al_channel_word_filter,thm:al_poisson_omitted_prefix_occupation}
     Since $0\le D_P(w;B)\le 2\|B\|$ by Lemma~\ref{thm:al_channel_word_omission_bounds},
     $D_P(\cdot;B)$ is integrable. Integrating (\ref{eq:al_channel_word_omission_telescope}),
     identifying $\mathcal E_{w_{<j}|_P}$ with the word over $F_P$ via
@@ -260,9 +258,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_channel_word_expected_omission,thm:al_channel_event_error,
-        thm:al_omitted_anchor_tail,thm:al_actual_channel_uniform_bounds,
-        thm:al_channel_poisson_graph_growth,thm:al_retained_anchor_fibers}
+    \uses{thm:al_channel_word_expected_omission,thm:al_channel_event_error,thm:al_omitted_anchor_tail,thm:al_actual_channel_uniform_bounds,thm:al_channel_poisson_graph_growth,thm:al_retained_anchor_fibers}
     By Lemma~\ref{thm:al_channel_poisson_graph_growth} (applied via
     Lemma~\ref{thm:al_retained_anchor_fibers} and
     Lemma~\ref{thm:al_actual_channel_uniform_bounds} to $F_P$),
@@ -296,8 +292,7 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Lemma~\ref{thm:al_lattice_counts}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_graph_channel_omission,thm:al_component_support_of_tail,
-        thm:al_lattice_counts}
+    \uses{thm:al_graph_channel_omission,thm:al_component_support_of_tail,thm:al_lattice_counts}
     Combine Lemma~\ref{thm:al_component_support_of_tail} and
     Lemma~\ref{thm:al_lattice_counts} ($K=2$) with
     Lemma~\ref{thm:al_graph_channel_omission}.
@@ -343,8 +338,7 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Lemma~\ref{thm:al_lattice_counts}.
     and any anchoring $a_i\in X_i$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:al_domain_constraint_omission,thm:al_lattice_positive_replacement,
-        thm:al_lattice_counts}
+    \uses{thm:al_domain_constraint_omission,thm:al_lattice_positive_replacement,thm:al_lattice_counts}
     Theorem~\ref{thm:al_lattice_positive_replacement} supplies $0\le k_i\le\mathbb 1$,
     $k_i\Omega=0$, and the stretched-exponential tails, while
     Lemma~\ref{thm:al_lattice_counts} bounds the anchor multiplicity $\mu$, so

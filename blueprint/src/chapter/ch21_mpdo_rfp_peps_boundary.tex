@@ -56,7 +56,7 @@ $D_{\mathrm v}$.
     \label{thm:peps_local_boundary_tensor_is_lpdo}
     \lean{TNLean.PEPS.localBoundaryMPOTensor_isLPDO}
     \leanok
-    \uses{def:peps_local_boundary_tensor, def:lpdo}
+    \uses{def:peps_local_boundary_tensor,def:lpdo}
     The local boundary tensor $E_A$ is a locally purifiable density operator.
     One may take ancillary dimension $dD_{\mathrm v}$ with coordinate $(s,b)$,
     purifying bond dimension $D_{\mathrm h}$, and purifying matrices
@@ -73,7 +73,7 @@ $D_{\mathrm v}$.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_local_boundary_tensor_formula, def:lpdo}
+    \uses{thm:peps_local_boundary_tensor_formula,def:lpdo}
     Identifying each MPO bond coordinate with a pair of horizontal PEPS virtual
     coordinates, substituting the displayed purifying matrices into the LPDO
     contraction, and summing over the ancillary pair $(s,b)$ gives
@@ -84,14 +84,14 @@ $D_{\mathrm v}$.
     \label{cor:peps_local_boundary_tensor_is_mpdo}
     \lean{TNLean.PEPS.localBoundaryMPOTensor_isMPDO}
     \leanok
-    \uses{def:peps_local_boundary_tensor, def:mpdo}
+    \uses{def:peps_local_boundary_tensor,def:mpdo}
     For every nonempty periodic chain, the matrix product operator generated
     by $E_A$ is positive semidefinite.
 \end{corollary}
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_local_boundary_tensor_is_lpdo, thm:lpdo_is_mpdo}
+    \uses{thm:peps_local_boundary_tensor_is_lpdo,thm:lpdo_is_mpdo}
     The general implication from local purification to matrix product
     density operators gives positive semidefiniteness on every nonempty
     periodic chain.
@@ -134,8 +134,7 @@ $D_{\mathrm v}$.
     \label{def:peps_boundary_coarse_graining}
     \notready
     \discussion{7371}
-    \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
-        def:peps_local_boundary_tensor, def:is_rfp_via_ts}
+    \uses{def:peps_transfer_fixed_point,def:peps_rfp_relation,def:peps_local_boundary_tensor,def:is_rfp_via_ts}
     A coarse-graining channel $\mathcal S$ acts from two boundary sites to one
     and satisfies $\mathcal S[M_2(X)]=M_1(X)$ for every virtual operator $X$.
     The coarse-graining map in the diagram at source lines~725--729 of
@@ -148,8 +147,7 @@ $D_{\mathrm v}$.
     \label{def:peps_boundary_refinement}
     \notready
     \discussion{7371}
-    \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
-        def:peps_local_boundary_tensor, def:is_rfp_via_ts}
+    \uses{def:peps_transfer_fixed_point,def:peps_rfp_relation,def:peps_local_boundary_tensor,def:is_rfp_via_ts}
     A refinement channel $\mathcal T$ acts from one boundary site to two and
     satisfies $\mathcal T[M_1(X)]=M_2(X)$ for every virtual operator $X$. It
     is obtained in the diagram at source lines~725--729 of
@@ -162,9 +160,7 @@ $D_{\mathrm v}$.
     \label{thm:peps_rfp_implies_boundary_rfp}
     \notready
     \discussion{7371}
-    \uses{def:peps_local_boundary_tensor, def:peps_transfer_fixed_point,
-        def:peps_rfp_relation, def:peps_boundary_coarse_graining,
-        def:peps_boundary_refinement, def:is_rfp_via_ts}
+    \uses{def:peps_local_boundary_tensor,def:peps_transfer_fixed_point,def:peps_rfp_relation,def:peps_boundary_coarse_graining,def:peps_boundary_refinement,def:is_rfp_via_ts}
     Suppose a homogeneous PEPS satisfies the neighboring blocking relation at
     source lines~716--720 of \cite{Cirac2016MPDO_arXiv}, and let its transfer
     fixed points determine the boundary MPO displayed at source lines~721--724.
@@ -175,9 +171,7 @@ $D_{\mathrm v}$.
 
 \begin{proof}
     \notready
-    \uses{def:peps_transfer_fixed_point, def:peps_rfp_relation,
-        def:peps_boundary_coarse_graining, def:peps_boundary_refinement,
-        def:is_rfp_via_ts}
+    \uses{def:peps_transfer_fixed_point,def:peps_rfp_relation,def:peps_boundary_coarse_graining,def:peps_boundary_refinement,def:is_rfp_via_ts}
     The domain and codomain of the physical isometry, the virtual-space
     identifications, the transition from the finite-cylinder operators
     $\sigma_L,\sigma_R$ to the local tensor, and the normalization of the

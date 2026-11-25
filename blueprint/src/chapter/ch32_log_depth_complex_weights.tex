@@ -66,9 +66,7 @@ Lemma~\ref{thm:ldp_approximation_error_complex_weights}.
         MPSTensor.totalDim_phaseBlockSector, MPSTensor.bijective_phaseBlockCopyCoord,
         MPSTensor.phaseBlockEquiv, MPSTensor.phaseBlockEquiv_symm_apply}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:ldp_sector_fixed_point_state,
-        def:correlation_length, def:sector_bnt_cf, def:nt_cpsv,
-        def:cpsv_cfii}
+    \uses{def:ldp_non_normal_fixed_point,def:ldp_sector_fixed_point_state,def:correlation_length,def:sector_bnt_cf,def:nt_cpsv,def:cpsv_cfii}
     Let $\mu\in\C$ with $\lvert\mu\rvert=1$, and let $A^0=\operatorname{diag}(1,0)$
     and $A^1=\operatorname{diag}(0,\mu)$, the direct sum $A_1\oplus\mu A_2$ of the
     one-dimensional normal blocks $A_1=(1,0)$ and $A_2=(0,1)$, each of multiplicity
@@ -103,7 +101,7 @@ Lemma~\ref{thm:ldp_approximation_error_complex_weights}.
 
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
+    \uses{thm:ldpolar_decomposition,thm:ldp_polar_uniqueness}
     The hypotheses are checked as in the proof of
     Lemma~\ref{thm:ldp_approximation_error_overlapping_blocks}: both blocks are
     one-dimensional with $\sum_i\lvert a_i\rvert^2=1$, their states $\ket{0\cdots0}$
@@ -142,9 +140,7 @@ Lemma~\ref{thm:ldp_approximation_error_complex_weights}.
         MPSTensor.nonNormalApproxOverlap_comp_of_eq_zero,
         MPSTensor.ghzAmplitude_comp_of_eq_zero}
     \leanok
-    \uses{def:ldp_non_normal_fixed_point, def:correlation_length,
-        def:ldp_repeated_block_sum, def:ldp_one_copy_weight, lem:ldp_one_copy_state,
-        thm:ldp_approximation_error_repeated_overlapping}
+    \uses{def:ldp_non_normal_fixed_point,def:correlation_length,def:ldp_repeated_block_sum,def:ldp_one_copy_weight,lem:ldp_one_copy_state,thm:ldp_approximation_error_repeated_overlapping}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ be the direct sum with complex weights $\mu_j$
     of normal blocks $A_j$ in the gauge (\ref{eq:ldp_normal_gauge}), with positive
     definite fixed points $\rho_j$ of trace one, each placed on its own bond coordinates.
@@ -228,7 +224,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
     \lean{MPSTensor.oneCopyWeight, MPSTensor.oneCopyWeight_of_subsingleton,
         MPSTensor.oneCopyWeight_ne_zero}
     \leanok
-    \uses{def:ldp_repeated_block_sum, thm:ldp_repeated_block_polar}
+    \uses{def:ldp_repeated_block_sum,thm:ldp_repeated_block_polar}
     With the notation of Definition~\ref{def:ldp_repeated_block_sum}, choose a copy
     $k_j$ of every block $j$, and let $N=qM$. The coefficient of block $j$ is
     \begin{align*}
@@ -251,8 +247,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
         MPSTensor.copyApproxOverlap_ofReal_mul,
         MPSTensor.nonNormalApproxOverlap_repeatedBlockSum_oneCopy}
     \leanok
-    \uses{def:ldp_one_copy_weight, def:ldp_repeated_block_state,
-        def:ldp_pair_family_fixed_point, thm:ldpolar_decomposition}
+    \uses{def:ldp_one_copy_weight,def:ldp_repeated_block_state,def:ldp_pair_family_fixed_point,thm:ldpolar_decomposition}
     Let $A$ be the direct sum with multiplicities of
     Definition~\ref{def:ldp_repeated_block_sum}, let $q\geq1$, and let $B=VP$ be the
     polar decomposition of its blocked map. The states of distinct blocks need not be
@@ -313,9 +308,7 @@ pairs placed on one copy to a multiple of the pairs placed by $L_j$.
         MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy,
         MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy}
     \leanok
-    \uses{lem:ldp_one_copy_state, def:ldp_one_copy_weight,
-        thm:ldp_approximation_error_repeated_orthogonal_blocks,
-        thm:ldp_approximation_error_repeated_overlapping, def:correlation_length}
+    \uses{lem:ldp_one_copy_state,def:ldp_one_copy_weight,thm:ldp_approximation_error_repeated_orthogonal_blocks,thm:ldp_approximation_error_repeated_overlapping,def:correlation_length}
     Let $A$ be the direct sum with multiplicities of
     Definition~\ref{def:ldp_repeated_block_sum}, with normal blocks $A_j$ in the gauge
     (\ref{eq:ldp_normal_gauge}) and positive definite fixed points $\rho_j$ of trace one,

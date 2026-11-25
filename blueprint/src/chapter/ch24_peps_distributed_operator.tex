@@ -13,14 +13,14 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{definition}[Active gate occurrences]
     \label{def:compression_operator_active_gates}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.ActiveGate}
+    \lean{TNLean.Network.DistributedOperatorContraction.ActiveGate}
     \leanok
     The set of active gate occurrences is the finite set $G$ (with distinct elements for repeated gate applications).
 \end{definition}
 
 \begin{definition}[Tagged star and sample links]
     \label{def:compression_operator_links}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.Link}
+    \lean{TNLean.Network.DistributedOperatorContraction.Link}
     \leanok
     The tagged link family is the disjoint union
     \begin{align}
@@ -30,15 +30,15 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{definition}[Gate occurrences at a party]
     \label{def:compression_operator_party_gates}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.GateAt}
+    \lean{TNLean.Network.DistributedOperatorContraction.GateAt}
     \leanok
     For $p\in P$, the set of incident gate occurrences is $G_p:=\{g\in G:p\in P_g\}$.
 \end{definition}
 
 \begin{definition}[Pair-sample positions]
     \label{def:compression_operator_samples}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.Sample}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.SampleAt}
+    \lean{TNLean.Network.DistributedOperatorContraction.Sample}
+    \lean{TNLean.Network.DistributedOperatorContraction.SampleAt}
     \leanok
     The pair-sample position set and its party restrictions are
     \begin{align}
@@ -49,69 +49,69 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{definition}[Star and sample edges]
     \label{def:compression_operator_edges}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.starLink}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sampleLink}
+    \lean{TNLean.Network.DistributedOperatorContraction.starLink}
+    \lean{TNLean.Network.DistributedOperatorContraction.sampleLink}
     \leanok
     For $g\in G$ and $q\in P_g\setminus\{r_g\}$, the star edge is $\ell_{\mathrm{star}}(g,q):=(g,\mathrm{star},q)\in\mathcal L$. For $s=(g,\{p,q\})\in S$, the sample edge is $\ell_{\mathrm{sample}}(s):=(g,\mathrm{sample},\{p,q\})\in\mathcal L$.
 \end{definition}
 
 \begin{definition}[Oriented link endpoints]
     \label{def:compression_operator_endpoints}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.src}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.tgt}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.endpoints_eq}
+    \lean{TNLean.Network.DistributedOperatorContraction.src}
+    \lean{TNLean.Network.DistributedOperatorContraction.tgt}
+    \lean{TNLean.Network.DistributedOperatorContraction.endpoints_eq}
     \leanok
     Each $\ell\in\mathcal L$ has oriented endpoints $(u_\ell,v_\ell)$ given by $(r_g,q)$ for $\ell=(g,\mathrm{star},q)$ and by a fixed ordering $(s^-,s^+)$ of $\{p,q\}$ for $\ell=(g,\mathrm{sample},\{p,q\})$, so $\{u_\ell,v_\ell\}$ is the endpoint set of $\ell$.
 \end{definition}
 
 \begin{definition}[Party incidences]
     \label{def:compression_operator_incidences}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.LinkAt}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.starLinkAt}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sampleLinkAt}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.starGateAt}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.rootGateAt}
+    \lean{TNLean.Network.DistributedOperatorContraction.LinkAt}
+    \lean{TNLean.Network.DistributedOperatorContraction.starLinkAt}
+    \lean{TNLean.Network.DistributedOperatorContraction.sampleLinkAt}
+    \lean{TNLean.Network.DistributedOperatorContraction.starGateAt}
+    \lean{TNLean.Network.DistributedOperatorContraction.rootGateAt}
     \leanok
     For $p\in P$, let $I_p:=\{\ell\in\mathcal L:p\in\{u_\ell,v_\ell\}\}$. Then $r_g\in P_g$ gives $g\in G_{r_g}$, $(g,\mathrm{star},q)\in I_p$ whenever $p\in\{r_g,q\}$ (with $g\in G_p$), and $s\in S_p$ gives $\ell_{\mathrm{sample}}(s)\in I_p$.
 \end{definition}
 
 \begin{definition}[Virtual alphabets]
     \label{def:compression_operator_alphabets}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.alphabet}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.alphabetFintype}
+    \lean{TNLean.Network.DistributedOperatorContraction.alphabet}
+    \lean{TNLean.Network.DistributedOperatorContraction.alphabetFintype}
     \leanok
     The finite virtual alphabet of $\ell\in\mathcal L$ is $D_\ell:=\Lambda_g$ for $\ell=(g,\mathrm{star},q)$ and $D_\ell:=J_k$ for $\ell=(g,\mathrm{sample},s)$.
 \end{definition}
 
 \begin{definition}[Gate-label assignments]
     \label{def:compression_operator_gate_labels}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.GateLabels}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.GateLabelsAt}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.restrictGates}
+    \lean{TNLean.Network.DistributedOperatorContraction.GateLabels}
+    \lean{TNLean.Network.DistributedOperatorContraction.GateLabelsAt}
+    \lean{TNLean.Network.DistributedOperatorContraction.restrictGates}
     \leanok
     Global and party-local gate assignments are elements $\kappa\in\prod_{g\in G}\Lambda_g$ and $\xi_p\in\prod_{g\in G_p}\Lambda_g$, with restriction $\kappa_p:=\kappa|_{G_p}$.
 \end{definition}
 
 \begin{definition}[Virtual-label assignments]
     \label{def:compression_operator_link_labels}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.LinkLabels}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.LinkLabelsAt}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.restrictLinks}
+    \lean{TNLean.Network.DistributedOperatorContraction.LinkLabels}
+    \lean{TNLean.Network.DistributedOperatorContraction.LinkLabelsAt}
+    \lean{TNLean.Network.DistributedOperatorContraction.restrictLinks}
     \leanok
     Global and party-local virtual assignments are elements $\eta\in\prod_{\ell\in\mathcal L}D_\ell$ and $\eta_p\in\prod_{\ell\in I_p}D_\ell$, with restriction $\eta_p:=\eta|_{I_p}$.
 \end{definition}
 
 \begin{definition}[Local sample assignments]
     \label{def:compression_operator_sample_labels}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.restrictSamples}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.localSamples}
+    \lean{TNLean.Network.DistributedOperatorContraction.restrictSamples}
+    \lean{TNLean.Network.DistributedOperatorContraction.localSamples}
     \leanok
     A global sample assignment $j\in J_k^S$ restricts to $j_p:=j|_{S_p}\in J_k^{S_p}$, and any $\eta_p\in\prod_{\ell\in I_p}D_\ell$ induces $j(\eta_p)\in J_k^{S_p}$ via $j(\eta_p)_s:=\eta_p(g,\mathrm{sample},s)$ for $s\in S_p$.
 \end{definition}
 
 \begin{definition}[Shared virtual labels]
     \label{def:compression_operator_shared_labels}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sharedLinkLabels}
+    \lean{TNLean.Network.DistributedOperatorContraction.sharedLinkLabels}
     \leanok
     For $\kappa\in\prod_{g\in G}\Lambda_g$ and $j\in J_k^S$, define $\eta(\kappa,j)\in\prod_{\ell\in\mathcal L}D_\ell$ by
     \begin{align}
@@ -122,14 +122,14 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{definition}[Local star consistency]
     \label{def:compression_operator_consistency}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.StarConsistent}
+    \lean{TNLean.Network.DistributedOperatorContraction.StarConsistent}
     \leanok
     A pair $(\eta_p,\xi_p)\in\bigl(\prod_{\ell\in I_p}D_\ell\bigr)\times\bigl(\prod_{g\in G_p}\Lambda_g\bigr)$ is star-consistent if $\eta_p(g,\mathrm{star},q)=\xi_p(g)$ for every $(g,\mathrm{star},q)\in I_p$.
 \end{definition}
 
 \begin{lemma}[Consistency of shared assignments]
     \label{thm:compression_operator_shared_consistency}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sharedLinkLabels_consistent}
+    \lean{TNLean.Network.DistributedOperatorContraction.sharedLinkLabels_consistent}
     \leanok
     For every $(\kappa,j)\in\bigl(\prod_{g\in G}\Lambda_g\bigr)\times J_k^S$ and $p\in P$, the pair $(\eta(\kappa,j)_p,\kappa_p)$ is star-consistent.
 \end{lemma}
@@ -141,14 +141,14 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{definition}[Root-owned scalar coefficients]
     \label{def:compression_operator_root_coefficients}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.rootCoefficient}
+    \lean{TNLean.Network.DistributedOperatorContraction.rootCoefficient}
     \leanok
     For coefficients $c_g:\Lambda_g\to\mathbb C$ and $\xi_p\in\prod_{g\in G_p}\Lambda_g$, define $C_p(\xi_p):=\prod_{g\in G:r_g=p}c_g(\xi_p(g))$.
 \end{definition}
 
 \begin{definition}[Local operator tensor]
     \label{def:compression_operator_local_tensor}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.localTensor}
+    \lean{TNLean.Network.DistributedOperatorContraction.localTensor}
     \leanok
     Given matrices $T_p(\xi_p,j_p)\in\mathbb C^{X_p\times Y_p}$, define the local tensor at $p\in P$ by
     \begin{align}
@@ -162,22 +162,22 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{definition}[Globally consistent configurations]
     \label{def:compression_operator_consistent_configs}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.ConsistentConfig}
+    \lean{TNLean.Network.DistributedOperatorContraction.ConsistentConfig}
     \leanok
     A globally consistent configuration is a pair $(\eta,(\xi_p)_{p\in P})$ such that $(\eta_p,\xi_p)$ is star-consistent (Definition~\ref{def:compression_operator_consistency}) for every $p\in P$.
 \end{definition}
 
 \begin{definition}[Recovery at gate roots and sample links]
     \label{def:compression_operator_recovery}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.gateLabelsOfConfig}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.samplesOfConfig}
+    \lean{TNLean.Network.DistributedOperatorContraction.gateLabelsOfConfig}
+    \lean{TNLean.Network.DistributedOperatorContraction.samplesOfConfig}
     \leanok
     From a globally consistent configuration $(\eta,(\xi_p)_{p\in P})$, recover $\kappa_g:=\xi_{r_g}(g)$ for $g\in G$ and $j_s:=\eta_{(g,\mathrm{sample},s)}$ for $s\in S$.
 \end{definition}
 
 \begin{lemma}[Every participant agrees with the root]
     \label{thm:compression_operator_root_agreement}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.gateLabel_eq_root}
+    \lean{TNLean.Network.DistributedOperatorContraction.gateLabel_eq_root}
     \leanok
     In any globally consistent configuration $(\eta,(\xi_p)_{p\in P})$, one has $\xi_p(g)=\kappa_g$ for all $p\in P$ and $g\in G_p$.
 \end{lemma}
@@ -189,7 +189,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{lemma}[Recovery of every virtual label]
     \label{thm:compression_operator_link_recovery}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sharedLinkLabels_recover}
+    \lean{TNLean.Network.DistributedOperatorContraction.sharedLinkLabels_recover}
     \leanok
     If $(\kappa,j)$ is recovered from a globally consistent configuration $(\eta,(\xi_p)_{p\in P})$ via Definition~\ref{def:compression_operator_recovery}, then $\eta(\kappa,j)=\eta$.
 \end{lemma}
@@ -201,21 +201,21 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{definition}[Bijection of consistent configurations]
     \label{def:compression_operator_configuration_bijection}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.consistentConfigEquiv}
+    \lean{TNLean.Network.DistributedOperatorContraction.consistentConfigEquiv}
     \leanok
     By Lemmas~\ref{thm:compression_operator_root_agreement} and~\ref{thm:compression_operator_link_recovery}, the map $(\kappa,j)\mapsto(\eta(\kappa,j),(\kappa_p)_{p\in P})$ is a bijection from $(\prod_{g\in G}\Lambda_g)\times J_k^S$ onto the set of globally consistent configurations, with inverse given by Definition~\ref{def:compression_operator_recovery}.
 \end{definition}
 
 \begin{definition}[Reading endpoint configurations]
     \label{def:compression_operator_endpoint_reader}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.endpointLabels}
+    \lean{TNLean.Network.DistributedOperatorContraction.endpointLabels}
     \leanok
     Given endpoint label pairs $(\eta_\ell^-,\eta_\ell^+)\in D_\ell^2$ for $\ell\in\mathcal L$, the endpoint reader at $p\in P$ assigns to $\ell\in I_p$ the label $\eta_\ell^-$ if $u_\ell=p$ and $\eta_\ell^+$ otherwise.
 \end{definition}
 
 \begin{lemma}[Reading diagonal endpoint labels]
     \label{thm:compression_operator_diagonal_reader}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.endpointLabels_diagonal}
+    \lean{TNLean.Network.DistributedOperatorContraction.endpointLabels_diagonal}
     \leanok
     For diagonal endpoint labels $(\eta_\ell,\eta_\ell)_{\ell\in\mathcal L}$, the endpoint reader of Definition~\ref{def:compression_operator_endpoint_reader} at $p\in P$ returns $\eta_p=\eta|_{I_p}$.
 \end{lemma}
@@ -227,7 +227,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{lemma}[Samples of a shared assignment]
     \label{thm:compression_operator_shared_samples}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.localSamples_sharedLinkLabels}
+    \lean{TNLean.Network.DistributedOperatorContraction.localSamples_sharedLinkLabels}
     \leanok
     For every $(\kappa,j)$ and $p\in P$, one has $j(\eta(\kappa,j)_p)=j_p$.
 \end{lemma}
@@ -239,7 +239,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{lemma}[Each scalar coefficient appears once]
     \label{thm:compression_operator_coefficient_product}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.prod_rootCoefficient}
+    \lean{TNLean.Network.DistributedOperatorContraction.prod_rootCoefficient}
     \leanok
     For every $\kappa\in\prod_{g\in G}\Lambda_g$, one has $\prod_{p\in P}C_p(\kappa_p)=\prod_{g\in G}c_g(\kappa_g)$.
 \end{lemma}
@@ -251,21 +251,21 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{definition}[Endpoint form of the local tensor]
     \label{def:compression_operator_endpoint_tensor}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.endpointTensor}
+    \lean{TNLean.Network.DistributedOperatorContraction.endpointTensor}
     \leanok
     The endpoint form of $A_p$ evaluates (\ref{eq:compression_operator_local_tensor}) on $(x_p,y_p)$ and the local virtual assignment read at $p$ by Definition~\ref{def:compression_operator_endpoint_reader}.
 \end{definition}
 
 \begin{definition}[Contracted operator]
     \label{def:compression_operator_operator}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator}
+    \lean{TNLean.Network.DistributedOperatorContraction.contractedOperator}
     \leanok
     Contracting the endpoint tensors of Definition~\ref{def:compression_operator_endpoint_tensor} with identity bond matrices $I_{D_\ell}$ on all $\ell\in\mathcal L$ defines the operator $\sigma:\prod_{p\in P}Y_p\to\prod_{p\in P}X_p$.
 \end{definition}
 
 \begin{lemma}[Reduction to one label per link]
     \label{thm:compression_operator_link_sum}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_eq_linkSum}
+    \lean{TNLean.Network.DistributedOperatorContraction.contractedOperator_eq_linkSum}
     \leanok
     The contracted operator $\sigma$ of Definition~\ref{def:compression_operator_operator} satisfies
     \begin{align}
@@ -283,8 +283,8 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{lemma}[Identity-bond factorization across a vertex partition]
     \label{thm:peps_identity_cut_factorization}
-    \lean{TNLean.Lattice.DependentBondNetwork.flattening_network_one_eq_mul,
-        TNLean.Lattice.DependentBondNetwork.rank_flattening_network_one_le}
+    \lean{TNLean.Network.DependentBondNetwork.flattening_network_one_eq_mul,
+        TNLean.Network.DependentBondNetwork.rank_flattening_network_one_le}
     \leanok
     \uses{def:peps_dependent_network,def:peps_group_contraction}
     Let $(V,E)$ be a finite directed multigraph with finite virtual alphabets $D_e$, local tensors $A_v$ on physical alphabets $P_v$, and identity-bond contraction $Z$.
@@ -308,11 +308,10 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{lemma}[Cut ranks of distributed product-basis columns]
     \label{thm:compression_operator_column_cut_rank}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.flattening_contractedOperator_column_eq_mul,
-        TNLean.Lattice.Compression.DistributedOperatorContraction.rank_flattening_contractedOperator_column_le}
+    \lean{TNLean.Network.DistributedOperatorContraction.flattening_contractedOperator_column_eq_mul,
+        TNLean.Network.DistributedOperatorContraction.rank_flattening_contractedOperator_column_le}
     \leanok
-    \uses{def:compression_operator_operator,def:compression_operator_links,
-        def:compression_operator_alphabets,def:peps_ket_column_dependent_fix_input}
+    \uses{def:compression_operator_operator,def:compression_operator_links,def:compression_operator_alphabets,def:peps_ket_column_dependent_fix_input}
     For $\sigma$ as in Definition~\ref{def:compression_operator_operator}, $z\in\prod_{p\in P}Y_p$, and $S\subseteq P$, let $F_{S,z}$ be the flattening across $S\mid S^c$ of $x\mapsto\sigma(x,z)$, and let $U_{S,z},U_{S^c,z}$ be the partial contractions on $S,S^c$ of the input-fixed local tensors $A_{p,z}(\eta_p,x_p):=A_p(\eta_p;x_p,z_p)$ (Definition~\ref{def:peps_ket_column_dependent_fix_input}). Then
     \begin{align}
         F_{S,z} & =U_{S,z}U_{S^c,z}^{\mathsf T},
@@ -327,14 +326,13 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_identity_cut_factorization,
-        def:peps_ket_column_dependent_fix_input,def:compression_operator_operator}
+    \uses{thm:peps_identity_cut_factorization,def:peps_ket_column_dependent_fix_input,def:compression_operator_operator}
     By Definitions~\ref{def:compression_operator_operator} and~\ref{def:peps_ket_column_dependent_fix_input}, the identity-bond contraction of $(A_{p,z})_{p\in P}$ on $\mathcal L$ is $x\mapsto\sigma(x,z)$, so Lemma~\ref{thm:peps_identity_cut_factorization} gives (\ref{eq:compression_column_cut_factor}) and (\ref{eq:compression_column_cut_rank}).
 \end{proof}
 
 \begin{lemma}[Exact branch and sample evaluation]
     \label{thm:compression_operator_branch_sum}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_eq_branchSampleSum}
+    \lean{TNLean.Network.DistributedOperatorContraction.contractedOperator_eq_branchSampleSum}
     \leanok
     The contracted operator $\sigma$ of Definition~\ref{def:compression_operator_operator} has entries (including when $\Lambda_g=\varnothing$, $\mathcal L=\varnothing$, $|P_g|=1$, or $k=0$)
     \begin{align}
@@ -353,7 +351,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{lemma}[Rectangular matrix form of exact evaluation]
     \label{thm:compression_operator_matrix_sum}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix}
+    \lean{TNLean.Network.DistributedOperatorContraction.contractedOperator_eq_sum_productMatrix}
     \leanok
     In matrix form, (\ref{eq:compression_operator_branch_sum}) reads
     \begin{align}
@@ -372,7 +370,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{lemma}[Exact virtual dimensions]
     \label{thm:compression_operator_alphabet_card}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.card_alphabet}
+    \lean{TNLean.Network.DistributedOperatorContraction.card_alphabet}
     \leanok
     Every star edge $\ell=(g,\mathrm{star},q)$ has $|D_\ell|=|\Lambda_g|$, and every sample edge $\ell=(g,\mathrm{sample},s)$ has $|D_\ell|=k$.
 \end{lemma}
@@ -384,7 +382,7 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{lemma}[Uniform virtual dimension bound]
     \label{thm:compression_operator_alphabet_bound}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.card_alphabet_le}
+    \lean{TNLean.Network.DistributedOperatorContraction.card_alphabet_le}
     \leanok
     If $|\Lambda_g|\le M$ for all $g\in G$, then $|D_\ell|\le\max\{M,k\}$ for all $\ell\in\mathcal L$.
 \end{lemma}
@@ -396,14 +394,14 @@ and $Y_p,X_p$ the physical input and output alphabets at $p\in P$.
 
 \begin{definition}[Density-branch coefficient]
     \label{def:compression_operator_density_coefficient}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.densityPairCoefficient}
+    \lean{TNLean.Network.DistributedOperatorContraction.densityPairCoefficient}
     \leanok
     For $\Lambda_g=K_g\times B_g$, $a_g:K_g\to\C$, $b_g:B_g\to\C$, and $w_g\in\C$, define $c_g(\xi,\zeta):=w_g a_g(\xi)\overline{b_g(\zeta)}$.
 \end{definition}
 
 \begin{lemma}[Density-pair specialization]
     \label{thm:compression_operator_density_pair}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_densityPair_eq}
+    \lean{TNLean.Network.DistributedOperatorContraction.contractedOperator_densityPair_eq}
     \leanok
     With $\Lambda_g=K_g\times B_g$ and $c_g$ from Definition~\ref{def:compression_operator_density_coefficient},
     \begin{align}

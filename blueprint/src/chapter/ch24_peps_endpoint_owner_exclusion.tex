@@ -15,12 +15,9 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{definition}[The word of local source-register operators]
     \label{def:peps_source_register_operator_word}
-    \lean{TNLean.Lattice.PartyCircuit.Word.localEndpoint}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sources_localEndpoint}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sources_endpointWord}
+    \lean{QuantumCircuit.Party.SourceInventory.endpointWord}
     \leanok
-    \uses{def:peps_party_layout,def:peps_source_slots}
+    \uses{def:peps_party_layout,def:peps_source_slots,thm:peps_actual_sampled_endpoint_word_sources}
     % Source: 04-compression.tex, lines 279--309 and 565--588.
     For the local matrices used in random source replacement and party
     contraction in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, let
@@ -33,7 +30,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{lemma}[Restriction away from every source owner]
     \label{thm:peps_source_register_operator_exclusion}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.restrict_endpointWord_eq_nil_and_eval_eq_id}
+    \lean{QuantumCircuit.Party.SourceInventory.partyOp_endpointWord_eq_one}
     \leanok
     \uses{def:peps_source_register_operator_word,thm:peps_party_restriction}
     Let $f:\mathcal P\to\{0,1\}$ satisfy $f(p_i)=f(q_i)=0$ for all
@@ -42,8 +39,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_source_register_operator_word,thm:peps_party_restriction,
-        thm:peps_party_factorization}
+    \uses{def:peps_source_register_operator_word,thm:peps_party_restriction,thm:peps_party_factorization}
     By induction on $R$ via Definition~\ref{def:peps_source_register_operator_word},
     every party occurring in $Z_R$ belongs to $\{p_i,q_i\}_{i=0}^{n-1}$, on
     which $f=0$. By Lemma~\ref{thm:peps_party_restriction} and
@@ -52,10 +48,16 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     $\mathcal L_R|_f=\varnothing$, hence acts as $\Id_{\C}$.
 \end{proof}
 
+In particular, the sampled endpoint word of
+Definition~\ref{def:peps_actual_sampled_endpoint_word} restricts at the exterior
+party $*$ to $\operatorname{id}_{\mathbb C}$ when all original parties are
+selected, for every $\xi,\zeta$, sample assignment $j$ and Gaussian array
+$\omega$, since every source has both endpoints in $P\not\ni *$.
+
 
 \begin{lemma}[Action on the original endpoint factors]
     \label{thm:peps_source_register_operator_evaluation}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.eval_endpointWord_slotVector_tmul}
+    \lean{QuantumCircuit.Party.SourceInventory.op_endpointWord_mulVec_slotVector_tmul}
     \leanok
     \uses{def:peps_source_register_operator_word,def:peps_joint_source_vector}
     For any $u_i\in U_i$ and $v_i\in V_i$, in the register
@@ -79,8 +81,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 
 \begin{lemma}[Coordinates of the original joint source vector]
     \label{thm:peps_joint_source_vector_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotVector_eq_sum_slotBasis}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis_repr_slotVector}
+    \lean{QuantumCircuit.Party.SourceInventory.slotVector_apply}
     \leanok
     \uses{def:peps_joint_source_vector,def:peps_source_slot_basis}
     Let $b_i,c_i$ be finite orthonormal bases of $U_i,V_i$ and let $e_x$ be
@@ -101,24 +102,11 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     and Definition~\ref{def:peps_source_slot_basis}) to obtain~(\ref{eq:peps_joint_source_coordinates}).
 \end{proof}
 
-\begin{definition}[The operator with specified orthonormal coordinates]
-    \label{def:peps_operator_from_basis_matrix}
-    \lean{TNLean.Lattice.PartyCircuit.basisMatrixOperator}
-    \lean{TNLean.Lattice.PartyCircuit.basisMatrixOperator_repr}
-    \leanok
-    For an orthonormal basis $b=(b_j)_{j\in I}$ of a finite-dimensional complex
-    inner product space and a matrix $M=(M_{ij})_{i,j\in I}$, define $T_b(M)$ by
-    $T_b(M)b_j=\sum_{i\in I} M_{ij}b_i$, so $[T_b(M)]_b=M$.
-\end{definition}
-
 \begin{lemma}[Coordinates of the source-endpoint operator]
     \label{thm:peps_endpoint_operator_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis_repr_endpointWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointMatrixWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis_repr_endpointMatrixWord}
+    \lean{QuantumCircuit.Party.SourceInventory.op_endpointWord}
     \leanok
-    \uses{thm:peps_source_register_operator_evaluation,
-        thm:peps_joint_source_vector_coordinates,def:peps_operator_from_basis_matrix}
+    \uses{thm:peps_source_register_operator_evaluation,thm:peps_joint_source_vector_coordinates,def:peps_source_register_operator_word}
     In the joint source basis $(e_x)$, the operator $Z_R$ has matrix entries
     \begin{align}
         [Z_R]_{x,y} & =\prod_i
@@ -126,22 +114,21 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
         \langle c_{i,x_i^{(2)}},B_i c_{i,y_i^{(2)}}\rangle.
         \label{eq:peps_endpoint_coordinates}
     \end{align}
-    In particular, for $A_i=T_{b_i}(L_i)$ and $B_i=T_{c_i}(H_i)$
-    (Definition~\ref{def:peps_operator_from_basis_matrix}),
+    In particular, if $A_i$ and $B_i$ have matrices $L_i$ and $H_i$ in the
+    bases $b_i$ and $c_i$, then
     $[Z_R]_{x,y}=\prod_i (L_i)_{x_i^{(1)},y_i^{(1)}}(H_i)_{x_i^{(2)},y_i^{(2)}}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_register_operator_evaluation,
-        thm:peps_joint_source_vector_coordinates,def:peps_operator_from_basis_matrix}
+    \uses{thm:peps_source_register_operator_evaluation,thm:peps_joint_source_vector_coordinates}
     Evaluate $Z_R e_y$ by Lemma~\ref{thm:peps_source_register_operator_evaluation}
-    and extract the $e_x$-coordinate via~(\ref{eq:peps_joint_source_coordinates})
-    and Definition~\ref{def:peps_operator_from_basis_matrix}.
+    and extract the $e_x$-coordinate
+    via~(\ref{eq:peps_joint_source_coordinates}).
 \end{proof}
 
 \begin{lemma}[Finite averaging of endpoint operators]
     \label{thm:peps_endpoint_matrix_average}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointMatrixAverage_eq_product}
+    \lean{QuantumCircuit.Party.SourceInventory.sum_op_endpointWord}
     \leanok
     \uses{thm:peps_endpoint_operator_coordinates}
     For endpoint matrices $L_{i,s},H_{i,s}$ ($0\le i<n$, $0\le s<k$), entrywise
@@ -152,7 +139,9 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
          & =k^{-n}\sum_{j:\{0,\ldots,n-1\}\to\{0,\ldots,k-1\}} Z_j,
         \label{eq:peps_endpoint_average}
     \end{align}
-    where $Z_j=Z_R(T_b(L_{\cdot,j(\cdot)}),T_c(H_{\cdot,j(\cdot)}))$ (with $0^{-1}=0$ for $k=0$).
+    where $Z_j$ is the endpoint word whose endpoint maps have matrices
+    $L_{i,j(i)}$ and $H_{i,j(i)}$ in the bases $b_i$ and $c_i$ (with $0^{-1}=0$
+    for $k=0$).
 \end{lemma}
 
 \begin{proof}\leanok
@@ -163,21 +152,9 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     $j:\{0,\ldots,n-1\}\to\{0,\ldots,k-1\}$.
 \end{proof}
 
-\begin{lemma}[Matrices in orthonormal coordinates]
-    \label{thm:peps_matrix_orthonormal_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.matrix_repr_eval_eq_toMatrix}
-    \leanok
-    For finite orthonormal bases $b=(b_j)$ and $c=(c_i)$ and a continuous linear
-    map $A$, the matrix of $A$ has entries $M_{ij}=\langle c_i,A b_j\rangle$.
-\end{lemma}
-
-\begin{proof}\leanok
-    Take the $c_i$-coordinate of $Ab_j$ by orthonormal expansion.
-\end{proof}
-
 \begin{lemma}[Dependence on the selected endpoint maps]
     \label{thm:peps_source_register_operator_local_congruence}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.restrict_endpointWord_eval_eq_of_local_eq}
+    \lean{QuantumCircuit.Party.SourceInventory.partyOp_endpointWord_congr}
     \leanok
     \uses{def:peps_source_register_operator_word,thm:peps_party_restriction}
     % Source: 04-compression.tex, lines 279--309 and 565--588.
@@ -199,34 +176,11 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{proof}
 
 
-\begin{lemma}[Restriction and register-list identification]
-    \label{thm:peps_party_restriction_canonical_layouts}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_castLayouts}
-    \leanok
-    \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
-    % Source: 04-compression.tex, lines 233--251, 279--309 and 565--588.
-    For a source-free chronological word $W:a\to b$, register-list equalities
-    $a=a'$ and $b=b'$, and a party selector $f$ in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, restricting $W$ after
-    identifying $a=a'$ and $b=b'$ equals restricting $W|_f$ first and then
-    identifying $a|_f=a'|_f$ and $b|_f=b'|_f$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
-    Substituting the list equalities $a=a'$ and $b=b'$ via
-    Lemma~\ref{thm:peps_basis_memory_equalities} commutes with the filter
-    $(\cdot)|_f$ of Lemma~\ref{thm:peps_party_restriction}.
-\end{proof}
-
 \begin{lemma}[Dependence on incident source samples]
     \label{thm:peps_actual_sampled_endpoint_locality}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_sampledEndpointInputWord_eval_eq_of_incident_samples}
+    \lean{QuantumCircuit.Party.SourceCircuit.partyOp_sampledEndpointWord_eq_of_incident_samples}
     \leanok
-    \uses{def:peps_actual_sampled_endpoint_word,
-        def:peps_original_sampled_endpoint_factors,
-        thm:peps_source_register_operator_local_congruence,
-        thm:peps_party_restriction_canonical_layouts}
+    \uses{def:peps_actual_sampled_endpoint_word,def:peps_original_sampled_endpoint_factors,thm:peps_source_register_operator_local_congruence}
     % Source: 04-compression.tex, lines 279--309 and 565--588.
     For ket/bra choices $\xi,\zeta$, a grouped-owner selector $f$, and two sample
     assignments $(j,\omega)$ and $(j',\omega')$ (Definition~\ref{def:peps_source_gaussian_law})
@@ -251,84 +205,19 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_actual_sampled_endpoint_word,
-        def:peps_original_sampled_endpoint_factors,
-        thm:peps_source_register_operator_local_congruence,
-        thm:peps_party_restriction_canonical_layouts}
+    \uses{def:peps_actual_sampled_endpoint_word,def:peps_original_sampled_endpoint_factors,thm:peps_source_register_operator_local_congruence}
     By Definition~\ref{def:peps_original_sampled_endpoint_factors},
     Definition~\ref{def:peps_actual_sampled_endpoint_word}, and~(\ref{eq:peps_actual_sampled_endpoint_locality_agreement}),
     the endpoint matrices agree at every endpoint selected by $f$.
-    Applying Lemma~\ref{thm:peps_source_register_operator_local_congruence} and
-    Lemma~\ref{thm:peps_party_restriction_canonical_layouts} yields~(\ref{eq:peps_actual_sampled_endpoint_locality}).
-\end{proof}
-
-\begin{lemma}[The physical mixed trace in the original coordinates]
-    \label{thm:peps_selected_physical_private_trace}
-    \lean{TNLean.Lattice.PartyCircuit.selectedPhysicalPrivateBasis_partialTrace_mixed}
-    \leanok
-    \uses{thm:peps_selected_physical_private_basis_grouped,
-        thm:peps_selected_physical_basis_grouped,def:peps_selected_physical_configurations}
-    % Source: 04-compression.tex, lines 137--151, 409--434 and 565--588.
-    Let $H$ be the original physical memory and $G$ the retained private memory
-    in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, with grouped
-    physical/private basis $B$, coordinate-separation map $\chi$ (removing the
-    exterior singleton coordinate), and product readout $J$ with respect to the
-    original physical basis and any finite orthonormal reference basis of $G$.
-    For $v,t\in H\otimes G$ with grouped coordinates $b_v,b_t$,
-    \begin{align}
-        \operatorname{tr}_{\mathrm{private}}
-        \left((b_vb_t^\dagger)^\chi\right)
-         & =\operatorname{tr}_{G}\left((Jv)(Jt)^\dagger\right),
-        \label{eq:peps_original_physical_mixed_trace}
-    \end{align}
-    indexed by $\prod_{p\in\mathcal P}\{0,\ldots,d_p-1\}$
-    (Definition~\ref{def:peps_selected_physical_configurations}).
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_selected_physical_private_basis_grouped,
-        thm:peps_selected_physical_basis_grouped}
-    By Lemma~\ref{thm:peps_selected_physical_private_basis_grouped} and
-    Lemma~\ref{thm:peps_selected_physical_basis_grouped}, $\chi\circ B$
-    coincides with the product of the original physical basis and the grouped
-    private basis on $G$. Any unitary change of basis $I\otimes V$ on $G$ cancels
-    under $\operatorname{tr}_G$, giving~(\ref{eq:peps_original_physical_mixed_trace}).
-\end{proof}
-
-
-
-\begin{lemma}[Restriction of an exchange of register blocks]
-    \label{thm:peps_party_restriction_exchange_blocks}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_exchangeBlocks_eval_heq}
-    \leanok
-    \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
-    % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
-    For ordered register lists $a,b,t$, an owner selector $f$, and the block-exchange
-    word $S_{a,b;t}:abt\to bat$ in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, under the retained-list
-    identifications,
-    \begin{align}
-        (S_{a,b;t})|_f
-         & =S_{a|_f,b|_f;t|_f}.
-        \label{eq:peps_restricted_block_exchange}
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
-    By Lemma~\ref{thm:peps_party_restriction} and
-    Lemma~\ref{thm:peps_basis_memory_equalities}, moving a single register
-    through $a$ restricts to moving it through $a|_f$ when retained and to $\Id$
-    when erased; induction on $b$ then yields~(\ref{eq:peps_restricted_block_exchange}).
+    Applying Lemma~\ref{thm:peps_source_register_operator_local_congruence}
+    yields~(\ref{eq:peps_actual_sampled_endpoint_locality}).
 \end{proof}
 
 \begin{lemma}[Restriction beside spectator registers]
     \label{thm:peps_append_spectators_restriction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_appendTail_eval_heq}
+    \lean{QuantumCircuit.Party.PartyCircuit.regionOp_frame}
     \leanok
-    \uses{def:peps_append_spectators,thm:peps_party_restriction,
-        thm:peps_party_restriction_exchange_blocks,
-        thm:peps_party_restriction_canonical_layouts}
+    \uses{def:peps_append_spectators,thm:peps_party_restriction}
     % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
     For a source-free chronological word $W:a\to b$, a spectator list $t$, and
     an owner selector $f$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -337,22 +226,20 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_append_spectators,thm:peps_party_restriction,
-        thm:peps_party_restriction_exchange_blocks,
-        thm:peps_party_restriction_canonical_layouts}
+    \uses{def:peps_append_spectators,thm:peps_party_restriction}
     By induction on $t$, restriction commutes with framing
-    (Lemma~\ref{thm:peps_party_restriction}); combining this with~(\ref{eq:peps_restricted_block_exchange})
-    and Lemma~\ref{thm:peps_party_restriction_canonical_layouts} on the three
-    factors of $W_t$ in Definition~\ref{def:peps_append_spectators} gives
+    (Lemma~\ref{thm:peps_party_restriction}), and an exchange of register
+    blocks restricts to the exchange of their retained registers; applying
+    this to the three factors of $W_t$ in
+    Definition~\ref{def:peps_append_spectators} gives
     $(W_t)|_f=(W|_f)_{t|_f}$.
 \end{proof}
 
 \begin{lemma}[Spectators at an excluded owner]
     \label{thm:peps_spectator_owner_exclusion}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_mapOwner_appendTail_eval_heq_id_of_disjoint}
+    \lean{QuantumCircuit.Party.Word.partyOp_frame_coarsen_apply_of_forall_ne}
     \leanok
-    \uses{thm:peps_owner_disjoint_restriction,
-        thm:peps_append_spectators_restriction,thm:peps_append_spectators}
+    \uses{thm:peps_owner_disjoint_restriction,thm:peps_append_spectators_restriction,thm:peps_append_spectators}
     % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
     Let $U:a\to b$ be a source-free chronological word with owners in $C$, let
     $\gamma:C\to\mathcal P$ satisfy $\gamma(c)\ne p$ for all $c\in C$, and let
@@ -362,44 +249,18 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_owner_disjoint_restriction,
-        thm:peps_append_spectators_restriction,thm:peps_append_spectators}
+    \uses{thm:peps_owner_disjoint_restriction,thm:peps_append_spectators_restriction,thm:peps_append_spectators}
     By Lemma~\ref{thm:peps_owner_disjoint_restriction}, $(U^\gamma)|_p=\Id_{\C}$
     on empty boundary lists. Applying Lemma~\ref{thm:peps_append_spectators_restriction}
     and Lemma~\ref{thm:peps_append_spectators} gives
     $((U^\gamma)_t)|_p=((U^\gamma)|_p)_{t|_p}=\Id_{\C}\otimes\Id_{\mathcal H_{t|_p}}=\Id_{\mathcal H_{t|_p}}$.
 \end{proof}
 
-\begin{lemma}[Operator identities under composition and framing]
-    \label{thm:peps_operator_composition_framing}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_comp_heq,
-        TNLean.Lattice.PartyCircuit.Word.eval_frame_heq,
-        TNLean.Lattice.PartyCircuit.Word.eval_frameList_heq}
-    \leanok
-    \uses{thm:peps_basis_memory_equalities,def:peps_party_registers}
-    % Source: 04-compression.tex, lines 233--251 and 409--434.
-    For register-list equalities $a=a'$, $b=b'$, $c=c'$ and $t=t'$ in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, if chronological words
-    $U:a\to b$, $V:b\to c$, $U':a'\to b'$, $V':b'\to c'$ satisfy $U=U'$ and
-    $V=V'$ under the memory identifications, then $V\circ U=V'\circ U'$,
-    $I_{\mathcal H_r}\otimes U=I_{\mathcal H_r}\otimes U'$ for any register $r$,
-    and $F_t(U)=F_{t'}(U')$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_basis_memory_equalities}
-    By Lemma~\ref{thm:peps_basis_memory_equalities}, identifying the equal
-    register lists reduces $V\circ U=V'\circ U'$ and
-    $I_{\mathcal H_r}\otimes U=I_{\mathcal H_r}\otimes U'$ to congruence of
-    composition and tensoring, and induction on $t=t'$ gives $F_t(U)=F_{t'}(U')$.
-\end{proof}
-
 \begin{lemma}[Restriction of the local part without sources]
     \label{thm:peps_source_free_local_part_restriction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_eval_heq_of_sources_nil}
+    \lean{QuantumCircuit.Party.Word.localPartOp_of_sources_eq_nil}
     \leanok
-    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
-        thm:peps_basis_memory_equalities}
+    \uses{thm:peps_source_preparation,thm:peps_party_restriction}
     % Source: 04-compression.tex, lines 233--267, 351--381 and 409--434.
     For a chronological word $W:a\to b$ with empty source inventory
     $s_W=\varnothing$ and an owner selector $f$ in
@@ -409,50 +270,22 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
-        thm:peps_excluded_spectator_restriction,
-        thm:peps_operator_composition_framing,thm:peps_register_exchange}
+    \uses{thm:peps_source_preparation,thm:peps_party_restriction,thm:peps_append_spectators_restriction,thm:peps_register_exchange}
     By induction on $W$ using Lemma~\ref{thm:peps_source_preparation} and
     Lemma~\ref{thm:peps_party_restriction}, identities, local operations, and
     exchanges satisfy $(L(W))|_f=W|_f$ directly, and source preparations are
     excluded by $s_W=\varnothing$. For compositions and framed words, each
     component has $s=\varnothing$, so moving through or framing by $s$ acts as
-    $\Id$ (Lemma~\ref{thm:peps_excluded_spectator_restriction} and
-    Lemma~\ref{thm:peps_register_exchange}), and
-    Lemma~\ref{thm:peps_operator_composition_framing} closes the induction.
-\end{proof}
-
-\begin{lemma}[Moving a register through an erased prefix]
-    \label{thm:peps_erased_prefix_register_move}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_moveHead_eval_heq_id_of_prefix_eq_nil}
-    \leanok
-    \uses{thm:peps_party_restriction,thm:peps_register_exchange,
-        thm:peps_basis_memory_equalities}
-    % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
-    Let $r$ be a register, let $s,t$ be ordered register lists, and let $f$ be
-    an owner selector with $s|_f=\varnothing$
-    (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}). Under the
-    identification $(srt)|_f=(rst)|_f=(rt)|_f$, the register move
-    $M_r(s,t):srt\to rst$ satisfies $(M_r(s,t))|_f=\Id_{\mathcal H_{(rt)|_f}}$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_party_restriction,thm:peps_register_exchange,
-        thm:peps_basis_memory_equalities}
-    By Lemma~\ref{thm:peps_party_restriction} and
-    Lemma~\ref{thm:peps_register_exchange}, since $s|_f=\varnothing$,
-    $(M_r(s,t))|_f$ moves $r$ through $\varnothing$ if $r$ is retained (acting
-    as $\Id_{\mathcal H_{r(t|_f)}}$) and acts as $\Id_{\mathcal H_{t|_f}}$ if
-    $r$ is erased; Lemma~\ref{thm:peps_basis_memory_equalities} identifies
-    both with $\Id_{\mathcal H_{(rt)|_f}}$.
+    $\Id$ (Lemma~\ref{thm:peps_append_spectators_restriction} and
+    Lemma~\ref{thm:peps_register_exchange}), and composing the restricted
+    components closes the induction.
 \end{proof}
 
 \begin{lemma}[Framing a local part with erased sources]
     \label{thm:peps_local_part_framing_restriction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_frameList_eval_heq}
+    \lean{QuantumCircuit.Party.Word.localPartOp_frame}
     \leanok
-    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
-        thm:peps_basis_memory_equalities}
+    \uses{thm:peps_source_preparation,thm:peps_party_restriction}
     % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
     Let $W:a\to b$ be a chronological word with source-register list $s$, let
     $f$ satisfy $s|_f=\varnothing$, and let $t$ be a spectator list
@@ -468,83 +301,21 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
-        thm:peps_erased_prefix_register_move,
-        thm:peps_operator_composition_framing,thm:peps_basis_memory_equalities}
+    \uses{thm:peps_source_preparation,thm:peps_party_restriction}
     By induction on $t$, $t=\varnothing$ is immediate. For $t=rt'$,
     Lemma~\ref{thm:peps_source_preparation} expresses $L(F_{rt'}(W))$ as
-    $F_r(L(F_{t'}(W)))\circ M_r(s,t'a)$. Since $s|_f=\varnothing$,
-    $(M_r(s,t'a))|_f=\Id$ by Lemma~\ref{thm:peps_erased_prefix_register_move},
-    and applying the induction hypothesis with
-    Lemma~\ref{thm:peps_party_restriction} and
-    Lemma~\ref{thm:peps_operator_composition_framing} yields~(\ref{eq:peps_local_part_framing}).
+    $F_r(L(F_{t'}(W)))$ after the move of $r$ in front of the source
+    registers $s$. Since $s|_f=\varnothing$, this move restricts to the
+    identity, and applying the induction hypothesis with
+    Lemma~\ref{thm:peps_party_restriction} yields~(\ref{eq:peps_local_part_framing}).
 \end{proof}
 
-\begin{lemma}[Identities and input identifications under restriction]
-    \label{thm:peps_identity_input_identification}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_id_heq,
-        TNLean.Lattice.PartyCircuit.Word.restrict_castInput_eval_heq}
-    \leanok
-    \uses{thm:peps_basis_memory_equalities,thm:peps_party_restriction}
-    % Source: 04-compression.tex, lines 233--251 and 409--434.
-    For an equality $a=a'$ of ordered register lists in
-    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    $\Id_{\mathcal H_a}=\Id_{\mathcal H_{a'}}$ under the memory identification,
-    and for any source-free word $W:a\to b$ and owner selector $f$, replacing
-    $a$ by $a'$ before restricting equals $W|_f$ under $a|_f=a'|_f$.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_basis_memory_equalities,thm:peps_party_restriction}
-    Substituting $a=a'$ via Lemma~\ref{thm:peps_basis_memory_equalities} and
-    Lemma~\ref{thm:peps_party_restriction} reduces both claims to reflexivity.
-\end{proof}
-
-\begin{lemma}[Spectators outside the owners of a sourced composition]
-    \label{thm:peps_sourced_spectator_owner_exclusion}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint}
-    \leanok
-    \uses{thm:peps_source_word_parties,def:peps_append_spectators,
-        thm:peps_party_restriction,thm:peps_basis_memory_equalities}
-    % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
-    Let $U:a\to b$ be a chronological word with owners in $C$, let
-    $\gamma:C\to\mathcal P$ satisfy $\gamma(c)\ne p$ for all $c\in C$, and let
-    $t$ be a spectator list (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}).
-    Under the retained-list identifications,
-    \begin{align}
-        \bigl(L((U^\gamma)_t)\bigr)|_p
-         & =\Id_{\mathcal H_{t|_p}}.
-        \label{eq:peps_sourced_spectator_exclusion}
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_source_word_parties,def:peps_append_spectators,
-        thm:peps_source_free_local_part_restriction,
-        thm:peps_party_restriction_exchange_blocks,
-        thm:peps_party_restriction_canonical_layouts,
-        thm:peps_local_part_framing_restriction,
-        thm:peps_excluded_spectator_restriction,
-        thm:peps_operator_composition_framing,
-        thm:peps_identity_input_identification}
-    Since $p\notin\gamma(C)$, $(a^\gamma)|_p=(b^\gamma)|_p=(s_{U^\gamma})|_p=\varnothing$,
-    and $(L(U^\gamma))|_p=\Id_{\C}$ by Lemma~\ref{thm:peps_source_word_parties}.
-    Expanding $(U^\gamma)_t$ by Definition~\ref{def:peps_append_spectators}, its
-    initial and final block exchanges restrict to $\Id_{\mathcal H_{t|_p}}$ by
-    Lemma~\ref{thm:peps_source_free_local_part_restriction} and~(\ref{eq:peps_restricted_block_exchange}),
-    while the middle framed local part restricts to
-    $F_{t|_p}(\Id_{\C})=\Id_{\mathcal H_{t|_p}}$ by~(\ref{eq:peps_local_part_framing})
-    and Lemma~\ref{thm:peps_excluded_spectator_restriction}. Composing via
-    Lemma~\ref{thm:peps_operator_composition_framing} and
-    Lemma~\ref{thm:peps_identity_input_identification} gives~(\ref{eq:peps_sourced_spectator_exclusion}).
-\end{proof}
 
 \begin{lemma}[Spectators at a party absent from the core]
     \label{thm:peps_absent_party_spectator_identity}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties}
+    \lean{QuantumCircuit.Party.Word.localPartOp_of_notMem_parties}
     \leanok
-    \uses{thm:peps_source_word_parties,def:peps_append_spectators,
-        thm:peps_party_restriction,def:peps_single_party_selector}
+    \uses{thm:peps_source_word_parties,def:peps_append_spectators,thm:peps_party_restriction,def:peps_single_party_selector}
     % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
     Let $U:a\to b$ be a chronological word, let $p\notin\mathcal P(U)$, and let
     $t$ be a spectator list (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}).
@@ -553,31 +324,32 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_word_parties,thm:peps_party_restriction,
-        thm:peps_party_factorization,def:peps_append_spectators,
-        thm:peps_source_free_local_part_restriction,
-        thm:peps_party_restriction_exchange_blocks,
-        thm:peps_party_restriction_canonical_layouts,
-        thm:peps_local_part_framing_restriction,
-        thm:peps_excluded_spectator_restriction,
-        thm:peps_operator_composition_framing,
-        thm:peps_identity_input_identification}
+    \uses{thm:peps_source_word_parties,thm:peps_party_restriction,thm:peps_party_factorization,def:peps_append_spectators,thm:peps_source_free_local_part_restriction,thm:peps_local_part_framing_restriction,thm:peps_append_spectators_restriction}
     Since $p\notin\mathcal P(U)$, $a|_p=b|_p=s_U|_p=\varnothing$, and
-    $\mathcal P(L(U))=\mathcal P(U)$ by Lemma~\ref{thm:peps_source_word_parties},
+    $\mathcal P(L(U))\subseteq\mathcal P(U)$ by Lemma~\ref{thm:peps_source_word_parties},
     so $(L(U))|_p=\Id_{\C}$ by Lemma~\ref{thm:peps_party_restriction} and
-    Lemma~\ref{thm:peps_party_factorization}. As in the proof of
-    Lemma~\ref{thm:peps_sourced_spectator_owner_exclusion}, the three factors
-    of $U_t$ (Definition~\ref{def:peps_append_spectators}) each restrict at $p$
-    to $\Id_{\mathcal H_{t|_p}}$, and composing gives
-    $(L(U_t))|_p=\Id_{\mathcal H_{t|_p}}$.
+    Lemma~\ref{thm:peps_party_factorization}. Expanding $U_t$ by
+    Definition~\ref{def:peps_append_spectators}, its initial and final block
+    exchanges restrict to the exchange of $t|_p$ with empty blocks, that is, to
+    $\Id_{\mathcal H_{t|_p}}$, by
+    Lemma~\ref{thm:peps_source_free_local_part_restriction}, while the middle
+    framed local part restricts to
+    $F_{t|_p}(\Id_{\C})=\Id_{\mathcal H_{t|_p}}$ by~(\ref{eq:peps_local_part_framing})
+    and Lemma~\ref{thm:peps_append_spectators_restriction}. Composing the
+    three restrictions gives $(L(U_t))|_p=\Id_{\mathcal H_{t|_p}}$.
 \end{proof}
+
+In particular, if $U$ has owners in $C$ and $\gamma:C\to\mathcal P$ satisfies
+$\gamma(c)\ne p$ for all $c\in C$, then $p\notin\mathcal P(U^\gamma)$ by
+Lemma~\ref{thm:peps_source_free_owner_parties}, so
+Lemma~\ref{thm:peps_absent_party_spectator_identity} gives
+$\bigl(L((U^\gamma)_t)\bigr)|_p=\Id_{\mathcal H_{t|_p}}$.
 
 \begin{lemma}[A nonincident party in the all-party expansion]
     \label{thm:peps_all_gate_nonincident_identity}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident}
+    \lean{QuantumCircuit.Party.SourceCircuit.localPartOp_partialWord_all_gate_of_notMem}
     \leanok
-    \uses{def:peps_prepared_source_gate,def:peps_partial_source_choices,
-        def:peps_affected_owner,def:peps_single_party_selector}
+    \uses{def:peps_prepared_source_gate,def:peps_partial_source_choices,def:peps_affected_owner,def:peps_single_party_selector}
     % Source: 04-compression.tex, lines 351--381, 409--434 and 565--588.
     Let $G$ be a prepared gate (Definition~\ref{def:peps_prepared_source_gate})
     with participant set $C$, branch set $\Xi$, and injection
@@ -595,12 +367,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_partial_source_choices,def:peps_affected_owner,
-        thm:peps_source_word_parties,thm:peps_owner_spectator_extension,
-        thm:peps_absent_party_spectator_identity,
-        thm:peps_source_free_local_part_restriction,
-        def:peps_grouped_block_map,thm:peps_party_restriction,
-        thm:peps_party_restriction_canonical_layouts}
+    \uses{def:peps_partial_source_choices,def:peps_affected_owner,thm:peps_source_word_parties,thm:peps_owner_spectator_extension,thm:peps_absent_party_spectator_identity,thm:peps_source_free_local_part_restriction,def:peps_grouped_block_map,thm:peps_party_restriction}
     If $C\ne\varnothing$, commuting $g$ past the spectator extension by $t$ via
     Lemma~\ref{thm:peps_owner_spectator_extension} expresses $V_\xi$ as a core
     with parties in $g(\gamma(C))\not\ni g(p)$ extended by $t^g$, so
@@ -611,33 +378,12 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Lemma~\ref{thm:peps_party_restriction} again give~(\ref{eq:peps_all_gate_nonincident}).
 \end{proof}
 
-\begin{lemma}[Restriction of a framed source-free composition]
-    \label{thm:peps_retained_spectator_framing}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_frameList_eval_heq}
-    \leanok
-    \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
-    % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
-    For a source-free chronological word $W:a\to b$, a spectator list $t$, and
-    an owner selector $f$ in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
-    the framed word $F_t(W)$ satisfies $(F_t(W))|_f=F_{t|_f}(W|_f)$ under the
-    retained-list identifications.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_party_restriction,
-        thm:peps_operator_composition_framing,thm:peps_basis_memory_equalities}
-    By induction on $t$ using Lemma~\ref{thm:peps_party_restriction},
-    Lemma~\ref{thm:peps_operator_composition_framing}, and
-    Lemma~\ref{thm:peps_basis_memory_equalities}, each retained head register
-    frames the inductive restriction while each erased head register is dropped.
-\end{proof}
 
 \begin{lemma}[Composition of equal selected local parts]
     \label{thm:peps_selected_local_part_composition}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_comp_eval_heq}
+    \lean{QuantumCircuit.Party.Word.localPartOp_comp}
     \leanok
-    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
-        thm:peps_basis_memory_equalities}
+    \uses{thm:peps_source_preparation,thm:peps_party_restriction}
     % Source: 04-compression.tex, lines 246--267, 351--381 and 409--434.
     Let $W:a\to b$, $V:b\to c$, $W':a'\to b'$, $V':b'\to c'$ be chronological
     words with source-register lists $s_W,s_V,s_{W'},s_{V'}$, and let $f$ be an
@@ -648,79 +394,19 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_preparation,
-        thm:peps_retained_spectator_framing,
-        thm:peps_operator_composition_framing,
-        thm:peps_identity_input_identification}
+    \uses{thm:peps_source_preparation,thm:peps_append_spectators_restriction}
     By Lemma~\ref{thm:peps_source_preparation}, $L(V\circ W)=L(V)\circ F_{s_V}(L(W))$
     up to the associative input identification. Restricting via
-    Lemma~\ref{thm:peps_retained_spectator_framing},
-    Lemma~\ref{thm:peps_operator_composition_framing}, and
-    Lemma~\ref{thm:peps_identity_input_identification} gives
+    Lemma~\ref{thm:peps_append_spectators_restriction} gives
     $(L(V\circ W))|_f=(L(V))|_f\circ F_{s_V|_f}((L(W))|_f)=(L(V'\circ W'))|_f$.
 \end{proof}
 
-\begin{lemma}[Register moves with equal retained prefixes]
-    \label{thm:peps_register_move_retained_prefix}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_moveHead_eval_heq_of_restrict_eq}
-    \leanok
-    \uses{thm:peps_party_restriction,thm:peps_register_exchange,
-        thm:peps_basis_memory_equalities}
-    % Source: 04-compression.tex, lines 246--267, 351--381 and 409--434.
-    For a register $r$, ordered register lists $s,s',a,a'$, and an owner
-    selector $f$ with $s|_f=s'|_f$ and $a|_f=a'|_f$
-    (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}), the register moves
-    $M_r(s,a):sra\to rsa$ and $M_r(s',a'):s'ra'\to rs'a'$ satisfy
-    $(M_r(s,a))|_f=(M_r(s',a'))|_f$ under the retained-list identifications.
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_party_restriction,thm:peps_register_exchange,
-        thm:peps_basis_memory_equalities}
-    By Lemma~\ref{thm:peps_party_restriction},
-    Lemma~\ref{thm:peps_register_exchange}, and
-    Lemma~\ref{thm:peps_basis_memory_equalities}, both sides restrict to
-    $M_r(s|_f,a|_f)=M_r(s'|_f,a'|_f)$ when $r$ is retained and to
-    $\Id_{\mathcal H_{(s|_f)(a|_f)}}=\Id_{\mathcal H_{(s'|_f)(a'|_f)}}$ when $r$ is erased.
-\end{proof}
-
-\begin{lemma}[Framing equal selected local parts]
-    \label{thm:peps_selected_local_part_framing}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_frame_eval_heq}
-    \leanok
-    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
-        thm:peps_basis_memory_equalities}
-    % Source: 04-compression.tex, lines 246--267, 351--381 and 409--434.
-    Let $W:a\to b$ and $W':a'\to b'$ be chronological words with source-register
-    lists $s_W,s_{W'}$, let $r$ be a register, and let $f$ be an owner selector
-    with $a|_f=a'|_f$, $b|_f=b'|_f$, $s_W|_f=s_{W'}|_f$, and
-    $(L(W))|_f=(L(W'))|_f$ (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}).
-    Then
-    \begin{align}
-        (L(F_r(W)))|_f
-         & =(L(F_r(W')))|_f.
-        \label{eq:peps_selected_local_part_framing}
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
-        thm:peps_register_move_retained_prefix,
-        thm:peps_operator_composition_framing}
-    By Lemma~\ref{thm:peps_source_preparation}, $L(F_r(W))=F_r(L(W))\circ M_r(s_W,a)$.
-    Here $(M_r(s_W,a))|_f=(M_r(s_{W'},a'))|_f$ by
-    Lemma~\ref{thm:peps_register_move_retained_prefix}, and
-    $(F_r(L(W)))|_f=(F_r(L(W')))|_f$ by Lemma~\ref{thm:peps_party_restriction}
-    and Lemma~\ref{thm:peps_operator_composition_framing}, giving~(\ref{eq:peps_selected_local_part_framing}).
-\end{proof}
 
 \begin{lemma}[Local dependence on given incident choices]
     \label{thm:peps_all_branch_incident_locality}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq}
+    \lean{QuantumCircuit.Party.SourceCircuit.partyOp_partialResidual_all_eq_of_projectAllChoices_eq}
     \leanok
-    \uses{def:peps_partial_source_choices,def:peps_touched_labels,
-        thm:peps_incident_gate_labels,def:peps_affected_owner,
-        def:peps_single_party_selector,thm:peps_source_preparation}
+    \uses{def:peps_partial_source_choices,def:peps_touched_labels,thm:peps_incident_gate_labels,def:peps_affected_owner,def:peps_single_party_selector,thm:peps_source_preparation}
     % Source: 04-compression.tex, lines 246--267, 351--381, 409--434 and 565--588.
     Let $W:a\to b$ be a chronological circuit on $P$, fix $p\in P$, and let
     $g:P\to P\sqcup\{*\}$ be the all-party owner map
@@ -733,15 +419,11 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_partial_source_choices,thm:peps_canonical_source_recovery,
-        thm:peps_touched_labels,thm:peps_incident_gate_labels,
-        thm:peps_selected_local_part_composition,
-        thm:peps_selected_local_part_framing,
-        thm:peps_all_gate_nonincident_identity}
+    \uses{def:peps_partial_source_choices,thm:peps_canonical_source_recovery,thm:peps_touched_labels,thm:peps_incident_gate_labels,thm:peps_selected_local_part_composition,thm:peps_local_part_framing_restriction,thm:peps_all_gate_nonincident_identity}
     By Lemma~\ref{thm:peps_canonical_source_recovery}, $s_{V_\xi}=s_{V_\zeta}$,
     so $s_{V_\xi}|_{g(p)}=s_{V_\zeta}|_{g(p)}$. We induct on $W$: compositions
     and framed words follow from Lemma~\ref{thm:peps_selected_local_part_composition}
-    and Lemma~\ref{thm:peps_selected_local_part_framing}; gates incident to
+    and Lemma~\ref{thm:peps_local_part_framing_restriction}; gates incident to
     $p$ receive the same branch label under $\xi$ and $\zeta$ by
     Lemma~\ref{thm:peps_touched_labels} and Lemma~\ref{thm:peps_incident_gate_labels};
     and gates nonincident to $p$ satisfy
@@ -749,59 +431,4 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Lemma~\ref{thm:peps_all_gate_nonincident_identity}.
 \end{proof}
 
-\begin{lemma}[Restriction of a register move]
-    \label{thm:peps_register_move_restriction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_moveHead_true_eval_heq,
-        TNLean.Lattice.PartyCircuit.Word.restrict_moveHead_false_eval_heq}
-    \leanok
-    \uses{thm:peps_party_restriction,thm:peps_register_exchange,
-        thm:peps_basis_memory_equalities}
-    % Source: 04-compression.tex, lines 233--267 and 409--434.
-    For a register $r$, ordered register lists $s,t$, and an owner selector $f$
-    in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, the register move
-    $M_r(s,t):srt\to rst$ satisfies $(M_r(s,t))|_f=M_r(s|_f,t|_f)$ if
-    $f(\operatorname{owner}(r))=1$ and
-    $(M_r(s,t))|_f=\Id_{\mathcal H_{(s|_f)(t|_f)}}$ if
-    $f(\operatorname{owner}(r))=0$.
-\end{lemma}
 
-\begin{proof}\leanok
-    \uses{thm:peps_party_restriction,thm:peps_register_exchange,
-        thm:peps_operator_composition_framing,thm:peps_basis_memory_equalities}
-    Induct on $s$ using Lemma~\ref{thm:peps_party_restriction},
-    Lemma~\ref{thm:peps_register_exchange},
-    Lemma~\ref{thm:peps_operator_composition_framing}, and
-    Lemma~\ref{thm:peps_basis_memory_equalities}: for $s=us'$, $M_r(us',t)$
-    frames $M_r(s',t)$ by $u$ and then swaps $u$ and $r$, which restricts to
-    the retained swap when both $u$ and $r$ are selected and to $\Id$ whenever
-    either is erased.
-\end{proof}
-
-
-\begin{lemma}[Erasing a framed register from the local part]
-    \label{thm:peps_selected_local_part_erased_frame}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_frame_false_eval_heq}
-    \leanok
-    \uses{thm:peps_source_preparation,thm:peps_party_restriction}
-    % Source: 04-compression.tex, lines 246--267, 351--381 and 409--434.
-    For a chronological word $W:a\to b$ with source-register list $s_W$, a
-    register $r$, and an owner selector $f$ with $f(\operatorname{owner}(r))=0$
-    in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, under the
-    identifications $((s_Wra)|_f)=(s_W|_f)(a|_f)$ and $(rb)|_f=b|_f$,
-    \begin{align}
-        (L(F_r(W)))|_f & =(L(W))|_f.
-        \label{eq:peps_selected_local_part_erased_frame}
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_source_preparation,thm:peps_register_move_restriction,
-        thm:peps_party_restriction,thm:peps_operator_composition_framing,
-        thm:peps_basis_memory_equalities}
-    By Lemma~\ref{thm:peps_source_preparation}, $L(F_r(W))=F_r(L(W))\circ M_r(s_W,a)$.
-    Since $f(\operatorname{owner}(r))=0$, $(M_r(s_W,a))|_f=\Id$ by
-    Lemma~\ref{thm:peps_register_move_restriction} and
-    $(F_r(L(W)))|_f=(L(W))|_f$ by Lemma~\ref{thm:peps_party_restriction};
-    composing via Lemma~\ref{thm:peps_operator_composition_framing} and
-    Lemma~\ref{thm:peps_basis_memory_equalities} gives~(\ref{eq:peps_selected_local_part_erased_frame}).
-\end{proof}

@@ -97,7 +97,7 @@ intertwiner is already visible in elementary block matrix multiplication.
     \label{def:asym_word_module}
     \lean{MPSTensor.WordModule}
     \leanok
-    \uses{def:asym_word_algebra, def:mps_tensor, def:eval_word}
+    \uses{def:asym_word_algebra,def:mps_tensor,def:eval_word}
     A tensor $C=(C^i)_{i=0}^{d-1}$ on $\C^D$ defines an $F$-module structure
     on $\C^D$ through the representation $\rho_C(x_i)=C^i$, extended
     multiplicatively so that a word $w$ acts by $\rho_C(w)=C^w$.
@@ -118,7 +118,7 @@ intertwiner is already visible in elementary block matrix multiplication.
     \label{lem:asym_word_traces_tensor}
     \lean{MPSTensor.traceWord_wordModule}
     \leanok
-    \uses{def:asym_word_traces, def:asym_word_module}
+    \uses{def:asym_word_traces,def:asym_word_module}
     On the word-algebra module of a tensor $C$, the word trace of $w$ is
     the periodic coefficient $\tr(C^w)$.
 \end{lemma}
@@ -135,7 +135,7 @@ intertwiner is already visible in elementary block matrix multiplication.
     \label{lem:asym_normal_simple}
     \lean{MPSTensor.isSimpleModule_wordModule_of_isNormal}
     \leanok
-    \uses{def:asym_word_module, def:normal}
+    \uses{def:asym_word_module,def:normal}
     If $C$ is normal on $\C^D$ with $D>0$, its word-algebra module is
     simple.
 \end{lemma}
@@ -235,7 +235,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
         WordAlgebra.exists_aug_eq_zero_smul_eq_self_smul_eq_zero,
         MPSTensor.exists_aug_eq_zero_of_forall_isEmpty_linearEquiv}
     \leanok
-    \uses{def:asym_word_module, def:asym_word_algebra}
+    \uses{def:asym_word_module,def:asym_word_algebra}
     Let $Q$ be a finite-dimensional simple $F$-module on which some
     generator acts nonzero. There is $u\in F_+$ acting as the identity on
     $Q$. If $T$ is a finite-dimensional simple module not isomorphic to
@@ -301,7 +301,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \label{thm:asym_identification}
     \lean{MPSTensor.exists_linearEquiv_wordModule_of_isSimpleModule_quotient}
     \leanok
-    \uses{def:asym_word_traces, def:asym_word_module}
+    \uses{def:asym_word_traces,def:asym_word_module}
     Let $M$ be a finite-dimensional $F$-module whose word traces are, on
     every nonempty word, the sum of the word traces of a finite family of
     simple tensor modules $C_s$, $s\in S$. Let $K\leq M$ have simple
@@ -311,8 +311,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
-    \uses{thm:asym_separation, lem:asym_ker_aug_separation,
-        thm:asym_nilpotent_trace_powers}
+    \uses{thm:asym_separation,lem:asym_ker_aug_separation,thm:asym_nilpotent_trace_powers}
     If $M/K$ were isomorphic to no $C_s$, Lemma~\ref{thm:asym_separation}
     would give $p\in F_+$ acting as the identity on $M/K$ and as zero on
     every $C_s$. Since the word trace of $M$ agrees with the sum of the
@@ -372,7 +371,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \label{lem:asym_flag_base_case}
     \lean{MPSTensor.finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero}
     \leanok
-    \uses{def:normal, def:asym_word_traces}
+    \uses{def:normal,def:asym_word_traces}
     If the word traces of a finite family of normal tensors of positive
     bond dimension sum to zero on every nonempty word, the family is
     empty.
@@ -380,7 +379,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
-    \uses{thm:asym_separation, thm:asym_nilpotent_trace_powers}
+    \uses{thm:asym_separation,thm:asym_nilpotent_trace_powers}
     Otherwise Lemma~\ref{thm:asym_separation} applied to one member $C_{s_0}$
     of the family gives $u\in F_+$ acting as the identity on $C_{s_0}$;
     vanishing total word trace forces every positive power of the action of
@@ -394,7 +393,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \label{thm:asym_flag_theorem}
     \lean{MPSTensor.exists_flagData}
     \leanok
-    \uses{def:asym_flag_data, def:normal, def:asym_word_traces}
+    \uses{def:asym_flag_data,def:normal,def:asym_word_traces}
     Let $C_s$, $s\in S$, be a finite family of normal tensors of positive
     bond dimension, and let $M$ be a finite-dimensional $F$-module whose
     word traces agree, on every nonempty word, with the sum of the word
@@ -404,8 +403,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
-    \uses{lem:asym_flag_base_case, lem:asym_zero_module,
-        thm:asym_identification, lem:asym_trace_additivity}
+    \uses{lem:asym_flag_base_case,lem:asym_zero_module,thm:asym_identification,lem:asym_trace_additivity}
     We induct on $\dim M$. If $M=0$, Lemma~\ref{lem:asym_flag_base_case}
     forces $S=\emptyset$, and the empty chain is the required flag. If
     $M\neq0$, its finite-dimensional invariant-submodule lattice has a
@@ -435,7 +433,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
         MPSTensor.MultiBlockCompression.left_mul_right_of_ne,
         MPSTensor.MultiBlockCompression.evalWord_remainder_eq_zero}
     \leanok
-    \uses{def:same_mpv2_pos, def:normal}
+    \uses{def:same_mpv2_pos,def:normal}
     Let $A=\bigoplus_{s\in S}C_s$ be a finite direct sum of nonzero normal
     tensors $C_s=(C_s^i)_i$ of bond dimension $D_s$, with repetitions
     allowed, and let $B=(B^i)_i$ be an arbitrary tensor of bond dimension
@@ -514,8 +512,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
-    \uses{thm:asym_flag_theorem, lem:asym_composition_gauge,
-        lem:asym_triangular}
+    \uses{thm:asym_flag_theorem,lem:asym_composition_gauge,lem:asym_triangular}
     By Lemma~\ref{thm:asym_flag_theorem}, applied with $M$ the
     word-algebra module of $B$, whose word traces agree with the sum of
     those of the $C_s$ by hypothesis, $\C^{D_B}$ carries a labelled
@@ -551,7 +548,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \lean{MPSTensor.exists_weightedMultiBlockCompression_of_isNormal,
         MPSTensor.MultiBlockCompression.left_mul_evalWord_mul_right_smul}
     \leanok
-    \uses{def:same_mpv2_pos, def:normal}
+    \uses{def:same_mpv2_pos,def:normal}
     Let $A=\bigoplus_{k=1}^g\bigoplus_{q=1}^{n_k}\mu_kA_{(k)}$ be a
     canonical target with each $A_{(k)}$ normal of bond dimension $D_k$
     and $\mu_k\in\C^\times$, and suppose
@@ -593,7 +590,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
         MPSTensor.MultiBlockCompression.trace_evalWord_eq_sum_smul,
         MPSTensor.MultiBlockCompression.mpv_eq_sum}
     \leanok
-    \uses{thm:asym_multiblock, lem:asym_triangular}
+    \uses{thm:asym_multiblock,lem:asym_triangular}
     Conversely, whenever a tensor $B$ admits the block triangular form of
     Theorem~\ref{thm:asym_multiblock}, clauses (i)--(iii), for a family
     $(C_s)_{s\in S}$, its periodic data are those of the direct sum:
@@ -642,7 +639,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \lean{MPSTensor.MultiBlockCompression.ofProjectorSum,
         MPSTensor.MultiBlockCompression.remainder_ofProjectorSum}
     \leanok
-    \uses{thm:asym_multiblock, lem:asym_triangular}
+    \uses{thm:asym_multiblock,lem:asym_triangular}
     Let the bond space of $B$ be $\C^m\otimes\C^{D}$ and let $\Pi_1,\ldots$
     be mutually orthogonal rank-one idempotents of $\C^m$ cut out by an
     invertible matrix $U$ (the idempotents $U^{-1}E_{jj}U$). If every
@@ -657,7 +654,7 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
-    \uses{lem:asym_triangular, prop:asym_split_intertwiners}
+    \uses{lem:asym_triangular,prop:asym_split_intertwiners}
     Conjugating by $U\otimes\id$ turns each $\Pi_{j(s)}$ into a matrix
     unit, so every letter becomes block diagonal with the blocks
     $\mu_sC_s^i$ at the positions $j(s)$ and zero blocks elsewhere; block

@@ -54,9 +54,7 @@ Let $D=\bigoplus_iD_i$ and $D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$ for represen
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_copy_transpose,thm:peps_copy_weight_products,
-        thm:peps_parent_support_boundary_factors,
-        thm:peps_parent_support_boundary_adjoints}
+    \uses{thm:peps_oriented_copy_transpose,thm:peps_copy_weight_products,thm:peps_parent_support_boundary_factors,thm:peps_parent_support_boundary_adjoints}
     Since $W_m^2D_g=\bigoplus_i\sqrt{m_i}D_i(g)$ by (\ref{eq:peps_copy_weight_products}), Lemma~\ref{thm:peps_oriented_copy_transpose} and the unreversed bond identity give the internal equations, while Lemmas~\ref{thm:peps_parent_support_boundary_factors} and~\ref{thm:peps_parent_support_boundary_adjoints} give (\ref{eq:peps_oriented_copy_crossing})--(\ref{eq:peps_oriented_copy_crossing_adjoint}). Substituting into (\ref{eq:peps_oriented_open}) yields (\ref{eq:peps_oriented_copy_open})--(\ref{eq:peps_oriented_copy_open_adjoint}).
 \end{proof}
 
@@ -94,10 +92,7 @@ Let $D=\bigoplus_iD_i$ and $D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$ for represen
     so $M_m$ is injective on $\mathcal P_{\mathcal R}(A_m)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_copy_local_ranges,
-        thm:peps_parent_support_copy_blocks,
-        thm:peps_parent_support_block_criterion,
-        thm:peps_oriented_parent_support,thm:peps_parent_support_retractions}
+    \uses{thm:peps_oriented_copy_local_ranges,thm:peps_parent_support_copy_blocks,thm:peps_parent_support_block_criterion,thm:peps_oriented_parent_support,thm:peps_parent_support_retractions}
     By Lemma~\ref{thm:peps_parent_support_copy_blocks}, each regional block of $M_m$ (and $M_m^\dagger$) is a scalar multiple of the numbered $F_{m,R}(\gamma)$ (and $F_{m,R}(\gamma)^\dagger$), so Lemma~\ref{thm:peps_oriented_copy_local_ranges} and Lemma~\ref{thm:peps_parent_support_block_criterion} give the parent inclusions. Edge coverage and Lemma~\ref{thm:peps_oriented_parent_support} place $\mathcal P_{\mathcal R}(A_m)$ in the matching-sector product support (where $F_m^\dagger F_m=1$) and $\mathcal P_{\mathcal R}(B_m)$ in the product of $\operatorname{im}F_m$ (where $F_mF_m^\dagger=1$), whence Lemma~\ref{thm:peps_parent_support_retractions} gives (\ref{eq:peps_oriented_copy_left_inverse})--(\ref{eq:peps_oriented_copy_right_inverse}).
 \end{proof}
 
@@ -111,8 +106,7 @@ Let $D=\bigoplus_iD_i$ and $D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$ for represen
     If $m_i>0$ and every edge has both endpoints in some member of $\mathcal R$, then $M_m\mathcal P_{\mathcal R}(A_m)=\mathcal P_{\mathcal R}(B_m)$, $\dim\mathcal P_{\mathcal R}(A_m)=\dim\mathcal P_{\mathcal R}(B_m)$, and $M_m\ker H_A=\ker H_B$ for any finite $\mathcal R$ and positive parent Hamiltonians $H_A,H_B$ with exact regional kernels.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_copy_parent_inverses,
-        thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_oriented_copy_parent_inverses,thm:peps_region_parent_common_kernel}
     Lemma~\ref{thm:peps_oriented_copy_parent_inverses} shows that $M_m$ and $M_m^\dagger$ restrict to mutually inverse bijections between $\mathcal P_{\mathcal R}(A_m)$ and $\mathcal P_{\mathcal R}(B_m)$, and Lemma~\ref{thm:peps_region_parent_common_kernel} identifies these parent spaces with $\ker H_A$ and $\ker H_B$.
 \end{proof}
 
@@ -142,8 +136,7 @@ Let $D=\bigoplus_iD_i$ and $D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$ for represen
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_copy_weight_products,
-        thm:peps_region_parent_ground_space_physical_transport}
+    \uses{thm:peps_copy_weight_products,thm:peps_region_parent_ground_space_physical_transport}
     By (\ref{eq:peps_copy_weight_products}), each incident leg $e\ni v$ contributes $m_{i(\sigma_e)}^{1/4}$ regardless of $o_e$, giving $(A_m)_v(\eta,\sigma)=S_v(\sigma)A^{D,1,o}_v(\eta,\sigma)$. For $m_i>0$, $S_v$ is invertible, and Lemma~\ref{thm:peps_region_parent_ground_space_physical_transport} yields (\ref{eq:peps_oriented_filter_parent}).
 \end{proof}
 
@@ -153,8 +146,7 @@ Let $D=\bigoplus_iD_i$ and $D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$ for represen
         TNLean.PEPS.canonicalOrientedPositiveMultiplicityParentEquiv,
         TNLean.PEPS.canonicalOrientedMultiplicityChangeParentEquiv}
     \leanok
-    \uses{thm:peps_oriented_copy_filter,
-        def:peps_oriented_copy_parent_equivalence}
+    \uses{thm:peps_oriented_copy_filter,def:peps_oriented_copy_parent_equivalence}
     For $m_i>0$, let $S_m^o=(\bigotimes_vS_v)|_{\mathcal P_{\mathcal R}(A^{D,1,o})}:\mathcal P_{\mathcal R}(A^{D,1,o})\simeq\mathcal P_{\mathcal R}(A_m)$. Under edge coverage by $\mathcal R$, set $L_m^o=E_m^oS_m^o:\mathcal P_{\mathcal R}(A^{D,1,o})\simeq\mathcal P_{\mathcal R}(A^{D^{(m)},1,o})$, and for positive families $m,n$ define $L_n^o(L_m^o)^{-1}:\mathcal P_{\mathcal R}(A^{D^{(m)},1,o})\simeq\mathcal P_{\mathcal R}(A^{D^{(n)},1,o})$.
 \end{definition}
 
@@ -164,8 +156,7 @@ Let $D=\bigoplus_iD_i$ and $D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$ for represen
         TNLean.PEPS.finrank_regionParentGroundSpace_arbitraryOrientedSemiRegular_eq,
         TNLean.PEPS.nonempty_ker_hamiltonian_ofPlace_arbitraryOrientedSemiRegular_equiv}
     \leanok
-    \uses{def:peps_semiregular,def:peps_oriented_averaging_tensor,
-        def:peps_region_parent_interaction}
+    \uses{def:peps_semiregular,def:peps_oriented_averaging_tensor,def:peps_region_parent_interaction}
     Let $U$ be a unitary semi-regular representation of a finite group on a $k$-regular graph, and suppose every edge is internal to some $R\in\mathcal R$. Then the oriented canonical parent spaces of $U$ and the left regular representation $L$ satisfy
     \begin{align}
         \mathcal P_{\mathcal R}(A^{U,1,o})
@@ -175,11 +166,7 @@ Let $D=\bigoplus_iD_i$ and $D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$ for represen
     have equal dimension, and for finite $\mathcal R$, any positive parent Hamiltonians with these exact local kernels have linearly equivalent full kernels.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_semiregular_matrix_blocks,
-        thm:peps_semiregular_block_fourier,
-        def:peps_oriented_coordinate_parent_equivalence,
-        def:peps_oriented_positive_multiplicity_equivalence,
-        thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_semiregular_matrix_blocks,thm:peps_semiregular_block_fourier,def:peps_oriented_coordinate_parent_equivalence,def:peps_oriented_positive_multiplicity_equivalence,thm:peps_region_parent_common_kernel}
     By Lemmas~\ref{thm:peps_semiregular_matrix_blocks} and~\ref{thm:peps_semiregular_block_fourier}, $U_g=QD^{(m)}_gQ^\dagger$ and $L_g=FD^{(d)}_gF^\dagger$ for unitaries $Q,F$, dimensions $d_i>0$, and multiplicities $m_i>0$. Composing the coordinate and multiplicity equivalences gives
     \begin{align}
         \mathcal P_{\mathcal R}(A^{U,1,o})
@@ -201,9 +188,7 @@ Let $D=\bigoplus_iD_i$ and $D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$ for represen
     Let $a_v$ be vertex-dependent physical tensors that are $G$-injective for $\rho_v^o$. If every vertex belongs to some $R\in\mathcal R$, then $\mathcal P_{\mathcal R}(a)\simeq\mathcal P_{\mathcal R}(A^{U,1,o})$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_average_g_injective,
-        thm:peps_range_parent_g_comparison,
-        thm:peps_range_parent_equivalence}
+    \uses{thm:peps_oriented_average_g_injective,thm:peps_range_parent_g_comparison,thm:peps_range_parent_equivalence}
     Since $A^{U,1,o}_v$ is $G$-injective (Lemma~\ref{thm:peps_oriented_average_g_injective}), Lemma~\ref{thm:peps_range_parent_g_comparison} gives local maps $F_v$ injective on $\operatorname{im}A^{U,1,o}_v$ with $a_v=F_vA^{U,1,o}_v$, and Lemma~\ref{thm:peps_range_parent_equivalence} under vertex coverage yields $\mathcal P_{\mathcal R}(a)\simeq\mathcal P_{\mathcal R}(A^{U,1,o})$.
 \end{proof}
 
@@ -213,13 +198,10 @@ Let $D=\bigoplus_iD_i$ and $D^{(m)}=\bigoplus_i(D_i\otimes1_{m_i})$ for represen
         TNLean.PEPS.finrank_regionParentGroundSpace_orientedSemiRegularGInjective_eq,
         TNLean.PEPS.nonempty_ker_hamiltonian_ofPlace_orientedSemiRegularGInjective_equiv}
     \leanok
-    \uses{def:peps_semiregular,def:peps_g_injective,
-        def:peps_region_parent_interaction}
+    \uses{def:peps_semiregular,def:peps_g_injective,def:peps_region_parent_interaction}
     Suppose $U$ is unitary and semi-regular on a $k$-regular graph, each $a_v$ is $G$-injective for $\rho_v^o$, and $\mathcal R$ covers all vertices and edges internally. Then $\mathcal P_{\mathcal R}(a)\simeq\mathcal P_{\mathcal R}(A^{L,1,o})$, $\dim\mathcal P_{\mathcal R}(a)=\dim\mathcal P_{\mathcal R}(A^{L,1,o})$, and for finite $\mathcal R$, any positive parent Hamiltonians with these exact local kernels have linearly equivalent full kernels.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_oriented_physical_canonical_parent,
-        thm:peps_oriented_semiregular_canonical_parent,
-        thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_oriented_physical_canonical_parent,thm:peps_oriented_semiregular_canonical_parent,thm:peps_region_parent_common_kernel}
     Composing Lemma~\ref{thm:peps_oriented_physical_canonical_parent} with (\ref{eq:peps_oriented_semiregular_parent}) gives $\mathcal P_{\mathcal R}(a)\simeq\mathcal P_{\mathcal R}(A^{U,1,o})\simeq\mathcal P_{\mathcal R}(A^{L,1,o})$, and Lemma~\ref{thm:peps_region_parent_common_kernel} yields the kernel equivalence.
 \end{proof}

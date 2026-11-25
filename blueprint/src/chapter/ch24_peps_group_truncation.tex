@@ -57,7 +57,8 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 
 \begin{definition}[Coordinate contraction of a tensor graph]
     \label{def:peps_group_contraction}
-    \lean{TNLean.Lattice.WholeGroup.contraction, TNLean.Lattice.WholeGroup.vertexNormSq}
+    \lean{TNLean.Network.WholeGroup.contraction,
+        TNLean.Network.WholeGroup.vertexNormSq}
     \leanok
     Let $(V,E)$ be a finite graph whose edges $e\in E$ have endpoints
     $t(e),h(e)\in V$ and finite index sets $D_e$, and let each $v\in V$ carry
@@ -74,8 +75,8 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 
 \begin{lemma}[Whole-group tensor bound, norm part]
     \label{thm:peps_group_contraction_norm}
-    \lean{TNLean.Lattice.WholeGroup.contraction_norm_le_one,
-        TNLean.Lattice.WholeGroup.partialNormSq_le_one}
+    \lean{TNLean.Network.WholeGroup.contraction_norm_le_one,
+        TNLean.Network.WholeGroup.partialNormSq_le_one}
     \leanok
     \uses{def:peps_group_contraction}
     If $(V,E)$ has no self-loops and $\lVert A_v\rVert\le1$ for all $v\in V$,
@@ -94,11 +95,11 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 
 \begin{lemma}[Whole-group tensor bound, nuclear part]
     \label{thm:peps_group_contraction_nuclear}
-    \lean{TNLean.Lattice.WholeGroup.rectangularTraceNorm_flattening_le_one,
-        TNLean.Lattice.WholeGroup.flattening,
-        TNLean.Lattice.WholeGroup.flattening_contraction}
+    \lean{TNLean.Network.WholeGroup.rectangularTraceNorm_flattening_le_one,
+        TNLean.Network.WholeGroup.flattening,
+        TNLean.Network.WholeGroup.flattening_contraction}
     \leanok
-    \uses{def:peps_group_contraction, def:peps_group_nuclear_norm}
+    \uses{def:peps_group_contraction,def:peps_group_nuclear_norm}
     Under the hypotheses of Lemma~\ref{thm:peps_group_contraction_norm}, for
     every $T\subseteq V$, the matrix reshaping $Z_T$ of $Z$ with rows indexed
     by $\prod_{v\in T}P_v$ and columns by $\prod_{v\in V\setminus T}P_v$
@@ -106,7 +107,7 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_group_contraction_norm, lem:peps_group_nuclear_holder}
+    \uses{thm:peps_group_contraction_norm,lem:peps_group_nuclear_holder}
     By Lemma~\ref{thm:peps_group_contraction_norm}, the partial contractions
     $A$ on $T$ and $B$ on $V\setminus T$ satisfy $\lVert A\rVert_2,\lVert B\rVert_2\le1$,
     and grouping the edges between $T$ and $V\setminus T$ gives
@@ -116,10 +117,10 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 
 \begin{lemma}[Simultaneous truncation of open-leg groups]
     \label{lem:peps_group_truncation_abstract}
-    \lean{TNLean.Lattice.WholeGroup.exists_group_truncation,
-        TNLean.Lattice.WholeGroup.norm_sub_factorMatrix_le,
-        TNLean.Lattice.WholeGroup.factorMatrix,
-        TNLean.Lattice.WholeGroup.productVector}
+    \lean{TNLean.Network.WholeGroup.exists_group_truncation,
+        TNLean.Network.WholeGroup.norm_sub_factorMatrix_le,
+        TNLean.Network.WholeGroup.factorMatrix,
+        TNLean.Network.WholeGroup.productVector}
     \leanok
     \uses{def:peps_group_nuclear_norm}
     Let $Z\in\bigotimes_{v\in V}\C^{P_v}$ satisfy $\lVert Z\rVert\le1$ and
@@ -145,8 +146,8 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 
 \begin{lemma}[Whole-group tensor bound]
     \label{thm:peps_group_tensor}
-    \lean{TNLean.Lattice.WholeGroup.exists_simultaneous_openLeg_truncation,
-        TNLean.Lattice.WholeGroup.exists_simultaneous_group_truncation}
+    \lean{TNLean.Network.WholeGroup.exists_simultaneous_openLeg_truncation,
+        TNLean.Network.WholeGroup.exists_simultaneous_group_truncation}
     \leanok
     \uses{def:peps_group_contraction}
     Let a finite loopless graph carry at each $v\in V$ a tensor $A_v$ with
@@ -162,8 +163,7 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_group_contraction_norm, thm:peps_group_contraction_nuclear,
-        lem:peps_group_truncation_abstract}
+    \uses{thm:peps_group_contraction_norm,thm:peps_group_contraction_nuclear,lem:peps_group_truncation_abstract}
     Lemmas~\ref{thm:peps_group_contraction_norm} and
     \ref{thm:peps_group_contraction_nuclear} give $\lVert Z\rVert\le1$ and
     $\lVert Z_T\rVert_1\le1$. Since $|P_v|=1$ when $v$ has no open legs, the
@@ -173,10 +173,10 @@ the sum of its singular values and $\lVert M\rVert_2$ its Hilbert--Schmidt norm.
 
 \begin{corollary}[Whole-group tensor bound for networks with edge matrices]
     \label{cor:peps_group_tensor_network}
-    \lean{TNLean.Lattice.WholeGroup.network_norm_le_one,
-        TNLean.Lattice.WholeGroup.rectangularTraceNorm_flattening_network_le_one,
-        TNLean.Lattice.WholeGroup.exists_simultaneous_network_truncation,
-        TNLean.Lattice.WholeGroup.network_one_eq_contraction}
+    \lean{TNLean.Network.WholeGroup.network_norm_le_one,
+        TNLean.Network.WholeGroup.rectangularTraceNorm_flattening_network_le_one,
+        TNLean.Network.WholeGroup.exists_simultaneous_network_truncation,
+        TNLean.Network.WholeGroup.network_one_eq_contraction}
     \leanok
     \uses{thm:peps_group_tensor}
     For a loopless tensor network with one leg per incident edge endpoint,

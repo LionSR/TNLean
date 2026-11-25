@@ -59,13 +59,13 @@ open Matrix QuantumCircuit
 open ManyBody (IsGapped groundSpace)
 open scoped Kronecker
 
-open ManyBody (supDist supDist_le_of_walk)
+open ManyBody (supDist supDist_le_of_walk supDist_comm supDist_triangle)
 
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open TNLean.Lattice AreaLaw
+open AreaLaw
 open ManyBody (crossingSites exists_walks_of_mem_crossingSites graphNeighborhood planeDomainGraph)
 
 /-! ### The constants -/
@@ -145,7 +145,6 @@ end TNLean.PEPS.Approximation
 
 namespace ManyBody.PlaneInteraction
 
-open TNLean.Lattice
 
 open TNLean.PEPS.Approximation TNLean.PEPS.AreaLaw
 

@@ -3,7 +3,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily}
     \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily_operator}
     \leanok
-    \uses{def:mpdo_bnt_fusion_isometry_family, def:mpdo_bnt_label_operator_family, def:mpdo_positive_bnt_label_chi_trace_power_form}
+    \uses{def:mpdo_bnt_fusion_isometry_family,def:mpdo_bnt_label_operator_family,def:mpdo_positive_bnt_label_chi_trace_power_form}
     The tensors $M_\gamma$ generate the periodic operators $O_L(M_\gamma)$.
     The positive diagonal matrices $\chi_{\alpha,\beta,\gamma}$ define the
     structure coefficients
@@ -87,7 +87,7 @@
     \lean{MPOTensor.BNTFusionIsometryFamily.mpo_mul_mpo_eq_sum}
     \lean{MPOTensor.BNTFusionIsometryFamily.toOperatorFamily_hasSameLengthProductForm}
     \leanok
-    \uses{def:mpdo_bnt_fusion_coisometry_family, def:mpdo_bnt_fusion_isometry_family, def:mpdo_bnt_fusion_operator_family, thm:mpdo_operator_product_mpo, lem:mpdo_word_product_conjugation, lem:mpdo_word_product_block_kronecker, def:mpdo_bnt_label_same_length_product_form}
+    \uses{def:mpdo_bnt_fusion_coisometry_family,def:mpdo_bnt_fusion_isometry_family,def:mpdo_bnt_fusion_operator_family,thm:mpdo_operator_product_mpo,lem:mpdo_word_product_conjugation,lem:mpdo_word_product_block_kronecker,def:mpdo_bnt_label_same_length_product_form}
     Fusion coisometries onto the active sectors with exact reconstruction,
     and also fusion isometries on the full product bond space, give the
     operator product law with structure coefficients determined by the
@@ -129,7 +129,7 @@
     \label{def:mpdo_bnt_fusion_algebra_clause}
     \lean{MPOTensor.BNTFusionIsometryFamily.toBNTAlgebraClause}
     \leanok
-    \uses{def:mpdo_bnt_algebra_clause, def:mpdo_bnt_fusion_isometry_family, def:mpdo_bnt_label_idempotent_coefficient_form, def:mpdo_positive_bnt_label_chi_trace_power_form, thm:mpdo_fusion_same_length_product}
+    \uses{def:mpdo_bnt_algebra_clause,def:mpdo_bnt_fusion_isometry_family,def:mpdo_bnt_label_idempotent_coefficient_form,def:mpdo_positive_bnt_label_chi_trace_power_form,thm:mpdo_fusion_same_length_product}
     Suppose the fusion-isometry identity holds with positive diagonal matrices
     $\chi_{\alpha,\beta,\gamma}$. Set
     $c^{(L)}_{\alpha,\beta,\gamma}
@@ -157,7 +157,7 @@
     \lean{MPOTensor.BNTFusionTensorClause}
     \lean{MPOTensor.HasBNTFusionTensorClause}
     \leanok
-    \uses{def:vertical_cf_mpdo, def:mpdo_bnt_fusion_coisometry_family, def:mpdo_bnt_label_idempotent_coefficient_form}
+    \uses{def:vertical_cf_mpdo,def:mpdo_bnt_fusion_coisometry_family,def:mpdo_bnt_label_idempotent_coefficient_form}
     Choose a vertical canonical decomposition, with nonempty positive
     diagonal matrices $\mu_\alpha$ and a BNT $\{M_\alpha\}_\alpha$:
     \begin{align}
@@ -233,7 +233,7 @@
     \cite[Appendix~C.4, lines~2001--2046]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_blocked_vertical_operator_representations, thm:mpdo_blocked_representations_idempotent_trace_scalars}
+    \uses{thm:mpdo_blocked_vertical_operator_representations,thm:mpdo_blocked_representations_idempotent_trace_scalars}
     The sector correspondence expresses the blocked closed-chain operator in
     the one-site normal-tensor basis. Multiplication of the one-site vertical
     decomposition gives a second expression in the same basis. At every
@@ -248,8 +248,7 @@
     \label{thm:mpdo_grouped_product_inputs_to_bnt_fusion_tensor}
     \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_productInputs}
     \leanok
-    \uses{def:mpdo, def:mpdo_grouped_vertical_product_inputs, def:is_rfp_via_ts,
-        def:mpdo_bnt_fusion_tensor_clause}
+    \uses{def:mpdo,def:mpdo_grouped_vertical_product_inputs,def:is_rfp_via_ts,def:mpdo_bnt_fusion_tensor_clause}
     Let $M$ generate matrix product density operators, have the grouped
     vertical product hypotheses, and satisfy the renormalization fixed-point
     condition. Then $M$ has an active-sector BNT fusion tensor clause. In
@@ -260,10 +259,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_literal_cpsv_vertical_decomposition,
-        thm:mpdo_transported_vertical_sector_coefficient_comparison,
-        thm:mpdo_grouped_vertical_product_positive_fusion_decomposition,
-        thm:mpdo_paired_vertical_decompositions_fusion}
+    \uses{thm:mpdo_literal_cpsv_vertical_decomposition,thm:mpdo_transported_vertical_sector_coefficient_comparison,thm:mpdo_grouped_vertical_product_positive_fusion_decomposition,thm:mpdo_paired_vertical_decompositions_fusion}
     The grouped hypotheses yield the one-site and two-site vertical
     decompositions, and conjugating the renormalization maps into retained
     coordinates compares their normal sectors. The positive product
@@ -275,7 +271,7 @@
     \label{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}
     \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_fusion_tensor_clause}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:is_rfp_via_ts,def:mpdo_bnt_fusion_tensor_clause}
     Let $M$ generate MPDOs $\rho^{(N)}(M)$, and suppose that its
     doubled-physical-index MPS tensor is in CF, with normalized NT blocks.
     Suppose there are trace-preserving completely positive maps (tpCPM)
@@ -318,7 +314,7 @@
     \label{thm:mpdo_horizontal_rfp_to_bnt_fusion_tensor}
     \lean{MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF}
     \leanok
-    \uses{def:is_rfp_via_ts, def:horizontal_cf_mpdo, def:mpdo_bnt_fusion_tensor_clause}
+    \uses{def:is_rfp_via_ts,def:horizontal_cf_mpdo,def:mpdo_bnt_fusion_tensor_clause}
     Let $M$ generate MPDOs and satisfy the normalized BNT-refined
     horizontal-form hypothesis. Suppose there are tpCPM $S,T$ on the
     original physical indices with $S[M_2(X)]=M_1(X)$ and
@@ -343,7 +339,7 @@
     \lean{MPOTensor.BNTFusionTensorClause.toBNTAlgebraTensorClause}
     \lean{MPOTensor.HasBNTFusionTensorClause.to_hasBNTAlgebraTensorClause}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_fusion_algebra_clause, def:mpdo_bnt_fusion_tensor_clause}
+    \uses{def:mpdo_bnt_algebra_tensor_clause,def:mpdo_bnt_fusion_algebra_clause,def:mpdo_bnt_fusion_tensor_clause}
     Suppose a chosen vertical canonical decomposition satisfies the
     active-sector fusion and idempotent relations.
     Then its operators $O_L(M_\alpha)$ satisfy the algebra relations.
@@ -375,7 +371,7 @@
 \begin{theorem}[Printed algebra and fusion characterization]
     \label{thm:cpsv_theorem414_printed_status}
     \notready
-    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_fusion_tensor_clause, thm:mpdo_cpsv_bnt_rfp_equivalence}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:is_rfp_via_ts,def:mpdo_bnt_algebra_tensor_clause,def:mpdo_bnt_fusion_tensor_clause,thm:mpdo_cpsv_bnt_rfp_equivalence}
     For a tensor in CF generating MPDOs,
     \cite[Theorem~4.14]{Cirac2016MPDO_arXiv} states that the RFP
     condition, the algebra and idempotent relations for a vertical BNT,
@@ -396,7 +392,7 @@
     \lean{MPOTensor.isRFPViaTS_iff_hasBNTAlgebraTensorClause}
     \lean{MPOTensor.isRFPViaTS_iff_hasBNTFusionTensorClause}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:is_rfp_via_ts, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_fusion_tensor_clause}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:is_rfp_via_ts,def:mpdo_bnt_algebra_tensor_clause,def:mpdo_bnt_fusion_tensor_clause}
     Let $M$ generate MPDOs, and suppose its doubled-physical-index tensor is
     in CF with normalized NT blocks. Consider the following conditions:
     \begin{enumerate}
@@ -446,7 +442,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor, thm:mpdo_bnt_fusion_tensor_to_algebra_tensor, thm:mpdo_bnt_algebra_tensor_to_rfp}
+    \uses{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor,thm:mpdo_bnt_fusion_tensor_to_algebra_tensor,thm:mpdo_bnt_algebra_tensor_to_rfp}
     An RFP has active-sector fusion and the idempotent relation by
     Lemma~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}.
     These imply the algebra and idempotent relations by
@@ -651,7 +647,7 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \label{thm:mpdo_left_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.leftFusion_apply}
     \leanok
-    \uses{def:mpdo_left_fusion_isometry, def:mpdo_operator_product, lem:matrix_block_conjugation_restriction}
+    \uses{def:mpdo_left_fusion_isometry,def:mpdo_operator_product,lem:matrix_block_conjugation_restriction}
     Site by site,
     \begin{align}
          & U^{\mathrm L}_{\alpha,\beta,\gamma}
@@ -714,7 +710,7 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \label{thm:mpdo_right_fusion_apply}
     \lean{MPOTensor.BNTFusionIsometryFamily.rightFusion_apply}
     \leanok
-    \uses{def:mpdo_right_fusion_isometry, def:mpdo_operator_product, lem:matrix_block_conjugation_restriction}
+    \uses{def:mpdo_right_fusion_isometry,def:mpdo_operator_product,lem:matrix_block_conjugation_restriction}
     Site by site,
     \begin{align}
          & U^{\mathrm R}_{\alpha,\beta,\gamma}
@@ -745,7 +741,7 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \label{def:mpdo_triple_fusion_comparison}
     \lean{MPOTensor.BNTFusionIsometryFamily.tripleFusionComparison}
     \leanok
-    \uses{def:mpdo_left_fusion_isometry, def:mpdo_right_fusion_isometry, def:mpdo_operator_product_associator}
+    \uses{def:mpdo_left_fusion_isometry,def:mpdo_right_fusion_isometry,def:mpdo_operator_product_associator}
     Matching the adjoint orientation of the $F$-matrix convention in
     \cite[Section~3.4]{Bultinck2017Anyons}, the canonical comparison oriented
     from the right-associated full direct sum to the left-associated full
@@ -781,7 +777,7 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_right_fusion_isometry_isometry, def:mpdo_operator_product_associator}
+    \uses{thm:mpdo_right_fusion_isometry_isometry,def:mpdo_operator_product_associator}
     Substituting (\ref{eq:rfp_triple_comparison}), the isometry identity
     $(U^{\mathrm R})^\dagger U^{\mathrm R}=1$ and the two-sided inverse
     identities for the permutation matrix $A$ leave
@@ -805,7 +801,7 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_left_fusion_isometry_isometry, def:mpdo_operator_product_associator}
+    \uses{thm:mpdo_left_fusion_isometry_isometry,def:mpdo_operator_product_associator}
     Substituting (\ref{eq:rfp_triple_comparison}), the isometry identity
     $(U^{\mathrm L})^\dagger U^{\mathrm L}=1$ and the two-sided inverse
     identities for $A$ leave
@@ -818,7 +814,7 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         tripleFusionComparison_intertwines_of_lengthIndependent}
     \leanok
-    \uses{def:mpdo_triple_fusion_comparison, thm:mpdo_operator_product_associativity, thm:mpdo_left_fusion_apply, thm:mpdo_right_fusion_apply, thm:mpdo_bnt_length_independent_zipper}
+    \uses{def:mpdo_triple_fusion_comparison,thm:mpdo_operator_product_associativity,thm:mpdo_left_fusion_apply,thm:mpdo_right_fusion_apply,thm:mpdo_bnt_length_independent_zipper}
     Suppose the structure coefficients
     $c^{(L)}_{\alpha,\beta,\gamma}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$, with positive diagonal
@@ -879,7 +875,7 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords}
     \leanok
-    \uses{def:mpdo_final_label_selector_words, thm:mpdo_bnt_length_independent_zipper}
+    \uses{def:mpdo_final_label_selector_words,thm:mpdo_bnt_length_independent_zipper}
     Suppose the structure coefficients
     $c^{(L)}_{\alpha,\beta,\gamma}
         =\tr(\chi_{\alpha,\beta,\gamma}^{L})$, with positive diagonal
@@ -909,7 +905,7 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent}
     \leanok
-    \uses{thm:cpsv_bnt_blocked_simultaneous_span, thm:mpdo_pair_fusion_selector_completeness}
+    \uses{thm:cpsv_bnt_blocked_simultaneous_span,thm:mpdo_pair_fusion_selector_completeness}
     By the common BNT word span in \cite[lines~317--345]{Cirac2016MPDO_arXiv},
     the fusion identity at lines~986--993, and length independence at
     lines~995--1010, suppose that the tensors $\{M_\alpha\}_\alpha$ with the

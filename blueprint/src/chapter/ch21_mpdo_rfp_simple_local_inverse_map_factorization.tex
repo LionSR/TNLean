@@ -5,7 +5,7 @@
     \lean{MPOTensor.physRealize}
     \lean{MPOTensor.physRealizeLeft}
     \leanok
-    \uses{def:mpo_tensor, def:mpo_to_mps, def:injective}
+    \uses{def:mpo_tensor,def:mpo_to_mps,def:injective}
     A simple MPO tensor $K$ is called injective if its doubled-index MPS tensor
     is injective. For such a tensor, the chosen decomposition map of the
     doubled-index MPS furnishes a concrete inverse tensor $K^{-1}$ together
@@ -84,7 +84,7 @@ a further copy of $K$ recovers $K$:
     \label{def:mpdo_normalized_four_site_tail}
     \lean{MPOTensor.normalizedFourSiteTail}
     \leanok
-    \uses{def:mpo_family, def:mpo_physical_trace_transfer}
+    \uses{def:mpo_family,def:mpo_physical_trace_transfer}
     Specializing the normalization convention and three-site marginal of
     \cite[lines~792--793 and 1343--1348]{Cirac2016MPDO_arXiv} to $N=4$, let
     $\mathcal K$ be an MPO tensor and set
@@ -104,7 +104,7 @@ a further copy of $K$ recovers $K$:
     \label{thm:mpdo_reduced_four_three_tail}
     \lean{MPOTensor.reducedBlockState_four_three_apply}
     \leanok
-    \uses{def:mpdo_normalized_four_site_tail, def:mpo_eval_word}
+    \uses{def:mpdo_normalized_four_site_tail,def:mpo_eval_word}
     Let $u=(i_1,i_2,i_3)$ and $v=(j_1,j_2,j_3)$ be physical words of length
     three. The corresponding entry of the first-three-site marginal of the
     normalized four-site periodic operator is
@@ -143,7 +143,7 @@ a further copy of $K$ recovers $K$:
 
 \begin{proof}
     \leanok
-    \uses{def:mpdo_normalized_four_site_tail, lem:mpo_eval_word_append}
+    \uses{def:mpdo_normalized_four_site_tail,lem:mpo_eval_word_append}
     Expanding the partial trace over the fourth site and factoring each
     length-four word at its last letter gives
     \begin{align}
@@ -336,7 +336,7 @@ a further copy of $K$ recovers $K$:
     \lean{MPOTensor.hayashiInverseLeft}
     \lean{MPOTensor.hayashiInverseRight}
     \leanok
-    \uses{def:mpdo_injective_inverse_layer, def:mpdo_eta_structure}
+    \uses{def:mpdo_injective_inverse_layer,def:mpdo_eta_structure}
     Fix virtual indices $\beta,\alpha$ and set
     $\kappa_{\beta,\alpha}(i,j)=\mathcal K^{ij}_{\beta,\alpha}$.
     Following the sectorwise inverse-map calculation of
@@ -363,7 +363,7 @@ a further copy of $K$ recovers $K$:
     \lean{MPOTensor.inverseMap_threeSite_closure_collapse}
     \lean{MPOTensor.inverseMap_conj_physicalSlice_expansion}
     \leanok
-    \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
+    \uses{def:mpdo_three_site_closure,def:mpdo_hayashi_inverse_factors}
     Let $\mathcal K$ be injective and let $\rho$ be its three-site closure
     against $R$. Applying the inverse tensor at the two outer sites collapses
     the closure to one entry of the middle physical slice and one entry of the
@@ -435,7 +435,7 @@ a further copy of $K$ recovers $K$:
     \label{thm:mpdo_inverse_map_hayashi_sector_comparison}
     \lean{MPOTensor.inverseMap_hayashi_sector_comparison}
     \leanok
-    \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
+    \uses{def:mpdo_three_site_closure,def:mpdo_hayashi_inverse_factors}
     Suppose that $\mathcal K$ is injective, $\rho$ is its three-site closure
     against $R$, and a Hayashi decomposition of $\rho$ has been chosen. Write
     \begin{align}
@@ -568,7 +568,7 @@ For fixed $k,\alpha_1,\beta_3$, the identity
     \label{thm:mpdo_three_site_closure_reduced}
     \lean{MPOTensor.isThreeSiteClosure_reducedBlockState}
     \leanok
-    \uses{def:mpdo_three_site_closure, def:mpdo_normalized_four_site_tail}
+    \uses{def:mpdo_three_site_closure,def:mpdo_normalized_four_site_tail}
     Carried onto the tripartite site index, the three-site marginal of the
     normalized four-site chain is the three-site closure of $\mathcal K$
     against the normalized fourth-site tail $R_4$.
@@ -594,7 +594,7 @@ For fixed $k,\alpha_1,\beta_3$, the identity
     \label{thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
     \lean{MPOTensor.inverseMap_hayashi_sector_offdiagonal}
     \leanok
-    \uses{def:mpdo_three_site_closure, def:mpdo_hayashi_inverse_factors}
+    \uses{def:mpdo_three_site_closure,def:mpdo_hayashi_inverse_factors}
     In the setting of
     Lemma~\ref{thm:mpdo_inverse_map_hayashi_sector_comparison}, for all
     $k\ne k'$, every off-diagonal sector satisfies
@@ -714,7 +714,7 @@ In the middle-site basis selected by $U_B$, the same factorization
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_inverse_map_hayashi_sector_comparison, thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
+    \uses{thm:mpdo_inverse_map_hayashi_sector_comparison,thm:mpdo_inverse_map_hayashi_sector_offdiagonal}
     On a diagonal sector, the sectorwise comparison gives
     $R_{\beta_3,\alpha_1}\widetilde\kappa^{(k)}
         =p_kA^{(k)}B^{(k)}$, and dividing by the nonzero entry
@@ -729,7 +729,7 @@ In the middle-site basis selected by $U_B$, the same factorization
     \label{thm:mpdo_exists_sector_factorization}
     \lean{MPOTensor.exists_physicalSlice_sector_factorization}
     \leanok
-    \uses{def:mpdo_sector_tensors, def:mpdo_normalized_four_site_tail}
+    \uses{def:mpdo_sector_tensors,def:mpdo_normalized_four_site_tail}
     Let $\mathcal K$ be injective with nonzero four-site trace, let $\rho$ be a
     three-site closure of $\mathcal K$ against the normalized fourth-site tail
     $R_4$, and choose a Hayashi decomposition of $\rho$. Then there exist
@@ -749,7 +749,7 @@ In the middle-site basis selected by $U_B$, the same factorization
 
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_sector_factorization, thm:mpdo_normalized_four_site_tail_entry_ne_zero}
+    \uses{thm:mpdo_sector_factorization,thm:mpdo_normalized_four_site_tail_entry_ne_zero}
     A nonzero four-site trace yields outer indices with
     $(R_4)_{\beta_3,\alpha_1}\ne0$, and the sector factorization applies.
 \end{proof}

@@ -455,8 +455,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
         TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coefficientCode_height,
         TNLean.MPS.AreaLaw.RationalLeftOpenMPSRepresentationOfHeight.coefficientCode_bitCount}
     \leanok
-    \uses{lem:lvv_contracted_coordinate_height,lem:lvv_rational_contraction_correct,
-        def:lvv_rational_coordinate_storage}
+    \uses{lem:lvv_contracted_coordinate_height,lem:lvv_rational_contraction_correct,def:lvv_rational_coordinate_storage}
     Rational real and imaginary coordinates are uniquely determined by
     their complex value. Consequently the actual fractions returned by
     sequential contraction of height-$H$, bond-$b$ tensor data on $k$
@@ -890,8 +889,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     \]
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:lvv_common_rational_denominator,
-        lem:lvv_weighted_transfer_intermediate_bounds}
+    \uses{lem:lvv_common_rational_denominator,lem:lvv_weighted_transfer_intermediate_bounds}
     The caps and actual local entries form a finite family of at most
     $P$ complex parameters. Clear their denominators together, and
     use the entry norm bound $2H$ in
@@ -1021,8 +1019,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     denominator times the maximum of one and the displayed norm bound.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:lvv_capped_weighted_overlap_bounds,
-        lem:lvv_rational_accumulation_bounds}
+    \uses{lem:lvv_capped_weighted_overlap_bounds,lem:lvv_rational_accumulation_bounds}
     Matrix-unit factors have entries zero or one, so their denominators
     divide $M$ and their norms are at most $C$. The capped overlap
     bound gives denominator $M^{3n+2}$ and norm at most $C^2Q^n$.
@@ -1052,8 +1049,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     sum. The exponent is independent of the prefix length $a$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:lvv_local_energy_common_input_denominator,
-        lem:lvv_local_energy_partial_sum_bounds}
+    \uses{lem:lvv_local_energy_common_input_denominator,lem:lvv_local_energy_partial_sum_bounds}
     Coordinate height at most $H$ gives entry norm at most $2H$.
     Use the one common denominator for all terms and the bounds of
     Lemma~\ref{lem:lvv_local_energy_partial_sum_bounds} with $C=2H$.
@@ -1260,10 +1256,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     height at most $2S^4$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:lvv_weighted_transfer_intermediate_bounds,
-        lem:lvv_contraction_intermediate_bounds,
-        lem:lvv_recorded_complex_operation_heights,
-        lem:lvv_recorded_coefficient_contraction}
+    \uses{lem:lvv_weighted_transfer_intermediate_bounds,lem:lvv_contraction_intermediate_bounds,lem:lvv_recorded_complex_operation_heights,lem:lvv_recorded_coefficient_contraction}
     Zero padding preserves the denominator and norm bounds. The initial
     basis row has denominator and norm bound one. After $t$ sites the
     stored row has denominator $M^t$ and entry norms at most $(DC)^t$.
@@ -1289,11 +1282,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     \]
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:lvv_rational_tensor_storage,
-        lem:lvv_common_rational_denominator,
-        lem:lvv_recorded_coefficient_max_height,
-        lem:lvv_recorded_coefficient_contraction,
-        lem:lvv_recorded_arithmetic_schoolbook_charge_bound}
+    \uses{lem:lvv_rational_tensor_storage,lem:lvv_common_rational_denominator,lem:lvv_recorded_coefficient_max_height,lem:lvv_recorded_coefficient_contraction,lem:lvv_recorded_arithmetic_schoolbook_charge_bound}
     Take a common parameter denominator $M\le 2^b$ and the complex norm
     bound $C=2^{h+1}$. Since $D\le 2^D$, the height lemma applies with
     $S\le 2^k$, giving operation height at most $2^{4k+1}$.
@@ -1543,8 +1532,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     \label{def:lvv_size_trimming_selection}
     \lean{ManyBody.ChainInteraction.sizeTrimmingSelection}
     \leanok
-    \uses{def:chain_model,def:chain_constant_bond,def:chain_boundary_trace_norm_net,
-        def:lvv_finite_boundary_selection,def:chain_gluing_hamiltonian_parts}
+    \uses{def:chain_model,def:chain_constant_bond,def:chain_boundary_trace_norm_net,def:lvv_finite_boundary_selection,def:chain_gluing_hamiltonian_parts}
     Let $q\ge2$. Fix a range-one chain Hamiltonian $H=\sum_Xh_X$, a number
     $\Delta>0$, a natural cut position $k$, with left blocks intersected with
     the chain, and a finite set $S$ of left-block vectors. Use
@@ -1610,9 +1598,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
     the printed quantitative AKLV dependence remains separate.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_gluing_hamiltonian_decomposition,thm:chain_boundary_trace_norm_net,
-        thm:lvv_finite_boundary_selection,thm:lvv_uniform_leading_bounds_library_bond,
-        thm:chain_gluing_left_extension,thm:lvv_left_columns_right_extension}
+    \uses{thm:chain_gluing_hamiltonian_decomposition,thm:chain_boundary_trace_norm_net,thm:lvv_finite_boundary_selection,thm:lvv_uniform_leading_bounds_library_bond,thm:chain_gluing_left_extension,thm:lvv_left_columns_right_extension}
     The decomposition $H=H_L+B$ of the left and boundary parts has the stated
     supports and $\|B\|\le2L$. Each net $N_m$ has at most $K$ points, so
     \begin{align}
@@ -3186,9 +3172,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
         ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le_polynomial,
         ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith}
     \leanok
-    \uses{def:lvv_size_trimming_selection, def:lvv_boundary_program_solution,
-        thm:lvv_uniform_leading_bounds_library_bond,
-        thm:chain_boundary_net_polynomial_bound}
+    \uses{def:lvv_size_trimming_selection,def:lvv_boundary_program_solution,thm:lvv_uniform_leading_bounds_library_bond,thm:chain_boundary_net_polynomial_bound}
     In the setting of Definition~\ref{def:lvv_size_trimming_selection}, let a
     finite set $N_m$ of boundary matrices be given for every bond dimension
     $m\le D$, and an assignment of vectors to boundary points for every $m$.

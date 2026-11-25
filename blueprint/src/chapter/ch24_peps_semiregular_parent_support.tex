@@ -122,8 +122,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.fullMultiplicityBondMap_apply,
         TNLean.PEPS.physicalProductMap_fullMultiplicityBondMap_apply}
     \leanok
-    \uses{def:peps_parent_support_copy_amplitude,
-        thm:peps_full_multiplicity_bond_map}
+    \uses{def:peps_parent_support_copy_amplitude,thm:peps_full_multiplicity_bond_map}
     Let $F=E_YJE_X^\dagger:\C^{X\times X}\to\C^{Y\times Y}$
     be the full endpoint multiplicity map (Lemma~\ref{thm:peps_full_multiplicity_bond_map}), where
     $J\ket{i,a,b}=m_i^{-1/2}\sum_{u\in M_i}\ket{i,(a,u),(b,u)}$
@@ -169,8 +168,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_full_multiplicity_bond_map,
-        thm:peps_physical_product_supported_isometry}
+    \uses{thm:peps_full_multiplicity_bond_map,thm:peps_physical_product_supported_isometry}
     By Lemma~\ref{thm:peps_full_multiplicity_bond_map},
     $F^\dagger F=E_XE_X^\dagger$ and $E_X^\dagger E_X=I$, so $F=E_YJE_X^\dagger$
     satisfies $FF^\dagger F=F(E_XE_X^\dagger)=F$. Writing
@@ -263,9 +261,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     $WD(g)=D(g)W=\bigoplus_i d_i^{1/4}D_i(g)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_parent_support_boundary_factors,
-        thm:peps_full_multiplicity_bond_map,
-        lem:peps_matching_sector_bond_inclusion}
+    \uses{thm:peps_parent_support_boundary_factors,thm:peps_full_multiplicity_bond_map,lem:peps_matching_sector_bond_inclusion}
     Evaluating~(\ref{eq:peps_parent_support_boundary_contraction}) at $\lambda=1$
     with $B_z^\dagger=B_z^{\mathsf T}$ and
     $M_{x,b(y)}=\lambda_{i(y)}^{-1}(M_\lambda)_{x,b(y)}$ gives~(\ref{eq:peps_parent_support_boundary_adjoint}).
@@ -388,8 +384,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.graphExteriorBondCoefficient,
         TNLean.PEPS.graphMultiplicityBlockCoefficient}
     \leanok
-    \uses{def:peps_parent_support_numbered_operator,
-        def:peps_parent_support_copy_amplitude}
+    \uses{def:peps_parent_support_numbered_operator,def:peps_parent_support_copy_amplitude}
     Fix exterior configurations $\tau,\sigma$, and put
     $\gamma_Y=\gamma_R^{e^Y}(\tau)$,
     $\gamma_X=\gamma_R^{e^X}(\sigma)$.
@@ -418,9 +413,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \lean{TNLean.PEPS.prod_edge_eq_exterior_boundary_internal,
         TNLean.PEPS.regionOperatorBlock_graphNumberedBondMatrix}
     \leanok
-    \uses{def:peps_parent_support_exterior_factors,
-        def:peps_parent_support_mixed_product,
-        def:peps_parent_support_operator_block}
+    \uses{def:peps_parent_support_exterior_factors,def:peps_parent_support_mixed_product,def:peps_parent_support_operator_block}
     For any weights $w_f$, the partition $E=E_{R^c}\sqcup\partial E_R\sqcup E_R$
     gives $\prod_{f\in E}w_f=(\prod_{f\in E_{R^c}}w_f)(\prod_{f\in\partial E_R}w_f)(\prod_{f\in E_R}w_f)$,
     and the regional blocks of $N_F$ satisfy
@@ -447,8 +440,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.graphBoundaryBondMatrix_fullMultiplicityBondMap,
         TNLean.PEPS.regionOperatorBlock_fullMultiplicityBondMap}
     \leanok
-    \uses{def:peps_parent_support_boundary_filter,
-        def:peps_parent_support_exterior_factors}
+    \uses{def:peps_parent_support_boundary_filter,def:peps_parent_support_exterior_factors}
     For the multiplicity map $F$ and any $z,y\in Y$, $r,x\in X$,
     \begin{align}
         F_{(y,z),(x,r)} & =\delta_{b(z),r}(B_z)_{y,x}, \\
@@ -466,8 +458,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_parent_support_sparse_action,
-        thm:peps_parent_support_bond_blocks}
+    \uses{thm:peps_parent_support_sparse_action,thm:peps_parent_support_bond_blocks}
     Factoring $\delta_{(b(y),b(z)),(x,r)}=\delta_{b(y),x}\delta_{b(z),r}$
     in~(\ref{eq:peps_parent_support_sparse_coefficient}) and using
     $a(y,z)=a(z,y)$ with~(\ref{eq:peps_parent_support_boundary_filter}) gives~(\ref{eq:peps_parent_support_fixed_endpoint});
@@ -512,8 +503,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.graphOpenBondSpace,
         TNLean.PEPS.graphDressedAveragingSite_one}
     \leanok
-    \uses{def:peps_parent_support_bond_coordinates,
-        def:peps_parent_support_open_factors}
+    \uses{def:peps_parent_support_bond_coordinates,def:peps_parent_support_open_factors}
     Let $a_v^{U,W}(\eta,\xi)$ be the dressed averaging site. In a
     chosen incident enumeration $e$, the numbered tensor is
     $A(U,W,e)_v(\eta,s)=a_v^{U,W}(\eta,e_v^{-1}(s))$, with virtual
@@ -529,8 +519,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.regionBondPhysicalEquiv_mem_graphOpenBondSpace_iff,
         TNLean.PEPS.regionInternalBondSlice_openRegionWeight}
     \leanok
-    \uses{def:peps_parent_support_canonical_tensor,
-        def:peps_region_ground_space,def:peps_open_sector_slice}
+    \uses{def:peps_parent_support_canonical_tensor,def:peps_region_ground_space,def:peps_open_sector_slice}
     Suppose $WU(g)=U(g)W$ for every $g\in G$. Then
     \begin{align}
         J_{e,R}\mathcal C_R(A(U,W,e))\ket{\theta}
@@ -559,8 +548,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \lean{TNLean.PEPS.regionInternalBondSlice_regionSliceMap_update,
         TNLean.PEPS.regionParentGroundSpace_mem_product_range_of_internal_slices}
     \leanok
-    \uses{def:peps_parent_support_bond_coordinates,
-        def:peps_open_sector_slice}
+    \uses{def:peps_parent_support_bond_coordinates,def:peps_open_sector_slice}
     Let $A$ be any tensor with incident enumeration $e$ by a finite
     endpoint set $X$, and let $F:\C^Z\to\C^{X\times X}$ with $Z$
     finite. Suppose every edge $f\in E$ lies in $E_{R_i}$ for some $R_i\in\mathcal R$, and
@@ -600,8 +588,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.regionInternalBondSlice_mem_range_of_factors,
         TNLean.PEPS.regionParentGroundSpace_mem_product_range_of_factors}
     \leanok
-    \uses{def:peps_parent_support_canonical_tensor,
-        def:peps_open_sector_slice}
+    \uses{def:peps_parent_support_canonical_tensor,def:peps_open_sector_slice}
     Let $U:G\to\operatorname{Mat}_X(\C)$ be a representation of a
     finite group, $WU(g)=U(g)W$ for all $g\in G$, and
     $F:\C^Z\to\C^{X\times X}$ ($X,Z$ finite) satisfy
@@ -616,9 +603,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_open_sector_weighted_slice,
-        thm:peps_parent_support_internal_slices,
-        thm:peps_parent_support_open_coordinates}
+    \uses{thm:peps_open_sector_weighted_slice,thm:peps_parent_support_internal_slices,thm:peps_parent_support_open_coordinates}
     Choose $x_g\in\C^Z$ with $Fx_g=\operatorname{vec}(W^2U(g))$ and set
     \begin{align}
         \chi(\alpha)=\sum_{q:R\to G}c_R(\theta,\sigma;q)
@@ -637,8 +622,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
         TNLean.PEPS.regionInternalBondSlice_mem_fullMultiplicityRange,
         TNLean.PEPS.regionParentGroundSpace_mem_product_fullMultiplicityRange}
     \leanok
-    \uses{def:peps_parent_support_canonical_tensor,
-        thm:peps_full_multiplicity_bond_map}
+    \uses{def:peps_parent_support_canonical_tensor,thm:peps_full_multiplicity_bond_map}
     Let $d_i>0$ and let $D_i:G\to\operatorname{Mat}_{d_i}(\C)$ be
     representations of a finite group. Put
     $U'(g)=\bigoplus_i(D_i(g)\otimes I_{d_i})$, and let $F$ be the full
@@ -655,10 +639,7 @@ $E_{R^c}$ for its exterior edges. An edge $f=(t,h)$ has $t<h$.
     Neither irreducibility nor unitarity of the $D_i$ is assumed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_open_sector_weighted_slice,
-        thm:peps_coherent_multiplicity_transport,
-        thm:peps_parent_support_open_coordinates,
-        thm:peps_parent_support_internal_slices}
+    \uses{thm:peps_open_sector_weighted_slice,thm:peps_coherent_multiplicity_transport,thm:peps_parent_support_open_coordinates,thm:peps_parent_support_internal_slices}
     By Lemmas~\ref{thm:peps_open_sector_weighted_slice}
     and~\ref{thm:peps_coherent_multiplicity_transport}, $F^{\otimes E_R}$ maps
     the coherent sum with internal factors

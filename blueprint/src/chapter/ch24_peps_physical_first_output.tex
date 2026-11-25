@@ -1,153 +1,42 @@
-\section{Physical output after exchanging auxiliary registers}
+\section{Physical output of the replacement}
 \label{sec:peps_physical_first_output}
 
 The source replacement of
-\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} has output memory
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} has at every party
 % Source: 04-compression.tex, lines 199--227.
-$\mathcal A\otimes(\mathcal H\otimes\mathcal E)$, where $\mathcal A$
-contains the retained auxiliary registers, $\mathcal H$ contains the
-original physical registers, and $\mathcal E$ contains the original
-discarded private registers. Write $\tau$ for the factor-exchange isometry
-from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
+$p$ the output space $\mathcal A_p\otimes\mathcal Y_p$, where $\mathcal A_p$
+contains the retained auxiliary registers of $p$ and $\mathcal Y_p$ is the
+original output space of $p$. The original output is read out by a
+contraction $K$ into physical coordinates $\mathcal H$ and discarded
+coordinates $\mathcal E$. The auxiliary registers are read out together with
+the discarded coordinates; no tensor factor is exchanged.
 
-\begin{definition}[Physical-first replacement]
+\begin{definition}[Readout of the replacement]
     \label{def:peps_physical_first_replacement}
     \uses{thm:peps_circuit_effect_error}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalFirstOutput}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.physicalFirstReplacement}
+    \lean{QuantumCircuit.Party.extendedReadout,
+        QuantumCircuit.Party.EffectCircuit.replacementPhysicalDensity}
     \leanok
-    If $R$ is the constructed source-only replacement, define
-    $R_{\rm phys}=\tau R$. The exchange acts on pure tensors by
+    If $R$ is the constructed source-only replacement, with output space
+    $\bigotimes_p(\mathcal A_p\otimes\mathcal Y_p)=\mathcal A\otimes\mathcal Y$,
+    the extended readout $K\otimes\id_{\mathcal A}$ maps it to
+    $\mathcal H\otimes(\mathcal E\otimes\mathcal A)$, and
     \begin{align}
-        \tau\bigl(u\otimes(p\otimes v)\bigr)
-        =p\otimes(u\otimes v).
+        R_{\rm phys} & =(K\otimes\id_{\mathcal A})\,R.
         \label{eq:peps_physical_first_exchange}
     \end{align}
+    For an input $\psi$, the physical state of the replacement is the partial
+    trace over $\mathcal E\otimes\mathcal A$ of
+    $\ket{R_{\rm phys}\psi}\bra{R_{\rm phys}\psi}$.
 \end{definition}
-
-\begin{lemma}[Preservation of gate and source occurrences]
-    \label{thm:peps_physical_first_occurrences}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder_physicalFirstOutput}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalFirstLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalFirstSourcesEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participants_physicalFirstLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchCoefficient_physicalFirstLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpoints_physicalFirstSourcesEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceVectorAt_physicalFirstSourcesEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participationCount_physicalFirstOutput}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_physicalFirstOutput}
-    \leanok
-    \uses{def:peps_physical_first_replacement}
-    Appending $\tau$ preserves the gate occurrences, source occurrences,
-    participating sets, branch-label types, branch coefficients, endpoint spaces and source
-    vectors of $R$. It preserves source order, each party's total number
-    of participating occurrences, and the bounds on monomial counts and
-    coefficient sums.
-\end{lemma}
-
-\begin{proof}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.branchLabels_physicalFirstLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_gateLocations_physicalFirstOutput}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceLocations_physicalFirstOutput}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_exchangeBlocks_operator}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_exchangeBlocks_threeFactors}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_exchangeBlocks_triple_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_physicalFirstOutput}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalFirstParticipationEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotCount_physicalFirstLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceDims_physicalFirstSourcesEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceOrder_exchangeBlocks}
-    \leanok
-    The exchange consists only of permutations of register order and
-    introduces no gate or source occurrence. Including each occurrence of
-    $R$ into the first part of the composition leaves the defining data at
-    these occurrences unchanged, while the second part contributes
-    empty occurrence sets. The gate and source cardinalities are therefore unchanged,
-    and allowedness is equivalent before and after the exchange.
-    Formula~(\ref{eq:peps_physical_first_exchange}) extends by linearity
-    to the full operator identity.
-\end{proof}
-
-\begin{lemma}[Finite-dimensional discarded registers]
-    \label{thm:peps_auxiliary_register_finiteness}
-    \uses{thm:peps_circuit_effect_error}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.finiteDimensional_auxiliary_registers}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.finiteDimensional_auxiliary_private_registers}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.finiteDimensional_auxiliary_private_mem}
-    \leanok
-    Every auxiliary register constructed by the source replacement is
-    finite-dimensional. If every original discarded private register is
-    finite-dimensional, the same holds for every register of
-    $\mathcal A\otimes\mathcal E$ and for their tensor product.
-\end{lemma}
-
-\begin{proof}
-    \uses{thm:peps_finite_register_memories}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_registers_append}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_registers_mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.finiteDimensional_registers_sources_prepStack}
-    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_registers_sources_comp}
-    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_registers_sources_prepGate}
-    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_registers_sources_prepWord}
-    \leanok
-    A prepared pair stack consists of finitely many finite-dimensional
-    Euclidean registers. Induction on the stack length, on the monomial,
-    on the gate expansion, and on the original chronology proves the
-    assertion for each auxiliary register. Changing an owner leaves the
-    register space unchanged, and concatenation preserves this assertion.
-    Finally, a finite tensor product of finite-dimensional spaces is
-    finite-dimensional.
-\end{proof}
-
-\begin{lemma}[Physical partial trace after the exchange]
-    \label{thm:peps_physical_first_trace}
-    \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout_exchange_apply}
-    \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout_exchange_outerProduct}
-    \lean{TNLean.Lattice.PartyCircuit.partialTrace_physicalFirstReadout_exchange}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalDensity_physicalFirstOutput}
-    \leanok
-    \uses{def:peps_physical_first_replacement}
-    Choose orthonormal coordinates indexed by $U$, $X$ and $V$ on
-    $\mathcal A$, $\mathcal H$ and $\mathcal E$, respectively. For
-    $z\in\mathcal A\otimes(\mathcal H\otimes\mathcal E)$, let
-    $z_{i,(k,j)}$ denote its coordinates when the physical coordinate
-    precedes the private and auxiliary coordinates. The coordinates of
-    $\tau z$ are $(\tau z)_{i,(j,k)}=z_{i,(k,j)}$. Consequently,
-    \begin{align}
-        \operatorname{Tr}_{\mathcal A\otimes\mathcal E}
-        |\tau z\rangle\langle\tau z|
-        =\operatorname{Tr}_{\mathcal E\otimes\mathcal A}
-        |z\rangle\langle z|.
-        \label{eq:peps_physical_first_trace}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalDensity_pure_input}
-    \lean{TNLean.Lattice.PartyCircuit.exchangedGarbageBasis}
-    \lean{TNLean.Lattice.PartyCircuit.extendedPhysicalReadout_triple_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout}
-    \lean{TNLean.Lattice.PartyCircuit.physicalFirstReadout_tmul}
-    \leanok
-    Formula~(\ref{eq:peps_physical_first_exchange}) gives the coordinate
-    identity on pure tensors. Tensor-product induction extends it to
-    arbitrary vectors. Their outer-product matrices are related by the
-    simultaneous reindexing $(i,(j,k))\mapsto(i,(k,j))$. Reindexing the
-    traced coordinate by the bijection $U\times V\to V\times U$
-    preserves the partial trace. The physical-first coordinate isometry uses the
-    tensor product of the physical basis and the auxiliary--private basis.
-    Evaluation of a pure input has density equal to the outer product of its
-    evaluated vector in these coordinates. Applying this to the output vector of
-    the composed circuit proves the final assertion.
-\end{proof}
 
 \begin{lemma}[Exact sources recover the replacement physical state]
     \label{thm:peps_physical_first_exact_sources}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.physicalDensity_physicalFirstReplacement}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.physicalSourceReplacedDensity_physicalFirstReplacement_exact}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_physicalFirst_density_sub_le_half}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalDensity_pure_input}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_exact}
+    \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le}
     \leanok
-    \uses{thm:peps_physical_first_trace,thm:peps_source_only_density_error}
+    \uses{thm:peps_source_only_density_error}
     Let $W$ be an original circuit with at most $M$ nonprivate gates,
     satisfying the original expansion bounds. Set
     $\delta=\varepsilon/(8\max\{1,M\})$ for $\varepsilon>0$, and
@@ -163,8 +52,9 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 
 \begin{proof}\leanok
     Exact source operators recover the output operator of the source-only
-    circuit. Formula~(\ref{eq:peps_physical_first_trace}) identifies its
-    physical partial trace with $\rho_R$, and applying
+    circuit. The physical density of a pure input is the partial trace of the
+    outer product of its output vector, so the physical partial trace of
+    this operator is $\rho_R$, and applying
     Lemma~\ref{thm:peps_source_only_density_error} at the original
     gate-count bound $M$ gives the trace-norm bound.
 \end{proof}

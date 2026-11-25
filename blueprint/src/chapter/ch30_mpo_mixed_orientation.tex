@@ -7,8 +7,7 @@
     \label{thm:glm_mixed_orientation}
     \lean{MPOTensor.CompleteZipperFusionFamily.leftAssocToLeftInner_mul_leftInnerToLeftAssocInverse,
         MPOTensor.CompleteZipperFusionFamily.twoEdgePrintedFMatrix_mul_leftInnerToLeftAssocInverse}
-    \uses{def:mpdo_complete_zipper_fusion_family,
-        def:mpdo_complete_zipper_fourfold_fusion_data}
+    \uses{def:mpdo_complete_zipper_fusion_family,def:mpdo_complete_zipper_fourfold_fusion_data}
     For a complete zipper fusion family, let $A,B,C$ be the successive
     coordinate changes along the three-edge path from the fully left to the
     fully right associated fourfold fusion tree. Let $D,E$ be the changes
@@ -22,8 +21,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpdo_complete_zipper_printed_fmove,
-        thm:mpdo_complete_zipper_fusion_pentagon}
+    \uses{thm:mpdo_complete_zipper_printed_fmove,thm:mpdo_complete_zipper_fusion_pentagon}
     Grouping the first edge by its spectator label and multiplicity makes
     each diagonal block of $AQ$ the product of the corresponding forward
     and reverse triple comparisons, tensored with the spectator identity,
@@ -39,8 +37,7 @@
     \leanok
     \label{thm:glm_mixed_entries}
     \lean{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_mixed_pentagon}
-    \uses{def:mpdo_complete_zipper_fusion_family,
-        def:mpdo_complete_zipper_fourfold_fusion_data}
+    \uses{def:mpdo_complete_zipper_fusion_family,def:mpdo_complete_zipper_fourfold_fusion_data}
     Let $N_{ab}^{c}$ be the multiplicities of a complete zipper fusion
     family, let $P_{abc}^{g}$ be its forward triple comparison with
     right-tree rows and left-tree columns, and put

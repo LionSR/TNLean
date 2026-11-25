@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.IntervalLowDensityFamily
 import QICLean.Probability.Sampling.ViableSubspaceDyadicBootstrap
-import QICLean.Spectral.LowEnergy.Order
+import QICLean.Analysis.Order.LowEnergyPerturbation
 
 /-!
 # A physical low-energy viable subspace from least dimensions

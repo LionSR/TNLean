@@ -14,7 +14,7 @@
     \lean{MPOTensor.TwistedDimer.sigmaDimer_isInjective,
         MPOTensor.TwistedDimer.sigmaDimer_sum_conjTranspose_mul}
     \leanok
-    \uses{def:mpdo_twisted_dimer_bond_tensor, def:injective}
+    \uses{def:mpdo_twisted_dimer_bond_tensor,def:injective}
     The sixteen matrices $Q^{ij}$ span $\MN{4}$ and satisfy
     $\sum_{i,j}(Q^{ij})^\dagger Q^{ij}=(25/32)\Id$.
 \end{lemma}
@@ -34,18 +34,14 @@
         MPOTensor.TwistedDimer.sigmaDimerBasis_isNormalTensor,
         MPOTensor.TwistedDimer.sigmaDimerBasis_trace_physTransfer}
     \leanok
-    \uses{def:mpdo_dimer_bond_normal_rep, thm:mpdo_dimer_bond_injective,
-        thm:mpdo_twisted_dimer_bond_product, def:mpdo_doubled_phys_trace_transfer,
-        thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{def:mpdo_dimer_bond_normal_rep,thm:mpdo_dimer_bond_injective,thm:mpdo_twisted_dimer_bond_product,def:mpdo_doubled_phys_trace_transfer,thm:is_normal_tensor_of_is_normal_left_canonical}
     The representative $A$ is left-canonical and normal.
     Its physical-trace transfer $\mathcal B_A=\sum_i A^{ii}$ satisfies
     $\tr\mathcal B_A=c\ne0$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:mpdo_dimer_bond_normal_rep, thm:mpdo_dimer_bond_injective,
-        thm:mpdo_twisted_dimer_bond_product,
-        thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{def:mpdo_dimer_bond_normal_rep,thm:mpdo_dimer_bond_injective,thm:mpdo_twisted_dimer_bond_product,thm:is_normal_tensor_of_is_normal_left_canonical}
     The adjoint-square sum of $A$ is $c^2(25/32)\Id=\Id$.
     Nonzero scalar multiplication preserves injectivity, so
     Lemma~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}
@@ -57,16 +53,13 @@
     \label{thm:mpdo_dimer_bond_simple}
     \lean{MPOTensor.TwistedDimer.sigmaDimer_isSimple}
     \leanok
-    \uses{def:mpdo_simple_tensor, lem:mpdo_dimer_bond_normal_rep,
-        thm:mpdo_twisted_dimer_bond_product, thm:cpsv_normal_separated_eventually_li}
+    \uses{def:mpdo_simple_tensor,lem:mpdo_dimer_bond_normal_rep,thm:mpdo_twisted_dimer_bond_product,thm:cpsv_normal_separated_eventually_li}
     The tensor $Q$ is simple in the sense of
     \cite[Definition~4.7]{Cirac2016MPDO_arXiv}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:mpdo_dimer_bond_normal_rep, lem:mpdo_dimer_bond_normal_rep,
-        thm:mpdo_twisted_dimer_bond_product,
-        thm:cpsv_normal_separated_eventually_li}
+    \uses{def:mpdo_dimer_bond_normal_rep,lem:mpdo_dimer_bond_normal_rep,thm:mpdo_twisted_dimer_bond_product,thm:cpsv_normal_separated_eventually_li}
     After one-site blocking, relabeling the ket-bra alphabet with the
     single representative $A$ and one copy of weight $c^{-1}$ recovers the
     positive-length matrix product vectors of $Q$ via the scalar word law.

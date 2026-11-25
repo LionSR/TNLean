@@ -26,7 +26,7 @@ noncomputable section
 open Matrix
 open scoped BigOperators
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

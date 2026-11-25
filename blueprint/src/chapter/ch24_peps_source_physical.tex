@@ -10,10 +10,9 @@ traces are used.
 
 \begin{definition}[Physical components of a word]
     \label{def:peps_physical_component}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalComponent}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalComponentCoordinates}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.physicalDiscardIso}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.physicalDiscardIso_tmul}
+    \lean{QuantumCircuit.Party.Word.physicalComponent}
+    \lean{QuantumCircuit.Party.physicalReadout}
+    \lean{QuantumCircuit.Party.toEuclideanLin_physicalReadout_apply}
     \leanok
     For an evaluated word $V:H\to K$, a linear isometric equivalence
     $J:K\simeq\C^X\otimes D$, and $x\in X$, define
@@ -28,8 +27,7 @@ traces are used.
 
 \begin{lemma}[Component contraction]
     \label{thm:peps_physical_component_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalComponent_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalComponentCoordinates_le_one}
+    \lean{QuantumCircuit.Party.Word.norm_physicalComponent_le_one}
     \leanok
     \uses{def:peps_physical_component}
     If $V$ is allowed, then $\|C_{x,V}\|\leq1$ and $\|A_{x,V}\|\leq1$.
@@ -44,10 +42,8 @@ traces are used.
 
 \begin{definition}[Mixed physical Gram operator]
     \label{def:peps_physical_gram}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalGramMap}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalGramMap_inner}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalGramMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalGramMatrix_apply}
+    \lean{QuantumCircuit.Party.Word.physicalGramMatrix}
+    \lean{QuantumCircuit.Party.Word.physicalGramMatrix_apply}
     \leanok
     For words $V:H\to K$ and $W:H'\to K$ with output identification $J$ and
     finite orthonormal bases $(e_i)$ of $H$ and $(e'_j)$ of $H'$, define
@@ -61,8 +57,7 @@ traces are used.
 
 \begin{lemma}[Gram contraction]
     \label{thm:peps_physical_gram_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalGramMap_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalGramMatrix_le_one}
+    \lean{QuantumCircuit.Party.Word.norm_physicalGramMatrix_le_one}
     \leanok
     \uses{def:peps_physical_gram,thm:peps_physical_component_contraction}
     For allowed $V,W$, the Gram operator and matrix satisfy $\|O\|\leq1$.
@@ -75,23 +70,17 @@ traces are used.
     $|\langle t,Os\rangle|\leq\|C_{y,W}t\|\,\|C_{x,V}s\|\leq\|t\|\,\|s\|$.
 \end{proof}
 
-\begin{definition}[Joint physical and discarded output coordinates]
-    \label{def:peps_physical_output_matrix}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalOutputMatrix}
-    \leanok
-    \uses{def:peps_physical_component}
-    In a finite orthonormal basis of $D$, let $K_V$ be the matrix of $JV$ in the
-    product output basis on $\C^X\otimes D$ and the chosen input basis on $H$.
-\end{definition}
-
 \begin{lemma}[Partial trace and exterior contraction]
     \label{thm:peps_exterior_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.partialTrace_physicalOutputMatrix_mul_conjTranspose}
-    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalOutputMatrix_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.Word.rectangularTraceNorm_partialTrace_physicalOutputMatrix_le}
+    \lean{QuantumCircuit.Party.Word.partialTraceRight_mul_op_mul_conjTranspose_apply}
+    \lean{QuantumCircuit.Party.Word.norm_mul_op_mul_le_one}
+    \lean{QuantumCircuit.Party.Word.rectangularTraceNorm_partialTraceRight_mul_op_le}
     \leanok
-    \uses{def:peps_physical_output_matrix,def:peps_physical_gram}
-    For any rectangular matrix $\rho:H'\to H$,
+    \uses{def:peps_physical_component,def:peps_physical_gram}
+    In a finite orthonormal basis of $D$, let $K_V$ be the matrix of $JV$ in
+    the product output basis on $\C^X\otimes D$ and the chosen input basis on
+    $H$, and define $K_W$ in the same way. For any rectangular matrix
+    $\rho:H'\to H$,
     \begin{align}
         \bigl[\operatorname{tr}_{D}(K_V\rho K_W^\dagger)\bigr]_{xy}
          & =\sum_{i,j}\rho_{ij}O_{ji}.
@@ -114,11 +103,8 @@ traces are used.
 
 \begin{definition}[Proper input frames]
     \label{def:peps_physical_frames}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalComponentFrameMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalComponentFrameMatrix_apply}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalFrameGramMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalFrameGramMatrix_apply}
-    \lean{TNLean.Lattice.PartyCircuit.Word.physicalOutputFrameMatrix}
+    \lean{QuantumCircuit.Party.Word.physicalFrameGramMatrix}
+    \lean{QuantumCircuit.Party.Word.physicalFrameGramMatrix_apply}
     \leanok
     \uses{def:peps_physical_component,def:peps_physical_gram}
     For linear isometries $F:\C^n\to H$ and $F':\C^{n'}\to H'$, define
@@ -132,12 +118,10 @@ traces are used.
 
 \begin{lemma}[Contraction in proper frames]
     \label{thm:peps_physical_frame_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalComponentFrameMatrix_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalFrameGramMatrix_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.Word.norm_physicalOutputFrameMatrix_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.Word.rectangularTraceNorm_partialTrace_physicalOutputFrameMatrix_le}
+    \lean{QuantumCircuit.Party.Word.norm_physicalFrameGramMatrix_le_one}
+    \lean{QuantumCircuit.Party.Word.rectangularTraceNorm_partialTraceRight_mul_op_mul_le}
     \leanok
-    \uses{def:peps_physical_frames,thm:peps_physical_component_contraction}
+    \uses{def:peps_physical_frames,thm:peps_physical_component_contraction,thm:peps_exterior_contraction}
     For allowed $V,W$, the matrices in (\ref{eq:peps_physical_frames}) satisfy
     $\|A_{x,V,F}\|,\|O\|,\|K_{V,F}\|\le 1$, and for any rectangular $Z$,
     \begin{align}
@@ -154,8 +138,8 @@ traces are used.
 
 \begin{definition}[Schmidt-weighted physical vectors]
     \label{def:peps_schmidt_physical_vector}
-    \lean{TNLean.Lattice.PartyCircuit.Word.schmidtPhysicalVector}
-    \lean{TNLean.Lattice.PartyCircuit.Word.schmidtPhysicalVector_repr}
+    \lean{QuantumCircuit.Party.Word.schmidtPhysicalVector}
+    \lean{QuantumCircuit.Party.Word.schmidtPhysicalVector_apply}
     \leanok
     \uses{def:peps_physical_frames}
     For an isometry $F:\C^{I\times T}\to H$, weights $\tau_t\in\R$, and physical
@@ -171,7 +155,7 @@ traces are used.
 
 \begin{lemma}[Weighted source matrix from Schmidt-weighted vectors]
     \label{thm:peps_weighted_physical_source_identity}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sum_schmidtPhysicalVector_outer_eq_weightedSourceError}
+    \lean{QuantumCircuit.Party.Word.sum_schmidtPhysicalVector_outer_eq_halfWeightedBlockCombination}
     \leanok
     \uses{def:peps_schmidt_physical_vector}
     For any $z_{il}\in\C$, tracing out $D$ in
@@ -192,10 +176,10 @@ traces are used.
 
 \begin{definition}[Separated output and its physical operator]
     \label{def:peps_separated_physical_density}
-    \lean{TNLean.Lattice.PartyCircuit.Word.separatedSchmidtOutput}
-    \lean{TNLean.Lattice.PartyCircuit.Word.separatedSchmidtOutput_repr}
-    \lean{TNLean.Lattice.PartyCircuit.Word.separatedPhysicalCoordinates}
-    \lean{TNLean.Lattice.PartyCircuit.Word.separatedPhysicalDensity}
+    \lean{QuantumCircuit.Party.Word.separatedSchmidtOutput}
+    \lean{QuantumCircuit.Party.Word.separatedSchmidtOutput_eq_mulVec}
+    \lean{QuantumCircuit.Party.Word.separatedPhysicalCoordinates}
+    \lean{QuantumCircuit.Party.Word.separatedPhysicalDensity}
     \leanok
     \uses{def:peps_schmidt_physical_vector}
     For an exterior word $V':H_E\to K_E$, output identification
@@ -213,8 +197,8 @@ traces are used.
 
 \begin{lemma}[Tracing both discarded factors]
     \label{thm:peps_separated_physical_density_blocks}
-    \lean{TNLean.Lattice.PartyCircuit.Word.partialTrace_separatedSchmidtOutput_eq_weightedSourceError}
-    \lean{TNLean.Lattice.PartyCircuit.Word.separatedPhysicalDensity_submatrix}
+    \lean{QuantumCircuit.Party.Word.partialTraceRight_separatedSchmidtOutput_eq_halfWeightedBlockCombination}
+    \lean{QuantumCircuit.Party.Word.separatedPhysicalDensity_submatrix}
     \leanok
     \uses{def:peps_separated_physical_density,thm:peps_weighted_physical_source_identity}
     For each $(x,y)\in X\times Y$, the $Y\times Y$ block $M(z)_{xy}$ of $M(z)$
@@ -233,7 +217,7 @@ traces are used.
 
 \begin{lemma}[Expected exterior trace norm under diagonal covariance]
     \label{thm:peps_weighted_physical_source_bound}
-    \lean{TNLean.Lattice.PartyCircuit.Word.integral_rectangularTraceNorm_weightedPhysicalSource_le}
+    \lean{QuantumCircuit.Party.Word.integral_rectangularTraceNorm_weightedPhysicalSource_le}
     \leanok
     \uses{thm:peps_physical_frame_contraction,def:peps_separated_physical_density}
     If $V,W,V',W'$ are allowed, $p_i,p'_l,\tau_t,\tau'_u\ge 0$ sum to $1$,
@@ -261,7 +245,7 @@ traces are used.
 
 \begin{definition}[Original corrected Schmidt coordinates]
     \label{def:peps_original_schmidt_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.CorrectedSchmidtCoordinates}
+    \lean{QuantumCircuit.Party.SourceCircuit.CorrectedSchmidtCoordinates}
     \leanok
     \uses{def:peps_source_coordinates}
     For $S\subseteq\mathcal E$, set
@@ -270,8 +254,8 @@ traces are used.
 
 \begin{lemma}[Gaussian estimates for separated words]
     \label{thm:peps_gaussian_separated_physical_bound}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_rectangularTraceNorm_gaussianPhysicalSource_le}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_gaussianSeparatedPhysicalDensity_and_integral_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.integral_rectangularTraceNorm_gaussianPhysicalSource_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.integrable_gaussianSeparatedPhysicalDensity_and_integral_le}
     \leanok
     \uses{def:peps_original_schmidt_coordinates,thm:peps_actual_gaussian_covariance,thm:peps_weighted_physical_source_bound}
     For the Gaussian coefficient product $Z_{u,v}$ on $S\subseteq\mathcal E$ at
@@ -296,10 +280,9 @@ traces are used.
 
 \begin{lemma}[Prepared matrices on mixed pure inputs]
     \label{thm:peps_prepared_vector_density}
-    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_mulVec_repr}
-    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_mul_vecMulVec}
-    \lean{TNLean.Lattice.PartyCircuit.Word.preparedMatrix_mul_vecMulVec_preparedInput}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceBasisMatrix_mul_vecMulVec}
+    \lean{QuantumCircuit.Party.Word.preparedMatrix_mul_euclideanOuterProduct}
+    \lean{QuantumCircuit.Party.Word.preparedMatrix_mul_euclideanOuterProduct_preparedInput}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceBasisMatrix_mul_euclideanOuterProduct}
     \leanok
     For prepared words with linear maps $T,T'$ and matrices $K_T,K_{T'}$ in
     finite orthonormal bases, and any input vectors $\psi,\phi$,
@@ -319,7 +302,8 @@ traces are used.
 
 \begin{lemma}[Independence of physical output coordinates]
     \label{thm:peps_physical_corrected_basis_invariance}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physicalCorrectedSourceTerm_basis_eq}
+    \lean{QuantumCircuit.Party.SourceCircuit.rectangularTraceNorm_physicalCorrectedSourceTerm_reindex,
+        QuantumCircuit.Party.SourceCircuit.rectangularTraceNorm_physicalCorrectedSourceTerm_kronecker_isometry_mul}
     \leanok
     \uses{thm:peps_prepared_vector_density}
     For any mixed pure input $|\psi\rangle\langle\phi|$, the trace norm
@@ -336,7 +320,7 @@ traces are used.
 
 \begin{definition}[Partial Schmidt output]
     \label{def:peps_partial_schmidt_output}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSchmidtOutput}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialSchmidtOutput}
     \leanok
     \uses{def:peps_partial_schmidt_assignments}
     For a partial branch $\xi$ and selected endpoint assignment $u$
@@ -350,7 +334,7 @@ traces are used.
 
 \begin{lemma}[Corrected operator on mixed pure inputs]
     \label{thm:peps_gaussian_vector_density}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_gaussian_vecMulVec_eq_sum}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceTerm_gaussian_euclideanOuterProduct_eq_sum}
     \leanok
     \uses{def:peps_partial_schmidt_output,thm:peps_corrected_gaussian_sum,thm:peps_prepared_vector_density}
     If the affected set $\mathcal A$ meets every source in $S$ and the weights
@@ -371,9 +355,9 @@ traces are used.
 
 \begin{lemma}[Square integrability of the coefficient products]
     \label{thm:peps_gaussian_products_integrable}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceCorrection_product_memLp_two}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceCorrection_product_memLp_two}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_sourceCorrectionSum}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceCorrection_product_memLp_two}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialSourceCorrection_product_memLp_two}
+    \lean{QuantumCircuit.Party.SourceCircuit.integrable_rectangularTraceNorm_sourceCorrectionSum}
     \leanok
     \uses{thm:peps_actual_gaussian_covariance}
     For $k>0$ and nonnegative local weights, every Gaussian coefficient product
@@ -391,8 +375,8 @@ traces are used.
 
 \begin{lemma}[Integrability of corrected physical operators]
     \label{thm:peps_actual_physical_integrability}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian}
+    \lean{QuantumCircuit.Party.SourceCircuit.integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian}
+    \lean{QuantumCircuit.Party.SourceCircuit.integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian}
     \leanok
     \uses{thm:peps_gaussian_products_integrable,thm:peps_corrected_gaussian_sum}
     For $k>0$, nonnegative representing source weights and frames, any linear map
@@ -416,7 +400,7 @@ traces are used.
 
 \begin{definition}[A single Gaussian branch pair]
     \label{def:peps_gaussian_branch_density}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.gaussianSchmidtBranchDensity}
+    \lean{QuantumCircuit.Party.SourceCircuit.gaussianSchmidtBranchDensity}
     \leanok
     \uses{def:peps_partial_schmidt_output}
     In finite orthonormal output coordinates, define
@@ -430,9 +414,9 @@ traces are used.
 
 \begin{lemma}[Original-position expression and branch expectation bound]
     \label{thm:peps_gaussian_branch_density_bound}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.gaussianSchmidtBranchDensity_eq_sum_original}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum}
+    \lean{QuantumCircuit.Party.SourceCircuit.gaussianSchmidtBranchDensity_eq_sum_original}
+    \lean{QuantumCircuit.Party.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity}
+    \lean{QuantumCircuit.Party.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum}
     \leanok
     \uses{def:peps_gaussian_branch_density,thm:peps_gaussian_products_integrable,thm:peps_gaussian_vector_density,thm:peps_actual_physical_integrability}
     If $\mathcal A$ meets $S$, reindexing (\ref{eq:peps_gaussian_branch_density})
@@ -456,7 +440,7 @@ traces are used.
 
 \begin{lemma}[A sample bounded by the average error sum]
     \label{thm:peps_sampled_error_integral_bound}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sampledSourceMatrix_error_le_sum_integral}
+    \lean{QuantumCircuit.Party.SourceCircuit.exists_sampledSourceMatrix_error_le_sum_integral}
     \leanok
     \uses{thm:peps_actual_physical_integrability,thm:peps_sampled_physical_error}
     For $k>0$, nonnegative representing source weights and frames, finite
@@ -479,10 +463,10 @@ traces are used.
 
 \begin{definition}[Affected parties and retained free sources]
     \label{def:peps_corrected_free_sources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedMask}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedFreeSlots}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedFreeSlots_eq_true_iff}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_correctedFreeSlot}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedMask}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedFreeSlots}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedFreeSlots_eq_true_iff}
+    \lean{QuantumCircuit.Party.SourceCircuit.exists_correctedFreeSlot}
     \leanok
     For $S\subseteq\mathcal E$, let $\mathcal A_S$ be the set of all endpoints
     of sources in $S$. A retained source slot is free if and only if its
@@ -493,12 +477,12 @@ traces are used.
 
 \begin{lemma}[Lifetime and coefficient costs]
     \label{thm:peps_actual_source_lifetime_cost}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_correctedMask_iff}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.corrected_slot_isTouched}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_touched_correctedMask_le}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_physical_cost_eq}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coefficient_physical_cost_le}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_norm_coefficient_mul_conj_le_lifetime}
+    \lean{QuantumCircuit.Party.SourceCircuit.isTouched_correctedMask_iff}
+    \lean{QuantumCircuit.Party.SourceCircuit.corrected_slot_isTouched}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_touched_correctedMask_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.coefficient_physical_cost_eq}
+    \lean{QuantumCircuit.Party.SourceCircuit.coefficient_physical_cost_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_norm_coefficient_mul_conj_le_lifetime}
     \leanok
     \uses{def:peps_corrected_free_sources}
     A gate occurrence is touched if it has a participant in $\mathcal A_S$ (so
@@ -527,7 +511,7 @@ traces are used.
 
 \begin{definition}[Two contraction factors]
     \label{def:peps_actual_tensor_partition}
-    \lean{TNLean.Lattice.PartyCircuit.Word.IsTensorPartitioned}
+    \lean{QuantumCircuit.Party.Word.IsTensorPartitioned}
     \leanok
     A word $W$ admits a tensor partition for a Boolean owner map if there exist
     allowed source-free words $C,D$ with $\|C\|,\|D\|\leq1$ on the restricted
@@ -538,37 +522,11 @@ traces are used.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Selective preparation gives two-side factors]
-    \label{thm:peps_corrected_source_partition}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_corrected_source_partition}
-    \leanok
-    \uses{def:peps_corrected_free_sources,def:peps_actual_tensor_partition}
-    For any allowed chronological composition, any $S\subseteq\mathcal E$, and
-    any partial branch for $\mathcal A_S$, the word obtained by preparing the
-    nonfree sources of Definition~\ref{def:peps_corrected_free_sources} followed
-    by the partial residual admits a tensor partition
-    (\ref{eq:peps_actual_tensor_partition}) with free input spaces independent of
-    the branch.
-\end{lemma}
-
-\begin{proof}\leanok
-    Every nonfree source is normalized with both endpoints on the same side of
-    $\mathcal A_S$, and the partial residual is allowed and source-free, so each
-    operation factors across the $\mathcal A_S$ partition into allowed
-    source-free words $C$ and $D$.
-\end{proof}
-
-% The concatenation/partition-commutation pair repeats the coordinate
-% development verbatim. Retain its canonical coordinate-chapter home
-% (Definition~\ref{def:peps_basis_partition_join} and
-% Lemma~\ref{thm:peps_basis_partition_concat}) and cite that entry rather
-% than duplicate its declaration tags here.
 
 \begin{definition}[An explicit positive sample count]
     \label{def:peps_source_sample_count}
-    \lean{TNLean.Lattice.Compression.sourceSamplingCount}
-    \lean{TNLean.Lattice.Compression.sourceSamplingCount_pos}
-    \lean{TNLean.Lattice.Compression.sourceSamplingCount_lt}
+    \lean{binomialSampleCount}
+    \lean{binomialSampleCount_bounds}
     \leanok
     For $N\in\N$, $Q\in\R$, and $\epsilon>0$, define
     \begin{align}
@@ -581,10 +539,9 @@ traces are used.
 
 \begin{lemma}[Finite subset summation and the sample-count estimate]
     \label{thm:peps_source_sample_count_bound}
-    \lean{TNLean.Lattice.Compression.sum_nonemptyFinsets_pow_card}
-    \lean{TNLean.Lattice.Compression.sum_sourceErrorWeights}
-    \lean{TNLean.Lattice.Compression.div_sqrt_sourceSamplingCount_le}
-    \lean{TNLean.Lattice.Compression.sum_sourceErrorWeights_sourceSamplingCount_le}
+    \lean{Finset.sum_powerset_erase_empty_pow_card}
+    \lean{Real.div_sqrt_le_of_sq_le}
+    \lean{Finset.sum_powerset_erase_empty_binomialSampleCount_le}
     \leanok
     \uses{def:peps_source_sample_count}
     For a finite set $\mathcal E$ with $|\mathcal E|=N$ and $k>0$,

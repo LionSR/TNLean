@@ -8,17 +8,10 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Network.IncidentFactor
 
-import TNLean.Network.IncidentFactor.AllPartySingletonCircuitComparison
-import TNLean.Network.IncidentFactor.AllPartySingletonComparison
-import TNLean.Network.IncidentFactor.EndpointSelectedRegisterComparison
 import TNLean.Network.IncidentFactor.IncidentPureSampledPhysicalSum
 import TNLean.Network.IncidentFactor.IncidentSampledEndpointComparison
-import TNLean.Network.IncidentFactor.IncidentSampledEndpointRepresentation
 import TNLean.Network.IncidentFactor.IncidentSampledEndpointWord
 import TNLean.Network.IncidentFactor.IncidentSampledPhysicalFactor
 import TNLean.Network.IncidentFactor.IncidentSourceWord
 import TNLean.Network.IncidentFactor.IncidentSourceWordComparison
 import TNLean.Network.IncidentFactor.OriginalGateSamplePhysicalSum
-import TNLean.Network.IncidentFactor.SampledEndpointIncidentComparison
-import TNLean.Network.IncidentFactor.SampledEndpointOperatorRepresentation
-import TNLean.Network.IncidentFactor.SelectedPartialSourceSlots

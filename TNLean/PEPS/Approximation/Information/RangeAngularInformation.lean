@@ -56,7 +56,6 @@ open ManyBody (supDist)
 
 noncomputable section
 
-open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 

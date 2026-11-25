@@ -46,7 +46,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_sampled_cut_decomposition, thm:lvv_mps_error_reduction}
+    \uses{thm:lvv_sampled_cut_decomposition,thm:lvv_mps_error_reduction}
     The power error is at most $\eta$ and the sampling error is less than
     $\eta$. Their sum is less than $\delta/4$. The simultaneous bounds of
     Lemma~\ref{thm:lvv_sampled_cut_decomposition} supply the hypotheses
@@ -156,8 +156,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     \lean{TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial_explicit_energy_degree,
         TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial}
     \leanok
-    \uses{def:lvv_successive_precision, def:lvv_successive_step,
-        def:lvv_size_trimming_selection}
+    \uses{def:lvv_successive_precision,def:lvv_successive_step,def:lvv_size_trimming_selection}
     Fix $q\ge2$, $\Delta>0$, $\eta>0$, an integer $a\ge1$, and an upper bound $B$ for
     $\varepsilon_0/\Delta$. There are natural constants $C,D\ge1$ and
     $p,r$ such that, for every positive chain length and every cut
@@ -176,8 +175,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_sampled_error_reduction, thm:lvv_sampled_polynomial_bounds,
-        thm:lvv_size_trimmed_family_bond_trim_set, lem:lvv_bond_trimming_radius_polynomial}
+    \uses{thm:lvv_sampled_error_reduction,thm:lvv_sampled_polynomial_bounds,thm:lvv_size_trimmed_family_bond_trim_set,lem:lvv_bond_trimming_radius_polynomial}
     Extension preserves viability. Since $\alpha\le(\Delta/169)^2$ and $L^a\ge L$,
     the trimmed size-trimming selection of the extended family is
     half-viable, of polynomial cardinality and individual bond
@@ -195,7 +193,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
         TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial_total_cardinality,
         TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial}
     \leanok
-    \uses{def:lvv_successive_step, def:lvv_size_trimming_selection}
+    \uses{def:lvv_successive_step,def:lvv_size_trimming_selection}
     Under the hypotheses of Lemma~\ref{thm:lvv_sampled_successor}, there
     are families $S_i$ at all cuts $0\le i\le L$, beginning with the scalar
     singleton, such that each is $(i,CL^p,DL^r,\alpha/L^a)$-viable, with
@@ -214,7 +212,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_sampled_successor, lem:lvv_initial_scalar_family}
+    \uses{thm:lvv_sampled_successor,lem:lvv_initial_scalar_family}
     The scalar singleton is exactly viable. Choose, for every family at a
     cut, the sampled projector and the step of
     Lemma~\ref{thm:lvv_sampled_successor}, and apply this choice
@@ -227,8 +225,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
     \label{lem:lvv_rational_sampled_successor}
     \lean{TNLean.MPS.AreaLaw.exists_rational_sampled_viable_successor_polynomial}
     \leanok
-    \uses{def:lvv_successive_precision,def:lvv_successive_step,
-        def:lvv_size_trimming_selection}
+    \uses{def:lvv_successive_precision,def:lvv_successive_step,def:lvv_size_trimming_selection}
     Fix $q\ge2$, $\Delta>0$, $\eta>0$, a natural number $a\ge1$ and
     $B\in\mathbb R$. Put $\alpha=\min\{1,\eta,(\Delta/169)^2\}$.
     There are natural constants $C,D\ge1$ and $p,r,E$, chosen before
@@ -264,10 +261,7 @@ Section~\ref{sec:lvv_successive_construction} does not need this bound.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_sampled_error_reduction,thm:lvv_sampled_polynomial_bounds,
-        thm:lvv_size_trimmed_family_bond_trim_set,
-        lem:lvv_bond_trimming_radius_polynomial,
-        thm:lvv_rational_orthonormal_family,lem:lvv_uniform_tensor_precision}
+    \uses{thm:lvv_sampled_error_reduction,thm:lvv_sampled_polynomial_bounds,thm:lvv_size_trimmed_family_bond_trim_set,lem:lvv_bond_trimming_radius_polynomial,thm:lvv_rational_orthonormal_family,lem:lvv_uniform_tensor_precision}
     The extension is $(\Delta/169)^2/L$-viable, so its size selection
     followed by bond trimming is half-viable. Choose the sampled
     projector at precision $\delta/16$ and apply error reduction with

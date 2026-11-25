@@ -3,13 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.PhysicalFirstPolynomial
+import QICLean.Circuit.Party.Compression.GateExpansion.ReplacementBounds
 import TNLean.Network.DistributedContraction.SourceAlphabetPolynomial
 
 /-!
 # Polynomial link dimensions from original gate resources
 
-The actual physical-first source replacement has one polynomial bound for
+The source-only replacement of an original circuit has one polynomial bound for
 both its branch-pair links and its sample links. The coefficient and exponent
 are explicit expressions in the original uniform bounds and the requested
 accuracy exponent. They do not depend on the particular construction, its
@@ -28,17 +28,17 @@ Independently formalized; no upstream Lean proof text reused.
 
 
 noncomputable section
-namespace TNLean.Lattice.PartyCircuit.OriginalCircuit
-open TNLean.Lattice.Compression
-variable {P : Type} [DecidableEq P] {a : Layout P}
+namespace QuantumCircuit.Party.OriginalCircuit
+open TNLean.Network
+variable {P : Type} [DecidableEq P] {X Y : P → Type} [∀ p, Fintype (X p)]
+  [∀ p, DecidableEq (X p)] [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)]
 
 open Classical in
 /-- The actual star and sample alphabets obey a single polynomial bound
 whose constants depend only on the original resource bounds. This holds for
 any retained collection of gate occurrences and any choice of its roots.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588. -/
-theorem card_physicalFirstNetworkAlphabet_le_power
-    (physical priv : Layout P) (w : OriginalCircuit a (physical ++ priv))
+theorem card_physicalFirstNetworkAlphabet_le_power (w : OriginalCircuit X Y)
     (K r N arity lifetime : ℕ) (B D L C_K C_N C_B C_D : ℝ)
     (u n s d p : ℕ)
     (hb : w.IsExpansionBounded r B) (hmonomial : w.IsMonomialBounded K)
@@ -49,9 +49,8 @@ theorem card_physicalFirstNetworkAlphabet_le_power
     (hK : (K : ℝ) ≤ C_K * L ^ u) (hN : (N : ℝ) ≤ C_N * L ^ n)
     (hBbound : B ≤ C_B * L ^ s) (hDbound : D ≤ C_D * L ^ d)
     (hδ : 0 < sourceGateBudget (L ^ p)⁻¹ N) :
-    let R := w.produce.physicalFirstReplacement hδ physical priv w.isAllowed_produce
-      ((w.isExpansionBounded_produce_iff r B).mpr hb)
-    let k := sourceSamplingCount (Fintype.card R.sourceLocations)
+    let R := w.replacement hδ hb
+    let k := binomialSampleCount (max 1 (Fintype.card R.sourceLocations))
       (B ^ (4 * lifetime) * D ^ 4) (L ^ p)⁻¹
     let C_sources := max 1 (C_N * (arity.choose 2 : ℝ))
     let C_branch := C_K * (64 * C_N ^ 2 * ((r : ℝ) * C_B) ^ 2 + 2) ^ r
@@ -71,11 +70,10 @@ theorem card_physicalFirstNetworkAlphabet_le_power
   · dsimp [C_sample]
     positivity
   · intro g _
-    exact w.card_branchLabels_physicalFirstReplacement_le_power physical priv
-      K r N B L C_K C_N C_B u n s p hb hmonomial hL hCK hCN hCB hB
-      hK hN hBbound hδ g
-  · exact (w.sourceSamplingCount_physicalFirstReplacement_lt_power physical priv hδ hb
-      hpart L C_N C_B C_D n s d p hL hCB hB hD
-      ((Nat.cast_le.mpr hcount).trans hN) hBbound hDbound).le
+    exact w.card_branchLabels_replacement_le_power K r N B L C_K C_N C_B u n s p hb hmonomial
+      hL hCK hCN hCB hB hK hN hBbound hδ g
+  · exact (w.binomialSampleCount_replacement_lt_power (lifetime := lifetime) hδ hb hpart
+      L C_N C_B C_D n s d p hL hCB hB hD ((Nat.cast_le.mpr hcount).trans hN) hBbound
+      hDbound).le
 
-end TNLean.Lattice.PartyCircuit.OriginalCircuit
+end QuantumCircuit.Party.OriginalCircuit

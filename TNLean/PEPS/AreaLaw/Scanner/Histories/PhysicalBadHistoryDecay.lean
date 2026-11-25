@@ -24,7 +24,7 @@ Lemma 9.1, `08-scanner.tex`, lines 309–329, at `openai/math@adc7f124`.
 open Filter
 open scoped BigOperators
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -50,7 +50,7 @@ theorem bad_history_probability_le_of_threshold_le
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - ell)⌋₊ + 10 * S.r₀ : ℕ) : ℤ) <
-          ambientSupDistance t z) →
+          (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
@@ -104,7 +104,7 @@ theorem eventually_bad_history_probability_le
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - ell)⌋₊ + 10 * S.r₀ : ℕ) : ℤ) <
-          ambientSupDistance t z) →
+          (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →

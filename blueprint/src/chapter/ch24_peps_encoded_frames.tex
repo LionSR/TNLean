@@ -56,7 +56,7 @@ norm of matrices, rectangular ones included.
     \label{def:peps_frame_hole_encoder}
     \lean{TNLean.PEPS.EncodedFrame.SquarePatch.branch,
         TNLean.PEPS.EncodedFrame.SquarePatch.encoder,
-        TNLean.Lattice.Sheet.stack,
+        TNLean.PEPS.EncodedFrame.stack,
         TNLean.PEPS.EncodedFrame.SquarePatch.card_tag_of_outer_eq_empty,
         TNLean.PEPS.EncodedFrame.SquarePatch.encoder_submatrix_of_outer_eq_empty}
     \leanok
@@ -177,8 +177,8 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Telescoping on a vector]
     \label{lem:peps_frame_telescoping}
-    \lean{TNLean.Lattice.Sheet.norm_act_list_prod_sub_le,
-        TNLean.PEPS.EncodedFrame.norm_act_projProd_sub_le}
+    \lean{Matrix.norm_toEuclideanLin_list_prod_sub_le,
+        TNLean.PEPS.EncodedFrame.norm_toEuclideanLin_projProd_sub_le}
     \leanok
     For contractions $A_1,\dots,A_s$ and every vector $\psi$,
     \begin{align}
@@ -219,33 +219,20 @@ norm of matrices, rectangular ones included.
 
 \begin{definition}[Site registers]
     \label{def:lattice_site_registers}
-    \lean{TNLean.Lattice.Sheet.siteRegs,
-        TNLean.Lattice.Sheet.sites,
-        TNLean.Lattice.Sheet.nodup_sites,
-        TNLean.Lattice.Sheet.mem_sites,
-        TNLean.Lattice.Sheet.sitesEquiv,
-        TNLean.Lattice.Sheet.owner_siteRegs}
+    \lean{QuantumCircuit.Party.Sheet.system}
     \leanok
     \uses{def:peps_party_layout}
-    For an owner $o$ of each site of a finite set $\Lambda$ and a list $\ell$ of
-    sites, the site registers of $\ell$ are one register $\C^q$ for each entry
-    of $\ell$, held by the owner of that site, in the order of $\ell$. A fixed
-    list of the sites of $\Lambda$ contains every site exactly once, so taking
-    the site at a position gives a bijection from its positions to $\Lambda$.
-    If every site of a list has owner $p$, every site register of the list is
-    held by $p$.
+    For an owner $o$ of each site of a finite set $\Lambda$, the site
+    registers are one register $\C^q$ for each site, held by the owner of that
+    site: the basis of the memory of a party $p$ is indexed by the
+    configurations $[q]^{o^{-1}(p)}$ of the sites it owns.
 \end{definition}
-
-\begin{proof}\leanok
-    Immediate from the definitions.
-\end{proof}
 
 \begin{definition}[Registers of a frame]
     \label{def:peps_frame_registers}
-    \lean{TNLean.PEPS.EncodedFrame.tagRegs,
-        TNLean.PEPS.EncodedFrame.layoutRegs,
-        TNLean.PEPS.EncodedFrame.Frame.regs,
-        TNLean.PEPS.EncodedFrame.Frame.map_owner_regs}
+    \lean{TNLean.PEPS.EncodedFrame.tagSystem,
+        TNLean.PEPS.EncodedFrame.layoutSystem,
+        TNLean.PEPS.EncodedFrame.Frame.system}
     \leanok
     \uses{def:peps_frame,def:peps_party_layout,def:lattice_site_registers}
     The registers of a frame $\mathcal F$ are one tag register $\C^{\mathcal
@@ -259,74 +246,56 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Canonical coordinates of site registers]
     \label{lem:lattice_site_register_coordinates}
-    \lean{TNLean.Lattice.Sheet.siteVec,
-        TNLean.Lattice.Sheet.siteVec_append,
-        TNLean.Lattice.Sheet.siteVec_congr,
-        TNLean.Lattice.Sheet.siteIsoList,
-        TNLean.Lattice.Sheet.siteIsoList_siteVec,
-        TNLean.Lattice.Sheet.groupIso,
-        TNLean.Lattice.Sheet.groupIso_siteVec}
+    \lean{ManyBody.blockConfigEquiv_apply,
+        QuantumCircuit.Party.Sheet.refVec_apply}
     \leanok
-    \uses{def:lattice_site_registers}
-    For a list $\ell$ of sites, including lists with repetitions, write
-    $\ket c_\ell$ for the product basis vector of a configuration $c$ on the
-    site registers of $\ell$. If $c(x)=c'(x)$ for every site in $\ell$, then
-    $\ket c_\ell=\ket{c'}_\ell$. If $\ell$ has length $n$, a unitary identifies
-    its site registers with $\C^{[q]^n}$ and sends $\ket c_\ell$ to the basis
-    vector of the configuration $k\mapsto c(\ell_k)$ read along the list. More
-    generally, for a bijection $e$ from the positions of $\ell$ to a finite set $K$
-    and a map $f:K\to\Lambda$ with $\ell_k=f(e(k))$ for every position $k$, the
-    grouping along $e$ is a unitary onto $\C^{[q]^K}$ sending $\ket c_\ell$ to
-    $\ket{c\circ f}$. Under the canonical unitary for
-    concatenating register lists, $\ket c_{\ell_1\ell_2}$ is identified with
-    $\ket c_{\ell_1}\otimes\ket c_{\ell_2}$; the empty list contributes the
-    scalar one.
+    \uses{def:lattice_site_registers,def:qc_blocked_local_channel_conversion}
+    The configurations of the site registers, one configuration of the sites
+    of each party, are identified with the configurations $c\in[q]^\Lambda$:
+    the configuration at a site $x$ is read at its owner $o(x)$. This gives a
+    unitary from the memory of the site registers onto $\C^{[q]^\Lambda}$
+    sending the product basis vector of a configuration to $\ket c$, and a
+    vector $\Omega$ of $\C^{[q]^\Lambda}$ placed in the site registers has the
+    coordinate $\Omega(c)$ at the configuration corresponding to $c$.
 \end{lemma}
 
 \begin{proof}\leanok
-    By induction on the list of registers, identifying $\C^\alpha\otimes\C^\beta$
-    with $\C^{\alpha\times\beta}$ at each step.
+    The sets $o^{-1}(p)$ of sites owned by the parties $p$ partition
+    $\Lambda$, so a configuration of $\Lambda$ is the same as one
+    configuration of $o^{-1}(p)$ for each party $p$.
 \end{proof}
 
 \begin{lemma}[Canonical coordinates of the registers]
     \label{lem:peps_frame_registers_coordinates}
-    \lean{TNLean.PEPS.EncodedFrame.tagVec,
-        TNLean.PEPS.EncodedFrame.tagIso,
-        TNLean.PEPS.EncodedFrame.tagIso_tagVec,
-        TNLean.PEPS.EncodedFrame.layoutVec,
-        TNLean.PEPS.EncodedFrame.layoutIso,
-        TNLean.PEPS.EncodedFrame.layoutIso_layoutVec,
-        TNLean.PEPS.EncodedFrame.layoutIso_symm_single,
-        TNLean.PEPS.EncodedFrame.Frame.regIso}
+    \lean{TNLean.PEPS.EncodedFrame.tagConfigEquiv,
+        TNLean.PEPS.EncodedFrame.layoutConfigEquiv,
+        TNLean.PEPS.EncodedFrame.Frame.configEquiv}
     \leanok
     \uses{def:peps_frame_registers,lem:lattice_site_register_coordinates}
-    The tensor product of the registers of a frame is identified, by a
-    unitary, with $\C^{\mathcal J\times[q]^\Lambda}$, the space of the tags
-    and the sheet on which the encoding $K_{\mathcal F}$ and its operators
-    act: the product basis vector $\ket\tau\otimes\bigotimes_x\ket{c(x)}$ is
-    sent to $\ket{\tau,c}$. More generally, the site registers of a list of
-    distinct sites enumerating a set $A$ are identified with $\C^{[q]^A}$ in
-    the same way. These are the canonical site and sheet coordinates of
-    \texttt{05-frames.tex}, lines 94--96, in which vectors are compared while
-    the owners of their registers are specified separately.
-    For any list $\ell$ of sites, including lists with repetitions, write
-    $\ket c_\ell$ for its product basis vector. If $c(x)=c'(x)$ for every
-    site in $\ell$, then $\ket c_\ell=\ket{c'}_\ell$.
-    Under the canonical unitary for concatenating register lists, the basis
-    vector $\ket c_{\ell_1\ell_2}$ is identified with
-    $\ket c_{\ell_1}\otimes\ket c_{\ell_2}$. The empty list contributes
-    the scalar one.
+    The registers of a frame held by a party $p$ are, for every hole in the
+    order of the frame, the tag register of the hole if $p$ holds its tag and
+    a one-dimensional factor otherwise, together with the raw registers $\C^q$
+    of the sites owned by $p$. A configuration of all registers of the frame
+    is the same as a tag configuration $\tau\in\mathcal J$, one tag for each
+    hole read at its tag owner, together with a configuration
+    $c\in[q]^\Lambda$, the configuration at a site $x$ read at its owner.
+    This identifies the tensor product of the registers, by a unitary, with
+    $\C^{\mathcal J\times[q]^\Lambda}$, the space of the tags and the sheet on
+    which the encoding $K_{\mathcal F}$ and its operators act: the product
+    basis vector of a configuration is sent to $\ket{\tau,c}$. These are the
+    canonical site and sheet coordinates of \texttt{05-frames.tex}, lines
+    94--96, in which vectors are compared while the owners of their
+    registers are specified separately.
 \end{lemma}
 
 \begin{proof}\leanok
-    By induction on the list of registers, identifying $\C^\alpha\otimes
-        \C^\beta$ with $\C^{\alpha\times\beta}$ at each step; product basis
-    vectors are sent to standard basis vectors, and a list of distinct sites
-    enumerating $A$ gives a bijection between its positions and $A$.
-    Configurations agreeing on a list give the same basis vector at every
-    position, hence the same product vector, even if sites repeat.
-    The same induction splits the vector at any prescribed list boundary;
-    its empty-list case is $1\otimes v\mapsto v$.
+    \uses{lem:lattice_site_register_coordinates}
+    A configuration of the tag registers of a list of holes is, by induction
+    on the list, one tag for each hole, since the one-dimensional factors at
+    the other parties carry a single configuration. A configuration of the
+    raw registers is one configuration of $[q]^\Lambda$ by
+    Lemma~\ref{lem:lattice_site_register_coordinates}. Combining the two
+    factors at every party gives the bijection.
 \end{proof}
 
 \begin{definition}[Data and conditions of a small-patch rewrite]
@@ -442,8 +411,7 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.frameEncoder_submatrix_of_rawProd_eq,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_norm_le_one_and_refVec_sub_le_of_perm}
     \leanok
-    \uses{lem:peps_frame_rewrite_contraction,lem:peps_frame_rewrite_intertwining,
-        lem:peps_frame_telescoping}
+    \uses{lem:peps_frame_rewrite_contraction,lem:peps_frame_rewrite_intertwining,lem:peps_frame_telescoping}
     Under conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data}, if every patch projector $P_i$ and affected
     old-hole projector $Q_t$ satisfies $\lVert(\id-P_i)\Omega\rVert,\lVert(\id-Q_t)\Omega\rVert\le\varepsilon$, then $\lVert M\rVert\le1$ and
     \begin{align}
@@ -537,7 +505,7 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Reference error of an approximate rewrite]
     \label{lem:peps_frame_approx_reference}
-    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_act_refVec_sub_le_of_approx,
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_toEuclideanLin_refVec_sub_le_of_approx,
         TNLean.PEPS.EncodedFrame.rewrite_error_le_inv_pow_twenty}
     \leanok
     \uses{thm:peps_frame_small_rewrite}
@@ -619,8 +587,7 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_owners_of_isOpen_inl,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_owners_of_isOpen_inr}
     \leanok
-    \uses{lem:peps_frame_branches,lem:peps_frame_wires,
-        lem:peps_frame_chain_network}
+    \uses{lem:peps_frame_branches,lem:peps_frame_wires,lem:peps_frame_chain_network}
     Assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data} and fix a branch $\beta=(a,s,b)$. Its site operator is
     \begin{align}
         B_aC_sA_b^\dagger
@@ -648,8 +615,7 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_liftBranch_le,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_contractive_approx}
     \leanok
-    \uses{lem:peps_frame_branch_network,lem:peps_frame_chain_truncation,
-        lem:peps_frame_rescale}
+    \uses{lem:peps_frame_branch_network,lem:peps_frame_chain_truncation,lem:peps_frame_rescale}
     Assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data}, let $N$ be the number of branches, and set
     $k=\lceil(4Nm/\delta)^2\rceil+1$ for $\delta>0$ (e.g.\ $\delta=L^{-a}$). Each branch $M_\beta$ is approximated in operator norm within
     $2m/\sqrt k$ by at most $k^{2m}$ product terms with coefficients $\lvert c_{\beta,i}\rvert\le1$, and the rescaled sum
@@ -677,11 +643,7 @@ norm of matrices, rectangular ones included.
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_refVec}
     \leanok
-    \uses{thm:peps_frame_small_rewrite,lem:peps_frame_branches,
-        lem:peps_frame_wires,lem:peps_frame_rescale,
-        lem:peps_frame_approx_reference,thm:peps_group_tensor,
-        thm:peps_frame_small_rewrite_product_terms,
-        thm:peps_frame_small_rewrite_monomials}
+    \uses{thm:peps_frame_small_rewrite,lem:peps_frame_branches,lem:peps_frame_wires,lem:peps_frame_rescale,lem:peps_frame_approx_reference,thm:peps_group_tensor,thm:peps_frame_small_rewrite_product_terms,thm:peps_frame_small_rewrite_monomials}
     In the setting of the frame construction, where every hole and additional patch projector has $\sum_jd_j\le CL^c$
     cylinder terms (\texttt{05-frames.tex}, lines
     34--46), assume conditions~(1)--(4) of Definition~\ref{def:peps_frame_rewrite_data} with $m,r_{\rm old},r_{\rm new}\le b$ and at most $b$ specified parties. Then for every
@@ -737,7 +699,7 @@ pair sources with the same constant.
 
 \begin{definition}[Pair-source bound of an original circuit]
     \label{def:peps_circuit_source_bound}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsSourceBounded}
+    \lean{QuantumCircuit.Party.OriginalCircuit.IsSourceBounded}
     \leanok
     \uses{def:peps_original_circuit}
     An original circuit satisfies the pair-source bound with constant $r$
@@ -747,15 +709,14 @@ pair sources with the same constant.
 
 \begin{lemma}[Pair sources of monomials read as circuits]
     \label{lem:peps_circuit_source_bound_monomials}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsSourceBounded.mono,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_castLayouts,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_frameList,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_appendTail,
-        TNLean.Lattice.PartyCircuit.Word.isSourceBounded_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.PartyChain.isSourceBounded_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.Word.isSourceBounded_toOriginalCircuit_of_one_le,
-        TNLean.Lattice.PartyCircuit.PartyChain.isSourceBounded_toOriginalCircuit_of_one_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.IsSourceBounded.mono,
+        QuantumCircuit.Party.OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero,
+        QuantumCircuit.Party.OriginalCircuit.isSourceBounded_castSystems,
+        QuantumCircuit.Party.OriginalCircuit.isSourceBounded_frame,
+        QuantumCircuit.Party.Word.isSourceBounded_toOriginalCircuit,
+        QuantumCircuit.Party.Monomial.isSourceBounded_toOriginalCircuit,
+        QuantumCircuit.Party.Word.isSourceBounded_toOriginalCircuit_of_one_le,
+        QuantumCircuit.Party.Monomial.isSourceBounded_toOriginalCircuit_of_one_le}
     \leanok
     \uses{def:peps_circuit_source_bound}
     The pair-source bound with constant $r$ implies the bound for every
@@ -771,12 +732,9 @@ pair sources with the same constant.
 
 \begin{lemma}[A sum of monomials as one gate keeps its pair sources]
     \label{lem:peps_party_gate_source_bound}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceCount_selectedPart,
-        TNLean.Lattice.PartyCircuit.PartyChain.sourceCount_selectedPart,
-        TNLean.Lattice.PartyCircuit.Word.sourceCount_mapOwner_le,
-        TNLean.Lattice.PartyCircuit.PartyChain.sourceCount_mapOwner_le,
-        TNLean.PEPS.PairEffect.isSourceBounded_gateCircuit,
-        TNLean.Lattice.PartyCircuit.PartyGate.exists_originalCircuit_isSourceBounded}
+    \lean{QuantumCircuit.Party.Monomial.sourceCount_restrict,
+        QuantumCircuit.Party.Monomial.effectCount_restrict,
+        QuantumCircuit.Party.WeightedGate.exists_originalCircuit_isSourceBounded}
     \leanok
     \uses{lem:peps_circuit_source_bound_monomials}
     Let $\sum_\xi c_\xi M_\xi$ be a contraction expanded into allowed
@@ -801,10 +759,7 @@ pair sources with the same constant.
         TNLean.PEPS.Approximation.resize_step_reading_isSourceBounded_of_le,
         TNLean.PEPS.Approximation.pointTreatment_step_reading_isSourceBounded_of_le}
     \leanok
-    \uses{thm:peps_frame_small_rewrite_gate, lem:peps_party_gate_source_bound,
-        thm:peps_guide_frame_rewrite_events,
-        thm:peps_guide_frame_resize_treatment_gates,
-        thm:peps_guide_frame_reading_gates}
+    \uses{thm:peps_frame_small_rewrite_gate,lem:peps_party_gate_source_bound,thm:peps_guide_frame_rewrite_events,thm:peps_guide_frame_resize_treatment_gates,thm:peps_guide_frame_reading_gates}
     In the setting of Lemma~\ref{thm:peps_frame_small_rewrite_gate}, the
     circuit can be chosen to satisfy the pair-source bound with constant $2b$. The same holds for the
     guide-frame rewrites of Lemma~\ref{thm:peps_guide_frame_rewrite} and, in the dyadic protocol of
@@ -816,15 +771,7 @@ pair sources with the same constant.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_guide_frame_patch_congruence,
-        thm:peps_frame_small_rewrite_polynomial, lem:peps_party_gate_source_bound,
-        thm:peps_original_finite_expansion_bound, def:peps_party_monomial,
-        thm:peps_guide_frame_rewrite, lem:peps_register_reorderings,
-        lem:peps_circuit_source_bound_monomials, def:peps_original_circuit,
-        thm:peps_guide_frame_rewrite_events, lem:peps_treated_true_vertices,
-        thm:peps_guide_frame_resize_treatment_gates,
-        thm:peps_dyadic_sampled_ratio, lem:peps_dyadic_floor,
-        thm:peps_guide_frame_reading_gates, def:peps_dyadic_block_guide}
+    \uses{thm:peps_guide_frame_patch_congruence,thm:peps_frame_small_rewrite_polynomial,lem:peps_party_gate_source_bound,thm:peps_original_finite_expansion_bound,def:peps_party_monomial,thm:peps_guide_frame_rewrite,lem:peps_register_reorderings,lem:peps_circuit_source_bound_monomials,def:peps_original_circuit,thm:peps_guide_frame_rewrite_events,lem:peps_treated_true_vertices,thm:peps_guide_frame_resize_treatment_gates,thm:peps_dyadic_sampled_ratio,lem:peps_dyadic_floor,thm:peps_guide_frame_reading_gates,def:peps_dyadic_block_guide}
     Each monomial in Lemma~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
     $2m\le 2b$ normalized pair sources, and Lemma~\ref{lem:peps_party_gate_source_bound} preserves this bound on
     the gate, while the tag-register exchanges in Lemma~\ref{thm:peps_guide_frame_rewrite} add no nonprivate gates.

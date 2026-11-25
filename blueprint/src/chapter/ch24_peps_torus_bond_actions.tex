@@ -33,7 +33,7 @@ operators.
         TNLean.PEPS.torusBondNetwork_one,
         TNLean.PEPS.stateCoeff_torusSiteTensor_eq_torusBondNetwork}
     \leanok
-    \uses{def:peps_torus_bond_network, lem:peps_torus_site_tensor_contraction}
+    \uses{def:peps_torus_bond_network,lem:peps_torus_site_tensor_contraction}
     If every bond operator in (\ref{eq:peps_torus_bond_network}) is diagonal, $O=\operatorname{diag}(\omega)$, then $\mathcal N(A,O)$ sums over one index per bond weighted by $\prod_e\omega_{e,i_e}$. In particular, $\mathcal N(A,I)$ is the bare contraction of $A_v$, and for $w,h\ge3$ and $A_v=a^{\sigma(v)}$ it equals the torus PEPS coefficient of $a$ at $\sigma$ (Lemma~\ref{lem:peps_torus_site_tensor_contraction}).
 \end{lemma}
 
@@ -61,7 +61,7 @@ operators.
         TNLean.PEPS.torusBondNetwork_westSouthOperatorString_eq,
         TNLean.PEPS.IsGInjective.torusBondNetwork_westSouthOperatorString_eq}
     \leanok
-    \uses{def:peps_g_injective, lem:peps_torus_bond_network_gauge}
+    \uses{def:peps_g_injective,lem:peps_torus_bond_network_gauge}
     Let $a$ satisfy $\mathcal{P}(a)(U_g\otimes U_g^{-1}\otimes U_g^{-1}\otimes U_g)=\mathcal{P}(a)$ for all $g\in G$ (Definition~\ref{def:peps_torus_bond_network}), and fix an $m\times n$ site rectangle $R$ with $m<w$ and $n<h$. Place $U_g$ on vertical bonds crossed rightward and $U_g^{-1}$ on horizontal bonds crossed downward. Then the operator string $O^{\mathrm{WS}}$ along the west and south boundary of $R$ and the string $O^{\mathrm{NE}}$ along its north and east boundary satisfy
     \begin{align}
         \mathcal N(a,O^{\mathrm{WS}}) & =\mathcal N(a,O^{\mathrm{NE}})

@@ -4,9 +4,7 @@
         TNLean.PEPS.regularWeightedOpenRegionWeight_vertexGauge,
         TNLean.PEPS.regularWeightedOpenRegionWeight_chargePair_swept}
     \leanok
-    \uses{thm:peps_regular_weighted_bond_contraction,
-        def:peps_regular_weighted_open_contraction,
-        def:peps_regular_swept_patch}
+    \uses{thm:peps_regular_weighted_bond_contraction,def:peps_regular_weighted_open_contraction,def:peps_regular_swept_patch}
     For finite $G$, left-translation-invariant site coefficients, edges oriented from smaller endpoint $t(e)$ to larger endpoint $h(e)$, and a vertex gauge $\ell$, define
     \begin{align}
         u'_e=\ell_{h(e)}^{-1}u_e\ell_{t(e)},\qquad
@@ -37,9 +35,7 @@
     \lean{TNLean.PEPS.torusSweptStringChargeEdge_tail_mem,
         TNLean.PEPS.IsGIsometric.graphInsertedBondNetwork_torusChargeStringDeformation}
     \leanok
-    \uses{thm:peps_regular_weighted_gauge_transport,
-        def:peps_torus_charge_string_edge,
-        thm:peps_torus_swept_string_transport}
+    \uses{thm:peps_regular_weighted_gauge_transport,def:peps_torus_charge_string_edge,thm:peps_torus_swept_string_transport}
     On a torus with periods $w\ge 5$ and $H\ge 4$ and a regular $G$-isometric four-leg tensor, at every position $v$ (including across both seams) and for any scalar function $\chi$ and $j\in\{1,2\}$, the closed contraction with initial flux string $u^{(0)}_k$ and diagonal weight $\operatorname{diag}(\chi(pt))$ on $e_c$ equals the closed contraction with swept flux string $u^{(j)}_k$ and diagonal weight $\operatorname{diag}(\chi(pk^{-1}t))$ on $e_c$ (realizing the virtual gauge identity of \cite{Schuch2010PEPS}, lines 2560--2581, without identifying a physical braid or reunion protocol).
 \end{lemma}
 \begin{proof}\leanok

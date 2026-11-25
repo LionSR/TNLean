@@ -20,32 +20,32 @@ The original gate operators, private operations, and physical output are fixed t
 
 \begin{definition}[Message expansions at the original gate occurrences]
     \label{def:peps_message_gate_lists}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.MessageGateLists}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.expandMessageGateLists}
+    \lean{QuantumCircuit.Party.EffectCircuit.MessageGateLists}
+    \lean{QuantumCircuit.Party.EffectCircuit.expandMessageGateLists}
     \leanok
     At each original nonprivate gate occurrence $g$, prescribe a finite ordered sum of monomials containing finite-dimensional messages, and expand each message in an orthonormal basis within its monomial. The expanded gate lists act on the same local input and output spaces, retaining the chronological composition, private operations, participating parties $C_g$, and spectator registers.
 \end{definition}
 
 \begin{definition}[Local approximation by message-containing monomials]
     \label{def:peps_message_gate_approximation}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageGateApproximation}
+    \lean{QuantumCircuit.Party.EffectCircuit.IsMessageGateApproximation}
     \leanok
     Fix an original operator $G_g$ at each nonprivate gate occurrence $g$. A prescribed message-containing expansion with evaluated operator $\widetilde G_g$ is a local approximation of tolerance $\delta$ if every $G_g$ and private operation is a contraction ($\|G_g\|\le1$), its monomials are allowed, $|C_g|\ne1$, and $\|\widetilde G_g-G_g\|\le\delta$.
 \end{definition}
 
 \begin{definition}[Original monomial and message bounds]
     \label{def:peps_message_gate_resources}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageResourceBounded}
+    \lean{QuantumCircuit.Party.EffectCircuit.IsMessageResourceBounded}
     \leanok
     Resource bounds $(r,m,K,D,C)$ mean that every prescribed original gate expansion contains $\le K$ monomials, and each monomial has $\le r$ pair effects, $\le m$ messages (counted with multiplicity), scalar coefficient of modulus $\le C$, and message dimensions $\le D$.
 \end{definition}
 
 \begin{lemma}[Enlarging local bounds]
     \label{thm:peps_message_gate_bounds_mono}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageGateApproximation.mono}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageResourceBounded.mono_dimension}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageResourceBounded.mono_coefficient}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsTermwiseBounded.mono_coefficient}
+    \lean{QuantumCircuit.Party.EffectCircuit.IsMessageGateApproximation.mono}
+    \lean{QuantumCircuit.Party.EffectCircuit.IsMessageResourceBounded.mono_dimension}
+    \lean{QuantumCircuit.Party.EffectCircuit.IsMessageResourceBounded.mono_coefficient}
+    \lean{QuantumCircuit.Party.EffectCircuit.IsTermwiseBounded.mono_coefficient}
     \leanok
     Increasing $\delta$, $D$, or $C$ in Definitions~\ref{def:peps_message_gate_approximation} and~\ref{def:peps_message_gate_resources} preserves the respective local approximation, resource, and termwise pair-effect bounds.
 \end{lemma}
@@ -56,7 +56,7 @@ The original gate operators, private operations, and physical output are fixed t
 
 \begin{lemma}[Message expansion preserves each local approximation]
     \label{thm:peps_message_expand_gate_approximation}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isGateApproximation_expandMessageGateLists}
+    \lean{QuantumCircuit.Party.EffectCircuit.isGateApproximation_expandMessageGateLists}
     \leanok
     \uses{def:peps_message_gate_lists,def:peps_message_gate_approximation}
     Expanding every message in a local approximation of tolerance $\delta$ (Definition~\ref{def:peps_message_gate_approximation}) yields an allowed pair-effect local approximation of the same tolerance $\delta$ with the same $G_g$ and $C_g$ at each occurrence $g$.
@@ -69,7 +69,7 @@ The original gate operators, private operations, and physical output are fixed t
 
 \begin{lemma}[Term counts after bounded message expansion]
     \label{thm:peps_message_expand_monomial_count}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.monomialCount_expandMessageGateLists_le}
+    \lean{QuantumCircuit.Party.EffectCircuit.monomialCount_expandMessageGateLists_le}
     \leanok
     \uses{def:peps_message_gate_resources}
     Under resource bounds $(r,m,K,D,C)$ with $D\ge1$, expanding messages produces at most $\lceil KD^m\rceil$ terms at each nonprivate gate occurrence.
@@ -82,7 +82,7 @@ The original gate operators, private operations, and physical output are fixed t
 
 \begin{lemma}[Individual coefficient bounds after message expansion]
     \label{thm:peps_message_expand_termwise_bound}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isTermwiseBounded_expandMessageGateLists}
+    \lean{QuantumCircuit.Party.EffectCircuit.isTermwiseBounded_expandMessageGateLists}
     \leanok
     \uses{def:peps_message_gate_resources,def:peps_message_gate_approximation}
     Under resource bounds $(r,m,K,D,C)$ with $D\ge1$, $C\ge0$ and Definition~\ref{def:peps_message_gate_approximation}, each expanded monomial has $\le r$ pair effects and scalar coefficient of modulus $\le KCD^m$.
@@ -95,7 +95,7 @@ The original gate operators, private operations, and physical output are fixed t
 
 \begin{lemma}[Uniform compression of original message-containing gates]
     \label{thm:peps_uniform_original_message_compression}
-    \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_message_sampled_network}
+    \lean{QuantumCircuit.Party.GateMapConstruction.exists_uniform_message_sampled_network}
     \leanok
     \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
     Fix a family of original distributed constructions on finite nonempty party sets with size parameter $L\ge2$, contractive original gates and private operations, $|C_g|\ne1$ at nonprivate gate occurrences, normalized product inputs, finite-dimensional private memories, gate arity and whole-lifetime participation $\le b$, and
@@ -132,7 +132,7 @@ The original gate operators, private operations, and physical output are fixed t
 
 \begin{lemma}[Uniform compression of exact original message expansions]
     \label{thm:peps_uniform_exact_original_message_compression}
-    \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_exact_message_sampled_network}
+    \lean{QuantumCircuit.Party.GateMapConstruction.exists_uniform_exact_message_sampled_network}
     \leanok
     \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
     Under the setup and bounds (\ref{eq:peps_uniform_msg_poly_inputs}) of Lemma~\ref{thm:peps_uniform_original_message_compression}, if there exist fixed $r,m,C_K,C_C,C_M,u,v,z$ such that every original gate admits an exact ($\delta=0$) local expansion with resource bounds $(r,m,C_KL^u,C_ML^z,C_CL^v)$, then for every $p>0$ there exist $r_p$, $C_p\ge0$, and an integer $\alpha_p>0$ such that every construction of size $L\ge2$ admits an operator tensor network $\sigma_L$ satisfying (\ref{eq:peps_uniform_msg_compression_bound}) (\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}).

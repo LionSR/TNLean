@@ -2,10 +2,7 @@
     \label{thm:peps_regular_cycle_global_permutation}
     \lean{TNLean.PEPS.exists_unitary_regularCycleGlobalPermutation}
     \leanok
-    \uses{thm:peps_regular_cycle_permutation_physical,
-        lem:peps_regular_bond_extension_transport,
-        thm:peps_regular_coherent_global_transport,
-        thm:peps_regular_two_cycle_global_flux_move}
+    \uses{thm:peps_regular_cycle_permutation_physical,lem:peps_regular_bond_extension_transport,thm:peps_regular_coherent_global_transport,thm:peps_regular_two_cycle_global_flux_move}
     Let the original site tensors of a finite graph be locally $G$-isometric
     for the regular action. Choose a spanning tree and root in a finite region
     $R$, and let $\phi$ be a permutation of its cycle assignments commuting
@@ -37,8 +34,7 @@
     \label{thm:peps_regular_two_cycle_global_conjugation}
     \lean{TNLean.PEPS.exists_unitary_regularTwoCycleGlobalConjugation}
     \leanok
-    \uses{thm:peps_regular_two_cycle_conjugation,
-        thm:peps_regular_cycle_global_permutation}
+    \uses{thm:peps_regular_two_cycle_conjugation,thm:peps_regular_cycle_global_permutation}
     Choose distinct internal non-tree bonds $e_0,e_1$ in the preceding region.
     One identity-extended physical unitary sends
     $\Psi(\widetilde u_\omega)$ to $\Psi(\widetilde u_{\Phi\omega})$ for every

@@ -54,7 +54,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open Set Filter Topology EncodedFrame TNLean.Lattice.PartyCircuit
+open Set Filter Topology EncodedFrame QuantumCircuit.Party
 
 variable {k : ℕ}
 
@@ -128,8 +128,8 @@ theorem exists_isBoundedChange_labelParty_switch [NeZero q] {Ω : EuclideanSpace
     (hpV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch z).outer (patch z').outer)
     (S : Set (ProtocolParty k)) (r K : ℕ) {ε : ℝ} (hε : 0 ≤ ε) :
     ∃ c : OriginalCircuit
-        (guideFrame pos q g (labelParty R) guidePlaceholder rank V patch hpV).regs
-        (guideFrame pos q g (labelParty R') guidePlaceholder rank V patch hpV).regs,
+        (guideFrame pos q g (labelParty R) guidePlaceholder rank V patch hpV).system
+        (guideFrame pos q g (labelParty R') guidePlaceholder rank V patch hpV).system,
       c.IsBoundedChange S r K ε
         ((guideFrame pos q g (labelParty R) guidePlaceholder rank V patch hpV).regRef Ω)
         ((guideFrame pos q g (labelParty R') guidePlaceholder rank V patch hpV).regRef Ω) :=
@@ -223,8 +223,8 @@ theorem exists_isBoundedChange_levelLabels_labelParty_switch [NeZero q] {L : ℕ
     (hpV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch z).outer (patch z').outer)
     (S : Set (ProtocolParty k)) (r K : ℕ) {ε : ℝ} (hε : 0 ≤ ε) :
     ∃ c : OriginalCircuit
-        (guideFrame (cellCenterPos L) q g (labelParty R) guidePlaceholder rank V patch hpV).regs
-        (guideFrame (cellCenterPos L) q g (labelParty R') guidePlaceholder rank V patch hpV).regs,
+        (guideFrame (cellCenterPos L) q g (labelParty R) guidePlaceholder rank V patch hpV).system
+        (guideFrame (cellCenterPos L) q g (labelParty R') guidePlaceholder rank V patch hpV).system,
       c.IsBoundedChange S r K ε
         ((guideFrame (cellCenterPos L) q g (labelParty R) guidePlaceholder rank V patch
           hpV).regRef Ω)

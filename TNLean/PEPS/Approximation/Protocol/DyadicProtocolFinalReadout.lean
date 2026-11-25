@@ -21,7 +21,7 @@ reference factors, the frozen auxiliary frames and the idle registers, form `Ξ`
 
 * `DyadicProtocol.exists_reference_changes_of_readoutCircuit`: for any protocol whose
   unit-square parties are the raw owners of a main frame `M` with trivial holes, whose final
-  physical order and private registers are those of the final regrouping of the stack `M :: Fs`,
+  private registers are identified with those of the final regrouping of the stack `M :: Fs`,
   and whose final reference vector is the regrouped reference vector of that stack, the readout
   of the final reference vector is `Ω ⊗ Ξ` with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`, given the frame
   constraints of the other sheets at accuracy `L⁻⁶⁰` and at most `C L³` holes on them.
@@ -51,13 +51,13 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
+open EncodedFrame ManyBody QuantumCircuit.Party Matrix
 
 /-! ### The final reference vector of a protocol -/
 
 namespace DyadicProtocol
 
-variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
+variable {L q : ℕ} {P : Type} [Fintype P] [DecidableEq P] (D : DyadicProtocol L q P)
 
 /-- If the unit-square parties of a protocol are given by `own`, the physical output of the party
 `own v` has dimension `q`. -/
@@ -74,59 +74,51 @@ theorem physicalDimension_eq_one_of_site_eq {own : SquareLatticeVertex L L → P
     D.physicalDimension p = 1 :=
   D.physicalDimension_eq_one p fun ⟨v, hv⟩ => hp ⟨v, (hsite v).symm.trans hv⟩
 
-/-- Transport of a physical-private readout along equalities of the physical order and of the
-private registers. -/
-private theorem exists_readout_eq_of_eq [DecidableEq P] {d : P → ℕ} {o o' : List P}
-    {pr pr' : Layout P} (ho : o = o') (hp : pr = pr') (hn : o.Nodup) (hm : ∀ p, p ∈ o)
-    (hn' : o'.Nodup) (hm' : ∀ p, p ∈ o') [FiniteDimensional ℂ (Mem pr).carrier]
-    [FiniteDimensional ℂ (Mem pr').carrier] {x : Mem (familyPhysicalOutputLayout d o pr)}
-    {y : Mem (familyPhysicalOutputLayout d o' pr')}
-    (hx : x = Layout.memCongr (congrArg₂ (familyPhysicalOutputLayout d) ho hp).symm y)
-    {Ω' : EuclideanSpace ℂ ((p : P) → Fin (d p))}
-    (Ξ' : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem pr').carrier)))
-    (h : familyLabelledPhysicalReadout d o' hn' hm' pr' y =
-      Matrix.euclideanTensorVector Ω' Ξ') :
-    ∃ Ξ : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem pr).carrier)), ‖Ξ‖ = ‖Ξ'‖ ∧
-      familyLabelledPhysicalReadout d o hn hm pr x = Matrix.euclideanTensorVector Ω' Ξ := by
-  subst ho hp hx
-  exact ⟨Ξ', rfl, h⟩
-
 /-- **The final reference vector of a protocol.** Let the unit-square parties of a protocol be
-the raw owners of a main frame `M` with trivial holes, let its final layout be the output layout
-of the final regrouping of the stack `M :: Fs` followed by the idle layout `ℓ`, and let its final
-reference vector be the regrouped reference vector of that stack with an idle vector of norm
-one. If `‖Ω‖ = 1`, every hole of the other sheets satisfies the frame constraint at accuracy
-`L⁻⁶⁰`, and the other sheets carry at most `C L³` holes in total, then the readout of the final
-reference vector is `Ω ⊗ Ξ` with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
+the raw owners of a main frame `M` with trivial holes, let its final private registers be
+identified, through `epriv`, with those of the final regrouping of the stack `M :: Fs` followed by
+the idle system `W`, and let its final reference vector be the regrouped reference vector of that
+stack with an idle vector of norm one, read through this identification. If `‖Ω‖ = 1`, every hole
+of the other sheets satisfies the frame constraint at accuracy `L⁻⁶⁰`, and the other sheets carry
+at most `C L³` holes in total, then the readout of the final reference vector is `Ω ⊗ Ξ` with
+`1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 4, `06-geometry.tex`,
 lines 43–51, and its proof, lines 653–656 and 669–681. -/
-theorem exists_reference_changes_of_readoutCircuit [DecidableEq P] [NeZero q]
+theorem exists_reference_changes_of_readoutCircuit [NeZero q]
     {pos : SquareLatticeVertex L L → ℝ × ℝ} (M : Frame pos q P) (Fs : List (Frame pos q P))
-    (ℓ : Layout P) (hown : Function.Injective M.owner) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
-    (hsite : ∀ v, D.site v = M.owner v) (horder : D.physicalOrder = siteOrder M.owner)
-    (hpriv : D.privateOutput = readoutPrivate M Fs ℓ) {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
-    (hL : 0 < L) {C : ℝ}
-    (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3) {ξ : Mem ℓ}
-    (hξ : ‖ξ‖ = 1)
-    (href : Layout.memCongr D.layout_changes (D.reference D.changes) =
-      Layout.memCongr (congrArg₂ (familyPhysicalOutputLayout D.physicalDimension) horder
-          hpriv).symm
-        ((readoutCircuit D.physicalDimension M Fs ℓ (D.physicalDimension_eq_of_site_eq hsite)
-          (D.physicalDimension_eq_one_of_site_eq hsite)).eval (stackVec Ω (M :: Fs) ξ))) :
-    ∃ Ξ : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem D.privateOutput))),
+    (W : P → Type) [∀ p, Fintype (W p)] [∀ p, DecidableEq (W p)]
+    (hown : Function.Injective M.owner) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
+    (hsite : ∀ v, D.site v = M.owner v) (epriv : ∀ p, D.privateOutput p ≃ readoutPrivate M Fs W p)
+    {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1) (hL : 0 < L) {C : ℝ}
+    (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
+    {ξ : EuclideanSpace ℂ (Config W)} (hξ : ‖ξ‖ = 1)
+    (href : D.reference D.changes = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+      (Equiv.piCongrRight fun p ↦
+        (D.finalSystemEquiv p).trans ((Equiv.refl _).prodCongr (epriv p))).symm
+        (toEuclideanLin (readoutCircuit D.physicalDimension M Fs W hown
+          (D.physicalDimension_eq_of_site_eq hsite)
+          (D.physicalDimension_eq_one_of_site_eq hsite)).op (stackRef Ω (M :: Fs) ξ))) :
+    ∃ Ξ : EuclideanSpace ℂ (Config D.privateOutput),
       ‖Ξ‖ ≤ 1 ∧ 1 - C / (L : ℝ) ^ 57 ≤ ‖Ξ‖ ∧
-        D.readout (D.reference D.changes) = Matrix.euclideanTensorVector Ω Ξ := by
+        D.readout (D.reference D.changes) = euclideanTensorVector Ω Ξ := by
   have he : ∀ σ v, (D.physicalConfigEquiv σ v : ℕ) = σ (M.owner v) := fun σ v => by
     rw [D.physicalConfigEquiv_apply_val, hsite]
-  have hfin := Layout.finiteDimensional_mem_of_registers _ D.finite_privateOutput
-  have : FiniteDimensional ℂ (Mem (readoutPrivate M Fs ℓ)).carrier := hpriv ▸ hfin
-  obtain ⟨Ξ', h1, h2, h3⟩ := exists_readoutCircuit_norm D.physicalDimension M Fs ℓ hown _ _ hM _ he
+  obtain ⟨Ξ', h1, h2, h3⟩ := exists_readoutCircuit_norm D.physicalDimension M Fs hown
+    (D.physicalDimension_eq_of_site_eq hsite) (D.physicalDimension_eq_one_of_site_eq hsite) hM _ he
     hΩ hL hε hholes hξ
-  obtain ⟨Ξ, hΞ, h⟩ := exists_readout_eq_of_eq horder hpriv D.physicalOrder_nodup
-    D.mem_physicalOrder (nodup_siteOrder hown) (mem_siteOrder M.owner) href Ξ' h3
-  exact ⟨Ξ, hΞ ▸ h1, hΞ ▸ h2, readout_eq_euclideanTensorVector D _ Ω Ξ h⟩
+  refine ⟨LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight epriv).symm Ξ',
+    by rwa [LinearIsometryEquiv.norm_map], by rwa [LinearIsometryEquiv.norm_map],
+    D.readout_eq_euclideanTensorVector _ Ω _ ?_⟩
+  ext ⟨σ, z⟩
+  have hc := congrArg (fun y ↦ y (σ, Equiv.piCongrRight epriv z)) h3
+  simp only [toEuclideanLin_physicalReadout_apply, euclideanTensorVector_apply] at hc ⊢
+  rw [href]
+  simp only [LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply, Equiv.symm_symm]
+  convert hc using 3
+  funext p
+  simp [Equiv.arrowProdEquivProdArrow]
 
 end DyadicProtocol
 
@@ -216,7 +208,9 @@ below `1/2`. The other sheets are frozen auxiliary frames, one for each change o
 that initializes an auxiliary sheet, each with at most as many holes as its final guide has true
 vertices and with patches supplied by Proposition 4.1 at accuracy `L⁻⁶⁰`, followed by idle
 registers with a vector of norm one. The unit-square party of a site is the party of its unit
-square, and the final layout and reference vector are those of the final regrouping. Then, for
+square, and the final private registers and reference vector are, through an identification
+of the bases, those of the final regrouping.
+Then, for
 `‖Ω‖ = 1`, the readout of the final reference vector is `Ω ⊗ Ξ` with
 `1 - 214 L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
 
@@ -236,25 +230,27 @@ theorem DyadicProtocol.exists_reference_changes_unitLevel [NeZero q]
     (supply : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L)
     (hsupply : ∀ x ∈ (protocolSchedule k large).filter fun x => x.2.IsAuxInit,
       ∀ h ∈ (aux x).holes, IsSuppliedPatch supply h.patch)
-    (ℓ : Layout (ProtocolParty k)) {ξ : Mem ℓ} (hξ : ‖ξ‖ = 1)
+    (W : ProtocolParty k → Type) [∀ p, Fintype (W p)] [∀ p, DecidableEq (W p)]
+    {ξ : EuclideanSpace ℂ (Config W)} (hξ : ‖ξ‖ = 1)
     (hsite : ∀ v, D.site v = .inl (unitSquare hk v))
-    (horder : D.physicalOrder = siteOrder (unitLevelFrame k done S rank V patch hV).owner)
-    (hpriv : D.privateOutput = readoutPrivate (unitLevelFrame k done S rank V patch hV)
-      (((protocolSchedule k large).filter fun x => x.2.IsAuxInit).map aux) ℓ)
-    (href : Layout.memCongr D.layout_changes (D.reference D.changes) =
-      Layout.memCongr (congrArg₂ (familyPhysicalOutputLayout D.physicalDimension) horder
-          hpriv).symm
-        ((readoutCircuit D.physicalDimension (unitLevelFrame k done S rank V patch hV)
-          (((protocolSchedule k large).filter fun x => x.2.IsAuxInit).map aux) ℓ
+    (epriv : ∀ p, D.privateOutput p ≃ readoutPrivate (unitLevelFrame k done S rank V patch hV)
+      (((protocolSchedule k large).filter fun x => x.2.IsAuxInit).map aux) W p)
+    (href : D.reference D.changes = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+      (Equiv.piCongrRight fun p ↦
+        (D.finalSystemEquiv p).trans ((Equiv.refl _).prodCongr (epriv p))).symm
+        (toEuclideanLin (readoutCircuit D.physicalDimension
+          (unitLevelFrame k done S rank V patch hV)
+          (((protocolSchedule k large).filter fun x => x.2.IsAuxInit).map aux) W
+          (unitLevelFrame_owner_injective hk hdone)
           (D.physicalDimension_eq_of_site_eq fun v => (hsite v).trans
             (unitLevelFrame_owner hk hdone v).symm)
           (D.physicalDimension_eq_one_of_site_eq fun v => (hsite v).trans
-            (unitLevelFrame_owner hk hdone v).symm)).eval
-          (stackVec Ω (unitLevelFrame k done S rank V patch hV ::
+            (unitLevelFrame_owner hk hdone v).symm)).op
+          (stackRef Ω (unitLevelFrame k done S rank V patch hV ::
             ((protocolSchedule k large).filter fun x => x.2.IsAuxInit).map aux) ξ))) :
-    ∃ Ξ : EuclideanSpace ℂ (Fin (Module.finrank ℂ (Mem D.privateOutput))),
+    ∃ Ξ : EuclideanSpace ℂ (Config D.privateOutput),
       ‖Ξ‖ ≤ 1 ∧ 1 - 214 / (L : ℝ) ^ 57 ≤ ‖Ξ‖ ∧
-        D.readout (D.reference D.changes) = Matrix.euclideanTensorVector Ω Ξ := by
+        D.readout (D.reference D.changes) = euclideanTensorVector Ω Ξ := by
   have hL : 0 < L := by
     by_contra h
     have : L = 0 := by omega
@@ -263,14 +259,14 @@ theorem DyadicProtocol.exists_reference_changes_unitLevel [NeZero q]
   have hM := (guideFrame_unitLevel (g := blockGuide 1 (protocolLevelLabels k 0 done))
     (own := labelParty S) (ph := guidePlaceholder) (rank := rank) (hV := hV)
     isCellCenter_cellCenterPos hc hcorner hs).1
-  refine D.exists_reference_changes_of_readoutCircuit _ _ ℓ
+  refine D.exists_reference_changes_of_readoutCircuit _ _ W
     (unitLevelFrame_owner_injective hk hdone) hM
-    (fun v => (hsite v).trans (unitLevelFrame_owner hk hdone v).symm) horder hpriv hΩ hL
+    (fun v => (hsite v).trans (unitLevelFrame_owner hk hdone v).symm) epriv hΩ hL
     ?_ ?_ hξ href
   · intro F hF h hh
     obtain ⟨x, hx, rfl⟩ := List.mem_map.1 hF
     rw [← GuideFrameRewrite.rpow_neg_sixty]
-    exact (hsupply x hx h hh).norm_act_proj_sub_le
+    exact (hsupply x hx h hh).norm_toEuclideanLin_proj_sub_le
   · have hnat := sum_frozenHoles_le_cube hk' large Fr
     have hle : ((((protocolSchedule k large).filter fun x => x.2.IsAuxInit).map aux).map
         fun F => F.holes.length).sum ≤ 214 * L ^ 3 := by

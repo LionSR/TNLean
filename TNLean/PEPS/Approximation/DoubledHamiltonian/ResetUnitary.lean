@@ -75,7 +75,6 @@ open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
 
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal ComplexOrder
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace)
 

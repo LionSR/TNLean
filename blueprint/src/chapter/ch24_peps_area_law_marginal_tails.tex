@@ -21,7 +21,7 @@ Definition~\ref{def:area_law_hamiltonian}.
     \lean{ManyBody.PlaneInteraction.log_surprisalMoment_regionState_le,
         ManyBody.PlaneInteraction.surprisalTail_regionState_le}
     \leanok
-    \uses{def:area_law_ground_entropy, def:area_law_cut_log_budget}
+    \uses{def:area_law_ground_entropy,def:area_law_cut_log_budget}
     Let $\Omega$ be a unit vector satisfying (\ref{eq:area_law_ground_vector})
     and (\ref{eq:area_law_projector_gap}) with $\Delta>0$ for a Hamiltonian whose terms have norm
     at most $J\ge0$, and let $A\subseteq\Lambda$. Let $K$ take the value
@@ -37,7 +37,7 @@ Definition~\ref{def:area_law_hamiltonian}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_supported_identity, thm:area_law_cut_marginal}
+    \uses{thm:area_law_supported_identity,thm:area_law_cut_marginal}
     By Lemma~\ref{thm:area_law_cut_marginal} the regional state is the
     marginal of $\Omega$ across the cut $A\sqcup A^c$. Every term is supported
     on its admissible support, of dimension $q^{|X|}$, by
@@ -66,8 +66,7 @@ Definition~\ref{def:area_law_hamiltonian}.
     \lean{Entropy.concentrationWidth,
         ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_regionState}
     \leanok
-    \uses{def:area_law_ground_entropy, def:area_law_cut_log_budget,
-        thm:area_law_marginal_tails}
+    \uses{def:area_law_ground_entropy,def:area_law_cut_log_budget,thm:area_law_marginal_tails}
     Under the hypotheses and notation of
     Lemma~\ref{thm:area_law_marginal_tails}, let $n\ge0$ be an
     integer and $M$ real, and put
@@ -92,8 +91,7 @@ Definition~\ref{def:area_law_hamiltonian}.
         ManyBody.card_le_card_mul_of_forall_exists_mem,
         TNLean.PEPS.AreaLaw.card_crossingTerms_le_edgeBoundary}
     \leanok
-    \uses{def:area_law_hamiltonian,
-        thm:area_diamond_count, thm:area_diamond_budget}
+    \uses{def:area_law_hamiltonian,thm:area_diamond_count,thm:area_diamond_budget}
     Put $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$. At most $\mu_R$ admissible
     supports contain a given site, so a family of admissible supports each of
     which contains a site of a set $N$ has at most $|N|\,\mu_R$ members; and
@@ -102,7 +100,7 @@ Definition~\ref{def:area_law_hamiltonian}.
     complement.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_diamond_count, thm:area_diamond_budget}
+    \uses{thm:area_diamond_count,thm:area_diamond_budget}
     Let $X$ meet $A$ in $v$ and its complement in $w$. A walk of length at
     most $R$ from $v$ to $w$ in the induced graph crosses an edge
     $\{x,y\}\in\partial_\Lambda A$ with $x\in A$, and its initial segment
@@ -121,7 +119,7 @@ Definition~\ref{def:area_law_hamiltonian}.
         TNLean.PEPS.AreaLaw.one_le_tailParameterConstant,
         TNLean.PEPS.AreaLaw.cutLogBudget_le_edgeBoundary}
     \leanok
-    \uses{def:area_law_cut_log_budget, thm:area_law_crossing_supports}
+    \uses{def:area_law_cut_log_budget,thm:area_law_crossing_supports}
     Let $q\ge1$ and put $C=v_R\mu_R\log^2(\mathrm e\,q^{v_R})$. Then $C\ge1$,
     and for every $A\subseteq\Lambda$,
     \begin{align}
@@ -132,7 +130,7 @@ Definition~\ref{def:area_law_hamiltonian}.
     \cite{OpenAI2026AreaLaw}; the constant depends only on $q$ and $R$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_crossing_supports, thm:area_diamond_budget}
+    \uses{thm:area_law_crossing_supports,thm:area_diamond_budget}
     An admissible support has at most $v_R$ sites, so each summand of
     $\mathcal B_A$ is at most $\log^2(\mathrm e\,q^{v_R})$, and by
     Lemma~\ref{thm:area_law_crossing_supports} there are at most
@@ -148,7 +146,7 @@ Definition~\ref{def:area_law_hamiltonian}.
         TNLean.PEPS.AreaLaw.typicalMass_le_typicalMass_of_le,
         ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_edgeBoundary}
     \leanok
-    \uses{thm:area_law_typical_spectrum, thm:area_law_tail_parameter}
+    \uses{thm:area_law_typical_spectrum,thm:area_law_tail_parameter}
     Under the hypotheses and notation of
     Lemma~\ref{thm:area_law_marginal_tails}, let $q\ge1$, let $n\ge0$ be
     an integer and $M\ge0$, and put
@@ -166,7 +164,7 @@ Definition~\ref{def:area_law_hamiltonian}.
     stated there for $n\ge1$ and $M>0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_typical_spectrum, thm:area_law_tail_parameter}
+    \uses{thm:area_law_typical_spectrum,thm:area_law_tail_parameter}
     Since $\log(n+2)\ge\log2$,
     \begin{align}
         M\log(n+2)+\mathrm e/2+\log2

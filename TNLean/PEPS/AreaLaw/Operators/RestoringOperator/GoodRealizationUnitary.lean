@@ -62,7 +62,7 @@ restoring operator `R₀` and the truncated product `L'` act on `S`, the unitary
 
 The entropy comparison for a unitary acting away from both regions,
 `ManyBody.regionMutualInformation_le_inv_pow_of_supported_unitary`, does not depend on the
-geometry of the sites and is stated in `TNLean.Lattice.SupportedUnitaryEntropy`.
+geometry of the sites and is stated in `QICLean.ManyBody.Entropy.MutualInformationPerturbation`.
 
 ### References
 

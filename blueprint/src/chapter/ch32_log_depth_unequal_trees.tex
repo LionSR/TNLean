@@ -38,7 +38,7 @@ configurations of the $n$ sites.
         MPSPreparation.polarPosTensor_blockTensor_two_pow,
         MPSPreparation.mergeIso_two_pow}
     \leanok
-    \uses{thm:ldpolar_tensor_decomposition, thm:ldp_tree_factorization}
+    \uses{thm:ldpolar_tensor_decomposition,thm:ldp_tree_factorization}
     Let $A$ be a tensor, $n_1,n_2\ge0$, and let
     $W:\C^{D^2}\to\C^{D^2}\otimes\C^{D^2}$ be the partial isometry of the polar
     decomposition of the tensor $(a,b)\mapsto P_{n_1}^aP_{n_2}^b$ of two
@@ -60,7 +60,7 @@ configurations of the $n$ sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_tensor_rotate, thm:ldpolar_tensor_injective}
+    \uses{thm:ldpolar_tensor_rotate,thm:ldpolar_tensor_injective}
     With $\mathcal B_{n_i}^{\tau}=\sum_y\bra\tau V_{n_i}\ket yP_{n_i}^y$, one has
     $\mathcal B_{n_1+n_2}^{\tau_1\tau_2}
         =\mathcal B_{n_1}^{\tau_1}\mathcal B_{n_2}^{\tau_2}$, so
@@ -83,7 +83,7 @@ configurations of the $n$ sites.
     \lean{MPSPreparation.registerLayersOp,
         MPSPreparation.exists_rounds_registerLayersOp}
     \leanok
-    \uses{thm:qc_register_layer, lem:qc_round_implementation_compose}
+    \uses{thm:qc_register_layer,lem:qc_round_implementation_compose}
     Let $G_0,\dots,G_{m-1}$ be lists of register gates, the gates of each list
     with pairwise disjoint stretches, such that no register of a gate of $G_{j'}$
     lies in the interior of a gate of $G_j$ for $j'<j$, and every matrix of a
@@ -159,9 +159,7 @@ configurations of the $n$ sites.
         MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp,
         MPSPreparation.isUnitaryCircuitOn_blockLayerOp_treeLeafOp}
     \leanok
-    \uses{def:ldp_tree_layout, thm:ldp_register_layers,
-        thm:ldp_register_tree_rounds, def:qc_local_circuit,
-        lem:qc_parallel_circuits}
+    \uses{def:ldp_tree_layout,thm:ldp_register_layers,thm:ldp_register_tree_rounds,def:qc_local_circuit,lem:qc_parallel_circuits}
     Cut a ring into blocks, each with a tree layout with $h+1$ coarse depths, and
     let a unitary $X_{j,p}$ on $2s$ sites act on the two registers of the node
     $p$ of depth $j\le h$ of every block. If every $X_{j,p}$ is a product of at
@@ -201,7 +199,7 @@ configurations of the $n$ sites.
         MPSPreparation.treeLevelsOp_apply_nodeCfg,
         MPSPreparation.treeBlockOp_apply}
     \leanok
-    \uses{def:ldp_tree_layout, thm:ldp_unitary_implementing_isometry}
+    \uses{def:ldp_tree_layout,thm:ldp_unitary_implementing_isometry}
     Let $V_m\colon\C^\chi\to(\C^d)^{\otimes m}$ and
     $W_{l,r}\colon\C^\chi\to\C^\chi\otimes\C^\chi$ be isometries for
     $m,l,r\ge s$, satisfying $V_{l+r}=(V_l\otimes V_r)W_{l,r}$.
@@ -224,7 +222,7 @@ configurations of the $n$ sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes}
+    \uses{thm:ldp_unitary_implementing_isometry,lem:ldp_tree_amplitudes}
     By induction from the leaves: after the leaves and the depths $h,\dots,j$,
     the amplitude of $\tau$ on the inputs $x_p$ of the nodes of depth $j$ is
     $\prod_p\bra{\tau_{j,p}}V_{\ell_{j,p}}\ket{x_p}$, with $\tau_{j,p}$ the part
@@ -245,8 +243,7 @@ configurations of the $n$ sites.
         MPSPreparation.treeBlockOp_apply_supportedCfgPolarIso,
         MPSPreparation.exists_rounds_blockLayerOp_supportedPolarTree}
     \leanok
-    \uses{thm:ldp_unequal_tree_isometry, thm:ldp_supported_polar_tree,
-        def:qc_measurement_rounds, def:qc_round_implementation}
+    \uses{thm:ldp_unequal_tree_isometry,thm:ldp_supported_polar_tree,def:qc_measurement_rounds,def:qc_round_implementation}
     Fix $d,s\ge1$ and a physical leaf bound $c$.
     There is $C$, depending only on $d,s,c$, such that any ring partitioned
     into blocks with tree layouts of $h+1$ coarse depths and leaves of at most
@@ -270,7 +267,7 @@ configurations of the $n$ sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_unequal_tree_rounds, thm:qc_bounded_unitary_two_site_gates}
+    \uses{thm:ldp_unequal_tree_rounds,thm:qc_bounded_unitary_two_site_gates}
     Each node unitary acts on $2s$ sites, so a fixed number $K$ of
     nearest-neighbour gates suffices. Register teleportation applies every
     coarse depth in depth at most $4s+K$, independently of register separation.
@@ -319,11 +316,7 @@ configurations of the $n$ sites.
         MPSPreparation.le_pow_sub_one_of_mul_self_le,
         MPSPreparation.exists_isMeasurementConversion_blockIsometryState}
     \leanok
-    \uses{thm:ldp_unequal_tree_isometry, thm:ldp_unequal_tree_rounds,
-        lem:ldp_balanced_widths, def:ldp_block_isometry_state,
-        thm:ldp_approximating_state_depth,
-        thm:qc_bounded_unitary_two_site_gates, def:qc_measurement_rounds,
-        lem:qc_round_implementation_compose}
+    \uses{thm:ldp_unequal_tree_isometry,thm:ldp_unequal_tree_rounds,lem:ldp_balanced_widths,def:ldp_block_isometry_state,thm:ldp_approximating_state_depth,thm:qc_bounded_unitary_two_site_gates,def:qc_measurement_rounds,lem:qc_round_implementation_compose}
     For every $s\ge2$ and $c$ there is $C$, depending only on $d$, $s$ and $c$,
     with the following property. Let $A$ be a tensor whose blocked tensors over
     $m\ge s$ sites are injective, and $\omega$ a unit vector on the pair space.
@@ -372,12 +365,7 @@ configurations of the $n$ sites.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_unequal_blocks_measurements,
-        thm:ldp_block_approximation_error, thm:ldp_short_chain_preparation,
-        thm:normalized_primitive_gauge, lem:ldp_normalized_state_rescaling,
-        lem:ldp_periodic_state_nonzero,
-        lem:ldp_approximating_state_unit_norm,
-        lem:qc_measurement_rounds_outputs, lem:qc_measurement_unitary_case}
+    \uses{thm:ldp_unequal_blocks_measurements,thm:ldp_block_approximation_error,thm:ldp_short_chain_preparation,thm:normalized_primitive_gauge,lem:ldp_normalized_state_rescaling,lem:ldp_periodic_state_nonzero,lem:ldp_approximating_state_unit_norm,lem:qc_measurement_rounds_outputs,lem:qc_measurement_unitary_case}
     Bringing $A$ into the gauge~(\ref{eq:ldp_normal_gauge}) multiplies
     $\ket{\phi_N}$ by a nonzero scalar, with a bound $t<1$ on the moduli of the
     subleading eigenvalues, $r=-\log t$, and an injectivity length $L$;

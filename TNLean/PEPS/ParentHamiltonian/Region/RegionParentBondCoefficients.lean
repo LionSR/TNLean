@@ -28,8 +28,7 @@ open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS
-open TNLean.Lattice
-open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
+open DependentBondNetwork TNLean.Network.DependentBondNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
@@ -58,14 +57,14 @@ theorem exists_regionParent_commonInverse (A : Tensor Γ d)
     ∃ F : (v : V) → Matrix (LocalConfig graphEdgeTail graphEdgeHead (graphBondAlphabet A) v)
       (Fin d) ℂ,
       ∀ ψ ∈ regionParentGroundSpace A R,
-        (∀ i, dependentPhysicalProductFamilyMap F ψ ∈
+        (∀ i, (Matrix.piKronecker F).mulVecLin ψ ∈
           cutSpace graphEdgeTail graphEdgeHead (graphBondAlphabet A)
             (DependentBondNetwork.averagingSite graphEdgeTail graphEdgeHead (graphBondAlphabet A) U)
             (regionExteriorCut (R i))) ∧
-        dependentPhysicalProductFamilyMap
+        (Matrix.piKronecker
           (fun v ↦ LinearMap.toMatrix' (localSiteMap graphEdgeTail graphEdgeHead
-            (graphBondAlphabet A) (graphDependentTensor A) v))
-          (dependentPhysicalProductFamilyMap F ψ) = ψ := by
+            (graphBondAlphabet A) (graphDependentTensor A) v))).mulVecLin
+          ((Matrix.piKronecker F).mulVecLin ψ) = ψ := by
   obtain ⟨F, _, hF⟩ := exists_liftedCutSpace_common_localInverse
     graphEdgeTail graphEdgeHead (graphBondAlphabet A) i₀
     (incidentRepresentation graphEdgeTail graphEdgeHead (graphBondAlphabet A) U)
@@ -93,9 +92,9 @@ theorem exists_regionParent_bondCoefficients (A : Tensor Γ d)
       (∀ i, ξ ∈ cutSpace graphEdgeTail graphEdgeHead (graphBondAlphabet A)
         (DependentBondNetwork.averagingSite graphEdgeTail graphEdgeHead (graphBondAlphabet A) U)
           (regionExteriorCut (R i))) ∧
-      dependentPhysicalProductFamilyMap
+      (Matrix.piKronecker
         (fun v ↦ LinearMap.toMatrix' (localSiteMap graphEdgeTail graphEdgeHead
-          (graphBondAlphabet A) (graphDependentTensor A) v)) ξ = ψ ∧
+          (graphBondAlphabet A) (graphDependentTensor A) v))).mulVecLin ξ = ψ ∧
       ξ = ∑ p : Edge Γ → G,
         bondCoefficientExtraction graphEdgeTail graphEdgeHead (graphBondAlphabet A) U p ξ •
           representationBondProduct graphEdgeTail graphEdgeHead (graphBondAlphabet A) U p ∧
@@ -105,7 +104,7 @@ theorem exists_regionParent_bondCoefficients (A : Tensor Γ d)
           p e = q e.1.2 * (q e.1.1)⁻¹) := by
   obtain ⟨F, hF⟩ := exists_regionParent_commonInverse A U hU hA i₀ R hvertex
   obtain ⟨hcuts, hrec⟩ := hF ψ hψ
-  let ξ := dependentPhysicalProductFamilyMap F ψ
+  let ξ := (Matrix.piKronecker F).mulVecLin ψ
   refine ⟨ξ, hcuts, hrec, ?_, ?_⟩
   · apply eq_sum_extracted_bondProducts_of_mem_cutSpaces
       graphEdgeTail graphEdgeHead (graphBondAlphabet A) U hU

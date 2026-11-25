@@ -275,7 +275,7 @@
     \label{lem:periodic_corner_product_blockmatch_pow}
     \lean{MPSTensor.cornerProd_blockMatch_pow}
     \leanok
-    \uses{def:periodic_corner_product, lem:periodic_corner_product_append}
+    \uses{def:periodic_corner_product,lem:periodic_corner_product_append}
     Let $P_0,\ldots,P_{m-1}$ and $Q_0,\ldots,Q_{m-1}$ be orthogonal projections,
     and suppose the $m$-block product identity
     \begin{align}
@@ -306,7 +306,7 @@
     \label{lem:periodic_corner_contraction}
     \lean{MPSTensor.cornerProd_contraction}
     \leanok
-    \uses{def:periodic_corner_letter, def:periodic_corner_product}
+    \uses{def:periodic_corner_letter,def:periodic_corner_product}
     Suppose the coefficients $\Omega_{k+1}$ recover each inserted matrix $X_k$
     from the repeated corner product $F_{k+1}$ over length-$L$ words:
     $\sum_{\mathbf j}(\Omega_{k+1}(X_k))_{\mathbf j}\,F_{k+1}^{\mathbf j}=X_k$
@@ -438,7 +438,7 @@
     \label{lem:periodic_cornerprod_flatten}
     \lean{MPSTensor.cornerProd_flatten_eq_phi_evalWord}
     \leanok
-    \uses{def:periodic_corner_product, def:periodic_block_flatten_equiv}
+    \uses{def:periodic_corner_product,def:periodic_block_flatten_equiv}
     Let $P_k$ be orthogonal projections satisfying the off-diagonal convention
     $P_kA^i=A^iP_{k+1}$, and let $\varphi_k$ be the multiplicative corner
     isomorphisms with $\varphi_k(\bar A_k^I)=P_k(A^{[m]})^IP_k$. Then for a
@@ -475,7 +475,7 @@
     \label{lem:periodic_ambient_corner_inverse}
     \lean{MPSTensor.exists_ambientCornerRightInverse_of_sectorRightInverse}
     \leanok
-    \uses{lem:periodic_cornerprod_flatten, lem:periodic_block_flatten_word_compat}
+    \uses{lem:periodic_cornerprod_flatten,lem:periodic_block_flatten_word_compat}
     From a sector right inverse $\Omega$ recovering every sector word product
     $\bar A_k^{\,W}$ over blocked words $W\in[d^m]^L$ with $L>0$
     (\cite[eq.~Omegauprop]{DeLasCuevas2017Irreducible}) one obtains an ambient
@@ -491,7 +491,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:periodic_cornerprod_flatten, lem:periodic_block_flatten_word_compat}
+    \uses{lem:periodic_cornerprod_flatten,lem:periodic_block_flatten_word_compat}
     Set $\hat\Omega_k(Y)=\Omega_k(\varphi_k^{-1}(Y))$ for corner-supported $Y$.
     Applying $\varphi_k$ to the sector recovery and using the corner product of a
     flattened word,
@@ -513,7 +513,7 @@
     \label{lem:periodic_sector_contraction}
     \lean{MPSTensor.exists_cornerProd_contraction_of_sectorRightInverse}
     \leanok
-    \uses{lem:periodic_ambient_corner_inverse, lem:periodic_corner_contraction}
+    \uses{lem:periodic_ambient_corner_inverse,lem:periodic_corner_contraction}
     Feeding the ambient corner right inverse into the right-inverse contraction
     yields the contracted product-tensor identity
     \cite[eq.~resultprop]{DeLasCuevas2017Irreducible}. For corner-supported
@@ -529,7 +529,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:periodic_ambient_corner_inverse, lem:periodic_corner_contraction}
+    \uses{lem:periodic_ambient_corner_inverse,lem:periodic_corner_contraction}
     Substituting the ambient corner right inverse $\hat\Omega_{k+1}$ for the
     abstract right inverse in the right-inverse contraction yields the
     displayed identity.

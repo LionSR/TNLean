@@ -18,7 +18,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
         coeff_eq_of_linearIndependentAt}
     \leanok
-    \uses{def:mpdo_bnt_label_linear_independent, def:mpdo_bnt_label_same_length_product_form, def:mpdo_bnt_label_coefficient_family}
+    \uses{def:mpdo_bnt_label_linear_independent,def:mpdo_bnt_label_same_length_product_form,def:mpdo_bnt_label_coefficient_family}
     Two systems of structure coefficients satisfying the product law for the
     same operator family agree at every positive length at which the
     operators are linearly independent.
@@ -78,7 +78,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.ExplicitVerticalTransport.%
         hasSameLengthProductForm_verticalTransport}
     \leanok
-    \uses{def:mpdo_vertical_bnt_explicit_transport, def:mpdo_vertical_bnt_transported_coefficients, def:mpdo_bnt_label_same_length_product_form}
+    \uses{def:mpdo_vertical_bnt_explicit_transport,def:mpdo_vertical_bnt_transported_coefficients,def:mpdo_bnt_label_same_length_product_form}
     A change of vertical representatives carries a product law with
     structure coefficients $c^{(L)}_{\alpha,\beta,\gamma}$ to a product law
     with structure coefficients $\widetilde c^{(L)}_{\alpha,\beta,\gamma}$.
@@ -115,7 +115,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.ExplicitVerticalTransport.%
         coeff_eq_verticalTransport_of_linearIndependentAt}
     \leanok
-    \uses{def:mpdo_bnt_label_linear_independent, thm:mpdo_bnt_label_coeff_unique, thm:mpdo_vertical_bnt_product_transport}
+    \uses{def:mpdo_bnt_label_linear_independent,thm:mpdo_bnt_label_coeff_unique,thm:mpdo_vertical_bnt_product_transport}
     Suppose that two operator families satisfy product laws and are related
     by a change of vertical representatives. At a positive length where
     the operators of the second family are linearly independent, their
@@ -141,7 +141,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         coeff_eq_of_explicitVerticalTransport}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause, def:mpdo_vertical_bnt_explicit_transport, def:mpdo_bnt_label_linear_independent, thm:mpdo_vertical_bnt_coefficient_covariance_abstract}
+    \uses{def:mpdo_bnt_algebra_tensor_clause,def:mpdo_vertical_bnt_explicit_transport,def:mpdo_bnt_label_linear_independent,thm:mpdo_vertical_bnt_coefficient_covariance_abstract}
     Suppose that two vertical basis-of-normal-tensors decompositions of tensors satisfy the
     algebra condition and are related by a change of vertical representatives.
     At every positive length $L$ at which the operators of the second
@@ -193,7 +193,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         coeff_eq_of_explicitVerticalTransport_of_scale_mul_eq}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_vertical_bnt_coefficient_transport_exact_abstract}
+    \uses{def:mpdo_bnt_algebra_tensor_clause,thm:mpdo_vertical_bnt_coefficient_transport_exact_abstract}
     Under the hypotheses of
     Lemma~\ref{thm:mpdo_vertical_bnt_coefficient_covariance}, if
     $s_\alpha s_\beta=s_\gamma$, then
@@ -222,7 +222,7 @@
     \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.leftClause}
     \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.rightClause}
     \leanok
-    \uses{def:mpo_tensor, def:mpdo_bnt_algebra_tensor_clause}
+    \uses{def:mpo_tensor,def:mpdo_bnt_algebra_tensor_clause}
     Let
     \begin{align}
         P & =\begin{pmatrix}1&0\\0&0\end{pmatrix},
@@ -290,7 +290,7 @@
     \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
         sameMPV₂Pos_and_no_relabelled_coefficient_equality}
     \leanok
-    \uses{def:mpdo, def:gauge_equiv, def:same_mpv2_pos, def:mpdo_vertical_coefficient_presentation_counterexample}
+    \uses{def:mpdo,def:gauge_equiv,def:same_mpv2_pos,def:mpdo_vertical_coefficient_presentation_counterexample}
     The tensors $M_P$ and $M_Q$ are related by the nonunitary gauge $X$.
     For every positive length $N$, their unnormalized periodic operators
     satisfy $\rho^{(N)}(M_P)=\rho^{(N)}(M_Q)$.
@@ -343,7 +343,7 @@
     \lean{MPOTensor.VerticalCoefficientPresentationCounterexample.%
         sameMPV₂Pos_and_lengthIndependent_mismatch}
     \leanok
-    \uses{def:same_mpv2_pos, def:mpdo_bnt_label_length_independent, def:mpdo_vertical_coefficient_presentation_counterexample}
+    \uses{def:same_mpv2_pos,def:mpdo_bnt_label_length_independent,def:mpdo_vertical_coefficient_presentation_counterexample}
     The structure coefficients in the vertical decomposition of $M_P$ are
     length independent, whereas those in the chosen vertical decomposition
     of $M_Q$ are not. More precisely,
@@ -365,7 +365,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
         coeff_assoc_of_linearIndependentAt}
     \leanok
-    \uses{def:mpdo_bnt_label_linear_independent, def:mpdo_bnt_label_same_length_product_form}
+    \uses{def:mpdo_bnt_label_linear_independent,def:mpdo_bnt_label_same_length_product_form}
     At every positive length $L$ at which the operators are linearly
     independent, the structure coefficients of the product law
     satisfy
@@ -413,7 +413,7 @@
     \lean{MPOTensor.BNTLabelOperatorFamily.HasSameLengthProductForm.%
         tracePowerCoeff_assoc_of_linearIndependentAt}
     \leanok
-    \uses{thm:mpdo_bnt_label_coeff_associativity, def:mpdo_bnt_label_same_length_product_form, def:mpdo_bnt_label_positive_length_chi_trace_power_form}
+    \uses{thm:mpdo_bnt_label_coeff_associativity,def:mpdo_bnt_label_same_length_product_form,def:mpdo_bnt_label_positive_length_chi_trace_power_form}
     Suppose that the operators $\{O_L(M_\alpha)\}_\alpha$ satisfy the product
     law with structure coefficients
     $c^{(L)}_{\alpha,\beta,\gamma}=\tr(\chi_{\alpha,\beta,\gamma}^{\,L})$
@@ -446,7 +446,7 @@
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
         exists_isRFPViaTS_not_lengthIndependent_bntCoefficients_R}
     \leanok
-    \uses{def:cpsv_canonical_form, def:mpdo, def:is_rfp_via_ts, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_label_length_independent}
+    \uses{def:cpsv_canonical_form,def:mpdo,def:is_rfp_via_ts,def:mpdo_bnt_algebra_tensor_clause,def:mpdo_bnt_label_length_independent}
     There is a tensor $M$ generating MPDOs that has the direct-sum form
     $M^i=\bigoplus_k\mu_k M_k^i$ with normalized normal tensor blocks $M_k$, is a
     renormalization fixed point, and has a vertical basis-of-normal-tensors decomposition
@@ -464,7 +464,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence, thm:mpdo_bnt_label_rescaling_stable_cf, thm:mpdo_bnt_label_rescaling_stable_ismpdo, thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts, thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
+    \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence,thm:mpdo_bnt_label_rescaling_stable_cf,thm:mpdo_bnt_label_rescaling_stable_ismpdo,thm:mpdo_bnt_label_rescaling_stable_is_rfp_via_ts,thm:mpdo_bnt_label_rescaling_stable_bnt_algebra_clause}
     Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_ismpdo} and
     Lemma~\ref{thm:mpdo_bnt_label_rescaling_stable_cf} show that $R$ generates
     MPDOs and has the direct-sum form with normalized normal tensor blocks.

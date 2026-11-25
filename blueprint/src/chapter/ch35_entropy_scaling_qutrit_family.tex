@@ -98,8 +98,7 @@ The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleMatrix_factorization,
         TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleVector_eq}
     \leanok
-    \uses{def:qutrit_entropy_scaling_middle,
-        thm:qutrit_entropy_scaling_orthonormal}
+    \uses{def:qutrit_entropy_scaling_middle,thm:qutrit_entropy_scaling_orthonormal}
     With $B$ from Lemma~\ref{thm:qutrit_entropy_scaling_orthonormal},
     $C=B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger$.
 \end{lemma}
@@ -112,13 +111,11 @@ The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
     \label{thm:qutrit_entropy_scaling_marginal}
     \lean{TNLean.MPS.AreaLaw.EntropyScaling.qutritMiddleMarginal_factorization}
     \leanok
-    \uses{def:qutrit_entropy_scaling_middle,
-        thm:qutrit_entropy_scaling_orthonormal}
+    \uses{def:qutrit_entropy_scaling_middle,thm:qutrit_entropy_scaling_orthonormal}
     The left marginal satisfies $\rho=B\operatorname{diag}(\lambda_i)B^\dagger$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:qutrit_entropy_scaling_schmidt,
-        thm:qutrit_entropy_scaling_orthonormal}
+    \uses{thm:qutrit_entropy_scaling_schmidt,thm:qutrit_entropy_scaling_orthonormal}
     By Lemmas~\ref{thm:qutrit_entropy_scaling_schmidt}
     and~\ref{thm:qutrit_entropy_scaling_orthonormal},
     $\rho=CC^\dagger=B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger B\operatorname{diag}(\sqrt{\lambda_i})B^\dagger=B\operatorname{diag}(\lambda_i)B^\dagger$.
@@ -142,9 +139,7 @@ The following family is the state introduced in~\cite{Schuch2008EntropyScaling}
     and $0$ (with multiplicity $3^N-1-2^N$).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:qutrit_entropy_scaling_marginal,
-        thm:qutrit_entropy_scaling_native_marginal,
-        thm:qutrit_entropy_scaling_orthonormal}
+    \uses{thm:qutrit_entropy_scaling_marginal,thm:qutrit_entropy_scaling_native_marginal,thm:qutrit_entropy_scaling_orthonormal}
     By Lemmas~\ref{thm:qutrit_entropy_scaling_marginal}
     and~\ref{thm:qutrit_entropy_scaling_orthonormal},
     $\rho=B\operatorname{diag}(\lambda_i)B^\dagger$ with $B^\dagger B=1_{1+2^N}$,

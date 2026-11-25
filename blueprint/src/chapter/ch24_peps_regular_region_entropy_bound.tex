@@ -27,8 +27,7 @@
         TNLean.PEPS.mul_normalizedRegionReducedDensity_eq_zero_iff_of_regular_connected_cut,
         TNLean.PEPS.IsRegionParentInteraction.mul_normalizedRegionReducedDensity_eq_zero}
     \leanok
-    \uses{def:peps_normalized_region_reduced_density,
-        def:peps_region_ground_space, def:peps_g_injective}
+    \uses{def:peps_normalized_region_reduced_density,def:peps_region_ground_space,def:peps_g_injective}
     Consider regular $G$-injective tensors on a finite graph and a cut
     whose two induced subgraphs are connected and whose boundary is
     nonempty. Then
@@ -45,8 +44,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_region_support,
-        thm:peps_regular_region_dimension}
+    \uses{thm:peps_regular_region_support,thm:peps_regular_region_dimension}
     The closed vector is nonzero. Normalization preserves the range,
     which is $\mathcal G_R$. The identity $h\widehat\rho_R=0$ means
     precisely that this range is contained in the kernel of $h$.
@@ -57,7 +55,7 @@
     \lean{TNLean.PEPS.normalizedRegionReducedDensity_properties_of_regular_connected_cut,
         TNLean.PEPS.entropy_normalizedRegionReducedDensity_of_regular_connected_cut}
     \leanok
-    \uses{def:peps_normalized_region_reduced_density, def:peps_g_injective}
+    \uses{def:peps_normalized_region_reduced_density,def:peps_g_injective}
     Let regular $G$-injective tensors define a PEPS on a finite graph.
     Suppose that both induced subgraphs of a cut are connected and
     that the cut has $n+1$ crossing bonds. Then the closed vector is
@@ -77,8 +75,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_region_dimension,
-        def:peps_normalized_region_reduced_density}
+    \uses{thm:peps_regular_region_dimension,def:peps_normalized_region_reduced_density}
     Normalization preserves the invariant boundary rank $|G|^n$.
     The von Neumann entropy of a positive trace-one matrix lies
     between zero and the logarithm of its rank. The zero-order

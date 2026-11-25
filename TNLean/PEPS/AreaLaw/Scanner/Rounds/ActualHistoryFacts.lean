@@ -50,7 +50,7 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
-open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TensorPower.ReplicaTransport
 
@@ -178,7 +178,7 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ X.L N →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {μ : ℕ} (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hC₁ : 3 * (μ : ℝ) ≤ S.C₁) (hC₁pos : 0 < S.C₁)
     (hbad : ∀ s ≤ S.n * S.m, S.badOldWeight s ≤ (N : ℝ) ^ (-200 : ℝ))
@@ -445,7 +445,7 @@ theorem exists_historyFacts_actualScanRound (X : ScannerExponents) (R : ℕ) {q 
         (∀ d : ℕ, 1 ≤ d → d ≤ X.L N →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         HistoryFacts X N C 4 c (fun r ↦ S.actualScanRound hm hM dims E a pre r.val) := by
   let μ : ℕ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
   let C₁ : ℝ := 3 * μ + 1

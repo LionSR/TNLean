@@ -63,7 +63,7 @@ Hamiltonian with the physical Majumdar--Ghosh Hamiltonian.
     \label{thm:majumdar_ghosh_review_coeff}
     \lean{MPSTensor.majumdarGhoshReview_coeff}
     \leanok
-    \uses{def:majumdar_ghosh_review_tensor, def:eval_word}
+    \uses{def:majumdar_ghosh_review_tensor,def:eval_word}
     For every word $w$,
     $\tr\bigl(\widetilde A^{w}\bigr)=\tr\bigl(B^{w}\bigr)\,\tr\bigl(Y^{|w|}\bigr)$.
 \end{lemma}
@@ -110,7 +110,7 @@ Hamiltonian with the physical Majumdar--Ghosh Hamiltonian.
         MPSTensor.pairProduct_ofFn_eq_pairCoveringEven,
         MPSTensor.pairProduct_rotate_ofFn_eq_pairCoveringOdd}
     \leanok
-    \uses{def:mpv, def:majumdar_ghosh_pair_covering}
+    \uses{def:mpv,def:majumdar_ghosh_pair_covering}
     Let $K$ be a tensor with a bond level $z$ such that $K^i_{xy}=0$ whenever
     $x\neq z$ and $y\neq z$, and $K^i_{zz}=0$ for every $i$. With
     $f(a,b)=(K^aK^b)_{zz}$, the entry $(K^w)_{zz}$ is the pair product of $w$.
@@ -154,7 +154,7 @@ Hamiltonian with the physical Majumdar--Ghosh Hamiltonian.
     \label{thm:majumdar_ghosh_bond_singlet_mpv}
     \lean{MPSTensor.majumdarGhoshBondSinglet_mpv_eq_pairCovering}
     \leanok
-    \uses{def:majumdar_ghosh_bond_singlet_tensor, thm:mps_pair_covering_form}
+    \uses{def:majumdar_ghosh_bond_singlet_tensor,thm:mps_pair_covering_form}
     With the tensor of \cite[Appendix~A, ``The Majumdar-Ghosh model'']{Cirac2021Matrix}
     read as in \cite{gap:rmp_majumdar_ghosh_tensor_gap}, every even $N>0$
     satisfies $\ket{V^{(N)}(C)}=P^{\mathrm{even}}_Y+P^{\mathrm{odd}}_Y$, the
@@ -205,7 +205,7 @@ level $0$ and the normalized singlet as pair amplitude.
         MPSTensor.majumdarGhosh_mpv_eq_zero_of_odd,
         MPSTensor.majumdarGhoshTensor_mul_apply_zero_zero}
     \leanok
-    \uses{def:majumdar_ghosh_tensor, thm:mps_pair_covering_form}
+    \uses{def:majumdar_ghosh_tensor,thm:mps_pair_covering_form}
     For every even $N>0$, $\ket{V^{(N)}(A)}=P^{\mathrm{even}}_s+P^{\mathrm{odd}}_s$,
     the sum of the two nearest-neighbour coverings by the normalized singlet
     $(\ket{10}-\ket{01})/\sqrt2$. For odd $N$ the periodic vector vanishes.
@@ -223,8 +223,7 @@ level $0$ and the normalized singlet as pair amplitude.
     \label{thm:majumdar_ghosh_bond_singlet_scaling}
     \lean{MPSTensor.majumdarGhoshBondSinglet_mpv_eq_smul}
     \leanok
-    \uses{def:majumdar_ghosh_tensor, thm:majumdar_ghosh_bond_singlet_mpv,
-        thm:majumdar_ghosh_dimer_superposition}
+    \uses{def:majumdar_ghosh_tensor,thm:majumdar_ghosh_bond_singlet_mpv,thm:majumdar_ghosh_dimer_superposition}
     For every even $N>0$,
     $\ket{V^{(N)}(C)}=\sqrt2^{\,N/2}\,\ket{V^{(N)}(A)}$.
 \end{lemma}
@@ -243,8 +242,7 @@ level $0$ and the normalized singlet as pair amplitude.
         MPSTensor.majumdarGhoshSingletY_sq,
         MPSTensor.majumdarGhoshSingletY_pow_two_mul}
     \leanok
-    \uses{def:majumdar_ghosh_review_tensor, thm:majumdar_ghosh_review_coeff,
-        thm:mps_pair_covering_form, thm:majumdar_ghosh_dimer_superposition}
+    \uses{def:majumdar_ghosh_review_tensor,thm:majumdar_ghosh_review_coeff,thm:mps_pair_covering_form,thm:majumdar_ghosh_dimer_superposition}
     Let $N=2m>0$ and $\delta(a,b)=\delta_{ab}$. Then
     \begin{align}
         \ket{V^{(N)}(\widetilde A)} & =
@@ -291,7 +289,7 @@ level $0$ and the normalized singlet as pair amplitude.
     \label{thm:majumdar_ghosh_transfer}
     \lean{MPSTensor.majumdarGhosh_transferMap_one}
     \leanok
-    \uses{def:majumdar_ghosh_tensor, def:transfer_map}
+    \uses{def:majumdar_ghosh_tensor,def:transfer_map}
     The transfer map of the Majumdar--Ghosh tensor sends the identity to the
     diagonal matrix $\E_A(\Id) = \diag(2, \tfrac12, \tfrac12)$.
 \end{lemma}
@@ -306,7 +304,7 @@ level $0$ and the normalized singlet as pair amplitude.
     \label{thm:majumdar_ghosh_not_injective}
     \lean{MPSTensor.majumdarGhosh_not_isInjective}
     \leanok
-    \uses{def:majumdar_ghosh_tensor, def:injective}
+    \uses{def:majumdar_ghosh_tensor,def:injective}
     The Majumdar--Ghosh tensor is not injective: every element of
     $\spn_{\C}\{A^0, A^1\}$ has vanishing $(2,2)$ entry, so the span is a proper
     subspace of~$\MN{3}$.
@@ -322,7 +320,7 @@ level $0$ and the normalized singlet as pair amplitude.
     \label{thm:majumdar_ghosh_not_normal}
     \lean{MPSTensor.majumdarGhosh_not_isNormal}
     \leanok
-    \uses{def:majumdar_ghosh_tensor, def:normal}
+    \uses{def:majumdar_ghosh_tensor,def:normal}
     The Majumdar--Ghosh tensor is not normal: no blocking length makes the
     products of that length span the full matrix algebra~$\MN{3}$. This
     non-normality is the algebraic signature expected from the two-periodic
@@ -410,8 +408,7 @@ level $0$ and the normalized singlet as pair amplitude.
     \label{thm:majumdar_ghosh_local_ground_space}
     \lean{MPSTensor.majumdarGhosh_groundSpace_three_eq_eigenspace}
     \leanok
-    \uses{def:majumdar_ghosh_tensor, def:ground_space_parent,
-        def:majumdar_ghosh_hamiltonian, thm:spin_exchange_swap}
+    \uses{def:majumdar_ghosh_tensor,def:ground_space_parent,def:majumdar_ghosh_hamiltonian,thm:spin_exchange_swap}
     The three-site local ground space $\mathcal G_3(A)$ equals the eigenspace
     of $h$ for the eigenvalue $-\tfrac38$.
 \end{lemma}
@@ -461,8 +458,7 @@ level $0$ and the normalized singlet as pair amplitude.
     \lean{MPSTensor.majumdarGhosh_pairCoveringEven_mem_chainGroundSpace,
         MPSTensor.majumdarGhosh_pairCoveringOdd_mem_chainGroundSpace}
     \leanok
-    \uses{thm:majumdar_ghosh_dimer_superposition, thm:mps_pair_covering_form,
-        thm:twisted_mpv_chain_ground_space, lem:mpv_mem_chain_ground_space}
+    \uses{thm:majumdar_ghosh_dimer_superposition,thm:mps_pair_covering_form,thm:twisted_mpv_chain_ground_space,lem:mpv_mem_chain_ground_space}
     For even $N>0$ and $L\le N$, both coverings $P^{\mathrm{even}}_s$ and
     $P^{\mathrm{odd}}_s$ lie in $\mathcal G_{N,L}(A)$.
 \end{lemma}
@@ -486,9 +482,7 @@ level $0$ and the normalized singlet as pair amplitude.
         MPSTensor.majumdarGhoshHamiltonian_pairCoveringOdd,
         MPSTensor.majumdarGhoshHamiltonian_mpv}
     \leanok
-    \uses{def:majumdar_ghosh_hamiltonian, thm:majumdar_ghosh_local_ground_space,
-        thm:majumdar_ghosh_coverings_chain_ground_space,
-        lem:mpv_mem_chain_ground_space}
+    \uses{def:majumdar_ghosh_hamiltonian,thm:majumdar_ghosh_local_ground_space,thm:majumdar_ghosh_coverings_chain_ground_space,lem:mpv_mem_chain_ground_space}
     For $N\ge3$, every $\psi\in\mathcal G_{N,3}(A)$ satisfies
     $H_N\psi=-\tfrac{3N}{8}\psi$. In particular, for even $N\ge4$ each of the
     two singlet coverings, and for $N\ge3$ the periodic vector
@@ -520,8 +514,7 @@ normality in the following two theorems.
     \lean{MPSTensor.majumdarGhosh_exists_parity_rep,
         MPSTensor.majumdarGhosh_eq_zero_of_groundSpaceMap_eq_zero}
     \leanok
-    \uses{def:majumdar_ghosh_tensor, def:ground_space_parent,
-        thm:majumdar_ghosh_left_canonical}
+    \uses{def:majumdar_ghosh_tensor,def:ground_space_parent,thm:majumdar_ghosh_left_canonical}
     Every vector of $\mathcal G_{K}(A)$ equals $\Gamma_{K}(X)$ for a matrix $X$
     with $GX=(-1)^{K}XG$. For $K\ge3$, a matrix $X$ with $GX=(-1)^{K}XG$ and
     $\Gamma_{K}(X)=0$ is zero.
@@ -546,8 +539,7 @@ normality in the following two theorems.
     \lean{MPSTensor.majumdarGhosh_groundSpace_intersection,
         MPSTensor.majumdarGhosh_chainGroundSpace_le_groundSpace}
     \leanok
-    \uses{lem:majumdar_ghosh_graded_injectivity,
-        thm:majumdar_ghosh_local_ground_space, def:chain_ground_space}
+    \uses{lem:majumdar_ghosh_graded_injectivity,thm:majumdar_ghosh_local_ground_space,def:chain_ground_space}
     For $M\ge3$,
     $(\mathcal G_{M}(A)\otimes\C^2)\cap(\C^2\otimes\mathcal G_{M}(A))
         =\mathcal G_{M+1}(A)$. Consequently, for $N\ge3$ every vector of
@@ -556,7 +548,7 @@ normality in the following two theorems.
 
 \begin{proof}
     \leanok
-    \uses{thm:ground_space_restriction_overlap, thm:ground_space_grow_back}
+    \uses{thm:ground_space_restriction_overlap,thm:ground_space_grow_back}
     Let $\psi$ lie in the intersection. By
     Lemma~\ref{lem:majumdar_ghosh_graded_injectivity}, its restriction with
     first letter $i$ is $\Gamma_{M}(Y_i)$ and its restriction with last letter
@@ -585,10 +577,7 @@ normality in the following two theorems.
         MPSTensor.majumdarGhosh_pairCovering_linearIndependent,
         MPSTensor.majumdarGhosh_finrank_chainGroundSpace}
     \leanok
-    \uses{def:majumdar_ghosh_tensor, def:ground_space_parent,
-        thm:majumdar_ghosh_coverings_chain_ground_space, lem:majumdar_ghosh_intersection,
-        lem:majumdar_ghosh_graded_injectivity,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    \uses{def:majumdar_ghosh_tensor,def:ground_space_parent,thm:majumdar_ghosh_coverings_chain_ground_space,lem:majumdar_ghosh_intersection,lem:majumdar_ghosh_graded_injectivity,thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     On an even periodic chain of length $N = 2m\ge4$, let
     $H_{N,\mathrm{MG}}^{(3)}$ be the range-three parent Hamiltonian of the
     Majumdar--Ghosh tensor, the periodic sum of translates of the local
@@ -600,8 +589,7 @@ normality in the following two theorems.
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_cyclic_translate_preserves_chain_space,
-        thm:full_ring_boundary_change_of_cut}
+    \uses{lem:parent_cyclic_translate_preserves_chain_space,thm:full_ring_boundary_change_of_cut}
     By Lemma~\ref{thm:majumdar_ghosh_coverings_chain_ground_space}, the two
     coverings lie in $\mathcal G_{N,3}(A)$. Conversely,
     let $\psi\in\mathcal G_{N,3}(A)$. By
@@ -629,15 +617,14 @@ normality in the following two theorems.
     \label{thm:majumdar_ghosh_ground_space_odd}
     \lean{MPSTensor.majumdarGhosh_chainGroundSpace_eq_bot_of_odd}
     \leanok
-    \uses{lem:majumdar_ghosh_intersection, lem:majumdar_ghosh_graded_injectivity}
+    \uses{lem:majumdar_ghosh_intersection,lem:majumdar_ghosh_graded_injectivity}
     On an odd periodic chain of length $N\ge5$, the space
     $\mathcal G_{N,3}(A_{\mathrm{MG}})$ is zero.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{lem:parent_cyclic_translate_preserves_chain_space,
-        thm:full_ring_boundary_change_of_cut}
+    \uses{lem:parent_cyclic_translate_preserves_chain_space,thm:full_ring_boundary_change_of_cut}
     As in the proof of Lemma~\ref{thm:majumdar_ghosh_ground_space}, a vector
     $\Gamma_{N}(X)$ of $\mathcal G_{N,3}(A)$ and its translates by one and two
     sites give $XA^a=A^aY$ and $YA^a=A^aZ$, now with $X,Y,Z$ anticommuting with
@@ -660,8 +647,7 @@ normality in the following two theorems.
     \lean{MPSTensor.majumdarGhoshTerm_apply,
         MPSTensor.majumdarGhoshTerm_shift_eq_parentInteraction}
     \leanok
-    \uses{def:majumdar_ghosh_hamiltonian, def:parent_interaction,
-        thm:spin_exchange_swap, thm:majumdar_ghosh_local_ground_space}
+    \uses{def:majumdar_ghosh_hamiltonian,def:parent_interaction,thm:spin_exchange_swap,thm:majumdar_ghosh_local_ground_space}
     The operator
     $\tfrac43\bigl(h+\tfrac38\bigr)=\tfrac13(P_{01}+P_{12}+P_{02})$ is the
     orthogonal projector onto $\mathcal G_{3}(A)^{\perp}$, the three-site parent
@@ -693,8 +679,7 @@ normality in the following two theorems.
         MPSTensor.majumdarGhosh_groundSpace_three_eq_totalSpinSq_eigenspace,
         MPSTensor.majumdarGhosh_parentInteraction_eq_spinThreeHalves_starProjection}
     \leanok
-    \uses{thm:majumdar_ghosh_term_projector, thm:spin_exchange_swap,
-        thm:majumdar_ghosh_local_ground_space}
+    \uses{thm:majumdar_ghosh_term_projector,thm:spin_exchange_swap,thm:majumdar_ghosh_local_ground_space}
     On three spin-$\tfrac12$ sites let $S^\alpha=S^\alpha_0+S^\alpha_1+S^\alpha_2$
     and $\mathbf S^{2}=\sum_\alpha(S^\alpha)^{2}$. Then
     $\mathbf S^{2}=\tfrac94+4h=\tfrac34+3Q$ with
@@ -729,9 +714,7 @@ normality in the following two theorems.
         MPSTensor.majumdarGhoshHamiltonian_eigenspace_eq_span,
         MPSTensor.majumdarGhoshHamiltonian_hasEigenvalue}
     \leanok
-    \uses{def:majumdar_ghosh_hamiltonian, def:parent_hamiltonian,
-        thm:majumdar_ghosh_term_projector, lem:transported_es_positive,
-        thm:majumdar_ghosh_ground_space, thm:spin_exchange_swap}
+    \uses{def:majumdar_ghosh_hamiltonian,def:parent_hamiltonian,thm:majumdar_ghosh_term_projector,lem:transported_es_positive,thm:majumdar_ghosh_ground_space,thm:spin_exchange_swap}
     For $N\ge3$, the Hamiltonian~(\ref{eq:mg_hamiltonian}) satisfies
     \begin{align}
         H_{N}+\tfrac{3N}{8}=\tfrac34H_{N,\mathrm{MG}}^{(3)},
@@ -774,9 +757,7 @@ normality in the following two theorems.
     \label{thm:majumdar_ghosh_review_hamiltonian_odd}
     \lean{MPSTensor.majumdarGhoshHamiltonian_not_hasEigenvalue_of_odd}
     \leanok
-    \uses{thm:majumdar_ghosh_review_hamiltonian,
-        thm:majumdar_ghosh_ground_space_odd,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space}
+    \uses{thm:majumdar_ghosh_review_hamiltonian,thm:majumdar_ghosh_ground_space_odd,thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     For odd $N\ge5$, $-\tfrac{3N}{8}$ is not an eigenvalue of $H_{N}$, so every
     eigenvalue of $H_{N}$ is strictly larger than $-\tfrac{3N}{8}$.
 \end{lemma}

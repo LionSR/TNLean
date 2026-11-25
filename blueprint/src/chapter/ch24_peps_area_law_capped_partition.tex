@@ -30,8 +30,7 @@
     $C_{k,z}\subseteq C_{k+1,\lfloor z/2\rfloor}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:area_law_lattice_dyadic_square,thm:area_law_dyadic_refinement,
-        thm:area_law_dyadic_indices}
+    \uses{def:area_law_lattice_dyadic_square,thm:area_law_dyadic_refinement,thm:area_law_dyadic_indices}
     The floor description of membership in the real cell at origin zero
     identifies $C_{k,z}$ with its integer points. Refining a single index
     to unit scale gives $|C_{k,z}|=4^k$. Because integer ancestry agrees
@@ -133,8 +132,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:area_law_safe_rectangle,thm:area_law_lattice_dyadic_nesting,
-        thm:area_law_capped_mixed_parents,thm:area_law_quotient_interval_count}
+    \uses{def:area_law_safe_rectangle,thm:area_law_lattice_dyadic_nesting,thm:area_law_capped_mixed_parents,thm:area_law_quotient_interval_count}
     Setting $X=[\lfloor x_0/u\rfloor,\lfloor x_1/u\rfloor]\cap\mathbb Z$ and
     $Y=[\lfloor y_0/u\rfloor,\lfloor y_1/u\rfloor]\cap\mathbb Z$,
     an inside point places a mixed square's index in $X\times Y$, while
@@ -163,8 +161,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition,
-        thm:area_law_dyadic_refinement}
+    \uses{thm:area_law_lattice_dyadic_nesting,def:area_law_capped_dyadic_partition,thm:area_law_dyadic_refinement}
     A selected square is nonempty and contained in $S$, so its parent contains
     a site of $S$. For $k<K$, the selection condition implies that the parent
     also contains a site outside $S$. Every selected index at scale $k$

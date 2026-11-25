@@ -8,72 +8,43 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 
 \begin{definition}[Private product inputs and exact local operations]
     \label{def:peps_private_product_input}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.mem_owners_wholePartyLayout}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.nodup_owners_wholePartyLayout}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.ofAllParties}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.owners_wholePartyLayout}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.wholePartyLayout}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.eval_prepare}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.eval_prepare_smul}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.isAllowed_prepare}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.mapOwnerIso_vector}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.norm_vector}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.ofParties}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.partitionIso_symm_mapOwner_vector}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.partitionIso_symm_vector}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.partitionIso_vector}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.prepare}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.prepareIsometry}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.restrict}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.sources_prepare}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.vector}
+    \lean{QuantumCircuit.Party.Word.op_prepareProduct_mulVec}
+    \lean{QuantumCircuit.Party.Word.isAllowed_prepareProduct}
+    \lean{QuantumCircuit.productVector_cutEquiv_symm}
+    \lean{QuantumCircuit.Party.Word.prepareProduct}
+    \lean{QuantumCircuit.Party.Word.sources_prepareProduct}
     \leanok
-    \uses{def:peps_party_layout,def:peps_party_monomial}
+    \uses{def:peps_party_layout,def:peps_party_monomial,def:product_state_tensor,thm:peps_free_source_norm}
     For an ordered register list with spaces $H_1,\ldots,H_n$ (or one private memory per party) and unit vectors $x_j\in H_j$, set $x=x_1\otimes\cdots\otimes x_n$ ($1$ for $n=0$) and define the preparation isometry $\C\to\bigotimes_{j=1}^n H_j$, $z\mapsto zx$. Restricting to owners in $A$ splits $x$ into unit vectors $x_A\otimes x_{A^c}$, and owner relabelings preserve $x$ under the induced memory identification.
 \end{definition}
 
 \begin{definition}[Prepared sources and retained spectators]
     \label{def:peps_source_replacement_operations}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.isPreparation_prepStack}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.castLayouts}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_exchangeBlocks}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.eval_frameList_appendIso_symm}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_ofLocalWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exchangeBlocks}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.frameList}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.isAllowed_frameList}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_ofLocalWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.ofLocalWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.norm_vector}
-    \lean{TNLean.Lattice.PartyCircuit.Word.IsPreparation}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_isPreparation_cast}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_isPreparation_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_localPrepare}
-    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_localPrepare}
-    \lean{TNLean.Lattice.PartyCircuit.Word.localPrepare}
-    \lean{TNLean.Lattice.PartyCircuit.Word.output_of_isPreparation}
-    \lean{TNLean.Lattice.PartyCircuit.exists_prepared_effectReplacement}
-    \lean{TNLean.Lattice.PartyCircuit.isPreparation_prepGate}
-    \lean{TNLean.Lattice.PartyCircuit.isPreparation_prepWord}
+    \lean{QuantumCircuit.Party.EffectCircuit}
+    \lean{QuantumCircuit.Party.SourceCircuit.op_frame}
+    \lean{QuantumCircuit.Party.SourceCircuit.op_ofLocalWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.frame}
+    \lean{QuantumCircuit.Party.PartyCircuit.isAllowed_frame}
+    \lean{QuantumCircuit.Party.SourceCircuit.isAllowed_ofLocalWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.ofLocalWord}
+    \lean{QuantumCircuit.Party.SourceInventory.norm_vector}
+    \lean{QuantumCircuit.Party.WeightedGate.exists_prepared_effectReplacement}
     \leanok
-    \uses{def:peps_private_product_input,def:peps_party_monomial}
+    \uses{def:peps_private_product_input,def:peps_party_monomial,def:peps_internal_pair_preparation,thm:peps_append_spectators,thm:peps_internal_pair_preparation}
     A source-only operation is a composition of local contractions, register permutations, and normalized pair-source preparations $y\mapsto x\otimes y$ ($\|x\|=1$). For an operation $T$ and spectator memory $R$, retaining $R$ acts as $I_R\otimes T$, block exchange acts as $r\otimes s\otimes y\mapsto s\otimes r\otimes y$, and equal register lists are identified isometrically; none of these adds nonprivate gates.
 \end{definition}
 
 \begin{definition}[Original distributed circuits]
     \label{def:peps_original_circuit}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isAllowed_produce}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_produce_iff}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateLocations}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_produce}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.produce}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.produceLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateCount}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsExpansionBounded}
+    \lean{QuantumCircuit.Party.OriginalCircuit.isAllowed_toEffectCircuit}
+    \lean{QuantumCircuit.Party.OriginalCircuit.isExpansionBounded_toEffectCircuit_iff}
+    \lean{QuantumCircuit.Party.OriginalCircuit.nonprivateLocations}
+    \lean{QuantumCircuit.Party.OriginalCircuit.participants_toEffectCircuitLocationsEquiv}
+    \lean{QuantumCircuit.Party.OriginalCircuit.toEffectCircuit}
+    \lean{QuantumCircuit.Party.OriginalCircuit.toEffectCircuitLocationsEquiv}
+    \lean{QuantumCircuit.Party.OriginalCircuit}
+    \lean{QuantumCircuit.Party.OriginalCircuit.nonprivateCount}
+    \lean{QuantumCircuit.Party.OriginalCircuit.IsExpansionBounded}
     \leanok
     \uses{def:peps_party_layout,def:peps_party_monomial}
     An original circuit is an ordered composition of private single-party contractions and $N$ nonprivate contractions $G_j=\sum_\xi c_{j,\xi}M_{j,\xi}$, where each $M_{j,\xi}$ is an allowed monomial on a specified participating party set (with outside registers as spectators) containing at most $r$ pair effects, and $\sum_\xi|c_{j,\xi}|\le S$.
@@ -81,12 +52,13 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 
 \begin{lemma}[Common auxiliary vector and operator error]
     \label{thm:peps_circuit_effect_error}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.referenceEval_apply}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_auxiliaryVector}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_replacement_sub_reference_le}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isAllowed_replacement}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.eval_produce}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.expandedGateCount_produce}
+    \lean{QuantumCircuit.Party.EffectCircuit.referenceOp_gate,
+        QuantumCircuit.Party.EffectCircuit.referenceOp_comp}
+    \lean{QuantumCircuit.Party.EffectCircuit.norm_auxiliaryVector}
+    \lean{QuantumCircuit.Party.EffectCircuit.norm_replacement_sub_reference_le}
+    \lean{QuantumCircuit.Party.EffectCircuit.isAllowed_replacement}
+    \lean{QuantumCircuit.Party.OriginalCircuit.op_toEffectCircuit}
+    \lean{QuantumCircuit.Party.OriginalCircuit.numGates_toEffectCircuit}
     \leanok
     \uses{def:peps_original_circuit,cor:peps_pair_effects_rescaling}
     Let $T$ be the operator of an original circuit and $\delta>0$. With $m=\lceil(rS/\delta)^2\rceil+1$, replacing each nonprivate gate by its rescaled source-only expansion yields a contraction $\widetilde T$ and a unit auxiliary vector $\Gamma$ (on spectator auxiliary registers) such that
@@ -97,73 +69,44 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 \end{lemma}
 
 \begin{proof}\leanok
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsExpansionBounded}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.auxiliary}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.auxiliaryVector}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.expandedGateCount}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.replacement}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_frameList}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_exchangeBlocks}
-    \lean{TNLean.Lattice.PartyCircuit.appendIso_assoc_symm_heq}
-    \lean{TNLean.Lattice.PartyCircuit.castOutputMap}
-    \lean{TNLean.Lattice.PartyCircuit.castOutputMap_sub}
-    \lean{TNLean.Lattice.PartyCircuit.exists_prepared_effectReplacement_native}
-    \lean{TNLean.Lattice.PartyCircuit.exists_prepared_effectReplacement_uniform}
-    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap}
-    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap_sub}
-    \lean{TNLean.Lattice.PartyCircuit.gate_auxiliary_layout}
-    \lean{TNLean.Lattice.PartyCircuit.norm_castOutputMap}
-    \lean{TNLean.Lattice.PartyCircuit.norm_gateMemoryMap_le}
-    \lean{TNLean.Lattice.PartyCircuit.norm_retainMap_le}
-    \lean{TNLean.Lattice.PartyCircuit.replacementCoefficients}
-    \lean{TNLean.Lattice.PartyCircuit.retainMap}
-    \lean{TNLean.Lattice.PartyCircuit.retainMap_sub}
-    \lean{TNLean.Lattice.PartyCircuit.retainMap_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_referenceEval_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.referenceEval}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exchangeHead_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.norm_eval_castLayouts_sub}
-    \lean{TNLean.Lattice.PartyCircuit.appendIso_singleton_symm_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap_auxiliary_identity}
-    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap_auxiliary_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.gateMemoryMap_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.preparation_mapOwner_heq}
-    \uses{cor:peps_pair_effects_rescaling}
+    \lean{QuantumCircuit.Party.EffectCircuit.IsExpansionBounded}
+    \lean{QuantumCircuit.Party.EffectCircuit.auxiliary}
+    \lean{QuantumCircuit.Party.EffectCircuit.auxiliaryVector}
+    \lean{QuantumCircuit.Party.PartyCircuit.numGates}
+    \lean{QuantumCircuit.Party.EffectCircuit.replacement}
+    \lean{QuantumCircuit.Party.WeightedGate.exists_prepared_effectReplacement_native}
+    \lean{QuantumCircuit.Party.WeightedGate.exists_prepared_effectReplacement_uniform}
+    \lean{QuantumCircuit.Party.WeightedGate.replacementCoefficients}
+    \lean{QuantumCircuit.Party.EffectCircuit.norm_referenceOp_le_one}
+    \lean{QuantumCircuit.Party.EffectCircuit.referenceOp}
+    \uses{cor:peps_pair_effects_rescaling,def:peps_source_replacement_operations}
     By Lemma~\ref{cor:peps_pair_effects_rescaling}, each nonprivate gate $G_j$ has a source-only contraction $\widetilde G_j$ and unit auxiliary vector $\Gamma_j$ with $\|\widetilde G_j-|\Gamma_j\rangle\otimes G_j\|\le 2\delta$. Setting $\Gamma=\bigotimes_{j=1}^N\Gamma_j$ and inducting over the circuit composition via $\|B_2B_1-A_2A_1\|\le\|B_2-A_2\|+\|B_1-A_1\|$ for contractions (while private gates and permutations contribute $0$) yields (\ref{eq:peps_circuit_effect_error}).
 \end{proof}
 
 \begin{lemma}[Preservation of participating parties]
     \label{thm:peps_replacement_participants}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.replacementLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_replacementLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_participants_ne_one}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_participants_ne_one}
     \leanok
-    \uses{def:peps_original_circuit}
+    \uses{def:peps_original_circuit,def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
     The nonprivate gates of the original circuit correspond bijectively to the expanded gates of the replacement circuit, preserving each gate's participating party set.
 \end{lemma}
 
 \begin{proof}\leanok
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_replacementLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participants_replacementLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.replacementLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.castLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exchangeBlocksLocationsEquivEmpty}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.false_of_gateLocation_ofLocalWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.frameListLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.ofLocalWordLocationsEquivEmpty}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participants_castLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participants_frameListLocationsEquiv}
+    \lean{QuantumCircuit.Party.EffectCircuit.participants_replacementLocationsEquiv}
+    \lean{QuantumCircuit.Party.EffectCircuit.replacementLocationsEquiv}
+    \lean{QuantumCircuit.Party.SourceCircuit.numGates_ofLocalWord}
+    \lean{QuantumCircuit.Party.PartyCircuit.frameLocationsEquiv}
+    \lean{QuantumCircuit.Party.PartyCircuit.participants_frameLocationsEquiv}
     By structural induction on the circuit, each nonprivate gate maps to a single replacement gate with identical participating parties, while private gates, auxiliary preparations, permutations, and spectator framings add no expanded gates.
 \end{proof}
 
 \begin{lemma}[Physical density error]
     \label{thm:peps_source_only_density_error}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half}
-    \lean{TNLean.Lattice.PartyCircuit.sourceGateBudget_eq_of_pos}
+    \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half}
+    \lean{QuantumCircuit.Party.sourceGateBudget_eq_of_pos}
     \leanok
-    \uses{thm:peps_circuit_effect_error}
+    \uses{thm:peps_circuit_effect_error,thm:peps_physical_first_exact_sources}
     Decompose the original output memory into physical and discarded registers. For $\|x\|\le1$, let $\rho=\operatorname{Tr}_{\rm disc}(|Tx\rangle\langle Tx|)$ and let $\widetilde\rho=\operatorname{Tr}_{{\rm disc},\,{\rm aux}}(|\widetilde Tx\rangle\langle\widetilde Tx|)$. Then
     \begin{align}
         \|\widetilde\rho-\rho\|_1\le4\delta N.
@@ -177,27 +120,15 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \lean{Matrix.norm_appendAuxiliaryVector}
     \lean{Matrix.partialTraceRight_appendAuxiliaryVector}
     \lean{Matrix.rectangularTraceNorm_appendAuxiliaryVector_error_le_two}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.finiteDimensional_auxiliary}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.originalPhysicalDensity}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.rectangularTraceNorm_replacement_density_sub_le}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.replacementPhysicalDensity}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.finiteDimensional_sources_prepStack}
-    \lean{TNLean.Lattice.PartyCircuit.auxiliaryCoordinateIso}
-    \lean{TNLean.Lattice.PartyCircuit.auxiliaryCoordinateIso_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.auxiliaryCoordinates}
-    \lean{TNLean.Lattice.PartyCircuit.extendedPhysicalReadout}
-    \lean{TNLean.Lattice.PartyCircuit.extendedPhysicalReadout_append_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_mem_append}
-    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_sources_comp}
-    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_sources_prepGate}
-    \lean{TNLean.Lattice.PartyCircuit.finiteDimensional_sources_prepWord}
-    \lean{TNLean.Lattice.PartyCircuit.norm_extendedPhysicalReadout_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.rectangularTraceNorm_extendedPhysicalReadout_error_le}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half}
-    \lean{TNLean.Lattice.PartyCircuit.sourceGateBudget}
-    \lean{TNLean.Lattice.PartyCircuit.sourceGateBudget_pos}
-    \lean{TNLean.Lattice.PartyCircuit.sourceGateBudget_spec}
-    \uses{thm:peps_circuit_effect_error}
+    \lean{QuantumCircuit.Party.EffectCircuit.originalPhysicalDensity}
+    \lean{QuantumCircuit.Party.EffectCircuit.rectangularTraceNorm_replacement_density_sub_le}
+    \lean{QuantumCircuit.Party.toEuclideanLin_extendedReadout_prepMatrix}
+    \lean{QuantumCircuit.Party.norm_extendedReadout_le_one}
+    \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half}
+    \lean{QuantumCircuit.Party.sourceGateBudget}
+    \lean{QuantumCircuit.Party.sourceGateBudget_pos}
+    \lean{QuantumCircuit.Party.sourceGateBudget_spec}
+    \uses{thm:peps_circuit_effect_error,def:peps_physical_first_replacement}
     Set $u=\widetilde T x$ and $v=\Gamma\otimes Tx$, so $\|u\|,\|v\|\le1$ and $\|u-v\|\le2\delta N$ by (\ref{eq:peps_circuit_effect_error}). Since $\operatorname{Tr}_E(|v\rangle\langle v|)=\|\Gamma\|^2\rho=\rho$ under the partial trace $\operatorname{Tr}_E$ over discarded and auxiliary registers,
     \begin{align}
         \|\widetilde\rho-\rho\|_1
@@ -210,13 +141,9 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 
 \begin{lemma}[Regional dimensions without padding]
     \label{thm:peps_family_regional_dimensions}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}
+    \lean{QuantumCircuit.Party.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
     \leanok
-    \uses{def:peps_family_physical_output,
-        thm:peps_source_only_density_error,
-        thm:peps_basis_physical_list_restriction,
-        thm:peps_basis_physical_dimensions,
-        thm:peps_basis_regional_readouts}
+    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error,thm:peps_basis_physical_dimensions,thm:peps_basis_regional_readouts}
     If $d_p\le D$ for all $p\in A$, the physical memory $\mathcal H_A$ of $A$ satisfies
     \begin{align}
         \dim\mathcal H_A=\prod_{p\in A}d_p\le D^{|A|},
@@ -226,42 +153,24 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_source_only_density_error,
-        def:peps_basis_physical_readouts,
-        def:peps_basis_region_coordinates,
-        thm:peps_basis_physical_dimensions,
-        thm:peps_basis_physical_list_restriction,
-        def:peps_family_physical_output,
-        thm:peps_basis_regional_readouts}
+    \uses{thm:peps_source_only_density_error,def:peps_basis_physical_readouts,def:peps_basis_region_coordinates,thm:peps_basis_physical_dimensions,def:peps_family_physical_output,thm:peps_basis_regional_readouts}
     Lemma~\ref{thm:peps_basis_physical_dimensions} gives (\ref{eq:peps_family_regional_dimension}), and applying Lemma~\ref{thm:peps_source_only_density_error} to the regional readout decomposing the physical registers into $A$ and $A^c$ (Lemma~\ref{thm:peps_basis_regional_readouts}) yields $\|\widetilde\rho_A-\rho_A\|_1\le\varepsilon/2$.
 \end{proof}
 
-\begin{lemma}[Constant-dimensional regional density estimate]
-    \label{thm:peps_constant_family_regional_density}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
-    \leanok
-    \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
-    If $d_p=d$ for all $p$, the discarded private memory is finite-dimensional, $N\le M$, and $\delta=\varepsilon/(8\max\{1,M\})$, then the regional reduced densities on $A$ for a whole-party unit product input satisfy $\|\widetilde\rho_A-\rho_A\|_1\le\varepsilon/2$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:peps_source_only_density_error,def:peps_family_physical_output}
-    Specialize Lemma~\ref{thm:peps_source_only_density_error} to $d_p=d$ and the regional readout on $A$ (Definition~\ref{def:peps_family_physical_output}).
-\end{proof}
 
 \begin{lemma}[Resources of the constructed source-only circuit]
     \label{thm:peps_source_only_resources}
-    \lean{TNLean.Lattice.PartyCircuit.sum_norm_replacementCoefficients_le}
-    \lean{TNLean.Lattice.PartyCircuit.card_replacementLabels_le}
-    \lean{TNLean.Lattice.PartyCircuit.stackLength_le}
-    \lean{TNLean.Lattice.PartyCircuit.card_replacementLabels_stackLength_le}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_replacement}
-    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.length_sources_branchWord_eq_choose}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotCount_eq_choose}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_sourceLocations_replacement_le}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_replacement}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount_replacement_le}
+    \lean{QuantumCircuit.Party.WeightedGate.sum_norm_replacementCoefficients_le}
+    \lean{QuantumCircuit.Party.WeightedGate.card_replacementLabels_le}
+    \lean{QuantumCircuit.Party.WeightedGate.stackLength_le}
+    \lean{QuantumCircuit.Party.WeightedGate.card_replacementLabels_stackLength_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.isExpansionBounded_replacement}
+    \lean{QuantumCircuit.Party.PreparedSourceGate.length_sources_branchWord_eq_choose}
+    \lean{QuantumCircuit.Party.SourceCircuit.slotCount_eq_choose}
+    \lean{QuantumCircuit.Party.OriginalCircuit.participationCount_replacement}
+    \lean{QuantumCircuit.Party.OriginalCircuit.participationCount_replacement_le}
     \leanok
-    \uses{thm:peps_circuit_effect_error,thm:peps_replacement_participants}
+    \uses{thm:peps_circuit_effect_error,thm:peps_replacement_participants,thm:peps_physical_first_source_count}
     Suppose each original nonprivate gate has at most $K$ monomials, absolute coefficient sum at most $S$, at most $r$ pair effects per monomial, and at most $b$ participating parties, and each party participates in at most $b$ nonprivate gates. With $m=\lceil(rS/\delta)^2\rceil+1$, each replacement gate has absolute coefficient sum at most $S$ and at most $Km^r$ monomials, where
     \begin{align}
         m    & \le(rS/\delta)^2+2,                 \\
@@ -272,29 +181,25 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 \end{lemma}
 
 \begin{proof}\leanok
-    \lean{TNLean.Lattice.PartyCircuit.exists_prepared_effectReplacement_uniform_resources}
-    \lean{TNLean.Lattice.PartyCircuit.length_wordList_le}
-    \lean{TNLean.Lattice.PartyCircuit.sum_norm_coeff_wordList}
-    \lean{TNLean.Lattice.PartyCircuit.sum_norm_replacementCoefficients}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsMonomialBounded}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsExpansionBounded}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_castLayouts}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_exchangeBlocks}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_frameList}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_ofLocalWord}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_nonprivateLocations}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.natCard_nonprivateLocations}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participationCount}
-    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.length_slots}
-    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.length_sources_branchWord}
-    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.length_sources_branchWord_le_choose}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceLocations_eq_sum_choose}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceLocations_le}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.IsExpansionBounded.at_gate}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participationCount_eq_card_incidentGates}
-    \uses{cor:peps_pair_effects_rescaling,thm:peps_replacement_participants}
+    \lean{QuantumCircuit.Party.WeightedGate.exists_prepared_effectReplacement_uniform_resources}
+    \lean{QuantumCircuit.Party.WeightedGate.length_wordList_le}
+    \lean{QuantumCircuit.Party.WeightedGate.sum_norm_coeff_wordList}
+    \lean{QuantumCircuit.Party.WeightedGate.sum_norm_replacementCoefficients}
+    \lean{QuantumCircuit.Party.OriginalCircuit.IsMonomialBounded}
+    \lean{QuantumCircuit.Party.SourceCircuit.IsExpansionBounded}
+    \lean{QuantumCircuit.Party.SourceCircuit.isExpansionBounded_frame}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_nonprivateLocations}
+    \lean{QuantumCircuit.Party.OriginalCircuit.natCard_nonprivateLocations}
+    \lean{QuantumCircuit.Party.OriginalCircuit.participation}
+    \lean{QuantumCircuit.Party.OriginalCircuit.participationLocationsEquiv}
+    \lean{QuantumCircuit.Party.PartyCircuit.participationCount}
+    \lean{QuantumCircuit.Party.PreparedSourceGate.length_sources_branchWord}
+    \lean{QuantumCircuit.Party.PreparedSourceGate.length_sources_branchWord_le_choose}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_sourceLocations_eq_sum_choose}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_sourceLocations_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.IsExpansionBounded.at_gate}
+    \lean{QuantumCircuit.Party.SourceCircuit.participationCount_eq_card_incidentGates}
+    \uses{cor:peps_pair_effects_rescaling,thm:peps_replacement_participants,thm:peps_source_pair_count}
     By Lemma~\ref{cor:peps_pair_effects_rescaling}, cyclic insertion averaging and rescaling by $(1+\delta)^{-1}<1$ keep the coefficient $\ell_1$-norm at most $S$ and expand each of the $K$ monomials into $m^r$ terms, where $\lceil x\rceil+1\le x+2$ gives (\ref{eq:peps_replacement_resource_bound}). Summing $\binom q2\le\binom b2$ over the $N$ gates bounds the total source slots by $N\binom b2$, and Lemma~\ref{thm:peps_replacement_participants} preserves each party's gate participation count.
 \end{proof}
 

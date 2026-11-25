@@ -43,7 +43,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 section
 
-open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
 
@@ -158,7 +157,6 @@ section
 
 open scoped Matrix.Norms.L2Operator
 
-open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace SquareInteraction)
 

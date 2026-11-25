@@ -298,7 +298,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \label{lem:trace_transfer_map_left_canonical}
     \lean{Kraus.isTracePreservingMap_mapLM_of_isTP}
     \leanok
-    \uses{def:transfer_map, def:left_canonical_tensor}
+    \uses{def:transfer_map,def:left_canonical_tensor}
     If $A$ is left canonical, then, for every bond matrix $X$,
     \begin{align}
         \tr(\E_A(X)) & =\tr(X).
@@ -464,7 +464,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \label{def:mps_rectangular_reduction}
     \lean{MPSTensor.IsReduction}
     \leanok
-    \uses{def:mps_tensor, def:eval_word}
+    \uses{def:mps_tensor,def:eval_word}
     Following \cite[Proposition~20 and the following definition]{Molnar2018SemiInjective},
     let $A$ and $B$ have the same physical alphabet and respective bond
     dimensions $D_A$ and $D_B$. A reduction from $B$ to $A$ is a pair
@@ -540,7 +540,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
         MPSTensor.NonzeroProportionalMPV₂.symm,
         MPSTensor.SameMPV₂Pos.toNonzeroProportionalMPV₂}
     \leanok
-    \uses{def:nonzero_proportional_mpv, def:eventually_nonzero_proportional_mpv, def:same_mpv2_pos}
+    \uses{def:nonzero_proportional_mpv,def:eventually_nonzero_proportional_mpv,def:same_mpv2_pos}
     Nonzero proportionality implies eventual nonzero
     proportionality, is symmetric, and equality of MPV families is the special
     case with scalar $1$, at every positive length.
@@ -598,7 +598,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \begin{lemma}[Scaling of MPV components]\label{lem:mpv_smul}
     \lean{MPSTensor.mpv_smul}
     \leanok
-    \uses{def:mpv, lem:eval_word_smul}
+    \uses{def:mpv,lem:eval_word_smul}
     Let $\zeta A$ denote the tensor with matrices
     $\{\zeta A^i\}_{i=0}^{d-1}$. Then, for every $N$ and every configuration
     $\sigma = (i_1, \ldots, i_N)$,
@@ -644,7 +644,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \label{lem:unit_gauge_phase_to_gauge_phase}
     \lean{MPSTensor.UnitGaugePhaseEquiv.toGaugePhaseEquiv}
     \leanok
-    \uses{def:unit_gauge_phase_equiv, def:gauge_phase_equiv}
+    \uses{def:unit_gauge_phase_equiv,def:gauge_phase_equiv}
     Unit gauge-phase equivalence implies gauge-phase equivalence.
 \end{lemma}
 
@@ -703,7 +703,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \begin{theorem}[Gauge invariance of MPVs]\label{thm:gauge_invariance}
     \lean{MPSTensor.GaugeEquiv.sameMPV}
     \leanok
-    \uses{def:gauge_equiv, def:same_mpv}
+    \uses{def:gauge_equiv,def:same_mpv}
     If $A$ and $B$ are gauge equivalent, then they generate the same
     MPV family.
 \end{theorem}
@@ -720,13 +720,13 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \begin{lemma}[Gauge-phase scaling of MPVs]\label{thm:gauge_phase_mpv_scaling}
     \lean{MPSTensor.mpv_eq_pow_mul_of_gaugePhase}
     \leanok
-    \uses{def:gauge_phase_equiv, def:mpv}
+    \uses{def:gauge_phase_equiv,def:mpv}
     If $B^i = \zeta X A^i X^{-1}$ for every physical index~$i$, then for
     every system size~$N$ and configuration~$\sigma$ one has
     $V^{(N)}(B)_\sigma = \zeta^N V^{(N)}(A)_\sigma$.
 \end{lemma}
 
-\begin{proof}\leanok\uses{lem:eval_word_smul, lem:eval_word_gauge}
+\begin{proof}\leanok\uses{lem:eval_word_smul,lem:eval_word_gauge}
     Combining gauge covariance of word evaluation with scalar scaling and
     taking traces gives the relation.
 \end{proof}
@@ -746,7 +746,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 \begin{lemma}[Injectivity implies irreducibility]\label{thm:injective_irreducible}
     \lean{Kraus.injective_implies_irreducibleCP}
     \leanok
-    \uses{def:injective, def:transfer_map}
+    \uses{def:injective,def:transfer_map}
     If $A$ is an injective MPS tensor, then its transfer map $\E_A$
     is irreducible.
 \end{lemma}
@@ -793,7 +793,7 @@ $A^{-1}A=\Id$.
     \label{lem:one_block_injective_of_injective}
     \lean{Kraus.isNBlkInjective_one_of_isInjective}
     \leanok
-    \uses{def:injective, def:l_blk_injective}
+    \uses{def:injective,def:l_blk_injective}
     If the one-site matrices $\{A^i\}_{i=0}^{d-1}$ span $\MN{D}$, then the
     length-one word products span $\MN{D}$, so $A$ is $1$-block injective.
 \end{lemma}
@@ -819,7 +819,7 @@ $A^{-1}A=\Id$.
     \label{lem:gauge_invariance_block_injective}
     \lean{MPSTensor.isNBlkInjective_of_gaugeEquiv}
     \leanok
-    \uses{def:gauge_equiv, def:l_blk_injective}
+    \uses{def:gauge_equiv,def:l_blk_injective}
     If $A$ and $B$ are gauge equivalent and $A$ is $L$-block injective, then
     $B$ is $L$-block injective.
 \end{lemma}
@@ -836,7 +836,7 @@ $A^{-1}A=\Id$.
     \label{thm:gauge_invariance_normal}
     \lean{MPSTensor.isNormal_of_gaugeEquiv}
     \leanok
-    \uses{def:gauge_equiv, def:normal}
+    \uses{def:gauge_equiv,def:normal}
     If $A$ and $B$ are gauge equivalent and $A$ is normal, then $B$ is normal.
 \end{lemma}
 
@@ -847,7 +847,7 @@ $A^{-1}A=\Id$.
 \end{proof}
 
 \begin{remark}\leanok
-    \uses{lem:primitive_implies_irreducible, thm:burnside_matrix, thm:normal_from_primitive_posdef, thm:algspan_to_normal, thm:blocking_primitivity}
+    \uses{lem:primitive_implies_irreducible,thm:burnside_matrix,thm:normal_from_primitive_posdef,thm:algspan_to_normal,thm:blocking_primitivity}
     The algebraic characterization of normality in
     Definition~\ref{def:normal} (eventual block injectivity) is equivalent to
     the spectral characterization of \cite[Definition~IV.1]{Cirac2021Matrix}
@@ -864,7 +864,7 @@ $A^{-1}A=\Id$.
 \begin{definition}[Block-injective canonical form]\label{def:canonical_form}
     \lean{MPSTensor.CanonicalForm}
     \leanok
-    \uses{def:mps_tensor, def:injective}
+    \uses{def:mps_tensor,def:injective}
     Here, a \emph{block-injective canonical form} for a
     tensor consists of:
     \begin{enumerate}
@@ -927,7 +927,7 @@ $A^{-1}A=\Id$.
     \label{lem:block_diagonal_of_commutes_block_projection}
     \lean{Matrix.isBlockDiagonal'_of_commutes_blockProjection}
     \leanok
-    \uses{def:block_projection, def:block_diagonal_matrix, lem:block_diagonal_iff_off_block_zero}
+    \uses{def:block_projection,def:block_diagonal_matrix,lem:block_diagonal_iff_off_block_zero}
     If a matrix on $\bigoplus_k \C^{D_k}$ commutes with every block projection
     $P_j$, then it is block diagonal.
 \end{lemma}
@@ -960,7 +960,7 @@ $A^{-1}A=\Id$.
     \label{lem:eval_word_block_diagonal_tensor}
     \lean{MPSTensor.evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal}
     \leanok
-    \uses{def:block_diagonal_tensor, def:eval_word}
+    \uses{def:block_diagonal_tensor,def:eval_word}
     For a word $w$, the word evaluation of a block-diagonal tensor remains
     block diagonal:
     \begin{align}
@@ -979,7 +979,7 @@ $A^{-1}A=\Id$.
 \begin{theorem}[MPV decomposition]\label{thm:mpv_decomposition}
     \lean{MPSTensor.mpv_toTensorFromBlocks_eq_sum}
     \leanok
-    \uses{def:block_diagonal_tensor, def:mpv, lem:eval_word_block_diagonal_tensor}
+    \uses{def:block_diagonal_tensor,def:mpv,lem:eval_word_block_diagonal_tensor}
     The MPV of a block-diagonal tensor decomposes as
     \begin{align}
         \ket{V^{(N)}(A)}
@@ -995,7 +995,7 @@ $A^{-1}A=\Id$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:block_diagonal_tensor, def:mpv, lem:eval_word_block_diagonal_tensor}
+    \uses{def:block_diagonal_tensor,def:mpv,lem:eval_word_block_diagonal_tensor}
     By Lemma~\ref{lem:eval_word_block_diagonal_tensor}, the full word evaluation
     is block diagonal with blocks $\mu_k^N A_k^w$ for a word $w$ of length $N$.
     Taking the trace of a block-diagonal matrix gives the sum of the block
@@ -1047,7 +1047,7 @@ $A^{-1}A=\Id$.
     \lean{MPSTensor.blockedConfigEquiv}
     \lean{MPSTensor.ofFn_blockedConfigEquiv}
     \leanok
-    \uses{def:blocked_tensor, def:eval_word}
+    \uses{def:blocked_tensor,def:eval_word}
     If $w = (J_1, \ldots, J_m)$ is a word in the blocked alphabet,
     where each $J_k$ is an $L$-tuple in $\{0, \ldots, d{-}1\}^L$,
     then concatenating the block words gives a word $\widetilde{w}$
@@ -1065,7 +1065,7 @@ $A^{-1}A=\Id$.
 \begin{lemma}[Blocking preserves MPV coefficients]\label{lem:mpv_block}
     \lean{MPSTensor.mpv_blockTensor_eq_mpv_blockedFlatConfig}
     \leanok
-    \uses{def:blocked_tensor, def:mpv}
+    \uses{def:blocked_tensor,def:mpv}
     For each basis state $\sigma = (\sigma_1, \ldots, \sigma_N)$ of
     the blocked system, where each $\sigma_k$ is an $L$-tuple in
     $\{0, \ldots, d{-}1\}^L$, there exists a basis state
@@ -1077,7 +1077,7 @@ $A^{-1}A=\Id$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:blocked_tensor, def:mpv, lem:eval_word_block}
+    \uses{def:blocked_tensor,def:mpv,lem:eval_word_block}
     Concatenating the block words and applying the blocked word evaluation
     lemma (Lemma~\ref{lem:eval_word_block}) gives the equality.
 \end{proof}
@@ -1085,7 +1085,7 @@ $A^{-1}A=\Id$.
 \begin{lemma}[Blocking preserves same MPV]\label{thm:blocking_same_mpv}
     \lean{MPSTensor.SameMPV.blockTensor}
     \leanok
-    \uses{def:same_mpv, def:blocked_tensor}
+    \uses{def:same_mpv,def:blocked_tensor}
     If $A$ and $B$ generate the same MPV family, then for any
     blocking length~$L$, the blocked tensors $A^{[L]}$ and $B^{[L]}$
     also generate the same MPV family.
@@ -1180,13 +1180,13 @@ $A^{-1}A=\Id$.
 \begin{lemma}[Overlap equals conjugate inner product]\label{lem:overlap_eq_inner}
     \lean{MPSTensor.mpvOverlap_eq_star_mpvInner}
     \leanok
-    \uses{def:mpv_overlap, def:mpv_inner}
+    \uses{def:mpv_overlap,def:mpv_inner}
     $O_{AB}(N)
         = \overline{\braket{V^{(N)}(A)}{V^{(N)}(B)}}$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpv_overlap, def:mpv_inner}
+    \uses{def:mpv_overlap,def:mpv_inner}
     The overlap sums $V_\sigma \overline{W_\sigma}$
     while the inner product sums $\overline{V_\sigma} W_\sigma$.
     Complex conjugation swaps these.

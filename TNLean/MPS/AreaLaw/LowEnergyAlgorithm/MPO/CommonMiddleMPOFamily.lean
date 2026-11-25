@@ -43,9 +43,8 @@ Proposition 5.7, lines 1311–1333.
 
 open ManyBody (disjoint_interval_interval interval interval_mono mem_interval)
 
-open Matrix QuantumCircuit
+open Matrix
 open scoped BigOperators Kronecker Matrix
-open TNLean.Lattice.Sheet
 
 noncomputable section
 
@@ -388,7 +387,7 @@ private theorem exists_common_fixed_middle_twoMarkerCoefficient_mpo_family
   obtain ⟨B_out, hB_out⟩ := hdecomp PL PR hPL hPR cPoly
   let X := ∑ r : Fin (k + 1),
     cPoly r • twoMarkerCoefficient Dphys (WL p) (WR s) r.val i j
-  obtain ⟨M, hM⟩ := exists_regional_exterior_of_natural_threeSplit_decomposition
+  obtain ⟨M, hM⟩ := exists_regional_exterior_of_natural_threeCut_decomposition
     T E hTE eE.toEquiv X V B_out hB_out
   obtain ⟨Mnew, hnew⟩ := hglobal M
   exact ⟨Mnew, hM.trans hnew⟩

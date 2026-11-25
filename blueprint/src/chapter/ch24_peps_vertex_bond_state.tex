@@ -11,8 +11,7 @@ include isolated vertices and zero-dimensional bonds.
     \label{def:peps_product_site_map_bonds}
     \lean{TNLean.PEPS.fullRegionVertexTensorMapEdgePairs}
     \leanok
-    \uses{thm:peps_vertex_bond_coordinates,
-        def:peps_injective_vertex_coordinates}
+    \uses{thm:peps_vertex_bond_coordinates,def:peps_injective_vertex_coordinates}
     Let $F$ be the product of all site tensor maps, expressed on its
     domain in the independent endpoint-pair coordinates of the edges.
     Its codomain is the physical coefficient space on the full vertex
@@ -24,10 +23,7 @@ include isolated vertices and zero-dimensional bonds.
     \lean{TNLean.PEPS.fullRegionVertexTensorMapEdgePairs_virtualBondProduct,
         TNLean.PEPS.map_virtualBondGroundSpace_fullRegionVertexTensorMapEdgePairs}
     \leanok
-    \uses{def:peps_product_site_map_bonds,
-        thm:peps_full_virtual_bond_product,
-        thm:peps_virtual_bond_ground_space,
-        thm:peps_full_region_range}
+    \uses{def:peps_product_site_map_bonds,thm:peps_full_virtual_bond_product,thm:peps_virtual_bond_ground_space,thm:peps_full_region_range}
     Write $\psi$ for the closed PEPS vector and $\Omega$ for
     the product of virtual Bell vectors. Then, in full-region physical
     coordinates,
@@ -54,9 +50,7 @@ include isolated vertices and zero-dimensional bonds.
         TNLean.PEPS.comap_regionGroundSpace_fullRegionVertexTensorMapEdgePairs,
         TNLean.PEPS.stateCoeff_ne_zero_iff_bondDim_pos_of_isVertexInjective}
     \leanok
-    \uses{thm:peps_bell_product_physical_image,
-        thm:peps_injective_vertex_reconstruction,
-        thm:peps_virtual_bond_ground_space}
+    \uses{thm:peps_bell_product_physical_image,thm:peps_injective_vertex_reconstruction,thm:peps_virtual_bond_ground_space}
     If every ordinary site tensor map is injective, then $F$ is
     injective and
     \[

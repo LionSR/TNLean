@@ -77,8 +77,7 @@ allows vertex-dependent physical tensors.
         TNLean.PEPS.localTensorMap_torusNativeIncidentSite,
         TNLean.PEPS.IsGInjective.isGInjective_torusNativeIncidentTensor}
     \leanok
-    \uses{def:peps_native_incident_coordinates,
-        def:peps_oriented_incident_representation,def:peps_g_injective}
+    \uses{def:peps_native_incident_coordinates,def:peps_oriented_incident_representation,def:peps_g_injective}
     Define the native four-leg representation by
     \begin{align}
         \rho_\square(g)=U_g\otimes U_{g^{-1}}^T
@@ -251,11 +250,7 @@ allows vertex-dependent physical tensors.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_torus_commuting_closure_seams,
-        thm:peps_native_plaquette_seam_exclusion,
-        thm:peps_native_inserted_network,
-        thm:peps_native_inserted_region_support,
-        thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_torus_commuting_closure_seams,thm:peps_native_plaquette_seam_exclusion,thm:peps_native_inserted_network,thm:peps_native_inserted_region_support,thm:peps_region_parent_common_kernel}
     By Lemma~\ref{thm:peps_torus_commuting_closure_seams}, $\mathcal A\rho_\square(k)=\mathcal A$
     and $gh=hg$ shift the closure seams to $(x+2,y+2)$, where
     Lemma~\ref{thm:peps_native_plaquette_seam_exclusion} gives $K_e=1$ on
@@ -301,8 +296,7 @@ allows vertex-dependent physical tensors.
     \lean{TNLean.PEPS.IsGInjective.finrank_torusParentGroundSpace_of_isSemiRegular,
         TNLean.PEPS.IsGInjective.finrank_torusParentKernel_of_isSemiRegular}
     \leanok
-    \uses{def:peps_semiregular,def:peps_g_injective,
-        def:peps_native_incident_coordinates,def:peps_region_parent_interaction}
+    \uses{def:peps_semiregular,def:peps_g_injective,def:peps_native_incident_coordinates,def:peps_region_parent_interaction}
     Let $G$ be finite, $U$ a unitary semi-regular representation on finite $X$,
     and $a$ a $G$-injective native tensor for $\rho_\square$ repeated on a torus
     with $m,n\ge3$. If $P_v\ge0$ has $\ker P_v=\operatorname{im}\mathcal C_{R_v}$,
@@ -314,13 +308,7 @@ allows vertex-dependent physical tensors.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_native_oriented_g_injectivity,
-        thm:peps_native_torus_incidence,
-        thm:peps_oriented_semiregular_physical_parent,
-        thm:peps_native_averaging_site,
-        thm:peps_oriented_physical_canonical_parent,
-        thm:peps_regular_torus_parent_ground_space,
-        thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_native_oriented_g_injectivity,thm:peps_native_torus_incidence,thm:peps_oriented_semiregular_physical_parent,thm:peps_native_averaging_site,thm:peps_oriented_physical_canonical_parent,thm:peps_regular_torus_parent_ground_space,thm:peps_region_parent_common_kernel}
     Let $b$ be the regular-representation native $G$-injective site from
     Lemma~\ref{thm:peps_native_averaging_site}. Combining
     Lemmas~\ref{thm:peps_native_oriented_g_injectivity},
@@ -342,8 +330,7 @@ allows vertex-dependent physical tensors.
     \lean{TNLean.PEPS.IsGInjective.torusParentKernel_eq_commutingClosureSpan_of_isSemiRegular,
         TNLean.PEPS.IsGInjective.torusParentGroundSpace_eq_commutingClosureSpan_of_isSemiRegular}
     \leanok
-    \uses{def:peps_torus_g_closure,def:peps_semiregular,
-        def:peps_g_injective,def:peps_region_parent_interaction}
+    \uses{def:peps_torus_g_closure,def:peps_semiregular,def:peps_g_injective,def:peps_region_parent_interaction}
     Under the hypotheses of
     Lemma~\ref{thm:peps_native_uniform_semiregular_parent_dimension}
     (\cite[Theorems~5.7 and~5.9]{Schuch2010PEPS}),
@@ -354,10 +341,7 @@ allows vertex-dependent physical tensors.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_native_invariant_closure_membership,
-        thm:peps_native_uniform_semiregular_parent_dimension,
-        thm:peps_g_injective_closure_dimension,
-        thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_native_invariant_closure_membership,thm:peps_native_uniform_semiregular_parent_dimension,thm:peps_g_injective_closure_dimension,thm:peps_region_parent_common_kernel}
     Let $\mathcal V=\operatorname{span}\{\lvert a;(g,h)\rangle:gh=hg\}$.
     Equation~(\ref{eq:peps_native_closure_inclusion}) gives
     $\mathcal V\subseteq\ker H=\mathcal P_{\{R_v\}}(a)$, while

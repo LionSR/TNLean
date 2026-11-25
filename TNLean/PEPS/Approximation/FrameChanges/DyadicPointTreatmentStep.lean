@@ -218,7 +218,7 @@ theorem card_blockParties_le (own : κ → Party) (lab : ℤ × ℤ → κ) (S :
 
 /-! ### The point treatment as one gate -/
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
+open EncodedFrame Matrix QuantumCircuit.Party
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ}
 
@@ -228,7 +228,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ �
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 481–505 and 574–583; Lemma 6.3
 `lem:small-rewrite`, `05-frames.tex`, lines 188–218; Theorem 5.2, item 3, `04-compression.tex`,
 lines 143–147. -/
-theorem pointTreatment_step_isSourceBounded [NeZero q] {n t r u : ℝ} (hn : 0 < n) (ht : 0 < t)
+theorem pointTreatment_step_isSourceBounded [NeZero q] [Fintype Party] [DecidableEq Party]
+    {n t r u : ℝ} (hn : 0 < n) (ht : 0 < t)
     (hr : 0 < r) (hu : 0 < u) (hsep : 2 * t + 6 * r + 3 * u < n) {lab : ℤ × ℤ → κ} {S : ℤ × ℤ}
     {B : κ}
     {g : ℝ × ℝ → κ} (hg : (blockBaseline hn lab S B).IsUnmodifiedGuide g)
@@ -254,21 +255,18 @@ theorem pointTreatment_step_isSourceBounded [NeZero q] {n t r u : ℝ} (hn : 0 <
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
     (hb : (2 * (t + 2 * r + u) / u + 1) ^ 2 ≤ b) (hb53 : 53 ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (htag : ∀ z, Nonempty (hole z).Tag) :
-    ∃ w : OriginalCircuit (guideFrame pos q g₁ own ph rank V hole hpV).regs
-        (guideFrame pos q g₂ own ph rank V' hole hpV').regs,
+    (hεpatch : ∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖toEuclideanLin (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
+    ∃ w : OriginalCircuit (guideFrame pos q g₁ own ph rank V hole hpV).system
+        (guideFrame pos q g₂ own ph rank V' hole hpV').system,
       w.nonprivateCount ≤ 1 ∧
       (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑(blockParties own lab S B)) ∧
       w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^
         (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
       w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
-      ‖w.eval ((guideFrame pos q g₁ own ph rank V hole hpV).regIso.symm
-          ((guideFrame pos q g₁ own ph rank V hole hpV).refVec Ω)) -
-        (guideFrame pos q g₂ own ph rank V' hole hpV').regIso.symm
-          ((guideFrame pos q g₂ own ph rank V' hole hpV').refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q g₁ own ph rank V hole hpV).regRef Ω) -
+        (guideFrame pos q g₂ own ph rank V' hole hpV').regRef Ω‖ ≤
         (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
       w.IsSourceBounded (2 * b) := by
   have htn : 2 * t < n := by linarith
@@ -301,8 +299,7 @@ theorem pointTreatment_step_isSourceBounded [NeZero q] {n t r u : ℝ} (hn : 0 <
     (c := c) (b := b) hL
     (fun a _ => h₇ ▸ hcardHole a) (fun z _ => hcardPatch z) (fun a _ => hcardHole a)
     (by exact_mod_cast h₁₄.trans hb) hold hnew hparties hΩ (fun z _ => hεpatch z)
-    (fun a _ => hεhole a) (by rw [h₉]; exact ⟨_, mem_blockParties.2 (Or.inl rfl)⟩)
-    (fun z _ => htag z)
+    (fun a _ => hεhole a)
   have e₂ : G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V' G.holeOld hpV' :=
     guideFrame_congr h₁₁ h₇ _ _
   rw [← G.oldFrame_eq h₁₀ hpV, ← e₂]
@@ -312,7 +309,7 @@ theorem pointTreatment_step_isSourceBounded [NeZero q] {n t r u : ℝ} (hn : 0 <
 `exists_pointTreatment_planeConditions`, let the mark `Q₀` be a corner of the closed block `S`,
 and the homogenizing label `L₀` be `B` or the label of one of the nine blocks around `S`. Suppose
 moreover that every hole and every patch has at most `C L^c` cylinder terms and error at most
-`L^{-60}` on `Ω`, with `‖Ω‖ ≤ 1`, that every hole has a tag, and that `b` is at least `53` and the
+`L^{-60}` on `Ω`, with `‖Ω‖ ≤ 1`, and that `b` is at least `53` and the
 number `(2 (t + 2 r + u) / u + 1)²` of net patches. Then there is an original circuit from the
 registers of the frame of `g₁` with holes at `V` to those of the frame of `g₂` with holes at
 `V'`, with at most one nonprivate gate, all participants among the parties of `B` and of the
@@ -322,7 +319,8 @@ nine blocks around `S`, expansion bounds as in
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505 and 574–583; Lemma 6.3
 `lem:small-rewrite`, `05-frames.tex`, lines 188–218. -/
-theorem pointTreatment_step [NeZero q] {n t r u : ℝ} (hn : 0 < n) (ht : 0 < t) (hr : 0 < r)
+theorem pointTreatment_step [NeZero q] [Fintype Party] [DecidableEq Party]
+    {n t r u : ℝ} (hn : 0 < n) (ht : 0 < t) (hr : 0 < r)
     (hu : 0 < u) (hsep : 2 * t + 6 * r + 3 * u < n) {lab : ℤ × ℤ → κ} {S : ℤ × ℤ} {B : κ}
     {g : ℝ × ℝ → κ} (hg : (blockBaseline hn lab S B).IsUnmodifiedGuide g)
     {M₁ M₂ : Finset (ℤ × ℤ)} (Q₀ : ℤ × ℤ) (hQ₀ : blockCorner n Q₀ ∈ closedBlock n S)
@@ -347,25 +345,22 @@ theorem pointTreatment_step [NeZero q] {n t r u : ℝ} (hn : 0 < n) (ht : 0 < t)
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
     (hb : (2 * (t + 2 * r + u) / u + 1) ^ 2 ≤ b) (hb53 : 53 ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (htag : ∀ z, Nonempty (hole z).Tag) :
-    ∃ w : OriginalCircuit (guideFrame pos q g₁ own ph rank V hole hpV).regs
-        (guideFrame pos q g₂ own ph rank V' hole hpV').regs,
+    (hεpatch : ∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖toEuclideanLin (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
+    ∃ w : OriginalCircuit (guideFrame pos q g₁ own ph rank V hole hpV).system
+        (guideFrame pos q g₂ own ph rank V' hole hpV').system,
       w.nonprivateCount ≤ 1 ∧
       (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑(blockParties own lab S B)) ∧
       w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^
         (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
       w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
-      ‖w.eval ((guideFrame pos q g₁ own ph rank V hole hpV).regIso.symm
-          ((guideFrame pos q g₁ own ph rank V hole hpV).refVec Ω)) -
-        (guideFrame pos q g₂ own ph rank V' hole hpV').regIso.symm
-          ((guideFrame pos q g₂ own ph rank V' hole hpV').refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q g₁ own ph rank V hole hpV).regRef Ω) -
+        (guideFrame pos q g₂ own ph rank V' hole hpV').regRef Ω‖ ≤
         (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
   obtain ⟨w, h₁, h₂, h₃, h₄, h₅, -⟩ := pointTreatment_step_isSourceBounded hn ht hr hu hsep hg Q₀
     hQ₀ hM L₀ hL₀ hg₁ hg₂ own ph rank hV hV' hVV' hole patch hhole hpatch hpV hpV' hW hH hH' htwo
-    htwo' hL hcardHole hcardPatch hb hb53 hΩ hεpatch hεhole htag
+    htwo' hL hcardHole hcardPatch hb hb53 hΩ hεpatch hεhole
   exact ⟨w, h₁, h₂, h₃, h₄, h₅⟩
 
 end TNLean.PEPS.Approximation

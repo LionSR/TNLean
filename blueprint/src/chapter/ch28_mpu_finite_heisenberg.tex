@@ -10,8 +10,7 @@
         MPOTensor.twoSiteHeisenbergMatrix_isUnitaryBetween,
         MPOTensor.twoSiteHeisenbergMatrix_conjugation}
     \leanok
-    \uses{def:mpu_supplied_two_site_standard_form,
-        lem:mpu_two_site_open_three_block_buffers}
+    \uses{def:mpu_supplied_two_site_standard_form,lem:mpu_two_site_open_three_block_buffers}
     Let $W$ have a supplied two-site standard form with gates $u,v$.
     For every $n\ge0$, write the actual periodic operator $W^{(3+n)}$
     in complete input coordinates separating the middle input pair,
@@ -49,9 +48,7 @@
         MPOTensor.originalSiteHeisenbergMatrix_isUnitaryBetween,
         MPOTensor.originalSiteHeisenbergMatrix_conjugation}
     \leanok
-    \uses{thm:mpu_original_site_buffered_three_block_locality,
-        thm:mpu_finite_heisenberg_complete_block,
-        def:mpu_supplied_two_site_standard_form}
+    \uses{thm:mpu_original_site_buffered_three_block_locality,thm:mpu_finite_heisenberg_complete_block,def:mpu_supplied_two_site_standard_form}
     Let $U$ be an MPU, and suppose that the two-site block of its length-$k$
     block has supplied standard-form gates $u,v$. For arbitrary original
     residual lengths $p,s\ge0$ with $N=p+6k+s>1$, complete coordinates on
@@ -217,8 +214,7 @@
     \label{thm:mpu_finite_heisenberg_arbitrary_region_compatibility}
     \lean{SpinChain.finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers}
     \leanok
-    \uses{thm:mpu_finite_heisenberg_full_central_interval,
-        lem:mpu_singleton_generation_and_inverse_reflection}
+    \uses{thm:mpu_finite_heisenberg_full_central_interval,lem:mpu_singleton_generation_and_inverse_reflection}
     Let $k>0$ and suppose that the length-$k$ blocked tensor has the
     supplied two-site standard form above. Let $\Lambda\subset\mathbb Z$
     be finite, and let $[b_j,b_j+N_j)$, for $j=1,2$, contain $\Lambda$,
@@ -411,8 +407,7 @@
         MPOTensor.mpo_chainWindow_conjugation_mem_supportedOperators,
         MPOTensor.mpo_conjugation_mem_supportedOperators_central}
     \leanok
-    \uses{thm:mpu_finite_heisenberg_fixed_window,
-        thm:mpu_finite_heisenberg_full_central_interval}
+    \uses{thm:mpu_finite_heisenberg_fixed_window,thm:mpu_finite_heisenberg_full_central_interval}
     Under the supplied standard-form hypotheses, take a chain of length
     $N=p+6k+s$ with $k>0$. Every observable $C$ on its complete central
     interval $[p+2k,p+4k)$ has actual forward conjugate supported in
@@ -450,8 +445,7 @@
         MPOTensor.mpo_conjugation_singleton_propagation_of_one,
         MPOTensor.mpo_conjugation_mem_supportedOperators_singleton}
     \leanok
-    \uses{lem:mpu_finite_window_operator_support,
-        lem:mpu_finite_conjugation_cyclic_relocation}
+    \uses{lem:mpu_finite_window_operator_support,lem:mpu_finite_conjugation_cyclic_relocation}
     Let an MPU have a supplied two-site standard form after a positive
     blocking length $k$. On every periodic ring of length $N\geq 6k$,
     the actual forward conjugate of an observable supported at a single
@@ -519,8 +513,7 @@
     \lean{SpinChain.bufferedMPUAlgebraicAction_supportedIn,
         SpinChain.bufferedMPUQuasiLocalAction_supportedIn}
     \leanok
-    \uses{thm:mpu_finite_heisenberg_completed_forward_action,
-        lem:mpu_singleton_generation_and_inverse_reflection}
+    \uses{thm:mpu_finite_heisenberg_completed_forward_action,lem:mpu_singleton_generation_and_inverse_reflection}
     Under the preceding supplied positive block and standard-form
     hypotheses, the actual completed forward endomorphism $F$ sends
     every observable supported in $\Lambda$ to an observable supported
@@ -557,8 +550,7 @@
         SpinChain.finiteRingNeighbourhood_subset,
         SpinChain.finiteChainConjugation_symm_mem_range_ringNeighbourhood}
     \leanok
-    \uses{lem:mpu_finite_cyclic_singleton_propagation,
-        lem:mpu_singleton_generation_and_inverse_reflection}
+    \uses{lem:mpu_finite_cyclic_singleton_propagation,lem:mpu_singleton_generation_and_inverse_reflection}
     Under the supplied positive-block standard-form hypotheses, let
     $N\geq 6k$ and let $B$ be supported on an arbitrary finite target
     $J$ in the actual periodic chain of length $N$. Then the actual
@@ -596,11 +588,7 @@
         SpinChain.bufferedMPUQuasiLocalAut_propagatesWithin,
         SpinChain.bufferedMPUQuasiLocalAut_isQCA}
     \leanok
-    \uses{lem:mpu_finite_cyclic_inverse_propagation,
-        lem:mpu_finite_heisenberg_forward_propagation,
-        lem:mpu_finite_heisenberg_translation_covariance,
-        thm:mpu_finite_heisenberg_forward_local_action,
-        thm:mpu_finite_heisenberg_completed_forward_action}
+    \uses{lem:mpu_finite_cyclic_inverse_propagation,lem:mpu_finite_heisenberg_forward_propagation,lem:mpu_finite_heisenberg_translation_covariance,thm:mpu_finite_heisenberg_forward_local_action,thm:mpu_finite_heisenberg_completed_forward_action}
     Under the supplied positive-block standard-form hypotheses, every
     observable on a finite target $J$ has a preimage under the actual
     completed forward action, supported in $J+[-4k,4k]$. Consequently

@@ -32,9 +32,7 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
         MPSTensor.sum_star_copyApproxVector_mul_mpv,
         MPSTensor.sum_norm_sq_copyApproxVector_le}
     \leanok
-    \uses{lem:ldp_shared_overlap_estimates, thm:ldp_repeated_block_polar,
-        def:ldp_repeated_block_state, lem:ldp_overlapping_overlaps_weights,
-        def:prep_fixed_point_tensor}
+    \uses{lem:ldp_shared_overlap_estimates,thm:ldp_repeated_block_polar,def:ldp_repeated_block_state,lem:ldp_overlapping_overlaps_weights,def:prep_fixed_point_tensor}
     With the notation of Lemma~\ref{thm:ldp_repeated_block_polar}, let the blocks be
     as in Lemma~\ref{lem:ldp_overlapping_positive_part}, with $c_j$ and $L_j$ the norms
     and isometries of the copies on $q$ sites, and define
@@ -112,8 +110,7 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
         MPSTensor.relativeRowLimit_self, MPSTensor.relativeRowLimit_of_ne,
         MPSTensor.exists_norm_relativeRow_sub_le}
     \leanok
-    \uses{lem:ldp_sylvester_bound, lem:ldp_repeated_overlapping_overlaps,
-        lem:ldp_shared_overlap_estimates, thm:ldp_repeated_block_polar}
+    \uses{lem:ldp_sylvester_bound,lem:ldp_repeated_overlapping_overlaps,lem:ldp_shared_overlap_estimates,thm:ldp_repeated_block_polar}
     \begin{enumerate}
         \item Let $L_j$ be isometries with orthogonal ranges in dimension $n$, $c_j>0$,
               $C=\sum_jc_jL_jL_j^\dagger$ and $C^{-1}=\sum_jc_j^{-1}L_jL_j^\dagger$, let
@@ -171,8 +168,7 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
         MPSTensor.mpvOverlap_conjTranspose_copyIsometry_mul_polarPos,
         MPSTensor.exists_norm_mpvOverlap_sub_ite_le}
     \leanok
-    \uses{lem:ldp_relative_positive_part, lem:ldp_repeated_overlapping_overlaps,
-        lem:ldp_shared_overlap_estimates, def:prep_fixed_point_tensor}
+    \uses{lem:ldp_relative_positive_part,lem:ldp_repeated_overlapping_overlaps,lem:ldp_shared_overlap_estimates,def:prep_fixed_point_tensor}
     With the notation of Lemma~\ref{lem:ldp_relative_positive_part}, let $q\geq1$ and
     $M\geq1$, with $N=qM$.
     \begin{enumerate}
@@ -215,8 +211,7 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
         MPSTensor.exists_relative_diagonal_deficit_le,
         MPSTensor.exists_norm_one_sub_relative_diagonal_le}
     \leanok
-    \uses{lem:ldp_relative_positive_part, lem:ldp_relative_overlaps,
-        def:prep_fixed_point_tensor}
+    \uses{lem:ldp_relative_positive_part,lem:ldp_relative_overlaps,def:prep_fixed_point_tensor}
     With the notation of Lemma~\ref{lem:ldp_relative_positive_part}, let $q\geq1$, let
     $H_{kj}=L_k^\dagger PC^{-1}L_j$ be the relative blocks, and for a positive
     semidefinite $\sigma$ let $\lVert X\rVert_\sigma^2=\Tr\sum_iX^i\sigma(X^i)^\dagger$
@@ -258,8 +253,7 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
     \label{lem:ldp_relative_overlaps_second_order}
     \lean{MPSTensor.exists_norm_relative_row_overlap_sub_ite_le_sq}
     \leanok
-    \uses{lem:ldp_relative_diagonal_deficit, lem:ldp_relative_overlaps,
-        lem:ldp_shared_overlap_estimates}
+    \uses{lem:ldp_relative_diagonal_deficit,lem:ldp_relative_overlaps,lem:ldp_shared_overlap_estimates}
     With the notation of Lemma~\ref{lem:ldp_relative_diagonal_deficit}, let $\sigma_k$ be a
     positive semidefinite fixed point of $\E_{A_k}$ of trace one for every block $k$, and
     let $j,j'$ be blocks. There is $C>0$ such that for all nonzero weights, all $q\geq1$,
@@ -288,9 +282,7 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
         MPSTensor.one_sub_le_mul_mul_exp_div_of_one_le,
         MPSTensor.one_sub_le_mul_mul_exp_div_of_sum_le}
     \leanok
-    \uses{lem:ldp_repeated_overlapping_overlaps, lem:ldp_shared_overlap_estimates,
-        lem:ldp_relative_positive_part, lem:ldp_relative_overlaps,
-        def:ldp_repeated_block_state, def:correlation_length}
+    \uses{lem:ldp_repeated_overlapping_overlaps,lem:ldp_shared_overlap_estimates,lem:ldp_relative_positive_part,lem:ldp_relative_overlaps,def:ldp_repeated_block_state,def:correlation_length}
     With the notation of Lemma~\ref{thm:ldp_repeated_block_polar}, let the blocks $A_j$
     be normal in the gauge (\ref{eq:ldp_normal_gauge}) with positive definite fixed points
     $\rho_j$ of trace one, let $\lambda_2\in\C$ bound the moduli of the eigenvalues other

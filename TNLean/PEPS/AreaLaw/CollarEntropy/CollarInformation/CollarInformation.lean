@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -13,7 +13,6 @@ import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import QICLean.Analysis.TraceNorm.PureStateTraceDistance
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateLayers
-import TNLean.PEPS.AreaLaw.Collar.CompactCollarCounting
 
 /-!
 # The deterministic steps of the sublinear collar bound
@@ -50,10 +49,9 @@ Consequently `SublinearCollarBound` reduces to its mutual-information inequality
   `2 S(X) + g_pre - g_post = I(X : V) + I(X : YV)`.
 * `ManyBody.two_regionMutualInformation_le_collarLeaf_average`: the lower bound by
   `2 I(X : W)` after an average over leaves.
-* `ManyBody.abs_regionMutualInformation_sub_le_of_traceDistance`: continuity of mutual
-  information with only the dimension of the first region.
 * `ManyBody.regionMutualInformation_le_add_of_traceDistance_le_rpow`: the transfer
-  from the truncated to the original ground state.
+  from the truncated to the original ground state, by the continuity of mutual
+  information with only the dimension of the first region.
 * `Geometry.Template.collar_cut_card_le`: the cut and size assertions.
 * `sublinearCollarBound_of_mutualInformation_le`: Proposition 9.6 follows from its
   mutual-information inequality alone.
@@ -73,7 +71,7 @@ open scoped Matrix.Norms.L2Operator
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction card_ambientDilation_le_of_layers)
 open scoped ComplexOrder
 open ManyBody (planeDomainGraph edgeBoundary ambientDilation)
 
@@ -95,20 +93,6 @@ Source: `08-scanner.tex`, lines 868–873. -/
 noncomputable def collarPostQuantity (ψ : EuclideanSpace ℂ ((v : ι) → β v))
     (U Y : Finset ι) : ℝ :=
   ManyBody.regionEntropy ψ U + ManyBody.regionEntropy ψ (U ∪ Y) - ManyBody.regionEntropy ψ Y
-
-/-- Mutual information of two regions is symmetric. -/
-theorem regionMutualInformation_comm (ψ : EuclideanSpace ℂ ((v : ι) → β v)) (R T : Finset ι) :
-    ManyBody.regionMutualInformation ψ R T = ManyBody.regionMutualInformation ψ T R := by
-  unfold ManyBody.regionMutualInformation
-  rw [Finset.union_comm]
-  ring
-
-/-- Discarding part of the second region cannot increase mutual information. -/
-theorem regionMutualInformation_mono_right (ψ : EuclideanSpace ℂ ((v : ι) → β v))
-    {X W V : Finset ι} (hWV : W ⊆ V) (hXV : Disjoint X V) :
-    ManyBody.regionMutualInformation ψ X W ≤ ManyBody.regionMutualInformation ψ X V := by
-  rw [regionMutualInformation_comm β ψ X W, regionMutualInformation_comm β ψ X V]
-  exact ManyBody.regionMutualInformation_mono_left β ψ W V X hWV hXV.symm
 
 /-- **The leaf entropy identity.** Let `X, U, Y, V` be pairwise disjoint regions
 covering all sites. For every vector `ψ`, purity gives
@@ -201,50 +185,6 @@ theorem two_regionMutualInformation_le_collarLeaf_average (ψ : EuclideanSpace �
   have h := Finset.sum_le_sum hleaf
   simp only [← Finset.sum_mul, hsum, one_mul, mul_add, Finset.sum_add_distrib] at h
   linarith
-
-/-- **Continuity of mutual information with a controlled first region.** For two
-normalized vectors at trace distance `δ` and disjoint regions `X, J`, the mutual
-information `I(X : J)` changes by at most `8 √δ log(e dim X)`. The dimensions of `J`
-and of the remaining sites do not enter.
-Source: Lemma 2.1, `01-preliminaries.tex`, lines 33–46, as applied in
-`08-scanner.tex`, lines 936–941. -/
-theorem abs_regionMutualInformation_sub_le_of_traceDistance
-    {ψ η : EuclideanSpace ℂ ((v : ι) → β v)} (hψ : ‖ψ‖ = 1) (hη : ‖η‖ = 1)
-    {X J : Finset ι} (hXJ : Disjoint X J) :
-    |ManyBody.regionMutualInformation ψ X J - ManyBody.regionMutualInformation η X J| ≤
-      8 * √(traceDistance (vecMulVec (WithLp.ofLp ψ) (star (WithLp.ofLp ψ)))
-          (vecMulVec (WithLp.ofLp η) (star (WithLp.ofLp η)))) *
-        Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X)) := by
-  have htr (χ : EuclideanSpace ℂ ((v : ι) → β v)) (hχ : ‖χ‖ = 1) :
-      (ManyBody.jointMatrix β χ X J hXJ).trace = 1 := by
-    unfold ManyBody.jointMatrix
-    rw [trace_submatrix_equiv]
-    exact ManyBody.trace_regionState_eq_one hχ (D := _)
-  have h := Entropy.abs_mutualInformation_sub_le_sqrt_fin
-    (ManyBody.jointMatrix_posSemidef β ψ X J hXJ) (ManyBody.jointMatrix_posSemidef β η X J hXJ)
-    (htr ψ hψ) (htr η hη)
-  have hψI : Entropy.mutualInformation (ManyBody.jointMatrix β ψ X J hXJ)
-      (ManyBody.jointMatrix_posSemidef β ψ X J hXJ).isHermitian
-          = ManyBody.regionMutualInformation ψ X J :=
-    (ManyBody.regionMutualInformation_eq_matrix β ψ X J hXJ).symm
-  have hηI : Entropy.mutualInformation (ManyBody.jointMatrix β η X J hXJ)
-      (ManyBody.jointMatrix_posSemidef β η X J hXJ).isHermitian
-          = ManyBody.regionMutualInformation η X J :=
-    (ManyBody.regionMutualInformation_eq_matrix β η X J hXJ).symm
-  rw [hψI, hηI] at h
-  have hdist : traceDistance (ManyBody.jointMatrix β ψ X J hXJ) (ManyBody.jointMatrix β η X J hXJ) ≤
-      traceDistance (vecMulVec (WithLp.ofLp ψ) (star (WithLp.ofLp ψ)))
-        (vecMulVec (WithLp.ofLp η) (star (WithLp.ofLp η))) := by
-    unfold ManyBody.jointMatrix
-    rw [traceDistance_submatrix_equiv _ (ManyBody.regionState_posSemidef _ ψ).isHermitian
-      (ManyBody.regionState_posSemidef _ η).isHermitian]
-    exact ManyBody.traceDistance_regionState_le β ψ η hψ hη _
-  have hlog : 0 ≤ Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X)) :=
-    Real.log_nonneg (one_le_mul_of_one_le_of_one_le (Real.one_le_exp zero_le_one)
-      (Nat.one_le_cast.mpr (Fintype.card_pos_iff.mpr
-        (Entropy.Matrix.PosSemidef.nonempty_of_trace_eq_one
-          (ManyBody.trace_regionState_eq_one hψ (D := X))))))
-  exact h.trans (by gcongr)
 
 /-- **The transfer to the original ground state.** Let `Ω, Ω'` be normalized vectors
 at trace distance at most `C₁ n^(-500)`, and let `log dim X ≤ C₂ n²` for an integer
@@ -402,7 +342,7 @@ theorem Template.collar_cut_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     template_cut_boundary_card_le T hC Λ A hsep hD L hL, ?_, ?_⟩
   · rw [hsd]
     exact template_shell_cut_boundary_card_le T hC Λ A hsep hD L hL
-  · have hlayers := Scan.card_ambientDilation_le_of_layers T.points n L
+  · have hlayers := card_ambientDilation_le_of_layers T.points n L
       (fun d hd hdL ↦ template_layer_card_le T hC d hd (hdL.trans hL))
     have hfilter : (A.filter fun x ↦ x.val ∈ ambientDilation T.points L).card ≤
         (ambientDilation T.points L).card :=

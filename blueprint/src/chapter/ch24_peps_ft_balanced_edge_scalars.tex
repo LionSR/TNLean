@@ -46,7 +46,7 @@ constant.
     \label{def:GaugeEquivModEdgeScalars}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars}
     \leanok
-    \uses{def:edgeGaugeAt, def:edgeScalarAt, def:IsVertexBalanced}
+    \uses{def:edgeGaugeAt,def:edgeScalarAt,def:IsVertexBalanced}
     Gauge families $X,Y$ are equivalent modulo balanced edge scalars, written
     $X\sim_{\mathrm{bal}}Y$, if there exist $c_e\in\C^\times$ ($e\in E$) such
     that $X_{v,e}=c_{v,e}Y_{v,e}$ for all $v\in e$ and
@@ -99,7 +99,7 @@ constant.
     \label{thm:IsVertexBalanced_mul}
     \lean{TNLean.PEPS.IsVertexBalanced.mul}
     \leanok
-    \uses{def:IsVertexBalanced, thm:edgeScalarAt_mul}
+    \uses{def:IsVertexBalanced,thm:edgeScalarAt_mul}
     If $c$ and $d$ are vertex-balanced, then $cd$ is vertex-balanced.
 \end{lemma}
 \begin{proof}\leanok
@@ -111,7 +111,7 @@ constant.
     \label{thm:IsVertexBalanced_inv}
     \lean{TNLean.PEPS.IsVertexBalanced.inv}
     \leanok
-    \uses{def:IsVertexBalanced, thm:edgeScalarAt_inv}
+    \uses{def:IsVertexBalanced,thm:edgeScalarAt_inv}
     If $c$ is vertex-balanced, then $c^{-1}$ is vertex-balanced.
 \end{lemma}
 \begin{proof}\leanok
@@ -137,7 +137,7 @@ constant.
     \label{thm:GaugeEquivModEdgeScalars_symm}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.symm}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_inv, thm:edgeScalarAt_ne_zero}
+    \uses{def:GaugeEquivModEdgeScalars,thm:IsVertexBalanced_inv,thm:edgeScalarAt_ne_zero}
     If $X\sim_{\mathrm{bal}}Y$ via $c$, then $Y\sim_{\mathrm{bal}}X$ via $c^{-1}$.
     % The inverse endpoint action is already stated exactly by
     % Definition~\ref{def:edgeGaugeAt}; there is no additional source figure.
@@ -152,7 +152,7 @@ constant.
     \label{thm:GaugeEquivModEdgeScalars_trans}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.trans}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_mul, thm:edgeScalarAt_mul}
+    \uses{def:GaugeEquivModEdgeScalars,thm:IsVertexBalanced_mul,thm:edgeScalarAt_mul}
     If $X\sim_{\mathrm{bal}}Y$ via $c$ and $Y\sim_{\mathrm{bal}}Z$ via $d$,
     then $X\sim_{\mathrm{bal}}Z$ via $cd$.
 \end{lemma}
@@ -166,7 +166,7 @@ constant.
     \label{thm:GaugeEquivModEdgeScalars_equivalence}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.equivalence}
     \leanok
-    \uses{thm:GaugeEquivModEdgeScalars_refl, thm:GaugeEquivModEdgeScalars_symm, thm:GaugeEquivModEdgeScalars_trans}
+    \uses{thm:GaugeEquivModEdgeScalars_refl,thm:GaugeEquivModEdgeScalars_symm,thm:GaugeEquivModEdgeScalars_trans}
     The relation $\sim_{\mathrm{bal}}$ on edge-gauge families is an equivalence
     relation.
 \end{lemma}
@@ -180,7 +180,7 @@ constant.
     \label{def:GaugeEquivModEdgeScalars_setoid}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.setoid}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, thm:GaugeEquivModEdgeScalars_equivalence}
+    \uses{def:GaugeEquivModEdgeScalars,thm:GaugeEquivModEdgeScalars_equivalence}
     The setoid on edge-gauge families with equivalence relation
     $\sim_{\mathrm{bal}}$ from Lemma~\ref{thm:GaugeEquivModEdgeScalars_equivalence}.
 \end{definition}
@@ -189,11 +189,11 @@ constant.
     \label{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.gaugeVertex_eq}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, def:gaugeVertex}
+    \uses{def:GaugeEquivModEdgeScalars,def:gaugeVertex}
     If $X\sim_{\mathrm{bal}}Y$, then $(A^X)_v(\eta,\sigma)=(A^Y)_v(\eta,\sigma)$
     for all $v,\eta,\sigma$.
 \end{lemma}
-\begin{proof}\leanok\uses{def:GaugeEquivModEdgeScalars, def:gaugeVertex}
+\begin{proof}\leanok\uses{def:GaugeEquivModEdgeScalars,def:gaugeVertex}
     In Definition~\ref{def:gaugeVertex}, each summand for $(A^X)_v$ differs from
     that for $(A^Y)_v$ by the factor $\prod_{e\ni v}c_{v,e}=1$.
 \end{proof}
@@ -202,7 +202,7 @@ constant.
     \label{thm:GaugeEquivModEdgeScalars_applyGauge_eq}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_eq}
     \leanok
-    \uses{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq, def:applyGauge}
+    \uses{thm:GaugeEquivModEdgeScalars_gaugeVertex_eq,def:applyGauge}
     If $X\sim_{\mathrm{bal}}Y$, then $A^X=A^Y$.
 \end{lemma}
 \begin{proof}\leanok
@@ -214,7 +214,7 @@ constant.
     \label{thm:GaugeEquivModEdgeScalars_applyGauge_sameState}
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.applyGauge_sameState}
     \leanok
-    \uses{thm:GaugeEquivModEdgeScalars_applyGauge_eq, def:peps_same_state}
+    \uses{thm:GaugeEquivModEdgeScalars_applyGauge_eq,def:peps_same_state}
     If $X\sim_{\mathrm{bal}}Y$, then $\Coeff_{A^X}(\sigma)=\Coeff_{A^Y}(\sigma)$
     for every physical configuration $\sigma$.
 \end{lemma}
@@ -226,7 +226,7 @@ constant.
     \label{thm:gauge_unique_mod_edge_scalars}
     \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, def:peps_injective_tensor, thm:peps_piProductFormsScalar}
+    \uses{def:GaugeEquivModEdgeScalars,def:peps_injective_tensor,thm:peps_piProductFormsScalar}
     If $A$ is an injective PEPS tensor and $A^X=A^Y$, then $X\sim_{\mathrm{bal}}Y$.
     % Correction documented in docs/paper-gaps/peps_gauge_edge_scalars.tex.
     % Nonzero bond spaces are part of the injectivity hypothesis, as in the

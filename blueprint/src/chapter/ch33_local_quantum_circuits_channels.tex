@@ -26,7 +26,7 @@ of a local circuit that may add product ancillas and discard them
 
 \begin{lemma}[Duality and complete positivity of local channel circuits]
     \label{lem:qc_local_channel_circuit_properties}
-    \uses{def:qc_local_channel_circuit, def:qc_local_circuit}
+    \uses{def:qc_local_channel_circuit,def:qc_local_circuit}
     \lean{QuantumCircuit.Circuit.isKrausCPTP_map,
         QuantumCircuit.Circuit.trace_map_mul,
         QuantumCircuit.Circuit.map_eq_of_subsingleton}
@@ -45,8 +45,7 @@ of a local circuit that may add product ancillas and discard them
 
 \begin{theorem}[Light cone of a local channel circuit]
     \label{lem:qc_channel_light_cone}
-    \uses{def:qc_local_channel_circuit, def:qc_light_cone_geometry,
-        lem:qc_light_cone_geometries}
+    \uses{def:qc_local_channel_circuit,def:qc_light_cone_geometry,lem:qc_light_cone_geometries}
     \lean{QuantumCircuit.Circuit.dual_mem_supportedOperators_lightCone,
         QuantumCircuit.Layer.dual_mem_supportedOperators_lightCone}
     \leanok
@@ -59,7 +58,7 @@ of a local circuit that may add product ancillas and discard them
 
 \begin{lemma}[No connected correlations beyond the light cone of channels]
     \label{lem:qc_channel_light_cone_correlations}
-    \uses{lem:qc_channel_light_cone, lem:qc_local_channel_circuit_properties}
+    \uses{lem:qc_channel_light_cone,lem:qc_local_channel_circuit_properties}
     \lean{QuantumCircuit.Circuit.dual_mul_of_disjoint_lightCone,
         QuantumCircuit.Layer.dual_mul_of_disjoint_lightCone,
         QuantumCircuit.IsConversion.trace_mul_mul_eq}
@@ -120,7 +119,7 @@ change the local dimension act on single sites.
 
 \begin{definition}[Local channel conversion]
     \label{def:qc_local_channel_conversion}
-    \uses{def:qc_local_channel_circuit, def:qc_onsite_channel}
+    \uses{def:qc_local_channel_circuit,def:qc_onsite_channel}
     \lean{QuantumCircuit.IsProtocol,
         QuantumCircuit.IsConversion}
     \leanok
@@ -133,8 +132,7 @@ change the local dimension act on single sites.
 
 \begin{lemma}[Basic properties of local channel conversions]
     \label{lem:qc_local_channel_conversion_properties}
-    \uses{def:qc_local_channel_conversion, def:qc_local_channel_circuit,
-        lem:qc_onsite_channel_properties}
+    \uses{def:qc_local_channel_conversion,def:qc_local_channel_circuit,lem:qc_onsite_channel_properties}
     \lean{QuantumCircuit.IsProtocol.isKrausCPTP,
         QuantumCircuit.IsProtocol.ofLayer,
         QuantumCircuit.IsProtocol.seq,
@@ -165,8 +163,7 @@ change the local dimension act on single sites.
 
 \begin{lemma}[Light cone of a local channel protocol]
     \label{lem:qc_protocol_light_cone}
-    \uses{def:qc_local_channel_conversion, lem:qc_onsite_channel_locality,
-        lem:qc_channel_light_cone, lem:qc_channel_light_cone_correlations}
+    \uses{def:qc_local_channel_conversion,lem:qc_onsite_channel_locality,lem:qc_channel_light_cone,lem:qc_channel_light_cone_correlations}
     \lean{QuantumCircuit.IsProtocol.traceAdjointMap_mem_supportedOperators_graphNeighborhood,
         QuantumCircuit.IsProtocol.traceAdjointMap_mul_of_disjoint_graphNeighborhood,
         Matrix.trace_traceAdjointMap_mul}
@@ -185,7 +182,7 @@ change the local dimension act on single sites.
 
 \begin{lemma}[No connected correlations after a conversion]
     \label{lem:qc_local_channel_conversion_correlations}
-    \uses{def:qc_local_channel_conversion, lem:qc_protocol_light_cone}
+    \uses{def:qc_local_channel_conversion,lem:qc_protocol_light_cone}
     \lean{QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isGraphSeparated}
     \leanok
     If $\sigma$ is converted in depth $T$ from $\rho=\bigotimes_i\sigma_i$ ($\Tr\sigma_i=1$) and $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $d_{\rm ring}(X,X')>2T$, then $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$~\cite{Piroli2021LOCC}.
@@ -203,8 +200,8 @@ change the local dimension act on single sites.
 
 \begin{definition}[Blocked local channel conversion]
     \label{def:qc_blocked_local_channel_conversion}
-    \uses{def:qc_local_channel_conversion}
-    \lean{ManyBody.blockSystem, ManyBody.blockConfigEquiv,
+    \uses{def:qc_local_channel_conversion,def:peps_owner_layout}
+    \lean{ManyBody.blockConfigEquiv,
         ManyBody.reindex_blockConfigEquiv_symm_piKronecker}
     \leanok
     Following~\cite{Piroli2021LOCC}, grouping $k\ge1$ consecutive sites $jk,\dots,jk+k-1$ of an $Mk$-site ring of local dimension $d$ into block $j\in\Z_M$ of dimension $d^k$ defines the $*$-isomorphism
@@ -237,10 +234,7 @@ change the local dimension act on single sites.
 
 \begin{lemma}[Light cone and correlations after blocking]
     \label{lem:qc_blocked_conversion_light_cone}
-    \uses{def:qc_blocked_local_channel_conversion, lem:qc_blocking_supports,
-        lem:qc_protocol_light_cone, lem:qc_local_channel_conversion_correlations,
-        lem:qc_local_channel_conversion_properties,
-        lem:qc_local_channel_conversion_trans, lem:qc_light_cone_geometries}
+    \uses{def:qc_blocked_local_channel_conversion,lem:qc_blocking_supports,lem:qc_protocol_light_cone,lem:qc_local_channel_conversion_correlations,lem:qc_local_channel_conversion_properties,lem:qc_local_channel_conversion_trans,lem:qc_light_cone_geometries}
     \lean{QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mem_supportedOperators_graphNeighborhood,
         QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mul,
         Matrix.trace_piKronecker}
@@ -283,7 +277,7 @@ change the local dimension act on single sites.
 
 \begin{definition}[Regrouped channels]
     \label{def:qc_regrouped_channel}
-    \uses{def:qc_blocked_local_channel_conversion, def:qc_local_channel_circuit}
+    \uses{def:qc_blocked_local_channel_conversion,def:qc_local_channel_circuit}
     \lean{QuantumCircuit.Layer.exists_coarsen}
     \leanok
     Write $\beta_{k,d}$ for blocking $k$ sites of local dimension $d$.
@@ -301,8 +295,7 @@ change the local dimension act on single sites.
 
 \begin{lemma}[Depth and dimension bounds for regrouped protocols]
     \label{lem:qc_regrouped_protocol}
-    \uses{def:qc_regrouped_channel, lem:qc_regrouped_matching_schedule,
-        def:qc_local_channel_conversion}
+    \uses{def:qc_regrouped_channel,lem:qc_regrouped_matching_schedule,def:qc_local_channel_conversion}
     \lean{QuantumCircuit.IsProtocol.block}
     \leanok
     Let $M,k\ge1$ and $d\ge1$. A depth-$T$ local channel protocol on $Mk$ sites
@@ -327,7 +320,7 @@ change the local dimension act on single sites.
 
 \begin{corollary}[An unblocked conversion followed by a blocked conversion]
     \label{cor:qc_unblocked_then_blocked_conversion}
-    \uses{lem:qc_regrouped_protocol, lem:qc_local_channel_conversion_trans}
+    \uses{lem:qc_regrouped_protocol,lem:qc_local_channel_conversion_trans}
     \lean{QuantumCircuit.IsConversion.block_trans}
     \leanok
     Let $M,k,d\ge1$. If $\rho$ converts to $\sigma$ on the $Mk$-site ring in

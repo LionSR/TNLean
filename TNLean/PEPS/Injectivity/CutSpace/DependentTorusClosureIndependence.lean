@@ -23,7 +23,6 @@ only the commuting restriction is used in the four-cut dimension theorem.
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.DependentTorus
-open TNLean.Lattice
 
 local notation "tail" => (torusLabelledBondTail (width := 2) (height := 2))
 local notation "head" => (torusLabelledBondHead (width := 2) (height := 2))
@@ -49,8 +48,8 @@ theorem closure_conjugate
     simp only [closure, closureLabels_conjugate]
     exact DependentBondNetwork.network_averagingSite_vertexGauge tail head D U
       (torusLabelledClosure g h) (fun _ => x) σ
-  let R := dependentPhysicalProductFamilyMap (fun v ↦ LinearMap.toMatrix'
-    (DependentBondNetwork.localSiteMap tail head D A v))
+  let R := (Matrix.piKronecker (fun v ↦ LinearMap.toMatrix'
+    (DependentBondNetwork.localSiteMap tail head D A v))).mulVecLin
   have hR (g h : G) : R (closure D U (canonicalSites D U) g h) = closure D U A g h := by
     rw [physicalMap_closure]
     rw [show DependentBondNetwork.physicalMapSite tail head D
@@ -126,15 +125,15 @@ theorem linearIndependent_closureClass [∀ v, Finite (Phys v)]
   let (v : Vertex) := Fintype.ofFinite (Phys v)
   obtain ⟨F, hF⟩ := DependentBondNetwork.exists_physicalMap_to_representationAveragingSite
     tail head D (DependentBondNetwork.incidentRepresentation tail head D U) A hA
-  apply LinearIndependent.of_comp (dependentPhysicalProductFamilyMap F)
-  have hc : dependentPhysicalProductFamilyMap F ∘
+  apply LinearIndependent.of_comp (Matrix.piKronecker F).mulVecLin
+  have hc : (Matrix.piKronecker F).mulVecLin ∘
       closureClass D U A (fun v => (hA v).invariant) =
         closureClass D U (canonicalSites D U)
           (fun v =>
             (DependentBondNetwork.isGInjective_averagingSite tail head D U v).invariant) := by
     funext C
     refine Quotient.inductionOn C (fun p => ?_)
-    change dependentPhysicalProductFamilyMap F (closure D U A p.1 p.2) = _
+    change (Matrix.piKronecker F).mulVecLin (closure D U A p.1 p.2) = _
     rw [physicalMap_closure, hF]
     rfl
   rw [hc]

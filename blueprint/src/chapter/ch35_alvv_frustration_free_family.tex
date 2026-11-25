@@ -90,8 +90,7 @@ of $\ell$, as recorded in \cite{gap:alvv16_ff_truncated_norm}.
         TNLean.MPS.AreaLaw.ALVV.norm_threeRegion_le,
         TNLean.MPS.AreaLaw.ALVV.threeRegion_gap}
     \leanok
-    \uses{def:alvv_ff_family_three_region,lem:alvv_ff_family_union_bound,
-        lem:alvv_ff_family_parity_gap,lem:alvv_ff_common_kernel_layers}
+    \uses{def:alvv_ff_family_three_region,lem:alvv_ff_family_union_bound,lem:alvv_ff_family_parity_gap,lem:alvv_ff_common_kernel_layers}
     Let the terms $h_i$ be orthogonal projections supported on $[i,i+2)$ and
     let $a+2\ell\le b$ and $b+2\ell\le m$. Then $\widetilde H$ is positive,
     $\ker\widetilde H=\ker H$, and $\|\widetilde H\|\le4\ell+6$. If
@@ -177,8 +176,7 @@ of $\ell$, as recorded in \cite{gap:alvv16_ff_truncated_norm}.
     \label{lem:alvv_ff_family_cut_rank}
     \lean{TNLean.MPS.AreaLaw.ALVV.operatorSchmidtRank_aeval_threeRegion_cut_le}
     \leanok
-    \uses{lem:alvv_ff_family_three_region,lem:alvv_ff_family_region_rank,
-        thm:alvv_two_window_interior_cut_rank,thm:alvv_bulk_cut_polynomial_rank}
+    \uses{lem:alvv_ff_family_three_region,lem:alvv_ff_family_region_rank,thm:alvv_two_window_interior_cut_rank,thm:alvv_bulk_cut_polynomial_rank}
     For $q\ge1$, $a+2\ell\le b$, every polynomial $P$ of degree at most $k$
     and every cut, $P(\widetilde H)$ has operator Schmidt rank at most
     $(q^2+4)^{k+1}$.
@@ -247,9 +245,7 @@ of $\ell$, as recorded in \cite{gap:alvv16_ff_truncated_norm}.
     the boundary convention of Lemma~\ref{thm:physical_dg_viable_family}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:alvv_ff_family_three_region,lem:alvv_ff_family_slices,
-        lem:alvv_ff_family_cut_rank,lem:alvv_ff_family_region_rank_filter,
-        thm:chain_polynomial_filter_parameters}
+    \uses{lem:alvv_ff_family_three_region,lem:alvv_ff_family_slices,lem:alvv_ff_family_cut_rank,lem:alvv_ff_family_region_rank_filter,thm:chain_polynomial_filter_parameters}
     Replace every $h_i$ by its range projection; this keeps the supports and the
     kernel and can only raise the quadratic form, as in the proof of the source.
     Choose $A$ by the scalar budget of
@@ -376,9 +372,7 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
         TNLean.MPS.AreaLaw.ALVV.merge_power_error_le,
         TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_tree_ritz_approximation}
     \leanok
-    \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
-        thm:physical_dg_sampled_node,thm:physical_dg_interval_trimming,
-        thm:sampled_interval_witness_tree,lem:physical_dg_automatic_refinement}
+    \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,thm:physical_dg_sampled_node,thm:physical_dg_interval_trimming,thm:sampled_interval_witness_tree,lem:physical_dg_automatic_refinement}
     Let $A\ge1$ be the constant of Theorem~\ref{thm:alvv_ff_improving_family}.
     Let $q\ge2$ and $L\ge1$, and let $H=\sum_ih_i$ be a nearest-neighbour chain
     of $L$ sites of local dimension $q$ with $0\le h_i\le\Id$, frustration free
@@ -413,9 +407,7 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     output bond dimension grows with $L$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
-        thm:physical_dg_sampled_node,thm:physical_dg_interval_trimming,
-        thm:sampled_interval_witness_tree,lem:physical_dg_automatic_refinement}
+    \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,thm:physical_dg_sampled_node,thm:physical_dg_interval_trimming,thm:sampled_interval_witness_tree,lem:physical_dg_automatic_refinement}
     The space of the chain has dimension $q^L\ge2$ and the kernel of $H$ has
     dimension one, so $H$ has a positive spectral value, which is at least
     $\gamma$. By Lemma~\ref{lem:unique_ground_state_spectral_span}, $0$ is a
@@ -478,8 +470,7 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     is not proved, see~\cite{gap:alvv16_unique_ground_state_tree}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:canonical_word_trim_tree_failure,lem:canonical_sampled_parent,
-        lem:physical_dg_automatic_refinement}
+    \uses{lem:canonical_word_trim_tree_failure,lem:canonical_sampled_parent,lem:physical_dg_automatic_refinement}
     As in Lemma~\ref{thm:alvv_unique_ground_state_tree}, with the target
     $\mathbb C\Gamma$ itself as intermediate target: for children of
     dimension at most $\mathcal D^{2k}s$, the canonical parent fails with

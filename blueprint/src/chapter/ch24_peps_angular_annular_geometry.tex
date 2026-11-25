@@ -141,8 +141,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:peps_annular_layers,thm:peps_dyadic_scale_bounds,
-        thm:peps_capped_distance_bounds}
+    \uses{def:peps_annular_layers,thm:peps_dyadic_scale_bounds,thm:peps_capped_distance_bounds}
     Since $s_j\le 2s_j\le n$ for $j>0$ by Lemma~\ref{thm:peps_dyadic_scale_bounds},
     rewriting the thresholds $s_j\le\delta(x)$ and $\delta(x)<2s_j$ in
     (\ref{eq:peps_annular_layers}) via Lemma~\ref{thm:peps_capped_distance_bounds}
@@ -169,8 +168,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:peps_annular_layers,thm:peps_dyadic_scale_bounds,
-        def:peps_dyadic_scales}
+    \uses{def:peps_annular_layers,thm:peps_dyadic_scale_bounds,def:peps_dyadic_scales}
     The definition $A_j=\bigcup_{i\le j}B_i$ immediately gives $A_0=B_0$,
     $B_j\subseteq A_j\subseteq X$, monotonicity, and $A_{j+1}=A_j\cup B_{j+1}$.
     If $x\in B_i$ with $i\le j\le m$, then either $i=j=m$ or
@@ -214,8 +212,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_annular_cutoff,thm:peps_cumulative_layer_identities,
-        thm:peps_dyadic_scale_bounds,thm:peps_annular_mark_witness}
+    \uses{thm:peps_annular_cutoff,thm:peps_cumulative_layer_identities,thm:peps_dyadic_scale_bounds,thm:peps_annular_mark_witness}
     The relation $2s_{j+1}=s_j$ and (\ref{eq:peps_annular_layers}) give pairwise
     disjointness and $A_j\cap B_{j+1}=\varnothing$, while
     (\ref{eq:peps_cumulative_threshold}) gives $A_m=X$ and
@@ -403,9 +400,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_annular_mark_witness,thm:peps_scaled_grid_count,
-        thm:peps_grid_ownership,thm:peps_new_cell_count,
-        thm:peps_cumulative_layer_identities}
+    \uses{thm:peps_annular_mark_witness,thm:peps_scaled_grid_count,thm:peps_grid_ownership,thm:peps_new_cell_count,thm:peps_cumulative_layer_identities}
     For $j=0$, either $X=\varnothing$ or $B_0\subseteq X\subseteq\overline B_\infty(x_0,A_0s_0)$
     for any $x_0\in X$. For $j>0$, Lemma~\ref{thm:peps_annular_mark_witness}
     gives $B_j\subseteq\bigcup_{v\in\mathcal V}\overline B_\infty(v,2s_j)$.
@@ -493,8 +488,7 @@ in the September 24, 2026 polynomial-PEPS manuscript.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_annular_separation,thm:peps_grid_enlargement,
-        thm:peps_enlargement_clearance,thm:peps_scaled_cell_clearance}
+    \uses{thm:peps_annular_separation,thm:peps_grid_enlargement,thm:peps_enlargement_clearance,thm:peps_scaled_cell_clearance}
     By (\ref{eq:peps_grid_enlargement}) and $d<a'/4$,
     $U_{ds,3a's/2}(A_{j-1})\subseteq A_{j-1}^{+(3a'/2+d)s}\subseteq A_{j-1}^{+2a's}$.
     Combining Lemma~\ref{thm:peps_annular_separation} with

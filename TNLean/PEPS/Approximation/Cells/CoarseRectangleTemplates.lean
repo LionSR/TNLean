@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import Mathlib.Analysis.Convex.Segment
 import Mathlib.Analysis.Convex.Combination
 import Mathlib.Order.Int.ConditionallyCompleteOrder
@@ -237,7 +237,7 @@ Source: polynomial-PEPS proof of Proposition 3.1, `02-information.tex`
 lines 111–117; area-law Definition 9.3. -/
 theorem IsBoxUnion.exists_template {N₀ : ℕ} {T : Finset (ℤ × ℤ)} (hT : IsBoxUnion N₀ T)
     (hne : T.Nonempty) {Ctpl : ℝ} {n s₀ : ℕ} {D : ℝ}
-    (hdiam : ∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ D)
+    (hdiam : ∀ x ∈ T, ∀ y ∈ T, ((ManyBody.supDist x y : ℤ) : ℝ) ≤ D)
     (hs₀ : D + 1 ≤ s₀) (hn : D ≤ n) (hn₀ : 0 < n)
     (hscale : max Ctpl 0 * N₀ * (s₀ + 1 : ℝ) ≤ n) :
     ∃ T' : Template Ctpl n s₀, T'.points = T := by
@@ -246,7 +246,7 @@ theorem IsBoxUnion.exists_template {N₀ : ℕ} {T : Finset (ℤ × ℤ)} (hT : 
   have hD : 0 ≤ D := by
     obtain ⟨x, hx⟩ := hne
     have := hdiam x hx x hx
-    simp only [Scan.ambientSupDistance, sub_self, abs_zero, max_self, Int.cast_zero] at this
+    simp only [ManyBody.supDist_self, Nat.cast_zero, Int.cast_zero] at this
     exact this
   have hs₀pos : 0 < s₀ := by exact_mod_cast (show (0 : ℝ) < s₀ by linarith)
   have hkpos : 0 < k := by
@@ -276,7 +276,7 @@ theorem IsBoxUnion.exists_template {N₀ : ℕ} {T : Finset (ℤ × ℤ)} (hT : 
       have hhi : hi a ∈ Finset.univ.biUnion fun a ↦ Finset.Icc (lo a) (hi a) :=
         Finset.mem_biUnion.mpr ⟨a, Finset.mem_univ _, Finset.right_mem_Icc.mpr h⟩
       have hd := hdiam _ hhi _ hlo
-      simp only [Scan.ambientSupDistance, Int.cast_max, Int.cast_abs, Int.cast_sub,
+      simp only [ManyBody.natCast_supDist, Int.cast_max, Int.cast_abs, Int.cast_sub,
         max_le_iff] at hd
       apply axisRectangle_diameter
       · dsimp only
@@ -291,7 +291,7 @@ theorem IsBoxUnion.exists_template {N₀ : ℕ} {T : Finset (ℤ × ℤ)} (hT : 
     nlinarith [show (0 : ℝ) < s₀ + 1 by positivity]
   · intro x hx y hy
     have := hdiam x hx y hy
-    simp only [Scan.ambientSupDistance, Int.cast_max, Int.cast_abs, Int.cast_sub] at this
+    simp only [ManyBody.natCast_supDist, Int.cast_max, Int.cast_abs, Int.cast_sub] at this
     linarith
 
 end Template

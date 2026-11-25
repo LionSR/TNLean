@@ -9,7 +9,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \label{lem:wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_compatibility_of_isNBlkInjective}
     \leanok
-    \uses{def:l_blk_injective, rem:cyclic_window_operators}
+    \uses{def:l_blk_injective,rem:cyclic_window_operators}
     Assume $A$ is $L_0$-block-injective with $L_0>0$ and $M\ge L_0$.
     If the reduced cyclic interval crossing the last site has boundary matrices
     $Y_\tau$, then, for every physical letter $j$, one has
@@ -33,7 +33,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \label{lem:mirror_wrapped_window_one_sided_compatibility}
     \lean{MPSTensor.wrapping_window_mirror_compatibility_of_isNBlkInjective}
     \leanok
-    \uses{def:l_blk_injective, rem:cyclic_window_operators}
+    \uses{def:l_blk_injective,rem:cyclic_window_operators}
     Assume $A$ is $L_0$-block-injective with $L_0>0$ and $M\ge L_0$.
     If the second boundary-crossing reduced cyclic interval has boundary
     matrices $Y_\tau$, then $X A^j C^-_\tau=A^jY_\tau$ for every physical
@@ -53,7 +53,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \label{thm:reduced_wrapped_boundary_compatibilities}
     \lean{MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective}
     \leanok
-    \uses{def:chain_ground_space, def:l_blk_injective, lem:cyclic_window_range_antitonicity, lem:wrapped_window_one_sided_compatibility, lem:mirror_wrapped_window_one_sided_compatibility}
+    \uses{def:chain_ground_space,def:l_blk_injective,lem:cyclic_window_range_antitonicity,lem:wrapped_window_one_sided_compatibility,lem:mirror_wrapped_window_one_sided_compatibility}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$.
     Suppose $\psi\in\mathcal G_{N,L}(A)$, $N\ge2$, $L_0<L\le N$, and
     $\psi=\Gamma_N(X)$ for a boundary matrix $X$. Then there are two families
@@ -70,7 +70,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
 
 \begin{proof}
     \leanok
-    \uses{lem:cyclic_window_range_antitonicity, lem:wrapped_window_one_sided_compatibility, lem:mirror_wrapped_window_one_sided_compatibility}
+    \uses{lem:cyclic_window_range_antitonicity,lem:wrapped_window_one_sided_compatibility,lem:mirror_wrapped_window_one_sided_compatibility}
     Lemma~\ref{lem:cyclic_window_range_antitonicity} reduces the cyclic
     constraints from range $L$ to range $L_0+1$, at which the two
     cyclic-interval compatibility lemmas at the boundary positions yield the
@@ -81,7 +81,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \label{lem:closure_property_boundary_crossing_equations_ground_space_map}
     \lean{MPSTensor.closure_property_wrapped_mirror_compatibilities_of_groundSpaceMap}
     \leanok
-    \uses{def:ground_space_map, rem:cyclic_window_operators, lem:wrapped_window_one_sided_compatibility, lem:mirror_wrapped_window_one_sided_compatibility}
+    \uses{def:ground_space_map,rem:cyclic_window_operators,lem:wrapped_window_one_sided_compatibility,lem:mirror_wrapped_window_one_sided_compatibility}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
     Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
     the length-$(L_0+1)$ cyclic restrictions
@@ -109,7 +109,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \label{lem:closure_property_boundary_one_sided_products_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}
     \leanok
-    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map, lem:wrapped_middle_backgrounds}
+    \uses{lem:closure_property_boundary_crossing_equations_ground_space_map,lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective with $L_0>0$, $D\ge1$, and $L_0\le M$.
     Suppose $\psi=\Gamma_{M+1}(X)$, and suppose matrices $Y_i(\tau)$ represent
     the length-$(L_0+1)$ cyclic restrictions
@@ -172,7 +172,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
         MPSTensor.wrappedMiddleBackground_first_products_eq_of_complement_eq_right_word,
         MPSTensor.mirrorMiddleBackground_first_products_eq_of_complement_eq_right_word}
     \leanok
-    \uses{rem:cyclic_window_operators, lem:wrapped_middle_backgrounds}
+    \uses{rem:cyclic_window_operators,lem:wrapped_middle_backgrounds}
     Let $A$ be $L_0$-block-injective, with $L_0>0$, and let $L_0\le M$.
     Suppose two length-$(L_0+1)$ restrictions of a state $\psi$ at the same
     cyclic support are represented by
@@ -322,7 +322,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \lean{MPSTensor.closure_property_boundary_condition_product_of_window_witnesses,
         MPSTensor.closure_property_boundary_condition_product_of_window_witnesses_mul_right}
     \leanok
-    \uses{rem:cyclic_window_operators, thm:cyclic_window_boundary_matrix_transport}
+    \uses{rem:cyclic_window_operators,thm:cyclic_window_boundary_matrix_transport}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$. Let
     $\psi$ be a state on the chain of length $M+1$, and suppose matrices
     $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
@@ -359,7 +359,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \label{lem:boundary_transport_wrapped_product_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap}
     \leanok
-    \uses{lem:closure_property_boundary_condition_product_window_witnesses, lem:closure_property_boundary_crossing_equations_ground_space_map}
+    \uses{lem:closure_property_boundary_condition_product_window_witnesses,lem:closure_property_boundary_crossing_equations_ground_space_map}
     Let $A$ be $L_0$-block-injective with $L_0>0$ and $D\ge1$, and let
     $L_0\le M$. Let $\psi=\Gamma_{M+1}(X)$, and suppose that matrices
     $Y_i(\rho)$ represent all length-$(L_0+1)$ cyclic restrictions of $\psi$.
@@ -392,7 +392,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \label{lem:closure_property_boundary_condition_long_product_window_witnesses}
     \lean{MPSTensor.closure_property_boundary_condition_long_product_of_window_witnesses}
     \leanok
-    \uses{rem:cyclic_window_operators, thm:cyclic_window_boundary_matrix_transport}
+    \uses{rem:cyclic_window_operators,thm:cyclic_window_boundary_matrix_transport}
     Let $A$ be $L_0$-block-injective with $L_0>0$, and let $L_0\le M$. Let
     $\psi$ be a state on the chain of length $M+1$, and suppose matrices
     $Y_i(\rho)$ represent the length-$(L_0+1)$ cyclic restrictions
@@ -477,7 +477,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     \label{thm:boundary_matrix_commutes}
     \lean{MPSTensor.boundary_matrix_commutes}
     \leanok
-    \uses{def:ground_space_map, def:ground_space_parent, thm:ground_space_map_injective}
+    \uses{def:ground_space_map,def:ground_space_parent,thm:ground_space_map_injective}
     Let $A$ be injective with $D\ge1$, and let $\psi=\Gamma_N(X)$ for some
     boundary matrix $X\in\MN{D}$. If every cyclic restriction of length $L$ of
     $\psi$ lies in $G_L(A)$, with $N\ge2$ and $1<L\le N$, then
@@ -514,14 +514,14 @@ ground space is spanned by $V^{(N)}(A)$.
     \label{lem:mpv_eq_ground_space_map_one}
     \lean{MPSTensor.mpv_eq_groundSpaceMap_one}
     \leanok
-    \uses{def:ground_space_map, def:mpv}
+    \uses{def:ground_space_map,def:mpv}
     For every chain length $N$, one has $V^{(N)}(A)=\Gamma_N(\Id)$.
 \end{lemma}
 
 \begin{lemma}[The periodic MPS vector lies in the local ground space]\label{lem:mpv_mem_ground_space}
     \lean{MPSTensor.mpv_mem_groundSpace}
     \leanok
-    \uses{def:ground_space_parent, def:mpv}
+    \uses{def:ground_space_parent,def:mpv}
     $V^{(N)}(A)\in G_N(A)$ for every $N$, with boundary matrix $X=\Id$.
 \end{lemma}
 
@@ -566,7 +566,7 @@ ground space is spanned by $V^{(N)}(A)$.
     \label{lem:chain_ground_space_window_witnesses}
     \lean{MPSTensor.chainGroundSpace_window_witnesses}
     \leanok
-    \uses{def:chain_ground_space, def:ground_space_parent}
+    \uses{def:chain_ground_space,def:ground_space_parent}
     If $0<N$, $L\le N$, and $\psi\in\mathcal G_{N,L}(A)$, then, for every
     cyclic window and every outside configuration, there is a boundary matrix
     $Y$ such that the corresponding restricted $L$-site state is
@@ -584,7 +584,7 @@ ground space is spanned by $V^{(N)}(A)$.
     \label{lem:mpv_mem_chain_ground_space}
     \lean{MPSTensor.mpv_mem_chainGroundSpace}
     \leanok
-    \uses{def:chain_ground_space, lem:mpv_window_mem_ground_space}
+    \uses{def:chain_ground_space,lem:mpv_window_mem_ground_space}
     If $0<N$ and $L\le N$, then
     $V^{(N)}(A)\in\mathcal G_{N,L}(A)$.
 \end{lemma}
@@ -594,7 +594,7 @@ ground space is spanned by $V^{(N)}(A)$.
     \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
     \lean{MPSTensor.mpvState_ne_zero_of_isNBlkInjective}
     \leanok
-    \uses{def:mpv, def:l_blk_injective}
+    \uses{def:mpv,def:l_blk_injective}
     If $A$ is $L_0$-block-injective with $L_0>0$, $D\ge1$, and
     $N\ge L_0+1$, then $V^{(N)}(A)\ne0$ in the $N$-site space, and likewise
     as a vector of the Hilbert space $\ell^2(\{0,\ldots,d-1\}^N)$.

@@ -23,7 +23,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 noncomputable section
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

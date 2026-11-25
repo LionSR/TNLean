@@ -42,7 +42,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction supDist)
 
 open ManyBody (planeDomainGraph edgeBoundary graphNeighborhood ambientDilation)
 
@@ -60,7 +60,7 @@ theorem graphNeighborhood_collar_subset_of_threshold_le (C : ℝ) {n : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
           (n : ℝ) ^ (Exponents.beta : ℝ) <
-        (Scan.ambientSupDistance t z : ℝ)) :
+        ((supDist t z : ℤ) : ℝ)) :
     graphNeighborhood (planeDomainGraph Λ)
         (A.filter fun x ↦ x.val ∈ ambientDilation T
           ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A := by
@@ -71,9 +71,10 @@ theorem graphNeighborhood_collar_subset_of_threshold_le (C : ℝ) {n : ℕ}
   have hL : (0 : ℝ) ≤
       (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) := Nat.cast_nonneg _
   have hlt : ((⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ + 2 * r : ℕ) : ℝ) <
-      (Scan.ambientSupDistance t z : ℝ) := by
-    push_cast
-    linarith only [hclear t ht z hz, hsmall, hL]
+      ((supDist t z : ℤ) : ℝ) := by
+    have hc := hclear t ht z hz
+    push_cast at hc ⊢
+    linarith only [hc, hsmall, hL]
   exact_mod_cast hlt
 
 /-- **The cut-clearance clause of Proposition 10.2.** For every radius constant `C` there
@@ -89,7 +90,7 @@ theorem exists_threshold_graphNeighborhood_collar_subset (C : ℝ) :
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
           (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
               (n : ℝ) ^ (Exponents.beta : ℝ) <
-            (Scan.ambientSupDistance t z : ℝ)) →
+            ((supDist t z : ℤ) : ℝ)) →
         graphNeighborhood (planeDomainGraph Λ)
             (A.filter fun x ↦ x.val ∈ ambientDilation T
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A :=

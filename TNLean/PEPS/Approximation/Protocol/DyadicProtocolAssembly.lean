@@ -5,8 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.Protocol.DyadicProtocolFinalReadout
 import TNLean.PEPS.Approximation.Protocol.DyadicProtocolInitialStep
-import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
-import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.Frames.SheetStackChange
 import TNLean.PEPS.Approximation.Frames.SheetStackSourceBoundedChange
 
@@ -23,7 +21,7 @@ into a `DyadicProtocol` and proves the bounds `DyadicProtocol.IsDistributionProt
 * a list of encoded frames `st t` at every stage, the initial frames raw and each held by one
   party;
 * one original circuit for each change of the schedule, a bounded change in the sense of
-  `PartyCircuit.OriginalCircuit.IsBoundedChange` from the reference vector of `st t` to that of
+  `QuantumCircuit.Party.OriginalCircuit.IsBoundedChange` from the reference vector of `st t` to
   `st (t + 1)`, whose participants are parties the event of the change uses;
 * at the end of the schedule, a main frame read by the unit-square parties, with trivial holes,
   followed by other sheets whose holes satisfy the frame constraint and are at most `C L³` in
@@ -79,8 +77,8 @@ namespace TNLean.PEPS
 
 namespace Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
-open TNLean.Lattice.PartyCircuit.OriginalCircuit
+open EncodedFrame ManyBody QuantumCircuit QuantumCircuit.Party Matrix
+open QuantumCircuit.Party.OriginalCircuit
 
 /-! ### The parties an event uses -/
 
@@ -154,40 +152,6 @@ theorem pow_le_paddedSide {L k : ℕ} (h : 2 ^ k < 2 * L) : 2 ^ k ≤ paddedSide
     omega
   exact Nat.pow_le_pow_right two_pos (Nat.lt_succ_iff.1 ((Nat.pow_lt_pow_iff_right
     (by norm_num)).1 h1))
-
-/-- Every register of a list of frames is finite-dimensional. -/
-theorem finiteDimensional_of_mem_stackRegs {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ}
-    {pos : ι → ℝ × ℝ} {Party : Type} :
-    ∀ (Fs : List (Frame pos q Party)), ∀ r ∈ stackRegs Fs [], FiniteDimensional ℂ r.space
-  | [], r, hr => absurd hr List.not_mem_nil
-  | F :: Fs, r, hr => by
-    rcases List.mem_append.1 hr with hr | hr
-    · rcases List.mem_append.1 hr with hr | hr
-      · have key : ∀ l : List (Hole pos q Party), ∀ r ∈ tagRegs l,
-            FiniteDimensional ℂ r.space := by
-          intro l
-          induction l with
-          | nil => intro r hr; exact absurd hr List.not_mem_nil
-          | cons h l ih =>
-            intro r hr
-            rcases List.mem_cons.1 hr with rfl | hr
-            · change FiniteDimensional ℂ (EuclideanSpace ℂ h.patch.Tag)
-              infer_instance
-            · exact ih r hr
-        exact key _ r hr
-      · obtain ⟨x, -, rfl⟩ := List.mem_map.1 hr
-        change FiniteDimensional ℂ (EuclideanSpace ℂ (Fin q))
-        infer_instance
-    · exact finiteDimensional_of_mem_stackRegs Fs r hr
-
-/-- The reference vector of equal lists of frames, across the identification of their
-registers. -/
-theorem memCongr_stackVec {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q]
-    {pos : ι → ℝ × ℝ} {Party : Type} (Ω : EuclideanSpace ℂ (ι → Fin q))
-    {Fs Fs' : List (Frame pos q Party)} (h : Fs = Fs') {ℓ : Layout Party} (ξ : Mem ℓ) :
-    Layout.memCongr (congrArg (stackRegs · ℓ) h) (stackVec Ω Fs ξ) = stackVec Ω Fs' ξ := by
-  subst h
-  rfl
 
 /-- A square of the padded hierarchy of `[0, 2 ^ k] ^ 2` is a square of the hierarchy of depth
 `k`: its scale is at most `k` and its block indices are below `2 ^ (k - j)`.
@@ -292,6 +256,8 @@ theorem nonneg_of_sum_map_natCast_le_mul {α : Type*} {l : List α} {f : α → 
     obtain ⟨a, -, rfl⟩ := List.mem_map.1 hy
     positivity).trans h) hx
 
+set_option maxHeartbeats 400000 in
+-- The assembled protocol is compared with its chain of stages field by field.
 /-- **A protocol from a bounded trajectory of sheets.** Let `L ≥ 2` and `L ≤ 2 ^ k < 2 L`, let
 `‖Ω‖ = 1`, and let `st t` be lists of encoded frames on the parties of the hierarchy of
 `[0, 2 ^ k] ^ 2`, read at the cell centers, such that:
@@ -310,9 +276,10 @@ theorem nonneg_of_sum_map_natCast_le_mul {α : Type*} {l : List α} {f : α → 
 If `C_N ≥ 5042`, there is a dyadic protocol with the bounds of
 `DyadicProtocol.IsDistributionProtocol` for `Ω`, the count constant `C_N`, the expansion constant
 `C_K`, the error constant `C_E`, and the constants `b = 64 · 189`, `kK` and
-`r`, including the bound `r` on the pair sources of each monomial. Its first change is the private
-initialization, then come the changes of the schedule, and its last change is the final
-regrouping into the physical registers.
+`r`, including the bound `r` on the pair sources of each monomial. Its initial memory is the
+memory of the raw frames `st 0`, each held privately by one party, with the product initial
+vector of their reference vectors; its first change is empty, then come the changes of the
+schedule, and its last change is the final regrouping into the physical registers.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, lines 12–53,
 and its proof, lines 572–681; Theorem 5.2, item 3, `04-compression.tex`, lines 143–147. -/
@@ -323,17 +290,18 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     (hne : ∀ t ≤ (protocolSchedule k large).length, st t ≠ [])
     (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
-    (c : ∀ t, OriginalCircuit (stackRegs (st t) []) (stackRegs (st (t + 1)) []))
+    (c : ∀ t, OriginalCircuit (framesSystem q (cellCenterPos L) (st t) fun _ ↦ Unit)
+      (framesSystem q (cellCenterPos L) (st (t + 1)) fun _ ↦ Unit))
     {r K kK : ℕ} {C_N C_K C_E ε : ℝ}
     (hc : ∀ t (ht : t < (protocolSchedule k large).length),
       (c t).IsBoundedChange {p | EventUses ((protocolSchedule k large)[t]).1 p} r K ε
-        (framesVec Ω (st t)) (framesVec Ω (st (t + 1))))
+        (framesRef Ω (st t)) (framesRef Ω (st (t + 1))))
     (hsrc : ∀ t < (protocolSchedule k large).length, (c t).IsSourceBounded r)
     (M : Frame (cellCenterPos L) q (ProtocolParty k))
     (Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)))
     (hfin : st (protocolSchedule k large).length = M :: Fs)
     (hMown : ∀ v, M.owner v = .inl (unitSquare hkL v)) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
-    (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3)
     (hC : 5042 ≤ C_N) (hK : (K : ℝ) ≤ C_K * (L : ℝ) ^ kK) (hεC : ε ≤ C_E / (L : ℝ) ^ 20) :
     ∃ D : DyadicProtocol L q (ProtocolParty k),
@@ -341,8 +309,17 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
   classical
   set sch := protocolSchedule k large with hsch
   set n := sch.length with hn
-  obtain ⟨hx, c₀, h0, -, -, -, hev0⟩ :=
-    exists_originalCircuit_initial_of_holes_eq_nil hΩ (st 0) holder hraw hown
+  -- the initial reference vector is the product of the vectors of the copies held by the parties
+  have hcard : ∀ F ∈ st 0, ∀ p ≠ holder F, Fintype.card (F.system p) = 1 := fun F hF p hp ↦
+    Frame.card_system_eq_one_of_holes_eq_nil (hraw F hF) (hown F hF) hp
+  let φ : ∀ p, EuclideanSpace ℂ (framesSystem q (cellCenterPos L) (st 0) (fun _ ↦ Unit) p) :=
+    fun p ↦ heldRef Ω holder p (st 0)
+  have hφ1 : ∀ p, ‖φ p‖ = 1 := fun p ↦ norm_heldRef Ω holder p (st 0) hcard fun F hF ↦ by
+    rw [F.norm_regRef, F.norm_refVec_of_holes_eq_nil (hraw F hF), hΩ]
+  have hφ : (WithLp.toLp 2 (productVector fun p x ↦ φ p x) :
+      EuclideanSpace ℂ (Config (framesSystem q (cellCenterPos L) (st 0) fun _ ↦ Unit))) =
+      framesRef Ω (st 0) :=
+    toLp_productVector_heldRef Ω holder (st 0) hcard
   have hinj : Function.Injective M.owner := fun v w h => by
     rw [hMown, hMown] at h
     exact unitSquare_injective hkL (Sum.inl_injective h)
@@ -351,27 +328,32 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
   have hd1 : ∀ p ∉ Set.range M.owner, d p = 1 := fun p hp => by simp only [d]; exact ite_eq_right hp
   have hrange : Set.range (fun v => (.inl (unitSquare hkL v) : ProtocolParty k)) =
       Set.range M.owner := congrArg Set.range (funext hMown).symm
-  let e := (readoutCircuit d M Fs [] hd hd1).castLayouts
-    (congrArg (stackRegs · []) hfin).symm rfl
+  have hsysn : framesSystem q (cellCenterPos L) (M :: Fs) (fun _ ↦ Unit) =
+      framesSystem q (cellCenterPos L) (st n) fun _ ↦ Unit :=
+    congrArg (framesSystem q (cellCenterPos L) · fun _ ↦ Unit) hfin.symm
+  let e := (readoutCircuit d M Fs (fun _ ↦ Unit) hinj hd hd1).castSystems hsysn rfl
   have he0 : e.nonprivateCount = 0 := by
-    simp only [e, Circuit.gateCount_castLayouts, nonprivateCount_readoutCircuit]
+    simp only [e, nonprivateCount_castSystems, nonprivateCount_readoutCircuit]
   have hN : paddedSide L = 2 ^ k :=
     le_antisymm (paddedSide_le_of_le_pow hkL) (pow_le_paddedSide hk2)
+  let c₀ := OriginalCircuit.done (framesSystem q (cellCenterPos L) (st 0) fun _ ↦ Unit)
+  let x₀ : EuclideanSpace ℂ (Config (framesSystem q (cellCenterPos L) (st 0) fun _ ↦ Unit)) :=
+    WithLp.toLp 2 (productVector fun p x ↦ φ p x)
   let D : DyadicProtocol L q (ProtocolParty k) :=
     { placement := protocolPlacement k
-      initialSpace := fun p => framesSpace ((st 0).filter fun F => holder F = p)
-      finite_initialSpace := fun p => Layout.finiteDimensional_mem_of_registers _
-        (finiteDimensional_of_mem_stackRegs _)
-      initialVector := fun p => framesVec Ω ((st 0).filter fun F => holder F = p)
-      norm_initialVector := hx
       changes := n + 2
-      layout := chainLayout (ProductInput.wholePartyLayout fun p =>
-        framesSpace ((st 0).filter fun F => holder F = p)) (fun t => stackRegs (st t) []) n
-        (familyPhysicalOutputLayout d (siteOrder M.owner) (readoutPrivate M Fs []))
-      layout_zero := rfl
+      system := chainSystem (framesSystem q (cellCenterPos L) (st 0) fun _ ↦ Unit)
+        (fun t => framesSystem q (cellCenterPos L) (st t) fun _ ↦ Unit) n
+        (physicalSystem d (readoutPrivate M Fs fun _ ↦ Unit))
+      fintype_system := instFintypeChainSystem _ _ _ _
+      decidableEq_system := instDecidableEqChainSystem _ _ _ _
+      fintype_privateOutput := fun _ ↦ inferInstance
+      decidableEq_privateOutput := fun _ ↦ inferInstance
+      initialVector := φ
+      norm_initialVector := hφ1
       step := chainStep c₀ c e
-      reference := chainVec (ProductInput.ofAllParties _ _ hx).vector
-        (fun t => framesVec Ω (st t)) (e.eval (framesVec Ω (st n)))
+      reference := chainVec x₀ (fun t => framesRef Ω (st t))
+        (toEuclideanLin e.op (framesRef Ω (st n)))
       reference_zero := rfl
       site := fun v => .inl (unitSquare hkL v)
       site_injective := fun v w h => unitSquare_injective hkL (Sum.inl_injective h)
@@ -379,20 +361,15 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
       physicalDimension := d
       physicalDimension_site := fun v => by rw [← hMown]; exact hd v
       physicalDimension_eq_one := fun p hp => hd1 p (by rwa [← hrange])
-      physicalOrder := siteOrder M.owner
-      physicalOrder_nodup := nodup_siteOrder hinj
-      mem_physicalOrder := mem_siteOrder M.owner
-      privateOutput := readoutPrivate M Fs []
-      finite_privateOutput := fun r hr => by
-        rcases List.mem_append.1 hr with hr | hr
-        · exact finiteDimensional_of_mem_stackRegs [M] r
-            (List.mem_append_left _ (List.mem_append_left _ hr))
-        · exact finiteDimensional_of_mem_stackRegs Fs r hr
-      layout_changes := chainLayout_succ_of_lt (Nat.lt_succ_self n)
+      privateOutput := readoutPrivate M Fs fun _ ↦ Unit
+      finalSystemEquiv := fun p ↦
+        Equiv.cast (congrFun (chainSystem_succ_of_lt (Nat.lt_succ_self n)) p)
       squareParty := protocolSquareParty hN
       repaintingSquare := fun t => if h : 0 < t ∧ t - 1 < n then
         Sum.elim (fun S => some S.toTriple) (fun _ => none) (sch[t - 1]'h.2).1 else none
       frames := fun t => st (t - 1) }
+  let _ : ∀ t p, Fintype (D.system t p) := D.fintype_system
+  let _ : ∀ t p, DecidableEq (D.system t p) := D.decidableEq_system
   -- the event of each change of the protocol
   let ev : ℕ → ProtocolEvent k := fun t =>
     if h : 0 < t ∧ t - 1 < n then (sch[t - 1]'h.2).1 else .inl (rootSquare k)
@@ -400,25 +377,36 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
     simp only [ev, Nat.add_sub_cancel, Nat.succ_pos, ht, and_self, dite_true]
   -- the properties of every change
   have hQ := chainStep_induction (c₀ := c₀) (c := c) (e := e)
-    (fun t a b (w : OriginalCircuit a b) => w.nonprivateCount ≤ 1 ∧
+    (fun t _ _ _ _ _ _ w => w.nonprivateCount ≤ 1 ∧
       (¬(0 < t ∧ t ≤ n) → w.nonprivateCount = 0) ∧
       (∀ g, (↑(w.participants g) : Set (ProtocolParty k)) ⊆ {p | EventUses (ev t) p}) ∧
       w.IsExpansionBounded r K ∧ w.IsMonomialBounded K ∧ w.IsSourceBounded r)
-    ⟨h0.trans_le zero_le_one, fun _ => h0, participants_subset_of_nonprivateCount_eq_zero _ h0 _,
-      isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ h0,
-      isMonomialBounded_of_nonprivateCount_eq_zero _ _ h0,
-      isSourceBounded_of_nonprivateCount_eq_zero h0 _⟩
+    (fun t _ _ _ _ _ _ _ _ _ _ _ _ w hX hY h => ⟨by simpa using h.1, fun ht => by
+        simpa using h.2.1 ht,
+      forall_participants_castSystems
+        (Q := fun D ↦ (↑D : Set (ProtocolParty k)) ⊆ {p | EventUses (ev t) p}) w hX hY h.2.2.1,
+      (isExpansionBounded_castSystems w hX hY).mpr h.2.2.2.1,
+      (isMonomialBounded_castSystems w hX hY).mpr h.2.2.2.2.1,
+      (isSourceBounded_castSystems w hX hY).mpr h.2.2.2.2.2⟩)
+    ⟨zero_le_one, fun _ => rfl,
+      fun g ↦ ((isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero (w := c₀) rfl).false g).elim,
+      isExpansionBounded_of_nonprivateCount_eq_zero rfl _ _,
+      isMonomialBounded_of_nonprivateCount_eq_zero rfl _,
+      isSourceBounded_of_nonprivateCount_eq_zero rfl _⟩
     (fun t ht => ⟨(hc t ht).nonprivateCount_le, fun h => absurd ⟨Nat.succ_pos t, ht⟩ h,
       fun g => by rw [hev t ht]; exact (hc t ht).participants_subset g,
       (hc t ht).isExpansionBounded, (hc t ht).isMonomialBounded, hsrc t ht⟩)
-    ⟨he0.trans_le zero_le_one, fun _ => he0, participants_subset_of_nonprivateCount_eq_zero _ he0 _,
-      isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ he0,
-      isMonomialBounded_of_nonprivateCount_eq_zero _ _ he0,
+    ⟨he0.trans_le zero_le_one, fun _ => he0,
+      fun g ↦ ((isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero he0).false g).elim,
+      isExpansionBounded_of_nonprivateCount_eq_zero he0 _ _,
+      isMonomialBounded_of_nonprivateCount_eq_zero he0 _,
       isSourceBounded_of_nonprivateCount_eq_zero he0 _⟩
     (fun t _ => ⟨zero_le_one, fun _ => rfl,
-      participants_subset_of_nonprivateCount_eq_zero _ rfl _,
-      isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ rfl,
-      isMonomialBounded_of_nonprivateCount_eq_zero _ _ rfl,
+      fun g ↦ ((isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero
+        (w := OriginalCircuit.done (physicalSystem d (readoutPrivate M Fs fun _ ↦ Unit)))
+        rfl).false g).elim,
+      isExpansionBounded_of_nonprivateCount_eq_zero rfl _ _,
+      isMonomialBounded_of_nonprivateCount_eq_zero rfl _,
       isSourceBounded_of_nonprivateCount_eq_zero rfl _⟩)
   -- an additional party is the placeholder of a non-root square, used only by its repainting
   have hadd : ∀ p, p ∉ Set.range D.squareParty → ∃ S : HierarchySquare (paddedSide L),
@@ -436,7 +424,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
       have ht : 0 < t ∧ t - 1 < n := by
         by_contra h
         have h' : ¬(0 < t ∧ t ≤ n) := fun h' => h ⟨h'.1, by omega⟩
-        exact (isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero _ ((hQ t).2.1 h')).false g
+        exact (isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero ((hQ t).2.1 h')).false g
       simp only [ev, ht, and_self, dite_true] at hu
       change (if h : 0 < t ∧ t - 1 < n then _ else none) = _
       simp only [ht, and_self, dite_true, hu, Sum.elim_inl]
@@ -496,27 +484,28 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
   -- the initial copies of `Ω`, each held privately by one party
   have hinit : D.frames 0 ≠ [] ∧ ∃ holder : Frame (cellCenterPos L) q (ProtocolParty k) →
       ProtocolParty k, (∀ F ∈ D.frames 0, F.holes = [] ∧ ∀ x, F.owner x = holder F) ∧
-        ∀ [DecidableEq (ProtocolParty k)],
-          (D.initialSpace = fun p => framesSpace ((D.frames 0).filter fun F => holder F = p)) ∧
-            ∀ [NeZero q], HEq D.initialVector
-              fun p => framesVec Ω ((D.frames 0).filter fun F => holder F = p) := by
-    refine ⟨hne 0 (Nat.zero_le _), holder, fun F hF => ⟨hraw F hF, hown F hF⟩, fun {inst} => ?_⟩
-    obtain rfl : inst = instDecidableEqSum := Subsingleton.elim _ _
-    exact ⟨rfl, fun {_} => HEq.rfl⟩
+        ∃ e : ∀ p, D.system 0 p ≃ framesSystem q (cellCenterPos L) (D.frames 0) (fun _ ↦ Unit) p,
+          ∀ [NeZero q], ∀ p, D.initialVector p = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+            (e p).symm (heldRef Ω holder p (D.frames 0)) := by
+    refine ⟨hne 0 (Nat.zero_le _), holder, fun F hF => ⟨hraw F hF, hown F hF⟩,
+      fun _ ↦ Equiv.refl _, fun p ↦ ?_⟩
+    ext x
+    rfl
   -- the intermediate reference vectors are the reference vectors of the frames
   have hframes : ∀ [NeZero q], ∀ t, 0 < t → t < D.changes →
       (∀ F ∈ D.frames t, ‖F.refVec Ω‖ ≤ 1) ∧
-        ∃ h : D.layout t = stackRegs (D.frames t) [],
-          D.reference t = Layout.memCongr h.symm (framesVec Ω (D.frames t)) := by
+        ∃ e : ∀ p, D.system t p ≃ framesSystem q (cellCenterPos L) (D.frames t) (fun _ ↦ Unit) p,
+          D.reference t = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight e).symm
+            (framesRef Ω (D.frames t)) := by
     intro _ t ht0 htn
     obtain ⟨s, rfl⟩ : ∃ s, t = s + 1 := ⟨t - 1, by omega⟩
     have hs : s ≤ n := by change s + 1 < n + 2 at htn; omega
-    have hl : D.layout (s + 1) = stackRegs (st s) [] :=
-      chainLayout_succ_of_le (A := ProductInput.wholePartyLayout fun p =>
-        framesSpace ((st 0).filter fun F => holder F = p)) (B := fun t => stackRegs (st t) []) hs
-    exact ⟨fun F _ => (F.norm_refVec_le Ω).trans hΩ.le, hl,
-      chainVec_succ_of_le (x₀ := (ProductInput.ofAllParties _ _ hx).vector)
-        (y := fun t => framesVec Ω (st t)) (z := e.eval (framesVec Ω (st n))) hs⟩
+    exact ⟨fun F _ => (F.norm_refVec_le Ω).trans hΩ.le, fun p ↦ Equiv.cast (congrFun
+      (chainSystem_succ_of_le (A := framesSystem q (cellCenterPos L) (st 0) fun _ ↦ Unit)
+        (B := fun t => framesSystem q (cellCenterPos L) (st t) fun _ ↦ Unit)
+        (Z := physicalSystem d (readoutPrivate M Fs fun _ ↦ Unit)) hs) p),
+      chainVec_succ_of_le x₀ (fun t => framesRef Ω (st t))
+        (toEuclideanLin e.op (framesRef Ω (st n))) hs⟩
   -- every intermediate stage has a frame
   have hnil : ∀ t, 0 < t → t < D.changes → D.frames t ≠ [] := fun t ht0 htn =>
     hne (t - 1) (by change t < n + 2 at htn; omega)
@@ -531,7 +520,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
   have hgate : ∀ γ : D.Gate, 0 < (γ.1 : ℕ) ∧ (γ.1 : ℕ) - 1 < n := fun γ => by
     by_contra h
     have h' : ¬(0 < (γ.1 : ℕ) ∧ (γ.1 : ℕ) ≤ n) := fun h' => h ⟨h'.1, by omega⟩
-    exact (isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero _ ((hQ γ.1).2.1 h')).false γ.2
+    exact (isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero ((hQ γ.1).2.1 h')).false γ.2
   let chg : D.Gate → Fin n := fun γ => ⟨(γ.1 : ℕ) - 1, (hgate γ).2⟩
   have hchg : ∀ t, #{γ | chg γ = t} ≤ 1 := fun t => by
     refine card_le_one.2 fun γ hγ γ' hγ' => ?_
@@ -577,31 +566,41 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
   · have h := EventUses.anchor_dist_le ((hQ t).2.2.1 g hp) ((hQ t).2.2.1 g hp')
     exact ⟨h.1.trans (Nat.mul_le_mul_right _ (by norm_num)),
       h.2.trans (Nat.mul_le_mul_right _ (by norm_num))⟩
-  · refine (norm_chainStep_eval_sub_le (fun t => if 0 < t ∧ t ≤ n then ε else 0) ?_ ?_ ?_ ?_
-      t).trans ?_
-    · simp [hev0]
-    · intro t ht
+  · have h₀ : ‖toEuclideanLin c₀.op x₀ - framesRef Ω (st 0)‖ ≤
+        (fun t => if 0 < t ∧ t ≤ n then ε else 0) 0 := by
+      have hx : x₀ = framesRef Ω (st 0) := hφ
+      simp only [c₀, OriginalCircuit.op_done, Matrix.toLpLin_one, LinearMap.id_apply, hx,
+        sub_self, norm_zero, lt_irrefl, false_and, ite_false, le_refl]
+    have hc' : ∀ t < n, ‖toEuclideanLin (c t).op (framesRef Ω (st t)) - framesRef Ω (st (t + 1))‖
+        ≤ (fun t => if 0 < t ∧ t ≤ n then ε else 0) (t + 1) := fun t ht => by
       simp only [Nat.succ_pos, true_and, show t + 1 ≤ n from ht, ite_true]
-      exact (hc t ht).norm_eval_sub_le
-    · simp
-    · intro t ht
-      simp [show ¬t + 1 ≤ n by omega]
-    · split_ifs
+      exact (hc t ht).norm_op_sub_le
+    have he' : ‖toEuclideanLin e.op (framesRef Ω (st n)) - toEuclideanLin e.op (framesRef Ω (st n))‖
+        ≤ (fun t => if 0 < t ∧ t ≤ n then ε else 0) (n + 1) := by
+      simp
+    have hid : ∀ t, n < t → 0 ≤ (fun t => if 0 < t ∧ t ≤ n then ε else 0) (t + 1) :=
+      fun t ht => by simp [show ¬t + 1 ≤ n by omega]
+    have key := norm_chainStep_op_sub_le (c₀ := c₀) (c := c) (e := e) (x₀ := x₀)
+      (y := fun t => framesRef Ω (st t)) (z := toEuclideanLin e.op (framesRef Ω (st n)))
+      (fun t => if 0 < t ∧ t ≤ n then ε else 0) h₀ hc' he' hid t
+    have hb : (fun t => if 0 < t ∧ t ≤ n then ε else 0) t ≤ C_E / (L : ℝ) ^ 20 := by
+      dsimp only
+      split_ifs
       exacts [hεC, div_nonneg hCE (by positivity)]
-  · have key : e.eval (framesVec Ω (st n)) =
-        (readoutCircuit d M Fs [] hd hd1).eval (stackVec Ω (M :: Fs) (1 : ℂ)) := by
-      have h1 := eval_castLayouts_memCongr (readoutCircuit d M Fs [] hd hd1)
-        (congrArg (stackRegs · []) hfin).symm rfl (stackVec Ω (M :: Fs) (1 : ℂ))
-      rw [memCongr_stackVec Ω hfin.symm] at h1
-      exact h1
-    refine D.exists_reference_changes_of_readoutCircuit M Fs [] hinj hM (fun v => (hMown v).symm)
-      rfl rfl hΩ (by omega) hε hholes norm_one ?_
+    exact key.trans hb
+  · refine D.exists_reference_changes_of_readoutCircuit M Fs (fun _ ↦ Unit) hinj hM
+      (fun v => (hMown v).symm) (fun _ ↦ Equiv.refl _) hΩ (by omega) hε hholes
+      (ξ := EuclideanSpace.single (fun _ ↦ ()) 1) (by simp) ?_
     have hz : D.reference D.changes = _ :=
-      chainVec_succ_of_lt (ProductInput.ofAllParties _ _ hx).vector
-        (fun t => framesVec Ω (st t)) (e.eval (framesVec Ω (st n))) (Nat.lt_succ_self n)
-    rw [hz]
-    exact eq_of_heq (((Layout.memCongr_apply_heq _ _).trans (Layout.memCongr_apply_heq _ _)).trans
-      ((heq_of_eq key).trans (Layout.memCongr_apply_heq _ _).symm))
+      chainVec_succ_of_lt x₀ (fun t => framesRef Ω (st t))
+        (toEuclideanLin e.op (framesRef Ω (st n))) (Nat.lt_succ_self n)
+    have hcastRef : ∀ {Fs₁ Fs₂ : List (Frame (cellCenterPos L) q (ProtocolParty k))}
+        (h : Fs₁ = Fs₂), castVector (congrArg (framesSystem q (cellCenterPos L) · fun _ ↦ Unit) h)
+          (framesRef Ω Fs₁) = framesRef Ω Fs₂ := by
+      rintro _ _ rfl
+      rfl
+    rw [hz, ← hcastRef hfin.symm, toEuclideanLin_op_castSystems]
+    rfl
 
 end Approximation
 
@@ -616,11 +615,12 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
+open EncodedFrame ManyBody QuantumCircuit QuantumCircuit.Party Matrix
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-  {Party : Type} {Ω : EuclideanSpace ℂ (ι → Fin q)} {ℓ : Layout Party} {ξ : Mem ℓ}
-  {r K rs : ℕ} {ε : ℝ}
+  {Party : Type} [Fintype Party] [DecidableEq Party] {Ω : EuclideanSpace ℂ (ι → Fin q)}
+  {W : Party → Type} [∀ p, Fintype (W p)] [∀ p, DecidableEq (W p)]
+  {ξ : EuclideanSpace ℂ (Config W)} {r K rs : ℕ} {ε : ℝ}
 
 /-- **Joining the changes of the events.** Let `es` be a list of events, each with a list of
 changes `ops e`, and let `b i` be the stack of sheets at the start of the event number `i`. If,
@@ -699,13 +699,14 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
     (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
     {kK : ℕ} {C_N C_K C_E : ℝ}
     (hc : ∀ t (ht : t < (protocolSchedule k large).length),
-      HasSourceBoundedChange Ω (st t) (st (t + 1)) (ℓ := []) (1 : ℂ)
+      HasSourceBoundedChange Ω (st t) (st (t + 1))
+        (EuclideanSpace.single (fun _ : ProtocolParty k ↦ ()) 1)
         {p | EventUses ((protocolSchedule k large)[t]).1 p} r K r ε)
     (M : Frame (cellCenterPos L) q (ProtocolParty k))
     (Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)))
     (hfin : st (protocolSchedule k large).length = M :: Fs)
     (hMown : ∀ v, M.owner v = .inl (unitSquare hkL v)) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
-    (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C_E * (L : ℝ) ^ 3)
     (hC : 5042 ≤ C_N) (hK : (K : ℝ) ≤ C_K * (L : ℝ) ^ kK) (hεC : ε ≤ C_E / (L : ℝ) ^ 20) :
     ∃ D : DyadicProtocol L q (ProtocolParty k),
@@ -715,7 +716,8 @@ theorem exists_isDistributionProtocol_of_hasSourceBoundedChange {L k : ℕ} (hL 
   set n := (protocolSchedule k large).length with hn
   set st' : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)) := fun t => st (min t n)
   have hst' : ∀ t ≤ n, st' t = st t := fun t ht => by simp only [st', min_eq_left ht]
-  have hall : ∀ t, HasSourceBoundedChange Ω (st' t) (st' (t + 1)) (ℓ := []) (1 : ℂ)
+  have hall : ∀ t, HasSourceBoundedChange Ω (st' t) (st' (t + 1))
+      (EuclideanSpace.single (fun _ : ProtocolParty k ↦ ()) 1)
       (if h : t < n then {p | EventUses ((protocolSchedule k large)[t]).1 p} else ∅) r K r
       (max ε 0) := fun t => by
     by_cases h : t < n

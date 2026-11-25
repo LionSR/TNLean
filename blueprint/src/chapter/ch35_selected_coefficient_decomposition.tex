@@ -23,10 +23,7 @@ units furnished by the selected crossing edges.
     \label{thm:selected_coefficient_prescribed_middle}
     \lean{TNLean.MPS.AreaLaw.exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition}
     \leanok
-    \uses{def:selected_exterior_middle_equiv,thm:selected_middle_core_inclusions,
-        thm:selected_middle_fixed_physical_data,def:two_marker_middle_index,
-        def:two_marker_middle_product,def:two_marker_coefficient,
-        thm:two_marker_common_middle}
+    \uses{def:selected_exterior_middle_equiv,thm:selected_middle_core_inclusions,thm:selected_middle_fixed_physical_data,def:two_marker_middle_index,def:two_marker_middle_product,def:two_marker_coefficient,thm:two_marker_common_middle}
     Let $L,q,a,b,\ell$ be nonnegative integers with
     $a+2\ell\le b$ and $b+2\ell\le L-1$.
     Fix positions $0\le p,s<2\ell$ and full-chain operators $W^L_r,W^R_r$
@@ -90,8 +87,7 @@ units furnished by the selected crossing edges.
     The assertion includes zero local dimension and every value of $k,i,j$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:selected_exterior_middle_equiv,
-        thm:selected_middle_fixed_physical_data,thm:two_marker_common_middle}
+    \uses{def:selected_exterior_middle_equiv,thm:selected_middle_fixed_physical_data,thm:two_marker_common_middle}
     Choose the fixed middle and crossing data from the two windows and $M$.
     Their ordinary weighted middle sum is $A=z_{B_1}M_E+K_z$, with $K_z$
     supported on $C$. Retain the prescribed one-site matrix-unit families in

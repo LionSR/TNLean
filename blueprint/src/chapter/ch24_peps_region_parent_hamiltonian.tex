@@ -43,7 +43,7 @@ tensors. Different interaction terms may act on different regions.
         ManyBody.Interaction.ofPlace,
         ManyBody.Interaction.hamiltonian}
     \leanok
-    \uses{def:peps_region_parent_interaction, def:peps_regional_operator_extension}
+    \uses{def:peps_region_parent_interaction,def:peps_regional_operator_extension}
     Let $(R_i)_{i\in I}$ be a finite family of regions, and let $h_i$
     be a parent interaction on $R_i$. Its extension to the full graph
     and the parent Hamiltonian are
@@ -98,8 +98,7 @@ tensors. Different interaction terms may act on different regions.
     \lean{TNLean.PEPS.stateCoeff_mem_regionParentGroundSpace,
         TNLean.PEPS.toLp_stateCoeff_mem_zeroSpace_ofPlace}
     \leanok
-    \uses{def:peps_region_parent_hamiltonian,
-        thm:peps_region_ground_space_slice}
+    \uses{def:peps_region_parent_hamiltonian,thm:peps_region_ground_space_slice}
     The closed PEPS vector $\psi$ satisfies every regional ground-space
     condition, and $\widetilde h_i\psi=0$ for every $i\in I$: it lies in the
     zero space of the family of extended interactions. Since the terms are
@@ -109,8 +108,7 @@ tensors. Different interaction terms may act on different regions.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_region_ground_space_slice,
-        thm:peps_region_parent_common_kernel}
+    \uses{thm:peps_region_ground_space_slice,thm:peps_region_parent_common_kernel}
     Every complementary slice of $\psi$ belongs to the regional
     PEPS ground space. Therefore every extended interaction kills
     $\psi$.

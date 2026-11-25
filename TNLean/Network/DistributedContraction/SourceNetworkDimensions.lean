@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.SourceGateRoot
+import QICLean.Circuit.Party.Compression.PartialExpansion.Choices
 import TNLean.Network.DistributedContraction.DistributedOperatorContraction
 import Mathlib.Data.Fintype.Prod
 import Mathlib.Algebra.Order.Monoid.Unbundled.Basic
@@ -22,15 +22,15 @@ original branch counts. It is an auxiliary finite-cardinality estimate.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588.
 -/
 
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice.Compression
-variable {P : Type} {a b : Layout P}
+namespace QuantumCircuit.Party.SourceCircuit
+open TNLean.Network
+variable {P : Type} [DecidableEq P] {X Y : P → Type}
 
 open Classical in
 /-- A density star at an original occurrence has the square of that gate's
 branch count; a source sample link has exactly the sample size.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–579. -/
-theorem card_alphabet_source_density (w : SourceCircuit a b) (k : ℕ)
+theorem card_alphabet_source_density (w : SourceCircuit X Y) (k : ℕ)
     (e : DistributedOperatorContraction.Link
       (Finset.univ : Finset w.nonemptyGateLocations)
       (fun g ↦ w.participants g.1) (sourceGateRoot w)) :
@@ -51,7 +51,7 @@ open Classical in
 /-- A supplied uniform bound on the original branch counts bounds every
 constructed density link by the maximum of its square and the sample size.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–579. -/
-theorem card_alphabet_source_density_le (w : SourceCircuit a b) (k M : ℕ)
+theorem card_alphabet_source_density_le (w : SourceCircuit X Y) (k M : ℕ)
     (hM : ∀ g : w.nonemptyGateLocations, Fintype.card (w.branchLabels g.1) ≤ M)
     (e : DistributedOperatorContraction.Link
       (Finset.univ : Finset w.nonemptyGateLocations)
@@ -71,7 +71,7 @@ open Classical in
 /-- Both endpoints of each density-network link belong to its original gate's
 participant set. Root membership is derived from the recorded nonempty gate.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 581–588. -/
-theorem distributedLinkParties_source_subset (w : SourceCircuit a b)
+theorem distributedLinkParties_source_subset (w : SourceCircuit X Y)
     (e : DistributedOperatorContraction.Link
       (Finset.univ : Finset w.nonemptyGateLocations)
       (fun g ↦ w.participants g.1) (sourceGateRoot w)) :
@@ -80,4 +80,4 @@ theorem distributedLinkParties_source_subset (w : SourceCircuit a b)
     (fun g ↦ w.participants g.1) (sourceGateRoot w)
     (fun g _ ↦ sourceGateRoot_mem w g) e.2
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

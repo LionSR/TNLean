@@ -25,7 +25,7 @@ open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS
-open TNLean.Lattice.DependentBondNetwork
+open TNLean.Network.DependentBondNetwork
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}

@@ -12,10 +12,10 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{definition}[Substitution in the original composition]
     \label{def:peps_source_substitution}
-    \lean{TNLean.Lattice.PartyCircuit.PreparedSourceGate.branchWithSources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.evalWithSources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialWithSources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceVectors}
+    \lean{QuantumCircuit.Party.PreparedSourceGate.branchWithSources}
+    \lean{QuantumCircuit.Party.SourceCircuit.opWithSources}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialWithSources}
+    \lean{QuantumCircuit.Party.SourceCircuit.selectedSourceVectors}
     \leanok
     \uses{def:peps_source_circuit,def:peps_prepared_source_gate,def:peps_partial_source_choices}
     For vectors $\eta_{e,\alpha}\in\C^{u_e}\otimes\C^{v_e}$, let $W(\eta)$ be
@@ -31,10 +31,10 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{lemma}[Summing untouched gates]
     \label{thm:peps_source_substitution_partial}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.evalWithSources_original}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialWithSources_original}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.evalWithSources_eq_sum_partialWithSources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_selectedSourceVectors_eq_sum}
+    \lean{QuantumCircuit.Party.SourceCircuit.opWithSources_original}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialWithSources_original}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_coefficient_smul_op_partialWithSources}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_coefficient_smul_op_partialWithSources_selected}
     \leanok
     \uses{def:peps_source_substitution}
     We have $W(\nu)=W$ and $W_{\mathcal A,\xi}(\nu)=W_{\mathcal A,\xi}$. If
@@ -51,7 +51,7 @@ $\rho$ is an arbitrary input matrix.
 \end{lemma}
 
 \begin{proof}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.affectedOwner_mapOwner_eq_none}
+    \lean{QuantumCircuit.Party.SourceCircuit.affectedOwner_eq_none_of_not_isTouched}
     \leanok
     \uses{thm:peps_partial_source_evaluation,thm:peps_source_circuit_incidence}
     By induction on $W$ using Lemma~\ref{thm:peps_partial_source_evaluation}:
@@ -72,8 +72,8 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{definition}[Remaining operations after source extraction]
     \label{def:peps_canonical_source_residual}
-    \lean{TNLean.Lattice.PartyCircuit.Word.residualInSlots}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialResidual}
+    \lean{QuantumCircuit.Party.Word.residualInSlots}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialResidual}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_partial_fixed_layout}
     Let $V$ be the residual composition obtained by extracting the prepared
@@ -87,13 +87,12 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{lemma}[Recovery from the remaining operations]
     \label{thm:peps_canonical_source_recovery}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sources_residualInSlots}
-    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_residualInSlots}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_residualInSlots_prepare}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotLayout_partialSlots_eq}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialResidual}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_partialResidual}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialResidual_prepare}
+    \lean{QuantumCircuit.Party.Word.sources_residualInSlots}
+    \lean{QuantumCircuit.Party.Word.isAllowed_residualInSlots}
+    \lean{QuantumCircuit.Party.Word.op_residualInSlots_mul_prepareSlots}
+    \lean{QuantumCircuit.Party.SourceCircuit.sources_partialResidual}
+    \lean{QuantumCircuit.Party.SourceCircuit.isAllowed_partialResidual}
+    \lean{QuantumCircuit.Party.SourceCircuit.op_partialResidual_mul_prepareSlots}
     \leanok
     \uses{def:peps_canonical_source_residual}
     The composition $V$ is source-free, allowed when the original word is
@@ -117,10 +116,8 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{lemma}[Uniform recovery after source substitution]
     \label{thm:peps_canonical_substitution_recovery}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.layout_sources_partialWithSources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.residualInSlots_partialWithSources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.ofSlots_partialWithSources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialResidual_prepare_substituted}
+    \lean{QuantumCircuit.Party.SourceCircuit.ofSlots_partialWithSources}
+    \lean{QuantumCircuit.Party.SourceCircuit.op_partialResidual_mul_prepareSlots_substituted}
     \leanok
     \uses{def:peps_source_substitution,def:peps_canonical_source_residual}
     For any $\eta$, $W_{\mathcal A,\xi}(\eta)$ has retained positions
@@ -168,11 +165,11 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{definition}[Corrected terms at original source positions]
     \label{def:peps_original_corrected_term}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.SourceBasisChoice}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceBasisChoiceFintype}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.labelBasisVectors}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceBasisMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm}
+    \lean{QuantumCircuit.Party.SourceCircuit.SourceBasisChoice}
+    \lean{QuantumCircuit.Party.SourceCircuit.instFintypeSourceBasisChoice}
+    \lean{QuantumCircuit.Party.SourceCircuit.labelBasisVectors}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceBasisMatrix}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceTerm}
     \leanok
     \uses{def:peps_source_substitution}
     For $S\subseteq\mathcal E$, a choice $u=(\alpha,a)$ assigns to each
@@ -192,7 +189,7 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{lemma}[The empty corrected set]
     \label{thm:peps_corrected_empty}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_empty}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceTerm_empty}
     \leanok
     \uses{def:peps_original_corrected_term}
     For the original circuit matrix $M$, $F_\varnothing(E;\rho)=M\rho M^\dagger$.
@@ -206,11 +203,11 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{definition}[Partially expanded basis substitutions]
     \label{def:peps_partial_basis_substitution}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceBasisMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.SelectedSourceCoordinates}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceCoordinatesFintype}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.coordinateBasisVectors}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialSourceBasisMatrix}
+    \lean{QuantumCircuit.Party.SourceCircuit.SelectedSourceCoordinates}
+    \lean{QuantumCircuit.Party.SourceCircuit.instFintypeSelectedSourceCoordinates}
+    \lean{QuantumCircuit.Party.SourceCircuit.coordinateBasisVectors}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialCoordinateBasisMatrix}
     \leanok
     \uses{def:peps_original_corrected_term,def:peps_partial_source_choices}
     Let $M_{\mathcal A,\xi;S,u}$ be the matrix of the substituted partial branch
@@ -222,11 +219,11 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{lemma}[Partial expansion of the same corrected term]
     \label{thm:peps_corrected_partial}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceBasisMatrix_eq_sum_partial}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_eq_sum_partial}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceBasisMatrix_eq_ite}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_eq_sum_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix_eq_preparedMatrix}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceBasisMatrix_eq_sum_partial}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceTerm_eq_sum_partial}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialSourceBasisMatrix_eq_ite}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceTerm_eq_sum_coordinates}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialCoordinateBasisMatrix_eq_preparedMatrix}
     \leanok
     \uses{def:peps_partial_basis_substitution}
     If every $e\in S$ has an endpoint in $\mathcal A$, then
@@ -249,8 +246,7 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_source_substitution_partial,thm:peps_weighted_density_sum,
-        thm:peps_canonical_substitution_recovery,thm:peps_source_preparation_sums}
+    \uses{thm:peps_source_substitution_partial,thm:peps_weighted_density_sum,thm:peps_canonical_substitution_recovery,thm:peps_source_preparation_sums}
     Expand $M_{S,u}$ by (\ref{eq:peps_substitution_partial}) and $F_S(E;\rho)$
     by (\ref{eq:peps_weighted_density_sum}). By
     (\ref{eq:peps_substituted_recovery}) and multilinearity of source
@@ -262,13 +258,12 @@ $\rho$ is an arbitrary input matrix.
 
 \begin{definition}[Selected retained positions]
     \label{def:peps_selected_retained_positions}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedPartialSlots}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mem_selectedPartialSlots}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedPartialSlotEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceCoordinateEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.selectedSourceCoordinateEquiv_apply}
+    \lean{QuantumCircuit.Party.SourceCircuit.mem_selectedPartialSlots}
+    \lean{QuantumCircuit.Party.SourceCircuit.selectedPartialSlotEquiv}
+    \lean{QuantumCircuit.Party.SourceCircuit.selectedSourceCoordinateEquiv}
+    \lean{QuantumCircuit.Party.SourceCircuit.selectedSourceCoordinateEquiv_apply}
     \leanok
-    \uses{def:peps_partial_fixed_positions}
+    \uses{def:peps_partial_fixed_positions,def:peps_corrected_crossing_blocks}
     For the retained-position enumeration $i\mapsto e_i$
     (Definition~\ref{def:peps_partial_fixed_positions}), set
     $S_{\mathcal A}=\{i:e_i\in S\}$. When every $e\in S$ has an endpoint in
@@ -278,7 +273,7 @@ $\rho$ is an arbitrary input matrix.
 \end{definition}
 \begin{lemma}[Changing the enumeration of selected sources]
     \label{thm:peps_selected_retained_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialCoordinateBasisMatrix_reindex}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialCoordinateBasisMatrix_reindex}
     \leanok
     \uses{def:peps_selected_retained_positions,thm:peps_canonical_substitution_recovery}
     Under the bijection of Definition~\ref{def:peps_selected_retained_positions},
@@ -302,8 +297,8 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 
 \begin{lemma}[Prepared densities as source contractions]
     \label{thm:peps_prepared_source_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_basis}
+    \lean{QuantumCircuit.Party.Word.sourceContraction_preparedDensityCoefficient}
+    \lean{QuantumCircuit.Party.Word.sourceContraction_preparedDensityCoefficient_single}
     \leanok
     \uses{thm:peps_prepared_density_components}
     If $\eta_i=\sum_a r_i(a)u_i(a_1)\otimes v_i(a_2)$,
@@ -325,7 +320,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 
 \begin{definition}[Replacement of source operators]
     \label{def:peps_prepared_source_replacement}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity}
+    \lean{QuantumCircuit.Party.Word.sourceOperatorDensity}
     \leanok
     For remaining compositions $V_\xi$, weights $c_\xi$, and source matrices
     $Y_{\xi,\zeta}$, define
@@ -338,9 +333,9 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{definition}
 \begin{lemma}[The prepared corrected-subset identity]
     \label{thm:peps_prepared_subset_identity}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity_sub}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity_exact}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceOperatorDensity_sub_prepared}
+    \lean{QuantumCircuit.Party.Word.sourceOperatorDensity_sub}
+    \lean{QuantumCircuit.Party.Word.sourceOperatorDensity_exact}
+    \lean{QuantumCircuit.Party.Word.sourceOperatorDensity_sub_prepared}
     \leanok
     \uses{def:peps_prepared_source_replacement}
     For any source matrix families $X,E$,
@@ -364,7 +359,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 
 \begin{lemma}[Expanding only the selected source matrices]
     \label{thm:peps_selected_source_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_selected}
+    \lean{QuantumCircuit.Party.Word.sourceContraction_preparedDensityCoefficient_selected}
     \leanok
     \uses{thm:peps_prepared_source_contraction}
     For $X_i=\ketbra{\eta_i}{\zeta_i}$ in the endpoint bases and any position
@@ -386,7 +381,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 
 \begin{lemma}[The corrected term in a partial expansion]
     \label{thm:peps_corrected_source_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.correctedSourceTerm_eq_sourceContraction}
+    \lean{QuantumCircuit.Party.SourceCircuit.correctedSourceTerm_eq_sourceContraction}
     \leanok
     \uses{def:peps_original_corrected_term,def:peps_selected_retained_positions}
     If every $e\in S$ has an endpoint in $\mathcal A$, setting
@@ -409,8 +404,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_corrected_partial,thm:peps_selected_retained_coordinates,
-        thm:peps_selected_source_contraction}
+    \uses{thm:peps_corrected_partial,thm:peps_selected_retained_coordinates,thm:peps_selected_source_contraction}
     Apply (\ref{eq:peps_selected_contraction}) to each $(\xi,\zeta)$ pair and
     reindex $S_{\mathcal A}\to S$ by Lemma~\ref{thm:peps_selected_retained_coordinates}
     to match (\ref{eq:peps_corrected_partial}).
@@ -418,8 +412,8 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 
 \begin{definition}[All original source positions]
     \label{def:peps_all_original_source_slots}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSlotEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceSlotEquiv_apply}
+    \lean{QuantumCircuit.Party.SourceCircuit.allSourceSlotEquiv}
+    \lean{QuantumCircuit.Party.SourceCircuit.allSourceSlotEquiv_apply}
     \leanok
     \uses{def:peps_partial_fixed_positions}
     Selecting all parties ($\mathcal A=P$) retains all $r=|\mathcal E|$ original
@@ -428,7 +422,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{definition}
 \begin{lemma}[Reindexing nonempty source subsets]
     \label{thm:peps_all_source_subsets}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_nonempty_allSourceSlots}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_nonempty_allSourceSlots}
     \leanok
     \uses{def:peps_all_original_source_slots}
     The bijection of Definition~\ref{def:peps_all_original_source_slots}
@@ -442,8 +436,8 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 
 \begin{definition}[Replacement in the complete circuit density]
     \label{def:peps_global_source_replacement}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exactSourceMatrix}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity}
+    \lean{QuantumCircuit.Party.SourceCircuit.exactSourceMatrix}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceReplacedDensity}
     \leanok
     \uses{def:peps_prepared_source_replacement,def:peps_all_original_source_slots}
     Set $X_{e,\alpha,\beta}=\ketbra{\nu_{e,\alpha}}{\nu_{e,\beta}}$, and define
@@ -452,9 +446,9 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{definition}
 \begin{lemma}[The global corrected-subset identity]
     \label{thm:peps_global_corrected_subsets}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_exact}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_piecewise}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceReplacedDensity_sub_exact}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceReplacedDensity_exact}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceReplacedDensity_piecewise}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceReplacedDensity_sub_exact}
     \leanok
     \uses{def:peps_global_source_replacement}
     We have $\widehat\rho(X)=M\rho M^\dagger$,
@@ -467,8 +461,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_corrected_source_contraction,thm:peps_corrected_empty,
-        thm:peps_prepared_subset_identity,thm:peps_all_source_subsets}
+    \uses{thm:peps_corrected_source_contraction,thm:peps_corrected_empty,thm:peps_prepared_subset_identity,thm:peps_all_source_subsets}
     Apply (\ref{eq:peps_corrected_contraction}) with $\mathcal A=P$ to
     $S=\varnothing$ (using Lemma~\ref{thm:peps_corrected_empty}) and to
     general $S\subseteq\mathcal E$, then combine (\ref{eq:peps_prepared_subsets})
@@ -477,9 +470,9 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 
 \begin{definition}[Physical output after discarding retained registers]
     \label{def:peps_physical_source_replacement}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalDensity}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalCorrectedSourceTerm}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalDensity}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalCorrectedSourceTerm}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity}
     \leanok
     \uses{def:peps_global_source_replacement,def:peps_original_corrected_term}
     In a product orthonormal basis of the physical and discarded output
@@ -493,11 +486,10 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{definition}
 \begin{lemma}[The physical corrected-subset identity]
     \label{thm:peps_physical_corrected_subsets}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_exact}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_sub_exact}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_sub_exact}
+    \lean{QuantumCircuit.Party.SourceCircuit.rectangularTraceNorm_physicalSourceReplacedDensity_sub_le}
     \leanok
-    \uses{def:peps_physical_source_replacement}
+    \uses{def:peps_physical_source_replacement,thm:peps_physical_first_exact_sources}
     We have $\widehat\rho_{\mathrm{phys}}(X)=\rho_{\mathrm{phys}}$ and
     \begin{align}
         \widehat\rho_{\mathrm{phys}}(X+E)-\rho_{\mathrm{phys}}
@@ -520,10 +512,10 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 
 \begin{definition}[The source-to-output composition]
     \label{def:peps_actual_private_preparation}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourcePrivatePreparation}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_sourcePrivatePreparation}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partialSourceWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_partialSourceWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourcePrivatePreparation}
+    \lean{QuantumCircuit.Party.SourceCircuit.sources_sourcePrivatePreparation}
+    \lean{QuantumCircuit.Party.SourceCircuit.partialSourceWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.sources_partialSourceWord}
     \leanok
     \uses{def:peps_private_product_input,def:peps_canonical_source_residual,def:peps_all_party_source_registers,def:peps_affected_owner,def:peps_partial_source_choices,thm:peps_owner_composition,thm:peps_canonical_source_recovery}
     For a distributed composition $W$ with private product input
@@ -537,8 +529,8 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 
 \begin{lemma}[Action of the private preparation]
     \label{thm:peps_actual_private_preparation}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_sourcePrivatePreparation_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_partialSourceWord_tmul}
+    \lean{QuantumCircuit.Party.SourceCircuit.op_sourcePrivatePreparation}
+    \lean{QuantumCircuit.Party.SourceCircuit.op_partialSourceWord}
     \leanok
     \uses{def:peps_actual_private_preparation}
     Under the append and owner identifications, every $y\in\mathcal H_S$
@@ -551,8 +543,7 @@ matrices $K_V(a)$, set $H_{V,V'}(a,b)=K_V(a)\rho K_{V'}(b)^\dagger$ and define
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:peps_private_product_input,lem:lattice_register_reorderings,
-        thm:peps_owner_composition}
+    \uses{def:peps_private_product_input,lem:lattice_register_reorderings,thm:peps_owner_composition}
     By Definition~\ref{def:peps_private_product_input},
     Lemma~\ref{lem:lattice_register_reorderings}, and
     (\ref{eq:peps_owner_composition}), $P_\psi(y\otimes 1)=y\otimes\psi$, and

@@ -11,7 +11,7 @@
     \label{def:common_period_blocking}
     \lean{MPSTensor.commonPeriodBlocking}
     \leanok
-    \uses{def:lcm_period, def:blocked_tensor}
+    \uses{def:lcm_period,def:blocked_tensor}
     For a finite family of tensors $(B_i)_{i \in I}$ with periods
     $(p_i)_{i \in I}$, the \emph{common-period blocked family} consists of the
     blocked tensors $B_i^{[L]}$ with $L = \lcm_{j \in I}(p_j)$.
@@ -21,7 +21,7 @@
     \label{thm:common_period_blocking_primitive}
     \lean{MPSTensor.isPrimitive_transferMap_commonPeriodBlocking}
     \leanok
-    \uses{def:common_period_blocking, thm:iterated_blocking_transfer, thm:primitive_blocking_divisible}
+    \uses{def:common_period_blocking,thm:iterated_blocking_transfer,thm:primitive_blocking_divisible}
     If each tensor $B_i$ has a primitive transfer map after blocking by its
     period $p_i \ge 1$, then each blocked tensor $B_i^{[L]}$ with
     $L = \lcm_j(p_j)$ also has a primitive transfer map.

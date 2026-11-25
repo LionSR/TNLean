@@ -39,8 +39,7 @@ that final viability alone.
     root's listed intervals.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:balanced_interval_joint_failure_ancestry,
-        thm:balanced_interval_merge_bounds}
+    \uses{lem:balanced_interval_joint_failure_ancestry,thm:balanced_interval_merge_bounds}
     Fix $\omega$ outside the union. Strengthen the interval property to
     \begin{align*}
         Q(a,b,S)=P(a,b,S)\land(b-a>w\Longrightarrow\omega\in H_{(a,b)}).
@@ -81,8 +80,7 @@ that final viability alone.
     explicit analytic assumptions here.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:balanced_interval_joint_history_ancestry,
-        lem:balanced_interval_merge_count}
+    \uses{lem:balanced_interval_joint_history_ancestry,lem:balanced_interval_merge_count}
     Integrate each actual update-section bound and sum over the root's
     merge list. This bounds the measure of the guarded union by
     $|\mathcal I_w(p,r)|\beta\le\max\{r-p-1,0\}\beta$.

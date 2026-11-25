@@ -23,8 +23,7 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
         ManyBody.PlaneInteraction.normBound_nonneg,
         ManyBody.PlaneInteraction.sum_norm_term_containing_le}
     \leanok
-    \uses{def:area_law_hamiltonian,thm:area_diamond_count,
-        thm:area_diamond_budget}
+    \uses{def:area_law_hamiltonian,thm:area_diamond_count,thm:area_diamond_budget}
     Adjacent sites of $\Lambda$ have ambient displacement one, and at most
     $2(d+1)^2$ sites lie at distance exactly $d$ from any site. Every
     original support has $d_\Lambda$-diameter at most $R$ and at most $v_R$
@@ -52,9 +51,7 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
         ManyBody.PlaneInteraction.commutator_eq_zero_of_edist_eq_top,
         ManyBody.PlaneInteraction.norm_sub_regionExpectation_graphBall_le}
     \leanok
-    \uses{def:area_law_hamiltonian,lem:area_domain_graph_counts,
-        thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,
-        thm:qc_graph_ball_localization,def:qc_site_expectation}
+    \uses{def:area_law_hamiltonian,lem:area_domain_graph_counts,thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,thm:qc_graph_ball_localization,def:qc_site_expectation}
     Following \cite[Lemma~4.1]{OpenAI2026AreaLaw}, let $q\ge1$. There are
     positive constants $C,v,c$, depending only on $q,R,J$, with the
     following property. For every domain $\Lambda$, every
@@ -79,8 +76,7 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:area_domain_graph_counts,thm:qc_graph_lieb_robinson,
-        thm:qc_graph_lieb_robinson_zero,thm:qc_graph_ball_localization}
+    \uses{lem:area_domain_graph_counts,thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,thm:qc_graph_ball_localization}
     Instantiating Lemma~\ref{thm:qc_graph_lieb_robinson} and
     Lemma~\ref{thm:qc_graph_lieb_robinson_zero} on the induced graph of
     $\Lambda$ with an anchor family assigning $a$ to $X$, together with

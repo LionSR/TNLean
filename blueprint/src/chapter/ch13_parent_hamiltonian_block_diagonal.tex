@@ -17,7 +17,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
     \lean{MPSTensor.pgvwc07_iSup_restriction_intersection_of_ge_of_bnt_directSum_unital_c1}
     \lean{MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital_c1}
     \leanok
-    \uses{lem:unital_block_separating_product_span, lem:product_span_block_image_direct_sum, lem:block_restriction_intersection_subspace}
+    \uses{lem:unital_block_separating_product_span,lem:product_span_block_image_direct_sum,lem:block_restriction_intersection_subspace}
     Let $A^1,\ldots,A^r$ be normalized representatives of a basis of normal
     tensors: each representative is irreducible, the family is left-canonical,
     the self-overlaps are normalized, and no two distinct same-dimensional
@@ -118,7 +118,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
     \label{lem:block_diagonal_boundary_of_open_boundary_sum}
     \lean{MPSTensor.BlockSumGroundSpace.exists_blockDiagonal_boundary_of_mem_iSup_groundSpace}
     \leanok
-    \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum}
+    \uses{def:ground_space_parent,lem:block_diagonal_boundary_condition_sum}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for every $j$.
     For every length $L$ and every
     $\psi\in\bigvee_{j=1}^gG_L(A_j)$, there are boundary matrices $X_j$ such
@@ -134,7 +134,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
 
 \begin{proof}
     \leanok
-    \uses{def:ground_space_parent, lem:block_diagonal_boundary_condition_sum}
+    \uses{def:ground_space_parent,lem:block_diagonal_boundary_condition_sum}
     By definition of the subspace sum, $\psi$ decomposes as
     \begin{align}
         \psi
@@ -189,8 +189,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_iSup,
         MPSTensor.groundSpaceES_toTensorFromBlocks_eq_iSup}
     \leanok
-    \uses{def:ground_space_parent, def:ground_space_es,
-        lem:block_diagonal_boundary_condition_sum, lem:local_ground_space_block_le_assembled}
+    \uses{def:ground_space_parent,def:ground_space_es,lem:block_diagonal_boundary_condition_sum,lem:local_ground_space_block_le_assembled}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for
     $1\le j\le g$. Then, for every length $L$,
     \begin{align}
@@ -218,7 +217,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
     \label{lem:block_diagonal_periodic_constraints_propagated_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace}
     \leanok
-    \uses{thm:block_sum_local_ground_space, lem:periodic_constraints_propagated_subspace_sequence}
+    \uses{thm:block_sum_local_ground_space,lem:periodic_constraints_propagated_subspace_sequence}
     Let $B=\bigoplus_{j=1}^g\mu_jA_j$, where $\mu_j\ne0$ for
     $1\le j\le g$, and set $S_M:=\bigvee_{j=1}^gG_M(A_j)$. If, for every
     $M\ge L$,
@@ -237,7 +236,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
     \label{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_groundSpace_of_ge_of_bnt_directSum_unital_c1}
     \leanok
-    \uses{lem:bnt_direct_sum_unital_block_intersection_ge, lem:block_diagonal_periodic_constraints_propagated_sum}
+    \uses{lem:bnt_direct_sum_unital_block_intersection_ge,lem:block_diagonal_periodic_constraints_propagated_sum}
     Let $A_1,\ldots,A_g$ be normalized representatives of a basis of normal
     tensors: each representative is irreducible, the family is left-canonical,
     the self-overlaps are normalized, and no two distinct same-dimensional
@@ -275,7 +274,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
     \label{lem:bnt_block_diagonal_periodic_constraints_internal_sum}
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum, lem:product_span_block_image_direct_sum}
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,lem:product_span_block_image_direct_sum}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}, set
     $S_N:=\bigvee_{j=1}^gG_N(A_j)$. Then, for every $N\ge L$,
@@ -348,7 +347,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
     \label{lem:bnt_block_diagonal_open_boundary_matrices}
     \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_of_bnt_unital_c1}
     \leanok
-    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum, lem:block_diagonal_boundary_of_open_boundary_sum}
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,lem:block_diagonal_boundary_of_open_boundary_sum}
     With the hypotheses and notation of
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum},
     every vector
@@ -367,7 +366,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
 
 \begin{proof}
     \leanok
-    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum, lem:block_diagonal_boundary_of_open_boundary_sum}
+    \uses{lem:bnt_block_diagonal_periodic_constraints_propagated_sum,lem:block_diagonal_boundary_of_open_boundary_sum}
     Lemma~\ref{lem:bnt_block_diagonal_periodic_constraints_propagated_sum}
     places $\psi$ in $\bigvee_{j=1}^gG_N(A_j)$. Applying
     Lemma~\ref{lem:block_diagonal_boundary_of_open_boundary_sum} gives
@@ -386,7 +385,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
     \lean{MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_pgvwc07_of_dualFixedPoint}
     \lean{MPSTensor.exists_blockDiagonal_boundary_of_chainGroundSpace_toTensorFromBlocks_pgvwc07_of_dualFixedPoint}
     \leanok
-    \uses{thm:pgvwc_direct_sum_intersection_source_length, thm:pgvwc_block_space_independence_source_length}
+    \uses{thm:pgvwc_direct_sum_intersection_source_length,thm:pgvwc_block_space_independence_source_length}
     Let $g\ge2$. Let $A_j$ be irreducible blocks, pairwise inequivalent up to
     gauge and phase, and injective at the common
     length $L_0>0$. Assume the canonical normalization of
@@ -420,7 +419,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
 
 \begin{proof}
     \leanok
-    \uses{thm:pgvwc_direct_sum_intersection_source_length, thm:pgvwc_block_space_independence_source_length, lem:block_diagonal_boundary_of_open_boundary_sum}
+    \uses{thm:pgvwc_direct_sum_intersection_source_length,thm:pgvwc_block_space_independence_source_length,lem:block_diagonal_boundary_of_open_boundary_sum}
     With $S_M=\sum_jG_M(A_j)$, for every $M$ with $L\le M<N$,
     Lemma~\ref{thm:pgvwc_direct_sum_intersection_source_length} gives
     \begin{align}
@@ -484,7 +483,7 @@ bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly in one step.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:pgvwc_direct_sum_intersection_doubly_normalized, thm:pgvwc_block_space_independence_doubly_normalized, lem:block_diagonal_boundary_of_open_boundary_sum}
+    \uses{thm:pgvwc_direct_sum_intersection_doubly_normalized,thm:pgvwc_block_space_independence_doubly_normalized,lem:block_diagonal_boundary_of_open_boundary_sum}
     With $S_M=\sum_jG_M(A_j)$, for every $M$ with $L\le M<N$,
     Lemma~\ref{thm:pgvwc_direct_sum_intersection_doubly_normalized} gives
     \begin{align}
@@ -545,11 +544,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:pgvwc07_trace_decompositions_from_block_restrictions,
-        lem:blockwise_boundary_compatibility_from_traces,
-        thm:ph_tp_boundary_compatibility,
-        lem:left_boundary_summands_mem_block_ground_spaces,
-        lem:ground_space_in_left_ground, lem:ground_space_in_right_ground}
+    \uses{lem:pgvwc07_trace_decompositions_from_block_restrictions,lem:blockwise_boundary_compatibility_from_traces,thm:ph_tp_boundary_compatibility,lem:left_boundary_summands_mem_block_ground_spaces,lem:ground_space_in_left_ground,lem:ground_space_in_right_ground}
     By Lemma~\ref{lem:pgvwc07_trace_decompositions_from_block_restrictions},
     the two endpoint restrictions provide boundary matrices $C_a^j$ and
     $D_b^j$, and Lemma~\ref{lem:blockwise_boundary_compatibility_from_traces}
@@ -586,14 +581,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ph_tp_block_intersection,
-        lem:open_chain_iteration_subspace_sequence,
-        thm:block_sum_local_ground_space, def:open_parent_hamiltonian_es,
-        thm:open_parent_hamiltonian_zero_local_terms,
-        lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es,
-        thm:open_ground_space_le_hamiltonian_kernel,
-        rem:cyclic_window_operators,
-        rem:euclidean_local_projector_ingredients}
+    \uses{thm:ph_tp_block_intersection,lem:open_chain_iteration_subspace_sequence,thm:block_sum_local_ground_space,def:open_parent_hamiltonian_es,thm:open_parent_hamiltonian_zero_local_terms,lem:local_term_es_kernel_restrictions,lem:mem_ground_space_es,thm:open_ground_space_le_hamiltonian_kernel,rem:cyclic_window_operators,rem:euclidean_local_projector_ingredients}
     By Definition~\ref{def:open_parent_hamiltonian_es}, the Hamiltonian is a
     sum of orthogonal projectors,
     \begin{align}
@@ -624,8 +612,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_three_block_pairwise_separation}
     \lean{MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1}
     \leanok
-    \uses{def:pairwise_block_separating_words, def:l_blk_injective,
-        def:blocks_not_gauge_phase_equiv}
+    \uses{def:pairwise_block_separating_words,def:l_blk_injective,def:blocks_not_gauge_phase_equiv}
     Let $A^0,\ldots,A^{r-1}$ be tensors with positive bond dimensions such
     that each $A^j$ is irreducible, satisfies
     $\sum_a(A^{j,a})^\dagger A^{j,a}=\Id$, and has self-overlap tending to
@@ -643,9 +630,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:bnt_direct_sum_injective_prefix_word_span,
-        lem:direct_sum_two_block_dimension_step,
-        lem:pair_trace_separation_to_pairwise_block_separation}
+    \uses{lem:bnt_direct_sum_injective_prefix_word_span,lem:direct_sum_two_block_dimension_step,lem:pair_trace_separation_to_pairwise_block_separation}
     For any distinct indices $k\ne j$ with $D_k\ne D_j$, the strict-size branch
     of Lemma~\ref{lem:direct_sum_two_block_dimension_step} at the comparison
     length $L_0+1$ gives
@@ -667,7 +652,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_eventual_word_span_from_selectors}
     \lean{MPSTensor.eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective}
     \leanok
-    \uses{def:l_blk_injective, def:blockwise_product_word_span}
+    \uses{def:l_blk_injective,def:blockwise_product_word_span}
     Let $A^0,\ldots,A^{r-1}$ be tensors, let $p>0$, and suppose that every
     $A^j$ is block injective at length $p$. Suppose that for every $k$ there
     are coefficients $c_\omega^{(k)}$ with
@@ -684,8 +669,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:wordspan_blk_inj_succ,
-        lem:product_word_span_from_bnt_block_separation}
+    \uses{thm:wordspan_blk_inj_succ,lem:product_word_span_from_bnt_block_separation}
     With $L_0=s+p$, any $L\ge L_0$ satisfies $L-s\ge p$, so
     Lemma~\ref{thm:wordspan_blk_inj_succ} makes every $A^j$ block injective
     at length $L-s$. Applying
@@ -698,7 +682,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_primitive_blocks_word_span}
     \lean{MPSTensor.exists_eventually_wordTupleSpanTop_of_hasComplementaryFixedPointGap}
     \leanok
-    \uses{def:primitive_mps, def:gauge_phase_equiv}
+    \uses{def:primitive_mps,def:gauge_phase_equiv}
     Let $A^0,\ldots,A^{r-1}$ be trace-preserving primitive tensors with
     positive bond dimensions and positive definite fixed points.
     Suppose that no two distinct blocks are related by conjugation and a
@@ -708,13 +692,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:normal_from_primitive_posdef,
-        thm:common_exact_block_injectivity_normal_left_canonical,
-        thm:wordspan_blk_inj_succ,
-        thm:peripheral_primitive_irreducible_overlap_one,
-        thm:ph_three_block_pairwise_separation,
-        lem:block_separating_equations_from_pairwise_separation,
-        thm:ph_eventual_word_span_from_selectors}
+    \uses{thm:normal_from_primitive_posdef,thm:common_exact_block_injectivity_normal_left_canonical,thm:wordspan_blk_inj_succ,thm:peripheral_primitive_irreducible_overlap_one,thm:ph_three_block_pairwise_separation,lem:block_separating_equations_from_pairwise_separation,thm:ph_eventual_word_span_from_selectors}
     By Lemma~\ref{thm:normal_from_primitive_posdef}, primitivity gives
     normality, and
     Lemma~\ref{thm:common_exact_block_injectivity_normal_left_canonical}
@@ -746,7 +724,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_primitive_blocks_open_kernel}
     \lean{MPSTensor.exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES}
     \leanok
-    \uses{def:primitive_mps, def:gauge_phase_equiv}
+    \uses{def:primitive_mps,def:gauge_phase_equiv}
     Let $d>0$ and $B=\bigoplus_j\mu_jA^j$, with nonzero coefficients $\mu_j$.
     Suppose that the blocks have positive bond dimensions, are trace-preserving
     and primitive with positive definite fixed points, and are pairwise
@@ -759,8 +737,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ph_primitive_blocks_word_span,
-        thm:ph_tp_block_open_ground_space}
+    \uses{thm:ph_primitive_blocks_word_span,thm:ph_tp_block_open_ground_space}
     Taking $L_0$ one larger than the eventual simultaneous word-span
     threshold of Lemma~\ref{thm:ph_primitive_blocks_word_span} and applying
     Lemma~\ref{thm:ph_tp_block_open_ground_space} gives the stated kernel
@@ -790,8 +767,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:normal_blocks_primitive_representatives}
     \lean{MPSTensor.exists_hasComplementaryFixedPointGap_family_of_isNormal}
     \leanok
-    \uses{def:normal, def:primitive_mps, def:ground_space_parent,
-        def:gauge_phase_equiv}
+    \uses{def:normal,def:primitive_mps,def:ground_space_parent,def:gauge_phase_equiv}
     Let $(A^i)_{i\in I}$ be normal tensors with positive bond dimensions.
     Suppose that no two distinct blocks are related by a virtual gauge
     and a nonzero complex scalar. Then there are tensors $(B^i)_{i\in I}$
@@ -803,9 +779,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:normalized_primitive_gauge,
-        lem:gauge_phase_equiv_transport_left_right,
-        thm:gauge_phase_equiv_of_nonzero_rescalings}
+    \uses{thm:normalized_primitive_gauge,lem:gauge_phase_equiv_transport_left_right,thm:gauge_phase_equiv_of_nonzero_rescalings}
     Lemma~\ref{thm:normalized_primitive_gauge} normalizes each block
     independently via a nonzero rescaling and virtual gauge that leave its local
     ground spaces unchanged. Thus $B^{i,a}=\zeta_iX_iA^{i,a}X_i^{-1}$ for every
@@ -859,8 +833,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:normal_blocks_primitive_representatives,
-        thm:ph_block_replacement_parent_equality}
+    \uses{thm:normal_blocks_primitive_representatives,thm:ph_block_replacement_parent_equality}
     Normalizing each block retains its local ground spaces and the
     inequivalence of distinct blocks, so the direct-sum parent Hamiltonians
     coincide at each interaction range and volume.
@@ -882,8 +855,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:normalized_primitive_gauge,
-        thm:ph_block_replacement_parent_equality}
+    \uses{thm:normalized_primitive_gauge,thm:ph_block_replacement_parent_equality}
     Lemma~\ref{thm:normalized_primitive_gauge} normalizes each tensor by
     a nonzero scalar and an invertible virtual conjugation, preserving
     block injectivity at each fixed word length, all local ground spaces, and
@@ -935,9 +907,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:bnt_direct_sum_block_separation_word_span,
-        thm:ph_tp_word_span_propagation,
-        thm:ph_tp_block_open_ground_space}
+    \uses{lem:bnt_direct_sum_block_separation_word_span,thm:ph_tp_word_span_propagation,thm:ph_tp_block_open_ground_space}
     The simultaneous-span estimate of
     Lemma~\ref{lem:bnt_direct_sum_block_separation_word_span}, the direct-sum
     lemma of \cite[lines~1346--1408]{PerezGarcia2007Matrix}, gives the full
@@ -962,9 +932,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     eventual periodic gap.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ph_primitive_representatives_parent_equality,
-        thm:primitive_block_sum_parent_gap,
-        thm:primitive_block_sum_parent_gap_threshold}
+    \uses{thm:ph_primitive_representatives_parent_equality,thm:primitive_block_sum_parent_gap,thm:primitive_block_sum_parent_gap_threshold}
     Replacing each block by a normalized primitive representative preserves
     inequivalence and leaves every parent Hamiltonian unchanged, so the uniform
     gap theorem for primitive block sums applies with the same
@@ -991,7 +959,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     least $\gamma_R$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:normal-block-primitive-c1-normalization, thm:primitive-block-parent-uniform-gap-three-block-bound}
+    \uses{lem:normal-block-primitive-c1-normalization,thm:primitive-block-parent-uniform-gap-three-block-bound}
     Normalizing the blocks to primitive representatives preserves the
     specified injectivity length $L_0$ and leaves their periodic parent Hamiltonians
     unchanged at every range and chain length, so the
@@ -1020,7 +988,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \label{thm:ph_block_cyclic_boundary_closure}
     \lean{MPSTensor.mem_bntMPSVectorSpan_of_cyclic_openBoundary}
     \leanok
-    \uses{def:parent_cyclic_translate_state, def:ground_space_map}
+    \uses{def:parent_cyclic_translate_state,def:ground_space_map}
     Let $N\geq2$. Suppose that the simultaneous words of length $N-1$
     in the tensors $A^j$ span the product of their matrix algebras.
     Let $\psi$ be a vector such that, for every cyclic cut
@@ -1035,10 +1003,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:block_boundary_intertwiner_from_global_cut,
-        thm:cyclic-boundary-intertwining,
-        thm:ground_space_map_mpv_of_long_word_commutes,
-        lem:bnt_span_eq_sum_mpv_submodules}
+    \uses{lem:block_boundary_intertwiner_from_global_cut,thm:cyclic-boundary-intertwining,thm:ground_space_map_mpv_of_long_word_commutes,lem:bnt_span_eq_sum_mpv_submodules}
     For the boundary matrices $X_i^j$ at each cyclic cut $i$, comparing
     adjacent cuts against all complementary words of length $N-1$
     gives $X_i^j A^{j,a}=A^{j,a}X_{i-1}^j$.
@@ -1072,10 +1037,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ph_block_cyclic_boundary_closure,thm:ph_tp_word_span_propagation,
-        thm:ph_tp_block_open_ground_space, lem:bnt_span_le_parent_hamiltonian_kernel,
-        lem:parent_cyclic_translate_preserves_chain_space,
-        thm:parent_hamiltonian_kernel_le_chain_ground_space}
+    \uses{thm:ph_block_cyclic_boundary_closure,thm:ph_tp_word_span_propagation,thm:ph_tp_block_open_ground_space,lem:bnt_span_le_parent_hamiltonian_kernel,lem:parent_cyclic_translate_preserves_chain_space,thm:parent_hamiltonian_kernel_le_chain_ground_space}
     Trace-preserving normalization propagates simultaneous injectivity to
     every length at least $S$, in particular to $N-1$. The open-chain
     intersection property expresses each periodic ground vector as a sum
@@ -1120,9 +1082,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     interaction range and chain length.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_word_span_independent_rescaling, thm:word_tuple_span_gauge_invariance,
-        thm:normalized_primitive_gauge, thm:block_sum_local_ground_space,
-        lem:bnt_span_eq_sum_mpv_submodules}
+    \uses{thm:block_word_span_independent_rescaling,thm:word_tuple_span_gauge_invariance,thm:normalized_primitive_gauge,thm:block_sum_local_ground_space,lem:bnt_span_eq_sum_mpv_submodules}
     Projection of the simultaneous span onto each matrix summand proves
     injectivity of every block at length $S$. Each block is therefore normal
     and admits a primitive representative obtained by a rescaling by some
@@ -1167,10 +1127,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     at the interaction range specified by the preceding intersection argument.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:block_word_span_primitive_normalization, thm:ph_block_periodic_closure_tp,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        lem:local_term_es_average, thm:weighted_sum_kernel,
-        thm:parent_ring_ground_space_kernel}
+    \uses{thm:block_word_span_primitive_normalization,thm:ph_block_periodic_closure_tp,thm:parent_hamiltonian_kernel_eq_chain_ground_space,lem:local_term_es_average,thm:weighted_sum_kernel,thm:parent_ring_ground_space_kernel}
     Normalizing the blocks while retaining simultaneous injectivity at length
     $S$ leaves the parent Hamiltonians and the span of the periodic component
     vectors unchanged, so the trace-preserving block closure theorem applies.
@@ -1191,7 +1148,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
         ker_parentHamiltonian_eq_of_three_bondDim_pow_five_le,
         MPSTensor.IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range}
     \leanok
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv}
+    \uses{def:cpsv_canonical_form,def:bnt_cpsv}
     Let $A$ be a canonical tensor with positive physical dimension and
     positive bond dimension $D$. There are distinct normal representatives
     $(A_j)_j$ and a positive integer $R\leq3D^5$ such that, for every
@@ -1208,8 +1165,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_bnt_sharp_span_ambient_cap,
-        thm:ph_canonical_block_closure}
+    \uses{thm:cpsv_bnt_sharp_span_ambient_cap,thm:ph_canonical_block_closure}
     Because the representative bond dimensions sum to at most $D$, the
     simultaneous span estimate yields $S>0$ with $S+1\leq3D^5$. Setting
     $R=S+1$ and applying periodic closure for canonical tensors establishes the
@@ -1232,8 +1188,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:coisometric_reconstruction_local_space, thm:block_sum_local_ground_space,
-        thm:local_ground_space_gauge_invariance, thm:local_ground_space_rescaling}
+    \uses{lem:coisometric_reconstruction_local_space,thm:block_sum_local_ground_space,thm:local_ground_space_gauge_invariance,thm:local_ground_space_rescaling}
     The coisometric reconstruction preserves the local space on every
     positive-length interval. The local space of the resulting direct sum
     is the sum of its block spaces. Each repeated copy differs from its
@@ -1264,12 +1219,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ph_canonical_representative_local_spaces,
-        thm:ph_block_ground_space_at_simultaneous_injectivity,
-        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        thm:block_sum_local_ground_space,
-        lem:local_term_es_average, thm:weighted_sum_kernel,
-        thm:parent_ring_ground_space_kernel}
+    \uses{thm:ph_canonical_representative_local_spaces,thm:ph_block_ground_space_at_simultaneous_injectivity,thm:parent_hamiltonian_kernel_eq_chain_ground_space,thm:block_sum_local_ground_space,lem:local_term_es_average,thm:weighted_sum_kernel,thm:parent_ring_ground_space_kernel}
     Replacing the original canonical tensor by the direct sum containing
     one copy of each normal representative preserves the local spaces and hence
     the periodic local constraints, so the simultaneous

@@ -2,7 +2,7 @@
     \label{def:mpdo_bnt_multiplicity_spectrum_comparison}
     \lean{MPOTensor.BNTMultiplicitySpectrumComparison}
     \leanok
-    \uses{def:mpdo_diagonal_chi_family, def:mpdo_bnt_label_trace_scalar_family}
+    \uses{def:mpdo_diagonal_chi_family,def:mpdo_bnt_label_trace_scalar_family}
     Let $\mu_\alpha$ and $\nu_\gamma$ be diagonal matrices with complex
     entries, representing one-site and two-site multiplicities, respectively.
     A multiplicity-spectrum comparison requires
@@ -101,7 +101,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         toTwoSiteMultiplicitySpectrum}
     \leanok
-    \uses{def:cpsv_canonical_form, def:mpdo, def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_two_site_multiplicity_spectrum, def:mpdo_bnt_two_site_exact_sector_gauge, def:mpdo_bnt_multiplicity_spectrum_comparison, def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
+    \uses{def:cpsv_canonical_form,def:mpdo,def:mpdo_bnt_algebra_tensor_clause,def:mpdo_bnt_two_site_multiplicity_spectrum,def:mpdo_bnt_two_site_exact_sector_gauge,def:mpdo_bnt_multiplicity_spectrum_comparison,def:mpdo_bnt_eventual_power_sums_multiplicity_comparison}
     Let $M$ generate MPDOs, and suppose that its MPS tensor obtained by
     pairing the physical indices is in canonical form. Suppose also that $M$ has a
     vertical decomposition
@@ -170,7 +170,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         markedChainCoefficient_gauge_eq_reflectedAdjoint}
     \leanok
-    \uses{def:mpdo, def:mpdo_bnt_two_site_exact_sector_gauge}
+    \uses{def:mpdo,def:mpdo_bnt_two_site_exact_sector_gauge}
     Suppose that the one-site and two-site sectors are related by the exact
     invertible gauges above. Let $\gamma$ be a one-site sector matched with a
     two-site sector by the bijection $\sigma$, and identify their bond
@@ -239,7 +239,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_blocked_reference_corners, thm:mpdo_gram_dressed_reflected_marked_chain}
+    \uses{thm:mpdo_blocked_reference_corners,thm:mpdo_gram_dressed_reflected_marked_chain}
     For the first positive-weight copy of the matched two-site sector,
     its inclusion is isometric and its compression selects the
     corresponding weighted normal tensor. Substituting the exact sector
@@ -256,7 +256,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         exists_oneSite_raw_sector_corner}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause, def:mpdo_bnt_two_site_exact_sector_gauge}
+    \uses{def:mpdo_bnt_algebra_tensor_clause,def:mpdo_bnt_two_site_exact_sector_gauge}
     In the setting above, each sector $\gamma$ admits an isometry
     $W_\gamma\colon\C^{d_\gamma}\to\C^d$ and a scalar
     $a_\gamma>0$ such that, for every vertical letter $v$,
@@ -288,7 +288,7 @@
     \lean{MPOTensor.IsMPDO.%
         markedChainCoefficient_blockTwoPrefix_gramDressing_eq_reflectedAdjoint}
     \leanok
-    \uses{def:mpdo, def:vertical_tensor_mpdo, def:mpdo_two_site_blocking}
+    \uses{def:mpdo,def:vertical_tensor_mpdo,def:mpdo_two_site_blocking}
     Let $M$ generate matrix product density operators, let $A$ be a vertical
     tensor, and suppose that an isometry $V$ selects from the two-site
     blocking a positive multiple of an invertible conjugate of $A$.
@@ -486,7 +486,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:normalize_scalar_gram_matrix, thm:normalized_conjugation_of_scalar_gram}
+    \uses{thm:normalize_scalar_gram_matrix,thm:normalized_conjugation_of_scalar_gram}
     The positive scalar Gram identity gives
     $U_\gamma^\dagger U_\gamma=\Id$ and
     $Z_\gamma^{-1}=\omega_\gamma^{-1}Z_\gamma^\dagger$, so that
@@ -507,7 +507,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
         UnitarySectorConjugacy.ofAlgebraTensorClause}
     \leanok
-    \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_bnt_two_site_exact_sector_gauge}
+    \uses{def:mpdo,def:cpsv_canonical_form,def:mpdo_bnt_two_site_exact_sector_gauge}
     Let $M$ generate MPDOs, and suppose that its MPS tensor obtained by
     pairing the physical indices is in canonical form. Let the one-site and two-site
     sectors be paired by the exact gauges $Z_\gamma$ above.
@@ -563,7 +563,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_bnt_exact_sector_one_site_raw_corner, thm:mpdo_bnt_exact_sector_gauge_blocked_corner, thm:mpdo_bnt_exact_sector_identity_oblique_physical_span, thm:mpdo_two_site_prefix_gram_reflected_marked_chain, thm:mpdo_reflected_marked_chain, thm:cpsv_original_coordinate_marked_lemma_l, thm:normal_tensor_gram_rigidity, thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
+    \uses{thm:mpdo_bnt_exact_sector_one_site_raw_corner,thm:mpdo_bnt_exact_sector_gauge_blocked_corner,thm:mpdo_bnt_exact_sector_identity_oblique_physical_span,thm:mpdo_two_site_prefix_gram_reflected_marked_chain,thm:mpdo_reflected_marked_chain,thm:cpsv_original_coordinate_marked_lemma_l,thm:normal_tensor_gram_rigidity,thm:mpdo_bnt_conditional_identity_marked_unitary_conjugacy}
     With $G_\gamma=Z_\gamma^\dagger Z_\gamma$, the two-site initial-block
     identity applied to the compression onto
     $Z_\gamma M_\gamma Z_\gamma^{-1}$ identifies the marked chains of

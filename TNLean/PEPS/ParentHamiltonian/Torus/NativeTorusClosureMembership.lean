@@ -26,10 +26,9 @@ open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
-open TNLean.Lattice
 
 namespace DependentBondNetwork
-open TNLean.Lattice.DependentBondNetwork
+open TNLean.Network.DependentBondNetwork
 variable {Vertex Edge : Type*} [Fintype Vertex] [Fintype Edge]
 variable [DecidableEq Vertex] [DecidableEq Edge]
 variable (tail head : Edge → Vertex) (D : Edge → Type*)
@@ -52,7 +51,7 @@ theorem network_vertexGauge_of_invariant
   have hrec : physicalMapSite tail head D F (averagingSite tail head D U) = A :=
     physicalMap_recover_representationAveragingSite tail head D _ A hA
   rw [← hrec, ← physicalMap_network, ← physicalMap_network]
-  apply congrArg (dependentPhysicalProductFamilyMap F)
+  apply congrArg (Matrix.piKronecker F).mulVecLin
   funext σ
   exact network_averagingSite_vertexGauge tail head D U p q σ
 
@@ -105,7 +104,7 @@ theorem isTorusFlat_nativeClosure (g h : G) (hgh : Commute g h) :
   split_ifs <;> simp_all [hgh.inv_left.eq]
 
 variable [Finite G] {d : ℕ}
-open DependentBondNetwork TNLean.Lattice.DependentBondNetwork
+open DependentBondNetwork TNLean.Network.DependentBondNetwork
 
 /-- Each slice of an actual commuting closure lies in the original plaquette
 range, for arbitrary bond dimensions and local invariant tensors.

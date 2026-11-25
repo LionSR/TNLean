@@ -28,7 +28,7 @@ similarity.
         MPSTensor.MultiBlockCompression.z_eq_zero_of_leftCanonical,
         MPSTensor.MultiBlockCompression.exists_simultaneous_similarity_of_leftCanonical}
     \leanok
-    \uses{thm:asym_multiblock, def:asym_assembled_compression}
+    \uses{thm:asym_multiblock,def:asym_assembled_compression}
     Suppose that a multi-block compression has zero remainder and that
     $\sum_i(B^i)^\dagger B^i=\id$. Then
     $\sum_sV_sW_s=\id$, the maps $L$ and $R$ satisfy $LR=\id$ and
@@ -38,7 +38,7 @@ similarity.
 
 \begin{proof}
     \leanok
-    \uses{thm:asym_multiblock, prop:asym_split_intertwiners}
+    \uses{thm:asym_multiblock,prop:asym_split_intertwiners}
     For $E=\sum_sV_sW_s$, zero remainder and biorthogonality give
     $B^iE=B^i$, so $B^i(\id-E)=0$. Left-normalization then gives
     \begin{align}
@@ -57,8 +57,7 @@ similarity.
     \label{thm:asym_faithful_stationary_similarity}
     \lean{MPSTensor.exists_simultaneous_similarity_of_leftCanonical_of_posDef_fixedPoint}
     \leanok
-    \uses{thm:asym_multiblock, thm:asym_stationary_splitting,
-        thm:asym_normalized_split_similarity}
+    \uses{thm:asym_multiblock,thm:asym_stationary_splitting,thm:asym_normalized_split_similarity}
     Let $A=\bigoplus_{s\in S}C_s$ be a finite direct sum of nonzero
     normal tensors, and suppose that $V_N(B)=V_N(A)$ for every $N\geq1$.
     If $\sum_i(B^i)^\dagger B^i=\id$ and
@@ -69,7 +68,7 @@ similarity.
 
 \begin{proof}
     \leanok
-    \uses{thm:asym_stationary_splitting, thm:asym_normalized_split_similarity}
+    \uses{thm:asym_stationary_splitting,thm:asym_normalized_split_similarity}
     Faithful stationary splitting gives a compression with zero
     remainder. The normalized split-compression theorem then yields
     the inverse maps, dimension equality, and simultaneous similarity.

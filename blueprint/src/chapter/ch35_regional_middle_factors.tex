@@ -12,7 +12,7 @@ by these regional identities.
 
 \begin{lemma}[From numbered middle coordinates to the actual middle region]
     \label{thm:regional_middle_from_numbered_three_regions}
-    \lean{TNLean.MPS.AreaLaw.exists_regional_exterior_of_natural_threeSplit_decomposition}
+    \lean{TNLean.MPS.AreaLaw.exists_regional_exterior_of_natural_threeCut_decomposition}
     \leanok
     \uses{def:selected_exterior_middle_equiv}
     Let $\Omega$ be a finite site set, let $T,E\subseteq\Omega$ be disjoint,
@@ -99,8 +99,7 @@ by these regional identities.
     \label{thm:regional_middle_exterior_transfer}
     \lean{TNLean.MPS.AreaLaw.exists_changingRegional_exterior_family}
     \leanok
-    \uses{def:regional_middle_configuration_splittings,
-        def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}
+    \uses{def:regional_middle_configuration_splittings,def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}
     Assume now that $I$ and every local set $\beta_v$ are finite.
     For every family $M_t$ of $\mathbb S$-valued matrices on
     $\mathcal X_{E^c}$, there are matrices $M^{\mathrm{new}}_r$ on
@@ -117,8 +116,7 @@ by these regional identities.
     independent of $M$. Empty regions and empty local sets are included.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:regional_middle_configuration_splittings,
-        def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}
+    \uses{def:regional_middle_configuration_splittings,def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}
     The old split into the four regions gives $((\mathcal X_B,\mathcal X_O),(\mathcal X_A,\mathcal X_C))$.
     The new split gives
     $((\mathcal X_A,\mathcal X_O),(\mathcal X_B,\mathcal X_C))$.

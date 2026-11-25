@@ -92,7 +92,7 @@ noncomputable section
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS.Approximation
-open TNLean.Lattice.Compression
+open TNLean.Network
 
 variable {L q : ℕ}
 
@@ -165,7 +165,9 @@ theorem exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le
       contractPEPS D (fixInput D A z) ≠ 0 ∧
       ∃ θ : ℝ, ‖((‖contractPEPS D (fixInput D A z)‖ : ℂ)⁻¹) •
         contractPEPS D (fixInput D A z) - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η :=
-  exists_eq_column_ne_zero_of_traceNorm_sub_pure_le e Ω hΩ hσ hη (contractPEPS_fixInput D A)
+  Matrix.exists_eq_column_ne_zero_of_rectangularTraceNorm_sub_pure_le Ω hΩ
+    (by rwa [← Matrix.rectangularTraceNorm_reindex e e, Matrix.rectangularTraceNorm_square]) hη
+    (contractPEPS_fixInput D A)
 
 /-- A nonzero contraction on the open square forces every edge dimension to be
 positive: if some `D e` were zero, the sum over virtual configurations would be
@@ -323,7 +325,9 @@ theorem Tensor.exists_fixInput_contract_of_traceNorm_sub_pure_le (P : Tensor (q 
       ∃ θ : ℝ, ‖((‖(P.fixInput z).contract‖ : ℂ)⁻¹) • (P.fixInput z).contract -
         Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
   obtain ⟨z, h⟩ :=
-    exists_eq_column_ne_zero_of_traceNorm_sub_pure_le e Ω hΩ hσ hη (Tensor.contract_fixInput P)
+    Matrix.exists_eq_column_ne_zero_of_rectangularTraceNorm_sub_pure_le Ω hΩ
+      (by rwa [← Matrix.rectangularTraceNorm_reindex e e, Matrix.rectangularTraceNorm_square]) hη
+      (Tensor.contract_fixInput P)
   exact ⟨z, rfl, h⟩
 
 /-- **Column extraction in the form used by the final theorem, virtual-first
@@ -389,7 +393,7 @@ open scoped Matrix
 noncomputable section
 
 namespace TNLean.PEPS.Approximation.Pinned
-open TNLean.Lattice.Compression
+open TNLean.Network
 
 variable {L q : ℕ} {b : Type*} [Fintype b]
 

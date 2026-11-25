@@ -25,7 +25,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_kronecker_identity_factors, thm:mpug_unitary_entrywise_self_sign}
+    \uses{thm:mpug_kronecker_identity_factors,thm:mpug_unitary_entrywise_self_sign}
     A Kronecker product equal to the identity has reciprocal scalar factors, so
     $\overline xx=e^{i\phi}\Id$ and $\overline yy=e^{-i\phi}\Id$. Since $x$ is
     unitary, $x^T\overline x=\Id$; multiplying $\overline xx=e^{i\phi}\Id$ on the left by $x^T$ gives $x=e^{i\phi}x^T$, and similarly
@@ -39,7 +39,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.standardForm_conjugation_iff}
     \leanok
     \discussion{5713}
-    \uses{FundamentalMPU, SF, def:mpdo_two_site_blocking}
+    \uses{FundamentalMPU,SF,def:mpdo_two_site_blocking}
     An MPU in standard form is invariant under complex conjugation if and only
     if there are unitaries $x$ and $y$ such that either
     $x=x^T$ and $y=y^T$, or $x=-x^T$ and $y=-y^T$, and
@@ -59,9 +59,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpu_standard_form_conjugation_sufficiency,
-        lem:mpu_source_local_conjugation_forward_even,
-        lem:mpu_local_conjugation_sign}
+    \uses{lem:mpu_standard_form_conjugation_sufficiency,lem:mpu_source_local_conjugation_forward_even,lem:mpu_local_conjugation_sign}
     The sufficiency is Lemma~\ref{lem:mpu_standard_form_conjugation_sufficiency}.
     Conversely, invariance at every length of the two-spin chain is invariance
     of $U^{(N)}(\mathcal V)$ at every even $N>1$. Lemma~\ref{lem:mpu_source_local_conjugation_forward_even}
@@ -99,8 +97,7 @@
     \label{lem:mpu_source_conjugation_transport}
     \lean{MPOTensor.sourceCutM₁_mapStar, MPOTensor.sourceCutM₂_mapStar, MPOTensor.source_ranks_mapStar, MPOTensor.normalizedFlattening_mapStar, MPOTensor.IsMPUCanonicalFormII.mapStar, MPOTensor.SourceCutSVD.mapStar, MPOTensor.SourceFactors.mapStar, MPOTensor.SourceFactors.sourceU_mapStar, MPOTensor.SourceFactors.sourceV_mapStar}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
-        def:mpu_source_svd_data}
+    \uses{def:mpu_canonical_form_ii,def:mpu_weighted_source_factors,def:mpu_source_svd_data}
     Both source cuts satisfy
     $M_i(\overline{\mathcal U})=\overline{M_i(\mathcal U)}$, and their ranks
     are unchanged. A supplied compact decomposition
@@ -119,7 +116,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpu_physical_adjoint_cfii, thm:mpu_physical_adjoint_full_support}
+    \uses{thm:mpu_physical_adjoint_cfii,thm:mpu_physical_adjoint_full_support}
     Conjugate both factorizations, both normalization identities and both
     right-inverse identities. Products, sums, adjoints and traces commute
     with conjugation. The singular-value matrices and the diagonal positive
@@ -132,7 +129,7 @@
     \label{lem:mpu_source_local_conjugation_forward}
     \lean{MPOTensor.supplied_source_factor_gate_relations, MPOTensor.IsMPUCanonicalFormII.exists_supplied_source_gate_unitary_gauges_of_mpo_eq, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges, MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges_common_transpose_case}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors}
+    \uses{def:mpu_canonical_form_ii,def:mpu_weighted_source_factors}
     Let $\mathcal U$ be in reduced canonical form II, with supplied source
     factors whose unshifted gate $u$ is unitary between its physical-pair and
     source-rank coordinate spaces. If
@@ -150,8 +147,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpu_source_conjugation_transport, FundamentalMPU,
-        lem:mpu_local_conjugation_sign, thm:mpu_source_factorizations}
+    \uses{lem:mpu_source_conjugation_transport,FundamentalMPU,lem:mpu_local_conjugation_sign,thm:mpu_source_factorizations}
     Apply the letter-level Fundamental Theorem to $\mathcal U$ and
     $\overline{\mathcal U}$. Compare the actual conjugated source factors
     with those transported by the resulting bond unitary. Normalized factor
@@ -185,8 +181,7 @@
         MPOTensor.IsMPUCanonicalFormII.exists_local_conjugation_gauges_of_even,
         MPOTensor.IsMPUCanonicalFormII.nonempty_source_ranks}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_weighted_source_factors,
-        def:mpdo_two_site_blocking}
+    \uses{def:mpu_canonical_form_ii,def:mpu_weighted_source_factors,def:mpdo_two_site_blocking}
     Equal MPUs of two two-site blocks at every positive length are equal MPUs of
     the tensors at every even length $N>1$. Let $\mathcal U$ be in canonical
     form II, with supplied source factors whose gate $u$ is unitary. If
@@ -202,7 +197,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpu_source_conjugation_transport, lem:mpu_even_family_supplied_source_gauges}
+    \uses{lem:mpu_source_conjugation_transport,lem:mpu_even_family_supplied_source_gauges}
     The two-site blocks close into rings of even length. Apply
     Lemma~\ref{lem:mpu_even_family_supplied_source_gauges} to $\mathcal U$ and
     $\overline{\mathcal U}$, with the conjugated source factors of
@@ -256,8 +251,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpu_supplied_two_site_periodic_circuit,
-        def:mpu_two_site_circuit_layers}
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,def:mpu_two_site_circuit_layers}
     Conjugation preserves the two open contractions and their unitary
     identities. It also conjugates every factor of each circuit layer.
     Let $\Gamma_N$ act on the intermediate labels by $x$ on every first
@@ -472,8 +466,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_skew_unitary_paired_spectral_data,
-        lem:mpu_skew_unitary_paired_projectors}
+    \uses{lem:mpu_skew_unitary_paired_spectral_data,lem:mpu_skew_unitary_paired_projectors}
     Lemma~\ref{lem:mpu_skew_unitary_paired_spectral_data} writes $x$ in the
     form required by Lemma~\ref{lem:mpu_skew_unitary_paired_projectors}, which
     gives $S$ and $\widetilde\Lambda$.
@@ -496,7 +489,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_symmetric_unitary_congruence, lem:mpu_skew_unitary_congruence}
+    \uses{lem:mpu_symmetric_unitary_congruence,lem:mpu_skew_unitary_congruence}
     In the symmetric case, Lemma~\ref{lem:mpu_symmetric_unitary_congruence}
     gives $x=S^TS$, so $\widetilde\Lambda=\Id$ works. The skew-symmetric case
     is Lemma~\ref{lem:mpu_skew_unitary_congruence}. A matrix that is both
@@ -637,7 +630,7 @@
         Matrix.exists_orthogonal_congruence_interleavedSkewForm}
     \leanok
     \discussion{7581}
-    \uses{lem:mpu_skew_paired_orthonormal_basis, lem:mpu_standard_skew_indexing}
+    \uses{lem:mpu_skew_paired_orthonormal_basis,lem:mpu_standard_skew_indexing}
     Let $A\in\operatorname{Mat}_{2m}(\mathbb R)$ be orthogonal with
     $A^T=-A$. Set $\Sigma_m=\Id_m\otimes Y$, in interleaved order, where
     $Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
@@ -660,7 +653,7 @@
     \lean{Matrix.exists_unitary_congruence_interleavedSkewForm}
     \leanok
     \discussion{7581}
-    \uses{lem:mpu_skew_unitary_congruence, thm:mpu_real_skew_orthogonal_normal_form}
+    \uses{lem:mpu_skew_unitary_congruence,thm:mpu_real_skew_orthogonal_normal_form}
     Let $x\in\operatorname{Mat}_{2m}(\mathbb C)$ be unitary with $x^T=-x$.
     There is a unitary matrix $U$ such that $x=U^T\Sigma_m U$.
     This is the complex normal form used in the proof of
@@ -686,9 +679,7 @@
         Matrix.exists_orthogonal_factors_of_kronecker_mul,
         Matrix.exists_symplectic_factors_of_kronecker_mul}
     \leanok
-    \uses{lemma:conjclass-normalform-continuous,
-        thm:mpu_skew_unitary_even_dimension,
-        thm:mpu_complex_skew_unitary_normal_form, lem:mpu_local_conjugation_sign}
+    \uses{lemma:conjclass-normalform-continuous,thm:mpu_skew_unitary_even_dimension,thm:mpu_complex_skew_unitary_normal_form,lem:mpu_local_conjugation_sign}
     Let $u:\mathbb C^P\to\mathbb C^\ell\otimes\mathbb C^r$ and
     $v:\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^P$, and let $x,y$ be
     unitaries with
@@ -762,7 +753,7 @@
         MPOTensor.SourceFactors.sourceU_rankGauge,
         MPOTensor.SourceFactors.sourceV_rankGauge}
     \leanok
-    \uses{def:mpu_weighted_source_factors, def:mpu_source_uv}
+    \uses{def:mpu_weighted_source_factors,def:mpu_source_uv}
     Let $X_i,Y_i,Z_i$ be supplied source factors of $\mathcal U$ at the weight
     $\rho$, with gates $u,v$, and let $a,b$ be unitaries on the left and
     right source ranks. The factors
@@ -787,7 +778,7 @@
         MPOTensor.IsMPUCanonicalFormII.exists_symplectic_gauge_of_mpo_eq}
     \leanok
     \discussion{5713}
-    \uses{prop1conj, def:mpu_source_factor_rank_gauge}
+    \uses{prop1conj,def:mpu_source_factor_rank_gauge}
     Let an MPU in standard form be invariant under complex conjugation, and let
     $x,y$ be as in Lemma~\ref{prop1conj}. The standard form can be chosen with
     unitaries $u',v'$ as follows. In Case I, if $x=x^T$ and $y=y^T$, then
@@ -821,9 +812,7 @@
 
 \begin{proof}
     \leanok
-    \uses{prop1conj, lem:mpu_conjugation_gate_gauge,
-        def:mpu_source_factor_rank_gauge,
-        lem:mpu_even_family_supplied_source_gauges}
+    \uses{prop1conj,lem:mpu_conjugation_gate_gauge,def:mpu_source_factor_rank_gauge,lem:mpu_even_family_supplied_source_gauges}
     Lemma~\ref{prop1conj} gives $x,y$. Lemma~\ref{lem:mpu_conjugation_gate_gauge}
     gives unitaries $U,V$ that put $(U\otimes V)u$ and
     $v(V^\dagger\otimes U^\dagger)$ in the corresponding case. These are the
@@ -870,7 +859,7 @@
         Matrix.exists_real_of_map_star_eq_mul_sourceSkewForm}
     \leanok
     \discussion{5713}
-    \uses{corconj, lem:mpu_symplectic_four_congruence}
+    \uses{corconj,lem:mpu_symplectic_four_congruence}
     In Case II of Lemma~\ref{corconj}, one can write
     \begin{align}
         u' & =(\Id_{r\ell/4}\otimes R)\widetilde u, &
@@ -910,7 +899,7 @@
         MPOTensor.IsMPUCanonicalFormII.index_eq_zero_of_rightRank_eq_phys}
     \leanok
     \discussion{5714}
-    \uses{SF, def:index, lem:mpu_supplied_standard_form_source_cuts}
+    \uses{SF,def:index,lem:mpu_supplied_standard_form_source_cuts}
     Let an MPU be in standard form, with one-site physical space
     $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Time-reversal symmetry forces
     $\operatorname{ind}(\mathcal U)=0$. Here $N$ counts sites of the
@@ -932,9 +921,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_supplied_forward_local_time_reversal,
-        lem:mpu_supplied_standard_form_source_cuts, def:index,
-        thm:mpu_physical_adjoint_source_ranks}
+    \uses{lem:mpu_supplied_forward_local_time_reversal,lem:mpu_supplied_standard_form_source_cuts,def:index,thm:mpu_physical_adjoint_source_ranks}
     The standard form is that of the two-site block $\mathcal U_2$ of a
     simple tensor $\mathcal U$ in canonical form II, and $\mathcal U_2$ is
     again in canonical form II. Hence the criterion for an arbitrary choice of
@@ -1182,10 +1169,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_supplied_standard_form_adjoint_zero_index,
-        lem:mpu_supplied_four_spin_source_comparison,
-        lem:mpu_normalized_source_forward_adjoint_certificate,
-        lem:mpu_local_time_reversal_certificate}
+    \uses{lem:mpu_supplied_standard_form_adjoint_zero_index,lem:mpu_supplied_four_spin_source_comparison,lem:mpu_normalized_source_forward_adjoint_certificate,lem:mpu_local_time_reversal_certificate}
     Derive $r=\ell=d$ and choose the actual normalized source factors of $W$.
     Write $A=v_{23}(u\otimes u)$ and $B=v_{23}$.
     Their normalized gates satisfy
@@ -1216,7 +1200,7 @@
         MPOTensor.mpo_standardFormTensorOfGates_even_eq_adjoint_of_timeReversal_certificate}
     \leanok
     \discussion{10781}
-    \uses{def:mpu_tensor_from_two_gates, thm:mpu_supplied_two_site_periodic_circuit}
+    \uses{def:mpu_tensor_from_two_gates,thm:mpu_supplied_two_site_periodic_circuit}
     Let $V$ be a tensor whose two-site block has a standard form with gates
     $A,B$ of equal intermediate dimensions $q$, and suppose
     \begin{align}
@@ -1357,8 +1341,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_even_family_virtual_sign_gauge,
-        lem:mpu_source_factors_scalar_transport, FundamentalMPU}
+    \uses{lem:mpu_even_family_virtual_sign_gauge,lem:mpu_source_factors_scalar_transport,FundamentalMPU}
     Write $\eta V=zUz^\dagger$ with $\eta^2=1$. Transport the supplied
     factors of $V$ to those of $\eta V$. Their gates are unchanged since
     the unshifted gate acquires $\eta^2$ and the shifted gate acquires no
@@ -1384,8 +1367,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_normalized_physical_adjoint_source_factors,
-        lem:mpu_even_family_supplied_source_gauges}
+    \uses{lem:mpu_normalized_physical_adjoint_source_factors,lem:mpu_even_family_supplied_source_gauges}
     Construct the actual physical-adjoint factors and compare the even
     periodic families. The two resulting unitary gate equations imply
     $YX\otimes XY=I$, hence $Y=\sigma X^\dagger$ with $\sigma^2=1$.
@@ -1422,9 +1404,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_supplied_standard_form_source_cuts,
-        lem:mpu_normalized_physical_adjoint_source_factors,
-        lem:mpu_even_family_supplied_source_gauges}
+    \uses{lem:mpu_supplied_standard_form_source_cuts,lem:mpu_normalized_physical_adjoint_source_factors,lem:mpu_even_family_supplied_source_gauges}
     The actual coarse source factors have gates
     $A=v_{23}(u\otimes u)$ and $B=v_{23}$. Adjoint symmetry identifies
     the even periodic families of the standard-form tensor and its adjoint.
@@ -1454,7 +1434,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{SF, FundamentalMPU}
+    \uses{SF,FundamentalMPU}
     Compare the supplied factors with the selected factors of the same tensor.
     The normalized factor comparison gives two unitary rank transformations.
     Apply them to the existing open standard-form contraction. Its gates are
@@ -1486,9 +1466,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_canonical_forward_local_time_reversal,
-        lem:mpu_standard_form_from_normalized_source_factors,
-        lem:mpu_local_time_reversal_certificate}
+    \uses{lem:mpu_canonical_forward_local_time_reversal,lem:mpu_standard_form_from_normalized_source_factors,lem:mpu_local_time_reversal_certificate}
     The forward implication is the preceding construction. For the converse,
     the normalized source factors give a standard form of the two-site block
     with gates $A=v_{23}(u\otimes u)$ and $B=v_{23}$, and the local equation
@@ -1532,8 +1510,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_normalized_physical_adjoint_source_factors,
-        lem:mpu_even_family_supplied_source_gauges}
+    \uses{lem:mpu_normalized_physical_adjoint_source_factors,lem:mpu_even_family_supplied_source_gauges}
     Compose physical adjunction with entrywise conjugation. The real diagonal
     weight is fixed under conjugation, so the actual adjoint factor
     normalizations give the displayed transpose factors and gates. Under
@@ -1565,9 +1542,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_physical_transpose_source_factors,
-        lem:mpu_even_family_supplied_source_gauges,
-        lem:mpu_canonical_forward_local_time_reversal}
+    \uses{lem:mpu_physical_transpose_source_factors,lem:mpu_even_family_supplied_source_gauges,lem:mpu_canonical_forward_local_time_reversal}
     The actual transpose factors have gates $B^T,A^T$. Their two gauge
     equations are $B^T=(X\otimes Y)A$ and
     $A^T=B(Y^\dagger\otimes X^\dagger)$. Transpose the second and substitute
@@ -1604,9 +1579,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_canonical_source_transposition_phase,
-        lem:mpu_standard_form_from_normalized_source_factors,
-        lem:mpu_local_transposition_certificate}
+    \uses{lem:mpu_canonical_source_transposition_phase,lem:mpu_standard_form_from_normalized_source_factors,lem:mpu_local_transposition_certificate}
     The forward direction is
     Lemma~\ref{lem:mpu_canonical_source_transposition_phase}. For the
     converse, the normalized source factors give a standard form of the
@@ -1649,9 +1622,7 @@
     Lemma~\ref{prop:local-char-transposition}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:mpu_supplied_four_spin_source_comparison,
-        lem:mpu_canonical_source_transposition_phase,
-        lem:mpu_local_transposition_certificate}
+    \uses{lem:mpu_supplied_four_spin_source_comparison,lem:mpu_canonical_source_transposition_phase,lem:mpu_local_transposition_certificate}
     Even-family comparison with the actual transposed tensor exchanges
     the actual source ranks. The supplied cut-rank identities therefore
     give $r=\ell=d$. Choose the actual normalized source factors and
@@ -1678,9 +1649,7 @@
         MPOTensor.mpo_standardFormTensorOfGates_even_eq_transpose_of_transposition_certificate}
     \leanok
     \discussion{5714}
-    \uses{def:mpu_tensor_from_two_gates,
-        thm:mpu_supplied_two_site_periodic_circuit,
-        lem:mpu_local_time_reversal_certificate}
+    \uses{def:mpu_tensor_from_two_gates,thm:mpu_supplied_two_site_periodic_circuit,lem:mpu_local_time_reversal_certificate}
     Let $V$ be a tensor whose two-site block has a standard form with gates
     $A,B$ of equal intermediate dimensions $q$, and suppose
     \begin{align}
@@ -1701,8 +1670,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_supplied_two_site_periodic_circuit,
-        lem:mpu_local_time_reversal_certificate}
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,lem:mpu_local_time_reversal_certificate}
     As in Lemma~\ref{lem:mpu_local_time_reversal_certificate}, the operator of
     the two-site block on $N$ sites is the circuit $C(A,B)$. Its transpose is
     the circuit $C(B^T,A^T)$ read on the chain translated by one site of $V$.
@@ -1760,7 +1728,7 @@
         MPOTensor.IsMPUCanonicalFormII.index_eq_zero_of_standardForm_even_mpo_eq_transpose}
     \leanok
     \discussion{5714}
-    \uses{SF, def:index, lem:mpu_supplied_standard_form_source_cuts}
+    \uses{SF,def:index,lem:mpu_supplied_standard_form_source_cuts}
     Let an MPU be in standard form, with one-site physical space
     $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Transposition symmetry forces
     $\operatorname{ind}(\mathcal U)=0$. As in Lemma~\ref{PropChiral}, $N$
@@ -1776,11 +1744,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_supplied_even_transposition_criterion,
-        lem:mpu_transposition_phase_deformation,
-        lem:mpu_supplied_standard_form_source_cuts, def:index,
-        def:mpu_source_matrix_one, def:mpu_source_matrix_two,
-        def:mpu_right_rank, def:mpu_left_rank}
+    \uses{lem:mpu_supplied_even_transposition_criterion,lem:mpu_transposition_phase_deformation,lem:mpu_supplied_standard_form_source_cuts,def:index,def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank}
     As for Lemma~\ref{PropChiral}, the two-site block $\mathcal U_2$ is in
     canonical form II, so
     Lemma~\ref{lem:mpu_supplied_even_transposition_criterion} applies to any
@@ -1842,7 +1806,7 @@
         MPOTensor.FiniteChainOperatorSymmetryFamily,
         MPOTensor.FiniteChainOperatorSymmetryFamily.at}
     \leanok
-    \uses{def:mpu_finite_chain_operator_symmetry, def:equivalent-tensors}
+    \uses{def:mpu_finite_chain_operator_symmetry,def:equivalent-tensors}
     A coherent symmetry family specifies an action $\mathcal S_{d,N}$ for every
     physical dimension $d$, with one common set $A$ of applicable lengths. For
     an ancilla dimension $x$, let
@@ -1865,7 +1829,7 @@
     \label{thm:mpu_symmetry_identity_ancilla_invariant}
     \lean{MPOTensor.IsInvariantUnderSymmetry.tensorPhysicalId}
     \leanok
-    \uses{def:mpu_coherent_symmetry_family, def:equivalent-tensors}
+    \uses{def:mpu_coherent_symmetry_family,def:equivalent-tensors}
     If $\mathcal U$ is invariant under the $d$-dimensional component of a
     coherent symmetry family, then $\mathcal U^{(x)}$ is invariant under its
     $dx$-dimensional component.
@@ -1886,7 +1850,7 @@
     \lean{MPOTensor.FiniteChainOperatorSymmetry.block,
         MPOTensor.FiniteChainOperatorSymmetry.block_action}
     \leanok
-    \uses{def:mpu_finite_chain_operator_symmetry, lem:eval_word_block}
+    \uses{def:mpu_finite_chain_operator_symmetry,lem:eval_word_block}
     For a blocking length $k$, the blocked symmetry has applicable lengths
     \begin{align}
         A_k & = \{N\mid Nk\in A\}.
@@ -1901,7 +1865,7 @@
     \label{thm:mpu_symmetry_blocking_invariant}
     \lean{MPOTensor.IsInvariantUnderSymmetry.blockTensor}
     \leanok
-    \uses{def:mpu_blocked_finite_chain_symmetry, thm:mpdo_closed_chain_physical_blocking}
+    \uses{def:mpu_blocked_finite_chain_symmetry,thm:mpdo_closed_chain_physical_blocking}
     If $\mathcal U$ is invariant under $\mathcal S$, then its $k$-site blocking
     is invariant under the blocked symmetry.
 \end{lemma}
@@ -1931,7 +1895,7 @@
         MPOTensor.StrictlyEquivalentUnderSymmetry.of_fixedBond}
     \leanok
     \discussion{6948}
-    \uses{def:strictly-equivalent-tensors, def:mpu_finite_chain_operator_symmetry}
+    \uses{def:strictly-equivalent-tensors,def:mpu_finite_chain_operator_symmetry}
     % **Local fix:** paper_v2.tex 1345--1353 repeats the symmetry-transformed
     % operator on the right-hand side. Invariance requires the original MPU.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
@@ -1956,7 +1920,7 @@
     \label{lem:mpu_strict_symmetry_equivalence_forget}
     \lean{MPOTensor.StrictlyEquivalentUnderSymmetry.toStrictlyEquivalent}
     \leanok
-    \uses{def:strictly-equivalent-symmetry, def:strictly-equivalent-tensors}
+    \uses{def:strictly-equivalent-symmetry,def:strictly-equivalent-tensors}
     Strict equivalence under a symmetry implies strict equivalence.
 \end{lemma}
 
@@ -1969,7 +1933,7 @@
     \label{def:equivalent-symmetry}
     \notready
     \discussion{6017}
-    \uses{def:strictly-equivalent-symmetry, def:equivalent-tensors}
+    \uses{def:strictly-equivalent-symmetry,def:equivalent-tensors}
     Let $\mathcal U$ and $\mathcal V$ have physical dimensions $d_a$ and
     $d_b$. They are equivalent under a symmetry $\mathcal S$ if there are a
     positive blocking length $k$ and coprime positive ancilla dimensions
@@ -1983,8 +1947,7 @@
     \lean{MPOTensor.EquivalentUnderSymmetry}
     \leanok
     \discussion{7015}
-    \uses{def:strictly-equivalent-symmetry, def:equivalent-tensors,
-        def:mpu_coherent_symmetry_family, def:mpu_blocked_finite_chain_symmetry}
+    \uses{def:strictly-equivalent-symmetry,def:equivalent-tensors,def:mpu_coherent_symmetry_family,def:mpu_blocked_finite_chain_symmetry}
     % **Scope restriction (coherent family):** the symmetry is
     % supplied at every physical dimension and semiconjugates the canonical
     % identity-ancilla embeddings. Documented in
@@ -2007,8 +1970,7 @@
     \label{thm:mpu_symmetry_equivalence_forget}
     \lean{MPOTensor.EquivalentUnderSymmetry.toEquivalent}
     \leanok
-    \uses{def:mpu_coherent_family_equivalent_symmetry, def:equivalent-tensors,
-        lem:mpu_strict_symmetry_equivalence_forget}
+    \uses{def:mpu_coherent_family_equivalent_symmetry,def:equivalent-tensors,lem:mpu_strict_symmetry_equivalence_forget}
     Equivalence under a coherent symmetry family implies ordinary
     equivalence after the same ancillas and blocking.
 \end{lemma}
@@ -2024,9 +1986,7 @@
     \label{lem:equivalent-symmetry}
     \notready
     \discussion{6017}
-    \uses{def:strictly-equivalent-symmetry, coruvSF, FundamentalMPU,
-        lem:mpu_symmetry_path_criterion_reverse,
-        lem:mpu_symmetry_path_criterion_forward}
+    \uses{def:strictly-equivalent-symmetry,coruvSF,FundamentalMPU,lem:mpu_symmetry_path_criterion_reverse,lem:mpu_symmetry_path_criterion_forward}
     Two MPUs described by simple tensors are strictly equivalent under
     $\mathcal S$ if and only if their standard-form unitaries are joined by
     continuous families $\widetilde u(p)$ and $\widetilde v(p)$ whose generated
@@ -2048,7 +2008,7 @@
         MPOTensor.TwoSiteStandardFormData.joinedIn_sameMPOSet_padBond}
     \leanok
     \discussion{6017}
-    \uses{def:strictly-equivalent-symmetry, SF}
+    \uses{def:strictly-equivalent-symmetry,SF}
     Let $\mathcal U_1,\mathcal U_2$ be tensors in canonical form II, let
     $\mathcal S$ be a symmetry imposed at positive chain lengths, and fix
     $k\geq1$. Suppose that $\widetilde u(p),\widetilde v(p)$, $p\in[0,1]$, are
@@ -2067,7 +2027,7 @@
 
 \begin{proof}
     \leanok
-    \uses{def:mpu_stacked_half_factors, lem:mpu_standard_form_interpolation}
+    \uses{def:mpu_stacked_half_factors,lem:mpu_standard_form_interpolation}
     The tensors built from $\widetilde u(p),\widetilde v(p)$ form a continuous
     path of tensors on blocks of $2k$ sites whose MPUs are invariant. At each
     endpoint, the tensor $W_1$ built from the gates and the block $W_2$ of
@@ -2091,7 +2051,7 @@
         MPOTensor.gatePath_of_symmetricPath}
     \leanok
     \discussion{6017}
-    \uses{def:strictly-equivalent-symmetry, SF, coruvSF, FundamentalMPU}
+    \uses{def:strictly-equivalent-symmetry,SF,coruvSF,FundamentalMPU}
     Let $\mathcal U_1,\mathcal U_2$ be simple tensors in canonical form II and
     let $\mathcal S$ be a symmetry imposed at positive chain lengths. If
     $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under
@@ -2109,7 +2069,7 @@
 
 \begin{proof}
     \leanok
-    \uses{coruvSF, FundamentalMPU, def:index}
+    \uses{coruvSF,FundamentalMPU,def:index}
     Apply Corollary~\ref{coruvSF} to the symmetric path $\mathcal W(p)$ of the
     strict equivalence. Its gates on blocks of $k$ sites have ranks $\ell,r$
     independent of $p$, with
@@ -2138,7 +2098,7 @@
         MPOTensor.StrictlyEquivalentUnderSymmetry.det_mpo_one_eq_of_conjugation}
     \leanok
     \discussion{5713}
-    \uses{SF, def:strictly-equivalent-symmetry}
+    \uses{SF,def:strictly-equivalent-symmetry}
     An MPU is unitary on a ring of one site, although unitarity is required
     only on rings of at least two sites. For a standard form with unitaries
     $u,v$, the MPU on one standard-form site has determinant
@@ -2178,8 +2138,7 @@
         MPOTensor.StrictlyEquivalentUnderSymmetry.det_mul_eq_of_conjugation}
     \leanok
     \discussion{5713}
-    \uses{prop1conj, corconj, thm:mpu_conjugation_odd_rank_if,
-        lem:mpu_conjugation_one_site_determinant}
+    \uses{prop1conj,corconj,thm:mpu_conjugation_odd_rank_if,lem:mpu_conjugation_one_site_determinant}
     Suppose that either $r$ or $\ell$ is odd. Two conjugation-invariant MPUs
     $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under
     conjugation if and only if
@@ -2238,8 +2197,7 @@
         MPOTensor.IsMPUCanonicalFormII.isMPUCanonicalForm_reindexPhysical_blockTwo}
     \leanok
     \discussion{5713}
-    \uses{prop1conj, corconj, lem:mpu_symmetry_path_criterion_reverse,
-        lem:mpu_orthogonal_gate_interpolation}
+    \uses{prop1conj,corconj,lem:mpu_symmetry_path_criterion_reverse,lem:mpu_orthogonal_gate_interpolation}
     Let $\mathcal U_1$ and $\mathcal U_2$ be tensors on pairs of sites in
     canonical form whose MPUs are invariant under conjugation, with
     standard-form unitaries $u_i,v_i$ of the same ranks $r$ and $\ell$. For
@@ -2281,8 +2239,7 @@
         MPOTensor.det_doubledV_submatrix}
     \leanok
     \discussion{5713}
-    \uses{thm:mpu_conjugation_odd_rank_if, thm:mpu_conjugation_even_rank_if,
-        corconj, def:equivalent-symmetry}
+    \uses{thm:mpu_conjugation_odd_rank_if,thm:mpu_conjugation_even_rank_if,corconj,def:equivalent-symmetry}
     Let $\mathcal U_1$ and $\mathcal U_2$ be conjugation-invariant tensors in
     canonical form II on the same physical dimension $d$, whose standard forms
     have the same ranks $r$ and $\ell$. If either $r$ or $\ell$ is odd, then
@@ -2362,7 +2319,7 @@
     \label{prop:conjsym-strict-equiv}
     \notready
     \discussion{5713}
-    \uses{prop1conj, corconj, cor:sympl-to-orthogonal, lem:equivalent-symmetry, lemma:conjclass-normalform-continuous, thm:mpu_conjugation_even_rank_if}
+    \uses{prop1conj,corconj,cor:sympl-to-orthogonal,lem:equivalent-symmetry,lemma:conjclass-normalform-continuous,thm:mpu_conjugation_even_rank_if}
     Suppose $r$ and $\ell$ are even. Two conjugation-invariant MPUs in the
     standard forms of Lemma~\ref{corconj} are strictly equivalent under
     conjugation if and only if they belong to the same case and
@@ -2382,8 +2339,7 @@
 \end{theorem}
 
 \begin{proof}
-    \uses{lem:equivalent-symmetry, lem:mpu_conjugation_gate_path_determinants,
-        thm:mpu_conjugation_even_rank_if}
+    \uses{lem:equivalent-symmetry,lem:mpu_conjugation_gate_path_determinants,thm:mpu_conjugation_even_rank_if}
     The ``if'' direction is Lemma~\ref{thm:mpu_conjugation_even_rank_if}. For the
     ``only if'' direction, the forward direction of
     Lemma~\ref{lem:equivalent-symmetry} gives a continuous path of
@@ -2402,7 +2358,7 @@
         MPOTensor.kronFactorDet_eq_of_kronecker_eq}
     \leanok
     \discussion{5713}
-    \uses{prop1conj, corconj}
+    \uses{prop1conj,corconj}
     Suppose $r$ and $\ell$ are even, and let $u(p),v(p)$, $p\in[0,1]$, be
     continuous families of unitaries whose MPUs are invariant under conjugation.
     Let $x(p),y(p)$ be the unitaries of Lemma~\ref{prop1conj}, so that
@@ -2440,8 +2396,7 @@
         Matrix.IsUnitaryBetween.joinedIn_symplectic_right_of_det_eq}
     \leanok
     \discussion{5713}
-    \uses{prop1conj, corconj, cor:sympl-to-orthogonal,
-        lem:mpu_symmetry_path_criterion_reverse, lem:mpu_orthogonal_gate_interpolation}
+    \uses{prop1conj,corconj,cor:sympl-to-orthogonal,lem:mpu_symmetry_path_criterion_reverse,lem:mpu_orthogonal_gate_interpolation}
     Suppose $r$ and $\ell$ are even, and let $\mathcal U_1$ and $\mathcal U_2$
     be tensors on pairs of sites in canonical form whose standard-form
     unitaries $u_i,v_i$ are both in the orthogonal form or both in the
@@ -2485,9 +2440,7 @@
     % direction; the "only if" direction uses the preservation of the case
     % under blocking. Documented in
     % docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex.
-    \uses{corconj, prop:conjsym-strict-equiv, def:equivalent-symmetry,
-        thm:mpu_conjugation_same_case_equiv_if,
-        lem:mpu_symmetry_path_criterion_forward}
+    \uses{corconj,prop:conjsym-strict-equiv,def:equivalent-symmetry,thm:mpu_conjugation_same_case_equiv_if,lem:mpu_symmetry_path_criterion_forward}
     Let $\mathcal U_1$ and $\mathcal U_2$ be simple conjugation-invariant
     tensors in canonical form II on the same physical dimension, whose standard
     forms have the same even ranks $r$ and $\ell$. Then $\mathcal U_1$ and
@@ -2525,8 +2478,7 @@
         MPOTensor.det_doubled_of_sign}
     \leanok
     \discussion{5713}
-    \uses{corconj, thm:mpu_conjugation_even_rank_if, def:equivalent-symmetry,
-        cor:all-equivalent-under-conjugation}
+    \uses{corconj,thm:mpu_conjugation_even_rank_if,def:equivalent-symmetry,cor:all-equivalent-under-conjugation}
     Let $\mathcal U_1$ and $\mathcal U_2$ be tensors in canonical form II on
     the same physical dimension $d$, whose standard forms have the same even
     ranks $r$ and $\ell$. If both standard forms lie in Case I, or both in
@@ -2649,7 +2601,7 @@
     \lean{MPOTensor.IsMPUCanonicalFormII.standardForm_timeReversalSign}
     \leanok
     \discussion{5714}
-    \uses{PropChiral, lem:matrix_trace_swap_kronecker}
+    \uses{PropChiral,lem:matrix_trace_swap_kronecker}
     For a time-reversal-invariant MPU in standard form, the sign $\sigma$ of
     Lemma~\ref{PropChiral} is
     \begin{align}
@@ -2661,7 +2613,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{PropChiral, lem:mpu_supplied_time_reversal_sign}
+    \uses{PropChiral,lem:mpu_supplied_time_reversal_sign}
     Lemma~\ref{PropChiral} gives $r=\ell=d_0$, a unitary $x$ and a sign
     $\sigma$ with
     $v_{23}(u_{12}\otimes u_{34})=\sigma(x_{12}\otimes x_{34}^\dagger)v_{23}^\dagger$.
@@ -2718,7 +2670,7 @@
         MPOTensor.continuous_blockTwo, MPOTensor.mpo_blockTwo_eq_of_mpo_eq}
     \leanok
     \discussion{5714}
-    \uses{eq:sigma-from-trace, lem:mpu_sigma_gauge_invariant}
+    \uses{eq:sigma-from-trace,lem:mpu_sigma_gauge_invariant}
     For a time-reversal-invariant MPU in standard form, the sign
     $\sigma=\pm1$ is independent of the gauge and is constant under continuous
     deformations that preserve time-reversal symmetry.
@@ -2726,8 +2678,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{eq:sigma-from-trace, lem:mpu_sigma_gauge_invariant,
-        lem:mpu_source_time_reversal_sign_independent, SF}
+    \uses{eq:sigma-from-trace,lem:mpu_sigma_gauge_invariant,lem:mpu_source_time_reversal_sign_independent,SF}
     Let $P$ exchange the two physical blocks. By
     Lemma~\ref{lem:mpu_source_time_reversal_sign_independent}, the trace
     expression of any standard form of a tensor $\mathcal W$ equals
@@ -2813,7 +2764,7 @@
     \label{lem:mpu_supplied_time_reversal_sign_constant}
     \lean{MPOTensor.continuous_intrinsicTimeReversalSign, MPOTensor.intrinsicTimeReversalSign_eq_on_path}
     \leanok
-    \uses{lem:mpu_supplied_time_reversal_sign, def:mpu_supplied_two_site_standard_form}
+    \uses{lem:mpu_supplied_time_reversal_sign,def:mpu_supplied_two_site_standard_form}
     Let $W(t)$ be a continuous path of tensors for $t\in[0,1]$.
     At each $t$, suppose there is a supplied square two-site standard form
     and a local time-reversal certificate as in
@@ -2828,7 +2779,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_supplied_time_reversal_sign, lem:mpu_source_time_reversal_sign_independent}
+    \uses{lem:mpu_supplied_time_reversal_sign,lem:mpu_source_time_reversal_sign_independent}
     The finite-chain operator is polynomial in the tensor entries,
     so $s(W(t))$ is continuous. At each point the local equation and
     intrinsic identity give $s(W(t))\in\{1,-1\}$. A continuous function
@@ -2841,7 +2792,7 @@
         MPOTensor.intrinsicTimeReversalSign_reindexPhysical}
     \leanok
     \discussion{5714}
-    \uses{prop:sigma-well-defined, PropChiral, lem:mpu_blocking}
+    \uses{prop:sigma-well-defined,PropChiral,lem:mpu_blocking}
     Let $\mathcal U$ be a time-reversal-invariant MPU in standard form,
     described by $u,v$, and let the blocked MPU $\mathcal U_k$ be described by
     $u^{(k)},v^{(k)}$, the gates of any standard form of its two-site block.
@@ -2857,8 +2808,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_source_time_reversal_sign_independent, PropChiral,
-        lem:mpu_blocking, lem:mpu_intrinsic_blocking_parity}
+    \uses{lem:mpu_source_time_reversal_sign_independent,PropChiral,lem:mpu_blocking,lem:mpu_intrinsic_blocking_parity}
     The source chooses the blocked gates
     $u^{(k)}=(\Id\otimes v^{\otimes(k-1)}\otimes\Id)u^{\otimes k}$ and
     $v^{(k)}=\Id^{\otimes(k-1)}\otimes v\otimes\Id^{\otimes(k-1)}$ and unwinds
@@ -2898,7 +2848,7 @@
         MPOTensor.mpo_blockTwo_selfAdjoint}
     \leanok
     \discussion{5714}
-    \uses{prop:sigma1-and-sigma2-equal, def:strictly-equivalent-symmetry, def:equivalent-symmetry}
+    \uses{prop:sigma1-and-sigma2-equal,def:strictly-equivalent-symmetry,def:equivalent-symmetry}
     Strictly equivalent time-reversal-invariant MPUs have the same
     $\sigma^{(1)}$ and $\sigma^{(2)}$. Equivalent time-reversal-invariant MPUs
     have the same $\sigma^{(2)}$.
@@ -2918,8 +2868,7 @@
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{prop:sigma-well-defined, lem:mpu_source_time_reversal_sign_independent,
-        lem:mpu_intrinsic_blocking_parity, lem:mpu_canonical_intrinsic_blocking_parity}
+    \uses{prop:sigma-well-defined,lem:mpu_source_time_reversal_sign_independent,lem:mpu_intrinsic_blocking_parity,lem:mpu_canonical_intrinsic_blocking_parity}
     Every MPU whose operators are self-adjoint on the rings of even length has
     intrinsic trace sign $\pm1$: for a canonical representative the blocked
     traces are $\eta^kC$ with $\eta=\pm1$, and at the even length $2D^4$ the
@@ -2979,8 +2928,7 @@
     % **Local fix (missing argument):** uses the "only if" direction of
     % Lemma cor:equiv-under-conjugation. Documented in
     % docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex.
-    \uses{prop1conj, corconj, lem:mpu_conjugation_mps_sign_local,
-        cor:equiv-under-conjugation, cor:all-equivalent-under-conjugation}
+    \uses{prop1conj,corconj,lem:mpu_conjugation_mps_sign_local,cor:equiv-under-conjugation,cor:all-equivalent-under-conjugation}
     For a conjugation-invariant MPU, the MPS sign
     $G\overline G=\pm\Id$ agrees with Case I and Case II, respectively, of
     Lemma~\ref{corconj}: if $G$ is a unitary with
@@ -3057,8 +3005,7 @@
         MPOTensor.IsMPUCanonicalFormII.mps_timeReversal_sign_eq_of_gauge}
     \leanok
     \discussion{5714}
-    \uses{PropChiral, eq:sigma-from-trace, prop:sigma-well-defined,
-        lem:mpu_double_layer_square_fixed_pair, lem:mpu_twisted_trace_rank_one}
+    \uses{PropChiral,eq:sigma-from-trace,prop:sigma-well-defined,lem:mpu_double_layer_square_fixed_pair,lem:mpu_twisted_trace_rank_one}
     For a time-reversal-invariant MPU in standard form, the MPS sign
     $G\overline G=\pm\Id$ equals the sign $\sigma^{(2)}$ obtained after
     blocking two sites: if $G$ is a unitary with
@@ -3077,7 +3024,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:mpu_double_layer_square_fixed_pair, lem:mpu_twisted_trace_rank_one}
+    \uses{lem:mpu_double_layer_square_fixed_pair,lem:mpu_twisted_trace_rank_one}
     Write $\mathcal W_2$ for the two-site block of the standard form; its
     double layer is $|\rho)(\Id|$ by
     Lemma~\ref{lem:mpu_double_layer_square_fixed_pair}. The gauge relation

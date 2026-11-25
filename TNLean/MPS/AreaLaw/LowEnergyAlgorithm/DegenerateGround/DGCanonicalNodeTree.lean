@@ -48,7 +48,7 @@ open MeasureTheory
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-open TNLean.MPS.AreaLaw TNLean.Lattice
+open TNLean.MPS.AreaLaw
 
 /-- **Success probability of the degenerate-gap tree of constant node dimension.** For a
 nearest-neighbour chain with `0 ≤ hᵢ ≤ 1` satisfying Assumption (DG), with ground space `G` of

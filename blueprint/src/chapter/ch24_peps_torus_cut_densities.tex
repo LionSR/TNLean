@@ -117,9 +117,7 @@ original tensor.
         TNLean.PEPS.regularRegionReferenceCoordinatesEquiv,
         TNLean.PEPS.regularReferenceBoundaryDensity}
     \leanok
-    \uses{def:peps_regular_region_coordinates,
-        thm:peps_controlled_projector_cut_boundary_factor,
-        def:peps_fixed_boundary_factor_density}
+    \uses{def:peps_regular_region_coordinates,thm:peps_controlled_projector_cut_boundary_factor,def:peps_fixed_boundary_factor_density}
     Number the $n+1$ crossing bonds. The spanning-tree physical
     coordinates identify the region rows with $(d,a)$, where $d\in G^n$
     is the relative boundary label and $a$ consists of its reference label,
@@ -143,7 +141,7 @@ original tensor.
     every nonnegative finite-order R\'enyi entropy are $n\log|G|$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_fixed_boundary_factor_density, thm:peps_flat_density_renyi_entropy}
+    \uses{thm:peps_fixed_boundary_factor_density,thm:peps_flat_density_renyi_entropy}
     Since the fixed ancillary vector has norm one, applying the fixed-factor density
     identities and pulling them back through the coordinate bijection yields the result.
 \end{proof}
@@ -191,7 +189,7 @@ original tensor.
     \label{thm:peps_torus_complement_disentangling}
     \lean{TNLean.PEPS.exists_unitary_torusComplementDisentangling_of_winding_eq}
     \leanok
-    \uses{thm:peps_torus_complement_cycle_words, thm:peps_cycle_controlled_boundary}
+    \uses{thm:peps_torus_complement_cycle_words,thm:peps_cycle_controlled_boundary}
     Choose the two rooted trees, reference crossing bond, and fixed
     complementary root loops with matching winding from
     Lemma~\ref{thm:peps_torus_complement_cycle_words}. There exists one
@@ -246,7 +244,7 @@ original tensor.
         TNLean.PEPS.regularCycleControlledBoundaryMatrix_maps_localProjector_range,
         TNLean.PEPS.exists_unitary_regionPhysicalProductMatrix_mul_cycleWords}
     \leanok
-    \uses{def:peps_regular_region_coordinates, thm:peps_regular_region_cycle_holonomy, thm:peps_cycle_controlled_boundary, thm:peps_region_physical_maps}
+    \uses{def:peps_regular_region_coordinates,thm:peps_regular_region_cycle_holonomy,thm:peps_cycle_controlled_boundary,thm:peps_region_physical_maps}
     Fix a rooted spanning tree in a finite region. Independent vertex
     translations $\lambda_v$ of its physical half-edge labels
     transform the spanning-tree coordinates by
@@ -346,7 +344,7 @@ original tensor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_regular_physical_unitary_transport, thm:peps_regular_twisted_region_accessibility}
+    \uses{thm:peps_regular_physical_unitary_transport,thm:peps_regular_twisted_region_accessibility}
     Expanding the half-edge contraction and summing the physical row
     against the product local projector replaces each site factor
     $P_v$ by $P_v^2=P_v$. The two reverse accessibility identities give
@@ -398,7 +396,7 @@ original tensor.
     \lean{TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_density_transfer,
         TNLean.PEPS.IsGIsometric.exists_torusPhysicalCut_common_density_of_isSimplyConnected_and_winding}
     \leanok
-    \uses{thm:peps_regular_physical_cut_transfer, thm:peps_supported_physical_density}
+    \uses{thm:peps_regular_physical_cut_transfer,thm:peps_supported_physical_density}
     Work on a native torus with both dimensions at least three, with an
     original regular $G$-isometric site map. Assume that the
     closed-cell realization of $R$ is simply connected. Choose rooted
@@ -432,7 +430,7 @@ original tensor.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_torus_controlled_boundary_density, thm:peps_flat_density_renyi_entropy}
+    \uses{thm:peps_torus_controlled_boundary_density,thm:peps_flat_density_renyi_entropy}
     Deriving the incident-coordinate local isometries from the original
     four-leg isometry gives a physical product map with positive scalar
     Gram $T_R^\dagger T_R=c_RP_R$. The cut image shows that a

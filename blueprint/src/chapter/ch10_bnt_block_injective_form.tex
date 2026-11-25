@@ -37,7 +37,7 @@ span after blocking.
     \lean{MPSTensor.wordTupleSpanTop_of_family_gaugeEquiv_symm}
     \lean{MPSTensor.wordTupleSpanTop_iff_of_family_gaugeEquiv}
     \leanok
-    \uses{def:blockwise_product_word_span, def:gauge_equiv}
+    \uses{def:blockwise_product_word_span,def:gauge_equiv}
     Let $(A_j)_{j=1}^g$ and $(B_j)_{j=1}^g$ be tensor families with the same
     physical dimension and the same bond dimension $D_j$ in each labelled
     block. Suppose that for every $j$ there is an arbitrary invertible matrix
@@ -82,7 +82,7 @@ span after blocking.
     \lean{MPSTensor.wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt}
     \lean{MPSTensor.wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1}
     \leanok
-    \uses{def:blockwise_product_word_span, def:blocks_not_gauge_phase_equiv, lem:bnt_direct_sum_injective_prefix_word_span}
+    \uses{def:blockwise_product_word_span,def:blocks_not_gauge_phase_equiv,lem:bnt_direct_sum_injective_prefix_word_span}
     As at the direct-sum induction length in
     \cite[lines~1346--1408]{PerezGarcia2007Matrix}, let $(A_j)_{j=1}^g$ be
     irreducible left-canonical tensors with normalized self-overlaps and with
@@ -120,7 +120,7 @@ span after blocking.
     \lean{MPSTensor.IsCPSVBasisOfNormalTensors.%
         exists_blocked_wordTupleSpanTop_one}
     \leanok
-    \uses{def:bnt_cpsv, def:blocked_tensor, def:blockwise_product_word_span}
+    \uses{def:bnt_cpsv,def:blocked_tensor,def:blockwise_product_word_span}
     Following \cite[lines~317--345]{Cirac2016MPDO_arXiv}, let $(A_j)_{j=1}^g$
     be a basis of normal tensors, with bond dimensions $D_j$. There is a
     positive integer $L$ such that the one-letter evaluations of the blocked
@@ -141,7 +141,7 @@ span after blocking.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:cpsv_bnt_block_dimensions_positive, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, thm:cpsv_normal_tp_gauge, thm:normal_tp_primitive_irred, thm:common_exact_block_injectivity_normal_left_canonical, thm:wordspan_blk_inj_succ, lem:bnt_direct_sum_block_separation_word_span, lem:gauge_invariance_block_injective}
+    \uses{lem:cpsv_bnt_block_dimensions_positive,thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,thm:cpsv_normal_tp_gauge,thm:normal_tp_primitive_irred,thm:common_exact_block_injectivity_normal_left_canonical,thm:wordspan_blk_inj_succ,lem:bnt_direct_sum_block_separation_word_span,lem:gauge_invariance_block_injective}
     In its trace-preserving Perron gauge, the gauged family is irreducible and
     left-canonical, has normalized self-overlaps, and remains gauge-phase
     separated. At a common positive length $p$ where every gauged block is
@@ -180,7 +180,7 @@ span after blocking.
         exists_positive_wordTupleSpanTop_le_three_cap_pow_five,
         MPSTensor.exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalTensor}
     \leanok
-    \uses{def:bnt_cpsv, def:blockwise_product_word_span}
+    \uses{def:bnt_cpsv,def:blockwise_product_word_span}
     Let $(A_j)_{j=1}^{g}$ be a basis of normal tensors with bond dimensions
     $D_j$, or more generally pairwise inequivalent normalized normal tensors.
     If $K>0$ and $\sum_jD_j\leq K$, then there is a positive integer
@@ -194,7 +194,7 @@ span after blocking.
 
 \begin{proof}
     \leanok
-    \uses{lem:cpsv_bnt_block_dimensions_positive, thm:cpsv_bnt_blocks_not_gaugePhaseEquiv, thm:cpsv_normal_tp_gauge, thm:normal_tp_primitive_irred, thm:exact_pow_four_block_injectivity_normal_left_canonical, thm:wordspan_blk_inj_succ, lem:bnt_direct_sum_block_separation_word_span, thm:word_tuple_span_gauge_invariance}
+    \uses{lem:cpsv_bnt_block_dimensions_positive,thm:cpsv_bnt_blocks_not_gaugePhaseEquiv,thm:cpsv_normal_tp_gauge,thm:normal_tp_primitive_irred,thm:exact_pow_four_block_injectivity_normal_left_canonical,thm:wordspan_blk_inj_succ,lem:bnt_direct_sum_block_separation_word_span,thm:word_tuple_span_gauge_invariance}
     In the trace-preserving Perron gauge of each representative, since
     $D_j\leq\sum_kD_k\leq K$, quantum Wielandt and homogeneous-span
     propagation make every representative block-injective at $K^4$,
@@ -220,7 +220,7 @@ span after blocking.
     \label{thm:cpsv_bnt_dimension_bound}
     \lean{MPSTensor.CPSVCanonicalFormData.sum_representative_dim_le}
     \leanok
-    \uses{def:cpsv_canonical_form, thm:cpsv_canonical_form_bnt_refinement}
+    \uses{def:cpsv_canonical_form,thm:cpsv_canonical_form_bnt_refinement}
     Let canonical-form data of ambient bond dimension $D$ have
     phase classes $j$ and chosen representatives of dimensions $D_j$. Then
     \begin{align}
@@ -245,7 +245,7 @@ span after blocking.
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five}
     \leanok
-    \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:blocked_tensor, def:blockwise_product_word_span}
+    \uses{def:cpsv_canonical_form,def:bnt_cpsv,def:blocked_tensor,def:blockwise_product_word_span}
     As in the proposition at \cite[lines~342--345]{Cirac2016MPDO_arXiv}, let
     $A$ be in CPSV canonical form with positive ambient bond dimension $D$.
     There is a basis of normal tensors $(A_j)_{j=1}^{g}$ and a positive integer
@@ -262,7 +262,7 @@ span after blocking.
 
 \begin{proof}
     \leanok
-    \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_bnt_dimension_bound, thm:cpsv_bnt_sharp_span_ambient_cap, thm:cpsv_bnt_blocked_simultaneous_span}
+    \uses{thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_bnt_dimension_bound,thm:cpsv_bnt_sharp_span_ambient_cap,thm:cpsv_bnt_blocked_simultaneous_span}
     Selecting one representative from every matrix-product-vector phase class
     produces a basis of normal tensors whose total bond dimension is at most
     $D$ by Lemma~\ref{thm:cpsv_bnt_dimension_bound}. Applying

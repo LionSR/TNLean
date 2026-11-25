@@ -38,9 +38,7 @@
     \lean{TNLean.PEPS.regularBoundaryRegisterPermutation_coordinateTranslation,
         TNLean.PEPS.exists_unitary_regularBoundaryRegisterTransport}
     \leanok
-    \uses{def:peps_boundary_register_permutation,
-        thm:peps_regular_coordinate_permutation_support,
-        thm:peps_regular_physical_unitary_transport}
+    \uses{def:peps_boundary_register_permutation,thm:peps_regular_coordinate_permutation_support,thm:peps_regular_physical_unitary_transport}
     On an untwisted connected region $R$ with regular $G$-isometric site tensors, for every boundary permutation $\tau$ there exists a regional unitary $W_\tau$ (chosen before $\theta$) such that
     \begin{align}
         W_\tau\Psi_R(\theta)=\Psi_R(\theta\circ\tau)
@@ -80,9 +78,7 @@
     \label{thm:peps_regular_two_part_charge_motion}
     \lean{TNLean.PEPS.exists_unitary_regularTwoPartChargeMotion}
     \leanok
-    \uses{def:peps_joining_boundary_edge,
-        thm:peps_regular_boundary_register_transport,
-        thm:peps_regular_boundary_charge_contraction}
+    \uses{def:peps_joining_boundary_edge,thm:peps_regular_boundary_register_transport,thm:peps_regular_boundary_charge_contraction}
     For disjoint connected regions $L,S$ with regular $G$-isometric site tensors and joining bonds $e,f\in E(L,S)$, there exist independent regional unitaries $W_L,W_S$ (chosen before $\chi,p,\theta$) such that
     \begin{align}
         (W_L\otimes W_S)\Psi_{L\cup S}^{e,\chi,p}(\theta)
@@ -109,8 +105,7 @@
         TNLean.PEPS.torusChargeMotionColumn_union,
         TNLean.PEPS.torusChargeMotionColumn_connected}
     \leanok
-    \uses{def:peps_torus_two_column_charge_geometry,
-        def:peps_torus_plaquette_flux_geometry}
+    \uses{def:peps_torus_two_column_charge_geometry,def:peps_torus_plaquette_flux_geometry}
     On a finite torus with periods $L_x,L_y\ge 3$, the columns $L_v,S_v$ of Definition~\ref{def:peps_torus_two_column_charge_geometry} satisfy $|L_v|=|S_v|=2$, $L_v\cap S_v=\emptyset$, are each connected, and have union $L_v\cup S_v$ equal to the plaquette region at $v$.
 \end{lemma}
 \begin{proof}\leanok
@@ -121,8 +116,7 @@
     \label{thm:peps_torus_two_column_charge_motion}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTwoColumnChargeMotion}
     \leanok
-    \uses{thm:peps_regular_two_part_charge_motion,
-        thm:peps_torus_two_column_charge_geometry}
+    \uses{thm:peps_regular_two_part_charge_motion,thm:peps_torus_two_column_charge_geometry}
     For a regular $G$-isometric four-leg tensor on a torus with $L_x,L_y\ge 3$, at every translated square $L_v\cup S_v$ (including across both seams) there exist independent two-spin unitaries $W_{L_v},W_{S_v}$ (chosen before $\chi,p,\theta$) satisfying (\ref{eq:two_part_charge_motion}) with $(e,f)=(e_{\mathrm{up}},e_{\mathrm{low}})$, realizing the two-column charge move of \cite[Section~6.6]{Schuch2010PEPS}, lines 2489--2507 (with unrestricted lattice geometry in \cite{gap:rmp_peps_quantum_double_g_isometry}).
 \end{lemma}
 \begin{proof}\leanok

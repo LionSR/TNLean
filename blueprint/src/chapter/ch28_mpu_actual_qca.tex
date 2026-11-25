@@ -35,11 +35,7 @@
     \label{lem:mpu_actual_qca_canonical}
     \lean{SpinChain.exists_isQCA_of_isMPUCanonicalFormII}
     \leanok
-    \uses{lem:mpu_actual_finite_adjoint_inverse,
-        thm:mpu_bounded_source_open_standard_form,
-        thm:mpu_finite_heisenberg_completed_forward_action,
-        lem:mpu_finite_heisenberg_translation_covariance,
-        lem:mpu_finite_heisenberg_forward_propagation}
+    \uses{lem:mpu_actual_finite_adjoint_inverse,thm:mpu_bounded_source_open_standard_form,thm:mpu_finite_heisenberg_completed_forward_action,lem:mpu_finite_heisenberg_translation_covariance,lem:mpu_finite_heisenberg_forward_propagation}
     A canonical-form-II MPU of bond dimension $D$ determines an actual
     quasi-local QCA with propagation neighbourhood
     $[-4D^4,4D^4]\cap\mathbb Z$. Its action is the actual original-site
@@ -86,7 +82,7 @@
         SpinChain.mpuQuasiLocalEquiv_finiteChainConjugation,
         SpinChain.mpuQuasiLocalEquiv_apply_eq_bufferedMPUQuasiLocalAction}
     \leanok
-    \uses{lem:mpu_actual_qca_canonical, thm:mpu_reduced_cfii_representative}
+    \uses{lem:mpu_actual_qca_canonical,thm:mpu_reduced_cfii_representative}
     Let $d>0$ and let $U$ be an MPU of bond dimension $D$.
     There is an actual quasi-local star-automorphism $\Phi_U$ which is
     translation covariant and propagates within
@@ -113,7 +109,7 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:mpu_actual_qca_canonical, thm:mpu_reduced_cfii_representative}
+    \uses{lem:mpu_actual_qca_canonical,thm:mpu_reduced_cfii_representative}
     The reduced canonical representative has bond dimension
     $0<D_{\mathrm{red}}\le D$ and exactly the same periodic physical
     operator at every positive length. Apply the preceding construction

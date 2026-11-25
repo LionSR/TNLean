@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.ColumnSelection
+import QICLean.Analysis.TraceNorm.ColumnSelection
 import TNLean.Network.DependentBond.DependentBondNetwork
 
 /-!
@@ -16,7 +16,7 @@ on every edge and the same inserted bond matrices. Its contraction is the column
 `σ|z⟩` of the contracted operator `σ` at the product-basis vector `|z⟩`.
 
 The networks are the edge-dependent contractions of
-`TNLean.Lattice.DependentBondNetwork`, which allow parallel edges, heterogeneous
+`TNLean.Network.DependentBondNetwork`, which allow parallel edges, heterogeneous
 physical spaces, edge-dependent virtual alphabets and arbitrary inserted bond
 matrices. No positivity or Hermiticity of the contracted operator is assumed.
 The same extraction for tensors on a finite simple graph is in
@@ -24,10 +24,10 @@ The same extraction for tensors on a finite simple graph is in
 
 ## Main results
 
-* `TNLean.Lattice.Compression.network_fixInput` and
-  `TNLean.Lattice.Compression.operatorNetworkMatrix_mulVec_single` — fixing the
+* `TNLean.Network.network_fixInput` and
+  `TNLean.Network.operatorNetworkMatrix_mulVec_single` — fixing the
   input indices selects the column of the contracted operator.
-* `TNLean.Lattice.Compression.exists_fixInput_network_of_traceNorm_sub_pure_le`
+* `TNLean.Network.exists_fixInput_network_of_traceNorm_sub_pure_le`
   — Lemma 8.1 for edge-dependent operator networks.
 
 ## References
@@ -42,9 +42,9 @@ noncomputable section
 
 open scoped BigOperators Matrix
 
-namespace TNLean.Lattice.Compression
+namespace TNLean.Network
 
-open TNLean.Lattice.DependentBondNetwork
+open TNLean.Network.DependentBondNetwork
 
 section Dependent
 
@@ -126,11 +126,12 @@ theorem exists_fixInput_network_of_traceNorm_sub_pure_le
       ψ = Matrix.toEuclideanLin (operatorNetworkMatrix tail head D A B)
         (EuclideanSpace.single z 1) ∧
       ψ ≠ 0 ∧ ∃ θ : ℝ, ‖((‖ψ‖ : ℂ)⁻¹) • ψ - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * η := by
+  rw [← Matrix.rectangularTraceNorm_square, Matrix.rectangularTraceNorm_reindex] at hσ
   obtain ⟨z, hz, θ, hθ⟩ :=
-    exists_column_ne_zero_of_traceNorm_sub_pure_le e _ Ω hΩ hσ hη
+    Matrix.exists_column_ne_zero_of_rectangularTraceNorm_sub_pure_le _ Ω hΩ hσ hη
   refine ⟨z, _, fun τ ↦ ?_, rfl, hz, θ, hθ⟩
   rw [Matrix.toEuclideanLin_single_one_apply, network_fixInput]
 
 end Dependent
 
-end TNLean.Lattice.Compression
+end TNLean.Network

@@ -14,8 +14,7 @@ direction constraint from the mesh argument of \cite[Section~11]{OpenAI2026AreaL
     \label{thm:area_law_initial_frontier_near_mark}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_frontier_near_mark_allowed}
     \leanok
-    \uses{def:area_law_initial_birth_regions,def:area_law_belt_cell_marks,
-        def:area_law_fine_layer_indices}
+    \uses{def:area_law_initial_birth_regions,def:area_law_belt_cell_marks,def:area_law_fine_layer_indices}
     Let $k\ge k_0$, let $z$ be a fine-cell index in layer $k$,
     and let $v$ be one of its nine marks. Set $t=2^{\ell_k}$.
     For any initial region identifier $i$ and any
@@ -24,12 +23,7 @@ direction constraint from the mesh argument of \cite[Section~11]{OpenAI2026AreaL
     of the four allowed lines through $v$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_primary_fine_cell_cover,def:area_law_fan_runs,
-        thm:area_law_belt_marks_quarter_mesh,thm:area_law_square_frontier_side,
-        thm:area_law_fan_frontier_primitives,
-        thm:area_law_near_mark_quarter_mesh,
-        thm:area_law_dummy_fine_scale_separation,
-        thm:area_law_affine_mesh_line_clearance}
+    \uses{thm:area_law_primary_fine_cell_cover,def:area_law_fan_runs,thm:area_law_belt_marks_quarter_mesh,thm:area_law_square_frontier_side,thm:area_law_fan_frontier_primitives,thm:area_law_near_mark_quarter_mesh,thm:area_law_dummy_fine_scale_separation,thm:area_law_affine_mesh_line_clearance}
     The boundary of a finite union is contained in the union of the boundaries
     of its pieces. For a primary region, $x$ lies on a side of one of its
     closed fine cells; for a fan run, $x$ lies on an outer square side or a

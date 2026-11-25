@@ -99,7 +99,7 @@ every finite union of injective regions.
     \lean{TNLean.PEPS.regionUnionPart_biUnion_one_two_disjoint_zero_three}
     \lean{TNLean.PEPS.regionUnionPart_pairwise_disjoint}
     \leanok
-    \uses{def:peps_regionUnionDecomposition, lem:peps_regionUnionDecomposition_identities}
+    \uses{def:peps_regionUnionDecomposition,lem:peps_regionUnionDecomposition_identities}
     The pieces $(P_i)_{i=0}^3$ in (\ref{eq:peps_four_region_parts}) are pairwise
     disjoint ($P_i\cap P_j=\varnothing$ for $i\neq j$). In particular,
     $(P_0\cup P_1\cup P_2)\cap P_3=\varnothing$,
@@ -159,7 +159,7 @@ every finite union of injective regions.
 \begin{lemma}[Union of injective regions]%
     \label{lem:peps_injectiveRegion_union}
     \notready
-    \uses{def:IsVertexInjective, lem:peps_regionUnionDecomposition_identities, lem:peps_regionUnionDecomposition_disjoint, lem:peps_injectiveRegion_union_contractionChain}
+    \uses{def:IsVertexInjective,lem:peps_regionUnionDecomposition_identities,lem:peps_regionUnionDecomposition_disjoint,lem:peps_injectiveRegion_union_contractionChain}
     Let $V$ be a finite vertex set. Write $\inj(R)$ for the
     assertion that the PEPS tensor blocked to the region $R\subseteq V$ is
     injective. For two possibly overlapping regions $A,B\subseteq V$,
@@ -460,7 +460,7 @@ every finite union of injective regions.
     \label{thm:peps_regionBlockedTensorInjective_applyGauge}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_applyGauge}
     \leanok
-    \uses{def:applyGauge, thm:peps_regionBlockedWeight_applyGauge, thm:peps_sum_regionBoundaryCoupling_mul_inv}
+    \uses{def:applyGauge,thm:peps_regionBlockedWeight_applyGauge,thm:peps_sum_regionBoundaryCoupling_mul_inv}
     For $\widetilde B=\operatorname{Gauge}_X(B)$,
     $\inj(T_{B,R})\Longrightarrow\inj(T_{\widetilde B,R})$.
 \end{lemma}
@@ -476,7 +476,7 @@ every finite union of injective regions.
     \label{thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     \lean{TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf}
+    \uses{def:IsVertexInjective,def:peps_regionInjectivityDataOf}
     If $A$ is vertex-injective and $D_f>0$ for every virtual bond $f$, then
     $\inj_A(R)$ holds for every finite region $R\subseteq V$.
     % Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
@@ -491,7 +491,7 @@ every finite union of injective regions.
     \label{thm:peps_regionInjectivityUnionClosure_of_isVertexInjective}
     \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_isVertexInjective}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_regionInjectivityDataOf, thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
+    \uses{def:IsVertexInjective,def:peps_regionInjectivityDataOf,thm:peps_regionBlockedTensorInjective_of_isVertexInjective}
     If $A$ is vertex-injective and $D_f>0$ for all $f$, then $\inj_A$ satisfies
     $\inj_A(R)\wedge\inj_A(S)\Longrightarrow\inj_A(R\cup S)$ for all $R,S\subseteq V$.
     % Paper-gap note: docs/paper-gaps/peps_injective_ft_section3_route.tex.
@@ -505,7 +505,7 @@ every finite union of injective regions.
     \label{thm:peps_regionInjectivityUnionClosure_of_overlap}
     \lean{TNLean.PEPS.regionInjectivityUnionClosure_of_overlap}
     \leanok
-    \uses{def:peps_regionInjectivityDataOf, lem:peps_injectiveRegion_union_pos}
+    \uses{def:peps_regionInjectivityDataOf,lem:peps_injectiveRegion_union_pos}
     If $A$ is a PEPS tensor with $D_f>0$ for all $f$, then $\inj_A$ satisfies
     $\inj_A(R)\wedge\inj_A(S)\Longrightarrow\inj_A(R\cup S)$ for all $R,S\subseteq V$.
     % Source-faithful scope note: this is the union-of-injective-regions
@@ -534,7 +534,7 @@ every finite union of injective regions.
     \lean{TNLean.PEPS.RegionInjectivityUnionClosure.regionUnionPart_inside_injective}
     \lean{TNLean.PEPS.RegionInjectivityUnionClosure.regionUnionPart_inside_binary_injective}
     \leanok
-    \uses{def:peps_regionInjectivityData, lem:peps_regionUnionDecomposition_identities}
+    \uses{def:peps_regionInjectivityData,lem:peps_regionUnionDecomposition_identities}
     If $\inj$ satisfies union closure and $(P_i)_{i=0}^3$ is as in
     (\ref{eq:peps_four_region_parts}), then
     $\inj(P_0\cup P_1)\wedge\inj(P_1\cup P_2)\Longrightarrow\inj(P_0\cup P_1\cup P_2)$.

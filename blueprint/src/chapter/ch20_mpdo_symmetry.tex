@@ -48,7 +48,7 @@ $\mathcal X$ that commutes with every tensor letter~\cite{Sun2025Anomalous}.
     \lean{Matrix.IsStrongSymmetry, Matrix.IsWeakSymmetry,
         MPOTensor.IsStrongMPOSymmetry, MPOTensor.IsWeakMPOSymmetry}
     \leanok
-    \uses{def:mpo_family, def:mpdo_commuting_boundary}
+    \uses{def:mpo_family,def:mpdo_commuting_boundary}
     An operator $O$ is a \emph{strong symmetry} of a matrix $\rho$ if
     $O\rho=\lambda\rho$ for some $\lambda\in\mathbb C$, and a \emph{weak
         symmetry} if $[O,\rho]=0$. A family of periodic matrix product operators
@@ -80,7 +80,7 @@ $\mathcal X$ that commutes with every tensor letter~\cite{Sun2025Anomalous}.
 \begin{lemma}[Periodic operators of an on-site tensor]\label{thm:mpdo_onsite_mpo}
     \lean{MPOTensor.mpo_onSite}
     \leanok
-    \uses{def:mpdo_onsite_symmetry, def:mpo_family}
+    \uses{def:mpdo_onsite_symmetry,def:mpo_family}
     The periodic operator of length $L$ of the bond dimension one tensor
     with entries $u_{ij}$ is $u^{\otimes L}$.
 \end{lemma}
@@ -139,8 +139,7 @@ one tensor with entries $(U_g)_{ij}$.
         MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry,
         MPOTensor.IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry}
     \leanok
-    \uses{def:mpdo_strong_weak_symmetry, def:mpdo_onsite_symmetry,
-        def:mpdo_commuting_boundary, thm:mpdo_onsite_mpo}
+    \uses{def:mpdo_strong_weak_symmetry,def:mpdo_onsite_symmetry,def:mpdo_commuting_boundary,thm:mpdo_onsite_mpo}
     Let $\rho$ be Hermitian. If $O$ and $O^\dagger$ are both strong
     symmetries of $\rho$, then $O$ is a weak symmetry of $\rho$. Hence a
     strong symmetry of an MPDO whose family contains the adjoint of each of
@@ -165,7 +164,7 @@ one tensor with entries $(U_g)_{ij}$.
         MPOTensor.IsStrongOnSiteSymmetry.map_mul,
         MPOTensor.IsStrongOnSiteSymmetry.map_one}
     \leanok
-    \uses{def:mpdo_strong_weak_symmetry, def:mpdo_onsite_symmetry}
+    \uses{def:mpdo_strong_weak_symmetry,def:mpdo_onsite_symmetry}
     Let $\rho^{(L)}\neq 0$. A unitary strong symmetry of $\rho^{(L)}$ has an
     eigenvalue of modulus one. If the periodic operators obey fusion rules
     $O_aO_b=\sum_c N_{ab}^cO_c$, the eigenvalues of a strong symmetry obey
@@ -189,7 +188,7 @@ one tensor with entries $(U_g)_{ij}$.
         MPOTensor.isStrongMPOSymmetry_iff_purification,
         MPOTensor.isStrongMPOSymmetry_one_iff_localPurification}
     \leanok
-    \uses{def:mpdo_strong_weak_symmetry, thm:mpo_eq_purification_density}
+    \uses{def:mpdo_strong_weak_symmetry,thm:mpo_eq_purification_density}
     Let $\rho=\Phi\Phi^\dagger$, where $\Phi$ has system configurations as
     rows and ancilla configurations as columns, so that $\Phi$ is a
     purification $\Psi$ of $\rho$. Then $O\rho=\lambda\rho$ if and only if
@@ -212,7 +211,7 @@ one tensor with entries $(U_g)_{ij}$.
     \lean{MPOTensor.isStrongOnSiteSymmetry_of_gaugePhase_purification,
         MPOTensor.isWeakOnSiteSymmetry_of_gaugePhase_purification}
     \leanok
-    \uses{thm:mpdo_strong_symmetry_purification, def:mpdo_onsite_symmetry}
+    \uses{thm:mpdo_strong_symmetry_purification,def:mpdo_onsite_symmetry}
     With identity boundary, let $M$ be locally purified by $A$. Suppose that
     $\sum_j(U_g)_{ij}A^{(j,k)}=\zeta_gX_gA^{(i,k)}X_g^{-1}$ for invertible
     $X_g$. Then $M$ is strongly on-site symmetric under $U$ with
@@ -291,9 +290,7 @@ follows, the first for strong and the second for weak symmetry.
         MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor,
         MPOTensor.IsStrongOnSiteSymmetry.exists_eq_pow_of_isNormalTensor}
     \leanok
-    \uses{thm:mpdo_strong_symmetry_purification, thm:mpdo_symmetry_local_conditions,
-        def:nt_cpsv, thm:normal_proportional_mpv_geometric_phase,
-        thm:cpsv_normal_mpv_phase_gauge}
+    \uses{thm:mpdo_strong_symmetry_purification,thm:mpdo_symmetry_local_conditions,def:nt_cpsv,thm:normal_proportional_mpv_geometric_phase,thm:cpsv_normal_mpv_phase_gauge}
     With identity boundary, let $M$ be locally purified by $A$,
     let the spin--ancilla tensor with
     entries $A^{(i,k)}$ be normal, and let $U$ be a unitary on-site
@@ -344,7 +341,7 @@ follows, the first for strong and the second for weak symmetry.
         MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor,
         MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor}
     \leanok
-    \uses{def:mpdo_onsite_symmetry, def:on_site_symmetric}
+    \uses{def:mpdo_onsite_symmetry,def:on_site_symmetric}
     Regard $\rho^{(L)}(\mathcal X,M)$ as the boundary-weighted
     vector $|\rho\rangle\rangle$ of the tensor with doubled physical index $(i,j)$ and matrices $M^{ij}$.
     Acting with $u\otimes v$ on every doubled index sends $\rho^{(L)}$ to
@@ -376,7 +373,7 @@ follows, the first for strong and the second for weak symmetry.
         MPOTensor.CPSVExample412Literal.not_isStrongSymmetry_sigmaX,
         MPOTensor.CPSVExample412Literal.not_isWeakMPOSymmetry_sigmaX}
     \leanok
-    \uses{def:mpdo_strong_weak_symmetry, thm:cpsv_example412_literal_formula}
+    \uses{def:mpdo_strong_weak_symmetry,thm:cpsv_example412_literal_formula}
     For the operators $\rho^{(N)}=I^{\otimes N}+\sigma_z^{\otimes N}$ of
     Lemma~\ref{thm:cpsv_example412_literal_formula}, $\sigma_z^{\otimes N}$
     is a strong symmetry with eigenvalue $1$ at every $N\ge 1$. The operator
@@ -401,7 +398,7 @@ follows, the first for strong and the second for weak symmetry.
         MPOTensor.RescalingStableLengthDependentRFP.not_isStrongSymmetry_sigmaXX_one,
         MPOTensor.RescalingStableLengthDependentRFP.not_isStrongMPOSymmetry_sigmaXX}
     \leanok
-    \uses{def:mpdo_strong_weak_symmetry, thm:mpdo_bnt_label_rescaling_stable_ismpdo}
+    \uses{def:mpdo_strong_weak_symmetry,thm:mpdo_bnt_label_rescaling_stable_ismpdo}
     Each site of the rescaling-stable example $R$ carries two qubits. Its
     operators $\rho^{(N)}(R)$ are strongly symmetric under
     $(\sigma_z\otimes\sigma_z)^{\otimes N}$ with eigenvalue $1$ and weakly
@@ -430,8 +427,7 @@ follows, the first for strong and the second for weak symmetry.
         MPOTensor.TwistedDimer.not_isStrongSymmetry_sigmaZF_one,
         MPOTensor.TwistedDimer.not_isStrongMPOSymmetry_sigmaZF}
     \leanok
-    \uses{def:mpdo_strong_weak_symmetry, def:mpdo_twisted_dimer_tensor,
-        thm:mpdo_twisted_dimer_ismpdo}
+    \uses{def:mpdo_strong_weak_symmetry,def:mpdo_twisted_dimer_tensor,thm:mpdo_twisted_dimer_ismpdo}
     Each site of the twisted quantum dimer $T$ carries a left qubit, a right
     qubit and a flag qubit, with Pauli operators indexed by $\ell$, $r$ and
     $f$. At every $N\ge 1$ the operators $\rho^{(N)}(T)$ are strongly

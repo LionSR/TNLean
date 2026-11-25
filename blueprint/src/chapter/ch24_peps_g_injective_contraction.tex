@@ -23,8 +23,7 @@ $\mathcal{P}$ from the virtual to the physical system.
         TNLean.PEPS.linkPairing_linkVector,
         TNLean.PEPS.linkPairing_deltaOperator_map}
     \leanok
-    \uses{def:peps_delta_operator, def:peps_semiregular,
-        thm:peps_semiregular_trace}
+    \uses{def:peps_delta_operator,def:peps_semiregular,thm:peps_semiregular_trace}
     The vector $\omega$ is invariant under $\tau^*(g)\otimes\tau(g)$ for every
     $g$. For an operator $M$ on $E$, the pairing $f\otimes e\mapsto f(Me)$
     sends $\omega$ to $\tr M$ and $(\tau^*(g)\otimes\tau(h))\,\omega$ to
@@ -55,9 +54,7 @@ $\mathcal{P}$ from the virtual to the physical system.
         TNLean.PEPS.linkContractionLeftInverse_comp,
         TNLean.PEPS.IsGInjective.linkContraction}
     \leanok
-    \uses{def:peps_g_injective, def:peps_delta_operator,
-        def:peps_semiregular, thm:peps_g_injective_left_inverse,
-        lem:peps_link_contraction, thm:peps_semiregular_tensor_product}
+    \uses{def:peps_g_injective,def:peps_delta_operator,def:peps_semiregular,thm:peps_g_injective_left_inverse,lem:peps_link_contraction,thm:peps_semiregular_tensor_product}
     Let $A$ be a tensor with virtual system $W_A\otimes E^*$ and group action
     $\sigma_A\otimes\tau^*$, where $E^*$ is its right leg and $W_A$ collects
     its left, up and down legs, and let $B$ be a tensor with virtual system
@@ -112,9 +109,7 @@ $\mathcal{P}$ from the virtual to the physical system.
         TNLean.PEPS.legContractionLeftInverse_comp,
         TNLean.PEPS.IsGInjective.legContraction}
     \leanok
-    \uses{def:peps_g_injective, def:peps_delta_operator,
-        def:peps_semiregular, thm:peps_g_injective_left_inverse,
-        lem:peps_link_contraction}
+    \uses{def:peps_g_injective,def:peps_delta_operator,def:peps_semiregular,thm:peps_g_injective_left_inverse,lem:peps_link_contraction}
     Let a tensor have virtual system $W\otimes E^*\otimes E$ with group action
     $\sigma\otimes\tau^*\otimes\tau$, as for the up leg of $A$ and the down leg
     of $B$ in the block $C$ above. Contracting the legs $E^*$ and $E$ gives
@@ -166,8 +161,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
     \label{thm:peps_mps_g_isometric_injective}
     \lean{TNLean.PEPS.IsGIsometricMPS.isGInjective}
     \leanok
-    \uses{def:peps_mps_g_isometric, thm:peps_g_injective_left_inverse,
-        thm:peps_mps_g_injective_source_form}
+    \uses{def:peps_mps_g_isometric,thm:peps_g_injective_left_inverse,thm:peps_mps_g_injective_source_form}
     A $G$-isometric matrix product tensor is $G$-injective for the left-regular
     representation, with left inverse $c^{-1}\mathcal{P}(A^\dagger)$
     \cite[Definition~6.1]{Schuch2010PEPS}.
@@ -187,8 +181,7 @@ $\mathcal{P}(A^\dagger)\ket{i}=(A^i)^\dagger$ under the identification above
         TNLean.PEPS.innerContraction_smul,
         TNLean.PEPS.linkContractionLeftInverse_leftRegular}
     \leanok
-    \uses{thm:peps_semiregular_trace, thm:peps_mps_g_injective_concatenation,
-        thm:peps_g_injective_concatenation}
+    \uses{thm:peps_semiregular_trace,thm:peps_mps_g_injective_concatenation,thm:peps_g_injective_concatenation}
     For the left-regular representation $|G|\,\Delta=\mathbb{1}$. Hence the
     left inverse of a concatenation $C^{ij}=A^iB^j$ of matrix product tensors
     built from left inverses $L_A$ and $L_B$ is
@@ -337,8 +330,7 @@ dual basis.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:peps_g_injective_concatenation, thm:peps_isometric_adjoint,
-        lem:peps_regular_left_inverse}
+    \uses{thm:peps_g_injective_concatenation,thm:peps_isometric_adjoint,lem:peps_regular_left_inverse}
     For a unitary representation, $G$-isometry with constant $c$ means
     $\mathcal{P}(A)^{\dagger}\mathcal{P}(A)=c\,\Pi$, since $\mathcal{P}(A)$ is
     invariant and $\Pi$ is self-adjoint. The Gram matrix of $C$ is
@@ -374,8 +366,7 @@ dual basis.
     \lean{TNLean.PEPS.concatLeftInverse_mpsAdjointSiteMap,
         TNLean.PEPS.IsGIsometricMPS.concatTensor}
     \leanok
-    \uses{def:peps_mps_g_isometric, lem:peps_regular_left_inverse,
-        thm:peps_mps_g_injective_concatenation}
+    \uses{def:peps_mps_g_isometric,lem:peps_regular_left_inverse,thm:peps_mps_g_injective_concatenation}
     If the matrix product tensors $A$ and $B$ are $G$-isometric, so is
     $C^{ij}=A^iB^j$: the left inverse built from $\mathcal{P}(A^\dagger)$ and
     $\mathcal{P}(B^\dagger)$ is $\mathcal{P}(C^\dagger)$, and

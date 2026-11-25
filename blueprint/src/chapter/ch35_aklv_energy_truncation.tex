@@ -266,8 +266,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     In particular its spectral gap is at least $g/2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:aklv_projected_energy,lem:aklv_clipped_high_mass,
-        lem:aklv_codimension_one_gap}
+    \uses{lem:aklv_projected_energy,lem:aklv_clipped_high_mass,lem:aklv_codimension_one_gap}
     Suppose a unit $v\perp\Omega$ has clipped energy $E\le e+g/2$.
     Write $q=\|Q_tv\|$. The mass estimate and cutoff condition imply
     $q\le g/32$. Since
@@ -301,8 +300,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:aklv_boundary_energy_tail,thm:aklv_ground_energy_tail,
-        lem:aklv_projected_energy}
+    \uses{thm:aklv_boundary_energy_tail,thm:aklv_ground_energy_tail,lem:aklv_projected_energy}
     The residual is $(Q_tAP_t-P_tAQ_t)\Omega$. Use
     $P_t=P_u+P_tQ_u$, the contraction of the spectral projections, and
     the cross-block estimate. In the chain case take $u=t/2$.
@@ -578,8 +576,7 @@ In this section $P_t=\mathbf1_{(-\infty,t)}(B)$ and $Q_t=I-P_t$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:aklv_two_sided_truncation,lem:aklv_projected_energy,
-        lem:aklv_clipped_gap}
+    \uses{def:aklv_two_sided_truncation,lem:aklv_projected_energy,lem:aklv_clipped_gap}
     Each unshifted regional sum is positive, its two boundary bonds sum
     to an operator at most $2I$, and the original supports give the
     regional commutations and reconstruction of $H$.
@@ -627,8 +624,7 @@ truncation or the normalization.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:aklv_truncation_low_agreement,lem:aklv_clipped_high_mass,
-        lem:aklv_projected_energy,lem:aklv_codimension_one_gap}
+    \uses{lem:aklv_truncation_low_agreement,lem:aklv_clipped_high_mass,lem:aklv_projected_energy,lem:aklv_codimension_one_gap}
     Put $B=L+N+R$, $Q=\mathbf1_{[t,\infty)}(B)$, $P=I-Q$,
     $u=Px$ and $v=Qx$. The low-energy agreement, high-energy lower bound
     and boundary cross-block identity give
@@ -671,8 +667,7 @@ truncation or the normalization.
     The energy $e$ remains in $[0,6]$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:aklv_inverse_gap_comparison,lem:aklv_projected_residual,
-        lem:aklv_residual_phase}
+    \uses{lem:aklv_inverse_gap_comparison,lem:aklv_projected_residual,lem:aklv_residual_phase}
     Since $e\le6$ and $0<g\le1$, the condition $tg\ge16$ implies
     $t\ge e+3g/2+8/g$. Lemma~\ref{lem:aklv_inverse_gap_comparison}
     therefore supplies the absolute excited-energy threshold $e+g/2$.

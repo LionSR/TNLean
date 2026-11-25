@@ -70,7 +70,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     \label{lem:isNBlkInjective_iff_blockTensor_isInjective}
     \lean{Kraus.isNBlkInjective_iff_blockTensor_isInjective}
     \leanok
-    \uses{def:blocked_tensor, def:injective}
+    \uses{def:blocked_tensor,def:injective}
     A tensor $A$ is $L$-block injective if and only if its $L$-blocked
     tensor $A^{[L]}$ is injective.
 \end{lemma}
@@ -85,7 +85,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{lemma}[Blocking transfer]\label{lem:blocking_transfer}
     \lean{MPSTensor.wordSpan_eq_top_of_blockTensor_wordSpan_eq_top}
     \leanok
-    \uses{def:word_span, def:blocked_tensor, lem:isNBlkInjective_iff_blockTensor_isInjective}
+    \uses{def:word_span,def:blocked_tensor,lem:isNBlkInjective_iff_blockTensor_isInjective}
     If the blocked tensor $A^{[L]}$ satisfies
     $S_n(A^{[L]})=\MN{D}$, then $S_{nL}(A)=\MN{D}$.
     In particular, $A$ is $L$-block injective if and only if $A^{[L]}$ is
@@ -109,7 +109,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     \label{thm:bounded_injective_blocking_normal_left_canonical}
     \lean{MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical}
     \leanok
-    \uses{def:normal, def:blocked_tensor, thm:wielandt_general, thm:wielandt_proposition_three}
+    \uses{def:normal,def:blocked_tensor,thm:wielandt_general,thm:wielandt_proposition_three}
     As the blocked-injectivity form of the quantum Wielandt input in
     \cite[Section~II]{Cirac2016MPDO_arXiv} (with the index estimate
     of~\cite[Theorem~1]{Sanz2010Quantum} and the left-canonical hypothesis of
@@ -139,7 +139,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     \label{thm:exact_pow_four_block_injectivity_normal_left_canonical}
     \lean{MPSTensor.isNBlkInjective_pow_four_of_isNormal_leftCanonical}
     \leanok
-    \uses{thm:bounded_injective_blocking_normal_left_canonical, lem:blocking_transfer, thm:wordspan_blk_inj_succ}
+    \uses{thm:bounded_injective_blocking_normal_left_canonical,lem:blocking_transfer,thm:wordspan_blk_inj_succ}
     Let $A$ be a left-canonical normal MPS tensor with bond dimension $D>0$.
     Then $S_{D^4}(A)=\MN{D}$; equivalently, $A$ is
     $D^4$-block injective.
@@ -147,7 +147,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
-    \uses{thm:bounded_injective_blocking_normal_left_canonical, lem:blocking_transfer, thm:wordspan_blk_inj_succ}
+    \uses{thm:bounded_injective_blocking_normal_left_canonical,lem:blocking_transfer,thm:wordspan_blk_inj_succ}
     Bounded injective blocking and blocking transfer provide $L$ with
     $0<L\le D^4$ and $S_L(A)=\MN{D}$. Writing $D^4=L+k$, induction on $k$ via
     positive-length propagation at each step gives $S_{L+k}(A)=\MN{D}$.
@@ -164,7 +164,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
-    \uses{def:l_blk_injective, thm:word_span_add_exact}
+    \uses{def:l_blk_injective,thm:word_span_add_exact}
     By induction on $m$, Lemma~\ref{thm:word_span_add_exact} gives
     $S_{mN+N}(A)=S_{mN}(A)S_N(A)$, and the product of the full matrix
     algebra with itself is again the full matrix algebra.
@@ -175,8 +175,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{MPSTensor.%
         exists_common_isNBlkInjective_of_isNormal_leftCanonical}
     \leanok
-    \uses{def:l_blk_injective, def:normal, thm:bounded_injective_blocking_normal_left_canonical,
-        thm:exact_block_injectivity_positive_multiple}
+    \uses{def:l_blk_injective,def:normal,thm:bounded_injective_blocking_normal_left_canonical,thm:exact_block_injectivity_positive_multiple}
     Let $(A_j)_{j=1}^g$ be a finite family of positive-bond-dimension,
     left-canonical normal tensors. There is a positive integer $L$ such that
     every $A_j$ is $L$-block injective.
@@ -196,7 +195,7 @@ construction appears in Section~\ref{sec:app_wielandt_blocking_support}.
     \lean{MPSTensor.IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective,
         MPSTensor.exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT}
     \leanok
-    \uses{thm:normal_tp_primitive_irred, thm:bounded_injective_blocking_normal_left_canonical}
+    \uses{thm:normal_tp_primitive_irred,thm:bounded_injective_blocking_normal_left_canonical}
     Let $(A_x)_{x\in X}$ be a finite separated normal-canonical family
     (a basis of normal-canonical representatives in the sense of
     Definition~\ref{def:normal_cf_bnt} with distinct blocks; see
@@ -241,7 +240,7 @@ Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{definition}[Primitive MPS tensor]\label{def:primitive_mps}
     \lean{Kraus.HasComplementaryFixedPointGap}
     \leanok
-    \uses{def:mps_tensor, def:transfer_map}
+    \uses{def:mps_tensor,def:transfer_map}
     Assume $D>0$.
     A tensor $A$ together with a matrix $\rho\in\MN{D}$ is
     \emph{primitive} if
@@ -326,7 +325,7 @@ transfer-map gap. It is connected to normality through the following results.
     \label{lem:primitive_implies_irreducible}
     \lean{Kraus.HasComplementaryFixedPointGap.isIrreducibleFamily_of_posDef}
     \leanok
-    \uses{def:primitive_mps, def:irreducible_tensor}
+    \uses{def:primitive_mps,def:irreducible_tensor}
     As part of~\cite[Proposition~3]{Sanz2010Quantum} (see also
     \cite[Section~2.3]{Cirac2016MPDO_arXiv}), if $A$ is a primitive MPS tensor
     with positive definite fixed point $\rho$, then $A$ is an irreducible
@@ -335,7 +334,7 @@ transfer-map gap. It is connected to normality through the following results.
 
 \begin{proof}
     \leanok
-    \uses{def:has_inv_proj, lem:complement_pow_zero}
+    \uses{def:has_inv_proj,lem:complement_pow_zero}
     Arguing by contrapositive, suppose $A$ has a nontrivial invariant
     projection~$P$ ($P\neq0$, $P\neq\Id$, $(\Id-P)A^iP=0$ for all~$i$), and
     set $\sigma=P\rho P$.
@@ -394,7 +393,7 @@ For Burnside-style arguments it is more natural to work with invariant
 
 \begin{lemma}[Irreducible tensor implies irreducible action]\label{thm:irreducible_tensor_to_action}
     \lean{Kraus.isIrreducibleAction_of_isIrreducibleFamily}\leanok
-    \uses{def:irreducible_tensor, def:irreducible_action}
+    \uses{def:irreducible_tensor,def:irreducible_action}
     If $A$ is irreducible as a tensor (Definition~\ref{def:irreducible_tensor}),
     then the Kraus operators act irreducibly on $\C^D$
     (Definition~\ref{def:irreducible_action}).
@@ -410,7 +409,7 @@ For Burnside-style arguments it is more natural to work with invariant
 
 \begin{lemma}[Burnside's theorem for matrix algebras]\label{thm:burnside_matrix}
     \lean{Matrix.burnside_matrix}\leanok
-    \uses{def:alg_span, def:irreducible_action}
+    \uses{def:alg_span,def:irreducible_action}
     In the complex finite-dimensional case of Burnside's theorem (equivalently,
     Jacobson's density theorem~\cite{Jacobson2009BasicAlgebraII}), assume
     $D>0$. If $A$ acts irreducibly on $\C^D$, then the generated unital
@@ -463,7 +462,7 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
     \label{thm:primitive_from_strongly_irred}
     \lean{MPSTensor.exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive}
     \leanok
-    \uses{def:transfer_map, def:primitive_mps}
+    \uses{def:transfer_map,def:primitive_mps}
     Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.  If $\E_A$ is
     irreducible and $1$ is its only peripheral eigenvalue, then there is a
     matrix $\rho>0$ such that $(A,\rho)$ is primitive in the sense of
@@ -472,8 +471,7 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
 
 \begin{proof}
     \leanok
-    \uses{def:irreducible_tensor, lem:blocked_irreducibility_direct_support,
-        thm:primitive_fixed_point_posdef_of_irreducible_map}
+    \uses{def:irreducible_tensor,lem:blocked_irreducibility_direct_support,thm:primitive_fixed_point_posdef_of_irreducible_map}
     Irreducibility of $\E_A$ gives irreducibility of the tensor $A$ by the
     last clause of Lemma~\ref{lem:blocked_irreducibility_direct_support}: if
     $P$ were a nontrivial invariant projection of $A$, then $\E_A$ would map
@@ -510,7 +508,7 @@ to the fixed-point projection, without requiring an identity element in $S_1(A)$
     \label{thm:normal_from_primitive_posdef}
     \lean{MPSTensor.isNormal_of_hasComplementaryFixedPointGap_with_posDef}
     \leanok
-    \uses{def:primitive_mps, def:normal}
+    \uses{def:primitive_mps,def:normal}
     If $A$ is a primitive MPS tensor with positive-definite fixed point~$\rho$,
     then $A$ is normal (eventually full Kraus rank).
 \end{lemma}

@@ -3,108 +3,106 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Network.IncidentFactor.SelectedPartialSourceSlots
-import TNLean.Lattice.Compression.ActualSampledEndpointInputWord
-import TNLean.Lattice.Compression.EndpointRegisterRestriction
+import QICLean.Circuit.Party.Compression.SourceSampling.EndpointWord
+import QICLean.Circuit.Party.Compression.SourceSampling.Samples
+import TNLean.Network.DistributedContraction.IncidentGateLabels
 
 /-!
 # Sampled endpoint operations determined by incident labels
 
-Two independent assignments of original incident gate labels determine the
-sampled endpoint word at one party. The singleton source slots retain their
-original occurrence indices and Euclidean dimensions. At both endpoints of
-each retained slot, the word uses the same local sample index and the
-same Gaussian array indexed by the ordered pair of incident labels.
+Two independent assignments of the labels at the gates incident to one original party, and one
+sample index at each source slot with an endpoint at that party, determine the sampled endpoint
+operation at the party. At both endpoints of such a slot the same sample index and the same
+Gaussian array, indexed by the ordered pair of incident labels, are used; at a slot with no
+endpoint at the party the endpoint matrices are identities. The operation is the one at the
+party of the endpoint word of the slots of the expansion along all parties.
 
-The endpoint register data are filtered before their chronological word is
-formed. The construction requires samples only at the singleton source slots,
-without extending incident labels or sample indices to other gates.
-Its input and output are the actual selected all-party source registers,
-including the canonical identification with their terminal empty layout.
+The sample indices are indexed by the slots of the expansion along the one party, in their
+order; no label or sample index at another gate or slot is chosen.
 
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
-279–355, 409–434 and 565–588.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267, 279–355, 409–434
+and 565–588.
 -/
 
 noncomputable section
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice.PartyCircuit
-variable {P : Type} {a b : Layout P}
 
-variable (w : SourceCircuit a b) (k : ℕ)
-  (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
-    Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
-  (E : ∀ e : sourceLocations w, branchLabels w e.1 →
-    Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
-  (F : ∀ e : sourceLocations w, branchLabels w e.1 →
-    Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+open Matrix ManyBody
 
-/-- Construct the selected sampled endpoint word from two independent incident
-label assignments and a sample assignment on the singleton source slots. Each
-slot uses its shared local sample index and original ordered-pair Gaussian
-array at both endpoints. The selected register data are formed before their
-word. No full branch choice or sample extension is supplied.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
-279–355, 409–434 and 565–588. -/
-def incidentSampledEndpointWord (p : P) (η θ : OriginalGateLabelsAt w p)
-    (j : Fin (partialSlots
-      (fun t : P ↦ partySelector (some ⟨p, rfl⟩)
-        (affectedOwner (fun _ : P ↦ true) t)) w).length → Fin k)
+namespace QuantumCircuit.Party.SourceCircuit
+
+variable {P : Type} [DecidableEq P] [Fintype P] {X Y : P → Type}
+
+omit [Fintype P] in
+/-- A party of the original circuit is affected in the expansion along it alone exactly when it
+is that party. -/
+theorem partySelector_affectedOwner_all_eq_true_iff (p t : P) :
+    partySelector (some (⟨p, rfl⟩ : {_p : P // true = true}))
+        (affectedOwner (fun _ ↦ true) t) = true ↔ t = p := by
+  rw [partySelector_affectedOwner_all_apply, partySelector_eq_true_iff]
+
+/-- A slot of the expansion along all parties is incident to the original party `p` when `p` is
+one of the two endpoints of its source position. -/
+abbrev IsIncidentSlot (w : SourceCircuit X Y) (p : P)
+    (i : Fin (partialSlots (fun _ ↦ true) w).length) : Prop :=
+  (w.endpoints (partialSlotEquiv (fun _ ↦ true) w i).1).1 = p ∨
+    (w.endpoints (partialSlotEquiv (fun _ ↦ true) w i).1).2 = p
+
+/-- The slot of the expansion along the party `p` alone that carries a slot of the expansion
+along all parties with an endpoint at `p`: both enumerate the same source position. Source:
+polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267 and 383–417. -/
+def incidentSlot (w : SourceCircuit X Y) (p : P) (i : Fin (partialSlots (fun _ ↦ true) w).length)
+    (h : IsIncidentSlot w p i) :
+    Fin (partialSlots (fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ ↦ true) t)) w).length :=
+  (partialSlotEquiv _ w).symm ⟨(partialSlotEquiv (fun _ ↦ true) w i).1,
+    h.imp (fun h ↦ (partySelector_affectedOwner_all_eq_true_iff p _).mpr h)
+      (fun h ↦ (partySelector_affectedOwner_all_eq_true_iff p _).mpr h)⟩
+
+/-- The gate of a slot with an endpoint at `p`, as a gate incident to `p`. -/
+def incidentSlotGate (w : SourceCircuit X Y) (p : P)
+    (i : Fin (partialSlots (fun _ ↦ true) w).length)
+    (h : IsIncidentSlot w p i) :
+    TNLean.Network.DistributedOperatorContraction.GateAt
+      (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) p :=
+  have hp : p ∈ w.participants (partialSlotEquiv (fun _ ↦ true) w i).1.1 := h.elim
+    (fun h ↦ h ▸ (w.endpoints_mem_participants _).1)
+    (fun h ↦ h ▸ (w.endpoints_mem_participants _).2)
+  ⟨⟨⟨(partialSlotEquiv (fun _ ↦ true) w i).1.1, ⟨p, hp⟩⟩, Finset.mem_univ _⟩, hp⟩
+
+variable (w : SourceCircuit X Y) (k : ℕ)
+  (lam : ∀ e : w.sourceLocations, w.branchLabels e.1 →
+    Fin (min (w.sourceDims e).1 (w.sourceDims e).2) → ℝ)
+  (E : ∀ e : w.sourceLocations, w.branchLabels e.1 →
+    Matrix (w.leftBasis e) (Fin (min (w.sourceDims e).1 (w.sourceDims e).2)) ℂ)
+  (F : ∀ e : w.sourceLocations, w.branchLabels e.1 →
+    Matrix (w.rightBasis e) (Fin (min (w.sourceDims e).1 (w.sourceDims e).2)) ℂ)
+
+/-- The sampled endpoint operation at the original party `p`, determined by two independent
+assignments `η`, `θ` of the labels at the gates incident to `p` and a sample index `j` at each
+slot with an endpoint at `p`: the operation at `p` of the endpoint word of the slots of the
+expansion along all parties whose endpoint matrices are, at a slot with an endpoint at `p`, the
+sampled endpoint matrices of its source position at the labels of `η`, `θ` and the sample index
+of `j`, and identities at the other slots. It acts on the bases of `p` in the system of the
+source slots. No label, sample index, positivity or normalization outside `p` is used. Source:
+polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267, 279–355, 409–434 and
+565–588. -/
+def incidentSampledEndpointOp (p : P) (η θ : OriginalGateLabelsAt w p)
+    (j : Fin (partialSlots (fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ ↦ true) t)) w).length → Fin k)
     (ω : SourceGaussianSamples w k) :
-    Word (Layout.atParty (some ⟨p, rfl⟩) (w.allResidualSourceLayout ++ []))
-      (Layout.atParty (some ⟨p, rfl⟩) (w.allResidualSourceLayout ++ [])) := by
-  classical
-  let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-    (affectedOwner (fun _ : P ↦ true) t)
-  let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-    (decide_eq_true rfl)
-  let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-  let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
-    fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-  let R := partialSlots A w
-  let U := fun i : Fin R.length ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1)
-  let V := fun i : Fin R.length ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2)
-  let S := SourceInventory.slotLayout R U V
-  let χη := choicesOfOriginalGateLabelsAt w p η
-  let χθ := choicesOfOriginalGateLabelsAt w p θ
-  let M : ∀ i, U i →L[ℂ] U i := fun i ↦
-    basisMatrixOperator (EuclideanSpace.basisFun _ ℂ)
-      (sampledEndpointLeft w k lam E (partialSlotEquiv A w i).1
-        (partialSlotChoice A w χη i, partialSlotChoice A w χθ i)
-        (j i) ω)
-  let N : ∀ i, V i →L[ℂ] V i := fun i ↦
-    basisMatrixOperator (EuclideanSpace.basisFun _ ℂ)
-      (sampledEndpointRight w k lam F (partialSlotEquiv A w i).1
-        (partialSlotChoice A w χη i, partialSlotChoice A w χθ i)
-        (j i) ω)
-  let D := SourceInventory.endpointRegisterData R U V M N
-  let Dp := D.filter (fun z ↦ partySelector q z.1.owner)
-  let Z := SourceInventory.endpointRegisterWord Dp
-  have hDp : Dp.map Sigma.fst = Layout.restrict (partySelector q) S :=
-    SourceInventory.endpointRegisterData_filter_layout (partySelector q) R U V M N
-  have hselected : Layout.mapOwner lift (Layout.restrict (partySelector q) S) =
-      Layout.atParty (some ⟨p, rfl⟩) (w.allResidualSourceLayout ++ []) := by
-    rw [List.append_nil]
-    exact mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
-  have hin : Layout.mapOwner lift (Dp.map Sigma.fst) =
-      Layout.atParty (some ⟨p, rfl⟩) (w.allResidualSourceLayout ++ []) :=
-    (congrArg (Layout.mapOwner lift) hDp).trans hselected
-  exact (Z.mapOwner lift).castLayouts hin hin
+    Matrix (allSourceSystem w (some ⟨p, rfl⟩)) (allSourceSystem w (some ⟨p, rfl⟩)) ℂ :=
+  PartyCircuit.partyOp (SourceInventory.endpointWord
+    (blockSystem (affectedOwner fun _ ↦ true) fun _ ↦ Unit) (partialSlots (fun _ ↦ true) w)
+    (partialSlotBases (fun _ ↦ true) w)
+    (fun i ↦ if h : IsIncidentSlot w p i then
+        sampledEndpointLeft w k lam E (partialSlotEquiv (fun _ ↦ true) w i).1
+          (η (incidentSlotGate w p i h), θ (incidentSlotGate w p i h))
+          (j (incidentSlot w p i h)) ω
+      else 1)
+    (fun i ↦ if h : IsIncidentSlot w p i then
+        sampledEndpointRight w k lam F (partialSlotEquiv (fun _ ↦ true) w i).1
+          (η (incidentSlotGate w p i h), θ (incidentSlotGate w p i h))
+          (j (incidentSlot w p i h)) ω
+      else 1)) (some ⟨p, rfl⟩)
 
-/-- The incident sampled endpoint word introduces no source preparation.
-Empty source inventories and sample index sets and zero-dimensional endpoint
-spaces are included without positivity or normalization assumptions.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355
-and 565–588. -/
-theorem sources_incidentSampledEndpointWord (p : P) (η θ : OriginalGateLabelsAt w p)
-    (j : Fin (partialSlots
-      (fun t : P ↦ partySelector (some ⟨p, rfl⟩)
-        (affectedOwner (fun _ : P ↦ true) t)) w).length → Fin k)
-    (ω : SourceGaussianSamples w k) :
-    (incidentSampledEndpointWord w k lam E F p η θ j ω).sources = [] := by
-  classical
-  unfold incidentSampledEndpointWord
-  simp only [Word.sources_castLayouts, Word.sources_mapOwner,
-    SourceInventory.sources_endpointRegisterWord, SourceInventory.mapOwner_nil]
-
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

@@ -192,9 +192,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:lvv_columnwise_trimming_overlap,
-        lem:lvv_bond_trimmed_family_bounds,thm:lvv_left_columns_right_extension,
-        thm:alvv_collective_trim_coordinates}
+    \uses{lem:lvv_columnwise_trimming_overlap,lem:lvv_bond_trimmed_family_bounds,thm:lvv_left_columns_right_extension,thm:alvv_collective_trim_coordinates}
     Put $v'=(I\otimes W^*)v$. Contracting the environment and then taking a
     column cannot increase an internal cut rank, so every column of $v'$
     has cut rank at most $D$. Since $W$ is an isometry, $\|v'\|\le\|v\|$.
@@ -313,8 +311,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     \lean{ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelection,
         ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve}
     \leanok
-    \uses{def:chain_model,def:lvv_viable_mps,def:lvv_bond_trimmed_family,
-        def:lvv_size_trimming_selection}
+    \uses{def:chain_model,def:lvv_viable_mps,def:lvv_bond_trimmed_family,def:lvv_size_trimming_selection}
     Let $L\ge1$, $q\ge2$, $i\le L$, and $\Delta>0$. Fix a range-one chain
     Hamiltonian with positive semidefinite terms of norm at most one,
     and a finite left family $S$. Use $c$ from
@@ -334,8 +331,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:lvv_size_trimmed_family,
-        lem:lvv_bond_trimming_reference,lem:lvv_bond_trimmed_family_viable}
+    \uses{thm:lvv_size_trimmed_family,lem:lvv_bond_trimming_reference,lem:lvv_bond_trimmed_family_viable}
     For each admissible ground pair, Lemma~\ref{thm:lvv_size_trimmed_family}
     supplies a unit $u$, an isometry $W$, all columns of $u$ in $T_0$, and
     overlap at least $11/12$ for $(I\otimes W)u$.
@@ -348,8 +344,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     \label{thm:lvv_size_bond_trimmed_family}
     \lean{ManyBody.ChainInteraction.exists_size_bond_trimmed_family_polynomial}
     \leanok
-    \uses{thm:lvv_size_trimmed_family_bond_trim_set,
-        thm:lvv_size_trimmed_family_polynomial}
+    \uses{thm:lvv_size_trimmed_family_bond_trim_set,thm:lvv_size_trimmed_family_polynomial}
     In the setting of Lemma~\ref{thm:lvv_size_trimmed_family_bond_trim_set},
     with $C$ and $p$ from Lemma~\ref{thm:lvv_size_trimmed_family_polynomial},
     there is a finite left family $T$, chosen before every ground-state
@@ -374,9 +369,7 @@ chain length, in place of the printed linear one~\cite{gap:lvv13_trimming_radius
     \label{thm:lvv_rational_size_bond_trimming}
     \lean{ManyBody.ChainInteraction.exists_rational_size_bond_trimmed_family}
     \leanok
-    \uses{thm:lvv_size_trimmed_family_bond_trim_set,
-        thm:lvv_dyadic_open_mps_approximation,
-        thm:lvv_subnormalized_column_rounding}
+    \uses{thm:lvv_size_trimmed_family_bond_trim_set,thm:lvv_dyadic_open_mps_approximation,thm:lvv_subnormalized_column_rounding}
     In the setting of Lemma~\ref{thm:lvv_size_trimmed_family_bond_trim_set},
     suppose $1\le i\le L$. Let $D$ be the constant cut bound used in size
     trimming, and let $m=(48L)^2r(L)$ be the corrected trimming radius.

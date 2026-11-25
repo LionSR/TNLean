@@ -83,7 +83,7 @@
     \label{thm:peps_regionInsertedCoeff_applyGauge}
     \lean{TNLean.PEPS.regionInsertedCoeff_applyGauge}
     \leanok
-    \uses{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff, thm:peps_edge_gauge_absorption, def:applyGauge}
+    \uses{thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff,thm:peps_edge_gauge_absorption,def:applyGauge}
     For an edge-gauge family $X$, gauged tensor $B^X$, and boundary edge $f\in\partial R$ with orientation map $\mathcal O_{R,f}$,
     \begin{align}
         C_{B^X}(R,f,M;\sigma,\tau)
@@ -150,7 +150,7 @@ At $f\in\partial R$, the per-edge gauge identity takes the conjugation form $C_A
     \label{thm:peps_regionInsertedCoeff_eq_applyGauge_of_conjIdentity}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_conjIdentity}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:applyGauge, def:peps_absorbedBoundaryGauge, thm:peps_regionEdgeOrient_absorbedBoundaryGauge, thm:peps_regionInsertedCoeff_applyGauge}
+    \uses{def:peps_regionInsertedCoeff,def:applyGauge,def:peps_absorbedBoundaryGauge,thm:peps_regionEdgeOrient_absorbedBoundaryGauge,thm:peps_regionInsertedCoeff_applyGauge}
     Let $f\in\partial R$, assume $h:D_A=D_B$, and suppose $Z\in\GL(D_B(f))$ satisfies $C_A(R,f,M;\sigma,\tau)=C_B(R,f,Z\,\phi_{h_f}(M)\,Z^{-1};\sigma,\tau)$ for all $M,\sigma,\tau$. If $X$ is an edge-gauge family with $X_f$ given by (\ref{eq:peps_absorbed_boundary_gauge}), then
     \begin{align}
         C_A(R,f,M;\sigma,\tau)
@@ -168,7 +168,7 @@ At $f\in\partial R$, the per-edge gauge identity takes the conjugation form $C_A
     \label{thm:peps_edgeInsertedCoeff_eq_applyGauge_of_region}
     \lean{TNLean.PEPS.edgeInsertedCoeff_eq_applyGauge_of_region}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff, def:applyGauge, thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    \uses{def:peps_regionInsertedCoeff,def:peps_edgeInsertedCoeff,def:applyGauge,thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     Let $f\in\partial R$ and assume $h:D_A=D_B>0$. If (\ref{eq:peps_region_absorbed_equality}) holds for all $M,\sigma,\tau$, then for every global physical configuration $\sigma$ and $N\in\MN{D_A(f)}$,
     \begin{align}
         E_A(f,\sigma,N)
@@ -193,7 +193,7 @@ At $f\in\partial R$, the per-edge gauge identity takes the conjugation form $C_A
     \label{thm:peps_regionInsertedCoeff_eq_applyGauge_of_edge}
     \lean{TNLean.PEPS.regionInsertedCoeff_eq_applyGauge_of_edge}
     \leanok
-    \uses{def:peps_regionInsertedCoeff, def:peps_edgeInsertedCoeff, def:applyGauge, thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
+    \uses{def:peps_regionInsertedCoeff,def:peps_edgeInsertedCoeff,def:applyGauge,thm:peps_regionInsertedCoeff_eq_smul_edgeInsertedCoeff}
     Assume $h:D_A=D_B$. If (\ref{eq:peps_edge_absorbed_equality}) holds at an edge $e$ for all $\sigma$ and $N$, then (\ref{eq:peps_region_absorbed_equality}) holds at every region $R$ with $e\in\partial R$.
 \end{lemma}
 \begin{proof}\leanok

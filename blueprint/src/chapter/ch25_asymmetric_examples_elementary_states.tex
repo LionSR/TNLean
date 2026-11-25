@@ -205,7 +205,7 @@ without contributing to positive-length periodic traces.
     % Principal declaration: MPSTensor.ghzSectors_dim_eq.
     \lean{MPSTensor.ghzSectors_compression, MPSTensor.ghzSectors_dim_eq}
     \leanok
-    \uses{def:asymex_ghz, thm:asym_multiblock}
+    \uses{def:asymex_ghz,thm:asym_multiblock}
     The source of Definition~\ref{def:asymex_ghz} carries the block
     triangular form of Theorem~\ref{thm:asym_multiblock} for the slot family
     $(C_0,C_1)$ with $z=2$ zero slots, the four diagonal positions carrying,
@@ -239,7 +239,7 @@ without contributing to positive-length periodic traces.
 
 \begin{proof}
     \leanok
-    \uses{thm:asymex_ghz_compression, prop:asym_compression_trace}
+    \uses{thm:asymex_ghz_compression,prop:asym_compression_trace}
     Applying Lemma~\ref{prop:asym_compression_trace} to the
     two-slot compression datum of Lemma~\ref{thm:asymex_ghz_compression}
     equates $\tr(B^w)$ with $\tr(C_0^w)+\tr(C_1^w)$ for every nonempty
@@ -432,7 +432,7 @@ in~(\ref{eq:asymex_repeated_amplitude}).
     % Principal declaration: MPSTensor.repB_trace_evalWord_eq_two_mul.
     \lean{MPSTensor.repeatedBlock_compression, MPSTensor.repB_trace_evalWord_eq_two_mul}
     \leanok
-    \uses{def:asymex_repeated, thm:asym_multiblock}
+    \uses{def:asymex_repeated,thm:asym_multiblock}
     The source of Definition~\ref{def:asymex_repeated} carries the block
     triangular form of Theorem~\ref{thm:asym_multiblock} for the two copies
     of $A$ with no zero slots. For $s\in\{0,1\}$, let $V_s:\C\to\C^2$
@@ -458,7 +458,7 @@ in~(\ref{eq:asymex_repeated_amplitude}).
     \label{thm:asymex_repeated_not_gauge}
     \lean{MPSTensor.not_gaugeEquiv_directSum_repA}
     \leanok
-    \uses{def:asymex_repeated, def:gauge_equiv}
+    \uses{def:asymex_repeated,def:gauge_equiv}
     There is no invertible $X\in\GL_2(\C)$ with
     $B^i=X\diag(A^i,A^i)X^{-1}$ for both letters $i$.
     Here $\diag(A^i,A^i)=A^i\oplus A^i$ is the repeated target matrix.

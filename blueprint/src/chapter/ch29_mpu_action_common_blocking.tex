@@ -4,7 +4,7 @@
         MPOTensor.GroupFamily.CarriesMPV.blockTensor,
         MPOTensor.GroupFamily.BlockActionData.block}
     \leanok
-    \uses{def:mpug_permuted_block_l_symbol, def:mpug_action_tensor}
+    \uses{def:mpug_permuted_block_l_symbol,def:mpug_action_tensor}
     For an operator tensor $T$ and a state tensor $A$, physical blocking
     satisfies $(T\cdot A)^{[L]}=T^{[L]}\cdot A^{[L]}$. A reduction
     $(V,W)$ from $T\cdot A$ onto $C$ remains a reduction from
@@ -15,7 +15,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_action_tensor, thm:mps_reduction_exterior_buffer}
+    \uses{def:mpug_action_tensor,thm:mps_reduction_exterior_buffer}
     Decode a blocked input index as a word of length $L$. Reindexing
     the contracted input sum gives
     \begin{align}
@@ -37,7 +37,7 @@
         MPOTensor.GroupFamily.BlockActionData.nilpotencyLength_le_commonBufferLength_add_one,
         MPOTensor.GroupFamily.BlockActionData.commonBufferLength_of_isEmpty}
     \leanok
-    \uses{def:mpug_permuted_block_l_symbol, thm:mps_reduction_exterior_buffer}
+    \uses{def:mpug_permuted_block_l_symbol,thm:mps_reduction_exterior_buffer}
     Fix action reductions $(V_{g,x},W_{g,x})$ for finite $G$ and
     $\mathsf X$, and put $B_{g,x}=O_g\cdot A_x$. Write $N_0(g,x)$ for
     their residual nilpotency lengths. Their common buffer length is
@@ -55,8 +55,7 @@
         MPOTensor.GroupFamily.exists_block_blockActionData_one,
         MPOTensor.GroupFamily.exists_block_blockActionData_one_of_isPretransitive}
     \leanok
-    \uses{def:mpug_action_buffer, lem:mpug_action_blocking,
-        thm:mpug_permuted_block_l_symbol_spec}
+    \uses{def:mpug_action_buffer,lem:mpug_action_blocking,thm:mpug_permuted_block_l_symbol_spec}
     Suppose $G$ and $\mathsf X$ are finite, the tensors $A_x$ are normal
     of positive, possibly different, bond dimensions, and the periodic
     action law holds at every positive length. There is one positive
@@ -90,8 +89,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_action_buffer, lem:mpug_action_blocking,
-        thm:mpug_permuted_block_l_symbol_spec, thm:mps_reduction_exterior_buffer}
+    \uses{def:mpug_action_buffer,lem:mpug_action_blocking,thm:mpug_permuted_block_l_symbol_spec,thm:mps_reduction_exterior_buffer}
     Choose the action reductions and the common length of
     Definition~\ref{def:mpug_action_buffer}. Their residual bounds follow
     from equality of the positive-length periodic vectors. Since

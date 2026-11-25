@@ -29,4 +29,3 @@ import TNLean.PEPS.AreaLaw.BirthRegions.Layers.PrimaryCounting
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.PrimaryFragments
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.PrimaryRegions
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.ScaleSeparation
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.SparseBelts

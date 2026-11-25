@@ -14,7 +14,7 @@ range of $\mathcal{P}(A)$, which can always be arranged by a local isometry
         TNLean.PEPS.IsGIsometric.exists_unitary_comp_eq,
         TNLean.PEPS.IsGIsometric.exists_comp_eq_of_unitary}
     \leanok
-    \uses{def:peps_g_injective, thm:peps_g_injective_left_inverse}
+    \uses{def:peps_g_injective,thm:peps_g_injective_left_inverse}
     Let $A$ be $G$-isometric with $\mathcal{P}(A)$ onto the physical system.
     If $V$ is a unitary on the virtual level that commutes with $U_g$ for
     every $g$, there is a unitary $W$ on the physical system with
@@ -70,7 +70,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
         MPSTensor.range_groundSpaceFrame,
         MPSTensor.parentInteraction_eq_one_sub_smul_groundSpaceFrame}
     \leanok
-    \uses{def:peps_ground_space_frame, def:parent_interaction}
+    \uses{def:peps_ground_space_frame,def:parent_interaction}
     The matrix of $P_{n}$ is Hermitian. If
     $\Gamma_{n}\Gamma_{n}^{\dagger}\Gamma_{n}=c\,\Gamma_{n}$ for some $c>0$, then
     $c^{-1}P_{n}$ is idempotent with range $\mathcal{S}_{n}$, so it is the
@@ -106,8 +106,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
         TNLean.PEPS.IsGIsometricMPS.groundSpaceMap_comp_regularMPSTensor,
         TNLean.PEPS.IsGIsometricMPS.parentInteraction_regularMPSTensor}
     \leanok
-    \uses{def:peps_mps_g_isometric, thm:peps_mps_g_isometric_concatenation,
-        thm:peps_ground_space_frame_projector, def:peps_regular_mps_tensor}
+    \uses{def:peps_mps_g_isometric,thm:peps_mps_g_isometric_concatenation,thm:peps_ground_space_frame_projector,def:peps_regular_mps_tensor}
     Let $A$ be a $G$-isometric matrix product tensor. There is $c>0$ such that
     the operator
     $P_{2}=\sum_{ijkl}\operatorname{tr}[A^{i}A^{j}(A^{k}A^{l})^{\dagger}]
@@ -145,10 +144,7 @@ boundary matrices, where $A^{\sigma}=A^{\sigma_{1}}\cdots A^{\sigma_{n}}$.
         TNLean.PEPS.IsGIsometricMPS.pairLift_groundSpaceFrame_regularMPSTensor,
         TNLean.PEPS.IsGIsometricMPS.isNNCPH_regularMPSTensor}
     \leanok
-    \uses{thm:peps_mps_g_isometric_local_terms, def:is_nncph,
-        thm:local_term_two_three_ax_xb_lifts,
-        thm:three_site_commutator_chain_transport,
-        lem:nncph_from_adjacent_two_site_commutation}
+    \uses{thm:peps_mps_g_isometric_local_terms,def:is_nncph,thm:local_term_two_three_ax_xb_lifts,thm:three_site_commutator_chain_transport,lem:nncph_from_adjacent_two_site_commutation}
     Let $A$ be a $G$-isometric matrix product tensor. On three sites, the
     products of $P_{2}$ acting on the first two sites with $P_{2}$ acting on the
     last two, in either order, both equal $c\,P_{3}$ for some $c>0$. Hence on

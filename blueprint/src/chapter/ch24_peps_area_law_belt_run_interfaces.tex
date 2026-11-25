@@ -13,8 +13,7 @@ between the resulting regions.
     \label{thm:area_law_belt_run_primary_interface}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellFanRun_primary_interface}
     \leanok
-    \uses{def:area_law_belt_fan_color,def:area_law_fan_runs,
-        def:area_law_primary_regions,def:area_law_primary_pitch_indices}
+    \uses{def:area_law_belt_fan_color,def:area_law_fan_runs,def:area_law_primary_regions,def:area_law_primary_pitch_indices}
     Fix an origin $o$, a finite endpoint set, a width $C\ge 2$, and an
     initial layer $k_0\ge 50{,}000{,}000$, with arbitrary residue choices
     in every layer. Let $R$ be a run of the labelled fan in a belt cell of
@@ -25,9 +24,7 @@ between the resulting regions.
     triangle of $R$ has label $h+1\ne h\pmod2$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_primary_fine_cell_cover,
-        thm:area_law_fan_other_cell_contact,
-        thm:area_law_belt_fan_nonbelt_color,thm:area_law_fan_run_color}
+    \uses{thm:area_law_primary_fine_cell_cover,thm:area_law_fan_other_cell_contact,thm:area_law_belt_fan_nonbelt_color,thm:area_law_fan_run_color}
     By the primary fine-cell cover, the primary birth region is a finite
     union of closed non-belt fine cells of layer $h$, and the run region
     is the finite union of the fan triangles in $R$. Since $[u,v]$ is
@@ -53,9 +50,7 @@ between the resulting regions.
     opposite labels in $\mathbb Z/2\mathbb Z$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_fan_other_cell_contact,
-        thm:area_law_belt_fan_contact_colors,thm:area_law_fan_run_color,
-        thm:area_law_cell_fan_cover}
+    \uses{thm:area_law_fan_other_cell_contact,thm:area_law_belt_fan_contact_colors,thm:area_law_fan_run_color,thm:area_law_cell_fan_cover}
     The infinite segment $[u,v]$ is covered by the finitely many intersections
     of a triangle in $R$ with a triangle in $T$, so some pair of triangles
     shares two distinct points. Applying the triangle-base contact lemma in

@@ -63,7 +63,7 @@ from these particular representatives.
     \label{lem:mpu_unwind_supplied}
     \lean{MPOTensor.TwoSiteStandardFormData.unwind_dagger_trick}
     \leanok
-    \uses{lem:mpu_unwind_local, lem:mpu_supplied_printed_two_block_standard_form}
+    \uses{lem:mpu_unwind_local,lem:mpu_supplied_printed_two_block_standard_form}
     Let $W$ have a supplied square two-site standard form with gates $u,v$.
     Suppose its one-block time-reversal equation holds with sign
     $\sigma_1\in\{1,-1\}$ and unitary $x$, and the time-reversal equation
@@ -81,7 +81,7 @@ from these particular representatives.
     \label{lem:mpu_unwind_canonical}
     \lean{MPOTensor.TwoSiteStandardFormData.exists_unwind_dagger_trick}
     \leanok
-    \uses{lem:mpu_unwind_supplied, lem:mpu_supplied_forward_local_time_reversal}
+    \uses{lem:mpu_unwind_supplied,lem:mpu_supplied_forward_local_time_reversal}
     Let $W$ have a supplied square two-site standard form with gates $u,v$
     and a reduced full-support canonical-form-II presentation. Suppose
     $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$.
@@ -178,7 +178,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_printed_circuit_extension}
     \lean{MPOTensor.printedBlockingCircuits_mem_unitaryGroup, MPOTensor.printedInputCircuit_succ}
     \leanok
-    \uses{def:mpu_printed_circuits, lem:mpu_printed_layer_identities}
+    \uses{def:mpu_printed_circuits,lem:mpu_printed_layer_identities}
     If $u,v$ are unitary, then $U_k,V_k$ are unitary for every $k>0$.
     Writing $\iota$ for placement on the first $2k$ spins of a chain of
     $2k+2$ spins, one has, for arbitrary $u,v$,
@@ -198,7 +198,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_printed_window_unwind}
     \lean{MPOTensor.printedPairGate_unwind}
     \leanok
-    \uses{lem:mpu_printed_placement, lem:mpu_unwind_local}
+    \uses{lem:mpu_printed_placement,lem:mpu_unwind_local}
     Suppose square two-spin matrices $u,v,x$ and $\zeta\in\mathbb C$
     satisfy (\ref{eq:mpu_unwind_local}). On any consecutive four-spin
     interval $p,p+1,p+2,p+3$ inside any longer chain,
@@ -232,7 +232,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_printed_sequence_steps}
     \lean{MPOTensor.printedUnwindingSequence_step, MPOTensor.printedUnwindingSequence_eq_zero, MPOTensor.printedUnwindingSequence_zero, MPOTensor.printedUnwindingSequence_last}
     \leanok
-    \uses{def:mpu_printed_unwinding_sequence, lem:mpu_printed_window_unwind, lem:mpu_printed_layer_identities}
+    \uses{def:mpu_printed_unwinding_sequence,lem:mpu_printed_window_unwind,lem:mpu_printed_layer_identities}
     Under (\ref{eq:mpu_unwind_local}), $Y_s=Y_{s+1}$ whenever $s+1<k$,
     and $Y_0=Y_s$ for every $s<k$. The endpoints, for arbitrary matrices,
     are
@@ -283,7 +283,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_printed_sequential_unwinding}
     \lean{MPOTensor.printed_sequential_unwinding, MPOTensor.printedUnwindingFactor_mem_unitaryGroup}
     \leanok
-    \uses{lem:mpu_printed_sequence_steps, lem:mpu_printed_layer_identities}
+    \uses{lem:mpu_printed_sequence_steps,lem:mpu_printed_layer_identities}
     For every $k>0$, (\ref{eq:mpu_unwind_local}) implies
     \begin{align*}
         \sigma L_{0,k-1}(v)x_{1,2}^\dagger C_{1,k-1}(u)
@@ -300,7 +300,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_canonical_printed_sequential_unwinding}
     \lean{MPOTensor.TwoSiteStandardFormData.exists_printed_sequential_unwinding}
     \leanok
-    \uses{lem:mpu_unwind_canonical, lem:mpu_printed_sequential_unwinding}
+    \uses{lem:mpu_unwind_canonical,lem:mpu_printed_sequential_unwinding}
     Under the hypotheses of Lemma~\ref{lem:mpu_unwind_canonical}, there
     is a single unitary $x$ for which the finite-spin sequential identity
     holds for every $k>0$, with $\sigma=\sigma(u,v)$ and
@@ -352,7 +352,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_actual_printed_open_contraction}
     \lean{MPOTensor.TwoSiteStandardFormData.evalWord_eq_printedOpenGateContraction, MPOTensor.TwoSiteStandardFormData.blockTensor_eq_printedOpenGateContraction, MPOTensor.TwoSiteStandardFormData.evalWord_eq_printedInputCircuit}
     \leanok
-    \uses{def:mpu_printed_open_contraction, lem:mpu_printed_open_layer_entries, def:mpu_printed_circuits}
+    \uses{def:mpu_printed_open_contraction,lem:mpu_printed_open_layer_entries,def:mpu_printed_circuits}
     The actual ordered product of the $k$ letters of $W$ equals $G(i,j)$.
     In particular this gives the actual length-$k$ blocked tensor after
     decoding its physical words. If $\bar i,\bar j$ are the flattened
@@ -379,7 +379,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{def:mpu_printed_blocked_half_factors}
     \lean{MPOTensor.printedHalfWordEquiv, MPOTensor.printedBlockedPhysicalEquiv, MPOTensor.printedBlockedInputGate, MPOTensor.printedBlockedOutputGate, MPOTensor.printedBlockedHalfLeft, MPOTensor.printedBlockedHalfRight}
     \leanok
-    \uses{def:mpu_printed_circuits, def:mpu_supplied_two_site_standard_form}
+    \uses{def:mpu_printed_circuits,def:mpu_supplied_two_site_standard_form}
     Set $q=d^k$. Identify an ordered pair of $q$-dimensional indices with
     the concatenation of its two decoded length-$k$ words. The physical
     relabelling $e_k$ sends the two encoded half words to the actual
@@ -400,7 +400,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_printed_blocked_coordinates}
     \lean{MPOTensor.printedBlockedPhysicalEquiv_decode, MPOTensor.printedBlockedGates_mem_unitaryGroup}
     \leanok
-    \uses{def:mpu_printed_blocked_half_factors, lem:mpu_printed_circuit_extension}
+    \uses{def:mpu_printed_blocked_half_factors,lem:mpu_printed_circuit_extension}
     Decoding $e_k$ recovers the original ordered physical pair word.
     If $u,v$ are unitary, then $\widehat U_k,\widehat V_k$ are unitary.
 \end{lemma}
@@ -414,7 +414,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_printed_blocked_contractions}
     \lean{MPOTensor.printedBlockedOutputGate_apply, MPOTensor.TwoSiteStandardFormData.printedBlocked_output_contraction, MPOTensor.TwoSiteStandardFormData.printedBlocked_input_contraction}
     \leanok
-    \uses{def:mpu_printed_blocked_half_factors, lem:mpu_actual_printed_open_contraction}
+    \uses{def:mpu_printed_blocked_half_factors,lem:mpu_actual_printed_open_contraction}
     For every $k>0$, the spectator half factors satisfy
     \begin{align*}
         (\widehat V_k)_{(A,B),(S,T)}
@@ -444,7 +444,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_actual_printed_blocked_standard_form}
     \lean{MPOTensor.TwoSiteStandardFormData.printedBlock}
     \leanok
-    \uses{lem:mpu_printed_blocked_coordinates, lem:mpu_printed_blocked_contractions}
+    \uses{lem:mpu_printed_blocked_coordinates,lem:mpu_printed_blocked_contractions}
     Let $W$ have supplied square standard-form data with positive physical
     and bond dimensions. For every $k>0$, its actual blocked tensor in
     the $e_k$ coordinates has standard form
@@ -460,7 +460,7 @@ matrices with the standard form of the actual arbitrarily blocked tensor.
     \label{lem:mpu_actual_printed_blocking_trace_parity}
     \lean{MPOTensor.TwoSiteStandardFormData.printedBlocking_trace_eq_intrinsic, MPOTensor.TwoSiteStandardFormData.printed_blocking_trace_parity}
     \leanok
-    \uses{lem:mpu_actual_printed_blocked_standard_form, lem:mpu_source_time_reversal_sign_independent, lem:mpu_intrinsic_blocking_parity}
+    \uses{lem:mpu_actual_printed_blocked_standard_form,lem:mpu_source_time_reversal_sign_independent,lem:mpu_intrinsic_blocking_parity}
     For the supplied square standard form above, the normalized trace
     $\tau_k=\sigma(\widehat U_k,\widehat V_k)$ equals the intrinsic trace
     of the actual length-$k$ block. If $W^{(N)}=W^{(N)\dagger}$ on every

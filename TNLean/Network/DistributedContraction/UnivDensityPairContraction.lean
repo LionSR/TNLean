@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Network.DistributedContraction.DistributedOperatorContraction
 import TNLean.Network.DistributedContraction.ActiveGateLabelSum
-import TNLean.Lattice.Compression.WeightedGateLabelPairSum
+import QICLean.Algebra.Combinatorics.FinSum
 
 /-! # The density contraction over all original gate occurrences
 
@@ -21,7 +21,7 @@ and empty families are included. The physical matrix indices are arbitrary.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588.
 -/
 
-namespace TNLean.Lattice.Compression.DistributedOperatorContraction
+namespace TNLean.Network.DistributedOperatorContraction
 open scoped ComplexConjugate
 variable {Party G : Type} [Fintype Party] [Fintype G]
 variable {Ket Bra : G → Type} [∀ g, Fintype (Ket g)] [∀ g, Fintype (Bra g)]
@@ -97,9 +97,9 @@ theorem contractedOperator_densityPair_univ_eq_double_sum
     (gates := (Finset.univ : Finset G)) (participants := participants)
     (root := root) (hroot := hroot) (Ket := Ket) (Bra := Bra) (k := k) a b w pairedT
   have hNetwork := hDensity.trans hReindex'.symm
-  have hAveraging := weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs w γ a b K
+  have hAveraging := Fintype.smul_sum_sum_pi_eq_smul_sum_pi_prod w γ a b K
   have h := (congrArg (fun Z : Matrix ((p : Party) → Out p) ((p : Party) → In p) ℂ ↦
     γ • Z) hNetwork).trans hAveraging.symm
   exact h
 
-end TNLean.Lattice.Compression.DistributedOperatorContraction
+end TNLean.Network.DistributedOperatorContraction

@@ -6,7 +6,7 @@
         MPSTensor.eq_of_uncleBoundary_cyclic_pairing,
         MPSTensor.exists_scalar_blocks_of_uncleBoundary_trace_cyclic}
     \leanok
-    \uses{def:two_block_uncle_tensor, def:uncle_boundary_product}
+    \uses{def:two_block_uncle_tensor,def:uncle_boundary_product}
     Let $\star$ be the boundary product of
     Definition~\ref{def:uncle_boundary_product}.
     If two boundary matrices $X,Y$ satisfy
@@ -39,7 +39,7 @@
     \label{thm:uncle_scalar_boundaries}
     \lean{MPSTensor.uncleBoundaryMap_scalar_blocks}
     \leanok
-    \uses{def:two_block_uncle_tensor, def:uncle_boundary_space, def:mpv}
+    \uses{def:two_block_uncle_tensor,def:uncle_boundary_space,def:mpv}
     For the single-wall boundary map $\Gamma_N$, the boundary
     $\operatorname{diag}(\alpha I,\beta I)$ gives
     $\Gamma_N(\operatorname{diag}(\alpha I,\beta I))
@@ -57,8 +57,7 @@
     \label{thm:uncle_periodic_boundary_closure}
     \lean{MPSTensor.uncleBoundarySpace_inf_cyclicTranslate}
     \leanok
-    \uses{def:two_block_uncle_tensor, def:parent_cyclic_translate_state,
-        def:uncle_boundary_space, def:mpv}
+    \uses{def:two_block_uncle_tensor,def:parent_cyclic_translate_state,def:uncle_boundary_space,def:mpv}
     Let the full perturbation letter
     $\left(\begin{smallmatrix}A&R\\L&B\end{smallmatrix}\right)$ be
     injective. For every $n\ge2$, let $S_n$ be the boundary space of
@@ -71,8 +70,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:uncle_cyclic_boundary_coefficients,
-        thm:uncle_scalar_boundaries}
+    \uses{thm:uncle_cyclic_boundary_coefficients,thm:uncle_scalar_boundaries}
     Represent a vector in the intersection by boundaries $X$ and $Y$
     at the two cuts. A word with first letter $i$ and remaining
     coefficient $W$ gives
@@ -95,8 +93,7 @@
         MPSTensor.mem_uncleBoundarySpace_of_cyclic_windows,
         MPSTensor.ker_hamiltonian_uncleInteraction_eq_span_mpv}
     \leanok
-    \uses{lem:uncle_kernel_local_conditions,lem:uncle_boundary_intersection,
-        thm:uncle_periodic_boundary_closure,lem:uncle_parent_sector_containment}
+    \uses{lem:uncle_kernel_local_conditions,lem:uncle_boundary_intersection,thm:uncle_periodic_boundary_closure,lem:uncle_parent_sector_containment}
     Let $C=A\oplus B$ and let the perturbation have off-diagonal blocks
     $R,L$. Suppose the full letter family
     $\left(\begin{smallmatrix}A&R\\L&B\end{smallmatrix}\right)$ is injective.

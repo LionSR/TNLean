@@ -34,7 +34,7 @@ noncomputable section
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction supDist natCast_supDist)
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (AdmissibleSupport ambientDilation)
@@ -64,7 +64,7 @@ private theorem template_scanner_clearance
     (hL : L ≤ s₀) (hr : 2 * r₀ ≤ D) (hDm : 4 * D ≤ m)
     (hK : 1 ≤ K) (hKL : 8 * K * m ≤ L) :
     ∀ t ∈ T.points, ∀ z ∈ Z,
-      ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z := by
+      ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ) := by
   have hmL : 8 * m ≤ L := by
     have h := Nat.mul_le_mul_right m (Nat.mul_le_mul_left 8 hK)
     omega
@@ -78,7 +78,7 @@ private theorem template_scanner_clearance
   have hresult : ((2 * L + 10 * r₀ : ℕ) : ℝ) <
       max |(t.1 : ℝ) - z.1| |(t.2 : ℝ) - z.2| := by
     nlinarith
-  unfold ambientSupDistance
+  rw [natCast_supDist]
   exact_mod_cast hresult
 
 /-- The anchor multiplicity `2 ^ (2 R (R + 1))` of the final template scanner: the number of
@@ -188,7 +188,7 @@ theorem template_final_mutualInformation_of_boxEntropy_explicit
     intro r hr hrL
     exact template_layer_card_le T hCtpl r hr (hrL.trans hL)
   have hclear : ∀ t ∈ T.points, ∀ z ∈ boundaryEndpoints Λ A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z :=
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ) :=
     template_scanner_clearance T hsep (by exact_mod_cast hD₀) hL
       hscales.1 hscales.2.2.1 hscales.2.2.2.1 hscales.2.2.2.2
   obtain ⟨htarget, hprefix⟩ := hentropy Λ h hh hhJ E₀ Ω hΩ hgap hspan S T hCtpl hsep rfl L hLpos hL

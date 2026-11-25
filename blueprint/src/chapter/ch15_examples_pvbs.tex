@@ -195,8 +195,7 @@ spectral-gap assertion.
     \lean{MPSTensor.pvbsEdge_first_cut_minor,
         MPSTensor.eq_zero_of_pvbsEdge_overlapping_sections}
     \leanok
-    \uses{def:pvbs_tensor,lem:pvbs_amplitudes,
-        lem:overlapping_one_dimensional_windows_zero}
+    \uses{def:pvbs_tensor,lem:pvbs_amplitudes,lem:overlapping_one_dimensional_windows_zero}
     The geometric one-particle vector on $n\ge2$ sites has a first-cut
     minor equal to $q$. Consequently, for $q\ne0$, no nonzero vector on
     $n+1$ sites can have all its first-window sections proportional to
@@ -236,7 +235,7 @@ spectral-gap assertion.
     \lean{MPSTensor.pvbsEdge_cyclic_step,
         MPSTensor.pvbsEdge_not_cyclic_invariant}
     \leanok
-    \uses{lem:pvbs_amplitudes, lem:pvbs_right_endpoint_coefficients}
+    \uses{lem:pvbs_amplitudes,lem:pvbs_right_endpoint_coefficients}
     On a chain of $n\ge1$ sites, if $q^n=1$, rotating the physical
     coefficients by one site satisfies
     \begin{align}
@@ -316,7 +315,7 @@ spectral-gap assertion.
     \label{lem:pvbs_matching_volume_line_invariance}
     \lean{MPSTensor.cyclicTranslateState_pvbsEdge_mem_span}
     \leanok
-    \uses{lem:pvbs_geometric_cyclic_phase, thm:parent_cyclic_translate_add}
+    \uses{lem:pvbs_geometric_cyclic_phase,thm:parent_cyclic_translate_add}
     Let $R\ge1$ and $q^R=1$. Every cyclic translate of $\Psi_R(q)$ belongs
     to $\mathbb C\Psi_R(q)$. This preserves the line without asserting
     that the coefficient vector is fixed by translation.
@@ -340,8 +339,7 @@ spectral-gap assertion.
         MPSTensor.ker_pvbsPureWindowHamiltonian_matching_volume,
         MPSTensor.pvbsEdge_ne_zero_matching_volume}
     \leanok
-    \uses{lem:pvbs_amplitudes, lem:pvbs_matching_volume_line_invariance,
-        lem:pvbs_pure_window_kernel,lem:periodic_interaction_sections}
+    \uses{lem:pvbs_amplitudes,lem:pvbs_matching_volume_line_invariance,lem:pvbs_pure_window_kernel,lem:periodic_interaction_sections}
     Let $R\ge1$ and $q^R=1$. At the matching periodic volume $R$, let
     $H_R(q)$ be the sum of all cyclic translates of the complementary
     pure particle projection $p_R(q)$. Then

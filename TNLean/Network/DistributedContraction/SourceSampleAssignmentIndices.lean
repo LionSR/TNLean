@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Network.DistributedContraction.SourceSampleIndices
-import TNLean.Lattice.Compression.AllSourceSlots
+import QICLean.Circuit.Party.Compression.PartialExpansion.Sources
 import Mathlib.Algebra.BigOperators.Group.Finset.Defs
 
 /-! # Reindexing the common source-sample assignment
@@ -20,17 +20,17 @@ and 568–579.
 -/
 
 noncomputable section
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice
-variable {P : Type}
+namespace QuantumCircuit.Party.SourceCircuit
+open TNLean.Network
+variable {P : Type} [DecidableEq P]
 
 open Classical in
 /-- Reindex common sample assignments from ordered source slots to the actual
 shared gate-pair samples. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 342–417 and 568–579. -/
-def allSourceSampleAssignmentEquiv {a b : Layout P} (w : SourceCircuit a b) (k : ℕ) :
+def allSourceSampleAssignmentEquiv {X Y : P → Type} (w : SourceCircuit X Y) (k : ℕ) :
     (Fin (partialSlots (fun _ : P ↦ true) w).length → Fin k) ≃
-      (Compression.DistributedOperatorContraction.Sample
+      (DistributedOperatorContraction.Sample
         (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) → Fin k) :=
   Equiv.piCongrLeft (fun _ ↦ Fin k)
     ((allSourceSlotEquiv w).trans (sourceSampleEquiv w))
@@ -40,9 +40,9 @@ open Classical in
 occurrence. It does not choose an orientation of its unordered pair.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 342–417
 and 568–579. -/
-theorem allSourceSampleAssignmentEquiv_symm_apply {a b : Layout P}
-    (w : SourceCircuit a b) (k : ℕ)
-    (j : Compression.DistributedOperatorContraction.Sample
+theorem allSourceSampleAssignmentEquiv_symm_apply {X Y : P → Type}
+    (w : SourceCircuit X Y) (k : ℕ)
+    (j : DistributedOperatorContraction.Sample
       (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) → Fin k)
     (e : w.sourceLocations) :
     (allSourceSampleAssignmentEquiv w k).symm j ((allSourceSlotEquiv w).symm e) =
@@ -54,13 +54,13 @@ open Classical in
 /-- A matrix-valued finite sample sum is unchanged by the canonical assignment
 reindexing. No restriction is imposed on the matrix summand.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 568–579. -/
-theorem sum_sourceSampleAssignments_eq {a b : Layout P}
-    (w : SourceCircuit a b) (k : ℕ) {m n : Type}
+theorem sum_sourceSampleAssignments_eq {X Y : P → Type}
+    (w : SourceCircuit X Y) (k : ℕ) {m n : Type}
     (F : (Fin (partialSlots (fun _ : P ↦ true) w).length → Fin k) → Matrix m n ℂ) :
     (∑ j, F j) =
-      ∑ j : Compression.DistributedOperatorContraction.Sample
+      ∑ j : DistributedOperatorContraction.Sample
           (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) → Fin k,
         F ((allSourceSampleAssignmentEquiv w k).symm j) := by
   exact ((allSourceSampleAssignmentEquiv w k).symm.sum_comp F).symm
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

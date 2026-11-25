@@ -56,7 +56,7 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
     \label{thm:lvv_mps_error_reduction}
     \lean{TNLean.MPS.AreaLaw.IsViableMPS.errorReduction_of_norm_sub_groundProjection_le}
     \leanok
-    \uses{def:lvv_viable_mps, def:lvv_error_reduction_family}
+    \uses{def:lvv_viable_mps,def:lvv_error_reduction_family}
     Let $0\le i\le L$, let $\Gamma$ be a unit vector, and let $S$ be
     $(i,s,b,1/2)$-viable. Suppose that
     $K=\sum_{j\in J}A_j\otimes B_j$ across the cut after $i$ sites,
@@ -71,8 +71,7 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:lvv_error_reduction_support, lem:lvv_projection_error_reduction,
-        lem:lvv_operator_bond_growth}
+    \uses{lem:lvv_error_reduction_support,lem:lvv_projection_error_reduction,lem:lvv_operator_bond_growth}
     Lemma~\ref{lem:lvv_error_reduction_support} gives at most $|J|s$ members.
     Lemma~\ref{lem:lvv_operator_bond_growth} gives each member effective
     MPS bond bound $\max(1,D\max(1,b))$.
@@ -110,7 +109,7 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
         TNLean.MPS.AreaLaw.IsViable.errorReduction,
         TNLean.MPS.AreaLaw.IsViableMPS.errorReduction}
     \leanok
-    \uses{def:lvv_viable_mps, def:lvv_error_reduction_family}
+    \uses{def:lvv_viable_mps,def:lvv_error_reduction_family}
     Let $\Gamma$ be a unit vector and
     $K=\sum_{j\in J}A_j\otimes B_j$. Suppose that a unit vector
     $v\in\operatorname{Span}(S)\otimes\mathcal H_R$ satisfies
@@ -128,7 +127,7 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:lvv_error_reduction_support, lem:lvv_overlap_perturbation}
+    \uses{lem:lvv_error_reduction_support,lem:lvv_overlap_perturbation}
     Put $x=A_0v$ and $y=Kv$. The operator bound gives $\|y-x\|\le\eta$,
     so $\|y\|\ge c-\eta>0$. Applying
     (\ref{eq:lvv_overlap_perturbation}) and dividing by $\|y\|$ gives the
@@ -142,7 +141,7 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
     \label{lem:lvv_projection_error_reduction}
     \lean{TNLean.MPS.AreaLaw.IsViable.errorReduction_of_norm_sub_groundProjection_le}
     \leanok
-    \uses{def:lvv_viable_set, def:lvv_error_reduction_family}
+    \uses{def:lvv_viable_set,def:lvv_error_reduction_family}
     Let $\Gamma$ be a unit vector, let $S$ be $(i,1/2)$-viable, and suppose
     $K=\sum_{j\in J}A_j\otimes B_j$. If
     $\|K-|\Gamma\rangle\langle\Gamma|\|\le\eta<1/2$, then $S'$ is
@@ -165,7 +164,7 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
         TNLean.MPS.AreaLaw.leftConfigOfFin_toEuclideanLin,
         TNLean.MPS.AreaLaw.IsLeftOpenMPS.toEuclideanLin}
     \leanok
-    \uses{def:chain_open_mps, def:lvv_viable_mps}
+    \uses{def:chain_open_mps,def:lvv_viable_mps}
     Applying an operator increases a vector's Schmidt rank at any cut by
     at most the operator-Schmidt rank at that cut. In particular, an
     operator whose operator-Schmidt ranks are at most $D$ at all internal
@@ -190,7 +189,7 @@ estimate recorded in~\cite{gap:lvv13_error_reduction_witness_norm}.
     \lean{TNLean.MPS.AreaLaw.IsViable.errorReduction_of_norm_sub_smul_groundProjection_le,
         TNLean.MPS.AreaLaw.IsViableMPS.errorReduction_of_norm_sub_smul_groundProjection_le}
     \leanok
-    \uses{lem:lvv_filter_witness, lem:lvv_operator_bond_growth}
+    \uses{lem:lvv_filter_witness,lem:lvv_operator_bond_growth}
     Let $c>0$ and let $S$ be $(i,s,b,1/2)$-viable for a unit vector
     $\Gamma$. Suppose that $K=\sum_{j\in J}A_j\otimes B_j$,
     each $A_j$ has operator-Schmidt rank at most $D$ at every internal

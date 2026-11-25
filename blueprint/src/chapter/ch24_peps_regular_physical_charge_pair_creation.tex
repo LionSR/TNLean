@@ -3,7 +3,7 @@
     \lean{TNLean.PEPS.regularProjectorChargePairOpenRegionMatrix,
         TNLean.PEPS.regularChargePairOpenRegionMatrix}
     \leanok
-    \uses{def:peps_regular_charge_pair, def:peps_regular_projector_open_region}
+    \uses{def:peps_regular_charge_pair,def:peps_regular_projector_open_region}
     For a finite region $R$ of an ordered simple graph, internal bonds $e_0,e_1\in E(R)$, site coefficients $A_v$, physical configuration $s$, and crossing labels $\theta$, define
     \begin{align}
         C_{\chi,p}(s,\theta)
@@ -20,8 +20,7 @@
         TNLean.PEPS.regularChargePairOpenRegionMatrix_eq_image,
         TNLean.PEPS.regularChargePairOpenRegionMatrix_one_eq_openRegionWeight}
     \leanok
-    \uses{def:peps_regular_correlated_charge_column,
-        thm:peps_regular_region_projector_coordinates}
+    \uses{def:peps_regular_correlated_charge_column,thm:peps_regular_region_projector_coordinates}
     In the coordinates $c=(y,a,r,z)$ of a rooted spanning tree of $R$, (\ref{eq:correlated_charge_column}) satisfies
     \begin{align}
         B_{\chi,p}(c,\theta)
@@ -51,10 +50,7 @@
         TNLean.PEPS.regularRegionChargeReferenceMatrix_mulVec,
         TNLean.PEPS.exists_unitary_regularPhysicalChargePairCreation}
     \leanok
-    \uses{def:peps_regular_charge_reference_matrix,
-        thm:peps_regular_charge_pair_normalization,
-        thm:peps_regular_charge_labels,
-        lem:peps_unitary_vector_swap,lem:peps_permutation_matrix_commutation}
+    \uses{def:peps_regular_charge_reference_matrix,thm:peps_regular_charge_pair_normalization,thm:peps_regular_charge_labels,lem:peps_unitary_vector_swap,lem:peps_permutation_matrix_commutation}
     For any unitary irreducible character $\chi$ and $p\in G$, there exists a unitary $Q$ commuting with simultaneous left translation such that
     \begin{align}
         Q\bigl(|G|^{-1}\mathbf1\bigr)(a,b)

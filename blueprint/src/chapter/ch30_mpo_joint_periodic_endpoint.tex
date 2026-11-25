@@ -113,8 +113,7 @@ overlaps of the original endpoint blocks.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,
-        thm:mpo_joint_mixed_compression}
+    \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,thm:mpo_joint_mixed_compression}
     If $V_x:\C^{D_x^0}\to E_x$ is the first coordinate inclusion, then
     $P_x=V_xV_x^*$ and
     \begin{align}
@@ -154,8 +153,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedEndpointCornerSupport_pairwise_isOrtho,
         MPSTensor.MPOSymmetry.jointMixedEndpointCornerSupport_false_false}
     \leanok
-    \uses{def:mpo_joint_outer_corners,thm:mpo_joint_phase_boundary,
-        thm:mpo_joint_canonical_corner}
+    \uses{def:mpo_joint_outer_corners,thm:mpo_joint_phase_boundary,thm:mpo_joint_canonical_corner}
     Put $P_x^{(0)}=P_x$ and $P_x^{(1)}=I-P_x$. For arbitrary insertions,
     \begin{align}
         T_{ab}\Gamma'_{2,W}(X)
@@ -168,8 +166,7 @@ overlaps of the original endpoint blocks.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,
-        thm:mpo_joint_canonical_corner}
+    \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,thm:mpo_joint_canonical_corner}
     Subtracting the outer boundary actions from the identity gives
     the complementary actions, whose products yield
     (\ref{eq:mpo_joint_outer_boundary}). The binary diagonal phase
@@ -281,8 +278,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_active_of_mem_ker,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_ker_eq}
     \leanok
-    \uses{thm:mpo_joint_cyclic_penalty,thm:mpo_joint_local_comparison,
-        thm:mpo_joint_phase_reducing}
+    \uses{thm:mpo_joint_cyclic_penalty,thm:mpo_joint_local_comparison,thm:mpo_joint_phase_reducing}
     Let $K_N=\sum_i k_{i,i+1}$ be the full joint canonical parent.
     For every $N\ge2$,
     \begin{align}
@@ -294,8 +290,7 @@ overlaps of the original endpoint blocks.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_joint_phase_reducing,thm:mpo_joint_cyclic_penalty,
-        thm:mpo_joint_local_comparison}
+    \uses{thm:mpo_joint_phase_reducing,thm:mpo_joint_cyclic_penalty,thm:mpo_joint_local_comparison}
     Translating and summing (\ref{eq:mpo_joint_local_comparison}) with cyclic
     reindexing turns the two outer penalties into $E_N$. Every site phase
     reduces every translated interaction, so $E_N$ commutes with $H'_N$.
@@ -316,8 +311,7 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_eq_actual,
         MPSTensor.MPOSymmetry.exists_uniform_jointMixedEndpoint_periodic_gap}
     \leanok
-    \uses{thm:mpo_joint_periodic_active,thm:mpo_joint_mixed_compression,
-        def:blockwise_product_word_span}
+    \uses{thm:mpo_joint_periodic_active,thm:mpo_joint_mixed_compression,def:blockwise_product_word_span}
     Suppose that both endpoint families have simultaneous one-site span
     and $D_x^0>0$ for every block. Then for every $N\ge2$,
     $\ket{V^{(N)}(A_x(0))}=\ket{V^{(N)}(B_x)}$ and
@@ -333,10 +327,7 @@ overlaps of the original endpoint blocks.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_joint_periodic_active,thm:mpo_joint_cyclic_penalty,
-        thm:mpo_joint_mixed_compression,
-        thm:block-parent-uniform-gap-simultaneous-injectivity,
-        thm:block_ground_space_continuity}
+    \uses{thm:mpo_joint_periodic_active,thm:mpo_joint_cyclic_penalty,thm:mpo_joint_mixed_compression,thm:block-parent-uniform-gap-simultaneous-injectivity,thm:block_ground_space_continuity}
     Simultaneous spanning is preserved by the first virtual compression.
     The joint canonical parent theorem gives the stated component span
     and one positive gap $\delta$ for $K_N$. Since

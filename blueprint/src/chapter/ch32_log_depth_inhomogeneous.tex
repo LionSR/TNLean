@@ -60,8 +60,7 @@ into a single constant.
         MPSTensor.chainBlockIsometryState_apply,
         MPSTensor.blockIsometryState_eq_chainBlockIsometryState}
     \leanok
-    \uses{def:ldp_chain_block_tensor, thm:ldpolar_tensor_decomposition,
-        def:prep_pair_product_state}
+    \uses{def:ldp_chain_block_tensor,thm:ldpolar_tensor_decomposition,def:prep_pair_product_state}
     Let $B_k=V_kP_k$ be the polar decompositions of the blocked tensors of
     Definition~\ref{def:ldp_chain_block_tensor}, with $P_k$ read as a tensor of
     physical dimension $D^2$ and bond dimension $D$ as in
@@ -116,7 +115,7 @@ into a single constant.
         MPSPreparation.norm_chainState_eq,
         MPSPreparation.inner_chainBlockIsometryState_normalize}
     \leanok
-    \uses{def:ldp_chain_pos_state, def:ldpolar_injective_on}
+    \uses{def:ldp_chain_pos_state,def:ldpolar_injective_on}
     For matrices $W_k$ from $\C^m$ to $\C^{n_k}$, one on each of $M$ sites,
     and vectors $x,y$ on $(\C^m)^{\otimes M}$,
     \begin{align}
@@ -155,9 +154,7 @@ into a single constant.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_chain_state_eq_pos, thm:ldpolar_tensor_injective_on,
-        thm:ldpolar_tensor_decomposition,
-        lem:ldp_block_isometry_state_overlap, def:prep_bond_regrouping}
+    \uses{thm:ldp_chain_state_eq_pos,thm:ldpolar_tensor_injective_on,thm:ldpolar_tensor_decomposition,lem:ldp_block_isometry_state_overlap,def:prep_bond_regrouping}
     Expanding both vectors and summing over the configurations $s=(s_k)_k$
     factor by factor gives (\ref{eq:ldp_chain_block_gram}), since
     $\sum_{s_k}\overline{(W_k)_{s_ka}}(W_k)_{s_kb}=(W_k^\dagger W_k)_{ab}$. For
@@ -215,7 +212,7 @@ into a single constant.
         VaryingBondChain.padPair,
         VaryingBondChain.padPairs}
     \leanok
-    \uses{def:ldp_chain_block_tensor, def:ldp_chain_pos_state}
+    \uses{def:ldp_chain_block_tensor,def:ldp_chain_pos_state}
     Let $D_1,\dots,D_N\le D$ be the dimensions of the bonds of the ring, the bond
     $k$ joining site $k-1$ to site $k$, cyclically, and let site $k$ carry
     matrices $A_k^i$ of size $D_k\times D_{k+1}$. The state of the chain is
@@ -268,7 +265,7 @@ into a single constant.
         VaryingBondChain.mem_blockCorner_of_pairFamilyState_ne_zero,
         VaryingBondChain.pairFamilyVector_padPairs_eq_zero}
     \leanok
-    \uses{def:ldp_varying_bond_chain, def:ldpolar_injective_on}
+    \uses{def:ldp_varying_bond_chain,def:ldpolar_injective_on}
     On a ring of $N\ge1$ sites the padded chain has the state $\ket{\phi_N}$ of
     the chain. If all bonds already have dimension $D$, zero padding leaves
     every matrix unchanged. If every block has at least one site, the blocked tensor $B_k$
@@ -280,7 +277,7 @@ into a single constant.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:ldp_chain_block_tensor, def:ldp_chain_pos_state}
+    \uses{def:ldp_chain_block_tensor,def:ldp_chain_pos_state}
     The trace of the product of the padded matrices is the sum over cyclic bond
     configurations $g$ of $\prod_k(A_k^{s_k})_{g_kg_{k+1}}$ with padded entries,
     and a term vanishes unless $g_k<D_k$ for every $k$; the remaining terms are
@@ -335,8 +332,7 @@ into a single constant.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_tensor_injective_on,
-        lem:ldp_sequential_factorization_first_inputs}
+    \uses{thm:ldpolar_tensor_injective_on,lem:ldp_sequential_factorization_first_inputs}
     By Lemma~\ref{thm:ldpolar_tensor_injective_on}, $V=BG$ for a matrix $G$
     on the bond pairs, and the columns $V\ket{\pi(x)}$, $x<\lvert S\rvert$, are
     orthonormal. Reordering the inputs by $\pi$ and applying
@@ -368,8 +364,7 @@ into a single constant.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldpolar_tensor_injective_on,
-        lem:ldp_sequential_factorization_first_inputs}
+    \uses{thm:ldpolar_tensor_injective_on,lem:ldp_sequential_factorization_first_inputs}
     Since $V^\dagger V=\Pi$ and $T$ is unitary, $(VT)^\dagger VT=T^\dagger\Pi
         T=\Lambda$. So the first $r$ columns of $VT$ are orthonormal and the
     others have norm zero. By Lemma~\ref{thm:ldpolar_tensor_injective_on},
@@ -387,7 +382,7 @@ into a single constant.
         MPSPreparation.exists_pairEquiv_val_lt_card_iff_mem,
         MPSPreparation.isPreparedInDepth_zero_of_le_one}
     \leanok
-    \uses{def:ldp_chain_pos_state, def:qc_local_circuit, def:ldpolar_injective_on}
+    \uses{def:ldp_chain_pos_state,def:qc_local_circuit,def:ldpolar_injective_on}
     There is $C$, depending only on $d$ and $D$, such that the following
     holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be tensors of bond dimension $D$
@@ -402,10 +397,7 @@ into a single constant.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_unitary_implementing_isometry,
-        thm:ldp_sequential_factorization_on,
-        thm:ldp_block_sum_unitary,
-        thm:qc_bounded_unitary_two_site_gates}
+    \uses{thm:ldp_unitary_implementing_isometry,thm:ldp_sequential_factorization_on,thm:ldp_block_sum_unitary,thm:qc_bounded_unitary_two_site_gates}
     For $d\le1$ there is at most one configuration, and a product vector
     carries any amplitude on it. For $D=0$ there is no unit pair. Otherwise
     $d\ge2$, so $D\le d^D$, and each bond index is encoded in $D$ sites. The
@@ -448,8 +440,7 @@ into a single constant.
         MPSPreparation.extend_inputCfg,
         MPSPreparation.exists_blockUnitary_of_equiv_mul}
     \leanok
-    \uses{thm:ldp_block_sum_unitary, thm:qc_bounded_unitary_two_site_gates,
-        thm:ldp_unitary_implementing_isometry}
+    \uses{thm:ldp_block_sum_unitary,thm:qc_bounded_unitary_two_site_gates,thm:ldp_unitary_implementing_isometry}
     Let $D\ge1$, encode the bond indices injectively in $r_1\ge1$ sites, let $\pi$
     enumerate the bond pairs, and let $Q_1,\dots,Q_q$ be an isometric chain
     with $b_0=1$, as in Lemma~\ref{thm:ldp_block_sum_unitary}. There is $C$,
@@ -478,8 +469,7 @@ into a single constant.
     \label{thm:ldp_isometric_extension_unitary}
     \lean{MPSPreparation.exists_blockUnitary_isometricExtension}
     \leanok
-    \uses{lem:ldp_projector_basis, lem:ldp_block_unitary_gate,
-        thm:ldp_sequential_factorization_partial}
+    \uses{lem:ldp_projector_basis,lem:ldp_block_unitary_gate,thm:ldp_sequential_factorization_partial}
     Encode the bond indices injectively in $D\ge1$ sites. There is $C$ such
     that for every $q\ge3D$ and all tensors $A_1,\dots,A_q$ of bond dimension
     $D$, one on each site, with blocked tensor $B=VP$ and $V^\dagger V=\Pi$,
@@ -509,7 +499,7 @@ into a single constant.
         MPSPreparation.chainState_eq_blockMatVector,
         MPSPreparation.inner_blockMatVector_chainState_normalize}
     \leanok
-    \uses{def:ldp_chain_pos_state, thm:ldp_chain_state_eq_pos}
+    \uses{def:ldp_chain_pos_state,thm:ldp_chain_state_eq_pos}
     For matrices $W_k$ from $\C^{D^2}$ to the sites of block $k$, let
     $(\bigotimes_kW_k)x$ have the coefficient $\sum_a\prod_k\bra{s_k}W_k\ket{a_k}x(a)$
     at the configuration $s$ read block by block; for $W_k=V_k$ it is the
@@ -530,8 +520,7 @@ into a single constant.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:ldp_block_isometry_state_overlap,
-        thm:ldpolar_tensor_decomposition, thm:ldp_chain_block_iso_inner}
+    \uses{lem:ldp_block_isometry_state_overlap,thm:ldpolar_tensor_decomposition,thm:ldp_chain_block_iso_inner}
     Expanding the inner product over the configurations read block by block,
     $\sum_{s_k}\overline{(W_k)_{s_ka}}(W_k)_{s_kb}=\delta_{ab}$ factor by factor
     gives $\langle x,y\rangle$, as in
@@ -549,8 +538,7 @@ into a single constant.
     \lean{MPSPreparation.exists_isPreparedInDepth_blockMatVector,
         MPSPreparation.blockMatVector_pairFamilyVector_eq_mulVec}
     \leanok
-    \uses{thm:ldp_isometric_extension_unitary,
-        thm:ldp_isometric_extension_overlap, thm:ldp_chain_depth}
+    \uses{thm:ldp_isometric_extension_unitary,thm:ldp_isometric_extension_overlap,thm:ldp_chain_depth}
     Let $D^2\le d^{3D}$. There is $C$, depending only on $d$ and $D$, such that
     the following holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be tensors of bond dimension $D$,
@@ -577,8 +565,7 @@ into a single constant.
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_isometricExtension,
         MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
     \leanok
-    \uses{def:ldp_varying_bond_chain, def:ldp_pair_approximable,
-        def:qc_local_circuit, thm:ldp_isometric_extension_depth}
+    \uses{def:ldp_varying_bond_chain,def:ldp_pair_approximable,def:qc_local_circuit,thm:ldp_isometric_extension_depth}
     Let $D^2\le d^{3D}$. There is $C$, depending only on $d$ and $D$, such that
     the following holds. Cut the ring of $N\ge1$ sites into $M\ge1$ blocks of lengths
     $3D\le\ell_k\le L$, let $A_1,\dots,A_N$ be a chain with bond dimensions at
@@ -617,8 +604,7 @@ into a single constant.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:ldp_zero_pad, thm:ldp_isometric_extension_overlap,
-        thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner}
+    \uses{thm:ldp_zero_pad,thm:ldp_isometric_extension_overlap,thm:ldp_chain_depth,thm:ldp_chain_block_iso_inner}
     The padded pairs are unit vectors by Lemma~\ref{thm:ldp_zero_pad}, and
     Lemma~\ref{thm:ldp_isometric_extension_depth} for the padded chain gives
     the isometries and the depth. The norm of $\ket\psi$ is
@@ -638,7 +624,7 @@ into a single constant.
     \label{cor:ldp_inhomogeneous_injective}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous}
     \leanok
-    \uses{thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner, thm:ldp_zero_pad}
+    \uses{thm:ldp_chain_depth,thm:ldp_chain_block_iso_inner,thm:ldp_zero_pad}
     There is $C$, depending only on $d$ and $D$, such that in the setting of
     Lemma~\ref{thm:ldp_inhomogeneous}, for any $d$, if every blocked
     tensor is injective in the sense of
@@ -668,8 +654,7 @@ into a single constant.
         MPSPreparation.exists_isPreparedInDepth_inhomogeneous_of_log_lower,
         MPSPreparation.exists_isPreparedInDepth_inhomogeneous_sequence}
     \leanok
-    \uses{thm:ldp_inhomogeneous, thm:ldp_short_chain_preparation,
-        def:ldp_pair_approximable}
+    \uses{thm:ldp_inhomogeneous,thm:ldp_short_chain_preparation,def:ldp_pair_approximable}
     Fix a physical dimension $d\ge1$, a bond bound $D$, and $c>0$.
     There are constants $C$ and $N_0$, depending only on $d,D,c$, with the
     following property. For every $N\ge1$, let $A^{(N)}$ be a chain with bond
@@ -709,8 +694,7 @@ into a single constant.
     \label{thm:ldp_inhomogeneous_exact}
     \lean{MPSPreparation.exists_isPreparedInDepth_normalizedChainState}
     \leanok
-    \uses{thm:ldp_isometric_extension_depth, thm:ldp_isometric_extension_overlap,
-        thm:ldp_short_chain_preparation}
+    \uses{thm:ldp_isometric_extension_depth,thm:ldp_isometric_extension_overlap,thm:ldp_short_chain_preparation}
     Fix $d\ge1$ and $D$. Applying the sequential circuit
     of~\cite{Malz2024Preparation} (including the isometric extension for a
     non-injective tensor) to a single block covering the ring yields a constant
@@ -735,8 +719,7 @@ into a single constant.
     \label{thm:ldp_inhomogeneous_uniform_rate}
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate}
     \leanok
-    \uses{thm:ldp_inhomogeneous, thm:ldp_inhomogeneous_exact,
-        def:ldp_pair_approximable, lem:ldp_log_threshold_error}
+    \uses{thm:ldp_inhomogeneous,thm:ldp_inhomogeneous_exact,def:ldp_pair_approximable,lem:ldp_log_threshold_error}
     Fix $d\ge1$ and a family $A^{(N)}$ of inhomogeneous chains with bond
     dimensions at most $D$. Suppose there are constants $K,r>0$ and an integer
     $k\ge0$, independent of $N$, such that at every scale $1\le q\le N$

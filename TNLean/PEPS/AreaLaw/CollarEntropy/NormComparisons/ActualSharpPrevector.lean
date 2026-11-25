@@ -39,7 +39,7 @@ theorem exists_actualScan_schmidtBellPrevector_sharp_upper
     {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I)
-    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hdepth : S.depth = fun x ↦ ManyBody.ambientDepth T hT x.val)
     (hm : 0 < S.m) (hM : 0 < S.M)
     (a Kmom r : ℝ) (ha : 0 < a) (har : 6 * a ≤ r) (ha1 : 6 * a ≤ 1)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)

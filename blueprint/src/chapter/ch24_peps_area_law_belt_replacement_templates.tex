@@ -42,8 +42,7 @@ in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
     \label{thm:area_law_belt_templates}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBelt_exists_template}
     \leanok
-    \uses{thm:area_law_fan_run_template,def:area_law_initial_birth_regions,
-        def:area_law_fine_belt_scales}
+    \uses{thm:area_law_fan_run_template,def:area_law_initial_birth_regions,def:area_law_fine_belt_scales}
     Let $C_{\mathrm{tpl}}\ge1$ and $C_B\ge16C_{\mathrm{tpl}}$. If a belt tile
     $B$ at layer $k$ satisfies $B\cap\mathbb Z^2\ne\varnothing$, then with
     $u=t_k$ there is a template $T=B\cap\mathbb Z^2$ with parameters
@@ -62,9 +61,7 @@ in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
         TNLean.PEPS.AreaLaw.Geometry.repairReplacementBirthRegion_exists_template,
         TNLean.PEPS.AreaLaw.Geometry.repairReplacement_exists_template}
     \leanok
-    \uses{thm:area_law_fan_run_template,thm:area_law_centered_fan_run_image,
-        def:area_law_repair_birth,def:area_law_repair_square,
-        def:area_law_repair_stage,def:area_law_repair_ancestors}
+    \uses{thm:area_law_fan_run_template,thm:area_law_centered_fan_run_image,def:area_law_repair_birth,def:area_law_repair_square,def:area_law_repair_stage,def:area_law_repair_ancestors}
     Let $S_*\ge1$, $C_{\mathrm{tpl}}\ge1$, and $C_B\ge32C_{\mathrm{tpl}}$. If a
     replacement with parent scale $S$, removal half-side $u=d(S)$, and birth
     region $B$ satisfies $B\cap\mathbb Z^2\ne\varnothing$, then there is a
@@ -136,8 +133,7 @@ and~\ref{thm:area_law_replacement_templates} holds for every retained region:
         TNLean.PEPS.AreaLaw.Geometry.repairStage_exists_integerPoint_mem_birth_of_oldInclusion,
         TNLean.PEPS.AreaLaw.Geometry.repairStage_retained_exists_integerPoint_mem_birth}
     \leanok
-    \uses{thm:area_law_repair_current_birth_containment,
-        def:area_law_repair_inclusions,def:area_law_repair_region_sites}
+    \uses{thm:area_law_repair_current_birth_containment,def:area_law_repair_inclusions,def:area_law_repair_region_sites}
     Retaining an identifier from generation $j$ to $j'\ge j$ preserves its birth
     region $B$; if its current region $R_{j'}$ at generation $j'$ meets
     $A\subseteq\mathbb Z^2$, then $B\cap\mathbb Z^2\ne\varnothing$ (in

@@ -6,7 +6,7 @@
     \label{ex:all-phases-under-conjugation}
     \notready
     \discussion{5715}
-    \uses{conjphs, prop:conjsym-strict-equiv, corconj, cor:sympl-to-orthogonal}
+    \uses{conjphs,prop:conjsym-strict-equiv,corconj,cor:sympl-to-orthogonal}
     Let $u_+=v_+=\Id_{r\ell}$ and
     $u_-=v_-=\operatorname{diag}(-1,1,\ldots,1)$. If at least one of $r$ and
     $\ell$ is odd, $(u_+,v_+)$ and $(u_+,v_-)$ realize the two classes of
@@ -17,8 +17,7 @@
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:mpu_conjugation_example_gate_invariants, conjphs, prop:conjsym-strict-equiv,
-        lem:mpu_conjugation_odd_rank_two_phases}
+    \uses{lem:mpu_conjugation_example_gate_invariants,conjphs,prop:conjsym-strict-equiv,lem:mpu_conjugation_odd_rank_two_phases}
     The gates generate conjugation-invariant MPUs with the case and
     determinants recorded in
     Lemma~\ref{lem:mpu_conjugation_example_gate_invariants}. When one rank is
@@ -35,8 +34,7 @@
         MPOTensor.ConjugationExamples.exists_isMPUCanonicalForm_signGates}
     \leanok
     \discussion{5715}
-    \uses{conjphs, lem:mpu_conjugation_example_gate_invariants,
-        thm:mpu_standard_form_canonical_representative, lem:mpu_conjugation_one_site_determinant}
+    \uses{conjphs,lem:mpu_conjugation_example_gate_invariants,thm:mpu_standard_form_canonical_representative,lem:mpu_conjugation_one_site_determinant}
     Suppose one of $\ell,r$ is odd and fix an identification of
     $\mathbb C^\ell\otimes\mathbb C^r$ with $\mathbb C^d\otimes\mathbb C^d$. There
     are tensors on pairs of sites in canonical form, invariant under
@@ -70,7 +68,7 @@
         MPOTensor.ConjugationExamples.det_regroupedR}
     \leanok
     \discussion{5715}
-    \uses{prop1conj, corconj, cor:sympl-to-orthogonal, def:mpu_tensor_from_two_gates}
+    \uses{prop1conj,corconj,cor:sympl-to-orthogonal,def:mpu_tensor_from_two_gates}
     Fix an identification of $\mathbb C^\ell\otimes\mathbb C^r$ with
     $\mathbb C^d\otimes\mathbb C^d$, and let
     $u_\pm,v_\pm\in\{\Id,\operatorname{diag}(-1,1,\ldots,1)\}$, with $u_+=v_+=\Id$.
@@ -167,7 +165,7 @@
         MPOTensor.TimeReversalExamples.intrinsicTimeReversalSign_blockTwo_czx}
     \leanok
     \discussion{5715}
-    \uses{def:mpu_tensor_from_two_gates, thm:mpu_supplied_two_site_periodic_circuit, lem:mpu_source_time_reversal_sign_independent, cor:all-equivalent-under-conjugation, thm:mpu_example_time_reversal_trace_signs, thm:czx_printed_normalization_obstruction}
+    \uses{def:mpu_tensor_from_two_gates,thm:mpu_supplied_two_site_periodic_circuit,lem:mpu_source_time_reversal_sign_independent,cor:all-equivalent-under-conjugation,thm:mpu_example_time_reversal_trace_signs,thm:czx_printed_normalization_obstruction}
     The CZX MPU of Chen, Liu and Wen~\cite{ChenLiuWen2011CZX} (see also
     \cite[lines~1906--1943]{Cirac2017MPU}) is defined by
     \begin{align}
@@ -268,7 +266,7 @@
         MPOTensor.TimeReversalExamples.timeReversalSign_I_smul_one,
         MPOTensor.TimeReversalExamples.timeReversalSign_I_smul_czx}
     \leanok
-    \uses{eq:sigma-from-trace, lem:mpu_supplied_time_reversal_sign}
+    \uses{eq:sigma-from-trace,lem:mpu_supplied_time_reversal_sign}
     For gates $u,v$ on $\mathbb C^2\otimes\mathbb C^2$ let
     \begin{align}
         s(u,v) & =\frac14\tr\!\left[\mathbb S_{12,34}
@@ -309,7 +307,7 @@
     \lean{MPOTensor.rightRank_leftShiftTensor}
     \lean{MPOTensor.leftRank_leftShiftTensor}
     \leanok
-    \uses{def:mpu_shift_tensors, def:mpu_source_matrix_one, def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank}
+    \uses{def:mpu_shift_tensors,def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank}
     Let $A$ be the right-shift tensor and let
     $z_{(\alpha,i)}=\delta_{\alpha i}$ be the vectorized identity. Its
     source cuts are
@@ -337,7 +335,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_shift_tensors, def:mpu_source_matrix_one, def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank, thm:mpu_physical_adjoint_source_cuts, thm:mpu_physical_adjoint_source_ranks}
+    \uses{def:mpu_shift_tensors,def:mpu_source_matrix_one,def:mpu_source_matrix_two,def:mpu_right_rank,def:mpu_left_rank,thm:mpu_physical_adjoint_source_cuts,thm:mpu_physical_adjoint_source_ranks}
     The entry formula $A^{ij}_{\alpha\beta}
         =\delta_{i\alpha}\delta_{j\beta}$ gives $M_1(A)=\Id$ and
     $M_2(A)=zz^{\mathsf T}$. Hence the first rank is $d^2$. For $d>0$, the
@@ -383,8 +381,7 @@
         MPOTensor.shiftExampleU₃_isMPUCanonicalForm,
         MPOTensor.IsMPU.conjugatePhysical, MPOTensor.IsMPU.bondConj}
     \leanok
-    \uses{threeMPU, def:strictly-equivalent-tensors, thm:mpu_canonical_form_of_cfii,
-        thm:mpu-continuous-unitary-swap-path}
+    \uses{threeMPU,def:strictly-equivalent-tensors,thm:mpu_canonical_form_of_cfii,thm:mpu-continuous-unitary-swap-path}
     For $d\geq1$ the tensors $U_2=T^\dagger\otimes T$ and $U_3=T\otimes T^\dagger$ are in
     canonical form and strictly equivalent, with no bond directions adjoined.
     Conjugating the physical legs of a tensor by a unitary, or its bond space by a
@@ -395,7 +392,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_of_cfii, thm:mpu-continuous-unitary-swap-path}
+    \uses{thm:mpu_canonical_form_of_cfii,thm:mpu-continuous-unitary-swap-path}
     The letter of $U_3$ at the exchanged physical indices is the letter of $U_2$
     conjugated on the bond by the factor exchange $\mathbb S$. Let $\mathbb S(x)$,
     $x\in[0,1]$, be the continuous unitary path from the identity to $\mathbb S$.
@@ -414,7 +411,7 @@
         MPOTensor.shiftPaperWeightSquared,
         MPOTensor.shiftPaperWeightSquared_eq}
     \leanok
-    \uses{def:mpu_source_weight, def:mpu_shift_tensors, threeMPU}
+    \uses{def:mpu_source_weight,def:mpu_shift_tensors,threeMPU}
     Canonical form II requires the positive right fixed point $\rho$ to have
     trace one. If the virtual weight on the bond space of a single shift is
     chosen to be a scalar identity, this normalization forces
@@ -475,7 +472,7 @@
     \label{def:mpu_right_shift_paper_source_factors}
     \lean{MPOTensor.rightShiftPaperSourceFactors}
     \leanok
-    \uses{def:mpu_shift_trace_weight, def:threeMPU_supplied_source_factors}
+    \uses{def:mpu_shift_trace_weight,def:threeMPU_supplied_source_factors}
     Assume $d>0$, and let $T$ be the right-shift tensor. Starting from the
     displayed source factors for $T$ with identity weight, rescale the first
     cut by
@@ -504,8 +501,7 @@
         MPOTensor.sourceU_rightShiftPaperSourceFactors_gram,
         MPOTensor.sourceU_rightShiftPaperSourceFactors_isIsometry}
     \leanok
-    \uses{def:mpu_right_shift_paper_source_factors, def:mpu_source_uv,
-        thm:mpu_shift_source_cuts_ranks}
+    \uses{def:mpu_right_shift_paper_source_factors,def:mpu_source_uv,thm:mpu_shift_source_cuts_ranks}
     Assume $d>0$. Identify the unique left source coordinate with $0$ and the
     right source coordinate with $(a,b)$. For the trace-normalized source
     factors of the right shift,
@@ -527,7 +523,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_right_shift_paper_source_factors, def:mpu_source_uv}
+    \uses{def:mpu_right_shift_paper_source_factors,def:mpu_source_uv}
     For the identity-weight factors, direct substitution in
     $u=Y_2\mathbin{-}Y_1$ gives
     \begin{align}
@@ -549,7 +545,7 @@
     \label{thm:threeMPU_local_physical_swap}
     \lean{MPOTensor.shiftExampleU₃_physicalSwap_eq_swapMatrix_mul_shiftExampleU₂_mul_swapMatrix}
     \leanok
-    \uses{threeMPU, def:mpu_shift_tensors, def:mpu_independent_tensor_product}
+    \uses{threeMPU,def:mpu_shift_tensors,def:mpu_independent_tensor_product}
     Write $[U_a]^{(i_1,i_2),(j_1,j_2)}$ for the virtual matrix of the
     one-site tensor $U_a$ with physical output coordinate $(i_1,i_2)$ and
     input coordinate $(j_1,j_2)$. Let $\mathbb S$ be the SWAP matrix on the
@@ -570,7 +566,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{threeMPU, def:mpu_shift_tensors, def:mpu_independent_tensor_product}
+    \uses{threeMPU,def:mpu_shift_tensors,def:mpu_independent_tensor_product}
     In virtual coordinates $(\alpha_1,\alpha_2)$ and
     $(\beta_1,\beta_2)$, multiplication by $\mathbb S$ on both sides selects
     the entry with row $(\alpha_2,\alpha_1)$ and column
@@ -595,9 +591,7 @@
         MPOTensor.sourceIndexValue_shiftExampleU₂,
         MPOTensor.sourceIndexValue_shiftExampleU₃}
     \leanok
-    \uses{def:mpu_specified_source_index_value,
-        thm:mpu_shift_source_cuts_ranks,
-        thm:mpu_tensor_product_source_ranks, threeMPU}
+    \uses{def:mpu_specified_source_index_value,thm:mpu_shift_source_cuts_ranks,thm:mpu_tensor_product_source_ranks,threeMPU}
     Assume $d>0$. For the displayed right- and left-shift tensors $T$ and
     $T^\sharp$, the specified-tensor values are
     \begin{align}
@@ -625,9 +619,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_specified_source_index_value,
-        thm:mpu_shift_source_cuts_ranks,
-        thm:mpu_tensor_product_source_ranks, threeMPU}
+    \uses{def:mpu_specified_source_index_value,thm:mpu_shift_source_cuts_ranks,thm:mpu_tensor_product_source_ranks,threeMPU}
     The right shift has source ranks $(d^2,1)$, while the left shift has
     $(1,d^2)$. Substitution into the source-index expression gives the first
     two formulas. The identity tensor has equal source ranks $(d,d)$. Source
@@ -643,8 +635,7 @@
         MPOTensor.shiftExampleU₁_index, MPOTensor.shiftExampleU₂_index,
         MPOTensor.shiftExampleU₃_index}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_reduced_representative_index,
-        threeMPU}
+    \uses{def:mpu_canonical_form_ii,def:mpu_reduced_representative_index,threeMPU}
     Let $d>0$. The right shift is in canonical form II in its original bond
     coordinates, with ambient right fixed matrix $\rho=I/d$. The right and
     left shifts and the three two-spin families satisfy
@@ -660,12 +651,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_ii_stabilization_converse,
-        thm:mpu_shift_blocked_source_index_values,
-        prop:mpu_admissible_index_well_defined,
-        thm:mpu_reduced_representative_index_invariance,
-        thm:mpu_representative_index_blocking_adjoint,
-        thm:mpu_representative_index_tensor_product}
+    \uses{thm:mpu_canonical_form_ii_stabilization_converse,thm:mpu_shift_blocked_source_index_values,prop:mpu_admissible_index_well_defined,thm:mpu_reduced_representative_index_invariance,thm:mpu_representative_index_blocking_adjoint,thm:mpu_representative_index_tensor_product}
     The normalized transfer map of the right shift sends $X$ to
     $\operatorname{tr}(X)I/d$. Its positive diagonal fixed matrix $I/d$
     gives a canonical-form-II presentation. The source-rank computation
@@ -705,12 +691,7 @@
         MPOTensor.rightRank_blockTensor_rightShiftTensor_ne_leftRank,
         MPOTensor.sourceIndexValue_blockTensor_rightShiftTensor_ne_zero}
     \leanok
-    \uses{def:mpu_simple, thm:mpu_bounded_simple_blocking,
-        def:mpu_specified_source_index_value,
-        thm:mpu_specified_source_index_identities,
-        thm:mpu_physical_adjoint_source_ranks,
-        thm:mpu_tensor_product_source_ranks, thm:mpu_source_ranks_physical_reindexing,
-        threeMPU, thm:mpu_block_tensor_product, thm:mpu_simple_tensor_product}
+    \uses{def:mpu_simple,thm:mpu_bounded_simple_blocking,def:mpu_specified_source_index_value,thm:mpu_specified_source_index_identities,thm:mpu_physical_adjoint_source_ranks,thm:mpu_tensor_product_source_ranks,thm:mpu_source_ranks_physical_reindexing,threeMPU,thm:mpu_block_tensor_product,thm:mpu_simple_tensor_product}
     Assume $d>0$ and let $k\ge0$. The right-shift tensor $T$ and the
     left-shift tensor $T^\sharp$ are simple, and so are their blockings
     $T_{k+1}$ and $T^\sharp_{k+1}$ over $k+1$ sites. The blocked letters are
@@ -755,12 +736,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_simple, thm:mpu_bounded_simple_blocking,
-        thm:mpu_physical_adjoint_source_ranks,
-        thm:mpu_tensor_product_source_ranks,
-        thm:mpu_source_ranks_physical_reindexing,
-        thm:mpu_specified_source_index_identities, thm:mpu_block_tensor_product, thm:mpu_double_layer_blocking,
-        thm:mpu_simple_tensor_product}
+    \uses{def:mpu_simple,thm:mpu_bounded_simple_blocking,thm:mpu_physical_adjoint_source_ranks,thm:mpu_tensor_product_source_ranks,thm:mpu_source_ranks_physical_reindexing,thm:mpu_specified_source_index_identities,thm:mpu_block_tensor_product,thm:mpu_double_layer_blocking,thm:mpu_simple_tensor_product}
     With $\Phi=\sum_j|jj)$, the double-layer letters of $T$ are
     $|\Phi)(ik|$, so the boundary vectors $|00)$ and $\Phi$ satisfy both
     simplicity identities; for $T^\sharp$ the letters are $|ik)(\Phi|$ and the
@@ -802,7 +778,7 @@
         MPOTensor.shiftExampleU₂SourceFactors,
         MPOTensor.shiftExampleU₃SourceFactors}
     \leanok
-    \uses{threeMPU, def:mpu_weighted_source_factors, thm:mpu_shift_source_cuts_ranks}
+    \uses{threeMPU,def:mpu_weighted_source_factors,thm:mpu_shift_source_cuts_ranks}
     Assume $d>0$. Equip $U_1$ with the tensor product of the two bond-one
     identity source factorizations.  Equip $U_2$ with the tensor product of the
     left-shift and right-shift source factorizations, in that order, and equip
@@ -846,7 +822,7 @@
         MPOTensor.shiftExampleU₁_sourceU_fourSpin_apply,
         MPOTensor.shiftExampleU₁_sourceV_fourSpin_apply}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
+    \uses{def:threeMPU_supplied_source_factors,def:mpu_source_uv}
     In the four-spin coordinates of the explicit source factorization,
     \begin{align}
         u_1 & =\Id\otimes\Id,
@@ -855,7 +831,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
+    \uses{def:threeMPU_supplied_source_factors,def:mpu_source_uv}
     The tensor-product formulas for $u=Y_2\mathbin{-}Y_1$ and
     $v=X_1\mathbin{-}X_2$ reduce each entry to the product of two primitive
     identity entries.
@@ -870,8 +846,7 @@
         MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁,
         MPOTensor.shiftExampleU₂_blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
-        thm:mpu_source_v_open_two_site, thm:mpu_source_u_open_two_site}
+    \uses{def:threeMPU_supplied_source_factors,def:mpu_source_uv,thm:mpu_source_v_open_two_site,thm:mpu_source_u_open_two_site}
     Assume $d>0$. In the four-spin coordinates of the paper, the explicit
     source gates satisfy
     \begin{align}
@@ -885,8 +860,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
-        thm:mpu_source_v_open_two_site, thm:mpu_source_u_open_two_site}
+    \uses{def:threeMPU_supplied_source_factors,def:mpu_source_uv,thm:mpu_source_v_open_two_site,thm:mpu_source_u_open_two_site}
     The tensor-product formulas for the paper gates reduce their entries to
     products of the left- and right-shift source gates. The Kronecker deltas
     give the two displayed swap matrices, with the factors $d$ and $d^{-1}$
@@ -903,8 +877,7 @@
         MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_X₂_mul_sourceU_mul_X₁,
         MPOTensor.shiftExampleU₃_blockTwo_apply_eq_sum_sourceV_mul_Y₁_mul_Y₂}
     \leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
-        thm:mpu_source_v_open_two_site, thm:mpu_source_u_open_two_site}
+    \uses{def:threeMPU_supplied_source_factors,def:mpu_source_uv,thm:mpu_source_v_open_two_site,thm:mpu_source_u_open_two_site}
     Assume $d>0$. In the four-spin coordinates of the paper, the explicit
     source gates satisfy
     \begin{align}
@@ -918,8 +891,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
-        thm:mpu_source_v_open_two_site, thm:mpu_source_u_open_two_site}
+    \uses{def:threeMPU_supplied_source_factors,def:mpu_source_uv,thm:mpu_source_v_open_two_site,thm:mpu_source_u_open_two_site}
     Reversing the two primitive shift factors in the tensor-product formulas for
     $u$ and $v$ makes their Kronecker deltas give the displayed ordered swap products,
     with the factors $d$ and $d^{-1}$ fixed by the identity-weight normalization, and
@@ -936,8 +908,7 @@
         MPOTensor.shiftExampleU₂PaperSourceFactors,
         MPOTensor.shiftExampleU₃PaperSourceFactors}
     \leanok
-    \uses{threeMPU, def:mpu_weighted_source_factors,
-        def:mpu_source_uv, def:mpu_shift_trace_weight}
+    \uses{threeMPU,def:mpu_weighted_source_factors,def:mpu_source_uv,def:mpu_shift_trace_weight}
     For $d>0$, the two counterpropagating shift tensors have source factors
     with trace-one weight $\rho=d^{-2}\Id_{d^2}$. In the four-spin coordinates
     used above, their source gates are
@@ -949,8 +920,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:threeMPU_supplied_source_factors, thm:threeMPU_U2_supplied_source_gates_two,
-        thm:threeMPU_U3_supplied_source_gates_two}
+    \uses{def:threeMPU_supplied_source_factors,thm:threeMPU_U2_supplied_source_gates_two,thm:threeMPU_U3_supplied_source_gates_two}
     Starting with the identity-weight source factors, replace
     $X_1,Y_1,Z_1$ by $dX_1,d^{-1}Y_1,dZ_1$, respectively, and leave the
     second cut unchanged. The cut factorizations and right inverses are
@@ -976,8 +946,7 @@
         MPOTensor.shiftExampleU₂BlockedStandardForm,
         MPOTensor.shiftExampleU₃BlockedStandardForm}
     \leanok
-    \uses{threeMPU, def:mpu_supplied_two_site_standard_form,
-        def:mpu_shift_trace_weight}
+    \uses{threeMPU,def:mpu_supplied_two_site_standard_form,def:mpu_shift_trace_weight}
     Assume $d>0$. The three shift families have two-site decompositions
     with given gates whose unitary gates satisfy
     \begin{align}
@@ -1003,9 +972,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_source_weight, thm:threeMPU_normalized_source_gates,
-        thm:mpu_source_u_open_two_site, thm:threeMPU_four_spin_matrix_unitarity,
-        thm:mpu_swap_matrix_unitary}
+    \uses{def:mpu_source_weight,thm:threeMPU_normalized_source_gates,thm:mpu_source_u_open_two_site,thm:threeMPU_four_spin_matrix_unitarity,thm:mpu_swap_matrix_unitary}
     For the identity family, take
     $X_1(i,\gamma;r)=\delta_{i,r}$ and
     $X_2(\alpha,i;\ell)=\delta_{i,\ell}$. For the unblocked third family, take
@@ -1057,7 +1024,7 @@
     \lean{MPOTensor.shiftExampleTildeU₂}
     \lean{MPOTensor.shiftExampleTildeU₃}
     \leanok
-    \uses{threeMPU, def:mpu_physical_pair_swap}
+    \uses{threeMPU,def:mpu_physical_pair_swap}
     Let $\mathbb S$ exchange the two $d$-dimensional spins at one site, with
     matrix entries
     \begin{align}
@@ -1087,8 +1054,7 @@
     \lean{MPOTensor.shiftExampleTildeU₂_isMPU}
     \lean{MPOTensor.shiftExampleTildeU₃_isMPU}
     \leanok
-    \uses{threeMPU2, thm:threeMPU_chain_formulas,
-        def:mpdo_sitewise_physical_matrix, def:mpu}
+    \uses{threeMPU2,thm:threeMPU_chain_formulas,def:mpdo_sitewise_physical_matrix,def:mpu}
     On every nonempty chain,
     \begin{align}
         \widetilde U_1^{(N)} & =\mathbb S^{\otimes N}, \\
@@ -1102,8 +1068,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{threeMPU2, thm:threeMPU_chain_formulas,
-        def:mpdo_sitewise_physical_matrix, def:mpu}
+    \uses{threeMPU2,thm:threeMPU_chain_formulas,def:mpdo_sitewise_physical_matrix,def:mpu}
     Acting by a one-site matrix $P$ on every output physical index gives
     \begin{align}
         \operatorname{MPO}_N(P\mathcal M)
@@ -1127,7 +1092,7 @@
     \label{thm:tildeU3}
     \lean{MPOTensor.mpo_shiftExampleTildeU₃_eq_swap_mul_tildeU₂_mul_swap}
     \leanok
-    \uses{threeMPU2, thm:threeMPU2_chain_formulas}
+    \uses{threeMPU2,thm:threeMPU2_chain_formulas}
     On every nonempty chain,
     \begin{align}
         \widetilde U_3^{(N)}
@@ -1155,8 +1120,7 @@
         MPOTensor.shiftExampleTildeU₁StandardForm,
         MPOTensor.shiftExampleTildeU₂StandardForm}
     \leanok
-    \uses{threeMPU2, def:mpu_supplied_two_site_standard_form,
-        def:mpu_shift_trace_weight}
+    \uses{threeMPU2,def:mpu_supplied_two_site_standard_form,def:mpu_shift_trace_weight}
     For $d>0$, the first two transformed families have two-site
     decompositions with given gates and normalized half factors, with gates
     \begin{align}
@@ -1172,9 +1136,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{threeMPU2, thm:threeMPU_supplied_decompositions,
-        def:mpu_source_weight, def:mpu_supplied_two_site_standard_form,
-        thm:mpu_swap_matrix_unitary}
+    \uses{threeMPU2,thm:threeMPU_supplied_decompositions,def:mpu_source_weight,def:mpu_supplied_two_site_standard_form,thm:mpu_swap_matrix_unitary}
     The physical swap exchanges the two output indices of each tensor.
     For the first family, retain the identity family's half factors and
     replace its unshifted gate by the swap. For the second family, choose
@@ -1219,8 +1181,7 @@
         MPOTensor.strictlyEquivalentUnderSymmetry_conjugation_ketLeftMul_swap_iff}
     \leanok
     \discussion{5715}
-    \uses{threeMPU, threeMPU2, def:strictly-equivalent-symmetry,
-        def:mpu_swap_comparison_symmetries}
+    \uses{threeMPU,threeMPU2,def:strictly-equivalent-symmetry,def:mpu_swap_comparison_symmetries}
     Two MPUs $U_i^{(N)}$ and $U_j^{(N)}$ are in the same phase under time
     reversal combined with the local swap, transposition combined with the
     local swap, or conjugation if and only if the corresponding
@@ -1243,9 +1204,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_one_sided_swap_invariance,
-        thm:mpu_symmetry_path_transport,
-        thm:threeMPU2_chain_formulas}
+    \uses{thm:mpu_one_sided_swap_invariance,thm:mpu_symmetry_path_transport,thm:threeMPU2_chain_formulas}
     Since the swap $Q=\mathbb S$ is a unitary involution and
     Lemma~\ref{thm:mpu_one_sided_swap_invariance} gives the three
     pointwise invariance equivalences,
@@ -1263,7 +1222,7 @@
         MPOTensor.shiftExampleU₁BlockedStandardForm}
     \leanok
     \discussion{5715}
-    \uses{threeMPU, thm:threeMPU_supplied_decompositions, thm:mpu_shift_public_index_values, thm:mpu_conjugation_odd_rank_if, thm:mpu_conjugation_even_rank_if}
+    \uses{threeMPU,thm:threeMPU_supplied_decompositions,thm:mpu_shift_public_index_values,thm:mpu_conjugation_odd_rank_if,thm:mpu_conjugation_even_rank_if}
     After blocking two sites, $U_2^{(N)}$ and $U_3^{(N)}$ are both in the
     trivial phase under conjugation.
     % Source lines: paper_v2.tex 2110--2134.
@@ -1362,9 +1321,7 @@
         Matrix.transpose_swapPath}
     \leanok
     \discussion{5715}
-    \uses{threeMPU2, thm:tildeU3, thm:mpu-continuous-unitary-swap-path,
-        def:strictly-equivalent-symmetry, def:mpu_swap_comparison_symmetries,
-        lemma:sym-trafo-swap}
+    \uses{threeMPU2,thm:tildeU3,thm:mpu-continuous-unitary-swap-path,def:strictly-equivalent-symmetry,def:mpu_swap_comparison_symmetries,lemma:sym-trafo-swap}
     The MPUs $\widetilde U_2^{(N)}$ and $\widetilde U_3^{(N)}$ are strictly
     equivalent under time reversal and under transposition, imposed as
     $X^\dagger=X$ and $X^{\mathsf T}=X$ on every chain of positive length.
@@ -1410,7 +1367,7 @@
     \label{prop:eqiv-U1-U2-conjugate}
     \notready
     \discussion{5715}
-    \uses{threeMPU2, lemma:sym-trafo-swap, conjphs, prop:conjsym-strict-equiv, cor:equiv-under-conjugation}
+    \uses{threeMPU2,lemma:sym-trafo-swap,conjphs,prop:conjsym-strict-equiv,cor:equiv-under-conjugation}
     The MPUs $U_1^{(N)}$ and $U_2^{(N)}$ lie in different strict conjugation
     phases exactly when $d=4k+2$ for a nonnegative integer $k$. Otherwise they
     lie in the same strict phase. All these phases are in Case I, so the two
@@ -1462,7 +1419,7 @@
         MPOTensor.shiftAncillaSwap₁aNext_apply}
     \leanok
     \discussion{7470}
-    \uses{def:mpu_shift_ancilla_config, def:mpo_rotate_config}
+    \uses{def:mpu_shift_ancilla_config,def:mpo_rotate_config}
     Let $R$ cyclically rotate configurations on the chain. The crossed swap is
     \begin{align}
         S^{1,a}_{+}((\sigma_1,\sigma_2),a)
@@ -1476,9 +1433,7 @@
     \lean{MPOTensor.shiftAncillaThreeSwap}
     \leanok
     \discussion{7470}
-    \uses{def:mpu_shift_ancilla_swap_12,
-        def:mpu_shift_ancilla_swap_2a,
-        def:mpu_shift_ancilla_swap_1a_next}
+    \uses{def:mpu_shift_ancilla_swap_12,def:mpu_shift_ancilla_swap_2a,def:mpu_shift_ancilla_swap_1a_next}
     Let $C$ be the permutation obtained by applying $S^{1,a}_{+}$ first, then
     $S^{1,2}$, and finally $S^{2,a}$.
     % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
@@ -1489,7 +1444,7 @@
     \lean{MPOTensor.shiftAncillaCounterShift}
     \leanok
     \discussion{7470}
-    \uses{def:mpu_shift_ancilla_config, def:mpo_rotate_config}
+    \uses{def:mpu_shift_ancilla_config,def:mpo_rotate_config}
     Define
     \begin{align}
         K((\sigma_1,\sigma_2),a)
@@ -1506,10 +1461,7 @@
         MPOTensor.permMatrix_shiftAncillaThreeSwap_conj_swap₁₂}
     \leanok
     \discussion{7470}
-    \uses{threeMPU2,
-        def:mpu_shift_ancilla_swap_12,
-        def:mpu_shift_ancilla_three_swap,
-        def:mpu_shift_ancilla_counter_shift}
+    \uses{threeMPU2,def:mpu_shift_ancilla_swap_12,def:mpu_shift_ancilla_three_swap,def:mpu_shift_ancilla_counter_shift}
     The three-swap circuit satisfies
     \begin{align}
         C^{-1}S^{1,2}C & =K.
@@ -1529,9 +1481,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpu_shift_ancilla_swap_12,
-        def:mpu_shift_ancilla_three_swap,
-        def:mpu_shift_ancilla_counter_shift}
+    \uses{def:mpu_shift_ancilla_swap_12,def:mpu_shift_ancilla_three_swap,def:mpu_shift_ancilla_counter_shift}
     Evaluating the three swaps gives
     \begin{align}
         C^{-1}S^{1,2}C((\sigma_1,\sigma_2),a)
@@ -1545,10 +1495,7 @@
     \label{prop:U1-U2-equiv-ancillatrick}
     \notready
     \discussion{5715}
-    \uses{threeMPU2,
-        lemma:sym-trafo-swap,
-        thm:mpu-continuous-unitary-swap-path,
-        def:strictly-equivalent-symmetry}
+    \uses{threeMPU2,lemma:sym-trafo-swap,thm:mpu-continuous-unitary-swap-path,def:strictly-equivalent-symmetry}
     After adding one ancilla of dimension $d$ per site,
     $\widetilde U_1^{(N)}$ and $\widetilde U_2^{(N)}$ are strictly equivalent
     under both time reversal and transposition.
@@ -1601,8 +1548,7 @@
     \lean{MPOTensor.swapMatrix_commute_timeReversalTwistedTransfer,
         MPOTensor.intrinsicTimeReversalSign_blockTensor_eq_twistedTransfer_trace}
     \leanok
-    \uses{def:mpu_time_reversal_twisted_transfer,
-        lem:mpu_time_reversal_blocked_open_words}
+    \uses{def:mpu_time_reversal_twisted_transfer,lem:mpu_time_reversal_blocked_open_words}
     Let $F_D$ exchange the two bond factors. Then $F_DT_W=T_WF_D$, and the
     normalized intrinsic exchange trace of each block is
     \begin{align}
@@ -1642,8 +1588,7 @@
     \label{lem:mpu_canonical_twisted_transfer_comparison}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_twistedTransfer_signed_unitary_comparison}
     \leanok
-    \uses{lem:mpu_even_family_virtual_sign_gauge,
-        def:mpu_time_reversal_twisted_transfer}
+    \uses{lem:mpu_even_family_virtual_sign_gauge,def:mpu_time_reversal_twisted_transfer}
     Let $U$ be a canonical-form-II MPU tensor and suppose that
     $U^{(N)}=U^{(N)\dagger}$ for every even $N>1$.
     There are a sign $\eta\in\{1,-1\}$ and a virtual unitary $z$ such that,
@@ -1664,9 +1609,7 @@
     \label{lem:mpu_canonical_intrinsic_blocking_phase_formula}
     \lean{MPOTensor.IsMPUCanonicalFormII.exists_intrinsic_blocking_phase_formula}
     \leanok
-    \uses{lem:mpu_canonical_twisted_transfer_comparison,
-        lem:mpu_stabilized_commuting_weighted_trace,
-        lem:mpu_intrinsic_blocked_twisted_trace}
+    \uses{lem:mpu_canonical_twisted_transfer_comparison,lem:mpu_stabilized_commuting_weighted_trace,lem:mpu_intrinsic_blocked_twisted_trace}
     Under the same canonical and even-chain adjoint-symmetry assumptions,
     there are $\eta\in\{1,-1\}$ and $C\in\mathbb C$ such that
     \begin{align}
@@ -1727,9 +1670,7 @@
     \label{lem:mpu_intrinsic_blocking_parity}
     \lean{MPOTensor.IsMPU.intrinsic_blocking_trace_parity}
     \leanok
-    \uses{lem:mpu_intrinsic_blocked_trace_representative,
-        lem:mpu_canonical_intrinsic_blocking_parity,
-        thm:mpu_reduced_cfii_representative}
+    \uses{lem:mpu_intrinsic_blocked_trace_representative,lem:mpu_canonical_intrinsic_blocking_parity,thm:mpu_reduced_cfii_representative}
     Let $d,D>0$ and let $U$ be an MPU tensor satisfying
     $U^{(N)}=U^{(N)\dagger}$ at every even $N>1$. For each $k>0$,
     \[
@@ -1753,7 +1694,7 @@
     \label{lem:mpu_raw_cut_two_letter_contraction}
     \lean{MPOTensor.mul_apply_eq_sum_of_sourceCut_factorizations}
     \leanok
-    \uses{def:mpu_source_matrix_one, def:mpu_source_matrix_two}
+    \uses{def:mpu_source_matrix_one,def:mpu_source_matrix_two}
     Suppose the two source cuts of $U$ factor as $M_1=X_1Y_1$ and
     $M_2=X_2Y_2$, with arbitrary finite intermediate spaces. Put
     \[
@@ -1789,10 +1730,7 @@
     \label{lem:mpu_supplied_printed_two_block_standard_form}
     \lean{MPOTensor.TwoSiteStandardFormData.blockTwo}
     \leanok
-    \uses{def:mpu_printed_two_block_gates,
-        lem:mpu_raw_cut_two_letter_contraction,
-        lem:mpu_supplied_standard_form_source_cuts,
-        def:mpu_supplied_two_site_standard_form}
+    \uses{def:mpu_printed_two_block_gates,lem:mpu_raw_cut_two_letter_contraction,lem:mpu_supplied_standard_form_source_cuts,def:mpu_supplied_two_site_standard_form}
     Let $W$ have a supplied standard form with square gates $u,v$ and
     positive physical and bond dimensions. Its actual two-site block has
     a supplied standard form with exactly the preceding gates $u^{(2)},v^{(2)}$.

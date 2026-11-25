@@ -2,8 +2,7 @@
     \label{def:peps_torus_semiregular_bond_map}
     \lean{TNLean.PEPS.torusSemiRegularBondMap}
     \leanok
-    \uses{thm:peps_full_multiplicity_bond_map,
-        lem:peps_bond_coordinate_transport}
+    \uses{thm:peps_full_multiplicity_bond_map,lem:peps_bond_coordinate_transport}
     Choose positive dimensions $d_i$ and put
     $V=\bigoplus_i\mathbb C^{d_i}$ and
     $V'=\bigoplus_i(\mathbb C^{d_i}\otimes\mathbb C^{d_i})$.
@@ -23,10 +22,7 @@
     \label{thm:peps_torus_semiregular_supported_overlap}
     \lean{TNLean.PEPS.torusSemiRegularBondMap_dotProduct}
     \leanok
-    \uses{def:peps_torus_semiregular_bond_map,
-        thm:peps_multiplicity_bond_product_overlap,
-        thm:peps_physical_product_supported_isometry,
-        lem:peps_bond_coordinate_transport}
+    \uses{def:peps_torus_semiregular_bond_map,thm:peps_multiplicity_bond_product_overlap,thm:peps_physical_product_supported_isometry,lem:peps_bond_coordinate_transport}
     Suppose $Q^\dagger Q=I$. For every physical vector $\psi$ and every
     $\phi\in\operatorname{ran}\bigotimes_{e\in\mathcal B}E_V$,
     \begin{align}
@@ -44,9 +40,7 @@
     \label{thm:peps_torus_semiregular_chosen_fourier_state}
     \lean{TNLean.PEPS.torusSemiRegularBondMap_blockFourthRootWeight}
     \leanok
-    \uses{def:peps_torus_semiregular_bond_map,
-        thm:peps_torus_block_multiplicity_state,
-        thm:peps_torus_bond_coordinate_transport}
+    \uses{def:peps_torus_semiregular_bond_map,thm:peps_torus_block_multiplicity_state,thm:peps_torus_bond_coordinate_transport}
     Let $D_i$ be matrix representations of a finite group $G$ of
     positive dimensions $d_i$. Set
     $U=\bigoplus_iD_i$, $W=\bigoplus_i d_i^{1/4}I$, and
@@ -79,10 +73,7 @@
     \label{thm:peps_torus_semiregular_isometric_extension}
     \lean{TNLean.PEPS.exists_isometric_torusSemiRegularBondMap}
     \leanok
-    \uses{thm:peps_torus_semiregular_chosen_fourier_state,
-        thm:peps_physical_product_supported_isometry,
-        thm:peps_full_multiplicity_bond_isometry_extension,
-        lem:peps_bond_coordinate_transport}
+    \uses{thm:peps_torus_semiregular_chosen_fourier_state,thm:peps_physical_product_supported_isometry,thm:peps_full_multiplicity_bond_isometry_extension,lem:peps_bond_coordinate_transport}
     Under the representation hypotheses of the chosen Fourier transformation,
     suppose also $Q^\dagger Q=I$. There is an isometry
     $T:V\otimes V\to V'\otimes V'$ such that, with
@@ -107,8 +98,7 @@
     \label{thm:peps_torus_multiplicity_one_semiregular_equivalence}
     \lean{TNLean.PEPS.exists_isometric_multiplicityOneSemiRegular_torusState}
     \leanok
-    \uses{thm:peps_regular_minimal_representation,
-        thm:peps_torus_semiregular_isometric_extension}
+    \uses{thm:peps_regular_minimal_representation,thm:peps_torus_semiregular_isometric_extension}
     Let $G$ be a finite group and let the torus have positive periods.
     There are positive dimensions $d_i$ and pairwise inequivalent unitary
     irreducible representations $D_i$ such that $U=\bigoplus_iD_i$ is

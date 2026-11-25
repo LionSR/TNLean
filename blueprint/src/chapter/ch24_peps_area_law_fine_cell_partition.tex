@@ -13,16 +13,13 @@ endpoint set $Z$, the integer width $C_0$, and the fine exponents $\ell_k$.
     \label{thm:area_law_unique_fine_cell}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_fineCell_of_not_mem_dyadicNeighborhood}
     \leanok
-    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales}
+    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     Suppose that $Z$ is nonempty and $C_0\ge2$. For every initial layer index
     $k_0$ and every $x\notin N_{k_0}$, there is a unique pair $(k,z)$
     with $k\ge k_0$, $z\in F_{k,\ell_k}$, and $x\in C_{\ell_k,z}$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_unique_layer,thm:area_law_fine_layer_count,
-        thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales,
-        thm:area_law_dyadic_indices}
+    \uses{thm:area_law_unique_layer,thm:area_law_fine_layer_count,thm:area_law_fine_cell_containment,thm:area_law_fine_belt_scales,thm:area_law_dyadic_indices}
     The point $x$ belongs to a unique layer $D_k$ with $k\ge k_0$. Since
     $\ell_k\le k$, the decomposition of $D_k$ into scale-$\ell_k$ fine cells
     gives $z\in F_{k,\ell_k}$ with $x\in C_{\ell_k,z}$. Conversely, if
@@ -34,8 +31,7 @@ endpoint set $Z$, the integer width $C_0$, and the fine exponents $\ell_k$.
     \label{thm:area_law_dummy_fine_cells_cover}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_union_iUnion_fineCells_eq_univ}
     \leanok
-    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales}
+    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
     For nonempty $Z$, integer $C_0\ge2$, and every initial layer index $k_0$,
     \begin{align}
         \mathbb R^2=N_{k_0}\cup\bigcup_{k\ge k_0}

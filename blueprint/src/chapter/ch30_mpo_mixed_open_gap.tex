@@ -103,9 +103,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_mixed_endpoint_projector_comparison,
-        thm:mpo_mixed_reducing_sectors,
-        thm:periodic-fixed-interaction-order}
+    \uses{thm:mpo_mixed_endpoint_projector_comparison,thm:mpo_mixed_reducing_sectors,thm:periodic-fixed-interaction-order}
     Summing the inner row and column penalties over all nonwrapping bonds
     assigns a unit penalty to each violated register, while each interaction
     bounds the two penalties assigned to it; this gives
@@ -454,10 +452,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:mpo_mixed_open_boundary_normalization,
-        thm:mpo_mixed_open_active_sectors,
-        thm:mpo_mixed_second_endpoint_comparison,
-        thm:injective_strict_knabe_window}
+    \uses{thm:mpo_mixed_open_boundary_normalization,thm:mpo_mixed_open_active_sectors,thm:mpo_mixed_second_endpoint_comparison,thm:injective_strict_knabe_window}
     For orthogonal projections $P_i$ and an invertible $F$, let $Q_i$
     project onto $(F^{-1}\ker P_i)^\perp$. Positive forward and inverse
     norm bounds $B,C$ give

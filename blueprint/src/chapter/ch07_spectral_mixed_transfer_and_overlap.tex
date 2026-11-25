@@ -2,7 +2,7 @@
 
 \begin{definition}[Mixed transfer operator]\label{def:mixed_transfer}
     \leanok
-    \uses{def:mps_tensor, def:mixed_transfer_rect}
+    \uses{def:mps_tensor,def:mixed_transfer_rect}
     The \emph{mixed transfer operator} (or \emph{cross transfer operator})
     for two MPS tensors $A$ and $B$ of the same bond dimension~$D$ is the
     linear map $F_{AB}:\MN{D}\to\MN{D}$ defined by
@@ -43,7 +43,7 @@ operator.
 \begin{lemma}[Overlap equals transfer trace]\label{thm:overlap_trace}
     \lean{MPSTensor.trace_mixedMapLM_pow_eq_mpvOverlap}
     \leanok
-    \uses{def:mixed_transfer, def:mpv_overlap}
+    \uses{def:mixed_transfer,def:mpv_overlap}
     For tensors $A$ and $B$ of bond dimension $D\geq1$,
     \begin{align}
         O_{AB}(N)
@@ -62,7 +62,7 @@ operator.
 \begin{lemma}[Rectangular overlap as transfer trace]\label{thm:overlap_trace_rect}
     \lean{MPSTensor.trace_mixedMapLM_rect_pow_eq_mpvOverlap}
     \leanok
-    \uses{def:mixed_transfer_rect, def:mpv_overlap}
+    \uses{def:mixed_transfer_rect,def:mpv_overlap}
     For tensors $A$ of bond dimension $D_1\geq1$ and $B$ of bond
     dimension $D_2\geq1$,
     \begin{align}
@@ -149,7 +149,7 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
     \label{thm:modulus_one_gauge}
     \lean{MPSTensor.modulus_one_eigenvalue_implies_gauge}
     \leanok
-    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
+    \uses{def:mixed_transfer,def:gauge_phase_equiv,def:injective}
     Let $A$ and $B$ be injective normalized MPS tensors. If
     $\rho_{\spec}(F_{AB})\geq1$, then $A$ and $B$ are gauge-phase
     equivalent.
@@ -157,7 +157,7 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
 
 \begin{proof}
     \leanok
-    \uses{thm:spectral_radius_le_one, def:gauge_phase_equiv, thm:qpf, thm:simplicity}
+    \uses{thm:spectral_radius_le_one,def:gauge_phase_equiv,thm:qpf,thm:simplicity}
     Since $\rho_{\spec}(F_{AB})\leq1$ by
     Lemma~\ref{thm:spectral_radius_le_one}, the hypothesis gives an
     eigenvalue $\mu$ with $|\mu|=1$ and a nonzero eigenvector $X$ satisfying
@@ -245,13 +245,13 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
 \begin{lemma}[Strict transfer-operator gap]\label{thm:transfer_operator_gap}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one}
     \leanok
-    \uses{def:gauge_phase_equiv, def:injective, def:mixed_transfer}
+    \uses{def:gauge_phase_equiv,def:injective,def:mixed_transfer}
     Let $A$ and $B$ be injective normalized MPS tensors that are not
     gauge-phase equivalent. Then $\rho_{\spec}(F_{AB})<1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spectral_radius_le_one, thm:modulus_one_gauge}
+    \uses{thm:spectral_radius_le_one,thm:modulus_one_gauge}
     Lemma~\ref{thm:spectral_radius_le_one} gives
     $\rho_{\spec}(F_{AB})\leq1$. Equality would imply gauge-phase equivalence
     by Theorem~\ref{thm:modulus_one_gauge}, contradicting the hypothesis.
@@ -297,7 +297,7 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
 \begin{lemma}[Rectangular transfer-operator gap]\label{thm:transfer_operator_gap_rect}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne}
     \leanok
-    \uses{def:mixed_transfer_rect, def:injective}
+    \uses{def:mixed_transfer_rect,def:injective}
     Let $A$ be an injective normalized tensor of bond dimension $D_1$ and
     $B$ an injective normalized tensor of bond dimension $D_2$, with
     $D_1\neq D_2$. Then
@@ -306,7 +306,7 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
 
 \begin{proof}
     \leanok
-    \uses{thm:eigenvalue_bound_rect, thm:gauged_intertwining_core, thm:rectangular_intertwining_dim_eq}
+    \uses{thm:eigenvalue_bound_rect,thm:gauged_intertwining_core,thm:rectangular_intertwining_dim_eq}
     Lemma~\ref{thm:eigenvalue_bound_rect} gives $|\mu|\leq1$ for every
     eigenvalue of $F_{AB}^{\mathrm{rect}}$. If its spectral radius were
     $1$, there would be a modulus-one eigenvector
@@ -346,13 +346,13 @@ embedding of the eigenvector forces gauge-phase equivalence between two injectiv
 \begin{lemma}[Rectangular overlap decay]\label{thm:overlap_decay_rect}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne}
     \leanok
-    \uses{def:mpv_overlap, def:injective}
+    \uses{def:mpv_overlap,def:injective}
     If $D_1\neq D_2$ and both tensors are injective and normalized, then
     $O_{AB}(N)\to0$ as $N\to\infty$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_operator_gap_rect, thm:overlap_trace_rect}
+    \uses{thm:transfer_operator_gap_rect,thm:overlap_trace_rect}
     The gap $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$ from
     Lemma~\ref{thm:transfer_operator_gap_rect} and
     Lemma~\cite[``Powers vanish below unit spectral radius'']{QICLean2026Blueprint} imply operator-norm convergence
@@ -424,14 +424,14 @@ proved in Section~\ref{sec:app_spectral_decay}.
 \begin{lemma}[Transfer powers converge to zero]\label{thm:transfer_pow_zero}
     \lean{MPSTensor.mixedTransfer_pow_tendsto_zero}
     \leanok
-    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:injective}
+    \uses{def:mixed_transfer,def:gauge_phase_equiv,def:injective}
     Let $A$ and $B$ be injective normalized tensors that are not gauge-phase
     equivalent. Then $F_{AB}^n(X)\to0$ for every $X\in\MN{D}$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:transfer_operator_gap, thm:rectangular_transfer_pow_zero}
+    \uses{thm:transfer_operator_gap,thm:rectangular_transfer_pow_zero}
     The gap $\rho_{\spec}(F_{AB})<1$ from
     Lemma~\ref{thm:transfer_operator_gap} and the equal-bond-dimension case
     of Lemma~\ref{thm:rectangular_transfer_pow_zero} give
@@ -441,7 +441,7 @@ proved in Section~\ref{sec:app_spectral_decay}.
 \begin{theorem}[Overlap decay]\label{thm:overlap_decay}
     \lean{MPSTensor.mpvOverlap_tendsto_zero}
     \leanok
-    \uses{def:mpv_overlap, def:gauge_phase_equiv, def:injective}
+    \uses{def:mpv_overlap,def:gauge_phase_equiv,def:injective}
     Let $A$ and $B$ be injective normalized tensors of the same bond
     dimension that are not gauge-phase equivalent. Then
     $O_{AB}(N)\to0$ as $N\to\infty$.
@@ -449,7 +449,7 @@ proved in Section~\ref{sec:app_spectral_decay}.
 
 \begin{proof}
     \leanok
-    \uses{thm:transfer_pow_zero, thm:overlap_trace}
+    \uses{thm:transfer_pow_zero,thm:overlap_trace}
     By (\ref{eq:spectral_overlap_trace}) and
     the trace-expansion formula of
     \cite[``Trace expansion over matrix units'']{QICLean2026Blueprint},
@@ -482,7 +482,7 @@ fixed point.
     \lean{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP,
         MPSTensor.gaugePhaseEquiv_of_krausGaugePhaseEquiv}
     \leanok
-    \uses{def:mixed_transfer, def:gauge_phase_equiv, def:irreducible_tensor, thm:eigenvalue_bound}
+    \uses{def:mixed_transfer,def:gauge_phase_equiv,def:irreducible_tensor,thm:eigenvalue_bound}
     Let $A$ and $B$ be irreducible trace-preserving normalized MPS tensors
     of bond dimension~$D$. If $\rho_{\spec}(F_{AB})\geq1$, then $A$ and $B$
     are gauge-phase equivalent.
@@ -490,7 +490,7 @@ fixed point.
 
 \begin{proof}
     \leanok
-    \uses{thm:modulus_one_gauge, thm:qpf, thm:transfer_psd_fp_pd_irred, thm:gauged_intertwining_core, thm:gauged_intertwining_gauge_phase}
+    \uses{thm:modulus_one_gauge,thm:qpf,thm:transfer_psd_fp_pd_irred,thm:gauged_intertwining_core,thm:gauged_intertwining_gauge_phase}
     Choosing a modulus-one eigenvector as in
     Theorem~\ref{thm:modulus_one_gauge}, the proof follows its five steps,
     with one change: separate gauging, the block Kraus family, and the
@@ -509,14 +509,14 @@ fixed point.
     \label{thm:transfer_operator_gap_irr_tp}
     \lean{MPSTensor.spectralRadius_mixedTransfer_lt_one_of_irreducible_TP}
     \leanok
-    \uses{def:gauge_phase_equiv, def:irreducible_tensor, def:mixed_transfer}
+    \uses{def:gauge_phase_equiv,def:irreducible_tensor,def:mixed_transfer}
     Let $A$ and $B$ be irreducible trace-preserving normalized MPS tensors
     of the same bond dimension that are not gauge-phase equivalent. Then
     $\rho_{\spec}(F_{AB})<1$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:spectral_radius_le_one, thm:modulus_one_gauge_irr_tp}
+    \uses{thm:spectral_radius_le_one,thm:modulus_one_gauge_irr_tp}
     Lemma~\ref{thm:spectral_radius_le_one} gives
     $\rho_{\spec}(F_{AB})\leq1$, while the contrapositive of
     Lemma~\ref{thm:modulus_one_gauge_irr_tp} excludes equality.
@@ -526,14 +526,14 @@ fixed point.
     \label{thm:overlap_decay_irr_tp}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_irreducible_TP}
     \leanok
-    \uses{def:mpv_overlap, def:gauge_phase_equiv, def:irreducible_tensor}
+    \uses{def:mpv_overlap,def:gauge_phase_equiv,def:irreducible_tensor}
     Let $A$ and $B$ be irreducible trace-preserving normalized tensors of
     the same bond dimension that are not gauge-phase equivalent. Then
     $O_{AB}(N)\to0$ as $N\to\infty$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_operator_gap_irr_tp, thm:overlap_trace}
+    \uses{thm:transfer_operator_gap_irr_tp,thm:overlap_trace}
     Lemma~\ref{thm:transfer_operator_gap_irr_tp} gives
     $\rho_{\spec}(F_{AB})<1$, so $F_{AB}^N\to0$. The overlap--trace identity
     (\ref{eq:spectral_overlap_trace}) gives $O_{AB}(N)\to0$.
@@ -543,7 +543,7 @@ fixed point.
     \label{thm:transfer_operator_gap_rect_irr_tp}
     \lean{MPSTensor.mixedTransferSpectralRadius₂_lt_one_of_dim_ne_of_irreducible_TP}
     \leanok
-    \uses{def:mixed_transfer_rect, def:irreducible_tensor}
+    \uses{def:mixed_transfer_rect,def:irreducible_tensor}
     Let $A$ and $B$ be irreducible trace-preserving normalized tensors of
     bond dimensions $D_1$ and $D_2$, respectively, with $D_1\neq D_2$.
     Then $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$.
@@ -551,7 +551,7 @@ fixed point.
 
 \begin{proof}
     \leanok
-    \uses{thm:eigenvalue_bound, thm:transfer_psd_fp_pd_irred}
+    \uses{thm:eigenvalue_bound,thm:transfer_psd_fp_pd_irred}
     If instead $\rho_{\spec}(F_{AB}^{\mathrm{rect}})=1$ with a modulus-one
     eigenvector $X\in M_{D_1\times D_2}(\C)\setminus\{0\}$, gauging $A$ and
     $B$ separately to unital families $A'$ and $B'$ produces a nonzero gauged
@@ -567,13 +567,13 @@ fixed point.
     \label{thm:overlap_decay_rect_irr_tp}
     \lean{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP}
     \leanok
-    \uses{def:mpv_overlap, def:irreducible_tensor}
+    \uses{def:mpv_overlap,def:irreducible_tensor}
     If $D_1\neq D_2$ and both tensors are irreducible and trace-preserving
     normalized, then $O_{AB}(N)\to0$ as $N\to\infty$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:transfer_operator_gap_rect_irr_tp, thm:overlap_trace_rect}
+    \uses{thm:transfer_operator_gap_rect_irr_tp,thm:overlap_trace_rect}
     Lemma~\ref{thm:transfer_operator_gap_rect_irr_tp} gives
     $\rho_{\spec}(F_{AB}^{\mathrm{rect}})<1$, so
     $(F_{AB}^{\mathrm{rect}})^N\to0$. The rectangular overlap--trace identity
@@ -608,7 +608,7 @@ for their mixed transfer operator, establishing gauge-phase equivalence.
     \label{thm:nt_overlap_norm_one_gauge}
     \lean{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
     \leanok
-    \uses{def:irreducible_tensor, def:gauge_phase_equiv, def:mpv_overlap}
+    \uses{def:irreducible_tensor,def:gauge_phase_equiv,def:mpv_overlap}
     Let $A$ and $B$ be irreducible MPS tensors of the same bond dimension with
     $\sum_i(A^i)^\dagger A^i=\Id$ and
     $\sum_i(B^i)^\dagger B^i=\Id$. If
@@ -619,7 +619,7 @@ for their mixed transfer operator, establishing gauge-phase equivalence.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{lem:overlap_norm_one_implies_spectral_radius_ge_one, thm:modulus_one_gauge_irr_tp}
+    \uses{lem:overlap_norm_one_implies_spectral_radius_ge_one,thm:modulus_one_gauge_irr_tp}
     By Lemma~\ref{lem:overlap_norm_one_implies_spectral_radius_ge_one}, the
     mixed-transfer spectral radius is at least~$1$, and
     Lemma~\ref{thm:modulus_one_gauge_irr_tp} then gives gauge-phase

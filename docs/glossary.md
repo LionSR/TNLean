@@ -422,9 +422,9 @@ out.
 
 ### PEPS predicates
 
-#### `TNLean.Lattice.PartyCircuit.SourceInventory.IsNormalized`
+#### `QuantumCircuit.Party.SourceInventory.IsNormalized`
 
-- **Defined in:** `TNLean/Lattice/PartyCircuit/SourcePreparation.lean`.
+- **Defined in:** `QICLean/Circuit/Party/Syntax/Gates.lean` (QICLean dependency).
 - **Meaning:** every recorded pair-source vector has norm one. The list records
   source occurrences separately, including repeated pairs of parties.
 - **Source:** polynomial-PEPS manuscript, September 24, 2026, Lemma 5.1,
@@ -433,9 +433,9 @@ out.
   `Word.isNormalized_sources` identify normalization with allowed preparation
   and derive it from an allowed composition.
 
-#### `TNLean.Lattice.PartyCircuit.SourceInventory.Expands`
+#### `QuantumCircuit.Party.SourceInventory.Expands`
 
-- **Defined in:** `TNLean/Lattice/PartyCircuit/PairSourceGrouping.lean`.
+- **Defined in:** `QICLean/Circuit/Party/Source/InventoryExpansion.lean` (QICLean dependency).
 - **Meaning:** `G.Expands S` means that, beside any spectator registers,
   allowed local operations and register exchanges containing no pair-source
   preparations take the preparation of `G` exactly to the preparation of `S`.
@@ -445,11 +445,11 @@ out.
   normalized `G` with one source for each unordered pair occurring in `S`.
   `Word.exists_grouped_source_preparation` gives the resulting exact
   factorization of an arbitrary allowed composition.
-- **Further consequence:** `Word.exists_tensorPartyMaps_parties` collects the
-  remaining operations into one contraction per party under canonical register
-  identifications. `Word.exists_prepared_tensorPartyMaps` combines this with
+- **Further consequence:** `Word.exists_piKronecker_of_sources_eq_nil` collects the
+  remaining operations into one contraction per party. `Word.exists_prepared_localOps`
+  combines this with
   grouped preparation for a prescribed finite gate party type.
-- **All pair slots:** `Word.exists_complete_prepared_tensorPartyMaps` also
+- **All pair slots:** `Word.exists_complete_prepared_localOps` also
   supplies a source on every unordered pair of distinct gate parties. Sources
   on pairs absent from the original monomial have one-dimensional halves.
   `SourceInventory.exists_complete_extension` retains the original inventory
@@ -3343,36 +3343,11 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ## Distributed PEPS compression: finite incidence and choice costs
 
-### Equality of selected remaining operations
-
-- **Declaration:** `TNLean.Lattice.PartyCircuit.Word.IsSelectedLocalPartComparison`.
-- **Defined in:** `TNLean/Network/IncidentFactor/AllPartySingletonComparison.lean`.
-- **Meaning:** For a Boolean owner selector and two chronological words, the
-  predicate is the heterogeneous equality of their remaining evaluations after
-  restriction to the selected owners. Each word's local part keeps its actual
-  ordered source registers as inputs and supplies its own source-free proof.
-  The two original input and output lists may differ; selected list identities
-  are supplied separately when deriving a comparison.
-- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
-  states*, September 24, 2026, proof of Theorem 5.2,
-  `04-compression.tex:351–434,565–588`,
-  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L351-L434).
-- **Sanctioned bridges:** In `TNLean.Lattice.PartyCircuit.SourceCircuit`,
-  `isSelectedLocalPartComparison_partialWord_all_gate` derives this comparison
-  for the actual all-party gate word and its lifted singleton projection.
-  `restrict_partialWord_all_localPart_eval_heq_singleton_projection` gives the
-  corresponding selected-operator identity for the whole original chronology.
-  Both retain the supplied branch choice, original source dimensions and
-  spectator registers.
-- **Caveat:** This predicate compares operators. Allowedness and factorization
-  of the complete physical density require separate results; no equivalence
-  with either is asserted. No norm or nonvanishing condition is imposed.
-
 ### Corrected source positions and whole-lifetime gate participation
 
-- **Declarations:** `TNLean.Lattice.Compression.sourceEndpoints`, `correctedParties`,
+- **Declarations:** `GateIncidence.sourceEndpoints`, `correctedParties`,
   `incidentGates` and `gatesTouching` in the same namespace.
-- **Defined in:** `TNLean/Lattice/Compression/DistributedLifetime.lean`.
+- **Defined in:** `QICLean/Algebra/Combinatorics/GateIncidence.lean` (QICLean dependency).
 - **Meaning:** A source position has two party endpoints. For a finite set `S`
   of corrected positions, `correctedParties` is their endpoint union. The gate
   identifiers distinguish occurrences; repeated uses of an identical operation
@@ -3397,10 +3372,10 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Star and pair-sample virtual links
 
-- **Declarations:** `TNLean.Lattice.Compression.pairSampleLabels`, `gateLinkLabels`,
+- **Declarations:** `TNLean.Network.pairSampleLabels`, `gateLinkLabels`,
   `gateLinkParties`, `linksAtGate`, `distributedLinks`, `distributedLinkParties`,
   `incidentDistributedLinks`, `incidentGateLinkLabels` and `incidentLinksAtGate`.
-- **Defined in:** `TNLean/Lattice/Compression/DistributedLinks.lean`.
+- **Defined in:** `TNLean/Network/DistributedContraction/DistributedOperatorContraction.lean`.
 - **Meaning:** Each gate has a star rooted at a chosen participant and a sample
   link for every unordered pair of distinct participants. Summand tags keep
   star and sample links distinct, while gate-occurrence tags preserve parallel
@@ -3425,9 +3400,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Weighted cost of affected coefficient and physical-entry choices
 
-- **Declarations:** `TNLean.Lattice.Compression.ketBraCoefficientCost` and
+- **Declarations:** `GateIncidence.ketBraCoefficientCost` and
   `correctedPositionChoiceCost`.
-- **Defined in:** `TNLean/Lattice/Compression/CorrectedPositionCost.lean`.
+- **Defined in:** `QICLean/Algebra/Combinatorics/GateIncidence.lean` (QICLean dependency).
 - **Meaning:** `ketBraCoefficientCost` is the square of the sum of nonnegative
   absolute coefficient weights. `correctedPositionChoiceCost` multiplies these
   quantities over affected gates and the squares of intended physical
@@ -3452,8 +3427,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ### Individual coefficients and pair-effect counts
 
-- **Declaration:** `TNLean.Lattice.PartyCircuit.EffectCircuit.IsTermwiseBounded r C`.
-- **Defined in:** `TNLean/Lattice/Compression/EffectCircuitTermwiseCoefficientBounds.lean`.
+- **Declaration:** `QuantumCircuit.Party.EffectCircuit.IsTermwiseBounded r C`.
+- **Defined in:** `QICLean/Circuit/Party/Compression/GateExpansion/CoefficientBounds.lean`
+  (QICLean dependency).
 - **Meaning:** Every monomial in each prescribed nonprivate gate expansion has
   at most $r$ pair effects and scalar coefficient of norm at most $C$.
   Composition combines these conditions on the two chronological subcircuits;
@@ -3473,8 +3449,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### Message-containing approximation of the original gates
 
 - **Declaration:**
-  `TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageGateApproximation δ lists G`.
-- **Defined in:** `TNLean/Lattice/Compression/MessageGateLists.lean`.
+  `QuantumCircuit.Party.EffectCircuit.IsMessageGateApproximation δ lists G`.
+- **Defined in:** `QICLean/Circuit/Party/Compression/GateExpansion/MessageGateLists.lean`
+  (QICLean dependency).
 - **Meaning:** Each original private map and each prescribed original gate is
   a contraction. At a nonprivate gate occurrence the participant index has
   cardinality different from one, every listed message monomial is allowed,
@@ -3494,8 +3471,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### Counts and dimensions before expanding messages
 
 - **Declaration:**
-  `TNLean.Lattice.PartyCircuit.EffectCircuit.IsMessageResourceBounded r m K D C lists`.
-- **Defined in:** `TNLean/Lattice/Compression/MessageGateLists.lean`.
+  `QuantumCircuit.Party.EffectCircuit.IsMessageResourceBounded r m K D C lists`.
+- **Defined in:** `QICLean/Circuit/Party/Compression/GateExpansion/MessageGateLists.lean`
+  (QICLean dependency).
 - **Meaning:** Each original nonprivate gate list has at most $K$ monomials.
   Each term has at most $r$ pair effects, a scalar coefficient of norm at
   most $C$, and at most $m$ message occurrences, each transferring an actual
@@ -3832,32 +3810,6 @@ source's Proposition 4.1.
   typical entropy and auxiliary dimension remain separate proof obligations.
   Those substitutions must already occur in the additive budgets; no uniform
   replica convergence rate over physical scales is supplied or needed.
-
-### Comparison of chronological word evaluations
-
-- **Declaration:** `TNLean.Lattice.PartyCircuit.Word.IsEvalComparison`.
-- **Defined in:** `TNLean/Lattice/Compression/WordEvalComparison.lean`.
-- **Meaning:** For two chronological words, possibly with different owner types
-  and register lists, the predicate is literally heterogeneous equality of
-  their evaluations. Each word retains its actual input and output space.
-- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
-  states*, September 24, 2026, proof of Theorem 5.2,
-  `04-compression.tex:253–267,351–434,565–588`,
-  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L253-L267).
-- **Sanctioned bridges:** `Word.IsEvalComparison.eval_eq` gives ordinary evaluation
-  equality for words on the same input and output layouts.
-  `Word.isEvalComparison_of_eval_eq` gives the converse for those fixed layouts,
-  taking both words explicitly. The prepared-source,
-  sampled-endpoint and physical-coordinate comparisons derive this predicate
-  from their actual word comparison results.
-- **Caveats:** This compares the full evaluations of the supplied words. It
-  neither imposes allowedness, contractions, source normalization or absence of
-  sources, nor supplies equality after an arbitrary restriction to owners.
-  It is not the selected-local-part comparison predicate. No equivalence with
-  physical-density equality, factorization or locality is asserted.
-- **Verification:** The predicate and both fixed-layout bridges passed the
-  hosted Lean build and their named axiom checks at commit
-  `c05b1ee03e2d24d1f93390ada1aa7b7912b0cfba`.
 
 ## Hastings' high-temperature cluster expansion
 

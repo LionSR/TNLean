@@ -321,8 +321,7 @@ notation below.
         TNLean.PEPS.place_regularCanonicalRegionRangeProjector,
         TNLean.PEPS.regularCanonicalRegionRangeProjector_lifts_commute}
     \leanok
-    \uses{def:peps_ambient_regular_range,def:peps_coordinate_projector,
-        def:peps_ambient_regional_constraints}
+    \uses{def:peps_ambient_regular_range,def:peps_coordinate_projector,def:peps_ambient_regional_constraints}
     A vector $x$ lies in $\widehat{\mathcal S}_R^0$ if and only if it is fixed by
     all regional vertex gauges $L_k$, all internal right translations $T_r$, and
     $D_R$. Writing $P_R^0=\Pi_{\mathcal S_R^0}$, one has
@@ -335,12 +334,7 @@ notation below.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_regional_range_invariant_flat,
-        thm:peps_regular_constraint_fixed_spaces,
-        thm:peps_ambient_regional_constraint_projection,
-        thm:peps_regional_extension_algebra,
-        thm:peps_projection_range_unique,
-        thm:peps_ambient_regional_constraint_commute}
+    \uses{thm:peps_regional_range_invariant_flat,thm:peps_regular_constraint_fixed_spaces,thm:peps_ambient_regional_constraint_projection,thm:peps_regional_extension_algebra,thm:peps_projection_range_unique,thm:peps_ambient_regional_constraint_commute}
     Applying Lemma~\ref{thm:peps_regional_range_invariant_flat} to each slice
     $x_\tau$ and combining with Lemma~\ref{thm:peps_regular_constraint_fixed_spaces}
     and Lemma~\ref{thm:peps_ambient_regional_constraint_projection} gives
@@ -386,8 +380,7 @@ notation below.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_scaled_partial_isometry_projector_transport,thm:peps_projection_range_unique,
-        thm:peps_regional_range_invariant_flat}
+    \uses{thm:peps_scaled_partial_isometry_projector_transport,thm:peps_projection_range_unique,thm:peps_regional_range_invariant_flat}
     Factoring the open-region map through $T_R$ gives $\mathcal S_R=T_R(\mathcal S_R^0)$,
     and local gauge invariance (Lemma~\ref{thm:peps_regional_range_invariant_flat})
     gives $E_RP_R^0=P_R^0=(P_R^0E_R)^*$. Tensoring $T_v^*T_v=c_vE_v$ gives
@@ -465,8 +458,7 @@ notation below.
     $[\widehat H_R,\widehat H_S]=0$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_regional_product_cancellation,thm:peps_site_image_support,
-        thm:peps_regional_extension_algebra}
+    \uses{thm:peps_regional_product_cancellation,thm:peps_site_image_support,thm:peps_regional_extension_algebra}
     Put $U=R\cup S$ and $D=[\widehat H_R,\widehat H_S]=\widehat F_U$
     (Lemma~\ref{thm:peps_regional_extension_algebra}). Intertwining gives
     $DA_V=A_V[\widehat K_R,\widehat K_S]=0$, so $DJ_V=DA_VL_V=0$, while
@@ -519,9 +511,7 @@ notation below.
     own contraction conventions.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_nonzero_site_images,thm:peps_physical_regional_projector,
-        thm:peps_regular_actual_projector,thm:peps_product_transport_commutation,
-        thm:peps_canonical_complement_projection}
+    \uses{thm:peps_nonzero_site_images,thm:peps_physical_regional_projector,thm:peps_regular_actual_projector,thm:peps_product_transport_commutation,thm:peps_canonical_complement_projection}
     Combining $T_vL_v=J_v\ne0$ and $J_RP_R=P_R$
     (Lemma~\ref{thm:peps_nonzero_site_images}), $P_RT_R=T_RP_R^0$ from
     (\ref{eq:peps_physical_projector_transport}), and

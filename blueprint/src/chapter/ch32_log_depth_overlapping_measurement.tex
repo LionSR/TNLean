@@ -48,7 +48,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
         MPSTensor.isInjectiveOn_of_eq_zero_of_mulVec_eq_zero,
         MPSTensor.exists_isInjectiveOn_blockTensor_blockSum}
     \leanok
-    \uses{lem:ldp_overlapping_positive_part, def:ldpolar_injective_on}
+    \uses{lem:ldp_overlapping_positive_part,def:ldpolar_injective_on}
     Let $S$ be the set of bond pairs $(E_ja,E_jc)$ whose two indices lie in the
     same block.
     \begin{enumerate}
@@ -94,9 +94,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
         MPSTensor.inner_blockIsometryState_embedPair,
         MPSTensor.norm_sum_smul_blockIsometryState}
     \leanok
-    \uses{lem:ldp_overlapping_block_injectivity, def:ldp_block_isometry_state,
-        def:ldp_chain_pos_state, thm:ldp_chain_block_iso_inner,
-        lem:ldp_overlapping_overlaps}
+    \uses{lem:ldp_overlapping_block_injectivity,def:ldp_block_isometry_state,def:ldp_chain_pos_state,thm:ldp_chain_block_iso_inner,lem:ldp_overlapping_overlaps}
     Cut a ring of $N\geq1$ sites into $M\geq1$ blocks of lengths $\ell_k\geq1$,
     and let $\omega_j$ be the pair of $\rho_j$ placed along $E_j$.
     \begin{enumerate}
@@ -141,8 +139,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
         MPSTensor.mixedMapLM_blockSumPosLimit_mul_apply,
         MPSTensor.exists_norm_trace_prod_blockPosTensor_sub_le}
     \leanok
-    \uses{lem:ldp_overlapping_block_states, lem:ldp_overlapping_positive_part,
-        lem:ldp_overlapping_overlaps_weights, lem:ldp_shared_overlap_estimates}
+    \uses{lem:ldp_overlapping_block_states,lem:ldp_overlapping_positive_part,lem:ldp_overlapping_overlaps_weights,lem:ldp_shared_overlap_estimates}
     \begin{enumerate}
         \item For a finite index set there is $K\geq0$ such that for every
               matrix $E$ whose powers have norm at most $c$ and all matrices
@@ -180,9 +177,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \label{thm:ldp_overlapping_unequal_blocks_error}
     \lean{MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le}
     \leanok
-    \uses{lem:ldp_overlapping_block_states, lem:ldp_overlapping_block_overlaps_limit,
-        lem:ldp_shared_overlap_estimates, thm:ldp_approximation_error_repeated_overlapping,
-        def:correlation_length}
+    \uses{lem:ldp_overlapping_block_states,lem:ldp_overlapping_block_overlaps_limit,lem:ldp_shared_overlap_estimates,thm:ldp_approximation_error_repeated_overlapping,def:correlation_length}
     Let $0<\gamma<1$. There is $C>0$ such that the following holds for all
     weights $\beta\in\C^b\setminus\{0\}$ and every cut of a ring of $N$ sites
     into $M\geq1$ blocks of lengths $\ell_k\geq q$ at which every blocked map
@@ -239,9 +234,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \lean{MPSPreparation.exists_isOneRoundConversion_blockIsometryState_of_isInjectiveOn,
         MPSPreparation.exists_isOneRoundConversion_of_isPreparedInDepth}
     \leanok
-    \uses{def:qc_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
-        thm:ldp_block_sum_unitary, thm:ldp_sequential_factorization_on,
-        def:ldp_block_isometry_state, lem:qc_measurement_unitary_case}
+    \uses{def:qc_measurement_circuit_preparation,thm:ldp_window_ghz_measurement,thm:ldp_block_sum_unitary,thm:ldp_sequential_factorization_on,def:ldp_block_isometry_state,lem:qc_measurement_unitary_case}
     For $d\geq2$, every bond dimension $D$ and every number $b$ of labels, there
     are $C$ and $L_0$ such that the following holds. Let $A$ be a tensor of bond
     dimension $D$, $S$ a set of bond pairs, $\omega_1,\dots,\omega_b$
@@ -275,8 +268,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \label{lem:ldp_overlapping_one_block_chain}
     \lean{MPSPreparation.exists_blockIsometryState_eq_smul}
     \leanok
-    \uses{lem:ldp_overlapping_block_states, thm:ldpolar_tensor_injective_on,
-        thm:ldp_chain_block_iso_inner}
+    \uses{lem:ldp_overlapping_block_states,thm:ldpolar_tensor_injective_on,thm:ldp_chain_block_iso_inner}
     Let the $N$-site blocked map of $\bigoplus_jA_j$ be injective on the bond
     pairs of the blocks, and let $\ket\phi=\sum_j\beta_j\ket{\phi_N(A_j)}\neq0$.
     Then $\ket\phi/\lVert\phi\rVert=V^{(N)}\ket\omega$ for a unit pair $\omega$
@@ -318,11 +310,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
         MPSPreparation.exists_mpvState_repeatedBlockSum_ne_zero,
         MPSPreparation.exists_isOneRoundConversion_le_log}
     \leanok
-    \uses{thm:ldp_injective_on_measurement, thm:ldp_overlapping_unequal_blocks_error,
-        lem:ldp_overlapping_block_injectivity, lem:ldp_overlapping_one_block_chain,
-        lem:ldp_common_mixed_gap, def:ldp_repeated_block_sum,
-        thm:ldp_chain_depth, thm:ldp_short_chain_preparation,
-        lem:ldp_log_threshold_error, lem:ldp_shared_overlap_estimates}
+    \uses{thm:ldp_injective_on_measurement,thm:ldp_overlapping_unequal_blocks_error,lem:ldp_overlapping_block_injectivity,lem:ldp_overlapping_one_block_chain,lem:ldp_common_mixed_gap,def:ldp_repeated_block_sum,thm:ldp_chain_depth,thm:ldp_short_chain_preparation,lem:ldp_log_threshold_error,lem:ldp_shared_overlap_estimates}
     Let $A$ be the direct sum with multiplicities of
     Definition~\ref{def:ldp_repeated_block_sum}, with nonzero complex weights,
     every block $A_j$ normal in the gauge (\ref{eq:ldp_normal_gauge}) with a
@@ -376,9 +364,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \label{thm:ldp_qccc_classification_forward}
     \lean{MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState}
     \leanok
-    \uses{thm:ldp_overlapping_measurement_depth,
-        lem:qc_asymptotic_preparation_of_overlap,
-        def:qc_asymptotic_measurement_preparation}
+    \uses{thm:ldp_overlapping_measurement_depth,lem:qc_asymptotic_preparation_of_overlap,def:qc_asymptotic_measurement_preparation}
     Let $A$ be as in Lemma~\ref{thm:ldp_overlapping_measurement_depth}, and
     let $\ket{\phi_N(A)}\neq0$ for all large $N$. There is $C$ such that the
     sequence of normalized states $\ket{\phi_N}$ is asymptotically prepared

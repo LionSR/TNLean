@@ -18,12 +18,12 @@ dimension `q`, supports of range `R` (nonempty sets of sites of diameter at most
 off its support, and a unit vector spanning the ground space of a gapped
 Hamiltonian (`ManyBody.IsGapped` and `ManyBody.groundSpace`). Regional entropies are QICLean's
 `ManyBody.regionEntropy`. The chain proof uses only the site-generic layer
-`TNLean/Lattice/` and QICLean: no module of `TNLean/MPS/AreaLaw/` imports
+`TNLean/Network/` and QICLean: no module of `TNLean/MPS/AreaLaw/` imports
 `TNLean.PEPS`, directly or transitively. The two finite-dimensional cores (the
 marginal tail bound `Entropy.surprisalTail_cut_le` and the buffered discount
 `Entropy.two_mul_condEntropy_le`) are QICLean lemmas stated on an arbitrary
 finite set of sites, instantiated here on the chain. The registers of the
-physical protocol are the sheets of `TNLean/Lattice/Sheet/`, an owner for each
+physical protocol are the sheets of QICLean's `QICLean/Circuit/Party/Sheet/`, an owner for each
 site of the chain, with no encoded holes.
 
 ## Statements
@@ -76,7 +76,7 @@ chain-sweep protocol. The latter has the following proved components:
 | Product initialization | `ChainSweep.exists_initialization` | Proved: the actual main and auxiliary copies are prepared privately from a constructed product input, with no nonprivate gate. |
 | Private terminal regrouping and its physical marginal | `ChainSweep.eval_terminalRegroupingWord`, `physicalDensity_terminalRegrouping` | Proved for every terminal vector, without a product or normalization premise, retaining all auxiliary labels and owners. |
 | Terminal copy reference and conditional density error | `ChainSweep.terminalStackReadout_framesVec`, `partialTrace_terminalStackReference`, `rectangularTraceNorm_terminalStackReadout_sub_le` | Proved for the specified terminal sheets and every local dimension: the reference is `Ω ⊗ Ξ` for arbitrary `Ω`, and unit `Ω` gives unit `Ξ` and the pure main marginal. For unit `Ω`, a terminal vector of norm at most one and distance at most `ε` from that reference has density error at most `2ε`; this does not construct a sweep or establish its required vector-error bound. |
-| Birth, death and two-sheet exchange with arbitrary error exponent (`lem:birth`, `lem:exchange`) | `Lattice.Sheet.birth_bounded`, `death_bounded`, `exchange_bounded` | Proved from the stated mutual-information bound `I(T:E) ≤ L^(-2p)`, retaining the constructed maps, exact ownership changes and resource counts. Birth and death have error at most `L^(-p)`; exchange is private with error at most `4 L^(-p)`. The death environment is evaluated after the death. No information bound is derived from a Hamiltonian in these local lemmas. |
+| Birth, death and two-sheet exchange with arbitrary error exponent (`lem:birth`, `lem:exchange`) | `QuantumCircuit.Party.Sheet.birth_bounded`, `death_bounded`, `exchange_bounded` (`TNLean/Network/Party/SheetBoundedChanges`) | Proved from the stated mutual-information bound `I(T:E) ≤ L^(-2p)`, retaining the constructed maps, exact ownership changes and resource counts. Birth and death have error at most `L^(-p)`; exchange is private with error at most `4 L^(-p)`. The death environment is evaluated after the death. No information bound is derived from a Hamiltonian in these local lemmas. |
 | One-band assignments and exact endpoints | `OneBand.main₈_eq_changeOwner`, `aux₄_eq_raw`, `exchange_regions` | Proved with half-open integer bands and the real open exchange window, including odd widths. The two retained auxiliary strips have their actual owners. |
 | Eight one-band changes and the boundary death, under primitive information bounds | `OneBand.circuits_of_primitive_information`, `boundary_change_of_primitive_information` | Proved conditionally on the eight stated mutual-information inequalities for the original vector. Each circuit has the stated source, effect, coefficient and gate bounds; the exchange is private. These results do not derive the information inequalities from a gapped Hamiltonian. |
 | Stage ownership and retired auxiliary copies | `ChainSweep.birth_environments`, `left_band_owners`, `rightBandMain_eq_stageFrame`, `rightRetiredAuxiliary_eq_raw`, `leftRetiredAuxiliary_eq_raw` | Proved from the actual stage assignments and margins, retaining the original stage-and-side copy labels. |

@@ -48,7 +48,7 @@ remains open.
 \begin{definition}[Open-boundary contraction]\label{def:open_coeff}
     \lean{MPSTensor.openCoeff}
     \leanok
-    \uses{def:mps_tensor, def:eval_word}
+    \uses{def:mps_tensor,def:eval_word}
     For a tensor $A$ with bond dimension $D$, a left boundary covector
     $v_L\in\C^D$, a right boundary vector $v_R\in\C^D$, and a word
     $w=(i_1,\ldots,i_k)$, the open-boundary contraction is the bilinear pairing
@@ -88,7 +88,7 @@ remains open.
     \label{thm:w_state_identification}
     \lean{MPSTensor.wTensor_openState_eq_wIndicator}
     \leanok
-    \uses{def:w_tensor, def:open_state, def:w_indicator}
+    \uses{def:w_tensor,def:open_state,def:w_indicator}
     For every $N$, the open-boundary state of the W tensor with boundary
     vectors $(0|$ and $|1)$ equals the W state:
     \begin{align}
@@ -101,7 +101,7 @@ remains open.
 
 \begin{proof}
     \leanok
-    \uses{def:w_tensor, def:open_state}
+    \uses{def:w_tensor,def:open_state}
     Because $A^0$ is the identity and $A^1$ is the raising operator with
     $A^1A^1=0$, the ordered product
     $A^{\sigma_1}\cdots A^{\sigma_N}$ depends only on the number of excitations
@@ -143,7 +143,7 @@ trace illustrates this failure.
     \lean{MPSTensor.mpv_wTensor_eq_zero_of_wIndicator_eq_one}
     \lean{MPSTensor.mpv_wTensor_ne_wIndicator}
     \leanok
-    \uses{def:w_tensor, def:mpv, def:w_indicator}
+    \uses{def:w_tensor,def:mpv,def:w_indicator}
     Closing the tensor of Definition~\ref{def:w_tensor} with a trace gives
     \begin{align}
         \operatorname{tr}\bigl(A^{\sigma_1}\cdots A^{\sigma_N}\bigr)
@@ -160,7 +160,7 @@ trace illustrates this failure.
 
 \begin{proof}
     \leanok
-    \uses{def:w_tensor, def:mpv, def:w_indicator}
+    \uses{def:w_tensor,def:mpv,def:w_indicator}
     The ordered product is the identity, the raising operator, or zero according
     to the number of excitations, as in the proof of
     Lemma~\ref{thm:w_state_identification}. Their traces are $2$, $0$, and $0$.
@@ -172,7 +172,7 @@ trace illustrates this failure.
     \label{def:w_state_periodic_rep}
     \lean{MPSTensor.IsPeriodicWState}
     \leanok
-    \uses{def:mpv, def:w_indicator}
+    \uses{def:mpv,def:w_indicator}
     A tensor $B$ with physical dimension $2$ and bond dimension $D$ is a periodic
     representation of $\ket{W_N}$ when
     $\operatorname{tr}(B^{\sigma_1}\cdots B^{\sigma_N})=\ket{W_N}(\sigma)$ for every
@@ -267,8 +267,7 @@ trace illustrates this failure.
     \lean{MPSTensor.PGVWC07CanonicalFormData.wordTupleSpanTop_of_ge,
         MPSTensor.wordTupleSpanTop_of_ge_of_isNBlkInjective}
     \leanok
-    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective,
-        def:blocks_not_gauge_phase_equiv}
+    \uses{def:pgvwc07_ti_canonical_representation,def:l_blk_injective,def:blocks_not_gauge_phase_equiv}
     Let $A$ be in the canonical form of
     Definition~\ref{def:pgvwc07_ti_canonical_representation} with blocks
     $A^1,\ldots,A^b$ of sizes $D_1,\ldots,D_b$, each $L_0$-block injective for a
@@ -354,8 +353,7 @@ trace illustrates this failure.
         MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isUnit,
         MPSTensor.PGVWC07CanonicalFormData.lt_of_mpv_eq_smul_wIndicator_of_isPrimitive}
     \leanok
-    \uses{def:pgvwc07_ti_canonical_representation, def:l_blk_injective,
-        def:blocks_not_gauge_phase_equiv, def:w_indicator}
+    \uses{def:pgvwc07_ti_canonical_representation,def:l_blk_injective,def:blocks_not_gauge_phase_equiv,def:w_indicator}
     Let $A$ be a translation-invariant tensor of bond dimension $D$ in the
     canonical form of Definition~\ref{def:pgvwc07_ti_canonical_representation},
     with $b$ blocks, no two of which are related by a gauge transformation and a
@@ -385,9 +383,7 @@ trace illustrates this failure.
 
 \begin{proof}
     \leanok
-    \uses{lem:w_state_cut_rank, lem:pgvwc07_block_tuple_span,
-        lem:pgvwc07_cut_rank_lower_bound, thm:w_state_two_product_states,
-        thm:wielandt_general}
+    \uses{lem:w_state_cut_rank,lem:pgvwc07_block_tuple_span,lem:pgvwc07_cut_rank_lower_bound,thm:w_state_two_product_states,thm:wielandt_general}
     Bipartitioning the chain into two pieces of at least
     $n_0=\max(L_0,3(b-1)(L_0+1))$ sites,
     Lemmas~\ref{lem:pgvwc07_block_tuple_span}
@@ -492,7 +488,7 @@ trace illustrates this failure.
 
 \begin{proof}
     \leanok
-    \uses{lem:normal_blocks_no_small_divisor, thm:w_state_canonical_bound}
+    \uses{lem:normal_blocks_no_small_divisor,thm:w_state_canonical_bound}
     By Lemma~\ref{lem:normal_blocks_no_small_divisor}, there are at most $D$
     unital irreducible blocks $B_j$ with positive definite dual fixed points,
     each injective after $L_0=(D^2+1)^2$ sites, no two of them related by a
@@ -557,7 +553,7 @@ trace illustrates this failure.
         MPSTensor.wBlockEncoding_conjTranspose_mul_self,
         MPSTensor.piKronecker_wBlockEncoding_isometry}
     \leanok
-    \uses{def:w_indicator, thm:spt_physical_embedding_boundary}
+    \uses{def:w_indicator,thm:spt_physical_embedding_boundary}
     The unnormalized W vector has squared norm $N$, so $\|W_N\|=\sqrt N$, and
     for $N>0$ the vector $N^{-1/2}|W_N\rangle$ has unit norm. For $k>0$, the map
     \begin{align}
@@ -583,7 +579,7 @@ trace illustrates this failure.
     \lean{MPSTensor.piKronecker_wBlockEncoding_mulVec_wIndicator,
         MPSTensor.piKronecker_wBlockEncoding_mulVec_normalized}
     \leanok
-    \uses{lem:w_state_block_encoding, lem:eval_word_block}
+    \uses{lem:w_state_block_encoding,lem:eval_word_block}
     With the usual flattening of $m$ consecutive blocks of $k$ sites,
     \begin{align}
         U_k^{\otimes m}|W_m\rangle & =k^{-1/2}|W_{mk}\rangle.
@@ -618,8 +614,7 @@ trace illustrates this failure.
         MPSTensor.prime_divisor_lt_of_mpv_eq_smul_wIndicator}
     \leanok
     \discussion{2947}
-    \uses{lem:w_state_isometric_blocking, lem:w_state_block_encoding,
-        lem:eval_word_block, thm:w_state_prime_bound}
+    \uses{lem:w_state_isometric_blocking,lem:w_state_block_encoding,lem:eval_word_block,thm:w_state_prime_bound}
     Suppose a tensor $A$ of bond dimension $D$ has periodic vector
     $cW_{mk}$, with $k>0$. Block $k$ consecutive physical sites and apply
     $U_k^\dagger$ to each physical leg. The resulting qubit tensor has the
@@ -638,8 +633,7 @@ trace illustrates this failure.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:w_state_isometric_blocking, lem:w_state_block_encoding,
-        lem:eval_word_block, thm:w_state_prime_bound}
+    \uses{lem:w_state_isometric_blocking,lem:w_state_block_encoding,lem:eval_word_block,thm:w_state_prime_bound}
     The physical action on a periodic vector is the tensor product of the
     local physical matrices. Lemma~\ref{lem:w_state_isometric_blocking}
     writes $W_{mk}$ as $\sqrt k\,U_k^{\otimes m}W_m$. Apply the adjoint of

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadHistoryTimeUnion
-import TNLean.PEPS.AreaLaw.Collar.Scales.ChargeBinomialBound
+import QICLean.Analysis.Real.ExcitationSubsetCounts
 
 /-!
 # A geometric finite tail for actual bad scan histories
@@ -19,7 +19,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 309–329, at `openai/math@adc7f124`.
 -/
 
-open ManyBody (ambientDilation planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -57,7 +57,7 @@ theorem badEndpointTail_le_geometricBadTail (S : CollarScan V I) (k μ : ℕ)
   have hwR : ((recentChargeTimes k (4 * S.n * (S.r₀ * j + 1))).card : ℝ) ≤
       (9 * (S.n : ℝ) * S.r₀) * j := by exact_mod_cast hw
   simpa only [badChargeRatio, div_eq_mul_inv, one_mul] using
-    choose_mul_pow_le_of_window_bound
+    Nat.choose_mul_pow_le_exp_mul_pow
       (recentChargeTimes k (4 * S.n * (S.r₀ * j + 1))).card j hjpos
       ((((1 + 2 * (2 * S.r₀) * (2 * S.r₀ + 1)) * μ : ℕ) : ℝ) *
         (1 / (2 * (S.M : ℝ)))) (9 * (S.n : ℝ) * S.r₀) (by positivity) hwR
@@ -84,7 +84,7 @@ theorem sum_historyWeight_bad_through_geometric_planeDomainGraph_le
     {N L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hr : 0 < S.r₀) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ μ) :

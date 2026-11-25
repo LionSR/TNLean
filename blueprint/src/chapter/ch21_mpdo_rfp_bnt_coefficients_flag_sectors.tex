@@ -14,7 +14,7 @@
     \lean{MPOTensor.TwistedDimer.%
         twoLabelCoeffs_rescaling_stable_not_lengthIndependent}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent}
+    \uses{def:mpdo_bnt_label_coefficient_family,def:mpdo_bnt_label_length_independent}
     Let the labels be $\{0,1\}$, with addition modulo two, and define
     positive diagonal matrices of size one, identified with their entries, by
     \begin{align}
@@ -40,7 +40,7 @@
     sectors of the twisted quantum dimer.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_length_independent}
+    \uses{def:mpdo_bnt_label_coefficient_family,def:mpdo_bnt_label_length_independent}
     If the powers of a positive real number $t$ agree at lengths one and
     two, then $t=t^2$, hence $t=1$. The triples $(0,0,0)$ and
     $(0,1,0)$ give $s_0\alpha=1$ and $s_1\beta=1$; the triple $(0,0,1)$ then
@@ -63,7 +63,7 @@
     \lean{MPOTensor.TwistedDimer.flagOperatorFamily}
     \lean{MPOTensor.TwistedDimer.flagOperatorFamily_operator}
     \leanok
-    \uses{def:mpdo_twisted_dimer_tensor, def:mpdo_bnt_label_operator_family}
+    \uses{def:mpdo_twisted_dimer_tensor,def:mpdo_bnt_label_operator_family}
     The matrices of the twisted quantum dimer of
     Definition~\ref{def:mpdo_twisted_dimer_tensor} are diagonal in the flag
     qubit. Viewed vertically, the tensor therefore splits along the flag
@@ -133,7 +133,7 @@
     \lean{MPOTensor.TwistedDimer.prod_flagCoef}
     \lean{MPOTensor.TwistedDimer.mpo_flagMPO_apply}
     \leanok
-    \uses{def:mpdo_twisted_dimer_flag_sectors, def:mpdo}
+    \uses{def:mpdo_twisted_dimer_flag_sectors,def:mpdo}
     For a matrix-unit tensor with one-site coefficients $c$, the ordered
     product along a nonempty pair of words vanishes unless both words
     satisfy the open bond-matching condition. When they do, the product is
@@ -186,7 +186,7 @@
     \lean{MPOTensor.TwistedDimer.mpo_flagMPO_mul}
     \lean{MPOTensor.TwistedDimer.flagOperatorFamily_hasSameLengthProductForm}
     \leanok
-    \uses{def:mpdo_twisted_dimer_flag_sectors, def:mpdo_bnt_label_same_length_product_form, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+    \uses{def:mpdo_twisted_dimer_flag_sectors,def:mpdo_bnt_label_same_length_product_form,thm:mpdo_twisted_dimer_two_label_rescaling_stable}
     For every positive length $L$ and all flag values $f,f'\in\{0,1\}$, the
     closed operators of the two rescaled flag sectors satisfy
     \begin{align}
@@ -269,7 +269,7 @@
     established below.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:mpdo_twisted_dimer_flag_sector_operators, lem:matrix_cyclic_path_sum, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+    \uses{lem:mpdo_twisted_dimer_flag_sector_operators,lem:matrix_cyclic_path_sum,thm:mpdo_twisted_dimer_two_label_rescaling_stable}
     Fix cyclically bond-matched words $\sigma$, $\tau$ with the common block
     labels $k_n$ and left bits $p_n$ of $\sigma$; all other entries of both
     sides vanish by Lemma~\ref{lem:mpdo_twisted_dimer_flag_sector_operators}.
@@ -321,7 +321,7 @@
     \lean{MPOTensor.TwistedDimer.canonicalFormData}
     \lean{MPOTensor.TwistedDimer.T_toMPSTensor_isCPSVCanonicalForm}
     \leanok
-    \uses{def:mpdo_twisted_dimer_tensor, def:cpsv_canonical_form, def:nt_cpsv, def:left_canonical_tensor}
+    \uses{def:mpdo_twisted_dimer_tensor,def:cpsv_canonical_form,def:nt_cpsv,def:left_canonical_tensor}
     Let $B_0$, $B_1$ denote the two horizontal blocks of the twisted quantum
     dimer $M$ of Definition~\ref{def:mpdo_twisted_dimer_tensor}, read as
     tensors with the doubled physical index $((l,r,f),(l',r',f'))$ and bond
@@ -342,7 +342,7 @@
     The physical-trace transfer of $\widehat B_1$ vanishes.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_closures, thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{thm:mpdo_twisted_dimer_closures,thm:is_normal_tensor_of_is_normal_left_canonical}
     The matrix of $B_k$ at the physical pair $((p,q,0),(p',q',0))$ is the
     matrix unit at the bond pair $((p,p'),(q,q'))$ with the nonzero
     coefficient $\frac12 C_k[p,p']$, so these matrices span the bond algebra.
@@ -367,7 +367,7 @@
     \label{lem:mpdo_phys_trace_transfer_blocking}
     \lean{MPOTensor.physTraceTransfer_blockTensor}
     \leanok
-    \uses{def:mpdo_physical_blocking, def:mpo_physical_trace_transfer}
+    \uses{def:mpdo_physical_blocking,def:mpo_physical_trace_transfer}
     For every tensor $M$ and every blocking length $L$, the physical-trace
     transfer of the $L$-site blocking of $M$ is the $L$-th power of the
     physical-trace transfer of $M$.
@@ -388,7 +388,7 @@
         doubledPhysTraceTransfer_blockedCanonicalFormData_blocks_one}
     \lean{MPOTensor.TwistedDimer.T_not_isSimple}
     \leanok
-    \uses{def:mpdo_simple_tensor, def:mpdo_twisted_dimer_tensor}
+    \uses{def:mpdo_simple_tensor,def:mpdo_twisted_dimer_tensor}
     The twisted quantum dimer of Definition~\ref{def:mpdo_twisted_dimer_tensor}
     is not simple in the sense of Definition~\ref{def:mpdo_simple_tensor}: for
     every positive blocking length $L$ and every basis-of-normal-tensors sector presentation of
@@ -396,7 +396,7 @@
     has nilpotent physical-trace transfer.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_horizontal_cf, thm:cpsv_literal_canonical_form_positive_blocking, thm:cpsv_physical_reindexing, thm:mpdo_blocking_doubled_index, thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_representative_sector_decomposition, thm:mpdo_bnt_nonnilpotency_independent, thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_phys_trace_transfer_blocking}
+    \uses{thm:mpdo_twisted_dimer_horizontal_cf,thm:cpsv_literal_canonical_form_positive_blocking,thm:cpsv_physical_reindexing,thm:mpdo_blocking_doubled_index,thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_representative_sector_decomposition,thm:mpdo_bnt_nonnilpotency_independent,thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase,lem:mpdo_doubled_phys_trace_transfer_to_mps,lem:mpdo_phys_trace_transfer_blocking}
     Fix $L>0$ and a presentation $P$. Blocking the canonical form of
     Lemma~\ref{thm:mpdo_twisted_dimer_horizontal_cf} by $L$ sites
     (Lemma~\ref{thm:cpsv_literal_canonical_form_positive_blocking}) and
@@ -452,7 +452,7 @@
     \lean{MPOTensor.TwistedDimer.flagFamily_isBNT}
     \lean{MPOTensor.TwistedDimer.T_isVerticalCF}
     \leanok
-    \uses{def:mpdo_twisted_dimer_flag_sectors, def:vertical_cf_mpdo, def:vertical_tensor_mpdo, def:bnt}
+    \uses{def:mpdo_twisted_dimer_flag_sectors,def:vertical_cf_mpdo,def:vertical_tensor_mpdo,def:bnt}
     The twisted quantum dimer $M$ of
     Definition~\ref{def:mpdo_twisted_dimer_tensor} has a vertical
     decomposition in the sense of
@@ -523,7 +523,7 @@
     CPSV sense is verified below.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:mpdo_twisted_dimer_flag_sectors, lem:mpdo_twisted_dimer_flag_sector_operators, def:vertical_cf_mpdo}
+    \uses{def:mpdo_twisted_dimer_flag_sectors,lem:mpdo_twisted_dimer_flag_sector_operators,def:vertical_cf_mpdo}
     The matrix of the twisted dimer between two physical indices with
     different flag values vanishes, because its coefficient contains
     $\delta_{ff'}$. Between two indices with common flag value $f$, it is
@@ -568,7 +568,7 @@
     \lean{MPOTensor.TwistedDimer.T_bntAlgebraTensorClause}
     \lean{MPOTensor.TwistedDimer.T_hasBNTAlgebraTensorClause}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_twisted_dimer_vertical_cf, thm:mpdo_twisted_dimer_flag_sector_product_law, thm:mpdo_twisted_dimer_two_label_rescaling_stable}
+    \uses{def:mpdo_bnt_algebra_tensor_clause,thm:mpdo_twisted_dimer_vertical_cf,thm:mpdo_twisted_dimer_flag_sector_product_law,thm:mpdo_twisted_dimer_two_label_rescaling_stable}
     The vertical sectors of the twisted quantum dimer of
     Definition~\ref{def:mpdo_twisted_dimer_tensor} satisfy the algebra and
     idempotent conditions of
@@ -605,7 +605,7 @@
     coefficients length independent.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_vertical_cf, thm:mpdo_twisted_dimer_flag_sector_product_law, thm:is_normal_tensor_of_is_normal_left_canonical}
+    \uses{thm:mpdo_twisted_dimer_vertical_cf,thm:mpdo_twisted_dimer_flag_sector_product_law,thm:is_normal_tensor_of_is_normal_left_canonical}
     The adjoint of a sector matrix times that matrix is the diagonal matrix
     unit at the right bits $(p',q')$ of the bond pair with the squared modulus
     of the coefficient, and the flag sign squares to one. Summing over the

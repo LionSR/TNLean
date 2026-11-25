@@ -143,7 +143,7 @@ $r_n$ is expressed in physical and private coordinates as $\Omega \otimes \Xi$,
 and the canonical regrouping of the same auxiliary stack is proved for the
 constructed witness rather than retained as a separate field of the public
 protocol predicate.\footnote{\leanid{TNLean.PEPS.Approximation.DyadicProtocol.exists_reference_changes_of_readoutCircuit}
-    and \leanid{TNLean.PEPS.EncodedFrame.readout_eval_readoutCircuit_stackVec}.}
+    and \leanid{TNLean.PEPS.EncodedFrame.physicalReadout_readoutCircuit_stackRef}.}
 That every intermediate reference vector $r_t$, $0 < t < n$,
 has at least one frame (\path{06-geometry.tex}, lines~38--40) is stated in the
 predicate and proved for the construction: every change of the schedule keeps
@@ -172,7 +172,7 @@ Two further clauses of Proposition~7.1 hold for the formal predicate.
           are the selected contractions, as in the instantiation of Section~8
           (\path{07-assembly.tex}, lines~29--34), and each formal nonprivate gate $G$
           equals its recorded expansion,\footnote{By the definition of
-              \leanid{TNLean.Lattice.PartyCircuit.EffectGate.eval} on a nonprivate gate,
+              \leanid{QuantumCircuit.Party.WeightedGate.ev} on a nonprivate gate,
               which evaluates the sum of its recorded monomials.}
           $G = \sum_{\xi} c_{\xi} M_{\xi}$, so
           $\lVert G - \sum_{\xi} c_{\xi} M_{\xi}\rVert = 0 \le L^{-a}$ for every

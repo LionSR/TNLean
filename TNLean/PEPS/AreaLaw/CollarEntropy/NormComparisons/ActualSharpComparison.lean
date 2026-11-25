@@ -32,7 +32,7 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation F
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
-open ManyBody (AdmissibleSupport PlaneInteraction)
+open ManyBody (AdmissibleSupport PlaneInteraction ambientDepth)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

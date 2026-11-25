@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixComparison
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Polygons.Templates.AmbientBoundary
 
@@ -23,7 +23,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 -/
 
 open ManyBody (ambientDilation ambientDilation_zero edgeBoundary mem_ambientDilation_iff
-  planeDomainGraph)
+  planeDomainGraph ambientDepth ambientDepth_le_iff_mem_ambientDilation ambientDepth_nonneg supDist
+  natCast_supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -32,14 +33,14 @@ Source: `08-scanner.tex`, lines 43–48 and 254–255. -/
 theorem disjoint_ambientDilation_boundaryEndpoints_of_clearance
     (Λ T : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (L r₀ : ℕ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-      ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {j : ℕ} (hj : j ≤ L) :
     Disjoint (ambientDilation T j) (Geometry.boundaryEndpoints Λ A) := by
   apply Finset.disjoint_left.mpr
   intro z hz hzcut
   obtain ⟨t, ht, hdist⟩ := mem_ambientDilation_iff.mp hz
-  have hnear : ambientSupDistance t z ≤ (j : ℤ) := by
-    simp only [ambientSupDistance, max_le_iff, abs_le]
+  have hnear : (supDist t z : ℤ) ≤ (j : ℤ) := by
+    simp only [natCast_supDist, max_le_iff, abs_le]
     omega
   have hfar := hclear t ht z hzcut
   omega
@@ -68,7 +69,7 @@ theorem card_edgeBoundary_depthPrefix_le (Λ T : Finset (ℤ × ℤ))
     (hrow : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-      ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {j : ℤ} (hj : j ≤ L) :
     (edgeBoundary (planeDomainGraph Λ)
       (depthPrefix A (fun x ↦ ambientDepth T hT x.val) j)).card ≤ 4 * n := by
@@ -78,7 +79,7 @@ theorem card_edgeBoundary_depthPrefix_le (Λ T : Finset (ℤ × ℤ))
     have heq : depthPrefix A (fun x ↦ ambientDepth T hT x.val) j =
         A.filter fun x ↦ x.val ∈ ambientDilation T j := by
       ext x
-      simp only [depthPrefix, Finset.mem_filter, ambientDepth_le_iff_mem_dilation]
+      simp only [depthPrefix, Finset.mem_filter, ambientDepth_le_iff_mem_ambientDilation]
     rw [heq]
     exact (Geometry.card_edgeBoundary_filter_le_ambientBoundary Λ A _
       (disjoint_ambientDilation_boundaryEndpoints_of_clearance Λ T A L r₀ hclear hjL)).trans
@@ -110,9 +111,9 @@ theorem positiveDepthPrefix_eq_filter_ambientDilation
       A.filter fun x ↦ x.val ∈ (ambientDilation T j.toNat \ T) := by
   simp only [Finset.ext_iff, positiveDepthPrefix, Finset.mem_filter, Finset.mem_sdiff]
   by_cases hj : 0 ≤ j
-  · simp only [← ambientDepth_le_iff_mem_dilation T hT, Int.toNat_of_nonneg hj]
+  · simp only [← ambientDepth_le_iff_mem_ambientDilation T hT, Int.toNat_of_nonneg hj]
     have hzero (x : ℤ × ℤ) : ambientDepth T hT x ≤ 0 ↔ x ∈ T :=
-      (ambientDepth_le_iff_mem_dilation T hT x 0).trans
+      (ambientDepth_le_iff_mem_ambientDilation T hT x 0).trans
         (Iff.of_eq (congrArg (fun U : Finset (ℤ × ℤ) ↦ x ∈ U) (ambientDilation_zero T)))
     simp [← hzero, not_le, and_comm]
   · simp [Int.toNat_of_nonpos (le_of_lt (lt_of_not_ge hj)),
@@ -127,7 +128,7 @@ theorem card_edgeBoundary_positiveDepthPrefix_le (Λ T : Finset (ℤ × ℤ))
     (hrow : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-      ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+      ((2 * L + 10 * r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {j : ℤ} (hj : j ≤ L) :
     (edgeBoundary (planeDomainGraph Λ)
       (positiveDepthPrefix A (fun x ↦ ambientDepth T hT x.val) j)).card ≤ 8 * n := by

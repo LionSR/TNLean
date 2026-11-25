@@ -5,25 +5,9 @@ The following bounds concern the source replacement and its prescribed
 star and sample alphabets (without asserting an identification of the
 sampled physical operator with a contraction of local tensors).
 
-\begin{lemma}[Finite coordinates for the original input]
-    \label{thm:peps_finite_whole_party_input}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.finiteDimensional_wholePartyMem}
-    \leanok
-    For any finite party set $P$ and finite-dimensional private memories
-    $H_p$ (with no bound on $\dim H_p$), the ordered memory
-    $\bigotimes_{p\in P}H_p$ is finite-dimensional and admits a finite
-    orthonormal basis.
-\end{lemma}
-\begin{proof}
-    \leanok
-    A finite tensor product of finite-dimensional spaces $H_p$ (including
-    empty products and zero-dimensional factors) is finite-dimensional.
-\end{proof}
-
-
 \begin{lemma}[Source positions after the physical output exchange]
     \label{thm:peps_physical_first_source_count}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_sourceLocations_physicalFirstReplacement_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_sourceLocations_replacement_le}
     \leanok
     An original contraction circuit $W$ with $N$ nonprivate gate
     occurrences of arity at most $a$ has physical-first source replacement
@@ -31,16 +15,14 @@ sampled physical operator with a contraction of local tensors).
     and private dimensions).
 \end{lemma}
 \begin{proof}
-    \uses{thm:peps_physical_first_occurrences}
     \leanok
     Each replacement gate has $\binom{|\text{participants}|}{2}\le\binom a2$
-    source slots, and the physical output exchange adds no gates or sources
-    (Lemma~\ref{thm:peps_physical_first_occurrences}).
+    source slots.
 \end{proof}
 
 \begin{lemma}[Polynomial sample count from original resources]
     \label{thm:peps_physical_first_sample_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sourceSamplingCount_physicalFirstReplacement_lt_power}
+    \lean{QuantumCircuit.Party.OriginalCircuit.binomialSampleCount_replacement_lt_power}
     \leanok
     In the setting of Lemma~\ref{thm:peps_physical_first_source_count},
     let $L\ge1$, let $n,s,d,p,\ell\in\mathbb N$, and suppose
@@ -72,7 +54,7 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Polynomial branch counts after the physical exchange]
     \label{thm:peps_physical_first_branch_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_branchLabels_physicalFirstReplacement_le_power}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_branchLabels_replacement_le_power}
     \leanok
     Suppose $L\ge1$, $C_N\ge1$, $C_K,C_S,S\ge0$, $u,n,s,p\in\mathbb N$, and
     \begin{align}
@@ -101,19 +83,18 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{definition}[Original gate occurrences]
     \label{def:peps_physical_first_original_locality}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.physicalFirstReplacementLocationsEquiv}
+    \lean{QuantumCircuit.Party.OriginalCircuit.replacementLocationsEquiv}
     \leanok
-    \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences}
+    \uses{thm:peps_replacement_participants}
     Let $E$ be the bijection from original nonprivate gate occurrences to
-    physical-first replacement gate occurrences obtained by composing the
-    correspondences of Lemmas~\ref{thm:peps_replacement_participants}
-    and~\ref{thm:peps_physical_first_occurrences}.
+    physical-first replacement gate occurrences given by the
+    correspondence of Lemma~\ref{thm:peps_replacement_participants}.
 \end{definition}
 
 \begin{lemma}[Original participants and link locality]
     \label{thm:peps_physical_first_original_locality}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
+    \lean{QuantumCircuit.Party.OriginalCircuit.participants_replacementLocationsEquiv}
+    \lean{QuantumCircuit.Party.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
     \uses{def:peps_physical_first_original_locality}
     \leanok
     The bijection $E$ preserves participating sets. For any retained set of
@@ -123,10 +104,8 @@ sampled physical operator with a contraction of local tensors).
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences,
-        thm:compression_original_gate_locality}
-    By Lemmas~\ref{thm:peps_replacement_participants}
-    and~\ref{thm:peps_physical_first_occurrences}, $E$ preserves
+    \uses{thm:peps_replacement_participants,thm:compression_original_gate_locality}
+    By Lemma~\ref{thm:peps_replacement_participants}, $E$ preserves
     participating sets; Lemma~\ref{thm:compression_original_gate_locality}
     places both endpoints of each link in the participating set of its
     gate.
@@ -134,7 +113,7 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Original lifetime bound controls the link degree]
     \label{thm:peps_physical_first_original_degree}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstLinks_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_incidentPhysicalFirstLinks_le}
     \leanok
     If every original gate involves at most $b$ parties and each party
     participates in at most $b$ original nonprivate occurrences, then in
@@ -153,7 +132,7 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Polynomial virtual dimensions of the source alphabets]
     \label{thm:peps_source_alphabet_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds}
     \leanok
     Fix a set of gate occurrences of a source circuit and a root assignment
     defining its star links (carrying ordered ket--bra branch pairs) and
@@ -170,8 +149,7 @@ sampled physical operator with a contraction of local tensors).
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:compression_operator_alphabet_card,
-        def:compression_distributed_links}
+    \uses{thm:compression_operator_alphabet_card,def:compression_distributed_links}
     By Definition~\ref{def:compression_distributed_links} and
     Lemma~\ref{thm:compression_operator_alphabet_card}
     (\cite[Proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}), star and

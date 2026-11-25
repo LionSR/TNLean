@@ -7,8 +7,6 @@ import TNLean.Network.SampledApproximation.DistributedGateMapConstruction
 import TNLean.PEPS.Approximation.Routing.PartyColumnRouting
 import TNLean.PEPS.Approximation.Protocol.DyadicProtocol
 import TNLean.PEPS.Approximation.Routing.GroundStateApproximation
-import TNLean.Lattice.PartyCircuit.OriginalCircuitChain
-import TNLean.Lattice.PartyCircuit.OriginalCircuitSequence
 
 /-!
 # Compression of the dyadic distribution protocol
@@ -66,44 +64,47 @@ noncomputable section
 open scoped Matrix
 
 namespace TNLean.PEPS.Approximation.DyadicProtocol
-open TNLean.Lattice.Compression
 
-open Finset TNLean.Lattice.PartyCircuit
+open Finset ManyBody QuantumCircuit QuantumCircuit.Party TNLean.Network
 
-variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
+variable {L q : ℕ} {P : Type} [Fintype P] [DecidableEq P] (D : DyadicProtocol L q P)
 
 /-- The first `n` changes of a protocol, composed into one chronology.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
-def chain (n : ℕ) : OriginalCircuit (D.layout 0) (D.layout n) :=
-  OriginalCircuit.sequence D.layout D.step n
+def chain (n : ℕ) : OriginalCircuit (D.system 0) (D.system n) :=
+  OriginalCircuit.sequence D.system D.step n
 
 /-- The composed changes take the initial vector to the actual vector at every stage.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:29–36`. -/
-theorem eval_chain_trajectory (n : ℕ) : (D.chain n).eval (D.trajectory 0) = D.trajectory n := by
+theorem toEuclideanLin_op_chain_trajectory (n : ℕ) :
+    Matrix.toEuclideanLin (D.chain n).op (D.trajectory 0) = D.trajectory n := by
   induction n with
-  | zero => rfl
+  | zero =>
+      rw [chain, OriginalCircuit.op_sequence_zero]
+      simp
   | succ n ih =>
-      rw [chain, OriginalCircuit.eval_sequence_succ, ← chain, ih]
+      rw [chain, OriginalCircuit.op_sequence_succ, Matrix.toLpLin_mul (q := 2),
+        LinearMap.comp_apply, ← chain, ih]
       rfl
 
 /-- The composed changes have the nonprivate gates of all changes.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 theorem nonprivateCount_chain (n : ℕ) :
     (D.chain n).nonprivateCount = ∑ t ∈ range n, (D.step t).nonprivateCount :=
-  OriginalCircuit.nonprivateCount_sequence D.layout D.step n
+  OriginalCircuit.nonprivateCount_sequence D.system D.step n
 
 /-- The participation of a party in the composed changes is the sum over the changes.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:31–32`. -/
-theorem participationCount_chain (n : ℕ) (p : P) :
-    (D.chain n).participationCount p = ∑ t ∈ range n, (D.step t).participationCount p :=
-  OriginalCircuit.participationCount_sequence D.layout D.step n p
+theorem participation_chain (n : ℕ) (p : P) :
+    (D.chain n).participation p = ∑ t ∈ range n, (D.step t).participation p :=
+  OriginalCircuit.participation_sequence D.system D.step n p
 
 /-- Every nonprivate gate of the composed changes is a nonprivate gate of one change.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–37`. -/
 theorem exists_participants_chain (n : ℕ) (g : (D.chain n).nonprivateLocations) :
     ∃ t < n, ∃ g' : (D.step t).nonprivateLocations,
       (D.chain n).participants g = (D.step t).participants g' :=
-  OriginalCircuit.forall_participants_sequence D.layout D.step
+  OriginalCircuit.forall_participants_sequence D.system D.step
     (fun S ↦ ∃ t < n, ∃ g' : (D.step t).nonprivateLocations, S = (D.step t).participants g')
     n (fun t ht g' ↦ ⟨t, ht, g', rfl⟩) g
 
@@ -111,39 +112,39 @@ theorem exists_participants_chain (n : ℕ) (g : (D.chain n).nonprivateLocations
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 theorem isExpansionBounded_chain {r : ℕ} {S : ℝ} (n : ℕ)
     (h : ∀ t < n, (D.step t).IsExpansionBounded r S) : (D.chain n).IsExpansionBounded r S :=
-  OriginalCircuit.isExpansionBounded_sequence D.layout D.step r S n h
+  OriginalCircuit.isExpansionBounded_sequence D.system D.step r S n h
 
 /-- The composed changes inherit the monomial bounds of every change.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 theorem isMonomialBounded_chain {K : ℕ} (n : ℕ)
     (h : ∀ t < n, (D.step t).IsMonomialBounded K) : (D.chain n).IsMonomialBounded K :=
-  OriginalCircuit.isMonomialBounded_sequence D.layout D.step K n h
+  OriginalCircuit.isMonomialBounded_sequence D.system D.step K n h
 
 /-- The protocol, read as one distributed construction of Theorem 5.2: its composed changes, with
-their recorded monomial expansions, between the input and output layouts of the protocol.
+their recorded monomial expansions, from the initial memory to the final memory of the protocol,
+read as physical and private registers through the relabelling of the bases of the final memory.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:45–49`, and Theorem 5.2,
 `04-compression.tex:137–151`. -/
-def toDistributedConstruction (hL : 0 < L) : DistributedConstruction P where
+def toDistributedConstruction (hL : 0 < L) :
+    DistributedConstruction P (D.system 0) D.physicalDimension D.privateOutput where
   nonemptyParties := ⟨D.site (⟨0, hL⟩, ⟨0, hL⟩)⟩
-  initialSpace := D.initialSpace
-  finite_initialSpace := D.finite_initialSpace
   initialVector := D.initialVector
   norm_initialVector := D.norm_initialVector
-  physicalDimension := D.physicalDimension
-  physicalOrder := D.physicalOrder
-  physicalOrder_nodup := D.physicalOrder_nodup
-  mem_physicalOrder := D.mem_physicalOrder
-  privateOutput := D.privateOutput
-  finite_privateOutput := D.finite_privateOutput
-  circuit := (D.chain D.changes).castLayouts D.layout_zero D.layout_changes
+  circuit := (D.chain D.changes).comp (OriginalCircuit.relabel fun p ↦ (D.finalSystemEquiv p).symm)
 
-/-- Every property of the composed changes holds for the circuit of the protocol read as a
-distributed construction, which only identifies its layouts.
+/-- Every property of the composed changes that passes to a relabelling of the bases of the
+output holds for the circuit of the protocol read as a distributed construction, which only
+relabels its final memory as the physical and private registers.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:45–49`. -/
 theorem toDistributedConstruction_circuit_induction (hL : 0 < L)
-    (Q : ∀ a b : Layout P, OriginalCircuit a b → Prop) (h : Q _ _ (D.chain D.changes)) :
-    Q _ _ (D.toDistributedConstruction hL).circuit :=
-  OriginalCircuit.castLayouts_induction Q _ _ h
+    (Q : ∀ (X Y : P → Type) [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
+      [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)], OriginalCircuit X Y → Prop)
+    (hrel : ∀ (X Y Z : P → Type) [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)]
+      [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)] [∀ p, Fintype (Z p)]
+      [∀ p, DecidableEq (Z p)] (w : OriginalCircuit X Y) (e : ∀ p, Z p ≃ Y p), Q X Y w →
+        Q X Z (w.comp (OriginalCircuit.relabel e)))
+    (h : Q _ _ (D.chain D.changes)) : Q _ _ (D.toDistributedConstruction hL).circuit :=
+  hrel _ _ _ _ _ h
 
 /-- Every nonprivate gate of the protocol circuit has the participating set of a nonprivate gate
 of one change.
@@ -152,11 +153,11 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 theorem exists_participants_toDistributedConstruction_circuit (hL : 0 < L)
     (g : (D.toDistributedConstruction hL).circuit.nonprivateLocations) :
     ∃ t < D.changes, ∃ g' : (D.step t).nonprivateLocations,
-      (D.toDistributedConstruction hL).circuit.participants g = (D.step t).participants g' :=
-  D.toDistributedConstruction_circuit_induction hL
-    (fun _ _ w ↦ ∀ g : w.nonprivateLocations, ∃ t < D.changes,
-      ∃ g' : (D.step t).nonprivateLocations, w.participants g = (D.step t).participants g')
-    (D.exists_participants_chain D.changes) g
+      (D.toDistributedConstruction hL).circuit.participants g = (D.step t).participants g' := by
+  rcases g with g | g
+  · exact D.exists_participants_chain D.changes g
+  · exact ((OriginalCircuit.isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero
+      (OriginalCircuit.nonprivateCount_relabel _)).false g).elim
 
 namespace IsDistributionProtocol
 
@@ -171,7 +172,8 @@ theorem nonprivateCount_toDistributedConstruction_circuit_le
     (D.toDistributedConstruction hL).circuit.nonprivateCount ≤ D.changes * b := by
   have hcount : (D.toDistributedConstruction hL).circuit.nonprivateCount =
       (D.chain D.changes).nonprivateCount :=
-    Circuit.gateCount_castLayouts _ _ _
+    (OriginalCircuit.nonprivateCount_comp _ _).trans
+      (by rw [OriginalCircuit.nonprivateCount_relabel, add_zero])
   rw [hcount, DyadicProtocol.nonprivateCount_chain]
   simpa using Finset.sum_le_card_nsmul _ _ b fun t ht ↦
     h.nonprivateCount_le t (Finset.mem_range.mp ht)
@@ -179,12 +181,15 @@ theorem nonprivateCount_toDistributedConstruction_circuit_le
 /-- Every party participates in at most `b` nonprivate gates of the protocol circuit.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 `06-geometry.tex:31–32`. -/
-theorem participationCount_toDistributedConstruction_circuit_le
+theorem participation_toDistributedConstruction_circuit_le
     (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 0 < L) (p : P) :
-    (D.toDistributedConstruction hL).circuit.participationCount p ≤ b :=
-  D.toDistributedConstruction_circuit_induction hL (fun _ _ w ↦ w.participationCount p ≤ b) <| by
-    rw [DyadicProtocol.participationCount_chain]
-    exact h.participation_le p
+    (D.toDistributedConstruction hL).circuit.participation p ≤ b := by
+  have hcount : (D.toDistributedConstruction hL).circuit.participation p =
+      (D.chain D.changes).participation p :=
+    (OriginalCircuit.participation_comp _ _ p).trans
+      (by rw [OriginalCircuit.participation_relabel, add_zero])
+  rw [hcount, DyadicProtocol.participation_chain]
+  exact h.participation_le p
 
 /-- Every nonprivate gate of the protocol circuit has at most `⌊C_K L^k⌋` monomials.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
@@ -192,8 +197,9 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 theorem isMonomialBounded_toDistributedConstruction_circuit
     (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 0 < L) :
     (D.toDistributedConstruction hL).circuit.IsMonomialBounded ⌊C_K * (L : ℝ) ^ k⌋₊ :=
-  D.toDistributedConstruction_circuit_induction hL (fun _ _ w ↦ w.IsMonomialBounded _)
-    (D.isMonomialBounded_chain _ h.monomialBounded)
+  (OriginalCircuit.isMonomialBounded_comp _ _ _).mpr ⟨D.isMonomialBounded_chain _ h.monomialBounded,
+    OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero
+      (OriginalCircuit.nonprivateCount_relabel _) _⟩
 
 /-- In the protocol circuit, every monomial has at most `r` pair effects and every gate has
 absolute coefficient sum at most `C_K L^k`.
@@ -203,8 +209,10 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 2,
 theorem isExpansionBounded_toDistributedConstruction_circuit
     (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r) (hL : 0 < L) :
     (D.toDistributedConstruction hL).circuit.IsExpansionBounded r (C_K * (L : ℝ) ^ k) :=
-  D.toDistributedConstruction_circuit_induction hL (fun _ _ w ↦ w.IsExpansionBounded r _)
-    (D.isExpansionBounded_chain _ h.expansionBounded)
+  (OriginalCircuit.isExpansionBounded_comp _ _ _ _).mpr
+    ⟨D.isExpansionBounded_chain _ h.expansionBounded,
+      OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero
+        (OriginalCircuit.nonprivateCount_relabel _) _ _⟩
 
 end IsDistributionProtocol
 
@@ -224,35 +232,36 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:36–49`, an
 theorem physicalDensity_toDistributedConstruction (hL : 0 < L) :
     (D.toDistributedConstruction hL).physicalDensity =
       D.physicalDensity.submatrix D.physicalConfigEquiv D.physicalConfigEquiv := by
-  classical
-  let := Layout.finiteDimensional_mem_of_registers D.privateOutput D.finite_privateOutput
   set e := D.physicalConfigEquiv
-  set J := familyLabelledPhysicalReadout D.physicalDimension D.physicalOrder
-    D.physicalOrder_nodup D.mem_physicalOrder D.privateOutput
-  set w := J (Layout.memCongr D.layout_changes (D.trajectory D.changes))
+  set J := physicalReadout D.physicalDimension D.privateOutput
+  set w := Matrix.toEuclideanLin J (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+    (Equiv.piCongrRight D.finalSystemEquiv) (D.trajectory D.changes))
   have hC : (D.toDistributedConstruction hL).physicalDensity =
       Matrix.partialTraceRight (Matrix.euclideanOuterProduct w w) := by
-    have h : (D.toDistributedConstruction hL).circuit.eval
-        (D.toDistributedConstruction hL).input.vector =
-        Layout.memCongr D.layout_changes (D.trajectory D.changes) := by
-      have hx : (D.toDistributedConstruction hL).input.vector =
-          Layout.memCongr D.layout_zero (D.trajectory 0) := by
-        change D.input.vector =
-          Layout.memCongr D.layout_zero (Layout.memCongr D.layout_zero.symm D.input.vector)
-        rw [Layout.memCongr_symm D.layout_zero, LinearIsometryEquiv.apply_symm_apply]
-      rw [hx]
-      exact (OriginalCircuit.eval_castLayouts_memCongr _ _ _ _).trans
-        (congrArg _ (D.eval_chain_trajectory _))
-    change Matrix.partialTraceRight (Matrix.euclideanOuterProduct
-      (J ((D.toDistributedConstruction hL).circuit.eval
-        (D.toDistributedConstruction hL).input.vector))
-      (J ((D.toDistributedConstruction hL).circuit.eval
-        (D.toDistributedConstruction hL).input.vector))) = _
+    rw [DistributedConstruction.physicalDensity, OriginalCircuit.physicalDensity_eq]
+    have h : Matrix.toEuclideanLin (D.toDistributedConstruction hL).circuit.op
+        (D.toDistributedConstruction hL).input =
+        LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Equiv.piCongrRight D.finalSystemEquiv)
+          (D.trajectory D.changes) := by
+      change Matrix.toEuclideanLin ((D.chain D.changes).comp
+        (OriginalCircuit.relabel fun p ↦ (D.finalSystemEquiv p).symm)).op (D.trajectory 0) = _
+      rw [OriginalCircuit.op_comp, Matrix.toLpLin_mul (q := 2), LinearMap.comp_apply,
+        D.toEuclideanLin_op_chain_trajectory, OriginalCircuit.toEuclideanLin_op_relabel]
+      rfl
     rw [h]
+  have hw : D.readout (D.trajectory D.changes) =
+      LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (e.prodCongr (Equiv.refl _)) w := by
+    ext ⟨c, i⟩
+    change (D.trajectory D.changes) (D.finalConfigEquiv.symm (c, i)) =
+      (Matrix.toEuclideanLin J (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        (Equiv.piCongrRight D.finalSystemEquiv) (D.trajectory D.changes))) (e.symm c, i)
+    rw [toEuclideanLin_physicalReadout_apply]
+    rfl
   have hD : D.physicalDensity = Matrix.partialTraceRight
       ((Matrix.euclideanOuterProduct w w).submatrix (e.prodCongr (Equiv.refl _)).symm
         (e.prodCongr (Equiv.refl _)).symm) := by
     unfold physicalDensity
+    rw [hw]
     congr 1
   rw [hC, hD, Matrix.partialTraceRight_submatrix_prod_equiv, Matrix.submatrix_submatrix]
   ext x y
@@ -290,7 +299,7 @@ theorem physicalOut_foldVertex (hL : 0 < L) (x : Configuration L q) :
   ext
   simp [physicalOut, D.physicalDimension_site, Nat.mod_eq_of_lt (x v).2]
 
-open DistributedOperatorContraction TNLean.Lattice.Compression.DistributedOperatorContraction in
+open DistributedOperatorContraction TNLean.Network.DistributedOperatorContraction in
 /-- **From a compressed density to an operator party network on dyadic anchors.** Let a
 distributed operator contraction on the parties of a protocol be within `ε` of the physical
 density of the protocol, with link alphabets of size at most `C₁ L ^ α`, at most `deg` links at
@@ -305,8 +314,7 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), the conclusion of Theorem 5.2
 estimate `eq:protocol-density`, `07-assembly.tex:33–41`. -/
 theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace L q}
     {C_N C_K C_E : ℝ} {b k r : ℕ} (h : D.IsDistributionProtocol Ω C_N C_K C_E b k r)
-    (hC : 0 ≤ C_E) (hΩ : ‖Ω‖ = 1)
-    {_ : DecidableEq P} {Gate : Type} {_ : DecidableEq Gate} (gates : Finset Gate)
+    (hC : 0 ≤ C_E) (hΩ : ‖Ω‖ = 1) {Gate : Type} {_ : DecidableEq Gate} (gates : Finset Gate)
     (participants : Gate → Finset P) (root : Gate → P)
     (hroot : ∀ g ∈ gates, root g ∈ participants g) (Label : Gate → Type)
     [∀ g, Fintype (Label g)] (m : ℕ) (c : (g : Gate) → Label g → ℂ)
@@ -378,9 +386,8 @@ theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace 
 end TNLean.PEPS.Approximation.DyadicProtocol
 
 namespace TNLean.PEPS.Approximation
-open TNLean.Lattice.Compression
 
-open Finset TNLean.Lattice.PartyCircuit
+open Finset ManyBody QuantumCircuit QuantumCircuit.Party TNLean.Network
 
 /-- A protocol with the bounds of §8 for fixed constants, on a square of some side `L ≥ 2`,
 together with its unit target vector. These instances form the family of constructions to which
@@ -392,12 +399,13 @@ private structure ProtocolInstance (q : ℕ) (C_N C_K C_E : ℝ) (b k r : ℕ) w
   two_le : 2 ≤ size
   Party : Type
   [fintype : Fintype Party]
+  [decidableEq : DecidableEq Party]
   protocol : DyadicProtocol size q Party
   target : StateSpace size q
   norm_target : ‖target‖ = 1
   isDistributionProtocol : protocol.IsDistributionProtocol target C_N C_K C_E b k r
 
-attribute [local instance] ProtocolInstance.fintype
+attribute [local instance] ProtocolInstance.fintype ProtocolInstance.decidableEq
 
 /-- The floor of a real number is at most its positive part. -/
 private theorem natCast_floor_le_max (x : ℝ) : (⌊x⌋₊ : ℝ) ≤ max x 0 := by
@@ -439,9 +447,9 @@ theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ 
   have hsize : ∀ i, 2 ≤ size i := fun i ↦ by
     change (2 : ℝ) ≤ (i.size : ℝ)
     exact_mod_cast i.two_le
-  let C₀ : ∀ i : ProtocolInstance q C_N C_K C_E b k r, DistributedConstruction i.Party :=
-    fun i ↦
-    i.protocol.toDistributedConstruction (by have := i.two_le; omega)
+  let C₀ : ∀ i : ProtocolInstance q C_N C_K C_E b k r, DistributedConstruction i.Party
+      (i.protocol.system 0) i.protocol.physicalDimension i.protocol.privateOutput :=
+    fun i ↦ i.protocol.toDistributedConstruction (by have := i.two_le; omega)
   have hN₀ : ∀ i, ((C₀ i).circuit.nonprivateCount : ℝ) ≤ (max C_N 0 * b) * size i ^ 3 := by
     intro i
     have hD := i.isDistributionProtocol
@@ -453,9 +461,8 @@ theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ 
           gcongr
           exact hD.changes_le.trans (by gcongr; exact le_max_left _ _)
       _ = (max C_N 0 * b) * size i ^ 3 := by ring
-  have hphysical₀ : ∀ i j, ((C₀ i).physicalDimension j : ℝ) ≤ q * size i ^ 0 := by
+  have hphysical₀ : ∀ i j, (i.protocol.physicalDimension j : ℝ) ≤ q * size i ^ 0 := by
     intro i j
-    change (i.protocol.physicalDimension j : ℝ) ≤ _
     rw [pow_zero, mul_one]
     by_cases hj : j ∈ Set.range i.protocol.site
     · obtain ⟨v, rfl⟩ := hj
@@ -466,8 +473,8 @@ theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ 
     obtain ⟨t, ht, g', hg'⟩ := i.protocol.exists_participants_toDistributedConstruction_circuit _ g
     exact (congrArg Finset.card hg').trans_le
       (i.isDistributionProtocol.card_participants_le t ht g')
-  have hlifetime₀ : ∀ i j, (C₀ i).circuit.participationCount j ≤ b := fun i j ↦
-    i.isDistributionProtocol.participationCount_toDistributedConstruction_circuit_le _ j
+  have hlifetime₀ : ∀ i j, (C₀ i).circuit.participation j ≤ b := fun i j ↦
+    i.isDistributionProtocol.participation_toDistributedConstruction_circuit_le _ j
   have hpow : ∀ i, C_K * size i ^ k ≤ max C_K 0 * size i ^ k := fun i ↦
     mul_pow_le_max_zero_mul_pow C_K (by linarith [hsize i]) k
   have hmonomial₀ : ∀ i, ∃ K : ℕ, (C₀ i).circuit.IsMonomialBounded K ∧
@@ -480,11 +487,12 @@ theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ 
     i.isDistributionProtocol.isExpansionBounded_toDistributedConstruction_circuit
       (by have := i.two_le; omega)
   have hfam := DistributedConstruction.uniform_sampled_network_of_sum_le size hsize
-    (fun i ↦ i.Party) C₀ b 3 0 r k k (max C_N 0 * b) q (max C_K 0) C_K hN₀ hphysical₀ harity₀
-    hlifetime₀ hmonomial₀ hexpansion₀ 5 le_rfl le_rfl
+    (fun i ↦ i.Party) (fun i ↦ i.protocol.system 0) (fun i ↦ i.protocol.physicalDimension)
+    (fun i ↦ i.protocol.privateOutput) C₀ b 3 0 r k k (max C_N 0 * b) q (max C_K 0) C_K hN₀
+    hphysical₀ harity₀ hlifetime₀ hmonomial₀ hexpansion₀ 5 le_rfl le_rfl
   intro L hL hL₀ Ω hΩ
   have hΩ₁ : ‖Ω‖ = 1 := hG L Ω hΩ
-  obtain ⟨P, hP, D, hD⟩ := hall L hL hL₀ Ω hΩ
+  obtain ⟨P, hP, hPd, D, hD⟩ := hall L hL hL₀ Ω hΩ
   let i : ProtocolInstance q C_N C_K C_E b k r := ⟨L, hL, P, D, Ω, hΩ₁, hD⟩
   obtain ⟨_, _, _, _, _, _, _, _, _, _, T, herr, hdim, hinc, hloc⟩ := hfam i
   have hL0 : 0 < L := by omega
@@ -499,14 +507,13 @@ theorem dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt {q : ℕ} (hq : 2 ≤ 
     by_contra hneg
     have := div_neg_of_neg_of_pos (not_le.mp hneg) (by positivity : (0 : ℝ) < (L : ℝ) ^ 57)
     linarith
-  classical
   obtain ⟨Λ, _, _, N, hdeg, hsep, hdimN, hnorm⟩ :=
     D.exists_partyNetwork_of_contractedOperator hL0 hD hC hΩ₁ _ _ _ _ _ _ _ T
       (D.physicalDensity_toDistributedConstruction hL0) herr hdim hinc fun e j l hj hl ↦ by
         obtain ⟨g, hjg, hlg⟩ := hloc e j l hj hl
         obtain ⟨t, ht, g', hg'⟩ := D.exists_participants_toDistributedConstruction_circuit hL0 g
         exact ⟨t, ht, g', by rw [← hg']; exact hjg, by rw [← hg']; exact hlg⟩
-  refine ⟨P, Λ, hP, inferInstance, inferInstance, inferInstance, N, D.placement, hD.inGrid,
+  refine ⟨P, Λ, hP, hPd, inferInstance, inferInstance, N, D.placement, hD.inGrid,
     hD.blockBounded, hdeg, hsep, fun ℓ ↦ (hdimN ℓ).trans_eq (by rw [Real.rpow_natCast]), ?_⟩
   have hx : (2 : ℝ) ≤ L := by exact_mod_cast hL
   have hx5 : (0 : ℝ) < (L : ℝ) ^ 5 := by positivity

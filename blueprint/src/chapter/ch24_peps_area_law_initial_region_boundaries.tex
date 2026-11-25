@@ -20,10 +20,7 @@ $k_0\ge 50{,}000{,}000$, with arbitrary valid residue choices.
     $\partial X_i^0\cap\mathbb Z^2=\varnothing$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_cell_fan_cover,thm:area_law_fan_triangle_contact,
-        thm:area_law_cell_fan_intersections,thm:area_law_cell_fan_mark_vertices,
-        thm:area_law_belt_marks_quarter_mesh,thm:area_law_primary_fine_cell_cover,
-        thm:area_law_dyadic_origin_lines,def:area_law_initial_birth_regions}
+    \uses{thm:area_law_cell_fan_cover,thm:area_law_fan_triangle_contact,thm:area_law_cell_fan_intersections,thm:area_law_cell_fan_mark_vertices,thm:area_law_belt_marks_quarter_mesh,thm:area_law_primary_fine_cell_cover,thm:area_law_dyadic_origin_lines,def:area_law_initial_birth_regions}
     First allow an arbitrary origin. Every dyadic square boundary lies
     on a line $x_1=o_1+m$ or $x_2=o_2+m$ with $m\in\mathbb Z$,
     since its side length is an integer power of two. The boundary of
@@ -64,8 +61,7 @@ $k_0\ge 50{,}000{,}000$, with arbitrary valid residue choices.
     $\partial\operatorname{int}(X_i^0)\cap\mathbb Z^2=\varnothing$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_initial_birth_boundary_lattice,
-        def:area_law_initial_open_regions}
+    \uses{thm:area_law_initial_birth_boundary_lattice,def:area_law_initial_open_regions}
     The inclusion
     $\partial\operatorname{int}(X_i^0)\subseteq\partial X_i^0$
     transfers the birth-boundary avoidance to the open region.
@@ -75,14 +71,12 @@ $k_0\ge 50{,}000{,}000$, with arbitrary valid residue choices.
     \label{thm:area_law_initial_lattice_membership}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_lattice_mem_iff_initialOpenRegion}
     \leanok
-    \uses{def:area_law_initial_birth_regions,def:area_law_initial_open_regions,
-        def:area_law_dyadic_origin}
+    \uses{def:area_law_initial_birth_regions,def:area_law_initial_open_regions,def:area_law_dyadic_origin}
     For every identifier $i$ and every $v\in\mathbb Z^2$,
     $v\in X_i^0$ if and only if $v\in\operatorname{int}(X_i^0)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_initial_birth_boundary_lattice,
-        def:area_law_initial_open_regions}
+    \uses{thm:area_law_initial_birth_boundary_lattice,def:area_law_initial_open_regions}
     A point in $X_i^0$ outside its boundary is an interior point.
     Birth-boundary avoidance gives this implication at every lattice
     point. The converse is the inclusion

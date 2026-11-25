@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Spectral.LowEnergy.ChebyshevViability
-import QICLean.Analysis.Projection.InvariantTensorWordPower
+import QICLean.Analysis.TensorProduct.InvariantTensorWordPower
 import QICLean.Spectral.LowEnergy.Coordinates
 import QICLean.Analysis.TensorProduct.MatrixTensorCoordinates
 import QICLean.Analysis.Support.ProjectionOrder
@@ -64,7 +64,7 @@ open Matrix
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-open TNLean.MPS.AreaLaw TNLean.Lattice
+open TNLean.MPS.AreaLaw
 
 section Cuts
 

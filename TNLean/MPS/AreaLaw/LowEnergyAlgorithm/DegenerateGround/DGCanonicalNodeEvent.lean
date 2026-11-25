@@ -31,7 +31,7 @@ open MeasureTheory
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-open TNLean.MPS.AreaLaw TNLean.Lattice
+open TNLean.MPS.AreaLaw
 
 /-- For fixed children of dimension at most `D^{2k} s`, every number of rounds `k ≥ 1` with
 `s ≤ D^{2k}`, and the canonical range sample of the merged space, the image under all words of

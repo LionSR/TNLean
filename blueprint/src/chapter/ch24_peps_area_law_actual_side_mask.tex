@@ -77,8 +77,7 @@ cell in a layer $k\ge k_0$ participates in this subdivision rule.
     \label{def:area_law_actual_side_mask}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask}
     \leanok
-    \uses{def:area_law_cell_fan,def:area_law_cell_corner,
-        def:area_law_fine_layer_indices}
+    \uses{def:area_law_cell_fan,def:area_law_cell_corner,def:area_law_fine_layer_indices}
     For the fine cell indexed by $z$ in layer $k$, write $[a_s,b_s]$
     for side $s$. Set $\varepsilon_s=1$ if the midpoint
     $(a_s+b_s)/2$ is a corner of some fine cell in a layer $h\ge k_0$,
@@ -114,8 +113,7 @@ cell in a layer $k\ge k_0$ participates in this subdivision rule.
     subdivision, then that corner is an endpoint of the elementary segment.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_corner_side_subdivision,def:area_law_actual_side_mask,
-        thm:area_law_elementary_side_geometry}
+    \uses{thm:area_law_corner_side_subdivision,def:area_law_actual_side_mask,thm:area_law_elementary_side_geometry}
     Every elementary segment lies on its full side $[a_s,b_s]$, so any corner
     of cell $w$ on $[a_s,b_s]$ is $a_s$, $(a_s+b_s)/2$, or $b_s$. If side $s$
     is undivided, the midpoint $(a_s+b_s)/2$ cannot be a corner of cell $w$ by

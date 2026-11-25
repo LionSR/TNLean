@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolTerminalCoordinates
-import TNLean.Lattice.Sheet.SheetStack
+import QICLean.Circuit.Party.Sheet.Initialization
 
 /-!
 # Private initialization of the chain sheets
@@ -12,8 +12,8 @@ import TNLean.Lattice.Sheet.SheetStack
 The main copy is held by the first remainder party. Every right and left
 auxiliary copy is held by the party that supplies its band operation. Copies
 with the same centre remain distinct occurrences in the list of sheets.
-The product of the copies can therefore be prepared from a product vector
-across the parties using private operations alone.
+The reference vector of the copies is therefore a product of unit vectors
+across the parties, the factor of a party being the product of the copies it holds.
 
 Source: the one-dimensional note, Part II, `part2b_mps_protocol.tex`,
 Construction `con:sweep`, lines 330–343, and Proposition `prop:sweep`,
@@ -25,7 +25,8 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
-open TNLean.Lattice TNLean.Lattice.PartyCircuit
+open QuantumCircuit QuantumCircuit.Party
+open ManyBody (Config)
 
 /-- All auxiliary copy labels, each occurring once, in a fixed order.
 Source: Part II, `con:band`, lines 265–272, and `con:sweep`, lines 336–340. -/
@@ -70,30 +71,26 @@ theorem mem_initialFrames {L w : ℕ}
 Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
 theorem norm_initialFrames {L w q : ℕ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) :
-    ‖framesVec (Sheet.refFamily Ω) (initialFrames L w)‖ = 1 :=
-  Sheet.norm_framesVec hΩ _
+    ‖framesVec (fun S : Sheet (Fin L) (Party L w) ↦ S.refVec Ω) (initialFrames L w)‖ = 1 := by
+  rw [norm_framesVec]
+  exact List.prod_eq_one fun r hr ↦ by
+    obtain ⟨S, -, rfl⟩ := List.mem_map.mp hr
+    rw [S.norm_refVec, hΩ]
 
-/-- The specified initial copies are prepared exactly from a product vector
-across all parties, with no nonprivate gate. The memory and vector of each
-party are constructed from the copies it holds, rather than supplied.
+/-- The specified initial copies form a product of unit vectors across all parties: the factor
+of a party is the product of the copies it holds, constructed rather than supplied.
 Source: Part II, `prop:sweep`, item 1, lines 349–351. -/
 theorem exists_initialization {L w q : ℕ}
     (hL : 0 < L) {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) :
-    let Fs := initialFrames L w
-    let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
-    ∃ hx : ∀ p, ‖framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)‖ = 1,
-      ∃ c : OriginalCircuit
-          (ProductInput.wholePartyLayout fun p ↦
-            framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p))
-          (stackRegs (Sheet.regs q) Fs []),
-        c.nonprivateCount = 0 ∧
-        (∀ (S : Set (Party L w)) g, (↑(c.participants g) : Set (Party L w)) ⊆ S) ∧
-        (∀ r s, c.IsExpansionBounded r s) ∧ (∀ K, c.IsMonomialBounded K) ∧
-        c.eval (ProductInput.ofAllParties _ _ hx).vector = framesVec (Sheet.refFamily Ω) Fs := by
-  classical
-  apply Sheet.exists_originalCircuit_initial_of_owner hΩ
-  intro F hF x
-  obtain ⟨p, rfl⟩ := mem_initialFrames hF
-  rfl
+    ∃ φ : ∀ p, EuclideanSpace ℂ
+        (stackSystem (Sheet.system q) (initialFrames L w) (fun _ ↦ Unit) p),
+      (∀ p, ‖φ p‖ = 1) ∧
+      (WithLp.toLp 2 (productVector fun p x ↦ WithLp.ofLp (φ p) x) :
+        EuclideanSpace ℂ (Config (stackSystem (Sheet.system q) (initialFrames L w)
+          fun _ ↦ Unit))) =
+        framesVec (fun S ↦ S.refVec Ω) (initialFrames L w) :=
+  Sheet.exists_productVector_eq_framesVec hΩ _ (fun F ↦ F.owner ⟨0, hL⟩) fun F hF x ↦ by
+    obtain ⟨p, rfl⟩ := mem_initialFrames hF
+    rfl
 
 end TNLean.MPS.AreaLaw.ChainSweep

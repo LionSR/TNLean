@@ -115,7 +115,7 @@ Definition~\ref{def:mpug_group_representation}.
     \lean{Kraus.IsNormal.eq_smul_of_cross_mul_eq,
         Kraus.IsInjective.eq_smul_of_cross_mul_eq}
     \leanok
-    \uses{def:injective, def:normal}
+    \uses{def:injective,def:normal}
     Let $A_i$ and $B_i$ be two families of square matrices of the same size,
     indexed by the same finite alphabet, and suppose that, for every $i,j$,
     \begin{align}
@@ -131,7 +131,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:decomposition_map, thm:normal_tensor_gram_rigidity}
+    \uses{def:decomposition_map,thm:normal_tensor_gram_rigidity}
     Let $N\geq1$ be a blocking length at which the length-$N$ words of $A$
     span the full matrix algebra, and decompose the identity as
     $\mathbf 1=\sum_\sigma c_\sigma A^{\sigma_1}\cdots A^{\sigma_N}$. The
@@ -158,7 +158,7 @@ Definition~\ref{def:mpug_group_representation}.
     \label{def:mpug_adjoint_canonical_boundaries}
     \lean{MPOTensor.IsMPUCanonicalFormII.physicalAdjointTensor}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpdo_physical_adjoint}
+    \uses{def:mpu_canonical_form_ii,def:mpdo_physical_adjoint}
     Let $\mathcal U$ be an MPU with a canonical-form-II presentation and
     recorded positive diagonal fixed matrix $\rho$, with
     $\operatorname{tr}\rho=1$. Its physical adjoint has letters
@@ -174,10 +174,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{definition}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_physical_adjoint_identities,
-        def:mpu_physical_adjoint_cfii_data,
-        thm:mpu_physical_adjoint_normalized_flattening,
-        thm:cpsv_map_star_transfer_fixed_point}
+    \uses{thm:mpu_physical_adjoint_identities,def:mpu_physical_adjoint_cfii_data,thm:mpu_physical_adjoint_normalized_flattening,thm:cpsv_map_star_transfer_fixed_point}
     Physical adjunction preserves periodic unitarity and conjugates the
     canonical blocks without changing their dimensions. Writing
     $\mathcal E_{\mathcal U}$ for the transfer map of $\mathcal U$, the
@@ -198,7 +195,7 @@ Definition~\ref{def:mpug_group_representation}.
         MPOTensor.IsMPUCanonicalFormII.doubleLayer_boundary_contractions}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_double_layer}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpu_double_layer}
     Let $\mathcal U$ be a simple MPU with a canonical-form-II presentation
     and recorded fixed matrix $\rho$. Let $W$ be its unnormalized double layer,
     put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
@@ -216,9 +213,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpu_canonical_form_ii_transfer_stabilization,
-        thm:mpu_supplied_projector_simple2,
-        thm:mpu_all_later_simple_blockings}
+    \uses{thm:mpu_canonical_form_ii_transfer_stabilization,thm:mpu_supplied_projector_simple2,thm:mpu_all_later_simple_blockings}
     Aligning the simplicity fixed vectors with the canonical fixed pair using
     the stabilized normalized transfer power gives~(\ref{eq:mpug_simple_canonical_split}) and
     $(\Phi|W^{ij}|\rho)=\delta_{ij}$. Contracting~(\ref{eq:mpug_simple_canonical_split}) on
@@ -229,8 +224,7 @@ Definition~\ref{def:mpug_group_representation}.
     \label{thm:mpug_adjoint_canonical_boundary_contractions}
     \lean{MPOTensor.IsMPUCanonicalFormII.physicalAdjoint_doubleLayer_boundary_contractions}
     \leanok
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpu_double_layer}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpu_double_layer}
     Let $\mathcal U$ be an MPU with a canonical-form-II presentation and
     recorded fixed matrix $\rho$. Assume that $\mathcal U^\dagger$ is
     simple. Let $W_\dagger$ be the unnormalized double layer of
@@ -248,8 +242,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_adjoint_canonical_boundaries,
-        thm:mpug_simple_canonical_boundary_contractions}
+    \uses{def:mpug_adjoint_canonical_boundaries,thm:mpug_simple_canonical_boundary_contractions}
     Passing the canonical presentation to $\mathcal U^\dagger$ with
     the same $\rho$ and applying
     Lemma~\ref{thm:mpug_simple_canonical_boundary_contractions}
@@ -284,8 +277,7 @@ Definition~\ref{def:mpug_group_representation}.
     \lean{MPOTensor.IsMPUCanonicalFormII.adjointSimpleContraction_cross_mul}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpug_adjoint_simple_contraction}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpug_adjoint_simple_contraction}
     Let $\mathcal U$ have a canonical-form-II presentation with recorded
     fixed matrix $\rho$, and assume that both $\mathcal U$ and
     $\mathcal U^\dagger$ are simple. Construct $s$ from this same $\rho$
@@ -299,8 +291,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_simple_canonical_boundary_contractions,
-        thm:mpug_adjoint_canonical_boundary_contractions}
+    \uses{thm:mpug_simple_canonical_boundary_contractions,thm:mpug_adjoint_canonical_boundary_contractions}
     For fixed open indices $i,j,k,l,a,b$, the six-tensor network expands as
     \begin{align}
         \mathcal N^{ij,kl}_{ab}
@@ -324,8 +315,7 @@ Definition~\ref{def:mpug_group_representation}.
     \lean{MPOTensor.IsMPUCanonicalFormII.adjointSimpleContraction_eq_smul}
     \leanok
     \discussion{7317}
-    \uses{def:mpu_canonical_form_ii, def:mpu_simple,
-        def:mpdo_physical_adjoint, def:mpug_adjoint_simple_contraction}
+    \uses{def:mpu_canonical_form_ii,def:mpu_simple,def:mpdo_physical_adjoint,def:mpug_adjoint_simple_contraction}
     Let $\mathcal U$ have a canonical-form-II presentation with recorded
     fixed matrix $\rho$, and suppose that both $\mathcal U$ and
     $\mathcal U^\dagger$ are simple. Then, as in the proportionality
@@ -341,8 +331,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_adjoint_simple_cross_product,
-        thm:mpu_canonical_form_ii_normal, thm:mpug_cross_product_rigidity}
+    \uses{thm:mpug_adjoint_simple_cross_product,thm:mpu_canonical_form_ii_normal,thm:mpug_cross_product_rigidity}
     With $\widetilde{\mathcal U}^{ij}=d^{-1/2}\mathcal U^{ij}$,
     canonical form II gives $d,D>0$ and normality of
     $\widetilde{\mathcal U}$. Scaling
@@ -456,13 +445,13 @@ Definition~\ref{def:mpug_group_representation}.
     \label{thm:mpug_coboundary_cocycle}
     \lean{ScalarThreeCochain.isCocycle_coboundary}
     \leanok
-    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    \uses{def:mpug_three_cocycle,def:mpug_fusion_gauge}
     For every scalar $2$-cochain $\beta$, the cochain $d\beta$ satisfies
     (\ref{eq:mpug_three_cocycle}).
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    \uses{def:mpug_three_cocycle,def:mpug_fusion_gauge}
     This is~\cite[``A three-coboundary is a
         three-cocycle'']{QICLean2026Blueprint}.
     Expanding the two sides gives the same product after cancellation:
@@ -481,7 +470,7 @@ Definition~\ref{def:mpug_group_representation}.
     \lean{ScalarThreeCochain.IsCocycle.mul,
         ScalarThreeCochain.IsCocycle.fusionGauge}
     \leanok
-    \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    \uses{def:mpug_three_cocycle,def:mpug_fusion_gauge}
     The pointwise product of two scalar $3$-cocycles is a scalar
     $3$-cocycle. Consequently, if $\omega$ satisfies
     (\ref{eq:mpug_three_cocycle}), then so does
@@ -489,7 +478,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_three_cocycle, thm:mpug_coboundary_cocycle}
+    \uses{def:mpug_three_cocycle,thm:mpug_coboundary_cocycle}
     This is~\cite[``Products and gauges preserve
         three-cocycles'']{QICLean2026Blueprint}.
     Multiplying the two instances of (\ref{eq:mpug_three_cocycle}) and
@@ -506,7 +495,7 @@ Definition~\ref{def:mpug_group_representation}.
         ScalarThreeCochain.IsNormalized.mul,
         ScalarThreeCochain.IsNormalized.fusionGauge}
     \leanok
-    \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
+    \uses{def:mpug_scalar_cochains,def:mpug_fusion_gauge}
     The $3$-coboundary $d\beta$ is normalized if and only if there is a
     constant $c\in\C^\times$ such that, for every $g\in G$,
     \begin{align}
@@ -519,7 +508,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
+    \uses{def:mpug_scalar_cochains,def:mpug_fusion_gauge}
     This is~\cite[``Normalization under a gauge'']{QICLean2026Blueprint}.
     Setting one argument at a time equal to $e$ in
     (\ref{eq:mpug_coboundary}), if $d\beta$ is normalized, then
@@ -557,7 +546,7 @@ Definition~\ref{def:mpug_group_representation}.
         ScalarThreeCochain.CohomologousTo.trans,
         ScalarThreeCochain.CohomologousTo.equivalence}
     \leanok
-    \uses{def:mpug_cohomologous_to, thm:mpug_gauge_action}
+    \uses{def:mpug_cohomologous_to,thm:mpug_gauge_action}
     Cohomologous-to is reflexive, symmetric, and transitive.
 \end{lemma}
 
@@ -591,7 +580,7 @@ Definition~\ref{def:mpug_group_representation}.
     \lean{ScalarCohomology.isMulCocycle₂_iff,
         ScalarCohomology.H2π_eq_iff_isMulCoboundary₂_div}
     \leanok
-    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle, def:h2_cx}
+    \uses{def:is_coboundary,def:cohomologous_to,def:is_cocycle,def:h2_cx}
     Let $G$ act trivially on $\C^\times$, and let
     $f(g,h)=\omega(g,h)$. The multiplicative cocycle equation
     \begin{align}
@@ -614,8 +603,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle,
-        thm:coboundary_iff_cohomologous_one}
+    \uses{def:is_coboundary,def:cohomologous_to,def:is_cocycle,thm:coboundary_iff_cohomologous_one}
     Since $\C^\times$ is commutative,
     (\ref{eq:mpug_h2_cocycle_comparison}) is obtained from the cocycle
     equation by interchanging the two factors on each side.
@@ -630,7 +618,7 @@ Definition~\ref{def:mpug_group_representation}.
     \label{thm:mpug_h2_group_cohomology_comparison}
     \lean{ScalarCocycle.exists_H2π_eq}
     \leanok
-    \uses{def:h2_cx, thm:mpug_h2_trivial_coefficients}
+    \uses{def:h2_cx,thm:mpug_h2_trivial_coefficients}
     Endowing $\C^\times$ with the trivial $G$-action, every element of
     $H^2\bigl(G,\C^\times_{\mathrm{triv}}\bigr)$ is the class $\pi(\omega)$ of
     a scalar $2$-cocycle $\omega$. Together with
@@ -665,7 +653,7 @@ Definition~\ref{def:mpug_group_representation}.
         ScalarThreeCochain.cocyclesEquiv,
         ScalarThreeCochain.anomalyClass}
     \leanok
-    \uses{def:mpug_three_cocycle, thm:mpug_h2_group_cohomology_comparison}
+    \uses{def:mpug_three_cocycle,thm:mpug_h2_group_cohomology_comparison}
     Giving $\C^\times$ the trivial $G$-action and writing it additively as in
     Lemma~\ref{thm:mpug_h2_group_cohomology_comparison}, a scalar
     $n$-cochain for $n=2,3$ is an inhomogeneous $n$-cochain
@@ -697,8 +685,7 @@ Definition~\ref{def:mpug_group_representation}.
         ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero,
         ScalarThreeCochain.anomalyClass_surjective}
     \leanok
-    \uses{def:mpug_h3_group_cohomology, def:mpug_fusion_gauge,
-        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    \uses{def:mpug_h3_group_cohomology,def:mpug_fusion_gauge,def:mpug_cohomologous_to,def:mpug_trivial_gauge_class}
     With the trivial action, the differentials of the inhomogeneous cochain
     complex in degrees two and three are, multiplicatively,
     \begin{align}
@@ -727,8 +714,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:mpug_h3_group_cohomology, def:mpug_fusion_gauge,
-        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    \uses{def:mpug_h3_group_cohomology,def:mpug_fusion_gauge,def:mpug_cohomologous_to,def:mpug_trivial_gauge_class}
     In degree $n$ the inhomogeneous differential of a cochain $f$ with
     trivial action is the alternating sum of $f$ at the $n+2$ faces
     obtained by dropping the first argument, multiplying two adjacent
@@ -768,8 +754,7 @@ Definition~\ref{def:mpug_group_representation}.
         ScalarThreeCochain.cyclicInvariant_eq_one_of_isTrivialGaugeClass,
         ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one}
     \leanok
-    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
-        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    \uses{def:mpug_cyclic_invariant,def:mpug_fusion_gauge,def:mpug_cohomologous_to,def:mpug_trivial_gauge_class}
     Let $g^n=e$. For every scalar $2$-cochain $\beta$,
     \begin{align}
         I_{g,n}(d\beta)                              & =1,               \\
@@ -783,8 +768,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
-        def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    \uses{def:mpug_cyclic_invariant,def:mpug_fusion_gauge,def:mpug_cohomologous_to,def:mpug_trivial_gauge_class}
     This is~\cite[``Gauge invariance of the cyclic
         invariant'']{QICLean2026Blueprint}.
     By (\ref{eq:mpug_coboundary}),
@@ -820,9 +804,7 @@ Definition~\ref{def:mpug_group_representation}.
         ScalarThreeCochain.comap_fusionGauge,
         ScalarThreeCochain.CohomologousTo.comap}
     \leanok
-    \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
-        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
-        def:mpug_trivial_gauge_class}
+    \uses{def:mpug_cochain_restriction,def:mpug_three_cocycle,def:mpug_fusion_gauge,def:mpug_cohomologous_to,def:mpug_trivial_gauge_class}
     Restriction along $f$ sends $3$-cocycles to $3$-cocycles and satisfies
     $f^*(\beta\mathbin{\triangleright}\omega)
         =(f^*\beta)\mathbin{\triangleright}f^*\omega$, where
@@ -832,9 +814,7 @@ Definition~\ref{def:mpug_group_representation}.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
-        def:mpug_fusion_gauge, def:mpug_cohomologous_to,
-        def:mpug_trivial_gauge_class}
+    \uses{def:mpug_cochain_restriction,def:mpug_three_cocycle,def:mpug_fusion_gauge,def:mpug_cohomologous_to,def:mpug_trivial_gauge_class}
     This is~\cite[``Restriction preserves cocycles and gauge
         classes'']{QICLean2026Blueprint}.
     Since $f(ab)=f(a)f(b)$, for all $a,b,c,d\in H$
@@ -878,8 +858,7 @@ space of $(MN)P$.
         MPSTensor.IsReduction.mulTensor_assoc_left,
         MPSTensor.IsReduction.mulTensor_assoc_right}
     \leanok
-    \uses{def:mps_rectangular_reduction, def:mpdo_operator_product,
-        def:mpdo_operator_product_associator}
+    \uses{def:mps_rectangular_reduction,def:mpdo_operator_product,def:mpdo_operator_product_associator}
     Reductions compose: if $(V_1,W_1)$ reduces $C$ onto $B$ and
     $(V_2,W_2)$ reduces $B$ onto $A$, then $(V_2V_1,W_1W_2)$ reduces $C$
     onto $A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
@@ -943,9 +922,7 @@ space of $(MN)P$.
         MPOTensor.GroupFamily.FusionData.IsAssociator,
         MPOTensor.GroupFamily.FusionData.omega}
     \leanok
-    \uses{def:mpug_group_representation, def:mpdo_operator_product,
-        def:mpo_to_mps, def:mps_rectangular_reduction,
-        def:mpdo_operator_product_associator, def:normal}
+    \uses{def:mpug_group_representation,def:mpdo_operator_product,def:mpo_to_mps,def:mps_rectangular_reduction,def:mpdo_operator_product_associator,def:normal}
     Let $\{O_g\}_{g\in G}$ be matrix product operator tensors of positive
     bond dimension whose doubled-index tensors are normal and whose periodic
     operators satisfy $O_g O_h=O_{gh}$ on every nonempty chain. A choice of
@@ -1035,7 +1012,7 @@ space of $(MN)P$.
     \lean{MPOTensor.GroupFamily.FusionData.isReduction_left,
         MPOTensor.GroupFamily.FusionData.isReduction_right}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_reduction_composition}
+    \uses{def:mpug_anomaly_three_cochain,thm:mpug_reduction_composition}
     The pairs $(V^L,W^L)$ and $(V^R,W^R)$ of
     Definition~\ref{def:mpug_anomaly_three_cochain} are reductions of the
     triple product $(O_gO_h)O_k$ onto $O_{ghk}$.
@@ -1055,8 +1032,7 @@ space of $(MN)P$.
     \lean{MPOTensor.GroupFamily.FusionData.isAssociator_omega,
         MPOTensor.GroupFamily.FusionData.eq_omega_of_isAssociator}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_fusion_trees_reductions,
-        thm:mpug_dressed_proportionality}
+    \uses{def:mpug_anomaly_three_cochain,thm:mpug_fusion_trees_reductions,thm:mpug_dressed_proportionality}
     The scalar $\omega(g,h,k)$ exists, is nonzero, and is the only scalar
     with the dressed identity of
     Definition~\ref{def:mpug_anomaly_three_cochain}.
@@ -1075,8 +1051,7 @@ space of $(MN)P$.
     \lean{MPOTensor.GroupFamily.FusionData.isCocycle_omega,
         MPOTensor.GroupFamily.FusionData.isCocycle_omega_of_isRepresentation}
     \leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
-        thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_anomaly_three_cochain_spec,thm:mpug_reduction_composition,thm:mpug_dressed_proportionality}
     For every $g,h,k,l\in G$,
     \begin{align}
         \omega(gh,k,l)\,\omega(g,h,kl)
@@ -1086,8 +1061,7 @@ space of $(MN)P$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec, thm:mpug_reduction_composition,
-        thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_anomaly_three_cochain_spec,thm:mpug_reduction_composition,thm:mpug_dressed_proportionality}
     The five fusion trees of the fourfold product $((O_gO_h)O_k)O_l$ are
     reductions onto $O_{ghkl}$. Two trees that differ by one change of
     bracketing are related against long words by one value of $\omega$:
@@ -1127,8 +1101,7 @@ space of $(MN)P$.
         MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge,
         MPOTensor.GroupFamily.FusionData.omega_cohomologousTo}
     \leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec,
-        thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_anomaly_three_cochain_spec,thm:mpug_dressed_proportionality}
     Let $\omega$ and $\omega'$ come from two choices of fusion tensors, and
     let $\beta_{g,h}\in\C^\times$ be the scalar with
     $F^<_{g,h}B^{\mathbf w}=\beta_{g,h}F'^<_{g,h}B^{\mathbf w}$ for all long
@@ -1143,8 +1116,7 @@ space of $(MN)P$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_anomaly_three_cochain_spec,
-        thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_anomaly_three_cochain_spec,thm:mpug_dressed_proportionality}
     By the two parts of Lemma~\ref{thm:mpug_dressed_proportionality}, the
     left boundaries of the two choices of the tree fusing $g$ with $h$
     first differ by $\beta_{g,h}\beta_{gh,k}$, and those of the tree fusing
@@ -1157,7 +1129,7 @@ space of $(MN)P$.
     \label{def:mpug_anomaly_class}
     \lean{MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass}
     \leanok
-    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_h3_group_cohomology}
+    \uses{thm:mpug_anomaly_three_cocycle,thm:mpug_h3_group_cohomology}
     Let the doubled-index tensors be normal. The anomaly class in
     $H^3(G,\C^\times_{\mathrm{triv}})$ is the class of the anomaly
     three-cocycle $\omega$, for any choice of fusion tensors.
@@ -1169,16 +1141,14 @@ space of $(MN)P$.
         MPOTensor.GroupFamily.FusionData.anomalyClass_omega,
         MPOTensor.GroupFamily.FusionData.isTrivialGaugeClass_omega_iff}
     \leanok
-    \uses{def:mpug_anomaly_class, thm:mpug_anomaly_three_cocycle,
-        thm:mpug_anomaly_three_cocycle_gauge, thm:mpug_h3_group_cohomology}
+    \uses{def:mpug_anomaly_class,thm:mpug_anomaly_three_cocycle,thm:mpug_anomaly_three_cocycle_gauge,thm:mpug_h3_group_cohomology}
     The class $[\omega]\in H^3(G,\C^\times_{\mathrm{triv}})$ of the anomaly
     three-cocycle is the same for every choice of fusion tensors. It vanishes
     exactly when $\omega$ has trivial gauge class.
 \end{corollary}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_anomaly_three_cocycle, thm:mpug_anomaly_three_cocycle_gauge,
-        thm:mpug_h3_group_cohomology}
+    \uses{thm:mpug_anomaly_three_cocycle,thm:mpug_anomaly_three_cocycle_gauge,thm:mpug_h3_group_cohomology}
     Two choices of fusion tensors give cohomologous three-cocycles by
     Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, hence equal classes
     by (\ref{eq:mpug_h3_cohomologous}). The second statement is
@@ -1196,7 +1166,7 @@ space of $(MN)P$.
         MPSTensor.IsReduction.of_reindexBond_source,
         MPOTensor.mulTensor_mul_idKron_of_intertwine}
     \leanok
-    \uses{def:mps_rectangular_reduction, def:mpdo_physical_adjoint, def:mpo_to_mps}
+    \uses{def:mps_rectangular_reduction,def:mpdo_physical_adjoint,def:mpo_to_mps}
     Let $(V,W)$ reduce the doubled-index tensor of $K$ onto that of $M$. Then
     the entrywise complex conjugates $(\overline V,\overline W)$ reduce the
     physical adjoint $K^\dagger$ onto $M^\dagger$. Moreover, if $Q R=\Id$ and
@@ -1227,8 +1197,7 @@ space of $(MN)P$.
         MPOTensor.GroupFamily.FusionData.daggerFusionV,
         MPOTensor.GroupFamily.FusionData.daggerFusionW}
     \leanok
-    \uses{def:mpug_anomaly_three_cochain, thm:mpug_dagger_inverse_gauge,
-        def:mpug_product_bond_swap}
+    \uses{def:mpug_anomaly_three_cochain,thm:mpug_dagger_inverse_gauge,def:mpug_product_bond_swap}
     Let $g\mapsto\mathcal U_g$ be a representation by simple injective MPU
     tensors in canonical form, with dagger-inverse gauges $T_g$ and a choice
     of fusion tensors $(F^<_{g,h},F^>_{g,h})$. For $g,h\in G$ the daggered
@@ -1259,7 +1228,7 @@ space of $(MN)P$.
         MPOTensor.GroupFamily.IsRepresentation.toMPSTensor_mul_daggerTargetGauge,
         MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge_mul_inv}
     \leanok
-    \uses{def:mpug_dagger_fusion_tensors, thm:mpug_dagger_inverse_gauge}
+    \uses{def:mpug_dagger_fusion_tensors,thm:mpug_dagger_inverse_gauge}
     For every $x\in G$ and every physical pair $i,j$,
     $\mathcal U_x^{ij}\,T_{x^{-1}}=T_{x^{-1}}\,(\mathcal U^\dagger_{x^{-1}})^{ij}$,
     and similarly
@@ -1278,8 +1247,7 @@ space of $(MN)P$.
     \label{thm:mpug_dagger_fusion_reduction}
     \lean{MPOTensor.GroupFamily.FusionData.isReduction_daggerFusion}
     \leanok
-    \uses{def:mpug_dagger_fusion_tensors, thm:mpug_reduction_dagger,
-        thm:mpug_dagger_leg_gauges, thm:mpug_physical_adjoint_product_reversal}
+    \uses{def:mpug_dagger_fusion_tensors,thm:mpug_reduction_dagger,thm:mpug_dagger_leg_gauges,thm:mpug_physical_adjoint_product_reversal}
     For every $g,h\in G$ the daggered fusion tensors
     $(\widetilde F^<_{g,h},\widetilde F^>_{g,h})$ reduce
     $\mathcal U_g\mathcal U_h$ onto $\mathcal U_{gh}$.
@@ -1303,7 +1271,7 @@ space of $(MN)P$.
     \lean{MPOTensor.GroupFamily.FusionData.daggerZeta,
         MPOTensor.GroupFamily.FusionData.daggerZeta_defzeta}
     \leanok
-    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_dagger_fusion_reduction,thm:mpug_dressed_proportionality}
     For every $g,h\in G$ there is a scalar $\zeta_{g,h}\in\C^\times$ such that,
     for all sufficiently long words $\mathbf w$ of $B=\mathcal U_g\mathcal U_h$,
     \begin{align}
@@ -1336,7 +1304,7 @@ space of $(MN)P$.
         MPOTensor.GroupFamily.IsRepresentation.isDressedProportional_daggerBoundary,
         MPOTensor.GroupFamily.FusionData.daggerFusionV_eq_daggerBoundary}
     \leanok
-    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_dagger_fusion_reduction,thm:mpug_dressed_proportionality}
     For a left boundary $X$ of $B'=\mathcal U_{h^{-1}}\mathcal U_{g^{-1}}$ with
     values in the bond space of $\mathcal U_{h^{-1}g^{-1}}$, write
     \begin{align}
@@ -1385,7 +1353,7 @@ space of $(MN)P$.
         MPOTensor.GroupFamily.FusionData.daggerLegGauge_double,
         MPOTensor.GroupFamily.FusionData.daggerBoundary_daggerFusionV}
     \leanok
-    \uses{thm:mpug_dagger_dressed_transport, thm:mpug_dagger_inverse_scalar}
+    \uses{thm:mpug_dagger_dressed_transport,thm:mpug_dagger_inverse_scalar}
     Applying the operation of Lemma~\ref{thm:mpug_dagger_dressed_transport}
     to $\widetilde F^<_{h^{-1},g^{-1}}$ gives
     \begin{align}
@@ -1412,9 +1380,7 @@ space of $(MN)P$.
     \label{thm:mpug_dagger_zeta_relation}
     \lean{MPOTensor.GroupFamily.FusionData.daggerZeta_mul_star_daggerZeta_inv}
     \leanok
-    \uses{thm:mpug_dagger_zeta, thm:mpug_dagger_dressed_transport,
-        thm:mpug_double_dagger_fusion, thm:mpug_dagger_inverse_scalar,
-        thm:mpug_dressed_proportionality}
+    \uses{thm:mpug_dagger_zeta,thm:mpug_dagger_dressed_transport,thm:mpug_double_dagger_fusion,thm:mpug_dagger_inverse_scalar,thm:mpug_dressed_proportionality}
     For all $g,h\in G$,
     \begin{align}
         \zeta_{g,h}\,\overline{\zeta_{h^{-1},g^{-1}}}
@@ -1446,8 +1412,7 @@ space of $(MN)P$.
         MPOTensor.GroupFamily.FusionData.daggerZeta_eq_relativeScalar,
         MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge_daggerZeta}
     \leanok
-    \uses{thm:mpug_dagger_fusion_reduction, thm:mpug_dagger_zeta,
-        thm:mpug_anomaly_three_cocycle_gauge}
+    \uses{thm:mpug_dagger_fusion_reduction,thm:mpug_dagger_zeta,thm:mpug_anomaly_three_cocycle_gauge}
     The daggered fusion tensors are a choice of fusion tensors, and if
     $\widetilde\omega$ denotes their three-cocycle, then
     \begin{align}
@@ -1474,7 +1439,7 @@ space of $(MN)P$.
     \label{def:mpug_action_tensor}
     \lean{MPOTensor.actTensor}
     \leanok
-    \uses{def:mpo_tensor, def:mps_tensor}
+    \uses{def:mpo_tensor,def:mps_tensor}
     For a matrix product operator tensor $T$ of bond dimension $D_1$ and a
     matrix product state tensor $B$ of bond dimension $D_2$, the action
     tensor $T\cdot B$ has bond dimension $D_1D_2$ and letters
@@ -1493,7 +1458,7 @@ space of $(MN)P$.
     \lean{MPOTensor.evalWord_actTensor, MPOTensor.mpv_actTensor,
         MPOTensor.mpo_mulVec_mpv}
     \leanok
-    \uses{def:mpug_action_tensor, def:mpo_family, def:mpv_state}
+    \uses{def:mpug_action_tensor,def:mpo_family,def:mpv_state}
     For every word $\sigma$ of length $N$,
     \begin{align}
         (T\cdot B)^{\sigma}
@@ -1559,9 +1524,7 @@ space of $(MN)P$.
         MPSTensor.IsDressedProportional.actTensor_idKron,
         MPSTensor.IsDressedProportional.actTensor_kronId}
     \leanok
-    \uses{def:mpug_action_tensor, def:mpdo_operator_product,
-        def:mpdo_operator_product_associator, def:mpo_to_mps,
-        def:mps_rectangular_reduction}
+    \uses{def:mpug_action_tensor,def:mpdo_operator_product,def:mpdo_operator_product_associator,def:mpo_to_mps,def:mps_rectangular_reduction}
     If $(V,W)$ reduces $B$ onto $A$, then
     $(\mathbf 1\otimes V,\mathbf 1\otimes W)$ reduces $T\cdot B$ onto
     $T\cdot A$. If $(V,W)$ reduces the doubled-index tensor of $X$ onto that
@@ -1584,7 +1547,7 @@ space of $(MN)P$.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpug_action_tensor_periodic, thm:mpug_reduction_composition}
+    \uses{thm:mpug_action_tensor_periodic,thm:mpug_reduction_composition}
     By Lemma~\ref{thm:mpug_action_tensor_periodic}, every word of
     $T\cdot B$ is the sum~(\ref{eq:mpug_action_tensor_word}) of Kronecker
     products of a word of $T$ and a word of $B$ of the same length. A

@@ -79,7 +79,7 @@ Section~\ref{sec:app_spectral_periodicity}.
     \label{thm:periodic_self_overlap_tendsto}
     \lean{MPSTensor.periodicSelfOverlap_tendsto}
     \leanok
-    \uses{def:mpv_overlap, def:irreducible_tensor, def:left_canonical_tensor, def:blocked_tensor}
+    \uses{def:mpv_overlap,def:irreducible_tensor,def:left_canonical_tensor,def:blocked_tensor}
     Let $D>0$ and $m>0$. Let $A$ be a left-canonical irreducible MPS tensor
     with bond dimension $D$, and suppose that the peripheral eigenvalues of
     its transfer map are exactly $\{z\in\C:z^m=1\}$. Then
@@ -88,7 +88,7 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{proof}
     \leanok
-    \uses{thm:cyclic_sector_decomp_after_blocking_isometry, thm:blocked_sector_unconditional, thm:primitive_overlap, thm:overlap_decay_irr_tp, thm:overlap_decay_rect_irr_tp}
+    \uses{thm:cyclic_sector_decomp_after_blocking_isometry,thm:blocked_sector_unconditional,thm:primitive_overlap,thm:overlap_decay_irr_tp,thm:overlap_decay_rect_irr_tp}
     Applying
     Lemma~\ref{thm:cyclic_sector_decomp_after_blocking_isometry} to the
     period-$m$ blocking $A^{[m]}$ gives $m$ nonzero cyclic-sector
@@ -122,7 +122,7 @@ Section~\ref{sec:app_spectral_periodicity}.
     \label{thm:bnt_primitivity_normality_from_self_overlap}
     \lean{MPSTensor.isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one}
     \leanok
-    \uses{def:irreducible_tensor, def:mpv_overlap, def:normal, thm:bnt_periodic_self_overlap_tendsto, thm:normal_tp_primitive_irred}
+    \uses{def:irreducible_tensor,def:mpv_overlap,def:normal,thm:bnt_periodic_self_overlap_tendsto,thm:normal_tp_primitive_irred}
     Let $A$ be an irreducible left-canonical tensor of positive bond dimension.
     If $O_{AA}(N)\longrightarrow1$, then the transfer map of $A$ is primitive
     and $A$ is normal.
@@ -130,7 +130,7 @@ Section~\ref{sec:app_spectral_periodicity}.
 
 \begin{proof}
     \leanok
-    \uses{thm:bnt_periodic_self_overlap_tendsto, thm:normal_tp_primitive_irred}
+    \uses{thm:bnt_periodic_self_overlap_tendsto,thm:normal_tp_primitive_irred}
     Let $m$ be the peripheral period. Along its multiples,
     $O_{AA}(mn)\longrightarrow m$. The assumed full limit gives
     $O_{AA}(mn)\to1$, hence $m=1$. The transfer map is therefore primitive,
@@ -186,7 +186,7 @@ Section~\ref{sec:app_spectral_perron_projection} following
     \label{thm:primitive_overlap}
     \lean{MPSTensor.mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one}
     \leanok
-    \uses{def:transfer_map, def:mpv_overlap}
+    \uses{def:transfer_map,def:mpv_overlap}
     Let $A$ be a normalized MPS tensor with a nonzero PSD fixed point
     $\rho$ of the transfer map. If $\rho_{\spec}(\E_A-P)<1$, where $P$ is
     the fixed-point projection, then $O_{AA}(N)\to1$ as $N\to\infty$.
@@ -194,7 +194,7 @@ Section~\ref{sec:app_spectral_perron_projection} following
 
 \begin{proof}
     \leanok
-    \uses{thm:trace_pow_one, thm:overlap_trace}
+    \uses{thm:trace_pow_one,thm:overlap_trace}
     By the overlap--trace identity (\ref{eq:spectral_overlap_trace}) with
     $A=B$, one has $O_{AA}(N)=\Tr(\E_A^N)$.
     By Lemma~\ref{thm:trace_pow_one}, $\Tr(\E_A^N)\to1$.

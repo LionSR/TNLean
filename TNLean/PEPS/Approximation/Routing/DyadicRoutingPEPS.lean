@@ -59,7 +59,7 @@ open ManyBody (Edge SquareLatticeVertex horizontalSquareLatticeEdge_coords
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
-open TNLean.Lattice.Compression
+open TNLean.Network
 
 open Finset
 

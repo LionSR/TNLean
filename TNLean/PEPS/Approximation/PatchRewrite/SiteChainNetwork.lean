@@ -58,7 +58,7 @@ noncomputable section
 
 namespace TNLean.PEPS.SiteChain
 
-open TNLean.Lattice.Sheet TNLean.Lattice.WholeGroup
+open TNLean.PEPS.EncodedFrame TNLean.Network.WholeGroup
 
 /-! ### Rank-one steps -/
 

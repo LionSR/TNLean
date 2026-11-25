@@ -22,19 +22,21 @@ part2b_mps_protocol.tex:594–614.
 noncomputable section
 open scoped Matrix NNReal
 
-namespace TNLean
-open TNLean.Lattice.PartyCircuit
-open TNLean.Lattice.Compression
-variable {P : Type} {input output : Layout P}
+namespace QuantumCircuit.Party
+open TNLean.Network ManyBody GateIncidence
 
-namespace Lattice.PartyCircuit.SourceCircuit
+variable {P : Type} [DecidableEq P]
+
+namespace SourceCircuit
+
+variable {X Y : P → Type}
 
 open Classical in
 /-- The actual source-density network inherits separate participant and
 participation bounds from its nonempty gate occurrences.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex:140–142,581–588. -/
 theorem card_incidentSourceDensityLinks_le_of_arity_lifetime
-    (w : SourceCircuit input output) (arity lifetime : ℕ)
+    (w : SourceCircuit X Y) (arity lifetime : ℕ)
     (harity : ∀ g : w.nonemptyGateLocations, (w.participants g.1).card ≤ arity)
     (hlifetime : ∀ p, w.participationCount p ≤ lifetime) (p : P) :
     (incidentDistributedLinks (Finset.univ : Finset w.nonemptyGateLocations)
@@ -47,55 +49,51 @@ theorem card_incidentSourceDensityLinks_le_of_arity_lifetime
   rw [card_incidentNonemptyGates_eq_participationCount]
   exact hlifetime p
 
-end Lattice.PartyCircuit.SourceCircuit
+end SourceCircuit
 
-namespace Lattice.PartyCircuit.OriginalCircuit
+namespace OriginalCircuit
+
+variable {X Y : P → Type} [∀ p, Fintype (X p)] [∀ p, DecidableEq (X p)] [∀ p, Fintype (Y p)]
+  [∀ p, DecidableEq (Y p)]
 
 open Classical in
 /-- The actual replacement used for the physical density has the original
 participant bound and lifetime bound, independently of its precision.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex:199–229,581–588. -/
-theorem card_incidentPhysicalFirstDensityLinks_le_of_arity_lifetime
-    (physical priv : Layout P) (w : OriginalCircuit input (physical ++ priv))
+theorem card_incidentPhysicalFirstDensityLinks_le_of_arity_lifetime (w : OriginalCircuit X Y)
     {r arity lifetime : ℕ} {S δ : ℝ} (hδ : 0 < δ)
     (hb : w.IsExpansionBounded r S)
     (harity : ∀ g : w.nonprivateLocations, (w.participants g).card ≤ arity)
-    (hlifetime : ∀ p, w.participationCount p ≤ lifetime) :
-    let R := w.produce.physicalFirstReplacement hδ physical priv w.isAllowed_produce
-      ((w.isExpansionBounded_produce_iff r S).mpr hb)
+    (hlifetime : ∀ p, w.participation p ≤ lifetime) :
+    let R := w.replacement hδ hb
     ∀ p, (incidentDistributedLinks (Finset.univ : Finset R.nonemptyGateLocations)
       (fun g ↦ R.participants g.1) (SourceCircuit.sourceGateRoot R) p).card ≤
         2 * lifetime * (arity - 1) := by
   intro R p
   apply R.card_incidentSourceDensityLinks_le_of_arity_lifetime arity lifetime
   · intro g
-    let E := w.physicalFirstReplacementLocationsEquiv physical priv hδ hb
-    have hpart := w.participants_physicalFirstReplacementLocationsEquiv
-      physical priv hδ hb (E.symm g.1)
-    change R.participants (E (E.symm g.1)) = _ at hpart
-    rw [E.apply_symm_apply] at hpart
+    have hpart := w.participants_replacementLocationsEquiv hδ hb
+      ((w.replacementLocationsEquiv hδ hb).symm g.1)
+    rw [Equiv.apply_symm_apply] at hpart
     exact (congrArg Finset.card hpart).trans_le (harity _)
-  · intro q
-    exact (SourceCircuit.participationCount_physicalFirstOutput
-      (w.produce.auxiliary (stackLength r S δ)) physical priv _ q).trans_le
-        (w.participationCount_replacement_le hδ hb hlifetime q)
+  · exact w.participationCount_replacement_le hδ hb hlifetime
 
-/-- Reading an original circuit as its recorded expansion keeps the bound
+omit [∀ p, Fintype (Y p)] [∀ p, DecidableEq (Y p)] in
+/-- Reading an original circuit as its effect circuit keeps the bound
 on the number of participants at each gate.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex:21–43,590–600. -/
-theorem card_participants_produce_le_of_arity
-    (w : OriginalCircuit input output) {arity : ℕ}
+theorem card_participants_toEffectCircuit_le_of_arity
+    (w : OriginalCircuit X Y) {arity : ℕ}
     (harity : ∀ g : w.nonprivateLocations, (w.participants g).card ≤ arity)
-    (g : w.produce.gateLocations) : (w.produce.participants g).card ≤ arity := by
-  rw [← w.produceLocationsEquiv.apply_symm_apply g, participants_produce]
+    (g : w.toEffectCircuit.gateLocations) : (w.toEffectCircuit.participants g).card ≤ arity := by
+  rw [← w.toEffectCircuitLocationsEquiv.apply_symm_apply g,
+    participants_toEffectCircuitLocationsEquiv]
   exact harity _
 
-end Lattice.PartyCircuit.OriginalCircuit
-end TNLean
+end OriginalCircuit
 
-namespace TNLean.Lattice.PartyCircuit.DistributedConstruction
-open TNLean.Lattice.PartyCircuit
-open TNLean.Lattice.Compression
+namespace DistributedConstruction
+
 attribute [local instance] Classical.propDecidable
 
 /-- Uniform compression with separate participant and lifetime bounds, from an absolute
@@ -106,13 +104,16 @@ Source: polynomial-PEPS Theorem 5.2, 04-compression.tex:137–175,565–600;
 one-dimensional note, Part II, thm:B, part2b_mps_protocol.tex:594–614. -/
 theorem exists_uniform_sampled_network_of_arity_lifetime
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
-    (P : ι → Type) [∀ L, Fintype (P L)]
-    (C₀ : ∀ L, DistributedConstruction (P L))
+    (P : ι → Type) [∀ L, Fintype (P L)] [∀ L, DecidableEq (P L)]
+    (X : ∀ L, P L → Type) [∀ L j, Fintype (X L j)] [∀ L j, DecidableEq (X L j)]
+    (physicalDim : ∀ L, P L → ℕ)
+    (V : ∀ L, P L → Type) [∀ L j, Fintype (V L j)] [∀ L j, DecidableEq (V L j)]
+    (C₀ : ∀ L, DistributedConstruction (P L) (X L) (physicalDim L) (V L))
     (a b n d r u s : ℕ) (hab : a ≤ b) (C_N C_D C_K C_S : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
-    (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
+    (hphysical₀ : ∀ L j, (physicalDim L j : ℝ) ≤ C_D * size L ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ a)
-    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
+    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participation j ≤ b)
     (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ C_K * size L ^ u)
     (hexpansion₀ : ∀ L, (C₀ L).circuit.IsExpansionBounded r (C_S * size L ^ s))
@@ -127,7 +128,7 @@ theorem exists_uniform_sampled_network_of_arity_lifetime
             (Finset.univ : Finset Gate) participants Label j →
           (DistributedOperatorContraction.SampleAt (Finset.univ : Finset Gate)
             participants j → Fin k) →
-          Matrix (Fin ((C₀ L).physicalDimension j)) (Fin ((C₀ L).physicalDimension j)) ℂ),
+          Matrix (Fin (physicalDim L j)) (Fin (physicalDim L j)) ℂ),
         Matrix.rectangularTraceNorm
             (DistributedOperatorContraction.contractedOperator Finset.univ participants root
               hroot Label k c T - (C₀ L).physicalDensity) ≤ size L ^ (-p) ∧
@@ -141,32 +142,35 @@ theorem exists_uniform_sampled_network_of_arity_lifetime
               ∃ g : (C₀ L).circuit.nonprivateLocations,
                 j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) := by
   have hsize0 : ∀ L, 0 ≤ size L := fun L ↦ (by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)
+  have hlifetime : ∀ L j, (C₀ L).circuit.toEffectCircuit.participationCount j ≤ b := by
+    intro L j
+    rw [← PartyCircuit.participation_eq_participationCount j (C₀ L).circuit.toEffectCircuit
+      (PartyCircuit.forallGate_card_ne_one_mapGates _),
+      OriginalCircuit.participation_toEffectCircuit]
+    exact hlifetime₀ L j
   have hfamily :=
-    GateMapConstruction.uniform_approximate_sampled_network_of_sum_le size hsize P
-      (fun L ↦ (C₀ L).toGateMapConstruction) b n d C_N C_D
+    GateMapConstruction.uniform_approximate_sampled_network_of_sum_le size hsize P X physicalDim
+      V (fun L ↦ (C₀ L).toGateMapConstruction) b n d C_N C_D
       (fun L ↦ by
-        change ((C₀ L).circuit.produce.expandedGateCount : ℝ) ≤ _
-        rw [OriginalCircuit.expandedGateCount_produce]
+        change ((C₀ L).circuit.toEffectCircuit.numGates : ℝ) ≤ _
+        rw [OriginalCircuit.numGates_toEffectCircuit]
         exact hN₀ L)
       hphysical₀
-      (fun L g ↦ by
-        change ((C₀ L).circuit.produce.participants g).card ≤ b
-        rw [← (C₀ L).circuit.produceLocationsEquiv.apply_symm_apply g,
-          OriginalCircuit.participants_produce]
-        exact (harity₀ L _).trans hab)
-      (fun L j ↦ by
-        change Nat.card {g : (C₀ L).circuit.produce.gateLocations //
-          j ∈ (C₀ L).circuit.produce.participants g} ≤ b
-        rw [OriginalCircuit.natCard_participation_produce]
-        exact hlifetime₀ L j)
+      (fun L g ↦ ((C₀ L).circuit.card_participants_toEffectCircuit_le_of_arity (harity₀ L)
+        g).trans hab)
+      hlifetime
       r C_K C_S u s p
       (fun L ↦ by
         obtain ⟨K, hK, hKb⟩ := hmonomial₀ L
-        exact ⟨(C₀ L).circuit.produce.expansionGateLists, K,
-          (C₀ L).circuit.isExpansionBounded_reexpand_expansionGateLists (hexpansion₀ L),
-          (C₀ L).circuit.monomialCount_reexpand_expansionGateLists_le hK, hKb,
-          (C₀ L).circuit.isGateApproximation_reexpand_expansionGateLists
-            (inv_nonneg.mpr (pow_nonneg (hsize0 L) _))⟩)
+        exact ⟨(C₀ L).circuit.toEffectCircuit.expansionGateLists, K,
+          EffectCircuit.isExpansionBounded_reexpand_expansionGateLists _ (hexpansion₀ L),
+          EffectCircuit.monomialCount_reexpand_expansionGateLists_le _
+            ((C₀ L).circuit.monomialCount_toEffectCircuit_le_of_isMonomialBounded hK),
+          hKb,
+          (C₀ L).circuit.toEffectCircuit.isGateApproximation_reexpand_expansionGateLists
+            (inv_nonneg.mpr (pow_nonneg (hsize0 L) _))
+            (C₀ L).circuit.isAllowed_toEffectCircuit
+            (PartyCircuit.forallGate_card_ne_one_mapGates _)⟩)
       le_rfl le_rfl
   refine ⟨sumCompressionPrefactor r b C_N C_D C_K C_S, sampledNetworkExponent r b n d u s p,
     by rw [sumCompressionPrefactor]; exact (sampledNetworkPrefactor_pos _ _ _ _ _ _).le,
@@ -177,25 +181,20 @@ theorem exists_uniform_sampled_network_of_arity_lifetime
   · intro j
     apply OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le_of_arity_lifetime
       (arity := a) (lifetime := b)
-    · exact EffectCircuit.isExpansionBounded_rescaledOriginal _ _ _ _ hb
     · intro g
       rw [EffectCircuit.participants_rescaledOriginal, EffectCircuit.participants_reexpand]
-      exact OriginalCircuit.card_participants_produce_le_of_arity
-        (C₀ L).circuit (harity₀ L) _
+      exact (C₀ L).circuit.card_participants_toEffectCircuit_le_of_arity (harity₀ L) _
     · intro j
-      rw [EffectCircuit.participationCount_rescaledOriginal,
+      rw [EffectCircuit.participation_rescaledOriginal, PartyCircuit.natCard_participants_mem,
         EffectCircuit.participationCount_reexpand]
-      change Nat.card {g : (C₀ L).circuit.produce.gateLocations //
-        j ∈ (C₀ L).circuit.produce.participants g} ≤ b
-      rw [OriginalCircuit.natCard_participation_produce]
-      exact hlifetime₀ L j
+      exact hlifetime L j
   · intro e j l hj hl
     obtain ⟨g, hjg, hlg⟩ := hlocal e j l hj hl
-    change (C₀ L).circuit.produce.gateLocations at g
-    change j ∈ (C₀ L).circuit.produce.participants g at hjg
-    change l ∈ (C₀ L).circuit.produce.participants g at hlg
-    refine ⟨(C₀ L).circuit.produceLocationsEquiv.symm g, ?_⟩
-    rw [← OriginalCircuit.participants_produce, Equiv.apply_symm_apply]
+    change (C₀ L).circuit.toEffectCircuit.gateLocations at g
+    change j ∈ (C₀ L).circuit.toEffectCircuit.participants g at hjg
+    change l ∈ (C₀ L).circuit.toEffectCircuit.participants g at hlg
+    refine ⟨(C₀ L).circuit.toEffectCircuitLocationsEquiv.symm g, ?_⟩
+    rw [← OriginalCircuit.participants_toEffectCircuitLocationsEquiv, Equiv.apply_symm_apply]
     exact ⟨hjg, hlg⟩
 
 /-- The same sampled network approximates a nearby pure state, retaining the
@@ -204,17 +203,20 @@ Source: polynomial-PEPS Remark 5.3, 04-compression.tex:602–611, and
 one-dimensional note, Part II, thm:B, part2b_mps_protocol.tex:587–614. -/
 theorem exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
-    (P : ι → Type) [∀ L, Fintype (P L)]
-    (C₀ : ∀ L, DistributedConstruction (P L))
+    (P : ι → Type) [∀ L, Fintype (P L)] [∀ L, DecidableEq (P L)]
+    (X : ∀ L, P L → Type) [∀ L j, Fintype (X L j)] [∀ L j, DecidableEq (X L j)]
+    (physicalDim : ∀ L, P L → ℕ)
+    (V : ∀ L, P L → Type) [∀ L j, Fintype (V L j)] [∀ L j, DecidableEq (V L j)]
+    (C₀ : ∀ L, DistributedConstruction (P L) (X L) (physicalDim L) (V L))
     (a b n d r u s : ℕ) (hab : a ≤ b) (C_N C_D C_K C_S : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.nonprivateCount : ℝ) ≤ C_N * size L ^ n)
-    (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * size L ^ d)
+    (hphysical₀ : ∀ L j, (physicalDim L j : ℝ) ≤ C_D * size L ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ a)
-    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participationCount j ≤ b)
+    (hlifetime₀ : ∀ L j, (C₀ L).circuit.participation j ≤ b)
     (hmonomial₀ : ∀ L, ∃ K : ℕ, (C₀ L).circuit.IsMonomialBounded K ∧
       (K : ℝ) ≤ C_K * size L ^ u)
     (hexpansion₀ : ∀ L, (C₀ L).circuit.IsExpansionBounded r (C_S * size L ^ s))
-    (Ω : ∀ L, EuclideanSpace ℂ ((j : P L) → Fin ((C₀ L).physicalDimension j)))
+    (Ω : ∀ L, EuclideanSpace ℂ ((j : P L) → Fin (physicalDim L j)))
     (hΩ : ∀ L, ‖Ω L‖ = 1) (η : ι → ℝ)
     (hpure : ∀ L, Matrix.rectangularTraceNorm
       ((C₀ L).physicalDensity - Matrix.euclideanOuterProduct (Ω L) (Ω L)) ≤ η L)
@@ -229,7 +231,7 @@ theorem exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
             (Finset.univ : Finset Gate) participants Label j →
           (DistributedOperatorContraction.SampleAt (Finset.univ : Finset Gate)
             participants j → Fin k) →
-          Matrix (Fin ((C₀ L).physicalDimension j)) (Fin ((C₀ L).physicalDimension j)) ℂ),
+          Matrix (Fin (physicalDim L j)) (Fin (physicalDim L j)) ℂ),
         Matrix.rectangularTraceNorm
             (DistributedOperatorContraction.contractedOperator Finset.univ participants root
               hroot Label k c T - Matrix.euclideanOuterProduct (Ω L) (Ω L)) ≤
@@ -249,7 +251,7 @@ theorem exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
               ∃ g : (C₀ L).circuit.nonprivateLocations,
                 j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) := by
   obtain ⟨C_p, α, hC, hα, hfamily⟩ :=
-    exists_uniform_sampled_network_of_arity_lifetime size hsize P C₀
+    exists_uniform_sampled_network_of_arity_lifetime size hsize P X physicalDim V C₀
       a b n d r u s hab C_N C_D C_K C_S hN₀ hphysical₀ harity₀ hlifetime₀
       hmonomial₀ hexpansion₀ p hp
   refine ⟨C_p, α, hC, hα, fun L ↦ ?_⟩
@@ -260,4 +262,6 @@ theorem exists_uniform_sampled_network_sub_pure_le_of_arity_lifetime
   exact ⟨Gate, _, _, participants, root, hroot, Label, _, k, c, T,
     hσ, herror, hlow, hhigh, hdim, hinc, hlocal⟩
 
-end TNLean.Lattice.PartyCircuit.DistributedConstruction
+end DistributedConstruction
+
+end QuantumCircuit.Party

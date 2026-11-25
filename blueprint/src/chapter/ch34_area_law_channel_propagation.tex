@@ -68,8 +68,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_spectator_support_fixed,thm:qc_spectator_commutant,
-        thm:qc_site_oscillation_commutant}
+    \uses{thm:al_spectator_support_fixed,thm:qc_spectator_commutant,thm:qc_site_oscillation_commutant}
     This is~\cite[``Vanishing oscillation outside the physical
         support'']{QICLean2026Blueprint}.
     By Lemma~\ref{thm:al_spectator_support_fixed}, $E_S^{\mathcal K}(B)=B$.
@@ -94,8 +93,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_spectator_support_oscillation_zero,
-        thm:qc_site_oscillation_bounds}
+    \uses{thm:al_spectator_support_oscillation_zero,thm:qc_site_oscillation_bounds}
     For $y\in S$, Lemma~\ref{thm:qc_site_oscillation_bounds} gives
     $d_y(B)\le2\|B\|$; for $y\notin S$, both sides of
     (\ref{eq:al_propagation_support_indicator}) vanish by
@@ -135,8 +133,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 
 \begin{lemma}[Finite-radius physical shell bound]
     \label{thm:al_channel_shell_finite_bound}
-    \uses{def:al_local_channel_shell,def:qc_site_oscillation,
-        def:al_channel_shell_coefficient}
+    \uses{def:al_local_channel_shell,def:qc_site_oscillation,def:al_channel_shell_coefficient}
     \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_le_sum_siteOscillation}
     \leanok
     Fix $l\in\N$ and $(\varepsilon_j)_{j\ge0}\subset\R$. If every
@@ -168,8 +165,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 
 \begin{lemma}[Finite one-event oscillation increment]
     \label{thm:al_channel_finite_increment}
-    \uses{def:al_local_root_channel,def:qc_site_oscillation,
-        def:al_channel_shell_coefficient}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation,def:al_channel_shell_coefficient}
     \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le}
     \leanok
     As the finite-radius one-event estimate of
@@ -185,11 +181,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_channel_shell_finite_bound,
-        thm:al_channel_shell_coefficient_nonneg,
-        thm:al_root_channel_outside_oscillation,
-        thm:qc_site_oscillation_seminorm,
-        thm:qc_site_oscillation_bounds,def:al_local_channel_shell}
+    \uses{thm:al_channel_shell_finite_bound,thm:al_channel_shell_coefficient_nonneg,thm:al_root_channel_outside_oscillation,thm:qc_site_oscillation_seminorm,thm:qc_site_oscillation_bounds,def:al_local_channel_shell}
     Set $a_l=\eta_l\sum_{z\in K_l}d_z(B)\ge0$ and induct on $n$. If
     $y\notin K_n$, Lemma~\ref{thm:al_root_channel_outside_oscillation} gives
     $d_y(\mathcal E_n(B))\le d_y(B)$, which implies
@@ -273,8 +265,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_channel_shell_finite_bound,
-        thm:al_channel_shell_coefficient_exp,thm:qc_site_oscillation_bounds}
+    \uses{thm:al_channel_shell_finite_bound,thm:al_channel_shell_coefficient_exp,thm:qc_site_oscillation_bounds}
     Combine~(\ref{eq:al_propagation_finite_shell}) for
     $\varepsilon_j=C\exp(-cj^\alpha)$ with
     (\ref{eq:al_propagation_exp_coefficient}) and $\sum_{z\in K_l}d_z(B)\ge0$.
@@ -297,8 +288,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_channel_finite_increment,
-        thm:al_channel_shell_coefficient_exp,thm:qc_site_oscillation_bounds}
+    \uses{thm:al_channel_finite_increment,thm:al_channel_shell_coefficient_exp,thm:qc_site_oscillation_bounds}
     Substitute~(\ref{eq:al_propagation_exp_coefficient}) for
     $\varepsilon_l=C\exp(-cl^\alpha)$ into
     (\ref{eq:al_propagation_finite_increment}) using
@@ -314,8 +304,7 @@ $\mathcal E_k$ the full root channel~(\ref{eq:qc_component_root_channel}).
 
 \begin{lemma}[Full-channel increment with an explicit finite cutoff]
     \label{thm:al_graph_channel_exp_increment}
-    \uses{def:al_local_root_channel,def:qc_site_oscillation,
-        def:qc_local_circuit}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation,def:qc_local_circuit}
     \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_exp_of_component_support}
     \leanok
     Suppose $0\le k\le\mathbb 1$ and $k\in\mathcal A_{C(a)}$. Let $C\ge0$,
@@ -332,8 +321,7 @@ $\mathcal E_k$ the full root channel~(\ref{eq:qc_component_root_channel}).
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_channel_exp_increment,thm:qc_graph_ball_stabilization,
-        thm:qc_component_channel_stabilization}
+    \uses{thm:al_channel_exp_increment,thm:qc_graph_ball_stabilization,thm:qc_component_channel_stabilization}
     Apply Lemma~\ref{thm:al_channel_exp_increment} with $K_l=N_l(a)$ and use
     $\mathcal E_{N_n(a)}(B)=\mathcal E_k(B)$ from
     Lemma~\ref{thm:qc_component_channel_stabilization} ($n\ge R_a$,
@@ -381,8 +369,7 @@ $l\in\N$ and $y,z\in I$, set
 
 \begin{lemma}[Sum of full-channel oscillation increments]
     \label{thm:al_graph_event_increment_cardinality}
-    \uses{def:al_local_root_channel,def:qc_site_oscillation,
-        def:qc_local_circuit}
+    \uses{def:al_local_root_channel,def:qc_site_oscillation,def:qc_local_circuit}
     \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannel_sub_le_exp_card}
     \leanok
     Following \cite[Section~10]{OpenAI2026AreaLaw}, for each $i\in F$ let
@@ -404,8 +391,7 @@ $l\in\N$ and $y,z\in I$, set
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_graph_channel_exp_increment,
-        thm:al_graph_shell_sum_cardinality}
+    \uses{thm:al_graph_channel_exp_increment,thm:al_graph_shell_sum_cardinality}
     Summing~(\ref{eq:al_propagation_graph_increment}) over $i\in F$ and
     applying~(\ref{eq:al_propagation_shell_count}) with
     $w_l=A\exp(-bl^\alpha)$ and $v_z=d_z(B)$ gives
@@ -560,8 +546,7 @@ $d_G(y,z)=\infty$.
 
 \begin{lemma}[Kernel domination of root-channel increments]
     \label{thm:al_actual_channel_kernel_domination}
-    \uses{def:al_graph_event_kernel,def:al_local_root_channel,
-        def:qc_site_oscillation,def:qc_local_circuit}
+    \uses{def:al_graph_event_kernel,def:al_local_root_channel,def:qc_site_oscillation,def:qc_local_circuit}
     \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel}
     \leanok
     Under the hypotheses of
@@ -591,8 +576,7 @@ $d_G(y,z)=\infty$.
 
 \begin{lemma}[Uniform weighted rows and root-channel increments]
     \label{thm:al_actual_channel_uniform_bounds}
-    \uses{def:al_graph_event_kernel,def:al_local_root_channel,
-        def:qc_site_oscillation,def:qc_local_circuit}
+    \uses{def:al_graph_event_kernel,def:al_local_root_channel,def:qc_site_oscillation,def:qc_local_circuit}
     \lean{TNLean.PEPS.AreaLaw.exists_graphChannelEventKernel_bounds_of_component_support}
     \leanok
     For every $C,K,\mu\ge0$, $c>0$, and $0<\alpha\le1$, there exists $R\ge0$
@@ -619,8 +603,7 @@ $d_G(y,z)=\infty$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_graph_kernel_uniform_row,
-        thm:al_actual_channel_kernel_domination}
+    \uses{thm:al_graph_kernel_uniform_row,thm:al_actual_channel_kernel_domination}
     Apply Lemma~\ref{thm:al_graph_kernel_uniform_row} with
     $D=2(2+8\sqrt C\exp(c/2))$ and $b=c/2$ to obtain $R$ and
     (\ref{eq:al_propagation_actual_row}), and
@@ -653,8 +636,7 @@ $d_G(y,z)=\infty$.
 
 \begin{lemma}[Uniform retained-channel bounds for lattice positive constraints]
     \label{thm:al_lattice_channel_uniform_bounds}
-    \uses{def:area_law_hamiltonian,def:al_graph_event_kernel,
-        def:al_local_root_channel,def:qc_site_oscillation}
+    \uses{def:area_law_hamiltonian,def:al_graph_event_kernel,def:al_local_root_channel,def:qc_site_oscillation}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelEventKernel_bounds}
     \leanok
     Combining \cite[Proposition~4.3 and Section~10]{OpenAI2026AreaLaw}, for
@@ -698,8 +680,7 @@ $d_G(y,z)=\infty$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:al_lattice_positive_replacement,thm:al_lattice_counts,
-        thm:al_retained_anchor_fibers,thm:al_actual_channel_uniform_bounds}
+    \uses{thm:al_lattice_positive_replacement,thm:al_lattice_counts,thm:al_retained_anchor_fibers,thm:al_actual_channel_uniform_bounds}
     Theorem~\ref{thm:al_lattice_positive_replacement} gives $C,c$ such that
     $0\le k_X\le\mathbb 1$, $k_X\in\mathcal A_{C(a_X)}$, and for all $l\in\N$,
     \begin{align}

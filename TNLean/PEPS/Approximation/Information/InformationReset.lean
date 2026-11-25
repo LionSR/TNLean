@@ -10,7 +10,7 @@ import QICLean.Analysis.Real.InformationResetScalar
 import QICLean.ManyBody.Sites.SitewiseProduct
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
-import TNLean.Lattice.Sheet.SwapCorrection
+import QICLean.ManyBody.Sites.ThreeRegion.SwapCorrection
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
@@ -62,23 +62,14 @@ open Matrix QuantumCircuit
 open ManyBody (IsGapped groundSpace rectangleEmbedding rectangularDomain rectangleSiteEquiv
   rectangleSiteEquiv_val graphNeighborhood planeDomainGraph)
 open scoped Kronecker
-open TNLean.Lattice
 
-open ManyBody (supDist supDist_le_of_walk)
+open ManyBody (supDist supDist_le_of_walk supDist_comm supDist_triangle)
 
 namespace TNLean.PEPS.Approximation
 
 open AreaLaw
 
 section Geometry
-
-theorem supDist_comm (x y : ℤ × ℤ) : supDist x y = supDist y x := by
-  simp only [supDist]
-  omega
-
-theorem supDist_triangle (x y z : ℤ × ℤ) : supDist x z ≤ supDist x y + supDist y z := by
-  simp only [supDist]
-  omega
 
 /-- Nearest neighbours of the open square are at sup-distance at most one. -/
 theorem supDist_rectangleEmbedding_le_one_of_adj {L : ℕ} {u v : SquareLatticeVertex L L}

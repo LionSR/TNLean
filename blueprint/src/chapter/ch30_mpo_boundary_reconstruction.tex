@@ -147,8 +147,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:glm_boundary_representation,thm:glm_boundary_matrix_blocks,
-        thm:glm_boundary_linear}
+    \uses{thm:glm_boundary_representation,thm:glm_boundary_matrix_blocks,thm:glm_boundary_linear}
     Restricting the output boundary to its diagonal blocks and taking the
     trace dual produces a multiplicative map that splits as in
     (\ref{eq:glm_boundary_matrix_reconstruct}); evaluating this splitting on
@@ -301,8 +300,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     \leanok
     \label{def:glm_boundary_zipper_family}
     \lean{MPOTensor.CompleteZipperFusionFamily.ofBiorthogonal}
-    \uses{def:glm_boundary_zipper_coordinates,def:glm_boundary_decomposition,
-        def:mpdo_complete_zipper_fusion_family}
+    \uses{def:glm_boundary_zipper_coordinates,def:glm_boundary_decomposition,def:mpdo_complete_zipper_fusion_family}
     For positive-dimensional injective blocks, exact biorthogonal pairwise
     decompositions and a simultaneous left inverse of the labelled
     one-site target matrices give a complete zipper fusion family with
@@ -335,8 +333,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_boundary_decomposition,def:glm_boundary_zipper_family,
-        thm:mpdo_complete_zipper_of_compression_blocked}
+    \uses{thm:glm_boundary_decomposition,def:glm_boundary_zipper_family,thm:mpdo_complete_zipper_of_compression_blocked}
     % The last node owns exists_blockTensor_isMPOBlockLeftInverse;
     % only its simultaneous-left-inverse assertion is used here.
     Induction on each nonempty word cancels intermediate analysis-synthesis
@@ -438,8 +435,7 @@ The common final-bond identity factor is suppressed in these formulas.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_boundary_spanning,def:glm_boundary_existing_zipper,
-        thm:asym_zipper_uniqueness}
+    \uses{thm:glm_boundary_spanning,def:glm_boundary_existing_zipper,thm:asym_zipper_uniqueness}
     An intertwiner between distinct blocks intertwines every simultaneous
     word tuple. By spanning it intertwines a tuple that is the identity
     in one block and zero in the other, so the intertwiner vanishes.
@@ -530,8 +526,7 @@ The common final-bond identity factor is suppressed in these formulas.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence,
-        thm:mpo_symmetric_nimrep}
+    \uses{thm:glm_boundary_spanning,thm:glm_boundary_periodic_independence,thm:mpo_symmetric_nimrep}
     Choose a positive length with independent periodic state blocks.
     Expand the associativity identity
     \begin{align*}
@@ -545,8 +540,7 @@ The common final-bond identity factor is suppressed in these formulas.
     \leanok
     \label{thm:glm_boundary_source_multiplicities}
     \lean{MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible}
-    \uses{def:glm_boundary_closedness,def:mpo_symmetric_family,
-        def:fusion_character_nimrep}
+    \uses{def:glm_boundary_closedness,def:mpo_symmetric_family,def:fusion_character_nimrep}
     For unweighted direct sums of separated positive-dimensional
     injective operator and state blocks, arbitrary-boundary closedness
     and compatibility produce natural multiplicities $N_{ab}^c$ and
@@ -558,8 +552,7 @@ The common final-bond identity factor is suppressed in these formulas.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_periodic_expansions,
-        thm:glm_boundary_fusion_associative,thm:glm_boundary_action_nimrep}
+    \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_periodic_expansions,thm:glm_boundary_fusion_associative,thm:glm_boundary_action_nimrep}
     Taking traces in the exact pairwise fusion and action decompositions gives
     the periodic expansions, and comparing coefficients at an independent
     length establishes fusion associativity and the NIM relation for the

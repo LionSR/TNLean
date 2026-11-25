@@ -38,7 +38,7 @@
     \label{thm:pgvwc07_periodic_state_vector_decomposition}
     \lean{MPSTensor.pgvwc07_unital_stateVector_decomposition}
     \leanok
-    \uses{def:pgvwc07_projector_component_chain, def:transfer_map}
+    \uses{def:pgvwc07_projector_component_chain,def:transfer_map}
     Let $A$ have bond dimension $D>0$, with $\sum_iA^i(A^i)^\dagger=\Id$,
     a positive-definite matrix $\Lambda$ satisfying $\E_A^*(\Lambda)=\Lambda$,
     and only scalar multiples of $\Id$ as fixed matrices of $\E_A$.
@@ -63,8 +63,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:pgvwc07_unital_canonical_spectrum, lem:kraus_cyclic_shift,
-        thm:pgvwc07_component_sum_and_vanishing}
+    \uses{thm:pgvwc07_unital_canonical_spectrum,lem:kraus_cyclic_shift,thm:pgvwc07_component_sum_and_vanishing}
     The cyclic decomposition theorem for irreducible finite Kraus maps
     \cite[``Cyclic decomposition for irreducible finite Kraus maps]{QICLean2026Blueprint}
     gives orthogonal projectors with

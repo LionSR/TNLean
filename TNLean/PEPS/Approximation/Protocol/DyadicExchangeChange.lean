@@ -38,7 +38,7 @@ open Set Metric Filter Topology
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.PartyCircuit
+open EncodedFrame QuantumCircuit.Party
 
 section Readings
 
@@ -105,11 +105,12 @@ end Readings
 section PairChanges
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-  {Party : Type}
+  {Party : Type} [Fintype Party] [DecidableEq Party]
 
 /-- **A bounded change of two frames with bounded pair sources.** For arbitrary finite sites,
-positions, parties, `q ≥ 1` and vector `Ω`, an original circuit between the concatenated frame
-registers satisfies `IsBoundedChange` on the pair reference vectors and `IsSourceBounded rs`.
+positions, parties, `q ≥ 1` and vector `Ω`, an original circuit between the products of the frame
+registers at every party satisfies `IsBoundedChange` on the pair reference vectors and
+`IsSourceBounded rs`.
 At each nonprivate expansion, the former bounds both monomial count and absolute coefficient
 sum by `K`, with at most `r` pair effects per monomial; the latter bounds pair sources per
 monomial by `rs`. The natural
@@ -118,7 +119,8 @@ bounds may be zero, the error is any real number, and `Ω` need not be normalize
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 39–41, 389–430 and 572–583. -/
 def HasPairChange (Ω : EuclideanSpace ℂ (ι → Fin q)) (F₁ F₂ F₁' F₂' : Frame pos q Party)
     (S : Set Party) (r K rs : ℕ) (ε : ℝ) : Prop :=
-  ∃ w : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs),
+  ∃ w : OriginalCircuit (fun p ↦ F₁.system p × F₂.system p)
+      (fun p ↦ F₁'.system p × F₂'.system p),
     w.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω) ∧ w.IsSourceBounded rs
 
 section Bounds
@@ -136,8 +138,9 @@ end Bounds
 
 /-- **Reordering the holes after a change of two frames.** The holes of an encoded frame are
 listed in a fixed order of their tags; frames with the same ownership assignment and the same
-holes in another order are related by a reordering of tensor factors. So a change into `N₁, N₂`
-is such a change into frames with the owners of `N₁, N₂` and their holes reordered.
+holes in another order are related by a relabelling of the bases of the parties. So a change
+into `N₁, N₂` is such a change into frames with the owners of `N₁, N₂` and their holes
+reordered.
 
 Polynomial-PEPS manuscript, `05-frames.tex` (the order of the tags) and `06-geometry.tex`,
 lines 662–667. -/
@@ -147,46 +150,23 @@ theorem HasPairChange.reorder {Ω : EuclideanSpace ℂ (ι → Fin q)}
     (ho₁ : N₁.owner = G₁.owner) (hp₁ : N₁.holes.Perm G₁.holes) (ho₂ : N₂.owner = G₂.owner)
     (hp₂ : N₂.holes.Perm G₂.holes) : HasPairChange Ω F₁ F₂ G₁ G₂ S r K rs ε := by
   obtain ⟨c, hc, hs⟩ := h
-  obtain ⟨w₁, hw₁, -, he₁⟩ := Frame.exists_permWord N₁ G₁ ho₁ hp₁
-  obtain ⟨w₂, hw₂, -, he₂⟩ := Frame.exists_permWord N₂ G₂ ho₂ hp₂
-  set c₁ := w₁.toOriginalCircuit hw₁.isAllowed
-  set c₂ := w₂.toOriginalCircuit hw₂.isAllowed
-  have h₁ := Word.nonprivateCount_toOriginalCircuit_of_isReordering hw₁
-  have h₂ := Word.nonprivateCount_toOriginalCircuit_of_isReordering hw₂
-  set e : OriginalCircuit (N₁.regs ++ N₂.regs) (G₁.regs ++ G₂.regs) :=
-    .comp (c₁.appendTail N₂.regs) (OriginalCircuit.frameList G₁.regs c₂)
-  have he0 : e.nonprivateCount = 0 := by
-    change (c₁.appendTail N₂.regs).nonprivateCount +
-      OriginalCircuit.nonprivateCount (OriginalCircuit.frameList G₁.regs c₂) = 0
-    rw [OriginalCircuit.nonprivateCount_appendTail, h₁, zero_add]
-    exact (Circuit.gateCount_frameList _ _).trans h₂
-  have heval : e.eval (pairRef N₁ N₂ Ω) = pairRef G₁ G₂ Ω := by
-    change (OriginalCircuit.frameList G₁.regs c₂).eval ((c₁.appendTail N₂.regs).eval
-      ((appendIso N₁.regs N₂.regs).symm (N₁.regRef Ω ⊗ₜ N₂.regRef Ω))) =
-      (appendIso G₁.regs G₂.regs).symm (G₁.regRef Ω ⊗ₜ G₂.regRef Ω)
-    rw [OriginalCircuit.eval_appendTail_appendIso_symm,
-      Circuit.eval_frameList_appendIso_symm, Word.eval_toOriginalCircuit,
-      Word.eval_toOriginalCircuit]
-    exact congrArg₂ (fun x y => (appendIso G₁.regs G₂.regs).symm (x ⊗ₜ y)) (he₁ Ω) (he₂ Ω)
-  have hE : ∀ (s : ℝ), e.IsExpansionBounded r s := fun s =>
-    ⟨OriginalCircuit.isExpansionBounded_appendTail _ _
-        (Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-          hw₁.sourceCount_eq r s),
-      OriginalCircuit.isExpansionBounded_frameList _
-        (Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-          hw₂.sourceCount_eq r s) _⟩
-  have hM : e.IsMonomialBounded K :=
-    ⟨OriginalCircuit.isMonomialBounded_appendTail _ _
-        (Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-          hw₁.sourceCount_eq K),
-      OriginalCircuit.isMonomialBounded_frameList _
-        (Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-          hw₂.sourceCount_eq K) _⟩
+  obtain ⟨e₁, he₁⟩ := Frame.exists_relabel_of_perm N₁ G₁ ho₁ hp₁
+  obtain ⟨e₂, he₂⟩ := Frame.exists_relabel_of_perm N₂ G₂ ho₂ hp₂
+  set e := OriginalCircuit.relabel fun p ↦ (e₁ p).prodCongr (e₂ p)
+  have he0 : e.nonprivateCount = 0 := OriginalCircuit.nonprivateCount_relabel _
+  have heval : Matrix.toEuclideanLin e.op (pairRef N₁ N₂ Ω) = pairRef G₁ G₂ Ω := by
+    ext z
+    have h1 := congrArg (fun v ↦ v (fun p ↦ (z p).1)) (he₁ Ω)
+    have h2 := congrArg (fun v ↦ v (fun p ↦ (z p).2)) (he₂ Ω)
+    simp only [e, pairRef, prodVec_apply, OriginalCircuit.toEuclideanLin_op_relabel,
+      LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply] at h1 h2 ⊢
+    rw [← h1, ← h2]
+    rfl
   refine ⟨c.comp e, ?_, hs, OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero he0 rs⟩
   rw [← heval]
-  exact hc.comp_right e he0 (hE _) hM
+  exact hc.comp_right e he0
 
-omit [NeZero q] in
+omit [NeZero q] [Fintype Party] [DecidableEq Party] in
 open Classical in
 /-- **The holes after an exchange of two guide frames.** Let `f₁, f₂` both be `C` on an open set
 containing the boundary of `Y'`, and keep the holes of the frame of `f₁` centered outside `Y'` and
@@ -259,8 +239,8 @@ edge list, edge and translation, with `0 < t = D log L ≤ n ≤ A₀ * L` and
 guides: starting main and auxiliary before, first main and exchanged auxiliary after. Use their
 exact finite true-vertex sets, an exponent-`60` adaptive supply and radius
 `0 < ε₀ * t ≤ B₀ * log L`, with pairwise-disjoint outer samples within each set. For any owner
-map and rank, the supplied frames admit a pair change with participants in any set containing
-the neighbor owner and error `4 L⁻³⁰`, for all natural `r, K, rs`, including zero. No pair
+map and rank, the supplied frames admit a pair change with participants in any set and error
+`4 L⁻³⁰`, for all natural `r, K, rs`, including zero. No pair
 source or nonprivate gate is needed. The edge list may repeat edges and may contain the edge
 being exchanged.
 
@@ -296,7 +276,7 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q G a A₀ m₀ 60 D 
     (hda' : (Wa : Set (ℝ × ℝ)).Pairwise fun z z' =>
       Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer)
     (own : GuideLabel → ProtocolParty k) (rank : GuideLabel → ℕ) {S : Set (ProtocolParty k)}
-    (hCS : own (Bl.nbrLabel e) ∈ S) {r K rs : ℕ} :
+    {r K rs : ℕ} :
     HasPairChange Ω
       (guideFrame (cellCenterPos L) q fm own guidePlaceholder rank Vm (suppliedPatch P _ hr) hdm)
       (guideFrame (cellCenterPos L) q fa own guidePlaceholder rank Va (suppliedPatch P _ hr) hda)
@@ -390,33 +370,23 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q G a A₀ m₀ 60 D 
     have hs' : closedBall (z - d) (2 * ε₀ * t) ⊆ Y := hs.resolve_right fun h => h (hcen z) hz
     rw [hpz]
     exact fun x hx => (mem_lensSample x).2 (hs' (hball z x hx))
-  obtain ⟨w, hw, hu, hs, herr⟩ := edgeExchange_step_guideFrame hD hLL hΩ hΩ₁
-    (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ ha Bl E e d ((1 : ℝ), (1 : ℝ)) ht htn
-    hnL hε hfm hfa (V₁ := Vm) (V₂ := Va) (hV₁ := hdm) (hV₂ := hda) (fun z hz => (hVm z).1 hz)
-    (fun z hz => (hVa z).1 hz) (fun z _ => ⟨suppliedPatch_center P hr z, by simp⟩)
-    (fun z _ => ⟨suppliedPatch_center P hr z, by simp⟩) out hout hin (fun x hx y hy => by
-      have hx' := ((TwoSheetExchange.mem_tSet_iff _ _ x).1 hx).1
-      have hy' := ((TwoSheetExchange.mem_tSet_iff _ _ y).1 hy).1
-      have hxY := (mem_lensSample x).1 hx'
-      have hyY := (mem_lensSample y).1 hy'
-      have := dist_le_of_mem_closure_edgeLens (s := edgeLens Bl.n e) subset_rfl
-        (subset_closure hxY) (subset_closure hyY)
-      rw [dist_sub_right] at this
-      exact this.trans (le_mul_of_one_le_left Bl.n_pos.le hA₀))
-  rw [← pairRef_eq_twoLayoutIso_symm, ← pairRef_eq_twoLayoutIso_symm] at herr
-  have h0 : (w.toOriginalCircuit hw).nonprivateCount = 0 :=
-    (w.nonprivateCount_toOriginalCircuit hw).trans hs
+  obtain ⟨c, h0, hcb⟩ := isBoundedChange_of_exchange (S := S) (r := r) (K := K)
+    (TwoSheetExchange.isAllowed_renameWord ..) (TwoSheetExchange.sourceCount_renameWord ..)
+    (edgeExchange_step_guideFrame hD hLL hΩ hΩ₁
+      (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ ha Bl E e d ((1 : ℝ), (1 : ℝ)) ht htn
+      hnL hε hfm hfa (V₁ := Vm) (V₂ := Va) (hV₁ := hdm) (hV₂ := hda) (fun z hz => (hVm z).1 hz)
+      (fun z hz => (hVa z).1 hz) (fun z _ => ⟨suppliedPatch_center P hr z, by simp⟩)
+      (fun z _ => ⟨suppliedPatch_center P hr z, by simp⟩) out hout hin (fun x hx y hy => by
+        have hx' := ((TwoSheetExchange.mem_tSet_iff _ _ x).1 hx).1
+        have hy' := ((TwoSheetExchange.mem_tSet_iff _ _ y).1 hy).1
+        have hxY := (mem_lensSample x).1 hx'
+        have hyY := (mem_lensSample y).1 hy'
+        have := dist_le_of_mem_closure_edgeLens (s := edgeLens Bl.n e) subset_rfl
+          (subset_closure hxY) (subset_closure hyY)
+        rw [dist_sub_right] at this
+        exact this.trans (le_mul_of_one_le_left Bl.n_pos.le hA₀)))
   have hpair : HasPairChange Ω Gm Ga _ _ S r K rs (4 * (L : ℝ) ^ (-30 : ℤ)) :=
-    ⟨w.toOriginalCircuit hw,
-      { nonprivateCount_le := h0.le.trans zero_le_one
-        participants_subset := fun g => (w.participants_toOriginalCircuit_subset hw hu g).trans
-          (by rintro x rfl; exact hCS)
-        isExpansionBounded := Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-          hs r K
-        isMonomialBounded := Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-          hs K
-        norm_eval_sub_le := by rwa [w.eval_toOriginalCircuit] },
-      OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero h0 rs⟩
+    ⟨c, hcb, OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero h0 rs⟩
   have hout' : ∀ z o, out ⟨suppliedPatch P _ hr z, o⟩ = decide (z ∉ Y') := fun z o => by
     simp [out, Y']
   refine hpair.reorder ?_ ?_ ?_ ?_
@@ -444,9 +414,9 @@ exponent-`60` adaptive patch supply, any rank, any already-repainted set and a r
 `R` of side `n = 2 ^ j > K₀ t`, where `t = D log L`. For any edge list and edge `e`, treat all
 four guides with the neighboring label about the endpoints of `e`: starting main and auxiliary
 before, first main and exchanged auxiliary after. Their frames admit a pair change with
-participants in any set containing the neighboring party and error `4 L⁻³⁰`, for all natural
-`r, K, rs`, including zero. No pair source or nonprivate gate is needed. The list may repeat
-or contain `e`, and there is no premise that `R` is absent from the already-repainted set.
+participants in any set and error `4 L⁻³⁰`, for all natural `r, K, rs`, including zero. No pair
+source or nonprivate gate is needed. The list may repeat or contain `e`, and there is no premise
+that `R` is absent from the already-repainted set.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–339, 389–430 and 440–445;
 Lemma 6.6 `lem:exchange`, `05-frames.tex`. -/
@@ -457,7 +427,6 @@ theorem edgeExchange_hasPairChange (hD : IsAngularScale q G a A₀ m₀ 60 D L�
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
     (done : Set (ℤ × ℤ)) (E : List SquareEdge) (e : SquareEdge)
     {S : Set (ProtocolParty k)}
-    (hCS : labelParty R (protocolLevelLabels k R.1.1 done (e.nbrBlock R.1.index)) ∈ S)
     {r K rs : ℕ} :
     let Bl := blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
       (protocolLevelLabels k R.1.1 done) R.1.index (newParty Sum.inl R.1.1 R.1.index)
@@ -499,7 +468,7 @@ theorem edgeExchange_hasPairChange (hD : IsAngularScale q G a A₀ m₀ 60 D L�
     (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index) ht
     (by change D * Real.log L ≤ (2 : ℝ) ^ (R.1.1 : ℕ); nlinarith [hc.twenty_le_K₀, hlarge, ht])
     (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (R.side_le hk2))
-    hc.ε₀_small hfm hfa hgm hga hmm hma hmm' hma' P hr hdm hda hdm' hda' _ rank hCS
+    hc.ε₀_small hfm hfa hgm hga hmm hma hmm' hma' P hr hdm hda hdm' hda' _ rank
 
 end Exchange
 

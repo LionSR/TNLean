@@ -9,7 +9,7 @@ pair effect by a cyclic insertion into a fresh register stack.
 
 \begin{lemma}[Elimination of normalized pair effects]
     \label{lem:peps_pair_effects_source}
-    \lean{TNLean.Lattice.PartyCircuit.partyPairEffectElimination_with_grouped_sources}
+    \lean{QuantumCircuit.Party.WeightedGate.partyPairEffectElimination_with_grouped_sources}
     \leanok
     \uses{def:peps_party_monomial}
     Let $G=\sum_\xi c_\xi M_\xi$ be a contraction expanded into $K$ allowed
@@ -41,7 +41,7 @@ pair effect by a cyclic insertion into a fresh register stack.
 
 \begin{theorem}[Elimination of pair effects on parties]
     \label{thm:peps_pair_effects_party}
-    \lean{TNLean.Lattice.PartyCircuit.partyPairEffectElimination}
+    \lean{QuantumCircuit.Party.WeightedGate.partyPairEffectElimination}
     \leanok
     \uses{def:peps_party_monomial}
     For an expansion $G=\sum_\xi c_\xi M_\xi$ into $K$ allowed monomials on
@@ -157,11 +157,11 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{definition}[Monomials with recorded pair effects]
     \label{def:peps_effect_chain}
-    \lean{TNLean.Lattice.PartyCircuit.effectMap}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.eval}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.effectCount}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.IsAllowed}
+    \lean{Matrix.effectMatrix}
+    \lean{QuantumCircuit.Party.EffectChain}
+    \lean{QuantumCircuit.Party.EffectChain.eval}
+    \lean{QuantumCircuit.Party.EffectChain.effectCount}
+    \lean{QuantumCircuit.Party.EffectChain.IsAllowed}
     \leanok
     A monomial with $n$ recorded pair effects is a composition
     \begin{align}
@@ -175,15 +175,15 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{definition}[Replaced monomial and replaced gate]
     \label{def:peps_replaced_gate}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.stackVector}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.replace}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.replaceTerm}
-    \lean{TNLean.Lattice.PartyCircuit.GateExpansion}
-    \lean{TNLean.Lattice.PartyCircuit.gate}
-    \lean{TNLean.Lattice.PartyCircuit.inventory}
-    \lean{TNLean.Lattice.PartyCircuit.inventoryVector}
-    \lean{TNLean.Lattice.PartyCircuit.replaceGate}
-    \lean{TNLean.Lattice.PartyCircuit.termList}
+    \lean{QuantumCircuit.Party.EffectChain.stackVector}
+    \lean{QuantumCircuit.Party.EffectChain.replace}
+    \lean{QuantumCircuit.Party.EffectChain.replaceTerm}
+    \lean{QuantumCircuit.Party.GateExpansion}
+    \lean{QuantumCircuit.Party.GateExpansion.gate}
+    \lean{QuantumCircuit.Party.GateExpansion.inventory}
+    \lean{QuantumCircuit.Party.GateExpansion.inventoryVector}
+    \lean{QuantumCircuit.Party.GateExpansion.replaceGate}
+    \lean{QuantumCircuit.Party.GateExpansion.termList}
     \leanok
     \uses{def:peps_cyclic_insertion,def:peps_effect_chain}
     Assign each effect $E_i$ of $M$ its own output stack $\mathcal W_i^{\otimes m}$
@@ -198,10 +198,10 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{lemma}[Error of one replaced monomial]
     \label{thm:peps_replaced_monomial_error}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_replace_sub_le}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_eval_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_stackVector}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_replace_le_one}
+    \lean{QuantumCircuit.Party.EffectChain.norm_replace_sub_le}
+    \lean{QuantumCircuit.Party.EffectChain.norm_eval_le_one}
+    \lean{QuantumCircuit.Party.EffectChain.norm_stackVector}
+    \lean{QuantumCircuit.Party.EffectChain.norm_replace_le_one}
     \leanok
     \uses{def:peps_replaced_gate}
     For an allowed monomial $M$ with $n$ recorded pair effects, $\|M\|\le 1$,
@@ -230,8 +230,8 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{lemma}[Expansion of a replaced monomial]
     \label{thm:peps_replaced_monomial_expansion}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.replace_eq_sum}
-    \lean{TNLean.Lattice.PartyCircuit.EffectChain.norm_replaceTerm_le_one}
+    \lean{QuantumCircuit.Party.EffectChain.replace_eq_sum}
+    \lean{QuantumCircuit.Party.EffectChain.norm_replaceTerm_le_one}
     \leanok
     \uses{def:peps_replaced_gate}
     For an allowed monomial $M$ with $n$ pair effects,
@@ -248,13 +248,13 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{lemma}[Pair-effect elimination, operator estimates]
     \label{thm:peps_pair_effects_operator}
-    \lean{TNLean.Lattice.PartyCircuit.pairEffectElimination}
-    \lean{TNLean.Lattice.PartyCircuit.norm_inventoryVector}
-    \lean{TNLean.Lattice.PartyCircuit.norm_replaceGate_sub_le}
-    \lean{TNLean.Lattice.PartyCircuit.replaceGate_eq_sum_termList}
-    \lean{TNLean.Lattice.PartyCircuit.length_termList_le}
-    \lean{TNLean.Lattice.PartyCircuit.sum_norm_coeff_termList}
-    \lean{TNLean.Lattice.PartyCircuit.norm_term_le_one}
+    \lean{QuantumCircuit.Party.pairEffectElimination}
+    \lean{QuantumCircuit.Party.GateExpansion.norm_inventoryVector}
+    \lean{QuantumCircuit.Party.GateExpansion.norm_replaceGate_sub_le}
+    \lean{QuantumCircuit.Party.GateExpansion.replaceGate_eq_sum_termList}
+    \lean{QuantumCircuit.Party.GateExpansion.length_termList_le}
+    \lean{QuantumCircuit.Party.GateExpansion.sum_norm_coeff_termList}
+    \lean{QuantumCircuit.Party.GateExpansion.norm_term_le_one}
     \leanok
     \uses{def:peps_replaced_gate}
     For $G=\sum_\xi c_\xi M_\xi$ with $K$ allowed monomials, each having
@@ -307,12 +307,11 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{definition}[Registers of parties and source-only compositions]
     \label{def:peps_party_layout}
-    \lean{TNLean.Lattice.PartyCircuit.Reg}
-    \lean{TNLean.Lattice.PartyCircuit.Mem}
-    \lean{TNLean.Lattice.PartyCircuit.Word}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.eval}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.IsAllowed}
-    \lean{TNLean.Lattice.PartyCircuit.IsSourceOnly}
+    \lean{ManyBody.Config}
+    \lean{QuantumCircuit.Party.Word}
+    \lean{QuantumCircuit.Party.PartyCircuit.op}
+    \lean{QuantumCircuit.Party.PartyCircuit.IsAllowed}
+    \lean{QuantumCircuit.Party.IsSourceOnly}
     \leanok
     A register is a Hilbert space paired with an owner party, and the memory of
     a finite register list is the tensor product of its spaces. A source-only
@@ -324,12 +323,12 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{definition}[Allowed monomials on parties]
     \label{def:peps_party_monomial}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.toEffectChain}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.IsAllowed}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.effectParties}
-    \lean{TNLean.Lattice.PartyCircuit.PartyGate}
-    \lean{TNLean.Lattice.PartyCircuit.toGate}
+    \lean{QuantumCircuit.Party.Monomial}
+    \lean{QuantumCircuit.Party.Monomial.toEffectChain}
+    \lean{QuantumCircuit.Party.ChainGate.IsAllowed}
+    \lean{QuantumCircuit.Party.Monomial.effectParties}
+    \lean{QuantumCircuit.Party.WeightedGate}
+    \lean{QuantumCircuit.Party.WeightedGate.toGate}
     \leanok
     \uses{def:peps_party_layout,def:peps_effect_chain}
     An allowed monomial on parties is an effect chain
@@ -343,12 +342,12 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{lemma}[Insertion by pair sources]
     \label{thm:peps_insertion_by_sources}
-    \lean{TNLean.Lattice.PartyCircuit.stackIso_prepWord}
-    \lean{TNLean.Lattice.PartyCircuit.stackIso_insWord}
-    \lean{TNLean.Lattice.PartyCircuit.pairsOn}
-    \lean{TNLean.Lattice.PartyCircuit.stackIso}
-    \lean{TNLean.Lattice.PartyCircuit.prepWord}
-    \lean{TNLean.Lattice.PartyCircuit.insWord}
+    \lean{QuantumCircuit.Party.Word.op_prepWord}
+    \lean{QuantumCircuit.Party.Word.op_insWord}
+    \lean{QuantumCircuit.Party.stackSys}
+    \lean{QuantumCircuit.Party.stackConfigEquiv}
+    \lean{QuantumCircuit.Party.Word.prepWord}
+    \lean{QuantumCircuit.Party.Word.insWord}
     \leanok
     \uses{def:peps_cyclic_insertion,def:peps_party_layout}
     For a unit vector $\eta\in\mathbb C^\alpha\otimes\mathbb C^\beta$ on parties
@@ -365,14 +364,14 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{lemma}[The expansion is source-only]
     \label{thm:peps_party_terms_source_only}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.replaceTerm_toEffectChain}
-    \lean{TNLean.Lattice.PartyCircuit.termList_toGate}
-    \lean{TNLean.Lattice.PartyCircuit.isSourceOnly_termList}
-    \lean{TNLean.Lattice.PartyCircuit.gateIso_prepGate}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.replaceWord}
-    \lean{TNLean.Lattice.PartyCircuit.wordList}
-    \lean{TNLean.Lattice.PartyCircuit.gateIso}
-    \lean{TNLean.Lattice.PartyCircuit.prepGate}
+    \lean{QuantumCircuit.Party.Monomial.op_replaceWord}
+    \lean{QuantumCircuit.Party.WeightedGate.termList_toGate}
+    \lean{QuantumCircuit.Party.WeightedGate.isSourceOnly_termList}
+    \lean{QuantumCircuit.Party.WeightedGate.op_prepGate}
+    \lean{QuantumCircuit.Party.Monomial.replaceWord}
+    \lean{QuantumCircuit.Party.WeightedGate.wordList}
+    \lean{QuantumCircuit.Party.WeightedGate.gateEquiv}
+    \lean{QuantumCircuit.Party.WeightedGate.prepGate}
     \leanok
     \uses{def:peps_party_monomial,def:peps_replaced_gate}
     For an expansion $G=\sum_\xi c_\xi M_\xi$ into allowed monomials on parties,
@@ -390,11 +389,13 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{lemma}[Ownership of the additional registers]
     \label{thm:peps_party_ownership}
-    \lean{TNLean.Lattice.PartyCircuit.pairRegs_eq}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.owner_stackRegs}
-    \lean{TNLean.Lattice.PartyCircuit.gateOut_eq}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.stackRegs}
-    \lean{TNLean.Lattice.PartyCircuit.gateOut}
+    \lean{QuantumCircuit.Party.stackSys_of_ne}
+    \lean{QuantumCircuit.Party.Monomial.stackApp_of_notMem_effectParties,
+        QuantumCircuit.Party.card_stackApp}
+    \lean{QuantumCircuit.Party.WeightedGate.gateOut_of_forall_ne,
+        QuantumCircuit.Party.WeightedGate.card_gateOut}
+    \lean{QuantumCircuit.Party.stackApp}
+    \lean{QuantumCircuit.Party.WeightedGate.gateOut}
     \leanok
     \uses{def:peps_party_monomial}
     The output registers of $\widetilde G_m$ consist of the output registers of
@@ -409,12 +410,11 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{lemma}[Combining pair sources on one pair of parties]
     \label{thm:peps_party_combine_sources}
-    \lean{TNLean.Lattice.PartyCircuit.eval_combineSources}
-    \lean{TNLean.Lattice.PartyCircuit.isAllowed_combineSources}
-    \lean{TNLean.Lattice.PartyCircuit.pairRegroup}
-    \lean{TNLean.Lattice.PartyCircuit.combineSources}
+    \lean{QuantumCircuit.Party.Word.op_combineSources}
+    \lean{QuantumCircuit.Party.Word.isAllowed_combineSources}
+    \lean{QuantumCircuit.Party.Word.combineSources}
     \leanok
-    \uses{def:peps_party_layout}
+    \uses{def:peps_party_layout,thm:peps_pair_combine}
     For pair vectors $\eta\in\mathcal U\otimes\mathcal V$ and
     $\eta'\in\mathcal U'\otimes\mathcal V'$ on $p\ne q$, preparing $\eta'$ and
     $\eta$ and merging the local registers into $\mathcal U\otimes\mathcal U'$
@@ -429,10 +429,10 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{lemma}[Stack length and rescaling]
     \label{cor:peps_pair_effects_rescaling}
-    \lean{TNLean.Lattice.PartyCircuit.stackLength}
-    \lean{TNLean.Lattice.PartyCircuit.stackLength_spec}
-    \lean{TNLean.Lattice.PartyCircuit.replaceGate_rescaled}
-    \lean{TNLean.Lattice.PartyCircuit.replaceGate_rescaled_stackLength}
+    \lean{QuantumCircuit.Party.stackLength}
+    \lean{QuantumCircuit.Party.stackLength_spec}
+    \lean{QuantumCircuit.Party.GateExpansion.replaceGate_rescaled}
+    \lean{QuantumCircuit.Party.GateExpansion.replaceGate_rescaled_stackLength}
     \leanok
     \uses{thm:peps_pair_effects_operator}
     In the setting of Lemma~\ref{thm:peps_pair_effects_operator}, if

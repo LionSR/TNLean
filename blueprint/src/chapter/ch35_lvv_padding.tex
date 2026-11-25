@@ -113,8 +113,7 @@ original prefix from a viable witness.
         ManyBody.BondInteraction.padded_term_le_one,
         ManyBody.BondInteraction.hamiltonian_padded}
     \leanok
-    \uses{def:lvv_padded_interaction,thm:lvv_prefix_support,
-        thm:lvv_placement_order,thm:lvv_product_basis_penalty}
+    \uses{def:lvv_padded_interaction,thm:lvv_prefix_support,thm:lvv_placement_order,thm:lvv_product_basis_penalty}
     If $0\le h_j\le I$ is supported on $\{j,j+1\}$, then each
     $0\le\widehat h_j\le I$ is supported on $\{j,j+1\}$ and
     \begin{align*}
@@ -231,8 +230,7 @@ original prefix from a viable witness.
     \lean{TNLean.MPS.AreaLaw.norm_paddedGroundVector,
         TNLean.MPS.AreaLaw.isGapped_paddedInteraction}
     \leanok
-    \uses{def:lvv_padded_ground_vector,thm:lvv_padding_tensor_coordinates,
-        thm:lvv_product_basis_penalty,thm:lvv_right_basis_extension}
+    \uses{def:lvv_padded_ground_vector,thm:lvv_padding_tensor_coordinates,thm:lvv_product_basis_penalty,thm:lvv_right_basis_extension}
     Suppose $\Gamma$ is a unit vector and $H$ is gapped at $E$ with gap
     $\Delta>0$, with ground space the line through $\Gamma$.
     Set $g=\min\{\Delta,1\}$.
@@ -257,8 +255,7 @@ original prefix from a viable witness.
     \label{thm:lvv_padding_prefix_mps}
     \lean{TNLean.MPS.AreaLaw.IsViable.exists_prefix_mps_of_paddedGroundVector}
     \leanok
-    \uses{thm:lvv_retained_prefix_extraction,thm:lvv_left_span_bond,
-        def:lvv_padded_ground_vector}
+    \uses{thm:lvv_retained_prefix_extraction,thm:lvv_left_span_bond,def:lvv_padded_ground_vector}
     Let $\Gamma$ be a unit original-chain vector and $\delta<1$.
     Suppose a finite prefix family $S$ is $\delta$-viable for
     $\widehat\Gamma$, and every member has effective MPS bond bound
@@ -284,9 +281,7 @@ original prefix from a viable witness.
     \lean{TNLean.MPS.AreaLaw.lvvSuccessiveError_min_lt_one,
         TNLean.MPS.AreaLaw.exists_uniform_positive_chain_successive_accuracy}
     \leanok
-    \uses{thm:lvv_uniform_successive_approximation,
-        thm:lvv_padded_interaction_sum,thm:lvv_padding_ground_gap,
-        thm:lvv_padding_prefix_mps}
+    \uses{thm:lvv_uniform_successive_approximation,thm:lvv_padded_interaction_sum,thm:lvv_padding_ground_gap,thm:lvv_padding_prefix_mps}
     Fix $q\ge2$ and $\Delta>0$, and put
     $g=\min\{\Delta,1\}$ and $c=(g/169)^2<1$.
     There are natural numbers $P,d$, with $P\ge1$, depending only on

@@ -48,7 +48,7 @@
     \label{thm:mpo_symmetry_fibonacci_normal_decomposition}
     \lean{FibonacciCompression.exists_equiv_prod_of_isMPOSymmetricFamily_fibNim}
     \leanok
-    \uses{def:asymex_fib_anomaly_nim, def:mpo_symmetric_family, def:normal}
+    \uses{def:asymex_fib_anomaly_nim,def:mpo_symmetric_family,def:normal}
     Let $O_1,O_\tau$ be a Fibonacci matrix product operator algebra and
     $(A_x)_{x\in K}$ a finite family of normal tensors of positive bond
     dimensions. Suppose its periodic vectors are invariant with
@@ -70,7 +70,7 @@
 \end{lemma}
 
 \begin{proof}
-    \uses{thm:mpo_symmetric_nimrep, thm:mpo_symmetry_fibonacci_decomposition}
+    \uses{thm:mpo_symmetric_nimrep,thm:mpo_symmetry_fibonacci_decomposition}
     \leanok
     The symmetry and normality hypotheses give natural-number coefficients
     forming a representation of the fusion ring. Linear independence at
@@ -98,8 +98,7 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:mpo_symmetry_fibonacci_decomposition,
-        thm:mpo_symmetry_fibonacci_rank_two}
+    \uses{thm:mpo_symmetry_fibonacci_decomposition,thm:mpo_symmetry_fibonacci_rank_two}
     Each isolated pair in (\ref{eq:mpo_fibonacci_direct_sum}) is a nonempty
     invariant subset. Indecomposability makes it all of $K$, and the
     two-block classification identifies the action with the regular one.
@@ -111,8 +110,7 @@
         FibonacciCompression.isBiorthogonalDecomposition_fibFusion,
         FibonacciCompression.isBiorthogonalDecomposition_fibAct}
     \leanok
-    \uses{def:glm_boundary_decomposition, def:asymex_fib,
-        thm:asymex_fib_anomaly_nim_rep}
+    \uses{def:glm_boundary_decomposition,def:asymex_fib,thm:asymex_fib_anomaly_nim_rep}
     Let $O_1,O_\tau$ be the Fibonacci operator blocks and let
     $A_{x_1},A_{x_\tau}$ be the two normal states of
     Lemma~\ref{thm:asymex_fib_anomaly_nim_rep}. For every pair of labels
@@ -139,8 +137,7 @@
     \lean{FibonacciCompression.fib_actionLMatrix_eq,
         FibonacciCompression.fib_actionLMatrix_eq_gauge_fSymbol}
     \leanok
-    \uses{lem:mpo_symmetry_fibonacci_exact_trees,
-        def:glm_boundary_action_l_matrix, def:asymex_fib_fsymbols}
+    \uses{lem:mpo_symmetry_fibonacci_exact_trees,def:glm_boundary_action_l_matrix,def:asymex_fib_fsymbols}
     For the exact trees of Lemma~\ref{lem:mpo_symmetry_fibonacci_exact_trees},
     the L-symbol $L_{\tau\tau x}^{y}$ equals $1$ on the three
     one-dimensional blocks, and on the block $x=y=x_\tau$ it equals

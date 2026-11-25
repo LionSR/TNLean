@@ -8,13 +8,9 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Collar
 
-import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
 import TNLean.PEPS.AreaLaw.Collar.AugmentedPartition
 import TNLean.PEPS.AreaLaw.Collar.ChargeSlots
-import TNLean.PEPS.AreaLaw.Collar.CompactCollarCounting
 import TNLean.PEPS.AreaLaw.Collar.Defs
 import TNLean.PEPS.AreaLaw.Collar.FillCoverage
-import TNLean.PEPS.AreaLaw.Collar.NestedBandMetric
 import TNLean.PEPS.AreaLaw.Collar.PhysicalPartition
-import TNLean.PEPS.AreaLaw.Collar.RegionalMoveEntropy
 import TNLean.PEPS.AreaLaw.Collar.Scales

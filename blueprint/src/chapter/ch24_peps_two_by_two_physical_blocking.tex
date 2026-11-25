@@ -45,8 +45,7 @@
         TNLean.PEPS.twoByTwoIncidentBoundaryEquiv_smul,
         TNLean.PEPS.twoByTwoIncidentBoundaryEquiv_rep}
     \leanok
-    \uses{def:peps_two_by_two_bundle_coordinates,
-        thm:peps_two_by_two_graph_contraction}
+    \uses{def:peps_two_by_two_bundle_coordinates,thm:peps_two_by_two_graph_contraction}
     Suppose both coarse periods are at least three. The fine state after
     physical grouping is the bundled graph state.
     The eight-label boundary bijection intertwines simultaneous left
@@ -68,8 +67,7 @@
         TNLean.PEPS.IsGIsometric.isGIsometric_torusIncidentFamily,
         TNLean.PEPS.IsGIsometric.exists_torusCanonicalSupportEquiv}
     \leanok
-    \uses{thm:peps_g_isometry_coordinate_equiv,
-        thm:peps_g_isometric_canonical_support}
+    \uses{thm:peps_g_isometry_coordinate_equiv,thm:peps_g_isometric_canonical_support}
     On any finite simple graph, the oriented incident action of the
     left-regular matrices equals simultaneous left translation on incident
     labels. On a square torus of periods at least three, let $A$ be any
@@ -94,9 +92,7 @@
     \label{thm:peps_two_by_two_bundled_isometry}
     \lean{TNLean.PEPS.isGIsometric_twoByTwoBundledGraphSite}
     \leanok
-    \uses{thm:peps_two_by_two_isometry,
-        thm:peps_two_by_two_bundle_coordinates,
-        thm:peps_g_isometry_coordinate_equiv}
+    \uses{thm:peps_two_by_two_isometry,thm:peps_two_by_two_bundle_coordinates,thm:peps_g_isometry_coordinate_equiv}
     If every fine site is regular $G$-isometric, then every bundled
     coarse site is $G$-isometric for its bundled incident representation.
     There is no independent hypothesis about the blocked Gram matrix.
@@ -116,8 +112,7 @@
         TNLean.PEPS.twoByTwoFinePhysicalSupport,
         TNLean.PEPS.twoByTwoPhysicalSupportRegrouping}
     \leanok
-    \uses{def:peps_two_by_two_physical_grouping,
-        def:peps_two_by_two_bundle_coordinates}
+    \uses{def:peps_two_by_two_physical_grouping,def:peps_two_by_two_bundle_coordinates}
     Let $\Psi_a$ be the original fine bond-indexed torus state. Let $W$
     be its full physical regrouping unitary, and let $T_B=\bigotimes_vB_v$
     be the product map of the bundled coarse tensors. Define
@@ -131,9 +126,7 @@
     \lean{TNLean.PEPS.twoByTwoPhysicalRegroupingIsometry_fineState,
         TNLean.PEPS.twoByTwoFineState_mem_physicalSupport}
     \leanok
-    \uses{def:peps_two_by_two_fine_support,
-        thm:peps_two_by_two_bundle_coordinates,
-        thm:peps_graph_physical_support_transport}
+    \uses{def:peps_two_by_two_fine_support,thm:peps_two_by_two_bundle_coordinates,thm:peps_graph_physical_support_transport}
     The physical regrouping satisfies $W\Psi_a=\Psi_B$, and the
     fine state belongs to $S_a$. These statements require no symmetry or
     additional support hypothesis.
@@ -149,9 +142,7 @@
     \label{thm:peps_two_by_two_physical_renormalization}
     \lean{TNLean.PEPS.exists_regularTwoByTwoPhysicalSupportIsometry}
     \leanok
-    \uses{thm:peps_two_by_two_bundled_isometry,
-        thm:peps_two_by_two_fine_support,
-        thm:peps_regular_graph_physical_blocking}
+    \uses{thm:peps_two_by_two_bundled_isometry,thm:peps_two_by_two_fine_support,thm:peps_regular_graph_physical_blocking}
     Let $G$ be any finite group, and let the two coarse periods be at least
     three. Place arbitrary regular $G$-isometric fine tensors $a_z$ on the
     doubled torus, with any common finite physical alphabet. There are

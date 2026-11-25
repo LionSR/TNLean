@@ -12,9 +12,7 @@
         TNLean.PEPS.regularCorrelatedChargeState_apply,
         TNLean.PEPS.place_mulVec_regularCorrelatedChargeState}
     \leanok
-    \uses{def:peps_regular_correlated_charge_state,
-        def:peps_regular_weighted_open_contraction,
-        thm:peps_regular_coherent_global_transport}
+    \uses{def:peps_regular_correlated_charge_state,def:peps_regular_weighted_open_contraction,thm:peps_regular_coherent_global_transport}
     The state $\Psi_z(u;\chi,p)$ of Definition~\ref{def:peps_regular_correlated_charge_state} has components
     \begin{align}
         \Psi_z(u;\chi,p)(\sigma)
@@ -44,9 +42,7 @@
     \lean{TNLean.PEPS.torusChargeFluxPartnerEdge_tail_not_mem,
         TNLean.PEPS.IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing_global}
     \leanok
-    \uses{def:peps_torus_charge_flux_partner_edge,
-        thm:peps_regular_correlated_charge_cut,
-        thm:peps_torus_charge_flux_crossing}
+    \uses{def:peps_torus_charge_flux_partner_edge,thm:peps_regular_correlated_charge_cut,thm:peps_torus_charge_flux_crossing}
     For finite $G$, torus periods $w\ge 5$ and $H\ge 4$, and a regular $G$-isometric four-leg tensor, on every translated strip $R=R_v$ with charge bond $e_0$, remote bond $e_1$ of Definition~\ref{def:peps_torus_charge_flux_partner_edge}, and initial flux string $u^{(0)}_k$, there exists a regional unitary $W_R$ (chosen before $k,\chi,p$, with global unitary extension $W_R\otimes I$ and no extra tree-gauge, factorization, Gram, or state-action hypotheses) such that
     \begin{align}
         (W_R\otimes I)\Psi_1(u^{(0)}_k;\chi,p)

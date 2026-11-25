@@ -2,7 +2,7 @@
     \label{def:mpdo_bnt_algebra_clause}
     \lean{MPOTensor.BNTAlgebraClause}
     \leanok
-    \uses{def:mpdo_bnt_label_coefficient_family, def:mpdo_bnt_label_operator_family, def:mpdo_bnt_label_trace_scalar_family, def:mpdo_diagonal_chi_family, def:mpdo_positive_bnt_label_chi_trace_power_form, def:mpdo_bnt_label_same_length_product_form, def:mpdo_bnt_label_idempotent_coefficient_form}
+    \uses{def:mpdo_bnt_label_coefficient_family,def:mpdo_bnt_label_operator_family,def:mpdo_bnt_label_trace_scalar_family,def:mpdo_diagonal_chi_family,def:mpdo_positive_bnt_label_chi_trace_power_form,def:mpdo_bnt_label_same_length_product_form,def:mpdo_bnt_label_idempotent_coefficient_form}
     Fix structure coefficients $c^{(L)}_{\alpha,\beta,\gamma}$,
     operators $O_L(M_\alpha)$, and scalars $m_\alpha=\tr(\mu_\alpha)$.
     The algebra conditions require a length-independent family of
@@ -84,7 +84,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause}
     \lean{MPOTensor.HasBNTAlgebraTensorClause}
     \leanok
-    \uses{def:vertical_cf_mpdo, def:mpdo_bnt_algebra_clause}
+    \uses{def:vertical_cf_mpdo,def:mpdo_bnt_algebra_clause}
     Choose a vertical canonical decomposition
     \begin{align}
         U\widetilde M U^\dagger
@@ -130,7 +130,7 @@
     \lean{MPOTensor.BNTAlgebraTensorClause.%
         physTraceTransfer_verticalBNTMPO_posSemidef}
     \leanok
-    \uses{def:mpdo, def:mpdo_bnt_algebra_tensor_clause, def:mpo_physical_trace_transfer, lem:mpdo_sitewise_physical_coordinate_congruence}
+    \uses{def:mpdo,def:mpdo_bnt_algebra_tensor_clause,def:mpo_physical_trace_transfer,lem:mpdo_sitewise_physical_coordinate_congruence}
     Let $M$ generate a family of MPDOs with physical dimension $d$
     and bond dimension $D$, and choose a vertical canonical decomposition
     satisfying the algebra conditions of
@@ -232,7 +232,7 @@
     \lean{MPSTensor.PositiveMinimalRealizationCounterexample.%
         gaugedTensor_not_retained_positive_sector}
     \leanok
-    \uses{def:mpdo_bnt_algebra_tensor_clause, thm:mpdo_algebra_clause_terminal_transfer_positivity, lem:mpdo_nonunitary_pair_terminal_not_positive}
+    \uses{def:mpdo_bnt_algebra_tensor_clause,thm:mpdo_algebra_clause_terminal_transfer_positivity,lem:mpdo_nonunitary_pair_terminal_not_positive}
     Neither $A$ nor $B$ can occur, up to the bond-dimension identification,
     as a retained sector of bond dimension two in a vertical canonical
     decomposition of an MPDO tensor satisfying
@@ -240,7 +240,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_algebra_clause_terminal_transfer_positivity, lem:mpdo_nonunitary_pair_terminal_not_positive}
+    \uses{thm:mpdo_algebra_clause_terminal_transfer_positivity,lem:mpdo_nonunitary_pair_terminal_not_positive}
     For any such retained sector, closing the physical legs gives a positive
     semidefinite matrix by
     Lemma~\ref{thm:mpdo_algebra_clause_terminal_transfer_positivity}.
@@ -270,7 +270,7 @@
 \begin{definition}[Linear extension on each virtual block]%
     \label{def:mpdo_virtual_perBlockLinearExtension}
     \leanok
-    \uses{def:injective, def:same_mpv, def:perBlockLinearExtension}
+    \uses{def:injective,def:same_mpv,def:perBlockLinearExtension}
     For injective families $A_k$ and $B_k$ with the same closed matrix
     product vectors, the linear extension on block $k$ is the unique linear map
     $T_k:\MN{D_k}\to\MN{D_k}$ satisfying $T_k(A_k^i)=B_k^i$ for every
@@ -286,7 +286,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_virtual_perBlockLinearExtension, thm:linear_ext_mul, lem:perBlockLinearExtension_mul}
+    \uses{def:mpdo_virtual_perBlockLinearExtension,thm:linear_ext_mul,lem:perBlockLinearExtension_mul}
     The letters of $A_k$ span $\MN{D_k}$, and equality of the closed matrix
     product vectors gives the identity on products of spanning letters.
 \end{proof}
@@ -299,7 +299,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:simplicity, lem:trace_ne_zero, lem:perBlockLinearExtension_bijective}
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul,thm:simplicity,lem:trace_ne_zero,lem:perBlockLinearExtension_bijective}
     Multiplicativity makes the kernel an ideal of the simple matrix algebra.
     The map is nonzero: otherwise every letter of $B_k$ would vanish,
     contradicting the nonvanishing trace pairing for the injective family.
@@ -315,7 +315,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul, thm:mpdo_virtual_perBlockLinearExtension_bijective, thm:positive_perBlockLinearExtension_unitary}
+    \uses{thm:mpdo_virtual_perBlockLinearExtension_mul,thm:mpdo_virtual_perBlockLinearExtension_bijective,thm:positive_perBlockLinearExtension_unitary}
     The map on each block is a bijective algebra endomorphism. Positivity makes it
     preserve adjoints, so unitary Skolem--Noether implements it by conjugation
     with a unitary matrix.
@@ -333,7 +333,7 @@
         tensorFamily_sameMPV_gaugedTensorFamily}
     \leanok
     \discussion{5284}
-    \uses{def:injective, def:same_mpv, def:mpdo_virtual_perBlockLinearExtension, lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    \uses{def:injective,def:same_mpv,def:mpdo_virtual_perBlockLinearExtension,lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     Regard the tensors $A$ and $B$ of
     Lemma~\ref{lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     as one-block families. They are injective and have equal closed matrix
@@ -342,7 +342,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:mpdo_virtual_perBlockLinearExtension, thm:mpdo_positive_perBlockLinearExtension_unitary, lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
+    \uses{def:mpdo_virtual_perBlockLinearExtension,thm:mpdo_positive_perBlockLinearExtension_unitary,lem:mpdo_nonunitary_pair_no_positive_isometric_realization}
     If the linear extension were positive, its unitary-implementation
     theorem would give a unitary $U$ satisfying
     $B^i=UA^iU^\dagger$ for every letter~$i$.

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSignIntrinsic
 import TNLean.MPS.CanonicalForm.SimpleMPU.DoubleLayerContraction
-import QICLean.Channel.Entanglement.MaximallyEntangled
+import QICLean.Algebra.Kronecker.MaximallyEntangled
 
 /-!
 # A twisted-transfer expression for the intrinsic blocked trace

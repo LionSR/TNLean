@@ -84,7 +84,9 @@ not assumed.
 
 \begin{definition}[Party network and routing]
     \label{def:peps_party_network_routing}
-    \lean{TNLean.Lattice.Compression.PartyNetwork, TNLean.Lattice.Compression.PartyNetwork.coeff, TNLean.PEPS.Approximation.Routing}
+    \lean{TNLean.Network.PartyNetwork,
+        TNLean.Network.PartyNetwork.coeff,
+        TNLean.PEPS.Approximation.Routing}
     \leanok
     A party network with physical dimension $d$ consists of finite sets $P$ of
     parties and $\mathcal L$ of links, a dimension $D_\ell$ and two endpoint
@@ -148,7 +150,7 @@ not assumed.
     \label{thm:peps_dyadic_folded_congestion}
     \lean{TNLean.PEPS.Approximation.foldedRouting, TNLean.PEPS.Approximation.foldedRouting_card_traversal_le}
     \leanok
-    \uses{thm:peps_dyadic_padded_congestion, lem:peps_dyadic_fold, lem:peps_dyadic_padded_side}
+    \uses{thm:peps_dyadic_padded_congestion,lem:peps_dyadic_fold,lem:peps_dyadic_padded_side}
     Establishing the congestion bound of~\cite[Lemma~8.2]{OpenAI2026PolynomialPEPS}, let $L\ge1$ and
     let every dyadic block lie in the padded square $[0,N]^2$.
     Under the hypotheses of Lemma~\ref{thm:peps_dyadic_padded_congestion}, applying $(f,f)$ from Definition~\ref{def:peps_dyadic_fold} maps the padded walks to walks on $\{0,\ldots,L-1\}^2$, places each party at $(f(x_p),f(y_p))$, and traverses every edge of $\{0,\ldots,L-1\}^2$ at most $8(2c+1)B\Delta$ times (counted with multiplicity).
@@ -162,7 +164,7 @@ not assumed.
     \label{thm:peps_dyadic_routing_peps}
     \lean{TNLean.PEPS.Approximation.exists_squarePEPS_of_dyadicRouting}
     \leanok
-    \uses{thm:peps_dyadic_folded_congestion, thm:peps_routed_contraction}
+    \uses{thm:peps_dyadic_folded_congestion,thm:peps_routed_contraction}
     Let $L\ge1$ and consider a party network on dyadic anchors of $[0,N]^2$
     with at most $B$ parties per block, at most $\Delta$ links per party,
     link separation at most $c$ times either endpoint scale, and link dimensions
@@ -188,7 +190,8 @@ in~\cite{gap:polypeps_product_reference_column}.
 
 \begin{definition}[Operator party network and a fixed input]
     \label{def:peps_party_operator_fix_input}
-    \lean{TNLean.Lattice.Compression.PartyNetwork.operatorCoeff, TNLean.Lattice.Compression.PartyNetwork.fixInput}
+    \lean{TNLean.Network.PartyNetwork.operatorCoeff,
+        TNLean.Network.PartyNetwork.fixInput}
     \leanok
     \uses{def:peps_party_network_routing}
     An operator party network is a party network whose physical index at each
@@ -202,7 +205,9 @@ in~\cite{gap:polypeps_product_reference_column}.
 
 \begin{lemma}[A column of the party network]
     \label{thm:peps_party_column}
-    \lean{TNLean.Lattice.Compression.PartyNetwork.dim_fixInput, TNLean.Lattice.Compression.PartyNetwork.coeff_fixInput, TNLean.Lattice.Compression.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le}
+    \lean{TNLean.Network.PartyNetwork.dim_fixInput,
+        TNLean.Network.PartyNetwork.coeff_fixInput,
+        TNLean.Network.PartyNetwork.exists_fixInput_of_rectangularTraceNorm_sub_pure_le}
     \leanok
     \uses{def:peps_party_operator_fix_input}
     In the party-graph setting of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
@@ -222,7 +227,7 @@ in~\cite{gap:polypeps_product_reference_column}.
     \label{thm:peps_party_column_routing}
     \lean{TNLean.PEPS.Tensor.bondDim_pos_of_pepsVector_ne_zero, TNLean.PEPS.Approximation.exists_squarePEPS_of_fixInput_dyadicRouting, TNLean.PEPS.Approximation.exists_squarePEPS_of_product_reference_dyadicRouting}
     \leanok
-    \uses{thm:peps_dyadic_routing_peps, thm:peps_party_column}
+    \uses{thm:peps_dyadic_routing_peps,thm:peps_party_column}
     Let $L\ge1$ and let an operator party network on dyadic anchors of $[0,N]^2$
     satisfy the hypotheses of Lemma~\ref{thm:peps_dyadic_routing_peps}
     with link dimensions at most $D$ and $\chi=8(2c+1)B\Delta$. Reading each party's physical pair at $(f(x_p),f(y_p))$, suppose

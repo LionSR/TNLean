@@ -69,7 +69,6 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ}
 
@@ -409,21 +408,21 @@ then `‖M_a Ω_{F_old} - Ω_{F_new}‖ ≤ δ + (m + r_old) ε`, under the hypo
 `norm_rewrite_refVec_sub_le`.
 
 Polynomial-PEPS manuscript, `05-frames.tex`, lines 213–218 and 343–344. -/
-theorem norm_act_refVec_sub_le_of_approx [NeZero q] (hR : R.AvoidsUntouched)
+theorem norm_toEuclideanLin_refVec_sub_le_of_approx [NeZero q] (hR : R.AvoidsUntouched)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1) {ε δ : ℝ}
-    (hpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ε)
-    (hold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ε)
+    (hpatch : ∀ P ∈ R.patches, ‖toEuclideanLin P.proj Ω - Ω‖ ≤ ε)
+    (hold : ∀ h ∈ R.oldAffected, ‖toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ε)
     {Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ} (hMa : ‖Ma - R.rewrite‖ ≤ δ) :
-    ‖act Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
+    ‖toEuclideanLin Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
       δ + (R.patches.length + R.oldAffected.length) * ε := by
-  have hsplit : act Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω =
-      act (Ma - R.rewrite) (R.oldFrame.refVec Ω) +
-        (act R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω) := by
-    rw [act_sub]; abel
+  have hsplit : toEuclideanLin Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω =
+      toEuclideanLin (Ma - R.rewrite) (R.oldFrame.refVec Ω) +
+        (toEuclideanLin R.rewrite (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω) := by
+    rw [map_sub, LinearMap.sub_apply]; abel
   rw [hsplit]
   refine (norm_add_le _ _).trans (add_le_add ?_ (R.norm_rewrite_refVec_sub_le hR hpatch hold))
-  calc ‖act (Ma - R.rewrite) (R.oldFrame.refVec Ω)‖
-      ≤ ‖Ma - R.rewrite‖ * ‖R.oldFrame.refVec Ω‖ := norm_act_le _ _
+  calc ‖toEuclideanLin (Ma - R.rewrite) (R.oldFrame.refVec Ω)‖
+      ≤ ‖Ma - R.rewrite‖ * ‖R.oldFrame.refVec Ω‖ := norm_toEuclideanLin_apply_le _ _
     _ ≤ δ * 1 := mul_le_mul hMa ((R.oldFrame.norm_refVec_le Ω).trans hΩ) (norm_nonneg _)
         ((norm_nonneg _).trans hMa)
     _ = δ := mul_one δ

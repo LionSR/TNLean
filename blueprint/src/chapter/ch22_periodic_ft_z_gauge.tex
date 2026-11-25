@@ -32,14 +32,14 @@
     \label{lem:z_gauge_diagonal_pow}
     \lean{MPSTensor.zGaugeDiagonal_pow_eq_one}
     \leanok
-    \uses{def:z_gauge_diagonal, lem:z_gauge_entry_pow}
+    \uses{def:z_gauge_diagonal,lem:z_gauge_entry_pow}
     If $\mu_i^m=\nu_i^m$ and $\nu_i\neq 0$ for all~$i$, then $Z^m=\Id$.
 \end{lemma}
 
 \begin{lemma}[Diagonal $Z$-gauge rescales diagonal multiplicities]\label{lem:z_gauge_diagonal_mul}
     \lean{MPSTensor.zGaugeDiagonal_mul_diagonal}
     \leanok
-    \uses{def:z_gauge_diagonal, lem:z_gauge_entry_mul}
+    \uses{def:z_gauge_diagonal,lem:z_gauge_entry_mul}
     Under $\nu_i\neq 0$ for all~$i$, one has
     $Z\diag(\nu)=\diag(\mu)$.
 \end{lemma}
@@ -76,7 +76,7 @@
     \label{thm:z_gauge_blockTensor_gauge_equiv}
     \lean{MPSTensor.ZGaugeEquiv.blockTensor_gaugeEquiv}
     \leanok
-    \uses{def:z_gauge_equiv, def:blocked_tensor, def:gauge_equiv}
+    \uses{def:z_gauge_equiv,def:blocked_tensor,def:gauge_equiv}
     If $A$ and $B$ are $\Z_m$-gauge equivalent, then their $m$-blocked
     tensors $A^{[m]}$ and $B^{[m]}$ are gauge equivalent in the ordinary sense.
 \end{lemma}
@@ -92,7 +92,7 @@
     \label{cor:z_gauge_blockTensor_same_mpv}
     \lean{MPSTensor.ZGaugeEquiv.blockTensor_sameMPV}
     \leanok
-    \uses{thm:z_gauge_blockTensor_gauge_equiv, thm:gauge_invariance}
+    \uses{thm:z_gauge_blockTensor_gauge_equiv,thm:gauge_invariance}
     If $A$ and $B$ are $\Z_m$-gauge equivalent, then the blocked tensors
     $A^{[m]}$ and $B^{[m]}$ have the same MPV family.
 \end{corollary}

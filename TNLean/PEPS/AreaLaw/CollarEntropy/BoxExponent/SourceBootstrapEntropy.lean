@@ -41,7 +41,7 @@ open scoped Matrix.Norms.L2Operator
 noncomputable section
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace PlaneInteraction ambientDepth supDist)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -172,7 +172,7 @@ theorem sourceBootstrap_entropy_improvement_explicit
           (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
         (∀ j : ℕ, j ≤ F.L S.n →
@@ -438,7 +438,7 @@ theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
           (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
         (∀ j : ℕ, j ≤ F.L S.n →
@@ -487,7 +487,7 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
           (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
         (∀ j : ℕ, j ≤ F.L S.n →
@@ -532,7 +532,7 @@ theorem exists_sourceBootstrap_entropy_improvement
           (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+          ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
         (∀ j : ℕ, j ≤ F.L S.n →

@@ -74,7 +74,7 @@ theorem largeSizeDyadicProtocol_of_le {q : ℕ} (hq : 2 ≤ q) {J Δ : ℝ} (hJ 
         protocolExpansionConstant protocolMeshRatio C ≤ C_K →
         protocolErrorConstant protocolMeshRatio ≤ C_E →
         ∀ L : ℕ, 2 ≤ L → L₁ ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
-          ∃ (P : Type) (_ : Fintype P) (D' : DyadicProtocol L q P),
+          ∃ (P : Type) (_ : Fintype P) (_ : DecidableEq P) (D' : DyadicProtocol L q P),
             D'.IsDistributionProtocol Ω C_N C_K C_E protocolLifetimeBound
               (protocolExpansionExponent protocolMeshRatio c)
               (2 * protocolPatchBound protocolHoleRatio protocolMeshRatio) :=

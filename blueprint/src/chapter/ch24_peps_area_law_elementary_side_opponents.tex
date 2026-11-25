@@ -14,8 +14,7 @@ containment of the whole segment; see
     \label{thm:area_law_elementary_side_opponent}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_elementarySide_opponent}
     \leanok
-    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,
-        def:area_law_fine_belt_scales,def:area_law_actual_side_mask}
+    \uses{def:area_law_dyadic_layers,def:area_law_fine_layer_indices,def:area_law_fine_belt_scales,def:area_law_actual_side_mask}
     Fix a common origin $o\in\mathbb R^2$, finite endpoint set $Z$,
     integer width $C_0\ge2$ and natural indices $k_0\le k$ with
     $k\ge50\,000\,000$. Let $z\in F_{k,\ell_k}$ be a
@@ -32,11 +31,7 @@ containment of the whole segment; see
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_dummy_fine_cells_cover,thm:area_law_unique_fine_cell,
-        thm:area_law_fine_cell_containment,thm:area_law_local_layer_indices,
-        thm:area_law_fine_cells_disjoint,thm:area_law_dummy_layer_disjoint,
-        thm:area_law_dummy_corner_elementary_side,
-        thm:area_law_elementary_corner_endpoint,thm:area_law_dyadic_closures}
+    \uses{thm:area_law_dummy_fine_cells_cover,thm:area_law_unique_fine_cell,thm:area_law_fine_cell_containment,thm:area_law_local_layer_indices,thm:area_law_fine_cells_disjoint,thm:area_law_dummy_layer_disjoint,thm:area_law_dummy_corner_elementary_side,thm:area_law_elementary_corner_endpoint,thm:area_law_dyadic_closures}
     The reference fine cell is nonempty, so its layer
     membership implies $Z\ne\varnothing$. Put $x=(a_i+b_i)/2$ and
     take the points in the ball of radius $10\,2^{\ell_k}$ about

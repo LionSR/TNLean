@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.TransportRound
-import TNLean.PEPS.AreaLaw.Collar.RegionalMoveEntropy
+import QICLean.ManyBody.Replica.BandMetric.MoveEntropy
 import QICLean.ManyBody.Entropy.ConditionalTwoFamilies
 
 /-!

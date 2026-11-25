@@ -3,52 +3,57 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.PureSourceMatrix
+import QICLean.Circuit.Party.Compression.SourceReplacement.Columns
 import QICLean.Algebra.PartialTrace
 
 /-!
 # Physical coefficients after tracing the prepared source output
 
-The ket and bra columns are computed in the same physical and discarded
-coordinate spaces. The final trace sums over a single common discarded index.
+The ket and bra columns are read through the same readout into physical and
+discarded coordinates, and the input is given in arbitrary input coordinates. The final
+trace sums over a single common discarded index.
 Neither the input vector nor the resulting mixed coefficient is normalized.
 Source: polynomial-PEPS Theorem 5.2, eq:compression-source-gate and
 rem:compression-retained-norm, manuscript revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 -/
 
 noncomputable section
-open scoped BigOperators TensorProduct Matrix ComplexConjugate
-namespace TNLean.Lattice.PartyCircuit.Word
+open scoped BigOperators Matrix ComplexConjugate
+open Matrix ManyBody
 
-/-- The physical entry of a mixed prepared coefficient is the sum of the ket
-and conjugated bra output columns over their common discarded coordinate.
+namespace QuantumCircuit.Party.Word
+
+variable {P : Type} [Fintype P] [DecidableEq P] (R : SourceInventory P)
+  (B : SourceInventory.SlotBases R.length) (X : P → Type) [∀ p, Fintype (X p)]
+  [∀ p, DecidableEq (X p)] {Y : P → Type} [∀ p, Fintype (Y p)]
+
+/-- The physical entry of a mixed prepared coefficient, read through a readout `K` into physical
+and discarded coordinates, is the sum of the ket and conjugated bra output columns over their
+common discarded coordinate. The input is given by its coordinates `c` in input coordinates `E`,
+for instance an orthonormal basis, so the input vector is `E c` and its matrix in the
+coordinates `E` is the outer product of `c` with itself; the readout may be the coordinates of a
+product orthonormal basis of the physical and discarded memories.
 Source: polynomial-PEPS Theorem 5.2, eq:compression-source-gate and the final
 partywise trace in its proof; Remark 5.3, rem:compression-retained-norm. -/
-theorem preparedDensityCoefficient_pure_partialTrace_apply
-    {P n X D : Type} [Fintype n] [Fintype X] [Fintype D]
-    (R : SourceInventory P) (U V : Fin R.length → HSpace)
-    {A B : Fin R.length → Type}
-    [∀ i, Fintype (A i)] [∀ i, Fintype (B i)]
-    (bU : ∀ i, OrthonormalBasis (A i) ℂ (U i))
-    (bV : ∀ i, OrthonormalBasis (B i) ℂ (V i))
-    (ℓ physical garbage : Layout P)
-    (v v' : Word (SourceInventory.slotLayout R U V ++ ℓ) (physical ++ garbage))
-    (bIn : OrthonormalBasis n ℂ (Mem ℓ))
-    (bPhysical : OrthonormalBasis X ℂ (Mem physical))
-    (bGarbage : OrthonormalBasis D ℂ (Mem garbage))
-    (ψ : Mem ℓ) (x y : ∀ i, A i × B i) (a b : X) :
-    let bOut := (bPhysical.tensorProduct bGarbage).map
-      (appendIso physical garbage).symm
-    Matrix.partialTraceRight
-      (v.preparedDensityCoefficient R U V (fun i ↦ bU i) (fun i ↦ bV i)
-        (fun i ↦ bU i) (fun i ↦ bV i) ℓ v' bIn bOut
-        (Matrix.vecMulVec (bIn.repr ψ).ofLp (fun j ↦ conj (bIn.repr ψ j))) x y) a b =
-      ∑ g : D, v.pureSourceMatrix R U V bU bV ℓ bOut ψ (a, g) x *
-        conj (v'.pureSourceMatrix R U V bU bV ℓ bOut ψ (b, g) y) := by
-  exact congrArg
-    (fun M : Matrix (X × D) (X × D) ℂ ↦ Matrix.partialTraceRight M a b)
-    (preparedDensityCoefficient_pure_eq_vecMulVec R U V bU bV ℓ v v' bIn
-      ((bPhysical.tensorProduct bGarbage).map (appendIso physical garbage).symm)
-      ψ x y)
+theorem preparedDensityCoefficient_pure_partialTrace_apply {n Phys Env : Type} [Fintype n]
+    [DecidableEq n] [Fintype Env] (K : Matrix (Phys × Env) (Config Y) ℂ)
+    (v v' : Word (SourceInventory.slotSystem R B X) Y) (E : Matrix (Config X) n ℂ)
+    (c : EuclideanSpace ℂ n) (x y : ∀ i, B.left i × B.right i) (a b : Phys) :
+    partialTraceRight
+      (K * v.preparedDensityCoefficient R B X (fun _ a ↦ EuclideanSpace.single a 1)
+        (fun _ a ↦ EuclideanSpace.single a 1) (fun _ a ↦ EuclideanSpace.single a 1)
+        (fun _ a ↦ EuclideanSpace.single a 1) v' (E * euclideanOuterProduct c c * Eᴴ) x y * Kᴴ)
+        a b =
+      ∑ g : Env, (K * v.pureSourceMatrix R B X (Matrix.toEuclideanLin E c)) (a, g) x *
+        conj ((K * v'.pureSourceMatrix R B X (Matrix.toEuclideanLin E c)) (b, g) y) := by
+  have hE : E * euclideanOuterProduct c c * Eᴴ =
+      euclideanOuterProduct (Matrix.toEuclideanLin E c) (Matrix.toEuclideanLin E c) := by
+    rw [euclideanOuterProduct, euclideanOuterProduct, mul_vecMulVec, vecMulVec_mul, ← star_mulVec]
+    rfl
+  rw [hE, preparedDensityCoefficient_pure_eq_vecMulVec, mul_vecMulVec, vecMulVec_mul,
+    partialTraceRight_apply]
+  refine Finset.sum_congr rfl fun g _ ↦ ?_
+  simp only [vecMulVec_apply, mulVec, vecMul, dotProduct, mul_apply, conjTranspose_apply,
+    map_sum, map_mul, RCLike.star_def, mul_comm]
 
-end TNLean.Lattice.PartyCircuit.Word
+end QuantumCircuit.Party.Word

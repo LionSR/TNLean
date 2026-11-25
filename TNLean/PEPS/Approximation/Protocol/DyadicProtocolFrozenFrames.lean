@@ -33,7 +33,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet
+open EncodedFrame
 
 variable {k : ℕ}
 
@@ -116,18 +116,18 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 114–118 and 620–624; Pr
 theorem norm_act_proj_sub_le_of_mem_holes_protocolFrozen (hL : 1 ≤ L)
     (x : ProtocolEvent k × RepaintOp) {h : Hole (cellCenterPos L) q (ProtocolParty k)}
     (hh : h ∈ (protocolFrozen (q := q) P rank hr x).holes) :
-    ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹ := by
+    ‖Matrix.toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹ := by
   have hpow : (L : ℝ) ^ (-(60 : ℝ)) = ((L : ℝ) ^ 60)⁻¹ := by
     rw [Real.rpow_neg (by positivity)]
     norm_cast
   have key : ∀ {R : RepaintedSquare k} {M : Finset (ℤ × ℤ)} {L₀ : GuideLabel}
       {g : ℝ × ℝ → GuideLabel}, h ∈ (treatedFrame (q := q) P rank R hr M L₀ g).holes →
-      ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹ := fun {R M L₀ g} hh => by
+      ‖Matrix.toEuclideanLin h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹ := fun {R M L₀ g} hh => by
     unfold treatedFrame at hh
     split_ifs at hh with hd
     · obtain ⟨z, -, rfl⟩ := mem_holes_guideFrame.1 hh
       rw [← hpow]
-      exact norm_act_proj_patchAt_sub_le P z (hr z)
+      exact norm_toEuclideanLin_proj_patchAt_sub_le P z (hr z)
     · simp [Frame.raw] at hh
   rcases x with ⟨S | J, o⟩
   · cases o with

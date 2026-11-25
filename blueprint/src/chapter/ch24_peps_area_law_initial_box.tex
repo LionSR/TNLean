@@ -16,7 +16,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
     \lean{TNLean.PEPS.AreaLaw.boxEntropy,
         TNLean.PEPS.AreaLaw.boxEntropyValues}
     \leanok
-    \uses{def:area_law_safe_rectangle, def:area_law_ground_entropy}
+    \uses{def:area_law_safe_rectangle,def:area_law_ground_entropy}
     The restriction to integer safety parameters of the function
     $F_{\mathrm{box}}$ defined before~\cite[Proposition~3.3]{OpenAI2026AreaLaw}.
 \end{definition}
@@ -41,7 +41,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
     \label{thm:area_law_box_entropy_safety}
     \lean{TNLean.PEPS.AreaLaw.boxEntropy_antitone}
     \leanok
-    \uses{def:area_law_box_entropy, def:area_law_safe_rectangle}
+    \uses{def:area_law_box_entropy,def:area_law_safe_rectangle}
     For fixed $q,R,J,\Delta,r$ with $q\ge1$ and $D_0,D_1\in\N$, if
     $D_0\le D_1$, then $F_{\mathrm{box},D_1}(r)\le F_{\mathrm{box},D_0}(r)$.
 \end{lemma}
@@ -121,7 +121,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
     \lean{TNLean.PEPS.AreaLaw.regionEntropy_rectRegion_le_of_children,
         TNLean.PEPS.AreaLaw.boxEntropy_le_of_scale}
     \leanok
-    \uses{thm:area_law_initial_buffer, def:area_law_box_entropy}
+    \uses{thm:area_law_initial_buffer,def:area_law_box_entropy}
     Fix an integer $D_0>2R+10$. With $C_{\mathrm{pad}},C_{\mathrm{buf}}$ from
     Lemma~\ref{thm:area_law_initial_buffer}, $P=2C_{\mathrm{pad}}+1$, and
     $p=1/(2P^2)$, for every $M$ and $r\ge1$,
@@ -132,8 +132,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_initial_buffer, thm:area_law_box_children,
-        thm:area_law_rotated_chain_rule}
+    \uses{thm:area_law_initial_buffer,thm:area_law_box_children,thm:area_law_rotated_chain_rule}
     \lean{TNLean.PEPS.AreaLaw.eq_of_color_eq,
         TNLean.PEPS.AreaLaw.card_filter_not_interior_le,
         ManyBody.IntRect.size_le_of_subset,
@@ -160,7 +159,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
     Lemma~\ref{thm:arealaw-physical-safe-rectangle-real} for real clearance).
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_box_recurrence, thm:area_law_box_entropy_bounds}
+    \uses{thm:area_law_box_recurrence,thm:area_law_box_entropy_bounds}
     Choosing $M=8(C_{\mathrm{pad}}+1)$ gives $2PM\le M^2/2$, so the coefficient
     in (\ref{eq:area_law_box_recurrence}) of
     Lemma~\ref{thm:area_law_box_recurrence} is at most
@@ -198,8 +197,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
     \label{thm:area_law_initial_safe_rectangle_entropy}
     \lean{TNLean.PEPS.AreaLaw.exists_regionEntropy_safe_rect_le_rpow}
     \leanok
-    \uses{def:area_law_safe_rectangle,def:area_law_hamiltonian,
-        def:area_law_ground_entropy}
+    \uses{def:area_law_safe_rectangle,def:area_law_hamiltonian,def:area_law_ground_entropy}
     For fixed $q\ge1$, $R$, $J\ge0$, and $\Delta>0$, there exist $C\ge0$ and
     $e_0\in(0,1)$ depending only on $q,R,J,\Delta$ such that for every integer
     $D_0>2R+10$, finite induced domain $\Lambda\subset\Z^2$, Hamiltonian $H$
@@ -217,8 +215,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
     Lemma~\ref{thm:arealaw-physical-safe-rectangle-real} for real clearance).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:area_law_initial_box,thm:area_law_box_entropy_bounds,
-        def:area_law_box_entropy}
+    \uses{thm:area_law_initial_box,thm:area_law_box_entropy_bounds,def:area_law_box_entropy}
     Theorem~\ref{thm:area_law_initial_box} and Lemma~\ref{thm:area_law_box_entropy_bounds} at $D_0=2R+11$ and $r=1$ give
     $0\le F_{\mathrm{box},2R+11}(1)\le C$, and since $\operatorname{size}(Q)\ge1$,
     Definition~\ref{def:area_law_box_entropy} and

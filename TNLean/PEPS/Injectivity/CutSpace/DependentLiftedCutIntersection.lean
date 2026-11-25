@@ -20,7 +20,7 @@ Source: SCP10, arXiv:1001.3807, Theorem 5.4.
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS.DependentBondNetwork
-open TNLean.Lattice.DependentBondNetwork TNLean.Lattice
+open TNLean.Network.DependentBondNetwork
 
 variable {Vertex Edge : Type*} [Fintype Vertex] [Fintype Edge]
 variable [DecidableEq Vertex] [DecidableEq Edge]
@@ -105,8 +105,8 @@ theorem iInf_liftedCutSpace_eq_map_representationAveragingSite
     (hcover : ∀ v, (∃ i, v ∈ R i) ∨ LinearMap.range (localSiteMap tail head D A v) = ⊤) :
     (⨅ i, liftedCutSpace tail head D A (R i) (C i)) =
       (⨅ i, cutSpace tail head D (representationAveragingSite tail head D ρ) (C i)).map
-        (dependentPhysicalProductFamilyMap
-          (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))) := by
+        (Matrix.piKronecker
+          (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))).mulVecLin := by
   rw [iInf_liftedCutSpace_eq_iInf_cutSpace tail head D A R C hcut hcover]
   exact iInf_cutSpace_eq_map_representationAveragingSite tail head D i₀ ρ A hA C
 
@@ -121,14 +121,14 @@ theorem exists_liftedCutSpace_common_localInverse [∀ v, Fintype (Phys v)]
     (hcut : ∀ i (p : Endpoint Edge), endpointVertex tail head p ∉ R i → p.1 ∈ C i)
     (hcover : ∀ v, (∃ i, v ∈ R i) ∨ LinearMap.range (localSiteMap tail head D A v) = ⊤) :
     ∃ F : (v : Vertex) → Matrix (LocalConfig tail head D v) (Phys v) ℂ,
-      (∀ C M, dependentPhysicalProductFamilyMap F (cutMap tail head D A C M) =
+      (∀ C M, (Matrix.piKronecker F).mulVecLin (cutMap tail head D A C M) =
         cutMap tail head D (representationAveragingSite tail head D ρ) C M) ∧
       ∀ ψ ∈ (⨅ i, liftedCutSpace tail head D A (R i) (C i)),
-        dependentPhysicalProductFamilyMap F ψ ∈
+        (Matrix.piKronecker F).mulVecLin ψ ∈
           (⨅ i, cutSpace tail head D (representationAveragingSite tail head D ρ) (C i)) ∧
-        dependentPhysicalProductFamilyMap
-          (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))
-          (dependentPhysicalProductFamilyMap F ψ) = ψ := by
+        (Matrix.piKronecker
+          (fun v ↦ LinearMap.toMatrix' (localSiteMap tail head D A v))).mulVecLin
+          ((Matrix.piKronecker F).mulVecLin ψ) = ψ := by
   obtain ⟨F, hF⟩ := exists_cutMap_localInverse tail head D ρ A hA
   refine ⟨F, hF, ?_⟩
   intro ψ hψ
@@ -138,7 +138,7 @@ theorem exists_liftedCutSpace_common_localInverse [∀ v, Fintype (Phys v)]
   · apply (Submodule.mem_iInf _).mpr
     intro i
     obtain ⟨M, hM⟩ := hcuts i
-    exact ⟨M, (hF (C i) M).symm.trans (congrArg (dependentPhysicalProductFamilyMap F) hM)⟩
+    exact ⟨M, (hF (C i) M).symm.trans (congrArg (Matrix.piKronecker F).mulVecLin hM)⟩
   · obtain ⟨M, rfl⟩ := hcuts i₀
     rw [hF]
     exact cutMap_recover_representationAveragingSite tail head D ρ A

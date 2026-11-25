@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.PointwiseChoiceCoefficient
+import QICLean.Circuit.Party.Compression.PartialExpansion.Coefficients
 import TNLean.Network.DistributedContraction.SourceSampleAssignmentIndices
 
 /-! # Original gate labels and common samples in the same physical sum
@@ -19,9 +19,9 @@ and 565–579.
 
 noncomputable section
 open scoped ComplexConjugate
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice
-variable {P : Type}
+namespace QuantumCircuit.Party.SourceCircuit
+open TNLean.Network
+variable {P : Type} [DecidableEq P]
 
 open Classical in
 /-- Reindex the two chronological branch choices and their shared samples in
@@ -29,8 +29,8 @@ an arbitrary matrix-valued sum. The original occurrence tags and inverse
 assignments are retained. No extension of a local assignment is selected.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381
 and 565–579. -/
-theorem sum_choiceSamples_eq_sum_originalGateSamples {a b : Layout P}
-    (w : SourceCircuit a b) (k : ℕ) {m n : Type}
+theorem sum_choiceSamples_eq_sum_originalGateSamples {X Y : P → Type}
+    (w : SourceCircuit X Y) (k : ℕ) {m n : Type}
     (K : Choices (fun _ : P ↦ true) w → Choices (fun _ : P ↦ true) w →
       (Fin (partialSlots (fun _ : P ↦ true) w).length → Fin k) → Matrix m n ℂ) :
     (∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
@@ -39,7 +39,7 @@ theorem sum_choiceSamples_eq_sum_originalGateSamples {a b : Layout P}
         ∑ θ : (g : w.nonemptyGateLocations) → w.branchLabels g.1,
           (∏ g : w.nonemptyGateLocations,
             w.branchCoefficient g.1 (η g) * conj (w.branchCoefficient g.1 (θ g))) •
-              ∑ j : Compression.DistributedOperatorContraction.Sample
+              ∑ j : DistributedOperatorContraction.Sample
                   (Finset.univ : Finset w.nonemptyGateLocations)
                   (fun g ↦ w.participants g.1) → Fin k,
                 K ((allChoicesNonemptyLabelsEquiv w).symm η)
@@ -49,4 +49,4 @@ theorem sum_choiceSamples_eq_sum_originalGateSamples {a b : Layout P}
     w (fun ξ ζ ↦ ∑ j, K ξ ζ j)]
   simp_rw [sum_sourceSampleAssignments_eq]
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

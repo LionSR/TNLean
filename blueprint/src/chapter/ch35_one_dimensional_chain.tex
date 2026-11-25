@@ -171,8 +171,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{definition}
 \begin{proof}
     \leanok
-    \uses{def:chain_doubled_hamiltonian,thm:area_law_supported_identity,
-        thm:peps_sheet_swap_conjugate_support,thm:peps_frame_sheet_swap_norm}
+    \uses{def:chain_doubled_hamiltonian,thm:area_law_supported_identity,thm:peps_sheet_swap_conjugate_support,thm:peps_frame_sheet_swap_norm}
     The support identity for the conjugated doubled interaction gives
     support on $X$, and taking adjoints preserves Hermiticity.
     Since $\|F\|\le1$, the doubled interaction estimate gives
@@ -207,8 +206,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:chain_doubled_operator,def:chain_swapped_doubled_hamiltonian,
-        thm:permutation_matrix_unitary,thm:mpu_reindex_unitary}
+    \uses{lem:chain_doubled_operator,def:chain_swapped_doubled_hamiltonian,thm:permutation_matrix_unitary,thm:mpu_reindex_unitary}
     The eigenvalues of $H\otimes\mathbb 1+\mathbb 1\otimes H$ are the sums
     $\lambda+\mu$ of two eigenvalues of $H$. Such a sum equals $2E_0$ only
     when $\lambda=\mu=E_0$, and is otherwise at least $2E_0+\Delta$; the
@@ -545,8 +543,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:chain_model,lem:chain_entropy_inequalities,
-        lem:chain_crossing_count}
+    \uses{def:chain_model,lem:chain_entropy_inequalities,lem:chain_crossing_count}
     Choose two sites of $X$ with different membership in $D$, and order
     their coordinates as $a<b$. Along the integer interval from $a$ to
     $b$, the indicator of $D$ must change at two consecutive sites
@@ -571,9 +568,7 @@ Theorem~B a second way, by a sequential preparation protocol.
         ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing,
         ManyBody.ChainInteraction.partialSwap_boundary_spec}
     \leanok
-    \uses{def:chain_model,def:chain_doubled_hamiltonian,
-        def:qc_site_pair_coordinates,def:peps_frame_sheet_swap,
-        lem:chain_boundary_crossing_count}
+    \uses{def:chain_model,def:chain_doubled_hamiltonian,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap,lem:chain_boundary_crossing_count}
     Let $L,q,R$ be natural numbers, let $J\in\mathbb R$, and let
     $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on the contiguous chain
     $I=\{0,\ldots,L-1\}$, with local dimension $q$ and
@@ -611,11 +606,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:chain_doubled_hamiltonian,thm:qc_site_pair_tensor_support,
-        thm:area_law_supported_identity,thm:peps_sheet_swap_conjugate_support,
-        thm:peps_frame_sheet_swap_norm,
-        thm:peps_sheet_swap_doubled_cancellation,
-        lem:chain_boundary_crossing_count}
+    \uses{def:chain_doubled_hamiltonian,thm:qc_site_pair_tensor_support,thm:area_law_supported_identity,thm:peps_sheet_swap_conjugate_support,thm:peps_frame_sheet_swap_norm,thm:peps_sheet_swap_doubled_cancellation,lem:chain_boundary_crossing_count}
     The support reduction for a conjugated tensor product in paired
     coordinates shows that $FT_{X,b}F^\dagger$ is supported on $X$.
     The same is true of $T_{X,b}$, so subtraction preserves its support.
@@ -685,7 +676,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:chain_model, lem:chain_crossing_count}
+    \uses{def:chain_model,lem:chain_crossing_count}
     Fix a site $x$. The singleton $\{x\}$ is an admissible support, so
     $0\le\lVert h_{\{x\}}\rVert\le J$. Every support containing $x$ lies in
     the clipped interval $[x-R,x+R+1)$, which has at most $2R+1$ sites.
@@ -718,8 +709,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:graph_lieb_robinson_two_spheres,lem:qc_site_expectation_properties,
-        thm:qc_site_expectation_supported_approximant}
+    \uses{thm:graph_lieb_robinson_two_spheres,lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
     For one index $c$ put $A=e^{itH}P_ce^{-itH}$, and let $A_0$ be its
     expectation on the balls of radius $\lfloor\ell\rfloor$ about $U_c$. The
     localization estimate gives
@@ -734,8 +724,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \label{thm:chain_relative_generator_localization}
     \lean{ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
-    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
-        def:qc_site_expectation,thm:chain_lieb_robinson}
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,def:qc_site_expectation,thm:chain_lieb_robinson}
     Let $H$ be a range-$R$ Hamiltonian on the contiguous chain
     $I=\{0,\ldots,L-1\}$ with local dimension $q\ge1$ and interaction
     bound $J\in\mathbb R$. Let $D\subseteq I$, and let
@@ -770,8 +759,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
-        lem:chain_site_norm_budget,lem:graph_evolved_perturbation_localization}
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,lem:chain_site_norm_budget,lem:graph_evolved_perturbation_localization}
     The swapped doubled interactions have range $R$ and bound $2J$.
     Their per-site norm sum is at most $b_0$. The chain localization
     estimate therefore has constants $a,v$ as displayed.
@@ -804,8 +792,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \label{lem:graph_supported_gaussian_integral}
     \lean{ManyBody.exists_supported_gaussian_integral_graphNeighborhood}
     \leanok
-    \uses{thm:graph_lieb_robinson_two_spheres,thm:qc_supported_gaussian_projection_bounds,
-        def:qc_site_expectation}
+    \uses{thm:graph_lieb_robinson_two_spheres,thm:qc_supported_gaussian_projection_bounds,def:qc_site_expectation}
     Let $\Gamma$ be a finite graph on a vertex set $V$ whose spheres have at
     most two vertices, and let $K'=\sum_k h_k$ be a finite family of
     Hermitian terms as in Lemma~\ref{thm:graph_lieb_robinson_two_spheres},
@@ -836,8 +823,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \label{thm:chain_supported_gaussian_integral}
     \lean{ManyBody.exists_supported_gaussian_integral}
     \leanok
-    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
-        def:qc_site_expectation,thm:chain_lieb_robinson}
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,def:qc_site_expectation,thm:chain_lieb_robinson}
     For every natural number $R$ and real $J$, there are positive constants
     $C,v$, depending only on $R,J$, with the following property.
     Let $q\ge1$ and $L$ be natural numbers, let $H$ be a range-$R$
@@ -882,9 +868,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \input{figures/chain_qc_gaussian_filter}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_swapped_doubled_hamiltonian,
-        thm:chain_relative_generator_localization,lem:graph_supported_gaussian_integral,
-        lem:chain_site_norm_budget,thm:area_law_supported_identity}
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_relative_generator_localization,lem:graph_supported_gaussian_integral,lem:chain_site_norm_budget,thm:area_law_supported_identity}
     Let $a,v$ be the localization constants, put
     $d=4|J|a(R+1)^2N_R$ and $C=a+d>0$.
     Apply Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} with
@@ -907,8 +891,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \label{lem:information_reset_of_supported_localization}
     \lean{ManyBody.information_reset_of_supported_localization}
     \leanok
-    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,
-        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
     Fix $q\ge1$, a natural $R$, a gap $\Delta>0$, an exponent $p>0$ and
     constants $C_{\mathrm{int}},v>0$. There are $C_p>0$ and a natural
     $L_0\ge1$, depending only on these data, with the following property.
@@ -930,8 +913,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,
-        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
     This is the argument of Lemma~\ref{thm:chain_information_reset} below,
     with the supported Gaussian integral and the separation of the reset
     support from the cores taken as the two hypotheses.
@@ -971,9 +953,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:information_reset_of_supported_localization,
-        thm:chain_supported_gaussian_integral,lem:qc_graph_ball_strict_margin,
-        thm:qc_graph_support_separation}
+    \uses{lem:information_reset_of_supported_localization,thm:chain_supported_gaussian_integral,lem:qc_graph_ball_strict_margin,thm:qc_graph_support_separation}
     Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
     Corollary~\ref{thm:peps_reset_regional_filter} once, and choose the locality
     constants $C,v>0$ from Lemma~\ref{thm:chain_supported_gaussian_integral}.
@@ -1143,8 +1123,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:chain_single_splitting,lem:chain_crossing_count,
-        lem:chain_marginal_tail}
+    \uses{thm:chain_single_splitting,lem:chain_crossing_count,lem:chain_marginal_tail}
     Use the coordinate shells of radius $(j+1)R$ and weights
     $a_j=2/m_{\mathrm{pol}}$. Each support is split at most once,
     each interval splits at most $N_R$ supports, and every support
@@ -1187,8 +1166,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:chain_polynomial_buffer_discount,
-        thm:chain_interval_enlargement_size,lem:chain_entropy_inequalities}
+    \uses{thm:chain_polynomial_buffer_discount,thm:chain_interval_enlargement_size,lem:chain_entropy_inequalities}
     The Araki--Lieb inequality gives
     $S_\Omega(X\cup T)-S_\Omega(T)\ge S_\Omega(X)-2S_\Omega(T)$.
     The buffer has at most $2m_{\mathrm{pol}}R$ sites, so
@@ -1244,7 +1222,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{lem:chain_crossing_count, def:chain_model, thm:chain_family_budget_discount}
+    \uses{lem:chain_crossing_count,def:chain_model,thm:chain_family_budget_discount}
     This is Lemma~\ref{thm:chain_family_budget_discount} for all supports, with
     $N=N_R$, $B=B_R$ and the stated $m$. It is the finite-dimensional buffered discount (optimized filters,
     stationarity, the energy estimate, the prefix comparison and Schmidt
@@ -1348,7 +1326,7 @@ Theorem~B a second way, by a sequential preparation protocol.
         TNLean.MPS.AreaLaw.chainAreaLaw
     }
     \leanok
-    \uses{def:chain_model, lem:chain_crossing_count}
+    \uses{def:chain_model,lem:chain_crossing_count}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
     $L$ sites with local dimension $q\ge1$. Every interval $X$ satisfies
@@ -1374,7 +1352,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:chain_buffer_discount, lem:chain_entropy_inequalities}
+    \uses{lem:chain_buffer_discount,lem:chain_entropy_inequalities}
     The discount of Lemma~\ref{lem:chain_buffer_discount} and the Araki--Lieb
     inequality of Lemma~\ref{lem:chain_entropy_inequalities} give
     $S(X)-2S(T)\le S(X\cup T)-S(T)\le\frac12S(X)+\frac12C_{\mathrm{disc}}$,
@@ -1486,8 +1464,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:chain_window_cut_budget,thm:chain_family_budget_discount,
-        thm:chain_interval_enlargement_size,lem:chain_entropy_inequalities}
+    \uses{thm:chain_window_cut_budget,thm:chain_family_budget_discount,thm:chain_interval_enlargement_size,lem:chain_entropy_inequalities}
     Restrict the interaction sum to its nonzero terms. The sum is still
     the original $H$, and each term retains its support, Hermiticity
     and norm bound $J$. At most $2R$ nonzero terms cross an interval, and
@@ -1537,8 +1514,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:chain_window_area_law,thm:chain_range_zero_entropy,
-        thm:chain_entropy_dim_one}
+    \uses{thm:chain_window_area_law,thm:chain_range_zero_entropy,thm:chain_entropy_dim_one}
     If $R=0$, Lemma~\ref{thm:chain_range_zero_entropy} gives
     $S_\Omega(A)=0$.
     If $q=1$, Lemma~\ref{thm:chain_entropy_dim_one} gives the same
@@ -1698,8 +1674,7 @@ allowed. These are the two-replica operators in
     The count here is a bound by the total number of domain sites.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
-        thm:peps_sheet_swap_doubled_cancellation,lem:domain_crossing_count}
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,thm:peps_sheet_swap_doubled_cancellation,lem:domain_crossing_count}
     The per-replica support, Hermiticity and norm estimates follow from
     the corresponding chain estimates at the same original support.
     If $X\subseteq D$ or $X\cap D=\varnothing$, then
@@ -1716,8 +1691,7 @@ allowed. These are the two-replica operators in
     \label{thm:domain_relative_generator_localization}
     \lean{ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
-    \uses{def:chain_swapped_doubled_hamiltonian,thm:domain_partial_swap_crossing,
-        def:qc_site_expectation,thm:domain_interval_neighborhood}
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:domain_partial_swap_crossing,def:qc_site_expectation,thm:domain_interval_neighborhood}
     Let $H$ be an admissible domain Hamiltonian with local dimension $q\ge1$,
     range $R$ and real interaction bound $J$. For $D\subseteq V$, put
     $K=\widehat H$, $K'=\widehat H'$ and
@@ -1741,9 +1715,7 @@ allowed. These are the two-replica operators in
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:domain_partial_swap_crossing,lem:domain_site_norm_budget,
-        thm:domain_graph_spheres,thm:graph_lieb_robinson_two_spheres,
-        lem:graph_evolved_perturbation_localization}
+    \uses{thm:domain_partial_swap_crossing,lem:domain_site_norm_budget,thm:domain_graph_spheres,thm:graph_lieb_robinson_two_spheres,lem:graph_evolved_perturbation_localization}
     The swapped domain family has interaction bound $2J$, so its per-site
     norm budget is $b_0$. Every distance sphere of the induced graph has at most
     two sites, so the localization estimate of
@@ -1792,8 +1764,7 @@ allowed. These are the two-replica operators in
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:chain_swapped_doubled_hamiltonian,lem:graph_supported_gaussian_integral,
-        thm:domain_relative_generator_localization,lem:domain_site_norm_budget}
+    \uses{def:chain_swapped_doubled_hamiltonian,lem:graph_supported_gaussian_integral,thm:domain_relative_generator_localization,lem:domain_site_norm_budget}
     Use the constants $a,v$ from the domain generator estimate and put
     $d=4|J|a(R+1)^2N_R$, $C=a+d$. The actual doubled and swapped operators
     are Hermitian because their terms are Hermitian.
@@ -1837,8 +1808,7 @@ allowed. These are the two-replica operators in
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:lattice_supported_unitary_entropy,thm:peps_reset_exchanged_cores,
-        thm:peps_reset_paired_support}
+    \uses{lem:lattice_supported_unitary_entropy,thm:peps_reset_exchanged_cores,thm:peps_reset_paired_support}
     Both replicas are normalized, and $F_D$ is unitary. The first-replica
     marginal of $\Phi$ on $R_0\cup C_0$ is a product, by
     Lemma~\ref{thm:peps_reset_exchanged_cores}.
@@ -1882,9 +1852,7 @@ allowed. These are the two-replica operators in
     \cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:information_reset_of_supported_localization,
-        thm:domain_supported_gaussian_integral,lem:qc_graph_ball_strict_margin,
-        thm:qc_graph_support_separation}
+    \uses{lem:information_reset_of_supported_localization,thm:domain_supported_gaussian_integral,lem:qc_graph_ball_strict_margin,thm:qc_graph_support_separation}
     Set $r=2p+10$. Choose the filter constants $A,T_0>0$ and the domain
     locality constants $C,v>0$, and put
     \begin{align}
@@ -1982,8 +1950,7 @@ allowed. These are the two-replica operators in
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:domain_interval_neighborhood,thm:chain_area_law,
-        lem:chain_entropy_inequalities,lem:zero_entropy_flip,def:domain_model}
+    \uses{thm:domain_interval_neighborhood,thm:chain_area_law,lem:chain_entropy_inequalities,lem:zero_entropy_flip,def:domain_model}
     Submodularity and nonnegativity of reduced-state entropy give
     $S_\Omega(X\cup Y)\le S_\Omega(X)+S_\Omega(Y)$.
     Since $S_\Omega(\varnothing)=0$, finite subadditivity gives
@@ -2025,8 +1992,7 @@ allowed. These are the two-replica operators in
     \cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:domain_information_reset,thm:domain_interval_neighborhood_entropy,
-        lem:domain_site_norm_budget}
+    \uses{thm:domain_information_reset,thm:domain_interval_neighborhood_entropy,lem:domain_site_norm_budget}
     Put $c=\max\{0,C_{\mathrm{int}}\}$ and $b=4k_0c$, where
     $C_{\mathrm{int}}$ is the interval entropy bound.
     Choose $C_p,L_{\mathrm{reset}}$ from
@@ -2133,8 +2099,7 @@ allowed. These are the two-replica operators in
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:chain_integer_domain_components,thm:qc_graph_edist_transport,
-        lem:chain_path_metric_spheres}
+    \uses{thm:chain_integer_domain_components,thm:qc_graph_edist_transport,lem:chain_path_metric_spheres}
     The enumeration preserves adjacency because it records the original
     integer coordinates. A vertex at finite distance from $x$ belongs to
     its connected component. This component is a finite path by
@@ -2289,8 +2254,7 @@ allowed. These are the two-replica operators in
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:domain_model,thm:chain_area_law,
-        thm:domain_entropy_boundary_reduction}
+    \uses{def:domain_model,thm:chain_area_law,thm:domain_entropy_boundary_reduction}
     Regard the Hamiltonian as one on the chain of $|\Lambda|$ labels,
     with the same sum and term norm bound, as in
     Definition~\ref{def:domain_model}. The ground vector and its gap
@@ -2345,8 +2309,7 @@ allowed. These are the two-replica operators in
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{def:domain_model,thm:chain_full_support_window,
-        thm:domain_entropy_boundary_reduction,thm:chain_window_polynomial_range}
+    \uses{def:domain_model,thm:chain_full_support_window,thm:domain_entropy_boundary_reduction,thm:chain_window_polynomial_range}
     Order the sites of $\Lambda$ as the chain of $L$ labels. Every
     nonzero interaction has $R+1$ sites and label diameter at most $R$.
     By Lemma~\ref{thm:chain_full_support_window}, its labels form a
@@ -2471,8 +2434,7 @@ allowed. These are the two-replica operators in
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:chain_information_reset,thm:chain_area_law,
-        thm:chain_interval_neighborhood_entropy}
+    \uses{thm:chain_information_reset,thm:chain_area_law,thm:chain_interval_neighborhood_entropy}
     Put $\overline C=\max\{0,C_{\mathrm{int}}(q,R,J,\Delta)\}$ and
     $b=4k_0\overline C$. Choose $C_p$ and the length threshold from
     Lemma~\ref{thm:chain_information_reset}, and set
@@ -2552,8 +2514,7 @@ allowed. These are the two-replica operators in
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:chain_area_law, lem:chain_marginal_tail,
-        lem:chain_crossing_count, lem:chain_sequential_truncation}
+    \uses{thm:chain_area_law,lem:chain_marginal_tail,lem:chain_crossing_count,lem:chain_sequential_truncation}
     The eigenvalues retained by $P$ are at least
     $e^{-(C_{\mathrm{int}}+w)}$, and their sum is at most
     $\operatorname{Tr}\rho_X=1$, giving the rank bound.
@@ -2572,7 +2533,7 @@ allowed. These are the two-replica operators in
     \label{thm:chain_mps_approximation_error}
     \lean{TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error}
     \leanok
-    \uses{def:chain_model, def:chain_open_mps}
+    \uses{def:chain_model,def:chain_open_mps}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
     $L\ge1$ sites with local dimension $q\ge1$. Put
@@ -2590,9 +2551,7 @@ allowed. These are the two-replica operators in
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:chain_area_law, lem:chain_marginal_tail,
-        lem:chain_sequential_truncation, thm:chain_mps_of_cut_rank,
-        lem:chain_crossing_count}
+    \uses{thm:chain_area_law,lem:chain_marginal_tail,lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank,lem:chain_crossing_count}
     The entropy of each left block is at most $C_{\mathrm{int}}$, and its
     surprisal tail beyond $w$ is at most $c_0^2e^{-w/(32s)}$.
     Set $w=64s\log(2Lc_0/\varepsilon)$. Since $s>0$ and
@@ -2648,9 +2607,7 @@ allowed. These are the two-replica operators in
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:chain_window_area_law,thm:chain_window_cut_budget,
-        lem:chain_entropy_inequalities,lem:chain_marginal_tail,
-        lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank}
+    \uses{thm:chain_window_area_law,thm:chain_window_cut_budget,lem:chain_entropy_inequalities,lem:chain_marginal_tail,lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank}
     A prefix $[0,k)$ has at most one boundary edge, so
     Corollary~\ref{thm:chain_window_area_law} gives $S_\Omega([0,k))\le C$.
     Restrict the interaction sum to its nonzero terms, preserving its
@@ -2690,7 +2647,7 @@ allowed. These are the two-replica operators in
         TNLean.MPS.AreaLaw.chainBondDimension_le_mul_rpow
     }
     \leanok
-    \uses{def:chain_model, def:chain_open_mps}
+    \uses{def:chain_model,def:chain_open_mps}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
     $L\ge1$ sites with local dimension $q\ge1$. Put
@@ -2738,8 +2695,7 @@ allowed. These are the two-replica operators in
 \end{corollary}
 \begin{proof}
     \leanok
-    \uses{thm:chain_polynomial_interval_entropy,lem:chain_marginal_tail,
-        lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank}
+    \uses{thm:chain_polynomial_interval_entropy,lem:chain_marginal_tail,lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank}
     Every prefix entropy is at most $C_{\mathrm{int}}^{\mathrm{pol}}$.
     For $w=64s\log(2Lc_0/\varepsilon)$, the marginal tail beyond $w$
     has square root at most $\varepsilon/(2L)$. Sequential truncation
@@ -2838,29 +2794,27 @@ allowed. These are the two-replica operators in
 % The older Part IIb, Section 7 citation does not locate that argument.
 \begin{definition}[Snake ordering of an open square]
     \label{def:snake_grid_order}
-    \lean{TNLean.MPS.AreaLaw.snakeNativeEquiv,
-        TNLean.MPS.AreaLaw.snakeIndex,
-        TNLean.MPS.AreaLaw.snakeIndex_val,
-        TNLean.MPS.AreaLaw.snakeGridEquiv,
-        TNLean.MPS.AreaLaw.snakeGridPrefix,
-        TNLean.MPS.AreaLaw.mem_snakeGridPrefix,
-        TNLean.MPS.AreaLaw.snakeGridPrefix_eq_map,
-        TNLean.MPS.AreaLaw.snakeGridStateEquiv}
+    \lean{TNLean.MPS.AreaLaw.snakeGridStateEquiv}
     \leanok
+    \uses{def:strip_snake}
     On $\{0,\ldots,L-1\}^2$, visit the rows in increasing order, the
     columns in increasing order in even rows and decreasing order in odd
-    rows. Let $A_k$ be the first $k$ sites. Relabelling the tensor factors
+    rows. Let $A_k$ be the first $k$ sites. This is the ordering of
+    Definition~\ref{def:strip_snake} for the square, $w=L$, with its
+    prefixes. Relabelling the tensor factors
     in this order is a linear isometry of the physical Hilbert space.
 \end{definition}
 
 \begin{lemma}[Snake cut boundary and finite-range budget]
     \label{lem:snake_grid_cut_budget}
-    \lean{TNLean.MPS.AreaLaw.card_edgeBoundary_snakeGridPrefix_le,
+    \lean{ManyBody.card_edgeBoundary_snakePrefix_le,
         TNLean.MPS.AreaLaw.cutLogBudget_snakeGridPrefix_le,
         TNLean.MPS.AreaLaw.snakeGrid_window_le_linear}
     \leanok
-    \uses{def:snake_grid_order, thm:area_law_tail_parameter}
-    Every prefix has $|\partial A_k|\le L+1$. For local dimension
+    \uses{def:snake_grid_order,def:strip_snake,thm:area_law_tail_parameter}
+    Every prefix has $|\partial A_k|\le L+1$; more generally, every prefix
+    of the ordering of Definition~\ref{def:strip_snake} of an $L\times w$
+    rectangle has at most $w+1$ boundary edges. For local dimension
     $q\ge1$, the logarithmic budget of the actual range-$R$ interaction
     supports satisfies $\mathcal B_{A_k}\le C_{\mathrm{tail}}(q,R)(L+2)$,
     where $C_{\mathrm{tail}}(q,R)\ge1$ is the constant $C$ of the
@@ -2889,9 +2843,7 @@ allowed. These are the two-replica operators in
         TNLean.MPS.AreaLaw.exists_snakeGridMPS,
         TNLean.MPS.AreaLaw.isOpenMPS_snakeGridStateEquiv_one}
     \leanok
-    \uses{thm:openai_uniform_area_law,lem:snake_grid_cut_budget,
-        lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank,
-        thm:area_law_marginal_tails}
+    \uses{thm:openai_uniform_area_law,lem:snake_grid_cut_budget,lem:chain_sequential_truncation,thm:chain_mps_of_cut_rank,thm:area_law_marginal_tails}
     Fix $q\ge1$, $R\ge0$ and $J,\Delta>0$. There is a constant
     $C=C(q,R,J,\Delta)\ge0$ such that every normalized gapped ground
     vector $\Omega$, with gap $\Delta$, of a finite-range Hamiltonian
@@ -2959,9 +2911,7 @@ In particular the ground eigenspace is one-dimensional.
         ManyBody.strip_single_splitting,
         ManyBody.card_crossingTerms_stripPrefix_le}
     \leanok
-    \uses{def:strip_column_model, thm:area_diamond_count,
-        thm:area_law_crossing_supports, thm:area_law_buffer_contours,
-        thm:area_law_initial_buffer}
+    \uses{def:strip_column_model,thm:area_diamond_count,thm:area_law_crossing_supports,thm:area_law_buffer_contours,thm:area_law_initial_buffer}
     Every admissible support has at most $v_R$ sites, hence dimension at
     most $q^{v_R}$, and at most $\mu_R$ admissible supports contain any
     specified site. The one-dimensional bound $q^{R+1}$ does not hold for
@@ -2975,9 +2925,7 @@ In particular the ground eigenspace is one-dimensional.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:strip_column_model, thm:area_diamond_count,
-        thm:area_law_crossing_supports, thm:area_law_buffer_contours,
-        thm:area_law_initial_buffer}
+    \uses{def:strip_column_model,thm:area_diamond_count,thm:area_law_crossing_supports,thm:area_law_buffer_contours,thm:area_law_initial_buffer}
     The bounds on the size of a support and on the number of supports
     containing a site are the lattice support counts, since $v_R-1=2R(R+1)$.
     A crossing support has an inside site in the two bands
@@ -3042,7 +2990,7 @@ In particular the ground eigenspace is one-dimensional.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:strip_buffer_discount, lem:strip_column_geometry}
+    \uses{lem:strip_buffer_discount,lem:strip_column_geometry}
     Araki--Lieb gives $S(X)\le S(X\cup T)+S(T)$, while
     $S(T)\le2mRw\log q$. Combining with the discount gives
     $S(X)\le8mRw\log q+4096e(J/\Delta)bw/m+m\log2$.
@@ -3051,33 +2999,38 @@ In particular the ground eigenspace is one-dimensional.
 
 \begin{definition}[Physical column-snake ordering]
     \label{def:strip_snake}
-    \lean{TNLean.MPS.AreaLaw.stripSnakeRows,
-        TNLean.MPS.AreaLaw.stripSnakeEquiv,
-        TNLean.MPS.AreaLaw.stripColumn_stripSnakeEquiv,
-        TNLean.MPS.AreaLaw.stripSnakePrefix,
+    \lean{ManyBody.snakeFlip,
+        ManyBody.snakeEquiv,
+        ManyBody.snakeIndex,
+        ManyBody.snakeIndex_val,
+        ManyBody.stripColumn_snakeEquiv,
+        ManyBody.snakePrefix,
+        ManyBody.mem_snakePrefix,
         TNLean.MPS.AreaLaw.stripSnakeState,
         TNLean.MPS.AreaLaw.norm_stripSnakeState,
         TNLean.MPS.AreaLaw.regionEntropy_stripSnakeState}
     \leanok
     Number the $Lw$ physical sites column by column, reversing the row
-    order in each odd column. The position $i$ lies in column $\lfloor i/w\rfloor$.
+    order in each odd column. The position $i$ lies in column $\lfloor i/w\rfloor$,
+    and the site in column $c$ and row $r$ has position $wc+r$ for even $c$
+    and $wc+(w-1-r)$ for odd $c$. The prefix of length $k$ is the set of
+    the first $k$ sites.
     This bijection preserves vector norms and the entropies of corresponding
     regions. Each physical site retains local dimension $q$.
 \end{definition}
 
 \begin{lemma}[Entropy and tails at every snake prefix]
     \label{lem:strip_prefix_tails}
-    \lean{TNLean.MPS.AreaLaw.stripInterval_subset_snakePrefix,
-        TNLean.MPS.AreaLaw.snakePrefix_subset_stripInterval,
-        TNLean.MPS.AreaLaw.card_snakePrefix_sdiff_le,
+    \lean{ManyBody.stripInterval_subset_snakePrefix,
+        ManyBody.snakePrefix_subset_stripInterval,
+        ManyBody.card_snakePrefix_sdiff_le,
         TNLean.MPS.AreaLaw.regionEntropy_stripSnakePrefix_le,
         TNLean.MPS.AreaLaw.stripPrefixBudgetConst,
         TNLean.MPS.AreaLaw.cutLogBudget_stripSnakePrefix_le,
         TNLean.MPS.AreaLaw.surprisalTail_stripSnakePrefix_le,
         TNLean.MPS.AreaLaw.surprisalTail_stripSnakeState_le}
     \leanok
-    \uses{def:strip_snake, thm:strip_area_law, lem:strip_column_geometry,
-        thm:area_law_initial_buffer, lem:chain_marginal_tail}
+    \uses{def:strip_snake,thm:strip_area_law,lem:strip_column_geometry,thm:area_law_initial_buffer,lem:chain_marginal_tail}
     Put $b'=1+(R+1)\mu_R\ell_R^2$ and $s=\sqrt{tb'w}$.
     Every snake prefix $P$ has entropy at most $C_0tw^2+w\log q$ and
     cut budget at most $b'w$. Its actual marginal satisfies
@@ -3085,8 +3038,7 @@ In particular the ground eigenspace is one-dimensional.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:strip_area_law, lem:strip_column_geometry, def:strip_snake,
-        thm:area_law_initial_buffer, lem:chain_marginal_tail}
+    \uses{thm:strip_area_law,lem:strip_column_geometry,def:strip_snake,thm:area_law_initial_buffer,lem:chain_marginal_tail}
     A prefix lies between two consecutive whole-column prefixes; its
     additional region has at most $w$ sites. Subadditivity gives the entropy
     estimate, and the partial-column crossing count gives the cut budget.
@@ -3110,8 +3062,7 @@ In particular the ground eigenspace is one-dimensional.
         TNLean.MPS.AreaLaw.exists_stripMPS_norm_sub_le,
         TNLean.MPS.AreaLaw.stripMPSApproximation}
     \leanok
-    \uses{lem:strip_prefix_tails, def:strip_snake,
-        lem:chain_sequential_truncation}
+    \uses{lem:strip_prefix_tails,def:strip_snake,lem:chain_sequential_truncation}
     There are nonnegative constants $C(q,R),c(q,R)$, chosen before
     $L,w,J,\Delta,H,\Omega$, and a normalized matrix product vector $\Phi$
     along the physical column-snake ordering such that
@@ -3126,8 +3077,7 @@ In particular the ground eigenspace is one-dimensional.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:strip_prefix_tails, def:strip_snake,
-        lem:chain_sequential_truncation}
+    \uses{lem:strip_prefix_tails,def:strip_snake,lem:chain_sequential_truncation}
     Sequentially truncate all $Lw-1$ internal cuts with slack
     $64s\log(2L^2wA)$. The sum of square roots of the actual discarded
     masses is at most $1/(2L)$. The truncated vector has nonzero norm;
