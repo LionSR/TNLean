@@ -18,16 +18,17 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[Operators on parts of a sheet]
     \label{lem:peps_frame_split_forms}
-    \lean{TNLean.Lattice.Sheet.threeSplit,
-        TNLean.Lattice.Sheet.threeSplit_fst,
-        TNLean.Lattice.Sheet.threeSplit_snd,
-        TNLean.Lattice.Sheet.piKronecker_submatrix_threeSplit,
+    \lean{ManyBody.threeCutEquiv,
+        ManyBody.threeCutEquiv_apply_fst_fst,
+        ManyBody.threeCutEquiv_apply_fst_snd,
+        ManyBody.threeCutEquiv_apply_snd,
+        ManyBody.reindex_threeCutEquiv_piKronecker,
         ManyBody.exists_eq_one_kronecker_of_mem_supportedOperators,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one_kronecker_one,
-        TNLean.Lattice.Sheet.exists_threeSplit_eq_one_kronecker}
+        ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one,
+        ManyBody.exists_reindex_threeCutEquiv_eq_one_kronecker_kronecker_one,
+        ManyBody.exists_reindex_threeCutEquiv_eq_reindex_one_kronecker,
+        ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one_kronecker_one,
+        ManyBody.exists_reindex_threeCutEquiv_eq_one_kronecker}
     \leanok
     Let $\Lambda$ be a finite site set and $q\in\mathbb N$. For
     $S\subseteq\Lambda$, identify $\mathcal H_\Lambda\cong\mathcal H_S\otimes\mathcal H_{\Lambda\setminus S}$

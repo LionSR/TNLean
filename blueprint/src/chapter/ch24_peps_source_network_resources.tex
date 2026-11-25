@@ -131,8 +131,6 @@ with no numerical bound on private register dimensions.
 
 \begin{lemma}[Finite endpoint registers in fixed source slots]
     \label{thm:peps_finite_source_slot_registers}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.finiteDimensional_registers_slotLayout}
-    \leanok
     \uses{def:peps_source_slots}
     For a finite ordered list $R$ of pair-source occurrences with
     finite-dimensional endpoint spaces $U_i,V_i$, every register in the slot
@@ -140,7 +138,6 @@ with no numerical bound on private register dimensions.
 \end{lemma}
 
 \begin{proof}
-    \leanok
     \uses{def:peps_source_slots}
     By induction on $R$: the empty list has no registers, and adjoining $i$
     prepends two registers with finite-dimensional spaces $U_i,V_i$.
@@ -148,8 +145,6 @@ with no numerical bound on private register dimensions.
 
 \begin{lemma}[Finite registers in the all-party source layout]
     \label{thm:peps_finite_all_party_source_registers}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.finiteDimensional_allResidualSource_registers}
-    \leanok
     \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
     For any chronological source composition $W$ on $P$, every register in the
     all-party source layout $R_W$ (Definition~\ref{def:peps_all_party_source_registers})
@@ -157,7 +152,6 @@ with no numerical bound on private register dimensions.
 \end{lemma}
 
 \begin{proof}
-    \leanok
     \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
     Each source occurrence $e$ has finite-dimensional halfspaces
     $\C^{u_e},\C^{v_e}$, so Lemma~\ref{thm:peps_finite_source_slot_registers}
@@ -166,8 +160,6 @@ with no numerical bound on private register dimensions.
 
 \begin{definition}[Finite orthonormal coordinates of a local source memory]
     \label{def:peps_all_party_local_source_basis}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allResidualSourceBasis}
-    \leanok
     \uses{thm:peps_finite_all_party_source_registers,
         thm:peps_finite_register_memories,def:peps_party_registers}
     For $q\in Q=P\sqcup\{*\}$, let $R_W(q)$ be the sublist of $R_W$ owned by $q$
@@ -179,8 +171,6 @@ with no numerical bound on private register dimensions.
 
 \begin{definition}[Finite orthonormal coordinates of a local discarded memory]
     \label{def:peps_all_party_local_discard_basis}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allPartyDiscardBasis}
-    \leanok
     \uses{thm:peps_finite_register_memories,def:peps_affected_owner,
         def:peps_party_registers}
     Let $G$ be a finite ordered list of finite-dimensional discarded registers.
@@ -377,7 +367,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{definition}[Termwise bounds for prescribed approximate gate expansions]
     \label{def:peps_effect_termwise_bounds}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsTermwiseBounded}
+    \lean{QuantumCircuit.Party.EffectCircuit.IsTermwiseBounded}
     \leanok
     Prescribed gate expansions have termwise bounds $(r,C)$ if every listed
     monomial at every nonprivate gate occurrence has at most $r$ pair effects
@@ -386,8 +376,8 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{lemma}[A polynomial coefficient majorant for approximate gate lists]
     \label{thm:peps_effect_coefficient_majorant}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isExpansionBounded_of_isTermwiseBounded}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
+    \lean{QuantumCircuit.Party.EffectCircuit.isExpansionBounded_of_isTermwiseBounded}
+    \lean{QuantumCircuit.Party.EffectCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
     \leanok
     \uses{def:peps_effect_termwise_bounds,thm:peps_gate_coefficient_sum}
     If each prescribed nonprivate gate expansion has at most $K$ terms and

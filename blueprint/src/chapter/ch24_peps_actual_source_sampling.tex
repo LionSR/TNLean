@@ -9,15 +9,12 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Finite-dimensional spaces of discarded registers]
     \label{thm:peps_finite_register_memories}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_mem_of_registers,TNLean.Lattice.PartyCircuit.Layout.finiteDimensional_mem_restrict_mapOwner_mapOwner}
-    \leanok
     For any finite ordered list $R$ of registers with finite-dimensional complex
     Hilbert spaces, $\mathcal H_R$ is finite-dimensional, and remains so after
     relabelling register parties twice and restricting to either side of any
     party partition.
 \end{lemma}
 \begin{proof}
-    \leanok
     Induction on $R$ shows $\dim\mathcal H_R<\infty$; party relabelling preserves
     each register's Hilbert space, and restriction selects a sublist of $R$.
 \end{proof}
@@ -25,8 +22,6 @@ and discarded registers; its tensor-network representation is proved separately.
 \begin{definition}[Orthonormal coordinates of selected discarded registers]
     \label{def:peps_restricted_discard_basis}
     \uses{thm:peps_finite_register_memories}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.restrictedDiscardBasis}
-    \leanok
     Under Lemma~\ref{thm:peps_finite_register_memories}, choose a finite
     orthonormal basis of the restricted discarded space indexed by
     $\{0,\ldots,d-1\}$, where $d$ is its dimension.
@@ -35,8 +30,6 @@ and discarded registers; its tensor-network representation is proved separately.
 \begin{definition}[Exterior physical coordinates]
     \label{def:peps_exterior_family_physical_basis}
     \uses{def:peps_family_physical_output,thm:peps_affected_original_dimensions}
-    \lean{TNLean.Lattice.PartyCircuit.exteriorFamilyPhysicalBasis}
-    \leanok
     For a finite party set $P$ listed without repetition with physical
     dimensions $d_p$ and $A\subseteq P$, mapping the product physical basis
     outside $A$ (indexed by $\prod_{p\notin A}\{0,\ldots,d_p-1\}$) through the
@@ -47,7 +40,7 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Exterior physical dimension]
     \label{thm:peps_exterior_family_physical_dimension}
-    \lean{TNLean.Lattice.PartyCircuit.finrank_exteriorFamilyPhysicalLayout}
+    \lean{QuantumCircuit.Party.card_affectedSides_false}
     \leanok
     The dimension of the exterior physical space after the two party
     identifications is $\prod_{p\notin A}d_p$.
@@ -61,7 +54,7 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Expected norm of a partial branch]
     \label{thm:peps_actual_gaussian_branch}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integrable_actualGaussianBranch_and_integral_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.integrable_actualGaussianBranch_and_integral_le}
     \leanok
     Let $W$ be an allowed circuit with physical output registers followed by
     discarded registers, $S$ a set of source occurrences with endpoint parties
@@ -111,7 +104,7 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Expected norm of the corrected term]
     \label{thm:peps_actual_corrected_source_bound}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_actualCorrectedSourceTerm_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.integral_actualCorrectedSourceTerm_le}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:peps_actual_gaussian_branch} on input
     state $|p_0(1)\rangle\langle p_0(1)|$, for $k>0$ the physical corrected term
@@ -138,7 +131,7 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Corrected-term bound from circuit participation]
     \label{thm:peps_actual_source_lifetime_bound}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.integral_actualCorrectedSourceTerm_le_lifetime}
+    \lean{QuantumCircuit.Party.SourceCircuit.integral_actualCorrectedSourceTerm_le_lifetime}
     \leanok
     Let $P$ be a finite party set listed without repetition with physical
     dimensions $d_p\le D$ ($D\ge 1$) and finite-dimensional discarded registers.
@@ -168,7 +161,7 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Choosing one sample from corrected-term bounds]
     \label{thm:peps_source_sample_choice_conditional}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sampledSourceMatrix_error_le_of_integral_bound}
+    \lean{QuantumCircuit.Party.SourceCircuit.exists_sampledSourceMatrix_error_le_of_integral_bound}
     \leanok
     For a source-only circuit with $N=|\mathcal E|$, finite orthonormal input
     and physical/discard output bases, an input matrix, representing source
@@ -195,7 +188,7 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[A single sample for the source circuit]
     \label{thm:peps_actual_source_sampling}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exists_sourceSample_lifetime_error_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.exists_sourceSample_lifetime_error_le}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:peps_actual_source_lifetime_bound},
     let $N=|\mathcal E|$ and $0<\varepsilon\leq1$, and set
@@ -228,7 +221,9 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Power bounds for the sample count]
     \label{thm:peps_source_sampling_polynomial}
-    \lean{TNLean.Lattice.Compression.sourceSamplingCount_lt_of_power_bounds,TNLean.Lattice.Compression.sourceSamplingCount_lt_inv_pow,TNLean.Lattice.Compression.sourceSamplingCount_lt_of_gate_power_bounds}
+    \lean{binomialSampleCount_lt_of_power_bounds,
+        binomialSampleCount_inv_pow_lt,
+        binomialSampleCount_lt_of_cost_power_bounds}
     \leanok
     If $L\geq1$, $Q\geq0$, $\varepsilon>0$, $n,q,p\in\N$, $C_N\geq1$, and
     $C_Q\geq0$ satisfy $N\leq C_NL^n$, $Q\leq C_QL^q$, and
@@ -289,8 +284,8 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Polynomial stack length at the per-gate error]
     \label{thm:peps_effect_stack_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.stackLength_sourceGateBudget_eq}
-    \lean{TNLean.Lattice.PartyCircuit.stackLength_sourceGateBudget_lt_of_power_bounds}
+    \lean{QuantumCircuit.Party.stackLength_sourceGateBudget_eq}
+    \lean{QuantumCircuit.Party.stackLength_sourceGateBudget_lt_of_power_bounds}
     \leanok
     For $r,N\in\N$, $S\in\mathbb R$, $\varepsilon>0$, and
     $\delta=\varepsilon/(8\max(1,N))$, the stack length is
@@ -316,8 +311,8 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Polynomial number of replacement monomials]
     \label{thm:peps_effect_replacement_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.replacementMonomialBound_le_of_power_bounds}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_branchLabels_replacement_le_power}
+    \lean{QuantumCircuit.Party.replacementMonomialBound_le_of_power_bounds}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_branchLabels_replacement_le_power}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:peps_effect_stack_polynomial}, if
     $K\in\N$ satisfies $K\leq C_KL^a$ ($C_K\geq0$, $a\in\N$), then
@@ -342,7 +337,7 @@ and discarded registers; its tensor-network representation is proved separately.
 
 \begin{lemma}[Sampled physical operator as a sum of party tensor products]
     \label{thm:peps_actual_pure_sampled_physical_sum}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum}
     \leanok
     \uses{thm:peps_actual_pure_physical_source_replacement,
         thm:peps_actual_source_column_physical_trace,thm:peps_actual_sampled_physical_scalar,

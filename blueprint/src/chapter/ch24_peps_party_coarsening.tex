@@ -14,13 +14,8 @@ owner identification for the affected and exterior systems in
 
 \begin{definition}[Changing register owners]
     \label{def:peps_owner_layout}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_nil}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_cons}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_append}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_nil_apply}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_cons_tmul}
+    \lean{ManyBody.blockSystem}
+    \lean{ManyBody.blockConfigEquiv}
     \leanok
     \uses{def:peps_party_registers}
     For a register list $\ell=((p_1,H_1),\ldots,(p_n,H_n))$ (with no
@@ -38,9 +33,6 @@ owner identification for the affected and exterior systems in
 
 \begin{lemma}[Compatibility with concatenation]
     \label{thm:peps_owner_concatenation}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_append_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwnerIso_append}
-    \leanok
     \uses{def:peps_owner_layout}
     With $C_{\ell,m}:\mathcal H_{\ell m}\to\mathcal H_\ell\otimes\mathcal H_m$
     the concatenation isometry and $(\ell m)^f=\ell^f m^f$, every
@@ -54,7 +46,7 @@ owner identification for the affected and exterior systems in
     or equivalently $R_{f,\ell m}C_{\ell,m}^{-1}=C_{\ell^f,m^f}^{-1}(R_{f,\ell}\otimes R_{f,m})$.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     Induction on $\ell$ using (\ref{eq:peps_owner_head}) gives
     (\ref{eq:peps_owner_concatenation}) on elementary tensors, and linearity
     gives the operator identity.
@@ -62,11 +54,11 @@ owner identification for the affected and exterior systems in
 
 \begin{definition}[Sources remaining between distinct owners]
     \label{def:peps_owner_sources}
-    \lean{TNLean.Lattice.PartyCircuit.PairSource.mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_nil}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_cons}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_append}
+    \lean{QuantumCircuit.Party.PairSource.mapOwner}
+    \lean{QuantumCircuit.Party.SourceInventory.mapOwner}
+    \lean{QuantumCircuit.Party.SourceInventory.mapOwner_nil}
+    \lean{QuantumCircuit.Party.SourceInventory.mapOwner_cons}
+    \lean{QuantumCircuit.Party.SourceInventory.mapOwner_append}
     \leanok
     \uses{def:peps_source_inventory}
     A source $s=(p,q;U,V;\eta)$ remains between distinct owners iff
@@ -77,9 +69,9 @@ owner identification for the affected and exterior systems in
 
 \begin{lemma}[Surviving pair labels after grouping]
     \label{thm:peps_owner_source_pairs}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.map_partyPair_mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mem_partyPair_mapOwner}
+    \lean{QuantumCircuit.Party.SourceInventory.mem_mapOwner}
+    \lean{QuantumCircuit.Party.SourceInventory.map_partyPair_mapOwner}
+    \lean{QuantumCircuit.Party.SourceInventory.mem_partyPair_mapOwner}
     \leanok
     \uses{def:peps_owner_sources}
     The unordered pair labels of $S_f$ are obtained (with multiplicity) by
@@ -95,8 +87,8 @@ owner identification for the affected and exterior systems in
 
 \begin{lemma}[Normalization and the absence of crossing sources]
     \label{thm:peps_owner_sources_internal}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.IsNormalized.mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.mapOwner_eq_nil_iff}
+    \lean{QuantumCircuit.Party.SourceInventory.IsNormalized.mapOwner}
+    \lean{QuantumCircuit.Party.SourceInventory.mapOwner_eq_nil_iff}
     \leanok
     \uses{def:peps_owner_sources}
     If the vectors of $S$ are normalized, then those of $S_f$ are normalized,
@@ -110,7 +102,7 @@ owner identification for the affected and exterior systems in
 
 \begin{definition}[Preparing an internal pair]
     \label{def:peps_internal_pair_preparation}
-    \lean{TNLean.Lattice.PartyCircuit.Word.localPairSource}
+    \lean{QuantumCircuit.Party.Word.localPrepare}
     \leanok
     \uses{def:peps_party_layout}
     For $q\in Q$ and $\eta\in U\otimes V$, prepare two fresh registers $U,V$
@@ -121,8 +113,8 @@ owner identification for the affected and exterior systems in
 
 \begin{lemma}[The internal preparation operator]
     \label{thm:peps_internal_pair_preparation}
-    \lean{TNLean.Lattice.PartyCircuit.Word.localPairSource_spec}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_localPairSource}
+    \lean{QuantumCircuit.Party.Word.isAllowed_localPrepare}
+    \lean{QuantumCircuit.Party.Word.op_localPrepare}
     \leanok
     \uses{def:peps_internal_pair_preparation}
     The operation of Definition~\ref{def:peps_internal_pair_preparation} maps
@@ -139,7 +131,7 @@ owner identification for the affected and exterior systems in
 
 \begin{definition}[Changing the owners of a composition]
     \label{def:peps_owner_composition}
-    \lean{TNLean.Lattice.PartyCircuit.Word.mapOwner}
+    \lean{QuantumCircuit.Party.Word.coarsen}
     \leanok
     \uses{def:peps_owner_layout,def:peps_internal_pair_preparation}
     For a composition $F:\mathcal H_\ell\to\mathcal H_{\ell'}$, define
@@ -154,10 +146,10 @@ owner identification for the affected and exterior systems in
 
 \begin{lemma}[Exact preservation of an allowed composition]
     \label{thm:peps_owner_composition}
-    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sources_mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapOwner}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eval_mapOwner_comp}
+    \lean{QuantumCircuit.Party.Word.isAllowed_coarsen}
+    \lean{QuantumCircuit.Party.Word.sources_coarsen}
+    \lean{QuantumCircuit.Party.Word.op_coarsen}
+    \lean{QuantumCircuit.Party.Word.op_coarsen}
     \leanok
     \uses{def:peps_owner_composition,def:peps_owner_sources}
     Without assuming norm bounds, $F$ and $F^f$ satisfy
@@ -180,7 +172,7 @@ owner identification for the affected and exterior systems in
 
 \begin{lemma}[Two contractions when every source is internal]
     \label{thm:peps_internal_source_factorization}
-    \lean{TNLean.Lattice.PartyCircuit.Word.exists_partition_of_sources_internal}
+    \lean{QuantumCircuit.Party.Word.isTensorPartitioned_of_sources_internal}
     \leanok
     % The statement below is an auxiliary result with its internal-source hypothesis explicit.
     \uses{def:peps_owner_composition,def:peps_party_partition}

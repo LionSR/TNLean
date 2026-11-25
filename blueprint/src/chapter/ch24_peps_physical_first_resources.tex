@@ -7,15 +7,12 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Finite coordinates for the original input]
     \label{thm:peps_finite_whole_party_input}
-    \lean{TNLean.Lattice.PartyCircuit.ProductInput.finiteDimensional_wholePartyMem}
-    \leanok
     For any finite party set $P$ and finite-dimensional private memories
     $H_p$ (with no bound on $\dim H_p$), the ordered memory
     $\bigotimes_{p\in P}H_p$ is finite-dimensional and admits a finite
     orthonormal basis.
 \end{lemma}
 \begin{proof}
-    \leanok
     A finite tensor product of finite-dimensional spaces $H_p$ (including
     empty products and zero-dimensional factors) is finite-dimensional.
 \end{proof}
@@ -23,7 +20,7 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Source positions after the physical output exchange]
     \label{thm:peps_physical_first_source_count}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_sourceLocations_physicalFirstReplacement_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_sourceLocations_replacement_le}
     \leanok
     An original contraction circuit $W$ with $N$ nonprivate gate
     occurrences of arity at most $a$ has physical-first source replacement
@@ -40,7 +37,7 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Polynomial sample count from original resources]
     \label{thm:peps_physical_first_sample_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sourceSamplingCount_physicalFirstReplacement_lt_power}
+    \lean{QuantumCircuit.Party.OriginalCircuit.binomialSampleCount_replacement_lt_power}
     \leanok
     In the setting of Lemma~\ref{thm:peps_physical_first_source_count},
     let $L\ge1$, let $n,s,d,p,\ell\in\mathbb N$, and suppose
@@ -72,7 +69,7 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Polynomial branch counts after the physical exchange]
     \label{thm:peps_physical_first_branch_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_branchLabels_physicalFirstReplacement_le_power}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_branchLabels_replacement_le_power}
     \leanok
     Suppose $L\ge1$, $C_N\ge1$, $C_K,C_S,S\ge0$, $u,n,s,p\in\mathbb N$, and
     \begin{align}

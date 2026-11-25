@@ -8,8 +8,6 @@ independent, and each source uses one shared sample index at its two endpoints.
 
 \begin{definition}[Comparison of word evaluations]
     \label{def:peps_word_eval_comparison}
-    \lean{TNLean.Lattice.PartyCircuit.Word.IsEvalComparison}
-    \leanok
     \uses{def:peps_party_layout}
     For chronological words $u,v$ in the proof of Theorem~5.2
     of~\cite{OpenAI2026PolynomialPEPS}, their evaluations agree when
@@ -20,15 +18,12 @@ independent, and each source uses one shared sample index at its two endpoints.
 
 \begin{lemma}[Evaluation comparison on fixed layouts]
     \label{lem:peps_word_eval_comparison_fixed_layouts}
-    \lean{TNLean.Lattice.PartyCircuit.Word.IsEvalComparison.eval_eq}
-    \leanok
     \uses{def:peps_word_eval_comparison}
     If $u$ and $v$ have the same input and output register lists and agree in
     the sense of Definition~\ref{def:peps_word_eval_comparison}, then
     $\operatorname{eval}(u)=\operatorname{eval}(v)$.
 \end{lemma}
 \begin{proof}
-    \leanok
     Since the input and output register lists of $u$ and $v$ coincide,
     heterogeneous equality (Definition~\ref{def:peps_word_eval_comparison})
     reduces to $\operatorname{eval}(u)=\operatorname{eval}(v)$.
@@ -36,22 +31,19 @@ independent, and each source uses one shared sample index at its two endpoints.
 
 \begin{lemma}[Equal word evaluations on fixed layouts]
     \label{lem:peps_word_eval_comparison_of_equality}
-    \lean{TNLean.Lattice.PartyCircuit.Word.isEvalComparison_of_eval_eq}
-    \leanok
     \uses{def:peps_word_eval_comparison}
     If $u$ and $v$ have the same input and output register lists and
     $\operatorname{eval}(u)=\operatorname{eval}(v)$, then they agree in the
     sense of Definition~\ref{def:peps_word_eval_comparison}.
 \end{lemma}
 \begin{proof}
-    \leanok
     Ordinary equality $\operatorname{eval}(u)=\operatorname{eval}(v)$ on equal
     boundary spaces implies Definition~\ref{def:peps_word_eval_comparison}.
 \end{proof}
 
 \begin{lemma}[Remaining operations at an owner with a singleton fibre]
     \label{thm:peps_singleton_fibre_local_part}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber}
+    \lean{QuantumCircuit.Party.Word.localPartOp_coarsen_of_fiber}
     \leanok
     \uses{thm:peps_source_preparation,def:peps_owner_composition,
         def:peps_single_party_selector,def:peps_party_registers}
@@ -225,9 +217,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{definition}[Ordered endpoint registers and their operators]
     \label{def:peps_ordered_endpoint_register_operators}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointRegisterData,
-        TNLean.Lattice.PartyCircuit.SourceInventory.endpointRegisterWord}
-    \leanok
     \uses{def:peps_source_inventory,def:peps_source_slots,
         def:peps_source_register_operator_word}
     For an ordered pair-source list $R=((p_i,q_i))_{i=0}^{n-1}$, complex inner
@@ -249,8 +238,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[The ordered endpoint word contains no pair preparation]
     \label{thm:peps_endpoint_register_word_sources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sources_endpointRegisterWord}
-    \leanok
     \uses{def:peps_ordered_endpoint_register_operators}
     For any ordered endpoint data list $\mathcal D$, the word
     $\mathcal E(\mathcal D)$ of Definition~\ref{def:peps_ordered_endpoint_register_operators}
@@ -259,7 +246,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 \end{lemma}
 
 \begin{proof}
-    \leanok
     \uses{def:peps_ordered_endpoint_register_operators}
     By induction on $\mathcal D$ via Definition~\ref{def:peps_ordered_endpoint_register_operators},
     $\mathcal E(\varnothing)=\Id_{\C}$ and each local operation and framing step
@@ -268,8 +254,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[The register list of filtered endpoint data]
     \label{thm:peps_filtered_endpoint_register_layout}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointRegisterData_filter_layout}
-    \leanok
     \uses{def:peps_ordered_endpoint_register_operators,def:peps_source_slots,
         def:peps_party_registers}
     For an ordered pair-source list $R$ with source-register list $S_R$
@@ -281,7 +265,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 \end{lemma}
 
 \begin{proof}
-    \leanok
     \uses{def:peps_ordered_endpoint_register_operators,def:peps_source_slots,
         def:peps_party_registers}
     By Definition~\ref{def:peps_ordered_endpoint_register_operators} and
@@ -292,7 +275,8 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[Restriction retains the ordered endpoint operators]
     \label{thm:peps_restricted_ordered_endpoint_operators}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.restrict_endpointWord_eval_heq_registerWord}
+    \lean{QuantumCircuit.Party.SourceInventory.partyOp_endpointWord,
+        QuantumCircuit.Party.SourceInventory.partyOp_endpointWord_congr}
     \leanok
     \uses{def:peps_ordered_endpoint_register_operators,
         def:peps_source_register_operator_word,thm:peps_party_restriction}
@@ -642,8 +626,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[Owner and layout identification of endpoint registers]
     \label{thm:peps_endpoint_register_owner_transport}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointRegisterWord_eval_heq_mapOwner_castLayouts}
-    \leanok
     For any finite ordered endpoint-register data list $\mathcal D$, owner map
     $f$, and equal boundary register lists (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}),
     relabelling $\mathcal E(\mathcal D)$ by $f$ and identifying its boundary
@@ -651,7 +633,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     identification.
 \end{lemma}
 \begin{proof}
-    \leanok
     \uses{thm:peps_party_restriction,thm:peps_owner_evaluation_identification}
     Combine the layout-identification invariance of Lemma~\ref{thm:peps_party_restriction}
     with the owner-relabelling identity of Lemma~\ref{thm:peps_owner_evaluation_identification}.

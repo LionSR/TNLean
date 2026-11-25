@@ -24,7 +24,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 % lines 810--821; this is a separate locality auxiliary, not that source theorem.
 \begin{lemma}[Support-intersection bound for an operator on two regions]
     \label{thm:peps_supported_left_factor_rank}
-    \lean{TNLean.Lattice.Sheet.exists_threeSplit_eq_kronecker_one_rank_le}
+    \lean{ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one_operatorSchmidtRank_le}
     \leanok
     \uses{lem:peps_frame_split_forms}
     Let $\Lambda$ be a finite site set, let $q$ be any natural number, and
@@ -72,7 +72,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Support-intersection bound for a complementary operator]
     \label{thm:peps_supported_right_factor_rank}
-    \lean{TNLean.Lattice.Sheet.exists_threeSplit_eq_reindex_one_kronecker_rank_le}
+    \lean{ManyBody.exists_reindex_threeCutEquiv_eq_reindex_one_kronecker_operatorSchmidtRank_le}
     \leanok
     \uses{lem:peps_frame_split_forms}
     Let $\Lambda$ be a finite site set, let $q$ be any natural number, and
@@ -123,14 +123,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Splitting consequence on a sheet]
     \label{lem:peps_frame_splitting}
-    \lean{TNLean.Lattice.Sheet.SplittingData,
-        TNLean.Lattice.Sheet.SplittingData.error,
-        TNLean.Lattice.Sheet.splitVec,
-        TNLean.Lattice.Sheet.partialTraceRight_splitVec,
-        TNLean.Lattice.Sheet.quantumRelativeEntropy_splitVec_eq_mutualInformation,
-        TNLean.Lattice.Sheet.exists_sheetSplitting,
-        TNLean.Lattice.Sheet.exists_sheetSplitting_zpow,
-        TNLean.Lattice.Sheet.exists_sheetSplitting_rpow}
+    \lean{ManyBody.SplittingData,
+        ManyBody.SplittingData.error,
+        ManyBody.splitVec,
+        ManyBody.partialTraceRight_splitVec,
+        ManyBody.quantumRelativeEntropy_splitVec_eq_regionMutualInformation,
+        ManyBody.SplittingData.exists_error_le,
+        ManyBody.SplittingData.exists_error_le_zpow,
+        ManyBody.SplittingData.exists_error_le_rpow}
     \leanok
     \uses{lem:peps_frame_split_forms}
     Let $T,E\subseteq\Lambda$ be disjoint, $U=\Lambda\setminus(T\cup E)$,
@@ -162,13 +162,12 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{definition}[Birth map]
     \label{def:peps_frame_birth_map}
-    \lean{TNLean.Lattice.Sheet.pairSource,
-        TNLean.Lattice.Sheet.birthKernel,
-        TNLean.Lattice.Sheet.birthEffect,
-        TNLean.Lattice.Sheet.birthOp,
-        TNLean.Lattice.Sheet.sheetBirthOp,
-        TNLean.Lattice.Sheet.birthOp_eq,
-        TNLean.Lattice.Sheet.pairSource_mul_conjTranspose_apply}
+    \lean{Matrix.prepMatrix,
+        ManyBody.birthKernel,
+        ManyBody.birthEffect,
+        ManyBody.birthOp,
+        ManyBody.configBirthOp,
+        ManyBody.birthOp_eq}
     \leanok
     \uses{lem:peps_frame_splitting}
     With the splitting data $(V,s,s')$ of Lemma~\ref{lem:peps_frame_splitting},
@@ -186,18 +185,18 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Properties of the birth map]
     \label{lem:peps_frame_birth_map}
-    \lean{TNLean.Lattice.Sheet.pairSource_conjTranspose_mul_self,
-        TNLean.Lattice.Sheet.pairSource_mulVec,
-        TNLean.Lattice.Sheet.birthOp_isHermitian,
-        TNLean.Lattice.Sheet.norm_birthOp_le_one,
-        TNLean.Lattice.Sheet.norm_act_birthOp_sub_le,
-        TNLean.Lattice.Sheet.birthEffect_eq_submatrix,
-        TNLean.Lattice.Sheet.birthOp_eq_submatrix,
-        TNLean.Lattice.Sheet.commute_birthOp,
-        TNLean.Lattice.Sheet.sheetBirthOp_isHermitian,
-        TNLean.Lattice.Sheet.norm_sheetBirthOp_le_one,
-        TNLean.Lattice.Sheet.norm_act_sheetBirthOp_sub_le,
-        TNLean.Lattice.Sheet.commute_sheetBirthOp}
+    \lean{Matrix.conjTranspose_mul_prepMatrix,
+        ManyBody.prepMatrix_prodProdProdComm_mulVec,
+        ManyBody.birthOp_isHermitian,
+        ManyBody.norm_birthOp_le_one,
+        ManyBody.norm_toEuclideanLin_birthOp_sub_le,
+        ManyBody.birthEffect_eq_submatrix,
+        ManyBody.birthOp_eq_submatrix,
+        ManyBody.commute_birthOp,
+        ManyBody.configBirthOp_isHermitian,
+        ManyBody.norm_configBirthOp_le_one,
+        ManyBody.norm_toEuclideanLin_configBirthOp_sub_le,
+        ManyBody.commute_configBirthOp}
     \leanok
     \uses{def:peps_frame_birth_map}
     The map $B$ (Definition~\ref{def:peps_frame_birth_map}) satisfies
@@ -222,7 +221,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Operators passing through an encoding]
     \label{lem:peps_frame_pass_encoding}
-    \lean{TNLean.Lattice.Sheet.one_kronecker_mul_stack,
+    \lean{TNLean.PEPS.EncodedFrame.one_kronecker_mul_stack,
         TNLean.PEPS.EncodedFrame.one_kronecker_mul_frameEncoder,
         TNLean.PEPS.EncodedFrame.norm_act_one_kronecker_refVec_sub_le}
     \leanok
@@ -316,10 +315,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{definition}[Parties used by a monomial]
     \label{def:peps_monomial_parties}
-    \lean{TNLean.Lattice.PartyCircuit.Word.UsesOnly,
-        TNLean.Lattice.PartyCircuit.Word.sourceCount,
-        TNLean.Lattice.PartyCircuit.PartyChain.UsesOnly,
-        TNLean.Lattice.PartyCircuit.PartyChain.sourceCount}
+    \lean{QuantumCircuit.Party.Word.UsesOnly,
+        QuantumCircuit.Party.Word.sourceCount,
+        QuantumCircuit.Party.Monomial.UsesOnly,
+        QuantumCircuit.Party.Monomial.sourceCount}
     \leanok
     \uses{def:peps_party_layout,def:peps_party_monomial}
     An allowed monomial $M$ (Definition~\ref{def:peps_party_monomial}) uses
@@ -331,12 +330,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Composition without additional pair effects]
     \label{thm:peps_monomial_composition_counts}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.precomp_props,
-        TNLean.Lattice.PartyCircuit.PartyChain.postcomp_props,
-        TNLean.Lattice.PartyCircuit.PartyChain.precomp,
-        TNLean.Lattice.PartyCircuit.PartyChain.postcomp,
-        TNLean.Lattice.PartyCircuit.PartyChain.eval_precomp,
-        TNLean.Lattice.PartyCircuit.PartyChain.eval_postcomp}
+    \lean{QuantumCircuit.Party.Monomial.sourceCount_comp,
+        QuantumCircuit.Party.Monomial.effectCount_comp,
+        QuantumCircuit.Party.PartyCircuit.op_comp}
     \leanok
     \uses{def:peps_monomial_parties}
     Let $M$ be an allowed monomial using only parties in $S$, and let $W_0,W_1$
@@ -360,25 +356,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Matrices on registers of one party]
     \label{lem:peps_front_registers}
-    \lean{TNLean.Lattice.Sheet.act,
-        TNLean.Lattice.Sheet.act_apply,
-        TNLean.Lattice.Sheet.act_apply_apply,
-        TNLean.Lattice.Sheet.ofLp_act,
-        TNLean.Lattice.Sheet.norm_act,
-        TNLean.Lattice.Sheet.act_add,
-        TNLean.Lattice.Sheet.act_mul,
-        TNLean.Lattice.PartyCircuit.oneIso,
-        TNLean.Lattice.PartyCircuit.twoIso,
-        TNLean.Lattice.PartyCircuit.pairHeadIso_eq,
-        TNLean.Lattice.PartyCircuit.appendIso_one_symm,
-        TNLean.Lattice.PartyCircuit.pairHeadIso_appendIso_symm,
-        TNLean.Lattice.PartyCircuit.matLocal₂₁,
-        TNLean.Lattice.PartyCircuit.matLocal₁₂,
-        TNLean.Lattice.PartyCircuit.matLocal₂₂,
-        TNLean.Lattice.PartyCircuit.eval_localMap,
-        TNLean.Lattice.PartyCircuit.eval_localMap₂₁,
-        TNLean.Lattice.PartyCircuit.eval_localMap₁₂,
-        TNLean.Lattice.PartyCircuit.pairHeadIso_eval_localMap₂₂}
+    \lean{Matrix.toEuclideanLin,
+        Matrix.toLpLin_apply,
+        Matrix.l2_opNorm_def,
+        Matrix.toEuclideanLin_mul_apply,
+        QuantumCircuit.Party.PartyCircuit.op_localOp}
     \leanok
     \uses{def:peps_party_layout}
     Under the identification of two registers $\C^\alpha,\C^\beta$ of party $p$
@@ -394,10 +376,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{definition}[Birth and death monomials]
     \label{def:peps_frame_birth_monomials}
-    \lean{TNLean.Lattice.Sheet.birthWord,
-        TNLean.Lattice.Sheet.birthPrivateWord,
-        TNLean.Lattice.Sheet.deathChain,
-        TNLean.Lattice.Sheet.deathPrivateChain}
+    \lean{QuantumCircuit.Party.Sheet.birthWord,
+        QuantumCircuit.Party.Sheet.privateBirthWord,
+        QuantumCircuit.Party.Sheet.deathChain,
+        QuantumCircuit.Party.Sheet.privateDeathChain}
     \leanok
     \uses{def:peps_frame_birth_map,def:peps_party_monomial,lem:peps_front_registers}
     Let $K=\bra s(\id_T\otimes V)\colon\mathcal H_T\otimes\mathcal H_U\to\mathcal B_E$
@@ -422,29 +404,23 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Operators of the birth and death monomials]
     \label{lem:peps_frame_birth_monomial_operators}
-    \lean{TNLean.Lattice.Sheet.pairHeadIso_birthWord_eval,
-        TNLean.Lattice.Sheet.pairHeadIso_deathChain_eval,
-        TNLean.Lattice.Sheet.pairHeadIso_birthPrivateWord_eval,
-        TNLean.Lattice.Sheet.sourceThenAdjoint,
-        TNLean.Lattice.Sheet.sourceThenAdjoint_pairVec,
-        TNLean.Lattice.Sheet.pairHeadIso_frame_localMap_source,
-        TNLean.Lattice.Sheet.effectNext,
-        TNLean.Lattice.Sheet.effectNext_apply,
-        TNLean.Lattice.Sheet.effectNext_act,
-        TNLean.Lattice.Sheet.norm_birthKernel_le_one,
+    \lean{QuantumCircuit.Party.Sheet.op_birthWord,
+        QuantumCircuit.Party.Sheet.op_deathChain,
+        QuantumCircuit.Party.Sheet.op_privateBirthWord,
+        QuantumCircuit.Party.Sheet.op_privateDeathChain,
+        ManyBody.norm_birthKernel_le_one,
         Matrix.IsIsometry.l2_opNorm_le_one,
-        TNLean.Lattice.Sheet.norm_toLp_eq_one_of_star_dotProduct,
-        TNLean.Lattice.Sheet.isAllowed_birthWord,
-        TNLean.Lattice.Sheet.isAllowed_birthPrivateWord,
-        TNLean.Lattice.Sheet.isAllowed_deathChain,
-        TNLean.Lattice.Sheet.usesOnly_birthWord,
-        TNLean.Lattice.Sheet.sourceCount_birthWord,
-        TNLean.Lattice.Sheet.usesOnly_birthPrivateWord,
-        TNLean.Lattice.Sheet.sourceCount_birthPrivateWord,
-        TNLean.Lattice.Sheet.usesOnly_deathChain,
-        TNLean.Lattice.Sheet.sourceCount_deathChain,
-        TNLean.Lattice.Sheet.effectCount_deathChain,
-        TNLean.Lattice.Sheet.sheetBirthOp_eq_submatrix}
+        EuclideanSpace.norm_toLp_eq_one_of_star_dotProduct,
+        QuantumCircuit.Party.Sheet.isAllowed_birthWord,
+        QuantumCircuit.Party.Sheet.isAllowed_privateBirthWord,
+        QuantumCircuit.Party.Sheet.isAllowed_deathChain,
+        QuantumCircuit.Party.Sheet.usesOnly_birthWord,
+        QuantumCircuit.Party.Sheet.sourceCount_birthWord,
+        QuantumCircuit.Party.Sheet.usesOnly_privateBirthWord,
+        QuantumCircuit.Party.Sheet.sourceCount_privateBirthWord,
+        QuantumCircuit.Party.Sheet.usesOnly_deathChain,
+        QuantumCircuit.Party.Sheet.forallGate_isRight_deathChain,
+        QuantumCircuit.Party.Sheet.numGates_deathChain}
     \leanok
     \uses{def:peps_frame_birth_monomials,def:peps_monomial_parties,
         lem:peps_frame_birth_map}
@@ -464,9 +440,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{lemma}[Homogeneous birth and death on grouped registers]
     \label{thm:peps_frame_birth_bounded_grouped}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth_monomial,
-        TNLean.PEPS.EncodedFrame.Frame.death_monomial,
-        TNLean.Lattice.Sheet.Frame.exists_birthWord,
-        TNLean.Lattice.Sheet.Frame.exists_deathChain}
+        TNLean.PEPS.EncodedFrame.Frame.death_monomial}
     \leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
         lem:peps_frame_birth_monomial_operators}
@@ -490,70 +464,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Reorderings of site registers]
     \label{lem:lattice_register_reorderings}
-    \lean{TNLean.Lattice.Sheet.relabelHead,
-        TNLean.Lattice.Sheet.relabelSites,
-        TNLean.Lattice.Sheet.eval_relabelSites,
-        TNLean.Lattice.Sheet.partSites,
-        TNLean.Lattice.Sheet.partSites_eq,
-        TNLean.Lattice.Sheet.partWord,
-        TNLean.Lattice.Sheet.unpartWord,
-        TNLean.Lattice.Sheet.eval_partWord,
-        TNLean.Lattice.Sheet.eval_unpartWord,
-        TNLean.Lattice.PartyCircuit.Word.appendNil,
-        TNLean.Lattice.PartyCircuit.Word.dropNil,
-        TNLean.Lattice.PartyCircuit.Word.eval_appendNil,
-        TNLean.Lattice.PartyCircuit.Word.eval_dropNil,
-        TNLean.Lattice.PartyCircuit.Word.assocWord,
-        TNLean.Lattice.PartyCircuit.Word.unassocWord,
-        TNLean.Lattice.PartyCircuit.Word.eval_assocWord_appendIso_symm,
-        TNLean.Lattice.PartyCircuit.Word.eval_unassocWord_appendIso_symm,
-        TNLean.Lattice.PartyCircuit.Word.swapPairs,
-        TNLean.Lattice.PartyCircuit.Word.eval_swapPairs,
-        TNLean.Lattice.Sheet.partWordApp,
-        TNLean.Lattice.Sheet.unpartWordApp,
-        TNLean.Lattice.Sheet.eval_partWordApp,
-        TNLean.Lattice.Sheet.eval_unpartWordApp,
-        TNLean.Lattice.Sheet.relabelSitesApp,
-        TNLean.Lattice.Sheet.eval_relabelSitesApp,
-        TNLean.Lattice.PartyCircuit.Word.isAllowed_frameList_iff,
-        TNLean.Lattice.PartyCircuit.Word.usesOnly_frameList_iff,
-        TNLean.Lattice.PartyCircuit.Circuit.gateCount_frameList,
-        TNLean.Lattice.Sheet.eval_relabelHead,
-        TNLean.Lattice.Sheet.mem_partSites_fst,
-        TNLean.Lattice.Sheet.mem_partSites_snd,
-        TNLean.Lattice.Sheet.nodup_partSites_fst,
-        TNLean.Lattice.Sheet.nodup_partSites_snd,
-        TNLean.Lattice.Sheet.partStepApp,
-        TNLean.Lattice.Sheet.unpartStepApp,
-        TNLean.Lattice.Sheet.eval_partStepApp,
-        TNLean.Lattice.Sheet.eval_unpartStepApp,
-        TNLean.Lattice.PartyCircuit.Word.IsReordering,
-        TNLean.Lattice.PartyCircuit.Word.IsReordering.isAllowed,
-        TNLean.Lattice.PartyCircuit.Word.IsReordering.usesOnly,
-        TNLean.Lattice.PartyCircuit.Word.IsReordering.sourceCount_eq,
-        TNLean.Lattice.PartyCircuit.Word.IsReordering.comp,
-        TNLean.Lattice.PartyCircuit.Word.IsReordering.frameList,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_id,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_swap,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_comp_iff,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_frame_iff,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_frameList_iff,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_moveHead,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_exchangeBlocks,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_appendNil,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_dropNil,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_assocWord,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_unassocWord,
-        TNLean.Lattice.PartyCircuit.Word.isReordering_swapPairs,
-        TNLean.Lattice.Sheet.isReordering_relabelHead,
-        TNLean.Lattice.Sheet.isReordering_partStepApp,
-        TNLean.Lattice.Sheet.isReordering_unpartStepApp,
-        TNLean.Lattice.Sheet.isReordering_partWordApp,
-        TNLean.Lattice.Sheet.isReordering_unpartWordApp,
-        TNLean.Lattice.Sheet.isReordering_relabelSitesApp,
-        TNLean.Lattice.Sheet.isReordering_relabelSites,
-        TNLean.Lattice.Sheet.isReordering_partWord,
-        TNLean.Lattice.Sheet.isReordering_unpartWord}
+    \lean{QuantumCircuit.Party.Word.isAllowed_frame,
+        QuantumCircuit.Party.PartyCircuit.UsesOnly.frame,
+        QuantumCircuit.Party.PartyCircuit.gateCount_frame}
     \leanok
     \uses{def:lattice_site_registers,lem:lattice_site_register_coordinates}
     For a list $\ell$ of sites and a condition $f$, let $\ell_+$ and $\ell_-$
@@ -622,21 +535,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Coordinates of ordered region registers]
     \label{thm:peps_region_register_coordinates}
-    \lean{TNLean.Lattice.Sheet.mem_listT,
-        TNLean.Lattice.Sheet.mem_listR,
-        TNLean.Lattice.Sheet.mem_listU,
-        TNLean.Lattice.Sheet.mem_listE,
-        TNLean.Lattice.Sheet.listT,
-        TNLean.Lattice.Sheet.listR,
-        TNLean.Lattice.Sheet.listU,
-        TNLean.Lattice.Sheet.listE,
-        TNLean.Lattice.Sheet.nodup_listT,
-        TNLean.Lattice.Sheet.nodup_listU,
-        TNLean.Lattice.Sheet.equivT,
-        TNLean.Lattice.Sheet.equivU,
-        TNLean.Lattice.Sheet.groupIso_listT_siteVec,
-        TNLean.Lattice.Sheet.groupIso_listU_siteVec}
-    \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates}
     For a site list $\ell$, $T,E\subseteq\Lambda$, and $U=\Lambda\setminus(T\cup E)$,
     filter $\ell$ into $\ell_T=\{x\in\ell:x\in T\}$ and $\ell_R=\{x\in\ell:x\notin T\}$,
@@ -652,7 +550,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \end{align}
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{lem:peps_register_reorderings,lem:peps_frame_registers_coordinates}
     Follows from Lemma~\ref{lem:peps_register_reorderings} and the product-basis
     coordinate identification of Lemma~\ref{lem:peps_frame_registers_coordinates}.
@@ -660,12 +558,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Reconstructing a configuration from its restrictions]
     \label{thm:peps_region_configuration}
-    \lean{TNLean.Lattice.Sheet.merge_restrict_T,
-        TNLean.Lattice.Sheet.merge_restrict_U,
-        TNLean.Lattice.Sheet.merge_of_mem_E,
-        TNLean.Lattice.Sheet.merge_eq_iff,
-        TNLean.Lattice.Sheet.merge,
-        TNLean.Lattice.Sheet.merge_self_of_mem_union}
+    \lean{ManyBody.threeCutEquiv_symm_apply_of_mem,
+        ManyBody.threeCutEquiv_symm_apply_of_not_mem,
+        ManyBody.threeCutEquiv_symm_apply_of_mem_sdiff,
+        ManyBody.threeCutEquiv}
     \leanok
     \uses{lem:peps_frame_split_forms}
     For disjoint $T,E\subseteq\Lambda$, $U=\Lambda\setminus(T\cup E)$,
@@ -689,18 +585,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Grouped monomials on the registers of a frame]
     \label{lem:peps_grouped_monomial_placement}
-    \lean{TNLean.Lattice.Sheet.groupWord,
-        TNLean.Lattice.Sheet.ungroupWord,
-        TNLean.Lattice.Sheet.eval_groupWord,
-        TNLean.Lattice.Sheet.eval_ungroupWord,
-        TNLean.Lattice.Sheet.groupWord_props,
-        TNLean.Lattice.Sheet.ungroupWord_props,
-        TNLean.Lattice.Sheet.relabelRest,
-        TNLean.Lattice.Sheet.isReordering_relabelRest,
-        TNLean.Lattice.Sheet.eval_place,
-        TNLean.Lattice.Sheet.sheetPlace,
-        TNLean.Lattice.Sheet.sum_single_merge,
-        TNLean.PEPS.EncodedFrame.layoutIso_place}
+    \lean{TNLean.PEPS.EncodedFrame.layoutIso_place}
     \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         lem:peps_register_reorderings,lem:peps_front_registers}
@@ -725,8 +610,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[A birth and a death behind front registers]
     \label{lem:lattice_front_births}
-    \lean{TNLean.Lattice.Sheet.exists_frontBirthWord,
-        TNLean.Lattice.Sheet.exists_frontDeathChain}
+    \lean{QuantumCircuit.Party.Sheet.exists_taggedBirthWord_of_environment,
+        QuantumCircuit.Party.Sheet.exists_taggedDeathChain_of_environment}
     \leanok
     \uses{def:lattice_site_registers,lem:lattice_site_register_coordinates}
     Let $\sigma$ be splitting data for disjoint sets $T,E$ of sites, with canonical
@@ -913,13 +798,12 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{definition}[Buffer correction]
     \label{def:peps_frame_buffer_correction}
-    \lean{TNLean.Lattice.Sheet.tSwap,
-        TNLean.Lattice.Sheet.tSwapW,
-        TNLean.Lattice.Sheet.bufferSwap,
-        TNLean.Lattice.Sheet.tbSwap,
-        TNLean.Lattice.Sheet.bufferCorrection,
-        TNLean.Lattice.Sheet.threeSplit₂,
-        TNLean.Lattice.Sheet.sheetBufferCorrection}
+    \lean{ManyBody.tSwap,
+        ManyBody.tSwapW,
+        ManyBody.tbSwap,
+        ManyBody.bufferCorrection,
+        ManyBody.threeCutEquiv₂,
+        ManyBody.configBufferCorrection}
     \leanok
     \uses{lem:peps_frame_splitting}
     With the splitting isometry $V\colon\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$
@@ -935,10 +819,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[The net map of the corrections of an exchange]
     \label{lem:lattice_exchange_net_map}
-    \lean{TNLean.Lattice.Sheet.tSwapW_toMatrix,
-        TNLean.Lattice.Sheet.tbSwap_toMatrix,
-        TNLean.Lattice.Sheet.bufferCorrection_mul_tSwap,
-        TNLean.Lattice.Sheet.reindex_pairSwapOp_eq_submatrix}
+    \lean{ManyBody.tSwapW_toMatrix,
+        ManyBody.tbSwap_toMatrix,
+        ManyBody.bufferCorrection_mul_tSwap,
+        ManyBody.reindex_pairSwapOp_eq_submatrix}
     \leanok
     Let $V:\mathcal H_U\to\mathcal B_T\otimes\mathcal B_E$ be any linear map, put
     $\mathcal V=\id_{TE}\otimes V$, and let $D_U=(V^{\otimes2})^\dagger
@@ -983,14 +867,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{lemma}[Exchange error on the reference]
     \label{lem:peps_frame_exchange_error}
     \lean{EuclideanSpace.vecKron,
-        TNLean.Lattice.Sheet.act_kronecker_vecKron,
+        Matrix.toEuclideanLin_kronecker_vecKron,
         EuclideanSpace.norm_vecKron,
         EuclideanSpace.norm_vecKron_self_sub_le,
-        TNLean.Lattice.Sheet.act_tbSwap_vecKron_tensorPurification,
-        TNLean.Lattice.Sheet.norm_toLp_tensorPurification,
-        TNLean.Lattice.Sheet.norm_bufferCorrection_le_one,
-        TNLean.Lattice.Sheet.norm_act_bufferCorrection_mul_tSwap_sub_le,
-        TNLean.Lattice.Sheet.norm_act_sheetBufferCorrection_mul_pairSwapOp_sub_le}
+        ManyBody.toEuclideanLin_tbSwap_vecKron_tensorPurification,
+        ManyBody.norm_toLp_tensorPurification,
+        ManyBody.norm_bufferCorrection_le_one,
+        ManyBody.norm_toEuclideanLin_bufferCorrection_mul_tSwap_sub_le,
+        ManyBody.norm_toEuclideanLin_configBufferCorrection_mul_pairSwapOp_sub_le}
     \leanok
     \uses{lem:lattice_exchange_net_map}
     For a unit vector $\omega$ and $\delta=\lVert\mathcal V\omega-s\otimes s'\rVert$,
@@ -1055,7 +939,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.commute_correction,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.norm_exchangeOp_le_one,
         TNLean.PEPS.EncodedFrame.liftTags_mul_kronecker,
-        TNLean.Lattice.Sheet.commute_sheetBufferCorrection}
+        ManyBody.commute_configBufferCorrection}
     \leanok
     \uses{lem:peps_frame_exchange_intertwining,lem:peps_frame_exchange_net_map,
         lem:peps_frame_exchange_error,def:peps_frame_exchange_map,
@@ -1122,12 +1006,12 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[The corrections of an exchange on the two copies of the remainder]
     \label{lem:lattice_exchange_correction_matrix}
-    \lean{TNLean.Lattice.Sheet.partSwap,
-        TNLean.Lattice.Sheet.correctionMatrix,
-        TNLean.Lattice.Sheet.norm_correctionMatrix_le_one,
-        TNLean.Lattice.Sheet.reindex_pairSwapOp_eq_submatrix_of_subset,
-        TNLean.Lattice.Sheet.sheetBufferCorrection_mul_pairSwapOp_eq,
-        TNLean.Lattice.Sheet.correctionWord}
+    \lean{ManyBody.partSwap,
+        ManyBody.correctionMatrix,
+        ManyBody.norm_correctionMatrix_le_one,
+        ManyBody.reindex_pairSwapOp_eq_submatrix_of_subset,
+        ManyBody.configBufferCorrection_mul_pairSwapOp_eq,
+        QuantumCircuit.Party.Sheet.correctionWord}
     \leanok
     \uses{lem:lattice_site_register_coordinates}
     Let $\sigma$ be splitting data for disjoint sets $T,E$ of sites, with isometry
@@ -1176,7 +1060,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         TNLean.PEPS.EncodedFrame.twoLayoutIso_symm_single,
         TNLean.PEPS.EncodedFrame.twoLayoutIso_basis,
         TNLean.PEPS.EncodedFrame.twoLayoutIso_eq_act_of_basis,
-        TNLean.Lattice.Sheet.act_toMatrix_symm_single}
+        Matrix.toEuclideanLin_toPEquiv_toMatrix_single}
     \leanok
     \uses{lem:peps_frame_registers_coordinates}
     The concatenated register list of two frames is canonically identified via
@@ -1192,9 +1076,10 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[The renaming of two sheets behind front blocks]
     \label{lem:lattice_block_renaming_word}
-    \lean{TNLean.Lattice.Sheet.blockRenameWord,
-        TNLean.Lattice.Sheet.eval_blockRenameWord,
-        TNLean.Lattice.Sheet.isReordering_blockRenameWord}
+    \lean{QuantumCircuit.Party.Sheet.taggedRenameWord,
+        QuantumCircuit.Party.Sheet.op_taggedRenameWord,
+        QuantumCircuit.Party.Sheet.isAllowed_taggedRenameWord,
+        QuantumCircuit.Party.Sheet.sourceCount_taggedRenameWord}
     \leanok
     \uses{def:lattice_site_registers,lem:lattice_register_reorderings}
     Let each of two sheets carry a block of front registers for the outside of a
@@ -1239,12 +1124,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Coordinates on two copies of a region]
     \label{thm:peps_two_region_coordinates}
-    \lean{TNLean.Lattice.Sheet.pairUIso_siteVec,
-        TNLean.Lattice.Sheet.pairUIso_symm_single,
-        TNLean.Lattice.Sheet.mem_of_mem_sitesR,
-        TNLean.Lattice.Sheet.sitesU,
-        TNLean.Lattice.Sheet.sitesR,
-        TNLean.Lattice.Sheet.pairUIso}
+    \lean{QuantumCircuit.Party.Sheet.exchangeEquivP}
     \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         thm:peps_region_configuration}
@@ -1278,11 +1158,11 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Corrections on two sheets as one private contraction]
     \label{lem:lattice_front_correction_word}
-    \lean{TNLean.Lattice.Sheet.twoSheetPlace,
-        TNLean.Lattice.Sheet.frontCorrectionWord,
-        TNLean.Lattice.Sheet.eval_frontCorrectionWord,
-        TNLean.Lattice.Sheet.twoFrontLayoutIso_frontCorrectionWord,
-        TNLean.Lattice.Sheet.frontCorrectionWord_props}
+    \lean{QuantumCircuit.Party.Sheet.correctionWord,
+        QuantumCircuit.Party.Sheet.op_correctionWord,
+        QuantumCircuit.Party.Sheet.isAllowed_correctionWord,
+        QuantumCircuit.Party.Sheet.usesOnly_correctionWord,
+        QuantumCircuit.Party.Sheet.sourceCount_correctionWord}
     \leanok
     \uses{def:lattice_site_registers,lem:lattice_register_reorderings}
     Let $T,E$ be disjoint sets of sites, let $U$ be the complement of $T\cup E$, and
@@ -1370,19 +1250,16 @@ three owners meet and no encoded holes are needed.
 
 \begin{definition}[Sheets without holes]
     \label{def:lattice_sheet}
-    \lean{TNLean.Lattice.Sheet,
-        TNLean.Lattice.Sheet.regs,
-        TNLean.Lattice.Sheet.regIso,
-        TNLean.Lattice.Sheet.regRef,
-        TNLean.Lattice.Sheet.twoRegIso,
-        TNLean.Lattice.Sheet.changeOwner,
-        TNLean.Lattice.Sheet.birthEnv,
-        TNLean.Lattice.Sheet.swapIn,
-        TNLean.Lattice.Sheet.exchangeEnv,
-        TNLean.Lattice.Sheet.exchangeOp,
-        TNLean.Lattice.unitProdIso₂_act_liftFront,
-        TNLean.Lattice.Sheet.regIso_eq_frontLayoutIso,
-        TNLean.Lattice.Sheet.twoRegIso_eq_twoFrontLayoutIso}
+    \lean{QuantumCircuit.Party.Sheet,
+        QuantumCircuit.Party.Sheet.system,
+        ManyBody.blockConfigEquiv,
+        QuantumCircuit.Party.Sheet.refVec,
+        QuantumCircuit.Party.Sheet.twoConfigEquiv,
+        QuantumCircuit.Party.Sheet.changeOwner,
+        QuantumCircuit.Party.Sheet.birthEnv,
+        QuantumCircuit.Party.Sheet.swapIn,
+        QuantumCircuit.Party.Sheet.exchangeEnv,
+        QuantumCircuit.Party.Sheet.exchangeOp}
     \leanok
     \uses{def:lattice_site_registers,def:peps_frame_sheet_swap,def:peps_frame_buffer_correction}
     A sheet on $\Lambda$ is an owner for each site; its registers are one
@@ -1421,9 +1298,9 @@ three owners meet and no encoded holes are needed.
 
 \begin{lemma}[Birth and death of sheets: bounded change]
     \label{thm:lattice_sheet_birth_bounded}
-    \lean{TNLean.Lattice.Sheet.birth_bounded,
-        TNLean.Lattice.Sheet.death_bounded,
-        TNLean.Lattice.Sheet.changeOwner_birth_owners}
+    \lean{QuantumCircuit.Party.Sheet.birth_bounded,
+        QuantumCircuit.Party.Sheet.death_bounded,
+        QuantumCircuit.Party.Sheet.changeOwner_birth_owners}
     \leanok
     \uses{def:lattice_sheet,lem:peps_frame_splitting,def:peps_frame_birth_map,
         lem:peps_frame_birth_map,def:peps_monomial_parties}
@@ -1454,10 +1331,10 @@ three owners meet and no encoded holes are needed.
 
 \begin{lemma}[Exchange of two sheets: bounded change]
     \label{thm:lattice_sheet_exchange_bounded}
-    \lean{TNLean.Lattice.Sheet.exchange_bounded,
-        TNLean.Lattice.Sheet.renameWord,
-        TNLean.Lattice.Sheet.twoRegIso_renameWord,
-        TNLean.Lattice.Sheet.exchangeOp_eq}
+    \lean{QuantumCircuit.Party.Sheet.exchange_bounded,
+        QuantumCircuit.Party.Sheet.renameWord,
+        QuantumCircuit.Party.Sheet.op_renameWord,
+        QuantumCircuit.Party.Sheet.exchangeOp_eq}
     \leanok
     \uses{def:lattice_sheet,lem:peps_frame_splitting,lem:lattice_exchange_net_map,
         def:peps_monomial_parties}
@@ -1488,17 +1365,16 @@ three owners meet and no encoded holes are needed.
 
 \begin{definition}[Bounded changes of a stack of sheets]
     \label{def:lattice_bounded_change}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.norm_eval_le_norm,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.IsBoundedChange,
-        TNLean.Lattice.stackRegs,
-        TNLean.Lattice.stackVec,
-        TNLean.Lattice.norm_stackVec,
-        TNLean.Lattice.norm_stackVec_le,
-        TNLean.Lattice.framesVec,
-        TNLean.Lattice.framesSpace,
-        TNLean.Lattice.pairRef,
-        TNLean.Lattice.HasBoundedChange,
-        TNLean.Lattice.HasSourceBoundedChange}
+    \lean{QuantumCircuit.Party.OriginalCircuit.norm_toEuclideanLin_op_le,
+        QuantumCircuit.Party.OriginalCircuit.IsBoundedChange,
+        QuantumCircuit.Party.stackSystem,
+        QuantumCircuit.Party.stackVec,
+        QuantumCircuit.Party.norm_stackVec,
+        QuantumCircuit.Party.norm_stackVec_le,
+        QuantumCircuit.Party.framesVec,
+        QuantumCircuit.Party.prodVec,
+        QuantumCircuit.Party.HasBoundedChange,
+        QuantumCircuit.Party.HasSourceBoundedChange}
     \leanok
     \uses{def:peps_circuit_source_bound}
     An original circuit is a bounded change from a vector $x$ to a vector $y$, with
@@ -1530,53 +1406,49 @@ three owners meet and no encoded holes are needed.
 
 \begin{lemma}[Operations that preserve bounded changes of a stack]
     \label{thm:lattice_bounded_change_closure}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsBoundedChange.mono,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.IsBoundedChange.comp_right,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.IsBoundedChange.comp_left,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isBoundedChange_id,
-        TNLean.Lattice.PartyCircuit.Word.isBoundedChange_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.PartyChain.isBoundedChange_toOriginalCircuit,
-        TNLean.Lattice.norm_eval_liftOne_stackVec_sub_le,
-        TNLean.Lattice.nonprivateCount_liftTwo,
-        TNLean.Lattice.participants_liftTwo_subset,
-        TNLean.Lattice.liftOne,
-        TNLean.Lattice.isMonomialBounded_liftTwo,
-        TNLean.Lattice.participants_liftOne_subset,
-        TNLean.Lattice.isExpansionBounded_liftTwo,
-        TNLean.Lattice.liftTwo,
-        TNLean.Lattice.norm_eval_liftTwo_stackVec_sub_le,
-        TNLean.Lattice.isMonomialBounded_liftOne,
-        TNLean.Lattice.isExpansionBounded_liftOne,
-        TNLean.Lattice.nonprivateCount_liftOne,
-        TNLean.Lattice.hasBoundedChange_activate,
-        TNLean.Lattice.hasBoundedChange_liftTwo,
-        TNLean.Lattice.hasBoundedChange_liftOne,
-        TNLean.Lattice.exists_isBoundedChange_of_eq,
-        TNLean.Lattice.HasBoundedChange.perm_left,
-        TNLean.Lattice.HasBoundedChange.perm_right,
-        TNLean.Lattice.hasBoundedChange_refl,
-        TNLean.Lattice.isBoundedChange_liftTwo,
-        TNLean.Lattice.hasBoundedChange_perm_liftOne,
-        TNLean.Lattice.HasBoundedChange.mono,
-        TNLean.Lattice.isBoundedChange_liftOne,
-        TNLean.Lattice.hasBoundedChange_of_perm,
-        TNLean.Lattice.stackVec_append,
-        TNLean.Lattice.exists_reordering_stackVec,
-        TNLean.Lattice.stackRegs_append,
-        TNLean.Lattice.exists_originalCircuit_of_eq,
-        TNLean.Lattice.exists_originalCircuit_stackVec_of_perm,
-        TNLean.Lattice.hasSourceBoundedChange_refl,
-        TNLean.Lattice.HasSourceBoundedChange.perm_right,
-        TNLean.Lattice.hasSourceBoundedChange_activate,
-        TNLean.Lattice.hasSourceBoundedChange_liftTwo,
-        TNLean.Lattice.hasSourceBoundedChange_liftOne,
-        TNLean.Lattice.HasSourceBoundedChange.mono,
-        TNLean.Lattice.hasSourceBoundedChange_of_perm,
-        TNLean.Lattice.isSourceBounded_liftOne,
-        TNLean.Lattice.hasSourceBoundedChange_perm_liftOne,
-        TNLean.Lattice.HasSourceBoundedChange.perm_left,
-        TNLean.Lattice.HasSourceBoundedChange.hasBoundedChange,
-        TNLean.Lattice.isSourceBounded_liftTwo}
+    \lean{QuantumCircuit.Party.OriginalCircuit.IsBoundedChange.mono,
+        QuantumCircuit.Party.OriginalCircuit.IsBoundedChange.comp_right,
+        QuantumCircuit.Party.OriginalCircuit.IsBoundedChange.comp_left,
+        QuantumCircuit.Party.OriginalCircuit.isBoundedChange_of_nonprivateCount_eq_zero,
+        QuantumCircuit.Party.Word.isBoundedChange_toOriginalCircuit,
+        QuantumCircuit.Party.Monomial.isBoundedChange_toOriginalCircuit,
+        QuantumCircuit.Party.norm_op_liftOne_stackVec_sub_le,
+        QuantumCircuit.Party.nonprivateCount_liftTwo,
+        QuantumCircuit.Party.forall_participants_liftTwo,
+        QuantumCircuit.Party.liftOne,
+        QuantumCircuit.Party.isMonomialBounded_liftTwo,
+        QuantumCircuit.Party.forall_participants_liftOne,
+        QuantumCircuit.Party.isExpansionBounded_liftTwo,
+        QuantumCircuit.Party.liftTwo,
+        QuantumCircuit.Party.norm_op_liftTwo_stackVec_sub_le,
+        QuantumCircuit.Party.isMonomialBounded_liftOne,
+        QuantumCircuit.Party.isExpansionBounded_liftOne,
+        QuantumCircuit.Party.nonprivateCount_liftOne,
+        QuantumCircuit.Party.hasBoundedChange_activate,
+        QuantumCircuit.Party.hasBoundedChange_liftTwo,
+        QuantumCircuit.Party.hasBoundedChange_liftOne,
+        QuantumCircuit.Party.exists_isBoundedChange_of_eq,
+        QuantumCircuit.Party.HasBoundedChange.perm_left,
+        QuantumCircuit.Party.HasBoundedChange.perm_right,
+        QuantumCircuit.Party.hasBoundedChange_refl,
+        QuantumCircuit.Party.isBoundedChange_liftTwo,
+        QuantumCircuit.Party.hasBoundedChange_perm_liftOne,
+        QuantumCircuit.Party.HasBoundedChange.mono,
+        QuantumCircuit.Party.isBoundedChange_liftOne,
+        QuantumCircuit.Party.hasBoundedChange_of_perm,
+        QuantumCircuit.Party.exists_relabel_stackVec_of_perm,
+        QuantumCircuit.Party.hasSourceBoundedChange_refl,
+        QuantumCircuit.Party.HasSourceBoundedChange.perm_right,
+        QuantumCircuit.Party.hasSourceBoundedChange_activate,
+        QuantumCircuit.Party.hasSourceBoundedChange_liftTwo,
+        QuantumCircuit.Party.hasSourceBoundedChange_liftOne,
+        QuantumCircuit.Party.HasSourceBoundedChange.mono,
+        QuantumCircuit.Party.hasSourceBoundedChange_of_perm,
+        QuantumCircuit.Party.isSourceBounded_liftOne,
+        QuantumCircuit.Party.hasSourceBoundedChange_perm_liftOne,
+        QuantumCircuit.Party.HasSourceBoundedChange.perm_left,
+        QuantumCircuit.Party.HasSourceBoundedChange.hasBoundedChange,
+        QuantumCircuit.Party.isSourceBounded_liftTwo}
     \leanok
     \uses{def:lattice_bounded_change,thm:peps_original_produced_resource_bounds}
     Let every reference vector of a sheet and the vector $\xi$ of the further
@@ -1622,16 +1494,7 @@ three owners meet and no encoded holes are needed.
 
 \begin{lemma}[The initial private maps of a stack of sheets]
     \label{thm:lattice_stack_initialization}
-    \lean{TNLean.Lattice.splitMap,
-        TNLean.Lattice.splitMap_tmul_one,
-        TNLean.Lattice.norm_splitMap_le,
-        TNLean.Lattice.splitCircuit,
-        TNLean.Lattice.nonprivateCount_splitCircuit,
-        TNLean.Lattice.isExpansionBounded_splitCircuit,
-        TNLean.Lattice.isMonomialBounded_splitCircuit,
-        TNLean.Lattice.participants_splitCircuit_subset,
-        TNLean.Lattice.eval_splitCircuit,
-        TNLean.Lattice.exists_originalCircuit_initial}
+    \lean{QuantumCircuit.Party.exists_productVector_eq_framesVec}
     \leanok
     \uses{def:lattice_bounded_change,thm:lattice_bounded_change_closure}
     Let every sheet of a list be held entirely by one party: all its registers belong
@@ -1652,9 +1515,9 @@ three owners meet and no encoded holes are needed.
 
 \begin{definition}[Stacks of sheets]
     \label{def:lattice_sheet_stack}
-    \lean{TNLean.Lattice.Sheet.refFamily,
-        TNLean.Lattice.Sheet.HasBoundedChange,
-        TNLean.Lattice.Sheet.HasSourceBoundedChange}
+    \lean{QuantumCircuit.Party.Sheet.refVec,
+        QuantumCircuit.Party.HasBoundedChange,
+        QuantumCircuit.Party.HasSourceBoundedChange}
     \leanok
     \uses{def:lattice_sheet,def:lattice_bounded_change}
     The memory of a list of sheets and its reference vector are those of
@@ -1668,10 +1531,9 @@ three owners meet and no encoded holes are needed.
 
 \begin{lemma}[Reference vectors of stacks of sheets]
     \label{lem:lattice_sheet_stack_reference}
-    \lean{TNLean.Lattice.Sheet.norm_refFamily_le,
-        TNLean.Lattice.Sheet.norm_framesVec,
-        TNLean.Lattice.Sheet.pairRef_eq_twoRegIso_symm,
-        TNLean.Lattice.Sheet.finiteDimensional_of_mem_stackRegs}
+    \lean{QuantumCircuit.Party.Sheet.norm_refVec_le,
+        QuantumCircuit.Party.norm_framesVec,
+        QuantumCircuit.Party.Sheet.prodVec_refVec}
     \leanok
     \uses{def:lattice_sheet_stack}
     If $\lVert\Omega\rVert\le1$, the reference vector of every sheet has norm at
@@ -1688,7 +1550,8 @@ three owners meet and no encoded holes are needed.
 
 \begin{lemma}[The initial step for sheets]
     \label{thm:lattice_sheet_initialization}
-    \lean{TNLean.Lattice.Sheet.exists_originalCircuit_initial_of_owner}
+    \lean{QuantumCircuit.Party.Sheet.exists_originalCircuit_framesVec,
+        QuantumCircuit.Party.Sheet.exists_productVector_eq_framesVec}
     \leanok
     \uses{lem:lattice_sheet_stack_reference,thm:lattice_stack_initialization}
     Let $\lVert\Omega\rVert=1$ and let every sheet of a list be held entirely by

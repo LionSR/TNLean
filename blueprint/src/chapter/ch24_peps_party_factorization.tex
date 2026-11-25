@@ -3,17 +3,9 @@
 
 \begin{definition}[The registers of a party]
     \label{def:peps_party_registers}
-    \lean{TNLean.Lattice.PartyCircuit.Word.parties}
-    \lean{TNLean.Lattice.PartyCircuit.Word.owners_mem_parties}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.atParty}
-    \lean{TNLean.Lattice.PartyCircuit.partyLayout}
-    \lean{TNLean.Lattice.PartyCircuit.tensorPartyMaps}
-    \lean{TNLean.Lattice.PartyCircuit.tensorPartyMaps_cons_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.partyLayout_eq_of_atParty_eq}
-    \lean{TNLean.Lattice.PartyCircuit.tensorPartyMaps_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.conj_memCongr_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.norm_conj_memCongr}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.eq_conj_memCongr_of_heq}
+    \lean{QuantumCircuit.Party.PartyCircuit.parties}
+    \lean{QuantumCircuit.Party.Word.usesOnly_parties}
+    \lean{Matrix.piKronecker}
     \leanok
     \uses{def:peps_party_layout}
     For an ordered register list $\ell$ and party $p$, let $\ell_p$ be the sublist of registers owned by $p$ in their original order, with memory $\mathcal H_{\ell,p}$ ($\mathbb C$ when $\ell_p=\emptyset$). Distinct parties $p_1,\ldots,p_s$ define the grouped memory $\bigotimes_{j=1}^s\mathcal H_{\ell,p_j}$, on which party-local maps act by ordered tensor product ($\operatorname{id}_{\mathbb C}$ for $s=0$). In \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} (\texttt{04-compression.tex}, lines 233--251), the party set of a composition includes all register owners and all parties assigned to local operations (including scalar maps $\mathbb C\to\mathbb C$).
@@ -21,32 +13,8 @@
 
 \begin{definition}[Register partitions and grouping]
     \label{def:peps_party_partition}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_nil}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_cons}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_append}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_eq_self_of_owner}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.restrict_eq_nil_of_owner}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.memCongr}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.memCongr_rfl}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_true}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_false}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_true_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_false_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_append_true_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_append_false_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_cons_true_true_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_cons_true_false_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_cons_false_true_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partitionIso_cons_cons_false_false_tmul}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.withoutParty}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.atParty_withoutParty}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mem_withoutParty}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.owners_withoutParty}
-    \lean{TNLean.Lattice.PartyCircuit.partyLayout_withoutParty}
-    \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso}
-    \lean{TNLean.Lattice.PartyCircuit.groupByPartyIso_cons}
+    \lean{ManyBody.RegionConfig}
+    \lean{ManyBody.cutEquiv}
     \leanok
     \uses{def:peps_party_registers}
     For any party subset $A$, associativity, tensor-factor exchanges, and unit identifications with $\mathbb C$ define an order-preserving unitary
@@ -74,24 +42,9 @@
 
 \begin{lemma}[Restriction to selected parties]
     \label{thm:peps_party_restriction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.castLayouts}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sources_castLayouts}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.isAllowed_castLayouts}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.eval_castLayouts_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Circuit.eval_castLayouts}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sources_restrict}
-    \lean{TNLean.Lattice.PartyCircuit.Word.isAllowed_restrict}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localMap_true_eval_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_localMap_false_eval_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_swap_true_true_eval_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_swap_true_false_eval_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_swap_false_true_eval_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_swap_false_false_eval_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_frame_true_eval_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_frame_false_eval_heq}
-    \lean{TNLean.Lattice.PartyCircuit.Word.parties_castLayouts}
-    \lean{TNLean.Lattice.PartyCircuit.Word.parties_restrict}
+    \lean{QuantumCircuit.Party.Word.restrict}
+    \lean{QuantumCircuit.Party.Word.sources_restrict}
+    \lean{QuantumCircuit.Party.Word.isAllowed_restrict}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition}
     For any source-free composition $F$ and party set $A$, retaining the registers and local operations with party in $A$ yields a source-free composition $F_A$ in the same chronological order with party set $\mathcal P(F)\cap A$, and $F_A$ is allowed whenever $F$ is allowed.
@@ -103,7 +56,7 @@
 
 \begin{lemma}[Factorization across a partition of the parties]
     \label{thm:peps_party_binary_factorization}
-    \lean{TNLean.Lattice.PartyCircuit.Word.partitionIso_eval}
+    \lean{QuantumCircuit.Party.PartyCircuit.op_eq_reindex_kronecker_regionOp}
     \leanok
     \uses{def:peps_party_partition,thm:peps_party_restriction}
     For any source-free composition $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ and party set $A$,
@@ -148,10 +101,10 @@
 
 \begin{lemma}[Tensor product of the local maps]
     \label{thm:peps_party_factorization}
-    \lean{TNLean.Lattice.PartyCircuit.norm_tensorPartyMaps_le_one}
-    \lean{TNLean.Lattice.PartyCircuit.Word.exists_tensorPartyMaps}
-    \lean{TNLean.Lattice.PartyCircuit.Word.exists_tensorPartyMaps_parties}
-    \lean{TNLean.Lattice.PartyCircuit.Word.eq_nil_and_eval_eq_id_of_parties_eq_empty}
+    \lean{Matrix.l2_opNorm_piKronecker_le_one}
+    \lean{QuantumCircuit.Party.Word.exists_piKronecker_of_sources_eq_nil}
+    \lean{QuantumCircuit.Party.Word.exists_piKronecker_of_sources_eq_nil}
+    \lean{QuantumCircuit.Party.PartyCircuit.partyOp_of_notMem_parties}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition}
     Let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be an allowed source-free composition (\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, \texttt{04-compression.tex}, lines 233--251), and let $p_1,\ldots,p_s$ be distinct parties with $\mathcal P(F)\subseteq\{p_1,\ldots,p_s\}$. There exist contractions $B_{p_j}:\mathcal H_{\ell,p_j}\to\mathcal H_{\ell',p_j}$ such that
@@ -170,7 +123,7 @@
 
 \begin{lemma}[Prepared pair sources and local contractions]
     \label{thm:peps_prepared_party_maps}
-    \lean{TNLean.Lattice.PartyCircuit.Word.exists_prepared_tensorPartyMaps}
+    \lean{QuantumCircuit.Party.Word.exists_prepared_localOps}
     \leanok
     \uses{def:peps_source_inventory,def:peps_party_registers,def:peps_party_partition}
     Let $P$ be an ordered finite party set and $F:\mathcal H_{\rm in}\to\mathcal H_{\rm out}$ an allowed composition with $\mathcal P(F)\subseteq P$. There exist a normalized source list $S$ with one source per unordered pair in $F$ and contractions $B_p$ ($p\in P$) such that
@@ -190,7 +143,7 @@
 
 \begin{lemma}[Factorization by singleton restrictions]
     \label{thm:peps_actual_singleton_factorization}
-    \lean{TNLean.Lattice.PartyCircuit.Word.groupByPartyIso_eval_eq_tensorRestrictions}
+    \lean{QuantumCircuit.Party.PartyCircuit.op_eq_piKronecker_partyOp}
     \leanok
     \uses{def:peps_party_registers,def:peps_party_partition,
         thm:peps_party_restriction}

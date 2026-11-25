@@ -15,11 +15,6 @@ source and physical input coordinates, following
 
 \begin{definition}[Bases of source and input registers]
     \label{def:peps_source_slot_basis}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.slotBasis_apply}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.preparedInputBasis}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.preparedInputBasis_apply}
-    \leanok
     \uses{def:peps_joint_source_vector}
     For finite orthonormal bases $(u_{e,r})_{r\in I_e}$ of $U_e$ and
     $(v_{e,s})_{s\in J_e}$ of $V_e$, let $\mathcal A=\prod_e(I_e\times J_e)$.
@@ -42,7 +37,7 @@ source and physical input coordinates, following
     \end{align}
 \end{definition}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:peps_source_preparation_sums}
     Induction on the ordered slots shows that tensoring the endpoint bases of
     the first slot with the inductive basis on the remaining slots preserves
@@ -71,7 +66,7 @@ source and physical input coordinates, following
 
 \begin{definition}[Source columns on a prescribed pure input]
     \label{def:peps_pure_source_matrix}
-    \lean{TNLean.Lattice.PartyCircuit.Word.pureSourceMatrix}
+    \lean{QuantumCircuit.Party.Word.pureSourceMatrix}
     \leanok
     \uses{def:peps_source_slot_basis}
     For $\psi\in\mathcal H$, define $A_{T,\psi}\in\C^{M\times\mathcal A}$ by
@@ -84,7 +79,7 @@ source and physical input coordinates, following
 
 \begin{lemma}[Pure-input prepared density coefficients]
     \label{thm:peps_pure_source_density_coefficient}
-    \lean{TNLean.Lattice.PartyCircuit.Word.preparedDensityCoefficient_pure_eq_vecMulVec}
+    \lean{QuantumCircuit.Party.Word.preparedDensityCoefficient_pure_eq_vecMulVec}
     \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
     For any compositions $T,T':\mathcal S\otimes\mathcal H\to\mathcal K$ in the
@@ -107,8 +102,6 @@ source and physical input coordinates, following
 
 \begin{definition}[The product source matrix]
     \label{def:peps_product_source_matrix}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.productSourceMatrix}
-    \leanok
     \uses{def:peps_source_inventory}
     For index sets $K_e$ at the ordered source positions,
     $\mathcal A_K=\prod_e K_e$, and matrices $X_e\in\C^{K_e\times K_e}$, define
@@ -122,7 +115,7 @@ source and physical input coordinates, following
 
 \begin{lemma}[Finite contraction of source columns]
     \label{thm:peps_source_column_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.sourceContraction_columns_eq_mul}
+    \lean{Matrix.sourceContraction_vecMulVec_eq_mul_piKronecker}
     \leanok
     \uses{def:peps_product_source_matrix}
     For finite $K_e$, arbitrary sets $\mathcal R,\mathcal T$, matrices
@@ -153,7 +146,7 @@ source and physical input coordinates, following
 
 \begin{lemma}[Contraction on a prescribed pure input]
     \label{thm:peps_pure_source_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \lean{QuantumCircuit.Party.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
     \leanok
     \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient,
         def:peps_product_source_matrix}
@@ -199,7 +192,8 @@ source and physical input coordinates, following
 
 \begin{lemma}[Mixed products of party matrices]
     \label{thm:peps_party_product_conjugation}
-    \lean{TNLean.Lattice.PartyCircuit.piKronecker_mul_mul_conjTranspose}
+    \lean{Matrix.conjTranspose_piKronecker,
+        Matrix.piKronecker_mul}
     \leanok
     \uses{def:peps_dependent_physical_product}
     For finite $P$, finite input alphabets $I_p$, output alphabets $O_p$, and
@@ -229,8 +223,7 @@ source and physical input coordinates, following
 
 \begin{lemma}[Tracing the private coordinates at each party]
     \label{thm:peps_party_product_partial_trace}
-    \lean{TNLean.Lattice.PartyCircuit.partialTraceRight_prod_eq_piKronecker,
-        TNLean.Lattice.PartyCircuit.partialTraceRight_piKronecker_mul_mul_conjTranspose}
+    \lean{Matrix.partialTraceRight_piKronecker_submatrix}
     \leanok
     \uses{def:peps_dependent_physical_product,
         thm:peps_party_product_conjugation}
@@ -262,7 +255,7 @@ source and physical input coordinates, following
 
 \begin{lemma}[Absorbing a common scalar at one party]
     \label{thm:peps_party_product_scalar}
-    \lean{TNLean.Lattice.PartyCircuit.piKronecker_ite_smul}
+    \lean{Matrix.piKronecker_update_smul}
     \leanok
     \uses{def:peps_dependent_physical_product}
     For finite $P$, $p_0\in P$, rectangular matrices $M_p$, and $\mu\in\C$,
@@ -341,8 +334,8 @@ source and physical input coordinates, following
 
 \begin{definition}[Pair labels of the source slots]
     \label{def:peps_source_pair_index}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.pairIndexEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.pairIndexEquiv_apply}
+    \lean{QuantumCircuit.Party.SourceInventory.pairIndexEquiv}
+    \lean{QuantumCircuit.Party.SourceInventory.pairIndexEquiv_apply}
     \leanok
     \uses{def:peps_source_inventory}
     If a source list $R$ has distinct unordered pair labels covering every
@@ -353,8 +346,8 @@ source and physical input coordinates, following
 
 \begin{lemma}[Number of pair-source slots]
     \label{thm:peps_source_pair_count}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.length_eq_choose}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.length_le_card_sq}
+    \lean{QuantumCircuit.Party.SourceInventory.length_eq_choose}
+    \lean{QuantumCircuit.Party.SourceInventory.length_le_card_sq}
     \leanok
     \uses{def:peps_source_pair_index}
     For the pair slots in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -456,7 +449,7 @@ source and physical input coordinates, following
 \begin{lemma}[Contraction through the source columns]
     \label{thm:peps_actual_pure_source_contraction}
     \leanok
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
     \uses{def:peps_actual_source_column_matrix,def:peps_product_source_matrix,
         thm:peps_pure_source_density_coefficient}
     For private product input $\psi$, monomial choices $\xi,\zeta$, prepared

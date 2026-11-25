@@ -9,7 +9,8 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{definition}[Bases adapted to the party partition]
     \label{def:peps_partition_output_bases}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.regionalOutputIso}
+    \lean{QuantumCircuit.Party.affectedSideReadout,
+        QuantumCircuit.Party.exteriorSideReadout}
     \leanok
     \uses{def:peps_party_partition,
         def:peps_basis_partition_bases,
@@ -30,8 +31,6 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{lemma}[Regrouping physical and discarded coordinates]
     \label{thm:peps_partition_output_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.Word.repr_effectMap}
-    \leanok
     \uses{def:peps_partition_output_bases,
         thm:peps_basis_memory_equalities,
         thm:peps_basis_partition_coordinates,
@@ -44,7 +43,7 @@ All coordinate bases in this section are finite orthonormal bases.
     followed by the $d_i$-coordinate recovers the $(x,i)$-coordinate of $v$.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{def:peps_partition_output_bases}
     The register permutation maps $(a_x\otimes e_y)\otimes(d_i\otimes f_j)$ to
     $(a_x\otimes d_i)\otimes(e_y\otimes f_j)$. Since this map is unitary,
@@ -55,9 +54,6 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{lemma}[Output coordinates under owner relabelling]
     \label{thm:peps_owner_output_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_mapOwner_tensorBasis_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_mapOwner_partitionBasis_coordinates}
-    \leanok
     \uses{thm:peps_partition_output_coordinates,
         thm:peps_basis_owner_coordinates}
     Under any owner relabelling (or composition of two owner relabellings),
@@ -68,7 +64,7 @@ All coordinate bases in this section are finite orthonormal bases.
     above.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:peps_partition_output_coordinates}
     Owner relabelling leaves the underlying register spaces unchanged and
     commutes with list concatenation, so its memory isometry preserves inner
@@ -78,8 +74,8 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{lemma}[Coordinates of a local Schmidt expansion]
     \label{thm:peps_local_schmidt_output_coordinates}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.partition_coordinates_eq_separated}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.mapOwner_mapOwner_coordinates_eq_separated}
+    \lean{QuantumCircuit.Party.Word.kronecker_mulVec_eq_separatedPhysicalCoordinates}
+    \lean{QuantumCircuit.Party.Word.kronecker_mulVec_eq_separatedPhysicalCoordinates}
     \leanok
     \uses{thm:peps_owner_output_coordinates}
     Let $V,W$ be the two local output maps, let $F,G$ be input isometries, and
@@ -115,9 +111,9 @@ All coordinate bases in this section are finite orthonormal bases.
 
 \begin{lemma}[Original physical dimensions after the two owner maps]
     \label{thm:peps_affected_original_dimensions}
-    \lean{TNLean.Lattice.PartyCircuit.Layout.affectedOutputIso}
-    \lean{TNLean.Lattice.PartyCircuit.affectedFamilyPhysicalBasis}
-    \lean{TNLean.Lattice.PartyCircuit.finrank_affectedFamilyPhysicalLayout}
+    \lean{QuantumCircuit.Party.affectedSideEquiv,
+        QuantumCircuit.Party.exteriorSideEquiv}
+    \lean{QuantumCircuit.Party.card_affectedSides_true}
     \leanok
     \uses{def:peps_basis_owner_restriction}
     Let the parties be listed without repetition, with physical space

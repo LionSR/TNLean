@@ -10,7 +10,7 @@ preserving the register spaces and order of operations.
 
 \begin{definition}[Selection of one party]
     \label{def:peps_single_party_selector}
-    \lean{TNLean.Lattice.PartyCircuit.partySelector}
+    \lean{QuantumCircuit.Party.partySelector}
     \leanok
     For $q\in Q$, define $\chi_q:Q\to\{\mathrm{false},\mathrm{true}\}$
     by $\chi_q(x)=\mathrm{true}$ if and only if $x=q$.
@@ -18,15 +18,13 @@ preserving the register spaces and order of operations.
 
 \begin{lemma}[Participating parties after changing owner labels]
     \label{thm:peps_source_free_owner_parties}
-    \lean{TNLean.Lattice.PartyCircuit.Word.parties_mapOwner_of_sources_nil}
-    \leanok
     \uses{def:peps_owner_composition,def:peps_party_registers}
     If $W$ contains no pair-source preparation, then the set of participating
     parties of $W^f$ is the image under $f$ of the set of participating parties
     of $W$, without assuming that $f$ is injective.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{def:peps_owner_composition,def:peps_party_registers}
     By induction on $W$. The owners of a relabeled register list
     are the images of its original owners. Under composition, if $W_1$ and
@@ -39,7 +37,7 @@ preserving the register spaces and order of operations.
 
 \begin{lemma}[Restriction to an owner outside the relabelling range]
     \label{thm:peps_owner_disjoint_restriction}
-    \lean{TNLean.Lattice.PartyCircuit.Word.restrict_mapOwner_eval_eq_id_of_disjoint}
+    \lean{QuantumCircuit.Party.Word.partyOp_coarsen_apply_of_forall_ne}
     \leanok
     \uses{def:peps_single_party_selector,def:peps_owner_composition,
         def:peps_party_registers,thm:peps_owner_composition,

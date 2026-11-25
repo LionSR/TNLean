@@ -556,7 +556,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
 
 \begin{lemma}[Reindexing physical product maps]%
     \label{thm:peps_physical_product_reindex}
-    \lean{TNLean.Lattice.dependentPhysicalProductFamilyMap_reindex_input}
+    \lean{Matrix.piKronecker_mulVec_reindex_columns}
     \leanok
     For a finite set of sites $V$ and finite alphabets $X_v$, write
     $M_F=\bigotimes_{v\in V}F_v$ for the product of local matrices
@@ -573,7 +573,7 @@ standing regime of at least three sites, whereas Lemma~\ref{thm:peps_cycle_two_s
 
 \begin{lemma}[Reflection of permutation invariance by an injective common map]%
     \label{thm:peps_common_map_reflects_invariance}
-    \lean{TNLean.Lattice.invariant_of_commonPhysicalProductFamilyMap_invariant}
+    \lean{Matrix.eq_of_piKronecker_const_mulVec_comp_perm}
     \leanok
     \uses{thm:peps_physical_product_reindex}
     Let $V,X,Y$ be finite, let $F:\C^X\to\C^Y$ be an injective linear map, and

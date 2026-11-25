@@ -8,7 +8,7 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
 
 \begin{lemma}[Columns of an operator and the trace norm]
     \label{thm:peps_ket_column_hilbert_schmidt}
-    \lean{TNLean.Lattice.Compression.sum_norm_sq_le_traceNorm_reindex_sq}
+    \lean{Matrix.sum_norm_sq_le_rectangularTraceNorm_sq}
     \leanok
     For every operator $E$ on a finite-dimensional space with orthonormal
     basis $\{\ket z\}$,
@@ -23,7 +23,7 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
 
 \begin{lemma}[Selection of one index]
     \label{thm:peps_ket_column_selection}
-    \lean{TNLean.Lattice.Compression.exists_ne_zero_norm_sq_le_of_sum}
+    \lean{exists_ne_zero_norm_sq_le_of_sum}
     \leanok
     For vectors $f_z$ and scalars $a_z\in\C$ on a finite index set with
     $\sum_z\lVert f_z\rVert^2\le\eta^2$ and $\sum_z|a_z|^2=1$, there exists
@@ -36,8 +36,8 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
 
 \begin{lemma}[Normalization within twice the error]
     \label{thm:peps_ket_column_normalization}
-    \lean{TNLean.Lattice.Compression.normalize_sub_le_two_mul,
-        TNLean.Lattice.Compression.exists_phase_normalize_sub_le}
+    \lean{normalize_sub_le_two_mul,
+        exists_phase_normalize_sub_le}
     \leanok
     Let $\lVert\Omega\rVert=1$ and $\eta<1$. If $\lVert w-\Omega\rVert\le\eta$,
     then $w\ne0$ and $\lVert w/\lVert w\rVert-\Omega\rVert\le2\eta$.
@@ -52,8 +52,8 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
 
 \begin{lemma}[Nonzero column close to a pure state]
     \label{thm:peps_ket_column_vector}
-    \lean{TNLean.Lattice.Compression.exists_column_ne_zero_of_traceNorm_sub_pure_le,
-        TNLean.Lattice.Compression.exists_eq_column_ne_zero_of_traceNorm_sub_pure_le,
+    \lean{Matrix.exists_column_ne_zero_of_rectangularTraceNorm_sub_pure_le,
+        Matrix.exists_eq_column_ne_zero_of_rectangularTraceNorm_sub_pure_le,
         Matrix.toEuclideanLin_single_one_apply}
     \leanok
     In the vector part of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS}, if
@@ -210,8 +210,8 @@ The following estimates formalize \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
 
 \begin{lemma}[Telescoping a chain of contractions]
     \label{lem:peps_protocol_telescoping}
-    \lean{TNLean.Lattice.PartyCircuit.norm_trajectory_sub_reference_le}
-    \lean{TNLean.Lattice.PartyCircuit.norm_trajectory_le}
+    \lean{TNLean.norm_trajectory_sub_reference_le}
+    \lean{TNLean.norm_trajectory_le}
     \leanok
     For normed spaces $E_t$, linear contractions $S_t\colon E_t\to E_{t+1}$ ($\lVert S_tv\rVert\leq\lVert v\rVert$, $t<n$), and $r_t\in E_t$, the sequence $x_0=r_0$, $x_{t+1}=S_tx_t$ satisfies
     \begin{align}
@@ -226,9 +226,9 @@ The following estimates formalize \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
 
 \begin{lemma}[Error and normalization of the protocol]
     \label{thm:peps_protocol_density}
-    \lean{TNLean.Lattice.PartyCircuit.norm_protocol_sub_reference_le}
-    \lean{TNLean.Lattice.PartyCircuit.rectangularTraceNorm_protocol_density_sub_le}
-    \lean{TNLean.Lattice.PartyCircuit.rectangularTraceNorm_compressed_density_sub_le}
+    \lean{TNLean.norm_protocol_sub_reference_le}
+    \lean{TNLean.rectangularTraceNorm_protocol_density_sub_le}
+    \lean{TNLean.rectangularTraceNorm_compressed_density_sub_le}
     \leanok
     Let $L\geq1$ and $C_{\rm step},C_{\rm hole}\geq0$. Suppose that in Lemma~\ref{lem:peps_protocol_telescoping} one has $n\leq C_{\rm ch}L^3$, $\lVert r_0\rVert\leq1$, $\lVert S_tr_t-r_{t+1}\rVert\leq C_{\rm step}L^{-20}$ ($t<n$), and $r_n=\Omega\otimes\Xi$ in physical-private coordinates with
     \begin{align}
@@ -256,7 +256,7 @@ The following estimates formalize \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
 
 \begin{lemma}[Retained norm and trace of the protocol]
     \label{thm:peps_protocol_retained_norm}
-    \lean{TNLean.Lattice.PartyCircuit.protocol_norm_and_trace_deficit_le}
+    \lean{TNLean.protocol_norm_and_trace_deficit_le}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:peps_protocol_density} (\cite[Section~8.1]{OpenAI2026PolynomialPEPS}), with $\varepsilon = C_{\rm ch}C_{\rm step}L^{-17}$, $\delta = C_{\rm hole}L^{-57}$, and $\rho=\Tr_{\rm private}|\Psi\rangle\langle\Psi|$,
     \begin{align}

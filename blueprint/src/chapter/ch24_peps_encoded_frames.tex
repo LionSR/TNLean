@@ -56,7 +56,7 @@ norm of matrices, rectangular ones included.
     \label{def:peps_frame_hole_encoder}
     \lean{TNLean.PEPS.EncodedFrame.SquarePatch.branch,
         TNLean.PEPS.EncodedFrame.SquarePatch.encoder,
-        TNLean.Lattice.Sheet.stack,
+        TNLean.PEPS.EncodedFrame.stack,
         TNLean.PEPS.EncodedFrame.SquarePatch.card_tag_of_outer_eq_empty,
         TNLean.PEPS.EncodedFrame.SquarePatch.encoder_submatrix_of_outer_eq_empty}
     \leanok
@@ -177,7 +177,7 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Telescoping on a vector]
     \label{lem:peps_frame_telescoping}
-    \lean{TNLean.Lattice.Sheet.norm_act_list_prod_sub_le,
+    \lean{Matrix.norm_toEuclideanLin_list_prod_sub_le,
         TNLean.PEPS.EncodedFrame.norm_act_projProd_sub_le}
     \leanok
     For contractions $A_1,\dots,A_s$ and every vector $\psi$,
@@ -219,13 +219,6 @@ norm of matrices, rectangular ones included.
 
 \begin{definition}[Site registers]
     \label{def:lattice_site_registers}
-    \lean{TNLean.Lattice.Sheet.siteRegs,
-        TNLean.Lattice.Sheet.sites,
-        TNLean.Lattice.Sheet.nodup_sites,
-        TNLean.Lattice.Sheet.mem_sites,
-        TNLean.Lattice.Sheet.sitesEquiv,
-        TNLean.Lattice.Sheet.owner_siteRegs}
-    \leanok
     \uses{def:peps_party_layout}
     For an owner $o$ of each site of a finite set $\Lambda$ and a list $\ell$ of
     sites, the site registers of $\ell$ are one register $\C^q$ for each entry
@@ -236,7 +229,7 @@ norm of matrices, rectangular ones included.
     held by $p$.
 \end{definition}
 
-\begin{proof}\leanok
+\begin{proof}
     Immediate from the definitions.
 \end{proof}
 
@@ -259,14 +252,6 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Canonical coordinates of site registers]
     \label{lem:lattice_site_register_coordinates}
-    \lean{TNLean.Lattice.Sheet.siteVec,
-        TNLean.Lattice.Sheet.siteVec_append,
-        TNLean.Lattice.Sheet.siteVec_congr,
-        TNLean.Lattice.Sheet.siteIsoList,
-        TNLean.Lattice.Sheet.siteIsoList_siteVec,
-        TNLean.Lattice.Sheet.groupIso,
-        TNLean.Lattice.Sheet.groupIso_siteVec}
-    \leanok
     \uses{def:lattice_site_registers}
     For a list $\ell$ of sites, including lists with repetitions, write
     $\ket c_\ell$ for the product basis vector of a configuration $c$ on the
@@ -283,7 +268,7 @@ norm of matrices, rectangular ones included.
     scalar one.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     By induction on the list of registers, identifying $\C^\alpha\otimes\C^\beta$
     with $\C^{\alpha\times\beta}$ at each step.
 \end{proof}
@@ -737,7 +722,7 @@ pair sources with the same constant.
 
 \begin{definition}[Pair-source bound of an original circuit]
     \label{def:peps_circuit_source_bound}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsSourceBounded}
+    \lean{QuantumCircuit.Party.OriginalCircuit.IsSourceBounded}
     \leanok
     \uses{def:peps_original_circuit}
     An original circuit satisfies the pair-source bound with constant $r$
@@ -747,15 +732,14 @@ pair sources with the same constant.
 
 \begin{lemma}[Pair sources of monomials read as circuits]
     \label{lem:peps_circuit_source_bound_monomials}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsSourceBounded.mono,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_castLayouts,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_frameList,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isSourceBounded_appendTail,
-        TNLean.Lattice.PartyCircuit.Word.isSourceBounded_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.PartyChain.isSourceBounded_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.Word.isSourceBounded_toOriginalCircuit_of_one_le,
-        TNLean.Lattice.PartyCircuit.PartyChain.isSourceBounded_toOriginalCircuit_of_one_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.IsSourceBounded.mono,
+        QuantumCircuit.Party.OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero,
+        QuantumCircuit.Party.OriginalCircuit.isSourceBounded_castSystems,
+        QuantumCircuit.Party.OriginalCircuit.isSourceBounded_frame,
+        QuantumCircuit.Party.Word.isSourceBounded_toOriginalCircuit,
+        QuantumCircuit.Party.Monomial.isSourceBounded_toOriginalCircuit,
+        QuantumCircuit.Party.Word.isSourceBounded_toOriginalCircuit_of_one_le,
+        QuantumCircuit.Party.Monomial.isSourceBounded_toOriginalCircuit_of_one_le}
     \leanok
     \uses{def:peps_circuit_source_bound}
     The pair-source bound with constant $r$ implies the bound for every

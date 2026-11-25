@@ -15,7 +15,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
 
 \begin{definition}[A participant root at each original gate]
     \label{def:peps_source_gate_root}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGateRoot}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceGateRoot}
     \leanok
     \uses{def:peps_touched_labels}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, choose a star root $r_g\in C_g$ for each $g\in G$ (Definition~\ref{def:peps_touched_labels}), defining $r:G\to P$.
@@ -24,7 +24,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
 
 \begin{lemma}[The root is an original participant]
     \label{thm:peps_source_gate_root_mem}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sourceGateRoot_mem}
+    \lean{QuantumCircuit.Party.SourceCircuit.sourceGateRoot_mem}
     \leanok
     \uses{def:peps_source_gate_root}
     Every $g\in G$ satisfies $r_g\in C_g$ (Definition~\ref{def:peps_source_gate_root}).
@@ -120,7 +120,7 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
 
 \begin{lemma}[Pairing the ket and bra label sums]
     \label{thm:peps_ordered_gate_label_pair_sum}
-    \lean{TNLean.Lattice.Compression.sum_gateLabels_eq_sum_orderedGateLabelPairs}
+    \lean{Fintype.sum_sum_pi_eq_sum_pi_prod}
     \leanok
     For any matrix family $F:\mathcal K\times\mathcal B\to\C^{I\times J}$,
     \begin{align}
@@ -138,7 +138,7 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
 
 \begin{lemma}[Pairing the weighted ket and bra sums]
     \label{thm:peps_ordered_gate_label_pair_weighted_sum}
-    \lean{TNLean.Lattice.Compression.sum_weighted_gateLabels_eq_sum_orderedGateLabelPairs}
+    \lean{Fintype.smul_sum_sum_pi_eq_smul_sum_pi_prod}
     \leanok
     For any $a_g:K_g\to\C$, $b_g:B_g\to\C$, and $F:\mathcal K\times\mathcal B\to\C^{I\times J}$,
     \begin{align}
@@ -159,7 +159,7 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
 
 \begin{lemma}[Placing gate weights inside the ordered coefficient product]
     \label{thm:peps_ordered_gate_label_averaging}
-    \lean{TNLean.Lattice.Compression.weighted_sum_gateLabels_eq_exterior_smul_orderedGateLabelPairs}
+    \lean{Fintype.smul_sum_sum_pi_eq_smul_sum_pi_prod}
     \leanok
     For any $w_g\in\C$ and $\gamma\in\C$,
     \begin{align}

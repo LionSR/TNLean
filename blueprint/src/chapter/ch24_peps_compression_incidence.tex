@@ -8,39 +8,39 @@ The finite counting statements below are those used in the proof of
 
 \begin{definition}[Source-position endpoints]
     \label{def:compression_source_endpoints}
-    \lean{TNLean.Lattice.Compression.sourceEndpoints}
-    \lean{TNLean.Lattice.Compression.mem_sourceEndpoints}
+    \lean{GateIncidence.sourceEndpoints}
+    \lean{GateIncidence.mem_sourceEndpoints}
     \leanok
     For source positions $e$ with ordered party pairs $(a_e,b_e)$, set $E_e=\{a_e,b_e\}$.
 \end{definition}
 
 \begin{definition}[Corrected parties]
     \label{def:compression_corrected_parties}
-    \lean{TNLean.Lattice.Compression.correctedParties}
-    \lean{TNLean.Lattice.Compression.mem_correctedParties}
+    \lean{GateIncidence.correctedParties}
+    \lean{GateIncidence.mem_correctedParties}
     \leanok
     For a finite set $S$ of source positions, set $A_S=\bigcup_{e\in S}E_e$.
 \end{definition}
 
 \begin{definition}[Lifetime gate incidence]
     \label{def:compression_lifetime_gates}
-    \lean{TNLean.Lattice.Compression.incidentGates}
-    \lean{TNLean.Lattice.Compression.mem_incidentGates}
+    \lean{GateIncidence.incidentGates}
+    \lean{GateIncidence.mem_incidentGates}
     \leanok
     For a finite set $G$ of nonprivate gate occurrences $g$ with finite participant sets $P_g$, set $G(p)=\{g\in G:p\in P_g\}$.
 \end{definition}
 
 \begin{definition}[Gates touching a party set]
     \label{def:compression_touching_gates}
-    \lean{TNLean.Lattice.Compression.gatesTouching}
-    \lean{TNLean.Lattice.Compression.mem_gatesTouching}
+    \lean{GateIncidence.gatesTouching}
+    \lean{GateIncidence.mem_gatesTouching}
     \leanok
     For a finite party set $A$, set $\Gamma(A)=\bigcup_{p\in A}G(p)=\{g\in G:P_g\cap A\ne\varnothing\}$.
 \end{definition}
 
 \begin{lemma}[Endpoint count at one source position]
     \label{thm:compression_endpoint_count}
-    \lean{TNLean.Lattice.Compression.card_sourceEndpoints_le}
+    \lean{GateIncidence.card_sourceEndpoints_le}
     \leanok
     Every source position $e$ satisfies $|E_e|\le2$.
 \end{lemma}
@@ -52,7 +52,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Corrected-party count]
     \label{thm:compression_corrected_party_count}
-    \lean{TNLean.Lattice.Compression.card_correctedParties_le}
+    \lean{GateIncidence.card_correctedParties_le}
     \leanok
     For every finite correction set $S$, $|A_S|\le2|S|$.
 \end{lemma}
@@ -64,7 +64,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Lifetime bound for touching gates]
     \label{thm:compression_touching_gate_count}
-    \lean{TNLean.Lattice.Compression.card_gatesTouching_le}
+    \lean{GateIncidence.card_gatesTouching_le}
     \leanok
     If $|G(p)|\le b$ for every $p\in A$, then $|\Gamma(A)|\le b|A|$.
 \end{lemma}
@@ -76,7 +76,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Affected-gate count for corrected positions]
     \label{thm:compression_affected_gate_count}
-    \lean{TNLean.Lattice.Compression.card_gatesTouching_correctedParties_le}
+    \lean{GateIncidence.card_gatesTouching_correctedParties_le}
     \leanok
     If $|G(p)|\le b$ for every $p\in A_S$, then $|\Gamma(A_S)|\le2b|S|$.
 \end{lemma}
@@ -88,7 +88,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Owner of a corrected source position]
     \label{thm:compression_corrected_owner}
-    \lean{TNLean.Lattice.Compression.owner_mem_gatesTouching_correctedParties}
+    \lean{GateIncidence.owner_mem_gatesTouching_correctedParties}
     \leanok
     Let $o(e)$ be the owner of $e$. If $e\in S$, $o(e)\in G$, and $a_e\in P_{o(e)}$, then $o(e)\in\Gamma(A_S)$.
 \end{lemma}
@@ -100,7 +100,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Exterior gates avoid corrected parties]
     \label{thm:compression_exterior_disjoint}
-    \lean{TNLean.Lattice.Compression.disjoint_participants_of_not_mem_gatesTouching}
+    \lean{GateIncidence.disjoint_participants_of_not_mem_gatesTouching}
     \leanok
     If $g\in G\setminus\Gamma(A)$, then $P_g\cap A=\varnothing$.
 \end{lemma}
@@ -315,14 +315,14 @@ The finite counting statements below are those used in the proof of
 
 \begin{definition}[Ket and bra coefficient cost]
     \label{def:compression_coefficient_cost}
-    \lean{TNLean.Lattice.Compression.ketBraCoefficientCost}
+    \lean{GateIncidence.ketBraCoefficientCost}
     \leanok
     For finite $\Xi$ and $a_\xi\ge0$, set $W(\Xi,a)=(\sum_{\xi\in\Xi}a_\xi)^2$.
 \end{definition}
 
 \begin{lemma}[Double coefficient sum]
     \label{thm:compression_double_coefficient_sum}
-    \lean{TNLean.Lattice.Compression.ketBraCoefficientCost_eq_sum}
+    \lean{GateIncidence.ketBraCoefficientCost_eq_sum}
     \leanok
     $W(\Xi,a)=\sum_{\xi,\zeta\in\Xi}a_\xi a_\zeta$.
 \end{lemma}
@@ -334,7 +334,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{definition}[Affected-position choice cost]
     \label{def:compression_position_choice_cost}
-    \lean{TNLean.Lattice.Compression.correctedPositionChoiceCost}
+    \lean{GateIncidence.correctedPositionChoiceCost}
     \leanok
     For finite $\Xi_g$, weights $a_{g,\xi}\ge0$, and dimensions $n_p\in\mathbb N$, define
     \begin{align}
@@ -345,7 +345,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Corrected-position weighted choice bound]
     \label{thm:compression_position_choice_bound}
-    \lean{TNLean.Lattice.Compression.correctedPositionChoiceCost_le}
+    \lean{GateIncidence.correctedPositionChoiceCost_le}
     \leanok
     If $B,d\ge1$, $|G(p)|\le b$ and $n_p\le d$ for all $p\in A_S$, and $\sum_{\xi\in\Xi_g}a_{g,\xi}\le B$ for all $g\in\Gamma(A_S)$, then $\mathcal C(S)\le(B^{4b}d^4)^{|S|}$.
 \end{lemma}
@@ -357,7 +357,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Explicit monomial enclosure of the choice base]
     \label{thm:compression_choice_monomial_bound}
-    \lean{TNLean.Lattice.Compression.compressionChoiceBase_le_of_monomial_bounds}
+    \lean{GateIncidence.compressionChoiceBase_le_of_monomial_bounds}
     \leanok
     For $L,B,d,C,D\ge0$ and $a,c,b\in\mathbb N$, if $B\le CL^a$ and $d\le DL^c$, then $B^{4b}d^4\le C^{4b}D^4L^{4ba+4c}$.
 \end{lemma}

@@ -9,7 +9,7 @@ contraction of local tensors is proved separately.
 
 \begin{definition}[Distributed construction]
     \label{def:peps_distributed_construction}
-    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction}
+    \lean{QuantumCircuit.Party.DistributedConstruction}
     \leanok
     \uses{def:peps_original_circuit}
     A distributed construction consists of a finite nonempty party set $P$
@@ -34,8 +34,8 @@ contraction of local tensors is proved separately.
 
 \begin{definition}[Original input and physical density]
     \label{def:peps_distributed_construction_density}
-    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.input,
-        TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity}
+    \lean{QuantumCircuit.Party.DistributedConstructionData.input,
+        QuantumCircuit.Party.DistributedConstruction.physicalDensity}
     \leanok
     \uses{def:peps_distributed_construction}
     The input of a distributed construction is the unit product vector
@@ -52,8 +52,8 @@ contraction of local tensors is proved separately.
 
 \begin{lemma}[Subnormalized physical density]
     \label{thm:peps_distributed_construction_density}
-    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.physicalDensity_posSemidef,
-        TNLean.Lattice.PartyCircuit.DistributedConstruction.trace_physicalDensity_le_one}
+    \lean{QuantumCircuit.Party.DistributedConstruction.physicalDensity_posSemidef,
+        QuantumCircuit.Party.DistributedConstruction.trace_physicalDensity_le_one}
     \leanok
     \uses{def:peps_distributed_construction_density}
     The physical density $\rho$ in Definition~\ref{def:peps_distributed_construction_density}
@@ -91,7 +91,7 @@ contraction of local tensors is proved separately.
 
 \begin{lemma}[A fixed inverse power meets the per-gate error tolerance]
     \label{thm:peps_fixed_power_gate_budget}
-    \lean{TNLean.Lattice.PartyCircuit.inversePower_le_sourceGateBudget_half}
+    \lean{QuantumCircuit.Party.inversePower_le_sourceGateBudget_half}
     \leanok
     For $L\ge2$, $C\ge1$, $M,n\in\mathbb N$ with $M\le CL^n$, and $p\in\mathbb R$,
     setting $q=n+\lceil p\rceil_++\lceil16C\rceil_+$ gives
@@ -110,8 +110,8 @@ contraction of local tensors is proved separately.
 
 \begin{lemma}[Monotonicity in the local approximation tolerance]
     \label{thm:peps_original_approximation_budget}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsGateApproximation.mono}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.isGateApproximation_budget_of_power_bound}
+    \lean{QuantumCircuit.Party.EffectCircuit.IsGateApproximation.mono}
+    \lean{QuantumCircuit.Party.EffectCircuit.isGateApproximation_budget_of_power_bound}
     \leanok
     If local gate expansions approximate the original gates within $\delta_1\le\delta_2$,
     they also do so within $\delta_2$ with the same operators, monomial lists,
@@ -150,9 +150,9 @@ contraction of local tensors is proved separately.
 
 \begin{lemma}[Finite expansion bounds and replacement coefficients]
     \label{thm:peps_original_finite_expansion_bound}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_mono}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_isMonomialBounded}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.sum_norm_branchCoefficient_physicalFirstReplacement_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.isMonomialBounded_mono}
+    \lean{QuantumCircuit.Party.OriginalCircuit.exists_isMonomialBounded}
+    \lean{QuantumCircuit.Party.OriginalCircuit.sum_norm_branchCoefficient_replacement_le}
     \leanok
     Every finite original circuit admits $K\in\mathbb N$ (and hence any
     $K'\ge K$) bounding all its gate-expansion lengths. If each monomial has at
@@ -172,7 +172,7 @@ contraction of local tensors is proved separately.
 
 \begin{lemma}[Physical approximation after replacement and sampling]
     \label{thm:peps_sampled_original_density}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_physicalFirst_sourceSample_original_error_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.exists_sourceSample_original_error_le}
     \leanok
     In the density-approximation steps of
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -223,7 +223,7 @@ contraction of local tensors is proved separately.
 
 \begin{lemma}[Sampling from approximate original gates]
     \label{thm:peps_approximate_source_sample}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_sourceSample_approximate_error_le}
+    \lean{QuantumCircuit.Party.EffectCircuit.exists_sourceSample_approximate_error_le}
     \leanok
     Let a finite distributed construction have normalized initial party vectors,
     contraction gates, at most $M$ nonprivate gates, party participation bound
@@ -321,7 +321,7 @@ contraction of local tensors is proved separately.
 
 \begin{lemma}[Trace bounded by the trace norm]
     \label{thm:peps_trace_le_trace_norm}
-    \lean{TNLean.Lattice.Compression.norm_trace_le_rectangularTraceNorm}
+    \lean{Matrix.norm_trace_le_rectangularTraceNorm}
     \leanok
     Every complex square matrix $X$ satisfies
     $\lvert\operatorname{Tr}X\rvert\le\|X\|_1$.
@@ -334,7 +334,7 @@ contraction of local tensors is proved separately.
 
 \begin{lemma}[Adding an absolute error to a pure-state approximation]
     \label{thm:peps_absolute_error_pure_state}
-    \lean{TNLean.Lattice.Compression.rectangularTraceNorm_sub_pure_le_of_retained_density}
+    \lean{Matrix.rectangularTraceNorm_sub_pure_le_of_retained_density}
     \leanok
     Let $\sigma,\rho$ be complex square matrices and $\Omega$ a unit vector.
     If $\|\sigma-\rho\|_1\le\kappa$ and
@@ -356,7 +356,7 @@ contraction of local tensors is proved separately.
 
 \begin{lemma}[Absolute error and retained norm]
     \label{thm:peps_compression_retained_norm}
-    \lean{TNLean.Lattice.PartyCircuit.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le}
+    \lean{QuantumCircuit.Party.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le}
     \leanok
     \uses{def:peps_distributed_construction_density}
     % Source: 04-compression.tex, lines 602--611.

@@ -135,10 +135,10 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{lemma}[The final reference vector]
     \label{thm:peps_final_reference}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_subset_of_nonprivateCount_eq_zero,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero,
+    \lean{QuantumCircuit.Party.OriginalCircuit.isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero,
+        QuantumCircuit.Party.OriginalCircuit.forall_participants_of_nonprivateCount_eq_zero,
+        QuantumCircuit.Party.OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero,
+        QuantumCircuit.Party.OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero,
         TNLean.PEPS.EncodedFrame.eq_trivialTag,
         TNLean.PEPS.EncodedFrame.rawProd_trivialTag,
         TNLean.PEPS.EncodedFrame.Frame.regRef_of_outer_eq_empty,
@@ -367,11 +367,11 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{lemma}[A protocol from a bounded trajectory of sheets]
     \label{thm:peps_protocol_from_bounded_trajectory}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.chainLayout,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.chainStep,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.chainVec,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.chainStep_induction,
-        TNLean.Lattice.PartyCircuit.OriginalCircuit.norm_chainStep_eval_sub_le,
+    \lean{QuantumCircuit.Party.OriginalCircuit.chainSystem,
+        QuantumCircuit.Party.OriginalCircuit.chainStep,
+        QuantumCircuit.Party.OriginalCircuit.chainVec,
+        QuantumCircuit.Party.OriginalCircuit.chainStep_induction,
+        QuantumCircuit.Party.OriginalCircuit.norm_chainStep_op_sub_le,
         TNLean.PEPS.Approximation.card_eventUses_le,
         TNLean.PEPS.Approximation.pow_le_paddedSide,
         TNLean.PEPS.Approximation.finiteDimensional_of_mem_stackRegs,
@@ -460,8 +460,8 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_sampleGuide,
         TNLean.PEPS.Approximation.IsRayConstant.isDisplacedReading_sampleGuide,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_main,
-        TNLean.Lattice.perm_map_update_cons,
-        TNLean.Lattice.perm_map_cons,
+        QuantumCircuit.Party.perm_map_update_cons,
+        QuantumCircuit.Party.perm_map_cons,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_aux,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_mainAux,
         TNLean.PEPS.Approximation.isDisplacedReading_levelGuide,
