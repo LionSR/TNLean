@@ -27,7 +27,7 @@ These coordinates apply to the local contractions in
 
 \begin{definition}[Selected physical coordinate families and party bases]
     \label{def:peps_selected_family_physical_basis}
-    \lean{ManyBody.blockSystem}
+    \lean{QuantumCircuit.Party.SourceCircuit.blockPhys}
     \leanok
     \uses{def:peps_owner_layout,def:peps_family_physical_output}
     For $d:P\to\mathbb N$, let $Q=P\sqcup\{*\}$ with the inclusion $\iota:P\to Q$ of the all-party selection in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}. Grouping the parties along $\iota$, the block of $\iota(p)$ consists of $p$ alone and the exterior block $*$ is empty. Accordingly, set $X_*:=\{\bullet\}$ and $X_{\iota(p)}:=\{0,\ldots,d(p)-1\}$, the physical configurations of the block $q\in Q$.
@@ -58,7 +58,7 @@ These coordinates apply to the local contractions in
 
 \begin{definition}[Original physical configurations]
     \label{def:peps_selected_physical_configurations}
-    \lean{ManyBody.blockConfigEquiv}
+    \lean{QuantumCircuit.Party.SourceCircuit.blockPhysEquiv}
     \leanok
     \uses{def:peps_selected_family_physical_basis}
     The bijection $e:\prod_{q\in Q}X_q\to\prod_{p\in P}\{0,\ldots,d(p)-1\}$ is defined by $e(x)_p:=x_{\iota(p)}$, with inverse $e^{-1}(y)_*=\bullet$ and $e^{-1}(y)_{\iota(p)}=y_p$.

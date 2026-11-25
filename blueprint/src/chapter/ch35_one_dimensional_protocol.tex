@@ -118,11 +118,13 @@ truncation instead.
     Let $\Omega$ be a unit vector on the chain. Initially place the main
     copy at $R_0$ and each auxiliary copy at its specified party $C$.
     There are $1+m+\max\{m-1,0\}$ copies, each held entirely by one
-    party. Take a party's private memory to be the tensor product of
-    the copies it holds, with their product reference vector. These
-    vectors have norm one. Private maps and changes of tensor-factor
-    order prepare the complete copy reference exactly, with no
-    nonprivate operation.
+    party. The memory is the stack of the copies: at every party, the
+    registers of the copies it holds. There are unit vectors $\phi_p$
+    in the memory of each party $p$, the product of the reference
+    vectors of the copies held by $p$, whose product over all parties is
+    the stacked reference vector of the copies. The initial vector is
+    therefore a product vector across parties, and no operation is
+    needed to prepare it.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -130,12 +132,11 @@ truncation instead.
     Each right copy at stage $k$ is held by $P_{k+1}$, and each left
     copy at stage $k+1$ is held by $P_{k+1}$. The copies remain
     distinct even when their holders coincide. Grouping the copies
-    by their holders gives a product across parties; each grouped
-    vector has norm equal to the product of the copy norms, hence one.
-    Lemma~\ref{thm:lattice_sheet_initialization} splits each party's
-    private memory into its labelled copies and restores their prescribed
-    order. Every map is private, and its action on the product vector
-    is exact.
+    by their holders gives, by
+    Lemma~\ref{thm:lattice_sheet_initialization}, a product across
+    parties whose factor at $p$ is the product of the reference vectors
+    of the copies held by $p$; its norm is the product of the copy
+    norms, hence one.
 \end{proof}
 
 \begin{definition}[Block coordinates]
@@ -1094,8 +1095,9 @@ with the retained-copy correction of
     absolute coefficient sum at most one, and at most one normalized
     pair source and one normalized pair effect per monomial.
     At stage zero, position $2$ joins the boundaries of the direct
-    death into $P_1$; positions $3,\ldots,9$ are identity circuits, with
-    zero error and no nonprivate gate. Every original auxiliary label and the order
+    death into $P_1$; positions $3,\ldots,9$ are circuits without gates,
+    consisting of private operations only, with zero error and no
+    nonprivate gate. Every original auxiliary label and the order
     of all spectator occurrences are retained.
 \end{lemma}
 \begin{proof}\leanok
@@ -1134,8 +1136,9 @@ with the retained-copy correction of
     boundary lists is a bounded change from $\psi(\mathcal B_{k,j})$ to
     $\psi(\mathcal B_{k,j+1})$, with participants in $\mathcal S_{k,j}$,
     bounds $r=K=1$ and error $4\delta_L$, and has pair-source bound one.
-    At $k=0$ and $3\le j<10$, require the identity circuit, zero
-    reference error and zero nonprivate count, as in the local conclusion.
+    At $k=0$ and $3\le j<10$, require a circuit without gates (private
+    operations only), zero reference error and zero nonprivate count, as
+    in the local conclusion.
     Put $N=18m$. On the chronological lists $\mathcal G_n$, define
     \begin{align}
         d_n & =
@@ -1178,10 +1181,11 @@ with the retained-copy correction of
         \label{eq:chain_middle_circuit_error}
     \end{align}
     The tail $d_n$ for $n\ge18m$ is the identity. When a first stage
-    exists, its positions $3,\ldots,9$ are identities. If $m=0$, the
+    exists, its positions $3,\ldots,9$ have no gates. If $m=0$, the
     middle is the identity on the common initial and terminal list.
     If $m=1$, it has one eighteen-position stage with the direct
-    left-death boundaries, seven identities and one right auxiliary copy.
+    left-death boundaries, seven positions without gates and one right
+    auxiliary copy.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:chain_stage_incidence,thm:peps_original_chronology_composition,
@@ -1335,7 +1339,8 @@ Definition~\ref{def:chain_open_mps}.
     they are bounded changes between the prescribed boundary references,
     with participants in $\mathcal S_{k,j}$, bounds $r=K=1$, error
     $4L^{-12}$ and pair-source bound one; the seven first-stage padding
-    positions are identities with zero error and zero nonprivate count.
+    positions have no gates (private operations only), zero error and
+    zero nonprivate count.
     Put $N=18m$ and $\varepsilon=4NL^{-12}$.
 
     Let $\mathcal F_0$ be the original ordered initial sheet list.
@@ -1800,8 +1805,9 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     For each $0\le j<18$, $c_{k,j}$ is a bounded change on
     $\mathcal S_{k,j}$ with bounds $r=K=1$, pair-source bound one,
     at most one nonprivate occurrence, and reference error at most
-    $4L^{-12}$. At $k=0$ the positions $3,\ldots,9$ are the
-    identity circuits, have zero error and have no nonprivate occurrence.
+    $4L^{-12}$. At $k=0$ the positions $3,\ldots,9$ are circuits
+    without gates, consisting of private operations only; they have zero
+    error and no nonprivate occurrence.
     Thus these circuits satisfy the entire local conclusion of
     Lemma~\ref{thm:chain_conditional_local_circuits}, including the
     original copy labels and spectator order. No information estimate
@@ -1826,7 +1832,7 @@ The prescribed placement is $\ell(R_i)=i$ and $\ell(P_{j+1})=j$.
     death, these supply precisely the nineteen information
     hypotheses of Lemma~\ref{thm:chain_conditional_local_circuits}.
     The ground-state hypothesis supplies $\|\Omega\|=1$.
-    The resulting circuits retain the seven identity positions; no
+    The resulting circuits retain the seven positions without gates; no
     predecessor $P_0$ or left copy is introduced at stage zero.
 \end{proof}
 

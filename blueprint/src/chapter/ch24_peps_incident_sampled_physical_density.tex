@@ -180,7 +180,7 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     \label{thm:peps_incident_sampled_endpoint_comparison}
     \lean{QuantumCircuit.Party.SourceCircuit.partyOp_sampledEndpointWord_eq_incidentSampledEndpointOp}
     \leanok
-    \uses{thm:peps_sampled_endpoint_incident_comparison,def:peps_incident_sampled_endpoint_word,
+    \uses{def:peps_incident_sampled_endpoint_word,
         def:peps_actual_sampled_endpoint_word,thm:peps_incident_gate_labels}
     For a chronological circuit $\mathcal W:a\to b$, all-party choices $\xi,\zeta$,
     the endpoint matrix families, sample number $k$, and Gaussian arrays $\omega$
@@ -347,24 +347,3 @@ retain every party, and write $p_{\rm all}=g_{\rm all}(p)$.
     Lemma~\ref{thm:peps_actual_pure_sampled_physical_sum}.
 \end{proof}
 
-\begin{lemma}[Restriction of the sampled endpoint word]
-    \label{thm:peps_sampled_endpoint_incident_comparison}
-    \lean{QuantumCircuit.Party.SourceCircuit.partyOp_sampledEndpointWord_eq_incidentSampledEndpointOp}
-    \leanok
-    \uses{thm:peps_source_register_operator_local_congruence,
-        def:peps_incident_sampled_endpoint_word,
-        def:peps_original_sampled_endpoint_factors}
-    The restriction to $p$ of the original sampled endpoint word equals
-    $U_{p,\xi_p,\zeta_p,j_p,\omega}$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{thm:peps_source_register_operator_local_congruence,
-        thm:peps_incident_gate_labels}
-    Both are restrictions to $p$ of endpoint words on the all-party source
-    registers. At every slot with an endpoint at $p$ they use the same source
-    position, the labels of $\xi$ and $\zeta$ there, which are those of
-    $\xi_p$ and $\zeta_p$ (Lemma~\ref{thm:peps_incident_gate_labels}), the same
-    sample index and the same Gaussian array, so
-    Lemma~\ref{thm:peps_source_register_operator_local_congruence} applies.
-\end{proof}

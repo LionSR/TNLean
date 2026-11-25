@@ -1,27 +1,34 @@
-\section{Physical output after exchanging auxiliary registers}
+\section{Physical output of the replacement}
 \label{sec:peps_physical_first_output}
 
 The source replacement of
-\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} has output memory
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS} has at every party
 % Source: 04-compression.tex, lines 199--227.
-$\mathcal A\otimes(\mathcal H\otimes\mathcal E)$, where $\mathcal A$
-contains the retained auxiliary registers, $\mathcal H$ contains the
-original physical registers, and $\mathcal E$ contains the original
-discarded private registers. Write $\tau$ for the factor-exchange isometry
-from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
+$p$ the output space $\mathcal A_p\otimes\mathcal Y_p$, where $\mathcal A_p$
+contains the retained auxiliary registers of $p$ and $\mathcal Y_p$ is the
+original output space of $p$. The original output is read out by a
+contraction $K$ into physical coordinates $\mathcal H$ and discarded
+coordinates $\mathcal E$. The auxiliary registers are read out together with
+the discarded coordinates; no tensor factor is exchanged.
 
-\begin{definition}[Physical-first replacement]
+\begin{definition}[Readout of the replacement]
     \label{def:peps_physical_first_replacement}
     \uses{thm:peps_circuit_effect_error}
-    \lean{QuantumCircuit.Party.EffectCircuit.replacement}
+    \lean{QuantumCircuit.Party.EffectCircuit.replacement,
+        QuantumCircuit.Party.extendedReadout,
+        QuantumCircuit.Party.EffectCircuit.replacementPhysicalDensity}
     \leanok
-    If $R$ is the constructed source-only replacement, define
-    $R_{\rm phys}=\tau R$. The exchange acts on pure tensors by
+    If $R$ is the constructed source-only replacement, with output space
+    $\bigotimes_p(\mathcal A_p\otimes\mathcal Y_p)=\mathcal A\otimes\mathcal Y$,
+    the extended readout $K\otimes\id_{\mathcal A}$ maps it to
+    $\mathcal H\otimes(\mathcal E\otimes\mathcal A)$, and
     \begin{align}
-        \tau\bigl(u\otimes(p\otimes v)\bigr)
-        =p\otimes(u\otimes v).
+        R_{\rm phys} & =(K\otimes\id_{\mathcal A})\,R.
         \label{eq:peps_physical_first_exchange}
     \end{align}
+    For an input $\psi$, the physical state of the replacement is the partial
+    trace over $\mathcal E\otimes\mathcal A$ of
+    $\ket{R_{\rm phys}\psi}\bra{R_{\rm phys}\psi}$.
 \end{definition}
 
 \begin{lemma}[Exact sources recover the replacement physical state]

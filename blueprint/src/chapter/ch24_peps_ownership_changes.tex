@@ -986,15 +986,16 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         Matrix.toEuclideanLin_toPEquiv_toMatrix_single}
     \leanok
     \uses{lem:peps_frame_registers_coordinates}
-    The concatenated register list of two frames is canonically identified via
+    The registers of two frames, taken together at every party, are
+    canonically identified via
     Lemma~\ref{lem:peps_frame_registers_coordinates} with the tensor product of
     their coordinate spaces, mapping product basis vectors to standard basis
     vectors.
 \end{lemma}
 
 \begin{proof}\leanok
-    Combine the two single-frame coordinate isometries of
-    Lemma~\ref{lem:peps_frame_registers_coordinates}.
+    Combine the two single-frame coordinate bijections of
+    Lemma~\ref{lem:peps_frame_registers_coordinates} at every party.
 \end{proof}
 
 \begin{lemma}[The renaming of two sheets behind front blocks]
@@ -1449,10 +1450,11 @@ three owners meet and no encoded holes are needed.
     \leanok
     \uses{lem:lattice_sheet_stack_reference,thm:lattice_stack_initialization}
     Let $\lVert\Omega\rVert=1$ and let every sheet of a list be held entirely by
-    one party. Then the product of the reference vectors of the sheets of every
-    party has norm one, and one private map per party followed by a reordering
-    carries the product of these vectors exactly to the reference vector of the
-    list, with no nonprivate gate. This is the case without holes of
+    one party. Then at every party $p$ the product $\phi_p$ of the reference
+    vectors of the sheets held by $p$ has norm one, the product over all parties
+    of the $\phi_p$ is the reference vector of the list, and one local operation
+    at every party prepares it exactly from the one-dimensional input, with no
+    nonprivate gate. This is the case without holes of
     Lemma~\ref{thm:lattice_stack_initialization}.
 \end{lemma}
 
