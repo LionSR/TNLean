@@ -534,8 +534,6 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{lemma}[Coordinate endpoint spaces recover the fixed source list]
     \label{thm:peps_partial_slot_coordinate_layout}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.slotLayout_partialSlots_eq_layout}
-    \leanok
     \uses{def:peps_partial_fixed_positions,thm:peps_partial_fixed_layout}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, for a
     chronological word $W:a\to b$ and $\mathcal A\subseteq P$ with retained
@@ -547,7 +545,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 253--267 and 342--417.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:peps_partial_fixed_layout}
     Follows directly from the slot-space specification in
     Lemma~\ref{thm:peps_partial_fixed_layout}.
@@ -555,8 +553,6 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{lemma}[Selected source lists in two owner groupings]
     \label{thm:peps_singleton_all_source_layout}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mapOwner_atParty_partialSlots_eq_allResidualSourceLayout}
-    \leanok
     \uses{thm:peps_partial_slot_coordinate_layout,thm:peps_incident_gate_labels,
         def:peps_affected_owner,def:peps_all_party_source_registers}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, fix $p\in P$, let
@@ -570,7 +566,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 253--267, 342--417 and 409--434.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:peps_partial_slot_coordinate_layout,thm:peps_partial_fixed_layout,
         thm:peps_incident_gate_labels,def:peps_affected_owner}
     By Lemma~\ref{thm:peps_partial_slot_coordinate_layout},
@@ -583,7 +579,7 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{definition}[The source-to-output word from incident labels]
     \label{def:peps_incident_source_word}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.incidentSourceWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.incidentSourceOp}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_partial_source_choices,
         def:peps_canonical_source_residual,thm:peps_singleton_all_source_layout,
@@ -604,8 +600,6 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{lemma}[No pair preparations in the incident-label word]
     \label{thm:peps_incident_source_word_sources}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sources_incidentSourceWord}
-    \leanok
     \uses{def:peps_incident_source_word}
     For every incident label assignment $\eta$ and product input $\psi$ in
     Definition~\ref{def:peps_incident_source_word}, $K_{p,\eta}$ has empty
@@ -613,7 +607,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 253--267, 409--434 and 565--588.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{def:peps_incident_source_word,thm:peps_canonical_source_recovery,
         thm:peps_source_preparation,thm:peps_party_restriction,
         def:peps_owner_composition}
@@ -627,8 +621,6 @@ complete operators. We give the corresponding exact constructions.
 
 \begin{lemma}[Selected original lists in two owner groupings]
     \label{thm:peps_singleton_all_original_layout}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.mapOwner_selected_originalLayout_eq}
-    \leanok
     \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
         def:peps_owner_layout,thm:peps_party_restriction}
     In the notation of Lemma~\ref{thm:peps_singleton_all_source_layout}, for
@@ -642,7 +634,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 409--434 and 565--588.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
         def:peps_owner_layout,thm:peps_party_restriction}
     Induct on $\ell$ using Definition~\ref{def:peps_affected_owner},

@@ -363,9 +363,8 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
   laws of its two group homomorphisms.
-- **Helper:** `Matrix.sitePermMatrix_one` in `TNLean/Lattice/SiteSymmetry.lean`;
-  moved to QICLean as `ManyBody.sitePermOp_one` in
-  `QICLean/ManyBody/Sites/Relabel.lean`.
+- **Helper:** `ManyBody.sitePermOp_one` in `QICLean/ManyBody/Sites/Relabel.lean`
+  (QICLean dependency).
 - **Occurrences:** the arbitrary-observable ground-space power formula in
   `TranslationGroundSpace.lean`, and the two translation-orbit arguments in
   `TranslationFiniteOrbitCommutator.lean`.
@@ -377,9 +376,8 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** An index whose chosen anchor is a site has support containing that
   site. Monotonicity of finite sums of nonnegative weights therefore bounds the
   anchor sum by the support sum.
-- **Helper:** `sum_weight_anchor_le_of_support_budget` in
-  `TNLean/Lattice/GraphDegreeGrowth.lean`; moved to QICLean in
-  `QICLean/ManyBody/Dynamics/GraphGrowth.lean`.
+- **Helper:** `ManyBody.sum_weight_anchor_le_of_support_budget` in
+  `QICLean/ManyBody/Dynamics/GraphGrowth.lean` (QICLean dependency).
 - **Refactored occurrences:** the two-dimensional basis sum in `LowEnergyBasisUniform.lean`,
   the arbitrary-dimensional sum in `LowEnergyBasisUniformGeneral.lean`, and
   the actual truncated-term sum in `LowEnergyBasisTruncatedUniform.lean`.
@@ -389,14 +387,14 @@ abstracted — record why, so it is not re-proposed).
 
 ### Norm of a ground-space compression — promoted (2026-10-28)
 
-- **Seen:** `Lattice/LowEnergyBasisConstruction.lean`,
-  `Lattice/LowEnergyBasisUniform.lean`, and the normalization of the general
-  recursive basis theorem in `Lattice/LowEnergyBasisUniformGeneral.lean`.
+- **Seen:** the former TNLean modules `LowEnergyBasisConstruction`,
+  `LowEnergyBasisUniform` (now `QICLean/ManyBody/Hamiltonian/LowEnergyBasisUniform.lean`),
+  and the normalization of the general recursive basis theorem in
+  `LowEnergyBasisUniformGeneral`, all since moved to QICLean.
 - **Pattern:** Restrict a ground compression to its invariant ground eigenspace,
   compare its operator norm with the ambient compression, and then with the
   original term norm.
-- **Helper:** `norm_groundSpaceCompression_le` in
-  `TNLean/Lattice/LowEnergyBasisConstruction.lean`; moved to QICLean, where the
+- **Helper:** formerly `norm_groundSpaceCompression_le`; in QICLean the
   ground compression is a `subspaceCompression` and the bound is the
   `subspaceCompression` norm lemma.
 - **Decision:** The normalized basis arguments use this mathematical norm bound
@@ -469,20 +467,6 @@ abstracted — record why, so it is not re-proposed).
   coverage. The `ViableSet/Basic.lean` consumer introduced by PR #10182 is included;
   its former candidate entry is consolidated here. Tracked in #10192.
 
-### Tensor forms from product generators — promoted (2026-10-23)
-
-- **Pattern:** Establish a linear tensor form for every product generator,
-  then extend it to all operators supported on the same set.
-- **Seen:** Four tensor-form proofs in
-  `Lattice/Sheet/Splitting.lean` and
-  `Lattice/Sheet/RegionalOperatorForms.lean`.
-- **Abstraction:** The existing
-  `TNLean.Lattice.Sheet.exists_eq_of_mem_supportedOperators` extends the
-  generator statement by linearity.
-- **Notes:** All four proofs use this declaration. The first- and last-region
-  forms require only the two off-support identity restrictions; they do not
-  repeat the linear-span induction or introduce another tactic.
-
 ### Raising a time bound inside a light-cone exponential — promoted (2026-10-25)
 
 - **Pattern:**
@@ -525,10 +509,10 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** `Matrix.isHermitian_sum T fun i hi ↦ hh i (hT hi)` for `hT : T ⊆ S`.
 - **Seen:** Five occurrences across three files: three in
-  `TNLean/Lattice/ClusterExpansion/ClusterPart.lean` and one each in
-  `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
-  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`, all three since
-  moved to QICLean's `Analysis/ClusterExpansion`.
+  `QICLean/Analysis/ClusterExpansion/ClusterPart.lean` and one each in the
+  former TNLean modules `ClusterExpansion/ThermalProduct` and
+  `ClusterExpansion/TruncatedPositivity`, all three since moved to QICLean's
+  `Analysis/ClusterExpansion`.
 - **Abstraction:** `Matrix.isHermitian_sum_of_subset` in
   `QICLean/Algebra/Hermitian/HermitianPartSum.lean` (QICLean dependency); all five occurrences use the theorem.
 - **Notes:** Retains the additive/star assumptions of `Matrix.isHermitian_sum`;
@@ -542,7 +526,7 @@ abstracted — record why, so it is not re-proposed).
   isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
   ```
 - **Seen:** 5 occurrences across 3 files: three in
-  `TNLean/Lattice/GaussianFilteredTermLocalization.lean` (since moved to
+  the former TNLean module `GaussianFilteredTermLocalization` (since moved to
   QICLean), one each in
   `QICLean/ManyBody/Dynamics/GraphLocalization.lean` and
   `QICLean/ManyBody/Dynamics/CommutatorRecursion.lean`.
@@ -556,12 +540,12 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Bound the integral of `|t|` against a centred Gaussian, either
   by `√(2h/π)` or by the simpler `√h`.
-- **Seen:** The tail specialization in `Lattice/GaussianFilteredIncrement.lean`
+- **Seen:** The tail specialization in the former TNLean module `GaussianFilteredIncrement`
   and the independent variance argument in `MPS/AreaLaw/ProjectorFactorization/GaussianTimeAverage.lean`.
   The additional proof reported in #9945 is already absent from main.
 - **Abstraction:** `GaussianFilter.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi`
   specializes the existing tail bound to zero; `integral_abs_gaussianReal_le`
-  follows by `2 ≤ π`. Both live in `Lattice/GaussianTailMoment.lean`.
+  follows by `2 ≤ π`. Both live in `QICLean/Analysis/Calculus/Kernel.lean` (QICLean dependency).
 - **Notes:** The filtered increment, time average, interaction picture and
   boundary localization use these shared facts. Zero variance needs no extra
   assumption. No new tactic or independent moment proof is introduced.
@@ -687,22 +671,6 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** Occurrence tags and both link kinds remain distinct. The counting
   proof occurs once; numerical specialization does not repeat the finite union.
 
-### Product-basis vectors on concatenated register lists — promoted (2026-10-18)
-
-- **Pattern:** Split a product basis vector at a list boundary, retaining the
-  specified equalities of register lists and their canonical memory maps.
-- **Seen:** The former concatenation inductions `rawAppend_siteVec`
-  in `MPS/AreaLaw/SweepPreparation/ProtocolTerminalWord.lean` and `append_siteVec_transport`
-  in `MPS/AreaLaw/SweepPreparation/ProtocolTerminalReference.lean`.
-- **Abstraction:** `TNLean.Lattice.Sheet.siteVec_append` in
-  `PEPS/Approximation/SiteVectorAppend.lean`.
-- **Refactor:** `packMain_siteVec` and `append_siteVec_heq` apply the shared
-  identity directly; their two private aliases have been removed.
-- **Notes:** The identity permits repeated sites and owners. The empty list
-  contributes the scalar one. The separate mapped-label identities below
-  are not further copies of this concatenation induction; no third identical
-  occurrence is claimed.
-
 ### Unit logarithm from a threshold at least three — promoted (2026-10-18)
 
 - **Pattern:**
@@ -812,11 +780,11 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Assemble the five `OriginalCircuit.IsBoundedChange` fields for
   `liftOne` or `liftTwo`: transport the nonprivate count, participants, expansion
   bound, monomial bound and error estimate through untouched spectator sheets.
-- **Seen:** `hasBoundedChange_liftOne`, `hasBoundedChange_liftTwo`
-  (`Lattice/Sheet/StackChange.lean`) and their source-bounded forms
-  (`Lattice/Sheet/StackSourceBoundedChange.lean`).
-- **Abstraction:** `TNLean.Lattice.isBoundedChange_liftOne` and
-  `isBoundedChange_liftTwo` in `Lattice/Sheet/StackChange.lean`, stated for the fixed
+- **Seen:** `hasBoundedChange_liftOne`, `hasBoundedChange_liftTwo` and their
+  source-bounded forms, now in `QICLean/Circuit/Party/Sheet/StackChange.lean`.
+- **Abstraction:** `QuantumCircuit.Party.isBoundedChange_liftOne` and
+  `isBoundedChange_liftTwo` in `QICLean/Circuit/Party/Sheet/StackChange.lean`
+  (QICLean dependency), stated for the fixed
   lifted circuit over any type of sheets; all four results now use them, and the
   encoded-frame forms in `PEPS/Approximation/Frames/SheetStackChange.lean` read them at the
   frames.
@@ -827,9 +795,10 @@ abstracted — record why, so it is not re-proposed).
   a theorem needs no sign hypothesis on `C`, and transport the given bound along
   `C * L ^ k ≤ max C 0 * L ^ k` for `0 ≤ L`.
 - **Seen:** the compression theorems and the dyadic protocol, in
-  `UniformApproximateSampledNetwork.lean`, `UniformMessageGateCompression.lean` and
-  `DyadicProtocolCompression.lean` under `TNLean/PEPS/Approximation/`.
-- **Abstraction:** `TNLean.Lattice.Compression.mul_pow_le_max_zero_mul_pow` in
+  `TNLean/Network/SampledApproximation/UniformApproximateSampledNetwork.lean`,
+  `TNLean/PEPS/Approximation/PartyCircuit/UniformMessageGateCompression.lean` and
+  `TNLean/PEPS/Approximation/Protocol/DyadicProtocolCompression.lean`.
+- **Abstraction:** `TNLean.Network.mul_pow_le_max_zero_mul_pow` in
   `UniformApproximateSampledNetwork.lean`.
 - **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 (20 added, 11
   removed) across the three changed modules, since the new lemma and its docstring outweigh the
@@ -1050,26 +1019,15 @@ abstracted — record why, so it is not re-proposed).
   `horizontalSlice_twoSidedCompression`, now in `ReflectedMarkedChain.lean`.
   No statement or tag changes.
 
-### Membership in composed gate expansions — promoted (2026-10-08)
-
-- **Pattern:** Decompose membership in the ordered Cartesian gate expansion
-  into membership of the first and second original monomials.
-- **Seen:** `PartyGateComposition.isAllowed_comp`,
-  `PartyGateComposition.effectCount_comp_le`, and
-  `MessageMonomial.isAllowed_effectCount_expand` use the same decomposition.
-- **Abstraction:** `TNLean.Lattice.PartyCircuit.PartyGate.mem_comp`, using Mathlib's
-  `List.mem_flatMap` and `List.mem_map` once at the defining composition.
-- **Refactor:** All three consumers use this characterization directly;
-  no custom tactic or extra membership definition is introduced.
-
 ### Telescoping two contraction compositions — promoted (2026-10-08)
 
 - **Pattern:** Expand `B ∘ A - D ∘ C` as `B ∘ (A - C) + (B - D) ∘ C`,
   then apply the triangle inequality and operator-norm submultiplicativity.
 - **Seen:** The identical 17-line proof in `EffectCircuitError` and the
   approximate-gate error development; both chronological induction proofs use it.
-- **Abstraction:** The existing `TNLean.Lattice.PartyCircuit.norm_comp_sub_comp_le_one`
-  is public in `EffectCircuitError`; `ApproximateCircuitError` imports it.
+- **Abstraction:** The matrix form is QICLean's `Matrix.norm_mul_sub_mul_le` in
+  `QICLean/Analysis/Norm/ContractionChain.lean` (QICLean dependency), used by the
+  effect-circuit and approximate-gate error estimates of `QICLean/Circuit/Party`.
 - **Refactor:** Removed the second proof. The original signature and proof are
   unchanged. The related three-factor estimate in the symmetry development has
   different hypotheses and is outside this two-factor statement.
@@ -1274,14 +1232,13 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** use `Word.mapPair_spec` to obtain an allowed source-free word,
   use `Word.eval_mapPair_source` to transform the first pair vector, and compose
   the identity on the right with the unchanged tail preparation.
-- **Seen:** former private proofs `pair_cons_mapIsometry_expands` in
-  `TNLean/Lattice/PartyCircuit/FiniteSourcePreparation.lean` and
-  `common_pair_cons_expands` in
-  `TNLean/Lattice/PartyCircuit/CommonSourcePreparation.lean`.
+- **Seen:** former private proofs `pair_cons_mapIsometry_expands` and
+  `common_pair_cons_expands` in the former TNLean party-circuit modules
+  `FiniteSourcePreparation` and `CommonSourcePreparation`.
 - **Abstraction:** the theorem
-  `TNLean.Lattice.PartyCircuit.SourceInventory.Expands.cons_mapL` in
-  [SourcePairMaps.lean](../TNLean/Lattice/PartyCircuit/SourcePairMaps.lean) takes the two
-  continuous linear maps and their operator-norm bounds. Issue #8973 requests
+  `QuantumCircuit.Party.SourceInventory.Expands.cons_mapL` in
+  `QICLean/Circuit/Party/Source/Preparation.lean` (QICLean dependency) takes the two
+  local maps and their norm bounds. Issue #8973 requests
   the common lemma; the two private copies are removed, rather than retained
   as aliases. Both existing family theorem statements remain unchanged.
 - **Refactor:** `SourceInventory.common_ofSlots_expands` and
@@ -1421,18 +1378,6 @@ abstracted — record why, so it is not re-proposed).
   (`DyadicUnmodifiedVertices.lean`).
 - **Notes:** −26 net lines together with the memory-identification entry
   below. No theorem statement changed and no import was added.
-
-### Backward layout memory identification — promoted (2026-10-11)
-
-- **Pattern:** the symmetric form of `Layout.memCongr`, identifying the memory
-  of `b` with that of `a` along `a = b` (`04-compression.tex`, lines 246–267).
-- **Seen:** a public copy in `UnitMemoryCoordinates.lean` and private copies in
-  `GroupedBlockMap.lean` and `WordOwnerMap.lean`.
-- **Abstraction:** `TNLean.Lattice.PartyCircuit.Layout.memCongr_symm`, moved next to
-  `memCongr` in `TNLean/Lattice/PartyCircuit/PartyPartition.lean`; the duplicates
-  are deleted.
-- **Notes:** the full name is unchanged, so the existing blueprint reference
-  still resolves.
 
 ### Homogeneous birth ownership and inner-square membership — promoted (2026-10-11)
 
@@ -5340,27 +5285,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   private free-source coordinate-norm helper is deleted. All public statements
   remain unchanged. The general lemma permits rectangular matrices and empty bases.
 
-### reordering words of a party layout — promoted
-
-- **Pattern:** a word of exchanges of tensor factors, built by recursion or
-  composition, gets a lemma that it is allowed, uses any given parties and has
-  no pair source, followed by three one-line projections.
-- **Helper:** the predicate `PartyCircuit.Word.IsReordering` with the simp lemmas
-  `isReordering_id`, `isReordering_swap`, `isReordering_comp_iff`,
-  `isReordering_frame_iff`, `isReordering_frameList_iff` and the projections
-  `IsReordering.isAllowed`, `IsReordering.usesOnly` and
-  `IsReordering.sourceCount_eq`, in
-  `TNLean/Lattice/PartyCircuit/SiteRegisters.lean`.
-- **Call sites:** `SiteRegisters.lean`, `Lattice/Sheet/Reordering.lean`,
-  `Lattice/Sheet/Registers.lean`, `Lattice/Sheet/TwoRegisters.lean`,
-  `RegisterReordering.lean`, `TwoSheetRegisters.lean` and
-  `FrameBoundedChanges.lean` (2026-10-09). A composite of reorderings closes
-  by `simp [w]`; a word with local maps passes the projections to `simp` as
-  conditional rewrites.
-- **Notes:** when a recursive word's type differs from the type of its
-  unfolding only up to definitions such as `siteRegs`, `simp` cannot match
-  `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
-
 ## Candidates
 
 ### Transporting three decoded Gram-factor bounds — candidate (2026-11-04)
@@ -5436,7 +5360,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 - **Pattern:** `congr 1` / `push_cast` / `ring` (14 sites), `cases h` /
   `cases h'` / `rfl` and `cases ha` / `cases hb` / `rfl` for cast lemmas
-  (19 sites in `Lattice/PartyCircuit/`), and `ext x` / `constructor` /
+  (19 sites in the former TNLean party-circuit modules), and `ext x` / `constructor` /
   `· intro hx` for set extensionality (10 sites).
 - **Reason:** each is a sequence of standard tactics with no shared
   mathematical content and no shorter spelling (`subst h h'; rfl` saves one
@@ -5694,9 +5618,11 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** Choose an actual configuration in the region carrying an identity
   factor, restrict each outside matrix to that configuration, and retain the
   same number of summands in the operator Schmidt decomposition.
-- **Seen:** The left-factor argument in
-  `TNLean/Lattice/Sheet/LeftSupportedSchmidtRank.lean` and the right-factor
-  argument in `TNLean/Lattice/Sheet/SupportedSchmidtRank.lean` (PR #10029).
+- **Seen:** The left-factor argument
+  `ManyBody.exists_reindex_threeCutEquiv_eq_kronecker_one_operatorSchmidtRank_le` and the
+  right-factor argument
+  `ManyBody.exists_reindex_threeCutEquiv_eq_reindex_one_kronecker_operatorSchmidtRank_le`,
+  both now in `QICLean/ManyBody/Sites/ThreeRegion/Cut.lean` (first written in PR #10029).
 - **Abstraction (proposed):** If another use appears, first seek a lemma saying
   that restriction by separate coordinate maps preserves a product
   decomposition with the same number of summands.
@@ -7741,8 +7667,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   every stage below the current index; composition forms the conjunction of
   the preceding bound and the last stage's bound.
 - **Seen:** `OriginalCircuit.isExpansionBounded_sequence` and
-  `OriginalCircuit.isMonomialBounded_sequence` in
-  `TNLean/Lattice/PartyCircuit/OriginalCircuitSequence.lean`, and formerly
+  `OriginalCircuit.isMonomialBounded_sequence`, now in
+  `QICLean/Circuit/Party/Original/Sequence.lean`, and formerly
   `DyadicProtocol.isExpansionBounded_chain` and
   `DyadicProtocol.isMonomialBounded_chain` in
   `TNLean/PEPS/Approximation/Protocol/DyadicProtocolCompression.lean`: four
@@ -7751,7 +7677,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `OriginalCircuit.sequence` of the protocol changes, and every `chain` lemma
   (counts, participation, participating sets, expansion and monomial bounds)
   is a one-line instance of the generic `sequence` lemma. Two inductions
-  remain, both in `OriginalCircuitSequence.lean`. Before adding a further
+  remain, both in QICLean's `Original/Sequence.lean`. Before adding a further
   gate-expansion property, derive it from a common occurrence-wise
   description, as in the existing retained-memory entry.
 - **Notes:** The gate and lifetime sum identities in the same module use the
@@ -8364,30 +8290,6 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The two occurrences do not justify another exported quotient
   wrapper; the underlying estimates stay with the actual periodic observables.
 
-### Bilinear identities for two pair sources — candidate (2026-10-07)
-
-- **Pattern:** Reduce an identity involving two arbitrary bipartite source
-  vectors to pure tensors by two tensor-product inductions. Linearity handles
-  the additive cases; tensor associators and exchanges then evaluate explicitly.
-- **Seen:** `eval_combineSources` in
-  `TNLean/Lattice/PartyCircuit/PartyLayout.lean` and
-  `eval_expandCombinedPair` in
-  `TNLean/Lattice/PartyCircuit/PairSourceExpansion.lean` (two occurrences).
-- **Abstraction:** At the next occurrence, consider a bilinear extensionality
-  lemma for maps on two tensor products. The existing `clm_ext_tmul` and
-  `clm_ext_tmul₃` already handle identities between continuous linear maps
-  with one tensor-product input; use those whenever the map has that form.
-- **Reuse (2026-10-08):** The two new concatenation-partition coherence
-  proofs in `PartyPartitionAppend.lean` use Mathlib's existing
-  `TensorProduct.ext_fourfold'`. After writing the two operations as linear
-  maps on `(M ⊗ N) ⊗ (P ⊗ Q)`, equality reduces directly to four elementary
-  factors. This removes both proposed additional double inductions. No new
-  theorem or tactic is needed; the older two source-combination calculations
-  remain the two occurrences listed above.
-- **Notes:** The endpoint-reversal identity uses `clm_ext_tmul`. Exchanging
-  complete source blocks reuses the preparation tensor identity and the
-  register-block exchange theorem. Neither requires another double induction.
-
 ### Tensor maps under equal filtered layouts — promoted (2026-10-13)
 
 - **Pattern:** Identify equal owner-filtered memories, transport their tensor
@@ -8580,20 +8482,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   Corrected source reaggregation uses the same lemma.
 - **Decision:** Ordinary finite-sum and matrix identities suffice. No tactic
   or special simplification attribute is needed.
-
-### Exterior ownership of a placed block — promoted (2026-10-08)
-
-- **Pattern:** If no participant of a placed gate is affected, every register
-  in its transported layout has the exterior owner.
-- **Helper:** `Layout.affectedOwner_mapOwner_eq_none` in
-  `TNLean/Lattice/PartyCircuit/SourceOwnerSupport.lean`, using
-  `List.mem_map` and the existing pointwise `affectedOwner_eq_none`.
-- **Refactored occurrences:** The private proof in
-  `DistributedSourceComposition.lean` is removed; its gate constructor,
-  `PartialSourceEvaluation.eval_partial_gate`, and the substituted gate
-  constructor in `SourceCircuitSubstitution.lean` use the shared lemma.
-- **Decision:** One layout-membership lemma removes the repeated argument;
-  no further automation is required.
 
 ### Complementary-slice reconstruction — candidate (2026-10-07)
 
@@ -8921,23 +8809,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   A fourth independent property of all gate expansions should be derived from a
   common occurrence-wise description before adding another structural induction.
 
-### Evaluation under equal register lists — promoted (2026-10-08)
-
-- **Pattern:** Apply a word whose input and output register lists have been
-  identified to a vector identified with the original input.
-- **Reuse:** `Word.eval_castLayouts_apply_heq` in
-  `TNLean/Lattice/PartyCircuit/WordEvaluationTransport.lean` is the existing checked
-  public proof from `SourceRegisterPermutation`. Its lower import position makes
-  it available to `SourceSlotMaps`, `SelectiveSourcePreparation`,
-  `SourceRegisterPermutation`, and `EffectCircuitPreparation`.
-- **Refactor:** Remove the three identical private copies and move the public
-  proof unchanged. Every call now uses the same declaration. Source inventories,
-  prepared vectors, public hypotheses, and conclusions are unchanged.
-- **Scouting:** `Circuit.eval_castLayouts_heq` already identifies the two maps;
-  the value statement additionally identifies their dependent input vectors.
-  Its proof uses core `congrArg`, `eq_of_heq`, and `heq_of_eq`; no custom tactic
-  or new generic congruence theorem is introduced.
-
 ### Physical projection coordinates — promoted (2026-10-08)
 
 - **Pattern:** Taking a physical basis component and then a discarded coordinate
@@ -9093,22 +8964,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   corollary is appropriate if the same conversion occurs in another module;
   the underlying matrix-action identity is already shared.
 
-### Excluding a party outside the image of an owner map — candidate (2026-10-11)
-
-- **Pattern:** Rewrite the parties of a restriction as a filtered image,
-  extract the original owner from image membership, and contradict the
-  selector using exclusion from the owner map. The no-party theorem then
-  gives the identity on the empty memory.
-- **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
-  `TNLean/Lattice/Compression/WordOwnerRestriction.lean` and
-  `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
-  `TNLean/Lattice/Compression/SourceWordParties.lean` (two occurrences).
-- **Abstraction:** At a third occurrence, share the restriction lemma for
-  a party absent from the original participating-party set, before applying
-  the relabelling identities.
-- **Notes:** Named scalar local maps belong to the participating-party set.
-  Excluding register owners alone would not exclude those scalar operations.
-
 ### Projection commutation from an invariant subspace — promoted (2026-10-11)
 
 - **Pattern:** show that a symmetric operator preserving a subspace commutes
@@ -9190,30 +9045,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   the numerical argument once; no separate predicate or compatibility alias
   is introduced.
 
-### Tensoring an intertwining identity — candidate (2026-10-11)
-
-- **Pattern:** Extend an intertwining identity for a map on one memory by
-  tensoring it with a fixed map on another memory. Compare elementary tensors
-  with `clm_ext_tmul` and apply congruence to the original identity.
-- **Seen:** The private `tensor_factorization` helper in
-  `TNLean/Lattice/PartyCircuit/PartyLocalMaps.lean` and
-  `TNLean/Lattice/Compression/CanonicalPartyFactorization.lean` (two occurrences).
-- **Abstraction:** At a third occurrence, share the operator identity in a
-  lower-level tensor-map module, or use Mathlib's `TensorProduct.mapL_comp`.
-- **Notes:** The new theorem identifies the actual singleton restrictions
-  without a norm bound; the existing theorem provides existential contractions.
-  Neither theorem replaces the other by cancellation when a factor vanishes.
-  The small helper is retained unchanged for the first compiler diagnostic.
-
 ### Selecting the exterior owner — promoted (2026-10-11)
 
-- **Helper:** `partySelector_none` in
-  `TNLean/Lattice/Compression/PartySelector.lean` identifies selection of the
-  exterior owner with `Option.isNone`.
+- **Helper:** `QuantumCircuit.Party.partySelector_none` in
+  `QICLean/Circuit/Party/Syntax/PartySelector.lean` (QICLean dependency) identifies
+  selection of the exterior owner with `Option.isNone`.
 - **Use:** Rewrite the selector in an already inferred restriction identity,
   then compose the resulting heterogeneous equalities.
-- **Occurrences replaced:** `SourcePrivatePreparationRestriction.lean`,
-  `AllPartialGate.lean`, and `NoneResidualScalar.lean` previously repeated
+- **Occurrences replaced:** the former TNLean modules
+  `SourcePrivatePreparationRestriction`, `AllPartialGate` and `NoneResidualScalar`
+  previously repeated
   function extensionality and the two optional-owner cases.
 - **Scope:** A lemma suffices; no new tactic or simplification attribute is
   needed.
@@ -9227,19 +9068,6 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** At a third occurrence, share the scalar composition lemma
   in a lower-level module and retain the explicit empty-layout assumptions.
 - **Notes:** The two scalars may vanish. No cancellation or normalization is used.
-
-### Matrices of actual maps in orthonormal coordinates — promoted (2026-10-11)
-
-- **Helper:** `matrix_repr_eval_eq_toMatrix` in
-  `TNLean/Lattice/Compression/BasisMatrixOperator.lean` identifies the matrix
-  formed from the coordinate entries with the linear map's matrix.
-- **Use:** Apply the identity before multiplying, summing or changing bases,
-  rather than repeatedly comparing entries and simplifying the two basis
-  coercions.
-- **Occurrences replaced:** `ActualPartySourceMatrix.lean`,
-  `ActualMixedSourceMatrix.lean`, and `ActualSampledEndpointInputWord.lean`.
-- **Scope:** Arbitrary actual continuous linear maps and finite orthonormal
-  bases; empty coordinate sets and zero maps are included. A lemma suffices.
 
 ### Restriction under identification of equal layouts — promoted (2026-10-12)
 
@@ -9872,8 +9700,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   `ChainSweep.local_stage_circuits_of_primitive_information` in
   `MPS/AreaLaw/SweepPreparation/ProtocolSweepLocalCircuits.lean`.
 - **Abstraction:** `OneBand.birth_liftOne` in `MPS/AreaLaw/SweepPreparation/BandDissolution.lean`,
-  built on `Lattice.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
-  `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
+  built on `QuantumCircuit.Party.Sheet.birth_bounded`, `Real.rpow_neg_ofNat` and
+  `QuantumCircuit.Party.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
 
 ### Gaussian approximation and polar correction for a regional reset — promoted (2026-11-17)
@@ -9979,7 +9807,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 - **Pattern:** Apply closure under powers and list products, unpack membership in a mapped
   list, and prove the factor supported using closure under scalar multiplication and exponentials.
-- **Seen:** Two occurrences in `TNLean/Lattice/ProductForm.lean` (since moved to QICLean), in
+- **Seen:** Two occurrences in the former TNLean module `ProductForm` (since moved to QICLean), in
   `hasProductForm_lie_of_radius` and
   `ManyBody.Interaction.hasProductForm_lie`.
 - **Abstraction:** None yet; the two proofs have different support hypotheses and are below
@@ -10080,10 +9908,11 @@ there is no need for a new tactic.
   `l < G.edist x (g • y)`. For supports of diameter at most `R`, apply
   `disjoint_biUnion_graphBall_of_lt_edist` at `l = 2 * R + s`.
 - **Seen:** Three applications across
-  `Lattice/TranslationSupercellCommutator.lean` (the two filtered bounds) and
-  `Lattice/TranslationSupercellTruncated.lean` (the truncated bound).
+  the former TNLean modules `TranslationSupercellCommutator` (the two filtered
+  bounds) and `TranslationSupercellTruncated` (the truncated bound), since moved
+  to QICLean.
 - **Abstraction:** `ManyBody.exists_mem_supercell_lt_edist` in
-  `Lattice/TranslationSupercellSpacing.lean`.
+  `QICLean/ManyBody/Hamiltonian/Translation.lean` (QICLean dependency).
 - **Notes:** This specializes the existing range-dependent coordinate estimate
   to displacement at most one along every edge. The original range-dependent
   theorem and all three commutator statements are unchanged.
@@ -10886,12 +10715,13 @@ removed after the dependency audit exposed it.
 
 ### Weighted geometric sums grouped by their anchors — promoted (2026-10-28)
 
-- **Seen:** `Lattice/LowEnergyCommutatorSum.lean`,
-  `Lattice/LowEnergyBasisUniform.lean`, and `Lattice/GraphDegreeTail.lean`.
+- **Seen:** `QICLean/ManyBody/Hamiltonian/LowEnergyCommutatorSum.lean`,
+  `QICLean/ManyBody/Hamiltonian/LowEnergyBasisUniform.lean`, and the former TNLean
+  module `GraphDegreeTail`.
 - **Pattern:** Group a weighted sum by its anchor and apply a uniform bound on
   the weight of each fibre before summing the nonnegative function on sites.
-- **Promotion:** `sum_weight_mul_comp_le_budget_mul_sum` in
-  `Lattice/GraphDegreeGrowth.lean` (now `QICLean/ManyBody/Dynamics/GraphGrowth.lean`)
+- **Promotion:** `ManyBody.sum_weight_mul_comp_le_budget_mul_sum` in
+  `QICLean/ManyBody/Dynamics/GraphGrowth.lean` (QICLean dependency)
   expresses the common inequality for any
   nonnegative function. All three grouping proofs now use it.
 - **Reuse:** The lower module also owns the support-to-anchor budget lemma.
@@ -11474,16 +11304,17 @@ removed after the dependency audit exposed it.
 - **Canonical API:** Mathlib `Matrix.l2_opNorm_mulVec`, already imported by
   the matrix operator-norm interface; its action is definitionally the
   same as `Matrix.toEuclideanCLM`.
-- **Refactored occurrences:** `Lattice/ObservableCentering.lean`,
-  `Lattice/GaussianGroundFrequencySeparation.lean`, and
-  `Lattice/GaussianConnectedCorrelation.lean` now invoke the existing theorem
+- **Refactored occurrences:** the former TNLean modules `ObservableCentering`,
+  `GaussianGroundFrequencySeparation` and `GaussianConnectedCorrelation`, since
+  moved to QICLean, invoke the existing theorem
   directly instead of repeating the norm-identification and `le_opNorm` proof.
 - **Related API:** QICLean's `Entropy.norm_toEuclideanLin_le` gives the same
   bound, but its entropy import is unnecessary for these matrix-only modules.
 
 ### Specializing a nonnegative Gaussian variance — candidate (2026-10-29)
 
-- **Seen:** `Lattice/GaussianFilteredCommutatorSeries.lean`, the exponential
+- **Seen:** the former TNLean module `GaussianFilteredCommutatorSeries` (now in
+  QICLean), the exponential
   identity and its norm-convergent series specialization.
 - **Pattern:** Identify the actual filter variance `(q/ΔE²).toNNReal` with
   the source's nonnegative real variance, then transport that equality

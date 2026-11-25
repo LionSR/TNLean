@@ -141,16 +141,13 @@ truncation instead.
 \begin{definition}[Block coordinates]
     \label{def:chain_terminal_coordinates}
     \uses{def:chain_terminal_registers}
-    \lean{
-        TNLean.MPS.AreaLaw.ChainSweep.blockEncoding,
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.blockEncoding,
         TNLean.MPS.AreaLaw.ChainSweep.mainConfigurationEquiv,
         TNLean.MPS.AreaLaw.ChainSweep.terminalConfigurationEquiv,
         TNLean.MPS.AreaLaw.ChainSweep.localConfigurationEquiv,
-        TNLean.MPS.AreaLaw.ChainSweep.privateLayout,
-        TNLean.MPS.AreaLaw.ChainSweep.physicalOrder,
+        TNLean.MPS.AreaLaw.ChainSweep.privateSystem,
         TNLean.MPS.AreaLaw.ChainSweep.sheetReadout,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRegrouping
-    }
+        TNLean.MPS.AreaLaw.ChainSweep.terminalRegrouping}
     \leanok
     At every party $p$, use increasing main-site order to identify
     configurations on $M_p$ with the basis of $\mathbb C^{d_p}$.
@@ -202,11 +199,9 @@ truncation instead.
 \begin{lemma}[Realization by private operations]
     \label{thm:chain_terminal_private_operations}
     \uses{def:chain_terminal_coordinates}
-    \lean{
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRegroupingWord,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRegroupingWord_props,
-        TNLean.MPS.AreaLaw.ChainSweep.eval_terminalRegroupingWord
-    }
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.terminalRegroupingCircuit,
+        TNLean.MPS.AreaLaw.ChainSweep.nonprivateCount_terminalRegroupingCircuit,
+        TNLean.MPS.AreaLaw.ChainSweep.toEuclideanLin_op_terminalRegroupingCircuit}
     \leanok
     The unitary $T$ is realized by a finite sequence of private
     operations and changes of tensor-factor order. No nonprivate gate
@@ -227,18 +222,11 @@ truncation instead.
     \label{def:chain_terminal_reference}
     \uses{def:chain_terminal_registers, thm:chain_initial_copies,
         def:chain_terminal_coordinates}
-    \lean{
-        TNLean.MPS.AreaLaw.ChainSweep.auxiliaryReference,
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.auxiliaryReference,
         TNLean.MPS.AreaLaw.ChainSweep.auxiliaryReference_apply,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalAuxiliarySiteOrder,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRawOrder,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalRawOrder_nodup,
-        TNLean.MPS.AreaLaw.ChainSweep.mem_terminalRawOrder,
         TNLean.MPS.AreaLaw.ChainSweep.terminalAuxiliaryFrames,
         TNLean.MPS.AreaLaw.ChainSweep.terminalFrames,
-        TNLean.MPS.AreaLaw.ChainSweep.stackRegs_terminalFrames,
-        TNLean.MPS.AreaLaw.ChainSweep.terminalStackReadout
-    }
+        TNLean.MPS.AreaLaw.ChainSweep.terminalStackReadout}
     \leanok
     Retain the chain, parties and labelled copies of
     Definition~\ref{def:chain_terminal_registers}, with $q\ge1$.
@@ -1166,8 +1154,8 @@ with the retained-copy correction of
 
 \begin{lemma}[Counts, expansions and error of the middle circuit]
     \label{thm:chain_conditional_middle_bounds}
-    \lean{TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_tail_identity,
-        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_first_padding,
+    \lean{TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_tail_isLocal,
+        TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleStep_first_padding_isLocal,
         TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_participation_le_forty,
         TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_nonprivateCount_le,
         TNLean.MPS.AreaLaw.ChainSweep.sweepMiddleCircuit_resource_bounds,
@@ -1448,7 +1436,7 @@ Definition~\ref{def:chain_open_mps}.
 
 \begin{lemma}[One useful column and all its cut ranks]
     \label{thm:compression_useful_column_all_cuts}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
+    \lean{TNLean.Network.DistributedOperatorContraction.exists_useful_column_of_sub_pure_le}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_alphabets,
         def:compression_operator_endpoint_tensor,def:peps_dependent_network,

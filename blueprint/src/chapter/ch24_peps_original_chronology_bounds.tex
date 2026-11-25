@@ -50,7 +50,7 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
 \begin{definition}[Recorded local operators]
     \label{def:peps_original_recorded_gate_maps}
     \leanok
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.canonicalGateMaps}
+    \lean{QuantumCircuit.Party.OriginalCircuit.canonicalGateMaps}
     For an original distributed circuit $W$, let $\widehat W$ be the evaluation
     of the chronology of $W$ when each nonprivate occurrence with monomial list
     $L$ is assigned its recorded sum $\sum_{m\in L}m$.
@@ -60,8 +60,8 @@ monomial expansion \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}.
     \label{thm:peps_original_exact_gate_maps}
     \leanok
     \uses{def:peps_original_recorded_gate_maps}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.evalWithGateMaps_canonicalGateMaps}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps}
+    \lean{QuantumCircuit.Party.OriginalCircuit.evalWithGateMaps_canonicalGateMaps}
+    \lean{QuantumCircuit.Party.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps}
     For every original distributed circuit $W$, $\widehat W=W$ (including
     private operations), with zero local approximation error and unchanged
     contraction and pair-effect conditions.

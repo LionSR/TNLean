@@ -178,7 +178,7 @@ norm of matrices, rectangular ones included.
 \begin{lemma}[Telescoping on a vector]
     \label{lem:peps_frame_telescoping}
     \lean{Matrix.norm_toEuclideanLin_list_prod_sub_le,
-        TNLean.PEPS.EncodedFrame.norm_act_projProd_sub_le}
+        TNLean.PEPS.EncodedFrame.norm_toEuclideanLin_projProd_sub_le}
     \leanok
     For contractions $A_1,\dots,A_s$ and every vector $\psi$,
     \begin{align}
@@ -235,10 +235,9 @@ norm of matrices, rectangular ones included.
 
 \begin{definition}[Registers of a frame]
     \label{def:peps_frame_registers}
-    \lean{TNLean.PEPS.EncodedFrame.tagRegs,
-        TNLean.PEPS.EncodedFrame.layoutRegs,
-        TNLean.PEPS.EncodedFrame.Frame.regs,
-        TNLean.PEPS.EncodedFrame.Frame.map_owner_regs}
+    \lean{TNLean.PEPS.EncodedFrame.tagSystem,
+        TNLean.PEPS.EncodedFrame.layoutSystem,
+        TNLean.PEPS.EncodedFrame.Frame.system}
     \leanok
     \uses{def:peps_frame,def:peps_party_layout,def:lattice_site_registers}
     The registers of a frame $\mathcal F$ are one tag register $\C^{\mathcal
@@ -275,14 +274,9 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Canonical coordinates of the registers]
     \label{lem:peps_frame_registers_coordinates}
-    \lean{TNLean.PEPS.EncodedFrame.tagVec,
-        TNLean.PEPS.EncodedFrame.tagIso,
-        TNLean.PEPS.EncodedFrame.tagIso_tagVec,
-        TNLean.PEPS.EncodedFrame.layoutVec,
-        TNLean.PEPS.EncodedFrame.layoutIso,
-        TNLean.PEPS.EncodedFrame.layoutIso_layoutVec,
-        TNLean.PEPS.EncodedFrame.layoutIso_symm_single,
-        TNLean.PEPS.EncodedFrame.Frame.regIso}
+    \lean{TNLean.PEPS.EncodedFrame.tagConfigEquiv,
+        TNLean.PEPS.EncodedFrame.layoutConfigEquiv,
+        TNLean.PEPS.EncodedFrame.Frame.configEquiv}
     \leanok
     \uses{def:peps_frame_registers,lem:lattice_site_register_coordinates}
     The tensor product of the registers of a frame is identified, by a
@@ -522,7 +516,7 @@ norm of matrices, rectangular ones included.
 
 \begin{lemma}[Reference error of an approximate rewrite]
     \label{lem:peps_frame_approx_reference}
-    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_act_refVec_sub_le_of_approx,
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_toEuclideanLin_refVec_sub_le_of_approx,
         TNLean.PEPS.EncodedFrame.rewrite_error_le_inv_pow_twenty}
     \leanok
     \uses{thm:peps_frame_small_rewrite}
@@ -755,12 +749,9 @@ pair sources with the same constant.
 
 \begin{lemma}[A sum of monomials as one gate keeps its pair sources]
     \label{lem:peps_party_gate_source_bound}
-    \lean{TNLean.Lattice.PartyCircuit.Word.sourceCount_selectedPart,
-        TNLean.Lattice.PartyCircuit.PartyChain.sourceCount_selectedPart,
-        TNLean.Lattice.PartyCircuit.Word.sourceCount_mapOwner_le,
-        TNLean.Lattice.PartyCircuit.PartyChain.sourceCount_mapOwner_le,
-        TNLean.PEPS.PairEffect.isSourceBounded_gateCircuit,
-        TNLean.Lattice.PartyCircuit.PartyGate.exists_originalCircuit_isSourceBounded}
+    \lean{QuantumCircuit.Party.Monomial.sourceCount_restrict,
+        QuantumCircuit.Party.Monomial.effectCount_restrict,
+        QuantumCircuit.Party.WeightedGate.exists_originalCircuit_isSourceBounded}
     \leanok
     \uses{lem:peps_circuit_source_bound_monomials}
     Let $\sum_\xi c_\xi M_\xi$ be a contraction expanded into allowed

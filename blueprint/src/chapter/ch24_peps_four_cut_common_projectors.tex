@@ -4,11 +4,8 @@
 
 \begin{definition}[Products of a family of physical maps]%
     \label{def:peps_four_cut_common_physical_product}
-    \lean{TNLean.PEPS.physicalProductFamilyMatrix,
-        TNLean.PEPS.physicalProductFamilyMap,
-        TNLean.PEPS.physicalProductFamilyMatrix_const,
-        TNLean.PEPS.physicalProductFamilyMap_const,
-        TNLean.PEPS.physicalProductFamilyMap_apply,
+    \lean{Matrix.piKronecker,
+        Matrix.piKronecker_mulVec_apply,
         TNLean.PEPS.torusSitewisePhysicalMap}
     \leanok
     \uses{def:peps_physical_product_map}
@@ -26,12 +23,10 @@
 
 \begin{lemma}[Composition and coordinate action of product maps]%
     \label{thm:peps_four_cut_common_product_algebra}
-    \lean{TNLean.PEPS.physicalProductFamilyMatrix_mul,
-        TNLean.PEPS.physicalProductFamilyMap_comp,
-        TNLean.PEPS.physicalProductFamilyMatrix_one,
-        TNLean.PEPS.physicalProductFamilyMap_one,
-        TNLean.PEPS.physicalProductFamilyMap_oneCoordinate_apply,
-        TNLean.PEPS.physicalProductFamilyMap_fixed_of_slices_fixed}
+    \lean{Matrix.piKronecker_mul,
+        Matrix.piKronecker_one,
+        Matrix.piKronecker_update_one_mulVec_apply,
+        Matrix.piKronecker_mulVec_eq_self_of_slice}
     \leanok
     \uses{def:peps_four_cut_common_physical_product}
     For compatible $F_v,L_v$ over finite intermediate (and for maps, input)
@@ -55,8 +50,8 @@
 
 \begin{lemma}[Slice characterization of a product range]%
     \label{thm:peps_four_cut_common_product_range}
-    \lean{TNLean.PEPS.physicalProductFamilyMap_slice_mem_range,
-        TNLean.PEPS.mem_range_physicalProductFamilyMap_iff}
+    \lean{Matrix.piKronecker_mulVec_slice_mem_range,
+        Matrix.mem_range_mulVecLin_piKronecker_iff}
     \leanok
     \uses{def:peps_four_cut_common_physical_product}
     For finite $I,P$, every slice $(\mathcal T_F\chi)(\tau[v\mapsto\cdot])$ lies in

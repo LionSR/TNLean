@@ -12,8 +12,8 @@ The statements below give supporting locality algebra for
 
 \begin{lemma}[Support of partial matrix elements]
     \label{thm:three_region_partial_support}
-    \lean{TNLean.MPS.AreaLaw.operatorBlock_isSupportedOn_of_threeSplit_left,
-        TNLean.MPS.AreaLaw.leftBlock_isSupportedOn_of_threeSplit_right}
+    \lean{TNLean.MPS.AreaLaw.operatorBlock_isSupportedOn_of_threeCut_left,
+        TNLean.MPS.AreaLaw.leftBlock_isSupportedOn_of_threeCut_right}
     \leanok
     Suppose that $P$ is supported on $D\subseteq V$.
     If $P^g=U\otimes \Id_R$, then for any configurations $a,b$ on $T$,
@@ -44,7 +44,7 @@ The statements below give supporting locality algebra for
 
 \begin{lemma}[Equality from a middle identity lift]
     \label{thm:three_region_middle_lift_equality}
-    \lean{TNLean.MPS.AreaLaw.eq_of_threeSplit_middle_lift_eq}
+    \lean{TNLean.MPS.AreaLaw.eq_of_threeCut_middle_lift_eq}
     \leanok
     Suppose that $E$ contains a specified site. If $W,M$ are operators on
     $\mathcal H_E$ and
@@ -63,7 +63,7 @@ The statements below give supporting locality algebra for
 
 \begin{lemma}[Canonical placement in the middle region]
     \label{thm:three_region_middle_embedding}
-    \lean{TNLean.MPS.AreaLaw.place_submatrix_threeSplit}
+    \lean{TNLean.MPS.AreaLaw.place_submatrix_threeCut}
     \leanok
     For every operator $W$ on $\mathcal H_E$, its canonical extension to $V$
     has three-region form
@@ -82,7 +82,7 @@ The statements below give supporting locality algebra for
 
 \begin{lemma}[Two-window factors with their collars]
     \label{thm:three_region_two_window_collars}
-    \lean{TNLean.MPS.AreaLaw.exists_threeSplit_two_window_factors_with_collars}
+    \lean{TNLean.MPS.AreaLaw.exists_threeCut_two_window_factors_with_collars}
     \leanok
     \uses{def:chain_model,lem:peps_frame_split_forms,
         thm:three_region_partial_support}

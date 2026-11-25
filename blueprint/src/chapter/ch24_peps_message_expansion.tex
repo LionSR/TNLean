@@ -243,7 +243,7 @@ parties, using message monomials as in
 
 \begin{lemma}[Expansion of a gate without messages]
     \label{thm:peps_message_gate_segment_expansion}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.expand_map_segment}
+    \lean{QuantumCircuit.Party.MessageGate.expand_map_segment}
     \leanok
     \uses{def:peps_party_monomial,def:peps_message_monomial,
         def:peps_message_gate_expand}
@@ -306,7 +306,7 @@ parties, using message monomials as in
 
 \begin{definition}[The corresponding original circuit gate]
     \label{def:peps_message_gate_circuit}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.toOriginalCircuit}
+    \lean{QuantumCircuit.Party.MessageGate.toOriginalCircuit}
     \leanok
     \uses{thm:peps_message_gate_eval}
     For a participant set $C$ with $|C|\ne1$, embedding $\iota:C\hookrightarrow P$,
@@ -317,9 +317,9 @@ parties, using message monomials as in
 
 \begin{lemma}[Operator and occurrences of the constructed gate]
     \label{thm:peps_message_gate_circuit_properties}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.eval_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.MessageGate.nonprivateCount_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.MessageGate.participants_toOriginalCircuit}
+    \lean{QuantumCircuit.Party.MessageGate.op_toOriginalCircuit,
+        QuantumCircuit.Party.MessageGate.nonprivateCount_toOriginalCircuit,
+        QuantumCircuit.Party.MessageGate.participants_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
     The gate of Definition~\ref{def:peps_message_gate_circuit} has operator
@@ -336,8 +336,8 @@ parties, using message monomials as in
 
 \begin{lemma}[Resource bounds for the constructed gate]
     \label{thm:peps_message_gate_circuit_bounds}
-    \lean{TNLean.Lattice.PartyCircuit.MessageGate.isExpansionBounded_toOriginalCircuit,
-        TNLean.Lattice.PartyCircuit.MessageGate.isMonomialBounded_toOriginalCircuit}
+    \lean{QuantumCircuit.Party.MessageGate.isExpansionBounded_toOriginalCircuit,
+        QuantumCircuit.Party.MessageGate.isMonomialBounded_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
     Under the hypotheses of Lemma~\ref{thm:peps_message_gate_size}, if

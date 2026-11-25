@@ -39,7 +39,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
 
 \begin{lemma}[Incident labels after reindexing a full choice]
     \label{thm:peps_reindexed_incident_gate_labels}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.originalGateLabelsAtOfAllChoices_eq_restrictGates}
+    \lean{QuantumCircuit.Party.SourceCircuit.originalGateLabelsAtOfAllChoices_eq_restrictGates}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_touched_labels}
     Let $e:\Xi_{\rm all}\to\prod_{g\in G}\Xi_g$ be the canonical all-party choice bijection (Definition~\ref{def:peps_touched_labels}). For any $\eta\in\prod_{g\in G}\Xi_g$ and $p\in P$, the incident-label extraction of Lemma~\ref{thm:peps_incident_gate_labels} applied to $e^{-1}\eta$ equals $\eta|_{\{g\in G:p\in C_g\}}$.
@@ -54,7 +54,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
 
 \begin{lemma}[Incident samples after reindexing a full assignment]
     \label{thm:peps_reindexed_incident_samples}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_reindexedSourceSampleAssignment_eq}
+    \lean{QuantumCircuit.Party.SourceCircuit.restrict_reindexedSourceSampleAssignment_eq}
     \leanok
     \uses{def:peps_source_sample_assignment_indices,def:peps_local_source_sample_indices}
     For $k\in\N$, $j:\mathcal S\to[k]$, $\widetilde j:=j\circ\tau:[N]\to[k]$, and the incident slot embedding $\iota_p:[n_p]\to[N]$ (Definitions~\ref{def:peps_source_sample_assignment_indices} and~\ref{def:peps_local_source_sample_indices}), one has
@@ -72,7 +72,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
 
 \begin{lemma}[Reindexing choices and common samples together]
     \label{thm:peps_joint_gate_sample_sum}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sum_choiceSamples_eq_sum_originalGateSamples}
+    \lean{QuantumCircuit.Party.SourceCircuit.sum_choiceSamples_eq_sum_originalGateSamples}
     \leanok
     \uses{def:peps_touched_labels,def:peps_source_sample_assignment_indices}
     For the all-party choice set $\Xi_{\rm all}$ with coefficients $c_\xi$, gate coefficients $a_g:\Xi_g\to\C$, and any $K:\Xi_{\rm all}\times\Xi_{\rm all}\times[k]^{[N]}\to\C^{I\times J}$,
@@ -98,7 +98,7 @@ $\tau:[N]\to\mathcal S$ and $\kappa_p:[n_p]\to\mathcal S_p$ be the canonical pos
 
 \begin{lemma}[Labels on the full selected gate set]
     \label{thm:peps_full_selected_gate_label_sum}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.sum_eq_sum_gateLabels_univ}
+    \lean{TNLean.Network.DistributedOperatorContraction.sum_eq_sum_gateLabels_univ}
     \leanok
     \uses{def:compression_operator_gate_labels}
     For finite $G$, finite label sets $\Lambda_g$, the canonical bijection $u:\widetilde G\to G$ from the full selected gate set $\widetilde G$, and any $K:(\prod_{g\in G}\Lambda_g)\to\C^{I\times J}$,
@@ -181,7 +181,7 @@ For the next three theorems, let $G,K_g,B_g$ be finite, set $\mathcal K:=\prod_{
 
 \begin{lemma}[The distributed density contraction in original gate labels]
     \label{thm:peps_density_pair_univ_double_sum}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_densityPair_univ_eq_double_sum}
+    \lean{TNLean.Network.DistributedOperatorContraction.contractedOperator_densityPair_univ_eq_double_sum}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_density_coefficient}
     Let $P,G,K_g,B_g$ be finite, let $r_g\in C_g\subseteq P$, $k\in\N$, $a_g:K_g\to\C$, $b_g:B_g\to\C$, $w_g,\gamma\in\C$, and let $T_p:\prod_{g:p\in C_g}K_g\times\prod_{g:p\in C_g}B_g\times[k]^{\mathcal S_p}\to\C^{O_p\times I_p}$. For the distributed contraction $\mathcal C(C,r,K\times B,k,c,T)$ (Definition~\ref{def:compression_operator_operator}) with $c_g(\alpha,\beta)=w_g a_g(\alpha)\overline{b_g(\beta)}$ (Definition~\ref{def:compression_operator_density_coefficient}),
@@ -218,7 +218,7 @@ Let $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ be the sampled physical oper
 
 \begin{lemma}[The sampled physical sum in original gate and sample positions]
     \label{thm:peps_original_gate_sample_physical_sum}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum}
     \leanok
     \uses{def:peps_incident_sampled_physical_factor,def:peps_source_sample_assignment_indices}
     With $T_p$ from (\ref{eq:peps_distributed_incident_matrix}) (including empty sets, zero dimensions, and $k=0$ with $0^{-1}=0$ and $0^0=1$),
@@ -244,7 +244,7 @@ Let $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ be the sampled physical oper
 
 \begin{lemma}[The exact distributed contraction of the sampled physical density]
     \label{thm:peps_actual_sampled_distributed_contraction}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator}
     \leanok
     \uses{def:compression_operator_operator,def:compression_operator_density_coefficient,
         def:peps_incident_sampled_physical_factor,def:peps_source_gate_root}

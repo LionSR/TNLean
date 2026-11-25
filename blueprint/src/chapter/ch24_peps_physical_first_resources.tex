@@ -98,7 +98,7 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{definition}[Original gate occurrences]
     \label{def:peps_physical_first_original_locality}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.physicalFirstReplacementLocationsEquiv}
+    \lean{QuantumCircuit.Party.OriginalCircuit.replacementLocationsEquiv}
     \leanok
     \uses{thm:peps_replacement_participants,thm:peps_physical_first_occurrences}
     Let $E$ be the bijection from original nonprivate gate occurrences to
@@ -109,8 +109,8 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Original participants and link locality]
     \label{thm:peps_physical_first_original_locality}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_physicalFirstReplacementLocationsEquiv}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
+    \lean{QuantumCircuit.Party.OriginalCircuit.participants_replacementLocationsEquiv}
+    \lean{QuantumCircuit.Party.OriginalCircuit.exists_original_gate_of_physicalFirst_link}
     \uses{def:peps_physical_first_original_locality}
     \leanok
     The bijection $E$ preserves participating sets. For any retained set of
@@ -131,7 +131,7 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Original lifetime bound controls the link degree]
     \label{thm:peps_physical_first_original_degree}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstLinks_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_incidentPhysicalFirstLinks_le}
     \leanok
     If every original gate involves at most $b$ parties and each party
     participates in at most $b$ original nonprivate occurrences, then in
@@ -150,7 +150,7 @@ sampled physical operator with a contraction of local tensors).
 
 \begin{lemma}[Polynomial virtual dimensions of the source alphabets]
     \label{thm:peps_source_alphabet_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_sourceNetworkAlphabet_le_of_power_bounds}
     \leanok
     Fix a set of gate occurrences of a source circuit and a root assignment
     defining its star links (carrying ordered ket--bra branch pairs) and

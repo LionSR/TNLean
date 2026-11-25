@@ -48,12 +48,12 @@ outer sample.
 \begin{lemma}[Adaptive patches on cell centers]
     \label{lem:peps_adaptive_patch_supply}
     \lean{TNLean.PEPS.EncodedFrame.SquarePatch.proj_eq_cylSum,
-        TNLean.PEPS.EncodedFrame.SquarePatch.norm_act_proj_sub_le,
+        TNLean.PEPS.EncodedFrame.SquarePatch.norm_toEuclideanLin_proj_sub_le,
         TNLean.PEPS.EncodedFrame.SquarePatch.card_tag_le_max,
         TNLean.PEPS.EncodedFrame.SquarePatch.translate,
         TNLean.PEPS.EncodedFrame.HasAdaptivePatch.translate,
         TNLean.PEPS.EncodedFrame.patchAt,
-        TNLean.PEPS.EncodedFrame.norm_act_proj_patchAt_sub_le,
+        TNLean.PEPS.EncodedFrame.norm_toEuclideanLin_proj_patchAt_sub_le,
         TNLean.PEPS.EncodedFrame.card_tag_patchAt_le,
         TNLean.PEPS.Approximation.cellCenterPos,
         TNLean.PEPS.Approximation.cellCenterPos_eq_sitePosition_add,
@@ -204,7 +204,7 @@ outer sample.
     \lean{TNLean.PEPS.Approximation.GuideFrameRewrite,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.conditions,
-        TNLean.PEPS.EncodedFrame.Frame.exists_permWord,
+        TNLean.PEPS.EncodedFrame.Frame.exists_relabel_of_perm,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit}
     \leanok
     \uses{def:peps_guide_frame, lem:peps_guide_frame_tags,
@@ -231,7 +231,7 @@ outer sample.
 \begin{lemma}[Patch data of adaptive small-patch rewrites]
     \label{lem:peps_guide_frame_patch_data}
     \lean{TNLean.PEPS.EncodedFrame.IsSuppliedPatch,
-        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.norm_act_proj_sub_le,
+        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.norm_toEuclideanLin_proj_sub_le,
         TNLean.PEPS.EncodedFrame.IsSuppliedPatch.card_tag_le,
         TNLean.PEPS.EncodedFrame.IsSuppliedPatch.nonempty_tag,
         TNLean.PEPS.Approximation.GuideFrameRewrite.IsSupplied,

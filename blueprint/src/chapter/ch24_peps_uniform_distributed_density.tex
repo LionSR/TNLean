@@ -132,8 +132,8 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{definition}[Constants of the sampled network]
     \label{def:peps_sampled_network_constants}
-    \lean{TNLean.Lattice.Compression.sampledNetworkPrefactor,
-        TNLean.Lattice.Compression.sampledNetworkExponent}
+    \lean{TNLean.Network.sampledNetworkPrefactor,
+        TNLean.Network.sampledNetworkExponent}
     \leanok
     For integers $r,b,n,d,u,s\ge0$ and reals $C_N,C_D,C_K,C_B,p$, set $t:=\max\{\lceil p\rceil,0\}$ and
     \begin{align}
@@ -148,9 +148,9 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{lemma}[Sampled bounds at one precision with explicit constants]
     \label{thm:peps_uniform_prescribed_expansion_bounds_of_le}
-    \lean{TNLean.Lattice.Compression.sampledNetworkPrefactor_pos,
-        TNLean.Lattice.Compression.sampledNetworkExponent_pos,
-        TNLean.Lattice.PartyCircuit.EffectCircuit.uniform_sampled_approximate_network_bounds_of_le}
+    \lean{TNLean.Network.sampledNetworkPrefactor_pos,
+        TNLean.Network.sampledNetworkExponent_pos,
+        QuantumCircuit.Party.EffectCircuit.uniform_sampled_approximate_network_bounds_of_le}
     \leanok
     \uses{def:peps_sampled_network_constants}
     In the setting of Lemma~\ref{thm:peps_uniform_prescribed_expansion_bounds}, with $t=\max\{\lceil p\rceil,0\}$, $q=n+t+\lceil16C_N\rceil$, and $C_{\mathrm{net}},\alpha_{\mathrm{net}}$ from (\ref{eq:peps_sampled_network_constants}) at $C_K,C_B,u,s$, the conclusion of Lemma~\ref{thm:peps_uniform_prescribed_expansion_bounds} holds with $\dim\mathcal V_e\le C_pL^{\alpha_p}$ for every $C_p\ge C_{\mathrm{net}}$ and integer $\alpha_p\ge\alpha_{\mathrm{net}}$.
@@ -163,7 +163,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{lemma}[Uniform sampled bounds at one prescribed precision]
     \label{thm:peps_uniform_prescribed_expansion_bounds}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_uniform_sampled_approximate_network_bounds}
+    \lean{QuantumCircuit.Party.EffectCircuit.exists_uniform_sampled_approximate_network_bounds}
     \leanok
     \uses{thm:peps_uniform_prescribed_expansion_bounds_of_le,def:peps_sampled_network_constants}
     Fix integers $b,r,n,d\ge0$, reals $C_N\ge1$ and $C_D$, and for integer precision $q$ let $C_K(q),C_B(q)\ge0$ and $u(q),s(q)\ge0$. For $p>0$, set $t:=\lceil p\rceil$, $q:=n+t+\lceil16C_N\rceil$, and let $C_p:=C_{\mathrm{net}}>0$ and $\alpha_p:=\alpha_{\mathrm{net}}>0$ be given by (\ref{eq:peps_sampled_network_constants}) at $C_K(q),C_B(q),u(q),s(q)$.
@@ -188,11 +188,11 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{definition}[Constants of the compression theorem]
     \label{def:peps_compression_constants}
-    \lean{TNLean.Lattice.Compression.compressionPrefactor,
-        TNLean.Lattice.Compression.compressionExponent,
-        TNLean.Lattice.Compression.sumCompressionPrefactor,
-        TNLean.Lattice.Compression.compressionPrefactor_eq_sumCompressionPrefactor,
-        TNLean.Lattice.Compression.compressionExponent_eq_sampledNetworkExponent}
+    \lean{TNLean.Network.compressionPrefactor,
+        TNLean.Network.compressionExponent,
+        TNLean.Network.sumCompressionPrefactor,
+        TNLean.Network.compressionPrefactor_eq_sumCompressionPrefactor,
+        TNLean.Network.compressionExponent_eq_sampledNetworkExponent}
     \leanok
     \uses{def:peps_sampled_network_constants}
     For integers $r,b,n,d,u,v,s\ge0$ and reals $C_N,C_D,C_K,C_C,C_S,p$, write $C_+=\max\{C,0\}$ and define, via $C_{\mathrm{net}}$ and $\alpha_{\mathrm{net}}$ of Definition~\ref{def:peps_sampled_network_constants},
@@ -205,10 +205,10 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{lemma}[Operator networks at one precision with explicit constants]
     \label{thm:peps_uniform_approximate_operator_network_of_le}
-    \lean{TNLean.Lattice.Compression.compressionPrefactor_pos,
-        TNLean.Lattice.Compression.compressionExponent_pos,
-        TNLean.Lattice.PartyCircuit.GateMapConstruction.uniform_approximate_sampled_network_of_le,
-        TNLean.Lattice.PartyCircuit.GateMapConstruction.uniform_approximate_sampled_network_of_sum_le,
+    \lean{TNLean.Network.compressionPrefactor_pos,
+        TNLean.Network.compressionExponent_pos,
+        QuantumCircuit.Party.GateMapConstruction.uniform_approximate_sampled_network_of_le,
+        QuantumCircuit.Party.GateMapConstruction.uniform_approximate_sampled_network_of_sum_le,
         QuantumCircuit.Party.EffectCircuit.IsExpansionBounded.mono}
     \leanok
     \uses{def:peps_compression_constants,def:peps_original_gate_construction}
@@ -222,7 +222,7 @@ monomial lists at the gate occurrences to vary independently.
 
 \begin{lemma}[Uniform operator networks from approximate original gate expansions]
     \label{thm:peps_uniform_approximate_operator_network}
-    \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_approximate_sampled_network}
+    \lean{QuantumCircuit.Party.GateMapConstruction.exists_uniform_approximate_sampled_network}
     \leanok
     \uses{thm:peps_uniform_approximate_operator_network_of_le,def:peps_compression_constants,def:peps_original_gate_construction}
     Let $(\mathcal C_i)_{i\in I}$ be a family of original gate constructions (Definition~\ref{def:peps_original_gate_construction}) of sizes $L=L_i\ge2$, where every nonprivate gate has $2\le|\mathcal P_g|\le b$, each party participates in at most $b$ nonprivate gates over its lifetime, and the gate counts $N_L$ and physical dimensions $d_{L,j}$ satisfy

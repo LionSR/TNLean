@@ -99,7 +99,7 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
 
 \begin{lemma}[Two contractions for the prepared sources]
     \label{thm:peps_actual_source_selective_partition}
-    \lean{TNLean.Lattice.PartyCircuit.Word.exists_selective_partition_of_word}
+    \lean{QuantumCircuit.Party.Word.exists_selective_partition_of_word}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_selective_partition}
     For an allowed composition $W$, a bipartition of its parties, and a set of free source positions containing all cut-crossing sources, let $P_{\mathrm{fix}}$ prepare the original vectors at the remaining (fixed) positions. Then there exist source-free allowed compositions $V,A_+,A_-$ (chosen independently of the free vectors) such that
@@ -157,12 +157,12 @@ The two separated contractions in \cite[proof of Theorem~5.2]{OpenAI2026Polynomi
 
 \begin{lemma}[Labels visible at one party]
     \label{thm:peps_incident_gate_labels}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.partySelector_affectedOwner_all_apply}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isTouched_groupedParty_iff}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.OriginalGateLabelsAt}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesOfOriginalGateLabelsAt}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.originalGateLabelsAtOfAllChoices}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices}
+    \lean{QuantumCircuit.Party.SourceCircuit.partySelector_affectedOwner_all_apply}
+    \lean{QuantumCircuit.Party.SourceCircuit.isTouched_groupedParty_iff}
+    \lean{QuantumCircuit.Party.SourceCircuit.OriginalGateLabelsAt}
+    \lean{QuantumCircuit.Party.SourceCircuit.choicesOfOriginalGateLabelsAt}
+    \lean{QuantumCircuit.Party.SourceCircuit.originalGateLabelsAtOfAllChoices}
+    \lean{QuantumCircuit.Party.SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices}
     \leanok
     \uses{thm:peps_touched_labels,def:compression_operator_gate_labels}
     For $p\in P$, the occurrences touched by $\mathcal A=\{p\}$ are $\{g\in\mathcal G^+:p\in C_g\}$, giving $\Xi_{\{p\}}\cong\prod_{g\in\mathcal G^+,\,p\in C_g}\Xi_g$ with $(\pi_{\{p\}}\xi)_g=(\xi_p)_g=\xi_g$ for all $\xi\in\Xi_P$.

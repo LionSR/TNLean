@@ -11,7 +11,7 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
 
 \begin{lemma}[Exact dimensions of the original density links]
     \label{thm:peps_source_density_link_card}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_alphabet_source_density}
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_operator_alphabets}
@@ -38,7 +38,7 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
 
 \begin{lemma}[A conditional uniform bound for the original density links]
     \label{thm:peps_source_density_link_card_bound}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_alphabet_source_density_le}
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_operator_alphabets}
@@ -58,7 +58,7 @@ occurrence, $D_e$ its virtual alphabet, and $\partial e$ its incident party set.
 
 \begin{lemma}[The endpoints are original participants of the owner gate]
     \label{thm:peps_source_density_link_locality}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.distributedLinkParties_source_subset}
+    \lean{QuantumCircuit.Party.SourceCircuit.distributedLinkParties_source_subset}
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_distributed_link_parties}
@@ -83,7 +83,7 @@ gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
 
 \begin{lemma}[The retained occurrences preserve participation counts]
     \label{thm:peps_nonempty_gate_participation}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentNonemptyGates_eq_participationCount}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_incidentNonemptyGates_eq_participationCount}
     \leanok
     \uses{def:compression_lifetime_gates}
     In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}, for every $p\in P$,
@@ -100,7 +100,7 @@ gate occurrences $G$, participant sets $C_g$, and roots $r_g\in C_g$.
 
 \begin{lemma}[Constant incidence of the density links]
     \label{thm:peps_actual_density_link_incidence}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_incidentSourceDensityLinks_le}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_incidentSourceDensityLinks_le}
     \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         thm:peps_nonempty_gate_participation}
@@ -183,7 +183,7 @@ with no numerical bound on private register dimensions.
 
 \begin{lemma}[Distributed physical approximation from local gate expansions]
     \label{thm:peps_approximate_sampled_distributed_error}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.exists_sampled_contractedOperator_approximate_error_le}
+    \lean{QuantumCircuit.Party.EffectCircuit.exists_sampled_contractedOperator_approximate_error_le}
     \leanok
     \uses{def:peps_approximate_original_operators,
         thm:peps_approximate_source_sample,
@@ -255,7 +255,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{lemma}[Real power bounds for the density alphabets]
     \label{thm:peps_actual_density_alphabet_power}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.card_alphabet_source_density_le_of_power_bounds}
+    \lean{QuantumCircuit.Party.SourceCircuit.card_alphabet_source_density_le_of_power_bounds}
     \leanok
     \uses{thm:peps_source_density_link_card,def:peps_source_gate_root}
     For a chronological source composition $R$, if $L\geq1$, $C_M,C_k\geq0$,
@@ -276,7 +276,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{lemma}[Original polynomial bounds for the contraction alphabets]
     \label{thm:peps_actual_physicalFirst_density_polynomial}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_physicalFirstDensityAlphabet_le_power}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_physicalFirstDensityAlphabet_le_power}
     \leanok
     \uses{thm:peps_actual_density_alphabet_power,
         thm:peps_physical_first_branch_polynomial,
@@ -316,7 +316,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{lemma}[Original incidence bound for the contraction]
     \label{thm:peps_actual_physicalFirst_density_incidence}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le}
+    \lean{QuantumCircuit.Party.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le}
     \leanok
     \uses{thm:peps_actual_density_link_incidence,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
@@ -344,7 +344,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{lemma}[A common original gate for the contraction endpoints]
     \label{thm:peps_actual_physicalFirst_density_locality}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.exists_original_gate_of_physicalFirst_density_link}
+    \lean{QuantumCircuit.Party.OriginalCircuit.exists_original_gate_of_physicalFirst_density_link}
     \leanok
     \uses{thm:peps_source_density_link_locality,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
@@ -395,7 +395,7 @@ gate occurrences $G$, roots $r_g\in C_g$, and tagged star and sample links.
 
 \begin{lemma}[Absorbing a scalar into one distributed local matrix]
     \label{thm:peps_distributed_operator_scalar_absorption}
-    \lean{TNLean.Lattice.Compression.DistributedOperatorContraction.contractedOperator_smul_at_party}
+    \lean{TNLean.Network.DistributedOperatorContraction.contractedOperator_smul_at_party}
     \leanok
     \uses{thm:compression_operator_matrix_sum,thm:peps_party_product_scalar}
     For a finite party set $P$, a distributed star-and-sample contraction

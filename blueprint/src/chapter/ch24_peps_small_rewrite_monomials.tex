@@ -20,21 +20,18 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{lemma}[A rank-one map on two registers with a change of owners]
     \label{lem:peps_rank_one_chain}
-    \lean{TNLean.Lattice.PartyCircuit.PartyChain.append,
-        TNLean.Lattice.PartyCircuit.PartyChain.eval_append,
-        TNLean.Lattice.PartyCircuit.PartyChain.append_props,
-        TNLean.PEPS.PairEffect.braLocal,
-        TNLean.PEPS.PairEffect.ketLocal,
-        TNLean.PEPS.PairEffect.norm_braLocal_le,
-        TNLean.PEPS.PairEffect.norm_ketLocal_le,
-        TNLean.PEPS.PairEffect.braChain,
-        TNLean.PEPS.PairEffect.ketWord,
-        TNLean.PEPS.PairEffect.rankOneChain,
-        TNLean.PEPS.PairEffect.eval_braChain,
-        TNLean.PEPS.PairEffect.pairHeadIso_ketWord,
-        TNLean.PEPS.PairEffect.act_vecMulVec_star,
-        TNLean.PEPS.PairEffect.pairHeadIso_rankOneChain,
-        TNLean.PEPS.PairEffect.rankOneChain_props}
+    \lean{QuantumCircuit.Party.PartyCircuit.comp,
+        QuantumCircuit.Party.PartyCircuit.op_comp,
+        QuantumCircuit.Party.Monomial.sourceCount_comp,
+        QuantumCircuit.Party.Monomial.effectCount_comp,
+        TNLean.PEPS.EncodedFrame.privateBra,
+        TNLean.PEPS.EncodedFrame.privateKet,
+        TNLean.PEPS.EncodedFrame.isAllowed_privateBra,
+        TNLean.PEPS.EncodedFrame.isAllowed_privateKet,
+        TNLean.PEPS.EncodedFrame.pairBra,
+        TNLean.PEPS.EncodedFrame.pairKet,
+        TNLean.PEPS.EncodedFrame.op_pairBra,
+        TNLean.PEPS.EncodedFrame.op_pairKet}
     \leanok
     \uses{def:peps_party_monomial,def:peps_monomial_parties,
         thm:peps_monomial_composition_counts,lem:peps_front_registers}
@@ -104,7 +101,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{lemma}[Rank-one blocks as allowed monomials on a frame]
     \label{lem:peps_rank_one_block_monomial}
-    \lean{TNLean.PEPS.EncodedFrame.exists_rankOneBlock_chain,
+    \lean{TNLean.PEPS.EncodedFrame.exists_rankOneBlock_monomial,
         TNLean.PEPS.EncodedFrame.exists_pairVec,
         TNLean.PEPS.EncodedFrame.exists_groupBlock,
         TNLean.PEPS.EncodedFrame.zeroGroupVec,
@@ -113,7 +110,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
         TNLean.PEPS.EncodedFrame.exists_braVertexBlock,
         TNLean.PEPS.EncodedFrame.exists_ketVertexBlock,
         TNLean.PEPS.EncodedFrame.prod_map_one_kronecker,
-        TNLean.PEPS.EncodedFrame.exists_chain_listProd,
+        TNLean.PEPS.EncodedFrame.exists_monomial_listProd,
         TNLean.PEPS.EncodedFrame.exists_zeroChain}
     \leanok
     \uses{lem:peps_rank_one_chain,def:peps_rank_one_block,
@@ -174,25 +171,9 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{lemma}[The tag maps of a branch]
     \label{lem:peps_frame_tag_change}
-    \lean{TNLean.PEPS.EncodedFrame.layoutIso_eq_act_of_basis,
-        TNLean.PEPS.EncodedFrame.regBra,
-        TNLean.PEPS.EncodedFrame.regKet,
-        TNLean.PEPS.EncodedFrame.norm_regBra_le,
-        TNLean.PEPS.EncodedFrame.norm_regKet_le,
-        TNLean.PEPS.EncodedFrame.tagBraWord,
-        TNLean.PEPS.EncodedFrame.tagKetWord,
-        TNLean.PEPS.EncodedFrame.eval_tagBraWord,
-        TNLean.PEPS.EncodedFrame.eval_tagKetWord,
-        TNLean.PEPS.EncodedFrame.tagBraWord_props,
-        TNLean.PEPS.EncodedFrame.tagKetWord_props,
-        TNLean.PEPS.EncodedFrame.tagChangeWord,
-        TNLean.PEPS.EncodedFrame.eval_tagChangeWord,
-        TNLean.PEPS.EncodedFrame.tagChangeWord_props,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_apply,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_mul,
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_apply,
         TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_sum_smul,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_smul,
-        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.layoutIso_tagChangeWord}
+        TNLean.PEPS.EncodedFrame.SmallPatchRewrite.liftBranch_smul}
     \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         lem:peps_register_reorderings,lem:peps_front_registers,

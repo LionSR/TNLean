@@ -112,74 +112,74 @@ The finite counting statements below are those used in the proof of
 
 \begin{definition}[Pair-sample labels]
     \label{def:compression_pair_labels}
-    \lean{TNLean.Lattice.Compression.pairSampleLabels}
-    \lean{TNLean.Lattice.Compression.mem_pairSampleLabels}
-    \lean{TNLean.Lattice.Compression.mk_mem_pairSampleLabels}
+    \lean{TNLean.Network.pairSampleLabels}
+    \lean{TNLean.Network.mem_pairSampleLabels}
+    \lean{TNLean.Network.mk_mem_pairSampleLabels}
     \leanok
     For a finite party set $P$, set $U(P)=\{\{p,q\}:p,q\in P,\ p\ne q\}$.
 \end{definition}
 
 \begin{definition}[Star and sample label sets]
     \label{def:compression_gate_labels}
-    \lean{TNLean.Lattice.Compression.gateLinkLabels}
+    \lean{TNLean.Network.gateLinkLabels}
     \leanok
     For a root $r$, define the disjoint union $T(P,r)=(P\setminus\{r\})\sqcup U(P)$ of star and sample labels.
 \end{definition}
 
 \begin{definition}[Gate-local link endpoints]
     \label{def:compression_gate_link_parties}
-    \lean{TNLean.Lattice.Compression.gateLinkParties}
+    \lean{TNLean.Network.gateLinkParties}
     \leanok
     Set $F(r,q)=\{r,q\}$ for $q\in P\setminus\{r\}$ and $F(r,\{p,q\})=\{p,q\}$ for $\{p,q\}\in U(P)$.
 \end{definition}
 
 \begin{definition}[Links tagged by gate occurrence]
     \label{def:compression_gate_links}
-    \lean{TNLean.Lattice.Compression.linksAtGate}
-    \lean{TNLean.Lattice.Compression.mem_linksAtGate}
+    \lean{TNLean.Network.linksAtGate}
+    \lean{TNLean.Network.mem_linksAtGate}
     \leanok
     For chosen roots $r_g$, set $\mathcal L_g=\{(g,t):t\in T(P_g,r_g)\}$.
 \end{definition}
 
 \begin{definition}[Distributed link family]
     \label{def:compression_distributed_links}
-    \lean{TNLean.Lattice.Compression.distributedLinks}
-    \lean{TNLean.Lattice.Compression.mem_distributedLinks}
+    \lean{TNLean.Network.distributedLinks}
+    \lean{TNLean.Network.mem_distributedLinks}
     \leanok
     Set $\mathcal L=\bigcup_{g\in G}\mathcal L_g=\{(g,t):g\in G,\ t\in T(P_g,r_g)\}$.
 \end{definition}
 
 \begin{definition}[Tagged link endpoints]
     \label{def:compression_distributed_link_parties}
-    \lean{TNLean.Lattice.Compression.distributedLinkParties}
+    \lean{TNLean.Network.distributedLinkParties}
     \leanok
     For $\ell=(g,t)\in\mathcal L$, set $V(\ell)=F(r_g,t)$.
 \end{definition}
 
 \begin{definition}[Distributed party incidence]
     \label{def:compression_distributed_incidence}
-    \lean{TNLean.Lattice.Compression.incidentDistributedLinks}
+    \lean{TNLean.Network.incidentDistributedLinks}
     \leanok
     Set $I(p)=\{\ell\in\mathcal L:p\in V(\ell)\}$.
 \end{definition}
 
 \begin{definition}[Gate-local party incidence]
     \label{def:compression_gate_label_incidence}
-    \lean{TNLean.Lattice.Compression.incidentGateLinkLabels}
+    \lean{TNLean.Network.incidentGateLinkLabels}
     \leanok
     Set $T_p(P,r)=\{t\in T(P,r):p\in F(r,t)\}$.
 \end{definition}
 
 \begin{definition}[Tagged incidence at one gate]
     \label{def:compression_gate_incidence}
-    \lean{TNLean.Lattice.Compression.incidentLinksAtGate}
+    \lean{TNLean.Network.incidentLinksAtGate}
     \leanok
     Set $\mathcal L_g(p)=\{\ell\in\mathcal L_g:p\in V(\ell)\}$.
 \end{definition}
 
 \begin{lemma}[Number of pair-sample labels]
     \label{thm:compression_pair_label_count}
-    \lean{TNLean.Lattice.Compression.card_pairSampleLabels}
+    \lean{TNLean.Network.card_pairSampleLabels}
     \leanok
     If $|P|=n$, then $|U(P)|=\binom n2$.
 \end{lemma}
@@ -191,8 +191,8 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Sample links incident to a participant]
     \label{thm:compression_pair_incidence}
-    \lean{TNLean.Lattice.Compression.filter_pairSampleLabels_eq_map}
-    \lean{TNLean.Lattice.Compression.card_filter_pairSampleLabels}
+    \lean{TNLean.Network.filter_pairSampleLabels_eq_map}
+    \lean{TNLean.Network.card_filter_pairSampleLabels}
     \leanok
     For $p\in P$, $q\mapsto\{p,q\}$ bijects $P\setminus\{p\}$ onto $\{u\in U(P):p\in u\}$, which has cardinality $|P|-1$.
 \end{lemma}
@@ -204,8 +204,8 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Number of links at one gate]
     \label{thm:compression_gate_label_count}
-    \lean{TNLean.Lattice.Compression.card_gateLinkLabels}
-    \lean{TNLean.Lattice.Compression.card_gateLinkLabels_le}
+    \lean{TNLean.Network.card_gateLinkLabels}
+    \lean{TNLean.Network.card_gateLinkLabels_le}
     \leanok
     If $r\in P$ and $|P|=n\le b$, then $|T(P,r)|=n-1+\binom n2\le b-1+\binom b2$.
 \end{lemma}
@@ -217,7 +217,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Gate-local incidence bound]
     \label{thm:compression_gate_incidence_bound}
-    \lean{TNLean.Lattice.Compression.card_incidentGateLinkLabels_le}
+    \lean{TNLean.Network.card_incidentGateLinkLabels_le}
     \leanok
     If $r,p\in P$, then $|T_p(P,r)|\le2(|P|-1)$.
 \end{lemma}
@@ -229,7 +229,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Gate-local endpoint locality]
     \label{thm:compression_gate_locality}
-    \lean{TNLean.Lattice.Compression.gateLinkParties_subset}
+    \lean{TNLean.Network.gateLinkParties_subset}
     \leanok
     If $r\in P$ and $t\in T(P,r)$, then $F(r,t)\subseteq P$.
 \end{lemma}
@@ -241,7 +241,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Distinct link endpoints]
     \label{thm:compression_gate_two_endpoints}
-    \lean{TNLean.Lattice.Compression.card_gateLinkParties}
+    \lean{TNLean.Network.card_gateLinkParties}
     \leanok
     For every $t\in T(P,r)$, $|F(r,t)|=2$.
 \end{lemma}
@@ -253,8 +253,8 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Tagging preserves cardinalities]
     \label{thm:compression_tagging_cardinality}
-    \lean{TNLean.Lattice.Compression.card_linksAtGate}
-    \lean{TNLean.Lattice.Compression.card_incidentLinksAtGate}
+    \lean{TNLean.Network.card_linksAtGate}
+    \lean{TNLean.Network.card_incidentLinksAtGate}
     \leanok
     For every $g$ and $p$, $|\mathcal L_g|=|T(P_g,r_g)|$ and $|\mathcal L_g(p)|=|T_p(P_g,r_g)|$.
 \end{lemma}
@@ -266,8 +266,8 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Original-gate locality of distributed links]
     \label{thm:compression_original_gate_locality}
-    \lean{TNLean.Lattice.Compression.distributedLinkParties_subset}
-    \lean{TNLean.Lattice.Compression.exists_common_gate_of_mem_distributedLinkParties}
+    \lean{TNLean.Network.distributedLinkParties_subset}
+    \lean{TNLean.Network.exists_common_gate_of_mem_distributedLinkParties}
     \leanok
     Suppose $r_g\in P_g$ for all $g\in G$. Every $\ell=(g,t)\in\mathcal L$ satisfies $V(\ell)\subseteq P_g$, so any $p,q\in V(\ell)$ share $g\in G$.
 \end{lemma}
@@ -279,7 +279,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Two endpoints of each distributed link]
     \label{thm:compression_distributed_two_endpoints}
-    \lean{TNLean.Lattice.Compression.card_distributedLinkParties}
+    \lean{TNLean.Network.card_distributedLinkParties}
     \leanok
     Every $\ell\in\mathcal L$ satisfies $|V(\ell)|=2$.
 \end{lemma}
@@ -291,7 +291,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Lifetime containment of incident links]
     \label{thm:compression_incidence_containment}
-    \lean{TNLean.Lattice.Compression.incidentDistributedLinks_subset}
+    \lean{TNLean.Network.incidentDistributedLinks_subset}
     \leanok
     If $r_g\in P_g$ for all $g\in G$, then $I(p)\subseteq\bigcup_{g\in G(p)}\mathcal L_g(p)$.
 \end{lemma}
@@ -303,7 +303,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{lemma}[Bounded distributed incidence]
     \label{thm:compression_distributed_incidence_bound}
-    \lean{TNLean.Lattice.Compression.card_incidentDistributedLinks_le}
+    \lean{TNLean.Network.card_incidentDistributedLinks_le}
     \leanok
     If $r_g\in P_g$ and $|P_g|\le b$ for all $g\in G$, and $|G(p)|\le b$, then $|I(p)|\le2b(b-1)$.
 \end{lemma}

@@ -73,10 +73,10 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
 
 \begin{definition}[Operator networks and fixed inputs on directed multigraphs]
     \label{def:peps_ket_column_dependent_fix_input}
-    \lean{TNLean.Lattice.Compression.operatorNetworkMatrix,
-        TNLean.Lattice.Compression.fixInput,
-        TNLean.Lattice.Compression.network_fixInput,
-        TNLean.Lattice.Compression.operatorNetworkMatrix_mulVec_single}
+    \lean{TNLean.Network.operatorNetworkMatrix,
+        TNLean.Network.fixInput,
+        TNLean.Network.network_fixInput,
+        TNLean.Network.operatorNetworkMatrix_mulVec_single}
     \leanok
     \uses{def:peps_dependent_network}
     For a directed-multigraph network (Definition~\ref{def:peps_dependent_network}) with virtual alphabets $X_e$, bond matrices $B_e$, and output-input physical pairs $(s_v,r_v)$ defining the operator $\sigma=(\sigma_{\tau\rho})$, the fixed-input network at input configuration $z$ replaces each vertex tensor $A_v$ by $A_{v,z}(\eta,s):=A_v(\eta,(s,z_v))$ on the same multigraph, alphabets $X_e$, and bond matrices $B_e$, so its contraction is $\tau\mapsto\sigma_{\tau z}=(\sigma\ket z)_\tau$.
@@ -84,7 +84,7 @@ $\{\ket z\}$, and $\sigma$ is an operator on that space.
 
 \begin{lemma}[Ket column of an operator network on a directed multigraph]
     \label{thm:peps_ket_column_dependent}
-    \lean{TNLean.Lattice.Compression.exists_fixInput_network_of_traceNorm_sub_pure_le}
+    \lean{TNLean.Network.exists_fixInput_network_of_traceNorm_sub_pure_le}
     \leanok
     \uses{def:peps_ket_column_dependent_fix_input}
     In the directed-multigraph model of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},

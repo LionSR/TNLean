@@ -223,7 +223,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \label{lem:peps_frame_pass_encoding}
     \lean{TNLean.PEPS.EncodedFrame.one_kronecker_mul_stack,
         TNLean.PEPS.EncodedFrame.one_kronecker_mul_frameEncoder,
-        TNLean.PEPS.EncodedFrame.norm_act_one_kronecker_refVec_sub_le}
+        TNLean.PEPS.EncodedFrame.norm_toEuclideanLin_one_kronecker_refVec_sub_le}
     \leanok
     \uses{def:peps_frame}
     If a sheet operator $B$ commutes with the sheet part of $K_{\mathcal F}$
@@ -439,9 +439,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Homogeneous birth and death on grouped registers]
     \label{thm:peps_frame_birth_bounded_grouped}
-    \lean{TNLean.PEPS.EncodedFrame.Frame.birth_monomial,
-        TNLean.PEPS.EncodedFrame.Frame.death_monomial}
-    \leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
         lem:peps_frame_birth_monomial_operators}
     Under the hypotheses of Theorem~\ref{thm:peps_frame_birth}, on grouped
@@ -454,7 +451,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $P_\circ$ and $Q_\circ$.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_monomial_operators,
         lem:peps_frame_birth_partition_owners}
     Combine Theorem~\ref{thm:peps_frame_birth},
@@ -494,13 +491,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Reordering registers]
     \label{lem:peps_register_reorderings}
-    \lean{TNLean.PEPS.EncodedFrame.tagSplit,
-        TNLean.PEPS.EncodedFrame.tagMerge,
-        TNLean.PEPS.EncodedFrame.eval_tagSplit,
-        TNLean.PEPS.EncodedFrame.eval_tagMerge,
-        TNLean.PEPS.EncodedFrame.exists_tagWord_of_perm,
-        TNLean.PEPS.EncodedFrame.isReordering_tagSplit,
-        TNLean.PEPS.EncodedFrame.isReordering_tagMerge}
+    \lean{TNLean.PEPS.EncodedFrame.tagSystemAppendEquiv,
+        TNLean.PEPS.EncodedFrame.tagAppendEquiv_tagConfigEquiv,
+        TNLean.PEPS.EncodedFrame.exists_tagReorderWord}
     \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,def:peps_monomial_parties,
         lem:lattice_register_reorderings}
@@ -585,8 +578,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Grouped monomials on the registers of a frame]
     \label{lem:peps_grouped_monomial_placement}
-    \lean{TNLean.PEPS.EncodedFrame.layoutIso_place}
-    \leanok
     \uses{def:peps_frame_registers,lem:peps_frame_registers_coordinates,
         lem:peps_register_reorderings,lem:peps_front_registers}
     Let $T,E\subseteq\Lambda$ be disjoint and $U=\Lambda\setminus(T\cup E)$,
@@ -599,7 +590,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     coordinates of Definition~\ref{def:peps_frame_registers}.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:peps_region_register_coordinates,thm:peps_region_configuration}
     By~(\ref{eq:peps_region_grouping_basis}) and~(\ref{eq:peps_region_reconstruction}),
     on a basis state $\ket c$, grouping extracts $\ket{c|_T}\otimes\ket{c|_U}$,
@@ -847,7 +838,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{Matrix.kronecker_kronecker_eq_submatrix,
         Matrix.toMatrix_toPEquiv_prodCongr,
         Matrix.toMatrix_toPEquiv_submatrix,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.sheetBufferCorrection_mul_pairSwapOp}
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.configBufferCorrection_mul_pairSwapOp}
     \leanok
     \uses{def:peps_frame_buffer_correction,def:peps_frame_sheet_swap,lem:lattice_exchange_net_map}
     With $\mathcal V=\id_{TE}\otimes V$,
@@ -1035,8 +1026,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Exchange corrections as one private contraction]
     \label{lem:peps_frame_exchange_correction_monomial}
-    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange_correction_monomial}
-    \leanok
     \uses{def:peps_frame_exchange_map,lem:peps_frame_exchange_owners,lem:peps_front_registers,
         def:peps_monomial_parties,lem:lattice_exchange_correction_matrix}
     In Definition~\ref{def:peps_frame_exchange_map},
@@ -1048,7 +1037,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $P_\circ$ (\texttt{05-frames.tex}, lines 503--515).
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     Since $A\subseteq U$, both $F_A$ and $D_U$ act on $\mathcal H_U^{\otimes 2}$
     with norm $\le 1$, and Lemma~\ref{lem:peps_front_registers} realizes $W$ as
     a local contraction at $P_\circ$ (Lemma~\ref{lem:peps_frame_exchange_owners}).
@@ -1056,10 +1045,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[Registers of two frames]
     \label{lem:peps_two_frame_registers}
-    \lean{TNLean.PEPS.EncodedFrame.twoLayoutIso,
-        TNLean.PEPS.EncodedFrame.twoLayoutIso_symm_single,
-        TNLean.PEPS.EncodedFrame.twoLayoutIso_basis,
-        TNLean.PEPS.EncodedFrame.twoLayoutIso_eq_act_of_basis,
+    \lean{TNLean.PEPS.EncodedFrame.twoLayoutEquiv,
         Matrix.toEuclideanLin_toPEquiv_toMatrix_single}
     \leanok
     \uses{lem:peps_frame_registers_coordinates}
@@ -1099,12 +1085,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[The renaming as reorderings]
     \label{lem:peps_exchange_renaming_word}
-    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.sitesY,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.sitesN,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.renameWord,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.eval_renameWord,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.twoLayoutIso_renameWord,
-        TNLean.PEPS.EncodedFrame.TwoSheetExchange.isReordering_renameWord}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.renameWord,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.op_renameWord}
     \leanok
     \uses{def:peps_frame_exchange_data,lem:peps_register_reorderings,lem:peps_two_frame_registers,
         lem:lattice_block_renaming_word}
@@ -1183,11 +1165,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \begin{lemma}[The corrections on the registers of two frames]
     \label{lem:peps_exchange_correction_word}
-    \lean{TNLean.PEPS.EncodedFrame.correctionLayoutWord,
-        TNLean.PEPS.EncodedFrame.eval_correctionLayoutWord,
-        TNLean.PEPS.EncodedFrame.sum_single_merge₂,
-        TNLean.PEPS.EncodedFrame.twoLayoutIso_correctionLayoutWord,
-        TNLean.PEPS.EncodedFrame.correctionLayoutWord_props}
+    \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.correctionWord,
+        TNLean.PEPS.EncodedFrame.TwoSheetExchange.op_correctionWord}
     \leanok
     \uses{lem:peps_register_reorderings,lem:peps_two_frame_registers,
         lem:peps_frame_exchange_correction_monomial,lem:lattice_front_correction_word}
@@ -1276,12 +1255,6 @@ three owners meet and no encoded holes are needed.
 
 \begin{lemma}[Sheets as encoded frames without holes]
     \label{lem:peps_sheet_frame}
-    \lean{TNLean.Lattice.Sheet.toFrame,
-        TNLean.Lattice.Sheet.toFrame_regs,
-        TNLean.Lattice.Sheet.toFrame_regIso,
-        TNLean.Lattice.Sheet.toFrame_regRef,
-        TNLean.Lattice.Sheet.toFrame_changeOwner}
-    \leanok
     \uses{def:lattice_sheet,def:peps_frame_registers}
     Placed in the plane, a sheet is the encoded frame without holes with the
     same owners. Its registers are those of the frame, its product coordinates
@@ -1291,7 +1264,7 @@ three owners meet and no encoded holes are needed.
     reference vectors agree.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     With no holes the encoder is the identity, so the frame places $\Omega$ in
     the site registers.
 \end{proof}

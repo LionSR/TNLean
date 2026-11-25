@@ -95,7 +95,7 @@ The original gate operators, private operations, and physical output are fixed t
 
 \begin{lemma}[Uniform compression of original message-containing gates]
     \label{thm:peps_uniform_original_message_compression}
-    \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_message_sampled_network}
+    \lean{QuantumCircuit.Party.GateMapConstruction.exists_uniform_message_sampled_network}
     \leanok
     \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
     Fix a family of original distributed constructions on finite nonempty party sets with size parameter $L\ge2$, contractive original gates and private operations, $|C_g|\ne1$ at nonprivate gate occurrences, normalized product inputs, finite-dimensional private memories, gate arity and whole-lifetime participation $\le b$, and
@@ -132,7 +132,7 @@ The original gate operators, private operations, and physical output are fixed t
 
 \begin{lemma}[Uniform compression of exact original message expansions]
     \label{thm:peps_uniform_exact_original_message_compression}
-    \lean{TNLean.Lattice.PartyCircuit.GateMapConstruction.exists_uniform_exact_message_sampled_network}
+    \lean{QuantumCircuit.Party.GateMapConstruction.exists_uniform_exact_message_sampled_network}
     \leanok
     \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
     Under the setup and bounds (\ref{eq:peps_uniform_msg_poly_inputs}) of Lemma~\ref{thm:peps_uniform_original_message_compression}, if there exist fixed $r,m,C_K,C_C,C_M,u,v,z$ such that every original gate admits an exact ($\delta=0$) local expansion with resource bounds $(r,m,C_KL^u,C_ML^z,C_CL^v)$, then for every $p>0$ there exist $r_p$, $C_p\ge0$, and an integer $\alpha_p>0$ such that every construction of size $L\ge2$ admits an operator tensor network $\sigma_L$ satisfying (\ref{eq:peps_uniform_msg_compression_bound}) (\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}).

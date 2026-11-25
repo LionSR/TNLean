@@ -100,9 +100,8 @@ To express each term $\ket a\bra b\otimes T_{\beta,i}\otimes\mathbb{1}$ as an
 allowed monomial on the frame registers (lines~306--316), the formalization
 uses the site-and-tag register layout (lines~74--75 and~84--85), with one raw
 register per site and one register per tag held by its owner.\footnote{%
-\leanid{TNLean.PEPS.EncodedFrame.layoutRegs},
-\leanid{TNLean.PEPS.EncodedFrame.layoutIso}, and
-\leanid{TNLean.PEPS.EncodedFrame.layoutIso_layoutVec}.}
+\leanid{TNLean.PEPS.EncodedFrame.layoutSystem} and
+\leanid{TNLean.PEPS.EncodedFrame.layoutConfigEquiv}.}
 Up to a scalar of modulus at most one, each branch term is realized by the
 composition of:
 \begin{enumerate}
@@ -120,7 +119,7 @@ composition of:
 All other sites lie outside the selected squares and retain their owners by
 condition~(ii). Each monomial uses only the specified parties and at most $2m$
 normalized pair sources and $2m$ normalized pair effects.\footnote{%
-\leanid{TNLean.PEPS.EncodedFrame.exists_rankOneBlock_chain},
+\leanid{TNLean.PEPS.EncodedFrame.exists_rankOneBlock_monomial},
 \leanid{TNLean.PEPS.SiteChain.termOp_eq_smul_prod},
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_termChain}, and
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx}.}

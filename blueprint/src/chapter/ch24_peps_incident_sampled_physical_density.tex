@@ -91,8 +91,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[A gate in the singleton and all-party expansions]
     \label{thm:peps_singleton_gate_comparison}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection}
-    \leanok
     \uses{def:peps_prepared_source_gate,def:peps_partial_source_choices,
         def:peps_affected_owner,thm:peps_incident_gate_labels}
     Let $G$ be a prepared gate (Definition~\ref{def:peps_prepared_source_gate})
@@ -113,7 +111,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 \end{lemma}
 
 \begin{proof}
-    \leanok
     \uses{thm:peps_incident_gate_labels,
         thm:peps_singleton_fibre_local_part,
         thm:peps_all_gate_nonincident_identity,
@@ -132,8 +129,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[A circuit in the singleton and all-party expansions]
     \label{thm:peps_singleton_circuit_comparison}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_singleton_projection}
-    \leanok
     \uses{thm:peps_lifted_singleton_gate_comparison,def:peps_source_circuit,def:peps_partial_source_choices,
         def:peps_affected_owner,thm:peps_incident_gate_labels}
     For a chronological circuit $\mathcal W:a\to b$, an all-party partial choice
@@ -150,7 +145,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 \end{lemma}
 
 \begin{proof}
-    \leanok
     \uses{thm:peps_singleton_gate_comparison,
         thm:peps_singleton_fibre_local_part,thm:peps_partial_fixed_layout,
         thm:peps_singleton_all_source_layout,
@@ -173,7 +167,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[The prepared operator determined by incident labels]
     \label{thm:peps_prepared_incident_operator}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_partialSourceWord_eval_eq_incidentSourceWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.partyOp_partialSourceWord_eq_incidentSourceOp}
     \leanok
     \uses{def:peps_actual_private_preparation,thm:peps_incident_gate_labels,
         def:peps_canonical_source_residual,thm:peps_partial_fixed_layout,
@@ -308,8 +302,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{definition}[The sampled endpoint word from incident labels]
     \label{def:peps_incident_sampled_endpoint_word}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.incidentSampledEndpointWord,
-        TNLean.Lattice.PartyCircuit.SourceCircuit.sources_incidentSampledEndpointWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.incidentSampledEndpointOp}
     \leanok
     \uses{thm:peps_incident_gate_labels,def:peps_partial_fixed_positions,
         def:peps_original_sampled_endpoint_factors,
@@ -361,7 +354,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[The sampled endpoint operator determined by incident labels]
     \label{thm:peps_incident_sampled_endpoint_comparison}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.partyOp_sampledEndpointWord_eq_incidentSampledEndpointOp}
     \leanok
     \uses{thm:peps_sampled_endpoint_incident_comparison,def:peps_incident_sampled_endpoint_word,
         def:peps_actual_sampled_endpoint_word,thm:peps_incident_gate_labels,
@@ -401,7 +394,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{definition}[The physical factor constructed from incident labels]
     \label{def:peps_incident_sampled_physical_factor}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.incidentSampledPhysicalFactor}
+    \lean{QuantumCircuit.Party.SourceCircuit.incidentSampledPhysicalFactor}
     \leanok
     \uses{def:peps_incident_source_word,def:peps_incident_sampled_endpoint_word,
         def:peps_selected_physical_private_basis,def:peps_private_product_input}
@@ -436,7 +429,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[The physical factor equals its incident construction]
     \label{thm:peps_incident_sampled_physical_factor_comparison}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledPhysicalFactor_eq_incidentSampledPhysicalFactor}
+    \lean{QuantumCircuit.Party.SourceCircuit.sampledPhysicalFactor_eq_incidentSampledPhysicalFactor}
     \leanok
     \uses{def:peps_incident_sampled_physical_factor,
         thm:peps_actual_sampled_physical_factors,thm:peps_incident_gate_labels}
@@ -473,7 +466,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[Restricting samples to the original incident slots]
     \label{thm:peps_incident_source_sample_compatibility}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_sourceSampleAssignment_eq}
+    \lean{QuantumCircuit.Party.SourceCircuit.restrict_sourceSampleAssignment_eq}
     \leanok
     \uses{def:peps_original_source_sample_indices,
         def:peps_local_source_sample_indices,def:peps_partial_fixed_positions}
@@ -504,7 +497,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[The original physical sum in incident factors]
     \label{thm:peps_incident_pure_sampled_physical_sum}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum}
+    \lean{QuantumCircuit.Party.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum}
     \leanok
     \uses{def:peps_incident_sampled_physical_factor,
         thm:peps_incident_sampled_physical_factor_comparison,
@@ -538,11 +531,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[Restriction of arbitrary endpoint operators]
     \label{thm:peps_endpoint_selected_register_comparison}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpointDataAt}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.endpointRegisterData_partialSlots}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_endpointWord_eval_heq_selectedRegisterWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceInventory.endpointRegisterWord_eval_heq_of_eq}
-    \leanok
     For endpoint endomorphisms $M_e,N_e$ at each source occurrence $e$ in the
     proof of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, restricting their
     ordered endpoint word $Z_R(M,N)$ to $p$ equals
@@ -550,7 +538,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     identification, and equal endpoint data lists evaluate to equal operators.
 \end{lemma}
 \begin{proof}
-    \leanok
     Filtering the ordered endpoint-register list $\mathcal D_R(M,N)$ by owner
     retains the local maps at $p$ in their original order, and owner relabelling
     preserves the endpoint spaces and operators.
@@ -558,10 +545,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{definition}[Original sampled endpoint operators]
     \label{def:peps_original_sampled_endpoint_operators}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allSourceLabel}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointOperatorLeft}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointOperatorRight}
-    \leanok
     For independent branch choices $\xi,\zeta$, a sample assignment $j$ on the
     original sources, and Gaussian arrays $\omega$, define the sampled endpoint
     operators $A_{e,\xi,\zeta,j,\omega}$ and $B_{e,\xi,\zeta,j,\omega}$ at each
@@ -571,17 +554,12 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[The ordered word of the original sampled operators]
     \label{thm:peps_original_sampled_endpoint_operator_word}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.projectedSlotChoice_eq_allSourceLabel}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.allPartialSlotChoice_eq_allSourceLabel}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.sampledEndpointWord_eq_endpointWord}
-    \leanok
     \uses{def:peps_original_sampled_endpoint_operators}
     The sampled endpoint word coincides with the ordered endpoint word
     $Z_R(A_{\cdot,\xi,\zeta,j,\omega},B_{\cdot,\xi,\zeta,j,\omega})$ of the
     operators in Definition~\ref{def:peps_original_sampled_endpoint_operators}.
 \end{lemma}
 \begin{proof}
-    \leanok
     Projecting $(\xi,\zeta)$ at each surviving slot in the complete ordered slot
     enumeration recovers its original gate label pair and source index $e$,
     matching Definition~\ref{def:peps_original_sampled_endpoint_operators}.
@@ -589,10 +567,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[Incident labels determine the selected endpoint operators]
     \label{thm:peps_incident_sampled_endpoint_register_representation}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.incidentSampledEndpointWord_eval_heq_endpointRegisterWord}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.incidentPartialSlotChoice_eq_allSourceLabel}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.incidentSampledEndpointWord_eval_heq_selectedRegisterWord}
-    \leanok
     \uses{def:peps_original_sampled_endpoint_operators}
     Under the canonical register identifications, the incident word
     $U_{p,\eta,\theta,j_p,\omega}$ evaluates to
@@ -602,7 +576,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
     Definition~\ref{def:peps_original_sampled_endpoint_operators}.
 \end{lemma}
 \begin{proof}
-    \leanok
     Unfolding the layout and owner identifications in $U_{p,\eta,\theta,j_p,\omega}$
     and comparing endpoint operators pointwise at $(\eta,\theta)=(\xi_p,\zeta_p)$
     via Definition~\ref{def:peps_original_sampled_endpoint_operators} equates
@@ -611,7 +584,7 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[Restriction of the sampled endpoint word]
     \label{thm:peps_sampled_endpoint_incident_comparison}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord}
+    \lean{QuantumCircuit.Party.SourceCircuit.partyOp_sampledEndpointWord_eq_incidentSampledEndpointOp}
     \leanok
     \uses{thm:peps_endpoint_selected_register_comparison,thm:peps_original_sampled_endpoint_operator_word,thm:peps_incident_sampled_endpoint_register_representation}
     Under the canonical register identification, the restriction to $p$ of the
@@ -640,8 +613,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{definition}[Equality of selected remaining operations]
     \label{def:peps_selected_local_part_comparison}
-    \lean{TNLean.Lattice.PartyCircuit.Word.IsSelectedLocalPartComparison}
-    \leanok
     Chronological words $W:a\to b$ and $W':a'\to b'$ have equal selected
     remaining operations under an owner selector $f$ when
     $(s_Wa)|_f=(s_{W'}a')|_f$, $b|_f=b'|_f$, and $(L(W))|_f=(L(W'))|_f$ under
@@ -650,8 +621,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 
 \begin{lemma}[A lifted singleton gate expansion]
     \label{thm:peps_lifted_singleton_gate_comparison}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isSelectedLocalPartComparison_partialWord_all_gate}
-    \leanok
     \uses{def:peps_selected_local_part_comparison}
     For a prepared gate step, a party $p\in P$, an all-party branch choice
     $\xi$, and $\chi=\pi_{\{p\}}\xi$, the all-party partial word $W_\xi$ and
@@ -660,7 +629,6 @@ and let $\iota_p:Q_p\to Q_{\rm all}$ map $p_p\mapsto p_{\rm all}$ and $*\mapsto 
 \end{lemma}
 
 \begin{proof}
-    \leanok
     \uses{thm:peps_singleton_gate_comparison,thm:peps_singleton_fibre_local_part}
     Combine Lemma~\ref{thm:peps_singleton_gate_comparison} and
     Lemma~\ref{thm:peps_singleton_fibre_local_part} (applied to $\iota_p$,

@@ -15,11 +15,10 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{definition}[The memory of several sheets]
     \label{def:peps_sheet_stack}
-    \lean{TNLean.PEPS.EncodedFrame.stackRegs,
-        TNLean.PEPS.EncodedFrame.SheetStack,
+    \lean{TNLean.PEPS.EncodedFrame.framesSystem,
         TNLean.PEPS.EncodedFrame.Frame.regRef,
-        TNLean.PEPS.EncodedFrame.stackVec,
-        TNLean.PEPS.EncodedFrame.framesVec}
+        TNLean.PEPS.EncodedFrame.stackRef,
+        TNLean.PEPS.EncodedFrame.framesRef}
     \leanok
     \uses{def:peps_frame_registers}
     For encoded frames $\mathcal F_1,\dots,\mathcal F_m$ (Definition~\ref{def:peps_frame_registers}) and a list $\ell$ of further registers with vector $\xi$, the sheet memory is the ordered tensor product of the registers of $\mathcal F_1,\dots,\mathcal F_m$ followed by $\ell$, with reference vector $\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}\otimes\xi$.
@@ -27,10 +26,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{lemma}[Reordering the sheets]
     \label{thm:peps_sheet_reordering}
-    \lean{TNLean.PEPS.EncodedFrame.stackRegs_append,
-        TNLean.PEPS.EncodedFrame.stackVec_append,
-        TNLean.PEPS.EncodedFrame.exists_reordering_stackVec,
-        TNLean.PEPS.EncodedFrame.exists_originalCircuit_stackVec_of_perm}
+    \lean{TNLean.PEPS.EncodedFrame.exists_originalCircuit_stackRef_of_perm}
     \leanok
     \uses{def:peps_sheet_stack}
     For any permutation $\mathcal F'_1,\dots,\mathcal F'_m$ of $\mathcal F_1,\dots,\mathcal F_m$, a word of tensor-factor exchanges (with $0$ nonprivate gates as an original circuit) maps the sheet memory of $\mathcal F_1,\dots,\mathcal F_m,\ell$ to that of $\mathcal F'_1,\dots,\mathcal F'_m,\ell$ and sends
@@ -47,8 +43,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{lemma}[The initial private maps]
     \label{thm:peps_sheet_initialization}
-    \lean{TNLean.PEPS.EncodedFrame.framesSpace,
-        TNLean.PEPS.EncodedFrame.exists_originalCircuit_initial}
+    \lean{TNLean.PEPS.EncodedFrame.exists_originalCircuit_initial}
     \leanok
     \uses{def:peps_sheet_stack,thm:lattice_stack_initialization}
     Suppose each frame in $\mathcal F_1,\dots,\mathcal F_m$ has all its raw and tag registers owned by a single party, and each party $p$ holds as its initial private memory the registers of its frames in list order with unit-norm product reference vector $\bigotimes_{\mathcal F_i\text{ at }p}\Omega_{\mathcal F_i}$. Then one private map per party followed by a sheet reordering (with $0$ nonprivate gates) maps $\bigotimes_p\bigotimes_{\mathcal F_i\text{ at }p}\Omega_{\mathcal F_i}$ exactly to $\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}$ (\texttt{06-geometry.tex}, lines 658--662).
@@ -62,7 +57,7 @@ no holes, this is the normalization of $\Omega$.
 \begin{lemma}[The initial step from raw copies]
     \label{thm:peps_sheet_raw_initialization}
     \lean{TNLean.PEPS.EncodedFrame.Frame.norm_refVec_of_holes_eq_nil,
-        TNLean.PEPS.EncodedFrame.norm_framesVec_of_holes_eq_nil,
+        TNLean.PEPS.EncodedFrame.norm_framesRef_of_holes_eq_nil,
         TNLean.PEPS.EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil}
     \leanok
     \uses{thm:peps_sheet_initialization}
@@ -90,8 +85,8 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{lemma}[The norm of the reference vector of several sheets]
     \label{thm:peps_sheet_stack_norm}
-    \lean{TNLean.PEPS.EncodedFrame.one_sub_mul_le_norm_stackVec,
-        TNLean.PEPS.EncodedFrame.one_sub_div_pow_le_norm_stackVec}
+    \lean{TNLean.PEPS.EncodedFrame.one_sub_mul_le_norm_stackRef,
+        TNLean.PEPS.EncodedFrame.one_sub_div_pow_le_norm_stackRef}
     \leanok
     \uses{def:peps_sheet_stack,thm:peps_frame_norm}
     If $\lVert\Omega\rVert=1$ and the $r$ total holes across $\mathcal F_1,\dots,\mathcal F_m$ each satisfy $\lVert(\id-P)\Omega\rVert\le\varepsilon$, then
@@ -110,24 +105,9 @@ no holes, this is the normalization of $\Omega$.
 \begin{definition}[The final regrouping]
     \label{def:peps_final_regrouping}
     \lean{TNLean.PEPS.EncodedFrame.trivialTag,
-        TNLean.PEPS.EncodedFrame.physVec,
-        TNLean.PEPS.EncodedFrame.freshMap,
-        TNLean.PEPS.EncodedFrame.freshMap_apply,
-        TNLean.PEPS.EncodedFrame.norm_freshMap_le,
-        TNLean.PEPS.EncodedFrame.renameMap,
-        TNLean.PEPS.EncodedFrame.renameMap_tmul,
-        TNLean.PEPS.EncodedFrame.norm_renameMap_le,
-        TNLean.PEPS.EncodedFrame.finOneOf,
-        TNLean.PEPS.EncodedFrame.nonprivateCount_freshCircuit,
-        TNLean.PEPS.EncodedFrame.nonprivateCount_siteCircuit,
-        TNLean.PEPS.EncodedFrame.mem_nonsiteParties,
-        TNLean.PEPS.EncodedFrame.nonsiteParties_dim,
-        TNLean.PEPS.EncodedFrame.freshCircuit,
-        TNLean.PEPS.EncodedFrame.siteCircuit,
-        TNLean.PEPS.EncodedFrame.nonsiteParties,
-        TNLean.PEPS.EncodedFrame.siteOrder,
-        TNLean.PEPS.EncodedFrame.readoutPrivate,
-        TNLean.PEPS.EncodedFrame.readoutCircuit}
+        TNLean.PEPS.EncodedFrame.nonprivateCount_readoutCircuit,
+        TNLean.PEPS.EncodedFrame.readoutCircuit,
+        TNLean.PEPS.EncodedFrame.readoutPrivate}
     \leanok
     \uses{def:peps_sheet_stack}
     With the main frame $\mathcal M$ first in the sheet memory (Definition~\ref{def:peps_sheet_stack}), the final regrouping moves the raw registers of $\mathcal M$ ahead of its tag registers, privately renames each site's raw register at its owning party as that party's physical register, and privately prepares a $1$-dimensional physical register at each site-free party. Physical registers are ordered by sites then site-free parties; private registers consist of the tags of $\mathcal M$ followed by all other sheets and idle copies (\texttt{06-geometry.tex}, lines 48--51 and 669--681).
@@ -142,12 +122,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.EncodedFrame.eq_trivialTag,
         TNLean.PEPS.EncodedFrame.rawProd_trivialTag,
         TNLean.PEPS.EncodedFrame.Frame.regRef_of_outer_eq_empty,
-        TNLean.PEPS.EncodedFrame.familyPhysicalListBasis_eq_physVec,
-        TNLean.PEPS.EncodedFrame.familyLabelledPhysicalBasis_eq_physVec,
-        TNLean.PEPS.EncodedFrame.eval_freshCircuit,
-        TNLean.PEPS.EncodedFrame.eval_siteCircuit,
-        TNLean.PEPS.EncodedFrame.nodup_siteOrder,
-        TNLean.PEPS.EncodedFrame.mem_siteOrder,
+        TNLean.PEPS.EncodedFrame.op_readoutCircuit_mulVec,
         TNLean.PEPS.EncodedFrame.nonprivateCount_readoutCircuit,
         TNLean.PEPS.EncodedFrame.eval_readoutCircuit_stackVec,
         TNLean.PEPS.EncodedFrame.readout_eval_readoutCircuit_stackVec,
@@ -226,7 +201,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{lemma}[Operations that preserve bounded changes]
     \label{thm:peps_bounded_change_closure}
-    \lean{TNLean.PEPS.EncodedFrame.pairRef_eq_twoLayoutIso_symm,
+    \lean{TNLean.PEPS.EncodedFrame.pairRef_eq_twoFrameEquiv_symm,
         TNLean.PEPS.EncodedFrame.HasBoundedChange.mono,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_of_perm,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_refl,
@@ -352,7 +327,7 @@ no holes, this is the normalization of $\Omega$.
 \begin{lemma}[Bounded changes along the schedule]
     \label{thm:peps_protocol_bounded_trajectory}
     \lean{TNLean.PEPS.EncodedFrame.exists_steps_of_hasBoundedChange,
-        TNLean.PEPS.Approximation.norm_trajectory_sub_stackVec_le,
+        TNLean.PEPS.Approximation.norm_trajectory_sub_stackRef_le,
         TNLean.PEPS.Approximation.card_participation_le_of_eventUses}
     \leanok
     \uses{thm:peps_bounded_change_closure, def:peps_dyadic_protocol_schedule,
@@ -421,8 +396,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_refl,
         TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.perm_left,
         TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.perm_right,
-        TNLean.PEPS.EncodedFrame.isSourceBounded_liftOne,
-        TNLean.PEPS.EncodedFrame.isSourceBounded_liftTwo,
+        QuantumCircuit.Party.isSourceBounded_liftOne,
+        QuantumCircuit.Party.isSourceBounded_liftTwo,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_liftOne,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_liftTwo,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_activate,
