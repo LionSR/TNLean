@@ -10,7 +10,8 @@ import QICLean.Algebra.PartialTrace
 # Physical coefficients after tracing the prepared source output
 
 The ket and bra columns are read through the same readout into physical and
-discarded coordinates. The final trace sums over a single common discarded index.
+discarded coordinates, and the input is given in arbitrary input coordinates. The final
+trace sums over a single common discarded index.
 Neither the input vector nor the resulting mixed coefficient is normalized.
 Source: polynomial-PEPS Theorem 5.2, eq:compression-source-gate and
 rem:compression-retained-norm, manuscript revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
@@ -28,19 +29,28 @@ variable {P : Type} [Fintype P] [DecidableEq P] (R : SourceInventory P)
 
 /-- The physical entry of a mixed prepared coefficient, read through a readout `K` into physical
 and discarded coordinates, is the sum of the ket and conjugated bra output columns over their
-common discarded coordinate.
+common discarded coordinate. The input is given by its coordinates `c` in input coordinates `E`,
+for instance an orthonormal basis, so the input vector is `E c` and its matrix in the
+coordinates `E` is the outer product of `c` with itself; the readout may be the coordinates of a
+product orthonormal basis of the physical and discarded memories.
 Source: polynomial-PEPS Theorem 5.2, eq:compression-source-gate and the final
 partywise trace in its proof; Remark 5.3, rem:compression-retained-norm. -/
-theorem preparedDensityCoefficient_pure_partialTrace_apply {Phys Env : Type} [Fintype Env]
-    (K : Matrix (Phys × Env) (Config Y) ℂ) (v v' : Word (SourceInventory.slotSystem R B X) Y)
-    (ψ : EuclideanSpace ℂ (Config X)) (x y : ∀ i, B.left i × B.right i) (a b : Phys) :
+theorem preparedDensityCoefficient_pure_partialTrace_apply {n Phys Env : Type} [Fintype n]
+    [DecidableEq n] [Fintype Env] (K : Matrix (Phys × Env) (Config Y) ℂ)
+    (v v' : Word (SourceInventory.slotSystem R B X) Y) (E : Matrix (Config X) n ℂ)
+    (c : EuclideanSpace ℂ n) (x y : ∀ i, B.left i × B.right i) (a b : Phys) :
     partialTraceRight
       (K * v.preparedDensityCoefficient R B X (fun _ a ↦ EuclideanSpace.single a 1)
         (fun _ a ↦ EuclideanSpace.single a 1) (fun _ a ↦ EuclideanSpace.single a 1)
-        (fun _ a ↦ EuclideanSpace.single a 1) v' (euclideanOuterProduct ψ ψ) x y * Kᴴ) a b =
-      ∑ g : Env, (K * v.pureSourceMatrix R B X ψ) (a, g) x *
-        conj ((K * v'.pureSourceMatrix R B X ψ) (b, g) y) := by
-  rw [preparedDensityCoefficient_pure_eq_vecMulVec, mul_vecMulVec, vecMulVec_mul,
+        (fun _ a ↦ EuclideanSpace.single a 1) v' (E * euclideanOuterProduct c c * Eᴴ) x y * Kᴴ)
+        a b =
+      ∑ g : Env, (K * v.pureSourceMatrix R B X (Matrix.toEuclideanLin E c)) (a, g) x *
+        conj ((K * v'.pureSourceMatrix R B X (Matrix.toEuclideanLin E c)) (b, g) y) := by
+  have hE : E * euclideanOuterProduct c c * Eᴴ =
+      euclideanOuterProduct (Matrix.toEuclideanLin E c) (Matrix.toEuclideanLin E c) := by
+    rw [euclideanOuterProduct, euclideanOuterProduct, mul_vecMulVec, vecMulVec_mul, ← star_mulVec]
+    rfl
+  rw [hE, preparedDensityCoefficient_pure_eq_vecMulVec, mul_vecMulVec, vecMulVec_mul,
     partialTraceRight_apply]
   refine Finset.sum_congr rfl fun g _ ↦ ?_
   simp only [vecMulVec_apply, mulVec, vecMul, dotProduct, mul_apply, conjTranspose_apply,
