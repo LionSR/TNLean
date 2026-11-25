@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Collar.Scales.BandCountGrowth
 import TNLean.PEPS.AreaLaw.Collar.Scales.Budgets
-import TNLean.PEPS.AreaLaw.Collar.Scales.ChargeBinomialBound
 import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
 import TNLean.PEPS.AreaLaw.Collar.Scales.FinalScannerAdmissibility
 import TNLean.PEPS.AreaLaw.Collar.Scales.FinalSharpErrorBudget
