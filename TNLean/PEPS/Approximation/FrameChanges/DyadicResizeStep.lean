@@ -311,7 +311,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
+open EncodedFrame Matrix QuantumCircuit.Party
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {κ Party : Type}
 
@@ -321,7 +321,8 @@ together with the bound of `2b` pair sources in every monomial of the gate.
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 529–541 and 574–583; Lemma 6.3
 `lem:small-rewrite`, `05-frames.tex`, lines 188–218; Theorem 5.2, item 3, `04-compression.tex`,
 lines 143–147. -/
-theorem resize_step_isSourceBounded [NeZero q] {N R u : ℝ} (hN : 0 < N) (hR : 0 < R)
+theorem resize_step_isSourceBounded [NeZero q] [Fintype Party] [DecidableEq Party]
+    {N R u : ℝ} (hN : 0 < N) (hR : 0 < R)
     (hu : 0 < u) (hsep : 4 * R + 3 * u < N) {lab : ℤ × ℤ → κ} {Q : ℤ × ℤ} {v : ℝ × ℝ}
     {g : ℝ × ℝ → κ}
     (hg : IsDisplacedReading g (blockGuide N lab) v) (own : κ → Party) (ph : κ)
@@ -348,25 +349,22 @@ theorem resize_step_isSourceBounded [NeZero q] {N R u : ℝ} (hN : 0 < N) (hR : 
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
     (hb : (2 * (2 * R + u) / u + 1) ^ 2 ≤ b) (hb9 : 9 ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεhole : ∀ z, ‖act (holeOld z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (htag : ∀ z, Nonempty (holeOld z).Tag) :
+    (hεpatch : ∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖toEuclideanLin (holeOld z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
     ∃ P : Finset Party, P.card ≤ 9 ∧
       (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + (Q.1 - 1, Q.2 - 1)))) ∧
-      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V holeOld hpOld).regs
-        (guideFrame pos q g own ph rank V holeNew hpNew).regs,
+      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V holeOld hpOld).system
+        (guideFrame pos q g own ph rank V holeNew hpNew).system,
       w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧
       w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^
         (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
       w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
-      ‖w.eval ((guideFrame pos q g own ph rank V holeOld hpOld).regIso.symm
-          ((guideFrame pos q g own ph rank V holeOld hpOld).refVec Ω)) -
-        (guideFrame pos q g own ph rank V holeNew hpNew).regIso.symm
-          ((guideFrame pos q g own ph rank V holeNew hpNew).refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q g own ph rank V holeOld hpOld).regRef Ω) -
+        (guideFrame pos q g own ph rank V holeNew hpNew).regRef Ω‖ ≤
         (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
       w.IsSourceBounded (2 * b) := by
-  obtain ⟨G, hG, ho, hn', how, hph, hrk, hho, hhn, hpt, hUA, hUA', hA, hA', hN', hP, hP₀,
+  obtain ⟨G, hG, ho, hn', how, hph, hrk, hho, hhn, hpt, hUA, hUA', hA, hA', hN', hP, -,
     hdesc⟩ := exists_resize_planeConditions (Party := Party) hN hR hu hsep hg own ph rank hV hc₀
       hVc holeOld holeNew patch hcenter hscale hsame hpatch htwoOld htwoNew
   subst ho how hph hrk hho hhn hpt
@@ -374,7 +372,7 @@ theorem resize_step_isSourceBounded [NeZero q] {N R u : ℝ} (hN : 0 < N) (hR : 
     (c := c) (b := b) hL
     (fun a _ => hcardNew a) (fun z _ => hcardPatch z) (fun a _ => hcardOld a)
     (by exact_mod_cast hN'.trans hb) (hA.trans (by omega)) (hA'.trans (by omega))
-    (hP.trans hb9) hΩ (fun z _ => hεpatch z) (fun a _ => hεhole a) hP₀ (fun z _ => htag z)
+    (hP.trans hb9) hΩ (fun z _ => hεpatch z) (fun a _ => hεhole a)
   have e₂ : G.newFrame = guideFrame pos q G.old G.own G.ph G.rank V G.holeNew hpNew := by
     rw [G.newFrame_eq hUA' hpNew, hn']
   rw [← G.oldFrame_eq hUA hpOld, ← e₂]
@@ -383,7 +381,7 @@ theorem resize_step_isSourceBounded [NeZero q] {N R u : ℝ} (hN : 0 < N) (hR : 
 /-- **The resize of a hole as one gate.** In the setting of `exists_resize_planeConditions`,
 suppose moreover that every hole patch of the two frames and every patch has at most `C L^c`
 cylinder terms, that every patch and every old hole patch has error at most `L^{-60}` on `Ω`, with
-`‖Ω‖ ≤ 1`, that every old hole patch has a tag, and that `b` is at least `9` and the number
+`‖Ω‖ ≤ 1`, and that `b` is at least `9` and the number
 `(2 (2 R + u) / u + 1)²` of net patches. There is a set of at most `9` parties, those of the
 labels of the nine blocks around the block `Q - (1, 1)`, and an original circuit from the
 registers of the frame of `g` with hole patches `holeOld` at `V` to those of the frame of `g` with
@@ -393,7 +391,8 @@ reference-vector error at most `(2b + 1) L^{-20}`.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 529–541 and 574–583; Lemma 6.3
 `lem:small-rewrite`, `05-frames.tex`, lines 188–218. -/
-theorem resize_step [NeZero q] {N R u : ℝ} (hN : 0 < N) (hR : 0 < R) (hu : 0 < u)
+theorem resize_step [NeZero q] [Fintype Party] [DecidableEq Party]
+    {N R u : ℝ} (hN : 0 < N) (hR : 0 < R) (hu : 0 < u)
     (hsep : 4 * R + 3 * u < N) {lab : ℤ × ℤ → κ} {Q : ℤ × ℤ} {v : ℝ × ℝ} {g : ℝ × ℝ → κ}
     (hg : IsDisplacedReading g (blockGuide N lab) v) (own : κ → Party) (ph : κ)
     (rank : κ → ℕ) {V : Finset (ℝ × ℝ)} (hV : ∀ c ∈ V, IsTrueVertex g c)
@@ -419,26 +418,23 @@ theorem resize_step [NeZero q] {N R u : ℝ} (hN : 0 < N) (hR : 0 < R) (hu : 0 <
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
     (hb : (2 * (2 * R + u) / u + 1) ^ 2 ≤ b) (hb9 : 9 ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεhole : ∀ z, ‖act (holeOld z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (htag : ∀ z, Nonempty (holeOld z).Tag) :
+    (hεpatch : ∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖toEuclideanLin (holeOld z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
     ∃ P : Finset Party, P.card ≤ 9 ∧
       (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + (Q.1 - 1, Q.2 - 1)))) ∧
-      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V holeOld hpOld).regs
-        (guideFrame pos q g own ph rank V holeNew hpNew).regs,
+      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V holeOld hpOld).system
+        (guideFrame pos q g own ph rank V holeNew hpNew).system,
       w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧
       w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^
         (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
       w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
-      ‖w.eval ((guideFrame pos q g own ph rank V holeOld hpOld).regIso.symm
-          ((guideFrame pos q g own ph rank V holeOld hpOld).refVec Ω)) -
-        (guideFrame pos q g own ph rank V holeNew hpNew).regIso.symm
-          ((guideFrame pos q g own ph rank V holeNew hpNew).refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q g own ph rank V holeOld hpOld).regRef Ω) -
+        (guideFrame pos q g own ph rank V holeNew hpNew).regRef Ω‖ ≤
         (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
   obtain ⟨P, h₁, h₂, w, h₃, h₄, h₅, h₆, h₇, -⟩ := resize_step_isSourceBounded hN hR hu hsep hg own
     ph rank hV hc₀ hVc holeOld holeNew patch hcenter hscale hsame hpatch htwoOld htwoNew hpOld hpNew
-    hL hcardOld hcardNew hcardPatch hb hb9 hΩ hεpatch hεhole htag
+    hL hcardOld hcardNew hcardPatch hb hb9 hΩ hεpatch hεhole
   exact ⟨P, h₁, h₂, w, h₃, h₄, h₅, h₆, h₇⟩
 
 end TNLean.PEPS.Approximation
@@ -454,7 +450,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit
+open EncodedFrame Matrix QuantumCircuit.Party
 
 /-- **The resizes of a level as gates, with one footprint ratio and their pair sources.** The
 conclusion of `resize_step_reading_of_le`, together with the bound of `2b` pair sources in every
@@ -466,7 +462,8 @@ theorem resize_step_reading_isSourceBounded_of_le {ε₀ : ℝ} (hε : 0 < ε₀
     (hε₀ : ε₀ ≤ 1 / 16) :
     ∀ ν : ℝ, 0 < ν → ν ≤ resizeRatio ε₀ → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
       ∀ {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-      {κ Party : Type} {n t : ℝ}, 0 < n → n < t → ∀ {lab : ℤ × ℤ → κ} {Q : ℤ × ℤ}
+      {κ Party : Type} [Fintype Party] [DecidableEq Party] {n t : ℝ}, 0 < n → n < t →
+      ∀ {lab : ℤ × ℤ → κ} {Q : ℤ × ℤ}
       {g : ℝ × ℝ → κ}, IsDisplacedReading g (blockGuide (2 * n) lab) v → ∀ (own : κ → Party)
       (ph : κ) (rank : κ → ℕ) {V : Finset (ℝ × ℝ)}, (∀ c ∈ V, IsTrueVertex g c) →
       blockCorner (2 * n) Q ∈ V →
@@ -488,28 +485,25 @@ theorem resize_step_reading_isSourceBounded_of_le {ε₀ : ℝ} (hε : 0 < ε₀
       (∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c) →
       (2 * (4 * ε₀ + ν) / ν + 1) ^ 2 ≤ (b : ℝ) → 9 ≤ b →
       ∀ {Ω : EuclideanSpace ℂ (ι → Fin q)}, ‖Ω‖ ≤ 1 →
-      (∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
-      (∀ z, ‖act (holeOld z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
-      (∀ z, Nonempty (holeOld z).Tag) →
+      (∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
+      (∀ z, ‖toEuclideanLin (holeOld z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
       ∃ P : Finset Party, P.card ≤ 9 ∧
         (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + (Q.1 - 1, Q.2 - 1)))) ∧
-        ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V holeOld hpOld).regs
-          (guideFrame pos q g own ph rank V holeNew hpNew).regs,
+        ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V holeOld hpOld).system
+          (guideFrame pos q g own ph rank V holeNew hpNew).system,
         w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧
         w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) *
           (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
             L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
         w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
           L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
-        ‖w.eval ((guideFrame pos q g own ph rank V holeOld hpOld).regIso.symm
-            ((guideFrame pos q g own ph rank V holeOld hpOld).refVec Ω)) -
-          (guideFrame pos q g own ph rank V holeNew hpNew).regIso.symm
-            ((guideFrame pos q g own ph rank V holeNew hpNew).refVec Ω)‖ ≤
+        ‖toEuclideanLin w.op ((guideFrame pos q g own ph rank V holeOld hpOld).regRef Ω) -
+          (guideFrame pos q g own ph rank V holeNew hpNew).regRef Ω‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
         w.IsSourceBounded (2 * b) := by
-  refine fun ν hν hνν' {v} _ {ι _ _ q _ pos κ Party n t} hn hnt {lab Q g} hg own ph rank
+  refine fun ν hν hνν' {v} _ {ι _ _ q _ pos κ Party _ _ n t} hn hnt {lab Q g} hg own ph rank
     {V} hV hc₀ hVc holeOld holeNew patch hcenter hscale hsame hpatch hpOld hpNew
-    {C c b L} hL hcOld hcNew hcPatch hb hb9 {Ω} hΩ hεp hεh htag => ?_
+    {C c b L} hL hcOld hcNew hcPatch hb hb9 {Ω} hΩ hεp hεh => ?_
   have hνle : ν ≤ 1 / 4 := (hνν'.trans (resizeRatio_le ε₀)).trans (by norm_num)
   have hn2 : 0 < 2 * n := by positivity
   have hRle : ∀ r, r = holeRadius ε₀ n t ∨ r = holeRadius ε₀ (2 * n) t → r ≤ 2 * ε₀ * n := by
@@ -538,7 +532,7 @@ theorem resize_step_reading_isSourceBounded_of_le {ε₀ : ℝ} (hε : 0 < ε₀
     (by nlinarith) hg own ph rank hV hc₀ hVc holeOld holeNew patch hcenter
     (fun z => ⟨hRle _ (hscale z).1, hRle _ (hscale z).2⟩) hsame hpatch
     (htwo holeOld fun z => (hscale z).1) (htwo holeNew fun z => (hscale z).2) hpOld hpNew hL
-    hcOld hcNew hcPatch hb' hb9 hΩ hεp hεh htag
+    hcOld hcNew hcPatch hb' hb9 hΩ hεp hεh
 
 /-- **The resizes of a level as gates, with one footprint ratio.** Fix `0 < ε₀ ≤ 1/16`. For every
 ratio `0 < ν ≤ resizeRatio ε₀ = min(ε₀, 1) / 8`, every generic displacement `v`, every
@@ -551,7 +545,8 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–133, 447–479, 529�
 theorem resize_step_reading_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
     ∀ ν : ℝ, 0 < ν → ν ≤ resizeRatio ε₀ → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
       ∀ {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-      {κ Party : Type} {n t : ℝ}, 0 < n → n < t → ∀ {lab : ℤ × ℤ → κ} {Q : ℤ × ℤ}
+      {κ Party : Type} [Fintype Party] [DecidableEq Party] {n t : ℝ}, 0 < n → n < t →
+      ∀ {lab : ℤ × ℤ → κ} {Q : ℤ × ℤ}
       {g : ℝ × ℝ → κ}, IsDisplacedReading g (blockGuide (2 * n) lab) v → ∀ (own : κ → Party)
       (ph : κ) (rank : κ → ℕ) {V : Finset (ℝ × ℝ)}, (∀ c ∈ V, IsTrueVertex g c) →
       blockCorner (2 * n) Q ∈ V →
@@ -573,31 +568,28 @@ theorem resize_step_reading_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε�
       (∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c) →
       (2 * (4 * ε₀ + ν) / ν + 1) ^ 2 ≤ (b : ℝ) → 9 ≤ b →
       ∀ {Ω : EuclideanSpace ℂ (ι → Fin q)}, ‖Ω‖ ≤ 1 →
-      (∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
-      (∀ z, ‖act (holeOld z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
-      (∀ z, Nonempty (holeOld z).Tag) →
+      (∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
+      (∀ z, ‖toEuclideanLin (holeOld z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
       ∃ P : Finset Party, P.card ≤ 9 ∧
         (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + (Q.1 - 1, Q.2 - 1)))) ∧
-        ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V holeOld hpOld).regs
-          (guideFrame pos q g own ph rank V holeNew hpNew).regs,
+        ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V holeOld hpOld).system
+          (guideFrame pos q g own ph rank V holeNew hpNew).system,
         w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧
         w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) *
           (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
             L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
         w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
           L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
-        ‖w.eval ((guideFrame pos q g own ph rank V holeOld hpOld).regIso.symm
-            ((guideFrame pos q g own ph rank V holeOld hpOld).refVec Ω)) -
-          (guideFrame pos q g own ph rank V holeNew hpNew).regIso.symm
-            ((guideFrame pos q g own ph rank V holeNew hpNew).refVec Ω)‖ ≤
+        ‖toEuclideanLin w.op ((guideFrame pos q g own ph rank V holeOld hpOld).regRef Ω) -
+          (guideFrame pos q g own ph rank V holeNew hpNew).regRef Ω‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
-  refine fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn hnt {lab Q g} hg own ph rank
+  refine fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party _ _ n t} hn hnt {lab Q g} hg own ph rank
     {V} hV hc₀ hVc holeOld holeNew patch hcenter hscale hsame hpatch hpOld hpNew
-    {C c b L} hL hcOld hcNew hcPatch hb hb9 {Ω} hΩ hεp hεh htag => ?_
+    {C c b L} hL hcOld hcNew hcPatch hb hb9 {Ω} hΩ hεp hεh => ?_
   obtain ⟨P, h₁, h₂, w, h₃, h₄, h₅, h₆, h₇, -⟩ :=
     resize_step_reading_isSourceBounded_of_le hε hε₀ ν hν hνν' hv hn hnt hg own ph rank hV hc₀
       hVc holeOld holeNew patch hcenter hscale hsame hpatch hpOld hpNew hL hcOld hcNew hcPatch hb
-      hb9 hΩ hεp hεh htag
+      hb9 hΩ hεp hεh
   exact ⟨P, h₁, h₂, w, h₃, h₄, h₅, h₆, h₇⟩
 
 end TNLean.PEPS.Approximation

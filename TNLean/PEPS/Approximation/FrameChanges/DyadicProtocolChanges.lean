@@ -17,10 +17,10 @@ a direct repainting, the resize of one hole, the point treatment of one mark of 
 operation or its removal, a birth or death on one sheet, and the lens exchange of two sheets.
 The step theorems of these operations each produce an original circuit, a word or a chain of
 pair resources on the registers of the encoded frames. This file turns each of them into a
-bounded change (`PartyCircuit.OriginalCircuit.IsBoundedChange`) whose participants are parties
-used by the event of the change (`Approximation.EventUses`), with the raw owners of the frames
-read through the party map of the repainting (`Approximation.labelParty`). The placeholder label
-of a repainting is read as the fresh placeholder party of that repainting
+bounded change (`QuantumCircuit.Party.OriginalCircuit.IsBoundedChange`) whose participants are
+parties used by the event of the change (`Approximation.EventUses`), with the raw owners of the
+frames read through the party map of the repainting (`Approximation.labelParty`). The placeholder
+label of a repainting is read as the fresh placeholder party of that repainting
 (`06-geometry.tex`, lines 91–100).
 
 * `Approximation.eventUses_labelParty_protocolLevelLabels`,
@@ -54,7 +54,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit Metric
+open EncodedFrame Matrix QuantumCircuit.Party Metric
 
 /-! ### The parties used by a repainting -/
 
@@ -237,7 +237,8 @@ theorem IsProtocolConstants.lt_one_div_four_thousand {K₀ ε₀ ν a D B₀ : �
   nlinarith
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-  {Party : Type} {Ω : EuclideanSpace ℂ (ι → Fin q)} {S : Set Party} {r K : ℕ} {ε : ℝ}
+  {Party : Type} [Fintype Party] [DecidableEq Party] {Ω : EuclideanSpace ℂ (ι → Fin q)}
+  {S : Set Party} {r K : ℕ} {ε : ℝ}
 
 /-- **A small-patch rewrite as a bounded change.** The conclusion of the step theorems of the
 direct repaintings, resizes and point treatments (`directRepainting_step`, `resize_step`,
@@ -248,11 +249,12 @@ participants in a set `P` of parties, and expansion bounds, is a bounded change 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 481–541 and 572–583; Lemma 6.3
 `lem:small-rewrite`, `05-frames.tex`, lines 188–218. -/
 theorem isBoundedChange_of_step {F F' : Frame pos q Party} {P : Finset Party} (hP : ↑P ⊆ S)
-    (h : ∃ w : OriginalCircuit F.regs F'.regs, w.nonprivateCount ≤ 1 ∧
+    (h : ∃ w : OriginalCircuit F.system F'.system, w.nonprivateCount ≤ 1 ∧
       (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧ w.IsExpansionBounded r (K : ℝ) ∧
       w.IsMonomialBounded K ∧
-      ‖w.eval (F.regIso.symm (F.refVec Ω)) - F'.regIso.symm (F'.refVec Ω)‖ ≤ ε) :
-    ∃ c : OriginalCircuit F.regs F'.regs, c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) :=
+      ‖toEuclideanLin w.op (F.regRef Ω) - F'.regRef Ω‖ ≤ ε) :
+    ∃ c : OriginalCircuit F.system F'.system,
+      c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) :=
   let ⟨w, h₁, h₂, h₃, h₄, h₅⟩ := h
   ⟨w, h₁, fun γ => (h₂ γ).trans hP, h₃, h₄, h₅⟩
 
@@ -285,12 +287,11 @@ theorem directRepainting_isBoundedChange {K₀ ε₀ ν a D B₀ : ℝ}
     (hpV' : (V' : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer)
     {C c : ℕ} (hcardHole : ∀ z, Fintype.card (hole z).Tag ≤ C * L ^ c)
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c) (hΩ : ‖Ω‖ ≤ 1)
-    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
-    (htag : ∀ z, Nonempty (hole z).Tag) :
+    (hεpatch : ∀ z, ‖toEuclideanLin (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖toEuclideanLin (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
     ∃ w : OriginalCircuit
-        (guideFrame pos q g (labelParty R) guidePlaceholder rank V hole hpV).regs
-        (guideFrame pos q g' (labelParty R) guidePlaceholder rank V' hole hpV').regs,
+        (guideFrame pos q g (labelParty R) guidePlaceholder rank V hole hpV).system
+        (guideFrame pos q g' (labelParty R) guidePlaceholder rank V' hole hpV').system,
       w.IsBoundedChange {p | EventUses (.inl R.1) p} (2 * protocolPatchBound ε₀ ν)
         ((C + 1) ^ (3 * protocolPatchBound ε₀ ν) *
           (16 * protocolPatchBound ε₀ ν ^ 2 * (C + 1) ^ (6 * protocolPatchBound ε₀ ν) + 1) ^
@@ -304,7 +305,7 @@ theorem directRepainting_isBoundedChange {K₀ ε₀ ν a D B₀ : ℝ}
   obtain ⟨P, -, hP, w, h₁, h₂, h₃, h₄, h₅, h₆⟩ := hc.directRepainting_step hm hL hn hK hv
     (fun Q hQ => levelLabels_insert_of_ne _ _ _ _ hQ) hg hg' (labelParty R) guidePlaceholder
     rank hV hV' hVc hVc' hVV' hole patch hhole hpatch hpV hpV' hcardHole hcardPatch hΩ hεpatch
-    hεhole htag
+    hεhole
   exact ⟨w, ⟨h₁, fun γ => (h₂ γ).trans (coe_subset_eventUses_of_window R done _ hP),
     by exact_mod_cast h₃, h₄, h₅⟩, h₆⟩
 
@@ -318,9 +319,10 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 155–221, 357–387 and 44
 `lem:birth`, `05-frames.tex`. -/
 theorem isBoundedChange_of_birth {F F' : Frame pos q Party} {P Q : Party} (hP : P ∈ S)
     (hQ : Q ∈ S) (hK : 1 ≤ K)
-    (h : ∃ w : Word F.regs F'.regs, w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
-      ‖w.eval (F.regIso.symm (F.refVec Ω)) - F'.regIso.symm (F'.refVec Ω)‖ ≤ ε) :
-    ∃ c : OriginalCircuit F.regs F'.regs, c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) := by
+    (h : ∃ w : Word F.system F'.system, w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
+      ‖toEuclideanLin w.op (F.regRef Ω) - F'.regRef Ω‖ ≤ ε) :
+    ∃ c : OriginalCircuit F.system F'.system,
+      c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) := by
   obtain ⟨w, hw, hu, hs, he⟩ := h
   refine ⟨_, (Word.isBoundedChange_toOriginalCircuit hw hu hs hK he).mono ?_ le_rfl le_rfl
     le_rfl⟩
@@ -328,49 +330,54 @@ theorem isBoundedChange_of_birth {F F' : Frame pos q Party} {P Q : Party} (hP : 
   exacts [hP, hQ]
 
 /-- **A death as a bounded change.** The conclusion of the step theorem of the bulk deaths
-(`bandDeath_step`): an allowed chain using only `P∘` and `Q∘`, without pair sources, with at
-most one pair effect and error `ε`, is a bounded change from `Ω_F` to `Ω_{F'}`, for every
-`r ≥ 1` and every `K ≥ 1`, with participants in any set containing `P∘` and `Q∘`.
+(`bandDeath_step`): an allowed chain using only `P∘` and `Q∘`, whose gates are pair effects, at
+most one of them, with error `ε`, is a bounded change from `Ω_F` to `Ω_{F'}`, for every `r ≥ 1`
+and every `K ≥ 1`, with participants in any set containing `P∘` and `Q∘`.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 357–387 and 440–445; Lemma 6.5
 `lem:birth`, `05-frames.tex`. -/
 theorem isBoundedChange_of_death {F F' : Frame pos q Party} {P Q : Party} (hP : P ∈ S)
     (hQ : Q ∈ S) (hr : 1 ≤ r) (hK : 1 ≤ K)
-    (h : ∃ M : PartyChain F.regs F'.regs, M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧
-      M.toEffectChain.effectCount ≤ 1 ∧
-      ‖M.toEffectChain.eval (F.regIso.symm (F.refVec Ω)) - F'.regIso.symm (F'.refVec Ω)‖ ≤ ε) :
-    ∃ c : OriginalCircuit F.regs F'.regs, c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) := by
-  obtain ⟨M, hM, hu, hs, hf, he⟩ := h
-  refine ⟨_, (PartyChain.isBoundedChange_toOriginalCircuit hM hu hs hf hr hK he).mono ?_ le_rfl
+    (h : ∃ M : PartyCircuit (ChainGate (P := Party)) F.system F'.system,
+      M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly {P, Q} ∧
+      M.ForallGate (fun _ _ _ g ↦ Sum.isRight g) ∧ M.numGates ≤ 1 ∧
+      ‖toEuclideanLin (M.op chainEv) (F.regRef Ω) - F'.regRef Ω‖ ≤ ε) :
+    ∃ c : OriginalCircuit F.system F'.system,
+      c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) := by
+  obtain ⟨M, hM, hu, -, hn, he⟩ := h
+  refine ⟨_, (Monomial.isBoundedChange_toOriginalCircuit hM hu hn hr hK he).mono ?_ le_rfl
     le_rfl le_rfl⟩
   rintro x (rfl | rfl)
   exacts [hP, hQ]
 
 /-- **The lens exchange as a bounded change.** The conclusion of the step theorem of the lens
-exchange (`edgeExchange_step`): an allowed word on the registers of two sheets using only the
-neighbouring owner `C`, without pair sources and with error `ε` on the product of the reference
-vectors, is a bounded change of the two sheets, without nonprivate gate, for every `r` and every
-`K ≥ 1`.
+exchange (`edgeExchange_step`): an allowed relabelling `g` of the bases of the parties without
+pair sources, followed by an allowed word `R` without pair sources (the renaming of the two
+sheets), followed by an allowed word using only the neighbouring owner `C` without pair sources,
+with error `ε` on the product of the reference vectors, is a bounded change of the two sheets
+without nonprivate gate, for every set of participants and all bounds.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 389–430 and 440–445; Lemma 6.6
 `lem:exchange`, `05-frames.tex`. -/
-theorem isBoundedChange_of_exchange {F₁ F₂ F₁' F₂' : Frame pos q Party} {C : Party} (hC : C ∈ S)
-    (hK : 1 ≤ K)
-    (h : ∃ w : Word (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs), w.IsAllowed ∧ w.UsesOnly {C} ∧
-      w.sourceCount = 0 ∧
-      ‖w.eval ((twoLayoutIso _ _ F₁.owner F₂.owner).symm
-          (EuclideanSpace.vecKron (F₁.refVec Ω) (F₂.refVec Ω))) -
-        (twoLayoutIso _ _ F₁'.owner F₂'.owner).symm
-          (EuclideanSpace.vecKron (F₁'.refVec Ω) (F₂'.refVec Ω))‖ ≤ ε) :
-    ∃ c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs),
+theorem isBoundedChange_of_exchange {F₁ F₂ G₁ G₂ F₁' F₂' : Frame pos q Party} {C : Party}
+    {R : Word (fun p ↦ G₁.system p × G₂.system p) (fun p ↦ F₁'.system p × F₂'.system p)}
+    (hR : R.IsAllowed) (hR0 : R.sourceCount = 0)
+    (h : ∃ g : Word (fun p ↦ F₁.system p × F₂.system p) (fun p ↦ G₁.system p × G₂.system p),
+      g.IsAllowed ∧ g.sourceCount = 0 ∧
+      ∃ w : Word (fun p ↦ F₁'.system p × F₂'.system p) (fun p ↦ F₁'.system p × F₂'.system p),
+        w.IsAllowed ∧ w.UsesOnly {C} ∧ w.sourceCount = 0 ∧
+        ‖toEuclideanLin (Word.op ((g.comp R).comp w)) (pairRef F₁ F₂ Ω) -
+          pairRef F₁' F₂' Ω‖ ≤ ε) :
+    ∃ c : OriginalCircuit (fun p ↦ F₁.system p × F₂.system p)
+        (fun p ↦ F₁'.system p × F₂'.system p),
       c.nonprivateCount = 0 ∧
         c.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω) := by
-  obtain ⟨w, hw, hu, hs, he⟩ := h
-  rw [← pairRef_eq_twoLayoutIso_symm, ← pairRef_eq_twoLayoutIso_symm] at he
-  refine ⟨_, (w.nonprivateCount_toOriginalCircuit hw).trans hs,
-    (Word.isBoundedChange_toOriginalCircuit hw hu ((le_of_eq hs).trans zero_le_one) hK
-      he).mono ?_ le_rfl le_rfl le_rfl⟩
-  rintro x rfl
-  exact hC
+  obtain ⟨g, hg, hg0, w, hw, -, hw0, herr⟩ := h
+  have hA : Word.IsAllowed ((g.comp R).comp w) := (hg.comp hR).comp hw
+  have h0 : Word.sourceCount ((g.comp R).comp w) = 0 := by
+    simp only [Word.sourceCount, Word.sources_comp, List.length_append] at hg0 hR0 hw0 ⊢
+    omega
+  exact ⟨_, Word.nonprivateCount_toOriginalCircuit_of_sourceCount_eq_zero _ hA h0,
+    Word.isBoundedChange_toOriginalCircuit_of_sourceCount_eq_zero hA h0 S r K herr⟩
 
 end TNLean.PEPS.Approximation

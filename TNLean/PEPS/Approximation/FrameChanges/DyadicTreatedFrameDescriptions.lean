@@ -71,8 +71,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open Set Metric EncodedFrame TNLean.Lattice.PartyCircuit
-open EuclideanSpace (vecKron)
+open Set Metric EncodedFrame Matrix QuantumCircuit.Party
 
 /-! ### The treated squares at the block -/
 
@@ -262,12 +261,12 @@ theorem AngularSeparation.closure_right {X E : Set (ℝ × ℝ)} {n t a : ℝ} {
 
 variable {q : ℕ} [NeZero q] {a A₀ D L₀ : ℝ} {m₀ : ℕ} {L : ℕ}
   {G : ∀ L : ℕ, StateSpace L q → Prop} {Ω : StateSpace L q}
-  {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type} {κ : Type*}
-  {own : κ → Party} {ph : κ} {rank : κ → ℕ} {V : Finset (ℝ × ℝ)}
+  {pos : SquareLatticeVertex L L → ℝ × ℝ} {c : ℝ × ℝ} {Party : Type} [Fintype Party]
+  [DecidableEq Party] {κ : Type*} {own : κ → Party} {ph : κ} {rank : κ → ℕ} {V : Finset (ℝ × ℝ)}
   {hole : ℝ × ℝ → SquarePatch pos q}
   {hV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer}
 
-omit [NeZero q] in
+omit [NeZero q] [Fintype Party] [DecidableEq Party] in
 /-- **The separation premise of a birth or death for the frame of a sampled guide.** Let `f` read
 the guide `G` moved by `d`, and let the holes of its frame sit at true vertices of `f` with radius
 at most `r`. If the plane separation of the remaining changed region `X` from the other labels of
@@ -341,13 +340,11 @@ theorem bandBirth_step_guideFrame (hD : IsAngularScale q G a A₀ m₀ 60 D L₀
     (hTH : Disjoint T (guideFrame pos q f own ph rank V hole hV).outerHoles)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hT : ∀ x ∈ T, fb (pos x) ≠ fa (pos x)) :
-    ∃ w : Word (guideFrame pos q f own ph rank V hole hV).regs
-        ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regs,
+    ∃ w : Word (guideFrame pos q f own ph rank V hole hV).system
+        ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).system,
       w.IsAllowed ∧ w.UsesOnly {own op.label, Q} ∧ w.sourceCount ≤ 1 ∧
-      ‖w.eval ((guideFrame pos q f own ph rank V hole hV).regIso.symm
-          ((guideFrame pos q f own ph rank V hole hV).refVec Ω)) -
-        ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regIso.symm
-          (((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q f own ph rank V hole hV).regRef Ω) -
+        ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regRef Ω‖ ≤
           (L : ℝ) ^ (-30 : ℤ) :=
   bulkBirth_step hD hL hΩ hΩ₁ hpos _ hTP hTH ((card_edgeMarks_le' n e d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv_guideFrame hf hVf hhole
@@ -357,7 +354,7 @@ theorem bandBirth_step_guideFrame (hD : IsAngularScale q G a A₀ m₀ 60 D L₀
 /-- **An edge death for the frame of the sampled guide, conditional on Proposition 3.4.** In the
 setting of `bandBirth_step_guideFrame`, with the frame that of the sampled surrounding guide after
 the death, the death of `T` from the frame in which `T` is owned by `Q∘` is an allowed monomial
-using only `P∘` and `Q∘`, without pair sources, with at most one pair effect and error
+using only `P∘` and `Q∘`, whose gates are pair effects, at most one of them, with error
 `L^{-30}`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:69–80`, `102–125`,
@@ -381,15 +378,14 @@ theorem bandDeath_step_guideFrame (hD : IsAngularScale q G a A₀ m₀ 60 D L₀
     (hTH : Disjoint T (guideFrame pos q f own ph rank V hole hV).outerHoles)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hT : ∀ x ∈ T, fb (pos x) ≠ fa (pos x)) :
-    ∃ M : PartyChain ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regs
-        (guideFrame pos q f own ph rank V hole hV).regs,
-      M.IsAllowed ∧ M.UsesOnly {own op.label, Q} ∧ M.sourceCount = 0 ∧
-      M.toEffectChain.effectCount ≤ 1 ∧
-      ‖M.toEffectChain.eval
-          (((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regIso.symm
-            (((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).refVec Ω)) -
-        (guideFrame pos q f own ph rank V hole hV).regIso.symm
-          ((guideFrame pos q f own ph rank V hole hV).refVec Ω)‖ ≤ (L : ℝ) ^ (-30 : ℤ) :=
+    ∃ M : PartyCircuit (ChainGate (P := Party))
+        ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).system
+        (guideFrame pos q f own ph rank V hole hV).system,
+      M.IsAllowed chainEv ChainGate.IsAllowed ∧ M.UsesOnly {own op.label, Q} ∧
+      M.ForallGate (fun _ _ _ g ↦ Sum.isRight g) ∧ M.numGates ≤ 1 ∧
+      ‖toEuclideanLin (M.op chainEv)
+          (((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regRef Ω) -
+        (guideFrame pos q f own ph rank V hole hV).regRef Ω‖ ≤ (L : ℝ) ^ (-30 : ℤ) :=
   bulkDeath_step hD hL hΩ hΩ₁ hpos _ hTP hTH ((card_edgeMarks_le' n e d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv_guideFrame hf hVf hhole
       (op.angularSeparation_bandUpdate ht htn hε e g d) ht ha
@@ -422,13 +418,11 @@ theorem centralBirth_step_guideFrame (hD : IsAngularScale q G a A₀ m₀ 60 D L
     (hTH : Disjoint T (guideFrame pos q f own ph rank V hole hV).outerHoles)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * R.n)
     (hT : ∀ x ∈ T, f (pos x) ≠ fa (pos x)) :
-    ∃ w : Word (guideFrame pos q f own ph rank V hole hV).regs
-        ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regs,
+    ∃ w : Word (guideFrame pos q f own ph rank V hole hV).system
+        ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).system,
       w.IsAllowed ∧ w.UsesOnly {own R.oldLabel, Q} ∧ w.sourceCount ≤ 1 ∧
-      ‖w.eval ((guideFrame pos q f own ph rank V hole hV).regIso.symm
-          ((guideFrame pos q f own ph rank V hole hV).refVec Ω)) -
-        ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regIso.symm
-          (((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).refVec Ω)‖ ≤
+      ‖toEuclideanLin w.op ((guideFrame pos q f own ph rank V hole hV).regRef Ω) -
+        ((guideFrame pos q f own ph rank V hole hV).changeOwner T Q).regRef Ω‖ ≤
           (L : ℝ) ^ (-30 : ℤ) :=
   bulkBirth_step hD hL hΩ hΩ₁ hpos _ hTP hTH ((card_cornerMarks_le' R.n d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv_guideFrame hf hVf hhole
@@ -440,8 +434,9 @@ Proposition 3.4.** In the setting of `edgeExchange_step`, let the frames of the 
 encoded frames of readings `f₁`, `f₂`, along one displacement `v`, of the main and auxiliary
 guides homogenized to `C_e` on the treated squares and moved to the block by `d`, with holes at
 true vertices of the readings of inner radius at most `ε₀ t`, and let `Y` be the sites placed in
-the translated lens. Then the exchange, by the party of `C_e`, is an allowed word using only that
-party, without pair resources, with error at most `4 L^{-30}`.
+the translated lens. Then the exchange is, after the relabellings of `lensExchange_step`, an
+allowed word using only the party of `C_e`, without pair resources, with error at most
+`4 L^{-30}`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:69–80`, `102–125`,
 `389–430` and `440–445`. -/
@@ -477,34 +472,41 @@ theorem edgeExchange_step_guideFrame (hD : IsAngularScale q G a A₀ m₀ 60 D L
         (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
           hin).tSet (own (R.nbrLabel e)),
         dist (pos x) (pos y) ≤ A₀ * R.n) :
-    ∃ w : Word ((guideFrame pos q f₁ own ph rank V₁ hole hV₁).regs ++
-          (guideFrame pos q f₂ own ph rank V₂ hole hV₂).regs)
-        ((TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
+    ∃ g : Word (fun p ↦ (guideFrame pos q f₁ own ph rank V₁ hole hV₁).system p ×
+          (guideFrame pos q f₂ own ph rank V₂ hole hV₂).system p)
+        (fun p ↦ (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
             (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
-              hin).newFrame₁.regs ++
+              hin).frame₁.system p ×
           (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
             (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
-              hin).newFrame₂.regs),
-      w.IsAllowed ∧ w.UsesOnly {own (R.nbrLabel e)} ∧ w.sourceCount = 0 ∧
-      ‖w.eval ((twoLayoutIso _ _ (guideFrame pos q f₁ own ph rank V₁ hole hV₁).owner
-            (guideFrame pos q f₂ own ph rank V₂ hole hV₂).owner).symm
-          (vecKron ((guideFrame pos q f₁ own ph rank V₁ hole hV₁).refVec Ω)
-            ((guideFrame pos q f₂ own ph rank V₂ hole hV₂).refVec Ω))) -
-        (twoLayoutIso _ _
+              hin).frame₂.system p),
+      g.IsAllowed ∧ g.sourceCount = 0 ∧
+      ∃ w : Word (fun p ↦ (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
+            (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
+              hin).newFrame₁.system p ×
             (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
-              (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
-                hin).newFrame₁.owner
+            (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
+              hin).newFrame₂.system p)
+          (fun p ↦ (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
+            (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
+              hin).newFrame₁.system p ×
             (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
-              (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
-                hin).newFrame₂.owner).symm
-          (vecKron
-            ((TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
-              (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
-                hin).newFrame₁.refVec Ω)
-            ((TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
-              (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
-                hin).newFrame₂.refVec Ω))‖ ≤
-        4 * (L : ℝ) ^ (-30 : ℤ) := by
+            (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
+              hin).newFrame₂.system p),
+        w.IsAllowed ∧ w.UsesOnly {own (R.nbrLabel e)} ∧ w.sourceCount = 0 ∧
+        ‖toEuclideanLin (Word.op ((g.comp
+              (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
+                (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
+                hin).renameWord).comp w))
+            (pairRef (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
+              (guideFrame pos q f₂ own ph rank V₂ hole hV₂) Ω) -
+          pairRef (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
+            (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
+              hin).newFrame₁
+            (TwoSheetExchange.ofFrames (guideFrame pos q f₁ own ph rank V₁ hole hV₁)
+            (guideFrame pos q f₂ own ph rank V₂ hole hV₂) (lensSample pos R.n e d) out hout
+              hin).newFrame₂ Ω‖ ≤
+          4 * (L : ℝ) ^ (-30 : ℤ) := by
   have hfl := R.floor_exchange_frontier ht htn hε E e d
   refine lensExchange_step_of_frontier hD hL hΩ hΩ₁ hpos _ _ _ out hout hin _
     (K := (· + d) '' edgeLens R.n e)

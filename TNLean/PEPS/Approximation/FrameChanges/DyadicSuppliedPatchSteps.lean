@@ -36,7 +36,8 @@ noncomputable section
 namespace TNLean.PEPS
 
 namespace EncodedFrame
-open TNLean.Lattice.Sheet
+
+open Matrix
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ}
   {Ω : EuclideanSpace ℂ (ι → Fin q)} {B₀ C c p : ℝ} {L : ℕ}
@@ -81,19 +82,19 @@ lines 109–124 and 574–583. -/
 theorem suppliedPatch_data (S : AdaptivePatchSupply pos Ω B₀ C c 60 L) (hΩ : ‖Ω‖ = 1)
     (hL : 2 ≤ L) {C' c' : ℕ} (hC : C ≤ C') (hC' : 1 ≤ C') (hc : c ≤ c') :
     (∀ z, Fintype.card (suppliedPatch S ρ hρ z).Tag ≤ C' * L ^ c') ∧
-      (∀ z, ‖act (suppliedPatch S ρ hρ z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) ∧
+      (∀ z, ‖toEuclideanLin (suppliedPatch S ρ hρ z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) ∧
       ∀ z, Nonempty (suppliedPatch S ρ hρ z).Tag :=
   ⟨fun z => (isSuppliedPatch_suppliedPatch S hρ z).card_tag_le (by omega) hC hC' hc,
     fun z => by
       rw [← Approximation.GuideFrameRewrite.rpow_neg_sixty]
-      exact (isSuppliedPatch_suppliedPatch S hρ z).norm_act_proj_sub_le,
+      exact (isSuppliedPatch_suppliedPatch S hρ z).norm_toEuclideanLin_proj_sub_le,
     fun z => (isSuppliedPatch_suppliedPatch S hρ z).nonempty_tag hΩ hL (by norm_num)⟩
 
 end EncodedFrame
 
 namespace Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet TNLean.Lattice.PartyCircuit Set Metric
+open EncodedFrame Matrix QuantumCircuit.Party Set Metric
 
 /-- **The resizes of a level as gates, with supplied patches.** In the setting of
 `resize_step_reading_of_le`, let the old and new hole patches and the net patches be supplied by
@@ -107,8 +108,9 @@ Polynomial-PEPS manuscript, `03-patches.tex`, lines 26–49, and `06-geometry.te
 theorem resize_step_supplied_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
     ∀ ν : ℝ, 0 < ν → ν ≤ resizeRatio ε₀ → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
       ∀ {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-      {κ Party : Type} {n t : ℝ}, 0 < n → n < t → ∀ {lab : ℤ × ℤ → κ} {Q : ℤ × ℤ}
-      {g : ℝ × ℝ → κ}, IsDisplacedReading g (blockGuide (2 * n) lab) v → ∀ (own : κ → Party)
+      {κ Party : Type} [Fintype Party] [DecidableEq Party] {n t : ℝ}, 0 < n → n < t →
+      ∀ {lab : ℤ × ℤ → κ} {Q : ℤ × ℤ} {g : ℝ × ℝ → κ},
+      IsDisplacedReading g (blockGuide (2 * n) lab) v → ∀ (own : κ → Party)
       (ph : κ) (rank : κ → ℕ) {V : Finset (ℝ × ℝ)}, (∀ c ∈ V, IsTrueVertex g c) →
       blockCorner (2 * n) Q ∈ V →
       (∀ c ∈ closedBall (blockCorner (2 * n) Q) (2 * (2 * n)), IsTrueVertex g c → c ∈ V) →
@@ -129,23 +131,24 @@ theorem resize_step_supplied_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε�
       ∃ P' : Finset Party, P'.card ≤ 9 ∧
         (∀ x ∈ P', ∃ R ∈ blockWindow 1, x = own (lab (R + (Q.1 - 1, Q.2 - 1)))) ∧
         ∃ w : OriginalCircuit
-          (guideFrame pos q g own ph rank V (suppliedPatch P ρ hρ) hpOld).regs
-          (guideFrame pos q g own ph rank V (suppliedPatch P ρ' hρ') hpNew).regs,
+          (guideFrame pos q g own ph rank V (suppliedPatch P ρ hρ) hpOld).system
+          (guideFrame pos q g own ph rank V (suppliedPatch P ρ' hρ') hpNew).system,
         w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P') ∧
         w.IsExpansionBounded (2 * b) ((C' + 1) ^ (3 * b) *
           (16 * b ^ 2 * (C' + 1) ^ (6 * b) + 1) ^ (2 * b) *
             L ^ (3 * b * c' + 4 * b * (3 * b * c' + 30)) : ℕ) ∧
         w.IsMonomialBounded ((C' + 1) ^ (3 * b) * (16 * b ^ 2 * (C' + 1) ^ (6 * b) + 1) ^
           (2 * b) * L ^ (3 * b * c' + 4 * b * (3 * b * c' + 30))) ∧
-        ‖w.eval ((guideFrame pos q g own ph rank V (suppliedPatch P ρ hρ) hpOld).regRef Ω) -
+        ‖toEuclideanLin w.op
+            ((guideFrame pos q g own ph rank V (suppliedPatch P ρ hρ) hpOld).regRef Ω) -
           (guideFrame pos q g own ph rank V (suppliedPatch P ρ' hρ') hpNew).regRef Ω‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
         w.IsSourceBounded (2 * b) := by
   have H := resize_step_reading_isSourceBounded_of_le hε hε₀
-  refine fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn hnt {lab Q g} hg own ph
+  refine fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party _ _ n t} hn hnt {lab Q g} hg own ph
     rank {V} hV hc₀ hVc {Ω B₀ C c L} P hΩ hL {ρ ρ'} hρ hρ' hu hscale hsame hpOld hpNew
     {C' c' b} hC hC' hc hb hb9 => ?_
-  obtain ⟨hcOld, hεOld, htagOld⟩ := suppliedPatch_data hρ P hΩ hL hC hC' hc
+  obtain ⟨hcOld, hεOld, -⟩ := suppliedPatch_data hρ P hΩ hL hC hC' hc
   obtain ⟨hcNew, -, -⟩ := suppliedPatch_data hρ' P hΩ hL hC hC' hc
   obtain ⟨hcPatch, hεPatch, -⟩ := suppliedPatch_data hu P hΩ hL hC hC' hc
   exact H ν hν hνν' hv hn hnt hg own ph rank hV hc₀ hVc (suppliedPatch P ρ hρ)
@@ -154,7 +157,7 @@ theorem resize_step_supplied_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε�
     (fun z => by simpa using hscale z)
     (fun z hz => suppliedPatch_congr P hρ hρ' (hsame z hz))
     (fun z => ⟨suppliedPatch_center P hu z, suppliedPatch_scale P hu z⟩) hpOld hpNew
-    (by omega) hcOld hcNew hcPatch hb hb9 hΩ.le hεPatch hεOld htagOld
+    (by omega) hcOld hcNew hcPatch hb hb9 hΩ.le hεPatch hεOld
 
 /-- **The point treatments as gates, with supplied patches.** In the setting of
 `pointTreatment_step_reading_of_le`, let the hole patches, of radius `ε₀ t`, and the net patches,
@@ -168,7 +171,8 @@ Polynomial-PEPS manuscript, `03-patches.tex`, lines 26–49, and `06-geometry.te
 theorem pointTreatment_step_supplied_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
     ∀ ν : ℝ, 0 < ν → ν ≤ pointTreatmentRatio ε₀ → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
       ∀ {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-      {κ Party : Type} {n t : ℝ} (hn : 0 < n), 0 < t → 8 * t < n →
+      {κ Party : Type} [Fintype Party] [DecidableEq Party] {n t : ℝ} (hn : 0 < n), 0 < t →
+      8 * t < n →
       ∀ {lab : ℤ × ℤ → κ} {S : ℤ × ℤ} {B : κ} {g : ℝ × ℝ → κ},
       (blockBaseline hn lab S B).IsUnmodifiedGuide g →
       ∀ {M₁ M₂ : Finset (ℤ × ℤ)} (Q₀ : ℤ × ℤ), IsBlockCornerOf S Q₀ →
@@ -192,8 +196,8 @@ theorem pointTreatment_step_supplied_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε�
           Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer)
         {C' c' b : ℕ}, C ≤ C' → 1 ≤ C' → c ≤ c' →
       (2 * (2 + 4 * ε₀ + ν) / ν + 1) ^ 2 ≤ (b : ℝ) → 53 ≤ b →
-      ∃ w : OriginalCircuit (guideFrame pos q g₁ own ph rank V (suppliedPatch P _ hr) hpV).regs
-          (guideFrame pos q g₂ own ph rank V' (suppliedPatch P _ hr) hpV').regs,
+      ∃ w : OriginalCircuit (guideFrame pos q g₁ own ph rank V (suppliedPatch P _ hr) hpV).system
+          (guideFrame pos q g₂ own ph rank V' (suppliedPatch P _ hr) hpV').system,
         w.nonprivateCount ≤ 1 ∧
         (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑(blockParties own lab S B)) ∧
         w.IsExpansionBounded (2 * b) ((C' + 1) ^ (3 * b) *
@@ -201,21 +205,22 @@ theorem pointTreatment_step_supplied_of_le {ε₀ : ℝ} (hε : 0 < ε₀) (hε�
             L ^ (3 * b * c' + 4 * b * (3 * b * c' + 30)) : ℕ) ∧
         w.IsMonomialBounded ((C' + 1) ^ (3 * b) * (16 * b ^ 2 * (C' + 1) ^ (6 * b) + 1) ^
           (2 * b) * L ^ (3 * b * c' + 4 * b * (3 * b * c' + 30))) ∧
-        ‖w.eval ((guideFrame pos q g₁ own ph rank V (suppliedPatch P _ hr) hpV).regRef Ω) -
+        ‖toEuclideanLin w.op
+            ((guideFrame pos q g₁ own ph rank V (suppliedPatch P _ hr) hpV).regRef Ω) -
           (guideFrame pos q g₂ own ph rank V' (suppliedPatch P _ hr) hpV').regRef Ω‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
         w.IsSourceBounded (2 * b) := by
   have H := pointTreatment_step_reading_isSourceBounded_of_le hε hε₀
-  refine fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
+  refine fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party _ _ n t} hn ht htn {lab S B g} hg
     {M₁ M₂} Q₀ hQ₀ hM L₀ hL₀ {g₁ g₂} hg₁ hg₂ own ph rank {V V'} hV hV' hVc hVc' hVV'
     {Ω B₀ C c L} P hΩ hL hr hu hpV hpV' {C' c' b} hC hC' hc hb hb53 => ?_
-  obtain ⟨hcHole, hεHole, htag⟩ := suppliedPatch_data hr P hΩ hL hC hC' hc
+  obtain ⟨hcHole, hεHole, -⟩ := suppliedPatch_data hr P hΩ hL hC hC' hc
   obtain ⟨hcPatch, hεPatch, -⟩ := suppliedPatch_data hu P hΩ hL hC hC' hc
   exact H ν hν hνν' hv hn ht htn hg Q₀ hQ₀ hM L₀ hL₀ hg₁ hg₂ own ph rank hV hV' hVc hVc' hVV'
     (suppliedPatch P _ hr) (suppliedPatch P _ hu)
     (fun z => ⟨suppliedPatch_center P hr z, suppliedPatch_scale P hr z⟩)
     (fun z => ⟨suppliedPatch_center P hu z, suppliedPatch_scale P hu z⟩) hpV hpV'
-    (by omega) hcHole hcPatch hb hb53 hΩ.le hεPatch hεHole htag
+    (by omega) hcHole hcPatch hb hb53 hΩ.le hεPatch hεHole
 
 end Approximation
 

@@ -28,9 +28,9 @@ error on a unit vector is `1 > L^{-p}`.
 
 ## Main results
 
-* `EncodedFrame.IsSuppliedPatch.norm_act_proj_sub_le`, `EncodedFrame.IsSuppliedPatch.card_tag_le`,
-  `EncodedFrame.IsSuppliedPatch.nonempty_tag`: the error, the tag count and the nonemptiness of
-  the tags of a supplied patch.
+* `EncodedFrame.IsSuppliedPatch.norm_toEuclideanLin_proj_sub_le`,
+  `EncodedFrame.IsSuppliedPatch.card_tag_le`, `EncodedFrame.IsSuppliedPatch.nonempty_tag`: the
+  error, the tag count and the nonemptiness of the tags of a supplied patch.
 * `Approximation.GuideFrameRewrite.IsSupplied.patchData`: the patch hypotheses of
   `GuideFrameRewrite.PlaneConditions.exists_originalCircuit` for a supplied rewrite.
 * `Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit_of_isSupplied`: a
@@ -50,10 +50,9 @@ noncomputable section
 
 namespace TNLean.PEPS
 
-open TNLean.Lattice.PartyCircuit
+open Matrix QuantumCircuit.Party
 
 namespace EncodedFrame
-open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ}
   {Ω : EuclideanSpace ℂ (ι → Fin q)} {B₀ C c p : ℝ} {L : ℕ}
@@ -67,17 +66,16 @@ def IsSuppliedPatch (S : AdaptivePatchSupply pos Ω B₀ C c p L) (P : SquarePat
   ∃ z u, ∃ hu : 0 < u ∧ u ≤ B₀ * Real.log L, patchAt S z hu = P
 
 namespace IsSuppliedPatch
-open TNLean.Lattice.Sheet
 
 variable {S : AdaptivePatchSupply pos Ω B₀ C c p L} {P : SquarePatch pos q}
 
 /-- The projector of a supplied patch has error at most `L^{-p}` on `Ω`.
 
 Polynomial-PEPS manuscript, `03-patches.tex`, lines 26–33. -/
-theorem norm_act_proj_sub_le (h : IsSuppliedPatch S P) :
-    ‖act P.proj Ω - Ω‖ ≤ (L : ℝ) ^ (-p) := by
+theorem norm_toEuclideanLin_proj_sub_le (h : IsSuppliedPatch S P) :
+    ‖toEuclideanLin P.proj Ω - Ω‖ ≤ (L : ℝ) ^ (-p) := by
   obtain ⟨z, u, hu, rfl⟩ := h
-  exact norm_act_proj_patchAt_sub_le S z hu
+  exact norm_toEuclideanLin_proj_patchAt_sub_le S z hu
 
 /-- **Tag count of a supplied patch.** For natural constants `C' ≥ max 1 C` and `c' ≥ c`, a
 supplied patch has at most `C' L^{c'}` tags.
@@ -115,8 +113,8 @@ theorem nonempty_tag (h : IsSuppliedPatch S P) (hΩ : ‖Ω‖ = 1) (hL : 2 ≤ 
     rw [not_nonempty_iff] at hne
     have hcyl : (patchAt S z hu).cylSum = 0 :=
       Finset.sum_eq_zero fun s _ => (hne.false (.inr ⟨s, ho⟩)).elim
-    have he := norm_act_one_sub_cylSum_patchAt_le S z hu
-    rw [hcyl, sub_zero, act_one, hΩ] at he
+    have he := norm_toEuclideanLin_one_sub_cylSum_patchAt_le S z hu
+    rw [hcyl, sub_zero, toEuclideanLin_one_apply, hΩ] at he
     have hlt : (L : ℝ) ^ (-p) < 1 :=
       Real.rpow_lt_one_of_one_lt_of_neg (by exact_mod_cast hL) (by linarith)
     linarith
@@ -127,7 +125,7 @@ end EncodedFrame
 
 namespace Approximation
 
-open EncodedFrame TNLean.Lattice.Sheet
+open EncodedFrame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {κ Party : Type}
 
@@ -154,7 +152,7 @@ theorem rpow_neg_sixty (L : ℕ) : (L : ℝ) ^ (-(60 : ℝ)) = ((L : ℝ) ^ 60)�
 supplied by Proposition 4.1 at test exponent `60`, with `‖Ω‖ = 1`, `L ≥ 2` and natural constants
 `C' ≥ max 1 C` and `c' ≥ c`: every affected hole and every additional patch has at most
 `C' L^{c'}` tags, every additional patch and every old affected hole has error at most `L^{-60}`
-on `Ω`, and every hole of the old frame has a tag. These are the patch hypotheses of
+on `Ω`, and every hole of the old frame has a tag. The first five are the patch hypotheses of
 `GuideFrameRewrite.PlaneConditions.exists_originalCircuit`.
 
 Polynomial-PEPS manuscript, `03-patches.tex`, lines 26–49; `06-geometry.tex`, lines 109–124 and
@@ -164,8 +162,8 @@ theorem IsSupplied.patchData {S : AdaptivePatchSupply pos Ω B₀ C c 60 L} (hG 
     (∀ a ∈ G.newAffected, Fintype.card (G.holeNew a).Tag ≤ C' * L ^ c') ∧
       (∀ z ∈ G.centers, Fintype.card (G.patch z).Tag ≤ C' * L ^ c') ∧
       (∀ a ∈ G.oldAffected, Fintype.card (G.holeOld a).Tag ≤ C' * L ^ c') ∧
-      (∀ z ∈ G.centers, ‖act (G.patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) ∧
-      (∀ a ∈ G.oldAffected, ‖act (G.holeOld a).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) ∧
+      (∀ z ∈ G.centers, ‖toEuclideanLin (G.patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) ∧
+      (∀ a ∈ G.oldAffected, ‖toEuclideanLin (G.holeOld a).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) ∧
       ∀ z ∈ G.untouched ∪ G.oldAffected, Nonempty (G.holeOld z).Tag := by
   obtain ⟨hpatch, hold, hnew⟩ := hG
   have hL1 : 1 ≤ L := by omega
@@ -174,15 +172,15 @@ theorem IsSupplied.patchData {S : AdaptivePatchSupply pos Ω B₀ C c 60 L} (hG 
   refine ⟨fun a ha => (hnew a ha).card_tag_le hL1 hC hC' hc,
     fun z hz => (hpatch z hz).card_tag_le hL1 hC hC' hc,
     fun a ha => (hold' a ha).card_tag_le hL1 hC hC' hc,
-    fun z hz => rpow_neg_sixty L ▸ (hpatch z hz).norm_act_proj_sub_le,
-    fun a ha => rpow_neg_sixty L ▸ (hold' a ha).norm_act_proj_sub_le,
+    fun z hz => rpow_neg_sixty L ▸ (hpatch z hz).norm_toEuclideanLin_proj_sub_le,
+    fun a ha => rpow_neg_sixty L ▸ (hold' a ha).norm_toEuclideanLin_proj_sub_le,
     fun z hz => (hold z hz).nonempty_tag hΩ hL (by norm_num)⟩
 
 /-- **A supplied small-patch rewrite between frames of guides as one gate.** Under the plane
 conditions of Lemma 6.3, let the patches of the rewrite be supplied by Proposition 4.1 at test
 exponent `60` for a unit vector `Ω` and `L ≥ 2`, and let `C' ≥ max 1 C` and `c' ≥ c` be natural
 constants. If there are at most `b` additional patches, `b` old and `b` new affected holes and
-`b` specified parties, and the specified list of parties is nonempty, then there is an original
+`b` specified parties, then there is an original
 circuit from the registers of the old frame to those of the new frame with at most one nonprivate
 gate, every participant of a gate a specified party, gate expansion into at most `K L^e` allowed
 monomials with at most `2b` normalized pair effects each and coefficients of total modulus at most
@@ -194,22 +192,23 @@ Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, line
 Proposition 4.1 `prop:patch`, `03-patches.tex`, lines 26–49; the holes and patches of the
 protocol, `06-geometry.tex`, lines 109–124; the gates of Proposition 7.1, `06-geometry.tex`,
 lines 574–583. -/
-theorem PlaneConditions.exists_originalCircuit_of_isSupplied [NeZero q] (h : G.PlaneConditions)
+theorem PlaneConditions.exists_originalCircuit_of_isSupplied [NeZero q] [Fintype Party]
+    [DecidableEq Party] (h : G.PlaneConditions)
     {S : AdaptivePatchSupply pos Ω B₀ C c 60 L} (hG : G.IsSupplied S) (hΩ : ‖Ω‖ = 1)
     (hL : 2 ≤ L) {C' c' b : ℕ} (hC : C ≤ C') (hC' : 1 ≤ C') (hc : c ≤ c')
     (hm : G.centers.card ≤ b) (hrold : G.oldAffected.card ≤ b) (hrnew : G.newAffected.card ≤ b)
-    (hparties : G.parties.card ≤ b) (hS₀ : G.parties.Nonempty) :
-    ∃ w : OriginalCircuit G.oldFrame.regs G.newFrame.regs, w.nonprivateCount ≤ 1 ∧
+    (hparties : G.parties.card ≤ b) :
+    ∃ w : OriginalCircuit G.oldFrame.system G.newFrame.system, w.nonprivateCount ≤ 1 ∧
       (∀ g, (↑(w.participants g) : Set Party) ⊆ ↑G.parties) ∧
       w.IsExpansionBounded (2 * b) ((C' + 1) ^ (3 * b) * (16 * b ^ 2 * (C' + 1) ^ (6 * b) + 1) ^
         (2 * b) * L ^ (3 * b * c' + 4 * b * (3 * b * c' + 30)) : ℕ) ∧
       w.IsMonomialBounded ((C' + 1) ^ (3 * b) * (16 * b ^ 2 * (C' + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c' + 4 * b * (3 * b * c' + 30))) ∧
-      ‖w.eval (G.oldFrame.regIso.symm (G.oldFrame.refVec Ω)) -
-          G.newFrame.regIso.symm (G.newFrame.refVec Ω)‖ ≤ (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
-  obtain ⟨hnew, hpatch, hold, hεpatch, hεold, htag⟩ := hG.patchData hΩ hL hC hC' hc
+      ‖toEuclideanLin w.op (G.oldFrame.regRef Ω) -
+          G.newFrame.regRef Ω‖ ≤ (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
+  obtain ⟨hnew, hpatch, hold, hεpatch, hεold, -⟩ := hG.patchData hΩ hL hC hC' hc
   exact h.exists_originalCircuit (by omega) hnew hpatch hold hm hrold hrnew hparties hΩ.le
-    hεpatch hεold hS₀ htag
+    hεpatch hεold
 
 end GuideFrameRewrite
 
