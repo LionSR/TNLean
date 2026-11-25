@@ -14,7 +14,8 @@ The density sum is indexed by the two original gate-label functions and one
 common assignment on gate-pair sample positions. Each physical matrix uses
 only the two restrictions to its incident gates and the restriction to its
 incident sample positions. All original source dimensions and sample arrays
-are retained; the exterior scalar is kept without cancellation.
+are retained; the exterior readout factor and the exterior scalar are kept
+without cancellation.
 
 This is an exact identity for the sampled circuit. No approximation estimate
 or bound on its virtual dimensions is asserted.
@@ -24,77 +25,72 @@ and 565–588.
 -/
 
 noncomputable section
-open scoped Matrix ComplexConjugate
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice
-open TNLean.Lattice.Compression
-attribute [local instance] Classical.propDecidable
-variable {P : Type} [Fintype P] {a : Layout P}
-variable {I E : Option {_p : P // true = true} → Type}
-variable [∀ q, Fintype (I q)] [∀ q, Fintype (E q)]
 
+open Matrix ManyBody
+open scoped Kronecker ComplexConjugate
+open TNLean.Network
+
+namespace QuantumCircuit.Party.SourceCircuit
+
+variable {P : Type} [DecidableEq P] [Fintype P] {X Y : P → Type} [∀ s, Fintype (X s)]
+  [∀ s, DecidableEq (X s)] [∀ s, Fintype (Y s)] [∀ s, DecidableEq (Y s)]
+  {Phys Env : Option {_p : P // true = true} → Type} [∀ q, Fintype (Env q)]
+
+open Classical in
 /-- The actual sampled physical density is its sum over original gate labels
 and common gate-pair samples, with each matrix constructed from incident data.
-The ket and bra labels remain independent, and the exterior scalar is unchanged.
+The ket and bra labels remain independent, and the exterior readout factor and
+the exterior scalar are unchanged.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381
 and 565–588. -/
 theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSampleSum
-    (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps)
-    (garbage : Layout P) (w : SourceCircuit a (familyPhysicalLayout d ps ++ garbage))
-    (ψ : ProductInput a) (k : ℕ)
-    (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
-      Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
-    (L : ∀ e : sourceLocations w, branchLabels w e.1 →
-      Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
-    (R : ∀ e : sourceLocations w, branchLabels w e.1 →
-      Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
-    (ω : SourceGaussianSamples w k)
-    (B : ∀ q, OrthonormalBasis (I q) ℂ
-      (Mem (Layout.atParty q (w.allResidualSourceLayout ++ []))))
-    (BG : ∀ q, OrthonormalBasis (E q) ℂ
-      (Mem (Layout.atParty q
-        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))))
-    {n J : Type} [Fintype n] [Fintype J]
-    (bIn : OrthonormalBasis n ℂ (Mem a)) (bRef : OrthonormalBasis J ℂ (Mem garbage)) :
-    letI : DecidableEq P := Classical.typeDecidableEq P
+    (K : ∀ q, Matrix (Phys q × Env q) (blockSystem (affectedOwner fun _ ↦ true) Y q) ℂ)
+    (w : SourceCircuit X Y) (φ : ∀ s, EuclideanSpace ℂ (X s)) (k : ℕ)
+    (lam : ∀ e : w.sourceLocations, w.branchLabels e.1 →
+      Fin (min (w.sourceDims e).1 (w.sourceDims e).2) → ℝ)
+    (E : ∀ e : w.sourceLocations, w.branchLabels e.1 →
+      Matrix (w.leftBasis e) (Fin (min (w.sourceDims e).1 (w.sourceDims e).2)) ℂ)
+    (F : ∀ e : w.sourceLocations, w.branchLabels e.1 →
+      Matrix (w.rightBasis e) (Fin (min (w.sourceDims e).1 (w.sourceDims e).2)) ℂ)
+    (ω : SourceGaussianSamples w k) :
+    let e := Equiv.arrowProdEquivProdArrow (Option {_p : P // true = true}) Phys Env
+    let b := blockConfigEquiv (affectedOwner fun _ ↦ true) Y
+    let ψ : EuclideanSpace ℂ (Config X) := WithLp.toLp 2 (productVector fun p x ↦ φ p x)
     let M := fun (η θ : (g : w.nonemptyGateLocations) → w.branchLabels g.1)
       (j : DistributedOperatorContraction.Sample
         (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) → Fin k)
       (p : P) ↦
-      incidentSampledPhysicalFactor (I := I) (E := E)
-        d ps hn hc garbage w ψ k lam L R p
+      incidentSampledPhysicalFactor K w φ k lam E F p
         (DistributedOperatorContraction.restrictGates
           (Finset.univ : Finset w.nonemptyGateLocations)
           (fun g ↦ w.participants g.1) (fun g ↦ w.branchLabels g.1) (fun g ↦ η g.1) p)
         (DistributedOperatorContraction.restrictGates
           (Finset.univ : Finset w.nonemptyGateLocations)
           (fun g ↦ w.participants g.1) (fun g ↦ w.branchLabels g.1) (fun g ↦ θ g.1) p)
-        ω B BG
+        ω
         ((DistributedOperatorContraction.restrictSamples
           (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1)
-          k j p) ∘ (partialSlotSampleEquiv w p).toFun)
-    physicalSourceReplacedDensity (familyPhysicalLayout d ps) garbage w
-        (fun e ξ ζ ↦ sampledSourceMatrix w k lam L R e ξ ζ ω)
-        bIn (familyLabelledPhysicalBasis d ps hn hc) bRef
-        (Matrix.vecMulVec (bIn.repr ψ.vector).ofLp
-          (fun t ↦ conj (bIn.repr ψ.vector t))) =
+          k j p) ∘ partialSlotSampleEquiv w p)
+    physicalSourceReplacedDensity w (fun s ξ ζ ↦ sampledSourceMatrix w k lam E F s ξ ζ ω)
+        ((piKronecker K).submatrix e.symm b.symm) (euclideanOuterProduct ψ ψ) =
       (((k : ℂ)⁻¹ ^ (partialSlots (fun _ ↦ true) w).length) *
         (w.emptyGateScalar * conj w.emptyGateScalar)) •
-        ∑ η : (g : w.nonemptyGateLocations) → w.branchLabels g.1,
-          ∑ θ : (g : w.nonemptyGateLocations) → w.branchLabels g.1,
-            (∏ g : w.nonemptyGateLocations,
-              w.branchCoefficient g.1 (η g) * conj (w.branchCoefficient g.1 (θ g))) •
-              ∑ j : DistributedOperatorContraction.Sample
-                  (Finset.univ : Finset w.nonemptyGateLocations)
-                  (fun g ↦ w.participants g.1) → Fin k,
-                Matrix.piKronecker (M η θ j) := by
-  classical
-  intro M
+        reindex (exteriorConfigEquiv Phys).symm (exteriorConfigEquiv Phys).symm
+          (partialTraceRight (K none * (K none)ᴴ) ⊗ₖ
+            ∑ η : (g : w.nonemptyGateLocations) → w.branchLabels g.1,
+              ∑ θ : (g : w.nonemptyGateLocations) → w.branchLabels g.1,
+                (∏ g : w.nonemptyGateLocations,
+                  w.branchCoefficient g.1 (η g) * conj (w.branchCoefficient g.1 (θ g))) •
+                  ∑ j : DistributedOperatorContraction.Sample
+                      (Finset.univ : Finset w.nonemptyGateLocations)
+                      (fun g ↦ w.participants g.1) → Fin k,
+                    piKronecker (M η θ j)) := by
+  intro e b ψ M
   have h := physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum
-    (I := I) (E := E) d ps hn hc garbage w ψ k lam L R ω B BG bIn bRef
+    K w φ k lam E F ω
   dsimp only at h
   rw [sum_choiceSamples_eq_sum_originalGateSamples] at h
   simpa only [M, originalGateLabelsAtOfAllChoices_eq_restrictGates,
-    restrict_reindexedSourceSampleAssignment_eq] using! h
+    restrict_reindexedSourceSampleAssignment_eq] using h
 
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party.SourceCircuit

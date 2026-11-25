@@ -3,566 +3,213 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Compression.WordEvalComparison
+import QICLean.Circuit.Party.Compression.PartialExpansion.ExteriorScalar
 import TNLean.Network.IncidentFactor.IncidentSourceWord
-import TNLean.Network.IncidentFactor.AllPartySingletonCircuitComparison
-import TNLean.Lattice.Compression.WordStructuralCongruence
 
 /-!
-# The prepared source operator determined by incident labels
+# The prepared source operation reads only the incident labels
 
-For a genuine all-party choice, the selected source-to-output operator equals
-the word constructed directly from that party's incident labels. The proof
-compares the actual recorded private preparation and the chronological
-residual separately, under the fixed selected source-register identifications.
-No extension of incident labels or cancellation of a preparation is used.
+At an original party, the local part of a branch of the expansion along all parties is built
+from the gates of the circuit one after the other. A gate whose cell does not contain the party
+acts there as the identification of equal bases, whatever its label; a gate whose cell contains
+the party is the same branch word for two branches with the same label there; and the fresh
+factors of the later sources do not depend on the labels, only on the bases of the slots. Hence
+the operation at the party of the residual of a branch, and of the prepared source word, is the
+same for two branches with the same labels at the incident gates. In particular it is the
+operation `incidentSourceOp` constructed from the incident labels.
 
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139, 246–267, 351–434
+and 565–588.
 -/
 
 noncomputable section
-namespace TNLean.Lattice.PartyCircuit.SourceCircuit
-open TNLean.Lattice.PartyCircuit
-variable {P : Type}
 
-private theorem restrict_partialResidual_eval_heq (A : P → Bool) {a b : Layout P}
-    (w : SourceCircuit a b) (ξ : Choices A w)
-    (f : Option {p : P // A p = true} → Bool) :
-    HEq ((partialResidual A w ξ).restrict f (sources_partialResidual A w ξ)).eval
-      ((partialWord A w ξ).localPart.restrict f (partialWord A w ξ).sources_localPart).eval := by
-  unfold partialResidual Word.residualInSlots
-  exact Word.restrict_castInput_eval_heq f _ _ _
+open Matrix ManyBody
 
-private theorem restrict_privatePreparation_mapOwner_eval_heq {Q : Type}
-    (f : P → Q) (p : P) (q : Q) (hf : ∀ r, f r = q ↔ r = p)
-    {a : Layout P} (ψ : ProductInput a) :
-    HEq ((ψ.prepare.mapOwner f).restrict (partySelector q)
-      (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])).eval
-      (ψ.prepare.restrict (partySelector p) ψ.sources_prepare).eval := by
-  have hsel : (fun r ↦ partySelector q (f r)) = partySelector p := by
-    funext r
-    apply Bool.eq_iff_iff.mpr
-    simpa only [partySelector, decide_eq_true_eq] using hf r
-  have h := Word.restrict_mapOwner_heq f (partySelector q) ψ.prepare ψ.sources_prepare
-  rw [hsel] at h
-  have hi : Layout.restrict (partySelector q) (Layout.mapOwner f []) =
-      Layout.mapOwner f (Layout.restrict (partySelector p) []) := rfl
-  have ho : Layout.restrict (partySelector q) (Layout.mapOwner f a) =
-      Layout.mapOwner f (Layout.restrict (partySelector p) a) := by
-    rw [Layout.restrict_mapOwner, hsel]
-  exact (Word.eval_heq hi ho h).trans (Word.eval_mapOwner_heq f _)
+namespace QuantumCircuit.Party
 
-/-- Restrict a source-free framed word and then change its owners. The
-comparison is proved before the original private preparation is supplied.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 409–434 and 565–588. -/
-private theorem restrict_frameList_mapOwner_eval_heq {R Q : Type}
-    (f : R → Bool) (lift : R → Q) (S : Layout R) {a b : Layout R}
-    (u : Word a b) (hu : u.sources = []) :
-    HEq ((Word.restrict f (Word.frameList S u)
-      ((Word.sources_frameList u S).trans hu)).mapOwner lift).eval
-      (Word.frameList (Layout.mapOwner lift (Layout.restrict f S))
-        ((u.restrict f hu).mapOwner lift)).eval := by
-  have hframe := Word.restrict_frameList_eval_heq f S u hu
-  have hMap := (Word.eval_mapOwner_heq lift
-      (Word.restrict f (Word.frameList S u) ((Word.sources_frameList u S).trans hu))).trans
-    (hframe.trans (Word.eval_mapOwner_heq lift
-      (Word.frameList (Layout.restrict f S) (u.restrict f hu))).symm)
-  exact hMap.trans (Word.eval_heq (Layout.mapOwner_append lift _ _)
-    (Layout.mapOwner_append lift _ _) (Word.mapOwner_frameList_heq lift _ _))
+variable {P : Type} [DecidableEq P]
 
-/-- Compare evaluations of arbitrary chronological words before the source
-prefixes or private preparation are substituted.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 409–434 and 565–588. -/
-private def preparedWordEvalComparison {Q R : Type} {a b : Layout Q} {c d : Layout R}
-    (u : Word a b) (v : Word c d) : Prop := Word.IsEvalComparison u v
+/-- Matrices of casts from a common basis are heterogeneously equal. -/
+private theorem heq_toMatrix_cast_left {T U U' : Type} [DecidableEq U] [DecidableEq U']
+    (h : T = U) (h' : T = U') :
+    HEq ((Equiv.cast h).toPEquiv.toMatrix : Matrix T U ℂ)
+      ((Equiv.cast h').toPEquiv.toMatrix : Matrix T U' ℂ) := by
+  subst h h'
+  rename_i i₁ i₂
+  obtain rfl : i₁ = i₂ := Subsingleton.elim _ _
+  rfl
 
-/-- Selection of arbitrary source-free words commutes with framing and
-owner transport when the retained source and boundary lists agree. The inner
-operator comparison is supplied before any original source inventory is fixed.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 409–434 and 565–588. -/
-private theorem preparedWordEvalComparison_frameList {Q R : Type}
-    {a b : Layout Q} {c d : Layout R} (sq : Q → Bool) (sa : R → Bool)
-    (lift : R → Q) (Sq : Layout Q) (Sa : Layout R)
-    (u : Word a b) (v : Word c d) (hu : u.sources = []) (hv : v.sources = [])
-    (hi : Layout.restrict sq a = Layout.mapOwner lift (Layout.restrict sa c))
-    (ho : Layout.restrict sq b = Layout.mapOwner lift (Layout.restrict sa d))
-    (hS : Layout.restrict sq Sq = Layout.mapOwner lift (Layout.restrict sa Sa))
-    (hInner : HEq (u.restrict sq hu).eval ((v.restrict sa hv).mapOwner lift).eval) :
-    preparedWordEvalComparison
-      (Word.restrict sq (Word.frameList Sq u) ((Word.sources_frameList u Sq).trans hu))
-      ((Word.restrict sa (Word.frameList Sa v)
-        ((Word.sources_frameList v Sa).trans hv)).mapOwner lift) := by
-  have hMapped := restrict_frameList_mapOwner_eval_heq sa lift Sa v hv
-  have hFramed := Word.eval_frameList_heq (u.restrict sq hu)
-    ((v.restrict sa hv).mapOwner lift) hi ho hInner
-    (Layout.restrict sq Sq) (Layout.mapOwner lift (Layout.restrict sa Sa)) hS
-  exact (Word.restrict_frameList_eval_heq sq Sq u hu).trans
-    (hFramed.trans hMapped.symm)
+/-- Matrices of casts into a common basis are heterogeneously equal. -/
+private theorem heq_toMatrix_cast_right {T U U' : Type} [DecidableEq T]
+    (h : U = T) (h' : U' = T) :
+    HEq ((Equiv.cast h).toPEquiv.toMatrix : Matrix U T ℂ)
+      ((Equiv.cast h').toPEquiv.toMatrix : Matrix U' T ℂ) := by
+  subst h h'
+  rfl
 
-/-- The original private preparation has the same selected operator as its
-lifted singleton preparation. No monomial choice occurs in this comparison.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 409–434 and 565–588. -/
-private theorem preparedWordEvalComparison_privatePreparation {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a) :
-    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-      (affectedOwner (fun _ : P ↦ true) t)
-    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-      (by classical exact decide_eq_true rfl)
-    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-    let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
-      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-    let S := SourceInventory.slotLayout (partialSlots A w)
-      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1))
-      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2))
-    let Pa : Word (S ++ []) (S ++ Layout.mapOwner (affectedOwner A) a) :=
-      Word.frameList S (ψ.prepare.mapOwner (affectedOwner A))
-    let hsPa : Pa.sources = [] := by
-      simp only [Pa, Word.sources_frameList, Word.sources_mapOwner, ψ.sources_prepare,
-        SourceInventory.mapOwner_nil]
-    preparedWordEvalComparison
-      ((w.sourcePrivatePreparation ψ).restrict (partySelector qp)
-        (sources_sourcePrivatePreparation w ψ))
-      ((Pa.restrict (partySelector q) hsPa).mapOwner lift) := by
-  classical
-  intro A hp q qp lift S Pa hsPa
-  let all := affectedOwner (fun _ : P ↦ true)
-  let fa := affectedOwner A
-  let sq := partySelector qp
-  let sa := partySelector q
-  have hfAll : ∀ r, all r = qp ↔ r = p := by
-    intro r
-    simp [all, qp, affectedOwner]
-  have hfA : ∀ r, fa r = q ↔ r = p := by
-    intro r
-    simpa only [fa, q, affectedOwner, hp, ↓reduceDIte,
-      Bool.true_eq_false, and_false, or_false] using affectedOwner_eq_iff A r p
-  have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
-      Layout.restrict sq w.allResidualSourceLayout :=
-    mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
-  have hBoundary (L : Layout P) :
-      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa L)) =
-        Layout.restrict sq (Layout.mapOwner all L) :=
-    mapOwner_selected_originalLayout_eq p L
-  have hInner : HEq ((ψ.prepare.mapOwner all).restrict sq
-      (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
-        SourceInventory.mapOwner_nil])).eval
-      (((ψ.prepare.mapOwner fa).restrict sa
-        (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
-          SourceInventory.mapOwner_nil])).mapOwner lift).eval :=
-    (restrict_privatePreparation_mapOwner_eval_heq all p qp hfAll ψ).trans
-      ((Word.eval_mapOwner_heq lift _).trans
-        (restrict_privatePreparation_mapOwner_eval_heq fa p q hfA ψ)).symm
-  exact preparedWordEvalComparison_frameList sq sa lift w.allResidualSourceLayout S
-    (ψ.prepare.mapOwner all) (ψ.prepare.mapOwner fa)
-    (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])
-    (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])
-    rfl (hBoundary a).symm hSlots.symm hInner
+/-- Products of heterogeneously equal factors are heterogeneously equal. -/
+private theorem heq_mul {l m n l' m' n' : Type} [Fintype m] [Fintype m'] (hl : l = l')
+    (hm : m = m') (hn : n = n') {A : Matrix l m ℂ} {A' : Matrix l' m' ℂ} {B : Matrix m n ℂ}
+    {B' : Matrix m' n' ℂ} (hA : HEq A A') (hB : HEq B B') : HEq (A * B) (A' * B') := by
+  subst hl hm hn
+  rename_i i₁ i₂
+  obtain rfl : i₁ = i₂ := Subsingleton.elim _ _
+  obtain rfl := eq_of_heq hA
+  obtain rfl := eq_of_heq hB
+  rfl
 
-/-- Compare a restricted source-free word with a word on its selected
-input and output lists, retaining the source-free proof with its word.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 409–434 and 565–588. -/
-private def selectedPreparedWordComparison {Q : Type} {a b : Layout Q}
-    (f : Q → Bool) (u : Word a b) (hu : u.sources = [])
-    (v : Word (Layout.restrict f a) (Layout.restrict f b)) : Prop :=
-  (u.restrict f hu).eval = v.eval
+/-- Reading the columns through casts keeps heterogeneous equality. -/
+private theorem heq_submatrix_cast {l m n m' n' : Type} (hm : m = m') (hn : n = n')
+    {A : Matrix l m ℂ} {A' : Matrix l m' ℂ} (e : n = m) (e' : n' = m') (hA : HEq A A') :
+    HEq (A.submatrix id (Equiv.cast e)) (A'.submatrix id (Equiv.cast e')) := by
+  subst hm hn
+  obtain rfl := eq_of_heq hA
+  rfl
 
-/-- Compose selected source-free word operators under the original input,
-intermediate and output identifications, without prescribing an incident target.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588. -/
-private theorem preparedWordEvalComparison_comp {Q R : Type}
-    {a b c : Layout Q} {d e f : Layout R}
-    (sq : Q → Bool) (sa : R → Bool) (lift : R → Q)
-    (u : Word a b) (v : Word b c) (x : Word d e) (y : Word e f)
-    (hu : u.sources = []) (hv : v.sources = [])
-    (hx : x.sources = []) (hy : y.sources = []) (hxy : (x.comp y).sources = [])
-    (hi : Layout.restrict sq a = Layout.mapOwner lift (Layout.restrict sa d))
-    (hm : Layout.restrict sq b = Layout.mapOwner lift (Layout.restrict sa e))
-    (ho : Layout.restrict sq c = Layout.mapOwner lift (Layout.restrict sa f))
-    (hPrep : preparedWordEvalComparison
-      (u.restrict sq hu) ((x.restrict sa hx).mapOwner lift))
-    (hResidual : preparedWordEvalComparison
-      (v.restrict sq hv) ((y.restrict sa hy).mapOwner lift)) :
-    preparedWordEvalComparison
-      ((u.comp v).restrict sq (by simp only [Word.sources, hv, hu, List.nil_append]))
-      (((x.comp y).restrict sa hxy).mapOwner lift) := by
-  exact Word.eval_comp_heq (u.restrict sq hu) (v.restrict sq hv)
-    ((x.restrict sa hx).mapOwner lift) ((y.restrict sa hy).mapOwner lift)
-    hi hm ho hPrep hResidual
+/-- Running heterogeneously equal operations beside the same fresh pair gives heterogeneously
+equal operations. -/
+private theorem addPairMatrix_heq {a b : P} (hab : a ≠ b) (α β : Type) [Fintype α]
+    [DecidableEq α] [Fintype β] [DecidableEq β] {Y₁ Y₂ Y₁' Y₂' : P → Type} (hY : Y₁ = Y₂)
+    (hY' : Y₁' = Y₂') (C₁ : ∀ s, Matrix (Y₁' s) (Y₁ s) ℂ) (C₂ : ∀ s, Matrix (Y₂' s) (Y₂ s) ℂ)
+    (p : P) (h : HEq (C₁ p) (C₂ p)) :
+    HEq (addPairMatrix hab α β C₁ p) (addPairMatrix hab α β C₂ p) := by
+  subst hY hY'
+  unfold addPairMatrix
+  rw [eq_of_heq h]
 
-/-- A selected operator comparison and a structural target-word comparison
-give the literal target operator on the same selected original layouts.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588. -/
-private theorem selectedPreparedWordComparison_of_word_heq {Q : Type}
-    {a b c d : Layout Q} (sq : Q → Bool) (u : Word a b) (hu : u.sources = [])
-    (v : Word c d) (t : Word (Layout.restrict sq a) (Layout.restrict sq b))
-    (hi : Layout.restrict sq a = c) (ho : Layout.restrict sq b = d)
-    (hProjection : preparedWordEvalComparison (u.restrict sq hu) v)
-    (hWord : HEq t v) : selectedPreparedWordComparison sq u hu t := by
-  have hTarget := Word.eval_heq hi ho hWord
-  apply eq_of_heq
-  exact hProjection.trans hTarget.symm
+namespace SourceInventory
 
-/-- A selected word comparison is preserved when its original word is
-replaced by an equal constructed word, with the source-free proof retained.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588. -/
-private theorem preparedWordEvalComparison_restrict_of_word_eq {Q R : Type}
-    {a b : Layout Q} {c d : Layout R} (s : Q → Bool)
-    (u u' : Word a b) (hu : u.sources = []) (hu' : u'.sources = [])
-    (v : Word c d) (h : u = u')
-    (hComparison : preparedWordEvalComparison (u'.restrict s hu') v) :
-    preparedWordEvalComparison (u.restrict s hu) v := by
-  cases h
-  exact hComparison
+/-- Running party operations beside the fresh factors of two slot inventories that differ only
+in their vectors gives heterogeneously equal operations at a party where the operations are
+heterogeneously equal. -/
+private theorem liftOps_ofSlots_heq : (R : SourceInventory P) → (B : SlotBases R.length) →
+    (η η' : ∀ i, EuclideanSpace ℂ (B.left i × B.right i)) →
+    {X₁ X₂ X₁' X₂' : P → Type} → (hX : X₁ = X₂) → (hX' : X₁' = X₂') →
+    (A₁ : ∀ s, Matrix (X₁' s) (X₁ s) ℂ) → (A₂ : ∀ s, Matrix (X₂' s) (X₂ s) ℂ) → (p : P) →
+    HEq (A₁ p) (A₂ p) → HEq ((ofSlots R B η).liftOps A₁ p) ((ofSlots R B η').liftOps A₂ p)
+  | [], _, _, _, _, _, _, _, hX, hX', A₁, A₂, p, h => by
+    subst hX hX'
+    exact h
+  | r :: R, B, η, η', _, _, _, _, hX, hX', A₁, A₂, p, h => by
+    rw [ofSlots_cons, ofSlots_cons]
+    have ih := liftOps_ofSlots_heq R B.tail (fun i ↦ η i.succ) (fun i ↦ η' i.succ) hX hX'
+      A₁ A₂ p h
+    subst hX hX'
+    exact addPairMatrix_heq r.distinct (B.left 0) (B.right 0)
+      ((system_ofSlots R B.tail _ _).trans (system_ofSlots R B.tail _ _).symm)
+      ((system_ofSlots R B.tail _ _).trans (system_ofSlots R B.tail _ _).symm) _ _ p ih
 
-/-- Equal source-free words remain equal after selection and owner transport,
-under a prescribed identification of their retained register lists.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588. -/
-private theorem restrict_mapOwner_castLayouts_heq_of_eq {Q R : Type}
-    {a b : Layout Q} {c d : Layout R} (s : Q → Bool) (lift : Q → R)
-    (u v : Word a b) (hu : u.sources = []) (hv : v.sources = [])
-    (hi : Layout.mapOwner lift (Layout.restrict s a) = c)
-    (ho : Layout.mapOwner lift (Layout.restrict s b) = d) (h : u = v) :
-    HEq (((u.restrict s hu).mapOwner lift).castLayouts hi ho)
-      ((v.restrict s hv).mapOwner lift) := by
-  cases h
-  exact Word.castLayouts_heq _ hi ho
+/-- Equal inventories run the same operations. -/
+private theorem liftOps_heq_of_eq {X X' : P → Type} {S S' : SourceInventory P} (h : S = S')
+    (A : ∀ s, Matrix (X' s) (X s) ℂ) (p : P) : HEq (S.liftOps A p) (S'.liftOps A p) := by
+  subst h
+  rfl
 
-/-- The literal incident word is the selected and lifted word of the original
-preparation and projected residual. All labels and source registers are derived
-from the same original all-party choice. Source: polynomial-PEPS Theorem 5.2,
+end SourceInventory
+
+namespace SourceCircuit
+
+variable [Fintype P]
+
+/-- Two branches of the expansion along all parties have the same system of sources. -/
+private theorem system_sources_partialWord_all {X Y : P → Type} [∀ s, Fintype (X s)]
+    [∀ s, DecidableEq (X s)] (w : SourceCircuit X Y) (ξ ξ' : Choices (fun _ ↦ true) w)
+    (Z : Option {_p : P // true = true} → Type) :
+    (partialWord (fun _ ↦ true) w ξ).sources.system Z =
+      (partialWord (fun _ ↦ true) w ξ').sources.system Z := by
+  rw [← ofSlots_partialSlotVector, ← ofSlots_partialSlotVector, SourceInventory.system_ofSlots,
+    SourceInventory.system_ofSlots]
+
+/-- The local part at an original party of a branch of the expansion along all parties reads
+only the labels of the gates in which the party participates. -/
+private theorem localPartOp_partialWord_all_heq : {X Y : P → Type} → [∀ s, Fintype (X s)] →
+    [∀ s, DecidableEq (X s)] → (w : SourceCircuit X Y) → (p : P) →
+    (ξ ξ' : Choices (fun _ ↦ true) w) →
+    (∀ g hg, p ∈ w.participants g →
+      choiceAt (fun _ ↦ true) w ξ g hg = choiceAt (fun _ ↦ true) w ξ' g hg) →
+    HEq ((partialWord (fun _ ↦ true) w ξ).localPartOp (some ⟨p, rfl⟩))
+      ((partialWord (fun _ ↦ true) w ξ').localPartOp (some ⟨p, rfl⟩))
+  | _, _, _, _, PartyCircuit.done _, _, _, _, _ => HEq.rfl
+  | _, _, _, _, PartyCircuit.gate D hY g, p, ξ, ξ', h => by
+    by_cases ht : PreparedGate.IsTouched (fun _ ↦ true) D
+    · by_cases hp : p ∈ D
+      · obtain rfl : ξ = ξ' := (cast_inj _).mp (h () ht hp)
+        rfl
+      · obtain ⟨e, he⟩ := localPartOp_partialWord_all_gate_of_notMem D hY g p hp ξ
+        obtain ⟨e', he'⟩ := localPartOp_partialWord_all_gate_of_notMem D hY g p hp ξ'
+        rw [he, he']
+        exact heq_toMatrix_cast_left e e'
+    · have : Subsingleton (Choices (fun _ ↦ true)
+          (PartyCircuit.gate D hY g : SourceCircuit _ _)) := by
+        dsimp only [Choices]
+        rw [ite_eq_right ht]
+        infer_instance
+      obtain rfl : ξ = ξ' := Subsingleton.elim _ _
+      rfl
+  | _, _, _, _, PartyCircuit.localOp _ _ _, _, _, _, _ => HEq.rfl
+  | _, _, _, _, PartyCircuit.localOps _, _, _, _, _ => HEq.rfl
+  | X, _, _, _, @PartyCircuit.comp _ _ _ M _ _ _ c c', p, ξ, ξ', h => by
+    have ih := localPartOp_partialWord_all_heq c p ξ.1 ξ'.1 fun g hg ↦ h (Sum.inl g) hg
+    have ih' := localPartOp_partialWord_all_heq c' p ξ.2 ξ'.2 fun g hg ↦ h (Sum.inr g) hg
+    have hs := system_sources_partialWord_all c ξ.1 ξ'.1
+    have hs' := system_sources_partialWord_all c' ξ.2 ξ'.2
+    let q : Option {_p : P // true = true} := some ⟨p, rfl⟩
+    have hlift : HEq ((partialWord (fun _ ↦ true) c' ξ.2).sources.liftOps
+        (partialWord (fun _ ↦ true) c ξ.1).localPartOp q)
+        ((partialWord (fun _ ↦ true) c' ξ'.2).sources.liftOps
+          (partialWord (fun _ ↦ true) c ξ'.1).localPartOp q) :=
+      (SourceInventory.liftOps_heq_of_eq (ofSlots_partialSlotVector _ c' ξ.2).symm _ q).trans
+        ((SourceInventory.liftOps_ofSlots_heq _ _ _ _ (hs _) rfl _ _ q ih).trans
+          (SourceInventory.liftOps_heq_of_eq (ofSlots_partialSlotVector _ c' ξ'.2) _ q))
+    refine heq_submatrix_cast ?_ ?_ _ _ (heq_mul rfl (congrFun (hs' _) q) ?_ ih' hlift)
+    · rw [hs', hs]
+    · change SourceInventory.system (_ ++ _) _ q = SourceInventory.system (_ ++ _) _ q
+      rw [SourceInventory.system_append, SourceInventory.system_append, hs', hs]
+    · rw [hs', hs]
+
+/-- **The residual at an original party reads only the labels of its incident gates.** -/
+theorem partyOp_partialResidual_all_eq_of_incident {X Y : P → Type} [∀ s, Fintype (X s)]
+    [∀ s, DecidableEq (X s)] [∀ s, Fintype (Y s)] [∀ s, DecidableEq (Y s)]
+    (w : SourceCircuit X Y) (p : P) (ξ ξ' : Choices (fun _ ↦ true) w)
+    (h : ∀ g hg, p ∈ w.participants g →
+      choiceAt (fun _ ↦ true) w ξ g hg = choiceAt (fun _ ↦ true) w ξ' g hg) :
+    PartyCircuit.partyOp (partialResidual (fun _ ↦ true) w ξ) (some ⟨p, rfl⟩) =
+      PartyCircuit.partyOp (partialResidual (fun _ ↦ true) w ξ') (some ⟨p, rfl⟩) := by
+  let q : Option {_p : P // true = true} := some ⟨p, rfl⟩
+  have hs := system_sources_partialWord_all w ξ ξ' (blockSystem (affectedOwner fun _ ↦ true) X)
+  refine eq_of_heq (heq_mul rfl (congrFun hs q) rfl
+    (localPartOp_partialWord_all_heq w p ξ ξ' h) (heq_toMatrix_cast_right _ _))
+
+/-- **The prepared source word at an original party reads only the labels of its incident
+gates.** -/
+theorem partyOp_partialSourceWord_eq_of_incident {X Y : P → Type} [∀ s, Fintype (X s)]
+    [∀ s, DecidableEq (X s)] [∀ s, Fintype (Y s)] [∀ s, DecidableEq (Y s)]
+    (w : SourceCircuit X Y) (φ : ∀ s, EuclideanSpace ℂ (X s)) (p : P)
+    (ξ ξ' : Choices (fun _ ↦ true) w)
+    (h : ∀ g hg, p ∈ w.participants g →
+      choiceAt (fun _ ↦ true) w ξ g hg = choiceAt (fun _ ↦ true) w ξ' g hg) :
+    PartyCircuit.partyOp (partialSourceWord w φ ξ) (some ⟨p, rfl⟩) =
+      PartyCircuit.partyOp (partialSourceWord w φ ξ') (some ⟨p, rfl⟩) := by
+  rw [partialSourceWord, partialSourceWord, PartyCircuit.partyOp_comp,
+    PartyCircuit.partyOp_comp, partyOp_partialResidual_all_eq_of_incident w p ξ ξ' h]
+
+/-- At an original party, the prepared source word of a branch is the operation constructed
+from the labels of the branch at the incident gates. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 137–139, 246–267, 351–434 and 565–588. -/
-private theorem incidentSourceWord_heq_of_original_labels {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
-    (ξ : Choices (fun _ : P ↦ true) w) :
-    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-      (affectedOwner (fun _ : P ↦ true) t)
-    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-      (by classical exact decide_eq_true rfl)
-    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
-      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-    let S := SourceInventory.slotLayout (partialSlots A w)
-      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1))
-      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2))
-    let χ := projectAllChoices A w ξ
-    let Pa : Word (S ++ []) (S ++ Layout.mapOwner (affectedOwner A) a) :=
-      Word.frameList S (ψ.prepare.mapOwner (affectedOwner A))
-    let hsPa : Pa.sources = [] := by
-      simp only [Pa, Word.sources_frameList, Word.sources_mapOwner, ψ.sources_prepare,
-        SourceInventory.mapOwner_nil]
-    let Va := Pa.comp (partialResidual A w χ)
-    let hsVa : Va.sources = [] := by
-      simp only [Va, Word.sources, sources_partialResidual, hsPa, List.nil_append]
-    HEq (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
-      ((Va.restrict (partySelector q) hsVa).mapOwner lift) := by
-  classical
-  intro A hp q lift S χ Pa hsPa Va hsVa
-  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-  let all := affectedOwner (fun _ : P ↦ true)
-  let fa := affectedOwner A
-  let sq := partySelector qp
-  let sa := partySelector q
-  have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
-      Layout.restrict sq w.allResidualSourceLayout :=
-    mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
-  have hBoundary (L : Layout P) :
-      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa L)) =
-        Layout.restrict sq (Layout.mapOwner all L) :=
-    mapOwner_selected_originalLayout_eq p L
-  have hin : Layout.restrict sq (w.allResidualSourceLayout ++ []) =
-      Layout.mapOwner lift (Layout.restrict sa (S ++ [])) := by
-    simpa only [List.append_nil] using hSlots.symm
-  unfold incidentSourceWord
-  dsimp only
-  exact restrict_mapOwner_castLayouts_heq_of_eq sa lift
-    (Pa.comp (partialResidual A w
-      (choicesOfOriginalGateLabelsAt w p (originalGateLabelsAtOfAllChoices w p ξ))))
-    Va
-    (by simp only [Word.sources, sources_partialResidual, hsPa, List.nil_append])
-    hsVa hin.symm (hBoundary b)
-    (congrArg (fun ζ : Choices A w ↦ Pa.comp (partialResidual A w ζ))
-      (choicesOfOriginalGateLabelsAt_eq_projectAllChoices w p ξ))
+theorem partyOp_partialSourceWord_eq_incidentSourceOp {X Y : P → Type} [∀ s, Fintype (X s)]
+    [∀ s, DecidableEq (X s)] [∀ s, Fintype (Y s)] [∀ s, DecidableEq (Y s)]
+    (w : SourceCircuit X Y) (φ : ∀ s, EuclideanSpace ℂ (X s)) (p : P)
+    (ξ : Choices (fun _ ↦ true) w) :
+    PartyCircuit.partyOp (partialSourceWord w φ ξ) (some ⟨p, rfl⟩) =
+      incidentSourceOp w φ p (originalGateLabelsAtOfAllChoices w p ξ) := by
+  have hf : Function.FactorsThrough
+      (fun ξ ↦ PartyCircuit.partyOp (partialSourceWord w φ ξ) (some ⟨p, rfl⟩))
+      (originalGateLabelsAtOfAllChoices w p) := fun ξ ξ' hξ ↦
+    partyOp_partialSourceWord_eq_of_incident w φ p ξ ξ' fun g _ hp ↦
+      congrFun hξ ⟨⟨⟨g, ⟨p, hp⟩⟩, Finset.mem_univ _⟩, hp⟩
+  exact (hf.extend_apply 0 ξ).symm
 
-/-- Compare selected source-free words through the selected local parts
-of two arbitrary full words, before original circuit data are substituted.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
-351–434 and 565–588. -/
-private theorem preparedWordEvalComparison_of_localPart {Q R : Type}
-    {a b e f : Layout Q} {c d g h : Layout R}
-    (sq : Q → Bool) (sa : R → Bool) (lift : R → Q)
-    (u : Word a b) (v : Word c d) (W : Word e f) (Z : Word g h)
-    (hu : u.sources = []) (hv : v.sources = [])
-    (hLeft : HEq (u.restrict sq hu).eval
-      (W.localPart.restrict sq W.sources_localPart).eval)
-    (hRight : HEq (v.restrict sa hv).eval
-      (Z.localPart.restrict sa Z.sources_localPart).eval)
-    (hFull : HEq (W.localPart.restrict sq W.sources_localPart).eval
-      ((Z.localPart.restrict sa Z.sources_localPart).mapOwner lift).eval) :
-    preparedWordEvalComparison (u.restrict sq hu) ((v.restrict sa hv).mapOwner lift) := by
-  have hResidualMapped := (Word.eval_mapOwner_heq lift (v.restrict sa hv)).trans
-    (hRight.trans (Word.eval_mapOwner_heq lift
-      (Z.localPart.restrict sa Z.sources_localPart)).symm)
-  exact hLeft.trans (hFull.trans hResidualMapped.symm)
+end SourceCircuit
 
-/-- The original all-party residual and its lifted singleton projection
-have the same selected operator. All choices are projections of the same
-original branch. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
-lines 246–267, 351–434 and 565–588. -/
-private theorem preparedWordEvalComparison_partialResidual {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (ξ : Choices (fun _ : P ↦ true) w) :
-    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-      (affectedOwner (fun _ : P ↦ true) t)
-    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-      (by classical exact decide_eq_true rfl)
-    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-    let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
-      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-    let χ := projectAllChoices A w ξ
-    preparedWordEvalComparison
-      ((partialResidual (fun _ : P ↦ true) w ξ).restrict (partySelector qp)
-        (sources_partialResidual (fun _ : P ↦ true) w ξ))
-      (((partialResidual A w χ).restrict (partySelector q)
-        (sources_partialResidual A w χ)).mapOwner lift) := by
-  classical
-  intro A hp q qp lift χ
-  let sq := partySelector qp
-  let sa := partySelector q
-  exact preparedWordEvalComparison_of_localPart sq sa lift
-    (partialResidual (fun _ : P ↦ true) w ξ) (partialResidual A w χ)
-    (partialWord (fun _ : P ↦ true) w ξ) (partialWord A w χ)
-    (sources_partialResidual (fun _ : P ↦ true) w ξ) (sources_partialResidual A w χ)
-    (restrict_partialResidual_eval_heq (fun _ : P ↦ true) w ξ sq)
-    (restrict_partialResidual_eval_heq A w χ sa)
-    (restrict_partialWord_all_localPart_eval_heq_singleton_projection w p ξ)
-
-/-- The original prepared word has the operator of its lifted singleton
-projection, with the original source and output lists retained.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588. -/
-private def selectedPreparedProjectionComparison {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
-    (ξ : Choices (fun _ : P ↦ true) w) : Prop :=
-    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-      (affectedOwner (fun _ : P ↦ true) t)
-    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-      (by classical exact decide_eq_true rfl)
-    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-    let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
-      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-    let S := SourceInventory.slotLayout (partialSlots A w)
-      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1))
-      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2))
-    let χ := projectAllChoices A w ξ
-    let Pa : Word (S ++ []) (S ++ Layout.mapOwner (affectedOwner A) a) :=
-      Word.frameList S (ψ.prepare.mapOwner (affectedOwner A))
-    let hsPa : Pa.sources = [] := by
-      simp only [Pa, Word.sources_frameList, Word.sources_mapOwner, ψ.sources_prepare,
-        SourceInventory.mapOwner_nil]
-    let Va := Pa.comp (partialResidual A w χ)
-    let hsVa : Va.sources = [] := by
-      simp only [Va, Word.sources, sources_partialResidual, hsPa, List.nil_append]
-    preparedWordEvalComparison
-      ((w.partialSourceWord ψ ξ).restrict (partySelector qp)
-        (sources_partialSourceWord w ψ ξ))
-      ((Va.restrict (partySelector q) hsVa).mapOwner lift)
-
-/-- The selected source input, prepared intermediate list and original output
-have their prescribed singleton owner identifications. No input vector or
-monomial choice enters these layout comparisons.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-253–267, 342–417 and 409–434. -/
-private theorem original_prepared_layout_comparison {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) :
-    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-      (affectedOwner (fun _ : P ↦ true) t)
-    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-      (by classical exact decide_eq_true rfl)
-    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-    let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
-      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-    let all := affectedOwner (fun _ : P ↦ true)
-    let fa := affectedOwner A
-    let sq := partySelector qp
-    let sa := partySelector q
-    let S := SourceInventory.slotLayout (partialSlots A w)
-      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1))
-      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2))
-    (Layout.restrict sq (w.allResidualSourceLayout ++ []) =
-      Layout.mapOwner lift (Layout.restrict sa (S ++ []))) ∧
-    (Layout.restrict sq (w.allResidualSourceLayout ++ Layout.mapOwner all a) =
-      Layout.mapOwner lift (Layout.restrict sa (S ++ Layout.mapOwner fa a))) ∧
-    (Layout.restrict sq (Layout.mapOwner all b) =
-      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa b))) := by
-  classical
-  intro A hp q qp lift all fa sq sa S
-  have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
-      Layout.restrict sq w.allResidualSourceLayout :=
-    mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
-  have hBoundary (L : Layout P) :
-      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa L)) =
-        Layout.restrict sq (Layout.mapOwner all L) :=
-    mapOwner_selected_originalLayout_eq p L
-  have hin : Layout.restrict sq (w.allResidualSourceLayout ++ []) =
-      Layout.mapOwner lift (Layout.restrict sa (S ++ [])) := by
-    simpa only [List.append_nil] using hSlots.symm
-  have hmid : Layout.restrict sq
-      (w.allResidualSourceLayout ++ Layout.mapOwner all a) =
-      Layout.mapOwner lift (Layout.restrict sa (S ++ Layout.mapOwner fa a)) := by
-    simp only [Layout.restrict_append, Layout.mapOwner_append]
-    exact congrArg₂ List.append hSlots.symm (hBoundary a).symm
-  exact ⟨hin, hmid, (hBoundary b).symm⟩
-
-/-- Combine the independently established preparation and residual comparisons
-before a literal incident word is supplied.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588. -/
-private theorem selectedPreparedProjectionComparison_of_original_labels {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
-    (ξ : Choices (fun _ : P ↦ true) w) :
-    selectedPreparedProjectionComparison w p ψ ξ := by
-  unfold selectedPreparedProjectionComparison
-  classical
-  intro A hp q qp lift S χ Pa hsPa Va hsVa
-  let all := affectedOwner (fun _ : P ↦ true)
-  let fa := affectedOwner A
-  let sq := partySelector qp
-  let sa := partySelector q
-  have hLayouts :
-      (Layout.restrict sq (w.allResidualSourceLayout ++ []) =
-        Layout.mapOwner lift (Layout.restrict sa (S ++ []))) ∧
-      (Layout.restrict sq (w.allResidualSourceLayout ++ Layout.mapOwner all a) =
-        Layout.mapOwner lift (Layout.restrict sa (S ++ Layout.mapOwner fa a))) ∧
-      (Layout.restrict sq (Layout.mapOwner all b) =
-        Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa b))) :=
-    original_prepared_layout_comparison w p
-  have hPrep : preparedWordEvalComparison
-      ((w.sourcePrivatePreparation ψ).restrict sq (sources_sourcePrivatePreparation w ψ))
-      ((Pa.restrict sa hsPa).mapOwner lift) :=
-    preparedWordEvalComparison_privatePreparation w p ψ
-  have hResidual : preparedWordEvalComparison
-      ((partialResidual (fun _ : P ↦ true) w ξ).restrict sq
-        (sources_partialResidual (fun _ : P ↦ true) w ξ))
-      (((partialResidual A w χ).restrict sa
-        (sources_partialResidual A w χ)).mapOwner lift) :=
-    preparedWordEvalComparison_partialResidual w p ξ
-  have hRaw : preparedWordEvalComparison
-      (((w.sourcePrivatePreparation ψ).comp
-        (partialResidual (fun _ : P ↦ true) w ξ)).restrict sq
-          (by simp only [Word.sources, sources_partialResidual,
-            sources_sourcePrivatePreparation, List.nil_append]))
-      ((Va.restrict sa hsVa).mapOwner lift) := by
-    exact preparedWordEvalComparison_comp sq sa lift
-      (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
-      Pa (partialResidual A w χ)
-      (sources_sourcePrivatePreparation w ψ)
-      (sources_partialResidual (fun _ : P ↦ true) w ξ)
-      hsPa (sources_partialResidual A w χ) hsVa
-      hLayouts.1 hLayouts.2.1 hLayouts.2.2 hPrep hResidual
-  exact preparedWordEvalComparison_restrict_of_word_eq sq
-    (w.partialSourceWord ψ ξ)
-    ((w.sourcePrivatePreparation ψ).comp (partialResidual (fun _ : P ↦ true) w ξ))
-    (sources_partialSourceWord w ψ ξ)
-    (by simp only [Word.sources, sources_partialResidual,
-      sources_sourcePrivatePreparation, List.nil_append])
-    ((Va.restrict sa hsVa).mapOwner lift) rfl hRaw
-
-/-- Compare the original prepared word with its incident-label word, with
-all original source and output data fixed before the comparison is proved.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588. -/
-private def selectedPreparedOriginalLabelComparison {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
-    (ξ : Choices (fun _ : P ↦ true) w) : Prop :=
-    selectedPreparedWordComparison
-      (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
-      (w.partialSourceWord ψ ξ) (sources_partialSourceWord w ψ ξ)
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
-
-/-- The preparation and residual comparisons are combined with a canonical
-word comparison as target, before its concrete operator equality is exposed.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588. -/
-private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
-    (ξ : Choices (fun _ : P ↦ true) w) :
-    selectedPreparedOriginalLabelComparison w p ψ ξ := by
-  unfold selectedPreparedOriginalLabelComparison
-  classical
-  let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-    (affectedOwner (fun _ : P ↦ true) t)
-  let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-    (decide_eq_true rfl)
-  let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-  let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
-    fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-  let all := affectedOwner (fun _ : P ↦ true)
-  let fa := affectedOwner A
-  let sq := partySelector qp
-  let sa := partySelector q
-  let χ := projectAllChoices A w ξ
-  let S := SourceInventory.slotLayout (partialSlots A w)
-    (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1))
-    (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2))
-  let Pa : Word (S ++ []) (S ++ Layout.mapOwner fa a) :=
-    Word.frameList S (ψ.prepare.mapOwner fa)
-  have hsPa : Pa.sources = [] := by
-    simp only [Pa, Word.sources_frameList, Word.sources_mapOwner, ψ.sources_prepare,
-      SourceInventory.mapOwner_nil]
-  let Va := Pa.comp (partialResidual A w χ)
-  have hsVa : Va.sources = [] := by
-    simp only [Va, Word.sources, sources_partialResidual, hsPa, List.nil_append]
-  have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
-      Layout.restrict sq w.allResidualSourceLayout :=
-    mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
-  have hBoundary (L : Layout P) :
-      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa L)) =
-        Layout.restrict sq (Layout.mapOwner all L) :=
-    mapOwner_selected_originalLayout_eq p L
-  have hin : Layout.restrict sq (w.allResidualSourceLayout ++ []) =
-      Layout.mapOwner lift (Layout.restrict sa (S ++ [])) := by
-    simpa only [List.append_nil] using hSlots.symm
-  have hProjection : preparedWordEvalComparison
-      ((w.partialSourceWord ψ ξ).restrict sq (sources_partialSourceWord w ψ ξ))
-      ((Va.restrict sa hsVa).mapOwner lift) :=
-    selectedPreparedProjectionComparison_of_original_labels w p ψ ξ
-  have hWord : HEq
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
-      ((Va.restrict sa hsVa).mapOwner lift) :=
-    incidentSourceWord_heq_of_original_labels w p ψ ξ
-  exact selectedPreparedWordComparison_of_word_heq sq
-    (w.partialSourceWord ψ ξ) (sources_partialSourceWord w ψ ξ)
-    ((Va.restrict sa hsVa).mapOwner lift)
-    (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
-    hin (hBoundary b).symm hProjection hWord
-
-/-- The source-to-output operator selected at one party of a genuine all-party
-branch is exactly the operator constructed from its original incident labels.
-The input is the recorded private product preparation, and the source and
-output registers are the actual selected all-party lists. No global extension
-of incident labels or additional condition on source vectors is assumed.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
-246–267, 351–434 and 565–588. -/
-theorem restrict_partialSourceWord_eval_eq_incidentSourceWord {a b : Layout P}
-    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
-    (ξ : Choices (fun _ : P ↦ true) w) :
-    ((w.partialSourceWord ψ ξ).restrict (partySelector (some ⟨p, rfl⟩))
-      (sources_partialSourceWord w ψ ξ)).eval =
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval := by
-  exact selectedPreparedWordComparison_of_original_labels w p ψ ξ
-
-end TNLean.Lattice.PartyCircuit.SourceCircuit
+end QuantumCircuit.Party
