@@ -851,8 +851,9 @@ abstracted — record why, so it is not re-proposed).
   remainder for an arbitrary per-band weight, then specialize to total weight
   four by substituting `a = 4 / K`.
 - **Seen:** The finite-copy comparison, remainder limit and supplied-prevector
-  comparison in `ActualRoughLower.lean`, `ActualRoughLowerRemainder.lean` and
-  `ActualRoughLowerPrevector.lean`, under `PEPS/AreaLaw/Scan/`.
+  comparison in `ActualRoughLower.lean` and `ActualRoughLowerPrevector.lean`,
+  under `PEPS/AreaLaw/CollarEntropy/NormComparisons/`, and the remainder limit in
+  `QICLean/Representation/Bell/LabelDimensionRemainder.lean`.
 - **Abstraction:** `exists_actualScan_rough_lower_norm_of_weight`,
   `tendsto_roughLowerRemainderAtWeight_of_label_dimension` and
   `exists_actualScan_suppliedPrevector_rough_lower_of_weight` retain the weight

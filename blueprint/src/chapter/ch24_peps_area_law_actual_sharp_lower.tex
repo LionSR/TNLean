@@ -107,12 +107,14 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     (\cite[Section~8]{OpenAI2026AreaLaw}).
 \end{proof}
 
-\begin{definition}[Lower label defect and replica remainder]
+\begin{definition}[Lower replica remainder]
     \label{def:actual_sharp_lower_remainder}
-    \lean{TNLean.PEPS.AreaLaw.Scan.sharpLowerLabelDefect,TNLean.PEPS.AreaLaw.Scan.sharpLowerRemainder}
+    \lean{TensorPower.sharpLowerRemainder}
     \leanok
+    \uses{def:actual_rough_lower_remainder}
     For a label sequence $\ell_k$, $S'\in\mathbb R$, $a>0$, and
-    $c,C_f\in\mathbb R$, define $\varepsilon_k$ ($k\in\mathbb N$) and
+    $c,C_f\in\mathbb R$, let $\varepsilon_k$ ($k\in\mathbb N$) be the label
+    defect of Definition~\ref{def:actual_rough_lower_remainder} and define
     $R_k^-$ ($k>0$) by
     \begin{align}
         \varepsilon_k
@@ -126,29 +128,9 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
     \end{align}
 \end{definition}
 
-\begin{lemma}[Lower label-defect inequality]
-    \label{thm:actual_sharp_lower_label_defect}
-    \lean{TNLean.PEPS.AreaLaw.Scan.sharpLowerLabelDefect_label_bound}
-    \leanok
-    \uses{def:actual_sharp_lower_remainder}
-    For every label sequence $\ell_k$ and every $k$,
-    $\varepsilon_k\geq0$ and
-    \begin{align}
-        2kS'-\varepsilon_k\leq2\log\dim\ell_k.
-        \label{eq:actual_sharp_lower_label_bound}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:actual_sharp_lower_remainder}
-    By (\ref{eq:actual_sharp_lower_defect}),
-    $2(kS'-\log\dim\ell_k)\leq 2|\log\dim\ell_k-kS'|=\varepsilon_k$.
-\end{proof}
-
 \begin{lemma}[Vanishing lower remainder]
     \label{thm:actual_sharp_lower_remainder_limit}
-    \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_sharpLowerRemainder_of_label_dimension}
+    \lean{TensorPower.tendsto_sharpLowerRemainder_of_label_dimension}
     \leanok
     \uses{def:actual_sharp_lower_remainder}
     For fixed $a>0$ and $c,C_f\in\mathbb R$, if $\log\dim\ell_k-kS'=o(k)$
@@ -196,10 +178,10 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
 
 \begin{proof}
     \leanok
-    \uses{thm:actual_scan_sharp_lower_norm,thm:actual_sharp_lower_label_defect,thm:actual_sharp_lower_remainder_limit,thm:al_augmented_prevector_norm,thm:al_augmented_prevector_symmetry,def:al_scan_auxiliary_coordinates}
+    \uses{thm:actual_scan_sharp_lower_norm,thm:actual_rough_lower_label_defect,thm:actual_sharp_lower_remainder_limit,thm:al_augmented_prevector_norm,thm:al_augmented_prevector_symmetry,def:al_scan_auxiliary_coordinates}
     By Lemmas~\ref{thm:al_augmented_prevector_norm},
     \ref{thm:al_augmented_prevector_symmetry},
-    and~\ref{thm:actual_sharp_lower_label_defect}, $u_k$ satisfies the
+    and~\ref{thm:actual_rough_lower_label_defect}, $u_k$ satisfies the
     norm, symmetry, and label bound (\ref{eq:actual_scan_sharp_lower_label})
     with $\varepsilon=\varepsilon_k$ and $\ell_C=\ell_R=\ell_k$, while the
     five status marginals of Definition~\ref{def:al_scan_status_marginals}

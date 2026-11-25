@@ -72,8 +72,8 @@ $j$ in band $g$ gives the far region $(Q_{jg}\cup Y_{jg})^c$.
 
 \begin{lemma}[Vanishing remainder at a fixed band weight]
     \label{thm:actual_rough_weight_remainder_limit}
-    \lean{TNLean.PEPS.AreaLaw.Scan.roughLowerRemainderAtWeight,
-        TNLean.PEPS.AreaLaw.Scan.tendsto_roughLowerRemainderAtWeight_of_label_dimension}
+    \lean{TensorPower.roughLowerRemainderAtWeight,
+        TensorPower.tendsto_roughLowerRemainderAtWeight_of_label_dimension}
     \leanok
     For fixed $K\in\mathbb N$, $a,c,C_f,S'\in\mathbb R$, and a label sequence
     $\lambda_k$ with $\varepsilon_k=2|\log\dim\lambda_k-kS'|$, define for $k>0$
@@ -171,7 +171,7 @@ $0<a\leq1/2$ for $K\geq8$).
 
 \begin{definition}[The same-label rough lower remainder]
     \label{def:actual_rough_lower_remainder}
-    \lean{TNLean.PEPS.AreaLaw.Scan.roughLowerLabelDefect,TNLean.PEPS.AreaLaw.Scan.roughLowerRemainder}
+    \lean{TensorPower.labelDimensionDefect,TensorPower.roughLowerRemainder}
     \leanok
     For a label sequence $\ell_k$ and $S'\in\mathbb R$, set
     $\varepsilon_k=2|\log\dim\ell_k-kS'|$ in
@@ -180,7 +180,7 @@ $0<a\leq1/2$ for $K\geq8$).
 
 \begin{lemma}[Label-defect entropy inequality]
     \label{thm:actual_rough_lower_label_defect}
-    \lean{TNLean.PEPS.AreaLaw.Scan.roughLowerLabelDefect_label_bound}
+    \lean{TensorPower.labelDimensionDefect_label_bound}
     \leanok
     For every $k$, $\varepsilon_k\geq0$ and
     $2kS'-\varepsilon_k\leq2\log\dim\ell_k$.
@@ -194,7 +194,8 @@ $0<a\leq1/2$ for $K\geq8$).
 
 \begin{lemma}[Vanishing rough remainder and a common threshold]
     \label{thm:actual_rough_lower_remainder_limit}
-    \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_roughLowerRemainder_of_label_dimension,TNLean.PEPS.AreaLaw.Scan.exists_roughLowerRemainder_threshold}
+    \lean{TensorPower.tendsto_roughLowerRemainder_of_label_dimension,
+        TensorPower.exists_roughLowerRemainder_threshold}
     \leanok
     If $\log\dim\ell_k-kS'=o(k)$, then $R_k\to0$ for each fixed $K,c,C_f$, so
     for every $\epsilon_{\rm rep}>0$ there is $k_0$ (independent of the round
