@@ -3,8 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
-import TNLean.Lattice.Sheet.StackSourceBoundedChange
 import TNLean.PEPS.Approximation.Frames.SheetStackChange
 
 /-!
@@ -14,9 +12,9 @@ Item 3 of Theorem 5.2 of the polynomial-PEPS manuscript asks for a constant boun
 pair sources, pair effects and messages in each monomial of every gate (`04-compression.tex`,
 lines 143–147). The protocol of Proposition 7.1 provides it through the counts of the step
 theorems of its changes (`06-geometry.tex`, lines 572–583). This file carries the pair-source
-bound `PartyCircuit.OriginalCircuit.IsSourceBounded` alongside the bounded changes of the sheets of
-`TNLean.PEPS.Approximation.SheetStackChange`. The predicate and its closure properties hold for
-sheets of any type and are proved in `TNLean.Lattice.Sheet.StackSourceBoundedChange`; this file
+bound `QuantumCircuit.Party.OriginalCircuit.IsSourceBounded` alongside the bounded changes of the
+sheets of `TNLean.PEPS.Approximation.Frames.SheetStackChange`. The predicate and its closure
+properties hold for sheets of any type (`QuantumCircuit.Party.HasSourceBoundedChange`); this file
 reads them at the encoded frames, with the reference vectors `Ω_F`.
 
 * `EncodedFrame.HasSourceBoundedChange` : a bounded change of the sheets by a circuit with at most
@@ -37,73 +35,60 @@ noncomputable section
 
 namespace TNLean.PEPS.EncodedFrame
 
-open TNLean.Lattice.PartyCircuit TNLean.Lattice.PartyCircuit.OriginalCircuit
+open ManyBody QuantumCircuit.Party
 
-variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type}
-  {pos : ι → ℝ × ℝ}
+variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type} [Fintype Party]
+  [DecidableEq Party] {pos : ι → ℝ × ℝ} {W : Party → Type} [∀ p, Fintype (W p)]
+  [∀ p, DecidableEq (W p)]
 
 /-- **A bounded change of the sheets with bounded pair sources.** There is an original circuit
-from the registers of the frames `Fs`, followed by the idle registers `ℓ`, to those of `Fs'`,
-followed by `ℓ`, that is a bounded change from the reference vector of `Fs` with idle vector `ξ`
+from the registers of the frames `Fs`, followed by the idle system `W`, to those of `Fs'`,
+followed by `W`, that is a bounded change from the reference vector of `Fs` with idle vector `ξ`
 to that of `Fs'`, and that has at most `rs` pair sources in each monomial.
 
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, items 2 and 4, `06-geometry.tex`,
 lines 25–41 and 572–583; Theorem 5.2, item 3, `04-compression.tex`, lines 143–147. -/
-def HasSourceBoundedChange (Ω : EuclideanSpace ℂ (ι → Fin q)) (Fs Fs' : List (Frame pos q Party))
-    {ℓ : Layout Party} (ξ : Mem ℓ) (S : Set Party) (r K rs : ℕ) (ε : ℝ) : Prop :=
-  ∃ c : OriginalCircuit (stackRegs Fs ℓ) (stackRegs Fs' ℓ),
-    c.IsBoundedChange S r K ε (stackVec Ω Fs ξ) (stackVec Ω Fs' ξ) ∧ c.IsSourceBounded rs
+abbrev HasSourceBoundedChange (Ω : EuclideanSpace ℂ (ι → Fin q))
+    (Fs Fs' : List (Frame pos q Party)) (ξ : EuclideanSpace ℂ (Config W)) (S : Set Party)
+    (r K rs : ℕ) (ε : ℝ) : Prop :=
+  QuantumCircuit.Party.HasSourceBoundedChange (fun F : Frame pos q Party ↦ F.regRef Ω) Fs Fs' ξ S
+    r K rs ε
 
 variable {Ω : EuclideanSpace ℂ (ι → Fin q)} {Fs Fs' Gs : List (Frame pos q Party)}
-  {ℓ : Layout Party} {ξ : Mem ℓ} {S S' : Set Party} {r r' K K' rs rs' : ℕ} {ε ε' : ℝ}
+  {ξ : EuclideanSpace ℂ (Config W)} {S S' : Set Party} {r r' K K' rs rs' : ℕ} {ε ε' : ℝ}
 
 theorem HasSourceBoundedChange.hasBoundedChange
     (h : HasSourceBoundedChange Ω Fs Fs' ξ S r K rs ε) : HasBoundedChange Ω Fs Fs' ξ S r K ε :=
-  Lattice.HasSourceBoundedChange.hasBoundedChange
-    (ref := fun F : Frame pos q Party => F.regRef Ω) h
+  QuantumCircuit.Party.HasSourceBoundedChange.hasBoundedChange h
 
 /-- A bounded change of the sheets with bounded pair sources stays so under weaker bounds. -/
 theorem HasSourceBoundedChange.mono (h : HasSourceBoundedChange Ω Fs Fs' ξ S r K rs ε)
     (hS : S ⊆ S') (hr : r ≤ r') (hK : K ≤ K') (hrs : rs ≤ rs') (hε : ε ≤ ε') :
     HasSourceBoundedChange Ω Fs Fs' ξ S' r' K' rs' ε' :=
-  Lattice.HasSourceBoundedChange.mono (ref := fun F : Frame pos q Party => F.regRef Ω)
-    h hS hr hK hrs hε
+  QuantumCircuit.Party.HasSourceBoundedChange.mono h hS hr hK hrs hε
 
 /-- **Reordering the sheets.** A permutation of the frames is a bounded change without
 nonprivate gates, without error and without pair sources. -/
-theorem hasSourceBoundedChange_of_perm (h : Fs.Perm Fs') (ξ : Mem ℓ) (S : Set Party) (r K rs : ℕ)
-    (hε : 0 ≤ ε) : HasSourceBoundedChange Ω Fs Fs' ξ S r K rs ε :=
-  Lattice.hasSourceBoundedChange_of_perm (ref := fun F : Frame pos q Party => F.regRef Ω)
-    h ξ S r K rs hε
+theorem hasSourceBoundedChange_of_perm (h : Fs.Perm Fs') (ξ : EuclideanSpace ℂ (Config W))
+    (S : Set Party) (r K rs : ℕ) (hε : 0 ≤ ε) : HasSourceBoundedChange Ω Fs Fs' ξ S r K rs ε :=
+  QuantumCircuit.Party.hasSourceBoundedChange_of_perm h ξ S r K rs hε
 
 /-- The identity change of the sheets. -/
-theorem hasSourceBoundedChange_refl (Fs : List (Frame pos q Party)) (ξ : Mem ℓ) (S : Set Party)
-    (r K rs : ℕ) (hε : 0 ≤ ε) : HasSourceBoundedChange Ω Fs Fs ξ S r K rs ε :=
+theorem hasSourceBoundedChange_refl (Fs : List (Frame pos q Party))
+    (ξ : EuclideanSpace ℂ (Config W)) (S : Set Party) (r K rs : ℕ) (hε : 0 ≤ ε) :
+    HasSourceBoundedChange Ω Fs Fs ξ S r K rs ε :=
   hasSourceBoundedChange_of_perm (List.Perm.refl Fs) ξ S r K rs hε
 
 /-- A reordering of the sheets followed by a bounded change is a bounded change. -/
 theorem HasSourceBoundedChange.perm_left (hp : Fs.Perm Gs)
     (h : HasSourceBoundedChange Ω Gs Fs' ξ S r K rs ε) :
     HasSourceBoundedChange Ω Fs Fs' ξ S r K rs ε :=
-  Lattice.HasSourceBoundedChange.perm_left (ref := fun F : Frame pos q Party => F.regRef Ω) hp h
+  QuantumCircuit.Party.HasSourceBoundedChange.perm_left hp h
 
 /-- A bounded change followed by a reordering of the sheets is a bounded change. -/
 theorem HasSourceBoundedChange.perm_right (h : HasSourceBoundedChange Ω Fs Gs ξ S r K rs ε)
     (hp : Gs.Perm Fs') : HasSourceBoundedChange Ω Fs Fs' ξ S r K rs ε :=
-  Lattice.HasSourceBoundedChange.perm_right (ref := fun F : Frame pos q Party => F.regRef Ω) h hp
-
-omit [NeZero q] in
-theorem isSourceBounded_liftOne {F F' : Frame pos q Party} (post : List (Frame pos q Party))
-    (ℓ : Layout Party) (c : OriginalCircuit F.regs F'.regs) (hc : c.IsSourceBounded rs) :
-    (pre : List (Frame pos q Party)) → (liftOne post ℓ c pre).IsSourceBounded rs :=
-  Lattice.isSourceBounded_liftOne Frame.regs post ℓ c hc
-
-omit [NeZero q] in
-theorem isSourceBounded_liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Party}
-    (post : List (Frame pos q Party)) (ℓ : Layout Party)
-    (c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs)) (hc : c.IsSourceBounded rs) :
-    (pre : List (Frame pos q Party)) → (liftTwo post ℓ c pre).IsSourceBounded rs :=
-  Lattice.isSourceBounded_liftTwo Frame.regs post ℓ c hc
+  QuantumCircuit.Party.HasSourceBoundedChange.perm_right h hp
 
 /-- **A change of one sheet, on the whole stack.** A bounded change of the frame `F` into `F'` with
 at most `rs` pair sources in each monomial is such a change of `pre ++ F :: post` into
@@ -111,12 +96,12 @@ at most `rs` pair sources in each monomial is such a change of `pre ++ F :: post
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 39–41 and 574–583. -/
 theorem hasSourceBoundedChange_liftOne {F F' : Frame pos q Party}
-    (pre post : List (Frame pos q Party)) {c : OriginalCircuit F.regs F'.regs}
+    (pre post : List (Frame pos q Party)) {c : OriginalCircuit F.system F'.system}
     (hc : c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω)) (hs : c.IsSourceBounded rs)
     (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω (pre ++ F :: post) (pre ++ F' :: post) ξ S r K rs ε :=
-  ⟨liftOne post ℓ c pre, isBoundedChange_liftOne pre post hc hΩ hξ,
-    isSourceBounded_liftOne post ℓ c hs pre⟩
+  QuantumCircuit.Party.hasSourceBoundedChange_liftOne pre post hc hs
+    (fun F ↦ F.norm_regRef_le hΩ) hξ
 
 /-- **A change of two adjacent sheets, on the whole stack.** A bounded change of the frames
 `F₁, F₂` into `F₁', F₂'` with at most `rs` pair sources in each monomial is such a change of
@@ -125,12 +110,13 @@ theorem hasSourceBoundedChange_liftOne {F F' : Frame pos q Party}
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 39–41, 389–430 and 574–583. -/
 theorem hasSourceBoundedChange_liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Party}
     (pre post : List (Frame pos q Party))
-    {c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs)}
+    {c : OriginalCircuit (fun p ↦ F₁.system p × F₂.system p)
+      (fun p ↦ F₁'.system p × F₂'.system p)}
     (hc : c.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω))
     (hs : c.IsSourceBounded rs) (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω (pre ++ F₁ :: F₂ :: post) (pre ++ F₁' :: F₂' :: post) ξ S r K rs ε :=
-  ⟨liftTwo post ℓ c pre, isBoundedChange_liftTwo pre post hc hΩ hξ,
-    isSourceBounded_liftTwo post ℓ c hs pre⟩
+  QuantumCircuit.Party.hasSourceBoundedChange_liftTwo pre post hc hs
+    (fun F ↦ F.norm_regRef_le hΩ) hξ
 
 /-- **Activating an auxiliary sheet.** If the frames `Fs` are a reordering of
 `pre ++ F₁ :: F₂ :: post`, a bounded change of the two adjacent sheets with at most `rs` pair
@@ -139,7 +125,8 @@ sources in each monomial is such a change of `Fs`.
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–186, 389–430 and 658–667. -/
 theorem hasSourceBoundedChange_activate {F₁ F₂ F₁' F₂' : Frame pos q Party}
     {pre post : List (Frame pos q Party)} (hp : Fs.Perm (pre ++ F₁ :: F₂ :: post))
-    {c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs)}
+    {c : OriginalCircuit (fun p ↦ F₁.system p × F₂.system p)
+      (fun p ↦ F₁'.system p × F₂'.system p)}
     (hc : c.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω))
     (hs : c.IsSourceBounded rs) (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω Fs (pre ++ F₁' :: F₂' :: post) ξ S r K rs ε :=
@@ -150,7 +137,8 @@ theorem hasSourceBoundedChange_activate {F₁ F₂ F₁' F₂' : Frame pos q Par
 such a change of `Fs`. -/
 theorem hasSourceBoundedChange_perm_liftOne {F F' : Frame pos q Party}
     {pre post : List (Frame pos q Party)} (hp : Fs.Perm (pre ++ F :: post))
-    {c : OriginalCircuit F.regs F'.regs} (hc : c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω))
+    {c : OriginalCircuit F.system F'.system}
+    (hc : c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω))
     (hs : c.IsSourceBounded rs) (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω Fs (pre ++ F' :: post) ξ S r K rs ε :=
   (hasSourceBoundedChange_liftOne pre post hc hs hΩ hξ).perm_left hp

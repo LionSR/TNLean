@@ -3,45 +3,41 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.Sheet.FrontChanges
-import TNLean.PEPS.Approximation.Frames.FrameRegisters
-import TNLean.PEPS.Approximation.Frames.RegisterReordering
+import QICLean.Circuit.Party.Sheet.TaggedExchange
+import TNLean.PEPS.Approximation.Frames.SheetStack
+import TNLean.PEPS.Approximation.Frames.TwoSheetExchange
 
 /-!
 # The registers of two encoded frames and the two-sheet exchange
 
-The two-sheet exchange of Lemma 6.6 acts on the registers of two frames, those of the first
-frame followed by those of the second (`twoLayoutIso` identifies them with the product of the
-canonical coordinates of the two frames). Its proof implements the exchange by a register
-renaming `ℛ` and private corrections at `P∘` (`05-frames.tex`, lines 485–515). This file writes
-both on the registers of the frames:
+The two-sheet exchange of Lemma 6.6 acts on the registers of two frames: at every party, its
+registers on the first frame and on the second (`twoFrameEquiv` identifies their configurations
+with the product of the canonical coordinates of the two frames). Its proof implements the
+exchange by a register renaming `ℛ` and private corrections at `P∘` (`05-frames.tex`,
+lines 485–515). This file writes both on the registers of the frames:
 
-* `TwoSheetExchange.renameWord` is the renaming as a word of exchanges of tensor factors: the
-  tags of each frame are split into those of the holes outside and inside `Y`, the raw registers
-  of the sites in `Y` of each sheet are moved next to its inside tags, these blocks are exchanged
-  between the sheets, and everything is merged back. No register changes its party. Its operator
-  in canonical coordinates is `ℛ` (`twoLayoutIso_renameWord`). Between the splitting and the
-  merging of the tags it is the word `blockRenameWord` of `TNLean.Lattice.Sheet.FrontChanges`,
-  stated there for any blocks of front registers outside and inside `Y`.
-* `correctionLayoutWord` moves the raw registers of `U` of both sheets to the front, applies a
-  matrix `W` to them as one private contraction at `P∘`, and moves them back; its operator is
-  `1_tags ⊗ (1_{T E} ⊗ W)` (`twoLayoutIso_correctionLayoutWord`). It is the word
-  `frontCorrectionWord` of `TNLean.Lattice.Sheet.TwoRegisters`, stated there for any blocks of
-  front registers, read with the tag registers of the two frames in front.
+* `TwoSheetExchange.renameWord` is the renaming as a relabelling of the bases of every party:
+  the tags of each frame at a party are split into those of the holes outside and inside `Y`,
+  the inside tags and the raw configurations of the sites in `Y` are exchanged between the
+  sheets (`QuantumCircuit.Party.Sheet.swapInsideTags`, `QuantumCircuit.Party.Sheet.swapInEquiv`),
+  and the tags are merged back. No register changes its party. Its operator in canonical
+  coordinates is `ℛ` (`TwoSheetExchange.op_renameWord`).
+* `TwoSheetExchange.correctionWord` applies, at `P∘` alone, the corrections of the exchange of
+  the raw configurations of the two sheets (`QuantumCircuit.Party.Sheet.correctionAt`), beside
+  the tags; its operator in canonical coordinates is `1_tags ⊗ D_U F_A`
+  (`TwoSheetExchange.op_correctionWord`).
 
 ## Main definitions
 
-* `EncodedFrame.twoLayoutIso`: the registers of two frames in canonical coordinates.
-* `EncodedFrame.correctionLayoutWord`.
-* `EncodedFrame.TwoSheetExchange.renameWord`.
+* `EncodedFrame.twoFrameEquiv`: the registers of two frames in canonical coordinates.
+* `EncodedFrame.TwoSheetExchange.renameWord`, `EncodedFrame.TwoSheetExchange.correctionWord`.
 
 ## Main results
 
-* `EncodedFrame.twoLayoutIso_eq_act_of_basis`: operators on two frames are determined by their
-  values on basis vectors.
-* `EncodedFrame.twoLayoutIso_correctionLayoutWord`, `EncodedFrame.correctionLayoutWord_props`.
-* `EncodedFrame.TwoSheetExchange.twoLayoutIso_renameWord`,
-  `EncodedFrame.TwoSheetExchange.isReordering_renameWord`.
+* `EncodedFrame.pairRef_eq_twoFrameEquiv_symm`: the reference vector of two frames is
+  `Ω_{F₁} ⊗ Ω_{F₂}` in canonical coordinates.
+* `EncodedFrame.TwoSheetExchange.op_renameWord`, `EncodedFrame.TwoSheetExchange.op_correctionWord`,
+  `EncodedFrame.TwoSheetExchange.op_comp_renameWord_correctionWord`.
 
 ## References
 
@@ -51,220 +47,313 @@ both on the registers of the frames:
 
 noncomputable section
 
-open scoped InnerProductSpace TensorProduct Kronecker Matrix.Norms.L2Operator
-
 namespace TNLean.PEPS.EncodedFrame
-open TNLean.Lattice.Sheet
 
-open TNLean.Lattice.PartyCircuit ContinuousLinearMap EuclideanSpace
+open ManyBody QuantumCircuit.Party Matrix
+open scoped Kronecker
 
-variable {ι : Type} {q : ℕ} {Party : Type}
+variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type}
+  [DecidableEq Party]
 
 /-! ### The registers of two frames in canonical coordinates -/
 
-section TwoLayout
+/-- The registers of two lists of holes and two ownership assignments, identified with the
+product of their canonical coordinates. -/
+def twoLayoutEquiv (l₁ : List (Hole pos q Party)) (own₁ : ι → Party)
+    (l₂ : List (Hole pos q Party)) (own₂ : ι → Party) :
+    Config (fun p ↦ layoutSystem q l₁ own₁ p × layoutSystem q l₂ own₂ p) ≃
+      (TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q)) :=
+  (Equiv.arrowProdEquivProdArrow Party _ _).trans
+    ((layoutConfigEquiv l₁ own₁).prodCongr (layoutConfigEquiv l₂ own₂))
 
-variable [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ}
+/-- The registers of two frames identified with the product of their canonical coordinates. -/
+abbrev twoFrameEquiv (F₁ F₂ : Frame pos q Party) :
+    Config (fun p ↦ F₁.system p × F₂.system p) ≃ F₁.Layout × F₂.Layout :=
+  twoLayoutEquiv F₁.holes F₁.owner F₂.holes F₂.owner
 
-/-- The registers of two frames, those of the first followed by those of the second, identified
-with the product `ℂ^{L₁ × L₂}` of their canonical coordinates. -/
-def twoLayoutIso (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party) :
-    Mem (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ ((TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q))) :=
-  (appendIso _ _).trans ((((layoutIso l₁ own₁).rTensor _).trans
-    ((layoutIso l₂ own₂).lTensor _)).trans (pairIso _ _))
+/-- **The reference vector of two sheets in canonical coordinates.** The reference vector of two
+frames on the product of their registers is `Ω_{F₁} ⊗ Ω_{F₂}` read through the coordinates of
+the two frames. -/
+theorem pairRef_eq_twoFrameEquiv_symm [Fintype Party] [NeZero q] (F₁ F₂ : Frame pos q Party)
+    (Ω : EuclideanSpace ℂ (ι → Fin q)) :
+    pairRef F₁ F₂ Ω = LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (twoFrameEquiv F₁ F₂).symm
+      (EuclideanSpace.vecKron (F₁.refVec Ω) (F₂.refVec Ω)) := by
+  ext z
+  simp [pairRef, LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply,
+    EuclideanSpace.vecKron, twoLayoutEquiv]
 
-theorem twoLayoutIso_symm_single (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party)
-    (τ₁ : TagSpace l₁) (c₁ : ι → Fin q) (τ₂ : TagSpace l₂) (c₂ : ι → Fin q) :
-    (twoLayoutIso l₁ l₂ own₁ own₂).symm (EuclideanSpace.single ((τ₁, c₁), (τ₂, c₂)) (1 : ℂ)) =
-      (appendIso _ _).symm (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ layoutVec l₂ own₂ τ₂ c₂) := by
-  rw [LinearIsometryEquiv.symm_apply_eq]
-  change _ = pairIso _ _ ((layoutIso l₂ own₂).lTensor _ ((layoutIso l₁ own₁).rTensor _
-    (appendIso _ _ ((appendIso _ _).symm (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ
-      layoutVec l₂ own₂ τ₂ c₂)))))
-  rw [LinearIsometryEquiv.apply_symm_apply, LinearIsometryEquiv.rTensor_tmul,
-    LinearIsometryEquiv.lTensor_tmul,
-    layoutIso_layoutVec, layoutIso_layoutVec, pairIso_single_tmul_single]
+/-- A tag configuration of a concatenation assembled from the tags of its two parts at every
+party is the concatenation of the two tag configurations. -/
+theorem tagConfigEquiv_append_symm (l₁ l₂ : List (Hole pos q Party))
+    (a : Config (tagSystem l₁)) (b : Config (tagSystem l₂)) :
+    tagConfigEquiv (l₁ ++ l₂) (fun p ↦ (tagSystemAppendEquiv l₁ l₂ p).symm (a p, b p)) =
+      (tagAppendEquiv l₁ l₂).symm (tagConfigEquiv l₁ a, tagConfigEquiv l₂ b) := by
+  rw [Equiv.eq_symm_apply, tagAppendEquiv_tagConfigEquiv]
+  simp
 
-theorem twoLayoutIso_basis (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party)
-    (τ₁ : TagSpace l₁) (c₁ : ι → Fin q) (τ₂ : TagSpace l₂) (c₂ : ι → Fin q) :
-    twoLayoutIso l₁ l₂ own₁ own₂
-        ((appendIso _ _).symm (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ layoutVec l₂ own₂ τ₂ c₂)) =
-      EuclideanSpace.single ((τ₁, c₁), (τ₂, c₂)) (1 : ℂ) := by
-  rw [← twoLayoutIso_symm_single, LinearIsometryEquiv.apply_symm_apply]
+/-- The splitting of the tags of a concatenation at every party, read in canonical
+coordinates. -/
+theorem tagAppendEquiv_tagConfigEquiv_fst (l₁ l₂ : List (Hole pos q Party))
+    (z : Config (tagSystem (l₁ ++ l₂))) :
+    (tagAppendEquiv l₁ l₂ (tagConfigEquiv (l₁ ++ l₂) z)).1 =
+      tagConfigEquiv l₁ fun p ↦ (tagSystemAppendEquiv l₁ l₂ p (z p)).1 := by
+  rw [tagAppendEquiv_tagConfigEquiv]
 
-/-- Two operators on the registers of two frames agree in canonical coordinates as soon as they
-agree on the basis vectors. -/
-theorem twoLayoutIso_eq_act_of_basis (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party)
-    (l₁' l₂' : List (Hole pos q Party)) (own₁' own₂' : ι → Party)
-    (f : Mem (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂) →L[ℂ]
-      Mem (layoutRegs q l₁' own₁' ++ layoutRegs q l₂' own₂'))
-    (A : Matrix ((TagSpace l₁' × (ι → Fin q)) × (TagSpace l₂' × (ι → Fin q)))
-      ((TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q))) ℂ)
-    (hf : ∀ τ₁ c₁ τ₂ c₂, twoLayoutIso l₁' l₂' own₁' own₂'
-      (f ((appendIso _ _).symm (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ layoutVec l₂ own₂ τ₂ c₂))) =
-        act A (EuclideanSpace.single ((τ₁, c₁), (τ₂, c₂)) (1 : ℂ)))
-    (z : Mem (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)) :
-    twoLayoutIso l₁' l₂' own₁' own₂' (f z) = act A (twoLayoutIso l₁ l₂ own₁ own₂ z) := by
-  obtain ⟨y, rfl⟩ : ∃ y, z = (twoLayoutIso l₁ l₂ own₁ own₂).symm y :=
-    ⟨twoLayoutIso l₁ l₂ own₁ own₂ z, by simp⟩
-  rw [LinearIsometryEquiv.apply_symm_apply]
-  conv_lhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
-  conv_rhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr y]
-  simp only [map_sum, map_smul]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  obtain ⟨⟨τ₁, c₁⟩, ⟨τ₂, c₂⟩⟩ := i
-  rw [EuclideanSpace.basisFun_apply, twoLayoutIso_symm_single, hf]
+theorem tagAppendEquiv_tagConfigEquiv_snd (l₁ l₂ : List (Hole pos q Party))
+    (z : Config (tagSystem (l₁ ++ l₂))) :
+    (tagAppendEquiv l₁ l₂ (tagConfigEquiv (l₁ ++ l₂) z)).2 =
+      tagConfigEquiv l₂ fun p ↦ (tagSystemAppendEquiv l₁ l₂ p (z p)).2 := by
+  rw [tagAppendEquiv_tagConfigEquiv]
 
-end TwoLayout
-
-/-! ### A private contraction on the raw registers of `U` on two sheets -/
-
-section Correction
-
-variable [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ} {T E : Finset ι}
-
-/-- **The corrections as one private contraction.** On two layouts of frames whose raw registers
-of `U = (T ∪ E)ᶜ` are all held by `P`, move the raw registers of `U` of both sheets to the front
-by exchanges of tensor factors, apply the matrix `W` to them as one private contraction at `P`,
-and move them back.
-
-Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 500–515. -/
-def correctionLayoutWord (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party) {P : Party}
-    (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
-      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ) :
-    Word (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)
-      (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂) :=
-  frontCorrectionWord (tagRegs l₁) (tagRegs l₂) own₁ own₂ h₁ h₂ W
-
-/-- **The corrections on basis vectors.** The configurations of the two sheets on `U` are
-mixed by `W`; those on `T ∪ E` and the tags are untouched. -/
-theorem eval_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Party))
-    (own₁ own₂ : ι → Party) {P : Party}
-    (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
-      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
-    (τ₁ : TagSpace l₁) (c₁ : ι → Fin q) (τ₂ : TagSpace l₂) (c₂ : ι → Fin q) :
-    (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).eval
-        ((appendIso (layoutRegs q l₁ own₁) (layoutRegs q l₂ own₂)).symm
-          (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ layoutVec l₂ own₂ τ₂ c₂)) =
-      ∑ u, W u ((fun x : {v // v ∉ T ∪ E} => c₁ x), (fun x : {v // v ∉ T ∪ E} => c₂ x)) •
-        (appendIso (layoutRegs q l₁ own₁) (layoutRegs q l₂ own₂)).symm
-          (layoutVec l₁ own₁ τ₁ (merge h ((fun x : T => c₁ x), u.1) c₁) ⊗ₜ
-            layoutVec l₂ own₂ τ₂ (merge h ((fun x : T => c₂ x), u.2) c₂)) :=
-  eval_frontCorrectionWord h (tagRegs l₁) (tagRegs l₂) own₁ own₂ h₁ h₂ W (tagVec l₁ τ₁) c₁
-    (tagVec l₂ τ₂) c₂
-
-theorem sum_single_merge₂ (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Party))
-    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
-      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
-    (τ₁ : TagSpace l₁) (c₁ : ι → Fin q) (τ₂ : TagSpace l₂) (c₂ : ι → Fin q) :
-    ∑ u, W u ((fun x : {v // v ∉ T ∪ E} => c₁ x), (fun x : {v // v ∉ T ∪ E} => c₂ x)) •
-        (EuclideanSpace.single ((τ₁, merge h ((fun x : T => c₁ x), u.1) c₁),
-          (τ₂, merge h ((fun x : T => c₂ x), u.2) c₂)) (1 : ℂ) :
-          EuclideanSpace ℂ ((TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q)))) =
-      act (liftTags (l₁ := l₁) (l₂ := l₂) (twoSheetPlace h W))
-        (EuclideanSpace.single ((τ₁, c₁), (τ₂, c₂)) (1 : ℂ)) :=
-  sum_single_merge₂_liftFront h W τ₁ c₁ τ₂ c₂
-
-/-- **The corrections in canonical coordinates.** The correction word acts on the registers of
-the two frames as `1_tags ⊗ (1_{T E} ⊗ W)`. -/
-theorem twoLayoutIso_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Party))
-    (own₁ own₂ : ι → Party) {P : Party}
-    (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
-      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
-    (z : Mem (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)) :
-    twoLayoutIso l₁ l₂ own₁ own₂ ((correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).eval z) =
-      act (liftTags (l₁ := l₁) (l₂ := l₂) (twoSheetPlace h W)) (twoLayoutIso l₁ l₂ own₁ own₂ z) :=
-  twoFrontLayoutIso_frontCorrectionWord h (tagRegs l₁) (tagIso l₁) (tagRegs l₂) (tagIso l₂) own₁
-    own₂ h₁ h₂ W z
-
-/-- The corrections form an allowed word using only `P`, without pair sources. -/
-theorem correctionLayoutWord_props (l₁ l₂ : List (Hole pos q Party))
-    (own₁ own₂ : ι → Party) {P : Party}
-    (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    {W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
-      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ} (hW : ‖W‖ ≤ 1) :
-    (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).IsAllowed ∧
-      (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).UsesOnly {P} ∧
-      (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).sourceCount = 0 :=
-  frontCorrectionWord_props (tagRegs l₁) (tagRegs l₂) own₁ own₂ h₁ h₂ hW
-
-end Correction
-
-/-! ### The renaming of a two-sheet exchange -/
+/-! ### The exchange on the registers of two frames -/
 
 namespace TwoSheetExchange
 
-variable [Fintype ι] [DecidableEq ι] {pos : ι → ℝ × ℝ} (X : TwoSheetExchange pos q Party)
+variable (X : TwoSheetExchange pos q Party)
 
-/-- The sites in the region `Y`, in the order of `sites ι`. -/
-abbrev sitesY : List ι := listT (sites ι) X.region
+omit [DecidableEq Party] in
+/-- The sheet of the first frame after the exchange: inside `Y` the owners of the second. -/
+theorem newFrame₁_sheet :
+    X.newFrame₁.sheet = Sheet.swapIn X.frame₁.sheet X.frame₂.sheet X.region := rfl
 
-/-- The sites outside the region `Y`, in the order of `sites ι`. -/
-abbrev sitesN : List ι := listR (sites ι) X.region
+omit [DecidableEq Party] in
+/-- The sheet of the second frame after the exchange. -/
+theorem newFrame₂_sheet :
+    X.newFrame₂.sheet = Sheet.swapIn X.frame₂.sheet X.frame₁.sheet X.region := rfl
 
-/-- **The renaming `ℛ` as a word of exchanges of tensor factors.** Split the tags of both frames
-into those of the holes outside and inside `Y`, move the raw registers of the sites in `Y` of
-each sheet next to its inside tags, exchange these blocks between the two sheets, and merge back.
-Every register keeps its party: a raw register of the first sheet at a site of `Y` becomes the
-register of the second new frame at that site, whose owner is the old owner on the first sheet.
+/-- The registers of the two frames at a party, grouped as the tags of the holes outside and
+inside `Y` on both sheets, followed by the raw configurations on both sheets. -/
+def inEquiv (p : Party) :
+    X.frame₁.system p × X.frame₂.system p ≃
+      ((tagSystem X.out₁ p × tagSystem X.in₁ p) × (tagSystem X.out₂ p × tagSystem X.in₂ p)) ×
+        (X.frame₁.sheet.system q p × X.frame₂.sheet.system q p) :=
+  (((tagSystemAppendEquiv X.out₁ X.in₁ p).prodCongr (Equiv.refl _)).prodCongr
+    ((tagSystemAppendEquiv X.out₂ X.in₂ p).prodCongr (Equiv.refl _))).trans
+      (Equiv.prodProdProdComm _ _ _ _)
+
+/-- The registers of the two frames after the exchange at a party, grouped in the same way. -/
+def outEquiv (p : Party) :
+    X.newFrame₁.system p × X.newFrame₂.system p ≃
+      ((tagSystem X.out₁ p × tagSystem X.in₂ p) × (tagSystem X.out₂ p × tagSystem X.in₁ p)) ×
+        ((Sheet.swapIn X.frame₁.sheet X.frame₂.sheet X.region).system q p ×
+          (Sheet.swapIn X.frame₂.sheet X.frame₁.sheet X.region).system q p) :=
+  (((tagSystemAppendEquiv X.out₁ X.in₂ p).prodCongr (Equiv.refl _)).prodCongr
+    ((tagSystemAppendEquiv X.out₂ X.in₁ p).prodCongr (Equiv.refl _))).trans
+      (Equiv.prodProdProdComm _ _ _ _)
+
+/-- **The renaming at one party.** The registers of a party after the exchange are those before
+it: the inside tags and the raw configurations of the sites in `Y` change sheet. -/
+def renameEquivAt (p : Party) :
+    X.newFrame₁.system p × X.newFrame₂.system p ≃ X.frame₁.system p × X.frame₂.system p :=
+  (X.outEquiv p).trans
+    (((Sheet.swapInsideTags _ _ _ _).prodCongr
+      (Sheet.swapInEquiv X.frame₁.sheet X.frame₂.sheet X.region p)).trans (X.inEquiv p).symm)
+
+/-- **The renaming `ℛ` on the registers of the frames**: the relabelling of the bases of every
+party along `renameEquivAt`. Every register keeps its party.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 485–490. -/
-def renameWord : Word (X.frame₁.regs ++ X.frame₂.regs) (X.newFrame₁.regs ++ X.newFrame₂.regs) :=
-  .comp (Word.assocWord (tagRegs (X.out₁ ++ X.in₁)) (siteRegs q X.owner₁ (sites ι))
-    X.frame₂.regs) <|
-  .comp (tagSplit X.out₁ X.in₁ (siteRegs q X.owner₁ (sites ι) ++ X.frame₂.regs)) <|
-  .comp (Word.frameList (tagRegs X.out₁) (Word.frameList (tagRegs X.in₁)
-    (Word.frameList (siteRegs q X.owner₁ (sites ι))
-      (tagSplit X.out₂ X.in₂ (siteRegs q X.owner₂ (sites ι)))))) <|
-  .comp (blockRenameWord (tagRegs X.out₁) (tagRegs X.in₁) (tagRegs X.out₂) (tagRegs X.in₂)
-    X.owner₁ X.owner₂ X.region) <|
-  .comp (Word.frameList (tagRegs X.out₁) (Word.frameList (tagRegs X.in₂)
-    (Word.frameList (siteRegs q X.newFrame₁.owner (sites ι))
-      (tagMerge X.out₂ X.in₁ (siteRegs q X.newFrame₂.owner (sites ι)))))) <|
-  .comp (tagMerge X.out₁ X.in₂ (siteRegs q X.newFrame₁.owner (sites ι) ++ X.newFrame₂.regs)) <|
-  Word.unassocWord (tagRegs (X.out₁ ++ X.in₂)) (siteRegs q X.newFrame₁.owner (sites ι))
-    X.newFrame₂.regs
+def renameWord : Word (fun p ↦ X.frame₁.system p × X.frame₂.system p)
+    (fun p ↦ X.newFrame₁.system p × X.newFrame₂.system p) :=
+  PartyCircuit.relabel X.renameEquivAt
 
-/-- **The renaming on basis vectors.** Inside `Y` the configurations and the inside tags of the
-two sheets change places. -/
-theorem eval_renameWord (τ₁ : TagSpace (X.out₁ ++ X.in₁)) (c₁ : ι → Fin q)
-    (τ₂ : TagSpace (X.out₂ ++ X.in₂)) (c₂ : ι → Fin q) :
-    X.renameWord.eval ((appendIso X.frame₁.regs X.frame₂.regs).symm
-        (layoutVec (X.out₁ ++ X.in₁) X.owner₁ τ₁ c₁ ⊗ₜ
-          layoutVec (X.out₂ ++ X.in₂) X.owner₂ τ₂ c₂)) =
-      (appendIso X.newFrame₁.regs X.newFrame₂.regs).symm
-        (layoutVec (X.out₁ ++ X.in₂) X.newFrame₁.owner
-            ((tagAppendEquiv X.out₁ X.in₂).symm
-              ((tagAppendEquiv X.out₁ X.in₁ τ₁).1, (tagAppendEquiv X.out₂ X.in₂ τ₂).2))
-            (fun x => if x ∈ X.region then c₂ x else c₁ x) ⊗ₜ
-          layoutVec (X.out₂ ++ X.in₁) X.newFrame₂.owner
-            ((tagAppendEquiv X.out₂ X.in₁).symm
-              ((tagAppendEquiv X.out₂ X.in₂ τ₂).1, (tagAppendEquiv X.out₁ X.in₁ τ₁).2))
-            (fun x => if x ∈ X.region then c₁ x else c₂ x)) := by
-  simp only [renameWord, layoutVec, Circuit.eval_comp, ContinuousLinearMap.comp_apply,
-    Word.eval_assocWord_appendIso_symm, eval_tagSplit]
-  rw [Circuit.eval_frameList_appendIso_symm, Circuit.eval_frameList_appendIso_symm,
-    Circuit.eval_frameList_appendIso_symm, eval_tagSplit, eval_blockRenameWord]
-  simp only [Circuit.eval_frameList_appendIso_symm, eval_tagMerge,
-    Word.eval_unassocWord_appendIso_symm]
+theorem isAllowed_renameWord : X.renameWord.IsAllowed :=
+  Word.isAllowed_relabel _
 
-/-- **The renaming in canonical coordinates** is the renaming `ℛ` of `TwoSheetExchange.rename`. -/
-theorem twoLayoutIso_renameWord
-    (z : Mem (X.frame₁.regs ++ X.frame₂.regs)) :
-    twoLayoutIso (X.out₁ ++ X.in₂) (X.out₂ ++ X.in₁) X.newFrame₁.owner X.newFrame₂.owner
-        (X.renameWord.eval z) =
-      act X.rename (twoLayoutIso (X.out₁ ++ X.in₁) (X.out₂ ++ X.in₂) X.owner₁ X.owner₂ z) :=
-  twoLayoutIso_eq_act_of_basis _ _ _ _ _ _ _ _ _ _ (fun τ₁ c₁ τ₂ c₂ => by
-    rw [eval_renameWord, twoLayoutIso_basis, rename, act_toMatrix_symm_single]
-    simp only [renameEquiv, Equiv.coe_fn_mk, ManyBody.permCongr_pairSwap_apply]) z
+theorem sourceCount_renameWord : X.renameWord.sourceCount = 0 :=
+  rfl
 
-/-- The renaming is a reordering: an allowed word using no party and no pair source. -/
-@[simp] theorem isReordering_renameWord : X.renameWord.IsReordering := by
-  simp [renameWord]
+/-- The swap `F_Y` read on the raw configurations of the two sheets before and after the
+exchange is the renaming of `QuantumCircuit.Party.Sheet.swapInEquiv` (the same computation as
+the operator of `QuantumCircuit.Party.Sheet.renameWord`). -/
+private theorem twoConfigEquiv_symm_permCongr_pairSwap (S₁ S₂ : Sheet ι Party) (Y : Finset ι)
+    (y : Config fun p ↦ (Sheet.swapIn S₁ S₂ Y).system q p × (Sheet.swapIn S₂ S₁ Y).system q p) :
+    (Sheet.twoConfigEquiv q S₁ S₂).symm ((Equiv.arrowProdEquivProdArrow ι _ _).permCongr
+        (pairSwap (X := fun _ : ι ↦ Fin q) Y) (Sheet.twoConfigEquiv q _ _ y)) =
+      Equiv.piCongrRight (Sheet.swapInEquiv S₁ S₂ Y) y := by
+  rw [permCongr_pairSwap_apply]
+  funext p
+  refine Prod.ext (funext fun v ↦ ?_) (funext fun v ↦ ?_)
+  · have hv := (mem_blockPreimage_singleton _).mp v.2
+    by_cases hY : (v : ι) ∈ Y
+    · exact (ite_eq_left hY).trans ((Sheet.twoConfigEquiv_snd_eq _ _ y
+        (show (Sheet.swapIn S₂ S₁ Y).owner v = p from
+          (ite_eq_left hY).trans hv)).trans (by simp [Sheet.swapInEquiv, hY]))
+    · exact (ite_eq_right hY).trans ((Sheet.twoConfigEquiv_fst_eq _ _ y
+        (show (Sheet.swapIn S₁ S₂ Y).owner v = p from
+          (ite_eq_right hY).trans hv)).trans (by simp [Sheet.swapInEquiv, hY]))
+  · have hv := (mem_blockPreimage_singleton _).mp v.2
+    by_cases hY : (v : ι) ∈ Y
+    · exact (ite_eq_left hY).trans ((Sheet.twoConfigEquiv_fst_eq _ _ y
+        (show (Sheet.swapIn S₁ S₂ Y).owner v = p from
+          (ite_eq_left hY).trans hv)).trans (by simp [Sheet.swapInEquiv, hY]))
+    · exact (ite_eq_right hY).trans ((Sheet.twoConfigEquiv_snd_eq _ _ y
+        (show (Sheet.swapIn S₂ S₁ Y).owner v = p from
+          (ite_eq_right hY).trans hv)).trans (by simp [Sheet.swapInEquiv, hY]))
+
+/-- The renaming at every party, read in canonical coordinates, is the renaming `ℛ` of
+`TwoSheetExchange.renameEquiv`. -/
+theorem twoFrameEquiv_renameEquivAt
+    (y : Config fun p ↦ X.newFrame₁.system p × X.newFrame₂.system p) :
+    twoFrameEquiv X.frame₁ X.frame₂ (Equiv.piCongrRight X.renameEquivAt y) =
+      X.renameEquiv.symm (twoFrameEquiv X.newFrame₁ X.newFrame₂ y) := by
+  have hraw : Sheet.twoConfigEquiv q X.frame₁.sheet X.frame₂.sheet
+      (Equiv.piCongrRight (Sheet.swapInEquiv X.frame₁.sheet X.frame₂.sheet X.region)
+        fun p ↦ ((y p).1.2, (y p).2.2)) =
+      (Equiv.arrowProdEquivProdArrow ι _ _).permCongr (pairSwap (X := fun _ : ι ↦ Fin q) X.region)
+        (Sheet.twoConfigEquiv q _ _ fun p ↦ ((y p).1.2, (y p).2.2)) := by
+    rw [← twoConfigEquiv_symm_permCongr_pairSwap, Equiv.apply_symm_apply]
+    rfl
+  refine Prod.ext (Prod.ext ?h11 ?h12) (Prod.ext ?h21 ?h22)
+  case h11 =>
+    refine (tagConfigEquiv_append_symm _ _
+      (fun p ↦ (tagSystemAppendEquiv X.out₁ X.in₂ p (y p).1.1).1)
+      (fun p ↦ (tagSystemAppendEquiv X.out₂ X.in₁ p (y p).2.1).2)).trans ?_
+    rw [← tagAppendEquiv_tagConfigEquiv_fst, ← tagAppendEquiv_tagConfigEquiv_snd]
+    rfl
+  case h12 => exact congrArg Prod.fst hraw
+  case h21 =>
+    refine (tagConfigEquiv_append_symm _ _
+      (fun p ↦ (tagSystemAppendEquiv X.out₂ X.in₁ p (y p).2.1).1)
+      (fun p ↦ (tagSystemAppendEquiv X.out₁ X.in₂ p (y p).1.1).2)).trans ?_
+    rw [← tagAppendEquiv_tagConfigEquiv_fst, ← tagAppendEquiv_tagConfigEquiv_snd]
+    rfl
+  case h22 => exact congrArg (fun z ↦ z.2) hraw
+
+variable [Fintype Party]
+
+/-- **The renaming in canonical coordinates** is the renaming `ℛ` of
+`TwoSheetExchange.rename`. -/
+theorem op_renameWord :
+    X.renameWord.op = reindex (twoFrameEquiv X.newFrame₁ X.newFrame₂).symm
+      (twoFrameEquiv X.frame₁ X.frame₂).symm X.rename := by
+  ext y x
+  rw [renameWord, Word.op, PartyCircuit.op_relabel, reindex_apply, submatrix_apply,
+    Equiv.symm_symm, Equiv.symm_symm, rename]
+  simp only [PEquiv.toMatrix_apply, Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq]
+  refine if_congr ?_ rfl rfl
+  rw [← twoFrameEquiv_renameEquivAt, (twoFrameEquiv X.frame₁ X.frame₂).apply_eq_iff_eq]
+
+variable (P : Party)
+
+/-- The corrections of the exchange beside the tags, at one party: at `P∘` the corrections
+`QuantumCircuit.Party.Sheet.correctionAt` of the raw configurations of the two sheets, the
+identity elsewhere. -/
+def correctionAt (σ : SplittingData (fun _ : ι ↦ Fin q) (X.tSet P) (X.tSet P ∪ X.eSet P))
+    (p : Party) :
+    Matrix (X.newFrame₁.system p × X.newFrame₂.system p)
+      (X.newFrame₁.system p × X.newFrame₂.system p) ℂ :=
+  reindex (X.outEquiv p).symm (X.outEquiv p).symm
+    ((1 : Matrix _ _ ℂ) ⊗ₖ Function.update (fun p ↦ (1 : Matrix
+        ((Sheet.swapIn X.frame₁.sheet X.frame₂.sheet X.region).system q p ×
+          (Sheet.swapIn X.frame₂.sheet X.frame₁.sheet X.region).system q p)
+        ((Sheet.swapIn X.frame₁.sheet X.frame₂.sheet X.region).system q p ×
+          (Sheet.swapIn X.frame₂.sheet X.frame₁.sheet X.region).system q p) ℂ)) P
+      (Sheet.correctionAt X.frame₁.sheet X.frame₂.sheet X.region P (X.exchangeEnv P)
+        (fun _ hx ↦ X.owner_eq_of_notMem_exchangeEnv P hx) σ) p)
+
+/-- **The corrections `D_U F_A` as one private contraction at `P∘`.**
+
+Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 500–515. -/
+def correctionWord (σ : SplittingData (fun _ : ι ↦ Fin q) (X.tSet P) (X.tSet P ∪ X.eSet P)) :
+    Word (fun p ↦ X.newFrame₁.system p × X.newFrame₂.system p)
+      (fun p ↦ X.newFrame₁.system p × X.newFrame₂.system p) :=
+  PartyCircuit.localOps (X.correctionAt P σ)
+
+omit [Fintype Party] in
+/-- The corrections are allowed. -/
+theorem isAllowed_correctionWord
+    (σ : SplittingData (fun _ : ι ↦ Fin q) (X.tSet P) (X.tSet P ∪ X.eSet P)) :
+    (X.correctionWord P σ).IsAllowed := by
+  intro r
+  refine (l2_opNorm_reindex_le _ _ _).trans ((l2_opNorm_one_kronecker_le _).trans ?_)
+  by_cases hr : r = P
+  · subst hr
+    rw [Function.update_self]
+    exact Sheet.norm_correctionAt_le_one _ _ _ _ _ _ σ
+  · rw [Function.update_of_ne hr, ← PEquiv.toMatrix_refl, ← Equiv.toPEquiv_refl]
+    exact l2_opNorm_toMatrix_toPEquiv_le _
+
+omit [Fintype Party] in
+/-- The corrections use only `P∘`. -/
+theorem usesOnly_correctionWord
+    (σ : SplittingData (fun _ : ι ↦ Fin q) (X.tSet P) (X.tSet P ∪ X.eSet P)) :
+    (X.correctionWord P σ).UsesOnly {P} := fun r hr ↦
+  ⟨rfl, fun y x ↦ by
+    rw [correctionAt, Function.update_of_ne hr, one_kronecker_one, reindex_apply, submatrix_apply,
+      Equiv.symm_symm, one_apply, cast_eq]
+    simp only [EmbeddingLike.apply_eq_iff_eq]
+    split_ifs <;> rfl⟩
+
+omit [Fintype Party] in
+/-- The corrections have no pair source. -/
+theorem sourceCount_correctionWord
+    (σ : SplittingData (fun _ : ι ↦ Fin q) (X.tSet P) (X.tSet P ∪ X.eSet P)) :
+    (X.correctionWord P σ).sourceCount = 0 :=
+  rfl
+
+/-- **The corrections in canonical coordinates** are `1_tags ⊗ D_U F_A`.
+
+Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 504–515. -/
+theorem op_correctionWord
+    (σ : SplittingData (fun _ : ι ↦ Fin q) (X.tSet P) (X.tSet P ∪ X.eSet P)) :
+    (X.correctionWord P σ).op =
+      reindex (twoFrameEquiv X.newFrame₁ X.newFrame₂).symm
+        (twoFrameEquiv X.newFrame₁ X.newFrame₂).symm
+        (liftTags (l₁ := X.out₁ ++ X.in₂) (l₂ := X.out₂ ++ X.in₁)
+          (configBufferCorrection Finset.subset_union_left σ * Matrix.reindex
+            (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+            (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin q) fun _ ↦ Fin q)
+            (ManyBody.pairSwapOp (X.aSet P)))) := by
+  have hc := Sheet.op_correctionWord X.frame₁.sheet X.frame₂.sheet X.region P (X.exchangeEnv P)
+    (fun _ hx ↦ X.owner_eq_of_notMem_exchangeEnv P hx) σ
+  simp only [Sheet.correctionWord, Word.op, PartyCircuit.op_localOps] at hc
+  ext y x
+  have hcyx := congrFun (congrFun hc (fun p ↦ (X.outEquiv p (y p)).2))
+    (fun p ↦ (X.outEquiv p (x p)).2)
+  rw [correctionWord, Word.op, PartyCircuit.op_localOps, piKronecker_apply]
+  simp only [correctionAt, reindex_apply, submatrix_apply, Equiv.symm_symm, kroneckerMap_apply,
+    one_apply, ite_mul, one_mul, zero_mul]
+  rw [piKronecker_apply] at hcyx
+  rw [Fintype.prod_ite_zero, hcyx]
+  simp only [liftTags, reindex_apply, submatrix_apply, Equiv.symm_symm, kroneckerMap_apply,
+    one_apply, Equiv.prodProdProdComm_apply, ite_mul, one_mul, zero_mul]
+  refine if_congr ?_ rfl rfl
+  constructor
+  · intro h
+    have h₁ : (fun p ↦ (y p).1.1) = fun p ↦ (x p).1.1 := funext fun p ↦
+      (tagSystemAppendEquiv X.out₁ X.in₂ p).injective
+        (Prod.ext (congrArg (fun t ↦ t.1.1) (h p))
+          (congrArg (fun t ↦ t.1.2) (h p)))
+    have h₂ : (fun p ↦ (y p).2.1) = fun p ↦ (x p).2.1 := funext fun p ↦
+      (tagSystemAppendEquiv X.out₂ X.in₁ p).injective
+        (Prod.ext (congrArg (fun t ↦ t.2.1) (h p))
+          (congrArg (fun t ↦ t.2.2) (h p)))
+    simp only [twoLayoutEquiv, Equiv.trans_apply, Equiv.prodCongr_apply, Prod.map,
+      layoutConfigEquiv_apply, Equiv.arrowProdEquivProdArrow_apply]
+    rw [h₁, h₂]
+  · intro h p
+    simp only [twoLayoutEquiv, Equiv.trans_apply, Equiv.prodCongr_apply, Prod.map,
+      layoutConfigEquiv_apply, Equiv.arrowProdEquivProdArrow_apply, Prod.mk.injEq] at h
+    have h₁ := congrFun ((tagConfigEquiv _).injective h.1) p
+    have h₂ := congrFun ((tagConfigEquiv _).injective h.2) p
+    change (tagSystemAppendEquiv X.out₁ X.in₂ p (y p).1.1,
+        tagSystemAppendEquiv X.out₂ X.in₁ p (y p).2.1) =
+      (tagSystemAppendEquiv X.out₁ X.in₂ p (x p).1.1, tagSystemAppendEquiv X.out₂ X.in₁ p (x p).2.1)
+    rw [h₁, h₂]
+
+/-- **The exchange in canonical coordinates**: the renaming followed by the corrections is
+`C = D_U F_A ℛ`.
+
+Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 485–527. -/
+theorem op_comp_renameWord_correctionWord
+    (σ : SplittingData (fun _ : ι ↦ Fin q) (X.tSet P) (X.tSet P ∪ X.eSet P)) :
+    Word.op (PartyCircuit.comp X.renameWord (X.correctionWord P σ)) =
+      reindex (twoFrameEquiv X.newFrame₁ X.newFrame₂).symm (twoFrameEquiv X.frame₁ X.frame₂).symm
+        (X.exchangeOp P σ) := by
+  rw [Word.op_comp, op_correctionWord, op_renameWord, exchangeOp, reindex_apply, reindex_apply,
+    reindex_apply, submatrix_mul_equiv]
+  rfl
 
 end TwoSheetExchange
 

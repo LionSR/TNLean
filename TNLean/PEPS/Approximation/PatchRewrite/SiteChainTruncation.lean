@@ -47,7 +47,7 @@ noncomputable section
 
 namespace TNLean.PEPS.SiteChain
 
-open EncodedFrame TNLean.Lattice.WholeGroup
+open EncodedFrame TNLean.Network.WholeGroup
 
 variable {ι : Type*} {q : ℕ} [NeZero q] {n : ℕ} (st : Fin n → Step ι q)
 
