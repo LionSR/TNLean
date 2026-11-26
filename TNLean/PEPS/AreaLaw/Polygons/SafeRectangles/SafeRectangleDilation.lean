@@ -4,12 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
-import TNLean.PEPS.AreaLaw.Polygons.Templates.LatticeDyadicRect
-import TNLean.PEPS.AreaLaw.Polygons.Templates.CappedDyadicEntropyCover
-import TNLean.PEPS.AreaLaw.Polygons.Templates.RectangleShellCounts
+import QICLean.ManyBody.Sites.Template.LatticeDyadicRect
+import QICLean.ManyBody.Entropy.Template.CappedDyadicEntropyCover
+import QICLean.ManyBody.Sites.Template.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.InitialBoxEstimate
 import Mathlib.Data.Nat.Log
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Sites.Template.Layers
+import QICLean.ManyBody.Entropy.RegionEntropy
+import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
+import QICLean.ManyBody.Entropy.Template.TwoFamilies
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 
 /-!
 # Safety inside a dilated parent rectangle
@@ -115,17 +120,17 @@ theorem _root_.ManyBody.IsSafe.isSafe_cappedDyadicPartition_shell
     (hsafe : IsSafe Λ A D₀ Q) (j L K k : ℕ) (z : ℤ × ℤ)
     (hj : j ≤ L) (hcap : 2 ^ K ≤ L)
     (hbudget : D₀ * L + L ≤ D₀ * Q.size)
-    (hcell : (k, z) ∈ Geometry.cappedDyadicPartition
+    (hcell : (k, z) ∈ ManyBody.cappedDyadicPartition
       ((Q.dilate j).toFinset \ Q.toFinset) K) :
-    IsSafe Λ A D₀ (Geometry.latticeDyadicRect k z) := by
-  obtain ⟨hk, hsub, _⟩ := (Geometry.mem_cappedDyadicPartition _ _ _ _).mp hcell
-  have hsize : (Geometry.latticeDyadicRect k z).size ≤ L := by
-    rw [Geometry.size_latticeDyadicRect]
+    IsSafe Λ A D₀ (ManyBody.latticeDyadicRect k z) := by
+  obtain ⟨hk, hsub, _⟩ := (ManyBody.mem_cappedDyadicPartition _ _ _ _).mp hcell
+  have hsize : (ManyBody.latticeDyadicRect k z).size ≤ L := by
+    rw [ManyBody.size_latticeDyadicRect]
     exact (Nat.pow_le_pow_right (n := 2) (by decide) hk).trans hcap
-  have hcellBudget : D₀ * (Geometry.latticeDyadicRect k z).size + j ≤ D₀ * Q.size :=
+  have hcellBudget : D₀ * (ManyBody.latticeDyadicRect k z).size + j ≤ D₀ * Q.size :=
     (Nat.add_le_add (Nat.mul_le_mul_left D₀ hsize) hj).trans hbudget
   apply hsafe.of_subset_dilate (j := j) ?_ hcellBudget
-  simpa only [Geometry.toFinset_latticeDyadicRect] using
+  simpa only [ManyBody.toFinset_latticeDyadicRect] using
     hsub.trans Finset.sdiff_subset
 
 end TNLean.PEPS.AreaLaw
@@ -151,12 +156,12 @@ theorem _root_.ManyBody.IntRect.regionEntropy_shell_le_of_safe_box
     ManyBody.regionEntropy Ω
       (A.filter fun x ↦ x.1 ∈ (Q.dilate j).toFinset \ Q.toFinset) ≤
       C * (24 + 64 / ((2 : ℝ) ^ e - 1)) * (Q.size : ℝ) * (L : ℝ) ^ e := by
-  have hsafeCells : ∀ c ∈ Geometry.cappedDyadicPartition
+  have hsafeCells : ∀ c ∈ ManyBody.cappedDyadicPartition
       ((Q.dilate j).toFinset \ Q.toFinset) K,
-      IsSafe Λ A D₀ (Geometry.latticeDyadicRect c.1 c.2) := by
+      IsSafe Λ A D₀ (ManyBody.latticeDyadicRect c.1 c.2) := by
     intro c hc
     exact hsafe.isSafe_cappedDyadicPartition_shell j L K c.1 c.2 hj hlo hbudget hc
-  have hcover := Geometry.regionEntropy_filter_le_weighted_cover
+  have hcover := ManyBody.regionEntropy_filter_le_weighted_cover
     Λ q D₀ Ω hΩ A ((Q.dilate j).toFinset \ Q.toFinset) K e C hsafeCells hbox
   have hweighted := mul_le_mul_of_nonneg_left
     (Q.sum_rpow_cappedDyadicPartition_shell_le j L K hj hL hlo hhi e he) hC
@@ -213,3 +218,60 @@ theorem exists_regionEntropy_weak_rectangle_shell_le_rpow
 end TNLean.PEPS.AreaLaw
 
 end
+
+open ManyBody (abs_regionEntropy_filter_union_sub_le)
+
+section WeakRectanglePartialRowEntropy
+
+/-!
+## Entropy cost of part of a rectangle dilation layer
+
+Adding an arbitrary subset of the next dilation layer changes the regional
+entropy by at most `12 * Q.size * Real.log q`, where `q` is the local
+dimension. The estimate follows from the layer cardinality bound,
+the disjoint-region entropy increment inequality, and the dimension bound.
+It includes thin rectangles, negative coordinates, an empty added region,
+and missing lattice sites in the physical domain.
+
+Source: OpenAI, A two-dimensional area law from a global spectral gap,
+September 24, 2026, Lemma 9.4, 08-scanner.tex, lines 666–667, and the
+rectangle covering argument for Proposition 9.5, lines 717–729,
+at openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+This is the partial-layer auxiliary estimate.
+Original formalization from the manuscript; no upstream Lean proof text reused.
+-/
+
+open ManyBody (IntRect card_dilate_sdiff_le)
+
+namespace TNLean.PEPS.AreaLaw
+
+/-- An arbitrary part of a rectangle dilation layer has entropy cost at most
+`12 * size Q * log q`. Source: `08-scanner.tex`, lines 666–667 and 717–729.
+The estimate uses only normalization, the local dimension and the layer count. -/
+theorem _root_.ManyBody.IntRect.partial_row_entropy_le
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
+    (Q : IntRect) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ Q.size)
+    (Y : Finset (ℤ × ℤ))
+    (hY : Y ⊆ (Q.dilate j).toFinset \ (Q.dilate (j - 1)).toFinset) :
+    |ManyBody.regionEntropy Ω
+        (A.filter fun x ↦ x.1 ∈ ((Q.dilate (j - 1)).toFinset \ Q.toFinset) ∪ Y) -
+      ManyBody.regionEntropy Ω
+        (A.filter fun x ↦ x.1 ∈ (Q.dilate (j - 1)).toFinset \ Q.toFinset)| ≤
+      12 * (Q.size : ℝ) * Real.log q := by
+  have hlayer := card_dilate_sdiff_le Q (d := j) (k := 1) hj
+  have hcardLayer :
+      ((Q.dilate j).toFinset \ (Q.dilate (j - 1)).toFinset).card ≤
+        12 * Q.size := by
+    omega
+  have hXY : Disjoint ((Q.dilate (j - 1)).toFinset \ Q.toFinset) Y :=
+    Finset.disjoint_left.mpr fun x hx hy ↦
+      (Finset.mem_sdiff.mp (hY hy)).2 (Finset.mem_sdiff.mp hx).1
+  refine (abs_regionEntropy_filter_union_sub_le Λ q hq Ω hΩ A _ Y hXY).trans ?_
+  have hcard := (Finset.card_le_card hY).trans hcardLayer
+  exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
+    (Real.log_nonneg (by exact_mod_cast hq))
+
+end TNLean.PEPS.AreaLaw
+
+end WeakRectanglePartialRowEntropy

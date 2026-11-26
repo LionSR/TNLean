@@ -93,7 +93,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
 
 \begin{lemma}[Averaged entropy chain rule]
     \label{thm:area_law_rotated_chain_rule}
-    \lean{TNLean.PEPS.AreaLaw.regionEntropy_biUnion_le_rotations}
+    \lean{ManyBody.regionEntropy_biUnion_le_rotations}
     \leanok
     \uses{def:area_law_ground_entropy}
     Let $\Omega$ be a unit vector, write $S=S_\Omega$, and let $X_i$ be
@@ -107,7 +107,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \lean{TNLean.PEPS.AreaLaw.sum_sub_filter_key_eq,
+    \lean{ManyBody.sum_sub_filter_key_eq,
         Entropy.regionEntropy_cond_anti}
     Ordering the regions by each of the $N$ cyclic color rotations and applying
     the chain rule bounds each term by $S(X_i)$, and by

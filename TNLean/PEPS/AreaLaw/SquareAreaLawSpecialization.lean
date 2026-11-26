@@ -8,12 +8,14 @@ import QICLean.ManyBody.Sites.Relabel
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
-import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
+import QICLean.ManyBody.Hamiltonian.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
-import TNLean.PEPS.AreaLaw.Polygons.Templates.AmbientBoundary
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
+import QICLean.ManyBody.Sites.Template.AmbientBoundary
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
+import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
+import QICLean.ManyBody.Entropy.Template.TwoFamilies
 import TNLean.PEPS.Tensor.Region.RegionBlock
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -207,7 +209,7 @@ theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
     (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart)
     h.isHermitian_toPlaneInteraction_hermitianPart_term
     (h.norm_toPlaneInteraction_hermitianPart_term_le hhJ) E₀
-    (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan'
+    (ManyBody.rectangleAreaLawState Ω) hΩ' hgap' hspan'
         (A.map (ManyBody.rectangleSiteEquiv L L).toEmbedding)
   rw [card_edgeBoundary_rectangle] at this
   exact (finiteProductEntropy_relabel (ManyBody.rectangleSiteEquiv L L) q Ω A).symm.trans_le

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionInvariantSpan
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularConstraintFixedSpaces
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexVirtualParentTransport
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 
 /-!
 # The actual regional range in the ambient half-edge space
@@ -14,6 +15,8 @@ A regional range condition applies to every complementary slice. Its exact
 left, right and support characterization retains arbitrary exterior labels.
 Source: SCP10, arXiv:1001.3807, Theorem 6.12, lines 2131–2153.
 -/
+
+open ManyBody (assembleDependentRegionConfig dependentRegionConfigEquiv)
 
 open ManyBody (Edge)
 

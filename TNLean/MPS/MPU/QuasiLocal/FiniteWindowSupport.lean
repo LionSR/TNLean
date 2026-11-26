@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.QuasiLocal.TwoSiteBufferedAction
 import TNLean.MPS.CanonicalForm.Correlation.WindowCorrelator
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 import QICLean.ManyBody.Sites.Lattice.Chain
 
 /-!

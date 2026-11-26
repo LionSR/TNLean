@@ -8,7 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Operators.FrustrationFree
 
-import TNLean.PEPS.AreaLaw.Operators.FrustrationFree.LightCone
-import TNLean.PEPS.AreaLaw.Operators.FrustrationFree.Model
-import TNLean.PEPS.AreaLaw.Operators.FrustrationFree.PlanarSweep
-import TNLean.PEPS.AreaLaw.Operators.FrustrationFree.Sweep
+import QICLean.ManyBody.Sites.Product.RetainedProduct
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
+import QICLean.ManyBody.Sites.Lattice.SupportColouring
+import QICLean.ManyBody.Hamiltonian.FrustrationFreeSweep

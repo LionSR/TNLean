@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.NestedPatches.NestedPatchEnergy
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
-import TNLean.PEPS.AreaLaw.Polygons.Squares.RangeNestedPatches
+import QICLean.ManyBody.Sites.Lattice.RangeNestedPatches
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GapMarginalCloseness
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 
 /-!
 # Energy of minimizing nested patch filters at interaction range `R`
@@ -61,6 +61,13 @@ range `R` as in *A two-dimensional area law from a global spectral gap*,
 Independently formalized from the manuscripts; no upstream Lean text is reused.
 -/
 
+open ManyBody (dependentGlobalFinIsometry dependentRegionFinEquiv
+  exists_clipped_filter_of_isMinOn_regularizedPatchObjective
+  map_filter_regularizedPatchFactorList_eq_chainList norm_normalizedRegularizedPatchOutput
+  normalizedRegularizedPatchMarginal normalizedRegularizedPatchOutput
+  normalizedRegularizedPatchOutput_eq_patchState regularizedPatchDomain regularizedPatchFactorList
+  regularizedPatchObjective reindex_reducedPure_eq_regionState)
+
 section
 
 open Matrix
@@ -75,7 +82,7 @@ namespace TNLean.PEPS.Approximation
 /-- The energy coefficient `C_E = 18 s_R R μ_R q^(2(v_R - 1)) J` of the range-`R` patch
 construction, with `s_R = 2 ⌈R / 2⌉`, `v_R = 1 + 2 R (R + 1)` and `μ_R = 2^(v_R - 1)`. -/
 noncomputable def rangePatchEnergyConstant (q R : ℕ) (J : ℝ) : ℝ :=
-  18 * AreaLaw.Geometry.rangePatchSpacing R * R * 2 ^ (2 * R * (R + 1)) *
+  18 * ManyBody.rangePatchSpacing R * R * 2 ^ (2 * R * (R + 1)) *
     (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J
 
 /-- The energy coefficient is nonnegative when `J` is. -/
@@ -87,9 +94,9 @@ theorem rangePatchEnergyConstant_nonneg (q R : ℕ) {J : ℝ} (hJ : 0 ≤ J) :
 /-- The energy coefficient is positive for positive range, local dimension and `J`. -/
 theorem rangePatchEnergyConstant_pos {q R : ℕ} {J : ℝ} (hq : 0 < q) (hR : 1 ≤ R)
     (hJ : 0 < J) : 0 < rangePatchEnergyConstant q R J := by
-  have hs : (0 : ℝ) < AreaLaw.Geometry.rangePatchSpacing R := by
-    exact_mod_cast (show 0 < AreaLaw.Geometry.rangePatchSpacing R from
-      lt_of_lt_of_le (by norm_num) (AreaLaw.Geometry.two_le_rangePatchSpacing hR))
+  have hs : (0 : ℝ) < ManyBody.rangePatchSpacing R := by
+    exact_mod_cast (show 0 < ManyBody.rangePatchSpacing R from
+      lt_of_lt_of_le (by norm_num) (ManyBody.two_le_rangePatchSpacing hR))
   have hR' : (0 : ℝ) < R := by exact_mod_cast hR
   have hq' : (0 : ℝ) < q := by exact_mod_cast hq
   unfold rangePatchEnergyConstant
@@ -101,16 +108,16 @@ The weighted crossing sum of one square is therefore at most
 `R (16 u + 4) μ_R q^(2(v_R - 1)) J`. -/
 theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : ℕ) {J : ℝ}
     (hJ : 0 ≤ J) (c : ℝ × ℝ) {u : ℝ} (hu : 0 ≤ u) {j : ℕ}
-    (hj : j < AreaLaw.Geometry.rangeNestedPatchCount R u) :
+    (hj : j < ManyBody.rangeNestedPatchCount R u) :
     ∑ X ∈ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
-        (AreaLaw.Geometry.rangeNestedPatch Λ c R u j),
+        (ManyBody.rangeNestedPatch Λ c R u j),
       (Fintype.card (ManyBody.InnerConfig (fun _ : ↥Λ ↦ q)
-        (AreaLaw.Geometry.rangeNestedPatch Λ c R u j) X.1) : ℝ) ^ 2 * J ≤
+        (ManyBody.rangeNestedPatch Λ c R u j) X.1) : ℝ) ^ 2 * J ≤
       R * (16 * u + 4) * 2 ^ (2 * R * (R + 1)) * (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J := by
   classical
-  set D := AreaLaw.Geometry.rangeNestedPatch Λ c R u j
+  set D := ManyBody.rangeNestedPatch Λ c R u j
   set C := ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) D
-  set N := AreaLaw.Geometry.squareLayer Λ c (AreaLaw.Geometry.rangeNestedPatchRadius R u j) R
+  set N := ManyBody.squareLayer Λ c (ManyBody.rangeNestedPatchRadius R u j) R
   have hmemC : ∀ X ∈ C, (∃ v ∈ X.1, v ∈ D) ∧ ∃ v ∈ X.1, v ∉ D := fun X hX ↦ by
     simp only [C, ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     exact hX
@@ -140,10 +147,10 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
   have hcount : (C.card : ℝ) ≤ R * (16 * u + 4) * 2 ^ (2 * R * (R + 1)) := by
     have h := ManyBody.card_le_card_mul_of_forall_exists_mem (N := N) (S := C) fun X hX ↦ by
       obtain ⟨⟨v, hvX, hvD⟩, ⟨w, hwX, hwD⟩⟩ := hmemC X hX
-      exact ⟨v, AreaLaw.Geometry.mem_squareLayer_of_split
-        (fun x hx y hy ↦ AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport c X.2
+      exact ⟨v, ManyBody.mem_squareLayer_of_split
+        (fun x hx y hy ↦ ManyBody.abs_squareRadius_sub_le_of_isAdmissibleSupport c X.2
           hx hy) hvX hvD hwX hwD, hvX⟩
-    have hN := AreaLaw.Geometry.card_squareLayer_rangeNestedPatch_le Λ c hu hj
+    have hN := ManyBody.card_squareLayer_rangeNestedPatch_le Λ c hu hj
     have hexp : 1 + 2 * R * (R + 1) - 1 = 2 * R * (R + 1) := by omega
     rw [hexp] at h
     have h' : (C.card : ℝ) ≤ (N.card : ℝ) * 2 ^ (2 * R * (R + 1)) := by exact_mod_cast h
@@ -180,9 +187,9 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
     (center : ℝ × ℝ) (u κ b : ℝ) (hu : 0 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     letI : LinearOrder ↥Λ :=
       (Fintype.equivFin ↥Λ).linearOrder
-    let m := AreaLaw.Geometry.rangeNestedPatchCount R u
+    let m := ManyBody.rangeNestedPatchCount R u
     let regions : Fin m → Finset ↥Λ :=
-      fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
+      fun j ↦ ManyBody.rangeNestedPatch Λ center R u j
     let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
     let Ψᵤ := Ψ
     ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
@@ -198,7 +205,7 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
         rangePatchEnergyConstant q R J * κ ^ 2 := by
   intro m regions a Ψᵤ x hx hmin φ
   have hm : (0 : ℝ) < m :=
-    Nat.cast_pos.mpr (AreaLaw.Geometry.rangeNestedPatchCount_pos R u)
+    Nat.cast_pos.mpr (ManyBody.rangeNestedPatchCount_pos R u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΨᵤ : ‖Ψᵤ‖ = 1 := hΩ
   let : LinearOrder ↥Λ := (Fintype.equivFin ↥Λ).linearOrder
@@ -206,7 +213,7 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
     (Out := fun _ : ↥Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ψᵤ hΨᵤ hx
   have hφ : ‖φ‖ = 1 := hnorm
   have hregions : Monotone regions := fun i j hij ↦
-    AreaLaw.Geometry.rangeNestedPatch_mono Λ center R u hij
+    ManyBody.rangeNestedPatch_mono Λ center R u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
     (n := fun _ : ↥Λ ↦ q) regions hregions a ha hb Ψᵤ hΨᵤ x hx hmin
   let T : AdmissibleSupport Λ R →
@@ -214,7 +221,7 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
   let S : AdmissibleSupport Λ R → Finset ↥Λ := fun X ↦ X.1
   have hsupp : ∀ X, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (T X) (S X) :=
     fun X ↦ (H.mem X)
-  let D : ℕ → Finset ↥Λ := AreaLaw.Geometry.rangeNestedPatch Λ center R u
+  let D : ℕ → Finset ↥Λ := ManyBody.rangeNestedPatch Λ center R u
   let K : (j : Fin m) → Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
       (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ :=
     fun j ↦ (x j + b • 1) ^ (-(a j) / 2)
@@ -247,9 +254,9 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
   have hsingle : ∀ X : AdmissibleSupport Λ R,
       ∀ j ∈ Entropy.splitIndices (S X) D m, ∀ k ∈ Entropy.splitIndices (S X) D m,
         j = k := fun X j hj k hk ↦
-    Fin.ext (AreaLaw.Geometry.rangeNestedPatch_split_unique
+    Fin.ext (ManyBody.rangeNestedPatch_split_unique
       (fun y hy z hz ↦
-        AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport center X.2 hy hz)
+        ManyBody.abs_squareRadius_sub_le_of_isAdmissibleSupport center X.2 hy hz)
       (Entropy.mem_splitIndices.mp hj) (Entropy.mem_splitIndices.mp hk))
   have henergy := Entropy.re_inner_sub_le_of_chain_sharp D hD K hunit hφ a ha₁ hcl
     T S hsupp hH σ₀ hHJ hsingle heig
@@ -261,7 +268,7 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
         (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J) := fun j ↦
     mul_le_mul_of_nonneg_left
       (sum_crossingTerms_rangeNestedPatch_le q R hJ center hu j.isLt) (sq_nonneg _)
-  have hquad := AreaLaw.Geometry.rangeNestedPatch_quadratic_budget hR u κ
+  have hquad := ManyBody.rangeNestedPatch_quadratic_budget hR u κ
   have hP : (0 : ℝ) ≤ R * 2 ^ (2 * R * (R + 1)) * (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J := by
     positivity
   rw [hop]
@@ -274,7 +281,7 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
         (R * 2 ^ (2 * R * (R + 1)) * (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J) := by
       rw [Finset.mul_sum, Finset.sum_mul]
       exact Finset.sum_congr rfl fun _ _ ↦ by ring
-    _ ≤ (18 * AreaLaw.Geometry.rangePatchSpacing R * κ ^ 2) *
+    _ ≤ (18 * ManyBody.rangePatchSpacing R * κ ^ 2) *
         (R * 2 ^ (2 * R * (R + 1)) * (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J) :=
       mul_le_mul_of_nonneg_right hquad hP
     _ = rangePatchEnergyConstant q R J * κ ^ 2 := by
@@ -352,9 +359,9 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
       ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
         letI : LinearOrder ↥Λ :=
           (Fintype.equivFin ↥Λ).linearOrder
-        let m := AreaLaw.Geometry.rangeNestedPatchCount R u
+        let m := ManyBody.rangeNestedPatchCount R u
         let regions : Fin m → Finset ↥Λ :=
-          fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
+          fun j ↦ ManyBody.rangeNestedPatch Λ center R u j
         let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
         let Ψᵤ := Ψ
         ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
@@ -411,9 +418,9 @@ theorem exists_uniform_rangeNestedPatch_minimizer_marginal_closeness
         ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
           letI : LinearOrder ↥Λ :=
             (Fintype.equivFin ↥Λ).linearOrder
-          let m := AreaLaw.Geometry.rangeNestedPatchCount R u
+          let m := ManyBody.rangeNestedPatchCount R u
           let regions : Fin m → Finset ↥Λ :=
-            fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
+            fun j ↦ ManyBody.rangeNestedPatch Λ center R u j
           let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
           let Ψᵤ := Ψ
           ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,

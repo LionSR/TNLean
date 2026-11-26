@@ -61,7 +61,7 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
         S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m → 8 * S.K * S.m ≤ L →
         (∀ j : ℕ, 1 ≤ j → j ≤ L →
           (ambientDilation T j \ ambientDilation T (j - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
         1 ≤ B ∧

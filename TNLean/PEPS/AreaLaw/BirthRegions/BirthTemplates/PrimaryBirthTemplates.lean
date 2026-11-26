@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DyadicScales
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.PrimaryFragments
-import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
+import QICLean.ManyBody.Sites.Template.Defs
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.TwoFamilyExplicitThresholds
 import Mathlib.Analysis.Convex.Combination
 import Mathlib.Analysis.Convex.Segment
@@ -46,6 +46,8 @@ fragment has sup diameter at most `r`, so `s₀ = r`. The scanner scale is
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (Template TemplatePolygon dyadicCell dyadicLayer_dist_lower integerPoint)
 
 noncomputable section
 
@@ -173,7 +175,7 @@ private theorem boxPolygon_region (x₀ x₁ y₀ y₁ : ℝ) (hx : x₀ < x₁)
     simp only [Set.mem_insert_iff, Set.mem_singleton_iff, Set.mem_prod, Prod.ext_iff,
       Prod.fst_add, Prod.snd_add, add_zero, add_sub_cancel]
     tauto
-  simp only [boxPolygon, TemplatePolygon.region]
+  simp only [boxPolygon, ManyBody.TemplatePolygon.region]
   rw [hset, convexHull_prod, convexHull_pair, convexHull_pair, segment_eq_Icc hx.le,
     segment_eq_Icc hy.le]
 

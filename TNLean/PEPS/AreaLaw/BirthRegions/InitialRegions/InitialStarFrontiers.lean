@@ -9,7 +9,7 @@ import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanFrontiers
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellContacts
-import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
+import QICLean.ManyBody.Sites.Template.Defs
 
 /-!
 # Initial frontiers near an actual mark
@@ -32,6 +32,10 @@ especially 352–359.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (IsAllowedSlope dyadicCell dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
+  dyadicLayer dyadicNeighborhood fineLayerIndices isAllowedSlope_sub_of_mem_affineSpan_pair
+  occupiedCellIndices)
 
 noncomputable section
 

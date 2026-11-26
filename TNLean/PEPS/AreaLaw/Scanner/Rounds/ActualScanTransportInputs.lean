@@ -365,7 +365,7 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
         S.r₀ = ⌈Ctr * Real.log N ^ 2⌉₊ → 0 < S.C₁ →
         (∀ d : ℕ, 1 ≤ d → d ≤ X.L N →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ∀ (Tr : ScanTruncation X κ N) (W : ℝ), 1 ≤ W →
         X.a W N * transportLogDimBound q S.r₀ ≤ c₀ →

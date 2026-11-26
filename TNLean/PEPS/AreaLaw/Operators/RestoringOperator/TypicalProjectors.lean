@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Real.ExplicitThresholds
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.TailParameter
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
+import QICLean.ManyBody.Sites.RegionState
 import QICLean.Entropy.Typical.Density
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 

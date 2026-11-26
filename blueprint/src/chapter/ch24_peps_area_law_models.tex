@@ -78,8 +78,8 @@ state the two models separately following
         ManyBody.rectangleSiteEquiv,
         ManyBody.rectangleSiteEquiv_val,
         ManyBody.rectangleGraphIso,
-        TNLean.PEPS.AreaLaw.rectangleConfigurationEquiv,
-        TNLean.PEPS.AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv
+        ManyBody.rectangleConfigurationEquiv,
+        ManyBody.siteConfigurationEquiv_rectangleSiteEquiv
     }
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
@@ -159,9 +159,9 @@ state the two models separately following
     \label{thm:area_law_regional_state_identities}
     \lean{
         ManyBody.regionState_posSemidef,
-        TNLean.PEPS.AreaLaw.trace_regionState_eq_norm_sq,
+        ManyBody.trace_regionState,
         ManyBody.trace_regionState_eq_one,
-        TNLean.PEPS.AreaLaw.regionEntropy_nonneg,
+        ManyBody.regionEntropy_nonneg,
         ManyBody.regionEntropy_empty,
         ManyBody.regionEntropy_univ
     }
@@ -842,14 +842,14 @@ state the two models separately following
 \begin{definition}[Polygonal lattice templates]
     \label{def:area_law_template}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.IsAllowedSlope,
-        TNLean.PEPS.AreaLaw.Geometry.integerPoint,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region,
-        TNLean.PEPS.AreaLaw.Geometry.Template,
-        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated,
-        TNLean.PEPS.AreaLaw.Geometry.Template.core,
-        TNLean.PEPS.AreaLaw.Geometry.Template.collar,
+        ManyBody.IsAllowedSlope,
+        ManyBody.integerPoint,
+        ManyBody.TemplatePolygon,
+        ManyBody.TemplatePolygon.region,
+        ManyBody.Template,
+        ManyBody.Template.IsSeparated,
+        ManyBody.Template.core,
+        ManyBody.Template.collar,
         ManyBody.ambientDilation,
         ManyBody.ambientDilation_zero
     }
@@ -888,10 +888,10 @@ state the two models separately following
 \begin{definition}[Rectangle templates, unions and omitted pieces]
     \label{def:area_law_template_instances}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.ofIntRect,
-        TNLean.PEPS.AreaLaw.Geometry.Template.ofIntRect,
-        TNLean.PEPS.AreaLaw.Geometry.Template.union,
-        TNLean.PEPS.AreaLaw.Geometry.Template.omitEmpty
+        ManyBody.TemplatePolygon.ofIntRect,
+        ManyBody.Template.ofIntRect,
+        ManyBody.Template.union,
+        ManyBody.Template.omitEmpty
     }
     \leanok
     \uses{def:area_law_template}
@@ -912,16 +912,16 @@ state the two models separately following
 \begin{lemma}[Properties of rectangle templates and omitted pieces]
     \label{lem:area_law_template_instances}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_ofIntRect,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_toFinset_iff_integerPoint_mem_ofIntRect,
-        TNLean.PEPS.AreaLaw.Geometry.Template.points_ofIntRect,
-        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_ofIntRect,
-        TNLean.PEPS.AreaLaw.Geometry.Template.isSeparated_ofIntRect_of_isSafe,
-        TNLean.PEPS.AreaLaw.Geometry.Template.points_union,
-        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_union,
-        TNLean.PEPS.AreaLaw.Geometry.Template.points_omitEmpty,
-        TNLean.PEPS.AreaLaw.Geometry.Template.sample_omitEmpty_nonempty,
-        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_omitEmpty_le
+        ManyBody.TemplatePolygon.region_ofIntRect,
+        ManyBody.TemplatePolygon.mem_toFinset_iff_integerPoint_mem_ofIntRect,
+        ManyBody.Template.points_ofIntRect,
+        ManyBody.Template.pieceCount_ofIntRect,
+        ManyBody.Template.isSeparated_ofIntRect_of_isSafe,
+        ManyBody.Template.points_union,
+        ManyBody.Template.pieceCount_union,
+        ManyBody.Template.points_omitEmpty,
+        ManyBody.Template.sample_omitEmpty_nonempty,
+        ManyBody.Template.pieceCount_omitEmpty_le
     }
     \leanok
     \uses{def:area_law_template_instances}
@@ -945,8 +945,8 @@ state the two models separately following
 \begin{definition}[Ordered two-family partition]
     \label{def:area_law_two_family_partition}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition,
-        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily
+        ManyBody.OrderedTwoFamilyPartition,
+        ManyBody.OrderedTwoFamilyPartition.earlierSameFamily
     }
     \leanok
     An ordered two-family partition of a finite set $A$ is a partition
@@ -957,9 +957,9 @@ state the two models separately following
 
 \begin{lemma}[Inverse images of ordered two-family partitions]
     \label{thm:peps_two_family_partition_inverse_image}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily_comap,
-        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.card_residual_comap_le,
-        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.comap}
+    \lean{ManyBody.OrderedTwoFamilyPartition.earlierSameFamily_comap,
+        ManyBody.OrderedTwoFamilyPartition.card_residual_comap_le,
+        ManyBody.OrderedTwoFamilyPartition.comap}
     \leanok
     \uses{def:area_law_two_family_partition}
     For a finite $A\subseteq V$ with ordered two-family partition
@@ -1290,7 +1290,7 @@ and template cut and cardinality bounds.
 
 \begin{lemma}[Cut and size assertions of the collar bound]
     \label{thm:area_law_collar_cut_bounds}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.collar_cut_card_le}
+    \lean{ManyBody.Template.collar_cut_card_le}
     \leanok
     \uses{def:area_law_template}
     For a template $T$ with parameters $(n,s_0)$ separated from $Z$, with

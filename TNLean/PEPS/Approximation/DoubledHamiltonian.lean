@@ -12,5 +12,6 @@ import TNLean.PEPS.Approximation.DoubledHamiltonian.RangeResetUnitary
 import TNLean.PEPS.Approximation.DoubledHamiltonian.ResetUnitary
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedPlaneInteraction
+import QICLean.ManyBody.Hamiltonian.PlaneLocalization
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedSquareHamiltonian
 import TNLean.PEPS.Approximation.DoubledHamiltonian.TwoSheetBufferFilter

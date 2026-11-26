@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.PrimaryCounting
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.FineBelts
 import Mathlib.Data.Int.ModEq
 
@@ -22,6 +23,9 @@ September 24, 2026, Section 11, lines 212–218, 237–249 and 299–305.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (closure_dyadicCell dyadicCell dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
+  dyadicLayer fineLayerIndices)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 

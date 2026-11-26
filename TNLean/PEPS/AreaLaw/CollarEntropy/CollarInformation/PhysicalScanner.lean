@@ -41,6 +41,8 @@ The source statement of Proposition 9.2 is proved for the original physical syst
   manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (designatedSupport)
+
 open scoped Matrix.Norms.L2Operator
 
 open Filter Topology Set
@@ -136,7 +138,7 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
         (T.card : ℝ) ≤ CT * (n : ℝ) ^ 2 →
         (∀ d : ℕ, 1 ≤ d → d ≤ X.L n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
         (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤

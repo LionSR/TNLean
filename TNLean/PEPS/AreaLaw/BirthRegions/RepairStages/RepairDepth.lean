@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Polygons.Squares.PowerScaleDepth
+import QICLean.Analysis.Real.IteratedPowerDepth
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.SimultaneousRepair
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.TwoFamilyExplicitThresholds
 import Mathlib.Analysis.Complex.ExponentialBounds
-import TNLean.PEPS.AreaLaw.Polygons.Squares.ClosedSquare
+import QICLean.ManyBody.Sites.Lattice.ClosedSquare
 
 /-!
 # Depth and descendant count of a repair branch
@@ -59,6 +59,11 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `geometry:bad-sites`, lines 694–707.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (card_closedSquareSample_le closedSquareSample closedSquareSample_mono)
+open Real (exists_iterate_depth_bound forall_le_iterate_of_le_iterate
+  iterateGenerationCountConstant iterateGenerationCountConstant_pos mul_rpow_le_max_mul_rpow
+  one_le_log_add_exp_one sum_pow_le_iterateGenerationCountConstant)
 
 section
 

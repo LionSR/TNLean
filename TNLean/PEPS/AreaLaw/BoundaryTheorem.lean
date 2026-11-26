@@ -3,10 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
+import QICLean.ManyBody.Entropy.Template.BoundaryEntropyAssembly
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
+import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Lattice.SupDistance
-import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.CollarInformation
@@ -52,6 +53,9 @@ two-family entropy cancellation and the regional dimension bound.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (regionEntropy_eq_zero_of_edgeBoundary_eq_empty
+  regionEntropy_le_boundary_of_partition_estimates)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -108,7 +112,7 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   C * ((n : ℝ) ^ M)⁻¹) ∧
-              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+              ((∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     ((supDist t z : ℤ) : ℝ)) →
@@ -152,7 +156,7 @@ def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : 
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
               ManyBody.regionMutualInformation Ω X Jset ≤
                 C * ((n : ℝ) ^ M)⁻¹) ∧
-            ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+            ((∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
                 (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                     (n : ℝ) ^ (Exponents.beta : ℝ) <
                   ((supDist t z : ℤ) : ℝ)) →
@@ -231,8 +235,8 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_at
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (↥Λ → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset ↥Λ)
     (hcol : ∀ n s₀ : ℕ, N₁ ≤ n →
-          ∀ T : Geometry.Template Ctpl n s₀,
-            T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+          ∀ T : ManyBody.Template Ctpl n s₀,
+            T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
@@ -275,7 +279,7 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_at
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   C₂ * ((n : ℝ) ^ 100)⁻¹) ∧
-              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+              ((∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     ((supDist t z : ℤ) : ℝ)) →
@@ -283,15 +287,15 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_at
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A))
     (htwo : 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
-      ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
-        ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
+      ∃ P : ManyBody.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
+        ∃ T : ∀ i, ManyBody.Template Ctpl (n i) (s i),
           (P.residual.card : ℝ) ≤ C₃ * (edgeBoundary (planeDomainGraph Λ) A).card ∧
           (∀ i, (P.piece i).Nonempty) ∧
           (∀ i, P.piece i ⊆ A.filter fun x ↦ x.val ∈ (T i).points) ∧
-          (∀ i, (T i).IsSeparated D₀ (Geometry.boundaryEndpoints Λ A)) ∧
+          (∀ i, (T i).IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A)) ∧
           (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
           (∀ i, uniformAreaLawScale N₁ N₂ C₂ ≤ n i) ∧
-          (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+          (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t z : ℤ) : ℝ)) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t x.val : ℤ) : ℝ)) ∧
@@ -386,8 +390,8 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
           (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
         ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-          ∀ A : Finset ↥Λ, ∀ T : Geometry.Template Ctpl n s₀,
-            T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
+          ∀ A : Finset ↥Λ, ∀ T : ManyBody.Template Ctpl n s₀,
+            T.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
             ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
@@ -434,7 +438,7 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   C₂ * ((n : ℝ) ^ 100)⁻¹) ∧
-              ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+              ((∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     ((supDist t z : ℤ) : ℝ)) →
@@ -443,15 +447,15 @@ theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A))
     (htwo : ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset ↥Λ,
       0 < (edgeBoundary (planeDomainGraph Λ) A).card →
-      ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
-        ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
+      ∃ P : ManyBody.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
+        ∃ T : ∀ i, ManyBody.Template Ctpl (n i) (s i),
           (P.residual.card : ℝ) ≤ C₃ * (edgeBoundary (planeDomainGraph Λ) A).card ∧
           (∀ i, (P.piece i).Nonempty) ∧
           (∀ i, P.piece i ⊆ A.filter fun x ↦ x.val ∈ (T i).points) ∧
-          (∀ i, (T i).IsSeparated D₀ (Geometry.boundaryEndpoints Λ A)) ∧
+          (∀ i, (T i).IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A)) ∧
           (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
           (∀ i, uniformAreaLawScale N₁ N₂ C₂ ≤ n i) ∧
-          (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+          (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t z : ℤ) : ℝ)) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t x.val : ℤ) : ℝ)) ∧

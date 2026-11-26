@@ -36,7 +36,7 @@ theorem bandState_has_chargeAncestry_planeDomainGraph
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (k : ℕ) (side : Bool) (x : ↥Λ) (hxA : x ∈ S.A)
     (hx : S.bandState g r k (fun j ↦ choices j) x = some side) :
@@ -79,7 +79,7 @@ theorem bad_bandState_has_long_chargeAncestry_planeDomainGraph
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L) (hn : 0 < S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (k : ℕ) (side : Bool) (x : ↥Λ) (hxA : x ∈ S.A)
     (hx : S.bandState g r k (fun j ↦ choices j) x = some side)

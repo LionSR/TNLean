@@ -56,11 +56,11 @@ $\Delta_{l+1}=\mathcal E_{k,l+1}-\mathcal E_{k,l}$.
 \begin{lemma}[Exact component localization]
     \label{thm:qc_component_channel_stabilization}
     \uses{def:qc_site_expectation}
-    \lean{TNLean.PEPS.AreaLaw.regionExpectation_graphBall_eq_of_component_support,
-        TNLean.PEPS.AreaLaw.norm_sub_regionExpectation_graphBall_eq_zero_of_component_support,
-        TNLean.PEPS.AreaLaw.localRootChannel_graphBall_eq_of_component_support,
-        TNLean.PEPS.AreaLaw.exists_localRootChannel_graphBall_eq_of_component_support,
-        TNLean.PEPS.AreaLaw.localRootChannelShell_graphBall_succ_eq_zero_of_component_support}
+    \lean{ManyBody.regionExpectation_graphBall_eq_of_component_support,
+        ManyBody.norm_sub_regionExpectation_graphBall_eq_zero_of_component_support,
+        ManyBody.localRootChannel_graphBall_eq_of_component_support,
+        ManyBody.exists_localRootChannel_graphBall_eq_of_component_support,
+        ManyBody.localRootChannelShell_graphBall_succ_eq_zero_of_component_support}
     \leanok
     Every physical operator $A$ supported on $C(a)$ satisfies
     $E_{N_n(a)}(A)=A$ and $\|A-E_{N_n(a)}(A)\|=0$ for $n\ge R_a$.
@@ -87,7 +87,7 @@ Definition~\ref{def:qc_site_oscillation}.
 \begin{lemma}[Finite-shell bound for the full channel]
     \label{thm:qc_component_channel_increment}
     \uses{def:qc_site_oscillation,thm:qc_component_channel_stabilization}
-    \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_of_component_support}
+    \lean{ManyBody.siteOscillation_spectatorRootChannel_le_of_component_support}
     \leanok
     As the finite-radius consequence of component support in
     \cite{OpenAI2026AreaLaw} before choosing a decaying error bound,
@@ -113,7 +113,7 @@ Definition~\ref{def:qc_site_oscillation}.
 \begin{lemma}[No increase across components]
     \label{thm:qc_component_channel_disconnected}
     \uses{def:qc_site_oscillation,thm:qc_component_channel_stabilization}
-    \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_of_edist_eq_top}
+    \lean{ManyBody.siteOscillation_spectatorRootChannel_le_of_edist_eq_top}
     \leanok
     If $0\le k\le1$, $k$ is supported on $C(a)$, and
     $d_G(a,y)=\infty$, then $d_y(\mathcal E_k(B))\le d_y(B)$.

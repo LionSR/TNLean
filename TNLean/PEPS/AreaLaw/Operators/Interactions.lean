@@ -8,11 +8,10 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Operators.Interactions
 
-import TNLean.PEPS.AreaLaw.Operators.Interactions.EdgeCrossingBudget
-import TNLean.PEPS.AreaLaw.Operators.Interactions.GraphExtendedMetric
-import TNLean.PEPS.AreaLaw.Operators.Interactions.GraphInteractionChain
-import TNLean.PEPS.AreaLaw.Operators.Interactions.GraphInteractionSeries
-import TNLean.PEPS.AreaLaw.Operators.Interactions.GraphInteractionTarget
-import TNLean.PEPS.AreaLaw.Operators.Interactions.GraphPropagation
-import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
-import TNLean.PEPS.AreaLaw.Operators.Interactions.RegionOperatorLocalization
+import QICLean.ManyBody.Sites.Lattice.NearestNeighborCrossing
+import QICLean.ManyBody.Sites.GraphBall
+import QICLean.Algebra.Combinatorics.SupportChain
+import QICLean.ManyBody.Sites.Lattice.SupportChainSeries
+import QICLean.ManyBody.Hamiltonian.PlaneLocality
+import QICLean.ManyBody.Hamiltonian.RectangleInteraction
+import QICLean.ManyBody.Hamiltonian.PlaneLocalization

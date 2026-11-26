@@ -1,18 +1,18 @@
 \begin{lemma}[Horizontal sections of sampled polygons]
     \label{thm:area_law_sample_rows}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.latticeRow,
-        TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.convex_region,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_region,
-        TNLean.PEPS.AreaLaw.Geometry.horizontal_mem_of_mem_of_le,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.isCompact_horizontalSection,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.horizontalSection_eq_Icc,
-        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc_ceil_floor,
-        TNLean.PEPS.AreaLaw.Geometry.Template.mem_sample_of_row_between,
-        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_eq_Icc,
-        TNLean.PEPS.AreaLaw.Geometry.ceil_affine_row,
-        TNLean.PEPS.AreaLaw.Geometry.floor_affine_row
+        ManyBody.latticeRow,
+        ManyBody.mem_latticeRow,
+        ManyBody.TemplatePolygon.convex_region,
+        ManyBody.TemplatePolygon.isCompact_region,
+        ManyBody.horizontal_mem_of_mem_of_le,
+        ManyBody.TemplatePolygon.isCompact_horizontalSection,
+        ManyBody.TemplatePolygon.horizontalSection_eq_Icc,
+        ManyBody.Template.latticeRow_eq_Icc_ceil_floor,
+        ManyBody.Template.mem_sample_of_row_between,
+        ManyBody.Template.latticeRow_eq_Icc,
+        ManyBody.ceil_affine_row,
+        ManyBody.floor_affine_row
     }
     \leanok
     \uses{def:area_law_template}
@@ -34,9 +34,9 @@
 \begin{lemma}[Area of a template]
     \label{thm:area_law_template_area}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.Template.sample_subset_box,
-        TNLean.PEPS.AreaLaw.Geometry.Template.card_sample_le,
-        TNLean.PEPS.AreaLaw.Geometry.template_card_le
+        ManyBody.Template.sample_subset_box,
+        ManyBody.Template.card_sample_le,
+        ManyBody.template_card_le
     }
     \leanok
     \uses{def:area_law_template}
@@ -51,13 +51,13 @@
     \label{thm:area_law_dilation_rows_union}
     \lean{
         ManyBody.mem_ambientDilation_iff,
-        TNLean.PEPS.AreaLaw.ambientDilation_mono,
-        TNLean.PEPS.AreaLaw.ambientDilation_mono_radius,
-        TNLean.PEPS.AreaLaw.ambientDilation_add,
-        TNLean.PEPS.AreaLaw.ambientDilation_biUnion_sdiff_subset,
-        TNLean.PEPS.AreaLaw.card_ambientDilation_biUnion_sdiff_le,
-        TNLean.PEPS.AreaLaw.Geometry.mem_latticeRow_ambientDilation,
-        TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_iff
+        ManyBody.ambientDilation_mono,
+        ManyBody.ambientDilation_mono_radius,
+        ManyBody.ambientDilation_add,
+        ManyBody.ambientDilation_biUnion_sdiff_subset,
+        ManyBody.card_ambientDilation_biUnion_sdiff_le,
+        ManyBody.mem_latticeRow_ambientDilation,
+        ManyBody.Template.mem_latticeRow_dilation_iff
     }
     \leanok
     \uses{def:area_law_template,thm:area_law_sample_rows}
@@ -82,10 +82,10 @@
     \label{thm:area_law_polygon_strips}
     \leanok
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.vertices,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_eq_convexHull_vertices,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_region_iff_normal_bounds,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.exists_four_strip_bounds
+        ManyBody.TemplatePolygon.vertices,
+        ManyBody.TemplatePolygon.region_eq_convexHull_vertices,
+        ManyBody.TemplatePolygon.mem_region_iff_normal_bounds,
+        ManyBody.TemplatePolygon.exists_four_strip_bounds
     }
     \uses{def:area_law_template}
     Every allowed polygon equals the intersection of its supporting strips for the four linear forms $x,y,x+y,x-y$ (equivalently, all closed supporting slabs with allowed normal directions).
@@ -99,7 +99,7 @@
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{lemma}[Finite integer points in allowed polygons]
     \label{thm:area_law_polygon_integer_points_finite}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.finite_integerPoints}
+    \lean{ManyBody.TemplatePolygon.finite_integerPoints}
     \leanok
     \uses{def:area_law_template}
     For any closed nondegenerate triangle or rectangle $P\subseteq\mathbb R^2$ with side slopes in $\{0,\infty,1,-1\}$, the set $P\cap\mathbb Z^2$ is finite.
@@ -142,13 +142,13 @@
     \label{thm:area_law_affine_row_profiles}
     \leanok
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_four_strip_bounds,
-        TNLean.PEPS.AreaLaw.Geometry.Template.exists_latticeRow_profile,
-        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_nonempty_between,
-        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_min_step,
-        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_max_step,
-        TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_window_between,
-        TNLean.PEPS.AreaLaw.Geometry.Template.exists_nearby_sample_in_row
+        ManyBody.Template.exists_sample_four_strip_bounds,
+        ManyBody.Template.exists_latticeRow_profile,
+        ManyBody.Template.latticeRow_nonempty_between,
+        ManyBody.Template.latticeRow_min_step,
+        ManyBody.Template.latticeRow_max_step,
+        ManyBody.Template.exists_sample_in_window_between,
+        ManyBody.Template.exists_nearby_sample_in_row
     }
     \uses{thm:area_law_polygon_strips,thm:area_law_sample_rows}
     For each sampled polygon $S$ there exist $l_x,u_x,l_y,u_y,l_+,u_+,l_-,u_-\in\mathbb Z$ such that $R_y(S)=\varnothing$ for $y\notin[l_y,u_y]$ and, for $y\in[l_y,u_y]$,
@@ -167,13 +167,13 @@
     \label{thm:area_law_piece_depth_layers}
     \leanok
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.Template.mem_latticeRow_dilation_of_between,
-        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_eq_Icc,
-        TNLean.PEPS.AreaLaw.Geometry.Template.latticeRow_dilation_succ_bounds,
-        TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_layer_le_four,
-        TNLean.PEPS.AreaLaw.Geometry.Template.card_latticeRow_dilation_le,
-        TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_row_domain,
-        TNLean.PEPS.AreaLaw.Geometry.Template.card_dilation_layer_le
+        ManyBody.Template.mem_latticeRow_dilation_of_between,
+        ManyBody.Template.latticeRow_dilation_eq_Icc,
+        ManyBody.Template.latticeRow_dilation_succ_bounds,
+        ManyBody.Template.card_latticeRow_layer_le_four,
+        ManyBody.Template.card_latticeRow_dilation_le,
+        ManyBody.Template.exists_dilation_row_domain,
+        ManyBody.Template.card_dilation_layer_le
     }
     \uses{thm:area_law_affine_row_profiles,thm:area_law_dilation_rows_union,thm:area_law_template_area}
     For any sampled piece $S$, each $R_y(S_r)$ is an integer interval of length at most $2s_0+2r+1$ with $|R_y(S_{r+1})\setminus R_y(S_r)|\le4$ whenever $R_y(S_r)\ne\varnothing$. When $S\ne\varnothing$, the occupied rows of $S_r$ form $[a-r,b+r]\cap\mathbb Z$ for some $a\le b$ with $b-a\le2s_0$, and for every $1\le j\le s_0$ (including $S=\varnothing$),
@@ -189,7 +189,7 @@
 \begin{lemma}[Template depth layers with an explicit constant]
     \label{thm:area_law_template_depth_layers}
     \leanok
-    \lean{TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le}
+    \lean{ManyBody.template_layer_card_le}
     \uses{def:area_law_template,thm:area_law_piece_depth_layers,thm:area_law_dilation_rows_union}
     If $C_{\rm tpl}\ge24$ and $1\le j\le s_0$, the template satisfies
     \begin{align}

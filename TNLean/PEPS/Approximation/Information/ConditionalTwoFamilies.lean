@@ -7,7 +7,8 @@ import QICLean.ManyBody.Entropy.Typical.PlaneMarginalTails
 import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Entropy.Filter.Optimizer
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
+import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
+import QICLean.ManyBody.Entropy.Template.TwoFamilies
 import QICLean.ManyBody.Entropy.ConditionalTwoFamilies
 import QICLean.ManyBody.Entropy.MovementEtaRegional
 import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
@@ -33,9 +34,11 @@ proof of Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 197–222 and
 310–311, revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (OrderedTwoFamilyPartition)
+
 open scoped BigOperators
 
-namespace TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition
+namespace ManyBody.OrderedTwoFamilyPartition
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {G : Finset V}
 
@@ -91,7 +94,7 @@ theorem conditionalMutualInformation_le_sum
   rw [P.union_familyIndices] at hsum
   linarith only [h, hsum]
 
-end TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition
+end ManyBody.OrderedTwoFamilyPartition
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -100,7 +103,7 @@ regional entropy terms. Canonical tripartite CMI identification is separate;
 this theorem uses only the existing model entropy and its proved QICLean equality. -/
 theorem regionEntropy_conditional_le_residual_add_sum
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
-    (G B C : Finset ↥Λ) (P : Geometry.OrderedTwoFamilyPartition G)
+    (G B C : Finset ↥Λ) (P : ManyBody.OrderedTwoFamilyPartition G)
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C)
     (ε : Fin P.pieceCount → ℝ)
     (h₀ : ∀ i, P.family i = 0 →
@@ -123,7 +126,7 @@ Source: Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 197–222,
 `eq:info-tile-cost`. -/
 theorem regionEntropy_conditional_le_card_residual_add_pieceCount
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1)
-    (G B C : Finset ↥Λ) (P : Geometry.OrderedTwoFamilyPartition G)
+    (G B C : Finset ↥Λ) (P : ManyBody.OrderedTwoFamilyPartition G)
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C) (C₂ : ℝ)
     (h₀ : ∀ i, P.family i = 0 →
       ManyBody.regionMutualInformation Ω (P.piece i)
@@ -151,7 +154,7 @@ theorem regionEntropy_conditional_le_two_mul_card_mul_log
     ManyBody.regionEntropy Ω (G ∪ B) + ManyBody.regionEntropy Ω (C ∪ B) -
         ManyBody.regionEntropy Ω B - ManyBody.regionEntropy Ω (G ∪ C ∪ B) ≤
       2 * (G.card : ℝ) * Real.log q := by
-  let P : Geometry.OrderedTwoFamilyPartition G :=
+  let P : ManyBody.OrderedTwoFamilyPartition G :=
     { pieceCount := 0
       family := Fin.elim0
       piece := Fin.elim0

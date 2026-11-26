@@ -8,13 +8,12 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters
 
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.PatchEnergySmallnessScale
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchCoordinate
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchDiagonalVariation
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchListCoordinates
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMarginal
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimizerStationarity
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimum
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchRadiusChoice
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchRadiusDerivative
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchStationarity
+import QICLean.Analysis.Parameter.PatchFilterParameters
+import QICLean.ManyBody.Entropy.Filter.Regularized.Coordinate
+import QICLean.ManyBody.Entropy.Filter.Regularized.DiagonalVariation
+import QICLean.ManyBody.Entropy.Filter.Regularized.ListCoordinates
+import QICLean.ManyBody.Entropy.Filter.Regularized.Marginal
+import QICLean.ManyBody.Entropy.Filter.Regularized.MinimizerStationarity
+import QICLean.ManyBody.Entropy.Filter.Regularized.Minimum
+import QICLean.ManyBody.Entropy.Filter.Regularized.RadiusDerivative
+import QICLean.ManyBody.Entropy.Filter.Regularized.Stationarity

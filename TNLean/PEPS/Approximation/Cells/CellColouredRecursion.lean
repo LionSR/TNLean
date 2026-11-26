@@ -38,6 +38,8 @@ The recursion iterates `Generation.next` (`gen`). This module records:
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (integerPoint)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation.CellPartition

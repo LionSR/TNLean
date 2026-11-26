@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Norm.MatrixToEuclidean
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import TNLean.MPS.AreaLaw.ProjectorFactorization.CutProductExpectation
 import QICLean.Analysis.Norm.ApproximateProjector

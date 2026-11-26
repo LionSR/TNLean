@@ -21,8 +21,8 @@ not stay inside a single interaction support.
 
 \begin{lemma}[Interaction-chain walk]
     \label{thm:area_chain_walk}
-    \lean{TNLean.PEPS.AreaLaw.exists_walk_length_le_sum_of_isChain,
-        TNLean.PEPS.AreaLaw.exists_walk_length_le_mul_of_isChain}
+    \lean{SimpleGraph.exists_walk_length_le_sum_of_isChain,
+        SimpleGraph.exists_walk_length_le_mul_of_isChain}
     \leanok
     Assign a nonnegative integer range $r(X)$ to each support $X\subseteq V$. Let
     $X_0,\ldots,X_m$ satisfy $X_j\cap X_{j+1}\ne\varnothing$, and suppose
@@ -43,12 +43,12 @@ not stay inside a single interaction support.
 \begin{lemma}[Distance and component restrictions]
     \label{thm:area_chain_components}
     \uses{thm:area_chain_walk}
-    \lean{TNLean.PEPS.AreaLaw.edist_le_mul_of_isChain,
-        TNLean.PEPS.AreaLaw.reachable_of_isChain,
-        TNLean.PEPS.AreaLaw.connectedComponent_eq_of_isChain,
-        TNLean.PEPS.AreaLaw.not_isChain_of_connectedComponent_ne,
-        TNLean.PEPS.AreaLaw.not_isChain_of_edist_eq_top,
-        TNLean.PEPS.AreaLaw.not_isChain_of_mul_lt_edist}
+    \lean{SimpleGraph.edist_le_mul_of_isChain,
+        SimpleGraph.reachable_of_isChain,
+        SimpleGraph.connectedComponent_eq_of_isChain,
+        SimpleGraph.not_isChain_of_connectedComponent_ne,
+        SimpleGraph.not_isChain_of_edist_eq_top,
+        SimpleGraph.not_isChain_of_mul_lt_edist}
     \leanok
     Under the common-range hypotheses of Lemma~\ref{thm:area_chain_walk},
     $d_G(x,y)\le(m+1)R$, and $x,y$ belong to the same connected component.

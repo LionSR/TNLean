@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.NestedCylinderOrthogonalization
+import QICLean.ManyBody.Sites.Cylinder.NestedCylinder
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
@@ -19,6 +19,11 @@ manuscript, `05-frames.tex`, lines 13–97 at revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. Party layouts, products over frames,
 and the approximation estimate are separate statements.
 -/
+
+open ManyBody (dependentRegionCylinder nestedCylinderInnovation
+  nestedCylinderInnovation_projector_sum sum_finrank_nestedCylinderInnovation_le)
+open Matrix (coordinateRangeProjector coordinateRangeProjector_isStarProjection
+  coordinateRangeProjector_mulVec_eq_self_iff coordinateSubspaceES)
 
 open scoped BigOperators Matrix Matrix.Norms.L2Operator
 

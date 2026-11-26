@@ -53,6 +53,8 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (closure_dyadicCell)
+
 noncomputable section
 
 open Filter Topology

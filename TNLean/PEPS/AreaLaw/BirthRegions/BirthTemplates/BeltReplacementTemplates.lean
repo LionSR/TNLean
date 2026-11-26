@@ -63,6 +63,8 @@ in `twoFamilyDecomposition` (`TwoFamilyAssembly.lean`). Documented in
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Template integerPoint)
+
 open Filter
 
 noncomputable section

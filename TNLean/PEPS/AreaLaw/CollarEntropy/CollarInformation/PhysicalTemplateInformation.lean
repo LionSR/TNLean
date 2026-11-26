@@ -30,6 +30,8 @@ conclusion of Proposition 9.6, lines 808--944, revision
 Independently proved by composition; no upstream Lean proof text reused.
 -/
 
+open ManyBody (Template boundaryEndpoints)
+
 open scoped Matrix.Norms.L2Operator
 
 noncomputable section

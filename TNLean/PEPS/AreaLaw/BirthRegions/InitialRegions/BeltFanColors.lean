@@ -45,6 +45,9 @@ It also contains the following results.
   runs.
 -/
 
+open ManyBody (dyadicCell dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices dyadicNeighborhood
+  dyadicNeighborhood_disjoint_later_layer fineLayerIndices)
+
 section BeltFanColors
 
 noncomputable section

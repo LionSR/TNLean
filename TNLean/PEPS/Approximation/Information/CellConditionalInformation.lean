@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.Information.CoarseInformation
 import TNLean.PEPS.Approximation.Cells.CellTwoFamilyPartition
 import TNLean.PEPS.Approximation.Information.ConditionalTwoFamilies
-import TNLean.PEPS.AreaLaw.Polygons.Templates.OrderedTwoFamilyPartitionComap
+import QICLean.ManyBody.Sites.Template.OrderedTwoFamilyPartitionComap
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -39,6 +39,8 @@ supplies the range-`R` estimate with any clearance above `2R + 10` and template 
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (OrderedTwoFamilyPartition integerPoint)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -197,7 +199,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
         (fun heq ↦ hm₀ (heq ▸ (Finset.mem_filter.mp hy).2))
         ((ite_eq_left (Finset.mem_filter.mp hy).2).trans hi.symm)
     · exact hearlier i x hx y.val (by
-        simpa only [Q, OrderedTwoFamilyPartition.earlierSameFamily_comap,
+        simpa only [Q, ManyBody.OrderedTwoFamilyPartition.earlierSameFamily_comap,
           Finset.mem_filter, Finset.mem_univ, true_and] using hy)
   have h₁ (i : Fin P.pieceCount) (hi : P.family i = 1) :
       ManyBody.regionMutualInformation Ω (Q.piece i)
@@ -212,7 +214,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
         ((ite_eq_right (fun hA ↦ hy.2
           (Finset.mem_filter.mpr ⟨Finset.mem_univ _, hA⟩))).trans hi.symm)
     · exact hearlier i x hx y.val (by
-        simpa only [Q, OrderedTwoFamilyPartition.earlierSameFamily_comap,
+        simpa only [Q, ManyBody.OrderedTwoFamilyPartition.earlierSameFamily_comap,
           Finset.mem_filter, Finset.mem_univ, true_and] using hy)
   have hinfo : ManyBody.conditionalMutualInformation (fun _ : ↥Λ ↦ Fin q)
       Ω G E B ≤ 2 * (Q.residual.card : ℝ) * Real.log q + Q.pieceCount * C₂ := by

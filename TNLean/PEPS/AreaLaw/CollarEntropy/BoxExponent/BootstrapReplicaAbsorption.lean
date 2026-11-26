@@ -9,7 +9,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Topology.Order.OrderClosed
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.SelectedSchmidtEntropyBounds
+import QICLean.ManyBody.Entropy.Typical.CompressedTypicalSiteCoordinates
 import Mathlib.Analysis.SpecialFunctions.BinaryEntropy
 import Mathlib.Tactic.Convert
 
@@ -217,7 +217,7 @@ theorem regionEntropy_le_of_rough_typical_comparisons
     S ≤ 7 * η - Real.log z + 4 * Bsh / z + 4 * Bexc +
       2 * C * Real.binEntropy τ / a := by
   intro β split ΩX z ψ S S' η hupper hlower
-  have hbounds := TNLean.PEPS.AreaLaw.abs_log_card_and_selectedSchmidtEntropy_sub_le
+  have hbounds := ManyBody.abs_log_card_and_selectedSchmidtEntropy_sub_le
     Ωt hΩt X E w hz hE
   have hρ : ManyBody.regionState Ωt X = Matrix.partialTraceRight
       (Matrix.vecMulVec ΩX (star ΩX)) :=

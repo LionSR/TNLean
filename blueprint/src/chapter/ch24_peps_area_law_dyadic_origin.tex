@@ -11,14 +11,14 @@ nonintegral.
 
 \begin{definition}[The prescribed origin]
     \label{def:area_law_dyadic_origin}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin}
+    \lean{ManyBody.dyadicOrigin}
     \leanok
     Set $o=(\sqrt 2,\sqrt 3)\in\mathbb R^2$.
 \end{definition}
 
 \begin{lemma}[Nonintegrality of the origin coordinates]
     \label{thm:area_law_dyadic_origin_nonintegral}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_nonintegral}
+    \lean{ManyBody.dyadicOrigin_nonintegral}
     \leanok
     \uses{def:area_law_dyadic_origin}
     None of $o_1$, $o_2$, $o_1+o_2$ and $o_1-o_2$ is an integer.
@@ -34,7 +34,7 @@ nonintegral.
 
 \begin{lemma}[Integer-translated supporting lines avoid the lattice]
     \label{thm:area_law_dyadic_origin_lines}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_supporting_lines_avoid_lattice}
+    \lean{ManyBody.dyadicOrigin_supporting_lines_avoid_lattice}
     \leanok
     \uses{def:area_law_dyadic_origin}
     For every $m\in\mathbb Z$, none of the four lines

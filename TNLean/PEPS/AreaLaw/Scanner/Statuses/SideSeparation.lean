@@ -43,6 +43,8 @@ The proof is written independently from the manuscript; no upstream Lean
 proof is copied or adapted.
 -/
 
+open ManyBody (designatedSupport truncationRadius_eq_of_mem_crossingTerms)
+
 section
 
 open ManyBody (planeDomainGraph ambientDepth supDist)
@@ -113,7 +115,7 @@ private theorem designatedSupport_not_near_far_planeDomainGraph
     (hnear : receiving σ false ⊆ S.truncationSet L)
     (hlead : ∀ side x, x ∈ S.A → σ x = some side →
       orientedDepth S.depth side x ≤ S.front g r k side + S.D + S.r₀)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (i : I) :
     ¬ ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
@@ -157,7 +159,7 @@ theorem state_designatedSupport_not_near_far_planeDomainGraph
     (h : History S.K S.m S.M k) (hn : 0 < S.n) (hk : k ≤ S.n * S.m)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hL : 8 * S.K * S.m ≤ L)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (g : Fin S.K) (i : I) :
     ¬ ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
@@ -178,7 +180,7 @@ theorem old_designatedSupport_not_near_far_planeDomainGraph
     (h : History S.K S.m S.M k) (hn : 0 < S.n) (hk : k + 1 ≤ S.n * S.m)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (hL : 8 * S.K * S.m ≤ L)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (g : Fin S.K) (i : I) :
     ¬ ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩

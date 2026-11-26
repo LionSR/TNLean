@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaTransport
 import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 import QICLean.ManyBody.Entropy.SumSitesProduct
 
 /-!

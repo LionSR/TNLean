@@ -9,12 +9,13 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.RegionalStates.Regions
 
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ConditionalEstimates
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.Cylinder
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GapMarginalCloseness
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.NestedCylinderOrthogonalization
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RegionalReindex
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RotatedChainRule
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.SelectedSchmidtEntropyBounds
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
+import QICLean.ManyBody.Sites.Cylinder.Cylinder
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
+import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
+import QICLean.ManyBody.Sites.Cylinder.NestedCylinder
+import QICLean.ManyBody.Sites.Relabel
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.Typical.CompressedTypicalSiteCoordinates
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
+import QICLean.ManyBody.Sites.RegionState

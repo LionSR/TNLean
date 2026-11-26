@@ -8,20 +8,18 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Operators.ChannelWords
 
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ChannelGroundVectors
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ChannelShellOscillation
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ChannelWordObservables
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ChannelWordOmission
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ChannelWordThinning
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ComponentChannelOscillation
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordLists
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordTruncation
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ExponentialChannelShells
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphChannelPoissonGrowth
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphChannelSpatialOmission
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphChannelWeightedRow
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphOmittedAnchorTail
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LatticeChannelSpatialOmission
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LatticeChannelWeightedRow
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LocalChannelOscillation
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LocalConstraintProducts
+import QICLean.ManyBody.Dynamics.ChannelWord.GroundVectors
+import QICLean.ManyBody.Dynamics.ChannelWord.ShellOscillation
+import QICLean.ManyBody.Dynamics.ChannelWord.Observables
+import QICLean.ManyBody.PoissonWord.Omission
+import QICLean.ManyBody.PoissonWord.Thinning
+import QICLean.ManyBody.Dynamics.ChannelWord.ComponentOscillation
+import QICLean.Probability.PoissonWord.ContractionWord
+import QICLean.ManyBody.PoissonWord.LocalConstraintProducts
+import QICLean.ManyBody.Dynamics.ChannelWord.ExponentialShells
+import QICLean.ManyBody.PoissonWord.SpatialGrowth
+import QICLean.ManyBody.PoissonWord.SpatialOmission
+import QICLean.ManyBody.Dynamics.ChannelWord.WeightedRow
+import QICLean.ManyBody.Dynamics.ChannelWord.OmittedAnchorTail
+import QICLean.ManyBody.PoissonWord.LatticeOmission
+import QICLean.ManyBody.Dynamics.ChannelWord.LocalOscillation

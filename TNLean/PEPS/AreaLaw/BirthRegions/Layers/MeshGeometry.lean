@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.BeltMarks
-import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
+import QICLean.ManyBody.Sites.Template.Defs
 import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
 import Mathlib.Topology.MetricSpace.Pseudo.Constructions
 import Mathlib.Analysis.Convex.Between
 import Mathlib.Analysis.Normed.Affine.Convex
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.AdjacentScales
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DummyContacts
+import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 
 /-!
 # Separation on the quarter mesh
@@ -55,6 +55,10 @@ It also contains the following results.
   `TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer_fineScale`: actual layers and
   meshes near a fine-cell mark.
 -/
+
+open ManyBody (IsAllowedSlope dyadicCell dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
+  dyadicLayer dyadicLayer_dist_lower dyadicNeighborhood dyadicNeighborhood_exists_dist_le
+  fineLayerIndices integerPoint)
 
 section MeshGeometry
 

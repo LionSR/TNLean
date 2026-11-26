@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateBoxEntropy
+import QICLean.ManyBody.Entropy.Template.BoxEntropy
 import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.InitialBoxEstimate
 import TNLean.PEPS.AreaLaw.Scanner.Histories.ActualHistory
@@ -32,6 +32,8 @@ September 24, 2026, `08-scanner.tex`, lines 353--357, 574--590, 641--667
 and 828--844, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
+
+open ManyBody (Template boundaryEndpoints)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -108,7 +110,7 @@ theorem template_source_entropy_bounds
   intro Λ Ω hΩ A D₀ hD Ctpl n s₀ T hC hsep hbox
   have hn : (0 : ℝ) < n := by exact_mod_cast T.n_pos
   have hs₀n := template_pieceScale_le_size T (by linarith)
-  have hcoreEntropy := Template.regionEntropy_core_le_of_safe_box Λ q D₀ Ω hΩ A T
+  have hcoreEntropy := ManyBody.Template.regionEntropy_core_le_of_safe_box Λ q D₀ Ω hΩ A T
     hC hsep hD (Nat.log 2 s₀) (Nat.pow_log_le_self 2 (Nat.ne_of_gt T.s₀_pos))
     (Nat.lt_pow_succ_log_self (by decide) s₀) e Cbox he hCbox hbox
   refine ⟨?_, ?_⟩
@@ -128,7 +130,7 @@ theorem template_source_entropy_bounds
         (Real.rpow_nonneg (Nat.cast_nonneg _) _)
     refine ⟨?_, ?_⟩
     · intro j hj
-      have hs := Template.regionEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T
+      have hs := ManyBody.Template.regionEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T
         hC hsep hD j L (Nat.log 2 L) hj hL hlo hhi e Cbox he hCbox hbox
       rw [positiveDepthPrefix_eq_filter_ambientDilation]
       simp only [Int.toNat_natCast]
@@ -140,7 +142,7 @@ theorem template_source_entropy_bounds
         _ ≤ Ce * ((n : ℝ) * (L : ℝ) ^ e + n) := by
           nlinarith [mul_nonneg hCe hn.le]
     · intro j hj hjL Y hY
-      have hp := Template.regionEntropy_prefix_le_of_safe_box Λ q D₀ hq Ω hΩ A T
+      have hp := ManyBody.Template.regionEntropy_prefix_le_of_safe_box Λ q D₀ hq Ω hΩ A T
         hC hsep hD j L (Nat.log 2 L) hj hjL hL hlo hhi Y hY e Cbox he hCbox hbox
       calc
         ManyBody.regionEntropy Ω

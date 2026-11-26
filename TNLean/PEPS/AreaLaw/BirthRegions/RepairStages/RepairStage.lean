@@ -57,6 +57,8 @@ It also contains the following results.
   weighted sums over the actual initial repair marks.
 -/
 
+open ManyBody (boundaryEndpoints fineLayerIndices)
+
 section RepairStage
 
 section

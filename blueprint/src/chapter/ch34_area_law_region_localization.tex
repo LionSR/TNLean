@@ -35,10 +35,10 @@
 
 \begin{definition}[Constants of graph-ball localization]
     \label{def:area_graph_ball_localization_constants}
-    \lean{TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor,
-        TNLean.PEPS.AreaLaw.graphBallLocalizationVelocity,
-        TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor_pos,
-        TNLean.PEPS.AreaLaw.graphBallLocalizationVelocity_nonneg}
+    \lean{ManyBody.graphBallLocalizationPrefactor,
+        ManyBody.graphBallLocalizationVelocity,
+        ManyBody.graphBallLocalizationPrefactor_pos,
+        ManyBody.graphBallLocalizationVelocity_nonneg}
     \leanok
     For an integer $R\geq0$ and a real number $J$, put $v_R=1+2R(R+1)$,
     $\mu_R=2^{v_R-1}$, and
@@ -53,8 +53,8 @@
 
 \begin{lemma}[Localization from a region]
     \label{thm:area_region_localization}
-    \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_region_localization,
-        TNLean.PEPS.AreaLaw.quasilocal_region_localization}
+    \lean{ManyBody.exists_quasilocal_region_localization,
+        ManyBody.quasilocal_region_localization}
     \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_expectation,def:area_graph_ball_localization_constants}
     To establish the operator localization estimate used in

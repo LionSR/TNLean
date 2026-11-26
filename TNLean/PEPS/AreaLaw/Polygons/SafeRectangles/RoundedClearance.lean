@@ -24,6 +24,8 @@ and `scanner:scales` / `scanner:test-geometry`, lines 32–49, at
 Original proof from the manuscript; no upstream Lean proof text reused.
 -/
 
+open ManyBody (cappedDyadicPartition latticeDyadicRect)
+
 open ManyBody (IntRect IsSafe supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan

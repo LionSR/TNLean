@@ -87,7 +87,7 @@ theorem actualCharge_energy_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
@@ -166,7 +166,7 @@ theorem exists_actualCharge_energy_threshold {Cr C1 Ct : ℝ}
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
@@ -316,7 +316,7 @@ theorem actualCharge_energy_coefficients_of_threshold_le (q : ℕ) [NeZero q]
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
@@ -459,7 +459,7 @@ theorem exists_actualCharge_energy_coefficients (q : ℕ) [NeZero q]
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →

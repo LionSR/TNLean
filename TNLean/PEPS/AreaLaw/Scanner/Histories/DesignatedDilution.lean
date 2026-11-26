@@ -37,6 +37,8 @@ It also contains the following results.
   labelled split counts in actual collar histories.
 -/
 
+open ManyBody (designatedSupport)
+
 section DesignatedDilution
 
 open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
@@ -91,7 +93,7 @@ theorem old_designated_split_dilution_planeDomainGraph
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (∑ h : History S.K S.m S.M k,
       if ∃ g side, S.designatedSplitIncidence (S.oldChargeState h g) L i side
@@ -120,7 +122,7 @@ theorem state_designated_split_dilution_planeDomainGraph
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (∑ h : History S.K S.m S.M k,
       if ∃ g side, S.designatedSplitIncidence (S.state h g) L i side
@@ -149,7 +151,7 @@ theorem designated_split_mixture_dilution_planeDomainGraph
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {p : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1) :
     (1 - p) * (∑ h : History S.K S.m S.M k,
@@ -177,7 +179,7 @@ theorem fill_split_mixture_dilution_planeDomainGraph
     (hDpos : 1 ≤ S.D) (hC : 0 < S.C₁) (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {p : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1) :
     (1 - p) * (∑ h : History S.K S.m S.M k,
@@ -375,7 +377,7 @@ theorem sum_card_state_designatedSplitIncidence_le_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (∑ g : Fin S.K, ∑ side : Bool,
       (Finset.univ.filter fun i ↦ S.designatedSplitIncidence (S.state h g) L i side).card) ≤
@@ -401,7 +403,7 @@ theorem sum_card_old_designatedSplitIncidence_le_planeDomainGraph
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     (∑ g : Fin S.K, ∑ side : Bool,
       (Finset.univ.filter fun i ↦

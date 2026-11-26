@@ -41,6 +41,8 @@ cost and the information bound of the cell, are not part of this module.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (OrderedTwoFamilyPartition integerPoint)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation.CellPartition
@@ -288,7 +290,7 @@ theorem cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
     exact ((hval g hg.le).chamber Q hQ).lt_dist_of_mem_tile
       ((hval g hg.le).rpow_side_pos γ) (hlarge _ (hm g hg))
       (mem_tileSample.mp hx).2 hg'
-  · simp only [OrderedTwoFamilyPartition.earlierSameFamily, Finset.mem_biUnion,
+  · simp only [ManyBody.OrderedTwoFamilyPartition.earlierSameFamily, Finset.mem_biUnion,
       Finset.mem_filter, Finset.mem_univ, true_and] at hy
     obtain ⟨j, ⟨hji, hfam⟩, hy⟩ := hy
     exact (hpw.rel_get_of_lt hji).2 hfam x hx y hy

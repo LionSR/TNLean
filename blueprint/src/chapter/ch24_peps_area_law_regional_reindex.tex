@@ -3,8 +3,8 @@
 
 \begin{definition}[Relabelling physical configurations]
     \label{def:area_law_regional_relabelling}
-    \lean{TNLean.PEPS.AreaLaw.regionConfigurationEquiv,
-        TNLean.PEPS.AreaLaw.relabelState}
+    \lean{ManyBody.regionConfigurationEquiv,
+        ManyBody.relabelVector}
     \leanok
     \uses{def:area_law_domain}
     Let $e:\Lambda\to\Lambda'$ be a bijection of finite domains, and let
@@ -20,9 +20,9 @@
 
 \begin{lemma}[Covariance of reductions and invariance of entropy]
     \label{thm:area_law_regional_relabelling}
-    \lean{TNLean.PEPS.AreaLaw.norm_relabelState,
-        TNLean.PEPS.AreaLaw.regionState_relabelState,
-        TNLean.PEPS.AreaLaw.regionEntropy_relabelState}
+    \lean{ManyBody.norm_relabelVector,
+        ManyBody.regionState_relabel,
+        ManyBody.regionEntropy_relabel}
     \leanok
     \uses{def:area_law_regional_relabelling,def:area_law_ground_entropy}
     For configurations $\sigma,\tau:A\to\{0,\ldots,q-1\}$, write

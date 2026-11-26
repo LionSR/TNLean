@@ -8,14 +8,14 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Polygons.Squares
 
-import TNLean.PEPS.AreaLaw.Polygons.Squares.CappedDyadicPartition
-import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
-import TNLean.PEPS.AreaLaw.Polygons.Squares.ClosedSquare
-import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicClosure
-import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicLayers
-import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicOrigin
-import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicRefinement
-import TNLean.PEPS.AreaLaw.Polygons.Squares.MixedDyadicSquares
-import TNLean.PEPS.AreaLaw.Polygons.Squares.NestedPatches
-import TNLean.PEPS.AreaLaw.Polygons.Squares.PowerScaleDepth
-import TNLean.PEPS.AreaLaw.Polygons.Squares.RangeNestedPatches
+import QICLean.ManyBody.Sites.Dyadic.CappedDyadicPartition
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
+import QICLean.ManyBody.Sites.Lattice.ClosedSquare
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
+import QICLean.ManyBody.Sites.Dyadic.DyadicLayers
+import QICLean.ManyBody.Sites.Dyadic.DyadicOrigin
+import QICLean.ManyBody.Sites.Dyadic.DyadicRefinement
+import QICLean.ManyBody.Sites.Dyadic.MixedDyadicSquares
+import QICLean.ManyBody.Sites.Lattice.NestedPatches
+import QICLean.Analysis.Real.IteratedPowerDepth
+import QICLean.ManyBody.Sites.Lattice.RangeNestedPatches

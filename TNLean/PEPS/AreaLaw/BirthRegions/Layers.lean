@@ -10,13 +10,13 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.AdjacentScales
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.BeltMarks
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DummyContacts
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DyadicScales
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.FineBelts
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.InitialMarkFamily
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.InitialPrimaryErrorSum
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
+import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.NonbeltPrimaries
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.PolynomialBudget

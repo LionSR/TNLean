@@ -71,13 +71,13 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
 
 \begin{lemma}[Counting spatial label paths]
     \label{thm:al_scan_anchor_path_count}
-    \lean{TNLean.PEPS.AreaLaw.Scan.nearbyChargeLabels,
-        TNLean.PEPS.AreaLaw.Scan.chargeAnchorPaths,
-        TNLean.PEPS.AreaLaw.Scan.mem_chargeAnchorPaths_iff,
-        TNLean.PEPS.AreaLaw.Scan.card_chargeAnchorPaths_le,
-        TNLean.PEPS.AreaLaw.Scan.card_nearbyChargeLabels_le_of_vertex_count,
-        TNLean.PEPS.AreaLaw.Scan.card_nearbyChargeLabels_planeDomainGraph_le,
-        TNLean.PEPS.AreaLaw.Scan.card_chargeAnchorPaths_planeDomainGraph_le}
+    \lean{ManyBody.nearbyChargeLabels,
+        ManyBody.chargeAnchorPaths,
+        ManyBody.mem_chargeAnchorPaths_iff,
+        ManyBody.card_chargeAnchorPaths_le,
+        ManyBody.card_nearbyChargeLabels_le_of_vertex_count,
+        ManyBody.card_nearbyChargeLabels_planeDomainGraph_le,
+        ManyBody.card_chargeAnchorPaths_planeDomainGraph_le}
     \leanok
     \uses{thm:al_scan_actual_ancestry}
     If at most $B$ labels have anchors within graph distance $2r$ of any site, there are at most $B^s$ reversed label paths of length $s$ from a fixed endpoint; for anchor multiplicity $\le\mu$, one may take
@@ -92,16 +92,16 @@ All probabilities below are classical finite-history probabilities (\cite[Sectio
 
 \begin{lemma}[Distinct charge times in a terminal interval]
     \label{thm:al_scan_timed_path_count}
-    \lean{TNLean.PEPS.AreaLaw.Scan.timedChargePaths,
-        TNLean.PEPS.AreaLaw.Scan.card_timedChargePaths_le,
-        TNLean.PEPS.AreaLaw.Scan.mem_timedChargePaths,
-        TNLean.PEPS.AreaLaw.Scan.length_of_mem_timedChargePaths,
-        TNLean.PEPS.AreaLaw.Scan.time_mem_of_mem_timedChargePaths,
-        TNLean.PEPS.AreaLaw.Scan.ordered_of_mem_timedChargePaths,
-        TNLean.PEPS.AreaLaw.Scan.recentChargeTimes,
-        TNLean.PEPS.AreaLaw.Scan.card_recentChargeTimes_le,
-        TNLean.PEPS.AreaLaw.Scan.mem_recentChargeTimes,
-        TNLean.PEPS.AreaLaw.Scan.card_ancestry_time_window_le}
+    \lean{ManyBody.timedChargePaths,
+        ManyBody.card_timedChargePaths_le,
+        ManyBody.mem_timedChargePaths,
+        ManyBody.length_of_mem_timedChargePaths,
+        ManyBody.time_mem_of_mem_timedChargePaths,
+        ManyBody.ordered_of_mem_timedChargePaths,
+        ManyBody.recentChargeTimes,
+        ManyBody.card_recentChargeTimes_le,
+        ManyBody.mem_recentChargeTimes,
+        ManyBody.card_ancestry_time_window_le}
     \leanok
     \uses{thm:al_scan_ancestry_window}
     The window $\{0\le t<k:k-(t+1)\le W\}$ has size $v\le\min\{k,W+1\}$ (with $v\le 9nrs$ for $n,r,s>0$ and $W=4n(rs+1)$), and pairing $s$-element subsets with a label family of size $b$ yields at most $\binom vs b$ chronologically ordered paths.

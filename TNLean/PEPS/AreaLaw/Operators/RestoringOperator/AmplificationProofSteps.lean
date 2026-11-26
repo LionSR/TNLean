@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaSites
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary
+import QICLean.Analysis.Isometry.PolarUnitaryCorrection
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 
 /-!

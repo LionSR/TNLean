@@ -3,12 +3,12 @@
 % This is the mixed-square prerequisite, not the complete entropy lemma.
 \begin{lemma}[Mixed squares of finite unions and differences]
     \label{thm:area_law_mixed_dyadic_boolean}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.mem_latticeDyadicCell_iff_bounds,
-        TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_empty,
-        TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_biUnion_subset,
-        TNLean.PEPS.AreaLaw.Geometry.card_mixedDyadicIndices_biUnion_le,
-        TNLean.PEPS.AreaLaw.Geometry.mixedDyadicIndices_sdiff_subset,
-        TNLean.PEPS.AreaLaw.Geometry.card_mixedDyadicIndices_sdiff_le}
+    \lean{ManyBody.mem_latticeDyadicCell_iff_bounds,
+        ManyBody.mixedDyadicIndices_empty,
+        ManyBody.mixedDyadicIndices_biUnion_subset,
+        ManyBody.card_mixedDyadicIndices_biUnion_le,
+        ManyBody.mixedDyadicIndices_sdiff_subset,
+        ManyBody.card_mixedDyadicIndices_sdiff_le}
     \leanok
     \uses{def:area_law_lattice_dyadic_square,def:area_law_mixed_dyadic_square}
     Set $u=2^k$. The integer sites of $C_{k,z}$ satisfy
@@ -31,8 +31,8 @@
 
 \begin{lemma}[Row displacement under integer dilation]
     \label{thm:area_law_template_dilated_row_displacement}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.exists_sample_in_row_within,
-        TNLean.PEPS.AreaLaw.Geometry.Template.exists_dilation_in_row_within}
+    \lean{ManyBody.Template.exists_sample_in_row_within,
+        ManyBody.Template.exists_dilation_in_row_within}
     \leanok
     For a sampled template piece $S_a=P_a\cap\Z^2$, let
     $(x,y)\in(S_a)_j$. If row $z$ of $(S_a)_j$ is nonempty and $|z-y|\le d$,
@@ -51,7 +51,7 @@
 
 \begin{lemma}[Mixed squares of one dilated piece]
     \label{thm:area_law_template_piece_mixed_count}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_sample_dilation_le}
+    \lean{ManyBody.Template.card_mixedDyadicIndices_sample_dilation_le}
     \leanok
     \uses{def:area_law_mixed_dyadic_square,thm:area_law_template_dilated_row_displacement}
     For every sampled template piece $S_a$ of diameter at most $s_0$,
@@ -81,10 +81,10 @@
 
 \begin{lemma}[Mixed squares of a template and its shell]
     \label{thm:area_law_template_shell_mixed_count}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_dilation_pieceCount_le,
-        TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_le,
-        TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_dilation_le,
-        TNLean.PEPS.AreaLaw.Geometry.Template.card_mixedDyadicIndices_shell_le}
+    \lean{ManyBody.Template.card_mixedDyadicIndices_dilation_pieceCount_le,
+        ManyBody.Template.card_mixedDyadicIndices_le,
+        ManyBody.Template.card_mixedDyadicIndices_dilation_le,
+        ManyBody.Template.card_mixedDyadicIndices_shell_le}
     \leanok
     \uses{thm:area_law_template_piece_mixed_count,thm:area_law_mixed_dyadic_boolean}
     Let $T$ be a template with $N_0$ pieces. For every $j\ge0$,
@@ -108,7 +108,7 @@
 
 \begin{lemma}[Selected shell squares below the cap]
     \label{thm:area_law_template_shell_selected_count}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_below_cap_le}
+    \lean{ManyBody.Template.card_cappedDyadicPartition_shell_below_cap_le}
     \leanok
     \uses{thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}
     Suppose $C_{\rm tpl}\ge24$, $0\le j\le s_0$, $k<K$, and $u=2^k\le s_0$.
@@ -125,8 +125,8 @@
 
 \begin{lemma}[Selected core squares at and below the cap]
     \label{thm:area_law_template_core_selected_count}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_at_cap_le,
-        TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_below_cap_le}
+    \lean{ManyBody.Template.card_cappedDyadicPartition_at_cap_le,
+        ManyBody.Template.card_cappedDyadicPartition_below_cap_le}
     \leanok
     \uses{thm:area_law_template_area,thm:area_law_capped_dyadic_partition,thm:area_law_capped_mixed_parents,thm:area_law_template_shell_mixed_count}
     Let $T$ be a template with $C_{\rm tpl}\ge24$, and suppose

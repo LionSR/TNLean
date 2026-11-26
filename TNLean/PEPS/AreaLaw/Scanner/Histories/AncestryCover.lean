@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Histories.ChargeAncestry
 import TNLean.PEPS.AreaLaw.Scanner.Histories.AncestryLead
-import TNLean.PEPS.AreaLaw.Scanner.Histories.ChargePathCounting
-import TNLean.PEPS.AreaLaw.Scanner.Histories.TimedChargePaths
+import QICLean.ManyBody.Sites.Lattice.LabelPaths
+import QICLean.Algebra.Combinatorics.TimedPaths
 
 /-!
 # Finite charge-path cover of bad endpoints
@@ -19,6 +19,11 @@ spatial count retains the multiplicity of labels at a common anchor.
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 286–329, at `openai/math@adc7f124`.
 -/
+
+open ManyBody (card_chargeAnchorPaths_le card_timedChargePaths_le chargeAnchorPaths
+  length_of_mem_timedChargePaths mem_chargeAnchorPaths_iff mem_recentChargeTimes
+  mem_timedChargePaths nearbyChargeLabels ordered_of_mem_timedChargePaths recentChargeTimes
+  time_mem_of_mem_timedChargePaths timedChargePaths)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

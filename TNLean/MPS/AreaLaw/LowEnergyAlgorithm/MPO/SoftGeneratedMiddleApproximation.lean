@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.SoftTruncationMPOAccuracy
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.RetainedCoreFamilies
 import QICLean.ManyBody.Hamiltonian.Chain.ConsecutiveRegions
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.Operator.Periodic.TraceChainHermitian
 import QICLean.Analysis.Norm.PrincipalSubmatrixNorm

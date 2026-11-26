@@ -8,7 +8,8 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalCollarInforma
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.TwoFamilyAssembly
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
-import TNLean.PEPS.AreaLaw.Operators.FrustrationFree.Model
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
 
 /-!
 # The frustration-free area law by the sweep

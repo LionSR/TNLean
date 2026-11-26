@@ -53,6 +53,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (designatedSupport)
+
 section
 
 open Matrix
@@ -150,7 +152,7 @@ theorem exists_truncated_statusMarginal_moment_bounds
           S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m → 8 * S.K * S.m ≤ L →
           (∀ d : ℕ, 1 ≤ d → d ≤ L →
             (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           let g := Δ / positiveNormalization 1 (Δ / 2) J
           let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
@@ -261,7 +263,7 @@ theorem exists_source_statusMarginal_moment_bounds
           (T.card : ℝ) ≤ Ct * (S.n : ℝ) ^ 2 →
           (∀ d : ℕ, 1 ≤ d → d ≤ L →
             (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           1 ≤ S.K ∧
           let g := Δ / positiveNormalization 1 (Δ / 2) J
@@ -355,7 +357,7 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
         S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m → 8 * S.K * S.m ≤ L →
         (∀ d : ℕ, 1 ≤ d → d ≤ L →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
         1 ≤ B ∧

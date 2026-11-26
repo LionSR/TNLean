@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DummyContacts
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivision
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 import Mathlib.Analysis.Normed.Affine.Convex
 
 /-!
@@ -22,6 +23,10 @@ September 24, 2026, Section 11, lines 160–191, 200–207 and 299–310.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (closure_dyadicCell convex_closure_dyadicCell dyadicCell dyadicCellCorner
+  dyadicCell_dist_le dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices dyadicNeighborhood
+  dyadicNeighborhood_contact_layer_eq fineLayerIndices integerPoint occupiedCellIndices)
 
 open ManyBody (ambientDilation)
 

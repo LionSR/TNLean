@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
 import Mathlib.Topology.MetricSpace.Bounded
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DyadicScales
 
@@ -31,6 +32,8 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Geometry.primaryBirthRegion_dist_separation_of_same_parity`: separation of
   primary births in layers of the same parity.
 -/
+
+open ManyBody (dyadicCell dyadicLayer dyadicLayerIndices dyadicLayer_dist_nonadjacent)
 
 section PrimaryRegions
 

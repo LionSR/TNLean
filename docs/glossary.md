@@ -923,9 +923,9 @@ out.
 - **Caveat:** nearness includes diagonal contact, so it is not the
   four-neighbor adjacency of the square lattice.
 
-#### `TNLean.PEPS.regularizedPatchDomain` and `regularizedPatchMinimum`
+#### `ManyBody.regularizedPatchDomain` and `regularizedPatchMinimum`
 
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchMinimum.lean`.
+- **Defined in:** `QICLean/ManyBody/Entropy/Filter/Regularized/Minimum.lean`.
 - **Meaning:** the domain consists of independent positive semidefinite
   trace-one matrices on the physical spaces of a finite family of regions.
   For shift `b > 0`, the objective is the norm of the reverse index-ordered
@@ -949,9 +949,9 @@ out.
 - **Scope:** see
   [the formalization scope](formalization/peps-regularized-patch-minimum.md).
 
-#### `TNLean.PEPS.regularizedPatchCoordinateUpdate` and `regularizedPatchFirstVariation_eq_zero`
+#### `ManyBody.regularizedPatchCoordinateUpdate` and `regularizedPatchFirstVariation_eq_zero`
 
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchCoordinate.lean` and
+- **Defined in:** `QICLean/ManyBody/Entropy/Filter/Regularized/Coordinate.lean` and
   `RegularizedPatchStationarity.lean`.
 - **Meaning:** unitary conjugation changes exactly one indexed feasible density.
   The actual output derivative along `exp(tB)`, for skew-Hermitian `B`, is the
@@ -968,9 +968,9 @@ out.
 - **Verification boundary:** see the exact-source gates and scope in
   [coordinate first variation](formalization/peps-regularized-patch-stationarity.md).
 
-#### `TNLean.PEPS.normalizedRegularizedPatchMarginal`
+#### `ManyBody.normalizedRegularizedPatchMarginal`
 
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/RegionalFilters/RegularizedPatchMarginal.lean`.
+- **Defined in:** `QICLean/ManyBody/Entropy/Filter/Regularized/Marginal.lean`.
 - **Meaning:** `ManyBody.regionState` of the same normalized final filtered
   vector for every region, after the explicit univ-subtype/global configuration
   isometry. These are canonical reduced states, not freely supplied densities.
@@ -2208,11 +2208,11 @@ operators on the configurations. The scope of the local channel model relative t
   nearest-neighbor ring consumer of the same recursion.
 - **Caveat:** the graph theorems take the per-support size bound and the
   per-site norm budget as hypotheses. On a finite induced square-lattice domain
-  they are discharged in `TNLean/PEPS/AreaLaw/Operators/Interactions/GraphPropagation.lean`:
+  they are discharged in `QICLean/ManyBody/Hamiltonian/PlaneLocality.lean`:
   `ManyBody.IsAdmissibleSupport.card_le` gives the size bound
   `v_R = 1 + 2R(R + 1)`,
   `ManyBody.PlaneInteraction.sum_norm_term_containing_le` gives the
-  budget `μ_R J`, and `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` is
+  budget `μ_R J`, and `ManyBody.exists_quasilocal_lieb_robinson` is
   the resulting Lemma 4.1 of the area-law manuscript.
 
 #### `ManyBody.regionExpectation`
@@ -2234,12 +2234,12 @@ operators on the configurations. The scope of the local channel model relative t
 
 #### Positive quasi-local constraints (`exists_positiveQuasilocalConstraints`)
 
-- **Declaration:** `TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints`, with the
+- **Declaration:** `ManyBody.exists_positiveQuasilocalConstraints`, with the
   constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
   from QICLean and their ball expectations
   `ManyBody.regionExpectation (ManyBody.graphBall G aᵢ l) kᵢ`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Operators/Constraints/PositiveConstraints.lean`; the root channels of
-  Lemma 4.4 in `TNLean/PEPS/AreaLaw/Operators/Constraints/PositiveConstraints.lean`.
+- **Defined in:** `QICLean/ManyBody/Hamiltonian/Constraint/PositiveConstraints.lean`; the root channels of
+  Lemma 4.4 in `QICLean/ManyBody/Hamiltonian/Constraint/PositiveConstraints.lean`.
 - **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
   centered at the ground vector; the positive contractions annihilate `Ω`, their sum
   dominates `c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)`, and the ball tails decay like
@@ -2252,9 +2252,9 @@ operators on the configurations. The scope of the local channel model relative t
   `positiveConstraint_mem_supportedOperators_component`, `quasilocalRoots`.
 - **Caveat:** stated for a general finite graph with the support, multiplicity and
   sphere-growth hypotheses of the propagation estimate. On finite induced square-lattice
-  domains these hypotheses are discharged in `TNLean/PEPS/AreaLaw/Operators/Constraints/LatticeConstraints.lean`:
-  `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` and
-  `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots` are Proposition 4.3 and Lemma 4.4
+  domains these hypotheses are discharged in `QICLean/ManyBody/Hamiltonian/Constraint/LatticeConstraints.lean`:
+  `ManyBody.exists_latticePositiveConstraints` and
+  `ManyBody.exists_latticeQuasilocalRoots` are Proposition 4.3 and Lemma 4.4
   there, with constants depending only on `p`, `R`, `J` and `Δ`.
 
 ## Inhomogeneous short-range correlated chains
@@ -3272,25 +3272,25 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 |---|---|---|
 | `ManyBody.IsAdmissibleSupport` | A nonempty support whose pairs are joined by induced-domain walks of length at most the interaction range | Area-law `eq:hamiltonian`; definition, with the extended-distance equivalence proved. |
 | `ManyBody.PlaneInteraction` (QICLean) | One supported term per admissible support; Hermiticity and the bound `‖h_X‖ ≤ J` are the hypotheses `∀ X, (h.term X).IsHermitian` and `∀ X, ‖h.term X‖ ≤ J` of the statements that use it | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
-| `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` | Positive constants `C, v, c`, chosen before the domain and the Hamiltonian, giving exponential decay in induced-graph distance of commutators of evolved supported operators with on-site operators (exact zero between components), and of their distance from graph-ball partial-trace expectations | Area-law Lemma 4.1 (`lem:quasilocal-lr`); proved with the source's hypotheses, the constants depending only on `R` and `J`. |
-| `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` | Positive contractions `kᵢ` annihilating the gapped ground vector, whose sum dominates the gap and whose graph-ball expectations converge stretched-exponentially, with constants chosen before the domain and the Hamiltonian | Area-law Proposition 4.3 (`prop:positive`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
-| `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots` | Square roots `(I - kᵢ)^{1/2}`, `kᵢ^{1/2}` and their graph-ball truncations, with stretched-exponential tails and the induced unital local channels | Area-law Lemma 4.4 (`lem:quasilocal-roots`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
-| `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation` | Constraints truncated near a finite set `S₀` of at most `C₀ n²` sites at radius `⌈C₁ (log n)²⌉`, within `ε_n` of the positive Hamiltonian, with a unit ground vector and gap at least half | Area-law Proposition 4.5 (`prop:truncation`), first part, on induced lattice domains, with `p = 1`; `C₁` depends only on `R, J, Δ, C₀`. |
-| `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span` | The truncated sum of `exists_latticeFiniteSetTruncation` has a gapped ground vector whose eigenspace at the ground energy is the line it spans | Area-law Proposition 4.5 (`prop:truncation`), uniqueness of the truncated ground vector, on induced lattice domains, with `p = 1`. |
-| `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget` | Crossing constraints of a cut are balls about their anchors, number at most `C b_X (r₀ + 1)²`, have log-dimension at most `C (r₀ + 1)²`, and the cut budget is at most `C (1 + b_X) (r₀ + 1)⁶` | Area-law `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`; `C` depends only on `q` and `R`. |
-| `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
+| `ManyBody.exists_quasilocal_lieb_robinson` | Positive constants `C, v, c`, chosen before the domain and the Hamiltonian, giving exponential decay in induced-graph distance of commutators of evolved supported operators with on-site operators (exact zero between components), and of their distance from graph-ball partial-trace expectations | Area-law Lemma 4.1 (`lem:quasilocal-lr`); proved with the source's hypotheses, the constants depending only on `R` and `J`. |
+| `ManyBody.exists_latticePositiveConstraints` | Positive contractions `kᵢ` annihilating the gapped ground vector, whose sum dominates the gap and whose graph-ball expectations converge stretched-exponentially, with constants chosen before the domain and the Hamiltonian | Area-law Proposition 4.3 (`prop:positive`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
+| `ManyBody.exists_latticeQuasilocalRoots` | Square roots `(I - kᵢ)^{1/2}`, `kᵢ^{1/2}` and their graph-ball truncations, with stretched-exponential tails and the induced unital local channels | Area-law Lemma 4.4 (`lem:quasilocal-roots`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
+| `ManyBody.exists_latticeFiniteSetTruncation` | Constraints truncated near a finite set `S₀` of at most `C₀ n²` sites at radius `⌈C₁ (log n)²⌉`, within `ε_n` of the positive Hamiltonian, with a unit ground vector and gap at least half | Area-law Proposition 4.5 (`prop:truncation`), first part, on induced lattice domains, with `p = 1`; `C₁` depends only on `R, J, Δ, C₀`. |
+| `ManyBody.exists_latticeFiniteSetTruncation_eigenspace_eq_span` | The truncated sum of `exists_latticeFiniteSetTruncation` has a gapped ground vector whose eigenspace at the ground energy is the line it spans | Area-law Proposition 4.5 (`prop:truncation`), uniqueness of the truncated ground vector, on induced lattice domains, with `p = 1`. |
+| `ManyBody.exists_latticeCrossingBudget` | Crossing constraints of a cut are balls about their anchors, number at most `C b_X (r₀ + 1)²`, have log-dimension at most `C (r₀ + 1)²`, and the cut budget is at most `C (1 + b_X) (r₀ + 1)⁶` | Area-law `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`; `C` depends only on `q` and `R`. |
+| `ManyBody.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
 | `ManyBody.IsGapped`, `ManyBody.groundSpace` (QICLean) | `H` is gapped at `E₀` with gap `Δ`: its ground space at `E₀` is nonzero and every other eigenvalue is at least `E₀ + Δ`. A unique gapped ground vector is stated by the hypotheses `‖Ω‖ = 1`, `IsGapped H E₀ Δ` and `groundSpace H E₀ = span {Ω}`, with `H.IsHermitian` only for a bare matrix; `isGapped_and_groundSpace_eq_span_iff` identifies them, for `0 < Δ`, with the projector-gap inequality `H − E₀ ≥ Δ (1 − \|Ω⟩⟨Ω\|)` | Area-law Theorem 1.1, polynomial-PEPS `eq:global-gap`, the one-dimensional note `eq:gap`. |
 | `ManyBody.IsSiteInvariant` | An operator `H` on the configurations of the sites `V` commuting with every site-permutation unitary `P_g` of a group `G` acting on `V`; for the translations of a lattice, a translation-invariant Hamiltonian. `isSiteInvariant_of_conj` gives it from the conjugation form `P_g H P_g† = H`. `isSiteInvariant_sum_of_covariant` gives it for a sum `∑_k h_k` of covariant terms `h_{g•k} = P_g h_k P_g†`, and `isSiteInvariant_sum_conj` for the sum of the translates of one term over a finite group | Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 862–863 and 1603–1613 ("the Hamiltonian is invariant under translation"); definition in `QICLean/ManyBody/Sites/SiteAction.lean` (QICLean dependency). The converse of `isSiteInvariant_of_conj` (invariance implies `P_g H P_g† = H`) holds since `P_g` is unitary, but it is not stated as a separate lemma; it is the hypothesis under which `gaussianFilteredTerm_sitePermOp_conj` moves a site permutation through the filter. Invariance of `H` alone does not make its terms covariant, so the supercell results in `QICLean/ManyBody/Hamiltonian/TranslationCommutator.lean` take covariance as a separate hypothesis. |
 | `ManyBody.norm_groundCompression_truncated_commutator_le_finite_translation_exp` | The low-energy commutator of the actual truncated Gaussian terms is bounded by `(2^m−1)(4vObs+4)J² exp(γ(2ρ+2)) exp(−γN/[4(m+1)])`, with `m=max(1,n₀²)` for ground-space dimension at most `n₀`. | Hastings, arXiv:cond-mat/0508554v3, lines 1603–1654. Only the original Hamiltonian is invariant; graph translations preserve the geometry. There is no assumption on momentum denominators, covariance of the local decomposition or retained sets, polynomial growth, or the gap of an approximating Hamiltonian. The proof uses Cayley–Hamilton on the actual ground-space operator algebra; see <https://sirui-lu.com/QICLean/paper-gaps/hastings05_translation_supercell.pdf>. |
 | `ManyBody.LowEnergyExample.IsGround` | Example-specific: a configuration of the `m + 3`-site spin-1/2 chain of Hastings' Appendix B example with spin `1` up, every spin `i ≥ 2` down and spin `0` free; `energy_eq_groundEnergy_iff` and `hamiltonian_mulVec_eq_iff` identify these with the ground space of `H = −S^z_1 + ∑_{i≥2} S^z_i` | Hastings, arXiv:cond-mat/0508554v3, lines 1655–1676, with the corrected sum (<https://sirui-lu.com/QICLean/paper-gaps/hastings05_low_energy_example.pdf>); not a general lattice predicate, and no bridge to `ManyBody.IsGapped` is stated. |
-| `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
+| `ManyBody.relabelVector` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.AreaLaw.uniformAreaLaw`. |
-| `TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped` | The frustration-free model on a planar domain: every term of a `ManyBody.PlaneInteraction` satisfies `0 ≤ h_X ≤ J`, `Ω` is a unit vector, `H` is gapped at energy zero (`IsGapped H 0 Δ`), and the zero space `ManyBody.Interaction.zeroSpace` (the common kernel of the terms) is `span {Ω}`. The ground space at energy zero is `span {Ω}` (`groundSpace_eq`) and each `h_X Ω = 0` follows (`mulVec_eq_zero`), so the interaction is `ManyBody.Interaction.IsFrustrationFree` (`isFrustrationFree`); for `0 < Δ` the model is equivalent to `0 ≤ h_X ≤ J`, `h_X Ω = 0`, `‖Ω‖ = 1`, `Δ (1 − \|Ω⟩⟨Ω\|) ≤ H` (`iff_model`). The terms are Hermitian and `H Ω = 0` (`isHermitian`, `hamiltonian_mulVec_eq_zero`); with `0 ≤ J`, `‖h_X‖ ≤ J` (`norm_term_le`); so with `0 < J, Δ` it is a special case of the hypotheses of `UniformAreaLaw`; the converse fails, since a gapped instance need not have positive terms annihilating `Ω` | Frustration-free area-law note (`docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`), `eq:model`; the positivity `0 ≤ h_X` and the annihilation are what the gap and the sweep consequences use. |
+| `ManyBody.IsFrustrationFreeGapped` | The frustration-free model on a planar domain: every term of a `ManyBody.PlaneInteraction` satisfies `0 ≤ h_X ≤ J`, `Ω` is a unit vector, `H` is gapped at energy zero (`IsGapped H 0 Δ`), and the zero space `ManyBody.Interaction.zeroSpace` (the common kernel of the terms) is `span {Ω}`. The ground space at energy zero is `span {Ω}` (`groundSpace_eq`) and each `h_X Ω = 0` follows (`mulVec_eq_zero`), so the interaction is `ManyBody.Interaction.IsFrustrationFree` (`isFrustrationFree`); for `0 < Δ` the model is equivalent to `0 ≤ h_X ≤ J`, `h_X Ω = 0`, `‖Ω‖ = 1`, `Δ (1 − \|Ω⟩⟨Ω\|) ≤ H` (`iff_model`). The terms are Hermitian and `H Ω = 0` (`isHermitian`, `hamiltonian_mulVec_eq_zero`); with `0 ≤ J`, `‖h_X‖ ≤ J` (`norm_term_le`); so with `0 < J, Δ` it is a special case of the hypotheses of `UniformAreaLaw`; the converse fails, since a gapped instance need not have positive terms annihilating `Ω` | Frustration-free area-law note (`docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`), `eq:model`; the positivity `0 ≤ h_X` and the annihilation are what the gap and the sweep consequences use. |
 | `TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw` | The uniform boundary entropy bound of `UniformAreaLaw` restricted to instances of `IsFrustrationFreeGapped`, with the constant chosen before the domain, the Hamiltonian and the cut | Frustration-free note, `eq:goal`. `UniformAreaLaw.frustrationFreeAreaLaw` derives it from `UniformAreaLaw`; it is proved by that route (`frustrationFreeAreaLaw_of_uniformAreaLaw`). It is also proved by the note's sweep route, which does not use the general amplification (`frustrationFreeAreaLaw`). |
 | `ManyBody.innerBoundary` | Sites of a region adjacent to its complement, for any graph; the induced domain uses `innerBoundary (planeDomainGraph Λ) A` | Area-law Corollary 1.2; defined in `QICLean/ManyBody/Sites/GraphBoundary.lean` (QICLean dependency); in a graph of degree at most four every cut has at most four crossing edges per inner-boundary site. |
 | `ManyBody.endpointBoundary` | Both endpoints of every edge of the edge boundary, with repetitions removed | Area-law Corollary 1.2; defined in `QICLean/ManyBody/Sites/GraphBoundary.lean` (QICLean dependency); `two_mul_card_edgeBoundary_le_mul_card_endpointBoundary` gives `2 |∂A| ≤ 4 |Z_A|` on the induced domain. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds` | Inner-boundary and endpoint entropy bounds with constants four and two times the edge-boundary constant | Area-law Corollary 1.2; proved conditionally on `UniformAreaLaw`, with the same uniform quantifiers. The unconditional form is `TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds`. |
-| `TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_edgeBoundary_eq_empty` | A cut with no crossing edge has zero regional entropy in a gapped ground vector | Area-law Lemma 2.2 (`lem:zero-boundary`), `01-preliminaries.tex`, lines 123–134; proved, using only the gapped ground-vector hypothesis with `Δ > 0`. |
+| `ManyBody.regionEntropy_eq_zero_of_edgeBoundary_eq_empty` | A cut with no crossing edge has zero regional entropy in a gapped ground vector | Area-law Lemma 2.2 (`lem:zero-boundary`), `01-preliminaries.tex`, lines 123–134; proved, using only the gapped ground-vector hypothesis with `Δ > 0`. |
 | `ManyBody.graphBall` | The closed ball `N_l(a) = {x : d_G(a,x) ≤ l}` of a finite graph in the extended graph distance | Area-law `03-quasilocal.tex`, line 17; sites in other connected components are at infinite distance and never belong to a ball. Defined in `QICLean/ManyBody/Sites/GraphBall.lean`, with the neighbourhood `ManyBody.graphNeighborhood G S l` of a region. |
 | `ManyBody.cutLogBudget` | The parameter `ℬ_A = 1 + ∑ log²(e d_X)` of a cut for a family of supports `D` and local dimensions `n`, summed over the supports meeting both `A` and its complement; the lattice budget is `cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A`, the chain budget uses `ChainSupport L R`, the truncated constraints use the designated supports | Area-law Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 47–55; defined in `QICLean/ManyBody/Entropy/SupportedMarginalTails.lean` (QICLean dependency), bounded by the number of crossing supports in `cutLogBudget_le_card`. |
 | `Entropy.concentrationWidth` | The width `32 √((1 + ϑ) ℬ) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}`; on the lattice `ϑ = J/Δ` and `ℬ = ℬ_A` | Area-law `02-initial.tex`, lines 207–212; defined in `QICLean/ManyBody/Entropy/Typical/TypicalMarginalMass.lean` (QICLean dependency), used in `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_regionState` at `Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M`. |
@@ -3301,25 +3301,25 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `ManyBody.IsSafe` | The sup-norm distance from the rectangle `Q` to every endpoint of an edge crossing `A` exceeds `D₀ · size Q` | Area-law `02-initial.tex`, lines 220–228; vacuous when no edge crosses `A`, matching the source's infinite distance to the empty set. The source's standing condition `D₀ > 2R + 10` is a hypothesis of the theorems, not of the predicate. |
 | `ManyBody.rectRegion` | The physical region `A ∩ Q` of an ambient rectangle | Area-law `02-initial.tex`, lines 232–233; sites of `Q` missing from the domain or from `A` are absent. |
 | `TNLean.PEPS.AreaLaw.boxEntropy` | The supremum `F_box(r)` of `S_Ω(A ∩ Q)` over all domains, admissible Hamiltonians with gapped ground vectors, cuts, and safe rectangles of size at most `r`, at fixed `q, R, J, Δ, D₀` | Area-law Proposition 3.3 (`prop:initial-box`), `02-initial.tex`, lines 590–594; a real supremum, bounded above by `r² log q` for `q ≥ 1` and estimated in `exists_boxEntropy_le_rpow`. |
-| `TNLean.PEPS.AreaLaw.skewSymbol` | The scalar `f(t) = ⟨θ, ρ_P^{[t]} ρ_Y^{[-t]} h ρ_P^{[-t]} ρ_Y^{[t]} θ⟩` for regions `P, Y` of a finite domain, with `ρ^{[s]}` the real power of a regional state taken as zero on its kernel | Area-law Lemma 5.3 (`lem:skew`), `04-conditional.tex`, lines 495–500; equal to QICLean's marked scalar symbol by `skewSymbol_eq_markedScalarSymbol`, with the lemma itself in `skewSymbol_skew_le`. |
+| `TensorPower.markedScalarSymbol` | The scalar `f(t) = ⟨θ, ρ_P^{[t]} ρ_Y^{[-t]} h ρ_P^{[-t]} ρ_Y^{[t]} θ⟩` for regions `P, Y` of a finite domain, with `ρ^{[s]}` the real power of a regional state taken as zero on its kernel | Area-law Lemma 5.3 (`lem:skew`), `04-conditional.tex`, lines 495–500; equal to QICLean's marked scalar symbol by `skewSymbol_eq_markedScalarSymbol`, with the lemma itself in `skewSymbol_skew_le`. |
 | `TNLean.PEPS.AreaLaw.Scan.ScanData` | The finite data of the collar scan at one scale for all replica counts, with the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for that scan as fields | Area-law Proposition 9.2 (`prop:scanner`), `08-scanner.tex`, lines 399–533; the inputs are hypotheses and are not derived from the scan geometry, so results over `ScanData` are Proposition 9.2 restricted to them, as recorded in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. |
 | `TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs`, `TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs.toScanInputs`, `TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTransportInputs_actualScan` | The Proposition 7.4 fields of `ScanInputs` (replica remainders, leaf masses `1/2`, defect measurability, continuity and differentiability of `log N(p)²`, entropy gain and energy with constants `κ.C` and `κ.C_l`, endpoint agreement), their completion by the Proposition 8.1 fields with the remainders and logarithmic errors added, and their proof for the actual rounds of a physical collar scan at the source scales for every sufficiently large `n` | Area-law Proposition 7.4 (`prop:transport`), `06-transport.tex`, lines 377–433, as used in `08-scanner.tex`, lines 416–461; hypotheses are the source ones, at positive replica counts only: nonzero symmetric replica vectors, smallness `aℓ ≤ c₀`, and the replica-mean eigenvector equation with the truncated ground energy. The conclusion is for the family `withZeroCopyUnit pre`, which carries the unit vector at zero copies; consumed by the conditional `scanner_estimate_actualScan` through `toScanInputs`. `κ.C` and `κ.C_l` must exceed thresholds depending on `q` and `C_tr`. |
 | `TNLean.PEPS.AreaLaw.Scan.CollarScan.HistoryProperties`, `TNLean.PEPS.AreaLaw.Scan.eventually_historyProperties` | The four assertions of Lemma 9.1 for an actual collar scan, with explicit constants: splitting designated supports are graph `r₀`-balls inside `A` that terminally split one band on one side, distinct-band metrics commute on the symmetric replica space, assigned leads are at most `j + D + r₀`, prefix comparisons differ by `3nD` sites, status cuts have at most `40nD` edges, at most `10bKnD` terms split, split probabilities are at most `10D/m`, bad histories have probability at most `n^(-p)`, and good-history sampling has probability at least `1/(2(C₁+1)nD)`. The theorem proves them at the source scales for all sufficiently large `n`. | Area-law Lemma 9.1 (`scanner:histories`), `08-scanner.tex`, lines 195–347; hypotheses are `scanner:scales`, `scanner:test-geometry`, a bound `b` on labels per anchor and the padding condition `3b ≤ C₁`. The threshold is chosen before the domain, cut, target, labels and scanner; all probabilities are classical history weights. |
 | `TNLean.PEPS.Approximation.IsSquareGroundState` | Unit gapped ground vector of an interaction `ManyBody.SquareInteraction L q` (one supported term per site and edge) with Hermitian total and terms of norm at most `J` | Polynomial-PEPS `eq:model`; individual Hermiticity is not assumed. |
 | `TNLean.PEPS.Approximation.HasPEPSApproximation` | Nonzero native PEPS, positive polynomially bounded bonds, and normalized global error at most the inverse side length, up to phase | Polynomial-PEPS Theorem 1.1; a predicate defining the desired approximation. |
 | `TNLean.PEPS.Approximation.PolynomialPEPSApproximation` | Constants chosen before every square size, Hamiltonian, and ground vector | Polynomial-PEPS Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.Approximation.polynomialPEPSApproximation`. |
-| `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
-| `TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
-| `TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood`, `dyadicLayer` | Actual translated half-open cell unions and their successive differences at nonnegative dyadic scales | Area-law Section 11; nesting, exact layer-cell unions, closed-cell formulas, uniform cell counts, endpoint-distance bounds, and nonadjacent-layer separation proved. Exhaustion holds for a nonempty endpoint set and radius at least two. |
-| `TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_infDist_bounds`, `dyadicLayer_dist_nonadjacent` | The source's lower and upper sup-distance bounds to the endpoints, and separation of closed layers whose scales differ by at least two | Area-law `geometry:layer-distance` and `geometry:nonadjacent`; proved for arbitrary origin and nonnegative integer radius. The nonadjacent lower bound is positive when the radius is at least two; the full two-family partition is `TNLean.PEPS.AreaLaw.twoFamilyDecomposition`. |
-| `TNLean.PEPS.AreaLaw.Geometry.fineLayerIndices`, `fineScaleIndex`, `pitchScaleIndex`, `exists_sparse_dyadic_belt_shift` | Actual fine-cell layer indices, the fixed rounded fine and pitch scales, and selection of sparse coordinate belts | Area-law `geometry:belt-count`; exact fine-cell unions and counts, scale divisibility, and the bound `64*(2*C₀+1)^2*b*2^(-δ₀*k/2)` proved, including empty layers. The constant is uniform in domain, cut, origin, and scale. The two-family construction is `TNLean.PEPS.AreaLaw.twoFamilyDecomposition`. |
+| `ManyBody.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |
+| `ManyBody.OrderedTwoFamilyPartition` | A finite disjoint partition with residual sites and two ordered families | Area-law Lemma 11.1; contains no entropy or separation assumption. |
+| `ManyBody.dyadicNeighborhood`, `dyadicLayer` | Actual translated half-open cell unions and their successive differences at nonnegative dyadic scales | Area-law Section 11; nesting, exact layer-cell unions, closed-cell formulas, uniform cell counts, endpoint-distance bounds, and nonadjacent-layer separation proved. Exhaustion holds for a nonempty endpoint set and radius at least two. |
+| `ManyBody.dyadicLayer_infDist_bounds`, `dyadicLayer_dist_nonadjacent` | The source's lower and upper sup-distance bounds to the endpoints, and separation of closed layers whose scales differ by at least two | Area-law `geometry:layer-distance` and `geometry:nonadjacent`; proved for arbitrary origin and nonnegative integer radius. The nonadjacent lower bound is positive when the radius is at least two; the full two-family partition is `TNLean.PEPS.AreaLaw.twoFamilyDecomposition`. |
+| `ManyBody.fineLayerIndices`, `fineScaleIndex`, `pitchScaleIndex`, `exists_sparse_dyadic_belt_shift` | Actual fine-cell layer indices, the fixed rounded fine and pitch scales, and selection of sparse coordinate belts | Area-law `geometry:belt-count`; exact fine-cell unions and counts, scale divisibility, and the bound `64*(2*C₀+1)^2*b*2^(-δ₀*k/2)` proved, including empty layers. The constant is uniform in domain, cut, origin, and scale. The two-family construction is `TNLean.PEPS.AreaLaw.twoFamilyDecomposition`. |
 | `TNLean.PEPS.AreaLaw.Geometry.exists_dyadicScale_side_ratios` | A threshold for each fixed factor separates the fine-cell side, layer-cell side, and belt pitch at every later scale | Area-law Section 11, lines 200–207; proved uniformly in all physical and geometric data. The later geometric construction is `TNLean.PEPS.AreaLaw.twoFamilyDecomposition`. |
 | `TNLean.PEPS.AreaLaw.Geometry.exists_polynomial_dyadic_absorption`, `summable_polynomial_dyadic_decay`, `exists_uniform_polynomial_dyadic_sum_bound` | Absorption of every fixed real power into the exponential belt decay, convergence of the resulting series, and one positive bound on arbitrary finite scale sums | Auxiliary numerical estimates for Area-law `geometry:total-repairs`, lines 668–692, uniform in all physical and geometric data. They feed the repair counts of `TNLean.PEPS.AreaLaw.twoFamilyDecomposition`. |
-| `TNLean.PEPS.AreaLaw.Geometry.latticeRow` | Horizontal integer coordinates at a fixed vertical coordinate | Lemma 9.4 proof; this is a horizontal section, not a dilation depth layer. |
-| `TNLean.PEPS.AreaLaw.Geometry.template_card_le` | The template area is at most `9*n*s₀` when `Ctpl ≥ 1` | Area part of Lemma 9.4; distinct from the dilation depth-layer bound. |
-| `TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le` | Each ambient dilation layer has at most `n` sites for `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` | Geometric depth-layer part of Lemma 9.4, derived from the actual polygon model; no added row regularity. See [validation status](formalization/template-rows.md). |
-| `TNLean.PEPS.AreaLaw.ambientBoundary` | Unordered ambient nearest-neighbor crossing edges, using the existing finite-domain boundary on a one-step enclosure | Exact ambient edges, distinct from physical cut intersections; [boundary proof status](formalization/template-boundary.md). |
-| `TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le` | Physical unordered crossing edges of `A ∩ T_j` number at most `4n`; the core and shell have bounds `4n` and `8n` | Lemma 9.4; avoidance is derived from actual separation for `D₀ ≥ 1`, `Ctpl ≥ 24`, and `j ≤ s₀`. [Validation status](formalization/template-cut-boundary.md). |
+| `ManyBody.latticeRow` | Horizontal integer coordinates at a fixed vertical coordinate | Lemma 9.4 proof; this is a horizontal section, not a dilation depth layer. |
+| `ManyBody.template_card_le` | The template area is at most `9*n*s₀` when `Ctpl ≥ 1` | Area part of Lemma 9.4; distinct from the dilation depth-layer bound. |
+| `ManyBody.template_layer_card_le` | Each ambient dilation layer has at most `n` sites for `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` | Geometric depth-layer part of Lemma 9.4, derived from the actual polygon model; no added row regularity. See [validation status](formalization/template-rows.md). |
+| `ManyBody.ambientBoundary` | Unordered ambient nearest-neighbor crossing edges, using the existing finite-domain boundary on a one-step enclosure | Exact ambient edges, distinct from physical cut intersections; [boundary proof status](formalization/template-boundary.md). |
+| `ManyBody.template_cut_boundary_card_le` | Physical unordered crossing edges of `A ∩ T_j` number at most `4n`; the core and shell have bounds `4n` and `8n` | Lemma 9.4; avoidance is derived from actual separation for `D₀ ≥ 1`, `Ctpl ≥ 24`, and `j ≤ s₀`. [Validation status](formalization/template-cut-boundary.md). |
 | `TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar` | An assignment of the eight elementary triangles of the closed square of half-side ρ about v to region identifiers. Each open triangle lies in its region, and each region closure meets the square in exactly its triangles. The frontiers in the square are exactly the directed axis and diagonal rays at changes of identifier. Successive triangles have equal labels exactly when their identifiers agree, and without a change the square lies in one region | Area-law `geometry:initial-stars`, lines 340–349; definition only. Shrinking the half-side preserves it (`IsIsolatedStar.mono`). |
 | `TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars` | Mark occurrences of a repair stage separated by `a₀` times the larger scale, each with an isolated star of half-side `a₀ S` in the current regions | Area-law `geometry:initial-stars` and `geometry:repair-induction`, lines 332–349 and 471–485; definition only, with shrinking of `a₀` for positive scales. Holding it at every generation is Lemma 11.4. |
 | `TNLean.PEPS.AreaLaw.Geometry.InitialIsolatedStarsStatement` | One positive `a₀` such that the jointly chosen initial repair stage has isolated stars with constant `a₀` for all large `k₀` | The specialization of Lemma 11.3 (`geometry:initial-stars`) to the residues chosen in `initialRepairStage`, which Lemma 11.4 consumes. Proved with `a₀ = 1/128` by `initialIsolatedStarsStatement_holds`, as a corollary of the shift-uniform theorem below. |
@@ -3497,10 +3497,10 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ## Nested regional cylinders
 
-### `TNLean.PEPS.dependentRegionCylinder`
+### `ManyBody.dependentRegionCylinder`
 
 - **Declaration:** `dependentRegionCylinder R S`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/Regions/Cylinder.lean`.
+- **Defined in:** `QICLean/ManyBody/Sites/Cylinder/Cylinder.lean`.
 - **Meaning:** the global vectors all of whose complementary coordinate slices
   lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
 - **Source:** the September 24, 2026 polynomial-PEPS manuscript,
@@ -3514,11 +3514,11 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   cylinder. No cancellation of a possibly zero-dimensional outside factor
   is used. The empty region still has inside Hilbert space `ℂ`.
 
-### `TNLean.PEPS.nestedCylinderInnovation`
+### `ManyBody.nestedCylinderInnovation`
 
 - **Declaration:** `nestedCylinderInnovation R hR S j`, where `hR` states
   that the finite family of regions is monotone.
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalStates/Regions/NestedCylinderOrthogonalization.lean`.
+- **Defined in:** `QICLean/ManyBody/Sites/Cylinder/NestedCylinder.lean`.
 - **Meaning:** the inside image `(I − P_(Wⱼ)) Sⱼ`, where
   `nestedCylinderEarlierInside` constructs `Wⱼ` by lifting the original earlier
   inside projectors into the current region and taking the sum of their ranges.
@@ -3546,7 +3546,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - `ManyBody.regionEntropy_le_remainder_add_half_sum` (QICLean): exact normalized
   pure-state two-family cancellation, with coefficient `1/2` and the entire
   exterior-plus-earlier-same-family mutual-information assumptions.
-- `TNLean.PEPS.AreaLaw.regionEntropy_le_residual_add_half_sum`: the finite-domain
+- `ManyBody.OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`: the finite-domain
   specialization using the existing `OrderedTwoFamilyPartition` and regional
   entropy. It assumes no Hamiltonian, gap, geometry, nonempty family, or separate
   nonnegative error bound. Source: OpenAI (September 24, 2026), area-law Lemma 11.1.
@@ -3557,28 +3557,28 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ## Partial template row entropy
 
-- `TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le` states the
+- `ManyBody.template_partial_row_entropy_le` states the
   absolute entropy cost at most `n * log q` for any subset of one template
   depth row, the partial-row step of area-law Lemma 9.4.
 
 ## Safe dyadic template rectangles
 
-- `TNLean.PEPS.AreaLaw.Geometry.latticeDyadicRect` interprets an existing
+- `ManyBody.latticeDyadicRect` interprets an existing
   lattice dyadic cell as the native `IntRect`, with the same sites and size `2^k`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation`
+- `ManyBody.Template.IsSeparated.isSafe_of_subset_ambientDilation`
   derives native rectangle safety from actual template separation, containment
   in `T_j`, `j ≤ s₀`, and rectangle size at most `s₀`, for `D₀ ≥ 1`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core`
+- `ManyBody.Template.IsSeparated.isSafe_cappedDyadicPartition_core`
   and `isSafe_cappedDyadicPartition_shell` derive those containment and size
   premises from the selected cells themselves when `2^K ≤ s₀`. These are the
   clearance step of Lemma 9.4, not its conditional entropy conclusion.
 ## Weighted template shell coverings
 
-- `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
+- `ManyBody.Template.card_shell_le` bounds the actual
   ambient shell by `n*j` for `Ctpl ≥ 24` and `j ≤ s₀`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le`
+- `ManyBody.Template.card_cappedDyadicPartition_shell_at_cap_le`
   bounds total cap-side length by `2*n` when `j ≤ L ≤ s₀` and `L < 2^(K+1)`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le`
+- `ManyBody.Template.sum_rpow_cappedDyadicPartition_shell_le`
   states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
   for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
   of Lemma 9.4, not safe clearance or a regional entropy theorem.
@@ -3612,7 +3612,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ## Partial rectangle layer entropy
 
 - **Declaration:** `ManyBody.IntRect.partial_row_entropy_le`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Polygons/Templates/TemplateEntropy.lean`.
+- **Defined in:** `QICLean/ManyBody/Entropy/Template/TemplateEntropy.lean`.
 - **Meaning:** let `Q` be a nonempty integer rectangle of size `s`, let
   `1 ≤ j ≤ s`, and let `Y ⊆ Q^{+j} \ Q^{+(j−1)}` be arbitrary. For a
   normalized pure state `Ω` with local dimension `q ≥ 1` and any physical
@@ -3681,8 +3681,8 @@ source's Proposition 4.1.
 
 | Declaration | Mathematical content | Source and scope |
 |---|---|---|
-| `TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector` | An actual positive-mass spectral restriction chooses one label sequence; the initial vector built from the original exact eigenvector has nonzero norm at most one, exact mean energy, simultaneous copy symmetry and both literal auxiliary projection equations. The same labels have polynomial selected-vector mass and the auxiliary entropy asymptotic. | Area-law `comparator:prevector` and `comparator:high-label`, lines 130–147 and 240–281. Identification of the transported auxiliary operators with singleton site-label projectors is separate. |
-| `TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap` | The same finite-set truncation constant, Hamiltonian and ground vector retain their support, gap and distance estimates and supply the common-label initial vector for every positive-mass spectral selection. | Area-law `prop:truncation` composed with the preceding result. The exact energy equation belongs to the truncated Hamiltonian. |
+| `ManyBody.exists_global_schmidtBellPrevector` | An actual positive-mass spectral restriction chooses one label sequence; the initial vector built from the original exact eigenvector has nonzero norm at most one, exact mean energy, simultaneous copy symmetry and both literal auxiliary projection equations. The same labels have polynomial selected-vector mass and the auxiliary entropy asymptotic. | Area-law `comparator:prevector` and `comparator:high-label`, lines 130–147 and 240–281. Identification of the transported auxiliary operators with singleton site-label projectors is separate. |
+| `ManyBody.exists_finiteSetTruncation_schmidtBellPrevector_of_gap` | The same finite-set truncation constant, Hamiltonian and ground vector retain their support, gap and distance estimates and supply the common-label initial vector for every positive-mass spectral selection. | Area-law `prop:truncation` composed with the preceding result. The exact energy equation belongs to the truncated Hamiltonian. |
 
 ## Weighted rectangle-shell covering
 

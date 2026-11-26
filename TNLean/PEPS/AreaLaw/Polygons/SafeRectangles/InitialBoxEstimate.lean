@@ -4,12 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Entropy.Filter.BufferedRectangleEntropy
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RotatedChainRule
-import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.SafeBoxChildren
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Sites.Lattice.RectangleChildren
+import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
+import QICLean.ManyBody.Entropy.Template.TwoFamilies
 import QICLean.Analysis.Real.ScaleRecurrence
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 
 /-!
 # The initial safe-box estimate
@@ -80,6 +80,8 @@ real-clearance physical conclusion is proved in `PhysicalSafeBox.lean`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open ManyBody (regionEntropy_biUnion_le_rotations regionEntropy_nonneg)
+
 section InitialBoxEstimate
 
 open ManyBody (IntRect IsSafe condEntropy_le_initialBufferConst initialBufferConst
@@ -139,7 +141,7 @@ theorem bddAbove_boxEntropyValues (hq : 1 ≤ q) (r : ℕ) :
 theorem nonneg_of_mem_boxEntropyValues {r : ℕ} {s : ℝ}
     (hs : s ∈ boxEntropyValues q R J Δ D₀ r) : 0 ≤ s := by
   obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, -, -, rfl⟩ := hs
-  exact regionEntropy_nonneg Λ q Ω hΩ _
+  exact regionEntropy_nonneg hΩ _
 
 theorem boxEntropy_nonneg (r : ℕ) : 0 ≤ boxEntropy q R J Δ D₀ r :=
   Real.sSup_nonneg fun _ hs ↦ nonneg_of_mem_boxEntropyValues hs
@@ -324,7 +326,7 @@ theorem regionEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {Cbu
     regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan (hchsafe i)
         (IntRect.size_child_le _ _ hr)
   have hX0 : ∀ i, 0 ≤ ManyBody.regionEntropy Ω (Xs i) := fun i ↦
-    regionEntropy_nonneg Λ q Ω hΩ _
+    regionEntropy_nonneg hΩ _
   have hcard : (Finset.univ : Finset ι).card ≤ M ^ 2 := by
     rw [Finset.card_univ, Fintype.card_prod, Fintype.card_fin, Fintype.card_fin, sq]
     exact Nat.mul_le_mul hnx hny

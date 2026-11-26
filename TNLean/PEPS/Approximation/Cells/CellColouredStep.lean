@@ -46,6 +46,8 @@ under that convention they are the half-open boxes used here.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (integerPoint)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation.CellPartition

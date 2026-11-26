@@ -36,6 +36,9 @@ Validation and inherited-dependency scope:
 `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
+open ManyBody (abs_log_card_and_selectedSchmidtEntropy_sub_le latticeTruncationRadiusConstant
+  latticeTruncationRadiusConstant_pos)
+
 open scoped Matrix.Norms.L2Operator
 
 noncomputable section
@@ -171,7 +174,7 @@ theorem sourceBootstrap_entropy_improvement_explicit
         (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
           (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
@@ -437,7 +440,7 @@ theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
         (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
           (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
@@ -486,7 +489,7 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
         (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
           (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
@@ -531,7 +534,7 @@ theorem exists_sourceBootstrap_entropy_improvement
         (∀ r : ℕ, 1 ≤ r → r ≤ F.L S.n →
           (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →

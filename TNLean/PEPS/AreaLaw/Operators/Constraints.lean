@@ -8,12 +8,14 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Operators.Constraints
 
-import TNLean.PEPS.AreaLaw.Operators.Constraints.CrossingBudget
-import TNLean.PEPS.AreaLaw.Operators.Constraints.FiniteSetTruncation
-import TNLean.PEPS.AreaLaw.Operators.Constraints.FiniteSetTruncationGap
-import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeConstraints
-import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeCounts
-import TNLean.PEPS.AreaLaw.Operators.Constraints.LocalRootChannels
-import TNLean.PEPS.AreaLaw.Operators.Constraints.PositiveConstraints
-import TNLean.PEPS.AreaLaw.Operators.Constraints.TruncationRadius
-import TNLean.PEPS.AreaLaw.Operators.Constraints.TruncationSeries
+import QICLean.ManyBody.Hamiltonian.Constraint.CrossingBudget
+import QICLean.ManyBody.Hamiltonian.Constraint.FiniteSetTruncation
+import QICLean.ManyBody.Hamiltonian.Constraint.FiniteSetTruncationGap
+import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
+import TNLean.PEPS.AreaLaw.AmplificationProof
+import QICLean.ManyBody.Hamiltonian.Constraint.LatticeConstraints
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
+import QICLean.ManyBody.Dynamics.ChannelWord.LocalRootChannel
+import QICLean.ManyBody.Hamiltonian.Constraint.PositiveConstraints
+import QICLean.Analysis.Parameter.TruncationRadius
+import QICLean.Analysis.Real.StretchedExponentialSummability

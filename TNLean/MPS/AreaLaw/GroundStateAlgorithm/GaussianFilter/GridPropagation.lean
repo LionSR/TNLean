@@ -9,7 +9,7 @@ import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridLocalization
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.BlockProductBonds
 import QICLean.ManyBody.Dynamics.DisjointRelativeEvolution
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Dynamics.GraphLocalization
 

@@ -596,10 +596,10 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** cast `i ≤ j` to `ℝ`, note `0 ≤ s_R`, unfold the radius
   `u + s_R j` and close with `nlinarith`.
 - **Seen:** 3 occurrences across 2 files (`rangeNestedPatch_mono` in
-  `TNLean/PEPS/AreaLaw/Polygons/Squares/RangeNestedPatches.lean`, and
+  `QICLean/ManyBody/Sites/Lattice/RangeNestedPatches.lean`, and
   `uniform_rangeNestedPatch_cylinders` and `rangeAdaptivePatchSupply` in
   `TNLean/PEPS/Approximation/NestedPatches/RangeNestedPatchApproximation.lean`).
-- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.rangeNestedPatchRadius_mono`.
+- **Abstraction:** `ManyBody.rangeNestedPatchRadius_mono`.
 - **Notes:** each call site is now one line; on `Fin m` indices write
   `fun _ _ hij ↦ rangeNestedPatchRadius_mono R u hij`.
 
@@ -1255,8 +1255,8 @@ abstracted — record why, so it is not re-proposed).
   monotonicity of division and the two endpoint remainder inequalities.
 - **Seen:** two coordinate estimates in each of
   `Geometry/TemplateDyadicRows.lean` and `Geometry/RectangleMixedSquares.lean`.
-- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card` in
-  `TNLean/PEPS/AreaLaw/Polygons/Templates/RectangleShellCounts.lean`.
+- **Abstraction:** `ManyBody.quotient_interval_card` in
+  `QICLean/ManyBody/Sites/Template/RectangleShellCounts.lean`.
 - **Notes:** the divisor is positive and the endpoints are ordered; negative
   endpoints are allowed. The existing statement and proof are unchanged,
   and both counting modules use the shared theorem.
@@ -1348,8 +1348,8 @@ abstracted — record why, so it is not re-proposed).
   interval between its least and greatest members.
 - **Seen:** `Template.latticeRow_eq_Icc` and
   `Template.latticeRow_dilation_eq_Icc` (`Geometry/TemplateLayers.lean`).
-- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.finset_eq_Icc_min'_max'_of_between`
-  in `TNLean/PEPS/AreaLaw/Polygons/Templates/TemplateRows.lean`.
+- **Abstraction:** `ManyBody.finset_eq_Icc_min'_max'_of_between`
+  in `QICLean/ManyBody/Sites/Template/Rows.lean`.
 - **Notes:** with two local contraction steps for `‖√a‖ ≤ 1` and Hermitian
   parts, −6 lines over 4 files.
 
@@ -1686,7 +1686,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** Three copies in `NonbeltPrimaries.lean`,
   `FineMarkSeparation.lean` and `SideSubdivision.lean`.
 - **Abstraction:**
-  `TNLean.PEPS.AreaLaw.Geometry.dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices`
+  `ManyBody.dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices`
   in `LayerPartition.lean`. It requires only the aligned exponents and actual
   index membership, including empty layers and arbitrary origins and radii.
 - **Refactor:** All three callers use the lemma. The closure callers apply
@@ -5784,8 +5784,8 @@ no additional helper is proposed.
   ```
 
 - **Seen:** 2 occurrences
-  (`TNLean/PEPS/AreaLaw/Polygons/Squares/NestedPatches.lean:141`,
-  `TNLean/PEPS/AreaLaw/Polygons/Squares/RangeNestedPatches.lean:179`).
+  (`QICLean/ManyBody/Sites/Lattice/NestedPatches.lean:141`,
+  `QICLean/ManyBody/Sites/Lattice/RangeNestedPatches.lean:179`).
 - **Abstraction:** proposed lemma deriving `i = j` for a symmetric property of
   two indices in a linear order from the case `i < j` leading to a
   contradiction.
@@ -5906,7 +5906,7 @@ no additional helper is proposed.
   interaction itself is QICLean's `ManyBody.RectangleInteraction.toPlaneInteraction`.
 - **Abstraction:** QICLean's `ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators`
   with `ManyBody.mem_rectangleSupport_iff` performs the transport, and
-  `TNLean.PEPS.AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv` rewrites the
+  `ManyBody.siteConfigurationEquiv_rectangleSiteEquiv` rewrites the
   configuration bijection to `rectangleConfigurationEquiv`. At a third
   occurrence, consider a lemma giving the reindexed term's supported-operator
   membership directly.
@@ -8998,8 +8998,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   monotonicity of division and the two endpoint remainder inequalities.
 - **Seen:** two coordinate estimates in each of
   `Geometry/TemplateDyadicRows.lean` and `Geometry/RectangleMixedSquares.lean`.
-- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card` in
-  `TNLean/PEPS/AreaLaw/Polygons/Templates/RectangleShellCounts.lean`.
+- **Abstraction:** `ManyBody.quotient_interval_card` in
+  `QICLean/ManyBody/Sites/Template/RectangleShellCounts.lean`.
 - **Notes:** the divisor is positive and the endpoints are ordered; negative
   endpoints are allowed. The existing statement and proof are unchanged,
   and both counting modules use the shared theorem.
@@ -9010,7 +9010,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** the rectangle-shell weighted covering and the two template
   covering proofs in [PR #9000](https://github.com/LionSR/TNLean/pull/9000).
 - **Abstraction:** Geometry.sum_cappedDyadicPartition_by_scale in
-  TNLean/PEPS/AreaLaw/Polygons/Squares/CappedDyadicPartition.lean.
+  QICLean/ManyBody/Sites/Dyadic/CappedDyadicPartition.lean.
 - **Notes:** the rectangle argument uses the shared identity. The existing
   template arguments still need the corresponding refactoring in their
   owning PR. The identity is valid for signed real weights, empty
@@ -9547,7 +9547,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Express the natural-valued lattice sup-norm distance, viewed
   as a real number, as the maximum of the absolute coordinate differences.
 - **Occurrences:** The former private helper in
-  `TNLean/PEPS/AreaLaw/Polygons/Templates/TemplateSafeRectangles.lean`, the local
+  `QICLean/ManyBody/Sites/Template/SafeRectangles.lean`, the local
   calculation in `Geometry/TemplateInstances.lean`, the dyadic-cell
   clearance proof in `Geometry/TemplateClearance.lean`, and the real
   clearance argument in `Geometry/TemplateBoxEntropyReal.lean`.

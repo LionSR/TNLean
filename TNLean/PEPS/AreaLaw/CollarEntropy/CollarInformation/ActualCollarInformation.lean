@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualTerminalCollarGeo
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.CollarInformation
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Ring
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.SelectedSchmidtEntropyBounds
+import QICLean.ManyBody.Entropy.Typical.CompressedTypicalSiteCoordinates
 
 /-!
 # The mutual information measured by the actual sharp entropy expression
@@ -39,6 +39,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 900--911 and 936--941, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (abs_log_card_and_selectedSchmidtEntropy_sub_le)
 
 section
 

@@ -72,9 +72,9 @@ namespace TNLean.PEPS.Approximation
 /-- The whole domain has no crossing edges, so its endpoint set `Z_Λ` is empty.
 Source: polynomial-PEPS proof of Proposition 3.1, `02-information.tex` lines 115–117. -/
 private theorem boundaryEndpoints_univ (Λ : Finset (ℤ × ℤ)) :
-    Geometry.boundaryEndpoints Λ (Finset.univ : Finset ↥Λ) = ∅ := by
+    ManyBody.boundaryEndpoints Λ (Finset.univ : Finset ↥Λ) = ∅ := by
   classical
-  unfold Geometry.boundaryEndpoints
+  unfold ManyBody.boundaryEndpoints
   rw [ManyBody.edgeBoundary_univ]
   simp
 
@@ -238,7 +238,7 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
     apply Nat.floor_le_of_le
     nlinarith
   -- The collar bound with the cut `A = Λ`.
-  have hsep : Tt.IsSeparated D₀ (Geometry.boundaryEndpoints Λ Finset.univ) := by
+  have hsep : Tt.IsSeparated D₀ (ManyBody.boundaryEndpoints Λ Finset.univ) := by
     intro x _ z hz
     rw [boundaryEndpoints_univ] at hz
     simp at hz
@@ -422,7 +422,7 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
     (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart)
     h.isHermitian_toPlaneInteraction_hermitianPart_term
     (h.norm_toPlaneInteraction_hermitianPart_term_le hhJ) E₀
-    (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan'
+    (ManyBody.rectangleAreaLawState Ω) hΩ' hgap' hspan'
     (T.image fun t ↦ t + -c) (hT.translate (-c))
     (by
       simp only [Finset.mem_image]
@@ -443,7 +443,7 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
       rintro _ ⟨t, ht, rfl⟩ _ ⟨v, hv, rfl⟩
       rw [Equiv.toEmbedding_apply, rectangleSiteEquiv_val, hdist]
       exact hE t ht v hv)
-  rwa [AreaLaw.rectangleAreaLawState, show AreaLaw.rectangleConfigurationEquiv L L q =
+  rwa [ManyBody.rectangleAreaLawState, show ManyBody.rectangleConfigurationEquiv L L q =
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
     finiteProductMutualInformation_relabel] at h
 

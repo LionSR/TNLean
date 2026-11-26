@@ -25,6 +25,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Independently proved from the manuscript; no upstream Lean proof text reused.
 -/
 
+open ManyBody (latticeTruncationRadiusConstant latticeTruncationRadiusConstant_pos)
+
 open scoped Matrix.Norms.L2Operator
 
 noncomputable section
@@ -92,7 +94,7 @@ theorem sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
@@ -159,7 +161,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_th
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
@@ -216,7 +218,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤

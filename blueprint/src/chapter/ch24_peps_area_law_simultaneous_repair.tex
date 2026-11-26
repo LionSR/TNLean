@@ -127,12 +127,12 @@ of scale $S$ have scale $d^{j}(S)$, and generation $j$ has at most $9^j$ marks.
 % OpenAI2026PolynomialPEPS, Lemma 3.2, 02-information.tex, lines 302--311.
 \begin{lemma}[Depth of a power-contracting recursion]
     \label{thm:area_law_power_recursion_depth}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.log_iterate_le_of_le_rpow,
-        TNLean.PEPS.AreaLaw.Geometry.one_le_log_add_exp_one,
-        TNLean.PEPS.AreaLaw.Geometry.exists_iterate_depth_bound,
-        TNLean.PEPS.AreaLaw.Geometry.exists_iterate_generation_count_bound,
-        TNLean.PEPS.AreaLaw.Geometry.mul_rpow_le_max_mul_rpow,
-        TNLean.PEPS.AreaLaw.Geometry.forall_le_iterate_of_le_iterate}
+    \lean{Real.log_iterate_le_of_le_rpow,
+        Real.one_le_log_add_exp_one,
+        Real.exists_iterate_depth_bound,
+        Real.exists_iterate_generation_count_bound,
+        Real.mul_rpow_le_max_mul_rpow,
+        Real.forall_le_iterate_of_le_iterate}
     \leanok
     Let $0<\rho<1$, $S_*>1$, and $0<f(u)\le u^{\rho}$ for all $u\ge S_*$. If
     $S>0$ satisfies $f^{i}(S)\ge S_*$ for $0\le i<m$, then

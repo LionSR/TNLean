@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.GroundPath.ExactGroundPathGaussianFilter
 import TNLean.MPS.Symmetry.PeriodicRay.PositiveRayExpectations
 import TNLean.MPS.CanonicalForm.Correlation.WindowSeparation
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 import QICLean.ManyBody.Sites.Lattice.Chain
 
 /-!

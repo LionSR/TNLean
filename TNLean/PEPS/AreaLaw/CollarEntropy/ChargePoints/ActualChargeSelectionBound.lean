@@ -54,7 +54,7 @@ theorem actualCharges_selection_planeDomainGraph_of_finiteFamilyTransportBound
       (∀ d : ℕ, 1 ≤ d → d ≤ L →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
       (∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
       let hm : 0 < S.m := by omega
@@ -118,7 +118,7 @@ theorem actualCharges_selection_planeDomainGraph :
         (∀ d : ℕ, 1 ≤ d → d ≤ L →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega

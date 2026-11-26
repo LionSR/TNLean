@@ -11,6 +11,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.InitialBoxEstimate
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.InitialBufferReal
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.RoundedClearance
-import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.SafeBoxChildren
+import QICLean.ManyBody.Sites.Lattice.RectangleChildren
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.TailParameter

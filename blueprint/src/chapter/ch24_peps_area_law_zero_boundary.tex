@@ -7,7 +7,7 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
 
 \begin{lemma}[Supports and components]
     \label{thm:area_law_support_components}
-    \lean{ManyBody.IsAdmissibleSupport.reachable, ManyBody.subset_or_disjoint_of_edgeBoundary_eq_empty, ManyBody.edgeBoundary_filter_connectedComponentMk_mem, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
+    \lean{ManyBody.IsAdmissibleSupport.reachable, ManyBody.subset_or_disjoint_of_edgeBoundary_eq_empty, ManyBody.edgeBoundary_filter_connectedComponentMk_mem, ManyBody.edgeBoundary_connectedComponent_eq_empty}
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
     Every support of finite induced-graph diameter lies in one connected
@@ -24,7 +24,7 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
 
 \begin{lemma}[A cut splitting no support]
     \label{thm:area_law_unsplit_supports}
-    \lean{TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_forall_subset_or_disjoint}
+    \lean{ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint}
     \leanok
     \uses{def:area_law_ground_entropy}
     Under the hypotheses of Theorem~\ref{thm:openai_uniform_area_law}, if every
@@ -41,7 +41,7 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
 
 \begin{lemma}[A cut with no crossing edge]
     \label{thm:area_law_zero_boundary}
-    \lean{TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_edgeBoundary_eq_empty}
+    \lean{ManyBody.regionEntropy_eq_zero_of_edgeBoundary_eq_empty}
     \leanok
     \uses{def:area_law_ground_entropy}
     Under the hypotheses of Theorem~\ref{thm:openai_uniform_area_law}, if
@@ -59,7 +59,7 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
 
 \begin{lemma}[Degenerate cases]
     \label{thm:area_law_degenerate_cases}
-    \lean{TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_range_eq_zero, TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_q_eq_one, TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_domain_eq_empty, TNLean.PEPS.AreaLaw.regionEntropy_connectedComponents_eq_zero}
+    \lean{ManyBody.regionEntropy_eq_zero_of_range_eq_zero, ManyBody.regionEntropy_eq_zero_of_q_eq_one, ManyBody.regionEntropy_eq_zero_of_domain_eq_empty, ManyBody.regionEntropy_connectedComponents_eq_zero}
     \leanok
     \uses{def:area_law_ground_entropy}
     For range $R=0$ every regional entropy of the gapped ground vector vanishes.

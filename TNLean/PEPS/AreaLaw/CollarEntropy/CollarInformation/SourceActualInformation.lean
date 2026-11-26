@@ -29,6 +29,9 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (abs_log_card_and_selectedSchmidtEntropy_sub_le designatedSupport
+  latticeTruncationRadiusConstant latticeTruncationRadiusConstant_pos regionEntropy_nonneg)
+
 open scoped Matrix.Norms.L2Operator
 
 noncomputable section
@@ -79,7 +82,7 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
@@ -218,7 +221,7 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
     St c Bpre continuity
   have hΩt : ‖Ωt‖ = 1 := htrgs.1
   have hKpos : 0 < S.K := by omega
-  have hSt : 0 ≤ St := regionEntropy_nonneg Λ q Ωt hΩt X
+  have hSt : 0 ≤ St := regionEntropy_nonneg hΩt X
   have hselected := abs_log_card_and_selectedSchmidtEntropy_sub_le
     Ωt hΩt X E w hwindow.2.2.1 (fun i hi ↦ (hwindow.2.2.2.2.2 i hi).2)
   change |Real.log (d : ℝ) - St| ≤ c ∧ |Sent - St| ≤ c at hselected
@@ -305,7 +308,7 @@ theorem exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
@@ -454,7 +457,7 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤

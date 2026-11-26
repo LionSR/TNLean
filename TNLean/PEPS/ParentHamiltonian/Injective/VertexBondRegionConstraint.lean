@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexBondCoordinates
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexInverseRegionSlice
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 
 /-!
 # Internal Bell constraints from actual regional virtual contractions
@@ -25,6 +26,8 @@ virtual-bond constraints and site inverses, lines 2017–2044.
   N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
   Concepts, symmetries, theorems*
 -/
+
+open ManyBody (assembleDependentRegionConfig)
 
 open ManyBody (Edge)
 

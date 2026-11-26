@@ -6,10 +6,11 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.RepairInduction
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairStage
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
+import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.BeltMarks
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
-import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
+import QICLean.ManyBody.Sites.Template.Defs
 import QICLean.ManyBody.Sites.Lattice.SupDistance
 
 /-!
@@ -56,6 +57,9 @@ requires.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (Template boundaryEndpoints dyadicCell
+  dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices dyadicLayer_dist_lower integerPoint)
 
 open Filter
 
