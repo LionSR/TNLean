@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexImageGroundSpace
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 
 /-!
 # Regional slices after the product site inverse

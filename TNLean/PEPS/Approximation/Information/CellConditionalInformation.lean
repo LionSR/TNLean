@@ -51,7 +51,6 @@ open ManyBody (IsGapped groundSpace PlaneInteraction supDist natCast_supDist)
 namespace TNLean.PEPS.Approximation
 
 open TNLean.PEPS.AreaLaw
-open TNLean.PEPS.AreaLaw.Geometry
 
 /-- The lower bound `max(u₀, u₁)` on the tile scales in the proof of Lemma 3.2, for the
 clearance coefficient `c`: `u₀ = coarseInformationThreshold C_tpl 66² 1 N C_a N_a` is the

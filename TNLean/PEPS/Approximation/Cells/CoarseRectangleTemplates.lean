@@ -56,7 +56,6 @@ open ManyBody (Template TemplatePolygon integerPoint)
 
 namespace TNLean.PEPS.Approximation
 
-open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 /-- An ambient lattice set is a union of at most `N₀` integer boxes `[lo a, hi a]`,
 each possibly empty. This is the full lattice sample of a union of at most `N₀`

@@ -42,7 +42,6 @@ open ManyBody (IsGapped groundSpace SquareInteraction rectangleEmbedding rectang
 namespace TNLean.PEPS.Approximation
 
 open TNLean.PEPS.AreaLaw
-open TNLean.PEPS.AreaLaw.Geometry
 
 open Classical in
 /-- **The cell bound of Lemma 3.2 on the square for a family of states,** with prefactor `C₁`

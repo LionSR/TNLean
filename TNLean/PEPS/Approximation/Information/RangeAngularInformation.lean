@@ -61,7 +61,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry AngularGrid
+open TNLean.PEPS.AreaLaw AngularGrid
 
 /-! ### The two estimates at range `R` -/
 

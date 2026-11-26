@@ -15,6 +15,7 @@ import QICLean.ManyBody.Entropy.RegionEntropy
 import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
 import QICLean.ManyBody.Entropy.Template.TwoFamilies
 import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.Template.TemplateEntropy
 
 /-!
 # Safety inside a dilated parent rectangle

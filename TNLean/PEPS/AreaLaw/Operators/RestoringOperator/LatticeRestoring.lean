@@ -11,6 +11,8 @@ import QICLean.Channel.Dilation.RestoringGroundComponent
 import QICLean.Analysis.Isometry.RestoringVectors
 import QICLean.ManyBody.Entropy.Filter.SchmidtPinning
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Algebra.PartialTrace
+import QICLean.Entropy.Typical.Density
 
 /-!
 # The restoring operator of the amplification proposition on the lattice

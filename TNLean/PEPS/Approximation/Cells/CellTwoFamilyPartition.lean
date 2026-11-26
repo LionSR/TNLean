@@ -47,7 +47,6 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation.CellPartition
 
-open TNLean.PEPS.AreaLaw.Geometry
 
 /-- The intermediate exponent `γ' = (max γ 0 + 1) / 2` of the cell recursion: for `γ < 1`
 it satisfies `γ < γ'`, `0 < γ' < 1`, and children of side `8 u ^ γ` shrink below `u ^ γ'`.

@@ -12,6 +12,8 @@ import QICLean.ManyBody.Sites.Dyadic.DyadicRefinement
 import Mathlib.Data.Nat.Find
 import Mathlib.Order.Monotone.Basic
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DyadicScales
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
+import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 
 /-!
 # Neighbouring dyadic layers and fine cells

@@ -44,7 +44,6 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation.CellPartition
 
-open TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### The grid of cells -/
 

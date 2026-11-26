@@ -45,7 +45,6 @@ open ManyBody (IsGapped groundSpace AdmissibleSupport ambientDilation PlaneInter
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-open Geometry
 
 /-- The common template scale dominates the size of each polygonal piece.
 This uses the nonempty family and the actual scale inequality. -/

@@ -52,7 +52,6 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation.CellPartition
 
-open TNLean.PEPS.AreaLaw.Geometry
 
 /-- The labels of ambient points: `none` is allowed and `some i` is forbidden
 colour `i`. Source: Lemma 3.2, `02-information.tex`, lines 181–188 and 228–233. -/

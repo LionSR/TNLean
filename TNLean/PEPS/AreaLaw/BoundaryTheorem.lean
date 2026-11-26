@@ -11,6 +11,7 @@ import QICLean.ManyBody.Sites.Dyadic.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.CollarInformation
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
 
 /-!
 # The area law from the collar, amplification and two-family propositions

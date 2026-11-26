@@ -10,6 +10,7 @@ import TNLean.PEPS.AreaLaw.BirthRegions.Layers.AdjacentScales
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
 import QICLean.ManyBody.Sites.Dyadic.LayerPartition
 import Mathlib.LinearAlgebra.AffineSpace.Midpoint
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 
 /-!
 # Opposing corners on fine-cell sides

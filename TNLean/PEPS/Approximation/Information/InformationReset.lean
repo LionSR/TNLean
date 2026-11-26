@@ -69,7 +69,6 @@ open ManyBody (supDist supDist_le_of_walk supDist_comm supDist_triangle)
 
 namespace TNLean.PEPS.Approximation
 
-open AreaLaw
 
 section Geometry
 

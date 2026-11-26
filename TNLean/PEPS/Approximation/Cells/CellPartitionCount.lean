@@ -48,7 +48,6 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open TNLean.PEPS.AreaLaw.Geometry
 
 /-- The child side `u' = 8 u ^ γ` of an active square of side `u`.
 Source: Lemma 3.2, `02-information.tex`, lines 240–241 and 276–280. -/

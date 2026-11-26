@@ -47,7 +47,6 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation.CellPartition
 
-open TNLean.PEPS.AreaLaw.Geometry
 
 /-! ### Lines in one coordinate -/
 
