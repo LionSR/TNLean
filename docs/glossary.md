@@ -2882,17 +2882,17 @@ involve no boundary.
   are stated separately. At identity boundary the positivity predicate
   is the ordinary MPDO predicate.
 
-### `Matrix.IsStrongSymmetry` and `Matrix.IsWeakSymmetry`
+### `Matrix.IsStrongSymmetry`
 
-- **Declarations:** `Matrix.IsStrongSymmetry (O ρ : Matrix n n ℂ) : Prop` and
-  `Matrix.IsWeakSymmetry (O ρ : Matrix n n ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Operator/Fusion/DensityOperatorSymmetry.lean`.
+- **Declarations:** `Matrix.IsStrongSymmetry (O ρ : Matrix n n ℂ) : Prop`; weak symmetry is
+  `Commute O ρ`.
+- **Defined in:** `QICLean/Algebra/Hermitian/StateSymmetry.lean` (QICLean dependency).
 - **Meaning:** $O\rho=\lambda\rho$ for some complex $\lambda$ (strong), and
   $[O,\rho]=0$ (weak), at one system size.
 - **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
 - **Sanctioned bridges:**
-  `Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose` and
-  `Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary`.
+  `Matrix.IsStrongSymmetry.commute_of_conjTranspose` and
+  `Matrix.IsStrongSymmetry.commute_of_unitary`.
 - **Caveat:** the eigenvalue is not required to be a phase and may be zero;
   `Matrix.IsStrongSymmetry.norm_eq_one` gives modulus one only for unitary `O`
   and nonzero `ρ`. Strong implies weak only for Hermitian `ρ` with `O†` also a

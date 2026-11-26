@@ -103,7 +103,7 @@ Project result: for the Example 4.12 tensor (arXiv:1606.00608, lines 932–939),
 arXiv:2504.16985, line 182) exactly when `N` is even, since conjugation flips every spin and
 multiplies `σ_z^{⊗N}` by `(-1)^N`. -/
 theorem isWeakSymmetry_sigmaX_iff_even (N : ℕ) :
-    Matrix.IsWeakSymmetry (Matrix.piKronecker fun _ : Fin N => sigmaX) (mpo M N) ↔
+    Commute (Matrix.piKronecker fun _ : Fin N => sigmaX) (mpo M N) ↔
       Even N := by
   rw [← neg_one_pow_eq_one_iff_even (R := ℂ) (by norm_num)]
   constructor
@@ -173,7 +173,7 @@ theorem not_isWeakMPOSymmetry_sigmaX :
 
 Project result: the restriction of `isWeakSymmetry_sigmaX_iff_even` to even lengths. -/
 theorem isWeakSymmetry_sigmaX_of_even {N : ℕ} (hN : Even N) :
-    Matrix.IsWeakSymmetry (Matrix.piKronecker fun _ : Fin N => sigmaX) (mpo M N) :=
+    Commute (Matrix.piKronecker fun _ : Fin N => sigmaX) (mpo M N) :=
   (isWeakSymmetry_sigmaX_iff_even N).mpr hN
 
 end MPOTensor.CPSVExample412Literal

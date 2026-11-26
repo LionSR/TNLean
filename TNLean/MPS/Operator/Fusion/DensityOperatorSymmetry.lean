@@ -37,7 +37,7 @@ themselves. Density-operator conclusions state positivity where it is used.
 
 ## Main definitions
 
-* `Matrix.IsStrongSymmetry`, `Matrix.IsWeakSymmetry`: `O ρ = c ρ` and `[O, ρ] = 0`.
+* `Matrix.IsStrongSymmetry` (in QICLean): `O ρ = c ρ`; weak symmetry is `Commute O ρ`.
 * `MPOTensor.IsStrongMPOSymmetry`, `MPOTensor.IsWeakMPOSymmetry`: the same at every positive
   length along a family of periodic matrix product operators, with length-dependent
   eigenvalues `c a L`.
@@ -46,7 +46,7 @@ themselves. Density-operator conclusions state positivity where it is used.
 
 ## Main results
 
-* `Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose`,
+* `Matrix.IsStrongSymmetry.commute_of_conjTranspose`,
   `MPOTensor.IsStrongMPOSymmetry.isWeakMPOSymmetry`: strong implies weak under adjoint closure.
 * `Matrix.IsStrongSymmetry.norm_eq_one`: a unitary strong symmetry of a nonzero matrix has a
   unimodular eigenvalue.
@@ -109,7 +109,7 @@ theorem IsStrongMPOSymmetry.isWeakMPOSymmetry {O : ∀ a, MPOTensor d (χ a)}
     (bar : ι → ι) (hbar : ∀ a L, 0 < L → mpo (O (bar a)) L = (mpo (O a) L)ᴴ) :
     IsWeakMPOSymmetry O M X := by
   intro a L hL
-  refine Matrix.IsStrongSymmetry.isWeakSymmetry_of_conjTranspose (hM L hL).isHermitian
+  refine Matrix.IsStrongSymmetry.commute_of_conjTranspose (hM L hL).isHermitian
     ⟨c a L, h a L hL⟩ ⟨c (bar a) L, ?_⟩
   rw [← hbar a L hL]
   exact h (bar a) L hL
@@ -203,7 +203,7 @@ theorem IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry
   intro g L hL
   have hL' := h g L hL
   simp only [mpo_onSite] at hL' ⊢
-  exact Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary (hM L hL).isHermitian
+  exact Matrix.IsStrongSymmetry.commute_of_unitary (hM L hL).isHermitian
     (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g)) ⟨c g L, hL'⟩
 
 /-- **Unit modulus of on-site strong eigenvalues.**
