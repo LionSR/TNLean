@@ -5,7 +5,7 @@
     \label{thm:swapped_square_hamiltonian_interaction}
     \lean{ManyBody.SquareInteraction.exists_swapped_doubled_planeInteraction}
     \leanok
-    \uses{def:square_hermitian_term,def:square_area_law_support,thm:square_area_law_support_admissible,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    \uses{thm:rectangular_hermitian_terms,thm:rectangular_domain_hamiltonian,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Fix integers $L,q\ge0$ and a real number $J\ge0$. Let $H=\sum_i A_i$
     be a Hermitian square Hamiltonian, with each $A_i$ supported on its
     designated site or edge $S_i$ and $\|A_i\|\le J$. Let $R$ be any
@@ -31,7 +31,7 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:square_hermitian_term_properties,thm:square_hermitian_term_sum,thm:peps_sheet_swap_conjugate_support,def:square_area_law_hamiltonian,thm:square_area_law_hamiltonian_operator}
+    \uses{thm:rectangular_hermitian_terms,thm:peps_sheet_swap_conjugate_support,thm:rectangular_domain_hamiltonian}
     The Hermitian terms $A_i^{\mathrm h}$ have their original supports and
     norm bounds, and their sum is $H$. After doubling and the partial swap,
     each term remains supported on $S_i$. Its norm is at most $2J$, by

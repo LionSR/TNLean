@@ -480,7 +480,7 @@ with marginals taken in the final normalized vector of
     \label{thm:peps_nested_patch_minimizer_energy}
     \lean{ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le}
     \leanok
-    \uses{def:polynomial_peps_model,def:square_area_law_hamiltonian,def:square_area_law_state,def:peps_nested_patches,def:peps_regularized_patch_objective,def:peps_regularized_patch_minimum}
+    \uses{def:polynomial_peps_model,thm:rectangular_domain_hamiltonian,def:peps_nested_patches,def:peps_regularized_patch_objective,def:peps_regularized_patch_minimum}
     Let $H$ be an original square Hamiltonian with interaction bound $J\ge0$,
     $\Delta>0$, and $\Omega$ a unit vector satisfying (\ref{eq:polynomial_peps_projector_gap}).
     Fix a site order on $\Lambda_L$, a centre $c$, $u\ge4$,
@@ -497,7 +497,7 @@ with marginals taken in the final normalized vector of
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_regularized_patch_minimum,thm:peps_nested_patch_sizes,thm:peps_patch_minimum_filter_log_ratio,thm:peps_ordered_patch_normalized_coordinates,thm:peps_patch_factor_chain_list,thm:square_nearest_neighbor_terms,thm:square_area_law_ground_gap,thm:peps_nested_patch_crossing,thm:area_law_nearest_neighbor_budget,thm:area_law_crossing_support_count,thm:peps_nested_patch_quadratic_sum}
+    \uses{thm:peps_regularized_patch_minimum,thm:peps_nested_patch_sizes,thm:peps_patch_minimum_filter_log_ratio,thm:peps_ordered_patch_normalized_coordinates,thm:peps_patch_factor_chain_list,thm:square_nearest_neighbor_terms,thm:rectangular_domain_hamiltonian,thm:peps_nested_patch_crossing,thm:area_law_nearest_neighbor_budget,thm:area_law_crossing_support_count,thm:peps_nested_patch_quadratic_sum}
     Here $0<a_j\le1$ and $\|\phi\|=1$. By Lemmas~\ref{thm:square_nearest_neighbor_terms} and~\ref{thm:peps_nested_patch_crossing}, $H_{\mathrm{int}}=\sum_i T_i$ with $\|T_i\|\le J$, where each support $D_i$ crosses at most one $X_j$. With $d_{ij}=q^{|D_i\cap X_j|}$, (\ref{eq:peps_patch_filter_log_ratio}) and $a_j\le1$ yield
     \begin{align}
         \operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0
@@ -578,7 +578,7 @@ entries extend the energy bound to range $R\ge1$ using Definition~\ref{def:peps_
     \label{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}
     \lean{TNLean.PEPS.Approximation.nestedPatch_minimizer_marginal_closeness}
     \leanok
-    \uses{def:polynomial_peps_model,def:square_area_law_state,def:peps_nested_patches,def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
+    \uses{def:polynomial_peps_model,thm:rectangular_domain_hamiltonian,def:peps_nested_patches,def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
     Let $q\ge0$, $J\ge0$, $\Delta>0$, and $0<\kappa\le\tfrac12$ satisfy $36q^2J\kappa^2\le\Delta/1024$. For every $L$, original square Hamiltonian $H$ with bound $J$, unit vector $\Omega$ satisfying (\ref{eq:polynomial_peps_projector_gap}), centre $c$, $u\ge4$, and $b>0$, let $x\in\mathcal D$ minimize $F$ on $\mathcal D$ for the nested patches with $a_j=\kappa/m$ and input $U\Omega$. Then the marginal $\rho_X$ of $\widehat\Psi(x)$ on any $X\subseteq\Lambda_L$ satisfies
     \begin{align}
         \|\rho_X-\rho_X^{U\Omega}\|_1 & \le\frac1{16}.
@@ -589,16 +589,16 @@ entries extend the energy bound to range $R\ge1$ using Definition~\ref{def:peps_
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_nested_patch_minimizer_energy,thm:peps_regularized_patch_minimum,thm:square_area_law_ground_gap,thm:peps_gap_marginal_one_sixteenth,thm:peps_regional_basis_relabelling}
+    \uses{thm:peps_nested_patch_minimizer_energy,thm:peps_regularized_patch_minimum,thm:rectangular_domain_hamiltonian,thm:peps_gap_marginal_one_sixteenth,thm:peps_regional_basis_relabelling}
     For $\phi=\widehat\Psi(x)$, (\ref{eq:peps_nested_patch_minimizer_energy}) gives
-    $\operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0\le 36q^2J\kappa^2\le\Delta/1024$, so Lemmas~\ref{thm:square_area_law_ground_gap} and~\ref{thm:peps_gap_marginal_one_sixteenth} yield (\ref{eq:peps_nested_patch_marginal_closeness_explicit}).
+    $\operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0\le 36q^2J\kappa^2\le\Delta/1024$, so Lemmas~\ref{thm:rectangular_domain_hamiltonian} and~\ref{thm:peps_gap_marginal_one_sixteenth} yield (\ref{eq:peps_nested_patch_marginal_closeness_explicit}).
 \end{proof}
 
 \begin{lemma}[Uniform marginal closeness at a minimizing nested patch]
     \label{thm:peps_nested_patch_minimizer_marginal_closeness}
     \lean{TNLean.PEPS.Approximation.exists_uniform_nestedPatch_minimizer_marginal_closeness}
     \leanok
-    \uses{def:polynomial_peps_model,def:square_area_law_state,def:peps_nested_patches,def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
+    \uses{def:polynomial_peps_model,thm:rectangular_domain_hamiltonian,def:peps_nested_patches,def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
     For every integer $q\ge0$, $J\ge0$, and $\Delta>0$, there exists $0<\kappa\le\tfrac12$ (depending only on $q,J,\Delta$) such that under the hypotheses of Lemma~\ref{thm:peps_nested_patch_minimizer_marginal_closeness_explicit}, every $X\subseteq\Lambda_L$ satisfies
     \begin{align}
         \|\rho_X-\rho_X^{U\Omega}\|_1 & \le\frac1{16}.
@@ -662,7 +662,7 @@ entries extend the energy bound to range $R\ge1$ using Definition~\ref{def:peps_
     \lean{TNLean.PEPS.Approximation.nestedPatchRadiusExponent_pos,
         TNLean.PEPS.Approximation.SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders}
     \leanok
-    \uses{def:square_entropy_area_law_at,def:polynomial_peps_model,def:area_law_ground_entropy,def:square_area_law_state,def:peps_nested_patches,def:peps_regional_cylinder,def:peps_nested_patch_radius_exponent}
+    \uses{def:square_entropy_area_law_at,def:polynomial_peps_model,def:area_law_ground_entropy,thm:rectangular_domain_hamiltonian,def:peps_nested_patches,def:peps_regional_cylinder,def:peps_nested_patch_radius_exponent}
     Let $q\ge2$, $J,\Delta,B_0,p>0$, and assume the
     square-grid entropy area law at $(J,\Delta)$ with constant $C_A$ (Definition~\ref{def:square_entropy_area_law_at}).
     Then $R_0=R_0(q,J,\Delta,B_0,p,C_A)>0$, and for every $L\ge2$,
@@ -681,7 +681,7 @@ entries extend the energy bound to range $R\ge1$ using Definition~\ref{def:peps_
     \label{thm:peps_nested_patch_cylinder_approximation}
     \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders}
     \leanok
-    \uses{def:square_entropy_area_law,def:polynomial_peps_model,def:area_law_ground_entropy,def:square_area_law_state,def:peps_nested_patches,def:peps_regional_cylinder}
+    \uses{def:square_entropy_area_law,def:polynomial_peps_model,def:area_law_ground_entropy,thm:rectangular_domain_hamiltonian,def:peps_nested_patches,def:peps_regional_cylinder}
     Assume the square-grid entropy area law (Definition~\ref{def:square_entropy_area_law}). For every $q\ge2$ and $J,\Delta,B_0,p>0$, there exists $R_0>0$ (chosen before $L,H,\Omega,c,u$) such that under the hypotheses of Lemma~\ref{thm:peps_nested_patch_cylinder_approximation_explicit}, there exist subspaces $S_j\subseteq\mathcal H_{K_j}$ with $\dim S_j\le L^{R_0}$ and $v\in\sum_j S_j\otimes\mathcal H_{K_j^c}$ satisfying
     \begin{align}
         \|U\Omega-v\| & \le L^{-p}.
