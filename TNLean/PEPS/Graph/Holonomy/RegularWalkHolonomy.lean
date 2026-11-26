@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Tensor.GraphState.RegularClosedGauge
+import QICLean.ManyBody.Sites.Lattice.Edge
+import Mathlib.Tactic.Group
 import Mathlib.Combinatorics.SimpleGraph.Walk.Operations
 
 /-!
@@ -19,6 +20,8 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, seam deformation in
 `eq:2d:move-strings`, local source lines 1622–1647, and the accessible complement
 cycle argument, lines 1935–1990. This module supplies walk words; it does not
 assume a relation between complement holonomies and boundary transports.
+The gauged bond operators `regularVertexGaugeOperators` change each ordered bond by
+its two endpoint gauges.
 
 ## References
 
@@ -41,6 +44,11 @@ namespace TNLean.PEPS
 
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
 variable {G : Type*} [Group G]
+
+/-- The inserted operators after a gauge at every vertex.
+Source: SCP10, deformation of closure strings, lines 1622–1647. -/
+def regularVertexGaugeOperators (k : V → G) (u : Edge Γ → G) : Edge Γ → G :=
+  fun e => (k e.1.2)⁻¹ * u e * k e.1.1
 
 /-- Transport along an adjacent pair in the native ordered-edge convention.
 The reverse of the ordered orientation uses the inverse operator. -/

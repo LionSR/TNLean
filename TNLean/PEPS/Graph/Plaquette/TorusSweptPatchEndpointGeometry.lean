@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement
+import TNLean.PEPS.Graph.Plaquette.TwoPlaquetteGeometry
 import TNLean.PEPS.Graph.Torus.TorusTranslation
+import Mathlib.LinearAlgebra.Matrix.Notation
 
 /-!
 # A translated swept patch with four actual flux endpoints

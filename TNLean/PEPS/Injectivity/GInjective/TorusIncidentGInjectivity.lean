@@ -4,6 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Torus.TorusSingletonRegion
+import TNLean.PEPS.Tensor.Torus.TorusIncidentCoordinates
+import TNLean.PEPS.Injectivity.TorusSector.RegularTorusCut
+import TNLean.PEPS.Injectivity.Closure.TorusGClosure
 
 /-!
 # Native four-leg G-injectivity in incident graph coordinates

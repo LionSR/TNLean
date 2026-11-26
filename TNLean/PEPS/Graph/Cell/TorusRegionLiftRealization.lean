@@ -5,6 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Cell.TorusRegionRealization
 import Mathlib.Topology.Homeomorph.Lemmas
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Analysis.RCLike.Basic
+import Mathlib.Topology.Algebra.Module.ModuleTopology
 
 /-!
 # Planar closed-cell domains supplied by torus covering lifts

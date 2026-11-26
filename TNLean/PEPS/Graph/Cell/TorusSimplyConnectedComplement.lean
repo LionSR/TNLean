@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Cell.IntegerCellBoundaryContour
-import TNLean.PEPS.Injectivity.Normal.NormalPairBlocking
 import TNLean.PEPS.Graph.Cell.TorusComplementPathReplacement
 import TNLean.PEPS.Graph.Cell.TorusRegionExteriorCollar
 import TNLean.PEPS.Graph.Torus.TorusRectangleConnectivity

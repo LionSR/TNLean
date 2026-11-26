@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.CoefficientTransfer
 import TNLean.PEPS.Tensor.Region.ConfigurationCalculus
 
 /-!
@@ -232,7 +231,6 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complPhysical_eq
   rw [regionBlockedWeight]
   exact Finset.sum_congr rfl
     (fun ζ _ => g.prod_sdiff_red_eq_blue_mul_complement (A := A) σblue σcompl ζ)
-
 
 /-! ### The blue and complement fiber-collapse factorizations
 

@@ -7,6 +7,7 @@ import QICLean.Algebra.Combinatorics.DependentProducts
 import TNLean.PEPS.Injectivity.Closure.RegularTorusGramExpansion
 import TNLean.PEPS.Injectivity.Regular.RegularTorusSite
 import TNLean.PEPS.Graph.Holonomy.RegularTorusBondCounting
+import TNLean.PEPS.Injectivity.Closure.TorusGClosure
 
 /-!
 # Overlaps of actual regular torus closure states
@@ -163,5 +164,3 @@ theorem IsGIsometric.exists_torusGClosure_overlap
   exact ⟨c, hc, sum_star_torusGClosure_regular_mul a (c : ℂ) hlocal⟩
 
 end TNLean.PEPS
-
-

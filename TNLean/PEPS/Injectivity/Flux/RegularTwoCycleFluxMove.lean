@@ -48,16 +48,6 @@ private abbrev RC (R : Finset V) (T : SimpleGraph (RV R)) :=
 
 variable (R : Finset V) (T : SimpleGraph (RV R)) [DecidableRel T.Adj]
 
-/-- Assign prescribed operators to the internal bonds outside the tree and the
-identity to every other native bond. Source: SCP10, flux-moving construction,
-Theorem 6.16, lines 2270–2301. -/
-def regularTreeCycleAssignment (ω : RC (Γ := Γ) R T → G) : Edge Γ → G := fun e =>
-  if ht : e.1.1 ∈ R then
-    if hh : e.1.2 ∈ R then
-      if hnt : ¬ T.Adj ⟨e.1.1, ht⟩ ⟨e.1.2, hh⟩ then ω ⟨⟨e, ht, hh⟩, hnt⟩ else 1
-    else 1
-  else 1
-
 /-- A native assignment supported on the selected non-tree bonds is recovered
 by restricting it to those coordinates. Auxiliary to SCP10, lines 1765–1920. -/
 theorem regularTreeCycleAssignment_eq_of_support {V : Type*} [LinearOrder V]

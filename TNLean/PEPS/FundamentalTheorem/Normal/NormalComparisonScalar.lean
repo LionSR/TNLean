@@ -89,35 +89,6 @@ theorem regionBlockedWeight_empty (A : Tensor G d)
   rw [hfilter, Finset.sum_congr rfl (fun ζ _ => Finset.prod_of_isEmpty _),
     Finset.sum_const, Finset.card_univ, nsmul_eq_mul, mul_one]
 
-/-- The blocked weight of the full vertex set is the closed state coefficient:
-there are no boundary edges, and the vertex product runs over all vertices.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1571 of
-`Papers/1804.04964/paper_normal.tex` (the degenerate end of the one-site
-comparison pair). -/
-theorem regionBlockedWeight_univ (A : Tensor G d)
-    (μ : RegionBoundaryConfig (G := G) A (Finset.univ : Finset V))
-    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ : Finset V)) :
-    regionBlockedWeight (G := G) A Finset.univ μ τ =
-      stateCoeff A (fun v => τ ⟨v, Finset.mem_univ v⟩) := by
-  classical
-  have hbdry :
-      IsEmpty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ :
-        Finset V) f} := by
-    refine ⟨fun f => ?_⟩
-    rcases f.2 with ⟨_, h2⟩ | ⟨h1, _⟩
-    · exact h2 (Finset.mem_univ _)
-    · exact h1 (Finset.mem_univ _)
-  unfold regionBlockedWeight stateCoeff
-  have hfilter : (Finset.univ.filter
-      (fun ζ : VirtualConfig A =>
-        regionBoundaryLabel (G := G) A Finset.univ ζ = μ)) = Finset.univ :=
-    Finset.filter_true_of_mem (fun ζ _ => funext fun f => hbdry.elim f)
-  rw [hfilter]
-  refine Finset.sum_congr rfl (fun ζ _ => ?_)
-  exact Fintype.prod_equiv (Equiv.subtypeUnivEquiv (fun v => Finset.mem_univ v))
-    _ _ (fun w => rfl)
-
 /-- **The empty-region comparison proportionality.**  Over the empty region the
 blocked tensors of `A` and of any reindexed tensor with `A`'s bond dimensions
 are both the counting constant of the global virtual configurations, so they

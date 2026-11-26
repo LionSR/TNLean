@@ -26,6 +26,9 @@ sliding-window tiling lemmas below are the torus ports of
 at the coordinate origin, so the construction's regions span only a few cells and stay clear of the
 wraparound seam.
 
+The seam-wrapping cyclic rectangle `torusArcRectangle` reads its columns and rows
+through the cyclic distance from a base vertex.
+
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled pair states
@@ -241,6 +244,33 @@ theorem shortRectangle_injective
     exact h.rect32_injective (by omega) (by omega)
 
 end NormalTorusRectangleInjectivityHypotheses
+
+/-! ### The cyclic (seam-wrapping) torus rectangle -/
+
+section ArcRectangle
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+
+/-- A cyclic coordinate rectangle on the discrete torus: the vertices whose
+cyclic distances from `s` lie below `xLen` and `yLen` respectively.  Unlike
+`torusContiguousRectangle`, this rectangle may wrap the seam — it is read through
+`ZMod.val` cyclic distance, so the columns `[s.1, s.1 + xLen)` are taken
+cyclically.
+
+Source: arXiv:1804.04964, proof sketch at lines 2320--2445 of
+`Papers/1804.04964/paper_normal.tex` (the complement bands that wrap the seam);
+the filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`. -/
+def torusArcRectangle (s : TorusVertex width height) (xLen yLen : ℕ) :
+    Finset (TorusVertex width height) :=
+  Finset.univ.filter fun v => (v.1 - s.1).val < xLen ∧ (v.2 - s.2).val < yLen
+
+@[simp] theorem mem_torusArcRectangle (s : TorusVertex width height) (xLen yLen : ℕ)
+    (v : TorusVertex width height) :
+    v ∈ torusArcRectangle s xLen yLen ↔
+      (v.1 - s.1).val < xLen ∧ (v.2 - s.2).val < yLen := by
+  simp [torusArcRectangle]
+
+end ArcRectangle
 
 end PEPS
 end TNLean

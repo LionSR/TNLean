@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Holonomy.TorusRegionLiftGauge
 import TNLean.PEPS.Graph.Walk.TorusWalkWinding
+import Mathlib.Tactic.Abel
 
 /-!
 # Crossing numbers of projected integer unit steps

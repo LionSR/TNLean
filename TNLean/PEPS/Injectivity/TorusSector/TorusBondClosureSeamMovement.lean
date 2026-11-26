@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.TorusSector.TorusBondFlatConnection
 import TNLean.PEPS.Injectivity.TorusSector.TorusMatchedCutClosureMembership
+import TNLean.PEPS.Graph.Torus.TorusLabelledBondGeometry
 
 /-!
 # Moving commuting closures on native labelled torus bonds
@@ -14,6 +15,10 @@ The seam deformation of SCP10, Theorem 5.5 and equation
 Consequently averaging any function of the bond labels is independent of the
 chosen seams. The statements impose no virtual dimensions or representations,
 and apply to all positive periods, including periods one and two.
+
+The same reductions are restated on the native labelled torus edges of
+`TNLean/PEPS/Graph/Torus/TorusLabelledBondGeometry.lean`
+(`exists_torusLabelledClosureGauge`, `exists_torusLabelledBondGauge_eq_closure`).
 -/
 
 open scoped BigOperators
@@ -108,5 +113,73 @@ theorem sum_torusBondGauge_closureAt [Fintype G] {A : Type*} [AddCommMonoid A]
       ∑ q, f (torusBondGauge q (torusBondClosureLabels g h)) := by
   rw [← torusBondGauge_closureSeamGauge g h hgh c r]
   exact sum_torusBondGauge f (torusBondClosureSeamGauge g h c r) (torusBondClosureLabels g h)
+
+/-! ### Bond labels on the native labelled torus edges -/
+
+section LabelledBondLabels
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+variable {G : Type*} [Group G]
+
+/-- Horizontal and vertical parts of a single edge-indexed label assignment. -/
+def torusLabelledBondPair (p : TorusLabelledBond width height → G) :
+    TorusBondLabels width height G :=
+  (fun v ↦ p (v, false), fun v ↦ p (v, true))
+
+/-- Commuting labels may be moved to any edge cut before choosing the dimensions
+or representations of the actual bonds. -/
+theorem exists_torusLabelledClosureGauge (g h : G) (hgh : Commute g h)
+    (c : ZMod width) (r : ZMod height) :
+    ∃ q : TorusVertex width height → G, ∀ e,
+      q (torusLabelledBondHead e) * torusLabelledClosure g h e *
+          (q (torusLabelledBondTail e))⁻¹ = torusLabelledClosureAt g h c r e := by
+  obtain ⟨q, hq⟩ := exists_torusBondGauge_eq_closureAt g h hgh c r
+  refine ⟨q, ?_⟩
+  rintro ⟨v, b⟩
+  cases b
+  · have hv := congrFun (congrArg Prod.fst hq) v
+    simpa only [torusBondGauge, torusBondClosureLabels, torusBondClosureLabelsAt,
+      torusLabelledBondHead, torusLabelledBondTail, torusLabelledClosure,
+      torusLabelledClosureAt, Bool.false_eq_true, ↓reduceIte] using hv
+  · have hv := congrFun (congrArg Prod.snd hq) v
+    simpa only [torusBondGauge, torusBondClosureLabels, torusBondClosureLabelsAt,
+      torusLabelledBondHead, torusLabelledBondTail, torusLabelledClosure,
+      torusLabelledClosureAt, ↓reduceIte] using hv
+
+/-- The native labelled-torus classification expressed directly on edge IDs.
+It is independent of the dimension of the representation on any edge. -/
+theorem exists_torusLabelledBondGauge_eq_closure
+    (p : TorusLabelledBond width height → G)
+    (hp : IsTorusBondFlat (torusLabelledBondPair p)) :
+    ∃ (q : TorusVertex width height → G) (g h : G), Commute g h ∧
+      ∀ e, q (torusLabelledBondHead e) * p e * (q (torusLabelledBondTail e))⁻¹ =
+        torusLabelledClosure g h e := by
+  obtain ⟨q, g, h, hgh, heq⟩ := exists_torusBondGauge_eq_closure (torusLabelledBondPair p) hp
+  refine ⟨q, g, h, hgh, ?_⟩
+  rintro ⟨v, b⟩
+  cases b
+  · have hv := congrFun (congrArg Prod.fst heq) v
+    simpa only [torusBondGauge, torusLabelledBondPair, torusBondClosureLabels,
+      torusLabelledBondHead, torusLabelledBondTail, torusLabelledClosure,
+      Bool.false_eq_true, ↓reduceIte] using hv
+  · have hv := congrFun (congrArg Prod.snd heq) v
+    simpa only [torusBondGauge, torusLabelledBondPair, torusBondClosureLabels,
+      torusLabelledBondHead, torusLabelledBondTail, torusLabelledClosure, ↓reduceIte] using hv
+
+/-- Relative labels on the four uncut edges satisfy their native plaquette equation. -/
+theorem torusPlaquette_flat_of_uncut_relative
+    (p : TorusLabelledBond 2 2 → G) (q : TorusVertex 2 2 → G) (c r : ZMod 2)
+    (hp : ∀ e, e ∉ torusSeamCutBonds c r →
+      p e = q (torusLabelledBondHead e) * (q (torusLabelledBondTail e))⁻¹) :
+    (torusLabelledBondPair p).2 (c + 1, r) * (torusLabelledBondPair p).1 (c, r + 1) =
+      (torusLabelledBondPair p).1 (c, r) * (torusLabelledBondPair p).2 (c, r) := by
+  change p ((c + 1, r), true) * p ((c, r + 1), false) =
+    p ((c, r), false) * p ((c, r), true)
+  rw [hp ((c + 1, r), true) (by simp), hp ((c, r + 1), false) (by simp),
+    hp ((c, r), false) (by simp), hp ((c, r), true) (by simp)]
+  simp only [torusLabelledBondHead, torusLabelledBondTail, Bool.false_eq_true,
+    ↓reduceIte, mul_assoc, inv_mul_cancel_left]
+
+end LabelledBondLabels
 
 end TNLean.PEPS

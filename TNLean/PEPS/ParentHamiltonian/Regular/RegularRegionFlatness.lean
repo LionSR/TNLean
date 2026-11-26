@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.ParentHamiltonian.Region.RegionParentInteraction
 import TNLean.PEPS.Injectivity.Regular.RegularTwistedRegionProjectorCoordinates
 import TNLean.PEPS.Graph.Holonomy.RegularRegionCycleHolonomy
+import TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeContraction
 
 /-!
 # Local parent constraints exclude nontrivial regular holonomy

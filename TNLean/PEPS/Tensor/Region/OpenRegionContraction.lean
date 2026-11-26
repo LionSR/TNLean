@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence
+import TNLean.PEPS.Tensor.Region.ConfigurationCalculus
 import QICLean.ManyBody.Sites.Lattice.Square
-import TNLean.PEPS.Injectivity.Normal.NormalBlocking
+import TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount
 import Mathlib.Logic.Equiv.Prod
 
 /-!
@@ -46,14 +46,6 @@ abbrev RegionIncidentConfig (A : Tensor Γ d) (R : Finset V) :=
 def regionIncidentBoundaryLabel (A : Tensor Γ d) (R : Finset V)
     (η : RegionIncidentConfig A R) : RegionBoundaryConfig A R :=
   fun e => η ⟨e.1, ManyBody.isRegionBoundaryEdge_touches R e.2⟩
-
-omit [Fintype V] [DecidableRel Γ.Adj] in
-/-- An edge attached to a vertex of the region touches that region. -/
-theorem isRegionIncidentEdge_of_regionVertex (R : Finset V) (w : {w : V // w ∈ R})
-    (e : IncidentEdge Γ w.1) : ManyBody.IsRegionIncidentEdge R e.1 := by
-  rcases e.2 with h | h
-  · exact Or.inl (by rw [h]; exact w.2)
-  · exact Or.inr (by rw [h]; exact w.2)
 
 /-- The product of the tensors at the region vertices for a fixed incident-edge assignment. -/
 noncomputable def regionIncidentWeight (A : Tensor Γ d) (R : Finset V)

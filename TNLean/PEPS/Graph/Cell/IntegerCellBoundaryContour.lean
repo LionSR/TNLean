@@ -8,6 +8,7 @@ import TNLean.PEPS.Graph.Cell.IntegerContourRayPotential
 import TNLean.PEPS.Graph.Cell.IntegerCellExteriorCollar
 import TNLean.PEPS.Graph.Cell.IntegerCellContactConnectivity
 import Mathlib.GroupTheory.Perm.Cycle.Basic
+import Mathlib.GroupTheory.Perm.Cycle.Factors
 
 /-!
 # Connectivity of the exposed integer-cell contour

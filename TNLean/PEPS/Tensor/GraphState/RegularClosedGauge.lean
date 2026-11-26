@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeContraction
+import TNLean.PEPS.Tensor.GraphState.RegularTwistedRegion
+import TNLean.PEPS.Graph.Holonomy.RegularWalkHolonomy
 
 /-!
 # Vertex gauges in a closed regular PEPS
@@ -32,11 +33,6 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
 variable {G : Type*} [Group G] [Fintype G]
-
-/-- The inserted operators after a gauge at every vertex.
-Source: SCP10, deformation of closure strings, lines 1622–1647. -/
-def regularVertexGaugeOperators (k : V → G) (u : Edge Γ → G) : Edge Γ → G :=
-  fun e => (k e.1.2)⁻¹ * u e * k e.1.1
 
 /-- Local regular invariance makes the original and gauged closed contractions
 equal as physical PEPS vectors. Source: SCP10, `eq:2d:move-strings`,

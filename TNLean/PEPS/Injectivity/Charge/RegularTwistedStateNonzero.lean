@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.Regular.RegularProjectorTwistedRegion
 import TNLean.PEPS.Injectivity.Entropy.RegularTorusEntropy
-import TNLean.PEPS.FundamentalTheorem.Normal.NormalComparisonScalar
 
 /-!
 # Nonvanishing of actual regular-bond states with inserted operators

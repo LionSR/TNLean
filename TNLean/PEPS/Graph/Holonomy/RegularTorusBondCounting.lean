@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Injectivity.Closure.RegularTorusGramExpansion
 import TNLean.PEPS.Graph.Holonomy.RegularBondCounting
 import TNLean.PEPS.Graph.Holonomy.RegularTorusCompatibility
 
@@ -28,6 +27,9 @@ argument in the proof of Theorem 6.9, lines 1935–1957. This is a counting resu
 for the actual torus coordinates, rather than an assertion about the entropy
 of a physical torus state.
 
+The four labels read by a site from one label per oriented permutation bond are
+`torusPermutationSiteLabels`.
+
 ## References
 
 - [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
@@ -40,6 +42,20 @@ namespace TNLean.PEPS
 
 variable {G : Type*} [Group G]
 variable {width height : ℕ} [NeZero width] [NeZero height]
+
+section PermutationLabels
+
+variable {V : Type*} [Fintype V] [DecidableEq V]
+variable {width height : ℕ} [NeZero width] [NeZero height]
+
+/-- The four virtual labels read from one label per oriented permutation bond. -/
+def torusPermutationSiteLabels
+    (σh σv : TorusVertex width height → Equiv.Perm V)
+    (hb vb : TorusVertex width height → V) (v : TorusVertex width height) :
+    V × V × V × V :=
+  (σv v (vb v), hb v, vb (v.1, v.2 - 1), σh (v.1 - 1, v.2) (hb (v.1 - 1, v.2)))
+
+end PermutationLabels
 
 /-- The four labels read from regular group-valued torus bonds, in the
 orientation of SCP10, `eq:2d:peps-with-ug-uh`, lines 1515–1525. -/

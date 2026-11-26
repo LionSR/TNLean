@@ -225,51 +225,6 @@ SUBDIRECTORY_ORDERS: dict[str, tuple[str, ...]] = {
 # an entry: move the shared declaration down to the layer both sides may import.
 UPWARD_IMPORTS: frozenset[str] = frozenset(
     {
-        "TNLean.PEPS.Graph.Cell.TorusPlaquetteRealization -> TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement",
-        "TNLean.PEPS.Graph.Cell.TorusSimplyConnectedComplement -> TNLean.PEPS.Injectivity.Normal.NormalPairBlocking",
-        "TNLean.PEPS.Graph.Holonomy.RegularBoundaryRoute -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion",
-        "TNLean.PEPS.Graph.Holonomy.RegularInternalGaugeTransport -> TNLean.PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove",
-        "TNLean.PEPS.Graph.Holonomy.RegularRegionConnectivity -> TNLean.PEPS.Tensor.GraphState.RegularOpenRegion",
-        "TNLean.PEPS.Graph.Holonomy.RegularRegionCoordinates -> TNLean.PEPS.Tensor.GraphState.RegularRegionCycleRank",
-        "TNLean.PEPS.Graph.Holonomy.RegularRegionCounting -> TNLean.PEPS.Tensor.GraphState.RegularOpenRegion",
-        "TNLean.PEPS.Graph.Holonomy.RegularRegionTreeGauge -> TNLean.PEPS.Tensor.GraphState.RegularTwistedRegion",
-        "TNLean.PEPS.Graph.Holonomy.RegularTorusBondCounting -> TNLean.PEPS.Injectivity.Closure.RegularTorusGramExpansion",
-        "TNLean.PEPS.Graph.Holonomy.RegularTorusCompatibility -> TNLean.PEPS.Injectivity.Closure.TorusGClosure",
-        "TNLean.PEPS.Graph.Holonomy.RegularTwistedRegionConnectivity -> TNLean.PEPS.Tensor.GraphState.RegularTwistedRegion",
-        "TNLean.PEPS.Graph.Holonomy.RegularWalkHolonomy -> TNLean.PEPS.Tensor.GraphState.RegularClosedGauge",
-        "TNLean.PEPS.Graph.Holonomy.TorusDirectedBondUpdate -> TNLean.PEPS.Tensor.Torus.TorusTranslationInvariant",
-        "TNLean.PEPS.Graph.Holonomy.TorusParallelSection -> TNLean.PEPS.Tensor.Torus.TorusSiteTensor",
-        "TNLean.PEPS.Graph.Holonomy.TorusRegionLiftGauge -> TNLean.PEPS.Injectivity.TorusSector.RegularTorusCut",
-        "TNLean.PEPS.Graph.Plaquette.TorusJointFluxGeometry -> TNLean.PEPS.Injectivity.Flux.TorusTranslatedFluxMove",
-        "TNLean.PEPS.Graph.Plaquette.TorusSweptPatchEndpointGeometry -> TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement",
-        "TNLean.PEPS.Graph.Plaquette.TranslatedTwoPlaquetteGeometry -> TNLean.PEPS.FundamentalTheorem.Torus.Window.WindowComplement",
-        "TNLean.PEPS.Graph.Plaquette.TranslatedTwoPlaquetteGeometry -> TNLean.PEPS.Tensor.Region.RegionTransport",
-        "TNLean.PEPS.Graph.Plaquette.TwoPlaquetteGeometry -> TNLean.PEPS.Tensor.GraphState.RegularRegionCycleRank",
-        "TNLean.PEPS.Graph.Plaquette.TwoPlaquetteGeometry -> TNLean.PEPS.Tensor.Network.IsoTransport",
-        "TNLean.PEPS.Graph.Plaquette.VerticalTwoPlaquetteGeometry -> TNLean.PEPS.FundamentalTheorem.Torus.TorusCoordinateSwap",
-        "TNLean.PEPS.Graph.Region.EdgeMapSubgraph -> TNLean.PEPS.Tensor.Network.IsoTransport",
-        "TNLean.PEPS.Graph.Region.EdgeScalarSolve -> TNLean.PEPS.Tensor.Network.Defs",
-        "TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
-        "TNLean.PEPS.Graph.Torus.TorusLabelledBondGeometry -> TNLean.PEPS.Injectivity.TorusSector.TorusBondClosureSeamMovement",
-        "TNLean.PEPS.Graph.Torus.TorusLabelledBondGeometry -> TNLean.PEPS.Injectivity.TorusSector.TorusBondFlatConnection",
-        "TNLean.PEPS.Graph.Torus.TorusLatticeGraph -> TNLean.PEPS.Tensor.Network.Defs",
-        "TNLean.PEPS.Graph.Torus.TorusRectangleBoundaryCard -> TNLean.PEPS.Tensor.Torus.TorusSiteTensor",
-        "TNLean.PEPS.Graph.Torus.TorusRectangleConnectivity -> TNLean.PEPS.Tensor.Region.RegionBlock",
-        "TNLean.PEPS.Graph.Torus.TorusRectangleConnectivity -> TNLean.PEPS.Tensor.Torus.TorusTranslationInvariant",
-        "TNLean.PEPS.Graph.Torus.TorusSingletonRegion -> TNLean.PEPS.Injectivity.Entropy.RegularTorusEntropy",
-        "TNLean.PEPS.Graph.Walk.TorusWalkWinding -> TNLean.PEPS.Injectivity.TorusSector.RegularTorusCut",
-        "TNLean.PEPS.Injectivity.Charge.RegularTwistedStateNonzero -> TNLean.PEPS.FundamentalTheorem.Normal.NormalComparisonScalar",
-        "TNLean.PEPS.Injectivity.Multiplicity.GraphOpenAveragingBondState -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.GaugeInjectivity",
-        "TNLean.PEPS.Injectivity.Region.DisjointUnionSetup -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.CoefficientTransfer",
-        "TNLean.PEPS.Injectivity.Region.ReindexInjectivity -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion",
-        "TNLean.PEPS.Injectivity.Regular.GInjectivePhysicalMap -> TNLean.PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation",
-        "TNLean.PEPS.Tensor.GraphState.GraphBondContraction -> TNLean.PEPS.FundamentalTheorem.Injective.GaugeAction",
-        "TNLean.PEPS.Tensor.GraphState.RegularClosedGauge -> TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeContraction",
-        "TNLean.PEPS.Tensor.GraphState.RegularRegionGram -> TNLean.PEPS.Injectivity.Regular.RegularSiteGram",
-        "TNLean.PEPS.Tensor.Region.OpenRegionContraction -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence",
-        "TNLean.PEPS.Tensor.Region.OpenRegionContraction -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
-        "TNLean.PEPS.Tensor.SquareLattice.Basic -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
-        "TNLean.PEPS.Tensor.SquareLattice.SquareGridSource -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
         "TNLean.QCA.LocalAlgebra.Blocking -> TNLean.MPS.Tensor.Physical.Blocking",
     }
 )
@@ -282,13 +237,6 @@ DEEP_ROOTS: frozenset[str] = frozenset({"MPS", "PEPS"})
 # directory both sides already import.
 MUTUAL_LAYER_DIRECTORIES: frozenset[str] = frozenset(
     {
-        "PEPS/FundamentalTheorem <-> PEPS/Graph",
-        "PEPS/FundamentalTheorem <-> PEPS/Injectivity",
-        "PEPS/FundamentalTheorem <-> PEPS/Tensor",
-        "PEPS/Graph <-> PEPS/Injectivity",
-        "PEPS/Graph <-> PEPS/Tensor",
-        "PEPS/Injectivity <-> PEPS/ParentHamiltonian",
-        "PEPS/Injectivity <-> PEPS/Tensor",
     }
 )
 

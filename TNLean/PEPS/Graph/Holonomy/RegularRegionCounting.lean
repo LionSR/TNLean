@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Tensor.GraphState.RegularOpenRegion
+import QICLean.ManyBody.Sites.Lattice.Edge
+import Mathlib.Basic.Complex.BigOperators
 import QICLean.Algebra.Combinatorics.FinSumPermutation
+import QICLean.ManyBody.Sites.Config
 
 /-!
 # Counting regular-bond assignments with a fixed boundary

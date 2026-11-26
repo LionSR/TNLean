@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.FundamentalTheorem.Normal.CoarseThreeSite.CoarseThreeSite
-import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.RegionFibers
+import TNLean.PEPS.FundamentalTheorem.Normal.NormalFundamentalTheorem
+import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.InsertionAlgebra
 import TNLean.PEPS.Injectivity.Region.DisjointUnionSetup
 
 /-!

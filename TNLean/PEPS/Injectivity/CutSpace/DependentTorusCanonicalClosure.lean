@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.CutSpace.DependentTorusCutSpaces
 import TNLean.PEPS.Injectivity.CutSpace.DependentBondCoefficients
+import TNLean.PEPS.Injectivity.TorusSector.TorusBondClosureSeamMovement
 
 /-!
 # Canonical closures with arbitrary bond dimensions

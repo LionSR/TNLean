@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Injectivity.TorusSector.TorusBondFlatConnection
-import TNLean.PEPS.Injectivity.TorusSector.TorusBondClosureSeamMovement
+import TNLean.PEPS.Graph.Torus.TorusLatticeGraph
 import TNLean.Network.DependentBond.DependentBondCut
 
 /-!
@@ -116,11 +115,6 @@ theorem card_torusCutEndpoint_two (c r : ZMod 2) :
 section GroupLabels
 variable {G : Type*} [Group G]
 
-/-- Horizontal and vertical parts of a single edge-indexed label assignment. -/
-def torusLabelledBondPair (p : TorusLabelledBond width height → G) :
-    TorusBondLabels width height G :=
-  (fun v ↦ p (v, false), fun v ↦ p (v, true))
-
 /-- The standard commuting closure labels in the single edge-indexed model. -/
 def torusLabelledClosure (g h : G) (e : TorusLabelledBond width height) : G :=
   if e.2 then if e.1.2 + 1 = 0 then g else 1
@@ -139,60 +133,6 @@ theorem torusLabelledClosureAt_eq_one_of_not_mem
     torusLabelledClosureAt g h c r e = 1 := by
   rcases e with ⟨v, b⟩
   cases b <;> simp_all [torusLabelledClosureAt]
-
-/-- Commuting labels may be moved to any edge cut before choosing the dimensions
-or representations of the actual bonds. -/
-theorem exists_torusLabelledClosureGauge (g h : G) (hgh : Commute g h)
-    (c : ZMod width) (r : ZMod height) :
-    ∃ q : TorusVertex width height → G, ∀ e,
-      q (torusLabelledBondHead e) * torusLabelledClosure g h e *
-          (q (torusLabelledBondTail e))⁻¹ = torusLabelledClosureAt g h c r e := by
-  obtain ⟨q, hq⟩ := exists_torusBondGauge_eq_closureAt g h hgh c r
-  refine ⟨q, ?_⟩
-  rintro ⟨v, b⟩
-  cases b
-  · have hv := congrFun (congrArg Prod.fst hq) v
-    simpa only [torusBondGauge, torusBondClosureLabels, torusBondClosureLabelsAt,
-      torusLabelledBondHead, torusLabelledBondTail, torusLabelledClosure,
-      torusLabelledClosureAt, Bool.false_eq_true, ↓reduceIte] using hv
-  · have hv := congrFun (congrArg Prod.snd hq) v
-    simpa only [torusBondGauge, torusBondClosureLabels, torusBondClosureLabelsAt,
-      torusLabelledBondHead, torusLabelledBondTail, torusLabelledClosure,
-      torusLabelledClosureAt, ↓reduceIte] using hv
-
-/-- The native labelled-torus classification expressed directly on edge IDs.
-It is independent of the dimension of the representation on any edge. -/
-theorem exists_torusLabelledBondGauge_eq_closure
-    (p : TorusLabelledBond width height → G)
-    (hp : IsTorusBondFlat (torusLabelledBondPair p)) :
-    ∃ (q : TorusVertex width height → G) (g h : G), Commute g h ∧
-      ∀ e, q (torusLabelledBondHead e) * p e * (q (torusLabelledBondTail e))⁻¹ =
-        torusLabelledClosure g h e := by
-  obtain ⟨q, g, h, hgh, heq⟩ := exists_torusBondGauge_eq_closure (torusLabelledBondPair p) hp
-  refine ⟨q, g, h, hgh, ?_⟩
-  rintro ⟨v, b⟩
-  cases b
-  · have hv := congrFun (congrArg Prod.fst heq) v
-    simpa only [torusBondGauge, torusLabelledBondPair, torusBondClosureLabels,
-      torusLabelledBondHead, torusLabelledBondTail, torusLabelledClosure,
-      Bool.false_eq_true, ↓reduceIte] using hv
-  · have hv := congrFun (congrArg Prod.snd heq) v
-    simpa only [torusBondGauge, torusLabelledBondPair, torusBondClosureLabels,
-      torusLabelledBondHead, torusLabelledBondTail, torusLabelledClosure, ↓reduceIte] using hv
-
-/-- Relative labels on the four uncut edges satisfy their native plaquette equation. -/
-theorem torusPlaquette_flat_of_uncut_relative
-    (p : TorusLabelledBond 2 2 → G) (q : TorusVertex 2 2 → G) (c r : ZMod 2)
-    (hp : ∀ e, e ∉ torusSeamCutBonds c r →
-      p e = q (torusLabelledBondHead e) * (q (torusLabelledBondTail e))⁻¹) :
-    (torusLabelledBondPair p).2 (c + 1, r) * (torusLabelledBondPair p).1 (c, r + 1) =
-      (torusLabelledBondPair p).1 (c, r) * (torusLabelledBondPair p).2 (c, r) := by
-  change p ((c + 1, r), true) * p ((c, r + 1), false) =
-    p ((c, r), false) * p ((c, r), true)
-  rw [hp ((c + 1, r), true) (by simp), hp ((c, r + 1), false) (by simp),
-    hp ((c, r), false) (by simp), hp ((c, r), true) (by simp)]
-  simp only [torusLabelledBondHead, torusLabelledBondTail, Bool.false_eq_true,
-    ↓reduceIte, mul_assoc, inv_mul_cancel_left]
 
 end GroupLabels
 

@@ -8,7 +8,6 @@ import TNLean.PEPS.Tensor.GraphState.GraphOpenRegionContraction
 import TNLean.PEPS.Injectivity.Multiplicity.GraphAveragingBondState
 import TNLean.PEPS.Graph.Holonomy.RegularRegionCoordinates
 import TNLean.PEPS.Injectivity.Regular.RegularProjectorOpenRegion
-import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.GaugeInjectivity
 
 /-!
 # Actual weighted averaging coefficients of an open graph region

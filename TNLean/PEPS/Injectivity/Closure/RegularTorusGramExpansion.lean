@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Tensor.Torus.TorusOperatorString
+import TNLean.PEPS.Graph.Holonomy.RegularTorusBondCounting
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.LinearAlgebra.Matrix.Permutation
@@ -125,13 +126,6 @@ theorem permMatrixHom_apply_eq_ite (σ : Equiv.Perm V) (i j : V) :
     PEquiv.toMatrix_apply, Equiv.toPEquiv_apply, Option.mem_def, Option.some.injEq,
     Equiv.symm_apply_eq]
 
-/-- The four virtual labels read from one label per oriented permutation bond. -/
-def torusPermutationSiteLabels
-    (σh σv : TorusVertex width height → Equiv.Perm V)
-    (hb vb : TorusVertex width height → V) (v : TorusVertex width height) :
-    V × V × V × V :=
-  (σv v (vb v), hb v, vb (v.1, v.2 - 1), σh (v.1 - 1, v.2) (hb (v.1 - 1, v.2)))
-
 /-- Source: SCP10, equation `eq:2d:peps-with-ug-uh`, lines 1515–1525.
 With permutation matrices on the oriented bonds, the head label is the image
 of its tail label, leaving exactly one independent index per bond. -/
@@ -194,7 +188,3 @@ theorem sum_star_torusBondNetwork_perm_mul {Phys : Type*} [Fintype Phys]
   simpa only [Fintype.sum_prod_type, one_mul, star_one, mul_one] using h
 
 end TNLean.PEPS
-
-
-
-

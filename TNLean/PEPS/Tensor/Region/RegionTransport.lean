@@ -11,7 +11,8 @@ import TNLean.PEPS.Tensor.Region.RegionBlock
 # Transport of blocked-region injectivity along a graph isomorphism
 
 A graph isomorphism `φ : G ≃g G'` carries a finite vertex region `R` of `G` to its
-image region `R.map φ.toEquiv.toEmbedding` of `G'`.  The blocked-region weight of the
+image region `Region.map φ R = R.map φ.toEquiv.toEmbedding` of `G'`
+(`TNLean/PEPS/Graph/Region/EdgeMapSubgraph.lean`).  The blocked-region weight of the
 transported tensor `A.transport φ` over that image region is a relabelling of the
 blocked-region weight of `A` over `R`: the boundary edges, the open virtual legs, and
 the physical legs on the region all carry across by the edge action `Edge.map φ` and
@@ -43,33 +44,6 @@ namespace PEPS
 variable {V W : Type*} [Fintype V] [LinearOrder V] [Fintype W] [LinearOrder W]
   {G : SimpleGraph V} {G' : SimpleGraph W} {d : ℕ}
 variable [DecidableRel G.Adj] [DecidableRel G'.Adj]
-
-/-! ### The image region of a graph isomorphism -/
-
-/-- The image of a finite region `R` of `G` under the vertex bijection of `φ`. -/
-def Region.map (φ : G ≃g G') (R : Finset V) : Finset W :=
-  R.map φ.toEquiv.toEmbedding
-
-omit [Fintype V] [LinearOrder V] [Fintype W] [LinearOrder W]
-  [DecidableRel G.Adj] [DecidableRel G'.Adj] in
-@[simp] theorem mem_Region_map (φ : G ≃g G') (R : Finset V) (w : W) :
-    w ∈ Region.map φ R ↔ φ.symm w ∈ R := by
-  simp only [Region.map, Finset.mem_map, Equiv.coe_toEmbedding]
-  constructor
-  · rintro ⟨v, hv, rfl⟩
-    rw [show (φ.toEquiv : V → W) v = φ v from rfl,
-      show φ.symm (φ v) = v from φ.symm_apply_apply v]; exact hv
-  · intro h
-    refine ⟨φ.symm w, h, ?_⟩
-    rw [show (φ.toEquiv : V → W) (φ.symm w) = φ (φ.symm w) from rfl, φ.apply_symm_apply w]
-
-omit [Fintype V] [LinearOrder V] [Fintype W] [LinearOrder W]
-  [DecidableRel G.Adj] [DecidableRel G'.Adj] in
-/-- A vertex `v` lies in `R` iff `φ v` lies in the image region. -/
-theorem mem_Region_map_apply (φ : G ≃g G') (R : Finset V) (v : V) :
-    φ v ∈ Region.map φ R ↔ v ∈ R := by
-  rw [mem_Region_map]
-  rw [show φ.symm (φ v) = v from φ.symm_apply_apply v]
 
 omit [DecidableRel G.Adj] [DecidableRel G'.Adj] in
 /-- The image of the set complement is the set complement of the image: the edge action carries

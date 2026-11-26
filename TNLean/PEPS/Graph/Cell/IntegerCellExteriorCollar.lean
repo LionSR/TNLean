@@ -7,6 +7,8 @@ import TNLean.PEPS.Graph.Cell.IntegerCellNoHoles
 import Mathlib.Analysis.Convex.PathConnected
 import Mathlib.Combinatorics.SimpleGraph.Cayley
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
+import Mathlib.Algebra.Order.Star.Real
+import Mathlib.Topology.Algebra.Module.ModuleTopology
 
 /-!
 # Continuous paths in an exterior integer-cell collar

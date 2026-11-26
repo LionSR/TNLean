@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Holonomy.RegularRegionTreeGauge
 import TNLean.PEPS.Injectivity.Regular.RegularProjectorOpenRegion
+import TNLean.PEPS.Tensor.GraphState.RegularTwistedRegion
 
 /-!
 # Vertex gauges in actual regular-region contractions

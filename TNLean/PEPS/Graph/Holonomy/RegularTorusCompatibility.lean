@@ -3,7 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Injectivity.Closure.TorusGClosure
+import TNLean.PEPS.Graph.Torus.TorusLatticeGraph
+import Mathlib.Data.Matrix.Basic
+import Mathlib.Tactic.Group
+import Mathlib.Basic.Complex.BigOperators
 
 /-!
 # Group-label compatibility across torus closure seams
@@ -23,6 +26,10 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Definition 5.6 and t
 invariance assertion after Definition 5.8, source lines 1515–1525 and 1575–1580.
 This is an auxiliary group-coordinate statement for twisted torus contractions;
 it asserts neither the ground-space theorem nor the full physical entropy theorem.
+
+The matrix closures `torusHorizontalClosure` and `torusVerticalClosure` insert a
+representation of these seam elements, and `torusClosureEdgeAssignment` places the seam
+elements on the ordered torus edges.
 
 ## References
 
@@ -44,6 +51,26 @@ def torusHorizontalClosureElement (h : G) (v : TorusVertex width height) : G :=
 `eq:2d:peps-with-ug-uh`, lines 1515–1525. -/
 def torusVerticalClosureElement (g : G) (v : TorusVertex width height) : G :=
   if v.2 + 1 = 0 then g else 1
+
+section MatrixClosures
+
+variable {G V : Type*} [Group G] [Fintype V] [DecidableEq V]
+variable {width height : ℕ}
+
+/-- A horizontal closure inserts `U_h` on every bond from the last column to
+the first. Source: arXiv:1001.3807, equation `eq:2d:peps-with-ug-uh`. -/
+def torusHorizontalClosure (U : G →* Matrix V V ℂ) (h : G)
+    (v : TorusVertex width height) : Matrix V V ℂ :=
+  if v.1 + 1 = 0 then U h else 1
+
+/-- A vertical closure inserts `U_g` on every bond from the bottom row to the
+top, along the downward orientation. Source: arXiv:1001.3807,
+equation `eq:2d:peps-with-ug-uh`. -/
+def torusVerticalClosure (U : G →* Matrix V V ℂ) (g : G)
+    (v : TorusVertex width height) : Matrix V V ℂ :=
+  if v.2 + 1 = 0 then U g else 1
+
+end MatrixClosures
 
 omit [NeZero width] [NeZero height] in
 /-- The horizontal group seam element gives the matrix closure in SCP10,
@@ -176,5 +203,48 @@ theorem sum_torusClosureCompatible_eq_sum_intertwiner [Fintype G] [DecidableEq G
       · intro h
         exact ⟨x, fun _ => rfl, h⟩
     simp only [hc]
+
+/-! ### Closure labels on the ordered torus edges -/
+
+section ClosureEdgeAssignment
+
+open ManyBody (Edge)
+
+variable {width height : ℕ} [NeZero width] [NeZero height]
+variable [Fact (2 < width)] [Fact (2 < height)]
+
+local instance : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
+local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
+
+variable {G : Type*} [Group G]
+
+/-- Closure operators in the ordered-edge convention. A horizontal seam is
+reversed and hence carries the inverse horizontal element at its ordered head.
+Source: SCP10, `eq:2d:peps-with-ug-uh`. -/
+noncomputable def torusClosureEdgeAssignment (g h : G)
+    (f : Edge (torusGraph width height)) : G :=
+  match torusEdgeEquiv.symm f with
+  | Sum.inl v => (torusHorizontalClosureElement h v)⁻¹
+  | Sum.inr v => torusVerticalClosureElement g v
+
+/-- The horizontal edge value of the closure assignment. -/
+theorem torusClosureEdgeAssignment_right (g h : G) (v : TorusVertex width height) :
+    torusClosureEdgeAssignment g h (torusRightEdge v) =
+      (torusHorizontalClosureElement h v)⁻¹ := by
+  change (match torusEdgeEquiv.symm (torusEdgeEquiv (Sum.inl v)) with
+    | Sum.inl z => (torusHorizontalClosureElement h z)⁻¹
+    | Sum.inr z => torusVerticalClosureElement g z) = _
+  rw [Equiv.symm_apply_apply]
+
+/-- The vertical edge value of the closure assignment. -/
+theorem torusClosureEdgeAssignment_up (g h : G) (v : TorusVertex width height) :
+    torusClosureEdgeAssignment g h (torusUpEdge v) =
+      torusVerticalClosureElement g v := by
+  change (match torusEdgeEquiv.symm (torusEdgeEquiv (Sum.inr v)) with
+    | Sum.inl z => (torusHorizontalClosureElement h z)⁻¹
+    | Sum.inr z => torusVerticalClosureElement g z) = _
+  rw [Equiv.symm_apply_apply]
+
+end ClosureEdgeAssignment
 
 end TNLean.PEPS

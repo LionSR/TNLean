@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion
 import TNLean.PEPS.FundamentalTheorem.Injective.FundamentalTheorem
 import TNLean.PEPS.Tensor.Region.RegionConfigSplit
+import TNLean.PEPS.Tensor.Region.ConfigurationCalculus
 
 /-!
 # Fundamental Theorem for normal PEPS
@@ -28,9 +29,11 @@ at a boundary edge of a region, the region analogue of `edgeInsertedCoeff_identi
 The map `assembleRegionσ`, which glues a physical configuration on a region to one
 on its complement, lives in `TNLean.PEPS.Tensor.Region.RegionConfigSplit`.
 
-The closed-state comparison lemmas `stateCoeff_eq_regionComplement` and
-`regionInsertedCoeff_one_eq_stateCoeff` belong to
-`TNLean.PEPS.RegionBlock.Recovery`.
+Inserting the identity on a boundary edge reads the closed state coefficient times the
+interior bond product (`regionInsertedCoeff_identity_eq_doubleSum`,
+`regionInsertedCoeff_one_eq_stateCoeff`). The region/complement decomposition of the
+closed state coefficient it rests on (`stateCoeff_eq_regionComplement`) is a statement
+about the tensor and its regions, in `TNLean/PEPS/Tensor/Region/ConfigurationCalculus.lean`.
 
 ## References
 
@@ -161,6 +164,98 @@ theorem fundamentalTheorem_normalPEPS_of_vertexInjective (A B : Tensor G d)
     (_h : NormalPEPSBlockingHypotheses (regionInjectivityDataOf (G := G) A) G) :
     GaugeEquiv A B :=
   fundamentalTheorem_PEPS A B hA hB hAB hconn
+
+/-! ### The boundary-agreement form of the identity region insertion
+
+Summing the product of the blocked-region weight on `R` against the blocked-region
+weight on `univ \ R` over the boundary configuration collapses the two boundary
+filters into a single constraint: the two global virtual configurations agree on
+every edge crossing the boundary of `R`. This is the double-global-sum form of
+`regionInsertedCoeff_identity`, the starting point for the multiplicity collapse
+to the closed state coefficient. -/
+
+open scoped Classical in
+/-- The identity-inserted region coefficient, in its double-global-configuration
+form: a sum over pairs of global virtual configurations agreeing on the boundary
+of `R`, of the region vertex product against the complement vertex product. -/
+theorem regionInsertedCoeff_identity_eq_doubleSum (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f
+        (1 : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) σ τ =
+      ∑ p ∈ Finset.univ.filter
+          (fun p : VirtualConfig A × VirtualConfig A =>
+            regionBoundaryLabel (G := G) A R p.1 = regionBoundaryLabel (G := G) A R p.2),
+        (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => p.1 ie.1) (σ w)) *
+          ∏ w : {w : V // w ∈ Finset.univ \ R},
+            A.component w.1 (fun ie => p.2 ie.1) (τ w) := by
+  classical
+  rw [regionInsertedCoeff_identity]
+  -- Expand each blocked-region weight as a filtered sum over global configurations.
+  simp only [regionBlockedWeight]
+  -- Distribute the products of filtered sums and identify the combined filter.
+  rw [show (∑ μ : RegionBoundaryConfig (G := G) A R,
+        (∑ ζ ∈ Finset.univ.filter
+            (fun ζ : VirtualConfig A => regionBoundaryLabel (G := G) A R ζ = μ),
+          ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w)) *
+          ∑ ξ ∈ Finset.univ.filter
+            (fun ξ : VirtualConfig A =>
+              regionBoundaryLabel (G := G) A (Finset.univ \ R) ξ =
+                regionComplementBoundaryConfig (G := G) A R μ),
+            ∏ w : {w : V // w ∈ Finset.univ \ R},
+              A.component w.1 (fun ie => ξ ie.1) (τ w)) =
+      ∑ μ : RegionBoundaryConfig (G := G) A R,
+        ∑ ζ ∈ Finset.univ.filter
+            (fun ζ : VirtualConfig A => regionBoundaryLabel (G := G) A R ζ = μ),
+          ∑ ξ ∈ Finset.univ.filter
+            (fun ξ : VirtualConfig A => regionBoundaryLabel (G := G) A R ξ = μ),
+            (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w)) *
+              ∏ w : {w : V // w ∈ Finset.univ \ R},
+                A.component w.1 (fun ie => ξ ie.1) (τ w) from ?_]
+  · -- Reindex the triple sum (μ, ζ, ξ) onto the boundary-agreement pair sum.
+    simp only [Finset.sum_filter]
+    rw [Fintype.sum_prod_type]
+    rw [Finset.sum_comm]
+    refine Finset.sum_congr rfl (fun ζ _ => ?_)
+    rw [Finset.sum_eq_single (regionBoundaryLabel (G := G) A R ζ)]
+    · rw [ite_eq_left rfl]
+      refine Finset.sum_congr rfl (fun ξ _ => ?_)
+      by_cases heq : regionBoundaryLabel (G := G) A R ζ = regionBoundaryLabel (G := G) A R ξ
+      · rw [ite_eq_left heq.symm, ite_eq_left heq]
+      · rw [ite_eq_right (fun h => heq h.symm), ite_eq_right heq]
+    · intro μ _ hμ
+      rw [ite_eq_right (fun h => hμ h.symm)]
+    · intro h; exact absurd (Finset.mem_univ _) h
+  · -- The complement filter matches the region filter after the boundary-edge identification,
+    -- and the product of sums is the doubled sum.
+    refine Finset.sum_congr rfl (fun μ _ => ?_)
+    rw [Finset.sum_mul_sum]
+    refine Finset.sum_congr rfl (fun ζ _ => ?_)
+    refine Finset.sum_congr ?_ (fun ξ _ => rfl)
+    ext ξ
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    exact regionBoundaryLabel_compl_eq_iff (G := G) A R μ ξ
+
+open scoped Classical in
+/-- **Identity insertion reads the closed state coefficient.** Inserting the
+identity matrix on a boundary edge `f` of `R` equals the bond-dimension product
+over the edges not crossing the boundary of `R`, times the closed state
+coefficient of the assembled physical configuration. This combines the
+double-global-sum form of the identity insertion with the cardinality collapse.
+
+Source: arXiv:1804.04964, Section 3, lines 1205--1210 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem regionInsertedCoeff_one_eq_stateCoeff (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
+    (σ : RegionPhysicalConfig (V := V) (d := d) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ R)) :
+    regionInsertedCoeff (G := G) A R f
+        (1 : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ) σ τ =
+      regionInteriorBondProd (G := G) A R •
+        stateCoeff A (assembleRegionσ (V := V) (d := d) R σ τ) := by
+  rw [regionInsertedCoeff_identity_eq_doubleSum (G := G) A R f σ τ,
+    stateCoeff_eq_regionComplement (G := G) A R σ τ]
 
 end PEPS
 end TNLean

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Plaquette.ThreePlaquetteGeometry
 import TNLean.PEPS.Graph.Plaquette.TorusJointFluxGeometry
+import TNLean.PEPS.Graph.Holonomy.RegularRegionTreeGauge
 
 /-!
 # Literal transports and holonomies in a three-plaquette strip

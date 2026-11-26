@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Tensor.GraphState.RegularOpenRegion
+import TNLean.PEPS.Graph.Region.InjectiveRegion
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
 /-!
@@ -18,6 +18,10 @@ are one simultaneous translation of the incident-edge configuration.
 This is an auxiliary step in the finite-region contraction of Schuch, Cirac, and
 Pérez-García, arXiv:1001.3807, lines 1935–1957. The connectedness hypothesis is
 explicit. No region isometry or entropy assertion is made here.
+
+The same equations with regular bond operators inserted at the larger endpoints use
+the twisted labels `regularTwistedLabels` and the compatibility predicate
+`IsTwistedRegionLabelCompatible`.
 
 ## References
 
@@ -168,5 +172,41 @@ theorem sum_regionLabelCompatible_eq_sum_translation [Fintype V] [DecidableRel �
         exact (isRegionLabelCompatible_iff_exists_translation R hR _ η θ).mpr
           ⟨g, fun _ => rfl, ht⟩
     simp only [hcompat]
+
+/-! ### Regular labels with inserted bond operators -/
+
+section TwistedLabels
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
+variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
+
+/-- Source: SCP10, bond operators in `eq:2d:peps-with-ug-uh`.
+The head label of an oriented regular bond is its group operator times its tail label. -/
+def regularTwistedLabels (u : Edge Γ → G) (v : V) (η : IncidentEdge Γ v → G) :
+    IncidentEdge Γ v → G :=
+  fun f => if v = f.1.1.2 then u f.1 * η f else η f
+
+/-- The local translation equations after the two bond operators are inserted.
+Source: SCP10, twisted-sector contraction, lines 1935–1990. -/
+def IsTwistedRegionLabelCompatible (R : Finset V) (u w : Edge Γ → G)
+    (q : {v : V // v ∈ R} → G)
+    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) : Prop :=
+  ∀ (v : {v : V // v ∈ R}),
+    regularTwistedLabels u v.1
+        (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) =
+      fun f => q v * regularTwistedLabels w v.1
+        (fun f => θ ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) f
+
+instance (R : Finset V) (u w : Edge Γ → G) (q : {v : V // v ∈ R} → G)
+    (η θ : {f : Edge Γ // ManyBody.IsRegionIncidentEdge R f} → G) :
+    Decidable (IsTwistedRegionLabelCompatible R u w q η θ) :=
+  inferInstanceAs (Decidable (∀ (v : {v : V // v ∈ R}),
+    regularTwistedLabels u v.1
+        (fun f => η ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) =
+      fun f => q v * regularTwistedLabels w v.1
+        (fun f => θ ⟨f.1, isRegionIncidentEdge_of_regionVertex R v f⟩) f))
+
+end TwistedLabels
 
 end TNLean.PEPS

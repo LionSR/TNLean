@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Tensor.Region.VertexComplement
+import TNLean.PEPS.Graph.Region.InjectiveRegion
+import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 
 /-!
 # Blocked-region tensor for an arbitrary PEPS region
@@ -22,6 +24,12 @@ the family of edges with exactly one endpoint in `R`.
 The blocked-region tensor is the second injective block of the
 one-region-versus-complement comparison of arXiv:1804.04964, Section 3: a
 contraction of injective tensors over any finite region is injective.
+
+The file also records the boundary configuration of a region read on its complement
+(`regionComplementBoundaryConfig`), the blocked weight of the full vertex set
+(`regionBlockedWeight_univ`), the blocked weights of a tensor with reindexed bond
+dimensions (`regionBlockedWeight_reindexTensor`), and the blocked-region tensor map
+(`regionBlockedTensorMap`).
 
 ## References
 
@@ -164,6 +172,170 @@ theorem regionBlockedWeight_congr {S R : Finset V} (h : S = R)
         (regionPhysicalConfigCongr (d := d) h τ) := by
   subst h
   rfl
+
+/-! ### Boundary configurations of a region read on its complement -/
+
+section ComplementBoundaryConfig
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
+
+/-- The boundary configuration on the complement `univ \ R`, obtained from a
+boundary configuration on `R` by reading each crossing edge under the
+boundary-edge identification. -/
+def regionComplementBoundaryConfig (A : Tensor G d) (R : Finset V)
+    (bdry : RegionBoundaryConfig (G := G) A R) :
+    RegionBoundaryConfig (G := G) A (Finset.univ \ R) :=
+  fun f => bdry ((regionBoundaryEdgeComplEquiv (G := G) R).symm f)
+
+/-- The complement boundary configuration reads the boundary edge `f` of `R`,
+viewed on the complement as `regionBoundaryEdgeToCompl R f`, off the original
+boundary value at `f`. -/
+theorem regionComplementBoundaryConfig_apply_toCompl (A : Tensor G d) (R : Finset V)
+    (f : {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) R f})
+    (bdry : RegionBoundaryConfig (G := G) A R) :
+    regionComplementBoundaryConfig (G := G) A R bdry (regionBoundaryEdgeToCompl (G := G) R f) =
+      bdry f := by
+  rw [regionComplementBoundaryConfig]
+  congr 1
+
+end ComplementBoundaryConfig
+
+/-! ### Blocked weights of a tensor with reindexed bond dimensions -/
+
+section ReindexTensor
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
+
+/-- The blocked-region weight transports along a bond-dimension reindex: the
+weight of the reindexed tensor at a boundary configuration is the weight of the
+original tensor at the cast boundary configuration. -/
+theorem regionBlockedWeight_reindexTensor (B : Tensor G d) {bd : Edge G → ℕ}
+    (h : bd = B.bondDim) (R : Finset V)
+    (bdry : RegionBoundaryConfig (G := G) (reindexTensor (G := G) B h) R)
+    (τ : RegionPhysicalConfig (V := V) (d := d) R) :
+    regionBlockedWeight (G := G) (reindexTensor (G := G) B h) R bdry τ =
+      regionBlockedWeight (G := G) B R
+        (fun f => Fin.cast (congr_fun h f.1) (bdry f)) τ := by
+  classical
+  rw [regionBlockedWeight, regionBlockedWeight]
+  -- Reindex the constrained virtual-configuration sum by casting every bond.
+  let φ : VirtualConfig (reindexTensor (G := G) B h) ≃ VirtualConfig B :=
+    Equiv.piCongrRight fun e =>
+      finCongr (by simpa [reindexTensor_bondDim] using congr_fun h e)
+  refine Finset.sum_nbij' φ φ.symm ?_ ?_ ?_ ?_ ?_
+  · -- Forward map lands in the complement filter.
+    intro ζ hζ
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ ⊢
+    funext f
+    have hf : regionBoundaryLabel (G := G) (reindexTensor (G := G) B h) R ζ f = bdry f :=
+      congrFun hζ f
+    rw [regionBoundaryLabel_apply] at hf ⊢
+    change Fin.cast (by simpa [reindexTensor_bondDim] using congr_fun h f.1) (ζ f.1) =
+      Fin.cast (by simpa [reindexTensor_bondDim] using congr_fun h f.1) (bdry f)
+    rw [hf]
+  · -- Backward map lands in the original filter.
+    intro ζ hζ
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hζ ⊢
+    funext f
+    have hf : regionBoundaryLabel (G := G) B R ζ f = Fin.cast (congr_fun h f.1) (bdry f) :=
+      congrFun hζ f
+    rw [regionBoundaryLabel_apply] at hf ⊢
+    apply Fin.eq_of_val_eq
+    change (((finCongr (by simpa [reindexTensor_bondDim] using congr_fun h f.1)).symm
+      (ζ f.1) : Fin ((reindexTensor (G := G) B h).bondDim f.1)) : ℕ) = (bdry f : ℕ)
+    rw [finCongr_symm_apply_coe]
+    exact (congrArg Fin.val hf).trans (Fin.val_cast _ _)
+  · -- Left inverse.
+    intro ζ _
+    exact φ.left_inv ζ
+  · -- Right inverse.
+    intro ζ _
+    exact φ.right_inv ζ
+  · -- Matching summand: products of casts agree.
+    intro ζ _
+    refine Finset.prod_congr rfl fun w _ => ?_
+    rfl
+
+end ReindexTensor
+
+/-! ### The blocked-region tensor map -/
+
+section BlockedTensorMap
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
+
+/-- The blocked-region tensor map: the linear combination of the blocked-region
+weight family of `R`, sending a boundary-configuration coefficient to the region
+physical function it produces.
+
+This is the region analogue of `edgeMiddleTensorMap`. Its injectivity is exactly
+the blocked-tensor injectivity of `R`. -/
+noncomputable def regionBlockedTensorMap (A : Tensor G d) (R : Finset V) :
+    (RegionBoundaryConfig (G := G) A R → ℂ) →ₗ[ℂ]
+      (RegionPhysicalConfig (V := V) (d := d) R → ℂ) :=
+  Fintype.linearCombination ℂ (regionBlockedTensorFamily (G := G) A R)
+
+/-- The blocked-region tensor map is injective when the region is blocked-tensor
+injective. This is the region analogue of
+`edgeMiddleTensorMap_injective_of_injective`. -/
+theorem regionBlockedTensorMap_injective_of_injective (A : Tensor G d) (R : Finset V)
+    (hR : RegionBlockedTensorInjective (G := G) A R) :
+    Function.Injective (regionBlockedTensorMap (G := G) A R) :=
+  hR.fintypeLinearCombination_injective
+
+/-- The blocked-region tensor map, expanded as the boundary-configuration sum of
+the blocked-region weights. -/
+theorem regionBlockedTensorMap_apply (A : Tensor G d) (R : Finset V)
+    (c : RegionBoundaryConfig (G := G) A R → ℂ)
+    (τ : RegionPhysicalConfig (V := V) (d := d) R) :
+    regionBlockedTensorMap (G := G) A R c τ =
+      ∑ μ : RegionBoundaryConfig (G := G) A R,
+        c μ • regionBlockedWeight (G := G) A R μ τ := by
+  rw [regionBlockedTensorMap, Fintype.linearCombination_apply, Finset.sum_apply]
+  rfl
+
+end BlockedTensorMap
+
+/-! ### The blocked weight of the full vertex set -/
+
+section FullRegion
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
+
+/-- The blocked weight of the full vertex set is the closed state coefficient:
+there are no boundary edges, and the vertex product runs over all vertices.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1519--1571 of
+`Papers/1804.04964/paper_normal.tex` (the degenerate end of the one-site
+comparison pair). -/
+theorem regionBlockedWeight_univ (A : Tensor G d)
+    (μ : RegionBoundaryConfig (G := G) A (Finset.univ : Finset V))
+    (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ : Finset V)) :
+    regionBlockedWeight (G := G) A Finset.univ μ τ =
+      stateCoeff A (fun v => τ ⟨v, Finset.mem_univ v⟩) := by
+  classical
+  have hbdry :
+      IsEmpty {f : Edge G // ManyBody.IsRegionBoundaryEdge (G := G) (Finset.univ :
+        Finset V) f} := by
+    refine ⟨fun f => ?_⟩
+    rcases f.2 with ⟨_, h2⟩ | ⟨h1, _⟩
+    · exact h2 (Finset.mem_univ _)
+    · exact h1 (Finset.mem_univ _)
+  unfold regionBlockedWeight stateCoeff
+  have hfilter : (Finset.univ.filter
+      (fun ζ : VirtualConfig A =>
+        regionBoundaryLabel (G := G) A Finset.univ ζ = μ)) = Finset.univ :=
+    Finset.filter_true_of_mem (fun ζ _ => funext fun f => hbdry.elim f)
+  rw [hfilter]
+  refine Finset.sum_congr rfl (fun ζ _ => ?_)
+  exact Fintype.prod_equiv (Equiv.subtypeUnivEquiv (fun v => Finset.mem_univ v))
+    _ _ (fun w => rfl)
+
+end FullRegion
 
 end PEPS
 end TNLean
