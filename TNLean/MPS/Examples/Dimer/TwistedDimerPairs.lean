@@ -50,6 +50,8 @@ The fusion rule and its exact data were first recorded in the notes cited above 
 `Notes/OpenProblemsTN/`; they are verification records, not the source.
 -/
 
+open MPTensor
+
 open scoped Matrix Kronecker
 
 namespace P6Compression

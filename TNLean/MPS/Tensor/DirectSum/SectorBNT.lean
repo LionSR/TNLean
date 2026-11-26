@@ -123,7 +123,7 @@ structure IsBNTCanonicalForm (P : SectorDecomposition d) where
   periodic generalization at CPSV21 lines 1905–1908 is deliberately not
   included here). -/
   basis_normalized_self_overlap : ∀ j : Fin P.basisCount,
-    Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
+    Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j) (P.basis j) N)
       atTop (𝓝 1)
   /-- **BNT eventual linear independence** of the basis MPV states
   (CPSV21 Definition 4.2, lines 1846–1850; combined-family LI input at

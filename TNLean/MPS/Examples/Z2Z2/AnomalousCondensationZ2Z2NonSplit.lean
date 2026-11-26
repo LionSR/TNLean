@@ -90,6 +90,8 @@ the source. The data file (Section 4) also records each of these remainders as n
 nilpotent of order three.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix

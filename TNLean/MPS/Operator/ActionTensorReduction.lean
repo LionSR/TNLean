@@ -21,7 +21,7 @@ tensors, and lifts left-dressed proportionality relations through an action tens
   legs of the action tensor.
 * The bond associator intertwines `(M N) · A` with `M · (N · A)`.
 * Dressed proportionality `V B^w = z V' B^w` on long words
-  (`MPSTensor.IsDressedProportional`) lifts, with the same scalar, to the action tensor.
+  (`MPTensor.IsDressedProportional`) lifts, with the same scalar, to the action tensor.
 
 These are the manipulations of arXiv:2502.20257, equation `eq:defL` (`main.tex` lines
 1875--1913), where the L-symbols compare the two reductions of the action of `g` after `h`
@@ -32,12 +32,12 @@ defined here.
 
 ## Main results
 
-* `MPSTensor.IsReduction.actTensor_idKron`, `MPSTensor.IsReduction.actTensor_kronId`
+* `MPTensor.IsReduction.actTensor_idKron`, `MPTensor.IsReduction.actTensor_kronId`
 * `MPOTensor.actTensor_mulTensor`, `MPOTensor.actTensor_mulTensor_mul_assocMatrix`
-* `MPSTensor.IsReduction.actTensor_assoc_left`, `MPSTensor.IsReduction.actTensor_assoc_right`
+* `MPTensor.IsReduction.actTensor_assoc_left`, `MPTensor.IsReduction.actTensor_assoc_right`
 * `MPOTensor.actTensor_mul_kronId_of_intertwine`
-* `MPSTensor.IsDressedProportional.actTensor_idKron`,
-  `MPSTensor.IsDressedProportional.actTensor_kronId`
+* `MPTensor.IsDressedProportional.actTensor_idKron`,
+  `MPTensor.IsDressedProportional.actTensor_kronId`
 -/
 
 open scoped Matrix Kronecker
@@ -53,11 +53,11 @@ variable {d D₁ D₂ D₃ : ℕ}
 
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1875--1913 (the action tensor of `h`
 applied first, with an identity strand on the operator leg of `g`). -/
-theorem _root_.MPSTensor.IsReduction.actTensor_idKron (T : MPOTensor d D₃)
+theorem _root_.MPTensor.IsReduction.actTensor_idKron (T : MPOTensor d D₃)
     {B : MPSTensor d D₂} {A : MPSTensor d D₁} {V : Matrix (Fin D₁) (Fin D₂) ℂ}
-    {W : Matrix (Fin D₂) (Fin D₁) ℂ} (h : MPSTensor.IsReduction B A V W) :
-    MPSTensor.IsReduction (actTensor T B) (actTensor T A) (idKron D₃ V) (idKron D₃ W) := by
-  rw [MPSTensor.IsReduction.iff_forall_evalWord]
+    {W : Matrix (Fin D₂) (Fin D₁) ℂ} (h : MPTensor.IsReduction B A V W) :
+    MPTensor.IsReduction (actTensor T B) (actTensor T A) (idKron D₃ V) (idKron D₃ W) := by
+  rw [MPTensor.IsReduction.iff_forall_evalWord]
   intro w
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [evalWord_actTensor, evalWord_actTensor, idKron_mul_submatrix_sum,
@@ -70,12 +70,12 @@ view of `X` onto that of `Y`, then `(V ⊗ 1, W ⊗ 1)` reduces the action tenso
 
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1875--1913 (the fusion tensor of
 `(g, h)` applied to the operator legs, with an identity strand on the state leg). -/
-theorem _root_.MPSTensor.IsReduction.actTensor_kronId {X : MPOTensor d D₂}
+theorem _root_.MPTensor.IsReduction.actTensor_kronId {X : MPOTensor d D₂}
     {Y : MPOTensor d D₁} (B : MPSTensor d D₃) {V : Matrix (Fin D₁) (Fin D₂) ℂ}
     {W : Matrix (Fin D₂) (Fin D₁) ℂ}
-    (h : MPSTensor.IsReduction X.toMPSTensor Y.toMPSTensor V W) :
-    MPSTensor.IsReduction (actTensor X B) (actTensor Y B) (kronId V D₃) (kronId W D₃) := by
-  rw [MPSTensor.IsReduction.iff_forall_evalWord]
+    (h : MPTensor.IsReduction X.toMPSTensor Y.toMPSTensor V W) :
+    MPTensor.IsReduction (actTensor X B) (actTensor Y B) (kronId V D₃) (kronId W D₃) := by
+  rw [MPTensor.IsReduction.iff_forall_evalWord]
   intro w
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [evalWord_actTensor, evalWord_actTensor, kronId_mul_submatrix_sum,
@@ -141,12 +141,12 @@ theorem assocInvMatrix_mul_actTensor_mulTensor (M : MPOTensor d D₁) (N : MPOTe
 gives the reduction `(V a⁻¹, a W)` of `(M N) · A`, where `a` is the bond associator.
 
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1875--1913. -/
-theorem _root_.MPSTensor.IsReduction.actTensor_assoc_left {M : MPOTensor d D₁}
+theorem _root_.MPTensor.IsReduction.actTensor_assoc_left {M : MPOTensor d D₁}
     {N : MPOTensor d D₂} {A : MPSTensor d D₃} {D : ℕ} {Z : MPSTensor d D}
     {V : Matrix (Fin D) (Fin (D₁ * (D₂ * D₃))) ℂ}
     {W : Matrix (Fin (D₁ * (D₂ * D₃))) (Fin D) ℂ}
-    (h : MPSTensor.IsReduction (actTensor M (actTensor N A)) Z V W) :
-    MPSTensor.IsReduction (actTensor (mulTensor M N) A) Z
+    (h : MPTensor.IsReduction (actTensor M (actTensor N A)) Z V W) :
+    MPTensor.IsReduction (actTensor (mulTensor M N) A) Z
       (V * mulTensorAssocInvMatrix D₁ D₂ D₃) (mulTensorAssocMatrix D₁ D₂ D₃ * W) :=
   h.of_intertwine (mulTensorAssocInvMatrix_mul_matrix D₁ D₂ D₃)
     (actTensor_mulTensor_mul_assocMatrix M N A)
@@ -155,12 +155,12 @@ theorem _root_.MPSTensor.IsReduction.actTensor_assoc_left {M : MPOTensor d D₁}
 gives the reduction `(V a, a⁻¹ W)` of `M · (N · A)`, where `a` is the bond associator.
 
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1875--1913. -/
-theorem _root_.MPSTensor.IsReduction.actTensor_assoc_right {M : MPOTensor d D₁}
+theorem _root_.MPTensor.IsReduction.actTensor_assoc_right {M : MPOTensor d D₁}
     {N : MPOTensor d D₂} {A : MPSTensor d D₃} {D : ℕ} {Z : MPSTensor d D}
     {V : Matrix (Fin D) (Fin (D₁ * D₂ * D₃)) ℂ}
     {W : Matrix (Fin (D₁ * D₂ * D₃)) (Fin D) ℂ}
-    (h : MPSTensor.IsReduction (actTensor (mulTensor M N) A) Z V W) :
-    MPSTensor.IsReduction (actTensor M (actTensor N A)) Z
+    (h : MPTensor.IsReduction (actTensor (mulTensor M N) A) Z V W) :
+    MPTensor.IsReduction (actTensor M (actTensor N A)) Z
       (V * mulTensorAssocMatrix D₁ D₂ D₃) (mulTensorAssocInvMatrix D₁ D₂ D₃ * W) :=
   h.of_intertwine (mulTensorAssocMatrix_mul_invMatrix D₁ D₂ D₃)
     (fun i ↦ (assocInvMatrix_mul_actTensor_mulTensor M N A i).symm)
@@ -189,10 +189,10 @@ words of the same lengths.
 Source: arXiv:2203.12563, `sec:PBC`, lines 1091--1129: the L-symbols are phase factors
 between reductions on words longer than the nilpotency length, and they are compared inside
 further action tensors. -/
-theorem _root_.MPSTensor.IsDressedProportional.actTensor_idKron (T : MPOTensor d D₃)
+theorem _root_.MPTensor.IsDressedProportional.actTensor_idKron (T : MPOTensor d D₃)
     {B : MPSTensor d D₂} {m : ℕ} {V V' : Matrix (Fin m) (Fin D₂) ℂ} {z : ℂ}
-    (h : MPSTensor.IsDressedProportional B V V' z) :
-    MPSTensor.IsDressedProportional (actTensor T B) (idKron D₃ V) (idKron D₃ V') z := by
+    (h : MPTensor.IsDressedProportional B V V' z) :
+    MPTensor.IsDressedProportional (actTensor T B) (idKron D₃ V) (idKron D₃ V') z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
@@ -209,10 +209,10 @@ of `X` satisfies `V X^u = z V' X^u` for long pair words, then
 Source: arXiv:2203.12563, `sec:PBC`, lines 1028 and 1091--1129: the three-cocycle, defined
 by fusion tensors on long words, is compared with the L-symbols inside the action on the
 state. -/
-theorem _root_.MPSTensor.IsDressedProportional.actTensor_kronId {X : MPOTensor d D₂}
+theorem _root_.MPTensor.IsDressedProportional.actTensor_kronId {X : MPOTensor d D₂}
     (B : MPSTensor d D₃) {m : ℕ} {V V' : Matrix (Fin m) (Fin D₂) ℂ} {z : ℂ}
-    (h : MPSTensor.IsDressedProportional X.toMPSTensor V V' z) :
-    MPSTensor.IsDressedProportional (actTensor X B) (kronId V D₃) (kronId V' D₃) z := by
+    (h : MPTensor.IsDressedProportional X.toMPSTensor V V' z) :
+    MPTensor.IsDressedProportional (actTensor X B) (kronId V D₃) (kronId V' D₃) z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w

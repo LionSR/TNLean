@@ -144,8 +144,8 @@ lemma mpv_cast_dim {d D₁ D₂ : ℕ} (h : D₁ = D₂) (A : MPSTensor d D₁) 
 /-- Casting the bond dimension of the left tensor preserves the MPV overlap. -/
 lemma mpvOverlap_cast_dim_left {d D₁ D₂ D₃ : ℕ} (h : D₁ = D₂)
     (A : MPSTensor d D₁) (B : MPSTensor d D₃) :
-    ∀ N, mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) h) A) B N =
-      mpvOverlap (d := d) A B N := by
+    ∀ N, mpvOverlap (α := Fin d) (cast (congr_arg (MPSTensor d) h) A) B N =
+      mpvOverlap (α := Fin d) A B N := by
   subst h; simp
 
 /-- Casting the bond dimension preserves injectivity. -/

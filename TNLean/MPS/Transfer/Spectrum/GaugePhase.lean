@@ -82,8 +82,8 @@ private theorem mpvOverlap_cross_scale_of_mpv_eq_pow_mul_at
     {ζ1 ζ2 : ℂ}
     (hmpv1 : ∀ σ : Fin N → Fin d, mpv B1 σ = ζ1 ^ N * mpv A σ)
     (hmpv2 : ∀ σ : Fin N → Fin d, mpv B2 σ = ζ2 ^ N * mpv A σ) :
-    mpvOverlap (d := d) B1 B2 N =
-      (ζ1 * star ζ2) ^ N * mpvOverlap (d := d) A A N := by
+    mpvOverlap (α := Fin d) B1 B2 N =
+      (ζ1 * star ζ2) ^ N * mpvOverlap (α := Fin d) A A N := by
   classical
   simp only [mpvOverlap]
   simp_rw [hmpv1, hmpv2, star_mul, star_pow]
@@ -102,8 +102,8 @@ theorem mpvOverlap_cross_scale_of_mpv_eq_pow_mul
     (hmpv1 : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B1 σ = ζ1 ^ N * mpv A σ)
     (hmpv2 : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B2 σ = ζ2 ^ N * mpv A σ) :
     ∀ N : ℕ,
-      mpvOverlap (d := d) B1 B2 N =
-        (ζ1 * star ζ2) ^ N * mpvOverlap (d := d) A A N :=
+      mpvOverlap (α := Fin d) B1 B2 N =
+        (ζ1 * star ζ2) ^ N * mpvOverlap (α := Fin d) A A N :=
   fun N => mpvOverlap_cross_scale_of_mpv_eq_pow_mul_at (hmpv1 N) (hmpv2 N)
 
 /-- Positive-length overlap scaling for two MPV families with a common representative. -/
@@ -115,8 +115,8 @@ theorem mpvOverlap_cross_scale_of_mpv_eq_pow_mul_pos
     (hmpv2 : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
       mpv B2 σ = ζ2 ^ N * mpv A σ) :
     ∀ N : ℕ, 0 < N →
-      mpvOverlap (d := d) B1 B2 N =
-        (ζ1 * star ζ2) ^ N * mpvOverlap (d := d) A A N :=
+      mpvOverlap (α := Fin d) B1 B2 N =
+        (ζ1 * star ζ2) ^ N * mpvOverlap (α := Fin d) A A N :=
   fun N hN => mpvOverlap_cross_scale_of_mpv_eq_pow_mul_at (hmpv1 N hN) (hmpv2 N hN)
 
 /-- If `mpv B σ = ζ ^ N * mpv A σ` for every system size `N` and configuration `σ`, then the
@@ -125,8 +125,8 @@ theorem mpvOverlap_self_scale_of_mpv_eq_pow_mul
     {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
     (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) :
     ∀ N : ℕ,
-      mpvOverlap (d := d) B B N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N := by
+      mpvOverlap (α := Fin d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (α := Fin d) A A N := by
   simpa using
     (mpvOverlap_cross_scale_of_mpv_eq_pow_mul
       (A := A) (B1 := B) (B2 := B) (ζ1 := ζ) (ζ2 := ζ) hmpv hmpv)
@@ -137,8 +137,8 @@ theorem mpvOverlap_self_scale_of_mpv_eq_pow_mul_pos
     (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
       mpv B σ = ζ ^ N * mpv A σ) :
     ∀ N : ℕ, 0 < N →
-      mpvOverlap (d := d) B B N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N := by
+      mpvOverlap (α := Fin d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (α := Fin d) A A N := by
   simpa using
     (mpvOverlap_cross_scale_of_mpv_eq_pow_mul_pos
       (A := A) (B1 := B) (B2 := B) (ζ1 := ζ) (ζ2 := ζ) hmpv hmpv)
@@ -146,11 +146,11 @@ theorem mpvOverlap_self_scale_of_mpv_eq_pow_mul_pos
 private theorem mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul_at
     {D D' N : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
     (hmpv : ∀ σ : Fin N → Fin d, mpv B σ = ζ ^ N * mpv A σ) :
-    mpvOverlap (d := d) A B N =
-      (star ζ) ^ N * mpvOverlap (d := d) A A N := by
+    mpvOverlap (α := Fin d) A B N =
+      (star ζ) ^ N * mpvOverlap (α := Fin d) A A N := by
   classical
   calc
-    mpvOverlap (d := d) A B N =
+    mpvOverlap (α := Fin d) A B N =
         ∑ σ : Cfg d N, mpv A σ * star (ζ ^ N * mpv A σ) := by
           simp only [mpvOverlap]
           refine Finset.sum_congr rfl ?_
@@ -165,7 +165,7 @@ private theorem mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul_at
             rw [StarMul.star_mul, star_pow]
           rw [hstar]
           ring
-    _ = (star ζ) ^ N * mpvOverlap (d := d) A A N := by
+    _ = (star ζ) ^ N * mpvOverlap (α := Fin d) A A N := by
           simp [mpvOverlap, Finset.mul_sum]
 
 /-- If all matrix-product amplitudes of `B` are obtained from those of `A` by the
@@ -175,8 +175,8 @@ theorem mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul
     {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
     (hmpv : ∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) :
     ∀ N : ℕ,
-      mpvOverlap (d := d) A B N =
-        (star ζ) ^ N * mpvOverlap (d := d) A A N :=
+      mpvOverlap (α := Fin d) A B N =
+        (star ζ) ^ N * mpvOverlap (α := Fin d) A A N :=
   fun N => mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul_at (hmpv N)
 
 /-- Positive-length form of
@@ -186,26 +186,26 @@ theorem mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul_pos
     (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
       mpv B σ = ζ ^ N * mpv A σ) :
     ∀ N : ℕ, 0 < N →
-      mpvOverlap (d := d) A B N =
-        (star ζ) ^ N * mpvOverlap (d := d) A A N :=
+      mpvOverlap (α := Fin d) A B N =
+        (star ζ) ^ N * mpvOverlap (α := Fin d) A A N :=
   fun N hN => mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul_at (hmpv N hN)
 
 private theorem norm_eq_one_of_selfOverlap_scale_at_nonzero_limit_pos_aux
     {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
     {r : ℝ} (hr : r ≠ 0)
-    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds r))
-    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds r))
+    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A A N‖) Filter.atTop (nhds r))
+    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖) Filter.atTop (nhds r))
     (hSelf : ∀ N : ℕ, 0 < N →
-      mpvOverlap (d := d) B B N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N) :
+      mpvOverlap (α := Fin d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (α := Fin d) A A N) :
     ‖ζ‖ = 1 := by
-  have hAA_ne : ∀ᶠ N in Filter.atTop, ‖mpvOverlap (d := d) A A N‖ ≠ 0 :=
+  have hAA_ne : ∀ᶠ N in Filter.atTop, ‖mpvOverlap (α := Fin d) A A N‖ ≠ 0 :=
     hAA.eventually_ne hr
-  have hRatio : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖ /
-      ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1) :=
+  have hRatio : Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖ /
+      ‖mpvOverlap (α := Fin d) A A N‖) Filter.atTop (nhds 1) :=
     (tendsto_div_nhds_one_iff_eq₀ hBB hAA hr).2 rfl
   have hRatioEq : ∀ᶠ N in Filter.atTop,
-      ‖mpvOverlap (d := d) B B N‖ / ‖mpvOverlap (d := d) A A N‖ = (‖ζ‖ ^ 2) ^ N := by
+      ‖mpvOverlap (α := Fin d) B B N‖ / ‖mpvOverlap (α := Fin d) A A N‖ = (‖ζ‖ ^ 2) ^ N := by
     filter_upwards [hAA_ne, Filter.eventually_ge_atTop 1] with N hN hNpos
     rw [hSelf N hNpos, norm_mul, norm_pow,
       show ‖ζ * starRingEnd ℂ ζ‖ = ‖ζ‖ ^ 2 from by
@@ -231,11 +231,11 @@ the other by powers of `ζ * conj ζ`, then `ζ` has unit norm. -/
 theorem norm_eq_one_of_selfOverlap_scale_at_nonzero_limit
     {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
     {r : ℝ} (hr : r ≠ 0)
-    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds r))
-    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds r))
+    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A A N‖) Filter.atTop (nhds r))
+    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖) Filter.atTop (nhds r))
     (hSelf : ∀ N : ℕ,
-      mpvOverlap (d := d) B B N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N) :
+      mpvOverlap (α := Fin d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (α := Fin d) A A N) :
     ‖ζ‖ = 1 :=
   norm_eq_one_of_selfOverlap_scale_at_nonzero_limit_pos_aux hr hAA hBB
     (fun N _hN => hSelf N)
@@ -244,11 +244,11 @@ theorem norm_eq_one_of_selfOverlap_scale_at_nonzero_limit
 `ζ * conj ζ`, then `ζ` has unit norm. -/
 theorem norm_eq_one_of_selfOverlap_scale
     {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
-    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1))
-    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds 1))
+    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A A N‖) Filter.atTop (nhds 1))
+    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖) Filter.atTop (nhds 1))
     (hSelf : ∀ N : ℕ,
-      mpvOverlap (d := d) B B N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N) :
+      mpvOverlap (α := Fin d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (α := Fin d) A A N) :
     ‖ζ‖ = 1 :=
   norm_eq_one_of_selfOverlap_scale_at_nonzero_limit one_ne_zero hAA hBB hSelf
 
@@ -256,11 +256,11 @@ theorem norm_eq_one_of_selfOverlap_scale
 uses the scaling identity eventually, so no value at length zero is required. -/
 theorem norm_eq_one_of_selfOverlap_scale_pos
     {D D' : ℕ} {A : MPSTensor d D} {B : MPSTensor d D'} {ζ : ℂ}
-    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop (nhds 1))
-    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop (nhds 1))
+    (hAA : Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A A N‖) Filter.atTop (nhds 1))
+    (hBB : Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖) Filter.atTop (nhds 1))
     (hSelf : ∀ N : ℕ, 0 < N →
-      mpvOverlap (d := d) B B N =
-        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (d := d) A A N) :
+      mpvOverlap (α := Fin d) B B N =
+        (ζ * starRingEnd ℂ ζ) ^ N * mpvOverlap (α := Fin d) A A N) :
     ‖ζ‖ = 1 :=
   norm_eq_one_of_selfOverlap_scale_at_nonzero_limit_pos_aux one_ne_zero hAA hBB hSelf
 
@@ -288,17 +288,17 @@ theorem dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hOverlap :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
         (nhds (1 : ℝ))) :
     D₁ = D₂ := by
   by_contra hdim
   have hzero :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A B N) Filter.atTop
         (nhds (0 : ℂ)) :=
     mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
       A B hA_irr hB_irr hA_norm hB_norm hdim
   have hnorm_zero :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
         (nhds (0 : ℝ)) := by
     simpa using hzero.norm
   exact one_ne_zero (tendsto_nhds_unique hOverlap hnorm_zero)
@@ -320,7 +320,7 @@ mixed-transfer trace identity, with no proportionality hypothesis required. -/
 theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
     (A B : MPSTensor d D)
     (hOverlap :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
         (nhds (1 : ℝ))) :
     1 ≤ Kraus.mixedTransferSpectralRadius A B := by
   by_contra hlt
@@ -332,12 +332,12 @@ theorem mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one
             (Kraus.mixedMapLM (d := d) (D₁ := D) (D₂ := D) A B)) < 1 := by
     simpa [Kraus.mixedTransferSpectralRadius] using hlt
   have hzero :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A B N) Filter.atTop
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A B N) Filter.atTop
         (nhds (0 : ℂ)) :=
     mpvOverlap_tendsto_zero_of_mixedTransferSpectralRadius_lt_one
       (A := A) (B := B) hlt'
   have hnorm_zero :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
         (nhds (0 : ℝ)) := by
     simpa using hzero.norm
   have h01 : (1 : ℝ) = 0 := tendsto_nhds_unique hOverlap hnorm_zero
@@ -375,7 +375,7 @@ theorem gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hOverlap :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
         (nhds (1 : ℝ))) :
     GaugePhaseEquiv A B :=
   modulus_one_eigenvalue_implies_gauge_of_irreducible_TP
@@ -574,13 +574,13 @@ required. -/
 theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hA_self :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)))
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A A N) Filter.atTop (nhds (1 : ℂ)))
     (hB_self :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) B B N) Filter.atTop (nhds (1 : ℂ)))
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) B B N) Filter.atTop (nhds (1 : ℂ)))
     (hProp :
       ∀ᶠ N in Filter.atTop, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
         mpv A σ = c * mpv B σ) :
-    Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+    Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
       (nhds (1 : ℝ)) := by
   classical
   let proportionalAt : ℕ → Prop := fun N =>
@@ -600,8 +600,8 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
     rw [dite_eq_left hN']
     simpa [mpv, coeff] using Classical.choose_spec hN' σ
   have hOverlapAB :
-      (fun N => mpvOverlap (d := d) A B N) =ᶠ[Filter.atTop]
-        fun N => c N * mpvOverlap (d := d) B B N := by
+      (fun N => mpvOverlap (α := Fin d) A B N) =ᶠ[Filter.atTop]
+        fun N => c N * mpvOverlap (α := Fin d) B B N := by
     filter_upwards [hc_event] with N hc
     unfold mpvOverlap
     rw [Finset.mul_sum]
@@ -610,8 +610,8 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
     rw [hc σ]
     ring
   have hOverlapAA :
-      (fun N => mpvOverlap (d := d) A A N) =ᶠ[Filter.atTop]
-        fun N => (c N * star (c N)) * mpvOverlap (d := d) B B N := by
+      (fun N => mpvOverlap (α := Fin d) A A N) =ᶠ[Filter.atTop]
+        fun N => (c N * star (c N)) * mpvOverlap (α := Fin d) B B N := by
     filter_upwards [hc_event] with N hc
     unfold mpvOverlap
     rw [Finset.mul_sum]
@@ -621,44 +621,44 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
     simp only [star_mul]
     ring
   have hA_self_norm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A A N‖) Filter.atTop
         (nhds (1 : ℝ)) := by
     simpa using hA_self.norm
   have hB_self_norm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) B B N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) B B N‖) Filter.atTop
         (nhds (1 : ℝ)) := by
     simpa using hB_self.norm
   have hRatio :
       Filter.Tendsto
-        (fun N => ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖)
+        (fun N => ‖mpvOverlap (α := Fin d) A A N‖ / ‖mpvOverlap (α := Fin d) B B N‖)
         Filter.atTop (nhds (1 : ℝ)) := by
     have hdiv := hA_self_norm.div hB_self_norm one_ne_zero
     have hfun :
-        ((fun N => ‖mpvOverlap (d := d) A A N‖) /
-          (fun N => ‖mpvOverlap (d := d) B B N‖)) =
-            (fun N => ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖) := by
+        ((fun N => ‖mpvOverlap (α := Fin d) A A N‖) /
+          (fun N => ‖mpvOverlap (α := Fin d) B B N‖)) =
+            (fun N => ‖mpvOverlap (α := Fin d) A A N‖ / ‖mpvOverlap (α := Fin d) B B N‖) := by
       funext N
       rfl
     simpa [hfun] using hdiv
   have hB_self_norm_ne :
-      (∀ᶠ N in Filter.atTop, ‖mpvOverlap (d := d) B B N‖ ≠ (0 : ℝ)) :=
+      (∀ᶠ N in Filter.atTop, ‖mpvOverlap (α := Fin d) B B N‖ ≠ (0 : ℝ)) :=
     hB_self_norm.eventually_ne one_ne_zero
   have hRatio_eq :
-      (fun N => ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖)
+      (fun N => ‖mpvOverlap (α := Fin d) A A N‖ / ‖mpvOverlap (α := Fin d) B B N‖)
         =ᶠ[Filter.atTop] fun N => ‖c N‖ ^ 2 := by
     filter_upwards [hOverlapAA, hB_self_norm_ne] with N hAA hN
     calc
-      ‖mpvOverlap (d := d) A A N‖ / ‖mpvOverlap (d := d) B B N‖
-          = ‖(c N * star (c N)) * mpvOverlap (d := d) B B N‖ /
-              ‖mpvOverlap (d := d) B B N‖ := by
+      ‖mpvOverlap (α := Fin d) A A N‖ / ‖mpvOverlap (α := Fin d) B B N‖
+          = ‖(c N * star (c N)) * mpvOverlap (α := Fin d) B B N‖ /
+              ‖mpvOverlap (α := Fin d) B B N‖ := by
                 simp [hAA]
-      _ = (‖c N * star (c N)‖ * ‖mpvOverlap (d := d) B B N‖) /
-            ‖mpvOverlap (d := d) B B N‖ := by
+      _ = (‖c N * star (c N)‖ * ‖mpvOverlap (α := Fin d) B B N‖) /
+            ‖mpvOverlap (α := Fin d) B B N‖ := by
                 simp
       _ = ‖c N * star (c N)‖ := by
             simpa using
               (mul_div_cancel_right₀ (a := ‖c N * star (c N)‖)
-                (b := ‖mpvOverlap (d := d) B B N‖) hN)
+                (b := ‖mpvOverlap (α := Fin d) B B N‖) hN)
       _ = ‖c N‖ ^ 2 := by
             simp [pow_two]
   have hc_normsq :
@@ -668,15 +668,15 @@ theorem mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
       Filter.Tendsto (fun N => ‖c N‖) Filter.atTop (nhds (1 : ℝ)) := by
     simpa [Real.sqrt_sq (norm_nonneg _)] using hc_normsq.sqrt
   have hCrossNorm :
-      Filter.Tendsto (fun N => ‖mpvOverlap (d := d) A B N‖) Filter.atTop
+      Filter.Tendsto (fun N => ‖mpvOverlap (α := Fin d) A B N‖) Filter.atTop
         (nhds (1 : ℝ)) := by
     have hmul :
-        Filter.Tendsto (fun N => ‖c N‖ * ‖mpvOverlap (d := d) B B N‖)
+        Filter.Tendsto (fun N => ‖c N‖ * ‖mpvOverlap (α := Fin d) B B N‖)
           Filter.atTop (nhds (1 : ℝ)) := by
       simpa using hc_norm.mul hB_self_norm
     have hCross_eq :
-        (fun N => ‖mpvOverlap (d := d) A B N‖) =ᶠ[Filter.atTop]
-          fun N => ‖c N‖ * ‖mpvOverlap (d := d) B B N‖ := by
+        (fun N => ‖mpvOverlap (α := Fin d) A B N‖) =ᶠ[Filter.atTop]
+          fun N => ‖c N‖ * ‖mpvOverlap (α := Fin d) B B N‖ := by
       filter_upwards [hOverlapAB] with N hAB
       simp [hAB]
     exact Filter.Tendsto.congr' hCross_eq.symm hmul
@@ -693,9 +693,9 @@ theorem exists_ge_not_forall_mpv_eq_mul_of_not_gaugePhaseEquiv_of_irreducible_TP
     (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * B i = 1)
     (hA_self :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)))
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) A A N) Filter.atTop (nhds (1 : ℂ)))
     (hB_self :
-      Filter.Tendsto (fun N => mpvOverlap (d := d) B B N) Filter.atTop (nhds (1 : ℂ)))
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) B B N) Filter.atTop (nhds (1 : ℂ)))
     (hNot : ¬ GaugePhaseEquiv A B) (Nmin : ℕ) :
     ∃ N : ℕ, Nmin ≤ N ∧
       ¬ ∃ c : ℂ, ∀ σ : Fin N → Fin d, mpv A σ = c * mpv B σ := by

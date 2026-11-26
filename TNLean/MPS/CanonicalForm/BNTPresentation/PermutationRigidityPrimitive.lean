@@ -53,14 +53,14 @@ namespace MPSTensor
 
 private lemma tendsto_mpvInner_zero_of_overlap_zero
     {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (h : Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds (0 : ℂ))) :
+    (h : Tendsto (fun N => mpvOverlap (α := Fin d) A B N) atTop (nhds (0 : ℂ))) :
     Tendsto (fun N => mpvInner (d := d) A B N) atTop (nhds (0 : ℂ)) := by
   have h' := h.star
   simpa only [mpvOverlap_eq_star_mpvInner, star_star, star_zero] using h'
 
 private lemma tendsto_mpvInner_one_of_overlap_one
     {d D : ℕ} (A : MPSTensor d D)
-    (h : Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ))) :
+    (h : Tendsto (fun N => mpvOverlap (α := Fin d) A A N) atTop (nhds (1 : ℂ))) :
     Tendsto (fun N => mpvInner (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   have h' := h.star
   simpa only [mpvOverlap_eq_star_mpvInner, star_star, star_one] using h'
@@ -91,10 +91,10 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     (hB_inj : ∀ j, Kraus.IsInjective (B j))
     (hA_norm : ∀ j, (∑ i : Fin d, (A j i)ᴴ * (A j i)) = 1)
     (hB_norm : ∀ j, (∑ i : Fin d, (B j i)ᴴ * (B j i)) = 1)
-    (hA_self : ∀ j, Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
-    (hA_off : ∀ i j, i ≠ j → Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0))
-    (hB_self : ∀ j, Tendsto (fun N => mpvOverlap (d := d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
-    (hB_off : ∀ i j, i ≠ j → Tendsto (fun N => mpvOverlap (d := d) (B i) (B j) N) atTop (nhds 0))
+    (hA_self : ∀ j, Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (hA_off : ∀ i j, i ≠ j → Tendsto (fun N => mpvOverlap (A i) (A j) N) atTop (nhds 0))
+    (hB_self : ∀ j, Tendsto (fun N => mpvOverlap (α := Fin d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
+    (hB_off : ∀ i j, i ≠ j → Tendsto (fun N => mpvOverlap (B i) (B j) N) atTop (nhds 0))
     (hspan : ∀ᶠ N : ℕ in atTop,
       Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (d := d) (A j) N))
       =
@@ -171,7 +171,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
   -- ═══════════════════════════════════════════════════════════════════════════
   have exists_nonzero_overlap : ∀ j : Fin g,
       ∃ i : Fin g,
-        ¬ Tendsto (fun N => mpvOverlap (d := d) (A i) (B j) N) atTop (nhds (0 : ℂ)) := by
+        ¬ Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (B j) N) atTop (nhds (0 : ℂ)) := by
     intro j
     by_contra hall
     push Not at hall
@@ -260,7 +260,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
   --
   let f : Fin g → Fin g := fun j => (exists_nonzero_overlap j).choose
   have hf_spec : ∀ j : Fin g,
-      ¬ Tendsto (fun N => mpvOverlap (d := d) (A (f j)) (B j) N) atTop (nhds (0 : ℂ)) :=
+      ¬ Tendsto (fun N => mpvOverlap (α := Fin d) (A (f j)) (B j) N) atTop (nhds (0 : ℂ)) :=
     fun j => (exists_nonzero_overlap j).choose_spec
   --
   have hf_dim : ∀ j : Fin g, dimA (f j) = dimB j := by
@@ -293,7 +293,7 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
   have hf_inj : Function.Injective f := by
     intro j1 j2 hfj
     by_contra hne
-    have h_cross : Tendsto (fun N => mpvOverlap (d := d) (B j1) (B j2) N) atTop (nhds 0) :=
+    have h_cross : Tendsto (fun N => mpvOverlap (α := Fin d) (B j1) (B j2) N) atTop (nhds 0) :=
       hB_off j1 j2 hne
     --
     obtain ⟨X1, ζ1, _, hX1⟩ := hf_gauge j1
@@ -311,15 +311,15 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     --
     -- Self-overlap of A(f j1) in norm → 1.
     have hAA_norm_tendsto :
-        Tendsto (fun N => ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖) atTop (nhds 1) := by
+        Tendsto (fun N => ‖mpvOverlap (α := Fin d) (A (f j1)) (A (f j1)) N‖) atTop (nhds 1) := by
       simpa only [norm_one] using (hA_self (f j1)).norm
     --
     -- BB overlap norms → 1.
     have hBB1_norm :
-        Tendsto (fun N => ‖mpvOverlap (d := d) (B j1) (B j1) N‖) atTop (nhds 1) := by
+        Tendsto (fun N => ‖mpvOverlap (α := Fin d) (B j1) (B j1) N‖) atTop (nhds 1) := by
       simpa only [norm_one] using (hB_self j1).norm
     have hBB2_norm :
-        Tendsto (fun N => ‖mpvOverlap (d := d) (B j2) (B j2) N‖) atTop (nhds 1) := by
+        Tendsto (fun N => ‖mpvOverlap (α := Fin d) (B j2) (B j2) N‖) atTop (nhds 1) := by
       simpa only [norm_one] using (hB_self j2).norm
     --
     have hζ1_norm : ‖ζ1‖ = 1 :=
@@ -333,9 +333,9 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
     --
     -- Cross overlap.
     have hCross_eq : ∀ N : ℕ,
-        mpvOverlap (d := d) (B j1) (B j2) N =
+        mpvOverlap (α := Fin d) (B j1) (B j2) N =
         (ζ1 * star ζ2) ^ N *
-          mpvOverlap (d := d) (A (f j1)) (A (f j1)) N :=
+          mpvOverlap (α := Fin d) (A (f j1)) (A (f j1)) N :=
       mpvOverlap_cross_scale_of_mpv_eq_pow_mul
         (A := A (f j1)) (B1 := B j1) (B2 := B j2) (ζ1 := ζ1) (ζ2 := ζ2)
         hmpv1 hmpv2
@@ -346,20 +346,20 @@ theorem exists_perm_dimEq_gaugePhaseEquiv_of_overlapOrtho
       rw [norm_mul, hζ2_star, hζ1_norm, hζ2_norm, mul_one]
     --
     have hCross_norm_one :
-        Tendsto (fun N => ‖mpvOverlap (d := d) (B j1) (B j2) N‖) atTop (nhds 1) := by
-      have heq : (fun N => ‖mpvOverlap (d := d) (B j1) (B j2) N‖) =
+        Tendsto (fun N => ‖mpvOverlap (α := Fin d) (B j1) (B j2) N‖) atTop (nhds 1) := by
+      have heq : (fun N => ‖mpvOverlap (α := Fin d) (B j1) (B j2) N‖) =
           fun N => ‖(ζ1 * star ζ2) ^ N‖ *
-            ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖ := by
+            ‖mpvOverlap (α := Fin d) (A (f j1)) (A (f j1)) N‖ := by
         ext N; rw [hCross_eq, norm_mul]
       rw [heq]
       have : (fun N => ‖(ζ1 * star ζ2) ^ N‖ *
-          ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖) =
-          fun N => 1 * ‖mpvOverlap (d := d) (A (f j1)) (A (f j1)) N‖ := by
+          ‖mpvOverlap (α := Fin d) (A (f j1)) (A (f j1)) N‖) =
+          fun N => 1 * ‖mpvOverlap (α := Fin d) (A (f j1)) (A (f j1)) N‖ := by
         ext N; rw [norm_pow, hNormζ, one_pow]
       rw [this]; simpa only [one_mul] using hAA_norm_tendsto
     --
     have hCross_norm_zero :
-        Tendsto (fun N => ‖mpvOverlap (d := d) (B j1) (B j2) N‖) atTop (nhds 0) := by
+        Tendsto (fun N => ‖mpvOverlap (α := Fin d) (B j1) (B j2) N‖) atTop (nhds 0) := by
       simpa only [norm_zero] using h_cross.norm
     --
     exact zero_ne_one (tendsto_nhds_unique hCross_norm_zero hCross_norm_one)
@@ -435,12 +435,12 @@ lemma exists_eq_numBlocks_and_equiv_gaugePhase_of_overlapOrtho
     (hB_inj : ∀ j, Kraus.IsInjective (B j))
     (hA_norm : ∀ j, (∑ i : Fin d, (A j i)ᴴ * (A j i)) = 1)
     (hB_norm : ∀ j, (∑ i : Fin d, (B j i)ᴴ * (B j i)) = 1)
-    (hA_self : ∀ j, Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+    (hA_self : ∀ j, Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (hA_off : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0))
-    (hB_self : ∀ j, Tendsto (fun N => mpvOverlap (d := d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A j) N) atTop (nhds 0))
+    (hB_self : ∀ j, Tendsto (fun N => mpvOverlap (α := Fin d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
     (hB_off : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (B i) (B j) N) atTop (nhds 0))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (B i) (B j) N) atTop (nhds 0))
     (hspan : ∀ᶠ N : ℕ in atTop,
       Submodule.span ℂ (Set.range (fun j : Fin gA => mpvState (d := d) (A j) N))
         =

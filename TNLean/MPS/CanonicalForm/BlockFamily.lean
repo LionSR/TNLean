@@ -149,7 +149,7 @@ structure HasNormalizedSelfOverlap {r : ℕ} {dim : Fin r → ℕ}
   /-- Literature-normalized aperiodicity / overlap normalization. -/
   overlap_tendsto_one :
     ∀ k,
-      Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
         Filter.atTop (nhds (1 : ℂ))
 
 namespace HasNormalizedSelfOverlap
@@ -160,7 +160,7 @@ variable {A : (k : Fin r) → MPSTensor d (dim k)}
 /-- Build `HasNormalizedSelfOverlap` from pointwise self-overlap convergence. -/
 theorem ofForall
     (hA : ∀ k,
-      Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
         Filter.atTop (nhds (1 : ℂ))) :
     HasNormalizedSelfOverlap (d := d) A where
   overlap_tendsto_one := hA
@@ -200,7 +200,7 @@ structure IsCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
   `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
   overlap_tendsto_one :
     ∀ k,
-      Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
         Filter.atTop (nhds (1 : ℂ))
 
 namespace IsCanonicalForm
@@ -301,7 +301,7 @@ This is a direct re-use of
 `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible`. -/
 theorem overlap_tendsto_one
     (hNCF : IsNormalCanonicalForm μ A) (k : Fin r) :
-    Filter.Tendsto (fun N => mpvOverlap (d := d) (A k) (A k) N)
+    Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A k) (A k) N)
       Filter.atTop (nhds (1 : ℂ)) := by
   let : NeZero (dim k) := ⟨Nat.ne_of_gt (hNCF.dim_pos k)⟩
   simpa using

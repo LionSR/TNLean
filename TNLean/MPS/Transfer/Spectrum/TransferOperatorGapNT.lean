@@ -200,9 +200,9 @@ theorem tendsto_mpvOverlap_uncast_left
     {d D₁ D₂ : ℕ} (hdim : D₁ = D₂)
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hcast :
-      Tendsto (fun N => mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B N)
+      Tendsto (fun N => mpvOverlap (α := Fin d) (cast (congr_arg (MPSTensor d) hdim) A) B N)
         atTop (nhds 0)) :
-    Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds 0) :=
+    Tendsto (fun N => mpvOverlap (α := Fin d) A B N) atTop (nhds 0) :=
   hcast.congr fun N => mpvOverlap_cast_dim_left hdim A B N
 
 /-- If the left tensor is cast along a dimension equality, then the irreducible / TP
@@ -215,7 +215,7 @@ theorem mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_
     (hB_norm : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
     (hNot :
       ¬ GaugePhaseEquiv (α := Fin d) (cast (congr_arg (MPSTensor d) hdim) A) B) :
-    Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds 0) := by
+    Tendsto (fun N => mpvOverlap (α := Fin d) A B N) atTop (nhds 0) := by
   have hAcst_irr : Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) hdim) A) :=
     (isIrreducibleFamily_cast_dim hdim A).mpr hA_irr
   have hAcst_norm :

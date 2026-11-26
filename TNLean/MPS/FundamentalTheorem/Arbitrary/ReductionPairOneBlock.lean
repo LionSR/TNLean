@@ -22,9 +22,9 @@ and states behave under transposition.
 
 ## Main results
 
-* `MPSTensor.IsReduction.transpose`, `MPSTensor.sameMPV₂Pos_transpose_iff`: transposition.
+* `MPTensor.IsReduction.transpose`, `MPSTensor.sameMPV₂Pos_transpose_iff`: transposition.
 * `MPSTensor.tfae_sameMPV₂Pos_multiBlockCompression_isReduction`,
-  `MPSTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_sameMPV₂Pos`,
+  `MPTensor.IsReduction.evalWord_reductionResidual_eq_zero_of_sameMPV₂Pos`,
   `IsReduction.exists_ne_zero_mul_evalWord_eq_smul_and_evalWord_mul_eq_inv_smul_of_sameMPV₂Pos`:
   the theorem on one block.
 -/
@@ -49,7 +49,8 @@ private theorem evalWord_transpose_letters {n : ℕ} (A : MPSTensor d n) (w : Li
 /-- **Transposed reduction pairs**. If
 `(P, E)` is a reduction pair from `B` to `C`, then `(Eᵀ, Pᵀ)` is a reduction pair from `Bᵀ` to
 `Cᵀ`, the tensors with letters `(B^i)ᵀ` and `(C^i)ᵀ`. -/
-theorem IsReduction.transpose {P : Matrix (Fin c) (Fin D) ℂ} {E : Matrix (Fin D) (Fin c) ℂ}
+theorem _root_.MPTensor.IsReduction.transpose {P : Matrix (Fin c) (Fin D) ℂ} {E : Matrix (Fin D)
+    (Fin c) ℂ}
     (h : IsReduction B C P E) :
     IsReduction (fun i => (B i)ᵀ) (fun i => (C i)ᵀ) Eᵀ Pᵀ := by
   refine ⟨by rw [← Matrix.transpose_mul, h.mul_eq_one, Matrix.transpose_one], fun w => ?_⟩
@@ -355,7 +356,13 @@ theorem tfae_sameMPV₂Pos_multiBlockCompression_isReduction (hirr : Matrix.IsIr
         trace_evalWord_eq_zero_of_forall_length_eq hn hw, add_zero]
   tfae_finish
 
-namespace IsReduction
+end MPSTensor
+
+namespace MPTensor.IsReduction
+
+open MPSTensor WordAlgebra
+
+variable {d D c : ℕ} {B : MPSTensor d D} {C : MPSTensor d c}
 
 variable {P : Matrix (Fin c) (Fin D) ℂ} {E : Matrix (Fin D) (Fin c) ℂ}
 
@@ -405,6 +412,4 @@ theorem exists_ne_zero_mul_evalWord_eq_smul_and_evalWord_mul_eq_inv_smul_of_same
   refine ⟨l, hl, fun w hw => ⟨hP w hw, ?_⟩⟩
   rw [hE' w hw, eq_inv_of_mul_eq_one_right hlm]
 
-end IsReduction
-
-end MPSTensor
+end MPTensor.IsReduction

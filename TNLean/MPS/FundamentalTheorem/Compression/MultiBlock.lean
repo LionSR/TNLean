@@ -245,7 +245,7 @@ theorem left_mul_evalWord_mul_right (s : {s // s ∈ S}) (w : List (Fin d)) :
 
 /-- Each slot of a multi-block compression is a rectangular reduction of `B`. -/
 theorem isReduction (s : {s // s ∈ S}) :
-    MPSTensor.IsReduction B (C s.1) (P.left s) (P.right s) :=
+    MPTensor.IsReduction B (C s.1) (P.left s) (P.right s) :=
   ⟨P.left_mul_right_self s, P.left_mul_evalWord_mul_right s⟩
 
 /-- **The remainder** `R^i = B^i - ∑_s V_s C_s^i W_s` (P5 note,

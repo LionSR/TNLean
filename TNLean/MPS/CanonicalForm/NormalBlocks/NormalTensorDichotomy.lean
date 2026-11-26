@@ -49,10 +49,10 @@ are related by an invertible gauge and a unit phase. -/
 theorem IsNormalTensor.overlap_dichotomy
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
-    (Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds 1) ∧
-      Tendsto (fun N ↦ mpvOverlap (d := d) B B N) atTop (nhds 1)) ∧
-        (Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) ∨
-          (Tendsto (fun N ↦ ‖mpvOverlap (d := d) A B N‖) atTop (nhds (1 : ℝ)) ∧
+    (Tendsto (fun N ↦ mpvOverlap (α := Fin d) A A N) atTop (nhds 1) ∧
+      Tendsto (fun N ↦ mpvOverlap (α := Fin d) B B N) atTop (nhds 1)) ∧
+        (Tendsto (fun N ↦ mpvOverlap (α := Fin d) A B N) atTop (nhds 0) ∨
+          (Tendsto (fun N ↦ ‖mpvOverlap (α := Fin d) A B N‖) atTop (nhds (1 : ℝ)) ∧
             ∃ hdim : D₁ = D₂,
               ∃ X : GL (Fin D₂) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
                 ∀ i, B i = ζ • ((X : Matrix (Fin D₂) (Fin D₂) ℂ) *
@@ -66,7 +66,7 @@ theorem IsNormalTensor.overlap_dichotomy
   let A' := Kraus.tpGauge (d := d) (D := D₁) A σA
   let B' := Kraus.tpGauge (d := d) (D := D₂) B σB
   have hOverlapGauge : ∀ N,
-      mpvOverlap (d := d) A B N = mpvOverlap (d := d) A' B' N := by
+      mpvOverlap (α := Fin d) A B N = mpvOverlap (α := Fin d) A' B' N := by
     intro N
     apply Finset.sum_congr rfl
     intro w _hw
@@ -85,14 +85,14 @@ theorem IsNormalTensor.overlap_dichotomy
           (A := cast (congr_arg (MPSTensor d) hdim) A) (B := B) X ζ hrel N w,
           mpv_cast_dim hdim A N w]
       have hCrossEq : ∀ N,
-          mpvOverlap (d := d) A B N =
-            (star ζ) ^ N * mpvOverlap (d := d) A A N :=
+          mpvOverlap (α := Fin d) A B N =
+            (star ζ) ^ N * mpvOverlap (α := Fin d) A A N :=
         mpvOverlap_eq_star_pow_mul_self_of_mpv_eq_pow_mul hmpv
       have hCrossNormEq : ∀ N,
-          ‖mpvOverlap (d := d) A B N‖ = ‖mpvOverlap (d := d) A A N‖ := by
+          ‖mpvOverlap (α := Fin d) A B N‖ = ‖mpvOverlap (α := Fin d) A A N‖ := by
         intro N
         rw [hCrossEq N, norm_mul, norm_pow, norm_star, hζnorm, one_pow, one_mul]
-      have hSelfNorm : Tendsto (fun N ↦ ‖mpvOverlap (d := d) A A N‖)
+      have hSelfNorm : Tendsto (fun N ↦ ‖mpvOverlap (α := Fin d) A A N‖)
           atTop (nhds (1 : ℝ)) := by
         simpa using hA.selfOverlap_tendsto_one.norm
       refine ⟨hSelfNorm.congr fun N ↦ (hCrossNormEq N).symm, hdim, X, ζ, hζnorm, hrel⟩
@@ -120,7 +120,7 @@ raised to that length. -/
 theorem IsNormalTensor.mpv_phase_alternative
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B) :
-    Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) ∨
+    Tendsto (fun N ↦ mpvOverlap (α := Fin d) A B N) atTop (nhds 0) ∨
       ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ N,
         mpvState (d := d) B N = ζ ^ N • mpvState (d := d) A N := by
   have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
@@ -144,7 +144,7 @@ theorem overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (hNot : ¬ MPVBlockPhaseEquiv A B) :
-    Tendsto (fun N ↦ mpvOverlap (d := d) A B N) atTop (nhds 0) := by
+    Tendsto (fun N ↦ mpvOverlap (α := Fin d) A B N) atTop (nhds 0) := by
   have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
   have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   rcases hA.mpv_phase_alternative hB with hZero | ⟨ζ, hζ, hState⟩
@@ -183,13 +183,13 @@ theorem _root_.MPTensor.EventuallyNonzeroProportionalMPV₂.exists_unit_phase_po
   have hEvent : ∀ᶠ N in atTop, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
       mpv A σ = c * mpv B σ := by
     exact hProp.mono fun _ hN ↦ ⟨hN.choose, hN.choose_spec.2⟩
-  have hCrossNorm : Tendsto (fun N ↦ ‖mpvOverlap (d := d) A B N‖)
+  have hCrossNorm : Tendsto (fun N ↦ ‖mpvOverlap (α := Fin d) A B N‖)
       atTop (nhds (1 : ℝ)) :=
     mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂
       A B hA.selfOverlap_tendsto_one hB.selfOverlap_tendsto_one hEvent
   rcases hA.mpv_phase_alternative hB with hZero | ⟨ζ, hζ, hState⟩
   · exfalso
-    have hZeroNorm : Tendsto (fun N ↦ ‖mpvOverlap (d := d) A B N‖)
+    have hZeroNorm : Tendsto (fun N ↦ ‖mpvOverlap (α := Fin d) A B N‖)
         atTop (nhds (0 : ℝ)) := by
       simpa using hZero.norm
     exact one_ne_zero (tendsto_nhds_unique hCrossNorm hZeroNorm)

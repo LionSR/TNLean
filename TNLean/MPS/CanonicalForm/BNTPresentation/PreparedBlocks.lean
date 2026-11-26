@@ -164,22 +164,22 @@ theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
       (X := X) (Y := Y) hTPX hTPY hPrimX hPrimY hIrrX hIrrY h
   have hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
       mpv Y σ = h.choose ^ N * mpv X σ := h.choose_spec.2
-  have hXX_c : Tendsto (fun N => mpvOverlap (d := d) X X N) atTop (𝓝 (1 : ℂ)) :=
+  have hXX_c : Tendsto (fun N => mpvOverlap (α := Fin d) X X N) atTop (𝓝 (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       (d := d) (D := DX) X hIrrX hTPX hPrimX
-  have hXX : Tendsto (fun N => ‖mpvOverlap (d := d) X X N‖) atTop (𝓝 (1 : ℝ)) := by
+  have hXX : Tendsto (fun N => ‖mpvOverlap (α := Fin d) X X N‖) atTop (𝓝 (1 : ℝ)) := by
     simpa using hXX_c.norm
   have hYX_eq : ∀ N : ℕ, 0 < N →
-      mpvOverlap (d := d) Y X N =
-        h.choose ^ N * mpvOverlap (d := d) X X N := by
+      mpvOverlap (α := Fin d) Y X N =
+        h.choose ^ N * mpvOverlap (α := Fin d) X X N := by
     intro N hN
     exact mpvOverlap_eq_mul_of_mpv_eq_mul
-      (d := d) (A := Y) (B := X) (N := N) (c := h.choose ^ N) (hmpv N hN) X
+      (α := Fin d) (A := Y) (B := X) (N := N) (c := h.choose ^ N) (hmpv N hN) X
   have hYX_norm_eq : ∀ N : ℕ, 0 < N →
-      ‖mpvOverlap (d := d) Y X N‖ = ‖mpvOverlap (d := d) X X N‖ := by
+      ‖mpvOverlap (α := Fin d) Y X N‖ = ‖mpvOverlap (α := Fin d) X X N‖ := by
     intro N hN
     rw [hYX_eq N hN, norm_mul, norm_pow, hζ_norm, one_pow, one_mul]
-  have hYX : Tendsto (fun N => ‖mpvOverlap (d := d) Y X N‖) atTop (𝓝 (1 : ℝ)) :=
+  have hYX : Tendsto (fun N => ‖mpvOverlap (α := Fin d) Y X N‖) atTop (𝓝 (1 : ℝ)) :=
     hXX.congr' (by
       filter_upwards [eventually_ge_atTop 1] with N hN
       exact (hYX_norm_eq N hN).symm)
@@ -217,11 +217,11 @@ theorem gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
   subst DY
   refine ⟨rfl, ?_⟩
   have hX_self :
-      Tendsto (fun N : ℕ => mpvOverlap (d := d) X X N) atTop (nhds (1 : ℂ)) :=
+      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) X X N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       (d := d) (D := DX) X hIrrX hTPX hPrimX
   have hY_self :
-      Tendsto (fun N : ℕ => mpvOverlap (d := d) Y Y N) atTop (nhds (1 : ℂ)) :=
+      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) Y Y N) atTop (nhds (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       (d := d) (D := DX) Y hIrrY hTPY hPrimY
   by_contra hNot
@@ -262,18 +262,18 @@ lemma exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr
     hTPX hTPY hPrimX hPrimY hIrrX hIrrY h
   subst DY
   obtain ⟨G, η, hη, hrel⟩ := hGauge
-  have hXX : Tendsto (fun N => mpvOverlap (d := d) X X N) atTop (𝓝 (1 : ℂ)) :=
+  have hXX : Tendsto (fun N => mpvOverlap (α := Fin d) X X N) atTop (𝓝 (1 : ℂ)) :=
     overlap_tendsto_one_of_peripheralPrimitive_of_irreducible X hIrrX hTPX hPrimX
-  have hEventually : ∀ᶠ N in atTop, mpvOverlap (d := d) X X N ≠ 0 :=
+  have hEventually : ∀ᶠ N in atTop, mpvOverlap (α := Fin d) X X N ≠ 0 :=
     hXX.eventually_ne one_ne_zero
   rw [eventually_atTop] at hEventually
   obtain ⟨N₀, hN₀⟩ := hEventually
   let M := max N₀ 1
-  have hM : mpvOverlap (d := d) X X M ≠ 0 :=
+  have hM : mpvOverlap (α := Fin d) X X M ≠ 0 :=
     hN₀ M (le_max_left _ _)
-  have hM1 : mpvOverlap (d := d) X X (M + 1) ≠ 0 :=
+  have hM1 : mpvOverlap (α := Fin d) X X (M + 1) ≠ 0 :=
     hN₀ (M + 1) (le_trans (le_max_left _ _) (Nat.le_add_right M 1))
-  have exists_coeff (L : ℕ) (hL : mpvOverlap (d := d) X X L ≠ 0) :
+  have exists_coeff (L : ℕ) (hL : mpvOverlap (α := Fin d) X X L ≠ 0) :
       ∃ σ : Fin L → Fin d, mpv X σ ≠ 0 := by
     by_contra hzero
     push Not at hzero
@@ -457,11 +457,11 @@ theorem isBNTCanonicalForm_collapsedBntSectorDecomp_of_tp_primitive_irr_blocks
   have h_lc : ∀ j : Fin P.basisCount, IsLeftCanonical (P.basis j) := by
     intro j; change IsLeftCanonical (blocks (classes.repr j)); exact hTP (classes.repr j)
   have h_self_overlap : ∀ j : Fin P.basisCount,
-      Tendsto (fun N : ℕ => mpvOverlap (d := d) (P.basis j) (P.basis j) N)
+      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (P.basis j) (P.basis j) N)
         atTop (𝓝 (1 : ℂ)) := by
     intro j
     change
-      Tendsto (fun N : ℕ => mpvOverlap (d := d) (blocks (classes.repr j))
+      Tendsto (fun N : ℕ => mpvOverlap (α := Fin d) (blocks (classes.repr j))
         (blocks (classes.repr j)) N) atTop (𝓝 (1 : ℂ))
     exact
       overlap_tendsto_one_of_peripheralPrimitive_of_irreducible

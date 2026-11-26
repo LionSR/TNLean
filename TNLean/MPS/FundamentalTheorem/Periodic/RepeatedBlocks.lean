@@ -260,13 +260,13 @@ structure PeriodicOverlapHypothesis
     (B : (k : Fin rB) → MPSTensor d (dimB k)) where
   /-- For each A-block, ∃ B-block with non-decaying overlap. -/
   exists_nondecaying_A : ∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
-    ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) Filter.atTop (nhds 0)
+    ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j₀) (B k₀) N) Filter.atTop (nhds 0)
   /-- For each B-block, ∃ A-block with non-decaying overlap. -/
   exists_nondecaying_B : ∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
-    ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N) Filter.atTop (nhds 0)
+    ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j₀) (B k₀) N) Filter.atTop (nhds 0)
   /-- Non-decaying cross-family overlap forces `HetRepeatedBlocks`. -/
   hetRepeatedBlocks_of_nondecaying : ∀ j k,
-    ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) Filter.atTop (nhds 0) →
+    ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (B k) N) Filter.atTop (nhds 0) →
     HetRepeatedBlocks (A j) (B k)
 
 /-- Pure bond-space similarities transport a periodic overlap hypothesis back to the
@@ -294,7 +294,7 @@ theorem PeriodicOverlapHypothesis.of_gaugeEquiv
   have hRepB : ∀ k, HetRepeatedBlocks (B k) (B' k) := fun k =>
     (hGaugeB k).toHetRepeatedBlocks
   have hOverlapEq : ∀ j k N,
-      mpvOverlap (d := d) (A j) (B k) N = mpvOverlap (d := d) (A' j) (B' k) N := by
+      mpvOverlap (α := Fin d) (A j) (B k) N = mpvOverlap (α := Fin d) (A' j) (B' k) N := by
     intro j k N
     apply Finset.sum_congr rfl
     intro σ _
@@ -317,7 +317,7 @@ theorem PeriodicOverlapHypothesis.of_gaugeEquiv
     exact hDecay.congr' (Filter.Eventually.of_forall fun N ↦ hOverlapEq j k N)
   · intro j k hNondecay
     have hNondecay' : ¬ Filter.Tendsto
-        (fun N ↦ mpvOverlap (d := d) (A' j) (B' k) N) Filter.atTop (nhds 0) := by
+        (fun N ↦ mpvOverlap (α := Fin d) (A' j) (B' k) N) Filter.atTop (nhds 0) := by
       intro hDecay
       apply hNondecay
       exact hDecay.congr'
@@ -350,10 +350,10 @@ theorem PeriodicOverlapHypothesis.ofIsPeriodic
     (hPerA : ∀ j, IsPeriodic (periodA j) (A j))
     (hPerB : ∀ k, IsPeriodic (periodB k) (B k))
     (hExA : ∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N)
+      ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j₀) (B k₀) N)
         Filter.atTop (nhds 0))
     (hExB : ∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N)
+      ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j₀) (B k₀) N)
         Filter.atTop (nhds 0)) :
     PeriodicOverlapHypothesis A B where
   exists_nondecaying_A := hExA
@@ -394,7 +394,7 @@ theorem peripheralProportionalCase_periodicFT_of_sameMPV₂Pos
     HetRepeatedBlocks A B := by
   rcases periodicOverlapDichotomy A B hA hB with hDecay | ⟨hdim, hRep⟩
   · have hSameOverlap : ∀ᶠ N : ℕ in Filter.atTop,
-        mpvOverlap (d := d) A B N = mpvOverlap A A N := by
+        mpvOverlap (α := Fin d) A B N = mpvOverlap A A N := by
       filter_upwards [Filter.eventually_gt_atTop 0] with N hN
       unfold mpvOverlap
       refine Finset.sum_congr rfl ?_
@@ -467,7 +467,7 @@ theorem fundamentalTheorem_periodic_proportional
   -- Step 1: Matching function from A-blocks to B-blocks.
   let fA : Fin rA → Fin rB := fun j => (hOverlap.exists_nondecaying_A j).choose
   have hfA_nd : ∀ j,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j) (B (fA j)) N)
+      ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (B (fA j)) N)
         Filter.atTop (nhds 0) :=
     fun j => (hOverlap.exists_nondecaying_A j).choose_spec
   -- Step 2: HetRepeatedBlocks from overlap dichotomy.
@@ -487,7 +487,7 @@ theorem fundamentalTheorem_periodic_proportional
   -- Step 4: Matching function from B-blocks to A-blocks, also injective.
   let gB : Fin rB → Fin rA := fun k => (hOverlap.exists_nondecaying_B k).choose
   have hgB_nd : ∀ k,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A (gB k)) (B k) N)
+      ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A (gB k)) (B k) N)
         Filter.atTop (nhds 0) :=
     fun k => (hOverlap.exists_nondecaying_B k).choose_spec
   have hgB_rep : ∀ k, HetRepeatedBlocks (A (gB k)) (B k) :=

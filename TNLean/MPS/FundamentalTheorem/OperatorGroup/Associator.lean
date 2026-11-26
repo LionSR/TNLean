@@ -91,8 +91,8 @@ noncomputable def castIndex {ι : Type*} (f : ι → ℕ) {a b : ι} (e : a = b)
 theorem isReduction_castIndex {ι : Type*} {f : ι → ℕ} {d' n : ℕ}
     {A : (i : ι) → MPSTensor d' (f i)} {B : MPSTensor d' n} {a b : ι}
     {V : Matrix (Fin (f a)) (Fin n) ℂ} {W : Matrix (Fin n) (Fin (f a)) ℂ}
-    (h : MPSTensor.IsReduction B (A a) V W) (e : a = b) :
-    MPSTensor.IsReduction B (A b) (castIndex f e * V) (W * castIndex f e.symm) := by
+    (h : MPTensor.IsReduction B (A a) V W) (e : a = b) :
+    MPTensor.IsReduction B (A b) (castIndex f e * V) (W * castIndex f e.symm) := by
   subst e
   simpa using h
 
@@ -137,8 +137,8 @@ omit [Group G] in
 `b = a`, after identifying the bond spaces. -/
 theorem isReduction_castMat {D : ℕ} {B : MPSTensor (d * d) D} {a b : G}
     {V : Matrix (Fin (F.bondDim a)) (Fin D) ℂ} {W : Matrix (Fin D) (Fin (F.bondDim a)) ℂ}
-    (h : MPSTensor.IsReduction B (F.tensor a).toMPSTensor V W) (e : a = b) :
-    MPSTensor.IsReduction B (F.tensor b).toMPSTensor (F.castMat e * V)
+    (h : MPTensor.IsReduction B (F.tensor a).toMPSTensor V W) (e : a = b) :
+    MPTensor.IsReduction B (F.tensor b).toMPSTensor (F.castMat e * V)
       (W * F.castMat e.symm) :=
   isReduction_castIndex (A := fun g ↦ (F.tensor g).toMPSTensor) h e
 
@@ -152,7 +152,7 @@ structure FusionData (F : GroupFamily G d) where
   V : ∀ g h : G, Matrix (Fin (F.bondDim (g * h))) (Fin (F.bondDim g * F.bondDim h)) ℂ
   /-- The right fusion tensor `F^>_{g,h}`. -/
   W : ∀ g h : G, Matrix (Fin (F.bondDim g * F.bondDim h)) (Fin (F.bondDim (g * h))) ℂ
-  isReduction : ∀ g h, MPSTensor.IsReduction
+  isReduction : ∀ g h, MPTensor.IsReduction
     (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (F.tensor (g * h)).toMPSTensor
     (V g h) (W g h)
 
@@ -211,14 +211,14 @@ noncomputable def rightW (g h k : G) :
 /-- The fusion tree fusing `g` with `h` first reduces the triple product onto the
 tensor of `g * h * k`. -/
 theorem isReduction_left (g h k : G) :
-    MPSTensor.IsReduction (F.tripleTensor g h k).toMPSTensor
+    MPTensor.IsReduction (F.tripleTensor g h k).toMPSTensor
       (F.tensor (g * h * k)).toMPSTensor (fd.leftV g h k) (fd.leftW g h k) :=
   ((fd.isReduction g h).mulTensor_kronId (F.tensor k)).trans (fd.isReduction (g * h) k)
 
 /-- The fusion tree fusing `h` with `k` first reduces the triple product onto the
 tensor of `g * h * k`. -/
 theorem isReduction_right (g h k : G) :
-    MPSTensor.IsReduction (F.tripleTensor g h k).toMPSTensor
+    MPTensor.IsReduction (F.tripleTensor g h k).toMPSTensor
       (F.tensor (g * h * k)).toMPSTensor (fd.rightV g h k) (fd.rightW g h k) :=
   isReduction_castMat ((((fd.isReduction h k).mulTensor_idKron (F.tensor g)).trans
     (fd.isReduction g (h * k))).mulTensor_assoc_left) (mul_assoc g h k).symm
@@ -236,7 +236,7 @@ theorem isReductionResidualNilpotencyBound_left {K : ℕ}
       (fd.V g h) (fd.W g h) K) (g h k : G) :
     MPSTensor.IsReductionResidualNilpotencyBound (F.tripleTensor g h k).toMPSTensor
       (F.tensor (g * h * k)).toMPSTensor (fd.leftV g h k) (fd.leftW g h k) (3 * K) := by
-  have hb := MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans
+  have hb := MPTensor.IsReduction.isReductionResidualNilpotencyBound_trans
     ((fd.isReduction g h).mulTensor_kronId (F.tensor k))
     (isReductionResidualNilpotencyBound_mulTensor_kronId (F.tensor k) (hK g h)) (hK (g * h) k)
   rwa [show 2 * K + K = 3 * K by ring] at hb
@@ -253,7 +253,7 @@ theorem isReductionResidualNilpotencyBound_right {K : ℕ}
       (fd.V g h) (fd.W g h) K) (g h k : G) :
     MPSTensor.IsReductionResidualNilpotencyBound (F.tripleTensor g h k).toMPSTensor
       (F.tensor (g * h * k)).toMPSTensor (fd.rightV g h k) (fd.rightW g h k) (3 * K) := by
-  have hb := MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans
+  have hb := MPTensor.IsReduction.isReductionResidualNilpotencyBound_trans
     ((fd.isReduction h k).mulTensor_idKron (F.tensor g))
     (isReductionResidualNilpotencyBound_mulTensor_idKron (F.tensor g) (hK h k)) (hK g (h * k))
   rw [show 2 * K + K = 3 * K by ring] at hb
@@ -266,7 +266,7 @@ triple product satisfy `V^L T^w = z V^R T^w` for all long words `w`.
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines
 1506--1535. -/
 def IsAssociator (g h k : G) (z : ℂ) : Prop :=
-  MPSTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
+  MPTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
     (fd.leftV g h k) (fd.rightV g h k) z
 
 section
@@ -355,7 +355,7 @@ theorem isAssociator_omega (hF : F.IsNormalRepresentation) (g h k : G) :
 identity is `ω(g,h,k)`. -/
 theorem eq_omega_of_isAssociator (hF : F.IsNormalRepresentation) {g h k : G} {z : ℂ}
     (hz : fd.IsAssociator g h k z) : z = fd.omega g h k :=
-  MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero hz
+  MPTensor.IsDressedProportional.eq_of_forall_exists_ne_zero hz
     (isAssociator_omega hF g h k) (exists_leftV_mul_evalWord_ne_zero hF g h k)
 
 /-- **The anomaly three-cochain is a three-cocycle** (arXiv:2502.20257,
@@ -495,9 +495,9 @@ noncomputable def relativeScalar (fd fd' : FusionData F) : ScalarCocycle G := fu
 `relativeScalar`. -/
 theorem isDressedProportional_relativeScalar (hF : F.IsNormalRepresentation)
     (fd fd' : FusionData F) (g h : G) :
-    MPSTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
       (fd.V g h) (fd'.V g h) (fd.relativeScalar fd' (g, h)) := by
-  have hex : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
+  have hex : ∃ z : ℂ, z ≠ 0 ∧ MPTensor.IsDressedProportional
       (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor (fd.V g h) (fd'.V g h) z :=
     (fd.isReduction g h).exists_isDressedProportional (fd'.isReduction g h)
       (hF.isNormal _) (hF.sameMPV₂Pos_mulTensor g h)
@@ -513,14 +513,14 @@ theorem omega_eq_fusionGauge (hF : F.IsNormalRepresentation) (fd fd' : FusionDat
   have hS : ∀ N, 0 < N → ∀ a b : G,
       mpo (F.tensor a) N * mpo (F.tensor b) N = mpo (F.tensor (a * b)) N :=
     fun N hN a b ↦ hF.operator_mul a b N hN
-  have hleft : MPSTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
+  have hleft : MPTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
       (fd.leftV g h k) (fd'.leftV g h k)
       (fd.relativeScalar fd' (g, h) * fd.relativeScalar fd' (g * h, k)) :=
     (((hβ g h).mulTensor_kronId (F.tensor k)).mul_left (fd.V (g * h) k)).trans
       ((hβ (g * h) k).pullback ((fd'.isReduction g h).mulTensor_kronId (F.tensor k))
         (sameMPV₂Pos_toMPSTensor_of_mpo_eq fun N hN ↦ by
           simp only [mpo_mulTensor, ← hS N hN]))
-  have hright : MPSTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
+  have hright : MPTensor.IsDressedProportional (F.tripleTensor g h k).toMPSTensor
       (fd.rightV g h k) (fd'.rightV g h k)
       (fd.relativeScalar fd' (h, k) * fd.relativeScalar fd' (g, h * k)) :=
     ((((hβ h k).mulTensor_idKron (F.tensor g)).mul_left (fd.V g (h * k))).trans

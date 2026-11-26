@@ -541,7 +541,7 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     (hNondeg : ∀ k, dim k ≠ 0)
     (u v : Fin m) :
     Tendsto
-      (fun k => mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
+      (fun k => mpvOverlap (α := Fin (blockPhysDim d m)) (blocks u) (blocks v) k)
       atTop (nhds (if u = v then (1 : ℂ) else 0)) := by
   classical
   have hCyclic : IsCyclicSectorDecomp A blocks :=
@@ -558,7 +558,7 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     have hSelf :
         Tendsto
           (fun k =>
-            mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks u) k)
+            mpvOverlap (α := Fin (blockPhysDim d m)) (blocks u) (blocks u) k)
           atTop (nhds (1 : ℂ)) :=
       mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
         (blocks u) (hBlocks_lc u) ρ hρ_fix hρ_ne hρ_psd (by
@@ -583,7 +583,7 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
       have hZero :
           Tendsto
             (fun k =>
-              mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
+              mpvOverlap (α := Fin (blockPhysDim d m)) (blocks u) (blocks v) k)
             atTop (nhds (0 : ℂ)) :=
         mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
           hdim (blocks u) (blocks v) hIrr_u hIrr_v
@@ -592,7 +592,7 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     · have hZero :
           Tendsto
             (fun k =>
-              mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) k)
+              mpvOverlap (α := Fin (blockPhysDim d m)) (blocks u) (blocks v) k)
             atTop (nhds (0 : ℂ)) :=
         mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
           (blocks u) (blocks v) hIrr_u hIrr_v
@@ -649,17 +649,17 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
       (φ k X).1 = V k * X * (V k)ᴴ)
     (hNondeg : ∀ k, dim k ≠ 0) :
     Tendsto
-      (fun k => mpvOverlap (d := blockPhysDim d m)
+      (fun k => mpvOverlap (α := Fin (blockPhysDim d m))
         (blockTensor (d := d) (n := Fin D) A m)
         (blockTensor (d := d) (n := Fin D) A m) k)
       atTop (nhds (m : ℂ)) := by
   classical
   have hOverlap_eq : ∀ N,
-      mpvOverlap (d := blockPhysDim d m)
+      mpvOverlap (α := Fin (blockPhysDim d m))
           (blockTensor (d := d) (n := Fin D) A m)
           (blockTensor (d := d) (n := Fin D) A m) N =
         ∑ u : Fin m, ∑ v : Fin m,
-          mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N := by
+          mpvOverlap (α := Fin (blockPhysDim d m)) (blocks u) (blocks v) N := by
     intro N
     exact mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
       (blockTensor (d := d) (n := Fin D) A m)
@@ -668,7 +668,7 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
   have hInner : ∀ u : Fin m,
       Tendsto
         (fun N => ∑ v : Fin m,
-          mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N)
+          mpvOverlap (α := Fin (blockPhysDim d m)) (blocks u) (blocks v) N)
         atTop (nhds (∑ v : Fin m, if u = v then (1 : ℂ) else 0)) := by
     intro u
     exact tendsto_finsetSum (s := Finset.univ) fun v _ =>
@@ -678,7 +678,7 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
   have hSum :
       Tendsto
         (fun N => ∑ u : Fin m, ∑ v : Fin m,
-          mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N)
+          mpvOverlap (α := Fin (blockPhysDim d m)) (blocks u) (blocks v) N)
         atTop (nhds (∑ u : Fin m, ∑ v : Fin m, if u = v then (1 : ℂ) else 0)) := by
     exact tendsto_finsetSum (s := Finset.univ) fun u _ => hInner u
   have hLimit :
@@ -707,7 +707,7 @@ theorem periodicSelfOverlap_tendsto
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclicRaw k
   have hBlocked :
       Tendsto
-        (fun k => mpvOverlap (d := blockPhysDim d m)
+        (fun k => mpvOverlap (α := Fin (blockPhysDim d m))
           (blockTensor (d := d) (n := Fin D) A m)
           (blockTensor (d := d) (n := Fin D) A m) k)
         atTop (nhds (m : ℂ)) :=

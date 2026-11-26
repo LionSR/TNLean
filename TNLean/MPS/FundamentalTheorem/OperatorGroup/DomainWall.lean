@@ -189,7 +189,7 @@ theorem physAct_mulTensor (M : MPOTensor d D₁) (N : MPOTensor d D₂)
 reduces the physical action of `X` onto that of `Y`. -/
 theorem physAct_kronId {X : MPOTensor d D₂} {Y : MPOTensor d D₁}
     {V : Matrix (Fin D₁) (Fin D₂) ℂ} {W : Matrix (Fin D₂) (Fin D₁) ℂ}
-    (h : MPSTensor.IsReduction X.toMPSTensor Y.toMPSTensor V W)
+    (h : MPTensor.IsReduction X.toMPSTensor Y.toMPSTensor V W)
     (P : (Fin L → Fin d) → Matrix (Fin m) (Fin n) ℂ) (σ : Fin L → Fin d) :
     kronId V m * physAct X P σ * kronId W n = physAct Y P σ := by
   rw [physAct, physAct, kronId, kronId, Matrix.submatrix_mul_equiv,
@@ -424,13 +424,13 @@ noncomputable def fuseW (g h : G) (x : X) :
     Matrix (Fin (F.bondDim g * F.bondDim h * D x)) (Fin (D (g • h • x))) ℂ :=
   kronId (fd.W g h) (D x) * ad.W (g * h) x * castIndex D (mul_smul g h x).symm
 
-theorem isReduction_actV (g h : G) (x : X) : MPSTensor.IsReduction
+theorem isReduction_actV (g h : G) (x : X) : MPTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (A (g • h • x)) (ad.actV g h x)
       (ad.actW g h x) :=
   (((ad.isReduction h x).actTensor_idKron (F.tensor g)).trans
     (ad.isReduction g (h • x))).actTensor_assoc_left
 
-theorem isReduction_fuseV (g h : G) (x : X) : MPSTensor.IsReduction
+theorem isReduction_fuseV (g h : G) (x : X) : MPTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (A (g • h • x))
       (ad.fuseV fd g h x) (ad.fuseW fd g h x) :=
   isReduction_castIndex (((fd.isReduction g h).actTensor_kronId (A x)).trans
@@ -642,12 +642,12 @@ theorem exists_evalWord_mul_actW_eq (hA : ∀ x, Kraus.IsNormal (A x))
     (ad.isReduction_actV g h x).exists_boundary_dressed_proportional_of_nilpotencyLength_le
       (ad.isReduction_fuseV fd g h x) (hA _) hSame (le_max_left _ _) (le_max_right _ _)
   obtain ⟨N, hN⟩ := exists_forall_le_of_forall_lt hz
-  have hleft : MPSTensor.IsDressedProportional
+  have hleft : MPTensor.IsDressedProportional
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x)) (ad.actV g h x)
         (ad.fuseV fd g h x) z :=
     ⟨N, fun w hw ↦ (hN w hw).1⟩
   have hzL : ((ad.lSymbol fd x g h : ℂˣ) : ℂ) = z :=
-    MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero
+    MPTensor.IsDressedProportional.eq_of_forall_exists_ne_zero
       (isDressedProportional_lSymbol hA hperm x g h) hleft
       ((ad.isReduction_actV g h x).exists_mul_evalWord_ne_zero (hA _) hD)
   refine ⟨N, fun w hw ↦ ?_⟩

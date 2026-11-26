@@ -1151,13 +1151,13 @@ abstracted — record why, so it is not re-proposed).
   `Matrix.mul_sum`/`Matrix.sum_mul`, then `congr 1`, `Finset.sum_congr rfl`, and push the
   boundary onto one factor with `← Matrix.mul_kronecker_mul` and
   `Matrix.one_mul`/`Matrix.mul_one`.
-- **Seen:** fifteen occurrences across four files: `MPSTensor.IsReduction.mulTensor_kronId`,
+- **Seen:** fifteen occurrences across four files: `MPTensor.IsReduction.mulTensor_kronId`,
   `mulTensor_idKron`, `kronId_mul_evalWord_toMPSTensor_mulTensor_ofFn`,
   `idKron_mul_evalWord_toMPSTensor_mulTensor_ofFn` and
   `MPOTensor.mulTensor_mul_kronId_of_intertwine`
-  (`TNLean/MPS/Operator/ReductionComposition.lean`); `MPSTensor.IsReduction.actTensor_idKron`,
+  (`TNLean/MPS/Operator/ReductionComposition.lean`); `MPTensor.IsReduction.actTensor_idKron`,
   `actTensor_kronId`, `MPOTensor.actTensor_mul_kronId_of_intertwine`,
-  `MPSTensor.IsDressedProportional.actTensor_idKron` and `actTensor_kronId`
+  `MPTensor.IsDressedProportional.actTensor_idKron` and `actTensor_kronId`
   (`TNLean/MPS/Operator/ActionTensorReduction.lean`); and the four `hres` steps of
   `MPOTensor.isReductionResidualNilpotencyBound_mulTensor_kronId`, `_mulTensor_idKron`,
   `_actTensor_kronId` and `_actTensor_idKron`
@@ -1177,7 +1177,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:**
   ```lean
   open Classical in
-  ... if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional B X Y z
+  ... if hz : ∃ z : ℂ, z ≠ 0 ∧ MPTensor.IsDressedProportional B X Y z
   then Units.mk0 hz.choose hz.choose_spec.1 else 1
   ```
   with the spec lemma closing by
@@ -2904,7 +2904,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   simp (disch := exact hβ) only [matrix_reciprocal_smul]
   ```
 - **Seen:** three declarations across three files (2026-09-04):
-  `MPSTensor.IsReduction.reciprocal_smul` in `TNLean/MPS/Tensor/Reduction/Reduction.lean`
+  `MPTensor.IsReduction.reciprocal_smul` in `TNLean/MPS/Tensor/Reduction/Reduction.lean`
   (two goals), `MPSTensor.reductionResidual_reciprocal_smul` in
   `TNLean/MPS/Tensor/Reduction/ReductionResidual.lean`, and
   `MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff` in
@@ -7450,13 +7450,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   requires fresh validation. See `docs/audits/2026-11-15_comprehensive_simplification_audit.md`.
 
 ### rectangular reduction from local compression data — candidate
-- **Pattern:** prove `MPSTensor.IsReduction B A V W` by
+- **Pattern:** prove `MPTensor.IsReduction B A V W` by
   `refine ⟨hVW, fun w ↦ ?_⟩` followed by `induction w` with `nil`, singleton,
   and `cons i (cons j w)` cases, the last one rewriting `B i * W * V * B j`
   to `B i * B j` and then splitting the caps off the two factors.
 - **Seen:** one occurrence, in `MPOTensor.CZX.fusion_isReduction`
   (`TNLean/MPS/MPDO/CZX/CZXFusionTensors.lean`), recorded 2026-09-07.
-- **Abstraction:** `MPSTensor.IsReduction.of_local_compression` in
+- **Abstraction:** `MPTensor.IsReduction.of_local_compression` in
   `TNLean/MPS/Tensor/Reduction/Reduction.lean`, taking `V * W = 1`, per-letter
   compression, and the two-letter reinsertion identity.
 - **Notes:** below the rule of three, but the abstraction now sits beside the

@@ -23,14 +23,16 @@ letters is isomorphic, through `P`, to the word module of `C`. No hypothesis on 
 
 ## Main results
 
-* `MPSTensor.mulVec_mem_reachable`, `MPSTensor.IsReduction.mulVec_mem_reachableKer`
-* `MPSTensor.IsReduction.mulVec_mulVec_of_mem_reachable`
-* `MPSTensor.IsReduction.exists_mem_reachable_mulVec_eq`
-* `MPSTensor.IsReduction.disjoint_reachableKer_range`,
-  `MPSTensor.IsReduction.reachableKer_sup_range`
-* `MPSTensor.IsReduction.exists_surjective_wordModule_ker_eq`
-* `MPSTensor.IsReduction.exists_quotient_linearEquiv_wordModule`
+* `MPSTensor.mulVec_mem_reachable`, `MPTensor.IsReduction.mulVec_mem_reachableKer`
+* `MPTensor.IsReduction.mulVec_mulVec_of_mem_reachable`
+* `MPTensor.IsReduction.exists_mem_reachable_mulVec_eq`
+* `MPTensor.IsReduction.disjoint_reachableKer_range`,
+  `MPTensor.IsReduction.reachableKer_sup_range`
+* `MPTensor.IsReduction.exists_surjective_wordModule_ker_eq`
+* `MPTensor.IsReduction.exists_quotient_linearEquiv_wordModule`
 -/
+
+open MPTensor
 
 open WordAlgebra
 open scoped Matrix
@@ -132,13 +134,16 @@ private theorem map_wordSubmodule (B : MPSTensor d D) (V : Submodule ℂ (Fin D 
       rwa [LinearEquiv.apply_symm_apply]
     · simp
 
-namespace IsReduction
+section IsReduction
+
+open MPTensor.IsReduction
 
 variable {B : MPSTensor d D} {C : MPSTensor d c} {P : Matrix (Fin c) (Fin D) ℂ}
   {E : Matrix (Fin D) (Fin c) ℂ}
 
 /-- On the reachable subspace the projection intertwines the letters: `P (B^i x) = C^i (P x)`. -/
-theorem mulVec_mulVec_of_mem_reachable (h : IsReduction B C P E) (i : Fin d)
+theorem _root_.MPTensor.IsReduction.mulVec_mulVec_of_mem_reachable (h : IsReduction B C P E)
+    (i : Fin d)
     {x : Fin D → ℂ} (hx : x ∈ reachable B E) : P *ᵥ (B i *ᵥ x) = C i *ᵥ (P *ᵥ x) := by
   induction hx using Submodule.span_induction with
   | mem x hx =>
@@ -154,21 +159,22 @@ theorem mulVec_mulVec_of_mem_reachable (h : IsReduction B C P E) (i : Fin d)
   | smul a x _ hx => simp only [Matrix.mulVec_smul, hx]
 
 /-- The kernel part `K = U ∩ ker P` is invariant under every letter. -/
-theorem mulVec_mem_reachableKer (h : IsReduction B C P E) (i : Fin d)
+theorem _root_.MPTensor.IsReduction.mulVec_mem_reachableKer (h : IsReduction B C P E) (i : Fin d)
     {x : Fin D → ℂ} (hx : x ∈ reachableKer B P E) : B i *ᵥ x ∈ reachableKer B P E := by
   rw [mem_reachableKer_iff] at hx ⊢
   refine ⟨mulVec_mem_reachable B E i hx.1, ?_⟩
   rw [h.mulVec_mulVec_of_mem_reachable i hx.1, hx.2, Matrix.mulVec_zero]
 
 /-- The projection maps the reachable subspace onto `ℂ^c`. -/
-theorem exists_mem_reachable_mulVec_eq (h : IsReduction B C P E) (v : Fin c → ℂ) :
+theorem _root_.MPTensor.IsReduction.exists_mem_reachable_mulVec_eq (h : IsReduction B C P E)
+    (v : Fin c → ℂ) :
     ∃ x ∈ reachable B E, P *ᵥ x = v := by
   refine ⟨E *ᵥ v, ?_, ?_⟩
   · simpa using evalWord_mulVec_mem_reachable B E [] v
   · rw [Matrix.mulVec_mulVec, h.mul_eq_one, Matrix.one_mulVec]
 
 /-- `K` meets the range of the embedding only in zero. -/
-theorem disjoint_reachableKer_range (h : IsReduction B C P E) :
+theorem _root_.MPTensor.IsReduction.disjoint_reachableKer_range (h : IsReduction B C P E) :
     Disjoint (reachableKer B P E) (LinearMap.range (Matrix.toLin' E)) := by
   rw [Submodule.disjoint_def]
   intro x hx hxE
@@ -178,7 +184,7 @@ theorem disjoint_reachableKer_range (h : IsReduction B C P E) :
   rw [h0, map_zero]
 
 /-- `K` and the range of the embedding together span the reachable subspace: `U = K ⊕ ran E`. -/
-theorem reachableKer_sup_range (h : IsReduction B C P E) :
+theorem _root_.MPTensor.IsReduction.reachableKer_sup_range (h : IsReduction B C P E) :
     reachableKer B P E ⊔ LinearMap.range (Matrix.toLin' E) = reachable B E := by
   have hE : ∀ v : Fin c → ℂ, E *ᵥ v ∈ reachable B E := fun v => by
     simpa using evalWord_mulVec_mem_reachable B E [] v
@@ -196,7 +202,8 @@ theorem reachableKer_sup_range (h : IsReduction B C P E) :
     rw [Matrix.mulVec_sub, Matrix.mulVec_mulVec, h.mul_eq_one, Matrix.one_mulVec, sub_self]
 
 /-- On the reachable subspace the projection intertwines every word. -/
-theorem mulVec_evalWord_mulVec_of_mem_reachable (h : IsReduction B C P E)
+theorem _root_.MPTensor.IsReduction.mulVec_evalWord_mulVec_of_mem_reachable
+    (h : IsReduction B C P E)
     (w : List (Fin d)) {x : Fin D → ℂ} (hx : x ∈ reachable B E) :
     P *ᵥ (Kraus.evalWord B w *ᵥ x) = Kraus.evalWord C w *ᵥ (P *ᵥ x) := by
   induction w with
@@ -207,7 +214,8 @@ theorem mulVec_evalWord_mulVec_of_mem_reachable (h : IsReduction B C P E)
         (evalWord_mulVec_mem (fun j _ hy => mulVec_mem_reachable B E j hy) w hx), ih]
 
 /-- On the reachable subspace the projection intertwines the whole word algebra. -/
-private theorem mulVec_asAlgebraHom_of_mem_reachable (h : IsReduction B C P E)
+private theorem _root_.MPTensor.IsReduction.mulVec_asAlgebraHom_of_mem_reachable
+    (h : IsReduction B C P E)
     (p : WordAlgebra d) {x : Fin D → ℂ} (hx : x ∈ reachable B E) :
     P *ᵥ B.wordRep.asAlgebraHom p x = C.wordRep.asAlgebraHom p (P *ᵥ x) := by
   induction p using MonoidAlgebra.induction_on with
@@ -225,7 +233,7 @@ private theorem mulVec_asAlgebraHom_of_mem_reachable (h : IsReduction B C P E)
 module of `B` whose underlying subspaces are `K` and `U`, and a surjective word-algebra map from
 `U'` onto the word module of `C`, given by `P`, with kernel `K'`. By the first isomorphism theorem
 it induces an isomorphism `U' / K' ≃ C`. -/
-theorem exists_surjective_wordModule_ker_eq (h : IsReduction B C P E) :
+theorem _root_.MPTensor.IsReduction.exists_surjective_wordModule_ker_eq (h : IsReduction B C P E) :
     ∃ (U' K' : Submodule (WordAlgebra d) B.WordModule) (f : U' →ₗ[WordAlgebra d] C.WordModule),
       K' ≤ U' ∧
       (U'.restrictScalars ℂ).map (B.wordRep.asModuleEquiv).toLinearMap = reachable B E ∧
@@ -263,7 +271,8 @@ theorem exists_surjective_wordModule_ker_eq (h : IsReduction B C P E) :
 /-- **`U / K` is isomorphic to the word module of `C`.** There are word-algebra submodules
 `K' ≤ U'` of the word module of `B` whose underlying subspaces are `K` and `U`, and an isomorphism
 of word-algebra modules from `U' / K'` onto the word module of `C`. -/
-theorem exists_quotient_linearEquiv_wordModule (h : IsReduction B C P E) :
+theorem _root_.MPTensor.IsReduction.exists_quotient_linearEquiv_wordModule
+    (h : IsReduction B C P E) :
     ∃ (U' K' : Submodule (WordAlgebra d) B.WordModule), K' ≤ U' ∧
       (U'.restrictScalars ℂ).map (B.wordRep.asModuleEquiv).toLinearMap = reachable B E ∧
       (K'.restrictScalars ℂ).map (B.wordRep.asModuleEquiv).toLinearMap = reachableKer B P E ∧

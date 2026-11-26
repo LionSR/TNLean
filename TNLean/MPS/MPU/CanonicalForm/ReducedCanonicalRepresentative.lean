@@ -53,9 +53,9 @@ variable {d D : ℕ}
 
 private theorem mpvOverlap_two_eq_zero_of_bondDim_eq_zero
     {e E : ℕ} (A : MPSTensor e E) (hE : E = 0) :
-    MPSTensor.mpvOverlap A A 2 = 0 := by
+    MPTensor.mpvOverlap A A 2 = 0 := by
   subst E
-  simp [MPSTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, Matrix.trace]
+  simp [MPTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, Matrix.trace]
 
 /-- The unit shifted transfer traces of a matrix product unitary pass to every
 tensor generating the same positive-length matrix product vectors as its
@@ -70,10 +70,10 @@ private theorem trace_transferMatrix_pow_eq_one_of_sameMPV₂Pos
     Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) = 1 := by
   calc
     Matrix.trace (transferMatrix (Kraus.transferMap A) ^ N) =
-        MPSTensor.mpvOverlap A A N :=
+        MPTensor.mpvOverlap A A N :=
       MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap A N
-    _ = MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N :=
-      (MPSTensor.mpvOverlap_eq_of_pos_mpv_eq
+    _ = MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N :=
+      (MPTensor.mpvOverlap_eq_of_pos_mpv_eq
         (fun {N} hN => hSame N hN) (fun {N} hN => hSame N hN)
         (Nat.zero_lt_of_lt hN)).symm
     _ = Matrix.trace
@@ -140,14 +140,14 @@ theorem IsMPU.exists_reduced_normalizedFlattening_cfii
   let Ared : MPSTensor (d * d) Dred :=
     MPSTensor.toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) blocks
   have hOriginalOverlap :
-      MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
+      MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
     rw [← MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
     exact hU.trace_transferMatrix_normalizedFlattening_pow_eq_one (by omega)
-  have hReducedOverlap : MPSTensor.mpvOverlap Ared Ared 2 = 1 := by
+  have hReducedOverlap : MPTensor.mpvOverlap Ared Ared 2 = 1 := by
     calc
-      MPSTensor.mpvOverlap Ared Ared 2 =
-          MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 :=
-        (MPSTensor.mpvOverlap_eq_of_pos_mpv_eq
+      MPTensor.mpvOverlap Ared Ared 2 =
+          MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 :=
+        (MPTensor.mpvOverlap_eq_of_pos_mpv_eq
           (fun {N} hN => hSame N hN) (fun {N} hN => hSame N hN) (by omega)).symm
       _ = 1 := hOriginalOverlap
   have hDred : 0 < Dred := by

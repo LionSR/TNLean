@@ -99,9 +99,9 @@ lemma eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
     {d : ℕ} {ι : Type*} [Finite ι] {dim : ι → ℕ}
     (A : (j : ι) → MPSTensor d (dim j))
     (h_self : ∀ j,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (h_cross : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A j) N) atTop (nhds (0 : ℂ))) :
     ∀ᶠ N in atTop,
       LinearIndependent ℂ (fun j : ι => mpvState (d := d) (A j) N) := by
   classical
@@ -187,15 +187,15 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
     (A : (j : Fin gA) → MPSTensor d (dimA j))
     (B : (k : Fin gB) → MPSTensor d (dimB k))
     (hA_self : ∀ j,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (hA_off : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds 0))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A j) N) atTop (nhds 0))
     (hB_self : ∀ k,
-      Tendsto (fun N => mpvOverlap (d := d) (B k) (B k) N) atTop (nhds (1 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (B k) (B k) N) atTop (nhds (1 : ℂ)))
     (hB_off : ∀ k₁ k₂, k₁ ≠ k₂ →
-      Tendsto (fun N => mpvOverlap (d := d) (B k₁) (B k₂) N) atTop (nhds 0))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (B k₁) (B k₂) N) atTop (nhds 0))
     (hAB : ∀ j k,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (B k) N) atTop (nhds 0)) :
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (B k) N) atTop (nhds 0)) :
     ∀ᶠ N in atTop,
       LinearIndependent ℂ
         (Sum.elim
@@ -205,14 +205,14 @@ lemma eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal
   let C : (x : Sum (Fin gA) (Fin gB)) → MPSTensor d (Sum.elim dimA dimB x) :=
     Sum.rec (motive := fun x => MPSTensor d (Sum.elim dimA dimB x)) A B
   have h_self : ∀ x,
-      Tendsto (fun N => mpvOverlap (d := d) (C x) (C x) N) atTop
+      Tendsto (fun N => mpvOverlap (α := Fin d) (C x) (C x) N) atTop
         (nhds (1 : ℂ)) := by
     intro x
     cases x with
     | inl j => simpa [C] using hA_self j
     | inr k => simpa [C] using hB_self k
   have h_cross : ∀ x y, x ≠ y →
-      Tendsto (fun N => mpvOverlap (d := d) (C x) (C y) N) atTop
+      Tendsto (fun N => mpvOverlap (α := Fin d) (C x) (C y) N) atTop
         (nhds (0 : ℂ)) := by
     intro x y hxy
     cases x with
@@ -363,13 +363,13 @@ lemma eventually_exists_invertible_changeBasis
     (A : (j : Fin g) → MPSTensor d (dimA j))
     (B : (j : Fin g) → MPSTensor d (dimB j))
     (hA_diag : ∀ j,
-      Tendsto (fun N => mpvOverlap (d := d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (A j) N) atTop (nhds (1 : ℂ)))
     (hA_off : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (A i) (A j) N) atTop (nhds (0 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (A i) (A j) N) atTop (nhds (0 : ℂ)))
     (hB_diag : ∀ j,
-      Tendsto (fun N => mpvOverlap (d := d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (B j) (B j) N) atTop (nhds (1 : ℂ)))
     (hB_off : ∀ i j, i ≠ j →
-      Tendsto (fun N => mpvOverlap (d := d) (B i) (B j) N) atTop (nhds (0 : ℂ)))
+      Tendsto (fun N => mpvOverlap (α := Fin d) (B i) (B j) N) atTop (nhds (0 : ℂ)))
     (hspan : ∀ᶠ N : ℕ in atTop,
       Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (d := d) (A j) N)) =
       Submodule.span ℂ (Set.range (fun j : Fin g => mpvState (d := d) (B j) N))) :

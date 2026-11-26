@@ -55,6 +55,8 @@ nonsplitting content of the source's indecomposability claim; the associator
   Bialgebraic Structures in Matrix Product Operator Symmetries*
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped Matrix

@@ -174,7 +174,9 @@ private theorem exists_cross_scalar
   apply (eq_div_iff hden).2
   simpa only [mul_comm] using hsingle
 
-namespace IsReduction
+section IsReduction
+
+open MPTensor.IsReduction
 
 variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
@@ -187,7 +189,7 @@ Theorem 22; no bare equality between boundary matrices is asserted.
 
 Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Theorem 22,
 `cornerproblem.tex` lines 3156--3162 and 4007--4035. -/
-theorem exists_boundary_dressed_proportional
+theorem _root_.MPTensor.IsReduction.exists_boundary_dressed_proportional
     (h : IsReduction B A V W) (h' : IsReduction B A V' W')
     (hNormal : Kraus.IsNormal A) {N₀ : ℕ}
     (hBound : IsReductionResidualNilpotencyBound B A V W N₀)
@@ -339,7 +341,7 @@ inequalities then promote those bounds to the common threshold `N₀`.
 
 Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Theorem 22,
 `cornerproblem.tex` lines 3156--3162 and 4007--4035. -/
-theorem exists_boundary_dressed_proportional_of_nilpotencyLength_le
+theorem _root_.MPTensor.IsReduction.exists_boundary_dressed_proportional_of_nilpotencyLength_le
     (h : IsReduction B A V W) (h' : IsReduction B A V' W')
     (hNormal : Kraus.IsNormal A) (hSame : SameMPV₂Pos B A) {N₀ : ℕ}
     (hLength : reductionResidualNilpotencyLength B A V W ≤ N₀)

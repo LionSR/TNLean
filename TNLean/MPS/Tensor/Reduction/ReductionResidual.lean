@@ -62,7 +62,13 @@ noncomputable def reductionRightContractedAllCutSum (B : MPSTensor d D_B)
     Kraus.evalWord (reductionResidual B A V W) (w.take r) * W *
       Kraus.evalWord A (w.drop r)
 
-namespace IsReduction
+end MPSTensor
+
+namespace MPTensor.IsReduction
+
+open MPSTensor
+
+variable {d D_A D_B : ℕ}
 
 variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
@@ -287,7 +293,11 @@ theorem evalWord_mul_eq_reductionRightContractedSum
       simp only [Matrix.mul_assoc]
       ac_rfl
 
-end IsReduction
+end MPTensor.IsReduction
+
+namespace MPSTensor
+
+variable {d D_A D_B : ℕ}
 
 variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
@@ -363,7 +373,13 @@ theorem reductionRightContractedSum_eq_allCutSum
         simpa only [Matrix.mul_assoc] using hsum
       rw [hsum']
 
-namespace IsReduction
+end MPSTensor
+
+namespace MPTensor.IsReduction
+
+open MPSTensor
+
+variable {d D_A D_B : ℕ}
 
 variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
@@ -542,7 +558,14 @@ theorem trace_evalWord_reductionResidual_eq_zero
   rw [hSame.trace_evalWord u hu] at hdecomp
   exact add_left_cancel (by simpa only [add_zero] using hdecomp.symm)
 
-end IsReduction
+end MPTensor.IsReduction
+
+namespace MPSTensor
+
+variable {d D_A D_B : ℕ}
+
+variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
+  {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
 
 private theorem exists_reductionResiduals_eq_list_of_mem_generatorSet
     (B : MPSTensor d D_B) (A : MPSTensor d D_A)
@@ -579,7 +602,13 @@ private theorem pow_mem_nonUnitalSubalgebra_of_pos_reductionResidual
       | zero => simpa using hx
       | succ N ih => simpa [pow_succ] using S.mul_mem ih hx
 
-namespace IsReduction
+end MPSTensor
+
+namespace MPTensor.IsReduction
+
+open MPSTensor
+
+variable {d D_A D_B : ℕ}
 
 variable {B : MPSTensor d D_B} {A : MPSTensor d D_A}
   {V : Matrix (Fin D_A) (Fin D_B) ℂ} {W : Matrix (Fin D_B) (Fin D_A) ℂ}
@@ -954,6 +983,4 @@ theorem evalWord_reductionResidual_eq_zero_of_bondDim_le_length
   exact evalWord_reductionResidual_eq_zero_of_bound_le_length
     (h.bondDim_isReductionResidualNilpotencyBound hSame) w hlen
 
-end IsReduction
-
-end MPSTensor
+end MPTensor.IsReduction

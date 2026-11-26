@@ -138,7 +138,7 @@ theorem exists_mpvBlockPhaseEquiv_of_mem_span_eventually
     (B : (j : ι) → MPSTensor d (dim j))
     (hB : ∀ j, IsNormalTensor (B j))
     (hBCross : ∀ i j, i ≠ j →
-      Filter.Tendsto (fun N => mpvOverlap (d := d) (B i) (B j) N)
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (B i) (B j) N)
         Filter.atTop (nhds 0))
     (hMem : ∀ᶠ N in Filter.atTop,
       mpvState (d := d) A N ∈
@@ -153,14 +153,14 @@ theorem exists_mpvBlockPhaseEquiv_of_mem_span_eventually
       (x : Option ι) → MPSTensor d (Option.rec D₀ dim x) :=
     fun x => Option.rec A B x
   have hSelf : ∀ x,
-      Filter.Tendsto (fun N => mpvOverlap (d := d) (C x) (C x) N)
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (C x) (C x) N)
         Filter.atTop (nhds (1 : ℂ)) := by
     intro x
     cases x with
     | none => simpa [C] using hA.selfOverlap_tendsto_one
     | some j => simpa [C] using (hB j).selfOverlap_tendsto_one
   have hCross : ∀ x y, x ≠ y →
-      Filter.Tendsto (fun N => mpvOverlap (d := d) (C x) (C y) N)
+      Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (C x) (C y) N)
         Filter.atTop (nhds (0 : ℂ)) := by
     intro x y hxy
     cases x with
@@ -303,7 +303,7 @@ private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_overlap_tendsto
     {A : MPSTensor d D} (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight}
     (hlm : l ≠ m) :
     Filter.Tendsto
-      (fun N => mpvOverlap (d := d) (F.normalizedMinimalLoopTensor l)
+      (fun N => mpvOverlap (α := Fin d) (F.normalizedMinimalLoopTensor l)
         (F.normalizedMinimalLoopTensor m) N)
       Filter.atTop (nhds 0) := by
   refine tendsto_const_nhds.congr' ?_
@@ -311,7 +311,7 @@ private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_overlap_tendsto
   intro N hN
   let : NeZero N := ⟨hN.ne'⟩
   symm
-  change mpvOverlap (d := d) (F.normalizedMinimalLoopTensor l)
+  change mpvOverlap (α := Fin d) (F.normalizedMinimalLoopTensor l)
     (F.normalizedMinimalLoopTensor m) N = 0
   rw [mpvOverlap_eq_star_mpvInner, mpvInner,
     F.mpvState_normalizedMinimalLoopTensor l,
@@ -481,7 +481,7 @@ theorem nncph_implies_rfp
   have hMem := F.eventually_mpvState_mem_span_normalizedMinimalLoopTensor hparent
   have hCross : ∀ l m : Loop F.edgeWeight, l ≠ m →
       Filter.Tendsto
-        (fun N => mpvOverlap (d := d) (F.normalizedMinimalLoopTensor l)
+        (fun N => mpvOverlap (α := Fin d) (F.normalizedMinimalLoopTensor l)
           (F.normalizedMinimalLoopTensor m) N)
         Filter.atTop (nhds 0) := by
     intro l m hlm

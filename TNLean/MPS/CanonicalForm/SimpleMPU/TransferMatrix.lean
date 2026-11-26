@@ -58,13 +58,13 @@ Source: Cirac--Perez-Garcia--Schuch--Verstraete, Proposition `prop:normal-tensor
 lines 344--354. -/
 theorem mpvOverlap_normalizedFlattening_self [NeZero d]
     (U : MPOTensor d D) (N : ℕ) :
-    MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N =
+    MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N =
       ((d : ℂ)⁻¹) ^ N *
-        MPSTensor.mpvOverlap U.toMPSTensor U.toMPSTensor N := by
-  change MPSTensor.mpvOverlap
+        MPTensor.mpvOverlap U.toMPSTensor U.toMPSTensor N := by
+  change MPTensor.mpvOverlap
       (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i)
       (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i) N = _
-  rw [MPSTensor.mpvOverlap_smul_self]
+  rw [MPTensor.mpvOverlap_smul_self]
   congr 2
   have hd : (0 : ℝ) < d := by
     exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)

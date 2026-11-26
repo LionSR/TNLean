@@ -485,11 +485,11 @@ noncomputable def toTwoSiteExactSectorGauge
   have hzetaNorm : ∀ γ, ‖zeta γ‖ = 1 := by
     intro γ
     have hHH : Tendsto
-        (fun N ↦ ‖MPSTensor.mpvOverlap (d := D * D)
+        (fun N ↦ ‖MPTensor.mpvOverlap (α := Fin (D * D))
           (H.tensor γ) (H.tensor γ) N‖) atTop (nhds (1 : ℝ)) := by
       simpa using (H.isCPSVBNT.blocks_normal γ).selfOverlap_tendsto_one.norm
     have hDD : Tendsto
-        (fun N ↦ ‖MPSTensor.mpvOverlap (d := D * D)
+        (fun N ↦ ‖MPTensor.mpvOverlap (α := Fin (D * D))
           (D₂.tensor (f γ)) (D₂.tensor (f γ)) N‖)
         atTop (nhds (1 : ℝ)) := by
       simpa using

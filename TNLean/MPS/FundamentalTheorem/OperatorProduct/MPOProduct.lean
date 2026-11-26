@@ -207,7 +207,7 @@ theorem IsNormalRepresentation.exists_fusionTensors {F : GroupFamily G d}
     (hF : F.IsNormalRepresentation) (g h : G) :
     ∃ (V : Matrix (Fin (F.bondDim (g * h))) (Fin (F.bondDim g * F.bondDim h)) ℂ)
       (W : Matrix (Fin (F.bondDim g * F.bondDim h)) (Fin (F.bondDim (g * h))) ℂ),
-      MPSTensor.IsReduction (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+      MPTensor.IsReduction (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
           (F.tensor (g * h)).toMPSTensor V W ∧
         ∀ w : List (Fin (d * d)),
           F.bondDim g * F.bondDim h - F.bondDim (g * h) + 1 ≤ w.length →
@@ -237,7 +237,7 @@ theorem exists_isReduction_actTensor_of_isNormal {D Dx Dy : ℕ} (T : MPOTensor 
       mpo T N *ᵥ (fun τ : Fin N → Fin d => MPTensor.mpv Ax τ) =
         fun σ : Fin N → Fin d => MPTensor.mpv Ay σ) :
     ∃ (V : Matrix (Fin Dy) (Fin (D * Dx)) ℂ) (W : Matrix (Fin (D * Dx)) (Fin Dy) ℂ),
-      MPSTensor.IsReduction (actTensor T Ax) Ay V W ∧
+      MPTensor.IsReduction (actTensor T Ax) Ay V W ∧
         ∀ w : List (Fin d), D * Dx - Dy + 1 ≤ w.length →
           Kraus.evalWord (fun i => actTensor T Ax i - W * Ay i * V) w = 0 := by
   refine MPSTensor.exists_isReduction_and_nilpotent_of_isNormal Ay hAy hDy (actTensor T Ax)

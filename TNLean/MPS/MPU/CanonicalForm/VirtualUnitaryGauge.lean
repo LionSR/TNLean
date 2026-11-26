@@ -99,10 +99,10 @@ private theorem normalizedFlattening_exists_mpv_ne_zero
   let : NeZero D := hU.neZero_bond
   by_contra hzero
   push Not at hzero
-  have hOverlap : MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N = 1 := by
+  have hOverlap : MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening N = 1 := by
     rw [← MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
     exact hU.isMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN
-  simp only [MPSTensor.mpvOverlap, hzero, star_zero, mul_zero, Finset.sum_const_zero] at hOverlap
+  simp only [MPTensor.mpvOverlap, hzero, star_zero, mul_zero, Finset.sum_const_zero] at hOverlap
   exact zero_ne_one hOverlap
 
 /-- Equality beyond one site extends to every positive length for full-support
@@ -324,10 +324,10 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
   obtain ⟨_, hzero | ⟨_, hdim, X, η, hη, hrel⟩⟩ := hA.overlap_dichotomy hB
   · exfalso
     have hCrossSelf : ∀ᶠ n : ℕ in Filter.atTop,
-        MPSTensor.mpvOverlap U.normalizedFlattening V.normalizedFlattening (2 * n) =
-          MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening (2 * n) := by
+        MPTensor.mpvOverlap U.normalizedFlattening V.normalizedFlattening (2 * n) =
+          MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening (2 * n) := by
       filter_upwards [Filter.eventually_gt_atTop 0] with n hn
-      unfold MPSTensor.mpvOverlap
+      unfold MPTensor.mpvOverlap
       apply Finset.sum_congr rfl
       intro w _
       rw [← hMPV (2 * n) (by omega) (even_two_mul n) w]
@@ -336,14 +336,14 @@ theorem IsMPUCanonicalFormII.exists_unitary_virtual_sign_gauge_of_mpo_eq_even
     exact zero_ne_one (tendsto_nhds_unique (hzero.comp hEvenTop) hone)
   · have hη0 : η ≠ 0 := Complex.ne_zero_of_norm_eq_one hη
     have hηsq : η ^ 2 = 1 := by
-      have hSelf : MPSTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
+      have hSelf : MPTensor.mpvOverlap U.normalizedFlattening U.normalizedFlattening 2 = 1 := by
         rw [← MPSTensor.trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
         exact hU.isMPU.trace_transferMatrix_normalizedFlattening_pow_eq_one (by omega)
       have hNonzero : ∃ w : Fin 2 → Fin (d * d),
           MPTensor.mpv U.normalizedFlattening w ≠ 0 := by
         by_contra hall
         push Not at hall
-        simp only [MPSTensor.mpvOverlap, hall, star_zero, mul_zero,
+        simp only [MPTensor.mpvOverlap, hall, star_zero, mul_zero,
           Finset.sum_const_zero] at hSelf
         exact zero_ne_one hSelf
       obtain ⟨w, hw⟩ := hNonzero

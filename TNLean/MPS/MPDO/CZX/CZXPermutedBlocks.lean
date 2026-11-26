@@ -62,6 +62,8 @@ is the same for both. Documented in
   ratio times `ω(g,e,g)` is `-1`.
 -/
 
+open MPTensor
+
 noncomputable section
 
 open scoped BigOperators Matrix Kronecker

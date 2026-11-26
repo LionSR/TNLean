@@ -340,8 +340,8 @@ theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
       SameMPV₂ T₂
         (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocksB))
     (N : ℕ) :
-    mpvOverlap (d := d) T₁ T₂ N =
-      ∑ u : Fin r, ∑ v : Fin r, mpvOverlap (d := d) (blocksA u) (blocksB v) N := by
+    mpvOverlap (α := Fin d) T₁ T₂ N =
+      ∑ u : Fin r, ∑ v : Fin r, mpvOverlap (α := Fin d) (blocksA u) (blocksB v) N := by
   classical
   have hDecompA : ∀ σ : Fin N → Fin d, mpv T₁ σ =
       ∑ u : Fin r, mpv (blocksA u) σ := by
@@ -352,7 +352,7 @@ theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
     intro σ
     exact mpv_eq_sum_of_sameMPV₂_toTensorFromBlocks_one T₂ blocksB hSameB σ
   calc
-    mpvOverlap (d := d) T₁ T₂ N =
+    mpvOverlap (α := Fin d) T₁ T₂ N =
         ∑ σ : Cfg d N, mpv T₁ σ * star (mpv T₂ σ) := rfl
     _ = ∑ σ : Cfg d N,
           (∑ u : Fin r, mpv (blocksA u) σ) *
@@ -378,7 +378,7 @@ theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
             intro u _
             rw [Finset.sum_comm]
     _ = ∑ u : Fin r, ∑ v : Fin r,
-          mpvOverlap (d := d) (blocksA u) (blocksB v) N := by
+          mpvOverlap (α := Fin d) (blocksA u) (blocksB v) N := by
             simp [mpvOverlap]
 
 end BlockAssembly

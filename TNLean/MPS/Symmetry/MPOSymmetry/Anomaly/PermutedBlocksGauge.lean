@@ -88,7 +88,7 @@ noncomputable def rescale (fd : FusionData F) (β : ScalarCocycle G) : FusionDat
 
 /-- The left fusion tensors before and after rescaling by `β` differ by `β`. -/
 theorem isDressedProportional_rescale (fd : FusionData F) (β : ScalarCocycle G) (g h : G) :
-    MPSTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPTensor.IsDressedProportional (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
       (fd.V g h) ((fd.rescale β).V g h) (β (g, h)) :=
   ⟨0, fun w _ ↦ by simp [rescale, Matrix.smul_mul, smul_smul, (β (g, h)).ne_zero]⟩
 
@@ -129,9 +129,9 @@ noncomputable def relativeScalar (ad ad' : BlockActionData F A) : ActionTensorGa
 theorem isDressedProportional_relativeScalar (hA : ∀ x, Kraus.IsNormal (A x))
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (ad ad' : BlockActionData F A)
     (g : G) (x : X) :
-    MPSTensor.IsDressedProportional (actTensor (F.tensor g) (A x)) (ad.V g x) (ad'.V g x)
+    MPTensor.IsDressedProportional (actTensor (F.tensor g) (A x)) (ad.V g x) (ad'.V g x)
       (ad.relativeScalar ad' g x) := by
-  have hex : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
+  have hex : ∃ z : ℂ, z ≠ 0 ∧ MPTensor.IsDressedProportional
       (actTensor (F.tensor g) (A x)) (ad.V g x) (ad'.V g x) z :=
     (ad.isReduction g x).exists_isDressedProportional (ad'.isReduction g x) (hA _)
       ((hperm g x).sameMPV₂Pos_actTensor (MPTensor.SameMPV₂Pos.refl (A x)))
@@ -182,7 +182,7 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
         MPTensor.SameMPV₂Pos (actTensor (F.tensor a) C) (A (a • y)) :=
     fun a _ C y hC ↦ (hperm a y).sameMPV₂Pos_actTensor hC
   -- the tree acting with `h` and then `g`
-  have hact : MPSTensor.IsDressedProportional
+  have hact : MPTensor.IsDressedProportional
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
       (ad.actV g h x) (ad'.actV g h x) (ad.relativeScalar ad' h x *
         ad.relativeScalar ad' g (h • x)) := by
@@ -194,7 +194,7 @@ theorem lSymbol_eq_gauge (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNo
       (mulTensorAssocInvMatrix_mul_matrix _ _ _)
       (actTensor_mulTensor_mul_assocMatrix (F.tensor g) (F.tensor h) (A x))
   -- the tree fusing `g` with `h` and then acting
-  have hfuse : MPSTensor.IsDressedProportional
+  have hfuse : MPTensor.IsDressedProportional
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) (A x))
       (ad.fuseV fd g h x) (ad'.fuseV fd' g h x) (fd.relativeScalar fd' (g, h) *
         ad.relativeScalar ad' (g * h) x) := by

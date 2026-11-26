@@ -240,7 +240,7 @@ theorem mulTensor_eTensor_eTensor :
 /-- **The square of the dressed tensor of `x` is the square of `M_x`**, so the compression
 witnesses of the block `(x, x)` are fusion tensors onto `M_e`. -/
 theorem kx_isReduction :
-    MPSTensor.IsReduction (mulTensor kxTensor kxTensor).toMPSTensor eTensor.toMPSTensor xXLeft
+    MPTensor.IsReduction (mulTensor kxTensor kxTensor).toMPSTensor eTensor.toMPSTensor xXLeft
       xXRight := by
   have h : (mulTensor kxTensor kxTensor).toMPSTensor = xXStacked := by
     funext a
@@ -253,7 +253,7 @@ theorem kx_isReduction :
 compression witnesses of the block `(xy, xy)` are fusion tensors onto `M_e`: the sign cancels
 the weight `−1` of the target of that block. -/
 theorem kxy_isReduction :
-    MPSTensor.IsReduction (mulTensor kxyTensor kxyTensor).toMPSTensor eTensor.toMPSTensor
+    MPTensor.IsReduction (mulTensor kxyTensor kxyTensor).toMPSTensor eTensor.toMPSTensor
       xyXyLeft xyXyRight := by
   have h : (mulTensor kxyTensor kxyTensor).toMPSTensor = fun i ↦ (-1 : ℂ) • xyXyStacked i := by
     funext a

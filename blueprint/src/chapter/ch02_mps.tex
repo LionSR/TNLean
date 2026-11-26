@@ -462,7 +462,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 
 \begin{definition}[Rectangular MPS reduction]
     \label{def:mps_rectangular_reduction}
-    \lean{MPSTensor.IsReduction}
+    \lean{MPTensor.IsReduction}
     \leanok
     \uses{def:mps_tensor,def:eval_word}
     Following \cite[Proposition~20 and the following definition]{Molnar2018SemiInjective},
@@ -481,11 +481,11 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
 
 \begin{lemma}[Basic rectangular reduction identities]
     \label{thm:mps_rectangular_reduction_identities}
-    \lean{MPSTensor.IsReduction.mul_eq_one,
-        MPSTensor.IsReduction.evalWord,
-        MPSTensor.IsReduction.evalWord_nil,
-        MPSTensor.IsReduction.bondDim_le,
-        MPSTensor.IsReduction.iff_forall_evalWord}
+    \lean{MPTensor.IsReduction.mul_eq_one,
+        MPTensor.IsReduction.evalWord,
+        MPTensor.IsReduction.evalWord_nil,
+        MPTensor.IsReduction.bondDim_le,
+        MPTensor.IsReduction.iff_forall_evalWord}
     \leanok
     \uses{def:mps_rectangular_reduction}
     A rectangular reduction satisfies the retraction identity
@@ -1136,7 +1136,7 @@ $A^{-1}A=\Id$.
 \end{definition}
 
 \begin{definition}[MPV overlap]\label{def:mpv_overlap}
-    \lean{MPSTensor.mpvOverlap}
+    \lean{MPTensor.mpvOverlap}
     \leanok
     \uses{def:mpv}
     The \emph{MPV overlap} between two tensors $A$ (of bond
@@ -1194,7 +1194,7 @@ $A^{-1}A=\Id$.
 
 \begin{lemma}[Overlap determined by positive-length MPV]%
     \label{lem:overlap_eq_of_pos_mpv}
-    \lean{MPSTensor.mpvOverlap_eq_of_pos_mpv_eq}\leanok
+    \lean{MPTensor.mpvOverlap_eq_of_pos_mpv_eq}\leanok
     \uses{def:mpv_overlap}
     If $V^{(N)}(A)_\sigma = V^{(N)}(A')_\sigma$ and
     $V^{(N)}(B)_\sigma = V^{(N)}(B')_\sigma$ for all $N > 0$

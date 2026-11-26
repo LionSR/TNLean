@@ -126,21 +126,21 @@ def z3FusionData : family.FusionData where
   isReduction := by
     refine Multiplicative.forall_zmod_three (Multiplicative.forall_zmod_three ?_ ?_ ?_)
       (Multiplicative.forall_zmod_three ?_ ?_ ?_) (Multiplicative.forall_zmod_three ?_ ?_ ?_)
-    · change MPSTensor.IsReduction (mulTensor identityTensor identityTensor).toMPSTensor
+    · change MPTensor.IsReduction (mulTensor identityTensor identityTensor).toMPSTensor
         ((identityTensor : MPOTensor 3 (1 * 1))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_identityTensor])
-    · change MPSTensor.IsReduction (mulTensor identityTensor uTensor).toMPSTensor
+    · change MPTensor.IsReduction (mulTensor identityTensor uTensor).toMPSTensor
         ((uTensor : MPOTensor 3 (1 * 2))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_left])
-    · change MPSTensor.IsReduction (mulTensor identityTensor uDagTensor).toMPSTensor
+    · change MPTensor.IsReduction (mulTensor identityTensor uDagTensor).toMPSTensor
         ((uDagTensor : MPOTensor 3 (1 * 2))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_left])
-    · change MPSTensor.IsReduction (mulTensor uTensor identityTensor).toMPSTensor
+    · change MPTensor.IsReduction (mulTensor uTensor identityTensor).toMPSTensor
         ((uTensor : MPOTensor 3 (2 * 1))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_right])
     · exact uu_compression.isReduction oneSlotMem
     · exact ud_compression.isReduction oneSlotMem
-    · change MPSTensor.IsReduction (mulTensor uDagTensor identityTensor).toMPSTensor
+    · change MPTensor.IsReduction (mulTensor uDagTensor identityTensor).toMPSTensor
         ((uDagTensor : MPOTensor 3 (2 * 1))).toMPSTensor 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_identityTensor_right])
     · exact du_compression.isReduction oneSlotMem
@@ -240,7 +240,7 @@ theorem z3FusionData_isAssociator_gen_gen_gen :
     z3FusionData.IsAssociator z3Gen z3Gen z3Gen (eisensteinToComplex ⟨-1, -1⟩) := by
   unfold GroupFamily.FusionData.IsAssociator
   rw [z3FusionData_leftV_gen_gen_gen, z3FusionData_rightV_gen_gen_gen]
-  refine MPSTensor.IsDressedProportional.of_forall_mul_mul (D := 8) (A := identityMPS)
+  refine MPTensor.IsDressedProportional.of_forall_mul_mul (D := 8) (A := identityMPS)
     (fun a b ↦ ?_) (fun a b ↦ ?_) (fun a ↦ ?_)
   · rw [tripleUUU_eq, tripleUUU_eq, identityMPS_eq, ← complexOfEisenstein_mul,
       ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul,
@@ -256,7 +256,7 @@ theorem z3FusionData_isAssociator_gen_sq_gen :
     z3FusionData.IsAssociator z3Gen (z3Gen * z3Gen) z3Gen 1 := by
   unfold GroupFamily.FusionData.IsAssociator
   rw [z3FusionData_leftV_gen_sq_gen, z3FusionData_rightV_gen_sq_gen]
-  refine MPSTensor.IsDressedProportional.of_forall_mul_mul (D := 8) (A := uMPS)
+  refine MPTensor.IsDressedProportional.of_forall_mul_mul (D := 8) (A := uMPS)
     (fun a b ↦ ?_) (fun a b ↦ ?_) (fun a ↦ ?_)
   · rw [tripleUDU_eq, tripleUDU_eq, uMPS_eq, ← complexOfEisenstein_mul,
       ← complexOfEisenstein_mul, ← complexOfEisenstein_mul, ← complexOfEisenstein_mul,
@@ -285,7 +285,7 @@ theorem z3FusionData_omega_gen_one_gen : z3FusionData.omega z3Gen 1 z3Gen = 1 :=
   have h : z3FusionData.IsAssociator z3Gen 1 z3Gen 1 := by
     unfold GroupFamily.FusionData.IsAssociator
     rw [hR, ← hL]
-    exact MPSTensor.IsDressedProportional.refl _ _
+    exact MPTensor.IsDressedProportional.refl _ _
   apply Units.ext
   rw [← GroupFamily.FusionData.eq_omega_of_isAssociator family_isNormalRepresentation h]
   simp

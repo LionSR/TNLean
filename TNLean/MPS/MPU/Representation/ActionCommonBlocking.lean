@@ -96,7 +96,7 @@ noncomputable def block (ad : BlockActionData F A) (L : ℕ) :
   V := ad.V
   W := ad.W
   isReduction g x := by
-    change MPSTensor.IsReduction
+    change MPTensor.IsReduction
       (actTensor (blockTensor (F.tensor g) L) (Kraus.blockTensor (A x) L))
       (Kraus.blockTensor (A (g • x)) L) (ad.V g x) (ad.W g x)
     rw [← blockTensor_actTensor]

@@ -131,10 +131,10 @@ length: this is the case $\lambda=1$.  The fusion equations used there are
 therefore unaffected by the defect in the proportional version of
 Proposition~20.
 
-The formal predicate \leanid{MPSTensor.IsReduction} records the rectangular
+The formal predicate \leanid{MPTensor.IsReduction} records the rectangular
 pair, the retraction $VW=1$, and the word equation including the empty word.
-Scalar covariance is proved by \leanid{MPSTensor.IsReduction.smul}, and
-\leanid{MPSTensor.IsReduction.evalWord_smul_target} gives the corrected formula
+Scalar covariance is proved by \leanid{MPTensor.IsReduction.smul}, and
+\leanid{MPTensor.IsReduction.evalWord_smul_target} gives the corrected formula
 $VB^wW=\lambda^{|w|}A^w$ for a reduction from $B$ to $\lambda A$.  For
 $\lambda\ne0$, the injective-target and normal-target existence results are
 \leanid{MPSTensor.exists_isReduction_smul_of_isInjective_of_mpv_eq_pow_mul}

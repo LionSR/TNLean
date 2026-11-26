@@ -186,7 +186,7 @@ theorem exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor
     mpv_purificationTensor_spinTwist_of_mpo_mul_eq_smul A e hM
       (by simpa only [mpoWithBoundary_one] using hsym g L hL) w
   have hProp : EventuallyNonzeroProportionalMPV₂ (purificationTensor A) B := by
-    have hev : ∀ᶠ N in atTop, mpvOverlap (d := d * dK) B B N ≠ 0 :=
+    have hev : ∀ᶠ N in atTop, mpvOverlap (α := Fin (d * dK)) B B N ≠ 0 :=
       hB.selfOverlap_tendsto_one.eventually_ne one_ne_zero
     filter_upwards [hev, eventually_gt_atTop 0] with N hN hN0
     have hc : c g N ≠ 0 := by

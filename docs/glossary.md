@@ -2700,9 +2700,9 @@ involve no boundary.
 - **Caveat:** data, not a proposition; the nilpotent-remainder clause of the
   existence theorem is not stored.
 
-### `MPSTensor.IsDressedProportional`
+### `MPTensor.IsDressedProportional`
 
-- **Declaration:** `MPSTensor.IsDressedProportional B X Y z : Prop`.
+- **Declaration:** `MPTensor.IsDressedProportional B X Y z : Prop`.
 - **Defined in:** `TNLean/MPS/Operator/ReductionComposition.lean`.
 - **Meaning:** $XB^{\mathbf w}=z\,YB^{\mathbf w}$ for every sufficiently long
   word $\mathbf w$.
@@ -2712,7 +2712,7 @@ involve no boundary.
 - **Sanctioned bridges:** `MPSTensor.exists_isDressedProportional` (two
   reductions onto a normal tensor are dressed proportional with a nonzero
   scalar), `IsDressedProportional.refl` and `.trans`, and
-  `MPSTensor.IsDressedProportional.of_forall_mul_mul`.
+  `MPTensor.IsDressedProportional.of_forall_mul_mul`.
 - **Caveat:** the scalar is not required to be nonzero in the definition, and
   the threshold length is existential.
 

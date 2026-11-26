@@ -71,6 +71,8 @@ carries the phase. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overla
   arXiv:2307.01696, Supplemental Material, eqs. (S2)–(S7) and Lemma 1'(ii).
 -/
 
+open MPTensor
+
 open scoped BigOperators Matrix ComplexOrder
 open Matrix Filter Topology Complex
 open Kraus (blockTensor)

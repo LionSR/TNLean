@@ -12,7 +12,7 @@ import TNLean.MPS.Operator.ActionTensorReduction
 Let `(V₁, W₁)` reduce `C` onto `B` and `(V₂, W₂)` reduce `B` onto `A`, with residual letters
 `N^i = C^i - W₁ B^i V₁` and `M^i = B^i - W₂ A^i V₂` whose words vanish at lengths `N₁` and
 `N₂` respectively (MGSC18, Definition 8).  The composite reduction `(V₂ V₁, W₁ W₂)`
-(`MPSTensor.IsReduction.trans`) has residual letters `R^i = N^i + W₁ M^i V₁`, and every word
+(`MPTensor.IsReduction.trans`) has residual letters `R^i = N^i + W₁ M^i V₁`, and every word
 of `R` of length `2 N₁ + N₂` vanishes.  The additive bound `N₁ + N₂` is false in general: a
 chain of six basis vectors with `N₁ = 3`, `N₂ = 2` has a nonzero residual word of length five.
 
@@ -33,14 +33,16 @@ off-diagonal tails.
 
 ## Main results
 
-* `MPSTensor.IsReduction.mul_evalWord_reductionResidual_trans_mul`
-* `MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans`
+* `MPTensor.IsReduction.mul_evalWord_reductionResidual_trans_mul`
+* `MPTensor.IsReduction.isReductionResidualNilpotencyBound_trans`
 * `MPSTensor.isReductionResidualNilpotencyBound_of_intertwine`
 * `MPOTensor.isReductionResidualNilpotencyBound_mulTensor_kronId`,
   `MPOTensor.isReductionResidualNilpotencyBound_mulTensor_idKron`
 * `MPOTensor.isReductionResidualNilpotencyBound_actTensor_kronId`,
   `MPOTensor.isReductionResidualNilpotencyBound_actTensor_idKron`
 -/
+
+open MPTensor
 
 open scoped Matrix Kronecker
 
@@ -61,13 +63,16 @@ theorem reductionResidual_trans_apply (C : MPSTensor d D₃) (B : MPSTensor d D�
   simp only [reductionResidual, Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_assoc]
   abel
 
-namespace IsReduction
+section IsReduction
+
+open MPTensor.IsReduction
 
 variable {C : MPSTensor d D₃} {B : MPSTensor d D₂} {A : MPSTensor d D₁}
   {V₁ : Matrix (Fin D₂) (Fin D₃) ℂ} {W₁ : Matrix (Fin D₃) (Fin D₂) ℂ}
   {V₂ : Matrix (Fin D₁) (Fin D₂) ℂ} {W₂ : Matrix (Fin D₂) (Fin D₁) ℂ}
 
-private theorem evalWord_reductionResidual_trans_append_singleton (w : List (Fin d))
+private theorem _root_.MPTensor.IsReduction.evalWord_reductionResidual_trans_append_singleton
+    (w : List (Fin d))
     (x : Fin d) :
     Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) (w ++ [x]) =
       Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w *
@@ -85,7 +90,8 @@ factor, `V₁ R^w N^q W₁ = 0`.  Only the first reduction is used.
 
 Source: arXiv:1706.07329v2, Lemma `lem:VNW=0`, `cornerproblem.tex` lines 3946--3970, applied
 to the composite reductions of arXiv:2502.20257, `main.tex` lines 1506--1535. -/
-theorem mul_evalWord_reductionResidual_trans_mul (h₁ : IsReduction C B V₁ W₁)
+theorem _root_.MPTensor.IsReduction.mul_evalWord_reductionResidual_trans_mul
+    (h₁ : IsReduction C B V₁ W₁)
     (w : List (Fin d)) :
     V₁ * Kraus.evalWord (reductionResidual C A (V₂ * V₁) (W₁ * W₂)) w * W₁ =
         Kraus.evalWord (reductionResidual B A V₂ W₂) w ∧
@@ -120,7 +126,8 @@ theorem mul_evalWord_reductionResidual_trans_mul (h₁ : IsReduction C B V₁ W�
           simp only [Matrix.mul_add, Matrix.add_mul, Matrix.mul_assoc]
         rw [key, hxq, hq0, Matrix.mul_zero, add_zero]
 
-private theorem evalWord_reductionResidual_mul_trans_mul_eq_zero (h₁ : IsReduction C B V₁ W₁)
+private theorem _root_.MPTensor.IsReduction.evalWord_reductionResidual_mul_trans_mul_eq_zero
+    (h₁ : IsReduction C B V₁ W₁)
     {N₁ N₂ : ℕ} (hN₁ : IsReductionResidualNilpotencyBound C B V₁ W₁ N₁)
     (hN₂ : IsReductionResidualNilpotencyBound B A V₂ W₂ N₂) (w : List (Fin d)) :
     ∀ p : List (Fin d), N₁ + N₂ ≤ p.length + w.length →
@@ -155,7 +162,8 @@ private theorem evalWord_reductionResidual_mul_trans_mul_eq_zero (h₁ : IsReduc
           (by simp at hp ⊢; omega)]
         simp
 
-private theorem evalWord_reductionResidual_trans_mul_eq_zero (h₁ : IsReduction C B V₁ W₁)
+private theorem _root_.MPTensor.IsReduction.evalWord_reductionResidual_trans_mul_eq_zero
+    (h₁ : IsReduction C B V₁ W₁)
     {N₁ N₂ : ℕ} (hN₁ : IsReductionResidualNilpotencyBound C B V₁ W₁ N₁)
     (hN₂ : IsReductionResidualNilpotencyBound B A V₂ W₂ N₂) (w : List (Fin d)) :
     ∀ q : List (Fin d), 2 * N₁ + N₂ ≤ w.length + q.length →
@@ -199,7 +207,8 @@ basis vectors, reduced onto the middle two and then onto a zero block, one has `
 Source: arXiv:1706.07329v2, Definition 8 (`cornerproblem.tex` lines 3147--3152) and Lemma
 `lem:VNW=0` (lines 3946--3970); the composite reductions are those of arXiv:2502.20257,
 `main.tex` lines 1506--1535, and arXiv:2203.12563, lines 1026--1060. -/
-theorem isReductionResidualNilpotencyBound_trans (h₁ : IsReduction C B V₁ W₁)
+theorem _root_.MPTensor.IsReduction.isReductionResidualNilpotencyBound_trans
+    (h₁ : IsReduction C B V₁ W₁)
     {N₁ N₂ : ℕ} (hN₁ : IsReductionResidualNilpotencyBound C B V₁ W₁ N₁)
     (hN₂ : IsReductionResidualNilpotencyBound B A V₂ W₂ N₂) :
     IsReductionResidualNilpotencyBound C A (V₂ * V₁) (W₁ * W₂) (2 * N₁ + N₂) := by
@@ -331,7 +340,7 @@ theorem isReductionResidualNilpotencyBound_mulTensor_idKron {X : MPOTensor d D�
 
 /-- **Reassociation preserves the residual bound, right to left.** The residual bound of a
 reduction of `M · (N · P)` carries over to the reduction of `(M · N) · P` obtained by
-`MPSTensor.IsReduction.mulTensor_assoc_left`.
+`MPTensor.IsReduction.mulTensor_assoc_left`.
 
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines 3147--3152; the associator
 is that of arXiv:1606.00608, lines 995--999. -/
@@ -349,7 +358,7 @@ theorem isReductionResidualNilpotencyBound_mulTensor_assoc_left {M : MPOTensor d
 
 /-- **Reassociation preserves the residual bound, left to right.** The residual bound of a
 reduction of `(M · N) · P` carries over to the reduction of `M · (N · P)` obtained by
-`MPSTensor.IsReduction.mulTensor_assoc_right`.
+`MPTensor.IsReduction.mulTensor_assoc_right`.
 
 Source: arXiv:1706.07329v2, Definition 8, `cornerproblem.tex` lines 3147--3152; the associator
 is that of arXiv:1606.00608, lines 995--999. -/

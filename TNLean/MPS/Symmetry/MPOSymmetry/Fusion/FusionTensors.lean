@@ -233,14 +233,16 @@ theorem nonempty_nilpotentBiorthogonalReductions_sigma_of_isNormal (B : MPSTenso
   obtain ⟨V, W, hred, horth, hnil⟩ := exists_multiplicityReductions_of_isNormal B C N hC hD hmpv
   exact ⟨⟨V, W, hred, horth, ⟨DB, hnil⟩⟩⟩
 
-namespace IsReduction
+section IsReduction
+
+open MPTensor.IsReduction
 
 variable {DA : ℕ} {B : MPSTensor d DB} {A : MPSTensor d DA}
   {V V' : Matrix (Fin DA) (Fin DB) ℂ} {W W' : Matrix (Fin DB) (Fin DA) ℂ}
 
 /-- A residual nilpotency statement for all words of length at least `K` gives the
 exact-length bound of MGSC18, Definition 8, at `K`. -/
-theorem isReductionResidualNilpotencyBound_of_forall_le {K : ℕ}
+theorem _root_.MPTensor.IsReduction.isReductionResidualNilpotencyBound_of_forall_le {K : ℕ}
     (h : ∀ w : List (Fin d), K ≤ w.length →
       Kraus.evalWord (fun i => B i - W * A i * V) w = 0) :
     IsReductionResidualNilpotencyBound B A V W K :=
@@ -252,8 +254,9 @@ remainders `B^i - W A^i V` both have vanishing words of every length at least `K
 to one nonzero scalar on every word longer than `2K`, after dressing with the source word.
 
 Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Theorem 22, `cornerproblem.tex` lines
-3156--3162 and 4007--4035 (via `MPSTensor.IsReduction.exists_boundary_dressed_proportional`). -/
-theorem exists_boundary_dressed_proportional_of_forall_le (h : IsReduction B A V W)
+3156--3162 and 4007--4035 (via `MPTensor.IsReduction.exists_boundary_dressed_proportional`). -/
+theorem _root_.MPTensor.IsReduction.exists_boundary_dressed_proportional_of_forall_le
+    (h : IsReduction B A V W)
     (h' : IsReduction B A V' W') (hA : Kraus.IsNormal A) {K : ℕ}
     (hK : ∀ w : List (Fin d), K ≤ w.length →
       Kraus.evalWord (fun i => B i - W * A i * V) w = 0)
@@ -298,7 +301,7 @@ theorem exists_fusionTensors_of_mpo_mul_eq_sum {χ : L → ℕ} (O : ∀ c, MPOT
     (hfus : ∀ n : ℕ, 0 < n → mpo (O a) n * mpo (O b) n = ∑ c, (N a b c : ℂ) • mpo (O c) n) :
     ∃ (V : ∀ s : Σ c, Fin (N a b c), Matrix (Fin (χ s.1)) (Fin (χ a * χ b)) ℂ)
       (W : ∀ s : Σ c, Fin (N a b c), Matrix (Fin (χ a * χ b)) (Fin (χ s.1)) ℂ),
-      (∀ s, MPSTensor.IsReduction (mulTensor (O a) (O b)).toMPSTensor (O s.1).toMPSTensor
+      (∀ s, MPTensor.IsReduction (mulTensor (O a) (O b)).toMPSTensor (O s.1).toMPSTensor
           (V s) (W s)) ∧
         (∀ s t, s ≠ t → V s * W t = 0) ∧
         ∀ w : List (Fin (d * d)), χ a * χ b ≤ w.length →
@@ -320,7 +323,7 @@ theorem IsMPOFusionAlgebra.exists_fusionTensors {χ : L → ℕ} {O : ∀ c, MPO
     (hO : ∀ c, Kraus.IsNormal (O c).toMPSTensor) (hχ : ∀ c, 0 < χ c) (a b : L) :
     ∃ (V : ∀ s : Σ c, Fin (N a b c), Matrix (Fin (χ s.1)) (Fin (χ a * χ b)) ℂ)
       (W : ∀ s : Σ c, Fin (N a b c), Matrix (Fin (χ a * χ b)) (Fin (χ s.1)) ℂ),
-      (∀ s, MPSTensor.IsReduction (mulTensor (O a) (O b)).toMPSTensor (O s.1).toMPSTensor
+      (∀ s, MPTensor.IsReduction (mulTensor (O a) (O b)).toMPSTensor (O s.1).toMPSTensor
           (V s) (W s)) ∧
         (∀ s t, s ≠ t → V s * W t = 0) ∧
         ∀ w : List (Fin (d * d)), χ a * χ b ≤ w.length →
@@ -346,7 +349,7 @@ theorem exists_actionTensors_of_mpo_mulVec_eq_sum {κ : Type*} [Fintype κ]
         fun σ : Fin n → Fin d => ∑ y, (M y : ℂ) * MPTensor.mpv (A y) σ) :
     ∃ (V : ∀ s : Σ y, Fin (M y), Matrix (Fin (D s.1)) (Fin (χ * Dx)) ℂ)
       (W : ∀ s : Σ y, Fin (M y), Matrix (Fin (χ * Dx)) (Fin (D s.1)) ℂ),
-      (∀ s, MPSTensor.IsReduction (actTensor T Ax) (A s.1) (V s) (W s)) ∧
+      (∀ s, MPTensor.IsReduction (actTensor T Ax) (A s.1) (V s) (W s)) ∧
         (∀ s t, s ≠ t → V s * W t = 0) ∧
         ∀ w : List (Fin d), χ * Dx ≤ w.length →
           Kraus.evalWord (fun i => actTensor T Ax i - ∑ s, W s * A s.1 i * V s) w = 0 := by
@@ -460,8 +463,8 @@ theorem exists_boundary_dressed_proportional_of_mpo_mul_eq {χa χb χc : ℕ}
     {Oa : MPOTensor d χa} {Ob : MPOTensor d χb} {Oc : MPOTensor d χc}
     (hOc : Kraus.IsNormal Oc.toMPSTensor)
     {V V' : Matrix (Fin χc) (Fin (χa * χb)) ℂ} {W W' : Matrix (Fin (χa * χb)) (Fin χc) ℂ}
-    (h : MPSTensor.IsReduction (mulTensor Oa Ob).toMPSTensor Oc.toMPSTensor V W)
-    (h' : MPSTensor.IsReduction (mulTensor Oa Ob).toMPSTensor Oc.toMPSTensor V' W') {K : ℕ}
+    (h : MPTensor.IsReduction (mulTensor Oa Ob).toMPSTensor Oc.toMPSTensor V W)
+    (h' : MPTensor.IsReduction (mulTensor Oa Ob).toMPSTensor Oc.toMPSTensor V' W') {K : ℕ}
     (hK : ∀ w : List (Fin (d * d)), K ≤ w.length →
       Kraus.evalWord (fun i => (mulTensor Oa Ob).toMPSTensor i - W * Oc.toMPSTensor i * V) w =
         0)

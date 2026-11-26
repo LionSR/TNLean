@@ -101,7 +101,7 @@ structure ActionData (F : GroupFamily G d) (A : MPSTensor d D) where
   V : ∀ g : G, Matrix (Fin D) (Fin (F.bondDim g * D)) ℂ
   /-- The right action tensor of `g`. -/
   W : ∀ g : G, Matrix (Fin (F.bondDim g * D)) (Fin D) ℂ
-  isReduction : ∀ g, MPSTensor.IsReduction (actTensor (F.tensor g) A) A (V g) (W g)
+  isReduction : ∀ g, MPTensor.IsReduction (actTensor (F.tensor g) A) A (V g) (W g)
 
 omit [Group G] in
 /-- **Existence of action tensors** for a normal state of positive bond dimension fixed by
@@ -136,14 +136,14 @@ noncomputable def fuseV (g h : G) :
 omit [Group G] in
 /-- Acting with `h` and then with `g` gives a reduction of `(O_g O_h) · A` onto `A` with left
 boundary `actV g h`. -/
-theorem exists_isReduction_actV (g h : G) : ∃ W, MPSTensor.IsReduction
+theorem exists_isReduction_actV (g h : G) : ∃ W, MPTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) A (ad.actV g h) W :=
   ⟨_, (((ad.isReduction h).actTensor_idKron (F.tensor g)).trans
     (ad.isReduction g)).actTensor_assoc_left⟩
 
 /-- Fusing `g` with `h` and then acting with `gh` gives a reduction of `(O_g O_h) · A` onto `A`
 with left boundary `fuseV g h`. -/
-theorem exists_isReduction_fuseV (g h : G) : ∃ W, MPSTensor.IsReduction
+theorem exists_isReduction_fuseV (g h : G) : ∃ W, MPTensor.IsReduction
     (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) A (ad.fuseV fd g h) W :=
   ⟨_, ((fd.isReduction g h).actTensor_kronId A).trans (ad.isReduction (g * h))⟩
 
@@ -184,9 +184,9 @@ belong to reductions onto the normal tensor `A`, so a nonzero proportionality sc
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913. -/
 theorem isDressedProportional_lSymbol (hA : Kraus.IsNormal A)
     (hinv : ∀ g, FixesMPV (F.tensor g) A) (x : Unit) (g h : G) :
-    MPSTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) A)
+    MPTensor.IsDressedProportional (actTensor (mulTensor (F.tensor g) (F.tensor h)) A)
       (ad.actV g h) (ad.fuseV fd g h) (ad.lSymbol fd x g h) := by
-  have hex : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
+  have hex : ∃ z : ℂ, z ≠ 0 ∧ MPTensor.IsDressedProportional
       (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) (ad.actV g h) (ad.fuseV fd g h) z := by
     obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h
     obtain ⟨W', hW'⟩ := ad.exists_isReduction_fuseV fd g h
@@ -284,15 +284,15 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
       MPTensor.SameMPV₂Pos B3 (actTensor (mulTensor (F.tensor a) (F.tensor b)) A) :=
     fun a b ↦ fun N hN σ ↦ (hSame3 N hN σ).trans (hSameC a b N hN σ).symm
   -- the three reductions of `B3` used for pullbacks
-  have hR : MPSTensor.IsReduction B3 (actTensor (mulTensor (F.tensor g) (F.tensor h)) A)
+  have hR : MPTensor.IsReduction B3 (actTensor (mulTensor (F.tensor g) (F.tensor h)) A)
       (idKron (F.bondDim g * F.bondDim h) (ad.V k) *
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) D) _ :=
     ((ad.isReduction k).actTensor_idKron (mulTensor (F.tensor g) (F.tensor h))).actTensor_assoc_left
-  have hS : MPSTensor.IsReduction B3
+  have hS : MPTensor.IsReduction B3
       (actTensor (mulTensor (F.tensor (g * h)) (F.tensor k)) A)
       (kronId (kronId (fd.V g h) (F.bondDim k)) D) _ :=
     ((fd.isReduction g h).mulTensor_kronId (F.tensor k)).actTensor_kronId A
-  have hK : MPSTensor.IsReduction B3
+  have hK : MPTensor.IsReduction B3
       (actTensor (mulTensor (F.tensor g) (F.tensor (h * k))) A)
       (kronId (idKron (F.bondDim g) (fd.V h k) *
         mulTensorAssocInvMatrix (F.bondDim g) (F.bondDim h) (F.bondDim k)) D) _ :=
@@ -318,7 +318,7 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
         mulTensor_mul_assocMatrix (F.tensor g) (F.tensor h) (F.tensor k) i l)
   have H5 := ((fd.isAssociator_omega hF g h k).actTensor_kronId A).mul_left (ad.V (g * h * k))
   -- rewrite all boundaries into the five canonical ones
-  have H1'' : MPSTensor.IsDressedProportional B3
+  have H1'' : MPTensor.IsDressedProportional B3
       (ad.actV g h * (idKron (F.bondDim g * F.bondDim h) (ad.V k) *
         mulTensorAssocInvMatrix (F.bondDim g * F.bondDim h) (F.bondDim k) D))
       (ad.actV g (h * k) * kronId (idKron (F.bondDim g) (fd.V h k) *
@@ -338,7 +338,7 @@ theorem isCompatible_lSymbol (hF : F.IsNormalRepresentation) (hA : Kraus.IsNorma
           Kraus.evalWord B3 w ≠ 0 := by
     obtain ⟨W, hW⟩ := ad.exists_isReduction_actV g h
     exact (hR.trans hW).exists_mul_evalWord_ne_zero hA hD
-  have heq := MPSTensor.IsDressedProportional.eq_of_forall_exists_ne_zero hleft hright hne
+  have heq := MPTensor.IsDressedProportional.eq_of_forall_exists_ne_zero hleft hright hne
   apply Units.ext
   simp only [Units.val_mul]
   have hk : k • x = x := Subsingleton.elim _ _

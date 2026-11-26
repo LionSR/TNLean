@@ -496,11 +496,11 @@ theorem ft_sector_bnt_equal_matched_copy_weight_witnesses
       mpv_cast_dim (hDim k) (P.basis (β k)) N σ]
   have hζ_norm : ∀ k : Fin Q.basisCount, ‖ζ k‖ = 1 := by
     intro k
-    have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) (P.basis (β k)) (P.basis (β k)) N‖)
+    have hAA : Tendsto (fun N => ‖mpvOverlap (α := Fin d) (P.basis (β k)) (P.basis (β k)) N‖)
         atTop (𝓝 (1 : ℝ)) := by
       have h1 := (hP.basis_normalized_self_overlap (β k)).norm
       simpa using h1
-    have hBB : Tendsto (fun N => ‖mpvOverlap (d := d) (Q.basis k) (Q.basis k) N‖)
+    have hBB : Tendsto (fun N => ‖mpvOverlap (α := Fin d) (Q.basis k) (Q.basis k) N‖)
         atTop (𝓝 (1 : ℝ)) := by
       have h1 := (hQ.basis_normalized_self_overlap k).norm
       simpa using h1

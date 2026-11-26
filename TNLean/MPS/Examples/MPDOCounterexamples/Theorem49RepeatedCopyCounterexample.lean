@@ -103,7 +103,7 @@ theorem repeatedCopyDecomposition_isBNTCanonicalForm :
         scalarBNT, toMPSTensor]
     basis_normalized_self_overlap := by
       intro j
-      simp [MPSTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
+      simp [MPTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
         Matrix.trace]
     bnt_data := by
       refine ⟨0, ?_⟩

@@ -141,7 +141,7 @@ theorem exists_fusionTensors_of_leftCanonical_of_posDef_fixedPoint
     (hFix : Kraus.map B ρ = ρ) :
     ∃ (left : ∀ s : {s // s ∈ S}, Matrix (Fin (dim s.1)) (Fin D) ℂ)
       (right : ∀ s : {s // s ∈ S}, Matrix (Fin D) (Fin (dim s.1)) ℂ),
-      (∀ s, MPSTensor.IsReduction B (C s.1) (left s) (right s)) ∧
+      (∀ s, MPTensor.IsReduction B (C s.1) (left s) (right s)) ∧
       (∀ (i : Fin d) (s : {s // s ∈ S}), B i * right s = right s * C s.1 i) ∧
       (∀ (i : Fin d) (s : {s // s ∈ S}), left s * B i = C s.1 i * left s) ∧
       (∀ s t : {s // s ∈ S}, s ≠ t → left s * right t = 0) := by

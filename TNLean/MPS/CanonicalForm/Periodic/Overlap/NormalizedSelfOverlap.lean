@@ -62,7 +62,7 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
     [NeZero D] (A : MPSTensor d D)
     (hIrr : Kraus.IsIrreducibleFamily A)
     (hLeft : IsLeftCanonical A)
-    (hSelf : Tendsto (fun N : ℕ ↦ mpvOverlap (d := d) A A N) atTop (nhds 1)) :
+    (hSelf : Tendsto (fun N : ℕ ↦ mpvOverlap (α := Fin d) A A N) atTop (nhds 1)) :
     _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ∧ Kraus.IsNormal A := by
   classical
   obtain ⟨K, hUnital, hIrrK, ρ, hρpd, hρfix, rfl⟩ :=
@@ -167,7 +167,7 @@ theorem isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
     [NeZero D] (A : MPSTensor d D)
     (hIrr : Kraus.IsIrreducibleFamily A)
     (hLeft : IsLeftCanonical A)
-    (hSelf : Tendsto (fun N : ℕ ↦ mpvOverlap (d := d) A A N) atTop (nhds 1)) :
+    (hSelf : Tendsto (fun N : ℕ ↦ mpvOverlap (α := Fin d) A A N) atTop (nhds 1)) :
     Kraus.IsNormal A :=
   (isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendsto_one
     A hIrr hLeft hSelf).2

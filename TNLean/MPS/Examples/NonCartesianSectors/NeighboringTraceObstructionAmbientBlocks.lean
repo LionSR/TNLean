@@ -484,24 +484,24 @@ theorem obstructionTerminalDecomposition_isBNTCanonicalForm
     MPSTensor.IsBNTCanonicalForm (obstructionTerminalDecomposition mu B hmu) := by
   have hTerminalNormal := terminalBlock_isNormalTensor
   have hBSelf : Filter.Tendsto
-      (fun N : ℕ ↦ MPSTensor.mpvOverlap (d := 5 * 5) B B N)
+      (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5)) B B N)
       Filter.atTop (nhds (1 : ℂ)) :=
     MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible B
       hBNormal.no_invariant_proj hBLeft hBNormal.primitive_transfer
   have hTerminalSelf : Filter.Tendsto
-      (fun N : ℕ ↦ MPSTensor.mpvOverlap (d := 5 * 5)
+      (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5))
         terminalBlock.toMPSTensor terminalBlock.toMPSTensor N)
       Filter.atTop (nhds (1 : ℂ)) :=
     MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
       terminalBlock.toMPSTensor hTerminalNormal.no_invariant_proj
       terminalBlock_isLeftCanonical hTerminalNormal.primitive_transfer
   have hCrossBT : Filter.Tendsto
-      (fun N : ℕ ↦ MPSTensor.mpvOverlap (d := 5 * 5)
+      (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5))
         B terminalBlock.toMPSTensor N) Filter.atTop (nhds 0) :=
     MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne B terminalBlock.toMPSTensor
       hBInj terminalBlock_isInjective hBLeft terminalBlock_isLeftCanonical (by omega)
   have hCrossTB : Filter.Tendsto
-      (fun N : ℕ ↦ MPSTensor.mpvOverlap (d := 5 * 5)
+      (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5))
         terminalBlock.toMPSTensor B N) Filter.atTop (nhds 0) :=
     MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne terminalBlock.toMPSTensor B
       terminalBlock_isInjective hBInj terminalBlock_isLeftCanonical hBLeft (by omega)
