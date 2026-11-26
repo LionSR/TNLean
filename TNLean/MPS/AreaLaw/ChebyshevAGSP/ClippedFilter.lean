@@ -178,7 +178,7 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
             ‖K - vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ))‖ ≤
               2 * Real.exp (-2 * (ell : ℝ) * Real.sqrt ((9 * g / 10) / (2 * t + s))) ∧
             operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-              (leftBlock L (a + s / 2)) K) ≤
+              (interval L 0 (a + s / 2)) K) ≤
                 (q * (ell + 1)) ^ (32 * (ell / s + Nat.sqrt ell + 1)) ∧
             ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪φ, ψ⟫_ℂ = 0 →
               ⟪φ, toEuclideanLin K ψ⟫_ℂ = 0 ∧
@@ -292,7 +292,7 @@ theorem exists_aklv_clipped_chebyshev_filter {L q a s : ℕ}
             ‖K - vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ))‖ ≤
               2 * Real.exp (-2 * (ell : ℝ) * Real.sqrt ((9 * g / 10) / (2 * t + s))) ∧
             operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-              (leftBlock L (a + s / 2)) K) ≤
+              (interval L 0 (a + s / 2)) K) ≤
                 (q * (ell + 1)) ^ (32 * (ell / s + Nat.sqrt ell + 1)) ∧
             ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪φ, ψ⟫_ℂ = 0 →
               ⟪φ, toEuclideanLin K ψ⟫_ℂ = 0 ∧
@@ -362,7 +362,7 @@ theorem exists_aklv_physical_favorable_filter :
         let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
         toEuclideanLin K φ = φ ∧
         operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-          (leftBlock L (a + s / 2)) K) ≤ D ∧
+          (interval L 0 (a + s / 2)) K) ≤ D ∧
         ‖K - vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ))‖ ≤
           2 * Real.exp (-2 * (ell : ℝ) * Real.sqrt ((9 * g / 10) / R)) ∧
         ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪φ, ψ⟫_ℂ = 0 →
@@ -393,7 +393,7 @@ theorem exists_aklv_physical_favorable_filter :
     hfilter t0 le_rfl
   obtain ⟨p, hdegree, hpE, hfix, herr, hrank, hperp⟩ := hpoly ell
   have hrankD : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L (a + s / 2))
+      (interval L 0 (a + s / 2))
       (Polynomial.aeval
         (ManyBody.BondInteraction.twoBlockTruncatedHamiltonian
           (a + 2) (a + s - 1) Φ e t0 Finset.univ) p)) ≤ D := by
@@ -464,20 +464,20 @@ theorem exists_cut_product_filtered_output {L q k D : ℕ}
     (hperp : ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪φ, ψ⟫_ℂ = 0 →
       ⟪φ, toEuclideanLin K ψ⟫_ℂ = 0 ∧ ‖toEuclideanLin K ψ‖ ^ 2 ≤ delta)
     (hrank : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) K) ≤ D) (htrade : (D : ℝ) * delta ≤ 1 / 2) :
+      (interval L 0 k) K) ≤ D) (htrade : (D : ℝ) * delta ≤ 1 / 2) :
     ∃ (χ : EuclideanSpace ℂ (Fin L → Fin q))
-      (u : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) → ℂ)
-      (v : ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q) → ℂ) (c : ℂ),
-      ‖χ‖ = 1 ∧ ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) χ =
+      (u : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k)) → ℂ)
+      (v : ((i : {i : Fin L // i ∉ interval L 0 k}) → Fin q) → ℂ) (c : ℂ),
+      ‖χ‖ = 1 ∧ ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) χ =
         WithLp.toLp 2 (fun z ↦ u z.1 * v z.2) ∧
       1 / Real.sqrt (2 * (D : ℝ)) ≤ ‖⟪φ, χ⟫_ℂ‖ ∧
       toEuclideanLin K χ ≠ 0 ∧ ‖c‖ = 1 ∧
       let ψ := c • (‖toEuclideanLin K χ‖⁻¹ : ℂ) • toEuclideanLin K χ
       ‖ψ‖ = 1 ∧
       schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
-        (leftBlock L k) ψ)) ≤ D ∧ ‖ψ - φ‖ ^ 2 ≤ 4 * (D : ℝ) * delta := by
+        (interval L 0 k) ψ)) ≤ D ∧ ‖ψ - φ‖ ^ 2 ≤ 4 * (D : ℝ) * delta := by
   classical
-  let cut := leftBlock L k
+  let cut := interval L 0 k
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) cut)
   let Kcut := ManyBody.cutOperator (X := fun _ ↦ Fin q) cut K
   have hU (x : EuclideanSpace ℂ (Fin L → Fin q)) : U x = ManyBody.cutVector cut x := by
@@ -598,19 +598,19 @@ theorem exists_aklv_physical_product_initialization :
         let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
         toEuclideanLin K φ = φ ∧
         operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-          (leftBlock L (a + s / 2)) K) ≤ D ∧
+          (interval L 0 (a + s / 2)) K) ≤ D ∧
         ∃ (χ : EuclideanSpace ℂ (Fin L → Fin q))
-          (vL : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L (a + s / 2))) → ℂ)
-          (vR : ((i : {i : Fin L // i ∉ leftBlock L (a + s / 2)}) → Fin q) → ℂ) (c : ℂ),
+          (vL : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 (a + s / 2))) → ℂ)
+          (vR : ((i : {i : Fin L // i ∉ interval L 0 (a + s / 2)}) → Fin q) → ℂ) (c : ℂ),
           ‖χ‖ = 1 ∧
-          ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L (a + s / 2)) χ =
+          ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 (a + s / 2)) χ =
             WithLp.toLp 2 (fun z ↦ vL z.1 * vR z.2) ∧
           1 / Real.sqrt (2 * (D : ℝ)) ≤ ‖⟪φ, χ⟫_ℂ‖ ∧
           toEuclideanLin K χ ≠ 0 ∧ ‖c‖ = 1 ∧
           let ψ := c • (‖toEuclideanLin K χ‖⁻¹ : ℂ) • toEuclideanLin K χ
           ‖ψ‖ = 1 ∧
           schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
-            (leftBlock L (a + s / 2)) ψ)) ≤ D ∧
+            (interval L 0 (a + s / 2)) ψ)) ≤ D ∧
           ‖ψ - φ‖ ^ 2 ≤ 1 / 64 ∧ ‖ψ - Ω‖ ^ 2 ≤ 1 / 16 := by
   obtain ⟨A, hA, hA21, hphysical⟩ := exists_aklv_physical_favorable_filter
   refine ⟨A, hA, hA21, ?_⟩

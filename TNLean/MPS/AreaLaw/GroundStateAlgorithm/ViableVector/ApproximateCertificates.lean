@@ -61,7 +61,7 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace ChainInteraction)
+open ManyBody (IsGapped groundSpace ChainInteraction interval interval_mono)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -75,8 +75,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_all_spectral_ap
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
@@ -94,8 +94,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_all_spectral_ap
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))
     (A : Matrix (Fin n) (Fin n) ℂ) (hA : A.IsHermitian)
     (P N : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
@@ -163,8 +165,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
@@ -182,8 +184,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))
     {κ ε εb δ eK : ℝ} {A : Matrix (Fin n) (Fin n) ℂ}
     {P N : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ}
@@ -249,8 +253,8 @@ theorem exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
@@ -268,8 +272,10 @@ theorem exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))
     {κ ε εb δ eK eη : ℝ} {A : Matrix (Fin n) (Fin n) ℂ}
     {P N : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ}
@@ -339,8 +345,8 @@ theorem exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
@@ -360,8 +366,10 @@ theorem exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     {κ ε εb δ eK eη ξrat : ℝ} {A : Matrix (Fin n) (Fin n) ℂ}
@@ -423,8 +431,8 @@ theorem exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slac
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
@@ -444,8 +452,10 @@ theorem exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slac
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     {κ ε εb δ eK eη ξrat : ℝ} {A : Matrix (Fin n) (Fin n) ℂ}

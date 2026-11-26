@@ -30,6 +30,7 @@ factorizes as `⟨O_L⟩ ⟨O_R⟩`.
 
 open Matrix
 open scoped InnerProductSpace Kronecker
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -39,9 +40,9 @@ variable {L q : ℕ}
 coordinates against the operator in cut coordinates. -/
 theorem trace_cutPureState_mul_cutOperator (c : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    (cutPureState L q c Ω * ManyBody.cutOperator (leftBlock L c) A).trace =
+    (cutPureState L q c Ω * ManyBody.cutOperator (interval L 0 c) A).trace =
       ⟪Ω, toEuclideanLin A Ω⟫_ℂ := by
-  rw [← Entropy.inner_cutOperator (leftBlock L c), Entropy.inner_toEuclideanLin_eq_trace]
+  rw [← Entropy.inner_cutOperator (interval L 0 c), Entropy.inner_toEuclideanLin_eq_trace]
 
 /-- **Expectation of a product of one-sided operators.** If `O_L` is supported on the sites
 to the left of the cut after `c` sites and `O_R` on the remaining sites, then the
@@ -50,11 +51,11 @@ product `⟨Ω, O_L Ω⟩ ⟨Ω, O_R Ω⟩` of the expectations in `Ω`.
 Hastings, arXiv:0705.2024v4, `law16.tex` lines 440–446. -/
 theorem trace_cutProductState_mul_mul (c : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     {OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (leftBlock L c))
-    (hR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (leftBlock L c)ᶜ) :
+    (hL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (interval L 0 c))
+    (hR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (interval L 0 c)ᶜ) :
     (cutProductState L q c Ω * (OL * OR)).trace =
       ⟪Ω, toEuclideanLin OL Ω⟫_ℂ * ⟪Ω, toEuclideanLin OR Ω⟫_ℂ := by
-  set B := leftBlock L c
+  set B := interval L 0 c
   set e := ManyBody.cutEquiv (fun _ ↦ Fin q) B
   rcases isEmpty_or_nonempty (Fin L → Fin q) with hE | hE
   · simp [Matrix.trace, PiLp.inner_apply]
@@ -82,7 +83,7 @@ the product of the two marginals of `Ω` equals its expectation `⟨Ω, O_L Ω�
 theorem trace_cutProductState_mul_of_isSupportedOn_left (c : ℕ)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {OL : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (leftBlock L c)) :
+    (hL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (interval L 0 c)) :
     (cutProductState L q c Ω * OL).trace = ⟪Ω, toEuclideanLin OL Ω⟫_ℂ := by
   have h := trace_cutProductState_mul_mul c Ω hL
       (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _))
@@ -96,7 +97,7 @@ the product of the two marginals of `Ω` equals its expectation `⟨Ω, O_R Ω�
 theorem trace_cutProductState_mul_of_isSupportedOn_right (c : ℕ)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (leftBlock L c)ᶜ) :
+    (hR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (interval L 0 c)ᶜ) :
     (cutProductState L q c Ω * OR).trace = ⟪Ω, toEuclideanLin OR Ω⟫_ℂ := by
   have h := trace_cutProductState_mul_mul c Ω
       (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)) hR

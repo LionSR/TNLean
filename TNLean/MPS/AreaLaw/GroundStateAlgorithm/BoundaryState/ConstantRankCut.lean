@@ -87,7 +87,7 @@ open scoped Matrix.Norms.L2Operator
 open Matrix
 open scoped Kronecker InnerProductSpace ComplexOrder
 
-open ManyBody (IsGapped groundSpace ChainInteraction)
+open ManyBody (IsGapped groundSpace ChainInteraction interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -96,40 +96,40 @@ variable {L q : ℕ}
 /-! ### Cut coordinates -/
 
 /-- The regional state of `ψ` on the first `k` sites is the left marginal of its cut vector. -/
-theorem regionState_leftBlock_eq_leftMarginal (ψ : EuclideanSpace ℂ (Fin L → Fin q))
+theorem regionState_interval_eq_leftMarginal (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (k : ℕ) :
-    ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) =
-      leftMarginal (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ) :=
+    ManyBody.regionState (X := fun _ ↦ Fin q) ψ (interval L 0 k) =
+      leftMarginal (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ) :=
   (ManyBody.regionState_eq_partialTraceRight_cutVector _ _).trans
     (partialTraceRight_vecMulVec_eq _)
 
 /-- Passing to cut coordinates commutes with scalar multiplication. -/
 theorem cutVector_smul (k : ℕ) (c : ℂ) (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) (c • ψ) =
-      c • ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ :=
+    ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) (c • ψ) =
+      c • ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ :=
   rfl
 
 /-- In the coordinates of the cut after `k` sites, the normalized trimmed vector is the
 normalized bipartite trimmed vector. -/
 theorem cutVector_normalized_chainTrim (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
     (P : LeftBlockMatrix L q k) :
-    ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k)
+    ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k)
         (‖chainTrim ψ k P‖⁻¹ • chainTrim ψ k P) =
-      ‖leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ)‖⁻¹ •
-        leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ) := by
+      ‖leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ)‖⁻¹ •
+        leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ) := by
   rw [RCLike.real_smul_eq_coe_smul (K := ℂ), cutVector_smul, cutVector_chainTrim,
-    ← Entropy.norm_cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) (chainTrim ψ k P),
+    ← Entropy.norm_cutVector (n := fun _ : Fin L ↦ q) (interval L 0 k) (chainTrim ψ k P),
     cutVector_chainTrim, ← RCLike.real_smul_eq_coe_smul]
 
 /-- The normalized trimmed vector has overlap with `ψ` equal to the square root of the Ky Fan
 norm of the regional state of `ψ` on the first `k` sites. -/
 theorem inner_normalized_chainTrim {ψ : EuclideanSpace ℂ (Fin L → Fin q)} {k m : ℕ}
     {P : LeftBlockMatrix L q k}
-    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ)
+    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ)
       m P) :
     ⟪‖chainTrim ψ k P‖⁻¹ • chainTrim ψ k P, ψ⟫_ℂ =
       (√((posSemidef_leftMarginal
-        (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ)).isHermitian.kyFanNorm
+        (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ)).isHermitian.kyFanNorm
           m) : ℂ) := by
   rw [← inner_cutVector k, cutVector_normalized_chainTrim, hP.inner_normalized_eq_sqrt]
 
@@ -157,7 +157,7 @@ theorem _root_.ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim {R : ℕ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {δ : ℝ} (hδ0 : 0 < δ) (k : ℕ) {P : LeftBlockMatrix L q k}
-    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) Ω)
+    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) Ω)
       (constantCutBond q R J Δ δ) P) :
     1 - δ ≤ (⟪‖chainTrim Ω k P‖⁻¹ • chainTrim Ω k P, Ω⟫_ℂ).re := by
   rcases le_or_gt δ 1 with hδ1 | hδ1
@@ -179,14 +179,14 @@ theorem _root_.ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim {R : ℕ}
   have hw0 : 0 ≤ w := by
     have := Real.log_nonneg hcδ
     positivity
-  have hb := h.spectralProjectionGE_leftBlock_bounds hh hhJ hq hJ hΔ hΩ hgap hspan k w hw0
+  have hb := h.spectralProjectionGE_interval_bounds hh hhJ hq hJ hΔ hΩ hgap hspan k w hw0
   dsimp only at hb
   obtain ⟨hproj, hrank, hmass⟩ := hb
-  set Pw := spectralProjectionGE (ManyBody.regionState (X := fun _ ↦ Fin q) Ω (leftBlock L k))
+  set Pw := spectralProjectionGE (ManyBody.regionState (X := fun _ ↦ Fin q) Ω (interval L 0 k))
     (Real.exp (-(chainIntervalEntropyBound q R J Δ + w))) with hPw
   -- The discarded mass is at most `δ`.
   have hmassδ : ((1 - Pw) * ManyBody.regionState (X := fun _ ↦ Fin q)
-      Ω (leftBlock L k)).trace.re ≤ δ := by
+      Ω (interval L 0 k)).trace.re ≤ δ := by
     refine hmass.trans (le_of_eq ?_)
     rw [← hs, ← hc, hw, show 32 * s * Real.log (c / δ) / (32 * s) = Real.log (c / δ) by
       field_simp, Real.exp_neg, Real.exp_log (by positivity)]
@@ -195,15 +195,15 @@ theorem _root_.ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim {R : ℕ}
   have hrankB : Pw.rank ≤ constantCutBond q R J Δ δ := Nat.le_floor hrank
   -- Ky Fan's maximum principle.
   have hρ := posSemidef_leftMarginal
-    (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) Ω)
+    (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) Ω)
   have hPh : Pw.IsHermitian := hproj.isSelfAdjoint
   have hPi : Pw * Pw = Pw := hproj.isIdempotentElem
   have hKF := hρ.trace_mul_re_le_kyFanNorm_of_isHermitian_idem hPh hPi hrankB
   have htr : (leftMarginal
-      (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) Ω)).trace.re = 1 := by
-    rw [← regionState_leftBlock_eq_leftMarginal, ManyBody.trace_regionState_eq_one hΩ,
+      (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) Ω)).trace.re = 1 := by
+    rw [← regionState_interval_eq_leftMarginal, ManyBody.trace_regionState_eq_one hΩ,
       Complex.one_re]
-  rw [regionState_leftBlock_eq_leftMarginal, Matrix.sub_mul, Matrix.one_mul, trace_sub,
+  rw [regionState_interval_eq_leftMarginal, Matrix.sub_mul, Matrix.one_mul, trace_sub,
     Complex.sub_re, htr] at hmassδ
   set κ := hρ.isHermitian.kyFanNorm (constantCutBond q R J Δ δ)
   have hκ : 1 - δ ≤ κ := by linarith
@@ -228,11 +228,11 @@ theorem hasSchmidtRankLE_smul {α β : Type*} [Fintype β] {k : ℕ}
 /-- The normalized trimmed vector has rank at most `m` across its cut. -/
 theorem rank_cutMatrix_normalized_chainTrim_le {ψ : EuclideanSpace ℂ (Fin L → Fin q)}
     {k m : ℕ} {P : LeftBlockMatrix L q k}
-    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ)
+    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ)
       m P) :
-    (ManyBody.cutMatrix (leftBlock L k) (‖chainTrim ψ k P‖⁻¹ • chainTrim ψ k P)).rank ≤ m := by
+    (ManyBody.cutMatrix (interval L 0 k) (‖chainTrim ψ k P‖⁻¹ • chainTrim ψ k P)).rank ≤ m := by
   change (schmidtCoeffMatrix (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
-    (leftBlock L k) (‖chainTrim ψ k P‖⁻¹ • chainTrim ψ k P)))).rank ≤ m
+    (interval L 0 k) (‖chainTrim ψ k P‖⁻¹ • chainTrim ψ k P)))).rank ≤ m
   rw [cutVector_normalized_chainTrim, RCLike.real_smul_eq_coe_smul (K := ℂ)]
   exact hasSchmidtRankLE_smul hP.hasSchmidtRankLE_leftApply _
 
@@ -249,17 +249,17 @@ theorem norm_normalized_chainTrim_eq_one {ψ : EuclideanSpace ℂ (Fin L → Fin
 
 /-- In cut coordinates a sum is the sum of the cut forms. -/
 theorem cutOperator_add (k : ℕ) (X Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) (X + Y) =
-      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) X +
-        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) Y := by
+    ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) (X + Y) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) X +
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) Y := by
   ext a b
   simp
 
 /-- In cut coordinates `X - E 1` becomes the cut form of `X` minus `E 1`. -/
 theorem cutOperator_sub_smul_one (k : ℕ) (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (E : ℂ) :
-    ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) (X - E • 1) =
-      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) X - E • 1 := by
+    ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) (X - E • 1) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) X - E • 1 := by
   ext a b
   simp [one_apply]
 
@@ -274,18 +274,18 @@ The source's Hamiltonian is a sum of nearest-neighbour terms `0 ≤ H_i ≤ 1`; 
 the term across it. -/
 theorem re_inner_normalized_chainTrim_le
     {H HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {k B : ℕ} (hsplit : H = HL + HR + K)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hHR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (leftBlock L k)ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hHR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (interval L 0 k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ Δ : ℝ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : H.IsHermitian) (hΩ : ‖Ω‖ = 1)
     (hgap : IsGapped H E₀ Δ) (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω})
     {PΩ : LeftBlockMatrix L q k}
-    (hPΩ : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) Ω)
+    (hPΩ : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) Ω)
       B PΩ)
     {δB : ℝ} (hB : 1 - δB ≤ (⟪‖chainTrim Ω k PΩ‖⁻¹ • chainTrim Ω k PΩ, Ω⟫_ℂ).re)
     {w : EuclideanSpace ℂ (Fin L → Fin q)} (hw : ‖w‖ = 1) {δ : ℝ}
     (hE : (⟪w, toEuclideanLin H w⟫_ℂ).re ≤ E₀ + δ) {P : LeftBlockMatrix L q k}
-    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w)
+    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) w)
       B P)
     {η : ℝ} (hη : 2 * (δ / Δ + δB) ≤ η) (hη2 : 2 * η < 1) :
     (⟪‖chainTrim w k P‖⁻¹ • chainTrim w k P,
@@ -321,44 +321,44 @@ theorem re_inner_normalized_chainTrim_le
     one_sub_two_mul_add_le_norm_inner hunorm hw hΩ hδB (by linarith) hδΔ (by linarith)
       ((Complex.re_le_norm _).trans' hB) (by rwa [norm_inner_symm])
   -- Cut coordinates.
-  set e := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)
-  have hL := hHL.cutOperator_eq_kronecker_one (B := leftBlock L k) subset_rfl (e σ).2
-  have hR := hHR.cutOperator_eq_one_kronecker (B := leftBlock L k) disjoint_compl_left (e σ).1
+  set e := ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)
+  have hL := hHL.cutOperator_eq_kronecker_one (B := interval L 0 k) subset_rfl (e σ).2
+  have hR := hHR.cutOperator_eq_one_kronecker (B := interval L 0 k) disjoint_compl_left (e σ).1
   obtain ⟨A, A', hHc⟩ : ∃ (A : LeftBlockMatrix L q k)
-      (A' : Matrix ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q)
-        ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) ℂ),
-      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) H =
-        A ⊗ₖ (1 : Matrix ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) _ ℂ) +
+      (A' : Matrix ((v : {v : Fin L // v ∉ interval L 0 k}) → Fin q)
+        ((v : {v : Fin L // v ∉ interval L 0 k}) → Fin q) ℂ),
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) H =
+        A ⊗ₖ (1 : Matrix ((v : {v : Fin L // v ∉ interval L 0 k}) → Fin q) _ ℂ) +
           (1 : LeftBlockMatrix L q k) ⊗ₖ A' +
-          ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K :=
-    ⟨fun x x' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) HL
+          ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K :=
+    ⟨fun x x' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) HL
         (x, (e σ).2) (x', (e σ).2),
-      fun y y' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) HR
+      fun y y' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) HR
         ((e σ).1, y) ((e σ).1, y'),
       by rw [hsplit, cutOperator_add, cutOperator_add, ← hL, ← hR]⟩
-  have hK1c : (1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K).PosSemidef := by
-    have : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
+  have hK1c : (1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K).PosSemidef := by
+    have : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k)
         (1 - K)).PosSemidef := hK1.submatrix _
-    have h1 : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) (1 - K) =
-        1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K := by
+    have h1 : ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) (1 - K) =
+        1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K := by
       ext a b
       simp [one_apply]
     rwa [h1] at this
-  have hHc0 : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) H -
+  have hHc0 : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) H -
       (E₀ : ℂ) • 1).PosSemidef := by
     rw [← cutOperator_sub_smul_one]
     exact hH0.submatrix _
   have hEc := hE
-  rw [← Entropy.inner_cutOperator (leftBlock L k)] at hEc
-  have hwc : ‖ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w‖ = 1 := by
+  rw [← Entropy.inner_cutOperator (interval L 0 k)] at hEc
+  have hwc : ‖ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) w‖ = 1 := by
     rw [Entropy.norm_cutVector, hw]
-  have hucv : ‖ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) u‖ = 1 := by
+  have hucv : ‖ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) u‖ = 1 := by
     rw [Entropy.norm_cutVector, hunorm]
   have huD : HasSchmidtRankLE B
-      (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) u)) :=
+      (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) u)) :=
     rank_cutMatrix_normalized_chainTrim_le hPΩ
-  have huwc : 1 - η ≤ ‖⟪ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) u,
-      ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w⟫_ℂ‖ := by
+  have huwc : 1 - η ≤ ‖⟪ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) u,
+      ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) w⟫_ℂ‖ := by
     rw [inner_cutVector]
     linarith
   have h := hP.re_inner_normalized_le_of_norm_inner hHc hHc0 (hK0.submatrix _) hK1c hwc hEc
@@ -373,22 +373,22 @@ theorem _root_.ManyBody.ChainInteraction.re_inner_normalized_chainTrim_le {R : �
         (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {k : ℕ}
     (hsplit : h.hamiltonian = HL + HR + K)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hHR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (leftBlock L k)ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hHR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (interval L 0 k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ : ℝ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {δB : ℝ} (hδB0 : 0 < δB) {w : EuclideanSpace ℂ (Fin L → Fin q)}
     (hw : ‖w‖ = 1) {δ : ℝ} (hE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + δ)
     {P : LeftBlockMatrix L q k}
-    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w)
+    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) w)
       (constantCutBond q R J Δ δB) P)
     {η : ℝ} (hη : 2 * (δ / Δ + δB) ≤ η) (hη2 : 2 * η < 1) :
     (⟪‖chainTrim w k P‖⁻¹ • chainTrim w k P,
         toEuclideanLin h.hamiltonian (‖chainTrim w k P‖⁻¹ • chainTrim w k P)⟫_ℂ).re ≤
       E₀ + (δ + 2 * √(2 * η)) / (1 - 2 * η) := by
   obtain ⟨PΩ, hPΩ⟩ := exists_isTrimmingProjection
-    (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) Ω) (constantCutBond q R J Δ δB)
+    (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) Ω) (constantCutBond q R J Δ δB)
   exact TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le hsplit hHL hHR hK0 hK1 hΔ
       (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan hPΩ
     (h.one_sub_le_re_inner_chainTrim hh hhJ hq hJ hΔ hΩ hgap hspan hδB0 k hPΩ) hw hE hP hη hη2
@@ -404,23 +404,23 @@ theorem _root_.ManyBody.ChainInteraction.exists_rank_cutMatrix_le_constantCutBon
         (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {k : ℕ}
     (hsplit : h.hamiltonian = HL + HR + K)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hHR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (leftBlock L k)ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hHR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (interval L 0 k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ : ℝ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {δ : ℝ} (hδ0 : 0 < δ) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
-      (ManyBody.cutMatrix (leftBlock L k) v).rank ≤ constantCutBond q R J Δ (min δ (1 / 12)) ∧
+      (ManyBody.cutMatrix (interval L 0 k) v).rank ≤ constantCutBond q R J Δ (min δ (1 / 12)) ∧
       1 - δ ≤ (⟪v, Ω⟫_ℂ).re ∧
       (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + 6 * √δ := by
   have hsmall {d : ℝ} (hd0 : 0 < d) (hd4 : 4 * d < 1) :
       ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
-        (ManyBody.cutMatrix (leftBlock L k) v).rank ≤ constantCutBond q R J Δ d ∧
+        (ManyBody.cutMatrix (interval L 0 k) v).rank ≤ constantCutBond q R J Δ d ∧
         1 - d ≤ (⟪v, Ω⟫_ℂ).re ∧
         (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + 4 * √d / (1 - 4 * d) := by
     obtain ⟨P, hP⟩ := exists_isTrimmingProjection
-      (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) Ω) (constantCutBond q R J Δ d)
+      (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) Ω) (constantCutBond q R J Δ d)
     have hov := h.one_sub_le_re_inner_chainTrim hh hhJ hq hJ hΔ hΩ hgap hspan hd0 k hP
     have hEΩ : (⟪Ω, toEuclideanLin h.hamiltonian Ω⟫_ℂ).re ≤ E₀ + 0 := by
       have h2 : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=

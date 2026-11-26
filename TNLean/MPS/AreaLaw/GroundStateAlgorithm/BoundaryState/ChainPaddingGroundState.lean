@@ -23,7 +23,7 @@ no equality of spectral gaps or running-time bound is asserted.
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Kronecker
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -56,16 +56,16 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
   let P := (Φ.padded hi fun _ ↦ ManyBody.siteBasisPenalty z).hamiltonian
   let e := leftConfigOfFinEquiv (q := q) hi
   let H := Φ.hamiltonian
-  let b0 : (v : {v : Fin N // v ∉ leftBlock N L}) → Fin q := fun _ ↦ z
+  let b0 : (v : {v : Fin N // v ∉ interval N 0 L}) → Fin q := fun _ ↦ z
   let A := Matrix.reindex e e H
   let B := ManyBody.productBasisPenalty b0
-  let c := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N L)
-  have hpad : ManyBody.cutOperator (leftBlock N L) P = A ⊗ₖ 1 + 1 ⊗ₖ B := by
+  let c := ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 L)
+  have hpad : ManyBody.cutOperator (interval N 0 L) P = A ⊗ₖ 1 + 1 ⊗ₖ B := by
     rw [show P = _ from hamiltonian_padded_siteBasisPenalty hL hi z Φ]
-    change ManyBody.cutOperator (leftBlock N L)
+    change ManyBody.cutOperator (interval N 0 L)
         (ManyBody.placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) H) +
-      ManyBody.cutOperator (leftBlock N L)
-        (∑ v : {v : Fin N // v ∉ leftBlock N L},
+      ManyBody.cutOperator (interval N 0 L)
+        (∑ v : {v : Fin N // v ∉ interval N 0 L},
           ManyBody.placeAt (X := fun _ ↦ Fin q) v.val (ManyBody.siteBasisPenalty z)) = _
     rw [cutOperator_placeAlong_castLEEmb hi b0 H,
       cutOperator_appended_penalty z (fun _ ↦ z)]
@@ -79,7 +79,7 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
     (ManyBody.groundSpace_productBasisPenalty b0)
   rw [add_zero, ← hpad] at hgK hsK
   have hsP := ManyBody.groundSpace_reindex_eq_span c.symm hsK
-  rw [show Matrix.reindex c.symm c.symm (ManyBody.cutOperator (leftBlock N L) P) = P by
+  rw [show Matrix.reindex c.symm c.symm (ManyBody.cutOperator (interval N 0 L) P) = P by
     ext σ τ
     exact congrArg₂ P (c.symm_apply_apply σ) (c.symm_apply_apply τ)] at hsP
   refine ⟨(norm_paddedGroundVector hi z Γ).trans hΩ, (ManyBody.isGapped_reindex_iff c).mp hgK,

@@ -45,6 +45,8 @@ It also contains the following results.
   ranks after uniform compression.
 -/
 
+open ManyBody (interval)
+
 section CompressedBlockColumn
 
 /-!
@@ -440,10 +442,10 @@ private theorem exact_isOpenMPS_of_length_le {L q N : ℕ}
   apply isOpenMPS_of_internal_cutMatrix_rank_le
   intro k _ _
   calc
-    (cutMatrix (leftBlock L k) Ω).rank ≤
-        Fintype.card ((v : {v : Fin L // v ∈ leftBlock L k}) → Fin q) :=
+    (cutMatrix (interval L 0 k) Ω).rank ≤
+        Fintype.card ((v : {v : Fin L // v ∈ interval L 0 k}) → Fin q) :=
       Matrix.rank_le_card_height _
-    _ = q ^ Fintype.card {v : Fin L // v ∈ leftBlock L k} := by simp
+    _ = q ^ Fintype.card {v : Fin L // v ∈ interval L 0 k} := by simp
     _ ≤ q ^ N := Nat.pow_le_pow_right (by omega : 0 < q)
       ((Fintype.card_subtype_le _).trans (by simpa using hLN))
 

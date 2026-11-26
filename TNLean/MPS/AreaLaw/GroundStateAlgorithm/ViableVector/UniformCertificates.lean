@@ -62,7 +62,7 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace ChainInteraction)
+open ManyBody (IsGapped groundSpace ChainInteraction interval interval_mono)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -76,8 +76,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_rational_fixed_
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
@@ -95,8 +95,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_rational_fixed_
     (Z QZ : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ))
     (QK : Matrix (Fin n) (Fin n) ℂ)
     {κ ε εb δ θZ θK θX : ℝ} {A : Matrix (Fin n) (Fin n) ℂ}
@@ -161,8 +163,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniformly_appro
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
@@ -182,8 +184,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniformly_appro
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     (A : Matrix (Fin n) (Fin n) ℂ) (hA : A.IsHermitian)
@@ -238,8 +242,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniform_approx_
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
@@ -259,8 +263,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniform_approx_
     (Z : Matrix ((CutLeft L q k × CutSite L q k) × Fin m) (Fin n) ℂ)
     (hZ : Zᴴ * Z = 1)
     (hZZ : Z * Zᴴ = reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ))
     {κ ε εb δ : ℝ} {A : Matrix (Fin n) (Fin n) ℂ}
@@ -302,8 +308,8 @@ theorem exists_boundary_coordinates_with_uniform_approx_sdp_soundness
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
@@ -313,8 +319,10 @@ theorem exists_boundary_coordinates_with_uniform_approx_sdp_soundness
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     (hxnorm : ‖WithLp.toLp 2 x‖ = 1)
     (hxP : (reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -332,8 +340,10 @@ theorem exists_boundary_coordinates_with_uniform_approx_sdp_soundness
       (P₀ N₀ : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ),
       0 < n ∧ n ≤ S.card * m ∧ Zᴴ * Z = 1 ∧
       Z * Zᴴ = reindex
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
         (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
           (1 : Matrix (Fin m) (Fin m) ℂ) ∧
       IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy Z
@@ -400,8 +410,10 @@ theorem exists_boundary_coordinates_with_zero_error_sdp_certificate
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     (hxnorm : ‖WithLp.toLp 2 x‖ = 1)
     (hxP : (reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x)
     {X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ}
@@ -413,8 +425,10 @@ theorem exists_boundary_coordinates_with_zero_error_sdp_certificate
       (P N : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ),
       0 < n ∧ n ≤ S.card * m ∧ Zᴴ * Z = 1 ∧
       Z * Zᴴ = reindex
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
         (spanProjection (S : Set (LeftBlockVector L q k))) ⊗ₖ
           (1 : Matrix (Fin m) (Fin m) ℂ) ∧
       IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy Z

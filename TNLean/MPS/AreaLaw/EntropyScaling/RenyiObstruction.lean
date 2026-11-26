@@ -26,12 +26,13 @@ leave the qualitative obstruction unchanged.
 
 It also contains the following results.
 
-* `TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log`,
-  `TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log`: Rényi lower
+* `TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_interval_add_log_error_le_log`,
+  `TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_sdiff_interval_add_log_error_le_two_log`: Rényi lower
   bounds for matrix product state approximation.
 -/
 
 open scoped ComplexOrder
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -54,22 +55,22 @@ in `docs/paper-gaps/swvc08_renyi_bond_dimension_sign.tex`.
 /-- The corrected Rényi lower bound at an internal chain cut. The approximating
 MPS need not be normalized. Source: SWVC08, arXiv:0705.0292v2,
 Eq. (eps-lower) and lines 333–345. -/
-theorem IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log
+theorem IsOpenMPS.renyiEntropy_interval_add_log_error_le_log
     {L q D : ℕ} {ψ φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (hψ : ‖ψ‖ = 1)
     {k : ℕ} (hk0 : 0 < k) (hkL : k < L)
     {α δ : ℝ} (hα : 1 < α) (hδ : δ < 1)
     (herror : Matrix.rectangularTraceNorm
       (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
-    renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k))
+    renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q) ψ (interval L 0 k))
       (ManyBody.regionState_posSemidef _ _).isHermitian α +
       α / (α - 1) * Real.log (1 - δ) ≤ Real.log D := by
-  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) ψ
+  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (interval L 0 k) ψ
   exact hρ.renyiEntropy_add_log_error_le_log_rank_of_rectangularTraceNorm
     (by simp [ManyBody.trace_regionState, hψ])
     (ManyBody.regionState_posSemidef _ φ).isHermitian
-    (hφ.rank_regionState_leftBlock_le hk0 hkL) hα hδ
-    ((rectangularTraceNorm_regionState_leftBlock_sub_le ψ φ k).trans herror)
+    (hφ.rank_regionState_interval_le hk0 hkL) hα hδ
+    ((rectangularTraceNorm_regionState_interval_sub_le ψ φ k).trans herror)
 
 /-- The corrected Rényi lower bound for any contiguous block, including empty
 blocks, the whole chain, and chains of length zero or one. The approximating
@@ -79,7 +80,7 @@ Source: SWVC08, arXiv:0705.0292v2, lines 269–270 and 333–345.
 **Local fix (interior-block rank):** the right side is twice the logarithm of
 the bond dimension. The source's single-bond expression applies to a prefix
 or suffix; see `docs/paper-gaps/swvc08_interior_block_bond_rank.tex`. -/
-theorem IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log
+theorem IsOpenMPS.renyiEntropy_sdiff_interval_add_log_error_le_two_log
     {L q D : ℕ} {ψ φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (hψ : ‖ψ‖ = 1)
     {a b : ℕ} (hab : a ≤ b)
@@ -87,15 +88,15 @@ theorem IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log
     (herror : Matrix.rectangularTraceNorm
       (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
     renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q)
-      ψ (leftBlock L b \ leftBlock L a))
+      ψ (interval L 0 b \ interval L 0 a))
       (ManyBody.regionState_posSemidef _ _).isHermitian α +
       α / (α - 1) * Real.log (1 - δ) ≤ 2 * Real.log D := by
   have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q)
-    (leftBlock L b \ leftBlock L a) ψ
+    (interval L 0 b \ interval L 0 a) ψ
   have hbound := hρ.renyiEntropy_add_log_error_le_log_rank_of_rectangularTraceNorm
     (by simp [ManyBody.trace_regionState, hψ])
     (ManyBody.regionState_posSemidef _ φ).isHermitian
-    (hφ.rank_regionState_sdiff_leftBlock_le_max_sq hab) hα hδ
+    (hφ.rank_regionState_sdiff_interval_le_max_sq hab) hα hδ
     ((Entropy.rectangularTraceNorm_regionState_sub_le ψ φ _).trans herror)
   have hlog : Real.log (max 1 D : ℕ) = Real.log D := by
     rcases Nat.eq_zero_or_pos D with rfl | hD
@@ -117,13 +118,13 @@ theorem IsEfficientlyApproximableByMPS.exists_logarithmic_renyi_bound
     {α : ℝ} (hα : 1 < α) (a b : lengths → ℕ) (hab : ∀ N, a N ≤ b N) :
     ∃ K : ℝ, ∃ m : ℕ, ∀ N : lengths,
       renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q)
-        (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N)))
+        (ψ N) (interval N.val 0 (b N) \ interval N.val 0 (a N)))
         (ManyBody.regionState_posSemidef _ _).isHermitian α ≤
         K + (m : ℝ) * Real.log ((N.val : ℝ) + 1) := by
   obtain ⟨C, hC, m, happrox⟩ := happrox (1 / 2) (by norm_num)
   refine ⟨2 * |Real.log C| - α / (α - 1) * Real.log (1 - 1 / 2), 2 * m, fun N ↦ ?_⟩
   obtain ⟨D, φ, hD, hφ, herror⟩ := happrox N
-  have hbound := hφ.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log
+  have hbound := hφ.renyiEntropy_sdiff_interval_add_log_error_le_two_log
     (hψ N) (hab N) hα (by norm_num) herror
   have hx : 0 < (N.val : ℝ) + 1 := by positivity
   have hlogD : Real.log D ≤ |Real.log C| + (m : ℝ) * Real.log ((N.val : ℝ) + 1) := by
@@ -148,7 +149,7 @@ theorem not_isEfficientlyApproximableByMPS_of_superlogarithmic_renyi
     (hgrowth : ∀ K : ℝ, ∀ m : ℕ, ∃ N : lengths,
       K + (m : ℝ) * Real.log ((N.val : ℝ) + 1) <
         renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q)
-          (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N)))
+          (ψ N) (interval N.val 0 (b N) \ interval N.val 0 (a N)))
           (ManyBody.regionState_posSemidef _ _).isHermitian α) :
     ¬ IsEfficientlyApproximableByMPS ψ := by
   intro happrox
@@ -180,11 +181,11 @@ theorem not_isEfficientlyApproximableByMPS_of_renyi_power_growth
     (a b : lengths → ℕ) (hab : ∀ N, a N ≤ b N)
     {c κ η : ℝ} (hc : 0 < c) (hκ : 0 < κ) (hη : 0 < η) {N₀ : ℕ}
     (hlinear : ∀ N : lengths, N₀ ≤ N.val →
-      η * (N.val : ℝ) ≤ ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ))
+      η * (N.val : ℝ) ≤ ((interval N.val 0 (b N) \ interval N.val 0 (a N)).card : ℝ))
     (hentropy : ∀ N : lengths, N₀ ≤ N.val →
-      c * ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ) ^ κ ≤
+      c * ((interval N.val 0 (b N) \ interval N.val 0 (a N)).card : ℝ) ^ κ ≤
         renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q)
-          (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N)))
+          (ψ N) (interval N.val 0 (b N) \ interval N.val 0 (a N)))
           (ManyBody.regionState_posSemidef _ _).isHermitian α) :
     ¬ IsEfficientlyApproximableByMPS ψ := by
   apply not_isEfficientlyApproximableByMPS_of_superlogarithmic_renyi hψ hα a b hab
@@ -203,7 +204,7 @@ theorem not_isEfficientlyApproximableByMPS_of_renyi_power_growth
   have hN₁ : (1 : ℝ) ≤ N.val := by linarith [le_max_right x₀ 1]
   have hxN : x₀ ≤ (N.val : ℝ) + 1 := by linarith [le_max_left x₀ 1]
   have hsize : (η / 2) * ((N.val : ℝ) + 1) ≤
-      ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ) := by
+      ((interval N.val 0 (b N) \ interval N.val 0 (a N)).card : ℝ) := by
     nlinarith [hlinear N hN₀, mul_nonneg hη.le (sub_nonneg.mpr hN₁)]
   have hpow := mul_le_mul_of_nonneg_left
     (Real.rpow_le_rpow (by positivity) hsize hκ.le) hc.le

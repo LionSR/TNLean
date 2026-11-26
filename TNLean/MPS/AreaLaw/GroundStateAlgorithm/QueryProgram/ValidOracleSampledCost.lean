@@ -59,7 +59,7 @@ theorem cost_sampledSweepStepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 
     {ℓ m : ℕ} (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i))
     (hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) (bondComplementWord Φ (I t))) ≤ D) :
+      (interval L 0 k) (bondComplementWord Φ (I t))) ≤ D) :
     FreeM.cost o queryCost (sampledSweepStepProgram hq Φ E₀ Δ I b D hi S) ≤
       sampledStepCostBound q Δ L ℓ D b S.card := by
   classical

@@ -213,12 +213,12 @@ theorem flat_ground_same_root_ritz_exact {L q count : ℕ}
       have hvalue := (config ⟨0, by omega⟩).isLt
       omega
     calc
-      (cutMatrix (leftBlock L k) v).rank ≤
-          Fintype.card ((w : {w : Fin L // w ∈ leftBlock L k}) → Fin q) :=
+      (cutMatrix (interval L 0 k) v).rank ≤
+          Fintype.card ((w : {w : Fin L // w ∈ interval L 0 k}) → Fin q) :=
         Matrix.rank_le_card_height _
-      _ = q ^ Fintype.card {w : Fin L // w ∈ leftBlock L k} := by simp
+      _ = q ^ Fintype.card {w : Fin L // w ∈ interval L 0 k} := by simp
       _ ≤ q ^ L := Nat.pow_le_pow_right hq (by
-        simpa using Fintype.card_subtype_le (fun w : Fin L ↦ w ∈ leftBlock L k))
+        simpa using Fintype.card_subtype_le (fun w : Fin L ↦ w ∈ interval L 0 k))
       _ = r := by
         change q ^ L = Module.finrank ℂ G
         rw [hGtop]

@@ -38,6 +38,8 @@ Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`,
 Claim `c:errorreduction`, lines 580–592, and Corollary `c:agsp`, lines 626–649.
 -/
 
+open ManyBody (mem_interval)
+
 section
 
 open ManyBody (interval)
@@ -50,7 +52,7 @@ namespace TNLean.MPS.AreaLaw
 private theorem operatorSchmidtRank_cutOperator_endpoint_le_one {L q k : ℕ}
     (hk : k = 0 ∨ L ≤ k) (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) K) ≤ 1 := by
+      (interval L 0 k) K) ≤ 1 := by
   classical
   have hs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K Finset.univ := by
     constructor
@@ -62,10 +64,10 @@ private theorem operatorSchmidtRank_cutOperator_endpoint_le_one {L q k : ℕ}
   apply hs.operatorSchmidtRank_cutOperator_le_one
   rcases hk with rfl | hk
   · right
-    simp [leftBlock]
+    simp [interval]
   · left
     intro v _
-    exact mem_leftBlock.mpr (lt_of_lt_of_le v.isLt hk)
+    exact mem_interval.mpr ⟨Nat.zero_le _, lt_of_lt_of_le v.isLt hk⟩
 
 /-- Multiplicity bounds give word-rank bounds at every cut, including the two
 endpoints. LVV13, `algo53.tex`, lines 584–591 and 626–649. -/
@@ -74,7 +76,7 @@ theorem operatorSchmidtRank_cutOperator_bondComplementWord_le_all {L q m κ : �
     (Φ : ManyBody.BondInteraction L q) (I : Fin m → Fin L)
     (hI : ∀ j, letterCount I j ≤ κ) (k : ℕ) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) (bondComplementWord Φ I)) ≤ q ^ (2 * κ) := by
+      (interval L 0 k) (bondComplementWord Φ I)) ≤ q ^ (2 * κ) := by
   by_cases hk0 : k = 0
   · exact (operatorSchmidtRank_cutOperator_endpoint_le_one (Or.inl hk0) _).trans
       (Nat.one_le_pow _ _ hq)
@@ -94,14 +96,14 @@ theorem exists_sampledProjector_cutDecomposition {L q ℓ m i D : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (E₀ : ℝ) (I : Fin ℓ → Fin m → Fin L)
     (hrank : ∀ t k, operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k)
         (bondComplementWord Φ (I t))) ≤ D) :
     ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q i)
       (B : Fin N → RightBlockMatrix L q i),
-      N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
+      N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i)
         (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B j ∧
       ∀ j k, 0 < k → k < i → operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
           ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D := by
   classical
   choose N A B hN hdec hleft using fun t ↦
@@ -122,9 +124,9 @@ theorem exists_sampledProjector_cutDecomposition {L q ℓ m i D : ℕ}
     simp [sampledProjector, ManyBody.cutOperator, reindex_apply, submatrix_apply,
       Matrix.sum_apply, Matrix.smul_apply, c, mul_assoc]
   · intro j k hk0 hki
-    have heq : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+    have heq : ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
         ((c • A (e j).1 (e j).2).submatrix leftConfigOfFin leftConfigOfFin) =
-        c • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+        c • ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
           ((A (e j).1 (e j).2).submatrix leftConfigOfFin leftConfigOfFin) := rfl
     rw [heq]
     exact (operatorSchmidtRank_smul_le _ _).trans (hleft _ _ k hk0 hki)
@@ -161,10 +163,10 @@ theorem exists_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
       ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 4 ∧
       ∀ i : ℕ, i ≤ L → ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q i)
         (B : Fin N → RightBlockMatrix L q i),
-        N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
+        N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i)
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B j ∧
         (∀ j k, 0 < k → k < i → operatorSchmidtRank
-          (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+          (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
             ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D) ∧
         ∀ (s b : ℕ) (S : Finset (LeftBlockVector L q i)), IsViableMPS Γ s b (1 / 2) S →
           IsViableMPS Γ (ℓ * D * s) (D * max 1 b) δ

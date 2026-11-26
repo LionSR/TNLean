@@ -70,12 +70,12 @@ theorem isAdmissibleSampledFactors_sampledFactors {L : ℕ}
     (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) :
     ∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
-      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector Φ E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) (sampledProjector Φ E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧
         ∀ t ∈ J, A t ∈ AreaLaw.sampledFactors Φ E₀ I i := by
   classical
   refine ⟨(t : Fin ℓ) × Fin (operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-    (leftBlock L i) (bondComplementWord Φ (I t)))), Finset.univ,
+    (interval L 0 i) (bondComplementWord Φ (I t)))), Finset.univ,
     fun p ↦ sampledLeftFactor Φ E₀ I i p.1 p.2,
     fun p ↦ cutRightFactor (bondComplementWord Φ (I p.1)) p.2,
     cutOperator_sampledProjector_eq_sum Φ E₀ I i, fun p _ ↦ ?_⟩
@@ -123,19 +123,19 @@ structure LinearAlgebraQuery.IsValidOracle (o : {ι : Type} → LinearAlgebraQue
     (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (_h1 : ∀ j, Φ.term j ≤ 1)
     (c Delta : ℝ), 0 < c → 0 < Delta → i ≤ L →
     ∀ A ∈ o (LinearAlgebraQuery.gaussianFilterFactors L i hq Φ h0 c Delta), ∀ k, k < i →
-      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ huangFilterRankBound q c Delta L
   sampledFactors : ∀ (L i : ℕ) (Φ : ManyBody.BondInteraction L q)
     (E₀ : ℝ) (ℓ m D : ℕ) (I : Fin ℓ → Fin m → Fin L),
-    (∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
+    (∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k)
       (bondComplementWord Φ (I t))) ≤ D) →
     (∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
-      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector Φ E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) (sampledProjector Φ E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧
         ∀ t ∈ J, A t ∈ o (LinearAlgebraQuery.sampledFactors L i Φ E₀ ℓ m D I)) ∧
     (o (LinearAlgebraQuery.sampledFactors L i Φ E₀ ℓ m D I)).card ≤ ℓ * D ∧
     (i ≤ L → ∀ A ∈ o (LinearAlgebraQuery.sampledFactors L i Φ E₀ ℓ m D I), ∀ k, k < i →
-      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
   applyFactor : ∀ (L i r b : ℕ) (A : LeftBlockMatrix L q i) (s : LeftBlockVector L q i),
     o (LinearAlgebraQuery.applyFactor L i r b A s) = toEuclideanLin A s

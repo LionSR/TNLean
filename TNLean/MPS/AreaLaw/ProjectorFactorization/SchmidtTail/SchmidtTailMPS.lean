@@ -29,6 +29,7 @@ the geometric tail bound is available only at even exponents. Documented in
 -/
 
 open Real
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -48,11 +49,11 @@ theorem isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1)
     {d ξ c k₀ : ℝ} (hd : 1 < d) (hξ : 0 < ξ) (hc : 0 ≤ c) (hk₀ : 0 < k₀)
     (hτ : ∀ k ∈ Finset.Ico 1 L, ∀ m n : ℕ, k₀ * d ^ (2 * m) ≤ n →
-      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k)
         ψ).kyFanNorm n ≤ c * exp (-(2 * m) / ξ))
     {k' : ℕ} (hk' : k₀ ≤ k') :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k)
         ψ).leadingEigenprojection k'
     let Φ := sequentialTruncation P (L - 1) ψ
     IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -62,7 +63,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_schmidtTail_geometric
   refine ⟨(isOpenMPS_sequentialTruncation_leadingEigenprojection ψ hψ k').1, ?_⟩
   refine (norm_sequentialTruncation_leadingEigenprojection_sub_sq_le ψ hψ k').trans ?_
   calc ∑ k ∈ Finset.Ico 1 L, (1 -
-        (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
+        (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k)
           ψ).kyFanNorm k')
       ≤ ∑ _k ∈ Finset.Ico 1 L, c * exp (2 / ξ) * ((k' : ℝ) / k₀) ^ (-1 / (ξ * log d)) :=
         Finset.sum_le_sum fun k hk ↦
