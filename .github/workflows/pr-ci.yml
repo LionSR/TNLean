@@ -657,8 +657,8 @@ jobs:
 
       # Imports between the layers below the tensor-network directories must
       # point downward, no new pair of directories may import each other, no
-      # library module may newly import a worked example, and no declaration
-      # may newly restate another one under a second name, and no directory
+      # library module may newly import a worked example, no declaration may
+      # newly restate another one under a second name, and no directory
       # may hold more modules of at most two public declarations than its
       # ceiling. The recorded violations and ceilings may only shrink against
       # the base; see docs/many_body_circuit_architecture.md and
