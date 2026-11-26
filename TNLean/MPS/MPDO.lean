@@ -11,12 +11,13 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.AmbientSectorMaps
 import TNLean.MPS.MPDO.BNTSectors
 import TNLean.MPS.MPDO.CPSVBNTTheoremEquivalence
-import TNLean.MPS.MPDO.CZX
 import TNLean.MPS.MPDO.Coefficients
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CyclicActiveSector
 import TNLean.MPS.MPDO.Entropy
 import TNLean.MPS.MPDO.Fusion
+import TNLean.MPS.MPDO.GaugeInvariantSubspace
+import TNLean.MPS.MPDO.GaussProjectorPlacement
 import TNLean.MPS.MPDO.MPOAction
 import TNLean.MPS.MPDO.PhysicalSector
 import TNLean.MPS.MPDO.Purification

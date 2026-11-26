@@ -76,7 +76,6 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.transferMap_pow_tendsto_fixed
     (Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm) hP.fixedPoint_is_fixed hn,
     map_add, map_pow]
 
-
 /-- An observable insertion between two expanding primitive transfer intervals
 converges to its scalar local expectation times the limiting transfer projection.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
@@ -114,7 +113,6 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.physicalObservableTransfer_sa
     rw [fixedPointProj_physicalObservableTransfer_fixedPointProj, map_smul]
   simpa only [map_mul, hlimit] using hlim
 
-
 /-- The boundary-map compression of a physical observable is exactly the Choi
 reshuffling of its insertion transfer map. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b) and lines 2649--2675. -/
@@ -147,7 +145,6 @@ theorem adjoint_groundSpaceMapES_observable_groundSpaceMapES
   have h' := h.trans
     (Matrix.inner_single_gramReshuffle_single (physicalObservableTransfer A k X) a b c e).symm
   simpa [PiLp.inner_apply] using h'
-
 
 /-- A fixed observable supported between free physical intervals of lengths
 \(\ell\) and \(r\). Source: Nachtergaele, arXiv:cond-mat/9410110,
@@ -184,7 +181,6 @@ theorem adjoint_groundSpaceMapES_bulkObservable_groundSpaceMapES
   rw [adjoint_groundSpaceMapES_observable_groundSpaceMapES,
     physicalObservableTransfer_bulkObservable]
 
-
 private noncomputable def transferReshuffleLinear :
     (Matrix (Fin D) (Fin D) ℂ →L[ℂ] Matrix (Fin D) (Fin D) ℂ) →ₗ[ℂ]
       (EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Fin D × Fin D)) :=
@@ -208,12 +204,19 @@ private theorem transferReshuffleLinear_apply
   ext p q
   simp [Matrix.gramReshuffleMatrix]
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+
 /-- The virtual Gram compression of a fixed interior observable converges to
 its scalar expectation times the limiting boundary Gram operator. Both free
 intervals may expand along any common filter. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_bulkObservable_compression_tendsto
+theorem groundSpaceMapES_bulkObservable_compression_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
@@ -255,4 +258,5 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_bulkObservab
     hlim.congr' (Eventually.of_forall fun n => heq _)
   simpa only [adjoint_groundSpaceMapES_bulkObservable_groundSpaceMapES] using hreshaped
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
+

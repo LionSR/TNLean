@@ -44,12 +44,18 @@ open scoped ComplexOrder ENNReal NNReal
 
 namespace MPSTensor
 
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
 variable {d D : ℕ}
 
 /-- Every nonzero FNW remainder eigenvalue is a transfer eigenvalue.
 This is the algebraic step in the rate prescription following `boundAm`
 in Nachtergaele, Section 6, lines 2407--2412. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwTransfer_hasEigenvalue_of_remainder [NeZero D]
+theorem fnwTransfer_hasEigenvalue_of_remainder [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) {ν : ℂ} (hν0 : ν ≠ 0)
     (hν : Module.End.HasEigenvalue
@@ -69,11 +75,10 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwTransfer_hasEigenvalue_of_
     ⟨Module.End.mem_eigenspace_iff.mpr (by
       simpa only [LinearMap.sub_apply, hPX, sub_zero] using hX.apply_eq_smul), hX.2⟩
 
-set_option linter.style.longLine false in
 /-- The transfer-eigenvalue prescription following Nachtergaele's `boundAm`
 (Section 6, lines 2407--2412) implies the weighted remainder spectral-radius
 bound. Eigenvalues are compared by modulus, and the rate is positive. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues
+theorem fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (rate : ℝ≥0)
     (hrate : 0 < rate)
@@ -93,12 +98,11 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwWeightedRemainderSpectralR
       (ne_of_lt (hP.fnwRemainder_eigenvalue_norm_lt_one ν hEig)) (by simp [h])
     exact_mod_cast hEigen ν (hP.fnwTransfer_hasEigenvalue_of_remainder hν0 hEig) hν1
 
-set_option linter.style.longLine false in
 /-- The transfer-eigenvalue condition following Nachtergaele's `boundAm`
 (Section 6, lines 2407--2412) gives the FNW mixing estimate at that prescribed
 rate, with a positive rate-dependent prefactor. The dimension-only constant
 in the source projector estimate is not asserted. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues
+theorem exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (rate : ℝ≥0) (hrate : 0 < rate)
@@ -109,7 +113,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_g
   hP.exists_fnwMixingQuantity_le_geometric hρ htr rate
     (hP.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues hρ rate hrate hEigen)
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
 
 end
 

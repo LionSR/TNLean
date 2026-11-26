@@ -1436,7 +1436,7 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declarations:** `MPOTensor.HasDefectSupport d G hN D Ψ : Prop` and
   `MPOTensor.HasPrescribedDefectCovariance d G hN D Ψ : Prop`.
-- **Defined in:** `TNLean/MPS/MPDO/CZX/GaugeInvariantSubspace.lean`.
+- **Defined in:** `TNLean/MPS/MPDO/GaugeInvariantSubspace.lean`.
 - **Meaning:** every two-site matter slice of $\Psi_\alpha$ lies in the defect
   subspace selected by the adjacent labels, and the prescribed defect maps
   carry these slices covariantly under $(a,b)\mapsto(ag^{-1},gb)$.

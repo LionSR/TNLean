@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Dimension.Constructions
 import QICLean.Representation.UnitaryCompletionClass
-import TNLean.MPS.MPDO.CZX.CZXGaussCircuitTuple
+import TNLean.MPS.Examples.CZX.Gauging.CZXGaussCircuitTuple
 
 /-!
 # The CZX defect domains and prescribed defect maps

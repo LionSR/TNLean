@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Module.CommonFixedSubmodule
 import QICLean.Representation.UnitaryCompletionClass
-import TNLean.MPS.MPDO.CZX.GaussProjectorPlacement
+import TNLean.MPS.MPDO.GaussProjectorPlacement
 
 /-!
 # The gauge-invariant subspace of a completion and its universal vector

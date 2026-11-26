@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Compression.RingEmbedding
-import TNLean.MPS.MPDO.CZX.CZXActionTensors
-import TNLean.MPS.MPDO.CZX.CZXFusionTensors
-import TNLean.MPS.MPDO.CZX.CZXTensor
+import TNLean.MPS.Examples.CZX.Gauging.CZXActionTensors
+import TNLean.MPS.Examples.CZX.Gauging.CZXFusionTensors
+import TNLean.MPS.Examples.CZX.Gauging.CZXTensor
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorCohomology
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorOrderTwo
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.PermutedBlocks

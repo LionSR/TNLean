@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.CZX.CZXDefectMaps
-import TNLean.MPS.MPDO.CZX.CZXGaussInvariantSubspace
-import TNLean.MPS.MPDO.CZX.CZXSecondTupleCertificate
-import TNLean.MPS.MPDO.CZX.GaugeInvariantSubspace
+import TNLean.MPS.Examples.CZX.Gauging.CZXDefectMaps
+import TNLean.MPS.Examples.CZX.Gauging.CZXGaussInvariantSubspace
+import TNLean.MPS.Examples.CZX.Gauging.CZXSecondTupleCertificate
+import TNLean.MPS.MPDO.GaugeInvariantSubspace
 
 /-!
 # The displayed CZX tuples are completions, and the supremum over their class

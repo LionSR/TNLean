@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.SpinCover.Basic
-import TNLean.MPS.MPDO.CZX.CZXTensor
+import TNLean.MPS.Examples.CZX.Gauging.CZXTensor
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
 
 /-!

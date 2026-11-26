@@ -24,3 +24,4 @@ import TNLean.MPS.Examples.CZX.CZXSquare
 import TNLean.MPS.Examples.CZX.CZXTensor
 import TNLean.MPS.Examples.CZX.CZXUnitary
 import TNLean.MPS.Examples.CZX.ClusterIsingSymmetry
+import TNLean.MPS.Examples.CZX.Gauging

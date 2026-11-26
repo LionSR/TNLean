@@ -2846,7 +2846,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `Examples/MultiBlock/StackedPairGauge.lean`, `Examples/Rings/EisensteinCertificates.lean`.  A later sweep
   (2026-09-19) found nine further occurrences outside the `Reduction/Examples` directory that
   the promotion had missed: `Examples/Rings/Zsqrt2Ring.lean`, `Examples/Rings/GoldenCompression.lean`,
-  `Examples/MultiBlock/OneSlotGauge.lean`, `TNLean/MPS/MPDO/CZX/CZXTensor.lean`,
+  `Examples/MultiBlock/OneSlotGauge.lean`, `TNLean/MPS/Examples/CZX/Gauging/CZXTensor.lean`,
   `TNLean/MPS/Examples/BondTwoSingleton/BondTwoSingletonGramBoundary.lean`,
   `TNLean/MPS/CanonicalForm/DiagonalRestrictionCounterexample.lean`,
   `TNLean/MPS/Examples/MPDOCounterexamples/PositiveMinimalRealizationCounterexample.lean`,
@@ -3202,7 +3202,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `mpo_czxDecoratedTensor_apply` in `Examples/CZX/CZXDecoratedTensor.lean`,
   `mpo_uTensor_apply` in `Examples/Z3Anomalous/Z3AnomalousUnitary.lean`, `mpo_symTensor_apply` in
   `Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Unitary.lean`, `mpo_tensor_apply` in
-  `TNLean/MPS/MPDO/CZX/CZXTensor.lean`, and `mpo_rightShiftTensor_apply` in
+  `TNLean/MPS/Examples/CZX/Gauging/CZXTensor.lean`, and `mpo_rightShiftTensor_apply` in
   `TNLean/MPS/Examples/Shift/Shift.lean`.
 - **Abstraction:** `MPOTensor.mpo_apply_eq_sum_cyclic` and
   `MPOTensor.mpo_apply_eq_prod_of_forced_bond` in `TNLean/MPS/Operator/Periodic/OperatorCyclicSum.lean`;
@@ -3600,9 +3600,9 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 - **Seen:** fourteen occurrences across four files before promotion
   (2026-09-03): the phase-table rows and bar-flip exponent identities in
-  `TNLean/MPS/MPDO/CZX/CZXGaussCircuitTuple.lean`, the involution, holonomy, fiber
+  `TNLean/MPS/Examples/CZX/Gauging/CZXGaussCircuitTuple.lean`, the involution, holonomy, fiber
   coordinate, and label lemmas in
-  `TNLean/MPS/MPDO/CZX/CZXGaussInvariantSubspace.lean`, hypercube connectivity in
+  `TNLean/MPS/Examples/CZX/Gauging/CZXGaussInvariantSubspace.lean`, hypercube connectivity in
   `QICLean/Algebra/Combinatorics/HypercubePhasePotential.lean`, and the characteristic-two
   identity in `QICLean/Algebra/Matrix/MonomialFixedSubspace.lean`.
 - **Mathlib replacement:** the characteristic-two identity in
@@ -5350,7 +5350,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `exact finCongr_toMatrix_eq_one _`, then
   `rw [GroupFamily.FusionData.rightV, hc]`.
 - **Seen:** 8 sites in 2 files (`MPS/Examples/Z3/Z3AnomalyClass.lean`
-  twice, `MPS/MPDO/CZX/CZXPermutedBlocks.lean` six times), each proving
+  twice, `MPS/Examples/CZX/Gauging/CZXPermutedBlocks.lean` six times), each proving
   `family.castMat e = 1` for an equation `e` between group elements whose bond
   dimensions reduce to the same numeral.
 - **Reason:** a lemma `castMat e = 1` cannot be stated without the cast, since
@@ -7455,7 +7455,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   and `cons i (cons j w)` cases, the last one rewriting `B i * W * V * B j`
   to `B i * B j` and then splitting the caps off the two factors.
 - **Seen:** one occurrence, in `MPOTensor.CZX.fusion_isReduction`
-  (`TNLean/MPS/MPDO/CZX/CZXFusionTensors.lean`), recorded 2026-09-07.
+  (`TNLean/MPS/Examples/CZX/Gauging/CZXFusionTensors.lean`), recorded 2026-09-07.
 - **Abstraction:** `MPSTensor.IsReduction.of_local_compression` in
   `TNLean/MPS/Tensor/Reduction/Reduction.lean`, taking `V * W = 1`, per-letter
   compression, and the two-letter reinsertion identity.
@@ -7463,7 +7463,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   definition it constructs, so a second local-compression reduction reuses it
   instead of repeating the word induction.
   `MPOTensor.CZX.dressedAction_isReduction`
-  (`TNLean/MPS/MPDO/CZX/CZXActionTensors.lean`) is not an occurrence: it obtains
+  (`TNLean/MPS/Examples/CZX/Gauging/CZXActionTensors.lean`) is not an occurrence: it obtains
   the all-word equation by absorbing the dressing into a nonempty acted word,
   not from per-letter data.
 
@@ -7890,9 +7890,9 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 - **Seen:** eight occurrences across two files (2026-09-07): the six
   `matterMatrix_{w,tildeLambda,tildeLambdaStar}_mulVec_matterKet_{zero,one}`
-  proofs in `TNLean/MPS/MPDO/CZX/CZXCompletion.lean`, and the two
+  proofs in `TNLean/MPS/Examples/CZX/Gauging/CZXCompletion.lean`, and the two
   `matterMatrix_lambda_mulVec_defectVector_{zero,one}` proofs in
-  `TNLean/MPS/MPDO/CZX/CZXCompletion.lean`.
+  `TNLean/MPS/Examples/CZX/Gauging/CZXCompletion.lean`.
 - **Reason:** the shared step is already abstracted. Every occurrence reaches
   `MPOTensor.CZX.matterMatrix_monomial_mulVec_matterKet`, directly or through
   the per-operator wrappers `matterMatrix_w_mulVec_matterKet` and

@@ -180,13 +180,20 @@ theorem norm_inner_blockedResidualBoundaryMapES_le_of_prefix_bound {D₂ : ℕ}
   exact fun τ => hAngle _ (residualPrefixFiber_mem_groundSpaceES A B V hx τ)
     _ (residualPrefixFiber_mem_groundSpaceES C B' W hy τ)
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D E F L : ℕ}
+
 /-- Inequivalent normalized primitive prefixes have asymptotically
 orthogonal correlated residual ranges, uniformly over every original tail
 length. The original tensors supplying the tail need no normalization.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint,
 lines 1744--1820, followed by the exact fiberwise residual bound. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent
+theorem eventually_norm_inner_blockedResidualBoundaryMapES_le_of_inequivalent
     [NeZero E] [NeZero F] {D₂ : ℕ}
     (A : MPSTensor d D) (C : MPSTensor d D₂)
     {B : MPSTensor (blockPhysDim d L) E} {B' : MPSTensor (blockPhysDim d L) F}
@@ -205,6 +212,12 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_blocked
     hB' hρ hσ hDistinct hε] with N hN
   exact fun r x hx y hy =>
     norm_inner_blockedResidualBoundaryMapES_le_of_prefix_bound A C B B' V W hε.le hN hx hy
+
+end Kraus.HasComplementaryFixedPointGap
+
+namespace MPSTensor
+
+variable {d D E F L : ℕ}
 
 /-- For a finite inequivalent primitive prefix family, the sum of the
 correlated residual-sector projections approaches the projection onto their
