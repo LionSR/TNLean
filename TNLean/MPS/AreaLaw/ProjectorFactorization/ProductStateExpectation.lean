@@ -42,6 +42,7 @@ separate statement in the Kronecker coordinates of an abstract bipartition is ke
 -/
 
 open scoped ComplexOrder InnerProductSpace Matrix.Norms.L2Operator MatrixOrder
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -241,8 +242,8 @@ theorem one_sub_two_mul_sq_le_re_trace_cutProductState_mul {L q c : ℕ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hOL : IsStarProjection OL) (hOR : IsStarProjection OR)
-    (hL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (leftBlock L c))
-    (hR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (leftBlock L c)ᶜ) {ε : ℝ}
+    (hL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (interval L 0 c))
+    (hR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (interval L 0 c)ᶜ) {ε : ℝ}
     (hprod : ‖OB * OL * OR - vecMulVec Ω.ofLp (star Ω.ofLp)‖ ≤ ε) :
     1 - 2 * ε ^ 2 ≤ (cutProductState L q c Ω * (OL * OR)).trace.re := by
   have hcomm : Commute OL OR :=

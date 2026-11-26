@@ -32,7 +32,7 @@ space. No finite-net cardinality assertion is made; see
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace ChainInteraction)
+open ManyBody (IsGapped groundSpace ChainInteraction interval interval_mono)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -233,9 +233,9 @@ theorem maxEigenvalue_lower_bound_of_gluing_with_objective_slack
 /-- Chain-coordinate form of the quantitative maximal-eigenvalue gluing bound. -/
 theorem maxEigenvalue_lower_bound_chain_with_objective_slack [NeZero q]
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
     {D : Finset (Fin L)} (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
-    (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ μ : ℝ}
+    (hDA : Disjoint D (interval L 0 (k - 1))) {E₀ Δ e τ ξ μ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
     (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
     (hgap : IsGapped (HL + K) E₀ Δ)
@@ -291,7 +291,7 @@ theorem maxEigenvalue_lower_bound_chain_with_objective_slack [NeZero q]
     exact hwE
   have hKK : ‖K'‖ ≤ ‖K‖ := by
     have hr := hK.reindex_threeCutEquiv_eq_one_kronecker
-      (leftBlock_mono (Nat.sub_le k 1)) hDA (fun _ ↦ 0)
+      (interval_mono (le_refl 0) (Nat.sub_le k 1)) hDA (fun _ ↦ 0)
     have hn : ‖reindex E E K‖ = ‖K‖ := l2_opNorm_reindex_equiv E K
     rw [show reindex E E K = _ from hr, l2_opNorm_reindex_equiv] at hn
     exact (l2_opNorm_one_kronecker (X := CutLeft L q k) K').symm.le.trans hn.le
@@ -447,8 +447,10 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_bounds
     (u u' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m))
     (hu : ‖u‖ = 1) (hu' : ‖u'‖ = 1)
     (hu'P : (reindex
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u' =
       WithLp.ofLp u')
     {E a ζ : ℝ}
@@ -474,8 +476,8 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_bounds
       a - ζ ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   classical
   let P := reindex
-    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) (Nat.sub_le k 1)))
     (spanProjection S)
   let J := (1 : Matrix (CutLeft L q k × CutSite L q k)
     (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W
@@ -521,8 +523,10 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_bounds
     (u u' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m))
     (hu : ‖u‖ = 1) (hu' : ‖u'‖ = 1)
     (hu'P : (reindex
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u' =
       WithLp.ofLp u')
     (hE : (⟪WithLp.toLp 2
@@ -560,8 +564,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViab
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
@@ -572,14 +576,16 @@ theorem _root_.ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViab
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
     let P := reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection S)
     ∃ (w : EuclideanSpace ℂ (Fin L → Fin q)) (m : ℕ)
       (W : Matrix (CutRight L q k) (Fin m) ℂ)
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
       ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
-      (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ D ∧
+      (ManyBody.cutMatrix (interval L 0 k) w).rank ≤ D ∧
       (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √c ∧
       Wᴴ * W = 1 ∧ m ≤ D ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
@@ -617,8 +623,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViab
   let c : ℝ := (Δ / 169) ^ 2
   let D := constantCutBond q 1 1 Δ c
   let P := reindex
-    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) (Nat.sub_le k 1)))
     (spanProjection S)
   obtain ⟨_, _, w, m, W, x, -, -, -, -, hw, hwS, hwD, hwE, hW, hmD,
       hwx, hxnorm, hxP, -⟩ :=
@@ -737,8 +743,8 @@ theorem _root_.ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
@@ -756,8 +762,10 @@ theorem _root_.ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_
       ((CutLeft L q k × CutSite L q k) × Fin m) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1)
     (hσP : (reindex
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * σ = σ)
     (hσX : rectangularTraceNorm (partialTraceFirst σ - X) ≤
       ((Δ / 169) ^ 2) / (2 * L) + δ)
@@ -769,8 +777,10 @@ theorem _root_.ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_
     (hmax : ∀ (ν : ℝ) (z : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)),
       z ≠ 0 → σ *ᵥ WithLp.ofLp z = (ν : ℂ) • WithLp.ofLp z → ν ≤ μ) :
     let P := reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection S)
     let v : EuclideanSpace ℂ (Fin L → Fin q) := WithLp.toLp 2
       ((((1 : Matrix (CutLeft L q k × CutSite L q k)
@@ -790,8 +800,8 @@ theorem _root_.ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_
   let c : ℝ := (Δ / 169) ^ 2
   let η := c / (2 * L)
   let P := reindex
-    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) (Nat.sub_le k 1)))
     (spanProjection S)
   let ρx := vecMulVec x (star x)
   change rectangularTraceNorm (partialTraceFirst ρx - X) ≤ η at hX

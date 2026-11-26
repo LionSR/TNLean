@@ -136,7 +136,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
 
 \begin{lemma}[Rényi lower bound at a chain cut]
     \label{thm:chain_cut_renyi_approximation_lower_bound}
-    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_interval_add_log_error_le_log}
     \leanok
     Let $\|\psi\|=1$ on $L$ sites, $\phi$ be an (unnormalized) open-boundary MPS
     of bond dimension at most $D$, $0<k<L$, $\alpha>1$, $\delta<1$, and
@@ -158,10 +158,10 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
 
 \begin{lemma}[Rényi lower bound on an arbitrary contiguous block]
     \label{thm:chain_block_renyi_approximation_lower_bound}
-    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_leftBlock_le_sq,
-        TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_leftBlock_le_max,
-        TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_leftBlock_le_max_sq,
-        TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_interval_le_sq,
+        TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_interval_le_max,
+        TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_sdiff_interval_le_max_sq,
+        TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_sdiff_interval_add_log_error_le_two_log}
     \leanok
     Let $\|\psi\|=1$, $\phi$ be an (unnormalized) open-boundary MPS of bond
     dimension at most $D\ge0$ (with $\log0=0$), $\alpha>1$, $\delta<1$, and
@@ -257,7 +257,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
 
 \begin{lemma}[Single-boundary entropy bound at small approximation error]
     \label{thm:chain_von_neumann_prefix_error}
-    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_interval_le_log_add_half_error}
     \leanok
     Let $\|\psi\|=1$ on a chain of local dimension $q$ and $\phi$ be an
     (unnormalized) open-boundary MPS of bond dimension at most $D\ge0$ with
@@ -279,7 +279,7 @@ natural, and $\|\cdot\|_1$ denotes the trace norm.
 
 \begin{lemma}[Two-boundary entropy bound at small approximation error]
     \label{thm:chain_von_neumann_block_error}
-    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_interval_le_two_log_add_half_error}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:chain_von_neumann_prefix_error},
     every contiguous block $R$ satisfies

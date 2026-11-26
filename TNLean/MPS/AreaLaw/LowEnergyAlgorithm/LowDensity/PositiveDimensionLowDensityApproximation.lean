@@ -180,7 +180,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
         ψ ∈ G (etaLD - v) → ‖ψ‖ = 1 →
       ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
         IsOpenMPS L q (Module.finrank ℂ (G etaLD) * Bg) (fun x ↦ Φ x) ∧
-        (cutMatrix (leftBlock L k0) Φ).rank ≤ Module.finrank ℂ (G etaLD) * Bs ∧
+        (cutMatrix (interval L 0 k0) Φ).rank ≤ Module.finrank ℂ (G etaLD) * Bs ∧
         1 - delta < ‖⟪Φ, ψ⟫_ℂ‖ ∧ ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
   classical
   obtain ⟨K, hK, hfixed⟩ :=
@@ -263,7 +263,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
   intro k0 ψ hψG hψ
   have hmassAt (k : ℕ) (hkL : k ≤ L) (eps : ℝ) (heps : 0 < eps) (heps1 : eps ≤ 1) :
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) ψ).kyFanNorm
+        (interval L 0 k) ψ).kyFanNorm
           (Module.finrank ℂ (G etaLD) *
             ⌈Real.exp (F (16 + Real.log (1 / g) + Real.log (2 / eps)))⌉₊) ≤ 2 * eps := by
     obtain ⟨φ, hφ, hoverlap, hlogrank⟩ :=
@@ -273,7 +273,6 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
       (Module.finrank ℂ (G etaLD) *
         ⌈Real.exp (F (16 + Real.log (1 / g) + Real.log (2 / eps)))⌉₊)
       (Nat.le_mul_ceil_exp_of_log_le hrG _ hlogrank) hoverlap.le
-    rw [leftBlock_eq_interval]
     exact hregional
   have hDs : 1 ≤ Module.finrank ℂ (G etaLD) * Bs := by
     simpa only [one_mul] using Nat.mul_le_mul hrG hBs
@@ -286,7 +285,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
     have heq : 2 / (delta / 64) = 128 / delta := by field_simp; ring
     rw [heq] at hm
     change 1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-      (leftBlock L k0) ψ).kyFanNorm (Module.finrank ℂ (G etaLD) * Bs) ≤ _ at hm
+      (interval L 0 k0) ψ).kyFanNorm (Module.finrank ℂ (G etaLD) * Bs) ≤ _ at hm
     convert hm using 1; ring
   · intro k hk _hne
     have hden : 0 < 64 * ((L : ℝ) + 1) := by positivity
@@ -300,7 +299,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
         128 * ((L : ℝ) + 1) / delta := by field_simp; ring
     rw [heq] at hm
     change 1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-      (leftBlock L k) ψ).kyFanNorm (Module.finrank ℂ (G etaLD) * Bg) ≤ _ at hm
+      (interval L 0 k) ψ).kyFanNorm (Module.finrank ℂ (G etaLD) * Bg) ≤ _ at hm
     convert hm using 1; field_simp; ring
 
 end TNLean.MPS.AreaLaw

@@ -28,6 +28,8 @@ Source: LVV13, arXiv:1307.5143v1, `def:viable`, lines 240--244, and final
 induction, lines 652--678, applied to a product-ancilla extension.
 -/
 
+open ManyBody (interval)
+
 section
 
 open scoped InnerProductSpace
@@ -43,16 +45,16 @@ theorem sum_norm_cutColumn_sq {N q i : ℕ}
   simp_rw [EuclideanSpace.norm_sq_eq]
   rw [Finset.sum_comm]
   change (∑ a, ∑ b, ‖ψ
-    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b))‖ ^ 2) = _
+    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)).symm (a, b))‖ ^ 2) = _
   simpa only [Fintype.sum_prod_type] using
-    Equiv.sum_comp (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm
+    Equiv.sum_comp (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)).symm
       (fun σ ↦ ‖ψ σ‖ ^ 2)
 
 /-- A cut column has norm at most the norm of its full vector.
 Auxiliary to prefix extraction from LVV13 viable sets, `def:viable`. -/
 theorem norm_cutColumn_le {N q i : ℕ}
     (ψ : EuclideanSpace ℂ (Fin N → Fin q))
-    (b : (v : {v : Fin N // v ∉ leftBlock N i}) → Fin q) :
+    (b : (v : {v : Fin N // v ∉ interval N 0 i}) → Fin q) :
     ‖cutColumn ψ i b‖ ≤ ‖ψ‖ := by
   have h := Finset.single_le_sum (fun b _ ↦ sq_nonneg ‖cutColumn ψ i b‖)
     (Finset.mem_univ b)
@@ -62,24 +64,24 @@ theorem norm_cutColumn_le {N q i : ℕ}
 /-- Attach a fixed right basis configuration to a vector on the retained prefix.
 Auxiliary to the product-ancilla use of LVV13, `def:viable`. -/
 noncomputable def rightBasisExtension {N q i : ℕ} (v : LeftBlockVector N q i)
-    (b : (j : {j : Fin N // j ∉ leftBlock N i}) → Fin q) :
+    (b : (j : {j : Fin N // j ∉ interval N 0 i}) → Fin q) :
     EuclideanSpace ℂ (Fin N → Fin q) := by
   classical
   exact WithLp.toLp 2 fun σ ↦
-    if ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)) σ).2 = b then
-      v (((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)) σ).1) else 0
+    if ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)) σ).2 = b then
+      v (((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)) σ).1) else 0
 
 /-- Only the column at the selected right configuration is nonzero.
 Auxiliary to the product-ancilla use of LVV13, `def:viable`. -/
 theorem cutColumn_rightBasisExtension {N q i : ℕ} (v : LeftBlockVector N q i)
-    (b b' : (j : {j : Fin N // j ∉ leftBlock N i}) → Fin q) :
+    (b b' : (j : {j : Fin N // j ∉ interval N 0 i}) → Fin q) :
     cutColumn (rightBasisExtension v b) i b' = if b' = b then v else 0 := by
   classical
   ext a
-  change (if ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i))
-    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b'))).2 = b then
-      v (((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i))
-        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b'))).1) else 0) = _
+  change (if ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i))
+    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)).symm (a, b'))).2 = b then
+      v (((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i))
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)).symm (a, b'))).1) else 0) = _
   rw [Equiv.apply_symm_apply]
   split_ifs <;> rfl
 
@@ -87,33 +89,33 @@ theorem cutColumn_rightBasisExtension {N q i : ℕ} (v : LeftBlockVector N q i)
 Auxiliary to the product-ancilla use of LVV13, `def:viable`. -/
 theorem inner_rightBasisExtension {N q i : ℕ}
     (ψ : EuclideanSpace ℂ (Fin N → Fin q)) (v : LeftBlockVector N q i)
-    (b : (j : {j : Fin N // j ∉ leftBlock N i}) → Fin q) :
+    (b : (j : {j : Fin N // j ∉ interval N 0 i}) → Fin q) :
     ⟪ψ, rightBasisExtension v b⟫_ℂ = ⟪cutColumn ψ i b, v⟫_ℂ := by
   classical
-  have heval (a : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock N i)))
-      (b' : (j : {j : Fin N // j ∉ leftBlock N i}) → Fin q) :
+  have heval (a : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval N 0 i)))
+      (b' : (j : {j : Fin N // j ∉ interval N 0 i}) → Fin q) :
       rightBasisExtension v b
-        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b')) =
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)).symm (a, b')) =
         if b' = b then v a else 0 := by
-    change (if ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i))
-      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b'))).2 = b then
-        v (((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i))
-          ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b'))).1) else 0) = _
+    change (if ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i))
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)).symm (a, b'))).2 = b then
+        v (((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i))
+          ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)).symm (a, b'))).1) else 0) = _
     rw [Equiv.apply_symm_apply]
   have hsum := Equiv.sum_comp
-    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)).symm
     (fun σ ↦ rightBasisExtension v b σ * star (ψ σ))
   simp only [Fintype.sum_prod_type, heval, ite_mul, zero_mul] at hsum
   simp only [EuclideanSpace.inner_eq_star_dotProduct, dotProduct, Pi.star_apply]
   change (∑ σ, rightBasisExtension v b σ * star (ψ σ)) =
     ∑ a, v a * star (ψ
-      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b)))
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval N 0 i)).symm (a, b)))
   simpa only [Finset.sum_ite_eq', Finset.mem_univ, ite_true] using hsum.symm
 
 /-- Attaching a right basis configuration preserves the Hilbert norm.
 Auxiliary to the product-ancilla use of LVV13, `def:viable`. -/
 theorem norm_rightBasisExtension {N q i : ℕ} (v : LeftBlockVector N q i)
-    (b : (j : {j : Fin N // j ∉ leftBlock N i}) → Fin q) :
+    (b : (j : {j : Fin N // j ∉ interval N 0 i}) → Fin q) :
     ‖rightBasisExtension v b‖ = ‖v‖ := by
   classical
   have hsq : ‖rightBasisExtension v b‖ ^ 2 = ‖v‖ ^ 2 := by
@@ -137,7 +139,7 @@ vector belongs to the actual retained span. Auxiliary to LVV13's final
 induction, `algo53.tex`, lines 652--678, applied to a product-ancilla extension. -/
 theorem IsViable.exists_prefix_of_rightBasisExtension {N q i : ℕ}
     {v : LeftBlockVector N q i}
-    {b : (j : {j : Fin N // j ∉ leftBlock N i}) → Fin q}
+    {b : (j : {j : Fin N // j ∉ interval N 0 i}) → Fin q}
     {delta : ℝ} (hdelta : delta < 1) {S : Set (LeftBlockVector N q i)}
     (h : IsViable (rightBasisExtension v b) delta S) :
     ∃ w ∈ Submodule.span ℂ S, ‖w‖ = 1 ∧ 1 - delta ≤ ‖⟪w, v⟫_ℂ‖ := by

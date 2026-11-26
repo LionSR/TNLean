@@ -73,7 +73,7 @@ theorem exists_aklv_sharp_physical_sequential_mps_approximation :
         Real.log (2048 * ((L : ℝ) + 1) / epsilon ^ 2) ∧
       (∀ k : ℕ, k ≤ L →
         1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-          (leftBlock L k) Ω).kyFanNorm D ≤ rho) ∧
+          (interval L 0 k) Ω).kyFanNorm D ≤ rho) ∧
       aklvSpectralTruncation Ω D ≠ 0 ∧
       ‖aklvNormalizedSpectralTruncation Ω D‖ = 1 ∧
       IsOpenMPS L q D (fun x ↦ aklvNormalizedSpectralTruncation Ω D x) ∧
@@ -96,7 +96,7 @@ theorem exists_aklv_sharp_physical_sequential_mps_approximation :
     exact hlogLVV
   have htail (k : ℕ) (hk : k ≤ L) :
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) Ω).kyFanNorm D ≤ rho := by
+        (interval L 0 k) Ω).kyFanNorm D ≤ rho := by
     obtain ⟨y, hy, herror, _hoverlap, hrank, _hactual⟩ := hcut k hk
     exact one_sub_kyFanNorm_le_of_unit_cut_rank_approximation Ω y hΩ hy herror hrank
   refine ⟨hlog, hlogLVV, hlogExplicit, htail, ?_⟩

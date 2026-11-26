@@ -57,6 +57,7 @@ Documented in the companion library's paper-gap note
 -/
 
 open Matrix
+open ManyBody (interval interval_mono mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -66,24 +67,24 @@ variable {L q : ℕ}
 of the first `i` sites and `y` that of the rest, as a linear isometry. -/
 noncomputable def blockSplit (L q i : ℕ) :
     EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) ×
-        ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) :=
-  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L i))
+      EuclideanSpace ℂ ((ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 i)) ×
+        ((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q)) :=
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 i))
 
 @[simp]
 theorem blockSplit_apply (i : ℕ) (ψ : EuclideanSpace ℂ (Fin L → Fin q))
-    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)))
-    (y : (v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) :
-    blockSplit L q i ψ (x, y) = ManyBody.cutMatrix (leftBlock L i) ψ x y :=
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 i)))
+    (y : (v : {v : Fin L // v ∉ interval L 0 i}) → Fin q) :
+    blockSplit L q i ψ (x, y) = ManyBody.cutMatrix (interval L 0 i) ψ x y :=
   rfl
 
 /-- Joining the block coordinates restores a vector on the chain. -/
 theorem blockSplit_symm_eq (i : ℕ)
     (u : EuclideanSpace ℂ
-      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) ×
-        ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q))) :
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 i)) ×
+        ((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q))) :
     (blockSplit L q i).symm u = WithLp.toLp 2 (fun z ↦
-      u (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L i) z)) := by
+      u (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 i) z)) := by
   ext z
   simp [blockSplit, LinearIsometryEquiv.piLpCongrLeft_symm,
     LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft']
@@ -91,7 +92,7 @@ theorem blockSplit_symm_eq (i : ℕ)
 /-- `Span(S) ⊗ H_R` is the coordinate extension of `S` in block coordinates. -/
 theorem leftSupportSubmodule_eq_comap (i : ℕ) (S : Submodule ℂ (LeftBlockVector L q i)) :
     leftSupportSubmodule (S : Set (LeftBlockVector L q i)) =
-      (Submodule.prodExt S (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q))).comap
+      (Submodule.prodExt S (((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q))).comap
         (blockSplit L q i).toLinearEquiv.toLinearMap := by
   ext ψ
   rw [mem_leftSupportSubmodule, Submodule.span_eq, Submodule.mem_comap, Submodule.mem_prodExt]
@@ -102,17 +103,18 @@ to `T` exactly when the coordinate extension of `S` is `δ`-close to the image o
 theorem isCloseTo_leftSupportSubmodule_iff {i : ℕ} {δ : ℝ}
     (S : Submodule ℂ (LeftBlockVector L q i)) (T : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))) :
     Submodule.IsCloseTo δ (leftSupportSubmodule (S : Set (LeftBlockVector L q i))) T ↔
-      Submodule.IsCloseTo δ (Submodule.prodExt S (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)))
+      Submodule.IsCloseTo δ (Submodule.prodExt S
+          (((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q)))
         (T.map (blockSplit L q i).toLinearEquiv.toLinearMap) := by
   rw [← Submodule.isCloseTo_map_iff (blockSplit L q i), leftSupportSubmodule_eq_comap,
     Submodule.map_comap_eq_of_surjective (blockSplit L q i).surjective]
 
 /-- The first `j + 1` sites, as a region of the first `i` sites. -/
-def blockCut (L i j : ℕ) : Finset {v : Fin L // v ∈ leftBlock L i} :=
+def blockCut (L i j : ℕ) : Finset {v : Fin L // v ∈ interval L 0 i} :=
   Finset.univ.filter fun v ↦ v.1.val < j + 1
 
 @[simp]
-theorem mem_blockCut {i j : ℕ} {v : {v : Fin L // v ∈ leftBlock L i}} :
+theorem mem_blockCut {i j : ℕ} {v : {v : Fin L // v ∈ interval L 0 i}} :
     v ∈ blockCut L i j ↔ v.1.val < j + 1 := by
   simp [blockCut]
 
@@ -122,31 +124,31 @@ theorem blockCut_mono (L i : ℕ) : Monotone (blockCut L i) :=
 /-- The first `j + 1` sites, as a subtype of the first `i` sites and as a subtype of the
 chain. -/
 def blockCutSubtypeEquiv {i j : ℕ} (hj : j + 1 ≤ i) :
-    {v : {v : Fin L // v ∈ leftBlock L i} // v ∈ blockCut L i j} ≃
-      {v : Fin L // v ∈ leftBlock L (j + 1)} where
-  toFun v := ⟨v.1.1, mem_leftBlock.2 (mem_blockCut.1 v.2)⟩
-  invFun w := ⟨⟨w.1, mem_leftBlock.2 (lt_of_lt_of_le (mem_leftBlock.1 w.2) hj)⟩,
-    mem_blockCut.2 (mem_leftBlock.1 w.2)⟩
+    {v : {v : Fin L // v ∈ interval L 0 i} // v ∈ blockCut L i j} ≃
+      {v : Fin L // v ∈ interval L 0 (j + 1)} where
+  toFun v := ⟨v.1.1, mem_interval.mpr ⟨Nat.zero_le _, mem_blockCut.1 v.2⟩⟩
+  invFun w := ⟨⟨w.1, mem_interval.mpr ⟨Nat.zero_le _, lt_of_lt_of_le (mem_interval.mp w.2).2 hj⟩⟩,
+    mem_blockCut.2 (mem_interval.mp w.2).2⟩
   left_inv _ := rfl
   right_inv _ := rfl
 
 /-- The sites right of the first `j + 1`: those of the first `i` sites and those beyond. -/
 def blockRestSubtypeEquiv {i j : ℕ} (hj : j + 1 ≤ i) :
-    {v : {v : Fin L // v ∈ leftBlock L i} // v ∉ blockCut L i j} ⊕
-        {v : Fin L // v ∉ leftBlock L i} ≃
-      {v : Fin L // v ∉ leftBlock L (j + 1)} where
-  toFun := Sum.elim (fun v ↦ ⟨v.1.1, fun h ↦ v.2 (mem_blockCut.2 (mem_leftBlock.1 h))⟩)
-    fun v ↦ ⟨v.1, fun h ↦ v.2 (leftBlock_mono hj h)⟩
+    {v : {v : Fin L // v ∈ interval L 0 i} // v ∉ blockCut L i j} ⊕
+        {v : Fin L // v ∉ interval L 0 i} ≃
+      {v : Fin L // v ∉ interval L 0 (j + 1)} where
+  toFun := Sum.elim (fun v ↦ ⟨v.1.1, fun h ↦ v.2 (mem_blockCut.2 (mem_interval.mp h).2)⟩)
+    fun v ↦ ⟨v.1, fun h ↦ v.2 (interval_mono (le_refl 0) hj h)⟩
   invFun w :=
-    if h : w.1 ∈ leftBlock L i then
-      Sum.inl ⟨⟨w.1, h⟩, fun h' ↦ w.2 (mem_leftBlock.2 (mem_blockCut.1 h'))⟩
+    if h : w.1 ∈ interval L 0 i then
+      Sum.inl ⟨⟨w.1, h⟩, fun h' ↦ w.2 (mem_interval.mpr ⟨Nat.zero_le _, mem_blockCut.1 h'⟩)⟩
     else Sum.inr ⟨w.1, h⟩
   left_inv v := by
     rcases v with v | v
     · simp [v.1.2]
     · simp [v.2]
   right_inv w := by
-    by_cases h : w.1 ∈ leftBlock L i <;> simp [h]
+    by_cases h : w.1 ∈ interval L 0 i <;> simp [h]
 
 /-- **The Schmidt rank across a cut of the block is that across the chain cut.** For
 `j + 1 ≤ i`, the Schmidt rank of `ψ` across the first `j + 1` sites of the block, with the last
@@ -155,15 +157,15 @@ sites. -/
 theorem rank_cutEnvVector_blockSplit {i j : ℕ} (hj : j + 1 ≤ i)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
     Matrix.schmidtRank (WithLp.ofLp
-      (Entropy.cutEnvVector (n := fun _ : {v : Fin L // v ∈ leftBlock L i} ↦ q)
+      (Entropy.cutEnvVector (n := fun _ : {v : Fin L // v ∈ interval L 0 i} ↦ q)
         (blockCut L i j) (blockSplit L q i ψ))) =
-      (ManyBody.cutMatrix (leftBlock L (j + 1)) ψ).rank := by
+      (ManyBody.cutMatrix (interval L 0 (j + 1)) ψ).rank := by
   classical
   rw [Matrix.schmidtRank]
   have h : schmidtCoeffMatrix (WithLp.ofLp
-      (Entropy.cutEnvVector (n := fun _ : {v : Fin L // v ∈ leftBlock L i} ↦ q)
+      (Entropy.cutEnvVector (n := fun _ : {v : Fin L // v ∈ interval L 0 i} ↦ q)
         (blockCut L i j) (blockSplit L q i ψ))) =
-      (ManyBody.cutMatrix (leftBlock L (j + 1)) ψ).submatrix
+      (ManyBody.cutMatrix (interval L 0 (j + 1)) ψ).submatrix
         ((blockCutSubtypeEquiv hj).arrowCongr (Equiv.refl (Fin q)))
         ((Equiv.sumArrowEquivProdArrow _ _ (Fin q)).symm.trans
           ((blockRestSubtypeEquiv hj).arrowCongr (Equiv.refl (Fin q)))) := by
@@ -172,19 +174,19 @@ theorem rank_cutEnvVector_blockSplit {i j : ℕ} (hj : j + 1 ≤ i)
       ManyBody.cutMatrix_apply, submatrix_apply]
     refine congrArg (fun c : Fin L → Fin q ↦ ψ c) (funext fun v ↦ ?_)
     by_cases hv : v.val < j + 1
-    · have hvi : v ∈ leftBlock L i := mem_leftBlock.2 (lt_of_lt_of_le hv hj)
-      rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.2 hv),
+    · have hvi : v ∈ interval L 0 i := mem_interval.mpr ⟨Nat.zero_le _, lt_of_lt_of_le hv hj⟩
+      rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_interval.mpr ⟨Nat.zero_le _, hv⟩),
         ManyBody.cutEquiv_symm_apply_mem _ _ hvi,
         ManyBody.cutEquiv_symm_apply_mem _ _ (mem_blockCut.2 hv)]
       rfl
-    · have hv' : v ∉ leftBlock L (j + 1) := fun h ↦ hv (mem_leftBlock.1 h)
+    · have hv' : v ∉ interval L 0 (j + 1) := fun h ↦ hv (mem_interval.mp h).2
       rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hv']
-      by_cases hvi : v ∈ leftBlock L i
+      by_cases hvi : v ∈ interval L 0 i
       · rw [ManyBody.cutEquiv_symm_apply_mem _ _ hvi,
           ManyBody.cutEquiv_symm_apply_not_mem _ _ (fun h ↦ hv (mem_blockCut.1 h))]
-        simp [blockRestSubtypeEquiv, mem_leftBlock.1 hvi, Equiv.sumArrowEquivProdArrow]
+        simp [blockRestSubtypeEquiv, (mem_interval.mp hvi).2, Equiv.sumArrowEquivProdArrow]
       · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hvi]
-        have hvi' : ¬v.val < i := fun h ↦ hvi (mem_leftBlock.2 h)
+        have hvi' : ¬v.val < i := fun h ↦ hvi (mem_interval.mpr ⟨Nat.zero_le _, h⟩)
         simp [blockRestSubtypeEquiv, hvi', Equiv.sumArrowEquivProdArrow]
   rw [h, rank_submatrix]
 
@@ -195,7 +197,7 @@ variable {i s : ℕ}
 `local_alg_arxiv_v2.tex`, Definition `def:trimming`, lines 646–655). -/
 noncomputable def chainTrimVector (ξ : ℝ) (u : Fin s → LeftBlockVector L q i) (k : Fin s) :
     LeftBlockVector L q i :=
-  toEuclideanLin (Entropy.trimProj (n := fun _ : {v : Fin L // v ∈ leftBlock L i} ↦ q)
+  toEuclideanLin (Entropy.trimProj (n := fun _ : {v : Fin L // v ∈ interval L 0 i} ↦ q)
     (blockCut L i) ξ u (i - 1)) (u k)
 
 /-- The `ξ`-trimmed subspace `Trim_ξ(S)` of the first `i` sites, for an orthonormal basis `u` of
@@ -203,7 +205,7 @@ noncomputable def chainTrimVector (ξ : ℝ) (u : Fin s → LeftBlockVector L q 
 eq. `def-viable-trim`, line 654). -/
 noncomputable def chainTrimSubspace (ξ : ℝ) (u : Fin s → LeftBlockVector L q i) :
     Submodule ℂ (LeftBlockVector L q i) :=
-  Entropy.trimSubspace (n := fun _ : {v : Fin L // v ∈ leftBlock L i} ↦ q) (blockCut L i) ξ u
+  Entropy.trimSubspace (n := fun _ : {v : Fin L // v ∈ interval L 0 i} ↦ q) (blockCut L i) ξ u
     (i - 1)
 
 /-- `Trim_ξ(S)` is spanned by the trimmed vectors. -/
@@ -221,7 +223,7 @@ theorem isCloseTo_leftSupportSubmodule_chainTrimSubspace {b : ℕ} {ξ δ : ℝ}
     {S : Submodule ℂ (LeftBlockVector L q i)} (u : OrthonormalBasis (Fin s) ℂ S)
     {T : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))}
     (hT : Submodule.IsCloseTo δ (leftSupportSubmodule (S : Set (LeftBlockVector L q i))) T)
-    (hb : ∀ t ∈ T, ∀ j, 0 < j → j < i → (ManyBody.cutMatrix (leftBlock L j) t).rank ≤ b) :
+    (hb : ∀ t ∈ T, ∀ j, 0 < j → j < i → (ManyBody.cutMatrix (interval L 0 j) t).rank ≤ b) :
     Submodule.IsCloseTo (δ + 2 * (ξ * √(((i - 1 : ℕ) : ℝ) * b)))
       (leftSupportSubmodule
         (chainTrimSubspace ξ (fun k ↦ (u k : LeftBlockVector L q i)) :

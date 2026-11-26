@@ -82,7 +82,7 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
       ‖GaussianFilter.gaussianIntertwiner variance (H - (energy : ℂ) • 1) 0 1 - Q‖ ≤
         2 * Real.exp (-T ^ 2 / (2 * (variance : ℝ))) + eta + rho ∧
       ∀ cut : ℕ, operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) Q) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) Q) ≤
           N * q ^ (8 * r + 8) := by
   classical
   let : NeZero q := ⟨by omega⟩
@@ -176,7 +176,7 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
       ‖GaussianFilter.gaussianIntertwiner variance (H - (energy : ℂ) • 1) 0 1 - Q‖ ≤
         2 * Real.exp (-T ^ 2 / (2 * (variance : ℝ))) + eta + rho ∧
       ∀ cut : ℕ, operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) Q) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) Q) ≤
           N * q ^ (8 * r + 8) :=
   ⟨positiveChainGaussianSampleCount Φ energy T eta,
     positiveChainGaussianApproximant Φ h0 variance energy T eta rho,

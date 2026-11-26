@@ -136,10 +136,10 @@ absolute value, which is the form stated here. -/
 theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {κ : Type*} [Fintype κ] (a : κ → ℂ)
-    {ψL : κ → EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L j))}
-    {ψR : κ → EuclideanSpace ℂ ((v : {v // v ∉ leftBlock L j}) → Fin q)}
+    {ψL : κ → EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 j))}
+    {ψR : κ → EuclideanSpace ℂ ((v : {v // v ∉ interval L 0 j}) → Fin q)}
     (hψL : Orthonormal ℂ ψL) (hψR : Orthonormal ℂ ψR)
-    (hdec : WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) Ω) =
+    (hdec : WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 j) Ω) =
       fun p ↦ ∑ α, a α * (WithLp.ofLp (ψL α) p.1 * WithLp.ofLp (ψR α) p.2))
     {O : κ → ℂ} (hO : ∀ α, ‖O α‖ ≤ 1)
     {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {SA : Finset (Fin L)}
@@ -150,31 +150,31 @@ theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
       OB.PosSemidef ∧ OL.PosSemidef ∧ OR.PosSemidef ∧ ‖OB‖ ≤ 1 ∧ ‖OL‖ ≤ 1 ∧ ‖OR‖ ≤ 1 ∧
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧
       SB ⊆ interval L (j - l) (j + l) ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ interval L 0 j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (interval L 0 j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤ ε) :
-    ‖⟪Ω, T (A * ManyBody.place (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ -
+    ‖⟪Ω, T (A * ManyBody.place (interval L 0 j) (schmidtDiagonal O ψL)) Ω⟫_ℂ -
         ⟪Ω, T A Ω⟫_ℂ *
-          ⟪Ω, T (ManyBody.place (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ‖ ≤
+          ⟪Ω, T (ManyBody.place (interval L 0 j) (schmidtDiagonal O ψL)) Ω⟫_ℂ‖ ≤
       3 * Real.sqrt (2 * ε) + ε := by
   obtain ⟨OB, OL, OR, SB, SL, SR, hOB, hOL, hOR, hOB1, hOL1, hOR1, hsB, hSB, hsL, hSL, hsR, hSR,
     hprod⟩ := hfact
   classical
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
     ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
-  have hBL1 : ‖ManyBody.place (X := fun _ ↦ Fin q) (leftBlock L j)
+  have hBL1 : ‖ManyBody.place (X := fun _ ↦ Fin q) (interval L 0 j)
       (schmidtDiagonal O ψL)‖ ≤ 1 :=
     (l2_opNorm_reindex_le _ _ _).trans
       ((l2_opNorm_kronecker_one_le _).trans (l2_opNorm_schmidtDiagonal_le_one hO hψL))
-  have hBR1 : ‖reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm
-      (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm
+  have hBR1 : ‖reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 j)).symm
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 j)).symm
       ((1 : Matrix _ _ ℂ) ⊗ₖ schmidtDiagonal O ψR)‖ ≤ 1 :=
     (l2_opNorm_reindex_le _ _ _).trans
       ((l2_opNorm_one_kronecker_le _).trans (l2_opNorm_schmidtDiagonal_le_one hO hψR))
   have hBA : Commute OB A :=
     ManyBody.commute_of_mem_supportedOperators_of_disjoint hsB hA
         (Finset.disjoint_of_subset_right hSB hSA).symm
-  have hRB : Commute OR (ManyBody.place (X := fun _ ↦ Fin q) (leftBlock L j)
+  have hRB : Commute OR (ManyBody.place (X := fun _ ↦ Fin q) (interval L 0 j)
       (schmidtDiagonal O ψL)) :=
     ManyBody.commute_of_mem_supportedOperators_of_disjoint hsR
         (ManyBody.place_mem_supportedOperators _) hSR
@@ -191,9 +191,9 @@ theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
       if α = β then 1 else 0 := fun α β ↦ by
     rw [dotProduct_comm, ← EuclideanSpace.inner_eq_star_dotProduct]
     exact orthonormal_iff_ite.mp hψR α β
-  have hB : T (ManyBody.place (X := fun _ ↦ Fin q) (leftBlock L j)
+  have hB : T (ManyBody.place (X := fun _ ↦ Fin q) (interval L 0 j)
       (schmidtDiagonal O ψL)) Ω = T (reindex (ManyBody.cutEquiv (fun _ ↦ Fin q)
-        (leftBlock L j)).symm (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm
+        (interval L 0 j)).symm (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 j)).symm
       ((1 : Matrix _ _ ℂ) ⊗ₖ schmidtDiagonal O ψR)) Ω := by
     rw [ManyBody.place, Entropy.toEuclideanCLM_reindex_cutEquiv_symm,
       Entropy.toEuclideanCLM_reindex_cutEquiv_symm, hdec]
@@ -264,18 +264,18 @@ theorem exists_norm_inner_mul_sub_le (R : ℕ) :
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let s := max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80
       ∀ (j l : ℕ) {ι : Type*} [Fintype ι] (a : ι → ℂ)
-        {ψL : ι → EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L j))}
-        {ψR : ι → EuclideanSpace ℂ ((v : {v // v ∉ leftBlock L j}) → Fin q)},
+        {ψL : ι → EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 j))}
+        {ψR : ι → EuclideanSpace ℂ ((v : {v // v ∉ interval L 0 j}) → Fin q)},
         Orthonormal ℂ ψL → Orthonormal ℂ ψR →
-        WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) Ω) =
+        WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 j) Ω) =
           (fun p ↦ ∑ α, a α * (WithLp.ofLp (ψL α) p.1 * WithLp.ofLp (ψR α) p.2)) →
         ∀ {O : ι → ℂ}, (∀ α, ‖O α‖ ≤ 1) →
         ∀ {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {SA : Finset (Fin L)},
         ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A SA →
         Disjoint SA (interval L (j - l) (j + l)) → ‖A‖ ≤ 1 →
-        ‖⟪Ω, T (A * ManyBody.place (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ -
+        ‖⟪Ω, T (A * ManyBody.place (interval L 0 j) (schmidtDiagonal O ψL)) Ω⟫_ℂ -
             ⟪Ω, T A Ω⟫_ℂ *
-              ⟪Ω, T (ManyBody.place (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ‖ ≤
+              ⟪Ω, T (ManyBody.place (interval L 0 j) (schmidtDiagonal O ψL)) Ω⟫_ℂ‖ ≤
           3 * Real.sqrt (2 * (K * s ^ 3 *
               Real.exp (-(l / (6 * s))))) +
             K * s ^ 3 *

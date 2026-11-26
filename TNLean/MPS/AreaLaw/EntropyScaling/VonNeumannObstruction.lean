@@ -27,10 +27,12 @@ is unaffected by these corrections.
 
 It also contains the following results.
 
-* `TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error`,
-  `TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error`: von
+* `TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_interval_le_log_add_half_error`,
+  `TNLean.MPS.AreaLaw.IsOpenMPS.regionEntropy_sdiff_interval_le_two_log_add_half_error`: von
   Neumann entropy bounds from MPS approximation.
 -/
+
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -63,37 +65,37 @@ private theorem log_max_one_nat (D : ℕ) : Real.log (max 1 D : ℕ) = Real.log 
 /-- The small-error von Neumann bound at a single chain boundary. This is the
 corrected small-error form of SWVC08, arXiv:0705.0292v2, lines 278–305.
 Empty and full prefixes and chains of length zero or one are included. -/
-theorem IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error {L q D : ℕ}
+theorem IsOpenMPS.regionEntropy_interval_le_log_add_half_error {L q D : ℕ}
     {ψ φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (hψ : ‖ψ‖ = 1) (k : ℕ)
     {δ : ℝ} (hδ : δ < 1)
     (herror : Matrix.rectangularTraceNorm
       (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
-    ManyBody.regionEntropy (X := fun _ ↦ Fin q) ψ (leftBlock L k) ≤
-      Real.log D + δ / 2 * ((leftBlock L k).card : ℝ) * Real.log q + Real.log 2 := by
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) ψ (interval L 0 k) ≤
+      Real.log D + δ / 2 * ((interval L 0 k).card : ℝ) * Real.log q + Real.log 2 := by
   have ht := Entropy.sum_descEigenvalue_regionState_tail_le_half_pure_trace_error
-    ψ φ hψ (leftBlock L k) (hφ.rank_regionState_leftBlock_le_max k) hδ herror
-  have hb := ManyBody.regionEntropy_le_log_rank_add_spectral_tail ψ hψ (leftBlock L k) ht
+    ψ φ hψ (interval L 0 k) (hφ.rank_regionState_interval_le_max k) hδ herror
+  have hb := ManyBody.regionEntropy_le_log_rank_add_spectral_tail ψ hψ (interval L 0 k) ht
   simpa only [log_max_one_nat] using hb
 
 /-- The small-error von Neumann bound for a contiguous block. Two boundaries give
 `2 * log D`. This is the corrected form of SWVC08, arXiv:0705.0292v2,
 lines 269–305, including empty blocks, endpoints, and short chains. -/
-theorem IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error {L q D : ℕ}
+theorem IsOpenMPS.regionEntropy_sdiff_interval_le_two_log_add_half_error {L q D : ℕ}
     {ψ φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (hψ : ‖ψ‖ = 1)
     {a b : ℕ} (hab : a ≤ b) {δ : ℝ} (hδ : δ < 1)
     (herror : Matrix.rectangularTraceNorm
       (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q)
-      ψ (leftBlock L b \ leftBlock L a) ≤
-      2 * Real.log D + δ / 2 * ((leftBlock L b \ leftBlock L a).card : ℝ) *
+      ψ (interval L 0 b \ interval L 0 a) ≤
+      2 * Real.log D + δ / 2 * ((interval L 0 b \ interval L 0 a).card : ℝ) *
         Real.log q + Real.log 2 := by
   have ht := Entropy.sum_descEigenvalue_regionState_tail_le_half_pure_trace_error
-    ψ φ hψ (leftBlock L b \ leftBlock L a)
-    (hφ.rank_regionState_sdiff_leftBlock_le_max_sq hab) hδ herror
+    ψ φ hψ (interval L 0 b \ interval L 0 a)
+    (hφ.rank_regionState_sdiff_interval_le_max_sq hab) hδ herror
   have hb := ManyBody.regionEntropy_le_log_rank_add_spectral_tail ψ hψ
-    (leftBlock L b \ leftBlock L a) ht
+    (interval L 0 b \ interval L 0 a) ht
   simpa only [Nat.cast_pow, Real.log_pow, Nat.cast_ofNat, log_max_one_nat] using hb
 
 end VonNeumannApproximationLowerBound
@@ -110,7 +112,7 @@ theorem IsEfficientlyApproximableByMPS.exists_vonNeumann_bound
     (a b : lengths → ℕ) (hab : ∀ N, a N ≤ b N) {ε : ℝ} (hε : 0 < ε) :
     ∃ K : ℝ, ∃ m : ℕ, ∀ N : lengths,
       ManyBody.regionEntropy (X := fun _ ↦ Fin q)
-        (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N)) ≤
+        (ψ N) (interval N.val 0 (b N) \ interval N.val 0 (a N)) ≤
         K + (m : ℝ) * Real.log ((N.val : ℝ) + 1) + ε * N.val := by
   let δ := min (1 / 2 : ℝ) (ε / (Real.log q + 1))
   have hlq := Real.log_natCast_nonneg q
@@ -124,7 +126,7 @@ theorem IsEfficientlyApproximableByMPS.exists_vonNeumann_bound
   obtain ⟨C, hC, m, happrox⟩ := happrox δ hδpos
   refine ⟨2 * |Real.log C| + Real.log 2, 2 * m, fun N ↦ ?_⟩
   obtain ⟨D, φ, hD, hφ, herror⟩ := happrox N
-  have hbound := hφ.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error
+  have hbound := hφ.regionEntropy_sdiff_interval_le_two_log_add_half_error
     (hψ N) (hab N) hδ herror
   have hx : 0 < (N.val : ℝ) + 1 := by positivity
   have hlogD : Real.log D ≤ |Real.log C| + (m : ℝ) * Real.log ((N.val : ℝ) + 1) := by
@@ -135,12 +137,12 @@ theorem IsEfficientlyApproximableByMPS.exists_vonNeumann_bound
     · have hlog := Real.log_le_log (Nat.cast_pos.mpr hDpos) hD
       rw [Real.log_mul hC.ne' (pow_pos hx m).ne', Real.log_pow] at hlog
       exact hlog.trans (add_le_add (le_abs_self _) le_rfl)
-  have hcard : ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ) ≤ N.val := by
-    have h := Finset.card_le_univ (leftBlock N.val (b N) \ leftBlock N.val (a N))
+  have hcard : ((interval N.val 0 (b N) \ interval N.val 0 (a N)).card : ℝ) ≤ N.val := by
+    have h := Finset.card_le_univ (interval N.val 0 (b N) \ interval N.val 0 (a N))
     simp only [Fintype.card_fin] at h
     exact_mod_cast h
   have hmass := mul_le_mul_of_nonneg_right hcoef
-    (Nat.cast_nonneg (leftBlock N.val (b N) \ leftBlock N.val (a N)).card)
+    (Nat.cast_nonneg (interval N.val 0 (b N) \ interval N.val 0 (a N)).card)
   have hmass' := mul_le_mul_of_nonneg_left hcard hε.le
   norm_num only [Nat.cast_mul, Nat.cast_ofNat]
   nlinarith
@@ -170,11 +172,11 @@ theorem not_isEfficientlyApproximableByMPS_of_linear_vonNeumann_growth
     (a b : lengths → ℕ) (hab : ∀ N, a N ≤ b N)
     {c η : ℝ} (hc : 0 < c) (hη : 0 < η) (N₀ : ℕ)
     (hlinear : ∀ N : lengths, N₀ ≤ N.val →
-      η * (N.val : ℝ) ≤ ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ))
+      η * (N.val : ℝ) ≤ ((interval N.val 0 (b N) \ interval N.val 0 (a N)).card : ℝ))
     (hentropy : ∀ N : lengths, N₀ ≤ N.val →
-      c * ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ) ≤
+      c * ((interval N.val 0 (b N) \ interval N.val 0 (a N)).card : ℝ) ≤
         ManyBody.regionEntropy (X := fun _ ↦ Fin q)
-          (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N))) :
+          (ψ N) (interval N.val 0 (b N) \ interval N.val 0 (a N))) :
     ¬ IsEfficientlyApproximableByMPS ψ := by
   intro happrox
   have hcη : 0 < c * η := mul_pos hc hη

@@ -46,7 +46,7 @@ theorem physicalChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
     let K := physicalChainPropagator Φ hHerm T epsilon
     (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath Φ.hamiltonian (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (K t)) ≤
           q ^ (8 * r + 8) := by
   intro r K
   let w := 2 * r + 2
@@ -82,7 +82,7 @@ theorem exists_physical_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath Φ.hamiltonian (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (K t)) ≤
           q ^ (8 * r + 8) :=
   ⟨physicalChainPropagator Φ hHerm T epsilon,
     physicalChainPropagator_spec hq Φ hHerm hnorm hT hepsilon⟩
@@ -106,7 +106,7 @@ theorem positiveChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
     let K := positiveChainPropagator Φ h0 T epsilon
     (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath Φ.hamiltonian (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (K t)) ≤
           q ^ (8 * r + 8) :=
   physicalChainPropagator_spec hq Φ
     (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
@@ -122,7 +122,7 @@ theorem exists_positive_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath Φ.hamiltonian (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (K t)) ≤
           q ^ (8 * r + 8) :=
   ⟨positiveChainPropagator Φ h0 T epsilon,
     positiveChainPropagator_spec hq Φ h0 h1 hT hepsilon⟩

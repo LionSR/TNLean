@@ -56,6 +56,7 @@ every vector vanishes, and the statements hold trivially.
 
 open Matrix
 open scoped Kronecker
+open ManyBody (interval interval_mono)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -67,14 +68,14 @@ When `P` is a trimming projection of the cut vector of `ψ` at `m`, this is the 
 lines 330–333). -/
 noncomputable def chainTrim (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (i : ℕ)
     (P : LeftBlockMatrix L q i) : EuclideanSpace ℂ (Fin L → Fin q) :=
-  toEuclideanLin (ManyBody.place (leftBlock L i) P) ψ
+  toEuclideanLin (ManyBody.place (interval L 0 i) P) ψ
 
 /-- The coefficient matrix of `(P ⊗ 1) ψ` across the cut after `i` sites is `P C`, where `C`
 is that of `ψ`. -/
 theorem cutMatrix_chainTrim (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (i : ℕ)
     (P : LeftBlockMatrix L q i) :
-    ManyBody.cutMatrix (leftBlock L i) (chainTrim ψ i P) =
-      P * ManyBody.cutMatrix (leftBlock L i) ψ :=
+    ManyBody.cutMatrix (interval L 0 i) (chainTrim ψ i P) =
+      P * ManyBody.cutMatrix (interval L 0 i) ψ :=
   cutMatrix_localLift i P ψ
 
 /-- In the coordinates of the cut after `i` sites, `(P ⊗ 1) ψ` is the bipartite vector
@@ -82,8 +83,8 @@ theorem cutMatrix_chainTrim (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (i : ℕ
 lines 330–333). -/
 theorem cutVector_chainTrim (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (i : ℕ)
     (P : LeftBlockMatrix L q i) :
-    ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L i) (chainTrim ψ i P) =
-      leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L i) ψ) := by
+    ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 i) (chainTrim ψ i P) =
+      leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 i) ψ) := by
   ext ⟨a, b⟩
   exact congrFun (congrFun (cutMatrix_chainTrim ψ i P) a) b
 
@@ -92,9 +93,9 @@ algo53.tex, lines 330–333). If `P` is a trimming projection of the cut vector 
 then `trim^i_m ψ` has rank at most `m` across the cut after `i` sites. -/
 theorem rank_cutMatrix_chainTrim_self_le {ψ : EuclideanSpace ℂ (Fin L → Fin q)} {i m : ℕ}
     {P : LeftBlockMatrix L q i}
-    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L i) ψ)
+    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 i) ψ)
       m P) :
-    (ManyBody.cutMatrix (leftBlock L i) (chainTrim ψ i P)).rank ≤ m :=
+    (ManyBody.cutMatrix (interval L 0 i) (chainTrim ψ i P)).rank ≤ m :=
   (rank_cutMatrix_localLift_le i P ψ).trans hP.rank_le
 
 /-- **Lemma `l:trim2`** (arXiv:1307.5143v1, algo53.tex, lines 544–553). Trimming a chain
@@ -104,52 +105,53 @@ sites. For `j ≤ i` it equals `1 ⊗ Q` for an orthogonal projection `Q` on the
 which act to the right of the cut after `j` sites. -/
 theorem rank_cutMatrix_chainTrim_le {ψ : EuclideanSpace ℂ (Fin L → Fin q)} {i m : ℕ}
     {P : LeftBlockMatrix L q i}
-    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L i) ψ)
+    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 i) ψ)
       m P) (j : ℕ) :
-    (ManyBody.cutMatrix (leftBlock L j) (chainTrim ψ i P)).rank ≤
-      (ManyBody.cutMatrix (leftBlock L j) ψ).rank := by
+    (ManyBody.cutMatrix (interval L 0 j) (chainTrim ψ i P)).rank ≤
+      (ManyBody.cutMatrix (interval L 0 j) ψ).rank := by
   rcases isEmpty_or_nonempty (Fin L → Fin q) with hσ | ⟨⟨σ⟩⟩
-  · have h : ManyBody.cutMatrix (leftBlock L j) (chainTrim ψ i P) =
-        ManyBody.cutMatrix (leftBlock L j) ψ := by
+  · have h : ManyBody.cutMatrix (interval L 0 j) (chainTrim ψ i P) =
+        ManyBody.cutMatrix (interval L 0 j) ψ := by
       ext a b
-      exact isEmptyElim ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm (a, b))
+      exact isEmptyElim ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 j)).symm (a, b))
     rw [h]
   rcases le_total i j with hij | hji
   · exact rank_cutMatrix_toEuclideanLin_le_of_isOneSided ψ j
-      ((ManyBody.place_mem_supportedOperators P).isOneSided_of_subset (leftBlock_mono hij)
+      ((ManyBody.place_mem_supportedOperators P).isOneSided_of_subset
+          (interval_mono (le_refl 0) hij)
         fun v ↦ σ v.1)
   · obtain ⟨Q, -, -, -, hPQ⟩ := hP.exists_mul_eq_mul_transpose
     set Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L i)).symm
-        (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L i)).symm
+      reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 i)).symm
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 i)).symm
         ((1 : LeftBlockMatrix L q i) ⊗ₖ Q) with hY
-    have hcut : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) Y =
+    have hcut : ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) Y =
         (1 : LeftBlockMatrix L q i) ⊗ₖ Q := by
       ext a b
       simp [hY]
     have htrim : chainTrim ψ i P = toEuclideanLin Y ψ := by
       apply cutMatrix_injective i
-      change ManyBody.cutMatrix (leftBlock L i) (chainTrim ψ i P) =
-        ManyBody.cutMatrix (leftBlock L i) (toEuclideanLin Y ψ)
+      change ManyBody.cutMatrix (interval L 0 i) (chainTrim ψ i P) =
+        ManyBody.cutMatrix (interval L 0 i) (toEuclideanLin Y ψ)
       rw [cutMatrix_chainTrim, cutMatrix_toEuclideanLin, hcut,
         schmidtCoeffMatrix_one_kronecker_mulVec]
       exact hPQ
-    have hsupp : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Y (leftBlock L i)ᶜ :=
-      Entropy.isSupportedOn_rightCut (n := fun _ : Fin L ↦ q) (leftBlock L i) Q
+    have hsupp : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Y (interval L 0 i)ᶜ :=
+      Entropy.isSupportedOn_rightCut (n := fun _ : Fin L ↦ q) (interval L 0 i) Q
     rw [htrim]
     exact rank_cutMatrix_toEuclideanLin_le_of_isOneSided ψ j
-      (hsupp.isOneSided_of_disjoint (disjoint_compl_left_iff.mpr (leftBlock_mono hji))
+      (hsupp.isOneSided_of_disjoint (disjoint_compl_left_iff.mpr (interval_mono (le_refl 0) hji))
         fun v ↦ σ v.1)
 
 /-- The trimmed chain vector is no longer than `ψ` (arXiv:1307.5143v1, algo53.tex,
 lines 330–333). -/
 theorem norm_chainTrim_le {ψ : EuclideanSpace ℂ (Fin L → Fin q)} {i m : ℕ}
     {P : LeftBlockMatrix L q i}
-    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L i) ψ)
+    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 i) ψ)
       m P) :
     ‖chainTrim ψ i P‖ ≤ ‖ψ‖ := by
-  rw [← Entropy.norm_cutVector (n := fun _ : Fin L ↦ q) (leftBlock L i) (chainTrim ψ i P),
-    ← Entropy.norm_cutVector (n := fun _ : Fin L ↦ q) (leftBlock L i) ψ, cutVector_chainTrim]
+  rw [← Entropy.norm_cutVector (n := fun _ : Fin L ↦ q) (interval L 0 i) (chainTrim ψ i P),
+    ← Entropy.norm_cutVector (n := fun _ : Fin L ↦ q) (interval L 0 i) ψ, cutVector_chainTrim]
   exact hP.norm_leftApply_le
 
 /-- **Trimming error on the chain** (corrected form of arXiv:1307.5143v1, algo53.tex,
@@ -162,12 +164,12 @@ which is false; the bound here gives error `ε` at radius `D / ε²`. Documented
 note <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>. -/
 theorem norm_inner_sub_chainTrim_le {ψ : EuclideanSpace ℂ (Fin L → Fin q)} {i m : ℕ}
     {P : LeftBlockMatrix L q i}
-    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L i) ψ)
+    (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 i) ψ)
       m P) {D : ℕ} (w : EuclideanSpace ℂ (Fin L → Fin q))
-    (hw : (ManyBody.cutMatrix (leftBlock L i) w).rank ≤ D) :
+    (hw : (ManyBody.cutMatrix (interval L 0 i) w).rank ≤ D) :
     ‖inner ℂ (ψ - chainTrim ψ i P) w‖ ≤ ‖ψ‖ * ‖w‖ * √((D : ℝ) / (m + 1)) := by
   have h := hP.norm_inner_sub_leftApply_le
-    (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L i) w) hw
+    (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 i) w) hw
   rwa [inner_sub_left, ← cutVector_chainTrim, inner_cutVector, inner_cutVector,
     ← inner_sub_left, Entropy.norm_cutVector, Entropy.norm_cutVector] at h
 

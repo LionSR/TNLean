@@ -84,13 +84,13 @@ theorem normalized_cut_schmidtRank_le {L q k : ℕ}
     (hKx : toEuclideanLin K x ≠ 0) :
     let ψ := c • (‖toEuclideanLin K x‖⁻¹ : ℂ) • toEuclideanLin K x
     schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
-      (leftBlock L k) ψ)) ≤
+      (interval L 0 k) ψ)) ≤
       operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-        (leftBlock L k) K) *
+        (interval L 0 k) K) *
       schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
-        (leftBlock L k) x)) := by
+        (interval L 0 k) x)) := by
   change schmidtRank (c • (‖toEuclideanLin K x‖⁻¹ : ℂ) •
-    WithLp.ofLp (ManyBody.cutVector (leftBlock L k) (toEuclideanLin K x))) ≤ _
+    WithLp.ofLp (ManyBody.cutVector (interval L 0 k) (toEuclideanLin K x))) ≤ _
   rw [schmidtRank_smul_eq_of_ne_zero c hc,
     schmidtRank_smul_eq_of_ne_zero _ (by
       exact_mod_cast inv_ne_zero (norm_ne_zero_iff.mpr hKx)),
@@ -136,14 +136,14 @@ theorem exists_aklv_variable_window_filtered_output {L q a s : ℕ}
               Real.sqrt ((9 * g / 10) / (2 * t + s)))) ^ 2
             toEuclideanLin K φ = φ ∧
             operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-              (leftBlock L (a + s / 2)) K) ≤ D ∧ toEuclideanLin K x ≠ 0 ∧
+              (interval L 0 (a + s / 2)) K) ≤ D ∧ toEuclideanLin K x ≠ 0 ∧
             ∃ c : ℂ, ‖c‖ = 1 ∧
               let ψ := c • (‖toEuclideanLin K x‖⁻¹ : ℂ) • toEuclideanLin K x
               ‖ψ‖ = 1 ∧
               schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
-                (leftBlock L (a + s / 2)) ψ)) ≤
+                (interval L 0 (a + s / 2)) ψ)) ≤
                   D * schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
-                    (leftBlock L (a + s / 2)) x)) ∧
+                    (interval L 0 (a + s / 2)) x)) ∧
               ‖ψ - φ‖ ^ 2 ≤ 8 * delta * ‖x - φ‖ ^ 2 ∧
               ‖ψ - Ω‖ ^ 2 ≤ 16 * delta + Real.exp (-t / 16) / 50 := by
   classical
@@ -291,9 +291,9 @@ theorem exists_aklv_dyadic_filtered_output {L q a s : ℕ}
     (hxΩ : ‖x - Ω‖ ^ 2 ≤ aklvSequenceWeight i / 16) :
     ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
       ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ aklvSequenceWeight (i + 1) / 16 ∧
-      schmidtRank (WithLp.ofLp (ManyBody.cutVector (leftBlock L (a + s / 2)) y)) ≤
+      schmidtRank (WithLp.ofLp (ManyBody.cutVector (interval L 0 (a + s / 2)) y)) ≤
         aklvSequenceFilterRank q g s (i + 1) *
-          schmidtRank (WithLp.ofLp (ManyBody.cutVector (leftBlock L (a + s / 2)) x)) ∧
+          schmidtRank (WithLp.ofLp (ManyBody.cutVector (interval L 0 (a + s / 2)) x)) ∧
       IsAKLVSequenceStep a s Φ e g Ω i x y := by
   classical
   let t := aklvSequenceThreshold g (i + 1)
@@ -356,12 +356,12 @@ def IsAKLVSequenceInitialization {L q : ℕ} (a s : ℕ)
     (aklvLogarithmicThreshold g) Finset.univ
   ∃ (E : ℝ) (φ χ : EuclideanSpace ℂ (Fin L → Fin q))
       (p : Polynomial ℝ) (c : ℂ)
-      (vL : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L (a + s / 2))) → ℂ)
-      (vR : ((v : {v : Fin L // v ∉ leftBlock L (a + s / 2)}) → Fin q) → ℂ),
+      (vL : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 (a + s / 2))) → ℂ)
+      (vR : ((v : {v : Fin L // v ∉ interval L 0 (a + s / 2)}) → Fin q) → ℂ),
     ‖φ‖ = 1 ∧ toEuclideanLin B φ = (E : ℂ) • φ ∧
     ‖φ - Ω‖ ^ 2 ≤ Real.exp (-aklvLogarithmicThreshold g / 16) / 100 ∧
     p.natDegree = s ^ 2 ∧ p.eval E = 1 ∧ ‖χ‖ = 1 ∧
-    ManyBody.cutVector (leftBlock L (a + s / 2)) χ =
+    ManyBody.cutVector (interval L 0 (a + s / 2)) χ =
       WithLp.toLp 2 (fun z ↦ vL z.1 * vR z.2) ∧
     let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
     toEuclideanLin K φ = φ ∧ toEuclideanLin K χ ≠ 0 ∧ ‖c‖ = 1 ∧
@@ -394,7 +394,7 @@ theorem exists_aklv_physical_changing_target_sequence :
         E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
         (∀ i, ‖ψ i‖ = 1 ∧ ‖ψ i - Ω‖ ^ 2 ≤ aklvSequenceWeight i / 16 ∧
           schmidtRank (WithLp.ofLp (ManyBody.cutVector
-            (leftBlock L (a + s / 2)) (ψ i))) ≤ aklvSequenceRankBound q g s i) ∧
+            (interval L 0 (a + s / 2)) (ψ i))) ≤ aklvSequenceRankBound q g s i) ∧
         IsAKLVSequenceInitialization a s Φ e g Ω (ψ 0) ∧
         ∀ i, IsAKLVSequenceStep a s Φ e g Ω i (ψ i) (ψ (i + 1)) := by
   classical
@@ -415,7 +415,7 @@ theorem exists_aklv_physical_changing_target_sequence :
       hpE, hχ, hproduct, hfix, hKχ, hc, rfl⟩
   let State (i : ℕ) := {x : EuclideanSpace ℂ (Fin L → Fin q) //
     ‖x‖ = 1 ∧ ‖x - Ω‖ ^ 2 ≤ aklvSequenceWeight i / 16 ∧
-      schmidtRank (WithLp.ofLp (ManyBody.cutVector (leftBlock L (a + s / 2)) x)) ≤
+      schmidtRank (WithLp.ofLp (ManyBody.cutVector (interval L 0 (a + s / 2)) x)) ≤
         aklvSequenceRankBound q g s i}
   change 21 ≤ s at hs
   change ‖ψ0‖ = 1 at hψunit
@@ -431,7 +431,7 @@ theorem exists_aklv_physical_changing_target_sequence :
       exists_aklv_dyadic_filtered_output (by omega) ha Φ h0 h1
         mu g Ω hΩ hground hgap hg hexcited e hregional i x.val x.property.1 x.property.2.1
     have hrank : schmidtRank (WithLp.ofLp
-        (ManyBody.cutVector (leftBlock L (a + s / 2)) y)) ≤
+        (ManyBody.cutVector (interval L 0 (a + s / 2)) y)) ≤
           aklvSequenceRankBound q g s (i + 1) := by
       rw [(aklvSequenceRankBound_zero_succ q g s i).2]
       exact hyrank.trans (Nat.mul_le_mul_left _ x.property.2.2)

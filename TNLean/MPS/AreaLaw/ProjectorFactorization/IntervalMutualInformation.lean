@@ -58,7 +58,7 @@ the cut after `c` sites and `B` to its right. For an operator `K` on the configu
 two marginals of `Ω` equal to its expectation in the product `ρ_A ⊗ ρ_B` of the regional
 states of `Ω` on `A` and `B`. -/
 theorem trace_cutProductState_mul_localLift_union {c : ℕ} {A B : Finset (Fin L)}
-    (hAB : Disjoint A B) (hA : A ⊆ leftBlock L c) (hB : Disjoint B (leftBlock L c))
+    (hAB : Disjoint A B) (hA : A ⊆ interval L 0 c) (hB : Disjoint B (interval L 0 c))
     (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (K : Matrix ((ManyBody.RegionConfig (fun _ ↦ Fin q) A) ×
         (ManyBody.RegionConfig (fun _ ↦ Fin q) B))
@@ -95,7 +95,7 @@ to these configurations satisfy `tr(ρ M) = ⟨Ω, E Ω⟩` and `tr((ρ_A ⊗ ρ
 `σ` the product of the two marginals of `Ω` across the cut; `M` lies below the identity when
 `E` does. -/
 private theorem exists_bipartite_effect {c : ℕ} {A B : Finset (Fin L)} (hAB : Disjoint A B)
-    (hA : A ⊆ leftBlock L c) (hB : Disjoint B (leftBlock L c))
+    (hA : A ⊆ interval L 0 c) (hB : Disjoint B (interval L 0 c))
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {E : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hE : E.PosSemidef)
     (hsupp : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) E (A ∪ B)) :
@@ -157,10 +157,10 @@ theorem binaryRelativeEntropy_le_intervalMutualInformation
   set B := interval L c (c + l)
   have hAB : Disjoint A B := Finset.disjoint_left.mpr fun i hi hj ↦ by
     simp only [A, B, mem_interval] at hi hj; omega
-  have hA : A ⊆ leftBlock L c := fun i hi ↦ by
-    simp only [A, mem_interval] at hi; simp only [mem_leftBlock]; omega
-  have hB : Disjoint B (leftBlock L c) := Finset.disjoint_left.mpr fun i hi hj ↦ by
-    simp only [B, mem_interval] at hi; simp only [mem_leftBlock] at hj; omega
+  have hA : A ⊆ interval L 0 c := fun i hi ↦ by
+    simp only [A, mem_interval] at hi; simp only [mem_interval, Nat.zero_le, true_and]; omega
+  have hB : Disjoint B (interval L 0 c) := Finset.disjoint_left.mpr fun i hi hj ↦ by
+    simp only [B, mem_interval] at hi; simp only [mem_interval, Nat.zero_le, true_and] at hj; omega
   have hU : A ∪ B = interval L (c - l) (c + l) := by
     ext i; simp only [A, B, Finset.mem_union, mem_interval]; omega
   rw [← hU]
@@ -200,10 +200,10 @@ theorem re_trace_cutProductState_mul_pos {c l : ℕ} {Ω : EuclideanSpace ℂ (F
   set B := interval L c (c + l)
   have hAB : Disjoint A B := Finset.disjoint_left.mpr fun i hi hj ↦ by
     simp only [A, B, mem_interval] at hi hj; omega
-  have hA : A ⊆ leftBlock L c := fun i hi ↦ by
-    simp only [A, mem_interval] at hi; simp only [mem_leftBlock]; omega
-  have hB : Disjoint B (leftBlock L c) := Finset.disjoint_left.mpr fun i hi hj ↦ by
-    simp only [B, mem_interval] at hi; simp only [mem_leftBlock] at hj; omega
+  have hA : A ⊆ interval L 0 c := fun i hi ↦ by
+    simp only [A, mem_interval] at hi; simp only [mem_interval, Nat.zero_le, true_and]; omega
+  have hB : Disjoint B (interval L 0 c) := Finset.disjoint_left.mpr fun i hi hj ↦ by
+    simp only [B, mem_interval] at hi; simp only [mem_interval, Nat.zero_le, true_and] at hj; omega
   obtain ⟨M, hM0, -, h1, h2⟩ := exists_bipartite_effect hAB hA hB hΩ hE hsupp
   set ρ := (ManyBody.regionState Ω (A ∪ B)).submatrix (ManyBody.regionUnionEquiv hAB).symm
     (ManyBody.regionUnionEquiv hAB).symm

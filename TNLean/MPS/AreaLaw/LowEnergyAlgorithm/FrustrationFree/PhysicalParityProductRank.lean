@@ -34,7 +34,7 @@ namespace TNLean.MPS.AreaLaw
 variable {L q : ℕ}
 
 local notation "T" => Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-local notation "C" => fun k ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
+local notation "C" => fun k ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k)
 
 private noncomputable abbrev parityPrefix
     (Φ : ManyBody.BondInteraction L q) (p n : ℕ) :=
@@ -58,25 +58,25 @@ private theorem operatorSchmidtRank_cut_one_le (k : ℕ) :
     operatorSchmidtRank (C k (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) ≤ 1 := by
   classical
   change operatorSchmidtRank
-    (Matrix.reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)) 1) ≤ 1
+    (Matrix.reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)) 1) ≤ 1
   rw [map_one]
   exact
-    (operatorSchmidtRank_one_le (a := (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)))
-      (b := ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q)))
+    (operatorSchmidtRank_one_le (a := (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k)))
+      (b := ((v : {v : Fin L // v ∉ interval L 0 k}) → Fin q)))
 
 private theorem interval_one_sided_of_not_crossing (i : Fin (L - 1)) (k : ℕ)
     (hcross : i.val + 1 ≠ k) :
-    interval L i.val (i.val + 2) ⊆ leftBlock L k ∨
-      Disjoint (interval L i.val (i.val + 2)) (leftBlock L k) := by
+    interval L i.val (i.val + 2) ⊆ interval L 0 k ∨
+      Disjoint (interval L i.val (i.val + 2)) (interval L 0 k) := by
   by_cases hleft : i.val + 1 < k
   · left
     intro v hv
-    simp only [mem_interval, mem_leftBlock] at *
+    simp only [mem_interval, Nat.zero_le, true_and] at *
     omega
   · right
     apply Finset.disjoint_left.mpr
     intro v hv hk
-    simp only [mem_interval, mem_leftBlock] at *
+    simp only [mem_interval, Nat.zero_le, true_and] at *
     omega
 
 private theorem isSupportedOn_bond_complement
@@ -212,7 +212,7 @@ namespace TNLean.MPS.AreaLaw
 variable {L q : ℕ}
 
 local notation "T" => Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-local notation "C" => fun k ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
+local notation "C" => fun k ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k)
 
 private noncomputable def outsidePiece
     (Φ : ManyBody.BondInteraction L q) (a b : ℕ)
@@ -275,19 +275,19 @@ private theorem outside_crossing_eq_term
 private theorem outside_left_supported
     (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (outsidePiece Φ a b (fun i ↦ i.val + 1 < k)) (leftBlock L k) := by
+      (outsidePiece Φ a b (fun i ↦ i.val + 1 < k)) (interval L 0 k) := by
   apply isSupportedOn_outsidePiece Φ a b _ _
   intro i hi v hv
-  simp only [mem_interval, mem_leftBlock] at *
+  simp only [mem_interval, Nat.zero_le, true_and] at *
   omega
 
 private theorem outside_right_supported
     (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (outsidePiece Φ a b (fun i ↦ k ≤ i.val)) (leftBlock L k)ᶜ := by
+      (outsidePiece Φ a b (fun i ↦ k ≤ i.val)) (interval L 0 k)ᶜ := by
   apply isSupportedOn_outsidePiece Φ a b _ _
   intro i hi v hv
-  simp only [Finset.mem_compl, mem_interval, mem_leftBlock] at *
+  simp only [Finset.mem_compl, mem_interval, Nat.zero_le, true_and] at *
   omega
 
 /-- The actual regional truncation has operator Schmidt rank at most
@@ -297,23 +297,23 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
     (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
     operatorSchmidtRank (C k (physicalFrustrationFreeTruncation Φ a b)) ≤ q ^ 2 + 3 := by
   classical
-  let cut := reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k))
+  let cut := reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k))
   let HL := outsidePiece Φ a b (fun i ↦ i.val + 1 < k)
   let HR := outsidePiece Φ a b (fun i ↦ k ≤ i.val)
   let HC := outsidePiece Φ a b (fun i ↦ i.val + 1 = k)
   let Q := fun p ↦ (T).symm (physicalParityProduct
     (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p)
-  let U := ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k : Finset (Fin L))
-  let V := ManyBody.supportedOperators (fun _ ↦ Fin q) ((leftBlock L k)ᶜ : Finset (Fin L))
+  let U := ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L 0 k : Finset (Fin L))
+  let V := ManyBody.supportedOperators (fun _ ↦ Fin q) ((interval L 0 k)ᶜ : Finset (Fin L))
   have hHL : HL ∈ U :=
     (outside_left_supported Φ a b k)
   have hHR : HR ∈ V :=
     (outside_right_supported Φ a b k)
   have hU1 : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ U :=
-    (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k)))
+    (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L 0 k)))
   have hV1 : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ V :=
-    (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k)ᶜ))
-  have hdisjoint : Disjoint (leftBlock L k)ᶜ (leftBlock L k) :=
+    (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L 0 k)ᶜ))
+  have hdisjoint : Disjoint (interval L 0 k)ᶜ (interval L 0 k) :=
     Finset.disjoint_left.mpr (fun _ hv hw ↦ (Finset.mem_compl.mp hv) hw)
   have heq : physicalFrustrationFreeTruncation Φ a b =
       HL + HR + HC + 1 + 1 - Q 0 - Q 1 := by
@@ -327,12 +327,12 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
     have hQleft (hb : b ≤ k) (p : ℕ) : Q p ∈ U := by
       apply (isSupportedOn_regionalParityProduct Φ a b p).mono
       intro v hv
-      simp only [mem_interval, mem_leftBlock] at *
+      simp only [mem_interval, Nat.zero_le, true_and] at *
       omega
     have hQright (ha : k ≤ a) (p : ℕ) : Q p ∈ V := by
       apply (isSupportedOn_regionalParityProduct Φ a b p).mono
       intro v hv
-      simp only [Finset.mem_compl, mem_interval, mem_leftBlock] at *
+      simp only [Finset.mem_compl, mem_interval, Nat.zero_le, true_and] at *
       omega
     let X := if b ≤ k then HL + 1 + 1 - Q 0 - Q 1 else HL
     let Y := if b ≤ k then HR else HR + 1 + 1 - Q 0 - Q 1
@@ -350,15 +350,15 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
         exact sub_mem (sub_mem (add_mem (add_mem hHR hV1) hV1)
           (hQright ha 0)) (hQright ha 1)
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
-      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
+      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := interval L 0 k)
         hX
         (Or.inl (Finset.Subset.refl _))
     have hYrank : operatorSchmidtRank (cut Y) ≤ 1 :=
-      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
+      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := interval L 0 k)
         hY
         (Or.inr hdisjoint)
     have hterm : operatorSchmidtRank (cut (Φ.term i)) ≤ q ^ 2 :=
-      (Φ.mem i).operatorSchmidtRank_cutOperator_le_pow_card (A := leftBlock L k) hq |>.trans
+      (Φ.mem i).operatorSchmidtRank_cutOperator_le_pow_card (A := interval L 0 k) hq |>.trans
         (Nat.pow_le_pow_right hq ((card_interval_le _ _).trans (by omega)))
     have hdecomp : physicalFrustrationFreeTruncation Φ a b = X + Y + Φ.term i := by
       rw [heq, show HC = Φ.term i from outside_crossing_eq_term Φ a b k i hout hik]
@@ -374,11 +374,11 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
     let X := HL + 1 + 1
     have hX : X ∈ U := add_mem (add_mem hHL hU1) hU1
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
-      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
+      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := interval L 0 k)
         hX
         (Or.inl (Finset.Subset.refl _))
     have hHRrank : operatorSchmidtRank (cut HR) ≤ 1 :=
-      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
+      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := interval L 0 k)
         hHR
         (Or.inr hdisjoint)
     have hdecomp : cut (physicalFrustrationFreeTruncation Φ a b) =
@@ -424,7 +424,7 @@ theorem operatorSchmidtRank_physicalFrustrationFreeTruncation_le
       (0 : Matrix (Fin L → Fin 0) (Fin L → Fin 0) ℂ) ∅ := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact (zero_mem _)
-  exact (hz.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
+  exact (hz.operatorSchmidtRank_cutOperator_le_one (A := interval L 0 k)
     (Or.inl (Finset.empty_subset _))).trans (by decide : 1 ≤ 0 ^ 2 + 3)
 
 end TNLean.MPS.AreaLaw

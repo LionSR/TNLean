@@ -268,7 +268,7 @@ private theorem exists_right_crossing_factors_with_fixed_middle_units
   apply Matrix.exists_right_factors_of_left_blocks_mem_span VR N
   intro a b
   have hblock :=
-    (leftBlock_isSupportedOn_of_threeCut_right hAB D P hP VR hVR a b).mono hDE
+    (interval_isSupportedOn_of_threeCut_right hAB D P hP VR hVR a b).mono hDE
   exact mem_span_placeAlong_single_of_isSupportedOn_singleton
     e₀ (fun x y : ↥(B \ A) → Fin q ↦ VR (x, a) (y, b)) hblock
 

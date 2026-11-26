@@ -58,7 +58,7 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
       (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ≤ 1 → ∀ k : ℕ, k ≤ L →
-      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k) ≤
         C / g * (1 + log (q : ℝ) + log (1 / g)) ^ 3 := by
   obtain ⟨A, hA, _hA21, hscalar⟩ := exists_aklv_frustrationFree_scalar_parameters
   let W := 8192 * (A + 1) * (1 + log 8192) ^ 2
@@ -104,7 +104,7 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
       (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
     let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
     have hrankD : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-        (leftBlock L (a + s / 2)) K) ≤ D := by
+        (interval L 0 (a + s / 2)) K) ≤ D := by
       change _ ≤ (q * (ell + 1)) ^ (32 * (2 * s + 1))
       simpa only [hdiv, hsqrt, two_mul] using hrank
     have hDeltaEq :
@@ -121,7 +121,7 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
       obtain ⟨horthK, hnormK⟩ := hperp ψ hψ horth
       exact ⟨horthK, hnormK.trans_eq hDeltaEq⟩
     have hbound := Entropy.regionEntropy_le_four_log_of_cutOperatorSchmidtRank
-      (D := D) (δ := delta) (leftBlock L (a + s / 2)) K Ω hΩ hfix hperpDelta hrankD
+      (D := D) (δ := delta) (interval L 0 (a + s / 2)) K Ω hΩ hfix hperpDelta hrankD
       (htrade.trans (by norm_num))
     rw [hcenter] at hbound
     calc
@@ -162,7 +162,7 @@ theorem exists_aklv_frustrationFree_entropy_bound_of_mem_spectrum :
       (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ∈ spectrum ℝ Φ.hamiltonian → ∀ k : ℕ, k ≤ L →
-      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k) ≤
         C / g * (1 + log (q : ℝ) + log (1 / g)) ^ 3 := by
   obtain ⟨C, hC, hbound⟩ := exists_aklv_frustrationFree_physical_entropy_bound
   refine ⟨C, hC, fun L q Φ g Ω h0 h1 hΩ hzero hgap hg hexcited k hk ↦ ?_⟩

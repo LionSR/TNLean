@@ -101,12 +101,12 @@ theorem schmidtRank_cutEnvVector_interval_le {L q D : ℕ}
         (Entropy.regionConfigurationSplit q (interval L p r) psi))) ≤ (max 1 D) ^ 2 := by
   rw [intervalTrimCut, Entropy.schmidtRank_cutEnvVector_regionConfigurationSplit
     (interval_mono le_rfl hj)]
-  have heq : interval L p (p + j + 1) = leftBlock L (p + j + 1) \ leftBlock L p := by
+  have heq : interval L p (p + j + 1) = interval L 0 (p + j + 1) \ interval L 0 p := by
     ext v
-    simp only [mem_interval, Finset.mem_sdiff, mem_leftBlock]
+    simp only [mem_interval, Finset.mem_sdiff, Nat.zero_le, true_and]
     omega
   rw [heq]
-  exact hpsi.rank_regionState_sdiff_leftBlock_le_max_sq (by omega)
+  exact hpsi.rank_regionState_sdiff_interval_le_max_sq (by omega)
 
 /-- The actual collectively trimmed interval vectors. Supporting ALVV,
 arXiv:1602.08828v2, `def:trimming`, lines 646–655. -/

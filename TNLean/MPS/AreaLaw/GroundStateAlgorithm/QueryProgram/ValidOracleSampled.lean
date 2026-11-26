@@ -54,11 +54,11 @@ theorem isViableMPS_errorReductionSet_of_admissible_sampled {i : ℕ} (hi : i �
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ} {F : Finset (LeftBlockMatrix L q i)}
     (hdec : ∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i)
       (B : ι → RightBlockMatrix L q i),
-      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector Φ E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) (sampledProjector Φ E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧ ∀ t ∈ J, A t ∈ F)
     (hcard : F.card ≤ ℓ * D)
     (hrank : ∀ A ∈ F, ∀ k, k < i → operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1) {s b : ℕ}
     {S : Finset (LeftBlockVector L q i)} (hS : IsViableMPS Γ s b (1 / 2) S) {η : ℝ}
@@ -154,7 +154,7 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
           Matrix.PosSemidef.zero h0) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) hnet hsol E₀ Γ hΩ hgapC hspanC hext⟩
   have hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) (bondComplementWord Φ (I t))) ≤ q ^ (2 * κ) := fun t k ↦
+      (interval L 0 k) (bondComplementWord Φ (I t))) ≤ q ^ (2 * κ) := fun t k ↦
     operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) Φ (I t)
       (hgood.2 t) k
   obtain ⟨hdec, hcardF, hrankF⟩ := hv.sampledFactors L (i + 1) Φ E₀ ℓ m (q ^ (2 * κ)) I hrank

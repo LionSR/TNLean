@@ -282,10 +282,10 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
         ‖K - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
           2 * Real.exp (-2 * (ell : ℝ) * Real.sqrt ((g / 2) / (2 * t + s))) ∧
         operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-          (leftBlock L (a + s / 2)) K) ≤
+          (interval L 0 (a + s / 2)) K) ≤
             (q * (ell + 1)) ^ (16 * (ell / (s - 2) + Nat.sqrt ell + 1)) ∧
         operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-          (leftBlock L (a + s / 2)) K) ≤
+          (interval L 0 (a + s / 2)) K) ≤
             (q * (ell + 1)) ^ (32 * (ell / s + Nat.sqrt ell + 1)) ∧
         ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪Ω, ψ⟫_ℂ = 0 →
           ⟪Ω, toEuclideanLin K ψ⟫_ℂ = 0 ∧

@@ -132,29 +132,29 @@ theorem operatorSchmidtRank_one_marker_of_chain_supports_le
     (hcut0 : 0 < cut) (hcutL : cut < L)
     (H : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (X : ι → Finset (Fin L)) (hH : ∀ a, ManyBody.IsSupportedOn (H a) (X a))
-    (hside : ∀ a, X a ⊆ leftBlock L cut ∨ Disjoint (X a) (leftBlock L cut))
+    (hside : ∀ a, X a ⊆ interval L 0 cut ∨ Disjoint (X a) (interval L 0 cut))
     (T : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hT : ManyBody.IsSupportedOn T (interval L (cut - 1) (cut + 1))) (t k : ℕ) :
     let E := Finset.piAntidiag (Finset.univ : Finset ι) t
     ∀ weight : E → ℂ, operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut)
         (∑ α : E, weight α • WordMultiplicity.oneMarkerCoefficient H T t k α.val)) ≤
       E.card * ((t + 2 * k + 1).choose (2 * k + 1) * q ^ (2 * k)) := by
   classical
   let : NeZero q := ⟨by omega⟩
   intro E weight
-  let : DecidableEq ((v : {v : Fin L // v ∈ leftBlock L cut}) → Fin q) :=
+  let : DecidableEq ((v : {v : Fin L // v ∈ interval L 0 cut}) → Fin q) :=
     Classical.decEq _
-  let : DecidableEq ((v : {v : Fin L // v ∉ leftBlock L cut}) → Fin q) :=
+  let : DecidableEq ((v : {v : Fin L // v ∉ interval L 0 cut}) → Fin q) :=
     Classical.decEq _
-  let e := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L cut)
+  let e := ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 cut)
   let σ₀ : Fin L → Fin q := fun _ ↦ 0
   have hfactors (a : ι) :
-      ∃ (A : Matrix ((v : {v : Fin L // v ∈ leftBlock L cut}) → Fin q)
-          ((v : {v : Fin L // v ∈ leftBlock L cut}) → Fin q) ℂ)
-        (B : Matrix ((v : {v : Fin L // v ∉ leftBlock L cut}) → Fin q)
-          ((v : {v : Fin L // v ∉ leftBlock L cut}) → Fin q) ℂ),
-        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (H a) =
+      ∃ (A : Matrix ((v : {v : Fin L // v ∈ interval L 0 cut}) → Fin q)
+          ((v : {v : Fin L // v ∈ interval L 0 cut}) → Fin q) ℂ)
+        (B : Matrix ((v : {v : Fin L // v ∉ interval L 0 cut}) → Fin q)
+          ((v : {v : Fin L // v ∉ interval L 0 cut}) → Fin q) ℂ),
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (H a) =
           A ⊗ₖ 1 + 1 ⊗ₖ B := by
     have hone := (hside a).elim
       (fun hs ↦ (hH a).isOneSided_of_subset hs (e σ₀).2)
@@ -174,35 +174,35 @@ theorem operatorSchmidtRank_one_marker_of_chain_supports_le
       split_ifs at h ⊢ <;> exact h
   choose HL HR hlocal using hfactors
   let x : Fin L := ⟨cut - 1, by omega⟩
-  have hsites : interval L (cut - 1) (cut + 1) ∩ leftBlock L cut = {x} := by
+  have hsites : interval L (cut - 1) (cut + 1) ∩ interval L 0 cut = {x} := by
     ext v
-    simp only [Finset.mem_inter, mem_interval, mem_leftBlock, Finset.mem_singleton,
+    simp only [Finset.mem_inter, mem_interval, Finset.mem_singleton,
       Fin.ext_iff, x]
     omega
   have hTrank : operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) T) ≤ q ^ 2 := by
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) T) ≤ q ^ 2 := by
     simpa only [hsites, Finset.prod_singleton] using
-      (hT.operatorSchmidtRank_cutOperator_le (A := leftBlock L cut))
+      (hT.operatorSchmidtRank_cutOperator_le (A := interval L 0 cut))
   let φ := Matrix.reindexAlgEquiv ℂ ℂ e
   have hmap (α : E) :
       φ (WordMultiplicity.oneMarkerCoefficient H T t k α.val) =
         WordMultiplicity.oneMarkerCoefficient
-          (fun a ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (H a))
-          (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) T) t k α.val :=
+          (fun a ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (H a))
+          (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) T) t k α.val :=
     WordMultiplicity.map_oneMarkerCoefficient φ.toRingHom H T t k α.val
-  have heq : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
+  have heq : ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut)
       (∑ α : E, weight α • WordMultiplicity.oneMarkerCoefficient H T t k α.val) =
       ∑ α : E, weight α • WordMultiplicity.oneMarkerCoefficient
-        (fun a ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (H a))
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) T) t k α.val := by
+        (fun a ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (H a))
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) T) t k α.val := by
     change φ (∑ α : E, weight α • WordMultiplicity.oneMarkerCoefficient H T t k α.val) = _
     simp only [map_sum, map_smul, hmap]
   rw [heq]
   simpa only [← pow_mul] using
     Matrix.operatorSchmidtRank_sum_smul_one_marker_counts_le
-      (fun a ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (H a))
+      (fun a ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (H a))
       HL HR hlocal
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) T) hTrank t k weight
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) T) hTrank t k weight
 
 end TNLean.MPS.AreaLaw
 
@@ -252,7 +252,7 @@ theorem operatorSchmidtRank_aklv_window_one_marker_le {L q a s : ℕ}
     let E := @Finset.piAntidiag I ℕ (Classical.decEq I) _ _ _ Finset.univ t
     let ordinary := fun j : I ↦ aklvWindowFamily H HL HR j.val
     ∀ weight : E → ℂ, operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (a + u.val + 1))
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (a + u.val + 1))
         (∑ α : E, weight α •
           WordMultiplicity.oneMarkerCoefficient ordinary (H u) t k α.val)) ≤
       (t + s).choose s * ((t + 2 * k + 1).choose (2 * k + 1) * q ^ (2 * k)) := by
@@ -265,8 +265,8 @@ theorem operatorSchmidtRank_aklv_window_one_marker_le {L q a s : ℕ}
     cases j with
     | inl j => exact hH j
     | inr j => fin_cases j <;> assumption
-  have hside (j : I) : X j.val ⊆ leftBlock L (a + u.val + 1) ∨
-      Disjoint (X j.val) (leftBlock L (a + u.val + 1)) := by
+  have hside (j : I) : X j.val ⊆ interval L 0 (a + u.val + 1) ∨
+      Disjoint (X j.val) (interval L 0 (a + u.val + 1)) := by
     obtain ⟨j, hne⟩ := j
     cases j with
     | inl j =>
@@ -276,7 +276,7 @@ theorem operatorSchmidtRank_aklv_window_one_marker_le {L q a s : ℕ}
         intro v hv
         change v ∈ interval L (a + j.val) (a + j.val + 2) at hv
         rw [mem_interval] at hv
-        rw [mem_leftBlock]
+        rw [mem_interval]
         have hj := Fin.lt_def.mp hlt
         omega
       · right
@@ -284,7 +284,7 @@ theorem operatorSchmidtRank_aklv_window_one_marker_le {L q a s : ℕ}
         intro v hv hcut
         change v ∈ interval L (a + j.val) (a + j.val + 2) at hv
         rw [mem_interval] at hv
-        rw [mem_leftBlock] at hcut
+        rw [mem_interval] at hcut
         have hj := Fin.lt_def.mp hgt
         omega
     | inr j =>
@@ -293,14 +293,14 @@ theorem operatorSchmidtRank_aklv_window_one_marker_le {L q a s : ℕ}
         intro v hv
         change v ∈ interval L 0 (a + 1) at hv
         rw [mem_interval] at hv
-        rw [mem_leftBlock]
+        rw [mem_interval]
         omega
       · right
         apply Finset.disjoint_left.mpr
         intro v hv hcut
         change v ∈ interval L (a + s) L at hv
         rw [mem_interval] at hv
-        rw [mem_leftBlock] at hcut
+        rw [mem_interval] at hcut
         omega
   have hT : ManyBody.IsSupportedOn (H u)
       (interval L ((a + u.val + 1) - 1) ((a + u.val + 1) + 1)) := by
@@ -341,17 +341,14 @@ namespace TNLean.MPS.AreaLaw
 changed sites. AKLV, arXiv:1301.1162v1, Lemma 4.2, lines 651--654. -/
 theorem operatorSchmidtRank_cutOperator_le_pow_dist_mul {L q : ℕ} (hq : 1 ≤ q)
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (i j : ℕ) :
-    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L j) K) ≤
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 j) K) ≤
       q ^ (2 * Nat.dist i j) *
-        operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K) := by
-  have hleft (k : ℕ) : leftBlock L k = interval L 0 k := by
-    ext v
-    simp only [mem_leftBlock, mem_interval, Nat.zero_le, true_and]
-  have hcard : ((leftBlock L i) ∆ (leftBlock L j)).card ≤ Nat.dist i j := by
-    simpa only [hleft, Nat.dist_self, Nat.zero_add] using
+        operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K) := by
+  have hcard : ((interval L 0 i) ∆ (interval L 0 j)).card ≤ Nat.dist i j := by
+    simpa only [Nat.dist_self, Nat.zero_add] using
       (ManyBody.card_interval_symmDiff_le_dist (L := L) 0 i 0 j)
   exact (Matrix.operatorSchmidtRank_reindex_piEquivPiSubtypeProd_finset_le
-    q (leftBlock L i) (leftBlock L j) K).trans
+    q (interval L 0 i) (interval L 0 j) K).trans
       (Nat.mul_le_mul_right _ (Nat.pow_le_pow_right hq (Nat.mul_le_mul_left 2 hcard)))
 
 open Classical in
@@ -368,7 +365,7 @@ theorem operatorSchmidtRank_aklv_window_one_marker_target_le {L q a s : ℕ}
     let E := @Finset.piAntidiag I ℕ (Classical.decEq I) _ _ _ Finset.univ t
     let ordinary := fun j : I ↦ aklvWindowFamily H HL HR j.val
     ∀ weight : E → ℂ, operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L target)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 target)
         (∑ α : E, weight α •
           WordMultiplicity.oneMarkerCoefficient ordinary (H u) t k α.val)) ≤
       (t + s).choose s * (t + 2 * k + 1).choose (2 * k + 1) *
@@ -411,7 +408,7 @@ theorem operatorSchmidtRank_aklv_full_frequency_slice_target_le {L q a s : ℕ}
     let F := (@Finset.piAntidiag A ℕ (Classical.decEq A) _ _ _ Finset.univ (m + k)).filter
       (fun β ↦ β (Sum.inl u) = k)
     ∀ weight : (A → ℕ) → ℂ, operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L target)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 target)
         (∑ β ∈ F, weight β •
           WordMultiplicity.wordCoefficient (aklvWindowFamily H HL HR) (m + k) β)) ≤
       (m + s).choose s * (m + 2 * k + 1).choose (2 * k + 1) *
@@ -452,7 +449,7 @@ theorem exists_aklv_low_frequency_power_decomposition {L q a s : ℕ}
     ∃ Q : Fin s × Fin (ell / s + 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (HL + (∑ j, H j) + HR) ^ ell = ∑ b, Q b ∧
       ∀ b, operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (a + s / 2)) (Q b)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (a + s / 2)) (Q b)) ≤
         (ell - b.2.val + s).choose s * (ell + b.2.val + 1).choose (2 * b.2.val + 1) *
           q ^ (2 * b.2.val + 2 * Nat.dist (b.1.val + 1) (s / 2)) := by
   let A := Fin s ⊕ Fin 2
@@ -505,7 +502,7 @@ theorem exists_aklv_low_frequency_power_decomposition {L q a s : ℕ}
     have hrank := operatorSchmidtRank_aklv_full_frequency_slice_target_le
       hq hspace H hH HL HR hL hR b.1 (ell - b.2.val) b.2.val (a + s / 2) weight
     change operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (a + s / 2))
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (a + s / 2))
         (∑ β ∈ (@Finset.piAntidiag A ℕ (Classical.decEq A) _ _ _ Finset.univ
           (ell - b.2.val + b.2.val)).filter (fun β ↦ β (Sum.inl b.1) = b.2.val),
           weight β • WordMultiplicity.wordCoefficient (aklvWindowFamily H HL HR)
@@ -525,16 +522,16 @@ theorem operatorSchmidtRank_aklv_power_le_sum {L q a s : ℕ}
     (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
     (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L)) (ell : ℕ) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L (a + s / 2)) ((HL + (∑ j, H j) + HR) ^ ell)) ≤
+      (interval L 0 (a + s / 2)) ((HL + (∑ j, H j) + HR) ^ ell)) ≤
       ∑ b : Fin s × Fin (ell / s + 1),
         (ell - b.2.val + s).choose s * (ell + b.2.val + 1).choose (2 * b.2.val + 1) *
           q ^ (2 * b.2.val + 2 * Nat.dist (b.1.val + 1) (s / 2)) := by
   obtain ⟨Q, hQ, hrank⟩ := exists_aklv_low_frequency_power_decomposition
     hq hs hspace H hH HL HR hL hR ell
   rw [hQ]
-  have hcut : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (a + s / 2))
+  have hcut : ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 (a + s / 2))
       (∑ b, Q b) = ∑ b, ManyBody.cutOperator (X := fun _ ↦ Fin q)
-        (leftBlock L (a + s / 2)) (Q b) := by
+        (interval L 0 (a + s / 2)) (Q b) := by
     ext x y
     simp only [ManyBody.cutOperator, Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.sum_apply]
   rw [hcut]
@@ -690,7 +687,7 @@ theorem operatorSchmidtRank_aklv_polynomial_of_width_le {L q a s ell : ℕ}
     (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (P : Polynomial ℂ) (hP : P.natDegree ≤ ell) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L (a + s / 2))
+      (interval L 0 (a + s / 2))
       (Polynomial.aeval (HL + (∑ j, H j) + HR) P)) ≤
       (q * (ell + 1)) ^ (3 * s + 6 * (ell / s) + 5) := by
   let G := HL + (∑ j, H j) + HR
@@ -699,11 +696,11 @@ theorem operatorSchmidtRank_aklv_polynomial_of_width_le {L q a s ell : ℕ}
   have hbase : ell + 1 ≤ B := by dsimp [B]; nlinarith
   have hpower (r : ℕ) (hr : r ≤ ell) :
       operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-        (leftBlock L (a + s / 2)) (G ^ r)) ≤ B ^ e :=
+        (interval L 0 (a + s / 2)) (G ^ r)) ≤ B ^ e :=
     (operatorSchmidtRank_aklv_power_le_sum hq hs hspace H hH HL HR hL hR r).trans
       (Nat.aklv_frequency_sum_le hq hwidth hr)
   let φ := Matrix.reindexAlgEquiv ℂ ℂ
-    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L (a + s / 2)))
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 (a + s / 2)))
   change operatorSchmidtRank (φ (Polynomial.aeval G P)) ≤ _
   rw [Polynomial.aeval_eq_sum_range' (Nat.lt_succ_of_le hP) G]
   simp only [map_sum, map_smul]

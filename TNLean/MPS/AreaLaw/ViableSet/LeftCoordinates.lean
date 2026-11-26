@@ -16,6 +16,8 @@ Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, Definition
 lines 240–244, and the bond-trimming step, lines 549–559.
 -/
 
+open ManyBody (interval mem_interval)
+
 namespace TNLean.MPS.AreaLaw
 
 variable {L q i : ℕ}
@@ -23,37 +25,37 @@ variable {L q i : ℕ}
 /-- Configurations of `i` sites and configurations of the left block after those sites.
 Source: LVV13, `algo53.tex`, Definition `def:viable`, lines 240–244. -/
 def leftConfigOfFinEquiv (hi : i ≤ L) :
-    (Fin i → Fin q) ≃ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) where
+    (Fin i → Fin q) ≃ (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 i)) where
   toFun := leftConfigOfFin
-  invFun x v := x ⟨⟨v.val, lt_of_lt_of_le v.isLt hi⟩, mem_leftBlock.mpr v.isLt⟩
+  invFun x v := x ⟨⟨v.val, lt_of_lt_of_le v.isLt hi⟩, mem_interval.mpr ⟨Nat.zero_le _, v.isLt⟩⟩
   left_inv _ := rfl
   right_inv _ := rfl
 
 /-- Reading a left-block vector on `Fin i` preserves every internal cut rank.
 Source: LVV13, `algo53.tex`, the bond-trimming step, lines 549–559. -/
 theorem rank_cutMatrix_leftConfigOfFin (hi : i ≤ L) (u : LeftBlockVector L q i) (j : ℕ) :
-    (ManyBody.cutMatrix (leftBlock i j) (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x)))).rank =
+    (ManyBody.cutMatrix (interval i 0 j) (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x)))).rank =
       Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector
-        (Finset.univ.filter fun v : {v : Fin L // v ∈ leftBlock L i} ↦ v.1.val < j) u)) := by
+        (Finset.univ.filter fun v : {v : Fin L // v ∈ interval L 0 i} ↦ v.1.val < j) u)) := by
   classical
-  let D := Finset.univ.filter fun v : {v : Fin L // v ∈ leftBlock L i} ↦ v.1.val < j
-  let e : Fin i ≃ {v : Fin L // v ∈ leftBlock L i} :=
-    { toFun := fun v ↦ ⟨⟨v.val, lt_of_lt_of_le v.isLt hi⟩, mem_leftBlock.mpr v.isLt⟩
-      invFun := fun v ↦ ⟨v.1.val, mem_leftBlock.mp v.2⟩
+  let D := Finset.univ.filter fun v : {v : Fin L // v ∈ interval L 0 i} ↦ v.1.val < j
+  let e : Fin i ≃ {v : Fin L // v ∈ interval L 0 i} :=
+    { toFun := fun v ↦ ⟨⟨v.val, lt_of_lt_of_le v.isLt hi⟩, mem_interval.mpr ⟨Nat.zero_le _, v.isLt⟩⟩
+      invFun := fun v ↦ ⟨v.1.val, (mem_interval.mp v.2).2⟩
       left_inv := fun _ ↦ rfl
       right_inv := fun _ ↦ rfl }
-  let e₁ : {v : Fin i // v ∈ leftBlock i j} ≃
-      {v : {v : Fin L // v ∈ leftBlock L i} // v ∈ D} :=
+  let e₁ : {v : Fin i // v ∈ interval i 0 j} ≃
+      {v : {v : Fin L // v ∈ interval L 0 i} // v ∈ D} :=
     e.subtypeEquiv (by intro v; simp [D, e])
-  let e₂ : {v : Fin i // v ∉ leftBlock i j} ≃
-      {v : {v : Fin L // v ∈ leftBlock L i} // v ∉ D} :=
+  let e₂ : {v : Fin i // v ∉ interval i 0 j} ≃
+      {v : {v : Fin L // v ∈ interval L 0 i} // v ∉ D} :=
     e.subtypeEquiv (by intro v; simp [D, e])
-  have h : ManyBody.cutMatrix (leftBlock i j) (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x))) =
+  have h : ManyBody.cutMatrix (interval i 0 j) (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x))) =
       (Matrix.schmidtCoeffMatrix (WithLp.ofLp (ManyBody.cutVector D u))).submatrix
         (e₁.arrowCongr (Equiv.refl (Fin q))) (e₂.arrowCongr (Equiv.refl (Fin q))) := by
     ext a b
     change u (leftConfigOfFin
-      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock i j)).symm (a, b))) =
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval i 0 j)).symm (a, b))) =
       u ((ManyBody.cutEquiv (fun _ ↦ Fin q) D).symm
         (e₁.arrowCongr (Equiv.refl (Fin q)) a, e₂.arrowCongr (Equiv.refl (Fin q)) b))
     apply congrArg u
@@ -61,18 +63,19 @@ theorem rank_cutMatrix_leftConfigOfFin (hi : i ≤ L) (u : LeftBlockVector L q i
     by_cases hv : v.1.val < j
     · have hDv : v ∈ D := Finset.mem_filter.mpr ⟨Finset.mem_univ _, hv⟩
       rw [ManyBody.cutEquiv_symm_apply_mem _ _ hDv]
-      change ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock i j)).symm (a, b))
-        ⟨v.1.val, mem_leftBlock.mp v.2⟩ = _
+      change ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval i 0 j)).symm (a, b))
+        ⟨v.1.val, (mem_interval.mp v.2).2⟩ = _
       rw [ManyBody.cutEquiv_symm_apply_mem _ _ (show
-        (⟨v.1.val, mem_leftBlock.mp v.2⟩ : Fin i) ∈ leftBlock i j from mem_leftBlock.mpr hv)]
+        (⟨v.1.val, (mem_interval.mp v.2).2⟩ : Fin i) ∈ interval i 0 j from
+          mem_interval.mpr ⟨Nat.zero_le _, hv⟩)]
       rfl
     · have hDv : v ∉ D := fun h ↦ hv (Finset.mem_filter.mp h).2
       rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hDv]
-      change ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock i j)).symm (a, b))
-        ⟨v.1.val, mem_leftBlock.mp v.2⟩ = _
+      change ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval i 0 j)).symm (a, b))
+        ⟨v.1.val, (mem_interval.mp v.2).2⟩ = _
       rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (show
-        (⟨v.1.val, mem_leftBlock.mp v.2⟩ : Fin i) ∉ leftBlock i j from
-          fun h ↦ hv ((mem_leftBlock (L := i) (k := j)).mp h))]
+        (⟨v.1.val, (mem_interval.mp v.2).2⟩ : Fin i) ∉ interval i 0 j from
+          fun h ↦ hv (mem_interval.mp h).2)]
       rfl
   rw [h, Matrix.rank_submatrix]
   rfl

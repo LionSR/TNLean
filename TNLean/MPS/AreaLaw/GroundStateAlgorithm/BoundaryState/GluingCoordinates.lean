@@ -22,6 +22,7 @@ They hold for all natural cut positions, with each left block intersected with t
 
 open Matrix
 open scoped Kronecker
+open ManyBody (interval interval_mono mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -32,10 +33,10 @@ have dimension at most `q` when `1 ≤ q`. This includes the endpoint cuts used 
 boundary net of arXiv:1307.5143v1, `algo53.tex`, lines 456–464. -/
 theorem card_cutSite_le (hq : 1 ≤ q) : Fintype.card (CutSite L q k) ≤ q := by
   classical
-  have hc : (leftBlock L k \ leftBlock L (k - 1)).card ≤ 1 := by
+  have hc : (interval L 0 k \ interval L 0 (k - 1)).card ≤ 1 := by
     apply Finset.card_le_one.mpr
     intro a ha b hb
-    simp only [Finset.mem_sdiff, mem_leftBlock, Fin.ext_iff] at *
+    simp only [Finset.mem_sdiff, mem_interval, Fin.ext_iff, Nat.zero_le, true_and] at *
     omega
   simpa only [CutSite, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe, pow_one] using
     pow_le_pow_right' hq hc
@@ -46,10 +47,10 @@ lines 477–478 and 493–505. -/
 noncomputable def gluingLeftCoordinates (L q k m : ℕ) :
     EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ
-        ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m) :=
+        ((ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k)) × Fin m) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     ((ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
-      (leftBlock_mono (Nat.sub_le k 1))).symm.prodCongr (Equiv.refl _))
+      (interval_mono (le_refl 0) (Nat.sub_le k 1))).symm.prodCongr (Equiv.refl _))
 
 /-- Extending the right bond in three-way coordinates agrees with the extension after joining
 the left regions. This identifies the vector of Lemma `l:leading` with its left-block columns
@@ -61,14 +62,14 @@ theorem gluingLeftCoordinates_rightApply
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘ gluingCut L q k) =
       WithLp.toLp 2 (fun z ↦ rightApply W (gluingLeftCoordinates L q k m u)
-        (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z)) := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k) z)) := by
   classical
   ext z
   change (((1 : Matrix (CutLeft L q k × CutSite L q k)
       (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) (gluingCut L q k z) =
     schmidtCoeffMatrix (WithLp.ofLp (rightApply W (gluingLeftCoordinates L q k m u)))
-      (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z).1
-      (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z).2
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k) z).1
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k) z).2
   rw [schmidtCoeffMatrix_ofLp_rightApply]
   simp [gluingCut, ManyBody.threeCutEquiv_eq_trans, gluingLeftCoordinates,
     mulVec, dotProduct, Fintype.sum_prod_type, one_apply, mul_apply, mul_comm]
@@ -79,9 +80,9 @@ two left regions. This is the support condition in the size-trimming program
 theorem gluingLeftCoordinates_spanProjection_eq_iff (S : Set (LeftBlockVector L q k))
     (u : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) :
     (reindex (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
-          (leftBlock_mono (Nat.sub_le k 1)))
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
         (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
-          (leftBlock_mono (Nat.sub_le k 1))) (spanProjection S) ⊗ₖ
+          (interval_mono (le_refl 0) (Nat.sub_le k 1))) (spanProjection S) ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u = WithLp.ofLp u ↔
       (spanProjection S ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ
           WithLp.ofLp (gluingLeftCoordinates L q k m u) =
