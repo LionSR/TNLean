@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BNT.Basic
-import TNLean.MPS.Transfer.Spectrum.Proportional
+import TNLean.MPS.Transfer.Spectrum.GaugePhase
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective
 import TNLean.MPS.Tensor.Overlap
 import TNLean.MPS.Tensor.BondReindex
-import TNLean.MPS.Transfer.Spectrum.CastDecay
+import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
 
 import Mathlib.Analysis.SpecificLimits.Basic
 import Mathlib.Data.Fintype.Card

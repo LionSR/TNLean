@@ -10,16 +10,13 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.BoundaryNet
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.BoundaryNetPolynomial
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ChainPadding
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ChainPaddingCoordinates
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ChainPaddingGroundState
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ConstantRankCut
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.FiniteBoundarySelection
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.Gluing
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.GluingCoordinates
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.LeadingPower
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.LeadingResidual
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.TrimmingConstants
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ViableLeadingVector
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ViableTrimmedWitness

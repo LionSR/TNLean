@@ -15,7 +15,6 @@ import TNLean.Algebra.EndpointEmbeddingMatrix
 import TNLean.Algebra.FixedPointFreeInvolutionSign
 import TNLean.Algebra.GInjective
 import TNLean.Algebra.IsingCrossingCoefficients
-import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.LSymbolFreeAction
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
 import TNLean.Algebra.ProtocolDensityError
@@ -27,4 +26,3 @@ import TNLean.Algebra.TwoMarkerMiddleFactors
 import TNLean.Algebra.TwoMarkerMiddleIndexCardinality
 import TNLean.Algebra.TwoWindowFamily
 import TNLean.Algebra.TwoWindowPolynomialRecovery
-import TNLean.Algebra.TwoWindowTensorForms

@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail
 
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ChainBootstrap
-import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.MPSFromEntropy
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.MPSGroundState
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.RenyiBootstrapLemma
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.SchmidtTailConstraint

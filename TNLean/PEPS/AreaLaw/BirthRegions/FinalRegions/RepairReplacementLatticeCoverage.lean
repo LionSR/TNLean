@@ -6,7 +6,9 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicOrigin
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.RepairChildStarStep
-import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairHalfSideArithmetic
+import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.SimultaneousRepair
+import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionBoundaries
+import TNLean.PEPS.AreaLaw.BirthRegions.Stars.RepairInductionMetric
 
 /-!
 # Lattice points in the open replacement regions
@@ -21,7 +23,17 @@ September 24, 2026, Section 11, replacement instructions, lines 404–417, and
 the translated supporting-line argument, lines 545–561.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Written from the manuscript; no upstream Lean text is reused.
+
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.Geometry.exists_mem_repairNextCurrentRegion_or_terminalInterior`,
+  `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_current_or_terminal_before`:
+  lattice coverage during simultaneous repair.
+* `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.repairStage_location_mem_affineMesh`:
+  integral coordinates of the recursive repair marks.
 -/
+
+section RepairReplacementLatticeCoverage
 
 noncomputable section
 
@@ -147,3 +159,167 @@ theorem exists_mem_repairReplacementOpenRegion_of_mem_repairSquare
   exact ⟨repairFanRunOf ξ σ s, interior_mono hsubset htriangle⟩
 
 end TNLean.PEPS.AreaLaw.Geometry
+
+end
+
+end RepairReplacementLatticeCoverage
+
+section RepairMarkMesh
+
+/-!
+## Integral coordinates of the recursive repair marks
+
+Every mark of the actual repair construction lies on the translated integer
+mesh of its initial origin. Initial marks lie on dyadic meshes whose spacing
+is an integer. Each subsequent mark is obtained from its parent by adding an
+integer multiple of a centered offset with coordinates in {-1, 0, 1}.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, initial marks, lines 325–363; recursive
+marks, lines 404–409 and 506–514; integral coordinates, lines 545–558.
+Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+-/
+
+namespace TNLean.PEPS.AreaLaw.Geometry
+
+variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {C k₀ : ℕ}
+  {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar : ℝ}
+
+local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
+
+namespace RepairMetricHypotheses
+
+/-- Every mark of every actual generation belongs to the initial translated
+integer mesh when the stopping scale is at least one.
+Source: area-law Section 11, integral recursion, lines 545–551. -/
+theorem repairStage_location_mem_affineMesh {a₀ : ℝ}
+    (h : RepairMetricHypotheses (o := o) (Λ := Λ) (A := A)
+      (C := C) (k₀ := k₀) (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀)
+    (hSstar : 1 ≤ Sstar) (j : ℕ) (p : (𝔇 j).markIndex) :
+    (𝔇 j).location p ∈ affineMesh o 1 := by
+  induction j with
+  | zero =>
+    classical
+    obtain ⟨_, k, z, hk, hz, hp, _⟩ :=
+      (initialRepairStage_mark_spec o Λ A C k₀ hC h₀).2.2.1 p
+    have hf : fineScaleIndex 2 = 1 := by
+      norm_num [fineScaleIndex, Exponents.zeta, Exponents.geometryDelta, Nat.floor_eq_iff']
+    have hm := fineScaleIndex_mono (show 2 ≤ k by omega)
+    change p.val ∈ affineMesh o 1
+    change p.val ∈ beltCellMarks o (fineScaleIndex k) z at hp
+    simpa only [show (2 : ℝ) ^ 2 / 4 = 1 by norm_num] using
+      beltMarks_subset_affineMesh o 2 (fineScaleIndex k) _ (by omega)
+        (Finset.mem_biUnion.mpr ⟨z, hz, hp⟩)
+  | succ j ih =>
+    obtain ⟨z, hz⟩ := ih p.2.1.val
+    obtain ⟨n, hn⟩ := exists_natCast_repairHalfSide
+      (hSstar.trans (h.le_scale j p.2.1.val))
+    refine ⟨(z.1 + (n : ℤ) * ((p.2.2.1.val : ℤ) - 1),
+      z.2 + (n : ℤ) * ((p.2.2.2.val : ℤ) - 1)), ?_⟩
+    change _ = (𝔇 j).location p.2.1.val +
+      repairHalfSide ((𝔇 j).scale p.2.1.val) • repairChildOffset p.2.2
+    rw [← hz, hn]
+    simp [integerPoint, repairChildOffset, add_assoc]
+
+end RepairMetricHypotheses
+
+end TNLean.PEPS.AreaLaw.Geometry
+
+end RepairMarkMesh
+
+section RepairLatticeCoverage
+
+/-!
+## Lattice coverage during simultaneous repair
+
+A simultaneous repair preserves coverage of integer lattice points when
+terminal-square interiors are included. Nonterminal squares contribute open
+replacement regions; terminal squares contribute their interiors. The
+translated integer mesh excludes lattice points from either kind of boundary.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, replacement instructions, lines 393–417,
+and the lattice partition argument, lines 545–561.
+Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Written from the manuscript; no upstream Lean text is reused.
+-/
+
+noncomputable section
+
+open ManyBody (edgeBoundary planeDomainGraph)
+
+namespace TNLean.PEPS.AreaLaw.Geometry
+
+/-- A lattice point covered before repair belongs either to a next current
+region or to a terminal-square interior. The parent centers lie on the
+prescribed translated integer mesh, and their scales are at least one.
+Source: area-law Section 11, lines 393–417 and 545–561. -/
+theorem exists_mem_repairNextCurrentRegion_or_terminalInterior
+    {ι κ : Type*} (j : ℕ) (R : ι → Set (ℝ × ℝ))
+    (v : κ → ℝ × ℝ) (S : κ → ℝ) (Sstar : ℝ)
+    (ξ : ι → Fin 2) (σ : κ → RepairFanSlot → ι)
+    (hmesh : ∀ p, v p ∈ affineMesh dyadicOrigin 1)
+    (hscale : ∀ p, 1 ≤ S p) (z : ℤ × ℤ)
+    (hz : ∃ i, integerPoint z ∈ R i) :
+    (∃ i : RepairRegionIndex j S Sstar ξ σ,
+      integerPoint z ∈ repairNextCurrentRegion j R v S Sstar ξ σ i) ∨
+      integerPoint z ∈ repairTerminalInteriorSet v S Sstar := by
+  classical
+  by_cases hrem : integerPoint z ∈ repairRemovalSet v S
+  · obtain ⟨p, hp⟩ := Set.mem_iUnion.mp hrem
+    obtain ⟨H, hH⟩ := exists_mem_repairReplacementOpenRegion_of_mem_repairSquare
+      ξ (σ p) (hmesh p) (hscale p) hp
+    by_cases hterm : repairHalfSide (S p) < Sstar
+    · exact Or.inr (Set.mem_iUnion.mpr ⟨⟨p, hterm⟩,
+        interior_mono (repairReplacementBirthRegion_subset_repairSquare _ _ _ _ H) hH⟩)
+    · exact Or.inl ⟨.inr (⟨j + 1, rfl⟩, ⟨⟨p, le_of_not_gt hterm⟩, H⟩), hH⟩
+  · exact hz.elim fun i hi ↦ Or.inl ⟨.inl i, hi, hrem⟩
+
+variable {Λ : Finset (ℤ × ℤ)} {A : Finset ↥Λ} {C k₀ : ℕ}
+  {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar : ℝ}
+
+local notation "𝔇" => repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar
+
+namespace RepairMetricHypotheses
+
+/-- Every lattice point belongs either to an actual current region or to a
+terminal-square interior from a strictly earlier generation.
+Source: area-law Section 11, lines 393–417 and 545–561; the positive-boundary
+assumption of Proposition two-families is at lines 102–105. -/
+theorem lattice_mem_current_or_terminal_before {a₀ : ℝ}
+    (h : RepairMetricHypotheses (o := dyadicOrigin) (Λ := Λ) (A := A)
+      (C := C) (k₀ := k₀) (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀)
+    (hSstar : 1 ≤ Sstar) (hboundary : 0 < (edgeBoundary (planeDomainGraph Λ) A).card)
+    (j : ℕ) (z : ℤ × ℤ) :
+    (∃ i : (𝔇 j).regionIndex, integerPoint z ∈ (𝔇 j).current i) ∨
+      ∃ t < j, integerPoint z ∈
+        repairTerminalInteriorSet (𝔇 t).location (𝔇 t).scale Sstar := by
+  classical
+  have hZ : (boundaryEndpoints Λ A).Nonempty :=
+    (Finset.card_pos.mp hboundary).elim fun e he ↦
+      (Sym2.mk_surjective e).elim fun uv huv ↦
+        ⟨uv.1.1, mem_boundaryEndpoints_of_mem_edgeBoundary he
+          (huv ▸ Sym2.mem_mk_left uv.1 uv.2)⟩
+  induction j with
+  | zero =>
+    exact Or.inl (exists_unique_initialOpenRegion_integerPoint
+      k₀ (boundaryEndpoints Λ A) C _ _ hC h₀ hZ z).exists
+  | succ j ih =>
+    rcases ih with hi | ht
+    · let : Nonempty (𝔇 j).regionIndex := ⟨(𝔇 j).dummy⟩
+      rcases exists_mem_repairNextCurrentRegion_or_terminalInterior j
+        (𝔇 j).current (𝔇 j).location (𝔇 j).scale Sstar (𝔇 j).color
+        (repairCurrentAssignments (𝔇 j).current (𝔇 j).location (𝔇 j).scale)
+        (h.repairStage_location_mem_affineMesh hSstar j)
+        (fun p ↦ hSstar.trans (h.le_scale j p)) z hi with hnew | hterm
+      · exact Or.inl hnew
+      · exact Or.inr ⟨j, Nat.lt_succ_self j, hterm⟩
+    · exact ht.elim fun t htt ↦ Or.inr ⟨t, Nat.lt_succ_of_lt htt.1, htt.2⟩
+
+end RepairMetricHypotheses
+
+end TNLean.PEPS.AreaLaw.Geometry
+
+end
+
+end RepairLatticeCoverage

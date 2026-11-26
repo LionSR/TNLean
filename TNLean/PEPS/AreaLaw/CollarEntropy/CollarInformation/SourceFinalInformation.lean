@@ -6,8 +6,9 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.SourceActualInformation
 import TNLean.PEPS.AreaLaw.Collar.Scales.FinalSharpErrorPower
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.FinalSharpTransportSmallness
-import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalInformationDimension
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.CollarInformation
+import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
 
 /-!
 # Conditional final-scale information for the concrete physical source
@@ -26,7 +27,62 @@ See `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 353--357, 399--533 and 839--941, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.Scan.log_exp_configuration_card_le_of_card`: the physical dimension in the
+  collar information continuity cost.
 -/
+
+section PhysicalInformationDimension
+
+/-!
+## The physical dimension in the collar information continuity cost
+
+Only the target region contributes to the logarithmic dimension. Its actual
+site cardinality controls that dimension with the fixed local factor log q.
+No far-region cardinality or independent dimension certificate is used.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+`08-scanner.tex`, lines 936--941, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+-/
+
+noncomputable section
+
+namespace TNLean.PEPS.AreaLaw.Scan
+
+open Classical in
+/-- The actual target cardinality supplies the logarithmic dimension needed
+by the original-state continuity term. The finite local dimension is fixed
+before the system size and region. -/
+theorem log_exp_configuration_card_le_of_card
+    {Λ : Finset (ℤ × ℤ)} {q n : ℕ} (hq : 1 ≤ q)
+    (X : Finset ↥Λ) {Cvol : ℝ}
+    (hcard : (X.card : ℝ) ≤ Cvol * (n : ℝ) ^ 2) :
+    Real.log (Real.exp 1 *
+      Fintype.card (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q) X)) ≤
+        1 + (Cvol * Real.log q) * (n : ℝ) ^ 2 := by
+  have hqpos : (0 : ℝ) < q := by exact_mod_cast (show 0 < q by omega)
+  have hdimpos : (0 : ℝ) <
+      Fintype.card (ManyBody.RegionConfig (fun _ : ↥Λ ↦ Fin q) X) := by
+    simp only [ManyBody.RegionConfig, Fintype.card_fun, Fintype.card_fin,
+      Fintype.card_coe, Nat.cast_pow]
+    positivity
+  rw [Real.log_mul (Real.exp_pos 1).ne' hdimpos.ne', Real.log_exp]
+  have hlogq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+  have hbound := _root_.add_le_add (le_refl (1 : ℝ))
+    (mul_le_mul_of_nonneg_right hcard hlogq)
+  simpa only [ManyBody.RegionConfig, Fintype.card_fun, Fintype.card_fin,
+    Fintype.card_coe, Nat.cast_pow, Real.log_pow, mul_right_comm] using hbound
+
+end TNLean.PEPS.AreaLaw.Scan
+
+end
+
+end PhysicalInformationDimension
+
+section SourceFinalInformation
 
 open scoped Matrix.Norms.L2Operator
 
@@ -342,3 +398,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation
     two_le_sourceFinalInformationThreshold _ _ _ _ _ _ _ _ _ _ _ _ _ _, hall Ce hCe⟩⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
+
+end
+
+end SourceFinalInformation

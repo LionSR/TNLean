@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Hermitian.BinaryProjectionFamily
-import TNLean.PEPS.Injectivity.Charge.RegularTwoSiteChargeCommutation
+import TNLean.PEPS.Injectivity.Charge.RegularTwoSiteChargeDetector
 import TNLean.PEPS.Injectivity.Charge.RegularChargeCompleteMeasurement
 
 /-!

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.CanonicalForm.BNT.Construction
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockGroundSpaceContinuity
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanSeparation
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanNormalization
 import TNLean.MPS.ParentHamiltonian.Commuting.FrameOperator
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import TNLean.MPS.Preparation.BlockSum.OneDimensionalBlocks

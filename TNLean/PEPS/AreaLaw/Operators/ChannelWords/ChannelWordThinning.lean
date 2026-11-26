@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Probability.PoissonWord.Partition
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ChannelWordObservables
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LatticeChannelPoissonGrowth
+import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphChannelPoissonGrowth
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

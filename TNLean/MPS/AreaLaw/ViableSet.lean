@@ -16,7 +16,6 @@ import TNLean.MPS.AreaLaw.ViableSet.Endpoints
 import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
-import TNLean.MPS.AreaLaw.ViableSet.OperatorAction
 import TNLean.MPS.AreaLaw.ViableSet.PrefixColumn
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Span

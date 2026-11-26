@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DummyContacts
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivisionMask
-import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideEndpoints
+import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivision
 import Mathlib.Analysis.Normed.Affine.Convex
 
 /-!

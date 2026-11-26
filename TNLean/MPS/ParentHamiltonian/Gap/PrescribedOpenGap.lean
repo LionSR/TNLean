@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.SparseGroupedOpenGap
 import QICLean.ManyBody.Hamiltonian.Martingale.AbstractCriterion
-import TNLean.MPS.ParentHamiltonian.Gap.Comparison.IntervalKernelTransport
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenFiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalNormalization
 import TNLean.MPS.ParentHamiltonian.Gap.PrimitiveBlockGap
 

@@ -8,8 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.ParentHamiltonian.LocalExpectation
 
-import TNLean.MPS.ParentHamiltonian.LocalExpectation.IntervalObservableCoordinates
-import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalDensitySupport
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalFaithfulSupport
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableExpectation
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableInsertion

@@ -14,7 +14,6 @@ import TNLean.MPS.MPU.Symmetry.TimeReversal.IntrinsicBlockingParity
 import TNLean.MPS.MPU.Symmetry.TimeReversal.PrintedBlockingContraction
 import TNLean.MPS.MPU.Symmetry.TimeReversal.PrintedBlockingGates
 import TNLean.MPS.MPU.Symmetry.TimeReversal.PrintedBlockingHalfFactors
-import TNLean.MPS.MPU.Symmetry.TimeReversal.PrintedBlockingTrace
 import TNLean.MPS.MPU.Symmetry.TimeReversal.SequentialBlockingUnwinding
 import TNLean.MPS.MPU.Symmetry.TimeReversal.SuppliedTimeReversalCriterion
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalBlockingParity
@@ -22,7 +21,6 @@ import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalGateCertificate
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalLocalNecessity
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalLocalSufficiency
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalMPSClass
-import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSign
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSignTensorProduct
 import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalTraceGauge

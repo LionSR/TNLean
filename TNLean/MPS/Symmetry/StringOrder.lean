@@ -10,17 +10,14 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Symmetry.StringOrder.ContinuousPhysicalCovariance
 import TNLean.MPS.Symmetry.StringOrder.ContinuousStringEndpoints
-import TNLean.MPS.Symmetry.StringOrder.ContinuousStringOrder
 import TNLean.MPS.Symmetry.StringOrder.InfinitesimalPhysicalCovariance
 import TNLean.MPS.Symmetry.StringOrder.PeriodicFullRingString
 import TNLean.MPS.Symmetry.StringOrder.PeriodicPhysicalString
 import TNLean.MPS.Symmetry.StringOrder.PhysicalStringAsymptotics
 import TNLean.MPS.Symmetry.StringOrder.PhysicalStringBlockEndpoints
 import TNLean.MPS.Symmetry.StringOrder.PhysicalStringBlockOrder
-import TNLean.MPS.Symmetry.StringOrder.PhysicalStringEndpointSpan
 import TNLean.MPS.Symmetry.StringOrder.PhysicalStringEndpoints
 import TNLean.MPS.Symmetry.StringOrder.PhysicalStringPhase
 import TNLean.MPS.Symmetry.StringOrder.PhysicalStringSelectionRule
 import TNLean.MPS.Symmetry.StringOrder.PureTwistedSpectrum
-import TNLean.MPS.Symmetry.StringOrder.StationaryPhysicalSymmetry
 import TNLean.MPS.Symmetry.StringOrder.StringOrder

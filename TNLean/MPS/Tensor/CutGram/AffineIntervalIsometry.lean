@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.CutGram.AffineGramHull
-import TNLean.MPS.Tensor.CutGram.AffineGramBalancing
+import TNLean.MPS.Tensor.CutGram.BalancedGramMetrics
 import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 
 /-!

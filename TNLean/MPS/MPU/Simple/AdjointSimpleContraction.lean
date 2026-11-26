@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
-import TNLean.MPS.Tensor.Words.CrossProductRigidity
+import TNLean.MPS.Tensor.Words.OneSidedInverse
 import TNLean.MPS.MPU.CanonicalForm.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.Simple.SourceFactorContraction
 import TNLean.MPS.MPU.Simple.SuppliedFixedWitnesses

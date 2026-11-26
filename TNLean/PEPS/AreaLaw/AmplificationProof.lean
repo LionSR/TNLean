@@ -8,7 +8,7 @@ import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.AmplificationProofSteps
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordLists
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordTruncation
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LatticeChannelSpatialOmission
-import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeExcitedDecay
+import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeConstraints
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaSites
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.RadiusBound

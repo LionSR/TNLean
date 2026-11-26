@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.Wielandt.CyclicSpanning
 import TNLean.MPS.Examples.Wielandt.CyclicObstruction
-import TNLean.MPS.Transfer.Primitivity.EasyDirections
+import TNLean.MPS.Transfer.Primitivity.ImpliesStronglyIrreducible
 import QICLean.Kraus.Wielandt.SpanGrowth.InvertibleWordSpan
 
 /-!

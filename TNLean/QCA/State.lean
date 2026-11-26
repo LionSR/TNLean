@@ -10,5 +10,4 @@ Authors: TNLean contributors
 
 import TNLean.QCA.State.BlockingStateTransport
 import TNLean.QCA.State.CompatibleLocalState
-import TNLean.QCA.State.FinitePureStateDecomposition
 import TNLean.QCA.State.StateSpace

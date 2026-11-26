@@ -8,6 +8,8 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.RectangleSourceEntropy
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.RectangleBootstrapGeometry
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BoxEntropySupremum
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.ExponentBootstrap
+import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The physical safe-box exponent bootstrap
@@ -23,7 +25,16 @@ The accepted finite exponent iteration then reaches the fixed box exponent.
 Source: OpenAI area-law manuscript, `08-scanner.tex`, Proposition 9.5,
 lines 681--805, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
+
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.boxEntropy_power_le_of_succ_clearance`: reducing the clearance in a safe-box
+  entropy bound.
+* `TNLean.PEPS.AreaLaw.exists_regionEntropy_safe_rect_le_boxError`: the physical entropy bound for
+  safe rectangles.
 -/
+
+section PhysicalBoxBootstrap
 
 open ManyBody (IntRect IsSafe rectRegion)
 
@@ -399,3 +410,203 @@ theorem boxEntropy_le_boxError_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} 
     (fun _ hD₀ _ hr ↦ boxEntropy_le_initialBoxConstant_mul_rpow hq hJ hΔ hD₀ hr) hct htransport
 
 end TNLean.PEPS.AreaLaw.Scan
+
+end
+
+end PhysicalBoxBootstrap
+
+section BoxClearanceComparison
+
+/-!
+## Reducing the clearance in a safe-box entropy bound
+
+For an integer clearance at least three, split each rectangle of size at least
+two into at most four smaller rectangles. Each smaller rectangle has the next
+integer clearance. Subadditivity therefore transfers a uniform entropy power
+bound to the original clearance without changing its exponent. The volume
+entropy bound covers the remaining sizes.
+
+This is the clearance comparison used to pass from integer safe-box estimates
+to real template clearances in the collar argument.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+`02-initial.tex`, lines 220–228 and 590–594; `08-scanner.tex`, Proposition 9.6,
+lines 808–827, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+The comparison is a derived auxiliary result.
+-/
+
+open scoped BigOperators
+
+open ManyBody (IntRect IsSafe mem_rectRegion rectRegion)
+
+namespace TNLean.PEPS.AreaLaw
+
+private theorem half_size_clearance {D s : ℕ} (hD : 3 ≤ D) (hs : 2 ≤ s) :
+    (D + 1) * ((s + 1) / 2) ≤ D * s := by
+  have hr : (s + 1) / 2 ≤ 3 * (s - (s + 1) / 2) := by omega
+  have hDr : (s + 1) / 2 ≤ D * (s - (s + 1) / 2) :=
+    hr.trans (Nat.mul_le_mul_right _ hD)
+  have hrle : (s + 1) / 2 ≤ s := by omega
+  calc
+    (D + 1) * ((s + 1) / 2) = D * ((s + 1) / 2) + (s + 1) / 2 := by ring
+    _ ≤ D * ((s + 1) / 2) + D * (s - (s + 1) / 2) := Nat.add_le_add_left hDr _
+    _ = D * s := by rw [← Nat.mul_add, Nat.add_sub_of_le hrle]
+
+/-- A uniform box-entropy power bound at clearance D+1 gives a bound with
+that same exponent at clearance D≥3. The existing rectangle children split
+each large rectangle into at most four pieces; the volume bound covers the
+remaining sizes. This derived comparison is used to pass from integer-clearance box estimates
+to the real clearances in area-law Proposition 9.6, `08-scanner.tex`, lines 808–827,
+revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem boxEntropy_power_le_of_succ_clearance
+    {q R D : ℕ} (hq : 1 ≤ q) (hD : 3 ≤ D)
+    {J Δ C p : ℝ} (hC : 0 ≤ C) (hp : 0 ≤ p)
+    (hbox : ∀ r : ℕ, 1 ≤ r →
+      boxEntropy q R J Δ (D + 1) r ≤ C * (r : ℝ) ^ p) :
+    ∀ r : ℕ, 1 ≤ r →
+      boxEntropy q R J Δ D r ≤
+        (4 * C + 4 * Real.log q + 1) * (r : ℝ) ^ p := by
+  convert boxEntropy_power_le_of_large_rectangles (R := R) (D₀ := D) (J := J) (Δ := Δ)
+    hq (show 0 ≤ 4 * C by positivity) hp 2 ?_ using 1
+  · norm_num
+  · intro Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe hQ
+    let r := (Q.size + 1) / 2
+    have hr : 1 ≤ r := by omega
+    have hQtwo : Q.size ≤ 2 * r := by omega
+    have hcount : Q.numChunksX r * Q.numChunksY r ≤ 4 :=
+      Nat.mul_le_mul (Q.numChunksX_le r hr hQtwo) (Q.numChunksY_le r hr hQtwo)
+    let ι := Fin (Q.numChunksX r) × Fin (Q.numChunksY r)
+    let ch : ι → IntRect := fun i ↦ Q.child r i.1 i.2
+    let Xs : ι → Finset ↥Λ := fun i ↦ rectRegion A (ch i)
+    have hsub : ∀ i : ι, (ch i).toFinset ⊆ Q.toFinset := fun i ↦
+      IntRect.child_subset hr i.1.isLt i.2.isLt
+    have hclear : (D + 1) * r ≤ D * Q.size := half_size_clearance hD hQ
+    have hsafe_child : ∀ i : ι, IsSafe Λ A (D + 1) (ch i) := fun i e he z hz p hp ↦
+      lt_of_le_of_lt
+        ((Nat.mul_le_mul_left (D + 1) (IntRect.size_child_le (Q := Q) i.1 i.2 hr)).trans
+          hclear) (hsafe e he z hz p (hsub i hp))
+    have hbound : ∀ i : ι, ManyBody.regionEntropy Ω (Xs i) ≤ C * (Q.size : ℝ) ^ p := fun i ↦
+      (regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan (hsafe_child i)
+        (IntRect.size_le_of_subset (hsub i))).trans (hbox Q.size Q.one_le_size)
+    have hunion : Finset.univ.biUnion Xs = rectRegion A Q := by
+      ext x
+      simp only [Finset.mem_biUnion, Finset.mem_univ, true_and, Xs, mem_rectRegion]
+      constructor
+      · rintro ⟨i, hxA, hx⟩; exact ⟨hxA, hsub i hx⟩
+      · rintro ⟨hxA, hx⟩
+        obtain ⟨a, ha, b, hb, hab⟩ := IntRect.exists_mem_child hr hx
+        exact ⟨(⟨a, ha⟩, ⟨b, hb⟩), hxA, hab⟩
+    have hdisj : Pairwise fun i j ↦ Disjoint (Xs i) (Xs j) := by
+      intro i j hij
+      refine Finset.disjoint_left.mpr fun x hxi hxj ↦ hij ?_
+      rw [mem_rectRegion] at hxi hxj
+      obtain ⟨h1, h2⟩ := IntRect.eq_of_mem_child hr i.1.isLt i.2.isLt j.1.isLt j.2.isLt hxi.2 hxj.2
+      exact Prod.ext (Fin.ext h1) (Fin.ext h2)
+    have hsumEntropy : ManyBody.regionEntropy Ω (rectRegion A Q) ≤
+        ∑ i : ι, ManyBody.regionEntropy Ω (Xs i) := by
+      have hu := Entropy.OrderedSetFunction.union_biUnion_le_sum
+        (ManyBody.regionEntropy Ω)
+        (ManyBody.regionEntropy_union_le _ Ω hΩ) ∅ Xs Finset.univ
+        (by intros; simp) (fun i _ j _ hij ↦ hdisj hij)
+      simpa only [Finset.empty_union, ManyBody.regionEntropy_empty _ Ω hΩ,
+        zero_add, hunion] using hu
+    have hcard : Fintype.card ι ≤ 4 := by
+      simpa only [ι, Fintype.card_prod, Fintype.card_fin] using hcount
+    calc
+      ManyBody.regionEntropy Ω (rectRegion A Q) ≤
+          ∑ i : ι, ManyBody.regionEntropy Ω (Xs i) := hsumEntropy
+      _ ≤ ∑ _ : ι, C * (Q.size : ℝ) ^ p := Finset.sum_le_sum fun i _ ↦ hbound i
+      _ = (Fintype.card ι : ℝ) * (C * (Q.size : ℝ) ^ p) := by simp
+      _ ≤ 4 * (C * (Q.size : ℝ) ^ p) :=
+        mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
+          (mul_nonneg hC (Real.rpow_nonneg (Nat.cast_nonneg _) _))
+      _ = 4 * C * (Q.size : ℝ) ^ p := by ring
+
+
+end TNLean.PEPS.AreaLaw
+
+end BoxClearanceComparison
+
+section PhysicalSafeBox
+
+/-!
+## The physical entropy bound for safe rectangles
+
+For a gapped ground state of a finite-range Hamiltonian, the entropy in the
+intersection of a cut with a safe rectangle of size r is at most C r^(1+e),
+where e = 2/1000000. The constant depends only on the physical parameters and
+is uniform over every real clearance greater than 2R+10, every finite domain,
+Hamiltonian, ground state, cut, and rectangle.
+
+The physical safe-box estimate at integer clearance 2R+11 gives an estimate at
+clearance 2R+10 by subdivision into at most four rectangles. Every rectangle
+with an admissible real clearance has this latter integer clearance.
+The resulting pointwise estimate is the bound defining the safe-box supremum
+in Proposition 9.5.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+Proposition 9.5, `08-scanner.tex`, lines 681–689; the safety condition and
+safe-box supremum are in `02-initial.tex`, lines 223–228 and 590–594,
+revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
+-/
+
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
+
+open ManyBody (IntRect IsSafe rectRegion supDist)
+
+namespace TNLean.PEPS.AreaLaw
+
+/-- The fixed-exponent safe-rectangle bound with an arbitrary real safety
+parameter. The constant depends only on the physical parameters and is chosen
+before every safety parameter, domain, Hamiltonian, state, cut, and rectangle.
+Source: area-law Proposition 9.5, `08-scanner.tex`, lines 681–689; the safety
+condition is `02-initial.tex`, lines 223–228, and the supremum over rectangles
+is defined in lines 590–594, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+This pointwise statement is the bound defining the source's safe-box supremum;
+no second safety predicate or entropy supremum is introduced. -/
+theorem exists_regionEntropy_safe_rect_le_boxError
+    (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
+    ∃ C : ℝ, 0 < C ∧ ∀ D₀ : ℝ, 2 * (R : ℝ) + 10 < D₀ →
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J)
+        (E₀ : ℝ) (Ω : EuclideanSpace ℂ (↥Λ → Fin q)),
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        ∀ (A : Finset ↥Λ) (Q : IntRect),
+          (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+            D₀ * (Q.size : ℝ) < (supDist t z : ℝ)) →
+          ManyBody.regionEntropy Ω (rectRegion A Q) ≤
+            C * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
+  obtain ⟨Cb, hCb, hbox⟩ := Scan.exists_boxEntropy_le_boxError q R hq hJ hΔ
+  let d : ℕ := 2 * R + 10
+  have hd : 3 ≤ d := by dsimp only [d]; omega
+  have hp : 0 ≤ 1 + (Exponents.boxError : ℝ) := by
+    norm_num [Exponents.boxError]
+  have hweak := boxEntropy_power_le_of_succ_clearance
+    (R := R) (D := d) (J := J) (Δ := Δ) (p := 1 + (Exponents.boxError : ℝ))
+    hq hd hCb.le hp (hbox (d + 1) (by dsimp only [d]; omega))
+  have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
+  refine ⟨4 * Cb + 4 * Real.log q + 1, by linarith, ?_⟩
+  intro D₀ hD₀ Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hclear
+  have hdreal : (d : ℝ) < D₀ := by
+    simpa only [d, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat] using hD₀
+  have hsafe : IsSafe Λ A d Q := by
+    intro e he z hz t ht
+    have hz' := Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary he hz
+    have hreal := hclear t ht z.val hz'
+    have hle : (d : ℝ) * (Q.size : ℝ) ≤ D₀ * (Q.size : ℝ) :=
+      mul_le_mul_of_nonneg_right hdreal.le (Nat.cast_nonneg Q.size)
+    have hcast : ((d * Q.size : ℕ) : ℝ) < (supDist t z.val : ℝ) := by
+      simpa only [Nat.cast_mul] using hle.trans_lt hreal
+    exact_mod_cast hcast
+  exact regionEntropy_le_of_boxEntropy_power (e := (Exponents.boxError : ℝ)) hq
+    (by norm_num [Exponents.boxError]) hweak h hh hhJ hΩ hgap hspan A Q hsafe
+
+end TNLean.PEPS.AreaLaw
+
+end PhysicalSafeBox

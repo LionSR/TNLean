@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.BlockIntervalDefectDecay
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.FiniteRangeKnabeGap
-import TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedProjectorEstimate
+import TNLean.MPS.ParentHamiltonian.Gap.Filtration.WholeIncrementSpectatorTransport
 
 /-!
 # A uniform gap for parent Hamiltonians of primitive block sums

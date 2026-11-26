@@ -5,10 +5,11 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Order.ComplexPhasePositivity
 import TNLean.MPS.FundamentalTheorem.Sectors.CoeffIdentity
-import TNLean.MPS.FundamentalTheorem.Sectors.CopyWeightMatching
-import TNLean.MPS.FundamentalTheorem.Sectors.ProportionalMatch
-import TNLean.MPS.FundamentalTheorem.Sectors.StrongMatch
+import TNLean.MPS.FundamentalTheorem.Sectors.ProportionalMatchCore
 import TNLean.MPS.Tensor.DirectSum.GaugeEquiv
+import TNLean.MPS.FundamentalTheorem.Sectors.WeightEquiv
+import TNLean.MPS.Transfer.Irreducible.UnitaryGauge
+import TNLean.MPS.Tensor.DirectSum.BlockGauge
 
 /-!
 # BNT equal-MPV sector witnesses
@@ -34,7 +35,105 @@ The theorem below exposes the sector-level witnesses needed before assembling
 the global CPSV16 gauge `⊕_j (𝟙_{r_j} ⊗ Y_j)`.  The proof path is:
 full-basis matching, exact coefficient comparison, copy-weight recovery, and
 then the direct-sum gauge assembly.
+
+It also contains the following results.
+
+* `MPSTensor.SectorBNTCopyWeightMatching`,
+  `MPSTensor.SectorBNTCopyWeightMatching.of_coeff_identity`: copy-weight matching for matched BNT
+  sectors.
+* `MPSTensor.ft_sector_bnt_proportional_unitary_sector_match_witnesses`,
+  `MPSTensor.ft_sector_bnt_equal_unitary_global_gauge_witnesses`: unitary refinement of proportional
+  BNT sector matching.
 -/
+
+section CopyWeightMatching
+
+/-!
+## Copy-weight matching for matched BNT sectors
+
+This module records the copy-level weight comparison used in the BNT
+Fundamental Theorem.
+
+After the sector bijection and per-sector gauge phases have been fixed, the
+CPSV16 Appendix MPV proof compares the resulting coefficient power sums and
+identifies the copy weights, up to the same phase, inside each matched sector.
+The source anchor is arXiv:1606.00608, Appendix MPV proof line 1188, with the
+finite power-sum lemma at lines 1155--1163.
+
+The results here are purely algebraic: they assume the eventual
+coefficient identity for each matched sector and produce the copy permutations
+and pointwise weight identities needed by the direct-sum gauge assembly.
+-/
+
+namespace MPSTensor
+
+variable {d : ℕ}
+
+/-- **Copy-weight matching for matched BNT sectors.**
+
+For a matched sector bijection `β : Fin Q.basisCount ≃ Fin P.basisCount` and
+phases `ζ k`, this structure records the copy-level part of the CPSV16
+Appendix MPV proof, line 1188: each copy of a `Q`-sector is paired with a copy
+of the matched `P`-sector, and the corresponding raw weights satisfy
+`ν_{k,q} = (ζ k)⁻¹ μ_{β k, τ_k q}`.
+
+The proportional theorem in CPSV16 gives the sector matching at the theorem
+statement lines 1167--1170 and the Appendix MPV proof line 1182.  The
+coefficient comparison that constructs this copy-weight matching is the
+remaining source-faithful input before the proportional global-gauge theorem
+can be obtained without an explicit coefficient-identity hypothesis. -/
+structure SectorBNTCopyWeightMatching {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (ζ : Fin Q.basisCount → ℂ) where
+  /-- Copy permutation inside each matched sector. -/
+  copy_equiv : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))
+  /-- Matched copy-weight identity with the same phase as the sector gauge. -/
+  weight_eq : ∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
+    Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (copy_equiv k q)
+
+/-- **Construct copy-weight matching from matched-sector coefficient identities.**
+
+Assume that every matched sector satisfies the eventual coefficient identity
+
+`P.coeff N (β k) = (ζ k)^N * Q.coeff N k`.
+
+If each phase `ζ k` is nonzero, then the finite power-sum comparison recovers,
+sector by sector, the copy permutation and the pointwise identity
+
+`Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ_k q)`.
+
+This constructs the copy-weight matching established in CPSV16 Appendix MPV
+proof, line 1188, using the finite power-sum lemma from lines 1155--1163. -/
+noncomputable def SectorBNTCopyWeightMatching.of_coeff_identity
+    {P Q : SectorDecomposition d}
+    (β : Fin Q.basisCount ≃ Fin P.basisCount)
+    (ζ : Fin Q.basisCount → ℂ)
+    (hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0)
+    (hCoeff : ∀ k : Fin Q.basisCount, ∃ N₀, ∀ N > N₀,
+      P.coeff N (β k) = (ζ k) ^ N * Q.coeff N k) :
+    SectorBNTCopyWeightMatching (P := P) (Q := Q) β ζ := by
+  classical
+  have hData : ∀ k : Fin Q.basisCount,
+      ∃ (_hCopies : P.copies (β k) = Q.copies k)
+        (τ : Fin (P.copies (β k)) ≃ Fin (Q.copies k)),
+        ∀ q : Fin (P.copies (β k)),
+          Q.weight k (τ q) = (ζ k)⁻¹ * P.weight (β k) q := by
+    intro k
+    obtain ⟨N₀, hCoeff_k⟩ := hCoeff k
+    exact matched_sector_weight_equiv (P := P) (Q := Q)
+      (j₀ := β k) (k₀' := k) (ζ := ζ k) (hζ_ne k) (N₀ := N₀) hCoeff_k
+  refine
+    { copy_equiv := fun k => (hData k).choose_spec.choose.symm
+      weight_eq := ?_ }
+  intro k q
+  have hPoint := (hData k).choose_spec.choose_spec ((hData k).choose_spec.choose.symm q)
+  simpa using hPoint
+
+end MPSTensor
+
+end CopyWeightMatching
+
+section Fundamental
 
 open scoped Matrix BigOperators
 open Filter Topology
@@ -523,3 +622,193 @@ theorem ft_sector_bnt_equal_global_gauge
     hGauge⟩
 
 end MPSTensor
+
+end Fundamental
+
+section Unitary
+
+/-!
+## Unitary refinement of proportional BNT sector matching
+
+The proportional Fundamental Theorem matches the basis normal tensors of two
+canonical forms by gauge-phase equivalences. When the basis tensors satisfy the
+BNT canonical form hypotheses of left-canonicity and irreducibility, the
+matched gauges may be chosen unitary.
+
+This is the proportional part of Canonical Form II in Cirac et al.,
+arXiv:1606.00608, Corollary A.6, lines 1197–1199.
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPSTensor
+
+variable {d : ℕ}
+
+/-- **Canonical Form II unitary refinement of proportional BNT matching.**
+
+Let two BNT canonical forms generate eventually nonzero proportional MPV
+families.  Their basis normal tensors can be matched bijectively so that each
+matched pair has the same bond dimension and differs by a unit phase and a
+unitary conjugation.
+
+The BNT hypotheses already include left canonicity and irreducibility for each
+basis tensor.  Thus no hypothesis beyond those of the proportional BNT theorem
+is needed for this refinement.
+
+Source: Cirac et al., arXiv:1606.00608, Corollary A.6, lines 1197–1199. -/
+theorem ft_sector_bnt_proportional_unitary_sector_match_witnesses
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
+    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
+      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+      (ζ : Fin Q.basisCount → ℂ)
+      (U : (k : Fin Q.basisCount) → Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ),
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
+      ∀ (k : Fin Q.basisCount) (i : Fin d),
+        Q.basis k i =
+          ζ k • ((U k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (U k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)ᴴ) := by
+  classical
+  obtain ⟨β, hDim, ζ₀, X, hζ₀, hConj, _hMpv⟩ :=
+    ft_sector_bnt_proportional_sector_match_witnesses hP hQ hProp
+  have hGPE : ∀ k : Fin Q.basisCount,
+      GaugePhaseEquiv
+        (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) (Q.basis k) :=
+    fun k => ⟨X k, ζ₀ k, Complex.ne_zero_of_norm_eq_one (hζ₀ k), hConj k⟩
+  have hUnitary : ∀ k : Fin Q.basisCount,
+      ∃ (U : Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧
+        ∀ i, Q.basis k i = ζ •
+          ((U : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (U : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)ᴴ) := by
+    intro k
+    let : NeZero (Q.basisDim k) := ⟨ne_of_gt (hQ.basis_dim_pos k)⟩
+    apply exists_unitaryConj_gaugePhase_of_leftCanonical_irreducible (hGPE k)
+    · exact (leftCanonical_cast_dim (hDim k) (P.basis (β k))).2
+        (hP.basis_left_canonical (β k))
+    · exact hQ.basis_left_canonical k
+    · exact (isIrreducibleFamily_cast_dim (hDim k) (P.basis (β k))).2
+        (hP.basis_irreducible (β k))
+    · exact hQ.basis_irreducible k
+  let U : (k : Fin Q.basisCount) →
+      Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ :=
+    fun k => (hUnitary k).choose
+  let ζ : Fin Q.basisCount → ℂ :=
+    fun k => (hUnitary k).choose_spec.choose
+  refine ⟨β, hDim, ζ, U, ?_, ?_⟩
+  · intro k
+    exact (hUnitary k).choose_spec.choose_spec.1
+  · intro k i
+    exact (hUnitary k).choose_spec.choose_spec.2 i
+
+/-- **Equal-MPV global gauge assembled from the unitary sector gauges.**
+
+For equal BNT canonical forms, the sector phase used by the unitary conjugation
+is the same phase that occurs in the copy-weight identity. Repeating each
+sector unitary over its matched copies therefore gives a unitary block-diagonal
+global gauge in matched flattened coordinates.
+
+Source: arXiv:1606.00608, Corollary A.6 and Appendix MPV proof,
+lines 1182--1199. -/
+theorem ft_sector_bnt_equal_unitary_global_gauge_witnesses
+    {P Q : SectorDecomposition d}
+    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
+    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
+    ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
+      (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
+      (_hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k)
+      (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
+      (ζ : Fin Q.basisCount → ℂ)
+      (U : (k : Fin Q.basisCount) → Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ)
+      (X : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ),
+      (∀ k : Fin Q.basisCount, ‖ζ k‖ = 1) ∧
+      (∀ (k : Fin Q.basisCount) (i : Fin d),
+        Q.basis k i =
+          ζ k • ((U k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (U k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)ᴴ)) ∧
+      (∀ (k : Fin Q.basisCount) (q : Fin (Q.copies k)),
+        Q.weight k q = (ζ k)⁻¹ * P.weight (β k) (τ k q)) ∧
+      (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+        (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) ∈
+        Matrix.unitaryGroup (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ ∧
+      ∀ i : Fin d,
+        toTensorFromBlocks (d := d) (μ := Q.flatWeight) Q.flatBasis i =
+          (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+            (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) *
+            toTensorFromBlocks (d := d)
+              (μ := matched_p_weight (P := P) (Q := Q) β τ)
+              (matched_p_basis (P := P) (Q := Q) β hDim) i *
+            (((X)⁻¹ : GL (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) :
+              Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+                (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) := by
+  classical
+  obtain ⟨β, hDim, ζ, Xblock, hζ, hConj, ⟨W⟩⟩ :=
+    ft_sector_bnt_equal_matched_copy_weight_witnesses hP hQ hEqual
+  have hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0 := fun k =>
+    Complex.ne_zero_of_norm_eq_one (hζ k)
+  have hUnitary : ∀ k : Fin Q.basisCount,
+      ∃ U : Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ,
+        ∀ i, Q.basis k i = ζ k •
+          ((U : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+            (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+            (U : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)ᴴ) := by
+    intro k
+    let : NeZero (Q.basisDim k) := ⟨ne_of_gt (hQ.basis_dim_pos k)⟩
+    obtain ⟨U, _, hU⟩ :=
+      exists_unitaryConj_of_gaugePhase_data_of_leftCanonical_irreducible
+        (Xblock k) (ζ k) (hζ_ne k) (hConj k)
+        ((leftCanonical_cast_dim (hDim k) (P.basis (β k))).2
+          (hP.basis_left_canonical (β k)))
+        (hQ.basis_left_canonical k)
+        ((isIrreducibleFamily_cast_dim (hDim k) (P.basis (β k))).2
+          (hP.basis_irreducible (β k)))
+        (hQ.basis_irreducible k)
+    exact ⟨U, hU⟩
+  let U : (k : Fin Q.basisCount) → Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ :=
+    fun k => (hUnitary k).choose
+  have hConjU : ∀ (k : Fin Q.basisCount) (i : Fin d),
+      Q.basis k i = ζ k •
+        ((U k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+          (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+          (U k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)ᴴ) :=
+    fun k => (hUnitary k).choose_spec
+  let Ugl : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ :=
+    fun k => unitaryGL (U k)
+  have hConjGL : ∀ (k : Fin Q.basisCount) (i : Fin d),
+      Q.basis k i = ζ k •
+        ((Ugl k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+          (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+          (((Ugl k)⁻¹ : GL (Fin (Q.basisDim k)) ℂ) :
+            Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)) := by
+    intro k i
+    change Q.basis k i = ζ k •
+      ((U k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) *
+        (cast (congr_arg (MPSTensor d) (hDim k)) (P.basis (β k))) i *
+        (U k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ)ᴴ)
+    exact hConjU k i
+  obtain ⟨X, hX, hGauge⟩ :=
+    sector_bnt_global_gauge_of_copy_weight_matching
+      β hDim ζ Ugl hζ_ne hConjGL W
+  have hXunitary :
+      (X : Matrix (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s))
+        (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ) ∈
+        Matrix.unitaryGroup (Fin (∑ s : Fin Q.totalCopies, Q.flatDim s)) ℂ := by
+    rw [hX]
+    let Ucopy : (s : Fin Q.totalCopies) →
+        Matrix.unitaryGroup (Fin (Q.flatDim s)) ℂ :=
+      fun s => U (Q.flatIndexEquiv.symm s).1
+    exact globalGaugeOfBlocks_unitaryGL_mem Ucopy
+  have hCopies : ∀ k : Fin Q.basisCount, P.copies (β k) = Q.copies k := by
+    intro k
+    have hcard := Fintype.card_congr (W.copy_equiv k)
+    simpa using hcard.symm
+  exact ⟨β, hDim, hCopies, W.copy_equiv, ζ, U, X, hζ, hConjU,
+    W.weight_eq, hXunitary, hGauge⟩
+
+end MPSTensor
+
+end Unitary

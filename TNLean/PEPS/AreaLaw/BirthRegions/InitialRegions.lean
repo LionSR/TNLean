@@ -9,19 +9,10 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions
 
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.BeltFanColors
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.BeltRunInterfaces
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.DummyRunInterfaces
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialActiveRayCount
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialActiveRays
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionBoundaries
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionInterfaces
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionInteriors
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionRegularity
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegions
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorAssignment
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorColors
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorComponents
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorCycle
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorRuns
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialStarFrontiers
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.PrimaryFineCellCover

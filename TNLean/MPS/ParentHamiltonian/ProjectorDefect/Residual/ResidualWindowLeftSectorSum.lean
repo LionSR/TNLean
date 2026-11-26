@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowCoordinates
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockGroundSpaceOverlap
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceSectorCompressionDecay
+import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockProjectorSum
 import QICLean.Analysis.TensorProduct.EuclideanFiberwiseMap
 
 /-!

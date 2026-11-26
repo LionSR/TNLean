@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.Index.CompositionIndex
 import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
 import TNLean.MPS.MPU.Index.RepresentativeIndexTensorProduct
-import TNLean.MPS.MPU.Index.InjectiveSourceIndex
+import TNLean.MPS.MPU.Index.RepresentativeIndex
 
 /-!
 # The MPU index of a finite-group representation

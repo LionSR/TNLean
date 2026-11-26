@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Preparation.SectorEncoder
 
-import TNLean.MPS.Preparation.SectorEncoder.CoherentGroundspaceConversion
 import TNLean.MPS.Preparation.SectorEncoder.ExactSectorEncoder
 import TNLean.MPS.Preparation.SectorEncoder.SectorEncoder
 import TNLean.MPS.Preparation.SectorEncoder.SectorEncoderRates

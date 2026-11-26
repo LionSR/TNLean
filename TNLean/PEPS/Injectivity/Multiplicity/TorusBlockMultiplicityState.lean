@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.Injectivity.Multiplicity.TorusMultiplicityBondState
 import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondProductIsometry
 import TNLean.PEPS.Injectivity.Multiplicity.GraphAveragingBondState
-import TNLean.PEPS.Injectivity.Multiplicity.PhysicalCoherentTransport
 import TNLean.PEPS.Injectivity.Multiplicity.CoherentMultiplicityTransport
 
 /-!

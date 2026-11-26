@@ -8,14 +8,10 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.CanonicalForm.Periodic
 
-import TNLean.MPS.CanonicalForm.Periodic.BlockDecomposition
 import TNLean.MPS.CanonicalForm.Periodic.Blocking
 import TNLean.MPS.CanonicalForm.Periodic.CyclicBlockedWordSpan
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors
 import TNLean.MPS.CanonicalForm.Periodic.CyclicWordSpan
 import TNLean.MPS.CanonicalForm.Periodic.NormalCanonicalPeriodOne
-import TNLean.MPS.CanonicalForm.Periodic.Normalization
 import TNLean.MPS.CanonicalForm.Periodic.Overlap
-import TNLean.MPS.CanonicalForm.Periodic.PeriodExistence
-import TNLean.MPS.CanonicalForm.Periodic.ScaledNormalization
 import TNLean.MPS.CanonicalForm.Periodic.SectorNormalization

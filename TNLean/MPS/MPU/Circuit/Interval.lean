@@ -21,8 +21,6 @@ import TNLean.MPS.MPU.Circuit.Interval.MinimalEncodedParentColumns
 import TNLean.MPS.MPU.Circuit.Interval.MinimalIntervalCircuit
 import TNLean.MPS.MPU.Circuit.Interval.MinimalIntervalColumns
 import TNLean.MPS.MPU.Circuit.Interval.MinimalIntervalLeafColumns
-import TNLean.MPS.MPU.Circuit.Interval.MinimalIntervalMergingCircuit
 import TNLean.MPS.MPU.Circuit.Interval.MinimalIntervalRootColumns
 import TNLean.MPS.MPU.Circuit.Interval.MinimalLeafCircuitPlacement
 import TNLean.MPS.MPU.Circuit.Interval.MinimalLeafCircuits
-import TNLean.MPS.MPU.Circuit.Interval.ProductBasisFactorization

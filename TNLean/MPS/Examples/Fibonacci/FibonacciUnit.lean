@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.FundamentalTheorem.OperatorProduct.CompressionPeriodic
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
 import TNLean.MPS.Examples.Fibonacci.Fibonacci
 import TNLean.MPS.Examples.Rings.GoldenRing
 

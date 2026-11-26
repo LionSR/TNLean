@@ -7,7 +7,7 @@ import TNLean.MPS.Transfer.Irreducible.Periodic
 import QICLean.Algebra.Polynomial.ScalarPowerSumIdentity
 import TNLean.MPS.Tensor.Overlap
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.Dichotomy
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.SelfOverlap
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.SelfOverlapNonrep
 import TNLean.MPS.FundamentalTheorem.Periodic.ZGauge
 import TNLean.MPS.Transfer.Scaling
 import TNLean.MPS.Tensor.Tactic

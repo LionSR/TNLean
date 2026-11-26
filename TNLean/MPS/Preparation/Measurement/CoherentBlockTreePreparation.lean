@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Circuit.Model.Measurement
 import TNLean.MPS.Preparation.Circuit.GHZSeedCircuit
 import TNLean.MPS.Preparation.Circuit.SparseWindowGHZ
-import TNLean.MPS.Preparation.Circuit.SupportedTreePreparation
+import TNLean.MPS.Preparation.Circuit.UnequalRegisterTreeState
 import TNLean.MPS.Preparation.Circuit.UnequalTreePreparation
 import TNLean.MPS.Tensor.InjectivityCutoff
 import TNLean.MPS.Preparation.Circuit.LogLogDepthBound

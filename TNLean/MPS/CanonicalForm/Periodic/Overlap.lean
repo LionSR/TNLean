@@ -10,22 +10,16 @@ Authors: TNLean contributors
 
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.CornerContraction
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.Dichotomy
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.DifferentPeriod
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.FixedLineLimitSimplicity
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.GlobalGauge
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NoSectorMatch
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.NonzeroSubfamily
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.NormalizedSelfOverlap
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.PeriodicMPSNormLowerBound
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.PeriodicRayUnitOverlap
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.SectorContraction
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.SectorMatch
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.SectorMatchConsequences
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.SectorMatchContraction
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.SectorMatchCyclicTrace
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.SectorMatchCyclicTransport
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.SectorMatchPropagation
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.SectorOverlapTransport
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.SelfOverlap
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.SelfOverlapNonrep
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.Spanning

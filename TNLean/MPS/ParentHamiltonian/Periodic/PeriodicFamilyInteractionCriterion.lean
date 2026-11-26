@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Interaction.PrimitiveFamilyIntersection
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyQuasiLocalGap
-import TNLean.MPS.ParentHamiltonian.Interaction.OpenInteraction
 
 /-!
 # A periodic-family interaction criterion

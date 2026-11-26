@@ -5,8 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.IsolatedStars
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialActiveRays
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorColors
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorRuns
+import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorAssignment
 
 /-!
 # Isolated stars of the initial mesh

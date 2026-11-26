@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.VaryingBond.CutRank
-import TNLean.MPS.Tensor.VaryingBond.SiteIndependent
+import TNLean.MPS.Tensor.VaryingBond.VaryingBondOBC
 import TNLean.MPS.Operator.DensityOperator.PureAreaLaw
 import TNLean.MPS.Tensor.Overlap
 

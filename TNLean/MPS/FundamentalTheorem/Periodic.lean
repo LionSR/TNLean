@@ -11,8 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.Periodic.EqualCase
 import TNLean.MPS.FundamentalTheorem.Periodic.EqualCaseCanonical
 import TNLean.MPS.FundamentalTheorem.Periodic.EqualCaseGlobal
-import TNLean.MPS.FundamentalTheorem.Periodic.EqualCaseIrreducibleForm
-import TNLean.MPS.FundamentalTheorem.Periodic.IrreducibleFormPeriods
 import TNLean.MPS.FundamentalTheorem.Periodic.PhaseClassGrouping
 import TNLean.MPS.FundamentalTheorem.Periodic.PhaseClasses
 import TNLean.MPS.FundamentalTheorem.Periodic.ProportionalOverlap

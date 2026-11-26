@@ -11,6 +11,9 @@ import Mathlib.Logic.Equiv.Basic
 import Mathlib.Logic.Equiv.Option
 import Mathlib.Logic.Equiv.Sum
 import Mathlib.Logic.Equiv.Prod
+import QICLean.ManyBody.Replica.Label.SubsystemTransport
+import QICLean.ManyBody.Replica.Metric.Metric
+import QICLean.ManyBody.Replica.LowDefect.RegionalLowDefectMass
 
 /-!
 # Coordinates for the same augmented replica energy
@@ -30,7 +33,18 @@ registers C and R share one dimension d because the source pairs them by
 the Bell vector `Bell_CR = d_*^{-1/2} ∑_{i ∈ E} |i⟩_C |i⟩_R` on a common
 label set E (07-comparators.tex, line 89); the general `augmentedDimensions`
 with independent auxiliary dimensions is not needed at this step.
+
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.Scan.augmentedReplicaConfigurationEquiv_subsystemPerm`,
+  `TNLean.PEPS.AreaLaw.Scan.replicaMetric_submatrix_augmentedReplicaConfigurationEquiv`: replica
+  metrics in the same augmented site coordinates.
+* `TNLean.PEPS.AreaLaw.Scan.copyMean_augmentOperator_eq_globalReplicaMeanHamiltonian`,
+  `TNLean.PEPS.AreaLaw.Scan.star_dotProduct_copyMean_augmentOperator`: the global replica energy in
+  the scanner coordinates.
 -/
+
+section AugmentedEnergyCoordinates
 
 noncomputable section
 open TensorPower Entropy
@@ -170,3 +184,187 @@ theorem copyMean_augmentOperator_eq_replicaHamiltonian_kronecker
   simp only [Prod.mk.injEq, funext_iff, Bool.forall_bool, forall_and]
 
 end TNLean.PEPS.AreaLaw.Scan
+
+end
+
+end AugmentedEnergyCoordinates
+
+section AugmentedReplicaMetricCoordinates
+
+/-!
+## Replica metrics in the same augmented site coordinates
+
+The physical sites, near auxiliary site C and far auxiliary site R have two
+descriptions. The coordinate equivalence used for the augmented energy also
+transports every subsystem permutation and replica metric. The metric weights
+retain the dimension of the whole one-copy system.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+`05-replicas.tex`, `replicas:w-definition`; `06-transport.tex`, lines 335--358;
+`07-comparators.tex`, lines 130--153, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+-/
+
+open TensorPower PermutationRepresentation Matrix
+
+noncomputable section
+
+namespace TNLean.PEPS.AreaLaw.Scan
+
+variable {V : Type} [DecidableEq V]
+
+local notation "ιO" q:max d:max =>
+  addedSiteSpace (addedSiteSpace (fun _ : V => Fin q) (Fin d)) (Fin d)
+local notation "ιS" q:max d:max =>
+  fun s : V ⊕ Bool => Fin (augmentedDimensions q (fun _ => d) s)
+
+/-- The same one-copy coordinate identification transports permutations of
+any subsystem. The near auxiliary site is C=false and the far auxiliary
+site is R=true. Source: area-law manuscript, `05-replicas.tex`, lines 24--27;
+`06-transport.tex`, lines 335--358; `07-comparators.tex`, lines 130--153,
+revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem augmentedReplicaConfigurationEquiv_subsystemPerm
+    (q d k : ℕ) (Q : Finset (Option (Option V)))
+    (σ : Equiv.Perm (Fin k)) (x : Config k (ιO q d)) :
+    augmentedReplicaConfigurationEquiv q d k
+        (subsystemPerm k (ιO q d) Q σ x) =
+      subsystemPerm k (ιS q d) (Q.image augmentedSiteEquiv) σ
+        (augmentedReplicaConfigurationEquiv q d k x) := by
+  classical
+  funext j s
+  simp only [augmentedReplicaConfigurationEquiv, Equiv.arrowCongr_apply,
+    Equiv.refl_symm, Function.comp_apply, Equiv.refl_apply, subsystemPerm_apply]
+  rcases s with v | (_ | _)
+  · simp only [augmentedConfigurationEquiv_apply_physical, subsystemPerm_apply,
+      (show Sum.inl v ∈ Q.image augmentedSiteEquiv ↔ some (some v) ∈ Q from
+        (augmentedSiteEquiv (V := V)).injective.mem_finset_image
+          (s := Q) (a := some (some v)))]
+    rfl
+  all_goals
+    simp only [augmentedConfigurationEquiv_apply_C, augmentedConfigurationEquiv_apply_R,
+      subsystemPerm_apply,
+      (show Sum.inr false ∈ Q.image augmentedSiteEquiv ↔ some none ∈ Q from
+        (augmentedSiteEquiv (V := V)).injective.mem_finset_image
+          (s := Q) (a := some none)),
+      (show Sum.inr true ∈ Q.image augmentedSiteEquiv ↔ none ∈ Q from
+        (augmentedSiteEquiv (V := V)).injective.mem_finset_image
+          (s := Q) (a := none))]
+    rfl
+
+variable [Fintype V]
+
+/-- Changing the names of the physical and auxiliary sites preserves the
+replica metric with its original full-system dimension. The scalar parameter
+is arbitrary, and no nonempty-coordinate assumption is required. Source:
+area-law manuscript, `05-replicas.tex`, `replicas:w-definition`;
+`06-transport.tex`, lines 335--358; `07-comparators.tex`, lines 130--153,
+revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem replicaMetric_submatrix_augmentedReplicaConfigurationEquiv
+    (q d k : ℕ) (t : ℝ) (Q : Finset (Option (Option V))) :
+    replicaMetric (ιS q d) t k (Q.image augmentedSiteEquiv) =
+      (replicaMetric (ιO q d) t k Q).submatrix
+        (augmentedReplicaConfigurationEquiv q d k).symm
+        (augmentedReplicaConfigurationEquiv q d k).symm := by
+  classical
+  -- The two one-copy descriptions have the same dimension `d`, so the common
+  -- label weight is unchanged.
+  have hdim : replicaDim (ιS q d) = replicaDim (ιO q d) :=
+    Fintype.card_congr (augmentedConfigurationEquiv q d).symm
+  have hw : replicaLabelWeight (ιS q d) t (k := k) =
+      replicaLabelWeight (ιO q d) t (k := k) := by
+    funext l
+    simp only [replicaLabelWeight]
+    rw [hdim]
+  -- The coordinate equivalence intertwines the two subsystem permutations, so
+  -- it reindexes every label projector.
+  have key : ∀ l : IrrepLabel (Equiv.Perm (Fin k)),
+      labelProj (subsystemPerm k (ιS q d) (Q.image augmentedSiteEquiv)) l =
+        reindex (augmentedReplicaConfigurationEquiv q d k)
+          (augmentedReplicaConfigurationEquiv q d k)
+          (labelProj (subsystemPerm k (ιO q d) Q) l) := fun l =>
+    labelProj_of_intertwine (augmentedReplicaConfigurationEquiv q d k)
+      (fun σ x => (augmentedReplicaConfigurationEquiv_subsystemPerm q d k Q σ x).symm) l
+  simp only [replicaMetric, labelObservable, hw]
+  ext i j
+  simp only [Matrix.submatrix_apply, Matrix.sum_apply, Matrix.smul_apply]
+  refine Finset.sum_congr rfl fun l _ => ?_
+  rw [key l, reindex_apply, Matrix.submatrix_apply]
+
+end TNLean.PEPS.AreaLaw.Scan
+
+end
+
+end AugmentedReplicaMetricCoordinates
+
+section GlobalReplicaEnergyCoordinates
+
+/-!
+## The global replica energy in the scanner coordinates
+
+The replica mean of the physical Hamiltonian, extended by the identities on C
+and R, is the same operator in the two descriptions of the augmented sites.
+The coordinate identification preserves the physical sites and the ordering
+of C and R. The operator identity and the exact complex energy expectation
+hold for arbitrary physical matrices and supplied vectors, including zero
+replicas and empty configuration spaces.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+`06-transport.tex`, lines 335–358, and `07-comparators.tex`,
+`comparator:defect-mass`, lines 421–438, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+-/
+
+noncomputable section
+
+open TensorPower TensorPower.ReplicaTransport
+open scoped Matrix
+
+namespace TNLean.PEPS.AreaLaw.Scan
+
+variable {V : Type} [Fintype V] [DecidableEq V]
+
+omit [DecidableEq V] in
+/-- The scanner energy is the original global replica mean under the same
+copywise configuration identification. The statement includes zero replicas
+and requires no positivity or gap assumption.
+Source: OpenAI area-law manuscript, `07-comparators.tex`,
+`comparator:defect-mass`, lines 421–438, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem copyMean_augmentOperator_eq_globalReplicaMeanHamiltonian
+    (q d k : ℕ) (H : Matrix (V → Fin q) (V → Fin q) ℂ) :
+    copyMean (augmentedDimensions (V := V) q (fun _ => d)) k
+        (augmentOperator q (fun _ => d) H) =
+      (Matrix.globalReplicaMeanHamiltonian (fun _ : V => Fin q) (Fin d) (Fin d) H k).submatrix
+        (augmentedReplicaConfigurationEquiv q d k).symm
+        (augmentedReplicaConfigurationEquiv q d k).symm := by
+  rw [copyMean_augmentOperator_eq_replicaHamiltonian_kronecker]
+  ext x y
+  simp only [Matrix.globalReplicaMeanHamiltonian, Matrix.submatrix_apply,
+    Matrix.kroneckerMap_apply, Matrix.smul_apply, smul_eq_mul, Complex.real_smul,
+    Complex.ofReal_inv, Complex.ofReal_natCast, augmentedSumReplicaCopiesEquiv,
+    Equiv.trans_apply]
+
+/-- The exact complex energy expectation of a supplied scanner vector equals
+that of the same vector in the successive physical,C,R coordinates.
+No normalization, nonzero-vector or spectral hypothesis is imposed.
+Source: OpenAI area-law manuscript, `07-comparators.tex`,
+`comparator:defect-mass`, lines 421–438, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem star_dotProduct_copyMean_augmentOperator
+    (q d k : ℕ) (H : Matrix (V → Fin q) (V → Fin q) ℂ)
+    (w : Config k (fun s => Fin (augmentedDimensions (V := V) q (fun _ => d) s)) → ℂ) :
+    star w ⬝ᵥ (copyMean (augmentedDimensions (V := V) q (fun _ => d)) k
+        (augmentOperator q (fun _ => d) H) *ᵥ w) =
+      star (w ∘ augmentedReplicaConfigurationEquiv q d k) ⬝ᵥ
+        (Matrix.globalReplicaMeanHamiltonian (fun _ : V => Fin q) (Fin d) (Fin d) H k *ᵥ
+          (w ∘ augmentedReplicaConfigurationEquiv q d k)) := by
+  simpa only [copyMean_augmentOperator_eq_globalReplicaMeanHamiltonian] using
+    Matrix.star_dotProduct_submatrix_equiv
+      (Matrix.globalReplicaMeanHamiltonian (fun _ : V => Fin q) (Fin d) (Fin d) H k)
+      (augmentedReplicaConfigurationEquiv q d k) w
+
+end TNLean.PEPS.AreaLaw.Scan
+
+end
+
+end GlobalReplicaEnergyCoordinates

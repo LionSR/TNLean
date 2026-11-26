@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Stationary.StationarySupportCompression
-import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalDensitySupport
+import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalFaithfulSupport
 import TNLean.MPS.Tensor.IsometricBondCompression
 
 /-!

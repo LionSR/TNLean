@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Injectivity.Flux.RegularActualCyclePhysicalPermutation
 import TNLean.PEPS.Injectivity.Flux.RegularActualCycleTransport
-import TNLean.PEPS.Injectivity.Flux.RegularActualTwoChordTransport
 import TNLean.PEPS.Injectivity.Flux.RegularCycleFluxMeasurement
 import TNLean.PEPS.Injectivity.Flux.RegularCycleGlobalFluxCreation
 import TNLean.PEPS.Injectivity.Flux.RegularCycleGlobalPermutation

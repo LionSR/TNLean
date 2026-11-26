@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Projection.TwoProjectionCompression
 import TNLean.MPS.Tensor.GroundSpace.ParentHamiltonian
-import TNLean.MPS.Tensor.GroundSpace.ExtendRight
+import TNLean.MPS.Tensor.GroundSpace.SuffixWindow
 
 /-!
 # Open-chain ground-projector geometry

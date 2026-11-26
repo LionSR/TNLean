@@ -8,12 +8,9 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.ParentHamiltonian.Periodic
 
-import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyGap
-import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyGroundStates
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyOpenParentGap
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyQuasiLocalGap
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicFamilyInteractionCriterion
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicOpenParentGap
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicSectorExpectations
-import TNLean.MPS.ParentHamiltonian.Periodic.PhysicalResidualCoverLimit

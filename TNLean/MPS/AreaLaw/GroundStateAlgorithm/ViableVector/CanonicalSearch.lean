@@ -32,7 +32,7 @@ import TNLean.MPS.AreaLaw.GroundStateAlgorithm.RationalTensor.RationalViableFami
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.RationalTensor.SpanEncodings
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.RationalTensor.TensorParameters
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.RationalTensor.ViabilityStability
-import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.LeadingPower
+import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.LeadingResidual
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.BoundaryState.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.ViableVector.RationalSearch

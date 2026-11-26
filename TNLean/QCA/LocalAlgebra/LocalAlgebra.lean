@@ -7,6 +7,7 @@ import QICLean.Analysis.Norm.CStarMatrixKronecker
 import QICLean.ManyBody.Sites.Subregion
 import Mathlib.Analysis.CStarAlgebra.Hom
 import Mathlib.Data.Fintype.BigOperators
+import Lean.Elab.Tactic.Omega
 
 /-!
 # Finite-region observable algebras for one-dimensional spin chains
@@ -36,12 +37,15 @@ automaton is defined here.
 * `SpinChain.localInclusion_isometry` — operator-norm isometry.
 * `SpinChain.localInclusion_refl` — the identity inclusion.
 * `SpinChain.localInclusion_trans` — composition of inclusions.
+* `SpinChain.consecutivePairConfigEquiv`: ordered physical coordinates of consecutive pairs.
 
 ## References
 
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1703.09188, Appendix, lines 2285--2300.
 * Schumacher--Werner, quant-ph/0405174, Definition 1.
 -/
+
+section LocalAlgebra
 
 open scoped ComplexOrder
 
@@ -270,3 +274,43 @@ lemma localInclusion_trans {Λ Γ Δ : Finset ℤ} (hΛΓ : Λ ⊆ Γ) (hΓΔ : 
 end Inclusion
 
 end SpinChain
+
+end LocalAlgebra
+
+section ConsecutivePairCoordinates
+
+/-!
+## Ordered physical coordinates of consecutive pairs
+
+The two physical coordinates occur in increasing site order. This is
+the common finite-coordinate identification for the two-cell matrix
+algebras in GNVW, arXiv:0910.3675v2, RR2x, lines 1251–1266, and the
+physical input/output spaces of Schumacher–Werner bruleU/bruleV,
+quant-ph/0405174, lines 980–1001.
+-/
+
+namespace SpinChain
+
+/-- The ordered coordinates at sites a and a+1 identify the physical
+pair with two one-site coordinate spaces, in that order.
+Source: GNVW RR2x, lines 1251–1266; Schumacher–Werner bruleU/bruleV. -/
+def consecutivePairConfigEquiv (b : ℕ) (a : ℤ) :
+    (Fin b × Fin b) ≃ Config b ({a, a + 1} : Finset ℤ) where
+  toFun c x := if x.val = a then c.1 else c.2
+  invFun f := (f ⟨a, by simp⟩, f ⟨a + 1, by simp⟩)
+  left_inv c := by
+    apply Prod.ext
+    · exact ite_eq_left rfl
+    · exact ite_eq_right (by omega : a + 1 ≠ a)
+  right_inv f := by
+    funext x
+    rcases x with ⟨x, hx⟩
+    have hx' : x = a ∨ x = a + 1 := by
+      simpa only [Finset.mem_insert, Finset.mem_singleton] using hx
+    rcases hx' with rfl | rfl
+    · exact ite_eq_left rfl
+    · exact ite_eq_right (by omega : a + 1 ≠ a)
+
+end SpinChain
+
+end ConsecutivePairCoordinates

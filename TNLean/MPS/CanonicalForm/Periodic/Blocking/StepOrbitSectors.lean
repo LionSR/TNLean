@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Combinatorics.FinStepOrbit
 import QICLean.Algebra.Hermitian.OrthogonalProjection
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommutingProj
+import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.FixedAdjoint
 import TNLean.MPS.Tensor.Defs
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.SectorLift
 

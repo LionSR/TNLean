@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFans
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LocalLayers
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.AdjacentScales
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
@@ -22,10 +22,17 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, lines 299–306 and 352–356.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
+
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_coordinates`,
+  `TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_are_corners`: endpoints of whole
+  dyadic-cell sides.
 -/
 
-
 namespace TNLean.PEPS.AreaLaw.Geometry
+
+section SideSubdivision
 
 /-- A corner of the actual translated dyadic cell, with each endpoint chosen by
 a binary coordinate. Source: area-law Section 11, lines 299–306 and 352–356. -/
@@ -156,5 +163,66 @@ theorem fineLayer_corner_on_side (o : ℝ × ℝ) (k h : ℕ)
   have hscale : fineScaleIndex k ≤ fineScaleIndex h + 1 := by omega
   exact halfMesh_on_side o (fineScaleIndex k) z s x
     (dyadicCellCorner_mem_halfMesh o (fineScaleIndex k) (fineScaleIndex h) w ε hscale) hside
+
+end SideSubdivision
+
+section SideEndpoints
+
+/-!
+## Endpoints of whole dyadic-cell sides
+
+The endpoints of the four whole fan sides have the ordinary translated
+square coordinates. Each endpoint is an actual binary corner of that cell.
+These identities hold at every natural scale and every integer cell index.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, lines 299–306.
+Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Independently proved from the manuscript; no upstream Lean proof text is reused.
+-/
+
+/-- The exact oriented endpoint coordinates of each whole dyadic-cell side.
+Source: area-law Section 11, lines 299–306. -/
+theorem cellFan_unsplit_endpoints_coordinates (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) (s : Fin 4) :
+    (cellFanStart o ℓ z (fun _ ↦ false) ⟨s, 0⟩,
+      cellFanEnd o ℓ z (fun _ ↦ false) ⟨s, 0⟩) =
+    match s.val with
+    | 0 => ((o.1 + 2 ^ ℓ * (z.1 + 1), o.2 + 2 ^ ℓ * z.2),
+        (o.1 + 2 ^ ℓ * (z.1 + 1), o.2 + 2 ^ ℓ * (z.2 + 1)))
+    | 1 => ((o.1 + 2 ^ ℓ * (z.1 + 1), o.2 + 2 ^ ℓ * (z.2 + 1)),
+        (o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * (z.2 + 1)))
+    | 2 => ((o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * (z.2 + 1)),
+        (o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * z.2))
+    | _ => ((o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * z.2),
+        (o.1 + 2 ^ ℓ * (z.1 + 1), o.2 + 2 ^ ℓ * z.2)) := by
+  fin_cases s <;> apply Prod.ext <;> apply Prod.ext <;>
+    simp [cellFanStart_eq, cellFanEnd_eq, cellFanCenter, cellFanSideVector] <;> ring
+
+/-- The two endpoints of a whole fan side are actual binary corners of the
+same dyadic cell. Source: area-law Section 11, lines 299–306. -/
+theorem cellFan_unsplit_endpoints_are_corners (o : ℝ × ℝ) (ℓ : ℕ)
+    (z : ℤ × ℤ) (s : Fin 4) :
+    ∃ ε η : Fin 2 × Fin 2,
+      cellFanStart o ℓ z (fun _ ↦ false) ⟨s, 0⟩ = dyadicCellCorner o ℓ z ε ∧
+      cellFanEnd o ℓ z (fun _ ↦ false) ⟨s, 0⟩ = dyadicCellCorner o ℓ z η := by
+  let ε : Fin 2 × Fin 2 := match s.val with
+    | 0 => (1, 0)
+    | 1 => (1, 1)
+    | 2 => (0, 1)
+    | _ => (0, 0)
+  let η : Fin 2 × Fin 2 := match s.val with
+    | 0 => (1, 1)
+    | 1 => (0, 1)
+    | 2 => (0, 0)
+    | _ => (1, 0)
+  refine ⟨ε, η, ?_⟩
+  have h := cellFan_unsplit_endpoints_coordinates o ℓ z s
+  have ha := congrArg Prod.fst h
+  have hb := congrArg Prod.snd h
+  dsimp only at ha hb
+  fin_cases s <;> norm_num [ε, η, dyadicCellCorner] at ha hb ⊢
+  all_goals exact ⟨ha, hb⟩
+
+end SideEndpoints
 
 end TNLean.PEPS.AreaLaw.Geometry

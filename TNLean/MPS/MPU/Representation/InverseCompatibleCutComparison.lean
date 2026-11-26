@@ -7,7 +7,7 @@ import QICLean.Analysis.Isometry.UnitaryKronecker
 import TNLean.MPS.MPU.Representation.InverseCompatibleFirstCut
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import TNLean.MPS.Operator.Unitary.SourceUV
-import TNLean.MPS.MPU.Simple.SimpleTensorEquivalence
+import TNLean.MPS.MPU.Simple.SourceVCompleteNetwork
 
 /-!
 # Inverse comparison for the first inverse-compatible cut

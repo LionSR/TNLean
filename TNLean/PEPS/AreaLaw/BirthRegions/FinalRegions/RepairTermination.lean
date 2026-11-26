@@ -7,7 +7,6 @@ import Mathlib.Data.Set.Finite.Lattice
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairDescendantCounts
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairCurrentRegions
-import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairTerminalPrefixSites
 
 /-!
 # A common empty generation of the repair

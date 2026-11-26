@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Entropy.RegionEntropy
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RegionalStates
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
 
 /-!
 # The entropy chain rule averaged over rotated color orders

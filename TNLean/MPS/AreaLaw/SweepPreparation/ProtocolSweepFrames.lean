@@ -7,7 +7,7 @@ import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolSweepGeometry
 import TNLean.MPS.AreaLaw.SweepPreparation.BandDissolution
-import TNLean.MPS.AreaLaw.Entropy.LogarithmicSeparation
+import TNLean.MPS.AreaLaw.Entropy.AreaLaw
 import Mathlib.Data.Nat.Dist
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 

@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Examples.Weyl
 
 import TNLean.MPS.Examples.Weyl.Charges
-import TNLean.MPS.Examples.Weyl.CyclicBoundaryClosure
 import TNLean.MPS.Examples.Weyl.CyclicChargeDetection
 import TNLean.MPS.Examples.Weyl.CyclicPhases
 import TNLean.MPS.Examples.Weyl.LetterRelations
@@ -17,7 +16,6 @@ import TNLean.MPS.Examples.Weyl.LocalSpace
 import TNLean.MPS.Examples.Weyl.PeriodicKernel
 import TNLean.MPS.Examples.Weyl.SectorModel
 import TNLean.MPS.Examples.Weyl.SevenCyclicObstruction
-import TNLean.MPS.Examples.Weyl.ShortIntersections
 import TNLean.MPS.Examples.Weyl.ShortOverlapBridges
 import TNLean.MPS.Examples.Weyl.WeylSpans
 import TNLean.MPS.Examples.Weyl.WeylWords

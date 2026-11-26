@@ -14,7 +14,6 @@ import TNLean.PEPS.Injectivity.SemiRegular.RegularFourier
 import TNLean.PEPS.Injectivity.SemiRegular.RegularFourierCommutativity
 import TNLean.PEPS.Injectivity.SemiRegular.RegularFourierMatrix
 import TNLean.PEPS.Injectivity.SemiRegular.RegularMinimalRepresentation
-import TNLean.PEPS.Injectivity.SemiRegular.RegularOrderSixDimension
 import TNLean.PEPS.Injectivity.SemiRegular.SemiRegularBondDimension
 import TNLean.PEPS.Injectivity.SemiRegular.SemiRegularMatrixBlocks
 import TNLean.PEPS.Injectivity.SemiRegular.SemiRegularRegularComparison

@@ -21,7 +21,6 @@ import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorBondCommutativity
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorBondTransport
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorBondTwoSite
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorChainDecomposition
-import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorClosureBlocks
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorClosureCoordinates
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorClosureGlobal
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorClosureThree

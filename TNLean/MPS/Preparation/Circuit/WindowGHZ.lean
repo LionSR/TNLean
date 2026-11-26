@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Circuit.Gate.UnitaryExtension
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
-import TNLean.MPS.Preparation.Circuit.ConfigurationLayers
+import TNLean.MPS.Preparation.Circuit.BlockStatePreparation
 import QICLean.ManyBody.Sites.ConfigurationMap
 import QICLean.Circuit.Model.Measurement
 import QICLean.Circuit.Protocol.Teleportation.Hop

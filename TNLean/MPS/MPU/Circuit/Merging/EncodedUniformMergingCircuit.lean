@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.MPU.Circuit.Merging.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.Circuit.Merging.SuccessAttenuationCircuit
-import TNLean.MPS.MPU.Circuit.Merging.ExactCleanAmplificationCircuit
 import TNLean.MPS.MPU.Circuit.Merging.SupportedAmplification
 import QICLean.Circuit.Model.UnitaryPlacement
 import QICLean.Circuit.Compile.ChainPlacement

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorCoarseGraining
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorOmegaPreparation
-import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorClosureBlocks
+import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorRefinementAction
 
 /-!
 # Action of the physical-sector coarse-graining maps

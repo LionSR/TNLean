@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Circuit.Party.Compression.PartialExpansion.CorrectedCost
-import TNLean.Network.DistributedContraction.PhysicalFirstLinkPolynomial
+import TNLean.Network.DistributedContraction.SourceAlphabetPolynomial
 import TNLean.Network.DistributedContraction.SourceNetworkDimensions
 
 /-!

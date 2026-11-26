@@ -5,13 +5,13 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryGram
 import QICLean.Analysis.Projection.ProjectionProductDefect
-import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowProjectorCancellation
+import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowMixedGramDecay
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowLeftSectorSum
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowRightSectorSum
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowFullSectorSum
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowCrossOverlap
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicPrimitiveGroundSpace
-import TNLean.MPS.CanonicalForm.BNT.GaugePhaseSeparationTransport
+import TNLean.MPS.CanonicalForm.BNT.Separation
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowLeftGroundSpace
 
 /-!

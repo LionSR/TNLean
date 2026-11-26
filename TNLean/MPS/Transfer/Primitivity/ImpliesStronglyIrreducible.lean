@@ -9,8 +9,9 @@ import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
 import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Channel.KrausMap.KrausMap
 import QICLean.Kraus.Transfer
-import TNLean.MPS.Transfer.Primitivity.EasyDirections
 import TNLean.MPS.Tensor
+import QICLean.Kraus.Wielandt.Primitivity.EasyDirections
+import TNLean.MPS.Transfer.Primitivity.Definitions
 
 /-!
 # Spectral consequences of normality for the transfer map
@@ -36,12 +37,82 @@ clause (b). The proposition itself is `MPSTensor.primitivity_tfae` in
   left-canonical tensor has peripheral spectrum `{1}`.
 * `MPSTensor.exists_posDef_fixedPoint_of_isNormal`: it has a positive-definite
   fixed matrix.
+* `MPSTensor.exists_vectorSpreadSpan_eq_top_of_isNormal`, `MPSTensor.qIndex_le_iIndex`: Proposition
+  3, direction (b) to (a), and the index comparison.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
 open Matrix MPSTensor Module
 
 namespace MPSTensor
+
+section EasyDirections
+
+/-!
+## Proposition 3, direction (b) to (a), and the index comparison
+
+A normal tensor spreads every nonzero vector to the whole space at one fixed
+length, and its primitivity index is at most its full-Kraus-rank index. Neither
+statement needs a normalization of the tensor.
+
+### Main results
+
+* `MPSTensor.exists_vectorSpreadSpan_eq_top_of_isNormal`: Proposition 3,
+  direction (b) to (a), of arXiv:0909.5347.
+* `MPSTensor.qIndex_le_iIndex`: `q(E_A) ≤ i(A)` for a normal tensor.
+
+### References
+
+- Sanz, Pérez-García, Wolf, Cirac, arXiv:0909.5347, Propositions 1 and 3.
+-/
+
+variable {d D : ℕ}
+
+/-! ## (b)→(a): a full word span spreads every vector -/
+
+/-- **Proposition 3, direction (b)⟹(a)**: if `S_N(A) = M_D(ℂ)` for a positive
+`N`, then `H_N(A,φ) = ℂ^D` for every nonzero `φ`.
+
+The hypothesis is clause (b) of the proposition, which is `Kraus.IsNormal A` by
+definition; the conclusion is clause (a), written out.
+
+Paper: "(b) ⟹ (a)" in Proposition 3, arXiv:0909.5347. -/
+theorem exists_vectorSpreadSpan_eq_top_of_isNormal
+    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
+    ∃ q : ℕ, 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 → Kraus.vectorSpreadSpan A φ q = ⊤ := by
+  obtain ⟨N, hNpos, hN⟩ := hA
+  exact ⟨N, hNpos, fun φ hφ => Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hN φ hφ⟩
+
+/-! ## Index bound: q(E_A) ≤ i(A) -/
+
+/-- **q(E_A) ≤ i(A)**: the primitivity index is at most the full-Kraus-rank index,
+provided the tensor is normal.
+
+This is the normal case of "q(E_A) ≤ i(A)" (arXiv:0909.5347, Proposition 1);
+the comparison for every channel is `qIndex_le_iIndex_of_tracePreserving`.
+
+The proof uses `Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top`: since
+`Kraus.wordSpan A (iIndex A) = ⊤`, we have `Kraus.vectorSpreadSpan A φ (iIndex A) = ⊤`
+for all nonzero φ, so `qIndex A ≤ iIndex A`. -/
+theorem qIndex_le_iIndex (A : MPSTensor d D)
+    (hA : Kraus.IsNormal A) :
+    qIndex A ≤ iIndex A := by
+  -- iIndex A lies in the positive full-span set since hA makes it nonempty.
+  have hne : {n : ℕ | 0 < n ∧ Kraus.wordSpan A n = ⊤}.Nonempty := by
+    obtain ⟨N, hNpos, hN⟩ := hA
+    exact ⟨N, hNpos, hN⟩
+  have hi : Kraus.wordSpan A (iIndex A) = ⊤ := (Nat.sInf_mem hne).2
+  -- iIndex A witnesses that the qIndex-defining set is nonempty
+  have hq_mem : iIndex A ∈ {q : ℕ | 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 →
+      Kraus.vectorSpreadSpan A φ q = ⊤} := by
+    exact ⟨(Nat.sInf_mem hne).1,
+      fun φ hφ => Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top A hi φ hφ⟩
+  -- qIndex A = sInf of a set containing iIndex A, so qIndex A ≤ iIndex A
+  exact Nat.sInf_le hq_mem
+
+end EasyDirections
+
+section ImpliesStronglyIrreducible
 
 variable {d D : ℕ}
 
@@ -118,5 +189,7 @@ theorem exists_posDef_fixedPoint_of_isNormal [NeZero D]
   exact ⟨ρ, hρ_pd, by simpa only using hρ_fix⟩
 
 end Construction
+
+end ImpliesStronglyIrreducible
 
 end MPSTensor

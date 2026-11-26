@@ -7,7 +7,7 @@ import TNLean.MPS.MPDO.MPOAction.TriangularBoundaryDecomposition
 import TNLean.MPS.Operator.Fusion.BoundaryZipper
 import TNLean.MPS.Operator.BoundaryActionTreeEntries
 import TNLean.MPS.FundamentalTheorem.Zipper.BoundaryActionLMatrix
-import TNLean.MPS.Operator.Fusion.CompleteZipperFusionTrace
+import TNLean.MPS.Operator.Fusion.CompleteZipperFusion
 import TNLean.MPS.Operator.Fusion.BoundaryFusionFMatrix
 import TNLean.MPS.Operator.Fusion.CompleteZipperFusionMixedOrientation
 import TNLean.MPS.MPDO.MPOAction.TriangularBoundaryBlocked

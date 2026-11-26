@@ -7,9 +7,10 @@ import QICLean.Analysis.Isometry.UnitaryEntrywiseConjugation
 import TNLean.MPS.Tensor.BondReindex
 import TNLean.MPS.Transfer.ReductionExistence
 import TNLean.MPS.Transfer.Irreducible.UnitaryGauge
-import TNLean.MPS.MPU.Representation.DaggerInverse
 import TNLean.MPS.MPU.CanonicalForm.PhysicalAdjointCanonicalForm
 import TNLean.MPS.Tensor.Gauge.GaugeUniqueness
+import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
+import TNLean.MPS.Operator.Product.PhysicalAdjoint
 
 /-!
 # Virtual gauges relating physical adjoints and group inverses
@@ -28,11 +29,87 @@ where the star on \(T_{g^{-1}}\) is entrywise complex conjugation.
 
 Source: arXiv:2502.20257, equations `eq:defT` and `eq:intro_sigma`, lines
 1552--1562.
+
+It also contains the following results.
+
+* `MPOTensor.GroupFamily.IsRepresentation.mpo_physicalAdjointTensor_eq_inv`,
+  `MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_physicalAdjointTensor_inv`: physical adjoints
+  and inverses in MPU representations.
 -/
 
 open scoped Matrix
 
 namespace MPOTensor.GroupFamily
+
+section DaggerInverse
+
+/-!
+## Physical adjoints and inverses in MPU representations
+
+This file identifies the physical adjoint of a represented MPU tensor with the
+tensor representing the inverse group element at the periodic-operator and
+positive-length matrix product vector levels.
+
+### Main results
+
+* `MPOTensor.GroupFamily.IsRepresentation.mpo_physicalAdjointTensor_eq_inv`:
+  the physical adjoint for `g` generates the operator represented by `g⁻¹`.
+* `MPOTensor.GroupFamily.IsRepresentation.sameMPV₂Pos_physicalAdjointTensor_inv`:
+  the corresponding underlying MPS tensors generate the same positive-length
+  matrix product vectors.
+
+Source: arXiv:2502.20257, line 1552.
+-/
+
+universe u
+
+variable {G : Type u} {d : ℕ}
+
+/-- The physical adjoint of the tensor representing `g` generates the operator
+represented by `g⁻¹` on every nonempty chain.
+
+This is the operator-level assertion preceding the virtual-gauge construction
+in arXiv:2502.20257, line 1552. -/
+theorem IsRepresentation.mpo_physicalAdjointTensor_eq_inv [Group G]
+    (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation)
+    (g : G) (N : ℕ) (hN : 0 < N) :
+    MPOTensor.mpo (MPOTensor.physicalAdjointTensor (F.tensor g)) N =
+      MPOTensor.mpo (F.tensor g⁻¹) N := by
+  have hInvMul :
+      MPOTensor.mpo (F.tensor g⁻¹) N * MPOTensor.mpo (F.tensor g) N = 1 := by
+    rw [hF.operator_mul g⁻¹ g N hN, inv_mul_cancel, hF.operator_one N hN]
+  have hUnit :
+      MPOTensor.mpo (F.tensor g) N * star (MPOTensor.mpo (F.tensor g) N) = 1 :=
+    Matrix.mem_unitaryGroup_iff.mp (hF.isMPUPos g N hN)
+  have hInvEqStar :
+      MPOTensor.mpo (F.tensor g⁻¹) N = star (MPOTensor.mpo (F.tensor g) N) :=
+    left_inv_eq_right_inv hInvMul hUnit
+  ext σ τ
+  rw [MPOTensor.mpo_physicalAdjointTensor]
+  exact (congrFun (congrFun hInvEqStar σ) τ).symm
+
+/-- The physical-adjoint tensor for `g` and the tensor for `g⁻¹` generate the
+same matrix product vectors at every positive length.
+
+Source: arXiv:2502.20257, line 1552. -/
+theorem IsRepresentation.sameMPV₂Pos_physicalAdjointTensor_inv [Group G]
+    (F : MPOTensor.GroupFamily G d) (hF : F.IsRepresentation) (g : G) :
+    MPSTensor.SameMPV₂Pos
+      (MPOTensor.physicalAdjointTensor (F.tensor g)).toMPSTensor
+      (F.tensor g⁻¹).toMPSTensor := by
+  intro N hN ρ
+  let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
+  let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat
+  have hρ : (fun n ↦ finProdFinEquiv (σ n, τ n)) = ρ := by
+    funext n
+    exact finProdFinEquiv.apply_symm_apply (ρ n)
+  rw [← hρ, MPSTensor.mpv_toMPSTensor_pairConfig,
+    MPSTensor.mpv_toMPSTensor_pairConfig,
+    hF.mpo_physicalAdjointTensor_eq_inv F g N hN]
+
+end DaggerInverse
+
+section DaggerInverseGauge
 
 universe u
 
@@ -677,5 +754,7 @@ theorem IsRepresentation.daggerInverseScalar_eq_one_or_neg_one_of_inv_eq
   apply Matrix.scalar_eq_one_or_neg_one_of_mul_map_star_self_eq_smul_one
     (hF.daggerInverseGauge F hcanonical g)
   exact hF.daggerInverseGauge_mul_mapStar_self_eq_smul_one_of_inv_eq F hcanonical g hg
+
+end DaggerInverseGauge
 
 end MPOTensor.GroupFamily

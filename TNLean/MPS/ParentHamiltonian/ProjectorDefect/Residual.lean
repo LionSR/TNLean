@@ -18,6 +18,5 @@ import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowLeftG
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowLeftSectorSum
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowMixedGramDecay
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowOverlapFactors
-import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowProjectorCancellation
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowRightGroundSpace
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowRightSectorSum

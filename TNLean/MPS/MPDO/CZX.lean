@@ -19,7 +19,6 @@ import TNLean.MPS.MPDO.CZX.CZXGHZAction
 import TNLean.MPS.MPDO.CZX.CZXGaugedMPS
 import TNLean.MPS.MPDO.CZX.CZXGaussCircuitTuple
 import TNLean.MPS.MPDO.CZX.CZXGaussInvariantSubspace
-import TNLean.MPS.MPDO.CZX.CZXMovementCoordinates
 import TNLean.MPS.MPDO.CZX.CZXPermutedBlocks
 import TNLean.MPS.MPDO.CZX.CZXSecondTupleCertificate
 import TNLean.MPS.MPDO.CZX.CZXSourceFactors

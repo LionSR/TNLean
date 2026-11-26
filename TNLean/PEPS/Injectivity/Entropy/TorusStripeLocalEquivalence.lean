@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.Entropy.TorusSimplyConnectedPhysicalDensity
-import TNLean.PEPS.Graph.Cell.TorusRectangleRealization
+import TNLean.PEPS.Graph.Cell.TorusRegionRealization
 
 /-!
 # Unitary equivalence on two width-one torus stripes

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.GroundSpace.BoundaryClosingStripping
 import TNLean.MPS.Tensor.GroundSpace.CyclicTranslation
-import TNLean.MPS.Tensor.GroundSpace.ExtendRight
+import TNLean.MPS.Tensor.GroundSpace.SuffixWindow
 import TNLean.MPS.Tensor.GroundSpace.Nonvanishing
 import TNLean.MPS.Tensor.GroundSpace.PeriodicBoundaryReduction
 import TNLean.MPS.Tensor.GroundSpace.RestrictTransport

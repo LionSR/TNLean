@@ -7,10 +7,9 @@ import TNLean.MPS.Tensor.Defs
 import TNLean.MPS.ParentHamiltonian.Stationary.FaithfulPeriodicGroundSpace
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyQuasiLocalGap
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyOpenParentGap
-import TNLean.MPS.ParentHamiltonian.Interaction.CanonicalGroundSpaceTransport
+import TNLean.MPS.ParentHamiltonian.Interaction.PrimitiveFamilyIntersection
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalParentGroundStateFace
-import TNLean.MPS.ParentHamiltonian.Interaction.OpenInteraction
-import TNLean.MPS.ParentHamiltonian.Interaction.OpenInteractionRangeComparison
+import TNLean.MPS.ParentHamiltonian.Interaction.ParentInteractionGap
 
 /-!
 # Infinite-volume gaps for faithful normalized generators

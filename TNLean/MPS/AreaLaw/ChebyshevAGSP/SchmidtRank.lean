@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank
 
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.OneMarkerRank
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.PolynomialRank
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.SingleWindowPolynomialRank
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.WindowFrequencyRank

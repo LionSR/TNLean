@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent
 
-import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapBinaryEntropyCost
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapComparisonBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapIterateBound
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapParameters
@@ -16,14 +15,11 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapPrincipalEnergyBou
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapReplicaAbsorption
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapRoundBound
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapRoundedClearance
-import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapSelectedEnergy
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapTypicalBudget
-import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BoxClearanceComparison
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BoxEntropySupremum
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.ExponentBootstrap
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.PhysicalBoxBootstrap
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.PhysicalBoxStepBound
-import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.PhysicalSafeBox
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.RectangleBootstrapGeometry
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.RectangleSourceEntropy
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.SourceBootstrapEntropy

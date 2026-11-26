@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.SupportCounting
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Sites.Config
+import QICLean.ManyBody.Sites.RegionState
+import QICLean.ManyBody.Hamiltonian.Models
+import QICLean.ManyBody.Sites.Lattice.Plane
+import QICLean.ManyBody.Sites.PlacedConfiguration
 
 /-!
 # Vertex-boundary consequences of an edge-boundary area law
@@ -15,6 +19,10 @@ inner-boundary and endpoint-boundary formulations, with factors four and two.
 The uniform consequence keeps the constant independent of the domain,
 interaction family, ground vector, and cut. The edge-boundary area law is
 an explicit hypothesis; this module does not prove that theorem.
+
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.UniformAreaLaw`: the uniform finite-domain area-law statement.
 
 ## References
 
@@ -27,8 +35,54 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped Matrix.Norms.L2Operator
-
 open ManyBody (IsGapped groundSpace PlaneInteraction)
+
+section TheoremStatements
+
+/-!
+## The uniform finite-domain area-law statement
+
+The constant is chosen before the finite domain, interaction family, ground
+vector, and cut. Regional entropy is the von Neumann entropy of the partial
+trace, `ManyBody.regionEntropy`. The target is a proposition; this
+module does not assert that the area law has been proved.
+
+### Main definitions
+
+* `UniformAreaLaw`: the complete arbitrary-domain, finite-range target.
+
+### References
+
+* OpenAI, *A two-dimensional area law from a global spectral gap*,
+  September 24, 2026, Theorem 1.1 and `eq:area-law`.
+  Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
+-/
+
+open ManyBody (planeDomainGraph edgeBoundary)
+
+namespace TNLean.PEPS.AreaLaw
+
+/-- The uniform area-law target, with its constant chosen before all physical
+instances. Source: area-law Theorem 1.1 (`thm:area`, `eq:area-law`).
+This proposition is a theorem statement, not a proof of that theorem. -/
+def UniformAreaLaw : Prop :=
+  ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
+    ∃ C : ℝ, 0 ≤ C ∧
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+          (∀ X, ‖h.term X‖ ≤ J) →
+        ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (↥Λ → Fin q),
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+            ∀ A : Finset ↥Λ,
+              ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
+
+end TNLean.PEPS.AreaLaw
+
+end TheoremStatements
+
+section VertexBoundaryCorollaries
 
 open ManyBody (planeDomainGraph edgeBoundary innerBoundary endpointBoundary)
 
@@ -95,3 +149,5 @@ theorem UniformAreaLaw.vertex_boundary_bounds (h : UniformAreaLaw) :
       regionEntropy_le_two_mul_endpointBoundary_card hC (harea Λ H hH hHJ E₀ Ω hΩ hgap hspan A)⟩⟩
 
 end TNLean.PEPS.AreaLaw
+
+end VertexBoundaryCorollaries

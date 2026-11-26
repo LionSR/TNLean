@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.IdentityPlusZString.NormalizedRFP
-import TNLean.MPS.Examples.IdentityPlusZString.FourCycleObstruction
+import TNLean.MPS.Examples.IdentityPlusZString.FourCycleEntropy
 import TNLean.MPS.MPDO.Entropy.AreaLawScaling
 import TNLean.MPS.Operator.DensityOperator.RFPViaTS
 

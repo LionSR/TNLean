@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixComparison
 import TNLean.PEPS.AreaLaw.Collar.Scales.Budgets
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RegionalEntropyContinuity
+import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetEntropyTransfer
 
 /-!
 # Entropy transfer on positive-depth prefixes

@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableInsertion
 import TNLean.MPS.ParentHamiltonian.BulkObservable.GroundSpaceCompressionNorm
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GramInverseConvergence
 import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryCrossObservableCompression
-import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceSectorCompressionDecay
+import TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockProjectorSum
 
 /-!
 # Scalar compression of an interior observable to a primitive MPS ground space

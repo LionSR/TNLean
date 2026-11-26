@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairStage
 import Mathlib.Data.Set.Finite.Lattice
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRuns
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionInteriors
+import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegions
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairDescendantCounts
 
 /-!

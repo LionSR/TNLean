@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Gap.PrimitiveBlockGap
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanSeparation
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanNormalization
 import TNLean.MPS.CanonicalForm.BlockSeparation.BlockWordSpanPropagation
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockOpenGroundSpace

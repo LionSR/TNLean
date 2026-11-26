@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.ParentHamiltonian.BoundaryParentCommutation
 import TNLean.MPS.Operator.Boundary.BoundaryCut
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.MatrixRepresentation
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import TNLean.MPS.Operator.Boundary.BlockBoundarySelector
 import TNLean.MPS.Operator.Boundary.DualRepresentationAdjointBoundary

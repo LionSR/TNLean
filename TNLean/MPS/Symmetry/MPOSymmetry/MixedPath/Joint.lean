@@ -28,6 +28,5 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointProject
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointReducingSectors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointRightPeriodicGap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointSectors
-import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointSpectatorGap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointSupport
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Joint.JointMixedEndpointSwap

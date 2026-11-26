@@ -3,11 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Injectivity.Multiplicity.GraphGIsometricSupportTransport
+import TNLean.PEPS.Injectivity.Multiplicity.GraphInsertedPhysicalSupport
 import TNLean.PEPS.ParentHamiltonian.Reblocking.RegularGraphSurplusSite
 import TNLean.PEPS.ParentHamiltonian.Reblocking.RegularTwoByTwoNonzero
 import TNLean.PEPS.Injectivity.Boundary.PhysicalStateNormalization
-import TNLean.PEPS.Injectivity.Multiplicity.GraphInsertedPhysicalSupport
 import TNLean.PEPS.ParentHamiltonian.Reblocking.RegularGraphInsertedSurplus
 
 /-!

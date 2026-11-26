@@ -20,7 +20,6 @@ import TNLean.PEPS.AreaLaw.Collar
 import TNLean.PEPS.AreaLaw.CollarEntropy
 import TNLean.PEPS.AreaLaw.FrustrationFreeAmplification
 import TNLean.PEPS.AreaLaw.FrustrationFreeAreaLaw
-import TNLean.PEPS.AreaLaw.GraphNeighborhoodCutClearance
 import TNLean.PEPS.AreaLaw.Operators
 import TNLean.PEPS.AreaLaw.OriginalNestedPatchEntropy
 import TNLean.PEPS.AreaLaw.Polygons

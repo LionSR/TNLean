@@ -13,7 +13,6 @@ import TNLean.MPS.Tensor.VaryingBond.CutCoefficientRank
 import TNLean.MPS.Tensor.VaryingBond.CutRank
 import TNLean.MPS.Tensor.VaryingBond.IsometricChain
 import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentation
-import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationBases
 import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationCuts
 import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationFactorization
 import TNLean.MPS.Tensor.VaryingBond.MinimalCutRepresentationIntervals
@@ -23,7 +22,6 @@ import TNLean.MPS.Tensor.VaryingBond.OpenMPSRank
 import TNLean.MPS.Tensor.VaryingBond.PeriodicBondPadding
 import TNLean.MPS.Tensor.VaryingBond.RectangularIntervals
 import TNLean.MPS.Tensor.VaryingBond.SequentialTruncation
-import TNLean.MPS.Tensor.VaryingBond.SiteIndependent
 import TNLean.MPS.Tensor.VaryingBond.SnakeGridParameters
 import TNLean.MPS.Tensor.VaryingBond.Staircase
 import TNLean.MPS.Tensor.VaryingBond.VaryingBondChain

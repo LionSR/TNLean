@@ -15,5 +15,4 @@ import TNLean.MPS.ParentHamiltonian.Commuting.KroneckerTransport
 import TNLean.MPS.ParentHamiltonian.Commuting.LocalSupport
 import TNLean.MPS.ParentHamiltonian.Commuting.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Commuting.OverlapReduction
-import TNLean.MPS.ParentHamiltonian.Commuting.PairLiftCoordinates
 import TNLean.MPS.ParentHamiltonian.Commuting.SectorGraph

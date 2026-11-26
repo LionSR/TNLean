@@ -10,12 +10,10 @@ Authors: TNLean contributors
 
 import TNLean.MPS.MPU.CanonicalForm.CanonicalFormAncillaBlocking
 import TNLean.MPS.MPU.CanonicalForm.CompositionFlattening
-import TNLean.MPS.MPU.CanonicalForm.KetLeftMulCanonicalForm
 import TNLean.MPS.MPU.CanonicalForm.MPUCanonicalForm
 import TNLean.MPS.MPU.CanonicalForm.PhysicalAdjointCanonicalForm
 import TNLean.MPS.MPU.CanonicalForm.PhysicalAncilla
 import TNLean.MPS.MPU.CanonicalForm.PhysicalAncillaLeftMul
-import TNLean.MPS.MPU.CanonicalForm.PositiveCanonicalGauge
 import TNLean.MPS.MPU.CanonicalForm.ReducedCanonicalRepresentative
 import TNLean.MPS.MPU.CanonicalForm.ReducedRepresentative
 import TNLean.MPS.MPU.CanonicalForm.StandardFormParityCounterexample

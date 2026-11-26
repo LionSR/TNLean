@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Operators.Constraints.CrossingBudget
 import TNLean.PEPS.AreaLaw.Operators.Constraints.TruncationRadius
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellPrevector
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
 
 /-!
 # The truncated Hamiltonian keeps a unique gapped ground vector

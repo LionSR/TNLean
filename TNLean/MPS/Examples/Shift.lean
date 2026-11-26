@@ -22,7 +22,6 @@ import TNLean.MPS.Examples.Shift.ShiftSourceGateFormulas
 import TNLean.MPS.Examples.Shift.ShiftSourceRanks
 import TNLean.MPS.Examples.Shift.ShiftStandardForms
 import TNLean.MPS.Examples.Shift.ShiftStrictEquivalence
-import TNLean.MPS.Examples.Shift.ShiftSwap
 import TNLean.MPS.Examples.Shift.ShiftSwapMatrices
 import TNLean.MPS.Examples.Shift.ShiftSymmetryPaths
 import TNLean.MPS.Examples.Shift.ShiftTilde

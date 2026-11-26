@@ -13,7 +13,6 @@ import TNLean.PEPS.Injectivity.GInjective.GInjectiveConcatenation
 import TNLean.PEPS.Injectivity.GInjective.GInjectiveCutCompatibility
 import TNLean.PEPS.Injectivity.GInjective.GInjectiveCutRange
 import TNLean.PEPS.Injectivity.GInjective.GInjectiveMPS
-import TNLean.PEPS.Injectivity.GInjective.GInjectiveMPSAlgebra
 import TNLean.PEPS.Injectivity.GInjective.GInjectiveMPSIntersection
 import TNLean.PEPS.Injectivity.GInjective.GInjectiveRangeEquivalence
 import TNLean.PEPS.Injectivity.GInjective.GInjectiveStripIntersection

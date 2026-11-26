@@ -9,18 +9,12 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters
 
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.PatchEnergySmallnessScale
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchActualRegulatorTrace
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchCoordinate
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchDiagonalVariation
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchInsertionTrace
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchInverseCylinder
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchListCoordinates
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchLogMinimumRegularity
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMarginal
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimizerStationarity
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimum
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimumContinuity
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchMinimumGrowth
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchRadiusChoice
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchRadiusDerivative
 import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchStationarity

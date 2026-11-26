@@ -8,15 +8,12 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO
 
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.ClusterTruncationCutRank
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.CommonClosingPolynomialFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.CommonMiddleMPOFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.IntervalMPOTransfer
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.OperatorMPOFromCutRank
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalPeriodicPolynomialFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalPolynomialTensorFamily
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.RegionalSoftSpectralApproximation
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.SelectedMiddleMPOFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.SoftGeneratedMiddleApproximation

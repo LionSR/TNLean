@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.Injectivity.Regular
 
 import TNLean.PEPS.Injectivity.Regular.GInjectivePhysicalMap
-import TNLean.PEPS.Injectivity.Regular.GInjectivePhysicalNormalForm
 import TNLean.PEPS.Injectivity.Regular.RegularBoundaryLocalAlgebra
 import TNLean.PEPS.Injectivity.Regular.RegularBoundaryRegisterTransport
 import TNLean.PEPS.Injectivity.Regular.RegularCoherentGlobalTransport
@@ -26,14 +25,11 @@ import TNLean.PEPS.Injectivity.Regular.RegularReferenceBoundaryDensity
 import TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeBoundary
 import TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeContraction
 import TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeGram
-import TNLean.PEPS.Injectivity.Regular.RegularRegionInjectivity
-import TNLean.PEPS.Injectivity.Regular.RegularRegionIsometry
 import TNLean.PEPS.Injectivity.Regular.RegularRegionProjectorCoordinates
 import TNLean.PEPS.Injectivity.Regular.RegularSiteGram
 import TNLean.PEPS.Injectivity.Regular.RegularSiteSymmetryRecovery
 import TNLean.PEPS.Injectivity.Regular.RegularSweptPatchDeformation
 import TNLean.PEPS.Injectivity.Regular.RegularTorusSite
-import TNLean.PEPS.Injectivity.Regular.RegularTwistedRegionCrossGramCoordinates
 import TNLean.PEPS.Injectivity.Regular.RegularTwistedRegionProjectorCoordinates
 import TNLean.PEPS.Injectivity.Regular.TorusTwoByTwoTwistedGeometry
 import TNLean.PEPS.Injectivity.Regular.TwoByTwoTensorIsometry

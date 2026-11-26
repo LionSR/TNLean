@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.Isometry.UnitaryKronecker
 import QICLean.Analysis.Isometry.UnitaryEntrywiseConjugation
 import TNLean.MPS.MPU.Representation.InverseCompatibleCutComparison
-import TNLean.MPS.MPU.Simple.SimpleTensorEquivalence
+import TNLean.MPS.MPU.Simple.SourceVCompleteNetwork
 
 /-!
 # Unitarity of the inverse-compatible comparison

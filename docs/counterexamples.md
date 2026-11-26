@@ -134,7 +134,7 @@ mathematical obstruction.
 
 ### SAL and ZCL do not imply the Proposition C.15 blocking channels
 
-- Locations: `TNLean/MPS/Examples/NonCartesianSectors/CPSVBlockingChannelCounterexample.lean`,
+- Locations: `TNLean/MPS/Examples/NonCartesianSectors/CPSVBlockingChannelEmbeddedCounterexample.lean`,
   `TNLean/MPS/Examples/NonCartesianSectors/CPSVBlockingChannelEmbeddedCounterexample.lean`, and
   `TNLean/MPS/Examples/NonCartesianSectors/CPSVBlockingChannelAmbientCounterexample.lean`
 - Main declaration:

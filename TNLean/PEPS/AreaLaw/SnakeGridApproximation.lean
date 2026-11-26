@@ -7,7 +7,7 @@ import QICLean.ManyBody.Sites.Lattice.SnakeOrder
 import TNLean.MPS.Tensor.VaryingBond.SnakeGridParameters
 import TNLean.MPS.Tensor.VaryingBond.SequentialTruncation
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.TailParameter
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
 import QICLean.ManyBody.Sites.Relabel
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment

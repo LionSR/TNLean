@@ -8,7 +8,7 @@ import TNLean.MPS.CanonicalForm.BNT.PhaseCover
 import TNLean.MPS.Tensor.DirectSum.IrreducibleDecomposition
 import TNLean.MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.Dichotomy
-import TNLean.MPS.CanonicalForm.Periodic.ScaledNormalization
+import TNLean.MPS.CanonicalForm.Periodic.SectorNormalization
 
 /-!
 # Power-sum structure of length-dependent coefficients, without blocking

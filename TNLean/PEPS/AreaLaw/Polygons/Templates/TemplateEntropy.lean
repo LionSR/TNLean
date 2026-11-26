@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateLayers
 import QICLean.ManyBody.Entropy.RegionEntropy
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
 import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 
 /-!
 # Entropy cost of a partial template depth row
@@ -16,6 +17,10 @@ entropy by at most `n * log q`. This uses only purity, normalization and the
 geometric layer bound. Separation, a spectral gap and a safe-box estimate are
 not needed for this step.
 
+It also contains the following results.
+
+* `ManyBody.IntRect.partial_row_entropy_le`: entropy cost of part of a rectangle dilation layer.
+
 ## References
 
 OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
@@ -23,6 +28,8 @@ OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
 at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text reused.
 -/
+
+section TemplateEntropy
 
 open ManyBody (ambientDilation)
 
@@ -96,3 +103,60 @@ theorem template_partial_row_entropy_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
 
 end Geometry
 end TNLean.PEPS.AreaLaw
+
+end TemplateEntropy
+
+section WeakRectanglePartialRowEntropy
+
+/-!
+## Entropy cost of part of a rectangle dilation layer
+
+Adding an arbitrary subset of the next dilation layer changes the regional
+entropy by at most `12 * Q.size * Real.log q`, where `q` is the local
+dimension. The estimate follows from the layer cardinality bound,
+the disjoint-region entropy increment inequality, and the dimension bound.
+It includes thin rectangles, negative coordinates, an empty added region,
+and missing lattice sites in the physical domain.
+
+Source: OpenAI, A two-dimensional area law from a global spectral gap,
+September 24, 2026, Lemma 9.4, 08-scanner.tex, lines 666–667, and the
+rectangle covering argument for Proposition 9.5, lines 717–729,
+at openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+This is the partial-layer auxiliary estimate.
+Original formalization from the manuscript; no upstream Lean proof text reused.
+-/
+
+open ManyBody (IntRect card_dilate_sdiff_le)
+
+namespace TNLean.PEPS.AreaLaw
+
+/-- An arbitrary part of a rectangle dilation layer has entropy cost at most
+`12 * size Q * log q`. Source: `08-scanner.tex`, lines 666–667 and 717–729.
+The estimate uses only normalization, the local dimension and the layer count. -/
+theorem _root_.ManyBody.IntRect.partial_row_entropy_le
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
+    (Ω : EuclideanSpace ℂ (↥Λ → Fin q)) (hΩ : ‖Ω‖ = 1) (A : Finset ↥Λ)
+    (Q : IntRect) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ Q.size)
+    (Y : Finset (ℤ × ℤ))
+    (hY : Y ⊆ (Q.dilate j).toFinset \ (Q.dilate (j - 1)).toFinset) :
+    |ManyBody.regionEntropy Ω
+        (A.filter fun x ↦ x.1 ∈ ((Q.dilate (j - 1)).toFinset \ Q.toFinset) ∪ Y) -
+      ManyBody.regionEntropy Ω
+        (A.filter fun x ↦ x.1 ∈ (Q.dilate (j - 1)).toFinset \ Q.toFinset)| ≤
+      12 * (Q.size : ℝ) * Real.log q := by
+  have hlayer := card_dilate_sdiff_le Q (d := j) (k := 1) hj
+  have hcardLayer :
+      ((Q.dilate j).toFinset \ (Q.dilate (j - 1)).toFinset).card ≤
+        12 * Q.size := by
+    omega
+  have hXY : Disjoint ((Q.dilate (j - 1)).toFinset \ Q.toFinset) Y :=
+    Finset.disjoint_left.mpr fun x hx hy ↦
+      (Finset.mem_sdiff.mp (hY hy)).2 (Finset.mem_sdiff.mp hx).1
+  refine (abs_regionEntropy_filter_union_sub_le Λ q hq Ω hΩ A _ Y hXY).trans ?_
+  have hcard := (Finset.card_le_card hY).trans hcardLayer
+  exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
+    (Real.log_nonneg (by exact_mod_cast hq))
+
+end TNLean.PEPS.AreaLaw
+
+end WeakRectanglePartialRowEntropy

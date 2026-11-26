@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Word.OrderedProduct
 import TNLean.MPS.Tensor.Words.CyclicTrace
-import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
+import TNLean.MPS.Tensor.Gauge.FiniteLength
 import TNLean.MPS.Tensor.Physical.Blocking
 
 /-!

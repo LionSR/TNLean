@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree
 
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree.FrustrationFreeAccuracyParameters
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree.FrustrationFreeClipping
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree.FrustrationFreeEntropy
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree.FrustrationFreeFilter
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree.FrustrationFreeGapBounds

@@ -10,19 +10,14 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Tensor.Words.AlternatingNetwork
 import TNLean.MPS.Tensor.Words.Basic
-import TNLean.MPS.Tensor.Words.CrossProductRigidity
 import TNLean.MPS.Tensor.Words.CyclicTrace
 import TNLean.MPS.Tensor.Words.CyclicTraceForcedBond
-import TNLean.MPS.Tensor.Words.ForcedColumnNormality
-import TNLean.MPS.Tensor.Words.InsertedLeftInverse
 import TNLean.MPS.Tensor.Words.LetterScaledNormality
-import TNLean.MPS.Tensor.Words.LinearExtension
 import TNLean.MPS.Tensor.Words.NormalityFromTwoWords
 import TNLean.MPS.Tensor.Words.OneSidedInverse
 import TNLean.MPS.Tensor.Words.ScaledNormality
 import TNLean.MPS.Tensor.Words.SplitIndexTrace
 import TNLean.MPS.Tensor.Words.SquarePhysicalCoordinates
-import TNLean.MPS.Tensor.Words.TensorEquality
 import TNLean.MPS.Tensor.Words.TracePairing
 import TNLean.MPS.Tensor.Words.VirtualInsertion
 import TNLean.MPS.Tensor.Words.WordSpan

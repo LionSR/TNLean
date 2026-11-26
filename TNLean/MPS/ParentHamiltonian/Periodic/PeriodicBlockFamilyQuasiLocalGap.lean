@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Blocking.BlockedQuasiLocalGap
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicBlockFamilyPresentation
-import TNLean.MPS.CanonicalForm.BNT.GaugePhaseSeparationTransport
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicGroundStatePresentation
+import TNLean.MPS.CanonicalForm.BNT.Separation
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicPrimitiveGroundSpace
 
 /-!
 # Original-chain commutator gaps for finite periodic tensor families

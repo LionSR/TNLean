@@ -8,18 +8,12 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation
 
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.FiveRegionSoftNorm
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.FiveRegionSoftStructure
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.FiveRegionSoftUniformClusters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.PhysicalScaledSoftTruncationResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.PhysicalSoftMiddleCluster
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.PhysicalSoftTruncationCloseness
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.PhysicalSoftTruncationMPOApproximation
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.PhysicalSoftTruncationResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.PhysicalSoftTruncationReverse
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftClusterPrecision
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftFamilyResiduals
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftFourthOrderBudget
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftParentStructure
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftTruncationOriginalResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftTruncationReverseResidual

@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Examples.MPUPhases
 
-import TNLean.MPS.Examples.MPUPhases.ConjugationOddRankPhases
 import TNLean.MPS.Examples.MPUPhases.ConjugationPhaseRepresentatives
 import TNLean.MPS.Examples.MPUPhases.TimeReversalSecondSigns
 import TNLean.MPS.Examples.MPUPhases.TimeReversalTraceSigns

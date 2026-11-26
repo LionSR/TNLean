@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BirthSeparationReplacement
-import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRegularity
+import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanSectors
 
 /-!
 # Elementary triangles of the normalized belt arrangement

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Projection.PosSemidefSupport
-import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
+import TNLean.MPS.Tensor.Gauge.FiniteLength
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
 import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
 

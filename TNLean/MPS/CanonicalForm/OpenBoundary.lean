@@ -9,9 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.CanonicalForm.OpenBoundary
 
 import TNLean.MPS.CanonicalForm.OpenBoundary.OBCCanonicalConfigurations
-import TNLean.MPS.CanonicalForm.OpenBoundary.OBCCanonicalCutBases
 import TNLean.MPS.CanonicalForm.OpenBoundary.OBCCanonicalEndpoints
-import TNLean.MPS.CanonicalForm.OpenBoundary.OBCCanonicalForm
 import TNLean.MPS.CanonicalForm.OpenBoundary.OBCCanonicalPhysicalRanks
 import TNLean.MPS.CanonicalForm.OpenBoundary.OBCCanonicalRecurrences
 import TNLean.MPS.CanonicalForm.OpenBoundary.OBCMinimalPrefixBasis

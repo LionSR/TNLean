@@ -7,7 +7,7 @@ import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 import Mathlib.RingTheory.Noetherian.Basic
 import QICLean.Algebra.Module.TraceInvariantSubmodule
 import TNLean.MPS.FundamentalTheorem.WordModule.FlagData
-import TNLean.MPS.FundamentalTheorem.WordModule.Identification
+import TNLean.MPS.FundamentalTheorem.WordModule.SimpleSeparation
 
 /-!
 # The composition-series flag of the asymmetric compression theorem

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import QICLean.Analysis.Isometry.UnitaryKronecker
-import TNLean.MPS.MPU.Simple.SimpleTensorEquivalence
+import TNLean.MPS.MPU.Simple.SourceVCompleteNetwork
 import TNLean.MPS.Operator.Unitary.StaircaseGates
 
 /-!

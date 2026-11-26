@@ -10,7 +10,7 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree.FrustrationFreeFilter
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree.FrustrationFreeGapBounds
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree.FrustrationFreeParameters
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SequentialApproximation
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.VariableWindowRefinement
+import TNLean.MPS.AreaLaw.ChebyshevAGSP.ChangingTargetStep
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

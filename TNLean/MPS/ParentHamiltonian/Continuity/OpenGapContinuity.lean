@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Spectral.Gap.EigenvalueGap
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockGroundSpaceContinuity
 import TNLean.MPS.ParentHamiltonian.Gap.BlockOpenGroundSpaceAtSimultaneousInjectivity
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanSeparation
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanNormalization
 import QICLean.ManyBody.Hamiltonian.KernelGap
 
 /-!

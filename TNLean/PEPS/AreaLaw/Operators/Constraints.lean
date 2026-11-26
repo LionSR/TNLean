@@ -15,6 +15,5 @@ import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeConstraints
 import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeCounts
 import TNLean.PEPS.AreaLaw.Operators.Constraints.LocalRootChannels
 import TNLean.PEPS.AreaLaw.Operators.Constraints.PositiveConstraints
-import TNLean.PEPS.AreaLaw.Operators.Constraints.QuasilocalRoots
 import TNLean.PEPS.AreaLaw.Operators.Constraints.TruncationRadius
 import TNLean.PEPS.AreaLaw.Operators.Constraints.TruncationSeries

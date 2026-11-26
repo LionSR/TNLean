@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRuns
-import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideEndpoints
+import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivision
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.ElementarySideOpponents
 

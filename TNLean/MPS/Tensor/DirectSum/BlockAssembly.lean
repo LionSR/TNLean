@@ -8,6 +8,7 @@ import QICLean.Analysis.Isometry.CoisometricCompression
 import TNLean.MPS.Tensor.DirectSum.MultiBlock
 import TNLean.MPS.Tensor.Overlap
 import TNLean.MPS.Tensor.Tactic
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Shared direct-sum tensor infrastructure for MPS tensors
@@ -17,11 +18,21 @@ This file factors out the lightweight block-diagonal tensor constructor
 `sameMPV₂Pos_of_coisometry_reconstruction`. Shared infrastructure can therefore
 use direct-sum and coisometric-reconstruction formulas without importing
 gauge-equivalence theorems.
+
+It also contains the following results.
+
+* `MPSTensor.sum_blockInclusion_mul_conjTranspose`,
+  `MPSTensor.blockInclusion_conjTranspose_mul_toTensorFromBlocks`: coordinate resolution of a
+  dependent direct sum.
+* `MPSTensor.exists_unitary_toTensorFromBlocks_of_resolution`: unitary assembly of a resolution of
+  the bond space.
 -/
 
 open scoped Matrix BigOperators
 
 namespace MPSTensor
+
+section BlockAssembly
 
 variable {d : ℕ}
 
@@ -367,5 +378,146 @@ theorem mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
     _ = ∑ u : Fin r, ∑ v : Fin r,
           mpvOverlap (d := d) (blocksA u) (blocksB v) N := by
             simp [mpvOverlap]
+
+end BlockAssembly
+
+section BlockInclusionResolution
+
+/-!
+## Coordinate resolution of a dependent direct sum
+
+The isometric inclusions of finitely many blocks resolve the identity, and
+their adjoints intertwine a weighted block tensor with the selected block.
+These exact matrix identities retain the coordinate maps needed when cyclic
+sectors of different bond dimensions are assembled into one tensor.
+
+Source: arXiv:1606.00608, equation `II_CF1`, lines 214--225.
+-/
+
+variable {d r : ℕ}
+
+/-- The coordinate inclusions resolve the identity of a finite direct sum.
+Source: arXiv:1606.00608, equation `II_CF1`, lines 214--225. -/
+theorem sum_blockInclusion_mul_conjTranspose (dim : Fin r → ℕ) :
+    ∑ j, blockInclusion dim j * (blockInclusion dim j)ᴴ = 1 := by
+  let dim' := fun j : Fin r => Fin (dim j)
+  let e : ((j : Fin r) × dim' j) ≃ Fin (∑ j, dim j) := finSigmaFinEquiv
+  let E := fun j => Matrix.sigmaBlockInclusion dim' j
+  have hDiag : Matrix.blockDiagonal' (fun j =>
+      (1 : Matrix (dim' j) (dim' j) ℂ)) = 1 := Matrix.blockDiagonal'_one
+  have hRaw : ∑ j, E j * (E j)ᴴ = 1 := by
+    simpa only [Matrix.mul_one, hDiag, E] using
+      (Matrix.blockDiagonal'_eq_sum_sigmaBlockInclusion
+      (fun j => (1 : Matrix (dim' j) (dim' j) ℂ))).symm
+  have hTerm (j : Fin r) :
+      blockInclusion dim j * (blockInclusion dim j)ᴴ =
+        Matrix.reindexLinearEquiv ℂ ℂ e e (E j * (E j)ᴴ) := by
+    change Matrix.reindex e (Equiv.refl _) (E j) *
+      (Matrix.reindex e (Equiv.refl _) (E j))ᴴ = _
+    rw [Matrix.conjTranspose_reindex]
+    exact Matrix.reindexLinearEquiv_mul ℂ ℂ e (Equiv.refl _) e _ _
+  simp only [hTerm, ← map_sum, hRaw, Matrix.reindexLinearEquiv_one]
+
+/-- The adjoint coordinate inclusion intertwines a weighted direct sum with
+its selected block. Source: arXiv:1606.00608, equation `II_CF1`, lines 214--225. -/
+theorem blockInclusion_conjTranspose_mul_toTensorFromBlocks
+    {dim : Fin r → ℕ} (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j))
+    (k : Fin r) (i : Fin d) :
+    (blockInclusion dim k)ᴴ * toTensorFromBlocks μ A i =
+      (μ k • A k i) * (blockInclusion dim k)ᴴ := by
+  let dim' := fun j : Fin r => Fin (dim j)
+  let e : ((j : Fin r) × dim' j) ≃ Fin (∑ j, dim j) := finSigmaFinEquiv
+  let E := Matrix.sigmaBlockInclusion dim' k
+  let B := fun j : Fin r => μ j • A j i
+  change (Matrix.reindex e (Equiv.refl _) E)ᴴ *
+      Matrix.reindex e e (Matrix.blockDiagonal' B) =
+        B k * (Matrix.reindex e (Equiv.refl _) E)ᴴ
+  rw [Matrix.conjTranspose_reindex]
+  change Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) e Eᴴ *
+      Matrix.reindexLinearEquiv ℂ ℂ e e (Matrix.blockDiagonal' B) =
+        Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) (Equiv.refl _) (B k) *
+          Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) e Eᴴ
+  rw [Matrix.reindexLinearEquiv_mul ℂ ℂ (Equiv.refl _) e e,
+    Matrix.reindexLinearEquiv_mul ℂ ℂ (Equiv.refl _) (Equiv.refl _) e,
+    Matrix.sigmaBlockInclusion_conjTranspose_mul_blockDiagonal']
+
+end BlockInclusionResolution
+
+section BlockIsometryAssembly
+
+/-!
+## Unitary assembly of a resolution of the bond space
+
+A family of column matrices whose range operators sum to the identity and whose
+column counts sum to the ambient dimension concatenates to a unitary matrix.
+If each column matrix intertwines a tensor with one block, this unitary identifies
+the tensor with the direct sum of those blocks while retaining every inclusion.
+
+This is the change of bond coordinates implicit in arXiv:1708.00029,
+`lem:blocking-arbitrary`, lines 432–456, used before Theorem 4.1's phase construction.
+-/
+
+variable {D r : ℕ} {dim : Fin r → ℕ}
+
+private theorem exists_unitary_with_columns (V : (a : Fin r) → Matrix (Fin D) (Fin (dim a)) ℂ)
+    (hsum : ∑ a, V a * (V a)ᴴ = 1) (hdim : ∑ a, dim a = D) :
+    ∃ U : Matrix (Fin D) (Fin (∑ a, dim a)) ℂ,
+      U * Uᴴ = 1 ∧ Uᴴ * U = 1 ∧
+      ∀ x a y, U x (finSigmaFinEquiv ⟨a, y⟩) = V a x y := by
+  let U : Matrix (Fin D) (Fin (∑ a, dim a)) ℂ :=
+    fun x y ↦ V ((finSigmaFinEquiv (n := dim)).symm y).1 x ((finSigmaFinEquiv (n := dim)).symm y).2
+  have hinv (s : (a : Fin r) × Fin (dim a)) :
+      (finSigmaFinEquiv (n := dim)).symm (finSigmaFinEquiv s) = s :=
+    (finSigmaFinEquiv (n := dim)).symm_apply_apply s
+  have hU (x a y) : U x (finSigmaFinEquiv ⟨a, y⟩) = V a x y := by
+    dsimp only [U]
+    rw [hinv]
+  have hco : U * Uᴴ = 1 := by
+    rw [← hsum]
+    ext x y
+    simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.sum_apply]
+    rw [← Equiv.sum_comp (finSigmaFinEquiv (n := dim))]
+    simp only [Fintype.sum_sigma, hU]
+  refine ⟨U, hco, ?_, ?_⟩
+  · exact (Matrix.IsCoisometry.isUnitaryBetween_of_card_eq U hco
+      (by simpa using hdim.symm)).1
+  · exact hU
+
+private theorem mul_blockInclusion_apply (U : Matrix (Fin D) (Fin (∑ a, dim a)) ℂ)
+    (a : Fin r) (x : Fin D) (y : Fin (dim a)) :
+    (U * blockInclusion dim a) x y = U x (finSigmaFinEquiv ⟨a, y⟩) := by
+  simp [Matrix.mul_apply, blockInclusion_apply]
+
+/-- Assemble an identity resolution into a unitary block decomposition, preserving
+its prescribed inclusions. The total column count prevents a proper coisometry.
+Source: arXiv:1708.00029, `lem:blocking-arbitrary`, lines 432–456. -/
+theorem exists_unitary_toTensorFromBlocks_of_resolution {d : ℕ} (A : MPSTensor d D)
+    (B : (a : Fin r) → MPSTensor d (dim a))
+    (V : (a : Fin r) → Matrix (Fin D) (Fin (dim a)) ℂ)
+    (hsum : ∑ a, V a * (V a)ᴴ = 1) (hdim : ∑ a, dim a = D)
+    (hinter : ∀ a i, A i * V a = V a * B a i) :
+    ∃ U : Matrix (Fin D) (Fin (∑ a, dim a)) ℂ,
+      U * Uᴴ = 1 ∧ Uᴴ * U = 1 ∧
+      (∀ a, U * blockInclusion dim a = V a) ∧
+      ∀ i, A i = U * toTensorFromBlocks (fun _ ↦ 1) B i * Uᴴ := by
+  obtain ⟨U, hco, hiso, hU⟩ := exists_unitary_with_columns V hsum hdim
+  have hinc (a) : U * blockInclusion dim a = V a := by
+    ext x y
+    rw [mul_blockInclusion_apply, hU]
+  refine ⟨U, hco, hiso, hinc, ?_⟩
+  intro i
+  have hi : A i * U = U * toTensorFromBlocks (fun _ ↦ 1) B i := by
+    ext x y
+    obtain ⟨⟨a, z⟩, rfl⟩ := finSigmaFinEquiv.surjective y
+    have he : (A i * U) * blockInclusion dim a =
+        (U * toTensorFromBlocks (fun _ ↦ 1) B i) * blockInclusion dim a := by
+      rw [Matrix.mul_assoc, hinc, hinter, Matrix.mul_assoc,
+        toTensorFromBlocks_mul_blockInclusion, one_smul, ← Matrix.mul_assoc, hinc]
+    simpa only [mul_blockInclusion_apply] using congrFun (congrFun he x) z
+  calc
+    A i = A i * (U * Uᴴ) := by rw [hco, Matrix.mul_one]
+    _ = _ := by rw [← Matrix.mul_assoc, hi]
+
+end BlockIsometryAssembly
 
 end MPSTensor

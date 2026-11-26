@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.MPDO.CyclicActiveSector
 
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveAdjacentCoefficientExtraction
-import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveAreaLaw
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveCutCoordinates
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveCutRegrouping
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveCutStates

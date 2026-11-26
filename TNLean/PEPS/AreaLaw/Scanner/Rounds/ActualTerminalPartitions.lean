@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.FillTransport
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualChargeData
 
 /-!
 # The actual completed and pre-charge terminal family

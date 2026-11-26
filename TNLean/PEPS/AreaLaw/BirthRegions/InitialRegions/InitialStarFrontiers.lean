@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanSlopes
+import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFans
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegions
 import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanFrontiers
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.NearMarkGeometry
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellContacts
 import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
 

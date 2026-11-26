@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Blocking.BlockedInteractionKernel
 import QICLean.Spectral.Eigenvalue.MatrixReindexEuclidean
 import TNLean.MPS.ParentHamiltonian.Interaction.EventualKernelOpenGap
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicGroundStatePresentation
-import TNLean.MPS.CanonicalForm.BNT.GaugePhaseSeparationTransport
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicPrimitiveGroundSpace
+import TNLean.MPS.CanonicalForm.BNT.Separation
 
 /-!
 # Finite-chain gap transfer through physical blocking

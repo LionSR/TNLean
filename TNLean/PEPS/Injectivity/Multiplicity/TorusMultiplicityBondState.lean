@@ -3,11 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Injectivity.Multiplicity.PhysicalCoherentTransport
 import TNLean.PEPS.Injectivity.Multiplicity.CoherentMultiplicityTransport
 import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondSupport
 import TNLean.PEPS.Injectivity.Multiplicity.TorusPhysicalBondRegrouping
-import TNLean.PEPS.Injectivity.Multiplicity.ThetaBondOrthonormalCoordinates
+import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondIsometry
 
 /-!
 # Multiplicity restoration of the actual weighted-site torus state

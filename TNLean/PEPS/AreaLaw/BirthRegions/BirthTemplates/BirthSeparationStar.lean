@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BirthSeparationReplacement
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.IsolatedStars
-import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRegularity
+import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanSectors
 
 /-!
 # Same-label regions near a replacement, from an isolated star

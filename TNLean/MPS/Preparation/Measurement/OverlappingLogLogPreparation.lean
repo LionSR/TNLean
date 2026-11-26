@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.Measurement.OverlappingMeasurementPreparation
 import TNLean.MPS.Preparation.Measurement.CoherentBlockTreePreparation
-import TNLean.MPS.Transfer.Spectrum.MixedEigenvalueGap
-import TNLean.MPS.CanonicalForm.BNTPresentation.BlockedNormalSectors
+import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
+import TNLean.MPS.CanonicalForm.BNTPresentation.RepresentativeAfterBlocking
 import QICLean.Circuit.Model.Measurement
 
 /-!

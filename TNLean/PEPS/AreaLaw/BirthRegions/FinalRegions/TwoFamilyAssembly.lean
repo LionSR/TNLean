@@ -10,10 +10,10 @@ import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 import TNLean.PEPS.AreaLaw.Collar.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.InitialPrimaryErrorSum
-import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.PrimaryBirthSeparation
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.PrimaryRegions
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.RepairActualBirthTemplates
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairBirthLatticePoint
-import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairCharacteristicLengthLowerBound
+import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairBirthRank
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairDepth
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairCurrentRegions
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalRegionTransport
@@ -21,7 +21,7 @@ import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalLatticePartition
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairRankZeroAncestry
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairRetainedNonprimaryErrorSum
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairTermination
-import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairTerminalPrefixSites
+import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairDescendantCounts
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairTotalMarkPrefixCount
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.TwoFamilyExplicitThresholds
 

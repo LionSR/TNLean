@@ -15,7 +15,6 @@ import TNLean.MPS.Examples.PVBS.PVBSEnergyGap
 import TNLean.MPS.Examples.PVBS.PVBSGapAttainment
 import TNLean.MPS.Examples.PVBS.PVBSGroundSpace
 import TNLean.MPS.Examples.PVBS.PVBSHamiltonian
-import TNLean.MPS.Examples.PVBS.PVBSLocalInteraction
 import TNLean.MPS.Examples.PVBS.PVBSLocalization
 import TNLean.MPS.Examples.PVBS.PVBSOneParticleWindow
 import TNLean.MPS.Examples.PVBS.PVBSPeriodicGroundSpace
@@ -25,4 +24,3 @@ import TNLean.MPS.Examples.PVBS.WState
 import TNLean.MPS.Examples.PVBS.WStateBlocking
 import TNLean.MPS.Examples.PVBS.WStateCanonicalBound
 import TNLean.MPS.Examples.PVBS.WStatePeriodic
-import TNLean.MPS.Examples.PVBS.WStatePrimeLengthBound

@@ -431,7 +431,7 @@ that name `CPSVCanonicalFormData`, `IsCPSVCanonicalForm`, `CPSVCanonicalFormII*`
   RFP/ResidualIsometry.lean, MPDO/VerticalBNTConstruction.lean,
   MPDO/SourceBNTBlocking.lean, MPDO/BNTAlgebraTensorClause.lean,
   MPDO/BNTFusionTensorClauseFromRFP.lean; 253 modules downstream.
-- `TNLean/MPS/CanonicalForm/BNTPresentation/CanonicalFormBridge.lean`: relates two
+- `TNLean/MPS/CanonicalForm/BNTPresentation/PreparedReconstruction.lean`: relates two
   different objects (a canonical form of `A`, a sector presentation), so it is a
   theorem; its construction duplicates `BNTRefinement.isBNTSectorPresentation` up
   to the left-canonical gauge. Merged into CanonicalForm/BNTRefinement.lean as

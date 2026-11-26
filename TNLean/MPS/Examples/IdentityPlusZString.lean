@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.IdentityPlusZString.BinaryConfigurationSign
 import TNLean.MPS.Examples.IdentityPlusZString.FourCycleEntropy
-import TNLean.MPS.Examples.IdentityPlusZString.FourCycleObstruction
 import TNLean.MPS.Examples.IdentityPlusZString.IdentityPlusZString
 import TNLean.MPS.Examples.IdentityPlusZString.Literal
 import TNLean.MPS.Examples.IdentityPlusZString.NormalizedRFP

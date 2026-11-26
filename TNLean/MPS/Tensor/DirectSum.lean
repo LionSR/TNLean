@@ -10,8 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
 import TNLean.MPS.Tensor.DirectSum.BlockGauge
-import TNLean.MPS.Tensor.DirectSum.BlockInclusionResolution
-import TNLean.MPS.Tensor.DirectSum.BlockIsometryAssembly
 import TNLean.MPS.Tensor.DirectSum.BlockSum
 import TNLean.MPS.Tensor.DirectSum.BoundaryDecomposition
 import TNLean.MPS.Tensor.DirectSum.GaugeEquiv

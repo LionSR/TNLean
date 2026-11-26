@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.Flux.TorusGaugedRouteStep
-import TNLean.PEPS.Injectivity.Flux.RegularActualTwoChordTransport
+import TNLean.PEPS.Injectivity.Flux.RegularActualCycleTransport
 import TNLean.PEPS.Graph.Holonomy.TorusDirectedBondUpdate
 import TNLean.PEPS.Injectivity.Flux.TorusActualPlaquetteVacancy
 

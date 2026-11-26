@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Spectral.LowEnergy.ChebyshevViability
 import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolynomialFamily
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalPolynomialTensorFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.PhysicalLowEnergyCloseness
 
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual

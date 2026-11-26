@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence
 import TNLean.MPS.Preparation.Normal.DepthUpperBound
 import TNLean.MPS.Preparation.Normal.BlockApproximationError
 import TNLean.MPS.Preparation.Circuit.RemainderBlocks
-import TNLean.MPS.Preparation.Inhomogeneous.ExplicitPreparationScale
+import TNLean.MPS.Preparation.Inhomogeneous.InhomogeneousApproximationError
 
 /-!
 # Preparation in depth `O(log(N/ε))` with blocks of equal length

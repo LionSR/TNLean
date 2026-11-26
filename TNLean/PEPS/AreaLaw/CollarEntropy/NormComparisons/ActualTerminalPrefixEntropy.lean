@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualTerminalPartitions
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixApproximation
+import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixCardinality
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.SideSeparation
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateEntropy
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Endpoint.MixedEndpointExtendedBoundary
-import TNLean.MPS.Tensor.Words.InsertedLeftInverse
+import TNLean.MPS.Tensor.Words.OneSidedInverse
 import TNLean.MPS.Tensor.GroundSpace.IntersectionProperty
 
 /-!

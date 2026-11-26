@@ -6,7 +6,7 @@ Authors: Sirui Lu
 import TNLean.MPS.Examples.Z3.Z3ClockTensor
 import TNLean.MPS.Operator.Product.DirectSum
 import TNLean.MPS.Operator.Defs
-import TNLean.MPS.MPU.Representation.GroupCocycleMPO.FusionAlgebra
+import TNLean.MPS.MPU.Representation.GroupCocycleMPO
 
 /-!
 # Non-anomalous `ℤ₃` clock symmetry: the condensation defect and its length-dependent fusion

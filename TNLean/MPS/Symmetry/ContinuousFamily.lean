@@ -8,27 +8,17 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Symmetry.ContinuousFamily
 
-import TNLean.MPS.Symmetry.ContinuousFamily.AdjointFixedSpaceDimension
 import TNLean.MPS.Symmetry.ContinuousFamily.CompactMinimalClassStability
-import TNLean.MPS.Symmetry.ContinuousFamily.CompactSupportedSequenceClass
-import TNLean.MPS.Symmetry.ContinuousFamily.CompactUnitalTensors
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousCanonicalNormalization
-import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousInvariantCompression
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousProjectionFrame
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousSpectralCorner
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousStationaryDensity
 import TNLean.MPS.Symmetry.ContinuousFamily.GlobalVirtualGauge
 import TNLean.MPS.Symmetry.ContinuousFamily.LocalInvariantCompression
-import TNLean.MPS.Symmetry.ContinuousFamily.LocalProjectiveClassStability
 import TNLean.MPS.Symmetry.ContinuousFamily.LocalSpectralSupport
 import TNLean.MPS.Symmetry.ContinuousFamily.LocalVirtualGauge
 import TNLean.MPS.Symmetry.ContinuousFamily.NearbyInjectiveAdjointActions
-import TNLean.MPS.Symmetry.ContinuousFamily.PointwiseInvariantCompression
-import TNLean.MPS.Symmetry.ContinuousFamily.StationarySupportLimitIdentification
-import TNLean.MPS.Symmetry.ContinuousFamily.StationarySupportPreparation
 import TNLean.MPS.Symmetry.ContinuousFamily.StationarySupportedDensityPhaseInvariance
 import TNLean.MPS.Symmetry.ContinuousFamily.SupportPeriodicDecomposition
-import TNLean.MPS.Symmetry.ContinuousFamily.TransientCornerSpectrum
-import TNLean.MPS.Symmetry.ContinuousFamily.TransientSupportGaugeIdentification
 import TNLean.MPS.Symmetry.ContinuousFamily.UniformProjectiveRigidity
 import TNLean.MPS.Symmetry.ContinuousFamily.VaryingSupportPhaseInvariance

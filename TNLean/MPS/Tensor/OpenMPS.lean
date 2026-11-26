@@ -12,7 +12,6 @@ import TNLean.MPS.Tensor.OpenMPS.CutMatrixGrowth
 import TNLean.MPS.Tensor.OpenMPS.CutReducedState
 import TNLean.MPS.Tensor.OpenMPS.IntervalSlice
 import TNLean.MPS.Tensor.OpenMPS.NormalizedSequentialApproximation
-import TNLean.MPS.Tensor.OpenMPS.NormalizedVariableTruncation
 import TNLean.MPS.Tensor.OpenMPS.OpenMPSCutRank
 import TNLean.MPS.Tensor.OpenMPS.OpenMPSProduct
 import TNLean.MPS.Tensor.OpenMPS.ProductReplacement

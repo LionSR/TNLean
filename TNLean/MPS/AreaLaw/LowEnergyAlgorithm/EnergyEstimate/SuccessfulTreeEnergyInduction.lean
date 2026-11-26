@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.BalancedRegionalEnergy
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SelectedSoftTerminalNodeEnergy
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalResamplingGood
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftTerminalNodeEnergy
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalResamplingSelection
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.BalancedIntervalTree
 

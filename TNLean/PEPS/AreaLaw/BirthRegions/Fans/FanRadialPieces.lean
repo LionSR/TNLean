@@ -3,9 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRegularity
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanSectors
-import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanSlopes
+import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFans
 import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRadialConvexity
 import Mathlib.Analysis.Normed.Module.Convex

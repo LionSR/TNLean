@@ -8,10 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation
 
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.GoodProjectorHardTruncation
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.GoodProjectorHardTruncationCorollary
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.HardTruncation
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.HardTruncationResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentTruncationParameters

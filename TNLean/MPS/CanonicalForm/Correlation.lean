@@ -11,7 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.Correlation.CorrelatorFiniteSize
 import TNLean.MPS.CanonicalForm.Correlation.DecayingCorrelations
 import TNLean.MPS.CanonicalForm.Correlation.FiniteRingCorrelationLimit
-import TNLean.MPS.CanonicalForm.Correlation.PhysicalCorrelationBinomial
 import TNLean.MPS.CanonicalForm.Correlation.PhysicalCorrelationDecay
 import TNLean.MPS.CanonicalForm.Correlation.PhysicalCorrelationJordan
 import TNLean.MPS.CanonicalForm.Correlation.WindowCorrelator

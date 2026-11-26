@@ -23,9 +23,17 @@ These are finite-dimensional locality identities underlying the passage to
 infinite-volume local expectations in Nachtergaele, arXiv:cond-mat/9410110,
 lines 2649--2675. They do not assert the infinite-volume spectral-gap theorem.
 The interaction is arbitrary; positivity and self-adjointness are not needed.
+
+It also contains the following results.
+
+* `MPSTensor.hamiltonian_chainTranslates_eq_zero_of_length_lt`: open interaction Hamiltonians on
+  chains shorter than the range.
 -/
 
 open scoped Matrix BigOperators
+
+section BulkObservableCommutator
+
 open ManyBody (placeAlong chainWindow)
 
 open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
@@ -174,3 +182,34 @@ theorem toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction {D : ℕ}
   rfl
 
 end MPSTensor
+
+end BulkObservableCommutator
+
+section AllLengthOpenInteractionMatrix
+
+/-!
+## Open interaction Hamiltonians on chains shorter than the range
+
+On a chain shorter than the interaction range there is no window, so the Hamiltonian of the
+open-chain translates of a local matrix vanishes.
+
+Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12).
+-/
+
+open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
+
+namespace MPSTensor
+variable {d R N : ℕ}
+
+/-- The open matrix sum vanishes when the interval is shorter than its
+interaction range. Source: Nachtergaele, arXiv:cond-mat/9410110,
+equation (3.12), the empty interaction sum. -/
+theorem hamiltonian_chainTranslates_eq_zero_of_length_lt
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hN : N < R) :
+    (chainTranslates R N h).hamiltonian = 0 := by
+  have hEmpty : N + 1 - R = 0 := Nat.sub_eq_zero_of_le (by omega)
+  simp [hamiltonian_chainTranslates_eq_sum_range, hEmpty]
+
+end MPSTensor
+
+end AllLengthOpenInteractionMatrix

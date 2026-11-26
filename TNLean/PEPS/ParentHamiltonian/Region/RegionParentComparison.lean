@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.Region.RegionParentInteraction
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 
 /-!
 # Comparison of regional PEPS parent interactions

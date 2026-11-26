@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Irreducible.FromSpectral
-import TNLean.MPS.Transfer.Primitivity.EasyDirections
 import TNLean.MPS.Transfer.Primitivity.ImpliesStronglyIrreducible
 import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
 import TNLean.MPS.Tensor

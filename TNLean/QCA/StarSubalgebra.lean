@@ -9,7 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.QCA.StarSubalgebra
 
 import TNLean.QCA.StarSubalgebra.BipartiteSupportAlgebra
-import TNLean.QCA.StarSubalgebra.CommutingStarSubalgebraKronecker
 import TNLean.QCA.StarSubalgebra.KroneckerSupportAlgebra
-import TNLean.QCA.StarSubalgebra.OverlappingSupportAlgebra
 import TNLean.QCA.StarSubalgebra.SupportAlgebraReindex

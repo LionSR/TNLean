@@ -3,7 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommutingProj
+import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
+import TNLean.MPS.Tensor.DirectSum.InvariantSubspaceDecomp
+import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
+import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.Compression
+import QICLean.Algebra.Matrix.MatrixAux
+import TNLean.MPS.Transfer.Irreducible.PeriodicBlocking
+import QICLean.Channel.Semigroup.CPClosure
 
 /-!
 # Cyclic-sector decompositions from fixed adjoint projections
@@ -18,6 +24,14 @@ projections fixed by the adjoint transfer map.
 * `offDiag_shift_of_adjoint_cyclic_shift`
 * `eq_sum_offDiag_of_adjoint_cyclic_shift`
 * `offDiag_shift_evalWord_of_adjoint_cyclic_shift`
+* `MPSTensor.leftSectorTensor`, `MPSTensor.left_mul_evalWord_leftSectorTensor_of_commutes`: basic
+  projection word lemmas for cyclic-sector decompositions.
+* `MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter_and_isometry`,
+  `MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter`: cyclic-sector decompositions
+  from commuting projections.
+* `pairwise_mul_zero_of_orthogonalProjection_sum_one`,
+  `preservesCorner_of_adjoint_fixed_projection`: sector irreducibility: projection orthogonality and
+  corner preservation.
 
 ## References
 
@@ -27,6 +41,229 @@ projections fixed by the adjoint transfer map.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
+
+section Basic
+
+/-!
+## Basic projection word lemmas for cyclic-sector decompositions
+
+This file contains the projection-word identities used throughout the
+cyclic-sector normalization argument.
+
+### Main declarations
+
+* `leftSectorTensor`
+* `left_mul_evalWord_leftSectorTensor_of_commutes`
+
+### References
+
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
+-/
+
+open Matrix Finset Complex
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+section BasicProjectionWordLemmas
+
+/-- Left-multiply every letter by `P`. -/
+noncomputable def leftSectorTensor (P : MatrixAlg D) (A : MPSTensor d D) : MPSTensor d D :=
+  fun i => P * A i
+
+lemma left_mul_evalWord_leftSectorTensor_of_commutes
+    (P : MatrixAlg D) (A : MPSTensor d D)
+    (hPidem : P * P = P)
+    (hComm : ∀ i : Fin d, P * A i = A i * P) :
+    ∀ w : List (Fin d),
+      P * Kraus.evalWord (leftSectorTensor P A) w = P * Kraus.evalWord A w := by
+  intro w
+  induction w with
+  | nil =>
+      simp only [Kraus.evalWord]
+  | cons i w ih =>
+      simp only [leftSectorTensor, Kraus.evalWord]
+      calc P * (P * A i * Kraus.evalWord (leftSectorTensor P A) w)
+          = P * P * A i * Kraus.evalWord (leftSectorTensor P A) w := by
+            simp only [Matrix.mul_assoc]
+        _ = P * A i * Kraus.evalWord (leftSectorTensor P A) w := by rw [hPidem]
+        _ = A i * (P * Kraus.evalWord (leftSectorTensor P A) w) := by
+            rw [← Matrix.mul_assoc, hComm i, Matrix.mul_assoc]
+        _ = A i * (P * Kraus.evalWord A w) := by rw [ih]
+        _ = P * (A i * Kraus.evalWord A w) := by
+            rw [← Matrix.mul_assoc, ← hComm i, Matrix.mul_assoc]
+
+end BasicProjectionWordLemmas
+
+end MPSTensor
+
+end Basic
+
+section CommutingProj
+
+/-!
+## Cyclic-sector decompositions from commuting projections
+
+This file assembles the per-sector compression theorem into a direct-sum
+decomposition when a left-canonical tensor commutes with a family of
+orthogonal projections.
+
+### Main declarations
+
+* `exists_blockDecomp_of_commuting_projections_with_letter_and_isometry`
+* `exists_blockDecomp_of_commuting_projections_with_letter`
+
+### References
+
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
+-/
+
+open Matrix Finset Complex
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+section CommutingProjectionDecomposition
+
+variable {m : ℕ}
+
+/-- If a left-canonical tensor commutes with a family of orthogonal projections summing to `1`,
+then it decomposes into compressed sectors whose direct-sum tensor is `SameMPV₂`-equivalent to the
+original tensor. The compression isomorphism also sends each compressed sector
+letter to the corresponding ambient corner P_k A_i P_k.
+
+For each sector k, the compression isomorphism φ_k identifies the compressed
+matrix algebra with the corner of P_k. Its intertwining identity identifies
+the compressed adjoint transfer map with the sector adjoint transfer map on
+that corner, so irreducibility and primitivity are preserved across the
+compression. -/
+theorem exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
+    (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hComm : ∀ k : Fin m, ∀ i : Fin d, P k * A i = A i * P k) :
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k))
+      (φ : (k : Fin m) →
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
+      (V : (k : Fin m) → Matrix (Fin D) (Fin (dim k)) ℂ),
+      (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      (∀ k (N : ℕ) (σ : Fin N → Fin d),
+        mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (Kraus.transferMap (ι := Fin d) (n := Fin (dim k))
+            (fun i => (blocks k i)ᴴ) X)).1 =
+          Kraus.transferMap (ι := Fin d) (n := Fin D)
+            (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
+      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
+      (∀ k (i : Fin d), (φ k (blocks k i)).1 = P k * A i * P k) ∧
+      (∀ k, (V k)ᴴ * V k = 1) ∧
+      (∀ k, V k * (V k)ᴴ = P k) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k X).1 = V k * X * (V k)ᴴ) := by
+  -- For each k, sector tensor P_k * A_i is P_k-supported
+  have hSectorSupp : ∀ k i, P k * (P k * A i) * P k = P k * A i := by
+    intro k i
+    rw [← Matrix.mul_assoc (P k) (P k) _, (hPproj k).2,
+      hComm k i, Matrix.mul_assoc, (hPproj k).2]
+  -- TP condition for each sector
+  have hSectorTP : ∀ k, ∑ i : Fin d, (P k * A i)ᴴ * (P k * A i) = P k := by
+    intro k
+    have hterm : ∀ i, (P k * A i)ᴴ * (P k * A i) = (A i)ᴴ * A i * P k := by
+      intro i
+      rw [Matrix.conjTranspose_mul, Matrix.mul_assoc]
+      rw [← Matrix.mul_assoc (P k)ᴴ (P k) (A i), (hPproj k).1.eq, (hPproj k).2]
+      rw [hComm k i, ← Matrix.mul_assoc]
+    simp_rw [hterm, ← Finset.sum_mul, hLeft, Matrix.one_mul]
+  -- Apply compression to each sector
+  choose dim blocks φ V hDim hTPblocks hMPVblocks hIntertwine hMul hStar hLetterRaw
+    hV_iso hV_range hEmbed using fun k =>
+    exists_compressedTensor_of_supported_projection_with_letter_and_isometry
+      (fun i => P k * A i) (P k) (hPproj k) (hSectorSupp k) (hSectorTP k)
+  -- Per-sector trace relation: mpv(blocks k) σ = tr(P_k · Kraus.evalWord A σ)
+  have hSectorTrace : ∀ k (N : ℕ) (σ : Fin N → Fin d),
+      mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace := by
+    intro k N σ
+    rw [hMPVblocks k N σ]
+    congr 1
+    exact left_mul_evalWord_leftSectorTensor_of_commutes (P k) A (hPproj k).2 (hComm k) _
+  have hLetter : ∀ k (i : Fin d), (φ k (blocks k i)).1 = P k * A i * P k := by
+    intro k i
+    calc
+      (φ k (blocks k i)).1 = P k * A i := hLetterRaw k i
+      _ = P k * A i * P k := by
+          calc
+            P k * A i = A i * P k := hComm k i
+            _ = A i * (P k * P k) := by rw [(hPproj k).2]
+            _ = (A i * P k) * P k := by rw [Matrix.mul_assoc]
+            _ = (P k * A i) * P k := by rw [← hComm k i]
+  refine ⟨dim, blocks, φ, V, hTPblocks, ?_, hSectorTrace, hIntertwine, hMul, hStar,
+    hLetter, hV_iso, hV_range, hEmbed⟩
+  -- SameMPV₂ follows from summing per-sector traces over the projection partition
+  intro N σ
+  rw [mpv_toTensorFromBlocks_eq_sum]; simp only [one_pow, one_smul]
+  simp only [mpv, coeff]
+  conv_lhs => rw [show Kraus.evalWord A (List.ofFn σ) = 1 * Kraus.evalWord A (List.ofFn σ) from by
+    rw [Matrix.one_mul]]
+  rw [show (1 : MatrixAlg D) = ∑ k : Fin m, P k from hPsum.symm]
+  rw [Finset.sum_mul, Matrix.trace_sum]
+  congr 1; ext k
+  exact (hSectorTrace k N σ).symm
+
+/-- If a left-canonical tensor commutes with a family of orthogonal projections summing to `1`,
+then it decomposes into compressed sectors whose direct-sum tensor is `SameMPV₂`-equivalent to the
+original tensor. The compression isomorphism also sends each compressed sector
+letter to the corresponding ambient corner P_k A_i P_k.
+
+This is the projection of
+`exists_blockDecomp_of_commuting_projections_with_letter_and_isometry` that forgets
+the support isometries. -/
+theorem exists_blockDecomp_of_commuting_projections_with_letter
+    (A : MPSTensor d D)
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1)
+    (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hComm : ∀ k : Fin m, ∀ i : Fin d, P k * A i = A i * P k) :
+    ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k))
+      (φ : (k : Fin m) →
+        Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)),
+      (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
+      (∀ k (N : ℕ) (σ : Fin N → Fin d),
+        mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (Kraus.transferMap (ι := Fin d) (n := Fin (dim k))
+            (fun i => (blocks k i)ᴴ) X)).1 =
+          Kraus.transferMap (ι := Fin d) (n := Fin D)
+            (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
+      (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
+      (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+        (φ k Xᴴ).1 = ((φ k X).1)ᴴ) ∧
+      (∀ k (i : Fin d), (φ k (blocks k i)).1 = P k * A i * P k) := by
+  obtain ⟨dim, blocks, φ, _V, hTPblocks, hMPV, hSectorTrace, hIntertwine, hMul,
+    hStar, hLetter, _hV_iso, _hV_range, _hEmbed⟩ :=
+    exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
+      A P hPproj hPsum hLeft hComm
+  exact ⟨dim, blocks, φ, hTPblocks, hMPV, hSectorTrace, hIntertwine, hMul, hStar,
+    hLetter⟩
+
+end CommutingProjectionDecomposition
+
+end MPSTensor
+
+end CommutingProj
+
+section FixedAdjoint
+
 open Matrix Finset Complex KadisonSchwarz
 
 namespace MPSTensor
@@ -217,3 +454,96 @@ theorem offDiag_shift_evalWord_of_adjoint_cyclic_shift [NeZero m]
 end CyclicShiftOffDiagonal
 
 end MPSTensor
+
+end FixedAdjoint
+
+section ProjectionOrtho
+
+/-!
+## Sector irreducibility: projection orthogonality and corner preservation
+
+This file contains the general linear-algebra input for the
+sector-irreducibility development. It proves pairwise orthogonality for
+orthogonal projections summing to `1`, and it shows that an adjoint-fixed
+orthogonal projection for a trace-preserving tensor yields an invariant corner
+algebra.
+
+### Main statements
+
+* `pairwise_mul_zero_of_orthogonalProjection_sum_one` — orthogonal projections
+  summing to `1` are pairwise orthogonal.
+* `preservesCorner_of_adjoint_fixed_projection` — an adjoint-fixed orthogonal
+  projection yields a preserved corner algebra.
+
+### Tags
+
+matrix product states, orthogonal projections, invariant corners
+-/
+
+open Matrix Finset Complex
+
+/-! ### Orthogonal-projection pairwise orthogonality -/
+
+variable {D m : ℕ}
+
+/-- If a finite family of orthogonal projections sums to the identity, then
+distinct projections are orthogonal: `P i * P j = 0` for `i ≠ j`.
+
+This is the `Pairwise` packaging of
+`orthogonalProjection_mul_eq_zero_of_sum_eq_one` from
+`TNLean/Channel/Irreducible/Basic.lean`. -/
+theorem pairwise_mul_zero_of_orthogonalProjection_sum_one
+    (P : Fin m → MatrixAlg D)
+    (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
+    (hPsum : ∑ k : Fin m, P k = 1) :
+    Pairwise fun i j : Fin m => P i * P j = 0 := fun _ _ hij =>
+  orthogonalProjection_mul_eq_zero_of_sum_eq_one P hPproj hPsum hij
+
+/-! ### Corner preservation from adjoint fixed projections -/
+
+variable {d : ℕ}
+
+/-- If an orthogonal projection `P` is fixed by the adjoint transfer map
+`T†(·) = ∑ᵢ Aᵢ† · Aᵢ` of a TP tensor, then `T†` preserves the corner
+algebra `P · M_D(ℂ) · P`.
+
+The proof derives `[P, Aᵢ] = 0` from
+`MPSTensor.commutes_letters_of_adjoint_fixed_projection`, then threads the
+idempotent relation `P² = P` through the corner sandwich. -/
+theorem preservesCorner_of_adjoint_fixed_projection
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    {P : MatrixAlg D}
+    (hP : IsOrthogonalProjection P)
+    (hFix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) P = P) :
+    PreservesCorner P (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) := by
+  have hComm : ∀ i : Fin d, P * A i = A i * P :=
+    MPSTensor.commutes_letters_of_adjoint_fixed_projection (A := A) hTP (hP := hP) hFix
+  have hCommAdj : ∀ i : Fin d, P * (A i)ᴴ = (A i)ᴴ * P := by
+    intro i
+    have h := congrArg Matrix.conjTranspose (hComm i)
+    simpa [Matrix.conjTranspose_mul, hP.1.eq] using h.symm
+  intro X
+  simp only [Kraus.transferMap_apply, Finset.mul_sum, Finset.sum_mul,
+    Matrix.conjTranspose_conjTranspose]
+  refine Finset.sum_congr rfl ?_
+  intro i _
+  calc
+    P * ((A i)ᴴ * (P * X * P) * A i) * P
+        = (P * (A i)ᴴ) * (P * X * P) * (A i * P) := by
+            simp only [Matrix.mul_assoc]
+    _ = ((A i)ᴴ * P) * (P * X * P) * (P * A i) := by
+          rw [hCommAdj i, ← hComm i]
+    _ = (A i)ᴴ * ((P * P) * X * P) * (P * A i) := by
+          simp only [Matrix.mul_assoc]
+    _ = (A i)ᴴ * (P * X * P) * (P * A i) := by
+          simp only [Matrix.mul_assoc, hP.2]
+    _ = (A i)ᴴ * (P * X * P) * A i := by
+          calc
+            (A i)ᴴ * (P * X * P) * (P * A i)
+                = (A i)ᴴ * ((P * X * P) * P) * A i := by
+                    simp only [Matrix.mul_assoc]
+            _ = (A i)ᴴ * (P * X * P) * A i := by
+                    simp only [Matrix.mul_assoc, hP.2]
+
+end ProjectionOrtho

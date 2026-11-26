@@ -20,7 +20,6 @@ import TNLean.MPS.Operator.Fusion.CompleteZipperFusionInverse
 import TNLean.MPS.Operator.Fusion.CompleteZipperFusionMixedOrientation
 import TNLean.MPS.Operator.Fusion.CompleteZipperFusionPentagon
 import TNLean.MPS.Operator.Fusion.CompleteZipperFusionSupport
-import TNLean.MPS.Operator.Fusion.CompleteZipperFusionTrace
 import TNLean.MPS.Operator.Fusion.DensityOperatorSymmetry
 import TNLean.MPS.Operator.Fusion.MPOSymmetry
 import TNLean.MPS.Operator.Fusion.ZipperUniqueness

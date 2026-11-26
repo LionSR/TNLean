@@ -10,8 +10,8 @@ import TNLean.MPS.Transfer.Scaling
 import QICLean.Channel.Peripheral.Spectrum.Conjugation
 import TNLean.MPS.FundamentalTheorem.Arbitrary.WeightedSums
 import TNLean.MPS.FundamentalTheorem.Arbitrary.GaugeConversions
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.NonzeroSubfamily
-import TNLean.MPS.CanonicalForm.Periodic.ScaledNormalization
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.Dichotomy
+import TNLean.MPS.CanonicalForm.Periodic.SectorNormalization
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.StateVectorDecomposition
 
 /-!

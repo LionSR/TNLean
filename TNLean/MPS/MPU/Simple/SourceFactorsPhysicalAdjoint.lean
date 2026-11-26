@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Simple.SourceYOneNormalization
 import TNLean.MPS.MPU.Simple.SourceYTwoNormalization
-import TNLean.MPS.MPU.Simple.SimpleTensorEquivalence
+import TNLean.MPS.MPU.Simple.SourceVCompleteNetwork
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!

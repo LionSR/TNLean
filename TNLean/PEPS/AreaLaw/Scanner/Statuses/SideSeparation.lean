@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusContainment
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BandMargins
 import TNLean.PEPS.AreaLaw.Scanner.Histories.GoodSampling
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixFiniteFamily
+import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixComparison
 
 /-!
 # Designated supports cannot meet both receiving sides

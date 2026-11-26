@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.QCA.Margolus.MargolusConstantGates
-import TNLean.QCA.QuasiLocal.ConsecutivePairObservables
+import TNLean.QCA.QuasiLocal.QuasiLocalTranslation
 import TNLean.QCA.QuasiLocal.BipartiteQuasiLocalEmbedding
 import TNLean.MPS.MPU.StandardForm.StandardFormFromGates
 import TNLean.MPS.MPU.StandardForm.TwoSiteStandardFormOpenWord

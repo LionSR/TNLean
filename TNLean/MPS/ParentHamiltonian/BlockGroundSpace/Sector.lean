@@ -10,13 +10,10 @@ Authors: TNLean contributors
 
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicBlockFamilyPresentation
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicBlockedGroundSpace
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicCornerSeparation
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicGroundSpaceIndependence
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicGroundStatePresentation
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicPrimitiveGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicResidualGroundSpace
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicSectorRepresentatives
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PoweredCyclicPrimitiveResolution
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PrimitiveSectorRepresentatives
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PrimitiveWitnessTransport
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryGram

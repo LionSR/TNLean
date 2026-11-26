@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.OperatorProduct
 
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.CompleteZipperFusionOfCompression
-import TNLean.MPS.FundamentalTheorem.OperatorProduct.CompressionPeriodic
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.IntegralRankOneAction
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.MPOProduct
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.NIMRep

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.Region.RegionReducedDensity
-import TNLean.PEPS.Injectivity.Regular.RegularRegionInjectivity
+import TNLean.PEPS.Injectivity.Boundary.RegularRegionEntropy
 import TNLean.PEPS.Injectivity.GInjective.GInjectiveCutRange
 import TNLean.PEPS.Injectivity.Normal.NormalPairBlocking
 

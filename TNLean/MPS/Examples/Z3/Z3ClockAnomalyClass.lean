@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Words.CyclicTraceForcedBond
-import TNLean.MPS.Tensor.Words.ForcedColumnNormality
 import TNLean.MPS.Examples.Z3.Z3ClockDefect
 import TNLean.MPS.Operator.Periodic.BondOneOperator
 import TNLean.MPS.Operator.Defs

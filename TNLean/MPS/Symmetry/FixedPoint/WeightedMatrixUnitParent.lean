@@ -7,7 +7,7 @@ import TNLean.MPS.Symmetry.FixedPoint.FixedPointGappedPath
 import TNLean.MPS.Symmetry.FixedPoint.WeightedMatrixUnitInterpolation
 import TNLean.MPS.Symmetry.FixedPoint.BondProductEndpointGroundSpace
 import TNLean.MPS.Symmetry.FixedPoint.TwoSiteBondContraction
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.MatrixRepresentation
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 
 /-!
 # Canonical parents of the weighted matrix-unit interpolation

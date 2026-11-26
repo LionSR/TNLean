@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
-import TNLean.MPS.FundamentalTheorem.Compression.WeightedMultiBlock
 import TNLean.MPS.Operator.Product.ActionTensor
 import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
 

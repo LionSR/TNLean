@@ -10,8 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.FiniteRangeKnabeGap
-import TNLean.MPS.ParentHamiltonian.Gap.Comparison.IntervalGapTransport
-import TNLean.MPS.ParentHamiltonian.Gap.Comparison.IntervalKernelTransport
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenFiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenKnabePadding
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenRangeComparison

@@ -11,7 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.Index.BlockingRanks
 import TNLean.MPS.MPU.Index.BondPadding
 import TNLean.MPS.MPU.Index.CompositionIndex
-import TNLean.MPS.MPU.Index.CompositionRanks
 import TNLean.MPS.MPU.Index.FactorFreeSandwich
 import TNLean.MPS.MPU.Index.GeneralIndexContinuity
 import TNLean.MPS.MPU.Index.IdentityIndex
@@ -19,7 +18,6 @@ import TNLean.MPS.MPU.Index.IdentitySourceRanks
 import TNLean.MPS.MPU.Index.Index
 import TNLean.MPS.MPU.Index.IndexContinuity
 import TNLean.MPS.MPU.Index.IndexOfCanonicalForm
-import TNLean.MPS.MPU.Index.InjectiveSourceIndex
 import TNLean.MPS.MPU.Index.ReducedToHatTransport
 import TNLean.MPS.MPU.Index.RepresentativeIndex
 import TNLean.MPS.MPU.Index.RepresentativeIndexTensorProduct

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Entropy.RegionalReset
 import TNLean.PEPS.Approximation.DoubledHamiltonian.SwappedSquareHamiltonian
-import TNLean.PEPS.AreaLaw.Operators.Interactions.SupportedGaussianIntegral
+import TNLean.PEPS.AreaLaw.Operators.Interactions.RegionOperatorLocalization
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!

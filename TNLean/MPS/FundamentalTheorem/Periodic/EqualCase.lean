@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Sectors.WeightEquiv
 import TNLean.MPS.FundamentalTheorem.Periodic.RepeatedBlocks
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.NonzeroSubfamily
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.Dichotomy
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.StateVectorDecomposition
 import TNLean.MPS.Tensor.DirectSum.SectorDecomposition
 

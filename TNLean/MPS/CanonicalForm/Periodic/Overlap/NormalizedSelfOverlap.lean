@@ -7,7 +7,7 @@ import TNLean.MPS.Transfer.Irreducible.TransferPeripheral
 import TNLean.MPS.Transfer.Irreducible.BlockingViaAdjoint
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalityChain
 import TNLean.MPS.Tensor.DirectSum.SectorBNT
-import TNLean.MPS.CanonicalForm.Periodic.Overlap.SelfOverlap
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.SelfOverlapNonrep
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 
 /-!

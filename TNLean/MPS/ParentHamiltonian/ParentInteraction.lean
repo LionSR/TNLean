@@ -12,9 +12,7 @@ import TNLean.MPS.ParentHamiltonian.ParentInteraction.CoefficientPairing
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.CyclicRestrictionNorm
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.CyclicWindowPermutation
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.EmbeddedC2
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.KernelChainGroundSpace
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.MatrixRepresentation
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.PhysicalDeformation
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.PhysicalEmbedding

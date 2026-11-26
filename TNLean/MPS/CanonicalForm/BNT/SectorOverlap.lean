@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.DirectSum.SectorBNT
 import TNLean.MPS.CanonicalForm.BNT.Basic
-import TNLean.MPS.Transfer.Spectrum.CastDecay
+import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
 
 /-!
 # Auxiliary lemmas for the BNT canonical-form predicate `IsBNTCanonicalForm`

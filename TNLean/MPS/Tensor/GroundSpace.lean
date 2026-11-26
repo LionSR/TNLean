@@ -15,11 +15,9 @@ import TNLean.MPS.Tensor.GroundSpace.BoundaryClosingTraceReconstruction
 import TNLean.MPS.Tensor.GroundSpace.BoundaryClosingWitness
 import TNLean.MPS.Tensor.GroundSpace.BoundaryMatrixBlock
 import TNLean.MPS.Tensor.GroundSpace.BoundaryOverlap
-import TNLean.MPS.Tensor.GroundSpace.BoundaryStripping
 import TNLean.MPS.Tensor.GroundSpace.ChainGroundSpace
 import TNLean.MPS.Tensor.GroundSpace.CyclicTranslation
 import TNLean.MPS.Tensor.GroundSpace.CyclicWindow
-import TNLean.MPS.Tensor.GroundSpace.ExtendRight
 import TNLean.MPS.Tensor.GroundSpace.GroundSpace
 import TNLean.MPS.Tensor.GroundSpace.IntersectionProperty
 import TNLean.MPS.Tensor.GroundSpace.Nonvanishing

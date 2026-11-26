@@ -7,6 +7,8 @@ import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import Mathlib.Logic.Equiv.Fin.Rotate
 import TNLean.MPS.Operator.Interaction.PhysicalGibbsEmbedding
 import TNLean.MPS.FundamentalTheorem.Sectors.FundamentalCoord
+import TNLean.MPS.Symmetry.FixedPoint.SPTFixedPoint
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!
 # Regrouping physical registers into neighboring bonds
@@ -27,7 +29,15 @@ register of the preceding physical site and the left register of the current
 site. The entry formula below includes identities on all other registers.
 Source: Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.D.2,
 figure `fig:iso-injective` and equation `eq:phase-nosym:iso-hamiltonian`.
+
+It also contains the following results.
+
+* `MPSTensor.incomingBondPerm_conj_registerAction`,
+  `MPSTensor.incomingBondPerm_conj_sptFixedPointAction`: physical symmetry in incoming-bond
+  coordinates.
 -/
+
+section BondRegrouping
 
 section
 
@@ -100,3 +110,68 @@ theorem incomingBondPerm_conj_local_apply {D N : ℕ} (hN : 1 ≤ N) (i : Fin N)
 end MPSTensor
 
 end
+
+end BondRegrouping
+
+section BondRegroupingSymmetry
+
+/-!
+## Physical symmetry in incoming-bond coordinates
+
+Regrouping the registers exchanges the order of their two actions: an on-site
+left-right action `L ⊗ R` becomes the bond action `R ⊗ L`. This is the
+coordinate identity underlying the symmetric independent-bond Hamiltonian in
+Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F.2,
+equation `eq:1d-sym:jointsym`.
+-/
+
+open scoped Matrix Kronecker
+
+namespace MPSTensor
+
+/-- The on-site left-right action becomes the right-left action on incoming
+bonds. Source: arXiv:1010.3732, Section II.F.2, `eq:1d-sym:jointsym`. -/
+theorem incomingBondPerm_conj_registerAction (D N : ℕ)
+    (L R : Matrix (Fin D) (Fin D) ℂ) :
+    (incomingBondPerm D N).permMatrix ℂ *
+      Matrix.piKronecker (fun _ : Fin N =>
+        Matrix.reindex finProdFinEquiv finProdFinEquiv (R ⊗ₖ L)) *
+      ((incomingBondPerm D N).permMatrix ℂ).conjTranspose =
+    Matrix.piKronecker (fun _ : Fin N =>
+      Matrix.reindex finProdFinEquiv finProdFinEquiv (L ⊗ₖ R)) := by
+  classical
+  rw [Matrix.conjTranspose_permMatrix, Equiv.Perm.inv_def,
+    permMatrix_conj_eq_submatrix]
+  ext s t
+  simp only [Matrix.submatrix_apply, Matrix.piKronecker_apply,
+    Matrix.reindex_apply, Matrix.kroneckerMap_apply]
+  simp only [incomingBondPerm, Equiv.trans_apply, Equiv.piCongrRight_apply,
+    Pi.map_apply, Equiv.symm_apply_apply]
+  change (∏ n, R (finProdFinEquiv.symm (s ((finRotate N).symm n))).2
+      (finProdFinEquiv.symm (t ((finRotate N).symm n))).2 *
+      L (finProdFinEquiv.symm (s n)).1 (finProdFinEquiv.symm (t n)).1) = _
+  rw [Finset.prod_mul_distrib, Finset.prod_mul_distrib]
+  rw [Equiv.prod_comp (finRotate N).symm
+    (fun n => R (finProdFinEquiv.symm (s n)).2 (finProdFinEquiv.symm (t n)).2),
+    mul_comm]
+
+/-- The physical action `U(g) = W_gᵀ ⊗ W_g⁻¹` of the fixed-point tensor, with
+`W_g = ρ(g⁻¹)`, is the right-left virtual action `W_g⁻¹ ⊗ W_gᵀ` in incoming-bond
+coordinates. Source: arXiv:1010.3732, Section II.F.2, `eq:1d-sym:jointsym`. -/
+theorem incomingBondPerm_conj_sptFixedPointAction {G : Type} [Group G]
+    {D : ℕ} {ω : ScalarCocycle G}
+    (ρ : ProjectiveRepresentation (D := D) ω) (g : G) (N : ℕ) :
+    (incomingBondPerm D N).permMatrix ℂ *
+      Matrix.piKronecker (fun _ : Fin N =>
+        Matrix.reindex finProdFinEquiv finProdFinEquiv
+          ((((sptGauge ρ g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) ⊗ₖ
+            (sptGauge ρ g : Matrix (Fin D) (Fin D) ℂ)ᵀ)) *
+      ((incomingBondPerm D N).permMatrix ℂ).conjTranspose =
+    Matrix.piKronecker (fun _ : Fin N => sptFixedPointAction ρ 1 g) := by
+  simp only [sptFixedPointAction, MonoidHom.coe_mk, OneHom.coe_mk, MonoidHom.one_apply,
+    one_smul, Matrix.coe_reindexAlgEquiv, sptKron]
+  exact incomingBondPerm_conj_registerAction D N _ _
+
+end MPSTensor
+
+end BondRegroupingSymmetry

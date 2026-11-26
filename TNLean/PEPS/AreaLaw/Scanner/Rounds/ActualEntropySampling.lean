@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualChargeData
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.SplitEntropyCost
+import TNLean.PEPS.AreaLaw.Scanner.Rounds.FillTransport
+import TNLean.PEPS.AreaLaw.Scanner.Rounds.ChargeEntropyCost
 import QICLean.ManyBody.Replica.BandMetric.OldLeafIntegral
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.SupportCompatibility
 import QICLean.ManyBody.Replica.BandMetric.Energy

@@ -126,7 +126,7 @@ The range equality follows by comparing the vanishing conditions for
 $\eta_{A,\rho}(X^*X)$ and
 $\operatorname{tr}(\sigma_kX^*X)$, then testing the orthogonal-complement
 projections of the two subspaces. The result is proved in
-\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalDensitySupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalFaithfulSupport.lean}.
 Stationarity is unnecessary for these finite densities. Without stationarity
 the conclusion does not assert consistency across intervals.
 
@@ -242,7 +242,7 @@ projections approaches the projection onto their joint span. Thus all
 column compressions vanish in norm, and so does the full ground projection
 of $X\psi_n$ for bounded vectors in the chosen sector. The finite-sector
 assembly and tensor consequence are proved in
-\path{TNLean/MPS/ParentHamiltonian/BoundaryMap/GroundSpaceSectorCompressionDecay.lean} and
+\path{TNLean/MPS/ParentHamiltonian/BoundaryMap/BlockProjectorSum.lean} and
 \path{TNLean/MPS/ParentHamiltonian/BulkObservable/BoundaryObservableCompression.lean}.
 
 For a weighted direct sum of normalized primitive blocks with nonzero
@@ -318,7 +318,7 @@ mass tend to one; compactness supplies limiting coefficients. Compression
 of each local observable identifies its expectation, and continuity extends
 the identity to the completed quasi-local algebra. Translation invariance
 of $\varphi$ is not assumed. This implication is proved in
-\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/MultiblockQuasiLocalFace.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/MultiblockQuasiLocalSupport.lean}.
 
 Conversely, eventual annihilation of the joint MPS space by the
 open-chain sums gives zero local expectation in every constructed
@@ -364,7 +364,7 @@ Full joint projection decay and finite-range locality then give
 $\gamma$. The ground-state classification identifies every pure zero-energy
 state with such a sector, so the bound holds in every pure state of the
 zero-energy face. This paired finite- and infinite-volume conclusion is
-proved in \path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalGroundStateGap.lean}.
+proved in \path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalEventualKernelGap.lean}.
 Simultaneous word span of an original, unnormalized family suffices:
 normalization preserves the joint spaces at every length, and the range of
 $h$ remains arbitrary and positive.
@@ -412,7 +412,7 @@ matrices. Removing gauge-phase repetitions preserves the joint spaces. Thus
 (\ref{eq:exact_blocked_presentation}) holds for a nonempty finite family of
 inequivalent primitive tensors; no sector matrices or inequivalence
 hypotheses are supplied separately. This construction is proved in
-\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/Sector/PeriodicGroundStatePresentation.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/Sector/PeriodicPrimitiveGroundSpace.lean}.
 
 There is also an exact criterion relating local zero energy to interval
 support. For any tensor $A$, a positive interaction of positive range whose
@@ -426,10 +426,10 @@ eventual open-chain kernel is $G_A(N)$ satisfies
 Projection ordering extends eventual symmetric support to all intervals.
 Conversely, each interaction term annihilates the MPS space of a sufficiently
 large containing volume. This criterion is proved in
-\path{TNLean/MPS/ParentHamiltonian/Blocking/EventualKernelGroundStateSupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalGroundStateSupport.lean}.
 Together with the periodic presentation it classifies the entire original
 zero-energy face and its pure states in
-\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicBlockFamilyGroundStates.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicSectorExpectations.lean}.
 
 Nonwrapping interaction windows commute exactly with configuration
 regrouping. To compare Hamiltonians, let $\widehat h$ be $H_h(KL)$
@@ -687,7 +687,7 @@ For stationary data, the compatible finite expectations define a quasi-local
 state $\omega_{A,\rho}$. The same density $\sigma_k$ represents every translated
 interval restriction of this state, and its range remains $G_A(k)$. This
 literal state-support statement is proved in
-\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalDensitySupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalFaithfulSupport.lean}.
 
 The periodic presentation also gives an infinite-volume gap for these
 supplied generators without assuming that $A$ is irreducible or periodic.
@@ -743,7 +743,7 @@ remaining finitely many volumes extends the bound above their actual
 kernels. The same given $h$ has the literal infinite-volume commutator gap.
 No assumption on $\ker h$ at the interaction range is added. These results
 are proved in
-\path{TNLean/MPS/ParentHamiltonian/Interaction/OpenInteractionRangeComparison.lean}
+\path{TNLean/MPS/ParentHamiltonian/Interaction/ParentInteractionGap.lean}
 and
 \path{TNLean/MPS/ParentHamiltonian/Stationary/FaithfulParentFiniteGap.lean}.
 They give Theorem~1.2 in the supplied faithful stationary-generator setting.
@@ -787,7 +787,7 @@ quasi-local states:
 Every finite-region observable can be placed in a containing interval, where
 the two functionals agree. Continuity and density of the local observables
 then give equality on the quasi-local algebra. This is proved in
-\path{TNLean/MPS/ParentHamiltonian/Stationary/QuasiLocalExpectationEquality.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/StationarySupportCompression.lean}.
 Thus the support restriction preserves the entire specified state, rather
 than merely its finite density ranges.
 

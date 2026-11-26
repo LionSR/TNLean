@@ -13,7 +13,6 @@ import TNLean.MPS.MPDO.SectorMaps.VerticalBlockedOperatorRepresentations
 import TNLean.MPS.MPDO.SectorMaps.VerticalBoundaryContraction
 import TNLean.MPS.MPDO.SectorMaps.VerticalMapTransport
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorAmbientMaps
-import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoefficientComparison
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCompletePositivity
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoordinates
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorDensityBlocks

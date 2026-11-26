@@ -4,10 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalBlocks.Blocking
-import TNLean.MPS.FundamentalTheorem.Refinement.OrbitUnitary
-import TNLean.MPS.FundamentalTheorem.Refinement.Normalization
 import TNLean.MPS.FundamentalTheorem.Refinement.PhysicalSymmetry
-import TNLean.MPS.Tensor.DirectSum.BlockInclusionResolution
+import TNLean.MPS.Tensor.DirectSum.BlockAssembly
+import TNLean.MPS.CanonicalForm.Periodic.SectorNormalization
+import TNLean.MPS.CanonicalForm.Periodic.Blocking.IrreducibleFormBlocking
+import TNLean.MPS.FundamentalTheorem.Periodic.PhaseClassGrouping
+import TNLean.MPS.FundamentalTheorem.Refinement.RefinableOfDivisible
+import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.FundamentalTheorem.Periodic.EqualCaseGlobal
+import TNLean.MPS.CanonicalForm.Periodic.Blocking.SectorPhaseWord
 
 /-!
 # Refinability implies divisibility for a block form with unit weights
@@ -42,6 +47,13 @@ makes `𝔼_B` trace preserving. Documented in
   trace-preserving root with exactly prescribed blocking.
 * `MPSTensor.isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks`: the
   corrected forward implication of Theorem 4.1.
+* `MPSTensor.weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos`,
+  `MPSTensor.exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos`: normalizing a tensor
+  from a unit-weight blocked comparison.
+* `MPSTensor.refinementScalarCounterexample`, `MPSTensor.refinement_normalization_counterexample`: a
+  scalar counterexample to the printed refinement implication.
+* `MPSTensor.IsPeriodic.exists_unitary_stepOrbit_decomposition`: unitary orbit coordinates and
+  phase-weighted blocked roots.
 
 ## References
 
@@ -50,6 +62,286 @@ makes `𝔼_B` trace preserving. Documented in
   `lem:blocking-arbitrary`, lines 432--456; `thm:bdequal`, lines 643--693;
   Theorem 4.1, lines 715--810.
 -/
+
+section Normalization
+
+/-!
+## Normalizing a tensor from a unit-weight blocked comparison
+
+Start with the positive-weight periodic decomposition of an arbitrary tensor.
+If a positive blocking has the same positive-length MPVs as a periodic sector
+decomposition with unit-modulus multiplicities, the original block weights have
+modulus one. The multiplicity-bearing equal-case fundamental theorem also
+recovers the exact total bond dimension.
+
+Absorbing the original weight phases into the blocks gives a unit-weight periodic
+presentation without assuming an initial canonical form or empty-word equality.
+This is the normalization step in arXiv:1708.00029, Theorem 4.1, lines 750–756.
+The subsequent orbit-phase matching and root construction are separate steps.
+
+**Scope restriction (positive lengths):**
+`exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos` asserts equality
+of MPVs only at positive lengths, since discarding zero blocks may lower the bond
+dimension. The convention is inherited from `exists_periodic_blockDecomposition`
+and recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
+
+**Scope restriction (unit-modulus target weights):** both blocked-comparison
+theorems assume the target multiplicities have modulus one (`hQweight`). This is
+the trace-preservation correction to the forward direction of Theorem 4.1, which
+is false as printed without it; see
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`.
+-/
+
+open scoped Matrix BigOperators ComplexOrder
+open Kraus (blockPhysDim blockTensor)
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+section Blocked
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+
+private theorem sum_dim_eq_of_sameMPV₂Pos (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (A k))
+    (Q : SectorDecomposition d) (periodQ : Fin Q.basisCount → ℕ)
+    (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
+    (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
+    (hSame : SameMPV₂Pos (toTensorFromBlocks μ A) Q.toTensor) :
+    (∑ k, dim k) = Q.totalDim := by
+  let classes := mpvPhaseClassData A
+  obtain ⟨ξ, hξ, hdim, hP, hNonRepP, _, hgroup, _⟩ :=
+    classes.exists_unitary_sectorDecomposition μ hμ period hper
+  let P := classes.toSectorDecomposition μ ξ hμ hξ
+  have hPQ : SameMPV₂Pos P.toTensor Q.toTensor := hgroup.symm.trans hSame
+  obtain ⟨_, _, _, _, _, _, _, _, _, Y, Y', hYY', hY'Y, _⟩ :=
+    fundamentalTheorem_periodic_equalCase_sectorDecomposition P Q
+      (fun j ↦ period (classes.repr j)) periodQ hP hPerQ hNonRepP hNonRepQ hPQ
+  exact hdim.symm.trans (by simpa using Matrix.square_of_invertible Y Y' hYY' hY'Y)
+
+/-- A blocked comparison with unit-modulus multiplicities forces every original
+periodic-block weight to have modulus one and recovers the target bond dimension.
+Source: arXiv:1708.00029, Theorem 4.1, lines 750–756, using `lem:blocking-arbitrary`
+and the multiplicity matching in `thm:bdequal`. The unit-modulus target condition
+is the trace-preservation correction recorded in
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. -/
+theorem weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (A k))
+    {p : ℕ} (hp : 0 < p)
+    (Q : SectorDecomposition (blockPhysDim d p)) (periodQ : Fin Q.basisCount → ℕ)
+    (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
+    (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
+    (hSame : SameMPV₂Pos (blockTensor (toTensorFromBlocks μ A) p) Q.toTensor)
+    (hQweight : ∀ j q, ‖Q.weight j q‖ = 1) :
+    (∀ k, ‖μ k‖ = 1) ∧ (∑ k, dim k) = Q.totalDim := by
+  classical
+  let n : Fin r → ℕ := fun k ↦ (period k).gcd p
+  have hex (k : Fin r) :
+      ∃ (sd : Fin (n k) → ℕ)
+        (B : (a : Fin (n k)) → MPSTensor (blockPhysDim d p) (sd a)),
+        (∑ a, sd a) = dim k ∧
+        (∀ a, IsPeriodic (period k / n k) (B a)) ∧
+        SameMPV₂ (blockTensor (A k) p) (toTensorFromBlocks (fun _ ↦ 1) B) := by
+    obtain ⟨_, sd, B, _, _, _, _, _, _, hd, _, hSame, _, _, _, hperB⟩ :=
+      (hper k).exists_stepOrbit_blockDecomposition p
+    exact ⟨sd, B, hd, hperB hp, hSame⟩
+  choose sd B hdimB hperB hSameB using hex
+  let e := (finSigmaFinEquiv (n := n)).symm
+  have hflat := sameMPV₂_toTensorFromBlocks_refinement (fun k ↦ μ k ^ p)
+    (fun k ↦ blockTensor (A k) p) n sd B hSameB
+  have hbase := sameMPV₂_blockTensor_toTensorFromBlocks μ A p
+  have hPQ : SameMPV₂Pos
+      (toTensorFromBlocks (fun j ↦ μ (e j).1 ^ p) (fun j ↦ B (e j).1 (e j).2))
+      Q.toTensor := by
+    intro N hN σ
+    exact (hflat N σ).symm.trans ((hbase N σ).symm.trans (hSame N hN σ))
+  have hw := weight_norm_eq_one_of_block_sum_sameMPV₂Pos
+    (fun j ↦ μ (e j).1 ^ p) (fun j ↦ pow_ne_zero _ (hμ _))
+    (fun j ↦ period (e j).1 / n (e j).1) (fun j ↦ hperB (e j).1 (e j).2)
+    Q periodQ hPerQ hNonRepQ hPQ hQweight
+  have hdimFlat := sum_dim_eq_of_sameMPV₂Pos (fun j ↦ μ (e j).1 ^ p)
+    (fun j ↦ pow_ne_zero _ (hμ _)) (fun j ↦ B (e j).1 (e j).2)
+    (fun j ↦ period (e j).1 / n (e j).1) (fun j ↦ hperB (e j).1 (e j).2)
+    Q periodQ hPerQ hNonRepQ hPQ
+  constructor
+  · intro k
+    let a : Fin (n k) := ⟨0, Nat.gcd_pos_of_pos_right _ hp⟩
+    have hh := hw (finSigmaFinEquiv ⟨k, a⟩)
+    change ‖μ ((finSigmaFinEquiv (n := n)).symm (finSigmaFinEquiv ⟨k, a⟩)).1 ^ p‖ = 1 at hh
+    rw [Equiv.symm_apply_apply, norm_pow] at hh
+    exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) (Nat.ne_of_gt hp)).mp hh
+  · have hdimSum : (∑ j, sd (e j).1 (e j).2) = ∑ k, dim k := by
+      rw [Equiv.sum_comp e (fun ka ↦ sd ka.1 ka.2), Fintype.sum_sigma]
+      simp only [hdimB]
+    exact hdimSum.symm.trans hdimFlat
+
+end Blocked
+
+/-- Normalize an arbitrary tensor whose positive blocking matches a periodic
+sector decomposition with unit-modulus weights. The resulting unit-weight blocks
+have total dimension exactly that of the target. Source: arXiv:1708.00029,
+Theorem 4.1, lines 750–756. This is a positive-length presentation, not a claimed
+unitary similarity of the original arbitrary tensor; the corrected forward proof
+continues with the presented blocks. -/
+theorem exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos
+    (A : MPSTensor d D) {p : ℕ} (hp : 0 < p)
+    (Q : SectorDecomposition (blockPhysDim d p)) (periodQ : Fin Q.basisCount → ℕ)
+    (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
+    (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
+    (hSame : SameMPV₂Pos (blockTensor A p) Q.toTensor)
+    (hQweight : ∀ j q, ‖Q.weight j q‖ = 1) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ)
+      (B : (k : Fin r) → MPSTensor d (dim k)) (period : Fin r → ℕ),
+      (∀ k, IsPeriodic (period k) (B k)) ∧
+      (∑ k, dim k) = Q.totalDim ∧ (∑ k, dim k) ≤ D ∧
+      SameMPV₂Pos A (toTensorFromBlocks (fun _ ↦ 1) B) := by
+  obtain ⟨r, dim, μ, B, period, hper, hμpos, _, hAB, hbound⟩ :=
+    exists_periodic_blockDecomposition A
+  have hμ (k : Fin r) : μ k ≠ 0 := (hμpos k).ne'
+  have hBlock := sameMPV₂Pos_blockTensor A (toTensorFromBlocks μ B) hAB p hp
+  obtain ⟨hw, hdim⟩ := weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos
+    μ hμ B period hper hp Q periodQ hPerQ hNonRepQ
+    (hBlock.symm.trans hSame) hQweight
+  refine ⟨r, dim, (fun k i ↦ μ k • B k i), period,
+    (fun k ↦ isPeriodic_smul_of_norm_one (hw k) (B k) (hper k)), hdim, hbound, ?_⟩
+  have he : toTensorFromBlocks (fun _ ↦ 1) (fun k i ↦ μ k • B k i) =
+      toTensorFromBlocks μ B := by
+    unfold toTensorFromBlocks
+    simp only [one_smul]
+  rw [he]
+  exact hAB
+
+end MPSTensor
+
+end Normalization
+
+section OrbitUnitary
+
+/-!
+## Unitary orbit coordinates and phase-weighted blocked roots
+
+The isometries of the prescribed periodic decomposition assemble into a unitary
+on the original bond space. Its columns keep the original step-orbit labels,
+so the diagonal multiplicity phases can be transported to those orbit supports.
+The cyclic phase construction then gives a left-canonical tensor whose blocking
+is the phase-weighted direct sum in these same coordinates.
+
+This supplies the bond-coordinate and phase-transport steps of
+arXiv:1708.00029, Theorem 4.1. It does not yet identify the phases supplied by the
+global equal-case theorem after grouping multiple original periodic blocks.
+
+**Local fix (powered roots):** The period of each orbit block is `m / gcd(m,p)`.
+The source's displayed peripheral root set omits the exponent `p`; see
+`docs/paper-gaps/dccsp17_blocking_peripheral_roots.tex`.
+-/
+
+open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
+
+namespace MPSTensor
+
+variable {d D m : ℕ} [NeZero m]
+
+private theorem blockScalarMatrix_mul_blockInclusion {r : ℕ} {dim : Fin r → ℕ}
+    (c : Fin r → ℂ) (a : Fin r) :
+    blockScalarMatrix dim c * blockInclusion dim a = c a • blockInclusion dim a := by
+  have h := toTensorFromBlocks_mul_blockInclusion (d := 1) (dim := dim) c
+    (fun _ _ ↦ 1) a 0
+  change blockScalarMatrix dim c * blockInclusion dim a =
+    blockInclusion dim a * (c a • 1) at h
+  simpa only [Matrix.mul_smul, Matrix.mul_one] using h
+
+private theorem exists_root_of_orbit_phase (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+    (hproj : ∀ u, IsOrthogonalProjection (P u)) (hsum : ∑ u, P u = 1)
+    (hshift : ∀ u i, P u * A i = A i * P (u + 1)) (p : ℕ)
+    (dim : Fin (m.gcd p) → ℕ)
+    (B : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
+    (V : (a : Fin (m.gcd p)) → Matrix (Fin D) (Fin (dim a)) ℂ)
+    (hrange : ∀ a, V a * (V a)ᴴ = stepOrbitProjection P p a)
+    (U : Matrix (Fin D) (Fin (∑ a, dim a)) ℂ)
+    (hiso : Uᴴ * U = 1)
+    (hinc : ∀ a, U * blockInclusion dim a = V a)
+    (hconj : ∀ i, blockTensor A p i = U * toTensorFromBlocks (fun _ ↦ 1) B i * Uᴴ)
+    (c : Fin (m.gcd p) → ℂ) (hc : ∀ a, c a ^ (m / m.gcd p) = 1) :
+    ∃ A' : MPSTensor d D, IsLeftCanonical A' ∧
+      ∀ i, blockTensor A' p i = U * toTensorFromBlocks c B i * Uᴴ := by
+  let Z := U * blockScalarMatrix dim c * Uᴴ
+  have hZV (a) : Z * V a = c a • V a := by
+    rw [← hinc]
+    dsimp only [Z]
+    simp only [Matrix.mul_assoc]
+    rw [← Matrix.mul_assoc Uᴴ U, hiso, Matrix.one_mul, blockScalarMatrix_mul_blockInclusion,
+      Matrix.mul_smul]
+  have hZ (a i) : Z * (stepOrbitProjection P p a * blockTensor A p i) =
+      c a • (stepOrbitProjection P p a * blockTensor A p i) := by
+    rw [← hrange]
+    simp only [← Matrix.mul_assoc]
+    rw [hZV]
+    simp only [Matrix.smul_mul]
+  have hmul := orthogonalProjection_mul_eq_ite_of_sum_eq_one P hproj hsum
+  obtain ⟨A', hA', hblock⟩ := exists_isLeftCanonical_blockTensor_eq_of_orbit_action
+    A P hmul (fun u ↦ (hproj u).1.eq) hsum hshift hA p c hc Z hZ
+  refine ⟨A', hA', fun i ↦ ?_⟩
+  rw [hblock]
+  change Z * blockTensor A p i = _
+  rw [hconj]
+  dsimp only [Z]
+  simp only [Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc Uᴴ U, hiso, Matrix.one_mul,
+    ← Matrix.mul_assoc (blockScalarMatrix dim c), blockScalarMatrix_mul_toTensorFromBlocks]
+  simp only [mul_one]
+
+omit [NeZero m] in
+/-- The prescribed periodic blocks assemble by one unitary, retaining their orbit
+inclusions. Every family of root-of-unity phases on these same blocks lifts to a
+left-canonical root with the original physical dimension and bond space.
+
+Source: arXiv:1708.00029, `lem:blocking-arbitrary`, lines 432–456, and
+`eq:ZPA-is-cPA` through `eq:Aprime-is-cPA`, lines 778–807. -/
+theorem IsPeriodic.exists_unitary_stepOrbit_decomposition
+    (A : MPSTensor d D) (hA : IsPeriodic m A) {p : ℕ} (hp : 0 < p) :
+    let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
+    ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
+      (dim : Fin (m.gcd p) → ℕ)
+      (B : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
+      (V : (a : Fin (m.gcd p)) → Matrix (Fin D) (Fin (dim a)) ℂ)
+      (U : Matrix (Fin D) (Fin (∑ a, dim a)) ℂ),
+      (∀ u, IsOrthogonalProjection (P u)) ∧ (∑ u, P u = 1) ∧
+      (∀ u i, P u * A i = A i * P (u + 1)) ∧
+      (∑ a, dim a) = D ∧
+      (∀ a, IsPeriodic (m / m.gcd p) (B a)) ∧
+      (∀ a, V a * (V a)ᴴ = stepOrbitProjection P p a) ∧
+      U * Uᴴ = 1 ∧ Uᴴ * U = 1 ∧
+      (∀ a, U * blockInclusion dim a = V a) ∧
+      (∀ i, blockTensor A p i = U * toTensorFromBlocks (fun _ ↦ 1) B i * Uᴴ) ∧
+      ∀ c : Fin (m.gcd p) → ℂ, (∀ a, c a ^ (m / m.gcd p) = 1) →
+        ∃ A' : MPSTensor d D, IsLeftCanonical A' ∧
+          ∀ i, blockTensor A' p i = U * toTensorFromBlocks c B i * Uᴴ := by
+  let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
+  obtain ⟨P, dim, B, V, hproj, hsum, _, hshift, _, hdim, _, _, hiso, hrange, hB, hper⟩ :=
+    hA.exists_stepOrbit_blockDecomposition p
+  have hinter (a) (i) : blockTensor A p i * V a = V a * B a i := by
+    have hPV : stepOrbitProjection P p a * V a = V a := by
+      rw [← hrange, Matrix.mul_assoc, hiso, Matrix.mul_one]
+    rw [hB, ← Matrix.mul_assoc, ← Matrix.mul_assoc, hrange,
+      stepOrbitProjection_mul_blockTensor P A hshift, Matrix.mul_assoc, hPV]
+  obtain ⟨U, hco, hU, hinc, hconj⟩ :=
+    exists_unitary_toTensorFromBlocks_of_resolution (blockTensor A p) B V
+      (by simp only [hrange, sum_stepOrbitProjection, hsum]) hdim hinter
+  refine ⟨P, dim, B, V, U, hproj, hsum, hshift, hdim, hper hp, hrange,
+    hco, hU, hinc, hconj, ?_⟩
+  exact fun c hc ↦ exists_root_of_orbit_phase A hA.leftCanonical P hproj hsum hshift p
+    dim B V hrange U hU hinc hconj c hc
+
+end MPSTensor
+
+end OrbitUnitary
+
+section DivisibleOfRefinable
 
 open scoped Matrix BigOperators
 open Kraus (blockPhysDim blockTensor)
@@ -337,3 +629,117 @@ theorem isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks
   exact ⟨Kraus.transferMap R, Kraus.isChannel_mapLM R hR, hRoot⟩
 
 end MPSTensor
+
+end DivisibleOfRefinable
+
+section NormalizationCounterexample
+
+/-!
+## A scalar counterexample to the printed refinement implication
+
+The forward implication of Theorem 4.1 in arXiv:1708.00029, lines 717--731,
+requires trace preservation of the target transfer map. The one-dimensional
+tensor with sole letter `4` is a literal positive-weight irreducible-form
+block and has a two-site refinement with sole root letter `2`. Its transfer
+map multiplies by `16`, so it has no channel square root. See
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`.
+-/
+
+open scoped Matrix BigOperators
+open Kraus (blockTensor)
+
+namespace MPSTensor
+
+private def unitTensor : MPSTensor 1 1 := fun _ => 1
+
+private def rootTensor : MPSTensor 1 1 :=
+  fun _ => (2 : ℂ) • (1 : Matrix (Fin 1) (Fin 1) ℂ)
+
+/-- The one-dimensional target tensor with sole letter four. -/
+def refinementScalarCounterexample : MPSTensor 1 1 :=
+  fun _ => (4 : ℂ) • (1 : Matrix (Fin 1) (Fin 1) ℂ)
+
+/-- The normalized one-dimensional block has period one. -/
+private theorem unitTensor_periodic : IsPeriodic 1 unitTensor := by
+  have hMap : Kraus.transferMap unitTensor = LinearMap.id := by
+    ext X i j
+    fin_cases i
+    fin_cases j
+    simp [unitTensor]
+  have hNormal := isNormalTensor_of_bondDim_one_of_transferMap_eq_id
+    unitTensor hMap
+  apply (IsPeriodic.one_iff_primitive unitTensor).2
+  refine ⟨hNormal.no_invariant_proj, ?_, hNormal.primitive_transfer⟩
+  unfold IsLeftCanonical Kraus.IsTP
+  simp [unitTensor]
+
+/-- The target is literally one periodic normalized block with positive weight four. -/
+private noncomputable def refinementScalarCounterexample_irreducibleForm :
+    IsIrreducibleForm refinementScalarCounterexample := by
+  refine {
+    r := 1
+    dim := fun _ => 1
+    blocks := fun _ => unitTensor
+    μ := fun _ => 4
+    period := fun _ => 1
+    periodic := fun _ => unitTensor_periodic
+    weight_pos := ?_
+    sameMPV := ?_ }
+  · intro k
+    norm_num
+  · intro N σ
+    rw [mpv_toTensorFromBlocks_eq_sum]
+    change mpv (fun i => (4 : ℂ) • unitTensor i) σ = _
+    rw [mpv_smul]
+    simp
+
+/-- The target family has a two-site refinement with root letter two. -/
+private theorem refinementScalarCounterexample_refinable :
+    IsPRefinable refinementScalarCounterexample 2 := by
+  apply isPRefinable_of_transferMap_eq_blockTensor refinementScalarCounterexample rootTensor
+    (by norm_num)
+  have hTensor : refinementScalarCounterexample = blockTensor rootTensor 2 := by
+    funext i
+    have hw : Kraus.wordOfBlock 1 2 i = List.replicate 2 (0 : Fin 1) := by
+      have hdecode : Kraus.decodeBlock 1 2 i = fun _ => (0 : Fin 1) :=
+        Subsingleton.elim _ _
+      simp only [Kraus.wordOfBlock, hdecode, List.ofFn_const]
+    change (4 : ℂ) • (1 : Matrix (Fin 1) (Fin 1) ℂ) =
+      Kraus.evalWord rootTensor (Kraus.wordOfBlock 1 2 i)
+    rw [hw, Kraus.evalWord_replicate]
+    ext a b
+    fin_cases a
+    fin_cases b
+    norm_num [rootTensor, pow_two, Matrix.mul_apply]
+  exact congrArg Kraus.transferMap hTensor
+
+/-- The target transfer map has no channel square root. -/
+private theorem refinementScalarCounterexample_not_divisible :
+    ¬ IsPDivisibleChannel (Kraus.transferMap refinementScalarCounterexample) 2 := by
+  rintro ⟨E, hE, hpow⟩
+  have hChannel : IsChannel (Kraus.transferMap refinementScalarCounterexample) := by
+    rw [hpow]
+    exact Kraus.isChannel_pow E hE 2
+  have hTrace := hChannel.tp (1 : Matrix (Fin 1) (Fin 1) ℂ)
+  norm_num [refinementScalarCounterexample, Kraus.transferMap_apply] at hTrace
+
+/-- The positive scalar weight in irreducible form does not force
+trace preservation in the printed forward implication of Theorem 4.1.
+Source: arXiv:1708.00029, lines 717--731; see
+`docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. -/
+theorem refinement_normalization_counterexample :
+    Nonempty (IsIrreducibleForm refinementScalarCounterexample) ∧
+      (∃ A₀ : MPSTensor 1 1, IsPeriodic 1 A₀ ∧
+        ∀ i, refinementScalarCounterexample i = (4 : ℂ) • A₀ i) ∧
+      IsPRefinable refinementScalarCounterexample 2 ∧
+      ¬ IsPDivisibleChannel (Kraus.transferMap refinementScalarCounterexample) 2 := by
+  refine ⟨⟨refinementScalarCounterexample_irreducibleForm⟩,
+    ⟨unitTensor, unitTensor_periodic, ?_⟩,
+    refinementScalarCounterexample_refinable,
+    refinementScalarCounterexample_not_divisible⟩
+  intro i
+  rfl
+
+end MPSTensor
+
+end NormalizationCounterexample

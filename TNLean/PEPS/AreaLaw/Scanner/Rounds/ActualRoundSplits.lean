@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualScanMeasures
 import TNLean.PEPS.AreaLaw.Scanner.Histories.DesignatedDilution
-import TNLean.PEPS.AreaLaw.Scanner.Histories.SplitCounting
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.SupportClassification
 
 /-!

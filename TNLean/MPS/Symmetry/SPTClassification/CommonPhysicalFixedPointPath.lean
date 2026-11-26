@@ -8,7 +8,7 @@ import TNLean.MPS.Symmetry.SPTClassification.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.GappedPath.PhysicalInteractionGap
 import TNLean.MPS.Symmetry.SPTClassification.FixedPointGappedPathWitness
 import TNLean.MPS.Symmetry.GappedPath.PhysicalInteractionGroundSpace
-import TNLean.MPS.Symmetry.SPTClassification.PhysicalSpectatorBondTransport
+import TNLean.MPS.Symmetry.SPTClassification.PhysicalSpectatorBondExtension
 
 /-!
 # The fixed-point path in the common physical representation

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Injectivity.Regular.RegularBoundaryRegisterTransport
-import TNLean.PEPS.Injectivity.Charge.RegularBoundaryChargeContraction
+import TNLean.PEPS.Injectivity.Charge.RegularEdgeChargeContraction
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!

@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.Algebra.ComplexOfInt
 import QICLean.Algebra.Matrix.MonomialMatrix
 import TNLean.MPS.Tensor.Words.CyclicTraceForcedBond
-import TNLean.MPS.Tensor.Words.ForcedColumnNormality
 import TNLean.MPS.Tensor.Words.SplitIndexTrace
 import TNLean.MPS.Examples.Cluster.ClusterReview
 import TNLean.MPS.FundamentalTheorem.Compression.RingEmbedding

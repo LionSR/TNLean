@@ -28,10 +28,8 @@ import TNLean.MPS.Preparation.BlockSum.OverlappingBlockStates
 import TNLean.MPS.Preparation.BlockSum.PhaseWeightCounterexample
 import TNLean.MPS.Preparation.BlockSum.RelativePolarCompression
 import TNLean.MPS.Preparation.BlockSum.RelativePositivePart
-import TNLean.MPS.Preparation.BlockSum.RelativeSecondOrderOverlap
 import TNLean.MPS.Preparation.BlockSum.RepeatedBlockCounterexample
 import TNLean.MPS.Preparation.BlockSum.RepeatedBlockSum
-import TNLean.MPS.Preparation.BlockSum.RepeatedOverlappingBlockError
 import TNLean.MPS.Preparation.BlockSum.RepeatedOverlappingBlockOverlap
 import TNLean.MPS.Preparation.BlockSum.RepeatedOverlappingBlockWeights
 import TNLean.MPS.Preparation.BlockSum.SecondOrderBlockError

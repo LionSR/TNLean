@@ -13,8 +13,6 @@ import TNLean.MPS.CanonicalForm.NormalBlocks.Conjugation
 import TNLean.MPS.CanonicalForm.NormalBlocks.FaithfulStationaryClosure
 import TNLean.MPS.CanonicalForm.NormalBlocks.FormII
 import TNLean.MPS.CanonicalForm.NormalBlocks.IrreducibleDecomposition
-import TNLean.MPS.CanonicalForm.NormalBlocks.NormalCanonicalForm
-import TNLean.MPS.CanonicalForm.NormalBlocks.NormalPrimitiveGauge
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorDichotomy
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalityChain

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.Reblocking.TorusInsertedGraphNetwork
-import TNLean.PEPS.Injectivity.Multiplicity.GraphInsertedRegionSupport
+import TNLean.PEPS.Injectivity.Multiplicity.GraphInsertedBondState
 import TNLean.PEPS.Injectivity.Closure.TorusClosureSeams
 import TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement
 import TNLean.PEPS.ParentHamiltonian.Region.RegionParentInteraction

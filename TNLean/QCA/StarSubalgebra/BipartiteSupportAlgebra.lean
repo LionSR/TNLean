@@ -9,6 +9,8 @@ import Mathlib.LinearAlgebra.Dimension.Free
 import QICLean.Algebra.Kronecker.KroneckerEmbed
 import QICLean.Algebra.OperatorSchmidt.Basic
 import QICLean.Algebra.Kronecker.TensorMap
+import QICLean.Algebra.StarSubalgebra.CommutingProduct
+import QICLean.Algebra.Kronecker.CommutingDecomposition
 
 /-!
 # Bipartite support algebras
@@ -60,7 +62,13 @@ dimensions, constructing Margolus gates, or comparing the GNVW and MPU indices.
 * `Matrix.le_support_kroneckerSubmodule` proves the literal two-sided support containment.
 * `Matrix.left_kronecker_embed_mem_centralizer_iff` and
   `Matrix.right_kronecker_embed_mem_centralizer_iff` give the two commutant characterizations.
+* `Matrix.leftKroneckerEmbed_sup_rightKroneckerEmbed_toSubmodule`: canonical coordinates for
+  products of commuting matrix factors.
+* `Matrix.supportAlgebras_commute_of_overlappingLifts_commute`: commutation of overlapping support
+  algebras.
 -/
+
+section BipartiteSupportAlgebra
 
 open scoped BigOperators Kronecker
 
@@ -532,3 +540,221 @@ theorem right_kronecker_embed_mem_centralizer_iff
     exact ((commute_right_kronecker_embed_iff B X).mpr (h hX)).eq.symm
 
 end Matrix
+
+end BipartiteSupportAlgebra
+
+section CommutingStarSubalgebraKronecker
+
+/-!
+## Canonical coordinates for products of commuting matrix factors
+
+The canonical embeddings of two matrix star-subalgebras into a bipartite matrix algebra commute.
+The underlying complex vector space of their algebraic join is the Kronecker-product span of the
+two original subspaces.
+
+This coordinate statement is distinct from the abstract full-matrix presentation of a pair of
+commuting factors: an arbitrary common ambient matrix algebra has no distinguished bipartite
+coordinates.
+
+### Main result
+
+* `Matrix.leftKroneckerEmbed_sup_rightKroneckerEmbed_toSubmodule` identifies the canonical join
+  with `Matrix.kroneckerSubmodule`.
+
+### References
+
+* B. Schumacher and R. F. Werner, *Reversible quantum cellular automata*,
+  quant-ph/0405174, Proposition `Cscom`, lines 2119--2138.
+* D. Gross, V. Nesme, H. Vogts, and R. F. Werner, *Index theory of one-dimensional quantum walks
+  and cellular automata*, arXiv:0910.3675v2, lines 1270--1308.
+-/
+
+open scoped Kronecker
+
+namespace Matrix
+
+variable {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n] [DecidableEq n]
+
+private theorem leftKroneckerEmbed_mul_rightKroneckerEmbed
+    (A : Matrix m m ℂ) (B : Matrix n n ℂ) :
+    leftKroneckerEmbed (n := n) A * rightKroneckerEmbed (m := m) B = A ⊗ₖ B := by
+  rw [leftKroneckerEmbed_apply, rightKroneckerEmbed_apply, ← mul_kronecker_mul,
+    mul_one, one_mul]
+
+private theorem rightKroneckerEmbed_mul_leftKroneckerEmbed
+    (A : Matrix m m ℂ) (B : Matrix n n ℂ) :
+    rightKroneckerEmbed (m := m) B * leftKroneckerEmbed (n := n) A = A ⊗ₖ B := by
+  rw [leftKroneckerEmbed_apply, rightKroneckerEmbed_apply, ← mul_kronecker_mul,
+    one_mul, mul_one]
+
+private theorem left_right_kronecker_commute
+    (S : StarSubalgebra ℂ (Matrix m m ℂ)) (T : StarSubalgebra ℂ (Matrix n n ℂ)) :
+    ∀ a : S.map (leftKroneckerEmbed (n := n)),
+      ∀ b : T.map (rightKroneckerEmbed (m := m)),
+        Commute (a : Matrix (m × n) (m × n) ℂ) (b : Matrix (m × n) (m × n) ℂ) := by
+  intro a b
+  obtain ⟨A, _, hA⟩ := StarSubalgebra.mem_map.mp a.2
+  obtain ⟨B, _, hB⟩ := StarSubalgebra.mem_map.mp b.2
+  change (a : Matrix (m × n) (m × n) ℂ) * b = b * a
+  rw [← hA, ← hB, leftKroneckerEmbed_mul_rightKroneckerEmbed,
+    rightKroneckerEmbed_mul_leftKroneckerEmbed]
+
+private theorem left_right_kronecker_mul_toSubmodule
+    (S : StarSubalgebra ℂ (Matrix m m ℂ)) (T : StarSubalgebra ℂ (Matrix n n ℂ)) :
+    (S.map (leftKroneckerEmbed (n := n))).toSubmodule *
+        (T.map (rightKroneckerEmbed (m := m))).toSubmodule =
+      kroneckerSubmodule S.toSubmodule T.toSubmodule := by
+  apply le_antisymm
+  · rw [Submodule.mul_le]
+    intro X hX Y hY
+    obtain ⟨A, hA, hAX⟩ := StarSubalgebra.mem_map.mp hX
+    obtain ⟨B, hB, hBY⟩ := StarSubalgebra.mem_map.mp hY
+    rw [← hAX, ← hBY, leftKroneckerEmbed_mul_rightKroneckerEmbed]
+    exact Submodule.apply_mem_map₂ Matrix.kroneckerBilinear hA hB
+  · rw [kroneckerSubmodule, Submodule.map₂_le]
+    intro A hA B hB
+    change A ⊗ₖ B ∈
+      (S.map (leftKroneckerEmbed (n := n))).toSubmodule *
+        (T.map (rightKroneckerEmbed (m := m))).toSubmodule
+    rw [← leftKroneckerEmbed_mul_rightKroneckerEmbed]
+    exact Submodule.mul_mem_mul (StarSubalgebra.mem_map.mpr ⟨A, hA, rfl⟩)
+      (StarSubalgebra.mem_map.mpr ⟨B, hB, rfl⟩)
+
+/-- In canonical bipartite coordinates, the join of the left and right embedded factors has
+underlying vector space equal to the Kronecker-product span. This is the coordinate identity used
+for the commuting support algebras in GNVW, arXiv:0910.3675v2, lines 1270--1308. -/
+theorem leftKroneckerEmbed_sup_rightKroneckerEmbed_toSubmodule
+    (S : StarSubalgebra ℂ (Matrix m m ℂ)) (T : StarSubalgebra ℂ (Matrix n n ℂ)) :
+    (S.map (leftKroneckerEmbed (n := n)) ⊔
+        T.map (rightKroneckerEmbed (m := m))).toSubmodule =
+      kroneckerSubmodule S.toSubmodule T.toSubmodule := by
+  cases isEmpty_or_nonempty m with
+  | inl _ =>
+      apply Submodule.ext
+      intro X
+      have hX : X = 0 := Subsingleton.elim _ _
+      subst X
+      simp
+  | inr hm =>
+      let _ : Nonempty m := hm
+      cases isEmpty_or_nonempty n with
+      | inl _ =>
+          apply Submodule.ext
+          intro X
+          have hX : X = 0 := Subsingleton.elim _ _
+          subst X
+          simp
+      | inr hn =>
+          let _ : Nonempty n := hn
+          rw [StarSubalgebra.sup_toSubmodule_eq_mul _ _ (left_right_kronecker_commute S T)]
+          exact left_right_kronecker_mul_toSubmodule S T
+
+end Matrix
+
+end CommutingStarSubalgebraKronecker
+
+section OverlappingSupportAlgebra
+
+/-!
+## Commutation of overlapping support algebras
+
+Let `A₁` be a star-subalgebra on the first two factors and `A₂` a star-subalgebra on
+the last two factors. If their natural lifts commute elementwise on the three-factor
+space, then the right support algebra of `A₁` commutes with the left support algebra
+of `A₂` on the common factor. The proof extracts the outer-factor coefficients and
+then passes to the two generated star-subalgebras.
+
+**Local fix (star-closed input):** Schumacher--Werner define the ordinary algebra
+generated by the coefficient support and obtain adjoint closure from adjoint closure
+of the observable input. GNVW instead define the generated C*-algebra but state the
+input only as a subalgebra. For C*-generated supports, involution closure of the input
+is necessary. The formal statement therefore takes star-subalgebras, as supplied by
+the QCA and MPU applications. This correction is proved and documented in
+`docs/paper-gaps/gnvw12_support_algebra_star_closure.tex`.
+
+**Local fix (outer-factor basis):** The printed coefficient proofs in both
+Schumacher--Werner and GNVW place the basis elements $e'_\nu$ in the middle factor.
+The expansion of the second operator and the assertion that $e_\mu \otimes e'_\nu$ is a basis
+of the two outer factors force $e'_\nu$ to belong to the third factor. The third-factor
+indices in this module implement that correction. It is documented in
+`docs/paper-gaps/gnvw12_support_algebra_outer_factor_basis.tex`.
+
+**Scope restriction (full matrix factors):** The statement below treats full complex
+matrix algebras. Schumacher--Werner and GNVW allow arbitrary finite-dimensional
+C*-algebra factors. Full matrix factors suffice for the MPU application because its
+one-site observable algebras are full matrix algebras. The general-factor extension
+remains open and is documented in
+`docs/paper-gaps/gnvw12_support_algebra_full_matrix_scope.tex`.
+
+### Main statement
+
+* `Matrix.supportAlgebras_commute_of_overlappingLifts_commute` proves pairwise
+  commutation of the two support algebras on the common factor.
+
+### References
+
+* Schumacher--Werner, quant-ph/0405174, Section 4.3, Lemma `sppcomm`,
+  lines 1174--1194.
+* Gross--Nesme--Vogts--Werner, arXiv:0910.3675v2, Section 7.1, Lemma `sppcomm`,
+  lines 1221--1246.
+* Cirac--Pérez-García--Schuch--Verstraete, arXiv:1703.09188, Appendix,
+  lines 2300--2306 and 2313--2334.
+-/
+
+namespace Matrix
+
+variable {a b c : Type*}
+variable [Fintype a] [Fintype b] [Fintype c]
+variable [DecidableEq a] [DecidableEq b] [DecidableEq c]
+
+/-- If star-subalgebras on two overlapping pairs of full complex matrix factors
+commute after their natural three-factor lifts, then their support algebras on the
+common factor commute elementwise.
+
+This is the full-matrix, star-closed specialization of Schumacher--Werner Lemma
+`sppcomm`, quant-ph/0405174, lines 1174--1194, and GNVW Lemma `sppcomm`,
+arXiv:0910.3675v2, lines 1221--1246. The MPU application is
+arXiv:1703.09188, lines 2300--2306 and 2313--2334. -/
+theorem supportAlgebras_commute_of_overlappingLifts_commute
+    (A₁ : StarSubalgebra ℂ (Matrix (a × b) (a × b) ℂ))
+    (A₂ : StarSubalgebra ℂ (Matrix (b × c) (b × c) ℂ))
+    (hComm : ∀ ⦃X⦄, X ∈ A₁ → ∀ ⦃Y⦄, Y ∈ A₂ →
+      leftOverlappingLift X * rightOverlappingLift Y =
+      rightOverlappingLift Y * leftOverlappingLift X) :
+    ∀ R ∈ rightSupportAlgebra A₁, ∀ L ∈ leftSupportAlgebra A₂,
+      R * L = L * R := by
+  have hRight :
+      rightSupportAlgebra A₁ ≤
+        StarSubalgebra.centralizer ℂ (leftCoefficientSet A₂) := by
+    rw [rightSupportAlgebra, StarAlgebra.adjoin_le_iff]
+    rintro R ⟨X, hX, i, i', rfl⟩
+    change operatorBlock X i i' ∈
+      StarSubalgebra.centralizer ℂ (leftCoefficientSet A₂)
+    rw [StarSubalgebra.mem_centralizer_iff]
+    rintro L ⟨Y, hY, k, k', rfl⟩
+    constructor
+    · exact (middleSlices_commute_of_overlappingLifts_commute
+        X Y (hComm hX hY) i i' k k').symm
+    · exact (middleSlices_commute_of_overlappingLifts_commute
+        X Yᴴ (hComm hX (A₂.star_mem' hY)) i i' k' k).symm
+  have hLeft :
+      leftSupportAlgebra A₂ ≤
+        StarSubalgebra.centralizer ℂ (rightSupportAlgebra A₁ : Set (Matrix b b ℂ)) := by
+    rw [leftSupportAlgebra, StarAlgebra.adjoin_le_iff]
+    rintro L ⟨Y, hY, k, k', rfl⟩
+    change bipartiteSlice Y k k' ∈
+      StarSubalgebra.centralizer ℂ (rightSupportAlgebra A₁ : Set (Matrix b b ℂ))
+    rw [StarSubalgebra.mem_centralizer_iff]
+    intro R hR
+    constructor
+    · exact ((StarSubalgebra.mem_centralizer_iff ℂ).mp (hRight hR)
+        (bipartiteSlice Y k k') ⟨Y, hY, k, k', rfl⟩).1.symm
+    · exact ((StarSubalgebra.mem_centralizer_iff ℂ).mp
+        (hRight ((rightSupportAlgebra A₁).star_mem' hR))
+        (bipartiteSlice Y k k') ⟨Y, hY, k, k', rfl⟩).1.symm
+  intro R hR L hL
+  exact ((StarSubalgebra.mem_centralizer_iff ℂ).mp (hLeft hL) R hR).1
+
+end Matrix
+
+end OverlappingSupportAlgebra

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.Entropy.LocalOrthogonalSumAreaLaw
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.GSNNCHOrthogonalSectors
-import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveAreaLaw
+import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveMarkovDecomposition
 import TNLean.MPS.MPDO.BNTSectors.BNTSectorAnalyticProperties
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction
 

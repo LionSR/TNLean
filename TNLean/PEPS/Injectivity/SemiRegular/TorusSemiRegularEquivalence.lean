@@ -7,9 +7,9 @@ import TNLean.PEPS.Injectivity.Multiplicity.TorusBlockMultiplicityState
 import TNLean.PEPS.Injectivity.Multiplicity.TorusBondCoordinateTransport
 import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondProductIsometry
 import TNLean.PEPS.Injectivity.Regular.RegularTorusSite
-import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondIsometryExtension
+import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondSupport
 import TNLean.PEPS.Injectivity.SemiRegular.RegularFourierMatrix
-import TNLean.PEPS.Injectivity.Multiplicity.PhysicalCoherentTransport
+import TNLean.PEPS.Injectivity.Multiplicity.CoherentMultiplicityTransport
 
 /-!
 # The physical transformation from weighted blocks to the regular torus state

@@ -16,4 +16,3 @@ import TNLean.PEPS.AreaLaw.Operators.Interactions.GraphInteractionTarget
 import TNLean.PEPS.AreaLaw.Operators.Interactions.GraphPropagation
 import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
 import TNLean.PEPS.AreaLaw.Operators.Interactions.RegionOperatorLocalization
-import TNLean.PEPS.AreaLaw.Operators.Interactions.SupportedGaussianIntegral

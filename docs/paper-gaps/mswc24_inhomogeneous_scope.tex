@@ -194,7 +194,7 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
 
           A conditional variant is now formalized in
           \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate}
-          in \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousUniformRate}.
+          in \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousSequence}.
           It assumes a rate $KN^ke^{-rq}$, with $K,r>0$ and $k\ge0$
           independent of $N$, at every scale $1\le q\le N$ for some
           partition with $q\le\ell_j\le2q$.
@@ -228,7 +228,7 @@ length. The declarations are
 \leanid{MPSChainTensor.traceNorm_transferMap_blockTensor_sub_le_of_choi_domination},
 and
 \leanid{MPSPreparation.exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination}
-in \doclink{TNLean/MPS/Tensor/Chain/Transfer},
+in \doclink{TNLean/MPS/Tensor/Chain/BlockTensor},
 \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousDoeblin}, and
 \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousDoeblin}.
 
@@ -262,7 +262,7 @@ estimates are not used as a substitute for that normalization.
 
 Consequently
 \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing}
-in \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousMixingPreparation}
+in \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousApproximationError}
 derives pair error at most $C_\sigma KN e^{-rq}$ and physical depth
 $O(\log(N/\varepsilon))$. It assumes nonzero periodic targets at every
 positive ring length, as required to interpret the source's normalized
@@ -436,7 +436,7 @@ $C_D\sqrt K\,N e^{-rq/2}$ for blocks of lengths between $q$ and $2q$.
 Whole-ring mixing supplies nonvanishing beyond a fixed cutoff.
 The theorem
 \leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing}
-in \doclink{TNLean/MPS/Preparation/Inhomogeneous/RectangularPreparation}
+in \doclink{TNLean/MPS/Preparation/Inhomogeneous/VaryingReferencePreparation}
 therefore gives physical depth $C\log(N/\varepsilon)$ for all
 $N\ge N_0$ and $0<\varepsilon\le1$, with $N_0,C$ selected first.
 This is a quantitative sufficient condition, and does not derive the
@@ -470,7 +470,7 @@ without introducing a common enlarged channel or changing the physical tensors.
 The family window at $N=s$ gives $\eta\le1$. Weakening to $\eta/2$ yields
 $K=4D$ and $r=-\log(1-\eta/2)/s>0$. The theorem
 \leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_domination}
-in \doclink{TNLean/MPS/Preparation/Inhomogeneous/RectangularPreparation}
+in \doclink{TNLean/MPS/Preparation/Inhomogeneous/VaryingReferencePreparation}
 then gives the original physical ring preparation conclusion with $N_0\ge s$
 and $C$ chosen before $N,\varepsilon$. Dimension-one bonds and singular references
 are included. This local condition remains additional quantitative input;

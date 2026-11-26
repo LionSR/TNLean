@@ -13,10 +13,8 @@ import TNLean.PEPS.AreaLaw.Polygons.Templates.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.Polygons.Templates.CappedDyadicEntropyCover
 import TNLean.PEPS.AreaLaw.Polygons.Templates.LatticeDyadicRect
 import TNLean.PEPS.AreaLaw.Polygons.Templates.OrderedTwoFamilyPartitionComap
-import TNLean.PEPS.AreaLaw.Polygons.Templates.RectangleMixedSquares
 import TNLean.PEPS.AreaLaw.Polygons.Templates.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Polygons.Templates.SegmentBallClipping
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateBoundary
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateBoxEntropy
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateBoxEntropyReal
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateClearance

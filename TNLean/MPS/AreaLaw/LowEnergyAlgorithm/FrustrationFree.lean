@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree
 
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFree
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeCanonicalTree
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeChain
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeGap
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeImprovingFamily
@@ -18,8 +17,6 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeThre
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeTree
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeTreeFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalDetectability
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalFrustrationFreeRank
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalFrustrationFreeTruncation
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalParityProductRank
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalRangeDetectability
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.UniqueGroundStateTree

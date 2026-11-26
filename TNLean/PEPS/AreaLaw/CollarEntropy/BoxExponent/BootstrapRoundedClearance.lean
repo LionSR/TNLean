@@ -9,7 +9,7 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapParameters
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Collar.Scales.RoundedScalePower
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RegionalStates
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
 import Mathlib.Data.Nat.Log
 
 /-!

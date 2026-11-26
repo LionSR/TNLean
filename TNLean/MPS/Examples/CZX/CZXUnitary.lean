@@ -6,7 +6,7 @@ Authors: Sirui Lu
 import TNLean.MPS.Tensor.Chain.BinaryPhase
 import QICLean.Algebra.Matrix.MonomialMatrix
 import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
-import TNLean.MPS.Examples.CZX.CZXAnomaly
+import TNLean.MPS.Examples.CZX.CZXSquare
 import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
 
 /-!

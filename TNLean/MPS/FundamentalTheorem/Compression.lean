@@ -33,4 +33,3 @@ import TNLean.MPS.FundamentalTheorem.Compression.UniquenessDifferentFlags
 import TNLean.MPS.FundamentalTheorem.Compression.UniquenessLongWords
 import TNLean.MPS.FundamentalTheorem.Compression.UniquenessMatrixForm
 import TNLean.MPS.FundamentalTheorem.Compression.UniquenessSameFlag
-import TNLean.MPS.FundamentalTheorem.Compression.WeightedMultiBlock

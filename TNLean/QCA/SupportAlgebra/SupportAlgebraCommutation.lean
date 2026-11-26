@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.QCA.QuasiLocal.DisjointSupport
-import TNLean.QCA.StarSubalgebra.OverlappingSupportAlgebra
+import TNLean.QCA.StarSubalgebra.BipartiteSupportAlgebra
 import TNLean.QCA.SupportAlgebra.SiteIndexedSupportAlgebra
 
 /-!

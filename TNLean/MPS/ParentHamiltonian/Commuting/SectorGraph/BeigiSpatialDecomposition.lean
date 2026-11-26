@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Kronecker.CommutingDecomposition
 import TNLean.MPS.ParentHamiltonian.Commuting.Defs
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.MatrixRepresentation
-import TNLean.MPS.ParentHamiltonian.Commuting.PairLiftCoordinates
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
+import TNLean.MPS.ParentHamiltonian.Commuting.KroneckerTransport
 
 /-!
 # Spatial decomposition of the two-site parent interaction

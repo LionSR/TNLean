@@ -10,10 +10,8 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Scanner.Histories.ActualHistory
 import TNLean.PEPS.AreaLaw.Scanner.Histories.AncestryCover
-import TNLean.PEPS.AreaLaw.Scanner.Histories.AncestryGeometry
 import TNLean.PEPS.AreaLaw.Scanner.Histories.AncestryLead
 import TNLean.PEPS.AreaLaw.Scanner.Histories.AssignedLead
-import TNLean.PEPS.AreaLaw.Scanner.Histories.BadChargeRatioBound
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadHistoryAsymptotics
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadHistoryGeometricTail
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadHistoryPowerBound
@@ -23,7 +21,6 @@ import TNLean.PEPS.AreaLaw.Scanner.Histories.BadHistoryUnion
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadOldHistoryDecay
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BandMargins
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BandNesting
-import TNLean.PEPS.AreaLaw.Scanner.Histories.BandUniqueness
 import TNLean.PEPS.AreaLaw.Scanner.Histories.ChargeAncestry
 import TNLean.PEPS.AreaLaw.Scanner.Histories.ChargePathCounting
 import TNLean.PEPS.AreaLaw.Scanner.Histories.DesignatedDilution
@@ -35,10 +32,7 @@ import TNLean.PEPS.AreaLaw.Scanner.Histories.HistoryMeanTree
 import TNLean.PEPS.AreaLaw.Scanner.Histories.HistoryPrefixes
 import TNLean.PEPS.AreaLaw.Scanner.Histories.HistoryWeights
 import TNLean.PEPS.AreaLaw.Scanner.Histories.OffsetDilution
-import TNLean.PEPS.AreaLaw.Scanner.Histories.PhysicalBadHistoryDecay
 import TNLean.PEPS.AreaLaw.Scanner.Histories.PhysicalChargeAncestry
 import TNLean.PEPS.AreaLaw.Scanner.Histories.SelectedChainProbability
-import TNLean.PEPS.AreaLaw.Scanner.Histories.SplitCounting
 import TNLean.PEPS.AreaLaw.Scanner.Histories.SplitIntervals
-import TNLean.PEPS.AreaLaw.Scanner.Histories.SupportLocalization
 import TNLean.PEPS.AreaLaw.Scanner.Histories.TimedChargePaths

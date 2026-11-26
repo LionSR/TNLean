@@ -13,9 +13,7 @@ import TNLean.MPS.FundamentalTheorem.Arbitrary.AsymmetricCorollary
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Basic
 import TNLean.MPS.FundamentalTheorem.Arbitrary.BlockDiagonalCommutant
 import TNLean.MPS.FundamentalTheorem.Arbitrary.BlockPermutation
-import TNLean.MPS.FundamentalTheorem.Arbitrary.ClassForm
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ClassWeights
-import TNLean.MPS.FundamentalTheorem.Arbitrary.ClassicalDependent
 import TNLean.MPS.FundamentalTheorem.Arbitrary.CompletelyReducible
 import TNLean.MPS.FundamentalTheorem.Arbitrary.EventualEquality
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Examples
@@ -25,7 +23,6 @@ import TNLean.MPS.FundamentalTheorem.Arbitrary.GaugeScalars
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Proportional
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ReductionPair
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ReductionPairOneBlock
-import TNLean.MPS.FundamentalTheorem.Arbitrary.UnitaryGauges
 import TNLean.MPS.FundamentalTheorem.Arbitrary.WeightedExamples
 import TNLean.MPS.FundamentalTheorem.Arbitrary.WeightedStates
 import TNLean.MPS.FundamentalTheorem.Arbitrary.WeightedSums

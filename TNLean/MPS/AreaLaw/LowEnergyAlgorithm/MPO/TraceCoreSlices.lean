@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.OpenMPS.OpenMPSCutRank
 import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
-import TNLean.MPS.Operator.Periodic.SitewiseOperatorProduct
+import TNLean.MPS.Operator.Product.OperatorProduct
 import Mathlib.Data.Fin.Tuple.Basic
 import Mathlib.Data.Fin.Rev
 import Mathlib.Logic.Equiv.Fin.Basic

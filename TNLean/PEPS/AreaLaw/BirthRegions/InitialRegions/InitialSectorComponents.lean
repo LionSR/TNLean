@@ -3,10 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorColors
-import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRunComponents
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorRuns
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialActiveRayCount
+import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialSectorAssignment
+import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRunConnectedness
+import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialActiveRays
 import Mathlib.Analysis.Normed.Affine.Convex
 
 /-!

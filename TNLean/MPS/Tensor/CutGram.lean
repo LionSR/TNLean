@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Tensor.CutGram.AffineFactorizationIsometry
 import TNLean.MPS.Tensor.CutGram.AffineFactorizationRank
-import TNLean.MPS.Tensor.CutGram.AffineGramBalancing
 import TNLean.MPS.Tensor.CutGram.AffineGramCompactness
 import TNLean.MPS.Tensor.CutGram.AffineGramHull
 import TNLean.MPS.Tensor.CutGram.AffineGramTransfer

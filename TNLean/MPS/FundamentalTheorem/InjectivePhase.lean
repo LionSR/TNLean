@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Polynomial.TailPowerSumUniqueness
 import TNLean.MPS.Tensor.Words.ScaledNormality
-import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
+import TNLean.MPS.Tensor.Gauge.FiniteLength
 import TNLean.MPS.FundamentalTheorem.SectorBNT.UnblockedPowerSumCoefficients
 import TNLean.MPS.Tensor.GroundSpace.Nonvanishing
 

@@ -8,6 +8,7 @@ import QICLean.Algebra.SpinCover.Basic
 import QICLean.Kraus.Wielandt.Primitivity.EasyDirections
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
+import TNLean.MPS.Symmetry.StringOrder.PeriodicFullRingString
 
 /-!
 # A four-letter tensor with scalar-only unphased physical symmetry
@@ -20,12 +21,20 @@ These explicit properties determine its unphased physical symmetries.
 The example tests the scalar phase removed between arXiv:0802.0447,
 display `SOP` (lines 114–121), and Theorem 1 (lines 257–275).
 
+It also contains the following results.
+
+* `MPSTensor.stringPhaseTensor_fullRing_I_eq_pow`,
+  `MPSTensor.stringPhaseTensor_fullRing_neg_one_not_tendsto`: existing canonical phase example on
+  the actual periodic ring.
+
 ## References
 
 * Pérez-García, Wolf, Sanz, Verstraete, Cirac, arXiv:0802.0447,
   canonical normalization and purity, lines 147–160; Theorem 1, lines 257–275.
 * Wolf, *Quantum Channels & Operations*, Theorems 6.4 and 6.7.
 -/
+
+section StringOrderScalarPhase
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 
@@ -367,3 +376,64 @@ theorem stringPhaseTensor_not_hasPhysicalStringOrder :
   exact ⟨u, V, n, m, hu, by simpa using hnonScalar 1, hFix, htrace⟩
 
 end MPSTensor
+
+end
+
+end StringOrderScalarPhase
+
+section PeriodicFullRingPhase
+
+/-!
+## Existing canonical phase example on the actual periodic ring
+
+This reuses the existing four independent physical letters and canonical
+purity proof. No new tensor or new source-error classification is introduced.
+The finite physical expectation, rather than a stationary boundary proxy,
+oscillates under the source-allowed nonidentity scalar twist.
+
+**Local fix (full-ring phase):** The complex limit printed in the source's
+`RL` passage is phase-sensitive. This example uses actual periodic
+expectations and retains that phase, as recorded in
+`docs/paper-gaps/pgwsvc08_string_order_virtual_boundary.tex`.
+
+### References
+
+* Pérez-García, Wolf, Sanz, Verstraete, Cirac, arXiv:0802.0447,
+  the periodic overlap in display `RL`, lines 381–388.
+-/
+
+open scoped Matrix BigOperators InnerProductSpace
+open Filter
+
+namespace MPSTensor
+
+/-- A nonreal scalar twist has the same, unconjugated length phase in the
+actual normalized expectation. This distinguishes the ket-action orientation
+from its complex conjugate at odd lengths. -/
+theorem stringPhaseTensor_fullRing_I_eq_pow (L : ℕ)
+    (hL : mpvState stringPhaseTensor L ≠ 0) :
+    mpvExpectation stringPhaseTensor L
+      (Matrix.piKronecker fun _ : Fin L =>
+        Complex.I • (1 : Matrix (Fin 4) (Fin 4) ℂ)) = Complex.I ^ L := by
+  apply mpvExpectation_piKronecker_const_eq_phase_pow stringPhaseTensor
+    (Complex.I • 1) 1 Complex.I (by simp) ?_ L hL
+  intro i
+  simp [Matrix.smul_apply, Matrix.one_apply, smul_eq_mul, mul_ite, ite_smul]
+
+/-- The already formalized faithful pure tensor has no complex full-ring
+limit for the scalar twist `-1`. This only checks phase-sensitive convergence. -/
+theorem stringPhaseTensor_fullRing_neg_one_not_tendsto :
+    ¬ ∃ z : ℂ, Tendsto (fun L : ℕ => mpvExpectation stringPhaseTensor L
+      (Matrix.piKronecker fun _ : Fin L => (-1 : Matrix (Fin 4) (Fin 4) ℂ)))
+      atTop (nhds z) := by
+  apply pureCanonical_mpvExpectation_fullRing_not_tendsto stringPhaseTensor
+    ((1 / 2 : ℂ) • 1) stringPhaseTensor_canonical.1
+    stringPhaseTensor_canonical.2.1 stringPhaseTensor_canonical.2.2
+    stringPhaseTensor_unital stringPhaseTensor_pure
+    (-1) 1 (-1) (by simp) (by simp) (by norm_num)
+  intro i
+  simp [Matrix.one_apply, neg_smul]
+
+end MPSTensor
+
+end PeriodicFullRingPhase

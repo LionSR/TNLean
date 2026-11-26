@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.Analysis.Isometry.IsometricCompression
 import TNLean.MPS.Tensor.Physical.PhysicalRotation
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.MatrixRepresentation
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 
 /-!
 # Boundary spaces under rectangular physical embeddings

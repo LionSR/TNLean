@@ -10,9 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.InitialBoxEstimate
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.InitialBufferReal
-import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.InitialExponentGain
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.RoundedClearance
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.SafeBoxChildren
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.TailParameter
-import TNLean.PEPS.AreaLaw.Polygons.SafeRectangles.WeakRectanglePartialRowEntropy

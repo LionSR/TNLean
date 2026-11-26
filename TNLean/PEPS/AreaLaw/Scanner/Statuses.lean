@@ -10,17 +10,13 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.ActualMarginalTails
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.AugmentedReceivingRegions
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PositivePrefixEntropyTransfer
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixApproximation
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixBoundary
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixCardinality
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixComparison
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixFiniteFamily
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.ReceivingRegions
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.ScanTruncationInputs
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.SideSeparation
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.SplitSupportSize
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusContainment
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusCutBounds
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusMarginalBudget
@@ -30,6 +26,5 @@ import TNLean.PEPS.AreaLaw.Scanner.Statuses.SubsystemDimensionScale
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.SubsystemSize
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.SupportClassification
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetEntropyTransfer
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetGeometry
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetTypicalWindow
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.TerminalSplits

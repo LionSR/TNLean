@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.Coefficients.BNTAlgebraTensorClause
-import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoefficientComparison
+import TNLean.MPS.MPDO.SectorMaps.VerticalSectorIdentity
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
 import TNLean.MPS.Tensor.Tactic
 
