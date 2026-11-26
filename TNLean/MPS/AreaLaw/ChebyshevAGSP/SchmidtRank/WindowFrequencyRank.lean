@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.OneMarkerRank
 import QICLean.ManyBody.Sites.OperatorSchmidtPartition
 import QICLean.Algebra.Word.OneMarkerFullCounts
-import QICLean.Algebra.Word.OneWindowWordPartition
+import QICLean.Algebra.Word.LowFrequencyWordPartition
 import Mathlib.Algebra.BigOperators.Fin
-import QICLean.ManyBody.Entropy.ZeroEntropy
+import QICLean.ManyBody.Entropy.RegionEntropy
 import Mathlib.Data.Nat.Sqrt
 import QICLean.Algebra.Combinatorics.BinomialFrequencySum
 import Mathlib.Algebra.Polynomial.AlgebraMap

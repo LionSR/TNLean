@@ -5,8 +5,9 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Replica.BandMetric.LeafMeasure
 import QICLean.ManyBody.Replica.BandMetric.Energy
+import QICLean.ManyBody.Replica.BandMetric.OldLeafIntegral
+import QICLean.ManyBody.Replica.BandMetric.SplitEntropy
 import TNLean.PEPS.AreaLaw.Collar.Defs
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.OldStateIntegral
 
 /-!
 # A scan round on the literal coherent sphere
@@ -27,24 +28,6 @@ open Matrix MeasureTheory Set
 open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
-
-namespace TensorPower.ReplicaTransport.TransportData
-
-variable {V H ι : Type} [Fintype V] [DecidableEq V] {K : ℕ}
-  [Fintype H] [DecidableEq H] {C : H → Type}
-  [∀ h, Fintype (C h)] [∀ h, DecidableEq (C h)]
-  {n : V → ℕ} (D : TransportData V K H C) (E : EnergyTerms V n ι)
-
-omit [DecidableEq H] [∀ h, DecidableEq (C h)] in
-/-- An unsplit leaf has identically zero split entropy, directly from the defining
-sum over exceptional bands (`06-transport.tex`, lines 342–347). -/
-theorem splitEta_eq_zero_of_not_mem_splitLeaves {i : ι} {j : Σ h, Option (C h)}
-    (hj : j ∉ D.splitLeaves E i) (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
-    D.splitEta E i j θ = 0 := by
-  classical
-  simp [splitEta, D.forall_contains_of_not_mem_splitLeaves E hj]
-
-end TensorPower.ReplicaTransport.TransportData
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

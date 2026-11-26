@@ -4,14 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.HardTruncationResidual
-import QICLean.ManyBody.Entropy.ZeroEntropy
+import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.Analysis.Order.QuadraticScalarShift
-import QICLean.ManyBody.Entropy.Cut.RegionalOperatorCoordinates
-import QICLean.Spectral.Eigenvalue.CompressionEnergyInterval
+import QICLean.ManyBody.Entropy.Cut.RegionalViability
+import QICLean.Spectral.Eigenvalue.CompressionEnergyBounds
 import QICLean.Analysis.TensorProduct.MatrixTensorCoordinates
 import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
 import QICLean.ManyBody.Sites.RegionMatrix
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Replica.RelativePin
 
 /-!

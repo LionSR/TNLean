@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Spectral.TwoWindowPolynomialRank
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.Algebra.OperatorSchmidt.Submatrix
+import QICLean.Algebra.OperatorSchmidt.Basic
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState

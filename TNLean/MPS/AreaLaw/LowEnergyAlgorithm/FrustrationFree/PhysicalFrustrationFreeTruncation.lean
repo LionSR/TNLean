@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalDetectability
 import QICLean.Algebra.Matrix.MatrixAux
-import QICLean.Analysis.Projection.Residual
-import QICLean.ManyBody.Sites.SupportedComplementProduct
+import QICLean.Analysis.Projection.DetectabilityLemma
+import QICLean.ManyBody.Sites.Support
 
 /-!
 # The actual regional frustration-free truncation

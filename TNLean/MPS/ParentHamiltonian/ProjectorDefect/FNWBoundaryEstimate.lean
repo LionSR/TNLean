@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Norm.WeightedSupertrace
-import QICLean.Kraus.TracePairing
+import QICLean.Kraus.Transfer
 import QICLean.Algebra.Word.OrderedProduct
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.FNWBoundaryConvention
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.FNWTransferDecay

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Chain.TwoCutEdgeSupports
 import QICLean.ManyBody.Sites.ThreeRegion.Cut
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Algebra.OperatorSchmidt.Basic

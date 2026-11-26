@@ -6,10 +6,10 @@ Authors: TNLean contributors
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Sites.ReplicaSwap
 import QICLean.ManyBody.Sites.PairSwapPermutation
-import QICLean.ManyBody.Sites.SitewiseProduct
+import QICLean.ManyBody.Sites.Support
 import TNLean.PEPS.Tensor.Region.RegionBlock
 import QICLean.ManyBody.Sites.ThreeRegion.SwapCorrection
 import QICLean.Spectral.Gap.DoubledSystemGap

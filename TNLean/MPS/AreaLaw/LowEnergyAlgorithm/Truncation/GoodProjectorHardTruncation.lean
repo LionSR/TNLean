@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Spectral.LowEnergy.RelativeLowEnergyCloseness
 import QICLean.ManyBody.Replica.Symbol.CoherentSymbolFunction
 import QICLean.ManyBody.Sites.Twirl
-import QICLean.Spectral.LowEnergy.OrderedSpectralSpan
+import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
 import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.SpectralProjector
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.IndependentFiveRegionResidual

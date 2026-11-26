@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.VaryingBond.OpenMPSRank
 import TNLean.MPS.Operator.Periodic.TraceChainOperator
 import TNLean.MPS.CanonicalForm.VerticalForm.Purity
-import QICLean.Algebra.OperatorSchmidt.Realignment
+import QICLean.Algebra.OperatorSchmidt.Basic
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.ClusterTruncationCutRank
 import QICLean.Analysis.ClusterExpansion.Path
 import QICLean.ManyBody.Sites.OperatorSchmidtRank

@@ -16,7 +16,7 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityAccurateViabil
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityLogDimension
 import QICLean.ManyBody.Entropy.ViableSubspaceEntropy
 import QICLean.Probability.Sampling.ViableSubspaceMinimum
-import QICLean.Analysis.Parameter.LowDensityEntropyParameters
+import QICLean.Analysis.Parameter.LowDensityCountParameters
 
 /-!
 # Dyadic entropy estimates for the degenerate gapped area law

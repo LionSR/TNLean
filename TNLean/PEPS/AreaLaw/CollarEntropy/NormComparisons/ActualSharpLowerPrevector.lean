@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualSharpLower
-import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualSharpLowerRemainder
+import QICLean.Representation.Bell.LabelDimensionRemainder
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaPrevectorProperties
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusMarginalMoments
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
@@ -269,8 +269,8 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
   obtain ⟨⟨hfnorm, hfpos, hfδ, hf⟩, ⟨hcnorm, hcpos, hcδ, hcharge⟩⟩ :=
     hlower S hm hM (S.n * S.m) h hh hhJ Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos
       Kmom rMom hmomQ har haone hK pre k hk hprenonzero hprenorm hsym
-      (ell k) (ell k) Sent (sharpLowerLabelDefect ell Sent k) hC hR
-      (sharpLowerLabelDefect_label_bound ell Sent k).2 s p
+      (ell k) (ell k) Sent (labelDimensionDefect ell Sent k) hC hR
+      (labelDimensionDefect_label_bound ell Sent k).2 s p
   refine ⟨⟨hfnorm, hfpos, hfδ, ?_⟩, ⟨hcnorm, hcpos, hcδ, ?_⟩⟩
   · intro τ hτ hτhalf
     simpa only [sharpLowerRemainder] using

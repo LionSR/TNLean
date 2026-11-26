@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.SparseGroupedOpenGap
-import QICLean.ManyBody.Hamiltonian.Martingale.TwoGroundProjectionGap
+import QICLean.ManyBody.Hamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.IntervalKernelTransport
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalNormalization
 import TNLean.MPS.ParentHamiltonian.Gap.PrimitiveBlockGap

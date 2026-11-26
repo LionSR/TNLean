@@ -181,6 +181,6 @@ theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
     · rw [abs_of_nonneg (sub_nonneg.mpr hlo)]
       linarith only [hupper, hc]
     · simpa only [u, sub_sub_cancel] using
-        congrArg (fun t : ℝ ↦ Real.log t / u) (Entropy.surprisalMoment_eq_sum_rpow hp hu1)
+        congrArg (fun t : ℝ ↦ Real.log t / u) (Entropy.surprisalMoment_eq_sum_rpow_of_ne_one hp hu1)
 
 end TNLean.MPS.AreaLaw

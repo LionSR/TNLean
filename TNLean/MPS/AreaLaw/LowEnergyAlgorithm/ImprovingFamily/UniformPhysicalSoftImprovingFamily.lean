@@ -7,7 +7,7 @@ import QICLean.Algebra.Combinatorics.TwoWindowSum
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.FiveRegionSoftUniformClusters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.UniformSoftMiddleMPO
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.CommonClosingPolynomialFamily
-import QICLean.Spectral.LowEnergy.ChebyshevWordPower
+import QICLean.Spectral.LowEnergy.ChebyshevViability
 
 /-!
 # An actual soft improving family before all estimated centers

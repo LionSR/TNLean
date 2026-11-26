@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaTransport
-import QICLean.ManyBody.Entropy.RelabelMutualInformation
+import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.ManyBody.Entropy.SumSitesProduct

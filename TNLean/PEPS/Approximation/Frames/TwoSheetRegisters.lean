@@ -163,34 +163,6 @@ theorem isAllowed_renameWord : X.renameWord.IsAllowed :=
 theorem sourceCount_renameWord : X.renameWord.sourceCount = 0 :=
   rfl
 
-/-- The swap `F_Y` read on the raw configurations of the two sheets before and after the
-exchange is the renaming of `QuantumCircuit.Party.Sheet.swapInEquiv` (the same computation as
-the operator of `QuantumCircuit.Party.Sheet.renameWord`). -/
-private theorem twoConfigEquiv_symm_permCongr_pairSwap (S₁ S₂ : Sheet ι Party) (Y : Finset ι)
-    (y : Config fun p ↦ (Sheet.swapIn S₁ S₂ Y).system q p × (Sheet.swapIn S₂ S₁ Y).system q p) :
-    (Sheet.twoConfigEquiv q S₁ S₂).symm ((Equiv.arrowProdEquivProdArrow ι _ _).permCongr
-        (pairSwap (X := fun _ : ι ↦ Fin q) Y) (Sheet.twoConfigEquiv q _ _ y)) =
-      Equiv.piCongrRight (Sheet.swapInEquiv S₁ S₂ Y) y := by
-  rw [permCongr_pairSwap_apply]
-  funext p
-  refine Prod.ext (funext fun v ↦ ?_) (funext fun v ↦ ?_)
-  · have hv := (mem_blockPreimage_singleton _).mp v.2
-    by_cases hY : (v : ι) ∈ Y
-    · exact (ite_eq_left hY).trans ((Sheet.twoConfigEquiv_snd_eq _ _ y
-        (show (Sheet.swapIn S₂ S₁ Y).owner v = p from
-          (ite_eq_left hY).trans hv)).trans (by simp [Sheet.swapInEquiv, hY]))
-    · exact (ite_eq_right hY).trans ((Sheet.twoConfigEquiv_fst_eq _ _ y
-        (show (Sheet.swapIn S₁ S₂ Y).owner v = p from
-          (ite_eq_right hY).trans hv)).trans (by simp [Sheet.swapInEquiv, hY]))
-  · have hv := (mem_blockPreimage_singleton _).mp v.2
-    by_cases hY : (v : ι) ∈ Y
-    · exact (ite_eq_left hY).trans ((Sheet.twoConfigEquiv_fst_eq _ _ y
-        (show (Sheet.swapIn S₁ S₂ Y).owner v = p from
-          (ite_eq_left hY).trans hv)).trans (by simp [Sheet.swapInEquiv, hY]))
-    · exact (ite_eq_right hY).trans ((Sheet.twoConfigEquiv_snd_eq _ _ y
-        (show (Sheet.swapIn S₂ S₁ Y).owner v = p from
-          (ite_eq_right hY).trans hv)).trans (by simp [Sheet.swapInEquiv, hY]))
-
 /-- The renaming at every party, read in canonical coordinates, is the renaming `ℛ` of
 `TwoSheetExchange.renameEquiv`. -/
 theorem twoFrameEquiv_renameEquivAt
@@ -202,7 +174,7 @@ theorem twoFrameEquiv_renameEquivAt
         fun p ↦ ((y p).1.2, (y p).2.2)) =
       (Equiv.arrowProdEquivProdArrow ι _ _).permCongr (pairSwap (X := fun _ : ι ↦ Fin q) X.region)
         (Sheet.twoConfigEquiv q _ _ fun p ↦ ((y p).1.2, (y p).2.2)) := by
-    rw [← twoConfigEquiv_symm_permCongr_pairSwap, Equiv.apply_symm_apply]
+    rw [← Sheet.twoConfigEquiv_symm_permCongr_pairSwap, Equiv.apply_symm_apply]
     rfl
   refine Prod.ext (Prod.ext ?h11 ?h12) (Prod.ext ?h21 ?h22)
   case h11 =>

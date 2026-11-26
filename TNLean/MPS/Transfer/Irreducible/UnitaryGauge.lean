@@ -9,7 +9,6 @@ import TNLean.MPS.Tensor.Defs
 import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import QICLean.Kraus.PrimitiveFixedPoint.Assembly
-import QICLean.Kraus.PrimitiveFixedPoint.Uniqueness
 
 /-!
 # Unitary gauges for left-canonical irreducible tensors

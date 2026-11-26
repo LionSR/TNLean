@@ -72,53 +72,6 @@ theorem Frame.card_system_eq_one_of_holes_eq_nil {F : Frame pos q Party} {o : Pa
 variable [Fintype Party] [NeZero q] (Ω : EuclideanSpace ℂ (ι → Fin q))
   (holder : Frame pos q Party → Party)
 
-omit [Fintype Party] [NeZero q] in
-/-- A configuration of a frame whose bases outside `holder F` are single points is determined by
-its value at `holder F`. -/
-theorem Frame.eq_of_apply_holder_eq {F : Frame pos q Party}
-    (hF : ∀ p ≠ holder F, Fintype.card (F.system p) = 1) {z z' : Config F.system}
-    (h : z (holder F) = z' (holder F)) : z = z' := by
-  funext p
-  by_cases hp : p = holder F
-  · subst hp
-    exact h
-  · exact (Fintype.card_le_one_iff_subsingleton.mp (hF p hp).le).elim _ _
-
-/-- The product over the parties of the factors of the reference vector of a frame held by one
-party is that reference vector. -/
-theorem Frame.prod_heldFactor {F : Frame pos q Party}
-    (hF : ∀ p ≠ holder F, Fintype.card (F.system p) = 1) (z : Config F.system) :
-    ∏ p, F.heldFactor Ω holder p (z p) = F.regRef Ω z := by
-  rw [Fintype.prod_eq_single (holder F) fun p hp ↦ by simp [Frame.heldFactor, Ne.symm hp]]
-  simp only [Frame.heldFactor, PiLp.toLp_apply, ↓reduceIte]
-  rw [Fintype.sum_eq_single z fun z' hz' ↦ ite_eq_right fun h ↦
-    hz' (F.eq_of_apply_holder_eq holder hF h), ite_eq_left rfl]
-
-/-- The factor at a party of the reference vector of a frame held by one party has the norm of
-the reference vector at the holder and norm one elsewhere. -/
-theorem Frame.norm_heldFactor {F : Frame pos q Party}
-    (hF : ∀ p ≠ holder F, Fintype.card (F.system p) = 1) (p : Party) :
-    ‖F.heldFactor Ω holder p‖ = if holder F = p then ‖F.regRef Ω‖ else 1 := by
-  by_cases hp : holder F = p
-  · subst hp
-    rw [ite_eq_left rfl]
-    have hbij : Function.Bijective fun z : Config F.system ↦ z (holder F) := by
-      refine ⟨fun z z' h ↦ F.eq_of_apply_holder_eq holder hF h, fun a ↦ ?_⟩
-      refine ⟨fun p ↦ if h : p = holder F then h ▸ a else
-        Classical.choice (Fintype.card_pos_iff.mp ((hF p h).symm ▸ Nat.one_pos)), ?_⟩
-      simp
-    set e := Equiv.ofBijective _ hbij
-    have hf : F.heldFactor Ω holder (holder F) = WithLp.toLp 2 fun a ↦ F.regRef Ω (e.symm a) := by
-      ext a
-      simp only [Frame.heldFactor, PiLp.toLp_apply, ↓reduceIte]
-      rw [Fintype.sum_eq_single (e.symm a) fun z hz ↦ ite_eq_right fun h ↦ hz
-        (e.injective (h.trans (e.apply_symm_apply a).symm))]
-      exact ite_eq_left (e.apply_symm_apply a)
-    rw [hf, ← EuclideanSpace.norm_toLp_comp_equiv e.symm (fun z ↦ F.regRef Ω z)]
-    rfl
-  · rw [ite_eq_right hp, EuclideanSpace.norm_eq]
-    simp [Frame.heldFactor, hp, hF p (Ne.symm hp)]
-
 /-- **The copies held by the parties make up the reference vector.** If every frame of `Fs` is
 held by the party `holder F` (its bases at the other parties are single points), the product
 across the parties of the vectors of the copies they hold is the reference vector of `Fs`.
@@ -141,7 +94,8 @@ theorem toLp_productVector_heldRef : (Fs : List (Frame pos q Party)) →
       Finset.prod_mul_distrib]
     rw [show (∏ p, heldRef Ω holder p Fs (z p).2) =
         productVector (fun p x ↦ heldRef Ω holder p Fs x) (fun p ↦ (z p).2) from rfl, hz,
-      F.prod_heldFactor Ω holder (hF F List.mem_cons_self) fun p ↦ (z p).1]
+      QuantumCircuit.Party.prod_partyFactor (fun G : Frame pos q Party ↦ G.regRef Ω)
+        (hF F List.mem_cons_self) fun p ↦ (z p).1]
     rfl
 
 /-- The vector of the copies held by a party is a unit vector when the reference vector of every
@@ -151,7 +105,9 @@ theorem norm_heldRef (p : Party) : (Fs : List (Frame pos q Party)) →
       ‖heldRef Ω holder p Fs‖ = 1
   | [], _, _ => by simp [heldRef]
   | F :: Fs, hF, hn => by
-    rw [heldRef, EuclideanSpace.norm_vecKron, F.norm_heldFactor Ω holder (hF F List.mem_cons_self),
+    rw [heldRef, EuclideanSpace.norm_vecKron,
+      QuantumCircuit.Party.norm_partyFactor (fun G : Frame pos q Party ↦ G.regRef Ω)
+        (hF F List.mem_cons_self),
       norm_heldRef p Fs (fun G hG ↦ hF G (List.mem_cons_of_mem F hG))
         fun G hG ↦ hn G (List.mem_cons_of_mem F hG), mul_one]
     split_ifs

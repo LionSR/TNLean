@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualTransportEstimates
 import TNLean.PEPS.AreaLaw.Collar.Defs
-import QICLean.ManyBody.Replica.BandMetric.FiniteFamily
+import QICLean.ManyBody.Replica.BandMetric.Transport
 
 /-!
 # Common transport errors for the actual finite sequence of rounds

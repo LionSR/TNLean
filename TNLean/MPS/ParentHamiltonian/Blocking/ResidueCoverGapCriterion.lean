@@ -9,7 +9,7 @@ import TNLean.MPS.ParentHamiltonian.Gap.Comparison.IntervalKernelTransport
 import TNLean.MPS.ParentHamiltonian.Blocking.BlockedFiniteGapTransport
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import QICLean.Analysis.Topology.UniformSelectionBounds
-import QICLean.Spectral.Gap.OrthogonalKernelGap
+import QICLean.Spectral.Gap.EigenvalueGap
 import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicOriginalIntersection
 
 /-!

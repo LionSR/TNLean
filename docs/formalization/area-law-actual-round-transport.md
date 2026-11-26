@@ -80,7 +80,7 @@ of the source scanner has been constructed.
 
 The module imports `TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualTransportEstimates`,
 `TNLean.PEPS.AreaLaw.Collar.Defs`, and
-`QICLean.ManyBody.Replica.BandMetric.FiniteFamily`. The first supplies the
+`QICLean.ManyBody.Replica.BandMetric.Transport`. The first supplies the
 actual fill and charge constructions, the truncated positive energy terms,
 physical support compatibility, commutation, and physical dimension estimates;
 the second supplies the round-parity convention. No literal sphere-measure or

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualTerminalPartitions
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualGlobalReplicaEnergy
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedRootCompression
-import QICLean.Algebra.Hermitian.ProjectionRangeIsometry
+import QICLean.Algebra.Hermitian.OrthogonalProjection
 import QICLean.ManyBody.Replica.LowDefect.RegionalRoughLowerNorm
 import QICLean.Analysis.Parameter.RoughLowerCoefficient
 

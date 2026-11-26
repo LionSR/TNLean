@@ -2545,8 +2545,13 @@ most 37 parts.
   `TimedChargePaths` (combinatorics), `ChargePathCounting` (graph). Two further generic
   modules are now in QICLean: `ChargeBinomialBound` (in
   `Analysis/Real/ExcitationSubsetCounts`) and `RegionalMoveEntropy`
-  (`ManyBody/Replica/BandMetric/MoveEntropy`). The rest is the argument of Propositions
-  9.2–9.6 and is
+  (`ManyBody/Replica/BandMetric/MoveEntropy`). Eight modules of `Rounds` and
+  `NormComparisons` followed: `OldStateIntegral` and `OldStateParameterIntegral`
+  (`ManyBody/Replica/BandMetric/OldLeafIntegral`), `SplitEntropyBound`
+  (`ManyBody/Replica/BandMetric/SplitEntropy`), `ComparatorData`, `ComparatorBounds` and
+  `SourceComparators` (`ManyBody/Replica/NormComparison`), `ActualRoughLowerRemainder` and
+  `ActualSharpLowerRemainder` (`Representation/Bell/LabelDimensionRemainder`). The rest is
+  the argument of Propositions 9.2–9.6 and is
   divided by object into `Collar`, `Scales`, `Histories`, `Statuses`, `Rounds`,
   `NormComparisons`, `ChargePoints`, `CollarInformation`, `BoxExponent`;
   `PhysicalTemplateInformation` goes to the root.

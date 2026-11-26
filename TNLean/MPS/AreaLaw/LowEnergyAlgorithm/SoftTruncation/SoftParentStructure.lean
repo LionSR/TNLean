@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftFamilyResiduals
-import QICLean.Spectral.Filter.SoftHardTruncation
+import QICLean.Spectral.Filter.ShiftedSoftHardTruncation
 import QICLean.Spectral.Perturbation.GroundEnergyResidual
 
 /-!

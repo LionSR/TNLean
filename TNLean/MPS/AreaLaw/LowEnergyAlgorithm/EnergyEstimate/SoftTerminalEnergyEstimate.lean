@@ -7,9 +7,9 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftParentEnergy
 import QICLean.ManyBody.Subspace.Sampling.CanonicalHalfSamplingParent
 import QICLean.Analysis.Projection.RegionalEnergyCalibration
 import QICLean.Analysis.Subspace.ViableSubspace
-import QICLean.Spectral.Eigenvalue.CompressionEnergyInterval
+import QICLean.Spectral.Eigenvalue.CompressionEnergyBounds
 import QICLean.Analysis.Order.QuadraticScalarShift
-import QICLean.ManyBody.Entropy.Cut.RegionalOperatorCoordinates
+import QICLean.ManyBody.Entropy.Cut.RegionalViability
 
 /-!
 # Soft energy of the actual terminal untrimmed image

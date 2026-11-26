@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.NestedPatches.AdaptivePatchSupply
 import TNLean.PEPS.Approximation.Information.InformationReset
-import QICLean.Analysis.Norm.ReindexMulVec
+import QICLean.Analysis.Norm.MatrixKroneckerContraction
 
 /-!
 # Relabelling the sites of a square patch

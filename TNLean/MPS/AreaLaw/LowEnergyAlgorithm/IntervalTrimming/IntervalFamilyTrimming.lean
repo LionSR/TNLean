@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalGenerators
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalCollectiveTrimming
-import QICLean.Analysis.Subspace.ViableSubspaceSharpTensorReduction
+import QICLean.Analysis.Subspace.ViableSubspaceErrorReduction
 
 /-!
 # One actual tensor-family application and collective interval trim

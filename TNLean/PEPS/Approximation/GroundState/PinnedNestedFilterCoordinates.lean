@@ -8,7 +8,7 @@ import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
 import QICLean.ManyBody.Entropy.Filter.OutputCovariance
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.Filter.Optimizer
 
 /-!
 # Original-grid filter families in canonical square coordinates

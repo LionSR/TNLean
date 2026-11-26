@@ -7,7 +7,7 @@ import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.ManyBody.Dynamics.GraphLocalization
-import QICLean.ManyBody.Dynamics.ComponentLocality
+import QICLean.ManyBody.Dynamics.CommutatorRecursion
 import QICLean.Spectral.Filter.FilterLocality
 
 /-!

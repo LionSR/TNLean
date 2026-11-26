@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.OperatorSchmidt.OperatorSchmidtCut
+import QICLean.Algebra.OperatorSchmidt.Basic
 import Mathlib.Data.Finset.SymmDiff
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Logic.Equiv.Basic
@@ -19,7 +19,6 @@ import QICLean.Algebra.Combinatorics.TwoWindowCounts
 import QICLean.Algebra.Word.LowFrequencyWordPartition
 import QICLean.Algebra.OperatorSchmidt.Bounds
 import Mathlib.Algebra.Polynomial.AlgebraMap
-import QICLean.Algebra.OperatorSchmidt.Basic
 import TNLean.Algebra.TwoWindowPolynomialRecovery
 
 /-!

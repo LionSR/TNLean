@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityDesignatedApproximation
 import TNLean.MPS.Tensor.OpenMPS.OpenMPSCutRank
-import QICLean.Analysis.Projection.ApproximateBasisImage
 import QICLean.Analysis.Subspace.ViableSubspace
 
 /-!

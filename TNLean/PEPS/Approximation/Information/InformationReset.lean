@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DoubledHamiltonian.ResetUnitary
 import QICLean.ManyBody.Sites.ReplicaSwap
-import QICLean.ManyBody.Entropy.RegionalResetEntropy
+import QICLean.ManyBody.Entropy.InformationReset
 import QICLean.Analysis.Real.InformationResetScalar
-import QICLean.ManyBody.Sites.SitewiseProduct
+import QICLean.ManyBody.Sites.Support
 import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import QICLean.ManyBody.Sites.ThreeRegion.SwapCorrection

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.Chain.ConsecutiveRegions
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
-import QICLean.Spectral.Filter.SoftTruncationCommutingFamily
+import QICLean.Spectral.Filter.SoftTruncationHighProjection
 
 /-!
 # The actual simultaneous soft replacement of five consecutive regions

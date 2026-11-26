@@ -36,29 +36,6 @@ noncomputable section
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction ambientDepth
   supDist)
 
-namespace TensorPower.ReplicaTransport.TransportData
-
-variable {V : Type*} [Fintype V] [DecidableEq V] {K : ℕ}
-variable {H : Type*} [Fintype H] [DecidableEq H]
-variable {C : H → Type*} [∀ h, Fintype (C h)] [∀ h, DecidableEq (C h)]
-
-/-- Strong subadditivity makes every move symbol nonnegative; positive history
-weights and the old-state integrals preserve this sign. The supplied vector may
-vanish, and the interpolation parameter may be either endpoint. -/
-theorem entropyGain_nonneg (D : TransportData V K H C)
-    (n : V → ℕ) [∀ v, NeZero (n v)] (hD : D.IsAdmissible)
-    {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
-    (pre : Config k (fun v => Fin (n v)) → ℂ) (p : ℝ) :
-    0 ≤ D.entropyGain n t k pre p := by
-  rw [D.entropyGain_eq_sum_oldFourierCoherentIntegral n t k pre p]
-  apply Finset.sum_nonneg
-  intro h _
-  exact mul_nonneg (hD.histWeight_pos h).le
-    (D.oldFourierCoherentIntegral_nonneg n hD ht hcomm pre p h
-      (D.continuous_choiceEntropySymbol n h) (D.choiceEntropySymbol_nonneg n hD h))
-
-end TensorPower.ReplicaTransport.TransportData
-
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open TensorPower TensorPower.ReplicaTransport

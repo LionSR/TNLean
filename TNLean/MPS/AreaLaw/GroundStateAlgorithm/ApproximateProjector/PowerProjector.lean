@@ -7,7 +7,7 @@ import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
 import QICLean.Analysis.Norm.MatrixToEuclidean
 import QICLean.Spectral.Filter.PhysicalPowerFilterLowerGap
-import QICLean.Algebra.Word.FiniteSumPowers
+import QICLean.Algebra.Word.WordMultiplicity
 import QICLean.ManyBody.Entropy.Cut.SupportedOperatorSchmidtWords
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.Algebra.Hermitian.HermitianPartSum

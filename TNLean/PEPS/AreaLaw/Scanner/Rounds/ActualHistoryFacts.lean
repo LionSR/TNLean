@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualRoundSplits
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.SplitEntropyBound
+import QICLean.ManyBody.Replica.BandMetric.SplitEntropy
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.TransportDimension
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualEntropySampling
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadOldHistoryDecay
@@ -51,59 +51,6 @@ open TensorPower TensorPower.ReplicaTransport Entropy
 noncomputable section
 
 open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph ambientDepth supDist)
-
-namespace TensorPower.ReplicaTransport
-
-variable {V : Type*} [Fintype V] [DecidableEq V] (n : V → ℕ) [∀ v, NeZero (n v)]
-
-/-- A valid move has entropy at most twice the logarithmic dimension of its moved
-subsystem (`06-transport.tex`, lines 315–322; `08-scanner.tex`, lines 434–440). -/
-theorem moveEta_le_two_mul_logDim (π : PYF V) (hπ : π.IsPartition) (m : Move V)
-    (hm : m.IsValid π) (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) (hθ : ‖θ‖ = 1) :
-    moveEta n π m θ ≤ 2 * logDim n m.subsystem := by
-  cases m with
-  | stay => simp [moveEta, Move.subsystem, logDim]
-  | toP x =>
-    have hxY : x ⊆ π.Y := hm
-    exact (ManyBody.conditionalMutualInformation_le_two_regionEntropy _ θ hθ x π.F π.P
-      (hπ.2.2.1.mono_left hxY) (hπ.1.symm.mono_left hxY)).trans
-      (mul_le_mul_of_nonneg_left (entropy_le_logDim_of_subset n θ hθ subset_rfl)
-        (by norm_num))
-  | toF x =>
-    have hxY : x ⊆ π.Y := hm
-    exact (ManyBody.conditionalMutualInformation_le_two_regionEntropy _ θ hθ x π.P π.F
-      (hπ.1.symm.mono_left hxY) (hπ.2.2.1.mono_left hxY)).trans
-      (mul_le_mul_of_nonneg_left (entropy_le_logDim_of_subset n θ hθ subset_rfl)
-        (by norm_num))
-
-namespace TransportData
-
-variable {K : ℕ} {H : Type*} [Fintype H] [DecidableEq H] {C : H → Type*}
-  [∀ h, Fintype (C h)] [∀ h, DecidableEq (C h)] (D : TransportData V K H C)
-
-omit [Fintype H] in
-/-- The choice-averaged move entropy is at most `2Kℓ` when every move has logarithmic
-dimension at most `ℓ`: each band contributes one probability average of move entropies
-(`08-scanner.tex`, lines 434–440). -/
-theorem choiceEntropySymbol_le_of_logDim_move_le (hD : D.IsAdmissible) {ℓ : ℝ}
-    (hmove : ∀ h c g, logDim n (D.move h c g).subsystem ≤ ℓ) (h : H)
-    (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) (hθ : ‖θ‖ = 1) :
-    D.choiceEntropySymbol n h (fun x => θ x) ≤ K * (2 * ℓ) := by
-  classical
-  unfold choiceEntropySymbol
-  calc
-    _ ≤ ∑ _g : Fin K, ∑ c, (D.choiceTree h).weight c * (2 * ℓ) := by
-      refine Finset.sum_le_sum fun g _ => Finset.sum_le_sum fun c _ => ?_
-      refine mul_le_mul_of_nonneg_left ?_ ((D.choiceTree h).weight_nonneg c)
-      exact (moveEta_le_two_mul_logDim n _ (hD.old_isPartition h g) _
-        (hD.move_isValid h c g) θ hθ).trans
-        (mul_le_mul_of_nonneg_left (hmove h c g) (by norm_num))
-    _ = K * (2 * ℓ) := by
-      simp [← Finset.sum_mul, (D.choiceTree h).sum_weight]
-
-end TransportData
-
-end TensorPower.ReplicaTransport
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
-import QICLean.ManyBody.Entropy.QuditRegionEntropy
-import QICLean.ManyBody.Entropy.ZeroEntropy
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

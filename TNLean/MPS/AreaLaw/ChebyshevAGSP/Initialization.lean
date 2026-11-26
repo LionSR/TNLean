@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ClippedFilter
 import QICLean.Analysis.Norm.SquaredTriangle
-import QICLean.Channel.Schmidt.FilterNormalization
+import QICLean.Channel.Schmidt.ProductOverlapBootstrap
 import QICLean.ManyBody.Entropy.Filter.Prefix
 import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
 

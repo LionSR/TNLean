@@ -8,7 +8,7 @@ import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
 import QICLean.Analysis.Projection.MatrixStarProjection
 import QICLean.Algebra.Matrix.MatrixRankBaseChange
 import QICLean.Algebra.Hermitian.PositiveSemidefiniteNormalization
-import QICLean.Algebra.Hermitian.ProjectionRangeIsometry
+import QICLean.Algebra.Hermitian.OrthogonalProjection
 import QICLean.Analysis.Isometry.IsometricDomainExtension
 import QICLean.Analysis.TraceNorm.RectangularTraceNormContraction
 import QICLean.Channel.Gluing.BoundaryDensitySelection

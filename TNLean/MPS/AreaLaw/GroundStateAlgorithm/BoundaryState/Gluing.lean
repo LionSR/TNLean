@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
-import QICLean.Channel.Gluing.LeadingEigenvector
+import QICLean.Channel.Gluing.LeadingEigenvectorBounds
 import QICLean.ManyBody.Sites.ThreeRegion.Cut
 import QICLean.ManyBody.Entropy.Cut.RegionSplit
 import QICLean.Analysis.TraceNorm.RectangularTraceNormAlgebra

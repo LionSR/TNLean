@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import QICLean.Kraus.BlockTriangularWord
-import QICLean.Algebra.Module.FlagBlockTriangular
+import QICLean.Algebra.Module.Subquotient
 import TNLean.MPS.Tensor.Words.Basic
 import TNLean.MPS.Tensor.Reduction.Reduction
 import TNLean.MPS.FundamentalTheorem.WordModule.Flag
