@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualRoundSplits
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.EnergyBalance
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.SplitEntropyBound
+import QICLean.ManyBody.Replica.BandMetric.SplitEntropy
 import TNLean.PEPS.AreaLaw.Scanner.Histories.SplitCounting
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.TransportDimension
 

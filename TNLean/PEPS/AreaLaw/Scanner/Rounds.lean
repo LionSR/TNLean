@@ -32,11 +32,8 @@ import TNLean.PEPS.AreaLaw.Scanner.Rounds.FillTransportEndpoints
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.FinalSharpTransportSmallness
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.FixedWeightTransportSmallness
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.GlobalReplicaEnergyCoordinates
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.OldStateIntegral
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.OldStateParameterIntegral
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.PhysicalBandCommutation
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ScanHistories
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.SplitEntropyBound
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.SplitEntropyCost
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.SupportCompatibility
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.TransportDimension

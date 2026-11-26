@@ -8,14 +8,14 @@ The norm comparisons of \cite[Proposition~8.1]{OpenAI2026AreaLaw} apply to a fin
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{definition}[Statement of the norm comparisons]
     \label{def:al_comparators_source_statement}
-    \lean{TNLean.PEPS.AreaLaw.Scan.Comparators.IsTypicalSchmidtSet,
-        TNLean.PEPS.AreaLaw.Scan.Comparators.IsStatusFamily,
-        TNLean.PEPS.AreaLaw.Scan.Comparators.IsPrefixData,
-        TNLean.PEPS.AreaLaw.Scan.Comparators.IsMarginalMomentData,
-        TNLean.PEPS.AreaLaw.Scan.Comparators.prevector,
-        TNLean.PEPS.AreaLaw.Scan.Comparators.bandMetric,
-        TNLean.PEPS.AreaLaw.Scan.Comparators.meanRoot,
-        TNLean.PEPS.AreaLaw.Scan.Comparators.ComparatorsStatement}
+    \lean{ManyBody.NormComparison.IsTypicalSchmidtSet,
+        ManyBody.NormComparison.IsStatusFamily,
+        ManyBody.NormComparison.IsPrefixData,
+        ManyBody.NormComparison.IsMarginalMomentData,
+        ManyBody.NormComparison.prevector,
+        ManyBody.NormComparison.leafFactor,
+        ManyBody.NormComparison.meanRoot,
+        ManyBody.NormComparison.ComparatorsStatement}
     \leanok
     On a finite-site tensor-product space $\mathcal H_{\rm phys}$, let $\widetilde H\ge0$ satisfy $\widetilde H\widetilde\Omega=\widetilde E_0\widetilde\Omega$ and $\widetilde H-\widetilde E_0\ge\widetilde g(1-|\widetilde\Omega\rangle\langle\widetilde\Omega|)$ for a unit vector $\widetilde\Omega$ and gap $\widetilde g>0$.
     For a site subset $X$, a typical Schmidt set is a nonempty index set $E$ of positive eigenvalues $\{p_i\}_{i\in E}$ of $\rho_X$ satisfying $e^{-S_X-w}\le p_i\le e^{-S_X+w}$ ($w\ge0$) and $z=\sum_{i\in E}p_i>0$; set $d_*=|E|$, $p_i'=p_i/z$, and $S'=-\sum_{i\in E}p_i'\log p_i'$.
@@ -89,7 +89,7 @@ The norm comparisons of \cite[Proposition~8.1]{OpenAI2026AreaLaw} apply to a fin
 
 \begin{lemma}[Upper and lower norm comparisons]
     \label{thm:al_comparators_source}
-    \lean{TNLean.PEPS.AreaLaw.Scan.Comparators.comparatorsStatement}
+    \lean{ManyBody.NormComparison.comparatorsStatement}
     \leanok
     \uses{def:al_comparators_source_statement}
     Definition~\ref{def:al_comparators_source_statement} (\cite[Proposition~8.1]{OpenAI2026AreaLaw}) holds with $a_0=1/10$, $C=4$, $C'=4+25C_0$, and $c=c_0/10$, with $\lambda_k$ chosen before the status family and $a$, and (\ref{eq:al_comparators_source_rough_lower}), (\ref{eq:al_comparators_source_sharp_lower}) valid for all $\xi\in\mathcal S_k$ of norm $0<\|\xi\|\le1$ fixed by $\pi_C^{\lambda_k},\pi_R^{\lambda_k}$ (in particular $\xi=\mathrm{pre}_k$).

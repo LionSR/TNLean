@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualChargeData
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.SplitEntropyCost
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.OldStateIntegral
+import QICLean.ManyBody.Replica.BandMetric.OldLeafIntegral
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.SupportCompatibility
 import QICLean.ManyBody.Replica.BandMetric.Energy
 
@@ -157,6 +157,6 @@ theorem actualChargeEntropyDefect_le_entropyGain_planeDomainGraph
   · simp only [hg, ↓reduceIte, mul_zero]
     exact mul_nonneg (historyWeight_nonneg h)
       (D.oldFourierCoherentIntegral_nonneg n hAdm ht hcomm pre p h
-        (D.continuous_choiceEntropySymbol n h) (D.choiceEntropySymbol_nonneg n hAdm h))
+        (D.choiceEntropySymbol_nonneg n hAdm h))
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
