@@ -7,7 +7,7 @@ import QICLean.Analysis.Real.ComplexSqrt
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.Examples.PVBS.PVBS
-import TNLean.MPS.Examples.PVBS.WStatePrimeLengthBound
+import TNLean.MPS.Examples.PVBS.WStateCanonicalBound
 
 /-!
 # Isometric blocking of the W vector

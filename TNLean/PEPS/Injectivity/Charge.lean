@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.Injectivity.Charge
 
-import TNLean.PEPS.Injectivity.Charge.RegularBoundaryChargeContraction
 import TNLean.PEPS.Injectivity.Charge.RegularChargeBondContraction
 import TNLean.PEPS.Injectivity.Charge.RegularChargeCompleteMeasurement
 import TNLean.PEPS.Injectivity.Charge.RegularChargeCoordinates
@@ -18,21 +17,16 @@ import TNLean.PEPS.Injectivity.Charge.RegularChargeFluxPhysicalTransport
 import TNLean.PEPS.Injectivity.Charge.RegularChargeLabels
 import TNLean.PEPS.Injectivity.Charge.RegularChargePair
 import TNLean.PEPS.Injectivity.Charge.RegularChargePairPreparation
-import TNLean.PEPS.Injectivity.Charge.RegularChargePairRegionalReadout
 import TNLean.PEPS.Injectivity.Charge.RegularChargePairSectors
-import TNLean.PEPS.Injectivity.Charge.RegularChargeReferencePreparation
 import TNLean.PEPS.Injectivity.Charge.RegularChargeSubspace
 import TNLean.PEPS.Injectivity.Charge.RegularClosedChargePairPreparation
 import TNLean.PEPS.Injectivity.Charge.RegularCorrelatedChargeGlobalTransport
 import TNLean.PEPS.Injectivity.Charge.RegularEdgeChargeContraction
 import TNLean.PEPS.Injectivity.Charge.RegularPhysicalChargeMotion
 import TNLean.PEPS.Injectivity.Charge.RegularPhysicalChargePairCreation
-import TNLean.PEPS.Injectivity.Charge.RegularPhysicalChargePairInterference
-import TNLean.PEPS.Injectivity.Charge.RegularProjectorChargePairCoordinates
 import TNLean.PEPS.Injectivity.Charge.RegularRegionChargePairCreation
 import TNLean.PEPS.Injectivity.Charge.RegularTwistedStateNonzero
 import TNLean.PEPS.Injectivity.Charge.RegularTwoPartChargeMotion
-import TNLean.PEPS.Injectivity.Charge.RegularTwoSiteChargeCommutation
 import TNLean.PEPS.Injectivity.Charge.RegularTwoSiteChargeCoordinates
 import TNLean.PEPS.Injectivity.Charge.RegularTwoSiteChargeDetector
 import TNLean.PEPS.Injectivity.Charge.RegularTwoSiteChargeNonzero

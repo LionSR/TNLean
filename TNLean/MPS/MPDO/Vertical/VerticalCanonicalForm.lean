@@ -9,10 +9,11 @@ import TNLean.MPS.MPDO.Vertical.VerticalBNT
 import TNLean.MPS.MPDO.Vertical.VerticalBNTConstruction
 import TNLean.MPS.MPDO.Vertical.VerticalCoisometry
 import TNLean.MPS.MPDO.Vertical.CPSVOriginalSpaceLemmaL
-import TNLean.MPS.MPDO.Vertical.CPSVBlocking
 import TNLean.MPS.MPDO.Vertical.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.Vertical.HorizontalBlocking
 import TNLean.MPS.Operator.Product.PhysicalBlocking
+import TNLean.MPS.CanonicalForm.NormalBlocks.Blocking
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # Predicate-neutral vertical canonical form
@@ -26,6 +27,9 @@ row gives the required coisometry and exact reconstruction.
 
 * `MPOTensor.verticalCF_of_grouping_and_gramDressing`: grouped vertical BNT
   data and the pairwise Figure 8 hypothesis imply vertical canonical form.
+* `MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTensor`,
+  `MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTwo`: literal CPSV canonical form and MPO physical
+  blocking.
 
 ## References
 
@@ -113,6 +117,60 @@ maps assemble into the coisometry of the vertical canonical form.
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608,
   Proposition 4.13, lines 1863--1921.
 -/
+
+section CPSVBlocking
+
+/-!
+## Literal CPSV canonical form and MPO physical blocking
+
+This module specializes the MPS-level literal CPSV blocking theorem to MPO
+tensors through the doubled-index MPS tensor.
+
+### Main results
+
+* `MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTensor`
+* `MPOTensor.IsCPSVCanonicalForm_toMPSTensor_blockTwo`
+
+### References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, Section 2.3 and
+  Appendix C.4, lines 1951--1956.
+-/
+
+open scoped Matrix ComplexOrder
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-- Literal CPSV canonical form is preserved by arbitrary positive MPO physical
+blocking after passing to the doubled-index MPS tensor.
+
+Source: arXiv:1606.00608, lines 636--659 define MPDO coarse graining by
+physical blocking and its two-site tensor maps; arbitrary positive blocking is
+the iterated form of the same operation. -/
+theorem IsCPSVCanonicalForm_toMPSTensor_blockTensor {M : MPOTensor d D}
+    (hM : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor) (p : ℕ) (hp : 0 < p) :
+    MPSTensor.IsCPSVCanonicalForm (blockTensor M p).toMPSTensor := by
+  rw [toMPSTensor_blockTensor]
+  exact (hM.blockTensor p hp).reindexPhysical (blockedDoubledIndexEquiv d p)
+
+/-- Literal CPSV canonical form is preserved by concrete two-site MPO
+blocking after passing to the doubled-index MPS tensor.
+
+Source: arXiv:1606.00608, lines 636--659, especially the two-site maps
+`M_2(X)` and equations `eq:Smap`--`eq:Tmap`. -/
+theorem IsCPSVCanonicalForm_toMPSTensor_blockTwo {M : MPOTensor d D}
+    (hM : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor) :
+    MPSTensor.IsCPSVCanonicalForm (blockTwo M).toMPSTensor := by
+  rw [toMPSTensor_blockTwo]
+  exact (hM.blockTensor 2 (by norm_num)).reindexPhysical (twoSiteDoubledIndexEquiv d)
+
+end MPOTensor
+
+end CPSVBlocking
+
+section VerticalCanonicalForm
 
 section
 
@@ -410,3 +468,5 @@ theorem verticalCF_of_cpsvCanonicalForm (M : MPOTensor d D)
 end MPOTensor
 
 end
+
+end VerticalCanonicalForm

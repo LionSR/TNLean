@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetTypicalWindow
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusMarginalBudget
 import TNLean.PEPS.AreaLaw.Collar.Scales.StatusScaleSeparation
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RegionalEntropyContinuity
+import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetEntropyTransfer
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

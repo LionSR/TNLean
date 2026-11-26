@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRuns
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.SimultaneousRepair
 import Mathlib.Topology.Algebra.ConstMulAction
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionInteriors
+import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegions
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairDepth
 import Mathlib.Data.Set.Disjoint
 

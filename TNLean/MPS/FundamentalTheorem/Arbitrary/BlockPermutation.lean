@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ArbitraryTensor
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
-import TNLean.MPS.Tensor.DirectSum.BlockInclusionResolution
 import TNLean.MPS.FundamentalTheorem.Arbitrary.GaugeConversions
 import TNLean.MPS.FundamentalTheorem.Arbitrary.WeightedSums
 

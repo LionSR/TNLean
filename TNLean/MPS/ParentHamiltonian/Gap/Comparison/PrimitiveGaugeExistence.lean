@@ -9,7 +9,7 @@ import TNLean.MPS.Tensor.GroundSpace.ChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.FiniteRangeKnabeGap
 import TNLean.MPS.Tensor.Gauge.GaugeUniqueness
 import TNLean.MPS.Transfer.Primitivity.Equivalence
-import TNLean.MPS.CanonicalForm.NormalBlocks.NormalPrimitiveGauge
+import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 
 /-!
 # The normalized primitive gauge of a normal tensor
@@ -25,7 +25,7 @@ radius of the transfer map is one and gauging by the square root of a positive
 fixed point.
 
 That step, `MPSTensor.exists_hasComplementaryFixedPointGap_gauge_of_isNormal`
-(`TNLean.MPS.CanonicalForm.NormalBlocks.NormalPrimitiveGauge`), produces from a normal
+(`TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge`), produces from a normal
 tensor \(A\) a positive scalar \(\zeta\), a virtual gauge \(X\), and the rescaled
 gauged tensor \(B^i=\zeta\,XA^iX^{-1}\) which carries the trace-preserving
 normalization \(\sum_i (B^i)^\dagger B^i=\mathbb 1\) together with a positive

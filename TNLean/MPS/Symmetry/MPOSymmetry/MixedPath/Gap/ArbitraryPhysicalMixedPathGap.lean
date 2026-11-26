@@ -12,7 +12,7 @@ import QICLean.ManyBody.Hamiltonian.KernelGap
 import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import TNLean.MPS.Operator.Interaction.GappedInteractionPath
 import TNLean.MPS.Symmetry.GappedPath.PhysicalIsometricGapTransport
-import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpointOrthogonality
+import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpoints
 
 /-!
 # The mixed path for arbitrary physical alphabets

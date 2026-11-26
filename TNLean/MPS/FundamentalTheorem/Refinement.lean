@@ -13,17 +13,12 @@ import TNLean.MPS.FundamentalTheorem.Refinement.Defs
 import TNLean.MPS.FundamentalTheorem.Refinement.DivisibleOfRefinable
 import TNLean.MPS.FundamentalTheorem.Refinement.FromInvertibleWordSpan
 import TNLean.MPS.FundamentalTheorem.Refinement.IsometryTensor
-import TNLean.MPS.FundamentalTheorem.Refinement.Normalization
-import TNLean.MPS.FundamentalTheorem.Refinement.NormalizationCounterexample
 import TNLean.MPS.FundamentalTheorem.Refinement.OneSite
-import TNLean.MPS.FundamentalTheorem.Refinement.OrbitUnitary
 import TNLean.MPS.FundamentalTheorem.Refinement.PhysicalSymmetry
 import TNLean.MPS.FundamentalTheorem.Refinement.QubitRootRank
 import TNLean.MPS.FundamentalTheorem.Refinement.RefinableOfDivisible
 import TNLean.MPS.FundamentalTheorem.Refinement.RootIrreducibility
 import TNLean.MPS.FundamentalTheorem.Refinement.RootPeriod
-import TNLean.MPS.FundamentalTheorem.Refinement.RootRankChannelSquare
 import TNLean.MPS.FundamentalTheorem.Refinement.RootRankCounterexample
-import TNLean.MPS.FundamentalTheorem.Refinement.RootRankIrreducibility
 import TNLean.MPS.FundamentalTheorem.Refinement.RootWordSpan
 import TNLean.MPS.FundamentalTheorem.Refinement.SuppliedRootObstruction

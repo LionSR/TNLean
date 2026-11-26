@@ -6,12 +6,11 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.BNT.Construction
 import TNLean.MPS.CanonicalForm.BNT.Grouping
 import TNLean.MPS.CanonicalForm.BNT.PhaseCover
-import TNLean.MPS.Transfer.Spectrum.CastDecay
+import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
 import TNLean.MPS.Tensor.BondReindex
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 import TNLean.MPS.Transfer.Spectrum.GaugePhase
 import TNLean.MPS.Tensor.DirectSum.SectorDecomposition
-import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
 
 /-!
 # Phase-class BNT sector data

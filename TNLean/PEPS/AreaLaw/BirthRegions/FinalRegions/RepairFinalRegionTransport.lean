@@ -8,7 +8,6 @@ import Mathlib.Order.Monotone.Basic
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairBirthRank
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalRegion
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BirthSeparationInitial
-import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairCharacteristicLength
 
 /-!
 # Final regions under retention

@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateMixedSquares
-import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicWeightedSum
-import TNLean.PEPS.AreaLaw.Polygons.Squares.CappedDyadicPartitionByScale
+import TNLean.PEPS.AreaLaw.Polygons.Squares.CappedDyadicPartition
 
 /-!
 # Selected dyadic squares of the template core

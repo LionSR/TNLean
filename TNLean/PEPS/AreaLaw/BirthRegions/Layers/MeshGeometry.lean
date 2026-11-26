@@ -9,6 +9,10 @@ import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
 import Mathlib.Topology.MetricSpace.Pseudo.Constructions
 import Mathlib.Analysis.Convex.Between
 import Mathlib.Analysis.Normed.Affine.Convex
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DistanceLayers
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.AdjacentScales
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.LayerPartition
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DummyContacts
 
 /-!
 # Separation on the quarter mesh
@@ -43,7 +47,16 @@ Manuscript file:
 `preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/`
 `build/sections/10-geometry.tex`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
+
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.Geometry.fineLayer_marks_dist_ge`: separation of actual fine-layer marks.
+* `TNLean.PEPS.AreaLaw.Geometry.fineLayer_near_mark_quarter_mesh`,
+  `TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_dist_later_layer_fineScale`: actual layers and
+  meshes near a fine-cell mark.
 -/
+
+section MeshGeometry
 
 section
 
@@ -286,3 +299,200 @@ theorem affineMesh_segment_dist_ge_of_not_mem
 end TNLean.PEPS.AreaLaw.Geometry
 
 end
+
+end MeshGeometry
+
+namespace TNLean.PEPS.AreaLaw.Geometry
+
+section FineMarkSeparation
+
+/-!
+## Separation of actual fine-layer marks
+
+At sufficiently late layers, distinct fine-cell marks are separated by at least
+one quarter of the larger incident cell side. The proof combines the separation
+of nonadjacent closed layers with the quarter mesh of marks in adjacent layers.
+It applies to every actual fine-layer cell, hence in particular to selected belt
+cells, and includes marks on cell boundaries.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, `geometry:initial-stars`, lines 325–339 and
+352–359. This proves the point-separation assertion, without a fan or ray
+construction.
+Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Independently proved from the manuscript; no upstream Lean proof text is reused.
+-/
+
+private theorem cellMark_mem_closed_layer (o : ℝ × ℝ) (k : ℕ)
+    (Z : Finset (ℤ × ℤ)) (C : ℕ) (z : ℤ × ℤ) (x : ℝ × ℝ)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hx : x ∈ beltCellMarks o (fineScaleIndex k) z) :
+    x ∈ closure (dyadicLayer o k Z C) := by
+  have hcell := dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
+    o k (fineScaleIndex k) Z C z (fineScaleIndex_le k) hz
+  exact closure_mono hcell
+    (beltCellMarks_subset_closure_dyadicCell o (fineScaleIndex k) z hx)
+
+private theorem cellMark_mem_quarter_mesh (o : ℝ × ℝ) (ℓ j : ℕ)
+    (z : ℤ × ℤ) (x : ℝ × ℝ) (hℓj : ℓ ≤ j + 1)
+    (hx : x ∈ beltCellMarks o j z) : x ∈ affineMesh o ((2 : ℝ) ^ ℓ / 4) := by
+  classical
+  apply beltMarks_subset_affineMesh o ℓ j {z} hℓj
+  exact Finset.mem_biUnion.mpr ⟨z, by simp, hx⟩
+
+private theorem fineLayer_marks_dist_ge_left (o : ℝ × ℝ) (k h : ℕ)
+    (Z : Finset (ℤ × ℤ)) (C : ℕ) (z w : ℤ × ℤ) (x y : ℝ × ℝ)
+    (hC : 2 ≤ C) (hk : 50000000 ≤ k)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hw : w ∈ fineLayerIndices o h (fineScaleIndex h) Z C)
+    (hx : x ∈ beltCellMarks o (fineScaleIndex k) z)
+    (hy : y ∈ beltCellMarks o (fineScaleIndex h) w) (hne : x ≠ y) :
+    (2 : ℝ) ^ fineScaleIndex k / 4 ≤ dist x y := by
+  by_contra! hdist
+  have ht : 0 < (2 : ℝ) ^ fineScaleIndex k := by positivity
+  have hnear : dist x y < 10 * (2 : ℝ) ^ fineScaleIndex k := by linarith
+  have hkh := (dyadicLayer_nearby_indices o k h Z C x y hC hk
+    (cellMark_mem_closed_layer o k Z C z x hz hx)
+    (cellMark_mem_closed_layer o h Z C w y hw hy) hnear).2
+  have hmono := fineScaleIndex_mono hkh
+  have hstep := fineScaleIndex_succ h
+  have hscale : fineScaleIndex k ≤ fineScaleIndex h + 1 := by omega
+  have hxmesh := cellMark_mem_quarter_mesh o (fineScaleIndex k) (fineScaleIndex k)
+    z x (by omega) hx
+  have hymesh := cellMark_mem_quarter_mesh o (fineScaleIndex k) (fineScaleIndex h)
+    w y hscale hy
+  have hsep := affineMesh_dist_ge (by positivity) hxmesh hymesh hne
+  linarith
+
+/-- Actual fine-layer marks are separated by one quarter of the larger incident side.
+Source: area-law Section 11, `geometry:initial-stars`, lines 325–339 and 352–359. -/
+theorem fineLayer_marks_dist_ge (o : ℝ × ℝ) (k h : ℕ)
+    (Z : Finset (ℤ × ℤ)) (C : ℕ) (z w : ℤ × ℤ) (x y : ℝ × ℝ)
+    (hC : 2 ≤ C) (hk : 50000000 ≤ k) (hh : 50000000 ≤ h)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hw : w ∈ fineLayerIndices o h (fineScaleIndex h) Z C)
+    (hx : x ∈ beltCellMarks o (fineScaleIndex k) z)
+    (hy : y ∈ beltCellMarks o (fineScaleIndex h) w) (hne : x ≠ y) :
+    max ((2 : ℝ) ^ fineScaleIndex k) ((2 : ℝ) ^ fineScaleIndex h) / 4 ≤ dist x y := by
+  have hksep := fineLayer_marks_dist_ge_left o k h Z C z w x y hC hk hz hw hx hy hne
+  have hhsep := fineLayer_marks_dist_ge_left o h k Z C w z y x hC hh hw hz hy hx hne.symm
+  rw [dist_comm] at hhsep
+  have hm : max ((2 : ℝ) ^ fineScaleIndex k) ((2 : ℝ) ^ fineScaleIndex h) ≤
+      4 * dist x y := max_le (by linarith) (by linarith)
+  linarith
+
+end FineMarkSeparation
+
+section NearMarkGeometry
+
+/-!
+## Actual layers and meshes near a fine-cell mark
+
+A closed neighborhood of radius ten fine-cell sides around an actual cell
+mark meets only its own or an adjacent layer. All marks of a cell meeting
+that neighborhood lie on one common quarter mesh. The closed radius is
+handled by the sixteen-side separation of nonadjacent layers.
+
+The initial dummy neighborhood is also separated from every later layer by
+at least sixteen of that layer's fine sides. The reference layer alone has
+the explicit late bound. The origin and endpoint set are arbitrary; neither
+selected belt membership nor a supplied local geometric description is needed.
+Active rays and sectors remain separate assertions.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, `geometry:initial-stars`, lines 352–359;
+`geometry:layer-distance`, lines 179–191; and scale comparison, lines 200–207.
+Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Independently proved from the manuscript; no upstream Lean proof text is reused.
+-/
+
+/-- The marks of one cell inherit the existing quarter-mesh inclusion.
+Auxiliary to Section 11, `geometry:initial-stars`, lines 352–359. -/
+private theorem cellMarks_subset_quarter_mesh (o : ℝ × ℝ) (ℓ j : ℕ)
+    (z : ℤ × ℤ) (hℓj : ℓ ≤ j + 1) :
+    (beltCellMarks o j z : Set (ℝ × ℝ)) ⊆ affineMesh o ((2 : ℝ) ^ ℓ / 4) := by
+  classical
+  simpa only [beltMarks, Finset.singleton_biUnion] using
+    beltMarks_subset_affineMesh o ℓ j {z} hℓj
+
+/-- An actual fine cell meeting the closed ten-side neighborhood of an actual
+cell mark lies in a neighboring layer and shares its quarter mesh.
+Source: Section 11, `geometry:initial-stars`, lines 352–359. -/
+theorem fineLayer_near_mark_quarter_mesh
+    (o : ℝ × ℝ) (k h : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (z w : ℤ × ℤ) (v : ℝ × ℝ)
+    (hC : 2 ≤ C) (hk : 50000000 ≤ k)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hw : w ∈ fineLayerIndices o h (fineScaleIndex h) Z C)
+    (hv : v ∈ beltCellMarks o (fineScaleIndex k) z)
+    (hcontact : (closure (dyadicCell o (fineScaleIndex h) w) ∩
+      Metric.closedBall v (10 * (2 : ℝ) ^ fineScaleIndex k)).Nonempty) :
+    (h ≤ k + 1 ∧ k ≤ h + 1) ∧
+    (fineScaleIndex h = fineScaleIndex k ∨
+      fineScaleIndex h + 1 = fineScaleIndex k ∨
+      fineScaleIndex h = fineScaleIndex k + 1) ∧
+    ((beltCellMarks o (fineScaleIndex k) z : Set (ℝ × ℝ)) ∪
+      (beltCellMarks o (fineScaleIndex h) w : Set (ℝ × ℝ))) ⊆
+      affineMesh o ((2 : ℝ) ^ fineScaleIndex k / 4) := by
+  obtain ⟨y, hycell, hyball⟩ := hcontact
+  have hvD : v ∈ closure (dyadicLayer o k Z C) :=
+    closure_mono (dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k
+      (fineScaleIndex k) Z C z (fineScaleIndex_le k) hz)
+      (beltCellMarks_subset_closure_dyadicCell o (fineScaleIndex k) z hv)
+  have hyD : y ∈ closure (dyadicLayer o h Z C) :=
+    closure_mono (dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o h
+      (fineScaleIndex h) Z C w (fineScaleIndex_le h) hw) hycell
+  have hdist : dist v y ≤ 10 * (2 : ℝ) ^ fineScaleIndex k :=
+    Metric.mem_closedBall'.mp hyball
+  have hnot : ¬ (k + 2 ≤ h ∨ h + 2 ≤ k) := by
+    intro hnon
+    have hsep := dyadicLayer_dist_nonadjacent_fineScale o k h Z C v y hC hk
+      hnon hvD hyD
+    have ht : 0 < (2 : ℝ) ^ fineScaleIndex k := pow_pos zero_lt_two _
+    linarith
+  have hadj : h ≤ k + 1 ∧ k ≤ h + 1 := by omega
+  have hlo := fineScaleIndex_mono hadj.2
+  have hhi := fineScaleIndex_mono hadj.1
+  have hstepk := fineScaleIndex_succ k
+  have hsteph := fineScaleIndex_succ h
+  have hindices : fineScaleIndex k ≤ fineScaleIndex h + 1 ∧
+      fineScaleIndex h ≤ fineScaleIndex k + 1 := by omega
+  have hcases : fineScaleIndex h = fineScaleIndex k ∨
+      fineScaleIndex h + 1 = fineScaleIndex k ∨
+      fineScaleIndex h = fineScaleIndex k + 1 := by omega
+  refine ⟨hadj, hcases, ?_⟩
+  exact Set.union_subset
+    (cellMarks_subset_quarter_mesh o (fineScaleIndex k) (fineScaleIndex k) z (by omega))
+    (cellMarks_subset_quarter_mesh o (fineScaleIndex k) (fineScaleIndex h) w hindices.1)
+
+/-- The closed dummy neighborhood is separated from a later closed layer
+by sixteen of that layer's fine sides.
+Source: Section 11, `geometry:initial-stars`, lines 352–359;
+`geometry:layer-distance`, lines 179–191; and scale comparison, lines 200–207. -/
+theorem dyadicNeighborhood_dist_later_layer_fineScale
+    (o : ℝ × ℝ) (k₀ k : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (x y : ℝ × ℝ) (hC : 2 ≤ C) (hk : 50000000 ≤ k)
+    (hkk : k₀ + 1 ≤ k)
+    (hx : x ∈ closure (dyadicNeighborhood o k₀ Z C))
+    (hy : y ∈ closure (dyadicLayer o k Z C)) :
+    16 * (2 : ℝ) ^ fineScaleIndex k ≤ dist x y := by
+  obtain ⟨u, hu, hxu⟩ := dyadicNeighborhood_exists_dist_le o k₀ Z C x hx
+  have hyu := dyadicLayer_dist_lower o k Z C y hy u hu
+  have htriangle : dist y (integerPoint u) ≤ dist x y + dist x (integerPoint u) := by
+    simpa only [dist_comm y x] using dist_triangle y x (integerPoint u)
+  have hpow : 2 * (2 : ℝ) ^ k₀ ≤ (2 : ℝ) ^ k := by
+    calc
+      _ = (2 : ℝ) ^ (k₀ + 1) := by rw [pow_succ]; ring
+      _ ≤ _ := pow_le_pow_right₀ (by norm_num) hkk
+  have hpowC := mul_le_mul_of_nonneg_left hpow
+    (by positivity : (0 : ℝ) ≤ (C : ℝ) + 1)
+  have hC' : (2 : ℝ) ≤ C := by exact_mod_cast hC
+  have hCK : 2 * (2 : ℝ) ^ k ≤ (C : ℝ) * (2 : ℝ) ^ k :=
+    mul_le_mul_of_nonneg_right hC' (by positivity)
+  have hscale : 32 * (2 : ℝ) ^ fineScaleIndex k ≤ (2 : ℝ) ^ k := by
+    exact_mod_cast (dyadicScale_side_ratios 5 k (by omega)).1
+  nlinarith only [hxu, hyu, htriangle, hpowC, hCK, hscale]
+
+end NearMarkGeometry
+
+end TNLean.PEPS.AreaLaw.Geometry

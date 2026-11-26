@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Examples.NonCartesianSectors
 
 import TNLean.MPS.Examples.NonCartesianSectors.CPSVBlockingChannelAmbientCounterexample
-import TNLean.MPS.Examples.NonCartesianSectors.CPSVBlockingChannelCounterexample
 import TNLean.MPS.Examples.NonCartesianSectors.CPSVBlockingChannelEmbeddedCounterexample
 import TNLean.MPS.Examples.NonCartesianSectors.NeighboringTraceObstructionAmbientBlocks
 import TNLean.MPS.Examples.NonCartesianSectors.NeighboringTraceObstructionAmbientCounterexample

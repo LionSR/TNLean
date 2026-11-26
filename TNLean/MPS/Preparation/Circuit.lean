@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Preparation.Circuit
 
 import TNLean.MPS.Preparation.Circuit.BlockStatePreparation
-import TNLean.MPS.Preparation.Circuit.ConfigurationLayers
 import TNLean.MPS.Preparation.Circuit.GHZSectorObstruction
 import TNLean.MPS.Preparation.Circuit.GHZSeedCircuit
 import TNLean.MPS.Preparation.Circuit.GHZSeedRegisters
@@ -22,7 +21,6 @@ import TNLean.MPS.Preparation.Circuit.ShortChainPreparation
 import TNLean.MPS.Preparation.Circuit.SparseRegisterPadding
 import TNLean.MPS.Preparation.Circuit.SparseWindowGHZ
 import TNLean.MPS.Preparation.Circuit.StateApproximationError
-import TNLean.MPS.Preparation.Circuit.SupportedTreePreparation
 import TNLean.MPS.Preparation.Circuit.TreeMeasurement
 import TNLean.MPS.Preparation.Circuit.UnequalRegisterTree
 import TNLean.MPS.Preparation.Circuit.UnequalRegisterTreeState

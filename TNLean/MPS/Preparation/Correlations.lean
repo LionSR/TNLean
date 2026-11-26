@@ -12,6 +12,5 @@ import TNLean.MPS.Preparation.Correlations.BlockVariance
 import TNLean.MPS.Preparation.Correlations.DecayingCorrelationBound
 import TNLean.MPS.Preparation.Correlations.ObservableTransferBound
 import TNLean.MPS.Preparation.Correlations.PhysicalCorrelationExpansion
-import TNLean.MPS.Preparation.Correlations.PhysicalCorrelationGauge
 import TNLean.MPS.Preparation.Correlations.PhysicalObservableGauge
 import TNLean.MPS.Preparation.Correlations.WindowClustering

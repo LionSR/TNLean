@@ -11,7 +11,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.ActualCollarInformation
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.CollarInformation
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalCollarInformation
-import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalInformationDimension
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalScanner
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalTemplateInformation
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.SourceActualInformation
@@ -19,5 +18,4 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.SourceFinalInformatio
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.SourceRoundedInformation
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.SourceScanner
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.TemplateFinalInformation
-import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.TemplateScanner
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.TemplateSourceEntropy

@@ -7,7 +7,6 @@ import TNLean.MPS.Symmetry.FixedPoint.BondProductParentHamiltonian
 import TNLean.MPS.Symmetry.FixedPoint.BondProductContinuity
 import TNLean.MPS.Symmetry.FixedPoint.BondRegrouping
 import TNLean.MPS.Symmetry.FixedPoint.BondProductHamiltonianSymmetry
-import TNLean.MPS.Symmetry.FixedPoint.BondRegroupingSymmetry
 
 /-!
 # Independent-bond parent Hamiltonian in physical coordinates

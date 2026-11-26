@@ -11,10 +11,8 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.GappedPath.CanonicalInjectiveGappedPath
 import TNLean.MPS.Symmetry.GappedPath.EmbeddedInjectiveGappedPath
 import TNLean.MPS.Symmetry.GappedPath.ExactMPSGappedPhase
-import TNLean.MPS.Symmetry.GappedPath.ExactMPSGroundPathComposition
 import TNLean.MPS.Symmetry.GappedPath.ExactMPSPhaseGaugeInvariance
 import TNLean.MPS.Symmetry.GappedPath.GappedInteractionPathComposition
-import TNLean.MPS.Symmetry.GappedPath.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.GappedPath.PhysicalCharacterGappedPath
 import TNLean.MPS.Symmetry.GappedPath.PhysicalInteractionGap
 import TNLean.MPS.Symmetry.GappedPath.PhysicalInteractionGroundSpace

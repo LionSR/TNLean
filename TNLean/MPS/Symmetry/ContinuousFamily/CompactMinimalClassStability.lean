@@ -3,8 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Symmetry.ContinuousFamily.CompactSupportedSequenceClass
-import TNLean.MPS.Symmetry.ContinuousFamily.CompactUnitalTensors
 import TNLean.MPS.CanonicalForm.Periodic.Overlap.FixedLineLimitSimplicity
 import TNLean.MPS.Symmetry.PeriodicRay.MpvRayLimit
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousStationaryDensity
@@ -18,6 +16,21 @@ import Mathlib.Data.Fintype.Pigeonhole
 import Mathlib.Data.Nat.Nth
 import Mathlib.Order.Filter.AtTopBot.CountablyGenerated
 import Mathlib.FieldTheory.IsAlgClosed.Spectrum
+import TNLean.MPS.Symmetry.ContinuousFamily.StationarySupportedDensityPhaseInvariance
+import TNLean.MPS.Symmetry.ContinuousFamily.SupportPeriodicDecomposition
+import TNLean.MPS.Symmetry.OnSite.CompactSupportVirtualTransport
+import TNLean.MPS.Symmetry.OnSite.UnitaryVirtualGauge
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.PeriodicRayUnitOverlap
+import Mathlib.Topology.Compactification.OnePoint.Basic
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
+import TNLean.MPS.Tensor.Defs
+import QICLean.Channel.Schwarz.Basic
+import QICLean.Channel.Basic
+import Mathlib.Topology.Instances.Matrix
+import Mathlib.Analysis.Complex.Basic
+import Mathlib.Tactic.Continuity
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Linarith
 
 /-!
 # Compactness and virtual class stability for periodic-ray sequences
@@ -31,7 +44,298 @@ then identifies the limiting minimal tensor with the injective reference.
 Source context: arXiv:1010.3732, Appendix C, lines 2653–2717. The uniform
 transfer bound and exact unitary virtual covariance are explicit auxiliary
 hypotheses. No physical-gap conclusion is asserted here.
+
+It also contains the following results.
+
+* `MPSTensor.eventually_cohomologousTo_of_tendsto_unital_periodic_lines`: virtual class stability
+  along a convergent unital sequence.
+* `MPSTensor.isCompact_setOf_isUnital`, `MPSTensor.exists_subsequence_unital_stationary_limit`:
+  compactness of unital tensors and stationary densities.
 -/
+
+section CompactSupportedSequenceClass
+
+/-!
+## Virtual class stability along a convergent unital sequence
+
+The one-point compactification of the natural numbers turns a convergent
+sequence of ambient tensors into a continuous family. At the finite points,
+the stationary support may be the entire bond space; at infinity it may have
+smaller dimension. The supported-family theorem requires no convergence of
+virtual representatives or support frames.
+
+Source context: arXiv:1010.3732, Appendix C, lines 2653–2717. The transfer
+spectral bound remains an explicit hypothesis in the eventual application.
+-/
+
+set_option relaxedAutoImplicit false
+set_option maxSynthPendingDepth 3
+set_option linter.mathlibStandardSet true
+open scoped Matrix ComplexOrder Topology OnePoint
+open Filter TNLean.Algebra
+
+open scoped ScalarCohomology
+
+namespace MPSTensor
+
+private theorem eventually_class_of_unital_sequence_supported_limit
+    {G : Type} [Group G] {d k E : ℕ}
+    (B : ℕ → MPSTensor d k) (b : MPSTensor d k)
+    (hB : Tendsto B atTop (𝓝 b)) (hUnital : ∀ n, Kraus.IsUnital (B n))
+    (hbUnital : Kraus.IsUnital b)
+    (σ : ℕ → Matrix (Fin k) (Fin k) ℂ) (hσ : ∀ n, (σ n).PosDef)
+    (hTrace : ∀ n, (σ n).trace = 1)
+    (hFix : ∀ n, Kraus.adjointMap (B n) (σ n) = σ n)
+    (τ : Matrix (Fin k) (Fin k) ℂ) (hτ : τ.PosSemidef)
+    (hτTrace : τ.trace = 1) (hτFix : Kraus.adjointMap b τ = τ)
+    (K : Matrix (Fin k) (Fin E) ℂ) (hK : K.IsIsometry)
+    (hSupport : K * Kᴴ = hτ.supportProj)
+    (C : MPSTensor d E) (hC : ∀ i, C i = Kᴴ * b i * K)
+    (hCInj : Kraus.IsInjective C)
+    (hDim : Module.finrank ℂ (LinearMap.ker (LinearMap.id - Kraus.adjointMapLM b)) = 1)
+    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+    (ω : ℕ → ScalarCocycle G) (ω₀ : ScalarCocycle G)
+    (ρ : ∀ n, ProjectiveRepresentation (D := k) (ω n))
+    (ρ₀ : ProjectiveRepresentation (D := E) ω₀)
+    (hρ : ∀ n g, ((ρ n).X g : Matrix (Fin k) (Fin k) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
+    (hρ₀ : ∀ g, (ρ₀.X g : Matrix (Fin E) (Fin E) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
+    (hCov : ∀ n g, rotatePhysical (U g) (B n) = fun i =>
+      ((ρ n).X (g⁻¹) : Matrix (Fin k) (Fin k) ℂ) * B n i *
+        ((ρ n).X (g⁻¹) : Matrix (Fin k) (Fin k) ℂ)ᴴ)
+    (hCov₀ : ∀ g, rotatePhysical (U g) C = fun i =>
+      (ρ₀.X (g⁻¹) : Matrix (Fin E) (Fin E) ℂ) * C i *
+        (ρ₀.X (g⁻¹) : Matrix (Fin E) (Fin E) ℂ)ᴴ) :
+    ∀ᶠ n in atTop, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ n) (by
+            apply Nat.pos_of_ne_zero
+            intro hk
+            subst k
+            simp only [Matrix.trace_fin_zero, zero_ne_one] at hτTrace))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀
+            (Matrix.supportFrame_dimension_pos_of_trace_one K τ hτ hSupport hτTrace))) := by
+  let ambient := OnePoint.continuousMapMkNat B b hB
+  let dim : OnePoint ℕ → ℕ := OnePoint.rec E (fun _ => k)
+  let factor : OnePoint ℕ → ScalarCocycle G := OnePoint.rec ω₀ ω
+  let action : ∀ t, ProjectiveRepresentation (D := dim t) (factor t) :=
+    OnePoint.rec ρ₀ ρ
+  let density : OnePoint ℕ → Matrix (Fin k) (Fin k) ℂ := OnePoint.rec τ σ
+  let frame : ∀ t : OnePoint ℕ, Matrix (Fin k) (Fin (dim t)) ℂ :=
+    OnePoint.rec K (fun _ => (1 : Matrix (Fin k) (Fin k) ℂ))
+  let tensor : ∀ t, MPSTensor d (dim t) := OnePoint.rec C B
+  have hClass := eventually_cohomologousTo_of_continuousAt_unital_supported_family
+    dim factor action ambient ∞ ambient.continuous.continuousAt
+    (OnePoint.rec hbUnital hUnital) density
+    (OnePoint.rec hτ (fun n => (hσ n).posSemidef))
+    (OnePoint.rec hτTrace hTrace) (OnePoint.rec hτFix hFix) frame
+    (OnePoint.rec hK (fun _ => by
+      change (1 : Matrix (Fin k) (Fin k) ℂ)ᴴ *
+        (1 : Matrix (Fin k) (Fin k) ℂ) = (1 : Matrix (Fin k) (Fin k) ℂ)
+      simp only [Matrix.conjTranspose_one, Matrix.one_mul]))
+    (OnePoint.rec hSupport (fun n => by
+      change (1 : Matrix (Fin k) (Fin k) ℂ) *
+        (1 : Matrix (Fin k) (Fin k) ℂ)ᴴ = (hσ n).posSemidef.supportProj
+      rw [Matrix.conjTranspose_one, Matrix.one_mul, (hσ n).supportProj_eq_one]))
+    tensor (OnePoint.rec hC (fun n i => by
+      change B n i = (1 : Matrix (Fin k) (Fin k) ℂ)ᴴ * B n i *
+        (1 : Matrix (Fin k) (Fin k) ℂ)
+      simp only [Matrix.conjTranspose_one, Matrix.one_mul, Matrix.mul_one]))
+    (OnePoint.rec hρ₀ hρ) U (OnePoint.rec hCov₀ hCov) hDim hCInj
+  have hTendsto : Tendsto ((↑) : ℕ → OnePoint ℕ) atTop (𝓝 ∞) := by
+    simpa only [coclosedCompact_eq_cocompact, cocompact_eq_cofinite,
+      Nat.cofinite_eq_atTop] using (OnePoint.tendsto_coe_infty (X := ℕ))
+  exact hTendsto.eventually hClass
+
+/-- A convergent sequence of unital tensors eventually has the base virtual class
+when its limiting periodic lines agree eventually with those of a unital
+injective reference. The limiting transfer spectral bound is supplied. The
+normality and the limiting virtual action are derived inside the argument;
+no continuity of virtual representatives is assumed. Source context:
+arXiv:1010.3732, Appendix C, lines 2653–2717. -/
+theorem eventually_cohomologousTo_of_tendsto_unital_periodic_lines
+    {G : Type} [Group G] {d D k E : ℕ} [NeZero D]
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hAU : Kraus.IsUnital A)
+    (B : ℕ → MPSTensor d k) (b : MPSTensor d k)
+    (hB : Tendsto B atTop (𝓝 b)) (hBU : ∀ n, Kraus.IsUnital (B n))
+    (hbU : Kraus.IsUnital b)
+    (hDim : Module.finrank ℂ (Module.End.eigenspace (Kraus.transferMap b) 1) = 1)
+    (σ : ℕ → Matrix (Fin k) (Fin k) ℂ) (hσ : ∀ n, (σ n).PosDef)
+    (hσTrace : ∀ n, (σ n).trace = 1)
+    (hσFix : ∀ n, Kraus.adjointMap (B n) (σ n) = σ n)
+    (τ : Matrix (Fin k) (Fin k) ℂ) (hτ : τ.PosSemidef)
+    (hτTrace : τ.trace = 1) (hτFix : Kraus.adjointMap b τ = τ)
+    (K : Matrix (Fin k) (Fin E) ℂ) (hK : K.IsIsometry)
+    (hSupport : K * Kᴴ = hτ.supportProj)
+    (C : MPSTensor d E) (hC : ∀ i, C i = Kᴴ * b i * K)
+    (q : ℝ) (hq : 0 ≤ q) (hqOne : q < 1)
+    (hSpecA : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), z ≠ 1 → ‖z‖ ≤ q)
+    (hSpecb : ∀ z ∈ spectrum ℂ (Kraus.transferMap b), z ≠ 1 → ‖z‖ ≤ q)
+    (hSpan : ∀ᶠ N in atTop,
+      Submodule.span ℂ {(mpv A : (Fin N → Fin d) → ℂ)} =
+        Submodule.span ℂ {(mpv b : (Fin N → Fin d) → ℂ)})
+    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+    (ω : ℕ → ScalarCocycle G) (ω₀ : ScalarCocycle G)
+    (ρ : ∀ n, ProjectiveRepresentation (D := k) (ω n))
+    (ρ₀ : ProjectiveRepresentation (D := D) ω₀)
+    (hρ : ∀ n g, ((ρ n).X g : Matrix (Fin k) (Fin k) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
+    (hρ₀ : ∀ g, (ρ₀.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
+    (hCov : ∀ n g, rotatePhysical (U g) (B n) = fun i =>
+      ((ρ n).X (g⁻¹) : Matrix (Fin k) (Fin k) ℂ) * B n i *
+        ((ρ n).X (g⁻¹) : Matrix (Fin k) (Fin k) ℂ)ᴴ)
+    (hCov₀ : ∀ g, rotatePhysical (U g) A = fun i =>
+      (ρ₀.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (ρ₀.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ)ᴴ) :
+    ∀ᶠ n in atTop, groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ n) (by
+            apply Nat.pos_of_ne_zero
+            intro hk
+            subst k
+            simp only [Matrix.trace_fin_zero, zero_ne_one] at hτTrace))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
+        (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ₀) (NeZero.pos D))) := by
+  have hk : k ≠ 0 := by
+    intro hzero
+    subst k
+    simp only [Matrix.trace_fin_zero, zero_ne_one] at hτTrace
+  let : NeZero k := ⟨hk⟩
+  have hAirr := Kraus.injective_implies_irreducibleCP A hA
+  have hAdim : Module.finrank ℂ (Module.End.eigenspace (Kraus.transferMap A) 1) = 1 :=
+    finrank_eigenspace_eq_one_of_irreducible_positive
+      (Kraus.mapLM A) (Kraus.isPositiveMap_mapLM A) hAirr (r := 1) zero_le_one
+      Matrix.PosDef.one (by simpa only [Kraus.mapLM_apply, Complex.ofReal_one, one_smul]
+        using Kraus.map_one_of_isUnital A hAU)
+  have hAnorm := norm_mpvState_tendsto_one_of_transfer_spectrum
+    A hAU hAdim q hq hqOne hSpecA
+  have hbnorm := norm_mpvState_tendsto_one_of_transfer_spectrum
+    b hbU hDim q hq hqOne hSpecb
+  have hBound : ∀ᶠ N in atTop, ‖mpvState A N‖ ≤ (2 : ℝ) :=
+    ((tendsto_order.mp hAnorm).2 2 (by norm_num)).mono fun _ h => h.le
+  have hOverlap := norm_mpvOverlap_tendsto_one_of_eventual_span_eq A b hSpan hAnorm hbnorm
+  obtain ⟨Λ, hΛ, hΛfix⟩ := exists_posDef_adjoint_fixedPoint_of_isInjective_unital
+    hA (Kraus.map_one_of_isUnital A hAU)
+  have hΛfix' : Kraus.adjointMap A Λ = Λ := by
+    simpa only [Kraus.transferMap, Kraus.mapLM_apply, Kraus.map_apply,
+      Matrix.conjTranspose_conjTranspose, Kraus.adjointMap_apply] using hΛfix
+  obtain ⟨_, hEq, hGauge⟩ := exists_dim_eq_gaugePhase_of_unital_stationary_support_overlap
+    A b C (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hAirr)
+    Λ hΛ hΛfix' hbU hDim τ hτ hτFix hτTrace K hK hSupport hC
+    q hq hqOne hSpecb 2 hBound hOverlap
+  subst E
+  have hGauge' : GaugePhaseEquiv A C := by simpa using hGauge
+  have hUniq := normalized_adjoint_fixed_unique_of_transfer_fixed_finrank_one
+    b hDim τ hτFix hτTrace
+  have hCU := (prepare_stationary_support_compression
+    b C K hK hC hbU τ hτ hSupport hτFix hτTrace hUniq).1
+  obtain ⟨ρLimit, hρLimit, hCovLimit⟩ := exists_unitary_virtualRep_of_unital_gaugePhaseEquiv
+    hA hAU hCU hGauge' U ρ₀ hρ₀ hCov₀
+  obtain ⟨X, c, hc, hX⟩ := hGauge'
+  have hCInj : Kraus.IsInjective C := isInjective_of_gaugeEquiv (hA.smul hc)
+    ⟨X, fun i => by simpa only [Pi.smul_apply, Matrix.mul_smul, Matrix.smul_mul] using hX i⟩
+  exact eventually_class_of_unital_sequence_supported_limit
+    B b hB hBU hbU σ hσ hσTrace hσFix τ hτ hτTrace hτFix K hK hSupport C hC hCInj
+    ((finrank_adjointFixedSpace_eq_transferFixedSpace b).trans hDim)
+    U ω ω₀ ρ ρLimit hρ hρLimit hCov hCovLimit
+
+end MPSTensor
+
+end CompactSupportedSequenceClass
+
+section CompactUnitalTensors
+
+/-!
+## Compactness of unital tensors and stationary densities
+
+In fixed physical and bond dimensions, each entry of a unital tensor has
+modulus at most one. Unitality is a closed condition, so these tensors form
+a compact set. Pairing this set with the compact set of density matrices
+gives a common convergent subsequence of tensors and stationary densities.
+Stationarity passes to the limit by continuity. The limiting density is
+allowed to have smaller rank.
+
+These are finite-dimensional compactness results for the exact MPS families
+of arXiv:1010.3732, Section II.F.2 and Appendix C, lines 2653–2717. They do not
+identify the limiting stationary support with a prescribed minimal tensor.
+-/
+
+set_option relaxedAutoImplicit false
+set_option maxSynthPendingDepth 3
+set_option linter.mathlibStandardSet true
+open scoped Matrix
+
+private theorem norm_entry_le_one_of_isUnital {d D : ℕ}
+    (A : MPSTensor d D) (hA : Kraus.IsUnital A) (i : Fin d) (a b : Fin D) :
+    ‖A i a b‖ ≤ 1 := by
+  have hdiag := congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => (M a a).re) hA
+  have hsum : ∑ j : Fin d, ∑ c : Fin D, ‖A j a c‖ ^ 2 = 1 := by
+    simpa [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
+      map_sum, Complex.mul_re, Complex.norm_mul_self_eq_normSq,
+      Complex.normSq_apply, pow_two] using hdiag
+  have hle : ‖A i a b‖ ^ 2 ≤ 1 := by
+    rw [← hsum]
+    apply (Finset.single_le_sum (fun c _ => sq_nonneg ‖A i a c‖)
+      (Finset.mem_univ b)).trans
+    exact Finset.single_le_sum (fun j _ => Finset.sum_nonneg
+      (fun c _ => sq_nonneg ‖A j a c‖)) (Finset.mem_univ i)
+  nlinarith [norm_nonneg (A i a b)]
+
+/-- In fixed physical and bond dimensions the unital tensors form a compact
+set, irrespective of injectivity or the rank of a stationary density. -/
+theorem MPSTensor.isCompact_setOf_isUnital (d D : ℕ) :
+    IsCompact {A : MPSTensor d D | Kraus.IsUnital A} := by
+  have hclosed : IsClosed {A : MPSTensor d D | Kraus.IsUnital A} := by
+    apply isClosed_eq ?_ continuous_const
+    fun_prop
+  have hcompact : IsCompact {A : MPSTensor d D |
+      ∀ i a b, A i a b ∈ Metric.closedBall (0 : ℂ) 1} :=
+    isCompact_pi_infinite (fun _ => isCompact_pi_infinite
+      (fun _ => isCompact_pi_infinite (fun _ => isCompact_closedBall 0 1)))
+  apply hcompact.of_isClosed_subset hclosed
+  intro A hA i a b
+  simpa only [Metric.mem_closedBall, dist_zero_right] using
+    norm_entry_le_one_of_isUnital A hA i a b
+
+/-- Unital tensors and stationary density matrices admit a common convergent
+subsequence in fixed dimensions. The limiting density may have smaller rank. -/
+theorem MPSTensor.exists_subsequence_unital_stationary_limit {d D : ℕ}
+    (A : ℕ → MPSTensor d D) (σ : ℕ → Matrix (Fin D) (Fin D) ℂ)
+    (hA : ∀ n, Kraus.IsUnital (A n))
+    (hσ : ∀ n, σ n ∈ densityMatrices D)
+    (hfixed : ∀ n, Kraus.adjointMap (A n) (σ n) = σ n) :
+    ∃ B : MPSTensor d D, ∃ τ : Matrix (Fin D) (Fin D) ℂ,
+      Kraus.IsUnital B ∧ τ ∈ densityMatrices D ∧ Kraus.adjointMap B τ = τ ∧
+      ∃ φ : ℕ → ℕ, StrictMono φ ∧
+        Filter.Tendsto (A ∘ φ) Filter.atTop (nhds B) ∧
+        Filter.Tendsto (σ ∘ φ) Filter.atTop (nhds τ) := by
+  let : FirstCountableTopology (Fin D → ℂ) := inferInstance
+  let : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) :=
+    inferInstanceAs (FirstCountableTopology (Fin D → Fin D → ℂ))
+  let : FirstCountableTopology (MPSTensor d D) :=
+    inferInstanceAs (FirstCountableTopology (Fin d → Matrix (Fin D) (Fin D) ℂ))
+  obtain ⟨p, hp, φ, hφ, hconv⟩ :=
+    ((MPSTensor.isCompact_setOf_isUnital d D).prod
+      (densityMatrices_isCompact (D := D))).tendsto_subseq
+        (fun n => show (A n, σ n) ∈
+          {B : MPSTensor d D | Kraus.IsUnital B} ×ˢ densityMatrices D from ⟨hA n, hσ n⟩)
+  have hadj : Continuous (fun p : MPSTensor d D × Matrix (Fin D) (Fin D) ℂ =>
+      Kraus.adjointMap p.1 p.2) := by
+    unfold Kraus.adjointMap
+    fun_prop
+  have hAc : Filter.Tendsto (A ∘ φ) Filter.atTop (nhds p.1) :=
+    (continuous_fst.tendsto p).comp hconv
+  have hσc : Filter.Tendsto (σ ∘ φ) Filter.atTop (nhds p.2) :=
+    (continuous_snd.tendsto p).comp hconv
+  refine ⟨p.1, p.2, hp.1, hp.2, ?_, φ, hφ, hAc, hσc⟩
+  exact tendsto_nhds_unique_of_eventuallyEq
+    ((hadj.tendsto p).comp hconv) hσc
+    (Filter.Eventually.of_forall (fun n => hfixed (φ n)))
+
+end CompactUnitalTensors
+
+section CompactMinimalClassStability
 
 open Kraus (blockPhysDim wordOfBlock blockTensor evalWord_blockTensor)
 
@@ -389,3 +693,5 @@ theorem eventually_cohomologousTo_of_continuousAt_bounded_normal_periodic_rays
       (A t) U (ρ t) (hρ t) (hCov t) L)
 
 end MPSTensor
+
+end CompactMinimalClassStability

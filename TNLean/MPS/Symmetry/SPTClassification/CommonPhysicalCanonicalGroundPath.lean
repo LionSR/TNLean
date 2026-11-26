@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalFixedPointGroundPath
-import TNLean.MPS.Symmetry.GappedPath.ExactMPSGroundPathComposition
+import TNLean.MPS.Symmetry.GappedPath.ExactMPSGappedPhase
 import QICLean.ManyBody.Hamiltonian.KernelGap
 
 /-!

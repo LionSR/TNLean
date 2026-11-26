@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.CanonicalForm.BlockSeparation
 
-import TNLean.MPS.CanonicalForm.BlockSeparation.BNTDirectSum
 import TNLean.MPS.CanonicalForm.BlockSeparation.BlockWordSpanPropagation
 import TNLean.MPS.CanonicalForm.BlockSeparation.DirectSumGroundSpace
 import TNLean.MPS.CanonicalForm.BlockSeparation.DirectSumInput

@@ -16,7 +16,6 @@ import TNLean.MPS.Operator.Periodic.FirstSite
 import TNLean.MPS.Operator.Periodic.LPDO
 import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
-import TNLean.MPS.Operator.Periodic.SitewiseOperatorProduct
 import TNLean.MPS.Operator.Periodic.TraceChainHermitian
 import TNLean.MPS.Operator.Periodic.TraceChainLinearCombination
 import TNLean.MPS.Operator.Periodic.TraceChainOperator

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateBoundary
+import TNLean.PEPS.AreaLaw.Polygons.Templates.AmbientBoundary
 
 /-!
 # Physical boundaries of separated templates

@@ -9,7 +9,7 @@ import TNLean.MPS.CanonicalForm.TranslationInvariant
 import TNLean.MPS.CanonicalForm.BNT.PhaseCover
 import TNLean.MPS.Tensor.Words.ScaledNormality
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.PeriodicSectorDecomposition
-import TNLean.MPS.CanonicalForm.Periodic.ScaledNormalization
+import TNLean.MPS.CanonicalForm.Periodic.SectorNormalization
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.StateVectorDecomposition
 
 /-!

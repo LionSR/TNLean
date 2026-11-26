@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.MPDO.Vertical
 
-import TNLean.MPS.MPDO.Vertical.CPSVBlocking
 import TNLean.MPS.MPDO.Vertical.CPSVOriginalSpaceLemmaL
 import TNLean.MPS.MPDO.Vertical.CPSVPeriodicExclusion
 import TNLean.MPS.MPDO.Vertical.CPSVRepresentativeGroupedLemmaL
@@ -20,8 +19,6 @@ import TNLean.MPS.MPDO.Vertical.LinearMarkedTensor
 import TNLean.MPS.MPDO.Vertical.NormalizedGroupedSectorMaps
 import TNLean.MPS.MPDO.Vertical.ReflectedMarkedChain
 import TNLean.MPS.MPDO.Vertical.RepresentativeGroupedMarkedLemmaL
-import TNLean.MPS.MPDO.Vertical.RetainedClass
-import TNLean.MPS.MPDO.Vertical.TwoSitePrefixReflectedMarkedChain
 import TNLean.MPS.MPDO.Vertical.VerticalBNT
 import TNLean.MPS.MPDO.Vertical.VerticalBNTConstruction
 import TNLean.MPS.MPDO.Vertical.VerticalCanonicalForm

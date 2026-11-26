@@ -11,7 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.BNT.Basic
 import TNLean.MPS.CanonicalForm.BNT.Construction
 import TNLean.MPS.CanonicalForm.BNT.EqualModulus
-import TNLean.MPS.CanonicalForm.BNT.GaugePhaseSeparationTransport
 import TNLean.MPS.CanonicalForm.BNT.Grouping
 import TNLean.MPS.CanonicalForm.BNT.PhaseClassSectorData
 import TNLean.MPS.CanonicalForm.BNT.PhaseCover

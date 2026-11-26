@@ -17,7 +17,14 @@ incident gates, and this reconstruction agrees with projecting a global
 choice.
 
 Source: polynomial-PEPS, `04-compression.tex`, lines 351–381 and 565–579.
+
+It also contains the following results.
+
+* `QuantumCircuit.Party.SourceCircuit.originalGateLabelsAtOfAllChoices_eq_restrictGates`: incident
+  labels after reindexing all-party choices.
 -/
+
+section IncidentGateLabels
 
 /-!
 Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
@@ -98,3 +105,52 @@ theorem choicesOfOriginalGateLabelsAt_eq_projectAllChoices {X Y : P → Type}
     (choiceAt_projectAllChoices _ w ξ g hg).symm
 
 end QuantumCircuit.Party.SourceCircuit
+
+end
+
+end IncidentGateLabels
+
+section LocalGateLabelCompatibility
+
+/-! # Incident labels after reindexing all-party choices
+
+The original labels visible at a party agree with restriction of the supplied
+label function on nonempty gate occurrences. This identity applies separately
+to the ket and bra label functions and retains the original occurrence tags.
+
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381
+and 565–579.
+-/
+
+noncomputable section
+
+namespace QuantumCircuit.Party.SourceCircuit
+
+open TNLean.Network
+
+variable {P : Type} [DecidableEq P]
+
+open Classical in
+/-- Recovering an all-party choice from its original gate-label function and
+then taking its incident labels gives the restriction of that same function.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381
+and 565–579. -/
+theorem originalGateLabelsAtOfAllChoices_eq_restrictGates
+    {X Y : P → Type} (w : SourceCircuit X Y) (p : P)
+    (η : (g : w.nonemptyGateLocations) → w.branchLabels g.1) :
+    originalGateLabelsAtOfAllChoices w p ((allChoicesNonemptyLabelsEquiv w).symm η) =
+      DistributedOperatorContraction.restrictGates
+        (Finset.univ : Finset w.nonemptyGateLocations)
+        (fun g ↦ w.participants g.1) (fun g ↦ w.branchLabels g.1)
+        (fun g : DistributedOperatorContraction.ActiveGate
+          (Finset.univ : Finset w.nonemptyGateLocations) ↦ η g.1) p := by
+  funext g
+  change allChoicesNonemptyLabelsEquiv w
+      ((allChoicesNonemptyLabelsEquiv w).symm η) g.1.1 = η g.1.1
+  exact congrFun ((allChoicesNonemptyLabelsEquiv w).apply_symm_apply η) g.1.1
+
+end QuantumCircuit.Party.SourceCircuit
+
+end
+
+end LocalGateLabelCompatibility

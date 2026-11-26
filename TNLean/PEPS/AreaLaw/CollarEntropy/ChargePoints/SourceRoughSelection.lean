@@ -6,10 +6,10 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetTypicalWindow
 import TNLean.PEPS.AreaLaw.Collar.Scales.BandCountGrowth
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualRoughLowerPrevector
-import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.GenericSelectedChargeEnergy
+import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.GenericChargeEnergy
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.RoughSelectionBudget
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellPrevector
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

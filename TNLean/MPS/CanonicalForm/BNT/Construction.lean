@@ -6,10 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.BlockFamily
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
-import TNLean.MPS.Transfer.Spectrum.Proportional
+import TNLean.MPS.Transfer.Spectrum.GaugePhase
 import TNLean.MPS.CanonicalForm.BNT.Separation
 import TNLean.MPS.CanonicalForm.BNT.Basic
-import TNLean.MPS.Transfer.Spectrum.CastDecay
 
 /-!
 # Basis of normal tensors from separated block hypotheses

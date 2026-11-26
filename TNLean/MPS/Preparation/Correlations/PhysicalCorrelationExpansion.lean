@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Correlation.PhysicalCorrelationJordan
-import TNLean.MPS.Preparation.Correlations.PhysicalCorrelationGauge
+import TNLean.MPS.Preparation.Correlations.PhysicalObservableGauge
 
 /-!
 # Jordan-aware physical correlation expansion for normal tensors

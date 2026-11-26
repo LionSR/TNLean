@@ -10,12 +10,8 @@ Authors: TNLean contributors
 
 import TNLean.MPS.FundamentalTheorem.Sectors.CanonicalFormEqualAmbient
 import TNLean.MPS.FundamentalTheorem.Sectors.CoeffIdentity
-import TNLean.MPS.FundamentalTheorem.Sectors.CopyWeightMatching
 import TNLean.MPS.FundamentalTheorem.Sectors.Fundamental
 import TNLean.MPS.FundamentalTheorem.Sectors.FundamentalCoord
 import TNLean.MPS.FundamentalTheorem.Sectors.MatchAux
-import TNLean.MPS.FundamentalTheorem.Sectors.ProportionalMatch
 import TNLean.MPS.FundamentalTheorem.Sectors.ProportionalMatchCore
-import TNLean.MPS.FundamentalTheorem.Sectors.StrongMatch
-import TNLean.MPS.FundamentalTheorem.Sectors.Unitary
 import TNLean.MPS.FundamentalTheorem.Sectors.WeightEquiv

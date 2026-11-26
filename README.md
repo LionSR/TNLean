@@ -56,7 +56,7 @@ import TNLean
 
 An MPS assigns a matrix `A i` to each local basis state, with matrix products giving the state's coefficients on a chain (`MPSTensor d D`). TNLean proves the fundamental theorem of MPS across its single-block, canonical-form, periodic, and fixed-length algebraic forms:
 
-- **Single-block injective case** (`TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean`, plus finite-length and up-to-phase variants):
+- **Single-block injective case** (`TNLean/MPS/Tensor/Gauge/FiniteLength.lean`, plus finite-length and up-to-phase variants):
 
 ```lean
 theorem MPSTensor.fundamentalTheorem_singleBlock {A B : MPSTensor d D}
@@ -140,10 +140,10 @@ lake exe cache get
 lake build
 
 # Verify a single module with package Lean options and Mathlib standard linters.
-lake build TNLean.MPS.Tensor.Gauge.FundamentalTheorem
+lake build TNLean.MPS.Tensor.Gauge.FiniteLength
 
 # Fast elaboration only (does not apply package Lean options).
-lake env lean TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean
+lake env lean TNLean/MPS/Tensor/Gauge/FiniteLength.lean
 ```
 
 ### Building the blueprint locally

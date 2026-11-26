@@ -11,9 +11,18 @@ import TNLean.MPS.Operator.Fusion.CompleteZipperFusionSupport
 This file constructs the printed-orientation F-move after the equality of the
 left- and right-associated product-MPO supports has been derived from the
 source hypotheses.
+
+It also contains the following results.
+
+* `MPOTensor.CompleteZipperFusionFamily.rightTripleAnalysis_mul_leftTripleSynthesis_eq_smul_one`,
+  `MPOTensor.CompleteZipperFusionFamily.printedFMatrix_eq_inv_dim_mul_trace`: normalized trace of
+  the constructed fusion comparison.
 -/
 
 open scoped Matrix BigOperators Kronecker
+
+section CompleteZipperFusion
+
 open Matrix
 
 namespace MPOTensor
@@ -419,3 +428,63 @@ theorem rightTripleSynthesis_mul_printedFMatrix (a b c d : Λ) :
 end CompleteZipperFusionFamily
 
 end MPOTensor
+
+end CompleteZipperFusion
+
+section CompleteZipperFusionTrace
+
+/-!
+## Normalized trace of the constructed fusion comparison
+
+The fixed-final comparison is scalar on the final virtual bond. Its
+multiplicity entry can therefore be recovered by the normalized trace of
+the actual right analysis followed by left synthesis. This gives a direct
+coordinate bridge to the source-oriented action L matrix without choosing
+a new basis or a new normalization.
+
+Source: arXiv:1511.08090, `Fmove`, and Garre-Rubio--Lootens--Molnár,
+arXiv:2203.12563v3, `1Fsymbol` and `eq:F_symbol2`.
+-/
+
+namespace MPOTensor.CompleteZipperFusionFamily
+
+universe u
+
+variable {Λ : Type u} [Fintype Λ] [DecidableEq Λ] {p : ℕ}
+  (Fus : CompleteZipperFusionFamily Λ p)
+
+/-- A fixed pair of multiplicity indices in the actual triple-tree
+comparison leaves the printed coefficient times the identity final bond. -/
+theorem rightTripleAnalysis_mul_leftTripleSynthesis_eq_smul_one
+    (a b c d : Λ) (q : Fus.RightTripleMultiplicity a b c d)
+    (t : Fus.LeftTripleMultiplicity a b c d) :
+    (Fus.rightTripleAnalysis a b c d).submatrix (fun z ↦ (q, z)) id *
+        (Fus.leftTripleSynthesis a b c d).submatrix id (fun z ↦ (t, z)) =
+      Fus.printedFMatrix a b c d q t •
+        (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ) := by
+  ext z w
+  change _ = Fus.printedFMatrix a b c d q t *
+    (1 : Matrix (Fin (Fus.bondDim d)) (Fin (Fus.bondDim d)) ℂ) z w
+  have h := congrArg (fun C ↦ C (q, z) (t, w))
+    (Fus.printedFMatrixAmplified_eq_kronecker_one a b c d)
+  simpa only [printedFMatrixAmplified, fullPrintedFMatrix, Matrix.submatrix_apply,
+    rightFinalRow, leftFinalRow, Matrix.mul_apply, rightTripleAnalysisFull,
+    leftTripleSynthesisFull, Matrix.kroneckerMap_apply, id_eq] using h
+
+/-- The normalized trace reads a printed multiplicity entry from the
+actual right-analysis/left-synthesis contraction. The positive bond
+dimension is a field of the complete zipper family. -/
+theorem printedFMatrix_eq_inv_dim_mul_trace
+    (a b c d : Λ) (q : Fus.RightTripleMultiplicity a b c d)
+    (t : Fus.LeftTripleMultiplicity a b c d) :
+    Fus.printedFMatrix a b c d q t = (Fus.bondDim d : ℂ)⁻¹ *
+      Matrix.trace ((Fus.rightTripleAnalysis a b c d).submatrix (fun z ↦ (q, z)) id *
+        (Fus.leftTripleSynthesis a b c d).submatrix id (fun z ↦ (t, z))) := by
+  rw [Fus.rightTripleAnalysis_mul_leftTripleSynthesis_eq_smul_one,
+    Matrix.trace_smul, Matrix.trace_one, Fintype.card_fin, smul_eq_mul,
+    mul_comm (Fus.printedFMatrix a b c d q t), ← mul_assoc,
+    inv_mul_cancel₀ (by exact_mod_cast (Fus.bondDim_pos d).ne'), one_mul]
+
+end MPOTensor.CompleteZipperFusionFamily
+
+end CompleteZipperFusionTrace

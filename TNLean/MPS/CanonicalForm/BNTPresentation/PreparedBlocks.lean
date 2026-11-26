@@ -4,12 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BNT.PhaseClassSectorData
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonSectorTransport
+import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonBlockedCyclicSectorConstruction
 import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
-import TNLean.MPS.Transfer.Spectrum.Proportional
+import TNLean.MPS.Transfer.Spectrum.GaugePhase
 import TNLean.MPS.Tensor.DirectSum.SectorBNT
 import TNLean.MPS.Tensor.DirectSum.BlockGauge
-import TNLean.MPS.Transfer.Spectrum.GaugePhase
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
 
 /-!

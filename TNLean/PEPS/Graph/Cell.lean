@@ -13,11 +13,9 @@ import TNLean.PEPS.Graph.Cell.IntegerCellContactConnectivity
 import TNLean.PEPS.Graph.Cell.IntegerCellExteriorCollar
 import TNLean.PEPS.Graph.Cell.IntegerCellNoHoles
 import TNLean.PEPS.Graph.Cell.IntegerContourRayPotential
-import TNLean.PEPS.Graph.Cell.IntegerExteriorConnectivity
 import TNLean.PEPS.Graph.Cell.TorusComplementPathReplacement
 import TNLean.PEPS.Graph.Cell.TorusExteriorPathApproximation
 import TNLean.PEPS.Graph.Cell.TorusPlaquetteRealization
-import TNLean.PEPS.Graph.Cell.TorusRectangleRealization
 import TNLean.PEPS.Graph.Cell.TorusRegionBoundaryLift
 import TNLean.PEPS.Graph.Cell.TorusRegionExteriorCollar
 import TNLean.PEPS.Graph.Cell.TorusRegionLiftRealization

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.StaircaseChaining
-import TNLean.PEPS.FundamentalTheorem.Torus.Window.WindowIndependence
+import TNLean.PEPS.FundamentalTheorem.Torus.Window.BondInsertedRegion
 
 /-!
 # The per-consecutive-window bond-insert transport through the injective overlap

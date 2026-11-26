@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Preparation.Normal.AllLengthPolynomialAccuracy
 import TNLean.MPS.Preparation.Normal.BlockApproximationError
-import TNLean.MPS.Preparation.Normal.CircuitEquivalence
 import TNLean.MPS.Preparation.Normal.CompatibleSeedCircuitEquivalence
 import TNLean.MPS.Preparation.Normal.DepthLogBound
 import TNLean.MPS.Preparation.Normal.DepthLowerBound

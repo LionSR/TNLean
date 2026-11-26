@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicPrimitiveGroundSpace
-import TNLean.MPS.Transfer.Irreducible.PeriodicPhysicalDimension
+import TNLean.MPS.Transfer.Irreducible.Periodic
 import TNLean.MPS.CanonicalForm.Periodic.CyclicBlockedWordSpan
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.CyclicBoundaryIntersection
 import TNLean.MPS.FundamentalTheorem.SectorBNT.PrimitiveBlockWordSpan
-import TNLean.MPS.CanonicalForm.BNT.GaugePhaseSeparationTransport
+import TNLean.MPS.CanonicalForm.BNT.Separation
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
 import QICLean.Spectral.Gap.PositiveComparisonGap

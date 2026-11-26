@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Defs
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+import TNLean.MPS.Tensor.CutGram.AffineGramCompactness
+import TNLean.MPS.Tensor.CutGram.DeterminantStationarity
 
 /-!
 # Dual positive metrics for MPU interval isometries
@@ -17,12 +19,19 @@ following determinant stationarity in Section 5 of
 
 The existence of the determinant maximizer and the circuit construction
 are separate assertions; neither is assumed to have been formalized here.
+
+It also contains the following results.
+
+* `MPUCircuit.exists_posDef_dualGramMetric_on_affineSubspace`: determinant balancing of affine cap
+  Grams.
 -/
 
 open Matrix
 open scoped ComplexOrder
 
 namespace MPUCircuit
+
+section BalancedGramMetrics
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
@@ -113,5 +122,50 @@ theorem trace_dualGramMetric_inv_mul_inv [Nonempty ι]
     Matrix.mul_nonsing_inv _ (P.isUnit_iff_isUnit_det.mp hP.isUnit),
     Matrix.trace_smul, Matrix.trace_one]
   simp [pow_two, Complex.real_smul]
+
+end BalancedGramMetrics
+
+section AffineGramBalancing
+
+/-!
+## Determinant balancing of affine cap Grams
+
+A trace-normalized real affine space of Hermitian matrices containing a
+positive-definite matrix admits a positive-definite determinant maximizer.
+Its inverse divided by the dimension normalizes every matrix in that affine
+space. The associated inverse-metric trace is the square of the dimension.
+
+This is the determinant-balancing lemma of Section 5 in
+`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. The formal statement below
+concerns a single affine Gram space. Realizing the compatible interval maps
+as a complete quantum circuit is a further statement.
+-/
+
+/-- Determinant maximization produces positive balanced metrics on a real
+affine space of Hermitian cap Grams. The metric normalizes the entire affine
+space, rather than only its positive-semidefinite part.
+
+Source: Section 5, "The determinant maximizer and its dual metric", in
+`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
+theorem exists_posDef_dualGramMetric_on_affineSubspace
+    {D : ℕ} [Nonempty (Fin D)]
+    (C : AffineSubspace ℝ (Matrix (Fin D) (Fin D) ℂ))
+    (hHerm : ∀ X ∈ C, X.IsHermitian)
+    {Q₀ : Matrix (Fin D) (Fin D) ℂ} (hQ₀ : Q₀.PosDef)
+    (hnorm : ∀ X ∈ C, (X * Q₀).trace = 1)
+    (hPD : ∃ X ∈ C, X.PosDef) :
+    ∃ P ∈ C, P.PosDef ∧ (dualGramMetric P).PosDef ∧
+      (∀ X ∈ C, (X * dualGramMetric P).trace = 1) ∧
+      ((dualGramMetric P)⁻¹ * P⁻¹).trace = (D : ℂ) ^ 2 := by
+  obtain ⟨P, hPC, hP, hmax⟩ :=
+    Matrix.exists_posDef_det_re_max_of_trace_mul_eq_one C hQ₀ hnorm hPD
+  refine ⟨P, hPC, hP, dualGramMetric_posDef hP, ?_, ?_⟩
+  · intro X hXC
+    apply trace_mul_dualGramMetric_eq_one hP
+    exact hP.trace_nonsing_inv_mul_sub_eq_zero_of_isMaxOn_det C hPC hHerm
+      (isMaxOn_iff.mpr (fun Y hY ↦ hmax Y hY.1 hY.2)) X hXC
+  · simpa using trace_dualGramMetric_inv_mul_inv hP
+
+end AffineGramBalancing
 
 end MPUCircuit

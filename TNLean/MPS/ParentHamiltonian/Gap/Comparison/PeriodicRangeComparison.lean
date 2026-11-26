@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.CyclicWindowOpenHamiltonian
 import QICLean.Analysis.TensorProduct.EuclideanFiberwiseMap
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import QICLean.Spectral.Gap.PositiveComparisonGap
 
 /-!

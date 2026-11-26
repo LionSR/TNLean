@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyParentInteractionGap
-import TNLean.MPS.ParentHamiltonian.Interaction.CanonicalGroundSpaceTransport
+import TNLean.MPS.ParentHamiltonian.Interaction.PrimitiveFamilyIntersection
 import TNLean.MPS.ParentHamiltonian.Stationary.FaithfulParentFiniteGap
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalParentGroundStateFace
 

@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.Graph.Cell.IntegerCellNoHoles
 import TNLean.PEPS.Graph.Cell.IntegerContourRayPotential
 import TNLean.PEPS.Graph.Cell.IntegerCellExteriorCollar
-import TNLean.PEPS.Graph.Cell.IntegerExteriorConnectivity
 import TNLean.PEPS.Graph.Cell.IntegerCellContactConnectivity
 import Mathlib.GroupTheory.Perm.Cycle.Basic
 

@@ -3,13 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.QuasiLocalState.MultiblockQuasiLocalFace
+import TNLean.MPS.ParentHamiltonian.QuasiLocalState.MultiblockQuasiLocalSupport
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalGroundStateSupport
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalParentGroundStateFace
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.QuasiLocalOpenInteractionExpectation
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PrimitiveQuasiLocalUniqueness
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanNormalization
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanSeparation
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 

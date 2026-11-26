@@ -16,5 +16,4 @@ import TNLean.PEPS.FundamentalTheorem.Cycle.CycleMPSChainOverlapWindow
 import TNLean.PEPS.FundamentalTheorem.Cycle.CycleMPSConstantDescription
 import TNLean.PEPS.FundamentalTheorem.Cycle.CycleMPSFundamentalTheorem
 import TNLean.PEPS.FundamentalTheorem.Cycle.CycleMPSOverlapCapstone
-import TNLean.PEPS.FundamentalTheorem.Cycle.CycleMPSTranslationInvariant
 import TNLean.PEPS.FundamentalTheorem.Cycle.CycleShiftBondUniformity

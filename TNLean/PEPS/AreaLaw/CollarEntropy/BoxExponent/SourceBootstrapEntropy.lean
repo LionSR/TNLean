@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceRoughSelection
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.RoughSelectedDensity
-import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapSelectedEnergy
+import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapPrincipalEnergyBounds
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapTypicalBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapParameters
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.FixedWeightTransportSmallness

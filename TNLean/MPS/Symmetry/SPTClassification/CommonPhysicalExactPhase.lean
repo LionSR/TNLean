@@ -11,7 +11,7 @@ import TNLean.MPS.Symmetry.SPTClassification.PhysicalMatrixBondCovariance
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalCanonicalGroundPath
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalInjectivePath
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalPolarGroundPath
-import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpointOrthogonality
+import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpoints
 import TNLean.MPS.Symmetry.GappedPath.ExactMPSPhaseGaugeInvariance
 
 /-!

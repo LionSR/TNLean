@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Uncle.UncleBoundaryIntersection
-import TNLean.MPS.ParentHamiltonian.Uncle.UnclePeriodicClosure
+import TNLean.MPS.ParentHamiltonian.Uncle.UncleBoundaryWords
 import TNLean.MPS.ParentHamiltonian.Uncle.UncleKernelConditions
 import Mathlib.Algebra.Group.Fin.Basic
 

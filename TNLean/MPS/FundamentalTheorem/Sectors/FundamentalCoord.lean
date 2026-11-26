@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.Tensor.BondReindex
-import TNLean.MPS.FundamentalTheorem.Sectors.Unitary
+import TNLean.MPS.FundamentalTheorem.Sectors.Fundamental
 
 /-!
 # BNT equal-MPV global-gauge witness

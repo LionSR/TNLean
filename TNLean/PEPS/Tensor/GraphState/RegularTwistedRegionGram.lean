@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Graph.Holonomy.RegularTwistedRegionConnectivity
-import TNLean.PEPS.Graph.Holonomy.RegularTwistedRegionCounting
+import TNLean.PEPS.Graph.Holonomy.RegularRegionCounting
 import TNLean.PEPS.Tensor.GraphState.RegularBoundaryTransporter
 
 /-!

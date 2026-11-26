@@ -8,11 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.CanonicalForm.Periodic.Blocking
 
-import TNLean.MPS.CanonicalForm.Periodic.Blocking.Eigenvalues
 import TNLean.MPS.CanonicalForm.Periodic.Blocking.FixedSpace
 import TNLean.MPS.CanonicalForm.Periodic.Blocking.IrreducibleFormBlocking
-import TNLean.MPS.CanonicalForm.Periodic.Blocking.PrescribedBlocking
-import TNLean.MPS.CanonicalForm.Periodic.Blocking.SectorPhaseBlocking
 import TNLean.MPS.CanonicalForm.Periodic.Blocking.SectorPhaseWord
 import TNLean.MPS.CanonicalForm.Periodic.Blocking.Spectrum
 import TNLean.MPS.CanonicalForm.Periodic.Blocking.StepOrbitSectors

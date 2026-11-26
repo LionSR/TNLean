@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.MPDO.RFP.AlgebraStructure
 import TNLean.MPS.MPDO.RFP.FusionIsometries
-import TNLean.MPS.MPDO.RFP.RFPViaTSBlocking
 import TNLean.MPS.MPDO.RFP.RFPViaTSGlobal
 import TNLean.MPS.MPDO.RFP.RFPViaTSSAL
 import TNLean.MPS.MPDO.RFP.StrongRFP

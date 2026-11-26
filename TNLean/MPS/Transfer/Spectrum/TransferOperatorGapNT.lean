@@ -8,6 +8,9 @@ import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Kraus.MixedMap.GaugeConstruction
 import TNLean.MPS.Transfer.Spectrum.MPVOverlapTrace
 import QICLean.Kraus.MixedMap.TransferOperatorGapNormalized
+import TNLean.MPS.Tensor.BondReindex
+import TNLean.MPS.Tensor.Defs
+import TNLean.MPS.Transfer.Primitivity.ImpliesStronglyIrreducible
 
 /-!
 # Transfer-operator gap for normal tensor blocks
@@ -15,7 +18,18 @@ import QICLean.Kraus.MixedMap.TransferOperatorGapNormalized
 The operator statements in this file are compatibility results for matrix-product tensors. Their
 finite-family forms are proved in `QICLean.Kraus.MixedMap.Gap`; only transfer-map and overlap
 notation remains here.
+
+It also contains the following results.
+
+* `MPSTensor.tendsto_mpvOverlap_uncast_left`,
+  `MPSTensor.mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP`: cast-aware
+  overlap-decay lemmas.
+* `MPSTensor.mixedMap_eigenvalue_norm_lt_one_of_spectralRadius_lt_one`,
+  `MPSTensor.mixedMap_eigenvalue_norm_lt_one_of_normal_inequivalent`: strict mixed eigenvalue bounds
+  for inequivalent normal blocks.
 -/
+
+section TransferOperatorGapNT
 
 open scoped Matrix ComplexOrder BigOperators NNReal ENNReal Kraus
 
@@ -161,3 +175,116 @@ theorem mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP
       A B hA_irr hB_irr hA_left hB_left hD
 
 end MPSTensor
+
+end TransferOperatorGapNT
+
+section CastDecay
+
+/-!
+## Cast-aware overlap-decay lemmas
+
+This module records the recurring pattern where an equal-dimension hypothesis is used to cast the
+left tensor before applying an overlap-decay theorem, and the resulting limit is transported back to
+the original uncasted overlap.
+-/
+
+open scoped BigOperators Matrix
+open Filter
+
+namespace MPSTensor
+
+/-- Transport an overlap-decay limit from a casted left tensor back to the original tensor. -/
+theorem tendsto_mpvOverlap_uncast_left
+    {d D₁ D₂ : ℕ} (hdim : D₁ = D₂)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hcast :
+      Tendsto (fun N => mpvOverlap (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B N)
+        atTop (nhds 0)) :
+    Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds 0) :=
+  hcast.congr fun N => mpvOverlap_cast_dim_left hdim A B N
+
+/-- If the left tensor is cast along a dimension equality, then the irreducible / TP
+overlap-decay theorem still yields decay for the original uncasted overlap. -/
+theorem mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP
+    {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] (hdim : D₁ = D₂)
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA_irr : Kraus.IsIrreducibleFamily A) (hB_irr : Kraus.IsIrreducibleFamily B)
+    (hA_norm : ∑ i : Fin d, (A i)ᴴ * (A i) = 1)
+    (hB_norm : ∑ i : Fin d, (B i)ᴴ * (B i) = 1)
+    (hNot :
+      ¬ GaugePhaseEquiv (d := d) (cast (congr_arg (MPSTensor d) hdim) A) B) :
+    Tendsto (fun N => mpvOverlap (d := d) A B N) atTop (nhds 0) := by
+  have hAcst_irr : Kraus.IsIrreducibleFamily (cast (congr_arg (MPSTensor d) hdim) A) :=
+    (isIrreducibleFamily_cast_dim hdim A).mpr hA_irr
+  have hAcst_norm :
+      ∑ i : Fin d,
+        (cast (congr_arg (MPSTensor d) hdim) A i)ᴴ *
+          (cast (congr_arg (MPSTensor d) hdim) A i) = 1 :=
+    (leftCanonical_cast_dim hdim A).mpr hA_norm
+  exact tendsto_mpvOverlap_uncast_left hdim A B <| mpvOverlap_tendsto_zero_of_irreducible_TP
+    (cast (congr_arg (MPSTensor d) hdim) A) B hAcst_irr hB_irr hAcst_norm hB_norm hNot
+
+end MPSTensor
+
+end CastDecay
+
+section MixedEigenvalueGap
+
+/-!
+## Strict mixed eigenvalue bounds for inequivalent normal blocks
+
+The mixed-transfer spectral gap of inequivalent normal left-canonical blocks bounds every
+mixed eigenvalue strictly below one. The bond dimensions may differ; gauge-phase
+inequivalence is required only when the dimensions agree.
+
+### References
+
+* arXiv:2307.01696, Supplemental Material, proof of Lemma 1'(ii), mixed transfer rate.
+* arXiv:2011.12127, normal-block mixed-transfer characterization.
+-/
+
+open Matrix
+open scoped BigOperators TNOperatorSpace
+
+namespace MPSTensor
+
+/-- A strict mixed-transfer spectral radius bounds every mixed eigenvalue. -/
+theorem mixedMap_eigenvalue_norm_lt_one_of_spectralRadius_lt_one
+    {d D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hgap : Kraus.mixedMapSpectralRadius A B < 1) {μ : ℂ}
+    (hμ : Module.End.HasEigenvalue (Kraus.mixedMapLM A B) μ) : ‖μ‖ < 1 := by
+  let V := Matrix (Fin D₁) (Fin D₂) ℂ
+  let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
+  have hmem : μ ∈ spectrum ℂ (Φ (Kraus.mixedMapLM A B)) := by
+    rw [AlgEquiv.spectrum_eq]
+    exact Module.End.hasEigenvalue_iff_mem_spectrum.mp hμ
+  have hle : (‖μ‖₊ : ENNReal) ≤ Kraus.mixedMapSpectralRadius A B := by
+    change (‖μ‖₊ : ENNReal) ≤ spectralRadius ℂ (Φ (Kraus.mixedMapLM A B))
+    rw [spectralRadius_eq_of_unital]
+    exact le_iSup_of_le μ (le_iSup_of_le hmem le_rfl)
+  exact_mod_cast hle.trans_lt hgap
+
+/-- Inequivalent normal left-canonical blocks have all mixed eigenvalues of norm below one,
+including rectangular mixed maps between blocks of different bond dimensions. -/
+theorem mixedMap_eigenvalue_norm_lt_one_of_normal_inequivalent
+    {d D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hA : Kraus.IsNormal A) (hB : Kraus.IsNormal B)
+    (hAleft : IsLeftCanonical A) (hBleft : IsLeftCanonical B)
+    (hneq : ∀ h : D₁ = D₂, ¬ GaugePhaseEquiv (h ▸ A) B) {μ : ℂ}
+    (hμ : Module.End.HasEigenvalue (Kraus.mixedMapLM A B) μ) : ‖μ‖ < 1 := by
+  apply mixedMap_eigenvalue_norm_lt_one_of_spectralRadius_lt_one A B _ hμ
+  have hAi := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A
+    (isIrreducibleFamily_of_isNormal A hA)
+  have hBi := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B
+    (isIrreducibleFamily_of_isNormal B hB)
+  by_cases hD : D₁ = D₂
+  · subst D₁
+    exact Kraus.mixedMapSpectralRadius_lt_one_of_irreducible_TP A B hAi hBi hAleft hBleft
+      (fun h => hneq rfl (gaugePhaseEquiv_of_krausGaugePhaseEquiv h))
+  · exact Kraus.mixedMapSpectralRadius_lt_one_of_dim_ne_of_irreducible_TP
+      A B hAi hBi hAleft hBleft hD
+
+end MPSTensor
+
+end MixedEigenvalueGap

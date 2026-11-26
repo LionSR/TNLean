@@ -8,12 +8,9 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Scanner.Rounds
 
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualChargeData
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualEntropySampling
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualGlobalReplicaEnergy
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualHistoryFacts
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualParameterIntegral
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualReplicaDefect
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualRoundEntropy
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualRoundSplits
@@ -23,7 +20,6 @@ import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualScanTransportInputs
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualTerminalPartitions
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualTransportEstimates
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedEnergyCoordinates
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaMetricCoordinates
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaPrevectorProperties
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedRootCompression
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ChargeEntropyCost
@@ -31,10 +27,8 @@ import TNLean.PEPS.AreaLaw.Scanner.Rounds.FillTransport
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.FillTransportEndpoints
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.FinalSharpTransportSmallness
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.FixedWeightTransportSmallness
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.GlobalReplicaEnergyCoordinates
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.PhysicalBandCommutation
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ScanHistories
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.SplitEntropyCost
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.SupportCompatibility
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.TransportDimension
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.TransportRound

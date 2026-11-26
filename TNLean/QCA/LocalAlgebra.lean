@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.QCA.LocalAlgebra.BipartiteLocalAlgebra
 import TNLean.QCA.LocalAlgebra.Blocking
-import TNLean.QCA.LocalAlgebra.ConsecutivePairCoordinates
 import TNLean.QCA.LocalAlgebra.IntervalCoordinates
 import TNLean.QCA.LocalAlgebra.IntervalSupport
 import TNLean.QCA.LocalAlgebra.LocalAlgebra

@@ -4,17 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Irreducible.Periodic
-import TNLean.MPS.Transfer.Spectrum.CastDecay
-import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
+import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
+import TNLean.MPS.Tensor.Gauge.FiniteLength
 import TNLean.MPS.Tensor.Words.OneSidedInverse
 import TNLean.MPS.Tensor.Physical.Blocking
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CornerBridge
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonSectorData
+import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CyclicSectorDecomposition
+import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonBlockedCyclicSectorConstruction
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CyclicSectorRelation
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.GaugePhase
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
-import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT
 import QICLean.Channel.Irreducible.PerronFrobenius
 import QICLean.Channel.Schwarz.MultiplicativeDomainFull
 import QICLean.Analysis.Topology.GramMatrixLI

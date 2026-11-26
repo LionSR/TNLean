@@ -4,10 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.FixedPoint.WeightedMatrixUnitParent
-import TNLean.MPS.Symmetry.GappedPath.OrderedGappedInteractionPath
+import TNLean.MPS.Symmetry.GappedPath.GappedInteractionPathComposition
 import TNLean.MPS.Symmetry.SPTClassification.FixedPointGappedPathWitness
 import TNLean.MPS.ParentHamiltonian.Deformation.ParentHamiltonianSymmetry
-import TNLean.MPS.Symmetry.GappedPath.GappedInteractionPathComposition
 
 /-!
 # Gapped paths between weighted canonical parents

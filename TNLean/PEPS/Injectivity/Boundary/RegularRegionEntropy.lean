@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Injectivity.Boundary.BoundaryNormalization
 import TNLean.PEPS.Tensor.GraphState.RegularOpenRegion
 import TNLean.PEPS.Tensor.GraphState.RegularRegionGram
+import TNLean.PEPS.Injectivity.Regular.RegularRegionProjectorCoordinates
 
 /-!
 # Entropy across connected cuts of a finite regular PEPS
@@ -23,6 +24,14 @@ see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 Source: SCP10, Lemma 6.2 and the proof of Theorem 6.9, local source
 `Papers/1001.3807/paper_v3.tex`, lines 1704–1716 and 2043–2076.
 
+It also contains the following results.
+
+* `TNLean.PEPS.isGInjective_regularOpenRegionMatrix_of_connected`: G-injectivity of an actual
+  connected regular block.
+* `TNLean.PEPS.regularOpenRegionMatrix_invariant`,
+  `TNLean.PEPS.isGIsometric_regularOpenRegionMatrix_of_connected`: regular isometry of an actual
+  connected block.
+
 ## References
 
 - [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
@@ -30,6 +39,8 @@ Source: SCP10, Lemma 6.2 and the proof of Theorem 6.9, local source
 -/
 
 open ManyBody (Edge)
+
+section RegularRegionEntropy
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
@@ -194,3 +205,180 @@ theorem exists_normalization_regularPhysicalCutState_of_connected
   exact exists_normalization_of_cut_grams a hsym R n e hcA hcB hM hN
 
 end TNLean.PEPS
+
+end RegularRegionEntropy
+
+section RegularRegionIsometry
+
+/-!
+## Regular isometry of an actual connected block
+
+Contracting a connected region of regular isometric sites gives an isometric map
+on the invariant boundary subspace, up to the positive scalar contributed by the
+site factors and the internal cycles. The statement uses the genuine open-region
+map: no Gram identity for the block is supplied as a hypothesis.
+
+Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Lemma 6.2 and the
+blocking discussion, `Papers/1001.3807/paper_v3.tex`, lines 1709–1716 and 1825–1880.
+The positive-factor convention is that of `IsGIsometric`, documented in
+`docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`. This also applies to
+regions with internal cycles or no crossing bonds.
+
+### References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
+-/
+
+open scoped BigOperators Matrix
+
+namespace TNLean.PEPS
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
+variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
+attribute [local instance] Representation.invertibleFintypeCardComplex
+
+omit [DecidableEq G] in
+/-- The actual blocked physical map is invariant under the regular boundary action.
+Source: SCP10, virtual symmetry of a block in the blocking discussion, lines 1825–1840. -/
+theorem regularOpenRegionMatrix_invariant
+    (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
+    (ha : ∀ g v η s, a v (fun f => g * η f) s = a v η s)
+    (R : Finset V) {b : ℕ}
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) (g : G) :
+    Matrix.mulVecLin (regularOpenRegionMatrix a R e) ∘ₗ
+      regularBoundaryRepresentation b g = Matrix.mulVecLin (regularOpenRegionMatrix a R e) := by
+  classical
+  ext x σ
+  simp only [LinearMap.comp_apply, Matrix.mulVecLin_apply, Matrix.mulVec, dotProduct,
+    regularBoundaryRepresentation_apply]
+  simp only [LinearMap.single_apply, Pi.single_apply, inv_smul_eq_iff]
+  simpa using regularOpenRegionMatrix_translation a ha R e g σ x
+
+omit [DecidableEq G] in
+/-- Contracting an actual connected region of regular isometric sites preserves
+isometry on the invariant boundary space, with its derived positive factor.
+Source: SCP10, Lemma 6.2 and blocking, lines 1709–1716 and 1825–1880. -/
+theorem isGIsometric_regularOpenRegionMatrix_of_connected
+    (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
+    (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v))
+      (regularSiteMap (a v))) (R : Finset V)
+    (hR : (Γ.induce (R : Set V)).Connected) {b : ℕ}
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
+    IsGIsometric (regularBoundaryRepresentation b)
+      (Matrix.mulVecLin (regularOpenRegionMatrix a R e)) := by
+  classical
+  obtain ⟨c, hc, h⟩ := exists_positive_gram_regularOpenRegionMatrix_of_connected a ha R hR e
+  apply isGIsometric_of_coordinateAdjoint_comp
+    (fun g => regularOpenRegionMatrix_invariant a
+      (fun g v η s => (ha v).toIsGInjective.regularSiteMap_translation g η s) R e g) hc
+  apply LinearMap.toMatrix'.injective
+  simp only [LinearMap.toMatrix'_comp, coordinateAdjoint, map_smul]
+  simp only [← Matrix.toLin'_apply', LinearMap.toMatrix'_toLin']
+  exact h
+
+end TNLean.PEPS
+
+end RegularRegionIsometry
+
+section RegularRegionInjectivity
+
+/-!
+## G-injectivity of an actual connected regular block
+
+Local inverses expose the canonical projector contraction. In spanning-tree
+coordinates, a row with identity reference, vertex, and cycle labels is a
+nonzero multiple of the boundary projector. Hence the actual block is injective
+on the invariant boundary space whenever its local tensors are G-injective.
+
+Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807, Lemma 5.2 and the
+blocking discussion, `Papers/1001.3807/paper_v3.tex`, lines 1300–1350 and
+1825–1840. This is the regular-representation connected-region consequence;
+no local isometry or block Gram identity is assumed.
+
+**Scope restriction (regular bonds):** The source allows semi-regular virtual
+representations; this connected-region result uses regular group coordinates.
+The scope is documented in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
+
+### References
+
+- [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
+  D. Pérez-García, *PEPS as ground states: degeneracy and topology*
+-/
+
+open scoped BigOperators Matrix
+
+namespace TNLean.PEPS
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
+variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
+attribute [local instance] Representation.invertibleFintypeCardComplex
+
+private theorem regularLegProjector_numbering {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {b : ℕ} (e : ι ≃ Fin b) (y x : Fin b → G) :
+    regularLegProjector ι (fun f => y (e f)) (fun f => x (e f)) =
+      regularBoundaryProjector b y x := by
+  classical
+  rw [← regularLegProjector_fin b, regularLegProjector_apply, regularLegProjector_apply]
+  congr 1
+  apply Finset.sum_congr rfl
+  intro g _
+  have h : (fun f => y (e f)) = g • (fun f => x (e f)) ↔ y = g • x := by
+    change y ∘ e = (g • x) ∘ e ↔ y = g • x
+    exact e.surjective.right_cancellable
+  simp only [h]
+
+private theorem canonical_boundary_row (R : Finset V)
+    (T : SimpleGraph {v : V // v ∈ R}) [DecidableRel T.Adj]
+    (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v // v ∈ R})
+    {b : ℕ} (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b)
+    (y x : Fin b → G) :
+    regularProjectorOpenRegionMatrix R
+        ((regularRegionCoordinatesEquiv R T hT htree o).symm
+          (fun f => y (e f), 1, ⟨1, rfl⟩, 1)) (fun f => x (e f)) =
+      (Fintype.card G : ℂ) * (Fintype.card G : ℂ)⁻¹ ^ R.card *
+        regularBoundaryProjector b y x := by
+  rw [regularProjectorOpenRegionMatrix_coordinates]
+  simp only [ite_true, mul_one]
+  rw [regularLegProjector_numbering]
+
+omit [DecidableEq G] in
+/-- An actual connected block of regular G-injective sites is G-injective
+on its invariant boundary space. Internal cycles and empty boundaries are allowed.
+Source: SCP10, Lemma 5.2 and its following observation, lines 1318–1358;
+the regular blocking discussion, lines 1825–1840. -/
+theorem isGInjective_regularOpenRegionMatrix_of_connected
+    (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
+    (ha : ∀ v, IsGInjective (regularLegRepresentation (IncidentEdge Γ v))
+      (regularSiteMap (a v))) (R : Finset V)
+    (hR : (Γ.induce (R : Set V)).Connected) {b : ℕ}
+    (e : {f : Edge Γ // ManyBody.IsRegionBoundaryEdge R f} ≃ Fin b) :
+    IsGInjective (regularBoundaryRepresentation b)
+      (Matrix.mulVecLin (regularOpenRegionMatrix a R e)) := by
+  classical
+  refine ⟨fun g => regularOpenRegionMatrix_invariant a
+    (fun g v η s => (ha v).regularSiteMap_translation g η s) R e g, ?_⟩
+  intro x hInv hx
+  choose F hF using fun v => (ha v).exists_regularProjectorCoefficients
+  have hcan := congrArg (fun M => M *ᵥ x)
+    (regionPhysicalProductMatrix_mul_regularOpenRegionMatrix a F hF R e)
+  rw [← Matrix.mulVec_mulVec, show regularOpenRegionMatrix a R e *ᵥ x = 0 from hx,
+    Matrix.mulVec_zero] at hcan
+  obtain ⟨T, hT, htree⟩ := hR.exists_isTree_le
+  let o : {v : V // v ∈ R} := Classical.choice hR.nonempty
+  ext y
+  have hrow := congrFun hcan ((regularRegionCoordinatesEquiv R T hT htree o).symm
+    (fun f => y (e f), 1, ⟨1, rfl⟩, 1))
+  simp only [Pi.zero_apply, Matrix.mulVec, dotProduct,
+    canonical_boundary_row R T hT htree o e y, mul_assoc, ← Finset.mul_sum] at hrow
+  change 0 = (Fintype.card G : ℂ) * ((Fintype.card G : ℂ)⁻¹ ^ R.card *
+    (regularBoundaryProjector b *ᵥ x) y) at hrow
+  rw [regularBoundaryProjector_mulVec_of_mem_invariants b x hInv] at hrow
+  have hκ : (Fintype.card G : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr Fintype.card_ne_zero
+  simpa [hκ] using hrow.symm
+
+end TNLean.PEPS
+
+end RegularRegionInjectivity

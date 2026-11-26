@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Kronecker.PiKronecker
 import QICLean.Circuit.Protocol.GHZ
 import TNLean.MPS.Tensor.Physical.BlockedPolar
-import TNLean.MPS.CanonicalForm.FixedPointApproximation.FixedPointPairs
+import TNLean.MPS.CanonicalForm.FixedPointApproximation.ApproximatingState
 
 /-!
 # The fixed-point state of a basis of normal tensors

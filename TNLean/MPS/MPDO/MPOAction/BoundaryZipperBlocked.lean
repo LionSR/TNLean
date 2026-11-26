@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Fusion.BoundaryZipper
-import TNLean.MPS.FundamentalTheorem.Zipper.BoundarySourceDecomposition
+import TNLean.MPS.FundamentalTheorem.Zipper.CompleteZipperFusionBlocked
 
 /-!
 # Complete zipper families from arbitrary-boundary closedness

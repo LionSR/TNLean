@@ -14,9 +14,6 @@ import TNLean.MPS.ParentHamiltonian.Gap.Filtration.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.FixedAmbientMartingaleBound
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedOpenGap
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedProjections
-import TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedProjectorEstimate
-import TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedSpectatorNorm
-import TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedWindowBounds
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.OpenParentGap
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.OverlappingIntervalGap
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.SparseGroupedOpenGap

@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Examples.Weyl.ShortIntersections
-import TNLean.MPS.Examples.Weyl.CyclicBoundaryClosure
+import TNLean.MPS.Examples.Weyl.ShortOverlapBridges
+import TNLean.MPS.Examples.Weyl.CyclicChargeDetection
 import TNLean.MPS.Examples.Weyl.WeylSpans
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.CyclicSubmoduleIteration
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalChainGroundSpace
 import TNLean.MPS.Tensor.GroundSpace.CyclicTranslation
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.KernelChainGroundSpace
 

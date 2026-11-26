@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BNTPresentation.Characterization
 import TNLean.MPS.MPDO.Coefficients.BNTMultiplicityNormalization
-import TNLean.MPS.MPDO.Vertical.CPSVBlocking
+import TNLean.MPS.MPDO.Vertical.VerticalCanonicalForm
 import TNLean.MPS.MPDO.Fusion.RFPPositiveFusionDecomposition
 import TNLean.MPS.MPDO.SectorMaps.VerticalBlockedOperatorRepresentations
 import QICLean.Algebra.Combinatorics.FinSumPermutation

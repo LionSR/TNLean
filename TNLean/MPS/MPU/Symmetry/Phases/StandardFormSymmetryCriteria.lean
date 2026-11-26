@@ -7,7 +7,7 @@ import TNLean.MPS.MPU.Index.Index
 import TNLean.MPS.MPU.StandardForm.SimpleCanonicalRepresentative
 import TNLean.MPS.MPU.Symmetry.TimeReversal.SuppliedTimeReversalCriterion
 import TNLean.MPS.MPU.Symmetry.Transposition.SuppliedTranspositionCriterion
-import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSign
+import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSignIntrinsic
 
 /-!
 # Local criteria for time reversal and transposition in standard form

@@ -10,6 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.ApproximatingState
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.ApproximationError
-import TNLean.MPS.CanonicalForm.FixedPointApproximation.FixedPointPairs
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.PositivePartRate
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.SecondOrderOverlap

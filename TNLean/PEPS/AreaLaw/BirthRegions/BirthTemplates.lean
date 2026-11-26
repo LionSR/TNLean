@@ -19,6 +19,5 @@ import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BirthSeparationRepair
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BirthSeparationReplacement
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BirthSeparationStar
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.DescendantCutClearance
-import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.PrimaryBirthSeparation
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.PrimaryBirthTemplates
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.RepairActualBirthTemplates

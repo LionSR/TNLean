@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.ParentHamiltonian.OpenBoundary.DependentPairCoordinates
 import TNLean.MPS.ParentHamiltonian.OpenBoundary.PhysicalAlphabetEmbedding
-import TNLean.MPS.ParentHamiltonian.OpenBoundary.UniformPhysicalParentComparison
 import TNLean.MPS.ParentHamiltonian.OpenBoundary.VaryingOBCBoundaryStates
 import TNLean.MPS.ParentHamiltonian.OpenBoundary.VaryingOBCIntersection
 import TNLean.MPS.ParentHamiltonian.OpenBoundary.VaryingOBCParentUniqueness

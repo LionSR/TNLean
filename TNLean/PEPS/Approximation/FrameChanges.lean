@@ -14,7 +14,6 @@ import TNLean.PEPS.Approximation.FrameChanges.DyadicDirectRepaintingRewrite
 import TNLean.PEPS.Approximation.FrameChanges.DyadicDirectRepaintingStep
 import TNLean.PEPS.Approximation.FrameChanges.DyadicGuideFrames
 import TNLean.PEPS.Approximation.FrameChanges.DyadicGuideOwners
-import TNLean.PEPS.Approximation.FrameChanges.DyadicLevelTrueVertices
 import TNLean.PEPS.Approximation.FrameChanges.DyadicOwnerSwitch
 import TNLean.PEPS.Approximation.FrameChanges.DyadicPointTreatmentReadingStep
 import TNLean.PEPS.Approximation.FrameChanges.DyadicPointTreatmentRewrite

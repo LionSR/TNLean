@@ -8,15 +8,10 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.CanonicalForm.Periodic.CyclicSectors
 
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.Basic
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonBlockedCyclicSectorConstruction
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonBlockedCyclicSectorFamily
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonPeriodBlocking
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonSectorData
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonSectorTransport
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommutingProj
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.Compression
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CornerBridge
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CornerTransition
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CyclicSectorDecomposition
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CyclicSectorRelation
@@ -25,8 +20,6 @@ import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.GaugePhase
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.HLift
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.OrbitSum
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.PeriodicSectorDecomposition
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.ProjectionOrtho
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.SectorLift
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.StateVectorDecomposition
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.UnitalCanonicalSpectrum
-import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.UnitalStateVectorDecomposition

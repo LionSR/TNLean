@@ -21,7 +21,6 @@ import TNLean.PEPS.Graph.Holonomy.RegularTorusBondCounting
 import TNLean.PEPS.Graph.Holonomy.RegularTorusCompatibility
 import TNLean.PEPS.Graph.Holonomy.RegularTreeGaugeTransport
 import TNLean.PEPS.Graph.Holonomy.RegularTwistedRegionConnectivity
-import TNLean.PEPS.Graph.Holonomy.RegularTwistedRegionCounting
 import TNLean.PEPS.Graph.Holonomy.RegularWalkHolonomy
 import TNLean.PEPS.Graph.Holonomy.TorusDirectedBondUpdate
 import TNLean.PEPS.Graph.Holonomy.TorusParallelSection

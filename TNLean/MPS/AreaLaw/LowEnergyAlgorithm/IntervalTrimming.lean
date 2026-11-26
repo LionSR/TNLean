@@ -16,7 +16,6 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.FullIntervalMPS
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.FullIntervalViability
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalFamilyTrimming
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalFamilyTrimmingBudget
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalFamilyTrimmingIteration
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalFamilyTrimmingMeasurable
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalGenerators

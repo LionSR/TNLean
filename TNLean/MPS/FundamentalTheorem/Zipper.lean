@@ -11,6 +11,5 @@ Authors: TNLean contributors
 import TNLean.MPS.FundamentalTheorem.Zipper.BoundaryActionCrossTransport
 import TNLean.MPS.FundamentalTheorem.Zipper.BoundaryActionLMatrix
 import TNLean.MPS.FundamentalTheorem.Zipper.BoundaryMultiplicity
-import TNLean.MPS.FundamentalTheorem.Zipper.BoundarySourceDecomposition
 import TNLean.MPS.FundamentalTheorem.Zipper.BoundaryZipperUniqueness
 import TNLean.MPS.FundamentalTheorem.Zipper.CompleteZipperFusionBlocked

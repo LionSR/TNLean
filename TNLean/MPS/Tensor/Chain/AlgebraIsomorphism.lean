@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Words.VirtualInsertion
 import TNLean.MPS.Tensor.Chain.Defs
-import TNLean.MPS.Tensor.Words.LinearExtension
+import TNLean.MPS.Tensor.Words.OneSidedInverse
 import QICLean.Algebra.MatrixAlgebra.SkolemNoether
 /-!
 # Algebra isomorphism between virtual bond algebras

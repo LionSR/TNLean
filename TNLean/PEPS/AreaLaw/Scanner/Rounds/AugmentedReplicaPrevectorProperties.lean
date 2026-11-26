@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaMetricCoordinates
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.GlobalReplicaEnergyCoordinates
+import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedEnergyCoordinates
 import QICLean.Representation.Bell.ReplicaPrevector
 import QICLean.ManyBody.Replica.Configuration.RegionalFiveFactorCoordinates
 import QICLean.ManyBody.Replica.LowDefect.RegionalLowDefectProjection

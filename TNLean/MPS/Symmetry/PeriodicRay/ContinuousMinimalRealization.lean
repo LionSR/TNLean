@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Topology.ContinuousIdempotentFrames
-import TNLean.MPS.CanonicalForm.TraceQuotient.ContinuousTraceQuotientPrimitive
+import TNLean.MPS.CanonicalForm.TraceQuotient.TraceQuotientTripleContinuity
 import TNLean.MPS.CanonicalForm.TraceQuotient.FramedLeftIdealRealization
 import TNLean.MPS.CanonicalForm.TraceQuotient.TraceQuotientLetterCoordinates
 import TNLean.MPS.Symmetry.PeriodicRay.PositiveRayFiniteTraceData

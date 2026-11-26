@@ -11,8 +11,6 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.SweepPreparation.BandDissolution
 import TNLean.MPS.AreaLaw.SweepPreparation.BandInformation
 import TNLean.MPS.AreaLaw.SweepPreparation.ChainStageIncidence
-import TNLean.MPS.AreaLaw.SweepPreparation.CompressedBlockColumn
-import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolConditionalPreparation
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolCutCoordinates
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolInitialization
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolMPSApproximation
@@ -28,5 +26,4 @@ import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolSweepPlacement
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolTerminalCoordinates
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolTerminalReference
 import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolTerminalWord
-import TNLean.MPS.AreaLaw.SweepPreparation.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.SweepPreparation.SharpPhysicalCompression

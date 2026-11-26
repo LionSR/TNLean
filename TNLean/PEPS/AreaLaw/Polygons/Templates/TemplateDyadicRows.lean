@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateLayers
 import TNLean.PEPS.AreaLaw.Polygons.Squares.MixedDyadicSquares
-import TNLean.PEPS.AreaLaw.Polygons.Squares.QuotientIntervals
+import TNLean.PEPS.AreaLaw.Polygons.Templates.RectangleShellCounts
 
 /-!
 # Mixed dyadic squares of an integer-dilated template piece

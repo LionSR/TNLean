@@ -10,11 +10,9 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Transfer.Primitivity.Bounds
 import TNLean.MPS.Transfer.Primitivity.Definitions
-import TNLean.MPS.Transfer.Primitivity.EasyDirections
 import TNLean.MPS.Transfer.Primitivity.Equivalence
 import TNLean.MPS.Transfer.Primitivity.ImpliesStronglyIrreducible
 import TNLean.MPS.Transfer.Primitivity.InvertibleWordSpan
-import TNLean.MPS.Transfer.Primitivity.NonzeroTraceWord
 import TNLean.MPS.Transfer.Primitivity.Normal
 import TNLean.MPS.Transfer.Primitivity.PrimitiveFixedPoint
 import TNLean.MPS.Transfer.Primitivity.RectangularSpan

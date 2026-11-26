@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Injectivity.Multiplicity.TorusBlockMultiplicityState
 import TNLean.PEPS.Injectivity.Multiplicity.GraphAveragingBondState
 import TNLean.PEPS.Injectivity.Multiplicity.GraphRegularStateNonzero
-import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondIsometryExtension
+import TNLean.PEPS.Injectivity.Multiplicity.SemiRegularBondSupport
 import TNLean.PEPS.Injectivity.SemiRegular.RegularFourierMatrix
 import TNLean.PEPS.Injectivity.SemiRegular.RegularMinimalRepresentation
 import TNLean.PEPS.Injectivity.Multiplicity.GraphInsertedBondState

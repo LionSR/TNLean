@@ -7,7 +7,7 @@ import TNLean.PEPS.ParentHamiltonian.Torus.TorusSectorLocalGroundSpace
 import TNLean.PEPS.ParentHamiltonian.Torus.RegularTorusRectangleEntropyBound
 import TNLean.PEPS.Injectivity.GInjective.TorusIncidentGInjectivity
 import TNLean.PEPS.Injectivity.Entropy.RegularGInjectiveSimplyConnectedEntropy
-import TNLean.PEPS.Graph.Cell.TorusRectangleRealization
+import TNLean.PEPS.Graph.Cell.TorusRegionRealization
 
 /-!
 # Coherent torus sectors recover interior regional ground spaces

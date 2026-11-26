@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Tensor.GraphState.GraphBondContraction
 import TNLean.PEPS.Injectivity.Multiplicity.TorusThetaBondState
 import TNLean.PEPS.Injectivity.Multiplicity.BondCoordinateTransport
-import TNLean.PEPS.Injectivity.Multiplicity.PhysicalCoherentTransport
+import TNLean.PEPS.Injectivity.Multiplicity.CoherentMultiplicityTransport
 
 /-!
 # Weighted averaging-site contractions on finite graphs

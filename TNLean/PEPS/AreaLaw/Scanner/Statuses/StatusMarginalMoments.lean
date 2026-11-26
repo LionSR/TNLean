@@ -9,7 +9,7 @@ import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.Collar.Scales.StatusScaleSeparation
 import QICLean.ManyBody.Sites.Lattice.SupDistance
 import TNLean.PEPS.AreaLaw.Collar.PhysicalPartition
-import TNLean.PEPS.AreaLaw.Scanner.Histories.BadChargeRatioBound
+import TNLean.PEPS.AreaLaw.Scanner.Histories.BadHistoryAsymptotics
 
 /-!
 # Common marginal moment input at every physical status

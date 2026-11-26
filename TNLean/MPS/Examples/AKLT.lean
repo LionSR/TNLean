@@ -21,4 +21,3 @@ import TNLean.MPS.Examples.AKLT.AKLTSpinSectors
 import TNLean.MPS.Examples.AKLT.AKLTStringOrder
 import TNLean.MPS.Examples.AKLT.AKLTTimeReversal
 import TNLean.MPS.Examples.AKLT.PeriodicStringExamples
-import TNLean.MPS.Examples.AKLT.SPTEntanglementSpectrum

@@ -17,13 +17,10 @@ import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ComponentChannelOscillation
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordLists
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ConstraintWordTruncation
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.ExponentialChannelShells
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphChannelEventError
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphChannelEventKernel
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphChannelPoissonGrowth
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphChannelSpatialOmission
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphChannelWeightedRow
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.GraphOmittedAnchorTail
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LatticeChannelPoissonGrowth
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LatticeChannelSpatialOmission
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LatticeChannelWeightedRow
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LocalChannelOscillation

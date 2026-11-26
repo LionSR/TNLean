@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.QCA.QuasiLocal.BipartiteQuasiLocalEmbedding
 import TNLean.QCA.QuasiLocal.SingletonGeneration
 import TNLean.QCA.SupportAlgebra.SiteIndexedSupportAlgebra
-import TNLean.QCA.StarSubalgebra.CommutingStarSubalgebraKronecker
+import TNLean.QCA.StarSubalgebra.BipartiteSupportAlgebra
 
 /-!
 # Norm-closed generation of the quasi-local algebra by the support algebras

@@ -9,16 +9,11 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons
 
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualEndpointRoughBudget
-import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualRoughLower
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualRoughLowerPrevector
-import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualRoughUpper
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualSharpComparison
-import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualSharpLower
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualSharpLowerPrevector
-import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualSharpPrevector
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualSharpUpper
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualTerminalCollarGeometry
-import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualTerminalEntropyBounds
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualTerminalPrefixEntropy
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.SourceActualTerminalEntropy
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.SourceTargetSharpMoments

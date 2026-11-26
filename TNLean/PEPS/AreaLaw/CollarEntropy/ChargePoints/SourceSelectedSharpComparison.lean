@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.SourceTargetSharpMoment
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualSelectedChargeDensityEnergy
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.RoughSelectionBudget
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellPrevector
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

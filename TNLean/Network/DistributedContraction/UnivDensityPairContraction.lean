@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Network.DistributedContraction.DistributedOperatorContraction
-import TNLean.Network.DistributedContraction.ActiveGateLabelSum
 import QICLean.Algebra.Combinatorics.FinSum
+import Mathlib.Data.Fintype.BigOperators
 
 /-! # The density contraction over all original gate occurrences
 
@@ -19,9 +19,49 @@ No coefficient is cancelled. Empty label types, zero weights, zero sample size
 and empty families are included. The physical matrix indices are arbitrary.
 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588.
+
+It also contains the following results.
+
+* `TNLean.Network.DistributedOperatorContraction.sum_eq_sum_gateLabels_univ`: gate-label sums on the
+  universal active set.
 -/
 
 namespace TNLean.Network.DistributedOperatorContraction
+
+section ActiveGateLabelSum
+
+/-! # Gate-label sums on the universal active set
+
+When every gate occurrence is active, the active-gate subtype is canonically
+the original gate type. The finite sum over its dependent label assignments
+is therefore the original label sum. The identification retains each label
+at its original occurrence and chooses no additional label values.
+
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–579.
+-/
+
+variable {G : Type} [Fintype G] {Label : G → Type}
+variable [∀ g, Fintype (Label g)] {m n : Type}
+
+open Classical in
+/-- Reindex the original finite label sum by labels on the universal active
+set. The matrix summand is arbitrary, and its row and column types need not
+be finite. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 565–579. -/
+theorem sum_eq_sum_gateLabels_univ
+    (K : ((g : G) → Label g) → Matrix m n ℂ) :
+    (∑ η : (g : G) → Label g, K η) =
+      ∑ ξ : GateLabels (Finset.univ : Finset G) Label,
+        K (fun g ↦ ξ ⟨g, Finset.mem_univ g⟩) := by
+  let e := Equiv.piCongrLeft
+    (fun g : ActiveGate (Finset.univ : Finset G) ↦ Label g.1)
+    (Equiv.subtypeUnivEquiv (fun g : G ↦ Finset.mem_univ g)).symm
+  exact (e.symm.sum_comp K).symm
+
+end ActiveGateLabelSum
+
+section UnivDensityPairContraction
+
 open scoped ComplexConjugate
 variable {Party G : Type} [Fintype Party] [Fintype G]
 variable {Ket Bra : G → Type} [∀ g, Fintype (Ket g)] [∀ g, Fintype (Bra g)]
@@ -101,5 +141,7 @@ theorem contractedOperator_densityPair_univ_eq_double_sum
   have h := (congrArg (fun Z : Matrix ((p : Party) → Out p) ((p : Party) → In p) ℂ ↦
     γ • Z) hNetwork).trans hAveraging.symm
   exact h
+
+end UnivDensityPairContraction
 
 end TNLean.Network.DistributedOperatorContraction

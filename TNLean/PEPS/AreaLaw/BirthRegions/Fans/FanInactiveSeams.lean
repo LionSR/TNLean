@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRuns
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanCycle
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanRays
-import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanRadialIncidence
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanRadialPieces
 import Mathlib.Analysis.Normed.Affine.AddTorsor
 

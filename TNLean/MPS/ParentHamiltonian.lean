@@ -26,6 +26,5 @@ import TNLean.MPS.ParentHamiltonian.ProjectorDefect
 import TNLean.MPS.ParentHamiltonian.QuasiLocalState
 import TNLean.MPS.ParentHamiltonian.Stationary
 import TNLean.MPS.ParentHamiltonian.Uncle
-import TNLean.MPS.ParentHamiltonian.UncleFiniteGaplessness
 import TNLean.MPS.ParentHamiltonian.UncleNormGrowth
 import TNLean.MPS.ParentHamiltonian.WeightedCanonicalSectors

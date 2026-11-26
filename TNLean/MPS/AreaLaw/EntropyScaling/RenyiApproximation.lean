@@ -8,9 +8,9 @@ import TNLean.MPS.AreaLaw.Approximation.MPSApproximation
 import QICLean.Entropy.Renyi.FlatDensityEntropy
 import QICLean.Entropy.Renyi.Tail
 import QICLean.Entropy.Renyi.Smooth
-import TNLean.MPS.AreaLaw.EntropyScaling.SmoothApproximation
 import QICLean.Analysis.TraceNorm.SubnormalizedPureStateError
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
+import QICLean.Spectral.Eigenvalue.TailTraceNorm
 
 /-!
 # Matrix product state approximation from Rényi entropy bounds
@@ -25,7 +25,64 @@ the family. At order zero the ordinary bound gives exact MPS representations;
 the smooth bound controls the ranks of independently chosen nearby marginals.
 The smoothing radius is the full trace norm, and finite exceptional lengths
 are absorbed into the accuracy-dependent constant.
+
+It also contains the following results.
+
+* `TNLean.MPS.AreaLaw.norm_sequentialTruncation_leadingEigenprojection_sub_sq_le_of_smoothing`:
+  approximation from separately smoothed marginal states.
 -/
+
+section SmoothApproximation
+
+/-!
+## Approximation from separately smoothed marginal states
+
+Source: Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 539–559.
+Each cut may use a different nearby density matrix. The smoothing radius is
+measured in the full trace norm; it contributes half its value to the bound
+on discarded spectral mass. This supplies the finite-chain estimate for the
+smooth entropy family criterion. Only the individual marginal tails enter
+this estimate; no common smoothing state is assumed.
+-/
+
+open scoped BigOperators ComplexOrder
+open Matrix
+
+namespace TNLean.MPS.AreaLaw
+
+/-- The squared truncation error is bounded by the tails of independently
+smoothed marginal states and half the sum of their full trace-norm errors.
+This is the finite-chain estimate in the smoothing argument of
+Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, lines 539–559. -/
+theorem norm_sequentialTruncation_leadingEigenprojection_sub_sq_le_of_smoothing
+    {L q D : ℕ} (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1)
+    (T η : ℕ → ℝ)
+    (hσ : ∀ k ∈ Finset.Ico 1 L,
+      ∃ (σ : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))
+          (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) ℂ)
+        (hσ : σ.PosSemidef), σ.trace = 1 ∧
+        rectangularTraceNorm (ManyBody.regionState ψ (leftBlock L k) - σ) ≤ η k ∧
+        1 - hσ.isHermitian.kyFanNorm D ≤ T k) :
+    let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
+      (ManyBody.regionState_isHermitian (leftBlock L k) ψ).leadingEigenprojection D
+    ‖sequentialTruncation P (L - 1) ψ - ψ‖ ^ 2 ≤
+      ∑ k ∈ Finset.Ico 1 L, (T k + η k / 2) := by
+  exact (norm_sequentialTruncation_leadingEigenprojection_sub_sq_le ψ hψ D).trans
+    (Finset.sum_le_sum (fun k hk ↦ by
+      obtain ⟨σ, hσ, htr, hη, hT⟩ := hσ k hk
+      have h := Matrix.IsHermitian.trace_sub_kyFanNorm_le_add_traceDistance
+        (ManyBody.regionState_isHermitian (leftBlock L k) ψ) hσ.isHermitian
+          ((ManyBody.trace_regionState_eq_one hψ).trans htr.symm) D
+      rw [ManyBody.trace_regionState_eq_one hψ, htr, Complex.one_re,
+        traceDistance_eq_rectangularTraceNorm
+          (ManyBody.regionState_isHermitian (leftBlock L k) ψ) hσ.isHermitian] at h
+      linarith))
+
+end TNLean.MPS.AreaLaw
+
+end SmoothApproximation
+
+section RenyiApproximation
 
 open scoped BigOperators ComplexOrder Topology
 open Matrix
@@ -349,3 +406,5 @@ theorem isEfficientlyApproximableByMPS_of_smoothRenyiEntropy_le
   exact ⟨D, φ, by simp [D], hmps, herr.trans (min_le_left _ _)⟩
 
 end TNLean.MPS.AreaLaw
+
+end RenyiApproximation

@@ -13,7 +13,6 @@ import TNLean.MPS.ParentHamiltonian.Continuity.CompactBlockBoundaryInjectivity
 import TNLean.MPS.ParentHamiltonian.Continuity.CompactBlockParentGap
 import TNLean.MPS.ParentHamiltonian.Continuity.CompactNormalParentGap
 import TNLean.MPS.ParentHamiltonian.Continuity.CompactOpenParentGap
-import TNLean.MPS.ParentHamiltonian.Continuity.CompactOpenParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Continuity.CompactParentGap
 import TNLean.MPS.ParentHamiltonian.Continuity.CompactParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Continuity.NormalOpenGapAtWielandtRange

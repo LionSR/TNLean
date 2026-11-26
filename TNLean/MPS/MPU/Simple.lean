@@ -15,7 +15,6 @@ import TNLean.MPS.MPU.Simple.RectangularSourceRanks
 import TNLean.MPS.MPU.Simple.SimpleRankOne
 import TNLean.MPS.MPU.Simple.SimpleReduction
 import TNLean.MPS.MPU.Simple.SimpleSupportCompression
-import TNLean.MPS.MPU.Simple.SimpleTensorEquivalence
 import TNLean.MPS.MPU.Simple.SourceDecompositionUniqueness
 import TNLean.MPS.MPU.Simple.SourceFactorChoice
 import TNLean.MPS.MPU.Simple.SourceFactorContraction

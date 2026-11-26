@@ -16,6 +16,5 @@ import TNLean.MPS.Tensor.Chain.CyclicBlockAverage
 import TNLean.MPS.Tensor.Chain.Defs
 import TNLean.MPS.Tensor.Chain.FundamentalTheorem
 import TNLean.MPS.Tensor.Chain.Interval
-import TNLean.MPS.Tensor.Chain.Transfer
 import TNLean.MPS.Tensor.Chain.TranslationInvariance
 import TNLean.MPS.Tensor.Chain.WeightedOverlap

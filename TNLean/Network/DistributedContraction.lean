@@ -8,19 +8,12 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Network.DistributedContraction
 
-import TNLean.Network.DistributedContraction.ActiveGateLabelSum
 import TNLean.Network.DistributedContraction.DistributedContractionScalar
 import TNLean.Network.DistributedContraction.DistributedOperatorContraction
 import TNLean.Network.DistributedContraction.IdentityBondCutRank
 import TNLean.Network.DistributedContraction.IncidentGateLabels
-import TNLean.Network.DistributedContraction.JointSourceSumReindex
-import TNLean.Network.DistributedContraction.LocalGateLabelCompatibility
-import TNLean.Network.DistributedContraction.LocalSourceSampleIndices
-import TNLean.Network.DistributedContraction.PhysicalFirstLinkPolynomial
-import TNLean.Network.DistributedContraction.ReindexedLocalSourceSamples
 import TNLean.Network.DistributedContraction.SourceAlphabetPolynomial
 import TNLean.Network.DistributedContraction.SourceNetworkDimensions
 import TNLean.Network.DistributedContraction.SourceSampleAssignmentIndices
-import TNLean.Network.DistributedContraction.SourceSampleCount
 import TNLean.Network.DistributedContraction.SourceSampleIndices
 import TNLean.Network.DistributedContraction.UnivDensityPairContraction

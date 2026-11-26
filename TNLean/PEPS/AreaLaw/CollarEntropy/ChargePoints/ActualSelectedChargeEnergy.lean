@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualChargeSelectionBound
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualRoundTransport
-import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualGlobalReplicaEnergy
+import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualScanMeasures
 
 /-!
 # Energy at the selected actual charge point

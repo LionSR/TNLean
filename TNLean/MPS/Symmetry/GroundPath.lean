@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Symmetry.GroundPath
 
 import TNLean.MPS.Symmetry.GroundPath.ExactGroundPathGaussianFilter
-import TNLean.MPS.Symmetry.GroundPath.ExactGroundPathTransferBound
 import TNLean.MPS.Symmetry.GroundPath.ExactGroundPathTransferClass
 import TNLean.MPS.Symmetry.GroundPath.ExactGroundPathWindowClustering
 import TNLean.MPS.Symmetry.GroundPath.FixedBondPhysicalPathInvariance

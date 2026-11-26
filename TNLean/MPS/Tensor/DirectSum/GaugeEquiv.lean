@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.DirectSum.BlockAssembly
 import TNLean.MPS.Tensor.DirectSum.BlockGauge
-import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
+import TNLean.MPS.Tensor.Gauge.FiniteLength
 
 import Mathlib.Algebra.BigOperators.Fin
 

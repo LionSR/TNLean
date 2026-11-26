@@ -11,14 +11,11 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProjectorFactorization.AreaLaw
 import TNLean.MPS.AreaLaw.ProjectorFactorization.BoundaryLocalization
 import TNLean.MPS.AreaLaw.ProjectorFactorization.ChainLocalizedParts
-import TNLean.MPS.AreaLaw.ProjectorFactorization.CorrelationLemma
 import TNLean.MPS.AreaLaw.ProjectorFactorization.CutProductExpectation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.CutProductState
 import TNLean.MPS.AreaLaw.ProjectorFactorization.CutoffPair
-import TNLean.MPS.AreaLaw.ProjectorFactorization.DecaySlack
 import TNLean.MPS.AreaLaw.ProjectorFactorization.Doubling
 import TNLean.MPS.AreaLaw.ProjectorFactorization.FactorizationBudget
-import TNLean.MPS.AreaLaw.ProjectorFactorization.GappedAreaLaw
 import TNLean.MPS.AreaLaw.ProjectorFactorization.InteractionPicture
 import TNLean.MPS.AreaLaw.ProjectorFactorization.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.LemmaOneConstant
@@ -26,7 +23,6 @@ import TNLean.MPS.AreaLaw.ProjectorFactorization.LiebRobinson
 import TNLean.MPS.AreaLaw.ProjectorFactorization.MainTheorem
 import TNLean.MPS.AreaLaw.ProjectorFactorization.MovedEstimate
 import TNLean.MPS.AreaLaw.ProjectorFactorization.PositiveFactorization
-import TNLean.MPS.AreaLaw.ProjectorFactorization.PrintedAreaLaw
 import TNLean.MPS.AreaLaw.ProjectorFactorization.PrintedAreaLawSource
 import TNLean.MPS.AreaLaw.ProjectorFactorization.ProductStateExpectation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.ProjectorFactorization

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs
 import TNLean.MPS.Tensor.Gauge.OnSiteSymmetry
-import TNLean.MPS.Examples.ZMod2
+import QICLean.Representation.ZMod2Representation
 import QICLean.Algebra.Cohomology.CocycleCohomology
 import QICLean.Analysis.Real.ComplexSqrt
 

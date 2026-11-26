@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadOldHistoryDecay
 import TNLean.PEPS.AreaLaw.Scanner.Histories.DesignatedDilution
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.PhysicalBandCommutation
-import TNLean.PEPS.AreaLaw.Scanner.Histories.SplitCounting
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusCutBounds
 import TNLean.PEPS.AreaLaw.Scanner.Histories.AssignedLead
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.TerminalSplits

@@ -11,14 +11,11 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.StandardForm.ConjugationSourceFactors
 import TNLean.MPS.MPU.StandardForm.ConjugationSymmetry
 import TNLean.MPS.MPU.StandardForm.EvenFamilySourceGauges
-import TNLean.MPS.MPU.StandardForm.FundamentalTheorem
 import TNLean.MPS.MPU.StandardForm.FundamentalTheoremGates
 import TNLean.MPS.MPU.StandardForm.FundamentalTheoremGatesBlocked
-import TNLean.MPS.MPU.StandardForm.FundamentalTheoremGatesNecessity
 import TNLean.MPS.MPU.StandardForm.FundamentalTheoremGatesSupplied
 import TNLean.MPS.MPU.StandardForm.FundamentalTheoremHalfFactors
 import TNLean.MPS.MPU.StandardForm.FundamentalTheoremLetters
-import TNLean.MPS.MPU.StandardForm.SelectedSourceFactorVirtualGauge
 import TNLean.MPS.MPU.StandardForm.SelectedSourceGateVirtualGauge
 import TNLean.MPS.MPU.StandardForm.SimpleCanonicalRepresentative
 import TNLean.MPS.MPU.StandardForm.SourceFactorChoiceGates

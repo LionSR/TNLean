@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
-import TNLean.PEPS.AreaLaw.GraphNeighborhoodCutClearance
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Sites.Lattice.SupDistance
+import TNLean.PEPS.AreaLaw.Polygons.Squares.CellCounting
 
 /-!
 # The cut-clearance clause of the amplification proposition
@@ -28,6 +29,9 @@ information bounds.
   `Exponents.collarRadiusThreshold C 1`.
 * `amplificationBound_of_radius_output`: the radius and output bounds of
   Proposition 10.2 imply `AmplificationBound`.
+* `TNLean.PEPS.AreaLaw.graphNeighborhood_subset_of_cut_clearance`,
+  `TNLean.PEPS.AreaLaw.exterior_union_subset_graphNeighborhood_compl_of_clearance`: graph
+  neighborhoods separated from physical cuts.
 
 ## References
 
@@ -39,6 +43,108 @@ information bounds.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+section GraphNeighborhoodCutClearance
+
+/-!
+## Graph neighborhoods separated from physical cuts
+
+A graph neighborhood of the part of an ambient target collar inside a cut
+stays inside the cut and the enlarged collar whenever every cut endpoint is
+farther from the target than the sum of the two radii. The estimate applies
+to arbitrary finite induced domains, including holes and disconnected parts.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+`10-geometry.tex`, lines 815–838, at immutable revision
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+The proof is independently written from the manuscript; no upstream Lean
+proof text is reused. The ordered two-family construction and separation
+from the earlier pieces are further geometric inputs.
+-/
+
+open ManyBody (planeDomainGraph graphNeighborhood ambientDilation mem_ambientDilation_iff
+  exists_edgeBoundary_of_walk abs_ambientDepth_sub_le_walk_length ambientDepth
+  ambientDepth_le_iff_mem_ambientDilation supDist supDist_le_one_of_planeDomainGraph_adj
+  exists_mem_ambientDepth_eq supDist_comm natCast_supDist)
+
+namespace TNLean.PEPS.AreaLaw
+
+/-- A graph neighborhood of the part of an ambient target collar inside a cut
+remains inside that cut and inside the enlarged ambient collar, provided every
+physical cut endpoint is farther from the target than the two radii together.
+No connectedness, convexity or target-nonemptiness assumption is required.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+`10-geometry.tex`, lines 815–838, immutable revision
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+This is the cut-exclusion and ambient-distance implication; the ordered
+partition and the earlier-family clearance estimates are separate results. -/
+theorem graphNeighborhood_subset_of_cut_clearance
+    (Λ T : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (L R : ℕ)
+    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+      ((L + R : ℕ) : ℤ) < (supDist t z : ℤ)) :
+    graphNeighborhood (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T L) R ⊆
+      A.filter (fun x ↦ x.val ∈ ambientDilation T (L + R)) := by
+  classical
+  intro x hx
+  obtain ⟨y, hy, p, hp⟩ := ManyBody.mem_graphNeighborhood_iff_exists_walk.mp hx
+  rcases Finset.mem_filter.mp hy with ⟨hyA, hyDil⟩
+  have hT : T.Nonempty :=
+    let ⟨t, ht, _⟩ := Finset.mem_biUnion.mp hyDil
+    ⟨t, ht⟩
+  have hydepth := (ambientDepth_le_iff_mem_ambientDilation T hT y.val L).mpr hyDil
+  refine Finset.mem_filter.mpr ⟨?_, ?_⟩
+  · by_contra hxA
+    obtain ⟨u, w, -, -, hcut, p', hp'⟩ := exists_edgeBoundary_of_walk p hyA hxA
+    have hz : u.val ∈ Geometry.boundaryEndpoints Λ A :=
+      Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary hcut (by simp)
+    have hvariation := (abs_ambientDepth_sub_le_walk_length T hT Subtype.val
+      (fun _ _ ↦ supDist_le_one_of_planeDomainGraph_adj) p').trans
+        (Int.ofNat_le.mpr (hp'.trans hp))
+    obtain ⟨t, ht, hmin⟩ := exists_mem_ambientDepth_eq T hT u.val
+    have hdeep : ((L + R : ℕ) : ℤ) < ambientDepth T hT u.val := by
+      rw [hmin, supDist_comm]
+      exact hclear t ht u.val hz
+    rw [abs_le] at hvariation
+    omega
+  · apply (ambientDepth_le_iff_mem_ambientDilation T hT x.val (L + R)).mp
+    have hvariation := (abs_ambientDepth_sub_le_walk_length T hT Subtype.val
+      (fun _ _ ↦ supDist_le_one_of_planeDomainGraph_adj) p).trans
+        (Int.ofNat_le.mpr hp)
+    rw [abs_le] at hvariation
+    omega
+
+/-- Clearance from physical cut endpoints and from an entire remote set excludes
+both the exterior and that remote set from the graph neighborhood of the target
+collar inside the region. In the area-law application, the remote set is the
+whole union of the earlier actual regions of the same geometric family.
+
+Source: OpenAI, proof of Theorem 1.1, `10-geometry.tex`, lines 825–838,
+immutable revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+This auxiliary geometric implication assumes the two clearance estimates;
+it does not construct the ordered partition or prove its clearance estimates.
+The proof is independently written from the manuscript; no upstream Lean
+proof text is reused. -/
+theorem exterior_union_subset_graphNeighborhood_compl_of_clearance
+    (Λ T : Finset (ℤ × ℤ)) (A J : Finset ↥Λ) (L R : ℕ)
+    (hcut : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+      ((L + R : ℕ) : ℤ) < (supDist t z : ℤ))
+    (hremote : ∀ t ∈ T, ∀ x ∈ J,
+      ((L + R : ℕ) : ℤ) < (supDist t x.val : ℤ)) :
+    Aᶜ ∪ J ⊆
+      (graphNeighborhood (planeDomainGraph Λ)
+        (A.filter fun x ↦ x.val ∈ ambientDilation T L) R)ᶜ := by
+  have hN := graphNeighborhood_subset_of_cut_clearance Λ T A L R hcut
+  simp_all only [Finset.subset_iff, Finset.mem_compl, Finset.mem_union, Finset.mem_filter,
+    mem_ambientDilation_iff, natCast_supDist, lt_max_iff, lt_abs]
+  grind
+
+
+end TNLean.PEPS.AreaLaw
+
+end GraphNeighborhoodCutClearance
+
+section AmplificationCutClearance
 
 open scoped Matrix.Norms.L2Operator
 
@@ -142,3 +248,5 @@ theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
   exact ⟨r, hr, hout, hN₂ n (le_of_max_le_right hn) r hr Λ A T⟩
 
 end TNLean.PEPS.AreaLaw
+
+end AmplificationCutClearance

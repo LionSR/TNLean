@@ -9,12 +9,9 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Transfer.Spectrum
 
 import TNLean.MPS.Transfer.Spectrum.AsymptoticDecomposition
-import TNLean.MPS.Transfer.Spectrum.CastDecay
 import TNLean.MPS.Transfer.Spectrum.GaugePhase
 import TNLean.MPS.Transfer.Spectrum.MPVOverlapTrace
-import TNLean.MPS.Transfer.Spectrum.MixedEigenvalueGap
 import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
-import TNLean.MPS.Transfer.Spectrum.Proportional
 import TNLean.MPS.Transfer.Spectrum.QuantitativeGap
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective
 import TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT

@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Network.SampledApproximation
 
 import TNLean.Network.SampledApproximation.ActualNetworkResourceCoupling
-import TNLean.Network.SampledApproximation.ActualSampledDistributedContraction
 import TNLean.Network.SampledApproximation.ApproximateSampledNetworkApproximation
 import TNLean.Network.SampledApproximation.DistributedGateMapConstruction
 import TNLean.Network.SampledApproximation.SeparateArityCompression

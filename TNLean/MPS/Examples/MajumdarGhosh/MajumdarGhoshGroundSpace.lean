@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MajumdarGhosh.MajumdarGhoshHamiltonian
-import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.CyclicSubmoduleIteration
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalChainGroundSpace
 import TNLean.MPS.Tensor.GroundSpace.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.KernelChainGroundSpace
 import TNLean.MPS.Tensor.GroundSpace.UniqueGroundState

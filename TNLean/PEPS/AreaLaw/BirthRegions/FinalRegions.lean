@@ -8,17 +8,12 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions
 
-import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairCurrentDisjointness
-import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairCurrentTerminalDisjointness
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalLatticePartition
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalRegion
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairFinalRegionTransport
-import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairLatticeCoverage
-import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairMarkMesh
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairNonprimaryRetainedCount
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairReplacementLatticeCoverage
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairRetainedNonprimaryErrorSum
-import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairRootPrefixCount
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairStabilization
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairTermination
 import TNLean.PEPS.AreaLaw.BirthRegions.FinalRegions.RepairTotalMarkPrefixCount

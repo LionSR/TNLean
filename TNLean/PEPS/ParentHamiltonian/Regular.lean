@@ -24,7 +24,6 @@ import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionBondRightInvariance
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionCommutingConstraints
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionEntropyBound
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionFlatness
-import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionHolonomyFilter
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionIntersection
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionInvariantSpan
 import TNLean.PEPS.ParentHamiltonian.Regular.RegularRegionOrbitCoordinates

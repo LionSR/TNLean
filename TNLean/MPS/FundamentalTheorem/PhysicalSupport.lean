@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.PhysicalSupport
 
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.GSNNCHOrthogonalSectors
-import TNLean.MPS.FundamentalTheorem.PhysicalSupport.IsometricAdjacentBondTransport
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportBondCommutativity
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportBondTransport
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportProductTransport

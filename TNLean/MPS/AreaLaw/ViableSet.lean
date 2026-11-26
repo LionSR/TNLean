@@ -10,15 +10,12 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.ViableSet.Basic
 import TNLean.MPS.AreaLaw.ViableSet.BondTrimming
-import TNLean.MPS.AreaLaw.ViableSet.BoundaryTraceNormSDP
 import TNLean.MPS.AreaLaw.ViableSet.CollectiveTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Endpoints
 import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
-import TNLean.MPS.AreaLaw.ViableSet.OperatorAction
 import TNLean.MPS.AreaLaw.ViableSet.PrefixColumn
-import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveTrimming
 import TNLean.MPS.AreaLaw.ViableSet.Trimming

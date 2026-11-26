@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Preparation.Measurement
 
 import TNLean.MPS.Preparation.Measurement.CoherentBlockTreePreparation
-import TNLean.MPS.Preparation.Measurement.MeasurementPreparation
 import TNLean.MPS.Preparation.Measurement.NonNormalMeasurementPreparation
 import TNLean.MPS.Preparation.Measurement.OverlappingLogLogPreparation
 import TNLean.MPS.Preparation.Measurement.OverlappingMeasurementPreparation

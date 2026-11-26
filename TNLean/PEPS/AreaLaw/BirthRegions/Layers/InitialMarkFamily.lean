@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.BeltMarks
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.PolynomialBudget
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.FineMarkSeparation
+import TNLean.PEPS.AreaLaw.BirthRegions.Layers.MeshGeometry
 import Mathlib.Data.Set.Finite.Basic
 
 /-!

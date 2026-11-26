@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.PhysicalScanner
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedEnergyCoordinates
 import QICLean.Representation.Bell.ReplicaPrevector
 import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.SuppliedTargetNormAttachment
-import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualRoughUpper
+import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.ActualEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceSelectedEnergy
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 

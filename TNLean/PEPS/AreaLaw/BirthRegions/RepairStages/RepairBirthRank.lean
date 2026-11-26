@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairStage
+import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.TwoFamilyExplicitThresholds
 
 /-!
 # Retained identifiers and the order of birth
@@ -44,7 +45,18 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Section 11, replacement instructions, lines 398–409, and current regions,
 lines 558–561. Source revision:
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.Geometry.initialRegionCharacteristicLength`,
+  `TNLean.PEPS.AreaLaw.Geometry.repairStageCharacteristicLength`: characteristic lengths remembered
+  at birth.
+* `TNLean.PEPS.AreaLaw.Geometry.repairStage_positive_rank_length_lower_bound`,
+  `TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_length_lower_bound`:
+  uniform lower bounds for nonprimary birth lengths.
 -/
+
+section RepairBirthRank
 
 section
 
@@ -176,3 +188,149 @@ end TNLean.PEPS.AreaLaw.Geometry
 end
 
 end
+
+end RepairBirthRank
+
+section RepairCharacteristicLength
+
+/-!
+## Characteristic lengths remembered at birth
+
+An initial primary has its layer length r, an initial belt region has its
+cell side u, and a replacement has the half-side u of its removal square.
+These lengths are retained when an old identifier passes to a later stage.
+For a replacement, the scanner template uses primitive scale 2u.
+
+The dummy is assigned zero for totality and is excluded from the retained
+physical identifiers. The order of identifiers is determined separately by
+their initial class and generation of birth.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, `geometry:primary-scale`, lines 709–721;
+belt and replacement scanner scales, lines 732–740; and the ordering
+preceding `geometry:birth-separation`, lines 565–568.
+Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+-/
+
+noncomputable section
+
+namespace TNLean.PEPS.AreaLaw.Geometry
+
+/-- The characteristic length of an initial identifier: r = 2^k for a
+primary and u = t_k for a belt region. The primary length is the layer
+length; the whole primary can have a larger pitch diameter. The dummy
+has value zero for totality and is excluded from retained identifiers.
+Source: area-law Section 11, `geometry:primary-scale`, lines 709–721;
+initial belt scale, lines 732–734; and dummy exclusion, lines 565–568. -/
+def initialRegionCharacteristicLength (o : ℝ × ℝ) (k₀ : ℕ)
+    (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)))
+    (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) :
+    InitialRegionIndex o k₀ Z C a b hC h₀ → ℝ
+  | .inl _ => 0
+  | .inr (.inl ⟨k, _⟩) => (2 : ℝ) ^ k.val
+  | .inr (.inr ⟨k, _, _⟩) => (2 : ℝ) ^ fineScaleIndex k.val
+
+/-- The characteristic birth length in the actual repair family. Old
+identifiers keep their value, and a fresh replacement receives the removal
+half-side u computed from its parent scale at birth. Its scanner template
+has primitive scale 2u. The initial identifiers use the same joint choice
+as the actual initial stage.
+Source: area-law Section 11, replacement creation, lines 398–409;
+`geometry:primary-scale`, lines 709–721; and belt and replacement scanner
+scales, lines 732–740. -/
+def repairStageCharacteristicLength (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
+    (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (Sstar : ℝ) :
+    (j : ℕ) → (repairStage o Λ A C k₀ hC h₀ Sstar j).regionIndex → ℝ :=
+  Nat.rec
+    (motive := fun j ↦
+      (repairStage o Λ A C k₀ hC h₀ Sstar j).regionIndex → ℝ)
+    (let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2
+        o Λ A C k₀ hC h₀
+      let a := Classical.choose h
+      let hb := Classical.choose_spec h
+      let b := Classical.choose hb
+      initialRegionCharacteristicLength o k₀ (boundaryEndpoints Λ A) C a b hC h₀)
+    (fun j length ↦ fun
+      | .inl i => length i
+      | .inr q =>
+        repairHalfSide ((repairStage o Λ A C k₀ hC h₀ Sstar j).scale q.2.1.val))
+
+end TNLean.PEPS.AreaLaw.Geometry
+
+end
+
+end RepairCharacteristicLength
+
+section RepairCharacteristicLengthLowerBound
+
+/-!
+## Uniform lower bounds for nonprimary birth lengths
+
+Initial belt lengths tend to infinity with their dyadic layer. A replacement
+is created only when its removal half-side is at least the stopping scale.
+Old identifiers retain their characteristic lengths. Consequently, for any
+prescribed lower bound, a sufficiently large initial layer and stopping scale
+give that bound for every identifier of positive birth rank at every stage.
+The initial-layer threshold depends only on the prescribed lower bound `U`; it
+is the explicit layer `fineScaleIndexThreshold U = ⌈dyadicIndexThreshold U / ζ⌉₊`.
+
+This is an auxiliary for the choice of scanner thresholds. It applies to all
+actual identifiers of positive birth rank, including those whose current
+regions are empty. It requires no metric or termination assertion.
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, `10-geometry.tex`, nonterminal replacements,
+lines 398–409; belt and replacement scales, lines 732–740; and the threshold
+choice following `geometry:fine-clearance`, lines 761–771.
+Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Independently formalized; no upstream Lean proof text reused.
+-/
+
+namespace TNLean.PEPS.AreaLaw.Geometry
+
+
+/-- **Explicit uniform lower bound for nonprimary lengths.** Every prescribed
+real lower bound `U` holds for the remembered lengths of all positive-rank
+identifiers once the initial layer is at least `fineScaleIndexThreshold U` and
+the stopping scale is at least `U`. The usual formation assumptions of the
+actual repair family are retained.
+Source: area-law Section 11, `10-geometry.tex`, lines 398–409, 732–740
+and 761–771. -/
+theorem repairStage_positive_rank_length_lower_bound (U : ℝ) (o : ℝ × ℝ)
+    (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ) (C k₀ : ℕ) (hC : 2 ≤ C)
+    (h₀ : 50000000 ≤ k₀) (hk : fineScaleIndexThreshold U ≤ k₀) (Sstar : ℝ)
+    (hSstar : U ≤ Sstar) (N : ℕ) (i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex)
+    (hi : 0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i) :
+    U ≤ repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar N i := by
+  induction N with
+  | zero =>
+    rcases i with u | (p | b)
+    · exact (Nat.lt_irrefl 0 hi).elim
+    · exact (Nat.lt_irrefl 0 hi).elim
+    · exact le_two_pow_fineScaleIndex_of_fineScaleIndexThreshold_le
+        (hk.trans b.1.property)
+  | succ N ih =>
+    rcases i with i | q
+    · exact ih i hi
+    · exact hSstar.trans q.2.1.property
+
+/-- Every prescribed real lower bound holds uniformly for the remembered
+lengths of all positive-rank identifiers once the initial layer and stopping
+scale are sufficiently large. The threshold is chosen before all geometric
+data, the stopping scale and the generation; it is `fineScaleIndexThreshold U`
+(`repairStage_positive_rank_length_lower_bound`).
+Source: area-law Section 11, `10-geometry.tex`, lines 398–409, 732–740
+and 761–771. -/
+theorem exists_uniform_repairStage_positive_rank_length_lower_bound (U : ℝ) :
+    ∃ K : ℕ, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset ↥Λ)
+      (C k₀ : ℕ) (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+      ∀ Sstar : ℝ, U ≤ Sstar → ∀ (N : ℕ)
+        (i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex),
+        0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i →
+        U ≤ repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar N i :=
+  ⟨fineScaleIndexThreshold U, repairStage_positive_rank_length_lower_bound U⟩
+
+end TNLean.PEPS.AreaLaw.Geometry
+
+end RepairCharacteristicLengthLowerBound

@@ -28,6 +28,11 @@ The half-side satisfies `S ^ ρ₀ / 2 ≤ d(S) ≤ S ^ ρ₀` at every positive
 scale, `d(S) < S` when `S > 1`, and `d(S) ≤ (a₀ / 1000) S` for all
 sufficiently large `S`, for every positive constant `a₀`.
 
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.Geometry.exists_natPow_repairHalfSide`,
+  `TNLean.PEPS.AreaLaw.Geometry.exists_natCast_repairHalfSide`: integral repair half-sides.
+
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*,
@@ -37,6 +42,8 @@ sufficiently large `S`, for every positive constant `a₀`.
   lines 506–524 and 538–541, and `geometry:birth-separation`, lines 584–591.
   Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+section SimultaneousRepair
 
 noncomputable section
 
@@ -179,3 +186,50 @@ def repairChildScale {ι : Type*} (S : ι → ℝ) (Sstar : ℝ)
   repairHalfSide (S j.1.val)
 
 end TNLean.PEPS.AreaLaw.Geometry
+
+end
+
+end SimultaneousRepair
+
+section RepairHalfSideArithmetic
+
+/-!
+## Integral repair half-sides
+
+At every parent scale at least one, the exponent defining the dyadic repair
+half-side is a nonnegative integer. The half-side is therefore a natural
+number, viewed in the real plane. This arithmetic fact ensures that the
+successive centers, corners and side midpoints preserve the translated
+integer mesh.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, `geometry:trim-radius`, lines 380–385,
+and the arithmetic of supporting lines, lines 545–558.
+Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+-/
+
+namespace TNLean.PEPS.AreaLaw.Geometry
+
+/-- A repair half-side computed from a parent scale at least one is a
+natural power of two. Source: area-law Section 11, `geometry:trim-radius`,
+lines 380–385, and the integral recursion, lines 545–551. -/
+theorem exists_natPow_repairHalfSide {S : ℝ} (hS : 1 ≤ S) :
+    ∃ e : ℕ, repairHalfSide S = (2 : ℝ) ^ e := by
+  have hf : 0 ≤ (⌊(Exponents.rho : ℝ) * Real.logb 2 S⌋ : ℤ) :=
+    Int.floor_nonneg.mpr
+      (mul_nonneg rho_pos_lt_one.1.le (Real.logb_nonneg one_lt_two hS))
+  refine ⟨(⌊(Exponents.rho : ℝ) * Real.logb 2 S⌋ : ℤ).toNat, ?_⟩
+  simp only [repairHalfSide, ← zpow_natCast, Int.toNat_of_nonneg hf]
+
+/-- A repair half-side computed from a parent scale at least one is a
+natural number. Source: area-law Section 11, `geometry:trim-radius`,
+lines 380–385, and the integral recursion, lines 545–551. -/
+theorem exists_natCast_repairHalfSide {S : ℝ} (hS : 1 ≤ S) :
+    ∃ n : ℕ, repairHalfSide S = (n : ℝ) := by
+  obtain ⟨e, he⟩ := exists_natPow_repairHalfSide hS
+  refine ⟨2 ^ e, ?_⟩
+  simpa only [Nat.cast_pow, Nat.cast_ofNat] using he
+
+end TNLean.PEPS.AreaLaw.Geometry
+
+end RepairHalfSideArithmetic

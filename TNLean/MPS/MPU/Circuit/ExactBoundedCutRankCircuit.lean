@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.Circuit.Interval.MinimalIntervalLeafColumns
 import TNLean.MPS.MPU.Circuit.Interval.MinimalIntervalRootColumns
 import TNLean.MPS.MPU.Circuit.Interval.MinimalIntervalCircuit
-import TNLean.MPS.MPU.Circuit.Interval.MinimalIntervalMergingCircuit
 import TNLean.MPS.MPU.Circuit.Bounds.UniformCircuitResourceBounds
 import TNLean.MPS.MPU.Circuit.SingleSiteCompleteCircuit
 import TNLean.MPS.Operator.Unitary.PeriodicOperatorCutRank

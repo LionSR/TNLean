@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.Simple.AdjointSimpleContraction
 import TNLean.MPS.MPU.Simple.SourceFactorsPhysicalAdjoint
 import TNLean.MPS.MPU.Simple.CanonicalFormBlocking
-import TNLean.MPS.MPU.Simple.SimpleTensorEquivalence
+import TNLean.MPS.MPU.Simple.SourceVCompleteNetwork
 import TNLean.MPS.MPU.Index.SourceIndexValue
 
 /-!

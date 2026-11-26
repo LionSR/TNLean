@@ -8,7 +8,7 @@ import QICLean.Channel.KrausMap.KrausRepresentation
 import QICLean.Kraus.MixedMap.Basic
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Tensor.Physical.PhysicalRotation
-import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
+import TNLean.MPS.Tensor.Gauge.FiniteLength
 import TNLean.MPS.Transfer.Irreducible.Periodic
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 

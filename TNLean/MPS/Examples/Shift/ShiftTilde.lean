@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.Operator.PhysicalSector.SitewisePhysicalMatrix
 import TNLean.MPS.Examples.Shift.Shift
-import TNLean.MPS.MPU.CanonicalForm.KetLeftMulCanonicalForm
+import TNLean.MPS.MPU.CanonicalForm.PhysicalAncillaLeftMul
 
 /-!
 # Swap-transformed shift matrix product unitaries

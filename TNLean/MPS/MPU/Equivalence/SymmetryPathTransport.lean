@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Equivalence.Equivalence
-import TNLean.MPS.MPU.CanonicalForm.KetLeftMulCanonicalForm
+import TNLean.MPS.MPU.CanonicalForm.PhysicalAncillaLeftMul
 import TNLean.MPS.Tensor.Physical.Blocking
 
 /-!

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.SpanningSectors.ActiveSectorSpanningAreaLaw
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSectorPairPreservingObstruction
-import TNLean.MPS.MPDO.RFP.RFPViaTSBlocking
+import TNLean.MPS.MPDO.RFP.RFPViaTSGlobal
 
 /-!
 # Renormalization maps for the four-sector classical tensor

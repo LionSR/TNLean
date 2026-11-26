@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.Guides.DyadicLargeRepaintingGates
-import TNLean.PEPS.Approximation.FrameChanges.DyadicLevelTrueVertices
 import TNLean.PEPS.Approximation.FrameChanges.DyadicPointTreatmentRewrite
+import TNLean.PEPS.Approximation.FrameChanges.DyadicResizeStep
 
 /-!
 # The true vertices of a temporary guide as a finite set
@@ -37,6 +37,8 @@ same before and after (`isTrueVertex_reading_homogenize_iff`).
 * `Approximation.mem_treatedTrueVertices`.
 * `Approximation.mem_insert_rimFinset_of_isTrueVertex`, `Approximation.card_rimFinset_le`.
 * `Approximation.isTrueVertex_reading_homogenize_iff`.
+* `TNLean.PEPS.Approximation.levelTrueVertices`, `TNLean.PEPS.Approximation.mem_levelTrueVertices`:
+  the true vertices of a level guide as a finite set.
 
 ## References
 
@@ -46,6 +48,79 @@ same before and after (`isTrueVertex_reading_homogenize_iff`).
 -/
 
 open Set Metric Filter Topology
+
+section DyadicLevelTrueVertices
+
+/-!
+## The true vertices of a level guide as a finite set
+
+The holes of the main frame at the start and the end of a repainting are at the true vertices of
+the reading of a guide uniform on the blocks of the level, which carries the placeholder outside
+the root square (`levelLabels`). These true vertices are grid corners of the root square, or of
+its first neighbours, so they form a finite set (`levelTrueVertices`,
+`mem_levelTrueVertices`), the set of hole centers of the frame of the guide.
+
+### Main definitions
+
+* `Approximation.levelTrueVertices`.
+
+### Main results
+
+* `Approximation.mem_levelTrueVertices`.
+
+### References
+
+* Polynomial-PEPS manuscript (September 24, 2026), §7, `06-geometry.tex`: the root square and the
+  placeholder outside it (lines 62–67 and 82–100), the holes at true vertices (lines 109–118).
+-/
+
+noncomputable section
+
+namespace TNLean.PEPS.Approximation
+
+variable {κ : Type}
+
+open Classical in
+/-- The true vertices of a labelling among the grid corners `blockCorner n Q` with
+`0 ≤ Q.1, Q.2 ≤ M + 1`. -/
+def levelTrueVertices (n : ℝ) (M : ℤ) (g : ℝ × ℝ → κ) : Finset (ℝ × ℝ) :=
+  ((Finset.Icc 0 (M + 1) ×ˢ Finset.Icc 0 (M + 1)).image (blockCorner n)).filter (IsTrueVertex g)
+
+/-- **The true vertices of a level guide.** Let `g` be the reading along `v` of a guide uniform
+on the `n`-blocks whose label is a fixed `ph` on every block outside the root square of `M × M`
+blocks. Then the true vertices of `g` are exactly the points of `levelTrueVertices n M g`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 62–67, 82–100 and 109–118. -/
+theorem mem_levelTrueVertices {n : ℝ} (hn : 0 < n) {M : ℤ} {lab : ℤ × ℤ → κ} {ph : κ}
+    (hout : ∀ Q, ¬InRoot M Q → lab Q = ph) {v : ℝ × ℝ} {g : ℝ × ℝ → κ}
+    (hg : IsDisplacedReading g (blockGuide n lab) v) {c : ℝ × ℝ} :
+    c ∈ levelTrueVertices n M g ↔ IsTrueVertex g c := by
+  classical
+  simp only [levelTrueVertices, Finset.mem_filter, Finset.mem_image, Finset.mem_product,
+    Finset.mem_Icc, and_iff_right_iff_imp]
+  intro hc
+  obtain ⟨Q, rfl⟩ := (hg.isTrueVertex hc).eq_blockCorner hn
+  refine ⟨Q, ?_, rfl⟩
+  by_contra hQ
+  refine (hasTwoLabelsNear_of_eventuallyEq_const (c := ph) ?_).not_isTrueVertex hc
+  filter_upwards [ball_mem_nhds (blockCorner n Q) hn] with p hp
+  obtain ⟨R, hR, e⟩ := reading_mem_blockWindow hn hg (blockCorner_mem_closedBlock_sub_one hn Q)
+    (mem_ball.1 hp)
+  rw [e]
+  refine hout _ fun hr => hQ ?_
+  simp only [blockWindow, Finset.mem_product, Finset.mem_Icc] at hR
+  obtain ⟨h1, h2, h3, h4⟩ := hr
+  simp only [Prod.fst_add, Prod.snd_add] at h1 h2 h3 h4
+  push_cast at hR
+  omega
+
+end TNLean.PEPS.Approximation
+
+end
+
+end DyadicLevelTrueVertices
+
+section DyadicTreatedTrueVertices
 
 noncomputable section
 
@@ -289,3 +364,7 @@ theorem isTrueVertex_reading_homogenize_iff {n t : ℝ} {M₁ M₂ : Finset (ℤ
   rw [isTrueVertex_iff_incidentLabels, isTrueVertex_iff_incidentLabels, incidentLabels_congr heq]
 
 end TNLean.PEPS.Approximation
+
+end
+
+end DyadicTreatedTrueVertices

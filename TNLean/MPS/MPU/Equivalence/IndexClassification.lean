@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Equivalence.EquivalenceIndex
 import TNLean.MPS.MPU.CanonicalForm.CanonicalFormAncillaBlocking
-import TNLean.MPS.MPU.CanonicalForm.PositiveCanonicalGauge
+import TNLean.MPS.MPU.CanonicalForm.MPUCanonicalForm
 import TNLean.MPS.MPU.StandardForm.StandardFormInterpolation
 import TNLean.MPS.MPU.StandardForm.StandardFormFromGates
 import TNLean.MPS.MPU.Index.CompositionIndex

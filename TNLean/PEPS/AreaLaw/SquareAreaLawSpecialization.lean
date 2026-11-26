@@ -12,7 +12,7 @@ import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
 import TNLean.PEPS.AreaLaw.Polygons.Templates.AmbientBoundary
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
 import TNLean.PEPS.Tensor.Region.RegionBlock
 import QICLean.ManyBody.Hamiltonian.GroundSpace

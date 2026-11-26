@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.FixedAmbient
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import QICLean.Spectral.Gap.PositiveComparisonGap
 import QICLean.ManyBody.Hamiltonian.Martingale.AbstractCriterion
 

@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Symmetry.SPTClassification.CohomologousFixedPointPath
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalCanonicalGroundPath
-import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpointOrthogonality
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpointPaths
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpoints
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalExactPhase
@@ -23,6 +22,5 @@ import TNLean.MPS.Symmetry.SPTClassification.ExactMPSPhaseCohomologyObstruction
 import TNLean.MPS.Symmetry.SPTClassification.FixedPointGappedPathWitness
 import TNLean.MPS.Symmetry.SPTClassification.PhysicalMatrixBondCovariance
 import TNLean.MPS.Symmetry.SPTClassification.PhysicalSpectatorBondExtension
-import TNLean.MPS.Symmetry.SPTClassification.PhysicalSpectatorBondTransport
 import TNLean.MPS.Symmetry.SPTClassification.PhysicalSpectatorCoordinates
 import TNLean.MPS.Symmetry.SPTClassification.WeightedMatrixUnitParentPath

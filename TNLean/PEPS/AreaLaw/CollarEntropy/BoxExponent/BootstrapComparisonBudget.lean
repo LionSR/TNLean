@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapParameters
-import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BootstrapBinaryEntropyCost
+import TNLean.PEPS.AreaLaw.Collar.Scales.Budgets
+import Mathlib.Analysis.SpecialFunctions.BinaryEntropy
 
 /-!
 # The additive entropy budget for the fixed bootstrap scales
@@ -24,9 +25,85 @@ September 24, 2026, `08-scanner.tex`, `scanner:scales`, lines 32–41,
 The statement is independently formulated from the manuscript; no upstream Lean proof
 text is reused.
 
+It also contains the following results.
+
+* `TNLean.PEPS.AreaLaw.Scan.bootstrap_binEntropy_cost_bound_of_scaleFactsThreshold_le`,
+  `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound`: binary-entropy cost for the
+  rounded bootstrap bands.
 -/
 
 namespace TNLean.PEPS.AreaLaw.Scan
+
+section BootstrapBinaryEntropyCost
+
+/-!
+## Binary-entropy cost for the rounded bootstrap bands
+
+For each fixed tuple of scanner exponents, one large-scale threshold gives
+positive band count and positive per-band metric weight. With total metric
+weight four, the binary-entropy cost is at most `(log 2 / 4) n` above that
+threshold. The coefficient is absolute; the threshold may depend on the
+fixed exponent tuple and precedes every auxiliary fraction and physical
+instance.
+
+The proof uses the actual rounded bands `K = floor(L / (8m))` and the
+existing scale estimates `1 ≤ K` and `L ≤ n`, together with `h(τ) ≤ log 2`.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, `08-scanner.tex`, `scanner:scales`, lines 32–41, and
+the binary-entropy cost following `scanner:bootstrap-comparison`,
+lines 755–787, at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
+-/
+
+/-- For fixed scanner exponents, at every `n` from the explicit threshold
+`X.scaleFactsThreshold` on, the actual band count and the per-band weight are positive and
+the binary-entropy cost is linear with absolute coefficient. Source: `08-scanner.tex`,
+`scanner:scales`, lines 32–41, and the cost following `scanner:bootstrap-comparison`,
+lines 755–787. -/
+theorem bootstrap_binEntropy_cost_bound_of_scaleFactsThreshold_le (X : ScannerExponents)
+    {n : ℕ} (hthr : X.scaleFactsThreshold ≤ n) :
+    1 ≤ X.K n ∧ 0 < X.a 4 n ∧ ∀ τ : ℝ,
+      Real.binEntropy τ / X.a 4 n ≤ (Real.log 2 / 4) * (n : ℝ) := by
+  have hfacts := scaleFacts_of_scaleFactsThreshold_le X hthr
+  have hKpos : (0 : ℝ) < X.K n := by
+    exact_mod_cast (lt_of_lt_of_le Nat.zero_lt_one hfacts.one_le_K)
+  have ha : 0 < X.a 4 n :=
+    div_pos (by norm_num : (0 : ℝ) < 4) hKpos
+  have hKbound : (X.K n : ℝ) ≤ (n : ℝ) := by
+    exact_mod_cast (Nat.div_le_self (X.L n) (8 * X.m n)).trans hfacts.L_le_n
+  have hcoefficient : 0 ≤ Real.log 2 / 4 :=
+    div_nonneg (Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 2))
+      (by norm_num : (0 : ℝ) ≤ 4)
+  refine ⟨hfacts.one_le_K, ha, fun τ ↦ ?_⟩
+  calc
+    Real.binEntropy τ / X.a 4 n =
+        (Real.binEntropy τ / 4) * (X.K n : ℝ) := by
+      rw [ScannerExponents.a, div_div_eq_mul_div]
+      ring
+    _ ≤ (Real.log 2 / 4) * (X.K n : ℝ) :=
+      mul_le_mul_of_nonneg_right
+        (div_le_div_of_nonneg_right Real.binEntropy_le_log_two
+          (by norm_num : (0 : ℝ) ≤ 4)) (Nat.cast_nonneg (X.K n))
+    _ ≤ (Real.log 2 / 4) * (n : ℝ) :=
+      mul_le_mul_of_nonneg_left hKbound hcoefficient
+
+/-- For fixed scanner exponents, one threshold gives positive actual band
+count, positive per-band weight, and a linear binary-entropy cost with
+absolute coefficient. The threshold precedes the auxiliary fraction and
+every physical instance. Source: `08-scanner.tex`, `scanner:scales`,
+lines 32–41, and the cost following `scanner:bootstrap-comparison`,
+lines 755–787. -/
+theorem exists_bootstrap_binEntropy_cost_bound (X : ScannerExponents) :
+    ∃ N : ℕ, 1 ≤ N ∧ ∀ n : ℕ, N ≤ n →
+      1 ≤ X.K n ∧ 0 < X.a 4 n ∧ ∀ τ : ℝ,
+        Real.binEntropy τ / X.a 4 n ≤ (Real.log 2 / 4) * (n : ℝ) :=
+  ⟨_, (scaleFacts_of_scaleFactsThreshold_le X le_rfl).two_le_n.trans' (by norm_num),
+    fun _ => bootstrap_binEntropy_cost_bound_of_scaleFactsThreshold_le X⟩
+
+end BootstrapBinaryEntropyCost
+
+section BootstrapComparisonBudget
 
 /-- The explicit threshold of the bootstrap comparison budget: the scale-facts threshold at
 the fixed bootstrap scales, the least `n ≥ 2` with `n ^ μ ≥ 2`, `n ^ (1 - ℓ) ≥ 2` and
@@ -166,5 +243,7 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
               (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + η * e) :=
   ⟨_, (by norm_num : 1 ≤ 2).trans (le_max_left _ _),
     fun _ => bootstrap_comparison_budget_bound_of_threshold_le he₀ he₀₁⟩
+
+end BootstrapComparisonBudget
 
 end TNLean.PEPS.AreaLaw.Scan

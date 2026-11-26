@@ -27,7 +27,6 @@ import TNLean.MPS.Examples.Dimer.TwistedDimerFlagSectors
 import TNLean.MPS.Examples.Dimer.TwistedDimerHorizontalCF
 import TNLean.MPS.Examples.Dimer.TwistedDimerMPDO
 import TNLean.MPS.Examples.Dimer.TwistedDimerNotSimple
-import TNLean.MPS.Examples.Dimer.TwistedDimerPairZeroOne
 import TNLean.MPS.Examples.Dimer.TwistedDimerPairs
 import TNLean.MPS.Examples.Dimer.TwistedDimerProductLaw
 import TNLean.MPS.Examples.Dimer.TwistedDimerRefine

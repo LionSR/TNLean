@@ -8,10 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.ChebyshevAGSP
 
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.ApproximateGroundVector
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.CenteredWindow
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.CertificateRateLowerBound
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.ChainNormalization
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ChangingTargetStep
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ChebyshevProjector
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ClippedFilter
@@ -20,7 +18,6 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.CutApproximationTail
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FavorableParameters
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.FrustrationFree
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.HighEnergyMass
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.Initialization
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.InverseGapRobustness
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.LowSpectrumGap
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.Normalization
@@ -30,7 +27,6 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedRankBound
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedRankLog
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedRankScale
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedTailParameters
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.OriginalChainRobustness
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.PhysicalEntropy
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.PhysicalRobustness
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.ProjectionEnergy
@@ -43,4 +39,3 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.SequentialApproximation
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SharpMPSApproximation
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SharpPerCutApproximation
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SpectralCluster
-import TNLean.MPS.AreaLaw.ChebyshevAGSP.VariableWindowRefinement

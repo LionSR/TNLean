@@ -28,7 +28,6 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenGapContinu
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenKernel
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenSectors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointPeriodicStateContinuity
-import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointRightOpenGap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointRightOpenTransport
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointUniformPathGap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointZeroSectorGap

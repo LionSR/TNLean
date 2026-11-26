@@ -34,7 +34,6 @@ import TNLean.MPS.Examples.NonCartesianSectors
 import TNLean.MPS.Examples.OddRing
 import TNLean.MPS.Examples.OneLabelCandidate
 import TNLean.MPS.Examples.PVBS
-import TNLean.MPS.Examples.PeriodicFullRingPhase
 import TNLean.MPS.Examples.ProductState
 import TNLean.MPS.Examples.Rings
 import TNLean.MPS.Examples.Shift
@@ -46,4 +45,3 @@ import TNLean.MPS.Examples.Weyl
 import TNLean.MPS.Examples.Wielandt
 import TNLean.MPS.Examples.Z2Z2
 import TNLean.MPS.Examples.Z3
-import TNLean.MPS.Examples.ZMod2

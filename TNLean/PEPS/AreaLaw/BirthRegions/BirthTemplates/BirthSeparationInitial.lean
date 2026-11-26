@@ -12,9 +12,7 @@ import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplatePolygons
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.AdjacentScales
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellContacts
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanSideContacts
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionInterfaces
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionInteriors
-import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegionRegularity
+import TNLean.PEPS.AreaLaw.BirthRegions.InitialRegions.InitialRegions
 import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateRows
 import TNLean.PEPS.AreaLaw.BirthRegions.Stars.InitialStars
 

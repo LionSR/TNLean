@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Simple.VirtualSandwichBlocking
-import TNLean.MPS.MPU.CanonicalForm.PositiveCanonicalGauge
+import TNLean.MPS.MPU.CanonicalForm.MPUCanonicalForm
 import TNLean.MPS.MPU.Index.Index
 import TNLean.MPS.MPU.Index.RepresentativeIndex
 import TNLean.MPS.CanonicalForm.SimpleMPU.SimpleBlocking

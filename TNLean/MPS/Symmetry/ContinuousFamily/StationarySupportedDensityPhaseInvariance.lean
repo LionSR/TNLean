@@ -7,7 +7,6 @@ import QICLean.Channel.KrausMap.KrausCornerCompression
 import QICLean.Channel.FixedPoint.Stationary.SupportInvariance
 import QICLean.Analysis.Isometry.SupportedIsometricCompression
 import TNLean.MPS.Symmetry.ContinuousFamily.LocalInvariantCompression
-import TNLean.MPS.Symmetry.ContinuousFamily.LocalProjectiveClassStability
 import TNLean.MPS.Symmetry.ContinuousFamily.LocalSpectralSupport
 import TNLean.MPS.Symmetry.ContinuousFamily.ContinuousStationaryDensity
 import TNLean.MPS.Symmetry.OnSite.StationaryDensitySymmetry

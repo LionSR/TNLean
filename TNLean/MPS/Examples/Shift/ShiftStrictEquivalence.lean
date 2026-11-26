@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.CanonicalForm.MPUCanonicalForm
 import TNLean.MPS.MPU.Equivalence.Equivalence
-import TNLean.MPS.Examples.Shift.ShiftSwap
+import TNLean.MPS.Examples.Shift.Shift
 import TNLean.MPS.Examples.Shift.SwapPath
 import TNLean.MPS.Examples.Shift.ShiftPublicIndex
 import TNLean.MPS.MPU.Simple.AdjointSimpleContraction

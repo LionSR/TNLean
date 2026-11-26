@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
 import QICLean.Spectral.Gap.PositiveComparisonGap
 import QICLean.ManyBody.Hamiltonian.KernelGap
 import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.MatrixRepresentation
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import TNLean.MPS.Operator.Interaction.PhysicalGibbsEmbedding
 
 /-!

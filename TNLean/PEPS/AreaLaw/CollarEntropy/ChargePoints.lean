@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualChargeEnergyBound
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualChargeEnergyCoefficients
-import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualChargeEnergyDecay
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualChargeEntropySum
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualChargeParameterBound
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualChargeSelectionBound
@@ -19,12 +18,10 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualSelectedChargeEnergy
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.EnergyBalance
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.EntropyBalance
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.GenericChargeEnergy
-import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.GenericSelectedChargeEnergy
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.RoughSelectedDensity
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.RoughSelectionBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.Scanner
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.Selection
-import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceChargeSelection
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceRoughBudgetPower
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceRoughSelection

@@ -8,9 +8,9 @@ import QICLean.Spectral.LowEnergy.Coordinates
 import QICLean.Probability.Sampling.ViableSubspaceBootstrap
 import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
 import QICLean.Analysis.Subspace.ViableSubspace
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolynomialFamily
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalPolynomialTensorFamily
 import QICLean.ManyBody.Sites.Lattice.Chain
-import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.FiveRegionTruncationResidual
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.PhysicalLowEnergyCloseness
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport
 import QICLean.Analysis.Parameter.PolynomialFilterParameters
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ShortRegionViableFamily

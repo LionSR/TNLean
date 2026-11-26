@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Periodic.PhaseClasses
-import TNLean.MPS.FundamentalTheorem.Periodic.EqualCaseIrreducibleForm
+import TNLean.MPS.FundamentalTheorem.Periodic.EqualCaseCanonical
 
 /-!
 # Unitary grouping of periodic phase classes

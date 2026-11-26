@@ -5,7 +5,10 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
-import TNLean.MPS.AreaLaw.EntropyScaling.RenyiApproximationLowerBound
+import TNLean.MPS.Tensor.OpenMPS.CutReducedState
+import QICLean.Entropy.Renyi.Tail
+import QICLean.ManyBody.Entropy.Filter.Optimizer
+import QICLean.ManyBody.Entropy.RegionEntropy
 
 /-!
 # Rényi entropy obstruction to efficient MPS approximation
@@ -20,11 +23,89 @@ sign of the logarithmic error term and the two-boundary factor for interior
 blocks, documented in `docs/paper-gaps/swvc08_renyi_bond_dimension_sign.tex`
 and `docs/paper-gaps/swvc08_interior_block_bond_rank.tex`. These corrections
 leave the qualitative obstruction unchanged.
+
+It also contains the following results.
+
+* `TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log`,
+  `TNLean.MPS.AreaLaw.IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log`: Rényi lower
+  bounds for matrix product state approximation.
 -/
 
 open scoped ComplexOrder
 
 namespace TNLean.MPS.AreaLaw
+
+section RenyiApproximationLowerBound
+
+/-!
+## Rényi lower bounds for matrix product state approximation
+
+Approximation by an open-boundary matrix product state forces Rényi bounds
+on every contiguous block. A prefix cut gives a logarithmic bond bound; a
+block with two boundary cuts gives twice the logarithm. Empty blocks, the
+whole chain, and chains of length zero or one are included. Only the target
+vector is normalized. Source: SWVC08, arXiv:0705.0292v2, Eq. (eps-lower),
+lines 269–270 and 333–345.
+
+**Local fix (error-term sign):** the corrected logarithmic term is documented
+in `docs/paper-gaps/swvc08_renyi_bond_dimension_sign.tex`.
+-/
+
+/-- The corrected Rényi lower bound at an internal chain cut. The approximating
+MPS need not be normalized. Source: SWVC08, arXiv:0705.0292v2,
+Eq. (eps-lower) and lines 333–345. -/
+theorem IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log
+    {L q D : ℕ} {ψ φ : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (hψ : ‖ψ‖ = 1)
+    {k : ℕ} (hk0 : 0 < k) (hkL : k < L)
+    {α δ : ℝ} (hα : 1 < α) (hδ : δ < 1)
+    (herror : Matrix.rectangularTraceNorm
+      (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
+    renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k))
+      (ManyBody.regionState_posSemidef _ _).isHermitian α +
+      α / (α - 1) * Real.log (1 - δ) ≤ Real.log D := by
+  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) ψ
+  exact hρ.renyiEntropy_add_log_error_le_log_rank_of_rectangularTraceNorm
+    (by simp [ManyBody.trace_regionState, hψ])
+    (ManyBody.regionState_posSemidef _ φ).isHermitian
+    (hφ.rank_regionState_leftBlock_le hk0 hkL) hα hδ
+    ((rectangularTraceNorm_regionState_leftBlock_sub_le ψ φ k).trans herror)
+
+/-- The corrected Rényi lower bound for any contiguous block, including empty
+blocks, the whole chain, and chains of length zero or one. The approximating
+MPS need not be normalized.
+Source: SWVC08, arXiv:0705.0292v2, lines 269–270 and 333–345.
+
+**Local fix (interior-block rank):** the right side is twice the logarithm of
+the bond dimension. The source's single-bond expression applies to a prefix
+or suffix; see `docs/paper-gaps/swvc08_interior_block_bond_rank.tex`. -/
+theorem IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log
+    {L q D : ℕ} {ψ φ : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (hψ : ‖ψ‖ = 1)
+    {a b : ℕ} (hab : a ≤ b)
+    {α δ : ℝ} (hα : 1 < α) (hδ : δ < 1)
+    (herror : Matrix.rectangularTraceNorm
+      (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
+    renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q)
+      ψ (leftBlock L b \ leftBlock L a))
+      (ManyBody.regionState_posSemidef _ _).isHermitian α +
+      α / (α - 1) * Real.log (1 - δ) ≤ 2 * Real.log D := by
+  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q)
+    (leftBlock L b \ leftBlock L a) ψ
+  have hbound := hρ.renyiEntropy_add_log_error_le_log_rank_of_rectangularTraceNorm
+    (by simp [ManyBody.trace_regionState, hψ])
+    (ManyBody.regionState_posSemidef _ φ).isHermitian
+    (hφ.rank_regionState_sdiff_leftBlock_le_max_sq hab) hα hδ
+    ((Entropy.rectangularTraceNorm_regionState_sub_le ψ φ _).trans herror)
+  have hlog : Real.log (max 1 D : ℕ) = Real.log D := by
+    rcases Nat.eq_zero_or_pos D with rfl | hD
+    · simp
+    · rw [max_eq_right hD]
+  simpa only [Nat.cast_pow, Real.log_pow, Nat.cast_ofNat, hlog] using hbound
+
+end RenyiApproximationLowerBound
+
+section RenyiObstruction
 
 /-- Efficient approximation forces a uniform logarithmic Rényi entropy bound
 on any chosen contiguous blocks. Source: SWVC08, arXiv:0705.0292v2,
@@ -130,5 +211,7 @@ theorem not_isEfficientlyApproximableByMPS_of_renyi_power_growth
   apply (hx₀ _ hxN).trans_le
   apply le_trans ?_ (hentropy N hN₀)
   simpa only [mul_assoc] using hpow
+
+end RenyiObstruction
 
 end TNLean.MPS.AreaLaw

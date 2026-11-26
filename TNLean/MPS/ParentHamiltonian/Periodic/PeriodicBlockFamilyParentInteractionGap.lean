@@ -6,8 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicFamilyInteractionCriterion
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicSectorRepresentatives
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicGroundSpaceIndependence
-import TNLean.MPS.ParentHamiltonian.Interaction.CanonicalGroundSpaceTransport
-import TNLean.MPS.ParentHamiltonian.Interaction.OpenInteraction
+import TNLean.MPS.ParentHamiltonian.Interaction.PrimitiveFamilyIntersection
 
 /-!
 # Canonical interactions and pure-state gaps for periodic families

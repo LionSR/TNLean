@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.PrimaryBirthTemplates
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.BeltReplacementTemplates
 import TNLean.PEPS.AreaLaw.BirthRegions.BirthTemplates.DescendantCutClearance
-import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairCharacteristicLength
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairBirthRank
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.TwoFamilyExplicitThresholds
 

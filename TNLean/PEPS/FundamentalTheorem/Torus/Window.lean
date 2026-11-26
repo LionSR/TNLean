@@ -18,7 +18,6 @@ import TNLean.PEPS.FundamentalTheorem.Torus.Window.CornerExtensionAdditivity
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.CornerExtensionTransitivity
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.CornerRegion
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.CrossTensorAlgebra
-import TNLean.PEPS.FundamentalTheorem.Torus.Window.CrossTensorDimensions
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.CrossTensorEndOperation
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.CrossTensorRealization
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.CrossTensorTransfer
@@ -30,15 +29,12 @@ import TNLean.PEPS.FundamentalTheorem.Torus.Window.EndWindowCoupling
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.Family
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.FamilyCrossing
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.GaugeUniqueness
-import TNLean.PEPS.FundamentalTheorem.Torus.Window.InteriorBondInsertion
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.PhysicalOperation
-import TNLean.PEPS.FundamentalTheorem.Torus.Window.RealizationWitness
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.SingleBondPeeling
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.SingleCrossingObstruction
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.StaircaseChaining
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.VirtualOperationFamily
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.WindowComplement
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.WindowExtension
-import TNLean.PEPS.FundamentalTheorem.Torus.Window.WindowIndependence
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.WindowRegion
 import TNLean.PEPS.FundamentalTheorem.Torus.Window.Witness

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.StandardForm.SuppliedTwoBlockStandardForm
-import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSign
+import TNLean.MPS.MPU.Symmetry.TimeReversal.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.Symmetry.TimeReversal.SuppliedTimeReversalCriterion
 
 /-!

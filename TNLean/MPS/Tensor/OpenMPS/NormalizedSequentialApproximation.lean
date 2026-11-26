@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
-import TNLean.MPS.Tensor.OpenMPS.NormalizedVariableTruncation
+import TNLean.MPS.Tensor.VaryingBond.SequentialTruncation
 import QICLean.ManyBody.Entropy.ViableSubspaceEntropy
 import QICLean.Channel.Schmidt.MaximalOverlap
 

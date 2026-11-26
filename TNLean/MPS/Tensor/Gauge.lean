@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Tensor.Gauge.CoisometryGauge
 import TNLean.MPS.Tensor.Gauge.FiniteLength
-import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
 import TNLean.MPS.Tensor.Gauge.GaugeUniqueness
 import TNLean.MPS.Tensor.Gauge.JointOneSiteSpan
 import TNLean.MPS.Tensor.Gauge.OnSiteSymmetry

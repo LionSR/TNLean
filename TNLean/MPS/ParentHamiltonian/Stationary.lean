@@ -12,7 +12,6 @@ import TNLean.MPS.ParentHamiltonian.Stationary.FaithfulParentFiniteGap
 import TNLean.MPS.ParentHamiltonian.Stationary.FaithfulParentGroundStates
 import TNLean.MPS.ParentHamiltonian.Stationary.FaithfulParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Stationary.FaithfulPeriodicGroundSpace
-import TNLean.MPS.ParentHamiltonian.Stationary.QuasiLocalExpectationEquality
 import TNLean.MPS.ParentHamiltonian.Stationary.StationaryLocalSupport
 import TNLean.MPS.ParentHamiltonian.Stationary.StationaryParentFiniteGap
 import TNLean.MPS.ParentHamiltonian.Stationary.StationarySupportCompression

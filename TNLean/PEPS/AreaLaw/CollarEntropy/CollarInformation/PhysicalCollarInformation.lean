@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.CollarInformation
 import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.PhysicalBoxBootstrap
 import TNLean.PEPS.AreaLaw.CollarEntropy.CollarInformation.TemplateFinalInformation
-import TNLean.PEPS.AreaLaw.CollarEntropy.BoxExponent.BoxClearanceComparison
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

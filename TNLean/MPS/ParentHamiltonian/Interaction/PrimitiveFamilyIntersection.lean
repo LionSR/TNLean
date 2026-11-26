@@ -12,7 +12,6 @@ import QICLean.Spectral.Gap.PositiveComparisonGap
 import QICLean.ManyBody.Hamiltonian.KernelGap
 import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
-import TNLean.MPS.ParentHamiltonian.Interaction.OpenInteraction
 
 /-!
 # Primitive-family intersections from support-space independence
@@ -36,7 +35,59 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4, Proposition
 forintersection, Lemmas disjoint and intersectionequivalence, and
 Lemma existenceinteraction in Section 5, equations (3.10)--(3.13).
+
+It also contains the following results.
+
+* `MPSTensor.toMatrix'_parentInteraction_eq_of_groundSpaceES_eq`,
+  `MPSTensor.hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq`: canonical interactions
+  determined by their local support.
+* `exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction`
+  (in `MPSTensor`):
+  the positive canonical interaction from exact open kernels.
 -/
+
+section OpenInteraction
+
+/-!
+## The positive canonical interaction from exact open kernels
+
+An exact kernel identity for the canonical range-\(R\) open Hamiltonian gives
+an explicit positive local interaction with those same open kernels. The
+witness is recorded as the canonical projection matrix itself. This equality
+retains the literal local support when subsequent gap and state arguments
+use the constructed interaction.
+
+Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma `existenceinteraction`,
+lines 2195--2230, the orthogonal-complement construction of the interaction.
+-/
+
+open scoped ComplexOrder
+namespace MPSTensor
+variable {d D R : ℕ}
+
+open ManyBody.Interaction (chainTranslates) in
+/-- Exact kernels of the Hamiltonians of the parent interaction on the open chain give a positive
+semidefinite interaction equal to the matrix of the canonical parent interaction, with the same
+kernels at every volume at least its range. Source: Nachtergaele, arXiv:cond-mat/9410110,
+Lemma `existenceinteraction`, lines 2195--2230. -/
+theorem exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction
+    (A : MPSTensor d D)
+    (hKernel : ∀ N, R ≤ N →
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
+        groundSpaceES A N) :
+    ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
+      h = LinearMap.toMatrix' (parentInteraction A R) ∧ h.PosSemidef ∧
+      ∀ N, R ≤ N →
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+          groundSpaceES A N :=
+  ⟨LinearMap.toMatrix' (parentInteraction A R), rfl, posSemidef_toMatrix'_parentInteraction A R,
+    hKernel⟩
+
+end MPSTensor
+
+end OpenInteraction
+
+section PrimitiveFamilyIntersection
 
 open Filter
 open scoped Matrix BigOperators ComplexOrder
@@ -138,3 +189,45 @@ theorem exists_positive_parent_interaction_of_primitive_overlap
   exact ⟨R, hR, h, hh, hKernelInteraction⟩
 
 end MPSTensor
+
+end PrimitiveFamilyIntersection
+
+section CanonicalGroundSpaceTransport
+
+/-!
+## Canonical interactions determined by their local support
+
+Equal local boundary spaces determine equal canonical interaction matrices
+and equal open Hamiltonians. The tensors may have different bond dimensions.
+Only the physical support space enters the canonical projection.
+
+Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma `existenceinteraction`,
+lines 2195--2230, the orthogonal-complement construction of the interaction.
+-/
+
+namespace MPSTensor
+variable {d DA DB R : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
+
+/-- Equal local support spaces give equal canonical interaction matrices,
+also for tensors of different bond dimensions. Source: Nachtergaele,
+arXiv:cond-mat/9410110, Lemma `existenceinteraction`, lines 2195--2230. -/
+theorem toMatrix'_parentInteraction_eq_of_groundSpaceES_eq
+    (h : groundSpaceES A R = groundSpaceES B R) :
+    LinearMap.toMatrix' (parentInteraction A R) = LinearMap.toMatrix' (parentInteraction B R) := by
+  apply Matrix.toEuclideanLin.injective
+  rw [toEuclideanLin_toMatrix'_parentInteraction, toEuclideanLin_toMatrix'_parentInteraction, h]
+
+/-- Equal local support spaces give equal Hamiltonians of the parent interaction on the open
+chain at every volume, independently of the bond dimensions. Source: Nachtergaele,
+arXiv:cond-mat/9410110, Lemma `existenceinteraction`, lines 2195--2230. -/
+theorem hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq
+    (h : groundSpaceES A R = groundSpaceES B R) (N : ℕ) :
+    (parentChainInteraction A R N).hamiltonian = (parentChainInteraction B R N).hamiltonian := by
+  have hP : parentInteraction A R = parentInteraction B R := by
+    simp only [parentInteraction, h]
+  unfold parentChainInteraction
+  rw [hP]
+
+end MPSTensor
+
+end CanonicalGroundSpaceTransport

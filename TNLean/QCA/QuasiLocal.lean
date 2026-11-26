@@ -13,7 +13,6 @@ import TNLean.QCA.QuasiLocal.AlgebraicTranslation
 import TNLean.QCA.QuasiLocal.BipartiteQuasiLocalEmbedding
 import TNLean.QCA.QuasiLocal.BlockingIntervalCoordinates
 import TNLean.QCA.QuasiLocal.BlockingTranslation
-import TNLean.QCA.QuasiLocal.ConsecutivePairObservables
 import TNLean.QCA.QuasiLocal.DisjointSupport
 import TNLean.QCA.QuasiLocal.IntervalTranslation
 import TNLean.QCA.QuasiLocal.LocalLimit
@@ -23,6 +22,4 @@ import TNLean.QCA.QuasiLocal.QuasiLocalBlocking
 import TNLean.QCA.QuasiLocal.QuasiLocalCommutant
 import TNLean.QCA.QuasiLocal.QuasiLocalInterval
 import TNLean.QCA.QuasiLocal.QuasiLocalTranslation
-import TNLean.QCA.QuasiLocal.RelativeCommutant
 import TNLean.QCA.QuasiLocal.SingletonGeneration
-import TNLean.QCA.QuasiLocal.SupportIntersection

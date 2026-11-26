@@ -77,7 +77,7 @@ is deliberately source-faithful.
   `MPOTensor.transported_source_factor_premises_at_selected_ranks` and
   `MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges`.
 - **Defined in:** `TNLean/MPS/MPU/StandardForm/VirtualSourceFactorTransport.lean` and
-  `TNLean/MPS/MPU/StandardForm/SelectedSourceFactorVirtualGauge.lean`.
+  `TNLean/MPS/MPU/StandardForm/VirtualSourceFactorTransport.lean`.
 - **Meaning:** If two simple canonical-form-II tensors are related by a
   unitary virtual conjugation, their selected source factors obey four exact
   identities after identifying their equal source-cut ranks. The two
@@ -247,7 +247,7 @@ is deliberately source-faithful.
   lines 248--261.
 - **Sanctioned bridge:**
   `MPSTensor.IsSpectrallyPeriodic.exists_isPeriodic_tpGauge` in
-  `TNLean/MPS/CanonicalForm/Periodic/Normalization.lean` gives a pure-similarity
+  `TNLean/MPS/CanonicalForm/Periodic/SectorNormalization.lean` gives a pure-similarity
   trace-preserving representative. For a multiplicity-bearing sector
   decomposition, `MPSTensor.SectorDecomposition.exists_isPeriodic_replaceBasis`
   applies these gauges simultaneously and leaves all multiplicities and weights
@@ -2239,7 +2239,7 @@ operators on the configurations. The scope of the local channel model relative t
   from QICLean and their ball expectations
   `ManyBody.regionExpectation (ManyBody.graphBall G aᵢ l) kᵢ`.
 - **Defined in:** `TNLean/PEPS/AreaLaw/Operators/Constraints/PositiveConstraints.lean`; the root channels of
-  Lemma 4.4 in `TNLean/PEPS/AreaLaw/Operators/Constraints/QuasilocalRoots.lean`.
+  Lemma 4.4 in `TNLean/PEPS/AreaLaw/Operators/Constraints/PositiveConstraints.lean`.
 - **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
   centered at the ground vector; the positive contractions annihilate `Ω`, their sum
   dominates `c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)`, and the ball tails decay like
@@ -2420,7 +2420,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 ### `ManyBody.ChainInteraction.IsAdmissibleNet` and `IsAdmissibleSolver`
 
-- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/SizeTrimming.lean`.
+- **Defined in:** `TNLean/MPS/AreaLaw/GroundStateAlgorithm/ViableVector/Selection.lean`.
 - **Meaning:** `IsAdmissibleNet` says that for every bond dimension `m` up to the
   uniform cut bound, the net covers the trace-norm unit ball of boundary densities
   within `c / (2L)`, `c = (Δ / 169)²`. `IsAdmissibleSolver` says that at every bond
@@ -3612,7 +3612,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ## Partial rectangle layer entropy
 
 - **Declaration:** `ManyBody.IntRect.partial_row_entropy_le`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Polygons/SafeRectangles/WeakRectanglePartialRowEntropy.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Polygons/Templates/TemplateEntropy.lean`.
 - **Meaning:** let `Q` be a nonempty integer rectangle of size `s`, let
   `1 ≤ j ≤ s`, and let `Y ⊆ Q^{+j} \ Q^{+(j−1)}` be arbitrary. For a
   normalized pure state `Ω` with local dimension `q ≥ 1` and any physical
@@ -3652,7 +3652,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ## Binary-entropy cost of the rounded bootstrap bands
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/CollarEntropy/BoxExponent/BootstrapBinaryEntropyCost.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/CollarEntropy/BoxExponent/BootstrapComparisonBudget.lean`.
 - **Meaning:** one threshold, chosen for a fixed scanner exponent tuple before
   the auxiliary fraction and all physical data, gives positive rounded band
   count `K = ⌊L/(8m)⌋`, positive metric weight `a = 4/K`, and

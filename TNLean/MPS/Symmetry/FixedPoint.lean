@@ -17,7 +17,6 @@ import TNLean.MPS.Symmetry.FixedPoint.BondProductParentHamiltonian
 import TNLean.MPS.Symmetry.FixedPoint.BondProductPhysicalParentHamiltonian
 import TNLean.MPS.Symmetry.FixedPoint.BondProductSpectralGap
 import TNLean.MPS.Symmetry.FixedPoint.BondRegrouping
-import TNLean.MPS.Symmetry.FixedPoint.BondRegroupingSymmetry
 import TNLean.MPS.Symmetry.FixedPoint.EmbeddedFixedPointTensor
 import TNLean.MPS.Symmetry.FixedPoint.FixedPointGappedPath
 import TNLean.MPS.Symmetry.FixedPoint.FixedPointParentIdentification

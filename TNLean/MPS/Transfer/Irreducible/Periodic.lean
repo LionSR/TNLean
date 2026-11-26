@@ -20,7 +20,15 @@ used by the periodic form theory (arXiv:1708.00029, Section 2.1).
 The predicate `IsSpectrallyPeriodic` describes irreducible spectral-radius-one
 blocks before trace-preserving normalization, whereas `IsPeriodic` also includes
 left-canonical normalization.
+
+It also contains the following results.
+
+* `MPSTensor.IsPeriodic.physDim_ne_zero`: positive physical dimension of a normalized periodic
+  tensor.
 -/
+
+section Periodic
+
 open scoped Matrix BigOperators Matrix.Norms.Operator Kraus
 open Kraus (wordOfBlock blockTensor)
 
@@ -384,3 +392,34 @@ theorem IsSpectrallyPeriodic.period_eq_of_peripheralEigenvalues_eq
     (by rw [← hA.peripheral_eq, ← hB.peripheral_eq]; exact hSpec)
 
 end MPSTensor
+
+end Periodic
+
+section PeriodicPhysicalDimension
+
+/-!
+## Positive physical dimension of a normalized periodic tensor
+
+The prescribed peripheral spectrum makes the bond space nonzero. The
+left-canonical normalization then excludes an empty physical alphabet.
+
+Source: arXiv:1708.00029, Section 2.1.
+-/
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-- A normalized periodic tensor has nonzero physical dimension. An empty
+physical alphabet would make the left-canonical sum zero, whereas its bond
+dimension is nonzero.
+
+Source: arXiv:1708.00029, Section 2.1, left-canonical normalization. -/
+theorem IsPeriodic.physDim_ne_zero {m : ℕ} {A : MPSTensor d D}
+    (hA : IsPeriodic m A) : d ≠ 0 := by
+  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
+  exact hA.leftCanonical.physDim_ne_zero
+
+end MPSTensor
+
+end PeriodicPhysicalDimension

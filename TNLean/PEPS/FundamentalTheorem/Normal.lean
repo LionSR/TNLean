@@ -16,12 +16,9 @@ import TNLean.PEPS.FundamentalTheorem.Normal.NormalBondDimension
 import TNLean.PEPS.FundamentalTheorem.Normal.NormalComparisonScalar
 import TNLean.PEPS.FundamentalTheorem.Normal.NormalEdgeGauge
 import TNLean.PEPS.FundamentalTheorem.Normal.NormalEdgeGaugeFamily
-import TNLean.PEPS.FundamentalTheorem.Normal.NormalEdgeSingleCrossing
 import TNLean.PEPS.FundamentalTheorem.Normal.NormalFundamentalTheorem
 import TNLean.PEPS.FundamentalTheorem.Normal.NormalSquareEdgeCoeff
-import TNLean.PEPS.FundamentalTheorem.Normal.NormalSquareInteriorAbsorbedFamily
 import TNLean.PEPS.FundamentalTheorem.Normal.NormalSquareUnconditionalFundamentalTheorem
-import TNLean.PEPS.FundamentalTheorem.Normal.RegionComplementComparison
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionTransferCovariance
 import TNLean.PEPS.FundamentalTheorem.Normal.RegionTransportData

@@ -14,7 +14,6 @@ import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
 import TNLean.MPS.Transfer.Irreducible.FixedPointProjection
 import TNLean.MPS.Transfer.Irreducible.Periodic
 import TNLean.MPS.Transfer.Irreducible.PeriodicBlocking
-import TNLean.MPS.Transfer.Irreducible.PeriodicPhysicalDimension
 import TNLean.MPS.Transfer.Irreducible.PeriodicRotation
 import TNLean.MPS.Transfer.Irreducible.PerronGauge
 import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport

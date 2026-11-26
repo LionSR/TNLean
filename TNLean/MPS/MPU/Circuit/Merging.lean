@@ -12,7 +12,6 @@ import TNLean.MPS.MPU.Circuit.Merging.BalancedIntervalDilation
 import TNLean.MPS.MPU.Circuit.Merging.BondDilationCircuit
 import TNLean.MPS.MPU.Circuit.Merging.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.Circuit.Merging.EncodedUniformMergingCircuit
-import TNLean.MPS.MPU.Circuit.Merging.ExactCleanAmplificationCircuit
 import TNLean.MPS.MPU.Circuit.Merging.ExactUniformMerging
 import TNLean.MPS.MPU.Circuit.Merging.OrthogonalIsometrySwap
 import TNLean.MPS.MPU.Circuit.Merging.PermutedEncodedMergingCircuit

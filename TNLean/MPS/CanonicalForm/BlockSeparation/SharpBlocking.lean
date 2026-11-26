@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import QICLean.Channel.KrausMap.KrausGauge
 import TNLean.MPS.CanonicalForm.BNTPresentation.Refinement
 import TNLean.MPS.CanonicalForm.BlockSeparation.DirectSumSelectors
-import TNLean.MPS.CanonicalForm.BlockSeparation.BNTDirectSum
 import TNLean.MPS.CanonicalForm.BlockSeparation.SimultaneousBlocking
 import TNLean.MPS.Tensor.Gauge.WordTupleGauge
 

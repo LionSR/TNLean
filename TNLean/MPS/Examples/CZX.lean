@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Examples.CZX
 
-import TNLean.MPS.Examples.CZX.CZXAnomaly
 import TNLean.MPS.Examples.CZX.CZXAnomalyClass
 import TNLean.MPS.Examples.CZX.CZXDecoratedFusion
 import TNLean.MPS.Examples.CZX.CZXDecoratedTensor

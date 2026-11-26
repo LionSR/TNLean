@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.NormalBlocks.FaithfulStationaryClosure
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureDecomposition
-import TNLean.MPS.CanonicalForm.Periodic.BlockDecomposition
+import TNLean.MPS.CanonicalForm.Periodic.SectorNormalization
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.PeriodicBlockedGroundSpace
 
 /-!

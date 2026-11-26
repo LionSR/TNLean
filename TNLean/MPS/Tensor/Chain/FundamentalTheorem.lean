@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Chain.AlgebraIsomorphism
-import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
+import TNLean.MPS.Tensor.Gauge.FiniteLength
 
 /-!
 # Fundamental Theorem for injective MPS chains

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.GHZ
 import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs
 import TNLean.MPS.Tensor.Gauge.OnSiteSymmetry
-import TNLean.MPS.Examples.ZMod2
+import QICLean.Representation.ZMod2Representation
 
 /-!
 # GHZ state as a Matrix Product State

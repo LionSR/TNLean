@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import QICLean.Analysis.Isometry.UnitaryKronecker
 import TNLean.MPS.MPU.Simple.SourceFactorChoice
 import TNLean.MPS.MPU.StandardForm.TwoSiteStandardForm
-import TNLean.MPS.MPU.StandardForm.FundamentalTheoremGatesNecessity
 import TNLean.MPS.MPU.StandardForm.FundamentalTheoremGatesBlocked
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 

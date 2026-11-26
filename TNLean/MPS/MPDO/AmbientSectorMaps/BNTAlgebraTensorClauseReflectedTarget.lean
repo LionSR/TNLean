@@ -8,7 +8,7 @@ import TNLean.MPS.MPDO.AmbientSectorMaps.BNTAlgebraTensorClauseConditionalPhysic
 import TNLean.MPS.MPDO.AmbientSectorMaps.BNTAlgebraTensorClauseSpectrum
 import TNLean.MPS.MPDO.AmbientSectorMaps.BNTAlgebraTensorClauseCorner
 import TNLean.MPS.MPDO.Vertical.CPSVOriginalSpaceLemmaL
-import TNLean.MPS.MPDO.Vertical.TwoSitePrefixReflectedMarkedChain
+import TNLean.MPS.MPDO.Vertical.FigureEightPairwise
 
 /-!
 # Unitary sector gauges from the mixed-prefix Gram identity

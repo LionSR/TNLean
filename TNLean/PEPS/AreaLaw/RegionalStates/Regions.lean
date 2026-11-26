@@ -11,15 +11,10 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ConditionalEstimates
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.Cylinder
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GapMarginalCloseness
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellPrevector
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughUpper
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.NestedCylinderOrthogonalization
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RegionalEntropyContinuity
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RegionalReindex
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RegionalStates
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.RotatedChainRule
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.SelectedSchmidtEntropyBounds
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary

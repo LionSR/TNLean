@@ -11,11 +11,9 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.Representation.ActionCommonBlocking
 import TNLean.MPS.MPU.Representation.DaggerFusionCompatibility
 import TNLean.MPS.MPU.Representation.DaggerFusionScalars
-import TNLean.MPS.MPU.Representation.DaggerInverse
 import TNLean.MPS.MPU.Representation.DaggerInverseGauge
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO.ArbitraryBoundary
-import TNLean.MPS.MPU.Representation.GroupCocycleMPO.FusionAlgebra
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO.FusionTensors
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO.Instances
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO.PBCGroupProjector
