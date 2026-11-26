@@ -65,7 +65,7 @@ cd docbuild && lake build TNLean:docs
 
 | Workflow | Trigger | What it does |
 |----------|---------|-------------|
-| `blueprint.yml` | Every push to `main` | Builds blueprint, pushes to `gh-pages` |
+| `blueprint.yml` | Nightly, called by `nightly.yml` (19:23 UTC) + manual | Builds blueprint, deploys Pages |
 | `docgen.yml` | Weekly (Sunday 06:00 UTC) + manual | Full build + API docs, pushes to `gh-pages` |
 
 To manually trigger docgen from the CLI:

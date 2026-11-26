@@ -1,0 +1,236 @@
+name: Nightly CI
+
+# The integration pipeline. Pull requests run only the light checks of
+# pr-ci.yml (changed modules, lint, source-level policies), so the whole
+# library is built and the blueprint is rendered and tested here, once a
+# night on main: the root `lake build`, the compiled declaration checks, the
+# diagram and browser tests, the print volumes, and the publication of the
+# site. A failed run on main starts nightly-fix.yml, whose agent opens a
+# repair pull request and dispatches this workflow on its branch to verify
+# it. See docs/ci-automation.md.
+
+on:
+  schedule:
+    # 19:23 UTC, off the hour to avoid the scheduler's busiest minutes.
+    - cron: '23 19 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Run even when this commit already passed a nightly run
+        type: boolean
+        default: false
+
+# A running main build is never cancelled, so it finishes and saves its build
+# cache; a newer verification run of a repair branch replaces an older one.
+concurrency:
+  group: nightly-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
+# Build-cache policy: this workflow's build of main is the only writer of the
+# Lean build cache; pull requests restore it read-only (pr-ci.yml).
+# lean-action's built-in GitHub cache is disabled because it saved a ~2.4 GB
+# entry per run, which cycled main's entry out of the 10 GB repository cache
+# budget. Mathlib and its dependencies are intentionally excluded:
+# `lake exe cache get` (run inside lean-action) restores them faster than a
+# GitHub cache of that size could.
+env:
+  BUILD_CACHE_PATHS: |
+    .lake/build
+    .lake/packages/Gametheory/.lake/build
+    .lake/packages/checkdecls/.lake/build
+    .lake/packages/qiclean/.lake/build
+    .lake/packages/cslib/.lake/build
+
+jobs:
+  # Find the last commit of main that passed this workflow. A scheduled run
+  # on that same commit has nothing new to check and is skipped; otherwise
+  # the commit is the base for the changed-file checks and the ratchets.
+  plan:
+    name: Plan the nightly run
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      run: ${{ steps.plan.outputs.run }}
+      base: ${{ steps.plan.outputs.base }}
+    steps:
+      - name: Find the last passing nightly commit
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          set -euo pipefail
+          base="$(gh api \
+            "repos/$GITHUB_REPOSITORY/actions/workflows/nightly.yml/runs?branch=main&status=success&per_page=1" \
+            --jq '.workflow_runs[0].head_sha // ""')"
+          [[ "$base" =~ ^[0-9a-f]{40}$ ]] || base=""
+          run=true
+          if [ "$GITHUB_EVENT_NAME" = schedule ] && [ "$FORCE" != true ] && [ "$base" = "$GITHUB_SHA" ]; then
+            run=false
+            echo "::notice::$GITHUB_SHA already passed a nightly run; nothing to do."
+          fi
+          {
+            echo "run=$run"
+            echo "base=$base"
+          } >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    env:
+      BASE_SHA: ${{ needs.plan.outputs.base }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Restore Lean build cache
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ env.BUILD_CACHE_PATHS }}
+          key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
+          restore-keys: |
+            tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-
+
+      - uses: leanprover/lean-action@v1
+        with:
+          build: false
+          use-github-cache: false
+
+      - name: Build Lean project and capture timings
+        id: lean-build
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          {
+            lake build
+            lake build lint_style
+          } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      # Saved as soon as the library is built, so a failure of a later check
+      # does not cost the next pull requests their cache. A cancelled or
+      # failed build can leave partially written `.olean` files and saves
+      # nothing.
+      - name: Save Lean build cache (main only)
+        if: success() && github.ref == 'refs/heads/main'
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ env.BUILD_CACHE_PATHS }}
+          key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
+
+      # Elaborate, with warnings as errors, every production file changed
+      # since the last passing nightly commit. Pull requests check their own
+      # edits the same way; this catches what a budget cut short there.
+      # Selection: scripts/ci_lean_checks.py.
+      - name: Check changed Lean files strictly
+        timeout-minutes: 120
+        run: |
+          set -eo pipefail
+          if [ -n "$BASE_SHA" ] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags origin "$BASE_SHA" || BASE_SHA=""
+          fi
+          python3 scripts/ci_lean_checks.py strict --jobs 3
+
+      - name: Run text-based style linter
+        if: ${{ !cancelled() && steps.lean-build.outcome == 'success' }}
+        run: lake exe lint_style --github
+
+      # `checkdecls` imports TNLean modules to resolve every tagged declaration,
+      # so it runs after the project build.
+      - name: Generate Blueprint Lean declaration list
+        if: ${{ !cancelled() && steps.lean-build.outcome == 'success' }}
+        run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
+
+      - name: Check Blueprint Lean declarations
+        if: ${{ !cancelled() && steps.lean-build.outcome == 'success' }}
+        timeout-minutes: 10
+        run: lake exe checkdecls blueprint/lean_decls
+
+      - name: Generate paper-gap Lean declaration list
+        if: ${{ !cancelled() && steps.lean-build.outcome == 'success' }}
+        run: python3 scripts/paper_gap_leanid_sync.py --root . --output "$RUNNER_TEMP/paper_gap_leanid_decls"
+
+      - name: Check paper-gap Lean declarations
+        if: ${{ !cancelled() && steps.lean-build.outcome == 'success' }}
+        timeout-minutes: 10
+        run: lake exe checkdecls "$RUNNER_TEMP/paper_gap_leanid_decls"
+
+      # The slowest modules of the whole library, for the job summary.
+      - name: Report compilation-time hotspots
+        if: ${{ !cancelled() && steps.lean-build.outcome == 'success' }}
+        run: |
+          {
+            echo '### Slowest modules'
+            echo '```'
+            python3 scripts/lake_build_hotspots.py report "$RUNNER_TEMP/lake-build.log" --limit 20 || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # The whole-repository policies. Each pull request passes them against its
+  # own base; two pull requests merged side by side can still break one
+  # together, so the merged tree is checked again.
+  policies:
+    name: Check Lean module policies
+    needs: plan
+    if: needs.plan.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      BASE_SHA: ${{ needs.plan.outputs.base }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Check generated import aggregators
+        run: PYTHONPATH=scripts python3 scripts/generate_import_aggregators.py --check
+
+      - name: Check docbuild manifest against the root manifest
+        if: ${{ !cancelled() }}
+        run: python3 scripts/check_docbuild_manifest.py --root .
+
+      - name: Run oversized-file guard
+        if: ${{ !cancelled() }}
+        run: >
+          PYTHONPATH=scripts python3 scripts/check_oversized_lean_files.py
+          --root .
+          --import-only-aggregator TNLean.lean
+
+      # The recorded violations and ceilings may only shrink against the last
+      # passing nightly commit; without one the previous commit is the base.
+      - name: Check import layers, pass-throughs and small modules
+        if: ${{ !cancelled() }}
+        run: |
+          base="$BASE_SHA"
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+            base="HEAD^"
+          fi
+          python3 scripts/check_import_layers.py --root . --base-ref "$base"
+          python3 scripts/check_pass_through_declarations.py --root . --base-ref "$base"
+          python3 scripts/check_small_lean_modules.py --root . --base-ref "$base"
+
+  # The blueprint half of the pipeline, in the one workflow that also
+  # publishes: the paper-gap references, both print volumes, the web pages,
+  # the diagram and browser tests, and, on main, the Pages deployment.
+  site:
+    name: Build, test and publish blueprint
+    needs: plan
+    if: needs.plan.outputs.run == 'true'
+    uses: ./.github/workflows/blueprint.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      actions: read

@@ -42,9 +42,8 @@ normalized to plain `TNLean/...` citations before scanning.
 
 The audit tool **never writes to GitHub**. It reads exported issue JSON (produced
 by `gh issue list --json ...`) and writes analysis output to stdout or to a
-local file. The CI workflow summarises the results and uploads them as artifacts,
-but does not modify issue bodies, close issues, or post comments. Every flag is
-a suggestion for human review.
+local file. It does not modify issue bodies, close issues, or post comments.
+Every flag is a suggestion for human review.
 
 ## Running the audit locally
 
@@ -89,25 +88,10 @@ It constructs a synthetic issue referencing a bogus file
 (`` `definitely_not_a_real_declaration` ``), then verifies both are flagged.
 Exits 0 if everything works.
 
-## CI workflow
+## Running it
 
-The `stale-audit` job of `.github/workflows/housekeeping.yml` runs the audit
-automatically:
-
-- **Schedule:** Every Monday at 08:30 UTC (cron `30 8 * * 1`).
-- **Manual dispatch:** Supported via `workflow_dispatch`.
-- **Permissions:** `contents: read`, `issues: read`. The workflow never pushes
-  code or modifies issues.
-
-The workflow pipeline:
-
-1. Checkout `main` and set up Python 3.12.
-2. Export all open issues with `gh issue list` (up to 500).
-3. Run the audit twice: once with `--format json` (for the summary) and once in
-   text mode (for the human-readable log).
-4. Summarise the results and write them to the job's step summary.
-5. When flagged issues exist, upload the full audit report as a workflow
-   artifact (`stale-issue-audit-report`).
+The audit is run by hand when the issue list is triaged; no workflow runs it
+on a schedule.
 
 ## Maintainer triage policy
 
