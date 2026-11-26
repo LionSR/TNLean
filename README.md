@@ -10,8 +10,7 @@
   <p><b>Tensor-network theory and many-body area laws, formalized in Lean 4.</b></p>
 
   <p>
-    <a href="https://github.com/LionSR/TNLean/actions/workflows/pr-ci.yml"><img alt="PR CI" src="https://github.com/LionSR/TNLean/actions/workflows/pr-ci.yml/badge.svg" /></a>
-    <a href="https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml"><img alt="Compile blueprint" src="https://github.com/LionSR/TNLean/actions/workflows/blueprint.yml/badge.svg" /></a>
+    <a href="https://github.com/LionSR/TNLean/actions/workflows/nightly.yml"><img alt="Nightly CI" src="https://github.com/LionSR/TNLean/actions/workflows/nightly.yml/badge.svg?branch=main" /></a>
     <img alt="sorries" src="https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/sorries.json" />
     <img alt="axioms" src="https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/axioms.json" />
     <img alt="Lean" src="https://img.shields.io/endpoint?url=https://sirui-lu.com/TNLean/badges/lean.json" />

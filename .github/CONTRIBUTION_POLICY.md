@@ -62,8 +62,8 @@ contribution here is closed on sight and the account may be blocked. Maintainers
 exempt from the assignment requirement; the disclosure and accountability
 requirements bind every contributor.
 
-The project's own continuous-integration jobs — the linter autofix, blueprint
-sync, and housekeeping workflows — open pull requests without going through the
+The project's own continuous-integration jobs — the auto-fix and nightly-fix
+workflows — open pull requests without going through the
 template. Their disclosure is the workflow file itself, which names what runs
 and on what trigger; a maintainer remains accountable for what they merge.
 

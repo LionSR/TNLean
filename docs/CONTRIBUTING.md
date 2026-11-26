@@ -451,12 +451,14 @@ The following workflows run automatically:
 
 | Workflow | Trigger | What it does |
 |----------|---------|-------------|
-| **Lean CI** (`pr-ci.yml`, `build` job) | Push to `main`, PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Runs `lake build` with Mathlib cache |
+| **Lean CI** (`pr-ci.yml`, `build` job) | PRs touching `.lean`/`lakefile.toml`/`lean-toolchain` | Builds and strictly elaborates the changed modules within a time budget, runs the style linter; no root `lake build` |
+| **Nightly CI** (`nightly.yml`) | Nightly on `main` (19:23 UTC), manual | Root `lake build`, compiled declaration checks, whole-repository policies, and the blueprint build (`blueprint.yml`: print volumes, web pages, diagram and browser tests, site publication) |
+| **Nightly Fix** (`nightly-fix.yml`) | After a failed Nightly CI run | Lets the agent repair a failed run on the `nightly-fix` branch, verifies the repair with Nightly CI, and leaves a pull request for review |
 | **PR Review** (`pr-review.yml`) | After a successful PR CI run | Automated review for sorrys, Mathlib style, type safety, performance, modularity, documentation, plus blueprint/prose review |
 | **Issue Automation** (`issue-automation.yml`) | Issue opened/labeled/closed/reopened; PR opened/merged | Classifies new issues, posts Mathlib scouting reports, keeps tracking issues current (progress comments, sub-issue counts, `all-resolved` label — deterministic, no model), and scans merged PRs for follow-ups (deferred review feedback, new `sorry` markers, missing blueprint tags), filing them with the `follow-up` label |
-| **Blueprint Lint** (`pr-ci.yml`, `blueprint` job) | PRs touching blueprint or Lean files | Validates LaTeX blueprint for broken labels and references |
-| **Lean Module Policy** (`pr-ci.yml`, `file-length` job) | PRs and main pushes touching Lean policy paths | Blocks ordinary files above 1000 lines; validates exact import-only aggregator exemptions |
-| **Import Completeness** (`pr-ci.yml`, `file-length` job) | PRs and main pushes touching TNLean sources or generator files | Tests the import-aggregator generator and checks that the generated aggregators are current |
+| **Blueprint Lint** (`pr-ci.yml`, `blueprint` job) | PRs touching blueprint or Lean files | Lints picture and LaTeX sources and checks the declaration tags against the Lean sources; compiles no TeX |
+| **Lean Module Policy** (`pr-ci.yml`, `file-length` job) | PRs touching Lean policy paths; nightly on `main` | Blocks ordinary files above 1000 lines; validates exact import-only aggregator exemptions |
+| **Import Completeness** (`pr-ci.yml`, `file-length` job) | PRs touching TNLean sources or generator files; nightly on `main` | Tests the import-aggregator generator and checks that the generated aggregators are current |
 
 ### Generated import aggregators
 
