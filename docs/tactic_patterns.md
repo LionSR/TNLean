@@ -1095,11 +1095,11 @@ abstracted — record why, so it is not re-proposed).
   `exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact`
   (`CompactBlockParentGap.lean`), all under `TNLean/MPS/ParentHamiltonian/`.
 - **Abstraction:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` in
-  `QICLean/Spectral/Gap/CompactKernelGap.lean` (QICLean dependency); pass `H := fun x N => …` and
+  `QICLean/Spectral/Gap/EigenvalueGap.lean` (QICLean dependency); pass `H := fun x N => …` and
   `V := fun x N => (LinearMap.ker …)ᗮ` and prove only the local bound.
 - **Notes:** the three call sites were refactored on 2026-10-10. The open-chain variant in
   `CompactOpenParentGap.lean` fixes the tail at `R ≤ N` and the kernel-gap lemma in
-  `CompactKernelGap.lean` has no tail, so both keep the direct call to
+  `EigenvalueGap.lean` has no tail, so both keep the direct call to
   `exists_uniform_pos_nat_bounds`, now in QICLean
   (`QICLean/Analysis/Topology/CompactUniformBounds.lean`).
 
@@ -2440,7 +2440,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   (2026-10-02).
 - **Abstraction:**
   `ContinuousLinearMap.exists_uniform_norm_gap_of_compact` in
-  `QICLean/Spectral/Gap/CompactKernelGap.lean` (QICLean dependency).
+  `QICLean/Spectral/Gap/EigenvalueGap.lean` (QICLean dependency).
 - **Notes:** the bound follows from finite dimensionality; positivity,
   self-adjointness, and a supplied pointwise gap are unnecessary.
 
@@ -3251,7 +3251,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/Kraus/Wielandt/Primitivity/StronglyIrreducibleToFullWordSpan.lean` and
   `TNLean/Wielandt/Primitivity/TracePairing.lean` before promotion (2026-08-20).
 - **Abstraction:** `Kraus.sum_normSq_trace_conjTranspose_mul_evalWord` in
-  `QICLean/Kraus/TracePairing.lean` (QICLean dependency).
+  `QICLean/Kraus/Transfer.lean` (QICLean dependency).
 - **Notes:** the Kraus theorem owns the generic identity. The established
   `MPSTensor.sum_normSq_trace_conjTranspose_mul_evalWord` statement is a direct
   reformulation by definitional equality; the primitive full-word-span

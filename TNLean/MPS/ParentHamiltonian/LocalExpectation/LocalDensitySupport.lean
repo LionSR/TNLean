@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalFaithfulSupport
 import TNLean.MPS.Tensor.Defs
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableState
-import QICLean.Channel.Positive.PositiveFunctional
+import QICLean.Channel.ConditionalExpectation.PositiveConditionalExpectation
 import QICLean.Analysis.Optimization.SemidefiniteProgram
 import QICLean.Channel.Schwarz.Closure
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableQuasiLocalState

@@ -4,9 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.LinearIndependent.Lemmas
-import QICLean.Algebra.OperatorSchmidt.PrescribedFactors
-import QICLean.Algebra.OperatorSchmidt.Realignment
-import QICLean.Algebra.OperatorSchmidt.Reindex
+import QICLean.Algebra.OperatorSchmidt.Basic
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.ManyBody.Sites.Placement
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct

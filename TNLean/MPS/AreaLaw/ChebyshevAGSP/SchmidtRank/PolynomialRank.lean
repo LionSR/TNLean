@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.WindowFrequencyRank
-import QICLean.Algebra.OperatorSchmidt.Realignment
-import QICLean.Spectral.Filter.ChebyshevGroundFilter
+import QICLean.Algebra.OperatorSchmidt.Basic
+import QICLean.Spectral.Filter.ChebyshevSpectralFilter
 
 /-!
 # The AKLV polynomial rank estimate from the original physical interactions

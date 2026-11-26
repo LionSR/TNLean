@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.VaryingBond.OpenMPSRank
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import TNLean.MPS.Tensor.OpenMPS.SupportedCutRank
-import QICLean.Channel.Schmidt.RankAction
+import QICLean.Channel.Schmidt.Rank
 import Mathlib.LinearAlgebra.Dimension.LinearMap
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 

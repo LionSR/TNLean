@@ -8,12 +8,11 @@ import TNLean.MPS.AreaLaw.ProjectorFactorization.IntervalMutualInformation
 import TNLean.MPS.AreaLaw.ProjectorFactorization.ProductStateExpectation
 import QICLean.Analysis.TraceInequality.TraceMulBound
 import QICLean.Analysis.Norm.ApproximateProjector
-import QICLean.ManyBody.Entropy.QuditRegionEntropy
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 import TNLean.MPS.AreaLaw.ProjectorFactorization.SchmidtTail.ChainBootstrap
 import TNLean.MPS.AreaLaw.ProjectorFactorization.PositiveFactorization
 import TNLean.MPS.AreaLaw.ProjectorFactorization.LiebRobinson
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!

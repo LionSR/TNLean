@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenKernel
-import QICLean.Spectral.Gap.CompactKernelGap
+import QICLean.Spectral.Gap.EigenvalueGap
 import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 
 /-!

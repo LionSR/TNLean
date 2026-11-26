@@ -10,7 +10,7 @@ import QICLean.Kraus.Word
 import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.Tensor.Words.WordSpan
 import Mathlib.Data.Fin.Tuple.Basic
-import QICLean.Kraus.Wielandt.RankOne.ExtractionFull
+import QICLean.Kraus.Wielandt.RankOne.Construction
 import QICLean.Kraus.Wielandt.RectangularSpan.Growth
 import QICLean.Algebra.Matrix.MatrixMulRange
 import QICLean.Kraus.Wielandt.RectangularSpan.Universality

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.Filter.Optimizer
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.FrustrationFreeChain
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.RegionalFactors.RegionalSlices
 

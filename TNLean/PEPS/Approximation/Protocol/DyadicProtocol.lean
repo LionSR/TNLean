@@ -149,17 +149,6 @@ open ManyBody QuantumCircuit.Party
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {Party : Type} [Fintype Party]
   [DecidableEq Party] {pos : ι → ℝ × ℝ}
 
-/-- The factor at the party `p` of the reference vector `K_F Ω` of a frame `F` held by the party
-`holder F`: the reference vector read on the registers of `p` when `p` holds the frame, and the
-vector `1` otherwise.
-
-Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
-`06-geometry.tex:21–23, 658–660`. -/
-def Frame.heldFactor (Ω : EuclideanSpace ℂ (ι → Fin q)) (holder : Frame pos q Party → Party)
-    (p : Party) (F : Frame pos q Party) : EuclideanSpace ℂ (F.system p) :=
-  WithLp.toLp 2 fun a ↦
-    if holder F = p then ∑ z : Config F.system, if z p = a then F.regRef Ω z else 0 else 1
-
 /-- The vector at the party `p` of the copies of `Ω` that it holds in a list of frames, each held
 by the party `holder F`: the product of the factors at `p` of the reference vectors of the frames,
 on the registers of `p` on all the frames.
@@ -169,7 +158,10 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1, item 1,
 def heldRef (Ω : EuclideanSpace ℂ (ι → Fin q)) (holder : Frame pos q Party → Party) (p : Party) :
     (Fs : List (Frame pos q Party)) → EuclideanSpace ℂ (framesSystem q pos Fs (fun _ ↦ Unit) p)
   | [] => EuclideanSpace.single () 1
-  | F :: Fs => EuclideanSpace.vecKron (F.heldFactor Ω holder p) (heldRef Ω holder p Fs)
+  | F :: Fs => EuclideanSpace.vecKron
+      (WithLp.toLp 2 (QuantumCircuit.Party.partyFactor (fun G : Frame pos q Party ↦ G.regRef Ω)
+        holder F p))
+      (heldRef Ω holder p Fs)
 
 end TNLean.PEPS.EncodedFrame
 

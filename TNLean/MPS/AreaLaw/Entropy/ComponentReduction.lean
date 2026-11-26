@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Entropy.AreaLaw
 import QICLean.ManyBody.Entropy.ChainInterval
-import QICLean.ManyBody.Entropy.ZeroEntropy
+import QICLean.ManyBody.Entropy.RegionEntropy
 import QICLean.ManyBody.Sites.Lattice.Line
 import Mathlib.Combinatorics.SimpleGraph.Metric
 import QICLean.ManyBody.Hamiltonian.GroundSpace

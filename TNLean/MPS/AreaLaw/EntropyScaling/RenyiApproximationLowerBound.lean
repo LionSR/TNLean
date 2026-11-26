@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.OpenMPS.CutReducedState
-import QICLean.Entropy.Renyi.RankLowerBound
+import QICLean.Entropy.Renyi.Tail
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Entropy.RegionEntropy
 

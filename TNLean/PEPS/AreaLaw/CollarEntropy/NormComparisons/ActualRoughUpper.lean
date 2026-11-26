@@ -11,7 +11,7 @@ import TNLean.PEPS.AreaLaw.Scanner.Statuses.StatusCutBounds
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.ReceivingRegions
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedRootCompression
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.AugmentedReplicaPrevectorProperties
-import QICLean.Algebra.Hermitian.ProjectionRangeIsometry
+import QICLean.Algebra.Hermitian.OrthogonalProjection
 import QICLean.ManyBody.Replica.Bell.PrevectorRoughUpper
 
 /-!

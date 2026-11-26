@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Histories.HistoryMeanTree
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.PhysicalBandCommutation
-import QICLean.ManyBody.Replica.BandMetric.RootMetricFloor
+import QICLean.ManyBody.Replica.BandMetric.SymmetricMetricFloor
 
 /-!
 # Actual deterministic fill transport

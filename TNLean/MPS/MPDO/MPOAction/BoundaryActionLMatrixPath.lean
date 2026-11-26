@@ -7,7 +7,7 @@ import QICLean.Analysis.Calculus.MatrixEntrywiseDeriv
 import QICLean.Analysis.Calculus.MatrixFrameDeriv
 import QICLean.Analysis.Calculus.MatrixLinearODE
 import TNLean.MPS.MPDO.MPOAction.BoundaryActionLMatrixGauge
-import QICLean.Analysis.Calculus.MatrixEvolution
+import QICLean.Analysis.Exponential.UnitaryEvolution
 
 /-!
 # The L-symbols along a differentiable symmetric path

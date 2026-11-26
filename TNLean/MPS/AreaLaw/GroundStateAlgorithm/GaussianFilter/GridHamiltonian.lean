@@ -7,7 +7,7 @@ import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Sites.Lattice.ChainBlocks
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.Algebra.Hermitian.HermitianPartSum
 
 /-!

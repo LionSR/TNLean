@@ -8,9 +8,9 @@ import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.AdjacentIntervalMe
 import QICLean.Analysis.Parameter.SoftRegionalEnergyParameters
 import QICLean.Analysis.Projection.RegionalEnergyCalibration
 import QICLean.Analysis.Subspace.ViableSubspace
-import QICLean.Spectral.Eigenvalue.CompressionEnergyInterval
+import QICLean.Spectral.Eigenvalue.CompressionEnergyBounds
 import QICLean.Analysis.Order.QuadraticScalarShift
-import QICLean.ManyBody.Entropy.Cut.RegionalOperatorCoordinates
+import QICLean.ManyBody.Entropy.Cut.RegionalViability
 
 /-!
 # Raw regional energy on the same untrimmed word candidate

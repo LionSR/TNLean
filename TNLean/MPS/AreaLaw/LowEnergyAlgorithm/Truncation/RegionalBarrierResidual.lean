@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Hamiltonian.Chain.RegionalTruncation
 import QICLean.Spectral.Filter.SoftTruncationHardResidual
 import QICLean.Spectral.Filter.ShiftedSoftHardTruncation
-import QICLean.Spectral.LowEnergy.SoftTruncationLowRestriction
+import QICLean.Spectral.LowEnergy.WeightedLowRestriction
 
 /-!
 # A regional hard tail with an arbitrary commuting interior

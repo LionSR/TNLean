@@ -7,7 +7,7 @@ import TNLean.MPS.Transfer.Irreducible.Periodic
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.FixedAdjoint
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.ProjectionOrtho
-import QICLean.Channel.Peripheral.Spectrum.PeriodicityRemoval
+import QICLean.Channel.Peripheral.Spectrum.Spectrum
 import QICLean.Kraus.PrimitiveFixedPoint.Assembly
 
 /-!

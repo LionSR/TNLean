@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Subspace.RegionalTensorMerge
-import QICLean.ManyBody.Subspace.RegionalTensorMergeMeasurable
 
 /-!
 # Merging viable spaces on adjacent physical intervals

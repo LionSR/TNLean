@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ProjectorDefect.Residual.ResidualWindowJointProjectionDecay
 import TNLean.MPS.ParentHamiltonian.Blocking.ResidueCoverGapCriterion
-import QICLean.Spectral.Gap.OrthogonalKernelGap
+import QICLean.Spectral.Gap.EigenvalueGap
 import TNLean.MPS.ParentHamiltonian.Periodic.PeriodicBlockFamilyQuasiLocalGap
 import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicOriginalIntersection
 

@@ -7,7 +7,7 @@ import QICLean.Spectral.Perturbation.KernelGapPerturbation
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceMapContinuity
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.FiniteRangeKnabeGap
 import TNLean.MPS.Tensor.Words.WordSpan
-import QICLean.Spectral.Gap.CompactKernelGap
+import QICLean.Spectral.Gap.EigenvalueGap
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenRangeComparison
 import TNLean.MPS.ParentHamiltonian.Continuity.PeriodicShortGapContinuity
 

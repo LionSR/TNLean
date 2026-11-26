@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedFamily
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalFamilyTrimmingIteration
-import QICLean.Analysis.Parameter.InterleavedStoppingParameters
+import QICLean.Analysis.Parameter.InterleavedTrimmingIteration
 
 /-!
 # Actual finite interleaved interval filtering and trimming

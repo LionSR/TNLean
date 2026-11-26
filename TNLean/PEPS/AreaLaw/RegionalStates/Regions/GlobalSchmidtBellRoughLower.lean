@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellPrevector
-import QICLean.ManyBody.Replica.LowDefect.RegionalRoughLowerThree
+import QICLean.ManyBody.Replica.LowDefect.RegionalRoughLowerNorm
 import QICLean.Analysis.Real.SublinearRemainder
 
 /-!

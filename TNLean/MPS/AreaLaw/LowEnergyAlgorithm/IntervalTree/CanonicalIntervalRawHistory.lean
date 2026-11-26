@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalResampling
-import QICLean.ManyBody.Subspace.Sampling.StoppedHalfSamplingEvents
+import QICLean.ManyBody.Subspace.Sampling.StoppedHalfSamplingProbability
 
 /-!
 # The literal original-target history of an interval parent

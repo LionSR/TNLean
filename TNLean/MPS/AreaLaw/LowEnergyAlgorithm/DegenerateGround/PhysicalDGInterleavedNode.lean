@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedIteration
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.AdjacentIntervalMerge
-import QICLean.Probability.Sampling.ViableSubspaceSamplingEvent
+import QICLean.Probability.Sampling.ViableSubspaceSampleOrFull
 import QICLean.Analysis.Parameter.ViableNodeSamplingParameters
 
 /-!
