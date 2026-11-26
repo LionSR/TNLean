@@ -9,7 +9,7 @@ import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.ManyBody.Sites.Placement
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 
 /-!
 # Matrix-entry slices over the complement of a region

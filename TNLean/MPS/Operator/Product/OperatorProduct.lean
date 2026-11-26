@@ -8,7 +8,7 @@ import QICLean.Algebra.PartialTrace
 import TNLean.MPS.Operator.Defs
 import QICLean.Algebra.Word.OrderedProduct
 import Mathlib.LinearAlgebra.Matrix.Reindex
-import QICLean.Algebra.Kronecker.KroneckerEmbed
+import QICLean.Algebra.Matrix.KroneckerEmbed
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!

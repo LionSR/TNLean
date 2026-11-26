@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.GroundStateAlgorithm.GaussianFilter.GridHamiltonian
 import QICLean.ManyBody.Sites.Lattice.ChainBlocks
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.Exponential.HermitianUnitaryPath

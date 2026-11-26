@@ -8,7 +8,7 @@ import QICLean.Algebra.Combinatorics.IndexInduction
 import TNLean.MPS.Preparation.Inhomogeneous.VaryingBondBlocks
 import QICLean.Channel.Choi.RectangularChoi
 import QICLean.Channel.KrausMap.KrausCPTP
-import QICLean.Channel.SupportCompletion
+import QICLean.Channel.KrausMap.SupportCompletion
 
 /-!
 # Ordered overlap with corner-supported density references

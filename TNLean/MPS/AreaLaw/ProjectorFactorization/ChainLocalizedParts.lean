@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.Chain.CutCommutators
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.Real.ExplicitThresholds

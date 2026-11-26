@@ -9,7 +9,7 @@ import QICLean.ManyBody.Sites.Placement
 import TNLean.PEPS.Approximation.HoleEncoder
 import QICLean.Analysis.Norm.MatrixToEuclidean
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 
 /-!
 # Encoded frames

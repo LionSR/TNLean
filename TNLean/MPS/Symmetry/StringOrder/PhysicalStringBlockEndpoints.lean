@@ -9,7 +9,7 @@ import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
 import QICLean.Algebra.Kronecker.KroneckerFactorPositivity
 import Mathlib.LinearAlgebra.Multilinear.Basic
 import QICLean.Algebra.Combinatorics.FinSumPermutation
-import QICLean.ManyBody.Sites.ProductOperatorTrace
+import QICLean.ManyBody.Sites.Product.ProductOperatorTrace
 import TNLean.MPS.Transfer.ObservableTransfer
 import QICLean.Algebra.Word.OrderedProduct
 import QICLean.Kraus.Transfer

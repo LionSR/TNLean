@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Dynamics.GraphLocalization
 import TNLean.PEPS.AreaLaw.Operators.ChannelWords.LocalChannelOscillation
 

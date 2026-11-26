@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BlockFamily
 import TNLean.MPS.Transfer.Spectrum.QuantitativeGap
-import QICLean.Channel.TransferMatrix
+import QICLean.Channel.TransferMatrix.Basic
 import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs
 import QICLean.Analysis.Topology.NewtonIdempotent
 

@@ -21,6 +21,7 @@ import TNLean.MPS.Tensor.Gauge.GaugeUniqueness
 import TNLean.MPS.Tensor.GroundSpace.ChainGroundSpace
 import TNLean.MPS.Tensor.GroundSpace.ParentHamiltonianBasic
 import TNLean.MPS.Transfer.Primitivity.Equivalence
+import QICLean.Channel.Peripheral.Spectrum.Conjugation
 
 /-!
 # Perron gauges for normal tensors

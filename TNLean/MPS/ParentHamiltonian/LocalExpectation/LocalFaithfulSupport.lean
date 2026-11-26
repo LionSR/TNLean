@@ -8,7 +8,7 @@ import QICLean.Algebra.Matrix.MatrixAux
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import TNLean.MPS.Tensor.Defs
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableState
-import QICLean.Channel.ConditionalExpectation.PositiveConditionalExpectation
+import QICLean.Channel.Positive.PositiveConditionalExpectation
 import QICLean.Analysis.Optimization.SemidefiniteProgram
 import QICLean.Channel.Schwarz.Closure
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalObservableQuasiLocalState

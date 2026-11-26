@@ -8,7 +8,7 @@ import QICLean.Analysis.Projection.Geometry
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.Algebra.Hermitian.HermitianPartSum
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Hamiltonian.GroundSpace

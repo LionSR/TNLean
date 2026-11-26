@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Word.OrderedProduct
 import QICLean.Circuit.Gate.UnitaryExtension
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 import TNLean.MPS.Preparation.Sequential.Sequential
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 

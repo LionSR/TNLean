@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.CStarAlgebra.Spectrum
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.CanonicalForm.Correlation.WindowCorrelator
 

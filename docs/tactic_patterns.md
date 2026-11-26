@@ -4689,12 +4689,12 @@ three-plaquette output measurement, and the routed reunion measurement.
   strong-subadditivity argument is a direct corollary of the same statement.
 
 ### Support-correct tensor logarithm
-- **Pattern:** `QICLean/Entropy/StrongSubadditivity/SSAEqualityDPI.lean` carried a local
+- **Pattern:** `QICLean/Entropy/Recovery/SSAEqualityDPI.lean` carried a local
   simultaneous-diagonalization proof of the support-correct tensor logarithm.
 - **Reuse:** `Matrix.log_kronecker_posSemidef` in
   `QICLean/Analysis/FunctionalCalculus/CfcKronecker.lean` (QICLean dependency) is the canonical low-layer theorem.
 - **Result:** the duplicate proof was removed from
-  `QICLean/Entropy/StrongSubadditivity/SSAEqualityDPI.lean`; the faithful entropy comparison
+  `QICLean/Entropy/Recovery/SSAEqualityDPI.lean`; the faithful entropy comparison
   uses the Analysis declaration directly.
 
 ### Transpose covariance of the continuous functional calculus
@@ -7044,7 +7044,7 @@ current counts and full location lists).
   through the shifted-resolvent difference, commute the scalar identity shift,
   and normalize the resulting module expression.
 - **Seen:** 2 occurrences in
-  `QICLean/Channel/Schwarz/OperatorJensenAux.lean`:
+  `QICLean/Channel/Convexity/OperatorJensenAux.lean`:
   `positiveMap_rpowIntegrand₀₁_jensen` and
   `positiveMap_rpowIntegrand₁₂_jensen`.
 - **Abstraction:** a shared algebraic lemma parameterized by the exponent

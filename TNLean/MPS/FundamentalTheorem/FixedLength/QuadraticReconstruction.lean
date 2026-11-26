@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import TNLean.MPS.Tensor.Defs
-import QICLean.Algebra.Kronecker.KroneckerEmbed
+import QICLean.Algebra.Matrix.KroneckerEmbed
 
 /-!
 # Quadratic reconstruction system for the translation-invariant canonical form

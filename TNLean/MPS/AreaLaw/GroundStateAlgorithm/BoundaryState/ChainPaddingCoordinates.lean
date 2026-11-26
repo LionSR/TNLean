@@ -8,7 +8,7 @@ import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Hamiltonian.ProductBasisPenalty
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import QICLean.Spectral.Gap.DoubledSystemGap
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 
 /-!
 # Tensor coordinates of the actual padded Hamiltonian

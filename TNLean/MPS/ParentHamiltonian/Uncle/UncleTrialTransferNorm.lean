@@ -7,13 +7,13 @@ import TNLean.MPS.ParentHamiltonian.Uncle.UncleWallGram
 import QICLean.Algebra.Matrix.MatrixTracePairing
 import QICLean.Channel.KrausMap.KrausCPTP
 import QICLean.Kraus.Wielandt.KrausRectangularComposition
-import QICLean.Channel.Peripheral.Spectrum.UnitalKraus
+import QICLean.Channel.Schwarz.RussoDye
 import Mathlib.Logic.Equiv.Fin.Basic
 import TNLean.MPS.ParentHamiltonian.Uncle.UnclePrimitiveTransfer
 import TNLean.MPS.ParentHamiltonian.Uncle.UncleWallGramBounds
 import QICLean.Analysis.TraceInequality.TraceMulBound
 import QICLean.Analysis.Norm.OperatorNormConvergence
-import QICLean.Channel.TraceNormNet
+import QICLean.Channel.Choi.TraceNormNet
 
 /-!
 # The exact finite transfer contraction of a two-wall trial

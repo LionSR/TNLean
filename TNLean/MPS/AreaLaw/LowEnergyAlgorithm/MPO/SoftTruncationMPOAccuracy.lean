@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.OperatorMPOFromCutRank
 import QICLean.Analysis.Real.ExponentialGeometricTailOrder
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.ProductVector
+import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.ManyBody.Entropy.Filter.Optimizer
 import TNLean.MPS.Operator.Periodic.TraceChainHermitian
 import Mathlib.Data.Fintype.EquivFin

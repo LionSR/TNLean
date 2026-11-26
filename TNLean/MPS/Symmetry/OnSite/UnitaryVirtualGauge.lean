@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Correlation.EntanglementSpectrum
-import QICLean.Channel.PerronFrobenius.Existence
+import QICLean.Channel.Irreducible.KrausSetup
 import TNLean.MPS.Tensor.Physical.PhysicalRotation
 import TNLean.Tactic.MatrixReciprocalSmul
 

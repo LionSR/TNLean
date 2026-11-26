@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Matrix.MatrixTracePairing
-import QICLean.Channel.TransferMatrix
+import QICLean.Channel.TransferMatrix.Basic
 import TNLean.MPS.Tensor.Overlap
 import QICLean.Kraus.MixedMap.Basic
 import QICLean.Kraus.Transfer

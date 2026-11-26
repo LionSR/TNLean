@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.Sector.ResidualBoundaryGram
-import QICLean.Analysis.Norm.NeumannInverse
+import QICLean.Analysis.Calculus.NeumannInverse
 /-!
 # Supported inverses of correlated residual Gram operators
 

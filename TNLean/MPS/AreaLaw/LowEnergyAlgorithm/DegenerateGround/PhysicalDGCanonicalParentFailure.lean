@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedIteration
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.CanonicalSampledIntervalInterleaved
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.AdjacentIntervalMerge
-import QICLean.Probability.Haar.NativeRankUnitarySampling
+import QICLean.Probability.Sampling.NativeRankUnitarySampling
 
 /-!
 # Uniform true failure for the physical canonical parent

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.QCA.LocalAlgebra.IntervalCoordinates
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Placement.PlaceAlong
 
 /-!
 # Finite local inclusions in numbered support coordinates

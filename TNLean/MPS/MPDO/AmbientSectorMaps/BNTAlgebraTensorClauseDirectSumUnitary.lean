@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.FixedPoint.DirectSum.TraceNonincreasingDirectSum
-import QICLean.Channel.ConditionalExpectation.PositiveConditionalExpectationDirectSum
+import QICLean.Channel.Positive.PositiveConditionalExpectationDirectSum
 import TNLean.MPS.MPDO.AmbientSectorMaps.BNTAlgebraTensorClauseSpectrum
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorRetractions
 

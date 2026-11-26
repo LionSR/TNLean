@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Spectral.Eigenvalue.ShiftedTracePowerSpectrum
-import QICLean.Channel.TransferMatrix
+import QICLean.Channel.TransferMatrix.Basic
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureSpectral
 import TNLean.MPS.CanonicalForm.RetainedBlockReconstruction
 import TNLean.MPS.Transfer.Scaling

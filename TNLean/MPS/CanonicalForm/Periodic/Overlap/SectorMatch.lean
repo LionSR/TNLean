@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixAlgebra.SkolemNoetherUnitary
-import QICLean.Channel.ConditionalExpectation.PositiveConditionalExpectationDirectSum
+import QICLean.Channel.Positive.PositiveConditionalExpectationDirectSum
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalityChain
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.Tensor.Words.OneSidedInverse

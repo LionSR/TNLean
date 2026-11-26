@@ -20,6 +20,7 @@ import QICLean.Channel.Peripheral.Irreducible.GroupStructure
 import TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureSpectral
 import TNLean.MPS.Transfer.Scaling
 import QICLean.Algebra.Combinatorics.ZModCyclicSums
+import QICLean.Channel.Peripheral.Spectrum.Conjugation
 
 /-!
 # Sectorwise Perron normalization of periodic blocks
