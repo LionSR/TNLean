@@ -178,8 +178,8 @@ lemma translation_apply_siteTranslation (d : ℕ) (a : ℤ) (Λ : Finset ℤ)
 Source: arXiv:1703.09188, Appendix, lines 2292--2298. -/
 @[simp]
 lemma translation_zero (d : ℕ) (Λ : Finset ℤ) (x : Config d Λ) (i : Λ) :
-    translation d 0 Λ x (Finset.equivMap (Equiv.addRight 0).toEmbedding Λ i) = x i := by
-  simp
+    translation d 0 Λ x (Finset.equivMap (Equiv.addRight 0).toEmbedding Λ i) = x i :=
+  translation_apply_siteTranslation d 0 Λ x i
 
 /-- Successive configuration translations agree pointwise with translation by the sum.
 
@@ -192,7 +192,7 @@ lemma translation_add (d : ℕ) (a b : ℤ) (Λ : Finset ℤ) (x : Config d Λ) 
           (Finset.equivMap (Equiv.addRight a).toEmbedding Λ i)) =
       translation d (a + b) Λ x
         (Finset.equivMap (Equiv.addRight (a + b)).toEmbedding Λ i) := by
-  simp only [translation_apply, Equiv.symm_apply_apply]
+  simp only [translation_apply_siteTranslation]
 
 end Config
 
@@ -294,7 +294,8 @@ lemma localTranslation_localInclusion {d : ℕ} (a : ℤ) {Λ Γ : Finset ℤ}
       change (Config.translation d a Γ).symm x js =
         (Config.translation d a Γ).symm y js at eq
       change x it = y it
-      simpa only [Config.translation_symm_apply, hsite] using eq
+      rw [Config.translation_symm_apply, Config.translation_symm_apply, hsite] at eq
+      exact eq
     · funext i
       let js : Γ := ⟨i, (Finset.mem_sdiff.mp i.2).1⟩
       let it : translateRegion a Γ :=
@@ -309,7 +310,8 @@ lemma localTranslation_localInclusion {d : ℕ} (a : ℤ) {Λ Γ : Finset ℤ}
       change x it = y it at eq
       change (Config.translation d a Γ).symm x js =
         (Config.translation d a Γ).symm y js
-      simpa only [Config.translation_symm_apply, hsite] using eq
+      rw [Config.translation_symm_apply, Config.translation_symm_apply, hsite]
+      exact eq
   · rfl
   · rfl
 

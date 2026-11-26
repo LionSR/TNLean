@@ -370,10 +370,9 @@ noncomputable def ofBond (hN : 2 ≤ N) (B : Matrix (Fin 2 → Fin d) (Fin 2 →
     (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) (hB : B.PosSemidef) hcomm :
     (ofBond hN B hB hcomm).unnormalizedState =
       (List.ofFn fun i : Fin N ↦ placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) B).prod := by
-  rw [unnormalizedState, Fin.sum_univ_one]
-  change ((1 : ℕ) : ℂ) • (List.ofFn fun i : Fin N ↦
+  change ∑ _x : Fin 1, ((1 : ℕ) : ℂ) • (List.ofFn fun i : Fin N ↦
     placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) B).prod = _
-  rw [Nat.cast_one, one_smul]
+  rw [Fin.sum_univ_one, Nat.cast_one, one_smul]
 
 end GSNNCHData
 
@@ -447,7 +446,7 @@ theorem exists_oneSector_gsnnchData_iff {N : ℕ} (hN : 2 ≤ N) (ρ : ChainOper
       refine Fintype.sum_eq_single x fun y hy ↦ ?_
       exact (hy (Fin.ext (by have := y.isLt; have := x.isLt; omega))).elim
     rcases Nat.eq_zero_or_pos (data.multiplicity x) with hn | hn
-    · refine ⟨0, Matrix.PosSemidef.zero, rfl, 1, one_pos, ?_⟩
+    · refine ⟨0, Matrix.PosSemidef.zero, by simp only [placeAlong_zero], 1, one_pos, ?_⟩
       have hprod : (List.ofFn fun i : Fin N ↦
           placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
             (0 : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ)).prod = 0 := by
