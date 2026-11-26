@@ -198,28 +198,6 @@
     Lemma~\ref{thm:peps_party_factorization}.
 \end{proof}
 
-\begin{lemma}[The weighted gate in common private spaces]
-    \label{thm:peps_common_source_gate}
-    \lean{QuantumCircuit.Party.Word.exists_finite_source_gate}
-    \leanok
-    \uses{def:peps_source_slots,def:peps_party_registers}
-    In \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    (\texttt{04-compression.tex}, lines 233--267), for $F=\sum_{\xi\in\Xi}c_\xi F_\xi$
-    with $(F_\xi)_{\xi\in\Xi}$ as in Lemma~\ref{thm:peps_common_party_maps},
-    \begin{align}
-        U_{\rm out}F
-         & =\sum_{\xi\in\Xi}c_\xi
-        \left(\bigotimes_{p\in P}B_{\xi,p}\right)
-        U_{\rm in}Q_{\widehat\eta_\xi,\mathcal H_{\rm in}}.
-        \label{eq:peps_common_source_gate}
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    \uses{thm:peps_common_party_maps}
-    Multiply (\ref{eq:peps_common_party_maps}) by $c_\xi$ and sum over
-    $\xi\in\Xi$.
-\end{proof}
 
 
 \begin{lemma}[Source preparations in finite coordinates]
