@@ -12,8 +12,23 @@ Progress, 2026-11-26. T.1a and T.1b are done. T.2a′ is done: `MPOTensor d D` i
 is done: `MPOTensor.blockTensor` is `Kraus.block` renumbered by the blocked ket and bra
 indices, and `blockTwo` is the case of two sites. Neither name is deleted yet: `toMPSTensor`
 (about 2,500 uses) waits for T.1c, since its codomain is `MPSTensor (d * d) D`, and `blockTwo`
-(about 700 uses) waits for the statements over `Fin (d * d)` to be restated. T.1c, T.2a, T.2c,
-T.3 and T.4 remain.
+(about 700 uses) waits for the statements over `Fin (d * d)` to be restated.
+
+T.1c is done in part. The definitions of `MPS/Tensor/Defs` (`coeff`, `mpv`, `GaugeEquiv`,
+`SameMPV`, `SameMPV₂`, `SameMPV₂Pos`, the two proportionality predicates, `GaugePhaseEquiv`,
+`UnitGaugePhaseEquiv`, `IsLeftCanonical`) and their lemmas are stated on `MPTensor α β` and live
+in the namespace `MPTensor`; so are `IsReduction` (on `MPTensor α β`), `IsDressedProportional`
+(on `MPTensor α β` with boundaries `Matrix μ β ℂ`) and `mpvOverlap` (on `MPTensor α (Fin D)`).
+Their dot lemmas elsewhere moved with them, still at `Fin d`, `Fin D`; files that named them
+without a prefix open `MPTensor`. Two Kraus heads of the scan, `IsInjective` and `IsNormal`, and
+`evalWord`, `transferMap` were already general after T.1a. The bond of `mpvOverlap` stays `Fin D`:
+with a general bond, the instances of a bond `Fin (f x)` of a dependent family of blocks stop
+matching after `f x` is unfolded. `IsNormalTensor`, `IsCPSVCanonicalForm` and
+`IsMPUCanonicalForm` cannot be restated in TNLean alone: their irreducibility clause is QICLean's
+`Kraus.IsIrreducibleFamily`, which is stated for `Fin d → Matrix (Fin D) (Fin D) ℂ`; generalizing
+it (with `HasInvariantProj`) in QICLean comes first. T.1c also leaves the 95 consuming
+definitions outside these heads, and the lemmas about the restated heads that are still stated at
+`Fin d`. T.2a can start for the consumers of the restated heads; T.2c, T.3 and T.4 remain.
 
 All counts were measured by the scripts listed in §6 on TNLean `e8f8dd3202` (5,417 modules
 outside `Archive/`) and QICLean `80e0a1782` (1,874 modules). Comments and docstrings are
