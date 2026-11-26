@@ -42,7 +42,7 @@ private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w
     (hQ : ∀ j, Q j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (ManyBody.chainCutBuffer L (ManyBody.chainGridCut w j.val) r : Finset (Fin L))) :
     ∀ cut : ℕ, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L cut) ((List.ofFn P).prod * (List.ofFn Q).prod)) ≤
+      (interval L 0 cut) ((List.ofFn P).prod * (List.ofFn Q).prod)) ≤
         q ^ (2 * (w + (2 * r + 2))) := by
   have hpairP : (List.ofFn (fun j : Fin (L / w + 1) ↦ j)).Pairwise
       (fun j k ↦ Disjoint (interval L (j.val * w) ((j.val + 1) * w))
@@ -93,7 +93,7 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
         (((L - 1) / w : ℕ) : ℝ) * chainGridLRPrefactor *
           Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) * |t| ∧
       ∀ cut : ℕ, operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut)
           (chainGridPropagator (w := w) (by omega) r Φ hHerm t)) ≤
           q ^ (2 * (w + (2 * r + 2))) := by
   classical
@@ -154,7 +154,7 @@ theorem exists_chainGrid_propagator_approximation (hq : 1 ≤ q) (hwidth : 2 * r
         (((L - 1) / w : ℕ) : ℝ) * chainGridLRPrefactor *
           Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) * |t| ∧
       ∀ cut : ℕ, operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 cut) (K t)) ≤
           q ^ (2 * (w + (2 * r + 2))) :=
   ⟨chainGridPropagator (w := w) (by omega) r Φ hHerm,
     chainGridPropagator_spec hq hwidth Φ hHerm hnorm⟩

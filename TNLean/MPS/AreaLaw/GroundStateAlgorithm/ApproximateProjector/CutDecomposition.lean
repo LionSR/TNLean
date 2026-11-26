@@ -21,6 +21,7 @@ Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, Claim
 
 open Matrix
 open scoped Kronecker
+open ManyBody (interval interval_mono mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -28,33 +29,33 @@ namespace TNLean.MPS.AreaLaw
 LVV13, `algo53.tex`, the internal bond assertion in Claim `c:errorreduction`, line 591. -/
 theorem operatorSchmidtRank_cutOperator_leftConfigOfFin {L q i k : ℕ}
     (hi : i ≤ L) (hk : k ≤ i) (A : LeftBlockMatrix L q i) :
-    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)) =
     operatorSchmidtRank (A.reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono hk))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono hk))) := by
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) hk))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) hk))) := by
   classical
-  let eL : {v : Fin i // v ∈ leftBlock i k} ≃ {v : Fin L // v ∈ leftBlock L k} :=
+  let eL : {v : Fin i // v ∈ interval i 0 k} ≃ {v : Fin L // v ∈ interval L 0 k} :=
     { toFun := fun v ↦ ⟨⟨v.1.val, lt_of_lt_of_le v.1.isLt hi⟩,
-        mem_leftBlock.mpr ((mem_leftBlock (L := i)).mp v.2)⟩
-      invFun := fun v ↦ ⟨⟨v.1.val, lt_of_lt_of_le (mem_leftBlock.mp v.2) hk⟩,
-        mem_leftBlock.mpr ((mem_leftBlock (L := L)).mp v.2)⟩
+        mem_interval.mpr ((mem_interval (L := i)).mp v.2)⟩
+      invFun := fun v ↦ ⟨⟨v.1.val, lt_of_lt_of_le (mem_interval.mp v.2).2 hk⟩,
+        mem_interval.mpr ((mem_interval (L := L)).mp v.2)⟩
       left_inv := fun _ ↦ rfl
       right_inv := fun _ ↦ rfl }
-  let eR : {v : Fin i // v ∉ leftBlock i k} ≃
-      {v : Fin L // v ∈ leftBlock L i \ leftBlock L k} :=
+  let eR : {v : Fin i // v ∉ interval i 0 k} ≃
+      {v : Fin L // v ∈ interval L 0 i \ interval L 0 k} :=
     { toFun := fun v ↦ ⟨⟨v.1.val, lt_of_lt_of_le v.1.isLt hi⟩,
-        Finset.mem_sdiff.mpr ⟨mem_leftBlock.mpr v.1.isLt,
-          fun h ↦ v.2 (mem_leftBlock.mpr ((mem_leftBlock (L := L)).mp h))⟩⟩
-      invFun := fun v ↦ ⟨⟨v.1.val, mem_leftBlock.mp (Finset.mem_sdiff.mp v.2).1⟩,
+        Finset.mem_sdiff.mpr ⟨mem_interval.mpr ⟨Nat.zero_le _, v.1.isLt⟩,
+          fun h ↦ v.2 (mem_interval.mpr ((mem_interval (L := L)).mp h))⟩⟩
+      invFun := fun v ↦ ⟨⟨v.1.val, (mem_interval.mp (Finset.mem_sdiff.mp v.2).1).2⟩,
         fun h ↦ (Finset.mem_sdiff.mp v.2).2
-          (mem_leftBlock.mpr ((mem_leftBlock (L := i)).mp h))⟩
+          (mem_interval.mpr ((mem_interval (L := i)).mp h))⟩
       left_inv := fun _ ↦ rfl
       right_inv := fun _ ↦ rfl }
   let fL := eL.arrowCongr (Equiv.refl (Fin q))
   let fR := eR.arrowCongr (Equiv.refl (Fin q))
-  let e := ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (L := L) hk)
-  let c := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock i k)
+  let e := ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (L := L) (le_refl 0) hk)
+  let c := ManyBody.cutEquiv (fun _ ↦ Fin q) (interval i 0 k)
   have hcoord : (leftConfigOfFinEquiv hi).trans e = c.trans (fL.prodCongr fR) := by
     ext x <;> rfl
   have hinv (x) : leftConfigOfFin (c.symm ((fL.prodCongr fR).symm x)) = e.symm x := by
@@ -64,7 +65,7 @@ theorem operatorSchmidtRank_cutOperator_leftConfigOfFin {L q i k : ℕ}
       (c.symm ((fL.prodCongr fR).symm x)) = x
     rw [hcoord, Equiv.trans_apply, Equiv.apply_symm_apply]
     exact (fL.prodCongr fR).apply_symm_apply x
-  have hmat : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+  have hmat : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)).reindex
       (fL.prodCongr fR) (fL.prodCongr fR) = A.reindex e e := by
     ext x y
@@ -80,38 +81,38 @@ cut decomposition. LVV13, `algo53.tex`, `e:decomp`, lines 584--591. -/
 noncomputable def cutDecompositionFunctional {L q i : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (j : Fin (operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K))) :
-    Matrix ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)
-      ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) ℂ →ₗ[ℂ] ℂ :=
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K))) :
+    Matrix ((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q)
+      ((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q) ℂ →ₗ[ℂ] ℂ :=
   Classical.choose (exists_operatorRightContraction_decomposition
-    (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K)) j
+    (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K)) j
 
 /-- **The left factors of the chosen cut decomposition** of an operator at the cut after
 `i` sites: the right contractions of the cut operator along the chosen functionals.
 LVV13, `algo53.tex`, `e:decomp`, lines 584--591. -/
 noncomputable def cutLeftFactor {L q i : ℕ} (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (j : Fin (operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K))) :
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K))) :
     LeftBlockMatrix L q i :=
   operatorRightContraction (cutDecompositionFunctional K j)
-    (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K)
+    (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K)
 
 /-- The right factors of the chosen cut decomposition. -/
 noncomputable def cutRightFactor {L q i : ℕ} (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (j : Fin (operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K))) :
-    Matrix ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)
-      ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) ℂ :=
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K))) :
+    Matrix ((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q)
+      ((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q) ℂ :=
   Classical.choose (Classical.choose_spec (exists_operatorRightContraction_decomposition
-    (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K))) j
+    (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K))) j
 
 /-- The chosen factors decompose the cut operator. -/
 theorem cutOperator_eq_sum_cutLeftFactor_kronecker {L q i : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
+    ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K =
       ∑ j, cutLeftFactor K j ⊗ₖ cutRightFactor K j :=
   Classical.choose_spec (Classical.choose_spec (exists_operatorRightContraction_decomposition
-    (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K)))
+    (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K)))
 
 /-- Every chosen left factor retains a simultaneous global cut-rank bound at its internal
 cuts. LVV13, `algo53.tex`, the internal bond assertion in Claim `c:errorreduction`,
@@ -119,16 +120,16 @@ line 591. -/
 theorem operatorSchmidtRank_cutLeftFactor_le {L q i R : ℕ} (hi : i ≤ L)
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hK : ∀ k : ℕ, operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K) ≤ R)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K) ≤ R)
     (j : Fin (operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K)))
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K)))
     (k : ℕ) (hki : k < i) :
-    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
       ((cutLeftFactor K j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ R := by
   classical
   rw [operatorSchmidtRank_cutOperator_leftConfigOfFin hi hki.le]
   exact (Entropy.operatorSchmidtRank_rightContraction_subset_le
-    (leftBlock_mono hki.le) K (cutDecompositionFunctional K j)).trans (hK k)
+    (interval_mono (le_refl 0) hki.le) K (cutDecompositionFunctional K j)).trans (hK k)
 
 /-- A simultaneous global cut-rank bound gives a shortest decomposition at the chosen
 cut, and every left factor retains the same bound at its internal cuts: the existence
@@ -138,14 +139,14 @@ zero. LVV13, `algo53.tex`, `e:decomp`, lines 584--591. -/
 theorem exists_cutDecomposition_of_operatorSchmidtRank_le {L q i R : ℕ}
     (hi : i ≤ L) (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hK : ∀ k : ℕ, operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K) ≤ R) :
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K) ≤ R) :
     ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q i)
-      (B : Fin N → Matrix ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)
-        ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) ℂ),
-      N ≤ R ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
+      (B : Fin N → Matrix ((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q)
+        ((v : {v : Fin L // v ∉ interval L 0 i}) → Fin q) ℂ),
+      N ≤ R ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 i) K =
         ∑ j, A j ⊗ₖ B j ∧
       ∀ j k, 0 < k → k < i → operatorSchmidtRank
-        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
           ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ R :=
   ⟨_, cutLeftFactor K, cutRightFactor K, hK i, cutOperator_eq_sum_cutLeftFactor_kronecker K,
     fun j k _ hki ↦ operatorSchmidtRank_cutLeftFactor_le hi K hK j k hki⟩

@@ -21,7 +21,7 @@ import QICLean.Channel.Schmidt.TrimmedWitness
 # Gluing a left state at a cut of the chain
 
 Fix the cut after `k` sites of a chain of `L` sites. In the coordinates of the three-way cut
-`A = leftBlock L (k - 1)`, `B = leftBlock L k`, a configuration is `((x, y), z)` with `x` on the
+`A = interval L 0 (k - 1)`, `B = interval L 0 k`, a configuration is `((x, y), z)` with `x` on the
 first `k - 1` sites, `y` on site `k - 1` and `z` on the remaining sites. A Hamiltonian
 `H = H_L + K` with `H_L` supported on the first `k` sites and `K` supported off the first
 `k - 1` sites is then `H_L' ⊗ 1 + 1 ⊗ K'`, the setting of the gluing lemma of Landau, Vazirani
@@ -109,6 +109,8 @@ argument. Documented in the QICLean note
   `l:within`, lines 509–515.
 -/
 
+open ManyBody (interval interval_mono)
+
 section
 
 open Matrix
@@ -139,26 +141,28 @@ theorem Matrix.l2_opNorm_kronecker_one {X Y : Type*} [Fintype X] [Fintype Y]
     _ = ‖K‖ := l2_opNorm_one_kronecker K
 
 /-- The configurations of the first `k - 1` sites. -/
-abbrev CutLeft (L q k : ℕ) := (v : {v // v ∈ leftBlock L (k - 1)}) → Fin q
+abbrev CutLeft (L q k : ℕ) := (v : {v // v ∈ interval L 0 (k - 1)}) → Fin q
 
 /-- The number of left configurations is the local dimension raised to the number of sites
 strictly before the cut site. -/
 @[simp]
 theorem card_cutLeft (L q k : ℕ) :
     Fintype.card (CutLeft L q k) = q ^ min L (k - 1) := by
-  rw [Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
-  simp
+  have hcard : (interval L 0 (k - 1)).card = min L (k - 1) := by
+    rw [← Fin.card_filter_val_lt]
+    simp [interval]
+  rw [Fintype.card_fun, Fintype.card_fin, Fintype.card_coe, hcard]
 
 /-- The configurations of site `k - 1`, the last site left of the cut. -/
-abbrev CutSite (L q k : ℕ) := (v : {v // v ∈ leftBlock L k \ leftBlock L (k - 1)}) → Fin q
+abbrev CutSite (L q k : ℕ) := (v : {v // v ∈ interval L 0 k \ interval L 0 (k - 1)}) → Fin q
 
 /-- The configurations of the sites right of the cut. -/
-abbrev CutRight (L q k : ℕ) := (v : {v // v ∉ leftBlock L k}) → Fin q
+abbrev CutRight (L q k : ℕ) := (v : {v // v ∉ interval L 0 k}) → Fin q
 
 /-- The three-way cut coordinates `((x, y), z)` at the cut after `k` sites. -/
 abbrev gluingCut (L q k : ℕ) :
     (Fin L → Fin q) ≃ (CutLeft L q k × CutSite L q k) × CutRight L q k :=
-  ManyBody.threeCutEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1))
+  ManyBody.threeCutEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) (Nat.sub_le k 1))
 
 /-- The operator on the first `k` sites of a matrix supported there: its slice at the
 configuration `0` of the remaining sites. -/
@@ -171,11 +175,11 @@ noncomputable def leftCutOperator [NeZero q] (k : ℕ)
 the left block. -/
 theorem norm_leftCutOperator_eq [NeZero q] {k : ℕ}
     {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X (leftBlock L k)) :
+    (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X (interval L 0 k)) :
     ‖leftCutOperator k X‖ = ‖X‖ := by
   classical
   have hform := hX.reindex_threeCutEquiv_eq_kronecker_one
-    (leftBlock_mono (Nat.sub_le k 1)) subset_rfl (fun _ ↦ 0)
+    (interval_mono (le_refl 0) (Nat.sub_le k 1)) subset_rfl (fun _ ↦ 0)
   have hn := l2_opNorm_reindex_equiv (gluingCut L q k) X
   rw [hform] at hn
   change ‖leftCutOperator k X ⊗ₖ
@@ -195,9 +199,9 @@ noncomputable def rightCutOperator [NeZero q] (k : ℕ)
 supported off the first `k - 1` sites, then in the three-way cut coordinates
 `H_L + K = H_L' ⊗ 1 + 1 ⊗ K'`. -/
 theorem reindex_gluingCut_eq [NeZero q] {k : ℕ} {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k)) {D : Finset (Fin L)}
     (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
-    (hDA : Disjoint D (leftBlock L (k - 1))) :
+    (hDA : Disjoint D (interval L 0 (k - 1))) :
     reindex (gluingCut L q k) (gluingCut L q k) (HL + K) =
       leftCutOperator k HL ⊗ₖ (1 : Matrix (CutRight L q k) (CutRight L q k) ℂ) +
         reindex (Equiv.prodAssoc _ _ _).symm (Equiv.prodAssoc _ _ _).symm
@@ -316,9 +320,9 @@ leading-vector lemma holds with `e` replaced by `e + ξ`. This is the form used 
 the size-trimming convex program to finite precision. -/
 theorem exists_leading_eigenvector_chain_with_objective_slack [NeZero q] {k : ℕ}
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k)) {D : Finset (Fin L)}
     (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
-    (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ : ℝ}
+    (hDA : Disjoint D (interval L 0 (k - 1))) {E₀ Δ e τ ξ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
     (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ}
@@ -374,7 +378,8 @@ theorem exists_leading_eigenvector_chain_with_objective_slack [NeZero q] {k : �
     rw [h]
     exact hwE
   have hKK : ‖K'‖ ≤ ‖K‖ := by
-    have hr := hK.reindex_threeCutEquiv_eq_one_kronecker (leftBlock_mono (Nat.sub_le k 1)) hDA
+    have hr := hK.reindex_threeCutEquiv_eq_one_kronecker
+        (interval_mono (le_refl 0) (Nat.sub_le k 1)) hDA
       (fun _ ↦ 0)
     have hn : ‖reindex E E K‖ = ‖K‖ := l2_opNorm_reindex_equiv E K
     rw [show reindex E E K = _ from hr, l2_opNorm_reindex_equiv] at hn
@@ -423,9 +428,9 @@ of Lemma `l:within`, `x` its left state and `σ` the solution of the size-trimmi
 `‖K‖ ≤ n` and `τ = c_ε/n` the energy bound is `E₀ + 2 (e + c_ε)`. -/
 theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k)) {D : Finset (Fin L)}
     (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
-    (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ : ℝ}
+    (hDA : Disjoint D (interval L 0 (k - 1))) {E₀ Δ e τ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
     (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ}
@@ -483,7 +488,8 @@ theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
     exact hwE
   -- `‖K'‖ ≤ ‖K‖`.
   have hKK : ‖K'‖ ≤ ‖K‖ := by
-    have hr := hK.reindex_threeCutEquiv_eq_one_kronecker (leftBlock_mono (Nat.sub_le k 1)) hDA
+    have hr := hK.reindex_threeCutEquiv_eq_one_kronecker
+        (interval_mono (le_refl 0) (Nat.sub_le k 1)) hDA
       (fun _ ↦ 0)
     have hn : ‖reindex E E K‖ = ‖K‖ := l2_opNorm_reindex_equiv E K
     rw [show reindex E E K = _ from hr, l2_opNorm_reindex_equiv] at hn
@@ -538,9 +544,9 @@ additive error `ξ`. This is the choice-independent finite-precision form of LVV
 `algo53.tex`, Lemma `l:leading`, lines 493–505. -/
 theorem leading_eigenvector_bounds_chain_with_objective_slack [NeZero q] {k : ℕ}
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k)) {D : Finset (Fin L)}
     (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
-    (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ : ℝ}
+    (hDA : Disjoint D (interval L 0 (k - 1))) {E₀ Δ e τ ξ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
     (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
     (hgap : IsGapped (HL + K) E₀ Δ)
@@ -598,9 +604,9 @@ one half satisfies the chain gluing energy and overlap bounds. Auxiliary choice-
 form of LVV13, `algo53.tex`, Lemma `l:leading`, lines 493–505. -/
 theorem leading_eigenvector_bounds_chain [NeZero q] {k : ℕ}
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k)) {D : Finset (Fin L)}
     (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
-    (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ : ℝ}
+    (hDA : Disjoint D (interval L 0 (k - 1))) {E₀ Δ e τ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
     (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
     (hgap : IsGapped (HL + K) E₀ Δ)
@@ -654,13 +660,16 @@ theorem mem_leftSupportSubmodule_of_gluingCut_fixed
     (S : Set (LeftBlockVector L q k))
     (y : (CutLeft L q k × CutSite L q k) × CutRight L q k → ℂ)
     (hy : (reindex
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+        (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+            (interval_mono (le_refl 0) (Nat.sub_le k 1)))
         (spanProjection S) ⊗ₖ (1 : Matrix (CutRight L q k) (CutRight L q k) ℂ)) *ᵥ y = y) :
     WithLp.toLp 2 (y ∘ gluingCut L q k) ∈ leftSupportSubmodule S := by
   classical
   let e :=
-    ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
+    ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+      (interval_mono (L := L) (le_refl 0) (Nat.sub_le k 1))
   let P := reindex e e (spanProjection S)
   let Y := Matrix.schmidtCoeffMatrix y
   have hleft : leftApply P (WithLp.toLp 2 y) = WithLp.toLp 2 y := by
@@ -670,12 +679,12 @@ theorem mem_leftSupportSubmodule_of_gluingCut_fixed
   have hPY : P * Y = Y := by
     have h := congrArg (fun z ↦ schmidtCoeffMatrix (WithLp.ofLp z)) hleft
     simpa only [schmidtCoeffMatrix_ofLp_leftApply] using h
-  have hcm : ManyBody.cutMatrix (leftBlock L k) (WithLp.toLp 2 (y ∘ gluingCut L q k)) =
+  have hcm : ManyBody.cutMatrix (interval L 0 k) (WithLp.toLp 2 (y ∘ gluingCut L q k)) =
       Y.submatrix e id := by
     ext p r
     rw [ManyBody.cutMatrix_apply]
     change y (gluingCut L q k ((ManyBody.cutEquiv (fun _ ↦ Fin q)
-      (leftBlock L k)).symm (p, r))) = y (e p, r)
+      (interval L 0 k)).symm (p, r))) = y (e p, r)
     rw [gluingCut, ManyBody.threeCutEquiv_eq_trans]
     simp [e]
   apply (spanProjection_mul_cutMatrix_eq_iff (S := S)).mp
@@ -711,26 +720,27 @@ vector `w` of rank at most `D` across the cut, with
 `gluingCut L q k`, whose left factor is in the range of `P_V`. -/
 theorem exists_trimmed_witness_chain {k : ℕ}
     {H HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hsplit : H = HL + HR + K)
-    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
-    (hHR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (leftBlock L k)ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k))
+    (hHR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (interval L 0 k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ δ : ℝ}
     (hH0 : (H - (E₀ : ℂ) • 1).PosSemidef) {ψ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hψ : ‖ψ‖ = 1) (hE : (⟪ψ, toEuclideanLin H ψ⟫_ℂ).re ≤ E₀ + δ) {D : ℕ}
     {u : EuclideanSpace ℂ (Fin L → Fin q)} (hu : ‖u‖ = 1)
-    (huD : (ManyBody.cutMatrix (leftBlock L k) u).rank ≤ D)
+    (huD : (ManyBody.cutMatrix (interval L 0 k) u).rank ≤ D)
     {η : ℝ} (hη : 1 - η ≤ ‖⟪u, ψ⟫_ℂ‖) (hη2 : 2 * η < 1) {PV : LeftBlockMatrix L q k}
-    (hPV : PV * ManyBody.cutMatrix (leftBlock L k) ψ = ManyBody.cutMatrix (leftBlock L k) ψ) :
+    (hPV : PV * ManyBody.cutMatrix (interval L 0 k) ψ = ManyBody.cutMatrix (interval L 0 k) ψ) :
     ∃ (w : EuclideanSpace ℂ (Fin L → Fin q)) (m : ℕ) (W : Matrix (CutRight L q k) (Fin m) ℂ)
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
-      ‖w‖ = 1 ∧ (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ D ∧
+      ‖w‖ = 1 ∧ (ManyBody.cutMatrix (interval L 0 k) w).rank ≤ D ∧
       (⟪w, toEuclideanLin H w⟫_ℂ).re ≤ E₀ + (δ + 2 * √(2 * η)) / (1 - 2 * η) ∧
-      PV * ManyBody.cutMatrix (leftBlock L k) w = ManyBody.cutMatrix (leftBlock L k) w ∧
+      PV * ManyBody.cutMatrix (interval L 0 k) w = ManyBody.cutMatrix (interval L 0 k) w ∧
       Wᴴ * W = 1 ∧ m ≤ D ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
         ((1 : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ
           x ∧
-      (reindex (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-          (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono
+      (reindex (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+          (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0)
             (Nat.sub_le k 1))) PV ⊗ₖ
         (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x := by
   classical
@@ -738,63 +748,64 @@ theorem exists_trimmed_witness_chain {k : ℕ}
   · exfalso
     have h0 : ψ = 0 := Subsingleton.elim _ _
     simp [h0] at hψ
-  set e := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)
-  set ψc := ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ
-  set uc := ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) u
+  set e := ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)
+  set ψc := ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ
+  set uc := ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) u
   -- The Hamiltonian in the cut coordinates.
-  have hL := hHL.cutOperator_eq_kronecker_one (B := leftBlock L k) subset_rfl (e σ).2
-  have hR := hHR.cutOperator_eq_one_kronecker (B := leftBlock L k) disjoint_compl_left (e σ).1
+  have hL := hHL.cutOperator_eq_kronecker_one (B := interval L 0 k) subset_rfl (e σ).2
+  have hR := hHR.cutOperator_eq_one_kronecker (B := interval L 0 k) disjoint_compl_left (e σ).1
   obtain ⟨A, A', hHc⟩ : ∃ (A : LeftBlockMatrix L q k)
       (A' : Matrix (CutRight L q k) (CutRight L q k) ℂ),
-      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) H =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) H =
         A ⊗ₖ (1 : Matrix (CutRight L q k) (CutRight L q k) ℂ) +
           (1 : LeftBlockMatrix L q k) ⊗ₖ A' +
-          ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K :=
-    ⟨fun x x' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) HL
+          ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K :=
+    ⟨fun x x' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) HL
         (x, (e σ).2) (x', (e σ).2),
-      fun y y' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) HR
+      fun y y' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) HR
         ((e σ).1, y) ((e σ).1, y'),
       by rw [hsplit, cutOperator_add, cutOperator_add, ← hL, ← hR]⟩
-  have hK1c : (1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K).PosSemidef := by
-    have : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
+  have hK1c : (1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K).PosSemidef := by
+    have : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k)
         (1 - K)).PosSemidef := hK1.submatrix _
-    have h1 : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) (1 - K) =
-        1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K := by
+    have h1 : ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) (1 - K) =
+        1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) K := by
       ext a b
       simp [one_apply]
     rwa [h1] at this
-  have hHc0 : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) H -
+  have hHc0 : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) H -
       (E₀ : ℂ) • 1).PosSemidef := by
     rw [← cutOperator_sub_smul_one]
     exact hH0.submatrix _
   have hEc := hE
-  rw [← Entropy.inner_cutOperator (leftBlock L k)] at hEc
+  rw [← Entropy.inner_cutOperator (interval L 0 k)] at hEc
   have hψc : ‖ψc‖ = 1 := by rw [Entropy.norm_cutVector, hψ]
   have huc : ‖uc‖ = 1 := by rw [Entropy.norm_cutVector, hu]
   have hucD : HasSchmidtRankLE D (WithLp.ofLp uc) := huD
   have hη' : 1 - η ≤ ‖⟪uc, ψc⟫_ℂ‖ := by rw [inner_cutVector]; exact hη
   have hPVc : leftApply PV ψc = ψc := by
-    change toEuclid (PV * ManyBody.cutMatrix (leftBlock L k) ψ) =
-      toEuclid (ManyBody.cutMatrix (leftBlock L k) ψ)
+    change toEuclid (PV * ManyBody.cutMatrix (interval L 0 k) ψ) =
+      toEuclid (ManyBody.cutMatrix (interval L 0 k) ψ)
     rw [hPV]
   obtain ⟨wc, m, W, xc, hwc1, hwcD, hwcE, hwcPV, hW, hmD, hwx, hxPV⟩ :=
     IsTrimmingProjection.exists_trimmed_witness hHc hHc0 (hK0.submatrix _) hK1c hψc hEc huc
       hucD hη' hη2 hPVc
   -- Back to the chain.
   set w : EuclideanSpace ℂ (Fin L → Fin q) := WithLp.toLp 2 (WithLp.ofLp wc ∘ e)
-  have hwcw : ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w = wc := by
+  have hwcw : ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) w = wc := by
     ext x
     simp [w, e]
-  have hcm : ManyBody.cutMatrix (leftBlock L k) w = schmidtCoeffMatrix (WithLp.ofLp wc) := by
+  have hcm : ManyBody.cutMatrix (interval L 0 k) w = schmidtCoeffMatrix (WithLp.ofLp wc) := by
     change schmidtCoeffMatrix (WithLp.ofLp
-      (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w)) = _
+      (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) w)) = _
     rw [hwcw]
   set Ssplit :=
-    ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
+    ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+      (interval_mono (L := L) (le_refl 0) (Nat.sub_le k 1))
   refine ⟨w, m, W, fun p ↦ WithLp.ofLp xc (Ssplit.symm p.1, p.2), ?_, ?_, ?_, ?_, hW, hmD, ?_, ?_⟩
-  · rw [← Entropy.norm_cutVector (leftBlock L k), hwcw, hwc1]
+  · rw [← Entropy.norm_cutVector (interval L 0 k), hwcw, hwc1]
   · rw [hcm]; exact hwcD
-  · rw [← Entropy.inner_cutOperator (leftBlock L k), hwcw]; exact hwcE
+  · rw [← Entropy.inner_cutOperator (interval L 0 k), hwcw]; exact hwcE
   · rw [hcm]
     have h := congrArg (fun v ↦ schmidtCoeffMatrix (WithLp.ofLp v)) hwcPV
     simpa only [schmidtCoeffMatrix_ofLp_leftApply] using h

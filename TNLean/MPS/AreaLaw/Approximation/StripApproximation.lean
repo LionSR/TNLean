@@ -33,6 +33,7 @@ open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction rectangul
 open ManyBody (card_crossingTerms_stripPrefix_le card_stripInterval_le mem_stripInterval
   stripColumn stripInterval snakeEquiv snakePrefix mem_snakePrefix stripInterval_subset_snakePrefix
   snakePrefix_subset_stripInterval card_snakePrefix_sdiff_le)
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -158,9 +159,9 @@ theorem regionEntropy_stripSnakeState {L w q : ℕ}
     (Ω : EuclideanSpace ℂ (↥(rectangularDomain L w) → Fin q))
     (k : ℕ) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) (stripSnakeState q Ω)
-      (leftBlock (L * w) k) = ManyBody.regionEntropy Ω (snakePrefix L w k) := by
+      (interval (L * w) 0 k) = ManyBody.regionEntropy Ω (snakePrefix L w k) := by
   apply ManyBody.regionEntropy_relabel
-    (snakePrefix L w k) (leftBlock (L * w) k) (snakeEquiv L w).symm
+    (snakePrefix L w k) (interval (L * w) 0 k) (snakeEquiv L w).symm
     (fun x ↦ by simp [mem_snakePrefix]) (fun _ ↦ Equiv.refl _)
 
 /-- The actual chain marginal inherits the physical prefix tail under the snake bijection. -/
@@ -173,12 +174,12 @@ theorem surprisalTail_stripSnakeState_le {L w q R : ℕ} {J Δ : ℝ}
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (k : ℕ) (u : ℝ) (hu : 0 ≤ u) :
     Entropy.surprisalTail
       (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock (L * w) k) (stripSnakeState q Ω)).eigenvalues
-      (ManyBody.regionEntropy (stripSnakeState q Ω) (leftBlock (L * w) k)) u ≤
+        (interval (L * w) 0 k) (stripSnakeState q Ω)).eigenvalues
+      (ManyBody.regionEntropy (stripSnakeState q Ω) (interval (L * w) 0 k)) u ≤
       2 * Real.exp (Real.exp 1 / 2) * Real.exp
         (-(u / (32 * Real.sqrt ((1 + J / Δ) * (stripPrefixBudgetConst q R * w))))) := by
   let A := snakePrefix L w k
-  let P := leftBlock (L * w) k
+  let P := interval (L * w) 0 k
   let e := (snakeEquiv L w).symm
   have hA : ∀ x, x ∈ A ↔ e x ∈ P := fun x ↦ by simp [A, P, e, mem_snakePrefix]
   let eA := ManyBody.regionConfigurationEquiv (X := fun _ : ↥(rectangularDomain L w) ↦ Fin q)
@@ -201,14 +202,14 @@ private theorem strip_approximation_of_prefix_bounds
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1)
     (hS : ∀ k : ℕ,
-      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤ C)
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k) ≤ C)
     (htail :
       let w : ℝ := 64 * s * Real.log (2 * (L : ℝ) * tailPrefactorRoot / ε)
       0 ≤ w → ∀ k ∈ Finset.Ico 1 L,
         Entropy.surprisalTail
           (ManyBody.regionState_isHermitian
-            (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
-          (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w ≤
+            (X := fun _ ↦ Fin q) (interval L 0 k) Ω).eigenvalues
+          (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) w ≤
           2 * Real.exp (Real.exp 1 / 2) * Real.exp (-(w / (32 * s)))) :
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
       IsOpenMPS L q
@@ -232,8 +233,8 @@ private theorem strip_approximation_of_prefix_bounds
   obtain ⟨Φ₀, hrank, hdist⟩ := exists_sequentialTruncation Ω hΩ w
   -- the distance
   have hsum : ∑ k ∈ Finset.Ico 1 L, Real.sqrt (Entropy.surprisalTail
-      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
-      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w) ≤
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k) Ω).eigenvalues
+      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) w) ≤
       ((L : ℝ) - 1) * (ε / (2 * (L : ℝ))) := by
     have hone : Real.sqrt (2 * Real.exp (Real.exp 1 / 2) * Real.exp (-(w / (32 * s)))) =
         ε / (2 * (L : ℝ)) := by
@@ -252,8 +253,8 @@ private theorem strip_approximation_of_prefix_bounds
         field_simp
       rw [this, Real.sqrt_sq (by positivity)]
     have hterm : ∀ k ∈ Finset.Ico 1 L, Real.sqrt (Entropy.surprisalTail
-        (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
-        (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w) ≤
+        (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k) Ω).eigenvalues
+        (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) w) ≤
         ε / (2 * (L : ℝ)) := fun k hk ↦ by
       rw [← hone]
       exact Real.sqrt_le_sqrt (htail hw0 k hk)
@@ -278,7 +279,7 @@ private theorem strip_approximation_of_prefix_bounds
     rw [← hΦ₁def, norm_sub_rev Φ₀ Ω] at h
     linarith
   -- the matrix product structure
-  have hD : ∀ k, (ManyBody.cutMatrix (leftBlock L k) Φ₀).rank ≤ ⌊Real.exp (C + w)⌋₊ := by
+  have hD : ∀ k, (ManyBody.cutMatrix (interval L 0 k) Φ₀).rank ≤ ⌊Real.exp (C + w)⌋₊ := by
     intro k
     apply Nat.le_floor
     refine (hrank k).trans (max_le ?_ ?_)
@@ -416,7 +417,7 @@ theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
     apply (div_le_iff₀ hLp).mpr
     simpa using (show (1 : ℝ) ≤ L by exact_mod_cast hL)
   have hS : ∀ k : ℕ, ManyBody.regionEntropy (X := fun _ ↦ Fin q)
-      (stripSnakeState q Ω) (leftBlock (L * w) k) ≤ C := by
+      (stripSnakeState q Ω) (interval (L * w) 0 k) ≤ C := by
     intro k
     rw [regionEntropy_stripSnakeState]
     exact regionEntropy_stripSnakePrefix_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan k

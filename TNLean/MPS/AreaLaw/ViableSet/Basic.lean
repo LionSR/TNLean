@@ -72,6 +72,7 @@ initialization `i = 0` (line 372); later bond dimensions are positive polynomial
 
 open Matrix
 open scoped InnerProductSpace ComplexOrder
+open ManyBody (interval interval_mono mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -81,20 +82,20 @@ variable {L q : ℕ}
 
 /-- Vectors on the configurations of the left block of the cut after `k` sites. -/
 abbrev LeftBlockVector (L q k : ℕ) : Type :=
-  EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))
+  EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))
 
 /-- The column of the cut matrix of `ψ` after `k` sites at a configuration `b` of the sites
 right of the cut, as a vector on the left block. -/
 noncomputable def cutColumn (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
-    (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) : LeftBlockVector L q k :=
-  WithLp.toLp 2 fun a ↦ ManyBody.cutMatrix (leftBlock L k) ψ a b
+    (b : (v : {v : Fin L // v ∉ interval L 0 k}) → Fin q) : LeftBlockVector L q k :=
+  WithLp.toLp 2 fun a ↦ ManyBody.cutMatrix (interval L 0 k) ψ a b
 
 /-- The entries of a cut-matrix column. -/
 @[simp]
 theorem cutColumn_apply (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
-    (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q)
-    (a : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
-    cutColumn ψ k b a = ManyBody.cutMatrix (leftBlock L k) ψ a b :=
+    (b : (v : {v : Fin L // v ∉ interval L 0 k}) → Fin q)
+    (a : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))) :
+    cutColumn ψ k b a = ManyBody.cutMatrix (interval L 0 k) ψ a b :=
   rfl
 
 /-- The vectors on the chain whose reduced density on the first `k` sites is supported on
@@ -153,7 +154,7 @@ theorem spanProjection_mul_self {k : ℕ} (S : Set (LeftBlockVector L q k)) :
 
 /-- The matrix `spanProjection S` acts on vectors as the projection onto `Span(S)`. -/
 theorem toLp_spanProjection_mulVec {k : ℕ} (S : Set (LeftBlockVector L q k))
-    (v : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) → ℂ) :
+    (v : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k)) → ℂ) :
     WithLp.toLp 2 (spanProjection S *ᵥ v) =
       (Submodule.span ℂ S).starProjection (WithLp.toLp 2 v) := by
   have h := congrArg (fun f ↦ f (WithLp.toLp 2 v)) (toEuclideanLin_spanProjection S)
@@ -163,8 +164,8 @@ theorem toLp_spanProjection_mulVec {k : ℕ} (S : Set (LeftBlockVector L q k))
 matrix `M` after `k` sites exactly when every column of `M` lies in `Span(S)`. -/
 theorem spanProjection_mul_cutMatrix_eq_iff {k : ℕ} {S : Set (LeftBlockVector L q k)}
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} :
-    spanProjection S * ManyBody.cutMatrix (leftBlock L k) ψ =
-        ManyBody.cutMatrix (leftBlock L k) ψ ↔ ψ ∈ leftSupportSubmodule S := by
+    spanProjection S * ManyBody.cutMatrix (interval L 0 k) ψ =
+        ManyBody.cutMatrix (interval L 0 k) ψ ↔ ψ ∈ leftSupportSubmodule S := by
   rw [mem_leftSupportSubmodule]
   simp_rw [← Submodule.starProjection_eq_self_iff]
   constructor
@@ -184,13 +185,13 @@ supported on `Span(S)`, `P ρ = ρ`, exactly when `ψ ∈ Span(S) ⊗ H_R`. This
 condition of Definition `def:viable` (arXiv:1307.5143v1, algo53.tex, lines 240–242). -/
 theorem spanProjection_mul_regionState_eq_iff {k : ℕ} {S : Set (LeftBlockVector L q k)}
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} :
-    spanProjection S * ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) =
-        ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) ↔
+    spanProjection S * ManyBody.regionState (X := fun _ ↦ Fin q) ψ (interval L 0 k) =
+        ManyBody.regionState (X := fun _ ↦ Fin q) ψ (interval L 0 k) ↔
       ψ ∈ leftSupportSubmodule S := by
   rw [← spanProjection_mul_cutMatrix_eq_iff,
-    ManyBody.regionState_eq_cutMatrix_mul_conjTranspose ψ (leftBlock L k)]
+    ManyBody.regionState_eq_cutMatrix_mul_conjTranspose ψ (interval L 0 k)]
   set P := spanProjection S
-  set M := ManyBody.cutMatrix (leftBlock L k) ψ
+  set M := ManyBody.cutMatrix (interval L 0 k) ψ
   constructor
   · intro h
     have h0 : (1 - P) * (M * Mᴴ) = 0 := by rw [Matrix.sub_mul, Matrix.one_mul, h, sub_self]
@@ -209,14 +210,14 @@ theorem spanProjection_mul_regionState_eq_iff {k : ℕ} {S : Set (LeftBlockVecto
 the cut matrix `M`. -/
 theorem leftApply_cutVector_eq_iff {k : ℕ} (P : LeftBlockMatrix L q k)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ) =
-        ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ ↔
-      P * ManyBody.cutMatrix (leftBlock L k) ψ = ManyBody.cutMatrix (leftBlock L k) ψ := by
+    leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ) =
+        ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ ↔
+      P * ManyBody.cutMatrix (interval L 0 k) ψ = ManyBody.cutMatrix (interval L 0 k) ψ := by
   constructor
   · intro h
     exact congrArg (fun w ↦ schmidtCoeffMatrix (WithLp.ofLp w)) h
   · intro h
-    change toEuclid (P * ManyBody.cutMatrix (leftBlock L k) ψ) = _
+    change toEuclid (P * ManyBody.cutMatrix (interval L 0 k) ψ) = _
     rw [h]
     rfl
 
@@ -226,8 +227,8 @@ the hypothesis of `Matrix.IsTrimmingProjection.exists_trimmed_witness`. -/
 theorem leftApply_spanProjection_cutVector_eq_iff {k : ℕ} {S : Set (LeftBlockVector L q k)}
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} :
     leftApply (spanProjection S)
-        (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ) =
-        ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ ↔
+        (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ) =
+        ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) ψ ↔
       ψ ∈ leftSupportSubmodule S := by
   rw [leftApply_cutVector_eq_iff, spanProjection_mul_cutMatrix_eq_iff]
 
@@ -290,18 +291,18 @@ theorem IsViable.exists_singleton_exact_of_localDimension_one
     ∃ v ∈ S, v ≠ 0 ∧ IsViable Γ 0 ({v} : Set (LeftBlockVector L 1 i)) := by
   classical
   obtain ⟨φ, hφ, hoverlap, hφS⟩ := h
-  let b : (x : {x : Fin L // x ∉ leftBlock L i}) → Fin 1 := fun _ ↦ 0
+  let b : (x : {x : Fin L // x ∉ interval L 0 i}) → Fin 1 := fun _ ↦ 0
   have hcolumn : cutColumn φ i b ≠ 0 := by
     intro hzero
     have hφzero : φ = 0 := by
       ext z
-      let p := ManyBody.cutEquiv (fun _ ↦ Fin 1) (leftBlock L i) z
+      let p := ManyBody.cutEquiv (fun _ ↦ Fin 1) (interval L 0 i) z
       have hb : p.2 = b := Subsingleton.elim _ _
       have hz := congrArg (fun w ↦ w p.1) hzero
       rw [cutColumn_apply, ManyBody.cutMatrix_apply] at hz
-      have hp : (ManyBody.cutEquiv (fun _ ↦ Fin 1) (leftBlock L i)).symm (p.1, b) = z := by
+      have hp : (ManyBody.cutEquiv (fun _ ↦ Fin 1) (interval L 0 i)).symm (p.1, b) = z := by
         rw [← hb]
-        exact (ManyBody.cutEquiv (fun _ ↦ Fin 1) (leftBlock L i)).symm_apply_apply z
+        exact (ManyBody.cutEquiv (fun _ ↦ Fin 1) (interval L 0 i)).symm_apply_apply z
       simpa [hp] using hz
     rw [hφzero, norm_zero] at hφ
     norm_num at hφ
@@ -359,20 +360,20 @@ theorem IsViable.exists_singleton_exact_of_chainLength_zero
     ∃ v ∈ S, v ≠ 0 ∧ IsViable Γ 0 ({v} : Set (LeftBlockVector 0 q i)) := by
   classical
   obtain ⟨φ, hφ, hoverlap, hφS⟩ := h
-  let b : (x : {x : Fin 0 // x ∉ leftBlock 0 i}) → Fin q := fun x ↦ x.1.elim0
+  let b : (x : {x : Fin 0 // x ∉ interval 0 0 i}) → Fin q := fun x ↦ x.1.elim0
   have hcolumn : cutColumn φ i b ≠ 0 := by
     intro hzero
     have hφzero : φ = 0 := by
       ext z
-      let p := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock 0 i) z
+      let p := ManyBody.cutEquiv (fun _ ↦ Fin q) (interval 0 0 i) z
       have hb : p.2 = b := by
         funext x
         exact x.1.elim0
       have hz := congrArg (fun w ↦ w p.1) hzero
       rw [cutColumn_apply, ManyBody.cutMatrix_apply] at hz
-      have hp : (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock 0 i)).symm (p.1, b) = z := by
+      have hp : (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval 0 0 i)).symm (p.1, b) = z := by
         rw [← hb]
-        exact (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock 0 i)).symm_apply_apply z
+        exact (ManyBody.cutEquiv (fun _ ↦ Fin q) (interval 0 0 i)).symm_apply_apply z
       simpa [hp] using hz
     rw [hφzero, norm_zero] at hφ
     norm_num at hφ
@@ -471,8 +472,8 @@ theorem isViable_iff_forall_mem_span_singleton {Γ : EuclideanSpace ℂ (Fin L �
 /-- A configuration of `Fin k` read as a configuration of the left block of the cut after `k`
 sites. -/
 def leftConfigOfFin {k : ℕ} (x : Fin k → Fin q) :
-    (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) :=
-  fun v ↦ x ⟨v.1.val, mem_leftBlock.mp v.2⟩
+    (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k)) :=
+  fun v ↦ x ⟨v.1.val, (mem_interval.mp v.2).2⟩
 
 /-- A vector on the first `k` sites is a matrix product state of bond dimension at most `b`
 (arXiv:1307.5143v1, algo53.tex, line 243): read on `Fin k → Fin q` through
@@ -546,9 +547,9 @@ theorem isViableMPS_iff_nonempty_data
 
 /-- The restriction of a configuration of the first `k'` sites to the first `k ≤ k'`. -/
 def restrictLeft {k k' : ℕ} (h : k ≤ k')
-    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k'))) :
-    (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) :=
-  fun v ↦ x ⟨v.1, leftBlock_mono h v.2⟩
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k'))) :
+    (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k)) :=
+  fun v ↦ x ⟨v.1, interval_mono (le_refl 0) h v.2⟩
 
 /-- The vector `v ⊗ |k⟩` on the first `i` sites for `v` on the first `i - 1` sites
 (arXiv:1307.5143v1, algo53.tex, line 386). The basis state `|k⟩` sits on the sites of the left
@@ -557,7 +558,7 @@ block after `i` sites outside that after `i - 1` sites, which for `1 ≤ i ≤ L
 noncomputable def extendSite (i : ℕ) (k : Fin q) :
     LeftBlockVector L q (i - 1) →ₗ[ℂ] LeftBlockVector L q i where
   toFun v := WithLp.toLp 2 fun x ↦
-    if ∀ s : {s : Fin L // s ∈ leftBlock L i}, s.1 ∉ leftBlock L (i - 1) → x s = k then
+    if ∀ s : {s : Fin L // s ∈ interval L 0 i}, s.1 ∉ interval L 0 (i - 1) → x s = k then
       v (restrictLeft (Nat.sub_le i 1) x) else 0
   map_add' v w := by
     ext x
@@ -569,14 +570,14 @@ noncomputable def extendSite (i : ℕ) (k : Fin q) :
     split_ifs <;> simp
 
 /-- The site `i - 1`, the last site of the left block after `i` sites. -/
-def lastLeftSite {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L) : {s : Fin L // s ∈ leftBlock L i} :=
-  ⟨⟨i - 1, by omega⟩, mem_leftBlock.mpr (by simp only; omega)⟩
+def lastLeftSite {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L) : {s : Fin L // s ∈ interval L 0 i} :=
+  ⟨⟨i - 1, by omega⟩, mem_interval.mpr ⟨Nat.zero_le _, by simp only; omega⟩⟩
 
 /-- For `1 ≤ i ≤ L`, `(v ⊗ |k⟩)(x) = v(x₀, …, x_{i-2})` when `x_{i-1} = k` and `0`
 otherwise. -/
 theorem extendSite_apply {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L) (k : Fin q)
     (v : LeftBlockVector L q (i - 1))
-    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i))) :
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 i))) :
     extendSite i k v x =
       if x (lastLeftSite hi0 hiL) = k then v (restrictLeft (Nat.sub_le i 1) x) else 0 := by
   change (if _ then _ else _) = _
@@ -584,11 +585,11 @@ theorem extendSite_apply {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L) (k : Fin q)
   apply propext
   constructor
   · intro h
-    exact h _ (by simp [lastLeftSite, mem_leftBlock])
+    exact h _ (by simp [lastLeftSite, mem_interval])
   · intro h s hs2
     have : s = lastLeftSite hi0 hiL := by
-      have h1 := mem_leftBlock.mp s.2
-      have h2 : ¬ s.1.val < i - 1 := fun h ↦ hs2 (mem_leftBlock.mpr h)
+      have h1 := (mem_interval.mp s.2).2
+      have h2 : ¬ s.1.val < i - 1 := fun h ↦ hs2 (mem_interval.mpr ⟨Nat.zero_le _, h⟩)
       exact Subtype.ext (Fin.ext (by simp only [lastLeftSite]; omega))
     rw [this, h]
 
@@ -632,16 +633,16 @@ theorem card_extend_le (i : ℕ) (S : Finset (LeftBlockVector L q (i - 1))) :
 
 /-- The configuration `(k, b)` of the sites right of the cut after `i - 1` sites, for `b` on
 the sites right of the cut after `i` sites. -/
-def consRightConfig {i : ℕ} (k : Fin q) (b : (v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) :
-    (v : {v : Fin L // v ∉ leftBlock L (i - 1)}) → Fin q :=
-  fun v ↦ if h : v.1 ∈ leftBlock L i then k else b ⟨v.1, h⟩
+def consRightConfig {i : ℕ} (k : Fin q) (b : (v : {v : Fin L // v ∉ interval L 0 i}) → Fin q) :
+    (v : {v : Fin L // v ∉ interval L 0 (i - 1)}) → Fin q :=
+  fun v ↦ if h : v.1 ∈ interval L 0 i then k else b ⟨v.1, h⟩
 
 /-- Decomposing site `i - 1` on the computational basis: the column of the cut matrix after `i`
 sites at `b` is `∑ₖ c_{k,b} ⊗ |k⟩`, with `c_{k,b}` the column after `i - 1` sites at `(k, b)`
 (arXiv:1307.5143v1, algo53.tex, line 399). -/
 theorem cutColumn_eq_sum_extendSite {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q))
-    (b : (v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) :
+    (b : (v : {v : Fin L // v ∉ interval L 0 i}) → Fin q) :
     cutColumn ψ i b =
       ∑ k : Fin q, extendSite i k (cutColumn ψ (i - 1) (consRightConfig k b)) := by
   ext x
@@ -651,16 +652,16 @@ theorem cutColumn_eq_sum_extendSite {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L)
   refine congrArg (fun y ↦ ψ y) ?_
   funext j
   by_cases h1 : (j : ℕ) < i - 1
-  · have hj : j ∈ leftBlock L (i - 1) := mem_leftBlock.mpr h1
-    have hj' : j ∈ leftBlock L i := mem_leftBlock.mpr (by omega)
+  · have hj : j ∈ interval L 0 (i - 1) := mem_interval.mpr ⟨Nat.zero_le _, h1⟩
+    have hj' : j ∈ interval L 0 i := mem_interval.mpr ⟨Nat.zero_le _, by omega⟩
     simp [Equiv.piEquivPiSubtypeProd_symm_apply, hj, hj', restrictLeft]
-  · have hj : j ∉ leftBlock L (i - 1) := fun h ↦ h1 (mem_leftBlock.mp h)
+  · have hj : j ∉ interval L 0 (i - 1) := fun h ↦ h1 (mem_interval.mp h).2
     by_cases h2 : (j : ℕ) < i
-    · have hj' : j ∈ leftBlock L i := mem_leftBlock.mpr h2
+    · have hj' : j ∈ interval L 0 i := mem_interval.mpr ⟨Nat.zero_le _, h2⟩
       simp only [Equiv.piEquivPiSubtypeProd_symm_apply, hj, hj', consRightConfig, ↓reduceDIte]
       congr 1
       exact Subtype.ext (Fin.ext (by simp only [lastLeftSite]; omega))
-    · have hj' : j ∉ leftBlock L i := fun h ↦ h2 (mem_leftBlock.mp h)
+    · have hj' : j ∉ interval L 0 i := fun h ↦ h2 (mem_interval.mp h).2
       simp [Equiv.piEquivPiSubtypeProd_symm_apply, hj, hj', consRightConfig]
 
 /-- **The witness survives the extension** (arXiv:1307.5143v1, algo53.tex, line 399). For

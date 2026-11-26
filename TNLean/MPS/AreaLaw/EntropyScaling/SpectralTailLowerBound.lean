@@ -18,6 +18,7 @@ Eq. (eps-lower), lines 246–264.
 -/
 
 open scoped ComplexOrder
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -25,29 +26,29 @@ namespace TNLean.MPS.AreaLaw
 pure-density trace error of any MPS approximant of bond dimension `D`.
 No normalization of the approximant or small-error assumption is required.
 Source: SWVC08, arXiv:0705.0292v2, Eq. (eps-lower), lines 246–264. -/
-theorem IsOpenMPS.sum_descEigenvalue_leftBlock_tail_le_traceNorm
+theorem IsOpenMPS.sum_descEigenvalue_interval_tail_le_traceNorm
     {L q D : ℕ} {ψ φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (hψ : ‖ψ‖ = 1)
     {k : ℕ} (hk0 : 0 < k) (hkL : k < L) :
-    ∑ i ∈ Finset.Ico D (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))),
-      (ManyBody.regionState_posSemidef (leftBlock L k) ψ).isHermitian.descEigenvalue i ≤
+    ∑ i ∈ Finset.Ico D (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))),
+      (ManyBody.regionState_posSemidef (interval L 0 k) ψ).isHermitian.descEigenvalue i ≤
         Matrix.rectangularTraceNorm
           (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) := by
   classical
   by_cases hsmall : Matrix.rectangularTraceNorm
       (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) < 1
   · have ht := Entropy.sum_descEigenvalue_regionState_tail_le_half_pure_trace_error
-      ψ φ hψ (leftBlock L k) (hφ.rank_regionState_leftBlock_le hk0 hkL) hsmall le_rfl
+      ψ φ hψ (interval L 0 k) (hφ.rank_regionState_interval_le hk0 hkL) hsmall le_rfl
     exact ht.trans (half_le_self (Matrix.rectangularTraceNorm_nonneg _))
   · apply le_trans (b := (1 : ℝ)) ?_ (le_of_not_gt hsmall)
     have htotal : (ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q)
-        (leftBlock L k) ψ).isHermitian.kyFanNorm
-        (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) = 1 := by
+        (interval L 0 k) ψ).isHermitian.kyFanNorm
+        (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) (interval L 0 k))) = 1 := by
       rw [Matrix.IsHermitian.kyFanNorm_card_eq_trace_re]
       simp [ManyBody.trace_regionState, hψ]
     rw [← htotal]
     apply Finset.sum_le_sum_of_subset_of_nonneg
     · exact fun i hi ↦ Finset.mem_range.mpr (Finset.mem_Ico.mp hi).2
-    · exact fun i _ _ ↦ (ManyBody.regionState_posSemidef (leftBlock L k) ψ).descEigenvalue_nonneg i
+    · exact fun i _ _ ↦ (ManyBody.regionState_posSemidef (interval L 0 k) ψ).descEigenvalue_nonneg i
 
 end TNLean.MPS.AreaLaw

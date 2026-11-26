@@ -51,6 +51,8 @@ It also contains the following results.
   product state approximation from the entropy of the cuts.
 -/
 
+open ManyBody (interval)
+
 section MPSFromEntropy
 
 /-!
@@ -113,18 +115,18 @@ theorem isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy [NeZero q]
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {ξ' C₁ : ℝ} (hξ' : 0 < ξ')
     (hfact : ∀ j ∈ Finset.Ico 1 L, ∀ m : ℕ, j + m ≤ L →
       ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (SB SL SR : Finset (Fin L)),
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L 0 (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ interval L 0 j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (interval L 0 j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k₀ : ℕ}
     (hk₀ : ∀ j ∈ Finset.Ico 1 L,
-      Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L j)) / 2 ≤
+      Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j)) / 2 ≤
         k₀)
     {k' : ℕ} (hk' : k₀ ≤ k') :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k)
         Ω).leadingEigenprojection k'
     let Φ := sequentialTruncation P (L - 1) Ω
     IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -153,14 +155,14 @@ theorem isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy [NeZero q]
       refine ⟨hmps, ?_⟩
       have hk'1 : 1 ≤ k' := le_trans (by exact_mod_cast hk₀pos) hk'
       have hzero : ∀ j ∈ Finset.Ico 1 L, Real.sqrt (1 -
-          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin 1) (leftBlock L j)
+          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin 1) (interval L 0 j)
             Ω).kyFanNorm k') = 0 := by
         intro j _
         refine Real.sqrt_eq_zero'.2 ?_
-        have hpsd := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin 1) (leftBlock L j) Ω
+        have hpsd := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin 1) (interval L 0 j) Ω
         have hcard := hpsd.isHermitian.kyFanNorm_card_eq_trace_re
         rw [ManyBody.trace_regionState, hΩ] at hcard
-        have hc1 : Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin 1) (leftBlock L j)) ≤ k' :=
+        have hc1 : Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin 1) (interval L 0 j)) ≤ k' :=
           (Fintype.card_le_one_iff_subsingleton.2 inferInstance).trans hk'1
         have := hpsd.kyFanNorm_mono hc1
         simp only [one_pow, Complex.ofReal_one, Complex.one_re] at hcard
@@ -182,11 +184,11 @@ theorem isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy [NeZero q]
         IsFactorizationAt Ω j m (C₁ * Real.exp (-(m / ξ'))) OB OL OR)
     {k₀ : ℕ}
     (hk₀ : ∀ j ∈ Finset.Ico 1 L,
-      Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L j)) / 2 ≤
+      Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j)) / 2 ≤
         k₀)
     {k' : ℕ} (hk' : k₀ ≤ k') :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k)
         Ω).leadingEigenprojection k'
     let Φ := sequentialTruncation P (L - 1) Ω
     IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -233,7 +235,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainInter
     {k' : ℕ} (hk' : ⌈Real.exp (2 * areaLawBound ξ' C₁ q) / 2⌉₊ ≤ k') :
     let k₀ := ⌈Real.exp (2 * areaLawBound ξ' C₁ q) / 2⌉₊
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k)
         Ω).leadingEigenprojection k'
     let Φ := sequentialTruncation P (L - 1) Ω
     IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -244,8 +246,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainInter
     (fun j _ m hm ↦ hfact j m hm) (fun j _ ↦ ?_) hk'
   -- The area law bounds the entropy of every initial segment by `S_max`.
   have hS := regionEntropy_prefix_le_of_factorization h hΩ hgap hspan hξ' hC₁ hfact j
-  rw [← leftBlock_eq_interval] at hS
-  calc Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L j)) / 2
+  calc Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j)) / 2
       ≤ Real.exp (2 * areaLawBound ξ' C₁ q) / 2 := by gcongr
     _ ≤ k₀ := Nat.le_ceil _
 
@@ -271,7 +272,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped (R : ℕ) {κ : ℝ} (hκ : 
         let k₀ := ⌈Real.exp (2 * areaLawBound (κ * lemmaOneLength R (J / ΔE) 1)
           (max (K * lemmaOneLength R (J / ΔE) 1 ^ 3) 1) q) / 2⌉₊
         let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
+          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k)
             Ω).leadingEigenprojection k'
         let Φ := sequentialTruncation P (L - 1) Ω
         IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -308,7 +309,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint (R : ℕ) :
         let k₀ := ⌈Real.exp (2 * areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
           (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q) / 2⌉₊
         let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
+          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k)
             Ω).leadingEigenprojection k'
         let Φ := sequentialTruncation P (L - 1) Ω
         IsOpenMPS L q k' (fun x ↦ Φ x) ∧

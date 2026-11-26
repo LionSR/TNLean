@@ -19,9 +19,6 @@ this bound with the area law to prove Theorem~B.
         TNLean.MPS.AreaLaw.OpenMPSRepresentation.isOpenMPS,
         TNLean.MPS.AreaLaw.OpenMPSRepresentation.smul,
         TNLean.MPS.AreaLaw.IsOpenMPS.smul,
-        TNLean.MPS.AreaLaw.leftBlock,
-        TNLean.MPS.AreaLaw.mem_leftBlock,
-        TNLean.MPS.AreaLaw.leftBlock_eq_interval,
         ManyBody.cutMatrix_apply
     }
     \leanok
@@ -207,8 +204,8 @@ this bound with the area law to prove Theorem~B.
 
 \begin{lemma}[Reduced states at a chain cut]
     \label{thm:chain_reduced_state_rank_error}
-    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_leftBlock_le,
-        TNLean.MPS.AreaLaw.rectangularTraceNorm_regionState_leftBlock_sub_le}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.rank_regionState_interval_le,
+        TNLean.MPS.AreaLaw.rectangularTraceNorm_regionState_interval_sub_le}
     \leanok
     For vectors $\psi,\phi$ on a finite chain, write
     $\rho_k=\operatorname{Tr}_{k+1,\ldots,L}|\psi\rangle\langle\psi|$ and
@@ -233,7 +230,7 @@ this bound with the area law to prove Theorem~B.
 
 \begin{lemma}[Spectral-tail lower bound for MPS approximation]
     \label{thm:chain_spectral_tail_lower_bound}
-    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.sum_descEigenvalue_leftBlock_tail_le_traceNorm}
+    \lean{TNLean.MPS.AreaLaw.IsOpenMPS.sum_descEigenvalue_interval_tail_le_traceNorm}
     \leanok
     Let $\psi$ be a unit vector on a chain of $L$ sites, and let $\phi$
     be an open-boundary matrix product state of bond dimension at most $D$.
@@ -454,7 +451,6 @@ this bound with the area law to prove Theorem~B.
         TNLean.MPS.AreaLaw.LeftBlockMatrix,
         TNLean.MPS.AreaLaw.cutTruncation,
         TNLean.MPS.AreaLaw.sequentialTruncation,
-        TNLean.MPS.AreaLaw.leftBlock_mono,
         TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_le,
         TNLean.MPS.AreaLaw.exists_sequentialTruncation_eq_localLift,
         TNLean.MPS.AreaLaw.rank_cutMatrix_sequentialTruncation_le,

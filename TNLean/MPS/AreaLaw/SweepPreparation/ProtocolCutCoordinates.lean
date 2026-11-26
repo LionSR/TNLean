@@ -56,6 +56,8 @@ part2b_mps_protocol.tex, lines 605–615. The constructor is the existing
 open-boundary rank theorem associated with Part IIa, prop:VC, lines 39–62.
 -/
 
+open ManyBody (interval mem_interval)
+
 section
 
 noncomputable section
@@ -132,16 +134,16 @@ private theorem mainConfigurationEquiv_glue (S : Finset (Fin L))
 private theorem cutMatrix_eq_flattening_submatrix
     (ψ : EuclideanSpace ℂ ((p : Party L w) → Fin (physicalDimension L w q p)))
     (k : ℕ) (T : Finset (Party L w))
-    (h : ∀ x, x ∈ leftBlock L k ↔ mainOwner L w x ∈ T) :
-    cutMatrix (leftBlock L k) (WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))) =
+    (h : ∀ x, x ∈ interval L 0 k ↔ mainOwner L w x ∈ T) :
+    cutMatrix (interval L 0 k) (WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))) =
       (TNLean.Network.WholeGroup.flattening (fun y ↦ ψ y) T).submatrix
         (blockCutEquiv h) (blockCutEquiv (fun x ↦ not_congr (h x))) := by
   classical
   ext a b
   rw [ManyBody.cutMatrix_apply]
   change ψ (mainConfigurationEquiv L w q
-    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (a, b))) = _
-  exact congrArg (fun y ↦ ψ y) (mainConfigurationEquiv_glue (leftBlock L k) T h a b)
+    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (interval L 0 k)).symm (a, b))) = _
+  exact congrArg (fun y ↦ ψ y) (mainConfigurationEquiv_glue (interval L 0 k) T h a b)
 
 private theorem partyLevel_mainOwner_lt_iff (r : ℕ) (hr : r ≤ stageCount L w)
     (x : Fin L) : partyLevel (mainOwner L w x) < r ↔ x.val < r * (20 * w) := by
@@ -168,13 +170,13 @@ theorem rank_partyPrefix_eq_cutMatrix
     let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < r
     let Φ := WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
     (TNLean.Network.WholeGroup.flattening (fun y ↦ ψ y) T).rank =
-      (cutMatrix (leftBlock L (r * (20 * w))) Φ).rank := by
+      (cutMatrix (interval L 0 (r * (20 * w))) Φ).rank := by
   classical
   dsimp only
   let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < r
-  have h : ∀ x, x ∈ leftBlock L (r * (20 * w)) ↔ mainOwner L w x ∈ T := by
+  have h : ∀ x, x ∈ interval L 0 (r * (20 * w)) ↔ mainOwner L w x ∈ T := by
     intro x
-    simpa only [mem_leftBlock, T, Finset.mem_filter, Finset.mem_univ, true_and] using
+    simpa only [mem_interval, T, Finset.mem_filter, Finset.mem_univ, true_and, Nat.zero_le] using
       (partyLevel_mainOwner_lt_iff r hr x).symm
   exact (Matrix.rank_submatrix _ _ _).symm.trans
     (congrArg Matrix.rank (cutMatrix_eq_flattening_submatrix ψ (r * (20 * w)) T h).symm)
@@ -187,7 +189,7 @@ theorem rank_partyPrefix_last_eq_cutMatrix
     let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < stageCount L w + 1
     let Φ := WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
     (TNLean.Network.WholeGroup.flattening (fun y ↦ ψ y) T).rank =
-      (cutMatrix (leftBlock L L) Φ).rank := by
+      (cutMatrix (interval L 0 L) Φ).rank := by
   classical
   dsimp only
   let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < stageCount L w + 1
@@ -195,9 +197,9 @@ theorem rank_partyPrefix_last_eq_cutMatrix
     cases p with
     | inl p => exact p.isLt
     | inr p => exact p.isLt.trans (Nat.lt_succ_self _)
-  have h : ∀ x, x ∈ leftBlock L L ↔ mainOwner L w x ∈ T := by
+  have h : ∀ x, x ∈ interval L 0 L ↔ mainOwner L w x ∈ T := by
     intro x
-    simp only [mem_leftBlock, x.isLt, T, Finset.mem_filter, Finset.mem_univ, true_and,
+    simp only [mem_interval, Nat.zero_le, x.isLt, T, Finset.mem_filter, Finset.mem_univ, true_and,
       hlevel, iff_self]
   exact (Matrix.rank_submatrix _ _ _).symm.trans
     (congrArg Matrix.rank (cutMatrix_eq_flattening_submatrix ψ L T h).symm)
@@ -214,11 +216,11 @@ theorem rank_cutMatrix_le_of_partyPrefix_bounds
         (Finset.univ.filter fun p : Party L w ↦ partyLevel p < r)).rank ≤ R)
     (k : ℕ) (hk : k ≤ L) :
     let Φ := WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
-    (cutMatrix (leftBlock L k) Φ).rank ≤ q ^ (40 * w) * R := by
+    (cutMatrix (interval L 0 k) Φ).rank ≤ q ^ (40 * w) * R := by
   classical
   let Φ : EuclideanSpace ℂ (Fin L → Fin q) :=
     WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
-  change (cutMatrix (leftBlock L k) Φ).rank ≤ _
+  change (cutMatrix (interval L 0 k) Φ).rank ≤ _
   let m := stageCount L w
   let t := 20 * w
   have ht : 0 < t := by dsimp [t]; omega
@@ -228,7 +230,7 @@ theorem rank_cutMatrix_le_of_partyPrefix_bounds
   have hmL : m * t ≤ L := by omega
   have hterminal := (terminal_length_bounds L w hw hgeometry).2
   change L - m * t < 4 * t at hterminal
-  have hcut (r : ℕ) (hr : r ≤ m) : (cutMatrix (leftBlock L (r * t)) Φ).rank ≤ R := by
+  have hcut (r : ℕ) (hr : r ≤ m) : (cutMatrix (interval L 0 (r * t)) Φ).rank ≤ R := by
     by_cases hr0 : r = 0
     · subst r
       rw [Nat.zero_mul]
@@ -345,7 +347,7 @@ theorem isOpenMPS_of_polynomial_partyPrefix_bounds
       WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
     let B := q ^ (40 * w) * (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ χ
     let n := max 1 (⌈40 * D * Real.log q⌉₊ + χ * α)
-    ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix (leftBlock L k) Φ).rank ≤ B) ∧
+    ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix (interval L 0 k) Φ).rank ≤ B) ∧
       IsOpenMPS L q B (fun x ↦ Φ x) ∧ 1 ≤ n ∧
         (B : ℝ) ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ χ * (L : ℝ) ^ n := by
   classical
@@ -354,7 +356,7 @@ theorem isOpenMPS_of_polynomial_partyPrefix_bounds
   let R := (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ χ
   let B := q ^ (40 * w) * R
   let n := max 1 (⌈40 * D * Real.log q⌉₊ + χ * α)
-  change ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix (leftBlock L k) Φ).rank ≤ B) ∧
+  change ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix (interval L 0 k) Φ).rank ≤ B) ∧
     IsOpenMPS L q B (fun x ↦ Φ x) ∧ 1 ≤ n ∧
       (B : ℝ) ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ χ * (L : ℝ) ^ n
   have hw1 : 1 ≤ w := by
@@ -368,7 +370,7 @@ theorem isOpenMPS_of_polynomial_partyPrefix_bounds
     change ‖LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (mainConfigurationEquiv L w q).symm ψ‖ = 1
     rw [LinearIsometryEquiv.norm_map, hψ]
-  have hcuts (k : ℕ) (hk : k ≤ L) : (cutMatrix (leftBlock L k) Φ).rank ≤ B :=
+  have hcuts (k : ℕ) (hk : k ≤ L) : (cutMatrix (interval L 0 k) Φ).rank ≤ B :=
     rank_cutMatrix_le_of_partyPrefix_bounds ψ hq hw1 hlarge hR hprefix k hk
   have hmps : IsOpenMPS L q B (fun x ↦ Φ x) :=
     isOpenMPS_of_internal_cutMatrix_rank_le Φ (fun k _ hk ↦ hcuts k hk.le)

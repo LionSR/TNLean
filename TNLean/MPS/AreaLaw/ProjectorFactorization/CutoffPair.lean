@@ -187,7 +187,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c
     (hmk : R + k ≤ m) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h.localizedPart Ω s ΔE (h.partialHamiltonian (cutLeftSupports L R c m))
-        (leftWindow L R c m k)) (leftBlock L c) := by
+        (leftWindow L R c m k)) (interval L 0 c) := by
   by_cases hcm : c ≤ m
   · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
     change _ ∈ ManyBody.supportedOperators _ _
@@ -195,8 +195,8 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c
   refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_)
     ((graphNeighborhood_pathGraph_interval_subset _ _ _).trans fun x hx ↦ ?_)
-  · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
-  · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
+  · rw [mem_interval] at hx ⊢; omega
+  · rw [mem_interval] at hx ⊢; omega
 
 /-- **The localized right part acts right of the cut.** If `R + k ≤ m`, then `M_R` is supported
 on the sites `i ≥ c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
@@ -204,12 +204,12 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {
     (hmk : R + k ≤ m) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h.localizedPart Ω s ΔE (h.partialHamiltonian (cutRightSupports L R c m))
-        (rightWindow L R c m k)) (leftBlock L c)ᶜ := by
+        (rightWindow L R c m k)) (interval L 0 c)ᶜ := by
   refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_rightPart c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_)
     ((graphNeighborhood_pathGraph_interval_subset _ _ _).trans fun x hx ↦ ?_)
-  · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
-  · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
+  · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_interval]; omega
+  · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_interval]; omega
 
 include hh in
 /-- **The localized part nearly annihilates the ground state.** If `‖[H, P]‖ ≤ c_P` and the
@@ -273,8 +273,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
     {c m k : ℕ} (hmk : R + k ≤ m) {θ T : ℝ} (hθ : 0 < θ) (hT : 0 ≤ T) :
     ∃ H₀ OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       H₀.IsHermitian ∧ IsStarProjection OL ∧ IsStarProjection OR ∧ Commute OL OR ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (leftBlock L c) ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (leftBlock L c)ᶜ ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (interval L 0 c) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (interval L 0 c)ᶜ ∧
       ‖H₀ * (OL * OR)‖ ≤ 2 * θ ∧
       ‖Ω - toEuclideanLin (OL * OR) Ω‖ ≤
         2 * (ΔE⁻¹ * Real.exp (-s / 2) * (cutCommutatorConst R * J ^ 2) +
@@ -296,9 +296,9 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hPR : PR.IsHermitian := ManyBody.Interaction.isHermitian_partialHamiltonian fun X _ ↦ hh X
   have hML : ML.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPL KL
   have hMR : MR.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPR KR
-  have hsL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) ML (leftBlock L c) :=
+  have hsL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) ML (interval L 0 c) :=
     h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
-  have hsR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) MR (leftBlock L c)ᶜ :=
+  have hsR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) MR (interval L 0 c)ᶜ :=
     h.isSupportedOn_localizedPart_rightPart Ω s ΔE hmk
   have hcomm : Commute (Matrix.spectralCutoff ML θ) (Matrix.spectralCutoff MR θ) :=
     ManyBody.commute_of_mem_supportedOperators_of_disjoint

@@ -232,7 +232,7 @@ with error `1`. -/
 theorem isFactorizationAt_zero_one_one {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (c l : ℕ) : IsFactorizationAt Ω c l 1 0 1 1 := by
   have h1 : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (leftBlock L c) :=
+      (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (interval L 0 c) :=
     one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
   refine ⟨IsStarProjection.one _, IsStarProjection.one _, Commute.one_left 1, by simp,
     zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _), h1,

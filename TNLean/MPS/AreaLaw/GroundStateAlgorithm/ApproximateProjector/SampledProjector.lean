@@ -656,7 +656,7 @@ theorem exists_sampledProjector [NeZero L]
       (∀ k j, letterCount (I k) j ≤
         sampledProjectorLetterBound L (sampledProjectorWordCount q L E₀ η m) m) ∧
       ∀ k (b : Fin (L - 1)), Matrix.operatorSchmidtRank (ManyBody.cutOperator
-        (X := fun _ ↦ Fin q) (leftBlock L (b + 1)) (bondComplementWord Φ (I k))) ≤
+        (X := fun _ ↦ Fin q) (interval L 0 (b + 1)) (bondComplementWord Φ (I k))) ≤
         q ^ (2 * sampledProjectorLetterBound L (sampledProjectorWordCount q L E₀ η m) m) := by
   set ℓ := sampledProjectorWordCount q L E₀ η m
   set κ := sampledProjectorLetterBound L ℓ m

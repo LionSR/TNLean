@@ -103,7 +103,7 @@ private theorem surprisalTail_region_le_of_family_budget
 bound with the uniform chain budget. Source: the one-dimensional note,
 `part1_arealaw.tex`, `lem:tail` and `eq:theta`, together with
 `part2a_mps_information.tex`, `thm:Bshort`, lines 80–92. -/
-private theorem surprisalTail_leftBlock_le
+private theorem surprisalTail_interval_le
     {L q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
@@ -113,15 +113,14 @@ private theorem surprisalTail_leftBlock_le
     (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
     Entropy.surprisalTail
       (ManyBody.regionState_isHermitian
-        (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
-      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w ≤
+        (X := fun _ ↦ Fin q) (interval L 0 k) Ω).eigenvalues
+      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) w ≤
       2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w /
           (32 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)))) := by
   refine surprisalTail_region_le_of_family_budget h.term
     (fun X : ChainSupport L R ↦ X.1) h.mem hh hJ hhJ hΔ hΩ hgap hspan
-    (leftBlock L k) ?_ w hw
-  rw [leftBlock_eq_interval]
+    (interval L 0 k) ?_ w hw
   exact ManyBody.cutLogBudget_interval_le hq 0 k
 
 open scoped ComplexOrder Matrix.Norms.L2Operator in
@@ -129,7 +128,7 @@ open scoped ComplexOrder Matrix.Norms.L2Operator in
 contained windows satisfies the two-sided tail bound with budget
 `1 + 2R log²(e q^(R+1))`. Source: the one-dimensional note, Remark `rem:sharper`,
 lines 706–745, and Lemma `lem:tail`, equations `eq:theta` and `eq:mgf`. -/
-private theorem surprisalTail_leftBlock_le_of_consecutive_terms
+private theorem surprisalTail_interval_le_of_consecutive_terms
     {L q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
@@ -141,8 +140,8 @@ private theorem surprisalTail_leftBlock_le_of_consecutive_terms
     (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
     Entropy.surprisalTail
       (ManyBody.regionState_isHermitian
-        (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
-      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w ≤
+        (X := fun _ ↦ Fin q) (interval L 0 k) Ω).eigenvalues
+      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) w ≤
       2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * ManyBody.windowBudgetConst q R)))) := by
   classical
@@ -154,8 +153,7 @@ private theorem surprisalTail_leftBlock_le_of_consecutive_terms
   rw [← hsum] at hgap hspan
   refine surprisalTail_region_le_of_family_budget g D
     (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) hJ
-    (fun X ↦ hhJ X.val) hΔ hΩ hgap hspan (leftBlock L k) ?_ w hw
-  rw [leftBlock_eq_interval]
+    (fun X ↦ hhJ X.val) hΔ hΩ hgap hspan (interval L 0 k) ?_ w hw
   exact h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow 0 k
 
 open scoped ComplexOrder in
@@ -166,7 +164,7 @@ Source: the one-dimensional note, `part2a_mps_information.tex`,
 `sec:shortcut`, proof of `thm:Bshort`, lines 80–92, together with the marginal
 tail estimate in `part1_arealaw.tex`, `lem:tail` and `eq:theta`.
 -/
-theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
+theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_interval_bounds
     {L q R : ℕ} {J Δ : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
@@ -174,7 +172,7 @@ theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
-    let ρ := ManyBody.regionState (X := fun _ ↦ Fin q) Ω (leftBlock L k)
+    let ρ := ManyBody.regionState (X := fun _ ↦ Fin q) Ω (interval L 0 k)
     let P := Matrix.spectralProjectionGE ρ
       (Real.exp (-(chainIntervalEntropyBound q R J Δ + w)))
     IsStarProjection P ∧
@@ -185,15 +183,14 @@ theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
             (32 * Real.sqrt ((1 + J / Δ) * ManyBody.chainBudgetConst q R)))) := by
   classical
   dsimp only
-  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) Ω
+  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (interval L 0 k) Ω
   refine ⟨hρ.isHermitian.isStarProjection_spectralProjectionGE _,
     hρ.rank_spectralProjectionGE_exp_le (ManyBody.trace_regionState_eq_one hΩ) _ _, ?_⟩
   let C := chainIntervalEntropyBound q R J Δ
-  let S := ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)
+  let S := ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)
   let v := C + w - S
   have hS : S ≤ C := by
     dsimp only [S, C]
-    rw [leftBlock_eq_interval]
     exact regionEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan _ _
   have hwv : w ≤ v := by
     dsimp only [v]
@@ -204,7 +201,7 @@ theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
     ring
   have hmass := hρ.trace_complement_spectralProjectionGE_le_surprisalTail S v
   rw [hcenter] at hmass
-  refine hmass.trans ((surprisalTail_leftBlock_le hq hJ hΔ h hh hhJ hΩ hgap hspan k v hv).trans ?_)
+  refine hmass.trans ((surprisalTail_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan k v hv).trans ?_)
   apply mul_le_mul_of_nonneg_left _ (by positivity)
   apply Real.exp_le_exp.mpr
   exact neg_le_neg (div_le_div_of_nonneg_right hwv (by positivity))
@@ -245,14 +242,14 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1)
     (hS : ∀ k : ℕ,
-      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤ C)
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k) ≤ C)
     (htail :
       let w : ℝ := 64 * s * Real.log (2 * (L : ℝ) * tailPrefactorRoot / ε)
       0 ≤ w → ∀ k ∈ Finset.Ico 1 L,
         Entropy.surprisalTail
           (ManyBody.regionState_isHermitian
-            (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
-          (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w ≤
+            (X := fun _ ↦ Fin q) (interval L 0 k) Ω).eigenvalues
+          (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) w ≤
           2 * Real.exp (Real.exp 1 / 2) * Real.exp (-(w / (32 * s)))) :
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
       IsOpenMPS L q
@@ -276,8 +273,8 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
   obtain ⟨Φ₀, hrank, hdist⟩ := exists_sequentialTruncation Ω hΩ w
   -- the distance
   have hsum : ∑ k ∈ Finset.Ico 1 L, Real.sqrt (Entropy.surprisalTail
-      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
-      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w) ≤
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k) Ω).eigenvalues
+      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) w) ≤
       ((L : ℝ) - 1) * (ε / (2 * (L : ℝ))) := by
     have hone : Real.sqrt (2 * Real.exp (Real.exp 1 / 2) * Real.exp (-(w / (32 * s)))) =
         ε / (2 * (L : ℝ)) := by
@@ -296,8 +293,8 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
         field_simp
       rw [this, Real.sqrt_sq (by positivity)]
     have hterm : ∀ k ∈ Finset.Ico 1 L, Real.sqrt (Entropy.surprisalTail
-        (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
-        (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w) ≤
+        (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L 0 k) Ω).eigenvalues
+        (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) w) ≤
         ε / (2 * (L : ℝ)) := fun k hk ↦ by
       rw [← hone]
       exact Real.sqrt_le_sqrt (htail hw0 k hk)
@@ -322,7 +319,7 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     rw [← hΦ₁def, norm_sub_rev Φ₀ Ω] at h
     linarith
   -- the matrix product structure
-  have hD : ∀ k, (ManyBody.cutMatrix (leftBlock L k) Φ₀).rank ≤ ⌊Real.exp (C + w)⌋₊ := by
+  have hD : ∀ k, (ManyBody.cutMatrix (interval L 0 k) Φ₀).rank ≤ ⌊Real.exp (C + w)⌋₊ := by
     intro k
     apply Nat.le_floor
     refine (hrank k).trans (max_le ?_ ?_)
@@ -362,11 +359,10 @@ theorem exists_isOpenMPS_norm_sub_le_of_error
   refine exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     (chainIntervalEntropyBound_nonneg hq hJ hΔ) hs hL hΩ hε hε1 ?_ ?_
   · intro k
-    rw [leftBlock_eq_interval]
     exact regionEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan _ _
   · dsimp only
     intro hw k _
-    exact surprisalTail_leftBlock_le hq hJ hΔ h hh hhJ hΩ hgap hspan k _ hw
+    exact surprisalTail_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan k _ hw
 
 /-- A gapped chain whose actual nonzero interactions occupy full contained windows
 has a normalized matrix product state approximant at every accuracy `0 < ε ≤ 1`.
@@ -408,19 +404,18 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
   refine exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     hC hs hL hΩ hε hε1 ?_ ?_
   · intro k
-    have hprefix : (boundaryEdges L (leftBlock L k)).card ≤ 1 := by
-      rw [leftBlock_eq_interval]
+    have hprefix : (boundaryEdges L (interval L 0 k)).card ≤ 1 := by
       exact ManyBody.card_boundaryEdges_prefix_le L k
-    have hprefix' : ((boundaryEdges L (leftBlock L k)).card : ℝ) ≤ 1 := by
+    have hprefix' : ((boundaryEdges L (interval L 0 k)).card : ℝ) ≤ 1 := by
       exact_mod_cast hprefix
-    calc ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)
-        ≤ C * (boundaryEdges L (leftBlock L k)).card :=
-          harea L h hh hhJ hwindow E₀ Ω hΩ hgap hspan (leftBlock L k)
+    calc ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)
+        ≤ C * (boundaryEdges L (interval L 0 k)).card :=
+          harea L h hh hhJ hwindow E₀ Ω hΩ hgap hspan (interval L 0 k)
       _ ≤ C * 1 := mul_le_mul_of_nonneg_left hprefix' hC
       _ = C := mul_one _
   · dsimp only
     intro hw k _
-    exact surprisalTail_leftBlock_le_of_consecutive_terms hq hJ hΔ h hh hhJ hwindow hΩ
+    exact surprisalTail_interval_le_of_consecutive_terms hq hJ hΔ h hh hhJ hwindow hΩ
         hgap hspan k _ hw
 
 /-- Accuracy-dependent MPS approximation with the original printed interval constant.
@@ -460,11 +455,10 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_polynomial
   refine exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     hC hs hL hΩ hε hε1 ?_ ?_
   · intro k
-    rw [leftBlock_eq_interval]
     exact regionEntropy_interval_le_polynomial hq hJ hΔ h hh hhJ hΩ hgap hspan _ _
   · dsimp only
     intro hw k _
-    exact surprisalTail_leftBlock_le hq hJ hΔ h hh hhJ hΩ hgap hspan k _ hw
+    exact surprisalTail_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan k _ hw
 
 /-- **Theorem B: polynomial matrix product state approximation on a chain.** For a gapped
 ground vector `Ω` of a finite-range Hamiltonian on the chain of `L ≥ 1` sites there is a

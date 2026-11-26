@@ -268,7 +268,7 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
           P * (L + 1) ^ d ∧
         ∀ A ∈ gaussianFilterFactors Φ h0 (lvvSuccessiveError Delta) Delta i,
           ∀ k, k < i → operatorSchmidtRank
-            (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
+            (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval i 0 k)
               (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ P * (L + 1) ^ d) ∧
       (∀ i : ℕ, i ≤ L → (lvvSweep hq Φ h0 h1 Delta i).card ≤ P * (L + 1) ^ d ∧
         (∀ v ∈ lvvSweep hq Φ h0 h1 Delta i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧

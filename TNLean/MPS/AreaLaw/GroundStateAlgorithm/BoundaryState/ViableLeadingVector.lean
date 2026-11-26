@@ -40,6 +40,8 @@ It also contains the following results.
   set.
 -/
 
+open ManyBody (interval_mono)
+
 section ViableTrimmedWitness
 
 /-!
@@ -92,14 +94,16 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
       (W : Matrix (CutRight L q k) (Fin m) ℂ)
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
       ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
-      (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) ∧
+      (ManyBody.cutMatrix (interval L 0 k) w).rank ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) ∧
       (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2) ∧
       Wᴴ * W = 1 ∧ m ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
         ((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x ∧
-      (reindex (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-          (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (reindex (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+          (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+              (interval_mono (le_refl 0) (Nat.sub_le k 1)))
           (spanProjection S) ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ x = x := by
   classical
   let c : ℝ := (Δ / 169) ^ 2
@@ -117,12 +121,12 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
   have hE := h.re_inner_le_of_overlap_div_of_range_one hh hhJ hΩ hspan hL hψ hΓψ
   let D := constantCutBond q 1 1 Δ c
   obtain ⟨PΓ, hPΓ⟩ := exists_isTrimmingProjection
-    (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) Γ) D
+    (ManyBody.cutVector (X := fun _ ↦ Fin q) (interval L 0 k) Γ) D
   let u := ‖chainTrim Γ k PΓ‖⁻¹ • chainTrim Γ k PΓ
   have hB := h.one_sub_le_re_inner_chainTrim hh hhJ (by omega : 1 ≤ q) (by norm_num)
     hΔ hΩ hgap hspan hc0 k hPΓ
   have hu : ‖u‖ = 1 := norm_normalized_chainTrim_eq_one (by linarith : c < 1) hB
-  have huD : (ManyBody.cutMatrix (leftBlock L k) u).rank ≤ D :=
+  have huD : (ManyBody.cutMatrix (interval L 0 k) u).rank ≤ D :=
     rank_cutMatrix_normalized_chainTrim_le hPΓ
   have huΓ : 1 - c ≤ ‖⟪u, Γ⟫_ℂ‖ := hB.trans (Complex.re_le_norm _)
   have huψ : 1 - 4 * c ≤ ‖⟪u, ψ⟫_ℂ‖ := by
@@ -132,10 +136,6 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
     linarith
   obtain ⟨HL, HR, K, hsplit, hHL, hHR, hK0, hK1⟩ :=
     h.exists_cut_decomposition_of_range_one hhJ hpos k
-  have hblock : interval L 0 k = leftBlock L k := by
-    ext i
-    simp [interval, leftBlock]
-  rw [hblock] at hHL hHR
   obtain ⟨w, m, W, x, hw, hwD, hwE, hwPV, hW, hmD, hwx, hxPV⟩ :=
     exists_trimmed_witness_chain hsplit hHL hHR hK0 hK1
       (hgap.posSemidef_sub_ground (ManyBody.Interaction.isHermitian_hamiltonian hh) hΔ.le)
@@ -189,18 +189,20 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
     let P := reindex
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+      (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q)
+          (interval_mono (le_refl 0) (Nat.sub_le k 1)))
       (spanProjection S)
     ∃ (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (w : EuclideanSpace ℂ (Fin L → Fin q)) (m : ℕ)
       (W : Matrix (CutRight L q k) (Fin m) ℂ)
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
       h.hamiltonian = HL + B ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k) ∧
-      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ ∧
       ‖B‖ ≤ 2 * L ∧ ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
-      (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ D ∧
+      (ManyBody.cutMatrix (interval L 0 k) w).rank ≤ D ∧
       (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √c ∧
       Wᴴ * W = 1 ∧ m ≤ D ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
@@ -234,19 +236,14 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
   let c : ℝ := (Δ / 169) ^ 2
   let D := constantCutBond q 1 1 Δ c
   let P := reindex
-    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
-    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (leftBlock_mono (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) (Nat.sub_le k 1)))
+    (ManyBody.subsetSplitEquiv (fun _ : Fin L ↦ Fin q) (interval_mono (le_refl 0) (Nat.sub_le k 1)))
     (spanProjection S)
   obtain ⟨w, m, W, x, hw, hwS, hwD, hwE, hW, hmD, hwx, hxP⟩ :=
     h.exists_trimmed_witness_of_isViable hh hhJ hpos hL hq hΔ hΩ hgap hspan hviable
-  change (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ D at hwD
+  change (ManyBody.cutMatrix (interval L 0 k) w).rank ≤ D at hwD
   change m ≤ D at hmD
   obtain ⟨HL, B, hsplit, hHL, hBS, hBn⟩ := h.exists_gluing_decomposition_of_range_one hhJ k
-  have hblock (i : ℕ) : interval L 0 i = leftBlock L i := by
-    ext j
-    simp [interval, leftBlock]
-  rw [hblock k] at hHL
-  rw [hblock (k - 1)] at hBS
   let J := (1 : Matrix (CutLeft L q k × CutSite L q k)
     (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W
   have hJ : Jᴴ * J = 1 := by

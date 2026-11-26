@@ -466,7 +466,7 @@ support in the middle region `B \ A` of the three-region coordinates of
 `A ⊆ B`. The two right configurations need not agree off the original
 support. Supporting locality algebra for ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
-theorem leftBlock_isSupportedOn_of_threeCut_right
+theorem interval_isSupportedOn_of_threeCut_right
     {V : Type*} [DecidableEq V] {q : ℕ}
     {A B : Finset V} (hAB : A ⊆ B) (D : Finset V)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)

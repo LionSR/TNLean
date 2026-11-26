@@ -18,7 +18,7 @@ lines 1503--1517. The boundary alternative is the elementary finite-dimensional
 completion of that choice, not an independent area-law theorem.
 -/
 
-open ManyBody (cutMatrix)
+open ManyBody (cutMatrix interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -52,7 +52,7 @@ theorem aklv_short_side_of_no_centered_window {L k s : ℕ} (hk : k ≤ L)
 side. This uses only the two endpoint ranks and physical cut transport. -/
 theorem aklv_rank_cutMatrix_le_pow_min {L q k : ℕ} (hk : k ≤ L)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
-    (cutMatrix (leftBlock L k) Ω).rank ≤ q ^ min k (L - k) := by
+    (cutMatrix (interval L 0 k) Ω).rank ≤ q ^ min k (L - k) := by
   have h := rank_cutMatrix_le_pow_min_mul Ω (a := 0) (b := L) (R := 1)
     (Nat.zero_le k) hk le_rfl (rank_cutMatrix_zero_le Ω)
     (rank_cutMatrix_le_one_of_le le_rfl Ω)
@@ -63,7 +63,7 @@ itself is an exact approximant with the corresponding boundary rank. -/
 theorem aklv_centered_window_or_exact_rank {L q k s : ℕ} (hq : 1 ≤ q) (hk : k ≤ L)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
     (∃ a : ℕ, a + s / 2 = k ∧ a + s + 1 ≤ L) ∨
-      (cutMatrix (leftBlock L k) Ω).rank ≤ q ^ (s - s / 2) := by
+      (cutMatrix (interval L 0 k) Ω).rank ≤ q ^ (s - s / 2) := by
   classical
   by_cases hfit : ∃ a : ℕ, a + s / 2 = k ∧ a + s + 1 ≤ L
   · exact Or.inl hfit

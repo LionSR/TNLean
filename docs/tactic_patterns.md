@@ -5560,7 +5560,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ### Splitting a chain Hamiltonian at one cut — candidate (2026-10-26)
 
-- **Pattern:** From `H = HL + HR + K` with `HL` supported on `leftBlock L k`, `HR` on its
+- **Pattern:** From `H = HL + HR + K` with `HL` supported on `interval L 0 k`, `HR` on its
   complement, `0 ≤ K ≤ 1` and `H ≥ E₀`, pass to the cut coordinates with
   `cutOperator_eq_kronecker_one` and `cutOperator_eq_one_kronecker`, obtain
   `cutOperator H = A ⊗ₖ 1 + 1 ⊗ₖ A' + cutOperator K`, and derive
@@ -5634,7 +5634,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 ### Mass of a cut beyond its leading eigenvalues — candidate
 - **Pattern:**
   ```lean
-  1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+  1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (interval L 0 k)
     ψ).kyFanNorm n
   ```
 - **Seen:** 5 occurrences (2026-10-22), in statements and proofs of
@@ -9769,7 +9769,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 - **Pattern:** Convert membership of the site `L * i + j` in a prefix or
   interval into inequalities on the block index, using `j < L`.
-- **Seen:** `copySite_mem_leftBlock_iff` in `MPS/AreaLaw/EntropyScaling/CopyProduct.lean`
+- **Seen:** `copySite_mem_interval_iff` in `MPS/AreaLaw/EntropyScaling/CopyProduct.lean`
   and `copyConfigurationEquiv_insertInterval` in `MPS/AreaLaw/EntropyScaling/CopyProduct.lean`.
 - **Existing reuse:** The first proof is shared within the copy-boundary
   factorization. The interval proof compares two block indices and uses

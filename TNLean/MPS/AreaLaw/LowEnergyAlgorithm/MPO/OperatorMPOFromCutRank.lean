@@ -67,6 +67,8 @@ It also contains the following results.
   actual label truncation.
 -/
 
+open ManyBody (interval mem_interval)
+
 section ClusterTruncationCutRank
 
 /-!
@@ -97,7 +99,7 @@ theorem operatorSchmidtRank_cluster_truncation_all_cuts_le {N q r : ℕ}
     (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ}) (β : ℝ) (k : ℕ) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock (N + 1) k) (truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β)) ≤
+      (interval (N + 1) 0 k) (truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β)) ≤
         r ^ 2 * q ^ r := by
   classical
   have hD : 1 ≤ r ^ 2 * q ^ r := Nat.mul_le_mul (one_le_pow₀ hr) (one_le_pow₀ hq)
@@ -108,23 +110,23 @@ theorem operatorSchmidtRank_cluster_truncation_all_cuts_le {N q r : ℕ}
     exact (Matrix.rank_le_card_height _).trans_eq (by simp)
   · by_cases hk0 : k = 0
     · subst k
-      have hempty : leftBlock (N + 1) 0 = ∅ := by ext v; simp [leftBlock]
+      have hempty : interval (N + 1) 0 0 = ∅ := by ext v; simp
       apply le_trans ?_ hD
       rw [hempty, Matrix.operatorSchmidtRank_eq_rank_realignment]
       exact (Matrix.rank_le_card_height _).trans_eq (by simp)
     · by_cases hkL : N + 1 ≤ k
-      · have huniv : leftBlock (N + 1) k = univ := by
+      · have huniv : interval (N + 1) 0 k = univ := by
           ext v
-          simp only [mem_leftBlock, mem_univ, iff_true]
+          simp only [mem_interval, mem_univ, iff_true, Nat.zero_le, true_and]
           exact v.isLt.trans_le hkL
         apply le_trans ?_ hD
         rw [huniv, Matrix.operatorSchmidtRank_eq_rank_realignment]
         exact (Matrix.rank_le_card_width _).trans_eq (by simp)
       · let p : Fin N := ⟨k - 1, by omega⟩
-        have hA : leftBlock (N + 1) k =
+        have hA : interval (N + 1) 0 k =
             {v ∈ (univ : Finset (Fin (N + 1))) | v.val ≤ p.val} := by
           ext v
-          simp only [mem_leftBlock, mem_filter, mem_univ, true_and]
+          simp only [mem_interval, mem_filter, mem_univ, true_and, Nat.zero_le]
           change v.val < k ↔ v.val ≤ k - 1
           omega
         rw [hA]
@@ -177,16 +179,16 @@ theorem rank_pairedOperator_cutMatrix_eq {L q : ℕ}
     (M : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (k : ℕ) :
     let ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2
       (fun z ↦ M ((pairCfgEquiv q L).symm z).1 ((pairCfgEquiv q L).symm z).2)
-    (cutMatrix (leftBlock L k) ψ).rank = operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) M) := by
+    (cutMatrix (interval L 0 k) ψ).rank = operatorSchmidtRank
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) M) := by
   classical
   let ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2
     (fun z ↦ M ((pairCfgEquiv q L).symm z).1 ((pairCfgEquiv q L).symm z).2)
-  let A := leftBlock L k
+  let A := interval L 0 k
   let e (V : Type) : (V → Fin (q * q)) ≃ ((V → Fin q) × (V → Fin q)) :=
     (Equiv.piCongrRight fun _ : V ↦ (finProdFinEquiv : Fin q × Fin q ≃ Fin (q * q)).symm).trans
       (Equiv.arrowProdEquivProdArrow V (fun _ ↦ Fin q) (fun _ ↦ Fin q))
-  have hmat : (cutMatrix (leftBlock L k) ψ).reindex (e {v : Fin L // v ∈ A})
+  have hmat : (cutMatrix (interval L 0 k) ψ).reindex (e {v : Fin L // v ∈ A})
       (e {v : Fin L // v ∉ A}) =
       fun ij kl ↦ (ManyBody.cutOperator (X := fun _ ↦ Fin q) A M)
         (ij.1, kl.1) (ij.2, kl.2) := by
@@ -201,9 +203,9 @@ theorem rank_pairedOperator_cutMatrix_eq {L q : ℕ}
          (fun v ↦ finProdFinEquiv (kl.1 v, kl.2 v))))).2 = _
     rw [pairCfgEquiv_symm_glue]
     rfl
-  change (cutMatrix (leftBlock L k) ψ).rank = operatorSchmidtRank (ManyBody.cutOperator A M)
+  change (cutMatrix (interval L 0 k) ψ).rank = operatorSchmidtRank (ManyBody.cutOperator A M)
   rw [← Matrix.rank_reindex (e {v : Fin L // v ∈ A})
-    (e {v : Fin L // v ∉ A}) (cutMatrix (leftBlock L k) ψ), hmat,
+    (e {v : Fin L // v ∉ A}) (cutMatrix (interval L 0 k) ψ), hmat,
     Matrix.operatorSchmidtRank_eq_rank_realignment]
 
 /-- Every nonempty operator chain with cut ranks at most a positive integer has actual
@@ -213,7 +215,7 @@ theorem exists_traceChainOperator_of_operatorSchmidtRank_le {L q D : ℕ}
     (hL : 1 ≤ L) (hD : 1 ≤ D)
     (M : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hrank : ∀ k : ℕ, operatorSchmidtRank
-      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) M) ≤ D) :
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (interval L 0 k) M) ≤ D) :
     ∃ A : Fin L → MPOTensor q D, M = traceChainOperator A 1 := by
   classical
   let ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2
@@ -313,7 +315,7 @@ theorem exists_local_sum_add_scalar_mpo {N q : ℕ} (hq : 1 ≤ q)
   classical
   apply MPOTensor.exists_traceChainOperator_of_operatorSchmidtRank_le (by omega) (by omega)
   intro k
-  let X := leftBlock (N + 1) k
+  let X := interval (N + 1) 0 k
   let φ := Matrix.reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) X)
   have hterm (i : Fin N) : operatorSchmidtRank (φ (h i)) ≤ q ^ 2 := by
     change operatorSchmidtRank (ManyBody.cutOperator X (h i)) ≤ _

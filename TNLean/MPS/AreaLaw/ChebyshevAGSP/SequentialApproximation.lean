@@ -20,6 +20,7 @@ using the general sequential truncation argument.
 
 open Matrix
 open scoped BigOperators InnerProductSpace
+open ManyBody (interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -28,7 +29,7 @@ noncomputable def aklvSpectralTruncation {L q : ℕ}
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (D : ℕ) :
     EuclideanSpace ℂ (Fin L → Fin q) :=
   sequentialTruncation (fun k ↦ (ManyBody.regionState_isHermitian
-    (X := fun _ ↦ Fin q) (leftBlock L k) Ω).leadingEigenprojection D) (L - 1) Ω
+    (X := fun _ ↦ Fin q) (interval L 0 k) Ω).leadingEigenprojection D) (L - 1) Ω
 
 /-- The normalization of the actual ordered spectral truncation. -/
 noncomputable def aklvNormalizedSpectralTruncation {L q : ℕ}
@@ -44,7 +45,7 @@ theorem aklvNormalizedSpectralTruncation_spec {L q D : ℕ}
     {epsilon : ℝ} (hepsilon : 0 < epsilon) (hepsilon1 : epsilon ≤ 1)
     (htail : ∀ k ∈ Finset.Ico 1 L,
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) Ω).kyFanNorm D ≤ epsilon ^ 2 / (16 * ((L : ℝ) + 1))) :
+        (interval L 0 k) Ω).kyFanNorm D ≤ epsilon ^ 2 / (16 * ((L : ℝ) + 1))) :
     aklvSpectralTruncation Ω D ≠ 0 ∧
       ‖aklvNormalizedSpectralTruncation Ω D‖ = 1 ∧
       IsOpenMPS L q D (fun x ↦ aklvNormalizedSpectralTruncation Ω D x) ∧
@@ -55,7 +56,7 @@ theorem aklvNormalizedSpectralTruncation_spec {L q D : ℕ}
     exact_mod_cast (by omega : L - 1 ≤ L + 1)
   have hsum : (∑ k ∈ Finset.Ico 1 L,
       (1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
-        (leftBlock L k) Ω).kyFanNorm D)) ≤ epsilon ^ 2 / 16 := by
+        (interval L 0 k) Ω).kyFanNorm D)) ≤ epsilon ^ 2 / 16 := by
     calc
       _ ≤ (Finset.Ico 1 L).card • (epsilon ^ 2 / (16 * ((L : ℝ) + 1))) :=
         Finset.sum_le_card_nsmul _ _ _ htail
