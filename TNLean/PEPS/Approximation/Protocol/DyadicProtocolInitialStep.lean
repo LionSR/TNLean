@@ -105,7 +105,8 @@ theorem norm_heldRef (p : Party) : (Fs : List (Frame pos q Party)) →
       ‖heldRef Ω holder p Fs‖ = 1
   | [], _, _ => by simp [heldRef]
   | F :: Fs, hF, hn => by
-    rw [heldRef, EuclideanSpace.norm_vecKron, QuantumCircuit.Party.norm_partyFactor (fun G : Frame pos q Party ↦ G.regRef Ω)
+    rw [heldRef, EuclideanSpace.norm_vecKron,
+      QuantumCircuit.Party.norm_partyFactor (fun G : Frame pos q Party ↦ G.regRef Ω)
         (hF F List.mem_cons_self),
       norm_heldRef p Fs (fun G hG ↦ hF G (List.mem_cons_of_mem F hG))
         fun G hG ↦ hn G (List.mem_cons_of_mem F hG), mul_one]
