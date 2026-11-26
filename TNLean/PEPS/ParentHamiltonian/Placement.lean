@@ -8,8 +8,4 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.ParentHamiltonian.Placement
 
-import QICLean.Analysis.Projection.CoordinateRangeProjector
-import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
-import QICLean.Analysis.Projection.IsometricProjectorTransport
 import TNLean.PEPS.ParentHamiltonian.Placement.ProductSiteProjectorCommutation
-import QICLean.ManyBody.Sites.Placement.RegionPlacement

@@ -8,14 +8,4 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.RegionalStates.Regions
 
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ConditionalEstimates
-import QICLean.ManyBody.Sites.Cylinder.Cylinder
-import QICLean.ManyBody.Entropy.MutualInformationPerturbation
-import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
-import QICLean.ManyBody.Sites.Cylinder.NestedCylinder
-import QICLean.ManyBody.Sites.Relabel
-import QICLean.ManyBody.Entropy.RegionEntropyInequalities
-import QICLean.ManyBody.Entropy.Typical.CompressedTypicalSiteCoordinates
 import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
-import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
-import QICLean.ManyBody.Sites.RegionState

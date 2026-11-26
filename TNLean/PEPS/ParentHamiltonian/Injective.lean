@@ -22,6 +22,5 @@ import TNLean.PEPS.ParentHamiltonian.Injective.VertexBondRegionConstraint
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexBondState
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexImageGroundSpace
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexInverseRegionSlice
-import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexVirtualParentTransport
 import TNLean.PEPS.ParentHamiltonian.Injective.VirtualBondGroundSpace

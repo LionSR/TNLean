@@ -2563,6 +2563,20 @@ most 37 parts.
   Proposition 11.2: `Layers`, `Fans`, `InitialRegions`, `RepairStages`, `Stars`,
   `BirthTemplates`, `FinalRegions`; `Exponents` and `ScaleSeparation` go to `Scales` and
   `Layers`.
+* The generic geometry, operators and regional states then followed to QICLean in one move
+  (2026-11-26): the dyadic squares (`ManyBody/Sites/Dyadic`, with the distances and partitions
+  of dyadic layers and the corners of a cell from `BirthRegions`), the templates
+  (`ManyBody/Sites/Template`), the plane-lattice counts, patches and colourings
+  (`ManyBody/Sites/Lattice`), the plane Hamiltonians and positive constraints
+  (`ManyBody/Hamiltonian`, `Hamiltonian/Constraint`), the channel words
+  (`ManyBody/Dynamics/ChannelWord`, `ManyBody/PoissonWord`), the template and plane-boundary
+  entropies (`ManyBody/Entropy/Template`, `Entropy/PlaneBoundaryEntropy`), the regularized
+  patch filters (`ManyBody/Entropy/Filter/Regularized`), the cylinders
+  (`ManyBody/Sites/Cylinder`), the placements of `PEPS/ParentHamiltonian/Placement` except
+  `ProductSiteProjectorCommutation` (`ManyBody/Sites/Placement`), and their scalar and matrix
+  lemmas. What stays is the argument: `Scanner`, `Collar`, `CollarEntropy`, `BirthRegions`,
+  `RestoringOperator`, `SafeRectangles` and the statements of the theorems
+  (`RegionalStates/Regions/TheoremStatements`).
 * `Amplification` (34), named for Proposition 10.2, disappears. Generic part:
   `ChannelWords` (22, channels), `LocalRootChannels` (to `Constraints`),
   `GoodRealizationUnitary` with `SupportedPolarCorrection` (matrix). The argument:

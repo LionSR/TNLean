@@ -12,12 +12,8 @@ import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.AmplificationProofSteps
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.AncillaTransport
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.GoodRealization
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.GoodRealizationUnitary
-import QICLean.Analysis.Isometry.PolarUnitaryCorrection
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaSites
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeAncillaTransport
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.LatticeRestoring
-import QICLean.Algebra.PartialTrace
-import QICLean.Analysis.Isometry.RestoringVectors
-import QICLean.Entropy.Typical.Density
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.RadiusBound
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator.TypicalProjectors

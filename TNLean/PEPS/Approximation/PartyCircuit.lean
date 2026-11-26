@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.PartyCircuit.ActualSourcePolynomial
 import TNLean.PEPS.Approximation.PartyCircuit.AllPartyBranchLocality
-import TNLean.PEPS.Approximation.PartyCircuit.CommonSourceGate
 import TNLean.PEPS.Approximation.PartyCircuit.EndpointWordRestrictionCongruence
 import TNLean.PEPS.Approximation.PartyCircuit.LocalSourceSampleCompatibility
 import TNLean.PEPS.Approximation.PartyCircuit.MessageGateCircuit

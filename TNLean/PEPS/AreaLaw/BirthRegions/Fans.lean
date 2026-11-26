@@ -15,7 +15,6 @@ import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanSectors
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFans
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.DummyCorners
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.ElementarySideOpponents
-import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.ElementarySideReciprocity
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanFrontiers
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanInactiveSeams

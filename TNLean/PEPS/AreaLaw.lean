@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw
 
 import TNLean.PEPS.AreaLaw.AmplificationCutClearance
-import QICLean.ManyBody.Sites.Dyadic.CellCounting
 import TNLean.PEPS.AreaLaw.AmplificationProof
 import TNLean.PEPS.AreaLaw.AreaLawElementaryConstant
 import TNLean.PEPS.AreaLaw.AreaLawExplicitConstant

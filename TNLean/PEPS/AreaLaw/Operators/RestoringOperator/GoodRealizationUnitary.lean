@@ -76,7 +76,6 @@ geometry of the sites and is stated in `QICLean.ManyBody.Entropy.MutualInformati
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (toEuclideanCLM_conjTranspose)
 open Matrix (exists_unitary_kronecker_sub_le)
 
 section
@@ -91,6 +90,11 @@ section SameSpace
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 local notation "L" => toEuclideanCLM (n := ι) (𝕜 := ℂ)
+
+/-- The Euclidean operator of a conjugate transpose is the adjoint operator. -/
+private theorem toEuclideanCLM_conjTranspose (A : Matrix ι ι ℂ) :
+    L Aᴴ = ContinuousLinearMap.adjoint (L A) := by
+  rw [← star_eq_conjTranspose, map_star, ContinuousLinearMap.star_eq_adjoint]
 
 /-- **First estimate of `eq:amplification-before-polar`.** Let `g` be the ground
 component of the restoring vector `ζ`, fixed by the full product `D` and of norm at
