@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows:
       - Auto Fix (Lean)
+      - Nightly Fix
       - PR Review
       - Issue Automation
     types: [completed]
@@ -35,7 +36,8 @@ jobs:
         run: |
           set -euo pipefail
           case "$WORKFLOW_NAME" in
-            "Auto Fix (Lean)")
+            "Auto Fix (Lean)"|\
+            "Nightly Fix")
               switch_name="CLAUDE_AUTO_FIX_ENABLED"
               until_name="CLAUDE_AUTO_FIX_DISABLED_UNTIL"
               reason_name="CLAUDE_AUTO_FIX_DISABLE_REASON"

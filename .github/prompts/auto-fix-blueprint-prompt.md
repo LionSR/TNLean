@@ -1,9 +1,15 @@
-A blueprint compilation job failed. Your task is to fix the blueprint errors.
+A blueprint job of PR CI failed. Your task is to fix the blueprint errors.
 
-Two PR CI jobs build the blueprint. Check which one failed:
-
-- "Check blueprint compiles without errors" builds the web pages with `texra-blueprint web` (plasTeX).
-- "Check blueprint PDF compiles" builds the two XeLaTeX print volumes: `leanblueprint pdf`, then `./scripts/build_blueprint_ch01_12.sh` for the FT-MPS volume. XeLaTeX rejects constructs that plasTeX accepts. Typical examples are a bare `_` in text mode, such as a file path inside `\texttt{...}` (write `\_`), and an unbraced subscript after a macro, such as `\spn_\C` (write `\spn_{\C}`). The FT-MPS volume also compiles the `\ifftmpsvolume` branches.
+PR CI runs one blueprint job, "Check blueprint sources". It compiles no TeX: it
+lints the picture sources (`tenkz_lint.py`), runs `chktex` and the
+`latexindent` formatting check (`scripts/check_latexindent_formatting.sh`), and
+checks that the `\lean{...}` tags agree with the Lean sources
+(`python3 scripts/blueprint_lean_sync.py --root . --ci --report-duplicate-tags`).
+The web pages and the XeLaTeX print volumes are built by Nightly CI, not here;
+the build notes below still apply when you want to confirm that an edit compiles.
+XeLaTeX rejects constructs that plasTeX accepts: a bare `_` in text mode, such
+as a file path inside `\texttt{...}` (write `\_`), and an unbraced subscript
+after a macro, such as `\spn_\C` (write `\spn_{\C}`).
 
 Instructions:
 

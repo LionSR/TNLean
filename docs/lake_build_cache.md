@@ -108,21 +108,21 @@ scripts/test_seed_lake_build.sh
 
 ## Main CI cache production
 
-`pr-ci.yml` keeps one running workflow and at most one pending workflow per ref.
-New pushes to `main` replace the pending run without cancelling the running
-one, allowing it to reach the successful-build cache save despite frequent
-merges. Manual dispatches on `main` share this policy and group. Pull requests
-and dispatches on other refs still cancel superseded running workflows.
+The nightly run of `main` (`nightly.yml`) is the only writer of the build
+cache; pull requests restore it read-only and compile only the modules they
+change. The cache is saved as soon as the root `lake build` and the linter
+executable are built, before the remaining checks, so a failed declaration
+check does not cost the next pull requests their cache. A running nightly
+build of `main` is never cancelled; a newer verification run of the
+`nightly-fix` branch replaces an older one, and saves nothing.
 
-This can delay checks for the latest main commit until the running workflow
-finishes; it does not guarantee a build for every intermediate commit or make
-a failing build save a cache. Cache keys still identify the built commit and
-all three root inputs. The cache guards and full build requirements below are
-unchanged.
+A cache therefore exists only for commits that were the head of `main` at a
+nightly run, and a failing build saves none. Cache keys still identify the
+built commit and all three root inputs. The cache guards below are unchanged.
 
 ## Narrow compatible-main CI seed
 
-The ordinary `pr-ci.yml` cache key and restore prefix still hash all three root
+The ordinary cache key and restore prefix (`nightly.yml` saves, `pr-ci.yml` restores) still hash all three root
 inputs: `lean-toolchain`, `lake-manifest.json`, and `lakefile.toml`. Only a
 successful main build saves the same four build directories; Mathlib's prebuilt
 retrieval remains separate. Both the requested and matched cache keys are logged.
@@ -150,8 +150,9 @@ across one narrowly validated kind of QICLean revision update:
   Its archive version witnesses the lookup action's paths/compression match.
   Try that key first, then exact keys from the same frozen 64-commit main window.
   Every candidate must have byte-identical baseline inputs, the same archive
-  version, one unambiguous main-scoped cache record, and a completed main push
-  workflow with a successful build/save on `ubuntu-latest`. Verify the original
+  version, one unambiguous main-scoped cache record, and a completed nightly
+  run of `main` (or, at commits before the nightly split, a main push of
+  `pr-ci.yml`) with a successful build/save on `ubuntu-latest`. Verify the original
   save key/path/policy at each candidate commit. Refused candidates are skipped
   before restoration; no completed candidate means ordinary uncached operation.
   The [REST key filter](https://docs.github.com/en/rest/actions/cache#list-github-actions-caches-for-a-repository)

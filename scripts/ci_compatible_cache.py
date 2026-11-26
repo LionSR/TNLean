@@ -30,6 +30,11 @@ MANIFEST_FIELDS = {"version", "packagesDir", "packages", "name", "lakeDir", "fix
 PACKAGE_FIELDS = {"url", "type", "subDir", "scope", "rev", "name", "manifestFile",
                   "inputRev", "inherited", "configFile"}
 WINDOW = 64
+# The workflow whose `build` job saves main's cache, with the events that
+# start it on main: nightly.yml since pull-request CI stopped building main,
+# pr-ci.yml (on every push) at older commits.
+PRODUCERS = ((".github/workflows/nightly.yml", ("schedule", "workflow_dispatch")),
+             (".github/workflows/pr-ci.yml", ("push",)))
 QIC_CONFIG_FIELDS = {"name", "version", "keywords", "defaultTargets", "releaseRepo",
                      "preferReleaseBuild", "leanOptions", "require", "lean_lib", "lean_exe"}
 
@@ -129,7 +134,8 @@ def non_build_qic_path(path):
     """Reviewed data/test paths, never a blanket exception for non-library files."""
     return ((path.startswith("docs/") and path.endswith(".md"))
             or (path.startswith("blueprint/") and path.endswith((".md", ".tex")))
-            or path in {".github/workflows/pr-ci.yml", "blueprint/src/references.bib"}
+            or path in {".github/workflows/pr-ci.yml", ".github/workflows/nightly.yml",
+                        ".github/workflows/nightly-fix.yml", "blueprint/src/references.bib"}
             or re.fullmatch(r"QICLeanTest/[A-Za-z_][A-Za-z_0-9]*\.lean", path) is not None
             or re.fullmatch(r"docs/audits/[A-Za-z_0-9-]+_validation\.json", path) is not None
             or re.fullmatch(r"docs/provenance/openai-math\.d/[A-Za-z_0-9-]+\.json", path) is not None
@@ -291,6 +297,13 @@ def api(path):
         return json.load(response)
 
 
+def producer(root, commit):
+    for path, events in PRODUCERS:
+        if git(root, "ls-tree", commit, "--", path).strip():
+            return path, events
+    raise Refusal("no cache-saving workflow at the matched commit")
+
+
 def source_workflow(raw):
     # A parsed comparison, not a substring that could accidentally match a
     # comment, a different job, or an obsolete save step.
@@ -344,13 +357,14 @@ def provenance_diagnostics(commit, runs, jobs):
         "runs": summary}, sort_keys=True), file=sys.stderr)
 
 
-def validate_provenance(key, commit, caches, runs, jobs, version):
+def validate_provenance(key, commit, caches, runs, jobs, version,
+                        path=PRODUCERS[1][0], events=PRODUCERS[1][1]):
     require(cache_record(key, caches)["version"] == version,
             "cache archive version differs from lookup")
     trusted_runs = [r for r in runs.get("workflow_runs", [])
                     if r.get("head_sha") == commit and r.get("head_branch") == "main"
-                    and r.get("event") == "push" and r.get("status") == "completed"
-                    and r.get("path") == ".github/workflows/pr-ci.yml"]
+                    and r.get("event") in events and r.get("status") == "completed"
+                    and r.get("path") == path]
     for run in trusted_runs:
         for job in jobs.get(run["id"], {}).get("jobs", []):
             if (job.get("name") == "build" and job.get("conclusion") == "success"
@@ -384,18 +398,19 @@ def validate(root, state, prefix, matched, version):
     require(config_at(root, commit) == config_at(root, data["baseline"]),
             "matched commit inputs differ from verified baseline bytes")
     compatible_configs(config_at(root, commit), config_at(root, "HEAD"))
-    source_workflow(file_at(root, commit, ".github/workflows/pr-ci.yml"))
+    path, events = producer(root, commit)
+    source_workflow(file_at(root, commit, path))
     # REST key matching also accepts prefixes. Reject extra suffixes, scopes,
     # versions, and truncated/ambiguous results before fetching run metadata.
     caches = api("actions/caches?" + urllib.parse.urlencode({"key": matched, "per_page": 100}))
     require(cache_record(matched, caches)["version"] == version,
             "cache archive version differs from lookup")
-    runs = api("actions/workflows/pr-ci.yml/runs?" + urllib.parse.urlencode(
-        {"head_sha": commit, "event": "push", "per_page": 20}))
+    runs = api(f"actions/workflows/{path.rsplit('/', 1)[1]}/runs?" + urllib.parse.urlencode(
+        {"head_sha": commit, "branch": "main", "per_page": 20}))
     jobs = {r["id"]: api(f"actions/runs/{r['id']}/jobs?per_page=100")
             for r in runs.get("workflow_runs", [])[:20]
-            if r.get("head_sha") == commit and r.get("event") == "push"}
-    validate_provenance(matched, commit, caches, runs, jobs, version)
+            if r.get("head_sha") == commit and r.get("event") in events}
+    validate_provenance(matched, commit, caches, runs, jobs, version, path, events)
     output(key=matched, version=version)
     print(f"Validated uniquely main-scoped cache {matched}; full build still required")
 

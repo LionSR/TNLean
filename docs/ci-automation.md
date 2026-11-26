@@ -8,15 +8,18 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
 - [How It Works](#how-it-works)
   - [Architecture Diagram](#architecture-diagram)
   - [The Fixed-Point Loop](#the-fixed-point-loop)
+  - [Light Pull Requests, Nightly Integration](#light-pull-requests-nightly-integration)
 - [Workflow Reference](#workflow-reference)
   - [PR Review](#pr-review-pr-reviewyml)
+  - [Nightly CI](#nightly-ci-nightlyyml)
+  - [Nightly Fix](#nightly-fix-nightly-fixyml)
   - [Issue Automation](#issue-automation-issue-automationyml)
   - [CI Failure Auto-Fix](#ci-failure-auto-fix-auto-fixyml)
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
   - [Lean Module Policy](#lean-module-policy-pr-ciyml-file-length-job)
   - [Changed Lean Compilation-Time Gate](#changed-lean-compilation-time-gate-pr-ciyml)
   - [Changed-File Lean Checks](#changed-file-lean-checks-pr-ciyml-build-job)
-  - [Blueprint Diagram Tests](#blueprint-diagram-tests-pr-ciyml-blueprint-job)
+  - [Blueprint Diagram Tests](#blueprint-diagram-tests-nightlyyml-blueprint-job)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
   - [Agent Mention Handler](#agent-mention-handler-agent-mentionyml)
   - [Shared CI Auto-Fix Template](#shared-ci-auto-fix-template-_ci-auto-fix-sharedyml)
@@ -48,6 +51,13 @@ When working on Lean 4 proofs, blueprint documentation, and paper-gap notes, a t
 6. Repeat until CI passes and the review is approved
 
 These workflows automate steps 3-6 using Claude Code. When CI fails, Claude reads the error logs and pushes a fix. When a code review leaves comments, Claude reads them and pushes fixes. This cycle repeats automatically until there is nothing left to fix.
+
+The checks themselves are split by cost. A pull request runs only light checks:
+it compiles the modules it changes, lints, and checks source-level policies.
+The full library build, the compiled declaration checks, the blueprint renders
+and the browser tests run once a night on `main` (Nightly CI), and a separate
+agent loop (Nightly Fix) repairs what the nightly run finds. See
+[Light Pull Requests, Nightly Integration](#light-pull-requests-nightly-integration).
 
 ---
 
@@ -83,7 +93,8 @@ When you push to a PR branch, several things happen in parallel:
   │  │ Runs on every PR push touching Lean files                    │
   ├──┤                                                              │
   │  │  PR CI — build job                                           │
-  │  │  Runs `lake build` to check that the code compiles.          │
+  │  │  Builds and strictly elaborates the changed modules only     │
+  │  │  (time-budgeted), and runs the style linter.                 │
   │  │  Separate `compile-time`: warn at 25s; fail at 50s.          │
   │  │                                                              │
   │  └───────────┬──────────────────────────────────────────────────┘
@@ -100,12 +111,10 @@ When you push to a PR branch, several things happen in parallel:
   │  │ Runs on every PR push touching blueprint or Lean files       │
   ├──┤                                                              │
   │  │  PR CI — blueprint job                                       │
-  │  │  Runs `texra-blueprint web` to check blueprint compilation.  │
-  │  │  PR CI — blueprint-pdf job, when blueprint TeX changed:      │
-  │  │  runs one XeTeX pass over the print volume                   │
-  │  │  (`scripts/check_blueprint_pdf_compiles.sh`), seeded from    │
-  │  │  the auxiliary files of the last main build, and the FT-MPS  │
-  │  │  volume build.                                               │
+  │  │  Lints picture and LaTeX sources (tenkz lint, chktex,        │
+  │  │  latexindent) and checks the declaration tags against the    │
+  │  │  Lean sources. Compiles no TeX: the web pages and the print  │
+  │  │  volumes are built by Nightly CI.                            │
   │  │                                                              │
   │  └───────────┬──────────────────────────────────────────────────┘
   │              │
@@ -113,7 +122,7 @@ When you push to a PR branch, several things happen in parallel:
   │              ▼
   │  ┌──────────────────────────────────────────────────────────────┐
   │  │  Blueprint Auto-Fix (auto-fix.yml)                           │
-  │  │  Reads blueprint error logs, fixes the LaTeX, pushes.        │
+  │  │  Reads the lint and sync errors, fixes the LaTeX, pushes.    │
   │  └──────────────────────────────────────────────────────────────┘
   │
   │  ┌──────────────────────────────────────────────────────────────┐
@@ -150,6 +159,60 @@ Here is exactly what happens:
    - The review finds no new issues → **"Fixed point reached!"** (convergence)
    - 5 consecutive bot-fix commits have been made → **iteration cap reached** (safety stop)
 
+### Light Pull Requests, Nightly Integration
+
+A full `lake build` of the library, a blueprint web build with its browser
+tests and two XeLaTeX print volumes used to run on every push to every pull
+request and again on every merge to `main`. They now run once a night:
+
+```
+  Pull request (every push)             main (once a night, 19:23 UTC)
+  ─────────────────────────             ──────────────────────────────
+  PR CI (pr-ci.yml)                     Nightly CI (nightly.yml)
+   · changed modules: build +            · root `lake build`, saves the cache
+     strict elaboration (budgeted)       · strict check of files changed
+   · style linter                          since the last passing night
+   · compilation-time gate               · checkdecls (blueprint, paper gaps)
+   · module policies                     · whole-repository policies
+   · blueprint source lint + sync        · diagram tests, web build,
+                                           browser tests
+                                         · print volumes, site publication
+                                                  │
+                                                  │ on failure
+                                                  ▼
+                                        Nightly Fix (nightly-fix.yml)
+                                         · files / updates the issue
+                                         · agent repairs on `nightly-fix`
+                                         · opens a pull request
+                                         · dispatches Nightly CI on the
+                                           branch ──► pass: ready for review
+                                                 └──► fail: next round (≤ 5)
+```
+
+What a pull request no longer checks, and what follows from that:
+
+- **Modules that import the changed ones are not rebuilt.** A renamed
+  declaration, a changed signature or a moved file can therefore break a
+  dependent module on `main`. The nightly root build finds it and Nightly Fix
+  repairs the dependent module. Run `scripts/lake_build_locked.sh` (or
+  `lake build`) locally before merging a change to a widely imported module.
+- **No TeX is compiled.** A construct that the lint accepts but XeLaTeX or
+  plasTeX rejects surfaces at night.
+- **`main` can be red for up to a day.** The `nightly-failure` issue is the
+  record; it closes itself when Nightly CI passes on `main` again.
+- **The build cache is one night old.** Pull requests restore the cache that
+  the nightly build of `main` saved; modules changed on `main` since then are
+  rebuilt within the pull request's budget.
+
+To run the integration pipeline on demand, dispatch it:
+
+```bash
+gh workflow run nightly.yml --repo LionSR/TNLean --ref <branch>
+```
+
+A run on a branch other than `main` checks everything but publishes nothing
+and saves no cache.
+
 ---
 
 ## Workflow Reference
@@ -175,10 +238,81 @@ Here is exactly what happens:
 
 ---
 
+### Nightly CI (`nightly.yml`)
+
+**What it does**: Runs every check that is too heavy for a pull request, on
+the merged tree.
+
+| Job | Checks |
+|-----|--------|
+| `plan` | Finds the last commit of `main` that passed this workflow. A scheduled run on that same commit is skipped; otherwise the commit is the base of the changed-file checks and the ratchets. |
+| `build` | Root `lake build` and the linter executable; saves the Lean build cache (main only); strict elaboration of every production file changed since the base; the text linter; `checkdecls` on the blueprint and paper-gap declaration lists; a table of the slowest modules in the job summary. |
+| `policies` | Generated import aggregators, the docbuild manifest, the oversized-file guard, and the import-layer, pass-through and small-module ratchets against the base. |
+| `inline-layout` | `scripts/test_tenkz_inline_web.py` in a browser. |
+| `blueprint` | The paper-gap reference check (which compiles the cited papers for their labels), every diagram test, the web build, the event-stream sweep, and the browser tests of search, dependency graph and generated pages. |
+| `site` | Calls `blueprint.yml`: both print volumes and the web pages, then, on `main`, the Pages deployment. A print volume that does not compile fails here. |
+
+**When it runs**: Every night at 19:23 UTC on `main`, and on manual dispatch on
+any branch (`force: true` reruns a commit that already passed). Nightly Fix
+dispatches it on the `nightly-fix` branch to verify a repair.
+
+**Concurrency**: one run per ref. A running build of `main` is never
+cancelled; a newer run on another branch cancels the older one.
+
+---
+
+### Nightly Fix (`nightly-fix.yml`)
+
+**What it does**: Keeps `main` green without a person watching the nightly
+run. It is started by every completed Nightly CI run and acts on four cases:
+
+| Nightly CI ran on | Result | Action |
+|-------------------|--------|--------|
+| `main` | failed | Open the issue *Nightly CI is failing on main* (label `nightly-failure`) or comment on the open one; then run one repair round. |
+| `nightly-fix` | failed | The repair was not enough: run the next round on the same branch. |
+| `nightly-fix` | passed | Comment on the pull request and the issue that the repair is verified. The pull request waits for review. |
+| `main` | passed | Close the issue, and close a leftover repair pull request. |
+
+**A repair round**:
+1. Checks out `nightly-fix`: the branch of the open repair pull request with
+   `main` merged in, or a fresh branch from `main` when there is none (or when
+   `main` no longer merges into it).
+2. Restores the Lean build cache, sets up Lean, and installs the blueprint TeX
+   stack only when a blueprint job failed.
+3. Gives the agent the tail of each failed job's log
+   (`.github/prompts/nightly-fix-prompt.md`). The agent reproduces the
+   failure, repairs it, verifies with the failed command, and commits with the
+   `[claude-nightly-fix]` prefix. Its tool preset (`nightly-fix` in
+   `.github/allowed-tools.json`) has no `git push` and no GitHub tool.
+4. The workflow pushes the commits, opens the pull request
+   *fix(nightly): repair main after a failed nightly run* if none is open, and
+   dispatches Nightly CI on the branch.
+
+**Limits**:
+- At most 5 rounds per pull request, counted by the round comments the
+  workflow leaves on it. After that it comments that a person is needed.
+- A round in which the agent commits nothing ends the loop until the next
+  nightly failure.
+- A repair that already passed Nightly CI on its branch is not repaired again
+  while it waits for review.
+- A repair that edits `.github/workflows/` is not pushed.
+- Nothing is merged automatically.
+- `CLAUDE_AUTO_FIX_ENABLED=false` stops the agent; the issue is still filed
+  and closed. The Claude Provider Limit Guard sets this switch when a round
+  fails on a provider limit.
+
+**Pushes and PR CI**: with the `BOT_PAT` secret the pushed repair starts PR CI
+like any other push. Without it the workflow pushes with the default token,
+for whose pushes GitHub starts no workflow; the dispatched Nightly CI run is
+then the only check on the repair pull request.
+
+---
+
 ### Changed Lean Compilation-Time Gate (`pr-ci.yml`)
 
-After `lake build`, PR CI parses the captured Lake job timings for changed
-`.lean` files. A changed module taking at least 25 seconds receives a GitHub
+After the build of the changed modules, PR CI parses the captured Lake job
+timings for changed `.lean` files. A module the build did not reach within
+its budget has no timing and is not gated in that run. A changed module taking at least 25 seconds receives a GitHub
 warning annotation; a changed module taking at least 50 seconds receives an
 error annotation and fails the separate `compile-time` job. Keeping the timing
 gate separate prevents a performance regression from invoking the Lean
@@ -186,8 +320,9 @@ proof-error auto-fixer, which only handles failures of the `build` job.
 Unchanged modules do not affect this PR ratchet. The local commands and
 cache-reuse procedure are documented in [`lake_build_cache.md`](lake_build_cache.md).
 
-`TNLean/Archive/*.lean` is excluded from the default root target, so changed
-Archive modules are built explicitly before their timings are checked. A
+`TNLean/Archive/*.lean` is excluded from the default root target and from the
+changed-module selection, so changed Archive modules are built explicitly
+before their timings are checked. A
 genuine Archive compilation error fails the `build` job and follows the normal
 Lean proof-error auto-fix path; a timing-only breach still fails only the
 separate `compile-time` job.
@@ -205,9 +340,9 @@ second parent is the event's PR head, then compare against its first (base)
 parent. This excludes changes already present on the base branch, even if the
 event's recorded base SHA is stale. Taking a merge-base with that stale ancestor
 would not fix the selection. An unverifiable merge checkout selects no changed
-source and leaves the library to the root build. Pushes and local invocations
-without a PR-head SHA retain their explicit base revision (the previous head for
-pushes).
+source and leaves the library to the nightly root build. The nightly run and
+local invocations without a PR-head SHA retain their explicit base revision
+(for the nightly run, the last commit of `main` that passed it).
 
 The changed-module timing gate uses the same verified two-parent checkout
 contract, comparing the tested merge tree to its first parent. It deliberately
@@ -216,32 +351,32 @@ Unlike the strict selection, which then selects nothing, an unverifiable timing
 checkout fails closed: it cannot reliably attribute build times to PR changes. Missing
 PR-head objects are fetched by immutable SHA; missing base-parent objects or Git
 failures are errors. Added/modified Lean paths (including rename destinations)
-are selected; deletions are excluded. The full integration build and the
-25-second warning / 50-second failure thresholds are unchanged.
+are selected; deletions are excluded. The 25-second warning / 50-second
+failure thresholds are unchanged.
 Use `lake_build_hotspots.py select-pr --head SHA` for selection and
 `lake_build_hotspots.py report LOG` for reporting; legacy `LOG [options]`
 invocations remain supported. Top-level `--help` lists both commands.
 
-- **Focused checks** (pull requests, before the early build): the directly
-  changed production files are prepared by one
-  `lake build` and elaborated with the strict flags, so that an error in the
-  pull request's own edits surfaces before the root build. It is a shortcut
-  with a 50-minute budget inside a 60-minute step: a failure it finds fails
-  the step, but targets not prepared or not checked within the budget (a cold
-  dependency cache after a pin change, or a change near the bottom of the
-  import graph) are left, with a warning, to the root build and the strict
-  checks after it.
-- **Early build** (pull requests, before the root build): a fail-fast
-  `lake build` of the changed production modules, logged with the root build
-  for the compilation-time gate. It is a shortcut with a 20-minute budget: a
-  compile error fails the step, but a build that runs past the budget (for
-  example behind a cold dependency cache after a pin change) stops with a
-  warning and leaves the remaining modules to the root build.
-- **Strict checks** (after the root build): every changed production file is
-  elaborated with the package options and `-DwarningAsError=true`, three files
-  at a time, each with a time limit. When the base revision is unknown (manual
-  dispatch, an unfetchable base), no file is selected and the root build is
-  the check.
+- **Focused checks** (pull requests): the directly changed production files
+  are prepared by one `lake build` and elaborated with the strict flags
+  (the package options and `-DwarningAsError=true`). A failure it finds fails
+  the step. It has a 25-minute budget inside a 30-minute step: targets not
+  prepared or not checked within the budget (a cold dependency cache after a
+  pin change, or a change near the bottom of the import graph) are left, with
+  a warning, to the nightly run.
+- **Early build** (pull requests): a fail-fast `lake build` of the changed
+  production modules, logged for the compilation-time gate. It has a
+  15-minute budget: a compile error fails the step, but a build that runs
+  past the budget stops with a warning and leaves the remaining modules to
+  the nightly root build.
+- **Strict checks** (Nightly CI, after the root build): every production file
+  changed since the last passing nightly commit is elaborated with the
+  package options and `-DwarningAsError=true`, three files at a time, each
+  with a time limit. When no such commit is known, no file is selected and
+  the root build is the check.
+
+Pull requests run no root build: modules that import the changed ones are
+compiled by Nightly CI only.
 
 The focused checks and the early build skip the aggregators that
 `scripts/generate_import_aggregators.py` writes, since building one builds its
@@ -257,9 +392,9 @@ Lean check files under `scripts/` are written (see
 
 ---
 
-### Blueprint Diagram Tests (`pr-ci.yml`, `blueprint` job)
+### Blueprint Diagram Tests (`nightly.yml`, `blueprint` job)
 
-When blueprint sources change, `scripts/run_diagram_tests.py` runs every
+Every night, `scripts/run_diagram_tests.py` runs every
 `scripts/test_tenkz_*.py` and `scripts/test_*_diagram.py` test, reports all
 failures, and fails the step if any test fails. Tests that declare an
 `--output-dir` option render into `$RUNNER_TEMP/diagram-tests/<test>`; the whole
@@ -269,11 +404,11 @@ test keeps each chunk's source, stage/elapsed-time record and TeX output there,
 so the outer timeout leaves diagnostics even when it kills the test process.
 This captures evidence; it does not increase any timeout or reduce figure coverage.
 Each test runs in its own process group, and a timeout kills the group, so a hung renderer
-does not outlive its test. The path filters use the same
-glob patterns. A new diagram test therefore needs no workflow edit: do not add a
-step or a path entry for it. `test_tenkz_equation_web.py` and
-`test_tenkz_inline_web.py` keep their own steps, because they need the built
-site or the inline-layout job.
+does not outlive its test. A new diagram test therefore needs no workflow
+edit: do not add a step or a path entry for it. `test_tenkz_equation_web.py` and
+`test_tenkz_inline_web.py` keep their own steps in `nightly.yml`, because they
+need the built site or the inline-layout job. Pull requests run none of these;
+their blueprint job lints the sources only.
 
 ---
 
@@ -339,18 +474,18 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **What it does**: When the blueprint linter fails on a PR, this workflow reads the error logs and asks Claude to fix the LaTeX.
 
-**When it runs**: Automatically after a "PR CI" run completes with either blueprint job failed: the `blueprint` job (`texra-blueprint web`, a wrapper of `leanblueprint web` that also fails on unrecognized renderer commands) or the `blueprint-pdf` job (`scripts/check_blueprint_pdf_compiles.sh`, one XeTeX pass over the print volume, and `./scripts/build_blueprint_ch01_12.sh`). Runs on any PR from the same repository (not forks).
+**When it runs**: Automatically after a "PR CI" run completes with the `blueprint` job failed. That job lints the picture and LaTeX sources (tenkz lint, `chktex`, `scripts/check_latexindent_formatting.sh`) and checks the declaration tags against the Lean sources (`scripts/blueprint_lean_sync.py`); it compiles no TeX. Runs on any PR from the same repository (not forks). Failures of the web build, the browser tests or the print volumes appear in Nightly CI and are handled by Nightly Fix.
 
 **What Claude does**:
-- Reads the blueprint compilation error logs and identifies which of the two jobs failed
-- Fixes common issues: unresolved `\ref`/`\label` references, duplicate labels, mismatched `\begin`/`\end` environments, invalid `\lean{DeclName}` references, malformed LaTeX, plasTeX parse errors
-- Validates the fix with the command matching the failed job: `texra-blueprint web` for the `blueprint` job; `scripts/check_blueprint_pdf_compiles.sh` (or the full `leanblueprint pdf`) for the `blueprint-pdf` job, plus `./scripts/build_blueprint_ch01_12.sh` when its FT-MPS step failed
+- Reads the lint and sync error logs
+- Fixes common issues: unresolved `\ref`/`\label` references, duplicate labels, mismatched `\begin`/`\end` environments, invalid `\lean{DeclName}` references, malformed LaTeX, formatting
+- Validates the fix with the failed command, and may build the web pages or the print volumes to confirm that an edit compiles
 - Pushes a commit with the `[claude-auto-fix]` prefix
 - Posts a summary comment on the PR
 
 **No label required** — this runs on all PRs automatically.
 
-The "PR CI" blueprint job and the "Blueprint" workflow fetch the pinned
+The "PR CI" blueprint job, Nightly CI and the "Blueprint" workflow fetch the pinned
 [tenkz](https://github.com/LionSR/tenkz) package (`tenkz.toml`,
 `scripts/fetch_tenkz.py`) and then lint blueprint and slide pictures. The
 package corpus, shrink ratchet, and RMP book run in the tenkz repository.
@@ -406,11 +541,12 @@ modules, and use a concept-named import-only aggregator. Do not create
 exception must explain why the numeral belongs to the mathematics or source
 citation; it is not an escape hatch for continuation files.
 
-**When it runs**: On pull requests and pushes to `main` whenever Lean sources,
-any checker, their tests, the ceilings, this documentation, or the workflow
-changes. CI runs the policy unit tests before the repository checks. The numbered-module
-ratchet compares a pull request with its merge base and a push with the commit
-recorded by the push event before any commit in that push was applied.
+**When it runs**: On pull requests whenever Lean sources, any checker, their
+tests, the ceilings, this documentation, or the workflow changes, and every
+night on `main` (`policies` job of `nightly.yml`). The pull-request job runs
+the policy unit tests before the repository checks. The ratchets compare a
+pull request with its base, and the nightly run with the last commit of
+`main` that passed it.
 
 ---
 
@@ -505,8 +641,8 @@ blueprint, review, and prompt failures are not enough to trip the guard.
 
 **When it runs**:
 
-- On failed completed runs of `auto-fix.yml`, `pr-review.yml`, and
-  `issue-automation.yml`, only when the failed run's
+- On failed completed runs of `auto-fix.yml`, `nightly-fix.yml`,
+  `pr-review.yml`, and `issue-automation.yml`, only when the failed run's
   head repository is the TNLean repository itself.
 - Hourly by schedule, to re-enable switches whose cooldown has elapsed.
 - Manually through `workflow_dispatch`, which runs the same re-enable check.
@@ -549,6 +685,9 @@ workflow stops. This prevents infinite loops where automation keeps pushing brok
 CI-fix and review-fix commits count toward **the same shared budget of 5**.
 A human commit resets the counter.
 
+Nightly Fix keeps its own cap: at most 5 repair rounds per repair pull
+request, counted by the round comments it leaves there, and it never merges.
+
 ### Concurrency Groups
 
 All auto-fix jobs in `auto-fix.yml` share the same
@@ -565,7 +704,7 @@ provider or mention handler.
 
 | Variable | Disabled workflows |
 |----------|--------------------|
-| `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml` |
+| `CLAUDE_AUTO_FIX_ENABLED=false` | `auto-fix.yml`, the agent of `nightly-fix.yml` |
 | `CLAUDE_REVIEW_ENABLED=false` | `pr-review.yml` and the model-backed jobs of `issue-automation.yml` |
 | `DEEPSEEK_MENTION_ENABLED=false` | the `@deepseek` handle of `agent-mention.yml` |
 

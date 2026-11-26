@@ -1,86 +1,16 @@
 name: PR CI
 
-# The pull-request pipeline: Lean build + style lint, blueprint lint and
-# Lean-blueprint sync, and the Lean module-policy guards, formerly
-# lean_action_ci.yml, lint-blueprint.yml, and oversized-lean-files.yml.
+# The pull-request pipeline, kept light: every push to a pull request
+# compiles the Lean modules it changed (within a time budget), runs the style
+# linters and the source-level policy and blueprint checks, and nothing else.
+# The full library build, the compiled declaration checks, the blueprint web
+# and PDF builds and the browser tests run once a night in nightly.yml, and
+# nightly-fix.yml repairs what they find. See docs/ci-automation.md.
+#
 # One workflow means one completion event for the auto-fix dispatcher and
-# per-job change gating: Lean-only changes skip the TeX pipeline, while
-# blueprint changes also run the Lean build for compiled declaration checking.
+# per-job change gating: Lean-only changes skip the blueprint lint.
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**.lean'
-      - 'lakefile.*'
-      - 'lean-toolchain'
-      - 'lake-manifest.json'
-      - 'texra-blueprint.toml'
-      - 'scripts/LintStyle.lean'
-      - 'scripts/nolints-style.txt'
-      - 'scripts/check_import_layers.py'
-      - 'scripts/check_oversized_lean_files.py'
-      - 'scripts/check_pass_through_declarations.py'
-      - 'scripts/check_small_lean_modules.py'
-      - 'scripts/small_lean_module_ceilings.txt'
-      - 'scripts/lean_import_syntax.py'
-      - 'scripts/test_lean_file_policies.py'
-      - 'docbuild/**'
-      - 'scripts/check_docbuild_manifest.py'
-      - 'scripts/lake_build_hotspots.py'
-      - 'scripts/ci_lean_checks.py'
-      - 'scripts/test_ci_lean_checks.py'
-      - 'scripts/test_lake_build_hotspots.py'
-      - 'scripts/lake_build_locked.sh'
-      - 'scripts/seed_lake_build.sh'
-      - 'scripts/test_seed_lake_build.sh'
-      - 'scripts/ci_compatible_cache.py'
-      - 'docs/ci-automation.md'
-      - 'docs/CONTRIBUTING.md'
-      - '.github/workflows/**'
-      - '.github/dependabot.yml'
-      - 'tenkz.toml'
-      - 'scripts/fetch_tenkz.py'
-      - 'scripts/tenkz_paths.py'
-      - 'scripts/prune_tenkz_render_cache.py'
-      - 'blueprint/src/**'
-      - 'docs/paper-gaps/**'
-      - 'scripts/generate_import_aggregators.py'
-      - 'scripts/test_generate_import_aggregators.py'
-      # Trees the paper-gap reference check scans (texra-blueprint
-      # paper-gaps check); without these the check never runs
-      # on merge pushes that only touch a scanned file.
-      - 'blueprint/comments/**'
-      - 'docs/**/*.md'
-      - 'docs/slides/**'
-      - 'blueprint/.chktexrc'
-      - 'blueprint/latexindent.yaml'
-      - 'scripts/latexindent'
-      - 'scripts/check_latexindent_formatting.sh'
-      - 'scripts/blueprint_lean_sync.py'
-      - 'scripts/test_blueprint_lean_sync.py'
-      - 'scripts/paper_gap_leanid_sync.py'
-      - 'scripts/test_paper_gap_leanid_sync.py'
-      - 'scripts/badge_utils.py'
-      - 'scripts/write_badges.py'
-      - 'scripts/generate_badges.py'
-      - 'scripts/test_blueprint_web_render.py'
-      - 'scripts/test_blueprint_graph_worker.py'
-      - 'scripts/test_blueprint_graph_precompute.py'
-      - 'scripts/add_blueprint_search.py'
-      - 'scripts/test_add_blueprint_search.py'
-      - 'scripts/test_blueprint_search_web.py'
-      - 'Papers/1606.00608/**'
-      - 'Papers/2502.20257/**'
-      - 'scripts/generate_paper_aux.sh'
-      - 'scripts/tenkz_blueprint_sweep.py'
-      - 'scripts/test_tenkz_*.py'
-      - 'scripts/test_*_diagram.py'
-      - 'scripts/run_diagram_tests.py'
-      - 'scripts/test_run_diagram_tests.py'
-      - 'scripts/test_tenkz_equation_web.py'
-      - 'scripts/test_tenkz_inline_web.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -160,12 +90,10 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  # Let main finish and save its build cache even during frequent merges.
-  # Keep only the newest pending main run; PR updates still cancel older runs.
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: true
 
-# Build-cache policy: the cache is saved only from main and restored
-# everywhere. lean-action's built-in GitHub cache is disabled because it
+# Build-cache policy: the cache is saved only by the nightly build of main
+# (nightly.yml) and restored everywhere. lean-action's built-in GitHub cache is disabled because it
 # saved a ~2.4 GB entry per PR run; those entries cycled through the 10 GB
 # repository cache budget within minutes, evicting main's entry, so no run
 # ever restored usable TNLean oleans and every run rebuilt all modules.
@@ -181,8 +109,7 @@ env:
     .lake/packages/cslib/.lake/build
 
 jobs:
-  # Per-job change gating. Push and dispatch runs skip this and run
-  # every job.
+  # Per-job change gating. Dispatch runs skip this and run every job.
   changes:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -192,8 +119,6 @@ jobs:
       lean: ${{ steps.filter.outputs.lean }}
       module_policy: ${{ steps.filter.outputs.module_policy }}
       blueprint: ${{ steps.filter.outputs.blueprint }}
-      blueprint_pdf: ${{ steps.filter.outputs.blueprint_pdf }}
-      paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
       workflow: ${{ steps.filter.outputs.workflow }}
     steps:
       - uses: dorny/paths-filter@v4
@@ -232,7 +157,7 @@ jobs:
               - 'scripts/generate_import_aggregators.py'
               - 'scripts/test_generate_import_aggregators.py'
             blueprint:
-              # Dependency upgrades must recheck compiled declarations and web/PDF renders.
+              # Dependency upgrades must recheck the blueprint declaration tags.
               - 'lean-toolchain'
               - 'lakefile.*'
               - 'lake-manifest.json'
@@ -264,36 +189,6 @@ jobs:
               - 'scripts/test_run_diagram_tests.py'
               - 'scripts/test_tenkz_equation_web.py'
               - 'scripts/test_tenkz_inline_web.py'
-            # Inputs of the two XeLaTeX volumes the blueprint-pdf job builds:
-            # `leanblueprint pdf` (blueprint/src/latexmkrc) and
-            # scripts/build_blueprint_ch01_12.sh, with the bibliography from
-            # `texra-blueprint bbl` (texra-blueprint.toml).
-            blueprint_pdf:
-              - 'lean-toolchain'
-              - 'lakefile.*'
-              - 'lake-manifest.json'
-              - 'docbuild/**'
-              - 'blueprint/src/**'
-              - 'texra-blueprint.toml'
-              - 'scripts/build_blueprint_ch01_12.sh'
-              - 'tenkz.toml'
-              - 'scripts/fetch_tenkz.py'
-              - 'scripts/tenkz_paths.py'
-            # Everything the paper-gap reference check reads: the notes,
-            # the trees it scans for references, its configuration, and
-            # the wrapper scripts.
-            paper_gaps:
-              - 'docs/paper-gaps/**'
-              - 'Papers/1606.00608/**'
-              - 'Papers/2502.20257/**'
-              - 'scripts/generate_paper_aux.sh'
-              - '**.lean'
-              - 'blueprint/src/**'
-              - 'blueprint/comments/**'
-              - 'docs/**/*.md'
-              - 'texra-blueprint.toml'
-              - 'scripts/paper_gap_leanid_sync.py'
-              - 'scripts/test_paper_gap_leanid_sync.py'
             workflow:
               - '.github/workflows/**'
               - '.github/dependabot.yml'
@@ -306,17 +201,19 @@ jobs:
       !cancelled() && (
         github.event_name != 'pull_request' ||
         needs.changes.outputs.lean == 'true' ||
-        needs.changes.outputs.blueprint == 'true' ||
-        needs.changes.outputs.paper_gaps == 'true' ||
         needs.changes.outputs.workflow == 'true'
       )
     runs-on: ubuntu-latest
+    # The two changed-module steps stop themselves at their budgets; this
+    # bound only catches a hung setup.
+    timeout-minutes: 75
 
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
+      # Read only: the nightly build of main saves this cache (nightly.yml).
       - name: Restore Lean build cache
         id: build-cache
         uses: actions/cache/restore@v6
@@ -408,15 +305,16 @@ jobs:
             --prefix "$PREFIX" --matched "$MATCHED_KEY" --version "$VERIFIED_VERSION"
           python3 scripts/ci_compatible_cache.py prune
 
-      # Diagnose the PR's direct edits before the full dependency build. Selection
+      # Elaborate the PR's direct edits with warnings as errors. Selection
       # uses the explicit feature head, while checks use this merged checkout.
-      # The step is a shortcut: a failure it finds fails the job, but past its
-      # 50-minute budget (a cold dependency cache after a pin change, or a
-      # change near the bottom of the import graph) it stops with a warning.
-      # The root build and complete strict suite below remain mandatory.
+      # A failure it finds fails the job; past its 25-minute budget (a cold
+      # dependency cache after a pin change, or a change near the bottom of
+      # the import graph) it stops with a warning and leaves the remaining
+      # files to the nightly build. Modules that import the changed ones are
+      # not rebuilt here at all: the nightly root build is their check.
       - name: Check directly changed Lean sources strictly
         if: github.event_name == 'pull_request'
-        timeout-minutes: 60
+        timeout-minutes: 30
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -431,16 +329,16 @@ jobs:
             git cat-file -e "$revision^{commit}"
           done
           python3 scripts/ci_lean_checks.py focused \
-            --base "$BASE_SHA" --head "$PR_HEAD_SHA" --jobs 3 --budget 3000 \
+            --base "$BASE_SHA" --head "$PR_HEAD_SHA" --jobs 3 --budget 1500 \
             --log "$RUNNER_TEMP/lake-build.log"
 
-      # Build the changed production modules before the full library so a
-      # failure surfaces early. The build is a shortcut: past its budget it
-      # stops with a warning and the root build continues. Selection:
-      # scripts/ci_lean_checks.py.
+      # Build the changed production modules, logging the timings that the
+      # compilation-time gate below reads. Past its 15-minute budget the
+      # build stops with a warning and the nightly build covers the rest.
+      # Selection: scripts/ci_lean_checks.py.
       - name: Build changed Lean modules early
         if: github.event_name == 'pull_request'
-        timeout-minutes: 30
+        timeout-minutes: 20
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -450,31 +348,7 @@ jobs:
           if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags origin "$BASE_SHA" || BASE_SHA=""
           fi
-          python3 scripts/ci_lean_checks.py early --budget 1200 --log "$RUNNER_TEMP/lake-build.log"
-
-      - name: Build Lean project and capture timings
-        id: lean-build
-        run: |
-          set -eo pipefail
-          {
-            lake build
-            lake build lint_style
-          } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
-      # Elaborate changed production files with warnings as errors. New
-      # modules need no workflow edit. Selection: scripts/ci_lean_checks.py.
-      - name: Check changed Lean files strictly
-        timeout-minutes: 120
-        env:
-          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-          PR_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
-        run: |
-          set -eo pipefail
-          case "$BASE_SHA" in 0000000000000000000000000000000000000000) BASE_SHA="" ;; esac
-          if [ -n "$BASE_SHA" ] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
-            git fetch --no-tags origin "$BASE_SHA" || BASE_SHA=""
-          fi
-          python3 scripts/ci_lean_checks.py strict --jobs 3
+          python3 scripts/ci_lean_checks.py early --budget 900 --log "$RUNNER_TEMP/lake-build.log"
 
       - name: Check changed Lean compilation times
         id: compilation-time
@@ -485,6 +359,8 @@ jobs:
           set -o pipefail
           timing_status=0
           archive_build_failed=false
+          # No changed production module means no build log yet.
+          touch "$RUNNER_TEMP/lake-build.log"
           # Compare the verified tested merge against its actual first parent.
           python3 scripts/lake_build_hotspots.py select-pr \
             --head "$PR_HEAD_SHA" \
@@ -524,33 +400,12 @@ jobs:
             exit 1
           fi
 
+      # The text-based linter reads sources only, so it needs its own small
+      # executable and no build of the library.
       - name: Run text-based style linter
-        run: lake exe lint_style --github
-
-      # `checkdecls` imports TNLean modules to resolve every tagged declaration,
-      # so it must run after the project build rather than in the TeX-only job.
-      - name: Generate Blueprint Lean declaration list
-        run: python3 scripts/blueprint_lean_sync.py --root . --update-lean-decls
-
-      - name: Check Blueprint Lean declarations
-        timeout-minutes: 10
-        run: lake exe checkdecls blueprint/lean_decls
-
-      - name: Generate paper-gap Lean declaration list
-        run: python3 scripts/paper_gap_leanid_sync.py --root . --output "$RUNNER_TEMP/paper_gap_leanid_decls"
-
-      - name: Check paper-gap Lean declarations
-        timeout-minutes: 10
-        run: lake exe checkdecls "$RUNNER_TEMP/paper_gap_leanid_decls"
-
-      # A cancelled or failed build can leave partially written `.olean` files.
-      # Restore only caches saved after the complete build and style checks pass.
-      - name: Save Lean build cache (main only)
-        if: success() && github.ref == 'refs/heads/main'
-        uses: actions/cache/save@v6
-        with:
-          path: ${{ env.BUILD_CACHE_PATHS }}
-          key: tnlean-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json', 'lakefile.toml') }}-${{ github.sha }}
+        run: |
+          lake build lint_style
+          lake exe lint_style --github
 
   compile-time:
     name: Check changed Lean compilation times
@@ -676,40 +531,22 @@ jobs:
           python3 scripts/check_pass_through_declarations.py --root . --base-ref "$base"
           python3 scripts/check_small_lean_modules.py --root . --base-ref "$base"
 
-  inline-layout:
-    name: Check inline diagram semantics
-    needs: changes
-    if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true')"
-    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: '3.12'
-      - name: Install parser and browser
-        run: |
-          python3 -m pip install plasTeX==3.1 playwright==1.56.0
-          python3 -m playwright install --with-deps chromium
-      - name: Test inline picture semantics
-        run: python3 scripts/test_tenkz_inline_web.py
-
   blueprint:
-    name: Check blueprint compiles without errors
+    # Source-level checks only: picture and LaTeX lint, formatting, and the
+    # agreement of the blueprint's declaration tags with the Lean sources.
+    # Nothing here compiles TeX; the web and PDF builds, the diagram and
+    # browser tests and the paper-gap reference check run in nightly.yml.
+    name: Check blueprint sources
     needs: changes
     if: "!cancelled() && (github.event_name != 'pull_request' || needs.changes.result == 'success')"
-    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
     runs-on: ubuntu-24.04
+    timeout-minutes: 20
     env:
       # This SHA belongs to the checked-out PR merge, even if its base branch advances.
       BASE_REF: ${{ github.event.pull_request.base.sha }}
-      # TeX-facing steps run only when blueprint sources changed (always on
-      # push/dispatch); the Lean-blueprint sync checks run on Lean-only
-      # changes too.
+      # The lint steps run only when blueprint sources changed (always on
+      # dispatch); the Lean-blueprint sync checks run on Lean-only changes too.
       TEX_CHANGED: ${{ github.event_name != 'pull_request' || needs.changes.outputs.blueprint == 'true' || needs.changes.outputs.workflow == 'true' }}
-      # The paper-gap reference check also runs when only the notes, the
-      # Lean sources, the Markdown docs, or the generator changed.
-      PAPER_GAPS_CHANGED: ${{ github.event_name != 'pull_request' || needs.changes.outputs.paper_gaps == 'true' || needs.changes.outputs.workflow == 'true' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -721,10 +558,8 @@ jobs:
           git fetch --no-tags origin "$BASE_REF"
           git merge-base --is-ancestor "$BASE_REF" HEAD
 
-      - name: Test blueprint search preparation
-        run: python3 scripts/test_add_blueprint_search.py
-
       - name: Fetch pinned tenkz package
+        if: env.TEX_CHANGED == 'true'
         run: python3 scripts/fetch_tenkz.py
 
       - name: Detect changed Lean files
@@ -763,65 +598,13 @@ jobs:
           fi
           echo "has_changed_lean=$has_changed_lean" >> "$GITHUB_OUTPUT"
 
-      - name: Configure apt retries
-        if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
-        run: |
-          printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "60";' \
-            'Acquire::https::Timeout "60";' | sudo tee /etc/apt/apt.conf.d/80-ci-retries
-
-      - name: Install blueprint system dependencies
-        id: blueprint-system-deps-1
-        if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
-        timeout-minutes: 10
-        continue-on-error: true
-        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
-        with:
-          cache-suffix: web-v3
-          extra-packages: texlive-fonts-extra texlive-publishers
-
-      - name: Recover an interrupted package install
-        if: (env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true') && steps.blueprint-system-deps-1.outcome == 'failure'
+      # chktex alone, not the TeX distribution the nightly builds install.
+      - name: Install chktex
+        if: env.TEX_CHANGED == 'true'
         timeout-minutes: 5
-        # The timed-out install can leave its apt-get running and holding the
-        # package locks, so stop the lock holders before repairing the database.
         run: |
-          locks=(/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock
-            /var/lib/apt/lists/lock /var/cache/apt/archives/lock
-            "$RUNNER_TEMP"/blueprint-apt-archives/*/lock)
-          for signal in TERM KILL; do
-            sudo fuser -k -"$signal" "${locks[@]}" 2>/dev/null || true
-            sleep 5
-          done
-          sudo dpkg --configure -a || true
-          # A crawling Azure mirror is the usual cause; fetch the retry from the
-          # main archive instead.
-          # Ubuntu runners list the mirror in apt-mirrors.txt and point the
-          # sources at it with mirror+file:, so rewrite both.
-          for f in /etc/apt/apt-mirrors.txt /etc/apt/sources.list \
-              /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
-            if [ -f "$f" ]; then
-              sudo sed -i \
-                's#http://azure\.archive\.ubuntu\.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' "$f"
-            fi
-          done
-
-      - name: Install blueprint system dependencies (retry)
-        if: (env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true') && steps.blueprint-system-deps-1.outcome == 'failure'
-        # A slow mirror can need more than one attempt; the packages fetched by the
-        # first attempt stay in the archive directory, so the retry resumes.
-        timeout-minutes: 45
-        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
-        with:
-          cache-suffix: web-v3
-          extra-packages: texlive-fonts-extra texlive-publishers
-
-      # Also installed for paper-gap-only changes: the reference check
-      # below runs the texra-blueprint CLI from this step's pip install.
-      - name: Install blueprint Python dependencies
-        if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
-        uses: texra-ai/lean-env-action/leanblueprint@v1
-        with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends chktex
 
       - name: Lint tenkz picture sources
         if: env.TEX_CHANGED == 'true'
@@ -830,41 +613,6 @@ jobs:
             'blueprint/src/chapter/*.tex' \
             'blueprint/src/figures/*.tex' \
             'docs/slides/*.tex'
-
-      - name: Check paper source label generator syntax
-        if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
-        run: bash -n scripts/generate_paper_aux.sh
-
-      - name: Generate paper source labels
-        if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
-        run: |
-          ./scripts/generate_paper_aux.sh 1606.00608
-          ./scripts/generate_paper_aux.sh 2502.20257
-
-      - name: Check paper-gap references resolve
-        if: env.TEX_CHANGED == 'true' || env.PAPER_GAPS_CHANGED == 'true'
-        run: texra-blueprint paper-gaps check
-
-      # Every scripts/test_tenkz_*.py and scripts/test_*_diagram.py test.
-      # New diagram tests need no workflow edit. Runner: scripts/run_diagram_tests.py.
-      - name: Test diagram test runner
-        run: python3 scripts/test_run_diagram_tests.py
-
-      - name: Test blueprint diagrams
-        id: diagram-tests
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/run_diagram_tests.py --output-dir "$RUNNER_TEMP/diagram-tests"
-
-      - name: Preserve rendered diagrams and diagnostics for review
-        if: >-
-          !cancelled() && env.TEX_CHANGED == 'true' &&
-          (steps.diagram-tests.outcome == 'success' || steps.diagram-tests.outcome == 'failure')
-        uses: actions/upload-artifact@v7
-        with:
-          name: diagram-tests-${{ github.sha }}
-          path: ${{ runner.temp }}/diagram-tests
-          if-no-files-found: error
-          retention-days: 3
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
@@ -878,98 +626,6 @@ jobs:
         if: env.TEX_CHANGED == 'true'
         timeout-minutes: 5
         run: scripts/check_latexindent_formatting.sh
-
-      - name: Build blueprint bibliography
-        if: env.TEX_CHANGED == 'true'
-        run: texra-blueprint bbl
-
-      # Reuse the pictures the last main build compiled (blueprint.yml saves
-      # them); a picture is named by the hash of its source, so only figures
-      # this branch edits are compiled again. Read only: branches never save.
-      - name: Restore tenkz picture cache
-        if: env.TEX_CHANGED == 'true'
-        uses: actions/cache/restore@v6
-        with:
-          path: |
-            blueprint/web/tenkz_svg
-            blueprint/src/.tenkz_svg_cache
-          key: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-${{ github.run_id }}
-          restore-keys: tenkz-render-${{ hashFiles('blueprint/src/Packages/tenkz_pic.py') }}-
-
-      - name: Run texra-blueprint web and check for errors
-        if: env.TEX_CHANGED == 'true'
-        working-directory: blueprint
-        run: |
-          set -o pipefail
-          tmp_output_file="$(mktemp)"
-
-          # texra-blueprint web wraps leanblueprint web and fails when the
-          # renderer meets a command it does not know (unrecognized
-          # command/environment, default-renderer fallback); the log is kept
-          # for the label checks below.
-          texra-blueprint web 2>&1 | tee "$tmp_output_file"
-
-          # Check for blueprint ERROR lines in the captured output
-          if grep -q "^ERROR:" "$tmp_output_file"; then
-            echo "::error::Blueprint has unresolved labels (see ERROR lines above)"
-            exit 1
-          fi
-          if grep -q "WARNING: File not found:" "$tmp_output_file"; then
-            echo "::warning::Blueprint has missing file references (see WARNING lines above)"
-          fi
-
-      - name: Prune unused tenkz pictures
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/prune_tenkz_render_cache.py
-
-      # Every blueprint picture compiled standalone during the web build and
-      # left its event stream in the render cache; the sweep audits all of
-      # them, so the boundary-signature rules reach the volume's figures and
-      # not only the regression corpus.
-      - name: Sweep tenkz blueprint event streams
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/tenkz_blueprint_sweep.py
-
-      - name: Test tenkz equation web layout
-        if: env.TEX_CHANGED == 'true'
-        run: |
-          python3 -m pip install --disable-pip-version-check playwright==1.56.0
-          python3 -m playwright install --with-deps chromium
-          python3 scripts/test_tenkz_equation_web.py --web-root blueprint/web
-
-      - name: Add and test blueprint search
-        if: env.TEX_CHANGED == 'true'
-        run: |
-          python3 -m pip install --disable-pip-version-check 'pagefind[extended]==1.5.2'
-          python3 scripts/add_blueprint_search.py --web-root blueprint/web
-          python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
-
-      - name: Test dependency graph rendering and terminal errors
-        if: env.TEX_CHANGED == 'true'
-        timeout-minutes: 2
-        run: python3 scripts/test_blueprint_graph_worker.py --browser-smoke
-
-      - name: Test precomputed dependency graph interactions
-        if: env.TEX_CHANGED == 'true'
-        timeout-minutes: 2
-        run: python3 scripts/test_blueprint_graph_precompute.py --browser-smoke
-
-      # A zero exit status says the build ran, not that the pages read. This
-      # opens every generated page and measures what a reader would meet.
-      - name: Test generated blueprint pages
-        if: env.TEX_CHANGED == 'true'
-        run: |
-          python3 scripts/test_blueprint_graph_worker.py
-          python3 scripts/test_blueprint_graph_precompute.py
-          python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
-
-      - name: Preserve failed blueprint render
-        if: failure() && env.TEX_CHANGED == 'true'
-        uses: actions/upload-artifact@v7
-        with:
-          name: blueprint-render-failure
-          path: blueprint/web
-          retention-days: 3
 
       - name: Test Blueprint declaration scanner
         run: python3 scripts/test_blueprint_lean_sync.py
@@ -1040,126 +696,3 @@ jobs:
               check=True,
           )
           PY
-
-  # PR CI otherwise builds only the web blueprint, whose plasTeX renderer
-  # accepts constructs that stop the print volumes (a bare `_` in text mode, an
-  # unbraced `\spn_\C` subscript). Those errors then surfaced only in the
-  # Blueprint workflow on main. This job runs the same two PDF builds as
-  # blueprint.yml (`leanblueprint pdf` and the FT-MPS volume), the first seeded from the auxiliary files main saved, so a
-  # typical run needs one or two XeLaTeX passes. Read only: branches never save.
-  blueprint-pdf:
-    name: Check blueprint PDF compiles
-    needs: changes
-    if: "!cancelled() && github.event_name == 'pull_request' && needs.changes.result == 'success' && (needs.changes.outputs.blueprint_pdf == 'true' || needs.changes.outputs.workflow == 'true')"
-    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
-    runs-on: ubuntu-24.04
-    timeout-minutes: 120
-    env:
-      PRINT_AUX_FILES: |
-        blueprint/print/*.aux
-        blueprint/print/*.bbl
-        blueprint/print/*.blg
-        blueprint/print/*.fdb_latexmk
-        blueprint/print/*.out
-        blueprint/print/*.toc
-    steps:
-      - name: Checkout project
-        uses: actions/checkout@v7
-
-      - name: Configure apt retries
-        run: |
-          printf '%s\n' 'Acquire::Retries "3";' 'Acquire::http::Timeout "60";' \
-            'Acquire::https::Timeout "60";' | sudo tee /etc/apt/apt.conf.d/80-ci-retries
-
-      - name: Install blueprint system dependencies
-        id: blueprint-system-deps-2
-        timeout-minutes: 10
-        continue-on-error: true
-        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
-        with:
-          cache-suffix: web-v3
-          extra-packages: texlive-fonts-extra texlive-publishers
-
-      - name: Recover an interrupted package install
-        if: steps.blueprint-system-deps-2.outcome == 'failure'
-        timeout-minutes: 5
-        # The timed-out install can leave its apt-get running and holding the
-        # package locks, so stop the lock holders before repairing the database.
-        run: |
-          locks=(/var/lib/dpkg/lock-frontend /var/lib/dpkg/lock
-            /var/lib/apt/lists/lock /var/cache/apt/archives/lock
-            "$RUNNER_TEMP"/blueprint-apt-archives/*/lock)
-          for signal in TERM KILL; do
-            sudo fuser -k -"$signal" "${locks[@]}" 2>/dev/null || true
-            sleep 5
-          done
-          sudo dpkg --configure -a || true
-          # A crawling Azure mirror is the usual cause; fetch the retry from the
-          # main archive instead.
-          # Ubuntu runners list the mirror in apt-mirrors.txt and point the
-          # sources at it with mirror+file:, so rewrite both.
-          for f in /etc/apt/apt-mirrors.txt /etc/apt/sources.list \
-              /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources; do
-            if [ -f "$f" ]; then
-              sudo sed -i \
-                's#http://azure\.archive\.ubuntu\.com/ubuntu#http://archive.ubuntu.com/ubuntu#g' "$f"
-            fi
-          done
-
-      - name: Install blueprint system dependencies (retry)
-        if: steps.blueprint-system-deps-2.outcome == 'failure'
-        # A slow mirror can need more than one attempt; the packages fetched by the
-        # first attempt stay in the archive directory, so the retry resumes.
-        timeout-minutes: 45
-        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
-        with:
-          cache-suffix: web-v3
-          extra-packages: texlive-fonts-extra texlive-publishers
-
-      - name: Install leanblueprint
-        uses: texra-ai/lean-env-action/leanblueprint@v1
-        with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
-
-      - name: Fetch pinned tenkz package
-        run: python3 scripts/fetch_tenkz.py
-
-      - name: Build blueprint bibliography
-        run: texra-blueprint bbl
-
-      - name: Restore PDF auxiliary files
-        uses: actions/cache/restore@v6
-        with:
-          path: ${{ env.PRINT_AUX_FILES }}
-          key: blueprint-print-aux-${{ github.run_id }}
-          restore-keys: blueprint-print-aux-
-
-      # One XeTeX pass over the print volume catches every TeX error that the
-      # web build misses; settling cross-references would double the job, so
-      # the check stops after one run and reads the log itself. As in
-      # blueprint.yml, a stale auxiliary file can name a macro that a changed
-      # preamble no longer defines, so a failed seeded run is retried from a
-      # clean print directory and only a broken source fails the step.
-      - name: Check blueprint PDF compiles
-        id: print-pdf
-        run: |
-          if ! scripts/check_blueprint_pdf_compiles.sh; then
-            echo "::warning::Seeded PDF check failed; retrying from a clean print directory"
-            rm -rf blueprint/print
-            scripts/check_blueprint_pdf_compiles.sh
-          fi
-
-      # The focused FT-MPS volume compiles the \ifftmpsvolume branches, which
-      # the full print volume never reaches; blueprint.yml builds it too.
-      - name: Build FT-MPS blueprint volume
-        run: ./scripts/build_blueprint_ch01_12.sh
-
-      # The FT-MPS script builds in a temporary directory it removes, so its
-      # log appears in the step output; only the full volume leaves print.log.
-      - name: Preserve failed PDF log
-        if: failure() && steps.print-pdf.outcome == 'failure'
-        uses: actions/upload-artifact@v7
-        with:
-          name: blueprint-pdf-failure
-          path: blueprint/print/print.log
-          retention-days: 3

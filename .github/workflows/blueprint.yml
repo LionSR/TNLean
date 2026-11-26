@@ -1,55 +1,19 @@
 name: Blueprint
 
+# Builds the print volumes and the web pages and publishes the site from main.
+# It no longer runs on every push to main: nightly.yml calls it once a night,
+# and it can be dispatched by hand for an immediate publication.
+
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**.lean'
-      - 'lakefile.*'
-      - 'lean-toolchain'
-      - 'lake-manifest.json'
-      - 'blueprint/src/**'
-      - 'docs/paper-gaps/**'
-      - 'Papers/1606.00608/**'
-      - 'Papers/2502.20257/**'
-      - 'scripts/generate_paper_aux.sh'
-      - 'texra-blueprint.toml'
-      # Trees the paper-gap reference check scans (texra-blueprint
-      # paper-gaps check); without these the check never runs
-      # on merge pushes that only touch a scanned file.
-      - 'blueprint/comments/**'
-      - 'docs/**/*.md'
-      - 'tenkz.toml'
-      - 'scripts/fetch_tenkz.py'
-      - 'scripts/prune_tenkz_render_cache.py'
-      - 'scripts/tenkz_paths.py'
-      - 'docs/slides/**'
-      - '.github/workflows/blueprint.yml'
-      - '.github/workflows/deploy-pages.yml'
-      - 'home_page/**'
-      - 'scripts/build_blueprint_ch01_12.sh'
-      - 'scripts/assemble-pages-site.sh'
-      - 'scripts/fetch-latest-artifact.sh'
-      - 'scripts/badge_utils.py'
-      - 'scripts/write_badges.py'
-      - 'scripts/tenkz_blueprint_sweep.py'
-      - 'scripts/test_blueprint_web_render.py'
-      - 'scripts/test_blueprint_graph_worker.py'
-      - 'scripts/test_blueprint_graph_precompute.py'
-      - 'scripts/add_blueprint_search.py'
-      - 'scripts/test_add_blueprint_search.py'
-      - 'scripts/test_blueprint_search_web.py'
+  workflow_call:
   workflow_dispatch:
 
-# Rapid pushes to main only need the newest build; actual Pages deployments
-# are serialized by the deploy job in deploy-pages.yml. A manual run on
-# another branch builds in its own group and never deploys.
+# Actual Pages deployments are serialized by the deploy job in
+# deploy-pages.yml. A run on another branch (a manual dispatch, or the
+# nightly verification of a repair branch) builds in its own group and never
+# deploys. A running build is left to finish and reach the deploy job.
 concurrency:
   group: blueprint-build-${{ github.ref }}
-  # Let a running build finish: with merges to main every few minutes and a
-  # build of about half an hour, cancelling in progress meant no run ever
-  # reached the deploy job. GitHub still keeps only the newest pending run.
   cancel-in-progress: false
 
 permissions:
@@ -183,6 +147,7 @@ jobs:
           fi
 
       - name: Save PDF auxiliary files
+        if: github.ref == 'refs/heads/main'
         uses: actions/cache/save@v6
         with:
           path: ${{ env.PRINT_AUX_FILES }}
@@ -341,6 +306,7 @@ jobs:
         run: python3 scripts/prune_tenkz_render_cache.py
 
       - name: Save tenkz picture cache
+        if: github.ref == 'refs/heads/main'
         uses: actions/cache/save@v6
         with:
           path: |
