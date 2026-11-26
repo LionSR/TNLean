@@ -670,6 +670,36 @@ class SmallModuleCeilingTests(unittest.TestCase):
         self.assertEqual(moved_in, {"Algebra": 1})
         self.assertEqual(changed, {"TNLean.Algebra.Moved", "TNLean.Algebra.New"})
 
+    def test_a_module_deleted_in_the_working_tree_is_absent(self) -> None:
+        # Git still lists a module that is removed but not yet committed; the checks read
+        # the tree on disk instead of failing on the missing file.
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+
+            def git(*args: str) -> None:
+                subprocess.run(["git", "-C", str(root), *args], check=True, capture_output=True)
+
+            git("init", "-q")
+            git("config", "user.email", "test@example.com")
+            git("config", "user.name", "test")
+            for name in ("Kept", "Deleted"):
+                path = root / "TNLean" / "QCA" / f"{name}.lean"
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(f"def {name.lower()} := 0\n", encoding="utf-8")
+            (root / small.CEILINGS_PATH).parent.mkdir(parents=True, exist_ok=True)
+            (root / small.CEILINGS_PATH).write_text("QCA 2\n", encoding="utf-8")
+            git("add", ".")
+            git("commit", "-q", "-m", "base")
+            git("branch", "base")
+            (root / "TNLean" / "QCA" / "Deleted.lean").unlink()
+            sources = layers.tracked_sources(root)
+            found = small.small_modules(sources)
+            base, _, changed = small.base_state(root, "base", found)
+        self.assertEqual(set(sources), {"TNLean.QCA.Kept"})
+        self.assertEqual(found, {"QCA": {"TNLean.QCA.Kept": 1}})
+        self.assertEqual(base, {"QCA": 2})
+        self.assertEqual(changed, set())
+
     def test_recorded_ceilings_hold_for_the_tree(self) -> None:
         root = Path(__file__).resolve().parent.parent
         found = small.small_modules(layers.tracked_sources(root))
