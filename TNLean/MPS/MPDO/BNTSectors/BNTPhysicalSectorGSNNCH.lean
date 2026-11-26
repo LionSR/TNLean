@@ -198,7 +198,6 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     fun s ↦ S.basisMPOTensor s
   have hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor := by
     intro s
-    change Kraus.IsInjective (K s).toMPSTensor
     dsimp only [K]
     rw [S.basisMPOTensor_toMPSTensor]
     exact hSpan.isInjective_one s
