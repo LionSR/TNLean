@@ -85,7 +85,9 @@ theorem blockTensor_map_star_of_conjugation_gauge {V : MPOTensor d D}
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ Matrix.unitaryGroup (Fin D) ℂ)
     (hg : ∀ i j, (V (i, j)).map (starRingEnd ℂ) = Xᴴ * V (i, j) * X) (m : ℕ) :
     ∀ i j, (blockTensor V m (i, j)).map (starRingEnd ℂ) = Xᴴ * blockTensor V m (i, j) * X :=
-  fun _ _ ↦ evalWord_map_star_of_conjugation_gauge hX hg _ _
+  fun i j ↦ by
+    rw [blockTensor_apply]
+    exact evalWord_map_star_of_conjugation_gauge hX hg _ _
 
 /-- A conjugation gauge of `𝒰` is a conjugation gauge of its two-site block. -/
 theorem blockTwo_map_star_of_conjugation_gauge {V : MPOTensor d D}

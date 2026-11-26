@@ -110,7 +110,7 @@ private theorem blockTensor_blockTwo_two {D : ℕ} (U : MPOTensor d D) :
       blockTwo (reindexPhysical σ W) = reindexPhysical
         (finProdFinEquiv.symm.trans ((Equiv.prodCongr σ σ).trans finProdFinEquiv))
         (blockTwo W) := fun σ W ↦ by
-    ext I J
+    funext ⟨I, J⟩
     simp [blockTwo_apply, reindexPhysical]
   have h4 : blockTensor (blockTensor U 2) 2 =
       reindexPhysical (MPSTensor.directIteratedBlockEquiv d 2 2).symm (blockTensor U (2 * 2)) := by
