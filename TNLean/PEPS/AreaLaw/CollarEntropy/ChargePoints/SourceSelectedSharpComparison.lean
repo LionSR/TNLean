@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.CollarEntropy.NormComparisons.SourceTargetSharpMoment
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.ActualSelectedChargeDensityEnergy
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.SourceEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.CollarEntropy.ChargePoints.RoughSelectionBudget
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GlobalSchmidtBellRoughLower
+import QICLean.ManyBody.Replica.LowDefect.GlobalSchmidtBell
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -29,6 +29,9 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 400--533 and 839--911, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (designatedSupport exists_global_schmidtBellPrevector
+  latticeTruncationRadiusConstant latticeTruncationRadiusConstant_pos)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -90,7 +93,7 @@ theorem sourceTarget_selected_actualCharge_sharp_comparison_explicit
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
@@ -368,7 +371,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFami
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
@@ -541,7 +544,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison_of_threshold_
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,
@@ -718,7 +721,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
             r ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
             (ambientDilation T r \ ambientDilation T (r - 1)).card ≤ S.n) →
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
-          (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+          (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
           ∀ Ce η : ℝ,

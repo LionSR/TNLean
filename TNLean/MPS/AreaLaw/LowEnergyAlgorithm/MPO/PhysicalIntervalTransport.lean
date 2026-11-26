@@ -10,7 +10,7 @@ import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.Product.ProductVector
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
-import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement.Basic
 import QICLean.ManyBody.Entropy.Filter.OutputCovariance
 import Mathlib.Data.List.OfFn
 import Mathlib.Order.Interval.Finset.Nat

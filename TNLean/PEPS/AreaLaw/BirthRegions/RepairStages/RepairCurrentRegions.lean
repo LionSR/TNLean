@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairDescendantCounts
 import TNLean.PEPS.AreaLaw.BirthRegions.RepairStages.RepairStageSites
-import TNLean.PEPS.AreaLaw.BirthRegions.Layers.DummyContacts
+import QICLean.ManyBody.Sites.Dyadic.DistanceLayers
 
 /-!
 # Current regions and closed removal sets
@@ -36,6 +36,9 @@ September 24, 2026, Section 11, initial dummy region, lines 172–177, and
 `geometry:bad-sites`, lines 694–707.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (boundaryEndpoints card_ambientDilation_le card_boundaryEndpoints_le
+  dyadicNeighborhood dyadicNeighborhood_exists_dist_le integerPoint mem_ambientDilation_iff)
 
 section
 

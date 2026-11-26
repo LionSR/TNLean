@@ -32,6 +32,9 @@ as in *A two-dimensional area law from a global spectral gap*, `eq:hamiltonian`;
 Independently formalized from the manuscripts; no upstream Lean text is reused.
 -/
 
+open ManyBody (dependentRegionCylinder)
+open Real (regularizedPatchRadiusExponent)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS.Approximation
@@ -77,14 +80,14 @@ theorem SquareEntropyAreaLawAt.rangeNestedPatch_entropy_le
     (hA : SquareEntropyAreaLawAt q G C_A) (R : ℕ) :
     ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
       ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
-        ∀ j : Fin (AreaLaw.Geometry.rangeNestedPatchCount R u),
+        ∀ j : Fin (ManyBody.rangeNestedPatchCount R u),
           ManyBody.regionEntropy
-            (AreaLaw.rectangleAreaLawState Ω)
-            (AreaLaw.Geometry.rangeNestedPatch (ManyBody.rectangularDomain L L) z R u j.val) ≤ max 1
+            (ManyBody.rectangleAreaLawState Ω)
+            (ManyBody.rangeNestedPatch (ManyBody.rectangularDomain L L) z R u j.val) ≤ max 1
                 (16 * C_A) * (1 + u) := fun L Ω hΩ z u hu j ↦
   hA.closedSquareSample_entropy_le L Ω hΩ z u _
-    (hu.trans (AreaLaw.Geometry.le_rangeNestedPatchRadius R u j.val))
-    (AreaLaw.Geometry.rangeNestedPatchRadius_le_two_mul hu j.isLt)
+    (hu.trans (ManyBody.le_rangeNestedPatchRadius R u j.val))
+    (ManyBody.rangeNestedPatchRadius_le_two_mul hu j.isLt)
 
 open Classical in
 /-- A square entropy area law at the constant `C_A` for the range-`R` family gives a sum of
@@ -104,10 +107,10 @@ theorem SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders
         let Λ := ManyBody.rectangularDomain L L
         letI : LinearOrder ↥Λ :=
           (Fintype.equivFin ↥Λ).linearOrder
-        let m := AreaLaw.Geometry.rangeNestedPatchCount R u
+        let m := ManyBody.rangeNestedPatchCount R u
         let regions : Fin m → Finset ↥Λ :=
-          fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j.val
-        let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
+          fun j ↦ ManyBody.rangeNestedPatch Λ center R u j.val
+        let Ωᵤ := ManyBody.rectangleAreaLawState Ω
         ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
           (v : EuclideanSpace ℂ
             ((v : ↥Λ) → Fin q)),
@@ -121,10 +124,10 @@ theorem SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders
   obtain ⟨H, hH, hHJ, E₀, hgs⟩ := hΩ
   have hκ := rangePatchFilterExponent_pos hq hR hJ hΔ
   exact exists_closedSquare_cylinders_of_marginal_closeness hL hB₀ hp hκ
-    (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (AreaLaw.rectangleAreaLawState Ω) hgs.1
-    center hu huL (AreaLaw.Geometry.rangeNestedPatchCount_pos R u)
-    (fun j ↦ AreaLaw.Geometry.rangeNestedPatchRadius R u j.val)
-    (fun _ _ hij ↦ AreaLaw.Geometry.rangeNestedPatchRadius_mono R u hij)
+    (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (ManyBody.rectangleAreaLawState Ω) hgs.1
+    center hu huL (ManyBody.rangeNestedPatchCount_pos R u)
+    (fun j ↦ ManyBody.rangeNestedPatchRadius R u j.val)
+    (fun _ _ hij ↦ ManyBody.rangeNestedPatchRadius_mono R u hij)
     (fun j ↦ hA.rangeNestedPatch_entropy_le R L Ω ⟨H, hH, hHJ, E₀, hgs⟩ center u hu j)
     (fun b hb ↦ rangeNestedPatch_minimizer_marginal_closeness q R hR hJ.le hΔ hκ
       (rangePatchFilterExponent_le_half q R J Δ)
@@ -148,22 +151,22 @@ theorem SquareEntropyAreaLawAt.rangeAdaptivePatchSupply
   intro L hL Ω hΩ
   refine adaptivePatchSupply_of_closedSquare_cylinders hq hB₀
     (rangeNestedPatchRadiusExponent_pos C_A hq hR hJ hΔ hB₀.le hp.le).le hL Ω
-    (AreaLaw.Geometry.rangeNestedPatchCount R)
-    (fun u j ↦ AreaLaw.Geometry.rangeNestedPatchRadius R u j.val)
-    (fun u _ _ hij ↦ AreaLaw.Geometry.rangeNestedPatchRadius_mono R u hij)
-    (fun u j ↦ AreaLaw.Geometry.le_rangeNestedPatchRadius R u j.val)
-    (fun u hu j ↦ AreaLaw.Geometry.rangeNestedPatchRadius_le_two_mul hu j.isLt)
+    (ManyBody.rangeNestedPatchCount R)
+    (fun u j ↦ ManyBody.rangeNestedPatchRadius R u j.val)
+    (fun u _ _ hij ↦ ManyBody.rangeNestedPatchRadius_mono R u hij)
+    (fun u j ↦ ManyBody.le_rangeNestedPatchRadius R u j.val)
+    (fun u hu j ↦ ManyBody.rangeNestedPatchRadius_le_two_mul hu j.isLt)
     (fun u hu huL ↦ ?_)
     (fun z u hu4 huL ↦ hA.uniform_rangeNestedPatch_cylinders hq hR hJ hΔ hB₀ hp L hL Ω hΩ z u
       (by linarith) huL)
-  have hs : (2 : ℝ) ≤ AreaLaw.Geometry.rangePatchSpacing R := by
-    exact_mod_cast AreaLaw.Geometry.two_le_rangePatchSpacing hR
-  have hf : (⌊u / AreaLaw.Geometry.rangePatchSpacing R⌋₊ : ℝ) ≤
-      u / AreaLaw.Geometry.rangePatchSpacing R :=
+  have hs : (2 : ℝ) ≤ ManyBody.rangePatchSpacing R := by
+    exact_mod_cast ManyBody.two_le_rangePatchSpacing hR
+  have hf : (⌊u / ManyBody.rangePatchSpacing R⌋₊ : ℝ) ≤
+      u / ManyBody.rangePatchSpacing R :=
     Nat.floor_le (div_nonneg hu (by linarith))
-  have hdiv : u / AreaLaw.Geometry.rangePatchSpacing R ≤ u / 2 :=
+  have hdiv : u / ManyBody.rangePatchSpacing R ≤ u / 2 :=
     div_le_div_of_nonneg_left hu (by norm_num) hs
-  simp only [AreaLaw.Geometry.rangeNestedPatchCount, Nat.cast_add, Nat.cast_one]
+  simp only [ManyBody.rangeNestedPatchCount, Nat.cast_add, Nat.cast_one]
   linarith only [hf, hdiv, huL]
 
 end TNLean.PEPS.Approximation

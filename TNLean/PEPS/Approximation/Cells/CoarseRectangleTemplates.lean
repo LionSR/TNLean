@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
+import QICLean.ManyBody.Sites.Template.Defs
 import QICLean.ManyBody.Sites.Lattice.SupDistance
 import Mathlib.Analysis.Convex.Segment
 import Mathlib.Analysis.Convex.Combination
@@ -52,9 +52,10 @@ geometric step.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Template TemplatePolygon integerPoint)
+
 namespace TNLean.PEPS.Approximation
 
-open TNLean.PEPS.AreaLaw TNLean.PEPS.AreaLaw.Geometry
 
 /-- An ambient lattice set is a union of at most `N₀` integer boxes `[lo a, hi a]`,
 each possibly empty. This is the full lattice sample of a union of at most `N₀`
@@ -168,7 +169,7 @@ private theorem axisRectangle_region (a w : ℝ × ℝ) (hw₁ : 0 < w.1) (hw₂
     simp only [Set.mem_insert_iff, Set.mem_singleton_iff, Set.mem_prod, Prod.ext_iff,
       Prod.fst_add, Prod.snd_add, add_zero]
     tauto
-  simp only [axisRectangle, TemplatePolygon.region]
+  simp only [axisRectangle, ManyBody.TemplatePolygon.region]
   rw [hset, convexHull_prod, convexHull_pair, convexHull_pair,
     segment_eq_Icc (by linarith), segment_eq_Icc (by linarith)]
 

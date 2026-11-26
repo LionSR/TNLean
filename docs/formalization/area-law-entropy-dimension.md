@@ -36,6 +36,6 @@ geometric and analytic steps of the ground-state area law; the source theorem
 must remain unmarked until they are proved.
 
 Implementation: QICLean's `ManyBody.regionEntropy_le_card_mul_log` and
-`TNLean/PEPS/AreaLaw/Polygons/Templates/BoundaryEntropyAssembly.lean`. The finite-domain regional
+`QICLean/ManyBody/Entropy/Template/BoundaryEntropyAssembly.lean`. The finite-domain regional
 entropy is QICLean's `ManyBody.regionEntropy`; no additional state, density
 matrix, partition, or entropy definition is introduced.

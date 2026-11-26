@@ -104,7 +104,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 
 \begin{definition}[Shell coefficients from localization errors]
     \label{def:al_channel_shell_coefficient}
-    \lean{TNLean.PEPS.AreaLaw.localRootChannelShellBound}
+    \lean{ManyBody.localRootChannelShellBound}
     \leanok
     For a real sequence $(\varepsilon_l)_{l\ge0}$ (with $\sqrt{r}=0$ for
     $r<0$), define
@@ -119,7 +119,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \begin{lemma}[Nonnegativity of the shell coefficients]
     \label{thm:al_channel_shell_coefficient_nonneg}
     \uses{def:al_channel_shell_coefficient}
-    \lean{TNLean.PEPS.AreaLaw.localRootChannelShellBound_nonneg}
+    \lean{ManyBody.localRootChannelShellBound_nonneg}
     \leanok
     For every real sequence $(\varepsilon_l)$ and $l\ge0$, $\eta_l\ge0$.
 \end{lemma}
@@ -134,7 +134,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \begin{lemma}[Finite-radius physical shell bound]
     \label{thm:al_channel_shell_finite_bound}
     \uses{def:al_local_channel_shell,def:qc_site_oscillation,def:al_channel_shell_coefficient}
-    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_le_sum_siteOscillation}
+    \lean{ManyBody.norm_localRootChannelShell_le_sum_siteOscillation}
     \leanok
     Fix $l\in\N$ and $(\varepsilon_j)_{j\ge0}\subset\R$. If every
     $0\le j\le l$ satisfies
@@ -166,7 +166,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \begin{lemma}[Finite one-event oscillation increment]
     \label{thm:al_channel_finite_increment}
     \uses{def:al_local_root_channel,def:qc_site_oscillation,def:al_channel_shell_coefficient}
-    \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le}
+    \lean{ManyBody.siteOscillation_localRootChannel_le}
     \leanok
     As the finite-radius one-event estimate of
     \cite[Section~10]{OpenAI2026AreaLaw}, fix $n\in\N$, $y\in I$, and
@@ -210,7 +210,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \begin{lemma}[Explicit stretched-exponential shell coefficients]
     \label{thm:al_channel_shell_coefficient_exp}
     \uses{def:al_channel_shell_coefficient}
-    \lean{TNLean.PEPS.AreaLaw.localRootChannelShellBound_le_exp}
+    \lean{ManyBody.localRootChannelShellBound_le_exp}
     \leanok
     Let $C\ge0$, $c>0$, $0<\alpha\le1$, and $\varepsilon_l=C\exp(-cl^\alpha)$.
     With
@@ -248,7 +248,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \begin{lemma}[Stretched-exponential physical shell bound]
     \label{thm:al_channel_shell_exp_bound}
     \uses{def:al_local_channel_shell,def:qc_site_oscillation}
-    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_le_exp_sum_siteOscillation}
+    \lean{ManyBody.norm_localRootChannelShell_le_exp_sum_siteOscillation}
     \leanok
     Let $C\ge0$, $c>0$, $0<\alpha\le1$, $l\in\N$, and $A,b$ be as in
     (\ref{eq:al_propagation_exp_constants}). If every $0\le j\le l$ satisfies
@@ -274,7 +274,7 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \begin{lemma}[Stretched-exponential finite one-event increment]
     \label{thm:al_channel_exp_increment}
     \uses{def:al_local_root_channel,def:qc_site_oscillation}
-    \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le_exp}
+    \lean{ManyBody.siteOscillation_localRootChannel_le_exp}
     \leanok
     Let $C\ge0$, $c>0$, $0<\alpha\le1$, $n\in\N$, $y\in I$, and $A,b$ be as in
     (\ref{eq:al_propagation_exp_constants}). If
@@ -305,7 +305,7 @@ $\mathcal E_k$ the full root channel~(\ref{eq:qc_component_root_channel}).
 \begin{lemma}[Full-channel increment with an explicit finite cutoff]
     \label{thm:al_graph_channel_exp_increment}
     \uses{def:al_local_root_channel,def:qc_site_oscillation,def:qc_local_circuit}
-    \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannel_le_exp_of_component_support}
+    \lean{ManyBody.siteOscillation_spectatorRootChannel_le_exp_of_component_support}
     \leanok
     Suppose $0\le k\le\mathbb 1$ and $k\in\mathcal A_{C(a)}$. Let $C\ge0$,
     $c>0$, $0<\alpha\le1$, $n\ge R_a$, and $A,b$ be as in
@@ -339,7 +339,7 @@ $l\in\N$ and $y,z\in I$, set
 
 \begin{lemma}[Finite shell sums as counts of labels]
     \label{thm:al_graph_shell_sum_cardinality}
-    \lean{TNLean.PEPS.AreaLaw.sum_graphBall_shell_eq_sum_card}
+    \lean{ManyBody.sum_graphBall_shell_eq_sum_card}
     \leanok
     For any $(w_l)_{l\ge0}\subset\R$, $(v_z)_{z\in I}\subset\R$, $n\in\N$, and
     $y\in I$,
@@ -370,7 +370,7 @@ $l\in\N$ and $y,z\in I$, set
 \begin{lemma}[Sum of full-channel oscillation increments]
     \label{thm:al_graph_event_increment_cardinality}
     \uses{def:al_local_root_channel,def:qc_site_oscillation,def:qc_local_circuit}
-    \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannel_sub_le_exp_card}
+    \lean{ManyBody.sum_siteOscillation_spectatorRootChannel_sub_le_exp_card}
     \leanok
     Following \cite[Section~10]{OpenAI2026AreaLaw}, for each $i\in F$ let
     $0\le k_i\le\mathbb 1$ be supported on $C(a_i)$ with full root channel
@@ -412,7 +412,7 @@ $d_G(y,z)=\infty$.
 
 \begin{definition}[Finite graph-channel event kernel]
     \label{def:al_graph_event_kernel}
-    \lean{TNLean.PEPS.AreaLaw.graphChannelEventKernel}
+    \lean{ManyBody.graphChannelEventKernel}
     \leanok
     For $D,b,\alpha\in\R$ (with $0^0=1$ and $0^\alpha=0$ for $\alpha\ne0$) and
     $N\in\N$, define
@@ -426,7 +426,7 @@ $d_G(y,z)=\infty$.
 \begin{lemma}[Vanishing kernel between distinct components]
     \label{thm:al_graph_kernel_disconnected}
     \uses{def:al_graph_event_kernel}
-    \lean{TNLean.PEPS.AreaLaw.graphChannelEventKernel_eq_zero_of_not_reachable}
+    \lean{ManyBody.graphChannelEventKernel_eq_zero_of_not_reachable}
     \leanok
     If $d_G(y,z)=\infty$, then $\mathsf A^{(N)}_{yz}=0$ for all $N\in\N$ and
     $D,b,\alpha\in\R$.
@@ -442,7 +442,7 @@ $d_G(y,z)=\infty$.
 \begin{lemma}[Finite weighted row bound from ball growth]
     \label{thm:al_graph_kernel_finite_row}
     \uses{def:al_graph_event_kernel}
-    \lean{TNLean.PEPS.AreaLaw.sum_graphChannelEventKernel_mul_exp_le}
+    \lean{ManyBody.sum_graphChannelEventKernel_mul_exp_le}
     \leanok
     Let $D,K,\mu\ge0$ and $b,\alpha>0$, and set
     \begin{align}
@@ -501,7 +501,7 @@ $d_G(y,z)=\infty$.
 \begin{lemma}[A uniform weighted row constant]
     \label{thm:al_graph_kernel_uniform_row}
     \uses{def:al_graph_event_kernel}
-    \lean{TNLean.PEPS.AreaLaw.exists_graphChannelEventKernel_weighted_row_le}
+    \lean{ManyBody.exists_graphChannelEventKernel_weighted_row_le}
     \leanok
     As in \cite[Section~10]{OpenAI2026AreaLaw}, for every $D,K,\mu\ge0$ and
     $b,\alpha>0$, there exists $V\ge0$ (depending only on $D,K,\mu,b,\alpha$)
@@ -547,7 +547,7 @@ $d_G(y,z)=\infty$.
 \begin{lemma}[Kernel domination of root-channel increments]
     \label{thm:al_actual_channel_kernel_domination}
     \uses{def:al_graph_event_kernel,def:al_local_root_channel,def:qc_site_oscillation,def:qc_local_circuit}
-    \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel}
+    \lean{ManyBody.sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel}
     \leanok
     Under the hypotheses of
     Lemma~\ref{thm:al_graph_event_increment_cardinality} at cutoff
@@ -577,7 +577,7 @@ $d_G(y,z)=\infty$.
 \begin{lemma}[Uniform weighted rows and root-channel increments]
     \label{thm:al_actual_channel_uniform_bounds}
     \uses{def:al_graph_event_kernel,def:al_local_root_channel,def:qc_site_oscillation,def:qc_local_circuit}
-    \lean{TNLean.PEPS.AreaLaw.exists_graphChannelEventKernel_bounds_of_component_support}
+    \lean{ManyBody.exists_graphChannelEventKernel_bounds_of_component_support}
     \leanok
     For every $C,K,\mu\ge0$, $c>0$, and $0<\alpha\le1$, there exists $R\ge0$
     (depending only on $C,K,\mu,c,\alpha$) such that for any finite $I,F,J$,
@@ -619,7 +619,7 @@ $d_G(y,z)=\infty$.
 
 \begin{lemma}[Anchor fibers after retaining labels]
     \label{thm:al_retained_anchor_fibers}
-    \lean{TNLean.PEPS.AreaLaw.card_anchor_fiber_subtype_le}
+    \lean{ManyBody.card_anchor_fiber_subtype_le}
     \leanok
     For any finite $F$, map $a:F\to V$, predicate $P$ on $F$ with
     $F_P=\{i\in F:P(i)\}$, and $x\in V$,
@@ -637,7 +637,7 @@ $d_G(y,z)=\infty$.
 \begin{lemma}[Uniform retained-channel bounds for lattice positive constraints]
     \label{thm:al_lattice_channel_uniform_bounds}
     \uses{def:area_law_hamiltonian,def:al_graph_event_kernel,def:al_local_root_channel,def:qc_site_oscillation}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelEventKernel_bounds}
+    \lean{ManyBody.exists_latticeChannelEventKernel_bounds}
     \leanok
     Combining \cite[Proposition~4.3 and Section~10]{OpenAI2026AreaLaw}, for
     every $p\ge1$, $R\ge0$, $J\ge0$, and $\Delta>0$, with $\alpha=p/(p+1)$,
@@ -748,7 +748,7 @@ identically false predicate both sides of
     \label{thm:al_graph_extended_components}
     \uses{def:al_graph_extended_metric}
     \lean{ManyBody.graphPseudoEMetricSpace_edist_ne_top,
-        TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist_eq_top}
+        ManyBody.graphPseudoEMetricSpace_edist_eq_top}
     \leanok
     For all $x,y\in V$, $\rho_G(x,y)\ne\infty$ if and only if $x$ and $y$ are
     connected in $G$ (and $\rho_G(x,y)=\infty$ otherwise).
@@ -783,7 +783,7 @@ For $r\in[0,\infty]$, write $r_{\R}=r$ for $r<\infty$ and $\infty_{\R}=0$.
 \begin{lemma}[Nonnegativity of the finite event kernel]
     \label{thm:al_graph_event_kernel_nonneg}
     \uses{def:al_graph_event_kernel}
-    \lean{TNLean.PEPS.AreaLaw.graphChannelEventKernel_nonneg}
+    \lean{ManyBody.graphChannelEventKernel_nonneg}
     \leanok
     If $D\ge0$, then $\mathsf A^{(N)}_{yz}\ge0$ for all $b,\alpha\in\R$,
     $N\in\N$, and $y,z\in I$.

@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Operators.Interactions.RectangleInteraction
+import QICLean.ManyBody.Hamiltonian.RectangleInteraction
 import QICLean.ManyBody.Sites.Lattice.Rectangle
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.VertexBoundaryCorollaries
+import TNLean.PEPS.AreaLaw.RegionalStates.Regions.TheoremStatements
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
 import TNLean.PEPS.AreaLaw.SquareAreaLawSpecialization
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -30,6 +31,9 @@ September 24, 2026, Theorem 1.1 and Corollary 1.2 (`cor:rectangles`), and
 Proposition 2.1, at revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (RectangleStateSpace rectangleAreaLawState
+  regionEntropy_le_four_mul_innerBoundary_card regionEntropy_le_two_mul_endpointBoundary_card)
 
 open ManyBody (Edge RectangleInteraction SquareLatticeVertex squareLatticeGraph)
 

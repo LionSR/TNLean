@@ -24,6 +24,8 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (dyadicCell dyadicLayer dyadicLayer_eq_iUnion_fine fineLayerIndices)
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem fine_coordinate_pitch_index {o t s x : ℝ}

@@ -157,7 +157,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
         (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
       let Λ := ManyBody.rectangularDomain L L
       let a := ManyBody.rectangleSiteEquiv L L
-      let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+      let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
       let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
       let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
@@ -264,7 +264,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
           (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
         let Λ := ManyBody.rectangularDomain L L
         let a := ManyBody.rectangleSiteEquiv L L
-        let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+        let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
         let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
         let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
@@ -307,7 +307,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
         (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
       let Λ := ManyBody.rectangularDomain L L
       let a := ManyBody.rectangleSiteEquiv L L
-      let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+      let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
       let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
       let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
@@ -358,7 +358,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
           (Equiv.arrowCongr (Equiv.refl (SquareLatticeVertex L L)) finProdFinEquiv)
         let Λ := ManyBody.rectangularDomain L L
         let a := ManyBody.rectangleSiteEquiv L L
-        let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+        let e := ManyBody.rectangleConfigurationEquiv L L (q * q)
         let F := reindex (p.trans e) (p.trans e) (reindex pr pr (ManyBody.pairSwapOp R))
         let ψ : (↥Λ → Fin (q * q)) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2

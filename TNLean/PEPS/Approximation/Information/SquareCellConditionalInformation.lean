@@ -30,6 +30,8 @@ lines 163–178, and Proposition 3.4, lines 688–737.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (integerPoint rectangleConfigurationEquiv)
+
 open scoped Matrix.Norms.L2Operator
 
 noncomputable section
@@ -40,7 +42,6 @@ open ManyBody (IsGapped groundSpace SquareInteraction rectangleEmbedding rectang
 namespace TNLean.PEPS.Approximation
 
 open TNLean.PEPS.AreaLaw
-open TNLean.PEPS.AreaLaw.Geometry
 
 open Classical in
 /-- **The cell bound of Lemma 3.2 on the square for a family of states,** with prefactor `C₁`
@@ -79,7 +80,7 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
       (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner (o - (1, 1)) s m₀) s),
         ∀ y ∈ E, c * s ≤ dist x (integerPoint y.val)) →
       ManyBody.conditionalMutualInformation
-        (fun _ : ↥(rectangularDomain L L) ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
+        (fun _ : ↥(rectangularDomain L L) ↦ Fin q) (ManyBody.rectangleAreaLawState Ω)
         (Finset.univ.filter (fun x : ↥(rectangularDomain L L) ↦
           x.val ∈ CellPartition.cellSample (o - (1, 1)) s m₀)) E
         (Finset.univ.filter (fun x : ↥(rectangularDomain L L) ↦
@@ -148,7 +149,7 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
     have hcv := hclear (x + (1, 1)) (hcl hx) v hv
     simpa only [Equiv.toEmbedding_apply, ← hpos, dist_add_right] using hcv
   have hfinal := hbound (E.map σ.toEmbedding) hE' hclear'
-  simpa only [AreaLaw.rectangleAreaLawState, show rectangleConfigurationEquiv L L q =
+  simpa only [ManyBody.rectangleAreaLawState, show rectangleConfigurationEquiv L L q =
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
     ManyBody.conditionalMutualInformation, ← Finset.map_union,
     finiteProductEntropy_relabel] using hfinal
@@ -193,7 +194,7 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
       (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart)
       h.isHermitian_toPlaneInteraction_hermitianPart_term
       (h.norm_toPlaneInteraction_hermitianPart_term_le hhJ) E₀
-      (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan')
+      (ManyBody.rectangleAreaLawState Ω) hΩ' hgap' hspan')
 
 open Classical in
 /-- **Lemma 3.2 on the original open square, at the named amplification constants.** Under

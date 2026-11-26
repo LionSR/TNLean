@@ -33,6 +33,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (designatedSupport)
+
 open scoped Matrix.Norms.L2Operator
 
 noncomputable section
@@ -84,7 +86,7 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
             S.depth = (fun x ↦ ambientDepth T hT x.val) →
             (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
               (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-            (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+            (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
               ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
             let L := F.L S.n
             let X := S.A.filter fun x ↦ x.val ∈ T

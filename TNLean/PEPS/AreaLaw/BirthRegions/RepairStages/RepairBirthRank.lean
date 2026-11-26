@@ -56,6 +56,8 @@ It also contains the following results.
   uniform lower bounds for nonprimary birth lengths.
 -/
 
+open ManyBody (boundaryEndpoints)
+
 section RepairBirthRank
 
 section

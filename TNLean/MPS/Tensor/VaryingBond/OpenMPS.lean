@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
-import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement.Basic
 import QICLean.Channel.Schmidt.Rank
 import QICLean.ManyBody.Sites.CutMatrix
 import QICLean.ManyBody.Sites.Lattice.Chain

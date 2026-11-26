@@ -4,6 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Tactic.NormNum
+import QICLean.ManyBody.Sites.Template.Defs
+import QICLean.ManyBody.Sites.Dyadic.CellCounting
+import QICLean.ManyBody.Sites.Lattice.SupDistance
 
 /-!
 # Exact exponents for the final area-law argument
@@ -11,6 +14,11 @@ import Mathlib.Tactic.NormNum
 All numerical exponents are rational numbers. Their real values are obtained
 by coercion. The parameter-dependent exponents of the initial entropy bound
 are not identified with these final choices.
+
+The module also states Proposition 11.2 (`prop:two-families`) as the predicate
+`TwoFamilyDecomposition`, with these exponents: every cut has an ordered two-family partition
+whose pieces lie in separated templates. It is proved in
+`BirthRegions/FinalRegions/TwoFamilyAssembly`.
 
 ## References
 
@@ -82,3 +90,41 @@ theorem geometry_gaps :
   norm_num [geometryDelta, beta, boxError, zeta, geometryEll, rho]
 
 end TNLean.PEPS.AreaLaw.Exponents
+
+open scoped BigOperators
+
+namespace TNLean.PEPS.AreaLaw
+
+section TwoFamilyDecomposition
+
+open ManyBody (planeDomainGraph edgeBoundary supDist)
+
+/-- **Proposition 11.2** (`prop:two-families`, `10-geometry.tex` lines 98–140),
+for the template constants `D₀, Ctpl` of Definition 9.3. For every lower scale
+threshold `n_* ≥ 1` there is a constant `C` such that every cut `A` of a finite
+induced domain with `b = |∂_Λ A| > 0` has an ordered partition
+`A = D ∪ ⋃ᵢ Xᵢ` into two labelled families of nonempty pieces, with templates
+`Tᵢ` of parameters `(nᵢ, sᵢ)` separated from the cut endpoints `Z`, such that
+`|D| ≤ C b`, `Xᵢ ⊆ A ∩ Tᵢ`, `⌊nᵢ^(1-ℓ)⌋ ≤ sᵢ`, `nᵢ ≥ n_*`, the clearances
+`dist_∞(Tᵢ, Z) > 2 nᵢ^β` and `dist_∞(Tᵢ, ⋃_{j<i, fⱼ=fᵢ} Xⱼ) > 2 nᵢ^β` hold, and
+`∑ᵢ nᵢ^(-100) ≤ C b`. The constant is chosen before the domain and the cut. -/
+def TwoFamilyDecomposition (D₀ Ctpl : ℝ) : Prop :=
+  ∀ nstar : ℕ, 1 ≤ nstar → ∃ C : ℝ,
+    ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset ↥Λ, 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
+      ∃ P : ManyBody.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
+        ∃ T : ∀ i, ManyBody.Template Ctpl (n i) (s i),
+          (P.residual.card : ℝ) ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card ∧
+          (∀ i, (P.piece i).Nonempty) ∧
+          (∀ i, P.piece i ⊆ A.filter fun x ↦ x.val ∈ (T i).points) ∧
+          (∀ i, (T i).IsSeparated D₀ (ManyBody.boundaryEndpoints Λ A)) ∧
+          (∀ i, ⌊(n i : ℝ) ^ (1 - (Exponents.geometryEll : ℝ))⌋₊ ≤ s i) ∧
+          (∀ i, nstar ≤ n i) ∧
+          (∀ i, ∀ t ∈ (T i).points, ∀ z ∈ ManyBody.boundaryEndpoints Λ A,
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t z : ℤ) : ℝ)) ∧
+          (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
+            2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < ((supDist t x.val : ℤ) : ℝ)) ∧
+          ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
+
+end TwoFamilyDecomposition
+
+end TNLean.PEPS.AreaLaw

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexImageGroundSpace
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 
 /-!
 # Regional slices after the product site inverse
@@ -23,6 +24,8 @@ CPGSV21, arXiv:2011.12127, Section IV.C.1, lines 2017–2044.
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (assembleDependentRegionConfig)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -30,12 +33,6 @@ namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V] {d : ℕ}
 variable {Out : V → Type*}
 
-/-- Assemble a dependent vertex configuration from a region and its complement. -/
-def assembleDependentRegionConfig (R : Finset V)
-    (α : (w : {w : V // w ∈ R}) → Out w.1)
-    (τ : (w : {w : V // w ∈ Finset.univ \ R}) → Out w.1) :
-    (w : {w : V // w ∈ Finset.univ}) → Out w.1 :=
-  fun w => if h : w.1 ∈ R then α ⟨w.1, h⟩ else τ ⟨w.1, by simp [h]⟩
 
 /-- Apply a product of physical maps with vertex-dependent output spaces. -/
 noncomputable def globalDependentPhysicalMap

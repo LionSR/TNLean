@@ -44,6 +44,8 @@ Lemma 9.1, `08-scanner.tex`, lines 195–221 (statement) and 223–347 (proof),
 at `openai/math@adc7f124`.
 -/
 
+open ManyBody (designatedSupport)
+
 open Filter TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators symmDiff
 
@@ -222,7 +224,7 @@ compact collar. -/
 private theorem ball_subset_of_middle {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan ↥Λ I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (σ : PhysicalPartition ↥Λ) (hsub : middle σ ⊆ S.truncationSet L) (i : I)
     (hsplit : (S.ball i ∩ middle σ).Nonempty) : S.ball i ⊆ S.A := by
@@ -257,7 +259,7 @@ theorem historyProperties_of_scales {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempt
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (hbad : (∑ h : History S.K S.m S.M (S.n * S.m),
       if ¬ S.IsGoodThrough h then historyWeight h else 0) ≤ (S.n : ℝ) ^ (-p)) :
@@ -359,7 +361,7 @@ theorem eventually_historyProperties {ell kappa mu Cr C1 Ct : ℝ} (hell : 0 < e
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ →
         (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - ell)⌋₊ + 10 * S.r₀ : ℕ) : ℤ) <
           (supDist t z : ℤ)) →
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ b) →

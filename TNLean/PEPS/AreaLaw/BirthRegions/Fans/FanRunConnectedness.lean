@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.FanInactiveSeams
 import Mathlib.Topology.Connected.Basic
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellFanCycle
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TemplateRows
+import QICLean.ManyBody.Sites.Template.Rows
 import Mathlib.Topology.Connected.Clopen
 
 /-!
@@ -35,6 +35,8 @@ It also contains the following results.
   `TNLean.PEPS.AreaLaw.Geometry.cellFanRun_closedHalf_connectedComponents_equiv`: connected
   components of cut fan squares.
 -/
+
+open ManyBody (dyadicCell)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 

@@ -84,10 +84,10 @@ theorem cell_conditionalMutualInformation_le_closed
         let G : Finset ↥Λ :=
           Finset.univ.filter (fun x ↦ x.val ∈ CellPartition.cellSample o s m₀)
         let B : Finset ↥Λ := Finset.univ.filter
-          (fun x ↦ CellPartition.cellIndex o s (AreaLaw.Geometry.integerPoint x.val) ∈ A)
+          (fun x ↦ CellPartition.cellIndex o s (ManyBody.integerPoint x.val) ∈ A)
         ∀ E : Finset ↥Λ, E ⊆ (G ∪ B)ᶜ →
           (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner o s m₀) s),
-            ∀ y ∈ E, c * s ≤ dist x (AreaLaw.Geometry.integerPoint y.val)) →
+            ∀ y ∈ E, c * s ≤ dist x (ManyBody.integerPoint y.val)) →
           ManyBody.conditionalMutualInformation (fun _ : ↥Λ ↦ Fin q)
             Ω G E B ≤ cellInformationConstantClosed q R J Δ c *
               (1 + Real.log s) ^ cellInformationExponentClosed q R J Δ c :=

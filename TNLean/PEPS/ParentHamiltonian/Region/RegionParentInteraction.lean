@@ -8,7 +8,7 @@ import TNLean.PEPS.Tensor.Region.RegionGroundSpace
 import QICLean.Analysis.Projection.MatrixStarProjection
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Matrix.Hermitian
-import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement.Basic
 import QICLean.ManyBody.Dynamics.InteractionOperations
 import QICLean.ManyBody.Hamiltonian.FrustrationFree
 import QICLean.Algebra.Matrix.MatrixAux

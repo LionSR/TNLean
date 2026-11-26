@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Real.ExplicitThresholds
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.ActualMarginalTails
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.ZeroBoundary
+import QICLean.ManyBody.Entropy.PlaneBoundaryEntropy
+import QICLean.ManyBody.Sites.RegionState
 import QICLean.Analysis.Real.TypicalTailScales
 import QICLean.Entropy.Typical.StateFromTail
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -42,6 +43,9 @@ It also contains the following results.
   `TNLean.PEPS.AreaLaw.Scan.CollarScan.source_target_geometry`: source geometry for the target
   marginal.
 -/
+
+open ManyBody (designatedSupport latticeCutBudgetConstant latticeCutBudget_le_log
+  latticeTruncationRadiusConstant latticeTruncationRadiusConstant_pos)
 
 section TargetGeometry
 
@@ -88,7 +92,7 @@ theorem source_target_geometry (E : ScannerExponents) (T : Finset (ℤ × ℤ))
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ E.L S.n →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * E.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) :
     ((S.truncationSet (E.L S.n)).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
       (S.A.filter fun x ↦ x.val ∈ T) ⊆ S.truncationSet (E.L S.n) ∧
@@ -246,7 +250,7 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let L := F.L S.n
         let X := S.A.filter fun x ↦ x.val ∈ T
@@ -358,7 +362,7 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let L := F.L S.n
         let X := S.A.filter fun x ↦ x.val ∈ T
@@ -437,7 +441,7 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let L := F.L S.n
         let X := S.A.filter fun x ↦ x.val ∈ T
@@ -504,7 +508,7 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ d : ℕ, 1 ≤ d → d ≤ F.L S.n →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         let L := F.L S.n
         let X := S.A.filter fun x ↦ x.val ∈ T

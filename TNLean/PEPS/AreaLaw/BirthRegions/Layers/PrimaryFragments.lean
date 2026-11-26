@@ -21,6 +21,8 @@ and 237–249. Source revision:
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (dyadicCell dyadicCell_dist_le dyadicLayer_eq_iUnion)
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 private theorem closure_Ico_inter_Ioo_of_nonempty {a b c d : ℝ}

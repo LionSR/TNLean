@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellContacts
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.ElementarySideOpponents
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 import Mathlib.Analysis.Convex.Topology
 
 /-!
@@ -27,6 +28,8 @@ September 24, 2026, Section 11, lines 299–323, `prop:two-families`.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (dyadicCell dyadicCellCorner fineLayerIndices)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 

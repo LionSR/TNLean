@@ -2,7 +2,7 @@
 
 \begin{lemma}[Regional increment bound]
     \label{thm:area_partial_row_increment}
-    \lean{TNLean.PEPS.AreaLaw.abs_regionEntropy_union_sub_le}
+    \lean{ManyBody.abs_regionEntropy_union_sub_le}
     \leanok
     \uses{def:area_law_ground_entropy}
     For a unit vector $\Omega$ on a finite lattice domain with local dimension $q$ and disjoint regions $R\cap B=\varnothing$,
@@ -21,7 +21,7 @@
 
 \begin{lemma}[Partial template row]
     \label{thm:area_template_partial_row}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le}
+    \lean{ManyBody.template_partial_row_entropy_le}
     \leanok
     \uses{def:area_law_ground_entropy,def:area_law_template}
     For a template $T$ with $C_{\rm tpl}\ge24$, $1\le j\le s_0$, $Y\subseteq T_j\setminus T_{j-1}$, a unit vector $\Omega$, local dimension $q\ge1$, and any physical region $A$ (\cite[Lemma~9.4]{OpenAI2026AreaLaw}),
@@ -40,7 +40,7 @@
 
 \begin{lemma}[From side-length bounds to a dyadic moment]
     \label{thm:area_law_weighted_dyadic_sum}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.sum_weighted_dyadic_rpow_le}
+    \lean{ManyBody.sum_weighted_dyadic_rpow_le}
     \leanok
     For an integer $K\ge0$, $e>0$, $B\ge0$, $A,a_k\in\mathbb R$ with $2^K a_K\le A$ and $2^k a_k\le B$ ($0\le k<K$; \cite[Lemma~9.4]{OpenAI2026AreaLaw}),
     \begin{align}
@@ -62,9 +62,9 @@
 
 \begin{lemma}[Safety from template separation]
     \label{thm:area_template_safe_rectangles}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation,
-        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core,
-        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_shell}
+    \lean{ManyBody.Template.IsSeparated.isSafe_of_subset_ambientDilation,
+        ManyBody.Template.IsSeparated.isSafe_cappedDyadicPartition_core,
+        ManyBody.Template.IsSeparated.isSafe_cappedDyadicPartition_shell}
     \leanok
     \uses{def:area_law_template,def:area_law_safe_rectangle,thm:area_template_dyadic_rectangle,thm:area_law_capped_dyadic_partition}
     For a cut-separated template $T$, integer $D_0\ge1$, and $0\le j\le s_0$ (\cite[Lemma~9.4]{OpenAI2026AreaLaw}), every integer rectangle $Q\subseteq T_j$ with $\operatorname{size}(Q)\le s_0$ is safe; in particular, if $2^K\le s_0$, every square in the scale-$K$ capped dyadic partitions of $T$ and $T_j\setminus T$ is safe.
@@ -80,7 +80,7 @@
 
 \begin{lemma}[Weighted covering of the template core]
     \label{thm:area_law_template_weighted_core_cover}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le}
+    \lean{ManyBody.Template.sum_rpow_cappedDyadicPartition_core_le}
     \leanok
     \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
     For a template $T$ with $C_{\rm tpl}\ge24$, $e>0$, $2^K\le s_0<2^{K+1}$, and the capped dyadic partition $\mathcal P$ of $T$ (\cite[Lemma~9.4]{OpenAI2026AreaLaw}),
@@ -98,7 +98,7 @@
 
 \begin{lemma}[Shell area and cap count]
     \label{thm:area_template_shell_cap}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le,TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le}
+    \lean{ManyBody.Template.card_shell_le,ManyBody.Template.card_cappedDyadicPartition_shell_at_cap_le}
     \leanok
     \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
     For a template $T$ with $C_{\rm tpl}\ge24$ and $0\le j\le L\le s_0$, one has $|T_j\setminus T|\le nj$; if $L<2^{K+1}$, the cap-scale count $a_K$ of the capped dyadic partition of $T_j\setminus T$ satisfies $2^K a_K\le2n$.
@@ -110,7 +110,7 @@
 
 \begin{lemma}[Weighted shell covering]
     \label{thm:area_template_weighted_shell}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le}
+    \lean{ManyBody.Template.sum_rpow_cappedDyadicPartition_shell_le}
     \leanok
     \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
     For a template $T$ with $C_{\rm tpl}\ge24$, $0\le j\le L\le s_0$, $2^K\le L<2^{K+1}$, $e>0$, and the scale-$K$ capped dyadic partition $\mathcal P_{\rm sh}$ of $T_j\setminus T$ (\cite[Lemma~9.4]{OpenAI2026AreaLaw}),
@@ -128,7 +128,7 @@
 
 \begin{lemma}[Template entropy from a box estimate at one exponent]
     \label{thm:area_template_safe_box_entropy}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.template_entropy_bounds_of_real_safe_box}
+    \lean{ManyBody.template_entropy_bounds_of_real_safe_box}
     \leanok
     \uses{def:area_law_template,def:area_law_ground_entropy,def:area_law_cell_counts,def:area_law_safe_rectangle}
     For finite $\Lambda$, $A\subseteq\Lambda$ with cut-edge endpoints $Z$, unit vector $\Omega$, $q\ge1$, and reals $D_0\ge1$, $e>0$, $C\in\mathbb R$ with $C_+=\max(C,0)$, suppose every integer rectangle $Q$ with $\operatorname{dist}_\infty(Q,Z)>D_0\operatorname{size}(Q)$ satisfies $S_\Omega(A\cap Q)\le C\operatorname{size}(Q)^{1+e}$.

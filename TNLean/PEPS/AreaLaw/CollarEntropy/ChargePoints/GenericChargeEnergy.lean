@@ -74,7 +74,7 @@ theorem ScannerExponents.badOldHistory_of_badOldHistoryThreshold_le (F : Scanner
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
@@ -118,7 +118,7 @@ private theorem exists_generic_badOldHistory_threshold (F : ScannerExponents) {C
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
@@ -147,7 +147,7 @@ private theorem generic_actualCharge_energy_of_threshold_le
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
@@ -273,7 +273,7 @@ theorem ScannerExponents.actualCharge_energy_coefficients_of_threshold_le
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →
@@ -403,7 +403,7 @@ theorem ScannerExponents.exists_actualCharge_energy_coefficients
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
       S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
       (∀ d : ℕ, 1 ≤ d → d ≤ ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ →

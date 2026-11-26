@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivision
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 import Mathlib.Analysis.Convex.Between
 import Mathlib.Analysis.Normed.Affine.Convex
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.CellContacts
@@ -31,6 +32,8 @@ Manuscript file:
 `build/sections/10-geometry.tex`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (dyadicCell dyadicCellCorner fineLayerIndices)
 
 section SideSubdivisionMask
 

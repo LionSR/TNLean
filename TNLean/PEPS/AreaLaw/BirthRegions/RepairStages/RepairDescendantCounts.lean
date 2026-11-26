@@ -27,6 +27,8 @@ It also contains the following results.
   finitely many repair generations.
 -/
 
+open ManyBody (closedSquareSample integerPoint mem_closedSquareSample)
+
 section RepairDescendantCounts
 
 noncomputable section

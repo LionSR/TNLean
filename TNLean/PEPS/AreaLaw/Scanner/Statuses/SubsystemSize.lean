@@ -29,6 +29,8 @@ It also contains the following results.
   non-contained actual designated support.
 -/
 
+open ManyBody (designatedSupport truncationRadius_eq_of_mem_crossingTerms)
+
 section SubsystemSize
 
 open ManyBody (ambientDilation planeDomainGraph abs_ambientDepth_sub_le_planeDomainGraph
@@ -62,7 +64,7 @@ theorem card_planeDomainGraph_ball_le (Λ : Finset (ℤ × ℤ)) (a : ↥Λ) (r 
           (by simpa only [SimpleGraph.edist_comm] using (Finset.mem_filter.mp hx).2))
         Subtype.val_injective.injOn
     _ ≤ (2 * r + 1) ^ 2 := by
-      simpa using Geometry.card_ambientDilation_le {a.val} r
+      simpa using ManyBody.card_ambientDilation_le {a.val} r
 
 variable {V I : Type*} [Fintype V] [DecidableEq V]
 

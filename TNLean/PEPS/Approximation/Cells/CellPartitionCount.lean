@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Polygons.Squares.PowerScaleDepth
+import QICLean.Analysis.Real.IteratedPowerDepth
 
 /-!
 # Generation count of the cell partition
@@ -40,11 +40,14 @@ bounds in `TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open Real (exists_iterate_depth_bound iterateGenerationCountConstant
+  iterateGenerationCountConstant_pos mul_rpow_le_max_mul_rpow
+  sum_pow_le_iterateGenerationCountConstant)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open TNLean.PEPS.AreaLaw.Geometry
 
 /-- The child side `u' = 8 u ^ γ` of an active square of side `u`.
 Source: Lemma 3.2, `02-information.tex`, lines 240–241 and 276–280. -/

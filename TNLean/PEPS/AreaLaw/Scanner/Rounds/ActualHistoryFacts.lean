@@ -10,7 +10,7 @@ import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualEntropySampling
 import TNLean.PEPS.AreaLaw.Scanner.Histories.BadOldHistoryDecay
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.SupportCompatibility
 import TNLean.PEPS.AreaLaw.Scanner.Rounds.ActualRoundTransport
-import TNLean.PEPS.AreaLaw.Operators.Constraints.LatticeCounts
+import QICLean.ManyBody.Sites.Lattice.IntegerRectangle
 
 /-!
 # Lemma 9.1 for the rounds of the actual collar scan
@@ -43,6 +43,8 @@ the interpolation scale are arbitrary.
   `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. Independently formalized from
   the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (card_anchor_fiber_le designatedSupport)
 
 open scoped BigOperators
 open Filter Set MeasureTheory
@@ -124,7 +126,7 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
     (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ X.L N →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     {μ : ℕ} (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hC₁ : 3 * (μ : ℝ) ≤ S.C₁) (hC₁pos : 0 < S.C₁)
@@ -391,7 +393,7 @@ theorem exists_historyFacts_actualScanRound (X : ScannerExponents) (R : ℕ) {q 
         (∀ i, S.anchor i ∈ i.val) →
         (∀ d : ℕ, 1 ≤ d → d ≤ X.L N →
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+        (∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
           ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ)) →
         HistoryFacts X N C 4 c (fun r ↦ S.actualScanRound hm hM dims E a pre r.val) := by
   let μ : ℕ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)

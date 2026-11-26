@@ -8,8 +8,4 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Operators
 
-import TNLean.PEPS.AreaLaw.Operators.ChannelWords
-import TNLean.PEPS.AreaLaw.Operators.Constraints
-import TNLean.PEPS.AreaLaw.Operators.FrustrationFree
-import TNLean.PEPS.AreaLaw.Operators.Interactions
 import TNLean.PEPS.AreaLaw.Operators.RestoringOperator

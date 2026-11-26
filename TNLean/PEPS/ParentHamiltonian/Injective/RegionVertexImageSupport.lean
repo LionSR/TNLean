@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.Region.RegionGroundSpaceNesting
 import TNLean.PEPS.ParentHamiltonian.Injective.VertexVirtualParentTransport
+import QICLean.ManyBody.Sites.Placement.DependentRegionCoordinates
 
 /-!
 # Site-image conditions supplied by regional parent constraints

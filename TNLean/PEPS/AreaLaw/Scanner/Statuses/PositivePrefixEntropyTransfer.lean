@@ -5,8 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scanner.Statuses.PrefixComparison
 import TNLean.PEPS.AreaLaw.Collar.Scales.Budgets
-import TNLean.PEPS.AreaLaw.Polygons.Templates.TwoFamilies
-import TNLean.PEPS.AreaLaw.Scanner.Statuses.TargetEntropyTransfer
+import TNLean.PEPS.AreaLaw.Collar.Scales.Exponents
+import QICLean.ManyBody.Entropy.Template.TwoFamilies
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 
 /-!
 # Entropy transfer on positive-depth prefixes
@@ -27,6 +28,8 @@ and its continuity argument, lines 399--404; `01-preliminaries.tex`,
 Lemma 2.1, lines 33--46; revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (abs_regionEntropy_sub_le_sqrt_traceDistance_card)
 
 open Filter
 

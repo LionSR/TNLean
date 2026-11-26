@@ -53,6 +53,8 @@ physical dimension `q^(L^2)` of a core.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (rectangleConfigurationEquiv)
+
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
@@ -67,7 +69,6 @@ open ManyBody (supDist supDist_le_of_walk supDist_comm supDist_triangle)
 
 namespace TNLean.PEPS.Approximation
 
-open AreaLaw
 
 section Geometry
 

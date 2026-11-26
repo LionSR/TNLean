@@ -50,7 +50,6 @@ past the end of the chain: the chain end needs no separate hypothesis, because e
 
 ## Main results
 
-* `regionEntropy_nonneg`: regional entropies of a unit vector are nonnegative.
 * `cutEntropy_sub_le`: the cut entropy moves by at most `ln q` per site.
 * `two_mul_div_three_le_cutEntropy`: the cut entropy bound of eq. `sbnd` on the window.
 * `regionEntropy_le_windowEntropy`, `exists_windowEntropy_eq`: the window entropy is the
@@ -70,14 +69,6 @@ open ManyBody (card_interval_le interval)
 namespace TNLean.MPS.AreaLaw.Hastings
 
 variable {L : ℕ}
-
-/-- The regional entropy of a unit vector is nonnegative: the regional state is a density
-matrix. This is the general fact for any finite type `V` of sites. -/
-theorem regionEntropy_nonneg {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
-    {Ω : EuclideanSpace ℂ (V → Fin q)} (hΩ : ‖Ω‖ = 1) (A : Finset V) :
-    0 ≤ ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A :=
-  vonNeumannEntropy_nonneg_of_posSemidef_trace_one (ManyBody.regionState_posSemidef A Ω)
-    (ManyBody.trace_regionState_eq_one hΩ)
 
 variable {q : ℕ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
 
@@ -192,7 +183,7 @@ theorem windowEntropy_nonneg (hΩ : ‖Ω‖ = 1) (i l₀ l : ℕ) : 0 ≤ windo
   by_cases hl : l ≤ l₀
   · obtain ⟨a, -, -, heq⟩ := exists_windowEntropy_eq (Ω := Ω) (i := i) hl
     rw [heq]
-    exact regionEntropy_nonneg hΩ _
+    exact ManyBody.regionEntropy_nonneg hΩ _
   · rw [windowEntropy, dite_eq_right hl]
 
 /-- **Stage lemma: the dimension bound on the window entropy**, `S_l ≤ l ln q`. Hastings,

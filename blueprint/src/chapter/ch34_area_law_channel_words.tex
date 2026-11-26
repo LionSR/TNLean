@@ -17,7 +17,7 @@ for the word $w$ with $i\in F$ appended on the right.
 \begin{definition}[Observable after a chronological word]
     \label{def:al_channel_word}
     \uses{def:al_local_root_channel}
-    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord}
+    \lean{ManyBody.spectatorRootChannelWord}
     \leanok
     For $w=(i_0,\ldots,i_{m-1})\in F^m$ ($m\ge1$), define
     \begin{align}
@@ -32,8 +32,8 @@ for the word $w$ with $i\in F$ appended on the right.
 \begin{lemma}[Empty words and appending an event]
     \label{thm:al_channel_word_append}
     \uses{def:al_channel_word}
-    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_nil,
-        TNLean.PEPS.AreaLaw.spectatorRootChannelWord_append_singleton}
+    \lean{ManyBody.spectatorRootChannelWord_nil,
+        ManyBody.spectatorRootChannelWord_append_singleton}
     \leanok
     For every operator $B$, finite word $w$, and label $i\in F$,
     \begin{align}
@@ -54,7 +54,7 @@ for the word $w$ with $i\in F$ appended on the right.
 \begin{lemma}[Relabelling chronological words]
     \label{thm:al_channel_word_relabel}
     \uses{def:al_channel_word}
-    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_map}
+    \lean{ManyBody.spectatorRootChannelWord_map}
     \leanok
     For a map $f:E\to F$, set $\widetilde k_j=k_{f(j)}$ and
     $\widetilde{\mathcal E}_j=\mathcal E_{f(j)}$ ($j\in E$). For a word
@@ -77,8 +77,8 @@ for the word $w$ with $i\in F$ appended on the right.
 \begin{lemma}[Channel words on a common ground vector]
     \label{thm:al_channel_word_ground}
     \uses{def:al_channel_word,def:al_local_root_channel}
-    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannel_mulVec_ground,
-        TNLean.PEPS.AreaLaw.spectatorRootChannelWord_mulVec_ground}
+    \lean{ManyBody.spectatorRootChannel_mulVec_ground,
+        ManyBody.spectatorRootChannelWord_mulVec_ground}
     \leanok
     Following \cite[Section~10]{OpenAI2026AreaLaw}, suppose
     $0\le k_i\le\mathbb 1$ and $k_i\Omega=0$ for all $i\in F$, where
@@ -109,7 +109,7 @@ for the word $w$ with $i\in F$ appended on the right.
 \begin{lemma}[Vector difference bounded by channel difference]
     \label{thm:al_channel_word_vector_difference}
     \uses{thm:al_channel_word_ground}
-    \lean{TNLean.PEPS.AreaLaw.norm_rootProduct_sub_le_channelWord_sub}
+    \lean{ManyBody.norm_rootProduct_sub_le_channelWord_sub}
     \leanok
     As in \cite[\texttt{09-amplification.tex}, lines 218--224]{OpenAI2026AreaLaw},
     under the hypotheses of Lemma~\ref{thm:al_channel_word_ground}, any two
@@ -134,7 +134,7 @@ for the word $w$ with $i\in F$ appended on the right.
 \begin{lemma}[Norm contraction along a finite word]
     \label{thm:al_channel_word_norm}
     \uses{def:al_channel_word}
-    \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannelWord_le}
+    \lean{ManyBody.norm_spectatorRootChannelWord_le}
     \leanok
     If $0\le k_i\le\mathbb 1$ for all $i\in F$, then
     $\|\mathcal E_w(B)\|\le\|B\|$ for every finite word $w$ and operator $B$.
@@ -156,7 +156,7 @@ for the word $w$ with $i\in F$ appended on the right.
 \begin{lemma}[Oscillation bounded by the initial norm]
     \label{thm:al_channel_word_oscillation}
     \uses{def:al_channel_word,def:qc_site_oscillation}
-    \lean{TNLean.PEPS.AreaLaw.siteOscillation_spectatorRootChannelWord_bounds}
+    \lean{ManyBody.siteOscillation_spectatorRootChannelWord_bounds}
     \leanok
     If $0\le k_i\le\mathbb 1$ for all $i\in F$, then every finite word $w$,
     $y\in I$, and $B_0$ satisfy $0\le d_y(B_w)\le2\|B_0\|$.
@@ -180,7 +180,7 @@ Lemma~\ref{thm:al_spectator_support_indicator} give
 \begin{lemma}[Summed append increments of the current observable]
     \label{thm:al_channel_word_kernel_increment}
     \uses{def:al_channel_word,def:qc_site_oscillation,def:al_graph_event_kernel,def:qc_local_circuit}
-    \lean{TNLean.PEPS.AreaLaw.sum_siteOscillation_spectatorRootChannelWord_append_sub_le_graphChannelEventKernel}
+    \lean{ManyBody.sum_siteOscillation_spectatorRootChannelWord_append_sub_le_graphChannelEventKernel}
     \leanok
     Suppose $q>0$, $F$ is finite, $G$ is a simple graph on $I$, and
     $0\le k_i\le\mathbb 1$ is supported on $C(a_i)$ ($a_i\in I$, $i\in F$).
@@ -247,8 +247,8 @@ so $H_{\varnothing}=0$.
 \begin{lemma}[A physical channel kernel gives expected spatial decay]
     \label{thm:al_channel_poisson_kernel_growth}
     \uses{def:al_channel_word,def:qc_site_oscillation,def:al_graph_extended_metric}
-    \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_siteOscillation_le_of_graph_kernel,
-        TNLean.PEPS.AreaLaw.spectatorRootChannelWord_ofFn_append_singleton}
+    \lean{ManyBody.integrable_and_integral_siteOscillation_le_of_graph_kernel,
+        ManyBody.spectatorRootChannelWord_ofFn_append_singleton}
     \leanok
     Suppose $q>0$, $G$ is a simple graph on $I$, and $A_{yz}\ge0$ satisfies
     $A_{yz}=0$ when $\rho_G(y,z)=\infty$. Assume that for all operators $W$
@@ -295,7 +295,7 @@ so $H_{\varnothing}=0$.
 \begin{lemma}[Localization tails give expected spatial decay]
     \label{thm:al_channel_poisson_graph_growth}
     \uses{thm:al_channel_word_kernel_increment,thm:al_channel_poisson_kernel_growth}
-    \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_siteOscillation_le_graphChannelEventKernel}
+    \lean{ManyBody.integrable_and_integral_siteOscillation_le_graphChannelEventKernel}
     \leanok
     Under the hypotheses of Lemma~\ref{thm:al_channel_word_kernel_increment},
     if $\mathsf A^{(N)}$ satisfies~(\ref{eq:al_poisson_weighted_rows}) with
@@ -315,7 +315,7 @@ so $H_{\varnothing}=0$.
 \begin{lemma}[Uniform expected spatial decay on lattice domains]
     \label{thm:al_channel_poisson_lattice_growth}
     \uses{thm:al_lattice_channel_uniform_bounds,thm:al_channel_poisson_kernel_growth}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelWord_spatial_growth}
+    \lean{ManyBody.exists_latticeChannelWord_spatial_growth}
     \leanok
     For every $p\ge1$, $R\in\N$, $J\ge0$, and $\Delta>0$, there exist $c>0$
     and $v\ge0$ (depending only on $p,R,J,\Delta$) such that under the lattice
@@ -346,7 +346,7 @@ so $H_{\varnothing}=0$.
 \begin{lemma}[Chronological restriction of a full word]
     \label{thm:al_channel_word_filter}
     \uses{def:al_channel_word}
-    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannelWord_filter}
+    \lean{ManyBody.spectatorRootChannelWord_filter}
     \leanok
     For $F_P=\{i\in F:P(i)\}$ and a word $w$ over $F$, let $\pi_P(w)$ be the
     subword over $F_P$ of letters satisfying $P$ and $w|_P=j(\pi_P(w))$ over
@@ -367,8 +367,8 @@ so $H_{\varnothing}=0$.
 \begin{lemma}[Expectations of retained physical words]
     \label{thm:al_channel_word_filter_expectation}
     \uses{def:al_channel_word}
-    \lean{TNLean.PEPS.AreaLaw.integrable_spectatorRootChannelWord_filter_iff,
-        TNLean.PEPS.AreaLaw.integral_spectatorRootChannelWord_filter}
+    \lean{ManyBody.integrable_spectatorRootChannelWord_filter_iff,
+        ManyBody.integral_spectatorRootChannelWord_filter}
     \leanok
     Let $F$ be finite, $t\ge0$, and $\nu_{F,t}$ the measure
     (\ref{eq:al_poisson_word_mass}). For any predicate $P$ on $F$ and map
@@ -394,7 +394,7 @@ so $H_{\varnothing}=0$.
 \begin{lemma}[Retained oscillation bounds under the full word law]
     \label{thm:al_channel_word_filter_oscillation}
     \uses{thm:al_channel_word_filter_expectation,def:qc_site_oscillation}
-    \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_siteOscillation_filter_le}
+    \lean{ManyBody.integrable_and_integral_siteOscillation_filter_le}
     \leanok
     For $y\in I$ and $R\in\R$, if $u\mapsto d_y(\mathcal E^P_u(B_0))$ is
     $\nu_{F_P,t}$-integrable with $\int d_y(\mathcal E^P_u(B_0))\,d\nu_{F_P,t}(u)\le R$,
@@ -414,7 +414,7 @@ so $H_{\varnothing}=0$.
 \begin{lemma}[Filtered full lattice words satisfy spatial decay]
     \label{thm:al_channel_poisson_lattice_filter_growth}
     \uses{thm:al_channel_poisson_lattice_growth,thm:al_channel_word_filter}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelWord_filter_spatial_growth}
+    \lean{ManyBody.exists_latticeChannelWord_filter_spatial_growth}
     \leanok
     Under the hypotheses of
     Lemma~\ref{thm:al_channel_poisson_lattice_growth},

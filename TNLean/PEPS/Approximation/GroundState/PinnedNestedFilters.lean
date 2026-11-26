@@ -14,7 +14,7 @@ eigenvalue powers, ascending action, inverse-zero normalization and forward-edge
 counting retain the source conventions. No upstream Lean proof text is copied.
 -/
 import TNLean.PEPS.Approximation.GroundState.PinnedRegionalState
-import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.LinearAlgebra.Matrix.PosDef

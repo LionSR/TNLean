@@ -19,8 +19,8 @@ MPS/Symmetry            18
 MPS/Tensor              9
 MPS/Transfer            4
 Network                 3
-PEPS/Approximation      17
-PEPS/AreaLaw            46
+PEPS/Approximation      16
+PEPS/AreaLaw            38
 PEPS/FundamentalTheorem 7
 PEPS/Graph              2
 PEPS/Injectivity        8

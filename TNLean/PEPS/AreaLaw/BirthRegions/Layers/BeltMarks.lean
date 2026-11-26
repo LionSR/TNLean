@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.FineBelts
-import TNLean.PEPS.AreaLaw.Polygons.Squares.DyadicClosure
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 
 /-!
 # The nine initial marks of each belt cell
@@ -24,6 +24,8 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 The minimum incident scale of a coincident mark, the fan coloring and the
 isolated-star properties are not part of these definitions or estimates.
 -/
+
+open ManyBody (boundaryEndpoints closure_dyadicCell dyadicCell fineLayerIndices)
 
 noncomputable section
 

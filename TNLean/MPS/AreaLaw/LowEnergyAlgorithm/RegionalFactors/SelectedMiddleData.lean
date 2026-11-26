@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.TwoMarkerMiddleFactors
 import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.RegionalFactors.ThreeRegionSupport
-import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement.Basic
 import Mathlib.Data.Matrix.Basis
 import Mathlib.Logic.Equiv.Fin.Basic
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct

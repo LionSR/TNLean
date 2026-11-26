@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Layers.BeltMarks
-import TNLean.PEPS.AreaLaw.Polygons.Templates.Templates
+import QICLean.ManyBody.Sites.Template.Defs
 import Mathlib.Analysis.Convex.Join
 import Mathlib.Analysis.Normed.Group.Constructions
 import Mathlib.Analysis.Normed.Affine.AddTorsor
@@ -29,6 +29,8 @@ It also contains the following results.
 * `TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_succ_inter_closedBall`: restriction of concentric
   triangular fans.
 -/
+
+open ManyBody (IsAllowedSlope TemplatePolygon closure_dyadicCell dyadicCell)
 
 section CellFans
 

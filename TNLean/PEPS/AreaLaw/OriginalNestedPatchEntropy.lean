@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.SquareAreaLawSpecialization
-import TNLean.PEPS.AreaLaw.Polygons.Squares.NestedPatches
+import QICLean.ManyBody.Sites.Lattice.NestedPatches
 
 /-!
 # Original-state entropy on the selected nested squares
@@ -57,26 +57,26 @@ theorem SquareEntropyAreaLawAt.closedSquareSample_entropy_le
     ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
       ∀ (z : ℝ × ℝ) (u r : ℝ), 0 ≤ r → r ≤ 2 * u →
         ManyBody.regionEntropy
-          (AreaLaw.rectangleAreaLawState Ω)
-          (AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L) z r) ≤ max 1
+          (ManyBody.rectangleAreaLawState Ω)
+          (ManyBody.closedSquareSample (ManyBody.rectangularDomain L L) z r) ≤ max 1
               (16 * C_A) * (1 + u) := by
   intro L Ω hΩ z u r hr hru
   obtain ⟨hCA, hA⟩ := hA
-  let D := AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L) z r
+  let D := ManyBody.closedSquareSample (ManyBody.rectangularDomain L L) z r
   have hcut := hA L Ω hΩ
     (D.map (ManyBody.rectangleSiteEquiv L L).symm.toEmbedding)
   rw [← finiteProductEntropy_relabel (ManyBody.rectangleSiteEquiv L L) q Ω,
     ← card_edgeBoundary_rectangle] at hcut
   simp only [Finset.map_map, Function.Embedding.mk_trans_mk, Equiv.self_comp_symm,
     Function.Embedding.mk_id, Finset.map_refl] at hcut
-  have hbound : ManyBody.regionEntropy (AreaLaw.rectangleAreaLawState Ω) D ≤
+  have hbound : ManyBody.regionEntropy (ManyBody.rectangleAreaLawState Ω) D ≤
       C_A * (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) D).card := by
     simpa only [ManyBody.regionEntropy,
-      AreaLaw.rectangleAreaLawState, AreaLaw.rectangleConfigurationEquiv] using hcut
+      ManyBody.rectangleAreaLawState, ManyBody.rectangleConfigurationEquiv] using hcut
   have hu : 0 ≤ u := by linarith
   have hedge : ((edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) D).card : ℝ) ≤
       16 * u + 4 := by
-    linarith [AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le
+    linarith [ManyBody.card_edgeBoundary_closedSquareSample_le
       (ManyBody.rectangularDomain L L) z hr]
   refine (hbound.trans (mul_le_mul_of_nonneg_left hedge hCA)).trans ?_
   nlinarith [mul_le_mul_of_nonneg_right (le_max_right (1 : ℝ) (16 * C_A))
@@ -94,14 +94,14 @@ theorem SquareEntropyAreaLawAt.nestedPatch_entropy_le
     (hA : SquareEntropyAreaLawAt q G C_A) :
     ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
       ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
-        ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
+        ∀ j : Fin (ManyBody.nestedPatchCount u),
           ManyBody.regionEntropy
-            (AreaLaw.rectangleAreaLawState Ω)
-            (AreaLaw.Geometry.nestedPatch (ManyBody.rectangularDomain L L) z u j.val) ≤ max 1
+            (ManyBody.rectangleAreaLawState Ω)
+            (ManyBody.nestedPatch (ManyBody.rectangularDomain L L) z u j.val) ≤ max 1
                 (16 * C_A) * (1 + u) := fun L Ω hΩ z u hu j ↦
   hA.closedSquareSample_entropy_le L Ω hΩ z u _
-    (hu.trans (AreaLaw.Geometry.le_nestedPatchRadius u j.val))
-    (AreaLaw.Geometry.nestedPatchRadius_le_two_mul hu j.isLt)
+    (hu.trans (ManyBody.le_nestedPatchRadius u j.val))
+    (ManyBody.nestedPatchRadius_le_two_mul hu j.isLt)
 
 /-- The original-state entropy of every selected nested square is at most
 `C_S * (1 + u)`, for one `C_S ≥ 1` independent of the physical instance and the
@@ -116,10 +116,10 @@ theorem SquareEntropyAreaLaw.exists_nestedPatch_entropy_le
     ∃ C_S : ℝ, 1 ≤ C_S ∧
       ∀ (L : ℕ) (Ω : StateSpace L q), IsSquareGroundState q J Δ L Ω →
         ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
-          ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
+          ∀ j : Fin (ManyBody.nestedPatchCount u),
             ManyBody.regionEntropy
-              (AreaLaw.rectangleAreaLawState Ω)
-              (AreaLaw.Geometry.nestedPatch (ManyBody.rectangularDomain L L) z u j.val) ≤ C_S *
+              (ManyBody.rectangleAreaLawState Ω)
+              (ManyBody.nestedPatch (ManyBody.rectangularDomain L L) z u j.val) ≤ C_S *
                   (1 + u) := by
   obtain ⟨C_A, hA⟩ := harea.exists_squareEntropyAreaLawAt hq hJ hΔ
   exact ⟨max 1 (16 * C_A), le_max_left _ _, hA.nestedPatch_entropy_le⟩

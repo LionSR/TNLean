@@ -47,8 +47,8 @@
 \begin{definition}[Boundary endpoints and dyadic children]
     \label{def:area_law_cell_counts}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.boundaryEndpoints,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicChildren
+        ManyBody.boundaryEndpoints,
+        ManyBody.dyadicChildren
     }
     \leanok
     \uses{def:area_law_hamiltonian}
@@ -71,9 +71,9 @@
 \begin{lemma}[Finite cell counts]
     \label{thm:area_law_cell_counts}
     \lean{
-        TNLean.PEPS.AreaLaw.Geometry.card_ambientDilation_le,
-        TNLean.PEPS.AreaLaw.Geometry.card_boundaryEndpoints_le,
-        TNLean.PEPS.AreaLaw.Geometry.card_dyadicChildren
+        ManyBody.card_ambientDilation_le,
+        ManyBody.card_boundaryEndpoints_le,
+        ManyBody.card_dyadicChildren
     }
     \leanok
     \uses{def:area_law_cell_counts,def:area_law_template,def:area_law_hamiltonian}

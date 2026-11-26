@@ -27,6 +27,8 @@ Manuscript file:
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (dyadicCell)
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The frontier of a finite closed-cover member lies on the outer boundary

@@ -14,8 +14,8 @@ combines the two.
 
 \begin{lemma}[Products of roots are contractions and telescope]
     \label{thm:al_contraction_word_telescope}
-    \lean{TNLean.PEPS.AreaLaw.norm_contractionWord_le_one,
-        TNLean.PEPS.AreaLaw.norm_contractionWord_sub_le}
+    \lean{Matrix.norm_contractionWord_le_one,
+        Matrix.norm_contractionWord_sub_le}
     \leanok
     For positive contractions $k_i,k_i'\le I$ on a finite-dimensional
     space and a word $w=(i_0,\ldots,i_{m-1})$, set
@@ -32,8 +32,8 @@ combines the two.
 
 \begin{lemma}[Expected truncation error on retained events]
     \label{thm:al_contraction_word_expected_truncation}
-    \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_norm_contractionWord_sub_le,
-        TNLean.PEPS.AreaLaw.integrable_and_integral_norm_contractionWord_retained_sub_le}
+    \lean{Matrix.integrable_and_integral_norm_contractionWord_sub_le,
+        Matrix.integrable_and_integral_norm_contractionWord_retained_sub_le}
     \leanok
     \uses{thm:al_contraction_word_telescope}
     In the setting of Lemma~\ref{thm:al_contraction_word_telescope},
@@ -58,8 +58,8 @@ combines the two.
 \begin{lemma}[Labels anchored near a set]
     \label{thm:al_retained_anchor_count}
     \lean{ManyBody.graphBall_subset_graphNeighborhood_add,
-        TNLean.PEPS.AreaLaw.card_filter_anchor_mem_graphNeighborhood_le,
-        TNLean.PEPS.AreaLaw.card_anchor_graphNeighborhood_le}
+        ManyBody.card_filter_anchor_mem_graphNeighborhood_le,
+        ManyBody.card_anchor_graphNeighborhood_le}
     \leanok
     \uses{thm:al_lattice_counts}
     On a finite induced lattice domain $\Lambda$, if finitely many labels
@@ -79,7 +79,7 @@ combines the two.
 
 \begin{lemma}[Support of the truncated products]
     \label{thm:al_truncated_product_support}
-    \lean{TNLean.PEPS.AreaLaw.contractionWord_regionExpectation_mem_supportedOperators}
+    \lean{ManyBody.contractionWord_regionExpectation_mem_supportedOperators}
     \leanok
     In the setting of Lemma~\ref{thm:al_retained_anchor_count}, for
     $0\le k_i\le I$ with $d_\Lambda(a_i,S)\le r$ and conditional
@@ -95,7 +95,7 @@ combines the two.
 
 \begin{lemma}[Truncation of the retained product for general constraints]
     \label{thm:al_domain_product_truncation}
-    \lean{TNLean.PEPS.AreaLaw.exists_domainConstraintWord_truncation}
+    \lean{ManyBody.exists_domainConstraintWord_truncation}
     \leanok
     For $C,\mu\ge0$, $c>0$, and $\alpha\in\R$, there exist $A\ge0$ and
     $\gamma>0$ (depending only on $C,c,\alpha,\mu$) with the following
@@ -127,7 +127,7 @@ combines the two.
 
 \begin{lemma}[Truncation of the retained constraint product]
     \label{thm:al_lattice_product_truncation}
-    \lean{TNLean.PEPS.AreaLaw.exists_latticeConstraintWord_truncation}
+    \lean{ManyBody.exists_latticeConstraintWord_truncation}
     \leanok
     \uses{thm:al_lattice_positive_replacement}
     For integer $p\ge1$, range $R$, strength $J\ge0$, gap $\Delta>0$, and

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BirthRegions.Fans.SideSubdivision
+import QICLean.ManyBody.Sites.Dyadic.DyadicClosure
 import Mathlib.Order.Interval.Set.Disjoint
 
 /-!
@@ -32,6 +33,9 @@ and `geometry:initial-stars`, lines 333–370, especially 352–359.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (closure_dyadicCell dyadicCell dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
+  dyadicLayer dyadicLayer_pairwiseDisjoint fineLayerIndices mem_dyadicCell_iff)
 
 section
 

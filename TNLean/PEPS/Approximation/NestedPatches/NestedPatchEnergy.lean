@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.FunctionalCalculus.MatrixPowers
 import TNLean.PEPS.Approximation.GroundState.SquareInteractionTerms
-import TNLean.PEPS.AreaLaw.Polygons.Squares.NestedPatches
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.RegularizedPatchListCoordinates
+import QICLean.ManyBody.Sites.Lattice.NestedPatches
+import QICLean.ManyBody.Entropy.Filter.Regularized.ListCoordinates
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import TNLean.PEPS.AreaLaw.RegionalStates.Regions.GapMarginalCloseness
-import TNLean.PEPS.AreaLaw.RegionalStates.RegionalFilters.PatchEnergySmallnessScale
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
+import QICLean.Analysis.Parameter.PatchFilterParameters
 
 /-!
 # Energy of minimizing nested patch filters
@@ -44,6 +44,15 @@ Independently formalized from the manuscript; no upstream Lean text is reused.
 The choice follows from the energy bound for the same minimizing output and
 the marginal trace-norm estimate for the original full-system spectral gap.
 -/
+
+open ManyBody (dependentGlobalFinIsometry dependentRegionFinEquiv
+  exists_clipped_filter_of_isMinOn_regularizedPatchObjective
+  map_filter_regularizedPatchFactorList_eq_chainList norm_normalizedRegularizedPatchOutput
+  normalizedRegularizedPatchMarginal normalizedRegularizedPatchOutput
+  normalizedRegularizedPatchOutput_eq_patchState regularizedPatchDomain regularizedPatchFactorList
+  regularizedPatchObjective reindex_reducedPure_eq_regionState)
+open Real (mul_patchFilterExponent_sq_le patchFilterExponent patchFilterExponent_le_half
+  patchFilterExponent_pos)
 
 section
 
@@ -81,11 +90,11 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     let Λ := ManyBody.rectangularDomain L L
     letI : LinearOrder ↥Λ :=
       (Fintype.equivFin ↥Λ).linearOrder
-    let m := AreaLaw.Geometry.nestedPatchCount u
+    let m := ManyBody.nestedPatchCount u
     let regions : Fin m → Finset ↥Λ :=
-      fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
+      fun j ↦ ManyBody.nestedPatch Λ center u j
     let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-    let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
+    let Ωᵤ := ManyBody.rectangleAreaLawState Ω
     ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
       x ∈ regularizedPatchDomain (Out := fun _ : ↥Λ ↦ Fin q) regions →
       IsMinOn
@@ -100,20 +109,20 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
             φ)).re - E₀ ≤
         36 * (q : ℝ) ^ 2 * J * κ ^ 2 := by
   intro Λ m regions a Ωᵤ x hx hmin φ
-  have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (AreaLaw.Geometry.nestedPatchCount_pos u)
+  have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (ManyBody.nestedPatchCount_pos u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΩᵤ : ‖Ωᵤ‖ = 1 :=
-    ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ)
+    ((ManyBody.norm_rectangleAreaLawState Ω).trans hΩ)
   let : LinearOrder ↥Λ := (Fintype.equivFin ↥Λ).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : ↥Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
   have hφ : ‖φ‖ = 1 := hnorm
   have hregions : Monotone regions := fun i j hij ↦
-    AreaLaw.Geometry.nestedPatch_mono Λ center u hij
+    ManyBody.nestedPatch_mono Λ center u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
     (n := fun _ : ↥Λ ↦ q) regions hregions a ha hb Ωᵤ hΩᵤ x hx hmin
   obtain ⟨T, hsupp, hherm, hTnorm, hTsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
-  let D : ℕ → Finset ↥Λ := AreaLaw.Geometry.nestedPatch Λ center u
+  let D : ℕ → Finset ↥Λ := ManyBody.nestedPatch Λ center u
   let K : (j : Fin m) → Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
       (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ :=
     fun j ↦ (x j + b • 1) ^ (-(a j) / 2)
@@ -125,7 +134,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
   have hφpatch := normalizedRegularizedPatchOutput_eq_patchState
     (n := fun _ : ↥Λ ↦ q) (fun j : Fin m ↦ D j) a b Ωᵤ x
   change φ = Entropy.patchState b (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x)
-    (AreaLaw.rectangleAreaLawState Ω) at hφpatch
+    (ManyBody.rectangleAreaLawState Ω) at hφpatch
   simp only [Entropy.patchState, Entropy.patchOutput,
     map_filter_regularizedPatchFactorList_eq_chainList] at hφpatch
   have hinv : Entropy.liftProdInv (Entropy.chainList D K fun _ ↦ True) *
@@ -137,43 +146,43 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
       ((h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan).2.2 ▸
         Submodule.mem_span_singleton_self _)) hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-      (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))
+      (ManyBody.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))
   rw [← hφpatch, ← hTsum] at heig
   have hφne : φ ≠ 0 := norm_ne_zero_iff.mp (hφ.trans_ne one_ne_zero)
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp (show (φ : _ → ℂ) ≠ 0 from by
     intro hzero; apply hφne; simpa using congrArg (WithLp.toLp 2) hzero)
   have hsingle : ∀ (i : ↥Λ ⊕ Edge (ManyBody.planeDomainGraph Λ)),
-      ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
-      ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
+      ∀ j ∈ Entropy.splitIndices (ManyBody.nearestNeighborSupport (Λ := Λ) i) D m,
+      ∀ k ∈ Entropy.splitIndices (ManyBody.nearestNeighborSupport (Λ := Λ) i) D m,
         j = k := by
     intro i j hj k hk
     have hc (l : Fin m) (hl : l ∈ Entropy.splitIndices
-        (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m) :
-        i ∈ ManyBody.crossingTerms (AreaLaw.nearestNeighborSupport (Λ := Λ)) (D l) :=
+        (ManyBody.nearestNeighborSupport (Λ := Λ) i) D m) :
+        i ∈ ManyBody.crossingTerms (ManyBody.nearestNeighborSupport (Λ := Λ)) (D l) :=
       by
         simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
         exact Entropy.mem_splitIndices.mp hl
     cases i with
-    | inl v => exact False.elim (AreaLaw.inl_not_mem_crossingTerms (D j) v (hc j hj))
+    | inl v => exact False.elim (ManyBody.inl_not_mem_crossingTerms (D j) v (hc j hj))
     | inr e =>
-        exact Fin.ext (AreaLaw.Geometry.nestedPatch_crossing_unique
+        exact Fin.ext (ManyBody.nestedPatch_crossing_unique
           (Λ := Λ) (c := center) (u := u) (i := (j : ℕ)) (j := (k : ℕ))
-          ((AreaLaw.inr_mem_crossingTerms_iff (D j) e).mp (hc j hj))
-          ((AreaLaw.inr_mem_crossingTerms_iff (D k) e).mp (hc k hk)))
+          ((ManyBody.inr_mem_crossingTerms_iff (D j) e).mp (hc j hj))
+          ((ManyBody.inr_mem_crossingTerms_iff (D k) e).mp (hc k hk)))
   have henergy := Entropy.re_inner_sub_le_of_chain_sharp D hD K hunit hφ a ha₁ hcl
-    T (AreaLaw.nearestNeighborSupport (Λ := Λ)) hsupp hherm σ₀ hTnorm hsingle heig
+    T (ManyBody.nearestNeighborSupport (Λ := Λ)) hsupp hherm σ₀ hTnorm hsingle heig
   have hcard (A S : Finset ↥Λ) :
       Fintype.card (ManyBody.InnerConfig (fun _ : ↥Λ ↦ q) A S) =
         Fintype.card (↥(S ∩ A) → Fin q) := by
     rw [ManyBody.card_innerConfig]
     simp only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
   simp only [hcard, hTsum] at henergy
-  rw [AreaLaw.nearestNeighbor_crossing_budget (Λ := Λ) q J
+  rw [ManyBody.nearestNeighbor_crossing_budget (Λ := Λ) q J
     (fun j : Fin m ↦ D j) a] at henergy
   have hboundary : (∑ j : Fin m, a j ^ 2 *
       (ManyBody.edgeBoundary (ManyBody.planeDomainGraph Λ) (D j)).card) ≤ 36 * κ ^ 2 := by
     simpa only [D, a, m, mul_comm] using
-      AreaLaw.Geometry.sum_card_edgeBoundary_nestedPatch_mul_sq_le Λ center (u := u) hu κ
+      ManyBody.sum_card_edgeBoundary_nestedPatch_mul_sq_le Λ center (u := u) hu κ
   calc
     _ ≤ ((q : ℝ) ^ 2 * J) * (36 * κ ^ 2) :=
       henergy.trans (mul_le_mul_of_nonneg_left hboundary (mul_nonneg (sq_nonneg _) hJ))
@@ -214,11 +223,11 @@ theorem nestedPatch_minimizer_marginal_closeness
         let Λ := ManyBody.rectangularDomain L L
         letI : LinearOrder ↥Λ :=
           (Fintype.equivFin ↥Λ).linearOrder
-        let m := AreaLaw.Geometry.nestedPatchCount u
+        let m := ManyBody.nestedPatchCount u
         let regions : Fin m → Finset ↥Λ :=
-          fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
+          fun j ↦ ManyBody.nestedPatch Λ center u j
         let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-        let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
+        let Ωᵤ := ManyBody.rectangleAreaLawState Ω
         ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
           x ∈ regularizedPatchDomain
             (Out := fun _ : ↥Λ ↦ Fin q) regions →
@@ -230,7 +239,7 @@ theorem nestedPatch_minimizer_marginal_closeness
             (CFC.abs
               (normalizedRegularizedPatchMarginal
                 (Out := fun _ : ↥Λ ↦ Fin q) regions a b Ωᵤ x R -
-                ManyBody.regionState (X := fun _ ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
+                ManyBody.regionState (X := fun _ ↦ Fin q) (ManyBody.rectangleAreaLawState Ω)
                   R)).trace.re ≤ (1 / 16 : ℝ) := by
   intro L h hh hhJ E₀ Ω hΩ hgap hspan center u b hu hb Λ m regions a Ωᵤ x hx hmin R
   let : LinearOrder ↥Λ := (Fintype.equivFin ↥Λ).linearOrder
@@ -239,7 +248,7 @@ theorem nestedPatch_minimizer_marginal_closeness
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : ↥Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ωᵤ
-    ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ) hx
+    ((ManyBody.norm_rectangleAreaLawState Ω).trans hΩ) hx
   obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan
   have hgap := ManyBody.re_trace_abs_regionState_sub_le_one_sixteenth_of_energy
     (fun _ : ↥Λ ↦ Fin q)
@@ -253,7 +262,7 @@ theorem nestedPatch_minimizer_marginal_closeness
     Matrix.reindex_refl_refl] at hρ
   have hU : dependentGlobalFinIsometry
       (fun _ : ↥Λ ↦ Equiv.refl (Fin q)) Ωᵤ = Ωᵤ := rfl
-  have hΩeq : Ωᵤ = AreaLaw.rectangleAreaLawState Ω := rfl
+  have hΩeq : Ωᵤ = ManyBody.rectangleAreaLawState Ω := rfl
   rw [hU, hΩeq] at hρ
   simpa only [normalizedRegularizedPatchMarginal, hρ] using hgap
 
@@ -277,11 +286,11 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
           let Λ := ManyBody.rectangularDomain L L
           letI : LinearOrder ↥Λ :=
             (Fintype.equivFin ↥Λ).linearOrder
-          let m := AreaLaw.Geometry.nestedPatchCount u
+          let m := ManyBody.nestedPatchCount u
           let regions : Fin m → Finset ↥Λ :=
-            fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
+            fun j ↦ ManyBody.nestedPatch Λ center u j
           let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-          let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
+          let Ωᵤ := ManyBody.rectangleAreaLawState Ω
           ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
             x ∈ regularizedPatchDomain
               (Out := fun _ : ↥Λ ↦ Fin q) regions →
@@ -293,7 +302,7 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
               (CFC.abs
                 (normalizedRegularizedPatchMarginal
                   (Out := fun _ : ↥Λ ↦ Fin q) regions a b Ωᵤ x R -
-                  ManyBody.regionState (X := fun _ ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
+                  ManyBody.regionState (X := fun _ ↦ Fin q) (ManyBody.rectangleAreaLawState Ω)
                     R)).trace.re ≤ (1 / 16 : ℝ) := by
   rcases (show (0 : ℝ) ≤ 36 * (q : ℝ) ^ 2 * J by positivity).eq_or_lt with hC | hC
   · exact ⟨1 / 2, by norm_num, le_rfl, nestedPatch_minimizer_marginal_closeness q hJ hΔ

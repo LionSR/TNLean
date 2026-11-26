@@ -3,9 +3,9 @@
 
 \begin{definition}[Half-open dyadic cells]
     \label{def:area_law_dyadic_cells}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicCell,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicParent}
+    \lean{ManyBody.dyadicCell,
+        ManyBody.dyadicCellIndex,
+        ManyBody.dyadicParent}
     \leanok
     Fix an origin $o\in\mathbb R^2$, covering the translated origin used in
     \cite[Section~11]{OpenAI2026AreaLaw}. For every integer $k\ge0$ and index
@@ -22,11 +22,11 @@
 
 \begin{lemma}[Cell indices and parents]
     \label{thm:area_law_dyadic_indices}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.mem_dyadicCell_iff,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicCellIndex_succ,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicParent_abs_sub_le,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicParent_mem_ambientDilation_image,
-        TNLean.PEPS.AreaLaw.Geometry.mem_dyadicChildren_iff}
+    \lean{ManyBody.mem_dyadicCell_iff,
+        ManyBody.dyadicCellIndex_succ,
+        ManyBody.dyadicParent_abs_sub_le,
+        ManyBody.dyadicParent_mem_ambientDilation_image,
+        ManyBody.mem_dyadicChildren_iff}
     \leanok
     \uses{def:area_law_dyadic_cells,def:area_law_cell_counts,def:area_law_template}
     Every point $x\in\mathbb R^2$ lies in the unique scale-$k$ cell indexed by
@@ -51,10 +51,10 @@
 
 \begin{definition}[Occupied indices, neighborhoods and layers]
     \label{def:area_law_dyadic_layers}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.occupiedCellIndices,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicLayerIndices,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicLayer}
+    \lean{ManyBody.occupiedCellIndices,
+        ManyBody.dyadicNeighborhood,
+        ManyBody.dyadicLayerIndices,
+        ManyBody.dyadicLayer}
     \leanok
     \uses{def:area_law_dyadic_cells,def:area_law_cell_counts,def:area_law_template}
     Let $Z\subset\mathbb Z^2$ be finite and let $C_0\ge0$ be an integer.
@@ -73,10 +73,10 @@
 
 \begin{lemma}[Nested neighborhoods and layer cells]
     \label{thm:area_law_dyadic_nesting}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.occupiedCellIndices_succ,
-        TNLean.PEPS.AreaLaw.Geometry.mem_dyadicNeighborhood_iff,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicNeighborhood_subset_succ,
-        TNLean.PEPS.AreaLaw.Geometry.dyadicLayer_eq_iUnion}
+    \lean{ManyBody.occupiedCellIndices_succ,
+        ManyBody.mem_dyadicNeighborhood_iff,
+        ManyBody.dyadicNeighborhood_subset_succ,
+        ManyBody.dyadicLayer_eq_iUnion}
     \leanok
     \uses{def:area_law_dyadic_layers,thm:area_law_dyadic_indices}
     For every origin $o$, finite $Z\subset\mathbb Z^2$, integer $C_0\ge0$,
@@ -100,8 +100,8 @@
 
 \begin{lemma}[Uniform number of layer cells]
     \label{thm:area_law_dyadic_layer_count}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_le,
-        TNLean.PEPS.AreaLaw.Geometry.card_dyadicLayerIndices_boundary_le}
+    \lean{ManyBody.card_dyadicLayerIndices_le,
+        ManyBody.card_dyadicLayerIndices_boundary_le}
     \leanok
     \uses{thm:area_law_cell_counts,thm:area_law_dyadic_nesting}
     For every origin $o$, finite $Z\subset\mathbb Z^2$, integer $C_0\ge0$,
@@ -126,8 +126,8 @@
 
 \begin{lemma}[Exhaustion of the plane]
     \label{thm:area_law_dyadic_exhaustion}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_mem_dyadicNeighborhood,
-        TNLean.PEPS.AreaLaw.Geometry.iUnion_dyadicNeighborhood_eq_univ}
+    \lean{ManyBody.exists_mem_dyadicNeighborhood,
+        ManyBody.iUnion_dyadicNeighborhood_eq_univ}
     \leanok
     \uses{def:area_law_dyadic_layers,thm:area_law_dyadic_indices}
     For every origin $o$, nonempty finite set $Z\subset\mathbb Z^2$, and
@@ -148,9 +148,9 @@
 
 \begin{lemma}[Closures of cells and layers]
     \label{thm:area_law_dyadic_closures}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.closure_dyadicCell,
-        TNLean.PEPS.AreaLaw.Geometry.convex_closure_dyadicCell,
-        TNLean.PEPS.AreaLaw.Geometry.closure_dyadicLayer_eq_iUnion}
+    \lean{ManyBody.closure_dyadicCell,
+        ManyBody.convex_closure_dyadicCell,
+        ManyBody.closure_dyadicLayer_eq_iUnion}
     \leanok
     \uses{thm:area_law_dyadic_nesting}
     For every origin $o$, integer $k\ge0$, cell index $z\in\mathbb Z^2$,

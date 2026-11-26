@@ -23,6 +23,8 @@ at lines 393–417 and retention at lines 565–568.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (Template boundaryEndpoints dyadicLayer_dist_lower integerPoint)
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- The lower-layer threshold of the birth templates: the largest of

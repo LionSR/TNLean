@@ -20,6 +20,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 at `openai/math@adc7f124`.
 -/
 
+open ManyBody (designatedSupport)
+
 open ManyBody (ambientDilation planeDomainGraph ambientDepth supDist)
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -50,7 +52,7 @@ theorem state_designatedSplitIncidence_unique_planeDomainGraph
     (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (g g' : Fin S.K) (side side' : Bool) (i : I)
     (hs : S.designatedSplitIncidence (S.state h g) L i side)
@@ -77,7 +79,7 @@ theorem old_designatedSplitIncidence_unique_planeDomainGraph
     (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (g g' : Fin S.K) (side side' : Bool) (i : I)
     (hs : S.designatedSplitIncidence (S.oldChargeState h g) L i side)
@@ -179,7 +181,7 @@ theorem state_designatedSplitIncidence_isTerminalSplit_planeDomainGraph
     (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (g : Fin S.K) (side : Bool) (i : I)
     (hs : S.designatedSplitIncidence (S.state h g) L i side) :
@@ -219,7 +221,7 @@ theorem old_designatedSplitIncidence_isTerminalSplit_planeDomainGraph
     (hL : 8 * S.K * S.m ≤ L)
     (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+    (hclear : ∀ t ∈ T, ∀ z ∈ ManyBody.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < (supDist t z : ℤ))
     (g : Fin S.K) (side : Bool) (i : I)
     (hs : S.designatedSplitIncidence (S.oldChargeState h g) L i side) :

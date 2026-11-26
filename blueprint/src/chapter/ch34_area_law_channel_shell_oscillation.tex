@@ -20,10 +20,10 @@ Definition~\ref{def:qc_site_expectation}.
 \begin{definition}[Root channels with a spectator]
     \label{def:al_local_root_channel}
     \uses{def:qc_site_expectation}
-    \lean{TNLean.PEPS.AreaLaw.spectatorRootChannel,
-        TNLean.PEPS.AreaLaw.localRootChannel,
-        TNLean.PEPS.AreaLaw.spectatorRootChannel_sub,
-        TNLean.PEPS.AreaLaw.localRootChannel_sub}
+    \lean{ManyBody.spectatorRootChannel,
+        ManyBody.localRootChannel,
+        ManyBody.spectatorRootChannel_sub,
+        ManyBody.localRootChannel_sub}
     \leanok
     Set $k_K=E_K(k)$, and define the positive square roots
     \begin{align}
@@ -48,9 +48,9 @@ Definition~\ref{def:qc_site_expectation}.
 \begin{lemma}[Contraction of the root channels]
     \label{thm:al_root_channel_contraction}
     \uses{def:al_local_root_channel}
-    \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannel_le,
-        TNLean.PEPS.AreaLaw.norm_localRootChannel_le,
-        TNLean.PEPS.AreaLaw.norm_localRootChannel_sub_self_le}
+    \lean{ManyBody.norm_spectatorRootChannel_le,
+        ManyBody.norm_localRootChannel_le,
+        ManyBody.norm_localRootChannel_sub_self_le}
     \leanok
     For every operator $B$ and region $K\subseteq I$,
     \begin{align}
@@ -74,8 +74,8 @@ Definition~\ref{def:qc_site_expectation}.
 \begin{lemma}[Channel error from localization of the constraint]
     \label{thm:al_root_channel_error}
     \uses{def:al_local_root_channel}
-    \lean{TNLean.PEPS.AreaLaw.norm_spectatorRootChannel_sub_localRootChannel_le,
-        TNLean.PEPS.AreaLaw.norm_localRootChannel_sub_localRootChannel_le}
+    \lean{ManyBody.norm_spectatorRootChannel_sub_localRootChannel_le,
+        ManyBody.norm_localRootChannel_sub_localRootChannel_le}
     \leanok
     If $\|k-E_K(k)\|\le\varepsilon_K$, then
     \begin{align}
@@ -114,9 +114,9 @@ Definition~\ref{def:qc_site_expectation}.
 \begin{lemma}[Fixing the regional commutant and intertwining commutators]
     \label{thm:al_root_channel_commutant}
     \uses{def:al_local_root_channel}
-    \lean{TNLean.PEPS.AreaLaw.localRootChannel_eq_self_of_forall_commute,
-        TNLean.PEPS.AreaLaw.localRootChannel_commutator_of_forall_commute,
-        TNLean.PEPS.AreaLaw.localRootChannel_commutator}
+    \lean{ManyBody.localRootChannel_eq_self_of_forall_commute,
+        ManyBody.localRootChannel_commutator_of_forall_commute,
+        ManyBody.localRootChannel_commutator}
     \leanok
     If $[B,\widehat C]=0$ for all $C\in\mathcal A_K$, then
     $\mathcal E_K(B)=B$. If $[A,\widehat C]=0$ for all $C\in\mathcal A_K$,
@@ -150,7 +150,7 @@ Definition~\ref{def:qc_site_expectation}.
 \begin{lemma}[Oscillation outside the region]
     \label{thm:al_root_channel_outside_oscillation}
     \uses{def:al_local_root_channel,def:qc_site_oscillation}
-    \lean{TNLean.PEPS.AreaLaw.siteOscillation_localRootChannel_le_of_notMem}
+    \lean{ManyBody.siteOscillation_localRootChannel_le_of_notMem}
     \leanok
     If $y\notin K$, then $d_y(\mathcal E_K(B))\le d_y(B)$.
 \end{lemma}
@@ -176,8 +176,8 @@ Definition~\ref{def:qc_site_expectation}.
 \begin{definition}[Local channel shells]
     \label{def:al_local_channel_shell}
     \uses{def:al_local_root_channel}
-    \lean{TNLean.PEPS.AreaLaw.localRootChannelShell,
-        TNLean.PEPS.AreaLaw.localRootChannelShell_sub}
+    \lean{ManyBody.localRootChannelShell,
+        ManyBody.localRootChannelShell_sub}
     \leanok
     Following \cite[Section~10]{OpenAI2026AreaLaw}, for regions
     $(K_l)_{l\ge0}$ with $\mathcal E_l=\mathcal E_{K_l}$, define
@@ -193,8 +193,8 @@ Definition~\ref{def:qc_site_expectation}.
 \begin{lemma}[Norm bounds for the channel shells]
     \label{thm:al_channel_shell_norm}
     \uses{def:al_local_channel_shell}
-    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_zero_le,
-        TNLean.PEPS.AreaLaw.norm_localRootChannelShell_succ_le}
+    \lean{ManyBody.norm_localRootChannelShell_zero_le,
+        ManyBody.norm_localRootChannelShell_succ_le}
     \leanok
     For any $(K_l)_{l\ge0}$, $\|\Delta_0(B)\|\le2\|B\|$. If $l\ge0$ and
     \begin{align}
@@ -221,7 +221,7 @@ Definition~\ref{def:qc_site_expectation}.
 \begin{lemma}[Shells vanish on the physical regional commutant]
     \label{thm:al_channel_shell_commutant}
     \uses{def:al_local_channel_shell}
-    \lean{TNLean.PEPS.AreaLaw.localRootChannelShell_eq_zero_of_forall_commute}
+    \lean{ManyBody.localRootChannelShell_eq_zero_of_forall_commute}
     \leanok
     Suppose $K_l\subseteq K_m$ for $l\le m$. If $[B,\widehat A]=0$ for all
     $A\in\mathcal A_{K_l}$, then $\Delta_l(B)=0$.
@@ -237,8 +237,8 @@ Definition~\ref{def:qc_site_expectation}.
 \begin{lemma}[Physical-site oscillation bound for channel shells]
     \label{thm:al_channel_shell_oscillation}
     \uses{def:al_local_channel_shell,def:qc_site_oscillation}
-    \lean{TNLean.PEPS.AreaLaw.norm_localRootChannelShell_zero_le_sum_siteOscillation,
-        TNLean.PEPS.AreaLaw.norm_localRootChannelShell_succ_le_sum_siteOscillation}
+    \lean{ManyBody.norm_localRootChannelShell_zero_le_sum_siteOscillation,
+        ManyBody.norm_localRootChannelShell_succ_le_sum_siteOscillation}
     \leanok
     If $K_l\subseteq K_m$ for $l\le m$, then
     \begin{align}
